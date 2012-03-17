@@ -9,14 +9,14 @@ environ
  vocabularies BOOLE, INTEGRA1, ARYTM_1, REALSET1, FUNCT_3, ORDINAL2, MEASURE5,
       RCOMP_1, INTEGRA5, FUNCOP_1, INTEGRA8, SIN_COS, PRE_TOPC, FUNCT_1,
       RELAT_1, ARYTM_3, PARTFUN1, FDIFF_1, SEQ_2, SIN_COS2, POWER, SQUARE_1,
-      SIN_COS4, SEQ_1, SIN_COS6, ABSVALUE, ARYTM, LATTICES, OPPCAT_1;
+      SIN_COS4, SEQ_1, SIN_COS6, ABSVALUE, ARYTM, LATTICES, OPPCAT_1, SEQ_4;
  notations TARSKI, XBOOLE_0, FUNCOP_1, INTEGRA1, RFUNCT_1, PSCOMP_1, RELAT_1,
       INTEGRA5, SIN_COS, SUBSET_1, PARTFUN1, RCOMP_1, NUMBERS, FDIFF_1,
-      XXREAL_0, REAL_1, FCONT_1, SEQ_2, RFUNCT_2, SIN_COS2, NAT_1, POWER,
-      SQUARE_1, VALUED_1, SEQ_1, SIN_COS6, COMPLEX1, FUNCT_2;
+      XXREAL_0, REAL_1, FCONT_1, SEQ_2, SEQ_4, RFUNCT_2, SIN_COS2, NAT_1,
+      POWER, SQUARE_1, VALUED_1, SEQ_1, SIN_COS6, COMPLEX1, FUNCT_2;
  constructors BINOP_2, FINSEQOP, INTEGRA5, SIN_COS, COMSEQ_3, PARTFUN1,
       PSCOMP_1, REAL_1, SQUARE_1, RFUNCT_1, FDIFF_1, RFUNCT_2, FCONT_1,
-      SIN_COS2, NAT_1, SIN_COS6, SEQ_1;
+      SIN_COS2, NAT_1, SIN_COS6, SEQ_1, POWER, XXREAL_2, SEQ_4;
  registrations INTEGRA1, RELSET_1, MEMBERED, RCOMP_1, FDIFF_1, INT_1, XXREAL_0,
       XREAL_0, NUMBERS, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2, SEQ_2,
       FCONT_1, SIN_COS;
@@ -142,7 +142,7 @@ theorem :: INTEGRA8:34
   cot is_differentiable_on Z & for x st x in Z holds (cot`|Z).x = -1/(sin.x)^2;
 
 theorem :: INTEGRA8:35
-  for r being Real holds dom (REAL --> r)=REAL & rng (REAL --> r) c= REAL;
+  for r being Real holds rng (REAL --> r) c= REAL;
 
 definition
   let r be Real;
@@ -158,7 +158,7 @@ theorem :: INTEGRA8:36
 
 theorem :: INTEGRA8:37
   for a,b being Real, A being closed-interval Subset of REAL
-  st A=[.a,b.] holds sup A=b & inf A=a;
+  st A=[.a,b.] holds upper_bound A=b & lower_bound A=a;
 
 begin :: Integrability formulas of special functions
 
@@ -166,7 +166,7 @@ theorem :: INTEGRA8:38
   for a,b being Real st a<=b holds integral(Cst(1),a,b)=b-a;
 
 theorem :: INTEGRA8:39
-  integral(cos,A) = sin.(sup A)-sin.(inf A);
+  integral(cos,A) = sin.(upper_bound A)-sin.(lower_bound A);
 
 theorem :: INTEGRA8:40
   A = [.0,PI/2.] implies integral(cos,A) = 1;
@@ -187,7 +187,7 @@ theorem :: INTEGRA8:45
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(cos,A) = -2*sin(x);
 
 theorem :: INTEGRA8:46
-  integral(-sin,A) = cos.(sup A)-cos.(inf A);
+  integral(-sin,A) = cos.(upper_bound A)-cos.(lower_bound A);
 
 theorem :: INTEGRA8:47
   A = [.0,PI/2.] implies integral(-sin,A) = -1;
@@ -208,19 +208,19 @@ theorem :: INTEGRA8:52
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(-sin,A) = -2*cos(x);
 
 theorem :: INTEGRA8:53
-  integral(exp_R,A) = exp_R.(sup A)-exp_R.(inf A);
+  integral(exp_R,A) = exp_R.(upper_bound A)-exp_R.(lower_bound A);
 
 theorem :: INTEGRA8:54
   A = [.0,1.] implies integral(exp_R,A) = number_e -1;
 
 theorem :: INTEGRA8:55
-  integral(sinh,A) = cosh.(sup A)-cosh.(inf A);
+  integral(sinh,A) = cosh.(upper_bound A)-cosh.(lower_bound A);
 
 theorem :: INTEGRA8:56
   A= [.0,1.] implies integral(sinh,A) = (number_e - 1)^2/(2*number_e);
 
 theorem :: INTEGRA8:57
-  integral(cosh,A) = sinh.(sup A)-sinh.(inf A);
+  integral(cosh,A) = sinh.(upper_bound A)-sinh.(lower_bound A);
 
 theorem :: INTEGRA8:58
   A= [.0,1.] implies integral(cosh,A) = (number_e^2 - 1)/(2*number_e);
@@ -228,26 +228,31 @@ theorem :: INTEGRA8:58
 theorem :: INTEGRA8:59
   A c= Z & dom tan = Z & dom tan = dom f2 &
   (for x st x in Z holds f2.x = 1/(cos.x)^2 & cos.x <> 0) &
-  f2|A is continuous implies integral(f2,A) = tan.(sup A)-tan.(inf A);
+  f2|A is continuous implies integral(f2,A) =
+  tan.(upper_bound A)-tan.(lower_bound A);
 
 theorem :: INTEGRA8:60
   A c= Z & dom cot = Z & dom cot = dom f2 &
   (for x st x in Z holds f2.x = -1/(sin.x)^2 & sin.x <> 0) &
-  f2|A is continuous implies integral(f2,A) = cot.(sup A)-cot.(inf A);
+  f2|A is continuous implies integral(f2,A) =
+  cot.(upper_bound A)-cot.(lower_bound A);
 
 theorem :: INTEGRA8:61
   dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
-  f2|A is continuous implies integral(f2,A) = tanh.(sup A)-tanh.(inf A);
+  f2|A is continuous implies integral(f2,A) =
+  tanh.(upper_bound A)-tanh.(lower_bound A);
 
 theorem :: INTEGRA8:62
   A c=].-1,1.[ & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) &
-  f2|A is continuous implies integral(f2,A) = arcsin.(sup A)-arcsin.(inf A);
+  f2|A is continuous implies integral(f2,A) =
+  arcsin.(upper_bound A)-arcsin.(lower_bound A);
 
 theorem :: INTEGRA8:63
   A c=].-1,1.[ & dom (arccos`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) &
-  f2|A is continuous implies integral(f2,A) = arccos.(sup A)-arccos.(inf A);
+  f2|A is continuous implies integral(f2,A) =
+  arccos.(upper_bound A)-arccos.(lower_bound A);
 
 theorem :: INTEGRA8:64
   A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arcsin)`|].-1,1.[) = dom f2 &
@@ -263,22 +268,25 @@ theorem :: INTEGRA8:66
   f is_differentiable_on Z & g is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded & g`|Z is_integrable_on A &
   (g`|Z)|A is bounded implies
-  integral(f`|Z+g`|Z,A) = f.(sup A) - f.(inf A) + g.(sup A) - g.(inf A);
+  integral(f`|Z+g`|Z,A) = f.(upper_bound A) - f.(lower_bound A) +
+  g.(upper_bound A) - g.(lower_bound A);
 
 theorem :: INTEGRA8:67
   f is_differentiable_on Z & g is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded & g`|Z is_integrable_on A &
   (g`|Z)|A is bounded implies
-  integral(f`|Z-g`|Z,A) = f.(sup A) - f.(inf A) - (g.(sup A) - g.(inf A));
+  integral(f`|Z-g`|Z,A) = f.(upper_bound A) - f.(lower_bound A) -
+  (g.(upper_bound A) - g.(lower_bound A));
 
 theorem :: INTEGRA8:68
   f is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded implies
-  integral((r(#)(f`|Z)),A) = r*f.(sup A) - r*f.(inf A);
+  integral((r(#)(f`|Z)),A) = r*f.(upper_bound A) - r*f.(lower_bound A);
 
 theorem :: INTEGRA8:69
   integral(sin+cos,A) =
-  (-cos).(sup A) - (-cos).(inf A) + sin.(sup A) - sin.(inf A);
+  (-cos).(upper_bound A) - (-cos).(lower_bound A) +
+  sin.(upper_bound A) - sin.(lower_bound A);
 
 theorem :: INTEGRA8:70
   A = [.0,PI/2.] implies integral(sin+cos,A) = 2;
@@ -301,14 +309,16 @@ theorem :: INTEGRA8:75
 
 theorem :: INTEGRA8:76
   integral(sinh+cosh,A) =
-  cosh.(sup A) - cosh.(inf A) + sinh.(sup A) - sinh.(inf A);
+  cosh.(upper_bound A) - cosh.(lower_bound A) +
+  sinh.(upper_bound A) - sinh.(lower_bound A);
 
 theorem :: INTEGRA8:77
   A = [.0,1.] implies integral(sinh+cosh,A) = number_e -1;
 
 theorem :: INTEGRA8:78
   integral(sin-cos,A) =
-  (-cos).(sup A) - (-cos).(inf A) - (sin.(sup A) - sin.(inf A));
+  (-cos).(upper_bound A) - (-cos).(lower_bound A) -
+  (sin.(upper_bound A) - sin.(lower_bound A));
 
 theorem :: INTEGRA8:79
   A = [.0,PI/2.] implies integral(sin-cos,A) = 0;
@@ -330,23 +340,24 @@ theorem :: INTEGRA8:84
   integral(sin-cos,A) = 2*cos x + 2*sin x;
 
 theorem :: INTEGRA8:85
-  integral(r(#)sin,A) = r*(-cos).(sup A) - r*(-cos).(inf A);
+  integral(r(#)sin,A) = r*(-cos).(upper_bound A) - r*(-cos).(lower_bound A);
 
 theorem :: INTEGRA8:86
-  integral(r(#)cos,A) = r*sin.(sup A) - r*sin.(inf A);
+  integral(r(#)cos,A) = r*sin.(upper_bound A) - r*sin.(lower_bound A);
 
 theorem :: INTEGRA8:87
-  integral(r(#)sinh,A) = r*cosh.(sup A) - r*cosh.(inf A);
+  integral(r(#)sinh,A) = r*cosh.(upper_bound A) - r*cosh.(lower_bound A);
 
 theorem :: INTEGRA8:88
-  integral(r(#)cosh,A) = r*sinh.(sup A) - r*sinh.(inf A);
+  integral(r(#)cosh,A) = r*sinh.(upper_bound A) - r*sinh.(lower_bound A);
 
 theorem :: INTEGRA8:89
-  integral(r(#)exp_R,A) = r*exp_R.(sup A) - r*exp_R.(inf A);
+  integral(r(#)exp_R,A) = r*exp_R.(upper_bound A) - r*exp_R.(lower_bound A);
 
 theorem :: INTEGRA8:90
   integral(sin(#)cos,A)
-  = 1/2*(cos.(inf A)*cos.(inf A)-cos.(sup A)*cos.(sup A));
+  = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)-
+  cos.(upper_bound A)*cos.(upper_bound A));
 
 theorem :: INTEGRA8:91
   A = [.0,PI/2.] implies integral(sin(#)cos,A) = 1/2;
@@ -367,23 +378,27 @@ theorem :: INTEGRA8:96
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(sin(#)cos,A) = 0;
 
 theorem :: INTEGRA8:97
-  integral(sin(#)sin,A)=cos.(inf A)*sin.(inf A)-
-  cos.(sup A)*sin.(sup A)+integral((cos)(#)(cos),A);
+  integral(sin(#)sin,A)=cos.(lower_bound A)*sin.(lower_bound A)-
+  cos.(upper_bound A)*sin.(upper_bound A)+integral((cos)(#)(cos),A);
 
 theorem :: INTEGRA8:98
-  integral(sinh(#)sinh,A)=cosh.(sup A)*sinh.(sup A)-
-  cosh.(inf A)*sinh.(inf A)-integral((cosh)(#)(cosh),A);
+  integral(sinh(#)sinh,A)=cosh.(upper_bound A)*sinh.(upper_bound A)-
+  cosh.(lower_bound A)*sinh.(lower_bound A)-integral((cosh)(#)(cosh),A);
 
 theorem :: INTEGRA8:99
   integral(sinh(#)cosh,A)
-  =1/2*((cosh.(sup A))*cosh.(sup A)-(cosh).(inf A)*cosh.(inf A));
+  =1/2*((cosh.(upper_bound A))*cosh.(upper_bound A)-
+  (cosh).(lower_bound A)*cosh.(lower_bound A));
 
 theorem :: INTEGRA8:100
-  integral(exp_R(#)exp_R,A) =1/2*((exp_R.(sup A))^2-((exp_R).(inf A))^2);
+  integral(exp_R(#)exp_R,A) =1/2*((exp_R.(upper_bound A))^2
+  -((exp_R).(lower_bound A))^2);
 
 theorem :: INTEGRA8:101
-  integral(exp_R(#)(sin+cos),A) = (exp_R(#)sin).(sup A)-(exp_R(#)sin).(inf A);
+  integral(exp_R(#)(sin+cos),A) =
+   (exp_R(#)sin).(upper_bound A)-(exp_R(#)sin).(lower_bound A);
 
 theorem :: INTEGRA8:102
-  integral(exp_R(#)(cos-sin),A) = (exp_R(#)cos).(sup A)-(exp_R(#)cos).(inf A);
+  integral(exp_R(#)(cos-sin),A) =
+   (exp_R(#)cos).(upper_bound A)-(exp_R(#)cos).(lower_bound A);
 

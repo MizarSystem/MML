@@ -43,7 +43,7 @@
 <Adjective nr="110"/>
 <Adjective nr="111"/>
 <Adjective nr="114"/>
-<Adjective nr="131"/>
+<Adjective nr="130"/>
 </Cluster>
 </Typ>
 </ArgTypes>

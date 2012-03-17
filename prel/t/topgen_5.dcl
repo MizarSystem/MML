@@ -24,11 +24,11 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -45,14 +45,14 @@
 </Signature>
 <FCluster aid="TOPGEN_5" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="353"/>
+<Func kind="K" nr="340"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPGEN_5" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="354"/>
+<Func kind="K" nr="341"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
@@ -71,7 +71,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="356">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -79,15 +79,15 @@
 <Adjective nr="7"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="355"/>
+<Func kind="K" nr="342"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="352"/>
+<Func kind="K" nr="339"/>
 </Func>
 </Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="355"/>
-<Func kind="K" nr="352"/>
+<Func kind="K" nr="342"/>
+<Func kind="K" nr="339"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -111,7 +111,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="357">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -120,15 +120,15 @@
 <Adjective nr="7"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="355"/>
+<Func kind="K" nr="342"/>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="352"/>
+<Func kind="K" nr="339"/>
 </Func>
 </Adjective>
 <Adjective nr="47">
-<Func kind="K" nr="355"/>
-<Func kind="K" nr="352"/>
+<Func kind="K" nr="342"/>
+<Func kind="K" nr="339"/>
 </Adjective>
 </Cluster>
 </FCluster>
@@ -136,7 +136,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="44"/>
-<Adjective nr="107"/>
+<Adjective nr="112"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -159,7 +159,7 @@
 <Cluster>
 <Adjective nr="31" value="false"/>
 <Adjective nr="44"/>
-<Adjective nr="107"/>
+<Adjective nr="112"/>
 </Cluster>
 </CCluster>
 </Registrations>

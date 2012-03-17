@@ -43,11 +43,11 @@
 <Adjective nr="84"/>
 <Adjective nr="85"/>
 <Adjective nr="88"/>
-<Adjective nr="97"/>
-<Adjective nr="104"/>
-<Adjective nr="108"/>
-<Adjective nr="110"/>
-<Adjective nr="121"/>
+<Adjective nr="96"/>
+<Adjective nr="103"/>
+<Adjective nr="107"/>
+<Adjective nr="109"/>
+<Adjective nr="120"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,8 +58,9 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="43"/>
 <Func kind="K" nr="47"/>
 </Typ>
 <Not>
@@ -81,8 +82,9 @@
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="43"/>
 <Func kind="K" nr="47"/>
 </Typ>
 <And>

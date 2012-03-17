@@ -14,8 +14,10 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -26,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <RCluster aid="METRIC_1" nr="2">
@@ -35,8 +37,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <RCluster aid="METRIC_1" nr="3">
@@ -45,21 +47,21 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="49"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 <FCluster aid="METRIC_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="122"/>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -74,7 +76,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -101,12 +103,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="114">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="METRIC_1" nr="4">
@@ -115,34 +117,34 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="114">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
+<Adjective nr="49"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="METRIC_1" nr="5">
 <ArgTypes/>
-<Func kind="K" nr="116"/>
+<Func kind="K" nr="132"/>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="47"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="METRIC_1" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="116"/>
+<Func kind="K" nr="132"/>
 <Cluster>
-<Adjective nr="47"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
+<Adjective nr="49"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 </Registrations>

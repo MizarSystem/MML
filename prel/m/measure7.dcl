@@ -13,6 +13,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
@@ -24,6 +26,7 @@
 <ArticleID name="CARD_4"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="SETFAM_1"/>
@@ -40,7 +43,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="178">
+<Func kind="K" nr="200">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

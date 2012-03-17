@@ -28,7 +28,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="86"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="2">
@@ -38,7 +38,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="86"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster aid="BHSP_1" nr="3">
@@ -53,8 +53,8 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
+<Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BHSP_1" nr="1">
@@ -129,7 +129,7 @@
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="86"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 </Registrations>

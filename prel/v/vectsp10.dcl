@@ -986,54 +986,6 @@
 </CCluster>
 <CCluster aid="VECTSP10" nr="3">
 <ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster>
-<Adjective nr="28" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="G" nr="13">
-<Cluster>
-<Adjective nr="28" value="false"/>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-</ArgTypes>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="6" value="false"/>
-<Adjective nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-</Cluster>
-<Typ kind="M" nr="4">
-<Cluster/>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="8" value="false"/>
-<Adjective nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Adjective>
-</Cluster>
-</CCluster>
-<CCluster aid="VECTSP10" nr="4">
-<ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="28" value="false"/>
@@ -1098,7 +1050,7 @@
 </Adjective>
 </Cluster>
 </CCluster>
-<CCluster aid="VECTSP10" nr="5">
+<CCluster aid="VECTSP10" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>

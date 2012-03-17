@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -26,7 +27,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -41,7 +41,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,14 +49,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="84"/>
-<Adjective nr="86">
-<Func kind="K" nr="263">
+<Adjective nr="89"/>
+<Adjective nr="91">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="87" value="false"/>
-<Adjective nr="88" value="false"/>
+<Adjective nr="92" value="false"/>
+<Adjective nr="93" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

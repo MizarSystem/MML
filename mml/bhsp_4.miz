@@ -11,8 +11,10 @@ environ
       ARYTM_3, POWER, PROB_1, INT_1, METRIC_1, ARYTM, GROUP_1, FUNCOP_1,
       FRECHET2, ALGSTR_0;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1,
-      ALGSTR_0, REAL_1, NAT_1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2,
-      SEQM_3, SERIES_1, STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2,
+      ALGSTR_0, REAL_1, NAT_1,
+      PARTFUN1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2,
+      SEQM_3, SERIES_1, VALUED_0,
+      STRUCT_0, PRE_TOPC, RLVECT_1, NORMSP_1, BHSP_1, BHSP_2,
       BHSP_3, NEWTON, POWER, INT_1, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, NEWTON, SERIES_1,
       BHSP_2, BHSP_3, SEQ_1, VALUED_1, PARTFUN1;
@@ -265,18 +267,18 @@ A5: (PSseq ^\1) = PSseq + seq ^\1 by NORMSP_1:def 5;
   then
 A6: seq ^\1 is convergent by A1,A2,BHSP_2:4;
   hence seq is convergent by BHSP_3:46;
-  seq ^\1 is subsequence of seq by BHSP_3:43;
+  seq ^\1 is subsequence of seq;
   hence thesis by A3,A4,A6,BHSP_3:33,46;
 end;
 
 theorem Th10:
-  X is_Hilbert_space implies
+  X is Hilbert implies
   ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
   m >= k ) holds ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r ))
 proof
-  assume X is_Hilbert_space;
+  assume X is Hilbert;
   then
-A1: X is RealUnitarySpace & X is_complete_space by BHSP_3:def 7;
+A1: X is RealUnitarySpace & X is complete by BHSP_3:def 7;
   set PSseq = Partial_Sums(seq);
   thus seq is summable implies
   ( for r st r > 0 ex k st for n, m st n >= k & m >= k holds
@@ -284,7 +286,7 @@ A1: X is RealUnitarySpace & X is_complete_space by BHSP_3:def 7;
   proof
     assume seq is summable;
     then PSseq is convergent by Def2;
-    then PSseq is_Cauchy_sequence by BHSP_3:9;
+    then PSseq is Cauchy by BHSP_3:9;
     hence thesis by BHSP_3:2;
   end;
   thus (for r st r > 0 ex k st for n, m st n >= k & m >= k holds
@@ -292,7 +294,7 @@ A1: X is RealUnitarySpace & X is_complete_space by BHSP_3:def 7;
   proof
     assume for r st r > 0 ex k st for n, m st n >= k & m >= k
     holds ||.(PSseq).n - (PSseq).m.|| < r;
-    then PSseq is_Cauchy_sequence by BHSP_3:2;
+    then PSseq is Cauchy by BHSP_3:2;
     then PSseq is convergent by A1,BHSP_3:def 6;
     hence thesis by Def2;
   end;
@@ -488,12 +490,12 @@ theorem
   Sum(seq, n+1, n) = seq.(n+1) by Th20;
 
 theorem Th25:
-  X is_Hilbert_space implies
+  X is Hilbert implies
   ( seq is summable iff ( for r st r > 0 ex k st for n, m st
   n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r ))
 proof
   assume
-A1: X is_Hilbert_space;
+A1: X is Hilbert;
   thus seq is summable implies ( for r st r > 0 ex k st for n, m st n >= k &
   m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r )
   proof
@@ -536,12 +538,12 @@ A5:   for n, m st n >= k & m >= k holds
 end;
 
 theorem
-  X is_Hilbert_space implies
+  X is Hilbert implies
   ( seq is summable iff ( for r st r > 0 ex k st for n, m st n >= k &
   m >= k holds ||.Sum(seq, n, m).|| < r ))
 proof
   assume
-A1: X is_Hilbert_space;
+A1: X is Hilbert;
   thus seq is summable implies ( for r st r > 0 ex k st for n, m st n >= k &
   m >= k holds ||.Sum(seq, n, m).|| < r )
   proof
@@ -1075,11 +1077,11 @@ theorem
   for n, m holds ||.Sum(seq, m, n).|| <= abs(Sum(||.seq.||, m, n)) by Th41;
 
 theorem
-  X is_Hilbert_space implies
+  X is Hilbert implies
   ( seq is absolutely_summable implies seq is summable )
 proof
   assume that
-A1: X is_Hilbert_space and
+A1: X is Hilbert and
 A2: seq is absolutely_summable;
 A3: ||.seq.|| is summable by A2,Def8;
   now
@@ -1450,19 +1452,19 @@ end;
 
 notation
   let Rseq;
-  synonym Rseq is_Cauchy_sequence for Rseq is Cauchy;
+  synonym Rseq is Cauchy for Rseq is Cauchy;
 end;
 
 theorem
-  X is_Hilbert_space implies
-  ( seq is_Cauchy_sequence & Rseq is_Cauchy_sequence implies
-  Rseq * seq is_Cauchy_sequence )
+  X is Hilbert implies
+  ( seq is Cauchy & Rseq is Cauchy implies
+  Rseq * seq is Cauchy )
 proof
   assume that
-A1: X is_Hilbert_space and
-A2: seq is_Cauchy_sequence and
-A3: Rseq is_Cauchy_sequence;
-  X is_complete_space by A1,BHSP_3:def 7;
+A1: X is Hilbert and
+A2: seq is Cauchy and
+A3: Rseq is Cauchy;
+  X is complete by A1,BHSP_3:def 7;
   then
 A4: seq is convergent by A2,BHSP_3:def 6;
   now

@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -44,20 +44,20 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="9" value="false"/>
-<Adjective nr="128">
+<Adjective nr="133">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="129"/>
-<Adjective nr="130"/>
 <Adjective nr="134"/>
 <Adjective nr="135"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -65,11 +65,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="311">
+<Func kind="K" nr="298">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

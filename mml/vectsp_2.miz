@@ -8,7 +8,7 @@ environ
 
  vocabularies VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1,
       RELAT_1, ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1,
-      STRUCT_0, ALGSTR_0;
+      STRUCT_0, ALGSTR_0, ALGSTR_2;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, FUNCT_5, STRUCT_0,
       ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, FUNCT_3;
  constructors FUNCT_3, VECTSP_1, FUNCSDOM, FUNCT_5;
@@ -516,7 +516,7 @@ A3: -1.SF<>0.SF by Th34;
 end;
 
 theorem
-  z<>0.SF implies ( x/z + y/z = (x+y)/z ) & ( x/z - y/z = (x-y)/z )
+  z<>0.SF implies x/z + y/z = (x+y)/z & x/z - y/z = (x-y)/z
 proof
   z<>0.SF implies x/z - y/z = (x-y)/z
   proof
@@ -880,9 +880,8 @@ end;
 
 definition
   let R;
-
-mode LeftMod of R is Abelian add-associative right_zeroed right_complementable
-    VectSp-like (non empty VectSpStr over R);
+  mode LeftMod of R is Abelian add-associative right_zeroed
+    right_complementable VectSp-like (non empty VectSpStr over R);
 end;
 
 Lm8: LeftModule R is VectSp-like
@@ -1010,8 +1009,8 @@ end;
 registration
   let R1,R2;
   cluster Abelian add-associative right_zeroed right_complementable
-
-RightMod-like VectSp-like BiMod-like strict (non empty BiModStr over R1,R2);
+     RightMod-like VectSp-like BiMod-like
+       strict (non empty BiModStr over R1,R2);
   existence
   proof
     take BiModule (R1,R2);
@@ -1065,4 +1064,162 @@ end;
 theorem
   for L being non empty multLoopStr st L is well-unital holds 1.(L) = 1_L
   by Lm2;
+
+begin :: MOD_1
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+  right-distributive right_unital (non empty doubleLoopStr)
+  for a be Element of K holds a * (- 1.K) = - a
+proof
+  let K be add-associative right_zeroed right_complementable
+  right-distributive right_unital (non empty doubleLoopStr);
+  let x be Element of K;
+  thus x * (- 1.K) = x * (0.K - 1.K) by RLVECT_1:27
+    .= x * 0.K - x * 1.K by VECTSP_1:43
+    .= 0.K - x * 1.K by VECTSP_1:36
+    .= - x * 1.K by RLVECT_1:27
+    .= - x by VECTSP_1:def 13;
+end;
+
+theorem
+  for K be add-associative right_zeroed right_complementable
+  left-distributive left_unital (non empty doubleLoopStr)
+  for a be Element of K holds (- 1.K) * a = - a
+proof
+  let K be add-associative right_zeroed right_complementable
+  left-distributive left_unital (non empty doubleLoopStr);
+  let x be Element of K;
+  thus (- 1.K) * x = (0.K - 1.K) * x by RLVECT_1:27
+    .= 0.K * x - 1.K * x by VECTSP_1:45
+    .= 0.K - 1.K * x by VECTSP_1:39
+    .= - 1.K * x by RLVECT_1:27
+    .= - x by VECTSP_1:def 19;
+end;
+
+reserve R for Abelian add-associative right_zeroed right_complementable
+  associative well-unital right_unital distributive (non empty doubleLoopStr),
+  F for non degenerated almost_left_invertible Ring,
+  x for Scalar of F,
+  V for add-associative right_zeroed right_complementable
+  VectSp-like (non empty VectSpStr over F),
+  v for Vector of V;
+
+theorem
+  x*v = 0.V iff x = 0.F or v = 0.V
+proof
+  x*v = 0.V implies x = 0.F or v = 0.V
+  proof
+    assume
+A1: x*v = 0.V;
+    assume
+A2: x<> 0.F;
+    (x"*x)*v = x"*(0.V) by A1,VECTSP_1:def 26
+      .= 0.V by VECTSP_1:59;
+    then 0.V = (1_F)*v by A2,Th43;
+    hence thesis by VECTSP_1:def 26;
+  end;
+  hence thesis by VECTSP_1:59;
+end;
+
+theorem
+  x<>0.F implies x"*(x*v)=v
+proof
+  assume
+A1: x<>0.F;
+  x"*(x*v) = (x"*x)*v by VECTSP_1:def 26
+    .= 1_F *v by A1,Th43
+    .= v by VECTSP_1:def 26;
+  hence thesis;
+end;
+
+reserve V for add-associative right_zeroed
+  right_complementable RightMod-like (non empty RightModStr over R);
+reserve x for Scalar of R;
+reserve v,w for Vector of V;
+
+theorem Th37:
+  v*(0.R) = 0.V & v*(-1_R) = -v & (0.V)*x = 0.V
+proof
+  v + v*(0.R) = v* (1_R) + v*(0.R) by Def23
+    .= v*((1_R) + (0.R)) by Def23
+    .= v*(1_R) by RLVECT_1:10
+    .= v by Def23
+    .= v + 0.V by RLVECT_1:10;
+  hence
+A1: v*(0.R) = 0.V by RLVECT_1:21;
+  v*(-(1_R)) + v = v*( -(1_R)) + v* (1_R) by Def23
+    .= v*((-(1_R)) + (1_R)) by Def23
+    .= 0.V by A1,RLVECT_1:16;
+  then v*(-(1_R)) + (v + -v) = 0.V + -v by RLVECT_1:def 6;
+  then 0.V + -v = v*(-(1_R)) + 0.V by RLVECT_1:16
+    .= v*(-(1_R)) by RLVECT_1:10;
+  hence v*(-1_R) = -v by RLVECT_1:10;
+  (0.V)*x = v*((0.R) *x) by A1,Def23
+    .= 0.V by A1,VECTSP_1:39;
+  hence thesis;
+end;
+
+theorem Th38:
+  -v*x = v*(-x) & w - v*x = w + v*(-x)
+proof
+  -v*x = (v*x) * (-1_R) by Th37
+    .= v*(x* (-1_R)) by Def23
+    .= v*(-(x* 1_R)) by VECTSP_1:40;
+  hence -v* x = v*(-x) by VECTSP_1:def 13;
+  hence thesis by RLVECT_1:def 12;
+end;
+
+theorem Th39:
+  (-v)*x = -v*x
+proof
+  (-v)*x = (v*(-1_R))*x by Th37
+    .= v*((-1_R) *x) by Def23
+    .= v*(-(1_R *x)) by VECTSP_1:41
+    .= v*(-x) by VECTSP_1:def 19;
+  hence thesis by Th38;
+end;
+
+theorem
+  (v - w)*x = v*x - w*x
+proof
+  (v - w)*x = (v + (-w))*x by RLVECT_1:def 12
+    .= v*x + (-w) *x by Def23
+    .= v*x + (-w * x) by Th39;
+  hence thesis by RLVECT_1:def 12;
+end;
+
+reserve F for non degenerated almost_left_invertible Ring;
+reserve x for Scalar of F;
+reserve V for add-associative right_zeroed
+  right_complementable RightMod-like (non empty RightModStr over F);
+reserve v for Vector of V;
+
+theorem
+  v*x = 0.V iff x = 0.F or v = 0.V
+proof
+  v*x = 0.V implies x = 0.F or v = 0.V
+  proof
+    assume
+A1: v*x = 0.V;
+    assume
+A2: x<>(0.F);
+    v*(x*x") = (0.V)*x" by A1,Def23
+      .= 0.V by Th37;
+    then 0.V = v*(1_F) by A2,Th43;
+    hence thesis by Def23;
+  end;
+  hence thesis by Th37;
+end;
+
+theorem
+  x<>0.F implies (v*x)*x"=v
+proof
+  assume
+A1: x<>0.F;
+  (v*x)*x" = v*(x*x") by Def23
+    .= v* 1_F by A1,Th43
+    .= v by Def23;
+  hence thesis;
+end;
 

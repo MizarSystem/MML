@@ -19,7 +19,7 @@ environ
       FINSEQ_1, FUNCT_2;
  constructors PARTFUN1, REAL_1, NAT_1, RCOMP_1, FINSOP_1, PARTFUN2, RFUNCT_1,
       REALSET1, RFINSEQ, BINARITH, FINSEQ_5, COMPLSP1, GOBOARD1, PSCOMP_1,
-      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3, NAT_D;
+      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3, NAT_D, RVSUM_1, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
       PSCOMP_1, VALUED_0, VALUED_1, FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -114,11 +114,11 @@ end;
 reserve A for closed-interval Subset of REAL;
 
 theorem Th4:
-  ex a,b st a<=b & a=inf A & b=sup A
+  ex a,b st a<=b & a=lower_bound A & b=upper_bound A
 proof
   consider a,b being Real such that
 A1: a <= b & A=[.a,b.] by Def1;
-A2: a=inf A & b=sup A
+A2: a=lower_bound A & b=upper_bound A
   proof
 A4: for x be real number st x in A holds a <= x
     proof
@@ -134,9 +134,9 @@ A4: for x be real number st x in A holds a <= x
       assume
 A5:   0<y;
       take a;
-      thus thesis by A1,A5,XXREAL_1:1,XREAL_1:31;
+      thus thesis by A1,A5,XREAL_1:31,XXREAL_1:1;
     end;
-    hence a=inf A by A4,SEQ_4:def 5;
+    hence a=lower_bound A by A4,SEQ_4:def 5;
 A7: for x be real number st x in A holds x <= b
     proof
       let x be real number;
@@ -158,15 +158,15 @@ A8:   0<y;
     hence thesis by A7,SEQ_4:def 4;
   end;
   take a,b;
-  thus a<=b & a=inf A & b=sup A by A1,A2;
+  thus a<=b & a=lower_bound A & b=upper_bound A by A1,A2;
 end;
 
 theorem Th5:
-  A = [. inf A, sup A .]
+  A = [. lower_bound A, upper_bound A .]
 proof
   consider a,b being Real such that
 A1: a <= b & A=[.a,b.] by Def1;
-  a=inf A & b=sup A
+  a=lower_bound A & b=upper_bound A
   proof
 A3: for x be real number st x in A holds a <= x
     proof
@@ -183,9 +183,9 @@ A4:   x in A;
       assume
 A5:   0<y;
       take a;
-      thus thesis by A1,A5,XXREAL_1:1,XREAL_1:31;
+      thus thesis by A1,A5,XREAL_1:31,XXREAL_1:1;
     end;
-    hence a=inf A by A3,SEQ_4:def 5;
+    hence a=lower_bound A by A3,SEQ_4:def 5;
 A7: for x be real number st x in A holds x <= b
     proof
       let x be real number;
@@ -228,12 +228,12 @@ definition
   let A be non empty compact Subset of REAL;
   mode DivisionPoint of A -> non empty increasing FinSequence of REAL means
     :Def2:
-    rng it c= A & it.(len it) = sup A;
+    rng it c= A & it.(len it) = upper_bound A;
   existence
   proof
-A1: sup A in A by RCOMP_1:32;
+A1: upper_bound A in A by RCOMP_1:32;
     consider a being Element of REAL such that
-A2: a = sup A;
+A2: a = upper_bound A;
     reconsider p = Seg 1 --> a as Function of Seg 1, REAL by FUNCOP_1:57;
 A3: dom p = Seg 1 by FUNCOP_1:19;
     then reconsider p as FinSequence by FINSEQ_1:def 2;
@@ -246,7 +246,7 @@ A4: len p = 1 by A3,FINSEQ_1:def 3;
 A5: rng p c= A by FINSEQ_1:def 4;
 A6: 1 in Seg 1 by FINSEQ_1:4,TARSKI:def 1;
     then
-A7: p.(len p)=sup A by A2,A4,FUNCOP_1:13;
+A7: p.(len p)=upper_bound A by A2,A4,FUNCOP_1:13;
     p is non empty increasing FinSequence of REAL
     proof
       dom p = Seg 1 & p.1 = a by A6,FUNCOP_1:13,19;
@@ -396,24 +396,24 @@ definition
 A1: i in dom D;
   func divset(D,i) -> closed-interval Subset of REAL means
   :Def5:
-  inf it = inf A & sup it = D.i if i=1
-  otherwise inf it = D.(i-1) & sup it = D.i;
+  lower_bound it = lower_bound A & upper_bound it = D.i if i=1
+  otherwise lower_bound it = D.(i-1) & upper_bound it = D.i;
   existence
   proof
     hereby
       assume i=1;
       thus ex IT being closed-interval Subset of REAL st
-      inf IT = inf A & sup IT = D.i
+      lower_bound IT = lower_bound A & upper_bound IT = D.i
       proof
 A2:     D.i in A by A1,Th8;
         consider I such that
-A3:     I=[.inf A,D.i .];
-        inf A <= D.i by A2,SEQ_4:def 5;
+A3:     I=[.lower_bound A,D.i .];
+        lower_bound A <= D.i by A2,SEQ_4:def 5;
         then
 A4:     I is closed-interval Subset of REAL by A3,Def1;
-        inf I = inf A & sup I = D.i
+        lower_bound I = lower_bound A & upper_bound I = D.i
         proof
-          I = [.inf I,sup I.] by A4,Th5;
+          I = [.lower_bound I,upper_bound I.] by A4,Th5;
           hence thesis by A3,A4,Th6;
         end;
         hence thesis by A4;
@@ -422,7 +422,7 @@ A4:     I is closed-interval Subset of REAL by A3,Def1;
     assume that
 A5: i<>1;
     thus ex IT being closed-interval Subset of REAL st
-    inf IT = D.(i-1) & sup IT = D.i
+    lower_bound IT = D.(i-1) & upper_bound IT = D.i
     proof
 A6:   i-1 in dom D & D.(i-1) in A by A1,A5,Th9;
 A7:   i+-1< i+(1+-1) by XREAL_1:8;
@@ -433,8 +433,8 @@ A9:   D.j < D.i by A1,A6,A7,SEQM_3:def 1;
       consider I such that
 A10:  I=[.a1,b1.];
 A11:  I is closed-interval Subset of REAL by A8,A9,A10,Def1;
-      then I=[.inf I,sup I.] by Th5;
-      then inf I=D.(i-1) & sup I=D.i by A8,A10,A11,Th6;
+      then I=[.lower_bound I,upper_bound I.] by Th5;
+      then lower_bound I=D.(i-1) & upper_bound I=D.i by A8,A10,A11,Th6;
       hence thesis by A11;
     end;
   end;
@@ -443,16 +443,16 @@ A11:  I is closed-interval Subset of REAL by A8,A9,A10,Def1;
     let A1,A2 be closed-interval Subset of REAL;
     hereby
       assume that i=1 and
-A12:  inf A1 =inf A & sup A1 = D.i and
-A13:  inf A2 =inf A & sup A2 = D.i;
+A12:  lower_bound A1 =lower_bound A & upper_bound A1 = D.i and
+A13:  lower_bound A2 =lower_bound A & upper_bound A2 = D.i;
       consider b such that
 A14:  b=D.i;
-      A1=[. inf A, b .] by A12,A14,Th5;
+      A1=[. lower_bound A, b .] by A12,A14,Th5;
       hence A1=A2 by A13,A14,Th5;
     end;
     assume that i<>1 and
-A15: inf A1 = D.(i-1) & sup A1 = D.i and
-A16: inf A2 = D.(i-1) & sup A2 = D.i;
+A15: lower_bound A1 = D.(i-1) & upper_bound A1 = D.i and
+A16: lower_bound A2 = D.(i-1) & upper_bound A2 = D.i;
     consider a,b such that
 A17: a=D.(i-1) and
 A18: b=D.i;
@@ -472,21 +472,22 @@ A1: i in dom D;
 A2:   i=1;
       consider b such that
 A3:   b=D.i;
-A4:   inf divset(D,i) = inf A by A1,A2,Def5;
-      sup divset(D,i) = b by A1,A2,A3,Def5;
+A4:   lower_bound divset(D,i) = lower_bound A by A1,A2,Def5;
+      upper_bound divset(D,i) = b by A1,A2,A3,Def5;
       then
-A5:   divset(D,i)=[. inf A,b .] by A4,Th5;
-A6:   inf A in [.inf A,sup A.]
+A5:   divset(D,i)=[. lower_bound A,b .] by A4,Th5;
+A6:   lower_bound A in [.lower_bound A,upper_bound A.]
       proof
-        inf A in A by RCOMP_1:32;
+        lower_bound A in A by RCOMP_1:32;
         hence thesis by Th5;
       end;
-      b in [.inf A,sup A.]
+      b in [.lower_bound A,upper_bound A.]
       proof
         b in A by A1,A3,Th8;
         hence thesis by Th5;
       end;
-      then [. inf A,b .] c= [.inf A,sup A.] by A6,XXREAL_2:def 12;
+      then [. lower_bound A,b .] c= [.lower_bound A,upper_bound A.]
+       by A6,XXREAL_2:def 12;
       hence divset(D,i) c= A by A5,Th5;
     end;
     suppose
@@ -495,19 +496,19 @@ A7:   i<>1;
 A8:   D.(i-1) in A by A1,Th9;
       consider a such that
 A9:   a=D.(i-1);
-A10:  inf divset(D,i) = a by A1,A7,A9,Def5;
+A10:  lower_bound divset(D,i) = a by A1,A7,A9,Def5;
       consider b such that
 A11:  b=D.i;
-      sup divset(D,i) = b by A1,A7,A11,Def5;
+      upper_bound divset(D,i) = b by A1,A7,A11,Def5;
       then
 A12:  divset(D,i)=[.a,b.] by A10,Th5;
-A13:  a in [.inf A,sup A.] by A8,A9,Th5;
-      b in [.inf A,sup A.]
+A13:  a in [.lower_bound A,upper_bound A.] by A8,A9,Th5;
+      b in [.lower_bound A,upper_bound A.]
       proof
         b in A by A1,A11,Th8;
         hence thesis by Th5;
       end;
-      then [.a,b.] c= [.inf A,sup A.] by A13,XXREAL_2:def 12;
+      then [.a,b.] c= [.lower_bound A,upper_bound A.] by A13,XXREAL_2:def 12;
       hence divset(D,i) c= A by A12,Th5;
     end;
   end;
@@ -518,7 +519,7 @@ definition
   let A be Subset of REAL;
   func vol(A) -> Real equals
 
-  sup A - inf A;
+  upper_bound A - lower_bound A;
   correctness;
 end;
 
@@ -536,10 +537,10 @@ definition
   func upper_volume(f,D) -> FinSequence of REAL means
   :Def7:
   len it = len D & for i be Nat st i in dom D holds
-  it.i=(sup rng (f|divset(D,i)))*vol divset(D,i);
+  it.i=(upper_bound rng (f|divset(D,i)))*vol divset(D,i);
   existence
   proof
-    deffunc F(Nat)=(sup (rng (f|divset(D,$1))))*vol(divset(D,$1));
+    deffunc F(Nat)=(upper_bound (rng (f|divset(D,$1))))*vol(divset(D,$1));
     consider IT being FinSequence of REAL such that
 A1:  len IT = len D & for i be Nat st i in dom IT holds
     IT.i=F(i) from FINSEQ_2:sch 1;
@@ -554,16 +555,16 @@ A1:  len IT = len D & for i be Nat st i in dom IT holds
   proof
     let s1,s2 be FinSequence of REAL such that
 A2: len s1 = len D & for i be Nat st i in dom D holds
-    s1.i=(sup (rng (f|divset(D,i))))*vol(divset(D,i)) and
+    s1.i=(upper_bound (rng (f|divset(D,i))))*vol(divset(D,i)) and
 A3: len s2 = len D & for i be Nat st i in dom D holds
-    s2.i=(sup (rng (f|divset(D,i))))*vol(divset(D,i));
+    s2.i=(upper_bound (rng (f|divset(D,i))))*vol(divset(D,i));
 Y: dom s1 = dom D & dom s2 = dom D by A2,A3,FINSEQ_3:31;
     for i being Nat st i in dom s1 holds s1.i=s2.i
     proof
       let i be Nat;
       assume
 A4:   i in dom s1;
-      then s1.i=(sup (rng (f|divset(D,i))))*vol(divset(D,i)) by A2,Y;
+      then s1.i=(upper_bound (rng (f|divset(D,i))))*vol(divset(D,i)) by A2,Y;
       hence thesis by A3,A4,Y;
     end;
     hence s1=s2 by A2,A3,FINSEQ_2:10;
@@ -571,10 +572,10 @@ A4:   i in dom s1;
   func lower_volume(f,D) -> FinSequence of REAL means
   :Def8:
   len it = len D & for i be Nat st i in dom D holds
-  it.i=(inf rng (f|divset(D,i)))*vol divset(D,i);
+  it.i=(lower_bound rng (f|divset(D,i)))*vol divset(D,i);
   existence
   proof
-    deffunc F(Nat)=(inf (rng (f|divset(D,$1))))*vol(divset(D,$1));
+    deffunc F(Nat)=(lower_bound (rng (f|divset(D,$1))))*vol(divset(D,$1));
     consider IT being FinSequence of REAL such that
 A5:  len IT = len D & for i be Nat st i in dom IT holds
     IT.i=F(i) from FINSEQ_2:sch 1;
@@ -589,16 +590,16 @@ A5:  len IT = len D & for i be Nat st i in dom IT holds
   proof
     let s1,s2 be FinSequence of REAL such that
 A6: len s1 = len D & for i be Nat st i in dom D holds
-    s1.i=(inf (rng (f|divset(D,i))))*vol(divset(D,i)) and
+    s1.i=(lower_bound (rng (f|divset(D,i))))*vol(divset(D,i)) and
 A7: len s2 = len D & for i be Nat st i in dom D holds
-    s2.i=(inf (rng (f|divset(D,i))))*vol(divset(D,i));
+    s2.i=(lower_bound (rng (f|divset(D,i))))*vol(divset(D,i));
 Y:  dom s1 = dom D & dom s2 = dom D by A6,A7,FINSEQ_3:31;
     for i being Nat st i in dom s1 holds s1.i=s2.i
     proof
       let i be Nat;
       assume
 A8:   i in dom s1;
-      then s1.i=(inf (rng (f|divset(D,i))))*vol(divset(D,i)) by A6,Y;
+      then s1.i=(lower_bound (rng (f|divset(D,i))))*vol(divset(D,i)) by A6,Y;
       hence thesis by A7,A8,Y;
     end;
     hence s1=s2 by A6,A7,FINSEQ_2:10;
@@ -729,7 +730,7 @@ definition
   let f be PartFunc of A,REAL;
   func upper_integral(f) -> Real equals
 
-  inf rng upper_sum_set(f);
+  lower_bound rng upper_sum_set(f);
   correctness;
 end;
 
@@ -738,7 +739,7 @@ definition
   let f be PartFunc of A,REAL;
   func lower_integral(f) -> Real equals
 
-  sup rng lower_sum_set(f);
+  upper_bound rng lower_sum_set(f);
   correctness;
 end;
 
@@ -773,7 +774,7 @@ proof
     then consider x1 such that
 A1: x1 in dom(f+g) & y=(f+g).x1 by FUNCT_1:def 5;
     dom(f+g)=dom f /\ dom g by VALUED_1:def 1;
-    then x1 in dom f & x1 in dom g by A1,XBOOLE_0:def 3;
+    then x1 in dom f & x1 in dom g by A1,XBOOLE_0:def 4;
     then
 A2: f.x1 in rng f & g.x1 in rng g by FUNCT_1:def 5;
 A3: rng f + rng g = { x+z : x in rng f & z in rng g } by COMPLSP1:def 21;
@@ -893,7 +894,7 @@ proof
     let x be Element of A;
     assume x in A /\ dom chi(A,A);
     then
-A1: x in A & x in dom chi(A,A) by XBOOLE_0:def 3;
+A1: x in A & x in dom chi(A,A) by XBOOLE_0:def 4;
     chi(A,A).x=1 by FUNCT_3:def 3;
     hence thesis by A1,PARTFUN1:def 8;
   end;
@@ -968,10 +969,10 @@ proof
 A1: i in dom D;
   then
 A2: lower_volume(chi(A,A),D).i=
-  (inf (rng (chi(A,A)|divset(D,i))))*vol(divset(D,i)) by Def8;
+  (lower_bound (rng (chi(A,A)|divset(D,i))))*vol(divset(D,i)) by Def8;
 A3: rng chi(A,A) = {1} by Th19;
   then
-A4: inf rng (chi(A,A)) = 1 by SEQ_4:22;
+A4: lower_bound rng (chi(A,A)) = 1 by SEQ_4:22;
   divset(D,i) /\ dom (chi(A,A)) <> {}
   proof
 A5: dom (chi(A,A)) = A by FUNCT_3:def 3;
@@ -992,10 +993,10 @@ proof
 A1: i in dom D;
   then
 A2: upper_volume(chi(A,A),D).i=
-  (sup (rng (chi(A,A)|divset(D,i))))*vol(divset(D,i)) by Def7;
+  (upper_bound (rng (chi(A,A)|divset(D,i))))*vol(divset(D,i)) by Def7;
 A3: rng chi(A,A) = {1} by Th19;
   then
-A4: sup rng (chi(A,A)) = 1 by SEQ_4:22;
+A4: upper_bound rng (chi(A,A)) = 1 by SEQ_4:22;
   divset(D,i) /\ dom (chi(A,A)) <> {}
   proof
 A5: dom (chi(A,A)) = A by FUNCT_3:def 3;
@@ -1041,10 +1042,10 @@ X: dom H = Seg len(F+G) by FINSEQ_1:def 3;
     let k be Nat;
     assume
 A9: k in dom H;
-    then k in dom F by A1,A8,FINSEQ_1:def 3,X;
+    then k in dom F by A1,A8,X,FINSEQ_1:def 3;
     then
 A10: H.k=F.k+G.k by A3;
-    k in dom(F+G) by A9,FINSEQ_1:def 3,X;
+    k in dom(F+G) by A9,X,FINSEQ_1:def 3;
     hence thesis by A10,VALUED_1:def 1;
   end;
   then Sum H=Sum(F+G) by A8,FINSEQ_2:10
@@ -1085,11 +1086,11 @@ X: dom H = Seg len (F-G) by FINSEQ_1:def 3;
     let k be Nat;
     assume
 A10: k in dom H;
-    then k in Seg(len F) by A8,FINSEQ_2:109,X;
+    then k in Seg(len F) by A8,X,FINSEQ_2:109;
     then k in dom F by FINSEQ_1:def 3;
     then
 A11: H.k=F.k-G.k by A3;
-    k in dom(F-G) by A10,FINSEQ_1:def 3,X;
+    k in dom(F-G) by A10,X,FINSEQ_1:def 3;
     hence thesis by A11,VALUED_1:13;
   end;
   then Sum H=Sum(F-G) by A9,FINSEQ_2:10
@@ -1109,12 +1110,13 @@ proof
 A1: len p = len D & for i be Nat st i in dom p holds
   p.i = F(i) from FINSEQ_2:sch 1;
 A2: dom p = Seg len D by A1,FINSEQ_1:def 3;
-A3: for i st i in Seg(len D) holds p.i = sup divset(D,i) - inf divset(D,i)
+A3: for i st i in Seg(len D) holds p.i
+ = upper_bound divset(D,i) - lower_bound divset(D,i)
   proof
     let i;
     assume
 A4: i in Seg(len D);
-    vol(divset(D,i))=sup divset(D,i)-inf divset(D,i);
+    vol(divset(D,i))=upper_bound divset(D,i)-lower_bound divset(D,i);
     hence thesis by A1,A4,A2;
   end;
   len D - 1 in NAT
@@ -1125,16 +1127,17 @@ A5: len D = 1 + j by NAT_1:10;
     thus thesis by A5,ORDINAL1:def 13;
   end;
   then reconsider k = len D - 1 as Element of NAT;
-  deffunc F(Nat)=sup divset(D,$1);
+  deffunc F(Nat)=upper_bound divset(D,$1);
   consider s1 being FinSequence of REAL such that
 A6: len s1 = k & for i be Nat st i in dom s1 holds
   s1.i = F(i) from FINSEQ_2:sch 1;
-  deffunc G(Nat)=inf divset(D,$1+1);
+  deffunc G(Nat)=lower_bound divset(D,$1+1);
   consider s2 being FinSequence of REAL such that
 A8: len s2 = k & for i be Nat st i in dom s2 holds
   s2.i = G(i) from FINSEQ_2:sch 1;
 A9: dom s2 = Seg k by A8,FINSEQ_1:def 3;
-A10: for i st i in Seg k holds sup divset(D,i)=inf divset(D,i+1)
+A10: for i st i in Seg k holds upper_bound divset(D,i)
+=lower_bound divset(D,i+1)
   proof
     let i;
     assume
@@ -1156,8 +1159,9 @@ A14: i+1-1=i;
     now per cases;
       suppose
 A15:    i=1;
-        then sup divset(D,i) = D.i by A12,Def5;
-        hence sup divset(D,i) = inf divset(D,i+1) by A13,A14,A15,Def5;
+        then upper_bound divset(D,i) = D.i by A12,Def5;
+        hence upper_bound divset(D,i) = lower_bound divset(D,i+1)
+         by A13,A14,A15,Def5;
       end;
       suppose
 A16:    i<>1;
@@ -1165,7 +1169,7 @@ A16:    i<>1;
         then i+1>=1+1 by XREAL_1:8;
         then
 A17:    i+1 <> 1;
-        sup divset(D,i) = D.i by A12,A16,Def5;
+        upper_bound divset(D,i) = D.i by A12,A16,Def5;
         hence thesis by A13,A14,A17,Def5;
       end;
     end;
@@ -1179,32 +1183,34 @@ X: dom s1 = Seg k by A6,FINSEQ_1:def 3;
       let i be Nat;
       assume
 A19:  i in dom s1;
-      then s1.i=sup divset(D,i) by A6;
-      then s1.i=inf divset(D,i+1) by A10,A19,X;
+      then s1.i=upper_bound divset(D,i) by A6;
+      then s1.i=lower_bound divset(D,i+1) by A10,A19,X;
       hence thesis by A8,A19,A9,X;
     end;
     hence thesis by A6,A8,FINSEQ_2:10;
   end;
-A20: len (s1^<*sup A*>) = len (<*inf A*>^s2) & len (s1^<*sup A*>) = len p &
-  (for i st i in dom (s1^<*sup A*>) holds
-  p.i=(s1^<*sup A*>)/.i - (<*inf A*>^s2)/.i)
+A20: len (s1^<*upper_bound A*>) = len (<*lower_bound A*>^s2) &
+len (s1^<*upper_bound A*>) = len p &
+  (for i st i in dom (s1^<*upper_bound A*>) holds
+  p.i=(s1^<*upper_bound A*>)/.i - (<*lower_bound A*>^s2)/.i)
   proof
-    dom(<*sup A*>)=Seg 1 by FINSEQ_1:def 8;
+    dom(<*upper_bound A*>)=Seg 1 by FINSEQ_1:def 8;
     then
-A21: len(<*sup A*>)=1 by FINSEQ_1:def 3;
-    dom(<*inf A*>)=Seg 1 by FINSEQ_1:def 8;
+A21: len(<*upper_bound A*>)=1 by FINSEQ_1:def 3;
+    dom(<*lower_bound A*>)=Seg 1 by FINSEQ_1:def 8;
     then
-A22: len(<*inf A*>)=1 by FINSEQ_1:def 3;
-A23: len(s1^<*sup A*>)=k+1 by A6,A21,FINSEQ_1:35;
+A22: len(<*lower_bound A*>)=1 by FINSEQ_1:def 3;
+A23: len(s1^<*upper_bound A*>)=k+1 by A6,A21,FINSEQ_1:35;
     hence
-A24: len (s1^<*sup A*>) = len (<*inf A*>^s2) by A8,A22,FINSEQ_1:35;
-    thus len (s1^<*sup A*>) = len p by A1,A23;
+A24: len (s1^<*upper_bound A*>) = len (<*lower_bound A*>^s2)
+ by A8,A22,FINSEQ_1:35;
+    thus len (s1^<*upper_bound A*>) = len p by A1,A23;
     let i;
     assume
-A25: i in dom (s1^<*sup A*>);
-A26: i in dom (<*inf A*>^s2)
+A25: i in dom (s1^<*upper_bound A*>);
+A26: i in dom (<*lower_bound A*>^s2)
     proof
-      i in Seg(len (s1^<*sup A*>)) by A25,FINSEQ_1:def 3;
+      i in Seg(len (s1^<*upper_bound A*>)) by A25,FINSEQ_1:def 3;
       hence thesis by A24,FINSEQ_1:def 3;
     end;
 A27: len D = 1 or len D >= 2
@@ -1212,8 +1218,8 @@ A27: len D = 1 or len D >= 2
       len D = 1 or len D is non trivial by NAT_2:def 1;
       hence thesis by NAT_2:31;
     end;
-A28: (s1^<*sup A*>)/.i=(s1^<*sup A*>).i by A25,PARTFUN1:def 8;
-A29: (<*inf A*>^s2)/.i=(<*inf A*>^s2).i by A26,PARTFUN1:def 8;
+A28: (s1^<*upper_bound A*>)/.i=(s1^<*upper_bound A*>).i by A25,PARTFUN1:def 8;
+A29: (<*lower_bound A*>^s2)/.i=(<*lower_bound A*>^s2).i by A26,PARTFUN1:def 8;
     now per cases by A27;
       suppose
 A30:    len D = 1;
@@ -1223,17 +1229,17 @@ A31:    i in Seg 1 by A23,A25,FINSEQ_1:def 3;
 A32:    i = 1 by FINSEQ_1:4,TARSKI:def 1;
 A33:    i in Seg len D & i in dom D by A30,A31,FINSEQ_1:def 3;
         s1={} by A6,A30;
-        then s1^<*sup A*> = <*sup A*> by FINSEQ_1:47;
+        then s1^<*upper_bound A*> = <*upper_bound A*> by FINSEQ_1:47;
         then
-A34:    (s1^<*sup A*>)/.i=sup A by A28,A32,FINSEQ_1:def 8;
+A34:    (s1^<*upper_bound A*>)/.i=upper_bound A by A28,A32,FINSEQ_1:def 8;
         s2={} by A8,A30;
-        then <*inf A*>^s2 = <*inf A*> by FINSEQ_1:47;
+        then <*lower_bound A*>^s2 = <*lower_bound A*> by FINSEQ_1:47;
         then
-A35:    (<*inf A*>^s2)/.i=inf A by A29,A32,FINSEQ_1:def 8;
-        D.i=sup A by A30,A32,Def2;
+A35:    (<*lower_bound A*>^s2)/.i=lower_bound A by A29,A32,FINSEQ_1:def 8;
+        D.i=upper_bound A by A30,A32,Def2;
         then
-A36:    sup divset(D,i)=sup A by A32,A33,Def5;
-        p.i=sup divset(D,i)-inf divset(D,i) by A3,A30,A31;
+A36:    upper_bound divset(D,i)=upper_bound A by A32,A33,Def5;
+        p.i=upper_bound divset(D,i)-lower_bound divset(D,i) by A3,A30,A31;
         hence thesis by A32,A33,A34,A35,A36,Def5;
       end;
       suppose
@@ -1260,16 +1266,17 @@ A43:          Seg 1 c= Seg k by A38,FINSEQ_1:7;
               hence i in Seg k by A43;
               hence thesis by A6,FINSEQ_1:def 3;
             end;
-            then (s1^<*sup A*>).i=s1.i by FINSEQ_1:def 7;
+            then (s1^<*upper_bound A*>).i=s1.i by FINSEQ_1:def 7;
             then
-A44:        (s1^<*sup A*>).i=sup divset(D,i) by A6,A42;
-A45:        (<*inf A*>^s2).i = inf A
+A44:        (s1^<*upper_bound A*>).i=upper_bound divset(D,i) by A6,A42;
+A45:        (<*lower_bound A*>^s2).i = lower_bound A
             proof
-              i in dom <*inf A*> by A42,FINSEQ_1:def 8;
-              then (<*inf A*>^s2).i=<*inf A*>.i by FINSEQ_1:def 7;
+              i in dom <*lower_bound A*> by A42,FINSEQ_1:def 8;
+              then (<*lower_bound A*>^s2).i=<*lower_bound A*>.i
+               by FINSEQ_1:def 7;
               hence thesis by A39,FINSEQ_1:def 8;
             end;
-            p.i=sup divset(D,i)-inf divset(D,i) by A3,A40;
+            p.i=upper_bound divset(D,i)-lower_bound divset(D,i) by A3,A40;
             hence thesis by A28,A29,A39,A40,A44,A45,Def5;
           end;
           suppose
@@ -1279,37 +1286,40 @@ A47:        i in Seg(len D) & i in dom D
               thus i in Seg(len D) by A46,FINSEQ_1:5;
               hence thesis by FINSEQ_1:def 3;
             end;
-A48:        i-len s1 = 1 & i-len s1 in dom <*sup A*>
+A48:        i-len s1 = 1 & i-len s1 in dom <*upper_bound A*>
             & i=i-len s1 + len s1 & i<>1
             proof
               thus i-len s1 = 1 by A6,A46;
               i-len s1 in Seg 1 by A6,A46,FINSEQ_1:4,TARSKI:def 1;
-              hence i-len s1 in dom <*sup A*> by FINSEQ_1:def 8;
+              hence i-len s1 in dom <*upper_bound A*> by FINSEQ_1:def 8;
               thus i = i - len s1 + len s1;
               thus thesis by A37,A46;
             end;
-            then (s1^<*sup A*>).i=<*sup A*>.(i-len s1) by FINSEQ_1:def 7;
+            then (s1^<*upper_bound A*>).i=<*upper_bound A*>.(i-len s1)
+             by FINSEQ_1:def 7;
             then
-A49:        (s1^<*sup A*>)/.i=sup A by A28,A48,FINSEQ_1:def 8;
-A50:        i-len <*inf A*>=i-1 & len <*inf A*> + (i - len <*inf A*>) = i &
-            i-1 in Seg k & i-len <*inf A*> in dom s2 & i-1+1=i
+A49:        (s1^<*upper_bound A*>)/.i=upper_bound A by A28,A48,FINSEQ_1:def 8;
+A50:        i-len <*lower_bound A*>=i-1 &
+len <*lower_bound A*> + (i - len <*lower_bound A*>) = i &
+            i-1 in Seg k & i-len <*lower_bound A*> in dom s2 & i-1+1=i
             proof thus
-A51:          i-len <*inf A*> = i-1 by FINSEQ_1:57;
-              thus len <*inf A*>+(i-len <*inf A*>)=i;
+A51:          i-len <*lower_bound A*> = i-1 by FINSEQ_1:57;
+              thus len <*lower_bound A*>+(i-len <*lower_bound A*>)=i;
               i-1<>0 & i-1=k by A37,A46;
               hence i-1 in Seg k by FINSEQ_1:5;
-              hence i-len <*inf A*> in dom s2 by A8,A51,FINSEQ_1:def 3;
+              hence i-len <*lower_bound A*> in dom s2 by A8,A51,FINSEQ_1:def 3;
               thus thesis;
             end;
-A52:        (<*inf A*>^s2).i = D.(i-1)
+A52:        (<*lower_bound A*>^s2).i = D.(i-1)
             proof
-              (<*inf A*>^s2).i = s2.(i-len <*inf A*>)
+              (<*lower_bound A*>^s2).i = s2.(i-len <*lower_bound A*>)
               by A50,FINSEQ_1:def 7;
-              then (<*inf A*>^s2).i = inf divset(D,i) by A8,A50;
+              then (<*lower_bound A*>^s2).i = lower_bound divset(D,i)
+               by A8,A50;
               hence thesis by A47,A48,Def5;
             end;
-            p.i=sup divset(D,i)-inf divset(D,i) by A3,A47;
-            then p.i=sup divset(D,i)-D.(i-1) by A47,A48,Def5;
+            p.i=upper_bound divset(D,i)-lower_bound divset(D,i) by A3,A47;
+            then p.i=upper_bound divset(D,i)-D.(i-1) by A47,A48,Def5;
             then p.i=D.i-D.(i-1) by A47,A48,Def5;
             hence thesis by A29,A46,A49,A52,Def2;
           end;
@@ -1317,13 +1327,13 @@ A52:        (<*inf A*>^s2).i = D.(i-1)
 A54:        i<>1 & i<>len D;
 A55:        i in Seg(len D) & i in dom D
             proof
-A56:          len s1+len <*sup A*> = k+1 by A6,FINSEQ_1:56;
+A56:          len s1+len <*upper_bound A*> = k+1 by A6,FINSEQ_1:56;
               hence i in Seg(len D) by A25,FINSEQ_1:def 7;
-              dom (s1^<*sup A*>) = Seg(len D) by A56,FINSEQ_1:def 7;
+              dom (s1^<*upper_bound A*>) = Seg(len D) by A56,FINSEQ_1:def 7;
               hence thesis by A25,FINSEQ_1:def 3;
             end;
 A57:        i in dom s1 & i in Seg k & i-1 in Seg k & i-1+1=i
-            & i-len<*inf A*> in dom s2
+            & i-len<*lower_bound A*> in dom s2
             proof
 A58:          1 <= i & i <= len D by A55,FINSEQ_1:3;
               then
@@ -1342,30 +1352,34 @@ A61:          i = 1 + j by A58,NAT_1:10;
               then i-1 >= 1 & i-1+0 <= k-1+1 by XREAL_1:9,21;
               hence i-1 in Seg k by A61,FINSEQ_1:3;
               then
-A62:          i-len<*inf A*> in Seg(len s2) by A8,FINSEQ_1: 56;
+A62:          i-len<*lower_bound A*> in Seg(len s2) by A8,FINSEQ_1:56;
               thus i-1+1=i;
               thus thesis by A62,FINSEQ_1:def 3;
             end;
-A63:        (s1^<*sup A*>).i=D.i
+A63:        (s1^<*upper_bound A*>).i=D.i
             proof
-              (s1^<*sup A*>).i = s1.i by A57,FINSEQ_1:def 7;
-              then (s1^<*sup A*>).i = sup divset(D,i) by A6,A57;
+              (s1^<*upper_bound A*>).i = s1.i by A57,FINSEQ_1:def 7;
+              then (s1^<*upper_bound A*>).i = upper_bound divset(D,i)
+               by A6,A57;
               hence thesis by A54,A55,Def5;
             end;
-A64:        (<*inf A*>^s2).i = D.(i-1)
+A64:        (<*lower_bound A*>^s2).i = D.(i-1)
             proof
-A65:          i-len<*inf A*> in Seg(len s2) by A57,FINSEQ_1:def 3;
-              1 <= i-len<*inf A*> & i-len<*inf A*> <= len s2 by A65,
-              FINSEQ_1:3;
+A65:          i-len<*lower_bound A*> in Seg(len s2) by A57,FINSEQ_1:def 3;
+              1 <= i-len<*lower_bound A*> & i-len<*lower_bound A*> <= len s2
+               by A65,FINSEQ_1:3;
 
-then len<*inf A*>+1 <= i & i <= len<*inf A*>+len s2 by XREAL_1:21, 22;
-              then (<*inf A*>^s2).i = s2.(i-len<*inf A*>) by FINSEQ_1:36;
-              then (<*inf A*>^s2).i=s2.(i-1) by FINSEQ_1:56;
-              then (<*inf A*>^s2).i= inf divset(D,i) by A8,A57,A9;
+then len<*lower_bound A*>+1 <= i & i <= len<*lower_bound A*>+len s2
+ by XREAL_1:21,22;
+              then (<*lower_bound A*>^s2).i = s2.(i-len<*lower_bound A*>)
+               by FINSEQ_1:36;
+              then (<*lower_bound A*>^s2).i=s2.(i-1) by FINSEQ_1:56;
+              then (<*lower_bound A*>^s2).i= lower_bound divset(D,i)
+               by A8,A57,A9;
               hence thesis by A54,A55,Def5;
             end;
-            p.i=sup divset(D,i)-inf divset(D,i) by A3,A55;
-            then p.i=sup divset(D,i)-D.(i-1) by A54,A55,Def5;
+            p.i=upper_bound divset(D,i)-lower_bound divset(D,i) by A3,A55;
+            then p.i=upper_bound divset(D,i)-D.(i-1) by A54,A55,Def5;
             hence thesis by A28,A29,A54,A55,A63,A64,Def5;
           end;
         end;
@@ -1374,11 +1388,13 @@ then len<*inf A*>+1 <= i & i <= len<*inf A*>+len s2 by XREAL_1:21, 22;
     end;
     hence thesis;
   end;
-A67: Sum p=Sum s1 + sup A - inf A - Sum s2
+A67: Sum p=Sum s1 + upper_bound A - lower_bound A - Sum s2
   proof
-    Sum p = Sum(s1^<*sup A*>)-Sum(<*inf A*>^s2) by A20,Th24;
-    then Sum p=Sum s1 + sup A -Sum(<*inf A*>^s2) by RVSUM_1:104;
-    then Sum p=Sum s1 + sup A - (inf A + Sum s2) by RVSUM_1:106;
+    Sum p = Sum(s1^<*upper_bound A*>)-Sum(<*lower_bound A*>^s2) by A20,Th24;
+    then Sum p=Sum s1 + upper_bound A -Sum(<*lower_bound A*>^s2)
+     by RVSUM_1:104;
+    then Sum p=Sum s1 + upper_bound A - (lower_bound A + Sum s2)
+     by RVSUM_1:106;
     hence thesis;
   end;
   Sum(lower_volume(chi(A,A),D)) = Sum p
@@ -1466,7 +1482,7 @@ end;
 theorem Th27:
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
   S being non empty Division of A, D being Element of S holds
-  (f|A is bounded_below implies (inf rng f)*vol(A) <= lower_sum(f,D))
+  (f|A is bounded_below implies (lower_bound rng f)*vol(A) <= lower_sum(f,D))
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
@@ -1474,8 +1490,8 @@ proof
   let D be Element of S;
   assume
 A1: f|A is bounded_below;
-A2: for i st i in dom D holds (inf rng f)*vol(divset(D,i))
-  <= (inf rng (f|divset(D,i)))*vol(divset(D,i))
+A2: for i st i in dom D holds (lower_bound rng f)*vol(divset(D,i))
+  <= (lower_bound rng (f|divset(D,i)))*vol(divset(D,i))
   proof
     let i;
     assume
@@ -1484,51 +1500,51 @@ A4: rng(f|divset(D,i)) c= rng f by RELAT_1:99;
 A5: rng(f|divset(D,i)) is non empty Subset of REAL
     proof
 A6:   dom f = A by FUNCT_2:def 1;
-      dom (f|divset(D,i)) = divset(D,i) by A6,Th10,RELAT_1:91,A3;
+      dom (f|divset(D,i)) = divset(D,i) by A6,Th10,A3,RELAT_1:91;
       hence thesis by RELAT_1:65;
     end;
 A7: rng f is bounded_below by A1,Th13;
     0 <= vol(divset(D,i)) by SEQ_4:24,XREAL_1:50;
     hence thesis by A4,A5,A7,SEQ_4:64,XREAL_1:66;
   end;
-A8: for i st i in dom D holds (inf rng f)*(lower_volume(chi(A,A),D).i)
-  <= (inf rng (f|divset(D,i)))*vol(divset(D,i))
+A8: for i st i in dom D holds (lower_bound rng f)*(lower_volume(chi(A,A),D).i)
+  <= (lower_bound rng (f|divset(D,i)))*vol(divset(D,i))
   proof
     let i;
     assume
 A9: i in dom D;
-    then (inf rng f)*vol(divset(D,i))
-    <= (inf rng (f|divset(D,i)))*vol(divset(D,i)) by A2;
+    then (lower_bound rng f)*vol(divset(D,i))
+    <= (lower_bound rng (f|divset(D,i)))*vol(divset(D,i)) by A2;
     hence thesis by A9,Th21;
   end;
-  Sum((inf rng f)*lower_volume(chi(A,A),D)) <=Sum(lower_volume(f,D))
+  Sum((lower_bound rng f)*lower_volume(chi(A,A),D)) <=Sum(lower_volume(f,D))
   proof
-    deffunc F(set)=(inf rng f)*(lower_volume(chi(A,A),D).$1);
+    deffunc F(set)=(lower_bound rng f)*(lower_volume(chi(A,A),D).$1);
     consider p being FinSequence of REAL such that
 A10: len p = len D & for i be Nat st i in dom p holds
     p.i=F(i) from FINSEQ_2:sch 1;
 A11: dom p = Seg len D by A10,FINSEQ_1:def 3;
-    deffunc G(Nat)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
+    deffunc G(Nat)=(lower_bound rng (f|divset(D,$1)))*vol(divset(D,$1));
     consider q being FinSequence of REAL such that
 A12: len q = len D & for i be Nat st i in dom q holds
     q.i=G(i) from FINSEQ_2:sch 1;
 A13: dom q = dom D by A12,FINSEQ_3:31;
 A14: q=lower_volume(f,D) by A12,Def8,A13;
     len (lower_volume(chi(A,A),D))
-    = len ((inf rng f)*lower_volume(chi(A,A),D)) by FINSEQ_2:37;
+    = len ((lower_bound rng f)*lower_volume(chi(A,A),D)) by FINSEQ_2:37;
     then
-A15: len ((inf rng f)*lower_volume(chi(A,A),D))=len D by Def8;
+A15: len ((lower_bound rng f)*lower_volume(chi(A,A),D))=len D by Def8;
     for i be Nat st 1 <= i & i <= len p holds
-    p.i=((inf rng f)*lower_volume(chi(A,A),D)).i
+    p.i=((lower_bound rng f)*lower_volume(chi(A,A),D)).i
     proof
       let i be Nat;
       assume 1 <= i & i <= len p;
       then i in Seg(len D) by A10,FINSEQ_1:3;
-      then p.i=(inf rng f)*(lower_volume(chi(A,A),D)).i by A10,A11;
+      then p.i=(lower_bound rng f)*(lower_volume(chi(A,A),D)).i by A10,A11;
       hence thesis by RVSUM_1:66;
     end;
     then
-A16: p=(inf rng f)*lower_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
+A16: p=(lower_bound rng f)*lower_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
     reconsider p as Element of (len D)-tuples_on REAL by A10,FINSEQ_2:110;
     reconsider q as Element of (len D)-tuples_on REAL by A12,FINSEQ_2:110;
     now
@@ -1536,14 +1552,15 @@ A16: p=(inf rng f)*lower_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
       assume
 A17:  i in Seg (len D);
       then
-A18:  p.i=(inf rng f)*(lower_volume(chi(A,A),D).i) by A10,A11;
+A18:  p.i=(lower_bound rng f)*(lower_volume(chi(A,A),D).i) by A10,A11;
 X:    i in dom D by A17,FINSEQ_1:def 3;
-      then q.i=(inf rng (f|divset(D,i)))*vol(divset(D,i)) by A12,A13;
+      then q.i=(lower_bound rng (f|divset(D,i)))*vol(divset(D,i)) by A12,A13;
       hence p.i <= q.i by A8,A18,X;
     end;
     hence thesis by A14,A16,RVSUM_1:112;
   end;
-  then (inf rng f)*Sum(lower_volume(chi(A,A),D))<=Sum(lower_volume(f,D))
+  then (lower_bound rng f)*Sum(lower_volume(chi(A,A),D))
+  <=Sum(lower_volume(f,D))
   by RVSUM_1:117;
   hence thesis by Th25;
 end;
@@ -1553,7 +1570,8 @@ theorem
   S being non empty Division of A, D being Element of S,
   i being Element of NAT holds
   f|A is bounded_above & i in dom D implies
-  (sup rng f)*vol(divset(D,i)) >= (sup rng (f|divset(D,i)))*vol(divset(D,i))
+  (upper_bound rng f)*vol(divset(D,i)) >=
+   (upper_bound rng (f|divset(D,i)))*vol(divset(D,i))
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
@@ -1568,7 +1586,7 @@ A3: rng(f|divset(D,i)) c= rng f by RELAT_1:99;
 A4: rng(f|divset(D,i)) is non empty Subset of REAL
   proof
 A5: dom f = A by FUNCT_2:def 1;
-    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,RELAT_1:91,A2;
+    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,A2,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
 A6: rng f is bounded_above by A1,Th15;
@@ -1579,7 +1597,7 @@ end;
 theorem Th29:
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
   S being non empty Division of A, D being Element of S holds
-  (f|A is bounded_above implies upper_sum(f,D) <= (sup rng f)*vol(A))
+  (f|A is bounded_above implies upper_sum(f,D) <= (upper_bound rng f)*vol(A))
 proof
   let A be closed-interval Subset of REAL;
   let f be Function of A,REAL;
@@ -1587,8 +1605,8 @@ proof
   let D be Element of S;
   assume
 A1: f|A is bounded_above;
-A2: for i st i in Seg(len D) holds (sup rng f)*vol(divset(D,i))
-  >= (sup rng (f|divset(D,i)))*vol(divset(D,i))
+A2: for i st i in Seg(len D) holds (upper_bound rng f)*vol(divset(D,i))
+  >= (upper_bound rng (f|divset(D,i)))*vol(divset(D,i))
   proof
     let i;
     assume
@@ -1605,46 +1623,47 @@ A7: rng f is bounded_above by A1,Th15;
     0 <= vol(divset(D,i)) by SEQ_4:24,XREAL_1:50;
     hence thesis by A4,A5,A7,SEQ_4:65,XREAL_1:66;
   end;
-A8: for i st i in Seg(len D) holds (sup rng f)*(upper_volume(chi(A,A),D).i)
-  >= (sup rng (f|divset(D,i)))*vol(divset(D,i))
+A8: for i st i in Seg(len D) holds
+ (upper_bound rng f)*(upper_volume(chi(A,A),D).i)
+  >= (upper_bound rng (f|divset(D,i)))*vol(divset(D,i))
   proof
     let i;
     assume
 A9: i in Seg(len D);
     then
-X:     (sup rng f)*vol(divset(D,i))
-    >= (sup rng (f|divset(D,i)))*vol(divset(D,i)) by A2;
+X:     (upper_bound rng f)*vol(divset(D,i))
+    >= (upper_bound rng (f|divset(D,i)))*vol(divset(D,i)) by A2;
      i in dom D by A9,FINSEQ_1:def 3;
     hence thesis by Th22,X;
   end;
-  Sum((sup rng f)*upper_volume(chi(A,A),D)) >=Sum(upper_volume(f,D))
+  Sum((upper_bound rng f)*upper_volume(chi(A,A),D)) >=Sum(upper_volume(f,D))
   proof
-    deffunc F(set)=(sup rng f)*(upper_volume(chi(A,A),D).$1);
+    deffunc F(set)=(upper_bound rng f)*(upper_volume(chi(A,A),D).$1);
     consider p being FinSequence of REAL such that
 A10: len p = len D & for i be Nat st i in dom p holds
     p.i=F(i) from FINSEQ_2:sch 1;
 A11: dom p = Seg len D by A10,FINSEQ_1:def 3;
-    deffunc G(Nat)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
+    deffunc G(Nat)=(upper_bound rng (f|divset(D,$1)))*vol(divset(D,$1));
     consider q being FinSequence of REAL such that
 A12: len q = len D & for i be Nat st i in dom q holds
     q.i=G(i) from FINSEQ_2:sch 1;
 A13: dom q = dom D by A12,FINSEQ_3:31;
 A14: q=upper_volume(f,D) by A12,Def7,A13;
     len (upper_volume(chi(A,A),D))
-    = len ((sup rng f)*upper_volume(chi(A,A),D)) by FINSEQ_2:37;
+    = len ((upper_bound rng f)*upper_volume(chi(A,A),D)) by FINSEQ_2:37;
     then
-A15: len ((sup rng f)*upper_volume(chi(A,A),D))=len D by Def7;
+A15: len ((upper_bound rng f)*upper_volume(chi(A,A),D))=len D by Def7;
     for i be Nat st 1 <= i & i <= len p holds
-    p.i=((sup rng f)*upper_volume(chi(A,A),D)).i
+    p.i=((upper_bound rng f)*upper_volume(chi(A,A),D)).i
     proof
       let i be Nat;
       assume 1 <= i & i <= len p;
       then i in Seg(len D) by A10,FINSEQ_1:3;
-      then p.i=(sup rng f)*(upper_volume(chi(A,A),D)).i by A10,A11;
+      then p.i=(upper_bound rng f)*(upper_volume(chi(A,A),D)).i by A10,A11;
       hence thesis by RVSUM_1:66;
     end;
     then
-A16: p=(sup rng f)*upper_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
+A16: p=(upper_bound rng f)*upper_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
     reconsider p as Element of (len D)-tuples_on REAL by A10,FINSEQ_2:110;
     reconsider q as Element of (len D)-tuples_on REAL by A12,FINSEQ_2:110;
     now
@@ -1653,13 +1672,14 @@ A16: p=(sup rng f)*upper_volume(chi(A,A),D) by A10,A15,FINSEQ_1:18;
 A17:  i in Seg (len D);
       then i in dom D by FINSEQ_1:def 3;
       then
-A18:  q.i=(sup rng (f|divset(D,i)))*vol(divset(D,i)) by A12,A13;
-      p.i=(sup rng f)*(upper_volume(chi(A,A),D).i) by A10,A17,A11;
+A18:  q.i=(upper_bound rng (f|divset(D,i)))*vol(divset(D,i)) by A12,A13;
+      p.i=(upper_bound rng f)*(upper_volume(chi(A,A),D).i) by A10,A17,A11;
       hence q.i <= p.i by A8,A17,A18;
     end;
     hence thesis by A14,A16,RVSUM_1:112;
   end;
-  then (sup rng f)*Sum(upper_volume(chi(A,A),D))>=Sum(upper_volume(f,D))
+  then (upper_bound rng f)*Sum(upper_volume(chi(A,A),D))>=
+  Sum(upper_volume(f,D))
   by RVSUM_1:117;
   hence thesis by Th26;
 end;
@@ -1677,12 +1697,12 @@ proof
   then f|A is bounded_below & f|A is bounded_above;
   then
 A1: rng f is bounded_below & rng f is bounded_above by Th13,Th15;
-  deffunc F(Nat)=(inf rng (f|divset(D,$1)))*vol(divset(D,$1));
+  deffunc F(Nat)=(lower_bound rng (f|divset(D,$1)))*vol(divset(D,$1));
   consider p being FinSequence of REAL such that
 A2: len p = len D & for i be Nat st i in dom p holds
   p.i=F(i) from FINSEQ_2:sch 1;
 A3: dom p = dom D by A2,FINSEQ_3:31;
-  deffunc G(Nat)=(sup rng (f|divset(D,$1)))*vol(divset(D,$1));
+  deffunc G(Nat)=(upper_bound rng (f|divset(D,$1)))*vol(divset(D,$1));
   consider q being FinSequence of REAL such that
 A4: len q = len D & for i be Nat st i in dom q holds
   q.i=G(i) from FINSEQ_2:sch 1;
@@ -1697,8 +1717,8 @@ A6: q=upper_volume(f,D) by A4,Def7,A5;
 A7: i in Seg(len D);
     then
 B7: i in dom D by FINSEQ_1:def 3;
-A8: rng (f|divset(D,i)) is bounded_below by A1,XXREAL_2:44,RELAT_1:99;
-    rng (f|divset(D,i)) is bounded_above by A1,XXREAL_2:43,RELAT_1:99;
+A8: rng (f|divset(D,i)) is bounded_below by A1,RELAT_1:99,XXREAL_2:44;
+    rng (f|divset(D,i)) is bounded_above by A1,RELAT_1:99,XXREAL_2:43;
     then
 A9: rng (f|divset(D,i)) is bounded by A8;
 A10: rng(f|divset(D,i)) is non empty Subset of REAL
@@ -1709,9 +1729,10 @@ A11:   dom f = A by FUNCT_2:def 1;
       hence thesis by RELAT_1:65;
     end;
     0 <= vol(divset(D,i)) by SEQ_4:24,XREAL_1:50;
-    then inf (rng(f|divset(D,i)))*vol(divset(D,i))
-    <= sup (rng(f|divset(D,i)))*vol(divset(D,i)) by A9,A10,SEQ_4:24,XREAL_1:66;
-    then p.i <= sup (rng(f|divset(D,i)))*vol(divset(D,i)) by A2,A3,B7;
+    then lower_bound (rng(f|divset(D,i)))*vol(divset(D,i))
+    <= upper_bound (rng(f|divset(D,i)))*vol(divset(D,i))
+     by A9,A10,SEQ_4:24,XREAL_1:66;
+    then p.i <= upper_bound (rng(f|divset(D,i)))*vol(divset(D,i)) by A2,A3,B7;
     hence thesis by A4,A5,B7;
   end;
   then Sum p <= Sum q by RVSUM_1:112;
@@ -1754,13 +1775,13 @@ proof
 A1: len D1 = 1;
 A2: len D2 in Seg(len D2) by FINSEQ_1:5;
   hence len D1 <= len D2 by A1,FINSEQ_1:3;
-  D1.1 = sup A by A1,Def2;
-  then D1=<*sup A*> by A1,FINSEQ_1:57;
+  D1.1 = upper_bound A by A1,Def2;
+  then D1=<*upper_bound A*> by A1,FINSEQ_1:57;
   then
-A3: rng D1 = {sup A} by FINSEQ_1:55;
+A3: rng D1 = {upper_bound A} by FINSEQ_1:55;
 A4: len D2 in dom D2 by A2,FINSEQ_1:def 3;
-  D2.(len D2) = sup A by Def2;
-  then sup A in rng D2 by A4,FUNCT_1:def 5;
+  D2.(len D2) = upper_bound A by Def2;
+  then upper_bound A in rng D2 by A4,FUNCT_1:def 5;
   then rng D1 is Subset of rng D2 by A3,SUBSET_1:63;
   hence thesis;
 end;
@@ -1783,20 +1804,20 @@ A2: len D1=1;
 A4: 1 in dom D1 by FINSEQ_1:def 3;
 A5: divset(D1,1)=A
   proof
-A6: inf divset(D1,1)=inf A by A4,Def5;
-A7: sup divset(D1,1)=D1.1 by A4,Def5
-      .=sup A by A2,Def2;
-    divset(D1,1)=[.inf divset(D1,1),sup divset(D1,1).] by Th5;
+A6: lower_bound divset(D1,1)=lower_bound A by A4,Def5;
+A7: upper_bound divset(D1,1)=D1.1 by A4,Def5
+      .=upper_bound A by A2,Def2;
+    divset(D1,1)=[.lower_bound divset(D1,1),upper_bound divset(D1,1).] by Th5;
     hence thesis by A6,A7,Th5;
   end;
 A8: dom f = A by FUNCT_2:def 1;
 A9: len upper_volume(f,D1) = 1 by A2,Def7;
-  upper_volume(f,D1).1=(sup (rng(f|divset(D1,1))))*vol(divset(D1,1))
+  upper_volume(f,D1).1=(upper_bound (rng(f|divset(D1,1))))*vol(divset(D1,1))
   by Def7,A4;
   then upper_sum(f,D1)=Sum
-  <*(sup (rng (f|divset(D1,1))))*vol(divset(D1,1))*> by A9,FINSEQ_1:57
-    .=(sup (rng(f|A)))*vol(A) by A5,FINSOP_1:12
-    .=(sup (rng f))*vol(A) by A8,RELAT_1:97;
+  <*(upper_bound (rng (f|divset(D1,1))))*vol(divset(D1,1))*> by A9,FINSEQ_1:57
+    .=(upper_bound (rng(f|A)))*vol(A) by A5,FINSOP_1:12
+    .=(upper_bound (rng f))*vol(A) by A8,RELAT_1:97;
   hence upper_sum(f,D1)>=upper_sum(f,D2) by A1,Th29;
 end;
 
@@ -1818,20 +1839,20 @@ A2: len D1=1;
 A4: 1 in dom D1 by FINSEQ_1:def 3;
 A5: divset(D1,1)=A
   proof
-A6: inf divset(D1,1)=inf A by A4,Def5;
-    sup divset(D1,1)=D1.1 by A4,Def5
-      .=sup A by A2,Def2;
-    then divset(D1,1)=[.inf A,sup A.] by A6,Th5;
+A6: lower_bound divset(D1,1)=lower_bound A by A4,Def5;
+    upper_bound divset(D1,1)=D1.1 by A4,Def5
+      .=upper_bound A by A2,Def2;
+    then divset(D1,1)=[.lower_bound A,upper_bound A.] by A6,Th5;
     hence thesis by Th5;
   end;
 A7: dom f = A by FUNCT_2:def 1;
 A8: len lower_volume(f,D1) = 1 by A2,Def8;
-  lower_volume(f,D1).1=(inf (rng(f|divset(D1,1))))*vol(divset(D1,1))
+  lower_volume(f,D1).1=(lower_bound (rng(f|divset(D1,1))))*vol(divset(D1,1))
   by Def8,A4;
   then lower_sum(f,D1)=Sum
-  <*(inf (rng (f|divset(D1,1))))*vol(divset(D1,1))*> by A8,FINSEQ_1:57
-    .=(inf (rng(f|A)))*vol(A) by A5,FINSOP_1:12
-    .=(inf (rng f))*vol(A) by A7,RELAT_1:97;
+  <*(lower_bound (rng (f|divset(D1,1))))*vol(divset(D1,1))*> by A8,FINSEQ_1:57
+    .=(lower_bound (rng(f|A)))*vol(A) by A5,FINSOP_1:12
+    .=(lower_bound (rng f))*vol(A) by A7,RELAT_1:97;
   hence lower_sum(f,D1)<=lower_sum(f,D2) by A1,Th27;
 end;
 
@@ -1839,7 +1860,7 @@ theorem
   for A be closed-interval Subset of REAL, S be non empty Division of A,
   D be Element of S st i in dom D holds
   ex A1,A2 be closed-interval Subset of REAL
-  st A1=[.inf A,D.i .] & A2=[. D.i,sup A.] & A=A1 \/ A2
+  st A1=[.lower_bound A,D.i .] & A2=[. D.i,upper_bound A.] & A=A1 \/ A2
 proof
   let A be closed-interval Subset of REAL;
   let S be non empty Division of A;
@@ -1849,15 +1870,17 @@ A1: i in dom D;
 A2: rng D c= A by Def2;
   D.i in rng D by A1,FUNCT_1:def 5;
   then D.i in A by A2;
-  then D.i in [.inf A,sup A.] by Th5;
-  then D.i in {a: inf A <= a & a <= sup A} by RCOMP_1:def 1;
+  then D.i in [.lower_bound A,upper_bound A.] by Th5;
+  then D.i in {a: lower_bound A <= a & a <= upper_bound A} by RCOMP_1:def 1;
   then
-A3: ex a st a=D.i & inf A <= a & a <= sup A;
-  then reconsider A1 =[.inf A,D.i .] as closed-interval Subset of REAL by Def1;
+A3: ex a st a=D.i & lower_bound A <= a & a <= upper_bound A;
+  then reconsider A1 =[.lower_bound A,D.i .] as closed-interval Subset of REAL
+   by Def1;
   take A1;
-  reconsider A2 = [. D.i,sup A.] as closed-interval Subset of REAL by A3,Def1;
+  reconsider A2 = [. D.i,upper_bound A.] as closed-interval Subset of REAL
+   by A3,Def1;
   take A2;
-  A1 \/ A2 = [.inf A,sup A.] by A3,XXREAL_1:174
+  A1 \/ A2 = [.lower_bound A,upper_bound A.] by A3,XXREAL_1:174
     .= A by Th5;
   hence thesis;
 end;
@@ -1988,7 +2011,7 @@ theorem Th38:
   for A be closed-interval Subset of REAL,
   S be non empty Division of A, D be Element of S, i,j be Element of NAT holds
   i in dom D & j in dom D & i<=j implies ex B be closed-interval Subset of REAL
-  st inf B=mid(D,i,j).1 & sup B=mid(D,i,j).(len mid(D,i,j))
+  st lower_bound B=mid(D,i,j).1 & upper_bound B=mid(D,i,j).(len mid(D,i,j))
   & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B
 proof
   let A be closed-interval Subset of REAL;
@@ -2066,10 +2089,10 @@ A12:  i in dom M & x=M.i by PARTFUN1:26;
     hence thesis by SUBSET_1:7;
   end;
 A13: len mid(D,i,j) = j-i+1 by A3,A8,XREAL_1:235;
-A14: B=[.inf B,sup B.] by Th5;
+A14: B=[.lower_bound B,upper_bound B.] by Th5;
   then
-A15: inf B = M.1 by Th6;
-A16: M.(len M)=sup B by A14,Th6;
+A15: lower_bound B = M.1 by Th6;
+A16: M.(len M)=upper_bound B by A14,Th6;
   then M is DivisionPoint of B by A11,Def2;
   hence thesis by A13,A15,A16;
 end;
@@ -2078,7 +2101,7 @@ theorem Th39:
   for A,B be closed-interval Subset of REAL,
   S be non empty Division of A, S1 be non empty Division of B,
   D be Element of S, i,j be Element of NAT
-  holds i in dom D & j in dom D & i<=j & D.i>=inf B & D.j=sup B
+  holds i in dom D & j in dom D & i<=j & D.i>=lower_bound B & D.j=upper_bound B
   implies mid(D,i,j) is Element of S1
 proof
   let A,B be closed-interval Subset of REAL;
@@ -2090,11 +2113,11 @@ proof
 A1: i in dom D and
 A2: j in dom D and
 A3: i<=j and
-A4: D.i>=inf B and
-A5: D.j=sup B;
+A4: D.i>=lower_bound B and
+A5: D.j=upper_bound B;
   consider A1 be closed-interval Subset of REAL such that
-A6: inf A1=mid(D,i,j).1 and
-A7: sup A1=mid(D,i,j).(len mid(D,i,j)) and
+A6: lower_bound A1=mid(D,i,j).1 and
+A7: upper_bound A1=mid(D,i,j).(len mid(D,i,j)) and
 A8: len mid(D,i,j)=j-i+1 and
 A9: mid(D,i,j) is DivisionPoint of A1 by A1,A2,A3,Th38;
   i in Seg(len D) by A1,FINSEQ_1:def 3;
@@ -2114,13 +2137,14 @@ A15: A1 c= B
     proof
       let x;
       assume x in A1;
-      then x in [.inf A1,sup A1.] by Th5;
-      then x in {a: inf A1 <= a & a <= sup A1} by RCOMP_1:def 1;
-      then ex a st x=a & inf A1 <= a & a <= sup A1;
+      then x in [.lower_bound A1,upper_bound A1.] by Th5;
+      then x in {a: lower_bound A1 <= a & a <= upper_bound A1}
+       by RCOMP_1:def 1;
+      then ex a st x=a & lower_bound A1 <= a & a <= upper_bound A1;
       then D.i <= x & x <= D.j by A3,A6,A7,A8,A10,A11,A12,A13,A14,JORDAN3:31;
-      then inf B <= x & x <= sup B by A4,A5,XXREAL_0:2;
-      then x in {a: inf B <= a & a <= sup B};
-      then x in [.inf B,sup B.] by RCOMP_1:def 1;
+      then lower_bound B <= x & x <= upper_bound B by A4,A5,XXREAL_0:2;
+      then x in {a: lower_bound B <= a & a <= upper_bound B};
+      then x in [.lower_bound B,upper_bound B.] by RCOMP_1:def 1;
       hence thesis by Th5;
     end;
     hence thesis by SUBSET_1:7;
@@ -2229,9 +2253,9 @@ A14:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
 A15:  1 <= len D2 by XXREAL_0:2;
       then len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-'1+1 by A14,JORDAN3:27;
       then
-A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, XREAL_1:235;
+A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14,XREAL_1:235;
       then
-A17:  len mid(D2,1,indx(D2,D1,1))=len (D2|indx(D2,D1,1)) by A14, FINSEQ_1:80;
+A17:  len mid(D2,1,indx(D2,D1,1))=len (D2|indx(D2,D1,1)) by A14,FINSEQ_1:80;
 A18:  for k be Nat st 1 <= k & k <= len mid(D2,1,indx(D2,D1,1)) holds
       mid(D2,1,indx(D2,D1,1)).k=(D2|indx(D2,D1,1)).k
       proof
@@ -2241,7 +2265,7 @@ A19:    1 <= k & k <= len mid(D2,1,indx(D2,D1,1));
         k in NAT by ORDINAL1:def 13;
         then mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-'1) by A14,A15,A19,JORDAN3:27;
         then
-A20:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by XREAL_1:235,NAT_1: 11;
+A20:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by NAT_1:11,XREAL_1:235;
         k in Seg len (D2|indx(D2,D1,1)) by A17,A19,FINSEQ_1:3;
         then k in dom (D2|indx(D2,D1,1)) by FINSEQ_1:def 3;
         then k in dom (D2|Seg indx(D2,D1,1)) by FINSEQ_1:def 15;
@@ -2253,8 +2277,8 @@ A21:  mid(D2,1,indx(D2,D1,1))=D2|indx(D2,D1,1) by A17,FINSEQ_1:18;
       set DD1=mid(D1,1,1);
       set B=divset(D1,1);
       consider S1 being non empty Division of B;
-A22:  D1.1 = sup B by A4,Def5;
-      then D1.1 >= inf B by SEQ_4:24;
+A22:  D1.1 = upper_bound B by A4,Def5;
+      then D1.1 >= lower_bound B by SEQ_4:24;
       then reconsider DD1 as Element of S1 by A4,A22,Th39;
 A23:  indx(D2,D1,1) in dom D2 by A1,A4,Def21;
       then indx(D2,D1,1) in Seg(len D2) by FINSEQ_1:def 3;
@@ -2264,14 +2288,15 @@ A24:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
       then 1 in Seg(len D2) by FINSEQ_1:3;
       then
 A25:  1 in dom D2 by FINSEQ_1:def 3;
-A26:  D2.indx(D2,D1,1) = sup B by A1,A4,A22,Def21;
+A26:  D2.indx(D2,D1,1) = upper_bound B by A1,A4,A22,Def21;
 A27:  rng D2 c= A by Def2;
       D2.1 in rng D2 by A25,FUNCT_1:def 5;
       then D2.1 in A by A27;
-      then D2.1 in [.inf A,sup A.] by Th5;
-      then D2.1 in {a: inf A <= a & a <= sup A} by RCOMP_1:def 1;
-      then ex a st D2.1=a & inf A <= a & a <= sup A;
-      then D2.1 >= inf B by A4,Def5;
+      then D2.1 in [.lower_bound A,upper_bound A.] by Th5;
+      then D2.1 in {a: lower_bound A <= a & a <= upper_bound A}
+       by RCOMP_1:def 1;
+      then ex a st D2.1=a & lower_bound A <= a & a <= upper_bound A;
+      then D2.1 >= lower_bound B by A4,Def5;
       then reconsider DD2=mid(D2,1,indx(D2,D1,1)) as Element of S1
       by A23,A24,A25,A26,Th39;
       reconsider g=f|divset(D1,1) as PartFunc of divset(D1,1),REAL
@@ -2292,7 +2317,7 @@ A30:    for x being set st x in A /\ dom f
           let x be set;
           assume x in divset(D1,1) /\ dom g;
           then
-A31:      x in dom g by XBOOLE_0:def 3;
+A31:      x in dom g by XBOOLE_0:def 4;
 A32:      A /\ dom f = dom f by XBOOLE_1:28;
 A33:      dom g c= dom f by RELAT_1:89;
           then x in A /\ dom f by A31,A32;
@@ -2325,20 +2350,22 @@ A41:      1 in dom DD1 by A39,FINSEQ_1:def 3;
 A42:      1 in dom(D1|Seg 1)
           proof
             dom(D1|Seg 1) = dom D1 /\ Seg 1 by FUNCT_1:68;
-            hence thesis by A4,A40,XBOOLE_0:def 3;
+            hence thesis by A4,A40,XBOOLE_0:def 4;
           end;
 A43:      upper_volume(g,DD1).i = upper_volume(g,DD1).1 by A36,A38,XXREAL_0:1
-            .= (sup (rng (g|divset(DD1,1))))*vol(divset(DD1,1))
+            .= (upper_bound (rng (g|divset(DD1,1))))*vol(divset(DD1,1))
           by Def7,A41;
-A44:      divset(DD1,1)=[.inf divset(DD1,1),sup divset(DD1,1).] by Th5
-            .=[.inf B,sup divset(DD1,1).] by A41,Def5
-            .=[.inf B,DD1.1 .] by A41,Def5
-            .=[.inf A,(D1|1).1 .] by A4,A9,Def5
-            .=[.inf A,(D1|Seg 1).1 .] by FINSEQ_1:def 15
-            .=[.inf A,D1.1 .] by A42,FUNCT_1:68;
-A45:      divset(D1,1)=[.inf divset(D1,1),sup divset(D1,1).] by Th5
-            .=[.inf A,sup divset(D1,1).] by A4,Def5
-            .=[.inf A,D1.1 .] by A4,Def5;
+A44:      divset(DD1,1)=[.lower_bound divset(DD1,1),
+upper_bound divset(DD1,1).] by Th5
+            .=[.lower_bound B,upper_bound divset(DD1,1).] by A41,Def5
+            .=[.lower_bound B,DD1.1 .] by A41,Def5
+            .=[.lower_bound A,(D1|1).1 .] by A4,A9,Def5
+            .=[.lower_bound A,(D1|Seg 1).1 .] by FINSEQ_1:def 15
+            .=[.lower_bound A,D1.1 .] by A42,FUNCT_1:68;
+A45:      divset(D1,1)=[.lower_bound divset(D1,1),upper_bound divset(D1,1).]
+ by Th5
+            .=[.lower_bound A,upper_bound divset(D1,1).] by A4,Def5
+            .=[.lower_bound A,D1.1 .] by A4,Def5;
           dom(upper_volume(f,D1))=Seg(len upper_volume(f,D1))
           by FINSEQ_1:def 3
             .=Seg(len D1) by Def7;
@@ -2351,7 +2378,7 @@ A46:      1 in dom (upper_volume(f,D1)|Seg 1) by FINSEQ_1:5;
           by FINSEQ_1:def 15
             .=(upper_volume(f,D1)|Seg 1).1 by A36,A38,XXREAL_0:1
             .=upper_volume(f,D1).1 by A46,FUNCT_1:68
-            .=(sup (rng(f|divset(D1,1))))*vol(divset(D1,1)) by Def7,A4;
+            .=(upper_bound (rng(f|divset(D1,1))))*vol(divset(D1,1)) by Def7,A4;
           hence thesis by A28,A43,A44,A45,RELAT_1:97;
         end;
         hence thesis by A37,FINSEQ_1:18;
@@ -2391,18 +2418,22 @@ A52:            i=1;
 A53:            1 in dom (D2|Seg indx(D2,D1,1)) by A21,A51,FINSEQ_1:def 15;
                 then 1 in dom D2 /\ Seg indx(D2,D1,1) by RELAT_1:90;
                 then
-A54:            1 in dom D2 by XBOOLE_0:def 3;
+A54:            1 in dom D2 by XBOOLE_0:def 4;
 A55:            divset
-                (DD2,i)=[.inf divset(DD2,1),sup divset(DD2,1).] by A52,Th5
-                  .=[.inf B,sup divset(DD2,1).] by A51,A52,Def5
-                  .=[.inf B,DD2.1 .] by A51,A52,Def5
-                  .=[.inf B,(D2|indx(D2,D1,1)).1 .] by A18,A50,A52
-                  .=[.inf B,(D2|Seg indx(D2,D1,1)).1 .] by FINSEQ_1:def 15
-                  .=[.inf B,D2.1 .] by A53,FUNCT_1:68
-                  .=[.inf A,D2.1 .] by A4,Def5;
-                divset(D2,i)=[.inf divset(D2,1),sup divset(D2,1).] by A52, Th5
-                  .=[.inf A,sup divset(D2,1).] by A54,Def5
-                  .=[.inf A,D2.1 .] by A54,Def5;
+                (DD2,i)=[.lower_bound divset(DD2,1),
+                upper_bound divset(DD2,1).] by A52,Th5
+                  .=[.lower_bound B,upper_bound divset(DD2,1).] by A51,A52,Def5
+                  .=[.lower_bound B,DD2.1 .] by A51,A52,Def5
+                  .=[.lower_bound B,(D2|indx(D2,D1,1)).1 .] by A18,A50,A52
+                  .=[.lower_bound B,(D2|Seg indx(D2,D1,1)).1 .]
+                   by FINSEQ_1:def 15
+                  .=[.lower_bound B,D2.1 .] by A53,FUNCT_1:68
+                  .=[.lower_bound A,D2.1 .] by A4,Def5;
+                divset(D2,i)=
+                [.lower_bound divset(D2,1),upper_bound divset(D2,1).]
+                by A52,Th5
+                  .=[.lower_bound A,upper_bound divset(D2,1).] by A54,Def5
+                  .=[.lower_bound A,D2.1 .] by A54,Def5;
                 hence thesis by A55;
               end;
               suppose
@@ -2415,17 +2446,15 @@ A58:              i-1 in dom(D2|Seg indx(D2,D1,1))
 A59:                i = 1 + j by A50,NAT_1:10;
                     i is non trivial by A50,A56,NAT_2:def 1;
                     then
-A60:                i>=1+1&i-1<=indx(D2,D1,1)-0 by A16,A50,NAT_2:31
-                    ,XREAL_1:15;
+A60:                i>=1+1&i-1<=indx(D2,D1,1)-0 by A16,A50,NAT_2:31,XREAL_1:15;
                     then i-1 >= 1 & i-1 <= indx(D2,D1,1) by XREAL_1:21;
                     then
-A61:                i-1 in Seg indx(D2,D1,1) by A59, FINSEQ_1:3;
-                    1 <= i-1 & i-1 <= len D2 by A24,A60,XREAL_1:21
-                    ,XXREAL_0:2;
+A61:                i-1 in Seg indx(D2,D1,1) by A59,FINSEQ_1:3;
+                    1 <= i-1 & i-1 <= len D2 by A24,A60,XREAL_1:21,XXREAL_0:2;
                     then i-1 in Seg(len D2) by A59,FINSEQ_1:3;
                     then i-1 in dom D2 by FINSEQ_1:def 3;
                     then i-1 in dom D2 /\ Seg indx(D2,D1,1) by A61,
-                    XBOOLE_0:def 3;
+XBOOLE_0:def 4;
                     hence thesis by FUNCT_1:68;
                   end;
                   DD2.(i-1)=(D2|indx(D2,D1,1)).(i-1) by A17,A18,FINSEQ_1:18
@@ -2440,18 +2469,20 @@ A63:              i in dom(D2|Seg indx(D2,D1,1))
                     then i in Seg(len D2) by FINSEQ_1:3;
                     then i in dom D2 by FINSEQ_1:def 3;
                     then i in dom D2 /\ Seg indx(D2,D1,1) by A16,A50,
-                    XBOOLE_0:def 3;
+XBOOLE_0:def 4;
                     hence thesis by FUNCT_1:68;
                   end;
                   DD2.i=(D2|indx(D2,D1,1)).i by A17,A18,FINSEQ_1:18
                     .=(D2|Seg indx(D2,D1,1)).i by FINSEQ_1:def 15;
                   hence thesis by A63,FUNCT_1:68;
                 end;
-A64:            divset(DD2,i)=[.inf divset(DD2,i),sup divset(DD2,i).] by Th5
-                  .=[. DD2.(i-1),sup divset(DD2,i).] by A51,A56,Def5
+A64:            divset(DD2,i)=[.lower_bound divset(DD2,i),
+upper_bound divset(DD2,i).] by Th5
+                  .=[. DD2.(i-1),upper_bound divset(DD2,i).] by A51,A56,Def5
                   .=[. D2.(i-1),D2.i .] by A51,A56,A57,A62,Def5;
-                divset(D2,i)=[.inf divset(D2,i),sup divset(D2,i).] by Th5
-                  .=[. D2.(i-1),sup divset(D2,i).] by A51,A56,Def5
+                divset(D2,i)=
+                [.lower_bound divset(D2,i),upper_bound divset(D2,i).] by Th5
+                  .=[. D2.(i-1),upper_bound divset(D2,i).] by A51,A56,Def5
                   .=[. D2.(i-1),D2.i .] by A51,A56,Def5;
                 hence thesis by A64;
               end;
@@ -2460,13 +2491,17 @@ A64:            divset(DD2,i)=[.inf divset(DD2,i),sup divset(DD2,i).] by Th5
           end;
           then
 A65:      upper_volume(g,DD2).i
-          =(sup (rng (g|divset(D2,i))))*vol(divset(D2,i)) by A50,Def7;
+          =(upper_bound (rng (g|divset(D2,i))))*vol(divset(D2,i)) by A50,Def7;
 A66:      divset(D2,i) c= divset(D1,1)
           proof
-A67:        divset(D2,i)=[.inf divset(D2,i),sup divset(D2,i).] by Th5;
-A68:        divset(D1,1)=[.inf divset(D1,1),sup divset(D1,1).] by Th5;
-            inf divset(D2,i) in [.inf divset(D1,1),sup divset(D1,1).] &
-            sup divset(D2,i) in [.inf divset(D1,1),sup divset(D1,1).]
+A67:        divset(D2,i)=[.lower_bound divset(D2,i),upper_bound divset(D2,i).]
+ by Th5;
+A68:        divset(D1,1)=[.lower_bound divset(D1,1),upper_bound divset(D1,1).]
+ by Th5;
+            lower_bound divset(D2,i) in [.lower_bound divset(D1,1),
+            upper_bound divset(D1,1).] &
+            upper_bound divset(D2,i) in
+            [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
             proof
 A69:          i in dom DD2 & i in dom D2
               proof
@@ -2482,35 +2517,42 @@ A70:              i=1;
                   by A21,A69,FINSEQ_1:def 15;
                   then 1 in dom D2 /\ Seg indx(D2,D1,1) by RELAT_1:90;
                   then
-A71:              1 in dom D2 by XBOOLE_0:def 3;
-                  then inf divset(D2,i)=inf A by A70,Def5;
+A71:              1 in dom D2 by XBOOLE_0:def 4;
+                  then lower_bound divset(D2,i)=lower_bound A by A70,Def5;
                   then
-A72:              inf divset(D2,i)=inf divset(D1,1) by A4,Def5;
-                  inf divset(D1,1) <= sup divset(D1,1)
+A72:              lower_bound divset(D2,i)=lower_bound divset(D1,1) by A4,Def5;
+                  lower_bound divset(D1,1) <= upper_bound divset(D1,1)
                   proof
-                    ex a,b st a<=b & a=inf divset(D1,1) & b=sup divset(D1,1 )
+                    ex a,b st a<=b & a=lower_bound divset(D1,1)
+                     & b=upper_bound divset(D1,1 )
                     by Th4;
                     hence thesis;
                   end;
-                  hence inf divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+                  hence lower_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by A72,XXREAL_1:1;
-A73:              sup divset(D2,i)=D2.1 by A70,A71,Def5;
+A73:              upper_bound divset(D2,i)=D2.1 by A70,A71,Def5;
                   D2.1 <= D2.indx(D2,D1,1) by A23,A24,A71,GOBOARD2:18;
-                  then sup divset(D2,i) <= D1.1 by A1,A4,A73,Def21;
+                  then upper_bound divset(D2,i) <= D1.1 by A1,A4,A73,Def21;
                   then
-A74:              sup divset(D2,i) <= sup divset(D1,1) by A4,Def5;
-                  inf divset(D2,i) <= sup divset(D2,i)
+A74:              upper_bound divset(D2,i) <= upper_bound divset(D1,1)
+ by A4,Def5;
+                  lower_bound divset(D2,i) <= upper_bound divset(D2,i)
                   proof
-                    ex a,b st a<=b & a=inf divset(D2,i) & b=sup divset(D2,i )
+                    ex a,b st a<=b & a=lower_bound divset(D2,i)
+                     & b=upper_bound divset(D2,i )
                     by Th4;
                     hence thesis;
                   end;
                   then consider a being Real such that
-A75:              a = sup divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A72,A74;
-                  sup divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A75;
-                  hence sup divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A75:              a = upper_bound divset(D2,i) & lower_bound divset(D1,1)
+ <= a &
+                  a <= upper_bound divset(D1,1) by A72,A74;
+                  upper_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r &
+                  r<=
+                  upper_bound divset(D1,1)} by A75;
+                  hence upper_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                 end;
                 suppose
@@ -2525,38 +2567,45 @@ A78:              i >= 1+1 & i-1 <= indx(D2,D1,1)-0
                   then i-1 in Seg(len D2) by A77,FINSEQ_1:3;
                   then
 A79:              i-1 in dom D2 by FINSEQ_1:def 3;
-A81:              inf divset(D2,i)=D2.(i-1) by A69,A76,Def5;
-A82:              sup divset(D2,i)=D2.i by A69,A76,Def5;
-A83:              inf divset(D1,1)=inf A by A4,Def5;
-A84:              sup divset(D1,1)=D1.1 by A4,Def5;
+A81:              lower_bound divset(D2,i)=D2.(i-1) by A69,A76,Def5;
+A82:              upper_bound divset(D2,i)=D2.i by A69,A76,Def5;
+A83:              lower_bound divset(D1,1)=lower_bound A by A4,Def5;
+A84:              upper_bound divset(D1,1)=D1.1 by A4,Def5;
 A85:              rng D2 c= A by Def2;
                   D2.(i-1) in rng D2 by A79,FUNCT_1:def 5;
                   then
-A86:              inf divset(D2,i) >= inf divset(D1,1)
+A86:              lower_bound divset(D2,i) >= lower_bound divset(D1,1)
                   by A81,A83,A85,SEQ_4:def 5;
                   D2.(i-1)<= D2.indx(D2,D1,1) by A23,A78,A79,GOBOARD2:18;
-                  then inf divset(D2,i) <= sup divset(D1,1)
+                  then lower_bound divset(D2,i) <= upper_bound divset(D1,1)
                   by A1,A4,A81,A84,Def21;
                   then consider a being Real such that
-A87:              a = inf divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A86;
-                  inf divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A87;
-                  hence inf divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A87:              a = lower_bound divset(D2,i) & lower_bound divset(D1,1)
+ <= a &
+                  a <= upper_bound divset(D1,1) by A86;
+                  lower_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r
+                   & r<=
+                  upper_bound divset(D1,1)} by A87;
+                  hence lower_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                   D2.i in rng D2 by A69,FUNCT_1:def 5;
                   then
-A88:              sup divset(D2,i) >= inf divset(D1,1)
+A88:              upper_bound divset(D2,i) >= lower_bound divset(D1,1)
                   by A82,A83,A85,SEQ_4:def 5;
                   D2.i <= D2.indx(D2,D1,1) by A16,A23,A50,A69,GOBOARD2:18;
 
-then sup divset(D2,i) <= sup divset(D1,1) by A1,A4,A82,A84,Def21;
+then upper_bound divset(D2,i) <= upper_bound divset(D1,1)
+ by A1,A4,A82,A84,Def21;
                   then consider a being Real such that
-A89:              a = sup divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A88;
-                  sup divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A89;
-                  hence sup divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A89:              a = upper_bound divset(D2,i) &
+lower_bound divset(D1,1) <= a &
+                  a <= upper_bound divset(D1,1) by A88;
+                  upper_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r
+                   & r<=
+                  upper_bound divset(D1,1)} by A89;
+                  hence upper_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                 end;
               end;
@@ -2580,7 +2629,8 @@ A91:        Seg indx(D2,D1,1) c= Seg(len D2) by A14,FINSEQ_1:7;
           (upper_volume(f,D2)|indx(D2,D1,1)).i
           =(upper_volume(f,D2)|Seg indx(D2,D1,1)).i by FINSEQ_1:def 15
             .=upper_volume(f,D2).i by A90,FUNCT_1:68
-            .=(sup (rng (f|divset(D2,i))))*vol(divset(D2,i)) by A90,Def7;
+            .=(upper_bound (rng (f|divset(D2,i))))*vol(divset(D2,i))
+             by A90,Def7;
           hence thesis by A65,A66,FUNCT_1:82;
         end;
         hence thesis by A48,FINSEQ_1:18;
@@ -2632,7 +2682,7 @@ A110:     indx(D2,D1,k) < indx(D2,D1,k+1)
           proof
             assume indx(D2,D1,k) >= indx(D2,D1,k+1);
             then
-A111:       D2.indx(D2,D1,k) >= D2.indx(D2,D1,k+1) by A105, A106, GOBOARD2:18;
+A111:       D2.indx(D2,D1,k) >= D2.indx(D2,D1,k+1) by A105,A106,GOBOARD2:18;
             k < k+1 by NAT_1:13;
             then
 A112:       D1.k < D1.(k+1) by A94,A102,SEQM_3:def 1;
@@ -2643,8 +2693,7 @@ A113:     indx(D2,D1,k+1) >= indx(D2,D1,k)
           proof
             assume indx(D2,D1,k+1) < indx(D2,D1,k);
             then
-A114:       D2.indx(D2,D1,k+1) < D2.indx(D2,D1,k) by A105,A106,
-            SEQM_3:def 1;
+A114:       D2.indx(D2,D1,k+1) < D2.indx(D2,D1,k) by A105,A106,SEQM_3:def 1;
             D1.(k+1) = D2.indx(D2,D1,k+1) by A1,A94,Def21;
             then D1.(k+1) < D1.k by A1,A102,A114,Def21;
             hence contradiction by A94,A102,GOBOARD2:18,NAT_1:11;
@@ -2745,10 +2794,11 @@ A142:     Sum q1 >= Sum q2
             set MD2 = mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1));
             set g = f|DD1;
             consider S1 being non empty Division of DD1;
-A143:       k+1 in dom D1 & D1.(k+1) >= inf DD1 & D1.(k+1) = sup DD1
+A143:       k+1 in dom D1 & D1.(k+1) >= lower_bound DD1 &
+D1.(k+1) = upper_bound DD1
             proof
               (k+1)-1=k;
-              then inf DD1=D1.k by A94,A97,Def5;
+              then lower_bound DD1=D1.k by A94,A97,Def5;
               hence thesis by A94,A97,A99,A102,Def5,GOBOARD2:18;
             end;
             then reconsider MD1 as Element of S1 by Th39;
@@ -2762,12 +2812,12 @@ A147:       indx(D2,D1,k)+1 in dom D2 by FINSEQ_1:def 3;
 A148:       D2.indx(D2,D1,k+1)=D1.(k+1) by A1,A94,Def21;
             (k+1)-1=k;
             then
-A149:       inf DD1=D1.k by A94,A97,Def5;
+A149:       lower_bound DD1=D1.k by A94,A97,Def5;
 
-D2.(indx(D2,D1,k)+1)>=D2.indx(D2,D1,k)by A105,A147,GOBOARD2:18,NAT_1 :11;
+D2.(indx(D2,D1,k)+1)>=D2.indx(D2,D1,k)by A105,A147,GOBOARD2:18,NAT_1:11;
             then
-A150:       D2.(indx(D2,D1,k)+1) >= inf DD1 by A1,A102,A149, Def21;
-            D2.indx(D2,D1,k+1) = sup DD1 by A94,A97,A148,Def5;
+A150:       D2.(indx(D2,D1,k)+1) >= lower_bound DD1 by A1,A102,A149,Def21;
+            D2.indx(D2,D1,k+1) = upper_bound DD1 by A94,A97,A148,Def5;
             then reconsider MD2 as Element of S1 by A106,A144,A147,A150,Th39;
             reconsider g as PartFunc of DD1,REAL by PARTFUN1:43;
 A151:       g is total & g|DD1 is bounded_above
@@ -2786,7 +2836,7 @@ A152:           for x being set st x in A /\ dom f
                   let x be set;
                   assume x in divset(D1,k+1) /\ dom g;
                   then
-A153:             x in dom g by XBOOLE_0:def 3;
+A153:             x in dom g by XBOOLE_0:def 4;
 A154:             A /\ dom f = dom f by XBOOLE_1:28;
 A155:             dom g c= dom f by RELAT_1:89;
                   then x in A /\ dom f by A153,A154;
@@ -2825,26 +2875,28 @@ A164:           k+1 in dom (upper_volume(f,D1)|Seg(k+1)) by FINSEQ_1:def 15;
 K1D1.(k+1)=(upper_volume(f,D1)|Seg(k+1)).(k+1) by FINSEQ_1:def 15
                   .=upper_volume(f,D1).(k+1) by A164,FUNCT_1:68;
                 then
-A165:           q1.n = upper_volume(f,D1).(k+1) by A120, A161,A163,
-                FINSEQ_1:def 7
+A165:           q1.n = upper_volume(f,D1).(k+1) by A120,A161,A163,
+FINSEQ_1:def 7
 
-.=(sup(rng(f|divset(D1,k+1))))*vol(divset(D1,k+1)) by Def7,A94;
-A166:           divset(MD1,1)=[.inf divset(MD1,1),sup divset(MD1,1).] by Th5;
+.=(upper_bound(rng(f|divset(D1,k+1))))*vol(divset(D1,k+1)) by Def7,A94;
+A166:           divset(MD1,1)=[.lower_bound divset(MD1,1),
+upper_bound divset(MD1,1).] by Th5;
 A167:           1 in dom MD1
                 proof
                   1 in Seg(len MD1) by A158,FINSEQ_1:5;
                   hence thesis by FINSEQ_1:def 3;
                 end;
 A168:           MD1.1 =D1.(k+1) by A96,JORDAN3:27;
-A169:           divset(MD1,1)=[.inf DD1,sup divset(MD1,1).] by A166,A167,Def5
-                  .=[.inf DD1,D1.(k+1).] by A167,A168,Def5;
+A169:           divset(MD1,1)=[.lower_bound DD1,upper_bound divset(MD1,1).]
+ by A166,A167,Def5
+                  .=[.lower_bound DD1,D1.(k+1).] by A167,A168,Def5;
                 (k+1)-1=k;
                 then
-A170:           inf DD1 = D1.k by A94,A97,Def5;
-                sup DD1 = D1.(k+1) by A94,A97,Def5;
+A170:           lower_bound DD1 = D1.k by A94,A97,Def5;
+                upper_bound DD1 = D1.(k+1) by A94,A97,Def5;
                 then divset(D1,k+1)=[. D1.k,D1.(k+1).] by A170,Th5;
                 then upper_volume(g,MD1).n
-                =(sup(rng(g|divset(D1,k+1))))*vol(divset(D1,k+1))
+                =(upper_bound(rng(g|divset(D1,k+1))))*vol(divset(D1,k+1))
                 by A161,A169,A170,Def7,A163,Y;
                 hence thesis by A165,FUNCT_1:82;
               end;
@@ -2858,7 +2910,7 @@ A172:         indx(D2,D1,k+1)-'(indx(D2,D1,k)+1)+1
 A173:         len(upper_volume(g,MD2))=
               len mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)) by Def7
                 .=indx(D2,D1,k+1)-indx(D2,D1,k) by A108,A144,A145,A146,A172,
-              JORDAN3:27;
+JORDAN3:27;
 
 for n be Nat st 1 <= n & n <= len q2 holds q2.n=upper_volume(g,MD2).n
               proof
@@ -2901,7 +2953,8 @@ A188:           q2.n=K1D2.(indx(D2,D1,k)+n) by A121,A176,FINSEQ_1:def 7
 .=(upper_volume(f,D2)|Seg indx(D2,D1,k+1)).(indx(D2,D1,k)+n) by FINSEQ_1:def 15
                   .=upper_volume(f,D2).(indx(D2,D1,k)+n) by A179,FUNCT_1:68
 
-.=(sup(rng(f|divset(D2,indx(D2,D1,k)+n))))*vol(divset(D2,indx(D2,D1,k)+n))
+.=(upper_bound(rng(f|divset(D2,indx(D2,D1,k)+n))))*
+vol(divset(D2,indx(D2,D1,k)+n))
                 by A178,Def7,B180;
 A189:           divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) &
                 divset(D2,indx(D2,D1,k)+n) c= divset(D1,k+1)
@@ -2913,20 +2966,23 @@ A191:                 (k+1)-1=k;
 A192:                 1<=indx(D2,D1,k)+1 & indx(D2,D1,k)+1<=len D2
                       by A178,A180,A190,FINSEQ_1:3;
 A193:                 indx(D2,D1,k)+1 <> 1 by A118,NAT_1:13;
-A194:                 inf divset(MD2,1)=inf divset(D1,k+1) by A187,A190,Def5
+A194:                 lower_bound divset(MD2,1)=lower_bound divset(D1,k+1)
+ by A187,A190,Def5
                         .= D1.k by A94,A97,A191,Def5;
-A195:                 sup divset(MD2,1)=
+A195:                 upper_bound divset(MD2,1)=
 
 mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)).1 by A187,A190,Def5
                         .= D2.(1+indx(D2,D1,k)) by A108,A192,JORDAN3:27;
                       then
-A196:                 divset(MD2,n)=[.D1.k,D2.(indx( D2,D1,k)+1).] by A190
-                      ,A194,Th5;
+A196:                 divset(MD2,n)=[.D1.k,D2.(indx( D2,D1,k)+1).] by A190,A194
+,Th5;
 A197:                 divset(D2,indx(D2,D1,k)+n)=
 
-[.inf divset(D2,indx(D2,D1,k)+1),sup divset(D2,indx(D2,D1,k)+1).] by A190,Th5
+[.lower_bound divset(D2,indx(D2,D1,k)+1),upper_bound divset(D2,
+indx(D2,D1,k)+1).] by A190,Th5
 
-.=[.D2.(indx(D2,D1,k)+1-1),sup divset(D2,indx(D2,D1,k)+1).] by A147,A193,Def5
+.=[.D2.(indx(D2,D1,k)+1-1),upper_bound divset(D2,indx(D2,D1,k)+1).]
+ by A147,A193,Def5
 
 .=[.D2.indx(D2,D1,k),D2.(indx(D2,D1,k)+1).] by A147,A193,Def5
                         .=[.D1.k,D2.(indx(D2,D1,k)+1).] by A1,A102,Def21;
@@ -2953,7 +3009,7 @@ A202:                 1<=n-1 & n-1<=len MD2
                       end;
 A203:                 n
 
-+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by XREAL_1:235, NAT_1:11
++(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by NAT_1:11,XREAL_1:235
                         .=indx(D2,D1,k)+n;
 A204:                 indx(D2,D1,k)+n <> 1
                       proof
@@ -2963,26 +3019,28 @@ A204:                 indx(D2,D1,k)+n <> 1
                         then n <= 1-1 by XREAL_1:21;
                         hence contradiction by A174,NAT_1:3;
                       end;
-A205:                 inf divset(MD2,n)=MD2.(n-1) by A187,A198,Def5
+A205:                 lower_bound divset(MD2,n)=MD2.(n-1) by A187,A198,Def5
 
-.=D2.(indx(D2,D1,k)+n-1) by A108,A145,A146,A199,A200,A201,A202, JORDAN3:27;
-A206:                 sup divset(MD2,n)=MD2.n by A187,A198,Def5
+.=D2.(indx(D2,D1,k)+n-1) by A108,A145,A146,A199,A200,A201,A202,JORDAN3:27;
+A206:                 upper_bound divset(MD2,n)=MD2.n by A187,A198,Def5
 
 .=D2.(indx(D2,D1,k)+n) by A108,A145,A146,A174,A175,A183,A185,A199,A203,
-                      JORDAN3:27;
+JORDAN3:27;
                       then
 A207:                 divset(MD2,n)=
 
 [. D2.(indx(D2,D1,k)+n-1),D2.(indx(D2,D1,k)+n) .] by A205,Th5;
 A208:                 divset(D2,indx(D2,D1,k)+n)
 
-=[.inf divset(D2,indx(D2,D1,k)+n),sup divset(D2,indx(D2,D1,k)+n).] by Th5
+=[.lower_bound divset(D2,indx(D2,D1,k)+n),
+upper_bound divset(D2,indx(D2,D1,k)+n).] by Th5
 
-.=[.D2.(indx(D2,D1,k)+n-1),sup divset(D2,indx(D2,D1,k)+n).] by A181,A204,Def5
+.=[.D2.(indx(D2,D1,k)+n-1),upper_bound divset(D2,indx(D2,D1,k)+n).]
+ by A181,A204,Def5
 
 .=[. D2.(indx(D2,D1,k)+n-1),D2.(indx(D2,D1,k)+n) .] by A181,A204,Def5;
 
-hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A205,A206, Th5;
+hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A205,A206,Th5;
                       thus thesis by A187,A207,A208,Th10;
                     end;
                   end;
@@ -3082,9 +3140,9 @@ A14:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
 A15:  1 <= len D2 by XXREAL_0:2;
       then len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-'1+1 by A14,JORDAN3:27;
       then
-A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14, XREAL_1:235;
+A16:  len mid(D2,1,indx(D2,D1,1))=indx(D2,D1,1)-1+1 by A14,XREAL_1:235;
       then
-A17:  len mid(D2,1,indx(D2,D1,1))=len(D2|indx(D2,D1,1)) by A14, FINSEQ_1:80;
+A17:  len mid(D2,1,indx(D2,D1,1))=len(D2|indx(D2,D1,1)) by A14,FINSEQ_1:80;
 A18:  for k be Nat st 1 <= k & k <= len mid(D2,1,indx(D2,D1,1)) holds
       mid(D2,1,indx(D2,D1,1)).k=(D2|indx(D2,D1,1)).k
       proof
@@ -3095,7 +3153,7 @@ A19:    1 <= k & k <= len mid(D2,1,indx(D2,D1,1));
 A20:    k in Seg len (D2|indx(D2,D1,1)) by A17,FINSEQ_1:3;
         then mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-'1) by A14,A15,A19,JORDAN3:27;
         then
-A21:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by XREAL_1:235,NAT_1: 11;
+A21:    mid(D2,1,indx(D2,D1,1)).k=D2.(k+1-1) by NAT_1:11,XREAL_1:235;
         k in dom (D2|indx(D2,D1,1)) by A20,FINSEQ_1:def 3;
         then k in dom (D2|Seg indx(D2,D1,1)) by FINSEQ_1:def 15;
         then (D2|Seg indx(D2,D1,1)).k=D2.k by FUNCT_1:68;
@@ -3107,8 +3165,8 @@ A22:  mid(D2,1,indx(D2,D1,1))=D2|indx(D2,D1,1) by A17,FINSEQ_1:18;
       set DD2=mid(D2,1,indx(D2,D1,1));
       set B=divset(D1,1);
       consider S1 being non empty Division of B;
-A23:  D1.1 = sup B by A4,Def5;
-      inf B <= sup B by SEQ_4:24;
+A23:  D1.1 = upper_bound B by A4,Def5;
+      lower_bound B <= upper_bound B by SEQ_4:24;
       then reconsider DD1 as Element of S1 by A4,A23,Th39;
 A24:  indx(D2,D1,1) in dom D2 by A1,A4,Def21;
       then indx(D2,D1,1) in Seg(len D2) by FINSEQ_1:def 3;
@@ -3118,14 +3176,15 @@ A25:  1 <= indx(D2,D1,1) & indx(D2,D1,1) <= len D2 by FINSEQ_1:3;
       then 1 in Seg(len D2) by FINSEQ_1:3;
       then
 A26:  1 in dom D2 by FINSEQ_1:def 3;
-A27:  D2.indx(D2,D1,1) = sup B by A1,A4,A23,Def21;
+A27:  D2.indx(D2,D1,1) = upper_bound B by A1,A4,A23,Def21;
 A28:  rng D2 c= A by Def2;
       D2.1 in rng D2 by A26,FUNCT_1:def 5;
       then D2.1 in A by A28;
-      then D2.1 in [.inf A,sup A.] by Th5;
-      then D2.1 in {a: inf A <= a & a <= sup A} by RCOMP_1:def 1;
-      then ex a st D2.1=a & inf A <= a & a <= sup A;
-      then D2.1 >= inf B by A4,Def5;
+      then D2.1 in [.lower_bound A,upper_bound A.] by Th5;
+      then D2.1 in {a: lower_bound A <= a & a <= upper_bound A}
+       by RCOMP_1:def 1;
+      then ex a st D2.1=a & lower_bound A <= a & a <= upper_bound A;
+      then D2.1 >= lower_bound B by A4,Def5;
       then reconsider DD2 as Element of S1 by A24,A25,A26,A27,Th39;
       set g=f|divset(D1,1);
       reconsider g as PartFunc of divset(D1,1),REAL by PARTFUN1:43;
@@ -3145,10 +3204,10 @@ A31:    for x being set st x in A /\ dom f
           let x be set;
           assume x in divset(D1,1) /\ dom g;
           then
-A32:      x in dom g by XBOOLE_0:def 3;
+A32:      x in dom g by XBOOLE_0:def 4;
 A33:      A /\ dom f = dom f by XBOOLE_1:28;
 A34:      dom g c= dom f by RELAT_1:89;
-          then reconsider x as Element of A by A32,A33,XBOOLE_0:def 3;
+          then reconsider x as Element of A by A32,A33,XBOOLE_0:def 4;
           a <= f.x by A31,A32,A33,A34;
           hence thesis by A32,FUNCT_1:68;
         end;
@@ -3176,19 +3235,22 @@ A43:      1 in dom DD1 by A40,A41,FINSEQ_1:def 3;
 A44:      1 in dom(D1|Seg 1)
           proof
             dom(D1|Seg 1) = dom D1 /\ Seg 1 by FUNCT_1:68;
-            hence thesis by A4,A41,XBOOLE_0:def 3;
+            hence thesis by A4,A41,XBOOLE_0:def 4;
           end;
 A45:      lower_volume(g,DD1).i = lower_volume(g,DD1).1 by A37,A39,XXREAL_0:1
-            .= (inf (rng (g|divset(DD1,1))))*vol(divset(DD1,1)) by A43,Def8;
-A46:      divset(DD1,1)=[.inf divset(DD1,1),sup divset(DD1,1).] by Th5
-            .=[.inf B,sup divset(DD1,1).] by A43,Def5
-            .=[.inf B,DD1.1 .] by A43,Def5
-            .=[.inf A,(D1|1).1 .] by A4,A9,Def5
-            .=[.inf A,(D1|Seg 1).1 .] by FINSEQ_1:def 15
-            .=[.inf A,D1.1 .] by A44,FUNCT_1:68;
-A47:      divset(D1,1)=[.inf divset(D1,1),sup divset(D1,1).] by Th5
-            .=[.inf A,sup divset(D1,1).] by A4,Def5
-            .=[.inf A,D1.1 .] by A4,Def5;
+            .= (lower_bound (rng (g|divset(DD1,1))))*vol(divset(DD1,1))
+             by A43,Def8;
+A46:      divset(DD1,1)=[.lower_bound
+ divset(DD1,1),upper_bound divset(DD1,1).] by Th5
+            .=[.lower_bound B,upper_bound divset(DD1,1).] by A43,Def5
+            .=[.lower_bound B,DD1.1 .] by A43,Def5
+            .=[.lower_bound A,(D1|1).1 .] by A4,A9,Def5
+            .=[.lower_bound A,(D1|Seg 1).1 .] by FINSEQ_1:def 15
+            .=[.lower_bound A,D1.1 .] by A44,FUNCT_1:68;
+A47:      divset(D1,1)=[.lower_bound divset(D1,1),upper_bound divset(D1,1).]
+ by Th5
+            .=[.lower_bound A,upper_bound divset(D1,1).] by A4,Def5
+            .=[.lower_bound A,D1.1 .] by A4,Def5;
           dom(lower_volume(f,D1))=Seg(len lower_volume(f,D1))
           by FINSEQ_1:def 3
             .=Seg(len D1) by Def8;
@@ -3201,7 +3263,7 @@ A48:      1 in dom (lower_volume(f,D1)|Seg 1) by FINSEQ_1:5;
           by FINSEQ_1:def 15
             .=(lower_volume(f,D1)|Seg 1).1 by A37,A39,XXREAL_0:1
             .=lower_volume(f,D1).1 by A48,FUNCT_1:68
-            .=(inf (rng(f|divset(D1,1))))*vol(divset(D1,1)) by Def8,A4;
+            .=(lower_bound (rng(f|divset(D1,1))))*vol(divset(D1,1)) by Def8,A4;
           hence thesis by A29,A45,A46,A47,RELAT_1:97;
         end;
         hence thesis by A38,FINSEQ_1:18;
@@ -3241,18 +3303,21 @@ A54:            i=1;
 A55:            1 in dom (D2|Seg indx(D2,D1,1)) by A22,A53,FINSEQ_1:def 15;
                 then 1 in dom D2 /\ Seg indx(D2,D1,1) by RELAT_1:90;
                 then
-A56:            1 in dom D2 by XBOOLE_0:def 3;
+A56:            1 in dom D2 by XBOOLE_0:def 4;
 A57:            divset
-                (DD2,i)=[.inf divset(DD2,1),sup divset(DD2,1).] by A54,Th5
-                  .=[.inf B,sup divset(DD2,1).] by A53,A54,Def5
-                  .=[.inf B,DD2.1 .] by A53,A54,Def5
-                  .=[.inf B,(D2|indx(D2,D1,1)).1 .] by A18,A52,A54
-                  .=[.inf B,(D2|Seg indx(D2,D1,1)).1 .] by FINSEQ_1:def 15
-                  .=[.inf B,D2.1 .] by A55,FUNCT_1:68
-                  .=[.inf A,D2.1 .] by A4,Def5;
-                divset(D2,i)=[.inf divset(D2,1),sup divset(D2,1).] by A54, Th5
-                  .=[.inf A,sup divset(D2,1).] by A56,Def5
-                  .=[.inf A,D2.1 .] by A56,Def5;
+                (DD2,i)=[.lower_bound divset(DD2,1),
+                upper_bound divset(DD2,1).] by A54,Th5
+                  .=[.lower_bound B,upper_bound divset(DD2,1).] by A53,A54,Def5
+                  .=[.lower_bound B,DD2.1 .] by A53,A54,Def5
+                  .=[.lower_bound B,(D2|indx(D2,D1,1)).1 .] by A18,A52,A54
+                  .=[.lower_bound B,(D2|Seg indx(D2,D1,1)).1 .]
+                   by FINSEQ_1:def 15
+                  .=[.lower_bound B,D2.1 .] by A55,FUNCT_1:68
+                  .=[.lower_bound A,D2.1 .] by A4,Def5;
+                divset(D2,i)=[.lower_bound divset(D2,1),
+                upper_bound divset(D2,1).] by A54,Th5
+                  .=[.lower_bound A,upper_bound divset(D2,1).] by A56,Def5
+                  .=[.lower_bound A,D2.1 .] by A56,Def5;
                 hence thesis by A57;
               end;
               suppose
@@ -3269,13 +3334,12 @@ A62:                i >= 1+1 & i-1 <= indx(D2,D1,1)-0
                     by A16,A52,NAT_2:31,XREAL_1:15;
                     then i-1 >= 1 & i-1 <= indx(D2,D1,1) by XREAL_1:21;
                     then
-A63:                i-1 in Seg indx(D2,D1,1) by A61, FINSEQ_1:3;
-                    1 <= i-1 & i-1 <= len D2 by A25,A62,XREAL_1:21
-                    ,XXREAL_0:2;
+A63:                i-1 in Seg indx(D2,D1,1) by A61,FINSEQ_1:3;
+                    1 <= i-1 & i-1 <= len D2 by A25,A62,XREAL_1:21,XXREAL_0:2;
                     then i-1 in Seg(len D2) by A61,FINSEQ_1:3;
                     then i-1 in dom D2 by FINSEQ_1:def 3;
                     then i-1 in dom D2 /\ Seg indx(D2,D1,1) by A63,
-                    XBOOLE_0:def 3;
+XBOOLE_0:def 4;
                     hence thesis by FUNCT_1:68;
                   end;
                   DD2.(i-1)=(D2|indx(D2,D1,1)).(i-1) by A17,A18,FINSEQ_1:18
@@ -3290,18 +3354,20 @@ A65:              i in dom(D2|Seg indx(D2,D1,1))
                     then i in Seg(len D2) by FINSEQ_1:3;
                     then i in dom D2 by FINSEQ_1:def 3;
                     then i in dom D2 /\ Seg indx(D2,D1,1) by A16,A52,
-                    XBOOLE_0:def 3;
+XBOOLE_0:def 4;
                     hence thesis by FUNCT_1:68;
                   end;
                   DD2.i=(D2|indx(D2,D1,1)).i by A17,A18,FINSEQ_1:18
                     .=(D2|Seg indx(D2,D1,1)).i by FINSEQ_1:def 15;
                   hence thesis by A65,FUNCT_1:68;
                 end;
-A66:            divset(DD2,i)=[.inf divset(DD2,i),sup divset(DD2,i).] by Th5
-                  .=[. DD2.(i-1),sup divset(DD2,i).] by A53,A58,Def5
+A66:            divset(DD2,i)=[.lower_bound divset(DD2,i),
+upper_bound divset(DD2,i).] by Th5
+                  .=[. DD2.(i-1),upper_bound divset(DD2,i).] by A53,A58,Def5
                   .=[. D2.(i-1),D2.i .] by A53,A58,A59,A64,Def5;
-                divset(D2,i)=[.inf divset(D2,i),sup divset(D2,i).] by Th5
-                  .=[. D2.(i-1),sup divset(D2,i).] by A53,A58,Def5
+                divset(D2,i)=[.lower_bound divset(D2,i),
+                upper_bound divset(D2,i).] by Th5
+                  .=[. D2.(i-1),upper_bound divset(D2,i).] by A53,A58,Def5
                   .=[. D2.(i-1),D2.i .] by A53,A58,Def5;
                 hence thesis by A66;
               end;
@@ -3310,13 +3376,17 @@ A66:            divset(DD2,i)=[.inf divset(DD2,i),sup divset(DD2,i).] by Th5
           end;
           then
 A67:      lower_volume(g,DD2).i
-          =(inf (rng (g|divset(D2,i))))*vol(divset(D2,i)) by A52,Def8;
+          =(lower_bound (rng (g|divset(D2,i))))*vol(divset(D2,i)) by A52,Def8;
 A68:      divset(D2,i) c= divset(D1,1)
           proof
-A69:        divset(D2,i)=[.inf divset(D2,i),sup divset(D2,i).] by Th5;
-A70:        divset(D1,1)=[.inf divset(D1,1),sup divset(D1,1).] by Th5;
-            inf divset(D2,i) in [.inf divset(D1,1),sup divset(D1,1).] &
-            sup divset(D2,i) in [.inf divset(D1,1),sup divset(D1,1).]
+A69:        divset(D2,i)=[.lower_bound divset(D2,i),upper_bound divset(D2,i).]
+ by Th5;
+A70:        divset(D1,1)=[.lower_bound divset(D1,1),upper_bound divset(D1,1).]
+ by Th5;
+            lower_bound divset(D2,i) in [.lower_bound divset(D1,1),
+            upper_bound divset(D1,1).] &
+            upper_bound divset(D2,i) in [.lower_bound divset(D1,1),
+            upper_bound divset(D1,1).]
             proof
 A71:          i in dom DD2 & i in dom D2
               proof
@@ -3332,35 +3402,42 @@ A72:              i=1;
                   by A22,A71,FINSEQ_1:def 15;
                   then 1 in dom D2 /\ Seg indx(D2,D1,1) by RELAT_1:90;
                   then
-A73:              1 in dom D2 by XBOOLE_0:def 3;
-                  then inf divset(D2,i)=inf A by A72,Def5;
+A73:              1 in dom D2 by XBOOLE_0:def 4;
+                  then lower_bound divset(D2,i)=lower_bound A by A72,Def5;
                   then
-A74:              inf divset(D2,i)=inf divset(D1,1) by A4,Def5;
-                  inf divset(D1,1) <= sup divset(D1,1)
+A74:              lower_bound divset(D2,i)=lower_bound divset(D1,1) by A4,Def5;
+                  lower_bound divset(D1,1) <= upper_bound divset(D1,1)
                   proof
-                    ex a,b st a<=b & a=inf divset(D1,1) & b=sup divset(D1,1 )
+                    ex a,b st a<=b & a=lower_bound divset(D1,1) &
+                     b=upper_bound divset(D1,1 )
                     by Th4;
                     hence thesis;
                   end;
-                  hence inf divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+                  hence lower_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by A74,XXREAL_1:1;
-A75:              sup divset(D2,i)=D2.1 by A72,A73,Def5;
+A75:              upper_bound divset(D2,i)=D2.1 by A72,A73,Def5;
                   D2.1 <= D2.indx(D2,D1,1) by A24,A25,A73,GOBOARD2:18;
                   then D2.1 <= D1.1 by A1,A4,Def21;
                   then
-A76:              sup divset(D2,i) <= sup divset(D1,1) by A4,A75,Def5;
-                  inf divset(D2,i) <= sup divset(D2,i)
+A76:              upper_bound divset(D2,i) <= upper_bound divset(D1,1)
+ by A4,A75,Def5;
+                  lower_bound divset(D2,i) <= upper_bound divset(D2,i)
                   proof
-                    ex a,b st a<=b & a=inf divset(D2,i) & b=sup divset(D2,i )
+                    ex a,b st a<=b & a=lower_bound divset(D2,i) &
+                     b=upper_bound divset(D2,i )
                     by Th4;
                     hence thesis;
                   end;
                   then consider a being Real such that
-A77:              a = sup divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A74,A76;
-                  sup divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A77;
-                  hence sup divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A77:              a = upper_bound divset(D2,i) &
+lower_bound divset(D1,1) <= a &
+                  a <= upper_bound divset(D1,1) by A74,A76;
+                  upper_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r
+                   & r<=
+                  upper_bound divset(D1,1)} by A77;
+                  hence upper_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                 end;
                 suppose
@@ -3375,38 +3452,46 @@ A80:              i >= 1+1 & i-1 <= indx(D2,D1,1)-0
                   then i-1 in Seg(len D2) by A79,FINSEQ_1:3;
                   then
 A81:              i-1 in dom D2 by FINSEQ_1:def 3;
-A83:              inf divset(D2,i)=D2.(i-1) by A71,A78,Def5;
-A84:              sup divset(D2,i)=D2.i by A71,A78,Def5;
-A85:              inf divset(D1,1)=inf A by A4,Def5;
-A86:              sup divset(D1,1)=D1.1 by A4,Def5;
+A83:              lower_bound divset(D2,i)=D2.(i-1) by A71,A78,Def5;
+A84:              upper_bound divset(D2,i)=D2.i by A71,A78,Def5;
+A85:              lower_bound divset(D1,1)=lower_bound A by A4,Def5;
+A86:              upper_bound divset(D1,1)=D1.1 by A4,Def5;
 A87:              rng D2 c= A by Def2;
                   D2.(i-1) in rng D2 by A81,FUNCT_1:def 5;
                   then
-A88:              inf divset(D2,i) >= inf divset(D1,1)
+A88:              lower_bound divset(D2,i) >= lower_bound divset(D1,1)
                   by A83,A85,A87,SEQ_4:def 5;
                   D2.(i-1)<= D2.indx(D2,D1,1) by A24,A80,A81,GOBOARD2:18;
-                  then inf divset(D2,i) <= sup divset(D1,1) by A1,A4,A83,A86,
-                  Def21;
+                  then lower_bound divset(D2,i) <= upper_bound divset(D1,1)
+                   by A1,A4,A83,A86
+,Def21;
                   then consider a being Real such that
-A89:              a = inf divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A88;
-                  inf divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A89;
-                  hence inf divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A89:              a = lower_bound divset(D2,i) & lower_bound divset(D1,1)
+ <= a &
+                  a <= upper_bound divset(D1,1) by A88;
+                  lower_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r
+                   & r<=
+                  upper_bound divset(D1,1)} by A89;
+                  hence lower_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                   D2.i in rng D2 by A71,FUNCT_1:def 5;
                   then
-A90:              sup divset(D2,i) >= inf divset(D1,1)
+A90:              upper_bound divset(D2,i) >= lower_bound divset(D1,1)
                   by A84,A85,A87,SEQ_4:def 5;
                   D2.i <= D2.indx(D2,D1,1) by A16,A24,A52,A71,GOBOARD2:18;
 
-then sup divset(D2,i) <= sup divset(D1,1) by A1,A4,A84,A86,Def21;
+then upper_bound divset(D2,i) <= upper_bound divset(D1,1)
+ by A1,A4,A84,A86,Def21;
                   then consider a being Real such that
-A91:              a = sup divset(D2,i) & inf divset(D1,1) <= a &
-                  a <= sup divset(D1,1) by A90;
-                  sup divset(D2,i)in{r: inf divset(D1,1)<=r & r<=
-                  sup divset(D1,1)} by A91;
-                  hence sup divset(D2,i)in[.inf divset(D1,1),sup divset(D1,1).]
+A91:              a = upper_bound divset(D2,i) & lower_bound divset(D1,1)
+ <= a &
+                  a <= upper_bound divset(D1,1) by A90;
+                  upper_bound divset(D2,i)in{r: lower_bound divset(D1,1)<=r &
+                   r<=
+                  upper_bound divset(D1,1)} by A91;
+                  hence upper_bound divset(D2,i)in
+                  [.lower_bound divset(D1,1),upper_bound divset(D1,1).]
                   by RCOMP_1:def 1;
                 end;
               end;
@@ -3430,7 +3515,8 @@ A93:        Seg indx(D2,D1,1) c= Seg(len D2) by A14,FINSEQ_1:7;
           (lower_volume(f,D2)|indx(D2,D1,1)).i
           =(lower_volume(f,D2)|Seg indx(D2,D1,1)).i by FINSEQ_1:def 15
             .=lower_volume(f,D2).i by A92,FUNCT_1:68
-            .=(inf (rng (f|divset(D2,i))))*vol(divset(D2,i)) by A92,Def8;
+            .=(lower_bound (rng (f|divset(D2,i))))*vol(divset(D2,i))
+             by A92,Def8;
           hence thesis by A67,A68,FUNCT_1:82;
         end;
         hence thesis by A50,FINSEQ_1:18;
@@ -3482,7 +3568,7 @@ A112:     indx(D2,D1,k) < indx(D2,D1,k+1)
           proof
             assume indx(D2,D1,k) >= indx(D2,D1,k+1);
             then
-A113:       D2.indx(D2,D1,k) >= D2.indx(D2,D1,k+1) by A107, A108, GOBOARD2:18;
+A113:       D2.indx(D2,D1,k) >= D2.indx(D2,D1,k+1) by A107,A108,GOBOARD2:18;
             k < k+1 by NAT_1:13;
             then
 A114:       D1.k < D1.(k+1) by A96,A104,SEQM_3:def 1;
@@ -3493,8 +3579,7 @@ A115:     indx(D2,D1,k+1) >= indx(D2,D1,k)
           proof
             assume indx(D2,D1,k+1) < indx(D2,D1,k);
             then
-A116:       D2.indx(D2,D1,k+1) < D2.indx(D2,D1,k) by A107,A108,
-            SEQM_3:def 1;
+A116:       D2.indx(D2,D1,k+1) < D2.indx(D2,D1,k) by A107,A108,SEQM_3:def 1;
             D1.(k+1) = D2.indx(D2,D1,k+1) by A1,A96,Def21;
             then D1.(k+1) < D1.k by A1,A104,A116,Def21;
             hence contradiction by A96,A104,GOBOARD2:18,NAT_1:11;
@@ -3594,10 +3679,11 @@ A143:     Sum q1 <= Sum q2
             set MD2 = mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1));
             set g = f|DD1;
             consider S1 being non empty Division of DD1;
-A144:       k+1 in dom D1 & D1.(k+1) >= inf DD1 & D1.(k+1) = sup DD1
+A144:       k+1 in dom D1 & D1.(k+1) >= lower_bound DD1 &
+D1.(k+1) = upper_bound DD1
             proof
               (k+1)-1=k;
-              then inf DD1=D1.k by A96,A99,Def5;
+              then lower_bound DD1=D1.k by A96,A99,Def5;
               hence thesis by A96,A99,A101,A104,Def5,GOBOARD2:18;
             end;
             then reconsider MD1 as Element of S1 by Th39;
@@ -3609,16 +3695,17 @@ A147:       1 <= indx(D2,D1,k)+1 by NAT_1:11;
             then
 A148:       indx(D2,D1,k)+1 in dom D2 by FINSEQ_1:def 3;
 A149:       D2.indx(D2,D1,k+1)=D1.(k+1) by A1,A96,Def21;
-A150:       inf divset(D1,k+1)=D1.((k+1)-1) & sup divset(D1,k+1)=D1.(k+1)
+A150:       lower_bound divset(D1,k+1)=D1.((k+1)-1) &
+upper_bound divset(D1,k+1)=D1.(k+1)
             by A96,A99,Def5;
             (k+1)-1=k;
             then
-A151:       inf DD1=D1.k by A96,A99,Def5;
-            D2.(indx(D2,D1,k)+1)>=D2.indx(D2,D1,k)by A107,A148,GOBOARD2:18,
-            NAT_1:11;
-            then D2.(indx(D2,D1,k)+1) >= inf DD1 by A1,A104,A151,Def21;
-            then reconsider MD2 as Element of S1 by A108,A145,A148,A149,A150,
-            Th39;
+A151:       lower_bound DD1=D1.k by A96,A99,Def5;
+            D2.(indx(D2,D1,k)+1)>=D2.indx(D2,D1,k)by A107,A148,GOBOARD2:18
+,NAT_1:11;
+            then D2.(indx(D2,D1,k)+1) >= lower_bound DD1 by A1,A104,A151,Def21;
+            then reconsider MD2 as Element of S1 by A108,A145,A148,A149,A150
+,Th39;
             reconsider g as PartFunc of DD1,REAL by PARTFUN1:43;
 A152:       g is total & g|DD1 is bounded_below
             proof
@@ -3636,11 +3723,11 @@ A153:           for x being set st x in A /\ dom f
                   let x be set;
                   assume x in divset(D1,k+1) /\ dom g;
                   then
-A154:             x in dom g by XBOOLE_0:def 3;
+A154:             x in dom g by XBOOLE_0:def 4;
 A155:             A /\ dom f = dom f by XBOOLE_1:28;
 A156:             dom g c= dom f by RELAT_1:89;
 
-then reconsider x as Element of A by A154,A155,XBOOLE_0:def 3;
+then reconsider x as Element of A by A154,A155,XBOOLE_0:def 4;
                   a <= f.x by A153,A154,A155,A156;
                   hence thesis by A154,FUNCT_1:68;
                 end;
@@ -3666,7 +3753,7 @@ A162:           n = 1 by A121,XXREAL_0:1;
 U:              n in Seg(len q1) by A161,FINSEQ_1:3;
                 then
 A164:           n in dom q1 by FINSEQ_1:def 3;
-Y:              n in dom MD1 by A121,A159,FINSEQ_1:def 3,U;
+Y:              n in dom MD1 by A121,A159,U,FINSEQ_1:def 3;
                 k+1 in Seg(len K1D1) by A120,FINSEQ_1:6;
                 then k+1 in dom K1D1 by FINSEQ_1:def 3;
                 then
@@ -3675,28 +3762,29 @@ A165:           k+1 in dom (lower_volume(f,D1)|Seg(k+1)) by FINSEQ_1:def 15;
                 by FINSEQ_1:def 15
                   .=lower_volume(f,D1).(k+1) by A165,FUNCT_1:68;
                 then
-A166:           q1.n = lower_volume(f,D1).(k+1) by A121, A162,A164,
-                FINSEQ_1:def 7
+A166:           q1.n = lower_volume(f,D1).(k+1) by A121,A162,A164,
+FINSEQ_1:def 7
 
-.=(inf(rng(f|divset(D1,k+1))))*vol(divset(D1,k+1)) by Def8,A96;
+.=(lower_bound(rng(f|divset(D1,k+1))))*vol(divset(D1,k+1)) by Def8,A96;
                 1 in dom MD1
                 proof
                   1 in Seg 1 by FINSEQ_1:5;
                   hence thesis by A159,FINSEQ_1:def 3;
                 end;
                 then
-A167:           inf divset(MD1,1) = inf DD1 & sup divset( MD1,1) = MD1.1
+A167:           lower_bound divset(MD1,1) = lower_bound DD1 &
+upper_bound divset( MD1,1) = MD1.1
                 by Def5;
                 MD1.1 =D1.(k+1) by A98,JORDAN3:27;
                 then
-A168:           divset(MD1,1)=[.inf DD1,D1.(k+1).] by A167,Th5;
+A168:           divset(MD1,1)=[.lower_bound DD1,D1.(k+1).] by A167,Th5;
                 (k+1)-1=k;
                 then
-A169:           inf DD1 = D1.k by A96,A99,Def5;
-                sup DD1 = D1.(k+1) by A96,A99,Def5;
+A169:           lower_bound DD1 = D1.k by A96,A99,Def5;
+                upper_bound DD1 = D1.(k+1) by A96,A99,Def5;
                 then divset(D1,k+1)=[. D1.k,D1.(k+1).] by A169,Th5;
                 then lower_volume(g,MD1).n
-                =(inf(rng(g|divset(D1,k+1))))*vol(divset(D1,k+1))
+                =(lower_bound(rng(g|divset(D1,k+1))))*vol(divset(D1,k+1))
                 by A162,A168,A169,Def8,Y;
                 hence thesis by A166,FUNCT_1:82;
               end;
@@ -3710,7 +3798,7 @@ A171:         indx(D2,D1,k+1)-'(indx(D2,D1,k)+1)+1
 A172:         len(lower_volume(g,MD2))=
               len mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)) by Def8
                 .=indx(D2,D1,k+1)-indx(D2,D1,k) by A110,A145,A146,A147,A171,
-              JORDAN3:27;
+JORDAN3:27;
 
 for n be Nat st 1 <= n & n <= len q2 holds q2.n=lower_volume(g,MD2).n
               proof
@@ -3747,7 +3835,8 @@ A186:           q2.n=K1D2.(indx(D2,D1,k)+n) by A122,A175,FINSEQ_1:def 7
 .=(lower_volume(f,D2)|Seg indx(D2,D1,k+1)).(indx(D2,D1,k)+n) by FINSEQ_1:def 15
                   .=lower_volume(f,D2).(indx(D2,D1,k)+n) by A178,FUNCT_1:68
 
-.=(inf(rng(f|divset(D2,indx(D2,D1,k)+n))))*vol(divset(D2,indx(D2,D1,k)+n))
+.=(lower_bound(rng(f|divset(D2,indx(D2,D1,k)+n))))*
+vol(divset(D2,indx(D2,D1,k)+n))
                 by Def8,A180;
 A187:           divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) &
                 divset(D2,indx(D2,D1,k)+n) c= divset(D1,k+1)
@@ -3759,20 +3848,23 @@ A189:                 (k+1)-1=k;
 A190:                 1<=indx(D2,D1,k)+1&indx(D2,D1,k)+1<=len D2
                       by A176,A177,A179,A188,FINSEQ_1:3;
 A191:                 indx(D2,D1,k)+1 <> 1 by A119,NAT_1:13;
-A192:                 inf divset(MD2,1)=inf divset(D1,k+1) by A185,A188,Def5
+A192:                 lower_bound divset(MD2,1)=lower_bound divset(D1,k+1)
+ by A185,A188,Def5
                         .= D1.k by A96,A99,A189,Def5;
-A193:                 sup divset(MD2,1)=
+A193:                 upper_bound divset(MD2,1)=
 
 mid(D2,indx(D2,D1,k)+1,indx(D2,D1,k+1)).1 by A185,A188,Def5
                         .= D2.(1+indx(D2,D1,k)) by A110,A190,JORDAN3:27;
                       then
-A194:                 divset(MD2,n)=[.D1.k,D2.(indx( D2,D1,k)+1).] by A188
-                      ,A192,Th5;
+A194:                 divset(MD2,n)=[.D1.k,D2.(indx( D2,D1,k)+1).] by A188,A192
+,Th5;
 A195:                 divset(D2,indx(D2,D1,k)+n)=
 
-[.inf divset(D2,indx(D2,D1,k)+1),sup divset(D2,indx(D2,D1,k)+1).] by A188,Th5
+[.lower_bound divset(D2,indx(D2,D1,k)+1),
+upper_bound divset(D2,indx(D2,D1,k)+1).] by A188,Th5
 
-.=[.D2.(indx(D2,D1,k)+1-1),sup divset(D2,indx(D2,D1,k)+1).] by A148,A191,Def5
+.=[.D2.(indx(D2,D1,k)+1-1),upper_bound divset(D2,indx(D2,D1,k)+1).]
+ by A148,A191,Def5
 
 .=[.D2.indx(D2,D1,k),D2.(indx(D2,D1,k)+1).] by A148,A191,Def5
                         .=[.D1.k,D2.(indx(D2,D1,k)+1).] by A1,A104,Def21;
@@ -3800,7 +3892,7 @@ A200:                 1<=n-1 & n-1<=len MD2
 A201:                 n+(indx(D2,D1,k)+1)-'1=indx(D2,D1,k)+n
                       proof
 
-n+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by XREAL_1:235 ,NAT_1:11
+n+(indx(D2,D1,k)+1)-'1=n+indx(D2,D1,k)+1-1 by NAT_1:11,XREAL_1:235
                           .=indx(D2,D1,k)+n;
                         hence thesis;
                       end;
@@ -3812,26 +3904,28 @@ A202:                 indx(D2,D1,k)+n <> 1
                         then n <= 1-1 by XREAL_1:21;
                         hence contradiction by A173,NAT_1:3;
                       end;
-A203:                 inf divset(MD2,n)=MD2.(n-1) by A185,A196,Def5
+A203:                 lower_bound divset(MD2,n)=MD2.(n-1) by A185,A196,Def5
 
-.=D2.(indx(D2,D1,k)+n-1) by A110,A146,A147,A197,A198,A199,A200, JORDAN3:27;
-A204:                 sup divset(MD2,n)=MD2.n by A185,A196,Def5
+.=D2.(indx(D2,D1,k)+n-1) by A110,A146,A147,A197,A198,A199,A200,JORDAN3:27;
+A204:                 upper_bound divset(MD2,n)=MD2.n by A185,A196,Def5
 
-.=D2.(indx(D2,D1,k)+n) by A110,A117,A146,A147,A173,A174,A182,A183,
-                      A197,A201,JORDAN3:27;
+.=D2.(indx(D2,D1,k)+n) by A110,A117,A146,A147,A173,A174,A182,A183,A197,A201,
+JORDAN3:27;
                       then
 A205:                 divset(MD2,n)=
 
 [. D2.(indx(D2,D1,k)+n-1),D2.(indx(D2,D1,k)+n) .] by A203,Th5;
 A206:                 divset(D2,indx(D2,D1,k)+n)
 
-=[.inf divset(D2,indx(D2,D1,k)+n),sup divset(D2,indx(D2,D1,k)+n).] by Th5
+=[.lower_bound divset(D2,indx(D2,D1,k)+n),
+upper_bound divset(D2,indx(D2,D1,k)+n).] by Th5
 
-.=[.D2.(indx(D2,D1,k)+n-1),sup divset(D2,indx(D2,D1,k)+n).] by A180,A202,Def5
+.=[.D2.(indx(D2,D1,k)+n-1),upper_bound divset(D2,indx(D2,D1,k)+n).]
+ by A180,A202,Def5
 
 .=[. D2.(indx(D2,D1,k)+n-1),D2.(indx(D2,D1,k)+n) .] by A180,A202,Def5;
 
-hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A203,A204, Th5;
+hence divset(MD2,n)=divset(D2,indx(D2,D1,k)+n) by A203,A204,Th5;
                       thus thesis by A185,A205,A206,Th10;
                     end;
                   end;
@@ -4100,25 +4194,26 @@ A2: rng D1 c= A by Def2;
   then rng D1 \/ rng D2 c= A by A2,XBOOLE_1:8;
   then
 A3: rng D3 c= A by A1,FINSEQ_1:44;
-  D3.(len D3) = sup A
+  D3.(len D3) = upper_bound A
   proof
     assume
-A4: D3.(len D3) <> sup A;
+A4: D3.(len D3) <> upper_bound A;
     now per cases by A4,XXREAL_0:1;
       suppose
-A5:     D3.(len D3) > sup A;
+A5:     D3.(len D3) > upper_bound A;
         len D3 in Seg(len D3) by FINSEQ_1:5;
         then len D3 in dom D3 by FINSEQ_1:def 3;
         then D3.(len D3) in rng D3 by FUNCT_1:def 5;
         then D3.(len D3) in A by A3;
-        then D3.(len D3) in [.inf A,sup A.] by Th5;
-        then D3.(len D3) in {r:inf A <= r & r <= sup A} by RCOMP_1:def 1;
+        then D3.(len D3) in [.lower_bound A,upper_bound A.] by Th5;
+        then D3.(len D3) in {r:lower_bound A <= r & r <= upper_bound A}
+         by RCOMP_1:def 1;
         then consider a such that
-A6:     a=D3.(len D3) & inf A <= a & a <= sup A;
+A6:     a=D3.(len D3) & lower_bound A <= a & a <= upper_bound A;
         thus contradiction by A5,A6;
       end;
       suppose
-A7:     D3.(len D3) < sup A;
+A7:     D3.(len D3) < upper_bound A;
         len D3 in Seg(len D3) by FINSEQ_1:5;
         then
 A8:     len D3 in dom D3 by FINSEQ_1:def 3;
@@ -4126,10 +4221,10 @@ A8:     len D3 in dom D3 by FINSEQ_1:def 3;
         then
 A9:     len D1 in dom D1 by FINSEQ_1:def 3;
 A10:    rng D1 c= rng (D1^D2) by FINSEQ_1:42;
-        D1.(len D1) = sup A by Def2;
-        then sup A in rng D1 by A9,FUNCT_1:def 5;
+        D1.(len D1) = upper_bound A by Def2;
+        then upper_bound A in rng D1 by A9,FUNCT_1:def 5;
         then consider k being Nat such that
-A11:    k in dom D3 & D3.k = sup A by A1,A10,FINSEQ_2:11;
+A11:    k in dom D3 & D3.k = upper_bound A by A1,A10,FINSEQ_2:11;
         k in Seg(len D3) by A11,FINSEQ_1:def 3;
         then k <= len D3 by FINSEQ_1:3;
         hence contradiction by A7,A8,A11,GOBOARD2:18;
@@ -4272,7 +4367,8 @@ end;
 
 theorem Th54:
   for X,Y be non empty Subset of REAL
-  st X is bounded_above & Y is bounded_above holds sup(X+Y) = sup X + sup Y
+  st X is bounded_above & Y is bounded_above
+   holds upper_bound(X+Y) = upper_bound X + upper_bound Y
 proof
   let X,Y be non empty Subset of REAL;
   assume that
@@ -4285,11 +4381,12 @@ A5: (-X) is bounded_below by A1,PSCOMP_1:15;
 A6: (-Y) is bounded_below by A2,PSCOMP_1:15;
   then
 A7: -(X+Y) is bounded_below by A3,A5,COMPLSP1:95;
-  inf(-X+-Y) = inf(-X)+inf(-Y) by A5,A6,COMPLSP1:96;
-  then inf(-X+-Y) = -sup(--X)+inf(-Y) by A5,PSCOMP_1:17
-    .= -sup X + -sup(--Y) by A6,PSCOMP_1:17
-    .= -(sup X + sup Y);
-  then -sup(--(X+Y))=-(sup X + sup Y) by A3,A4,A7,PSCOMP_1:17;
+  lower_bound(-X+-Y) = lower_bound(-X)+lower_bound(-Y) by A5,A6,COMPLSP1:96;
+  then lower_bound(-X+-Y) = -upper_bound(--X)+lower_bound(-Y) by A5,PSCOMP_1:17
+    .= -upper_bound X + -upper_bound(--Y) by A6,PSCOMP_1:17
+    .= -(upper_bound X + upper_bound Y);
+  then -upper_bound(--(X+Y))=-(upper_bound X + upper_bound Y)
+   by A3,A4,A7,PSCOMP_1:17;
   hence thesis;
 end;
 
@@ -4314,9 +4411,9 @@ A4: rng(f|divset(D,i)) is bounded_above & rng(f|divset(D,i)) is non empty
   proof
 X:  rng(f|divset(D,i)) c= rng f by RELAT_1:99;
     rng f is bounded_above by A2,Th15;
-    hence rng(f|divset(D,i)) is bounded_above by XXREAL_2:43,X;
+    hence rng(f|divset(D,i)) is bounded_above by X,XXREAL_2:43;
 A5: dom f = A by FUNCT_2:def 1;
-    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,RELAT_1:91,A1;
+    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
 A6: rng(g|divset(D,i)) is bounded_above & rng(g|divset(D,i)) is non empty
@@ -4325,29 +4422,31 @@ X:  rng(g|divset(D,i)) c= rng g by RELAT_1:99;
     rng g is bounded_above by A3,Th15;
     hence rng(g|divset(D,i)) is bounded_above by X,XXREAL_2:43;
 A7: dom g = A by FUNCT_2:def 1;
-    dom (g|divset(D,i)) = divset(D,i) by A7,Th10,RELAT_1:91,A1;
+    dom (g|divset(D,i)) = divset(D,i) by A7,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
   then
-A8: sup(rng(f|divset(D,i))+rng(g|divset(D,i)))
-  =sup rng(f|divset(D,i)) + sup rng(g|divset(D,i)) by A4,Th54;
+A8: upper_bound(rng(f|divset(D,i))+rng(g|divset(D,i)))
+  =upper_bound rng(f|divset(D,i)) + upper_bound rng(g|divset(D,i)) by A4,Th54;
 A9: rng(f|divset(D,i))+rng(g|divset(D,i)) is bounded_above by A4,A6,Th53;
 A10: rng((f+g)|divset(D,i)) is non empty
   proof
 A11: dom(f+g) = A /\ A by FUNCT_2:def 1;
-    dom((f+g)|divset(D,i)) = divset(D,i) by A11,Th10,RELAT_1:91,A1;
+    dom((f+g)|divset(D,i)) = divset(D,i) by A11,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
 A12: 0 <= vol(divset(D,i)) by SEQ_4:24,XREAL_1:50;
   (f+g)|divset(D,i)=f|divset(D,i) + g|divset(D,i) by RFUNCT_1:60;
   then rng((f+g)|divset(D,i))c=rng(f|divset(D,i))+rng(g|divset(D,i)) by Th12;
-  then sup rng((f+g)|divset(D,i))*vol(divset(D,i))
-  <= (sup rng(f|divset(D,i)) + sup rng(g|divset(D,i)))*vol(divset(D,i))
+  then upper_bound rng((f+g)|divset(D,i))*vol(divset(D,i))
+  <= (upper_bound rng(f|divset(D,i)) +
+   upper_bound rng(g|divset(D,i)))*vol(divset(D,i))
   by A8,A9,A10,A12,SEQ_4:65,XREAL_1:66;
-  then upper_volume(f+g,D).i <= sup rng(f|divset(D,i))*vol(divset(D,i))+
-  sup rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def7;
+  then upper_volume(f+g,D).i <=
+   upper_bound rng(f|divset(D,i))*vol(divset(D,i))+
+  upper_bound rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def7;
   then upper_volume(f+g,D).i <= upper_volume(f,D).i+
-  sup rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def7;
+  upper_bound rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def7;
   hence thesis by A1,Def7;
 end;
 
@@ -4374,7 +4473,7 @@ X:  rng(f|divset(D,i)) c= rng f by RELAT_1:99;
     rng f is bounded_below by A2,Th13;
     hence rng(f|divset(D,i)) is bounded_below by X,XXREAL_2:44;
 A5: dom f = A by FUNCT_2:def 1;
-    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,RELAT_1:91,A1;
+    dom (f|divset(D,i)) = divset(D,i) by A5,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
 A6: rng(g|divset(D,i)) is bounded_below & rng(g|divset(D,i)) is non empty
@@ -4383,30 +4482,33 @@ X:  rng(g|divset(D,i)) c= rng g by RELAT_1:99;
     rng g is bounded_below by A3,Th13;
     hence rng(g|divset(D,i)) is bounded_below by X,XXREAL_2:44;
 A7: dom g = A by FUNCT_2:def 1;
-    dom (g|divset(D,i)) = divset(D,i) by A7,Th10,RELAT_1:91,A1;
+    dom (g|divset(D,i)) = divset(D,i) by A7,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
   then
-A8: inf(rng(f|divset(D,i))+rng(g|divset(D,i)))
-  =inf rng(f|divset(D,i)) + inf rng(g|divset(D,i)) by A4,COMPLSP1:96;
+A8: lower_bound(rng(f|divset(D,i))+rng(g|divset(D,i)))
+  =lower_bound rng(f|divset(D,i)) + lower_bound rng(g|divset(D,i))
+   by A4,COMPLSP1:96;
 A9: rng
   (f|divset(D,i))+rng(g|divset(D,i)) is bounded_below by A4,A6,COMPLSP1:95;
 A10: rng((f+g)|divset(D,i)) is non empty
   proof
 A11: dom(f+g) = A /\ A by FUNCT_2:def 1;
-    dom((f+g)|divset(D,i)) = divset(D,i) by A11,Th10,RELAT_1:91,A1;
+    dom((f+g)|divset(D,i)) = divset(D,i) by A11,Th10,A1,RELAT_1:91;
     hence thesis by RELAT_1:65;
   end;
 A12: 0 <= vol(divset(D,i)) by SEQ_4:24,XREAL_1:50;
   (f+g)|divset(D,i)=f|divset(D,i) + g|divset(D,i) by RFUNCT_1:60;
   then rng((f+g)|divset(D,i))c=rng(f|divset(D,i))+rng(g|divset(D,i)) by Th12;
-  then inf rng((f+g)|divset(D,i))*vol(divset(D,i))
-  >= (inf rng(f|divset(D,i)) + inf rng(g|divset(D,i)))*vol(divset(D,i))
+  then lower_bound rng((f+g)|divset(D,i))*vol(divset(D,i))
+  >= (lower_bound rng(f|divset(D,i)) +
+  lower_bound rng(g|divset(D,i)))*vol(divset(D,i))
   by A8,A9,A10,A12,SEQ_4:64,XREAL_1:66;
-  then lower_volume(f+g,D).i >= inf rng(f|divset(D,i))*vol(divset(D,i))+
-  inf rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def8;
+  then lower_volume(f+g,D).i >=
+   lower_bound rng(f|divset(D,i))*vol(divset(D,i))+
+  lower_bound rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def8;
   then lower_volume(f+g,D).i >= lower_volume(f,D).i+
-  inf rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def8;
+  lower_bound rng(g|divset(D,i))*vol(divset(D,i)) by A1,Def8;
   hence thesis by A1,Def8;
 end;
 
@@ -4501,31 +4603,32 @@ A7: (f+g)|(A /\ A) is bounded by A1,A2,RFUNCT_1:100;
 A8: dom upper_sum_set(f+g) = divs A by Def11;
 A9: dom lower_sum_set(f+g) = divs A by Def12;
   for D be set st D in divs A /\ dom(upper_sum_set(f+g))
-  holds (inf rng f)*vol(A) + (inf rng g)*vol(A) <= (upper_sum_set(f+g)).D
+  holds (lower_bound rng f)*vol(A) + (lower_bound rng g)*vol(A)
+   <= (upper_sum_set(f+g)).D
   proof
     let D be set;
     assume
 A10: D in divs A /\ dom(upper_sum_set(f+g));
     then reconsider D as Element of divs A;
-    D in dom(upper_sum_set(f+g)) by A10,XBOOLE_0:def 3;
+    D in dom(upper_sum_set(f+g)) by A10,XBOOLE_0:def 4;
     then (upper_sum_set(f+g)).D = upper_sum((f+g),D) by Def11;
     then
 A11: lower_sum((f+g),D) <= (upper_sum_set(f+g)).D by A7,Th30;
     lower_sum(f,D)+lower_sum(g,D) <= lower_sum((f+g),D) by A5,A6,Th58;
     then
-A12: lower_sum(f,D)+lower_sum(g,D) <= (upper_sum_set(f+g)).D by A11,
-    XXREAL_0:2;
-    (inf rng f)*vol(A)+lower_sum(g,D) <= lower_sum(f,D)+lower_sum(g,D)
+A12: lower_sum(f,D)+lower_sum(g,D) <= (upper_sum_set(f+g)).D by A11,XXREAL_0:2;
+    (lower_bound rng f)*vol(A)+lower_sum(g,D) <= lower_sum(f,D)+lower_sum(g,D)
     proof
-      (inf rng f)*vol(A) <= lower_sum(f,D) by A5,Th27;
+      (lower_bound rng f)*vol(A) <= lower_sum(f,D) by A5,Th27;
       hence thesis by XREAL_1:8;
     end;
     then
-A13: (inf rng f)*vol(A)+lower_sum(g,D) <= (upper_sum_set(f+g)).D
+A13: (lower_bound rng f)*vol(A)+lower_sum(g,D) <= (upper_sum_set(f+g)).D
     by A12,XXREAL_0:2;
-    (inf rng f)*vol(A)+(inf rng g)*vol(A)<=(inf rng f)*vol(A)+lower_sum(g,D)
+    (lower_bound rng f)*vol(A)+(lower_bound rng g)*vol(A)<=
+    (lower_bound rng f)*vol(A)+lower_sum(g,D)
     proof
-      (inf rng g)*vol(A) <= lower_sum(g,D) by A6,Th27;
+      (lower_bound rng g)*vol(A) <= lower_sum(g,D) by A6,Th27;
       hence thesis by XREAL_1:8;
     end;
     hence thesis by A13,XXREAL_0:2;
@@ -4540,13 +4643,14 @@ A16: rng lower_sum_set(f+g) is bounded_above
     (lower_sum_set(f+g))|divs A is bounded_above
     proof
       for D be set st D in divs A /\ dom(lower_sum_set(f+g))
-      holds (lower_sum_set(f+g)).D <= (sup rng f)*vol(A) + (sup rng g)*vol(A)
+      holds (lower_sum_set(f+g)).D <=
+       (upper_bound rng f)*vol(A) + (upper_bound rng g)*vol(A)
       proof
         let D be set;
         assume
 A17:    D in divs A /\ dom(lower_sum_set(f+g));
         then reconsider D as Element of divs A;
-        D in dom(lower_sum_set(f+g)) by A17,XBOOLE_0:def 3;
+        D in dom(lower_sum_set(f+g)) by A17,XBOOLE_0:def 4;
         then (lower_sum_set(f+g)).D = lower_sum((f+g),D) by Def12;
         then
 A18:    (lower_sum_set(f+g)).D <= upper_sum((f+g),D) by A7,Th30;
@@ -4554,18 +4658,19 @@ A18:    (lower_sum_set(f+g)).D <= upper_sum((f+g),D) by A7,Th30;
         then
 A19:    (lower_sum_set(f+g)).D <= upper_sum(f,D)+upper_sum(g,D)
         by A18,XXREAL_0:2;
-        upper_sum(f,D)+upper_sum(g,D) <= (sup rng f)*vol(A)+upper_sum(g,D )
+        upper_sum(f,D)+upper_sum(g,D) <=
+         (upper_bound rng f)*vol(A)+upper_sum(g,D )
         proof
-          upper_sum(f,D) <= (sup rng f)*vol(A) by A5,Th29;
+          upper_sum(f,D) <= (upper_bound rng f)*vol(A) by A5,Th29;
           hence thesis by XREAL_1:8;
         end;
         then
-A20:    (lower_sum_set(f+g)).D <= (sup rng f)*vol(A)+upper_sum(g,D )
+A20:    (lower_sum_set(f+g)).D <= (upper_bound rng f)*vol(A)+upper_sum(g,D )
         by A19,XXREAL_0:2;
-        (sup rng f)*vol(A)+upper_sum(g,D)<=
-        (sup rng f)*vol(A)+(sup rng g)*vol(A)
+        (upper_bound rng f)*vol(A)+upper_sum(g,D)<=
+        (upper_bound rng f)*vol(A)+(upper_bound rng g)*vol(A)
         proof
-          upper_sum(g,D) <= (sup rng g)*vol(A) by A6,Th29;
+          upper_sum(g,D) <= (upper_bound rng g)*vol(A) by A6,Th29;
           hence thesis by XREAL_1:8;
         end;
         hence thesis by A20,XXREAL_0:2;
@@ -4597,7 +4702,7 @@ A26: for D be Element of divs A st D in divs A /\ dom upper_sum_set(f+g) holds
       let D be Element of divs A;
       assume D in divs A /\ dom upper_sum_set(f+g);
       then
-A27:  D in dom(upper_sum_set(f+g)) by XBOOLE_0:def 3;
+A27:  D in dom(upper_sum_set(f+g)) by XBOOLE_0:def 4;
       then (upper_sum_set(f+g)).D in rng upper_sum_set(f+g) by FUNCT_1:def 5;
       then
 A28:  (upper_sum_set(f+g)).D >= upper_integral(f+g) by A14,SEQ_4:def 5;
@@ -4608,8 +4713,8 @@ A30:    D in divs A;
         thus thesis by A30,Def11;
       end;
       upper_sum(f,D)+upper_sum(g,D) >= upper_sum((f+g),D) by A5,A6,Th57;
-      then (upper_sum_set f).D+upper_sum(g,D) >= upper_sum((f+g),D) by A29,
-      Def11;
+      then (upper_sum_set f).D+upper_sum(g,D) >= upper_sum((f+g),D) by A29
+,Def11;
       then (upper_sum_set f).D+(upper_sum_set g).D >= upper_sum((f+g),D)
       by A29,Def11;
       then (upper_sum_set f).D+(upper_sum_set g).D>=(upper_sum_set(f+g)).D
@@ -4622,7 +4727,7 @@ A31: for D be Element of divs A st D in divs A /\ dom lower_sum_set(f+g) holds
       let D be Element of divs A;
       assume D in divs A /\ dom lower_sum_set(f+g);
       then
-A32:  D in dom(lower_sum_set(f+g)) by XBOOLE_0:def 3;
+A32:  D in dom(lower_sum_set(f+g)) by XBOOLE_0:def 4;
       then (lower_sum_set(f+g)).D in rng lower_sum_set(f+g) by FUNCT_1:def 5;
       then
 A33:  (lower_sum_set(f+g)).D <= lower_integral(f+g) by A16,SEQ_4:def 4;
@@ -4633,8 +4738,8 @@ A35:    D in divs A;
         thus thesis by A35,Def12;
       end;
       lower_sum(f,D)+lower_sum(g,D) <= lower_sum((f+g),D) by A5,A6,Th58;
-      then (lower_sum_set f).D+lower_sum(g,D) <= lower_sum((f+g),D) by A34,
-      Def12;
+      then (lower_sum_set f).D+lower_sum(g,D) <= lower_sum((f+g),D) by A34
+,Def12;
       then (lower_sum_set f).D+(lower_sum_set g).D <= lower_sum((f+g),D)
       by A34,Def12;
       then (lower_sum_set f).D+(lower_sum_set g).D<=(lower_sum_set(f+g)).D
@@ -4678,14 +4783,16 @@ A44:    (upper_sum_set(f)).D <= upper_sum(f,D1) by A5,A40,Th47;
         by A41,XXREAL_0:2;
         hence thesis by A37,A39,XREAL_1:22;
       end;
-      then inf rng upper_sum_set(g) >= upper_integral(f+g) - a1 by A24,
-      SEQ_4:60;
-      then a1+inf rng upper_sum_set(g) >= upper_integral(f+g) by XREAL_1:22;
+      then lower_bound rng upper_sum_set(g) >= upper_integral(f+g) - a1
+       by A24,SEQ_4:60
+;
+      then a1+lower_bound rng upper_sum_set(g) >= upper_integral(f+g)
+       by XREAL_1:22;
       hence thesis by XREAL_1:22;
     end;
     then
-A45: upper_integral(f) >= upper_integral(f+g) - upper_integral(g) by
-    A22,SEQ_4:60;
+A45: upper_integral(f) >= upper_integral(f+g) - upper_integral(g) by A22,
+SEQ_4:60;
     for a1 be real number st a1 in rng lower_sum_set(f) holds
     a1 <= lower_integral(f+g) - lower_integral(g)
     proof
@@ -4723,22 +4830,24 @@ A54:    (lower_sum_set(f)).D >= lower_sum(f,D1) by A5,A50,Th48;
         by A51,XXREAL_0:2;
         hence thesis by A47,A49,XREAL_1:21;
       end;
-      then sup rng lower_sum_set(g)<=
+      then upper_bound rng lower_sum_set(g)<=
       lower_integral(f+g) - a1 by A25,SEQ_4:62;
-      then a1+sup rng lower_sum_set(g) <= lower_integral(f+g) by XREAL_1:21;
+      then a1+upper_bound rng lower_sum_set(g) <= lower_integral(f+g)
+       by XREAL_1:21;
       hence thesis by XREAL_1:21;
     end;
-    then sup rng lower_sum_set(f)<=lower_integral(f+g)-lower_integral(g)
+    then upper_bound rng lower_sum_set(f)<=
+    lower_integral(f+g)-lower_integral(g)
     by A23,SEQ_4:62;
     then
-A55: lower_integral(f) + lower_integral(g) <= lower_integral(f+g) by
-    XREAL_1:21;
+A55: lower_integral(f) + lower_integral(g) <= lower_integral(f+g) by XREAL_1:21
+;
 A56: upper_integral(f+g)>=lower_integral(f+g) by A7,Th51;
 A57: lower_integral(f)+lower_integral(g)
     =upper_integral(f) + lower_integral(g) by A3,Def17
       .=integral(f) + integral(g) by A4,Def17;
     then
-A58: integral(f)+integral(g) <= upper_integral(f+g) by A55,A56, XXREAL_0:2;
+A58: integral(f)+integral(g) <= upper_integral(f+g) by A55,A56,XXREAL_0:2;
     integral(f)+upper_integral(g)>=upper_integral(f+g) by A45,XREAL_1:22;
     then upper_integral(f+g)=integral(f) + integral(g) by A58,XXREAL_0:1;
     hence thesis by A55,A56,A57,XXREAL_0:1;

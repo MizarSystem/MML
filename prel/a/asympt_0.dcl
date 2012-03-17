@@ -16,6 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -34,8 +35,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
 <Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="2">
@@ -47,8 +48,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="3">
@@ -60,8 +61,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
-<Adjective nr="45"/>
+<Adjective nr="34"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="4">
@@ -73,8 +74,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="5">
@@ -86,8 +87,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
-<Adjective nr="34" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="35" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="6">
@@ -99,8 +100,8 @@
 <Cluster>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="33"/>
-<Adjective nr="45" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ASYMPT_0" nr="7">
@@ -121,15 +122,15 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="44">
+<Adjective nr="49">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ASYMPT_0" nr="1">
@@ -152,13 +153,13 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="51"/>
 </Cluster>
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -168,7 +169,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="46"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_0" nr="2">
@@ -191,13 +192,13 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="187">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -207,7 +208,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <CCluster aid="ASYMPT_0" nr="1">
@@ -218,7 +219,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="47"/>
+<Adjective nr="52"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -231,7 +232,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ASYMPT_0" nr="2">
@@ -242,7 +243,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -255,8 +256,8 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="46"/>
-<Adjective nr="49"/>
+<Adjective nr="51"/>
+<Adjective nr="54"/>
 </Cluster>
 </CCluster>
 <CCluster aid="ASYMPT_0" nr="3">
@@ -267,8 +268,8 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="46"/>
-<Adjective nr="49"/>
+<Adjective nr="51"/>
+<Adjective nr="54"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -281,7 +282,7 @@
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="48"/>
+<Adjective nr="53"/>
 </Cluster>
 </CCluster>
 </Registrations>

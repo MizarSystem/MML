@@ -23,6 +23,7 @@
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
@@ -31,7 +32,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
 <ArticleID name="RELAT_2"/>
@@ -87,21 +87,21 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </RCluster>
 <FCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="340"/>
+<Func kind="K" nr="327"/>
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <FCluster aid="BORSUK_4" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -109,19 +109,19 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="80"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 <CCluster aid="BORSUK_4" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="84"/>
+<Adjective nr="89"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="288">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -129,7 +129,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="8" value="false"/>
-<Adjective nr="84"/>
+<Adjective nr="89"/>
 </Cluster>
 </CCluster>
 </Registrations>

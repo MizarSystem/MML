@@ -10,7 +10,8 @@ environ
       VECTSP_2, REALSET1, SEQ_1, BOOLE, FUNCOP_1, LATTICES, SEQ_2,
       ABSVALUE, FUNCSDOM, LOPBAN_1, ORDINAL2, ARYTM_3, ARYTM,
       BINOP_1, ALGSTR_0, NORMSP_1, FUNCT_2, BHSP_3, RSSPACE4, GROUP_1,
-      PRE_TOPC, LOPBAN_2, C0SP1, ALGSTR_2, IDEAL_1, SUBSET_1, POLYALG1;
+      PRE_TOPC, LOPBAN_2, C0SP1, ALGSTR_2, IDEAL_1, SUBSET_1, POLYALG1,
+      SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, RELAT_1,
       XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, REALSET1, FUNCT_1,
       FUNCT_2, BINOP_1, DOMAIN_1, RELSET_1, PRE_TOPC, BINOP_2, RLVECT_1,
@@ -20,11 +21,11 @@ environ
       LOPBAN_2;
  constructors REAL_1, REALSET1, PRE_CIRC, PARTFUN2, RSSPACE3, COMPLEX1,
       RFUNCT_3, PSCOMP_1, NAT_1, BINOP_2, RCOMP_1, RLSUB_1, LOPBAN_2, ALGSTR_1,
-      FUNCT_2, VALUED_1, SEQ_1, SEQ_2, ALGSTR_0, IDEAL_1, XXREAL_2;
+      FUNCT_2, VALUED_1, SEQ_1, SEQ_2, ALGSTR_0, IDEAL_1, XXREAL_2, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, STRUCT_0, PRE_TOPC, XREAL_0, REALSET1,
       ALGSTR_0, NUMBERS, ORDINAL1, MEMBERED, FUNCSDOM, RELAT_1, XXREAL_0,
       RLVECT_1, VECTSP_1, VECTSP_2, FUNCT_2, VALUED_0, VALUED_1, LOPBAN_2,
-      GCD_1, SEQM_3, FUNCOP_1;
+      GCD_1, SEQM_3, FUNCOP_1, SEQ_4, RFUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions PRE_TOPC, PSCOMP_1, REALSET1, ALGSTR_0, TARSKI, ORDINAL1,
       XCMPLX_0, FINSET_1, FUNCT_2, MEMBERED, ZFMISC_1, NORMSP_1,
@@ -669,7 +670,7 @@ P1:{ f where f is Function of X,REAL : f|X is bounded } c= Funcs(X,REAL)
    { f where f is Function of X,REAL : f|X is bounded } is non empty
    proof
     reconsider g = X --> 0 as Function of X,REAL by FUNCOP_1:58;
-    g|X is bounded by RFUNCT_1:108; then
+    g|X is bounded; then
     g in { f where f is Function of X,REAL : f|X is bounded };
     hence thesis;
    end;
@@ -778,7 +779,7 @@ R3: dom v1 /\ dom u1 = X /\ X by FUNCT_2:def 1;
    end;
 
    reconsider g = RealFuncUnit X as Function of X,REAL;
-   g|X is bounded by RFUNCT_1:108; then
+   g|X is bounded; then
    1.V in W;
    hence thesis by Rdef200,Q2;
 end;
@@ -932,7 +933,7 @@ theorem
 f|X is bounded iff PreNorms f is bounded_above
 proof
    now assume A1: PreNorms f is bounded_above;
-    reconsider K = sup PreNorms f as Real;
+    reconsider K = upper_bound PreNorms f as Real;
 A7: now let t be set;
      assume t in X /\ dom f; then
      abs(f.t) in PreNorms f;
@@ -949,7 +950,7 @@ ex NORM be Function of BoundedFunctions X,REAL st
   for F be set st F in BoundedFunctions X holds
    NORM.F = sup PreNorms(modetrans(F,X))
 proof
-   deffunc F(set) = sup PreNorms(modetrans($1,X));
+   deffunc F(set) = upper_bound PreNorms(modetrans($1,X));
 A1:for z be set st z in BoundedFunctions X holds F(z) in REAL;
    ex f being Function of BoundedFunctions X,REAL st
     for x being set st x in BoundedFunctions X holds
@@ -1613,7 +1614,7 @@ A40:   xseq.m =modetrans(vseq.m,X).x by A36;
        hence abs(xseq.m-xseq.k) <= ||.vseq.m - vseq.k.|| by ThB19,A401;
       end;
       reconsider fseq = NAT --> xseq.n as Real_Sequence by FUNCOP_1:57;
-A42b: fseq is convergent by SEQ_4:39;
+A42b: fseq is convergent;
       lim fseq = fseq.0 by SEQ_4:41; then
 A42c: lim fseq =xseq.n by FUNCOP_1:13;
       set wseq = xseq-fseq;
@@ -1772,11 +1773,14 @@ E5:  abs(f1.t)*abs(g1.t) <= (sup PreNorms f1)*abs(g1.t) by E3,XREAL_1:66;
 E6:  0 <= sup PreNorms f1 by E4,COMPLEX1:132;
      abs(g1.t) in PreNorms g1; then
      abs(g1.t) <= sup PreNorms g1 by A04,SEQ_4:def 4; then
-     (sup PreNorms f1)*abs(g1.t) <= (sup PreNorms f1)*(sup PreNorms g1)
+     (sup PreNorms f1)*abs(g1.t)
+      <= (upper_bound PreNorms f1)*(upper_bound PreNorms g1)
        by E6,XREAL_1:66;
-     hence s <= (sup PreNorms f1)*(sup PreNorms g1) by E1,E2,E5,XXREAL_0:2;
+     hence s <= (upper_bound PreNorms f1)*(upper_bound PreNorms g1)
+     by E1,E2,E5,XXREAL_0:2;
     end; then
-    sup PreNorms h1 <= (sup PreNorms f1)*(sup PreNorms g1) by SEQ_4:62;
+    upper_bound PreNorms h1
+     <= (upper_bound PreNorms f1)*(upper_bound PreNorms g1) by SEQ_4:62;
     hence ||. f*g .|| <= ||.f.|| * ||.g.|| by B01,B02,A03,ThB17;
    end;
    1.B in BoundedFunctions X; then

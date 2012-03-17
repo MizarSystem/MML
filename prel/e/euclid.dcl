@@ -30,6 +30,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -50,7 +51,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="320">
+<Func kind="K" nr="329">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -66,13 +67,13 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="309">
+<Func kind="K" nr="318">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="320">
-<Func kind="K" nr="316">
+<Func kind="K" nr="329">
+<Func kind="K" nr="325">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -90,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="322">
+<Func kind="K" nr="331">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -110,7 +111,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="323">
+<Func kind="K" nr="332">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -127,13 +128,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="323">
+<Func kind="K" nr="332">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="141"/>
+<Adjective nr="146"/>
 </Cluster>
 </FCluster>
 <CCluster aid="EUCLID" nr="1">
@@ -148,7 +149,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="323">
+<Func kind="K" nr="332">
 <LocusVar nr="1"/>
 </Func>
 </Func>

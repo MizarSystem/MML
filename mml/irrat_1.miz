@@ -11,19 +11,22 @@ environ
       ABSVALUE, SEQM_3, SUPINF_2, RLVECT_1, SERIES_1, RFINSEQ, FINSEQ_4,
       FINSEQ_2, GROUP_1, SIN_COS, IRRAT_1, FUNCOP_1;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
-      INT_1, COMPLEX1, NAT_1, FUNCT_1, PARTFUN1, FUNCOP_1, VALUED_1, SEQ_1,
+      INT_1, COMPLEX1, NAT_1, FUNCT_1, PARTFUN1, FUNCOP_1,
+      VALUED_0, VALUED_1, SEQ_1,
       SEQ_2, POWER, SEQM_3, FINSEQ_1, RVSUM_1, SERIES_1, FINSEQ_2, RFINSEQ,
       SIN_COS, RAT_1, SQUARE_1, LIMFUNC1, INT_2, PEPIN, NEWTON;
  constructors ARYTM_0, REAL_1, NAT_1, NAT_D, SEQ_2, PARTFUN1, RVSUM_1,
-      LIMFUNC1, COMSEQ_3, RFINSEQ, BINARITH, SIN_COS, PEPIN, SEQ_1;
+      LIMFUNC1, COMSEQ_3, RFINSEQ, BINARITH, SIN_COS, PEPIN, SEQ_1, SERIES_1,
+      POWER;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER;
+      MEMBERED, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER, SEQ_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SEQ_2, SQUARE_1;
  theorems SEQ_1, REAL_2, POWER, NEWTON, NAT_1, SEQ_2, SEQ_4, ABSVALUE, SEQM_3,
       RVSUM_1, FINSEQ_2, SERIES_1, RFINSEQ, FINSEQ_3, FINSEQ_5, SIN_COS,
       SQUARE_1, INT_1, RAT_1, INT_2, FUNCT_2, XCMPLX_0, XCMPLX_1, FUNCOP_1,
-      XREAL_1, COMPLEX1, XXREAL_0, NAT_D, PARTFUN1, CARD_1;
+      XREAL_1, COMPLEX1, XXREAL_0, NAT_D, PARTFUN1, CARD_1, VALUED_0,
+      ORDINAL1, XREAL_0;
  schemes SEQ_1, NAT_1;
 
 begin :: Square roots of primes are irrational
@@ -314,14 +317,15 @@ A7: abs(aseq(k).n-1) = abs((1-(k/n))-1) by Th8
 end;
 
 theorem Th10:
-  for seq st for n holds seq.n=x holds seq is convergent & lim(seq)=x
+  for seq st for n being Nat holds seq.n=x holds seq is convergent & lim(seq)=x
 proof
   let seq;
+X: x in REAL by XREAL_0:def 1;
   assume
-A1: for n holds seq.n=x;
+A1: for n being Nat holds seq.n=x;
   then
-A2: seq is constant by SEQM_3:def 6;
-  hence seq is convergent by SEQ_4:39;
+A2: seq is constant by VALUED_0:def 18,X;
+  hence seq is convergent;
   thus lim(seq) = seq.0 by A2,SEQ_4:41
     .= x by A1;
 end;
@@ -345,12 +349,16 @@ end;
 theorem Th13:
   bseq(k) is convergent & lim(bseq(k))=1/(k!) & lim(bseq(k))=eseq.k
 proof
-  defpred P[Element of NAT] means bseq($1) is convergent &
+  defpred P[Nat] means bseq($1) is convergent &
   lim(bseq($1))=1/($1!);
 A1: P[0]
   proof
     reconsider bseq0 = NAT --> 1 as Real_Sequence by FUNCOP_1:57;
-    for n holds bseq0.n=1 by FUNCOP_1:13;
+    for n being Nat holds bseq0.n=1
+     proof let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
+      hence thesis by FUNCOP_1:13;
+     end;
     then
 A2: bseq0 is convergent & lim(bseq0)=1 by Th10;
 A3: for n st n>=1 holds bseq(0).n=bseq0.n
@@ -533,19 +541,20 @@ A1: len(sq)=0 & (for k st k<0 holds seq.k=sq.(k+1)) &
     then sq is Element of 0-tuples_on REAL by FINSEQ_2:110;
     then
 A2: Sum(sq)=0 by RVSUM_1:109;
-    defpred P[Element of NAT] means Partial_Sums(seq).$1=0;
+    defpred P[Nat] means Partial_Sums(seq).$1=0;
     seq.0=0 by A1;
     then
 A3: P[0] by SERIES_1:def 1;
 A4: now
-      let k;
+      let k be Nat;
       assume
 A5:   P[k];
-      Partial_Sums(seq).(k+1)
+      k in NAT by ORDINAL1:def 13;
+      then Partial_Sums(seq).(k+1)
       = (Partial_Sums(seq).k)+(seq.(k+1)) by SERIES_1:def 1;
       hence P[k+1] by A1,A5;
     end;
-    for k holds P[k] from NAT_1:sch 1(A3,A4);
+    for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
     then
 A6: Partial_Sums(seq) is convergent & lim(Partial_Sums(seq))=0 by Th10;
     hence seq is summable by SERIES_1:def 2;

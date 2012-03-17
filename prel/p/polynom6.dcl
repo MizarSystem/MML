@@ -22,6 +22,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
@@ -99,27 +100,27 @@
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="53" value="false"/>
 <Adjective nr="58" value="false"/>
-<Adjective nr="77"/>
-<Adjective nr="102"/>
-<Adjective nr="103"/>
-<Adjective nr="104"/>
+<Adjective nr="63" value="false"/>
+<Adjective nr="82"/>
+<Adjective nr="107"/>
+<Adjective nr="108"/>
 <Adjective nr="109"/>
-<Adjective nr="131"/>
-<Adjective nr="132"/>
+<Adjective nr="114"/>
+<Adjective nr="136"/>
+<Adjective nr="137"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="380">
+<Func kind="K" nr="389">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="53" value="false"/>
 <Adjective nr="58" value="false"/>
-<Adjective nr="100"/>
-<Adjective nr="132"/>
+<Adjective nr="63" value="false"/>
+<Adjective nr="105"/>
+<Adjective nr="137"/>
 </Cluster>
 </FCluster>
 </Registrations>

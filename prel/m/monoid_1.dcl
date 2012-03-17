@@ -17,6 +17,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
@@ -48,7 +49,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="321">
+<Func kind="K" nr="330">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -67,12 +68,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="321">
+<Func kind="K" nr="330">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="115"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="3">
@@ -90,7 +91,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="330">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -133,7 +134,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="334">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

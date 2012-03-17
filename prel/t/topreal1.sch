@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 </Signature>
 <Scheme>
@@ -100,7 +100,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -111,7 +111,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -162,7 +162,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -173,7 +173,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -185,7 +185,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -223,7 +223,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>

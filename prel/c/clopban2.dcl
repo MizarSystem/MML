@@ -46,9 +46,9 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="103"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="102"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CLOPBAN2" nr="2">
@@ -57,7 +57,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="121"/>
+<Adjective nr="120"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CLOPBAN2" nr="3">
@@ -80,13 +80,13 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
-<Adjective nr="121"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
+<Adjective nr="120"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CLOPBAN2" nr="5">
@@ -100,13 +100,13 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
-<Adjective nr="125"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
+<Adjective nr="124"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CLOPBAN2" nr="1">
@@ -118,8 +118,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -140,8 +140,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -149,7 +149,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="106"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="3">
@@ -161,8 +161,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -174,9 +174,9 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="108"/>
+<Adjective nr="107"/>
+<Adjective nr="114"/>
 <Adjective nr="115"/>
-<Adjective nr="116"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="4">
@@ -188,8 +188,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -198,7 +198,7 @@
 </Func>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="104"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="5">
@@ -210,8 +210,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -219,7 +219,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="106"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="6">
@@ -227,7 +227,7 @@
 <Func kind="K" nr="190"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="103"/>
+<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="7">
@@ -247,8 +247,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -257,7 +257,7 @@
 </Func>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="121"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="9">
@@ -269,8 +269,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -278,7 +278,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="106"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="10">
@@ -290,8 +290,8 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -303,12 +303,12 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="11">
@@ -321,9 +321,9 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="103"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -331,7 +331,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="125"/>
+<Adjective nr="124"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CLOPBAN2" nr="1">
@@ -342,13 +342,13 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
-<Adjective nr="125"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
+<Adjective nr="124"/>
 </Cluster>
 <Typ kind="G" nr="19">
 <Cluster/>
@@ -359,18 +359,18 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="103"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
 <Adjective nr="112"/>
 <Adjective nr="113"/>
-<Adjective nr="114"/>
-<Adjective nr="117"/>
+<Adjective nr="116"/>
+<Adjective nr="121"/>
 <Adjective nr="122"/>
 <Adjective nr="123"/>
-<Adjective nr="124"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CLOPBAN2" nr="2">
@@ -381,18 +381,18 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="103"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="102"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
 <Adjective nr="112"/>
 <Adjective nr="113"/>
-<Adjective nr="114"/>
-<Adjective nr="117"/>
+<Adjective nr="116"/>
+<Adjective nr="121"/>
 <Adjective nr="122"/>
 <Adjective nr="123"/>
-<Adjective nr="124"/>
 </Cluster>
 <Typ kind="G" nr="19">
 <Cluster/>
@@ -403,13 +403,13 @@
 <Adjective nr="80"/>
 <Adjective nr="81"/>
 <Adjective nr="82"/>
-<Adjective nr="90"/>
-<Adjective nr="93"/>
-<Adjective nr="105"/>
-<Adjective nr="108"/>
-<Adjective nr="112"/>
-<Adjective nr="114"/>
-<Adjective nr="125"/>
+<Adjective nr="89"/>
+<Adjective nr="92"/>
+<Adjective nr="104"/>
+<Adjective nr="107"/>
+<Adjective nr="111"/>
+<Adjective nr="113"/>
+<Adjective nr="124"/>
 </Cluster>
 </CCluster>
 </Registrations>

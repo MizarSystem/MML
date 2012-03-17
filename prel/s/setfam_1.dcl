@@ -590,4 +590,16 @@
 <Adjective nr="5" value="false"/>
 </Cluster>
 </CCluster>
+<CCluster aid="SETFAM_1" nr="4">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="2" value="false"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5" value="false"/>
+</Cluster>
+</CCluster>
 </Registrations>

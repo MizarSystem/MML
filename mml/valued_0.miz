@@ -8,17 +8,24 @@ environ
 
  vocabularies VALUED_0, RELAT_1, COMPLEX1, RAT_1, INT_1, FUNCT_1, ORDINAL2,
       XCMPLX_0, ARYTM, MEMBERED, BOOLE, FUNCOP_1, FUNCT_4, CAT_1, SUPINF_1,
-      ANPROJ_1, ZF_REFLE, SEQM_3, PROB_1;
+      ANPROJ_1, ZF_REFLE, SEQM_3, PROB_1, REALSET1, NORMSP_1, FRECHET2,
+      PARTFUN1, OPPCAT_1, TRIANG_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
-      RELSET_1, FUNCOP_1, FUNCT_4, NUMBERS, MEMBERED, XCMPLX_0, XREAL_0,
-      XXREAL_0, RAT_1, INT_1;
- constructors XCMPLX_0, RAT_1, MEMBERED, FUNCOP_1, FUNCT_4, XXREAL_0;
+      SETFAM_1, RELSET_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, FUNCT_4, NUMBERS, MEMBERED, XCMPLX_0, XREAL_0,
+      XXREAL_0, RAT_1, NAT_1, INT_1;
+ constructors XCMPLX_0, RAT_1, MEMBERED, FUNCOP_1, FUNCT_4, XXREAL_0, PARTFUN1,
+      NAT_1, SETFAM_1;
  registrations MEMBERED, RELAT_1, FUNCOP_1, XREAL_0, RAT_1, ORDINAL1, INT_1,
-      FUNCT_1, XBOOLE_0;
+      FUNCT_1, XBOOLE_0, ZFMISC_1, RELSET_1, FUNCT_2, SETFAM_1, NAT_1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
- definitions TARSKI, RELAT_1, XBOOLE_0, FUNCOP_1;
+ definitions TARSKI, XBOOLE_0, FUNCOP_1, ZFMISC_1, FUNCT_1, RELAT_1,
+      PARTFUN2, FUNCT_2;
  theorems NUMBERS, XBOOLE_1, RELAT_1, MEMBERED, FUNCT_1, XCMPLX_0, XXREAL_0,
-      XREAL_0, RAT_1, INT_1, ORDINAL1, FUNCT_4, FUNCOP_1, XBOOLE_0;
+      XREAL_0, RAT_1, INT_1, ORDINAL1, FUNCT_4, FUNCOP_1, XBOOLE_0, ZFMISC_1,
+      FUNCT_2, NAT_1, XREAL_1, RELSET_1, SETFAM_1, PARTFUN2, PARTFUN1,
+      SUBSET_1;
+ schemes NAT_1;
 
 begin
 
@@ -87,7 +94,7 @@ registration
   coherence
   proof
     let R be Relation;
-    assume R = {};
+    assume R is empty;
     hence rng R c= NAT by RELAT_1:60,XBOOLE_1:2;
   end;
 end;
@@ -1529,5 +1536,587 @@ definition
   attr f is non-increasing means
   :Def16:
   for e1,e2 st e1 in dom f & e2 in dom f & e1 <= e2 holds f.e1 >= f.e2;
+end;
+
+:: 2008.08.31, A.T.
+
+registration
+ cluster trivial -> increasing decreasing (ext-real-valued Function);
+ coherence
+  proof let f be ext-real-valued Function;
+   assume
+Z:  f is trivial;
+   thus f is increasing
+    proof let e1,e2;
+     assume e1 in dom f & e2 in dom f;
+      then e1 = e2 by Z,ZFMISC_1:def 10;
+     hence thesis;
+    end;
+   let e1,e2;
+   assume e1 in dom f & e2 in dom f;
+    then e1 = e2 by Z,ZFMISC_1:def 10;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster increasing -> non-decreasing (ext-real-valued Function);
+ coherence
+  proof let f be ext-real-valued Function;
+   assume
+Z:   f is increasing;
+   let e1,e2 such that
+Z1: e1 in dom f and
+Z2: e2 in dom f and
+Z3: e1 <= e2;
+   per cases by Z3,XXREAL_0:1;
+   suppose e1 = e2;
+   hence f.e1 <= f.e2;
+   end;
+   suppose e1 < e2;
+   hence f.e1 <= f.e2 by Z1,Z2,Def13,Z;
+   end;
+  end;
+ cluster decreasing -> non-increasing (ext-real-valued Function);
+ coherence
+  proof let f be ext-real-valued Function;
+   assume
+Z:   f is decreasing;
+   let e1,e2 such that
+Z1: e1 in dom f and
+Z2: e2 in dom f and
+Z3: e1 <= e2;
+   per cases by Z3,XXREAL_0:1;
+   suppose e1 = e2;
+   hence f.e1 >= f.e2;
+   end;
+   suppose e1 < e2;
+   hence f.e1 >= f.e2 by Z1,Z2,Def14,Z;
+   end;
+  end;
+end;
+
+registration
+ cluster empty Function;
+ existence
+  proof
+   {} is Function-like;
+   hence thesis;
+  end;
+end;
+
+registration
+ let f,g be increasing (ext-real-valued Function);
+ cluster g*f -> increasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 < e2;
+    then f.e1 < f.e2 by A1,Def13;
+   hence (g*f).e1 < (g*f).e2 by A3,A4,Def13;
+  end;
+end;
+
+registration
+ let f,g be non-decreasing (ext-real-valued Function);
+ cluster g*f -> non-decreasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 <= e2;
+    then f.e1 <= f.e2 by A1,Def15;
+   hence (g*f).e1 <= (g*f).e2 by A3,A4,Def15;
+  end;
+end;
+
+registration
+ let f,g be decreasing (ext-real-valued Function);
+ cluster g*f -> increasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 < e2;
+    then f.e1 > f.e2 by A1,Def14;
+   hence (g*f).e1 < (g*f).e2 by A3,A4,Def14;
+  end;
+end;
+
+registration
+ let f,g be non-increasing (ext-real-valued Function);
+ cluster g*f -> non-decreasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 <= e2;
+    then f.e1 >= f.e2 by A1,Def16;
+   hence (g*f).e1 <= (g*f).e2 by A3,A4,Def16;
+  end;
+end;
+
+registration
+ let f be decreasing (ext-real-valued Function);
+ let g be increasing (ext-real-valued Function);
+ cluster g*f -> decreasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 < e2;
+    then f.e1 > f.e2 by A1,Def14;
+   hence (g*f).e1 > (g*f).e2 by A3,A4,Def13;
+  end;
+ cluster f*g -> decreasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(f*g) & e2 in dom (f*g);
+    then
+A1:  e1 in dom g & e2 in dom g by FUNCT_1:21;
+    then
+A4: (f*g).e1 = f.(g.e1) & (f*g).e2 = f.(g.e2) by FUNCT_1:23;
+A3: g.e1 in dom f & g.e2 in dom f by Z,FUNCT_1:21;
+   assume e1 < e2;
+    then g.e1 < g.e2 by A1,Def13;
+   hence (f*g).e1 > (f*g).e2 by A3,A4,Def14;
+  end;
+end;
+
+registration
+ let f be non-increasing (ext-real-valued Function);
+ let g be non-decreasing (ext-real-valued Function);
+ cluster g*f -> non-increasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(g*f) & e2 in dom (g*f);
+    then
+A1:  e1 in dom f & e2 in dom f by FUNCT_1:21;
+    then
+A4: (g*f).e1 = g.(f.e1) & (g*f).e2 = g.(f.e2) by FUNCT_1:23;
+A3: f.e1 in dom g & f.e2 in dom g by Z,FUNCT_1:21;
+   assume e1 <= e2;
+    then f.e1 >= f.e2 by A1,Def16;
+   hence (g*f).e1 >= (g*f).e2 by A3,A4,Def15;
+  end;
+ cluster f*g -> non-increasing;
+ coherence
+  proof
+   let e1,e2;
+   assume
+Z:  e1 in dom(f*g) & e2 in dom (f*g);
+    then
+A1:  e1 in dom g & e2 in dom g by FUNCT_1:21;
+    then
+A4: (f*g).e1 = f.(g.e1) & (f*g).e2 = f.(g.e2) by FUNCT_1:23;
+A3: g.e1 in dom f & g.e2 in dom f by Z,FUNCT_1:21;
+   assume e1 <= e2;
+    then g.e1 <= g.e2 by A1,Def15;
+   hence (f*g).e1 >= (f*g).e2 by A3,A4,Def16;
+  end;
+end;
+
+registration let X be ext-real-membered set;
+ cluster id X -> increasing Function of X,X;
+ coherence
+  proof
+    id X is increasing
+     proof let e1,e2;
+      assume e1 in dom id X & e2 in dom id X;
+       then (id X).e1 = e1 & (id X).e2 = e2 by FUNCT_1:35;
+      hence thesis;
+     end;
+   hence thesis;
+  end;
+end;
+
+registration
+ cluster increasing sequence of NAT;
+ existence
+  proof
+   take id NAT;
+   thus thesis;
+  end;
+end;
+
+definition
+  let X be set, s be sequence of X;
+  mode subsequence of s -> sequence of X means
+:Def17:  ex N being increasing sequence of NAT st it = s * N;
+  existence
+  proof
+    take s;
+     reconsider N = id NAT as increasing sequence of NAT;
+    take N;
+    thus s = s * N by FUNCT_2:23;
+  end;
+end;
+
+definition let X be non empty set, s be sequence of X, k be Nat;
+ redefine func s ^\ k -> subsequence of s;
+ coherence
+  proof
+    set N = (id NAT)^\k;
+    N is increasing
+     proof let e1,e2;
+      assume e1 in dom N & e2 in dom N;
+       then reconsider i=e1, j=e2 as Element of NAT;
+A:     N.i = (id NAT).(i+k) by NAT_1:def 3
+          .= i+k by FUNCT_1:35;
+B:     N.j = (id NAT).(j+k) by NAT_1:def 3
+          .= j+k by FUNCT_1:35;
+      assume e1 < e2;
+      hence thesis by A,B,XREAL_1:8;
+     end;
+    then reconsider N as increasing sequence of NAT;
+   take N;
+   thus s^\k = (s* id NAT)^\k by FUNCT_2:23
+       .= s * N by NAT_1:51;
+  end;
+end;
+
+reserve s,s1,s2,s3 for sequence of X;
+
+theorem
+ s is subsequence of s
+ proof
+   reconsider N = id NAT as increasing sequence of NAT;
+  take N;
+  thus thesis by FUNCT_2:23;
+ end;
+
+theorem
+ s1 is subsequence of s2 & s2 is subsequence of s3
+  implies s1 is subsequence of s3
+proof
+ given N1 being increasing sequence of NAT such that
+G1: s1 = s2*N1;
+ given N2 being increasing sequence of NAT such that
+G2: s2 = s3*N2;
+ take N2*N1;
+ thus thesis by G1,G2,RELAT_1:55;
+end;
+
+registration let X;  :: to be generalized to Function of X,Y
+ cluster constant sequence of X;
+ existence
+  proof
+   per cases;
+   suppose X = {};
+     then reconsider s = {} as sequence of X by FUNCT_2:def 1,RELSET_1:25;
+    take s;
+    thus thesis;
+   end;
+   suppose X <> {};
+     then consider x such that
+W1:  x in X by XBOOLE_0:def 1;
+     reconsider s = NAT --> x as sequence of X by W1,FUNCOP_1:57;
+    take s;
+    thus thesis;
+   end;
+  end;
+end;
+
+theorem Th21:
+ for s1 being subsequence of s holds rng s1 c= rng s
+proof let s1 be subsequence of s;
+ per cases;
+ suppose X = {};
+  hence thesis;
+ end;
+ suppose
+S: X <> {};
+  consider N being increasing sequence of NAT such that
+A1: s1 = s * N by Def17;
+  let x;
+  assume x in rng s1;
+  then consider n being set such that
+W1: n in NAT and
+W2: x = s1.n by FUNCT_2:17;
+X: N.n in NAT by W1,FUNCT_2:7;
+   x = s.(N.n) by W1,A1,W2,FUNCT_2:21;
+  hence x in rng s by X,S,FUNCT_2:6;
+ end;
+end;
+
+registration let X; let s be constant sequence of X;
+ cluster -> constant subsequence of s;
+ coherence
+  proof let s1 be subsequence of s;
+    rng s1 c= rng s by Th21;
+   hence s1 is constant;
+  end;
+end;
+
+:: from FRECHET2, 2008.09.08, A.T.
+
+definition
+  let X be set, N be increasing sequence of NAT, s be sequence of X;
+  redefine func s*N -> subsequence of s;
+  correctness
+   proof
+    thus s*N is subsequence of s by Def6,Def17;
+   end;
+end;
+
+:: from RFUNCT_2 etc. 2008.09.10, A.T.
+
+reserve X,Y for non empty set,
+        Z for set;
+reserve s,s1 for sequence of X,
+        h,h1 for PartFunc of X,Y,
+        h2 for PartFunc of Y,Z,
+        x for Element of X,
+        N for increasing sequence of NAT;
+
+theorem
+  rng s c= dom h & s1 is subsequence of s implies
+  h/*s1 is subsequence of h/*s
+proof
+  assume
+A1: rng s c= dom h & s1 is subsequence of s;
+  then consider N such that
+A2: s1=s*N by Def17;
+  take N; thus thesis by A1,A2,FUNCT_2:187;
+end;
+
+:: to be generalized
+registration let X be with_non-empty_element set;
+ cluster non-empty sequence of X;
+ existence
+  proof
+    consider x being non empty set such that
+W:   x in X by SETFAM_1:def 11;
+    reconsider s = NAT --> x as sequence of X by W,FUNCOP_1:57;
+   take s;
+   thus thesis;
+  end;
+end;
+
+registration
+ let X be with_non-empty_element set, s be non-empty sequence of X;
+ cluster -> non-empty subsequence of s;
+ coherence
+  proof let s1 be subsequence of s;
+A:  rng s1 c= rng s by Th21;
+    not {} in rng s;
+   hence not {} in rng s1 by A;
+  end;
+end;
+
+reserve i,j for Nat;
+
+definition
+  let X,s;
+  redefine attr s is constant means
+   ex x st for n being Nat holds s.n=x;
+  compatibility
+  proof
+A1: dom s = NAT by FUNCT_2:def 1;
+    hereby
+      assume
+A2:   s is constant;
+      then consider x such that
+W:     for n being Element of NAT st n in dom s holds s.n = x
+        by PARTFUN2:def 1;
+      take x;
+      let n be Nat;
+X:     dom s = NAT by FUNCT_2:def 1;
+       n in NAT by ORDINAL1:def 13;
+      hence s.n = x by W,X;
+    end;
+    given x such that
+A3: for n being Nat holds s.n=x;
+    take x;
+    let n be Element of NAT;
+    assume
+A4: n in dom s;
+    hence s.n = x by A1,A3;
+  end;
+end;
+
+theorem Th23:
+ for X being set for s being constant sequence of X
+  holds s.i =s.j
+proof let X be set;
+ let s be constant sequence of X;
+ per cases;
+ suppose X is empty;
+  then not i in dom s & not j in dom s;
+  then s.i = {} & s.j = {} by FUNCT_1:def 4;
+ hence s.i =s.j;
+ end;
+ suppose X is not empty;
+  then dom s = NAT by FUNCT_2:def 1;
+  then i in dom s & j in dom s by ORDINAL1:def 13;
+ hence s.i =s.j by FUNCT_1:def 16;
+ end;
+end;
+
+theorem Th24:
+ (for i,j holds s.i = s.j) implies s is constant
+proof
+ assume
+Z: for i,j holds s.i = s.j;
+  for x,y being set st x in dom s & y in dom s holds s.x = s.y
+   by Z,FUNCT_1:def 16,FUNCT_2:def 1;
+ hence thesis by FUNCT_1:def 16;
+end;
+
+theorem
+ (for i holds s.i = s.(i+1)) implies s is constant
+proof
+ assume
+Z: for i holds s.i = s.(i+1);
+  now let i,j;
+L: now let i,j such that
+zz: i <= j;
+   defpred P[Nat] means i <= $1 implies s.i = s.$1;
+   i <= 0 implies i = 0 by NAT_1:3;
+   then
+A: P[0];
+B: for j being Nat st P[j] holds P[j+1]
+   proof let j being Nat such that
+z:  P[j];
+    assume i <= j+1;
+     then
+C:    i < j+1 or i = j+1 by XXREAL_0:1;
+     s.j = s.(j+1) by Z;
+    hence s.i = s.(j+1) by C,XXREAL_0:2,z,NAT_1:13;
+   end;
+   for j being Nat holds P[j] from NAT_1:sch 2(A,B);
+  hence s.i = s.j by zz;
+  end;
+  i <= j or j <= i;
+  hence s.i = s.j by L;
+ end;
+ hence thesis by Th24;
+end;
+
+theorem
+  s is constant & s1 is subsequence of s implies s=s1
+proof
+  assume that
+A1: s is constant and
+A2: s1 is subsequence of s;
+  consider N such that
+A3: s1=s*N by A2,Def17;
+   let n be Element of NAT;
+    thus s1.n=s.(N.n) by A3,FUNCT_2:21
+      .=s.n by A1,Th23;
+end;
+
+reserve n for Nat;
+
+theorem Th27:
+  rng s c= dom h implies (h/*s)^\n=h/*(s^\n)
+proof
+  assume
+A1: rng s c= dom h;
+A2: rng (s^\n) c= rng s by Th21;
+    let m be Element of NAT;
+    thus ((h/*s)^\n).m = (h/*s).(m+n) by NAT_1:def 3
+      .= h.(s.(m+n)) by A1,FUNCT_2:185
+      .= h.((s^\n).m) by NAT_1:def 3
+      .= (h/*(s^\n)).m by A1,A2,FUNCT_2:185,XBOOLE_1:1;
+end;
+
+theorem Th28:
+ s.n in rng s
+ proof
+   n in NAT by ORDINAL1:def 13;
+  hence thesis by FUNCT_2:189;
+ end;
+
+theorem
+  h is total implies h/*(s^\n) = (h/*s)^\n
+proof
+  assume h is total;
+  then dom h = X by PARTFUN1:def 4;
+  then rng s c= dom h;
+  hence thesis by Th27;
+end;
+
+theorem Th38:
+  rng s c= dom h implies h.:(rng s) = rng (h/*s)
+proof
+  assume
+A1: rng s c= dom h;
+  now
+    let r be Element of Y;
+    thus r in h.:(rng s) implies r in rng (h/*s)
+    proof
+      assume r in h.:(rng s);
+      then consider p being Element of X such that
+A2:   p in dom h & p in rng s & r=h.p by PARTFUN2:78;
+      consider n being Element of NAT such that
+A3:   p=s.n by A2,FUNCT_2:190;
+      r = (h/*s).n by A1,A2,A3,FUNCT_2:185;
+      hence r in rng (h/*s) by Th28;
+    end;
+    assume r in rng (h/*s);
+    then consider n being Element of NAT such that
+A4: (h/*s).n=r by FUNCT_2:190;
+A5: s.n in rng s by Th28;
+    r = h.(s.n) by A1,A4,FUNCT_2:185;
+    hence r in h.:(rng s) by A1,A5,FUNCT_1:def 12;
+  end;
+  hence thesis by SUBSET_1:8;
+end;
+
+theorem
+  rng s c= dom (h2*h1) implies h2/*(h1/*s) = (h2*h1)/*s
+proof
+  assume
+A1: rng s c= dom (h2*h1);
+  now
+    let n be Element of NAT;
+    s.n in rng s by Th28;
+    then
+A2: s.n in dom h1 & h1.(s.n) in dom h2 by A1,FUNCT_1:21;
+A3: rng s c= dom h1 & h1.:(rng s) c= dom h2 by A1,FUNCT_1:171;
+    then
+A4: rng s c= dom h1 & rng (h1/*s) c= dom h2 by Th38;
+    thus ((h2*h1)/*s).n = (h2*h1).(s.n) by A1,FUNCT_2:185
+      .= h2.(h1.(s.n)) by A2,FUNCT_1:23
+      .= h2.((h1/*s).n) by A3,FUNCT_2:185
+      .= (h2/*(h1/*s)).n by A4,FUNCT_2:185;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 

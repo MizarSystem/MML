@@ -100,48 +100,6 @@
 </Not>
 </For>
 </For>
-<For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="87"/>
-<Func kind="K" nr="91"/>
-</Typ>
-<For>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<For>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<For>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Not>
-<And>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-<Var nr="2"/>
-<Var nr="3"/>
-</Pred>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-<Var nr="2"/>
-<Var nr="4"/>
-</Pred>
-<Not>
-<Pred kind="R" nr="1">
-<Var nr="3"/>
-<Var nr="4"/>
-</Pred>
-</Not>
-</And>
-</Not>
-</For>
-</For>
-</For>
-</For>
 </Scheme>
 <Scheme>
 <ArgTypes>

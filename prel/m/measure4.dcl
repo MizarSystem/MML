@@ -11,8 +11,10 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
@@ -24,6 +26,7 @@
 <ArticleID name="CARD_4"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
 <ArticleID name="SETFAM_1"/>
@@ -35,21 +38,21 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="22">
+<Typ kind="M" nr="23">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="167">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="32">
+<Adjective nr="33">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="72">
+<Adjective nr="74">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

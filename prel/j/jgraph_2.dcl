@@ -21,11 +21,11 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="PRE_TOPC"/>
@@ -58,7 +58,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="298">
+<Func kind="K" nr="285">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -68,21 +68,21 @@
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="288">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="288">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="64">
-<Func kind="K" nr="288">
+<Adjective nr="69">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="288">
+<Func kind="K" nr="275">
 <Num nr="2"/>
 </Func>
 </Adjective>

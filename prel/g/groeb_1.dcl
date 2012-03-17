@@ -35,6 +35,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DICKSON"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -56,10 +57,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="380">
+<Func kind="K" nr="389">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="400">
+<Func kind="K" nr="409">
 <LocusVar nr="1"/>
 </Func>
 </Func>

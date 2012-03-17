@@ -11,6 +11,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
@@ -34,10 +35,43 @@
 </Cluster>
 </RCluster>
 <FCluster aid="FINSEQ_2" nr="1">
+<ArgTypes/>
+<Func kind="K" nr="133">
+<Func kind="K" nr="105"/>
+</Func>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="26"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FINSEQ_2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="78">
+<Func kind="K" nr="115">
+<LocusVar nr="1"/>
+</Func>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="26"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FINSEQ_2" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -46,7 +80,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="118">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -66,7 +100,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 </Registrations>

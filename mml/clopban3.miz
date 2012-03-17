@@ -14,7 +14,7 @@ environ
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
       FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
       STRUCT_0, ALGSTR_0, ORDINAL1, NUMBERS,
-      RLVECT_1, VECTSP_1, COMPLEX1, NORMSP_1, VALUED_1, SEQ_1,
+      RLVECT_1, VECTSP_1, COMPLEX1, NORMSP_1, VALUED_1, SEQ_1, VALUED_0,
       SEQ_2, SEQM_3, SERIES_1, PREPOWER, POWER, CFUNCT_1, CLVECT_1, CSSPACE3,
       BHSP_3, BHSP_4, CLOPBAN1, CLOPBAN2, LOPBAN_3, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PREPOWER,
@@ -29,7 +29,7 @@ environ
  theorems ABSVALUE, RLVECT_1, VECTSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, NAT_1,
       INT_1, FUNCT_2, SEQ_4, PREPOWER, CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1,
       CFUNCDOM, CLOPBAN2, GROUP_1, FUNCOP_1, BHSP_3, XREAL_1, COMPLEX1,
-      FUNCT_1, XXREAL_0, ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0;
+      FUNCT_1, XXREAL_0, ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0, VALUED_0;
  schemes SEQ_1, NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
@@ -247,37 +247,6 @@ A4: P[k];
     .= 0 by CLVECT_1:103;
 end;
 
-definition
-  let X be ComplexNormSpace;
-  let seq be sequence of X;
-  redefine attr seq is constant means
-  :Def5:
-  ex r be Element of X st for n be Element of NAT holds seq.n=r;
-  compatibility
-  proof
-A1: dom seq = NAT by FUNCT_2:def 1;
-    hereby
-      assume
-A2:   seq is constant;
-      reconsider r = seq.0 as Element of X;
-      take r;
-      let n be Element of NAT;
-      thus seq.n = r by A1,A2,FUNCT_1:def 16;
-    end;
-    given r be Element of X such that
-A3: for n be Element of NAT holds seq.n=r;
-    for n1,n2 being set st n1 in dom seq & n2 in dom seq holds seq.n1=seq.n2
-    proof
-      let n1,n2 be set;
-      assume
-A4:   n1 in dom seq & n2 in dom seq;
-      hence seq.n1 = r by A1,A3
-        .= seq.n2 by A1,A3,A4;
-    end;
-    hence seq is constant by FUNCT_1:def 16;
-  end;
-end;
-
 canceled 3;
 
 theorem Th10:
@@ -294,7 +263,7 @@ A3: for p be Real st 0<p ex n be Element of NAT st
   for m be Element of NAT st n<=m holds
   ||.(seq.m)-g1.||< p by A2,CLVECT_1:def 16;
   consider Nseq be increasing Seq_of_Nat such that
-A4: seq1=seq*Nseq by A1,BHSP_3:def 4;
+A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   take g=g1;
   let p be Real;
   assume 0<p;
@@ -306,7 +275,7 @@ A6: n<=m;
   m<=Nseq.m by SEQM_3:33;
   then
 A7: n<=Nseq.m by A6,XXREAL_0:2;
-  seq1.m=seq.(Nseq.m) by A4,LOPBAN_3:7;
+  seq1.m=seq.(Nseq.m) by A4,FUNCT_2:21;
   hence ||.(seq1.m)-g.||<p by A5,A7;
 end;
 
@@ -321,7 +290,7 @@ A1: seq1 is subsequence of seq and
 A2: seq is convergent;
 A3: seq1 is convergent by A1,A2,Th10;
   consider Nseq be increasing Seq_of_Nat such that
-A4: seq1=seq*Nseq by A1,BHSP_3:def 4;
+A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   now
     let p be Real;
     assume 0<p;
@@ -334,7 +303,7 @@ A6: n<=m;
     m<=Nseq.m by SEQM_3:33;
     then
 A7: n<=Nseq.m by A6,XXREAL_0:2;
-    seq1.m=seq.(Nseq.m) by A4,LOPBAN_3:7;
+    seq1.m=seq.(Nseq.m) by A4,FUNCT_2:21;
     hence ||.(seq1.m)-(lim seq).||<p by A5,A7;
   end;
   hence thesis by A3,CLVECT_1:def 18;
@@ -424,56 +393,15 @@ A5: nn = m+1+k by A4,Lm1;
   hence thesis by SEQM_3:def 1;
 end;
 
-theorem Th12:
-  for X be ComplexNormSpace, seq be sequence of X, k be Element of NAT holds
-  seq ^\k is subsequence of seq
-proof
-  let X be ComplexNormSpace;
-  let seq be sequence of X;
-  let k be Element of NAT;
-  deffunc U(Element of NAT) = $1+k;
-  consider seq1 be Real_Sequence such that
-A1: for n be Element of NAT holds seq1.n=U(n) from SEQ_1:sch 1;
-  now
-    let n be Element of NAT;
-A2: seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
-    n+k<n+k+1 by NAT_1:13;
-    hence seq1.n<seq1.(n+1) by A2;
-  end;
-  then
-A3: seq1 is increasing by Lm3;
-  now
-    let n be Element of NAT;
-    n+k is Element of NAT;
-    hence seq1.n is Element of NAT by A1;
-  end;
-  then reconsider seq1 as increasing Seq_of_Nat by A3,SEQM_3:29;
-  take Nseq=seq1;
-  now
-    let n be Element of NAT;
-    thus (seq*Nseq).n=seq.(Nseq.n) by LOPBAN_3:7
-      .=seq.(n+k) by A1
-      .=(seq ^\k).n by NAT_1:def 3;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
 :::::::::: Norm Space versions of SEQ_4_33 - SEQ_4_39
+
+canceled;
 
 theorem Th13:
 
 for X be ComplexNormSpace, seq,seq1 be sequence of X, k be Element of NAT holds
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
-proof
-  let X be ComplexNormSpace;
-  let seq,seq1 be sequence of X;
-  let k be Element of NAT;
-  assume
-A1: seq is convergent;
-A2: seq^\k is subsequence of seq by Th12;
-  hence seq^\k is convergent by A1,Th10;
-  thus lim (seq ^\k)=lim seq by A1,A2,Th11;
-end;
+               by Th10,Th11;
 
 theorem Th14:
   for X be ComplexNormSpace, seq,seq1 be sequence of X holds
@@ -565,7 +493,7 @@ proof
   let seq be sequence of X;
   assume seq is constant;
   then consider r be Element of X such that
-A1: for n be Element of NAT holds seq.n=r by Def5;
+A1: for n be Nat holds seq.n=r by VALUED_0:def 18;
   take g=r;
   let p be Real such that
 A2: 0<p;
@@ -1352,7 +1280,7 @@ definition
   let X be non empty Normed_Complex_AlgebraStr;
   let S be sequence of X;
   let a be Element of X;
-  canceled 2;
+  canceled 3;
   func a * S -> sequence of X means
   for n be Element of NAT holds it.n = a * S.n;
   existence

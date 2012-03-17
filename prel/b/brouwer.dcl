@@ -28,11 +28,11 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
@@ -55,17 +55,17 @@
 <Cluster>
 <Adjective nr="42" value="false"/>
 <Adjective nr="47" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -78,18 +78,18 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="42" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="42" value="false"/>
 <Adjective nr="47" value="false"/>
-<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -106,7 +106,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="300">
+<Func kind="K" nr="287">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -118,7 +118,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="390">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -136,7 +136,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="300">
+<Func kind="K" nr="287">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -147,13 +147,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="390">
+<Func kind="K" nr="377">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="113">
+<Adjective nr="118">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -16,6 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -50,56 +51,56 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="115"/>
+<Adjective nr="120"/>
 </Cluster>
 <Func kind="U" nr="8">
-<Func kind="K" nr="291"/>
+<Func kind="K" nr="300"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="90"/>
-<Func kind="K" nr="285">
+<Func kind="K" nr="294">
 <Func kind="K" nr="90"/>
 </Func>
 </Func>
-<Func kind="K" nr="307"/>
+<Func kind="K" nr="316"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="407">
+<Func kind="K" nr="416">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
-<Adjective nr="97">
-<Func kind="K" nr="291"/>
+<Adjective nr="38"/>
+<Adjective nr="98">
+<Func kind="K" nr="300"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="90"/>
-<Func kind="K" nr="285">
+<Func kind="K" nr="294">
 <Func kind="K" nr="90"/>
 </Func>
 </Func>
-<Func kind="K" nr="307"/>
+<Func kind="K" nr="316"/>
 </Adjective>
-<Adjective nr="108"/>
-<Adjective nr="110"/>
+<Adjective nr="113"/>
+<Adjective nr="115"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMISORT" nr="2">
 <ArgTypes>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="34">
 <Cluster>
-<Adjective nr="111" value="false"/>
+<Adjective nr="116" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="33">
+<Typ kind="M" nr="34">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="314">
+<Func kind="K" nr="323">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="115"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 </Registrations>

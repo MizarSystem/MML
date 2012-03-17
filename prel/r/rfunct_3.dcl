@@ -16,7 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="VALUED_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -24,6 +24,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
@@ -39,7 +40,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -65,7 +66,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <FCluster aid="RFUNCT_3" nr="1">
@@ -78,19 +79,19 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="262">
+<Func kind="K" nr="271">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RFUNCT_3" nr="2">
@@ -103,19 +104,19 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="K" nr="89"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
+<Func kind="K" nr="272">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="36"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

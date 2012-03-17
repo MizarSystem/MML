@@ -12,9 +12,11 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="DIFF_1"/>
 </Signature>
@@ -39,14 +41,14 @@
 <Func kind="K" nr="61"/>
 </Func>
 </Adjective>
-<Adjective nr="19">
+<Adjective nr="20">
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="52">
 <Func kind="K" nr="61"/>
 <Func kind="K" nr="61"/>
 </Func>
 </Adjective>
-<Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 </Registrations>

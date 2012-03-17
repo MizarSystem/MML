@@ -11,7 +11,11 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="XXREAL_1"/>
 <ArticleID name="RCOMP_1"/>
@@ -32,10 +36,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="53"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="2">
@@ -47,10 +51,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="53"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="58"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="3">
@@ -58,14 +62,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="25"/>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="K" nr="54"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -78,14 +82,14 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="25"/>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="K" nr="54"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -95,7 +99,7 @@
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="58"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -105,13 +109,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="25"/>
 </Cluster>
 </CCluster>
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="58"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -120,7 +124,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="56"/>
 </Cluster>
 </CCluster>
 </Registrations>

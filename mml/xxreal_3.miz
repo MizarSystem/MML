@@ -1,0 +1,185 @@
+:: Basic Operations on Extended Real Numbers
+::  by Andrzej Trybulec
+::
+:: Received September 23, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies SUPINF_1, ARYTM, ARYTM_1, RELAT_1, ASYMPT_0, ZF_LANG,
+  ARYTM_3, XCMPLX_0;
+ notations ORDINAL1, XXREAL_0, XREAL_0, XCMPLX_0, NUMBERS;
+ constructors XBOOLE_0, ORDINAL1, XXREAL_0, XCMPLX_0, XREAL_0, NUMBERS;
+ registrations XXREAL_0, XREAL_0, ORDINAL1, XBOOLE_0;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM;
+ definitions XCMPLX_0;
+ theorems XXREAL_0, XREAL_0;
+
+begin
+
+definition let x,y be ext-real number;
+  func x + y -> ext-real number means :Def3:
+    ex a,b being complex number st x = a & y = b & it = a + b
+      if x is real & y is real,
+    it = +infty if x = +infty & y <> -infty or y = +infty & x <> -infty,
+    it = -infty if x = -infty & y <> +infty or y = -infty & x <> +infty
+    otherwise it = 0;
+ existence
+  proof
+   thus x is real & y is real implies
+      ex c being ext-real number, a, b being complex number
+       st x = a & y = b & c = a + b
+     proof assume x is real & y is real;
+       then reconsider a = x, b = y as real number;
+      take c = a+b, a, b;
+      thus thesis;
+     end;
+   thus thesis;
+  end;
+ uniqueness;
+ consistency;
+ commutativity;
+  func x * y -> ext-real number means :Def4:
+    ex a,b being complex number st x = a & y = b & it = a * b
+      if x is real & y is real,
+    it = +infty if (x is not real or y is not real) &
+     (x is positive & y is positive or x is negative & y is negative),
+    it = -infty if (x is not real or y is not real) &
+     (x is positive & y is negative or x is negative & y is positive)
+    otherwise it = 0;
+ existence
+  proof
+   thus x is real & y is real implies
+      ex c being ext-real number, a, b being complex number
+       st x = a & y = b & c = a * b
+     proof assume x is real & y is real;
+       then reconsider a = x, b = y as real number;
+      take c = a*b, a, b;
+      thus thesis;
+     end;
+   thus thesis;
+  end;
+ uniqueness;
+ consistency;
+ commutativity;
+end;
+
+registration let x,y be real number, a,b be complex number;
+ identify x+y with a+b when x = a, y = b;
+ compatibility by Def3;
+ identify x*y with a*b when x = a, y = b;
+ compatibility by Def4;
+end;
+
+definition let x be ext-real number;
+  func -x -> ext-real number means :Def5:
+    ex a being complex number st x = a & it = -a if x is real,
+    it = -infty if x = +infty
+    otherwise it = +infty;
+ existence
+  proof
+   thus x is real implies
+    ex c being ext-real number, a being complex number st
+     x = a & c = -a
+     proof assume x is real;
+       then reconsider a = x as real number;
+      take -a, a;
+      thus thesis;
+     end;
+   thus thesis;
+  end;
+ uniqueness;
+ consistency;
+ involutiveness
+  proof
+    let y,x be ext-real number such that
+A1: x is real implies ex a being complex number st x = a & y = - a and
+A2: x = +infty implies y = -infty and
+A3: x is not real & x <> +infty implies y = +infty;
+    thus y is real implies ex a being complex number st y = a & x = - a
+    proof
+      assume y is real;
+      then consider a being complex number such that
+A4:   x = a and
+A5:   y = - a by A1,A2,A3;
+      take -a;
+      thus thesis by A4,A5;
+    end;
+     x in REAL implies x is real by XREAL_0:def 1;
+     then x is real or x = +infty or x = -infty by XXREAL_0:14;
+    hence y = +infty implies x = -infty by A1,A2;
+    thus thesis by A1,A3;
+  end;
+end;
+
+definition let x be ext-real number;
+  func x" -> ext-real number means :Def6:
+    ex a being complex number st x = a & it = a" if x is real
+     otherwise it = 0;
+ existence
+  proof
+   thus x is real implies
+    ex c being ext-real number, a being complex number st
+     x = a & c = a"
+     proof assume x is real;
+       then reconsider a = x as real number;
+      take a", a;
+      thus thesis;
+     end;
+   thus thesis;
+  end;
+ uniqueness;
+ consistency;
+end;
+
+registration let x be real number, a be complex number;
+ identify -x with -a when x = a;
+ compatibility by Def5;
+ identify x" with a" when x = a;
+ compatibility by Def6;
+end;
+
+definition let x,y be ext-real number;
+ func x - y -> ext-real number equals x + -y;
+ coherence;
+ func x / y -> ext-real number equals x * y";
+ coherence;
+end;
+
+registration let x,y be real number, a,b be complex number;
+ identify x-y with a-b when x = a, y = b;
+ compatibility
+  proof
+    reconsider y1=-y as real number;
+   assume x = a & y = b;
+   hence a - b = x + y1
+       .= x - y;
+  end;
+ identify x/y with a/b when x = a, y = b;
+ compatibility
+  proof
+   reconsider y1=y" as real number;
+   assume x = a & y = b;
+   hence a / b = x * y1
+       .= x / y;
+  end;
+end;
+
+reserve x for ext-real number;
+
+theorem
+ x * 0 = 0
+ proof
+  per cases by XXREAL_0:14;
+  suppose x in REAL;
+    then x is real & 0 is real by XREAL_0:def 1;
+    then ex a,b being complex number st x = a & 0 = b & x * 0 = a * b by Def4;
+   hence thesis;
+  end;
+  suppose x = +infty;
+   hence thesis by Def4;
+  end;
+  suppose x = -infty;
+   hence thesis by Def4;
+  end;
+ end;

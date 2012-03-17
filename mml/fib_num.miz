@@ -10,19 +10,20 @@ environ
       FUNCT_3, RELAT_1, ORDINAL2, FIB_NUM, ABSVALUE, POWER, SEQ_1, SEQ_2,
       SEQM_3, LATTICES, GROUP_1, ANPROJ_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, SQUARE_1,
-      VALUED_0, VALUED_1,
-      SEQ_1, XXREAL_0, COMPLEX1, NAT_1, NAT_D, INT_2, PRE_FF, SEQ_2, SEQM_3,
+      NAT_1, NAT_D, INT_2, VALUED_0, VALUED_1,
+      SEQ_1, XXREAL_0, COMPLEX1, PRE_FF, SEQ_2, SEQM_3,
       LIMFUNC1, QUIN_1, NEWTON, POWER;
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, QUIN_1, SEQ_2, SEQM_3, LIMFUNC1,
-      NEWTON, POWER, PRE_FF, SEQ_1, VALUED_1, PARTFUN1;
+      NEWTON, POWER, PRE_FF, SEQ_1, VALUED_1, PARTFUN1, SETFAM_1;
  registrations RELSET_1, XREAL_0, SQUARE_1, MEMBERED, QUIN_1, NEWTON, INT_1,
-      VALUED_0, VALUED_1, FUNCT_2, NUMBERS;
+      VALUED_0, VALUED_1, FUNCT_2, NUMBERS, SEQ_4, SETFAM_1, REALSET1,
+      FINSET_1;
  requirements SUBSET, NUMERALS, REAL, ARITHM, BOOLE;
  definitions SQUARE_1, VALUED_1;
  theorems NAT_1, PRE_FF, INT_2, SQUARE_1, WSIERP_1, EULER_1, PYTHTRIP,
       QUIN_1, REAL_2, ABSVALUE, POWER, NEWTON, SEQM_3, SEQ_1, SEQ_2, SEQ_4,
       PREPOWER, XCMPLX_0, XCMPLX_1, XREAL_1, COMPLEX1, XXREAL_0, FUNCT_2,
-      ORDINAL1, NAT_D, VALUED_1;
+      ORDINAL1, NAT_D, VALUED_1, VALUED_0, XREAL_0;
  schemes NAT_1, SEQ_1;
 
 begin
@@ -496,7 +497,6 @@ proof
 A1: a <> 0 and
 A2: delta(a,b,c) >= 0;
  lh = a * (x - r1) * (x - r2) by A1,A2,QUIN_1:16;
-   then x = r1 or x = r2 implies lh = 0;
   hence thesis by A1,A2,QUIN_1:15;
 end;
 
@@ -866,22 +866,23 @@ A22: for n holds f2.n <> 0
         .= Fib((n+1) + 1) by A2;
       hence thesis by Lm3,NAT_1:5;
     end;
-A23: for n holds (f2 /" f2) . n = 1
+A23: for n being Nat holds (f2 /" f2) . n = 1
     proof
-      let n;
-      (f2 /" f2).n = (f2.n) * (f2.n)" by Th11
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
+      then (f2 /" f2).n = (f2.n) * (f2.n)" by Th11
         .= (f2.n) * ( 1/ (f2.n)) by XCMPLX_1:217
-        .= 1 by A22,XCMPLX_1:107;
+        .= 1 by A22,XCMPLX_1:107,X;
       hence thesis;
     end;
     then
-A24: (f2 /" f2) is constant by SEQM_3:def 6;
+A24: (f2 /" f2) is constant by VALUED_0:def 18;
     (f2 /" f2) . 0 = 1 by A23;
     then
 A25: lim (f2 /" f2) = 1 by A24,SEQ_4:40;
 A26: (f /" f) ^\ 2 = (f2 /" f2) by SEQM_3:43;
-    hence f /" f is convergent by A24,SEQ_4:35,39;
-    thus thesis by A24,A25,A26,SEQ_4:36,39;
+    hence f /" f is convergent by A24,SEQ_4:35;
+    thus thesis by A24,A25,A26,SEQ_4:36;
   end;
 A27: (g /" f) = (f /" f) + (h /" f) by A7,SEQ_1:57;
   then
@@ -905,9 +906,12 @@ A32:  (tau |^ n) <> 0 by Lm12,PREPOWER:12;
   end;
 A33: (g1 /" g) is convergent & lim (g1 /" g) = tau
   proof
-A34: for n holds (g1 /" g) . n = tau
+Y:   tau in REAL by XREAL_0:def 1;
+A34: for n being Nat holds (g1 /" g) . n = tau
     proof
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
+      then
 A35:  g.n = (tau to_power n) / (sqrt 5) by A5
         .= (tau to_power n) * (sqrt 5)" by XCMPLX_0:def 9
         .= (tau |^ n) * (sqrt 5)" by POWER:46;
@@ -917,16 +921,16 @@ A36:  g1.n = g.(n+1) by NAT_1:def 3
         .= (tau |^ (n+1)) * (sqrt 5)" by POWER:46
         .= (tau * (tau |^ n)) * (sqrt 5)" by NEWTON:11
         .= tau * (g.n) by A35;
-A37:  g.n <> 0 by A30,SEQ_1:7;
-      (g1 /" g).n = (tau * (g.n)) * ((g.n)") by A36,Th11
+A37:  g.n <> 0 by A30,SEQ_1:7,X;
+      (g1 /" g).n = (tau * (g.n)) * ((g.n)") by A36,Th11,X
         .= tau * ((g.n) * (g.n)")
         .= tau * 1 by A37,XCMPLX_0:def 7
         .= tau;
       hence thesis;
     end;
     then
-A38: (g1 /" g) is constant by SEQM_3:def 6;
-    hence (g1 /" g) is convergent by SEQ_4:39;
+A38: (g1 /" g) is constant by VALUED_0:def 18,Y;
+    hence (g1 /" g) is convergent;
     (g1 /" g) . 0 = tau by A34;
     hence thesis by A38,SEQ_4:40;
   end;
@@ -941,47 +945,34 @@ A39: f1 is non-zero
     end;
     hence thesis by SEQ_1:7;
   end;
-A40: f2 = f1 ^\ 1
-  proof
-    f1 ^\ 1 = f ^\ (1 + 1) by NAT_1:49
+A40: f1 ^\ 1 = f ^\ (1 + 1) by NAT_1:49
       .= f2;
-    hence thesis;
-  end;
   set g2 = g1 ^\ 1;
-A41: g1 is non-zero & g2 is non-zero
-  proof
-    thus g1 is non-zero by A30,SEQM_3:40;
-    hence thesis by SEQM_3:40;
-  end;
-A42: f2 is non-zero by A39,A40,SEQM_3:40;
+     g1 is non-zero & g2 is non-zero by A30;
+A42: f2 is non-zero by A39,A40;
 A43: f2 /" g1 is convergent & lim (f2 /" g1 ) = tau
   proof
-A44: f2 /" g1 = (f2 /" g2) (#) (g2 /" g1) by A41,Th10;
-A45: g2 = g ^\2
-    proof
-      g2 = g ^\ (1 + 1) by NAT_1:49
-        .= g ^\ 2;
-      hence thesis;
-    end;
+A44: f2 /" g1 = (f2 /" g2) (#) (g2 /" g1) by A30,Th10;
+A45: g2 = g ^\ (1 + 1) by NAT_1:49;
 A46: (f2 /" g2) is convergent & lim (f2 /" g2) = 1
     proof
 A47:  (g2 /" f2) = (g /" f) ^\ 2 by A45,SEQM_3:43;
       then
-A48:  (g2 /" f2) is convergent by A28,SEQ_4:33;
+      (g2 /" f2) is convergent by A28;
 A49:  lim (g2 /" f2) = 1 by A28,A29,A47,SEQ_4:33;
       for n holds (g2 /" f2).n <> 0
       proof
         let n;
-A50:    (g2.n) <> 0 by A41,SEQ_1:7;
+A50:    (g2.n) <> 0 by A30,SEQ_1:7;
 A51:    (f2.n)" <> 0 by A42,SEQ_1:7,XCMPLX_1:203;
         (g2 /" f2).n = (g2.n) * (f2.n)" by Th11;
         hence thesis by A50,A51,XCMPLX_1:6;
       end;
       then
 A52:  (g2 /" f2) is non-zero by SEQ_1:7;
-      then (g2 /" f2)" is convergent by A48,A49,SEQ_2:35;
+      then (g2 /" f2)" is convergent by A47,A28,A49,SEQ_2:35;
       hence (f2 /" g2) is convergent by SEQ_1:48;
-      lim (g2 /" f2)" = 1" by A48,A49,A52,SEQ_2:36
+      lim (g2 /" f2)" = 1" by A47,A28,A49,A52,SEQ_2:36
         .= 1;
       hence thesis by SEQ_1:48;
     end;
@@ -1002,7 +993,7 @@ A54: (g1 /" f1) is convergent & lim (g1 /" f1) = 1
   end;
 A55: (f2 /" f1) is convergent & lim (f2 /" f1) = tau
   proof
-A56: (f2 /" f1) = (f2 /" g1) (#) (g1 /" f1) by A41,Th10;
+A56: (f2 /" f1) = (f2 /" g1) (#) (g1 /" f1) by A30,Th10;
     hence (f2 /" f1) is convergent by A43,A54,SEQ_2:28;
     lim (f2 /" f1) = tau * 1 by A43,A54,A56,SEQ_2:29;
     hence thesis;

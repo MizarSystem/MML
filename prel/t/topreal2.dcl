@@ -21,6 +21,7 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,7 +31,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="TOPREAL2"/>
@@ -41,7 +41,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,26 +49,26 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="274"/>
+<Func kind="K" nr="261"/>
 <Cluster>
-<Adjective nr="91"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPREAL2" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="91"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -77,7 +77,7 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="47">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Adjective>

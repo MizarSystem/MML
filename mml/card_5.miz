@@ -17,7 +17,7 @@ environ
  constructors WELLORD1, WELLORD2, FUNCOP_1, ORDINAL3, XXREAL_0, NAT_1,
       FINSEQ_1, CARD_2, CARD_3, ORDINAL4;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, FUNCOP_1, ORDINAL2, ORDINAL3,
-      XXREAL_0, NAT_1, CARD_1, CARD_3, ORDINAL4;
+      XXREAL_0, NAT_1, CARD_1, CARD_3, ORDINAL4, CARD_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, ORDINAL2, CARD_1, CARD_3, XBOOLE_0;
  theorems AXIOMS, TARSKI, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1, FINSEQ_1,
@@ -54,12 +54,12 @@ A1: Seg n = {k: 1 <= k & k <= n} & n+1 = {m: m < n+1}
 A2: x = k & 1 <= k & k <= n by A1;
     k < n+1 & x <> 0 by A2,NAT_1:13;
     then x in n+1 & not x in {0} by A1,A2,TARSKI:def 1;
-    hence thesis by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 5;
   end;
   let x;
   assume x in (n+1) \ {0};
   then
-A3: x in n+1 & not x in {0} by XBOOLE_0:def 4;
+A3: x in n+1 & not x in {0} by XBOOLE_0:def 5;
   then consider m such that
 A4: x = m & m < n+1 by A1;
   x <> 0 & m >= 0 by A3,TARSKI:def 1;
@@ -104,7 +104,7 @@ theorem Th11:
   alef A is infinite
 proof
   {} c= A by XBOOLE_1:2;
-  then omega c= alef A by CARD_1:43,CARD_1:83;
+  then omega c= alef A by CARD_1:43,83;
   hence thesis by CARD_4:8;
 end;
 
@@ -129,10 +129,10 @@ A4: not nextcard K is finite;
 A5: K = alef A by A3;
     take succ A; thus nextcard K = alef succ A by A5,CARD_1:39;
   end;
-A6: K <> {} & K is_limit_cardinal & (for N st N in K holds P[N]) implies P[K]
+A6: K <> {} & K is limit_cardinal & (for N st N in K holds P[N]) implies P[K]
   proof
     assume that
-A7: K <> {} & K is_limit_cardinal and
+A7: K <> {} & K is limit_cardinal and
 A8: for N st N in K holds P[N] and
 A9: not K is finite;
     defpred P[set] means ex N st N = $1 & not N is finite;
@@ -197,7 +197,7 @@ A24:  alef succ C = alef D & f.(alef succ C) = D by A15;
       succ C = D by A24,CARD_1:42;
       hence succ B in A by A15,A22,A23,A24,FUNCT_1:def 5;
     end;
-    then A is_limit_ordinal by ORDINAL1:41;
+    then A is limit_ordinal by ORDINAL1:41;
     then
 A25: A = {} or alef A = Card sup L by A20,CARD_1:40;
     sup L c= K
@@ -232,7 +232,7 @@ A31: Card sup L c= K by CARD_1:def 5;
 A32:    A <> {};
         assume K <> alef A;
         then Card sup L in K & not alef A is finite by A25,A31,A32,Th11,
-        CARD_1:13;
+CARD_1:13;
         then
 A33:    Card sup L in X by A10,A25,A32;
         then consider B such that
@@ -425,7 +425,7 @@ A16:    z in dom (f|y) & f.y in (f|y).z by Th10;
         reconsider z as Ordinal by A16;
         defpred P[Ordinal] means $1 in y & f.y in f.$1;
         dom (f|y) = dom f /\ y by RELAT_1:90;
-        then (f|y).z = f.z & z in y by A16,FUNCT_1:70,XBOOLE_0:def 3;
+        then (f|y).z = f.z & z in y by A16,FUNCT_1:70,XBOOLE_0:def 4;
         then
 A17:    ex C st P[C] by A16;
         consider C such that
@@ -439,7 +439,7 @@ A19:      a in dom (f|C) & f.C in (f|C).a by Th10;
           dom (f|C) = dom f /\ C & f.a = fa & fc in fa
           by A19,FUNCT_1:70,RELAT_1:90;
           then
-A20:      a in C & fy in f.a by A18,A19,ORDINAL1:19,XBOOLE_0:def 3;
+A20:      a in C & fy in f.a by A18,A19,ORDINAL1:19,XBOOLE_0:def 4;
           then a in y & not C c= a by A18,ORDINAL1:7,19;
           hence contradiction by A18,A20;
         end;
@@ -598,12 +598,12 @@ A10: for x st x in Z ex y st P[x,y]
 A11: ex Y being Subset of X st x = Y & Card Y in M;
     set A = order_type_of RelIncl (f.:x);
     Card (f.:x) = Card A & Card (f.:x) c= Card x
-     by Th16,CARD_2:3,A2,RELAT_1:144;
+     by Th16,A2,CARD_2:3,RELAT_1:144;
     then
 A13: Card A in M by A11,ORDINAL1:22;
     consider xi1 being Ordinal-Sequence such that
 A14: xi1 = canonical_isomorphism_of (RelIncl A, RelIncl (f.:x)) &
-    xi1 is increasing & dom xi1 = A & rng xi1 = f.:x by A2,RELAT_1:144,Th14;
+    xi1 is increasing & dom xi1 = A & rng xi1 = f.:x by A2,Th14,RELAT_1:144;
     deffunc f(set) = {};
     consider xi2 being Ordinal-Sequence such that
 A15: dom xi2 = M -^ A & for B st B in M -^ A holds xi2.B = f(B)
@@ -847,12 +847,8 @@ proof 1 in a by Lm1,Th25;
   hence thesis;
 end;
 
-theorem Th32:
-  union a = a
-proof
-  a is_limit_ordinal by CARD_4:32;
-  hence thesis by ORDINAL1:def 6;
-end;
+theorem
+  union a = a by ORDINAL1:def 6;
 
 registration
   let a,M;
@@ -915,7 +911,7 @@ end;
 
 canceled;
 
-Lm3: omega is_limit_ordinal by ORDINAL1:def 12;
+Lm3: omega is limit_ordinal by ORDINAL1:def 12;
 
 theorem Th34:
   cf omega = omega
@@ -947,8 +943,7 @@ A6: x in rxi & for y st y in rxi & y <> x holds not P[y,x]
     then A c= x or not x c= A by A6;
     hence A in succ x by ORDINAL1:34;
   end;
-  then omega c= succ x & succ x in omega by A2,A6,Lm3,ORDINAL1:41
-  ,ORDINAL2:28;
+  then omega c= succ x & succ x in omega by A2,A6,Lm3,ORDINAL1:41,ORDINAL2:28;
   hence contradiction by ORDINAL1:7;
 end;
 
@@ -971,7 +966,7 @@ Z:     x in cf nextcard a;
 A3: (Card xi).x = Card (xi.x) & (cf nextcard a --> a).x = a &
     xi.x in rng xi by A1,CARD_3:def 2,FUNCOP_1:13,FUNCT_1:def 5;
     reconsider A = xi.x as Ordinal by Z;
-    Card (xi.x) in nextcard a by A1,A3,ORDINAL1:22,CARD_1:24;
+    Card (xi.x) in nextcard a by A1,A3,CARD_1:24,ORDINAL1:22;
     hence (Card xi).x c= (cf nextcard a --> a).x by A3,CARD_4:23;
   end;
   then
@@ -1018,9 +1013,9 @@ end;
 theorem Th36:
   omega c= cf a
 proof
-A1: a is_cofinal_with cf a & a is_limit_ordinal by Def2,CARD_4:32;
+A1: a is_cofinal_with cf a & a is limit_ordinal by Def2;
   then
-A2: cf a is_limit_ordinal by ORDINAL4:40;
+A2: cf a is limit_ordinal by ORDINAL4:40;
   cf a <> {} by A1,ORDINAL2:68;
   then {} in cf a by ORDINAL3:10;
   hence thesis by A2,ORDINAL1:def 12;
@@ -1094,7 +1089,7 @@ registration
 end;
 
 theorem Th40:
-  cf a in a implies a is_limit_cardinal
+  cf a in a implies a is limit_cardinal
 proof
   assume
 A1: cf a in a;
@@ -1113,7 +1108,7 @@ theorem Th41:
 proof
   assume cf a in a;
   then
-A1: a is_limit_cardinal by Th40;
+A1: a is limit_cardinal by Th40;
   a is_cofinal_with cf a by Def2;
   then consider xi being Ordinal-Sequence such that
 A2: dom xi = cf a & rng xi c= a &
@@ -1207,7 +1202,7 @@ A19: A in dom phi by A17,ORDINAL1:19;
     then C in sup (phi|B) & sup (phi|B) in nextcard sup (phi|B) &
     nextcard sup (phi|B) = nextcard sup (phi|B) by CARD_1:36,ORDINAL2:27;
     then C in nextcard sup (phi|B) by ORDINAL1:19;
-    hence thesis by A18,XBOOLE_0:def 2;
+    hence thesis by A18,XBOOLE_0:def 3;
   end;
   thus a c= sup phi
   proof
@@ -1223,7 +1218,7 @@ A21: y in dom xi & A = xi.y by A20,FUNCT_1:def 5;
     then dom (phi|y) = y by A3,RELAT_1:91;
     then A in nextcard A & nextcard A = nextcard A &
     phi.y = ( nextcard A) \/ nextcard sup (phi|y) by A2,A3,A21,CARD_1:36;
-    then A in phi.y by XBOOLE_0:def 2;
+    then A in phi.y by XBOOLE_0:def 3;
     then A c= phi.y by ORDINAL1:def 2;
     then
 A22: x c= phi.y & phi.y in rng phi by A2,A3,A20,A21,FUNCT_1:def 5,XBOOLE_1:1;
@@ -1341,7 +1336,7 @@ A5:     x in nextcard a;
 A6:     (nextcard a --> exp(a,b)).x = exp(a,b) & Card phi.x = Card (phi.x) &
         phi.x' = Funcs(b,x') by A2,A5,CARD_3:def 2,FUNCOP_1:13;
 A7:     Card Card x = Card x & Card x' c= x' & Card b = Card b by CARD_1:24;
-        Card x in nextcard a by A5,ORDINAL1:22,CARD_1:24;
+        Card x in nextcard a by A5,CARD_1:24,ORDINAL1:22;
         then Card x c= a by CARD_4:23;
         then Funcs(b,Card x) c= Funcs(b,a) by FUNCT_5:63;
         then Card Funcs(b,Card x) c= Card Funcs(b,a) &
@@ -1411,10 +1406,10 @@ A5: dom f = X & dom (b-powerfunc_of a) = X
 end;
 
 theorem
-  a is_limit_cardinal & b in cf a implies exp(a,b) = Sum (b-powerfunc_of a)
+  a is limit_cardinal & b in cf a implies exp(a,b) = Sum (b-powerfunc_of a)
 proof
   assume
-A1: a is_limit_cardinal & b in cf a;
+A1: a is limit_cardinal & b in cf a;
   deffunc f(Ordinal) = Funcs(b,$1);
   consider L being T-Sequence such that
 A2: dom L = a & for A st A in a holds L.A = f(A) from ORDINAL2:sch 2;
@@ -1493,7 +1488,7 @@ A11: nextcard m in a by CARD_1:13;
 A12: nextcard Card x c= Sum (b-powerfunc_of a) by XBOOLE_1:1;
     Card x = Card Card x;
     then x' in nextcard x' & nextcard Card x = nextcard x by CARD_1:36
-    ,CARD_4:20;
+,CARD_4:20;
     hence thesis by A12;
   end;
   then a*`Sum (b-powerfunc_of a) = Sum (b-powerfunc_of a) by Th27;
@@ -1573,8 +1568,8 @@ A14: g2 = y & h2 = f.y & dom g2 = b & rng g2 c= a & dom h2 = cf a &
       g1.X in rng g1 & g2.X in rng g2 by A13,A14,FUNCT_1:def 5;
       then reconsider A1 = g1.x1, A2 = g2.x1 as Element of a by A13,A14;
       set A = A1 \/ A2;
-      a = union a by Th32;
-      then (A = A1 or A = A2) & a is_limit_ordinal
+      a = union a by ORDINAL1:def 6;
+      then (A = A1 or A = A2) & a is limit_ordinal
       by ORDINAL1:def 6,ORDINAL3:15;
       then succ A in a & sup phi = sup rng phi by ORDINAL1:41;
       then consider B such that
@@ -1631,7 +1626,7 @@ A24:    z' in dom fx & z = fx.z' by FUNCT_1:def 5;
         reconsider x2 as Ordinal by A21,A22;
         reconsider A = phi.x2 as Ordinal;
         (g.z' in phi.x2 or not g.z' in phi.x2) & A <> 0 by A3,A21,A22,
-        FUNCT_1:def 5;
+FUNCT_1:def 5;
         then (z = g.z' & g.z' in phi.x2 or z = 0) & 0 in A
         by A23,A24,ORDINAL3:10;
         hence thesis;

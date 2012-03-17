@@ -12,7 +12,8 @@ environ
       FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_2, METRIC_1, FINSET_1, BINOP_1,
-      STRUCT_0, PRE_TOPC, COMPTS_1, PCOMPS_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
+      STRUCT_0, PRE_TOPC, COMPTS_1, PCOMPS_1,
+      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
       LIMFUNC1, POWER, RCOMP_1, NEWTON, TOPMETR, XXREAL_0, RECDEF_1;
  constructors SETFAM_1, REAL_1, NAT_1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1, LIMFUNC1,
       NEWTON, POWER, COMPTS_1, TOPMETR, SEQ_1, VALUED_1, RECDEF_1;
@@ -25,7 +26,7 @@ environ
       NAT_1, NEWTON, POWER, PCOMPS_1, RCOMP_1, REAL_2, SEQ_1, SEQ_2, SEQ_4,
       SEQM_3, TARSKI, ZFMISC_1, XREAL_0, XBOOLE_1, XCMPLX_0,
       XCMPLX_1, XREAL_1, COMPLEX1, COMPTS_1, XXREAL_0, XXREAL_1, VALUED_0,
-      VALUED_1, SETFAM_1;
+      VALUED_1, SETFAM_1, PARTFUN1;
  schemes RECDEF_1, NAT_1, SEQ_1;
 
 begin
@@ -143,7 +144,7 @@ A1: a <= b;
   now per cases by A1,XREAL_1:50;
     suppose r = 0;
       then [. a,b .] = {a} & {a} is finite & the carrier of
-      Closed-Interval-TSpace(a,b) = [. a,b .] by XXREAL_1:17,TOPMETR:25;
+      Closed-Interval-TSpace(a,b) = [. a,b .] by TOPMETR:25,XXREAL_1:17;
       hence Closed-Interval-TSpace(a,b) is compact by COMPTS_1:27;
     end;
     suppose
@@ -300,7 +301,7 @@ A42:        f.(k+1) + r/2|^(k+1+1)
             f.k + r/2|^(k+1) by REAL_2:173;
             then [. f.k - r/2|^(k+1), f.k + r/2|^(k+1).] =
             [. f.k - r/2|^(k+1), f.k .] \/ [. f.k, f.k + r/2|^(k+1).] by
-            XXREAL_1:165;
+XXREAL_1:165;
             then [. f.k - r/2|^(k+1), f.k + r/2|^(k+1).] c= union G1 \/ union
             G by A35,A39,A41,A42,XBOOLE_1:13;
             then
@@ -332,7 +333,7 @@ A49:  s is convergent and
 A50:  lim s in [. a,b .] by A25,A47,RCOMP_1:def 3;
       reconsider ls = lim s as Point of M by A1,A50,TOPMETR:14;
       the carrier of M c= union F & the carrier of M = [. a,b .]
-      by A1,A5,TOPMETR:14,SETFAM_1:def 12;
+      by A1,A5,SETFAM_1:def 12,TOPMETR:14;
       then consider Z being set such that
 A51:  lim s in Z & Z in F by A50,TARSKI:def 4;
       consider p being Point of M, r0 being Real such that
@@ -340,7 +341,7 @@ A52:  Z = Ball(p,r0) by A4,A51,TOPMETR:def 4;
       consider r1 being Real such that
 A53:  r1 > 0 & Ball(ls,r1) c= Ball(p,r0) by A51,A52,PCOMPS_1:30;
       consider Nseq being increasing Seq_of_Nat such that
-A54:  s = f*Nseq by A48,SEQM_3:def 10;
+A54:  s = f*Nseq by A48,VALUED_0:def 17;
 A55:  r1/2 > 0 by A53,REAL_2:127;
       then consider n being Element of NAT such that
 A56:  for m being Element of NAT st m >= n holds abs( s.m - lim s ) < r1/2
@@ -364,31 +365,33 @@ A60:  for m being Element of NAT st m >= n holds (f*Nseq).m in Ball(ls, r1/2)
         let m be Element of NAT such that
 A61:    m >= n;
 A62:    dom f = NAT by FUNCT_2:def 1;
-        s.m = f.(Nseq.m) by A54,SEQM_3:31;
+        s.m = f.(Nseq.m) by A54,FUNCT_2:21;
         then s.m in rng f by A62,FUNCT_1:def 5;
         then reconsider q = s.m as Point of M by A1,A25,TOPMETR:14;
         dist(ls, q) < r1/2 by A57,A61;
         hence (f*Nseq).m in Ball(ls, r1/2) by A54,METRIC_1:12;
       end;
-      not Nseq is bounded_above
+      dom Nseq = NAT by FUNCT_2:def 1;
+      then reconsider Ns = Nseq as Real_Sequence by FUNCT_2:def 1,PARTFUN1:31;
+      not Ns is bounded_above
       proof
         let r be real number;
         consider n being Element of NAT such that
 A63:    n > r by SEQ_4:10;
         rng Nseq c= NAT by VALUED_0:def 6;
-        then n <= Nseq.n by Th6;
+        then n <= Ns.n by Th6;
         hence thesis by A63,XXREAL_0:2;
       end;
-      then 2 to_power Nseq is divergent_to+infty by Th9,LIMFUNC1:58;
+      then 2 to_power Ns is divergent_to+infty by Th9,LIMFUNC1:58;
       then
-A64:  (2 to_power Nseq)" is convergent & lim (2 to_power Nseq)" = 0
+A64:  (2 to_power Ns)" is convergent & lim (2 to_power Ns)" = 0
       by LIMFUNC1:61;
       then
-A65:  lim (r(#)((2 to_power Nseq)")) = r*0 by SEQ_2:22
+A65:  lim (r(#)((2 to_power Ns)")) = r*0 by SEQ_2:22
         .= 0;
-      r(#)((2 to_power Nseq)") is convergent by A64,SEQ_2:21;
+      r(#)((2 to_power Ns)") is convergent by A64,SEQ_2:21;
       then consider i such that
-A66:  for m st i <= m holds abs( (r(#)((2 to_power Nseq)")).m - 0 ) < r1/2
+A66:  for m st i <= m holds abs( (r(#)((2 to_power Ns)")).m - 0 ) < r1/2
       by A55,A65,SEQ_2:def 7;
       set l = i + 1 + n;
 A67:  l = n + 1 + i;
@@ -407,7 +410,7 @@ A68:    x = z & s.l - r*(2|^(Nseq.l+1))" <= x & x <= s.l + r*(2|^(Nseq.l+1))";
         then f.(Nseq.l) - r*(2|^(Nseq.l+1))" >= a &
         f.(Nseq.l) + r*(2|^(Nseq.l+1))" <= b by XCMPLX_0:def 9;
         then s.l - r*(2|^(Nseq.l+1))" >= a & s.l + r*(2|^(Nseq.l+1))" <= b
-        by A54,SEQM_3:31;
+        by A54,FUNCT_2:21;
         then x <= b & x >= a by A68,XXREAL_0:2;
         then x in {m where m is Real : a <= m & m <= b};
         then the carrier of M = [. a,b .] & x in [. a,b .]
@@ -428,10 +431,10 @@ A71:    s.l in Ball(ls, r1/2) by A54,A60,NAT_1:11;
         dist(ls,sl) < r1/2 by A71,METRIC_1:12;
         then
 A72:    abs( lim s - s.l ) < r1/2 by Th1;
-        abs( (r(#)(2 to_power Nseq)").l - 0 ) < r1/2 by A66,A67,NAT_1:11;
-        then abs( r*((2 to_power Nseq)").l ) < r1/2 by SEQ_1:13;
-        then abs( r*((2 to_power Nseq).l)" ) < r1/2 by VALUED_1:10;
-        then abs( r*(2 to_power (Nseq.l))" ) < r1/2 by Def1;
+        abs( (r(#)(2 to_power Ns)").l - 0 ) < r1/2 by A66,A67,NAT_1:11;
+        then abs( r*((2 to_power Ns)").l ) < r1/2 by SEQ_1:13;
+        then abs( r*((2 to_power Ns).l)" ) < r1/2 by VALUED_1:10;
+        then abs( r*(2 to_power (Ns.l))" ) < r1/2 by Def1;
         then
 A73:    abs( r*(2|^(Nseq.l))" ) < r1/2 by POWER:46;
         r >= 0 & 2|^(Nseq.l+1) > 0 by A1,NEWTON:102,XREAL_1:50;
@@ -469,10 +472,10 @@ A75:    abs( r*(2|^(Nseq.l+1))" ) < r1/2 by A73,XXREAL_0:2;
       then [. s.l - r/2|^(Nseq.l+1), s.l + r/2|^(Nseq.l+1) .]
       c= Ball(p,r0) by XCMPLX_0:def 9;
       then [. f.(Nseq.l) - r/(2|^(Nseq.l+1)), s.l + r/2|^(Nseq.l+1) .]
-      c= Ball(p,r0) by A54,SEQM_3:31;
+      c= Ball(p,r0) by A54,FUNCT_2:21;
       then
 A76:  [. f.(Nseq.l) - r/(2|^(Nseq.l+1)), f.(Nseq.l) + r/2|^(Nseq.l+1 ) .]
-      c= Ball(p,r0) by A54,SEQM_3:31;
+      c= Ball(p,r0) by A54,FUNCT_2:21;
       set G = {Ball(p,r0)};
       G c= bool the carrier of M
       proof

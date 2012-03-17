@@ -22,11 +22,11 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -35,18 +35,18 @@
 </Signature>
 <FCluster aid="JGRAPH_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="272"/>
+<Func kind="K" nr="259"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>

@@ -14,7 +14,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -38,18 +37,18 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="40" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="89"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="95"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="54"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
+<Adjective nr="82"/>
+<Adjective nr="85"/>
+<Adjective nr="93"/>
+<Adjective nr="100"/>
 <Adjective nr="104"/>
-<Adjective nr="111"/>
-<Adjective nr="115"/>
+<Adjective nr="106"/>
 <Adjective nr="117"/>
-<Adjective nr="128"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -59,7 +58,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="237">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -71,7 +70,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="130">
+<Adjective nr="119">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

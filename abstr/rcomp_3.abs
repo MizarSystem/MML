@@ -10,7 +10,7 @@ environ
       FUNCT_1, ORDINAL2, ARYTM_1, SQUARE_1, ARYTM_3, RCOMP_1, TOPMETR, JORDAN1,
       BOOLE, SETFAM_1, TARSKI, COMPTS_1, FINSEQ_1, RELAT_2, RCOMP_3, FINSEQ_4,
       ORDERS_2, CARD_1, MEMBERED, SEQ_2, LATTICES, TOPS_1, LIMFUNC1, REALSET1,
-      WELLORD2;
+      WELLORD2, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, RELAT_1, SETFAM_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, FINSET_1, WELLORD1, ORDERS_1, WELLORD2,
       RELAT_2, CARD_1, MEMBERED, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
@@ -21,7 +21,7 @@ environ
  constructors SETFAM_1, WELLORD1, WELLORD2, NAT_1, ORDERS_1, SEQM_3, PROB_1,
       RCOMP_2, LIMFUNC1, BINARITH, PRE_CIRC, TOPS_1, CONNSP_1, COMPTS_1,
       REALSET2, PSCOMP_1, JCT_MISC, BORSUK_4, TOPREALB, SEQ_1, XXREAL_2,
-      BORSUK_6, NAT_D;
+      BORSUK_6, NAT_D, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       INT_1, MEMBERED, FINSEQ_1, RCOMP_1, FCONT_3, REALSET1, RFINSEQ, STRUCT_0,
       PRE_TOPC, TOPS_1, METRIC_1, TOPMETR, PSCOMP_1, BORSUK_2, SPRECT_1,
@@ -47,7 +47,7 @@ theorem :: RCOMP_3:1
 
 theorem :: RCOMP_3:2
   for X being non empty bounded_above (real-membered set),
-  Y being closed Subset of REAL st X c= Y holds sup X in Y;
+  Y being closed Subset of REAL st X c= Y holds upper_bound X in Y;
 
 theorem :: RCOMP_3:3
   for X, Y being Subset of REAL holds Cl(X \/ Y) = Cl X \/ Cl Y;
@@ -68,16 +68,16 @@ registration
 end;
 
 theorem :: RCOMP_3:4
-  r < s implies inf [.r,s.[ = r;
+  r < s implies lower_bound [.r,s.[ = r;
 
 theorem :: RCOMP_3:5
-  r < s implies sup [.r,s.[ = s;
+  r < s implies upper_bound [.r,s.[ = s;
 
 theorem :: RCOMP_3:6
-  r < s implies inf ].r,s.] = r;
+  r < s implies lower_bound ].r,s.] = r;
 
 theorem :: RCOMP_3:7
-  r < s implies sup ].r,s.] = s;
+  r < s implies upper_bound ].r,s.] = s;
 
 begin :: Halflines
 
@@ -97,16 +97,16 @@ registration
 end;
 
 theorem :: RCOMP_3:21
-  sup left_closed_halfline(a) = a;
+  upper_bound left_closed_halfline(a) = a;
 
 theorem :: RCOMP_3:22
-  sup left_open_halfline(a) = a;
+  upper_bound left_open_halfline(a) = a;
 
 theorem :: RCOMP_3:23
-  inf right_closed_halfline(a) = a;
+  lower_bound right_closed_halfline(a) = a;
 
 theorem :: RCOMP_3:24
-  inf right_open_halfline(a) = a;
+  lower_bound right_open_halfline(a) = a;
 
 begin :: Connectedness
 
@@ -116,67 +116,74 @@ end;
 
 theorem :: RCOMP_3:25
   for X being bounded connected Subset of REAL st
-  inf X in X & sup X in X holds X = [.inf X,sup X.];
+  lower_bound X in X & upper_bound X in X
+  holds X = [.lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:26
-  for X being bounded Subset of REAL st not inf X in X holds
-  X c= ].inf X,sup X.];
+  for X being bounded Subset of REAL st not lower_bound X in X holds
+  X c= ].lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:27
   for X being bounded connected Subset of REAL st
-  not inf X in X & sup X in X holds X = ].inf X,sup X.];
+  not lower_bound X in X & upper_bound X in X
+  holds X = ].lower_bound X,upper_bound X.];
 
 theorem :: RCOMP_3:28
-  for X being bounded Subset of REAL st not sup X in X holds
-  X c= [.inf X,sup X.[;
+  for X being bounded Subset of REAL st not upper_bound X in X holds
+  X c= [.lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:29
   for X being bounded connected Subset of REAL st
-  inf X in X & not sup X in X holds X = [.inf X,sup X.[;
+  lower_bound X in X & not upper_bound X in X
+  holds X = [.lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:30
-  for X being bounded Subset of REAL st not inf X in X & not sup X in X
-  holds X c= ].inf X,sup X.[;
+  for X being bounded Subset of REAL st
+  not lower_bound X in X & not upper_bound X in X
+  holds X c= ].lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:31
   for X being non empty bounded connected Subset of REAL st
-  not inf X in X & not sup X in X holds X = ].inf X,sup X.[;
+  not lower_bound X in X & not upper_bound X in X
+  holds X = ].lower_bound X,upper_bound X.[;
 
 theorem :: RCOMP_3:32
   for X being Subset of REAL st X is bounded_above holds
-  X c= left_closed_halfline(sup X);
+  X c= left_closed_halfline(upper_bound X);
 
 theorem :: RCOMP_3:33
   for X being connected Subset of REAL st
-  X is not bounded_below & X is bounded_above & sup X in X holds
-  X = left_closed_halfline(sup X);
+  X is not bounded_below & X is bounded_above & upper_bound X in X holds
+  X = left_closed_halfline(upper_bound X);
 
 theorem :: RCOMP_3:34
-  for X being Subset of REAL st X is bounded_above & not sup X in X holds
-  X c= left_open_halfline(sup X);
+  for X being Subset of REAL
+   st X is bounded_above & not upper_bound X in X holds
+  X c= left_open_halfline(upper_bound X);
 
 theorem :: RCOMP_3:35
   for X being non empty connected Subset of REAL st
-  X is not bounded_below & X is bounded_above & not sup X in X holds
-  X = left_open_halfline(sup X);
+  X is not bounded_below & X is bounded_above & not upper_bound X in X holds
+  X = left_open_halfline(upper_bound X);
 
 theorem :: RCOMP_3:36
   for X being Subset of REAL st X is bounded_below holds
-  X c= right_closed_halfline(inf X);
+  X c= right_closed_halfline(lower_bound X);
 
 theorem :: RCOMP_3:37
   for X being connected Subset of REAL st
-  X is bounded_below & X is not bounded_above & inf X in X holds
-  X = right_closed_halfline(inf X);
+  X is bounded_below & X is not bounded_above & lower_bound X in X holds
+  X = right_closed_halfline(lower_bound X);
 
 theorem :: RCOMP_3:38
-  for X being Subset of REAL st X is bounded_below & not inf X in X holds
-  X c= right_open_halfline(inf X);
+  for X being Subset of REAL st
+  X is bounded_below & not lower_bound X in X holds
+  X c= right_open_halfline(lower_bound X);
 
 theorem :: RCOMP_3:39
   for X being non empty connected Subset of REAL st
-  X is bounded_below & X is not bounded_above & not inf X in X holds
-  X = right_open_halfline(inf X);
+  X is bounded_below & X is not bounded_above & not lower_bound X in X holds
+  X = right_open_halfline(lower_bound X);
 
 theorem :: RCOMP_3:40
   for X being connected Subset of REAL st
@@ -193,13 +200,15 @@ theorem :: RCOMP_3:41
 
 theorem :: RCOMP_3:42
   for X being non empty connected Subset of REAL st not r in X holds
-  r <= inf X or sup X <= r;
+  r <= lower_bound X or upper_bound X <= r;
 
 theorem :: RCOMP_3:43
   for X, Y being non empty bounded connected Subset of REAL
-  st inf X <= inf Y & sup Y <= sup X &
-  (inf X = inf Y & inf Y in Y implies inf X in X) &
-  (sup X = sup Y & sup Y in Y implies sup X in X) holds Y c= X;
+  st lower_bound X <= lower_bound Y & upper_bound Y <= upper_bound X &
+  (lower_bound X = lower_bound Y & lower_bound Y in Y
+  implies lower_bound X in X) &
+  (upper_bound X = upper_bound Y &
+  upper_bound Y in Y implies upper_bound X in X) holds Y c= X;
 
 registration
   cluster open closed connected non empty non bounded Subset of REAL;
@@ -347,9 +356,10 @@ definition
     rng it c= F & union rng it = [.r,s.] &
     (for n being natural number st 1 <= n holds
     (n <= len it implies it/.n is non empty) & (n+1 <= len it implies
-    inf(it/.n) <= inf(it/.(n+1)) & sup(it/.n) <= sup(it/.(n+1)) &
-    inf(it/.(n+1)) < sup(it/.n)) &
-    (n+2 <= len it implies sup(it/.n) <= inf(it/.(n+2)))) &
+    lower_bound(it/.n) <= lower_bound(it/.(n+1)) & upper_bound(it/.n)
+     <= upper_bound(it/.(n+1)) &
+    lower_bound(it/.(n+1)) < upper_bound(it/.n)) &
+    (n+2 <= len it implies upper_bound(it/.n) <= lower_bound(it/.(n+2)))) &
     ([.r,s.] in F implies it = <*[.r,s.]*>) & (not [.r,s.] in F implies
     (ex p being real number st r < p & p <= s & it.1 = [.r,p.[) &
     (ex p being real number st r <= p & p < s & it.len it = ].p,s.]) &
@@ -379,19 +389,22 @@ theorem :: RCOMP_3:66
 
 theorem :: RCOMP_3:67
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  n in dom C & m in dom C & n < m implies inf(C/.n) <= inf(C/.m);
+  n in dom C & m in dom C & n < m implies
+  lower_bound(C/.n) <= lower_bound(C/.m);
 
 theorem :: RCOMP_3:68
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  n in dom C & m in dom C & n < m implies sup(C/.n) <= sup(C/.m);
+  n in dom C & m in dom C & n < m
+  implies upper_bound(C/.n) <= upper_bound(C/.m);
 
 theorem :: RCOMP_3:69
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  1 <= n & n+1 <= len C implies ].inf(C/.(n+1)),sup(C/.n).[ is non empty;
+  1 <= n & n+1 <= len C implies ].lower_bound(C/.(n+1)),upper_bound(C/.n).[
+   is non empty;
 
 theorem :: RCOMP_3:70
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
-  implies inf(C/.1) = r;
+  implies lower_bound(C/.1) = r;
 
 theorem :: RCOMP_3:71
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
@@ -399,7 +412,7 @@ theorem :: RCOMP_3:71
 
 theorem :: RCOMP_3:72
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
-  implies sup(C/.len C) = s;
+  implies upper_bound(C/.len C) = s;
 
 theorem :: RCOMP_3:73
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s
@@ -418,7 +431,7 @@ definition
 
     len it = len C + 1 & it.1 = r & it.len it = s &
     for n being natural number st 1 <= n & n+1 < len it holds
-    it.(n+1) in ].inf(C/.(n+1)),sup(C/.n).[;
+    it.(n+1) in ].lower_bound(C/.(n+1)),upper_bound(C/.n).[;
 end;
 
 reserve G for IntervalCoverPts of C;
@@ -433,15 +446,15 @@ theorem :: RCOMP_3:75
 
 theorem :: RCOMP_3:76
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  1 <= n & n+1 < len G implies G.(n+1) < sup(C/.n);
+  1 <= n & n+1 < len G implies G.(n+1) < upper_bound(C/.n);
 
 theorem :: RCOMP_3:77
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  1 < n & n <= len C implies inf(C/.n) < G.n;
+  1 < n & n <= len C implies lower_bound(C/.n) < G.n;
 
 theorem :: RCOMP_3:78
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r <= s &
-  1 <= n & n < len C implies G.n <= inf(C/.(n+1));
+  1 <= n & n < len C implies G.n <= lower_bound(C/.(n+1));
 
 theorem :: RCOMP_3:79
   F is Cover of Closed-Interval-TSpace(r,s) & F is open connected & r < s

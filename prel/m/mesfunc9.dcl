@@ -10,9 +10,11 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="PARTFUN1"/>
@@ -30,7 +32,7 @@
 <Typ kind="M" nr="5">
 <Cluster/>
 <Func kind="K" nr="47"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
@@ -39,25 +41,25 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
 </Adjective>
-<Adjective nr="33">
+<Adjective nr="35">
 <Func kind="K" nr="47"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
-</Adjective>
-<Adjective nr="34">
-<LocusVar nr="1"/>
-<Func kind="K" nr="49"/>
 </Adjective>
 <Adjective nr="36">
+<LocusVar nr="1"/>
+<Func kind="K" nr="49"/>
+</Adjective>
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -19,6 +19,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="STRUCT_0"/>
@@ -35,7 +36,6 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="NORMSP_1"/>
-<ArticleID name="NAT_1"/>
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="POLYNOM5"/>
 </Signature>
@@ -74,7 +74,7 @@
 <Adjective nr="113">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="118">
+<Adjective nr="117">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -99,7 +99,7 @@
 <Adjective nr="94"/>
 <Adjective nr="95"/>
 <Adjective nr="96"/>
-<Adjective nr="119"/>
+<Adjective nr="118"/>
 </Cluster>
 </RCluster>
 <FCluster aid="POLYNOM5" nr="1">
@@ -269,7 +269,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="118">
+<Adjective nr="117">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -327,10 +327,10 @@
 </FCluster>
 <FCluster aid="POLYNOM5" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="207"/>
+<Func kind="K" nr="214"/>
 <Cluster>
 <Adjective nr="78"/>
-<Adjective nr="119"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
 </Registrations>

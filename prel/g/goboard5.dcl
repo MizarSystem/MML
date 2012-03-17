@@ -14,6 +14,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -33,7 +34,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="GOBOARD5"/>
@@ -43,7 +43,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="298">
+<Func kind="K" nr="285">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -57,15 +57,15 @@
 <Adjective nr="26"/>
 <Adjective nr="30">
 <Func kind="U" nr="1">
-<Func kind="K" nr="298">
+<Func kind="K" nr="285">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="129"/>
-<Adjective nr="130"/>
 <Adjective nr="134"/>
 <Adjective nr="135"/>
+<Adjective nr="139"/>
+<Adjective nr="140"/>
 </Cluster>
 </RCluster>
 </Registrations>

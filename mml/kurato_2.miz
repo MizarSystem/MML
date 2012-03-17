@@ -17,15 +17,17 @@ environ
       PRE_TOPC, TOPS_1, COMPTS_1, RELAT_1, FUNCT_1, INT_1, FINSEQ_1, SEQ_1,
       TBSP_1, RELSET_1, PARTFUN1, FUNCT_2, METRIC_1, PCOMPS_1, EUCLID,
       FUNCOP_1, BORSUK_1, CARD_3, PROB_1, LIMFUNC1, CONNSP_2, TOPREAL1,
-      TOPREAL2, JORDAN2C, SEQM_3, GOBOARD9, FRECHET, FRECHET2, TOPRNS_1,
+      TOPREAL2, JORDAN2C,
+      VALUED_0, SEQM_3, GOBOARD9, FRECHET, FRECHET2, TOPRNS_1,
       JORDAN9, FUNCT_6, YELLOW_6, RECDEF_1;
  constructors SETFAM_1, REAL_1, NAT_1, PROB_1, LIMFUNC1, FUNCT_6, TOPS_1,
       BORSUK_1, TBSP_1, MONOID_0, TOPRNS_1, TOPREAL2, GOBOARD9, YELLOW_6,
-      FRECHET, JORDAN2C, FRECHET2, JORDAN9, SEQ_1, RECDEF_1, SEQM_3;
+      FRECHET, JORDAN2C, FRECHET2, JORDAN9, SEQ_1, RECDEF_1, SEQM_3,
+      VALUED_0;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQM_3,
       STRUCT_0, TOPS_1, COMPTS_1, METRIC_1, PCOMPS_1, BORSUK_1, MONOID_0,
-      EUCLID, TOPREAL2, TOPREAL5, JORDAN2C, FUNCOP_1;
+      EUCLID, TOPREAL2, TOPREAL5, JORDAN2C, FUNCOP_1, VALUED_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions XBOOLE_0, TARSKI, EUCLID, SUBSET_1, STRUCT_0;
  theorems SETFAM_1, FRECHET, METRIC_1, TOPREAL3, YELLOW_6, TOPMETR, CONNSP_2,
@@ -34,7 +36,7 @@ environ
       TOPREAL6, JORDAN2C, TBSP_1, METRIC_6, ZFMISC_1, RELAT_1, TARSKI,
       FUNCOP_1, GOBRD14, FUNCT_6, SEQM_3, XCMPLX_1, MCART_1, BORSUK_1, PROB_1,
       FRECHET2, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, VALUED_0;
- schemes XBOOLE_0, WELLORD2, FUNCT_2, BINOP_2, NAT_1, LATTICE5, SUBSET_1;
+ schemes XBOOLE_0, WELLORD2, FUNCT_2, BINOP_2, NAT_1, RECDEF_1, SUBSET_1;
 
 begin
 
@@ -55,19 +57,7 @@ A1: i in dom F;
   hence meet F c= F.i;
 end;
 
-theorem Th3:
-  for T being set, S1, S2 being SetSequence of T holds
-  S1 = S2 iff for n being Element of NAT holds S1.n = S2.n
-proof
-  let T be set, S1, S2 be SetSequence of T;
-  thus S1 = S2 implies for n being Element of NAT holds S1.n = S2.n;
-  assume
-A1: for n being Element of NAT holds S1.n = S2.n;
-A2: dom S1 = NAT by FUNCT_2:def 1
-    .= dom S2 by FUNCT_2:def 1;
-  for x being set st x in dom S1 holds S1.x = S2.x by A1;
-  hence thesis by A2,FUNCT_1:9;
-end;
+canceled;
 
 theorem Th4:
   for A, B, C, D being set st A meets B & C meets D holds
@@ -111,20 +101,6 @@ definition
   mode SetSequence of T is SetSequence of the carrier of T;
 end;
 
-scheme LambdaSSeq { X() -> set, F(set) -> Subset of X() } :
-  ex f being SetSequence of X() st for n being Element of NAT holds f.n = F(n)
-proof
-  set Y = bool X();
-A1: for x be set st x in NAT holds F(x) in Y;
-  ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = F(x)
-  from FUNCT_2:sch 2(A1);
-  then consider f be Function of NAT, Y such that
-A2: for x be set st x in NAT holds f.x = F(x);
-  reconsider f as SetSequence of X();
-  take f;
-  thus thesis by A2;
-end;
-
 definition
   let X be set, F be SetSequence of X;
   redefine func Union F -> Subset of X;
@@ -155,7 +131,7 @@ definition
   proof
     deffunc F(Element of NAT) = meet (F ^\ $1);
     consider f being SetSequence of X such that
-A1: for n being Element of NAT holds f.n = F(n) from LambdaSSeq;
+A1: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
     take Union f;
     thus thesis by A1;
   end;
@@ -173,7 +149,7 @@ A3: A2 = Union f2 & for n being Element of NAT holds f2.n = meet (F ^\ n);
         .= f2.n by A3;
       hence thesis;
     end;
-    hence thesis by A2,A3,Th3;
+    hence thesis by A2,A3,FUNCT_2:113;
   end;
   func lim_sup F -> Subset of X means
   :Def4:
@@ -183,7 +159,7 @@ A3: A2 = Union f2 & for n being Element of NAT holds f2.n = meet (F ^\ n);
   proof
     deffunc F(Element of NAT) = Union (F ^\ $1);
     consider f being SetSequence of X such that
-A4: for n being Element of NAT holds f.n = F(n) from LambdaSSeq;
+A4: for n being Element of NAT holds f.n = F(n) from FUNCT_2:sch 4;
     take meet f;
     thus thesis by A4;
   end;
@@ -201,7 +177,7 @@ A6: A2 = meet f2 & for n being Element of NAT holds f2.n = Union (F ^\ n);
         .= f2.n by A6;
       hence thesis;
     end;
-    hence thesis by A5,A6,Th3;
+    hence thesis by A5,A6,FUNCT_2:113;
   end;
 end;
 
@@ -358,25 +334,25 @@ A2: for k being Element of NAT holds x in F.(n+k) by Th7;
       assume
 A3:   x in G.(n+k);
       G.(n+k) = (F.(n+k))` by PROB_1:def 4;
-      then not x in F.(n+k) by A3,XBOOLE_0:def 4;
+      then not x in F.(n+k) by A3,XBOOLE_0:def 5;
       hence thesis by A2;
     end;
     then not x in lim_sup G by Th8;
-    hence thesis by A1,XBOOLE_0:def 4;
+    hence thesis by A1,XBOOLE_0:def 5;
   end;
   thus (lim_sup Complement F)` c= lim_inf F
   proof
     let x be set;
     assume
 A4: x in (lim_sup Complement F)`;
-    then not x in lim_sup Complement F by XBOOLE_0:def 4;
+    then not x in lim_sup Complement F by XBOOLE_0:def 5;
     then consider n being Element of NAT such that
 A5: for k being Element of NAT holds not x in G.(n+k) by Th8;
     for k being Element of NAT holds x in F.(n+k)
     proof
       let k be Element of NAT;
       assume not x in F.(n+k);
-      then x in (F.(n+k))` by A4,XBOOLE_0:def 4;
+      then x in (F.(n+k))` by A4,XBOOLE_0:def 5;
       then x in G.(n+k) by PROB_1:def 4;
       hence thesis by A5;
     end;
@@ -403,7 +379,7 @@ A2: for k being Element of NAT holds x in C.(n+k) by Th7;
       let k be Element of NAT;
 A3:   C.(n+k) = A.(n+k) /\ B.(n+k) by A1;
       x in C.(n+k) by A2;
-      hence thesis by A3,XBOOLE_0:def 3;
+      hence thesis by A3,XBOOLE_0:def 4;
     end;
     then
 A4: x in lim_inf A by Th7;
@@ -412,17 +388,17 @@ A4: x in lim_inf A by Th7;
       let k be Element of NAT;
 A5:   C.(n+k) = A.(n+k) /\ B.(n+k) by A1;
       x in C.(n+k) by A2;
-      hence thesis by A5,XBOOLE_0:def 3;
+      hence thesis by A5,XBOOLE_0:def 4;
     end;
     then x in lim_inf B by Th7;
-    hence thesis by A4,XBOOLE_0:def 3;
+    hence thesis by A4,XBOOLE_0:def 4;
   end;
   thus lim_inf A /\ lim_inf B c= lim_inf C
   proof
     let x be set;
     assume x in lim_inf A /\ lim_inf B;
     then
-A6: x in lim_inf A & x in lim_inf B by XBOOLE_0:def 3;
+A6: x in lim_inf A & x in lim_inf B by XBOOLE_0:def 4;
     then consider n1 being Element of NAT such that
 A7: for k being Element of NAT holds x in A.(n1+k) by Th7;
     consider n2 being Element of NAT such that
@@ -453,7 +429,7 @@ A12:  n = n2 + g by NAT_1:10;
       let k be Element of NAT;
 A13:  x in A.(n+k) by A9;
       x in B.(n+k) by A11;
-      then x in A.(n+k) /\ B.(n+k) by A13,XBOOLE_0:def 3;
+      then x in A.(n+k) /\ B.(n+k) by A13,XBOOLE_0:def 4;
       hence thesis by A1;
     end;
     hence thesis by Th7;
@@ -491,7 +467,7 @@ A6:   n = n2 + h by NAT_1:10;
       consider k being Element of NAT such that
 A7:   x in C.(n+k) by A2,Th8;
 A8:   x in A.(n+k) \/ B.(n+k) by A1,A7;
-      per cases by A8,XBOOLE_0:def 2;
+      per cases by A8,XBOOLE_0:def 3;
       suppose x in A.(n+k);
         then x in A.(n1+(g+k)) by A5;
         hence thesis by A3;
@@ -502,14 +478,14 @@ A8:   x in A.(n+k) \/ B.(n+k) by A1,A7;
       end;
     end;
     then x in lim_sup A or x in lim_sup B by Th8;
-    hence thesis by XBOOLE_0:def 2;
+    hence thesis by XBOOLE_0:def 3;
   end;
   thus lim_sup A \/ lim_sup B c= lim_sup C
   proof
     let x be set;
     assume
 A9: x in lim_sup A \/ lim_sup B;
-    per cases by A9,XBOOLE_0:def 2;
+    per cases by A9,XBOOLE_0:def 3;
     suppose
 A10:  x in lim_sup A;
       for n being Element of NAT ex k being Element of NAT st x in C.(n+k)
@@ -518,7 +494,7 @@ A10:  x in lim_sup A;
         consider k being Element of NAT such that
 A11:    x in A.(n+k) by A10,Th8;
         take k;
-        x in A.(n+k) \/ B.(n+k) by A11,XBOOLE_0:def 2;
+        x in A.(n+k) \/ B.(n+k) by A11,XBOOLE_0:def 3;
         hence thesis by A1;
       end;
       hence thesis by Th8;
@@ -531,7 +507,7 @@ A12:  x in lim_sup B;
         consider k being Element of NAT such that
 A13:    x in B.(n+k) by A12,Th8;
         take k;
-        x in A.(n+k) \/ B.(n+k) by A13,XBOOLE_0:def 2;
+        x in A.(n+k) \/ B.(n+k) by A13,XBOOLE_0:def 3;
         hence thesis by A1;
       end;
       hence thesis by Th8;
@@ -550,7 +526,7 @@ A1: for n being Element of NAT holds C.n = A.n \/ B.n;
   let x be set;
   assume
 A2: x in lim_inf A \/ lim_inf B;
-  per cases by A2,XBOOLE_0:def 2;
+  per cases by A2,XBOOLE_0:def 3;
   suppose x in lim_inf A;
     then consider n being Element of NAT such that
 A3: for k being Element of NAT holds x in A.(n+k) by Th7;
@@ -558,7 +534,7 @@ A3: for k being Element of NAT holds x in A.(n+k) by Th7;
     proof
       let k be Element of NAT;
       x in A.(n+k) by A3;
-      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 2;
+      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
       hence thesis by A1;
     end;
     hence thesis by Th7;
@@ -570,7 +546,7 @@ A4: for k being Element of NAT holds x in B.(n+k) by Th7;
     proof
       let k be Element of NAT;
       x in B.(n+k) by A4;
-      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 2;
+      then x in A.(n+k) \/ B.(n+k) by XBOOLE_0:def 3;
       hence thesis by A1;
     end;
     hence thesis by Th7;
@@ -595,7 +571,7 @@ A2: x in lim_sup C;
 A3: x in C.(n+k) by A2,Th8;
     take k;
     x in A.(n+k) /\ B.(n+k) by A1,A3;
-    hence thesis by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 4;
   end;
   then
 A4: x in lim_sup A by Th8;
@@ -606,19 +582,19 @@ A4: x in lim_sup A by Th8;
 A5: x in C.(n+k) by A2,Th8;
     take k;
     x in A.(n+k) /\ B.(n+k) by A1,A5;
-    hence thesis by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 4;
   end;
   then x in lim_sup B by Th8;
-  hence thesis by A4,XBOOLE_0:def 3;
+  hence thesis by A4,XBOOLE_0:def 4;
 end;
 
 theorem Th17:
   for X being set, A being SetSequence of X, B being Subset of X st
-  (for n being Element of NAT holds A.n = B) holds lim_sup A = B
+  (for n being Nat holds A.n = B) holds lim_sup A = B
 proof
   let X be set, A be SetSequence of X, B be Subset of X;
   assume
-A1: for n being Element of NAT holds A.n = B;
+A1: for n being Nat holds A.n = B;
   thus lim_sup A c= B
   proof
     let x be set;
@@ -644,11 +620,11 @@ end;
 
 theorem Th18:
   for X being set, A being SetSequence of X, B being Subset of X st
-  (for n being Element of NAT holds A.n = B) holds lim_inf A = B
+  (for n being Nat holds A.n = B) holds lim_inf A = B
 proof
   let X be set, A be SetSequence of X, B be Subset of X;
   assume
-A1: for n being Element of NAT holds A.n = B;
+A1: for n being Nat holds A.n = B;
   thus lim_inf A c= B
   proof
     let x be set;
@@ -926,7 +902,7 @@ definition
   lim_sup S = lim_inf S;
 end;
 
-theorem Th27:
+theorem
   for T being set, S being SetSequence of T st S is constant holds
   the_value_of S is Subset of T
 proof
@@ -939,39 +915,6 @@ A1: x in dom S & the_value_of S = S.x by YELLOW_6:def 1;
   hence thesis by A1;
 end;
 
-definition
-  let T be set, S be SetSequence of T;
-  redefine attr S is constant means
-  :Def8:
-  ex A being Subset of T st for n being Element of NAT holds S.n = A;
-  compatibility
-  proof
-    hereby
-      assume
-A1:   S is constant;
-      then reconsider X = the_value_of S as Subset of T by Th27;
-      take X;
-      let n be Element of NAT;
-      n in NAT;
-      then
-A2:   n in dom S by FUNCT_2:def 1;
-      consider x being set such that
-A3:   x in dom S & X = S.x by A1,YELLOW_6:def 1;
-      thus S.n = X by A1,A2,A3,FUNCT_1:def 16;
-    end;
-    given A being Subset of T such that
-A4: for n being Element of NAT holds S.n = A;
-    for n1, n2 being set st n1 in dom S & n2 in dom S holds S.n1 = S.n2
-    proof
-      let n1, n2 be set;
-      assume n1 in dom S & n2 in dom S;
-      then S.n1 = A & S.n2 = A by A4;
-      hence thesis;
-    end;
-    hence thesis by FUNCT_1:def 16;
-  end;
-end;
-
 registration
   let T be set;
   cluster constant ->
@@ -981,7 +924,7 @@ registration
     let S be SetSequence of T;
     assume S is constant;
     then consider A being Subset of T such that
-A1: for n being Element of NAT holds S.n = A by Def8;
+A1: for n being Nat holds S.n = A by VALUED_0:def 18;
 A2: lim_sup S = A by A1,Th17;
 A3: lim_inf S = A by A1,Th18;
 A4: now
@@ -1010,6 +953,7 @@ registration
 end;
 
 definition
+ canceled;
   let T be set, S be convergent SetSequence of T;
   func Lim_K S -> Subset of T means
   :Def9:
@@ -1133,7 +1077,7 @@ A7: x = k & seq.x = choose (X /\ Ball (r',1/(k+1))) by A5,A6;
     then r in oi by METRIC_1:12;
     then X meets oi by A1,PRE_TOPC:54;
     then X /\ oi is non empty by XBOOLE_0:def 7;
-    hence y in X by A6,A7,XBOOLE_0:def 3;
+    hence y in X by A6,A7,XBOOLE_0:def 4;
   end;
 A8: now
     let p be Real;
@@ -1158,7 +1102,7 @@ A14: m' = m & seq.m = choose (X /\ Ball (r',1/(m'+1))) by A5;
     then X meets oi by A1,PRE_TOPC:54;
     then X /\ oi is non empty by XBOOLE_0:def 7;
     then
-A15: seq.m in oi by A14,XBOOLE_0:def 3;
+A15: seq.m in oi by A14,XBOOLE_0:def 4;
     k+1 <= m+1 by A13,XREAL_1:8;
     then
 A16: 1/m1 <= 1/(k+1) by REAL_2:152;
@@ -1318,120 +1262,22 @@ proof
   hence thesis by ZFMISC_1:35;
 end;
 
-definition
-  let T be non empty set;
-  let S be SetSequence of T;
-  let i be Element of NAT;
-  redefine func S.i -> Subset of T;
-  coherence
-  proof
-    S.i in bool T;
-    hence thesis;
-  end;
-end;
-
-theorem Th42:
-  for T be non empty 1-sorted, S being SetSequence of the carrier of T,
-  R being Seq_of_Nat holds S * R is SetSequence of T
-proof
-  let T be non empty 1-sorted, S be SetSequence of the carrier of T,
-  R be Seq_of_Nat;
-A1: dom S = NAT by FUNCT_2:def 1;
-A2: dom R = NAT by FUNCT_2:def 1;
-  rng R c= NAT by VALUED_0:def 6;
-  then
-A3: dom (S * R) = NAT by A1,A2,RELAT_1:46;
-  rng (S * R) c= bool the carrier of T;
-  hence thesis by A3,FUNCT_2:4;
-end;
-
-theorem Th43:
-  id NAT is increasing Seq_of_Nat
-proof
-  id NAT is Function of NAT, REAL by FUNCT_2:9;
-  hence thesis by FRECHET2:2;
-end;
-
-Lm1: for
-T being non empty 1-sorted, S being SetSequence of the carrier of T holds
-ex NS being increasing Seq_of_Nat st S = S * NS
-proof
-  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
-  reconsider NS = id NAT as increasing Seq_of_Nat by Th43;
-  take NS;
-  thus S = S * NS by FUNCT_2:23;
-end;
-
 begin :: Subsequences
 
-definition
-  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
-  mode subsequence of S -> SetSequence of T means
-    :Def10:
-    ex NS being increasing Seq_of_Nat st it = S * NS;
-  existence
-  proof
-    take S;
-    thus ex NS being increasing Seq_of_Nat st S = S * NS by Lm1;
-  end;
-end;
-
-theorem Th44:
-  for T being non empty 1-sorted,
-  S being SetSequence of the carrier of T holds S is subsequence of S
-proof
-  let T be non empty 1-sorted, S be SetSequence of the carrier of T;
-  ex NS being increasing Seq_of_Nat st S = S * NS by Lm1;
-  hence thesis by Def10;
-end;
-
-theorem
-  for T being non empty 1-sorted, S being SetSequence of T,
-  S1 being subsequence of S holds rng S1 c= rng S
-proof
-  let T be non empty 1-sorted, S be SetSequence of T, S1 be subsequence of S;
-  let y be set;
-  assume y in rng S1;
-  then consider x being set such that
-A1: x in dom S1 and
-A2: y = S1.x by FUNCT_1:def 5;
-  consider NS being increasing Seq_of_Nat such that
-A3: S1 = S * NS by Def10;
-  reconsider x as Element of NAT by A1;
-  NS.x in NAT;
-  then
-A4: NS.x in dom S by FUNCT_2:def 1;
-  y = S.(NS.x) by A1,A2,A3,FUNCT_1:22;
-  hence y in rng S by A4,FUNCT_1:def 5;
-end;
-
-theorem
-  for T being non empty 1-sorted, S1 being SetSequence of the carrier of T,
-  S2 being subsequence of S1, S3 being subsequence of S2 holds
-  S3 is subsequence of S1
-proof
-  let T be non empty 1-sorted, S1 be SetSequence of the carrier of T,
-  S2 be subsequence of S1, S3 be subsequence of S2;
-  consider NS2 being increasing Seq_of_Nat such that
-A1: S3 = S2 * NS2 by Def10;
-  consider NS1 being increasing Seq_of_Nat such that
-A2: S2 = S1 * NS1 by Def10;
-  S3 = S1 * (NS1 * NS2) by A1,A2,RELAT_1:55;
-  hence S3 is subsequence of S1 by Def10;
-end;
+canceled 3;
 
 theorem Th47:
   for T being non empty 1-sorted, F, G being SetSequence of the carrier of T,
   A being Subset of T st G is subsequence of F &
-  for i being Element of NAT holds F.i = A holds G = F
+  for i being Nat holds F.i = A holds G = F
 proof
   let T be non empty 1-sorted, F, G be SetSequence of the carrier of T,
   A be Subset of T;
   assume that
 A1: G is subsequence of F and
-A2: for i being Element of NAT holds F.i = A;
+A2: for i being Nat holds F.i = A;
   consider NS being increasing Seq_of_Nat such that
-A3: G = F * NS by A1,Def10;
+A3: G = F * NS by A1,VALUED_0:def 17;
 A4: for i being Element of NAT holds G.i = F.i
   proof
     let i be Element of NAT;
@@ -1446,18 +1292,9 @@ A5: NAT = dom G & NAT = dom F by FUNCT_2:def 1;
   hence thesis by A5,FUNCT_1:9;
 end;
 
-theorem
-  for T being non empty 1-sorted, A being constant SetSequence of T,
-  B being subsequence of A holds A = B
-proof
-  let T be non empty 1-sorted, A be constant SetSequence of T,
-  B be subsequence of A;
-  consider X being Subset of T such that
-A1: for n being Element of NAT holds A.n = X by Def8;
-  thus thesis by A1,Th47;
-end;
+canceled;
 
-theorem Th49:
+theorem
   for T being non empty 1-sorted, S being SetSequence of the carrier of T,
   R being subsequence of S, n being Element of NAT holds
   ex m being Element of NAT st m >= n & R.n = S.m
@@ -1465,7 +1302,7 @@ proof
   let T being non empty 1-sorted, S being SetSequence of the carrier of T,
   R being subsequence of S, n being Element of NAT;
   consider NS being increasing Seq_of_Nat such that
-A1: R = S * NS by Def10;
+A1: R = S * NS by VALUED_0:def 17;
   n in NAT;
   then
 A2: n in dom NS by FUNCT_2:def 1;
@@ -1474,122 +1311,12 @@ A2: n in dom NS by FUNCT_2:def 1;
   thus thesis by A1,A2,FUNCT_1:23;
 end;
 
-registration
-  let T be non empty 1-sorted, X be constant SetSequence of T;
-  cluster -> constant subsequence of X;
-  coherence
-  proof
-    let P be subsequence of X;
-    consider A being Subset of T such that
-A1: for n being Element of NAT holds X.n = A by Def8;
-    ex A being Subset of T st for n being Element of NAT holds P.n = A
-    proof
-      take A;
-      let n be Element of NAT;
-      consider m being Element of NAT such that
-A2:   m >= n & P.n = X.m by Th49;
-      thus thesis by A1,A2;
-    end;
-    hence thesis by Def8;
-  end;
-end;
-
-scheme SubSeqChoice { T() -> non empty TopSpace,
-  S() -> SetSequence of the carrier of T(), P[set]} :
-  ex S1 being subsequence of S() st for n being Element of NAT holds P[S1.n]
-provided
-A1: for n being Element of NAT ex m being Element of NAT st n <= m & P[S().m]
-proof
-  consider n0 being Element of NAT such that 0 <= n0 and
-A2: P[S().n0] by A1;
-  defpred P1[set,set,set] means $3 in NAT &
-  (for m,k being Element of NAT st m = $2 & k = $3 holds m < k & P[S().k]);
-A3: for n being Element of NAT for x being set ex y being set st P1[n,x,y]
-  proof
-    let n be Element of NAT, x be set;
-    per cases;
-    suppose x in NAT;
-      then reconsider mx = x as Element of NAT;
-      consider my being Element of NAT such that
-A4:   mx + 1 <= my & P[S().my] by A1;
-      take my;
-      thus my in NAT;
-      thus for m,k being Element of NAT st m=x & k=my holds m<k & P[S().k]
-      by A4,NAT_1:13;
-    end;
-    suppose
-A5:   not x in NAT;
-      set y = 0;
-      take 0;
-      thus y in NAT;
-      let m, k be Element of NAT;
-      assume m = x & k = y;
-      hence m < k & P[S().k] by A5;
-    end;
-  end;
-  consider g being Function such that
-A6: dom g = NAT and
-A7: g.0 = n0 and
-A8: for n being Element of NAT holds
-  P1[n,g.n,g.(n+1)] from LATTICE5:sch 1(A3);
-A9: rng g c= NAT
-  proof
-    let y be set;
-    assume y in rng g;
-    then consider x being set such that
-A10: x in dom g and
-A11: g.x = y by FUNCT_1:def 5;
-    reconsider n = x as Element of NAT by A6,A10;
-    defpred P[Element of NAT] means g.$1 in NAT;
-A12: P[0] by A7;
-A13: for k being Element of NAT holds P[k] implies P[k+1] by A8;
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
-    then g.n in NAT;
-    hence y in NAT by A11;
-  end;
-  then reconsider g as Function of NAT,REAL by A6,FUNCT_2:4,XBOOLE_1:1;
-  reconsider g as Real_Sequence;
-  for n being Element of NAT holds g.n<g.(n+1)
-  proof
-    let n be Element of NAT;
-    g.(n+1) in rng g by A6,FUNCT_1:def 5;
-    then reconsider k = g.(n+1) as Element of NAT by A9;
-    g.n in rng g by A6,FUNCT_1:def 5;
-    then reconsider m = g.n as Element of NAT by A9;
-    m < k by A8;
-    hence g.n<g.(n+1);
-  end;
-  then reconsider g as increasing Seq_of_Nat
-  by A9,SEQM_3:def 11,VALUED_0:def 6;
-  reconsider S1 = S() * g as SetSequence of T() by Th42;
-A14: dom S1 = NAT by FUNCT_2:def 1;
-  reconsider S1 as subsequence of S() by Def10;
-  take S1;
-  thus for n being Element of NAT holds P[S1.n]
-  proof
-    let n be Element of NAT;
-    per cases;
-    suppose n = 0;
-      hence P[S1.n] by A2,A7,A14,FUNCT_1:22;
-    end;
-    suppose n <> 0;
-      then n > 0;
-      then n >= 0 qua Nat + 1 by NAT_1:13;
-      then reconsider n' = n-1 as Element of NAT by INT_1:18;
-A15:  for m,k being Element of NAT st m = g.n' & k = g.(n'+1)
-      holds P[S().k] by A8;
-      reconsider k = g.(n'+1) as Element of NAT;
-      P[S().k] by A15;
-      hence P[S1.n] by A14,FUNCT_1:22;
-    end;
-  end;
-end;
-
 begin :: Lower Topological Limit
 
 definition
   let T be non empty TopSpace;
   let S be SetSequence of the carrier of T;
+ canceled;
   func Lim_inf S -> Subset of T means
   :Def11:
   for p being Point of T holds
@@ -1716,7 +1443,7 @@ A1: R is subsequence of S;
 A2: x in Lim_inf S;
   then reconsider p = x as Point of T;
   consider Nseq being increasing Seq_of_Nat such that
-A3: R = S * Nseq by A1,Def10;
+A3: R = S * Nseq by A1,VALUED_0:def 17;
   for G being a_neighborhood of p ex k being Element of NAT st
   for m being Element of NAT st m > k holds R.m meets G
   proof
@@ -1777,7 +1504,7 @@ A1: for i being Element of NAT holds C.i = A.i \/ B.i;
   assume
 A2: x in Lim_inf A \/ Lim_inf B;
   then reconsider p = x as Point of T;
-  per cases by A2,XBOOLE_0:def 2;
+  per cases by A2,XBOOLE_0:def 3;
   suppose
 A3: x in Lim_inf A;
     for H being a_neighborhood of p ex k being Element of NAT st
@@ -1860,7 +1587,7 @@ A7: C.m meets H by A6;
     hence thesis by A7,XBOOLE_1:17,63;
   end;
   then x in Lim_inf B by Def11;
-  hence thesis by A5,XBOOLE_0:def 3;
+  hence thesis by A5,XBOOLE_0:def 4;
 end;
 
 theorem Th57:
@@ -1952,12 +1679,12 @@ end;
 theorem Th59:
   for T being non empty TopSpace, P being Subset of T,
   s being SetSequence of the carrier of T st
-  (for i being Element of NAT holds s.i c= P) holds Lim_inf s c= Cl P
+  (for i being Nat holds s.i c= P) holds Lim_inf s c= Cl P
 proof
   let T be non empty TopSpace, P be Subset of T,
   s be SetSequence of the carrier of T;
   assume
-A1: for i being Element of NAT holds s.i c= P;
+A1: for i being Nat holds s.i c= P;
   let x be set;
   assume
 A2: x in Lim_inf s;
@@ -1982,13 +1709,13 @@ end;
 theorem Th60:
   for T being non empty TopSpace, F being SetSequence of the carrier of T,
   A being Subset of T st
-  for i being Element of NAT holds F.i = A holds Lim_inf F = Cl A
+  for i being Nat holds F.i = A holds Lim_inf F = Cl A
 proof
   let T be non empty TopSpace, F be SetSequence of the carrier of T,
   A be Subset of T;
   assume
-A1: for i being Element of NAT holds F.i = A;
-  then for i being Element of NAT holds F.i c= A;
+A1: for i being Nat holds F.i = A;
+  then for i being Nat holds F.i c= A;
   hence Lim_inf F c= Cl A by Th59;
   thus Cl A c= Lim_inf F
   proof
@@ -2013,11 +1740,11 @@ end;
 theorem
   for T being non empty TopSpace, F being SetSequence of the carrier of T,
   A being closed Subset of T st
-  for i being Element of NAT holds F.i = A holds Lim_inf F = A
+  for i being Nat holds F.i = A holds Lim_inf F = A
 proof
   let T be non empty TopSpace, F be SetSequence of the carrier of T,
   A be closed Subset of T;
-  assume for i being Element of NAT holds F.i = A;
+  assume for i being Nat holds F.i = A;
   then Lim_inf F = Cl A by Th60;
   hence thesis by PRE_TOPC:52;
 end;
@@ -2350,7 +2077,7 @@ proof
 A1: x in Lim_inf A;
   ex K being subsequence of A st x in Lim_inf K
   proof
-    reconsider B = A as subsequence of A by Th44;
+    reconsider B = A as subsequence of A by VALUED_0:19;
     take B;
     thus thesis by A1;
   end;
@@ -2367,10 +2094,10 @@ proof
 A1: for i being Element of NAT holds A.i c= B.i and
 A2: C is subsequence of A;
   consider NS being increasing Seq_of_Nat such that
-A3: C = A * NS by A2,Def10;
+A3: C = A * NS by A2,VALUED_0:def 17;
   set D = B * NS;
-  reconsider D as SetSequence of TOP-REAL 2 by Th42;
-  reconsider D as subsequence of B by Def10;
+  reconsider D as SetSequence of TOP-REAL 2;
+  reconsider D as subsequence of B;
   take D;
   for i being Element of NAT holds C.i c= D.i
   proof
@@ -2401,10 +2128,10 @@ proof
 A1: for i being Element of NAT holds A.i c= B.i and
 A2: C is subsequence of B;
   consider NS being increasing Seq_of_Nat such that
-A3: C = B * NS by A2,Def10;
+A3: C = B * NS by A2,VALUED_0:def 17;
   set D = A * NS;
-  reconsider D as SetSequence of TOP-REAL 2 by Th42;
-  reconsider D as subsequence of A by Def10;
+  reconsider D as SetSequence of TOP-REAL 2;
+  reconsider D as subsequence of A;
   take D;
   for i being Element of NAT holds D.i c= C.i
   proof
@@ -2471,7 +2198,7 @@ A3: for i being Element of NAT holds B.i c= C.i
     let x be set;
     assume
 A4: x in Lim_sup A \/ Lim_sup B;
-    per cases by A4,XBOOLE_0:def 2;
+    per cases by A4,XBOOLE_0:def 3;
     suppose x in Lim_sup A;
       then consider A1 being subsequence of A such that
 A5:   x in Lim_inf A1 by Def12;
@@ -2524,7 +2251,7 @@ A6: x in Lim_sup A by A4,Def12;
 A7: for i being Element of NAT holds C1.i c= E1.i by A3,Th69;
   Lim_inf C1 c= Lim_inf E1 by A7,Th54;
   then x in Lim_sup B by A4,Def12;
-  hence thesis by A6,XBOOLE_0:def 3;
+  hence thesis by A6,XBOOLE_0:def 4;
 end;
 
 theorem Th74:
@@ -2542,11 +2269,11 @@ proof
 A1: for i being Element of NAT holds C.i = [: A.i, B.i :] and
 A2: C1 is subsequence of C;
   consider NS being increasing Seq_of_Nat such that
-A3: C1 = C * NS by A2,Def10;
+A3: C1 = C * NS by A2,VALUED_0:def 17;
   set A1 = A * NS;
-  reconsider A1 as SetSequence of TOP-REAL 2 by Th42;
+  reconsider A1 as SetSequence of TOP-REAL 2;
   set B1 = B * NS;
-  reconsider B1 as SetSequence of TOP-REAL 2 by Th42;
+  reconsider B1 as SetSequence of TOP-REAL 2;
   take A1, B1;
   for i being Element of NAT holds C1.i = [: A1.i, B1.i :]
   proof
@@ -2559,7 +2286,7 @@ A6: B1.i = B.(NS.i) by A4,FUNCT_1:23;
       .= [: A1.i, B1.i :] by A1,A5,A6;
     hence thesis;
   end;
-  hence thesis by Def10;
+  hence thesis;
 end;
 
 theorem
@@ -2593,12 +2320,12 @@ end;
 theorem Th76:
   for T being non empty TopSpace, F being SetSequence of the carrier of T,
   A being Subset of T st
-  for i being Element of NAT holds F.i = A holds Lim_inf F = Lim_sup F
+  for i being Nat holds F.i = A holds Lim_inf F = Lim_sup F
 proof
   let T be non empty TopSpace, F be SetSequence of the carrier of T,
   A be Subset of T;
   assume
-A1: for i being Element of NAT holds F.i = A;
+A1: for i being Nat holds F.i = A;
   thus Lim_inf F c= Lim_sup F by Th68;
   thus Lim_sup F c= Lim_inf F
   proof
@@ -2613,12 +2340,12 @@ end;
 theorem
   for F being SetSequence of the carrier of TOP-REAL 2,
   A being Subset of TOP-REAL 2 st
-  for i being Element of NAT holds F.i = A holds Lim_sup F = Cl A
+  for i being Nat holds F.i = A holds Lim_sup F = Cl A
 proof
   let F be SetSequence of the carrier of TOP-REAL 2,
   A be Subset of TOP-REAL 2;
   assume
-A1: for i being Element of NAT holds F.i = A;
+A1: for i being Nat holds F.i = A;
   then Lim_inf F = Lim_sup F by Th76;
   hence thesis by A1,Th60;
 end;
@@ -2643,10 +2370,10 @@ A2: for i being Element of NAT holds F.i c= G.i
     then consider H being subsequence of G such that
 A3: x in Lim_inf H by Def12;
     consider NS being increasing Seq_of_Nat such that
-A4: H = G * NS by Def10;
+A4: H = G * NS by VALUED_0:def 17;
     set P = F * NS;
-    reconsider P as SetSequence of TOP-REAL 2 by Th42;
-    reconsider P as subsequence of F by Def10;
+    reconsider P as SetSequence of TOP-REAL 2;
+    reconsider P as subsequence of F;
     for i being Element of NAT holds H.i = Cl (P.i)
     proof
       let i be Element of NAT;

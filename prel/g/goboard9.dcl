@@ -15,6 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,7 +31,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN1"/>
 </Signature>
@@ -40,7 +40,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="268">
+<Func kind="K" nr="255">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -48,7 +48,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="84">
+<Adjective nr="89">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -77,7 +77,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

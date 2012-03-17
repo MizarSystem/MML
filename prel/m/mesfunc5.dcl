@@ -16,19 +16,21 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
+<ArticleID name="XXREAL_3"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
@@ -49,7 +51,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="77"/>
+<Adjective nr="82"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -58,7 +60,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="83"/>
+<Adjective nr="88"/>
 </Cluster>
 </CCluster>
 <CCluster aid="MESFUNC5" nr="2">
@@ -71,7 +73,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="82"/>
+<Adjective nr="87"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -80,7 +82,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="84"/>
+<Adjective nr="89"/>
 </Cluster>
 </CCluster>
 </Registrations>

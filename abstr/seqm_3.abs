@@ -8,14 +8,15 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      FINSEQ_1, VALUED_0, ANPROJ_1, SUPINF_1;
- notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0, XREAL_0,
-      RELAT_1, PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2,
-      COMPLEX1, NAT_1, FUNCOP_1, XXREAL_0, RECDEF_1;
+      FINSEQ_1, VALUED_0, SUPINF_1, NORMSP_1;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1,
+      FUNCT_1, PARTFUN1, FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2, REAL_1,
+      COMPLEX1, NAT_1, VALUED_0, FUNCOP_1, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
       VALUED_1, SEQ_1, SEQ_2, FINSEQ_1, RECDEF_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1, SEQ_2;
+      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1, SEQ_2,
+      RFUNCT_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -54,15 +55,7 @@ definition
 end;
 
 definition
-  let seq;
-  canceled;
-  redefine attr seq is constant means
-:: SEQM_3:def 6
-
-  ex r st for n holds seq.n=r;
-end;
-
-definition
+ canceled 2;
   let seq;
   attr seq is monotone means
 :: SEQM_3:def 7
@@ -96,17 +89,7 @@ theorem :: SEQM_3:13
 theorem :: SEQM_3:14
   seq is non-increasing iff for n,m st n<=m holds seq.m<=seq.n;
 
-theorem :: SEQM_3:15
-  seq is constant iff ex r st rng seq={r};
-
-theorem :: SEQM_3:16
-  seq is constant iff for n holds seq.n=seq.(n+1);
-
-theorem :: SEQM_3:17
-  seq is constant iff for n,k holds seq.n=seq.(n+k);
-
-theorem :: SEQM_3:18
-  seq is constant iff for n,m holds seq.n=seq.m;
+canceled 4;
 
 ::
 :: PROPORTIES OF MONOTONE AND CONSTANT SEQUENCES
@@ -125,41 +108,22 @@ theorem :: SEQM_3:22
   seq is non-increasing implies for n holds seq.n<=seq.0;
 
 registration
-  cluster increasing -> non-decreasing PartFunc of NAT, REAL;
-  cluster decreasing -> non-increasing PartFunc of NAT, REAL;
   cluster constant -> non-decreasing non-increasing PartFunc of NAT, REAL;
   cluster non-decreasing non-increasing -> constant PartFunc of NAT, REAL;
 end;
 
-theorem :: SEQM_3:23
-  seq is increasing implies seq is non-decreasing;
+canceled 5;
 
-theorem :: SEQM_3:24
-  seq is decreasing implies seq is non-increasing;
-
-theorem :: SEQM_3:25
-  seq is constant implies seq is non-decreasing;
-
-theorem :: SEQM_3:26
-  seq is constant implies seq is non-increasing;
-
-theorem :: SEQM_3:27
-  seq is non-decreasing & seq is non-increasing implies seq is constant;
-
-::  DEFINITIONS OF INCREASING SEQUENCE OF NATURAL NUMBERS,
-::  RESTRICTION OF SEQUENCE.
-
-notation
-  let IT be Relation;
-  synonym IT is natural-yielding for IT is natural-valued;
+registration
+  cluster increasing natural-valued Real_Sequence;
 end;
 
 registration
-  cluster increasing natural-yielding Real_Sequence;
+  cluster increasing sequence of NAT;
 end;
 
 definition
-  mode Seq_of_Nat is natural-yielding Real_Sequence;
+  mode Seq_of_Nat is sequence of NAT;
 end;
 
 reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
@@ -167,43 +131,17 @@ reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
 canceled;
 
 theorem :: SEQM_3:29
-  seq is increasing Seq_of_Nat iff seq is increasing &
-  for n holds seq.n is Element of NAT;
+  seq is Seq_of_Nat iff for n holds seq.n is Element of NAT;
 
-canceled;
-
-theorem :: SEQM_3:31
-  for n holds (seq*Nseq).n=seq.(Nseq.n);
-
-definition
-  let Nseq,seq;
-  redefine func seq*Nseq -> Real_Sequence;
-end;
-
-definition
-  let Nseq,Nseq1;
-  redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
-end;
+canceled 2;
 
 registration
   let Nseq,k;
-  cluster Nseq ^\k -> increasing natural-yielding;
-end;
-
-::
-:: DEFINITION OF SUBSEQUENCE
-::
-
-definition
-  let seq;
- canceled 2;
-  mode subsequence of seq -> Real_Sequence means
-:: SEQM_3:def 10
-
-    ex Nseq st it=seq*Nseq;
+  cluster Nseq ^\k -> increasing natural-valued;
 end;
 
 definition
+ canceled 3;
   let f be Real_Sequence;
   redefine attr f is increasing means
 :: SEQM_3:def 11
@@ -235,8 +173,7 @@ theorem :: SEQM_3:38
 theorem :: SEQM_3:39
   (seq-seq1) ^\k=(seq ^\k)-(seq1 ^\k);
 
-theorem :: SEQM_3:40
-  seq is non-zero implies seq ^\k is non-zero;
+canceled;
 
 theorem :: SEQM_3:41
   (seq") ^\k=(seq ^\k)";
@@ -250,23 +187,12 @@ theorem :: SEQM_3:43
 theorem :: SEQM_3:44
   (r(#)seq) ^\k=r(#)(seq ^\k);
 
-theorem :: SEQM_3:45
-  (seq*Nseq) ^\k=seq*(Nseq ^\k);
-
-theorem :: SEQM_3:46
-  seq is subsequence of seq;
-
-theorem :: SEQM_3:47
-  seq ^\k is subsequence of seq;
-
-theorem :: SEQM_3:48
-  seq is subsequence of seq1 & seq1 is subsequence of seq2
-  implies seq is subsequence of seq2;
-
 ::
 ::  SUBSEQUENCES OF MONOTONE SEQUENCE
 ::    SUBSEQUENCE OF BOUNDED SEQUENCE
 ::
+
+canceled 4;
 
 theorem :: SEQM_3:49
   seq is increasing & seq1 is subsequence of seq implies seq1 is increasing;
@@ -285,11 +211,7 @@ theorem :: SEQM_3:52
 theorem :: SEQM_3:53
   seq is monotone & seq1 is subsequence of seq implies seq1 is monotone;
 
-theorem :: SEQM_3:54
-  seq is constant & seq1 is subsequence of seq implies seq1 is constant;
-
-theorem :: SEQM_3:55
-  seq is constant & seq1 is subsequence of seq implies seq=seq1;
+canceled 2;
 
 theorem :: SEQM_3:56
   seq is bounded_above & seq1 is subsequence of seq implies
@@ -339,75 +261,29 @@ theorem :: SEQM_3:64
   (seq is non-increasing & seq1 is constant implies
   seq+seq1 is non-increasing);
 
-theorem :: SEQM_3:65
-  seq is constant implies (for r holds r(#)seq is constant) &
-  -seq is constant & abs seq is constant;
-
-theorem :: SEQM_3:66
-  seq is constant & seq1 is constant implies
-  seq(#)seq1 is constant & seq+seq1 is constant;
-
-theorem :: SEQM_3:67
-  seq is constant & seq1 is constant implies seq-seq1 is constant;
-
 ::
 :: OPERATIONS ON BOUNDED SEQUENCES
 ::
+
+canceled 3;
 
 theorem :: SEQM_3:68
   (seq is bounded_above & 0<r implies r(#)seq is bounded_above) &
   (0=r implies r(#)seq is bounded) &
   (seq is bounded_above & r<0 implies r(#)seq is bounded_below);
 
-theorem :: SEQM_3:69
-  (seq is bounded_below & 0<r implies r(#)seq is bounded_below) &
-  (seq is bounded_below & r<0 implies r(#)seq is bounded_above);
+canceled;
 
 theorem :: SEQM_3:70
   (seq is bounded implies for r holds r(#)seq is bounded) &
   (seq is bounded implies -seq is bounded) &
   (seq is bounded iff abs seq is bounded);
 
-theorem :: SEQM_3:71
-  (seq is bounded_above & seq1 is bounded_above implies
-  seq+seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is bounded_below implies
-  seq+seq1 is bounded_below) &
-  (seq is bounded & seq1 is bounded implies seq+seq1 is bounded);
-
-theorem :: SEQM_3:72
-  seq is bounded & seq1 is bounded implies seq(#)seq1 is bounded &
-  seq-seq1 is bounded;
-
-::
-:: OPERATIONS ON BOUNDED & CONSTANT SEQUENCES
-::
-
-theorem :: SEQM_3:73
-  seq is constant implies seq is bounded;
-
-theorem :: SEQM_3:74
-  seq is constant implies (for r holds r(#)seq is bounded) & -seq is bounded &
-  abs seq is bounded;
-
-theorem :: SEQM_3:75
-  (seq is bounded_above & seq1 is constant implies
-  seq+seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is constant implies
-  seq+seq1 is bounded_below) &
-  (seq is bounded & seq1 is constant implies seq+seq1 is bounded);
-
-theorem :: SEQM_3:76
-  (seq is bounded_above & seq1 is constant implies
-  seq-seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is constant implies
-  seq-seq1 is bounded_below) &
-  (seq is bounded & seq1 is constant implies seq-seq1 is bounded &
-  seq1-seq is bounded & seq(#)seq1 is bounded);
-
 ::
 :: OPERATIONS ON BOUNDED & MONOTONE SEQUENCES
 ::
+
+canceled 6;
 
 theorem :: SEQM_3:77
   seq is bounded_above & seq1 is non-increasing implies
@@ -417,13 +293,12 @@ theorem :: SEQM_3:78
   seq is bounded_below & seq1 is non-decreasing implies
   seq+seq1 is bounded_below;
 
-theorem :: SEQM_3:79  :: YELLOW_6:1
-  for X,x being set holds X --> x is constant;
+canceled;
 
 theorem :: SEQM_3:80
-  incl NAT is increasing natural-yielding;
+  incl NAT is increasing natural-valued;
 
 registration
-  cluster -> natural-yielding FinSequence of NAT;
+  cluster -> natural-valued FinSequence of NAT;
 end;
 

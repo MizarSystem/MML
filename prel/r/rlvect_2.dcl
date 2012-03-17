@@ -16,6 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -83,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="230">
+<Func kind="K" nr="239">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -103,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
+<Func kind="K" nr="244">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -124,7 +125,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="235">
+<Func kind="K" nr="244">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

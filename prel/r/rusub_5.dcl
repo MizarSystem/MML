@@ -37,11 +37,11 @@
 <Adjective nr="90"/>
 <Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="100"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -58,11 +58,11 @@
 <Adjective nr="90"/>
 <Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="100"/>
+<Adjective nr="99"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="174">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

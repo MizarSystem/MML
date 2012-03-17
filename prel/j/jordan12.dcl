@@ -14,6 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -29,7 +30,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -41,18 +41,18 @@
 <CCluster aid="JORDAN12" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="131"/>
+<Adjective nr="136"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="263">
+<Func kind="K" nr="250">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="134"/>
+<Adjective nr="139"/>
 </Cluster>
 </CCluster>
 </Registrations>

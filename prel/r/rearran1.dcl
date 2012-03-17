@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -51,9 +52,9 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="28"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
-<Adjective nr="54">
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="59">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>

@@ -7,21 +7,22 @@
 environ
 
  vocabularies COMPLEX1, COMSEQ_1, PARTFUN1, ORDINAL2, SEQM_3, SEQ_1, RELAT_1,
-      FUNCT_1, CFUNCT_1, FCONT_1, SEQ_2, FINSEQ_4, ARYTM_1, ANPROJ_1, BOOLE,
+      FUNCT_1, FCONT_1, SEQ_2, FINSEQ_4, ARYTM_1, ANPROJ_1, BOOLE,
       FINSEQ_1, ARYTM_3, COMPTS_1, ARYTM, FRECHET2, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, PARTFUN1, FUNCT_2, VALUED_1, SEQ_1, RELSET_1,
+      COMPLEX1, REAL_1, NAT_1, PARTFUN1, FUNCT_2, SEQ_1, RELSET_1,
+      VALUED_0, VALUED_1,
       SEQM_3, CFUNCT_1, COMSEQ_1, COMSEQ_2, COMSEQ_3, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, XXREAL_0, REAL_1, NAT_1, SEQ_1, COMSEQ_2,
-      CFUNCT_1, COMSEQ_3, RECDEF_1, SEQM_3;
+      CFUNCT_1, COMSEQ_3, RECDEF_1, SEQM_3, VALUED_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XREAL_0, NAT_1, MEMBERED, SEQM_3, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, COMSEQ_2, COMSEQ_3, FUNCT_1, VALUED_1;
+ definitions TARSKI, COMSEQ_2, COMSEQ_3, FUNCT_1, VALUED_0, VALUED_1;
  theorems TARSKI, NAT_1, FUNCT_1, COMPLEX1, SEQ_1, SEQM_3, SEQ_4,
       COMSEQ_1, COMSEQ_2, COMSEQ_3, PARTFUN1, CFUNCT_1, RELAT_1, FUNCT_2,
       PARTFUN2, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1,
-      VALUED_1;
+      VALUED_1, VALUED_0;
  schemes NAT_1, RECDEF_1, SEQ_1, FUNCT_2;
 
 begin
@@ -78,81 +79,7 @@ A2: for n holds seq1.n=seq2.n-seq3.n;
   hence thesis by COMSEQ_1:6;
 end;
 
-theorem Th3:
-  rng (seq^\n) c= rng seq
-proof
-  let x;
-  assume x in rng (seq^\n);
-  then consider y such that
-A1: y in dom (seq^\n) & (seq^\n).y = x by FUNCT_1:def 5;
-  reconsider y as Element of NAT by A1;
-A2: (seq^\n).y = seq.(y+n) by NAT_1:def 3;
-  y+n in NAT;
-  then y+n in dom seq by COMSEQ_1:2;
-  hence x in rng seq by A1,A2,FUNCT_1:def 5;
-end;
-
-theorem Th4:
-  rng seq c= dom f implies seq.n in dom f
-proof
-  assume
-A1: rng seq c= dom f;
-  n in NAT;
-  then n in dom seq by COMSEQ_1:2;
-  then seq.n in rng seq by FUNCT_1:def 5;
-  hence thesis by A1;
-end;
-
-theorem Th5:
-  x in rng seq iff ex n st x = seq.n
-proof
-  thus x in rng seq implies ex n st x = seq.n
-  proof
-    assume x in rng seq;
-    then consider y such that
-A1: y in dom seq & x = seq.y by FUNCT_1:def 5;
-    reconsider m=y as Element of NAT by A1;
-    take m; thus thesis by A1;
-  end;
-  given n such that
-A2: x = seq.n;
-  n in NAT;
-  then n in dom seq by COMSEQ_1:2;
-  hence thesis by A2,FUNCT_1:def 5;
-end;
-
-theorem
-  seq.n in rng seq by Th5;
-
-theorem Th7:
-  seq1 is subsequence of seq implies rng seq1 c= rng seq
-proof
-  assume seq1 is subsequence of seq;
-  then consider Ns such that
-A1: seq1 = seq * Ns by COMSEQ_3:def 9;
-  let x;
-  assume x in rng seq1;
-  then consider n such that
-A2: x = (seq * Ns).n by A1,Th5;
-  x = seq.(Ns.n) by A2,FUNCT_2:21;
-  hence x in rng seq by Th5;
-end;
-
-theorem
-  seq1 is subsequence of seq & seq is non-zero implies seq1 is non-zero
-proof
-  assume
-A1: seq1 is subsequence of seq & seq is non-zero;
-  then consider Ns such that
-A2: seq1=seq*Ns by COMSEQ_3:def 9;
-  now
-    given n such that
-A3: seq1.n=0c;
-    seq.(Ns.n) = 0c by A2,A3,FUNCT_2:21;
-    hence contradiction by A1,COMSEQ_1:4;
-  end;
-  hence thesis by COMSEQ_1:4;
-end;
+canceled 6;
 
 theorem Th9:
   (seq1 + seq2)*Ns = (seq1*Ns) + (seq2*Ns) &
@@ -209,7 +136,7 @@ proof
     .= -(seq*Ns) by COMSEQ_1:14;
   now
     let n;
-    thus ((|.seq.|)*Ns).n = (|.seq.|).(Ns.n) by SEQM_3:31
+    thus ((|.seq.|)*Ns).n = (|.seq.|).(Ns.n) by FUNCT_2:21
       .= |.seq.(Ns.n).| by VALUED_1:18
       .= |.(seq*Ns).n.| by FUNCT_2:21
       .= (|.seq*Ns.|).n by VALUED_1:18;
@@ -237,34 +164,7 @@ proof
     .= (seq1*Ns)/"(seq*Ns) by Th12;
 end;
 
-theorem
-  (for n holds seq.n in Y) implies rng seq c= Y
-proof
-  assume
-A1: for n holds seq.n in Y;
-  let x;
-  assume x in rng seq;
-  then ex n st seq.n=x by Th5;
-  hence x in Y by A1;
-end;
-
-canceled 2;
-
-theorem Th17:
-  rng seq c= dom f implies (f/*seq)^\n=f/*(seq^\n)
-proof
-  assume
-A1: rng seq c= dom f;
-A2: rng (seq^\n) c= rng seq by Th3;
-  now
-    let m;
-    thus ((f/*seq)^\n).m = (f/*seq).(m+n) by NAT_1:def 3
-      .= f/.(seq.(m+n)) by A1,FUNCT_2:186
-      .= f/.((seq^\n).m) by NAT_1:def 3
-      .= (f/*(seq^\n)).m by A1,A2,FUNCT_2:186,XBOOLE_1:1;
-  end;
-  hence thesis by COMSEQ_1:6;
-end;
+canceled 4;
 
 theorem Th18:
   rng seq c= dom h1 /\ dom h2 implies (h1+h2)/*seq=h1/*seq+h2/*seq &
@@ -278,7 +178,9 @@ A4: rng seq c= dom (h1 - h2) by A1,CFUNCT_1:4;
 A5: rng seq c= dom (h1 (#) h2) by A1,VALUED_1:def 4;
   now
     let n;
-A6: seq.n in dom (h1 + h2) by A3,Th4;
+    seq.n in rng seq by VALUED_0:28;
+    then
+A6: seq.n in dom (h1 + h2) by A3;
     thus ((h1+h2)/*seq).n = (h1+h2)/.(seq.n) by A3,FUNCT_2:186
       .= h1/.(seq.n) + h2/.(seq.n) by A6,CFUNCT_1:3
       .= (h1/*seq).n + h2/.(seq.n) by A1,A2,FUNCT_2:186,XBOOLE_1:1
@@ -288,7 +190,9 @@ A6: seq.n in dom (h1 + h2) by A3,Th4;
   hence (h1+h2)/*seq=(h1/*seq)+(h2/*seq) by COMSEQ_1:6;
   now
     let n;
-A7: seq.n in dom (h1 - h2) by A4,Th4;
+    seq.n in rng seq by VALUED_0:28;
+    then
+A7: seq.n in dom (h1 - h2) by A4;
     thus ((h1-h2)/*seq).n = (h1-h2)/.(seq.n) by A4,FUNCT_2:186
       .= h1/.(seq.n) - h2/.(seq.n) by A7,CFUNCT_1:4
       .= (h1/*seq).n - h2/.(seq.n) by A1,A2,FUNCT_2:186,XBOOLE_1:1
@@ -297,7 +201,9 @@ A7: seq.n in dom (h1 - h2) by A4,Th4;
   hence (h1-h2)/*seq=h1/*seq-h2/*seq by Th2;
   now
     let n;
-A8: seq.n in dom (h1(#)h2) by A5,Th4;
+    seq.n in rng seq by VALUED_0:28;
+    then
+A8: seq.n in dom (h1(#)h2) by A5;
     thus ((h1(#)h2)/*seq).n = (h1(#)h2)/.(seq.n) by A5,FUNCT_2:186
       .= (h1/.(seq.n)) * (h2/.(seq.n)) by A8,CFUNCT_1:5
       .= ((h1/*seq).n) * (h2/.(seq.n)) by A1,A2,FUNCT_2:186,XBOOLE_1:1
@@ -316,7 +222,9 @@ A1: rng seq c= dom h;
 A2: rng seq c= dom (g(#)h) by VALUED_1:def 5;
   now
     let n;
-A3: seq.n in dom (g(#)h) by A2,Th4;
+    seq.n in rng seq by VALUED_0:28;
+    then
+A3: seq.n in dom (g(#)h) by A2;
     thus ((g(#)h)/*seq).n = (g(#)h)/.(seq.n) by A2,FUNCT_2:186
       .= g * (h/.(seq.n)) by A3,CFUNCT_1:7
       .= g *((h/*seq).n) by A1,FUNCT_2:186
@@ -345,10 +253,10 @@ A3: rng seq c= dom h \ h"{0c} by A1,CFUNCT_1:def 2;
   now
     given n such that
 A4: (h/*seq).n=0c;
-    seq.n in rng seq by Th5;
+    seq.n in rng seq by VALUED_0:28;
     then seq.n in dom (h^) by A1;
     then seq.n in dom h \ h"{0c} by CFUNCT_1:def 2;
-    then seq.n in dom h & not seq.n in h"{0c} by XBOOLE_0:def 4;
+    then seq.n in dom h & not seq.n in h"{0c} by XBOOLE_0:def 5;
     then
 A5: not h/.(seq.n) in {0c} by PARTFUN2:44;
     h/.(seq.n) =0c by A2,A3,A4,FUNCT_2:186,XBOOLE_1:1;
@@ -366,7 +274,7 @@ A2: dom h \ h"{0c} c= dom h by XBOOLE_1:36;
 A3: rng seq c= dom h \ h"{0c} by A1,CFUNCT_1:def 2;
   now
     let n;
-A4: seq.n in rng seq by Th5;
+A4: seq.n in rng seq by VALUED_0:28;
     thus ((h^)/*seq).n = (h^)/.(seq.n) by A1,FUNCT_2:186
       .= (h/.(seq.n))" by A1,A4,CFUNCT_1:def 2
       .= ((h/*seq).n)" by A2,A3,FUNCT_2:186,XBOOLE_1:1
@@ -375,16 +283,16 @@ A4: seq.n in rng seq by Th5;
   hence thesis by COMSEQ_1:6;
 end;
 
-theorem Th23:
+theorem
   rng seq c= dom h implies Re ( (h/*seq)*Ns ) = Re (h/*(seq*Ns))
 proof
   assume
 A1: rng seq c= dom h;
   now
     let n;
-    (seq * Ns) is subsequence of seq by COMSEQ_3:def 9;
+    (seq * Ns) is subsequence of seq by VALUED_0:def 17;
     then
-A2: rng (seq*Ns) c= rng seq by Th7;
+A2: rng (seq*Ns) c= rng seq by VALUED_0:21;
     thus (Re ( (h/*seq)*Ns )).n = Re( ((h/*seq)*Ns).n ) by COMSEQ_3:def 3
       .= Re( (h/*seq).(Ns.n) ) by FUNCT_2:21
       .= Re( h/.(seq.(Ns.n)) ) by A1,FUNCT_2:186
@@ -395,16 +303,16 @@ A2: rng (seq*Ns) c= rng seq by Th7;
   hence Re ( (h/*seq)*Ns ) = Re (h/*(seq*Ns)) by FUNCT_2:113;
 end;
 
-theorem Th24:
+theorem
   rng seq c= dom h implies Im ( (h/*seq)*Ns ) = Im (h/*(seq*Ns))
 proof
   assume
 A1: rng seq c= dom h;
   now
     let n;
-    (seq * Ns) is subsequence of seq by COMSEQ_3:def 9;
+    (seq * Ns) is subsequence of seq by VALUED_0:def 17;
     then
-A2: rng (seq*Ns) c= rng seq by Th7;
+A2: rng (seq*Ns) c= rng seq by VALUED_0:21;
     thus (Im ( (h/*seq)*Ns )).n = Im( ((h/*seq)*Ns).n ) by COMSEQ_3:def 4
       .= Im( (h/*seq).(Ns.n) ) by FUNCT_2:21
       .= Im( h/.(seq.(Ns.n)) ) by A1,FUNCT_2:186
@@ -415,45 +323,7 @@ A2: rng (seq*Ns) c= rng seq by Th7;
   hence Im ( (h/*seq)*Ns ) = Im (h/*(seq*Ns)) by FUNCT_2:113;
 end;
 
-theorem Th25:
-  rng seq c= dom h implies (h/*seq)*Ns = h /* (seq*Ns)
-proof
-  assume
-A1: rng seq c= dom h;
-  then
-A2: Re ( (h/*seq)*Ns ) = Re (h/*(seq*Ns)) by Th23;
-  Im ( (h/*seq)*Ns ) = Im (h/*(seq*Ns)) by A1,Th24;
-  hence thesis by A2,COMSEQ_3:14;
-end;
-
-theorem Th26:
-  rng seq1 c= dom h & seq2 is subsequence of seq1 implies
-  h/*seq2 is subsequence of h/*seq1
-proof
-  assume
-A1: rng seq1 c= dom h & seq2 is subsequence of seq1;
-  then consider Ns such that
-A2: seq2=seq1*Ns by COMSEQ_3:def 9;
-  take Ns; thus thesis by A1,A2,Th25;
-end;
-
-theorem
-  h is total implies (h/*seq).n = h/.(seq.n)
-proof
-  assume h is total;
-  then dom h = COMPLEX by PARTFUN1:def 4;
-  then rng seq c= dom h;
-  hence thesis by FUNCT_2:186;
-end;
-
-theorem
-  h is total implies h/*(seq^\n) = (h/*seq)^\n
-proof
-  assume h is total;
-  then dom h = COMPLEX by PARTFUN1:def 4;
-  then rng seq c= dom h;
-  hence thesis by Th17;
-end;
+canceled 4;
 
 theorem
   h1 is total & h2 is total implies (h1+h2)/*seq = h1/*seq + h2/*seq &
@@ -479,63 +349,7 @@ proof
   hence thesis by Th19;
 end;
 
-theorem
-  rng seq c= dom (h|X) implies (h|X)/*seq = h/*seq
-proof
-  assume
-A1: rng seq c= dom (h|X);
-  dom (h|X) = dom h /\ X by RELAT_1:90;
-  then
-A2: dom (h|X) c= dom h by XBOOLE_1:17;
-  now
-    let n;
-A3: seq.n in rng seq by Th5;
-    thus ((h|X)/*seq).n = (h|X)/.(seq.n) by A1,FUNCT_2:186
-      .= h/.(seq.n) by A1,A3,PARTFUN2:32
-      .= (h/*seq).n by A1,A2,FUNCT_2:186,XBOOLE_1:1;
-  end;
-  hence thesis by COMSEQ_1:6;
-end;
-
-theorem
-  rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y) implies
-  (h|X)/*seq = (h|Y)/*seq
-proof
-  assume
-A1: rng seq c= dom (h|X) & (rng seq c= dom (h|Y) or X c= Y);
-  now per cases by A1;
-    suppose
-A2:   rng seq c= dom (h|Y);
-      now
-        let n;
-A3:     seq.n in rng seq by Th5;
-        thus ((h|X)/*seq).n = (h|X)/.(seq.n) by A1,FUNCT_2:186
-          .= h/.(seq.n) by A1,A3,PARTFUN2:32
-          .= (h|Y)/.(seq.n) by A2,A3,PARTFUN2:32
-          .= ((h|Y)/*seq).n by A2,FUNCT_2:186;
-      end;
-      hence thesis by COMSEQ_1:6;
-    end;
-    suppose X c= Y;
-      then dom h /\ X c= dom h /\ Y by XBOOLE_1:26;
-      then dom (h|X) c= dom h /\ Y by RELAT_1:90;
-      then
-A4:   dom (h|X) c= dom (h|Y) by RELAT_1:90;
-      then
-A5:   rng seq c= dom (h|Y) by A1,XBOOLE_1:1;
-      now
-        let n;
-A6:     seq.n in rng seq by Th5;
-        thus ((h|X)/*seq).n = (h|X)/.(seq.n) by A1,FUNCT_2:186
-          .= h/.(seq.n) by A1,A6,PARTFUN2:32
-          .= (h|Y)/.(seq.n) by A5,A6,PARTFUN2:32
-          .= ((h|Y)/*seq).n by A1,A4,FUNCT_2:186,XBOOLE_1:1;
-      end;
-      hence thesis by COMSEQ_1:6;
-    end;
-  end;
-  hence thesis;
-end;
+canceled 2;
 
 theorem
   rng seq c= dom (h|X) & h"{0}={} implies ((h^)|X)/*seq = ((h|X)/*seq)"
@@ -547,22 +361,22 @@ A1: rng seq c= dom (h|X) & h"{0}={};
     assume x in rng seq;
     then x in dom (h|X) by A1;
     then x in dom h /\ X by RELAT_1:90;
-    then x in dom h \ h"{0c} & x in X by A1,XBOOLE_0:def 3;
+    then x in dom h \ h"{0c} & x in X by A1,XBOOLE_0:def 4;
     then x in dom (h^) & x in X by CFUNCT_1:def 2;
-    then x in dom (h^) /\ X by XBOOLE_0:def 3;
+    then x in dom (h^) /\ X by XBOOLE_0:def 4;
     hence x in dom ((h^)|X) by RELAT_1:90;
   end;
   then
 A2: rng seq c= dom ((h^)|X) by TARSKI:def 3;
   now
     let n;
-A3: seq.n in rng seq by Th5;
+A3: seq.n in rng seq by VALUED_0:28;
     then seq.n in dom (h|X) by A1;
     then seq.n in dom h /\ X by RELAT_1:90;
-    then seq.n in dom h \ h"{0c} & seq.n in X by A1,XBOOLE_0:def 3;
+    then seq.n in dom h \ h"{0c} & seq.n in X by A1,XBOOLE_0:def 4;
     then
 A4: seq.n in dom (h^) & seq.n in X by CFUNCT_1:def 2;
-    then seq.n in dom (h^) /\ X by XBOOLE_0:def 3;
+    then seq.n in dom (h^) /\ X by XBOOLE_0:def 4;
     then
 A5: seq.n in dom((h^)|X) by FUNCT_1:68;
     thus (((h^)|X)/*seq).n = ((h^)|X)/.(seq.n) by A2,FUNCT_2:186
@@ -575,105 +389,25 @@ A5: seq.n in dom((h^)|X) by FUNCT_1:68;
   hence thesis by COMSEQ_1:6;
 end;
 
-definition
-  let seq;
-  redefine
-  canceled;
-  attr seq is constant means
-  :Def4:
-  ex g st for n holds seq.n=g;
-  compatibility
-  proof
-A1: dom seq = NAT by COMSEQ_1:2;
-    hereby
-      assume
-A2:   seq is constant;
-      take r = seq.0;
-      let n be Element of NAT;
-      thus seq.n = r by A1,A2,FUNCT_1:def 16;
-    end;
-    given g such that
-A3: for n holds seq.n=g;
-    let n1,n2 be set;
-    assume
-A4: n1 in dom seq & n2 in dom seq;
-    hence seq.n1 = g by A3
-      .= seq.n2 by A3,A4;
+Lm1E:
+ (for n,m holds seq.n=seq.m) implies ex g st for n being Nat holds seq.n=g
+proof
+  assume that
+A16: for n,m holds seq.n=seq.m and
+A17: for g ex n being Nat st seq.n<>g;
+  now
+    let n;
+     consider n1 being Nat such that
+W:    seq.n1<>seq.n by A17;
+     n1 in NAT by ORDINAL1:def 13;
+    hence contradiction by A16,W;
   end;
+  hence thesis;
 end;
 
-Lm1: ((ex g st for n holds seq.n=g) implies ex g st rng seq={g}) &
-((ex g st rng seq={g}) implies for n holds seq.n=seq.(n+1)) &
-((for n holds seq.n=seq.(n+1)) implies for n,k holds seq.n=seq.(n+k)) &
-((for n,k holds seq.n=seq.(n+k)) implies for n,m holds seq.n=seq.m) &
-((for n,m holds seq.n=seq.m) implies ex g st for n holds seq.n=g)
+Lm1D:
+ (for n,k holds seq.n=seq.(n+k)) implies for n,m holds seq.n=seq.m
 proof
-  thus (ex g st for n holds seq.n=g) implies ex g st rng seq={g}
-  proof
-    given g1 such that
-A1: for n holds seq.n=g1;
-    take g=g1;
-    now
-      let y;
-      assume y in rng seq;
-      then consider x such that
-A2:   x in dom seq and
-A3:   seq.x=y by FUNCT_1:def 5;
-      y=g1 by A1,A2,A3;
-      hence y in {g} by TARSKI:def 1;
-    end;
-    then
-A4: rng seq c={g} by TARSKI:def 3;
-    now
-      let y;
-      assume y in {g};
-      then
-A5:   y=g by TARSKI:def 1;
-      now
-        assume
-A6:     not y in rng seq;
-        now
-          let n;
-          n in NAT;
-          then n in dom seq by COMSEQ_1:2;
-          then seq.n<>g by A5,A6,FUNCT_1:def 5;
-          hence contradiction by A1;
-        end;
-        hence contradiction;
-      end;
-      hence y in rng seq;
-    end;
-    then {g} c= rng seq by TARSKI:def 3;
-    hence thesis by A4,XBOOLE_0:def 10;
-  end;
-  thus (ex g st rng seq={g}) implies for n holds seq.n=seq.(n+1)
-  proof
-    given g1 such that
-A7: rng seq={g1};
-    let n;
-    n in NAT & (n+1) in NAT;
-    then n in dom seq & (n+1) in dom seq by COMSEQ_1:2;
-    then seq.n in {g1} & seq.(n+1) in {g1} by A7,FUNCT_1:def 5;
-    then seq.n=g1 & seq.(n+1)=g1 by TARSKI:def 1;
-    hence seq.n=seq.(n+1);
-  end;
-  thus (for n holds seq.n=seq.(n+1)) implies for n,k holds seq.n=seq.(n+k)
-  proof
-    assume
-A8: for n holds seq.n=seq.(n+1);
-    let n;
-    defpred P[Element of NAT] means seq.n=seq.(n+$1);
-A9: P[0];
-A10: now
-      let k such that
-A11:  P[k];
-      seq.(n+k)=seq.(n+k+1) by A8;
-      hence P[k+1] by A11;
-    end;
-    thus for k holds P[k] from NAT_1:sch 1(A9,A10);
-  end;
-  thus (for n,k holds seq.n=seq.(n+k)) implies for n,m holds seq.n=seq.m
-  proof
     assume
 A12: for n,k holds seq.n=seq.(n+k);
     let n,m;
@@ -692,105 +426,39 @@ A15:  n=m+k by NAT_1:10;
       hence seq.n=seq.m by A12,A15;
     end;
     hence seq.n=seq.m by A13;
-  end;
-  assume that
-A16: for n,m holds seq.n=seq.m and
-A17: for g ex n st seq.n<>g;
-  now
+end;
+
+Lm1C:
+ (for n holds seq.n=seq.(n+1)) implies for n,k holds seq.n=seq.(n+k)
+proof
+    assume
+A8: for n holds seq.n=seq.(n+1);
     let n;
-    ex n1 st seq.n1<>seq.n by A17;
-    hence contradiction by A16;
-  end;
-  hence thesis;
+    defpred P[Element of NAT] means seq.n=seq.(n+$1);
+A9: P[0];
+A10: now
+      let k such that
+A11:  P[k];
+      seq.(n+k)=seq.(n+k+1) by A8;
+      hence P[k+1] by A11;
+    end;
+    thus for k holds P[k] from NAT_1:sch 1(A9,A10);
 end;
 
-theorem Th34:
-  seq is constant iff ex g st rng seq={g}
+Lm1B:
+ (ex g st rng seq={g}) implies for n holds seq.n=seq.(n+1)
 proof
-  thus seq is constant implies ex g st rng seq={g}
-  proof
-    assume seq is constant;
-    then ex g st for n holds seq.n=g by Def4;
-    hence thesis by Lm1;
-  end;
-  assume ex g st rng seq={g};
-  then for n holds seq.n=seq.(n+1) by Lm1;
-  then for n,k holds seq.n=seq.(n+k) by Lm1;
-  then for n,m holds seq.n=seq.m by Lm1;
-  hence ex g st for n holds seq.n=g by Lm1;
-end;
-
-theorem Th35:
-  seq is constant iff for n holds seq.n=seq.(n+1)
-proof
-  thus seq is constant implies for n holds seq.n=seq.(n+1)
-  proof
-    assume seq is constant;
-    then ex g st rng seq={g} by Th34;
-    hence thesis by Lm1;
-  end;
-  assume for n holds seq.n=seq.(n+1);
-  then for n,k holds seq.n=seq.(n+k) by Lm1;
-  then for n,m holds seq.n=seq.m by Lm1;
-  hence ex g st for n holds seq.n=g by Lm1;
-end;
-
-theorem Th36:
-  seq is constant iff for n,k holds seq.n=seq.(n+k)
-proof
-  thus seq is constant implies for n,k holds seq.n=seq.(n+k)
-  proof
-    assume seq is constant;
-    then for n holds seq.n=seq.(n+1) by Th35;
-    hence thesis by Lm1;
-  end;
-  assume for n,k holds seq.n=seq.(n+k);
-  then for n,m holds seq.n=seq.m by Lm1;
-  hence ex g st for n holds seq.n=g by Lm1;
-end;
-
-theorem
-  seq is constant iff for n,m holds seq.n=seq.m
-proof
-  thus seq is constant implies for n,m holds seq.n=seq.m
-  proof
-    assume seq is constant;
-    then for n,k holds seq.n=seq.(n+k) by Th36;
-    hence thesis by Lm1;
-  end;
-  assume for n,m holds seq.n=seq.m;
-  hence ex g st for n holds seq.n=g by Lm1;
-end;
-
-theorem Th38:
-  seq ^\k is subsequence of seq
-proof
-  deffunc f(Element of NAT) = $1+k;
-  consider Rseq1 such that
-A1: for n holds Rseq1.n=f(n) from SEQ_1:sch 1;
-  now
+    given g1 such that
+A7: rng seq={g1};
     let n;
-A2: Rseq1.n=n+k & Rseq1.(n+1)=n+1+k by A1;
-    n+k<n+k+1 by NAT_1:13;
-    hence Rseq1.n<Rseq1.(n+1) by A2;
-  end;
-  then
-A3: Rseq1 is increasing by SEQM_3:def 11;
-  now
-    let n;
-    n+k is Element of NAT;
-    hence Rseq1.n is Element of NAT by A1;
-  end;
-  then reconsider Rseq1 as increasing Seq_of_Nat by A3,SEQM_3:29;
-  take Rseq=Rseq1;
-  now
-    let n;
-    thus (seq*Rseq).n=seq.(Rseq.n) by FUNCT_2:21
-      .=seq.(n+k) by A1
-      .=(seq ^\k).n by NAT_1:def 3;
-  end;
-  hence thesis by COMSEQ_1:6;
+    n in NAT & (n+1) in NAT;
+    then n in dom seq & (n+1) in dom seq by COMSEQ_1:2;
+    then seq.n in {g1} & seq.(n+1) in {g1} by A7,FUNCT_1:def 5;
+    then seq.n=g1 & seq.(n+1)=g1 by TARSKI:def 1;
+    hence seq.n=seq.(n+1);
 end;
+
+canceled 5;
 
 theorem Th39:
   seq1 is subsequence of seq & seq is convergent implies seq1 is convergent
@@ -802,7 +470,7 @@ A2: seq is convergent;
 A3: for p st 0<p ex n st for m st n<=m holds
   |.(seq.m)-g.|<p by A2,COMSEQ_2:def 4;
   consider Nseq such that
-A4: seq1=seq*Nseq by A1,COMSEQ_3:def 9;
+A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   take t=g;
   let p;
   assume 0<p;
@@ -826,7 +494,7 @@ A1: seq1 is subsequence of seq and
 A2: seq is convergent;
 A3: seq1 is convergent by A1,A2,Th39;
   consider Nseq such that
-A4: seq1=seq*Nseq by A1,COMSEQ_3:def 9;
+A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   now
     let p;
     assume 0<p;
@@ -928,13 +596,7 @@ end;
 
 theorem Th43:
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
-proof
-  assume
-A1: seq is convergent;
-A2: seq^\k is subsequence of seq by Th38;
-  hence seq^\k is convergent by A1,Th39;
-  thus lim (seq ^\k)=lim seq by A1,A2,Th40;
-end;
+                        by Th39,Th40;
 
 theorem Th44:
   seq is convergent & (ex k st seq=seq1 ^\k) implies seq1 is convergent
@@ -1042,7 +704,7 @@ A2: lim seq <>0;
   consider k such that
 A3: seq ^\k is non-zero by A1,A2,Th46;
   take seq ^\k;
-  thus thesis by A3,Th38;
+  thus thesis by A3;
 end;
 
 theorem Th48:
@@ -1050,7 +712,7 @@ theorem Th48:
 proof
   assume seq is constant;
   then consider t such that
-A1: for n holds seq.n=t by Def4;
+A1: for n being Nat holds seq.n=t by VALUED_0:def 18;
   take g=t;
   let p such that
 A2: 0<p;
@@ -1072,9 +734,9 @@ A2: now
 A3: seq is constant and
 A4: g in rng seq;
     consider g1 such that
-A5: rng seq={g1} by A3,Th34;
+A5: rng seq={g1} by A3,FUNCT_2:188;
     consider g2 such that
-A6: for n holds seq.n=g2 by A3,Def4;
+A6: for n being Nat holds seq.n=g2 by A3,VALUED_0:def 18;
 A7: g=g1 by A4,A5,TARSKI:def 1;
 A8: seq is convergent by A3,Th48;
     now
@@ -1186,9 +848,7 @@ A4:   for n holds (s2^\N).n=x0
         s2.(n+N)=x0 by A3,NAT_1:12;
         hence (s2^\N).n=x0 by NAT_1:def 3;
       end;
-      s2^\N is subsequence of s2 by Th38;
-      then
-A5:   rng (s2^\N) c= rng s2 by Th7;
+A5:   rng (s2^\N) c= rng s2 by VALUED_0:21;
 A6:   now
         let p such that
 A7:     p>0;
@@ -1203,7 +863,7 @@ A7:     p>0;
       end;
       then
 A8:   f/*(s2^\N) is convergent by COMSEQ_2:def 4;
-      f/*(s2^\N)=(f/*s2)^\N by A2,Th17;
+      f/*(s2^\N)=(f/*s2)^\N by A2,VALUED_0:27;
       then f/*s2 is convergent & f/.x0=lim((f/*s2)^\N)
       by A6,A8,Th44,COMSEQ_2:def 5;
       hence thesis by Th43;
@@ -1316,10 +976,10 @@ A34:  for k st P[k] holds P[k+1]
         hence (s2*F).(k+1)<>x0 by FUNCT_2:21;
       end;
 A35:  for n holds P[n] from NAT_1:sch 1(A33,A34);
-A36:  s2*F is subsequence of s2 by COMSEQ_3:def 9;
+A36:  s2*F is subsequence of s2 by VALUED_0:def 17;
       then
 A37:  s2*F is convergent by A2,Th39;
-A38:  rng (s2*F) c= rng s2 by A36,Th7;
+A38:  rng (s2*F) c= rng s2 by A36,VALUED_0:21;
       then
 A39:  rng (s2*F) c= dom f by A2,XBOOLE_1:1;
       lim (s2*F)=x0 by A2,A36,Th40;
@@ -1392,7 +1052,7 @@ A6: rng s1 c= dom f
     proof
       let x;
       assume x in rng s1;
-      then ex n st x=s1.n by Th5;
+      then ex n st x=s1.n by FUNCT_2:190;
       hence thesis by A5;
     end;
 A7: now
@@ -1447,7 +1107,7 @@ A20:  for m st n<=m holds |.s1.m-x0.|<s by A17,A19,COMSEQ_2:def 5;
       take k=n;
       let m such that
 A21:  k<=m;
-A22:  s1.m in rng s1 by Th5;
+A22:  s1.m in rng s1 by VALUED_0:28;
       |.s1.m-x0.|<s by A20,A21;
       then |.f/.(s1.m)-f/.x0.|<p by A17,A19,A22;
       hence |.(f/*s1).m - f/.x0.|<p by A17,FUNCT_2:186;
@@ -1473,7 +1133,7 @@ A3: x0 in dom f2 &
   for s1 st rng s1 c= dom f2 & s1 is convergent & lim s1 = x0 holds
   f2/*s1 is convergent & f2/.x0 = lim (f2/*s1) by A1,Def2;
   now
-    x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+    x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 4;
     hence
 A4: x0 in dom (f1+f2) by VALUED_1:def 1;
     let s1;
@@ -1498,7 +1158,7 @@ A8: f2/*s1 is convergent & f2/.x0 = lim (f2/*s1) by A1,A5,Def2;
       .= lim ((f1+f2)/*s1) by A6,Th18;
   end;
   hence f1+f2 is_continuous_in x0 by Def2;
-  now x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+  now x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 4;
     hence
 A9: x0 in dom (f1-f2) by CFUNCT_1:4;
     let s1;
@@ -1523,7 +1183,7 @@ A13: f2/*s1 is convergent & f2/.x0 = lim (f2/*s1) by A1,A10,Def2;
       .= lim ((f1-f2)/*s1) by A11,Th18;
   end;
   hence f1-f2 is_continuous_in x0 by Def2;
-  x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 3;
+  x0 in dom f1 /\ dom f2 by A2,A3,XBOOLE_0:def 4;
   hence
 A14: x0 in dom (f1(#)f2) by VALUED_1:def 4;
   let s1;
@@ -1592,7 +1252,7 @@ A2: x0 in dom f &
   f/*s1 is convergent & f/.x0 = lim (f/*s1) by Def2;
   not f/.x0 in {0c} by A1,TARSKI:def 1;
   then not x0 in f"{0c} by PARTFUN2:44;
-  then x0 in dom f \ f"{0c} by A2,XBOOLE_0:def 4;
+  then x0 in dom f \ f"{0c} by A2,XBOOLE_0:def 5;
   hence
 A3: x0 in dom (f^) by CFUNCT_1:def 2;
 A4: dom f \ f"{0c} c= dom f by XBOOLE_1:36;
@@ -1621,6 +1281,7 @@ proof
 end;
 
 definition
+ canceled 2;
   let f,X;
   pred f is_continuous_on X means
   :Def5:
@@ -1649,7 +1310,7 @@ A4:   dom (f|X) = dom f /\ X by FUNCT_1:68
 A5:   f|X is_continuous_in (lim s1) by A1,A3,Def5;
       now
         let n;
-A6:     s1.n in rng s1 by Th5;
+A6:     s1.n in rng s1 by VALUED_0:28;
 A7:     rng s1 c= dom f by A2,A3,XBOOLE_1:1; thus
         ((f|X)/*s1).n = (f|X)/.(s1.n) by A3,A4,FUNCT_2:186
           .= f/.(s1.n) by A3,A4,A6,PARTFUN2:32
@@ -1677,7 +1338,7 @@ A11: dom (f|X) = dom f /\ X by FUNCT_1:68
 A12:  rng s1 c= dom (f|X) & s1 is convergent & lim s1 = x1;
       now
         let n;
-A13:    s1.n in rng s1 by Th5;
+A13:    s1.n in rng s1 by VALUED_0:28;
 A14:    rng s1 c= dom f by A9,A11,A12,XBOOLE_1:1; thus
         ((f|X)/*s1).n = (f|X)/.(s1.n) by A12,FUNCT_2:186
           .= f/.(s1.n) by A12,A13,PARTFUN2:32
@@ -1801,7 +1462,7 @@ A3: g in X1;
   then
 A4: f|X is_continuous_in g by A1,Def5;
   thus f|X1 is_continuous_in g
-  proof g in dom f /\ X1 by A2,A3,XBOOLE_0:def 3;
+  proof g in dom f /\ X1 by A2,A3,XBOOLE_0:def 4;
     hence
 A5: g in dom (f|X1) by RELAT_1:90;
     let s1 such that
@@ -1818,7 +1479,7 @@ A10: (f|X)/.g = f/.g by A5,A7,PARTFUN2:32
       .= (f|X1)/.g by A5,PARTFUN2:32;
     now
       let n;
-A11:  s1.n in rng s1 by Th5;
+A11:  s1.n in rng s1 by VALUED_0:28;
       thus ((f|X)/*s1).n = (f|X)/.(s1.n) by A6,A7,FUNCT_2:186,XBOOLE_1:1
         .= f/.(s1.n) by A8,A11,PARTFUN2:32
         .= (f|X1)/.(s1.n) by A6,A11,PARTFUN2:32
@@ -1846,7 +1507,7 @@ A2: t in {x0};
   proof
 A3: t=x0 by A2,TARSKI:def 1;
     t in dom f by A1,A2,TARSKI:def 1;
-    then t in dom f /\ {x0} by A2,XBOOLE_0:def 3;
+    then t in dom f /\ {x0} by A2,XBOOLE_0:def 4;
     hence t in dom (f|{x0}) by RELAT_1:90;
     let s1;
     assume
@@ -1858,7 +1519,7 @@ A5: rng s1 c= dom f /\ {x0} by RELAT_1:90;
 A6: rng s1 c= {x0} by A5,XBOOLE_1:1;
 A7: now
       let n;
-      s1.n in rng s1 by Th5;
+      s1.n in rng s1 by VALUED_0:28;
       hence s1.n = x0 by A6,TARSKI:def 1;
     end;
 A8: now
@@ -1940,7 +1601,7 @@ A21: f2/*s1 is convergent & f2/.(lim s1) = lim (f2/*s1) by A2,A18,Th60;
     then
 A22: (f1/*s1)(#)(f2/*s1) is convergent by A20,COMSEQ_2:29;
     (f1(#)f2)/.(lim s1) = lim (f1/*s1) * lim (f2/*s1) by A7,A18,A20,A21,
-    CFUNCT_1:5
+CFUNCT_1:5
       .= lim ((f1/*s1) (#) (f2/*s1)) by A20,A21,COMSEQ_2:30
       .= lim ((f1(#)f2)/*s1) by A19,Th18;
     hence (f1(#)f2)/*s1 is convergent & (f1(#)f2)/.(lim s1)=lim((f1(#)f2)/*s1)
@@ -1957,7 +1618,7 @@ proof
   let X,X1,f1,f2;
   assume f1 is_continuous_on X & f2 is_continuous_on X1;
   then f1 is_continuous_on X /\ X1 & f2 is_continuous_on X /\ X1 by Th63,
-  XBOOLE_1:17;
+XBOOLE_1:17;
   hence thesis by Th65;
 end;
 
@@ -2012,7 +1673,7 @@ A4: X c= dom (f^) by A1,Def5;
 A5: g in X;
   then
 A6: f|X is_continuous_in g by A1,Def5;
-  g in dom(f^) /\ X by A4,A5,XBOOLE_0:def 3;
+  g in dom(f^) /\ X by A4,A5,XBOOLE_0:def 4;
   then
 A7: g in dom((f^)|X) by RELAT_1:90;
   now
@@ -2024,7 +1685,7 @@ A8: rng s1 c= dom((f^)|X) & s1 is convergent & lim s1= g;
 A9: rng s1 c= dom(f|X) by A3,RELAT_1:90;
     then
 A10: (f|X)/*s1 is convergent & (f|X)/.g = lim ((f|X)/*s1) by A6,A8,Def2;
-    g in dom f /\ X by A3,A4,A5,XBOOLE_0:def 3;
+    g in dom f /\ X by A3,A4,A5,XBOOLE_0:def 4;
     then
 A11: g in dom(f|X) by RELAT_1:90;
     then
@@ -2035,7 +1696,7 @@ A14:  rng s1 c= dom f /\ X by A3,A8,RELAT_1:90;
       dom f /\ X c= dom f by XBOOLE_1:17;
       then
 A15:  rng s1 c= dom f by A14,XBOOLE_1:1;
-A16:  s1.n in rng s1 by Th5;
+A16:  s1.n in rng s1 by VALUED_0:28;
 A17:  now
         assume f/.(s1.n)=0c;
         then f/.(s1.n) in {0c} by TARSKI:def 1;
@@ -2055,11 +1716,11 @@ A18: lim ((f|X)/*s1) <> 0c & (f|X)/*s1 is non-zero
     by A6,A8,A9,A12,A13,Def2,COMSEQ_1:4;
     now
       let n;
-A19:  s1.n in rng s1 by Th5;
+A19:  s1.n in rng s1 by VALUED_0:28;
       then s1.n in dom((f^)|X) by A8;
       then s1.n in dom (f^) /\ X by RELAT_1:90;
       then
-A20:  s1.n in dom (f^) by XBOOLE_0:def 3;
+A20:  s1.n in dom (f^) by XBOOLE_0:def 4;
       thus (((f^)|X)/*s1).n = ((f^)|X)/.(s1.n) by A8,FUNCT_2:186
         .= (f^)/.(s1.n) by A8,A19,PARTFUN2:32
         .= (f/.(s1.n))" by A20,CFUNCT_1:def 2
@@ -2168,7 +1829,7 @@ A3: rng s1 c= rng f;
 A4: for n ex g st P[n,g]
     proof
       let n;
-      s1.n in rng s1 by Th5;
+      s1.n in rng s1 by VALUED_0:28;
       then consider g being Element of COMPLEX such that
 A5:   g in dom f & s1.n=f.g by A3,PARTFUN1:26;
       take g; thus thesis by A5,PARTFUN1:def 8;
@@ -2178,7 +1839,7 @@ A6: for n holds P[n,q1.n] from CompSeqChoice(A4);
     now
       let x;
       assume x in rng q1;
-      then ex n st x = q1.n by Th5;
+      then ex n st x = q1.n by FUNCT_2:190;
       hence x in dom f by A6;
     end;
     then
@@ -2196,14 +1857,14 @@ A9: s2 is subsequence of q1 &
     f|(dom f) is_continuous_in (lim s2) by A2,A9,Def5;
     then
 A10: f is_continuous_in (lim s2) by RELAT_1:97;
-    rng s2 c= rng q1 by A9,Th7;
+    rng s2 c= rng q1 by A9,VALUED_0:21;
     then rng s2 c= dom f by A7,XBOOLE_1:1;
     then f/*s2 is convergent & f/.(lim s2) = lim (f/*s2) by A9,A10,Def2;
     then
 A11: f/*s2 is convergent & f.(lim s2) = lim (f/*s2) by A9,PARTFUN1:def 8;
     take q2 = f/*s2;
     thus q2 is subsequence of s1 & q2 is convergent &
-    (lim q2) in rng f by A7,A8,A9,A11,Th26,FUNCT_1:def 5;
+    (lim q2) in rng f by A7,A8,A9,A11,VALUED_0:22,FUNCT_1:def 5;
   end;
   hence thesis by Def6;
 end;

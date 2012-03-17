@@ -13,11 +13,14 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
+<ArticleID name="XXREAL_3"/>
 <ArticleID name="SUPINF_2"/>
 </Signature>
 <RCluster aid="SUPINF_2" nr="1">
@@ -30,8 +33,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="29"/>
+<Adjective nr="25"/>
+<Adjective nr="30"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SUPINF_2" nr="2">
@@ -44,9 +47,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="29"/>
-<Adjective nr="51"/>
+<Adjective nr="25"/>
+<Adjective nr="30"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SUPINF_2" nr="1">
@@ -68,7 +71,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="100">
+<Func kind="K" nr="122">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -87,7 +90,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -116,7 +119,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="49">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -132,11 +135,11 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="49">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -164,11 +167,11 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="47">
+<Adjective nr="49">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -184,7 +187,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="49">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

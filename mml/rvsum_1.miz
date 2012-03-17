@@ -855,37 +855,37 @@ proof
   hence (-1)*R = -R by Th16,Th22,Th23,BINOP_2:7,FINSEQOP:72;
 end;
 
+notation
+  let F;
+  synonym sqr F for F^2;
+end;
+
 definition
   let F;
-  func sqr F -> FinSequence of REAL equals
+  redefine func sqr F -> FinSequence of REAL equals
 
   sqrreal*F;
+  compatibility
+   proof let f be FinSequence of REAL;
+     sqr F = sqrreal*F
+      proof
+        dom sqrreal = REAL by FUNCT_2:def 1;
+        then
+A:      rng F c= dom sqrreal;
+B:      dom sqr F = dom F by VALUED_1:11
+            .= dom(sqrreal*F) by A,RELAT_1:46;
+       hence len sqr F = len(sqrreal*F) by FINSEQ_3:31;
+       let k;
+       assume 1 <= k & k <= len sqr F;
+        then
+X:       k in dom sqr F by FINSEQ_3:27;
+       thus (sqr F).k = (F.k)^2 by VALUED_1:11
+            .= sqrreal.(F.k) by Def2
+            .= (sqrreal*F).k by X,B,FUNCT_1:22;
+      end;
+    hence thesis;
+   end;
   coherence by Lm4;
-end;
-
-theorem Th77:
-  dom(sqr F) = dom F
-proof
-  dom sqrreal = REAL by FUNCT_2:def 1;
-  then rng F c= dom sqrreal;
-  hence dom F = dom sqr F by RELAT_1:46;
-end;
-
-theorem Th78:
-  (sqr F).s = (F.s)^2
-proof
-  per cases;
-  suppose
-A1: not s in dom sqr F;
-    then
-A2: not s in dom F by Th77;
-    thus (sqr F).s = 0^2 by A1,FUNCT_1:def 4
-      .= (F.s)^2 by A2,FUNCT_1:def 4;
-  end;
-  suppose s in dom sqr F;
-    then (sqr F).s = sqrreal.(F.s) by FUNCT_1:22;
-    hence thesis by Def2;
-  end;
 end;
 
 definition
@@ -894,10 +894,7 @@ definition
   coherence by FINSEQ_2:133;
 end;
 
-theorem
-  (sqr R).s = (R.s)^2 by Th78;
-
-canceled;
+canceled 4;
 
 theorem
   sqr <*r*> = <*r^2*>
@@ -924,10 +921,10 @@ proof
     let j;
     assume j in Seg i;
     set r = R.j, r' = (-R).j;
-    thus (sqr -R).j = (r')^2 by Th78
+    thus (sqr -R).j = (r')^2 by VALUED_1:11
       .= (-r)^2 by Th35
       .= r^2
-      .= (sqr R).j by Th78;
+      .= (sqr R).j by VALUED_1:11;
   end;
   hence thesis by FINSEQ_2:139;
 end;
@@ -1132,11 +1129,11 @@ proof
     r1'2 = (sqr R1).j, r2'2 = (sqr R2).j,
     r1r2a = mlt(R1,R2).j,2r1r2 = (2*mlt(R1,R2)).j,
     r1'22r1r2 = (sqr R1 + 2*mlt(R1,R2)).j;
-    thus (sqr(R1 + R2)).j = r1r2^2 by Th78
+    thus (sqr(R1 + R2)).j = r1r2^2 by VALUED_1:11
       .= (r1 + r2)^2 by Th27
       .= r1^2+2*r1*r2+r2^2
-      .= r1'2+2*(r1*r2)+r2^2 by Th78
-      .= r1'2+2*(r1*r2)+r2'2 by Th78
+      .= r1'2+2*(r1*r2)+r2^2 by VALUED_1:11
+      .= r1'2+2*(r1*r2)+r2'2 by VALUED_1:11
       .= r1'2+2*(r1r2a)+r2'2 by Th87
       .= r1'2+2r1r2+r2'2 by Th66
       .= r1'22r1r2+r2'2 by Th27
@@ -1175,8 +1172,7 @@ registration
   cluster real-valued complex-yielding FinSequence;
   existence
   proof
-    consider f being FinSequence of REAL;
-    f is real-valued;
+    <*>REAL is real-valued;
     hence thesis;
   end;
 end;
@@ -1562,7 +1558,7 @@ proof
     set r = (sqr F).i;
     set x = F.i;
     0 <= x^2 by XREAL_1:65;
-    hence 0 <= r by Th78;
+    hence 0 <= r by VALUED_1:11;
   end;
   hence thesis by Th114;
 end;
@@ -1619,13 +1615,13 @@ A8: now
     set r = (sqr R).k;
     set x = R.k;
     0 <= x^2 by XREAL_1:65;
-    hence 0 <= r by Th78;
+    hence 0 <= r by VALUED_1:11;
   end;
 A9: j in dom sqr R by A5,A7,FINSEQ_2:37;
   set x = R.j,x' = (sqr R).j;
   x <> 0 by A2,A5,A6,A7,FUNCOP_1:13;
   then 0 < x^2 by SQUARE_1:74;
-  then 0 < x' by Th78;
+  then 0 < x' by VALUED_1:11;
   hence thesis by A1,A8,A9,Th115;
 end;
 

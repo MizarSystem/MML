@@ -23,6 +23,7 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -33,7 +34,6 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -43,20 +43,20 @@
 </Signature>
 <FCluster aid="PDIFF_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="350">
+<Func kind="K" nr="336">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="19">
-<Func kind="K" nr="320">
+<Func kind="K" nr="306">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="43"/>
 </Adjective>
 <Adjective nr="21">
-<Func kind="K" nr="320">
+<Func kind="K" nr="306">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="43"/>

@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -40,11 +41,11 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="33">
+<Adjective nr="34">
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PREPOWER" nr="1">
@@ -55,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -76,7 +77,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -93,11 +94,11 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -14,6 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="SETFAM_1"/>
@@ -53,7 +54,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -84,7 +85,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -101,7 +102,7 @@
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Adjective>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SCMNORM" nr="3">
@@ -134,7 +135,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
@@ -152,7 +153,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 </RCluster>
 <FCluster aid="SCMNORM" nr="1">
@@ -186,7 +187,7 @@
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
@@ -199,7 +200,7 @@
 <Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="323">
+<Func kind="K" nr="332">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -215,7 +216,7 @@
 <Cluster>
 <Adjective nr="27"/>
 </Cluster>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
@@ -252,7 +253,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="329">
+<Func kind="K" nr="338">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -264,7 +265,7 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMNORM" nr="3">
@@ -296,9 +297,9 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="27"/>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
@@ -307,7 +308,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="254">
+<Func kind="K" nr="261">
 <Func kind="K" nr="47"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -316,7 +317,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -360,7 +361,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SCMNORM" nr="3">
@@ -383,7 +384,7 @@
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="178">
+<Func kind="K" nr="185">
 <Func kind="U" nr="9">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -416,7 +417,7 @@
 <Adjective nr="4"/>
 <Adjective nr="14"/>
 <Adjective nr="27"/>
-<Adjective nr="104"/>
+<Adjective nr="109"/>
 </Cluster>
 </CCluster>
 </Registrations>

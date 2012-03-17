@@ -22,6 +22,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -102,7 +103,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="129">
-<Func kind="K" nr="358">
+<Func kind="K" nr="367">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="147">
@@ -127,7 +128,7 @@
 <Pred kind="R" nr="2">
 <Var nr="3"/>
 <Func kind="K" nr="130">
-<Func kind="K" nr="358">
+<Func kind="K" nr="367">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="147">
@@ -141,7 +142,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="13">
-<Func kind="K" nr="358">
+<Func kind="K" nr="367">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="147">
@@ -175,7 +176,7 @@
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="52" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -201,7 +202,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="64">
+<Adjective nr="69">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -213,7 +214,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="20">
-<Func kind="K" nr="226">
+<Func kind="K" nr="235">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -235,7 +236,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="258">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

@@ -35,30 +35,6 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="6">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="7"/>
-<Adjective nr="10"/>
-</Cluster>
-</RCluster>
-<RCluster aid="PUA2MSS1" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
 </ArgTypes>
 <Typ kind="M" nr="9">
 <Cluster/>

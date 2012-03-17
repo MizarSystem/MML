@@ -30,9 +30,14 @@ A2: for x holds x in X iff ex y st y in A() & Q[y,x] from TARSKI:sch 1(A1);
 end;
 
 definition
-  func {} -> set means
-  :Def1:
-  not ex x being set st x in it;
+  let X be set;
+  attr X is empty means
+  :Def5:
+  not ex x being set st x in X;
+end;
+
+registration
+  cluster empty set;
   existence
   proof
     consider X;
@@ -40,15 +45,15 @@ definition
     consider Y such that
 A1: x in Y iff x in X & P[x] from Separation;
     take Y;
-    thus thesis by A1;
+    thus not ex x being set st x in Y by A1;
   end;
-  uniqueness
-  proof
-    let X,Y;
-    assume (not ex x st x in X) & (not ex x st x in Y);
-    then x in Y iff x in X;
-    hence thesis by TARSKI:2;
-  end;
+end;
+
+definition
+  func {} -> set equals
+  :Def1:
+  the empty set;
+  coherence;
   let X,Y be set;
   func X \/ Y -> set means
   :Def2:
@@ -131,11 +136,7 @@ A9: x in A2 iff x in X & not x in Y;
 end;
 
 definition
-  let X be set;
-  attr X is empty means
-  :Def5:
-  X = {};
-  let Y be set;
+  let X, Y be set;
   func X \+\ Y -> set equals
 
   (X \ Y) \/ (Y \ X);
@@ -188,7 +189,7 @@ proof
   hence thesis by Def4;
 end;
 
-theorem :: BOOLE'25:
+theorem
   (for x holds not x in X iff (x in Y iff x in Z)) implies X = Y \+\ Z
 proof
   assume
@@ -204,12 +205,7 @@ end;
 
 registration
   cluster {} -> empty;
-  coherence by Def5;
-  cluster empty set;
-  existence
-  proof {} is empty;
-    hence thesis;
-  end;
+  coherence;
 end;
 
 registration
@@ -217,15 +213,13 @@ registration
   cluster { x1 } -> non empty;
   coherence
   proof x1 in {x1} by TARSKI:def 1;
-    then {x1} <> {} by Def1;
-    hence thesis by Def5;
+   hence ex x being set st x in {x1};
   end;
   let x2 be set;
   cluster { x1, x2 } -> non empty;
   coherence
   proof x1 in {x1,x2} by TARSKI:def 2;
-    then {x1,x2} <> {} by Def1;
-    hence thesis by Def5;
+   hence ex x being set st x in {x1,x2};
   end;
 end;
 
@@ -244,50 +238,59 @@ registration
   coherence
   proof
     consider x being set such that
-A1: x in D by Def1;
+A1: x in D by Def5;
     x in D \/ X by A1,Def2;
-    then D \/ X <> {} by Def1;
-    hence thesis by Def5;
+    hence ex x being set st x in D \/ X;
   end;
   cluster X \/ D -> non empty;
   coherence;
 end;
 
-theorem Th3: :: BOOLE'1:
+Lm1: X is empty implies X = {}
+  proof
+    assume
+Z:    not ex x st x in X;
+     then x in {} iff x in X by Def5;
+    hence thesis by TARSKI:2;
+  end;
+
+theorem Th3:
   X meets Y iff ex x st x in X & x in Y
 proof
   hereby
     assume X meets Y;
     then X /\ Y <> {} by Def7;
+    then X /\ Y is not empty by Lm1;
     then consider x such that
-A1: x in X /\ Y by Def1;
+A1: x in X /\ Y by Def5;
     take x;
     thus x in X & x in Y by A1,Def3;
   end;
   given x such that
 A2: x in X & x in Y;
   x in X /\ Y by A2,Def3;
-  then X /\ Y <> {} by Def1;
+  then X /\ Y <> {} by Def5;
   hence thesis by Def7;
 end;
 
-theorem :: BOOLE'2:
+theorem
   X meets Y iff ex x st x in X /\ Y
 proof
   hereby
     assume X meets Y;
     then X /\ Y <> {} by Def7;
+    then X /\ Y is not empty by Lm1;
     then consider x such that
-A1: x in X /\ Y by Def1;
+A1: x in X /\ Y by Def5;
     take x;
     thus x in X /\ Y by A1;
   end;
   assume ex x st x in X /\ Y;
-  then X /\ Y <> {} by Def1;
+  then X /\ Y <> {} by Def5;
   hence thesis by Def7;
 end;
 
-theorem :: SYSREL'1:
+theorem
   X misses Y & x in X \/ Y implies
   (x in X & not x in Y) or (x in Y & not x in X) by Def2,Th3;
 
@@ -336,4 +339,15 @@ A2: not for x holds x in X iff x in Y by TARSKI:2;
   X c= Y by A1,Def8;
   hence thesis by A2,TARSKI:def 3;
 end;
+
+:: 2008.08.07, A.T.
+
+theorem
+ X <> {} implies ex x st x in X
+  proof assume
+Z:  X <> {};
+   assume not ex x st x in X;
+    then X is empty by Def5;
+   hence thesis by Z,Lm1;
+  end;
 

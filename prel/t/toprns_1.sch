@@ -26,7 +26,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
@@ -43,7 +42,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="270">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -57,7 +56,7 @@
 <Adjective nr="19">
 <Func kind="K" nr="47"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="270">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -65,7 +64,7 @@
 </Cluster>
 <Func kind="K" nr="47"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="270">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -80,7 +79,7 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="102">
 <Func kind="U" nr="1">
-<Func kind="K" nr="270">
+<Func kind="K" nr="250">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>

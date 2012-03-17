@@ -6,7 +6,7 @@
 
 environ
 
- vocabularies REALSET1, SEQM_3, FUNCT_1, RELAT_1, FUNCOP_1, BOOLE, FINSEQ_1,
+ vocabularies REALSET1, SEQM_3, FUNCT_1, RELAT_1, BOOLE, FINSEQ_1,
       PRE_TOPC, CONNSP_1, EUCLID, COMPTS_1, TOPREAL1, SPPOL_1, MCART_1,
       SPPOL_2, PSCOMP_1, FINSEQ_6, GOBOARD5, GOBOARD1, CARD_1, ORDINAL2,
       GOBOARD2, MATRIX_2, TREES_1, MATRIX_1, ABSVALUE, ARYTM_1, RCOMP_1, SEQ_2,
@@ -22,12 +22,12 @@ environ
  constructors PARTFUN1, FUNCOP_1, REAL_1, NAT_1, COMPLEX1, RCOMP_1, FINSEQ_4,
       REALSET1, TOPS_1, CONNSP_1, COMPTS_1, MATRIX_2, TOPREAL4, GOBOARD2,
       SPPOL_1, JORDAN1, SPPOL_2, PSCOMP_1, GOBOARD9, SEQ_1, XXREAL_2, GOBOARD1,
-      SEQM_3;
+      SEQM_3, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, SEQ_2, SEQM_3, REALSET1, FINSEQ_5, FINSEQ_6,
       STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, GOBOARD2, SPPOL_2, GOBOARD5,
       PSCOMP_1, GOBOARD9, WAYBEL_2, YELLOW_6, VALUED_0, FINSET_1, XXREAL_1,
-      XXREAL_2, COMPTS_1, FUNCOP_1;
+      XXREAL_2, COMPTS_1, FUNCOP_1, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SPPOL_1, TOPREAL1, YELLOW_8, GOBOARD1, GOBOARD5, TARSKI, JORDAN1,
       SEQ_4, XBOOLE_0, PSCOMP_1, SEQM_3;
@@ -42,104 +42,6 @@ environ
 
 begin :: Preliminaries
 
-theorem Th1:
-  for A being trivial set for B being set st B c= A holds B is trivial
-proof
-  let A be trivial set;
-  let B be set;
-  assume
-A1: B c= A;
-  per cases by REALSET1:def 4;
-  suppose A is empty;
-    hence B is trivial by A1;
-  end;
-  suppose ex x being set st A = {x};
-    hence B is trivial by A1,ZFMISC_1:39;
-  end;
-end;
-
-registration
-  cluster non constant -> non trivial Function;
-  coherence
-  proof
-    let f be Function;
-    assume f is non constant;
-    then consider n1,n2 being set such that
-A1: n1 in dom f & n2 in dom f and
-A2: f.n1 <> f.n2 by FUNCT_1:def 16;
-    [n1,f.n1] in f & [n2,f.n2] in f by A1,FUNCT_1:8;
-    then reconsider f as non empty Function;
-    f is non trivial
-    proof
-      reconsider x = [n1,f.n1], y = [n2,f.n2] as Element of f by A1,FUNCT_1:8;
-      take x,y;
-      thus x <> y by A2,ZFMISC_1:33;
-    end;
-    hence thesis;
-  end;
-end;
-
-registration
-  cluster trivial -> constant Function;
-  coherence;
-end;
-
-theorem Th2:
-  for f being Function st rng f is trivial holds f is constant
-proof
-  let f be Function;
-  assume
-A1: rng f is trivial;
-  per cases by A1,REALSET1:def 4;
-  suppose rng f is empty;
-    then reconsider f as empty Function;
-    f is trivial;
-    hence thesis;
-  end;
-  suppose ex x being set st rng f = {x};
-    then consider x being set such that
-A2: rng f = {x};
-    f = dom f --> x by A2,FUNCOP_1:15;
-    hence f is constant;
-  end;
-end;
-
-registration
-  let f be constant Function;
-  cluster rng f -> trivial;
-  coherence
-  proof
-    per cases;
-    suppose f is empty;
-      then reconsider g = f as empty Function;
-      rng g is empty;
-      hence rng f is trivial;
-    end;
-    suppose f <> {};
-      then dom f <> {};
-      then consider x being set such that
-A1:   x in dom f by XBOOLE_0:def 1;
-      for y being set holds
-      y in {f.x} iff ex z being set st z in dom f & y = f.z
-      proof
-        let y be set;
-        hereby
-          assume
-A2:       y in {f.x};
-          take x;
-          thus x in dom f & y = f.x by A1,A2,TARSKI:def 1;
-        end;
-        given z being set such that
-A3:     z in dom f and
-A4:     y = f.z;
-        y = f.x by A1,A3,A4,FUNCT_1:def 16;
-        hence y in {f.x} by TARSKI:def 1;
-      end;
-      hence rng f is trivial by FUNCT_1:def 5;
-    end;
-  end;
-end;
-
 registration
   cluster non empty constant FinSequence;
   existence
@@ -147,6 +49,8 @@ registration
     take <* 0 *>; thus thesis;
   end;
 end;
+
+canceled 2;
 
 theorem Th3:
   for f,g being FinSequence st f^g is constant
@@ -156,9 +60,9 @@ proof
   assume f^g is constant;
   then reconsider h = f^g as constant FinSequence;
   rng f c= rng h by FINSEQ_1:42;
-  hence f is constant by Th1,Th2;
+  hence f is constant;
   rng g c= rng h by FINSEQ_1:43;
-  hence g is constant by Th1,Th2;
+  hence g is constant;
 end;
 
 theorem Th4:
@@ -639,12 +543,12 @@ proof
     proof
       assume
 A1:   a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C);
-      then a in LSeg(SW-corner C,NW-corner C)by XBOOLE_0:def 3;
+      then a in LSeg(SW-corner C,NW-corner C)by XBOOLE_0:def 4;
       then a in {p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C}
       by Th28;
       then
 A2:   ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
-      a in LSeg(NW-corner C,NE-corner C) by A1,XBOOLE_0:def 3;
+      a in LSeg(NW-corner C,NE-corner C) by A1,XBOOLE_0:def 4;
       then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C}
       by Th27;
       then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C;
@@ -654,7 +558,7 @@ A2:   ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
     then a in LSeg(SW-corner C,NW-corner C) & a in
     LSeg(NW-corner C,NE-corner C) by TOPREAL1:6;
     hence a in LSeg(SW-corner C,NW-corner C) /\ LSeg(NW-corner C,NE-corner C)
-    by XBOOLE_0:def 3;
+    by XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -673,12 +577,12 @@ proof
     proof
       assume
 A1:   a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C);
-      then a in LSeg(NW-corner C,NE-corner C)by XBOOLE_0:def 3;
+      then a in LSeg(NW-corner C,NE-corner C)by XBOOLE_0:def 4;
       then a in {p :p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C }
       by Th27;
       then
 A2:   ex p st p = a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C;
-      a in LSeg(NE-corner C,SE-corner C) by A1,XBOOLE_0:def 3;
+      a in LSeg(NE-corner C,SE-corner C) by A1,XBOOLE_0:def 4;
       then a in {p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
       by Th25;
       then ex p st p=a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
@@ -688,7 +592,7 @@ A2:   ex p st p = a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = N-bound C;
     then a in LSeg(NW-corner C,NE-corner C) & a in
     LSeg(NE-corner C,SE-corner C) by TOPREAL1:6;
     hence a in LSeg(NW-corner C,NE-corner C) /\ LSeg(NE-corner C,SE-corner C)
-    by XBOOLE_0:def 3;
+    by XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -707,12 +611,12 @@ proof
     proof
       assume
 A1:   a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C);
-      then a in LSeg(NE-corner C,SE-corner C)by XBOOLE_0:def 3;
+      then a in LSeg(NE-corner C,SE-corner C)by XBOOLE_0:def 4;
       then a in {p : p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
       by Th25;
       then
 A2:   ex p st p = a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
-      a in LSeg(SE-corner C,SW-corner C) by A1,XBOOLE_0:def 3;
+      a in LSeg(SE-corner C,SW-corner C) by A1,XBOOLE_0:def 4;
       then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C }
       by Th26;
       then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C;
@@ -722,7 +626,7 @@ A2:   ex p st p = a & p`1 = E-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
     then a in LSeg(NE-corner C,SE-corner C) & a in
     LSeg(SE-corner C,SW-corner C) by TOPREAL1:6;
     hence a in LSeg(NE-corner C,SE-corner C) /\ LSeg(SE-corner C,SW-corner C)
-    by XBOOLE_0:def 3;
+    by XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -741,12 +645,12 @@ proof
     proof
       assume
 A1:   a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C);
-      then a in LSeg(NW-corner C,SW-corner C)by XBOOLE_0:def 3;
+      then a in LSeg(NW-corner C,SW-corner C)by XBOOLE_0:def 4;
       then a in {p : p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C }
       by Th28;
       then
 A2:   ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
-      a in LSeg(SW-corner C,SE-corner C) by A1,XBOOLE_0:def 3;
+      a in LSeg(SW-corner C,SE-corner C) by A1,XBOOLE_0:def 4;
       then a in {p : p`1 <= E-bound C & p`1 >= W-bound C & p`2= S-bound C}
       by Th26;
       then ex p st p=a & p`1 <= E-bound C & p`1 >= W-bound C & p`2 = S-bound C;
@@ -756,7 +660,7 @@ A2:   ex p st p = a & p`1 = W-bound C & p`2 <= N-bound C & p`2 >= S-bound C;
     then a in LSeg(NW-corner C,SW-corner C) & a in
     LSeg(SW-corner C,SE-corner C) by TOPREAL1:6;
     hence a in LSeg(NW-corner C,SW-corner C) /\ LSeg(SW-corner C,SE-corner C)
-    by XBOOLE_0:def 3;
+    by XBOOLE_0:def 4;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -789,12 +693,12 @@ proof
   then consider a being set such that
 A1: a in LSeg(SW-corner D1,NW-corner D1) /\ LSeg(SE-corner D1,NE-corner D1)
   by XBOOLE_0:def 1;
-  a in LSeg(NW-corner D1,SW-corner D1)by A1,XBOOLE_0:def 3;
+  a in LSeg(NW-corner D1,SW-corner D1)by A1,XBOOLE_0:def 4;
   then a in {p : p`1 = W-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1}
   by Th28;
   then
 A2: ex p st p = a & p`1 = W-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1;
-  a in LSeg(NE-corner D1,SE-corner D1) by A1,XBOOLE_0:def 3;
+  a in LSeg(NE-corner D1,SE-corner D1) by A1,XBOOLE_0:def 4;
   then a in {p : p`1= E-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1}
   by Th25;
   then ex p st p=a & p`1 = E-bound D1 & p`2 <= N-bound D1 & p`2 >= S-bound D1;
@@ -809,12 +713,12 @@ proof
   then consider a being set such that
 A1: a in LSeg(SW-corner D2,SE-corner D2) /\ LSeg(NW-corner D2,NE-corner D2)
   by XBOOLE_0:def 1;
-  a in LSeg(SE-corner D2,SW-corner D2)by A1,XBOOLE_0:def 3;
+  a in LSeg(SE-corner D2,SW-corner D2)by A1,XBOOLE_0:def 4;
   then a in {p : p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2 = S-bound D2}
   by Th26;
   then
 A2: ex p st p = a & p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2 = S-bound D2;
-  a in LSeg(NE-corner D2,NW-corner D2) by A1,XBOOLE_0:def 3;
+  a in LSeg(NE-corner D2,NW-corner D2) by A1,XBOOLE_0:def 4;
   then a in {p : p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2= N-bound D2}
   by Th27;
   then ex p st p=a & p`1 <= E-bound D2 & p`1 >= W-bound D2 & p`2 = N-bound D2;
@@ -1423,7 +1327,7 @@ theorem Th46:
 proof
   let T be non empty TopSpace, X be non empty compact Subset of T,
   f be continuous RealMap of T;
-A1: (f|X).:X = f.:X by RFUNCT_2:5;
+A1: (f|X).:X = f.:X by RELAT_1:162;
   (f|X).:the carrier of T|X is bounded_below by PSCOMP_1:def 11;
   hence f.:X is bounded_below by A1,PRE_TOPC:29;
 end;
@@ -1434,7 +1338,7 @@ theorem Th47:
 proof
   let T be non empty TopSpace, X be non empty compact Subset of T,
   f be continuous RealMap of T;
-A1: (f|X).:X = f.:X by RFUNCT_2:5;
+A1: (f|X).:X = f.:X by RELAT_1:162;
   (f|X).:the carrier of T|X is bounded_above by PSCOMP_1:def 12;
   hence f.:X is bounded_above by A1,PRE_TOPC:29;
 end;
@@ -1493,7 +1397,7 @@ A2: for t being real number st t in A \/ B holds t >= r
   proof
     let t be real number;
     assume t in A \/ B;
-    then t in A or t in B by XBOOLE_0:def 2;
+    then t in A or t in B by XBOOLE_0:def 3;
     then inf A <= t or inf B <= t by SEQ_4:def 5;
     hence r <= t by A1,XXREAL_0:2;
   end;
@@ -1506,7 +1410,7 @@ A3: for t being real number st t in A \/ B holds t >= r1;
     now
       let t be real number;
       assume t in A;
-      then t in A \/ B by XBOOLE_0:def 2;
+      then t in A \/ B by XBOOLE_0:def 3;
       hence t >= r1 by A3;
     end;
     then
@@ -1514,7 +1418,7 @@ A4: inf A >= r1 by SEQ_4:60;
     now
       let t be real number;
       assume t in B;
-      then t in A \/ B by XBOOLE_0:def 2;
+      then t in A \/ B by XBOOLE_0:def 3;
       hence t >= r1 by A3;
     end;
     then inf B >= r1 by SEQ_4:60;
@@ -1534,7 +1438,7 @@ A2: for t being real number st t in A \/ B holds t <= r
   proof
     let t be real number;
     assume t in A \/ B;
-    then t in A or t in B by XBOOLE_0:def 2;
+    then t in A or t in B by XBOOLE_0:def 3;
     then sup A >= t or sup B >= t by SEQ_4:def 4;
     hence r >= t by A1,XXREAL_0:2;
   end;
@@ -1547,7 +1451,7 @@ A3: for t being real number st t in A \/ B holds t <= r1;
     now
       let t be real number;
       assume t in A;
-      then t in A \/ B by XBOOLE_0:def 2;
+      then t in A \/ B by XBOOLE_0:def 3;
       hence t <= r1 by A3;
     end;
     then
@@ -1555,7 +1459,7 @@ A4: sup A <= r1 by SEQ_4:62;
     now
       let t be real number;
       assume t in B;
-      then t in A \/ B by XBOOLE_0:def 2;
+      then t in A \/ B by XBOOLE_0:def 3;
       hence t <= r1 by A3;
     end;
     then sup B <= r1 by SEQ_4:62;
@@ -1842,7 +1746,7 @@ A8: W-bound S4 = W-bound C by A3,A6,Th62;
 A9: S1 \/ S2 is compact by COMPTS_1:19;
 A10: W-bound(S1 \/ S2) = min(W-bound S1,W-bound S2) by Th54
     .= min(E-bound C,W-bound C) by A3,A4,A7,Th23,Th62
-    .= W-bound C by A2,XXREAL_0:def 8;
+    .= W-bound C by A2,XXREAL_0:def 9;
 A11: S3 \/ S4 is compact by COMPTS_1:19;
   W-bound(S3 \/ S4) = min(W-bound S3,W-bound S4) by Th54
     .= min(W-bound C,W-bound C) by A5,A6,A8,Th23,Th62
@@ -1867,7 +1771,7 @@ A8: S-bound S4 = S-bound C by A3,A6,Th24,Th63;
 A9: S1 \/ S2 is compact by COMPTS_1:19;
 A10: S-bound(S1 \/ S2) = min(S-bound S1,S-bound S2) by Th55
     .= min(N-bound C,S-bound C) by A3,A4,A7,Th63
-    .= S-bound C by A2,XXREAL_0:def 8;
+    .= S-bound C by A2,XXREAL_0:def 9;
 A11: S3 \/ S4 is compact by COMPTS_1:19;
   S-bound(S3 \/ S4) = min(S-bound S3,S-bound S4) by Th55
     .= min(S-bound C,S-bound C) by A5,A6,A8,Th63
@@ -1896,7 +1800,7 @@ A10: N-bound(S1 \/ S2) = max(N-bound S1,N-bound S2) by Th56
 A11: S3 \/ S4 is compact by COMPTS_1:19;
   N-bound(S3 \/ S4) = max(N-bound S3,N-bound S4) by Th56
     .= max(S-bound C,N-bound C) by A5,A6,A8,Th64
-    .= N-bound C by A2,XXREAL_0:def 9;
+    .= N-bound C by A2,XXREAL_0:def 10;
   hence N-bound L~SpStSeq C = max(N-bound C,N-bound C) by A1,A9,A10,A11,Th56
     .= N-bound C;
 end;
@@ -1921,7 +1825,7 @@ A10: E-bound(S1 \/ S2) = max(E-bound S1,E-bound S2) by Th57
 A11: S3 \/ S4 is compact by COMPTS_1:19;
   E-bound(S3 \/ S4) = max(E-bound S3,E-bound S4) by Th57
     .= max(W-bound C,E-bound C) by A5,A6,A8,Th23,Th65
-    .= E-bound C by A2,XXREAL_0:def 9;
+    .= E-bound C by A2,XXREAL_0:def 10;
   hence E-bound L~SpStSeq C = max(E-bound C,E-bound C) by A1,A9,A10,A11,Th57
     .= E-bound C;
 end;

@@ -15,6 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -32,7 +33,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
@@ -45,7 +45,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="297">
+<Func kind="K" nr="284">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -59,12 +59,12 @@
 <Adjective nr="8" value="false"/>
 <Adjective nr="22"/>
 <Adjective nr="27"/>
-<Adjective nr="141"/>
-<Adjective nr="142"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
 <Adjective nr="146"/>
 <Adjective nr="147"/>
+<Adjective nr="148"/>
+<Adjective nr="149"/>
+<Adjective nr="151"/>
+<Adjective nr="152"/>
 </Cluster>
 </RCluster>
 <FCluster aid="JORDAN1J" nr="1">
@@ -85,7 +85,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="317">
+<Func kind="K" nr="304">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

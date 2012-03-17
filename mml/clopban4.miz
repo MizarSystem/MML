@@ -14,20 +14,22 @@ environ
  notations RELAT_1, FUNCT_1, SUBSET_1, FUNCT_2, PRE_TOPC,
       XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, ARYTM_0, NUMBERS, REAL_1, NAT_1,
       STRUCT_0, ALGSTR_0,
-      NEWTON, RLVECT_1, SQUARE_1, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      NEWTON, RLVECT_1, SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
       LOPBAN_4, NAT_D, SIN_COS, COMPLEX1, BHSP_4, CFUNCT_1, CLVECT_1,
-      CSSPACE3, CLOPBAN2, LOPBAN_3, CLOPBAN3;
+      CSSPACE3, CLOPBAN2, LOPBAN_3, CLOPBAN3, NORMSP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_2, COMSEQ_3, NAT_D,
-      SIN_COS, BHSP_4, LOPBAN_4, CSSPACE3, CLOPBAN3, SEQ_1;
+      SIN_COS, BHSP_4, LOPBAN_4, CSSPACE3, CLOPBAN3, SEQ_1, SERIES_1, SEQ_4,
+      NORMSP_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       MEMBERED, COMPLEX1, STRUCT_0, CLOPBAN2, CLOPBAN3, VALUED_0, SEQ_2,
-      XBOOLE_0;
+      XBOOLE_0, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions CLVECT_1;
  theorems ABSVALUE, REAL_2, RLVECT_1, XCMPLX_0, XCMPLX_1, XREAL_0,
       SEQ_2, SEQM_3, COMSEQ_3, SIN_COS, SERIES_1, NAT_1, INT_1, NEWTON,
       BINARITH, FUNCT_2, SEQ_4, LOPBAN_3, CLOPBAN3, CLVECT_1, COMPLEX1,
-      CSSPACE3, XREAL_1, XXREAL_0, LOPBAN_4, BHSP_4, NORMSP_1;
+      CSSPACE3, XREAL_1, XXREAL_0, LOPBAN_4, BHSP_4, NORMSP_1, VALUED_0,
+      ORDINAL1;
  schemes SEQ_1, NAT_1, FUNCT_2, CLASSES1;
 
 begin :: Basic Properties of Exponential Function on Complex Banach Algebra
@@ -1360,14 +1362,15 @@ proof
     .=1 by CLOPBAN3:42;
   then
 A1: X[0];
-A2: for n st X[n] holds X[n+1]
+A2: for n being Nat st X[n] holds X[n+1]
   proof
-    let n such that
+    let n be Nat such that
 A3: Partial_Sums(||.0.X ExpSeq .||).n=1;
+X:   n in NAT by ORDINAL1:def 13;
     thus Partial_Sums(||.0.X ExpSeq .||).(n+1)
-    =1 + ||.0.X ExpSeq .||.(n+1) by A3,SERIES_1:def 1
+    =1 + ||.0.X ExpSeq .||.(n+1) by A3,SERIES_1:def 1,X
       .=1 + ||.(0.X ExpSeq ).(n+1).|| by CLVECT_1:def 17
-      .=1 + ||.(1r/[*(n+1),0*] * 0.X)*(0.X ExpSeq .n) .|| by Th13
+      .=1 + ||.(1r/[*(n+1),0*] * 0.X)*(0.X ExpSeq .n) .|| by Th13,X
       .=1 + ||.(0.X)*(0.X ExpSeq .n) .|| by CLOPBAN3:42
       .=1 + ||.0.X.|| by CLOPBAN3:42
       .=1 + 0 by CLOPBAN3:42
@@ -1375,9 +1378,9 @@ A3: Partial_Sums(||.0.X ExpSeq .||).n=1;
   end;
 A4: 0.X ExpSeq is norm_summable
   proof
-    for n holds X[n] from NAT_1:sch 1(A1,A2);
-    then Partial_Sums(||.0.X ExpSeq .||) is constant by SEQM_3:def 6;
-    then Partial_Sums(||.0.X ExpSeq .||) is convergent by SEQ_4:39;
+    for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
+    then Partial_Sums(||.0.X ExpSeq .||) is constant by VALUED_0:def 18;
+    then Partial_Sums(||.0.X ExpSeq .||) is convergent;
     then ||.0.X ExpSeq .|| is summable by SERIES_1:def 2;
     hence thesis by CLOPBAN3:def 4;
   end;

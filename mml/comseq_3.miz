@@ -9,16 +9,18 @@ environ
  vocabularies SEQ_1, COMSEQ_1, COMPLEX1, FUNCT_1, SERIES_1, ABSVALUE, ARYTM,
       ARYTM_1, SUPINF_2, SEQ_2, ARYTM_3, PROB_1, ORDINAL2, SEQM_3, PREPOWER,
       SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES, XCMPLX_0, FUNCOP_1,
-      FRECHET2, FUNCT_3, GROUP_1;
+      FRECHET2, GROUP_1;
  notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0,
       XXREAL_0, COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      FUNCOP_1, FUNCT_3, VALUED_1, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1,
+      FUNCOP_1, FUNCT_3, VALUED_1, SEQ_1, SEQ_2, NAT_1,
+      VALUED_0, SEQM_3, SERIES_1,
       SQUARE_1, POWER, COMSEQ_1, COMSEQ_2, RECDEF_1;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      SEQM_3, COMSEQ_2, NEWTON, SERIES_1, SEQ_1, RECDEF_1;
+      SEQM_3, COMSEQ_2, NEWTON, SERIES_1, SEQ_1, RECDEF_1, SEQ_2, VALUED_1,
+      SEQ_4;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQM_3, COMSEQ_2, NEWTON, VALUED_0,
-      VALUED_1, FUNCOP_1;
+      VALUED_1, FUNCOP_1, SEQ_4;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1, VALUED_1;
  theorems NAT_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3, SEQ_4, POWER,
@@ -681,7 +683,7 @@ proof
     thus (Re (seq*Nseq)).n =Re((seq*Nseq).n) by Def3
       .=Re(seq.(Nseq.n)) by FUNCT_2:21
       .=Re seq.(Nseq.n) by Def3
-      .=(Re seq*Nseq).n by SEQM_3:31;
+      .=(Re seq*Nseq).n by FUNCT_2:21;
   end;
   hence Re (seq*Nseq)=Re seq*Nseq by FUNCT_2:113;
   now
@@ -689,7 +691,7 @@ proof
     thus Im (seq*Nseq).n =Im((seq*Nseq).n) by Def4
       .=Im(seq.(Nseq.n)) by FUNCT_2:21
       .=Im seq.(Nseq.n) by Def4
-      .=(Im seq*Nseq).n by SEQM_3:31;
+      .=(Im seq*Nseq).n by FUNCT_2:21;
   end;
   hence Im (seq*Nseq)=Im seq*Nseq by FUNCT_2:113;
 end;
@@ -1019,7 +1021,7 @@ A14:    |.Partial_Sums(seq).(n+k)- Partial_Sums(seq).n.| +|.seq.(n+k+1).| <=
           .=Partial_Sums(|.seq.|).(n+k)+|.seq.|.(n+k+1)
         - Partial_Sums(|.seq.|).n by VALUED_1:18
           .=Partial_Sums(|.seq.|).(n+(k+1))- Partial_Sums(|.seq.|).n by
-        SERIES_1:def 1
+SERIES_1:def 1
           .=abs( Partial_Sums(|.seq.|).(n+(k+1))- Partial_Sums(|.seq.|).n )
         by A6;
         hence P[k+1] by A12,A13,A14,XXREAL_0:2;
@@ -1472,7 +1474,7 @@ A6:   P[k];
   end;
   C.0=0 by FUNCOP_1:13;
   then
-A7: C is convergent & lim(C)=0 by SEQ_4:39,40;
+A7: C is convergent & lim(C)=0 by SEQ_4:40;
   deffunc g(Element of NAT) = |.z.| to_power ($1+1);
   consider rseq1 such that
 A8: for n holds rseq1.n=g(n) from SEQ_1:sch 1;
@@ -1700,7 +1702,7 @@ proof
 A1: (for n holds |. seq.n .| <= rseq.n) & rseq is convergent & lim(rseq)=0;
   C.0=0 by FUNCOP_1:13;
   then
-A2: C is convergent & lim(C)=0 by SEQ_4:39,40;
+A2: C is convergent & lim(C)=0 by SEQ_4:40;
 A3: (for n holds C.n <= abs(Re(seq)).n )
   & (for n holds abs(Re(seq)).n <= rseq.n)
   proof
@@ -1758,53 +1760,20 @@ end;
 
 begin :: Summable and Absolutely Summable Complex Sequences
 
-definition
-  let seq be Complex_Sequence;
-  mode subsequence of seq -> Complex_Sequence means
-    :Def9:
-    ex Nseq st it = seq*Nseq;
-  existence
-  proof
-    reconsider s = incl NAT as increasing Seq_of_Nat by SEQM_3:80;
-    take seq, s;
-    thus seq*s = seq by FUNCT_2:23;
-  end;
-end;
-
 theorem
   seq is subsequence of seq1 implies
   Re seq is subsequence of Re seq1 & Im seq is subsequence of Im seq1
 proof
   assume seq is subsequence of seq1;
   then consider Nseq such that
-A1: seq=seq1*Nseq by Def9;
+A1: seq=seq1*Nseq by VALUED_0:def 17;
   Re seq=Re seq1* Nseq by A1,Th22;
-  hence Re seq is subsequence of Re seq1 by SEQM_3:def 10;
+  hence Re seq is subsequence of Re seq1 by VALUED_0:def 17;
   Im seq=Im seq1 * Nseq by A1,Th22;
-  hence thesis by SEQM_3:def 10;
+  hence thesis by VALUED_0:def 17;
 end;
 
-theorem Th50:
-  seq is subsequence of seq1 & seq1 is subsequence of seq2 implies
-  seq is subsequence of seq2
-proof
-  assume that
-A1: seq is subsequence of seq1 and
-A2: seq1 is subsequence of seq2;
-  consider Nseq such that
-A3: seq=seq1*Nseq by A1,Def9;
-  consider Nseq1 such that
-A4: seq1=seq2*Nseq1 by A2,Def9;
-  now
-    let n;
-    thus (seq2*(Nseq1 * Nseq)).n = seq2.((Nseq1 * Nseq).n) by FUNCT_2:21
-      .=seq2.(Nseq1.(Nseq.n)) by SEQM_3:31
-      .=(seq2*Nseq1).(Nseq.n) by FUNCT_2:21
-      .=seq.n by A3,A4,FUNCT_2:21;
-  end;
-  then seq=seq2*(Nseq1*Nseq) by COMSEQ_1:6;
-  hence seq is subsequence of seq2 by Def9;
-end;
+canceled;
 
 theorem
   seq is bounded implies
@@ -1823,7 +1792,7 @@ A2: abs (Re seq.n)=abs(Re(seq.n)) by Def3;
   then consider rseq1 such that
 A3: rseq1 is subsequence of Re seq & rseq1 is convergent by SEQ_4:57;
   consider Nseq such that
-A4: rseq1=Re seq*Nseq by A3,SEQM_3:def 10;
+A4: rseq1=Re seq*Nseq by A3,VALUED_0:def 17;
 A5: now
     let n;
     |. (seq * Nseq).n .|=|. seq.(Nseq.n) .| by FUNCT_2:21;
@@ -1839,21 +1808,22 @@ A6: abs(Im (seq*Nseq).n)=abs(Im((seq* Nseq).n)) by Def4;
   then consider rseq2 such that
 A7: rseq2 is subsequence of Im (seq*Nseq) & rseq2 is convergent by SEQ_4:57;
   consider Nseq1 such that
-A8: rseq2=Im (seq*Nseq)*Nseq1 by A7,SEQM_3:def 10;
-A9: seq*Nseq is subsequence of seq by Def9;
-  (seq*Nseq)*Nseq1 is subsequence of seq*Nseq by Def9;
+A8: rseq2=Im (seq*Nseq)*Nseq1 by A7,VALUED_0:def 17;
+A9: seq*Nseq is subsequence of seq by VALUED_0:def 17;
+  (seq*Nseq)*Nseq1 is subsequence of seq*Nseq by VALUED_0:def 17;
   then
-A10: (seq*Nseq)*Nseq1 is subsequence of seq by A9,Th50;
+A10: (seq*Nseq)*Nseq1 is subsequence of seq by A9,VALUED_0:20;
 A11: Im ((seq*Nseq)*Nseq1) is convergent by A7,A8,Th22;
   Re ((seq*Nseq)*Nseq1)=(Re (seq*Nseq))*Nseq1 by Th22
     .=rseq1*Nseq1 by A4,Th22;
-  then Re ((seq*Nseq)*Nseq1) is subsequence of rseq1 by SEQM_3:def 10;
+  then Re ((seq*Nseq)*Nseq1) is subsequence of rseq1 by VALUED_0:def 17;
   then Re ((seq*Nseq)*Nseq1) is convergent by A3,SEQ_4:29;
   then (seq*Nseq)*Nseq1 is convergent by A11,Th42;
   hence thesis by A10;
 end;
 
 definition
+ canceled;
   let seq be Complex_Sequence;
   attr seq is summable means
   :Def10:
@@ -1915,12 +1885,6 @@ end;
 registration
   let seq be absolutely_summable Complex_Sequence;
   cluster |.seq.| -> summable Real_Sequence;
-  coherence by Def11;
-end;
-
-definition
-  let seq be absolutely_summable Complex_Sequence;
-  redefine func |.seq.| -> summable Real_Sequence;
   coherence by Def11;
 end;
 
@@ -2231,7 +2195,7 @@ A1: |.z.|< 1 & (for n holds seq.(n+1) = z * seq.n);
   now
     let n;
     thus Partial_Sums(seq).n = seq.0 * ((1r - z #N (n+1))/(1r-z)) by A1,Th37,
-    COMPLEX1:134
+COMPLEX1:134
       .=seq.0 * Partial_Sums(z GeoSeq).n by A1,Th36,COMPLEX1:134
       .=(seq.0 (#) Partial_Sums(z GeoSeq)).n by VALUED_1:6;
   end;

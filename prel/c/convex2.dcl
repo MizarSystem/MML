@@ -15,6 +15,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -44,7 +45,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -60,7 +61,7 @@
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="105">
+<Adjective nr="110">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -88,7 +89,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="15">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -105,7 +106,7 @@
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="105">
+<Adjective nr="110">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

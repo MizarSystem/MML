@@ -11,7 +11,7 @@ xmlns dc "http://purl.org/dc/elements/1.1/";
 output method=html;
 
 
-// $Revision: 1.112 $
+// $Revision: 1.113 $
 //
 // File: mhtml_main.xsltxt - html-ization of Mizar XML, main file
 //
@@ -3551,8 +3551,10 @@ tpl [Article]
 { 
   <div
   {
-    pcomment0(#str=`concat($aname, "  semantic presentation")`); 
-
+    if [not($mk_header > 0)]
+    {
+       pcomment0(#str=`concat($aname, "  semantic presentation")`); 
+    }
     if [$idv > 0] 
     { 
        idv_for_top();
@@ -3770,7 +3772,12 @@ span.p0:hover { color : inherit; background-color : #FFBAFF; }
 ";
 	                } 
         <head {  
-<title { $aname; }
+<title { 
+  if [$mk_header > 0]
+  {
+     $aname; ": "; for-each [document($hdr,/)/Header/dc:title] { `text()`; }
+  }
+  else { $aname; }}
 <script { @type="text/javascript";
 "
 <!-- 

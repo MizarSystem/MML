@@ -10,10 +10,12 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
@@ -22,8 +24,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="33"/>
+<Adjective nr="24"/>
+<Adjective nr="35"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -31,9 +33,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
+<Adjective nr="24"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SEQ_2" nr="2">
@@ -41,9 +43,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
+<Adjective nr="24"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -51,8 +53,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="23"/>
-<Adjective nr="33"/>
+<Adjective nr="24"/>
+<Adjective nr="35"/>
 </Cluster>
 </CCluster>
 </Registrations>

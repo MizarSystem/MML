@@ -19,7 +19,7 @@ environ
  definitions TARSKI, FRAENKEL, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       FINSEQ_1, FUNCOP_1, RELAT_1, RELSET_1, XBOOLE_1, XREAL_1, GRFUNC_1,
-      XXREAL_0, ORDINAL1, CARD_1, CARD_2;
+      XXREAL_0, ORDINAL1, CARD_1, CARD_2, SUBSET_1;
  schemes FINSEQ_1, NAT_1;
 
 begin
@@ -41,7 +41,7 @@ theorem Th2:
 proof i <= j or j <= i;
   then i <= j & Seg i /\ Seg j = Seg i or j <= i & Seg i /\ Seg j = Seg j
   by FINSEQ_1:9;
-  hence thesis by XXREAL_0:def 8;
+  hence thesis by XXREAL_0:def 9;
 end;
 
 theorem Th3:
@@ -50,7 +50,7 @@ proof
   assume i <= j;
   then i-i <= j-i by XREAL_1:11;
   then -(j-i) <= -0;
-  hence max(0,i-j) = 0 by XXREAL_0:def 9;
+  hence max(0,i-j) = 0 by XXREAL_0:def 10;
 end;
 
 theorem Th4:
@@ -58,7 +58,7 @@ theorem Th4:
 proof
   assume j <= i;
   then j-j <= i-j by XREAL_1:11;
-  hence max(0,i-j) = i-j by XXREAL_0:def 9;
+  hence max(0,i-j) = i-j by XXREAL_0:def 10;
 end;
 
 theorem
@@ -77,7 +77,7 @@ end;
 
 theorem
   min(0,i) = 0 & min(i,0) = 0 & max(0,i) = i & max(i,0) = i
-  by XXREAL_0:def 8,def 9;
+  by XXREAL_0:def 10,def 9;
 
 :: Non-empty Segments of Natural Numbers
 
@@ -130,15 +130,6 @@ proof
   assume i in dom p;
   then p.i in rng p & rng p c= D by FINSEQ_1:def 4,FUNCT_1:def 5;
   hence p.i in D;
-end;
-
-Lm1: now
-  let k such that
-A1: k <> 0;
-  let w be Element of Seg k;
-  reconsider z=k as Element of NAT by ORDINAL1:def 13;
-  Seg z is non empty Subset of NAT by A1,FINSEQ_1:5;
-  hence w in Seg k;
 end;
 
 theorem Th14:
@@ -210,7 +201,7 @@ A1: p^<*a*> = q^<*b*>;
   hence thesis by A1,FINSEQ_1:46;
 end;
 
-theorem Th21:
+theorem
   len p = i + 1 implies ex q,a st p = q^<*a*> by FINSEQ_1:63,CARD_1:47;
 
 theorem Th22:
@@ -261,7 +252,7 @@ A1: q = p|(Seg i);
       hence len q = len p by A1,Th23;
     end;
   end;
-  hence thesis by XXREAL_0:def 8;
+  hence thesis by XXREAL_0:def 9;
 end;
 
 theorem Th25:
@@ -622,7 +613,6 @@ end;
 definition
   let i be Nat;
   func idseq i -> FinSequence equals
-
   id Seg i;
   coherence by Th52;
 end;
@@ -637,17 +627,36 @@ proof
   hence thesis by FINSEQ_1:def 3;
 end;
 
+registration
+  cluster idseq 0 -> empty;
+  coherence
+  proof
+    len idseq 0 = 0 by Th55;
+    hence thesis;
+  end;
+end;
+
 canceled;
 
 theorem
-  i<>0 implies for k being Element of Seg i holds (idseq i).k = k
-  by Lm1,FUNCT_1:35;
+  for k being Element of Seg i holds (idseq i).k = k
+  proof
+    let k be Element of Seg i;
+    per cases;
+    suppose i <> 0;
+      hence thesis by FUNCT_1:35;
+    end;
+    suppose
+A2:   i = 0;
+      then
+A1:   k = 0 by SUBSET_1:def 2;
+      dom(idseq i) = 0 by A2;
+      hence thesis by A1,FUNCT_1:def 4;
+    end;
+  end;
 
 theorem
-  idseq 0 = {}
-proof len idseq 0 = 0 by Th55;
-  hence thesis;
-end;
+  idseq 0 = {};
 
 theorem Th59:
   idseq 1 = <*1*>
@@ -661,8 +670,8 @@ theorem Th60:
 proof
   set p = idseq (i+1);
 A1: len p = i + 1 by Th55;
-  then consider q being FinSequence , a being set such that
-A2: p = q^<*a*> by FINSEQ_1:63,CARD_1:47;
+  consider q being FinSequence , a being set such that
+A2: p = q^<*a*> by FINSEQ_1:63;
 A3: len p = len q + 1 by A2,Th19;
   p.(i+1) = i+1 by FINSEQ_1:6,FUNCT_1:35;
   then
@@ -721,12 +730,17 @@ proof
   hence p is FinSequence by FINSEQ_1:def 2;
 end;
 
+registration
+  let k, a;
+  cluster (Seg k) --> a -> FinSequence-like;
+  coherence by Th66;
+end;
+
 definition
   let i be Nat, a be set;
   func i |-> a -> FinSequence equals
-
   Seg i --> a;
-  coherence by Th66;
+  coherence;
 end;
 
 canceled 2;
@@ -741,15 +755,11 @@ end;
 canceled;
 
 theorem
-  k<>0 implies
-   for d being set, w being Element of Seg k holds (k |-> d).w = d
-  by Lm1,FUNCOP_1:13;
+  for d being set, w being set st w in Seg k holds (k |-> d).w = d
+  by FUNCOP_1:13;
 
-theorem Th72:
-  0 |-> a = {}
-proof len(0 |-> a) = 0 by Th69;
-  hence thesis;
-end;
+theorem
+  0 |-> a = {};
 
 theorem Th73:
   1 |-> a = <*a*>
@@ -763,13 +773,13 @@ theorem Th74:
 proof
   set p = (i+1) |-> a;
 A1: len p = i + 1 by Th69;
-  then consider q being FinSequence , x being set such that
-A2: p = q^<*x*> by FINSEQ_1:63,CARD_1:47;
+  consider q being FinSequence , x being set such that
+A2: p = q^<*x*> by FINSEQ_1:63;
 A3: len p = len q + 1 by A2,Th19;
 A4: p.(i+1) = a by FINSEQ_1:6,FUNCOP_1:13;
   now per cases;
     suppose i = 0;
-      then q = {} & len (i |-> a) = 0 by A1,A3,Th69;
+      then q = {} & len (i |-> a) = 0 by A1,A3;
       hence q = i |-> a;
     end;
     suppose
@@ -777,7 +787,7 @@ A5:   i <> 0;
 A6:   dom q = Seg len q by FINSEQ_1:def 3;
       then i in dom q by A1,A3,A5,FINSEQ_1:5;
       then q.i in rng q & Seg(i + 1) <> {} & p = Seg(i + 1) --> a
-      by FINSEQ_1:6,FUNCT_1:def 5;
+      by FUNCT_1:def 5;
       then rng q <> {} & rng q c= rng p & rng p = {a}
       by A2,FINSEQ_1:42,FUNCOP_1:14;
       then rng q = {a} by ZFMISC_1:39;
@@ -858,7 +868,7 @@ A1: [:{a},rng p:] c= dom F;
   rng q c= {a} by FUNCOP_1:19;
   then rng <:q,p:> c= [:rng q,rng p:] & [:rng q,rng p:] c= [:{a},rng p:]
   by FUNCT_3:71,ZFMISC_1:118;
-  then dom p = dom p & dom q = dom p & rng <:q,p:> c= [:{a},rng p:]
+  then dom q = dom p & rng <:q,p:> c= [:{a},rng p:]
   by FUNCOP_1:19,XBOOLE_1:1;
   then dom <:q,p:> = dom p & F[;](a,p) = F*<:q,p:> & rng <:q,p:> c= dom F
   by A1,FUNCOP_1:def 5,FUNCT_3:70,XBOOLE_1:1;
@@ -981,7 +991,7 @@ proof
   reconsider r = F.:(<*>D,p'),r' = F.:(p,<*>D') as FinSequence of E by Th84;
   len(<*>D) = 0 & len(<*>D') = 0;
   then len r = min(0,len p') & len r' = min(len p,0) by Th85;
-  hence thesis by XXREAL_0:def 8;
+  hence thesis by XXREAL_0:def 9;
 end;
 
 theorem
@@ -1806,7 +1816,7 @@ theorem
 proof
   defpred P[Nat] means (i+$1)|->x = (i|->x)^($1|->x);
   (i+0)|->x = (i|->x)^{} by FINSEQ_1:47
-    .= (i|->x)^(0|->x) by Th72;
+    .= (i|->x)^(0|->x);
   then
 A1: P[0];
 A2: for j st P[j] holds P[j+1]

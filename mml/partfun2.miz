@@ -212,7 +212,7 @@ proof
   assume
 A1: d in dom F /\ SD;
   then
-A2: d in dom F & d in SD by XBOOLE_0:def 3;
+A2: d in dom F & d in SD by XBOOLE_0:def 4;
   then
 A3: (id SD)/.d in dom F by Th12;
   d in dom id SD by A2,RELAT_1:71;
@@ -418,13 +418,13 @@ proof
 A1: g = f|X;
     then
 A2: dom g = dom f /\ X & for x st x in dom g holds
-    (g qua Function).x = (f qua Function).x by RELAT_1:90,FUNCT_1:70;
+    (g qua Function).x = (f qua Function).x by FUNCT_1:70,RELAT_1:90;
     thus dom g = dom f /\ X by A1,RELAT_1:90;
     let c;
     assume
 A3: c in dom g;
     then
-A4: c in dom f by A2,XBOOLE_0:def 3;
+A4: c in dom f by A2,XBOOLE_0:def 4;
     (g qua Function).c = (f qua Function).c by A1,A3,FUNCT_1:70;
     then g/.c = (f qua Function).c by A3,PARTFUN1:def 8;
     hence thesis by A4,PARTFUN1:def 8;
@@ -436,7 +436,7 @@ A5: dom g = dom f /\ X & for c st c in dom g holds g/.c = f/.c;
     assume
 A6: x in dom g;
     then
-A7: x in dom f by A5,XBOOLE_0:def 3;
+A7: x in dom f by A5,XBOOLE_0:def 4;
     reconsider y=x as Element of C by A6;
     g/.y = f/.y by A5,A6;
     then (g qua Function).y = f/.y by A6,PARTFUN1:def 8;
@@ -459,7 +459,7 @@ theorem
   c in dom f & c in X implies f|X/.c = f/.c
 proof
   assume c in dom f & c in X;
-  then c in dom f /\ X by XBOOLE_0:def 3;
+  then c in dom f /\ X by XBOOLE_0:def 4;
   hence thesis by Th34;
 end;
 
@@ -688,7 +688,7 @@ A1: f tolerates g;
     assume
 A2: c in dom f /\ dom g;
     then
-A3: c in dom f & c in dom g by XBOOLE_0:def 3;
+A3: c in dom f & c in dom g by XBOOLE_0:def 4;
     (f qua Function).c = (g qua Function).c by A1,A2,PARTFUN1:def 6;
     then f/.c = (g qua Function).c by A3,PARTFUN1:def 8;
     hence thesis by A3,PARTFUN1:def 8;
@@ -700,7 +700,7 @@ A4: for c st c in dom f /\ dom g holds f/.c = g/.c;
     assume
 A5: x in dom f /\ dom g;
     then
-A6: x in dom f & x in dom g by XBOOLE_0:def 3;
+A6: x in dom f & x in dom g by XBOOLE_0:def 4;
     reconsider x1=x as Element of C by A5;
     f/.x1 = g/.x1 by A4,A5;
     then (f qua Function).x = g/.x1 by A6,PARTFUN1:def 8;
@@ -744,7 +744,7 @@ A4: for x holds x in X iff x in D() & R[x] from XBOOLE_0:sch 1;
     hence d in dom f implies ex c be Element of C() st P[d,c] by A4;
     assume ex c be Element of C() st P[d,c];
     then d in X & d in D() by A4;
-    then d in dom g /\ X by A3,XBOOLE_0:def 3;
+    then d in dom g /\ X by A3,XBOOLE_0:def 4;
     hence thesis by RELAT_1:90;
   end;
   let d be Element of D();
@@ -903,11 +903,11 @@ end;
 
 definition let C,D,f;
  redefine attr f is constant means
-:Defx:  ex d st for c st c in dom f holds f/.c = d;
+:Defx:  ex d st for c st c in dom f holds f.c = d;
  compatibility
   proof
    thus f is constant implies
-   ex d st for c st c in dom f holds f/.c = d
+   ex d st for c st c in dom f holds f.c = d
    proof assume
 Z:    f is constant;
     per cases;
@@ -915,7 +915,7 @@ Z:    f is constant;
 S:   dom f = {};
      consider d;
      take d;
-     thus for c st c in dom f holds f/.c = d by S;
+     thus for c st c in dom f holds f.c = d by S;
     end;
     suppose dom f <> {};
      then consider c0 being set such that
@@ -925,20 +925,16 @@ W:   c0 in dom f by XBOOLE_0:def 1;
     let c;
     assume
 Z1:   c in dom f;
-    hence f/.c = f.c by PARTFUN1:def 8
-        .= f.c0 by W,Z,FUNCT_1:def 16,Z1
+    hence f.c = f.c0 by W,Z,Z1,FUNCT_1:def 16
         .= d by W,PARTFUN1:def 8;
     end;
    end;
    given d such that
-G1: for c st c in dom f holds f/.c = d;
+G1: for c st c in dom f holds f.c = d;
    let x,y be set such that
 Z1:  x in dom f and
 Z2:  y in dom f;
-   thus f.x = f/.x by Z1,PARTFUN1:def 8
-         .= d by Z1,G1
-         .= f/.y by Z2,G1
-         .=f.y by Z2,PARTFUN1:def 8;
+   thus f.x = d by Z1,G1 .=f.y by Z2,G1;
 
   end;
 end;
@@ -950,17 +946,16 @@ theorem Thx:
       ex d st for c st c in X /\ dom f holds f/.c = d
     proof
      given d such that
-G:    for c st c in dom(f|X) holds f|X/.c = d;
+G:    for c st c in dom(f|X) holds (f|X).c = d;
      take d;
      let c;
      assume
 Z:    c in X /\ dom f;
       then
 A:     c in dom(f|X) by RELAT_1:90;
-      c in dom f by Z,XBOOLE_0:def 3;
+      c in dom f by Z,XBOOLE_0:def 4;
      hence f/.c = f.c by PARTFUN1:def 8
             .= (f|X).c by A,FUNCT_1:70
-            .= f|X/.c by A,PARTFUN1:def 8
             .= d by G,A;
     end;
    given d such that
@@ -972,9 +967,8 @@ Z:  c in dom(f|X);
     then
 A:   c in X /\ dom f by RELAT_1:90;
     then
-B:   c in dom f by XBOOLE_0:def 3;
-   thus f|X/.c = (f|X).c by PARTFUN1:def 8,Z
-        .= f.c by Z,FUNCT_1:70
+B:   c in dom f by XBOOLE_0:def 4;
+   thus (f|X).c = f.c by Z,FUNCT_1:70
         .= f/.c by B,PARTFUN1:def 8
         .= d by G,A;
   end;
@@ -1009,7 +1003,7 @@ A3:   X /\ dom f = {};
     suppose
 A4:   X /\ dom f <> {};
       consider x being Element of X /\ dom f;
-      x in dom f by A4,XBOOLE_0:def 3;
+      x in dom f by A4,XBOOLE_0:def 4;
       then reconsider x as Element of C;
       for c holds c in X /\ dom f implies f/.c = f/.x by A2;
       hence thesis by Thx;
@@ -1047,7 +1041,7 @@ A3:   y in dom (f|X) & ((f|X) qua Function).y = x by FUNCT_1:def 5;
       let x such that
 A4:   x in {d};
       consider y being Element of X /\ dom f;
-      y in dom f by A1,XBOOLE_0:def 3;
+      y in dom f by A1,XBOOLE_0:def 4;
       then reconsider y as Element of C;
 A5:   dom (f|X) = X /\ dom f by RELAT_1:90;
       then f|X/.y = f/.y by A1,Th32
@@ -1060,8 +1054,10 @@ A5:   dom (f|X) = X /\ dom f by RELAT_1:90;
 A6: rng (f|X) = {d};
   take d;
   let c;
-  assume c in dom (f|X);
+  assume
+Z:   c in dom (f|X);
   then f|X/.c in {d} by A6,Th4;
+  then (f|X).c in {d} by Z,PARTFUN1:def 8;
   hence thesis by TARSKI:def 1;
 end;
 
@@ -1075,8 +1071,8 @@ A2: for c st c in X /\ dom f holds f/.c = d by Thx;
   now
     let c;
     assume c in Y /\ dom f;
-    then c in Y & c in dom f by XBOOLE_0:def 3;
-    then c in X /\ dom f by A1,XBOOLE_0:def 3;
+    then c in Y & c in dom f by XBOOLE_0:def 4;
+    then c in X /\ dom f by A1,XBOOLE_0:def 4;
     hence f/.c = d by A2;
   end;
   hence thesis by Thx;
@@ -1122,13 +1118,13 @@ proof
     suppose
 A1:   {x} /\ dom f <> {};
       consider y being Element of {x} /\ dom f;
-      y in {x} & y in dom f by A1,XBOOLE_0:def 3;
+      y in {x} & y in dom f by A1,XBOOLE_0:def 4;
       then reconsider x1=x as Element of C by TARSKI:def 1;
       now
         take d = f/.x1;
         let c;
         assume c in {x} /\ dom f;
-        then c in {x} by XBOOLE_0:def 3;
+        then c in {x} by XBOOLE_0:def 4;
         hence f/.c = f/.x1 by TARSKI:def 1;
       end;
       hence f|{x} is constant by Thx;
@@ -1148,34 +1144,36 @@ A2: for c st c in X /\ dom f holds f/.c = d1 by Thx;
   consider d2 such that
 A3: for c st c in Y /\ dom f holds f/.c = d2 by A1,Thx;
   consider x being Element of X /\ Y /\ dom f;
-A4: x in X /\ Y & x in dom f by A1,XBOOLE_0:def 3;
+A4: x in X /\ Y & x in dom f by A1,XBOOLE_0:def 4;
   then reconsider x as Element of C;
   take d1;
-  x in X & x in dom f by A4,XBOOLE_0:def 3;
-  then x in X /\ dom f by XBOOLE_0:def 3;
+  x in X & x in dom f by A4,XBOOLE_0:def 4;
+  then x in X /\ dom f by XBOOLE_0:def 4;
   then
 A5: f/.x = d1 by A2;
-  x in Y & x in dom f by A4,XBOOLE_0:def 3;
-  then x in Y /\ dom f by XBOOLE_0:def 3;
+  x in Y & x in dom f by A4,XBOOLE_0:def 4;
+  then x in Y /\ dom f by XBOOLE_0:def 4;
   then
 A6: d1 = d2 by A3,A5;
   let c;
-  assume c in dom(f|(X \/ Y));
+  assume
+Z:  c in dom(f|(X \/ Y));
   then
 X:   c in (X \/ Y) /\ dom f by RELAT_1:90;
   then
-A7: c in X \/ Y & c in dom f by XBOOLE_0:def 3;
-  now per cases by A7,XBOOLE_0:def 2;
+A7: c in X \/ Y & c in dom f by XBOOLE_0:def 4;
+  now per cases by A7,XBOOLE_0:def 3;
     suppose c in X;
-      then c in X /\ dom f by A7,XBOOLE_0:def 3;
+      then c in X /\ dom f by A7,XBOOLE_0:def 4;
       hence f/.c = d1 by A2;
     end;
     suppose c in Y;
-      then c in Y /\ dom f by A7,XBOOLE_0:def 3;
+      then c in Y /\ dom f by A7,XBOOLE_0:def 4;
       hence f/.c = d1 by A3,A6;
     end;
   end;
-  hence (f|(X \/ Y))/.c = d1 by X,Th34;
+  then (f|(X \/ Y))/.c = d1 by X,Th34;
+  hence (f|(X \/ Y)).c = d1 by Z,PARTFUN1:def 8;
 end;
 
 theorem
@@ -1186,17 +1184,19 @@ proof
 A1: for c st c in Y /\ dom f holds f/.c = d by Thx;
   take d;
   let c;
-  assume c in dom (f|X|Y);
+  assume
+Z:  c in dom (f|X|Y);
    then
 X:  c in Y /\ dom (f|X) by RELAT_1:90;
   then
-A2: c in Y & c in dom (f|X) by XBOOLE_0:def 3;
+A2: c in Y & c in dom (f|X) by XBOOLE_0:def 4;
   then c in Y & c in dom f /\ X by RELAT_1:90;
-  then c in Y & c in dom f by XBOOLE_0:def 3;
-  then c in Y /\ dom f by XBOOLE_0:def 3;
+  then c in Y & c in dom f by XBOOLE_0:def 4;
+  then c in Y /\ dom f by XBOOLE_0:def 4;
   then f/.c = d by A1;
-  then f|X/.c = d by A2,Th32;
- hence f|X|Y/.c = d by Th34,X;
+  then (f|X)/.c = d by A2,Th32;
+  then (f|X|Y)/.c = d by Th34,X;
+ hence (f|X|Y).c = d by Z,PARTFUN1:def 8;
 end;
 
 theorem
@@ -1204,12 +1204,14 @@ theorem
 proof
   take d;
   let c;
-  assume c in dom((SC --> d)|SC);
+  assume
+Z:  c in dom((SC --> d)|SC);
   then
 X:   c in SC /\ dom (SC --> d) by RELAT_1:90;
-  then c in SC by XBOOLE_0:def 3;
+  then c in SC by XBOOLE_0:def 4;
   then (SC --> d)/.c = d by Th48;
-  hence ((SC --> d)|SC)/.c = d by X,Th34;
+  then ((SC --> d)|SC)/.c = d by X,Th34;
+  hence ((SC --> d)|SC).c = d by Z,PARTFUN1:def 8;
 end;
 
 ::
@@ -1303,7 +1305,7 @@ proof
 A1: f1 = f /\ g & c in dom f1;
   then [c,(f1 qua Function).c] in f1 by FUNCT_1:8;
   then [c,(f1 qua Function).c] in f & [c,(f1 qua Function).c] in g
-  by A1,XBOOLE_0:def 3;
+  by A1,XBOOLE_0:def 4;
   then
 A2: c in dom f & c in dom g by FUNCT_1:8;
   (f1 qua Function).c = (f qua Function).c &
@@ -1319,7 +1321,7 @@ proof
   assume
 A1: c in dom f & f1 = f \/ g;
   then [c,(f qua Function).c] in f by FUNCT_1:8;
-  then [c,(f qua Function).c] in f1 by A1,XBOOLE_0:def 2;
+  then [c,(f qua Function).c] in f1 by A1,XBOOLE_0:def 3;
   then
 A2: c in dom f1 by FUNCT_1:8;
   (f1 qua Function).c = (f qua Function).c by A1,GRFUNC_1:34;
@@ -1333,7 +1335,7 @@ proof
   assume
 A1: c in dom g & f1 = f \/ g;
   then [c,(g qua Function).c] in g by FUNCT_1:8;
-  then [c,(g qua Function).c] in f1 by A1,XBOOLE_0:def 2;
+  then [c,(g qua Function).c] in f1 by A1,XBOOLE_0:def 3;
   then
 A2: c in dom f1 by FUNCT_1:8;
   (f1 qua Function).c = (g qua Function).c by A1,GRFUNC_1:35;
@@ -1348,16 +1350,16 @@ proof
 A1: c in dom f1 & f1 = f \/ g;
   then [c,f1/.c] in f1 by Th65;
   then
-A2: [c,f1/.c] in f or [c,f1/.c] in g by A1,XBOOLE_0:def 2;
+A2: [c,f1/.c] in f or [c,f1/.c] in g by A1,XBOOLE_0:def 3;
   now per cases by A2,FUNCT_1:8;
     suppose c in dom f;
       then [c,f/.c] in f by Th65;
-      then [c,f/.c] in f1 by A1,XBOOLE_0:def 2;
+      then [c,f/.c] in f1 by A1,XBOOLE_0:def 3;
       hence thesis by Th65;
     end;
     suppose c in dom g;
       then [c,g/.c] in g by Th65;
-      then [c,g/.c] in f1 by A1,XBOOLE_0:def 2;
+      then [c,g/.c] in f1 by A1,XBOOLE_0:def 3;
       hence thesis by Th65;
     end;
   end;
@@ -1377,7 +1379,7 @@ A1: c in dom f & c in SC;
   assume [c,f/.c] in (f|SC);
   then c in dom (f|SC) by FUNCT_1:8;
   then c in dom f /\ SC by RELAT_1:90;
-  hence thesis by XBOOLE_0:def 3;
+  hence thesis by XBOOLE_0:def 4;
 end;
 
 theorem
@@ -1425,7 +1427,7 @@ A1: for c st c in X /\ dom f holds f/.c = d by Thx;
     let c;
     assume
 A2: c in X /\ dom f;
-    then c in dom f by XBOOLE_0:def 3;
+    then c in dom f by XBOOLE_0:def 4;
     hence f.c = f/.c by PARTFUN1:def 8
       .= d by A1,A2;
   end;
@@ -1433,14 +1435,16 @@ A2: c in X /\ dom f;
 A3: for c st c in X /\ dom f holds f.c = d;
   take d;
   let c;
-  assume c in dom(f|X);
+  assume
+Z:  c in dom(f|X);
    then
 A4: c in X /\ dom f by RELAT_1:90;
   then
-B4: c in dom f by XBOOLE_0:def 3;
+B4: c in dom f by XBOOLE_0:def 4;
   thus
-   (f|X)/.c = f/.c by A4,Th34
-    .= f.c by PARTFUN1:def 8,B4
+   (f|X).c = (f|X)/.c by Z,PARTFUN1:def 8
+    .= f/.c by A4,Th34
+    .= f.c by B4,PARTFUN1:def 8
     .= d by A3,A4;
 end;
 
@@ -1478,7 +1482,7 @@ A4:   X /\ dom f <> {};
         let c;
         assume
 A5:     c in X /\ dom f;
-A6:     x in dom f by A4,XBOOLE_0:def 3;
+A6:     x in dom f by A4,XBOOLE_0:def 4;
         hence f.c = f.x by A2,A5
           .= f/.x by A6,PARTFUN1:def 8;
       end;

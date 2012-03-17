@@ -8,16 +8,17 @@ environ
 
  vocabularies FUNCT_1, COMPLEX1, RELAT_1, BOOLE, PARTFUN1, SEQ_1, ARYTM_1,
       XCMPLX_0, ARYTM, VALUED_0, MEMBERED, RAT_1, INT_1, ORDINAL2, SQUARE_1,
-      ARYTM_3, ABSVALUE, FINSEQ_1, RELOC, FUNCT_4, FINSET_1;
+      ARYTM_3, ABSVALUE, FINSEQ_1, RELOC, FUNCT_4, FINSET_1, NORMSP_1,
+      FRECHET2, SUPINF_1, SEQM_3, PROB_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, XCMPLX_0, NUMBERS,
       COMPLEX1, XXREAL_0, XREAL_0, RAT_1, INT_1, INT_2, SQUARE_1, RELAT_1,
-      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, MEMBERED,
-      VALUED_0, NAT_1;
+      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_4, FINSEQ_1, MEMBERED, NAT_1,
+      VALUED_0;
  constructors PARTFUN1, RAT_1, VALUED_0, SQUARE_1, MEMBERED, INT_2, FINSEQ_1,
-      NAT_1, FUNCT_4;
+      NAT_1, FUNCT_4, NAT_D;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
-      MEMBERED, VALUED_0, RAT_1, INT_1, NAT_1, FUNCT_1, FINSET_1;
- requirements NUMERALS, SUBSET, BOOLE, ARITHM;
+      MEMBERED, VALUED_0, RAT_1, INT_1, NAT_1, FUNCT_1, FINSET_1, XXREAL_0;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
 
 
 begin
@@ -1300,3 +1301,29 @@ theorem :: VALUED_1:27
 registration let p be finite Function, k be Element of NAT;
  cluster Shift(p,k) -> finite;
 end;
+
+reserve e1,e2 for ext-real number;
+
+definition let X be non empty ext-real-membered set, s be sequence of X;
+  redefine attr s is increasing means
+:: VALUED_1:def 13
+  for n being Nat holds s.n < s.(n+1);
+  redefine attr s is decreasing means
+:: VALUED_1:def 14
+  for n being Nat holds s.n > s.(n+1);
+  redefine attr s is non-decreasing means
+:: VALUED_1:def 15
+  for n being Nat holds s.n <= s.(n+1);
+  redefine attr s is non-increasing means
+:: VALUED_1:def 16
+  for n being Nat holds s.n >= s.(n+1);
+end;
+
+:: from KURATO_2, 2008.09.05, A.T.
+
+scheme :: VALUED_1:sch 1
+ SubSeqChoice { X() -> non empty set, S() -> sequence of X(), P[set]} :
+  ex S1 being subsequence of S() st for n being Element of NAT holds P[S1.n]
+provided
+ for n being Element of NAT ex m being Element of NAT st n <= m & P[S().m];
+

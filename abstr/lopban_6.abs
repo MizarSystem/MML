@@ -1,0 +1,127 @@
+:: Open Mapping Theorem
+::  by Hideki Sakurai , Hisayoshi Kunimune and Yasunari Shidama
+:: 
+:: Received September 23, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, BOOLE, RLVECT_1, FUNCT_1, PRE_TOPC, ARYTM, ABSVALUE,
+      ARYTM_1, FCONT_1, FINSEQ_4, ARYTM_3, RELAT_1, SEQ_2, LATTICES, OPPCAT_1,
+      ORDINAL2, NORMSP_1, PREPOWER, METRIC_1, NORMSP_2, PROB_1, RSSPACE3,
+      LOPBAN_1, SUPINF_2, JORDAN1, MCART_1, GROUP_1, XREAL_0, SGRAPH1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, PARTFUN1, MCART_1, FUNCOP_1, PRE_TOPC, DOMAIN_1, BINOP_1,
+      ORDINAL1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1,
+      STRUCT_0, XXREAL_0, SEQ_1, SEQ_2, INT_1, NEWTON, PREPOWER, SERIES_1,
+      RLVECT_1, FRAENKEL, CONVEX1, METRIC_1, RUSUB_4, NORMSP_1, NORMSP_2,
+      RSSPACE3, RLTOPSP1, LOPBAN_1, NFCONT_1, LOPBAN_5, KURATO_2, T_0TOPSP;
+ constructors XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL2, TOPS_1, REAL_1, DOMAIN_1,
+      SEQ_1, SEQ_2, PCOMPS_1, RUSUB_4, CONVEX1, RLTOPSP1, NFCONT_1, NAT_1,
+      FUNCT_1, FUNCT_2, PSCOMP_1, PARTFUN1, NEWTON, PREPOWER, SERIES_1,
+      NORMSP_2, RSSPACE3, LOPBAN_1, LOPBAN_5, T_0TOPSP;
+ registrations REAL_1, NUMBERS, ORDINAL2, XREAL_0, ZFMISC_1, XBOOLE_0,
+      METRIC_1, SERIES_1, XXREAL_0, ORDINAL1, RELSET_1, STRUCT_0, MEMBERED,
+      RLTOPSP1, TOPS_1, KURATO_2, SUBSET_1, NAT_1, RLVECT_1, NORMSP_1,
+      NORMSP_2, FUNCT_1, FUNCT_2, FUNCOP_1, RSSPACE3, SEQM_3, PARTFUN1,
+      MONOID_0, PROB_1, LOPBAN_1, LOPBAN_5, T_0TOPSP;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+theorem :: LOPBAN_6:1
+ for x,y be real number st 0<=x & x<y
+   ex s0 be real number st 0<s0 & x < y/(1+s0) & y/(1+s0) < y;
+
+scheme :: LOPBAN_6:sch 1
+ RecExD3{D() -> non empty set, A() -> Element of D(),
+            B() -> Element of D(), P[set,set,set,set]}:
+   ex f being Function of NAT,D() st
+     f.0 = A() & f.1 = B() &
+     for n being Element of NAT holds P[n,f.n,f.(n+1),f.(n+2)]
+ provided
+    for n being Element of NAT for x,y being Element of D()
+       ex z being Element of D() st P[n,x,y,z];
+
+ reserve X, Y for RealNormSpace;
+
+theorem :: LOPBAN_6:2
+  for y1 be Point of X, r be real number
+    holds Ball(y1,r) = y1 + Ball(0.X,r);
+
+theorem :: LOPBAN_6:3
+  for r be real number, a be Real st 0 < a
+    holds Ball(0.X,a*r) = a * Ball(0.X,r);
+
+theorem :: LOPBAN_6:4
+  for T be LinearOperator of X,Y,
+    B0,B1 be Subset of X holds T.:(B0+B1) = T.:B0+T.:B1;
+
+theorem :: LOPBAN_6:5
+  for T be LinearOperator of X,Y,
+      B0 be Subset of X, a be Real holds T.:(a*B0) = a*T.:B0;
+
+theorem :: LOPBAN_6:6
+  for T be LinearOperator of X,Y, B0 be Subset of X,
+      x1 be Point of X holds T.:(x1+ B0) = T.x1 + T.:B0;
+
+theorem :: LOPBAN_6:7
+  for V,W be Subset of X,
+      V1,W1 be Subset of LinearTopSpaceNorm X st V=V1 & W=W1
+     holds V+W=V1+W1;
+
+theorem :: LOPBAN_6:8
+  for V be Subset of X,x be Point of X,
+    V1 be Subset of LinearTopSpaceNorm X,
+    x1 be Point of LinearTopSpaceNorm X st V=V1 & x=x1
+    holds x+V=x1+V1;
+
+theorem :: LOPBAN_6:9
+  for V be Subset of X,a be Real,
+      V1 be Subset of LinearTopSpaceNorm X st V=V1 holds a*V=a*V1;
+
+theorem :: LOPBAN_6:10
+  for V be Subset of TopSpaceNorm X,
+    V1 be Subset of LinearTopSpaceNorm X st V=V1
+     holds Cl(V)=Cl(V1);
+
+theorem :: LOPBAN_6:11
+  for x be Point of X, r be real number
+    holds Ball(0.X,r)=(-1)*Ball(0.X,r);
+
+theorem :: LOPBAN_6:12
+  for x be Point of X,r be real number,
+      V be Subset of LinearTopSpaceNorm X
+     st V = Ball(x,r) holds V is convex;
+
+theorem :: LOPBAN_6:13
+  for x be Point of X,r be real number,
+    T be LinearOperator of X,Y,
+    V be Subset of LinearTopSpaceNorm Y
+    st V = T.: Ball(x,r) holds V is convex;
+
+theorem :: LOPBAN_6:14
+  for x be Point of X, r, s be real number st r <= s
+  holds Ball(x,r) c= Ball(x,s);
+
+:: Open Mapping lemma
+
+theorem :: LOPBAN_6:15
+  for X be RealBanachSpace, Y be RealNormSpace,
+    T be bounded LinearOperator of X,Y,
+    r be real number,
+    BX1 be Subset of LinearTopSpaceNorm X,
+    TBX1,BYr be Subset of LinearTopSpaceNorm Y
+  st r>0 & BX1=Ball(0.X,1) & BYr=Ball(0.Y,r )
+    & TBX1=T.: Ball(0.X,1) & BYr c= Cl (TBX1)
+  holds BYr c= TBX1;
+
+:: Open Mapping Theorem
+
+theorem :: LOPBAN_6:16
+  for X, Y be RealBanachSpace,
+    T be bounded LinearOperator of X,Y,
+    T1 be Function of LinearTopSpaceNorm X,LinearTopSpaceNorm Y
+    st T1=T & T1 is onto holds T1 is open;
+

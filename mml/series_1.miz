@@ -10,18 +10,19 @@ environ
       ABSVALUE, INT_1, SEQM_3, SUPINF_2, RLVECT_1, PROB_1, LATTICES, PREPOWER,
       SERIES_1, GROUP_1, FUNCOP_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
-      NAT_1, VALUED_1, SEQ_1, SEQ_2, FUNCT_2, SEQM_3, INT_1, NEWTON, PREPOWER,
+      NAT_1, VALUED_0,
+      VALUED_1, SEQ_1, SEQ_2, FUNCT_2, SEQM_3, INT_1, NEWTON, PREPOWER,
       POWER, FUNCOP_1, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2, SEQM_3, NEWTON,
-      PREPOWER, POWER, PARTFUN1, SEQ_1, VALUED_1;
+      PREPOWER, POWER, PARTFUN1, SEQ_1, VALUED_1, SEQ_4;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
       MEMBERED, SEQM_3, NEWTON, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, POWER,
-      FUNCOP_1, SEQ_2;
+      FUNCOP_1, SEQ_2, SEQ_4;
  requirements REAL, NUMERALS, SUBSET, ARITHM, BOOLE;
  definitions VALUED_1;
  theorems SEQ_1, SEQ_2, SEQM_3, SEQ_4, REAL_2, NAT_1, RFUNCT_2,
       ABSVALUE, INT_1, PREPOWER, POWER, SCHEME1, FUNCT_2, NEWTON, XCMPLX_1,
-      FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
+      FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, VALUED_0;
  schemes NAT_1, SEQ_1, FUNCT_2;
 
 begin
@@ -158,14 +159,15 @@ A2: for n holds s.n=a to_power (n+1);
       then
 A3:   a = 0 by ABSVALUE:7;
 A4:   now
-        let n;
+        let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
         a to_power (n+1) = 0 by A3,POWER:def 2;
-        hence s.n = 0 by A2;
+        hence s.n = 0 by A2,X;
       end;
       then
-A5:   s is constant by SEQM_3:def 6;
+A5:   s is constant by VALUED_0:def 18;
       s.0 = 0 by A4;
-      hence s is convergent & lim s = 0 by A5,SEQ_4:39,41;
+      hence s is convergent & lim s = 0 by A5,SEQ_4:41;
     end;
     suppose not abs(a) = 0;
       then
@@ -431,7 +433,7 @@ A3: Partial_Sums(s^\n)^\1 is convergent by SEQ_4:33;
 A4: s^\(n+1)=(s^\n)^\1 by NAT_1:49;
     reconsider s1 = NAT --> (s^\n).0 as Real_Sequence;
 A5: for k holds s1.k = (s^\n).0 by FUNCOP_1:13;
-A6: s1 is convergent by SEQ_4:39;
+A6: s1 is convergent;
     Partial_Sums(s^\n^\1) = (Partial_Sums(s^\n)^\1) - s1 by A5,Th14;
     then Partial_Sums(s^\n^\1) is convergent by A3,A6,SEQ_2:25;
     hence thesis by A4,Def2;
@@ -448,7 +450,7 @@ A1: s^\n is summable;
   then
 A2: Partial_Sums(s^\n^\1) is convergent by Def2;
   reconsider s1 = NAT --> Partial_Sums(s).n as Real_Sequence;
-A3: s1 is convergent by SEQ_4:39;
+A3: s1 is convergent;
   for k holds (Partial_Sums(s)^\(n+1)).k = Partial_Sums(s^\(n+1)).k + s1.k
   proof
 A4: Partial_Sums(s^\(n+1)).0 = (s^\(n+1)).0 by Def1
@@ -527,7 +529,7 @@ A3: for k holds s1.k= s.0 by FUNCOP_1:13;
 A4: Partial_Sums(s) is convergent by A1,Def2;
     then
 A5: Partial_Sums(s)^\1 is convergent by SEQ_4:33;
-A6: s1 is convergent by SEQ_4:39;
+A6: s1 is convergent;
     Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1 by A3,Th14;
     then lim Partial_Sums(s^\1) = lim (Partial_Sums(s)^\1) - lim s1 by A5,A6,
     SEQ_2:26
@@ -544,7 +546,7 @@ A7: for n st X[n] holds X[n+1]
 A8: Sum(s) = Partial_Sums(s).n + Sum(s^\(n+1));
     reconsider s1 = NAT --> (s^\(n+1)).0 as Real_Sequence;
 A9: for k holds s1.k= (s^\(n+1)).0 by FUNCOP_1:13;
-A10: s1 is convergent by SEQ_4:39;
+A10: s1 is convergent;
     s^\(n+1) is summable by A1,Th15;
     then
 A11: Partial_Sums(s^\(n+1)) is convergent by Def2;
@@ -585,12 +587,7 @@ proof
   assume for n holds 0<=s.n;
   then
 A1: Partial_Sums(s) is non-decreasing by Th19;
-  thus Partial_Sums(s) is bounded_above implies s is summable
-  proof
-    assume Partial_Sums(s) is bounded_above;
-    then Partial_Sums(s) is convergent by A1,SEQ_4:51;
-    hence thesis by Def2;
-  end;
+  thus Partial_Sums(s) is bounded_above implies s is summable by A1,Def2;
   assume s is summable;
   then Partial_Sums(s) is convergent by Def2;
   then Partial_Sums(s) is bounded by SEQ_2:27;
@@ -1468,7 +1465,7 @@ A21: s2.n = 2 to_power n * s1.(2 to_power n) by A15
     hence s3.n = n-root (2 to_power (1-p) to_power n) by A18;
   end;
 A22: now
-    let n;
+    let n be Nat;
 A23: n+1>=0+1 by XREAL_1:8;
 A24: 2 to_power (1-p) <> 0 & 2 to_power (1-p) >= 0 by POWER:39; thus
     (s3^\1).n = s3.(n+1) by NAT_1:def 3
@@ -1476,13 +1473,13 @@ A24: 2 to_power (1-p) <> 0 & 2 to_power (1-p) >= 0 by POWER:39; thus
       .= 2 to_power (1-p) by A23,A24,POWER:5;
   end;
   then
-A25: s3^\1 is constant by SEQM_3:def 6;
+A25: s3^\1 is constant by VALUED_0:def 18;
   then
-A26: s3 is convergent by SEQ_4:35,39;
+A26: s3 is convergent by SEQ_4:35;
   lim (s3^\1) = (s3^\1).0 by A25,SEQ_4:41
     .= 2 to_power (1-p) by A22;
   then
-A27: lim s3 = 2 to_power (1-p) by A25,SEQ_4:36,39;
+A27: lim s3 = 2 to_power (1-p) by A25,SEQ_4:36;
   1-p<0 & 2>1 by A1,REAL_2:105;
   then lim s3 < 1 by A27,POWER:41;
   then s2 is summable by A18,A19,A26,Th32;

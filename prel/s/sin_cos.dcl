@@ -15,12 +15,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
-<ArticleID name="VALUED_1"/>
 <ArticleID name="FCONT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -28,8 +26,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="NEWTON"/>
-<ArticleID name="POWER"/>
-<ArticleID name="SERIES_1"/>
 <ArticleID name="COMSEQ_3"/>
 <ArticleID name="SIN_COS"/>
 </Signature>
@@ -44,7 +40,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="253">
+<Func kind="K" nr="185">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -59,7 +55,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="258">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -68,7 +64,7 @@
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="83"/>
 </Adjective>
-<Adjective nr="53"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="3">
@@ -79,7 +75,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="272">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -94,7 +90,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="275">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,7 +105,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="280">
+<Func kind="K" nr="212">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -118,38 +114,38 @@
 </FCluster>
 <FCluster aid="SIN_COS" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="271"/>
+<Func kind="K" nr="203"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="40"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="274"/>
+<Func kind="K" nr="206"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="40"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SIN_COS" nr="8">
 <ArgTypes/>
-<Func kind="K" nr="279"/>
+<Func kind="K" nr="211"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="10">
 <Func kind="K" nr="82"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="40"/>
+<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 </Registrations>

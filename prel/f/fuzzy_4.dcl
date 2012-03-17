@@ -9,8 +9,12 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="FUZZY_1"/>
 </Signature>
@@ -21,7 +25,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

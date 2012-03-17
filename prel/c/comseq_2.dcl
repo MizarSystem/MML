@@ -16,6 +16,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 <ArticleID name="INT_1"/>
@@ -44,7 +45,7 @@
 <Func kind="K" nr="90"/>
 </Adjective>
 <Adjective nr="23"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster aid="COMSEQ_2" nr="2">
@@ -52,31 +53,6 @@
 <Typ kind="M" nr="4">
 <Cluster/>
 <Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="6"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="10">
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Adjective>
-<Adjective nr="11">
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Adjective>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-</Cluster>
-</RCluster>
-<RCluster aid="COMSEQ_2" nr="3">
-<ArgTypes/>
-<Typ kind="M" nr="4">
-<Cluster/>
-<Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Typ>
 <Cluster>
@@ -92,32 +68,7 @@
 <Func kind="K" nr="90"/>
 </Adjective>
 <Adjective nr="23"/>
-<Adjective nr="45"/>
-</Cluster>
-</RCluster>
-<RCluster aid="COMSEQ_2" nr="4">
-<ArgTypes/>
-<Typ kind="M" nr="4">
-<Cluster/>
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="7" value="false"/>
-<Adjective nr="10">
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Adjective>
-<Adjective nr="11">
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Adjective>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="36"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <FCluster aid="COMSEQ_2" nr="1">
@@ -139,7 +90,7 @@
 <Func kind="K" nr="90"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -160,19 +111,57 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="45"/>
+<Adjective nr="50"/>
 </Cluster>
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="175">
+<Func kind="K" nr="176">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="11">
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="89"/>
+</Adjective>
+<Adjective nr="37"/>
+</Cluster>
+<Typ kind="M" nr="5">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="11">
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="89"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="89"/>
+</Typ>
+</FCluster>
+<FCluster aid="COMSEQ_2" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="11">
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="90"/>
+</Adjective>
+<Adjective nr="50"/>
+</Cluster>
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="90"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="184">
 <Func kind="K" nr="93"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="45"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <CCluster aid="COMSEQ_2" nr="1">
@@ -183,7 +172,7 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="45"/>
+<Adjective nr="50"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -196,7 +185,7 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 <CCluster aid="COMSEQ_2" nr="2">
@@ -207,7 +196,7 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -220,7 +209,7 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="45" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -11,9 +11,11 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -30,7 +32,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="54"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="K" nr="63"/>
@@ -41,12 +43,12 @@
 <Func kind="K" nr="63"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="146">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 </Registrations>

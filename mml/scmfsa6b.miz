@@ -132,7 +132,7 @@ proof
   assume a in dom (I+*Start-At l);
   then a in dom I \/ dom Start-At l by FUNCT_4:def 1;
   then
-A1: a in dom I or a in dom Start-At l by XBOOLE_0:def 2;
+A1: a in dom I or a in dom Start-At l by XBOOLE_0:def 3;
 A2: dom I c= NAT by AMI_1:def 40;
   a in Int-Locations by SCMFSA_2:9;
   hence contradiction by A1,A2,Th9,SCMFSA_2:13,XBOOLE_0:3;
@@ -144,7 +144,7 @@ proof
   assume f in dom (I+*Start-At l);
   then f in dom I \/ dom Start-At l by FUNCT_4:def 1;
   then
-A1: f in dom I or f in dom Start-At l by XBOOLE_0:def 2;
+A1: f in dom I or f in dom Start-At l by XBOOLE_0:def 3;
 A2: dom I c= NAT by AMI_1:def 40;
   f in FinSeq-Locations by SCMFSA_2:10;
   hence contradiction by A1,A2,Th10,SCMFSA_2:14,XBOOLE_0:3;
@@ -236,9 +236,8 @@ A7: dom m = {insloc 0,insloc 1} by FUNCT_4:65;
     assume dom m /\ dom (Start-At insloc 0) is non empty;
     then consider x being set such that
 A8: x in dom m /\ dom (Start-At insloc 0) by XBOOLE_0:def 1;
-    x in dom m & x in dom (Start-At insloc 0) by A8,XBOOLE_0:def 3;
-    then (x=insloc 0 or x=insloc 1) & x=IC SCM+FSA by A2,A7,TARSKI:def 1
-    ,def 2;
+    x in dom m & x in dom (Start-At insloc 0) by A8,XBOOLE_0:def 4;
+    then (x=insloc 0 or x=insloc 1) & x=IC SCM+FSA by A2,A7,TARSKI:def 1,def 2;
     hence contradiction by AMI_1:48;
   end;
   then dom m misses dom (Start-At insloc 0) by XBOOLE_0:def 7;
@@ -363,7 +362,7 @@ A10: m+1 <= n;
     then
 A11: IC Computation(s2,m) in dom I by A4;
 A12: IC ( Computation(s1,m)) = IC  Computation(s2,m) by A7,A10,AMI_1:121
-    ,NAT_1:13;
+,NAT_1:13;
     CurInstr( Computation(s1,m)) = s1.IC( Computation(s1,m)) by AMI_1:54
       .= I.IC( Computation(s1,m)) by A2,A11,A12,GRFUNC_1:8
       .= s2.IC Computation(s2,m) by A3,A11,A12,GRFUNC_1:8
@@ -401,7 +400,7 @@ A7: IC s2 in NAT by AMI_1:def 4;
 A8: IAt is halting by A1,Def3;
     (IAt)|NAT = I by Th6;
     then dom I = dom(IAt)/\NAT by RELAT_1:90;
-    then not IC s2 in dom IAt by A4,A7,XBOOLE_0:def 3;
+    then not IC s2 in dom IAt by A4,A7,XBOOLE_0:def 4;
     then
 A9: IAt c= s0 by A2,FUNCT_7:91;
     then
@@ -451,7 +450,7 @@ A24:  dom IS = dom I \/ dom Start-At insloc 0 by FUNCT_4:def 1
         .= dom I \/ {IC SCM+FSA} by FUNCOP_1:19;
       IC s2 <> IC SCM+FSA by AMI_1:48;
       then not IC s2 in {IC SCM+FSA} by TARSKI:def 1;
-      then not IC s2 in dom IS by A22,A24,XBOOLE_0:def 2;
+      then not IC s2 in dom IS by A22,A24,XBOOLE_0:def 3;
       then
 A25:  IS c= s00 by A19,FUNCT_7:91;
 A26:  now
@@ -465,7 +464,7 @@ then reconsider FI as Instruction-Location of SCM+FSA by A20,AMI_1:def 4;
       FI <> IC SCM+FSA by SCMFSA_2:81;
       then not FI in {IC SCM+FSA} by TARSKI:def 1;
       then
-B28:   not FI in dom IS by A24,A26,XBOOLE_0:def 2;
+B28:   not FI in dom IS by A24,A26,XBOOLE_0:def 3;
       hence
 A28:  I +* Start-At insloc 0 c= s0 by A25,FUNCT_7:91;
       take k = n+1;
@@ -501,14 +500,14 @@ A37:  IC s02 = IC s2 by A19,A28,A29,A32,A35,SF_MASTR:73;
       FI in dom s00 by SCMFSA_2:66;
       then s0.FI = (s.intloc 0)+1 by FUNCT_7:33;
       then
-A38:  s02.FI = (s.intloc 0)+1 by B28,A30,A36,SF_MASTR:69,A25,FUNCT_7:91;
+A38:  s02.FI = (s.intloc 0)+1 by B28,A30,A36,A25,FUNCT_7:91,SF_MASTR:69;
 A39:  IC s2 in dom s by AMI_1:116;
       IC s2 <> FI & IC s2 in dom s00 by AMI_1:116,SCMFSA_2:84;
       then
 A40:  s0.IC s2 = s00.IC s2 by FUNCT_7:34
         .= intloc 0 := FI by A39,FUNCT_7:33;
 A42:  s0.intloc 0 = s00.intloc 0 by FUNCT_7:34
-        .= s.intloc 0 by SCMFSA_2:84,FUNCT_7:34;
+        .= s.intloc 0 by FUNCT_7:34,SCMFSA_2:84;
 A43:  (s.intloc 0) < (s.intloc 0)+1 by XREAL_1:31;
        Computation(s0,k) = Following s02 by AMI_1:14
         .= Exec(intloc 0 := FI, s02) by A37,A40,AMI_1:54;
@@ -731,14 +730,14 @@ A19: dom J c= dom JAt by GRFUNC_1:8;
 A21: IC  Computation(s1,k+1) in dom J by A1,Def2;
     dom ProgramPart J = dom J /\ NAT by FUNCT_1:68;
     then
-A22: l in dom ProgramPart J by A21,XBOOLE_0:def 3;
+A22: l in dom ProgramPart J by A21,XBOOLE_0:def 4;
 A23: j = s1.IC  Computation(s1,k+1) by AMI_1:54
       .= JAt.IC  Computation(s1,k+1) by A1,A19,A21,GRFUNC_1:8
       .= J.l by A18,A21,GRFUNC_1:8;
 A24: IC  Computation(s2,k+1) in NAT by AMI_1:def 4;
     IC  Computation(s2,k+1) in dom Relocated(J,n) by A17,A21,SCMFSA_5:4;
     then IC  Computation(s2,k+1) in dom Relocated(J,n) /\ NAT
-     by A24,XBOOLE_0:def 3;
+     by A24,XBOOLE_0:def 4;
     then
 A25: IC  Computation(s2,k+1) in dom ProgramPart Relocated(J,n) by FUNCT_1:68;
     thus IncAddr(CurInstr  Computation(s1,k+1),n)
@@ -748,8 +747,7 @@ A25: IC  Computation(s2,k+1) in dom ProgramPart Relocated(J,n) by FUNCT_1:68;
       .= s2.IC  Computation(s2,k+1) by A2,A25,GRFUNC_1:8
       .= CurInstr  Computation(s2,k+1) by AMI_1:54;
     thus DataPart Computation(s1,k+1)
-    = DataPart Computation(s2,k+1) by A14,A15,A16,
-    SCMFSA6A:41;
+    = DataPart Computation(s2,k+1) by A14,A15,A16,SCMFSA6A:41;
   end;
   for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A13);
   hence thesis;
@@ -802,8 +800,7 @@ A5: now
     let l be Element of NAT;
     assume
 A6: CurInstr  Computation(s2,l) = halt SCM+FSA;
-    CurInstr  Computation(s1,l) = CurInstr  Computation(s2,l) by A1,A2,A3,
-    Th28;
+    CurInstr  Computation(s1,l) = CurInstr  Computation(s2,l) by A1,A2,A3,Th28;
     hence LifeSpan s1 <= l by A4,A6,AMI_1:def 46;
   end;
 A7: CurInstr  Computation(s2,LifeSpan s1)
@@ -848,7 +845,7 @@ A3: insloc 0 in dom I by A1,SCMNORM:def 1;
   hence insloc 0 in dom Initialized I by A3;
   dom (I +* Start-At insloc 0) = dom I \/ dom Start-At insloc 0
   by FUNCT_4:def 1;
-  hence thesis by A3,XBOOLE_0:def 2;
+  hence thesis by A3,XBOOLE_0:def 3;
 end;
 
 theorem Th32:
@@ -1028,8 +1025,8 @@ A8: now
     assume
 A9: k <= m;
     then
-A10:  Computation(sISA0,k),  Computation(s1,k) equal_outside A by A1, A5,
-    Th36,FUNCT_4:26;
+A10:  Computation(sISA0,k),  Computation(s1,k) equal_outside A by A1,A5,Th36,
+FUNCT_4:26;
     defpred X[Element of NAT] means
     $1 <= k implies  Computation(s1,$1),  Computation(s2,$1) equal_outside A;
 A11:  Computation(s1,0) = s1 by AMI_1:13;
@@ -1050,14 +1047,14 @@ A17:  n + 1 <= k;
 A18:  n <= n + 1 by NAT_1:12;
       then n <= k by A17,XXREAL_0:2;
       then n <= m by A9,XXREAL_0:2;
-      then IC  Computation(sISA0,n) = IC  Computation(s1,n) by A1,A4,A5,Th36
-      ,AMI_1:121;
+      then IC  Computation(sISA0,n) = IC  Computation(s1,n) by A1,A4,A5,Th36,
+AMI_1:121;
       then
 A19:  IC  Computation(s1,n) in dom I by A4,Def2;
-A20:  IC  Computation(s1,n) = IC  Computation(s2,n) by A16,A17,A18,
-      AMI_1:121,XXREAL_0:2;
+A20:  IC  Computation(s1,n) = IC  Computation(s2,n) by A16,A17,A18,AMI_1:121
+,XXREAL_0:2;
       then
-A21:  IC  Computation(s2,n) in dom Directed I by A19, FUNCT_4:105;
+A21:  IC  Computation(s2,n) in dom Directed I by A19,FUNCT_4:105;
       CurInstr  Computation(s1,n) = s1.IC  Computation(s1,n) by AMI_1:54;
       then CurInstr  Computation(s1,n)
       = (I ';' I).IC  Computation(s1,n) by A14,A19,FUNCT_4:14;
@@ -1071,7 +1068,7 @@ A24:   Computation(s1,n+1) = Following  Computation(s1,n) by AMI_1:14
        Computation(s2,n+1) = Following  Computation(s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation(s2,n), Computation(s2,n));
       hence  Computation(s1,n+1),  Computation(s2,n+1)
-      equal_outside A by A16,A17,A18,A20,A22,A23,A24,SCMFSA6A:32 ,XXREAL_0:2;
+      equal_outside A by A16,A17,A18,A20,A22,A23,A24,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A12,A13);
     then  Computation(s1,k),  Computation(s2,k) equal_outside A;
@@ -1134,8 +1131,8 @@ A8: now
     assume
 A9: k <= m;
     then
-A10:  Computation(sISA0,k),  Computation(s1,k) equal_outside A by A1, A5,
-    Th36,FUNCT_4:26;
+A10:  Computation(sISA0,k),  Computation(s1,k) equal_outside A by A1,A5,Th36,
+FUNCT_4:26;
     defpred X[Element of NAT] means
     $1 <= k implies  Computation(s1,$1),  Computation(s2,$1) equal_outside A;
 A11:  Computation(s1,0) = s1 by AMI_1:13;
@@ -1156,14 +1153,14 @@ A17:  n + 1 <= k;
 A18:  n <= n + 1 by NAT_1:12;
       then n <= k by A17,XXREAL_0:2;
       then n <= m by A9,XXREAL_0:2;
-      then IC  Computation(sISA0,n) = IC  Computation(s1,n) by A1,A4,A5,
-      Th36,AMI_1:121;
+      then IC  Computation(sISA0,n) = IC  Computation(s1,n) by A1,A4,A5,Th36,
+AMI_1:121;
       then
 A19:  IC  Computation(s1,n) in dom I by A4,Def2;
-A20:  IC  Computation(s1,n) = IC  Computation(s2,n) by A16,A17,A18,
-      AMI_1:121,XXREAL_0:2;
+A20:  IC  Computation(s1,n) = IC  Computation(s2,n) by A16,A17,A18,AMI_1:121
+,XXREAL_0:2;
       then
-A21:  IC  Computation(s2,n) in dom Directed I by A19, FUNCT_4:105;
+A21:  IC  Computation(s2,n) in dom Directed I by A19,FUNCT_4:105;
 A22:  CurInstr  Computation(s1,n) = s1.IC  Computation(s1,n) by AMI_1:54
         .= (I ';' I).IC  Computation(s1,n) by A14,A19,FUNCT_4:14
         .= (Directed I).IC  Computation(s1,n) by A15,A20,A21,GRFUNC_1:8;
@@ -1174,7 +1171,7 @@ A24:   Computation(s1,n+1) = Following  Computation(s1,n) by AMI_1:14
        Computation(s2,n+1) = Following  Computation(s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation(s2,n), Computation(s2,n));
       hence  Computation(s1,n+1),  Computation(s2,n+1)
-      equal_outside A by A16,A17,A18,A20,A22,A23,A24,SCMFSA6A:32 ,XXREAL_0:2;
+      equal_outside A by A16,A17,A18,A20,A22,A23,A24,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A12,A13);
     then  Computation(s1,k),  Computation(s2,k) equal_outside A;
@@ -1229,7 +1226,7 @@ A4: now
     assume
 A5: k <= m;
     then
-A6:  Computation(s,k),  Computation(s1,k) equal_outside A by A2,A3, Th36;
+A6:  Computation(s,k),  Computation(s1,k) equal_outside A by A2,A3,Th36;
     defpred X[Element of NAT] means
     $1 <= k implies  Computation(s1,$1),  Computation(s2,$1) equal_outside A;
 A7:  Computation(s1,0) = s1 by AMI_1:13;
@@ -1250,14 +1247,14 @@ A13:  n + 1 <= k;
 A14:  n <= n + 1 by NAT_1:12;
       then n <= k by A13,XXREAL_0:2;
       then n <= m by A5,XXREAL_0:2;
-      then IC  Computation(s,n) = IC  Computation(s1,n) by A2,A3,Th36,AMI_1
-      :121;
+      then IC  Computation(s,n) = IC  Computation(s1,n) by A2,A3,Th36,AMI_1:121
+;
       then
 A15:  IC  Computation(s1,n) in dom I by A3,Def2;
-A16:  IC  Computation(s1,n) = IC  Computation(s2,n) by A12,A13,A14,
-      AMI_1:121,XXREAL_0:2;
+A16:  IC  Computation(s1,n) = IC  Computation(s2,n) by A12,A13,A14,AMI_1:121
+,XXREAL_0:2;
       then
-A17:  IC  Computation(s2,n) in dom Directed I by A15, FUNCT_4:105;
+A17:  IC  Computation(s2,n) in dom Directed I by A15,FUNCT_4:105;
 A18:  CurInstr  Computation(s1,n) = s1.IC  Computation(s1,n) by AMI_1:54
         .= (I ';' I).IC  Computation(s1,n) by A10,A15,FUNCT_4:14
         .= (Directed I).IC  Computation(s1,n) by A11,A16,A17,GRFUNC_1:8;
@@ -1268,7 +1265,7 @@ A20:   Computation(s1,n+1) = Following  Computation(s1,n) by AMI_1:14
        Computation(s2,n+1) = Following  Computation(s2,n) by AMI_1:14
         .= Exec(CurInstr  Computation(s2,n), Computation(s2,n));
       hence  Computation(s1,n+1),  Computation(s2,n+1)
-      equal_outside A by A12,A13,A14,A16,A18,A19,A20,SCMFSA6A:32 ,XXREAL_0:2;
+      equal_outside A by A12,A13,A14,A16,A18,A19,A20,SCMFSA6A:32,XXREAL_0:2;
     end;
     for n being Element of NAT holds X[n] from NAT_1:sch 1(A8,A9);
     then  Computation(s1,k),  Computation(s2,k) equal_outside A;
@@ -1415,7 +1412,7 @@ A11: now
     then
 A12: x in dom (Initialized J) /\ D by FUNCT_1:68,SCMFSA_2:127;
     then
-A13: x in dom Initialized J & x in D by XBOOLE_0:def 3;
+A13: x in dom Initialized J & x in D by XBOOLE_0:def 4;
     per cases by A13,SCMFSA6A:44;
     suppose
 A14:  x in dom J;
@@ -1438,7 +1435,7 @@ A15:  x = intloc 0;
     end;
     suppose x = IC SCM+FSA;
       hence (DataPart Initialized J).x = (DataPart Computation(s1,m1)).x
-       by A12,SCMFSA6A:37,XBOOLE_0:def 3;
+       by A12,SCMFSA6A:37,XBOOLE_0:def 4;
     end;
   end;
   Initialized J c= s3 by FUNCT_4:26;
@@ -1486,7 +1483,7 @@ B28: [ProgramPart Relocated(J,card I)] c= s4 by AMI_1:81;
 A29: intloc 0 in dom Initialized J by SCMFSA6A:45;
   intloc 0 in Int-Locations by SCMFSA_2:9;
   then
-A30: intloc 0 in D by XBOOLE_0:def 2;
+A30: intloc 0 in D by XBOOLE_0:def 3;
   hence s4.intloc 0 = (DataPart s3).intloc 0 by A25,FUNCT_1:72,SCMFSA_2:127
     .= s3.intloc 0 by A30,FUNCT_1:72,SCMFSA_2:127
     .= (Initialized J).intloc 0 by A29,FUNCT_4:14
@@ -1539,14 +1536,14 @@ A39: LifeSpan s = m by A34,A37,AMI_1:def 46;
   then Initialized I c= s1 by FUNCT_4:26;
   hence LifeSpan s
   = LifeSpan (s +* I) + 1 + LifeSpan (Result (s +* I) +* Initialized J) by A39
-  ,Th19,AMI_1:122;
+,Th19,AMI_1:122;
 A40: Initialized J c= s3 by FUNCT_4:26;
 A41: J +* Start-At insloc 0 c= s3 by Th8,FUNCT_4:26;
   hereby
     assume
 A42: J is keeping_0;
-A43:  DataPart Computation(s3,m3) = DataPart Computation(s4,m3) by A24,A25
-    ,A26,B28,Th27;
+A43:  DataPart Computation(s3,m3) = DataPart Computation(s4,m3) by A24,A25,A26
+,B28,Th27;
     thus (Result s).intloc 0 =  Computation(s,m).intloc 0 by A38,A39,AMI_1:122
       .=  Computation(s4,m3).intloc 0 by AMI_1:51
       .=  Computation(s3,m3).intloc 0 by A43,SCMFSA6A:38
@@ -1596,11 +1593,11 @@ A10: now
       then
 A11:  x in dom JAt /\ D by FUNCT_1:68,SCMFSA_2:127;
       then
-A12:  x in dom JAt & x in D by XBOOLE_0:def 3;
+A12:  x in dom JAt & x in D by XBOOLE_0:def 4;
       then x in dom J \/ dom SAt by FUNCT_4:def 1;
       then x in dom J \/ {IC SCM+FSA} by FUNCOP_1:19;
       then
-A13:  x in dom J or x in {IC SCM+FSA} by XBOOLE_0:def 2;
+A13:  x in dom J or x in {IC SCM+FSA} by XBOOLE_0:def 3;
       per cases by A13,TARSKI:def 1;
       suppose
 A14:    x in dom J;
@@ -1612,7 +1609,7 @@ A14:    x in dom J;
       end;
       suppose x = IC SCM+FSA;
         hence kk.x = (DataPart Computation(s1,m1)).x by A11,SCMFSA6A:37
-        ,XBOOLE_0:def 3;
+,XBOOLE_0:def 4;
       end;
     end;
     JAt c= s3 by FUNCT_4:26;
@@ -1925,11 +1922,10 @@ A4: s +*((I ';' J) +* Start-At insloc 0)
       .= s +* Start-At insloc 0 +*(I ';' J) by Th14
       .= s +* (I ';' J) by A3,FUNCT_4:79;
 A5: I +* SA0 c= s +* (I +* SA0) by FUNCT_4:26;
-    dom SA0 = {IC SCM+FSA} & intloc 0 <> IC SCM+FSA by FUNCOP_1:19,SCMFSA_2:
-    81;
+    dom SA0 = {IC SCM+FSA} & intloc 0 <> IC SCM+FSA by FUNCOP_1:19,SCMFSA_2:81;
     then not intloc 0 in dom I & not intloc 0 in dom SA0
     by SCMFSA6A:47,TARSKI:def 1;
-    then not intloc 0 in dom I \/ dom SA0 by XBOOLE_0:def 2;
+    then not intloc 0 in dom I \/ dom SA0 by XBOOLE_0:def 3;
     then
 A6: not intloc 0 in dom (I +* SA0) by FUNCT_4:def 1;
     per cases;
@@ -1947,7 +1943,7 @@ A9:       k <= LifeSpan(s +* (I +* SA0));
           = (s +* (I +* SA0)).intloc 0 by A5,Def4
             .= s.intloc 0 by A6,FUNCT_4:12;
 
-hence  Computation(s,k).intloc 0 = s.intloc 0 by A2,A7,A9,Th40,SCMFSA6A: 30;
+hence  Computation(s,k).intloc 0 = s.intloc 0 by A2,A7,A9,Th40,SCMFSA6A:30;
         end;
         suppose
 A10:      k > LifeSpan(s +* (I +* SA0));
@@ -1961,7 +1957,7 @@ A12:      p = 1 + r by A11,NAT_1:10;
           by FUNCOP_1:19,SCMFSA_2:81;
           then not intloc 0 in dom J & not intloc 0 in dom SA0
           by SCMFSA6A:47,TARSKI:def 1;
-          then not intloc 0 in dom J \/ dom SA0 by XBOOLE_0:def 2;
+          then not intloc 0 in dom J \/ dom SA0 by XBOOLE_0:def 3;
           then
 A13:      not intloc 0 in dom (J +* SA0) by FUNCT_4:def 1;
           J +* SA0 c= Result(s +*(I+*SA0)) +* (J +* SA0) by FUNCT_4:26;
@@ -1991,8 +1987,8 @@ A15:      ((Computation (Result(s +*(I+*SA0)) +* (J +* SA0),r))
           Computation (s +* ((I ';' J) +* Start-At insloc 0),(LS+1+r))
           equal_outside NAT by A1,A4,A7,A8,Th42;
 
-hence  Computation(s,k).intloc 0 = s.intloc 0 by A2,A11,A12,A14,A15,
-          SCMFSA6A:30;
+hence  Computation(s,k).intloc 0 = s.intloc 0 by A2,A11,A12,A14,A15,SCMFSA6A:30
+;
         end;
       end;
     end;
@@ -2025,7 +2021,7 @@ A1: LifeSpan (s +* Initialized (I ';' J))
   + LifeSpan (Result (s +* Initialized (I ';' J) +* I) +* Initialized J)
   by Lm4;
 A2: I +* SA0 c= s +* Initialized I by Th8,FUNCT_4:26;
-  Initialized I c= s +* Initialized (I ';' J) +* I by FUNCT_4:26, SCMFSA6A:52;
+  Initialized I c= s +* Initialized (I ';' J) +* I by FUNCT_4:26,SCMFSA6A:52;
   then
 A3: I +* SA0 c= s +* Initialized (I ';' J) +* I by Th8;
 A4: s +* Initialized (I ';' J), s +* Initialized (I ';' J) +* I equal_outside
@@ -2132,11 +2128,11 @@ A22: DataPart Computation(Computation(s2,m1+1),m3)
   IC Computation(Computation(s2,m1+1),m3) = IC  Computation(s3,m3) + card I
   proof
 A23: J +* Start-At insloc 0 c= s3 by Th8,FUNCT_4:26;
-A24: s1 +* (I ';' J) = s +* (Initialized I +* (I ';' J)) by FUNCT_4: 15
+A24: s1 +* (I ';' J) = s +* (Initialized I +* (I ';' J)) by FUNCT_4:15
       .= s2 by SCMFSA6A:58;
      DataPart Computation(s2+*I,m1)
     = DataPart Computation ((s2 +* I) +* (I ';' J),m1) by A6,A18,A20,Th36,
-    SCMFSA6A:39
+SCMFSA6A:39
       .= DataPart Computation ((s2 +* (I +* (I ';' J))),m1) by FUNCT_4:15
       .= DataPart Computation (s2 +* (I ';' J),m1) by SCMFSA6A:57
       .= DataPart Computation (s +* (Initialized (I ';' J) +* (I ';' J)),m1)
@@ -2161,7 +2157,7 @@ A28: J +* SA0 c= Result s1 +* Initialized J by Th8,FUNCT_4:26;
   J +* SA0 c= IExec(I,s) +* Initialized J by Th8,FUNCT_4:26;
   then
 A29: IC Result (Result s1 +* Initialized J)
-  = IC Result (IExec(I,s) +* Initialized J) by AMI_1:121,A8,A9,A27,A28,Th29;
+  = IC Result (IExec(I,s) +* Initialized J) by A8,A9,A27,A28,Th29,AMI_1:121;
 A30: IC IExec(I ';' J,s) = IC Result (s +* Initialized (I ';' J)) by Th30
     .= IC  Computation(s2,LifeSpan s2) by A4,Th19,AMI_1:122
     .= IC  Computation(s2,m1+1+m3) by A14,Th43
@@ -2185,7 +2181,7 @@ A33:  x in dom IExec(I ';' J,s);
       suppose
 A34:    x is Int-Location;
         then
-A35:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A25,SCMFSA6A :38;
+A35:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A25,SCMFSA6A:38;
         x <> IC SCM+FSA by A34,SCMFSA_2:81;
         then not x in dom Start-At l by A32,TARSKI:def 1;
         hence IExec(I ';' J,s).x
@@ -2195,7 +2191,7 @@ A35:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A25,SCMFSA6A :38;
       suppose
 A36:    x is FinSeq-Location;
         then
-A37:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A25,SCMFSA6A :38;
+A37:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A25,SCMFSA6A:38;
         x <> IC SCM+FSA by A36,SCMFSA_2:82;
         then not x in dom Start-At l by A32,TARSKI:def 1;
         hence IExec(I ';' J,s).x
@@ -2218,7 +2214,7 @@ A40:    x is Instruction-Location of SCM+FSA;
         IExec(I ';' J,s) | A = ps by CARD_3:99
           .= IExec(J,IExec(I,s)) | A by A16,CARD_3:99;
         then
-A41:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A40,SCMFSA6A :36;
+A41:    IExec(I ';' J,s).x = IExec(J,IExec(I,s)).x by A40,SCMFSA6A:36;
         x <> IC SCM+FSA by A40,AMI_1:48;
         then not x in dom Start-At l by A32,TARSKI:def 1;
         hence IExec(I ';' J,s).x

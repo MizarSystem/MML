@@ -15,7 +15,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="VALUED_0"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -26,6 +27,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="AFINSQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="CATALAN2"/>
 </Signature>
@@ -40,14 +42,14 @@
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14"/>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CATALAN2" nr="2">
@@ -61,14 +63,14 @@
 <Adjective nr="4"/>
 <Adjective nr="11"/>
 <Adjective nr="14" value="false"/>
-<Adjective nr="20"/>
 <Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <FCluster aid="CATALAN2" nr="1">
@@ -82,12 +84,12 @@
 <Func kind="K" nr="111"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="240">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 </Registrations>

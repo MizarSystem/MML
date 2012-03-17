@@ -10,9 +10,11 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="RINFSUP2"/>
 </Signature>
@@ -21,7 +23,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="49"/>
 </Adjective>
@@ -30,16 +32,16 @@
 <Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="92">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster aid="RINFSUP2" nr="2">
@@ -47,7 +49,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="49"/>
 </Adjective>
@@ -56,16 +58,16 @@
 <Func kind="K" nr="49"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="107">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="28"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

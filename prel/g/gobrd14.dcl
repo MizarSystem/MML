@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -31,7 +32,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="JORDAN1"/>
@@ -45,31 +45,31 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="130">
+<Adjective nr="135">
 <Func kind="U" nr="1">
-<Func kind="K" nr="282">
+<Func kind="K" nr="269">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="131"/>
-<Adjective nr="132"/>
 <Adjective nr="136"/>
 <Adjective nr="137"/>
+<Adjective nr="141"/>
+<Adjective nr="142"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="282">
+<Func kind="K" nr="269">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="311">
+<Func kind="K" nr="298">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="129"/>
+<Adjective nr="134"/>
 </Cluster>
 </FCluster>
 </Registrations>

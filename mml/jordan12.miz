@@ -20,7 +20,8 @@ environ
       CONNSP_1, COMPTS_1, GOBOARD2, SPPOL_1, JORDAN1, GRAPH_2, GOBOARD9,
       GOBRD13, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XREAL_0, INT_1, MEMBERED,
-      REALSET1, ABIAN, GOBOARD2, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN10;
+      REALSET1, ABIAN, GOBOARD2, SPPOL_2, GOBOARD5, GOBOARD9, JORDAN10,
+      FUNCT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, GOBOARD5, TOPREAL1, JORDAN1, SUBSET_1;
  theorems SPPOL_1, XBOOLE_0, TOPREAL1, JORDAN4, TARSKI, SPPOL_2, FUNCT_1,
@@ -282,8 +283,9 @@ A19: L~f misses rng f1 by A5,A17,TOPREAL3:27,XBOOLE_1:63;
   now
     let i such that
 A20: 1<=i & i < len f1;
-    L~f2 /\ LSeg(f1,i) is trivial by A3,A20,Def1;
-    hence L~f /\ LSeg(f1,i) is trivial by A18,SPRECT_1:1,XBOOLE_1:26;
+X:   L~f2 /\ LSeg(f1,i) is trivial by A3,A20,Def1;
+     L~f /\ LSeg(f1,i) c=  L~f2 /\ LSeg(f1,i) by A18,XBOOLE_1:26;
+    hence L~f /\ LSeg(f1,i) is trivial by X;
   end;
   then f is_in_general_position_wrt f1 by A19,Def1;
   hence f1,f are_in_general_position by A16,Def2;
@@ -308,8 +310,9 @@ A5: now
     let i such that
 A6: 1<=i & i < len (f1^'f2);
 A7: L~g1 c= L~(g1^'g2) by Th6;
-    L~(g1^'g2) /\ LSeg(f1^'f2,i) is trivial by A2,A6,Def1;
-    hence L~g1 /\ LSeg(f1^'f2,i) is trivial by A7,SPRECT_1:1,XBOOLE_1:26;
+X:    L~(g1^'g2) /\ LSeg(f1^'f2,i) is trivial by A2,A6,Def1;
+     L~g1 /\ LSeg(f1^'f2,i) c=  L~(g1^'g2) /\ LSeg(f1^'f2,i) by A7,XBOOLE_1:26;
+    hence L~g1 /\ LSeg(f1^'f2,i) is trivial by X;
   end;
   now
     let i such that
@@ -347,13 +350,13 @@ A8: rng g c= the carrier of TOP-REAL 2 by FINSEQ_1:def 4;
 A9: g.(k+1) in rng g by A6,FUNCT_1:12;
   now
     assume not g.k in (L~f)`;
-    then g.k in (L~f)`` by A7,A8,XBOOLE_0:def 4;
+    then g.k in (L~f)`` by A7,A8,XBOOLE_0:def 5;
     hence contradiction by A3,A7,XBOOLE_0:3;
   end;
   hence g.k in (L~f)`;
   now
     assume not g.(k+1) in (L~f)`;
-    then g.(k+1) in (L~f)`` by A8,A9,XBOOLE_0:def 4;
+    then g.(k+1) in (L~f)`` by A8,A9,XBOOLE_0:def 5;
     hence contradiction by A3,A9,XBOOLE_0:3;
   end;
   hence g.(k+1) in (L~f)`;
@@ -381,12 +384,12 @@ A6: LSeg(f1,i) /\ LSeg(f2,j) is non trivial;
     set B1 = LSeg(f1/.i,f1/.(i+1)), B2 = LSeg(f2/.j,f2/.(j+1));
     consider a1,a2 being set such that
 A7: a1 in A & a2 in A & a1 <> a2 by A6,REALSET1:14;
-A8: a1 in A1 & a1 in A2 & a2 in A1 & a2 in A2 by A7,XBOOLE_0:def 3;
+A8: a1 in A1 & a1 in A2 & a2 in A1 & a2 in A2 by A7,XBOOLE_0:def 4;
     reconsider a1, a2 as Point of TOP-REAL 2 by A7;
 A9: A1 = B1 by A2,TOPREAL1:def 5;
 A10: a2 in B2 by A2,A8,TOPREAL1:def 5;
 A11: a1 in B2 by A2,A8,TOPREAL1:def 5;
-A12: a2 in B1 by A7,A9,XBOOLE_0:def 3;
+A12: a2 in B1 by A7,A9,XBOOLE_0:def 4;
 A13: a1 in LSeg(f1/.i,a2) \/ LSeg(a2,f1/.(i+1)) by A8,A9,TOPREAL1:11;
 A14: a1 in LSeg(f2/.j,a2) \/ LSeg(a2,f2/.(j+1)) by A10,A11,TOPREAL1:11;
     f2/.j in B2 by TOPREAL1:6;
@@ -405,10 +408,10 @@ A19: f1/.i in rng f1 by A2,Th4;
 A20: f2/.j in rng f2 by A2,Th4;
 A21: f1/.(i+1) in rng f1 by A2,Th4;
 A22: f2/.(j+1) in rng f2 by A2,Th4;
-    per cases by A13,XBOOLE_0:def 2;
+    per cases by A13,XBOOLE_0:def 3;
     suppose
 A23:  a1 in LSeg(f1/.i,a2);
-      now per cases by A14,XBOOLE_0:def 2;
+      now per cases by A14,XBOOLE_0:def 3;
         suppose a1 in LSeg(f2/.j,a2);
           then f1/.i in LSeg(a2,f2/.j) or
           f2/.j in LSeg(a2,f1/.i) by A7,A23,JORDAN4:53;
@@ -448,7 +451,7 @@ A25:      f1/.i in B2 or f2/.(j+1) in B1 by A16,A18;
     end;
     suppose
 A26:  a1 in LSeg(a2,f1/.(i+1));
-      now per cases by A14,XBOOLE_0:def 2;
+      now per cases by A14,XBOOLE_0:def 3;
         suppose a1 in LSeg(f2/.j,a2);
           then f1/.(i+1) in LSeg(a2,f2/.j) or
           f2/.j in LSeg(a2,f1/.(i+1)) by A7,A26,JORDAN4:53;
@@ -648,10 +651,10 @@ A4: not ex C be Subset of TOP-REAL 2 st
     (C is_a_component_of (L~f)` & a in C & b in C);
 A5: a in LeftComp f \/ RightComp f by A3,GOBRD12:11;
 A6: b in LeftComp f \/ RightComp f by A3,GOBRD12:11;
-    per cases by A5,XBOOLE_0:def 2;
+    per cases by A5,XBOOLE_0:def 3;
     suppose
 A7:   a in LeftComp f;
-      now per cases by A6,XBOOLE_0:def 2;
+      now per cases by A6,XBOOLE_0:def 3;
         suppose b in LeftComp f;
           hence (a in LeftComp f & b in RightComp f) or
           (a in RightComp f & b in LeftComp f) by A1,A4,A7;
@@ -666,7 +669,7 @@ A7:   a in LeftComp f;
     end;
     suppose
 A8:   a in RightComp f;
-      now per cases by A6,XBOOLE_0:def 2;
+      now per cases by A6,XBOOLE_0:def 3;
         suppose b in RightComp f;
           hence (a in LeftComp f & b in RightComp f) or
           (a in RightComp f & b in LeftComp f) by A2,A4,A8;
@@ -1035,7 +1038,7 @@ A3: not r in L~f;
 A4: (L~f) /\ LSeg(p1,p2) = {p} by A2;
 A5: p in {p} by TARSKI:def 1;
   then
-A6: p in LSeg(p1,p2) by A4,XBOOLE_0:def 3;
+A6: p in LSeg(p1,p2) by A4,XBOOLE_0:def 4;
   reconsider p as Point of TOP-REAL 2 by A4,A5;
   p1 in LSeg(p1,p2) by TOPREAL1:6;
   then
@@ -1045,7 +1048,7 @@ A7: LSeg(p1,r) c= LSeg(p1,p2) by A1,TOPREAL1:12;
 A8: LSeg(p2,r) c= LSeg(p1,p2) by A1,TOPREAL1:12;
 A9: now
 A10: LSeg(p1,p2) = LSeg(p1,p) \/ LSeg(p,p2) by A6,TOPREAL1:11;
-    per cases by A1,A10,XBOOLE_0:def 2;
+    per cases by A1,A10,XBOOLE_0:def 3;
     suppose r in LSeg(p1,p);
       hence LSeg(p1,r) /\ LSeg(r,p) = {r} or
       LSeg(p,r) /\ LSeg(r,p2) = {r} by TOPREAL1:14;
@@ -1063,20 +1066,20 @@ A11: L~f meets LSeg(p1,r) & L~f meets LSeg(r,p2);
 A12:  LSeg(p1,r) /\ LSeg(r,p) = {r};
       consider x such that
 A13:  x in L~f & x in LSeg(p1,r) by A11,XBOOLE_0:3;
-      x in L~f /\ LSeg(p1,p2) by A7,A13,XBOOLE_0:def 3;
+      x in L~f /\ LSeg(p1,p2) by A7,A13,XBOOLE_0:def 4;
       then x = p by A4,TARSKI:def 1;
       then x in LSeg(r,p) by TOPREAL1:6;
-      then x in LSeg(p1,r) /\ LSeg(r,p) by A13,XBOOLE_0:def 3;
+      then x in LSeg(p1,r) /\ LSeg(r,p) by A13,XBOOLE_0:def 4;
       hence contradiction by A3,A12,A13,TARSKI:def 1;
     end;
     suppose
 A14:  LSeg(p,r) /\ LSeg(r,p2) = {r};
       consider x such that
 A15:  x in L~f & x in LSeg(r,p2) by A11,XBOOLE_0:3;
-      x in L~f /\ LSeg(p1,p2) by A8,A15,XBOOLE_0:def 3;
+      x in L~f /\ LSeg(p1,p2) by A8,A15,XBOOLE_0:def 4;
       then x = p by A4,TARSKI:def 1;
       then x in LSeg(p,r) by TOPREAL1:6;
-      then x in LSeg(p,r) /\ LSeg(r,p2) by A15,XBOOLE_0:def 3;
+      then x in LSeg(p,r) /\ LSeg(r,p2) by A15,XBOOLE_0:def 4;
       hence contradiction by A3,A14,A15,TARSKI:def 1;
     end;
   end;
@@ -1117,8 +1120,8 @@ A2: LSeg(r,s) is vertical;
   then LSeg(p,q) /\ LSeg(r,s) <> {} by XBOOLE_0:def 7;
   then consider x being Point of TOP-REAL 2 such that
 A3: x in LSeg(p,q) /\ LSeg(r,s) by SUBSET_1:10;
-A4: x in LSeg(r,s) by A3,XBOOLE_0:def 3;
-  x in LSeg(p,q) by A3,XBOOLE_0:def 3;
+A4: x in LSeg(r,s) by A3,XBOOLE_0:def 4;
+  x in LSeg(p,q) by A3,XBOOLE_0:def 4;
   hence p`1 = x`1 by A1,SPPOL_1:64
     .= r`1 by A2,A4,SPPOL_1:64;
 end;
@@ -1226,17 +1229,17 @@ A6: not p2 in LSeg(p,p1) by A2,A3,Th28;
 A7: p1 in LSeg(q,p2);
     then
 A8: LSeg(q,p1) \/ LSeg(p1,p2) = LSeg(q,p2) by TOPREAL1:11;
-    p in LSeg(q,p1) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 2;
+    p in LSeg(q,p1) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 3;
     then LSeg(q,p) \/ LSeg(p,p2) = LSeg(q,p2) by A8,TOPREAL1:11;
-    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A5,A7,XBOOLE_0:def 2;
+    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A5,A7,XBOOLE_0:def 3;
   end;
   suppose
 A9: p2 in LSeg(q,p1);
     then
 A10: LSeg(q,p2) \/ LSeg(p1,p2) = LSeg(q,p1) by TOPREAL1:11;
-    p in LSeg(q,p2) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 2;
+    p in LSeg(q,p2) \/ LSeg(p1,p2) by A2,XBOOLE_0:def 3;
     then LSeg(q,p) \/ LSeg(p,p1) = LSeg(q,p1) by A10,TOPREAL1:11;
-    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A6,A9,XBOOLE_0:def 2;
+    hence p1 in LSeg(q,p) or p2 in LSeg(q,p) by A6,A9,XBOOLE_0:def 3;
   end;
 end;
 
@@ -1251,7 +1254,7 @@ A2: LSeg(p1,p2) /\ LSeg(p3,p4) = {p};
 A3: p in LSeg(p1,p2) /\ LSeg(p3,p4) by A2,TARSKI:def 1;
   then
 A4: LSeg(p1,p2) meets LSeg(p3,p4) by XBOOLE_0:4;
-  p in LSeg(p3,p4) by A3,XBOOLE_0:def 3;
+  p in LSeg(p3,p4) by A3,XBOOLE_0:def 4;
   then LSeg(p3,p) \/ LSeg(p,p4) = LSeg(p3,p4) by TOPREAL1:11;
   then
 A5: LSeg(p3,p) c= LSeg(p3,p4) by XBOOLE_1:7;
@@ -1271,19 +1274,19 @@ A10: now
   now
     assume
 A11: p<>p1 & p<>p2 & p<>p3;
-A12: p in LSeg(p1,p2) by A3,XBOOLE_0:def 3;
+A12: p in LSeg(p1,p2) by A3,XBOOLE_0:def 4;
 A13: now
       assume p3 in LSeg(p1,p2);
-      then p3 in LSeg(p1,p2) /\ LSeg(p3,p4) by A8,XBOOLE_0:def 3;
+      then p3 in LSeg(p1,p2) /\ LSeg(p3,p4) by A8,XBOOLE_0:def 4;
       hence contradiction by A2,A11,TARSKI:def 1;
     end;
     now per cases by A1,A9,A10,A11,A12,A13,Th29;
       suppose p1 in LSeg(p3,p);
-        then p1 in LSeg(p1,p2) /\ LSeg(p3,p4) by A5,A6,XBOOLE_0:def 3;
+        then p1 in LSeg(p1,p2) /\ LSeg(p3,p4) by A5,A6,XBOOLE_0:def 4;
         hence contradiction by A2,A11,TARSKI:def 1;
       end;
       suppose p2 in LSeg(p3,p);
-        then p2 in LSeg(p1,p2) /\ LSeg(p3,p4) by A5,A7,XBOOLE_0:def 3;
+        then p2 in LSeg(p1,p2) /\ LSeg(p3,p4) by A5,A7,XBOOLE_0:def 4;
         hence contradiction by A2,A11,TARSKI:def 1;
       end;
     end;
@@ -1323,27 +1326,27 @@ A9: LSeg(f,i) c= left_cell(f,i,GoB f) by A7,A8,JORDAN1H:26;
 A10: LSeg(f,i) c= right_cell(f,i,GoB f) by A7,A8,JORDAN1H:28;
 A11: p in L~f /\ LSeg(p1,p2) by A1,TARSKI:def 1;
   then
-A12: p <> p2 & p <> p1 by A3,XBOOLE_0:def 3;
-A13: p in LSeg(p1,p2) by A11,XBOOLE_0:def 3;
+A12: p <> p2 & p <> p1 by A3,XBOOLE_0:def 4;
+A13: p in LSeg(p1,p2) by A11,XBOOLE_0:def 4;
 A14: right_cell(f,i,GoB f) is convex by A8,Th23;
 A15: left_cell(f,i,GoB f) is convex by A8,Th23;
 A16: right_cell(f,i,GoB f)\L~f c= RightComp f by A7,A8,JORDAN9:29;
 A17: left_cell(f,i,GoB f)\L~f c= LeftComp f by A7,A8,JORDAN9:29;
 A18: now
     assume r in right_cell(f,i,GoB f);
-    then r in right_cell(f,i,GoB f)\L~f by A6,XBOOLE_0:def 4;
+    then r in right_cell(f,i,GoB f)\L~f by A6,XBOOLE_0:def 5;
     hence r in RightComp f by A16;
   end;
 A19: now
     assume r in left_cell(f,i,GoB f);
-    then r in left_cell(f,i,GoB f)\L~f by A6,XBOOLE_0:def 4;
+    then r in left_cell(f,i,GoB f)\L~f by A6,XBOOLE_0:def 5;
     hence r in LeftComp f by A17;
   end;
 A20: now
     assume
 A21: p1 in LSeg(r,p) & r in right_cell(f,i,GoB f);
     then LSeg(r,p) c= right_cell(f,i,GoB f) by A8,A10,A14,JORDAN1:def 1;
-    then p1 in right_cell(f,i,GoB f)\L~f by A3,A21,XBOOLE_0:def 4;
+    then p1 in right_cell(f,i,GoB f)\L~f by A3,A21,XBOOLE_0:def 5;
     hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
     & r in C & p1 in C)) by A16,A18,A21,Th15;
   end;
@@ -1351,7 +1354,7 @@ A22: now
     assume
 A23: p1 in LSeg(r,p) & r in left_cell(f,i,GoB f);
     then LSeg(r,p) c= left_cell(f,i,GoB f) by A8,A9,A15,JORDAN1:def 1;
-    then p1 in left_cell(f,i,GoB f)\L~f by A3,A23,XBOOLE_0:def 4;
+    then p1 in left_cell(f,i,GoB f)\L~f by A3,A23,XBOOLE_0:def 5;
     hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
     & r in C & p1 in C)) by A17,A19,A23,Th15;
   end;
@@ -1359,7 +1362,7 @@ A24: now
     assume
 A25: p2 in LSeg(r,p) & r in right_cell(f,i,GoB f);
     then LSeg(r,p) c= right_cell(f,i,GoB f) by A8,A10,A14,JORDAN1:def 1;
-    then p2 in right_cell(f,i,GoB f)\L~f by A3,A25,XBOOLE_0:def 4;
+    then p2 in right_cell(f,i,GoB f)\L~f by A3,A25,XBOOLE_0:def 5;
     hence ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
     & r in C & p2 in C) by A16,A18,A25,Th15;
   end;
@@ -1367,7 +1370,7 @@ A26: now
     assume
 A27: p2 in LSeg(r,p) & r in left_cell(f,i,GoB f);
     then LSeg(r,p) c= left_cell(f,i,GoB f) by A8,A9,A15,JORDAN1:def 1;
-    then p2 in left_cell(f,i,GoB f)\L~f by A3,A27,XBOOLE_0:def 4;
+    then p2 in left_cell(f,i,GoB f)\L~f by A3,A27,XBOOLE_0:def 5;
     hence (ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
     & r in C & p2 in C)) by A17,A19,A27,Th15;
   end;
@@ -1442,9 +1445,9 @@ A7: f is_sequence_on GoB f by GOBOARD5:def 5;
   consider i such that
 A8: 1<=i & i+1<= len f & rl in left_cell(f,i,GoB f) &
   rp in right_cell(f,i,GoB f) by A4;
-A9: rl in left_cell(f,i,GoB f)\L~f by A5,A8,XBOOLE_0:def 4;
+A9: rl in left_cell(f,i,GoB f)\L~f by A5,A8,XBOOLE_0:def 5;
 A10: left_cell(f,i,GoB f)\L~f c= LeftComp f by A7,A8,JORDAN9:29;
-A11: rp in right_cell(f,i,GoB f)\L~f by A6,A8,XBOOLE_0:def 4;
+A11: rp in right_cell(f,i,GoB f)\L~f by A6,A8,XBOOLE_0:def 5;
 A12: right_cell(f,i,GoB f)\L~f c= RightComp f by A7,A8,JORDAN9:29;
 A13: not rl in RightComp f by A9,A10,GOBRD14:27;
 A14: not rp in LeftComp f by A11,A12,GOBRD14:28;
@@ -1695,10 +1698,10 @@ A3: not p1 in L~f & not p2 in L~f and
 A4: rng f misses LSeg(p1,p2);
 A5: p in {p} by TARSKI:def 1;
   then
-A6: p in LSeg(p1,p2) by A1,XBOOLE_0:def 3;
-A7: p in LSeg(p2,p1) by A1,A5,XBOOLE_0:def 3;
+A6: p in LSeg(p1,p2) by A1,XBOOLE_0:def 4;
+A7: p in LSeg(p2,p1) by A1,A5,XBOOLE_0:def 4;
 A8: f is_sequence_on GoB(f) by GOBOARD5:def 5;
-  p in L~f by A1,A5,XBOOLE_0:def 3;
+  p in L~f by A1,A5,XBOOLE_0:def 4;
   then consider LS be set such that
 A9: p in LS & LS in { LSeg(f,i) : 1 <= i & i+1 <= len f } by TARSKI:def 4;
   consider k such that
@@ -1746,7 +1749,7 @@ A22: LSeg(p1,p2) /\ LSeg(f,k) = {p} by A1,A9,A10,SPRECT_2:2,TOPREAL3:26;
   then
 A23: (f/.k)`1 =(f/.(k+1))`1 or (f/.k)`2 = (f/.(k+1))`2 by SPPOL_1:36,37;
 A24: LSeg(p1,p2) /\ LSeg(f/.k,f/.(k+1)) = {p} by A10,A22,TOPREAL1:def 5;
-A25: p <> p1 & p <> p2 & p <> f/.k by A1,A3,A4,A5,A6,A19,XBOOLE_0:3,def 3;
+A25: p <> p1 & p <> p2 & p <> f/.k by A1,A3,A4,A5,A6,A19,XBOOLE_0:3,def 4;
   then
 A26: p1`2 = p2`2 implies i1 = i2 by A15,A16,A23,A24,Th30,JORDAN1G:7;
 A27: p1`1 = p2`1 implies j1 = j2 by A15,A16,A23,A24,A25,Th30,JORDAN1G:6;
@@ -1789,7 +1792,7 @@ A47: j1 = j2 & i1 = i2+1;
     then i2 < i1 by NAT_1:13;
     then G*(i2,j1)`1 < G*(i1,j1)`1 by A29,A30,A32,A33,GOBOARD5:4;
     then (f/.(k+1))`1 < p`1 & p`1 < (f/.k)`1 by A15,A16,A25,A39,A40,A47,
-    TOPREAL6:37;
+TOPREAL6:37;
     hence G*(i2,1)`1 < p`1 & p`1 < G*(i2+1,1)`1
     by A15,A16,A28,A29,A30,A31,A34,A35,A47,GOBOARD5:3;
   end;
@@ -1808,7 +1811,7 @@ A51: i2=i1+1 implies i1 < len G by A28,NAT_1:13;
 A52: now
     assume 1 < j1 & i2 = i1+1;
     then 1 <= i1 & i1 < len G & 1 <= j1-'1 & j1-'1 < width G
-    by A15,A28,A33,A36,NAT_D:49,MATRIX_1:39,NAT_1:13,XXREAL_0:2;
+    by A15,A28,A33,A36,MATRIX_1:39,NAT_1:13,NAT_D:49,XXREAL_0:2;
     hence Int cell(G,i1,j1-'1) =
     { |[r,s]| : G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
     G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 } by GOBOARD6:29;
@@ -1833,7 +1836,7 @@ A58: j1 = j2 & i1 = i2+1 implies Int left_cell(f,k,G)= Int cell(G,i2,j1-'1) &
 A59: now
     assume 1 < j1 & i1 = i2+1;
     then 1 <= i2 & i2 < len G & 1 <= j1-'1 & j1-'1 < width G
-    by A16,A30,A33,A36,NAT_D:49,MATRIX_1:39,NAT_1:13,XXREAL_0:2;
+    by A16,A30,A33,A36,MATRIX_1:39,NAT_1:13,NAT_D:49,XXREAL_0:2;
     hence Int cell(G,i2,j1-'1) =
     { |[r,s]| : G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
     G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 } by GOBOARD6:29;
@@ -1858,7 +1861,7 @@ A65: i1 = i2 & j2 = j1+1 implies Int left_cell(f,k,G)= Int cell(G,i1-'1,j1) &
 A66: now
     assume 1 < i1 & j2 = j1+1;
     then 1 <= i1-'1 & i1-'1 < len G & 1 <= j1 & j1 < width G
-    by A15,A30,A34,A37,NAT_D:49,MATRIX_1:39,NAT_1:13,XXREAL_0:2;
+    by A15,A30,A34,A37,MATRIX_1:39,NAT_1:13,NAT_D:49,XXREAL_0:2;
     hence Int cell(G,i1-'1,j1) =
     { |[r,s]| : G*(i1-'1,1)`1 < r & r < G*(i1-'1+1,1)`1 &
     G*(1,j1)`2 < s & s < G*(1,j1+1)`2 } by GOBOARD6:29;
@@ -1883,7 +1886,7 @@ A72: i1 = i2 & j1 = j2+1 implies Int right_cell(f,k,G)= Int cell(G,i2-'1,j2) &
 A73: now
     assume 1 < i2 & j1 = j2+1;
     then 1 <= i2-'1 & i2-'1 < len G & 1 <= j2 & j2 < width G
-    by A16,A28,A33,A38,NAT_D:49,MATRIX_1:39,NAT_1:13,XXREAL_0:2;
+    by A16,A28,A33,A38,MATRIX_1:39,NAT_1:13,NAT_D:49,XXREAL_0:2;
     hence Int cell(G,i2-'1,j2) =
     { |[r,s]| : G*(i2-'1,1)`1 < r & r < G*(i2-'1+1,1)`1 &
     G*(1,j2)`2 < s & s < G*(1,j2+1)`2 } by GOBOARD6:29;
@@ -1923,15 +1926,15 @@ A84: now
       assume
 A85:  j1=j2+1 & i2 < len G;
       then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
-      G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A76,A78,A80,
-      Th30,JORDAN1G:7;
+      G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A76,A78,A80
+,Th30,JORDAN1G:7;
       then G*(i2,1)`1 < rl`1 & rl`1 < G*(i2+1,1)`1
 
-& G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81,A85,
-      Th30,EUCLID:56,JORDAN1G:7;
+& G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81,A85
+,Th30,EUCLID:56,JORDAN1G:7;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A76,A78,A81,A85,
-      Th30,JORDAN1G:7;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A76,A78,A81,A85
+,Th30,JORDAN1G:7;
     end;
 A86: now
       assume
@@ -1940,11 +1943,11 @@ A87:  j1=j2+1 & i2 = len G;
       s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A77,A78,A80,Th30,JORDAN1G:7;
       then G*(len G,1)`1 < rl`1
 
-& G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81,A87,
-      Th30,EUCLID:56,JORDAN1G:7;
+& G*(1,j2)`2 < p`2 & p`2 < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A41,A78,A81,A87
+,Th30,EUCLID:56,JORDAN1G:7;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A77,A78,A81,A87,
-      Th30,JORDAN1G:7;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A72,A77,A78,A81,A87
+,Th30,JORDAN1G:7;
     end;
 A88: now
       assume
@@ -1954,30 +1957,30 @@ then ex r,s st rp' = |[r,s]| & r < G*(1,1)`1 & G*(1,j2)`2 < s & s < G*(1,j2+
       1)`2 by A15,A16,A23,A24,A25,A72,A74,A78,A82,Th30,JORDAN1G:7;
       then rp'`1 < G*(1,1)`1 by EUCLID:56;
 
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A74,A78,A89,
-      Th30,JORDAN1G:7;
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A74,A78,A89
+,Th30,JORDAN1G:7;
     end;
 A90: now
       assume
 A91:  j1=j2+1 & 1 < i2;
       then ex r,s st rp' = |[r,s]| & G*(i2-'1,1)`1 < r & r < G*(i2-'1+1,1)`1 &
-      G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A73,A78,A82,
-      Th30,JORDAN1G:7;
+      G*(1,j2)`2 < s & s < G*(1,j2+1)`2 by A15,A16,A23,A24,A25,A72,A73,A78,A82
+,Th30,JORDAN1G:7;
       then G*(i2-'1,1)`1 < rp'`1 & rp'`1 < G*(i2-'1+1,1)`1 by EUCLID:56;
 
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A73,A78,A91,
-      Th30,JORDAN1G:7;
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A41,A72,A73,A78,A91
+,Th30,JORDAN1G:7;
     end;
 A92: now
       assume
 A93:  j2=j1+1 & i1 < len G;
       then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
-      G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A69,A78,A82,
-      Th30,JORDAN1G:7;
+      G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A69,A78,A82
+,Th30,JORDAN1G:7;
       then G*(i1,1)`1 < rp'`1 & rp'`1 < G*(i1+1,1)`1 by EUCLID:56;
 
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A69,A78,A93,
-      Th30,JORDAN1G:7;
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A69,A78,A93
+,Th30,JORDAN1G:7;
     end;
 A94: now
       assume
@@ -1986,8 +1989,8 @@ A95:  j2=j1+1 & i1 = len G;
       s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A70,A78,A82,Th30,JORDAN1G:7;
       then G*(len G,1)`1 < rp'`1 by EUCLID:56;
 
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A70,A78,A95,
-      Th30,JORDAN1G:7;
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A70,A78,A95
+,Th30,JORDAN1G:7;
     end;
 A96: now
       assume
@@ -1997,19 +2000,19 @@ then ex r,s st rl' = |[r,s]| & r < G*(1,1)`1 & G*(1,j1)`2 < s & s < G*(1,j1+
       1)`2 by A15,A16,A23,A24,A25,A65,A67,A78,A80,Th30,JORDAN1G:7;
       then rl'`1 < G*(1,1)`1 by EUCLID:56;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A67,A78,A97,
-      Th30,JORDAN1G:7;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A67,A78,A97
+,Th30,JORDAN1G:7;
     end;
 A98: now
       assume
 A99:  j2=j1+1 & 1 < i1;
       then ex r,s st rl' = |[r,s]| & G*(i1-'1,1)`1 < r & r < G*(i1-'1+1,1)`1 &
-      G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A66,A78,A80,
-      Th30,JORDAN1G:7;
+      G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A65,A66,A78,A80
+,Th30,JORDAN1G:7;
       then G*(i1-'1,1)`1 < rl'`1 & rl'`1 < G*(i1-'1+1,1)`1 by EUCLID:56;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A66,A78,A99,
-      Th30,JORDAN1G:7;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A44,A65,A66,A78,A99
+,Th30,JORDAN1G:7;
     end;
     now per cases by A17,A26,A78;
       suppose
@@ -2069,8 +2072,8 @@ A110:   rp in right_cell(f,k,GoB f) by A11,A108;
 A111:   not rl in L~f by A13,A107;
         not rp in L~f by A11,A108;
         hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
-        & p1 in C & p2 in C) by A1,A3,A9,A10,A78,A79,A81,A83,A109,A110,A111,
-        Th32;
+        & p1 in C & p2 in C) by A1,A3,A9,A10,A78,A79,A81,A83,A109,A110,A111
+,Th32;
       end;
     end;
     hence not ex C be Subset of TOP-REAL 2 st (C is_a_component_of (L~f)`
@@ -2097,22 +2100,22 @@ A118: now
 A119: i1=i2+1 & j1 < width G;
       then ex r,s st rp' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
       G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A58,A62,A112
-      ,A116,Th30,JORDAN1G:6;
+,A116,Th30,JORDAN1G:6;
       then G*(1,j1)`2 < rp`2 & rp`2 < G*(1,j1+1)`2 by A117,EUCLID:56;
       hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A62,A112
-      ,A117,A119,Th30,JORDAN1G:6;
+,A117,A119,Th30,JORDAN1G:6;
     end;
 A120: now
       assume
 A121: i1=i2+1 & j1 = width G;
       then ex r,s st rp' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
       G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A58,A63,A112,A116,Th30,
-      JORDAN1G:6;
+JORDAN1G:6;
       then G*(i2,1)`1 < p`1 & p`1 < G*(i2+1,1)`1 & G*(1,width G)`2 < rp`2
       by A15,A16,A23,A24,A25,A46,A112,A117,A121,Th30,EUCLID:56,JORDAN1G:6;
 
 hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A58,A63,A112,A117,A121
-      ,Th30,JORDAN1G:6;
+,Th30,JORDAN1G:6;
     end;
 A122: now
       assume
@@ -2123,7 +2126,7 @@ then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 & s < G*(1,
       then rl`2 < G*(1,1)`2 by A115,EUCLID:56;
 
 hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A60,A112,A115
-      ,A123,Th30,JORDAN1G:6;
+,A123,Th30,JORDAN1G:6;
     end;
 A124: now
       assume
@@ -2131,11 +2134,11 @@ A125: i1=i2+1 & 1 < j1;
       then ex r,s st rl' = |[r,s]| & G*(i2,1)`1 < r & r < G*(i2+1,1)`1 &
 
 G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A58,A59,A112
-      ,A114,Th30,JORDAN1G:6;
+,A114,Th30,JORDAN1G:6;
       then G*(1,j1-'1)`2 < rl'`2 & rl'`2 < G*(1,j1-'1+1)`2 by EUCLID:56;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A59,A112,A125,
-      Th30,JORDAN1G:6;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A46,A58,A59,A112,A125
+,Th30,JORDAN1G:6;
     end;
 A126: now
       assume
@@ -2143,22 +2146,22 @@ A127: i2=i1+1 & j1 < width G;
       then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
 
 G*(1,j1)`2 < s & s < G*(1,j1+1)`2 by A15,A16,A23,A24,A25,A50,A55,A112,A114,Th30
-      ,JORDAN1G:6;
+,JORDAN1G:6;
       then G*(1,j1)`2 < rl`2 & rl`2 < G*(1,j1+1)`2 by A115,EUCLID:56;
 
 hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A55,A112,A115
-      ,A127,Th30,JORDAN1G:6;
+,A127,Th30,JORDAN1G:6;
     end;
 A128: now
       assume
 A129: i2=i1+1 & j1 = width G;
       then ex r,s st rl' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
       G*(1,width G)`2 < s by A15,A16,A23,A24,A25,A50,A56,A112,A114,Th30,
-      JORDAN1G:6;
+JORDAN1G:6;
       then G*(1,width G)`2 < rl'`2 by EUCLID:56;
 
-hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A56,A112,A129,
-      Th30,JORDAN1G:6;
+hence rl in Int left_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A56,A112,A129
+,Th30,JORDAN1G:6;
     end;
 A130: now
       assume
@@ -2168,8 +2171,8 @@ then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 & s < G*(1,
       1)`2 by A15,A16,A23,A24,A25,A50,A53,A112,A116,Th30,JORDAN1G:6;
       then rp'`2 < G*(1,1)`2 by EUCLID:56;
 
-hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A53,A112,A131,
-      Th30,JORDAN1G:6;
+hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A53,A112,A131
+,Th30,JORDAN1G:6;
     end;
 A132: now
       assume
@@ -2177,10 +2180,10 @@ A133: i2=i1+1 & 1 < j1;
       then ex r,s st rp' = |[r,s]| & G*(i1,1)`1 < r & r < G*(i1+1,1)`1 &
 
 G*(1,j1-'1)`2 < s & s < G*(1,j1-'1+1)`2 by A15,A16,A23,A24,A25,A50,A52,A112
-      ,A116,Th30,JORDAN1G:6;
+,A116,Th30,JORDAN1G:6;
       then G*(1,j1-'1)`2 < rp'`2 & rp'`2 < G*(1,j1-'1+1)`2 by EUCLID:56;
       hence rp in Int right_cell(f,k,G) by A15,A16,A23,A24,A25,A48,A50,A52,A112
-      ,A133,Th30,JORDAN1G:6;
+,A133,Th30,JORDAN1G:6;
     end;
     now per cases by A17,A27,A112;
       suppose
@@ -2286,10 +2289,10 @@ A15: g.k in LSeg(g,k) by A2,A10,TOPREAL1:27;
 A16: g.(k+1) in LSeg(g,k) by A2,A13,TOPREAL1:27;
 A17: g.k in (L~f)` by A1,A2,Th9;
   then
-A18: not g.k in (L~f) by XBOOLE_0:def 4;
+A18: not g.k in (L~f) by XBOOLE_0:def 5;
 A19: g.(k+1) in (L~f)` by A1,A2,Th9;
   then
-A20: not g.(k+1) in (L~f) by XBOOLE_0:def 4;
+A20: not g.(k+1) in (L~f) by XBOOLE_0:def 5;
   set p1 = g/.k, p2 = g/.(k+1);
 A21: LSeg(g,k) = LSeg(p1,p2) by A2,TOPREAL1:def 5;
   LSeg(g,k) is vertical or LSeg(g,k) is horizontal by SPPOL_1:41;
@@ -2457,12 +2460,12 @@ A39:  dom a = dom g1 /\ Seg(k+1) by A23,FUNCT_1:68;
 A40:  k <=k+1 by NAT_1:13;
       then k in Seg (k+1) by A20,FINSEQ_1:3;
       then
-A41:  k in dom a by A26,A39,XBOOLE_0:def 3;
+A41:  k in dom a by A26,A39,XBOOLE_0:def 4;
 A42:  Seg k c= Seg (k+1) by A40,FINSEQ_1:7;
 A43:  a|k = (g1|(Seg (k+1)))|(Seg k) by A23,FINSEQ_1:def 15
         .= g1|(Seg k) by A42,FUNCT_1:82
         .= g1|k by FINSEQ_1:def 15;
-A44:  k+1 in dom a by A6,A25,A27,A39,XBOOLE_0:def 3;
+A44:  k+1 in dom a by A6,A25,A27,A39,XBOOLE_0:def 4;
       k>=1+1 by A17;
       then
 A45:  1<k by NAT_1:13;
@@ -2484,8 +2487,8 @@ A49:  s1 misses s2
         assume s1 meets s2;
         then consider x such that
 A50:    x in s1 & x in s2 by XBOOLE_0:3;
-A51:    x in Lf & x in L~b & x in c by A50,XBOOLE_0:def 3;
-        then x in (L~b /\ c) by XBOOLE_0:def 3;
+A51:    x in Lf & x in L~b & x in c by A50,XBOOLE_0:def 4;
+        then x in (L~b /\ c) by XBOOLE_0:def 4;
         then x = g1.k by A48,TARSKI:def 1;
         then x in rng g1 by A26,FUNCT_1:12;
         hence contradiction by A4,A51,XBOOLE_0:3;

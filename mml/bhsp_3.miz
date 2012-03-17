@@ -8,14 +8,15 @@ environ
 
  vocabularies BHSP_1, PRE_TOPC, NORMSP_1, ORDINAL2, SEQM_3, SEQ_1, RLVECT_1,
       METRIC_1, FUNCT_1, ARYTM_1, ARYTM_3, ABSVALUE, RELAT_1, SEQ_2, LATTICES,
-      BHSP_3, ARYTM, FUNCT_3, FRECHET2;
+      BHSP_3, ARYTM, FRECHET2;
  notations TARSKI, ORDINAL1, SUBSET_1, NUMBERS, XREAL_0, COMPLEX1, REAL_1,
-      RELAT_1, FUNCT_1, FUNCT_3, SEQ_1, NAT_1, SEQM_3, STRUCT_0, PRE_TOPC,
+      RELAT_1, FUNCT_1, FUNCT_3, SEQ_1, NAT_1,
+      VALUED_0, SEQM_3, STRUCT_0, PRE_TOPC,
       RLVECT_1, NORMSP_1, BHSP_1, BHSP_2, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, FUNCT_3, XXREAL_0, REAL_1, COMPLEX1, SEQ_1,
       SEQM_3, BHSP_2, VALUED_1, RECDEF_1, NAT_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, SEQM_3, STRUCT_0;
+      XREAL_0, NAT_1, MEMBERED, SEQM_3, STRUCT_0, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems NAT_1, REAL_2, FUNCT_1, SEQ_2, SEQM_3, FUNCT_2, RLVECT_1,
       BHSP_1, BHSP_2, NORMSP_1, RELAT_1, RELSET_1, XREAL_0, XBOOLE_1, XCMPLX_0,
@@ -42,13 +43,8 @@ definition
   holds dist(seq.n, seq.m) < r;
 end;
 
-notation
-  let X, seq;
-  synonym seq is_Cauchy_sequence for seq is Cauchy;
-end;
-
 theorem
-  seq is constant implies seq is_Cauchy_sequence
+  seq is constant implies seq is Cauchy
 proof
   assume
 A1: seq is constant;
@@ -56,20 +52,20 @@ A1: seq is constant;
 A2: r > 0;
   take k = 0;
   let n, m such that n >= k & m >= k;
-  dist((seq.n), (seq.m)) = dist((seq.n), (seq.n)) by A1,BHSP_1:70
+  dist((seq.n), (seq.m)) = dist((seq.n), (seq.n)) by A1,VALUED_0:23,25
     .= 0 by BHSP_1:41;
   hence dist((seq.n), (seq.m)) < r by A2;
 end;
 
 theorem
-  seq is_Cauchy_sequence iff for r st r > 0 ex k st for n, m st
+  seq is Cauchy iff for r st r > 0 ex k st for n, m st
   ( n >= k & m >= k ) holds ||.(seq.n) - (seq.m).|| < r
 proof thus
-  seq is_Cauchy_sequence implies for r st r > 0 ex k st for n, m st
+  seq is Cauchy implies for r st r > 0 ex k st for n, m st
   ( n >= k & m >= k ) holds ||.(seq.n) - (seq.m).|| < r
   proof
     assume
-A1: seq is_Cauchy_sequence;
+A1: seq is Cauchy;
     let r;
     assume r > 0;
     then consider l such that
@@ -82,7 +78,7 @@ A2: for n, m st ( n >= l & m >= l ) holds
     hence thesis by BHSP_1:def 5;
   end;
   ( for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
-  ||.(seq.n) - (seq.m).|| < r ) implies seq is_Cauchy_sequence
+  ||.(seq.n) - (seq.m).|| < r ) implies seq is Cauchy
   proof
     assume
 A3: for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
@@ -101,12 +97,12 @@ A4: for n, m st ( n >= l & m >= l ) holds ||.(seq.n) - (seq.m).|| < r by A3;
 end;
 
 theorem
-  seq1 is_Cauchy_sequence & seq2 is_Cauchy_sequence implies
-  seq1 + seq2 is_Cauchy_sequence
+  seq1 is Cauchy & seq2 is Cauchy implies
+  seq1 + seq2 is Cauchy
 proof
   assume that
-A1: seq1 is_Cauchy_sequence and
-A2: seq2 is_Cauchy_sequence;
+A1: seq1 is Cauchy and
+A2: seq2 is Cauchy;
   let r;
   assume r > 0;
   then
@@ -139,12 +135,12 @@ A8: dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r/2 + r/2
 end;
 
 theorem
-  seq1 is_Cauchy_sequence & seq2 is_Cauchy_sequence implies
-  seq1 - seq2 is_Cauchy_sequence
+  seq1 is Cauchy & seq2 is Cauchy implies
+  seq1 - seq2 is Cauchy
 proof
   assume that
-A1: seq1 is_Cauchy_sequence and
-A2: seq2 is_Cauchy_sequence;
+A1: seq1 is Cauchy and
+A2: seq2 is Cauchy;
   let r;
   assume r > 0;
   then
@@ -177,10 +173,10 @@ A8: dist((seq1.n), (seq1.m)) + dist((seq2.n), (seq2.m)) < r/2 + r/2
 end;
 
 theorem Th5:
-  seq is_Cauchy_sequence implies a * seq is_Cauchy_sequence
+  seq is Cauchy implies a * seq is Cauchy
 proof
   assume
-A1: seq is_Cauchy_sequence;
+A1: seq is Cauchy;
 A2: now
     assume
 A3: a = 0;
@@ -237,18 +233,18 @@ A12: dist(a * (seq.n), a * (seq.m))
 end;
 
 theorem
-  seq is_Cauchy_sequence implies - seq is_Cauchy_sequence
+  seq is Cauchy implies - seq is Cauchy
 proof
-  assume seq is_Cauchy_sequence;
-  then (-1) * seq is_Cauchy_sequence by Th5;
+  assume seq is Cauchy;
+  then (-1) * seq is Cauchy by Th5;
   hence thesis by BHSP_1:77;
 end;
 
 theorem Th7:
-  seq is_Cauchy_sequence implies seq + x is_Cauchy_sequence
+  seq is Cauchy implies seq + x is Cauchy
 proof
   assume
-A1: seq is_Cauchy_sequence;
+A1: seq is Cauchy;
   let r;
   assume r > 0;
   then consider m1 such that
@@ -269,15 +265,15 @@ A3: dist((seq.n), (seq.m)) < r by A2;
 end;
 
 theorem
-  seq is_Cauchy_sequence implies seq - x is_Cauchy_sequence
+  seq is Cauchy implies seq - x is Cauchy
 proof
-  assume seq is_Cauchy_sequence;
-  then seq + (-x) is_Cauchy_sequence by Th7;
+  assume seq is Cauchy;
+  then seq + (-x) is Cauchy by Th7;
   hence thesis by BHSP_1:78;
 end;
 
 theorem
-  seq is convergent implies seq is_Cauchy_sequence
+  seq is convergent implies seq is Cauchy
 proof
   assume seq is convergent;
   then consider h such that
@@ -431,11 +427,11 @@ A3: for n st n >= m holds seq1.n = seq2.n by A1;
 end;
 
 theorem
-  seq1 is_Cauchy_sequence & seq1 is_compared_to seq2
-  implies seq2 is_Cauchy_sequence
+  seq1 is Cauchy & seq1 is_compared_to seq2
+  implies seq2 is Cauchy
 proof
   assume that
-A1: seq1 is_Cauchy_sequence and
+A1: seq1 is Cauchy and
 A2: seq1 is_compared_to seq2;
   let r;
   assume r > 0;
@@ -651,7 +647,7 @@ theorem
 proof
   assume seq is constant;
   then consider x such that
-A1: for n holds seq.n = x by NORMSP_1:def 4;
+A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
 A2: x = 0'(X) implies seq is bounded
   proof
     assume
@@ -858,116 +854,7 @@ A16: now
   hence thesis by Def3;
 end;
 
-definition
-  let X, Nseq, seq;
-  redefine func seq * Nseq -> sequence of X;
-  coherence
-  proof
-A1: dom Nseq = NAT by FUNCT_2:def 1;
-A2: rng seq c= the carrier of X by RELSET_1:12;
-    rng Nseq c= NAT by VALUED_0:def 6;
-    then rng Nseq c= dom seq by FUNCT_2:def 1;
-    then
-A3: dom (seq * Nseq) = NAT by A1,RELAT_1:46;
-    rng (seq * Nseq) c= rng seq by RELAT_1:45;
-    then rng (seq * Nseq) c= the carrier of X by A2,XBOOLE_1:1;
-    hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
-  end;
-end;
-
-definition
-  let X be 1-sorted, s be sequence of X;
-  mode subsequence of s -> sequence of X means
-    :Def4:
-  ex N being increasing Seq_of_Nat st it = s * N;
-  existence
-  proof
-    reconsider s1 = incl NAT as increasing Seq_of_Nat by SEQM_3:80;
-    take s, s1;
-    thus thesis by FUNCT_2:23;
-  end;
-end;
-
-theorem Th26:
-  for X being RealUnitarySpace, s being sequence of X,
-  N being increasing Seq_of_Nat
-  for n being Element of NAT holds (s * N).n=s.(N.n)
-proof
-  let X be RealUnitarySpace, s be sequence of X, N be increasing Seq_of_Nat;
-  let n be Element of NAT;
-  dom (s * N) = NAT by FUNCT_2:def 1;
-  hence (s * N).n = s.(N.n) by FUNCT_1:22;
-end;
-
-theorem
-  seq is subsequence of seq
-proof
-  reconsider Rseq = incl NAT as Real_Sequence;
-  now
-    let n;
-    Rseq.n = n & Rseq.(n+1) = n+1 by FUNCT_1:35;
-    hence Rseq.n < Rseq.(n+1) by NAT_1:13;
-  end;
-  then
-A1: Rseq is increasing by SEQM_3:def 11;
-  for n holds Rseq.n is Element of NAT by FUNCT_1:35;
-  then reconsider Rseq as increasing Seq_of_Nat by A1,SEQM_3:29;
-  take Nseq = Rseq;
-  now
-    let n;
-    thus (seq * Nseq).n = seq.(Nseq.n) by Th26
-      .= seq.n by FUNCT_1:35;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  seq1 is subsequence of seq2 & seq2 is subsequence of seq3
-  implies seq1 is subsequence of seq3
-proof
-  assume that
-A1: seq1 is subsequence of seq2 and
-A2: seq2 is subsequence of seq3;
-  consider Nseq1 such that
-A3: seq1 = seq2 * Nseq1 by A1,Def4;
-  consider Nseq2 such that
-A4: seq2 = seq3 * Nseq2 by A2,Def4;
-  take Nseq = Nseq2 * Nseq1;
-  thus seq1 = seq3 * Nseq by A3,A4,RELAT_1:55;
-end;
-
-theorem Th29:
-  seq is constant & seq1 is subsequence of seq implies seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1 = seq * Nseq by A2,Def4;
-  now
-    let n;
-    seq.(Nseq.n) = seq.(Nseq.(n + 1)) by A1,BHSP_1:70;
-    then (seq * Nseq).(n + 1) = seq.(Nseq.n) by Th26;
-    hence seq1.n = seq1.(n+1) by A3,Th26;
-  end;
-  hence thesis by BHSP_1:68;
-end;
-
-theorem
-  seq is constant & seq1 is subsequence of seq implies seq = seq1
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1 = seq * Nseq by A2,Def4;
-  now
-    let n;
-    thus seq1.n = seq.(Nseq.n) by A3,Th26
-      .= seq.n by A1,BHSP_1:70;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 5;
 
 theorem Th31:
   seq is bounded & seq1 is subsequence of seq implies seq1 is bounded
@@ -979,11 +866,11 @@ A2: seq1 is subsequence of seq;
 A3: M1 > 0 and
 A4: for n holds ||.seq.n.|| <= M1 by A1,Def3;
   consider Nseq such that
-A5: seq1 = seq * Nseq by A2,Def4;
+A5: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   take M = M1;
   now
     let n;
-    seq1.n = seq.(Nseq.n) by A5,Th26;
+    seq1.n = seq.(Nseq.n) by A5,FUNCT_2:21;
     hence ||.seq1.n.|| <= M by A4;
   end;
   hence thesis by A3;
@@ -999,7 +886,7 @@ A2: seq1 is subsequence of seq;
 A3: for r st r > 0 ex m st for n st n >= m holds
   ||.(seq.n) - g1.|| < r by A1,BHSP_2:9;
   consider Nseq such that
-A4: seq1 = seq * Nseq by A2,Def4;
+A4: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -1011,7 +898,7 @@ A6: n >= m;
     Nseq.n >= n by SEQM_3:33;
     then
 A7: Nseq.n >= m by A6,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) by A4,Th26;
+    seq1.n = seq.(Nseq.n) by A4,FUNCT_2:21;
     hence ||.(seq1.n) - g1.|| < r by A5,A7;
   end;
   hence thesis by BHSP_2:9;
@@ -1025,7 +912,7 @@ A1: seq1 is subsequence of seq and
 A2: seq is convergent;
 A3: seq1 is convergent by A1,A2,Th32;
   consider Nseq such that
-A4: seq1 = seq * Nseq by A1,Def4;
+A4: seq1 = seq * Nseq by A1,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -1037,21 +924,21 @@ A6: n >= m;
     Nseq.n >= n by SEQM_3:33;
     then
 A7: Nseq.n >= m by A6,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) by A4,Th26;
+    seq1.n = seq.(Nseq.n) by A4,FUNCT_2:21;
     hence dist((seq1.n), (lim seq)) < r by A5,A7;
   end;
   hence thesis by A3,BHSP_2:def 2;
 end;
 
 theorem Th34:
-  seq is_Cauchy_sequence & seq1 is subsequence of seq
-  implies seq1 is_Cauchy_sequence
+  seq is Cauchy & seq1 is subsequence of seq
+  implies seq1 is Cauchy
 proof
   assume that
-A1: seq is_Cauchy_sequence and
+A1: seq is Cauchy and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1 = seq * Nseq by A2,Def4;
+A3: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -1064,7 +951,7 @@ A5: n >= k & m >= k;
     Nseq.n >= n & Nseq.m >= m by SEQM_3:33;
     then
 A6: Nseq.n >= k & Nseq.m >= k by A5,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) & seq1.m = seq.(Nseq.m) by A3,Th26;
+    seq1.n = seq.(Nseq.n) & seq1.m = seq.(Nseq.m) by A3,FUNCT_2:21;
     hence dist((seq1.n), (seq1.m)) < r by A4,A6;
   end;
   hence thesis by Def1;
@@ -1148,58 +1035,11 @@ proof
   hence thesis by FUNCT_2:113;
 end;
 
-theorem
-  (seq * Nseq) ^\k = seq * (Nseq ^\k)
-proof
-  now
-    let n; thus
-    ((seq * Nseq) ^\k).n = (seq * Nseq).(n + k) by NAT_1:def 3
-      .= seq.(Nseq.(n + k)) by Th26
-      .= seq.((Nseq ^\k).n) by NAT_1:def 3
-      .= (seq * (Nseq ^\k)).n by Th26;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem Th43:
-  seq ^\k is subsequence of seq
-proof
-  deffunc F(Element of NAT) = $1 + k;
-  consider Rseq such that
-A1: for n holds Rseq.n = F(n) from SEQ_1:sch 1;
-  now
-    let n;
-A2: Rseq.n = n + k & Rseq.(n + 1) = n + 1 + k by A1;
-    n + k < n + k + 1 by NAT_1:13;
-    hence Rseq.n < Rseq.(n + 1) by A2;
-  end;
-  then
-A3: Rseq is increasing by SEQM_3:def 11;
-  now
-    let n;
-    n + k is Element of NAT;
-    hence Rseq.n is Element of NAT by A1;
-  end;
-  then reconsider Rseq as increasing Seq_of_Nat by A3,SEQM_3:29;
-  take Nseq=Rseq;
-  now
-    let n; thus
-    (seq * Nseq).n = seq.(Nseq.n) by Th26
-      .= seq.(n + k) by A1
-      .= (seq ^\k).n by NAT_1:def 3;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 2;
 
 theorem
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
-proof
-  assume
-A1: seq is convergent;
-A2: seq ^\k is subsequence of seq by Th43;
-  hence seq ^\k is convergent by A1,Th32;
-  thus lim (seq ^\k) = lim seq by A1,A2,Th33;
-end;
+                          by Th32,Th33;
 
 canceled;
 
@@ -1243,11 +1083,11 @@ A10: l + k = n by A8;
 end;
 
 theorem
-  seq is_Cauchy_sequence & (ex k st seq = seq1 ^\k)
-  implies seq1 is_Cauchy_sequence
+  seq is Cauchy & (ex k st seq = seq1 ^\k)
+  implies seq1 is Cauchy
 proof
   assume that
-A1: seq is_Cauchy_sequence and
+A1: seq is Cauchy and
 A2: ex k st seq = seq1 ^\k;
   consider k such that
 A3: seq = seq1 ^\k by A2;
@@ -1290,13 +1130,7 @@ A15: l3 + k = m by A12;
 end;
 
 theorem
-  seq is_Cauchy_sequence implies (seq ^\k) is_Cauchy_sequence
-proof
-  assume
-A1: seq is_Cauchy_sequence;
-  seq ^\k is subsequence of seq by Th43;
-  hence thesis by A1,Th34;
-end;
+  seq is Cauchy implies (seq ^\k) is Cauchy by Th34;
 
 theorem
   seq1 is_compared_to seq2 implies (seq1 ^\k) is_compared_to (seq2 ^\k)
@@ -1318,45 +1152,28 @@ A3: n >= m;
 end;
 
 theorem
-  seq is bounded implies (seq ^\k) is bounded
-proof
-  assume
-A1: seq is bounded;
-  seq ^\k is subsequence of seq by Th43;
-  hence thesis by A1,Th31;
-end;
+  seq is bounded implies (seq ^\k) is bounded by Th31;
 
 theorem
-  seq is constant implies (seq ^\k) is constant
-proof
-  assume
-A1: seq is constant;
-  seq ^\k is subsequence of seq by Th43;
-  hence thesis by A1,Th29;
-end;
+  seq is constant implies (seq ^\k) is constant;
 
 definition
- canceled;
+ canceled 2;
   let X;
   attr X is complete means
   :Def6:
   for seq holds
-  seq is_Cauchy_sequence implies seq is convergent;
-end;
-
-notation
-  let X;
-  synonym X is_complete_space for X is complete;
+  seq is Cauchy implies seq is convergent;
 end;
 
 canceled;
 
 theorem
-  X is_complete_space & seq is_Cauchy_sequence implies seq is bounded
+  X is complete & seq is Cauchy implies seq is bounded
 proof
   assume that
-A1: X is_complete_space and
-A2: seq is_Cauchy_sequence;
+A1: X is complete and
+A2: seq is Cauchy;
   seq is convergent by A1,A2,Def6;
   hence thesis by Th24;
 end;
@@ -1365,11 +1182,6 @@ definition
   let X;
   attr X is Hilbert means
 
-  X is RealUnitarySpace & X is_complete_space;
-end;
-
-notation
-  let X;
-  synonym X is_Hilbert_space for X is Hilbert;
+  X is RealUnitarySpace & X is complete;
 end;
 

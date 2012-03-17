@@ -81,6 +81,20 @@
 <CCluster aid="CARD_4" nr="1">
 <ArgTypes/>
 <Cluster>
+<Adjective nr="20" value="false"/>
+<Adjective nr="23"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13"/>
+<Adjective nr="23"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_4" nr="2">
+<ArgTypes/>
+<Cluster>
 <Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
@@ -91,7 +105,7 @@
 <Adjective nr="33"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_4" nr="2">
+<CCluster aid="CARD_4" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20" value="false"/>
@@ -104,13 +118,32 @@
 <Adjective nr="34"/>
 </Cluster>
 </CCluster>
-<CCluster aid="CARD_4" nr="3">
+<CCluster aid="CARD_4" nr="4">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="20"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="33"/>
+</Cluster>
+</CCluster>
+<CCluster aid="CARD_4" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="33"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="24">
+<LocusVar nr="1"/>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="33"/>

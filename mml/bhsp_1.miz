@@ -10,7 +10,8 @@ environ
       ABSVALUE, SQUARE_1, FUNCT_3, ARYTM_3, NORMSP_1, METRIC_1, RELAT_1,
       SEQM_3, BHSP_1, ARYTM, FUNCOP_1, STRUCT_0, ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, STRUCT_0, ALGSTR_0,
+      REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1,
+      NAT_1, STRUCT_0, ALGSTR_0,
       DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1,
       XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, MEMBERED,
@@ -18,10 +19,10 @@ environ
  registrations SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       SQUARE_1, MEMBERED, STRUCT_0, XBOOLE_0, ALGSTR_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, NORMSP_1, STRUCT_0, SQUARE_1, ALGSTR_0;
+ definitions RLVECT_1, NORMSP_1, STRUCT_0, SQUARE_1, ALGSTR_0, VALUED_0;
  theorems TARSKI, REAL_2, SQUARE_1, ABSVALUE, RLVECT_1, RLSUB_1, QUIN_1,
       FUNCT_2, NORMSP_1, XREAL_0, COMPLEX1, FUNCOP_1, XREAL_1, XXREAL_0,
-      ALGSTR_0;
+      ALGSTR_0, VALUED_0, ORDINAL1;
  schemes FUNCT_2;
 
 begin
@@ -584,20 +585,15 @@ definition
 
   ||.x - y.||;
   correctness;
+  commutativity
+proof let IT be Real; let x,y;
+ ||.x - y.|| = ||.-(y-x).|| by RLVECT_1:47
+    .= ||.y - x.|| by Th37;
+ hence thesis;
+end;
 end;
 
-theorem Th40:
-  dist(x,y) = dist(y,x)
-proof
-  thus dist(x,y) = ||.-(y-x).|| by RLVECT_1:47
-    .= dist(y,x) by Th37;
-end;
-
-definition
-  let X, x, y;
-  redefine func dist(x,y);
-  commutativity by Th40;
-end;
+canceled;
 
 theorem Th41:
   dist(x,x) = 0
@@ -794,17 +790,15 @@ A1: seq1 is constant and
 A2: seq2 is constant and
 A3: seq = seq1 + seq2;
   consider x such that
-A4: for n holds seq1.n = x by A1,NORMSP_1:def 4;
+A4: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   consider y such that
-A5: for n holds seq2.n = y by A2,NORMSP_1:def 4;
+A5: for n being Nat holds seq2.n = y by A2,VALUED_0:def 18;
   take z = x + y;
-  now
-    let n;
-    thus seq.n = seq1.n + seq2.n by A3,NORMSP_1:def 5
+    let n be Nat;
+     n in NAT by ORDINAL1:def 13;
+    hence seq.n = seq1.n + seq2.n by A3,NORMSP_1:def 5
       .= x + seq2.n by A4
       .= z by A5;
-  end;
-  hence thesis;
 end;
 
 theorem
@@ -816,17 +810,15 @@ A1: seq1 is constant and
 A2: seq2 is constant and
 A3: seq = seq1 - seq2;
   consider x such that
-A4: for n holds seq1.n = x by A1,NORMSP_1:def 4;
+A4: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   consider y such that
-A5: for n holds seq2.n = y by A2,NORMSP_1:def 4;
+A5: for n being Nat holds seq2.n = y by A2,VALUED_0:def 18;
   take z = x - y;
-  now
-    let n;
-    thus seq.n = seq1.n - seq2.n by A3,NORMSP_1:def 6
+    let n be Nat;
+     n in NAT by ORDINAL1:def 13;
+    hence seq.n = seq1.n - seq2.n by A3,NORMSP_1:def 6
       .= x - seq2.n by A4
       .= z by A5;
-  end;
-  hence thesis;
 end;
 
 theorem
@@ -836,59 +828,15 @@ proof
 A1: seq1 is constant and
 A2: seq = a * seq1;
   consider x such that
-A3: for n holds seq1.n = x by A1,NORMSP_1:def 4;
+A3: for n being Nat holds seq1.n = x by A1,VALUED_0:def 18;
   take z = a * x;
-  now
-    let n;
-    thus seq.n = a * seq1.n by A2,NORMSP_1:def 8
+    let n be Nat;
+     n in NAT by ORDINAL1:def 13;
+    hence seq.n = a * seq1.n by A2,NORMSP_1:def 8
       .= z by A3;
-  end;
-  hence thesis;
 end;
 
-canceled 8;
-
-theorem Th68:
-  seq is constant iff for n holds seq.n = seq.(n + 1)
-proof
-  thus seq is constant implies for n holds seq.n=seq.(n + 1)
-  proof
-    assume seq is constant;
-    then ex x st rng seq = {x} by NORMSP_1:27;
-    hence thesis by NORMSP_1:21;
-  end;
-  assume for n holds seq.n = seq.(n + 1);
-  then for n, k holds seq.n = seq.(n + k) by NORMSP_1:22;
-  then for n, m holds seq.n = seq.m by NORMSP_1:23;
-  hence ex x st for n holds seq.n = x by NORMSP_1:24;
-end;
-
-theorem Th69:
-  seq is constant iff for n, k holds seq.n = seq.(n + k)
-proof
-  thus seq is constant implies for n, k holds seq.n = seq.(n + k)
-  proof
-    assume seq is constant;
-    then for n holds seq.n=seq.(n+1) by Th68;
-    hence thesis by NORMSP_1:22;
-  end;
-  assume for n, k holds seq.n = seq.(n + k);
-  then for n, m holds seq.n = seq.m by NORMSP_1:23;
-  hence ex x st for n holds seq.n = x by NORMSP_1:24;
-end;
-
-theorem
-  seq is constant iff for n, m holds seq.n = seq.m
-proof
-  thus seq is constant implies for n, m holds seq.n = seq.m
-  proof
-    assume seq is constant;
-    then for n, k holds seq.n = seq.(n + k) by Th69;
-    hence thesis by NORMSP_1:23;
-  end;
-  assume for n, m holds seq.n = seq.m;
-  hence ex x st for n holds seq.n = x by NORMSP_1:24;
-end;
+canceled 11;
 
 theorem
   seq1 - seq2 = seq1 + -seq2

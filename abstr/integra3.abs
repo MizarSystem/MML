@@ -9,7 +9,7 @@ environ
  vocabularies FINSEQ_1, ARYTM_1, INTEGRA1, MEASURE5, RELAT_1, ORDINAL2, BOOLE,
       FUNCT_1, CARD_1, FUNCT_3, SQUARE_1, ABSVALUE, RLVECT_1, SEQ_2, LATTICES,
       JORDAN3, RCOMP_1, PARTFUN1, RFINSEQ, INTEGRA2, FDIFF_1, ARYTM_3, PROB_1,
-      FINSEQ_4, ARYTM, ANPROJ_1;
+      FINSEQ_4, ARYTM, ANPROJ_1, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, CARD_1, NUMBERS, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FUNCT_2,
       XXREAL_2, SEQM_3, SEQ_4, VALUED_0, PARTFUN1, PSCOMP_1, FINSEQ_1,
@@ -17,7 +17,7 @@ environ
       FDIFF_1, SQUARE_1, RFINSEQ, BINARITH, INTEGRA2;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, FINSOP_1, RFUNCT_1,
       FDIFF_1, RFINSEQ, BINARITH, PRE_CIRC, PSCOMP_1, JORDAN3, INTEGRA2, SEQ_1,
-      BINOP_2, XXREAL_2, NAT_D;
+      BINOP_2, XXREAL_2, NAT_D, RVSUM_1, SEQ_4;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, GOBOARD1, INTEGRA1, INTEGRA2, VALUED_0, FUNCT_2,
       FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -71,36 +71,36 @@ theorem :: INTEGRA3:9
   D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
   & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
   holds Sum lower_volume(g,D2)-Sum
-  lower_volume(g,D1)<=(sup rng g-inf rng g)*delta(D1);
+  lower_volume(g,D1)<=(upper_bound rng g-lower_bound rng g)*delta(D1);
 
 theorem :: INTEGRA3:10
   for A be closed-interval Subset of REAL, g be Function of A,REAL,
   D1,D2 be Element of divs A st x in divset(D1,len D1) & len D1 >= 2
   & D1<=D2 & rng D2 = rng D1 \/ {x} & g|A is bounded
   holds Sum upper_volume(g,D1)-Sum
-  upper_volume(g,D2)<=(sup rng g-inf rng g)*delta(D1);
+  upper_volume(g,D2)<=(upper_bound rng g-lower_bound rng g)*delta(D1);
 
 theorem :: INTEGRA3:11
   for A be closed-interval Subset of REAL, D be Element of divs A,
   r be Real, i,j be Element of NAT
   st i in dom D & j in dom D & i<=j & r < mid(D,i,j).1
   holds ex B be closed-interval Subset of REAL
-  st r=inf B & sup B=mid(D,i,j).(len mid(D,i,j))
+  st r=lower_bound B & upper_bound B=mid(D,i,j).(len mid(D,i,j))
   & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B;
 
 theorem :: INTEGRA3:12
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
-  & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > inf A
+  & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
   holds Sum lower_volume(f,D2)-Sum
-  lower_volume(f,D1)<=(sup rng f-inf rng f)*delta(D1);
+  lower_volume(f,D1)<=(upper_bound rng f-lower_bound rng f)*delta(D1);
 
 theorem :: INTEGRA3:13
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   D1,D2 be Element of divs A st x in divset(D1,len D1) & vol(A)<>0
-  & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > inf A
+  & D1<=D2 & rng D2 = rng D1 \/ {x} & f|A is bounded & x > lower_bound A
   holds Sum upper_volume(f,D1)-Sum
-  upper_volume(f,D2)<=(sup rng f-inf rng f)*delta(D1);
+  upper_volume(f,D2)<=(upper_bound rng f-lower_bound rng f)*delta(D1);
 
 theorem :: INTEGRA3:14
   for A be closed-interval Subset of REAL, D1,D2 be Element of divs A,
@@ -108,7 +108,8 @@ theorem :: INTEGRA3:14
 r be Real, i,j be Element of NAT st i in dom D1 & j in dom D1 & i<=j & D1 <= D2
   & r < mid(D2,indx(D2,D1,i),indx(D2,D1,j)).1
   holds ex B be closed-interval Subset of REAL, MD1,MD2 be Element of divs B
-  st r=inf B & sup B=MD2.(len MD2) & sup B=MD1.(len MD1) & MD1 <= MD2
+  st r=lower_bound B & upper_bound B=MD2.(len MD2) &
+  upper_bound B=MD1.(len MD1) & MD1 <= MD2
   & MD1=mid(D1,i,j) & MD2=mid(D2,indx(D2,D1,i),indx(D2,D1,j));
 
 theorem :: INTEGRA3:15
@@ -123,12 +124,12 @@ theorem :: INTEGRA3:16
 theorem :: INTEGRA3:17
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   D be Element of divs A st f|A is bounded & i in dom D
-  holds inf rng(f|divset(D,i)) <= sup rng f;
+  holds lower_bound rng(f|divset(D,i)) <= upper_bound rng f;
 
 theorem :: INTEGRA3:18
   for A be closed-interval Subset of REAL, f be Function of A,REAL,
   D be Element of divs A st f|A is bounded & i in dom D
-  holds sup rng(f|divset(D,i)) >= inf rng f;
+  holds upper_bound rng(f|divset(D,i)) >= lower_bound rng f;
 
 begin :: Darboux's Theorem
 

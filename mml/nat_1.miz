@@ -10,10 +10,12 @@ environ
       FINSET_1, CARD_1, BOOLE, GR_CY_1, RELAT_1, FUNCT_1, SQUARE_1, NORMSP_1,
       SEQM_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, NUMBERS,
-      XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, RELAT_1, FUNCT_1, FUNCT_2;
- constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, CARD_1, WELLORD2, FUNCT_2;
+      XCMPLX_0, XREAL_0, REAL_1, XXREAL_0, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2;
+ constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, CARD_1, WELLORD2, FUNCT_2,
+      PARTFUN1;
  registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
-      XBOOLE_0, CARD_1, RELSET_1;
+      XBOOLE_0, CARD_1, RELSET_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, CARD_1;
  theorems AXIOMS, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, TARSKI,
@@ -1148,7 +1150,7 @@ proof
 W1:  dom L = NAT and
 W2:  {} in NAT implies L.{} = A() and
 W3:  for A being Ordinal st succ A in NAT holds L.(succ A) = G(A,L.A) and
-     for A being Ordinal st A in NAT & A <> {} & A is_limit_ordinal
+     for A being Ordinal st A in NAT & A <> {} & A is limit_ordinal
                 holds L.A = D(A,L|A) from ORDINAL2:sch 5;
  take L;
  thus dom L = NAT by W1;
@@ -1402,3 +1404,18 @@ proof
  thus s^\k^\m = s^\(k+m) by Th59
     .= s^\m^\k by Th59;
 end;
+
+theorem
+ for N being sequence of NAT
+  holds (s * N) ^\k = s * (N ^\k)
+proof let N be sequence of NAT;
+  now
+    let n be Element of NAT; thus
+    ((s * N) ^\k).n = (s * N).(n + k) by Def3
+      .= s.(N.(n + k)) by FUNCT_2:21
+      .= s.((N ^\k).n) by Def3
+      .= (s * (N ^\k)).n by FUNCT_2:21;
+  end;
+  hence thesis by FUNCT_2:113;
+end;
+

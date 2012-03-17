@@ -10,14 +10,15 @@ environ
       MEASURE5, RCOMP_1, INTEGRA5, FUNCOP_1, INTEGRA8, SIN_COS, PRE_TOPC,
       FUNCT_1, RELAT_1, ARYTM_3, PARTFUN1, FDIFF_1, SEQ_2, SIN_COS2,
       POWER, SQUARE_1, SIN_COS4, SEQ_1, SIN_COS6, ABSVALUE, ARYTM, LATTICES,
-      OPPCAT_1;
+      OPPCAT_1, SEQ_4;
  notations TARSKI, XBOOLE_0, FUNCOP_1, INTEGRA1, RFUNCT_1, PSCOMP_1, RELAT_1,
       INTEGRA5, SIN_COS, SUBSET_1, PARTFUN1, RCOMP_1, NUMBERS, FDIFF_1,
-      XXREAL_0, REAL_1, FCONT_1, SEQ_2, RFUNCT_2, SIN_COS2, NAT_1, POWER,
+      XXREAL_0, REAL_1, FCONT_1, SEQ_2,
+      SEQ_4, RFUNCT_2, SIN_COS2, NAT_1, POWER,
       SQUARE_1, VALUED_1, SEQ_1, SIN_COS6, COMPLEX1, FUNCT_2;
  constructors BINOP_2, FINSEQOP, INTEGRA5, SIN_COS, COMSEQ_3, PARTFUN1,
       PSCOMP_1, REAL_1, SQUARE_1, RFUNCT_1, FDIFF_1, RFUNCT_2, FCONT_1,
-      SIN_COS2, NAT_1, SIN_COS6, SEQ_1;
+      SIN_COS2, NAT_1, SIN_COS6, SEQ_1, POWER, XXREAL_2, SEQ_4;
  registrations INTEGRA1, RELSET_1, MEMBERED, RCOMP_1, FDIFF_1, INT_1, XXREAL_0,
       XREAL_0, NUMBERS, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, XXREAL_2,
       SEQ_2, FCONT_1, SIN_COS;
@@ -593,18 +594,11 @@ A9: cos is_differentiable_in x by SIN_COS:68;
 end;
 
 theorem Th35:
-  for r being Real holds dom (REAL --> r)=REAL & rng (REAL --> r) c= REAL
+  for r being Real holds rng (REAL --> r) c= REAL
 proof
   let r be Real;
-  thus dom (REAL --> r) = REAL by FUNCOP_1:19;
 A1: rng (REAL --> r) c= {r} by FUNCOP_1:19;
-  {r} c= REAL
-  proof
-    let x be set;
-    assume x in {r};
-    then x=r by TARSKI:def 1;
-    hence x in REAL;
-  end;
+  {r} c= REAL by TARSKI:def 1;
   hence thesis by A1,XBOOLE_1:1;
 end;
 
@@ -625,13 +619,13 @@ proof
   holds (x in A implies ((Cst(1))|A).x = 1)
   & (not x in A implies ((Cst(1))|A).x = 0)
   proof
-A1: dom (Cst(1))=REAL by Th35;
+A1: dom (Cst(1))=REAL by Th35,FUNCOP_1:19;
 A2: dom ((Cst(1))|A)=dom (Cst(1)) /\ A by FUNCT_1:68;
     hence dom ((Cst(1))|A)=A by A1,XBOOLE_1:28;
     let x be set;
     assume
 A3: x in A;
-    then x in dom ((Cst(1))|A) by A1,A2,XBOOLE_0:def 3;
+    then x in dom ((Cst(1))|A) by A1,A2,XBOOLE_0:def 4;
     then ((Cst 1)|A).x = (REAL-->1).x by FUNCT_1:68
       .= 1 by A3,FUNCOP_1:13;
     hence thesis by A3;
@@ -641,13 +635,13 @@ end;
 
 theorem Th37:
   for a,b being Real, A being closed-interval Subset of REAL
-  st A=[.a,b.] holds sup A=b & inf A=a
+  st A=[.a,b.] holds upper_bound A=b & lower_bound A=a
 proof
   let a,b be Real, A be closed-interval Subset of REAL;
   assume
 A1: A=[.a,b.];
-  A=[. inf A, sup A .] by INTEGRA1:5;
-  hence sup A=b & inf A=a by A1,INTEGRA1:6;
+  A=[. lower_bound A, upper_bound A .] by INTEGRA1:5;
+  hence upper_bound A=b & lower_bound A=a by A1,INTEGRA1:6;
 end;
 
 begin :: Integrability formulas of special functions
@@ -661,7 +655,7 @@ proof
   then reconsider A=[.a,b.] as non empty closed-interval Subset of REAL;
 A1: integral(Cst(1),a,b)=integral(Cst(1),A) by INTEGRA5:19;
 A2: (Cst(1))||A = chi(A,A) by Th36;
-  sup A=b & inf A=a by Th37;
+  upper_bound A=b & lower_bound A=a by Th37;
   then vol(A)=b-a by INTEGRA1:def 6;
   hence integral(Cst(1),a,b)=b-a by A1,A2,INTEGRA4:2;
 end;
@@ -678,11 +672,11 @@ Lm6: cos is_integrable_on A & cos|A is bounded
 proof
 X: A c= dom cos by D2;
   cos|A is continuous;
-  hence thesis by INTEGRA5:10,11,X;
+  hence thesis by X,INTEGRA5:10,11;
 end;
 
 theorem Th39:
-  integral(cos,A) = sin.(sup A)-sin.(inf A)
+  integral(cos,A) = sin.(upper_bound A)-sin.(lower_bound A)
 proof
 A1: cos is_integrable_on A & cos|A is bounded by Lm6;
   dom (sin`|REAL) = REAL by FDIFF_1:def 8,SIN_COS:73;
@@ -704,7 +698,7 @@ theorem
   A = [.0,PI/2.] implies integral(cos,A) = 1
 proof
   assume A=[.0,PI/2.];
-  then sup A=PI/2 & inf A=0 by Th37;
+  then upper_bound A=PI/2 & lower_bound A=0 by Th37;
   then integral(cos,A) = 1 - sin.0 by Th39,SIN_COS:82
     .= 1 - cos.(PI/2 - 0) by SIN_COS:83
     .= 1 - 0 by SIN_COS:82;
@@ -715,7 +709,7 @@ theorem
   A = [.0,PI.] implies integral(cos,A) = 0
 proof
   assume A=[.0,PI.];
-  then sup A=PI & inf A=0 by Th37;
+  then upper_bound A=PI & lower_bound A=0 by Th37;
   then integral(cos,A) = 0 - sin.0 by Th39,SIN_COS:81
     .= 0 - sin.(0+2*PI) by SIN_COS:83
     .= 0 - 0 by SIN_COS:81;
@@ -726,7 +720,7 @@ theorem
   A = [.0,PI*3/2.] implies integral(cos,A) = -1
 proof
   assume A=[.0,PI*3/2.];
-  then sup A=PI*3/2 & inf A=0 by Th37;
+  then upper_bound A=PI*3/2 & lower_bound A=0 by Th37;
   then integral(cos,A) = -1 - sin.0 by Th39,SIN_COS:81
     .= -1 - sin.(0+2*PI) by SIN_COS:83
     .= -1 - 0 by SIN_COS:81;
@@ -737,7 +731,7 @@ theorem
   A= [.0,PI*2.] implies integral(cos,A) = 0
 proof
   assume A=[.0,PI*2.];
-  then sup A=PI*2 & inf A=0 by Th37;
+  then upper_bound A=PI*2 & lower_bound A=0 by Th37;
   then integral(cos,A) = 0 - sin.0 by Th39,SIN_COS:81
     .= 0 - sin.(0+2*PI) by SIN_COS:83
     .= 0 - 0 by SIN_COS:81;
@@ -748,7 +742,7 @@ theorem
   A = [.2*n*PI,(2*n+1)*PI.] implies integral(cos,A) = 0
 proof
   assume A=[.2*n*PI,(2*n+1)*PI.];
-  then sup A=(2*n+1)*PI & inf A=2*n*PI by Th37;
+  then upper_bound A=(2*n+1)*PI & lower_bound A=2*n*PI by Th37;
   then integral(cos,A) = sin(0+(2*n+1)*PI) - sin(0+2*n*PI) by Th39
     .= -sin(0) - sin(0+2*n*PI) by Th2
     .= -sin(0) - sin(0) by Th1
@@ -761,7 +755,7 @@ theorem
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(cos,A) = -2*sin(x)
 proof
   assume A=[.x+2*n*PI,x+(2*n+1)*PI.];
-  then sup A=x+(2*n+1)*PI & inf A=x+2*n*PI by Th37;
+  then upper_bound A=x+(2*n+1)*PI & lower_bound A=x+2*n*PI by Th37;
   then integral(cos,A) = sin(x+(2*n+1)*PI) - sin(x+2*n*PI) by Th39
     .= -sin(x) - sin(x+2*n*PI) by Th2
     .= -sin(x) - sin(x) by Th1
@@ -773,11 +767,11 @@ Lm7: -sin is_integrable_on A & (-sin)|A is bounded
 proof
 Y: A c= dom -sin by D3;
    (-sin)|A is continuous;
-  hence thesis by INTEGRA5:10,11,Y;
+  hence thesis by Y,INTEGRA5:10,11;
 end;
 
 theorem Th46:
-  integral(-sin,A) = cos.(sup A)-cos.(inf A)
+  integral(-sin,A) = cos.(upper_bound A)-cos.(lower_bound A)
 proof
 A1: -sin is_integrable_on A & (-sin)|A is bounded by Lm7;
   dom (-sin) = REAL by FUNCT_2:def 1;
@@ -800,7 +794,7 @@ theorem
   A = [.0,PI/2.] implies integral(-sin,A) = -1
 proof
   assume A=[.0,PI/2.];
-  then sup A=PI/2 & inf A=0 by Th37;
+  then upper_bound A=PI/2 & lower_bound A=0 by Th37;
   then integral(-sin,A) = 0 - cos.0 by Th46,SIN_COS:81
     .= 0 - sin.(PI/2 - 0) by SIN_COS:83
     .= 0 - 1 by SIN_COS:81;
@@ -811,7 +805,7 @@ theorem
   A = [.0,PI.] implies integral(-sin,A) = -2
 proof
   assume A=[.0,PI.];
-  then sup A=PI & inf A=0 by Th37;
+  then upper_bound A=PI & lower_bound A=0 by Th37;
   then integral(-sin,A) = -1 - cos.0 by Th46,SIN_COS:81
     .= -1 - sin.(PI/2 - 0) by SIN_COS:83
     .= -1 - 1 by SIN_COS:81;
@@ -822,7 +816,7 @@ theorem
   A = [.0,PI*3/2.] implies integral(-sin,A) = -1
 proof
   assume A=[.0,PI*3/2.];
-  then sup A=PI*3/2 & inf A=0 by Th37;
+  then upper_bound A=PI*3/2 & lower_bound A=0 by Th37;
   then integral(-sin,A) = 0 - cos.0 by Th46,SIN_COS:81
     .= 0 - sin.(PI/2 - 0) by SIN_COS:83
     .= 0 - 1 by SIN_COS:81;
@@ -833,7 +827,7 @@ theorem
   A = [.0,PI*2.] implies integral(-sin,A) = 0
 proof
   assume A=[.0,PI*2.];
-  then sup A=PI*2 & inf A=0 by Th37;
+  then upper_bound A=PI*2 & lower_bound A=0 by Th37;
   then integral(-sin,A) = 1 - cos.0 by Th46,SIN_COS:81
     .= 1 - sin.(PI/2 - 0) by SIN_COS:83
     .= 1 - 1 by SIN_COS:81;
@@ -844,7 +838,7 @@ theorem
   A = [.2*n*PI,(2*n+1)*PI.] implies integral(-sin,A) = -2
 proof
   assume A=[.2*n*PI,(2*n+1)*PI.];
-  then sup A=(2*n+1)*PI & inf A=2*n*PI by Th37;
+  then upper_bound A=(2*n+1)*PI & lower_bound A=2*n*PI by Th37;
   then integral(-sin,A) = cos(0+(2*n+1)*PI) - cos(0+2*n*PI) by Th46
     .= -cos(0) - cos(0+2*n*PI) by Th4
     .= -cos(0) - cos(0) by Th3
@@ -857,7 +851,7 @@ theorem
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(-sin,A) = -2*cos(x)
 proof
   assume A=[.x+2*n*PI,x+(2*n+1)*PI.];
-  then sup A=x+(2*n+1)*PI & inf A=x+2*n*PI by Th37;
+  then upper_bound A=x+(2*n+1)*PI & lower_bound A=x+2*n*PI by Th37;
   then integral(-sin,A) = cos(x+(2*n+1)*PI) - cos(x+2*n*PI) by Th46
     .= -cos(x) - cos(x+2*n*PI) by Th4
     .= -cos(x) - cos(x) by Th3
@@ -869,11 +863,11 @@ Lm9: exp_R is_integrable_on A & (exp_R)|A is bounded
 proof
 X: A c= dom exp_R by D4;
   exp_R|A is continuous;
-  hence thesis by INTEGRA5:10,11,X;
+  hence thesis by X,INTEGRA5:10,11;
 end;
 
 theorem Th53:
-  integral(exp_R,A) = exp_R.(sup A)-exp_R.(inf A)
+  integral(exp_R,A) = exp_R.(upper_bound A)-exp_R.(lower_bound A)
 proof
 A1: exp_R is_integrable_on A & (exp_R)|A is bounded by Lm9;
   dom (exp_R`|REAL) = REAL by FDIFF_1:def 8,SIN_COS:71;
@@ -895,7 +889,7 @@ theorem
   A = [.0,1.] implies integral(exp_R,A) = number_e -1
 proof
   assume A=[.0,1.];
-  then sup A=1 & inf A=0 by Th37;
+  then upper_bound A=1 & lower_bound A=0 by Th37;
   hence thesis by Th53,IRRAT_1:def 7,SIN_COS:56;
 end;
 
@@ -909,11 +903,11 @@ Lm11: sinh is_integrable_on A & sinh|A is bounded
 proof
 X: A c= dom sinh by D5;
   sinh|A is continuous by Lm10;
-  hence thesis by INTEGRA5:10,11,X;
+  hence thesis by X,INTEGRA5:10,11;
 end;
 
 theorem Th55:
-  integral(sinh,A) = cosh.(sup A)-cosh.(inf A)
+  integral(sinh,A) = cosh.(upper_bound A)-cosh.(lower_bound A)
 proof
 A1: sinh is_integrable_on A & sinh|A is bounded by Lm11;
   dom (cosh`|REAL) = REAL by FDIFF_1:def 8,SIN_COS2:35;
@@ -936,7 +930,7 @@ theorem
 proof
   assume A=[.0,1.];
   then
-A1: sup A=1 & inf A=0 by Th37;
+A1: upper_bound A=1 & lower_bound A=0 by Th37;
 A2: 2*number_e > 0
   proof
     exp_R(1)>0 by SIN_COS:60;
@@ -961,11 +955,11 @@ Lm13: cosh is_integrable_on A & cosh|A is bounded
 proof
 X: A c= dom cosh by D6;
   cosh|A is continuous by Lm12;
-  hence thesis by INTEGRA5:10,11,X;
+  hence thesis by X,INTEGRA5:10,11;
 end;
 
 theorem Th57:
-  integral(cosh,A) = sinh.(sup A)-sinh.(inf A)
+  integral(cosh,A) = sinh.(upper_bound A)-sinh.(lower_bound A)
 proof
 A1: cosh is_integrable_on A & cosh|A is bounded by Lm13;
   dom (sinh`|REAL) = REAL by FDIFF_1:def 8,SIN_COS2:34;
@@ -987,7 +981,7 @@ theorem
   A= [.0,1.] implies integral(cosh,A) = (number_e^2 - 1)/(2*number_e)
 proof
   assume A=[.0,1.];
-  then sup A=1 & inf A=0 by Th37;
+  then upper_bound A=1 & lower_bound A=0 by Th37;
   then integral(cosh,A) = sinh.1 -0 by Th57,SIN_COS2:16
     .= (number_e^2 - 1)/(2*number_e) by Th17;
   hence thesis;
@@ -996,7 +990,8 @@ end;
 theorem
   A c= Z & dom tan = Z & dom tan = dom f2 &
   (for x st x in Z holds f2.x = 1/(cos.x)^2 & cos.x <> 0) &
-  f2|A is continuous implies integral(f2,A) = tan.(sup A)-tan.(inf A)
+  f2|A is continuous implies integral(f2,A) =
+  tan.(upper_bound A)-tan.(lower_bound A)
 proof
   assume
 A1: A c= Z & dom tan = Z & dom tan = dom f2 &
@@ -1023,7 +1018,8 @@ end;
 theorem
   A c= Z & dom cot = Z & dom cot = dom f2 &
   (for x st x in Z holds f2.x = -1/(sin.x)^2 & sin.x <> 0) &
-  f2|A is continuous implies integral(f2,A) = cot.(sup A)-cot.(inf A)
+  f2|A is continuous implies integral(f2,A) =
+  cot.(upper_bound A)-cot.(lower_bound A)
 proof
   assume
 A1: A c= Z & dom cot = Z & dom cot = dom f2 &
@@ -1049,7 +1045,8 @@ end;
 
 theorem
   dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
-  f2|A is continuous implies integral(f2,A) = tanh.(sup A)-tanh.(inf A)
+  f2|A is continuous implies integral(f2,A) =
+  tanh.(upper_bound A)-tanh.(lower_bound A)
 proof
   assume
 A1: dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
@@ -1057,7 +1054,7 @@ A1: dom tanh = dom f2 & (for x st x in REAL holds f2.x = 1/(cosh.x)^2) &
   dom tanh = REAL by FUNCT_2:def 1;
   then A c= dom f2 by A1;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
+A2: f2 is_integrable_on A & f2|A is bounded by A1,INTEGRA5:10,11;
 A3: dom tanh = REAL by SIN_COS2:30;
 A4: for x st x in dom (tanh`|REAL) holds (tanh`|REAL).x = f2.x
   proof
@@ -1078,20 +1075,21 @@ A4: dom ((arcsin)`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:84;
 theorem Th62:
   A c=].-1,1.[ & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) &
-  f2|A is continuous implies integral(f2,A) = arcsin.(sup A)-arcsin.(inf A)
+  f2|A is continuous implies integral(f2,A) =
+  arcsin.(upper_bound A)-arcsin.(lower_bound A)
 proof
   assume
 A1: A c=].-1,1.[ & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2|A is continuous;
   A c= dom f2 by A1,A4;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
+A2: f2 is_integrable_on A & f2|A is bounded by A1,INTEGRA5:10,11;
   for x st x in dom ((arcsin)`|].-1,1.[) holds ((arcsin)`|].-1,1.[).x = f2.x
   proof
     let x;
     assume
 A3: x in dom ((arcsin)`|].-1,1.[);
-A5: -1 < x & x < 1 by A3,XXREAL_1:4,A4;
+A5: -1 < x & x < 1 by A3,A4,XXREAL_1:4;
     ((arcsin)`|].-1,1.[).x =diff(arcsin,x) by A3,A4,FDIFF_1:def 8,SIN_COS6:84
       .= 1 / sqrt(1-x^2) by A5,SIN_COS6:84
       .= f2.x by A1;
@@ -1104,7 +1102,8 @@ end;
 theorem Th63:
   A c=].-1,1.[ & dom (arccos`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) &
-  f2|A is continuous implies integral(f2,A) = arccos.(sup A)-arccos.(inf A)
+  f2|A is continuous implies integral(f2,A) =
+  arccos.(upper_bound A)-arccos.(lower_bound A)
 proof
 A4: dom (arccos`|].-1,1.[ ) = ].-1,1.[ by FDIFF_1:def 8,SIN_COS6:108;
   assume
@@ -1112,13 +1111,13 @@ A1: A c=].-1,1.[ & dom ((arccos)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2|A is continuous;
   A c= dom f2 by A1,A4;
   then
-A2: f2 is_integrable_on A & f2|A is bounded by INTEGRA5:10,11,A1;
+A2: f2 is_integrable_on A & f2|A is bounded by A1,INTEGRA5:10,11;
   for x st x in dom ((arccos)`|].-1,1.[) holds ((arccos)`|].-1,1.[).x = f2.x
   proof
     let x;
     assume
 A3: x in dom (arccos`|].-1,1.[);
-A5: -1 < x & x < 1 by A3,XXREAL_1:4,A4;
+A5: -1 < x & x < 1 by A3,A4,XXREAL_1:4;
     ((arccos)`|].-1,1.[).x =diff(arccos,x) by A3,A4,FDIFF_1:def 8,SIN_COS6:108
       .= -1 / sqrt(1-x^2) by A5,SIN_COS6:108
       .= f2.x by A1;
@@ -1136,7 +1135,7 @@ proof
   assume
 A1: A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arcsin)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = 1/sqrt(1-x^2)) & f2|A is continuous;
-  then sup A = sqrt 2/2 & inf A = -sqrt 2/2 by Th37;
+  then upper_bound A = sqrt 2/2 & lower_bound A = -sqrt 2/2 by Th37;
   then integral(f2,A) = arcsin.(sqrt 2/2) - arcsin.(-sqrt 2/2) by A1,Th9,Th62
     .= arcsin(sqrt 2/2) - arcsin.(-sqrt 2/2) by SIN_COS6:def 2
     .= arcsin(sqrt 2/2) - arcsin(-sqrt 2/2) by SIN_COS6:def 2
@@ -1152,7 +1151,7 @@ proof
   assume
 A1: A = [.-sqrt 2/2,sqrt 2/2.] & dom ((arccos)`|].-1,1.[) = dom f2 &
   (for x holds x in ].-1,1.[ & f2.x = -1/sqrt(1-x^2)) & f2|A is continuous;
-  then sup A = sqrt 2/2 & inf A = -sqrt 2/2 by Th37;
+  then upper_bound A = sqrt 2/2 & lower_bound A = -sqrt 2/2 by Th37;
   then integral(f2,A) = arccos.(sqrt 2/2)-arccos.(-sqrt 2/2) by A1,Th9,Th63
     .= arccos(sqrt 2/2) - arccos.(-sqrt 2/2) by SIN_COS6:def 4
     .= arccos(sqrt 2/2) - arccos(-sqrt 2/2) by SIN_COS6:def 4
@@ -1164,7 +1163,8 @@ theorem Th66:
   f is_differentiable_on Z & g is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded & g`|Z is_integrable_on A &
   (g`|Z)|A is bounded implies
-  integral(f`|Z+g`|Z,A) = f.(sup A) - f.(inf A) + g.(sup A) - g.(inf A)
+  integral(f`|Z+g`|Z,A) = f.(upper_bound A) - f.(lower_bound A) +
+  g.(upper_bound A) - g.(lower_bound A)
 proof
   assume that
 A1: f is_differentiable_on Z and
@@ -1181,7 +1181,7 @@ Y: A c= dom f & A c= dom g by A3,XBOOLE_1:1;
 then f|A is continuous & g|A is continuous
  by A3,FCONT_1:17;
 then f is_integrable_on A & g is_integrable_on A
- by INTEGRA5:11,Y;
+ by Y,INTEGRA5:11;
   then
 A8: f||A is integrable & g||A is integrable &
   (f`|Z)||A is integrable & (g`|Z)||A is integrable
@@ -1194,8 +1194,10 @@ A10: (f`|Z)||A|A is bounded & (g`|Z)||A|A is bounded
   by A5,A7,INTEGRA5:9;
   integral(f`|Z+g`|Z,A) = integral((f`|Z)||A+(g`|Z)||A) by INTEGRA5:5
     .= integral(f`|Z,A) + integral(g`|Z,A) by A8,A9,A10,INTEGRA1:59
-    .= f.(sup A) - f.(inf A)+ integral(g`|Z,A) by A1,A3,A4,A5,INTEGRA5:13
-    .= f.(sup A) - f.(inf A)+ (g.(sup A) - g.(inf A))
+    .= f.(upper_bound A) - f.(lower_bound A)+ integral(g`|Z,A) by
+    A1,A3,A4,A5,INTEGRA5:13
+    .= f.(upper_bound A) - f.(lower_bound A)+
+    (g.(upper_bound A) - g.(lower_bound A))
   by A2,A3,A6,A7,INTEGRA5:13;
   hence thesis;
 end;
@@ -1204,7 +1206,8 @@ theorem Th67:
   f is_differentiable_on Z & g is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded & g`|Z is_integrable_on A &
   (g`|Z)|A is bounded implies
-  integral(f`|Z-g`|Z,A) = f.(sup A) - f.(inf A) - (g.(sup A) - g.(inf A))
+  integral(f`|Z-g`|Z,A) = f.(upper_bound A) - f.(lower_bound A) -
+  (g.(upper_bound A) - g.(lower_bound A))
 proof
   assume that
 A1: f is_differentiable_on Z and
@@ -1222,7 +1225,7 @@ Y: A c= dom f & A c= dom g by A3,XBOOLE_1:1;
 then f|A is continuous & g|A is continuous
  by A3,FCONT_1:17;
 then f is_integrable_on A & g is_integrable_on A
- by INTEGRA5:11,Y;
+ by Y,INTEGRA5:11;
   then
 A8: f||A is integrable & g||A is integrable &
   (f`|Z)||A is integrable & (g`|Z)||A is integrable
@@ -1235,15 +1238,17 @@ A10: (f`|Z)||A|A is bounded & (g`|Z)||A|A is bounded
   by A5,A7,INTEGRA5:9;
   integral(f`|Z-g`|Z,A) = integral((f`|Z)||A-(g`|Z)||A) by RFUNCT_1:63
     .= integral(f`|Z,A) - integral((g`|Z)||A) by A8,A9,A10,INTEGRA2:33
-    .= f.(sup A) - f.(inf A)- integral(g`|Z,A) by A1,A3,A4,A5,INTEGRA5:13
-    .= f.(sup A) - f.(inf A)- (g.(sup A) - g.inf A) by A2,A3,A6,A7,INTEGRA5:13;
+    .= f.(upper_bound A) - f.(lower_bound A)- integral(g`|Z,A)
+    by A1,A3,A4,A5,INTEGRA5:13
+    .= f.(upper_bound A) - f.(lower_bound A)-
+    (g.(upper_bound A) - g.lower_bound A) by A2,A3,A6,A7,INTEGRA5:13;
   hence thesis;
 end;
 
 theorem Th68:
   f is_differentiable_on Z & A c= Z &
   f`|Z is_integrable_on A & (f`|Z)|A is bounded implies
-  integral((r(#)(f`|Z)),A) = r*f.(sup A) - r*f.(inf A)
+  integral((r(#)(f`|Z)),A) = r*f.(upper_bound A) - r*f.(lower_bound A)
 proof
   assume that
 A1: f is_differentiable_on Z and
@@ -1255,7 +1260,7 @@ A4: (f`|Z)|A is bounded;
 Y: A c= dom f by A2,XBOOLE_1:1;
   f|Z is continuous by A1,FDIFF_1:33;
   then f|A is continuous by A2,FCONT_1:17;
-  then f is_integrable_on A by INTEGRA5:11,Y;
+  then f is_integrable_on A by Y,INTEGRA5:11;
   then
 A5: f||A is integrable &
   (f`|Z)||A is integrable by A3,INTEGRA5:def 2;
@@ -1265,7 +1270,7 @@ A6: (f`|Z)||A is Function of A,REAL by FUNCT_2:131,INTEGRA5:6;
 A7: (f`|Z)||A|A is bounded by A4,INTEGRA5:9;
   integral((r(#)(f`|Z)),A) = integral (r(#)((f`|Z)||A)) by RFUNCT_1:65
     .= r * integral ((f`|Z),A) by A5,A6,A7,INTEGRA2:31
-    .= r*(f.(sup A) - f.(inf A)) by A1,A2,A3,A4,INTEGRA5:13;
+    .= r*(f.(upper_bound A) - f.(lower_bound A)) by A1,A2,A3,A4,INTEGRA5:13;
   hence thesis;
 end;
 
@@ -1273,12 +1278,13 @@ Lm15: sin is_integrable_on A & sin|A is bounded
 proof
 X: A c= dom sin by D1;
   sin|A is continuous;
-  hence thesis by INTEGRA5:10,11,X;
+  hence thesis by X,INTEGRA5:10,11;
 end;
 
 theorem Th69:
   integral(sin+cos,A) =
-  (-cos).(sup A) - (-cos).(inf A) + sin.(sup A) - sin.(inf A)
+  (-cos).(upper_bound A) - (-cos).(lower_bound A) +
+  sin.(upper_bound A) - sin.(lower_bound A)
 proof
 A1: cos is_integrable_on A & cos|A is bounded by Lm6;
 A2: sin is_integrable_on A & sin|A is bounded by Lm15;
@@ -1290,7 +1296,7 @@ theorem
   A = [.0,PI/2.] implies integral(sin+cos,A) = 2
 proof
   assume A = [.0,PI/2.];
-  then sup A=PI/2 & inf A=0 by Th37;
+  then upper_bound A=PI/2 & lower_bound A=0 by Th37;
   then integral(sin+cos,A)
   = (-cos).(PI/2) - (-cos).0 + sin.(PI/2) - sin.0 by Th69
     .= -(cos.(PI/2)) - (-cos).0 + sin.(PI/2) - sin.0 by VALUED_1:8
@@ -1305,7 +1311,7 @@ theorem
   A = [.0,PI.] implies integral(sin+cos,A) = 2
 proof
   assume A = [.0,PI.];
-  then sup A=PI & inf A=0 by Th37;
+  then upper_bound A=PI & lower_bound A=0 by Th37;
   then integral(sin+cos,A) = (-cos).(PI) - (-cos).0 + sin.(PI) - sin.0 by Th69
     .= -(cos.(PI)) - (-cos).0 + sin.(PI) - sin.0 by VALUED_1:8
     .= -(cos.(PI)) - (-cos.0) + sin.(PI) - sin.0 by VALUED_1:8
@@ -1319,7 +1325,7 @@ theorem
   A = [.0,PI*3/2.] implies integral(sin+cos,A) = 0
 proof
   assume A = [.0,PI*3/2.];
-  then sup A=PI*3/2 & inf A=0 by Th37;
+  then upper_bound A=PI*3/2 & lower_bound A=0 by Th37;
   then integral(sin+cos,A)
   = (-cos).(PI*3/2) - (-cos).0 + sin.(PI*3/2) - sin.0 by Th69
     .= -(cos.(PI*3/2)) - (-cos).0 + sin.(PI*3/2) - sin.0 by VALUED_1:8
@@ -1333,7 +1339,7 @@ theorem
   A = [.0,PI*2.] implies integral(sin+cos,A) = 0
 proof
   assume A = [.0,PI*2.];
-  then sup A=PI*2 & inf A=0 by Th37;
+  then upper_bound A=PI*2 & lower_bound A=0 by Th37;
   then integral(sin+cos,A)
   = (-cos).(PI*2) - (-cos).0 + sin.(PI*2) - sin.0 by Th69
     .= -(cos.(PI*2)) - (-cos).0 + sin.(PI*2) - sin.0 by VALUED_1:8
@@ -1347,7 +1353,7 @@ theorem
   A = [.2*n*PI,(2*n+1)*PI.] implies integral(sin+cos,A) = 2
 proof
   assume A = [.2*n*PI,(2*n+1)*PI.];
-  then sup A=(2*n+1)*PI & inf A=(2*n*PI) by Th37;
+  then upper_bound A=(2*n+1)*PI & lower_bound A=(2*n*PI) by Th37;
   then integral(sin+cos,A)
   = (-cos).((2*n+1)*PI) - (-cos).(2*n*PI) + sin.((2*n+1)*PI) - sin.(2*n*PI)
   by Th69
@@ -1382,7 +1388,7 @@ theorem
   integral(sin+cos,A) = 2*cos x - 2*sin x
 proof
   assume A = [.x+2*n*PI,x+(2*n+1)*PI.];
-  then sup A=x+(2*n+1)*PI & inf A=x+2*n*PI by Th37;
+  then upper_bound A=x+(2*n+1)*PI & lower_bound A=x+2*n*PI by Th37;
   then integral(sin+cos,A) = (-cos).(x+(2*n+1)*PI) - (-cos).(x+2*n*PI) +
   sin.(x+(2*n+1)*PI) - sin.(x+2*n*PI) by Th69
     .= -(cos.(x+(2*n+1)*PI)) - (-cos).(x+2*n*PI) +
@@ -1399,16 +1405,17 @@ end;
 
 theorem Th76:
   integral(sinh+cosh,A) =
-  cosh.(sup A) - cosh.(inf A) + sinh.(sup A) - sinh.(inf A)
+  cosh.(upper_bound A) - cosh.(lower_bound A) +
+  sinh.(upper_bound A) - sinh.(lower_bound A)
 proof
 X: A c= dom cosh by D6;
   cosh|A is continuous by Lm12;
   then
-A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11,X;
+A1: cosh is_integrable_on A & cosh|A is bounded by X,INTEGRA5:10,11;
 Y: A c= dom sinh by D5;
   sinh|A is continuous by Lm10;
   then
-A2: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11,Y;
+A2: sinh is_integrable_on A & sinh|A is bounded by Y,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,A2,Th30,Th31,Th66,SIN_COS2:34,35;
 end;
@@ -1418,7 +1425,7 @@ theorem
 proof
   assume A = [.0,1.];
   then
-A1: sup A=1 & inf A=0 by Th37;
+A1: upper_bound A=1 & lower_bound A=0 by Th37;
 A2: number_e > 0 by IRRAT_1:def 7,SIN_COS:60;
   integral(sinh+cosh,A) = cosh.1 - cosh.0 + sinh.1 - sinh.0 by A1,Th76
     .= (number_e^2 + 1)/(2*number_e) + (number_e^2 - 1)/(2*number_e) - 1
@@ -1433,7 +1440,8 @@ end;
 
 theorem Th78:
   integral(sin-cos,A) =
-  (-cos).(sup A) - (-cos).(inf A) - (sin.(sup A) - sin.(inf A))
+  (-cos).(upper_bound A) - (-cos).(lower_bound A) -
+  (sin.(upper_bound A) - sin.(lower_bound A))
 proof
 A1: cos is_integrable_on A & cos|A is bounded by Lm6;
 A2: sin is_integrable_on A & sin|A is bounded by Lm15;
@@ -1445,7 +1453,7 @@ theorem
   A = [.0,PI/2.] implies integral(sin-cos,A) = 0
 proof
   assume A = [.0,PI/2.];
-  then sup A=PI/2 & inf A=0 by Th37;
+  then upper_bound A=PI/2 & lower_bound A=0 by Th37;
   then integral(sin-cos,A)
   = (-cos).(PI/2) - (-cos).0 - (sin.(PI/2) - sin.0) by Th78
     .= -(cos.(PI/2)) - (-cos).0 - (sin.(PI/2) - sin.0) by VALUED_1:8
@@ -1460,7 +1468,7 @@ theorem
   A = [.0,PI.] implies integral(sin-cos,A) = 2
 proof
   assume A = [.0,PI.];
-  then sup A=PI & inf A=0 by Th37;
+  then upper_bound A=PI & lower_bound A=0 by Th37;
   then integral(sin-cos,A)
   = (-cos).(PI) - (-cos).0 - (sin.(PI) - sin.0) by Th78
     .= -(cos.(PI)) - (-cos).0 - (sin.(PI) - sin.0) by VALUED_1:8
@@ -1475,7 +1483,7 @@ theorem
   A = [.0,PI*3/2.] implies integral(sin-cos,A) = 2
 proof
   assume A = [.0,PI*3/2.];
-  then sup A=PI*3/2 & inf A=0 by Th37;
+  then upper_bound A=PI*3/2 & lower_bound A=0 by Th37;
   then integral(sin-cos,A)
   = (-cos).(PI*3/2) - (-cos).0 - (sin.(PI*3/2) - sin.0) by Th78
     .= -(cos.(PI*3/2)) - (-cos).0 - (sin.(PI*3/2) - sin.0) by VALUED_1:8
@@ -1489,7 +1497,7 @@ theorem
   A = [.0,PI*2.] implies integral(sin-cos,A) = 0
 proof
   assume A = [.0,PI*2.];
-  then sup A=PI*2 & inf A=0 by Th37;
+  then upper_bound A=PI*2 & lower_bound A=0 by Th37;
   then integral(sin-cos,A)
   = (-cos).(PI*2) - (-cos).0 - (sin.(PI*2) - sin.0) by Th78
     .= -(cos.(PI*2)) - (-cos).0 - (sin.(PI*2) - sin.0) by VALUED_1:8
@@ -1503,7 +1511,7 @@ theorem
   A = [.2*n*PI,(2*n+1)*PI.] implies integral(sin-cos,A) = 2
 proof
   assume A = [.2*n*PI,(2*n+1)*PI.];
-  then sup A=(2*n+1)*PI & inf A=(2*n*PI) by Th37;
+  then upper_bound A=(2*n+1)*PI & lower_bound A=(2*n*PI) by Th37;
   then integral(sin-cos,A)
   = (-cos).((2*n+1)*PI) - (-cos).(2*n*PI) - (sin.((2*n+1)*PI) - sin.(2*n*PI))
   by Th78
@@ -1537,7 +1545,7 @@ theorem
   integral(sin-cos,A) = 2*cos x + 2*sin x
 proof
   assume A = [.x+2*n*PI,x+(2*n+1)*PI.];
-  then sup A=x+(2*n+1)*PI & inf A=x+2*n*PI by Th37;
+  then upper_bound A=x+(2*n+1)*PI & lower_bound A=x+2*n*PI by Th37;
   then integral(sin-cos,A) = (-cos).(x+(2*n+1)*PI) - (-cos).(x+2*n*PI) -
   (sin.(x+(2*n+1)*PI) - sin.(x+2*n*PI)) by Th78
     .= -(cos.(x+(2*n+1)*PI)) - (-cos).(x+2*n*PI) -
@@ -1555,18 +1563,18 @@ proof
 end;
 
 theorem
-  integral(r(#)sin,A) = r*(-cos).(sup A) - r*(-cos).(inf A)
+  integral(r(#)sin,A) = r*(-cos).(upper_bound A) - r*(-cos).(lower_bound A)
 proof
 X: A c= dom sin by D1;
   sin|A is continuous;
   then
-A1: sin is_integrable_on A & sin|A is bounded by INTEGRA5:10,11,X;
+A1: sin is_integrable_on A & sin|A is bounded by X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th26,Th29,Th68;
 end;
 
 theorem
-  integral(r(#)cos,A) = r*sin.(sup A) - r*sin.(inf A)
+  integral(r(#)cos,A) = r*sin.(upper_bound A) - r*sin.(lower_bound A)
 proof
 A1: cos is_integrable_on A & cos|A is bounded by Lm6;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
@@ -1574,63 +1582,69 @@ A1: cos is_integrable_on A & cos|A is bounded by Lm6;
 end;
 
 theorem
-  integral(r(#)sinh,A) = r*cosh.(sup A) - r*cosh.(inf A)
+  integral(r(#)sinh,A) = r*cosh.(upper_bound A) - r*cosh.(lower_bound A)
 proof
 X: A c= dom sinh by D5;
   sinh|A is continuous by Lm10;
   then
-A1: sinh is_integrable_on A & sinh|A is bounded by INTEGRA5:10,11,X;
+A1: sinh is_integrable_on A & sinh|A is bounded by X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th31,Th68,SIN_COS2:35;
 end;
 
 theorem
-  integral(r(#)cosh,A) = r*sinh.(sup A) - r*sinh.(inf A)
+  integral(r(#)cosh,A) = r*sinh.(upper_bound A) - r*sinh.(lower_bound A)
 proof
 X: A c= dom cosh by D6;
   cosh|A is continuous by Lm12;
   then
-A1: cosh is_integrable_on A & cosh|A is bounded by INTEGRA5:10,11,X;
+A1: cosh is_integrable_on A & cosh|A is bounded by X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th30,Th68,SIN_COS2:34;
 end;
 
 theorem
-  integral(r(#)exp_R,A) = r*exp_R.(sup A) - r*exp_R.(inf A)
+  integral(r(#)exp_R,A) = r*exp_R.(upper_bound A) - r*exp_R.(lower_bound A)
 proof
 X: A c= dom exp_R by D4;
   exp_R|A is continuous;
   then
-A1: exp_R is_integrable_on A & (exp_R)|A is bounded by INTEGRA5:10,11,X;
+A1: exp_R is_integrable_on A & (exp_R)|A is bounded by X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   hence thesis by A1,Th32,Th68,SIN_COS:71;
 end;
 
 theorem Th90:
   integral(sin(#)cos,A)
-  = 1/2*(cos.(inf A)*cos.(inf A)-cos.(sup A)*cos.(sup A))
+  = 1/2*(cos.(lower_bound A)*cos.(lower_bound A)-
+  cos.(upper_bound A)*cos.(upper_bound A))
 proof
 Y: A c= dom sin by D1;
 W: A c= dom -sin by D3;
   sin|A is continuous;
   then
 A1: (-cos)`|REAL is_integrable_on A & ((-cos)`|REAL)|A is bounded
-  by Th29,INTEGRA5:10,11,Y;
+  by Th29,Y,INTEGRA5:10,11;
   (-sin)|A is continuous;
   then
 A2: cos`|REAL is_integrable_on A & (cos`|REAL)|A is bounded
-  by Th28,INTEGRA5:10,11,W;
+  by Th28,W,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(sin(#)cos,A)
-  =(-cos).(sup A)*cos.(sup A)-(-cos).(inf A)*cos.(inf A)
+  =(-cos).(upper_bound A)*cos.(upper_bound A)-
+  (-cos).(lower_bound A)*cos.(lower_bound A)
   -integral((-cos)(#)(-sin),A) by A1,A2,Th26,Th28,Th29,INTEGRA5:21,SIN_COS:72
-    .=(-cos).(sup A)*cos.(sup A)-(-cos).(inf A)*cos.(inf A)
+    .=(-cos).(upper_bound A)*cos.(upper_bound A)-
+    (-cos).(lower_bound A)*cos.(lower_bound A)
   -integral(sin(#)cos,A) by Lm4
-    .=(-cos.(sup A))*cos.(sup A)-(-cos).(inf A)*cos.(inf A)
+    .=(-cos.(upper_bound A))*cos.(upper_bound A)-
+    (-cos).(lower_bound A)*cos.(lower_bound A)
   -integral(sin(#)cos,A) by VALUED_1:8
-    .=(-cos.(sup A))*cos.(sup A)-(-cos.(inf A))*cos.(inf A)
+    .=(-cos.(upper_bound A))*cos.(upper_bound A)-
+    (-cos.(lower_bound A))*cos.(lower_bound A)
   -integral(sin(#)cos,A) by VALUED_1:8
-    .=cos.(inf A)*cos.(inf A)-cos.(sup A)*cos.(sup A) -integral(sin(#)cos,A);
+    .=cos.(lower_bound A)*cos.(lower_bound A)-
+    cos.(upper_bound A)*cos.(upper_bound A) -integral(sin(#)cos,A);
   hence thesis;
 end;
 
@@ -1638,7 +1652,7 @@ theorem
   A = [.0,PI/2.] implies integral(sin(#)cos,A) = 1/2
 proof
   assume A = [.0,PI/2.];
-  then sup A=PI/2 & inf A=0 by Th37;
+  then upper_bound A=PI/2 & lower_bound A=0 by Th37;
   then integral(sin(#)cos,A) =1/2*(cos.0*cos.0-cos.(PI/2)*cos.(PI/2)) by Th90
     .=1/2*(cos.(0+2*PI)*cos.0-cos.(PI/2)*cos.(PI/2)) by SIN_COS:83
     .=1/2*(1*1-0*0) by SIN_COS:81,83;
@@ -1649,7 +1663,7 @@ theorem
   A = [.0,PI.] implies integral(sin(#)cos,A) = 0
 proof
   assume A = [.0,PI.];
-  then sup A=PI & inf A=0 by Th37;
+  then upper_bound A=PI & lower_bound A=0 by Th37;
   then integral(sin(#)cos,A) =1/2*(cos.0*cos.0-cos.PI*cos.PI) by Th90
     .=1/2*(cos.(0+2*PI)*cos.0-cos.PI*cos.PI) by SIN_COS:83
     .=1/2*(1*1-(-1)*(-1)) by SIN_COS:81,83;
@@ -1660,7 +1674,7 @@ theorem
   A = [.0,PI*(3/2).] implies integral(sin(#)cos,A) = 1/2
 proof
   assume A = [.0,PI*(3/2).];
-  then sup A=PI*(3/2) & inf A=0 by Th37;
+  then upper_bound A=PI*(3/2) & lower_bound A=0 by Th37;
   then integral(sin(#)cos,A)
   =1/2*(cos.0*cos.0-cos.(PI*(3/2))*cos.(PI*(3/2))) by Th90
     .=1/2*(cos.(0+2*PI)*cos.0-cos.(PI*(3/2))*cos.(PI*(3/2))) by SIN_COS:83
@@ -1672,7 +1686,7 @@ theorem
   A = [.0,PI*2.] implies integral(sin(#)cos,A) = 0
 proof
   assume A = [.0,PI*2.];
-  then sup A=PI*2 & inf A=0 by Th37;
+  then upper_bound A=PI*2 & lower_bound A=0 by Th37;
   then integral(sin(#)cos,A) =1/2*(cos.0*cos.0-cos.(PI*2)*cos.(PI*2)) by Th90
     .=1/2*(cos.(0+2*PI)*cos.0-cos.(PI*2)*cos.(PI*2)) by SIN_COS:83
     .=1/2*(1*1-1*1) by SIN_COS:81,83;
@@ -1683,7 +1697,7 @@ theorem
   A = [.2*n*PI,(2*n+1)*PI.] implies integral(sin(#)cos,A) = 0
 proof
   assume A = [.2*n*PI,(2*n+1)*PI.];
-  then sup A=(2*n+1)*PI & inf A=2*n*PI by Th37;
+  then upper_bound A=(2*n+1)*PI & lower_bound A=2*n*PI by Th37;
   then integral(sin(#)cos,A)
   =1/2*(cos.(2*n*PI)*cos.(2*n*PI)-cos.((2*n+1)*PI)*cos.((2*n+1)*PI)) by Th90
     .=1/2*(cos(0)*cos(0+2*n*PI)-cos.((2*n+1)*PI)*cos.((2*n+1)*PI)) by Th3
@@ -1702,7 +1716,7 @@ theorem
   A = [.x+2*n*PI,x+(2*n+1)*PI.] implies integral(sin(#)cos,A) = 0
 proof
   assume A = [.x+2*n*PI,x+(2*n+1)*PI.];
-  then sup A=x+(2*n+1)*PI & inf A=x+2*n*PI by Th37;
+  then upper_bound A=x+(2*n+1)*PI & lower_bound A=x+2*n*PI by Th37;
   then integral(sin(#)cos,A)
   = 1/2*(cos.(x+2*n*PI)*cos.(x+2*n*PI)-cos.(x+(2*n+1)*PI)*cos.(x+(2*n+1)*PI))
   by Th90
@@ -1722,23 +1736,23 @@ proof
    then
 Y: A c= dom(cos(#)cos) by VALUED_1:def 4;
    (cos(#)cos)|A is continuous;
-  hence thesis by INTEGRA5:10,11,Y;
+  hence thesis by Y,INTEGRA5:10,11;
 end;
 
 theorem
-  integral(sin(#)sin,A)=cos.(inf A)*sin.(inf A)-
-  cos.(sup A)*sin.(sup A)+integral((cos)(#)(cos),A)
+  integral(sin(#)sin,A)=cos.(lower_bound A)*sin.(lower_bound A)-
+  cos.(upper_bound A)*sin.(upper_bound A)+integral((cos)(#)(cos),A)
 proof
 X: A c= dom sin by D1;
   sin|A is continuous;
   then
 A1: (-cos)`|REAL is_integrable_on A & ((-cos)`|REAL)|A is bounded
-  by Th29,INTEGRA5:10,11,X;
+  by Th29,X,INTEGRA5:10,11;
 Y: A c= dom cos by D2;
   cos|A is continuous;
   then
 A2: sin`|REAL is_integrable_on A & (sin`|REAL)|A is bounded
-  by Th27,INTEGRA5:10,11,Y;
+  by Th27,Y,INTEGRA5:10,11;
   cos(#)cos is_integrable_on A & (cos(#)cos)|A is bounded by Lm17;
   then
 A3: (cos(#)cos)||A is integrable &
@@ -1748,26 +1762,33 @@ A3: (cos(#)cos)||A is integrable &
 A4: (cos(#)cos)||A is Function of A,REAL by FUNCT_2:131,INTEGRA5:6;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(sin(#)sin,A)
-  =(-cos).(sup A)*sin.(sup A)-(-cos).(inf A)*sin.(inf A)
+  =(-cos).(upper_bound A)*sin.(upper_bound A)-
+  (-cos).(lower_bound A)*sin.(lower_bound A)
   -integral((-cos)(#)(cos),A) by A1,A2,Th26,Th27,Th29,INTEGRA5:21,SIN_COS:73
-    .=(-cos.(sup A))*sin.(sup A)-(-cos).(inf A)*sin.(inf A)
+    .=(-cos.(upper_bound A))*sin.(upper_bound A)-
+    (-cos).(lower_bound A)*sin.(lower_bound A)
   -integral((-cos)(#)(cos),A) by VALUED_1:8
-    .=(-cos.(sup A))*sin.(sup A)-(-(cos.(inf A)))*sin.(inf A)
+    .=(-cos.(upper_bound A))*sin.(upper_bound A)-
+    (-(cos.(lower_bound A)))*sin.(lower_bound A)
   -integral((-cos)(#)(cos),A) by VALUED_1:8
-    .=cos.(inf A)*sin.(inf A)-cos.(sup A)*sin.(sup A)
+    .=cos.(lower_bound A)*sin.(lower_bound A)-
+    cos.(upper_bound A)*sin.(upper_bound A)
   -integral(-((cos)(#)(cos)),A) by RFUNCT_1:24
-    .=cos.(inf A)*sin.(inf A) - cos.(sup A)*sin.(sup A)
+    .=cos.(lower_bound A)*sin.(lower_bound A) -
+    cos.(upper_bound A)*sin.(upper_bound A)
   -integral((-1)(#)(((cos)(#)(cos))||A)) by RFUNCT_1:65
-    .=cos.(inf A)*sin.(inf A)-cos.(sup A)*sin.(sup A)
+    .=cos.(lower_bound A)*sin.(lower_bound A)-
+    cos.(upper_bound A)*sin.(upper_bound A)
   -(-1)*integral((cos)(#)(cos),A) by A3,A4,INTEGRA2:31
-    .=cos.(inf A)*sin.(inf A)-cos.(sup A)*sin.(sup A)
+    .=cos.(lower_bound A)*sin.(lower_bound A)-
+    cos.(upper_bound A)*sin.(upper_bound A)
   + integral((cos)(#)(cos),A);
   hence thesis;
 end;
 
 theorem
-  integral(sinh(#)sinh,A)=cosh.(sup A)*sinh.(sup A)-
-  cosh.(inf A)*sinh.(inf A)-integral((cosh)(#)(cosh),A)
+  integral(sinh(#)sinh,A)=cosh.(upper_bound A)*sinh.(upper_bound A)-
+  cosh.(lower_bound A)*sinh.(lower_bound A)-integral((cosh)(#)(cosh),A)
 proof
 A1: (cosh)`|REAL is_integrable_on A & (cosh`|REAL)|A is bounded
   by Lm11,Th31;
@@ -1778,35 +1799,40 @@ end;
 
 theorem
   integral(sinh(#)cosh,A)
-  =1/2*((cosh.(sup A))*cosh.(sup A)-(cosh).(inf A)*cosh.(inf A))
+  =1/2*((cosh.(upper_bound A))*cosh.(upper_bound A)-
+  (cosh).(lower_bound A)*cosh.(lower_bound A))
 proof
 X: A c= dom sinh by D5;
   sinh|A is continuous by Lm10;
   then
 A1: (cosh)`|REAL is_integrable_on A & (cosh`|REAL)|A is bounded
-  by Th31,INTEGRA5:10,11,X;
+  by Th31,X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(sinh(#)cosh,A)
-  =(cosh.(sup A))*cosh.(sup A)-(cosh).(inf A)*cosh.(inf A)
+  =(cosh.(upper_bound A))*cosh.(upper_bound A)-
+  (cosh).(lower_bound A)*cosh.(lower_bound A)
   -integral(sinh(#)cosh,A) by A1,Th31,INTEGRA5:21,SIN_COS2:35;
   hence thesis;
 end;
 
 theorem
-  integral(exp_R(#)exp_R,A) =1/2*((exp_R.(sup A))^2-((exp_R).(inf A))^2)
+  integral(exp_R(#)exp_R,A) =1/2*((exp_R.(upper_bound A))^2
+  -((exp_R).(lower_bound A))^2)
 proof
 X: A c= dom exp_R by D4;
   exp_R|A is continuous;
   then
 A1: exp_R`|REAL is_integrable_on A & (exp_R`|REAL)|A is bounded
-  by Th32,INTEGRA5:10,11,X;
+  by Th32,X,INTEGRA5:10,11;
   REAL is open Subset of REAL by FCONT_3:4,SUBSET_1:def 4;
   then integral(exp_R(#)exp_R,A)
-  =(exp_R).(sup A)*exp_R.(sup A)-(exp_R).(inf A)*exp_R.(inf A)
+  =(exp_R).(upper_bound A)*exp_R.(upper_bound A)-
+  (exp_R).(lower_bound A)*exp_R.(lower_bound A)
   -integral((exp_R)(#)(exp_R),A) by A1,Th32,INTEGRA5:21,SIN_COS:71
-    .= (exp_R.(sup A))^2 - ((exp_R).(inf A))*exp_R.(inf A)
+    .= (exp_R.(upper_bound A))^2 -
+    ((exp_R).(lower_bound A))*exp_R.(lower_bound A)
   -integral(exp_R(#)exp_R,A) by SQUARE_1:def 3
-    .= (exp_R.(sup A))^2 - ((exp_R).(inf A))^2
+    .= (exp_R.(upper_bound A))^2 - ((exp_R).(lower_bound A))^2
   -integral(exp_R(#)exp_R,A) by SQUARE_1:def 3;
   hence thesis;
 end;
@@ -1822,7 +1848,7 @@ A:  dom(sin + cos) = dom sin /\ dom cos by VALUED_1:def 1;
    then
 V: A c= dom(exp_R(#)(sin + cos)) by VALUED_1:def 4;
    (exp_R(#)(sin + cos))|A is continuous;
-  hence thesis by INTEGRA5:10,11,V;
+  hence thesis by V,INTEGRA5:10,11;
 end;
 
 Lm20: exp_R(#)(cos - sin) is_integrable_on A &
@@ -1834,11 +1860,12 @@ proof
    then
 V: A c= dom(exp_R(#)(cos - sin)) by VALUED_1:def 4;
    (exp_R(#)(cos - sin))|A is continuous;
-  hence thesis by INTEGRA5:10,11,V;
+  hence thesis by V,INTEGRA5:10,11;
 end;
 
 theorem
-  integral(exp_R(#)(sin+cos),A) = (exp_R(#)sin).(sup A)-(exp_R(#)sin).(inf A)
+  integral(exp_R(#)(sin+cos),A) =
+   (exp_R(#)sin).(upper_bound A)-(exp_R(#)sin).(lower_bound A)
 proof
 A1: dom (exp_R(#)sin) = REAL by FUNCT_2:def 1;
 A2: dom (sin+cos) = REAL by FUNCT_2:def 1;
@@ -1866,7 +1893,8 @@ A7: for x st x in dom ((exp_R(#)sin)`|REAL) holds
 end;
 
 theorem
-  integral(exp_R(#)(cos-sin),A) = (exp_R(#)cos).(sup A)-(exp_R(#)cos).(inf A)
+  integral(exp_R(#)(cos-sin),A) =
+   (exp_R(#)cos).(upper_bound A)-(exp_R(#)cos).(lower_bound A)
 proof
 A1: dom (exp_R(#)cos) = REAL by FUNCT_2:def 1;
 A2: dom (cos - sin) = REAL by FUNCT_2:def 1;

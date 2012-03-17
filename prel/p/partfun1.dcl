@@ -65,6 +65,30 @@
 </Adjective>
 </Cluster>
 </RCluster>
+<RCluster aid="PARTFUN1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="15" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="15" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="15" value="false"/>
+</Cluster>
+</RCluster>
 <FCluster aid="PARTFUN1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">

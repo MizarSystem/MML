@@ -14,6 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
@@ -51,28 +52,28 @@
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="83">
-<Func kind="K" nr="286"/>
+<Func kind="K" nr="293"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="137">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="309"/>
 </Adjective>
-<Adjective nr="104"/>
-<Adjective nr="106"/>
+<Adjective nr="109"/>
+<Adjective nr="111"/>
 </Cluster>
-<Func kind="K" nr="197">
+<Func kind="K" nr="204">
 <Func kind="U" nr="9">
-<Func kind="K" nr="286"/>
+<Func kind="K" nr="293"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="137">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="309"/>
 </Func>
 </Func>
 </Typ>
@@ -80,24 +81,24 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="413">
+<Func kind="K" nr="422">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="23"/>
 <Adjective nr="83">
-<Func kind="K" nr="286"/>
+<Func kind="K" nr="293"/>
 <Func kind="K" nr="16">
 <Func kind="K" nr="46"/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="137">
 <Func kind="K" nr="46"/>
 </Func>
 </Func>
-<Func kind="K" nr="302"/>
+<Func kind="K" nr="309"/>
 </Adjective>
-<Adjective nr="104"/>
-<Adjective nr="106"/>
+<Adjective nr="109"/>
+<Adjective nr="111"/>
 </Cluster>
 </FCluster>
 </Registrations>

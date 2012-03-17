@@ -17,7 +17,7 @@ environ
       JORDAN3, PARTFUN1, FINSEQ_1, FUNCT_2;
  constructors PARTFUN1, REAL_1, NAT_1, RCOMP_1, FINSOP_1, PARTFUN2, RFUNCT_1,
       REALSET1, RFINSEQ, BINARITH, FINSEQ_5, COMPLSP1, GOBOARD1, PSCOMP_1,
-      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3, NAT_D;
+      JORDAN3, SEQ_1, BINOP_2, XXREAL_2, SEQM_3, NAT_D, RVSUM_1, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, FINSEQ_2, GOBOARD1,
       PSCOMP_1, VALUED_0, VALUED_1, FINSET_1, XXREAL_2, CARD_1, SEQ_2;
@@ -71,10 +71,10 @@ end;
 reserve A for closed-interval Subset of REAL;
 
 theorem :: INTEGRA1:4
-  ex a,b st a<=b & a=inf A & b=sup A;
+  ex a,b st a<=b & a=lower_bound A & b=upper_bound A;
 
 theorem :: INTEGRA1:5
-  A = [. inf A, sup A .];
+  A = [. lower_bound A, upper_bound A .];
 
 theorem :: INTEGRA1:6
   for a1,a2,b1,b2 being real number holds
@@ -87,7 +87,7 @@ definition
   mode DivisionPoint of A -> non empty increasing FinSequence of REAL means
 :: INTEGRA1:def 2
 
-    rng it c= A & it.(len it) = sup A;
+    rng it c= A & it.(len it) = upper_bound A;
 end;
 
 definition
@@ -143,8 +143,8 @@ definition
   func divset(D,i) -> closed-interval Subset of REAL means
 :: INTEGRA1:def 5
 
-  inf it = inf A & sup it = D.i if i=1
-  otherwise inf it = D.(i-1) & sup it = D.i;
+  lower_bound it = lower_bound A & upper_bound it = D.i if i=1
+  otherwise lower_bound it = D.(i-1) & upper_bound it = D.i;
 end;
 
 theorem :: INTEGRA1:10
@@ -155,7 +155,7 @@ definition
   func vol(A) -> Real equals
 :: INTEGRA1:def 6
 
-  sup A - inf A;
+  upper_bound A - lower_bound A;
 end;
 
 theorem :: INTEGRA1:11
@@ -172,12 +172,12 @@ definition
 :: INTEGRA1:def 7
 
   len it = len D & for i be Nat st i in dom D holds
-  it.i=(sup rng (f|divset(D,i)))*vol divset(D,i);
+  it.i=(upper_bound rng (f|divset(D,i)))*vol divset(D,i);
   func lower_volume(f,D) -> FinSequence of REAL means
 :: INTEGRA1:def 8
 
   len it = len D & for i be Nat st i in dom D holds
-  it.i=(inf rng (f|divset(D,i)))*vol divset(D,i);
+  it.i=(lower_bound rng (f|divset(D,i)))*vol divset(D,i);
 end;
 
 definition
@@ -234,7 +234,7 @@ definition
   func upper_integral(f) -> Real equals
 :: INTEGRA1:def 15
 
-  inf rng upper_sum_set(f);
+  lower_bound rng upper_sum_set(f);
 end;
 
 definition
@@ -243,7 +243,7 @@ definition
   func lower_integral(f) -> Real equals
 :: INTEGRA1:def 16
 
-  sup rng lower_sum_set(f);
+  upper_bound rng lower_sum_set(f);
 end;
 
 definition
@@ -346,19 +346,20 @@ end;
 theorem :: INTEGRA1:27
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
   S being non empty Division of A, D being Element of S holds
-  (f|A is bounded_below implies (inf rng f)*vol(A) <= lower_sum(f,D));
+  (f|A is bounded_below implies (lower_bound rng f)*vol(A) <= lower_sum(f,D));
 
 theorem :: INTEGRA1:28
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
   S being non empty Division of A, D being Element of S,
   i being Element of NAT holds
   f|A is bounded_above & i in dom D implies
-  (sup rng f)*vol(divset(D,i)) >= (sup rng (f|divset(D,i)))*vol(divset(D,i));
+  (upper_bound rng f)*vol(divset(D,i)) >=
+   (upper_bound rng (f|divset(D,i)))*vol(divset(D,i));
 
 theorem :: INTEGRA1:29
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
   S being non empty Division of A, D being Element of S holds
-  (f|A is bounded_above implies upper_sum(f,D) <= (sup rng f)*vol(A));
+  (f|A is bounded_above implies upper_sum(f,D) <= (upper_bound rng f)*vol(A));
 
 theorem :: INTEGRA1:30
   for A being closed-interval Subset of REAL, f being Function of A,REAL,
@@ -411,7 +412,7 @@ theorem :: INTEGRA1:34
   for A be closed-interval Subset of REAL, S be non empty Division of A,
   D be Element of S st i in dom D holds
   ex A1,A2 be closed-interval Subset of REAL
-  st A1=[.inf A,D.i .] & A2=[. D.i,sup A.] & A=A1 \/ A2;
+  st A1=[.lower_bound A,D.i .] & A2=[. D.i,upper_bound A.] & A=A1 \/ A2;
 
 theorem :: INTEGRA1:35
   for A be closed-interval Subset of REAL, S be non empty Division of A,
@@ -444,14 +445,14 @@ theorem :: INTEGRA1:38
   for A be closed-interval Subset of REAL,
   S be non empty Division of A, D be Element of S, i,j be Element of NAT holds
   i in dom D & j in dom D & i<=j implies ex B be closed-interval Subset of REAL
-  st inf B=mid(D,i,j).1 & sup B=mid(D,i,j).(len mid(D,i,j))
+  st lower_bound B=mid(D,i,j).1 & upper_bound B=mid(D,i,j).(len mid(D,i,j))
   & len mid(D,i,j)=j-i+1 & mid(D,i,j) is DivisionPoint of B;
 
 theorem :: INTEGRA1:39
   for A,B be closed-interval Subset of REAL,
   S be non empty Division of A, S1 be non empty Division of B,
   D be Element of S, i,j be Element of NAT
-  holds i in dom D & j in dom D & i<=j & D.i>=inf B & D.j=sup B
+  holds i in dom D & j in dom D & i<=j & D.i>=lower_bound B & D.j=upper_bound B
   implies mid(D,i,j) is Element of S1;
 
 definition
@@ -542,7 +543,8 @@ theorem :: INTEGRA1:53
 
 theorem :: INTEGRA1:54
   for X,Y be non empty Subset of REAL
-  st X is bounded_above & Y is bounded_above holds sup(X+Y) = sup X + sup Y;
+  st X is bounded_above & Y is bounded_above
+   holds upper_bound(X+Y) = upper_bound X + upper_bound Y;
 
 theorem :: INTEGRA1:55
   for A be closed-interval Subset of REAL, f,g be Function of A,REAL,

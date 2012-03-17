@@ -8,13 +8,15 @@ environ
 
  vocabularies VALUED_0, RELAT_1, COMPLEX1, RAT_1, INT_1, FUNCT_1, ORDINAL2,
       XCMPLX_0, ARYTM, MEMBERED, BOOLE, FUNCOP_1, FUNCT_4, CAT_1, SUPINF_1,
-      ANPROJ_1, ZF_REFLE, SEQM_3, PROB_1;
+      ANPROJ_1, ZF_REFLE, SEQM_3, PROB_1, REALSET1, NORMSP_1, FRECHET2,
+      PARTFUN1, OPPCAT_1, TRIANG_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1,
-      RELSET_1, FUNCOP_1, FUNCT_4, NUMBERS, MEMBERED, XCMPLX_0, XREAL_0,
-      XXREAL_0, RAT_1, INT_1;
- constructors XCMPLX_0, RAT_1, MEMBERED, FUNCOP_1, FUNCT_4, XXREAL_0;
+      SETFAM_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, FUNCT_4, NUMBERS,
+      MEMBERED, XCMPLX_0, XREAL_0, XXREAL_0, RAT_1, NAT_1, INT_1;
+ constructors XCMPLX_0, RAT_1, MEMBERED, FUNCOP_1, FUNCT_4, XXREAL_0, PARTFUN1,
+      NAT_1, SETFAM_1;
  registrations MEMBERED, RELAT_1, FUNCOP_1, XREAL_0, RAT_1, ORDINAL1, INT_1,
-      FUNCT_1, XBOOLE_0;
+      FUNCT_1, XBOOLE_0, ZFMISC_1, RELSET_1, FUNCT_2, SETFAM_1, NAT_1;
  requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
 
 
@@ -739,4 +741,162 @@ definition
 
   for e1,e2 st e1 in dom f & e2 in dom f & e1 <= e2 holds f.e1 >= f.e2;
 end;
+
+:: 2008.08.31, A.T.
+
+registration
+ cluster trivial -> increasing decreasing (ext-real-valued Function);
+end;
+
+registration
+ cluster increasing -> non-decreasing (ext-real-valued Function);
+ cluster decreasing -> non-increasing (ext-real-valued Function);
+end;
+
+registration
+ cluster empty Function;
+end;
+
+registration
+ let f,g be increasing (ext-real-valued Function);
+ cluster g*f -> increasing;
+end;
+
+registration
+ let f,g be non-decreasing (ext-real-valued Function);
+ cluster g*f -> non-decreasing;
+end;
+
+registration
+ let f,g be decreasing (ext-real-valued Function);
+ cluster g*f -> increasing;
+end;
+
+registration
+ let f,g be non-increasing (ext-real-valued Function);
+ cluster g*f -> non-decreasing;
+end;
+
+registration
+ let f be decreasing (ext-real-valued Function);
+ let g be increasing (ext-real-valued Function);
+ cluster g*f -> decreasing;
+ cluster f*g -> decreasing;
+end;
+
+registration
+ let f be non-increasing (ext-real-valued Function);
+ let g be non-decreasing (ext-real-valued Function);
+ cluster g*f -> non-increasing;
+ cluster f*g -> non-increasing;
+end;
+
+registration let X be ext-real-membered set;
+ cluster id X -> increasing Function of X,X;
+end;
+
+registration
+ cluster increasing sequence of NAT;
+end;
+
+definition
+  let X be set, s be sequence of X;
+  mode subsequence of s -> sequence of X means
+:: VALUED_0:def 17
+  ex N being increasing sequence of NAT st it = s * N;
+end;
+
+definition let X be non empty set, s be sequence of X, k be Nat;
+ redefine func s ^\ k -> subsequence of s;
+end;
+
+reserve s,s1,s2,s3 for sequence of X;
+
+theorem :: VALUED_0:19
+ s is subsequence of s;
+
+theorem :: VALUED_0:20
+ s1 is subsequence of s2 & s2 is subsequence of s3
+  implies s1 is subsequence of s3;
+
+registration let X;  :: to be generalized to Function of X,Y
+ cluster constant sequence of X;
+end;
+
+theorem :: VALUED_0:21
+ for s1 being subsequence of s holds rng s1 c= rng s;
+
+registration let X; let s be constant sequence of X;
+ cluster -> constant subsequence of s;
+end;
+
+:: from FRECHET2, 2008.09.08, A.T.
+
+definition
+  let X be set, N be increasing sequence of NAT, s be sequence of X;
+  redefine func s*N -> subsequence of s;
+end;
+
+:: from RFUNCT_2 etc. 2008.09.10, A.T.
+
+reserve X,Y for non empty set,
+        Z for set;
+reserve s,s1 for sequence of X,
+        h,h1 for PartFunc of X,Y,
+        h2 for PartFunc of Y,Z,
+        x for Element of X,
+        N for increasing sequence of NAT;
+
+theorem :: VALUED_0:22
+  rng s c= dom h & s1 is subsequence of s implies
+  h/*s1 is subsequence of h/*s;
+
+:: to be generalized
+registration let X be with_non-empty_element set;
+ cluster non-empty sequence of X;
+end;
+
+registration
+ let X be with_non-empty_element set, s be non-empty sequence of X;
+ cluster -> non-empty subsequence of s;
+end;
+
+reserve i,j for Nat;
+
+definition
+  let X,s;
+  redefine attr s is constant means
+:: VALUED_0:def 18
+   ex x st for n being Nat holds s.n=x;
+end;
+
+theorem :: VALUED_0:23
+ for X being set for s being constant sequence of X
+  holds s.i =s.j;
+
+theorem :: VALUED_0:24
+ (for i,j holds s.i = s.j) implies s is constant;
+
+theorem :: VALUED_0:25
+ (for i holds s.i = s.(i+1)) implies s is constant;
+
+theorem :: VALUED_0:26
+  s is constant & s1 is subsequence of s implies s=s1;
+
+reserve n for Nat;
+
+theorem :: VALUED_0:27
+  rng s c= dom h implies (h/*s)^\n=h/*(s^\n);
+
+theorem :: VALUED_0:28
+ s.n in rng s;
+
+theorem :: VALUED_0:29
+  h is total implies h/*(s^\n) = (h/*s)^\n;
+
+theorem :: VALUED_0:30
+  rng s c= dom h implies h.:(rng s) = rng (h/*s);
+
+theorem :: VALUED_0:31
+  rng s c= dom (h2*h1) implies h2/*(h1/*s) = (h2*h1)/*s;
 

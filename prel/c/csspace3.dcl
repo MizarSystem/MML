@@ -35,7 +35,7 @@
 <ArgTypes/>
 <Func kind="K" nr="174"/>
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="87">
 <Func kind="K" nr="162"/>
 </Adjective>
 </Cluster>
@@ -62,8 +62,8 @@
 <Adjective nr="77"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
+<Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="87"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE3" nr="4">
@@ -132,7 +132,7 @@
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE3" nr="5">
@@ -144,8 +144,8 @@
 <Adjective nr="77"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="87"/>
-<Adjective nr="90"/>
+<Adjective nr="86"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
@@ -42,7 +43,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="239">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -75,7 +76,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="243">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

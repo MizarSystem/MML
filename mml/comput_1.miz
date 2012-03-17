@@ -8,12 +8,12 @@ environ
 
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, MATRIX_2, BOOLE,
       PARTFUN1, SETFAM_1, FUNCT_6, MSUALG_6, FRAENKEL, TARSKI, RFUNCT_3,
-      SEQM_3, UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
-      BORSUK_1, PROB_1, FINSET_1, SQUARE_1, BINTREE1, CARD_3,
+      UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
+      BORSUK_1, PROB_1, FINSET_1, SQUARE_1, BINTREE1, CARD_3, VALUED_0,
       MONOID_0, QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1, ARYTM, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETFAM_1, SEQ_1,
-      FRAENKEL, FUNCT_2, FUNCOP_1, XXREAL_2,
+      FRAENKEL, FUNCT_2, FUNCOP_1, XXREAL_2, VALUED_0,
       FUNCT_4, CARD_3, PROB_1, PRE_CIRC, FINSEQ_3, FINSEQ_4,
       PARTFUN1, RFUNCT_3, PRALG_3, UNIALG_1, FUNCT_6, FUNCT_7, FINSET_1,
       NEWTON, SEQM_3, NAT_D, NAT_1, RECDEF_1, BINARITH;
@@ -128,7 +128,7 @@ X: dom Del(f+*(i,x),i) = Seg j by FINSEQ_1:def 3;
       let a be Nat;
       assume a in dom Del(f+*(i,x),i);
       then
-A6:   1 <= a & a <= j by FINSEQ_1:3,X;
+A6:   1 <= a & a <= j by X,FINSEQ_1:3;
 A7:   a in NAT by ORDINAL1:def 13;
       per cases;
       suppose
@@ -142,7 +142,7 @@ A9:     i <= a;
         then
 A10:    i < a+1 by NAT_1:13;
         thus Del(f+*(i,x),i).a = (f+*(i,x)).(a+1) by A1,A2,A4,A5,A6,A7,A9,
-        FINSEQ_3:120
+FINSEQ_3:120
           .= f.(a+1) by A10,FUNCT_7:34
           .= Del(f,i).a by A1,A2,A6,A7,A9,FINSEQ_3:120;
       end;
@@ -180,7 +180,7 @@ A7:   len dx = m by A4,A5,FINSEQ_3:118;
       hence len dy = len dx by A1,A2,A3,A4,A5,FINSEQ_1:8,FINSEQ_3:118;
       let j be Nat such that
 A8:   j in dom Del(x,i);
-A9:   1 <= j & j <= m by A7,A8,FINSEQ_1:3,X;
+A9:   1 <= j & j <= m by A7,A8,X,FINSEQ_1:3;
 A10:  j in NAT by ORDINAL1:def 13;
       per cases;
       suppose
@@ -225,7 +225,7 @@ A2:   x = s & len s = 0;
     then
 A3: x = {} by TARSKI:def 1;
     <*>(X*) is Element of X* by FINSEQ_1:66;
-    hence x in S by CARD_1:47,A3;
+    hence x in S by A3,CARD_1:47;
   end;
   hence thesis by TARSKI:2;
 end;
@@ -359,7 +359,7 @@ A3:   [x,y2] in g & g in X by A1,TARSKI:def 4;
 A4:   x in dom f & x in dom g by A2,A3,RELAT_1:def 4;
       then
 A5:   f.x = y1 & g.x = y2 by A2,A3,FUNCT_1:def 4;
-A6:   x in dom f /\ dom g by A4,XBOOLE_0:def 3;
+A6:   x in dom f /\ dom g by A4,XBOOLE_0:def 4;
       f tolerates g by A2,A3,Def1;
       hence y1 = y2 by A5,A6,PARTFUN1:def 6;
     end;
@@ -409,7 +409,7 @@ A5:   f in X & g in X;
       let x be set;
       assume x in dom f /\ dom g;
       then
-A6:   x in dom f & x in dom g by XBOOLE_0:def 3;
+A6:   x in dom f & x in dom g by XBOOLE_0:def 4;
       then consider y1 being set such that
 A7:   [x,y1] in f by RELAT_1:def 4;
       consider y2 being set such that
@@ -587,7 +587,7 @@ begin :: Homogeneous relations
 
 notation
   let f be Relation;
-  synonym f is to-naturals for f is natural-yielding;
+  synonym f is to-naturals for f is natural-valued;
 end;
 
 definition
@@ -895,10 +895,10 @@ proof
   let f be homogeneous PartFunc of X*, X;
   per cases;
   suppose X is empty;
-    then rng f = {} by XBOOLE_1:3,RELSET_1:12;
+    then rng f = {} by RELSET_1:12,XBOOLE_1:3;
     then f = {};
     hence f is quasi_total non empty iff dom f = (arity f)-tuples_on X by Th8
-    ,Th21;
+,Th21;
   end;
   suppose X is non empty;
     hence f is quasi_total non empty iff dom f = (arity f)-tuples_on X by Lm1;
@@ -1658,8 +1658,8 @@ A12: j in dom F & g = F.j by FUNCT_1:def 5;
   end;
   then Union F is PartFunc of X*, X by A2,A3,Th18;
   then reconsider f = Union F as Element of PFuncs(X*, X) by PARTFUN1:119;
-A13: dom f=union {dom g where g is Element of Y: not contradiction} by A2,A10,
-  Th15;
+A13: dom f=union {dom g where g is Element of Y: not contradiction} by A2,A10
+,Th15;
   f is homogeneous
   proof
     let x,y be FinSequence;
@@ -1741,7 +1741,7 @@ proof
   let f be Element of HFuncs X;
   let F be with_the_same_arity FinSequence of HFuncs X;
   dom (f*<:F:>) c=dom <:F:>&dom <:F:> c=(arity F)-tuples_on X by Th45,
-  RELAT_1:44;
+RELAT_1:44;
   hence
 A1: dom (f*<:F:>) c= (arity F)-tuples_on X by XBOOLE_1:1;
   (arity F)-tuples_on X c= X* by MSUALG_1:12;
@@ -1901,7 +1901,7 @@ A25:    g.d in (rngs F).d by A19,A20,A24;
 A26:    dom F = Seg len F by FINSEQ_1:def 3;
         reconsider d as Element of NAT by A24;
         reconsider Fd = F.d as Element of HFuncs X by A19,A21,A23,A24,A26,
-        FINSEQ_2:13;
+FINSEQ_2:13;
 A27:    (rngs F).d = rng Fd by A19,A21,A24,FUNCT_6:def 3;
         rng Fd c= X by RELSET_1:12;
         hence x in X by A24,A25,A27;
@@ -2220,7 +2220,7 @@ A10: q in dom (F.(m+1));
 A11:  dom (F.(m+1)) = dom (F.m) \/ {p+*(i,m+1)} by FUNCOP_1:19;
       thus ex k being Element of NAT st q = p+*(i,k)
       proof
-        per cases by A10,A11,XBOOLE_0:def 2;
+        per cases by A10,A11,XBOOLE_0:def 3;
         suppose q in dom (F.m);
           hence ex k being Element of NAT st q = p+*(i,k) by A9;
         end;
@@ -2313,7 +2313,7 @@ A15:    m <= m+1 by NAT_1:11;
           = dom (F1.m) \/ dom (p1+*(i,m+1).--> f2.(p1c)) by FUNCT_4:def 1
             .= dom (F1.m) \/ {p1+*(i,m+1)} by FUNCOP_1:19;
           then
-A16:      x in dom (F1.m) or x in {p1+*(i,m+1)} by A14,XBOOLE_0:def 2;
+A16:      x in dom (F1.m) or x in {p1+*(i,m+1)} by A14,XBOOLE_0:def 3;
           thus ex n being Element of NAT st x = p1+*(i,n) & n <= m+1
           proof
             per cases by A16,TARSKI:def 1;
@@ -2334,7 +2334,7 @@ A17:          x = p1+*(i,n) & n <= m by A13;
 A18:      x = p1+*(i,n) & n <= m by A13,A14;
 
 thus ex n being Element of NAT st x = p1+*(i,n) & n <= m+1 by A15,A18,
-          XXREAL_0:2;
+XXREAL_0:2;
         end;
       end;
     end;
@@ -2365,7 +2365,7 @@ A25:    m <= m+1 by NAT_1:11;
           = dom (F2.m) \/ dom (p2+*(i,m+1).--> f2.(p2c)) by FUNCT_4:def 1
             .= dom (F2.m) \/ {p2+*(i,m+1)} by FUNCOP_1:19;
           then
-A26:      x in dom (F2.m) or x in {p2+*(i,m+1)} by A24,XBOOLE_0:def 2;
+A26:      x in dom (F2.m) or x in {p2+*(i,m+1)} by A24,XBOOLE_0:def 3;
           thus ex n being Element of NAT st x = p2+*(i,n) & n <= m+1
           proof
             per cases by A26,TARSKI:def 1;
@@ -2386,7 +2386,7 @@ A27:          x = p2+*(i,n) & n <= m by A23;
 A28:      x = p2+*(i,n) & n <= m by A23,A24;
 
 thus ex n being Element of NAT st x = p2+*(i,n) & n <= m+1 by A25,A28,
-          XXREAL_0:2;
+XXREAL_0:2;
         end;
       end;
     end;
@@ -2427,7 +2427,7 @@ A38:    p1+*(i,0) <> p2+*(i,0);
         assume dom (F1.m) /\ dom (F2.m) <> {};
         then consider x being set such that
 A39:    x in dom(F1.m) /\ dom(F2.m) by XBOOLE_0:def 1;
-A40:    x in dom(F1.m) & x in dom(F2.m) by A39,XBOOLE_0:def 3;
+A40:    x in dom(F1.m) & x in dom(F2.m) by A39,XBOOLE_0:def 4;
         then consider n1 being Element of NAT such that
 A41:    x = p1+*(i,n1) & n1 <= m by A19;
         consider n2 being Element of NAT such that
@@ -2460,7 +2460,7 @@ A48:        F1.(k+1) = (F1.k)+*(p1+*(i,k+1).--> f2.(p1c)) by A5;
               then consider x being set such that
 A49:          x in dom (F1.k) /\ dom({p1+*(i,k+1)}--> f2.(p1c)) by XBOOLE_0:4;
 A50:          x in dom (F1.k) & x in dom({p1+*(i,k+1)}--> f2.(p1c))
-              by A49,XBOOLE_0:def 3;
+              by A49,XBOOLE_0:def 4;
               then x in dom (F1.k) & x in {p1+*(i,k+1)} by FUNCOP_1:19;
               then
 A51:          x in dom (F1.k) & x = p1+*(i,k+1) by TARSKI:def 1;
@@ -2505,7 +2505,7 @@ A58:        F2.(k+1) = (F2.k)+*(p2+*(i,k+1).--> f2.(p2c)) by A9;
               then consider x being set such that
 A59:          x in dom (F2.k) /\ dom({p2+*(i,k+1)}--> f2.(p2c)) by XBOOLE_0:4;
 A60:          x in dom (F2.k) & x in dom({p2+*(i,k+1)}--> f2.(p2c))
-              by A59,XBOOLE_0:def 3;
+              by A59,XBOOLE_0:def 4;
               then x in dom (F2.k) & x in {p2+*(i,k+1)} by FUNCOP_1:19;
               then
 A61:          x in dom (F2.k) & x = p2+*(i,k+1) by TARSKI:def 1;
@@ -2633,7 +2633,7 @@ A15:    dom (F.(m+1)) = dom (F.m) \/ {p+*(i,m+1)} by FUNCOP_1:19;
 A16:    len (p+*(i,m)) = len (p+*(i,m+1)) by FINSEQ_3:31;
         len (p+*(i,m)) = 1+arity f1 by A13,A14,FINSEQ_2:109;
         then p+*(i,m+1)is Element of (1+arity f1)-tuples_on NAT by A16,
-        FINSEQ_2:110;
+FINSEQ_2:110;
         then {p+*(i,m+1)} c= (1+arity f1)-tuples_on NAT by ZFMISC_1:37;
         hence p[m+1] by A13,A15,XBOOLE_1:8;
       end;
@@ -2733,7 +2733,7 @@ A16: rng (F.m) c= NAT by RELSET_1:12;
 A17: dom(F.(m+1))=dom (F.m) \/ dom ({p+*(i,m+1)}--> f2.(pc))by FUNCT_4:def 1;
     p+*(i,m+1) in {p+*(i,m+1)} by TARSKI:def 1;
     then p+*(i,m+1) in dom ({p+*(i,m+1)}--> f2.(pc)) by FUNCOP_1:19;
-    hence p[m+1] by A17,XBOOLE_0:def 2;
+    hence p[m+1] by A17,XBOOLE_0:def 3;
   end;
 A18: for m being Element of NAT holds p[m] from NAT_1:sch 1(A11, A13);
   (p+*(i,p.i)) = p by FUNCT_7:37;
@@ -2904,8 +2904,8 @@ A10: x' in dom primrec(f1,f2,i,x') by A1,A2,A3,A4,Th58;
     then
 A11: G.x' in rng G by FUNCT_1:12;
     Union G = union rng G by CARD_3:def 4;
-    then reconsider rngG = rng G as non empty functional compatible set by A7,
-    Th14;
+    then reconsider rngG = rng G as non empty functional compatible set by A7
+,Th14;
 A12: dom union rngG =
     union {dom f where f is Element of rngG: not contradiction} by Th15;
     dom (G.x') in {dom f where f is Element of rngG:not contradiction} by A11;
@@ -3048,7 +3048,7 @@ A11:  p+*(i,k) in dom (F.(m+1));
 A12:    dom (F.(m+1)) = dom (F.m) \/ {pm1+*(i,m+1)} by FUNCOP_1:19;
         thus k <= (m+1)
         proof
-          per cases by A11,A12,XBOOLE_0:def 2;
+          per cases by A11,A12,XBOOLE_0:def 3;
           suppose p+*(i,k) in dom (F.m);
             then k <= m & m <= m+1 by A10,NAT_1:11;
             hence k <= (m+1) by XXREAL_0:2;
@@ -3209,7 +3209,7 @@ A19:    k <> m+1 by NAT_1:13;
         pk.i = k & (pkn+*(i,m+1)).i = m+1 by A1,A14,FUNCT_7:33;
         then not pk in {pkn+*(i,m+1)} by A19,TARSKI:def 1;
 
-hence not pk in dom (G.(p+*(i,(k+(n+1))))) by A16,A17,A18,XBOOLE_0:def 2;
+hence not pk in dom (G.(p+*(i,(k+(n+1))))) by A16,A17,A18,XBOOLE_0:def 3;
       end;
       suppose not i in dom pkn or not pkn+*(i,m) in dom (F.m) or
         not (pkn+*(i,m))^<*(F.m).(pkn+*(i,m))*> in dom f2;
@@ -3307,7 +3307,7 @@ A22: p0/.i = p0.i by A1,A16,PARTFUN1:def 8
     end;
     assume p0 in dom (G.p0);
     then F.0 = {p0} --> (f1.Del(p0,i)) by A3,A19,A20,A21,A22,FUNCT_7:36
-    ,RELAT_1:60;
+,RELAT_1:60;
     then F.0 = {p0} --> (f1.Del(p,i)) & p0 in {p0} by Th6,TARSKI:def 1;
     hence (G.p0).p0 = f1.Del(p,i) by A18,A19,A22,FUNCOP_1:13;
   end;
@@ -3382,7 +3382,7 @@ A45:  F1.(m+1) = (F1.m)+*(pm1.--> f2.((pm)^<*(F1.m).pm*>))
       pm1 in {pm1} by TARSKI:def 1;
       then pm1 in dom ({pm1}--> f2.((pm)^<*(F1.m).pm*>)) by FUNCOP_1:19;
       then pm1 in dom (F1.m) \/ dom ({pm1}--> f2.((pm)^<*(F1.m).pm*>))
-      by XBOOLE_0:def 2;
+      by XBOOLE_0:def 3;
       hence pm1 in dom (G.pm1) by A29,A30,A36,A45,FUNCT_4:def 1;
     end;
     assume
@@ -3414,7 +3414,7 @@ A50:  G.pm1 in rng G by A5,FUNCT_1:def 5;
       then (union rngG).pm = (G.pm1).pm by A6,A28,A49,A50,Th16;
 
 hence (p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*> in dom f2 by A2,A6,A27,A28,A49
-      ,CARD_3:def 4;
+,CARD_3:def 4;
     end;
     assume
 A51: p+*(i,m) in dom primrec(f1,f2,i) &
@@ -3439,7 +3439,7 @@ A56: G.pm1 in rng G by A5,FUNCT_1:def 5;
   by A6,A28,A55,A56,Th16;
   hence primrec(f1,f2,i).(p+*(i,m+1))
   = f2.((p+*(i,m))^<*primrec(f1,f2,i).(p+*(i,m))*>) by A2,A4,A6,A28,A55,
-  FUNCT_7:36;
+FUNCT_7:36;
 end;
 
 theorem
@@ -3698,8 +3698,8 @@ A5: for p being FinSequence of NAT st len p = n holds
   p+*(i,n) in dom g & (p+*(i,n))^<*g.(p+*(i,n))*> in dom f2) &
   (p+*(i,n+1) in dom g implies
   g.(p+*(i,n+1)) = f2.((p+*(i,n))^<*g.(p+*(i,n))*>)) by Def12;
-  reconsider f2' = f2 as non empty quasi_total Element of HFuncs(NAT) by A4,
-  Th21;
+  reconsider f2' = f2 as non empty quasi_total Element of HFuncs(NAT) by A4
+,Th21;
   per cases;
   suppose f1 is empty;
     hence thesis by A1,Th71;
@@ -3735,7 +3735,7 @@ A18:    len ((y+*(i,k))^<*g.(y+*(i,k))*>)
         reconsider gyk = g.(y+*(i,k)) as Element of NAT;
         reconsider gyik = <*gyk*> as FinSequence of NAT;
         (y+*(i,k))^<*g.(y+*(i,k))*> is Element of dom f2 by A4,A17,A18,
-        FINSEQ_2:110;
+FINSEQ_2:110;
         then (y+*(i,k))^<*g.(y+*(i,k))*> in dom f2';
         hence p[k+1] by A5,A11,A13,A16;
       end;
@@ -3799,7 +3799,7 @@ A14: arity g = 0 by A13,Th48,RELAT_1:60;
     then g.{} = (<*i*>/.1)+1 by Def10
       .= i+1 by FINSEQ_4:25;
     then 0 const (i+1) = (1 succ 1)*<:<*0 const i*>:> by A7,A9,A13,A14,Th52,
-    RELAT_1:60;
+RELAT_1:60;
     hence 0 const (i+1) in P by A1,A4,A5,A6,Def15;
   end;
 A15: P is primitive-recursion_closed by Def17;
@@ -3929,10 +3929,10 @@ A1: f in P by Th73;
 A3: arity f = 0 by Th35;
 A4: rng {} c= P by XBOOLE_1:2;
   reconsider F = {} as with_the_same_arity Element of (HFuncs NAT)* by
-  FINSEQ_1:66;
+FINSEQ_1:66;
   P is composition_closed by Def17;
   then
-  f*<:F:> in P by A1,CARD_1:47,A3,A4,Def15;
+  f*<:F:> in P by A1,A3,A4,Def15,CARD_1:47;
   then f*{} in P by FUNCT_6:60;
   hence {} in P;
 end;
@@ -3979,8 +3979,8 @@ A3: P is primitive-recursion_closed by Def17;
   end;
   suppose f1 is non empty;
 
-then primrec(f1,f2,i) is_primitive-recursively_expressed_by f1,f2,i by A1,A2,
-    Th21,Th68;
+then primrec(f1,f2,i) is_primitive-recursively_expressed_by f1,f2,i by A1,A2
+,Th21,Th68;
     hence primrec(f1,f2,i) in P by A3,Def16;
   end;
 end;
@@ -4298,16 +4298,16 @@ proof
 A1: prd.0 = {0 const 0, 1 succ 1} \/ PROJ by Def23;
 A2: dom prd = NAT by FUNCT_2:def 1;
   0 const 0 in {0 const 0, 1 succ 1} by TARSKI:def 2;
-  then 0 const 0 in prd.0 by A1,XBOOLE_0:def 2;
+  then 0 const 0 in prd.0 by A1,XBOOLE_0:def 3;
   hence 0 const 0 in UP by A2,CARD_5:10;
   1 succ 1 in {0 const 0, 1 succ 1} by TARSKI:def 2;
-  then 1 succ 1 in prd.0 by A1,XBOOLE_0:def 2;
+  then 1 succ 1 in prd.0 by A1,XBOOLE_0:def 3;
   hence 1 succ 1 in UP by A2,CARD_5:10;
   hereby
     let n,i being Element of NAT;
     assume 1 <= i & i <= n;
     then n proj i in PROJ;
-    then n proj i in prd.0 by A1,XBOOLE_0:def 2;
+    then n proj i in prd.0 by A1,XBOOLE_0:def 3;
     hence n proj i in UP by A2,CARD_5:10;
   end;
   hereby :: UP is composition_closed;
@@ -4327,9 +4327,9 @@ A4: kf in dom prd & f in prd.kf by A3,CARD_5:10;
 A5:   rng F c= prd.kf by RELAT_1:60,XBOOLE_1:2;
       F is with_the_same_arity Element of (HFuncs NAT)* by FINSEQ_1:def 11;
       then f*<:F:> in mcocl(kf) by A3,A4,A5;
-      then f*<:F:> in prd.kf \/ mcocl(kf) by XBOOLE_0:def 2;
+      then f*<:F:> in prd.kf \/ mcocl(kf) by XBOOLE_0:def 3;
       then f*<:F:> in PR-closure (prd.kf) \/ composition-closure(prd.kf)
-      by XBOOLE_0:def 2;
+      by XBOOLE_0:def 3;
       then f*<:F:> in prd.(kf+1) by Def23;
       hence f*<:F:> in UP by A2,CARD_5:10;
     end;
@@ -4370,15 +4370,15 @@ A15:    d in Seg len F by A14,FINSEQ_1:def 3;
         then consider m being Element of NAT such that
 A16:    F.d in prd.m & fKF.d = m by A9;
         m in KF by A11,A15,A16,FUNCT_1:12;
-        then m <= K & K <= k by XXREAL_2:def 8,XXREAL_0:25;
+        then m <= K & K <= k by XXREAL_0:25,XXREAL_2:def 8;
         then prd.m c= prd.k by Th79,XXREAL_0:2;
         hence x in prd.k by A14,A16;
       end;
       F is with_the_same_arity Element of (HFuncs NAT)* by FINSEQ_1:def 11;
       then f*<:F:> in mcocl(k) by A3,A4,A12,A13;
-      then f*<:F:> in prd.k \/ mcocl(k) by XBOOLE_0:def 2;
+      then f*<:F:> in prd.k \/ mcocl(k) by XBOOLE_0:def 3;
       then f*<:F:> in PR-closure (prd.k) \/ composition-closure(prd.k) by
-      XBOOLE_0:def 2;
+XBOOLE_0:def 3;
       then f*<:F:> in prd.(k+1) by Def23;
       hence f*<:F:> in UP by A2,CARD_5:10;
     end;
@@ -4401,18 +4401,18 @@ A19: k2 in dom prd & f2 in prd.k2 by A17,CARD_5:10;
   suppose k1 <= k2;
     then prd.k1 c= prd.k2 by Th79;
     then g in mprcl(k2) by A17,A18,A19;
-    then g in prd.k2 \/ mprcl(k2) by XBOOLE_0:def 2;
+    then g in prd.k2 \/ mprcl(k2) by XBOOLE_0:def 3;
     then g in PR-closure (prd.k2) \/ composition-closure(prd.k2) by
-    XBOOLE_0:def 2;
+XBOOLE_0:def 3;
     then g in prd.(k2+1) by Def23;
     hence g in UP by A2,CARD_5:10;
   end;
   suppose k2 <= k1;
     then prd.k2 c= prd.k1 by Th79;
     then g in mprcl(k1) by A17,A18,A19;
-    then g in prd.k1 \/ mprcl(k1) by XBOOLE_0:def 2;
+    then g in prd.k1 \/ mprcl(k1) by XBOOLE_0:def 3;
     then g in PR-closure (prd.k1) \/ composition-closure(prd.k1) by
-    XBOOLE_0:def 2;
+XBOOLE_0:def 3;
     then g in prd.(k1+1) by Def23;
     hence g in UP by A2,CARD_5:10;
   end;
@@ -4434,7 +4434,7 @@ A3: x in prd.0;
     then
 A4: x in {0 const 0, 1 succ 1} or
     x in {n proj i where n,i is Element of NAT: 1 <= i & i <= n}
-    by A3,XBOOLE_0:def 2;
+    by A3,XBOOLE_0:def 3;
     per cases by A4,TARSKI:def 2;
     suppose x = 0 const 0;
       hence thesis by Def17;
@@ -4465,12 +4465,12 @@ A9:   prd.(m+1) = (PR-closure (prd.m)) \/
       set mcocl = {f*<:F:> where f is Element of HFuncs NAT,
       F is with_the_same_arity Element of (HFuncs NAT)*:
       f in prd.m & arity f = len F & rng F c= prd.m};
-      per cases by A8,A9,XBOOLE_0:def 2;
+      per cases by A8,A9,XBOOLE_0:def 3;
       suppose
 A10:    x in PR-closure (prd.m);
         thus thesis
         proof
-          per cases by A10,XBOOLE_0:def 2;
+          per cases by A10,XBOOLE_0:def 3;
           suppose x in prd.m;
             hence thesis by A7;
           end;
@@ -4489,7 +4489,7 @@ A11:        x
 A12:    x in composition-closure (prd.m);
         thus thesis
         proof
-          per cases by A12,XBOOLE_0:def 2;
+          per cases by A12,XBOOLE_0:def 3;
           suppose x in prd.m;
             hence thesis by A7;
           end;
@@ -4538,7 +4538,7 @@ A1: p[0]
     then
 A2: f in {0 const 0, 1 succ 1} or
     f in {n proj i where n,i is Element of NAT: 1 <= i & i <= n} by
-    XBOOLE_0:def 2;
+XBOOLE_0:def 3;
     per cases by A2,TARSKI:def 2;
     suppose f = 0 const 0;
       hence f is quasi_total by Th32;
@@ -4561,12 +4561,12 @@ A5: p[m];
     assume f in prd.(m+1);
     then
 A6: f in (PR-closure (prd.m)) \/ (composition-closure (prd.m)) by Def23;
-    per cases by A6,XBOOLE_0:def 2;
+    per cases by A6,XBOOLE_0:def 3;
     suppose
 A7:   f in (PR-closure (prd.m));
       thus f is quasi_total
       proof
-        per cases by A7,XBOOLE_0:def 2;
+        per cases by A7,XBOOLE_0:def 3;
         suppose f in prd.m;
           hence f is quasi_total by A5;
         end;
@@ -4592,7 +4592,7 @@ A11:      g is_primitive-recursively_expressed_by f1,f2,i by A9;
 A12:  f in (composition-closure (prd.m));
       thus f is quasi_total
       proof
-        per cases by A12,XBOOLE_0:def 2;
+        per cases by A12,XBOOLE_0:def 3;
         suppose f in prd.m;
           hence f is quasi_total by A5;
         end;
@@ -5252,7 +5252,7 @@ A2: dom f' = 2-tuples_on NAT & dom g' = 2-tuples_on NAT &
     consider x being Element of 2-tuples_on NAT;
 A3: dom <:F:> = dom g /\ dom h by FUNCT_6:62;
     <:F:>.x = <*g'.x,h'.x*> & g'.x in NAT & h'.x in NAT
-          by A3,FUNCT_6:62,A2;
+          by A3,A2,FUNCT_6:62;
     then <:F:>.x is Element of 2-tuples_on NAT by FINSEQ_2:121;
     then
 A4: fgh is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60;
@@ -5296,7 +5296,7 @@ A1: arity f = 1 & arity g = 2 by Def25,Def26;
 A2: dom f' = 1-tuples_on NAT & dom g' = 2-tuples_on NAT by Lm1;
     consider x being Element of 2-tuples_on NAT;
 A3: dom <:F:> = dom g by FUNCT_6:61;
-    <:F:>.x = <*g'.x*> & g'.x in NAT by FUNCT_6:61,A2;
+    <:F:>.x = <*g'.x*> & g'.x in NAT by A2,FUNCT_6:61;
     then
 A4: fg is non empty & f' = f by A2,A3,FUNCT_1:21,RELAT_1:60;
     rng F = { g} by FINSEQ_1:56;
@@ -5512,7 +5512,7 @@ proof
     hence thesis by Def17;
   end;
   then reconsider F as with_the_same_arity FinSequence of PrimRec by
-  FINSEQ_1:def 4;
+FINSEQ_1:def 4;
 A1: for i, j holds g.<*i,0*> = 0 & g.<*i,j+1*> = j
   proof
     let i, j;

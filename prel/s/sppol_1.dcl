@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -27,7 +28,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
@@ -40,7 +40,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,11 +49,11 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="61">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="86"/>
+<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 <RCluster aid="SPPOL_1" nr="2">
@@ -62,7 +62,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -71,51 +71,51 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="61">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="87"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <CCluster aid="SPPOL_1" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="86"/>
+<Adjective nr="91"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="87" value="false"/>
+<Adjective nr="92" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SPPOL_1" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="2" value="false"/>
-<Adjective nr="87"/>
+<Adjective nr="92"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="86" value="false"/>
+<Adjective nr="91" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

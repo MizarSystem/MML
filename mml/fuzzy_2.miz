@@ -7,11 +7,13 @@
 environ
 
  vocabularies FUZZY_1, FUNCT_1, BOOLE, SQUARE_1, RELAT_1, ARYTM_1, PARTFUN1,
-      RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2, ARYTM, FUZZY_3, FUNCT_2, FUNCT_3;
+      RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2, ARYTM, FUZZY_3, FUNCT_2, FUNCT_3,
+      SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, NUMBERS, XXREAL_0, SQUARE_1,
       REAL_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, INTEGRA1, SEQ_1, RCOMP_1,
-      PSCOMP_1, FUZZY_1;
- constructors REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_1, SEQ_1;
+      SEQ_4, PSCOMP_1, FUZZY_1;
+ constructors REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_1, SEQ_1,
+      SEQ_4;
  registrations RELSET_1, NUMBERS, MEMBERED, INTEGRA1, XBOOLE_0, SUBSET_1,
       VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
@@ -303,7 +305,7 @@ A2: f.c <= g.c by A1;
   max(f,g\f).c = min(max(f,g),max(f,1_minus f)).c by FUZZY_1:10
     .= min(max(f,g).c,max(f,1_minus f).c) by FUZZY_1:6
     .= min(max(f.c,g.c),max(f,1_minus f).c) by FUZZY_1:6
-    .= min(g.c,max(f,1_minus f).c) by A2,XXREAL_0:def 9;
+    .= min(g.c,max(f,1_minus f).c) by A2,XXREAL_0:def 10;
   hence thesis by XXREAL_0:17;
 end;
 
@@ -439,9 +441,9 @@ A7:     rng h c= [.0,1.] & rng g c= [.0,1.] by FUZZY_1:def 1;
 A8:       x in dom IT & y = IT.x by PARTFUN1:26;
 
 reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
-          A = [. inf A, sup A .] by INTEGRA1:5;
+          A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
           then
-A9:       0=inf A & 1=sup A by INTEGRA1:6;
+A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           x in C;
           then x in dom h & x in dom g by FUZZY_1:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
@@ -519,9 +521,9 @@ A6:         x in C;
 A7:       x in dom IT & y = IT.x by PARTFUN1:26;
 
 reconsider A=[.0,1.] as closed-interval Subset of REAL by INTEGRA1:def 1;
-          A = [. inf A, sup A .] by INTEGRA1:5;
+          A = [. lower_bound A, upper_bound A .] by INTEGRA1:5;
           then
-A8:       0=inf A & 1=sup A by INTEGRA1:6;
+A8:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           0 <= h.x + g.x -(h.x)*(g.x) & h.x + g.x -(h.x)*(g.x) <= 1
           proof
             0 <= (1_minus h).x & (1_minus h).x <= 1 &
@@ -890,9 +892,9 @@ A1: 0 <= c;
 A2: min(a,b) = a;
     c*min(a,b) = min(c*a,c*b)
     proof
-      a <= b by A2,XXREAL_0:def 8;
+      a <= b by A2,XXREAL_0:def 9;
       then a*c <= b*c by A1,XREAL_1:66;
-      hence thesis by A2,XXREAL_0:def 8;
+      hence thesis by A2,XXREAL_0:def 9;
     end;
     hence thesis;
   end;
@@ -900,9 +902,9 @@ A2: min(a,b) = a;
 A3: min(a,b) = b;
     c*min(a,b) = min(c*a,c*b)
     proof
-      a >= b by A3,XXREAL_0:def 8;
+      a >= b by A3,XXREAL_0:def 9;
       then a*c >= b*c by A1,XREAL_1:66;
-      hence thesis by A3,XXREAL_0:def 8;
+      hence thesis by A3,XXREAL_0:def 9;
     end;
     hence thesis;
   end;
@@ -918,9 +920,9 @@ A1: 0 <= c;
 A2: max(a,b) = b;
     c*max(a,b) = max(c*a,c*b)
     proof
-      a <= b by A2,XXREAL_0:def 9;
+      a <= b by A2,XXREAL_0:def 10;
       then a*c <= c*b by A1,XREAL_1:66;
-      hence thesis by A2,XXREAL_0:def 9;
+      hence thesis by A2,XXREAL_0:def 10;
     end;
     hence thesis;
   end;
@@ -928,9 +930,9 @@ A2: max(a,b) = b;
 A3: max(a,b) = a;
     c*max(a,b) = max(c*a,c*b)
     proof
-      a >= b by A3,XXREAL_0:def 9;
+      a >= b by A3,XXREAL_0:def 10;
       then a*c >= b*c by A1,XREAL_1:66;
-      hence thesis by A3,XXREAL_0:def 9;
+      hence thesis by A3,XXREAL_0:def 10;
     end;
     hence thesis;
   end;
@@ -952,9 +954,9 @@ A1: c + max(a,b) = max(c+a,c+b)
 A2:   max(a,b) = b;
       c + max(a,b) = max(c+a,c+b)
       proof
-        a <= b by A2,XXREAL_0:def 9;
+        a <= b by A2,XXREAL_0:def 10;
         then c+a <= c+b by XREAL_1:8;
-        hence thesis by A2,XXREAL_0:def 9;
+        hence thesis by A2,XXREAL_0:def 10;
       end;
       hence thesis;
     end;
@@ -962,9 +964,9 @@ A2:   max(a,b) = b;
 A3:   max(a,b) = a;
       c + max(a,b) = max(c+a,c+b)
       proof
-        a >= b by A3,XXREAL_0:def 9;
+        a >= b by A3,XXREAL_0:def 10;
         then a+c >= b+c by XREAL_1:8;
-        hence thesis by A3,XXREAL_0:def 9;
+        hence thesis by A3,XXREAL_0:def 10;
       end;
       hence thesis;
     end;
@@ -976,9 +978,9 @@ A3:   max(a,b) = a;
 A4:   min(a,b) = a;
       c + min(a,b) = min(c+a,c+b)
       proof
-        a <= b by A4,XXREAL_0:def 8;
+        a <= b by A4,XXREAL_0:def 9;
         then a+c <= c+b by XREAL_1:8;
-        hence thesis by A4,XXREAL_0:def 8;
+        hence thesis by A4,XXREAL_0:def 9;
       end;
       hence thesis;
     end;
@@ -986,9 +988,9 @@ A4:   min(a,b) = a;
 A5:   min(a,b) = b;
       c + min(a,b) = min(c+a,c+b)
       proof
-        a >= b by A5,XXREAL_0:def 8;
+        a >= b by A5,XXREAL_0:def 9;
         then a+c >= b+c by XREAL_1:8;
-        hence thesis by A5,XXREAL_0:def 8;
+        hence thesis by A5,XXREAL_0:def 9;
       end;
       hence thesis;
     end;
@@ -1047,7 +1049,7 @@ A2: (f ++ max(g,h)).c = f.c + max(g,h).c - (f.c)*(max(g,h).c) by Def3
 A3:   max(g.c,h.c) = g.c;
       (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
       proof
-        g.c >= h.c & (1_minus f).c >= 0 by A3,Th1,XXREAL_0:def 9;
+        g.c >= h.c & (1_minus f).c >= 0 by A3,Th1,XXREAL_0:def 10;
         then (g.c)*((1_minus f).c) >= (h.c)*((1_minus f).c) by XREAL_1:66;
         then (g.c)*(1- f.c) >= (h.c)*((1_minus f).c) by FUZZY_1:def 6;
         then (g.c)*(1- f.c) >= (h.c)*(1- f.c) by FUZZY_1:def 6;
@@ -1056,7 +1058,7 @@ A4:     (g.c)*1- (g.c)*f.c + f.c >= (h.c)*(1- f.c) + f.c by XREAL_1:8;
 A5:     (f ++ max(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
         f.c + g.c - (f.c)*g.c
         = max((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
-        by A4,XXREAL_0:def 9
+        by A4,XXREAL_0:def 10
           .= max((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
           .= max((f ++ g).c,(f ++ h).c) by Def3;
         hence thesis by A5,FUZZY_1:6;
@@ -1067,7 +1069,7 @@ A5:     (f ++ max(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
 A6:   max(g.c,h.c) = h.c;
       (f ++ max(g,h)).c = (max((f ++ g),(f ++ h))).c
       proof
-        h.c >= g.c & (1_minus f).c >= 0 by A6,Th1,XXREAL_0:def 9;
+        h.c >= g.c & (1_minus f).c >= 0 by A6,Th1,XXREAL_0:def 10;
         then (h.c)*((1_minus f).c) >= (g.c)*((1_minus f).c) by XREAL_1:66;
         then (h.c)*(1- f.c) >= (g.c)*((1_minus f).c) by FUZZY_1:def 6;
         then (h.c)*(1- f.c) >= (g.c)*(1- f.c) by FUZZY_1:def 6;
@@ -1076,7 +1078,7 @@ A7:     (h.c)*1- (h.c)*f.c + f.c >= (g.c)*(1- f.c) + f.c by XREAL_1:8;
 A8:     (f ++ max(g,h)).c = f.c + h.c - (f.c)*h.c by A2,A6,FUZZY_1:6;
         f.c + h.c - (f.c)*h.c
         = max((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
-        by A7,XXREAL_0:def 9
+        by A7,XXREAL_0:def 10
           .= max((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
           .= max((f ++ g).c,(f ++ h).c) by Def3;
         hence thesis by A8,FUZZY_1:6;
@@ -1102,7 +1104,7 @@ A2: (f ++ min(g,h)).c = f.c + min(g,h).c - (f.c)*(min(g,h).c) by Def3
 A3:     min(g.c,h.c) = g.c;
         (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
         proof
-          g.c <= h.c & (1_minus f).c >= 0 by A3,Th1,XXREAL_0:def 8;
+          g.c <= h.c & (1_minus f).c >= 0 by A3,Th1,XXREAL_0:def 9;
           then (g.c)*((1_minus f).c) <= (h.c)*((1_minus f).c) by XREAL_1:66;
           then (g.c)*(1- f.c) <= (h.c)*((1_minus f).c) by FUZZY_1:def 6;
           then (g.c)*(1- f.c) <= (h.c)*(1- f.c) by FUZZY_1:def 6;
@@ -1111,7 +1113,7 @@ A4:       (g.c)*1- (g.c)*f.c + f.c <= (h.c)*(1- f.c) + f.c by XREAL_1:8;
 A5:       (f ++ min(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
           f.c + g.c - (f.c)*g.c
           = min((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
-          by A4,XXREAL_0:def 8
+          by A4,XXREAL_0:def 9
             .= min((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
             .= min((f ++ g).c,(f ++ h).c) by Def3;
           hence thesis by A5,FUZZY_1:6;
@@ -1122,7 +1124,7 @@ A5:       (f ++ min(g,h)).c = f.c + g.c - (f.c)*g.c by A2,A3,FUZZY_1:6;
 A6:     min(g.c,h.c) = h.c;
         (f ++ min(g,h)).c = (min((f ++ g),(f ++ h))).c
         proof
-          h.c <= g.c & (1_minus f).c >= 0 by A6,Th1,XXREAL_0:def 8;
+          h.c <= g.c & (1_minus f).c >= 0 by A6,Th1,XXREAL_0:def 9;
           then (h.c)*((1_minus f).c) <= (g.c)*((1_minus f).c) by XREAL_1:66;
           then (h.c)*(1- f.c) <= (g.c)*((1_minus f).c) by FUZZY_1:def 6;
           then (h.c)*(1- f.c) <= (g.c)*(1- f.c) by FUZZY_1:def 6;
@@ -1131,7 +1133,7 @@ A7:       (h.c)*1- (h.c)*f.c + f.c <= (g.c)*(1- f.c) + f.c by XREAL_1:8;
 A8:       (f ++ min(g,h)).c = f.c + h.c - (f.c)*h.c by A2,A6,FUZZY_1:6;
           f.c + h.c - (f.c)*h.c
           = min((f.c + g.c - (f.c)*g.c),(f.c + h.c - (f.c)*(h.c)))
-          by A7,XXREAL_0:def 8
+          by A7,XXREAL_0:def 9
             .= min((f ++ g).c,(f.c + h.c - (f.c)*(h.c))) by Def3
             .= min((f ++ g).c,(f ++ h).c) by Def3;
           hence thesis by A8,FUZZY_1:6;
@@ -1243,7 +1245,7 @@ A2:     min(f.c,g.c) = f.c;
 A3:         min(f.c,h.c) = f.c;
             min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
             proof
-A4:           f.c <= g.c & f.c <= h.c by A2,A3,XXREAL_0:def 8;
+A4:           f.c <= g.c & f.c <= h.c by A2,A3,XXREAL_0:def 9;
               0 <= g.c & 0 <= f.c by Th1;
 
 then (f.c)*(f.c) <= (g.c)*(f.c) & (g.c)*(f.c) <= (h.c)*(g.c) by A4,XREAL_1:66;
@@ -1265,7 +1267,7 @@ A6:         min(f.c,h.c) = h.c;
             min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
             proof
 
-f.c >= 0 & 1 >= h.c & f.c <= g.c & h.c >= 0 by A2,Th1,XXREAL_0:def 8;
+f.c >= 0 & 1 >= h.c & f.c <= g.c & h.c >= 0 by A2,Th1,XXREAL_0:def 9;
 
 then (f.c)*(h.c) <= (f.c)*1 & (f.c)*(h.c) <= (g.c)*(h.c) by XREAL_1:66;
               then (f.c)*(h.c) <= min((f.c),(g.c)*(h.c)) by SQUARE_1:39;
@@ -1287,7 +1289,7 @@ A8:         min(f.c,h.c) = f.c;
             min(f.c,g.c)*min(f.c,h.c) <= min(f,(g*h)).c
             proof
 
-f.c >= 0 & 1 >= g.c & f.c <= h.c & g.c >= 0 by A8,Th1,XXREAL_0:def 8;
+f.c >= 0 & 1 >= g.c & f.c <= h.c & g.c >= 0 by A8,Th1,XXREAL_0:def 9;
 
 then (g.c)*(f.c) <= (f.c)*1 & (f.c)*(g.c) <= (h.c)*(g.c) by XREAL_1:66;
               then (f.c)*(g.c) <= min((f.c),(h.c)*(g.c)) by SQUARE_1:39;
@@ -1303,7 +1305,7 @@ A9:         min(f.c,h.c) = h.c;
               f*f c= f by Th33;
 
 then g.c >= 0 & h.c <= f.c & f.c >= 0 & g.c <= f.c & (f*f).c <= f.c
-              by A7,A9,Th1,FUZZY_1:def 3,XXREAL_0:def 8;
+              by A7,A9,Th1,FUZZY_1:def 3,XXREAL_0:def 9;
               then (h.c)*(g.c) <= (f.c)*(g.c) & (g.c)*(f.c) <= (f.c)*(f.c) &
               (f.c)*(f.c) <= f.c by Def2,XREAL_1:66;
 
@@ -1360,7 +1362,7 @@ A3:   max(f.c,g.c) = f.c & max(f.c,h.c) = f.c;
       max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
       proof
         g.c <= f.c & h.c <= f.c &
-        (1_minus f).c >= 0 & (1_minus g).c >= 0 by A3,Th1,XXREAL_0:def 9;
+        (1_minus f).c >= 0 & (1_minus g).c >= 0 by A3,Th1,XXREAL_0:def 10;
         then 1 - g.c >= 1 - f.c & 1 - h.c >= 1 - f.c &
         1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,REAL_2:106;
         then (1 - f.c)*(1 - f.c) <= (1 - g.c)*(1 - f.c) &
@@ -1381,7 +1383,7 @@ A5:   max(f.c,g.c) = f.c & max(f.c,h.c) = h.c;
       max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
       proof
         g.c <= f.c & (1_minus h).c >= 0 & (1_minus f).c >= 0 & h.c >= 0
-        by A5,Th1,XXREAL_0:def 9;
+        by A5,Th1,XXREAL_0:def 10;
         then 1 - f.c <= 1 - g.c & 1 - h.c >= 0 & 1 - f.c >= 0 & h.c >= 0
         by FUZZY_1:def 6,REAL_2:106;
 
@@ -1399,7 +1401,7 @@ A6:   max(f.c,g.c) = g.c & max(f.c,h.c) = f.c;
       max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
       proof
         h.c <= f.c & (1_minus g).c >= 0 & (1_minus f).c >= 0 & g.c >= 0
-        by A6,Th1,XXREAL_0:def 9;
+        by A6,Th1,XXREAL_0:def 10;
         then 1 - f.c <= 1 - h.c & 1 - g.c >= 0 & 1 - f.c >= 0 & g.c >= 0
         by FUZZY_1:def 6,REAL_2:106;
 
@@ -1417,7 +1419,7 @@ A7:   max(f.c,g.c) = g.c & max(f.c,h.c) = h.c;
       max(f.c,g.c) + max(f.c,h.c) - (max(f.c,g.c))*(max(f.c,h.c))
       proof
         g.c >= f.c & h.c >= f.c &
-        (1_minus f).c >= 0 & (1_minus g).c >= 0 by A7,Th1,XXREAL_0:def 9;
+        (1_minus f).c >= 0 & (1_minus g).c >= 0 by A7,Th1,XXREAL_0:def 10;
         then 1 - g.c <= 1 - f.c & 1 - h.c <= 1 - f.c &
         1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,REAL_2:106;
         then (1 - f.c)*(1 - f.c) >= (1 - g.c)*(1 - f.c) &

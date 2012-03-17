@@ -32,7 +32,7 @@ A1: P[{}]
 and
 A2: for A st P[A] holds P[succ A]
 and
-A3: for A st A <> {} & A is_limit_ordinal & for B st B in A holds P[B]
+A3: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B]
 holds P[A]
 proof
 A4: for A st for B st B in A holds P[B] holds P[A]
@@ -48,7 +48,7 @@ A7:   A = succ B;
     now
       assume
 A8:   A <> {} & for B holds A <> succ B;
-      then A is_limit_ordinal by ORDINAL1:42;
+      then A is limit_ordinal by ORDINAL1:42;
       hence thesis by A3,A5,A8;
     end;
     hence thesis by A1,A6;
@@ -94,7 +94,7 @@ A2: x in A or x = A by ORDINAL1:13;
 end;
 
 theorem
-  {} is_limit_ordinal
+  {} is limit_ordinal
 proof
   thus {} = union {} by ZFMISC_1:2;
 end;
@@ -162,7 +162,7 @@ proof
 A1: X c= Y;
   let x;
   assume x in Lim X;
-  then x in X & ex A st x = A & A is_limit_ordinal by ORDINAL1:def 11;
+  then x in X & ex A st x = A & A is limit_ordinal by ORDINAL1:def 11;
   hence x in Lim Y by A1,ORDINAL1:def 11;
 end;
 
@@ -171,7 +171,7 @@ theorem
 proof
   let x;
   assume x in Lim X;
-  then x in X & ex A st x = A & A is_limit_ordinal by ORDINAL1:def 11;
+  then x in X & ex A st x = A & A is limit_ordinal by ORDINAL1:def 11;
   hence x in On X by ORDINAL1:def 10;
 end;
 
@@ -215,11 +215,11 @@ A6:     Y in X;
 end;
 
 registration
-  cluster being_limit_ordinal Ordinal;
+  cluster limit_ordinal Ordinal;
   existence
   proof
     take omega;
-    thus omega is being_limit_ordinal by ORDINAL1:def 12;
+    thus omega is limit_ordinal by ORDINAL1:def 12;
   end;
 end;
 
@@ -553,7 +553,7 @@ A2: {} in A() implies L1().{} = B()
 and
 A3: for A st succ A in A() holds L1().(succ A) = C(A,L1().A)
 and
-A4: for A st A in A() & A <> {} & A is_limit_ordinal
+A4: for A st A in A() & A <> {} & A is limit_ordinal
 holds L1().A = D(A,L1()|A)
 and
 A5: dom L2() = A()
@@ -562,7 +562,7 @@ A6: {} in A() implies L2().{} = B()
 and
 A7: for A st succ A in A() holds L2().(succ A) = C(A,L2().A)
 and
-A8: for A st A in A() & A <> {} & A is_limit_ordinal
+A8: for A st A in A() & A <> {} & A is limit_ordinal
 holds L2().A = D(A,L2()|A)
 proof
   assume L1() <> L2();
@@ -607,7 +607,7 @@ A23: L1().B = C(C,L1().C) & L2().B = C(C,L2().C) & C in B
   now
     assume
 A24: B <> {} & for C holds B <> succ C;
-    then B is_limit_ordinal by ORDINAL1:42;
+    then B is limit_ordinal by ORDINAL1:42;
     then L1().B = D(B,L1()|B) & L2().B = D(B,L2()|B) by A4,A8,A13,A24;
     hence L1().B = L2().B by A17,A18,FUNCT_1:9;
   end;
@@ -618,12 +618,12 @@ scheme TSExist1 { A()->Ordinal, B()->set, C(Ordinal,set)->set,
   D(Ordinal,T-Sequence)->set } : ex L st dom L = A() &
   ({} in A() implies L.{} = B() ) &
   (for A st succ A in A() holds L.(succ A) = C(A,L.A) ) &
-  (for A st A in A() & A <> {} & A is_limit_ordinal holds L.A = D(A,L|A) )
+  (for A st A in A() & A <> {} & A is limit_ordinal holds L.A = D(A,L|A) )
 proof
   defpred P[Ordinal,T-Sequence] means dom $2 = $1 &
   ({} in $1 implies $2.{} = B() ) &
   (for A st succ A in $1 holds $2.(succ A) = C(A,$2.A) ) &
-  for A st A in $1 & A <> {} & A is_limit_ordinal holds $2.A = D(A,$2|A);
+  for A st A in $1 & A <> {} & A is limit_ordinal holds $2.A = D(A,$2|A);
   defpred R[Ordinal] means ex L st P[$1,L];
 A1: for B st for C st C in B holds R[C] holds R[B]
   proof
@@ -645,12 +645,12 @@ A4:   ( a is Ordinal & b is T-Sequence &
 A5:   dom b = a by A4;
 A6:   {} in a implies b.{} = B() by A4;
 A7:   for A st succ A in a holds b.(succ A) = C(A,b.A) by A4;
-A8:   for A st A in a & A <> {} & A is_limit_ordinal
+A8:   for A st A in a & A <> {} & A is limit_ordinal
       holds b.A = D(A,b|A) by A4;
 A9:   dom c = a by A4;
 A10:  {} in a implies c.{} = B() by A4;
 A11:  for A st succ A in a holds c.(succ A) = C(A,c.A) by A4;
-A12:  for A st A in a & A <> {} & A is_limit_ordinal
+A12:  for A st A in a & A <> {} & A is limit_ordinal
       holds c.A = D(A,c|A) by A4;
       b = c from TSUniq1(A5,A6,A7,A8,A9,A10,A11,A12);
       hence thesis;
@@ -678,18 +678,18 @@ A16:  P[a',L] by A2,A15;
     end;
     defpred Q[set,set] means ex A,L st A = $1 & L = G.$1 &
     (A = {} & $2 = B() or (ex B st A = succ B & $2 = C(B,L.B)) or
-    A <> {} & A is_limit_ordinal & $2 = D(A,L));
+    A <> {} & A is limit_ordinal & $2 = D(A,L));
 A17: for a,b,c st a in B & Q[a,b] & Q[a,c] holds b = c
     proof
       let a,b,c such that a in B;
       given Ab being Ordinal,Lb being T-Sequence such that
 A18:  Ab = a & Lb = G.a and
 A19:  Ab = {} & b = B() or (ex B st Ab = succ B & b = C(B,Lb.B)) or
-      Ab <> {} & Ab is_limit_ordinal & b = D(Ab,Lb);
+      Ab <> {} & Ab is limit_ordinal & b = D(Ab,Lb);
       given Ac being Ordinal,Lc being T-Sequence such that
 A20:  Ac = a & Lc = G.a and
 A21:  Ac = {} & c = B() or (ex B st Ac = succ B & c = C(B,Lc.B)) or
-      Ac <> {} & Ac is_limit_ordinal & c = D(Ac,Lc);
+      Ac <> {} & Ac is limit_ordinal & c = D(Ac,Lc);
       now
         given C such that
 A22:    Ab = succ C;
@@ -754,7 +754,7 @@ A33: dom F = B & for a st a in B holds Q[a,F.a] from FUNCT_1:sch 2(A17,A25);
       then ex A being Ordinal, K being T-Sequence st
       A = {} & K = G.{} & (A = {} & F.{} = B() or
       (ex B st A = succ B & F.{} = C(B,K.B)) or
-      A <> {} & A is_limit_ordinal & F.{} = D(A,K)) by A33;
+      A <> {} & A is limit_ordinal & F.{} = D(A,K)) by A33;
       hence thesis;
     end;
 A34: for A,L1 st A in B & L1 = G.A holds L|A = L1
@@ -774,7 +774,7 @@ A39:    P[A,L1] & A c= dom L by A13,A33,A37,ORDINAL1:def 2;
         then
 A40:    dom L1 = A & dom(L|A) = A & ({} in A implies L1.{} = B() ) &
         (for B,x st succ B in A & x = L1.B holds L1.(succ B) = C(B,x) ) &
-        (for B,L2 st B in A & B <> {} & B is_limit_ordinal & L2 = L1|B
+        (for B,L2 st B in A & B <> {} & B is limit_ordinal & L2 = L1|B
         holds L1.B = D(B,L2) ) by RELAT_1:91;
         now
           let x;
@@ -785,7 +785,7 @@ A42:      x' in B by A37,A41,ORDINAL1:19;
           then consider A1,L2 such that
 A43:      A1 = x' & L2 = G.x' and
 A44:      A1 = {} & L.x' = B() or (ex B st A1 = succ B & L.x' = C(B,L2.B)) or
-          A1 <> {} & A1 is_limit_ordinal & L.x' = D(A1,L2) by A33;
+          A1 <> {} & A1 is limit_ordinal & L.x' = D(A1,L2) by A33;
 A45:      L|x' = L2 & L|A.x = L.x by A36,A41,A42,A43,FUNCT_1:72;
           for D,L3 st D = x' & L3 = L1|x' holds P[D,L3]
           proof
@@ -810,7 +810,7 @@ A49:          succ C in A & succ C in x' & C in A & C in x'
             end;
             let C;
             assume
-A50:        C in D & C <> {} & C is_limit_ordinal;
+A50:        C in D & C <> {} & C is limit_ordinal;
             then C c= x' by A46,ORDINAL1:def 2;
             then L1|C = L3|C & C in A by A41,A46,A50,FUNCT_1:82,ORDINAL1:19;
             then L1.C = D(C,L3|C) & L1|x'.C = L1.C by A13,A38,A46,A50,
@@ -841,7 +841,7 @@ A54:  succ A in B;
       then consider C being Ordinal, K being T-Sequence such that
 A55:  C = succ A & K = G.succ A and
 A56:  C = {} & F.succ A = B() or (ex B st C = succ B & F.succ A = C(B,K.B)) or
-      C <> {} & C is_limit_ordinal & F.succ A = D(C,K) by A33;
+      C <> {} & C is limit_ordinal & F.succ A = D(C,K) by A33;
       consider D such that
 A57:  C = succ D & F.succ A = C(D,K.D) by A55,A56,ORDINAL1:42;
       A = D & K = L|succ A & A in succ A by A34,A54,A55,A57,ORDINAL1:10,12;
@@ -849,10 +849,10 @@ A57:  C = succ D & F.succ A = C(D,K.D) by A55,A56,ORDINAL1:42;
     end;
     let D;
     assume
-A58: D in B & D <> {} & D is_limit_ordinal;
+A58: D in B & D <> {} & D is limit_ordinal;
     then ex A being Ordinal, K being T-Sequence st A = D & K = G.D &
     (A = {} & F.D = B() or (ex B st A = succ B & F.D = C(B,K.B)) or
-    A <> {} & A is_limit_ordinal & F.D = D(A,K)) by A33;
+    A <> {} & A is limit_ordinal & F.D = D(A,K)) by A33;
     hence L.D = D(D,L|D) by A34,A58,ORDINAL1:42;
   end;
   for A holds R[A] from ORDINAL1:sch 2(A1);
@@ -866,7 +866,7 @@ provided
 A1: for A,x holds x = F(A) iff
 ex L st x = last L & dom L = succ A & L.{} = B() &
 (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
 and
 A2: dom L() = A()
 and
@@ -874,7 +874,7 @@ A3: {} in A() implies L().{} = B()
 and
 A4: for A st succ A in A() holds L().(succ A) = C(A,L().A)
 and
-A5: for A st A in A() & A <> {} & A is_limit_ordinal holds L().A = D(A,L()|A)
+A5: for A st A in A() & A <> {} & A is limit_ordinal holds L().A = D(A,L()|A)
 proof
   let A;
   set L = L()|succ A;
@@ -899,11 +899,11 @@ A11: succ C in succ A;
     then L.C = L().C & L.succ C = L().succ C by A11,FUNCT_1:72,ORDINAL1:19;
     hence L.succ C = C(C,L.C) by A2,A4,A6,A11;
   end;
-  for C st C in succ A & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+  for C st C in succ A & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
   proof
     let C;
     assume
-A12: C in succ A & C <> {} & C is_limit_ordinal;
+A12: C in succ A & C <> {} & C is limit_ordinal;
     then C in A() & C c= succ A by A2,A6,ORDINAL1:def 2;
     then L.C = L().C & L|C = L()|C by A12,FUNCT_1:72,82;
     hence L.C = D(C,L|C) by A2,A5,A6,A12;
@@ -915,25 +915,25 @@ scheme TSDef { A()->Ordinal, B()->set, C(Ordinal,set)->set,
   D(Ordinal,T-Sequence)->set } :
   (ex x,L st x = last L & dom L = succ A() & L.{} = B() &
   (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) ) & for x1,x2 being set st
   (ex L st x1 = last L & dom L = succ A() & L.{} = B() &
   (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) ) &
   (ex L st x2 = last L & dom L = succ A() & L.{} = B() &
   (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C) )
+  for C st C in succ A() & C <> {} & C is limit_ordinal holds L.C = D(C,L|C) )
   holds x1 = x2
 proof
   consider L such that
 A1: dom L = succ A() & ({} in succ A() implies L.{} = B() ) &
   (for C st succ C in succ A() holds L.(succ C) = C(C,L.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) from TSExist1;
   thus ex x,L st x = last L & dom L = succ A() & L.{} = B() &
   (for C st succ C in succ A() holds L.succ C = C(C,L.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+  for C st C in succ A() & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
   proof
     take x = last L, L;
     thus x = last L & dom L = succ A() by A1;
@@ -947,14 +947,14 @@ A2: x1 = last L1 and
 A3: dom L1 = succ A() and
 A4: L1.{} = B() and
 A5: for C st succ C in succ A() holds L1.succ C = C(C,L1.C) and
-A6: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A6: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L1.C = D(C,L1|C);
   given L2 such that
 A7: x2 = last L2 and
 A8: dom L2 = succ A() and
 A9: L2.{} = B() and
 A10: for C st succ C in succ A() holds L2.succ C = C(C,L2.C) and
-A11: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A11: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L2.C = D(C,L2|C);
 A12: {} in succ A() implies L1.{} = B() by A4;
 A13: {} in succ A() implies L2.{} = B() by A9;
@@ -968,12 +968,12 @@ provided
 A1: for A,x holds x = F(A) iff
 ex L st x = last L & dom L = succ A & L.{} = B() &
 (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
 proof
   consider L such that
 A2: dom L = succ {} & ({} in succ {} implies L.{} = B() ) &
   (for A st succ A in succ {} holds L.(succ A) = C(A,L.A) ) &
-  for A st A in succ {} & A <> {} & A is_limit_ordinal
+  for A st A in succ {} & A <> {} & A is limit_ordinal
   holds L.A = D(A,L|A) from TSExist1;
   B() = last L & L.{} = B() by A2,Th2,ORDINAL1:10;
   hence thesis by A1,A2;
@@ -986,19 +986,19 @@ provided
 A1: for A,x holds x = F(A) iff
 ex L st x = last L & dom L = succ A & L.{} = B() &
 (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
 proof
   let A;
 A2: for A,x holds x = F(A) iff
   ex L st x = last L & dom L = succ A & L.{} = B() &
   (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-  for C st C in succ A & C <> {} & C is_limit_ordinal
+  for C st C in succ A & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) by A1;
   consider L such that
 A3: dom L = succ succ A and
 A4: {} in succ succ A implies L.{} = B() and
 A5: for C st succ C in succ succ A holds L.(succ C) = C(C,L.C) and
-A6: for C st C in succ succ A & C <> {} & C is_limit_ordinal
+A6: for C st C in succ succ A & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) from TSExist1;
 A7: for B st B in dom L holds L.B = F(B) from TSResult(A2,A3,A4,A5,A6);
   A in succ A & succ A in succ succ A by ORDINAL1:10;
@@ -1012,9 +1012,9 @@ provided
 A1: for A,x holds x = F(A) iff
 ex L st x = last L & dom L = succ A & L.{} = B() &
 (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds L.C = D(C,L|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds L.C = D(C,L|C)
 and
-A2: A() <> {} & A() is_limit_ordinal
+A2: A() <> {} & A() is limit_ordinal
 and
 A3: dom L() = A()
 and
@@ -1023,13 +1023,13 @@ proof
 A5: for A,x holds x = F(A) iff
   ex L st x = last L & dom L = succ A & L.{} = B() &
   (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
-  for C st C in succ A & C <> {} & C is_limit_ordinal
+  for C st C in succ A & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) by A1;
   consider L such that
 A6: dom L = succ A() and
 A7: {} in succ A() implies L.{} = B() and
 A8: for C st succ C in succ A() holds L.(succ C) = C(C,L.C) and
-A9: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A9: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L.C = D(C,L|C) from TSExist1;
 A10: for B st B in dom L holds L.B = F(B) from TSResult(A5,A6,A7,A8,A9);
   set L1 = L|A();
@@ -1055,14 +1055,14 @@ scheme OSExist { A()->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
   D(Ordinal,T-Sequence)->Ordinal } : ex fi st dom fi = A() &
   ({} in A() implies fi.{} = B() ) &
   (for A st succ A in A() holds fi.(succ A) = C(A,fi.A) ) &
-  (for A st A in A() & A <> {} & A is_limit_ordinal holds fi.A = D(A,fi|A) )
+  (for A st A in A() & A <> {} & A is limit_ordinal holds fi.A = D(A,fi|A) )
 proof
   deffunc CC(Ordinal,set) = C($1,sup union {$2});
   consider L such that
 A1: dom L = A() and
 A2: {} in A() implies L.{} = B() and
 A3: for A st succ A in A() holds L.(succ A) = CC(A,L.A) and
-A4: for A st A in A() & A <> {} & A is_limit_ordinal
+A4: for A st A in A() & A <> {} & A is limit_ordinal
   holds L.A = D(A,L|A) from TSExist1;
   L is Ordinal-yielding
   proof
@@ -1082,7 +1082,7 @@ A8:   y = succ B;
     now
       assume
 A9:   y <> {} & for B holds y <> succ B;
-      then y is_limit_ordinal by ORDINAL1:42;
+      then y is limit_ordinal by ORDINAL1:42;
       then L.y = D(y,L|y) by A1,A4,A6,A9;
       hence x is Ordinal by A6;
     end;
@@ -1112,7 +1112,7 @@ provided
 A1: for A,B holds B = F(A) iff
 ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
 (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
 and
 A2: dom fi() = A()
 and
@@ -1120,7 +1120,7 @@ A3: {} in A() implies fi().{} = B()
 and
 A4: for A st succ A in A() holds fi().(succ A) = C(A,fi().A)
 and
-A5: for A st A in A() & A <> {} & A is_limit_ordinal
+A5: for A st A in A() & A <> {} & A is limit_ordinal
 holds fi().A = D(A,fi()|A)
 proof
   let A;
@@ -1147,11 +1147,11 @@ A12: succ C in succ A;
     by A12,FUNCT_1:72,ORDINAL1:19;
     hence fi.succ C = C(C,fi.C) by A2,A4,A6,A12;
   end;
-  for C st C in succ A & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+  for C st C in succ A & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
   proof
     let C;
     assume
-A13: C in succ A & C <> {} & C is_limit_ordinal;
+A13: C in succ A & C <> {} & C is limit_ordinal;
     then C in A() & C c= succ A by A2,A6,ORDINAL1:def 2;
     then fi.C = fi().C & fi|C = fi()|C by A13,FUNCT_1:72,82;
     hence fi.C = D(C,fi|C) by A2,A5,A6,A13;
@@ -1163,26 +1163,26 @@ scheme OSDef { A()->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
   D(Ordinal,T-Sequence)->Ordinal } :
   (ex A,fi st A = last fi & dom fi = succ A() & fi.{} = B() &
   (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) ) & for A1,A2 st
   (ex fi st A1 = last fi & dom fi = succ A() & fi.{} = B() &
   (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) ) &
   (ex fi st A2 = last fi & dom fi = succ A() & fi.{} = B() &
   (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) ) holds A1 = A2
 proof
   consider fi such that
 A1: dom fi = succ A() & ({} in succ A() implies fi.{} = B() ) &
   (for C st succ C in succ A() holds fi.(succ C) = C(C,fi.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal
+  for C st C in succ A() & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) from OSExist;
   reconsider A = last fi as Ordinal;
   thus ex A,fi st A = last fi & dom fi = succ A() & fi.{} = B() &
   (for C st succ C in succ A() holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A() & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+  for C st C in succ A() & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
   proof
     take A, fi;
     thus A = last fi & dom fi = succ A() by A1;
@@ -1196,14 +1196,14 @@ A2: A1 = last L1 and
 A3: dom L1 = succ A() and
 A4: L1.{} = B() and
 A5: for C st succ C in succ A() holds L1.succ C = C(C,L1.C) and
-A6: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A6: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L1.C = D(C,L1|C);
   given L2 being Ordinal-Sequence such that
 A7: A2 = last L2 and
 A8: dom L2 = succ A() and
 A9: L2.{} = B() and
 A10: for C st succ C in succ A() holds L2.succ C = C(C,L2.C) and
-A11: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A11: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L2.C = D(C,L2|C);
 A12: {} in succ A() implies L1.{} = B() by A4;
 A13: {} in succ A() implies L2.{} = B() by A9;
@@ -1226,9 +1226,9 @@ A17: succ C in succ A();
       .= x' by Th26;
     hence thesis by A10,A17;
   end;
-A18: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A18: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L1.C = D(C,L1|C) by A6;
-A19: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A19: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds L2.C = D(C,L2|C) by A11;
   L1 = L2 from TSUniq1(A3,A12,A14,A18,A8,A13,A16,A19);
   hence thesis by A2,A7;
@@ -1241,12 +1241,12 @@ provided
 A1: for A,B holds B = F(A) iff
 ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
 (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
 proof
   consider fi such that
 A2: dom fi = succ {} & ({} in succ {} implies fi.{} = B() ) &
   (for A st succ A in succ {} holds fi.(succ A) = C(A,fi.A) ) &
-  for A st A in succ {} & A <> {} & A is_limit_ordinal
+  for A st A in succ {} & A <> {} & A is limit_ordinal
   holds fi.A = D(A,fi|A) from OSExist;
   B() = last fi & fi.{} = B() by A2,Th2,ORDINAL1:10;
   hence thesis by A1,A2;
@@ -1259,19 +1259,19 @@ provided
 A1: for A,B holds B = F(A) iff
 ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
 (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
 proof
   let A;
 A2: for A,B holds B = F(A) iff
   ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
   (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A & C <> {} & C is_limit_ordinal
+  for C st C in succ A & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by A1;
   consider fi such that
 A3: dom fi = succ succ A and
 A4: {} in succ succ A implies fi.{} = B() and
 A5: for C st succ C in succ succ A holds fi.(succ C) = C(C,fi.C) and
-A6: for C st C in succ succ A & C <> {} & C is_limit_ordinal
+A6: for C st C in succ succ A & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) from OSExist;
 A7: for B st B in dom fi holds fi.B = F(B) from OSResult(A2,A3,A4,A5,A6);
   A in succ A & succ A in succ succ A by ORDINAL1:10;
@@ -1287,9 +1287,9 @@ provided
 A1: for A,B holds B = F(A) iff
 ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
 (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-for C st C in succ A & C <> {} & C is_limit_ordinal holds fi.C = D(C,fi|C)
+for C st C in succ A & C <> {} & C is limit_ordinal holds fi.C = D(C,fi|C)
 and
-A2: A() <> {} & A() is_limit_ordinal
+A2: A() <> {} & A() is limit_ordinal
 and
 A3: dom fi() = A()
 and
@@ -1298,13 +1298,13 @@ proof
 A5: for A,B holds B = F(A) iff
   ex fi st B = last fi & dom fi = succ A & fi.{} = B() &
   (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ A & C <> {} & C is_limit_ordinal
+  for C st C in succ A & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by A1;
   consider fi such that
 A6: dom fi = succ A() and
 A7: {} in succ A() implies fi.{} = B() and
 A8: for C st succ C in succ A() holds fi.(succ C) = C(C,fi.C) and
-A9: for C st C in succ A() & C <> {} & C is_limit_ordinal
+A9: for C st C in succ A() & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) from OSExist;
 A10: for B st B in dom fi holds fi.B = F(B) from OSResult(A5,A6,A7,A8,A9);
   set psi = fi|A();
@@ -1524,7 +1524,7 @@ definition
 
   for A,B st A in B & B in dom L holds L.A in L.B;
   attr L is continuous means
-  for A,B st A in dom L & A <> {} & A is_limit_ordinal & B = L.A
+  for A,B st A in dom L & A <> {} & A is limit_ordinal & B = L.A
   holds B is_limes_of L|A;
 end;
 
@@ -1534,22 +1534,22 @@ definition
   :Def18:
   ex fi st it = last fi & dom fi = succ B & fi.{} = A &
   (for C st succ C in succ B holds fi.succ C = succ(fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal holds fi.C = sup(fi|C);
+  for C st C in succ B & C <> {} & C is limit_ordinal holds fi.C = sup(fi|C);
   correctness
   proof
     deffunc C(Ordinal,Ordinal) = succ $2;
     deffunc D(Ordinal,T-Sequence) = sup $2;
     (ex F being Ordinal,fi st F = last fi & dom fi = succ B & fi.{} = A &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) & for A1,A2 st
     (ex fi st A1 = last fi & dom fi = succ B & fi.{} = A &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) &
     (ex fi st A2 = last fi & dom fi = succ B & fi.{} = A &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) holds A1 = A2 from OSDef;
     hence thesis;
   end;
@@ -1561,7 +1561,7 @@ definition
   :Def19:
   ex fi st it = last fi & dom fi = succ A & fi.{} = {} &
   (for C st succ C in succ A holds fi.succ C = (fi.C)+^B) &
-  for C st C in succ A & C <> {} & C is_limit_ordinal
+  for C st C in succ A & C <> {} & C is limit_ordinal
   holds fi.C = union sup(fi|C);
   correctness
   proof
@@ -1569,15 +1569,15 @@ definition
     deffunc D(Ordinal,Ordinal-Sequence) = union sup $2;
     (ex F being Ordinal,fi st F = last fi & dom fi = succ A & fi.{} = {} &
     (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ A & C <> {} & C is_limit_ordinal
+    for C st C in succ A & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) & for A1,A2 st
     (ex fi st A1 = last fi & dom fi = succ A & fi.{} = {} &
     (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ A & C <> {} & C is_limit_ordinal
+    for C st C in succ A & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) &
     (ex fi st A2 = last fi & dom fi = succ A & fi.{} = {} &
     (for C st succ C in succ A holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ A & C <> {} & C is_limit_ordinal
+    for C st C in succ A & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) holds A1 = A2 from OSDef;
     hence thesis;
   end;
@@ -1595,22 +1595,22 @@ definition
   :Def20:
   ex fi st it = last fi & dom fi = succ B & fi.{} = 1 &
   (for C st succ C in succ B holds fi.succ C = A*^(fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal holds fi.C = lim(fi|C);
+  for C st C in succ B & C <> {} & C is limit_ordinal holds fi.C = lim(fi|C);
   correctness
   proof
     deffunc C(Ordinal,Ordinal) = A*^$2;
     deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
     (ex F being Ordinal,fi st F = last fi & dom fi = succ B & fi.{} = 1 &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) & for A1,A2 st
     (ex fi st A1 = last fi & dom fi = succ B & fi.{} = 1 &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) &
     (ex fi st A2 = last fi & dom fi = succ B & fi.{} = 1 &
     (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-    for C st C in succ B & C <> {} & C is_limit_ordinal
+    for C st C in succ B & C <> {} & C is limit_ordinal
     holds fi.C = D(C,fi|C) ) holds A1 = A2 from OSDef;
     hence thesis;
   end;
@@ -1626,7 +1626,7 @@ proof
   deffunc C(Ordinal,Ordinal) = succ $2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def18;
   thus F({}) = A from OSResult0(A1);
 end;
@@ -1639,18 +1639,18 @@ proof
   deffunc C(Ordinal,Ordinal) = succ $2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def18;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
 theorem Th46:
-  B <> {} & B is_limit_ordinal implies
+  B <> {} & B is limit_ordinal implies
   for fi st dom fi = B & for C st C in B holds fi.C = A+^C holds A+^B = sup fi
 proof
   assume
-A1: B <> {} & B is_limit_ordinal;
+A1: B <> {} & B is limit_ordinal;
   deffunc F(Ordinal) = A+^$1;
   deffunc D(Ordinal,Ordinal-Sequence) = sup $2;
   deffunc C(Ordinal,Ordinal) = succ $2;
@@ -1659,7 +1659,7 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = A & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def18;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
@@ -1670,12 +1670,12 @@ proof
   defpred P[Ordinal] means {}+^$1 = $1;
 A1: P[{}] by Th44;
 A2: for A holds P[A] implies P[succ A] by Th45;
-A3: for A st A <> {} & A is_limit_ordinal & for B st B in A holds P[B]
+A3: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B]
   holds P[A]
   proof
     let A;
     assume that
-A4: A <> {} & A is_limit_ordinal and
+A4: A <> {} & A is limit_ordinal and
 A5: for B st B in A holds {}+^B = B;
     deffunc F(Ordinal) = {}+^$1;
     consider fi such that
@@ -1747,7 +1747,7 @@ A8:     A c< D iff A c= D & A <> D by XBOOLE_0:def 8;
     now
       assume for D holds B <> succ D;
       then
-A9:   B is_limit_ordinal by ORDINAL1:42;
+A9:   B is limit_ordinal by ORDINAL1:42;
       deffunc F(Ordinal) = C+^$1;
       consider fi such that
 A10:  dom fi = B & for D st D in B holds fi.D = F(D) from OSLambda;
@@ -1803,7 +1803,7 @@ A7:   A +^ D c= B +^ D by A3,A6,ORDINAL1:10;
       assume
 A8:   C <> {} & for D holds C <> succ D;
       then
-A9:   C is_limit_ordinal by ORDINAL1:42;
+A9:   C is limit_ordinal by ORDINAL1:42;
       deffunc F(Ordinal) = A+^$1;
       consider fi such that
 A10:  dom fi = C & for D st D in C holds fi.D = F(D) from OSLambda;
@@ -1835,7 +1835,7 @@ proof
   deffunc C(Ordinal,Ordinal) = $2+^A;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def19;
   thus F({}) = {} from OSResult0(A1);
 end;
@@ -1848,19 +1848,19 @@ proof
   deffunc C(Ordinal,Ordinal) = $2 +^ A;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def19;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
 theorem Th54:
-  B <> {} & B is_limit_ordinal implies
+  B <> {} & B is limit_ordinal implies
   for fi st dom fi = B & for C st C in B holds fi.C = C*^A holds
   B*^A = union sup fi
 proof
   assume
-A1: B <> {} & B is_limit_ordinal;
+A1: B <> {} & B is limit_ordinal;
   deffunc F(Ordinal) = $1*^A;
   deffunc D(Ordinal,Ordinal-Sequence) = union sup $2;
   deffunc C(Ordinal,Ordinal) = $2+^A;
@@ -1869,7 +1869,7 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = {} & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def19;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
@@ -1886,12 +1886,12 @@ A2: for A st P[A] holds P[succ A]
     hence (succ A)*^{} = {}+^{} by Th53
       .= {} by Th44;
   end;
-A3: for A st A <> {} & A is_limit_ordinal &
+A3: for A st A <> {} & A is limit_ordinal &
   for B st B in A holds P[B] holds P[A]
   proof
     let A;
     assume that
-A4: A <> {} & A is_limit_ordinal and
+A4: A <> {} & A is limit_ordinal and
 A5: for B st B in A holds B*^{} = {};
     deffunc F(Ordinal) = $1*^{};
     consider fi such that
@@ -1952,7 +1952,7 @@ A4:   A = succ B;
       assume
 A5:   A <> {} & for B holds A <> succ B;
       then
-A6:   A is_limit_ordinal by ORDINAL1:42;
+A6:   A is limit_ordinal by ORDINAL1:42;
       deffunc F(Ordinal) = $1*^succ {};
       consider fi such that
 A7:   dom fi = A & for D st D in A holds fi.D = F(D) from OSLambda;
@@ -2026,7 +2026,7 @@ D*^C +^ C = (succ D) *^ C by A2,A5,A7,A10,Th44,Th49,Th53,ORDINAL1:21,34;
     now
       assume for D holds B <> succ D;
       then
-A11:  B is_limit_ordinal by ORDINAL1:42;
+A11:  B is limit_ordinal by ORDINAL1:42;
       deffunc F(Ordinal) = $1*^C;
       consider fi such that
 A12:  dom fi = B & for D st D in B holds fi.D = F(D) from OSLambda;
@@ -2101,7 +2101,7 @@ A7:     C = succ D;
         assume
 A8:     C <> {} & for D holds C <> succ D;
         then
-A9:     C is_limit_ordinal by ORDINAL1:42;
+A9:     C is limit_ordinal by ORDINAL1:42;
         deffunc F(Ordinal) = $1*^A;
         consider fi such that
 A10:    dom fi = C & for D st D in C holds fi.D = F(D) from OSLambda;
@@ -2136,7 +2136,7 @@ proof
   deffunc C(Ordinal,Ordinal) = A*^$2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def20;
   thus F({}) = 1 from OSResult0(A1);
 end;
@@ -2149,19 +2149,19 @@ proof
   deffunc C(Ordinal,Ordinal) = A *^ $2;
 A1: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def20;
   for B holds F(succ B) = C(B,F(B)) from OSResultS(A1);
   hence thesis;
 end;
 
 theorem Th62:
-  B <> {} & B is_limit_ordinal implies
+  B <> {} & B is limit_ordinal implies
   for fi st dom fi = B & for C st C in B holds fi.C = exp(A,C) holds
   exp(A,B) = lim fi
 proof
   assume
-A1: B <> {} & B is_limit_ordinal;
+A1: B <> {} & B is limit_ordinal;
   deffunc F(Ordinal) = exp(A,$1);
   deffunc D(Ordinal,Ordinal-Sequence) = lim $2;
   deffunc C(Ordinal,Ordinal) = A*^$2;
@@ -2170,7 +2170,7 @@ A2: dom fi = B and
 A3: for C st C in B holds fi.C = F(C);
 A4: for B,C holds C = F(B) iff ex fi st C = last fi & dom fi = succ B &
   fi.{} = 1 & (for C st succ C in succ B holds fi.succ C = C(C,fi.C)) &
-  for C st C in succ B & C <> {} & C is_limit_ordinal
+  for C st C in succ B & C <> {} & C is limit_ordinal
   holds fi.C = D(C,fi|C) by Def20;
   thus F(B) = D(B,fi) from OSResultL(A4,A1,A2,A3);
 end;
@@ -2190,11 +2190,11 @@ A2: for A st P[A] holds P[succ A]
     hence exp(1,succ A) = 1*^1 by Th61
       .= 1 by Th56;
   end;
-A3: for A st A <> {} & A is_limit_ordinal &
+A3: for A st A <> {} & A is limit_ordinal &
   for B st B in A holds P[B] holds P[A]
   proof
     let A such that
-A4: A <> {} & A is_limit_ordinal and
+A4: A <> {} & A is limit_ordinal and
 A5: for B st B in A holds exp(1,B) = 1;
     deffunc F(Ordinal) = exp(1,$1);
     consider fi such that
@@ -2233,10 +2233,10 @@ end;
 canceled;
 
 theorem
-  for A ex B,C st B is_limit_ordinal & C is natural & A = B +^ C
+  for A ex B,C st B is limit_ordinal & C is natural & A = B +^ C
 proof
   defpred Th[Ordinal] means
-  ex B,C st B is_limit_ordinal & C is natural & $1 = B +^ C;
+  ex B,C st B is limit_ordinal & C is natural & $1 = B +^ C;
 A1: for A st for B st B in A holds Th[B] holds Th[A]
   proof
     let A such that
@@ -2246,7 +2246,7 @@ A3: (for B holds A <> succ B) implies Th[A]
       assume
 A4:   for D holds A <> succ D;
       take B = A, C = {};
-      thus B is_limit_ordinal by A4,ORDINAL1:42;
+      thus B is limit_ordinal by A4,ORDINAL1:42;
       thus C in omega by ORDINAL1:def 12;
       thus A = B +^ C by Th44;
     end;
@@ -2256,10 +2256,10 @@ A4:   for D holds A <> succ D;
 A5:   A = succ B;
       B in A by A5,ORDINAL1:10;
       then consider C,D such that
-A6:   C is_limit_ordinal & D is natural & B = C +^ D by A2;
+A6:   C is limit_ordinal & D is natural & B = C +^ D by A2;
       take C, E = succ D;
-      thus C is_limit_ordinal by A6;
-      D in omega & omega is_limit_ordinal by A6,ORDINAL1:def 12,def 13;
+      thus C is limit_ordinal by A6;
+      D in omega & omega is limit_ordinal by A6,ORDINAL1:def 12,def 13;
       hence E in omega by ORDINAL1:41;
       thus A = C +^ E by A5,A6,Th45;
     end;
@@ -2376,7 +2376,7 @@ A7: {} c= A;
     then {} c< A by A7,XBOOLE_0:def 8;
     then
 A8: {} in A by ORDINAL1:21;
-    assume A is_limit_ordinal;
+    assume A is limit_ordinal;
     then omega c= A & not A in A by A8,ORDINAL1:def 12;
     then not A in omega;
     hence (for B st B in A holds P[B]) implies P[A] by ORDINAL1:def 13;

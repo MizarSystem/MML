@@ -19,7 +19,7 @@ environ
  definitions TARSKI, SUBSET_1;
  theorems FUNCT_1, FUNCT_2, PROB_1, NAT_1, TARSKI, XBOOLE_0, XBOOLE_1,
       XCMPLX_1, SETFAM_1, ZFMISC_1, CARD_3, KURATO_2, YELLOW_6,
-      PROB_2, XREAL_1, ORDINAL1;
+      PROB_2, XREAL_1, ORDINAL1, VALUED_0;
  schemes NAT_1, FUNCT_1;
 
 begin
@@ -35,7 +35,7 @@ LM1: i <= j implies i = j or i + 1 <= j
 proof
  assume i<=j;
  then i + 1 <= j + 1 by XREAL_1:8;
- hence thesis by XCMPLX_1:2,NAT_1:8;
+ hence thesis by NAT_1:8,XCMPLX_1:2;
 end;
 
 theorem Th5:
@@ -62,13 +62,13 @@ A00: {f.k1: n <= k1} c= {f.k2 : n+1 <= k2} \/ {f.n}
      B1: z = f.k & n <= k by B0;
      z = f.k & n+1 <= k or z = f.k & n = k by B1,LM1;
      then z in Z2 or z in {f.n} by TARSKI:def 1;
-    hence x in (Z2 \/ {f.n}) by B0, XBOOLE_0:def 2;
+    hence x in (Z2 \/ {f.n}) by B0,XBOOLE_0:def 3;
    end;
    Z2 \/ {f.n} c= Z1
     proof
      let x; assume
          C0:x in Z2 \/ {f.n};
-         now per cases by C0,XBOOLE_0:def 2;
+         now per cases by C0,XBOOLE_0:def 3;
           case x in Z2;
            then consider z such that
            CA2: x = z & z in Z2;
@@ -180,7 +180,7 @@ theorem Th11:
       CC1: k1 = k + k2 by CC0,NAT_1:10;
 AA:   k2 in NAT by ORDINAL1:def 13; then
       x = f1.k2 by CC0,CC1,NAT_1:def 3;
-      hence x in rng f1 by FUNCT_2:6,AA;
+      hence x in rng f1 by AA,FUNCT_2:6;
      end;
    rng f1 c= Z
     proof let y;
@@ -280,8 +280,9 @@ theorem
   B is constant implies Union B = Intersection B
 proof assume B is constant;then
    consider A being Subset of X such that
-B: for n holds B.n = A by KURATO_2:def 8;
-    Union B = A & Intersection B = A by B,Th185,Th186;
+B: for n being Nat holds B.n = A by VALUED_0:def 18;
+   for n being Element of NAT holds B.n = A by B;
+   then Union B = A & Intersection B = A by B,Th185,Th186;
  hence thesis;
 end;
 
@@ -606,7 +607,7 @@ A4: now let x;
      hence x in (inferior_setsequence B).n by def2;
     end;
   thus (inferior_setsequence B).n
-    = (inferior_setsequence B).(n+1) /\ B.n by A3,A4,XBOOLE_0:def 3;
+    = (inferior_setsequence B).(n+1) /\ B.n by A3,A4,XBOOLE_0:def 4;
  end;
 hence thesis;
 end;
@@ -617,7 +618,7 @@ proof
  now let n;
  {B.k1: n <= k1} = {B.k2 : n+1 <=k2} \/ {B.n} by Th6;then
  union {B.k2 : n+1 <= k2} c= union {B.k1 : n <= k1}
-   by ZFMISC_1:95,XBOOLE_1:7;then
+   by XBOOLE_1:7,ZFMISC_1:95;then
  (superior_setsequence B).(n+1)
    c= union {B.k1 : n <= k1} by def3;then
 A2:(superior_setsequence B).(n+1)
@@ -660,7 +661,7 @@ A4: now let x;
   x in (superior_setsequence B).n iff
   x in B.n or x in (superior_setsequence B).(n+1) by A3,A4;
  hence (superior_setsequence B).n = (superior_setsequence B).(n+1) \/ B.n
-      by XBOOLE_0:def 2;
+      by XBOOLE_0:def 3;
  end;
 hence thesis;
 end;
@@ -856,19 +857,19 @@ B: for n holds A3.n = A1.n \/ A2.n;
   let n;
    now let x; assume
     B1: x in X1.n \/ X2.n;
-    per cases by B1,XBOOLE_0:def 2;
+    per cases by B1,XBOOLE_0:def 3;
      suppose BB0: x in X1.n;
        now let k;
         C1: x in A1.(n+k) by BB0,Th21;
         A3.(n+k) = A1.(n+k) \/ A2.(n+k) by B; hence
-        x in A3.(n+k) by C1,XBOOLE_0:def 2;
+        x in A3.(n+k) by C1,XBOOLE_0:def 3;
        end;hence x in X3.n by Th21;
      end;
      suppose BC0: x in X2.n;
       now let k;
         D1: x in A2.(n+k) by BC0,Th21;
         A3.(n+k) = A1.(n+k) \/ A2.(n+k) by B;
-        hence x in A3.(n+k) by D1,XBOOLE_0:def 2;
+        hence x in A3.(n+k) by D1,XBOOLE_0:def 3;
        end;hence x in X3.n by Th21;
      end;
  end;
@@ -892,18 +893,18 @@ A2: X3.n c= X1.n /\ X2.n
      now let k;
       x in A3.(n+k) by B1,Th21;then
       x in (B.(n+k) /\ A2.(n+k)) by B;hence
-      x in B.(n+k) & x in A2.(n+k) by XBOOLE_0:def 3;
+      x in B.(n+k) & x in A2.(n+k) by XBOOLE_0:def 4;
      end;
     then x in X1.n & x in X2.n by Th21;
-    hence x in X1.n /\ X2.n by XBOOLE_0:def 3;
+    hence x in X1.n /\ X2.n by XBOOLE_0:def 4;
   end;
  X1.n /\ X2.n c= X3.n
   proof
    let x;assume x in (X1.n /\ X2.n);then
-   C1: x in X1.n & x in X2.n by XBOOLE_0:def 3;
+   C1: x in X1.n & x in X2.n by XBOOLE_0:def 4;
     now let k;
      x in B.(n+k) & x in A2.(n+k) by C1,Th21; then
-     x in B.(n+k) /\ A2.(n+k) by XBOOLE_0:def 3;
+     x in B.(n+k) /\ A2.(n+k) by XBOOLE_0:def 4;
      hence x in A3.(n+k) by B;
     end;
    hence x in X3.n by Th21;
@@ -930,7 +931,7 @@ A2: X3.n c= X1.n \/ X2.n
     B2: x in (B.(n+k) \/ A2.(n+k)) by B,B1;
      x in X1.n or x in X2.n
     proof
-      now per cases by B2,XBOOLE_0:def 2;
+      now per cases by B2,XBOOLE_0:def 3;
       case x in B.(n+k);
        hence x in X1.n by Th22;
       end;
@@ -940,25 +941,25 @@ A2: X3.n c= X1.n \/ X2.n
       end;
      hence thesis;
     end;
-   hence x in X1.n \/ X2.n by XBOOLE_0:def 2;
+   hence x in X1.n \/ X2.n by XBOOLE_0:def 3;
   end;
  X1.n \/ X2.n c= X3.n
   proof
    let x; assume
     B1: x in (X1.n \/ X2.n);
-    B2: now per cases by B1,XBOOLE_0:def 2;
+    B2: now per cases by B1,XBOOLE_0:def 3;
      case x in X1.n;then
       consider k such that
        C1: x in B.(n+k) by Th22;
        A3.(n+k) = B.(n+k) \/ A2.(n+k) by B; then
-        x in A3.(n+k) by C1,XBOOLE_0:def 2;
+        x in A3.(n+k) by C1,XBOOLE_0:def 3;
       hence x in X3.n by Th22;
      end;
      case x in X2.n;then
       consider k such that
        D1: x in A2.(n+k) by Th22;
        A3.(n+k) = B.(n+k) \/ A2.(n+k) by B; then
-        x in A3.(n+k) by D1,XBOOLE_0:def 2;
+        x in A3.(n+k) by D1,XBOOLE_0:def 3;
       hence x in X3.n by Th22;
      end;
      end;
@@ -984,9 +985,9 @@ B: for n holds A3.n = A1.n /\ A2.n; set B = A1;
     consider k such that
     B1: x in A3.(n+k) by Th22;
     A3.(n+k) = B.(n+k) /\ A2.(n+k) by B;then
-    x in B.(n+k) & x in A2.(n+k) by B1,XBOOLE_0:def 3;then
+    x in B.(n+k) & x in A2.(n+k) by B1,XBOOLE_0:def 4;then
     x in X1.n & x in X2.n by Th22;
-    hence x in X1.n /\ X2.n by XBOOLE_0:def 3;
+    hence x in X1.n /\ X2.n by XBOOLE_0:def 4;
    end;
  hence thesis;
  end;
@@ -1031,7 +1032,7 @@ theorem Th30:
 proof
   assume B is non-descending;
   then (superior_setsequence B).(n+1) \/ B.n
-    = (superior_setsequence B).(n+1) by XBOOLE_1:12,Th29;
+    = (superior_setsequence B).(n+1) by Th29,XBOOLE_1:12;
  hence thesis by Th24;
 end;
 
@@ -1100,7 +1101,7 @@ theorem Th34:
   B is non-descending implies (inferior_setsequence B).n = B.n
 proof
   assume B is non-descending;
-  then (inferior_setsequence B).(n+1) /\ B.n = B.n by XBOOLE_1:28,Th33;
+  then (inferior_setsequence B).(n+1) /\ B.n = B.n by Th33,XBOOLE_1:28;
  hence thesis by Th23;
 end;
 
@@ -1130,7 +1131,7 @@ theorem Th37:
   B is non-ascending implies (superior_setsequence(B)).n = B.n
 proof
   assume B is non-ascending;
-  then (superior_setsequence(B)).(n+1) \/ B.n = B.n by XBOOLE_1:12,Th36;
+  then (superior_setsequence(B)).(n+1) \/ B.n = B.n by Th36,XBOOLE_1:12;
  hence thesis by Th24;
 end;
 
@@ -1164,7 +1165,7 @@ theorem Th40:
 proof
   assume B is non-ascending; then
    (inferior_setsequence(B)).(n+1) /\ B.n
-    = (inferior_setsequence(B)).(n+1) by XBOOLE_1:28,Th39;
+    = (inferior_setsequence(B)).(n+1) by Th39,XBOOLE_1:28;
  hence thesis by Th23;
 end;
 
@@ -1393,37 +1394,7 @@ proof assume
 end;
 
 definition
- let X be set,
-     Si be SigmaField of X,
-     S be SetSequence of Si;
- redefine attr S is constant means
-  ex A being Element of Si st for n holds S.n = A;
- compatibility
-  proof
-B:dom S = NAT by FUNCT_2:def 1;
-  hereby assume
-A2:   S is constant;
-    consider n0 be Element of NAT;
-    reconsider B = S.n0 as Element of Si by PROB_1:def 9;
-    take B;
-    let n;
-    thus S.n = B by B,A2,FUNCT_1:def 16;
-   end;
-   given B being Element of Si such that
-A3:  for n holds S.n=B;
-   for n1, n2 being set st n1 in dom S
-    & n2 in dom S holds S.n1 = S.n2
-   proof let n1,n2 be set; assume
-A4:  n1 in dom S & n2 in dom S;
-   then S.n1 = B by A3
-            .= S.n2 by A3,A4;
-   hence thesis;
-  end;
-  hence thesis by FUNCT_1:def 16;
- end;
-end;
-
-definition
+ canceled;
   let X be set,
       Si be SigmaField of X,
       S be SetSequence of Si;

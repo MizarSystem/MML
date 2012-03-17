@@ -18,7 +18,8 @@ environ
       SEQ_2, SEQM_3, VFUNCT_1, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_3, NFCONT_1,
       FDIFF_1, NDIFF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, FDIFF_1,
-      RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, NDIFF_1, SEQ_1, VALUED_1;
+      RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, NDIFF_1, SEQ_1, VALUED_1,
+      NORMSP_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, MEMBERED,
       SEQM_3, FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2, NDIFF_1, VALUED_1,
       FUNCT_2, NUMBERS, VALUED_0, FUNCOP_1;
@@ -28,7 +29,7 @@ environ
       XCMPLX_0, XCMPLX_1, ZFMISC_1, SEQ_1, SEQ_2, NAT_1, SEQM_3, RELAT_1,
       FUNCT_1, VFUNCT_1, FUNCT_2, SEQ_4, NORMSP_1, LOPBAN_1, LOPBAN_2,
       LOPBAN_3, PARTFUN1, PARTFUN2, NFCONT_1, FDIFF_1, NDIFF_1, FUNCOP_1,
-      XREAL_1, COMPLEX1, XXREAL_0, VALUED_1;
+      XREAL_1, COMPLEX1, XXREAL_0, VALUED_1, VALUED_0, ORDINAL1;
  schemes FUNCT_2;
 
 begin :: Differentiable Functions on Normed Linear Spaces
@@ -192,24 +193,25 @@ A14: abs(h)"(#)(R/*(h*z)) is convergent & lim ( abs(h)"(#)(R/*(h*z)) ) = 0.T
       now per cases;
         case
 A15:      z= 0.S;
-A16:      for n be Element of NAT holds (abs(h)"(#) (R/*(h*z))).n = 0.T
+A16:      for n be Nat holds (abs(h)"(#) (R/*(h*z))).n = 0.T
           proof
-            let n be Element of NAT;
+            let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
             R is total by NDIFF_1:def 5;
             then dom R = the carrier of S by PARTFUN1:def 4;
             then
 A17:        rng (h*z) c= dom R;
             thus (abs(h)"(#)(R/*(h*z))).n
-            =abs(h)".n*(R/*(h*z)).n by NDIFF_1:def 2
+            =abs(h)".n*(R/*(h*z)).n by NDIFF_1:def 2,X
               .=(abs(h).n)"*(R/*(h*z)).n by VALUED_1:10
-              .=(abs(h.n))"*(R/*(h*z)).n by SEQ_1:16
-              .= (abs(h.n))"*(R/.((h*z).n)) by A17,FUNCT_2:186
-              .= (abs(h.n))"*(R/.(h.n*0.S)) by A15,NDIFF_1:def 3
+              .=(abs(h.n))"*(R/*(h*z)).n by SEQ_1:16,X
+              .= (abs(h.n))"*(R/.((h*z).n)) by A17,FUNCT_2:186,X
+              .= (abs(h.n))"*(R/.(h.n*0.S)) by A15,NDIFF_1:def 3,X
               .= (abs(h.n))"*(R/.(0.S)) by RLVECT_1:23
               .=0.T by A4,RLVECT_1:23;
           end;
           then
-A18:      abs(h)"(#) (R/*(h*z)) is constant by LOPBAN_3:def 5;
+A18:      abs(h)"(#) (R/*(h*z)) is constant by VALUED_0:def 18;
           (abs(h)"(#) (R/*(h*z))).0 = 0.T by A16;
           hence abs(h)"(#) (R/*(h*z)) is convergent &
           lim ( abs(h)"(#) (R/*(h*z)) ) =0.T by A18,NDIFF_1:21;

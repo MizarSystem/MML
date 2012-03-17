@@ -8,15 +8,16 @@ environ
 
  vocabularies RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
       SEQ_1, SEQ_2, BHSP_3, COMPLEX1, BOOLE, ARYTM_3, CSSPACE, CFUNCT_1,
-      PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, LATTICES, FUNCT_3, FRECHET2;
+      PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, LATTICES, FRECHET2;
  notations TARSKI, ORDINAL1, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
-      RELAT_1, FUNCT_1, NAT_1, SEQ_1, SEQM_3, STRUCT_0, PRE_TOPC, RLVECT_1,
+      RELAT_1, FUNCT_1, NAT_1, SEQ_1,
+      VALUED_0, SEQM_3, STRUCT_0, PRE_TOPC, RLVECT_1,
       NORMSP_1, BHSP_1, BHSP_3, SEQ_2, COMPLEX1, CFUNCT_1, CLVECT_1, CSSPACE,
       FUNCT_3, RECDEF_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
       BHSP_3, CSSPACE, SEQ_1, VALUED_1, PARTFUN1, RECDEF_1, SEQM_3;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, SEQM_3, STRUCT_0;
+      XREAL_0, NAT_1, MEMBERED, SEQM_3, STRUCT_0, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  theorems XBOOLE_0, RELAT_1, TARSKI, ABSVALUE, SEQ_2, SEQM_3, FUNCT_1,
       NAT_1, FUNCT_2, RLVECT_1, XCMPLX_0, XBOOLE_1, CLVECT_1, COMPLEX1, REAL_2,
@@ -47,7 +48,7 @@ theorem Th1:
 proof
   assume seq is constant;
   then consider x such that
-A1: for n holds seq.n = x by NORMSP_1:def 4;
+A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
   take g = x;
   let r such that
 A2: r > 0;
@@ -384,9 +385,9 @@ proof
 A1: seq is constant and
 A2: x in rng seq;
   consider y such that
-A3: rng seq = {y} by A1,NORMSP_1:27;
+A3: rng seq = {y} by A1,FUNCT_2:188;
   consider w such that
-A4: for n holds seq.n = w by A1,NORMSP_1:def 4;
+A4: for n being Nat holds seq.n = w by A1,VALUED_0:def 18;
 A5: x = y by A2,A3,TARSKI:def 1;
 A6: seq is convergent by A1,Th1;
   now
@@ -1322,7 +1323,7 @@ A2: ||.x - y.|| <= r by Th47;
         hence y in Sphere(x,r);
       end;
     end;
-    hence y in Ball(x,r) \/ Sphere(x,r) by XBOOLE_0:def 2;
+    hence y in Ball(x,r) \/ Sphere(x,r) by XBOOLE_0:def 3;
   end;
   then cl_Ball(x,r) c= Ball(x,r) \/ Sphere(x,r) by SUBSET_1:7;
   hence thesis by A1,XBOOLE_0:def 10;
@@ -1349,7 +1350,7 @@ A1: seq is constant;
 A2: r > 0;
   take k = 0;
   let n, m such that n >= k & m >= k;
-  dist((seq.n), (seq.m)) = dist((seq.n), (seq.n)) by A1,CSSPACE:70
+  dist((seq.n), (seq.m)) = dist((seq.n), (seq.n)) by A1,VALUED_0:23,24
     .= 0 by CSSPACE:53;
   hence dist((seq.n), (seq.m)) < r by A2;
 end;
@@ -1940,7 +1941,7 @@ theorem
 proof
   assume seq is constant;
   then consider x such that
-A1: for n holds seq.n = x by NORMSP_1:def 4;
+A1: for n being Nat holds seq.n = x by VALUED_0:def 18;
 A2: x = 0'(X) implies seq is bounded
   proof
     assume
@@ -2146,109 +2147,7 @@ A16: now
   hence thesis by Def10;
 end;
 
-definition
-  let X, Nseq, seq;
-  redefine func seq * Nseq -> sequence of X;
-  coherence
-  proof
-A1: dom Nseq = NAT by FUNCT_2:def 1;
-A2: rng seq c= the carrier of X by RELSET_1:12;
-    rng Nseq c= NAT by VALUED_0:def 6;
-    then rng Nseq c= dom seq by FUNCT_2:def 1;
-    then
-A3: dom (seq * Nseq) = NAT by A1,RELAT_1:46;
-    rng (seq * Nseq) c= rng seq by RELAT_1:45;
-    then rng (seq * Nseq) c= the carrier of X by A2,XBOOLE_1:1;
-    hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
-  end;
-end;
-
-theorem Th82:
-  for X being ComplexUnitarySpace, s being sequence of X,
-  N being increasing Seq_of_Nat
-  for n being Element of NAT holds (s * N).n=s.(N.n)
-proof
-  let X be ComplexUnitarySpace, s be sequence of X,
-  N be increasing Seq_of_Nat;
-  let n be Element of NAT;
-  dom (s * N) = NAT by FUNCT_2:def 1;
-  hence (s * N).n = s.(N.n) by FUNCT_1:22;
-end;
-
-theorem
-  seq is subsequence of seq
-proof
-  reconsider Rseq = incl NAT as Real_Sequence;
-  now
-    let n;
-    Rseq.n = n & Rseq.(n+1) = n+1 by FUNCT_1:35;
-    hence Rseq.n < Rseq.(n+1) by NAT_1:13;
-  end;
-  then
-A1: Rseq is increasing by SEQM_3:def 11;
-  for n holds Rseq.n is Element of NAT by FUNCT_1:35;
-  then reconsider Rseq as increasing Seq_of_Nat by A1,SEQM_3:29;
-  set Nseq = Rseq;
-A2: now
-    let n;
-    thus (seq * Nseq).n = seq.(Nseq.n) by Th82
-      .= seq.n by FUNCT_1:35;
-  end;
-  ex Nseq being increasing Seq_of_Nat st seq = seq * Nseq by A2,FUNCT_2:113;
-  hence thesis by BHSP_3:def 4;
-end;
-
-theorem
-  seq1 is subsequence of seq2 & seq2 is subsequence of seq3 implies
-  seq1 is subsequence of seq3
-proof
-  assume that
-A1: seq1 is subsequence of seq2 and
-A2: seq2 is subsequence of seq3;
-  consider Nseq1 be increasing Seq_of_Nat such that
-A3: seq1 = seq2 * Nseq1 by A1,BHSP_3:def 4;
-  consider Nseq2 be increasing Seq_of_Nat such that
-A4: seq2 = seq3 * Nseq2 by A2,BHSP_3:def 4;
-  ex Nseq being increasing Seq_of_Nat st seq1 = seq3 * Nseq
-  proof
-    take Nseq = Nseq2 * Nseq1;
-    thus seq1 = seq3 * Nseq by A3,A4,RELAT_1:55;
-  end;
-  hence thesis by BHSP_3:def 4;
-end;
-
-theorem Th85:
-  seq is constant & seq1 is subsequence of seq implies seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1 = seq * Nseq by A2,BHSP_3:def 4;
-  now
-    let n;
-    seq.(Nseq.n) = seq.(Nseq.(n + 1)) by A1,CSSPACE:70;
-    then (seq * Nseq).(n + 1) = seq.(Nseq.n) by Th82;
-    hence seq1.n = seq1.(n+1) by A3,Th82;
-  end;
-  hence thesis by CSSPACE:68;
-end;
-
-theorem
-  seq is constant & seq1 is subsequence of seq implies seq = seq1
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1 = seq * Nseq by A2,BHSP_3:def 4;
-  now
-    let n;
-    thus seq1.n = seq.(Nseq.n) by A3,Th82
-      .= seq.n by A1,CSSPACE:70;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 5;
 
 theorem Th87:
   seq is bounded & seq1 is subsequence of seq implies seq1 is bounded
@@ -2260,11 +2159,11 @@ A2: seq1 is subsequence of seq;
 A3: M1 > 0 and
 A4: for n holds ||.seq.n.|| <= M1 by A1,Def10;
   consider Nseq such that
-A5: seq1 = seq * Nseq by A2,BHSP_3:def 4;
+A5: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   take M = M1;
   now
     let n;
-    seq1.n = seq.(Nseq.n) by A5,Th82;
+    seq1.n = seq.(Nseq.n) by A5,FUNCT_2:21;
     hence ||.seq1.n.|| <= M by A4;
   end;
   hence thesis by A3;
@@ -2280,7 +2179,7 @@ A2: seq1 is subsequence of seq;
 A3: for r st r > 0 ex m st for n st n >= m holds
   ||.(seq.n) - g1.|| < r by A1,Th9;
   consider Nseq such that
-A4: seq1 = seq * Nseq by A2,BHSP_3:def 4;
+A4: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -2292,7 +2191,7 @@ A6: n >= m;
     Nseq.n >= n by SEQM_3:33;
     then
 A7: Nseq.n >= m by A6,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) by A4,Th82;
+    seq1.n = seq.(Nseq.n) by A4,FUNCT_2:21;
     hence ||.(seq1.n) - g1.|| < r by A5,A7;
   end;
   hence thesis by Th9;
@@ -2306,7 +2205,7 @@ A1: seq1 is subsequence of seq and
 A2: seq is convergent;
 A3: seq1 is convergent by A1,A2,Th88;
   consider Nseq such that
-A4: seq1 = seq * Nseq by A1,BHSP_3:def 4;
+A4: seq1 = seq * Nseq by A1,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -2318,7 +2217,7 @@ A6: n >= m;
     Nseq.n >= n by SEQM_3:33;
     then
 A7: Nseq.n >= m by A6,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) by A4,Th82;
+    seq1.n = seq.(Nseq.n) by A4,FUNCT_2:21;
     hence dist((seq1.n), (lim seq)) < r by A5,A7;
   end;
   hence thesis by A3,Def2;
@@ -2331,7 +2230,7 @@ proof
 A1: seq is Cauchy and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1 = seq * Nseq by A2,BHSP_3:def 4;
+A3: seq1 = seq * Nseq by A2,VALUED_0:def 17;
   now
     let r;
     assume r > 0;
@@ -2344,7 +2243,7 @@ A5: n >= k & m >= k;
     Nseq.n >= n & Nseq.m >= m by SEQM_3:33;
     then
 A6: Nseq.n >= k & Nseq.m >= k by A5,XXREAL_0:2;
-    seq1.n = seq.(Nseq.n) & seq1.m = seq.(Nseq.m) by A3,Th82;
+    seq1.n = seq.(Nseq.n) & seq1.m = seq.(Nseq.m) by A3,FUNCT_2:21;
     hence dist((seq1.n), (seq1.m)) < r by A4,A6;
   end;
   hence thesis by Def8;
@@ -2401,62 +2300,11 @@ proof
   hence thesis by FUNCT_2:113;
 end;
 
-theorem
-  (seq * Nseq) ^\k = seq * (Nseq ^\k)
-proof
-  now
-    let n; thus
-    ((seq * Nseq) ^\k).n = (seq * Nseq).(n + k) by NAT_1:def 3
-      .= seq.(Nseq.(n + k)) by Th82
-      .= seq.((Nseq ^\k).n) by NAT_1:def 3
-      .= (seq * (Nseq ^\k)).n by Th82;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem Th99:
-  seq ^\k is subsequence of seq
-proof
-  deffunc F(Element of NAT) = $1 + k;
-  consider Rseq be Real_Sequence such that
-A1: for n be Element of NAT holds Rseq.n = F(n) from SEQ_1:sch 1;
-  now
-    let n;
-A2: Rseq.n = n + k & Rseq.(n + 1) = n + 1 + k by A1;
-    n + k < n + k + 1 by NAT_1:13;
-    hence Rseq.n < Rseq.(n + 1) by A2;
-  end;
-  then
-A3: Rseq is increasing by SEQM_3:def 11;
-  now
-    let n;
-    n + k is Element of NAT;
-    hence Rseq.n is Element of NAT by A1;
-  end;
-  then reconsider Rseq as increasing Seq_of_Nat by A3,SEQM_3:29;
-  ex Nseq being increasing Seq_of_Nat st seq ^\k = seq * Nseq
-  proof
-    take Nseq=Rseq;
-    now
-      let n;
-      thus (seq * Nseq).n = seq.(Nseq.n) by Th82
-        .= seq.(n + k) by A1
-        .= (seq ^\k).n by NAT_1:def 3;
-    end;
-    hence thesis by FUNCT_2:113;
-  end;
-  hence thesis by BHSP_3:def 4;
-end;
+canceled 2;
 
 theorem
   seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq)
-proof
-  assume
-A1: seq is convergent;
-A2: seq ^\k is subsequence of seq by Th99;
-  hence seq ^\k is convergent by A1,Th88;
-  thus lim (seq ^\k) = lim seq by A1,A2,Th89;
-end;
+                by Th88,Th89;
 
 theorem
   seq is convergent & (ex k st seq = seq1 ^\k) implies seq1 is convergent
@@ -2544,13 +2392,7 @@ A15: l3 + k = m by A12;
 end;
 
 theorem
-  seq is Cauchy implies (seq ^\k) is Cauchy
-proof
-  assume
-A1: seq is Cauchy;
-  seq ^\k is subsequence of seq by Th99;
-  hence thesis by A1,Th90;
-end;
+  seq is Cauchy implies (seq ^\k) is Cauchy by Th90;
 
 theorem
   seq1 is_compared_to seq2 implies (seq1 ^\k) is_compared_to (seq2 ^\k)
@@ -2572,22 +2414,10 @@ A3: n >= m;
 end;
 
 theorem
-  seq is bounded implies (seq ^\k) is bounded
-proof
-  assume
-A1: seq is bounded;
-  seq ^\k is subsequence of seq by Th99;
-  hence thesis by A1,Th87;
-end;
+  seq is bounded implies (seq ^\k) is bounded by Th87;
 
 theorem
-  seq is constant implies (seq ^\k) is constant
-proof
-  assume
-A1: seq is constant;
-  seq ^\k is subsequence of seq by Th99;
-  hence thesis by A1,Th85;
-end;
+  seq is constant implies (seq ^\k) is constant;
 
 definition
  canceled;

@@ -39,9 +39,9 @@
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
+<Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RUSUB_4" nr="2">
@@ -54,7 +54,7 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
-<Adjective nr="88"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -71,9 +71,9 @@
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
+<Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RUSUB_4" nr="3">
@@ -86,8 +86,8 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
+<Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,9 +104,9 @@
 <Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
+<Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster aid="RUSUB_4" nr="4">
@@ -127,7 +127,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="90">
+<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -150,7 +150,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="90">
+<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -165,8 +165,8 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
+<Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -176,7 +176,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="88"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -42,13 +42,13 @@
 <Adjective nr="83"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
-<Adjective nr="96"/>
-<Adjective nr="100"/>
-<Adjective nr="102"/>
-<Adjective nr="110"/>
-<Adjective nr="113"/>
-<Adjective nr="120"/>
-<Adjective nr="125"/>
+<Adjective nr="95"/>
+<Adjective nr="99"/>
+<Adjective nr="101"/>
+<Adjective nr="109"/>
+<Adjective nr="112"/>
+<Adjective nr="119"/>
+<Adjective nr="124"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

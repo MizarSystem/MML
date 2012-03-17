@@ -21,6 +21,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -204,7 +205,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="71">
@@ -265,7 +266,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="72">
@@ -356,7 +357,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="73">

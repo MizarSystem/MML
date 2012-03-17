@@ -6,24 +6,24 @@
 
 environ
 
- vocabularies SUPINF_1, MEASURE6, ARYTM_3, ARYTM_1, RLVECT_1, ARYTM, COMPLEX1;
- notations TARSKI, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1, SUPINF_1,
-      SUPINF_2, MEASURE6;
- constructors REAL_1, SUPINF_2, MEASURE6, SUPINF_1;
- registrations NUMBERS, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0;
+ vocabularies SUPINF_1, MEASURE6, ARYTM_3, ARYTM_1, RLVECT_1, ARYTM, COMPLEX1,
+      XCMPLX_0, RELAT_1, ASYMPT_0, ZF_LANG;
+ notations TARSKI, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XXREAL_3,
+      XREAL_0, REAL_1, SUPINF_1, SUPINF_2, MEASURE6;
+ constructors REAL_1, SUPINF_2, MEASURE6, SUPINF_1, XXREAL_3;
+ registrations NUMBERS, XXREAL_0, XREAL_0, MEMBERED, XBOOLE_0, REAL_1,
+      XXREAL_3;
  requirements REAL, SUBSET, BOOLE, ARITHM;
+ definitions XXREAL_3, XCMPLX_0;
  theorems TARSKI, SUPINF_1, MEASURE5, MEASURE6, REAL_2, SUPINF_2,
-      MEASURE3, XBOOLE_0, XCMPLX_1, XREAL_1, XXREAL_0;
+      MEASURE3, XBOOLE_0, XCMPLX_1, XREAL_1, XXREAL_0, XXREAL_3, XREAL_0;
 
 begin
 
 reserve x,y,z for R_eal;
 reserve a for Real;
 
-theorem
-  x <> +infty & x <> -infty implies x is Real by XXREAL_0:14;
-
-canceled 2;
+canceled 3;
 
 theorem Th4:
   (x = +infty iff -x = -infty) & (x = -infty iff -x = +infty)
@@ -37,33 +37,6 @@ proof
   hence thesis by SUPINF_2:4;
 end;
 
-theorem Th5:
-  x - -y = x + y
-proof
-  thus x - -y = x + - -y by SUPINF_2:def 4
-    .= x + y;
-end;
-
-canceled;
-
-theorem Th7:
-  x <> -infty & y <> +infty & x <= y implies x <> +infty & y <> -infty
-proof
-  assume
-A1: x <> -infty & y <> +infty & x <= y;
-  assume
-A2: not (x <> +infty & y <> -infty);
-  now per cases by A2;
-    suppose x = +infty;
-      hence contradiction by A1,XXREAL_0:4;
-    end;
-    suppose y = -infty;
-      hence contradiction by A1,XXREAL_0:6;
-    end;
-  end;
-  hence thesis;
-end;
-
 Lm1: x in REAL & y in REAL implies x + y in REAL
 proof
   assume x in REAL & y in REAL;
@@ -71,6 +44,8 @@ proof
 A1: x = a & y = b & x + y = a + b by SUPINF_2:def 2;
   thus thesis by A1;
 end;
+
+canceled 3;
 
 theorem Th8:
   not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
@@ -82,7 +57,7 @@ proof
 A1: not (x = +infty & y = -infty or x = -infty & y = +infty) and
 A2: not ((y = +infty & z = -infty) or (y = -infty & z = +infty)) and
 A3: not ((x = +infty & z = -infty) or (x = -infty & z = +infty));
-  now per cases by A1,A2,A3,SUPINF_2:2;
+  now per cases by A1,A2,A3,XXREAL_0:14;
     suppose x in REAL & y in REAL & z in REAL;
       then reconsider A = x, B = y, C = z as Real;
       A + B = x + y & B + C = y + z by SUPINF_2:1;
@@ -171,7 +146,7 @@ end;
 theorem Th9:
   x + -x = 0.
 proof
-  per cases by SUPINF_2:2;
+  per cases by XXREAL_0:14;
   suppose x in REAL;
     then consider a being Real such that
 A1: x = a & -x = -a by SUPINF_2:def 3;
@@ -201,53 +176,77 @@ A1: not (x = +infty & y = -infty) & not (x = -infty & y = +infty) &
   then
 A2: not (y = +infty & -z = -infty) & not (y = -infty & -z = +infty) &
   not (x = +infty & -z = -infty) & not (x = -infty & -z = +infty) by Th4;
-  thus x + y - z = x + y + -z by SUPINF_2:def 4
+  thus x + y - z = x + y + -z
     .= x + (y + -z) by A1,A2,Th8
-    .= x + (y - z) by SUPINF_2:def 4;
+    .= x + (y - z);
 end;
 
 begin  :: Operations "x * y","x / y", "|.x.|" in R_eal numbers
 
 definition
   let x,y be R_eal;
-  func x * y -> R_eal means
+  redefine func x * y -> R_eal means
   :Def1:
   (ex a,b being Real st (x = a & y = b & it = a * b)) or
   (((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
   (y < 0. & x = -infty)) & it = +infty) or
   (((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
   (0. < y & x = -infty)) & it = -infty) or ((x = 0. or y = 0.) & it = 0.);
-  existence
-  proof
-    (x in REAL or x in {-infty,+infty}) & (y in REAL or y in {-infty,+infty }
-    ) by XBOOLE_0:def 2,XXREAL_0:def 4;
-    then
-A1: (x in REAL & y in REAL) or (0. < x & y = +infty) or
-    (0. < y & x = +infty) or (x < 0. & y = +infty) or
-    (y < 0. & x = +infty) or (0. < x & y = -infty) or
-    (0. < y & x = -infty) or (x < 0. & y = -infty) or
-    (y < 0. & x = -infty) or (x = 0.) or (y = 0.) by TARSKI:def 2;
-    ex Z being R_eal st ((ex a,b being Real st (x = a & y = b & Z = a * b)) or
-    (((0. < x & y = +infty) or (0. < y & x = +infty)) & Z = +infty) or
-    (((x < 0. & y = +infty) or (y < 0. & x = +infty)) & Z = -infty) or
-    (((0. < x & y = -infty) or (0. < y & x = -infty)) & Z = -infty) or
-    (((x < 0. & y = -infty) or (y < 0. & x = -infty)) & Z = +infty) or
-    ((x = 0. or y = 0.) & Z = 0.))
-    proof
-      x in REAL & y in REAL implies ex Z being R_eal st
-      (ex a,b being Real st (x = a & y = b & Z = a * b))
-      proof
-        assume x in REAL & y in REAL;
-        then reconsider x,y as Real;
-        reconsider Z = x * y as R_eal by XXREAL_0:def 1;
-        take Z;
-        thus thesis;
-      end;
-      hence thesis by A1;
+  coherence by XXREAL_0:def 1;
+  compatibility
+   proof let z be R_eal;
+    thus z = x*y implies (ex a,b being Real st x = a & y = b & z = a * b) or
+  (((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
+  (y < 0. & x = -infty)) & z = +infty) or
+  (((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
+  (0. < y & x = -infty)) & z = -infty) or ((x = 0. or y = 0.) & z = 0.)
+   proof assume
+Z:   z = x*y;
+    now per cases by XXREAL_0:14;
+     case
+C:    x in REAL & y in REAL;
+      then consider a,b being complex number such that
+W:     x = a & y = b & x*y = a * b by XXREAL_3:def 2;
+      thus ex a,b being Real st x = a & y = b & z = a * b by W,Z,C;
+     end;
+     case 0. < x & y=+infty or 0. < y & x=+infty
+         or x < 0. & y=-infty or y < 0. & x = -infty;
+      hence z = +infty by XXREAL_3:def 2,Z;
+     end;
+     case x < 0. & y=+infty or y < 0. & x=+infty
+         or 0. < x & y=-infty or 0. < y & x = -infty;
+      hence z = -infty by XXREAL_3:def 2,Z;
+     end;
+     case x = 0. or y = 0.;
+      hence z = 0 by XXREAL_3:1,Z;
+     end;
     end;
     hence thesis;
+   end;
+  assume
+Z: (ex a,b being Real st x = a & y = b & z = a * b) or
+  (((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
+     (y < 0. & x = -infty)) & z = +infty)
+   or
+  (((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
+  (0. < y & x = -infty)) & z = -infty) or
+  ((x = 0. or y = 0.) & z = 0.);
+  per cases by Z;
+  suppose ex a,b being Real st x = a & y = b & z = a * b;
+    hence z = x*y by XXREAL_3:def 2;
   end;
-  uniqueness;
+  suppose ((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
+     (y < 0. & x = -infty)) & z = +infty;
+    hence z = x*y by XXREAL_3:def 2;
+  end;
+  suppose ((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
+  (0. < y & x = -infty)) & z = -infty;
+    hence z = x*y by XXREAL_3:def 2;
+  end;
+  suppose (x = 0. or y = 0.) & z = 0.;
+    hence z = x*y by XXREAL_3:1;
+  end;
+ end;
 end;
 
 canceled;
@@ -347,44 +346,7 @@ A1: (x <= 0. & y < 0.) or (x < 0. & y <= 0.);
   end;
 end;
 
-theorem
-  for x be R_eal st x in REAL holds
-  (-infty < x & x < 0.) or x = 0. or (0. < x & x < +infty) by XXREAL_0:9,12;
-
-theorem Th17:
-  for x,y being R_eal holds x * y = y * x
-proof
-  let x,y be R_eal;
-  now per cases by Def1;
-    suppose ex a,b being Real st (x = a & y = b & x * y = a * b);
-      then consider a1,b1 being Real such that
-A1:   x = a1 & y = b1 & x * y = a1 * b1;
-      thus thesis by A1,Def1;
-    end;
-    suppose
-      ((0. < x & y=+infty) or (0. < y & x=+infty) or (x < 0. & y=-infty) or
-      (y < 0. & x = -infty)) & x * y = +infty;
-      hence thesis by Def1;
-    end;
-    suppose
-      ((x < 0. & y=+infty) or (y < 0. & x=+infty) or (0. < x & y=-infty) or
-      (0. < y & x = -infty)) & x * y = -infty;
-      hence thesis by Def1;
-    end;
-    suppose (x = 0. or y = 0.) & x * y = 0.;
-      hence thesis by Def1;
-    end;
-  end;
-  hence thesis;
-end;
-
-definition
-  let x,y be R_eal;
-  redefine func x*y;
-  commutativity by Th17;
-end;
-
-canceled 2;
+canceled 4;
 
 theorem Th20:
   (0. < x & 0. < y) or (x < 0. & y < 0.) implies 0. < x * y
@@ -908,14 +870,14 @@ A1: y + z = 0.;
 A2:   y <> -z;
       then
 A3:   -y <> z;
-      per cases by SUPINF_2:2;
+      per cases by XXREAL_0:14;
       suppose
 A4:     y in REAL;
         z in REAL
         proof
           assume
 A5:       not z in REAL;
-          per cases by A5,SUPINF_2:2;
+          per cases by A5,XXREAL_0:14;
           suppose z = -infty;
             hence thesis by A1,A4,SUPINF_2:def 2;
           end;
@@ -1172,7 +1134,7 @@ A2:   y = -infty & z = +infty;
       then y + z = 0. by Th9,SUPINF_2:4;
       then
 A3:   x * (y + z) = 0. by Def1;
-      now per cases by SUPINF_2:2;
+      now per cases by XXREAL_0:14;
         case x = +infty;
           then x*y = -infty & x*z = +infty by A2,Def1;
           hence thesis by A3,Th9,SUPINF_2:4;
@@ -1206,7 +1168,7 @@ A4:       x in REAL;
 A5:   y < 0. & z < 0.;
       then
 A6:   y + z < 0. by Th15;
-      now per cases by SUPINF_2:2;
+      now per cases by XXREAL_0:14;
         case x = -infty;
           then x*y = +infty & x*z = +infty & x*(y+z)=+infty by A5,A6,Def1;
           hence thesis by SUPINF_2:def 2;
@@ -1220,7 +1182,7 @@ A7:       x in REAL;
           now per cases by A7,XXREAL_0:9,12;
             case
 A8:           -infty < x & x < 0.;
-              now per cases by A5,SUPINF_2:2;
+              now per cases by A5,XXREAL_0:14;
                 case y = -infty & z = -infty;
                   then
 A9:               x*y = +infty & x*z = +infty & y+z = -infty
@@ -1277,7 +1239,7 @@ A23:              a = x by A7;
             end;
             case
 A24:          0. < x & x < +infty;
-              now per cases by A5,SUPINF_2:2;
+              now per cases by A5,XXREAL_0:14;
                 case y = -infty & z = -infty;
                   then
 A25:              x*y = -infty & x*z = -infty & y+z = -infty
@@ -1346,7 +1308,7 @@ A39:              a = x by A7;
 A40:  0. < y & 0. < z;
       then
 A41:  0. < y + z by Th14;
-      now per cases by SUPINF_2:2;
+      now per cases by XXREAL_0:14;
         case x = -infty;
           then x*y = -infty & x*z = -infty & x*(y+z)=-infty by A40,A41,Def1;
           hence thesis by SUPINF_2:def 2;
@@ -1360,7 +1322,7 @@ A42:      x in REAL;
           now per cases by A42,XXREAL_0:9,12;
             case
 A43:          -infty < x & x < 0.;
-              now per cases by A40,SUPINF_2:2;
+              now per cases by A40,XXREAL_0:14;
                 case y = +infty & z = +infty;
                   then
 A44:              x*y = -infty & x*z = -infty & y+z = +infty
@@ -1417,7 +1379,7 @@ A58:              a = x by A42;
             end;
             case
 A59:          0. < x & x < +infty;
-              now per cases by A40,SUPINF_2:2;
+              now per cases by A40,XXREAL_0:14;
                 case y = +infty & z = +infty;
                   then
 A60:              x*y = +infty & x*z = +infty & y+z = +infty
@@ -1479,7 +1441,7 @@ A75:  y = +infty & z = -infty;
       then y + z = 0. by Th9,SUPINF_2:4;
       then
 A76:  x * (y + z) = 0. by Def1;
-      now per cases by SUPINF_2:2;
+      now per cases by XXREAL_0:14;
         case x = +infty;
           then x*y = +infty & x*z = -infty by A75,Def1;
           hence thesis by A76,Th9,SUPINF_2:4;
@@ -1521,79 +1483,160 @@ proof
   x <> +infty & x <> -infty;
   then
 A1: x * (y + -z) = x * y + x * (-z) by Lm2;
-  y - (--z) = y + -z by Th5;
-  then x * (y - z) = x * y + -(x * z) by A1,Th26;
-  hence thesis by SUPINF_2:def 4;
+  x * (y - z) = x * y + -(x * z) by A1,Th26;
+  hence thesis;
 end;
 
 definition
   let x,y be R_eal;
   assume
 A1: not((x=-infty or x=+infty) & (y=-infty or y=+infty)) & y <> 0.;
-  func x / y -> R_eal means
+  redefine func x / y -> R_eal means
   :Def2:
   (ex a,b being Real st (x = a & y = b & it = a / b)) or
   (((x=+infty & 0. < y) or (x=-infty & y < 0.)) & it = +infty) or
   (((x=-infty & 0. < y) or (x=+infty & y < 0.)) & it = -infty) or
   ((y = -infty or y = +infty) & it = 0.);
-  existence
-  proof
-    now per cases by A1;
-      suppose x<>-infty & x<>+infty & y <> 0.;
-        then
-A2:     x is Real by MEASURE3:2;
-        y in REAL or y in {-infty,+infty} by XBOOLE_0:def 2,XXREAL_0:def 4;
-        then
-A3:     y in REAL or y = +infty or y = -infty by TARSKI:def 2;
-        ex Z being R_eal st
-        (ex a,b being Real st (x = a & y = b & Z = a / b)) or
-        ((y = -infty or y = +infty) & Z = 0.)
-        proof
-          y in REAL implies ex Z being R_eal st
-          ex a,b being Real st (x = a & y = b & Z = a / b)
-          proof
-            assume y in REAL;
-            then consider a,b being Real such that
-A4:         x = a & y = b by A2;
-            reconsider Z = a / b as R_eal by XXREAL_0:def 1;
-            take Z;
-            thus thesis by A4;
-          end;
-          hence thesis by A3;
-        end;
-        hence thesis;
+ coherence by XXREAL_0:def 1;
+ compatibility
+  proof let z be R_eal;
+   thus z = x/y implies
+     (ex a,b being Real st (x = a & y = b & z = a / b)) or
+     (((x=+infty & 0. < y) or (x=-infty & y < 0.)) & z = +infty) or
+    (((x=-infty & 0. < y) or (x=+infty & y < 0.)) & z = -infty) or
+    ((y = -infty or y = +infty) & z = 0.)
+   proof assume
+Z:   z = x/y;
+    now per cases by XXREAL_0:14,A1;
+     case
+C:    x in REAL & y in REAL;
+      then consider c being complex number such that
+W1:    y = c & y" = c" by XXREAL_3:def 4;
+      reconsider yy=y, xx=x as Real by C;
+      reconsider y1=yy" as Real;
+      consider a,b being complex number such that
+W2:    x = a & y" = b & x*y" = a * b by C,XXREAL_3:def 2,W1;
+       z = xx/ yy by W2,Z,W1;
+      hence ex a,b being Real st x = a & y = b & z = a / b;
+     end;
+     case
+pc:    x=+infty & 0. < y or x=-infty & y < 0.;
+      per cases by pc;
+       suppose
+C:        x=+infty & 0. < y;
+       then reconsider y as Real by A1,XXREAL_0:14;
+       reconsider yy=y as complex number;
+       x / y = +infty by XXREAL_3:def 2,C;
+      hence z = +infty by Z;
       end;
-      suppose
-A5:     y<>-infty & y<>+infty & y <> 0.;
-        then
-A6:     y is Real by MEASURE3:2;
-        x in REAL or x in {-infty,+infty} by XBOOLE_0:def 2,XXREAL_0:def 4;
-        then
-A7:     x in REAL or x = +infty or x = -infty by TARSKI:def 2;
-        ex Z being R_eal st
-        (ex a,b being Real st (x = a & y = b & Z = a / b)) or
-        (((x=+infty & 0. < y) or (x=-infty & y < 0.)) & Z = +infty) or
-        (((x=-infty & 0. < y) or (x=+infty & y < 0.)) & Z = -infty)
-        proof
-A8:       x in REAL implies ex Z being R_eal st
-          ex a,b being Real st x = a & y = b & Z = a / b
-          proof
-            assume x in REAL;
-            then consider a,b being Real such that
-A9:         x = a & y = b by A6;
-            reconsider Z = a / b as R_eal by XXREAL_0:def 1;
-            take Z;
-            thus thesis by A9;
-          end;
-          0. < y or y < 0. by A5;
-          hence thesis by A7,A8;
-        end;
-        hence thesis;
+       suppose
+C:        x=-infty & y < 0.;
+       then reconsider y as Real by A1,XXREAL_0:14;
+       reconsider yy=y as complex number;
+       x / y = +infty by XXREAL_3:def 2,C;
+      hence z = +infty by Z;
       end;
+     end;
+     case
+pc:    x=-infty & 0. < y or x=+infty & y < 0.;
+      per cases by pc;
+       suppose
+C:        x=-infty & 0. < y;
+       then reconsider y as Real by A1,XXREAL_0:14;
+       reconsider yy=y as complex number;
+       x / y = -infty by XXREAL_3:def 2,C;
+      hence z = -infty by Z;
+      end;
+       suppose
+C:        x=+infty & y < 0.;
+       then reconsider y as Real by A1,XXREAL_0:14;
+       reconsider yy=y as complex number;
+       x / y = -infty by XXREAL_3:def 2,C;
+      hence z = -infty by Z;
+      end;
+     end;
+     case y = -infty or y = +infty;
+       then y" = 0 by XXREAL_3:def 4;
+      hence z = 0. by XXREAL_3:1,Z;
+     end;
     end;
-    hence thesis;
+   hence thesis;
+   end;
+   assume
+Z:  (ex a,b being Real st x = a & y = b & z = a / b) or
+     (((x=+infty & 0. < y) or (x=-infty & y < 0.)) & z = +infty) or
+    (((x=-infty & 0. < y) or (x=+infty & y < 0.)) & z = -infty) or
+    ((y = -infty or y = +infty) & z = 0.);
+   per cases by Z;
+   suppose ex a,b being Real st x = a & y = b & z = a / b;
+    then consider a,b being Real such that
+W1:   x = a & y = b & z = a / b;
+    reconsider xx=x, yy=y as real number by W1;
+Y:   yy" = b" by W1;
+    then x is real & y" is real by W1;
+    then reconsider y1 = y" as real number;
+     z = xx * y1 by Y,W1;
+    then z = x*y";
+   hence thesis;
+   end;
+   suppose
+S:   ((x=+infty & 0. < y) or (x=-infty & y < 0.)) & z = +infty;
+   per cases by S;
+   suppose
+S1:  x=+infty & 0. < y;
+     then reconsider yy=y as positive Real by A1,XXREAL_0:14;
+     y in REAL by A1,XXREAL_0:14,S1;
+     then ex a being complex number st y = a & y" = a" by XXREAL_3:def 4;
+     then
+U:   yy" = y";
+     y" is positive by U;
+   hence thesis by XXREAL_3:def 2,S1,S;
+   end;
+   suppose
+S1:  x=-infty & y < 0.;
+     then reconsider yy=y as Real by A1,XXREAL_0:14;
+     y in REAL by A1,XXREAL_0:14,S1;
+     then ex a being complex number st y = a & y" = a" by XXREAL_3:def 4;
+     then
+U:   yy" = y";
+     y is negative by S1;
+     then y" is negative by U;
+   hence thesis by XXREAL_3:def 2,S1,S;
+   end;
+   end;
+   suppose
+S:  ((x=-infty & 0. < y) or (x=+infty & y < 0.)) & z = -infty;
+   per cases by S;
+   suppose
+S1:  x=-infty & 0. < y;
+     then reconsider yy=y as positive Real by A1,XXREAL_0:14;
+     y in REAL by A1,XXREAL_0:14,S1;
+     then ex a being complex number st y = a & y" = a" by XXREAL_3:def 4;
+     then
+U:   yy" = y";
+     y" is positive by U;
+   hence thesis by XXREAL_3:def 2,S1,S;
+   end;
+   suppose
+S1:  x=+infty & y < 0.;
+     then reconsider yy=y as Real by A1,XXREAL_0:14;
+     y in REAL by A1,XXREAL_0:14,S1;
+     then ex a being complex number st y = a & y" = a" by XXREAL_3:def 4;
+     then
+U:   yy" = y";
+     y is negative by S1;
+     then y" is negative by U;
+   hence thesis by XXREAL_3:def 2,S1,S;
+   end;
+   end;
+   suppose
+S:   (y = -infty or y = +infty) & z = 0.;
+    then y" = 0 by XXREAL_3:def 4;
+    then x*y" = 0 by XXREAL_3:1;
+   hence thesis by S;
+   end;
+
   end;
-  uniqueness by A1;
 end;
 
 canceled;
@@ -1640,10 +1683,10 @@ end;
 canceled;
 
 theorem
-  for x being R_eal st 0. < x holds |.x.| = x by Def3;
+  for x being R_eal st 0. < x holds |. x .| = x by Def3;
 
 theorem
-  for x being R_eal st x < 0. holds |.x.| = -x by Def3;
+  for x being R_eal st x < 0. holds |. x .| = -x by Def3;
 
 theorem
   for a,b being Real holds a*b = R_EAL a * R_EAL b
@@ -2042,7 +2085,7 @@ proof
 A1: x <> -infty & y <> +infty and
 A2: x <= y and
 A3: 0. < z;
-A4: x <> +infty & y <> -infty by A1,A2,Th7;
+A4: x <> +infty & y <> -infty by A1,A2,XXREAL_0:4,6;
   then reconsider a = x as Real by A1,XXREAL_0:14;
   reconsider b = y as Real by A1,A4,XXREAL_0:14;
   now per cases;
@@ -2104,7 +2147,7 @@ proof
 A1: x <> -infty & y <> +infty and
 A2: x <= y and
 A3: z < 0.;
-A4: x <> +infty & y <> -infty by A1,A2,Th7;
+A4: x <> +infty & y <> -infty by A1,A2,XXREAL_0:4,6;
   then reconsider a = x as Real by A1,XXREAL_0:14;
   reconsider b = y as Real by A1,A4,XXREAL_0:14;
   now per cases;

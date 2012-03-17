@@ -76,6 +76,28 @@
 <Adjective nr="10"/>
 </Cluster>
 </RCluster>
+<RCluster aid="FUNCT_1" nr="7">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+</Cluster>
+</RCluster>
+<RCluster aid="FUNCT_1" nr="8">
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12" value="false"/>
+</Cluster>
+</RCluster>
 <FCluster aid="FUNCT_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -294,6 +316,40 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
+<FCluster aid="FUNCT_1" nr="12">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="33">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FUNCT_1" nr="13">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="33">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="2" value="false"/>
+</Cluster>
+</FCluster>
 <CCluster aid="FUNCT_1" nr="1">
 <ArgTypes/>
 <Cluster>
@@ -340,6 +396,73 @@
 </Typ>
 <Cluster>
 <Adjective nr="10"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FUNCT_1" nr="4">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FUNCT_1" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FUNCT_1" nr="6">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12" value="false"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="2" value="false"/>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FUNCT_1" nr="7">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+<Adjective nr="10"/>
+<Adjective nr="12"/>
 </Cluster>
 </CCluster>
 </Registrations>

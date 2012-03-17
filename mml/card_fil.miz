@@ -14,9 +14,9 @@ environ
       BINOP_1, FUNCT_5, SETFAM_1, FINSET_1, ORDINAL1, CARD_1, RELSET_1,
       FUNCT_2, ORDINAL2, CARD_2, CARD_3, CARD_5;
  constructors SETFAM_1, WELLORD2, BINOP_1, FUNCOP_1, ORDINAL2, FUNCT_5, CARD_2,
-      CARD_5, NUMBERS;
+      CARD_5, NUMBERS, CARD_4;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      ORDINAL2, FINSET_1, CARD_1, CARD_5;
+      ORDINAL2, FINSET_1, CARD_1, CARD_5, CARD_4;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, CARD_1, XBOOLE_0, BINOP_1, SUBSET_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, FINSET_1, ORDINAL1, ORDINAL2, WELLORD2,
@@ -29,18 +29,7 @@ begin
 
 theorem Th1:
   for x being set for X being infinite set holds Card {x} in Card X
-proof
-  let x be set;
-  let X be infinite set;
-  Card X is infinite by CARD_4:1;
-  hence Card { x } in Card X by CARD_4:13;
-end;
-
-registration
-  let X be infinite set;
-  cluster Card X -> infinite;
-  coherence by CARD_4:1;
-end;
+           by CARD_4:13;
 
 scheme ElemProp{D()-> non empty set,x()->set,P[set]}: P[x()]
 provided
@@ -447,8 +436,7 @@ A8:   Y4 /\ Z c= Y2 by A4,Th13;
 A9:   Y3 /\ Y4 in F by A5,A7,Def1;
       (Y3 /\ Z) /\ (Y4 /\ Z) = Y3 /\ (Z /\ (Y4 /\ Z)) by XBOOLE_1:16
         .= Y3 /\ (Y4 /\ (Z /\ Z)) by XBOOLE_1:16
-        .= (Y3 /\ Y4) /\ Z by
-      XBOOLE_1:16;
+        .= (Y3 /\ Y4) /\ Z by XBOOLE_1:16;
       then (Y3 /\ Y4) /\ Z c= Y1 /\ Y2 by A6,A8,XBOOLE_1:27;
       hence (Y1 /\ Y2) in Extend_Filter(F,Z) by A9,Th13;
     end;
@@ -542,8 +530,7 @@ A4: S in FS by XBOOLE_0:def 1;
   S is Filter of X by A4,Th15;
   then X in S by Th5;
   then
-A5: union FS is non empty Subset-Family of X by A2,A4,TARSKI:def 4
-  ,ZFMISC_1:94;
+A5: union FS is non empty Subset-Family of X by A2,A4,TARSKI:def 4,ZFMISC_1:94;
 A6: not {} in union FS
   proof
     assume {} in union FS;
@@ -850,7 +837,7 @@ A9:   for x being Element of X holds not x in Y
         let x be Element of X;
 A10:    Y c= X \ { x } by A5,A6;
         assume x in Y;
-        then not x in { x } by A10,XBOOLE_0:def 4;
+        then not x in { x } by A10,XBOOLE_0:def 5;
         hence contradiction by TARSKI:def 1;
       end;
       Y = {}
@@ -895,7 +882,7 @@ A5:   not { x } in F by A1,Def5;
       { x } is Subset of X by A3,SUBSET_1:55;
       then X \ { x } in F by A1,A5,Def7;
       then x in X \ { x } by A4;
-      then not x in { x } by XBOOLE_0:def 4;
+      then not x in { x } by XBOOLE_0:def 5;
       hence contradiction by TARSKI:def 1;
     end;
     hence contradiction by A2,Def1;
@@ -952,7 +939,7 @@ A10:  Z in F;
     proof
       assume X \ { x } in F;
       then x in X \ { x } by A8;
-      then not x in { x } by XBOOLE_0:def 4;
+      then not x in { x } by XBOOLE_0:def 5;
       hence contradiction by TARSKI:def 1;
     end;
     then {x} in F by A1,A7,Def7;
@@ -995,11 +982,11 @@ A21: meet {h.x : x in Y} in F by A2,A13,A16,Def3;
   proof
     let y be set such that
 A22: y in (Y /\ meet {h.x : x in Y});
-A23: y in Y by A22,XBOOLE_0:def 3;
+A23: y in Y by A22,XBOOLE_0:def 4;
 A24: not y in h.y by A12,A22;
     h.y in {h.x : x in Y} by A23;
     then not y in meet {h.x : x in Y} by A24,SETFAM_1:def 1;
-    hence contradiction by A22,XBOOLE_0:def 3;
+    hence contradiction by A22,XBOOLE_0:def 4;
   end;
   then Y /\ meet {h.x : x in Y} = {} by XBOOLE_0:def 1;
   then {} in F by A3,A21,Def1;
@@ -1032,7 +1019,7 @@ definition
   let IT be Aleph;
   attr IT is inaccessible means
   :Def13:
-  IT is regular limit;
+  IT is regular limit_cardinal;
 end;
 
 notation
@@ -1041,7 +1028,7 @@ notation
 end;
 
 registration
-  cluster inaccessible -> regular limit Aleph;
+  cluster inaccessible -> regular limit_cardinal Aleph;
   coherence by Def13;
 end;
 
@@ -1049,7 +1036,7 @@ theorem
   omega is inaccessible
 proof
   thus omega is regular by CARD_5:42;
-  thus omega is limit;
+  thus omega is limit_cardinal;
 end;
 
 definition
@@ -1077,11 +1064,11 @@ proof
 end;
 
 theorem Th27:
-  M is strong_limit implies M is limit
+  M is strong_limit implies M is limit_cardinal
 proof
   assume
 A1: M is strong_limit;
-  assume not M is limit;
+  assume not M is limit_cardinal;
   then consider N such that
 A2: M = nextcard N by CARD_1:def 7;
 A3: N in M by A2,CARD_1:32;
@@ -1091,17 +1078,17 @@ A3: N in M by A2,CARD_1:32;
 end;
 
 registration
-  cluster strong_limit -> limit Aleph;
+  cluster strong_limit -> limit_cardinal Aleph;
   coherence by Th27;
 end;
 
 theorem Th28:
-  GCH implies (M is limit implies M is strong_limit)
+  GCH implies (M is limit_cardinal implies M is strong_limit)
 proof
   assume
 A1: GCH;
   assume
-A2: M is limit;
+A2: M is limit_cardinal;
   assume not M is strong_limit;
   then consider N being Cardinal such that
 A3: N in M & not exp(2,N) in M by Def14;
@@ -1180,10 +1167,10 @@ notation
 end;
 
 theorem Th32:
-  for A being being_limit_ordinal Ordinal for X being set st
+  for A being limit_ordinal Ordinal for X being set st
   X c= A holds sup X = A implies union X = A
 proof
-  let A be being_limit_ordinal Ordinal;
+  let A be limit_ordinal Ordinal;
   let X be set such that
 A1: X c= A;
   assume
@@ -1223,7 +1210,7 @@ A5: dom xi = cf M and
 A6: rng xi c= M and xi is increasing and
 A7: M = sup xi and xi is Cardinal-Function and not 0 in rng xi by CARD_5:41;
 A8: M = sup rng xi by A7,ORDINAL2:def 9;
-  M is_limit_ordinal by CARD_4:32;
+  M is limit_ordinal;
   then
 A9: M = union rng xi by A6,A8,Th32;
   Card rng xi c= Card dom xi by CARD_2:80;
@@ -1252,7 +1239,7 @@ end;
 
 registration
   let M;
-  cluster nextcard M -> non limit;
+  cluster nextcard M -> non limit_cardinal;
   coherence
   proof
     take M;
@@ -1261,21 +1248,21 @@ registration
 end;
 
 registration
-  cluster non limit infinite Cardinal;
+  cluster non limit_cardinal infinite Cardinal;
   existence
   proof
     take alef succ 0;
-    alef succ 0 = nextcard omega by CARD_1:39,CARD_1:83;
+    alef succ 0 = nextcard omega by CARD_1:39,83;
     hence thesis;
   end;
 end;
 
 registration
-  cluster non limit -> regular Aleph;
+  cluster non limit_cardinal -> regular Aleph;
   coherence
   proof
     let M such that
-A1: M is non limit;
+A1: M is non limit_cardinal;
     assume not M is regular;
     then cf M <> M & cf M c= M by CARD_5:def 2,def 4;
     then cf M in M by CARD_1:13;
@@ -1284,7 +1271,7 @@ A1: M is non limit;
 end;
 
 definition
-  let M be non limit Cardinal;
+  let M be non limit_cardinal Cardinal;
   func predecessor M -> Cardinal means
   :Def17:
   M = nextcard it;
@@ -1293,7 +1280,7 @@ definition
 end;
 
 registration
-  let M be non limit Aleph;
+  let M be non limit_cardinal Aleph;
   cluster predecessor M -> infinite;
   coherence
   proof
@@ -1311,7 +1298,7 @@ definition  :: infinite matrix
 end;
 
 reserve X for set;
-reserve M for non limit Aleph;
+reserve M for non limit_cardinal Aleph;
 reserve F for Filter of M;
 reserve N1,N2,N3 for Element of predecessor M;
 reserve K1,K2 for Element of M;
@@ -1344,7 +1331,7 @@ A1: for K1 being set st K1 in GT ex x being set st
   proof
     let K1 be set such that
 A2: K1 in (nextcard N) \ N;
-A3: K1 in nextcard N & not K1 in N by A2,XBOOLE_0:def 4;
+A3: K1 in nextcard N & not K1 in N by A2,XBOOLE_0:def 5;
     reconsider K2=K1 as Element of nextcard N by A2;
     Card N c= Card K2 by A3,CARD_1:27,ORDINAL1:26;
     then
@@ -1373,7 +1360,7 @@ A9: h1.K1 = f & f is one-to-one & dom f = N & rng f = K1 by A6,A7,A8;
   end;
   then reconsider h = h1 as Function-yielding Function by FUNCOP_1:def 6;
   N in nextcard N & not N in N by CARD_1:32;
-  then reconsider GT1 = nextcard N \ N as non empty set by XBOOLE_0:def 4;
+  then reconsider GT1 = nextcard N \ N as non empty set by XBOOLE_0:def 5;
 A10: for N1 for K1 being Element of GT1 holds dom (h.K1)=N & rng (h.K1) = K1
   proof
     let N1;
@@ -1410,7 +1397,7 @@ A15: for N1,N2,K1,K2 for K3 being set holds K3 in T.(N1,K1) /\ T.(N2,K2)
     let K3 be set;
     assume K3 in T.(N1,K1) /\ T.(N2,K2);
     then
-A16: K3 in T1.(N1,K1) & K3 in T1.(N2,K2) by XBOOLE_0:def 3;
+A16: K3 in T1.(N1,K1) & K3 in T1.(N2,K2) by XBOOLE_0:def 4;
     then reconsider K4=K3 as Element of GT1;
     take K4;
     thus K4=K3;
@@ -1488,8 +1475,7 @@ A31:  K5 in T.(N1,g(N1,K5)) by A14,A29,A30;
     end;
     then union {T.(N1,K1):K1 in M} = M \ N by Def17;
     then M \ union {T.(N1,K1):K1 in M} = M /\ N by XBOOLE_1:48;
-    hence Card (M \ union {T.(N1,K1): K1 in M}) c= N by CARD_1:23,XBOOLE_1:
-    17;
+    hence Card (M \ union {T.(N1,K1): K1 in M}) c= N by CARD_1:23,XBOOLE_1:17;
   end;
 
 :: fourth condition from def.
@@ -1533,8 +1519,8 @@ A41:    N c= K1;
         proof
           let K6 be set such that
 A42:      K6 in M \ (K1 \/ {K1});
-          K6 in M & not K6 in (K1 \/ {K1}) by A42,XBOOLE_0:def 4;
-          then (not K6 in {K1}) & not K6 in K1 by XBOOLE_0:def 2;
+          K6 in M & not K6 in (K1 \/ {K1}) by A42,XBOOLE_0:def 5;
+          then (not K6 in {K1}) & not K6 in K1 by XBOOLE_0:def 3;
           then
 A43:      not (K6 = K1 or K6 in K1) by TARSKI:def 1;
           reconsider K7=K6 as Element of M by A42;
@@ -1543,7 +1529,7 @@ A43:      not (K6 = K1 or K6 in K1) by TARSKI:def 1;
 A44:      K7 in nextcard N by Def17;
 A45:      K1 in K7 by A43,ORDINAL1:24;
           then N in K7 by A41,ORDINAL1:22;
-          then reconsider K8=K7 as Element of GT1 by A44,XBOOLE_0:def 4;
+          then reconsider K8=K7 as Element of GT1 by A44,XBOOLE_0:def 5;
           K8 in {K5 where K5 is Element of GT1: K1 in K5} by A45;
           hence K6 in {K5 where K5 is Element of GT1: K1 in K5};
         end;
@@ -1570,7 +1556,7 @@ A48:    K1 in N;
           hence {K5 where K5 is Element of GT1: K1 in K5} c= GT1;
           let K6 be set such that
 A49:      K6 in GT1;
-A50:      K6 in nextcard N & not K6 in N by A49,XBOOLE_0:def 4;
+A50:      K6 in nextcard N & not K6 in N by A49,XBOOLE_0:def 5;
           reconsider K7=K6 as Element of nextcard N by A49;
 A51:      N c= K7 by A50,ORDINAL1:26;
           reconsider K8=K7 as Element of GT1 by A49;
@@ -1666,8 +1652,7 @@ A18: Card {T.(N1,K1) : N1 in N} c=
     Card {T.X where X is Element of [:N,M:]: X in [:N,{K1}:]} by CARD_1:27;
     Card [:N,{K1}:] = Card N by CARD_2:13;
     then Card [:N,{K1}:] = N by CARD_1:def 5;
-    then Card {T.(N1,K1): N1 in N} in M by A14,A15,A18,ORDINAL1:22,XBOOLE_1:
-    1;
+    then Card {T.(N1,K1): N1 in N} in M by A14,A15,A18,ORDINAL1:22,XBOOLE_1:1;
     then union {T.(N1,K1): N1 in N} in I by A2,A10,A13,Def4;
     hence contradiction by A5,Th10;
   end;
@@ -1701,7 +1686,7 @@ A26: for N2 holds sup (h"{N2}) in sup {sup (h"{N3}): N3 in N}
       hence thesis by ORDINAL2:27;
     end;
     reconsider K1 = sup {sup (h"{N3}): N3 in N} as Element of M by A22,A25,
-    CARD_5:38;
+CARD_5:38;
     sup (h"{h.K1}) in K1 by A26;
     hence contradiction by ORDINAL2:27,SETWISEO:12;
   end;
@@ -1881,7 +1866,7 @@ A11: X1 in S by XBOOLE_0:def 1;
   then consider X2 being set such that
 A12: X2 in S \ {X1} by XBOOLE_0:def 1;
 A13: S qua set\{X1} is Subset of S;
-  not X2 in {X1} by A12,XBOOLE_0:def 4;
+  not X2 in {X1} by A12,XBOOLE_0:def 5;
   then X2 in S & X2 <> X1 by A12,A13,TARSKI:def 1;
   then X1 misses X2 by A7,A11;
   then
@@ -1895,14 +1880,14 @@ end;
 reserve M for Aleph;
 
 theorem Th38:
-  M is measurable implies M is limit
+  M is measurable implies M is limit_cardinal
 proof
   assume M is measurable;
   then consider F being Filter of M such that
 A1: F is_complete_with M and
 A2: F is non principal being_ultrafilter by Def16;
 A3: F is_complete_with Card M by A1,CARD_1:def 5;
-  assume not M is limit;
+  assume not M is limit_cardinal;
   hence contradiction by A1,A2,A3,Th23,Th37;
 end;
 
@@ -1910,7 +1895,7 @@ theorem
   M is measurable implies M is inaccessible
 proof
   assume M is measurable;
-  then M is limit & M is regular by Th33,Th38;
+  then M is limit_cardinal & M is regular by Th33,Th38;
   hence thesis by Def13;
 end;
 
@@ -1983,7 +1968,7 @@ A16:  g1 in Y;
       proof
         let X be set such that
 A17:    X in Y \ Y0;
-A18:    X in Y & not X in Y0 by A17,XBOOLE_0:def 4;
+A18:    X in Y & not X in Y0 by A17,XBOOLE_0:def 5;
         then consider g1 being Function such that
 A19:    g1=X and
 A20:    dom g1=N1 and
@@ -2007,7 +1992,7 @@ A26:    h1=h and h1 in Y and
 A27:    h1.A = {};
         thus contradiction by A25,A26,A27;
       end;
-      hence thesis by A23,A24,XBOOLE_0:def 4;
+      hence thesis by A23,A24,XBOOLE_0:def 5;
     end;
     then
 A28: Inv1 = (f"(rng f)) \ Inv0 by A13,FUNCT_1:138
@@ -2039,7 +2024,7 @@ A32: for A being Element of N1 holds P[A,g.A] from FUNCT_2:sch 3(A14);
   N1} c= Card N1 from TREES_2:sch 2;
   then Card {T(A) where A is Element of N1 : A in N1} c= N1 by CARD_1:def 5;
   then
-A33: Card {T(A) where A is Element of N1: A in N1} in M by A4,ORDINAL1: 22;
+A33: Card {T(A) where A is Element of N1: A in N1} in M by A4,ORDINAL1:22;
 A34: {T(A) where A is Element of N1: A in N1} c= F
   proof
     let X be set such that
@@ -2051,7 +2036,7 @@ A36: X=T(A) & A in N1 by A35;
   consider B being Element of N1;
   T(B) in {T(A) where A is Element of N1: A in N1};
   then
-A37: meet {T(A) where A is Element of N1: A in N1} in F by A1,A33,A34, Def3;
+A37: meet {T(A) where A is Element of N1: A in N1} in F by A1,A33,A34,Def3;
 A38: for X being set holds X in meet {T(A) where A is Element of N1: A in N1}
   implies f.X = g
   proof

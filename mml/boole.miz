@@ -10,7 +10,7 @@ environ
  notations TARSKI, XBOOLE_0;
  constructors TARSKI, XBOOLE_0;
  definitions XBOOLE_0, TARSKI;
- theorems XBOOLE_0;
+ theorems XBOOLE_0, TARSKI;
 
 begin
 
@@ -29,12 +29,12 @@ proof
   proof
     let x be set;
     assume x in X \/ {};
-    then x in X or x in {} by XBOOLE_0:def 2;
+    then x in X or x in {} by XBOOLE_0:def 3;
     hence thesis by XBOOLE_0:def 1;
   end;
   let x be set;
   assume x in X;
-  hence thesis by XBOOLE_0:def 2;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
 theorem
@@ -45,7 +45,7 @@ proof
   proof
     let x be set;
     assume x in X /\ {};
-    hence thesis by XBOOLE_0:def 3;
+    hence thesis by XBOOLE_0:def 4;
   end;
   let x be set;
   assume x in {};
@@ -60,12 +60,12 @@ proof
   proof
     let x be set;
     assume x in X \ {};
-    hence thesis by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 5;
   end;
   let x be set;
   assume x in X;
   then x in X & not x in {} by XBOOLE_0:def 1;
-  hence thesis by XBOOLE_0:def 4;
+  hence thesis by XBOOLE_0:def 5;
 end;
 
 theorem
@@ -76,7 +76,7 @@ proof
   proof
     let x be set;
     assume x in {} \ X;
-    hence thesis by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 5;
   end;
   let x be set;
   assume x in {};
@@ -92,8 +92,8 @@ proof
     let x be set;
     assume x in X \+\ {};
     then
-A1: x in X \ {} or x in {} \ X by XBOOLE_0:def 2;
-    per cases by A1,XBOOLE_0:def 4;
+A1: x in X \ {} or x in {} \ X by XBOOLE_0:def 3;
+    per cases by A1,XBOOLE_0:def 5;
     suppose x in X & not x in {};
       hence thesis;
     end;
@@ -104,21 +104,25 @@ A1: x in X \ {} or x in {} \ X by XBOOLE_0:def 2;
   let x be set;
   assume x in X;
   then x in X & not x in {} by XBOOLE_0:def 1;
-  then x in X \ {} by XBOOLE_0:def 4;
-  hence thesis by XBOOLE_0:def 2;
+  then x in X \ {} by XBOOLE_0:def 5;
+  hence thesis by XBOOLE_0:def 3;
 end;
 
-theorem
-  for X being set st X is empty holds X = {} by XBOOLE_0:def 5;
+reserve x,X for set;
+
+Lm1: X is empty implies X = {}
+  proof
+    assume
+Z:    not ex x st x in X;
+     then x in {} iff x in X by XBOOLE_0:def 1;
+    hence thesis by TARSKI:2;
+  end;
 
 theorem
-  for x, X being set st x in X holds X is non empty
-proof
-  let x, X be set;
-  assume x in X;
-  then X <> {} by XBOOLE_0:def 1;
-  hence thesis by XBOOLE_0:def 5;
-end;
+  for X being set st X is empty holds X = {} by Lm1;
+
+theorem
+  for x, X being set st x in X holds X is non empty by XBOOLE_0:def 1;
 
 theorem
   for X, Y being set st X is empty & X <> Y holds Y is non empty
@@ -127,8 +131,8 @@ proof
   assume that
 A1: X is empty and
 A2: X <> Y;
-  X = {} by A1,XBOOLE_0:def 5;
-  hence thesis by A2,XBOOLE_0:def 5;
+  X = {} by A1,Lm1;
+  hence thesis by A2,Lm1;
 end;
 
 ::theorem :: equality of 0 and {} is assumed

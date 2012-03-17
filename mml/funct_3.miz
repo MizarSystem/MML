@@ -448,8 +448,7 @@ A1: Y = {} implies X = {};
 A2: .:f is Function of bool dom f, bool rng f by Th21;
 A3: dom f = X & rng f c= Y by A1,FUNCT_2:def 1,RELSET_1:12;
 A4: dom.:f = bool dom f & rng.:f c= bool rng f by A2,FUNCT_2:def 1,RELSET_1:12;
-  rng f c= Y by RELSET_1:12;
-  then bool rng f c= bool Y by ZFMISC_1:79;
+  bool rng f c= bool Y by RELSET_1:12,ZFMISC_1:79;
   then rng.:f c= bool Y by A4,XBOOLE_1:1;
   hence thesis by A3,A4,FUNCT_2:def 1,RELSET_1:11;
 end;
@@ -855,7 +854,7 @@ theorem
   x in X \ A implies chi(A,X).x = {}
 proof
   assume x in X\A;
-  then x in X & not x in A by XBOOLE_0:def 4;
+  then x in X & not x in A by XBOOLE_0:def 5;
   hence thesis by Def3;
 end;
 
@@ -1210,22 +1209,22 @@ A4: for x st x in dom f2 holds f2.x = [f.x,g.x];
   end;
 end;
 
-registration let f be empty Function, g be Function;
+registration
+  let f be empty Function, g be Function;
   cluster <:f,g:> -> empty;
   coherence
-  proof
-    dom <:f,g:> = dom {} /\ dom g by Def8;
-    hence thesis;
-  end;
-end;
-
-registration let f be Function, g be empty Function;
-  cluster <:f,g:> -> empty;
+   proof
+     dom f = {};
+     then dom<:f,g:> = {} /\ dom g by Def8;
+    hence <:f,g:> is empty;
+   end;
+  cluster <:g,f:> -> empty;
   coherence
-  proof
-    dom <:f,g:> = dom f /\ dom {} by Def8;
-    hence thesis;
-  end;
+   proof
+     dom f = {};
+     then dom<:g,f:> = {} /\ dom g by Def8;
+    hence <:g,f:> is empty;
+   end;
 end;
 
 canceled;
@@ -1268,7 +1267,7 @@ proof
 A1: x in dom <:f,g:> and
 A2: q = <:f,g:>.x by FUNCT_1:def 5;
   x in dom f /\ dom g by A1,Def8;
-  then x in dom f & x in dom g by XBOOLE_0:def 3;
+  then x in dom f & x in dom g by XBOOLE_0:def 4;
   then f.x in rng f & g.x in rng g & q = [f.x,g.x] by A1,A2,Def8,FUNCT_1:def 5;
   hence thesis by ZFMISC_1:106;
 end;
@@ -1376,18 +1375,18 @@ proof
       assume x in dom <:f*h,g*h:>;
       then x in dom(f*h) /\ dom(g*h) by Def8;
       then
-A1:   x in dom(f*h) & x in dom(g*h) by XBOOLE_0:def 3;
+A1:   x in dom(f*h) & x in dom(g*h) by XBOOLE_0:def 4;
       then h.x in dom f & h.x in dom g by FUNCT_1:21;
-      then h.x in dom f /\ dom g by XBOOLE_0:def 3;
+      then h.x in dom f /\ dom g by XBOOLE_0:def 4;
       then h.x in dom <:f,g:> & x in dom h by A1,Def8,FUNCT_1:21;
       hence x in dom(<:f,g:>*h) by FUNCT_1:21;
     end;
     assume x in dom(<:f,g:>*h);
     then h.x in dom <:f,g:> & x in dom h by FUNCT_1:21;
     then h.x in dom f /\ dom g & x in dom h by Def8;
-    then h.x in dom f & h.x in dom g & x in dom h by XBOOLE_0:def 3;
+    then h.x in dom f & h.x in dom g & x in dom h by XBOOLE_0:def 4;
     then x in dom(f*h) & x in dom(g*h) by FUNCT_1:21;
-    then x in dom(f*h) /\ dom(g*h) by XBOOLE_0:def 3;
+    then x in dom(f*h) /\ dom(g*h) by XBOOLE_0:def 4;
     hence thesis by Def8;
   end;
   then
@@ -1399,10 +1398,10 @@ A2: dom <:f*h,g*h:> = dom(<:f,g:>*h) by TARSKI:2;
 A3: x in dom <:f*h,g*h:>;
     then x in dom(f*h) /\ dom(g*h) by Def8;
     then
-A4: x in dom(f*h) & x in dom(g*h) by XBOOLE_0:def 3;
+A4: x in dom(f*h) & x in dom(g*h) by XBOOLE_0:def 4;
     then h.x in dom f & h.x in dom g by FUNCT_1:21;
     then
-A5: h.x in dom f /\ dom g by XBOOLE_0:def 3;
+A5: h.x in dom f /\ dom g by XBOOLE_0:def 4;
     then
 A6: h.x in dom <:f,g:> & x in dom h by A4,Def8,FUNCT_1:21;
     thus <:f*h,g*h:>.x = [(f*h).x,(g*h).x] by A3,Def8
@@ -1425,7 +1424,7 @@ A1: x in dom <:f,g:> and
 A2: x in A and
 A3: y = <:f,g:>.x by FUNCT_1:def 12;
   x in dom f /\ dom g by A1,Def8;
-  then x in dom f & x in dom g by XBOOLE_0:def 3;
+  then x in dom f & x in dom g by XBOOLE_0:def 4;
   then f.x in f.:A & g.x in g.:
   A & y = [f.x,g.x] by A1,A2,A3,Def8,FUNCT_1:def 12;
   hence y in [:f.:A,g.:A:] by ZFMISC_1:def 2;
@@ -1447,16 +1446,16 @@ A2:   y1 in B & y2 in C and
 A3:   <:f,g:>.x = [y1,y2] by ZFMISC_1:def 2;
       x in dom <:f,g:> by A1,FUNCT_1:def 13;
       then x in dom f /\ dom g & [y1,y2] = [f.x,g.x] by A3,Def8;
-      then x in dom f & x in dom g & y1 =f.x & y2 = g.x by XBOOLE_0:def 3
-      ,ZFMISC_1:33;
+      then x in dom f & x in dom g & y1 =f.x & y2 = g.x by XBOOLE_0:def 4
+,ZFMISC_1:33;
       then x in f"B & x in g"C by A2,FUNCT_1:def 13;
-      hence x in f"B /\ g"C by XBOOLE_0:def 3;
+      hence x in f"B /\ g"C by XBOOLE_0:def 4;
     end;
     assume x in f"B /\ g"C;
-    then x in f"B & x in g"C by XBOOLE_0:def 3;
+    then x in f"B & x in g"C by XBOOLE_0:def 4;
     then x in dom f & x in dom g & f.x in B & g.x in C by FUNCT_1:def 13;
-    then x in dom f /\ dom g & [f.x,g.x] in [:B,C:] by XBOOLE_0:def 3
-    ,ZFMISC_1:def 2;
+    then x in dom f /\ dom g & [f.x,g.x] in [:B,C:] by XBOOLE_0:def 4
+,ZFMISC_1:def 2;
     then x in dom <:f,g:> & <:f,g:>.x in [:B,C:] by Def8,Th68;
     hence thesis by FUNCT_1:def 13;
   end;
@@ -1726,17 +1725,17 @@ proof
       then x in dom <:g,k:> & [g.x,k.x] in dom [:f,h:] by Def8;
       then [g.x,k.x] in [:dom f,dom h:] & x in dom g /\ dom k by Def8,Def9;
       then g.x in dom f & k.x in dom h & x in dom g & x in dom k
-      by XBOOLE_0:def 3,ZFMISC_1:106;
+      by XBOOLE_0:def 4,ZFMISC_1:106;
       then x in dom(f*g) & x in dom(h*k) by FUNCT_1:21;
-      then x in dom(f*g) /\ dom(h*k) by XBOOLE_0:def 3;
+      then x in dom(f*g) /\ dom(h*k) by XBOOLE_0:def 4;
       hence thesis by Def8;
     end;
     assume x in dom <:f*g,h*k:>;
     then x in dom(f*g) /\ dom(h*k) by Def8;
-    then x in dom(f*g) & x in dom(h*k) by XBOOLE_0:def 3;
+    then x in dom(f*g) & x in dom(h*k) by XBOOLE_0:def 4;
     then g.x in dom f & k.x in dom h & x in dom g & x in dom k by FUNCT_1:21;
     then [g.x,k.x] in [:dom f,dom h:] & x in dom g /\ dom k
-    by XBOOLE_0:def 3,ZFMISC_1:106;
+    by XBOOLE_0:def 4,ZFMISC_1:106;
     then [g.x,k.x] in dom [:f,h:] & x in dom <:g,k:> by Def8,Def9;
     then <:g,k:>.x in dom [:f,h:] & x in dom <:g,k:> by Def8;
     hence thesis by FUNCT_1:21;
@@ -1755,10 +1754,10 @@ A3: x in dom <:g,k:> & <:g,k:>.x in dom [:f,h:] by FUNCT_1:21;
     then [g.x,k.x] in [:dom f,dom h:] & x in dom g /\ dom k by A3,Def8,Def9;
     then
 A4: g.x in dom f & k.x in dom h & x in dom g & x in dom k
-    by XBOOLE_0:def 3,ZFMISC_1:106;
+    by XBOOLE_0:def 4,ZFMISC_1:106;
     then x in dom(f*g) & x in dom(h*k) by FUNCT_1:21;
     then
-A5: x in dom(f*g) /\ dom(h*k) by XBOOLE_0:def 3;
+A5: x in dom(f*g) /\ dom(h*k) by XBOOLE_0:def 4;
     thus ([:f,h:]*<:g,k:>).x = [:f,h:].(<:g,k:>.x) by A2,FUNCT_1:22
       .= [:f,h:].(g.x,k.x) by A3,Def8
       .= [f.(g.x),h.(k.x)] by A4,Def9

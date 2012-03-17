@@ -32,11 +32,12 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="MATRIX_2"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="MOD_2"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -82,7 +83,7 @@
 <Adjective nr="4"/>
 <Adjective nr="24"/>
 <Adjective nr="29"/>
-<Adjective nr="146">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -111,7 +112,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="31">
+<Typ kind="M" nr="32">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -122,17 +123,17 @@
 <Adjective nr="4"/>
 <Adjective nr="24"/>
 <Adjective nr="29"/>
-<Adjective nr="144">
+<Adjective nr="149">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="145">
+<Adjective nr="150">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="146">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -171,17 +172,17 @@
 <Adjective nr="4"/>
 <Adjective nr="24"/>
 <Adjective nr="29"/>
-<Adjective nr="144">
+<Adjective nr="149">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="145">
+<Adjective nr="150">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="146">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -227,7 +228,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="147">
+<Adjective nr="152">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -295,7 +296,7 @@
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="147">
+<Adjective nr="152">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -320,7 +321,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="146">
+<Adjective nr="151">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -335,7 +336,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="145">
+<Adjective nr="150">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

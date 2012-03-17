@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="PARTFUN1"/>
@@ -38,7 +39,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="27"/>
-<Adjective nr="33">
+<Adjective nr="34">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
@@ -52,7 +53,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="108">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
@@ -69,7 +70,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="109">
 <LocusVar nr="1"/>
 <Func kind="K" nr="48"/>
 </Func>
@@ -86,7 +87,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="101">
+<Func kind="K" nr="108">
 <Func kind="K" nr="48"/>
 <LocusVar nr="1"/>
 </Func>
@@ -103,7 +104,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="109">
 <Func kind="K" nr="48"/>
 <LocusVar nr="1"/>
 </Func>
@@ -146,7 +147,7 @@
 </FCluster>
 <FCluster aid="REAL_3" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="97">
+<Func kind="K" nr="104">
 <Func kind="K" nr="48"/>
 </Func>
 <Cluster>

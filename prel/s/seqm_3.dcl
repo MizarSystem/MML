@@ -47,6 +47,34 @@
 <Adjective nr="28"/>
 </Cluster>
 </RCluster>
+<RCluster aid="SEQM_3" nr="2">
+<ArgTypes/>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="93"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="7" value="false"/>
+<Adjective nr="10">
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="93"/>
+</Adjective>
+<Adjective nr="11">
+<Func kind="K" nr="93"/>
+<Func kind="K" nr="93"/>
+</Adjective>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+</Cluster>
+</RCluster>
 <FCluster aid="SEQM_3" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="4">
@@ -54,13 +82,12 @@
 <Adjective nr="4"/>
 <Adjective nr="11">
 <Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="93"/>
 </Adjective>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
 </Cluster>
 <Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="93"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -68,7 +95,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="109">
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="93"/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -76,7 +103,7 @@
 <Adjective nr="4"/>
 <Adjective nr="11">
 <Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
+<Func kind="K" nr="93"/>
 </Adjective>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
@@ -86,7 +113,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="28"/>
+<Adjective nr="6"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -96,13 +123,15 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SEQM_3" nr="2">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
+<Adjective nr="31"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
@@ -111,47 +140,13 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="6"/>
 </Cluster>
 </CCluster>
 <CCluster aid="SEQM_3" nr="3">
 <ArgTypes/>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="6"/>
-</Cluster>
-<Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Typ>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SEQM_3" nr="4">
-<ArgTypes/>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-</Cluster>
-<Typ kind="M" nr="4">
-<Cluster/>
-<Func kind="K" nr="93"/>
-<Func kind="K" nr="89"/>
-</Typ>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="6"/>
-</Cluster>
-</CCluster>
-<CCluster aid="SEQM_3" nr="5">
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="93"/>
 </Typ>

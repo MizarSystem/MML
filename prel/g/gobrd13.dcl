@@ -14,6 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
@@ -30,7 +31,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
@@ -52,12 +52,12 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="148">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="363">
+<Func kind="K" nr="350">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -73,12 +73,12 @@
 <Cluster/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="148">
+<Func kind="K" nr="155">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="145"/>
+<Adjective nr="150"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GOBRD13" nr="2">
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="145"/>
+<Adjective nr="150"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

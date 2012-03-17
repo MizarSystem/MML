@@ -18,6 +18,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -35,7 +36,7 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -49,7 +50,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="104">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -58,7 +59,7 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -72,7 +73,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="104">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -81,12 +82,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="49" value="false"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="104">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -98,7 +99,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="104">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -114,7 +115,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="104">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -131,12 +132,12 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="49" value="false"/>
-<Adjective nr="73"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="101"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="78"/>
+<Adjective nr="103"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
+<Adjective nr="106"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -148,7 +149,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="247">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

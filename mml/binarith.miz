@@ -7,13 +7,13 @@
 environ
 
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
-      ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
-      FINSEQ_4, ARYTM, RFINSEQ;
+      ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
+      FINSEQ_4, ARYTM, XREAL_0;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1,
       XBOOLEAN, MARGREL1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2,
       SETWISEO, FUNCOP_1,
-      SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, RFINSEQ,
-      SEQ_1, NAT_1, NAT_D, XXREAL_0;
+      SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2,
+      SEQ_1, XXREAL_0, NAT_1, NAT_D;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, BINOP_2, MARGREL1,
       PARTFUN1, FINSOP_1, SERIES_1, RFINSEQ, SEQ_1, REAL_1, NAT_D;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
@@ -125,7 +125,7 @@ theorem
 canceled 6;
 
 reserve i,j,k for Nat;
-reserve n for non empty Nat;
+reserve n for non zero Nat;
 reserve x,y,z1,z2 for Tuple of n, BOOLEAN;
 
 definition
@@ -162,8 +162,8 @@ X: dom y = Seg n by FINSEQ_1:def 3;
       assume
 A8:   j in dom y;
       then
-A9:   j in dom y & j in dom z by A7,FINSEQ_1:def 3,X;
-      thus y.j = y/.j by PARTFUN1:def 8,A8
+A9:   j in dom y & j in dom z by A7,X,FINSEQ_1:def 3;
+      thus y.j = y/.j by A8,PARTFUN1:def 8
         .= 'not' (x/.j) by A5,A8,X
         .= z/.j by A6,A8,X
         .= z.j by A9,PARTFUN1:def 8;
@@ -537,7 +537,7 @@ proof
     let i such that
 A1: i in Seg (n+1);
 A2: Seg (n+1) = Seg (n) \/ {. n+1 .} by FINSEQ_1:11;
-    per cases by A1,A2,XBOOLE_0:def 2;
+    per cases by A1,A2,XBOOLE_0:def 3;
     suppose
 A3:   i in Seg n;
       hence ((z1+z2)^<*d1 'xor' d2 'xor' add_ovfl(z1,z2)*>)/.i
@@ -580,7 +580,7 @@ proof
     let i such that
 A1: i in Seg (n+1);
 A2: Seg (n+1) = Seg (n) \/ {. n+1 .} by FINSEQ_1:11;
-    per cases by A1,A2,XBOOLE_0:def 2;
+    per cases by A1,A2,XBOOLE_0:def 3;
     suppose
 A3:   i in Seg n;
       hence (Binary(z)^<*IFEQ(d,FALSE,0,2 to_power(n))*>)/.i
@@ -609,7 +609,7 @@ theorem Th47:
   Absval(z1) + Absval(z2)
 proof
   set f = FALSE, t = TRUE;
-  defpred P[ non empty Nat] means
+  defpred P[non zero Nat] means
   for z1,z2 being Tuple of $1, BOOLEAN holds
   Absval(z1+z2) + IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power $1) =
   Absval(z1) + Absval(z2);
@@ -634,9 +634,9 @@ A5:   IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
 A6:     i in Seg 1;
         then
 A7:     i=1 by FINSEQ_1:4,TARSKI:def 1;
-        thus F/.i = (z1/.1) 'xor' f 'xor' f by A4,A6,FINSEQ_1:4 ,TARSKI:def 1
+        thus F/.i = (z1/.1) 'xor' f 'xor' f by A4,A6,FINSEQ_1:4,TARSKI:def 1
           .= (z1/.1) 'xor' (z2/.1) 'xor' f by A4,FINSEQ_4:25
-          .= (z1/.i) 'xor' (z2/.i) 'xor' (carry(z1,z2)/.i) by A7, Def5;
+          .= (z1/.i) 'xor' (z2/.i) 'xor' (carry(z1,z2)/.i) by A7,Def5;
       end;
       hence thesis by A3,A4,A5,Def8;
     end;
@@ -654,7 +654,7 @@ A9:   IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
 A10:    i in Seg 1;
         then
 A11:    i=1 by FINSEQ_1:4,TARSKI:def 1;
-        thus T/.i = (z1/.1) 'xor' f 'xor' f by A8,A10,FINSEQ_1:4 ,TARSKI:def 1
+        thus T/.i = (z1/.1) 'xor' f 'xor' f by A8,A10,FINSEQ_1:4,TARSKI:def 1
           .= (z1/.1) 'xor' (z2/.1) 'xor' f by A8,FINSEQ_4:25
           .= (z1/.i) 'xor' (z2/.i) 'xor' (carry(z1,z2)/.i) by A11,Def5;
       end;
@@ -703,7 +703,7 @@ A17:    i=1 by FINSEQ_1:4,TARSKI:def 1;
       hence thesis by A3,A15,A16;
     end;
   end;
-A18: for n being non empty Nat st P[n] holds P[n+1]
+A18: for n being non zero Nat st P[n] holds P[n+1]
   proof
     let n;
     assume
@@ -882,7 +882,7 @@ A46:              d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
       .= Absval(t1)+IFEQ(d1,FALSE,0,2 to_power n) + Absval(t2^<*d2*>) by Th46
       .= Absval(z1) + Absval(z2) by A20,A21,Th46;
   end;
-  thus for n being non empty Nat holds P[n] from NAT_1:sch 10(A1,A18);
+  thus for n being non zero Nat holds P[n] from NAT_1:sch 10(A1,A18);
 end;
 
 theorem

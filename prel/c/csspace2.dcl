@@ -13,7 +13,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -29,16 +28,16 @@
 <ArgTypes/>
 <Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="103"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="92"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CSSPACE2" nr="2">
 <ArgTypes/>
 <Func kind="K" nr="173"/>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="108"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="97"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -15,6 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
@@ -37,7 +38,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
 <ArticleID name="FRECHET"/>
@@ -114,19 +114,19 @@
 <Typ kind="M" nr="13">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="333">
+<Func kind="K" nr="320">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="346">
+<Func kind="K" nr="333">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="55">
-<Func kind="K" nr="333">
+<Func kind="K" nr="320">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -144,11 +144,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="211">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <FCluster aid="KURATO_2" nr="3">
@@ -158,13 +158,13 @@
 <Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="320">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
-<Adjective nr="105"/>
+<Adjective nr="110"/>
 </Cluster>
 </FCluster>
 <CCluster aid="KURATO_2" nr="1">
@@ -233,47 +233,9 @@
 </Adjective>
 <Adjective nr="35"/>
 <Adjective nr="36"/>
-<Adjective nr="111">
+<Adjective nr="116">
 <LocusVar nr="1"/>
 </Adjective>
-</Cluster>
-</CCluster>
-<CCluster aid="KURATO_2" nr="3">
-<ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster>
-<Adjective nr="40" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="5">
-<Cluster>
-<Adjective nr="7"/>
-<Adjective nr="9"/>
-<Adjective nr="19">
-<Func kind="K" nr="47"/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Adjective>
-</Cluster>
-<Func kind="K" nr="47"/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="17">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-<Cluster>
-<Adjective nr="9"/>
 </Cluster>
 </CCluster>
 </Registrations>

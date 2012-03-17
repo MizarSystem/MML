@@ -26,12 +26,12 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN16"/>
 </Signature>
@@ -46,7 +46,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="270">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -94,7 +94,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="279">
+<Func kind="K" nr="266">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

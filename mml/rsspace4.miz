@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, LATTICES, RLSUB_1, SEQ_1, FUNCT_2, FUNCOP_1,
       FUNCSDOM, SEQ_2, SEQM_3, BHSP_3, RSSPACE, RSSPACE3, LOPBAN_1, RSSPACE4,
-      REALSET1, MSUALG_3, ALGSTR_0;
+      REALSET1, MSUALG_3, ALGSTR_0, SEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, PRE_TOPC,
       DOMAIN_1, FUNCOP_1, REALSET1, XXREAL_0, XXREAL_2, REAL_1, NAT_1,
       STRUCT_0, ALGSTR_0, XREAL_0,
@@ -17,10 +17,11 @@ environ
       INTEGRA2, PSCOMP_1, RLVECT_1, NORMSP_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
       SEQ_4, RLSUB_1, PARTFUN1, RSSPACE, RSSPACE3, LOPBAN_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQM_3, REALSET1, RLSUB_1,
-      PSCOMP_1, INTEGRA2, RSSPACE3, LOPBAN_1, SEQ_1, XXREAL_2;
+      PSCOMP_1, INTEGRA2, RSSPACE3, LOPBAN_1, SEQ_1, XXREAL_2, RVSUM_1, SEQ_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, SEQM_3, REALSET1, STRUCT_0, RLVECT_1,
-      NORMSP_1, RSSPACE3, VALUED_0, RSSPACE, VALUED_1, FUNCOP_1;
+      RFUNCT_1, SEQ_2,
+      NORMSP_1, RSSPACE3, VALUED_0, RSSPACE, VALUED_1, FUNCOP_1, SEQ_4;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, SEQ_4, NORMSP_1, RLVECT_1, BINOP_1, REALSET1,
       STRUCT_0, ALGSTR_0, VALUED_1;
@@ -28,7 +29,7 @@ environ
       FUNCOP_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCT_1, FUNCT_2, RLVECT_1,
       RLSUB_1, NORMSP_1, XREAL_0, XCMPLX_0, PSCOMP_1, INTEGRA2, RSSPACE,
       RSSPACE3, RFUNCT_2, RSSPACE2, LOPBAN_1, COMPLEX1, XREAL_1, XXREAL_0,
-      XXREAL_2;
+      XXREAL_2, VALUED_0, ORDINAL1;
  schemes SEQ_1, FUNCT_2, XBOOLE_0;
 
 begin :: The Banach Space of Bounded Real Sequences
@@ -112,9 +113,13 @@ registration
     seq_id Zeroseq is bounded
     proof
       reconsider rseq=seq_id Zeroseq as Real_Sequence;
-      for n being Element of NAT holds rseq.n = 0 by RSSPACE:def 6;
-      then rseq is constant by SEQM_3:def 6;
-      hence thesis by SEQM_3:73;
+      for n being Nat holds rseq.n = 0
+       proof let n be Nat;
+         n in NAT by ORDINAL1:def 13;
+        hence thesis by RSSPACE:def 6;
+       end;
+      then rseq is constant by VALUED_0:def 18;
+      hence thesis;
     end;
     hence thesis by Def1;
   end;
@@ -135,7 +140,7 @@ A3:     seq_id v is bounded by A2,Def1;
 A4:     seq_id u is bounded by A2,Def1;
         seq_id(v+u)=seq_id(seq_id v+seq_id u) by RSSPACE:4,def 7
           .=seq_id v+seq_id u by RSSPACE:3;
-        hence thesis by A3,A4,SEQM_3:71;
+        hence thesis by A3,A4;
       end;
       hence v+u in W by Def1,RSSPACE:def 7;
     end;
@@ -185,7 +190,7 @@ Lm5: ex NORM be Function of the_set_of_BoundedRealSequences,REAL st
 for x be set st x in the_set_of_BoundedRealSequences holds
 NORM.x = sup rng abs seq_id(x)
 proof
-  deffunc F(set) = sup rng abs seq_id($1);
+  deffunc F(set) = upper_bound rng abs seq_id($1);
 A1: for z be set st z in the_set_of_BoundedRealSequences holds F(z) in REAL;
   ex f being Function of the_set_of_BoundedRealSequences,REAL st
   for x being set st x in the_set_of_BoundedRealSequences holds
@@ -222,19 +227,21 @@ A4:   z in the_set_of_BoundedRealSequences;
 end;
 
 Lm6: for
-rseq be Real_Sequence st (for n be Element of NAT holds rseq.n=0) holds
+rseq be Real_Sequence st (for n be Nat holds rseq.n=0) holds
 rseq is bounded & sup rng abs rseq = 0
 proof
   let rseq be Real_Sequence such that
-A1: for n be Element of NAT holds rseq.n=0;
-A2: for n be Element of NAT holds (abs rseq).n=0
+A1: for n be Nat holds rseq.n=0;
+A2: for n be Nat holds (abs rseq).n=0
   proof
-    let n be Element of NAT;
+    let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
+     then
 A3: rseq.n=0 by A1;
-    (abs rseq).n = abs(rseq.n) by SEQ_1:16;
+    (abs rseq).n = abs(rseq.n) by SEQ_1:16,X;
     hence thesis by A3,ABSVALUE:7;
   end;
-A4: rseq is constant by A1,SEQM_3:def 6;
+A4: rseq is constant by A1,VALUED_0:def 18;
   rng abs rseq = {0}
   proof
     rng abs rseq c= {0}
@@ -248,25 +255,26 @@ A5:   n in NAT & abs(rseq).n=y by FUNCT_2:17;
     end;
     hence thesis by ZFMISC_1:39;
   end;
-  hence thesis by A4,SEQM_3:73,SEQ_4:22;
+  hence thesis by A4,SEQ_4:22;
 end;
 
 Lm7: for rseq be Real_Sequence st
 ( rseq is bounded & sup rng abs rseq = 0 ) holds
-for n be Element of NAT holds rseq.n = 0
+for n be Nat holds rseq.n = 0
 proof
   let rseq be Real_Sequence such that
 A1: rseq is bounded and
 A2: sup rng abs rseq = 0;
-  let n be Element of NAT;
+  let n be Nat;
+X: n in NAT by ORDINAL1:def 13;
 A3: abs rseq is bounded by A1,SEQM_3:70;
   0 <= abs(rseq).n
   proof
     0 <= abs(rseq.n) by COMPLEX1:132;
-    hence thesis by SEQ_1:16;
+    hence thesis by SEQ_1:16,X;
   end;
-  then (abs rseq).n =0 by A2,A3,Lm2;
-  then abs (rseq.n) = 0 by SEQ_1:16;
+  then (abs rseq).n =0 by A2,A3,Lm2,X;
+  then abs (rseq.n) = 0 by SEQ_1:16,X;
   hence thesis by ABSVALUE:7;
 end;
 
@@ -275,7 +283,7 @@ canceled;
 theorem
   for rseq be Real_Sequence holds
   ( rseq is bounded & sup rng abs rseq = 0 ) iff
-  for n be Element of NAT holds rseq.n = 0 by Lm6,Lm7;
+  for n be Nat holds rseq.n = 0 by Lm6,Lm7;
 
 registration
   cluster NORMSTR (# the_set_of_BoundedRealSequences,
@@ -397,9 +405,13 @@ A4: for n be Element of NAT holds 0 = (seq_id x).n by A2,A3,Lm7;
     hence x=0.linfty_Space by A4,Th3,RSSPACE:def 6;
   end;
 A5: now
-    assume x=0.linfty_Space;
-    then
-A6: for n be Element of NAT holds (seq_id x).n=0 by Th3,RSSPACE:def 6;
+    assume
+Z:   x=0.linfty_Space;
+A6: for n be Nat holds (seq_id x).n=0
+     proof let n be Nat;
+       n in NAT by ORDINAL1:def 13;
+      hence thesis by Th3,RSSPACE:def 6,Z;
+     end;
     thus ||.x.|| = sup rng abs seq_id x by Th3
       .= 0 by A6,Lm6;
   end;
@@ -449,7 +461,8 @@ A15: abs seq_id x is bounded by SEQM_3:70;
   seq_id y is bounded by Def1;
   then
 A16: abs seq_id y is bounded by SEQM_3:70;
-A17: sup rng abs seq_id(x+y) <= sup rng abs seq_id x + sup rng abs seq_id y
+A17: upper_bound rng abs seq_id(x+y) <=
+      upper_bound rng abs seq_id x + upper_bound rng abs seq_id y
   proof
     now
       let n be Element of NAT;
@@ -459,8 +472,10 @@ A19:  (abs seq_id x + abs seq_id y).n
 A20:  (abs seq_id x).n <=sup rng abs seq_id x by A15,Lm2;
       (abs seq_id y).n <=sup rng abs seq_id y by A16,Lm2;
       then ((abs seq_id x) + (abs seq_id y)).n <=
-      sup(rng abs seq_id x) + sup rng abs seq_id y by A19,A20,XREAL_1:9;
-      hence (abs seq_id(x+y)).n <= sup rng abs seq_id x + sup rng abs seq_id y
+      upper_bound(rng abs seq_id x) + upper_bound rng abs seq_id y
+      by A19,A20,XREAL_1:9;
+      hence (abs seq_id(x+y)).n
+       <= upper_bound rng abs seq_id x + upper_bound rng abs seq_id y
       by A18,XXREAL_0:2;
     end;
     hence thesis by Lm1;
@@ -694,7 +709,7 @@ A37: abs seq_id (vseq.m) is bounded by SEQM_3:70;
     set a=abs(seq_id tseq -seq_id(vseq.m));
     set b=abs seq_id(vseq.m);
     set d=abs seq_id tseq;
-A38: a + b is bounded by A36,A37,SEQM_3:71;
+A38: a + b is bounded by A36,A37;
 A39: for i be Element of NAT holds d.i <= (a+b).i
     proof
       let i be Element of NAT;
@@ -1144,7 +1159,7 @@ proof
   now
     assume
 A1: PreNorms(g) is bounded_above;
-    reconsider K=sup PreNorms(g) as Real;
+    reconsider K=upper_bound PreNorms(g) as Real;
 A2: 0 <= K
     proof
 A3:   now
@@ -1179,7 +1194,7 @@ theorem Th15:
 proof
   let X be non empty set;
   let Y be RealNormSpace;
-  deffunc F(set) = sup PreNorms(modetrans($1,X,Y));
+  deffunc F(set) = upper_bound PreNorms(modetrans($1,X,Y));
 A1: for z be set st z in BoundedFunctions(X,Y) holds F(z) in REAL;
   ex f being Function of BoundedFunctions(X,Y),REAL st
   for x being set st x in BoundedFunctions(X,Y) holds
@@ -1631,7 +1646,7 @@ A1: seq is convergent and
 A2: ex k be Element of NAT st
   (for i be Element of NAT st k <= i holds seq.i <=e );
   reconsider cseq = NAT --> e as Real_Sequence;
-A3: cseq is convergent by SEQ_4:39;
+A3: cseq is convergent;
   consider k be Element of NAT such that
 A4: for i be Element of NAT st k <= i holds seq.i <=e by A2;
 A5: (seq ^\k) is convergent by A1,SEQ_4:33;

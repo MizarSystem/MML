@@ -79,6 +79,61 @@
 <Adjective nr="4"/>
 </Cluster>
 </FCluster>
+<FCluster aid="RELSET_1" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="24">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="30">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="4"/>
+</Cluster>
+</FCluster>
+<FCluster aid="RELSET_1" nr="5">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="4"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="24">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="32">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
 <CCluster aid="RELSET_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">

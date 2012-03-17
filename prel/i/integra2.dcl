@@ -11,9 +11,11 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
@@ -27,19 +29,19 @@
 </Signature>
 <RCluster aid="INTEGRA2" nr="1">
 <ArgTypes/>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="K" nr="54"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="37"/>
-<Adjective nr="42"/>
-<Adjective nr="54"/>
+<Adjective nr="24"/>
+<Adjective nr="39"/>
+<Adjective nr="44"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 </Registrations>

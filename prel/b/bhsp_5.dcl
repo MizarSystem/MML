@@ -33,7 +33,7 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
-<Adjective nr="87"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,7 +55,7 @@
 <Adjective nr="78"/>
 <Adjective nr="79"/>
 <Adjective nr="80"/>
-<Adjective nr="87"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -18,14 +18,15 @@ environ
  constructors PARTFUN1, DOMAIN_1, REAL_1, NAT_1, SEQM_3, SERIES_1, MEASURE3,
       MEASURE6, PARTFUN3, KURATO_2, RINFSUP1, PROB_3, SEQ_1, SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, MEMBERED, MEASURE1, MEASURE3, VALUED_0, SEQ_2;
+      XXREAL_0, XREAL_0, NAT_1, MEMBERED, MEASURE1, MEASURE3, VALUED_0, SEQ_2,
+      SEQ_4;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, SERIES_1, SUBSET_1;
  theorems FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, XREAL_1, SUPINF_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, PROB_2, RINFSUP1, SUPINF_2, SEQ_4, SEQM_3, CARD_3,
       SETLIM_1, PROB_1, SERIES_1, PROB_3, MEASURE1, MEASURE3, MEASURE6,
       ZFMISC_1, XXREAL_0, ORDINAL1, NUMBERS, XXREAL_2;
- schemes FUNCT_2, NAT_1, PARTFUN1, XBOOLE_0, KURATO_2;
+ schemes FUNCT_2, NAT_1, PARTFUN1, XBOOLE_0;
 
 begin
 
@@ -51,17 +52,17 @@ A1: C c= B;
     let x be set;
     assume x in A \ C;
     then (x in A & not x in B) or (x in A & x in B & not x in C)
-    by XBOOLE_0:def 4;
-    then x in A \ B or (x in A & x in B \ C) by XBOOLE_0:def 4;
-    then x in A \ B or x in A /\ (B \ C) by XBOOLE_0:def 3;
-    hence thesis by XBOOLE_0:def 2;
+    by XBOOLE_0:def 5;
+    then x in A \ B or (x in A & x in B \ C) by XBOOLE_0:def 5;
+    then x in A \ B or x in A /\ (B \ C) by XBOOLE_0:def 4;
+    hence thesis by XBOOLE_0:def 3;
   end;
   let x be set;
   assume x in (A \ B) \/ (A /\ (B \ C));
-  then x in A \ B or x in (A /\ (B \ C)) by XBOOLE_0:def 2;
-  then x in A \ B or (x in A & x in B \ C) by XBOOLE_0:def 3;
-  then x in A & not x in C by A1,XBOOLE_0:def 4;
-  hence thesis by XBOOLE_0:def 4;
+  then x in A \ B or x in (A /\ (B \ C)) by XBOOLE_0:def 3;
+  then x in A \ B or (x in A & x in B \ C) by XBOOLE_0:def 4;
+  then x in A & not x in C by A1,XBOOLE_0:def 5;
+  hence thesis by XBOOLE_0:def 5;
 end;
 
 definition
@@ -106,7 +107,7 @@ scheme LambdaSigmaSSeq { X() -> set, Si() -> SigmaField of X(),
   F(set) -> Element of Si() } :
   ex f being SetSequence of Si() st for n holds f.n = F(n)
 proof
-  ex f being SetSequence of X() st for n holds f.n = F(n) from KURATO_2:sch 1;
+  ex f being SetSequence of X() st for n holds f.n = F(n) from FUNCT_2:sch 4;
   then consider f be SetSequence of X() such that
 A1: for n holds f.n = F(n);
   for n holds f.n in Si()
@@ -127,7 +128,7 @@ registration
   proof
     reconsider Y = {} as Subset of X by XBOOLE_1:2;
     deffunc F(Element of NAT) = Y;
-    ex f being SetSequence of X st for n holds f.n = F(n) from KURATO_2:sch 1;
+    ex f being SetSequence of X st for n holds f.n = F(n) from FUNCT_2:sch 4;
     then consider A1 being SetSequence of X such that
 A1: for n holds A1.n = {};
     take A1;
@@ -286,15 +287,15 @@ A10:  x in A1.n by PROB_1:25;
 A11:  n < 1 + 1 by NAT_1:13;
       per cases by A11,NAT_1:14,22;
       suppose n = 0;
-        hence thesis by A2,A10,XBOOLE_0:def 2;
+        hence thesis by A2,A10,XBOOLE_0:def 3;
       end;
       suppose n = 1;
-        hence thesis by A2,A10,XBOOLE_0:def 2;
+        hence thesis by A2,A10,XBOOLE_0:def 3;
       end;
     end;
     let x;
     assume x in A \/ B;
-    then x in A1.0 or x in A1.1 by A2,XBOOLE_0:def 2;
+    then x in A1.0 or x in A1.1 by A2,XBOOLE_0:def 3;
     hence thesis by PROB_1:25;
   end;
 end;
@@ -381,7 +382,7 @@ A1: for n holds P.(ASeq.n) = 0;
 A2:   P[0]
       proof
         thus Partial_Sums(P * ASeq).0 = (P * ASeq).0 by SERIES_1:def 1
-          .= P.(ASeq.0) by PROB_2:11
+          .= P.(ASeq.0) by FUNCT_2:21
           .= 0 by A1;
       end;
 A3:   for k st P[k] holds P[k+1]
@@ -390,7 +391,7 @@ A3:   for k st P[k] holds P[k+1]
 A4:     P[k];
         thus Partial_Sums(P * ASeq).(k+1)
         = Partial_Sums(P * ASeq).k + (P * ASeq).(k+1) by SERIES_1:def 1
-          .= 0 + P.(ASeq.(k+1)) by A4,PROB_2:11
+          .= 0 + P.(ASeq.(k+1)) by A4,FUNCT_2:21
           .= 0 by A1;
       end;
       thus for k holds P[k] from NAT_1:sch 1(A2,A3);
@@ -529,7 +530,7 @@ A9: sup rng Eseq <= s by A4,XXREAL_2:def 3;
   proof
 A10: sup rng Eseq is UpperBound of rng Eseq by XXREAL_2:def 3;
     reconsider r1=sup rng Eseq as Real by A5,A6,XXREAL_2:57;
-    for n holds seq.n <= r1 by A1,A2,FUNCT_1:12,A10,XXREAL_2:def 1;
+    for n holds seq.n <= r1 by A1,A2,A10,FUNCT_1:12,XXREAL_2:def 1;
     hence thesis by RINFSUP1:9;
   end;
   hence thesis by A9,XXREAL_0:1;
@@ -570,7 +571,7 @@ A9: s <= inf rng Eseq by A4,XXREAL_2:def 4;
   proof
 A10: inf rng Eseq is LowerBound of rng Eseq by XXREAL_2:def 4;
     reconsider r1=inf rng Eseq as Real by A5,A6,XXREAL_2:58;
-    for n holds r1 <= seq.n by A1,A2,FUNCT_1:12,A10,XXREAL_2:def 2;
+    for n holds r1 <= seq.n by A1,A2,A10,FUNCT_1:12,XXREAL_2:def 2;
     hence thesis by RINFSUP1:10;
   end;
   hence thesis by A9,XXREAL_0:1;
@@ -733,7 +734,7 @@ A23:    p = (M*F).(n+1) & q = (M*F).n & p <= q by A21,A22,MEASURE1:62;
     end;
     then lim (P1 * ASeq) = M.(meet rng F) by A16,A17,MEASURE3:14
       .= P1.Intersection ASeq by SETLIM_1:8;
-    hence thesis by A19,A20,SEQ_4:52;
+    hence thesis by A19,A20;
   end;
   hence thesis by A9,A12,A13,PROB_1:def 13;
 end;
@@ -1410,7 +1411,7 @@ A24:      C c= union rng CSeq
             let x be set;
             assume x in C;
             then
-A25:        x in union rng F & not x in union rng BSeq by A11,XBOOLE_0:def 4;
+A25:        x in union rng F & not x in union rng BSeq by A11,XBOOLE_0:def 5;
             then consider Z being set such that
 A26:        x in Z & Z in rng F by TARSKI:def 4;
             consider n being set such that
@@ -1425,7 +1426,7 @@ A28:          x in BSeq.n;
               hence thesis by A25,A28,TARSKI:def 4;
             end;
             then
-A29:        x in F.n \ BSeq.n by A26,A27,XBOOLE_0:def 4;
+A29:        x in F.n \ BSeq.n by A26,A27,XBOOLE_0:def 5;
             ex Z being set st x in Z & Z in rng CSeq
             proof
 A30:          dom CSeq = NAT by FUNCT_2:def 1;
@@ -1553,8 +1554,8 @@ A9:   C c= D
       proof
         let x such that
 A10:    x in C;
-        x in A & not x in A1 by A10,XBOOLE_0:def 4;
-        hence thesis by A7,XBOOLE_0:def 4;
+        x in A & not x in A1 by A10,XBOOLE_0:def 5;
+        hence thesis by A7,XBOOLE_0:def 5;
       end;
       then C c= Omega by XBOOLE_1:1;
       hence thesis by A7,A9,Def4;
@@ -1714,7 +1715,7 @@ A27:      C c= union rng DSeq
             let x be set;
             assume x in C;
             then
-A28:        x in union rng F & not x in union rng CSeq by A20,XBOOLE_0:def 4;
+A28:        x in union rng F & not x in union rng CSeq by A20,XBOOLE_0:def 5;
             then consider Z being set such that
 A29:        x in Z & Z in rng F by TARSKI:def 4;
             consider n being set such that
@@ -1729,7 +1730,7 @@ A31:          x in CSeq.n;
               hence thesis by A28,A31,TARSKI:def 4;
             end;
             then
-A32:        x in F.n \ CSeq.n by A29,A30,XBOOLE_0:def 4;
+A32:        x in F.n \ CSeq.n by A29,A30,XBOOLE_0:def 5;
             ex Z being set st x in Z & Z in rng DSeq
             proof
 A33:          dom DSeq = NAT by FUNCT_2:def 1;
@@ -1990,8 +1991,10 @@ A76:  BSeq is non-descending;
         (comP * BSeq).n + 0 < 1 + 1 by A70,XREAL_1:10;
         hence thesis;
       end;
-      then comP * BSeq is bounded_above by SEQ_2:def 3;
-      hence thesis by A71,A76,SEQ_4:51;
+      hence
+K:     comP * BSeq is bounded_above by SEQ_2:def 3;
+       then comP * BSeq is non-decreasing by A71,A76;
+      hence comP * BSeq is convergent by A71,A76,K;
     end;
     for BSeq being SetSequence of COM(Sigma,P) st BSeq is non-descending
     holds (comP * BSeq is convergent & lim (comP * BSeq) = comP.Union BSeq)

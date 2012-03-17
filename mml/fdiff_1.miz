@@ -8,24 +8,26 @@ environ
 
  vocabularies PRE_TOPC, SEQ_1, PARTFUN1, SEQ_2, ORDINAL2, FUNCT_1, ARYTM_3,
       RELAT_1, SEQM_3, INCSP_1, ARYTM_1, ARYTM, RCOMP_1, BOOLE, ABSVALUE,
-      FCONT_1, LATTICES, FDIFF_1, FUNCOP_1, FRECHET2, SUBSET_1,
+      FCONT_1, LATTICES, FDIFF_1, FUNCOP_1, SUBSET_1,
       ANPROJ_1, OPPCAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, FUNCT_2, FUNCOP_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1,
+      ZFMISC_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_2, FUNCOP_1,
       VALUED_0, VALUED_1, SEQ_1, SEQ_2,
       SEQM_3, RELSET_1, PARTFUN1, PARTFUN2, RFUNCT_2, RCOMP_1, FCONT_1,
       XXREAL_0;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, RCOMP_1,
-      PARTFUN2, RFUNCT_2, FCONT_1, VALUED_1, SEQ_1;
+      PARTFUN2, RFUNCT_2, FCONT_1, VALUED_1, SEQ_1, REALSET1, FINSET_1,
+      SETFAM_1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, SEQM_3, RCOMP_1, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2,
-      FUNCOP_1;
+      FUNCOP_1, SEQ_4, REALSET1, SETFAM_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FCONT_1, XBOOLE_0, VALUED_1, RCOMP_1, SUBSET_1;
  theorems TARSKI, NAT_1, FUNCT_1, ABSVALUE, ZFMISC_1, SEQ_1, SEQ_2,
       SEQM_3, SEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1, RFUNCT_2, RCOMP_1, FCONT_1,
       FUNCT_2, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
-      FUNCOP_1, XREAL_1, COMPLEX1, VALUED_1;
+      FUNCOP_1, XREAL_1, COMPLEX1, VALUED_1, VALUED_0, ORDINAL1;
  schemes SEQ_1;
 
 begin
@@ -81,21 +83,6 @@ A1: for n holds s1.n=F(n) from SEQ_1:sch 1;
 end;
 reconsider cs = NAT --> 0 as Real_Sequence by FUNCOP_1:57;
 
-registration
-  cluster constant Real_Sequence;
-  existence
-  proof
-    take cs;
-    thus cs is constant;
-  end;
-end;
-
-registration
-  let s1 be constant Real_Sequence;
-  cluster -> constant subsequence of s1;
-  coherence by SEQM_3:54;
-end;
-
 reserve h for convergent_to_0 Real_Sequence;
 reserve c for constant Real_Sequence;
 
@@ -119,18 +106,19 @@ A1: dom f = REAL by FUNCOP_1:19;
     now
       let h;
 A2:   now
-        let n;
+        let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A3:     rng h c= dom f by A1; thus
-        ((h")(#)(f/*h)).n = (h").n*((f/*h).n) by SEQ_1:12
-          .= (h").n*(f.(h.n)) by A3,FUNCT_2:185
+        ((h")(#)(f/*h)).n = (h").n*((f/*h).n) by SEQ_1:12,X
+          .= (h").n*(f.(h.n)) by A3,FUNCT_2:185,X
           .= (h").n*0 by FUNCOP_1:13
           .= 0;
       end;
       then
-A4:   (h")(#)(f/*h) is constant by SEQM_3:def 6;
+A4:   (h")(#)(f/*h) is constant by VALUED_0:def 18;
       ((h")(#)(f/*h)).0 = 0 by A2;
       hence (h")(#)(f/*h) is convergent & lim ((h")(#)(f/*h)) = 0
-      by A4,SEQ_4:39,40;
+      by A4,SEQ_4:40;
     end;
     hence thesis;
   end;
@@ -184,8 +172,6 @@ A1: for p holds L1.p = g1*p by Def4;
   consider g2 such that
 A2: for p holds L2.p = g2*p by Def4;
 A3: L1 is total & L2 is total by Def4;
-  then
-A4: L1+L2 is total;
   now
     let p;
     thus (L1+L2).p = L1.p + L2.p by A3,RFUNCT_1:72
@@ -193,8 +179,7 @@ A4: L1+L2 is total;
       .= g1*p + g2*p by A2
       .= (g1+g2)*p;
   end;
-  hence L1+L2 is LINEAR by A4,Def4;
-A5: L1-L2 is total by A3;
+  hence L1+L2 is LINEAR by A3,Def4;
   now
     let p;
     thus (L1-L2).p = L1.p - L2.p by A3,RFUNCT_1:72
@@ -202,7 +187,7 @@ A5: L1-L2 is total by A3;
       .= g1*p - g2*p by A2
       .= (g1-g2)*p;
   end;
-  hence thesis by A5,Def4;
+  hence thesis by A3,Def4;
 end;
 
 theorem Th7:
@@ -211,23 +196,19 @@ proof
   consider g such that
 A1: for p holds L.p = g*p by Def4;
 A2: L is total by Def4;
-  then
-A3: r(#)L is total;
   now
     let p;
     thus (r(#)L).p = r*L.p by A2,RFUNCT_1:73
       .= r*(g*p) by A1
       .= r*g*p;
   end;
-  hence thesis by A3,Def4;
+  hence thesis by A2,Def4;
 end;
 
 theorem Th8:
   R1+R2 is REST & R1-R2 is REST & R1(#)R2 is REST
 proof
 A1: R1 is total & R2 is total by Def3;
-  then
-A2: R1+R2 is total;
   now
     let h;
 A3: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by Def3;
@@ -238,8 +219,7 @@ A5: (h")(#)((R1+R2)/*h) = (h")(#)((R1/*h)+(R2/*h)) by A1,RFUNCT_2:32
     thus lim ((h")(#)((R1+R2)/*h)) = 0+0 by A3,A4,A5,SEQ_2:20
       .= 0;
   end;
-  hence R1+R2 is REST by A2,Def3;
-A6: R1-R2 is total by A1;
+  hence R1+R2 is REST by A1,Def3;
   now
     let h;
 A7: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by Def3;
@@ -250,8 +230,7 @@ A9: (h")(#)((R1-R2)/*h) = (h")(#)((R1/*h)-(R2/*h)) by A1,RFUNCT_2:32
     thus lim ((h")(#)((R1-R2)/*h)) = 0-0 by A7,A8,A9,SEQ_2:26
       .= 0;
   end;
-  hence R1-R2 is REST by A6,Def3;
-A10: R1(#)R2 is total by A1;
+  hence R1-R2 is REST by A1,Def3;
   now
     let h;
 A11: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by Def3;
@@ -272,15 +251,13 @@ A17: (h")(#)((R1(#)R2)/*h) = ((R1/*h)(#)(R2/*h))/"h by A1,RFUNCT_2:32
     thus lim ((h")(#)((R1(#)R2)/*h)) = 0*0 by A12,A15,A16,A17,SEQ_2:29
       .= 0;
   end;
-  hence thesis by A10,Def3;
+  hence thesis by A1,Def3;
 end;
 
 theorem Th9:
   r(#)R is REST
 proof
 A1: R is total by Def3;
-  then
-A2: r(#)R is total;
   now
     let h;
 A3: (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0 by Def3;
@@ -290,7 +267,7 @@ A4: (h")(#)((r(#)R)/*h) = (h")(#)(r(#)(R/*h)) by A1,RFUNCT_2:33
     thus lim ((h")(#)((r(#)R)/*h)) = r*0 by A3,A4,SEQ_2:22
       .= 0;
   end;
-  hence thesis by A2,Def3;
+  hence thesis by A1,Def3;
 end;
 
 theorem Th10:
@@ -299,7 +276,7 @@ proof
 A1: L1 is total by Def4;
 A2: L2 is total by Def4;
   hence
-A3: L1(#)L2 is total by A1;
+    L1(#)L2 is total by A1;
   consider x1 such that
 A4: for p holds L1.p=x1*p by Def4;
   consider x2 such that
@@ -313,7 +290,7 @@ A6: h is convergent & lim h=0 by Def1;
       then
 A7:   h.n<>0 by SEQ_1:7;
       thus ((h")(#)((L1(#)L2)/*h)).n=(h").n *((L1(#)L2)/*h).n by SEQ_1:12
-        .=(h").n*(L1(#)L2).(h.n) by A3,RFUNCT_2:30
+        .=(h").n*(L1(#)L2).(h.n) by A1,A2,FUNCT_2:192
         .=(h").n*(L1.(h.n)*L2.(h.n)) by A1,A2,RFUNCT_1:72
         .=(h").n*L1.(h.n)*L2.(h.n)
         .=((h.n)")*L1.(h.n)*L2.(h.n) by VALUED_1:10
@@ -338,8 +315,6 @@ theorem Th11:
 proof
 A1: R is total by Def3;
 A2: L is total by Def4;
-  then
-A3: R(#)L is total by A1;
   consider x1 such that
 A4: for p holds L.p=x1*p by Def4;
 A5: now
@@ -349,7 +324,7 @@ A6: (h")(#)((R(#)L)/*h)=(h")(#)((R/*h)(#)(L/*h)) by A1,A2,RFUNCT_2:32
 A7: h is convergent & lim h=0 by Def1;
     now
       let n;
-      thus (L/*h).n=L.(h.n) by A2,RFUNCT_2:30
+      thus (L/*h).n=L.(h.n) by A2,FUNCT_2:192
         .=x1*(h.n) by A4
         .=(x1(#)h).n by SEQ_1:13;
     end;
@@ -364,8 +339,8 @@ A11: (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h))=0 by Def3;
     thus lim ((h")(#)((R(#)L)/*h))=0*0 by A6,A9,A10,A11,SEQ_2:29
       .=0;
   end;
-  hence R(#)L is REST by A3,Def3;
-  thus thesis by A3,A5,Def3;
+  hence R(#)L is REST by A1,A2,Def3;
+  thus thesis by A1,A2,A5,Def3;
 end;
 
 definition
@@ -457,22 +432,21 @@ A22:  0<g/(n+2) by A18,XREAL_1:141;
       then g/(n+2)<g/1 by A18,XREAL_1:78;
       then
 A23:  x0 + g/(n+2)<x0 + g by XREAL_1:8;
-      -g<-0 by A18,XREAL_1:26;
-      then x0+-g<x0+g/(n+2) by A22,XREAL_1:8;
-      then x0+g/(n+2) in {p2 : x0-g<p2 & p2<x0+g} by A23;
+      x0+-g<x0+g/(n+2) by A22,XREAL_1:8,A18;
       then
-A24:  x0+g/(n+2) in ].x0-g,x0+g.[;
+A24:  x0+g/(n+2) in ].x0-g,x0+g.[ by A23;
       take x=x0+g/(n+2);
       thus thesis by A17,A18,A19,A24;
     end;
 A25: now
-      let n;
-      ex x st x in N & x in N1 & h.n=x-x0 by A21;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
+      then ex x st x in N & x in N1 & h.n=x-x0 by A21;
       then
 A26:  r*(h.n) + R.(h.n) = s*(h.n) + R1.(h.n) by A15;
       h is non-zero by Def1;
       then
-A27:  h.n <> 0 by SEQ_1:7;
+A27:  h.n <> 0 by SEQ_1:7,X;
 A28:  (r*(h.n))/(h.n)+(R.(h.n))/(h.n)=(s*(h.n)+R1.(h.n))/(h.n)
       by A26,XCMPLX_1:63;
 A29:  (r*(h.n))/(h.n) = r*((h.n)/(h.n)) by XCMPLX_1:75
@@ -482,7 +456,7 @@ A29:  (r*(h.n))/(h.n) = r*((h.n)/(h.n)) by XCMPLX_1:75
         .= s*1 by A27,XCMPLX_1:60
         .= s;
       then
-A30:  r + (R.(h.n))/(h.n) = s + (R1.(h.n))/(h.n) by A28,A29,XCMPLX_1 :63;
+A30:  r + (R.(h.n))/(h.n) = s + (R1.(h.n))/(h.n) by A28,A29,XCMPLX_1:63;
       R is total by Def3;
       then dom R = REAL by PARTFUN1:def 4;
       then
@@ -493,17 +467,17 @@ A31:  rng h c= dom R;
 A32:  rng h c= dom R1;
 A33:  (R.(h.n))/(h.n) = (R.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R.(h.n))*(h".n) by VALUED_1:10
-        .= ((R/*h).n)*(h".n) by A31,FUNCT_2:185
-        .= ((h")(#)(R/*h)).n by SEQ_1:12;
+        .= ((R/*h).n)*(h".n) by A31,FUNCT_2:185,X
+        .= ((h")(#)(R/*h)).n by SEQ_1:12,X;
       (R1.(h.n))/(h.n) = (R1.(h.n))*(h.n)" by XCMPLX_0:def 9
         .= (R1.(h.n))*(h".n) by VALUED_1:10
-        .= ((R1/*h).n)*(h".n) by A32,FUNCT_2:185
-        .= ((h")(#)(R1/*h)).n by SEQ_1:12;
+        .= ((R1/*h).n)*(h".n) by A32,FUNCT_2:185,X
+        .= ((h")(#)(R1/*h)).n by SEQ_1:12,X;
       then r = s + (((h")(#)(R1/*h)).n - ((h")(#)(R/*h)).n) by A30,A33;
-      hence r - s = (((h")(#)(R1/*h))-((h")(#)(R/*h))).n by RFUNCT_2:6;
+      hence r - s = (((h")(#)(R1/*h))-((h")(#)(R/*h))).n by RFUNCT_2:6,X;
     end;
     then
-A34: ((h")(#)(R1/*h))-((h")(#)(R/*h)) is constant by SEQM_3:def 6;
+A34: ((h")(#)(R1/*h))-((h")(#)(R/*h)) is constant by VALUED_0:def 18;
     (((h")(#)(R1/*h))-((h")(#)(R/*h))).1 = r-s by A25;
     then
 A35: lim (((h")(#)(R1/*h))-((h")(#)(R/*h))) = r-s by A34,SEQ_4:40;
@@ -690,16 +664,17 @@ A4: dom R = REAL by FUNCOP_1:19;
   now
     let h;
 A5: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A6:   rng h c= dom R by A4;
-      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12
-        .= (h".n)*(R.(h.n)) by A6,FUNCT_2:185
+      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12,X
+        .= (h".n)*(R.(h.n)) by A6,FUNCT_2:185,X
         .= (h".n)*0 by FUNCOP_1:13
         .= 0;
     end;
     then
-A7: (h")(#)(R/*h) is constant by SEQM_3:def 6;
-    hence (h")(#)(R/*h) is convergent by SEQ_4:39;
+A7: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+    hence (h")(#)(R/*h) is convergent;
     ((h")(#)(R/*h)).0 = 0 by A5;
     hence lim ((h")(#)(R/*h)) = 0 by A7,SEQ_4:40;
   end;
@@ -755,21 +730,8 @@ registration
     h^\n is convergent_to_0
     proof
 A1:   h is non-zero & h is convergent & lim h = 0 by Def1;
-      hence h^\n is non-zero by SEQM_3:40;
+      hence h^\n is non-zero;
       thus thesis by A1,SEQ_4:33;
-    end;
-    hence thesis;
-  end;
-end;
-
-registration
-  let c,n;
-  cluster c^\n -> constant;
-  coherence
-  proof
-    c^\n is constant
-    proof c^\n is subsequence of c by SEQM_3:47;
-      hence c^\n is constant;
     end;
     hence thesis;
   end;
@@ -801,26 +763,22 @@ A7: x0 in N2
   proof
 A8: x0 + 0 < x0 + g by A6,XREAL_1:10;
     x0 - g < x0 - 0 by A6,XREAL_1:17;
-    then x0 in {r: x0 - g < r & r < x0 + g} by A8;
-    hence thesis by A6;
+    hence thesis by A6,A8;
   end;
   ex n st rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2
   proof
-A9: c is convergent by SEQ_4:39;
     x0 in rng c by A2,TARSKI:def 1;
     then
 A10: lim c = x0 by SEQ_4:40;
 A11: h is convergent & lim h = 0 by Def1;
     then
-A12: lim (h + c) = 0 + x0 by A9,A10,SEQ_2:20
+A12: lim (h + c) = 0 + x0 by A10,SEQ_2:20
       .= x0;
-    h + c is convergent by A9,A11,SEQ_2:19;
+    h + c is convergent by A11,SEQ_2:19;
     then consider n such that
 A13: for m being Element of NAT st n<=m holds abs((h+c).m-x0)<g
     by A6,A12,SEQ_2:def 7;
-    c^\n is subsequence of c by SEQM_3:47;
-    then
-A14: rng (c^\n) = {x0} by A2,SEQM_3:55;
+A14: rng (c^\n) = {x0} by A2,VALUED_0:26;
     take n;
     thus rng (c^\n) c= N2
     proof
@@ -831,13 +789,12 @@ A14: rng (c^\n) = {x0} by A2,SEQM_3:55;
     let y;
     assume y in rng ((h+c)^\n);
     then consider m such that
-A15: y = ((h+c)^\n).m by RFUNCT_2:9;
+A15: y = ((h+c)^\n).m by FUNCT_2:190;
     n + 0 <= n+m by XREAL_1:9;
     then abs((h+c).(n+m)-x0)<g by A13;
     then -g < (h+c).(m+n) - x0 & (h+c).(m+n) - x0 < g by SEQ_2:9;
     then -g < ((h+c)^\n).m - x0 & ((h+c)^\n).m - x0 < g by NAT_1:def 3;
     then x0 +-g < ((h+c)^\n).m & ((h+c)^\n).m < x0 + g by XREAL_1:21,22;
-    then ((h+c)^\n).m in {r:  x0 - g < r & r < x0 + g};
     hence y in N2 by A6,A15;
   end;
   then consider n such that
@@ -845,9 +802,7 @@ A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
 A17: rng (c^\n) c= dom f
   proof
     let y;
-    c^\n is subsequence of c by SEQM_3:47;
-    then
-A18: rng (c^\n) = rng c by SEQM_3:55;
+A18: rng (c^\n) = rng c by VALUED_0:26;
     assume y in rng (c^\n);
     then y = x0 by A2,A18,TARSKI:def 1;
     then y in N by A5,A7;
@@ -880,15 +835,14 @@ A22: for x st x in N2 holds f.x - f.x0 = L.(x-x0) + R.(x-x0) by A4,A5;
 A23: for k holds f.(((h+c)^\n).k) - f.((c^\n).k) = L.((h^\n).k) + R.((h^\n).k)
   proof
     let k;
-    ((h+c)^\n).k in rng ((h+c)^\n) by RFUNCT_2:10;
+    ((h+c)^\n).k in rng ((h+c)^\n) by VALUED_0:28;
     then
 A24: ((h+c)^\n).k in N2 by A16;
 A25: ((h+c)^\n).k - (c^\n).k = (h^\n + c^\n).k - (c^\n).k by SEQM_3:37
       .= (h^\n).k + (c^\n).k - (c^\n).k by SEQ_1:11
       .= (h^\n).k;
-A26: (c^\n).k in rng (c^\n) by RFUNCT_2:10;
-    c^\n is subsequence of c by SEQM_3:47;
-    then rng (c^\n) = rng c by SEQM_3:55;
+A26: (c^\n).k in rng (c^\n) by VALUED_0:28;
+    rng (c^\n) = rng c by VALUED_0:26;
     then (c^\n).k = x0 by A2,A26,TARSKI:def 1;
     hence thesis by A4,A5,A24,A25;
   end;
@@ -903,8 +857,8 @@ A29: f/*((h+c)^\n) - f/*(c^\n) = L/*(h^\n) + R/*(h^\n)
         .= f.(((h+c)^\n).k) - (f/*(c^\n)).k by A19,FUNCT_2:185
         .= f.(((h+c)^\n).k) - f.((c^\n).k) by A17,FUNCT_2:185
         .= L.((h^\n).k) + R.((h^\n).k) by A23
-        .= (L/*(h^\n)).k + R.((h^\n).k) by A27,RFUNCT_2:30
-        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A28,RFUNCT_2:30
+        .= (L/*(h^\n)).k + R.((h^\n).k) by A27,FUNCT_2:192
+        .= (L/*(h^\n)).k + (R/*(h^\n)).k by A28,FUNCT_2:192
         .= (L/*(h^\n) + R/*(h^\n)).k by SEQ_1:11;
     end;
     hence thesis by FUNCT_2:113;
@@ -932,7 +886,7 @@ A34:  (h^\n).m <> 0 by SEQ_1:7;
         .= ((L/*(h^\n)).m)*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m
          by VALUED_1:10
         .= (L.((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)
-      (h^\n)").m by A27,RFUNCT_2:30
+      (h^\n)").m by A27,FUNCT_2:192
         .= (s*((h^\n).m))*((h^\n).m)" + ((R/*(h^\n))(#)(h^\n)").m by A32
         .= s*(((h^\n).m)*((h^\n).m)") + ((R/*(h^\n))(#)(h^\n)").m
         .= s*1 + ((R/*(h^\n))(#)(h^\n)").m by A34,XCMPLX_0:def 7
@@ -960,8 +914,8 @@ A39:  n1<=k;
   end;
 A40: N2 c= dom f by A1,A5,XBOOLE_1:1;
 A41: ((L/*(h^\n) + R/*(h^\n))(#)(h^\n)") = ((((f/*(h+c))^\n)-f/*(c^\n))(#)
-  (h^\n)") by A21,A29,RFUNCT_2:22
-    .=((((f/*(h+c))^\n)-((f/*c)^\n))(#)(h^\n)") by A20,RFUNCT_2:22
+  (h^\n)") by A21,A29,VALUED_0:27
+    .=((((f/*(h+c))^\n)-((f/*c)^\n))(#)(h^\n)") by A20,VALUED_0:27
     .=((((f/*(h+c))-(f/*c))^\n)(#)(h^\n)") by SEQM_3:39
     .=((((f/*(h+c))-(f/*c))^\n)(#)((h")^\n)) by SEQM_3:41
     .=((((f/*(h+c))-(f/*c))(#) h")^\n) by SEQM_3:42;
@@ -1004,8 +958,8 @@ A12: now
     assume
 A13: x in N;
 A14: x0 in N by RCOMP_1:37;
-    thus (f1+f2).x - (f1+f2).x0 = (f1.x+f2.x) - (f1+f2).x0 by A11,A13,VALUED_1
-    : def 1
+    thus (f1+f2).x - (f1+f2).x0 = (f1.x+f2.x) - (f1+f2).x0 by A11,A13,
+VALUED_1:def 1
       .=f1.x+f2.x - (f1.x0+f2.x0) by A11,A14,VALUED_1:def 1
       .=(f1.x - f1.x0) + (f2.x - f2.x0)
       .=L1.(x-x0)+R1.(x-x0) + (f2.x - f2.x0) by A4,A7,A13
@@ -1157,7 +1111,7 @@ A14: f1.x - f1.x0 + f1.x0 = L1.(x-x0) + R1.(x-x0) + f1.x0 by A4,A7;
     thus (f1(#)f2).x - (f1(#)f2).x0 = (f1.x) * (f2.x) - (f1(#)
     f2).x0 by VALUED_1:5
       .=(f1.x)*(f2.x)+-(f1.x)*(f2.x0)+(f1.x)*(f2.x0)-(f1.x0)*(f2.x0) by
-    VALUED_1:5
+VALUED_1:5
       .=(f1.x)*((f2.x)-(f2.x0))+((f1.x)-(f1.x0))*(f2.x0)
       .=(f1.x)*((f2.x)-(f2.x0))+(L1.(x-x0)+R1.(x-x0))*(f2.x0) by A4,A7,A13
       .=(f1.x)*((f2.x)-(f2.x0))+((f2.x0)*L1.(x-x0)+R1.(x-x0)*(f2.x0))
@@ -1219,16 +1173,17 @@ A3: dom R = REAL by FUNCOP_1:19;
   now
     let h;
 A4: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A5:   rng h c= dom R by A3;
-      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12
-        .= (h".n)*(R.(h.n)) by A5,FUNCT_2:185
+      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12,X
+        .= (h".n)*(R.(h.n)) by A5,FUNCT_2:185,X
         .= (h".n)*0 by FUNCOP_1:13
         .= 0;
     end;
     then
-A6: (h")(#)(R/*h) is constant by SEQM_3:def 6;
-    hence (h")(#)(R/*h) is convergent by SEQ_4:39;
+A6: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+    hence (h")(#)(R/*h) is convergent;
     ((h")(#)(R/*h)).0 = 0 by A4;
     hence lim ((h")(#)(R/*h)) = 0 by A6,SEQ_4:40;
   end;
@@ -1432,16 +1387,17 @@ A3: dom R = REAL by FUNCOP_1:19;
   now
     let h;
 A4: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A5:   rng h c= dom R by A3;
-      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12
-        .=(h".n)*(R.(h.n)) by A5,FUNCT_2:185
+      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12,X
+        .=(h".n)*(R.(h.n)) by A5,FUNCT_2:185,X
         .=(h".n)*0 by FUNCOP_1:13
         .=0;
     end;
     then
-A6: (h")(#)(R/*h) is constant by SEQM_3:def 6;
-    hence (h")(#)(R/*h) is convergent by SEQ_4:39;
+A6: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+    hence (h")(#)(R/*h) is convergent;
     ((h")(#)(R/*h)).0 = 0 by A4;
     hence lim ((h")(#)(R/*h)) = 0 by A6,SEQ_4:40;
   end;
@@ -1451,7 +1407,7 @@ A7: now
     assume
 A8: x0 in Z;
     then
-A9: x0 in Z/\dom f by A1,XBOOLE_0:def 3;
+A9: x0 in Z/\dom f by A1,XBOOLE_0:def 4;
     consider N being Neighbourhood of x0 such that
 A10: N c= Z by A8,RCOMP_1:39;
 A11: N c= dom f by A1,A10,XBOOLE_1:1;
@@ -1459,7 +1415,7 @@ A11: N c= dom f by A1,A10,XBOOLE_1:1;
     proof
       let x;
       assume x in N;
-      then x in Z/\dom f by A10,A11,XBOOLE_0:def 3;
+      then x in Z/\dom f by A10,A11,XBOOLE_0:def 4;
       hence f.x-f.x0=r-f.x0 by A2
         .=r - r by A2,A9
         .=L.(x-x0)+0 by FUNCOP_1:13
@@ -1473,7 +1429,7 @@ A12: f is_differentiable_on Z by A1,Th16;
   assume
 A13: x0 in Z;
   then
-A14: x0 in Z/\dom f by A1,XBOOLE_0:def 3;
+A14: x0 in Z/\dom f by A1,XBOOLE_0:def 4;
 A15: f is_differentiable_in x0 by A7,A13;
   consider N being Neighbourhood of x0 such that
 A16: N c= Z by A13,RCOMP_1:39;
@@ -1482,7 +1438,7 @@ A18: for x st x in N holds f.x-f.x0=L.(x-x0)+R.(x-x0)
   proof
     let x;
     assume x in N;
-    then x in Z/\dom f by A16,A17,XBOOLE_0:def 3;
+    then x in Z/\dom f by A16,A17,XBOOLE_0:def 4;
     hence f.x - f.x0 = r - f.x0 by A2
       .=r - r by A2,A14
       .=L.(x-x0) + 0 by FUNCOP_1:13
@@ -1518,16 +1474,17 @@ A5: dom R = REAL by FUNCOP_1:19;
   now
     let h;
 A6: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A7:   rng h c= dom R by A5;
-      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12
-        .=(h".n)*(R.(h.n)) by A7,FUNCT_2:185
+      thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by SEQ_1:12,X
+        .=(h".n)*(R.(h.n)) by A7,FUNCT_2:185,X
         .=(h".n)*0 by FUNCOP_1:13
         .=0;
     end;
     then
-A8: (h")(#)(R/*h) is constant by SEQM_3:def 6;
-    hence (h")(#)(R/*h) is convergent by SEQ_4:39;
+A8: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+    hence (h")(#)(R/*h) is convergent;
     ((h")(#)(R/*h)).0 = 0 by A6;
     hence lim ((h")(#)(R/*h)) = 0 by A8,SEQ_4:40;
   end;
@@ -1597,13 +1554,12 @@ A5: 0<g & N=].x0-g,x0+g.[ by RCOMP_1:def 7;
     deffunc G(Real) = s1.$1-s2.$1;
     consider s3 such that
 A6: for n holds s3.n=G(n) from SEQ_1:sch 1;
-A7: s2 is convergent by SEQ_4:39;
 A8: lim s2 = s2.0 by SEQ_4:41
       .=x0 by FUNCOP_1:13;
 A9: s3=s1-s2 by A6,RFUNCT_2:6;
     then
-A10: s3 is convergent by A4,A7,SEQ_2:25;
-A11: lim s3 =x0-x0 by A4,A7,A8,A9,SEQ_2:26
+A10: s3 is convergent by A4,SEQ_2:25;
+A11: lim s3 =x0-x0 by A4,A8,A9,SEQ_2:26
       .=0;
 A12: now
       given n such that
@@ -1630,7 +1586,7 @@ A18: rng c = {x0}
         let y;
         assume y in rng c;
         then consider n such that
-A19:    y=(s2^\l).n by RFUNCT_2:9;
+A19:    y=(s2^\l).n by FUNCT_2:190;
         y=s2.(n+l) by A19,NAT_1:def 3;
         then y=x0 by FUNCOP_1:13;
         hence y in {x0} by TARSKI:def 1;
@@ -1641,14 +1597,14 @@ A19:    y=(s2^\l).n by RFUNCT_2:9;
 A20:  y=x0 by TARSKI:def 1;
       c.0=s2.(0+l) by NAT_1:def 3
         .= y by A20,FUNCOP_1:13;
-      hence y in rng c by RFUNCT_2:9;
+      hence y in rng c by VALUED_0:28;
     end;
     rng (h+c) c= N
     proof
       let y;
       assume y in rng(h+c);
       then consider n such that
-A21:  y=(h+c).n by RFUNCT_2:9;
+A21:  y=(h+c).n by FUNCT_2:190;
       (h+c).n=((s1-s2+s2)^\l).n by A9,SEQM_3:37
         .=(s1-s2+s2).(n+l) by NAT_1:def 3
         .=(s1-s2).(n+l)+s2.(n+l) by SEQ_1:11
@@ -1667,7 +1623,7 @@ A23: lim (h(#)(h"(#)(f/*(h+c) - f/*c))) =0*lim(h"(#)
       let n;
 A24:  h.n<>0 by A16;
 thus (h(#)(h"(#)(f/*(h+c) - f/*c))).n
-         =h.n *(h"(#)(f/*(h+c) - f/*c)).n by SEQ_1: 12
+         =h.n *(h"(#)(f/*(h+c) - f/*c)).n by SEQ_1:12
         .=h.n*((h").n*(f/*(h+c) - f/*c).n) by SEQ_1:12
         .=h.n*(((h.n)")*(f/*(h+c) - f/*c).n) by VALUED_1:10
         .=h.n*((h.n)")*(f/*(h+c) - f/*c).n
@@ -1677,7 +1633,7 @@ thus (h(#)(h"(#)(f/*(h+c) - f/*c))).n
     then
 A25: h(#)(h"(#)(f/*(h+c) - f/*c))=f/*(h+c)-f/*c by FUNCT_2:113;
     then
-A26: f/*(h+c)-f/*c is convergent by A15,A22,SEQ_2:28;
+A26: f/*(h+c)-f/*c is convergent by A10,A22,SEQ_2:28;
 A27: now
       let p be real number such that
 A28:  0<p;
@@ -1716,7 +1672,7 @@ A33: f/*(h+c)-f/*c+(f/*c)=f/*(h+c) by FUNCT_2:113;
     end;
     then
 A34: f/*(h+c)-f/*c+(f/*c)=f/*(s1^\l) by A33,FUNCT_2:113
-      .=(f/*s1)^\l by A4,RFUNCT_2:22;
+      .=(f/*s1)^\l by A4,VALUED_0:27;
     hence f/*s1 is convergent by A31,SEQ_4:35;
     thus f.x0=lim(f/*s1) by A31,A32,A34,SEQ_4:36;
   end;
@@ -1802,7 +1758,6 @@ A6: now
     then consider M being real number such that
 A7: M>0 & for n holds abs(((h")(#)(R/*h)).n)<M by SEQ_2:15;
     set s3 = cs;
-A8: s3 is convergent by SEQ_4:39;
 A9: s3.1 = 0 by FUNCOP_1:13;
     then
 A10: lim s3 = 0 by SEQ_4:40;
@@ -1834,8 +1789,8 @@ A18:  abs((h.n)"*(R/*h).n)<=M by A7;
       hence abs((R/*h)).n<=(M(#)abs (h)).n by SEQ_1:16;
     end;
     then
-A19: abs(R/*h) is convergent by A8,A14,A15,SEQ_2:33;
-    lim abs(R/*h)=0 by A8,A10,A14,A15,A16,SEQ_2:34;
+A19: abs(R/*h) is convergent by A14,A15,SEQ_2:33;
+    lim abs(R/*h)=0 by A10,A14,A15,A16,SEQ_2:34;
     hence R/*h is convergent & lim (R/*h)=R.0 by A4,A19,SEQ_4:28;
   end;
      now
@@ -1890,7 +1845,6 @@ proof
   let f be differentiable PartFunc of REAL, REAL;
   assume
 A1: Z c= dom f;
-  f is_differentiable_on dom f by DifDef; then
-  f is_differentiable_on Z by A1,Th34;
-  hence thesis;
+  f is_differentiable_on dom f by DifDef;
+  hence thesis by A1,Th34;
 end;

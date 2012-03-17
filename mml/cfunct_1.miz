@@ -7,8 +7,8 @@
 environ
 
  vocabularies PARTFUN1, COMPLEX1, ARYTM, ARYTM_3, RELAT_1, BOOLE, FINSEQ_4,
-      FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE,
-      CFUNCT_1, SEQM_3, LATTICES, SEQ_2, VALUED_0;
+      FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, ABSVALUE,
+      CFUNCT_1, SEQM_3, LATTICES, SEQ_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0,
       RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2,
@@ -16,7 +16,7 @@ environ
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, PARTFUN2, VALUED_1,
       RFUNCT_1, SEQ_1, SEQ_2, NAT_1;
  registrations RELSET_1, NUMBERS, XREAL_0, MEMBERED, COMPLEX1, VALUED_0,
-      XBOOLE_0;
+      XBOOLE_0, RFUNCT_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, VALUED_1, SEQ_2;
  theorems TARSKI, SUBSET_1, FUNCT_1, PARTFUN1, PARTFUN2, RFUNCT_1, COMPLEX1,
@@ -107,7 +107,7 @@ A1: dom (f1+f2) = dom f1 /\ dom f2 by VALUED_1:def 1;
     let c;
     assume
 A2: c in dom (f1+f2);
-    then c in dom f1 & c in dom f2 by A1,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by A1,XBOOLE_0:def 4;
     then
 A3: f1.c = f1/.c & f2.c = f2/.c by PARTFUN1:def 8;
     thus (f1+f2)/.c = (f1+f2).c by A2,PARTFUN1:def 8
@@ -127,8 +127,8 @@ A1: dom (f1-f2) = dom f1 /\ dom(-f2) by VALUED_1:def 1;
     assume
 A2: c in dom (f1-f2);
 A3: dom -f2 = dom f2 by VALUED_1:8;
-A4: c in dom -f2 by A1,A2,XBOOLE_0:def 3;
-    c in dom f1 by A1,A2,XBOOLE_0:def 3;
+A4: c in dom -f2 by A1,A2,XBOOLE_0:def 4;
+    c in dom f1 by A1,A2,XBOOLE_0:def 4;
     then
 A5: f1/.c = f1.c by PARTFUN1:def 8;
     thus (f1-f2)/.c = (f1-f2).c by A2,PARTFUN1:def 8
@@ -147,7 +147,7 @@ A1: dom (f1(#)f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
     let c;
     assume
 A2: c in dom (f1(#)f2);
-    then c in dom f1 & c in dom f2 by A1,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by A1,XBOOLE_0:def 4;
     then
 A3: f1.c = f1/.c & f2.c = f2/.c by PARTFUN1:def 8;
     thus (f1(#)f2)/.c = (f1(#)f2).c by A2,PARTFUN1:def 8
@@ -212,7 +212,7 @@ proof
     assume
 A1: x in dom (f1(#)f2) \ (f1(#)f2)"{0};
     then
-A2: x in dom (f1(#)f2) & not x in (f1(#)f2)"{0c} by XBOOLE_0:def 4;
+A2: x in dom (f1(#)f2) & not x in (f1(#)f2)"{0c} by XBOOLE_0:def 5;
     reconsider x1=x as Element of C by A1;
     not (f1(#)f2)/.x1 in {0c} by A2,PARTFUN2:44;
     then (f1(#)f2)/.x1 <> 0c by TARSKI:def 1;
@@ -222,11 +222,11 @@ A2: x in dom (f1(#)f2) & not x in (f1(#)f2)"{0c} by XBOOLE_0:def 4;
     by A2,Th5,TARSKI:def 1;
 
 then x1 in dom f1 & x1 in dom f2 & not x1 in (f1)"{0c} & not (f2/.x1) in {0c }
-    by PARTFUN2:44,XBOOLE_0:def 3;
-    then x in dom f1 \ (f1)"{0c} & x1 in dom f2 & not x1 in (f2)"{0c}
     by PARTFUN2:44,XBOOLE_0:def 4;
-    then x in dom f1 \ (f1)"{0c} & x in dom f2 \ (f2)"{0c} by XBOOLE_0:def 4;
-    hence x in (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0}) by XBOOLE_0:def 3;
+    then x in dom f1 \ (f1)"{0c} & x1 in dom f2 & not x1 in (f2)"{0c}
+    by PARTFUN2:44,XBOOLE_0:def 5;
+    then x in dom f1 \ (f1)"{0c} & x in dom f2 \ (f2)"{0c} by XBOOLE_0:def 5;
+    hence x in (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0}) by XBOOLE_0:def 4;
   end;
   thus (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0}) c= dom (f1(#)f2) \
   (f1(#)f2)"{0}
@@ -234,10 +234,10 @@ then x1 in dom f1 & x1 in dom f2 & not x1 in (f1)"{0c} & not (f2/.x1) in {0c }
     let x;
     assume
 A3: x in (dom f1 \ (f1)"{0}) /\ (dom f2 \ (f2)"{0});
-    then x in dom f1 \ (f1)"{0c} & x in dom f2 \ (f2)"{0c} by XBOOLE_0:def 3;
+    then x in dom f1 \ (f1)"{0c} & x in dom f2 \ (f2)"{0c} by XBOOLE_0:def 4;
     then
 A4: x in dom f1 & not x in (f1)"{0c} & x in dom f2 & not x in (f2)"{0c }
-    by XBOOLE_0:def 4;
+    by XBOOLE_0:def 5;
     reconsider x1=x as Element of C by A3;
     not (f1/.x1) in {0c} by A4,PARTFUN2:44;
     then
@@ -246,13 +246,13 @@ A5: (f1/.x1) <> 0c by TARSKI:def 1;
     then (f2/.x1) <> 0c by TARSKI:def 1;
     then
 A6: (f1/.x1) * (f2/.x1) <>0c by A5,XCMPLX_1:6;
-    x1 in dom f1 /\ dom f2 by A4,XBOOLE_0:def 3;
+    x1 in dom f1 /\ dom f2 by A4,XBOOLE_0:def 4;
     then
 A7: x1 in dom (f1(#)f2) by Th5;
     then (f1(#)f2)/.x1 <> 0c by A6,Th5;
     then not (f1(#)f2)/.x1 in {0c} by TARSKI:def 1;
     then not x in (f1(#)f2)"{0c} by PARTFUN2:44;
-    hence x in dom (f1(#)f2) \ (f1(#)f2)"{0}by A7,XBOOLE_0:def 4;
+    hence x in dom (f1(#)f2) \ (f1(#)f2)"{0}by A7,XBOOLE_0:def 5;
   end;
 end;
 
@@ -264,10 +264,10 @@ A1: c in dom (f^) and
 A2: (f/.c) = 0;
 A3: c in dom f \ f"{0c} by A1,Def2;
   then
-A4: c in dom f & not c in f"{0c} by XBOOLE_0:def 4;
+A4: c in dom f & not c in f"{0c} by XBOOLE_0:def 5;
   now per cases by A4,PARTFUN2:44;
     suppose not c in dom f;
-      hence contradiction by A3,XBOOLE_0:def 4;
+      hence contradiction by A3,XBOOLE_0:def 5;
     end;
     suppose not (f/.c) in {0c};
       hence contradiction by A2,TARSKI:def 1;
@@ -288,7 +288,7 @@ A2: x in dom (f^) & (f^)/.x in {0c} by A1,Lm1;
   then
 A3: (f/.x)" = 0c by A2,Def2;
   x in dom f \ f"{0c} by A2,Def2;
-  then x in dom f & not x in f"{0c} by XBOOLE_0:def 4;
+  then x in dom f & not x in f"{0c} by XBOOLE_0:def 5;
   then not f/.x in {0c} by PARTFUN2:44;
   hence contradiction by A3,TARSKI:def 1,XCMPLX_1:203;
 end;
@@ -403,10 +403,10 @@ A1: dom (f1 + f2 + f3) = dom (f1 + f2) /\ dom f3 by VALUED_1:def 1
 A2: c in dom (f1 + f2 + f3);
     then c in dom f1 /\ dom (f2 + f3) by A1,VALUED_1:def 1;
     then
-A3: c in dom (f2 + f3) by XBOOLE_0:def 3;
+A3: c in dom (f2 + f3) by XBOOLE_0:def 4;
     c in dom (f1 + f2) /\ dom f3 by A2,VALUED_1:def 1;
     then
-A4: c in dom (f1 + f2) by XBOOLE_0:def 3;
+A4: c in dom (f1 + f2) by XBOOLE_0:def 4;
     thus (f1 + f2 + f3)/.c = (f1 + f2)/.c + (f3/.c) by A2,Th3
       .= ((f1/.c)) + ((f2/.c)) + (f3/.c) by A4,Th3
       .= ((f1/.c)) + (((f2/.c)) + (f3/.c))
@@ -430,10 +430,10 @@ A1: dom (f1 (#) f2 (#) f3) = dom (f1 (#) f2) /\ dom f3 by Th5
 A2: c in dom (f1(#)f2(#)f3);
     then c in dom f1 /\ dom (f2(#)f3) by A1,Th5;
     then
-A3: c in dom (f2 (#) f3) by XBOOLE_0:def 3;
+A3: c in dom (f2 (#) f3) by XBOOLE_0:def 4;
     c in dom (f1 (#) f2) /\ dom f3 by A2,Th5;
     then
-A4: c in dom (f1 (#) f2) by XBOOLE_0:def 3;
+A4: c in dom (f1 (#) f2) by XBOOLE_0:def 4;
     thus (f1 (#) f2 (#) f3)/.c = (f1 (#) f2)/.c * (f3/.c) by A2,Th5
       .= ((f1/.c)) * ((f2/.c)) * (f3/.c) by A4,Th5
       .= ((f1/.c)) * (((f2/.c)) * (f3/.c))
@@ -460,10 +460,10 @@ A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Th5
 A2: c in dom ((f1 + f2)(#)f3);
     then c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,VALUED_1:def 1;
     then
-A3: c in dom (f1(#)f3) & c in dom (f2 (#) f3) by XBOOLE_0:def 3;
+A3: c in dom (f1(#)f3) & c in dom (f2 (#) f3) by XBOOLE_0:def 4;
     c in dom (f1 + f2) /\ dom f3 by A2,Th5;
     then
-A4: c in dom (f1 + f2) by XBOOLE_0:def 3;
+A4: c in dom (f1 + f2) by XBOOLE_0:def 4;
     thus ((f1 + f2) (#) f3)/.c = (f1 + f2)/.c * (f3/.c) by A2,Th5
       .= (((f1/.c)) + ((f2/.c))) * (f3/.c) by A4,Th3
       .= ((f1/.c)) * (f3/.c) + ((f2/.c)) * (f3/.c)
@@ -490,7 +490,7 @@ A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th7
 A2: c in dom (r(#)(f1(#)f2));
     then c in dom (r(#)f1) /\ dom f2 by A1,Th5;
     then
-A3: c in dom (r(#)f1) & c in dom f2 by XBOOLE_0:def 3;
+A3: c in dom (r(#)f1) & c in dom f2 by XBOOLE_0:def 4;
 A4: c in dom (f1(#)f2) by A2,Th7;
     thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th7
       .= r*(((f1/.c)) * ((f2/.c))) by A4,Th5
@@ -514,7 +514,7 @@ A1: dom (r(#)(f1 (#) f2)) = dom (f1 (#) f2) by Th7
 A2: c in dom (r(#)(f1(#)f2));
     then c in dom f1 /\ dom (r(#)f2) by A1,Th5;
     then
-A3: c in dom f1 & c in dom (r(#)f2) by XBOOLE_0:def 3;
+A3: c in dom f1 & c in dom (r(#)f2) by XBOOLE_0:def 4;
 A4: c in dom (f1(#)f2) by A2,Th7;
     thus (r(#)(f1(#)f2))/.c = r * ((f1(#)f2)/.c) by A2,Th7
       .= r * (((f1/.c)) * ((f2/.c))) by A4,Th5
@@ -542,10 +542,10 @@ A1: dom ((f1 - f2) (#) f3) = dom (f1 - f2) /\ dom f3 by Th5
 A2: c in dom ((f1 - f2)(#)f3);
     then c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,Th4;
     then
-A3: c in dom (f1(#)f3) & c in dom (f2 (#) f3) by XBOOLE_0:def 3;
+A3: c in dom (f1(#)f3) & c in dom (f2 (#) f3) by XBOOLE_0:def 4;
     c in dom (f1 - f2) /\ dom f3 by A2,Th5;
     then
-A4: c in dom (f1 - f2) by XBOOLE_0:def 3;
+A4: c in dom (f1 - f2) by XBOOLE_0:def 4;
     thus ((f1 - f2) (#) f3)/.c = (f1 - f2)/.c * (f3/.c) by A2,Th5
       .= (((f1/.c)) - ((f2/.c))) * (f3/.c) by A4,Th4
       .= ((f1/.c)) * (f3/.c) - ((f2/.c)) * (f3/.c)
@@ -573,7 +573,7 @@ A1: dom (r(#)(f1 + f2)) = dom (f1 + f2) by Th7
 A2: c in dom (r(#)(f1 + f2));
     then c in dom (r(#)f1) /\ dom (r(#)f2) by A1,VALUED_1:def 1;
     then
-A3: c in dom (r(#)f1) & c in dom (r(#)f2) by XBOOLE_0:def 3;
+A3: c in dom (r(#)f1) & c in dom (r(#)f2) by XBOOLE_0:def 4;
 A4: c in dom (f1 + f2) by A2,Th7;
     thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Th7
       .= r * (((f1/.c)) + ((f2/.c))) by A4,Th3
@@ -619,7 +619,7 @@ A1: dom (r(#)(f1 - f2)) = dom (f1 - f2) by Th7
 A2: c in dom (r(#)(f1 - f2));
     then c in dom (r(#)f1) /\ dom (r(#)f2) by A1,Th4;
     then
-A3: c in dom (r(#)f1) & c in dom (r(#)f2) by XBOOLE_0:def 3;
+A3: c in dom (r(#)f1) & c in dom (r(#)f2) by XBOOLE_0:def 4;
 A4: c in dom (f1 - f2) by A2,Th7;
     thus (r(#)(f1 - f2))/.c = r * ((f1 - f2)/.c) by A2,Th7
       .= r * (((f1/.c)) - ((f2/.c))) by A4,Th4
@@ -664,10 +664,10 @@ A1: dom (f1 - (f2 + f3)) = dom f1 /\ dom (f2 + f3) by Th4
 A2: c in dom (f1 - (f2 + f3));
     then c in dom (f1 - f2) /\ dom f3 by A1,Th4;
     then
-A3: c in dom (f1 - f2) by XBOOLE_0:def 3;
+A3: c in dom (f1 - f2) by XBOOLE_0:def 4;
     c in dom f1 /\ dom (f2 + f3) by A2,Th4;
     then
-A4: c in dom (f2 + f3) by XBOOLE_0:def 3;
+A4: c in dom (f2 + f3) by XBOOLE_0:def 4;
     thus (f1 - (f2 + f3))/.c = ((f1/.c)) - (f2 + f3)/.c by A2,Th4
       .= ((f1/.c)) - (((f2/.c)) + (f3/.c)) by A4,Th3
       .= ((f1/.c)) - ((f2/.c)) - (f3/.c)
@@ -704,10 +704,10 @@ A1: dom (f1 - (f2 - f3)) = dom f1 /\ dom (f2 - f3) by Th4
 A2: c in dom (f1 - (f2 - f3));
     then c in dom (f1 - f2) /\ dom f3 by A1,VALUED_1:def 1;
     then
-A3: c in dom (f1 - f2) by XBOOLE_0:def 3;
+A3: c in dom (f1 - f2) by XBOOLE_0:def 4;
     c in dom f1 /\ dom (f2 - f3) by A2,Th4;
     then
-A4: c in dom (f2 - f3) by XBOOLE_0:def 3;
+A4: c in dom (f2 - f3) by XBOOLE_0:def 4;
     thus (f1 - (f2 - f3))/.c = ((f1/.c)) - (f2 - f3)/.c by A2,Th4
       .= ((f1/.c)) - (((f2/.c)) - (f3/.c)) by A4,Th4
       .= ((f1/.c)) - ((f2/.c)) + (f3/.c)
@@ -731,10 +731,10 @@ A1: dom (f1 + (f2 - f3)) = dom f1 /\ dom (f2 - f3) by VALUED_1:def 1
 A2: c in dom (f1 + (f2 - f3));
     then c in dom (f1 + f2) /\ dom f3 by A1,Th4;
     then
-A3: c in dom (f1 + f2) by XBOOLE_0:def 3;
+A3: c in dom (f1 + f2) by XBOOLE_0:def 4;
     c in dom f1 /\ dom (f2 - f3) by A2,VALUED_1:def 1;
     then
-A4: c in dom (f2 - f3) by XBOOLE_0:def 3;
+A4: c in dom (f2 - f3) by XBOOLE_0:def 4;
     thus (f1 + (f2 - f3))/.c = ((f1/.c)) + (f2 - f3)/.c by A2,Th3
       .= ((f1/.c)) + (((f2/.c)) - (f3/.c)) by A4,Th4
       .= ((f1/.c)) + ((f2/.c)) - (f3/.c)
@@ -758,7 +758,7 @@ A1: dom (|.f1 (#) f2.|) = dom (f1 (#) f2) by VALUED_1:def 11
 A2: c in dom (|.f1 (#) f2.|);
     then c in dom (|.f1.|) /\ dom (|.f2.|) by A1,VALUED_1:def 4;
     then
-A3: c in dom (|.f1.|) & c in dom (|.f2.|) by XBOOLE_0:def 3;
+A3: c in dom (|.f1.|) & c in dom (|.f2.|) by XBOOLE_0:def 4;
 A4: c in dom (f1 (#) f2) by A2,VALUED_1:def 11;
     dom |.f1.| = dom f1 & dom |.f2.| = dom f2 by VALUED_1:def 11;
     then
@@ -820,7 +820,7 @@ A1: dom (f^^) = dom (f|(dom (f^))) by Th20;
 A2: c in dom (f^^);
     then c in dom f /\ dom (f^) by A1,RELAT_1:90;
     then
-A3: c in dom f & c in dom (f^) by XBOOLE_0:def 3;
+A3: c in dom f & c in dom (f^) by XBOOLE_0:def 4;
     thus (f^^)/.c = ((f^)/.c)" by A2,Def2
       .= (((f/.c))")" by A3,Def2
       .= (f|(dom (f^)))/.c by A1,A2,PARTFUN2:32;
@@ -842,10 +842,10 @@ A1: dom ((f1(#)f2)^) = dom (f1(#)f2) \ (f1(#)f2)"{0c} by Def2
 A2: c in dom ((f1(#)f2)^);
     then c in dom (f1^) /\ dom (f2^) by A1,Th5;
     then
-A3: c in dom (f1^) & c in dom (f2^) by XBOOLE_0:def 3;
+A3: c in dom (f1^) & c in dom (f2^) by XBOOLE_0:def 4;
     c in dom (f1(#)f2) \ (f1(#)f2)"{0c} by A2,Def2;
     then
-A4: c in dom (f1(#)f2) by XBOOLE_0:def 4;
+A4: c in dom (f1(#)f2) by XBOOLE_0:def 5;
     thus ((f1(#)f2)^)/.c = ((f1(#)f2)/.c)" by A2,Def2
       .= (((f1/.c)) * ((f2/.c)))" by A4,Th5
       .= (((f1/.c)))"* (((f2/.c)))" by XCMPLX_1:205
@@ -872,7 +872,7 @@ A2: dom ((r(#)f)^) = dom (r(#)f) \ (r(#)f)"{0c} by Def2
 A3: c in dom ((r(#)f)^);
     then c in dom (r(#)f) \ (r(#)f)"{0c} by Def2;
     then
-A4: c in dom (r(#)f) by XBOOLE_0:def 4;
+A4: c in dom (r(#)f) by XBOOLE_0:def 5;
 A5: c in dom (f^) by A2,A3,Th7;
     thus ((r(#)f)^)/.c = ((r(#)f)/.c)" by A3,Def2
       .= (r*((f/.c)))" by A4,Th7
@@ -904,7 +904,7 @@ A1: dom ((|.f.|)^) = dom (|.f.|) \ (|.f.|)"{0} by RFUNCT_1:def 8
 A2: c in dom ((|.f.|)^);
     then c in dom (|.f.|) \ (|.f.|)"{0} by RFUNCT_1:def 8;
     then
-A3: c in dom (|.f.|) by XBOOLE_0:def 4;
+A3: c in dom (|.f.|) by XBOOLE_0:def 5;
 A4: c in dom (f^) by A1,A2,VALUED_1:def 11;
 A5: dom f = dom |.f.| by VALUED_1:def 11;
     thus ((|.f.|)^).c = ((|.f.|).c)" by A2,RFUNCT_1:def 8
@@ -934,7 +934,7 @@ A2: c in dom (f/g);
     then
 A3: c in dom f /\ dom (g^) by Def2;
     then
-A4: c in dom (g^) by XBOOLE_0:def 3;
+A4: c in dom (g^) by XBOOLE_0:def 4;
 A5: c in dom (f (#) (g^)) by A3,Th5;
     thus (f/g)/.c = (f/.c) * (g/.c)" by A2,Def1
       .= (f/.c) * ((g^)/.c) by A4,Def2
@@ -968,7 +968,7 @@ A3: c in dom ((f/g)(#)g);
 A4: c in dom f /\ dom (g^) by A2,RELAT_1:90;
     then
 A5: c in dom (f(#)(g^)) by Th5;
-A6: c in dom f & c in dom (g^) by A4,XBOOLE_0:def 3;
+A6: c in dom f & c in dom (g^) by A4,XBOOLE_0:def 4;
     then
 A7: g/.c <> 0c by Th17;
     thus ((f/g)(#)g)/.c = ((f/g)/.c) * (g/.c )by A3,Th5
@@ -989,9 +989,9 @@ A1: dom ((f/g)(#)(f1/g1)) = dom (f/g) /\ dom (f1/g1) by Th5
     .= dom f /\ (dom g \ g"{0c}) /\ dom (f1/g1) by Def1
     .= dom f /\ (dom g \ g"{0c}) /\ (dom f1 /\ (dom g1 \ g1"{0c})) by Def1
     .= dom f /\ ((dom g \ g"{0c}) /\ (dom f1 /\ (dom g1 \ g1"{0c}))) by
-  XBOOLE_1:16
+XBOOLE_1:16
     .= dom f /\ (dom f1 /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c}))) by
-  XBOOLE_1:16
+XBOOLE_1:16
 
 .= dom f /\ dom f1 /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c})) by XBOOLE_1:16
     .= dom (f(#)f1) /\ ((dom g \ g"{0c}) /\ (dom g1 \ g1"{0c})) by Th5
@@ -1005,15 +1005,15 @@ A2: c in dom ((f/g)(#)(f1/g1));
     then c in dom (f (#)(g^)) /\ dom (f1/g1) by Th51;
     then c in dom (f (#)(g^)) /\ dom (f1(#)(g1^)) by Th51;
     then
-A3: c in dom (f (#)(g^)) & c in dom (f1(#)(g1^)) by XBOOLE_0:def 3;
+A3: c in dom (f (#)(g^)) & c in dom (f1(#)(g1^)) by XBOOLE_0:def 4;
     then c in dom f /\ dom(g^) & c in dom f1 /\ dom(g1^) by Th5;
     then c in dom f & c in dom(g^) & c in dom f1 & c in dom(g1^) by
-    XBOOLE_0:def 3;
-    then c in dom f /\ dom f1 & c in dom (g^) /\ dom (g1^) by XBOOLE_0:def 3;
+XBOOLE_0:def 4;
+    then c in dom f /\ dom f1 & c in dom (g^) /\ dom (g1^) by XBOOLE_0:def 4;
     then
 A4: c in dom (f(#)f1) & c in dom((g^)(#)(g1^)) by Th5;
     then c in dom (f(#)f1) & c in dom((g(#)g1)^) by Th45;
-    then c in dom (f(#)f1) /\ dom((g(#)g1)^) by XBOOLE_0:def 3;
+    then c in dom (f(#)f1) /\ dom((g(#)g1)^) by XBOOLE_0:def 4;
     then
 A5: c in dom ((f(#)f1)(#)((g(#)g1)^)) by Th5;
     thus ((f/g)(#)(f1/g1))/.c = ((f/g)/.c)* ((f1/g1)/.c) by A2,Th5
@@ -1124,42 +1124,42 @@ A2: c in dom ((f1/f) + (g1/g));
     then
 A3: c in dom (f1/f) /\ dom (g1/g) by VALUED_1:def 1;
     then
-A4: c in dom (f1/f) & c in dom (g1/g) by XBOOLE_0:def 3;
+A4: c in dom (f1/f) & c in dom (g1/g) by XBOOLE_0:def 4;
     c in dom (f1 (#)(f^)) /\ dom (g1/g) by A3,Th51;
     then c in dom (f1 (#)(f^)) /\ dom (g1(#)(g^)) by Th51;
-    then c in dom (f1 (#)(f^)) & c in dom (g1(#)(g^)) by XBOOLE_0:def 3;
+    then c in dom (f1 (#)(f^)) & c in dom (g1(#)(g^)) by XBOOLE_0:def 4;
     then c in dom f1 /\ dom(f^) & c in dom g1 /\ dom(g^) by Th5;
     then
-A5: c in dom f1 & c in dom(f^) & c in dom g1 & c in dom(g^) by XBOOLE_0:def 3;
+A5: c in dom f1 & c in dom(f^) & c in dom g1 & c in dom(g^) by XBOOLE_0:def 4;
     then
 A6: (f/.c) <> 0c & g/.c <> 0c by Th17;
-    c in dom f1 /\ dom g1 & c in dom (f^) /\ dom (g^) by A5,XBOOLE_0:def 3;
+    c in dom f1 /\ dom g1 & c in dom (f^) /\ dom (g^) by A5,XBOOLE_0:def 4;
     then c in dom f1 /\ dom g1 & c in dom ((f^)(#)(g^)) by Th5;
     then
 A7: c in dom f1 /\ dom g1 & c in dom ((f(#)g)^) by Th45;
 A8: dom (g^) c= dom g & dom (f^) c= dom f by Th15;
-    then c in dom f /\ dom g by A5,XBOOLE_0:def 3;
+    then c in dom f /\ dom g by A5,XBOOLE_0:def 4;
     then
 A9: c in dom (f(#)g) by Th5;
-    c in dom f1 /\ dom g & c in dom g1 /\ dom f by A5,A8,XBOOLE_0:def 3;
+    c in dom f1 /\ dom g & c in dom g1 /\ dom f by A5,A8,XBOOLE_0:def 4;
     then
 A10: c in dom (f1(#)g) & c in dom (g1(#)f) by Th5;
-    then c in dom (f1(#)g) /\ dom (g1(#)f) by XBOOLE_0:def 3;
+    then c in dom (f1(#)g) /\ dom (g1(#)f) by XBOOLE_0:def 4;
     then
 A11: c in dom (f1(#)g + g1(#)f) by VALUED_1:def 1;
-    then c in dom (f1(#)g + g1(#)f) /\ dom ((f(#)g)^) by A7,XBOOLE_0:def 3;
+    then c in dom (f1(#)g + g1(#)f) /\ dom ((f(#)g)^) by A7,XBOOLE_0:def 4;
     then c in dom ((f1(#)g + g1(#)f)(#)((f(#)g)^)) by Th5;
     then
 A12: c in dom ((f1(#)g + g1(#)f)/(f(#)g)) by Th51;
     thus (f1/f + g1/g)/.c = (f1/f)/.c + (g1/g)/.c by A2,Th3
       .= (((f1/.c))) * ((f/.c))" + (g1/g)/.c by A4,Def1
       .= (((f1/.c))) *(1r*((f/.c))") + (g1/.c) * 1r * (g/.c)" by A4,Def1,
-    COMPLEX1:def 7
+COMPLEX1:def 7
       .= (((f1/.c))) *((g/.c) *(g/.c)"* ((f/.c))") +
     (g1/.c) * (1r * (g/.c)") by A6,COMPLEX1:def 7,XCMPLX_0:def 7
       .= (((f1/.c))) *(g/.c *((g/.c)"* ((f/.c))")) +
     (g1/.c) * (((f/.c)) *((f/.c))" * (g/.c)") by A6,COMPLEX1:def 7
-    ,XCMPLX_0:def 7
+,XCMPLX_0:def 7
       .= (((f1/.c))) *((g/.c) *((g/.c * (f/.c))")) +
     (g1/.c) * (((f/.c)) *(((f/.c))" * (g/.c)")) by XCMPLX_1:205
       .= (((f1/.c))) *((g/.c) *(((f/.c)* (g/.c))")) +
@@ -1220,13 +1220,13 @@ A1: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
 A2: c in dom ((f1+f2)|X);
     then c in dom (f1+f2) /\ X by RELAT_1:90;
     then
-A3: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
+A3: c in dom (f1+f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by VALUED_1:def 1;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 /\ X & c in dom f2 /\ X by A3,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 /\ X & c in dom f2 /\ X by A3,XBOOLE_0:def 4;
     then
 A4: c in dom (f1|X) & c in dom (f2|X) by RELAT_1:90;
-    then c in dom (f1|X) /\ dom (f2|X) by XBOOLE_0:def 3;
+    then c in dom (f1|X) /\ dom (f2|X) by XBOOLE_0:def 4;
     then
 A5: c in dom ((f1|X) + (f2|X)) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A2,PARTFUN2:32
@@ -1247,13 +1247,13 @@ A6: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
 A7: c in dom ((f1+f2)|X);
     then c in dom (f1+f2) /\ X by RELAT_1:90;
     then
-A8: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
+A8: c in dom (f1+f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by VALUED_1:def 1;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 /\ X & c in dom f2 by A8,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 /\ X & c in dom f2 by A8,XBOOLE_0:def 4;
     then
 A9: c in dom (f1|X) & c in dom f2 by RELAT_1:90;
-    then c in dom (f1|X) /\ dom f2 by XBOOLE_0:def 3;
+    then c in dom (f1|X) /\ dom f2 by XBOOLE_0:def 4;
     then
 A10: c in dom ((f1|X) + f2) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A7,PARTFUN2:32
@@ -1273,13 +1273,13 @@ A11: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
 A12: c in dom ((f1+f2)|X);
     then c in dom (f1+f2) /\ X by RELAT_1:90;
     then
-A13: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
+A13: c in dom (f1+f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by VALUED_1:def 1;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 & c in dom f2 /\ X by A13,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 & c in dom f2 /\ X by A13,XBOOLE_0:def 4;
     then
 A14: c in dom f1 & c in dom (f2|X) by RELAT_1:90;
-    then c in dom f1 /\ dom (f2|X) by XBOOLE_0:def 3;
+    then c in dom f1 /\ dom (f2|X) by XBOOLE_0:def 4;
     then
 A15: c in dom (f1 + (f2|X)) by VALUED_1:def 1;
     thus ((f1+f2)|X)/.c = (f1+f2)/.c by A12,PARTFUN2:32
@@ -1309,13 +1309,13 @@ A1: dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:90
 A2: c in dom ((f1(#)f2)|X);
     then c in dom (f1(#)f2) /\ X by RELAT_1:90;
     then
-A3: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 3;
+A3: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by Th5;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 /\ X & c in dom f2 /\ X by A3,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 /\ X & c in dom f2 /\ X by A3,XBOOLE_0:def 4;
     then
 A4: c in dom (f1|X) & c in dom (f2|X) by RELAT_1:90;
-    then c in dom (f1|X) /\ dom (f2|X) by XBOOLE_0:def 3;
+    then c in dom (f1|X) /\ dom (f2|X) by XBOOLE_0:def 4;
     then
 A5: c in dom ((f1|X) (#) (f2|X)) by Th5;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A2,PARTFUN2:32
@@ -1336,13 +1336,13 @@ A6: dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:90
 A7: c in dom ((f1(#)f2)|X);
     then c in dom (f1(#)f2) /\ X by RELAT_1:90;
     then
-A8: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 3;
+A8: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by Th5;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 /\ X & c in dom f2 by A8,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 /\ X & c in dom f2 by A8,XBOOLE_0:def 4;
     then
 A9: c in dom (f1|X) & c in dom f2 by RELAT_1:90;
-    then c in dom (f1|X) /\ dom f2 by XBOOLE_0:def 3;
+    then c in dom (f1|X) /\ dom f2 by XBOOLE_0:def 4;
     then
 A10: c in dom ((f1|X) (#) f2) by Th5;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A7,PARTFUN2:32
@@ -1362,13 +1362,13 @@ A11: dom ((f1(#)f2)|X) = dom (f1(#)f2) /\ X by RELAT_1:90
 A12: c in dom ((f1(#)f2)|X);
     then c in dom (f1(#)f2) /\ X by RELAT_1:90;
     then
-A13: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 3;
+A13: c in dom (f1(#)f2) & c in X by XBOOLE_0:def 4;
     then c in dom f1 /\ dom f2 by Th5;
-    then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
-    then c in dom f1 & c in dom f2 /\ X by A13,XBOOLE_0:def 3;
+    then c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
+    then c in dom f1 & c in dom f2 /\ X by A13,XBOOLE_0:def 4;
     then
 A14: c in dom f1 & c in dom (f2|X) by RELAT_1:90;
-    then c in dom f1 /\ dom (f2|X) by XBOOLE_0:def 3;
+    then c in dom f1 /\ dom (f2|X) by XBOOLE_0:def 4;
     then
 A15: c in dom (f1 (#) (f2|X)) by Th5;
     thus ((f1(#)f2)|X)/.c = (f1(#)f2)/.c by A12,PARTFUN2:32
@@ -1392,9 +1392,9 @@ A1: dom ((-f)|X) = dom (-f) /\ X by RELAT_1:90
 A2: c in dom ((-f)|X);
     then c in dom (-f) /\ X by RELAT_1:90;
     then
-A3: c in dom (-f) & c in X by XBOOLE_0:def 3;
+A3: c in dom (-f) & c in X by XBOOLE_0:def 4;
     then c in dom f by Th9;
-    then c in dom f /\ X by A3,XBOOLE_0:def 3;
+    then c in dom f /\ X by A3,XBOOLE_0:def 4;
     then
 A4: c in dom (f|X) by RELAT_1:90;
     then
@@ -1418,7 +1418,7 @@ A7: dom ((f^)|X) = dom (f^) /\ X by RELAT_1:90
 A8: c in dom ((f^)|X);
     then c in dom (f^) /\ X by RELAT_1:90;
     then
-A9: c in dom (f^) & c in X by XBOOLE_0:def 3;
+A9: c in dom (f^) & c in X by XBOOLE_0:def 4;
     thus ((f^)|X)/.c = (f^)/.c by A8,PARTFUN2:32
       .= ((f/.c))" by A9,Def2
       .= ((f|X)/.c)" by A6,A7,A8,PARTFUN2:32
@@ -1435,7 +1435,7 @@ A10: dom ((|.f.|)|X) = dom (|.f.|) /\ X by RELAT_1:90
 A11: c in dom ((|.f.|)|X);
     then c in dom (|.f.|) /\ X by RELAT_1:90;
     then
-A12: c in dom (|.f.|) & c in X by XBOOLE_0:def 3;
+A12: c in dom (|.f.|) & c in X by XBOOLE_0:def 4;
 A13: c in dom (f|X) by A10,A11,VALUED_1:def 11;
 A14: dom |.f.| = dom f by VALUED_1:def 11;
     thus ((|.f.|)|X).c = (|.f.|).c by A11,FUNCT_1:70
@@ -1488,9 +1488,9 @@ A1: dom ((r(#)f)|X) = dom (r(#)f) /\ X by RELAT_1:90
 A2: c in dom ((r(#)f)|X);
     then c in dom (r(#)f) /\ X by RELAT_1:90;
     then
-A3: c in dom (r(#)f) & c in X by XBOOLE_0:def 3;
+A3: c in dom (r(#)f) & c in X by XBOOLE_0:def 4;
     then c in dom f by Th7;
-    then c in dom f /\ X by A3,XBOOLE_0:def 3;
+    then c in dom f /\ X by A3,XBOOLE_0:def 4;
     then
 A4: c in dom (f|X) by RELAT_1:90;
     then
@@ -1721,7 +1721,7 @@ G:   for y st y in dom |.f.| holds abs(|.f.|.y) < r1 by SEQ_2:def 5;
     assume
 Z:   y in dom f;
      then abs(|.f.|.y) < r1 by F,G;
-     then abs(|.f.y.|) < r1 by F,VALUED_1:def 11,Z;
+     then abs(|.f.y.|) < r1 by F,Z,VALUED_1:def 11;
     hence abs(f.y) <r1;
    end;
   given r1 such that
@@ -1731,7 +1731,7 @@ G:   for y st y in dom f holds abs(f.y) <r1;
   assume
 Z: y in dom |.f.|;
    then abs(|.f.y.|) <r1 by F,G;
-  hence abs(|.f.|.y) <r1 by VALUED_1:def 11,Z;
+  hence abs(|.f.|.y) <r1 by Z,VALUED_1:def 11;
   end;
   hence thesis by SEQ_2:def 5;
  end;
@@ -1752,10 +1752,10 @@ A2: for c being set st c in dom(|.f.||Y) holds abs((|.f.||Y).c) <= p
     now
       let c such that
 A3:   c in Y /\ dom f;
-      c in dom f by A3,XBOOLE_0:def 3;
+      c in dom f by A3,XBOOLE_0:def 4;
       then
 A4:   f.c = f/.c by PARTFUN1:def 8;
-      abs((|.f.||Y).c) = abs(|.f.|.c) by FUNCT_1:70,A1,A3,B1
+      abs((|.f.||Y).c) = abs(|.f.|.c) by A1,A3,B1,FUNCT_1:70
           .= abs(|.(f.c).|) by VALUED_1:18;
       hence |.(f/.c).| <= p by A1,A2,A3,A4,B1;
     end;
@@ -1816,7 +1816,7 @@ proof
   let c be set;
   assume c in X /\ dom (|.f.|);
   then
-A1: c in dom (|.f.|) by XBOOLE_0:def 3;
+A1: c in dom (|.f.|) by XBOOLE_0:def 4;
   dom |.f.| = dom f by VALUED_1:def 11;
   then
 A2: f.c = f/.c by A1,PARTFUN1:def 8;
@@ -1834,7 +1834,7 @@ G:  (-1r)(#)(f|Y) = ((-1r)(#)f)|Y by RFUNCT_1:65;
   assume
 A1: f|Y is bounded;
   hence |.f.||Y is bounded by Def3,F;
-  thus thesis by A1,Th84,COMPLEX1:def 7,G;
+  thus thesis by A1,Th84,G,COMPLEX1:def 7;
 end;
 
 theorem Th87:
@@ -1852,12 +1852,12 @@ A3: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A1,Th81;
     let c;
     assume c in X /\ Y /\ dom (f1+f2);
     then
-A4: c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 3;
+A4: c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 4;
     then c in X & c in Y & c in
-    dom f1 /\ dom f2 by VALUED_1:def 1,XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
+    dom f1 /\ dom f2 by VALUED_1:def 1,XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
     then
-A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
+A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 4;
     then
 A6: |.((f1/.c)).| <= r1 by A2;
     |.((f2/.c)).| <= r2 by A3,A5;
@@ -1885,11 +1885,11 @@ A3: for c st c in Y /\ dom f2 holds |.((f2/.c)).| <= r2 by A1,Th81;
     let c;
     assume c in X /\ Y /\ dom (f1(#)f2);
     then
-A4: c in X /\ Y & c in dom (f1(#)f2) by XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 /\ dom f2 by Th5,XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
+A4: c in X /\ Y & c in dom (f1(#)f2) by XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 /\ dom f2 by Th5,XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
     then
-A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
+A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 4;
     then
 A6: |.((f1/.c)).| <= r1 by A2;
 A7: |.((f2/.c)).| <= r2 by A3,A5;
@@ -1934,12 +1934,12 @@ A3: for c st c in Y /\ dom f2 holds ((f2/.c)) = cr2 by A1,PARTFUN2:54;
     let c;
     assume c in X /\ Y /\ dom (f1+f2);
     then
-A4: c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 3;
+A4: c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 4;
     then c in X & c in Y & c in (dom f1 /\ dom f2) by VALUED_1:def 1
-    ,XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
+,XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
     then
-A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
+A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 4;
     thus (f1+f2)/.c =((f1/.c)) + ((f2/.c)) by A4,Th3
       .= cr1 + ((f2/.c)) by A2,A5
       .= cr1 + cr2 by A3,A5;
@@ -1949,11 +1949,11 @@ A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
     let c;
     assume c in X /\ Y /\ dom (f1-f2);
     then
-A6: c in X /\ Y & c in dom (f1-f2) by XBOOLE_0:def 3;
-    then c in X & c in Y & c in (dom f1 /\ dom f2) by Th4,XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
+A6: c in X /\ Y & c in dom (f1-f2) by XBOOLE_0:def 4;
+    then c in X & c in Y & c in (dom f1 /\ dom f2) by Th4,XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
     then
-A7: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
+A7: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 4;
     thus (f1-f2)/.c = ((f1/.c)) - ((f2/.c)) by A6,Th4
       .= cr1 - ((f2/.c)) by A2,A7
       .= cr1 - cr2 by A3,A7;
@@ -1963,11 +1963,11 @@ A7: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
     let c;
     assume c in X /\ Y /\ dom (f1(#)f2);
     then
-A8: c in X /\ Y & c in dom (f1(#)f2) by XBOOLE_0:def 3;
-    then c in X & c in Y & c in (dom f1 /\ dom f2) by Th5,XBOOLE_0:def 3;
-    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
+A8: c in X /\ Y & c in dom (f1(#)f2) by XBOOLE_0:def 4;
+    then c in X & c in Y & c in (dom f1 /\ dom f2) by Th5,XBOOLE_0:def 4;
+    then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 4;
     then
-A9: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
+A9: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 4;
     thus (f1(#)f2)/.c =((f1/.c)) * ((f2/.c)) by A8,Th5
       .= cr1 * ((f2/.c)) by A2,A9
       .= cr1 * cr2 by A3,A9;
@@ -1985,10 +1985,10 @@ A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
     let c;
     assume c in Y /\ dom (q(#)f);
     then
-A2: c in dom (q(#)f) & c in Y by XBOOLE_0:def 3;
+A2: c in dom (q(#)f) & c in Y by XBOOLE_0:def 4;
     then c in dom f by Th7;
     then
-A3: c in Y /\ dom f by A2,XBOOLE_0:def 3;
+A3: c in Y /\ dom f by A2,XBOOLE_0:def 4;
     thus (q(#)f)/.c = q * (f/.c) by A2,Th7
       .= q*r by A1,A3;
   end;
@@ -2005,11 +2005,11 @@ A1: for c st c in Y /\ dom f holds (f/.c) = r by PARTFUN2:54;
     let c;
     assume c in Y /\ dom (|.f.|);
     then
-A2: c in dom (|.f.|) & c in Y by XBOOLE_0:def 3;
+A2: c in dom (|.f.|) & c in Y by XBOOLE_0:def 4;
     then
 A3: c in dom f by VALUED_1:def 11;
     then
-A4: c in Y /\ dom f by A2,XBOOLE_0:def 3;
+A4: c in Y /\ dom f by A2,XBOOLE_0:def 4;
     f.c = f/.c by A3,PARTFUN1:def 8;
     hence (|.f.|).c = |.(f/.c).| by VALUED_1:18
       .= |.r.| by A1,A4;
@@ -2023,7 +2023,7 @@ A5: c in Y /\ dom (-f);
     then c in Y /\ dom f by Th9;
     then
 A6: -(f/.c) = p by A1;
-    c in dom (-f) by A5,XBOOLE_0:def 3;
+    c in dom (-f) by A5,XBOOLE_0:def 4;
     hence (-f)/.c = p by A6,Th9;
   end;
   hence thesis by PARTFUN2:54;
@@ -2052,7 +2052,8 @@ proof
 A1: f|Y is constant;
   hence for r holds (r(#)f)|Y is bounded by Th93,Th91;
   thus (-f)|Y is bounded by Th93,A1,Th92;
-  thus |.f.||Y is bounded by RFUNCT_1:108,A1,Th92;
+   |.f.||Y is constant by A1,Th92;
+  hence |.f.||Y is bounded by A1,Th92;
 end;
 
 theorem Th95:

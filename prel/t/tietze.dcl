@@ -10,10 +10,11 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="VALUED_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POWER"/>
 <ArticleID name="SERIES_1"/>
@@ -30,6 +31,7 @@
 <ArticleID name="CONNSP_2"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
 <RCluster aid="TIETZE" nr="1">
@@ -44,19 +46,19 @@
 <Adjective nr="4"/>
 <Adjective nr="6"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
 <Adjective nr="22"/>
-<Adjective nr="31"/>
-<Adjective nr="78">
+<Adjective nr="69">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="91"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
+<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
@@ -80,7 +82,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="17">
+<Adjective nr="18">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -110,12 +112,12 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="49">
+<Adjective nr="40">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -126,13 +128,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="46"/>
-<Adjective nr="85">
+<Adjective nr="37"/>
+<Adjective nr="76">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

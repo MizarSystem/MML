@@ -412,6 +412,31 @@
 <Adjective nr="20"/>
 </Cluster>
 </FCluster>
+<FCluster aid="FINSEQ_1" nr="17">
+<ArgTypes/>
+<Func kind="K" nr="97">
+<Func kind="K" nr="88"/>
+</Func>
+<Cluster>
+<Adjective nr="14"/>
+</Cluster>
+</FCluster>
+<FCluster aid="FINSEQ_1" nr="18">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+<Adjective nr="14" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="97">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="14" value="false"/>
+</Cluster>
+</FCluster>
 <CCluster aid="FINSEQ_1" nr="1">
 <ArgTypes/>
 <Cluster>

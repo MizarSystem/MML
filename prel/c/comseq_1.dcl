@@ -14,6 +14,8 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 </Signature>
 <RCluster aid="COMSEQ_1" nr="1">
@@ -36,7 +38,7 @@
 <Func kind="K" nr="93"/>
 <Func kind="K" nr="90"/>
 </Adjective>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 </Registrations>

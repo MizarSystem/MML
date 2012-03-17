@@ -19,6 +19,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -30,7 +31,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -53,7 +53,7 @@
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -74,13 +74,13 @@
 <Func kind="K" nr="47"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="264">
+<Func kind="K" nr="251">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="106"/>
+<Adjective nr="111"/>
 </Cluster>
 </FCluster>
 </Registrations>

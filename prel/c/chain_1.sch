@@ -33,7 +33,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="VALUED_1"/>
-<ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
@@ -303,7 +302,7 @@
 <Func kind="K" nr="43"/>
 <Func kind="K" nr="47"/>
 </Typ>
-<Typ kind="M" nr="32">
+<Typ kind="M" nr="33">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -315,7 +314,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="478">
+<Func kind="K" nr="458">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -327,7 +326,7 @@
 <Func kind="F" nr="4"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="479">
+<Func kind="K" nr="459">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -337,11 +336,11 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="282">
+<Func kind="K" nr="262">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="478">
+<Func kind="K" nr="458">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -356,7 +355,7 @@
 <Not>
 <Pred kind="P" nr="1">
 <Func kind="K" nr="125">
-<Func kind="K" nr="478">
+<Func kind="K" nr="458">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -372,7 +371,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="478">
+<Func kind="K" nr="458">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -383,7 +382,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="24">
-<Func kind="K" nr="478">
+<Func kind="K" nr="458">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -408,7 +407,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="481">
+<Func kind="K" nr="461">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

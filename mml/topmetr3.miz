@@ -13,13 +13,14 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
       XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1,
       FUNCT_2, BINOP_1, NAT_1, STRUCT_0, METRIC_1, PRE_TOPC, TOPS_2, COMPTS_1,
-      PCOMPS_1, RCOMP_1, EUCLID, PSCOMP_1, TOPMETR, SEQ_1, SEQ_2, SEQ_4,
-      SEQM_3, TBSP_1, JORDAN6, TOPREAL1, JORDAN5C, TOPREAL2;
+      PCOMPS_1, RCOMP_1, EUCLID, PSCOMP_1, TOPMETR, SEQ_1, SEQ_2,
+      SEQM_3, SEQ_4, TBSP_1, JORDAN6, TOPREAL1, JORDAN5C, TOPREAL2;
  constructors REAL_1, NAT_1, COMPLEX1, SEQM_3, RCOMP_1, TOPS_2, COMPTS_1,
-      TBSP_1, TOPMETR, TOPREAL1, PSCOMP_1, JORDAN5C, JORDAN6, SEQ_1, XXREAL_2;
+      TBSP_1, TOPMETR, TOPREAL1, PSCOMP_1, JORDAN5C, JORDAN6, SEQ_1, XXREAL_2,
+      SEQ_4;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
       MEMBERED, STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1, EUCLID, TOPMETR,
-      PSCOMP_1, COMPTS_1, VALUED_0;
+      PSCOMP_1, COMPTS_1, VALUED_0, SEQ_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0;
  theorems PRE_TOPC, TOPMETR, XREAL_0, TBSP_1, XBOOLE_0, METRIC_1, FUNCT_1,
@@ -84,7 +85,7 @@ A6:   for m being Element of NAT st m>=n holds dist(S.m,lim S)<r2
       then
 A7:   S.n in Ball(lim S,r1) by METRIC_1:12;
       S.n in F by A1;
-      then S.n in F /\ G by A5,A7,XBOOLE_0:def 3;
+      then S.n in F /\ G by A5,A7,XBOOLE_0:def 4;
       hence F meets G by XBOOLE_0:def 7;
     end;
     hence lim S in G implies F meets G;
@@ -278,7 +279,7 @@ A3: s.0 in rng s by FUNCT_1:def 5;
   reconsider t=s.0 as Real;
   a<=t & t<=b by A1,A3,XXREAL_1:1;
   then the carrier of Closed-Interval-MSpace(a,b)=[.a,b.] by TOPMETR:14
-  ,XXREAL_0:2;
+,XXREAL_0:2;
   hence s is sequence of Closed-Interval-MSpace(a,b) by A1,A2,FUNCT_2:4;
 end;
 
@@ -452,7 +453,7 @@ A3: a<=s.n & s.n <=b by A2,XXREAL_1:1;
     hence s.n <b+1 by A3,XXREAL_0:2;
   end;
   then s is bounded_above by SEQ_2:def 3;
-  then s is convergent by A1,SEQ_4:51;
+  then s is convergent by A1;
   hence S is convergent by A1,Th10;
 end;
 
@@ -479,7 +480,7 @@ A3: a<=s.n & s.n <=b by A2,XXREAL_1:1;
     hence s.n >a-1 by A3,XXREAL_0:2;
   end;
   then s is bounded_below by SEQ_2:def 4;
-  then s is convergent by A1,SEQ_4:52;
+  then s is convergent by A1;
   hence S is convergent by A1,Th10;
 end;
 
@@ -570,43 +571,9 @@ A6:       x is real number;
       hence ex y being set st P[n,x,y];
     end;
   end;
-A7: for n being Element of NAT for x,y1,y2 being set
-  st P[n,x,y1] & P[n,x,y2] holds y1=y2
-  proof
-    let n be Element of NAT;
-    thus for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1=y2
-    proof
-      let x,y1,y2 be set;
-      assume
-A8:   P[n,x,y1] & P[n,x,y2];
-      now per cases;
-        case not x is real number;
-          hence y1=y2 by A8;
-        end;
-        case x is real number;
-          then reconsider r1=x as real number;
-          reconsider r2=s1.(n+1) as real number;
-          now per cases;
-            case
-A9:           r1>=r2;
-              then y1=x by A8;
-              hence y1=y2 by A8,A9;
-            end;
-            case
-A10:          r1<r2;
-              then y1=s1.(n+1) by A8;
-              hence y1=y2 by A8,A10;
-            end;
-          end;
-          hence y1=y2;
-        end;
-      end;
-      hence y1=y2;
-    end;
-  end;
   ex f being Function st dom f = NAT & f.0 = s1.0 &
   for n being Element of NAT holds P[n,f.n,f.(n+1)]
-  from RECDEF_1:sch 1(A5,A7);
+  from RECDEF_1:sch 1(A5);
   then consider s2 being Function such that
 A11: dom s2 = NAT & s2.0 = s1.0 &
   for n being Element of NAT holds P[n,s2.n,s2.(n+1)];
@@ -811,7 +778,7 @@ A41: upper_bound R<upper_bound R +1 by XREAL_1:31;
   end;
   then s3 is bounded_above by SEQ_2:def 3;
   then
-A42: s3 is convergent by A32,SEQ_4:51;
+A42: s3 is convergent by A32;
   then
 A43: lim s3<=upper_bound R by A40,PREPOWER:3;
 A44: for r being Real st r>0 holds upper_bound R -r<lim s3
@@ -934,43 +901,9 @@ A6:       x is real number;
       hence ex y being set st P[n,x,y];
     end;
   end;
-A7: for n being Element of NAT for x,y1,y2 being set
-  st P[n,x,y1] & P[n,x,y2] holds y1=y2
-  proof
-    let n be Element of NAT;
-    thus for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1=y2
-    proof
-      let x,y1,y2 be set;
-      assume
-A8:   P[n,x,y1] & P[n,x,y2];
-      now per cases;
-        case not x is real number;
-          hence y1=y2 by A8;
-        end;
-        case x is real number;
-          then reconsider r1=x as real number;
-          reconsider r2=s1.(n+1) as real number;
-          now per cases;
-            case
-A9:           r1<=r2;
-              then y1=x by A8;
-              hence y1=y2 by A8,A9;
-            end;
-            case
-A10:          r1>r2;
-              then y1=s1.(n+1) by A8;
-              hence y1=y2 by A8,A10;
-            end;
-          end;
-          hence y1=y2;
-        end;
-      end;
-      hence y1=y2;
-    end;
-  end;
   ex f being Function st dom f = NAT & f.0 = s1.0 &
   for n being Element of NAT holds P[n,f.n,f.(n+1)]
-  from RECDEF_1:sch 1(A5,A7);
+  from RECDEF_1:sch 1(A5);
   then consider s2 being Function such that
 A11: dom s2 = NAT & s2.0 = s1.0 &
   for n being Element of NAT holds P[n,s2.n,s2.(n+1)];
@@ -1177,7 +1110,7 @@ A41: lower_bound R>lower_bound R -1 by XREAL_1:21;
   end;
   then s3 is bounded_below by SEQ_2:def 4;
   then
-A42: s3 is convergent by A32,SEQ_4:52;
+A42: s3 is convergent by A32;
   then
 A43: lim s3>=lower_bound R by A40,PREPOWER:2;
 A44: for r being Real st r>0 holds lower_bound R +r>lim s3
@@ -1341,7 +1274,7 @@ A38:      r1<=r0 & r0<=r2 by A18,A36,A37,XXREAL_0:2;
           then f.r0 in rng f by FUNCT_1:def 5;
           then f.r0 in the carrier of TopSpaceMetr(X);
           then f.r0 in the carrier of X by TOPMETR:16;
-          then f.r0 in F1 or f.r0 in F2 by A9,XBOOLE_0:def 2;
+          then f.r0 in F1 or f.r0 in F2 by A9,XBOOLE_0:def 3;
           then
 A39:      r0 in R by A32,A35,A38;
           upper_bound R<r0 by A31,XREAL_1:31;
@@ -1359,7 +1292,7 @@ A41: s1 is non-decreasing convergent & rng s1 c= R & lim s1=upper_bound R
   by A16,Th15;
   reconsider S2=s1 as sequence of RealSpace by METRIC_1:def 14;
   reconsider S1=s1 as sequence of Closed-Interval-MSpace(0,1) by A12,A41,Th7,
-  XBOOLE_1:1;
+XBOOLE_1:1;
 A42: S1 is convergent by A41,Th10;
   then S2 is convergent by Th9;
   then lim S2=lim S1 by Th9;
@@ -1417,7 +1350,7 @@ A53: s2 is non-increasing convergent & rng s2 c= R2 & lim s2=lower_bound R2
   by A26,Th16;
   reconsider S2=s2 as sequence of RealSpace by METRIC_1:def 14;
   reconsider S1=s2 as sequence of Closed-Interval-MSpace(0,1) by A22,A53,Th7,
-  XBOOLE_1:1;
+XBOOLE_1:1;
 A54: S1 is convergent by A53,Th10;
   then S2 is convergent by Th9;
   then lim S2=lim S1 by Th9;
@@ -1469,7 +1402,7 @@ A63:  dist(lim S1,S1.m)<r7 by A62;
     for m being Element of NAT st m>=n holds dist(S00.m,t1)<r;
   end;
   then f.(lim S1)=lim S00 by A57,TBSP_1:def 4;
-  then f.(lim s1) in F1 /\ F2 by A40,A41,A52,A53,A55,A60,XBOOLE_0:def 3;
+  then f.(lim s1) in F1 /\ F2 by A40,A41,A52,A53,A55,A60,XBOOLE_0:def 4;
   hence ex r being Real st r1<=r & r<=r2 & f.r in F1 /\ F2 by A17,A18,A41;
 end;
 
@@ -1548,10 +1481,10 @@ A17:    0<=r & r<=1 by A16,BORSUK_1:83,XXREAL_1:1;
             hence y in Lower_Arc(P) by A15,A16;
           end;
           case r=0;
-            hence y in Lower_Arc(P) by A5,A6,A16,XBOOLE_0:def 3;
+            hence y in Lower_Arc(P) by A5,A6,A16,XBOOLE_0:def 4;
           end;
           case r=1;
-            hence y in Lower_Arc(P) by A4,A6,A16,XBOOLE_0:def 3;
+            hence y in Lower_Arc(P) by A4,A6,A16,XBOOLE_0:def 4;
           end;
         end;
         hence y in Lower_Arc(P);
@@ -1576,10 +1509,10 @@ A21:        0<=r & r<=1 by A20,BORSUK_1:83,XXREAL_1:1;
                 hence y in Upper_Arc(P) by A19,A20;
               end;
               case r=0;
-                hence y in Upper_Arc(P) by A5,A6,A20,XBOOLE_0:def 3;
+                hence y in Upper_Arc(P) by A5,A6,A20,XBOOLE_0:def 4;
               end;
               case r=1;
-                hence y in Upper_Arc(P) by A4,A6,A20,XBOOLE_0:def 3;
+                hence y in Upper_Arc(P) by A4,A6,A20,XBOOLE_0:def 4;
               end;
             end;
             hence y in Upper_Arc(P);
@@ -1594,18 +1527,18 @@ A23:      0<r1 & r1<1 & not f.r1 in Lower_Arc(P) by A18;
           r2 in [.0,1.] by A22,XXREAL_1:1;
           then f.r2 in rng f by A10,BORSUK_1:83,FUNCT_1:def 5;
           then
-A24:      f.r2 in Lower_Arc(P) by A1,A3,A11,A22,XBOOLE_0:def 2;
+A24:      f.r2 in Lower_Arc(P) by A1,A3,A11,A22,XBOOLE_0:def 3;
           r1 in [.0,1.] by A23,XXREAL_1:1;
           then
 A25:      f.r1 in rng f by A10,BORSUK_1:83,FUNCT_1:def 5;
           then
-A26:      f.r1 in Upper_Arc(P) by A1,A3,A11,A23,XBOOLE_0:def 2;
+A26:      f.r1 in Upper_Arc(P) by A1,A3,A11,A23,XBOOLE_0:def 3;
           now per cases;
             case
 A27:          r1<=r2;
               now per cases by A27,XXREAL_0:1;
                 case r1=r2;
-                  hence contradiction by A1,A3,A11,A22,A23,A25,XBOOLE_0:def 2;
+                  hence contradiction by A1,A3,A11,A22,A23,A25,XBOOLE_0:def 3;
                 end;
                 case
 A28:              r1<r2;

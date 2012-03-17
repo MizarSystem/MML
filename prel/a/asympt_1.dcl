@@ -16,6 +16,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
@@ -46,7 +47,7 @@
 <Func kind="K" nr="74"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="220">
+<Func kind="K" nr="229">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -57,19 +58,19 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="221"/>
+<Func kind="K" nr="230"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="22">
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="3">
@@ -79,7 +80,7 @@
 <Func kind="K" nr="74"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="222">
+<Func kind="K" nr="231">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -88,12 +89,12 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="4">
 <ArgTypes/>
-<Func kind="K" nr="223">
+<Func kind="K" nr="232">
 <Num nr="1"/>
 </Func>
 <Cluster>
@@ -102,7 +103,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="52"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="5">
@@ -112,7 +113,7 @@
 <Func kind="K" nr="78"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -121,7 +122,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="54"/>
+<Adjective nr="59"/>
 </Cluster>
 </FCluster>
 </Registrations>

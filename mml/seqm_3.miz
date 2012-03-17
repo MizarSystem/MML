@@ -8,16 +8,18 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      FINSEQ_1, VALUED_0, ANPROJ_1, SUPINF_1;
- notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XCMPLX_0, XREAL_0,
-      RELAT_1, PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2,
-      COMPLEX1, NAT_1, FUNCOP_1, XXREAL_0, RECDEF_1;
+      FINSEQ_1, VALUED_0, SUPINF_1, NORMSP_1;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_3, FINSEQ_1, VALUED_1, SEQ_1, SEQ_2, REAL_1,
+      COMPLEX1, NAT_1, VALUED_0, FUNCOP_1, XXREAL_0, RECDEF_1;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
       VALUED_1, SEQ_1, SEQ_2, FINSEQ_1, RECDEF_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1, SEQ_2;
+      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, FUNCT_2, VALUED_1, SEQ_2,
+      RFUNCT_1 ;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_2, FUNCT_1, VALUED_0, VALUED_1;
+ definitions TARSKI, SEQ_2, FUNCT_1, VALUED_0, VALUED_1;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, FUNCT_2, RELAT_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
       ORDINAL1, VALUED_0, VALUED_1;
@@ -346,33 +348,7 @@ A4: n = m+k by NAT_1:10;
 end;
 
 definition
-  let seq;
-  canceled;
-  redefine attr seq is constant means
-  :Def6:
-  ex r st for n holds seq.n=r;
-  compatibility
-  proof
-A1: dom seq = NAT by FUNCT_2:def 1;
-    hereby
-      assume
-A2:   seq is constant;
-      reconsider r = seq.0 as real number;
-      take r;
-      let n be Element of NAT;
-      thus seq.n = r by A1,A2,FUNCT_1:def 16;
-    end;
-    given r such that
-A3: for n holds seq.n=r;
-    let n1,n2 be set;
-    assume
-A4: n1 in dom seq & n2 in dom seq;
-    hence seq.n1 = r by A1,A3
-      .= seq.n2 by A1,A3,A4;
-  end;
-end;
-
-definition
+ canceled 2;
   let seq;
   attr seq is monotone means
   :Def7:
@@ -504,166 +480,7 @@ A1: for n,m st n<=m holds seq.m<=seq.n;
   hence thesis by A1;
 end;
 
-Lm10: ((ex r st for n holds seq.n=r) implies ex r st rng seq={r}) &
-((ex r st rng seq={r}) implies for n holds seq.n=seq.(n+1)) &
-((for n holds seq.n=seq.(n+1)) implies for n,k holds seq.n=seq.(n+k)) &
-((for n,k holds seq.n=seq.(n+k)) implies for n,m holds seq.n=seq.m) &
-((for n,m holds seq.n=seq.m) implies ex r st for n holds seq.n=r)
-proof
-  thus (ex r st for n holds seq.n=r) implies ex r st rng seq={r}
-  proof
-    given r1 such that
-A1: for n holds seq.n=r1;
-    take r=r1;
-    now
-      let y;
-      assume y in rng seq;
-      then consider x such that
-A2:   x in dom seq and
-A3:   seq.x=y by FUNCT_1:def 5;
-      x in NAT by A2,FUNCT_2:def 1;
-      then y=r1 by A1,A3;
-      hence y in {r} by TARSKI:def 1;
-    end;
-    then
-A4: rng seq c={r} by TARSKI:def 3;
-    now
-      let y;
-      assume y in {r};
-      then
-A5:   y=r by TARSKI:def 1;
-      now
-        assume
-A6:     not y in rng seq;
-        now
-          let n;
-          n in NAT;
-          then n in dom seq by FUNCT_2:def 1;
-          then seq.n<>r by A5,A6,FUNCT_1:def 5;
-          hence contradiction by A1;
-        end;
-        hence contradiction;
-      end;
-      hence y in rng seq;
-    end;
-    then {r} c= rng seq by TARSKI:def 3;
-    hence thesis by A4,XBOOLE_0:def 10;
-  end;
-  thus (ex r st rng seq={r}) implies for n holds seq.n=seq.(n+1)
-  proof
-    given r1 such that
-A7: rng seq={r1};
-    let n;
-    n in NAT & n+1 in NAT;
-    then n in dom seq & n+1 in dom seq by FUNCT_2:def 1;
-    then seq.n in{r1} & seq.(n+1) in{r1} by A7,FUNCT_1:def 5;
-    then seq.n=r1 & seq.(n+1)=r1 by TARSKI:def 1;
-    hence seq.n=seq.(n+1);
-  end;
-  thus (for n holds seq.n=seq.(n+1)) implies for n,k holds seq.n=seq.(n+k)
-  proof
-    assume
-A8: for n holds seq.n=seq.(n+1);
-    let n;
-    defpred X[Element of NAT] means seq.n=seq.(n+$1);
-A9: X[0];
-A10: now
-      let k such that
-A11:  X[k];
-      seq.(n+k)=seq.(n+k+1) by A8;
-      hence X[k+1] by A11;
-    end;
-    thus for k holds X[k] from NAT_1:sch 1(A9,A10);
-  end;
-  thus (for n,k holds seq.n=seq.(n+k)) implies for n,m holds seq.n=seq.m
-  proof
-    assume
-A12: for n,k holds seq.n=seq.(n+k);
-    let n,m;
-A13: now
-      assume n<=m;
-      then consider k be Nat such that
-A14:  m=n+k by NAT_1:10;
-      k in NAT by ORDINAL1:def 13;
-      hence seq.n=seq.m by A12,A14;
-    end;
-    now
-      assume m<=n;
-      then consider k be Nat such that
-A15:  n=m+k by NAT_1:10;
-      k in NAT by ORDINAL1:def 13;
-      hence seq.n=seq.m by A12,A15;
-    end;
-    hence seq.n=seq.m by A13;
-  end;
-  assume that
-A16: for n,m holds seq.n=seq.m and
-A17: for r ex n st seq.n<>r;
-  now
-    let n;
-    ex n1 st seq.n1<>seq.n by A17;
-    hence contradiction by A16;
-  end;
-  hence thesis;
-end;
-
-theorem Th15:
-  seq is constant iff ex r st rng seq={r}
-proof
-  thus seq is constant implies ex r st rng seq={r}
-  proof
-    assume seq is constant;
-    then ex r st for n holds seq.n=r by Def6;
-    hence thesis by Lm10;
-  end;
-  assume ex r st rng seq={r};
-  then for n holds seq.n=seq.(n+1) by Lm10;
-  then for n,k holds seq.n=seq.(n+k) by Lm10;
-  then for n,m holds seq.n=seq.m by Lm10;
-  hence ex r st for n holds seq.n=r by Lm10;
-end;
-
-theorem Th16:
-  seq is constant iff for n holds seq.n=seq.(n+1)
-proof
-  thus seq is constant implies for n holds seq.n=seq.(n+1)
-  proof
-    assume seq is constant;
-    then ex r st rng seq={r} by Th15;
-    hence thesis by Lm10;
-  end;
-  assume for n holds seq.n=seq.(n+1);
-  then for n,k holds seq.n=seq.(n+k) by Lm10;
-  then for n,m holds seq.n=seq.m by Lm10;
-  hence ex r st for n holds seq.n=r by Lm10;
-end;
-
-theorem Th17:
-  seq is constant iff for n,k holds seq.n=seq.(n+k)
-proof
-  thus seq is constant implies for n,k holds seq.n=seq.(n+k)
-  proof
-    assume seq is constant;
-    then for n holds seq.n=seq.(n+1) by Th16;
-    hence thesis by Lm10;
-  end;
-  assume for n,k holds seq.n=seq.(n+k);
-  then for n,m holds seq.n=seq.m by Lm10;
-  hence ex r st for n holds seq.n=r by Lm10;
-end;
-
-theorem Th18:
-  seq is constant iff for n,m holds seq.n=seq.m
-proof
-  thus seq is constant implies for n,m holds seq.n=seq.m
-  proof
-    assume seq is constant;
-    then for n,k holds seq.n=seq.(n+k) by Th17;
-    hence thesis by Lm10;
-  end;
-  assume for n,m holds seq.n=seq.m;
-  hence ex r st for n holds seq.n=r by Lm10;
-end;
+canceled 4;
 
 ::
 :: PROPORTIES OF MONOTONE AND CONSTANT SEQUENCES
@@ -696,38 +513,6 @@ A1: seq is non-increasing;
 end;
 
 registration
-  cluster increasing -> non-decreasing PartFunc of NAT, REAL;
-  coherence
-  proof
-    let f be PartFunc of NAT, REAL such that
-A1: f is increasing;
-    let m,n such that
-A2: m in dom f & n in dom f and
-A3: m <= n;
-    per cases by A3,XXREAL_0:1;
-    suppose m < n;
-      hence f.m <= f.n by A1,A2,Def1;
-    end;
-    suppose m = n;
-      hence thesis;
-    end;
-  end;
-  cluster decreasing -> non-increasing PartFunc of NAT, REAL;
-  coherence
-  proof
-    let f be PartFunc of NAT, REAL such that
-A4: f is decreasing;
-    let m,n such that
-A5: m in dom f & n in dom f and
-A6: m <= n;
-    per cases by A6,XXREAL_0:1;
-    suppose m < n;
-      hence f.m >= f.n by A4,A5,Def2;
-    end;
-    suppose m = n;
-      hence thesis;
-    end;
-  end;
   cluster constant -> non-decreasing non-increasing PartFunc of NAT, REAL;
   coherence
   proof
@@ -759,30 +544,12 @@ A9: x in dom f & y in dom f;
   end;
 end;
 
-theorem
-  seq is increasing implies seq is non-decreasing;
-
-theorem
-  seq is decreasing implies seq is non-increasing;
-
-theorem
-  seq is constant implies seq is non-decreasing;
-
-theorem
-  seq is constant implies seq is non-increasing;
-
-theorem
-  seq is non-decreasing & seq is non-increasing implies seq is constant;
+canceled 5;
 
 ::  DEFINITIONS OF INCREASING SEQUENCE OF NATURAL NUMBERS,
 ::  RESTRICTION OF SEQUENCE.
 
-notation
-  let IT be Relation;
-  synonym IT is natural-yielding for IT is natural-valued;
-end;
-
-Lm11: incl NAT is increasing natural-yielding
+Lm11: incl NAT is increasing natural-valued
 proof
   set seq = incl NAT;
   now
@@ -793,29 +560,42 @@ proof
   hence thesis by Lm6;
 end;
 
+Lm11A: id NAT is increasing natural-valued;
+
 registration
-  cluster increasing natural-yielding Real_Sequence;
+  cluster increasing natural-valued Real_Sequence;
   existence by Lm11;
 end;
 
+registration
+  cluster increasing sequence of NAT;
+  existence by Lm11A;
+end;
+
 definition
-  mode Seq_of_Nat is natural-yielding Real_Sequence;
+  mode Seq_of_Nat is sequence of NAT;
+end;
+
+Lm6A: for f being Seq_of_Nat holds
+ f is increasing iff for n being Element of NAT holds f.n < f.(n+1)
+proof let f be Seq_of_Nat;
+  reconsider f as Real_Sequence by FUNCT_2:9;
+  f is increasing iff for n being Element of NAT holds f.n < f.(n+1) by Lm6;
+  hence thesis;
 end;
 
 reserve Nseq,Nseq1,Nseq2 for increasing Seq_of_Nat;
 
 canceled;
 
-theorem Th29:
-  seq is increasing Seq_of_Nat iff seq is increasing &
-  for n holds seq.n is Element of NAT
+theorem
+  seq is Seq_of_Nat iff for n holds seq.n is Element of NAT
 proof
-  thus seq is increasing Seq_of_Nat implies seq is increasing &
+  thus seq is Seq_of_Nat implies
   for n holds seq.n is Element of NAT
   proof
     assume
-A1: seq is increasing Seq_of_Nat;
-    hence seq is increasing;
+A1: seq is Seq_of_Nat;
     let n;
 A2: rng seq c= NAT by A1,VALUED_0:def 6;
     n in NAT;
@@ -824,103 +604,41 @@ A2: rng seq c= NAT by A1,VALUED_0:def 6;
     hence seq.n is Element of NAT by A2;
   end;
   assume that
-A3: seq is increasing and
 A4: for n holds seq.n is Element of NAT;
-  seq is natural-yielding
+   rng seq c= NAT
   proof
-    let x;
-    assume x in dom seq;
-    then x in NAT by FUNCT_2:def 1;
-    hence thesis by A4;
+    let x be set;
+    assume x in rng seq;
+     then consider y such that
+W1:  y in dom seq and
+W2:  x = seq.y by FUNCT_1:def 5;
+     reconsider y as Element of NAT by W1,FUNCT_2:def 1;
+     x = seq.y by W2;
+     then x is Element of NAT by A4;
+    hence thesis;
   end;
-  hence thesis by A3;
+  hence thesis by FUNCT_2:8;
 end;
 
-canceled;
-
-theorem Th31:
-  for n holds (seq*Nseq).n=seq.(Nseq.n)
-proof
-  let n;
-A1: dom Nseq=NAT by FUNCT_2:def 1;
-  rng Nseq c= NAT by VALUED_0:def 6;
-  then rng Nseq c= dom seq by FUNCT_2:def 1;
-  then dom (seq*Nseq)=NAT by A1,RELAT_1:46;
-  hence (seq*Nseq).n=seq.(Nseq.n) by FUNCT_1:22;
-end;
-
-definition
-  let Nseq,seq;
-  redefine func seq*Nseq -> Real_Sequence;
-  coherence
-  proof
-A1: dom Nseq=NAT by FUNCT_2:def 1;
-A2: rng seq c= REAL by RELSET_1:12;
-    rng Nseq c= NAT by VALUED_0:def 6;
-    then rng Nseq c= dom seq by FUNCT_2:def 1;
-    then
-A3: dom (seq*Nseq)=NAT by A1,RELAT_1:46;
-    rng (seq*Nseq) c= rng seq by RELAT_1:45;
-    then rng (seq*Nseq) c= REAL by A2,XBOOLE_1:1;
-    hence thesis by A3,FUNCT_2:def 1,RELSET_1:11;
-  end;
-end;
-
-definition
-  let Nseq,Nseq1;
-  redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
-  coherence
-  proof
-    now
-      let n;
-      Nseq.n<Nseq.(n+1) by Lm6;
-      then Nseq1.(Nseq.n)<Nseq1.(Nseq.(n+1)) by Th7;
-      then (Nseq1*Nseq).n<Nseq1.(Nseq.(n+1)) by Th31;
-      hence (Nseq1*Nseq).n<(Nseq1*Nseq).(n+1) by Th31;
-    end;
-    hence thesis by Lm6;
-  end;
-end;
+canceled 2;
 
 registration
   let Nseq,k;
-  cluster Nseq ^\k -> increasing natural-yielding;
+  cluster Nseq ^\k -> increasing natural-valued;
   coherence
   proof
-A1: now
-      let n;
-      (Nseq ^\k).n=Nseq.(n+k) by NAT_1:def 3;
-      hence (Nseq ^\k).n is Element of NAT;
-    end;
     now
       let n;
-      Nseq.(n+k)<Nseq.(n+k+1) by Lm6;
+      Nseq.(n+k)<Nseq.(n+k+1) by Lm6A;
       then (Nseq ^\k).n<Nseq.(n+1+k) by NAT_1:def 3;
       hence (Nseq ^\k).n<(Nseq ^\k).(n+1) by NAT_1:def 3;
     end;
-    then Nseq ^\k is increasing by Lm6;
-    hence thesis by A1,Th29;
-  end;
-end;
-
-::
-:: DEFINITION OF SUBSEQUENCE
-::
-
-definition
-  let seq;
- canceled 2;
-  mode subsequence of seq -> Real_Sequence means
-    :Def10:
-    ex Nseq st it=seq*Nseq;
-  existence
-  proof reconsider s = incl NAT as increasing Seq_of_Nat by Lm11;
-    take seq, s;
-    thus thesis by FUNCT_2:23;
+    hence thesis by Lm6A;
   end;
 end;
 
 definition
+ canceled 3;
   let f be Real_Sequence;
   redefine attr f is increasing means
   for n being Element of NAT holds f.n < f.(n+1);
@@ -946,7 +664,7 @@ A1: X[0] by NAT_1:2;
 A2: now
     let k such that
 A3: X[k];
-    Nseq.k<Nseq.(k+1) by Lm6;
+    Nseq.k<Nseq.(k+1) by Lm6A;
     then k<Nseq.(k+1) by A3,XXREAL_0:2;
     hence X[k+1] by NAT_1:13;
   end;
@@ -989,18 +707,7 @@ proof
     .=(seq ^\k)-(seq1 ^\k) by Th38;
 end;
 
-theorem
-  seq is non-zero implies seq ^\k is non-zero
-proof
-  assume
-A1: seq is non-zero;
-  now
-    let n;
-    (seq ^\k).n=seq.(n+k) by NAT_1:def 3;
-    hence (seq ^\k).n<>0 by A1,SEQ_1:7;
-  end;
-  hence thesis by SEQ_1:7;
-end;
+canceled;
 
 theorem Th41:
   (seq") ^\k=(seq ^\k)"
@@ -1049,87 +756,12 @@ proof
   hence thesis by FUNCT_2:113;
 end;
 
-theorem
-  (seq*Nseq) ^\k=seq*(Nseq ^\k)
-proof
-  now
-    let n;
-    thus ((seq*Nseq) ^\k).n=(seq*Nseq).(n+k) by NAT_1:def 3
-      .=seq.(Nseq.(n+k)) by Th31
-      .=seq.((Nseq ^\k).n) by NAT_1:def 3
-      .=(seq*(Nseq ^\k)).n by Th31;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  seq is subsequence of seq
-proof
-  set seq1 = incl NAT;
-  now
-    let n;
-    seq1.n=n & seq1.(n+1)=n+1 by FUNCT_1:35;
-    hence seq1.n<seq1.(n+1) by NAT_1:13;
-  end;
-  then reconsider seq1 as increasing Seq_of_Nat by Lm6;
-  take Nseq=seq1;
-  now
-    let n;
-    thus (seq*Nseq).n=seq.(Nseq.n) by Th31
-      .=seq.n by FUNCT_1:35;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  seq ^\k is subsequence of seq
-proof
-  deffunc U(Element of NAT) = $1+k;
-  consider seq1 such that
-A1: for n holds seq1.n=U(n) from SEQ_1:sch 1;
-  now
-    let n;
-A2: seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
-    n+k<n+k+1 by NAT_1:13;
-    hence seq1.n<seq1.(n+1) by A2;
-  end;
-  then
-A3: seq1 is increasing by Lm6;
-  now
-    let n;
-    n+k is Element of NAT;
-    hence seq1.n is Element of NAT by A1;
-  end;
-  then reconsider seq1 as increasing Seq_of_Nat by A3,Th29;
-  take Nseq=seq1;
-  now
-    let n;
-    thus (seq*Nseq).n=seq.(Nseq.n) by Th31
-      .=seq.(n+k) by A1
-      .=(seq ^\k).n by NAT_1:def 3;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem
-  seq is subsequence of seq1 & seq1 is subsequence of seq2
-  implies seq is subsequence of seq2
-proof
-  assume that
-A1: seq is subsequence of seq1 and
-A2: seq1 is subsequence of seq2;
-  consider Nseq1 such that
-A3: seq=seq1*Nseq1 by A1,Def10;
-  consider Nseq2 such that
-A4: seq1=seq2*Nseq2 by A2,Def10;
-  take Nseq=Nseq2*Nseq1;
-  thus seq=seq2*Nseq by A3,A4,RELAT_1:55;
-end;
-
 ::
 ::  SUBSEQUENCES OF MONOTONE SEQUENCE
 ::    SUBSEQUENCE OF BOUNDED SEQUENCE
 ::
+
+canceled 4;
 
 theorem
   seq is increasing & seq1 is subsequence of seq implies seq1 is increasing
@@ -1138,12 +770,12 @@ proof
 A1: seq is increasing and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
+A3: seq1=seq*Nseq by A2,VALUED_0:def 17;
   let n;
-  Nseq.n<Nseq.(n+1) by Lm6;
+  Nseq.n<Nseq.(n+1) by Lm6A;
   then (seq.(Nseq.n))<(seq.(Nseq.(n+1))) by A1,Th7;
-  then (seq*Nseq).n<(seq.(Nseq.(n+1))) by Th31;
-  hence seq1.n<seq1.(n+1) by A3,Th31;
+  then (seq*Nseq).n<(seq.(Nseq.(n+1))) by FUNCT_2:21;
+  hence seq1.n<seq1.(n+1) by A3,FUNCT_2:21;
 end;
 
 theorem
@@ -1153,12 +785,12 @@ proof
 A1: seq is decreasing and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
+A3: seq1=seq*Nseq by A2,VALUED_0:def 17;
   let n;
-  Nseq.n<Nseq.(n+1) by Lm6;
+  Nseq.n<Nseq.(n+1) by Lm6A;
   then seq.(Nseq.(n+1))<seq.(Nseq.n) by A1,Th10;
-  then (seq*Nseq).(n+1)<seq.(Nseq.n) by Th31;
-  hence seq1.(n+1)<seq1.n by A3,Th31;
+  then (seq*Nseq).(n+1)<seq.(Nseq.n) by FUNCT_2:21;
+  hence seq1.(n+1)<seq1.n by A3,FUNCT_2:21;
 end;
 
 theorem Th51:
@@ -1169,12 +801,12 @@ proof
 A1: seq is non-decreasing and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
+A3: seq1=seq*Nseq by A2,VALUED_0:def 17;
   let n;
-  Nseq.n<=Nseq.(n+1) by Lm6;
+  Nseq.n<=Nseq.(n+1) by Lm6A;
   then (seq.(Nseq.n))<=(seq.(Nseq.(n+1))) by A1,Th12;
-  then (seq*Nseq).n<=(seq.(Nseq.(n+1))) by Th31;
-  hence seq1.n<=seq1.(n+1) by A3,Th31;
+  then (seq*Nseq).n<=(seq.(Nseq.(n+1))) by FUNCT_2:21;
+  hence seq1.n<=seq1.(n+1) by A3,FUNCT_2:21;
 end;
 
 theorem Th52:
@@ -1185,12 +817,12 @@ proof
 A1: seq is non-increasing and
 A2: seq1 is subsequence of seq;
   consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
+A3: seq1=seq*Nseq by A2,VALUED_0:def 17;
   let n;
-  Nseq.n<=Nseq.(n+1) by Lm6;
+  Nseq.n<=Nseq.(n+1) by Lm6A;
   then (seq.(Nseq.(n+1)))<=(seq.(Nseq.n)) by A1,Th14;
-  then (seq*Nseq).(n+1)<=(seq.(Nseq.n)) by Th31;
-  hence seq1.(n+1)<=seq1.n by A3,Th31;
+  then (seq*Nseq).(n+1)<=(seq.(Nseq.n)) by FUNCT_2:21;
+  hence seq1.(n+1)<=seq1.n by A3,FUNCT_2:21;
 end;
 
 theorem
@@ -1212,38 +844,7 @@ A3: now
   hence thesis by A1,A3,Def7;
 end;
 
-theorem
-  seq is constant & seq1 is subsequence of seq implies seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
-  now
-    let n;
-    seq.(Nseq.(n+1))=seq.(Nseq.n) by A1,Th18;
-    then (seq*Nseq).(n+1)=seq.(Nseq.n) by Th31;
-    hence seq1.n=seq1.(n+1) by A3,Th31;
-  end;
-  hence thesis by Th16;
-end;
-
-theorem
-  seq is constant & seq1 is subsequence of seq implies seq=seq1
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq such that
-A3: seq1=seq*Nseq by A2,Def10;
-  now
-    let n;
-    thus seq1.n=seq.(Nseq.n) by A3,Th31
-      .=seq.n by A1,Th18;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 2;
 
 theorem Th56:
   seq is bounded_above & seq1 is subsequence of seq implies
@@ -1255,10 +856,10 @@ A2: seq1 is subsequence of seq;
   consider r1 such that
 A3: for n holds seq.n<r1 by A1,SEQ_2:def 3;
   consider Nseq such that
-A4: seq1=seq*Nseq by A2,Def10;
+A4: seq1=seq*Nseq by A2,VALUED_0:def 17;
   take r=r1;
   let n be Element of NAT;
-  seq1.n=seq.(Nseq.n) by A4,Th31;
+  seq1.n=seq.(Nseq.n) by A4,FUNCT_2:21;
   hence seq1.n<r by A3;
 end;
 
@@ -1272,10 +873,10 @@ A2: seq1 is subsequence of seq;
   consider r1 such that
 A3: for n holds r1<seq.n by A1,SEQ_2:def 4;
   consider Nseq such that
-A4: seq1=seq*Nseq by A2,Def10;
+A4: seq1=seq*Nseq by A2,VALUED_0:def 17;
   take r=r1;
   let n be Element of NAT;
-  seq1.n=seq.(Nseq.n) by A4,Th31;
+  seq1.n=seq.(Nseq.n) by A4,FUNCT_2:21;
   hence r<seq1.n by A3;
 end;
 
@@ -1285,10 +886,8 @@ proof
   assume that
 A1: seq is bounded and
 A2: seq1 is subsequence of seq;
-  seq is bounded_above by A1;
-  hence seq1 is bounded_above by A2,Th56;
-  seq is bounded_below by A1;
-  hence seq1 is bounded_below by A2,Th57;
+  thus seq1 is bounded_above by A1,A2,Th56;
+  thus seq1 is bounded_below by A1,A2,Th57;
 end;
 
 ::
@@ -1316,12 +915,13 @@ A2: 0<r;
     assume
 A3: 0=r;
     now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
       r*seq.n=r*seq.(n+1) by A3;
-      then (r(#)seq).n=r*seq.(n+1) by SEQ_1:13;
+      then (r(#)seq).n=r*seq.(n+1) by SEQ_1:13,X;
       hence (r(#)seq).n=(r(#)seq).(n+1) by SEQ_1:13;
     end;
-    hence thesis by Th16;
+    hence thesis by VALUED_0:25;
   end;
   assume that
 A4: seq is increasing and
@@ -1477,8 +1077,8 @@ proof
     assume that
 A1: seq is increasing and
 A2: seq1 is constant;
-    consider r1 such that
-A3: for n holds seq1.n=r1 by A2,Def6;
+    consider r1 being Real such that
+A3: for n being Nat holds seq1.n=r1 by A2,VALUED_0:def 18;
     let n;
     seq.n<seq.(n+1) by A1,Lm6;
     then seq.n+r1<seq.(n+1)+r1 by XREAL_1:8;
@@ -1492,8 +1092,8 @@ A3: for n holds seq1.n=r1 by A2,Def6;
     assume that
 A4: seq is decreasing and
 A5: seq1 is constant;
-    consider r1 such that
-A6: for n holds seq1.n=r1 by A5,Def6;
+    consider r1 being Real such that
+A6: for n being Nat holds seq1.n=r1 by A5,VALUED_0:def 18;
     let n;
     seq.(n+1)<seq.n by A4,Lm7;
     then seq.(n+1)+r1<seq.n+r1 by XREAL_1:8;
@@ -1507,94 +1107,21 @@ A6: for n holds seq1.n=r1 by A5,Def6;
   assume that
 A9: seq is non-increasing and
 A10: seq1 is constant;
-  seq1 is non-increasing by A10;
-  hence thesis by A9,Th63;
-end;
-
-theorem Th65:
-  seq is constant implies (for r holds r(#)seq is constant) &
-  -seq is constant & abs seq is constant
-proof
-  assume seq is constant;
-  then consider r1 such that
-A1: for n holds seq.n=r1 by Def6;
-A2: now
-    let r;
-    now
-      take p=r*r1;
-      let n;
-      r*seq.n=p by A1;
-      hence (r(#)seq).n=p by SEQ_1:13;
-    end;
-    hence r(#)seq is constant by Def6;
-  end;
-  hence for r holds r(#)seq is constant;
-  thus -seq is constant by A2;
-  take p=abs r1;
-  let n;
-  abs (seq.n)=abs r1 by A1;
-  hence (abs seq).n=p by SEQ_1:16;
-end;
-
-theorem Th66:
-  seq is constant & seq1 is constant implies
-  seq(#)seq1 is constant & seq+seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is constant;
-  consider r1 such that
-A3: for n holds seq.n=r1 by A1,Def6;
-  consider r2 such that
-A4: for n holds seq1.n=r2 by A2,Def6;
-  now
-    take p=r1*r2;
-    let n;
-    (seq.n)*r2=r1*r2 by A3;
-    then seq.n*(seq1.n)=r1*r2 by A4;
-    hence (seq(#)seq1).n=p by SEQ_1:12;
-  end;
-  hence seq(#)seq1 is constant by Def6;
-  take p=r1+r2;
-  let n;
-  seq.n+r2=r1+r2 by A3;
-  then seq.n+seq1.n=r1+r2 by A4;
-  hence (seq+seq1).n=p by SEQ_1:11;
-end;
-
-theorem
-  seq is constant & seq1 is constant implies seq-seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is constant;
-  -seq1 is constant by A2,Th65;
-  hence thesis by A1,Th66;
+  thus thesis by A9,A10,Th63;
 end;
 
 ::
 :: OPERATIONS ON BOUNDED SEQUENCES
 ::
 
+canceled 3;
+
 theorem Th68:
   (seq is bounded_above & 0<r implies r(#)seq is bounded_above) &
   (0=r implies r(#)seq is bounded) &
   (seq is bounded_above & r<0 implies r(#)seq is bounded_below)
 proof
-  thus seq is bounded_above & 0<r implies r(#)seq is bounded_above
-  proof
-    assume that
-A1: seq is bounded_above and
-A2: 0<r;
-    consider r1 such that
-A3: for n holds seq.n<r1 by A1,SEQ_2:def 3;
-    take p=r*abs r1;
-    let n be Element of NAT;
-    r1<=abs r1 by ABSVALUE:11;
-    then seq.n<abs r1 by A3,XXREAL_0:2;
-    then r*seq.n<r*abs r1 by A2,XREAL_1:70;
-    hence (r(#)seq).n<p by SEQ_1:13;
-  end;
+  thus seq is bounded_above & 0<r implies r(#)seq is bounded_above;
   thus 0=r implies r(#)seq is bounded
   proof
     assume
@@ -1624,80 +1151,31 @@ A8: for n holds seq.n<r1 by A6,SEQ_2:def 3;
   hence p<(r(#)seq).n by SEQ_1:13;
 end;
 
-theorem Th69:
-  (seq is bounded_below & 0<r implies r(#)seq is bounded_below) &
-  (seq is bounded_below & r<0 implies r(#)seq is bounded_above)
-proof
-  thus seq is bounded_below & 0<r implies r(#)seq is bounded_below
-  proof
-    assume that
-A1: seq is bounded_below and
-A2: 0<r;
-    consider r1 such that
-A3: for n holds r1<seq.n by A1,SEQ_2:def 4;
-    take p=r*r1;
-    let n be Element of NAT;
-    r*r1<r*seq.n by A2,A3,XREAL_1:70;
-    hence p<(r(#)seq).n by SEQ_1:13;
-  end;
-  assume that
-A4: seq is bounded_below and
-A5: r<0;
-  consider r1 such that
-A6: for n holds r1<seq.n by A4,SEQ_2:def 4;
-  take p=r*(-abs r1);
-  let n be Element of NAT;
-  -abs r1<=r1 by ABSVALUE:11;
-  then -abs r1<seq.n by A6,XXREAL_0:2;
-  then r*seq.n<r*(-abs r1) by A5,XREAL_1:71;
-  hence (r(#)seq).n<p by SEQ_1:13;
-end;
+canceled;
 
-theorem Th70:
+theorem
   (seq is bounded implies for r holds r(#)seq is bounded) &
   (seq is bounded implies -seq is bounded) &
   (seq is bounded iff abs seq is bounded)
 proof thus
-A1: seq is bounded implies for r holds r(#)seq is bounded
+ seq is bounded implies for r holds r(#)seq is bounded
   proof
-    assume seq is bounded;
-    then
-A2: seq is bounded_above & seq is bounded_below;
+    assume
+Z:   seq is bounded;
     let r;
     per cases;
-    suppose
-A3:   0<r;
-      then
-A4:   r(#)seq is bounded_above by A2,Th68;
-      r(#)seq is bounded_below by A2,A3,Th69;
-      hence r(#)seq is bounded by A4;
+    suppose 0<r;
+      hence r(#)seq is bounded by Z;
     end;
     suppose 0=r;
       hence r(#)seq is bounded by Th68;
     end;
-    suppose
-A5:   r<0;
-      then
-A6:   r(#)seq is bounded_above by A2,Th69;
-      r(#)seq is bounded_below by A2,A5,Th68;
-      hence r(#)seq is bounded by A6;
+    suppose r<0;
+      hence r(#)seq is bounded by Z;
     end;
   end;
-  thus seq is bounded implies -seq is bounded by A1;
-  thus seq is bounded implies abs seq is bounded
-  proof
-    assume seq is bounded;
-    then consider r such that
-A7: 0<r and
-A8: for n holds abs (seq.n) <r by SEQ_2:15;
-    now
-      thus 0<r by A7;
-      let n;
-      abs (abs (seq.n))<r by A8;
-      hence abs ((abs seq).n)<r by SEQ_1:16;
-    end;
-    hence thesis by SEQ_2:15;
-  end;
+  thus seq is bounded implies -seq is bounded;
+  thus seq is bounded implies abs seq is bounded;
   assume abs seq is bounded;
   then consider r be real number such that
 A9: 0<r & for n be Element of NAT holds abs(abs seq.n)<r by SEQ_2:15;
@@ -1710,196 +1188,11 @@ A9: 0<r & for n be Element of NAT holds abs(abs seq.n)<r by SEQ_2:15;
   hence seq is bounded by A9,SEQ_2:15;
 end;
 
-theorem Th71:
-  (seq is bounded_above & seq1 is bounded_above implies
-  seq+seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is bounded_below implies
-  seq+seq1 is bounded_below) &
-  (seq is bounded & seq1 is bounded implies seq+seq1 is bounded)
-proof thus
-A1: seq is bounded_above & seq1 is bounded_above implies
-  seq+seq1 is bounded_above
-  proof
-    assume that
-A2: seq is bounded_above and
-A3: seq1 is bounded_above;
-    consider r1 such that
-A4: for n holds seq.n<r1 by A2,SEQ_2:def 3;
-    consider r2 such that
-A5: for n holds seq1.n<r2 by A3,SEQ_2:def 3;
-    take r=r1+r2;
-    let n be Element of NAT;
-    seq.n<r1 by A4;
-    then seq.n+seq1.n<r1+r2 by A5,XREAL_1:10;
-    hence (seq+seq1).n<r by SEQ_1:11;
-  end; thus
-A6: seq is bounded_below & seq1 is bounded_below implies
-  seq+seq1 is bounded_below
-  proof
-    assume that
-A7: seq is bounded_below and
-A8: seq1 is bounded_below;
-    consider r1 such that
-A9: for n holds r1<seq.n by A7,SEQ_2:def 4;
-    consider r2 such that
-A10: for n holds r2<seq1.n by A8,SEQ_2:def 4;
-    take r=r1+r2;
-    let n be Element of NAT;
-    r1<seq.n by A9;
-    then r1+r2<seq.n+seq1.n by A10,XREAL_1:10;
-    hence r<(seq+seq1).n by SEQ_1:11;
-  end;
-  assume that
-A11: seq is bounded and
-A12: seq1 is bounded;
-  thus seq+seq1 is bounded_above by A1,A11,A12;
-  thus seq+seq1 is bounded_below by A6,A11,A12;
-end;
-
-theorem Th72:
-  seq is bounded & seq1 is bounded implies seq(#)seq1 is bounded &
-  seq-seq1 is bounded
-proof
-  assume that
-A1: seq is bounded and
-A2: seq1 is bounded;
-  consider r1 such that
-A3: 0<r1 and
-A4: for n holds abs (seq.n)<r1 by A1,SEQ_2:15;
-  consider r2 such that
-A5: 0<r2 and
-A6: for n holds abs (seq1.n)<r2 by A2,SEQ_2:15;
-  now
-    take r=r1*r2;
-    0*0<r1*r2 by A3,A5,XREAL_1:98;
-    hence 0<r;
-    let n;
-A7: abs (seq.n)<r1 by A4;
-A8: abs (seq1.n)<r2 by A6;
-A9: 0<=abs (seq.n) by COMPLEX1:132;
-    0<=abs (seq1.n) by COMPLEX1:132;
-    then abs (seq.n)*abs (seq1.n)<r by A7,A8,A9,XREAL_1:98;
-    then abs ((seq.n)*seq1.n)<r by COMPLEX1:151;
-    hence abs ((seq(#)seq1).n)<r by SEQ_1:12;
-  end;
-  hence seq (#)seq1 is bounded by SEQ_2:15;
-  -seq1 is bounded by A2,Th70;
-  hence thesis by A1,Th71;
-end;
-
-::
-:: OPERATIONS ON BOUNDED & CONSTANT SEQUENCES
-::
-
-theorem Th73:
-  seq is constant implies seq is bounded
-proof
-  assume seq is constant;
-  then consider r1 such that
-A1: for n holds seq.n=r1 by Def6;
-  now
-    take p=abs r1+1;
-    0+0<abs r1+1 by COMPLEX1:132,XREAL_1:10;
-    hence 0<p;
-    let n;
-    abs r1=abs (seq.n) by A1;
-    then abs (seq.n)+0<abs r1+1 by XREAL_1:8;
-    hence abs (seq.n)<p;
-  end;
-  hence thesis by SEQ_2:15;
-end;
-
-theorem
-  seq is constant implies (for r holds r(#)seq is bounded) & -seq is bounded &
-  abs seq is bounded
-proof
-  assume
-A1: seq is constant;
-  now
-    let r;
-    r(#)seq is constant by A1,Th65;
-    hence r(#)seq is bounded by Th73;
-  end;
-  hence for r holds r(#)seq is bounded;
-  -seq is constant by A1,Th65;
-  hence -seq is bounded by Th73;
-  abs seq is constant by A1,Th65;
-  hence abs seq is bounded by Th73;
-end;
-
-theorem Th75:
-  (seq is bounded_above & seq1 is constant implies
-  seq+seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is constant implies
-  seq+seq1 is bounded_below) &
-  (seq is bounded & seq1 is constant implies seq+seq1 is bounded)
-proof
-  thus seq is bounded_above & seq1 is constant implies
-  seq+seq1 is bounded_above
-  proof
-    assume that
-A1: seq is bounded_above and
-A2: seq1 is constant;
-    seq1 is bounded by A2,Th73;
-    then seq1 is bounded_above;
-    hence thesis by A1,Th71;
-  end;
-  thus seq is bounded_below & seq1 is constant implies
-  seq+seq1 is bounded_below
-  proof
-    assume that
-A3: seq is bounded_below and
-A4: seq1 is constant;
-    seq1 is bounded by A4,Th73;
-    then seq1 is bounded_below;
-    hence thesis by A3,Th71;
-  end;
-  assume that
-A5: seq is bounded and
-A6: seq1 is constant;
-  seq1 is bounded by A6,Th73;
-  hence thesis by A5,Th71;
-end;
-
-theorem
-  (seq is bounded_above & seq1 is constant implies
-  seq-seq1 is bounded_above) &
-  (seq is bounded_below & seq1 is constant implies
-  seq-seq1 is bounded_below) &
-  (seq is bounded & seq1 is constant implies seq-seq1 is bounded &
-  seq1-seq is bounded & seq(#)seq1 is bounded)
-proof
-  thus seq is bounded_above & seq1 is constant implies
-  seq-seq1 is bounded_above
-  proof
-    assume that
-A1: seq is bounded_above and
-A2: seq1 is constant;
-    -seq1 is constant by A2,Th65;
-    hence thesis by A1,Th75;
-  end;
-  thus seq is bounded_below & seq1 is constant implies
-  seq-seq1 is bounded_below
-  proof
-    assume that
-A3: seq is bounded_below and
-A4: seq1 is constant;
-    -seq1 is constant by A4,Th65;
-    hence thesis by A3,Th75;
-  end;
-  assume that
-A5: seq is bounded and
-A6: seq1 is constant;
-  -seq1 is constant by A6,Th65;
-  hence seq-seq1 is bounded by A5,Th75;
-A7: seq1 is bounded by A6,Th73;
-  hence seq1-seq is bounded by A5,Th72;
-  thus thesis by A5,A7,Th72;
-end;
-
 ::
 :: OPERATIONS ON BOUNDED & MONOTONE SEQUENCES
 ::
+
+canceled 6;
 
 theorem
   seq is bounded_above & seq1 is non-increasing implies
@@ -1933,14 +1226,13 @@ A3: for n holds r1<seq.n by A1,SEQ_2:def 4;
   hence r<(seq+seq1).n by SEQ_1:11;
 end;
 
-theorem Th79: :: YELLOW_6:1
-  for X,x being set holds X --> x is constant;
+canceled;
 
 theorem
-  incl NAT is increasing natural-yielding by Lm11;
+  incl NAT is increasing natural-valued by Lm11;
 
 registration
-  cluster -> natural-yielding FinSequence of NAT;
+  cluster -> natural-valued FinSequence of NAT;
   coherence;
 end;
 

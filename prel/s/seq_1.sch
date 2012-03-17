@@ -13,7 +13,9 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 </Signature>
@@ -21,7 +23,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -46,7 +48,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="90">
+<Func kind="K" nr="106">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

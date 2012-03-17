@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="XXREAL_0"/>
@@ -59,7 +60,7 @@
 <Adjective nr="33" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="143"/>
+<Adjective nr="148"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREALA" nr="1">
@@ -76,7 +77,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <Func kind="K" nr="90">
 <LocusVar nr="1"/>
@@ -101,7 +102,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 <Func kind="K" nr="90">
 <LocusVar nr="1"/>
@@ -126,7 +127,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 <Func kind="K" nr="90">
 <LocusVar nr="1"/>
@@ -151,7 +152,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 <Func kind="K" nr="90">
 <LocusVar nr="1"/>
@@ -176,7 +177,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="119">
 <Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -201,7 +202,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="117">
 <Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -226,7 +227,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="118">
 <Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -251,7 +252,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="116">
 <Func kind="K" nr="94">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -277,7 +278,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -300,7 +301,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -323,7 +324,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -346,7 +347,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -369,7 +370,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="112">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -392,7 +393,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -415,7 +416,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -438,7 +439,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="109">
+<Func kind="K" nr="116">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -473,7 +474,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="405">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
@@ -488,7 +489,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="46"/>
-<Adjective nr="143"/>
+<Adjective nr="148"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -498,7 +499,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="143"/>
+<Adjective nr="148"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPREALA" nr="2">

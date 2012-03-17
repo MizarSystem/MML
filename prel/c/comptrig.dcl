@@ -16,8 +16,8 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>

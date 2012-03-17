@@ -20,7 +20,7 @@ environ
       LOPBAN_3, NFCONT_1, FDIFF_1, RECDEF_1;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, SEQ_2, PARTFUN2,
       FDIFF_1, BHSP_3, RSSPACE, VFUNCT_1, LOPBAN_3, NFCONT_1, SEQ_1, VALUED_1,
-      RECDEF_1;
+      RECDEF_1, NORMSP_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, MEMBERED, SEQM_3, FDIFF_1, STRUCT_0, LOPBAN_1, LOPBAN_2,
       VALUED_0, VALUED_1, FUNCT_2, FUNCOP_1;
@@ -32,7 +32,7 @@ environ
       SEQ_1, SEQ_2, NAT_1, SEQM_3, RELAT_1, FUNCT_1, VFUNCT_1, FUNCT_2, SEQ_4,
       NORMSP_1, LOPBAN_1, LOPBAN_2, LOPBAN_3, ANPROJ_1, PARTFUN1, PARTFUN2,
       NFCONT_1, FDIFF_1, BHSP_3, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
-      VALUED_1, STRUCT_0;
+      VALUED_1, STRUCT_0, VALUED_0;
  schemes NAT_1, SEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Differentiable Function on Normed Linear Spaces
@@ -110,7 +110,7 @@ A6: x in N & not x in X by TARSKI:def 3;
 A7: x=s & ||.s-r.|| <g by A6;
     take s;
     thus s in N by A7;
-    thus s in X` by A6,A7,XBOOLE_0:def 4;
+    thus s in X` by A6,A7,XBOOLE_0:def 5;
   end;
   defpred P[Element of NAT,Point of S] means
   $2 in {y where y is Point of S:||.y-r.|| < 1/($1+1)} & $2 in X`;
@@ -168,7 +168,7 @@ A21: s1.y=x by FUNCT_1:def 5;
   end;
   X` is closed by A1,NFCONT_1:def 6;
   then r in X` by A17,A18,A19,NFCONT_1:def 5;
-  hence contradiction by A2,XBOOLE_0:def 4;
+  hence contradiction by A2,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -215,7 +215,7 @@ A8: s1.n in N by A6;
   n in NAT;
   then n in dom s1 by FUNCT_2:def 1;
   then s1.n in rng s1 by FUNCT_1:def 5;
-  hence contradiction by A3,A4,A8,XBOOLE_0:def 4;
+  hence contradiction by A3,A4,A8,XBOOLE_0:def 5;
 end;
 
 theorem
@@ -240,7 +240,7 @@ definition
     assume
 Z:    rng f c= (the carrier of S) \ {0.S};
     assume 0.S in rng f;
-     then not 0.S in {0.S} by XBOOLE_0:def 4,Z;
+     then not 0.S in {0.S} by Z,XBOOLE_0:def 5;
     hence contradiction by TARSKI:def 1;
    end;
 end;
@@ -257,7 +257,7 @@ A1: rng seq c= (the carrier of S) \{0.S} by Def1;
     assume x in NAT;
     then x in dom seq by FUNCT_2:def 1;
     then seq.x in rng seq by FUNCT_1:def 5;
-    then not seq.x in {0.S} by A1,XBOOLE_0:def 4;
+    then not seq.x in {0.S} by A1,XBOOLE_0:def 5;
     hence seq.x<>0.S by TARSKI:def 1;
   end;
   assume
@@ -271,7 +271,7 @@ A4: x in dom seq and
 A5: seq.x=y by FUNCT_1:def 5;
     y<>0.S by A2,A4,A5;
     then not y in {0.S} by TARSKI:def 1;
-    hence y in (the carrier of S) \{0.S} by A3,XBOOLE_0:def 4;
+    hence y in (the carrier of S) \{0.S} by A3,XBOOLE_0:def 5;
   end;
   then rng seq c=(the carrier of S) \{0.S} by TARSKI:def 3;
   hence thesis by Def1;
@@ -556,7 +556,7 @@ A16: ||.((rseq(#)seq).m)-g.||<=
     ||.rseq.m*(seq.m-g2).||+||.(rseq.m-g1)*g2.|| by NORMSP_1:def 2;
     abs(rseq.m)<r by A4;
     then abs(rseq.m)*||.seq.m-g2.||<r*(p/(||.g2.||+r)) by A12,A13,A14,
-    XREAL_1:98;
+XREAL_1:98;
     then
 A17: ||.rseq.m*(seq.m-g2).||<r*(p/(||.g2.||+r)) by NORMSP_1:def 2;
     ||.(rseq.m-g1)*g2.||=||.g2.||*abs(rseq.m-g1) by NORMSP_1:def 2;
@@ -612,74 +612,7 @@ A1: seq is non-zero;
   hence thesis by Th7;
 end;
 
-theorem Th18:
-  seq ^\k is subsequence of seq
-proof
-  deffunc U(Element of NAT) = $1+k;
-  consider seq1 be Real_Sequence such that
-A1: for n holds seq1.n=U(n) from SEQ_1:sch 1;
-  now
-    let n;
-A2: seq1.n=n+k & seq1.(n+1)=n+1+k by A1;
-    n+k<n+k+1 by NAT_1:13;
-    hence seq1.n<seq1.(n+1) by A2;
-  end;
-  then
-A3: seq1 is increasing by SEQM_3:def 11;
-  now
-    let n;
-    n+k is Element of NAT;
-    hence seq1.n is Element of NAT by A1;
-  end;
-  then reconsider seq1 as increasing Seq_of_Nat by A3,SEQM_3:29;
-  take Nseq=seq1;
-  now
-    let n;
-    thus (seq*Nseq).n=seq.(Nseq.n) by LOPBAN_3:7
-      .=seq.(n+k) by A1
-      .=(seq ^\k).n by NAT_1:def 3;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
-
-theorem Th19:
-  seq is constant & seq1 is subsequence of seq implies seq1 is constant
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq be increasing Seq_of_Nat such that
-A3: seq1=seq*Nseq by A2,BHSP_3:def 4;
-  consider r be Point of S such that
-A4: for n be Element of NAT holds seq.n=r by A1,LOPBAN_3:def 5;
-  now
-    let n;
-    thus seq1.n=seq.(Nseq.n) by A3,LOPBAN_3:7
-      .=r by A4;
-
-  end;
-  hence thesis by LOPBAN_3:def 5;
-end;
-
-theorem Th20:
-  seq is constant & seq1 is subsequence of seq implies seq=seq1
-proof
-  assume that
-A1: seq is constant and
-A2: seq1 is subsequence of seq;
-  consider Nseq be increasing Seq_of_Nat such that
-A3: seq1=seq*Nseq by A2,BHSP_3:def 4;
-  consider r be Point of S such that
-A4: for n be Element of NAT holds seq.n=r by A1,LOPBAN_3:def 5;
-  now
-    let n;
-    thus seq1.n=seq.(Nseq.n) by A3,LOPBAN_3:7
-      .=r by A4
-
-      .=seq.n by A4;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 3;
 
 definition
   let S;
@@ -701,7 +634,7 @@ A1: seq is constant;
   hence
 A2: seq is convergent by LOPBAN_3:17;
   consider r be Point of X such that
-A3: for n be Element of NAT holds seq.n=r by A1,LOPBAN_3:def 5;
+A3: for n be Nat holds seq.n=r by A1,VALUED_0:def 18;
   now
     let k be Element of NAT;
     thus lim seq = seq.k
@@ -978,16 +911,17 @@ A1: dom f = the carrier of S by FUNCOP_1:19;
     now
       let h;
 A2:   now
-        let n;
+        let n be Nat;
 A3:     f/.(h.n) =f.(h.n) by A1,PARTFUN1:def 8
           .=0.T by FUNCOP_1:13;
-A4:     rng h c= dom f by A1; thus
-        ((||.h.||")(#)(f/*h)).n = (||.h.||").n*((f/*h).n) by Def2
-          .= (||.h.||").n*(f/.(h.n)) by A4,FUNCT_2:186
+A4:     rng h c= dom f by A1;
+X:   n in NAT by ORDINAL1:def 13;
+     hence ((||.h.||")(#)(f/*h)).n = (||.h.||").n*((f/*h).n) by Def2
+          .= (||.h.||").n*(f/.(h.n)) by A4,FUNCT_2:186,X
           .= 0.T by A3,RLVECT_1:23;
       end;
       then
-A5:   (||.h.||")(#)(f/*h) is constant by LOPBAN_3:def 5;
+A5:   (||.h.||")(#)(f/*h) is constant by VALUED_0:def 18;
       ((||.h.||")(#)(f/*h)).0 = 0.T by A2;
       hence (||.h.||")(#)(f/*h) is convergent & lim ((||.h.||")(#)(f/*h)) = 0.T
       by A5,Th21;
@@ -1184,38 +1118,7 @@ end;
 reserve R,R1,R2 for REST of S,T;
 reserve L,L1,L2 for Point of R_NormSpace_of_BoundedLinearOperators(S,T);
 
-theorem Th28:
-  rng (seq^\n) c= rng seq
-proof
-  let x;
-  assume x in rng (seq^\n);
-  then consider y such that
-A1: y in dom (seq^\n) & (seq^\n).y = x by FUNCT_1:def 5;
-  reconsider y as Element of NAT by A1;
-A2: (seq^\n).y = seq.(y+n) by NAT_1:def 3;
-  y+n in NAT;
-  then y+n in dom seq by FUNCT_2:def 1;
-  hence x in rng seq by A1,A2,FUNCT_1:def 5;
-end;
-
-theorem Th29:
-  for h be PartFunc of S,T for seq be sequence of S holds
-  rng seq c= dom h implies (h/*seq)^\n=h/*(seq^\n)
-proof
-  let h be PartFunc of S,T;
-  let seq be sequence of S;
-  assume
-A1: rng seq c= dom h;
-A2: rng (seq^\n) c= rng seq by Th28;
-  now
-    let m be Element of NAT;
-    thus ((h/*seq)^\n).m = (h/*seq).(m+n) by NAT_1:def 3
-      .= h/.(seq.(m+n)) by A1,FUNCT_2:186
-      .= h/.((seq^\n).m) by NAT_1:def 3
-      .= (h/*(seq^\n)).m by A1,A2,FUNCT_2:186,XBOOLE_1:1;
-  end;
-  hence thesis by FUNCT_2:113;
-end;
+canceled 2;
 
 theorem Th30:
   for h1,h2 be PartFunc of S,T for seq be sequence of S holds
@@ -1273,9 +1176,9 @@ A4:   for n holds (s2^\N).n=x0
         s2.(n+N)=x0 by A3,NAT_1:12;
         hence (s2^\N).n=x0 by NAT_1:def 3;
       end;
-      s2^\N is subsequence of s2 by LOPBAN_3:13;
+      s2^\N is subsequence of s2;
       then
-A5:   rng (s2^\N) c= rng s2 by NFCONT_1:7;
+A5:   rng (s2^\N) c= rng s2 by VALUED_0:21;
 A6:   now
         let p be Real such that
 A7:     p>0;
@@ -1290,7 +1193,7 @@ A7:     p>0;
       end;
       then
 A8:   f/*(s2^\N) is convergent by NORMSP_1:def 9;
-      f/*(s2^\N)=(f/*s2)^\N by A2,Th29;
+      f/*(s2^\N)=(f/*s2)^\N by A2,VALUED_0:27;
       then f/*s2 is convergent & f/.x0=lim((f/*s2)^\N)
       by A6,A8,LOPBAN_3:15,NORMSP_1:def 11;
       hence thesis by LOPBAN_3:14;
@@ -1400,21 +1303,21 @@ A32:    F.(m+1)<=M1 by A18,A23,A27,A30;
 A33:  for n holds (s2*F).n<>x0
       proof
         defpred P[Element of NAT] means (s2*F).$1<>x0;
-A34:    P[0] by A12,A18,LOPBAN_3:7;
+A34:    P[0] by A12,A18,FUNCT_2:21;
 A35:    for k st P[k] holds P[k+1]
         proof
           let k such that (s2*F).k<>x0;
           P[k,F.k,F.(k+1)] by A18;
           then s2.(F.(k+1))<>x0;
 
-          hence (s2*F).(k+1)<>x0 by LOPBAN_3:7;
+          hence (s2*F).(k+1)<>x0 by FUNCT_2:21;
         end;
         thus for n holds P[n] from NAT_1:sch 1(A34,A35);
       end;
-A36:  s2*F is subsequence of s2 by BHSP_3:def 4;
+A36:  s2*F is subsequence of s2 by VALUED_0:def 17;
       then
 A37:  s2*F is convergent by A2,LOPBAN_3:11;
-A38:  rng (s2*F) c= rng s2 by A36,NFCONT_1:7;
+A38:  rng (s2*F) c= rng s2 by A36,VALUED_0:21;
       then
 A39:  rng (s2*F) c= dom f by A2,XBOOLE_1:1;
       lim (s2*F)=x0 by A2,A36,LOPBAN_3:12;
@@ -1444,7 +1347,7 @@ A46:        m=F.l by A21;
             n<=l by A44,A46,SEQM_3:7;
             then ||.(f/*(s2*F)).l-f/.x0.||<p by A43;
             then ||.f/.((s2*F).l)-f/.x0.||<p by A2,A38,FUNCT_2:186,XBOOLE_1:1;
-            then ||.f/.(s2.m)-f/.x0.||<p by A46,LOPBAN_3:7;
+            then ||.f/.(s2.m)-f/.x0.||<p by A46,FUNCT_2:21;
             hence ||.(f/*s2).m-f/.x0.||<p by A2,FUNCT_2:186;
           end;
         end;
@@ -1681,16 +1584,17 @@ A26:      for n holds s.n = F(n) from FUNCT_2:sch 4;
           end;
           then reconsider s as convergent_to_0 sequence of S by Def4;
 A27:      now
-            let n;
+            let n be Nat;
             set x=(r.n)*z+x0;
 A28:        x-x0 = (r.n)*z+(x0 -x0) by RLVECT_1:def 6
               .= (r.n)*z+0.S by RLVECT_1:28
               .=(r.n)*z by RLVECT_1:10;
-            x in N0 by A25;
+X:   n in NAT by ORDINAL1:def 13;
+            then x in N0 by A25;
             then
 A29:        L.((r.n)*z) + R/.((r.n)*z) = L1.((r.n)*z) + R1/.(( r.n)*z)
             by A14,A16,A28;
-A30:        r.n <> 0 by A25;
+A30:        r.n <> 0 by A25,X;
 A31:        (r.n)"*(L.((r.n)*z))+(r.n)"*(R/.((r.n)*z))
             =(r.n)"*(L1.((r.n)*z)+R1/.((r.n)*z)) by A29,RLVECT_1:def 9;
 A32:        (r.n)"*(L.((r.n)*z)) =(r.n)"*(modetrans(L,S,T).((r.n)*z))
@@ -1720,12 +1624,12 @@ A34:        rng s c= dom R;
             then dom R1 = the carrier of S by PARTFUN1:def 4;
             then
 A35:        rng s c= dom R1;
-A36:        r.n > 0 by A25;
+A36:        r.n > 0 by A25,X;
             s is non-zero by Def4;
-            then s.n <> 0.S by Th7;
+            then s.n <> 0.S by Th7,X;
             then
 A37:        ||.s.n.|| <> 0 by NORMSP_1:def 2;
-            ||.s.n.|| = ||.(r.n)*z.|| by A26
+            ||.s.n.|| = ||.(r.n)*z.|| by A26,X
               .= abs(r.n) * ||.z.|| by NORMSP_1:def 2
               .=r.n * ||.z.|| by A36,ABSVALUE:def 1;
             then (r.n)"* ||.s.n.|| = (r.n)"* r.n * ||.z.||
@@ -1737,17 +1641,17 @@ A37:        ||.s.n.|| <> 0 by NORMSP_1:def 2;
               .= (r.n)"*1 by A37,XCMPLX_1:60
               .= (r.n)";
             then
-A38:        ||.z.|| *( ||.s.||.n )" = (r.n)" by NORMSP_1:def 10;
-A39:        (r.n)"*(R/.((r.n)*z)) = (r.n)"*(R/.(s.n)) by A26
+A38:        ||.z.|| *( ||.s.||.n )" = (r.n)" by NORMSP_1:def 10,X;
+A39:        (r.n)"*(R/.((r.n)*z)) = (r.n)"*(R/.(s.n)) by A26,X
               .= ( ||.z.|| *||.s.||".n)*(R/.(s.n)) by A38,VALUED_1:10
               .= ||.z.|| *(||.s.||".n *(R/.(s.n)) ) by RLVECT_1:def 9
-              .= ||.z.|| *((||.s.||".n)*((R/*s).n)) by A34,FUNCT_2:186
-              .= ||.z.|| *((||.s.||")(#)(R/*s)).n by Def2;
-            (r.n)"*(R1/.((r.n)*z)) = (r.n)"*(R1/.(s.n)) by A26
+              .= ||.z.|| *((||.s.||".n)*((R/*s).n)) by A34,FUNCT_2:186,X
+              .= ||.z.|| *((||.s.||")(#)(R/*s)).n by Def2,X;
+            (r.n)"*(R1/.((r.n)*z)) = (r.n)"*(R1/.(s.n)) by A26,X
               .= ( ||.z.|| *||.s.||".n)*(R1/.(s.n)) by A38,VALUED_1:10
               .= ||.z.|| *(||.s.||".n *(R1/.(s.n)) ) by RLVECT_1:def 9
-              .= ||.z.|| *((||.s.||".n)*((R1/*s).n)) by A35,FUNCT_2:186
-              .= ||.z.|| *((||.s.||")(#)(R1/*s)).n by Def2;
+              .= ||.z.|| *((||.s.||".n)*((R1/*s).n)) by A35,FUNCT_2:186,X
+              .= ||.z.|| *((||.s.||")(#)(R1/*s)).n by Def2,X;
             then L.z + ( ||.z.|| *((||.s.||")(#)(R/*s)).n
             -( ||.z.|| *((||.s.||")(#)(R/*s)).n))
             = L1.z + ||.z.|| *((||.s.||")(#)(R1/*s)).n
@@ -1771,14 +1675,14 @@ then L.z - L1.z = ||.z.|| *((||.s.||"(#)(R1/*s)).n-(||.s.||"(#)(R/*s)).n)
             by RLVECT_1:48;
 
 then L.z - L1.z = ||.z.|| *((||.s.||"(#)(R1/*s))-(||.s.||"(#)(R/*s))).n
-            by NORMSP_1:def 6;
+            by NORMSP_1:def 6,X;
 
 hence L.z - L1.z = ( ||.z.|| *((||.s.||"(#)(R1/*s))-(||.s.||"(#)(R/*s)))).n
-            by NORMSP_1:def 8;
+            by NORMSP_1:def 8,X;
           end;
           then
 A40:      ||.z.|| *((||.s.||"(#)(R1/*s))-(||.s.||"(#)(R/*s)))
-          is constant by LOPBAN_3:def 5;
+          is constant by VALUED_0:def 18;
           ( ||.z.|| *((||.s.||"(#)(R1/*s))-(||.s.||"(#)(R/*s)))).1
           =L.z - L1.z by A27;
           then
@@ -2012,16 +1916,17 @@ A6: dom R = the carrier of S by FUNCOP_1:19;
   now
     let h;
 A8: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A9:   R/.(h.n) =R.(h.n) by A6,PARTFUN1:def 8
         .=0.T by FUNCOP_1:13;
 A10:  rng h c= dom R by A6;
-      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2
-        .= (||.h.||".n)*(R/.(h.n)) by A10,FUNCT_2:186
+      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2,X
+        .= (||.h.||".n)*(R/.(h.n)) by A10,FUNCT_2:186,X
         .= 0.T by A9,RLVECT_1:23;
     end;
     then
-A11: (||.h.||")(#)(R/*h) is constant by LOPBAN_3:def 5;
+A11: (||.h.||")(#)(R/*h) is constant by VALUED_0:def 18;
     hence (||.h.||")(#)(R/*h) is convergent by Th21;
     ((||.h.||")(#)(R/*h)).0 = 0.T by A8;
     hence lim ((||.h.||")(#)(R/*h)) = 0.T by A11,Th21;
@@ -2092,20 +1997,6 @@ A1:   h is non-zero & h is convergent & lim h = 0.S by Def4;
   end;
 end;
 
-registration
-  let S;
-  let c,n;
-  cluster c^\n -> constant;
-  coherence
-  proof
-    c^\n is constant
-    proof c^\n is subsequence of c by LOPBAN_3:13;
-      hence c^\n is constant by Th19;
-    end;
-    hence thesis;
-  end;
-end;
-
 theorem Th39:
   for x0 be Point of S for N being Neighbourhood of x0 st
   f is_differentiable_in x0 & N c= dom f holds
@@ -2146,9 +2037,9 @@ A11: lim (h + c) = 0.S + x0 by A8,A9,NORMSP_1:42
     then consider n such that
 A12: for m being Element of NAT st n<=m holds
     ||.(h+c).m-x0.||<g by A6,A11,NORMSP_1:def 11;
-    c^\n is subsequence of c by Th18;
+    c^\n is subsequence of c;
     then
-A13: rng (c^\n) = {x0} by A2,Th20;
+A13: rng (c^\n) = {x0} by A2,VALUED_0:26;
     take n;
     thus rng (c^\n) c= N2
     proof
@@ -2174,9 +2065,9 @@ A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
 A17: rng (c^\n) c= dom f
   proof
     let y;
-    c^\n is subsequence of c by Th18;
+    c^\n is subsequence of c;
     then
-A18: rng (c^\n) = rng c by Th20;
+A18: rng (c^\n) = rng c by VALUED_0:26;
     assume y in rng (c^\n);
     then y = x0 by A2,A18,TARSKI:def 1;
     then y in N by NFCONT_1:4;
@@ -2220,8 +2111,8 @@ A24: ((h+c)^\n).k - (c^\n).k = (h+c).(k+n) - (c^\n).k by NAT_1:def 3
       .= (h^\n).k + 0.S by RLVECT_1:28
       .= (h^\n).k by RLVECT_1:10;
 A25: (c^\n).k in rng (c^\n) by NFCONT_1:6;
-    c^\n is subsequence of c by Th18;
-    then rng (c^\n) = rng c by Th20;
+    c^\n is subsequence of c;
+    then rng (c^\n) = rng c by VALUED_0:26;
     then (c^\n).k = x0 by A2,A25,TARSKI:def 1;
     hence thesis by A4,A5,A23,A24;
   end;
@@ -2302,8 +2193,8 @@ A38: LP is_continuous_on the carrier of S by NFCONT_1:52;
   then
 A39: (LP/*(h^\n) + R/*(h^\n)) is convergent &
   lim (LP/*(h^\n) + R/*(h^\n)) = 0.T by RLVECT_1:10;
-  f/*((h+c)^\n) - f/*(c^\n) =(f/*(h+c))^\n - f/*(c^\n) by A21,Th29
-    .=(f/*(h+c))^\n - (f/*c) ^\n by A20,Th29
+  f/*((h+c)^\n) - f/*(c^\n) =(f/*(h+c))^\n - f/*(c^\n) by A21,VALUED_0:27
+    .=(f/*(h+c))^\n - (f/*c) ^\n by A20,VALUED_0:27
     .= (f/*(h+c) - f/*c) ^\n by Th16;
   hence thesis by A29,A39,LOPBAN_3:15,16;
 end;
@@ -2483,16 +2374,17 @@ A5: dom R = (the carrier of S) by FUNCOP_1:19;
   now
     let h;
 A7: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A8:   R/.(h.n) =R.(h.n) by A5,PARTFUN1:def 8
         .=0.S by FUNCOP_1:13;
 A9:   rng h c= dom R by A5;
-      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2
-        .= (||.h.||".n)*(R/.(h.n)) by A9,FUNCT_2:186
+      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2,X
+        .= (||.h.||".n)*(R/.(h.n)) by A9,FUNCT_2:186,X
         .= 0.S by A8,RLVECT_1:23;
     end;
     then
-A10: (||.h.||")(#)(R/*h) is constant by LOPBAN_3:def 5;
+A10: (||.h.||")(#)(R/*h) is constant by VALUED_0:def 18;
     hence (||.h.||")(#)(R/*h) is convergent by Th21;
     ((||.h.||")(#)(R/*h)).0 = 0.S by A7;
     hence lim ((||.h.||")(#)(R/*h)) = 0.S by A10,Th21;
@@ -2703,16 +2595,17 @@ A7: dom R = the carrier of S by FUNCOP_1:19;
   now
     let h;
 A9: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A10:  R/.(h.n) =R.(h.n) by A7,PARTFUN1:def 8
         .=0.T by FUNCOP_1:13;
 A11:  rng h c= dom R by A7;
-      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2
-        .=(||.h.||".n)*(R/.(h.n)) by A11,FUNCT_2:186
+      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2,X
+        .=(||.h.||".n)*(R/.(h.n)) by A11,FUNCT_2:186,X
         .=0.T by A10,RLVECT_1:23;
     end;
     then
-A12: (||.h.||")(#)(R/*h) is constant by LOPBAN_3:def 5;
+A12: (||.h.||")(#)(R/*h) is constant by VALUED_0:def 18;
     hence (||.h.||")(#)(R/*h) is convergent by Th21;
     ((||.h.||")(#)(R/*h)).0 = 0.T by A9;
     hence lim ((||.h.||")(#)(R/*h)) = 0.T by A12,Th21;
@@ -2723,7 +2616,7 @@ A13: now
     assume
 A14: x0 in Z;
     then
-A15: x0 in Z/\dom f by A2,XBOOLE_0:def 3;
+A15: x0 in Z/\dom f by A2,XBOOLE_0:def 4;
     consider N being Neighbourhood of x0 such that
 A16: N c= Z by A1,A14,Th2;
 A17: N c= dom f by A2,A16,XBOOLE_1:1;
@@ -2733,7 +2626,7 @@ A17: N c= dom f by A2,A16,XBOOLE_1:1;
 A18:  R/.(x-x0) =R.(x-x0) by A7,PARTFUN1:def 8
         .=0.T by FUNCOP_1:13;
       assume x in N;
-      then x in Z/\dom f by A16,A17,XBOOLE_0:def 3;
+      then x in Z/\dom f by A16,A17,XBOOLE_0:def 4;
       hence f/.x-f/.x0=r-f/.x0 by A4
         .=r - r by A4,A15
         .=0.T by RLVECT_1:28
@@ -2748,7 +2641,7 @@ A19: f is_differentiable_on Z by A1,A2,Th36;
   assume
 A20: x0 in Z;
   then
-A21: x0 in Z/\dom f by A2,XBOOLE_0:def 3;
+A21: x0 in Z/\dom f by A2,XBOOLE_0:def 4;
 A22: f is_differentiable_in x0 by A13,A20;
   consider N being Neighbourhood of x0 such that
 A23: N c= Z by A1,A20,Th2;
@@ -2759,7 +2652,7 @@ A25: for x be Point of S st x in N holds f/.x-f/.x0 =L.(x-x0)+R/.(x-x0)
 A26: R/.(x-x0) =R.(x-x0) by A7,PARTFUN1:def 8
       .=0.T by FUNCOP_1:13;
     assume x in N;
-    then x in Z/\dom f by A23,A24,XBOOLE_0:def 3;
+    then x in Z/\dom f by A23,A24,XBOOLE_0:def 4;
     hence f/.x - f/.x0 = r - f/.x0 by A4
       .=r - r by A4,A21
       .=0.T by RLVECT_1:28
@@ -2800,16 +2693,17 @@ A5: dom R = the carrier of S by FUNCOP_1:19;
   now
     let h;
 A7: now
-      let n;
+      let n be Nat;
+X:   n in NAT by ORDINAL1:def 13;
 A8:   R/.(h.n) =R.(h.n) by A5,PARTFUN1:def 8
         .=0.S by FUNCOP_1:13;
 A9:   rng h c= dom R by A5;
-      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2
-        .=(||.h.||".n)*(R/.(h.n)) by A9,FUNCT_2:186
+      thus ((||.h.||")(#)(R/*h)).n = (||.h.||".n)*((R/*h).n) by Def2,X
+        .=(||.h.||".n)*(R/.(h.n)) by A9,FUNCT_2:186,X
         .=0.S by A8,RLVECT_1:23;
     end;
     then
-A10: (||.h.||")(#)(R/*h) is constant by LOPBAN_3:def 5;
+A10: (||.h.||")(#)(R/*h) is constant by VALUED_0:def 18;
     hence (||.h.||")(#)(R/*h) is convergent by Th21;
     ((||.h.||")(#)(R/*h)).0 = 0.S by A7;
     hence lim ((||.h.||")(#)(R/*h)) = 0.S by A10,Th21;
@@ -3017,7 +2911,7 @@ A30: f/*(h+c)-f/*c+(f/*c)=f/*(h+c) by FUNCT_2:113;
     end;
     then
 A31: f/*(h+c)-f/*c+(f/*c)=f/*(s1^\l) by A30,FUNCT_2:113
-      .=(f/*s1)^\l by A4,Th29;
+      .=(f/*s1)^\l by A4,VALUED_0:27;
     hence f/*s1 is convergent by A28,LOPBAN_3:15;
     thus f/.x0=lim(f/*s1) by A23,A26,A29,A31,LOPBAN_3:16,NORMSP_1:34;
   end;

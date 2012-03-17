@@ -27,6 +27,7 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -63,11 +64,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="491">
+<Func kind="K" nr="500">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="156"/>
+<Adjective nr="161"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_7" nr="2">
@@ -79,15 +80,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="494">
+<Func kind="K" nr="503">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="68" value="false"/>
-<Adjective nr="74"/>
-<Adjective nr="121"/>
-<Adjective nr="122"/>
-<Adjective nr="124"/>
+<Adjective nr="73" value="false"/>
+<Adjective nr="79"/>
+<Adjective nr="126"/>
+<Adjective nr="127"/>
+<Adjective nr="129"/>
 </Cluster>
 </FCluster>
 </Registrations>

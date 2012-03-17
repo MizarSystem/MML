@@ -25,13 +25,14 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="RFINSEQ"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -53,8 +54,8 @@
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="171">
-<Func kind="K" nr="171">
+<Func kind="K" nr="178">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -64,7 +65,7 @@
 <Adjective nr="4"/>
 <Adjective nr="22"/>
 <Adjective nr="27"/>
-<Adjective nr="131">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -79,8 +80,8 @@
 </ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="171">
-<Func kind="K" nr="171">
+<Func kind="K" nr="178">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -90,7 +91,7 @@
 <Adjective nr="4"/>
 <Adjective nr="22"/>
 <Adjective nr="27"/>
-<Adjective nr="132">
+<Adjective nr="137">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -104,20 +105,20 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="132">
+<Adjective nr="137">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="171">
-<Func kind="K" nr="171">
+<Func kind="K" nr="178">
+<Func kind="K" nr="178">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="131">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

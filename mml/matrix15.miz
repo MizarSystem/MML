@@ -79,9 +79,9 @@ A6: [i,j] in Indices AB by A4,MATRIXR1:18;
     then i in Seg len A & i in dom (aA*B) & j in Seg width (aA*B)
     by A2,A3,A5,FINSEQ_1:def 3;
     then
-A7: 1<=i & i<=len A & [i,j] in Indices (aA*B) by ZFMISC_1:106,FINSEQ_1 :3;
-    thus aAB*(i,j) = a*(AB*(i,j)) by MATRIX_3:def 5,A6
-      .= a*(Line(A,i)"*"Col(B,j)) by A1,MATRIX_3:def 4,A6
+A7: 1<=i & i<=len A & [i,j] in Indices (aA*B) by FINSEQ_1:3,ZFMISC_1:106;
+    thus aAB*(i,j) = a*(AB*(i,j)) by A6,MATRIX_3:def 5
+      .= a*(Line(A,i)"*"Col(B,j)) by A1,A6,MATRIX_3:def 4
       .= Sum(a*mlt(Line(A,i),Col(B,j))) by FVSUM_1:92
       .= Sum(mlt(a*Line(A,i),Col(B,j))) by A1,FVSUM_1:82
       .= Line(aA,i)"*"Col(B,j) by A7,MATRIXR1:20
@@ -262,9 +262,9 @@ A3: dom f1=dom p1 & dom f2=dom p2 & dom (f*(p1^p2))=dom (p1^p2)
   by A1,A2,RELAT_1:46,XBOOLE_1:8;
   then
 A4: len f1=len p1 & len f2=len p2 & dom (p1^p2)=Seg (len p1+len p2)
-  by FINSEQ_3:31,FINSEQ_1:def 7;
+  by FINSEQ_1:def 7,FINSEQ_3:31;
   then
-A5: dom (f1^f2)=dom (f*(p1^p2)) by FINSEQ_1:def 7,A3;
+A5: dom (f1^f2)=dom (f*(p1^p2)) by A3,FINSEQ_1:def 7;
   now
     let x such that
 A6: x in dom (f1^f2);
@@ -345,7 +345,7 @@ A16:  x in dom fn & fn.x=m' by A15,FUNCT_1:def 5;
       dom fn=Seg n by A8,FINSEQ_1:def 3;
       then x<=n by A16,FINSEQ_1:3;
       then x < n1 & n1 in Seg n1 & dom f=Seg n1 & x in dom f
-      by A5,A10,A16,NAT_1:13,FINSEQ_1:def 3,6;
+      by A5,A10,A16,FINSEQ_1:6,def 3,NAT_1:13;
       then f.x < f.n1 & f.x = fn.x & f.n1=n'
       by A7,A9,A15,A16,FINSEQ_1:def 7,TARSKI:def 1;
       hence m' < n' by A16;
@@ -389,7 +389,7 @@ A6: i in NAT by ORDINAL1:def 13;
     1 <= i & i <= len p by A5,A2,FINSEQ_1:3;
     then
 A7: i in Seg i & len pI=i & dom pI=Seg i & Seg i c= Seg len p
-    by FINSEQ_1:7,21,A6;
+    by A6,FINSEQ_1:7,21;
     now
       let k such that
 A8:   k in dom pI & k<>i;
@@ -437,7 +437,7 @@ proof
 A1: i in Seg m;
   set I=idseq m;
   reconsider N=n as Element of NAT by ORDINAL1:def 13;
-A2: dom I=Seg len I & len I=m by FINSEQ_2:55,FINSEQ_1:def 3;
+A2: dom I=Seg len I & len I=m by FINSEQ_1:def 3,FINSEQ_2:55;
 A3: dom (N Shift I) = {N+k where k is Element of NAT: k in dom I}
   by PNPROC_1:def 15;
 A4: Seg (n+m)\Seg n c= dom (N Shift I)
@@ -445,7 +445,7 @@ A4: Seg (n+m)\Seg n c= dom (N Shift I)
     let x such that
 A5: x in Seg (n+m)\Seg n;
     reconsider i=x as Element of NAT by A5;
-    i in Seg (n+m) & not i in Seg n by A5,XBOOLE_0:def 4;
+    i in Seg (n+m) & not i in Seg n by A5,XBOOLE_0:def 5;
     then
 A6: 1<=i & i<=n+m & (i<1 or i>n) by FINSEQ_1:3;
     then reconsider IN=i-n as Element of NAT by NAT_1:21;
@@ -463,13 +463,13 @@ A7: x in dom (N Shift I);
 A8: n+k=x & k in dom I by A3,A7;
     1<=k & k<=m by A2,A8,FINSEQ_1:3;
     then
-A9: n+1<=n+k & n+k<=n+m & 1<=n+1 by XREAL_1:9,NAT_1:11;
+A9: n+1<=n+k & n+k<=n+m & 1<=n+1 by NAT_1:11,XREAL_1:9;
     then n+k >n by NAT_1:13;
     then
 A10: not k+n in Seg n by FINSEQ_1:3;
     1<=n+k by A9,XXREAL_0:2;
     then n+k in Seg (n+m) by A9;
-    hence thesis by A8,A10,XBOOLE_0:def 4;
+    hence thesis by A8,A10,XBOOLE_0:def 5;
   end;
   then Seg (n+m)\Seg n = dom (N Shift I) by A4,XBOOLE_0:def 10;
   hence thesis by A1,A2,PNPROC_1:59;
@@ -541,7 +541,7 @@ A14:  Sgm Cx.m=i & Sgm Cy.n=j by A8;
     end;
     suppose not [i,j] in [:Bx,By:] & not [i,j] in [:Cx,Cy:];
       then
-A15:  not [i,j] in [:Bx,By:]\/[:Cx,Cy:] by XBOOLE_0:def 2;
+A15:  not [i,j] in [:Bx,By:]\/[:Cx,Cy:] by XBOOLE_0:def 3;
       hence x1 = A*(i,j) by A8
         .= x2 by A8,A15;
     end;
@@ -581,14 +581,14 @@ A26:  now
         let m,n such that
 A27:    m in dom Sgm Cx & n in dom Sgm Cy and
 A28:    Sgm Cx.m=i & Sgm Cy.n=j;
-A29:    [i,j] in [:Bx,By:]/\[:Cx,Cy:] by A18,XBOOLE_0:def 3;
+A29:    [i,j] in [:Bx,By:]/\[:Cx,Cy:] by A18,XBOOLE_0:def 4;
         Sgm Bx".i=x & Sgm By".j=y & Sgm Cx".i=m & Sgm Cy".j=n
         by A16,A19,A20,A27,A28,FUNCT_1:54;
         hence BB=C*(m,n) by A2,A29;
       end;
       xC in dom Sgm Cx & Sgm Cx.xC=i & yC in dom Sgm Cy & Sgm Cy.yC=j
       by A21,A22;
-      hence thesis by A19,A20,A23,A26,A18,XBOOLE_0:def 2;
+      hence thesis by A19,A20,A23,A26,A18,XBOOLE_0:def 3;
     end;
     suppose
 A30:  [i,j] in [:Bx,By:] & not [i,j] in [:Cx,Cy:];
@@ -607,7 +607,7 @@ A34:    Sgm Bx.m=i & Sgm By.n=j;
         x = m & y = n by A16,A31,A32,A33,A34,FUNCT_1:def 8;
         hence BB=B*(m,n);
       end;
-      hence thesis by A31,A32,A30,XBOOLE_0:def 2;
+      hence thesis by A31,A32,A30,XBOOLE_0:def 3;
     end;
     suppose
 A35:  not [i,j] in [:Bx,By:] & [i,j] in [:Cx,Cy:];
@@ -626,7 +626,7 @@ A39:    Sgm Cx.m=i & Sgm Cy.n=j;
         x = m & y = n by A16,A36,A37,A38,A39,FUNCT_1:def 8;
         hence CC=C*(m,n);
       end;
-      hence thesis by A36,A37,A35,XBOOLE_0:def 2;
+      hence thesis by A36,A37,A35,XBOOLE_0:def 3;
     end;
     suppose
 A40:  not [i,j] in [:Bx,By:] & not [i,j] in [:Cx,Cy:];
@@ -673,7 +673,7 @@ A46: i in Seg cx & j in Seg cy by A45,ZFMISC_1:106;
   hence MC=C by MATRIX_1:28;
   let i,j such that
 A47: [i,j] in Indices M\([:Bx,By:]\/[:Cx,Cy:]);
-  not [i,j] in [:Bx,By:]\/[:Cx,Cy:] by A47,XBOOLE_0:def 4;
+  not [i,j] in [:Bx,By:]\/[:Cx,Cy:] by A47,XBOOLE_0:def 5;
   hence thesis by A41,A47;
 end;
 
@@ -703,7 +703,7 @@ A10: card P2=card P' & card Q2=card Q' and
 A11: Segm(S,P',Q') = Segm(A,P2,Q2) by A6,MATRIX13:57;
 A12: dom A=Seg len A by FINSEQ_1:def 3;
   then
-A13: i in Seg len A & j in Seg width A by A2,XBOOLE_0:def 4;
+A13: i in Seg len A & j in Seg width A by A2,XBOOLE_0:def 5;
   then reconsider i0=i,j0=j as non zero Element of NAT;
   set P2i=P2\/{i0};
   set Q2j=Q2\/{j0};
@@ -719,14 +719,14 @@ A14: the_rank_of S=0 by MATRIX13:77;
   end;
   suppose [:P,Q:]<>{};
     then P c= dom A & Q c= Seg width A & [:P,R:]<>{}
-    by A5,A4,ZFMISC_1:138,XBOOLE_1:3;
+    by A5,A4,XBOOLE_1:3,ZFMISC_1:138;
     then
 A15: P2 c= dom A & Q2 c= Seg width A & R c= Seg width A
-    by A9,XBOOLE_1:1,A1,ZFMISC_1:138;
+    by A9,A1,XBOOLE_1:1,ZFMISC_1:138;
 A16: {i0} c= dom A & {j0}c= Seg width A by A12,A13,ZFMISC_1:37;
     then
 A17: P2i c= dom A & Q2j c= Seg width A by A15,XBOOLE_1:8;
-A18: not i in P2 & not j in Q2 by A9,A2,XBOOLE_0:def 4;
+A18: not i in P2 & not j in Q2 by A9,A2,XBOOLE_0:def 5;
     then
 A19: card P2i=card P2+1 & card Q2j=card Q2+1 by CARD_2:54;
 A20: rng Sgm P2i=P2i & dom Sgm P2i=Seg card P2i &
@@ -734,11 +734,11 @@ A20: rng Sgm P2i=P2i & dom Sgm P2i=Seg card P2i &
     & rng Sgm R=R & dom Sgm R=Seg card R
     by A12,A15,A17,FINSEQ_1:def 13,FINSEQ_3:45,99;
     i in {i} by TARSKI:def 1;
-    then i in P2i by XBOOLE_0:def 2;
+    then i in P2i by XBOOLE_0:def 3;
     then consider x such that
 A21: x in dom Sgm P2i & Sgm P2i.x=i by A20,FUNCT_1:def 5;
     j in {j} by TARSKI:def 1;
-    then j in Q2j by XBOOLE_0:def 2;
+    then j in Q2j by XBOOLE_0:def 3;
     then consider y such that
 A22: y in dom Sgm Q2j & Sgm Q2j.y=j by A20,FUNCT_1:def 5;
     reconsider x,y as Element of NAT by A21,A22;
@@ -746,18 +746,18 @@ A22: y in dom Sgm Q2j & Sgm Q2j.y=j by A20,FUNCT_1:def 5;
 A23: dom L = Seg len L by FINSEQ_1:def 3
       .= Seg card P2i by LAPLACE:def 7;
     then
-A24: y in dom L by A6,A10,A19,A22,A16,A15,XBOOLE_1:8,FINSEQ_3:45;
+A24: y in dom L by A6,A10,A19,A22,A16,A15,FINSEQ_3:45,XBOOLE_1:8;
 A25: len ESS = card P2i & dom ESS=Seg len ESS & Indices ESS =
-    [:Seg card P2i,Seg card P2i:] by MATRIX_1:25,FINSEQ_1:def 3;
+    [:Seg card P2i,Seg card P2i:] by FINSEQ_1:def 3,MATRIX_1:25;
 A26: ESS = SS by A6,A10,A19,MATRIX13:def 3;
     now
       let k such that
 A27:  k in dom L & k <> y;
 A28:  [x,k] in Indices ESS by A25,A27,A20,A21,A23,ZFMISC_1:106;
-      Sgm Q2j.k <> j by FUNCT_1:def 8,A27,A23,A20,A6,A10,A19,A22;
+      Sgm Q2j.k <> j by A27,A23,A20,A6,A10,A19,A22,FUNCT_1:def 8;
       then Sgm Q2j.k in Q2j & not Sgm Q2j.k in {j}
-      by FUNCT_1:def 5,A27,A6,A10,A19,A20,A23,TARSKI:def 1;
-      then Sgm Q2j.k in Q2 by XBOOLE_0:def 2;
+      by A27,A6,A10,A19,A20,A23,FUNCT_1:def 5,TARSKI:def 1;
+      then Sgm Q2j.k in Q2 by XBOOLE_0:def 3;
       then
 A29:  Sgm Q2j.k in Q by A9;
       then consider z be set such that
@@ -765,7 +765,7 @@ A30:  z in dom Sgm R & Sgm R.z=Sgm Q2j.k by A3,A20,FUNCT_1:def 5;
 A31:  Sgm Q2j.k in R by A3,A29;
       reconsider z as Element of NAT by A30;
       ESS*(x,k) = A*(i,Sgm Q2j.k) by A21,A28,A26,MATRIX13:def 1
-        .= Line(A,i).(Sgm R.z) by MATRIX_1:def 8,A15,A31,A30
+        .= Line(A,i).(Sgm R.z) by A15,A31,A30,MATRIX_1:def 8
         .= (card R |-> 0.K).z by A3,A30,FUNCT_1:23
         .= 0.K by A20,A30,FINSEQ_1:4,FINSEQ_2:71;
       hence L.k = 0.K*Cofactor(ESS,x,k) by A27,LAPLACE:def 7
@@ -779,12 +779,12 @@ A34: L.y = SS*(x,y)*Cofactor(ESS,x,y) by A26,A24,LAPLACE:def 7
       .= A*(i,j)*(power(K).(-1_K,x+y)*Det Delete(ESS,x,y))
     by A21,A22,A33,A26,MATRIX13:def 1;
 A35: Delete(ESS,x,y) = EqSegm(A,P2i\{i},Q2j\{j})
-    by MATRIX13:64,A6,A10,A19,A20,A21,A22
+    by A6,A10,A19,A20,A21,A22,MATRIX13:64
       .= EqSegm(A,P2,Q2j\{j}) by A18,ZFMISC_1:141
       .= EqSegm(A,P2,Q2) by A18,ZFMISC_1:141
       .= Segm(A,P2,Q2) by A6,A10,MATRIX13:def 3
       .= EqSegm(S,P',Q') by A6,A11,MATRIX13:def 3;
-A36: card P2i-'1=card P' by NAT_D:34,A10,A19;
+A36: card P2i-'1=card P' by A10,A19,NAT_D:34;
     -1_K<>0.K by VECTSP_1:86;
     then power(K).(-1_K,x+y)<>0.K by Lm2;
     then power(K).(-1_K,x+y) * Det Delete(ESS,x,y)<>0.K
@@ -822,7 +822,7 @@ A7: dom A=Seg l by FINSEQ_1:def 3;
 A8: Ni in N
     proof
       assume not Ni in N;
-      then Ni in dom A\N by A6,A7,XBOOLE_0:def 4;
+      then Ni in dom A\N by A6,A7,XBOOLE_0:def 5;
       then x = w |-> 0.K by A2,A6
         .= 0.(w-VectSp_over K) by MATRIX13:102;
       hence thesis by A3,A5,VECTSP_7:3;
@@ -866,7 +866,7 @@ A4: card N=0;
       then consider i,j such that
 A5:   [i,j] in Indices A & A*(i,j) <> 0.K by MATRIX13:94;
 A6:   i in dom A & j in Seg width A & N={} by A4,A5,ZFMISC_1:106;
-      then 0.K = (len A|-> 0.K).i by A3,FINSEQ_2:71,FINSEQ_1:4
+      then 0.K = (len A|-> 0.K).i by A3,FINSEQ_1:4,FINSEQ_2:71
         .= Col(A,j).i by A2,A6
         .= A*(i,j) by A6,MATRIX_1:def 9;
       hence thesis by A5;
@@ -876,7 +876,7 @@ A6:   i in dom A & j in Seg width A & N={} by A4,A5,ZFMISC_1:106;
   suppose
 A7: card N>0;
     then
-A8: width A<>0 by FINSEQ_1:4,A1,XBOOLE_1:3,CARD_1:47;
+A8: width A<>0 by A1,CARD_1:47,FINSEQ_1:4,XBOOLE_1:3;
     then len A<>0 by MATRIX_1:def 4;
     then len A in Seg len A by FINSEQ_1:5;
     then
@@ -892,7 +892,7 @@ A15: N c= dom AT by A1,A12,FINSEQ_1:def 3;
 A16: now
       let i such that
 A17:  i in dom AT \ N;
-      i in dom AT by A17,XBOOLE_0:def 4;
+      i in dom AT by A17,XBOOLE_0:def 5;
       hence Line(AT,i) = Col(A,i) by A12,A14,MATRIX_2:17
         .= width AT |-> 0.K by A2,A12,A13,A14,A17;
     end;
@@ -918,16 +918,16 @@ A1: u in U & v in U;
   proof
     let x such that
 A2: x in UU \/ {ua};
-    per cases by A2,XBOOLE_0:def 2;
+    per cases by A2,XBOOLE_0:def 3;
     suppose x in UU;
-      then x in U by XBOOLE_0:def 4;
+      then x in U by XBOOLE_0:def 5;
       then x in Lin U by VECTSP_7:13;
       hence thesis by STRUCT_0:def 5;
     end;
     suppose x in {ua};
       then
 A3:   x=ua by TARSKI:def 1;
-      u in Lin U & a*v in Lin U by VECTSP_4:29,A1,VECTSP_7:13;
+      u in Lin U & a*v in Lin U by A1,VECTSP_4:29,VECTSP_7:13;
       then x in Lin U by A3,VECTSP_4:28;
       hence thesis by STRUCT_0:def 5;
     end;
@@ -957,9 +957,9 @@ A3: x in U;
 A4:   x=u;
       per cases;
       suppose u<>v;
-        then v in UU & ua in {ua} by A1,ZFMISC_1:64,TARSKI:def 1;
+        then v in UU & ua in {ua} by A1,TARSKI:def 1,ZFMISC_1:64;
         then
-A5:     v in UU\/{ua} & ua in UU\/{ua} by XBOOLE_0:def 2;
+A5:     v in UU\/{ua} & ua in UU\/{ua} by XBOOLE_0:def 3;
         then
 A6:     v in Lin(UU\/{ua}) & ua in Lin(UU\/{ua}) by VECTSP_7:13;
         (-a)*v in Lin(UU\/{ua}) by A5,VECTSP_4:29,VECTSP_7:13;
@@ -984,7 +984,7 @@ A9:       0.K<>a+1_K by VECTSP_1:89;
           then
 A10:      (1.K+a)" *ua =u by A9,VECTSP_1:67;
           ua in {ua} by TARSKI:def 1;
-          then ua in UU\/{ua} by XBOOLE_0:def 2;
+          then ua in UU\/{ua} by XBOOLE_0:def 3;
           then u in Lin (UU\/{ua}) by A10,VECTSP_4:29,VECTSP_7:13;
           hence thesis by A4,STRUCT_0:def 5;
         end;
@@ -996,13 +996,13 @@ A10:      (1.K+a)" *ua =u by A9,VECTSP_1:67;
     end;
     suppose x<>u;
       then x in UU by A3,ZFMISC_1:64;
-      then x in UU\/{ua} by XBOOLE_0:def 2;
+      then x in UU\/{ua} by XBOOLE_0:def 3;
       then x in Lin (UU\/{ua}) by VECTSP_7:13;
       hence thesis by STRUCT_0:def 5;
     end;
   end;
   then Lin (UU\/{ua}) is Subspace of Lin U &
-  Lin U is Subspace of Lin (UU\/{ua}) by A1,VECTSP_9:20,Th13;
+  Lin U is Subspace of Lin (UU\/{ua}) by A1,Th13,VECTSP_9:20;
   then the carrier of Lin (UU\/{ua})c= the carrier of Lin U &
   the carrier of Lin U c=the carrier of Lin (UU\/{ua}) by VECTSP_4:def 2;
   then the carrier of Lin U =the carrier of Lin (UU\/ {ua})
@@ -1046,7 +1046,7 @@ A6:   N in Seg N by FINSEQ_1:5;
       by MATRIX_2:10;
       then AB.N=Line(A,N)^Line(B,N) & AB.N in rng AB &
       len (Line(A,N)^Line(B,N))=width A+width B
-      by A2,A6,MATRLIN:def 2,FUNCT_1:def 5,FINSEQ_2:109;
+      by A2,A6,FINSEQ_2:109,FUNCT_1:def 5,MATRLIN:def 2;
       then width AB=width A+width B by A3,A5,MATRIX_1:def 4;
       hence thesis by A3,MATRIX_2:7;
     end;
@@ -1061,7 +1061,7 @@ proof
   let i such that
 A1: i in Seg n;
   set AB=A^^B;
-A2: len AB=n & dom AB=Seg len AB by MATRIX_1:def 3,FINSEQ_1:def 3;
+A2: len AB=n & dom AB=Seg len AB by FINSEQ_1:def 3,MATRIX_1:def 3;
   Line(A,i)=A.i & Line(B,i)=B.i by A1,MATRIX_2:10;
   hence Line(A,i)^Line(B,i) = AB.i by A1,A2,MATRLIN:def 2
     .= Line(AB,i) by A1,MATRIX_2:10;
@@ -1140,7 +1140,7 @@ A1: len pA = width A & len pB = width B;
   set RB=RLine(B,i,pB);
   set Rab=RA^^RB;
 A2: len RAB=n & len Rab=n & dom RAB=Seg len RAB & dom Rab=Seg len Rab
-  by MATRIX_1:def 3,FINSEQ_1:def 3;
+  by FINSEQ_1:def 3,MATRIX_1:def 3;
   now
     let j such that
 A3: 1<=j & j<=n;
@@ -1197,7 +1197,7 @@ A3: [i,j] in Indices A';
 A4: I in Seg n & J in Seg width A by A3,ZFMISC_1:106;
 A5: dom S1 = Seg len S1 by FINSEQ_1:def 3
       .= Seg n by A2,MATRIX_1:def 3;
-A6: J = (idseq width A).J by A4,FINSEQ_2:57,FINSEQ_1:4
+A6: J = (idseq width A).J by A4,FINSEQ_1:4,FINSEQ_2:57
       .= Sgm (Seg (width A)).J by FINSEQ_3:54;
 A7: dom A=Seg n by A1,FINSEQ_1:def 3;
     thus S1*(i,j) = Col(S1,J).I by A5,A4,MATRIX_1:def 9
@@ -1276,7 +1276,7 @@ A1: len A = len B & len A =the_rank_of A;
   reconsider A'=A as Matrix of L,width A,K by MATRIX_2:7;
   reconsider B'=B as Matrix of L,width B,K by A1,MATRIX_2:7;
   the_rank_of (A'^^B')<=len (A'^^B') & len (A'^^B')=L& the_rank_of (A'^^B')>=L
-  by A1,MATRIX_1:def 3,Th20,MATRIX13:74;
+  by A1,Th20,MATRIX13:74,MATRIX_1:def 3;
   hence thesis by A1,XXREAL_0:1;
 end;
 
@@ -1303,7 +1303,7 @@ A2: L=0;
 A3: width AB=width B & width BA=width B & len AB=L & len BA=L
     by A1,MATRIX_1:24;
     hence A^^B = Segm(AB,Seg L,Seg width B\Seg width A)
-    by A1,MATRIX13:46,FINSEQ_1:4
+    by A1,FINSEQ_1:4,MATRIX13:46
       .= B by A1,Th19;
     thus B^^A = Segm(BA,Seg L,Seg width B) by A3,MATRIX13:46
       .=B by Th19;
@@ -1335,7 +1335,7 @@ A4: Seg width A c= Seg width AB by FINSEQ_1:7;
     now
       let i such that
 A5:   i in Seg width AB \ Seg width A;
-A6:   i in Seg width AB & not i in Seg width A by A5,XBOOLE_0:def 4;
+A6:   i in Seg width AB & not i in Seg width A by A5,XBOOLE_0:def 5;
       then
 A7:   1<=i & (i<1 or i>width A) by FINSEQ_1:3;
       then reconsider n=i-width A as Element of NAT by NAT_1:21;
@@ -1354,7 +1354,7 @@ A12:    1<=i & i<=L;
         i in NAT by ORDINAL1:def 13;
         then i in Seg L & Seg L=dom B by A2,A12,FINSEQ_1:def 3;
         then L0.i=0.K & Col(B',n).i=B'*(i,n) & [i,n] in Indices B
-        by A3,A9,A12,MATRIX_1:def 9,FINSEQ_2:71,ZFMISC_1:106;
+        by A3,A9,A12,FINSEQ_2:71,MATRIX_1:def 9,ZFMISC_1:106;
         hence Col(B',n).i=L0.i by A1,MATRIX_3:3;
       end;
       hence Col(AB,i) = len AB |-> 0.K by A10,A11,FINSEQ_1:18;
@@ -1388,7 +1388,7 @@ A6: dom A=Seg len A by FINSEQ_1:def 3;
   then len A >0;
   then
 A7: width AB=width A+width B & dom AB=Seg len AB & len AB=len A &Indices AB=
-  [:Seg len A,Seg (width A+width B):] by MATRIX_1:24,FINSEQ_1:def 3;
+  [:Seg len A,Seg (width A+width B):] by FINSEQ_1:def 3,MATRIX_1:24;
   then
 A8: j+width A in Seg width AB by A5,FINSEQ_1:81;
 A9: len Line(B',i)=width B' & len Line(A',i)=width A' by MATRIX_1:def 8;
@@ -1398,7 +1398,7 @@ A10: 1<=j & j<=len Line(B',i) by A5,FINSEQ_1:3;
     .= (Line(A',i)^Line(B',i)).(j+width A) by A2,A4,A6,Th15
     .= Line(B',i).j by A9,A10,FINSEQ_1:86;
   then
-A11: AB*(i,j+width A)<> 0.K by FINSEQ_2:71,FINSEQ_1:4,A5;
+A11: AB*(i,j+width A)<> 0.K by A5,FINSEQ_1:4,FINSEQ_2:71;
   consider P,Q be without_zero finite Subset of NAT such that
 A12: [:P,Q:] c= Indices A' & card P = card Q and
 A13: card P = the_rank_of A' and
@@ -1423,9 +1423,9 @@ A22: Sgm Seg len A = idseq len A by FINSEQ_3:54
       .= id (Seg len A);
 A23: P c= Seg len A & Q c= Seg width A by A12,MATRIX13:67;
     then
-A24: i in P by A21,A17,FUNCT_1:162,A22;
+A24: i in P by A21,A17,A22,FUNCT_1:162;
 A25: dom Sgm P=Seg card P & rng Sgm P=P & dom Sgm Q=Seg card Q &
-    rng Sgm Q=Q by A23,FINSEQ_3:45,FINSEQ_1:def 13;
+    rng Sgm Q=Q by A23,FINSEQ_1:def 13,FINSEQ_3:45;
     then consider x such that
 A26: x in dom Sgm P & Sgm P.x=i by A24,FUNCT_1:def 5;
     reconsider x as Element of NAT by A26;
@@ -1437,25 +1437,25 @@ A27: dom Line(A,i)=Seg width A by FINSEQ_2:144;
     then Line(Segm(A,P,Q),x)=0.K * Line(Segm(A,P,Q),x) &
     Segm(A,P,Q)=EqSegm(A,P,Q) by A12,A23,A25,A27,MATRIX13:87,def 3;
     then 0.K*Det EqSegm(A,P,Q)
-    = Det RLine(EqSegm(A,P,Q),x,Line(EqSegm(A,P,Q),x)) by MATRIX11:35,A25,A26
+    = Det RLine(EqSegm(A,P,Q),x,Line(EqSegm(A,P,Q),x)) by A25,A26,MATRIX11:35
       .= Det EqSegm(A,P,Q) by MATRIX11:30;
     hence thesis by A14,VECTSP_1:36;
   end;
   then
-A28: i in dom AB\P2 by A2,A4,A6,A7,XBOOLE_0:def 4;
+A28: i in dom AB\P2 by A2,A4,A6,A7,XBOOLE_0:def 5;
   j>=1 by A5,FINSEQ_1:3;
   then j+width A >=1+width A by XREAL_1:8;
   then j+width A >width A by NAT_1:13;
   then not j+width A in Q2 by A16,FINSEQ_1:3;
   then
-A29: j+width A in Seg width AB\Q2 by A8,XBOOLE_0:def 4;
+A29: j+width A in Seg width AB\Q2 by A8,XBOOLE_0:def 5;
 A30: card Seg len A=len A & card Seg width A=width A by FINSEQ_1:78;
 A31: Sgm (Seg len A).i = (idseq len A).i by FINSEQ_3:54
     .= i by A6,A2,A4,FINSEQ_1:4,FINSEQ_2:57;
   card (Seg width A) |->0.K = Line(A,i) by A3,A4,A30
-    .= Line(AB,i) * Sgm (Seg width A) by A31,A30,A19,A15,MATRIX13:47,A2,A4,A6;
+    .= Line(AB,i) * Sgm (Seg width A) by A31,A30,A19,A15,A2,A4,A6,MATRIX13:47;
   then
-A32: card P > the_rank_of Segm(AB,P2,Q2) by A1,A16,Th10,A20,A28,A29,A11, A13;
+A32: card P > the_rank_of Segm(AB,P2,Q2) by A1,A16,Th10,A20,A28,A29,A11,A13;
   Segm(AB,P2,Q2)=EqSegm(A,P,Q) by A12,A18,MATRIX13:def 3;
   hence thesis by A32,A14,MATRIX13:83;
 end;
@@ -1536,7 +1536,7 @@ A3: len MD=len bD by A2,MATRIX_1:def 3;
   assume
 A4: Col(MD,1) = bD & width MD = 1;
   then
-A5: len bD=len MD & len (MD@)=1 by MATRIX_1:def 9,def 7;
+A5: len bD=len MD & len (MD@)=1 by MATRIX_1:def 7,def 9;
   then
 A6: len MD>0 by A1;
   1 in Seg 1;
@@ -1559,7 +1559,7 @@ A1: len f = len g;
   set Lfg=LineVec2Mx FG;
 A2: len FG=len f & len Lfg=1 & len Lf=1 & len Lg=1 & len (Lf+Lg)=len Lf &
   width (Lf+Lg)=width Lf & width Lf=len f & width Lg=len f &width Lfg=len FG
-  by A1,MATRIX_1:24,MATRIX_3:def 3,FINSEQ_2:109;
+  by A1,FINSEQ_2:109,MATRIX_1:24,MATRIX_3:def 3;
   per cases;
   suppose len f=0;
     then for i,j st [i,j] in Indices (Lf+Lg) holds
@@ -1590,7 +1590,7 @@ A1: len f = len g;
   set Cfg=ColVec2Mx FG;
 A2: len FG=len f & len Cfg=len FG & len Cf=len f & len Cg=len f &
   len (Cf+Cg)=len Cf & width (Cf+Cg)=width Cf
-  by A1,MATRIX_1:def 3,MATRIX_3:def 3,FINSEQ_2:109;
+  by A1,FINSEQ_2:109,MATRIX_1:def 3,MATRIX_3:def 3;
   per cases;
   suppose len f=0;
     then Cf+Cg={} & Cfg={} by A2;
@@ -1602,7 +1602,7 @@ A3: len f>0;
 A4: len f in Seg len f & dom Cf=Seg len f & 1 in Seg 1 & width Cf= 1&
     width Cg=1 by A1,A2,FINSEQ_1:5,def 3,MATRIX_1:24;
     then [len f,1] in Indices Cf by ZFMISC_1:106;
-    then Col(Cf+Cg,1) = Col(Cf,1)+Col(Cg,1) by MATRIX_4:60,A2,A4
+    then Col(Cf+Cg,1) = Col(Cf,1)+Col(Cg,1) by A2,A4,MATRIX_4:60
       .= f+Col(Cg,1) by Th26,A3
       .= f+g by Th26,A3,A1;
     hence thesis by Th26,A2,A4;
@@ -1651,13 +1651,13 @@ proof
     let i,j such that
 A1: [i,j] in Indices L;
 A2: j in Seg width L & i in dom L & dom L = Seg len L & len L=1
-    by A1,ZFMISC_1:106,MATRIX_1:def 3,FINSEQ_1:def 3;
+    by A1,FINSEQ_1:def 3,MATRIX_1:def 3,ZFMISC_1:106;
     then
-A3: i=1 by TARSKI:def 1,FINSEQ_1:4;
+A3: i=1 by FINSEQ_1:4,TARSKI:def 1;
 A4: width L=k by MATRIX_1:24;
     Indices Z=Indices L by MATRIX_1:27;
     hence Z*(i,j) = 0.K by A1,MATRIX_3:3
-      .= (k|->0.K).j by A2,A4,FINSEQ_2:71,FINSEQ_1:4
+      .= (k|->0.K).j by A2,A4,FINSEQ_1:4,FINSEQ_2:71
       .= Line(L,i).j by A3,Th25
       .= L*(i,j) by A2,MATRIX_1:def 8;
   end;
@@ -1674,10 +1674,10 @@ proof
 A1: [i,j] in Indices C;
 A2: i in dom C & j in Seg width C & dom C=Seg len C &
     len C=len (k|->0.K) & len (k|->0.K)=k
-    by A1,ZFMISC_1:106,MATRIX_1:def 3,FINSEQ_1:def 3,FINSEQ_2:69;
+    by A1,FINSEQ_1:def 3,FINSEQ_2:69,MATRIX_1:def 3,ZFMISC_1:106;
     then width C=1 by Th26;
     then
-A3: j=1 by A2,TARSKI:def 1,FINSEQ_1:4;
+A3: j=1 by A2,FINSEQ_1:4,TARSKI:def 1;
     Indices Z=Indices C by MATRIX_1:27;
     hence Z*(i,j) = 0.K by A1,MATRIX_3:3
       .= (k|->0.K).i by A2,FINSEQ_2:71
@@ -1725,12 +1725,11 @@ A6: len Col(B,i) = len B & len LB0 = len B by FINSEQ_2:109;
 A7: 1 <=k & k <= len B;
     k in NAT by ORDINAL1:def 13;
     then
-A8: k in Seg len B & Indices B=[:Seg len B,Seg width B:] by A7,
-    FINSEQ_1:def 3;
+A8: k in Seg len B & Indices B=[:Seg len B,Seg width B:] by A7,FINSEQ_1:def 3;
     then [k,i] in Indices B & width A=len X1 by A2,A4,ZFMISC_1:106;
     then
 A9: B*(k,i) = Line(A,k) "*" Col(X1,i) by A5,MATRIX_3:def 4
-      .= Sum(0.K*Line(A,k)) by FVSUM_1:80,A3,A4
+      .= Sum(0.K*Line(A,k)) by A3,A4,FVSUM_1:80
       .= 0.K* Sum(Line(A,k)) by FVSUM_1:92
       .= 0.K by VECTSP_1:36
       .= LB0.k by A7,A8,FINSEQ_2:71;
@@ -1787,7 +1786,7 @@ proof
   let A,B be Matrix of D such that
 A1: len A = len B & width A = 0 & width B = 0;
   for i,j st [i,j] in Indices A holds A*(i,j) = B*(i,j)
-  by ZFMISC_1:113,A1,FINSEQ_1:4;
+  by A1,FINSEQ_1:4,ZFMISC_1:113;
   hence thesis by A1,MATRIX_1:21;
 end;
 
@@ -1815,7 +1814,7 @@ A8:   len (A*X1) = 0 & len (A*(X1+X2)) = 0 by A3,A7,MATRIX_3:def 4;
     end;
     suppose len X1=0;
       then width (A*X1)=0 & len (A*X1)=len A
-      by A3,A4,MATRIX_3:def 4,MATRIX_1:def 4;
+      by A3,A4,MATRIX_1:def 4,MATRIX_3:def 4;
       then width (A*X1 + A*X2)=0 & len (A*X1+A*X2)=len A & len (A*(X1+X2))=
       len A & width (A*(X1+X2)) = 0 by A3,A4,A7,MATRIX_3:def 3,def 4;
       hence A*(X1+X2)=A*X1+A*X2 by Lm3;
@@ -1842,7 +1841,7 @@ A3: A' * X1 = B';
   set RB=RLine(B',i,a*LB);
   set RX=RA*X1;
 A4: len (a*LA)=len LA & len LA= width A' & len (a*LB)=len LB & len LB=width B'
-  & len A'=len B' by A1,Th33,MATRIXR1:16,FINSEQ_2:109;
+  & len A'=len B' by A1,Th33,FINSEQ_2:109,MATRIXR1:16;
   then
 A5: len RA=len A' & width RA=width A' & len RB=len B' & width RB=width B'
   by MATRIX11:def 3;
@@ -1851,14 +1850,14 @@ A6: len RX=len RA & width RX=width X1 by A2,MATRIX_3:def 4;
   dom B'=Seg len RA by A4,A5,FINSEQ_1:def 3;
   then
 A7: Indices RX=Indices B' & Indices RB=Indices B'
-  by A2,MATRIX_1:27,A6,FINSEQ_1:def 3;
+  by A2,A6,FINSEQ_1:def 3,MATRIX_1:27;
   now
     let j,k such that
 A8: [j,k] in Indices RB;
     len B'=m by MATRIX_1:def 3;
     then
 A9: j in dom B' & dom B'=Seg m & k in Seg width B' & len LB= width B'
-    by A7,A8,ZFMISC_1:106,FINSEQ_1:def 3,MATRIX_1:def 8;
+    by A7,A8,FINSEQ_1:def 3,MATRIX_1:def 8,ZFMISC_1:106;
     then B'*(i,k)=LB.k by MATRIX_1:def 8;
     then reconsider LBk=LB.k as Element of K;
 A10: B'*(j,k)= Line(A',j) "*" Col(X1,k) by A2,A3,A7,A8,MATRIX_3:def 4;
@@ -1867,7 +1866,7 @@ A10: B'*(j,k)= Line(A',j) "*" Col(X1,k) by A2,A3,A7,A8,MATRIX_3:def 4;
 A11:    j=i;
         then Line(RA,i)=a*LA by A4,A9,MATRIX11:28;
         hence RX*(j,k) = (a*LA)"*"Col(X1,k) by A2,A5,A7,A8,A11,MATRIX_3:def 4
-          .= Sum(a*mlt(LA,Col(X1,k))) by FVSUM_1:82,A2
+          .= Sum(a*mlt(LA,Col(X1,k))) by A2,FVSUM_1:82
           .= a*Sum(mlt(LA,Col(X1,k))) by FVSUM_1:92
           .= a*LBk by A9,A10,A11,MATRIX_1:def 8
           .= (a*LB).k by A9,FVSUM_1:63
@@ -1973,18 +1972,18 @@ A7: len RX = len RA & width RX=width X1 by A3,MATRIX_3:def 4;
   dom B'=Seg len RA by A5,A6,FINSEQ_1:def 3;
   then
 A8: Indices RX = Indices B' & Indices RB = Indices B'
-  by A3,MATRIX_1:27,A7,FINSEQ_1:def 3;
+  by A3,A7,FINSEQ_1:def 3,MATRIX_1:27;
   now
     let o,p be Nat such that
 A9: [o,p] in Indices RB;
     len B' = m by MATRIX_1:def 3;
     then
 A10: o in dom B' & dom B'=Seg m & p in Seg width B'
-    by A8,A9,ZFMISC_1:106,FINSEQ_1:def 3;
+    by A8,A9,FINSEQ_1:def 3,ZFMISC_1:106;
     then [j,p] in Indices B' by A2,ZFMISC_1:106;
     then
 A11: B'*(o,p) = Line(A',o) "*" Col(X1,p) & B'*(j,p) = LAj"*"Col(X1,p ) &
-    len Col(X1,p)=width A' by A3,A4,A8,A9,MATRIX_3:def 4,MATRIX_1:def 9;
+    len Col(X1,p)=width A' by A3,A4,A8,A9,MATRIX_1:def 9,MATRIX_3:def 4;
     B'*(o,p)=Line(B',o).p & B'*(j,p)=LBj.p by A10,MATRIX_1:def 8;
     then reconsider LBop = Line(B',o).p,LBjp = LBj.p
     as Element of the carrier of K;
@@ -1992,7 +1991,7 @@ A11: B'*(o,p) = Line(A',o) "*" Col(X1,p) & B'*(j,p) = LAj"*"Col(X1,p ) &
     the carrier of K by A3;
     p in dom (a*LBj) by A10,FINSEQ_2:144;
     then (a*LBj).p in rng (a*LBj) & rng (a*LBj) c= the carrier of K
-    by FUNCT_1:def 5,FINSEQ_1:def 4;
+    by FINSEQ_1:def 4,FUNCT_1:def 5;
     then reconsider aLBjp=(a*Line(B',j)).p as Element of K;
     now per cases;
       suppose
@@ -2171,7 +2170,7 @@ A1: i in Seg n;
   then dom Line(A,nt.i)=S & Sgm S = idseq width A
   by FINSEQ_1:def 3,FINSEQ_3:54;
   then Line(A,nt.i) * Sgm S = Line(A,nt.i) & rng Sgm S=S
-  by RELAT_1:78,FINSEQ_1:def 13;
+  by FINSEQ_1:def 13,RELAT_1:78;
   hence thesis by A1,MATRIX13:24;
 end;
 
@@ -2201,19 +2200,19 @@ A8: len SX=len SA & width SX=width X by A3,MATRIX_3:def 4;
     let j,k such that
 A9: [j,k] in Indices SX;
     reconsider j'=j,k'=k as Element of NAT by ORDINAL1:def 13;
-    j in dom SX & len SX=len SA by A9,ZFMISC_1:106,A3,A7,MATRIX_3:def 4;
+    j in dom SX & len SX=len SA by A9,A3,A7,MATRIX_3:def 4,ZFMISC_1:106;
     then
 A10: j in Seg n & dom nt=Seg n by A6,FINSEQ_1:def 3,FINSEQ_2:144;
     then
 A11: Line(SA,j)=Line(A,nt.j) & nt.j in rng nt by Lm6,FUNCT_1:def 5;
     then nt.j in dom A & dom A=Seg len B & width SX=width X
-    by A1,A5,FINSEQ_1:def 3,A3,A7,MATRIX_3:def 4;
+    by A1,A5,A3,A7,FINSEQ_1:def 3,MATRIX_3:def 4;
     then
 A12: nt.j in dom B & k in Seg width B & j in dom SB
     by A3,A6,A9,A10,FINSEQ_1:def 3,ZFMISC_1:106;
     then
 A13: [nt.j,k] in Indices B & [j,k] in Indices SB & width B<>0 &
-    Sgm Seg width B=idseq width B by FINSEQ_1:4,FINSEQ_3:54,A7,ZFMISC_1:106;
+    Sgm Seg width B=idseq width B by A7,FINSEQ_1:4,FINSEQ_3:54,ZFMISC_1:106;
     then
 A14: (Sgm Seg width B).k'=k by A12,FINSEQ_2:57;
     thus SX*(j,k) = Line(A,nt.j) "*" Col(X,k) by A3,A7,A9,A11,MATRIX_3:def 4
@@ -2251,16 +2250,16 @@ A7: width SA=card Seg width A & width SB=card Seg width B by A1,MATRIX_1:24;
 A8: width SA=width A & width SB=width B by FINSEQ_1:78;
     then
 A9: len AX = len A & Seg len A = dom B & dom B=Seg len B
-    by A1,A5,MATRIX_3:def 4,FINSEQ_1:def 3;
+    by A1,A5,FINSEQ_1:def 3,MATRIX_3:def 4;
     then len AX >= len B & len B >= len AX by FINSEQ_1:7;
     then
-A10: len AX = len B & width AX = width X by XXREAL_0:1,A5,A8,MATRIX_3: def 4;
+A10: len AX = len B & width AX = width X by A5,A8,MATRIX_3:def 4,XXREAL_0:1;
     now
       let j,k such that
 A11:  [j,k] in Indices AX;
       reconsider j'=j,k'=k as Element of NAT by ORDINAL1:def 13;
 A12:  j in dom AX & dom AX=Seg len A & k in Seg width AX
-      by A9,A11,ZFMISC_1:106,FINSEQ_1:def 3;
+      by A9,A11,FINSEQ_1:def 3,ZFMISC_1:106;
       now per cases;
         suppose j' in rng nt;
           then consider p be set such that
@@ -2269,9 +2268,9 @@ A13:      p in dom nt & nt.p=j' by FUNCT_1:def 5;
 A14:      dom nt=Seg n by FINSEQ_2:144;
           Indices SB =[:Seg n,Seg card Seg width B:] by A1,MATRIX_1:24;
           then
-A15:      [p,k] in Indices SB by A7,A10,A12,A13,A14,ZFMISC_1:106 ,A5;
+A15:      [p,k] in Indices SB by A7,A10,A12,A13,A14,A5,ZFMISC_1:106;
           width B<>0 & Sgm Seg width B=idseq width B
-          by A8,A5,A12,MATRIX_3:def 4,FINSEQ_1:4,FINSEQ_3:54;
+          by A8,A5,A12,FINSEQ_1:4,FINSEQ_3:54,MATRIX_3:def 4;
           then
 A16:      (Sgm Seg width B).k'=k by A5,A8,A10,A12,FINSEQ_2:57;
           Line(SA,p) = Line(A,j') by A13,Lm6,A14;
@@ -2280,17 +2279,17 @@ A16:      (Sgm Seg width B).k'=k by A5,A8,A10,A12,FINSEQ_2:57;
             .= B*(j,k) by A13,A15,A16,MATRIX13:def 1;
         end;
         suppose not j' in rng nt;
-          then j' in (dom A)\rng nt by A9,A12,A1,XBOOLE_0:def 4;
+          then j' in (dom A)\rng nt by A9,A12,A1,XBOOLE_0:def 5;
           then
 A17:      Line(A,j) = width A|->0.K & Line(B,j) = width B|->0.K &
-          width B<>0 by A2,A5,A8,A12,MATRIX_3:def 4,FINSEQ_1:4;
+          width B<>0 by A2,A5,A8,A12,FINSEQ_1:4,MATRIX_3:def 4;
           hence AX*(j,k) = (width A|-> 0.K)"*"Col(X,k)
           by A5,A8,A11,MATRIX_3:def 4
             .= Sum(0.K*Col(X,k)) by A5,A8,FVSUM_1:80
             .= 0.K*Sum(Col(X,k)) by FVSUM_1:92
             .= 0.K by VECTSP_1:36
             .= Line(B,j).k by A5,A8,A10,A12,A17,FINSEQ_2:71
-            .= B*(j,k) by MATRIX_1:def 8,A5,A8,A10,A12;
+            .= B*(j,k) by A5,A8,A10,A12,MATRIX_1:def 8;
         end;
       end;
       hence AX*(j,k)=B*(j,k);
@@ -2338,7 +2337,7 @@ proof
 A1: i in dom A & len A > 1;
   then reconsider l1=len A-1 as Element of NAT by NAT_1:20;
 A2: Seg len A=dom A & card Seg len A=l1+1 & (Seg len A)\{i}c= Seg len A
-  by FINSEQ_1:def 3,78,XBOOLE_1:36;
+  by FINSEQ_1:78,def 3,XBOOLE_1:36;
   then Card ((Seg len A)\{i})=l1 & l1 > 1-1 by A1,STIRL2_1:65,XREAL_1:11;
   then
 A3: Solutions_of(A,B)c=Solutions_of(Segm(A,(Seg len A)\{i},Seg width A),
@@ -2379,7 +2378,7 @@ A10: Card (S\{i})=l1 & l1 > 1-1 by A1,A7,STIRL2_1:65,XREAL_1:11;
     let j such that
 A11: j in (dom A)\(S\{i});
     j in dom A /\{i} by A7,A11,XBOOLE_1:48;
-    then j in {i} by XBOOLE_0:def 3;
+    then j in {i} by XBOOLE_0:def 4;
     hence Line(A,j) = width A |-> 0.K & Line(B,j) = width B |-> 0.K
     by A2,A3,TARSKI:def 1;
   end;
@@ -2402,14 +2401,14 @@ proof
   set IDn=idseq n;
   len IDn=n & IDn is FinSequence of NAT by FINSEQ_2:52,55;
   then reconsider IDn as Element of n-tuples_on NAT by FINSEQ_2:110;
-A1: dom IDn=Seg n & rng P c= Seg n & dom P=Seg n by RELSET_1:12,FUNCT_2:67;
+A1: dom IDn=Seg n & rng P c= Seg n & dom P=Seg n by FUNCT_2:67,RELSET_1:12;
   then reconsider IDnP=IDn*P as FinSequence of NAT by FINSEQ_2:51;
 A2: n in NAT by ORDINAL1:def 13;
   dom IDnP = Seg n by A1,RELAT_1:79;
-  then len IDnP = n by FINSEQ_1:def 3,A2;
+  then len IDnP = n by A2,FINSEQ_1:def 3;
   then reconsider IDnP as Element of n-tuples_on NAT by FINSEQ_2:110;
 A3: IDn=Sgm Seg n & n=len A & len B=n & card Seg n=n & (idseq n)*P = P
-  by A1,RELAT_1:79,FINSEQ_3:54,MATRIX_1:def 3,FINSEQ_1:78;
+  by A1,FINSEQ_1:78,FINSEQ_3:54,MATRIX_1:def 3,RELAT_1:79;
   then
 A4: Segm(A,IDnP,Sgm Seg width A) = Segm(A,Seg len A,Seg width A) * P
   by MATRIX13:33
@@ -2459,13 +2458,12 @@ A4: len A=n & width A=m & Indices A=[:Seg n,Seg m:] by A3,MATRIX_1:24;
   set SN=Seg m\N;
 A5: SN c= Seg m by XBOOLE_1:36;
   then
-A6: [:Seg n,N:] c= Indices A & [:Seg n,SN:] c= Indices A by A1,A4,
-  ZFMISC_1:119;
+A6: [:Seg n,N:] c= Indices A & [:Seg n,SN:] c= Indices A by A1,A4,ZFMISC_1:119;
   set ZERO=0.(K,m-'n,m);
 A7: now per cases;
     suppose m-'n=0;
       then [:Seg (m-'n),N:] = {} & [:Seg (m-'n),SN:] ={}
-      by ZFMISC_1:113,FINSEQ_1:4;
+      by FINSEQ_1:4,ZFMISC_1:113;
       hence [:Seg (m-'n),N:]c=Indices ZERO & [:Seg (m-'n),SN:]c=Indices ZERO
       by XBOOLE_1:2;
     end;
@@ -2480,14 +2478,14 @@ A8: card Seg m = m & card Seg n = n & card Seg (m-'n) = m-'n by FINSEQ_1:78;
   then
 A9: n <= m by A8,NAT_1:40;
   then
-A10: m-'n=m-n & card SN=m-n by A1,A8,XREAL_1:235,CARD_2:63;
+A10: m-'n=m-n & card SN=m-n by A1,A8,CARD_2:63,XREAL_1:235;
   set SA=Segm(A,Seg n,SN);
   set ONE= 1.(K,m-'n);
 A11: len SA=n & width SA=m-'n by A3,A8,A10,MATRIX_1:24;
   m-'n=0 or m-'n > 0;
   then (len (SA@)=0 & m-'n=0 or len (SA@)=m-'n & width (SA@)=n)&
   len (SA@)=len (-SA@) & width (SA@)=width (-SA@)
-  by A11,MATRIX_2:12,MATRIX_3:def 2,MATRIX_1:def 7;
+  by A11,MATRIX_1:def 7,MATRIX_2:12,MATRIX_3:def 2;
   then -SA@={} &m-'n=0 or -SA@ is Matrix of m-'n,n,K
    by MATRIX_2:7;
   then reconsider SAT=-SA@ as Matrix of m-'n,n,K by MATRIX_1:13;
@@ -2518,7 +2516,7 @@ A14: for i st i in Seg l holds (ex j st j in Seg (m-'n) & Col(M,i) = Line(V,j))
 A15: len M=m & width M=l by A3,A9,MATRIX_1:24;
   then
 A16: len (A*M)=n & width (A*M)=l & width Z=l
-  by A3,A4,MATRIX_3:def 4,MATRIX_1:24;
+  by A3,A4,MATRIX_1:24,MATRIX_3:def 4;
   then reconsider AM=A*M as Matrix of n,l,K by MATRIX_2:7;
   now
     let i,j such that
@@ -2562,7 +2560,7 @@ A29:    jj = idseq (m-'n).jj by A20,FINSEQ_1:4,FINSEQ_2:57
         by A20,A1,A25,A22,ZFMISC_1:106;
         then
 A30:    [jj,I] in Indices Segm(V,Seg(m-'n),N) & Indices SAT= Indices (SA@)
-        by A7,A22,A24,MATRIX13:17,Lm1;
+        by A7,A22,A24,Lm1,MATRIX13:17;
         then
 A31:    [I,jj] in Indices SA by A13,MATRIX_1:def 7;
 A32:    Line(V,jj).(Sgm N.I) = V*(jj,Sgm N.I) by A1,A25,A22,MATRIX_1:def 8
@@ -2576,7 +2574,7 @@ A33:    mlt(Line(A,I),Line(V,jj))/.(Sgm N.I)
           .= -(A*(I,Sgm SN.jj)) by VECTSP_1:def 16;
 A34:    Sgm SN.jj in SN by A20,A24,FUNCT_1:def 5;
         then
-A35:    Line(A,I).(Sgm SN.jj)=A*(I,Sgm SN.jj) by A4,A5,MATRIX_1: def 8;
+A35:    Line(A,I).(Sgm SN.jj)=A*(I,Sgm SN.jj) by A4,A5,MATRIX_1:def 8;
 A36:    Indices ONE=[:Seg (m-'n),Seg (m-'n):] by MATRIX_1:25;
         then
 A37:    [jj,jj] in Indices ONE by A20,ZFMISC_1:106;
@@ -2592,7 +2590,7 @@ A40:    Sgm SN.jj <> Sgm N.I by A12,A25,A34,XBOOLE_0:3;
           let kk be Nat such that
 A41:      kk in Seg m and
 A42:      kk<> Sgm SN.jj & kk<>Sgm N.I;
-          now per cases by A41,XBOOLE_0:def 4;
+          now per cases by A41,XBOOLE_0:def 5;
             suppose kk in N;
               then consider x such that
 A43:          x in dom Sgm N & Sgm N.x=kk by A24,FUNCT_1:def 5;
@@ -2600,7 +2598,7 @@ A43:          x in dom Sgm N & Sgm N.x=kk by A24,FUNCT_1:def 5;
               [Sgm (Seg n).I,Sgm N.x] in Indices A
               by A26,A4,A19,A41,A43,ZFMISC_1:106;
               then
-A44:          [I,x] in Indices Segm(A,Seg n,N) by A6,A24, MATRIX13:17;
+A44:          [I,x] in Indices Segm(A,Seg n,N) by A6,A24,MATRIX13:17;
 A45:          Line(A,I).(Sgm N.x) = A*(I,Sgm N.x) by A4,A41,A43,MATRIX_1:def 8
                 .= Segm(A,Seg n,N)*(I,x) by A26,A44,MATRIX13:def 1
                 .= 0.K by A2,A44,A43,A42,MATRIX_1:def 12;
@@ -2661,9 +2659,9 @@ A1: card N = n & N c= Seg m & n>0 and
 A2: Segm(A,Seg n,N) = 1.(K,n);
   set SN=Seg m\N;
 A3: n <=card Seg m & card Seg m=m & card Seg n=n & card Seg l=l
-  by A1,NAT_1:44,FINSEQ_1:78;
+  by A1,FINSEQ_1:78,NAT_1:44;
   then
-A4: m-'n=m-n & card SN=m-n & m>0 by A1,XREAL_1:235,CARD_2:63;
+A4: m-'n=m-n & card SN=m-n & m>0 by A1,CARD_2:63,XREAL_1:235;
 A5: SN c= Seg m by XBOOLE_1:36;
   set Z=0.(K,m,l);
   set ZERO=0.(K,m-'n,l);
@@ -2686,7 +2684,7 @@ A9: Segm(X,N,Seg l) = B & Segm(X,SN,Seg l) = ZERO and
   X*(i,j) = Z*(i,j) by A1,A3,A4,A6,A7,Th9;
   take X;
   thus Segm(X,SN,Seg l) = ZERO & Segm(X,N,Seg l) = B by A9;
-A10: len X=m & width X=l & Indices X=[:Seg m,Seg l:] by A3,MATRIX_1:24,A1;
+A10: len X=m & width X=l & Indices X=[:Seg m,Seg l:] by A3,A1,MATRIX_1:24;
   then
 A11: dom X=Seg m by FINSEQ_1:def 3;
   set AX=A*X;
@@ -2734,7 +2732,7 @@ A24: dom mlt(Line(A,i),Col(X,j))=Seg m by FINSEQ_1:def 3;
     now
       let kk be Nat such that
 A25:  kk in Seg m & kk <> Sgm N.I;
-      per cases by A25,XBOOLE_0:def 4;
+      per cases by A25,XBOOLE_0:def 5;
       suppose
 A26:    kk in N;
         then consider x such that
@@ -2745,8 +2743,8 @@ A27:    x in dom Sgm N & Sgm N.x=kk by A15,FUNCT_1:def 5;
         then
 A28:    [I,x] in Indices 1.(K,n) by A2,A15,A17,MATRIX13:17;
 A29:    Line(A,i).(Sgm N.x) = A*(I,Sgm N.x) by A1,A6,A26,A27,MATRIX_1:def 8
-          .= (Segm(A,Seg n,N))*(I,x) by A2,A18,MATRIX13:def 1,A28
-          .= 0.K by MATRIX_1:def 12,A2,A25,A27,A28;
+          .= (Segm(A,Seg n,N))*(I,x) by A2,A18,A28,MATRIX13:def 1
+          .= 0.K by A2,A25,A27,A28,MATRIX_1:def 12;
         Col(X,j).kk = X*(kk,j) by A26,A1,A11,MATRIX_1:def 9;
         hence mlt(Line(A,i),Col(X,j)).kk = 0.K*(X*(kk,j))
         by A1,A27,A26,A29,A6,A10,FVSUM_1:74
@@ -2764,7 +2762,7 @@ A32:    [x,J] in Indices ZERO by A9,A15,A17,MATRIX13:17;
 A33:    Line(A,i).kk=A*(I,Sgm SN.x) by A6,A25,A31,MATRIX_1:def 8;
         Col(X,j).kk = X*(Sgm SN.x,Sgm (Seg l).j)
         by A21,A31,A5,A30,A11,MATRIX_1:def 9
-          .= ZERO*(x,J) by A9,MATRIX13:def 1,A32
+          .= ZERO*(x,J) by A9,A32,MATRIX13:def 1
           .= 0.K by A32,MATRIX_3:3;
         hence mlt(Line(A,i),Col(X,j)).kk = (A*(I,Sgm SN.x))*0.K
         by A25,A33,A6,A10,FVSUM_1:74
@@ -2827,7 +2825,7 @@ A6: i in Seg n & n>0 & width A=k by A5,MATRIX_1:24;
       .= B'.i by A6,MATRIX_2:10;
     hence B.i=ZERO.i by A6,FINSEQ_2:71;
   end;
-  hence thesis by FINSEQ_1:18,A3,A4;
+  hence thesis by A3,A4,FINSEQ_1:18;
 end;
 
 theorem Th53:
@@ -3018,7 +3016,7 @@ A17:        [i,j] in Indices A' &i>len f&j<=n1;
           n<=n1 by NAT_1:13;
           then Seg n c= Seg n1 & Seg n1 c= Seg m() by A9,FINSEQ_1:7;
           then len f <=n1 & len f<=n() & rng f c= Seg n1
-          by A13,XBOOLE_1:1,NAT_1:12;
+          by A13,NAT_1:12,XBOOLE_1:1;
           hence thesis by A10,A13,A14,A16;
         end;
         suppose ex i,j st [i,j] in Indices A' &i>len f&j=n1&A'*(i,j)<>0.K();
@@ -3027,7 +3025,7 @@ A18:      [i0,j0] in Indices A' & i0>len f &j0=n1 & A'*(i0,j0)<>0.K();
           n<=m() by A9,NAT_1:13;
           then
 A19:      Indices A'=[:Seg n(),Seg m():] & width A()=m() &
-          Seg n c= Seg m() by A4,MATRIX_1:24,FINSEQ_1:7;
+          Seg n c= Seg m() by A4,FINSEQ_1:7,MATRIX_1:24;
           then
 A20:      i0 in Seg n() & Seg n c= Seg m() by A18,ZFMISC_1:106;
           then
@@ -3036,7 +3034,7 @@ A21:      i0<=n() & len f+1<=i0 by A18,FINSEQ_1:3,NAT_1:13;
           then
 A22:      len f+1 in Seg n() & j0 in Seg m() & n1 in Seg m()
           & Seg len f c=Seg n() & dom f = Seg len f
-          by A13,A18,A19,ZFMISC_1:106,FINSEQ_1:def 3,7;
+          by A13,A18,A19,FINSEQ_1:7,def 3,ZFMISC_1:106;
           ex A' be Matrix of n(),m(),K(), B' be Matrix of n(),m'(),K() st
           P[A',B'] & r = the_rank_of A' & A'*(len f+1,n1) <> 0.K() &
           (for i,j st [i,j] in Indices A' & i>len f &j<=n holds
@@ -3050,7 +3048,7 @@ A22:      len f+1 in Seg n() & j0 in Seg m() & n1 in Seg m()
 A23:          A'*(len f+1,n1) = 0.K();
               then
 A24:          i0 <> len f+1 & i0 in dom A' & dom A'=Seg len A'
-              by A18,ZFMISC_1:106,FINSEQ_1:def 3;
+              by A18,FINSEQ_1:def 3,ZFMISC_1:106;
               set LAf=Line(A',len f+1);
               set LA=Line(A',i0);
               set RA=RLine(A',len f+1,LAf + 1_K()*LA);
@@ -3058,19 +3056,19 @@ A24:          i0 <> len f+1 & i0 in dom A' & dom A'=Seg len A'
               take RA,RB;
               thus P[RA,RB] & r = the_rank_of RA by A2,A10,A24,MATRIX13:92;
 A25:          width A'=m() & len A'=n() & 1_K()*LA=LA & width A()=m()&
-              len (LAf+LA)=width A' by A4,MATRIX_1:24,FVSUM_1:70,FINSEQ_2:109;
+              len (LAf+LA)=width A' by A4,FINSEQ_2:109,FVSUM_1:70,MATRIX_1:24;
               [len f+1,j0] in Indices A' by A19,A22,ZFMISC_1:106;
               then RA*(len f+1,n1)=(LAf+LA).n1 & LAf.n1=0.K() &
               LA.n1=A'*(i0,n1)
               by A18,A23,A25,A22,MATRIX11:def 3,MATRIX_1:def 8;
-              then RA*(len f+1,n1) = 0.K()+A'*(i0,n1) by A25,A22,FVSUM_1: 22
+              then RA*(len f+1,n1) = 0.K()+A'*(i0,n1) by A25,A22,FVSUM_1:22
                 .= A'*(i0,n1) by RLVECT_1:def 7;
               hence RA*(len f+1,n1)<>0.K() by A18;
 A26:          Indices RA=Indices A' by MATRIX_1:27;
               now
                 let i,j such that
 A27:            [i,j] in Indices RA & i>len f&j<=n;
-A28:            j in Seg m()&i>=len f+1 by A25,A26,A27,ZFMISC_1:106,NAT_1:13;
+A28:            j in Seg m()&i>=len f+1 by A25,A26,A27,NAT_1:13,ZFMISC_1:106;
                 now per cases by A28,XXREAL_0:1;
                   suppose i>len f+1;
                     hence RA*(i,j) = A'*(i,j) by A25,A26,A27,MATRIX11:def 3
@@ -3081,8 +3079,8 @@ A29:                i=len f+1;
                     then
 A30:                RA*(i,j)=(LAf+LA).j & LAf.j=A'*( len f+1,j) &
                     LA.j=A'*(i0,j)&[i0,j] in Indices A'
-                    by A19,A20,A25,A26,A27,A28,MATRIX11:def 3,
-                    MATRIX_1:def 8,ZFMISC_1:106;
+                    by A19,A20,A25,A26,A27,A28,MATRIX11:def 3,MATRIX_1:def 8
+,ZFMISC_1:106;
                     hence RA*(i,j) = A'*(len f+1,j)+A'*(i0,j)
                     by A25,A28,FVSUM_1:22
                       .= 0.K()+A'*(i0,j) by A12,A26,A27,A29
@@ -3096,13 +3094,13 @@ A30:                RA*(i,j)=(LAf+LA).j & LAf.j=A'*( len f+1,j) &
               RA*(i,j) = 0.K();
               let i,j such that
 A31:          i in dom f;
-              f/.i=f.i&f.i in rng f by A31,PARTFUN1:def 8,FUNCT_1:def 5;
+              f/.i=f.i&f.i in rng f by A31,FUNCT_1:def 5,PARTFUN1:def 8;
               then
 A32:          i in Seg n() & f/.i in Seg n & i <= len f
               by A22,A13,A31,FINSEQ_1:3;
               then
 A33:          [i,f/.i] in Indices A' & i<len f+1 & f/.i in Seg m()
-              by A19,ZFMISC_1:106,NAT_1:13;
+              by A19,NAT_1:13,ZFMISC_1:106;
               then RA*(i,f/.i)=A'*(i,f/.i) by A25,MATRIX11:def 3;
               hence RA*(i,f/.i)<>0.K()&(j in dom f & i<j implies f/.i<f/.j)
               by A31,A14;
@@ -3110,10 +3108,10 @@ A33:          [i,f/.i] in Indices A' & i<len f+1 & f/.i in Seg m()
               proof
                 assume
 A34:            j in dom f\{i};
-                then j in dom f by XBOOLE_0:def 4;
+                then j in dom f by XBOOLE_0:def 5;
                 then j<=len f & j in Seg n() by A22,FINSEQ_1:3;
                 then j<len f+1 & [j,f/.i] in Indices A'
-                by A19,A32,ZFMISC_1:106,NAT_1:13;
+                by A19,A32,NAT_1:13,ZFMISC_1:106;
                 hence RA*(j,f/.i) = A'*(j,f/.i) by A25,MATRIX11:def 3
                   .= 0.K() by A31,A34,A14;
               end;
@@ -3146,7 +3144,7 @@ A41:      QQ[0]
               let j such that
 A42:          j in dom A0 \ {len f+1} & j<=0;
               dom A0=Seg len A0 & j in dom A0
-              by A42,FINSEQ_1:def 3,XBOOLE_0:def 4;
+              by A42,FINSEQ_1:def 3,XBOOLE_0:def 5;
               hence A0*(j,n1) = 0.K() by A42;
             end;
             hence thesis by A37,A38,A39,A40;
@@ -3197,7 +3195,7 @@ A55:            len (LA+(-(AA*(k1,n1))*a")*LAf)=m()by FINSEQ_2:109;
 A56:            P[RA,RB] & r=the_rank_of RA by A2,A45,A52,A54,MATRIX13:92;
                 [len f+1,n1] in Indices AA by A53,A19,A22,ZFMISC_1:106;
                 then
-A57:            RA*(len f+1,n1)<>0.K() by A46,A52,A54,A55, MATRIX11:def 3;
+A57:            RA*(len f+1,n1)<>0.K() by A46,A52,A54,A55,MATRIX11:def 3;
 A58:            now
                   let i,j such that
 A59:              [i,j] in Indices RA&i>len f&j<=n;
@@ -3206,7 +3204,7 @@ A59:              [i,j] in Indices RA&i>len f&j<=n;
 A60:                  i = k1;
 A61:                  j in Seg m() by A53,A19,A59,ZFMISC_1:106;
                       then
-A62:                  LA.j = AA*(k1,j) by A54, MATRIX_1:def 8
+A62:                  LA.j = AA*(k1,j) by A54,MATRIX_1:def 8
                         .= 0.K() by A60,A59,A53,A47;
                       len f+1>len f & [len f+1,j] in Indices A'
                       by A19,A22,A61,NAT_1:13,ZFMISC_1:106;
@@ -3217,12 +3215,12 @@ A62:                  LA.j = AA*(k1,j) by A54, MATRIX_1:def 8
                         .= 0.K() by VECTSP_1:36;
                       then 0.K()+0.K() = (LA + (-(AA*(k1,n1))*a")*LAf).j
                       by A54,A61,A62,FVSUM_1:22
-                        .= RA*(i,j) by A53,A54,A59,A55,A60, MATRIX11:def 3;
+                        .= RA*(i,j) by A53,A54,A59,A55,A60,MATRIX11:def 3;
                       hence RA*(i,j) = 0.K() by RLVECT_1:def 7;
                     end;
                     suppose i<>k1;
                       hence RA*(i,j) = AA*(i,j) by A53,A54,A59,A55,
-                      MATRIX11:def 3
+MATRIX11:def 3
                         .= 0.K() by A47,A53,A59;
                     end;
                   end;
@@ -3232,15 +3230,15 @@ A63:            now
                   let i,j such that
 A64:              i in dom f;
                   set fi=f/.i;
-A65:              fi=f.i & f.i in rng f by A64,PARTFUN1:def 8,FUNCT_1:def 5;
+A65:              fi=f.i & f.i in rng f by A64,FUNCT_1:def 5,PARTFUN1:def 8;
                   then
 A66:              fi in Seg n by A13;
                   then
 A67:              [i,fi] in Indices AA & [len f+1,fi] in Indices AA
-                  by A19,A22,A53,ZFMISC_1:106,A64;
+                  by A19,A22,A53,A64,ZFMISC_1:106;
 A68:              LA.fi=AA*(k1,fi) & LAf.fi=AA*(len f+1,fi) &
-                  len f+1>len f & fi<=n by A54,A66,A19,MATRIX_1:def 8,
-                  NAT_1:13,FINSEQ_1:3;
+                  len f+1>len f & fi<=n by A54,A66,A19,FINSEQ_1:3
+,MATRIX_1:def 8,NAT_1:13;
                   then LAf.fi=0.K() by A67,A47;
                   then ((-(AA*(k1,n1))*a")*LAf).fi =(-(AA*(k1,n1))*a")*0.K()
                   by A54,A66,A19,FVSUM_1:63
@@ -3266,13 +3264,12 @@ A69:              (LA+(-(AA*(k1,n1))*a")*LAf).fi = AA*( k1,fi)+0.K()
                   proof
                     assume
 A70:                j in dom f \ {i};
-                    then j in Seg len f by A22,XBOOLE_0:def 4;
+                    then j in Seg len f by A22,XBOOLE_0:def 5;
                     then
-A71:                [j,fi] in Indices AA by A22,A53, A66,A19,ZFMISC_1:106;
+A71:                [j,fi] in Indices AA by A22,A53,A66,A19,ZFMISC_1:106;
                     per cases;
                     suppose j<>k1;
-                      hence RA*(j,fi) = AA*(j,fi) by A55,A54,A71,
-                      MATRIX11:def 3
+                      hence RA*(j,fi) = AA*(j,fi) by A55,A54,A71,MATRIX11:def 3
                         .= 0.K() by A64,A70,A48;
                     end;
                     suppose
@@ -3297,11 +3294,11 @@ A74:                [i,j] in Indices AA & [len f+1,j] in Indices AA
                     suppose
 A75:                  i = k1;
                       then
-A76:                  LA.j = AA*(i,j)by A73,A54, MATRIX_1:def 8
+A76:                  LA.j = AA*(i,j)by A73,A54,MATRIX_1:def 8
                         .= 0.K() by A73,A54,A64,A48;
-                      fi <= n by FINSEQ_1:3,A65,A13;
+                      fi <= n by A65,A13,FINSEQ_1:3;
                       then j <= n & len f+1 > len f
-                      by A73,XXREAL_0:2,NAT_1:13;
+                      by A73,NAT_1:13,XXREAL_0:2;
                       then 0.K() = AA*(len f+1,j) by A47,A74
                         .= LAf.j by A73,A54,MATRIX_1:def 8;
                       then ((-(AA*(k1,n1))*a")*LAf).j
@@ -3311,7 +3308,7 @@ A76:                  LA.j = AA*(i,j)by A73,A54, MATRIX_1:def 8
                       by A73,A54,A76,FVSUM_1:22
                         .= 0.K() by RLVECT_1:def 7;
                       hence RA*(i,j) = 0.K()
-                      by A55,A74,A54,MATRIX11:def 3,A75;
+                      by A55,A74,A54,A75,MATRIX11:def 3;
                     end;
                   end;
                 end;
@@ -3320,9 +3317,9 @@ A76:                  LA.j = AA*(i,j)by A73,A54, MATRIX_1:def 8
 A77:              j in dom RA \ {len f+1} & j<=k1;
 A78:              dom RA=Seg len RA & len RA=n() & dom AA=Seg len AA
                   by FINSEQ_1:def 3,MATRIX_1:def 3;
-                  j in dom RA by A77,XBOOLE_0:def 4;
+                  j in dom RA by A77,XBOOLE_0:def 5;
                   then
-A79:              [j,n1] in Indices AA by A22,A53,A54, ZFMISC_1:106;
+A79:              [j,n1] in Indices AA by A22,A53,A54,ZFMISC_1:106;
                   now per cases by A77,NAT_1:8;
                     suppose
 A80:                  j<=k;
@@ -3340,8 +3337,7 @@ A82:                  LA.n1=AA*(k1,n1)&LAf.n1=a by A22,A54,MATRIX_1:def 8;
                         .= (-(AA*(k1,n1)))*1_K() by A46,VECTSP_1:def 22
                         .= -(AA*(k1,n1)) by VECTSP_1:def 13;
                       then (LA + (-(AA*(k1,n1))*a")*LAf).n1
-                      = AA*(k1,n1) + (-(AA*(k1,n1))) by A82,A22,A54,
-                      FVSUM_1:22
+                      = AA*(k1,n1) + (-(AA*(k1,n1))) by A82,A22,A54,FVSUM_1:22
                         .= 0.K() by VECTSP_1:66;
                       hence RA*(j,n1) = 0.K()
                       by A54,A55,A79,A81,MATRIX11:def 3;
@@ -3367,12 +3363,11 @@ A86:      for j st j in dom Aa\{len f+1}&j<=n() holds Aa*(j,n1)=0.K();
           thus P[Aa,Bb] & r = the_rank_of Aa by A83;
           take f'=f^<*n1*>;
 A87:      len f'=len f+1 & len f+1>len f & len Aa=n() &dom Aa=Seg len Aa
-          & width Aa=m() by FINSEQ_2:19,NAT_1:13,FINSEQ_1:def 3,
-          A4,MATRIX_1:24;
+          & width Aa=m() by A4,FINSEQ_1:def 3,FINSEQ_2:19,MATRIX_1:24,NAT_1:13;
 A88:      now
             let i,j such that
 A89:        [i,j] in Indices Aa & i>len f' & j<=n1;
-            per cases by NAT_1:8,A89;
+            per cases by A89,NAT_1:8;
             suppose
 A90:          j<=n;
               i>len f by A89,A87,NAT_1:13;
@@ -3382,7 +3377,7 @@ A90:          j<=n;
 A91:          j=n1;
               i in dom Aa by A89,ZFMISC_1:106;
               then i in dom Aa\{len f+1} & i<=n()
-              by A87,A89,ZFMISC_1:64,FINSEQ_1:3;
+              by A87,A89,FINSEQ_1:3,ZFMISC_1:64;
               hence Aa*(i,j)=0.K() by A91,A86;
             end;
           end;
@@ -3390,9 +3385,9 @@ A91:          j=n1;
           then
 A92:      rng f misses {n1} & <*n1*> is one-to-one & rng <*n1*>= {n1} &
           rng f \/{n1} c= Seg n\/{n1} & Seg n\/{n1}=Seg n1
-          by A13,XBOOLE_1:9,63,FINSEQ_3:102,FINSEQ_1:11,55;
+          by A13,FINSEQ_1:11,55,FINSEQ_3:102,XBOOLE_1:9,63;
           then
-A93:      len f'<=n() & rng f' c= Seg n1 by A21,A87,FINSEQ_1:44, XXREAL_0:2;
+A93:      len f'<=n() & rng f' c= Seg n1 by A21,A87,FINSEQ_1:44,XXREAL_0:2;
           now
             let i,j such that
 A94:        i in dom f';
@@ -3401,12 +3396,12 @@ A95:        dom f' = Seg (len f+1) by A87,FINSEQ_1:def 3
 A96:        now
               let k such that
 A97:          k in dom f;
-A98:          k in dom f' by A95,A97,XBOOLE_0:def 2;
+A98:          k in dom f' by A95,A97,XBOOLE_0:def 3;
               thus f/.k = f.k by A97,PARTFUN1:def 8
                 .= f'.k by A97,FINSEQ_1:def 7
                 .= f'/.k by A98,PARTFUN1:def 8;
             end;
-            now per cases by A94,A95,XBOOLE_0:def 2;
+            now per cases by A94,A95,XBOOLE_0:def 3;
               suppose
 A99:            i in dom f;
                 then f/.i=f'/.i by A96;
@@ -3424,17 +3419,17 @@ A100:           i in {len f+1};
             proof
               assume
 A101:         j in dom f' & i < j;
-              per cases by A94,A95,A101,XBOOLE_0:def 2;
+              per cases by A94,A95,A101,XBOOLE_0:def 3;
               suppose j in {len f+1} & i in {len f+1};
                 then i=len f+1 & j=len f+1 by TARSKI:def 1;
                 hence thesis by A101;
               end;
               suppose
 A102:           j in {len f+1} & i in dom f;
-                then f/.i=f.i & f.i in rng f by PARTFUN1:def 8,FUNCT_1:def 5;
+                then f/.i=f.i & f.i in rng f by FUNCT_1:def 5,PARTFUN1:def 8;
                 then f/.i in Seg n & len f+1=j by A13,A102,TARSKI:def 1;
                 then f/.i <= n & n < n1 & f'.j=n1 & f'.j=f'/.j
-                by A101,NAT_1:13,FINSEQ_1:3,59,PARTFUN1:def 8;
+                by A101,FINSEQ_1:3,59,NAT_1:13,PARTFUN1:def 8;
                 then f/.i < f'/.j & f/.i=f'/.i by A96,A102,XXREAL_0:2;
                 hence thesis;
               end;
@@ -3443,7 +3438,7 @@ A102:           j in {len f+1} & i in dom f;
                 hence thesis by A101,NAT_1:13;
               end;
               suppose j in dom f & i in dom f;
-                then f/.i=f'/.i & f/.j=f'/.j & f/.i<f/.j by A14,A96, A101;
+                then f/.i=f'/.i & f/.j=f'/.j & f/.i<f/.j by A14,A96,A101;
                 hence thesis;
               end;
             end;
@@ -3462,24 +3457,24 @@ A105:           i=len f+1;
 A106:           j in dom Aa & j<>i&j<=n()&len f+1 in {len f+1}
                 by A103,A87,FINSEQ_1:3,TARSKI:def 1;
                 then j in dom Aa\{i} & len f+1 in dom f'
-                by A95,ZFMISC_1:64,XBOOLE_0:def 2;
+                by A95,XBOOLE_0:def 3,ZFMISC_1:64;
                 then Aa*(j,n1)=0.K() & f'.(len f+1)=f'/.i
                 by A86,A105,A106,PARTFUN1:def 8;
                 hence thesis by FINSEQ_1:59;
               end;
               suppose
 A107:           i<>len f+1;
-A108:           i in dom f or i in {len f+1} by A94,A95,XBOOLE_0:def 2;
+A108:           i in dom f or i in {len f+1} by A94,A95,XBOOLE_0:def 3;
                 then f/.i=f'/.i & f.i=f/.i & f.i in rng f
-                by A96,PARTFUN1:def 8,FUNCT_1:def 5,A107,TARSKI:def 1;
+                by A96,A107,FUNCT_1:def 5,PARTFUN1:def 8,TARSKI:def 1;
                 then
-A109:           1<=f'/.i & f'/.i<=n & n<=m() by A9, FINSEQ_1:3,A13,NAT_1:13;
+A109:           1<=f'/.i & f'/.i<=n & n<=m() by A9,A13,FINSEQ_1:3,NAT_1:13;
                 then f'/.i <=m() by XXREAL_0:2;
                 then
 A110:           f'/.i in Seg width Aa by A87,A109;
-                j in dom f' by A104,XBOOLE_0:def 4;
+                j in dom f' by A104,XBOOLE_0:def 5;
                 then
-A111:           [j,f'/.i] in Indices Aa by A103,A110, ZFMISC_1:106;
+A111:           [j,f'/.i] in Indices Aa by A103,A110,ZFMISC_1:106;
                 per cases;
                 suppose j=len f+1;
                   then j > len f by NAT_1:13;
@@ -3487,8 +3482,8 @@ A111:           [j,f'/.i] in Indices Aa by A103,A110, ZFMISC_1:106;
                 end;
                 suppose
 A112:             j<>len f+1;
-                  j in dom f' by A104,XBOOLE_0:def 4;
-                  then j in dom f or j in {len f+1} by A95,XBOOLE_0:def 2;
+                  j in dom f' by A104,XBOOLE_0:def 5;
+                  then j in dom f or j in {len f+1} by A95,XBOOLE_0:def 3;
                   then j in dom f & j<>i
                   by A104,A112,TARSKI:def 1,ZFMISC_1:64;
                   then j in dom f\{i} by ZFMISC_1:64;
@@ -3510,7 +3505,7 @@ A114:           i in dom f;
               end;
               suppose
 A115:           not i in dom f;
-                i in dom f or i in {len f+1} by A94,A95,XBOOLE_0:def 2;
+                i in dom f or i in {len f+1} by A94,A95,XBOOLE_0:def 3;
                 then
 A116:           i=len f+1 by A115,TARSKI:def 1;
                 then f'.i=f'/.i & f'.i = n1 & i in dom Aa
@@ -3524,8 +3519,8 @@ A116:           i=len f+1 by A115,TARSKI:def 1;
           hence (for i,j st [i,j] in Indices Aa&i>len f'&j<=n1 holds
           Aa*(i,j)=0.K())& f' is one-to-one & len f' <= n1 &
           len f'<=n() & rng f' c= Seg n1 & for i,j st i in dom f'
-          holds PP[f',i,j,Aa] by A88,A92,A21,A13,A87,FINSEQ_3:98,XREAL_1:8,
-          FINSEQ_1:44,XXREAL_0:2;
+          holds PP[f',i,j,Aa] by A88,A92,A21,A13,A87,FINSEQ_1:44,FINSEQ_3:98
+,XREAL_1:8,XXREAL_0:2;
         end;
       end;
       for n holds Q[n] from NAT_1:sch 2(A5,A7);
@@ -3547,11 +3542,11 @@ A121: for i,j st i in dom f holds PP[f,i,j,A'] by A118;
       by FINSEQ_2:110;
       set S=Segm(A',idL,F');
 A122: rng idL=Seg L & Seg L c= Seg n() & len A'=n() & dom A'=Seg len A'
-      & width A'=m() & dom f=Seg L by A4,A120,RELAT_1:71,FINSEQ_1:7,def 3,
-      MATRIX_1:24;
+      & width A'=m() & dom f=Seg L by A4,A120,FINSEQ_1:7,def 3,MATRIX_1:24
+,RELAT_1:71;
       then
 A123: [:rng idL,rng F':] c= Indices A' & Indices S=[:Seg L,Seg L:]
-      by A120,ZFMISC_1:119,MATRIX_1:25;
+      by A120,MATRIX_1:25,ZFMISC_1:119;
       now
         let i,j such that
 A124:   [i,j] in Indices S;
@@ -3576,9 +3571,9 @@ A129:   k in dom D;
         len D=L by MATRIX_3:def 10;
         then
 A130:   k in Seg L by A129,FINSEQ_1:def 3;
-        then [k,k] in Indices S & L<>0 by A123,ZFMISC_1:106,FINSEQ_1:4;
+        then [k,k] in Indices S & L<>0 by A123,FINSEQ_1:4,ZFMISC_1:106;
         then S*(k,k) = A'*(idL.k,f.k) by MATRIX13:def 1
-          .= A'*(k,f.k) by A130,FINSEQ_2:57,FINSEQ_1:4
+          .= A'*(k,f.k) by A130,FINSEQ_1:4,FINSEQ_2:57
           .= A'*(k,f/.k) by A122,A130,PARTFUN1:def 8;
         then S*(k,k)<>0.K() by A121,A122,A130;
         hence thesis by A130,MATRIX_3:def 10;
@@ -3599,13 +3594,13 @@ A135:     1<=j & j<=width A';
           j in NAT by ORDINAL1:def 13;
           then
 A136:     j in Seg width A' & i in dom A' & not i in Seg L
-          by A133,A135,XBOOLE_0:def 4;
+          by A133,A135,XBOOLE_0:def 5;
           then
 A137:     [i,j] in Indices A' & i>=1 & (i > L or i<1) & width A' <>0
-          by A122,ZFMISC_1:106,FINSEQ_1:3;
+          by A122,FINSEQ_1:3,ZFMISC_1:106;
           thus LA.j = A'*(i,j) by A136,MATRIX_1:def 8
             .= 0.K() by A122,A135,A137,A119
-            .= w0.j by A136,FINSEQ_2:71,FINSEQ_1:4;
+            .= w0.j by A136,FINSEQ_1:4,FINSEQ_2:71;
         end;
         hence Line(A',i) = width A' |-> 0.K() by A134,FINSEQ_1:18;
       end;
@@ -3621,11 +3616,11 @@ A139: r=L by A131,A117,XXREAL_0:1;
         let i such that
 A140:   i in dom A' & i > r;
         not i in Seg L by A139,A140,FINSEQ_1:3;
-        then i in dom A'\(Seg L) by A140,XBOOLE_0:def 4;
+        then i in dom A'\(Seg L) by A140,XBOOLE_0:def 5;
         hence thesis by A122,A132;
       end;
       take f;
-      thus thesis by A120,A121,A4,MATRIX_1:24,A138,A131,XXREAL_0:1;
+      thus thesis by A120,A121,A4,A138,A131,MATRIX_1:24,XXREAL_0:1;
     end;
   end;
   then consider A' be Matrix of n(),m(),K(), B' be Matrix of n(),m'(),K() such
@@ -3669,14 +3664,14 @@ A151: Indices S = [:Seg r,Seg r:] & dom f=Seg r
     let i,j be Element of NAT such that
 A152: i in Seg r & j in Seg r & i <> j;
 A153: [i,j] in Indices S & dom f=Seg r by A151,A152,ZFMISC_1:106;
-A154: idseq r.i=i & i<=r by A152,FINSEQ_2:57,FINSEQ_1:3,4;
+A154: idseq r.i=i & i<=r by A152,FINSEQ_1:3,4,FINSEQ_2:57;
 A155: S*(i,j) = A'*(Sgm (Seg r).i,f.j) by A147,A150,A153,MATRIX13:def 1
       .= A'*(i,f.j) by A154,FINSEQ_3:54
       .= A'*(i,f/.j) by A152,A151,PARTFUN1:def 8;
     i in dom f\{j} by A152,A151,ZFMISC_1:64;
     hence S*(i,j) = 0.K() by A146,A151,A152,A155;
   end;
-  hence S is diagonal by A150,MATRIX_7:def 2,A147;
+  hence S is diagonal by A150,A147,MATRIX_7:def 2;
   thus for i st i in Seg card rngf holds A'*(i,Sgm rngf/.i) <> 0.K()
   by A146,A147,A150,A151;
   thus for i st i in dom A' & i > card rngf holds Line(A',i) = m()|->0.K()
@@ -3757,7 +3752,7 @@ A20: n1 in Seg card N & dom Sgm N=Seg card N & rng Sgm N=N &
     r<=len A' & len A'=n() by A5,MATRIX13:74,MATRIX_1:def 3;
     then
 A21: Seg r c= Seg n() & dom A1=Seg len A1 & len A1=n()
-    by FINSEQ_1:def 3,7,MATRIX_1:def 3;
+    by FINSEQ_1:7,def 3,MATRIX_1:def 3;
 A22: (A1*(n1,Sgm N/.n1))"-1_K()<>-1.K()
     proof
       assume
@@ -3775,11 +3770,11 @@ A25: LL = 1_K()*L+((A1*(n1,f/.n1))"-1_K())*L by FVSUM_1:70
       .= (0.K()+A1*(n1,f/.n1)")*L by VECTSP_1:66
       .= (A1*(n1,f/.n1))"*L by RLVECT_1:def 7;
     take R,FB=F(A25,n1,n1,(A1*(n1,f/.n1))"-1_K());
-    n()<>0 by FINSEQ_1:4,A5,A20,A21;
+    n()<>0 by A5,A20,A21,FINSEQ_1:4;
     then n()>0;
     then
 A26: width A'=m() & width A1=m() & width R=m() by MATRIX_1:24;
-    thus the_rank_of R =r by A14,A20,A21,A22,MATRIX13:92,A5; thus
+    thus the_rank_of R =r by A14,A20,A21,A22,A5,MATRIX13:92; thus
 A27: for i st i in Seg card N & i<=n1 holds R*(i,Sgm N/.i) = 1_K()
     proof
       let i;
@@ -3787,7 +3782,7 @@ A27: for i st i in Seg card N & i<=n1 holds R*(i,Sgm N/.i) = 1_K()
 A28:  i in Seg card N & i<=n1;
       then
 A29:  f.i=f/.i & f.i in rng f & i in dom A1
-      by A20,A21,FUNCT_1:def 5,A5,PARTFUN1:def 8;
+      by A20,A21,A5,FUNCT_1:def 5,PARTFUN1:def 8;
       then
 A30:  [i,Sgm N/.i] in Indices A1 by A4,A20,A26,ZFMISC_1:106;
       per cases by A28,NAT_1:8;
@@ -3822,11 +3817,11 @@ A35:  rng Sgm (Seg card N)=(Seg card N) by FINSEQ_1:def 13;
       then
 A36:  [:Seg card N,N:] c= Indices A1 & Indices A1=Indices R &
       Indices S=Indices SA & Sgm (Seg card N)=idseq card N &
-      (idseq card N).I=I by A4,A21,A26,MATRIX_1:27,ZFMISC_1:119,
-      FINSEQ_3:54,FINSEQ_2:57,A5,FINSEQ_1:4;
+      (idseq card N).I=I by A4,A21,A26,A5,FINSEQ_1:4,FINSEQ_2:57,FINSEQ_3:54
+,MATRIX_1:27,ZFMISC_1:119;
       then
 A37:  [I,Sgm N.J] in Indices A1 & S*(i,j)=R*(I,Sgm N.J)
-      by A20,A34,A35,MATRIX13:def 1,17;
+      by A20,A34,A35,MATRIX13:17,def 1;
       then
 A38:  Sgm N.J in Seg width A1 by ZFMISC_1:106;
       then reconsider SgmNJ=Sgm N.j as Element of NAT;
@@ -3859,7 +3854,7 @@ A40:      i<>j;
       let i such that
 A41:  i in Seg card N;
       f.i=f/.i & f.i in rng f & i in dom A1
-      by A20,A21,A41,FUNCT_1:def 5,A5,PARTFUN1:def 8;
+      by A20,A21,A41,A5,FUNCT_1:def 5,PARTFUN1:def 8;
       then
 A42:  [i,Sgm N/.i] in Indices A1 by A4,A20,A26,ZFMISC_1:106;
       per cases;
@@ -3918,9 +3913,9 @@ A53: Indices ONE = [:Seg r,Seg r:] & Indices ONE = Indices S
 A54: [i,j] in Indices ONE;
     reconsider i'=i,j'=j as Element of NAT by ORDINAL1:def 13;
 A55: i in Seg r & j in Seg r & dom Sgm N=Seg r
-    by A4,A5,A53,A54,ZFMISC_1:106,FINSEQ_3:45;
+    by A4,A5,A53,A54,FINSEQ_3:45,ZFMISC_1:106;
     then
-A56: idseq r.i'=i' & i<=r by FINSEQ_2:57,FINSEQ_1:3,4;
+A56: idseq r.i'=i' & i<=r by FINSEQ_1:3,4,FINSEQ_2:57;
 A57: S*(i,j) = A*(Sgm (Seg r).i',Sgm N.j') by A5,A53,A54,MATRIX13:def 1
       .= A*(i',Sgm N.j') by A56,FINSEQ_3:54
       .= A*(i',Sgm N/.j') by A55,PARTFUN1:def 8;
@@ -4041,9 +4036,9 @@ A20:  Seg L\Seg card N c= Seg L by XBOOLE_1:36;
 A21:  now
         let i such that
 A22:    i in SS;
-        i in Seg L & not i in SN by A22,XBOOLE_0:def 4;
+        i in Seg L & not i in SN by A22,XBOOLE_0:def 5;
         then 1<=i & (i<1 or i> card N) by FINSEQ_1:3;
-        then i>card N & i in dom A1 by A22,A19,XBOOLE_0:def 4;
+        then i>card N & i in dom A1 by A22,A19,XBOOLE_0:def 5;
         hence Line(A1,i)=width A1|->0.K by A15,A19;
       end;
 A23:  card SN=card N by FINSEQ_1:78;
@@ -4056,7 +4051,7 @@ A24:  P2 = SN by A23,RELAT_1:169;
       then
 A25:  Sgm Seg wA.:Q2 = N & Q2 c= dom Sgm Seg wA &
       dom Sgm Seg wA=Seg card Seg wA &Sgm Seg wA is one-to-one
-      by A12,FUNCT_1:147,RELAT_1:167,FINSEQ_3:45,99;
+      by A12,FINSEQ_3:45,99,FUNCT_1:147,RELAT_1:167;
       then N,Q2 are_equipotent by CARD_1:60;
       then
 A26:  card N=card Q2 by CARD_1:21;
@@ -4091,7 +4086,7 @@ A28:    x in Solutions_of(A1,B1) by XBOOLE_0:def 1;
         set AB=A1^^B1;
 A29:    dom AB=Seg len AB & len AB=L & width AB=width A1+width B1 &
         Indices AB=[:Seg L,Seg (width A1+width B1):]
-        by A17,MATRIX_1:24,FINSEQ_1:def 3;
+        by A17,FINSEQ_1:def 3,MATRIX_1:24;
         now
           let i such that
 A30:      i in SS;
@@ -4099,7 +4094,7 @@ A31:      i in dom A1&Line(A1,i)=width A1|->0.K by A19,A20,A30,A21;
 A32:      x in Solutions_of(A1,B1) & i in dom A1 & Line(A1,i)=
           width A1|->0.K implies Line(B1,i)=width B1|->0.K by Th41;
           thus Line(AB,i)=Line(A1,i)^Line(B1,i)by A20,A30,Th15
-            .=width AB|->0.K by A31,A32,A29,FINSEQ_2:143,A28;
+            .=width AB|->0.K by A31,A32,A29,A28,FINSEQ_2:143;
         end;
         then
 A33:    the_rank_of Segm(AB,SN,Seg width AB)=the_rank_of AB by A19,A29,Th11;
@@ -4110,7 +4105,7 @@ A34:    the_rank_of AB<=card N by FINSEQ_1:78;
         width A1<=width AB by A29,NAT_1:11;
         then Seg width A1 c= Seg width AB by FINSEQ_1:7;
         then
-A35:    [:Seg L,Seg width A1:] c= Indices AB by A29,ZFMISC_1: 118;
+A35:    [:Seg L,Seg width A1:] c= Indices AB by A29,ZFMISC_1:118;
         the_rank_of Segm(AB,Seg L,Seg width A1)=card N by A13,Th19;
         then card N <= the_rank_of AB by A35,MATRIX13:79;
         then the_rank_of AB=card N by A34,XXREAL_0:1;
@@ -4171,11 +4166,11 @@ A45:    Solutions_of(A,B) is non empty;
         then consider i,j such that
 A46:    [i,j] in Indices (A'^^B') & (A'^^B')*(i,j)<>0.K by MATRIX13:94;
 A47:    i in Seg L & j in Seg (wA+wB) &len Line(A',i)=wA
-        by A37,A46,ZFMISC_1:106,FINSEQ_2:109;
+        by A37,A46,FINSEQ_2:109,ZFMISC_1:106;
         then
 A48:    dom Line(A'^^B',i)=Seg (wA+wB) & dom Line(A',i)=Seg wA &
         dom Line(B',i)=Seg wB & Line(A'^^B',i)=Line(A',i)^Line(B',i)
-        by A37,FINSEQ_2:144,Th15;
+        by A37,Th15,FINSEQ_2:144;
         per cases by A47,A48,FINSEQ_1:38;
         suppose
 A49:      j in dom Line(A',i);
@@ -4191,7 +4186,7 @@ A50:      [i,j] in Indices ZERO by A37,A47,A48,ZFMISC_1:106;
           then consider n such that
 A51:      n in dom Line(B',i) & j=wA + n;
 A52:      [i,n] in Indices B & B=0.(K,L,wB)
-          by A37,A41,A45,A47,A48,A51,ZFMISC_1:106,Th52;
+          by A37,A41,A45,A47,A48,A51,Th52,ZFMISC_1:106;
           (A'^^B')*(i,j) = Line(A'^^B',i).j by A37,A47,MATRIX_1:def 8
             .= Line(B',i).n by A47,A48,A51,FINSEQ_1:def 7
             .= B'*(i,n) by A48,A51,MATRIX_1:def 8
@@ -4229,11 +4224,11 @@ A3: len X=0;
     take f=0|-> 0.K;
     len f=0 by FINSEQ_2:69;
     then len (ColVec2Mx f)=0 by MATRIX_1:def 3;
-    hence thesis by A2,A3,FINSEQ_2:69,CARD_2:83;
+    hence thesis by A2,A3,CARD_2:83,FINSEQ_2:69;
   end;
   suppose
 A4: len X>0;
-    then len A<>0 & len A=len (ColVec2Mx b) by A1,A2,MATRIX_1:def 4,Th33;
+    then len A<>0 & len A=len (ColVec2Mx b) by A1,A2,Th33,MATRIX_1:def 4;
     then len b<>0 by MATRIX_1:def 3;
     then len b>0;
     then
@@ -4381,7 +4376,7 @@ A4: {} = ColVec2Mx f & len f = width A by Th58;
   end;
   suppose
 A5: width A > 0;
-A6: len ColVec2Mx L=len L & ColVec2Mx L =0.(K,len A,1) by MATRIX_1:def 3,Th32;
+A6: len ColVec2Mx L=len L & ColVec2Mx L =0.(K,len A,1) by Th32,MATRIX_1:def 3;
     then the_rank_of A=the_rank_of (A^^(ColVec2Mx L)) by Th23;
     then Solutions_of(A,ColVec2Mx L) is non empty by A2,A5,A6,Th57;
     then consider x such that
@@ -4429,7 +4424,7 @@ A3: len f =width A by A2,Th59;
   then reconsider f as Element of (width A)-tuples_on the carrier of K
   by FINSEQ_2:110;
   reconsider F=f as Element of V by MATRIX13:102;
-A4: len CB=len B & len A=len CB by A2,MATRIX_1:def 3,Th33;
+A4: len CB=len B & len A=len CB by A2,Th33,MATRIX_1:def 3;
   width A=0 implies len A=0 by A1,Th60;
   then
 A5: the carrier of Space_of_Solutions_of A=Solutions_of(A,len A|->0.K)
@@ -4485,7 +4480,7 @@ A16: ColVec2Mx (f+g)=Cf+ColVec2Mx g by A2,Th59,Th28;
     len (len A|-> 0.K) =len A & (len A=0 or len A<>0) by FINSEQ_2:69;
     then
 A17: (width CB=1 & width ColVec2Mx (len A|->0.K)=1)
-    or (width CB=0 & width ColVec2Mx (len A|->0.K)=0) by A4,MATRIX_1:23,Th26;
+    or (width CB=0 & width ColVec2Mx (len A|->0.K)=0) by A4,Th26,MATRIX_1:23;
     ColVec2Mx (len A|->0.K)=0.(K,len A,1) by Th32;
     then CB+ColVec2Mx (len A|->0.K)=CB by A4,MATRIX_3:6;
     then ColVec2Mx (f+g) in Solutions_of(A,CB) by A2,A15,A16,A17,Th37;
@@ -4510,11 +4505,11 @@ A2: the_rank_of A = 0;
 A3: x in the carrier of (width A)-VectSp_over K;
     reconsider x'=x as Element of (width A)-tuples_on the carrier of K
     by A3,MATRIX13:102;
-A4: A=0.(K,len A,width A) & ColVec2Mx L=0.(K,len A,1) by A2,MATRIX13:95,Th32;
+A4: A=0.(K,len A,width A) & ColVec2Mx L=0.(K,len A,1) by A2,Th32,MATRIX13:95;
     per cases;
     suppose len A=0;
       then
-A5:   Solutions_of(A,ColVec2Mx L)={{}} & width A=0 by A4,Th51, MATRIX_1:def 4;
+A5:   Solutions_of(A,ColVec2Mx L)={{}} & width A=0 by A4,Th51,MATRIX_1:def 4;
       then the carrier of (width A)-VectSp_over K
       = 0-tuples_on the carrier of K by MATRIX13:102
         .= {<*>the carrier of K} by FINSEQ_2:112;
@@ -4554,14 +4549,14 @@ A1: Space_of_Solutions_of A = (width A)-VectSp_over K;
   then consider i,j such that
 A2: [i,j] in Indices A & A*(i,j) <> 0.K by MATRIX13:94;
 A3: j in Seg width A & i in dom A & dom A=Seg len A
-  by A2,ZFMISC_1:106,FINSEQ_1:def 3;
+  by A2,FINSEQ_1:def 3,ZFMISC_1:106;
   then
 A4: width A<>0 & len A<>0 by FINSEQ_1:4;
   set L=Line(1.(K,width A),j);
 A5: width 1.(K,width A)=width A by MATRIX_1:25;
   then L in (width A)-tuples_on the carrier of K;
   then L in the carrier of Space_of_Solutions_of A by A1,MATRIX13:102;
-  then L in Solutions_of(A,len A|->0.K) by Def5,FINSEQ_1:4,A3;
+  then L in Solutions_of(A,len A|->0.K) by Def5,A3,FINSEQ_1:4;
   then consider f such that
 A6: f=L & ColVec2Mx f in Solutions_of(A,ColVec2Mx (len A|->0.K));
   consider X such that
@@ -4583,13 +4578,13 @@ A13: Indices 1.(K,width A)=[:Seg width A,Seg width A:] by MATRIX_1:25;
   then [j,j] in Indices 1.(K,width A) by A3,ZFMISC_1:106;
   then
 A14: 1_K = 1.(K,width A)*(j,j) by MATRIX_1:def 12
-    .= L.j by MATRIX_1:def 8,A3,A5;
+    .= L.j by A3,A5,MATRIX_1:def 8;
   now
     let k such that
 A15: k in dom L & k<>j;
     [j,k] in Indices 1.(K,width A) by A13,A3,A12,A15,ZFMISC_1:106;
     hence 0.K = 1.(K,width A)*(j,k) by A15,MATRIX_1:def 12
-      .= L.k by MATRIX_1:def 8,A5,A12,A15;
+      .= L.k by A5,A12,A15,MATRIX_1:def 8;
   end;
   then Sum(mlt(L,Line(A,i))) = Line(A,i).j by A3,A12,A14,MATRIX_3:19
     .= A*(i,j) by A3,MATRIX_1:def 8;
@@ -4625,7 +4620,7 @@ A8:     j' in Seg 1 & i' in Seg m by A4,ZFMISC_1:106;
         then
 A9:     Line(C,i).j'=C*(i,j') & Line(C,j).j'=C*(j,j') &
         [i,j'] in Indices C & [j,j'] in Indices C
-        by A1,A7,MATRIX_1:def 8,A6,ZFMISC_1:106;
+        by A1,A7,A6,MATRIX_1:def 8,ZFMISC_1:106;
         then (a*Line(C,j)).j'=a*(C*(j,j')) by A7,A8,FVSUM_1:63;
         then (Line(C,i) + a*Line(C,j)).j'
         = C*(i,j')+a*(C*(j,j')) by A7,A8,A9,FVSUM_1:22
@@ -4670,7 +4665,7 @@ A3: for i st i in (dom A) \ N holds Line(A,i) = width A |-> 0.K;
 A4: len L=len A & len C=len L & dom A=Seg len A
   by FINSEQ_1:def 3,FINSEQ_2:69,MATRIX_1:def 3;
   then
-A5: dom C=dom A & C=0.(K,len A,1) by FINSEQ_3:31,Th32;
+A5: dom C=dom A & C=0.(K,len A,1) by Th32,FINSEQ_3:31;
 A6: Seg len A<>{} by A4,A1,XBOOLE_1:3;
   then
 A7: width C=1 & dom A is non empty by A4,Th26;
@@ -4679,7 +4674,7 @@ A8: card Seg width C=1 by FINSEQ_1:78;
   now
     let i such that
 A9: i in (dom A) \ N;
-A10: i in dom A by A9,XBOOLE_0:def 4;
+A10: i in dom A by A9,XBOOLE_0:def 5;
     then Line(C,i) = C.i by A4,MATRIX_2:10
       .= (len A|->(width C|->0.K)).i by A5,A6,Th26
       .= width C|->0.K by A4,A10,FINSEQ_2:71;
@@ -4691,12 +4686,12 @@ A11: Solutions_of(A,C)=Solutions_of(Segm(A,N,Seg width A),Segm(C,N,Seg
   now
     let k,l such that
 A12: [k,l] in Indices Segm(C,N,Seg width C);
-A13: Indices Segm(C,N,Seg width C)=Indices 0.(K,card N,1) by MATRIX_1:27,A8;
+A13: Indices Segm(C,N,Seg width C)=Indices 0.(K,card N,1) by A8,MATRIX_1:27;
     reconsider kk=k,ll=l as Element of NAT by ORDINAL1:def 13;
     [:N,Seg width C:] c= Indices C & rng Sgm N=N & rng Sgm Seg 1=Seg 1
-    by A1,A4,A5,ZFMISC_1:118,FINSEQ_1:def 13;
+    by A1,A4,A5,FINSEQ_1:def 13,ZFMISC_1:118;
     then
-A14: [Sgm N.kk,Sgm Seg width C.ll] in Indices C by A7,A12,MATRIX13 :17;
+A14: [Sgm N.kk,Sgm Seg width C.ll] in Indices C by A7,A12,MATRIX13:17;
     thus Segm(C,N,Seg width C)*(k,l) = C*(Sgm N.kk,Sgm Seg width C.ll)
     by A12,MATRIX13:def 1
       .= 0.K by A14,A5,MATRIX_3:3
@@ -4712,10 +4707,10 @@ A15: Segm(C,N,Seg width C) = 0.(K,card N,1) by A8,MATRIX_1:28
   then card N>0;
   then width S=card Seg width A by MATRIX_1:24;
   then
-A16: len S=card N & width A=width S by MATRIX_1:def 3,FINSEQ_1:78;
+A16: len S=card N & width A=width S by FINSEQ_1:78,MATRIX_1:def 3;
   then the carrier of SA = Solutions_of(A,L) &
   the carrier of SS = Solutions_of(S,card N|->0.K) by A2,Def5;
-  hence thesis by A16,VECTSP_4:37,A11,A15;
+  hence thesis by A16,A11,A15,VECTSP_4:37;
 end;
 
 Lm7: for A be set st A c= dom g ex ga,gb be FinSequence of K st
@@ -4729,7 +4724,7 @@ A3: rng Sgm(A)=A & rng Sgm(dom g\A)=dom g\A by A1,FINSEQ_1:def 13;
   then reconsider ga=g*Sgm A,gb=g*Sgm (dom g\A) as FinSequence
   by A1,A2,FINSEQ_1:20;
   rng ga c=rng g & rng gb c=rng g & rng g c= the carrier of K
-  by RELAT_1:45,FINSEQ_1:def 4;
+  by FINSEQ_1:def 4,RELAT_1:45;
   then rng ga c= the carrier of K & rng gb c= the carrier of K by XBOOLE_1:1;
   then reconsider ga,gb as FinSequence of K by FINSEQ_1:def 4;
   take ga,gb;
@@ -4759,7 +4754,7 @@ proof
 A1: card N = n & N c= Seg m and
 A2: Segm(A,Seg n,N) = 1.(K,n) and
 A3: n > 0 & m-'n>0;
-A4: m<>0 by FINSEQ_1:4,A1,XBOOLE_1:3,A3,CARD_1:47;
+A4: m<>0 by A1,A3,CARD_1:47,FINSEQ_1:4,XBOOLE_1:3;
   then
 A5: len A=n & width A=m & m>0 by A3,MATRIX_1:24;
   consider MV be Matrix of m-'n,m,K such that
@@ -4783,7 +4778,7 @@ A13: m = width MV by A3,MATRIX_1:24
     now
       let i;
       assume i in Seg 1;
-      then i=1 & Col(C,1)=Line(MV,k) by A13,A4,Th26,TARSKI:def 1,FINSEQ_1:4;
+      then i=1 & Col(C,1)=Line(MV,k) by A13,A4,Th26,FINSEQ_1:4,TARSKI:def 1;
       hence (ex j st j in Seg (m-'n) & Col(C,i) = Line(MV,j)) or
       Col(C,i) = m|->0.K by A12;
     end;
@@ -4799,19 +4794,19 @@ A14: Solutions_of(A,len A|->0.K)=the carrier of Space_of_Solutions_of A
   the carrier of Lin (Solutions_of(A,len A|->0.K)) by VECTSP_4:def 2;
   then
 A15: the carrier of Lin (lines MV) c= the carrier of Space_of_Solutions_of(A)
-  by VECTSP_7:16,A14;
-  n <=card Seg m & card Seg m=m by A1,NAT_1:44,FINSEQ_1:78;
+  by A14,VECTSP_7:16;
+  n <=card Seg m & card Seg m=m by A1,FINSEQ_1:78,NAT_1:44;
   then
-A16: m-'n=m-n & card (Seg m \ N) =m-n by A1,XREAL_1:235,CARD_2:63;
+A16: m-'n=m-n & card (Seg m \ N) =m-n by A1,CARD_2:63,XREAL_1:235;
   then
 A17: card Seg (m-'n)=card (Seg m \ N) by FINSEQ_1:78;
 A18: the_rank_of MV = m-'n
   proof
 A19: EqSegm(MV,Seg (m-'n),Seg m \ N)=1.(K,m-'n)
-    by MATRIX13:def 3,A6,A16,FINSEQ_1:78;
+    by A6,A16,FINSEQ_1:78,MATRIX13:def 3;
     Seg m \ N c= Seg m by XBOOLE_1:36;
     then
-A20: [:Seg (m-'n),Seg m \ N:] c= Indices MV by ZFMISC_1:118,A9;
+A20: [:Seg (m-'n),Seg m \ N:] c= Indices MV by A9,ZFMISC_1:118;
     m-'n+0>0 by A3;
     then m-'n>=1 by NAT_1:19;
     then Det 1.(K,m-'n)=1_K & 0.K<>1_K by MATRIX_7:16;
@@ -4849,7 +4844,7 @@ A28:  i in Seg (m-'n);
     then consider L be Linear_Combination of lines MV such that
 A29: L (#) MX2FinS MV = M1 by A27,MATRIX13:108;
     reconsider SumL=Sum L,f as Element of
-    m-tuples_on the carrier of K by A23,MATRIX13:102,FINSEQ_2:110;
+    m-tuples_on the carrier of K by A23,FINSEQ_2:110,MATRIX13:102;
     now
       let i such that
 A30:  i in Seg m;
@@ -4870,16 +4865,16 @@ A39:      ColVec2Mx (len A|->0.K)=0.(K,len A,1) &
           Indices 0.(K,len A,1)=[:Seg len A,Seg 1:] & 1 in Seg 1
           by Th32,A5,A3,MATRIX_1:24;
           then
-A40:      [x,1] in Indices 0.(K,len A,1)by A1,A34,A35, ZFMISC_1: 106,A5;
+A40:      [x,1] in Indices 0.(K,len A,1)by A1,A34,A35,A5,ZFMISC_1:106;
           then
-A41:      0.K = (ColVec2Mx (len A|->0.K))*(x,1) by A39, MATRIX_3 :3
-            .= Line(A,x)"*"Col(X,1) by A37,A38,MATRIX_3:def 4,A40,A39
+A41:      0.K = (ColVec2Mx (len A|->0.K))*(x,1) by A39,MATRIX_3:3
+            .= Line(A,x)"*"Col(X,1) by A37,A38,A40,A39,MATRIX_3:def 4
             .= Sum(mlt(Line(A,x),Col(X,1)));
 A42:      f = Col(X,1) by A5,A37,A36,Th26;
           reconsider F=f as Element of (width A)-tuples_on
           the carrier of K by A3,MATRIX_1:24;
           set L=Line(A,x);
-A43:      dom mlt(L,F)=Seg m by FINSEQ_2:144,A5;
+A43:      dom mlt(L,F)=Seg m by A5,FINSEQ_2:144;
           then consider mN,mSN be FinSequence of K such that
 A44:      mN = mlt(L,F)*Sgm N and
 A45:      mSN = mlt(L,F)*Sgm SN and
@@ -4888,7 +4883,7 @@ A47:      rng Sgm Seg (m-'n)=Seg (m-'n) & rng Sgm SN=SN &
           dom Sgm SN=Seg card SN by A31,FINSEQ_1:def 13,FINSEQ_3:45;
           then
 A48:      dom mN=Seg n & dom mSN=Seg (m-'n)
-          by A1,XBOOLE_1:36,A43,A44,A45,A34,A16,RELAT_1:46;
+          by A1,A43,A44,A45,A34,A16,RELAT_1:46,XBOOLE_1:36;
           then len mSN=m-'n by FINSEQ_1:def 3;
           then reconsider mSN as Element of (m-'n)-tuples_on
           the carrier of K by FINSEQ_2:110;
@@ -4898,31 +4893,31 @@ A50:      x = (idseq n).x by A1,A3,A35,A34,FINSEQ_2:57
           now
             let j such that
 A51:        j in dom mN & j<>x;
-A52:        Sgm N.j in N by FUNCT_1:def 5,A51,A48,A1,A34;
+A52:        Sgm N.j in N by A51,A48,A1,A34,FUNCT_1:def 5;
             then
 A53:        F.(Sgm N.j)=F/.(Sgm N.j) & L.(Sgm N.j)=A*(x,Sgm N. j)
-            by A1,A23,A5,PARTFUN1:def 8,MATRIX_1:def 8;
+            by A1,A23,A5,MATRIX_1:def 8,PARTFUN1:def 8;
             Indices 1.(K,n)=[:Seg n,Seg n:] by MATRIX_1:25;
             then
-A54:        [x,j] in Indices 1.(K,n) by ZFMISC_1:106,A51,A1, A35,A48,A34;
+A54:        [x,j] in Indices 1.(K,n) by A51,A1,A35,A48,A34,ZFMISC_1:106;
             thus mN.j = mlt(L,F).(Sgm N.j) by A51,A44,FUNCT_1:22
               .= F/.(Sgm N.j)*(A*(Sgm Seg n.x,Sgm N.j))
             by A52,A50,A1,A5,A53,FVSUM_1:74
               .= F/.(Sgm N.j)*(1.(K,n)*(x,j))
             by A54,A2,MATRIX13:def 1
-              .= F/.(Sgm N.j)*0.K by A54,MATRIX_1:def 12,A51
+              .= F/.(Sgm N.j)*0.K by A54,A51,MATRIX_1:def 12
               .= 0.K by VECTSP_1:36;
           end;
           then
 A55:      Sum mN=mN.x by A1,A35,A48,A34,MATRIX_3:14;
-A56:      Sgm N.x in N by A35,FUNCT_1:def 5,A34;
+A56:      Sgm N.x in N by A35,A34,FUNCT_1:def 5;
           then
 A57:      F.(Sgm N.x)=F/.(Sgm N.x) & L.(Sgm N.x)=A*(x,Sgm N. x)
-          by A1,A23,A5,PARTFUN1:def 8,MATRIX_1:def 8;
+          by A1,A23,A5,MATRIX_1:def 8,PARTFUN1:def 8;
           Indices 1.(K,n)=[:Seg n,Seg n:] by MATRIX_1:25;
           then
-A58:      [x,x] in Indices 1.(K,n) by ZFMISC_1:106,A34,A35, A1;
-A59:      Sum mN = mlt(L,F).(Sgm N.x) by A55,A44,FUNCT_1:22,A1,A35,A48,A34
+A58:      [x,x] in Indices 1.(K,n) by A34,A35,A1,ZFMISC_1:106;
+A59:      Sum mN = mlt(L,F).(Sgm N.x) by A55,A44,A1,A35,A48,A34,FUNCT_1:22
             .= F/.(Sgm N.x)*(A*(Sgm Seg n.x,Sgm N.x))
           by A56,A50,A1,A5,A57,FVSUM_1:74
             .= F/.(Sgm N.x)*(1.(K,n)*(x,x))
@@ -4935,39 +4930,39 @@ A59:      Sum mN = mlt(L,F).(Sgm N.x) by A55,A44,FUNCT_1:22,A1,A35,A48,A34
 A60:        j in Seg (m-'n);
 A61:        Line(M1,j) = M1.j by A60,MATRIX_2:10
               .= f/.(Sgm SN.j)*Line(MV,j) by A25,A60,A26;
-A62:        j = idseq(m-'n).j by A60,FINSEQ_2:57,A3
+A62:        j = idseq(m-'n).j by A60,A3,FINSEQ_2:57
               .= Sgm Seg (m-'n).j by FINSEQ_3:54;
             [:Seg (m-'n),N:] c= Indices MV & [j,i] in Indices MV
-            by A9,A1,ZFMISC_1:118,106,A60,A33;
+            by A9,A1,A60,A33,ZFMISC_1:106,118;
             then
 A63:        [j,x] in Indices Segm(MV,Seg (m-'n),N)
-            by A62,A47,MATRIX13:17,A35,A34;
+            by A62,A47,A35,A34,MATRIX13:17;
             then
 A64:        [j,x] in Indices (Segm(A,Seg n,SN)@) by A7,Lm1;
             then
-A65:        [x,j] in Indices Segm(A,Seg n,SN) by MATRIX_1: def 7;
+A65:        [x,j] in Indices Segm(A,Seg n,SN) by MATRIX_1:def 7;
 A66:        x = idseq(n).x by A35,A34,A1,A3,FINSEQ_2:57
               .= Sgm Seg n.x by FINSEQ_3:54;
 A67:        Line(MV,j).i = MV*(Sgm Seg (m-'n).j,Sgm N.x)
             by A9,A35,A62,A30,MATRIX_1:def 8
               .= (-Segm(A,Seg n,Seg m \N)@)*(j,x) by A63,A7,MATRIX13:def 1
-              .= -((Segm(A,Seg n,Seg m \N)@)*(j,x)) by MATRIX_3:def 2,A64
-              .= -(Segm(A,Seg n,SN)*(x,j)) by MATRIX_1:def 7,A65
-              .= -(A*(x,Sgm SN.j)) by MATRIX13:def 1,A65,A66;
+              .= -((Segm(A,Seg n,Seg m \N)@)*(j,x)) by A64,MATRIX_3:def 2
+              .= -(Segm(A,Seg n,SN)*(x,j)) by A65,MATRIX_1:def 7
+              .= -(A*(x,Sgm SN.j)) by A65,A66,MATRIX13:def 1;
 A68:        Sgm SN.j in SN by A16,A47,A60,FUNCT_1:def 5;
             then f/.(Sgm SN.j) = F.(Sgm SN.j) & A*(x,Sgm SN.j) = L.(Sgm SN.j)
-            by A23,PARTFUN1:def 8,A5,A31,MATRIX_1:def 8;
+            by A23,A5,A31,MATRIX_1:def 8,PARTFUN1:def 8;
             then
 A69:        f/.(Sgm SN.j) * (A*(x,Sgm SN.j))
-            = mlt(L,F).(Sgm SN.j) by A5,A68,FVSUM_1:74,A31
+            = mlt(L,F).(Sgm SN.j) by A5,A68,A31,FVSUM_1:74
               .= mSN.j by A45,A16,A47,A60,FUNCT_1:23;
-            dom M1=Seg (m-'n) by FINSEQ_1:def 3,A24;
+            dom M1=Seg (m-'n) by A24,FINSEQ_1:def 3;
             hence Col(M1,i).j = M1*(j,i) by A60,MATRIX_1:def 9
               .= Line(M1,j).i by A49,A30,MATRIX_1:def 8
               .= f/.(Sgm SN.j) * (-(A*(x,Sgm SN.j)))
-            by A61,A9,FVSUM_1:63,A33,A1,A67
+            by A61,A9,A33,A1,A67,FVSUM_1:63
               .= -(f/.(Sgm SN.j) * (A*(x,Sgm SN.j))) by VECTSP_1:40
-              .= (-mSN).j by FVSUM_1:31,A60,A69;
+              .= (-mSN).j by A60,A69,FVSUM_1:31;
           end;
           then Col(M1,i)=-mSN by A24,FINSEQ_2:139;
           hence Sum Col(M1,i) = - Sum mSN by FVSUM_1:94
@@ -4979,18 +4974,17 @@ A69:        f/.(Sgm SN.j) * (A*(x,Sgm SN.j))
         suppose not i in N;
           then
 A70:      i in SN & rng Sgm SN=SN & dom Sgm SN=Seg card SN
-          by A30,A31,XBOOLE_0:def 4,FINSEQ_1:def 13,FINSEQ_3:45;
+          by A30,A31,FINSEQ_1:def 13,FINSEQ_3:45,XBOOLE_0:def 5;
           then consider x such that
 A71:      x in dom Sgm SN & Sgm SN.x=i by FUNCT_1:def 5;
           reconsider x as Element of NAT by A71;
 A72:      dom Col(M1,i)=Seg len M1 & len M1=m-n & width M1=m &
-          dom M1=Seg len M1 by A3,A16,MATRIX_1:24,FINSEQ_1:def 3,
-          FINSEQ_2:144;
+          dom M1=Seg len M1 by A3,A16,FINSEQ_1:def 3,FINSEQ_2:144,MATRIX_1:24;
 A73:      now
             let j such that
 A74:        j in dom Col(M1,i) & x<>j;
             [j,x] in [:Seg (m-'n),Seg (m-'n):]
-            by ZFMISC_1:106,A70,A71,A72,A74,A16;
+            by A70,A71,A72,A74,A16,ZFMISC_1:106;
             then
 A75:        [j,x] in Indices 1.(K,m-'n) by MATRIX_1:25;
             j = idseq (m-'n).j by A3,A72,A74,A16,FINSEQ_2:57
@@ -5004,10 +4998,10 @@ A77:        Line(M1,j) = M1.j by A72,A74,MATRIX_2:10
               .= f/.(Sgm SN.j)*Line(MV,j) by A25,A74,A72;
             thus Col(M1,i).j = M1*(j,i) by A74,A72,MATRIX_1:def 9
               .= (f/.(Sgm SN.j)*Line(MV,j)).i by A77,A30,A72,MATRIX_1:def 8
-              .= (f/.(Sgm SN.j))*0.K by A76,FVSUM_1:63,A30,A9
+              .= (f/.(Sgm SN.j))*0.K by A76,A30,A9,FVSUM_1:63
               .= 0.K by VECTSP_1:36;
           end;
-          [x,x] in [:Seg (m-'n),Seg (m-'n):] by ZFMISC_1:106,A70,A71,A16;
+          [x,x] in [:Seg (m-'n),Seg (m-'n):] by A70,A71,A16,ZFMISC_1:106;
           then
 A78:      [x,x] in Indices 1.(K,m-'n) by MATRIX_1:25;
           x = idseq (m-'n).x by A70,A71,A16,FINSEQ_2:57
@@ -5021,10 +5015,10 @@ A80:      Line(M1,x) = M1.x by A70,A71,A16,MATRIX_2:10
             .= f/.(Sgm SN.x)*Line(MV,x) by A25,A70,A71,A16,A26;
           Col(M1,i).x = M1*(x,i) by A16,A70,A71,A72,MATRIX_1:def 9
             .= Line(M1,x).i by A30,A72,MATRIX_1:def 8
-            .= (f/.(Sgm SN.x))*1_K by A79,FVSUM_1:63,A30,A80,A9
+            .= (f/.(Sgm SN.x))*1_K by A79,A30,A80,A9,FVSUM_1:63
             .= (f/.i) by A71,VECTSP_1:def 13
             .= f.i by A23,A30,PARTFUN1:def 8;
-          hence Sum Col(M1,i)=f.i by A73,MATRIX_3:14,A72,A70,A71,A16;
+          hence Sum Col(M1,i)=f.i by A73,A72,A70,A71,A16,MATRIX_3:14;
         end;
       end;
       Carrier L c= lines MV by VECTSP_6:def 7;
@@ -5063,19 +5057,19 @@ A6: ONE * X = ColVec2Mx (n|->0.K) by A4;
 A7: now per cases;
       suppose
 A8:     n>0;
-        ONE*X=X by MATRIXR2:68,A3,A5;
+        ONE*X=X by A3,A5,MATRIXR2:68;
         hence n|->0.K = Col(X,1) by A3,A5,A6,A8,Th26
           .= f by A3,A5,A8,Th26;
       end;
       suppose n=0;
-        then len f=0 & len (n|->0.K)=0 by A5,A3,MATRIX_1:def 3,FINSEQ_2:69;
+        then len f=0 & len (n|->0.K)=0 by A5,A3,FINSEQ_2:69,MATRIX_1:def 3;
         then f={} & n|->0.K={};
         hence f=n|->0.K;
       end;
     end;
     0.SS = 0.((width ONE)-VectSp_over K ) by VECTSP_4:19
-      .= n|->0.K by MATRIX13:102,A3;
-    then f in {0.SS} by TARSKI:def 1,A7;
+      .= n|->0.K by A3,MATRIX13:102;
+    then f in {0.SS} by A7,TARSKI:def 1;
     hence thesis by A4,VECTSP_4:def 3;
   end;
   then the carrier of SS = the carrier of (0).SS by A1,XBOOLE_0:def 10;
@@ -5138,15 +5132,15 @@ A12: for i st i in dom A1 & i > card N holds Line(A1,i) = W|->0.K and
     card N <= len A1 by A10,MATRIX13:74;
     then
 A13: Seg card N c= Seg len A1 & Seg len A1=dom A1 by FINSEQ_1:7,def 3;
-A14: Seg card N is non empty & card N>0 by FINSEQ_1:5,A3,A10;
+A14: Seg card N is non empty & card N>0 by A3,A10,FINSEQ_1:5;
 A15: 0<L by A3,MATRIX13:74;
     then
 A16: width A1=W by MATRIX_1:24;
-A17: width A1>0 by A5,MATRIX_1:24,A15;
+A17: width A1>0 by A5,A15,MATRIX_1:24;
 A18: now
       let i such that
 A19:  i in (dom A1) \ Seg card N;
-A20:  i in dom A1 & not i in Seg card N by A19,XBOOLE_0:def 4;
+A20:  i in dom A1 & not i in Seg card N by A19,XBOOLE_0:def 5;
       then 1<=i & (i<1 or i > card N) by A13,FINSEQ_1:3;
       hence Line(A1,i) = width A1 |-> 0.K by A12,A16,A20;
     end;
@@ -5161,16 +5155,16 @@ A24: Sgm (Seg width A1) = idseq width A1 by FINSEQ_3:54
       .= id Seg width A1;
     Seg card N c= Seg card N;
     then Seg card N=Sgm (Seg card N)"(Seg card N) & N=Sgm (Seg width A1)"N
-    by FUNCT_2:171,A23,A24,A9,A16;
+    by A23,A24,A9,A16,FUNCT_2:171;
     then
-A25: Segm(SN,Seg card N,N)=1.(K,card N) by A11,MATRIX13:56,A9,A16;
-A26: card N<=W & card (Seg W\N)=W-card N by A22,A16,NAT_1:44,CARD_2:63,A9;
+A25: Segm(SN,Seg card N,N)=1.(K,card N) by A11,A9,A16,MATRIX13:56;
+A26: card N<=W & card (Seg W\N)=W-card N by A22,A16,A9,CARD_2:63,NAT_1:44;
     then
 A27: W-'card N=W-card N by XREAL_1:235;
     per cases;
     suppose
 A28:  W-'card N=0;
-      then SN=1.(K,card N) by A11,A16,A22,CARD_FIN:1,A9,A27;
+      then SN=1.(K,card N) by A11,A16,A22,A9,A27,CARD_FIN:1;
       hence thesis by A28,Lm8,A21,A10,A27;
     end;
     suppose
@@ -5181,23 +5175,22 @@ A30:  Segm(MVectors,Seg (W-'card N),Seg W \ N) = 1.(K,W-'card N) and
 A31:  Lin(lines MVectors) = Space_of_Solutions_of A'
       by A9,A22,A3,A10,Th67,A25,A21;
 A32:  dom MVectors=Seg len MVectors & len MVectors=W-'card N
-      by MATRIX_1:def 3,FINSEQ_1:def 3;
+      by FINSEQ_1:def 3,MATRIX_1:def 3;
 A33:  card Seg (W-'card N)=W-'card N by FINSEQ_1:78;
 A34:  Indices MVectors=[:Seg (W-'card N),Seg W:] & len MVectors=W-'card N
       by A29,MATRIX_1:24;
 A35:  the_rank_of MVectors = W-'card N
       proof
 A36:    EqSegm(MVectors,Seg (W-'card N),Seg W \ N)=1.(K,W-'card N)
-        by MATRIX13:def 3,A30,A26,A27,FINSEQ_1:78;
+        by A30,A26,A27,FINSEQ_1:78,MATRIX13:def 3;
         Seg W \ N c= Seg W by XBOOLE_1:36;
         then
-A37:    [:Seg (W-'card N),Seg W \ N:] c= Indices MVectors by A34,
-        ZFMISC_1:118;
+A37:    [:Seg (W-'card N),Seg W \ N:] c= Indices MVectors by A34,ZFMISC_1:118;
         W-'card N+0>0 by A29;
         then W-'card N>=1 by NAT_1:19;
         then Det 1.(K,W-'card N)=1_K & 0.K<>1_K by MATRIX_7:16;
         then W-'card N<=the_rank_of MVectors&W-'card N>=the_rank_of MVectors
-        by A26,A27,A36,A37,A33,A34,MATRIX13:def 4,74;
+        by A26,A27,A36,A37,A33,A34,MATRIX13:74,def 4;
         hence thesis by XXREAL_0:1;
       end;
       then
@@ -5207,7 +5200,7 @@ A38:  lines MVectors is linearly-independent by MATRIX13:121;
       then Seg (W-'card N),B are_equipotent by A32,WELLORD2:def 4;
       then Card B = card Seg (W-'card N) by CARD_1:21
         .= W-'card N by FINSEQ_1:78;
-      hence thesis by VECTSP_9:30,A31,A10,A27,A38;
+      hence thesis by A31,A10,A27,A38,VECTSP_9:30;
     end;
   end;
 end;
@@ -5276,7 +5269,7 @@ proof
   consider I be finite Subset of W such that
 A1: I is Basis of W by MATRLIN:def 3;
 A2: card I=dim W & I is linearly-independent & Lin(I) = the VectSpStr of W
-  by A1,VECTSP_9:def 2,VECTSP_7:def 3;
+  by A1,VECTSP_7:def 3,VECTSP_9:def 2;
   then reconsider U=I as linearly-independent Subset of m-VectSp_over K
   by VECTSP_9:15;
   consider M be Matrix of card I,m,K such that
@@ -5287,7 +5280,7 @@ A4: lines M = U by MATRIX13:104;
   for A be Matrix of card I,m,K,B be Matrix of card I,m,K st $1=A holds
   A is without_repeated_line & lines A is linearly-independent &
   Lin(lines A)=(Omega).W;
-A5: P[M,M] by A2,VECTSP_9:21,A3,A4;
+A5: P[M,M] by A2,A3,A4,VECTSP_9:21;
 A6: for A' be Matrix of card I,m,K, B' be Matrix of card I,m,K st P[A',B']
   for a be Element of K for i,j st j in dom A' & (i=j implies a<>-1_K)
   holds P[RLine(A',i,Line(A',i) + a*Line(A',j)),F(B',i,j,a)]
@@ -5347,7 +5340,7 @@ A3: m-'dim W=m by A2,NAT_D:40;
 A4: len 1.(K,m)=m & width 1.(K,m)=m & card N=m by FINSEQ_1:78,MATRIX_1:25;
 A5: dim Space_of_Solutions_of ONE=0 by Lm8;
     Space_of_Solutions_of ONE = (Omega).(Space_of_Solutions_of ONE)
-      .= (0).(Space_of_Solutions_of ONE) by VECTSP_9:33,A5
+      .= (0).(Space_of_Solutions_of ONE) by A5,VECTSP_9:33
       .= (0).W by A4,VECTSP_4:48
       .= (Omega).W by A2,VECTSP_9:33
       .= W;
@@ -5360,15 +5353,15 @@ A7: N c= Seg m & dim W = card N and
 A8: Segm(A,Seg dim W,N)=1.(K,dim W) and
 A9: the_rank_of A = dim W & lines A is Basis of W by Th70;
     set ZERO=0.(K,m-'dim W,m);
-A10: m-'dim W=m-dim W & m-dim W>dim W-dim W by A1,XREAL_1:235,XREAL_1:11;
+A10: m-'dim W=m-dim W & m-dim W>dim W-dim W by A1,XREAL_1:11,235;
     then
 A11: len ZERO=m-'dim W & width ZERO=m&Indices ZERO=[:Seg (m-'dim W ), Seg m:]
-    & card Seg (m-'dim W)=m-'dim W by MATRIX_1:24,FINSEQ_1:78;
+    & card Seg (m-'dim W)=m-'dim W by FINSEQ_1:78,MATRIX_1:24;
     set SA = Segm(A,Seg dim W,(Seg m)\N);
 A12: card ((Seg m)\N) = card Seg m-card N & card Seg (m-'dim W)=m-'dim W
     & card Seg dim W=dim W & card Seg m = m by A7,CARD_2:63,FINSEQ_1:78;
     then reconsider CC=1.(K,m-'dim W) as
-    Matrix of card Seg(m-'dim W),card((Seg m)\N),K by A1,XREAL_1:235,A7;
+    Matrix of card Seg(m-'dim W),card((Seg m)\N),K by A1,A7,XREAL_1:235;
     len SA=dim W & width SA =m-card N by A6,A12,MATRIX_1:24;
     then len (SA@)=m-dim W & width (SA@) =dim W by A7,A10,MATRIX_2:12;
     then len (-SA@)=m-'dim W & width (-SA@) =dim W by A10,MATRIX_3:def 2;
@@ -5378,7 +5371,7 @@ A13: (Seg m)\N c= Seg m by XBOOLE_1:36;
     then
 A14: [:Seg (m-'dim W),N:] c= Indices ZERO & Seg m\((Seg m)\N) = Seg m /\N &
     [:Seg (m-'dim W),(Seg m)\N:] c= Indices ZERO & Seg m /\ N =N
-    by A11,A7,ZFMISC_1:118,XBOOLE_1:48,28;
+    by A11,A7,XBOOLE_1:28,48,ZFMISC_1:118;
 A15: N misses (Seg m)\N by XBOOLE_1:79;
     [:Seg (m-'dim W),N:]/\[:Seg (m-'dim W),(Seg m)\N:]=
     [:Seg (m-'dim W),N/\((Seg m)\N):] by ZFMISC_1:122
@@ -5393,7 +5386,7 @@ A16: Segm(M,Seg (m-'dim W),N)=BB & Segm(M,Seg (m-'dim W),(Seg m)\N)=CC and
     for i,j st [i,j] in
     Indices M\([:Seg (m-'dim W),N:]\/[:Seg (m-'dim W),(Seg m)\N:])
     holds M*(i,j) = ZERO*(i,j) by Th9,A11,A14;
-    m-'(m-'dim W)=m-(m-'dim W) by XREAL_1:235,NAT_D:35;
+    m-'(m-'dim W)=m-(m-'dim W) by NAT_D:35,XREAL_1:235;
     then consider MV be Matrix of dim W,m,K such that
 A17: Segm(MV,Seg dim W,N) = 1.(K,dim W) and
 A18: Segm(MV,Seg dim W,(Seg m)\N)= -Segm(M,Seg (m-'dim W),N)@ and
@@ -5407,7 +5400,7 @@ A22:  Indices A=[:Seg dim W, Seg m:] & Indices A=Indices MV
       then
 A23:  i in Seg dim W & rng Sgm Seg dim W=Seg dim W &
       dom Sgm Seg dim W=Seg dim W & j in Seg m
-      by ZFMISC_1:106,A21,FINSEQ_1:def 13,FINSEQ_3:45,A12;
+      by A21,A12,FINSEQ_1:def 13,FINSEQ_3:45,ZFMISC_1:106;
       then consider x such that
 A24:  x in Seg dim W & (Sgm Seg dim W).x=i by FUNCT_1:def 5;
       reconsider x as Element of NAT by A24;
@@ -5426,13 +5419,13 @@ A28:      [x,y] in Indices Segm(A,Seg dim W,N) &
           by A22,A23,A24,A26,A27,MATRIX13:17;
           hence A*(i,j) = Segm(MV,Seg dim W,N)*(x,y)
           by A8,A24,A27,A17,MATRIX13:def 1
-            .= MV*(i,j) by A24,A27,MATRIX13:def 1,A28;
+            .= MV*(i,j) by A24,A27,A28,MATRIX13:def 1;
         end;
         suppose not j in N;
           then
-A29:      j in Seg m\N by A23,XBOOLE_0:def 4;
+A29:      j in Seg m\N by A23,XBOOLE_0:def 5;
 A30:      rng Sgm (Seg m\N)=(Seg m\N) & dom Sgm(Seg m\N)=Seg(m-'dim W)
-          by A7,FINSEQ_1:def 13,FINSEQ_3:45,A12,A13,A10;
+          by A7,A12,A13,A10,FINSEQ_1:def 13,FINSEQ_3:45;
           then consider y such that
 A31:      y in Seg (m-'dim W) & (Sgm (Seg m\N)).y=j by A29,FUNCT_1:def 5;
           reconsider y as Element of NAT by A31;
@@ -5443,19 +5436,19 @@ A32:      [x,y] in Indices Segm(A,Seg dim W,Seg m\N) &
           [x,y] in Indices Segm(MV,Seg dim W,Seg m\N)
           by A22,A23,A24,A30,A31,MATRIX13:17;
           then
-A33:      [x,y] in Indices (Segm(M,Seg (m-'dim W),N)@) by A18, Lm1;
+A33:      [x,y] in Indices (Segm(M,Seg (m-'dim W),N)@) by A18,Lm1;
           then
-A34:      [y,x] in Indices Segm(M,Seg (m-'dim W),N) by MATRIX_1: def 7;
+A34:      [y,x] in Indices Segm(M,Seg (m-'dim W),N) by MATRIX_1:def 7;
           then
 A35:      [y,x] in Indices SA@ by Lm1,A16;
           thus MV*(i,j) = (-Segm(M,Seg (m-'dim W),N)@)*(x,y)
-          by A24,A31,MATRIX13:def 1,A32,A18
+          by A24,A31,A32,A18,MATRIX13:def 1
             .= -(Segm(M,Seg (m-'dim W),N)@)*(x,y) by A33,MATRIX_3:def 2
             .= -(-SA@)*(y,x) by A16,A34,MATRIX_1:def 7
             .= --(SA@)*(y,x) by A35,MATRIX_3:def 2
             .= (SA@)*(y,x) by RLVECT_1:30
             .= SA*(x,y) by A32,MATRIX_1:def 7
-            .=A*(i,j) by A24,A31,MATRIX13:def 1,A32;
+            .=A*(i,j) by A24,A31,A32,MATRIX13:def 1;
         end;
       end;
       hence A*(i,j)=MV*(i,j);
@@ -5463,8 +5456,8 @@ A35:      [y,x] in Indices SA@ by Lm1,A16;
     take M,NN=Seg m\ N;
     reconsider lA=lines MV as Subset of W by A9,A20,MATRIX_1:28;
     MV = A by A20,MATRIX_1:28;
-    then Lin(lA) = the VectSpStr of W by VECTSP_7:def 3,A9;
-    hence thesis by XBOOLE_1:36,A16,A19,VECTSP_9:21,A7,A1,XREAL_1:235,A12;
+    then Lin(lA) = the VectSpStr of W by A9,VECTSP_7:def 3;
+    hence thesis by A16,A19,A7,A1,A12,VECTSP_9:21,XBOOLE_1:36,XREAL_1:235;
   end;
 end;
 
@@ -5501,14 +5494,14 @@ A11:    Solutions_of(AB,ColVec2Mx (len AB|->0.K)) ={{}} & len X=0
         by Th51,A4,A7,A10,MATRIX_1:def 4;
         then X ={};
         hence X in Solutions_of(AB,ColVec2Mx (len AB|->0.K))
-        by TARSKI:def 1,A11;
+        by A11,TARSKI:def 1;
       end;
       suppose
 A12:    len A<>0;
         then len A>0 & width A>0 by A2;
         then
-A13:    ColVec2Mx (len AB|->0.K) = A*(B*X) by A1,A9,A10,MATRIXR2: 18
-          .= AB*X by MATRIX_3:35,A1,A7;
+A13:    ColVec2Mx (len AB|->0.K) = A*(B*X) by A1,A9,A10,MATRIXR2:18
+          .= AB*X by A1,A7,MATRIX_3:35;
 A14:    len (len AB|->0.K)=len AB & len (len B|->0.K)=len B by FINSEQ_2:69;
         then width ColVec2Mx (len AB|->0.K)=1 by Th26,A12,A4
           .= width ColVec2Mx (len B|->0.K) by Th26,A12,A2,A1,A14;
@@ -5542,7 +5535,7 @@ A3: len AB>0 & width AB>0 by MATRIX13:74;
     & dim Space_of_Solutions_of B = width B-the_rank_of B
     & dim Space_of_Solutions_of AB=width AB-the_rank_of AB by A1,A2,Th72,Th68;
     then
-A4: width B-the_rank_of B <= width B-the_rank_of AB by A2, VECTSP_9:29;
+A4: width B-the_rank_of B <= width B-the_rank_of AB by A2,VECTSP_9:29;
     set AT=A@;
     set BT=B@;
     set BA=BT*AT;
@@ -5551,18 +5544,18 @@ A4: width B-the_rank_of B <= width B-the_rank_of AB by A2, VECTSP_9:29;
 A5: width AT=len A & len AT=width A & width BT=len B & len BT= width B
     by A2,A3,MATRIX_2:12;
     then
-A6: len BA=len BT & width BA=width AT & BA=AB@ by A1,A2,A3,MATRIX_3: def 4,24;
+A6: len BA=len BT & width BA=width AT & BA=AB@ by A1,A2,A3,MATRIX_3:24,def 4;
     ( width AT = 0 implies len AT = 0 ) & ( width BT = 0 implies len BT = 0 )
-    & width BT=len AT by A1,MATRIX_1:def 4,A5;
+    & width BT=len AT by A1,A5,MATRIX_1:def 4;
     then Space_of_Solutions_of AT is Subspace of Space_of_Solutions_of BA
     & dim Space_of_Solutions_of AT = width AT - the_rank_of AT
     & dim Space_of_Solutions_of BA = width BA - the_rank_of BA
     by Th72,Th68,A6;
     then width AT - the_rank_of AT<=width AT - the_rank_of BA
-    by VECTSP_9:29,A6;
+    by A6,VECTSP_9:29;
     then the_rank_of AT >= the_rank_of BA by XREAL_1:12;
     then the_rank_of A >= the_rank_of BA by MATRIX13:84;
-    hence thesis by A4,XREAL_1:12,A6,MATRIX13:84;
+    hence thesis by A4,A6,MATRIX13:84,XREAL_1:12;
   end;
 end;
 
@@ -5599,8 +5592,8 @@ A12: 1.(K,n)=A~*A by MATRIX_6:def 2;
 A13: len (A~)=n & width (A~)=n by MATRIX_1:25;
 A14: len BX=len B by A4,A9,MATRIX_3:def 4;
     then
-A15: BX = 1.(K,n)* BX by A1,MATRIXR2:68,A3
-      .= A~ * (A*BX) by A1,A3,MATRIX_3:35,A12,A13,A14
+A15: BX = 1.(K,n)* BX by A1,A3,MATRIXR2:68
+      .= A~ * (A*BX) by A1,A3,A12,A13,A14,MATRIX_3:35
       .= A~ * ColVec2Mx(len AB|->0.K) by A1,A4,A9,A11,MATRIX_3:35
       .= A~ * 0.(K,len AB,1) by Th32;
     now per cases;
@@ -5611,7 +5604,7 @@ A16:    n = 0;
         hence BX=0.(K,len AB,1);
       end;
       suppose n>0;
-        hence BX=0.(K,len AB,1) by MATRIXR2:18,A3,A4,A13,A15;
+        hence BX=0.(K,len AB,1) by A3,A4,A13,A15,MATRIXR2:18;
       end;
     end;
     then BX =ColVec2Mx(len AB|->0.K) by Th32;
@@ -5626,7 +5619,7 @@ A16:    n = 0;
   the carrier of Space_of_Solutions_of (A*B) by VECTSP_4:def 2;
   then the carrier of Space_of_Solutions_of B =
   the carrier of Space_of_Solutions_of (A*B) by A6,XBOOLE_0:def 10;
-  hence thesis by A4, VECTSP_4:37;
+  hence thesis by A4,VECTSP_4:37;
 end;
 
 theorem Th75:
@@ -5637,7 +5630,7 @@ proof
 A1: width A = len B & Det A <>0.K;
   set AB=A*B;
 A2: len AB=len A & width AB=width B & len A=n & width A=n & len A=n
-  by A1,MATRIX_3:def 4,MATRIX_1:25;
+  by A1,MATRIX_1:25,MATRIX_3:def 4;
   per cases;
   suppose width AB=0;
     hence thesis by A1,A2,Lm3;
@@ -5674,7 +5667,7 @@ A2: len BA=len B & width BA=width A & len A=n & width A=n
 A3: width BA>0;
     then
 A4: Det (A@)<>0.K & width (A@)=len A & len (B@)=width B
-    by A1,A2,MATRIX_2:12,MATRIXR2:43;
+    by A1,A2,MATRIXR2:43,MATRIX_2:12;
     thus the_rank_of (B*A) = the_rank_of ((B*A)@) by MATRIX13:84
       .= the_rank_of ((A@)*(B@)) by A1,A2,A3,MATRIX_3:24
       .= the_rank_of (B@) by A1,A4,Th75

@@ -20,6 +20,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
@@ -35,7 +36,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="210">
+<Func kind="K" nr="219">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -63,8 +64,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLSP1" nr="3">
@@ -74,13 +75,13 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="225">
+<Func kind="K" nr="234">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="48" value="false"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
+<Adjective nr="53" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 </Registrations>

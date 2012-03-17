@@ -60,22 +60,6 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="23" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="90">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="26"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CARD_FIL" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
@@ -98,7 +82,7 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CARD_FIL" nr="3">
+<FCluster aid="CARD_FIL" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -115,7 +99,7 @@
 <Adjective nr="27" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="CARD_FIL" nr="4">
+<FCluster aid="CARD_FIL" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

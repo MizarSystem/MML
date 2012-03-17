@@ -16,7 +16,7 @@ environ
  constructors WELLORD2, ORDINAL2, NAT_1, CARD_2, CLASSES1, CLASSES2, CARD_4,
       CARD_5, CARD_FIL, ZF_MODEL;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, ORDINAL3, CARD_1, CLASSES2,
-      CARD_5, CARD_FIL;
+      CARD_5, CARD_FIL, CARD_4;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions CLASSES1, ORDINAL1, TARSKI, SUBSET_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ORDINAL1, ORDINAL2, ORDINAL3, CLASSES1,
@@ -26,23 +26,21 @@ environ
 
 begin
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                   ::
 ::             Some initial settings                 ::
 ::                                                   ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 registration
-  cluster cardinal infinite -> being_limit_ordinal Ordinal;
-  coherence by CARD_4:32;
+  cluster cardinal infinite -> limit_ordinal Ordinal;
+  coherence;
 end;
 
 registration
-  cluster non empty being_limit_ordinal -> infinite Ordinal;
+  cluster non empty limit_ordinal -> infinite Ordinal;
   coherence
   proof
     let A be Ordinal such that
-A1: A is non empty being_limit_ordinal;
+A1: A is non empty limit_ordinal;
     assume A is finite;
     then
 A2: A in omega by CARD_1:103;
@@ -54,11 +52,11 @@ A2: A in omega by CARD_1:103;
 end;
 
 registration
-  cluster non limit -> non countable Aleph;
+  cluster non limit_cardinal -> non countable Aleph;
   coherence
   proof
     let M be Aleph such that
-A1: M is non limit;
+A1: M is non limit_cardinal;
     assume M is countable;
     then
 A2: Card M c= omega by CARD_4:def 1;
@@ -75,19 +73,17 @@ end;
 registration
   cluster regular non countable Aleph;
   existence
-  proof consider M being non limit Aleph;
+  proof consider M being non limit_cardinal Aleph;
     take M;
     thus thesis;
   end;
 end;
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                   ::
 ::       Closed, unbounded and stationary sets       ::
 ::                                                   ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-reserve A,B for being_limit_ordinal infinite Ordinal;
+reserve A,B for limit_ordinal infinite Ordinal;
 reserve B1,B2,B3,B5,B6,D, C for Ordinal;
 reserve X for set;
 
@@ -149,17 +145,15 @@ end;
 theorem Th3:
   X c= sup X
 proof
-  let x be set such that
-A1: x in X;
-  reconsider x1=x as Element of A by A1;
-  x1 in sup X by A1,ORDINAL2:27;
-  hence thesis;
+  let x be set;
+  assume x in X;
+  hence thesis by ORDINAL2:27;
 end;
 
 theorem Th4:
   (X is non empty &
   for B1 st B1 in X ex B2 st (B2 in X & B1 in B2) ) implies sup X is
-  being_limit_ordinal infinite Ordinal
+  limit_ordinal infinite Ordinal
 proof
   assume
 A1: X is non empty;
@@ -185,8 +179,8 @@ A9: succ C c= B2 by ORDINAL1:33;
 A10: x in X by A1,XBOOLE_0:def 1;
   X c= sup X by Th3;
   then reconsider SUP = sup X as non empty
-  being_limit_ordinal Ordinal by A3,A10,ORDINAL1:41;
-  SUP is being_limit_ordinal infinite Ordinal;
+  limit_ordinal Ordinal by A3,A10,ORDINAL1:41;
+  SUP is limit_ordinal infinite Ordinal;
   hence thesis;
 end;
 
@@ -363,7 +357,7 @@ A6:   D in X and
 A7:   B2 c= D by A2,A4,Th7;
       take D;
       B1 in D by A5,A7;
-      hence D in (X \ B1) by A6,XBOOLE_0:def 4;
+      hence D in (X \ B1) by A6,XBOOLE_0:def 5;
       thus B2 c= D by A7;
     end;
     suppose
@@ -373,7 +367,7 @@ A9:   D in X and
 A10:  B1 c= D by A1,A2,Th7;
       take D;
       not D in B1 by A10,ORDINAL1:7;
-      hence D in (X \ B1) by A9,XBOOLE_0:def 4;
+      hence D in (X \ B1) by A9,XBOOLE_0:def 5;
       thus B2 c= D by A8,A10,XBOOLE_1:1;
     end;
   end;
@@ -395,7 +389,7 @@ A13:  B c= sup (X /\ B) by A12,ORDINAL2:30;
     then
 A14: B in X by A2,A11,Def5;
     assume not B in (X \ B1);
-    then B in B1 by A14,XBOOLE_0:def 4;
+    then B in B1 by A14,XBOOLE_0:def 5;
     then
 A15: B c= B1 by ORDINAL1:def 2;
     (X \ B) misses B by XBOOLE_1:79;
@@ -513,11 +507,11 @@ definition
   func limpoints X -> Subset of A equals
 
   {B1 where B1 is Element of A:
-  B1 is infinite being_limit_ordinal & sup (X /\ B1) = B1};
+  B1 is infinite limit_ordinal & sup (X /\ B1) = B1};
   coherence
   proof
     defpred P[set] means
-    $1 is infinite being_limit_ordinal & sup (X /\ $1) = $1;
+    $1 is infinite limit_ordinal & sup (X /\ $1) = $1;
     thus {B1 where B1 is Element of A: P[B1]} is Subset of A from
     DOMAIN_1:sch 7;
   end;
@@ -532,23 +526,23 @@ A1: X /\ B3 c= B1;
   then consider x being set such that
 A2: x in B3 /\ limpoints X and
 A3: not x in succ B1 by TARSKI:def 3;
-A4: x in B3 by A2,XBOOLE_0:def 3;
-  reconsider x1=x as Element of B3 by A2,XBOOLE_0:def 3;
-  defpred P[set] means $1is infinite being_limit_ordinal & sup (X /\ $1) = $1;
-A5: x1 in {B2 where B2 is Element of A: P[B2]} by A2,XBOOLE_0:def 3;
+A4: x in B3 by A2,XBOOLE_0:def 4;
+  reconsider x1=x as Element of B3 by A2,XBOOLE_0:def 4;
+  defpred P[set] means $1is infinite limit_ordinal & sup (X /\ $1) = $1;
+A5: x1 in {B2 where B2 is Element of A: P[B2]} by A2,XBOOLE_0:def 4;
   succ B1 c= x1 by A3,ORDINAL1:26;
   then
 A6: B1 in x1 by ORDINAL1:33;
 A7: P[x1] from CARD_FIL:sch 1(A5);
-  then reconsider x2=x1 as infinite being_limit_ordinal Ordinal;
+  then reconsider x2=x1 as infinite limit_ordinal Ordinal;
   reconsider Y = (X /\ x2) as Subset of x2 by XBOOLE_1:17;
   Y is unbounded by A7,Def4;
   then consider C such that
 A8: C in Y and
 A9: B1 c= C by A6,Th7;
-A10: C in X by A8,XBOOLE_0:def 3;
+A10: C in X by A8,XBOOLE_0:def 4;
   C in B3 by A4,A8,ORDINAL1:19;
-  then C in X /\ B3 by A10,XBOOLE_0:def 3;
+  then C in X /\ B3 by A10,XBOOLE_0:def 4;
   then C in B1 by A1;
   then C in C by A9;
   hence contradiction;
@@ -585,7 +579,7 @@ A6: sup ((limpoints X) /\ B) c= succ B1 by ORDINAL2:26;
     hence contradiction;
   end;
   reconsider Bl=B as Element of A by A1;
-  Bl is infinite being_limit_ordinal & sup (X /\ Bl)=Bl by A3;
+  Bl is infinite limit_ordinal & sup (X /\ Bl)=Bl by A3;
   hence B in limpoints X;
 end;
 
@@ -632,28 +626,28 @@ A9:     (X /\ B) c= B5 by Th6;
         then consider B6 such that
 A10:    B6 in (SUCC /\ B) and
 A11:    succ succ B5 c= B6 by A7,ORDINAL2:29;
-        B6 in SUCC by A10,XBOOLE_0:def 3;
+        B6 in SUCC by A10,XBOOLE_0:def 4;
         then consider B7 being Element of A such that
 A12:    B6 = succ B7 and
 A13:    B7 in X & B1 in succ B7;
         succ B5 in succ B7 by A11,A12,ORDINAL1:33;
         then
 A14:    succ B5 c= B7 by ORDINAL1:34;
-A15:    B6 in B by A10,XBOOLE_0:def 3;
+A15:    B6 in B by A10,XBOOLE_0:def 4;
         B7 in succ B7 by ORDINAL1:10;
         then B7 in B by A12,A15,ORDINAL1:19;
-        then B7 in (X /\ B) by A13,XBOOLE_0:def 3;
+        then B7 in (X /\ B) by A13,XBOOLE_0:def 4;
         then B7 in B5 by A9;
         hence contradiction by A14,ORDINAL1:33;
       end;
       then
 A16:  B0 in {B10 where B10 is Element of A:
-      B10 is infinite being_limit_ordinal & sup ( X /\ B10) = B10};
+      B10 is infinite limit_ordinal & sup ( X /\ B10) = B10};
       consider B2 being Element of B;
       consider B3 such that
 A17:  B3 in (SUCC /\ B) and B2 c= B3 by A7,ORDINAL2:29;
-A18:  B3 in B by A17,XBOOLE_0:def 3;
-      B3 in SUCC by A17,XBOOLE_0:def 3;
+A18:  B3 in B by A17,XBOOLE_0:def 4;
+      B3 in SUCC by A17,XBOOLE_0:def 4;
       then consider B4 being Element of A such that
 A19:  B3= succ B4 and B4 in X and
 A20:  B1 in succ B4;
@@ -696,7 +690,8 @@ registration
   existence
   proof
     take omega;
-    thus omega is Element of M by CARD_4:44,46,ORDINAL1:26;
+     not M c= omega;
+    hence omega is Element of M by ORDINAL1:26;
     thus thesis;
   end;
 end;
@@ -725,7 +720,7 @@ theorem Th22:
 proof
   let S be Subset-Family of M such that
 A1: for X being Element of S holds X is closed;
-  let C be being_limit_ordinal infinite Ordinal;
+  let C be limit_ordinal infinite Ordinal;
   assume
 A2: C in M;
   per cases;
@@ -776,7 +771,7 @@ A1: omega in cf M;
     then dom f = NAT & rng f c= rng f by FUNCT_2:def 1;
     then
 A2: Card rng f c= Card NAT by CARD_1:28;
-    Card NAT c= omega by CARD_4:44,def 1;
+    Card NAT c= omega by CARD_4:def 1;
     then Card NAT in cf M by A1,ORDINAL1:22;
     then
 A3: Card rng f in cf M by A2,ORDINAL1:22;
@@ -827,7 +822,7 @@ A7:     LBound(B,X)=x and X in S by A6;
         hence x in M by A7;
       end;
       hence Ch(B) = { LBound(B,X) where X is Element of S : X in S } by
-      XBOOLE_1:28;
+XBOOLE_1:28;
     end;
 A8: for B being Element of M holds sup Ch(B) in M & B in sup Ch(B)
     proof
@@ -885,7 +880,7 @@ A19:  C1 = L.y1 by A17,FUNCT_1:def 5;
       thus C1 in L1 by A13,A19;
     end;
     then reconsider SUPL = sup RNG as
-    being_limit_ordinal infinite Element of M by A14,A15,Th4;
+    limit_ordinal infinite Element of M by A14,A15,Th4;
     for X1 being set st X1 in S holds SUPL in X1
     proof
       let X1 be set such that
@@ -903,7 +898,7 @@ A23:    sup (X /\ SUPL) c= SUPL by ORDINAL2:26;
         then sup (X /\ SUPL) c< SUPL by A23,XBOOLE_0:def 8;
         then consider B3 being Ordinal such that
 A24:    B3 in rng L and
-A25:    sup (X /\ SUPL) c= B3 by ORDINAL2:29,ORDINAL1:21;
+A25:    sup (X /\ SUPL) c= B3 by ORDINAL1:21,ORDINAL2:29;
         consider y1 being set such that
 A26:    y1 in dom L and
 A27:    B3 = L.y1 by A24,FUNCT_1:def 5;
@@ -919,7 +914,7 @@ A28:    LBound((L.y),X) in L.(y+1) by A13;
         L.(y+1) in rng L by FUNCT_2:6;
         then L.(y+1) in SUPL by ORDINAL2:27;
         then LBY in SUPL by A28,ORDINAL1:19;
-        then LBound((L.y),X) in X /\ SUPL by A22,XBOOLE_0:def 3;
+        then LBound((L.y),X) in X /\ SUPL by A22,XBOOLE_0:def 4;
         then LBY in sup (X /\ SUPL) by ORDINAL2:27;
         then LBY in L.y by A25,A27;
         hence contradiction by A21,Th10;
@@ -984,7 +979,7 @@ A15: C = L2.C1 by A13,FUNCT_1:def 5;
     thus C3 in rng L2 by A9,FUNCT_1:def 5;
     thus C in C3 by A8,A15;
   end;
-  then reconsider SUP = sup rng L as being_limit_ordinal infinite
+  then reconsider SUP = sup rng L as limit_ordinal infinite
   Element of M by A1,A10,A12,Th4,Th23;
   take SUP;
 A16: sup ( X /\ SUP) = SUP
@@ -997,7 +992,7 @@ A18: (X /\ SUP) c= B5 by Th6;
 A19: B6 in rng L and
 A20: B5 c= B6 by A17,ORDINAL2:29;
     B6 in sup rng L by A19,ORDINAL2:27;
-    then B6 in (X /\ SUP) by A11,A19,XBOOLE_0:def 3;
+    then B6 in (X /\ SUP) by A11,A19,XBOOLE_0:def 4;
     then B6 in B5 by A18;
     then B6 in B6 by A20;
     hence contradiction;
@@ -1098,10 +1093,10 @@ A11: {succ B2 where B2 is Element of M :
     then consider x being set such that
 A12: x in (SUCC /\ { N : N is regular }) by XBOOLE_0:def 1;
     x in {succ B2 where B2 is Element of M :
-    B2 in RNG & B1 in succ B2} by A12,XBOOLE_0:def 3;
+    B2 in RNG & B1 in succ B2} by A12,XBOOLE_0:def 4;
     then consider B2 being Element of M such that
 A13: x = succ B2 and B2 in RNG & B1 in succ B2;
-    x in { N : N is regular } by A12,XBOOLE_0:def 3;
+    x in { N : N is regular } by A12,XBOOLE_0:def 4;
     then consider N1 such that
 A14: x=N1 and N1 is regular;
     thus contradiction by A13,A14,ORDINAL1:42;
@@ -1111,16 +1106,16 @@ A14: x=N1 and N1 is regular;
   then {N : N is regular} /\ (limpoints RNG \ succ cf M) <> {} by A1,Def8;
   then consider x being set such that
 A15: x in (limpoints RNG \ succ cf M) /\ {N : N is regular} by XBOOLE_0:def 1;
-A16: x in (limpoints RNG \ succ cf M) by A15,XBOOLE_0:def 3;
+A16: x in (limpoints RNG \ succ cf M) by A15,XBOOLE_0:def 4;
   then
-A17: x in limpoints RNG & not x in succ cf M by XBOOLE_0:def 4;
-  x in {N : N is regular} by A15,XBOOLE_0:def 3;
+A17: x in limpoints RNG & not x in succ cf M by XBOOLE_0:def 5;
+  x in {N : N is regular} by A15,XBOOLE_0:def 4;
   then consider N1 such that
 A18: N1=x and
 A19: N1 is regular;
   defpred P[set] means
-  $1 is infinite being_limit_ordinal & sup (RNG /\ $1) = $1;
-A20: N1 in {B1 where B1 is Element of M: P[B1]} by A16,A18,XBOOLE_0:def 4;
+  $1 is infinite limit_ordinal & sup (RNG /\ $1) = $1;
+A20: N1 in {B1 where B1 is Element of M: P[B1]} by A16,A18,XBOOLE_0:def 5;
 A21: P[N1] from CARD_FIL:sch 1(A20);
   reconsider RNG1= (N1 /\ RNG) as Subset of N1 by XBOOLE_1:17;
   RNG1 is unbounded by A21,Def4;
@@ -1136,13 +1131,13 @@ A24: cf N1 = N1 by A19,CARD_5:def 4;
 end;
 
 theorem Th29:
-  M is Mahlo implies M is limit
+  M is Mahlo implies M is limit_cardinal
 proof
   assume M is Mahlo;
   then
 A1: { N : N is regular } is_stationary_in M by Def10;
   then reconsider REG={N : N is regular} as Subset of M by Def8;
-  assume not M is limit;
+  assume not M is limit_cardinal;
   then consider M1 being Cardinal such that
 A2: nextcard M1 = M by CARD_1:def 7;
   M1 in M by A2,CARD_1:32;
@@ -1151,10 +1146,10 @@ A2: nextcard M1 = M by CARD_1:def 7;
   then REG /\ (M \ succ M1) <> {} by A1,Def8;
   then consider M2 being set such that
 A3: M2 in REG /\ (M \ succ M1) by XBOOLE_0:def 1;
-A4: M2 in REG & M2 in (M \ succ M1) by A3,XBOOLE_0:def 3;
+A4: M2 in REG & M2 in (M \ succ M1) by A3,XBOOLE_0:def 4;
   then consider N such that
 A5: N = M2 and N is regular;
-A6: N in M & not N in succ M1 by A4,A5,XBOOLE_0:def 4;
+A6: N in M & not N in succ M1 by A4,A5,XBOOLE_0:def 5;
   then not N c= M1 by ORDINAL1:34;
   then M1 in N by ORDINAL1:26;
   then nextcard M1 c= N by CARD_4:22;
@@ -1166,7 +1161,7 @@ theorem
   M is Mahlo implies M is inaccessible
 proof
   assume M is Mahlo;
-  then M is regular limit by Th28,Th29;
+  then M is regular limit_cardinal by Th28,Th29;
   hence thesis by CARD_FIL:def 13;
 end;
 
@@ -1186,15 +1181,15 @@ A3: not exp(2,M1) in M by CARD_FIL:def 14;
   then SI /\ (M \ succ M1) <> {} by A1,Def8;
   then consider M2 being set such that
 A4: M2 in SI /\ (M \ succ M1) by XBOOLE_0:def 1;
-A5: M2 in SI & M2 in (M \ succ M1) by A4,XBOOLE_0:def 3;
+A5: M2 in SI & M2 in (M \ succ M1) by A4,XBOOLE_0:def 4;
   then consider N such that
 A6: N = M2 and
 A7: N is strongly_inaccessible;
-A8: N is strong_limit by A7;
-  N in M & not N in succ M1 by A5,A6,XBOOLE_0:def 4;
+    N is strong_limit by A7;
+  N in M & not N in succ M1 by A5,A6,XBOOLE_0:def 5;
   then not N c= M1 by ORDINAL1:34;
   then M1 in N by ORDINAL1:26;
-  then exp(2,M1) in N by A8,CARD_FIL:def 14;
+  then exp(2,M1) in N by A7,CARD_FIL:def 14;
   hence contradiction by A3,ORDINAL1:19;
 end;
 
@@ -1209,11 +1204,9 @@ A2: M is strong_limit by Th31;
   hence thesis by A2,CARD_FIL:def 15;
 end;
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::                                                   ::
 ::  Proof that strongly inaccessible is model of ZF  ::
 ::                                                   ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 begin
 
@@ -1339,8 +1332,6 @@ proof
   assume
 A1: M is strongly_inaccessible & A in M;
   then
-A2: M is strong_limit & M is regular;
-  then
 A3: cf M=M by CARD_5:def 4;
   defpred P[Ordinal] means $1 in M implies Card Rank $1 in M;
 A4: P[{}] by CLASSES1:33;
@@ -1351,15 +1342,15 @@ A6: P[B1];
     assume succ B1 in M;
     then succ B1 c= M by ORDINAL1:def 2;
     then
-A7: exp(2,Card Rank B1) in M by A2,A6,CARD_FIL:def 14,ORDINAL1:33;
+A7: exp(2,Card Rank B1) in M by A1,A6,CARD_FIL:def 14,ORDINAL1:33;
     Rank succ B1 = bool Rank B1 by CLASSES1:34;
     hence Card Rank succ B1 in M by A7,CARD_2:44;
   end;
-A8: for B1 st B1 <> {} & B1 is_limit_ordinal & for B2 st B2 in B1
+A8: for B1 st B1 <> {} & B1 is limit_ordinal & for B2 st B2 in B1
   holds P[B2] holds P[B1]
   proof
     let B1 such that B1 <> {} and
-A9: B1 is_limit_ordinal and
+A9: B1 is limit_ordinal and
 A10: for B2 st B2 in B1 holds P[B2];
     assume
 A11: B1 in M;
@@ -1434,7 +1425,6 @@ theorem Th37:
 proof
   assume
 A1: M is strongly_inaccessible;
-  then M is regular;
   then
 A2: cf M = M by CARD_5:def 4;
   thus X in Rank M & Y c= X implies Y in Rank M by CLASSES1:47;
@@ -1458,7 +1448,7 @@ A6: Card X = Card X & Card X in M by A1,A4,Th36,ORDINAL1:21;
     per cases;
     suppose
 A7:   X = {};
-      {} <> M & {} c= M by XBOOLE_1:2;
+      {} <> M & {} c= M;
       then {} c< M by XBOOLE_0:def 8;
       then {} in M & M c= Rank M by CLASSES1:44,ORDINAL1:21;
       hence contradiction by A5,A7;
@@ -1546,8 +1536,8 @@ proof
   assume M is strongly_inaccessible;
   then
 A1: Rank M is Universe by Th39;
-  omega c= M by CARD_4:8;
-  then omega c< M by CARD_4:44,XBOOLE_0:def 8;
+  omega c= M;
+  then omega c< M by XBOOLE_0:def 8;
   then omega in M & M c= Rank M by CLASSES1:44,ORDINAL1:21;
   hence Rank M is being_a_model_of_ZF by A1,ZF_REFLE:7;
 end;

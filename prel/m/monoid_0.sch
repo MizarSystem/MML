@@ -25,6 +25,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MEMBERED"/>
@@ -53,7 +54,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="56"/>
@@ -107,7 +108,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="13">
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="56"/>
@@ -229,7 +230,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="63"/>
@@ -289,7 +290,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="14">
 <Cluster>
 <Adjective nr="30" value="false"/>
 <Adjective nr="63"/>
