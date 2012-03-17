@@ -423,7 +423,7 @@ A4: Segment(P,p1,p2,q1,q2) = R_Segment(P,p1,p2,q1) /\ L_Segment(P,p1,p2,q2)
 definition
   let D be Subset of TOP-REAL 2;
   attr D is with_the_max_arc means :arc:
-  ex A being Subset of TOP-REAL 2 st A c= D & A is_an_arc_of W-min D,E-max D;
+  D meets Vertical_Line((W-bound D+E-bound D)/2);
 end;
 
 registration
@@ -431,48 +431,29 @@ registration
   coherence
   proof
     let D be Subset of TOP-REAL 2;
-    given A being Subset of TOP-REAL 2 such that
-A1: A c= D & A is_an_arc_of W-min D,E-max D;
-    W-min D in A by A1,TOPREAL1:4;
-    hence thesis by A1;
+    assume D meets Vertical_Line((W-bound D+E-bound D)/2);
+    hence thesis by XBOOLE_1:65;
   end;
 end;
 
-registration
-  let C;
-  cluster Lower_Arc C -> with_the_max_arc;
-  coherence
+LmTh22: 
+  Upper_Middle_Point C in C
   proof
-    take Lower_Arc C;
-    Lower_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
-    then
-A1: W-min C in Lower_Arc C & E-max C in Lower_Arc C by TOPREAL1:4;
-    Lower_Arc C c= C by JORDAN1A:16;
-    then W-min C = W-min Lower_Arc C & E-max C = E-max Lower_Arc C
-    by A1,JORDAN1J:18,21;
-    hence thesis by JORDAN6:65;
-  end;
-  cluster Upper_Arc C -> with_the_max_arc;
-  coherence
-  proof
-    take Upper_Arc C;
-    Upper_Arc C is_an_arc_of W-min C,E-max C by JORDAN6:65;
-    then
-A1: W-min C in Upper_Arc C & E-max C in Upper_Arc C by TOPREAL1:4;
+A1: Upper_Middle_Point C in Upper_Arc C by JORDAN1K:63;
     Upper_Arc C c= C by JORDAN1A:16;
-    then W-min C = W-min Upper_Arc C & E-max C = E-max Upper_Arc C
-    by A1,JORDAN1J:18,21;
-    hence thesis by JORDAN6:65;
+    hence thesis by A1;
   end;
-end;
 
 registration
   cluster -> with_the_max_arc Simple_closed_curve;
   coherence
   proof
     let C be Simple_closed_curve;
-    take Upper_Arc C;
-    thus thesis by JORDAN6:65,JORDAN1A:16;
+a1: Upper_Middle_Point C in C by LmTh22;
+    (Upper_Middle_Point C)`1 = (W-bound C+E-bound C)/2 by JORDAN1K:61;
+    then Upper_Middle_Point C in Vertical_Line((W-bound C+E-bound C)/2)
+    by JORDAN6:34;
+    hence C meets Vertical_Line((W-bound C+E-bound C)/2) by a1,XBOOLE_0:3;
   end;
 end;
 
@@ -489,18 +470,12 @@ end;
 reserve D for compact with_the_max_arc Subset of TOP-REAL 2;
 
 theorem Th12:
+  for D being with_the_max_arc Subset of TOP-REAL 2 holds
   proj2.:(D /\ Vertical_Line((W-bound D + E-bound D) / 2)) is not empty
   proof
-    consider A being Subset of TOP-REAL 2 such that
-A1: A c= D and
-A2: A is_an_arc_of W-min D,E-max D by arc;
+    let D be with_the_max_arc Subset of TOP-REAL 2;
     set w = (W-bound D + E-bound D) / 2;
-A3: (W-min D)`1 = W-bound D & (E-max D)`1 = E-bound D by PSCOMP_1:84,104;
-    W-bound D <= E-bound D by SPRECT_1:23;
-    then W-bound D = E-bound D or W-bound D < E-bound D by REAL_1:def 5;
-    then (W-min D)`1 <= w & w <= (E-max D)`1 by A3,TOPREAL3:3;
-    then A meets Vertical_Line w by A2,JORDAN6:64;
-    then D meets Vertical_Line w by A1,XBOOLE_1:63;
+    D meets Vertical_Line w by arc;
     then D /\ Vertical_Line w is non empty by XBOOLE_0:def 7;
     hence thesis by Lm1,RELAT_1:152;
   end;
@@ -713,12 +688,7 @@ end;
 begin :: Middle Points
 
 theorem Th22:
-  Upper_Middle_Point C in C
-  proof
-A1: Upper_Middle_Point C in Upper_Arc C by JORDAN1K:63;
-    Upper_Arc C c= C by JORDAN1A:16;
-    hence thesis by A1;
-  end;
+  Upper_Middle_Point C in C by LmTh22;
 
 theorem Th23:
   Lower_Middle_Point C in C
@@ -1076,7 +1046,10 @@ theorem Th43:
   proof
     set w = (W-bound D + E-bound D) / 2;
     set X = D /\ Vertical_Line w;
-A1: proj2.:X is non empty by Th12;
+    D meets Vertical_Line w by arc;
+    then X is non empty by XBOOLE_0:def 7;
+    then
+A1: proj2.:X is non empty by Lm1,RELAT_1:152;
 A2: proj2.:X is closed by Th13;
     proj2.:X is bounded_above by Th13;
     then sup (proj2.:X) in proj2.:X by A1,A2,RCOMP_1:30;
@@ -2460,6 +2433,30 @@ A26: u in UBD L~Cage(C,n) by A20,A22,A23,JORDAN2C:16;
     hence thesis by A7,A24,A26,XBOOLE_0:3;
   end;
   end;
+
+registration
+  let C;
+  cluster Lower_Arc C -> with_the_max_arc;
+  coherence
+  proof
+a1: W-bound C = W-bound Lower_Arc C &
+    E-bound C = E-bound Lower_Arc C by Th28,Th29;
+    Lower_Arc C meets Vertical_Line((W-bound C+E-bound C)/2)
+    by JORDAN1K:58;
+    hence Lower_Arc C meets
+    Vertical_Line((W-bound Lower_Arc C+E-bound Lower_Arc C)/2) by a1;
+  end;
+  cluster Upper_Arc C -> with_the_max_arc;
+  coherence
+  proof
+a1: W-bound C = W-bound Upper_Arc C &
+    E-bound C = E-bound Upper_Arc C by Th26,Th27;
+    Upper_Arc C meets Vertical_Line((W-bound C+E-bound C)/2)
+    by JORDAN1K:59;
+    hence Upper_Arc C meets
+    Vertical_Line((W-bound Upper_Arc C+E-bound Upper_Arc C)/2) by a1;
+  end;
+end;
 
 theorem
   UMP Upper_Arc L~Cage(C,n) in Upper_Arc L~Cage(C,n) by Th43;

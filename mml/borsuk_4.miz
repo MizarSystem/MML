@@ -10,18 +10,20 @@ environ
       TOPREAL2, RELAT_2, BORSUK_1, SUBSET_1, RCOMP_1, TOPS_2, TOPMETR,
       CONNSP_1, ARYTM_3, SQUARE_1, RELAT_1, ORDINAL2, LATTICES, T_0TOPSP,
       SEQ_2, INTEGRA1, REALSET1, FUNCT_1, BORSUK_4, PARTFUN1, TREAL_1, FUNCT_4,
-      ARYTM, JORDAN1;
+      ARYTM, JORDAN1, MEMBERED, JORDAN2C;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, REALSET1,
+      MEMBERED,
       STRUCT_0, REALSET2, PRE_TOPC, COMPTS_1, FUNCT_4, RCOMP_1, EUCLID,
       TOPREAL1, TOPREAL2, SEQ_4, T_0TOPSP, TREAL_1, CONNSP_1, BORSUK_1,
-      BORSUK_3, TSEP_1, RCOMP_2, JORDAN1, TOPMETR, PSCOMP_1, INTEGRA1, TOPS_2;
+      BORSUK_3, TSEP_1, RCOMP_2, JORDAN1, TOPMETR, PSCOMP_1, INTEGRA1,
+      TOPS_2, JORDAN2C;
  constructors REALSET2, TOPS_2, TOPREAL2, TOPREAL1, CONNSP_1, RCOMP_2,
       PSCOMP_1, INTEGRA1, TMAP_1, BORSUK_3, COMPTS_1, YELLOW_8, LIMFUNC1,
-      SPPOL_1, TOPGRP_1, TREAL_1, DOMAIN_1, JORDAN1;
+      SPPOL_1, TOPGRP_1, TREAL_1, DOMAIN_1, JORDAN1, MEMBERED, JORDAN2C;
  registrations XREAL_0, RELSET_1, REVROT_1, TOPREAL6, STRUCT_0, PRE_TOPC,
       BORSUK_2, INTEGRA1, TEX_1, TEX_2, JORDAN1B, YELLOW13, EUCLID, MEMBERED,
-      TOPS_1, REALSET1;
+      TOPS_1, REALSET1, XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions XBOOLE_0, TARSKI, CONNSP_1, PARTFUN1, JORDAN1;
  theorems TOPS_2, T_0TOPSP, BORSUK_1, RCOMP_2, PRE_TOPC, COMPTS_1, TARSKI,
@@ -30,7 +32,8 @@ environ
       XBOOLE_0, XBOOLE_1, JORDAN6, JORDAN1, SEQ_4, JGRAPH_5, INTEGRA1,
       INTEGRA2, TSEP_1, TOPREAL2, JORDAN5B, REALSET2, FUNCT_2, FUNCT_1,
       GOBOARD9, RELAT_1, PARTFUN1, RFUNCT_2, BORSUK_3, FUNCT_4, TOPS_1,
-      JGRAPH_2, CIRCCMB2, TOPMETR2, TEX_2, SUBSET_1, REALSET1, XREAL_1;
+      JGRAPH_2, CIRCCMB2, TOPMETR2, TEX_2, SUBSET_1, REALSET1, XREAL_1,
+      ENUMSET1, JCT_MISC, JORDAN2C;
 
 begin :: Preliminaries
 
@@ -104,8 +107,8 @@ A1: x <> y by REALSET2:def 7;
   end;
 end;
 
-theorem
-      for X being non trivial set,
+theorem ZZ:
+  for X being non trivial set,
       p being set
    ex q being Element of X st q <> p
   proof
@@ -120,11 +123,11 @@ A1: q in X \ { p } by XBOOLE_0:def 1;
   end;
 
 registration let X be non trivial set;
- cluster non trivial Subset of X;
- existence
+  cluster non trivial Subset of X;
+  existence
   proof
-   take [#]X;
-   thus thesis by SUBSET_1:def 4;
+    take [#]X;
+    thus thesis by SUBSET_1:def 4;
   end;
 end;
 
@@ -320,7 +323,7 @@ then A3:   l>0 & l<1 by A1,REAL_1:def 5;
 A4:   l*s1<l*s4 by A1,A2,XREAL_1:70;
           1-l>0 by A3,XREAL_1:52;
 then A5:   (1-l)*s1<=(1-l)*s3 by A1,XREAL_1:66;
-          (1-l)*s1+l*s1=1*s1;
+          (1-l)*s1+l*s1=1 * s1;
       hence thesis by A4,A5,XREAL_1:10;
     end;
     end;
@@ -1009,9 +1012,9 @@ then A2: 0 <= a & b <= 1 by JORDAN5A:2;
     then x in { y where y is Real : a <= y & y <= b } by RCOMP_1:def 1;
     then consider z being Real such that
 A3: z = x & a <= z & z <= b;
-        0 <= z & z <= 1 by A2,A3,XREAL_1:2;
+    0 <= z & z <= 1 by A2,A3,XREAL_1:2;
     then reconsider z as Point of I[01] by JORDAN5A:2;
-        z in A by A1,A3,Th46;
+    z in A by A1,A3,Th46;
     hence thesis by A3;
   end;
 
@@ -2073,3 +2076,261 @@ A23:  C is_an_arc_of s1,s2 by A4,A6,A19,Th80;
   end;
   end;
 
+:: Added by AG, 14.09.2005
+
+registration
+  cluster the carrier of I[01] -> real-membered;
+  coherence by BORSUK_1:83;
+end;
+
+RCOMP3'8:
+  for a,b,r,s being real number st (a <= b or r <= s) & [.a,b.] = [.r,s.]
+    holds a = r & b = s
+proof
+  let a,b,r,s be real number;
+  assume that
+A1: a <= b or r <= s and
+A2: [.a,b.] = [.r,s.];
+  [.a,b.] is non empty or [.r,s.] is non empty by A1,RCOMP_1:48;
+  then a <= b & r <= s by A2,RCOMP_1:13;
+  then inf [.a,b.] = a & inf [.r,s.] = r &
+  sup [.a,b.] = b & sup [.r,s.] = s by JORDAN5A:20;
+  hence thesis by A2;
+end;
+
+theorem Th55':
+  for C being non empty compact Subset of I[01] st C c= ].0,1.[ holds
+    ex D being closed-interval Subset of REAL st
+      C c= D & D c= ].0,1.[ & inf C = inf D & sup C = sup D
+  proof
+    let C be non empty compact Subset of I[01];
+    assume
+ZZ: C c= ].0,1.[;
+    reconsider C' = C as Subset of REAL by BORSUK_1:83,XBOOLE_1:1;
+    C is closed by COMPTS_1:16; then
+A1: C' is closed by Th52;
+A2: C' is bounded_below bounded_above by Th50; then
+A3: inf C' in C' by A1,RCOMP_1:31;
+A4: sup C' in C' by A1,A2,RCOMP_1:30;
+    reconsider D = [. inf C', sup C' .] as Subset of REAL;
+P1: C c= D
+    proof
+      let x be set;
+      assume
+R1:   x in C; then
+      x in the carrier of I[01]; then
+      reconsider x' = x as Real by BORSUK_1:83;
+      inf C' <= x' & x' <= sup C' by R1,Th51;
+      hence thesis by RCOMP_1:48;
+    end;
+    consider x being Element of C';
+    C' is bounded by A2,SEQ_4:def 3;
+    then BC: inf C' <= sup C' by SEQ_4:24; then
+T2: D is non empty compact connected Subset of I[01] by A3,A4,Th49; then
+G1: D is closed-interval Subset of REAL by Th55; then
+X1: D = [. inf D, sup D .] by INTEGRA1:5;
+BB: inf C' = inf D & sup C' = sup D by X1,BC,RCOMP3'8;
+G3: D c= [.0,1.] by T2,BORSUK_1:83;
+H2: not 0 in D
+    proof
+      assume 0 in D; then
+      inf D <= 0 by G1,INTEGRA2:1;
+      hence thesis by ZZ,RCOMP_1:47,A3,BB;
+    end;
+H4: not 1 in D
+    proof
+      assume 1 in D; then
+      sup D >= 1 by G1,INTEGRA2:1;
+      hence thesis by A4,BB,ZZ,RCOMP_1:47;
+    end;
+T1: D c= ].0,1.[
+    proof
+      let x be set;
+      assume
+H1:   x in D; then
+      reconsider x' = x as Real;
+      thus thesis by Th10,G3,H1,H2,H4;
+    end;
+    reconsider D as closed-interval Subset of REAL by BC,INTEGRA1:def 1;
+    take D;
+    thus thesis by P1,BB,T1;
+  end;
+
+theorem Th56':
+  for C being non empty compact Subset of I[01] st C c= ].0,1.[ holds
+    ex p1, p2 being Point of I[01] st
+      p1 <= p2 & C c= [. p1, p2 .] & [.p1,p2.] c= ]. 0, 1 .[
+  proof
+    let C be non empty compact Subset of I[01];
+    assume C c= ].0,1.[; then
+    consider D being closed-interval Subset of REAL such that
+A0: C c= D & D c= ].0,1.[ & inf C = inf D & sup C = sup D by Th55';
+    consider p1,p2 being Real such that
+Z1: p1 <= p2 & D = [.p1,p2.] by INTEGRA1:def 1;
+JJ: ].0,1.[ c= [.0,1.] by RCOMP_1:15;
+    p1 in D & p2 in D by Z1,RCOMP_1:15; then
+    p1 in ].0,1.[ & p2 in ].0,1.[ by A0; then
+    reconsider p1, p2 as Point of I[01] by JJ,BORSUK_1:83;
+    take p1, p2;
+    thus p1 <= p2 by Z1;
+    thus thesis by Z1,A0;
+  end;
+
+theorem Artur:
+  for D being Simple_closed_curve,
+      C being closed Subset of TOP-REAL 2 st C c= D & C <> D
+   ex p1,p2 being Point of TOP-REAL 2,
+      B being Subset of TOP-REAL 2 st
+    B is_an_arc_of p1,p2 & C c= B & B c= D
+  proof
+    let D be Simple_closed_curve,
+        C be closed Subset of TOP-REAL 2;
+    assume A1: C c= D;
+    D is Bounded by JORDAN2C:73; then
+    C is Bounded by A1,JORDAN2C:16; then
+XX: C is compact by TOPREAL6:88;
+    assume A2: C <> D;
+WW: for C being compact Subset of TOP-REAL 2
+    st C is non trivial & C c= D & C <> D
+    ex p1,p2 being Point of TOP-REAL 2,
+       B being Subset of TOP-REAL 2 st
+    B is_an_arc_of p1,p2 & C c= B & B c= D
+    proof
+      let C be compact Subset of TOP-REAL 2;
+      assume C is non trivial;
+      then consider d1,d2 being Point of TOP-REAL 2 such that
+A3:   d1 in C & d2 in C & d1 <> d2 by REALSET1:15;
+      assume A1: C c= D;
+      assume A2: C <> D;
+      C c< D by A1,A2,XBOOLE_0:def 8;
+      then consider p being Point of TOP-REAL 2 such that
+A4:   p in D & C c= D \ {p} by Th1,A3;
+A5:   d1 in D \ {p} & d2 in D \ {p} by A3,A4;
+      reconsider Dp = D \ {p} as non empty Subset of TOP-REAL 2 by A3,A4;
+      (TOP-REAL 2) | Dp, I(01) are_homeomorphic by A4,Th77;
+      then consider f being map of (TOP-REAL 2) | Dp, I(01) such that
+A6:   f is_homeomorphism by T_0TOPSP:def 1;
+A7:   C c= the carrier of (TOP-REAL 2) | Dp by A4,JORDAN1:1;
+      reconsider C' = C as Subset of (TOP-REAL 2) | Dp by A4,JORDAN1:1;
+      set fC = f.:C';
+      C c= [#] ((TOP-REAL 2) | Dp) by A7,PRE_TOPC:12;then
+A8:   C' is compact by COMPTS_1:11;
+A10:  f is continuous by A6,TOPS_2:def 5;
+BJ:   rng f = [#] I(01) by A6,TOPS_2:def 5;
+      then reconsider fC as compact Subset of I(01) by A8,A10,COMPTS_1:24;
+      reconsider fC' = fC as Subset of I[01] by PRE_TOPC:39;
+B1:   fC' c= the carrier of I(01);then
+A11:  fC' c= [#] I(01) by PRE_TOPC:12;
+BL:   fC' c= ].0,1.[ by B1,Def1;
+A12:  for P being Subset of I(01) st P=fC' holds P is compact;
+A13:  d1 in the carrier of (TOP-REAL 2) | Dp by A5,JORDAN1:1;
+A14:  f.d1 in f.:C' by A3,FUNCT_2:43;
+A15:  d2 in the carrier of (TOP-REAL 2) | Dp by A5,JORDAN1:1;
+A16:  f.d2 in f.:C' by A3,FUNCT_2:43;
+      then reconsider fC' as non empty compact
+        Subset of I[01] by A11,A12,COMPTS_1:11;
+A17:  d1 in dom f by A13,FUNCT_2:def 1;
+A18:  d2 in dom f by A15,FUNCT_2:def 1;
+      consider p1, p2 being Point of I[01] such that
+A19:  p1 <= p2 & fC' c= [. p1,p2 .] & [.p1,p2.] c= ].0,1.[ by Th56',BL;
+      reconsider E = [.p1,p2.] as non empty compact connected Subset of I[01]
+        by A19,Th49;
+A20:  f is one-to-one by A6,TOPS_2:def 5;
+      p1 <> p2
+      proof
+        assume p1 = p2; then
+A21:    fC' c= {p1} by A19,RCOMP_1:14; then
+A22:    f.d1 = p1 by A14,TARSKI:def 1;
+        f.d2 = p1 by A16,A21,TARSKI:def 1;
+        hence thesis by A3,A17,A18,A20,A22,FUNCT_1:def 8;
+      end; then
+ZZ:   p1 < p2 by A19,REAL_1:def 5;
+      rng f = the carrier of I(01) by PRE_TOPC:def 3,BJ
+           .= ].0,1.[ by Def1; then
+PP:   E c= rng f by A19; then
+K0:   f " E <> {} by RELAT_1:174;
+K1:   f " E c= dom f by RELAT_1:167;
+      dom f = the carrier of (TOP-REAL 2) | Dp by FUNCT_2:def 1; then
+      dom f c= the carrier of TOP-REAL 2 by BORSUK_1:35; then
+      reconsider B = f " E as non empty Subset of TOP-REAL 2
+        by K0,K1,XBOOLE_1:1;
+      dom f = the carrier of (TOP-REAL 2) | Dp by FUNCT_2:def 1; then
+K2:   dom f = Dp by JORDAN1:1;
+      Dp c= D by XBOOLE_1:36; then
+U1:   f " E c= D by K2,K1,XBOOLE_1:1;
+      f.: (f"E) = E by PP,FUNCT_1:147; then
+      consider s1, s2 being Point of TOP-REAL 2 such that
+A23:  B is_an_arc_of s1,s2 by A6,Th80,K2,K1,ZZ;
+      take s1, s2, B;
+      thus B is_an_arc_of s1,s2 by A23;
+      C c= dom f by A7,FUNCT_2:def 1;
+      hence thesis by U1,JCT_MISC:3,A19;
+    end;
+    per cases;
+    suppose
+Z1:  C is trivial;
+     per cases;
+     suppose FO: C = {};
+       consider p,q being Point of TOP-REAL 2 such that
+D1:    p <> q & p in D & q in D by TOPREAL2:4;
+       reconsider CC = {p,q} as Subset of TOP-REAL 2;
+       p in CC & q in CC by TARSKI:def 2; then
+D2:    CC is non trivial by D1,REALSET1:14;
+       reconsider pp = {p}, qq = {q} as Subset of TOP-REAL 2;
+       CC = pp \/ qq by ENUMSET1:41; then
+D3:    CC is compact by COMPTS_1:19;
+D4:   CC c= D by D1,ZFMISC_1:38;
+     CC <> D
+     proof
+       assume CC = D; then
+H1:    D \ CC = {} by XBOOLE_1:37; then
+       reconsider E = D \ CC as Subset of (TOP-REAL 2)|D by XBOOLE_1:2;
+       not {}((TOP-REAL 2)|D) is connected by H1,JORDAN6:60,D1;
+       hence thesis;
+     end; then
+   consider p1,p2 being Point of TOP-REAL 2,
+      B being Subset of TOP-REAL 2 such that
+K1:    B is_an_arc_of p1,p2 & CC c= B & B c= D by D2,D3,WW,D4;
+   take p1, p2, B;
+   thus B is_an_arc_of p1,p2 by K1;
+   thus C c= B by FO,XBOOLE_1:2;
+   thus B c= D by K1;
+     end;
+     suppose C <> {}; then
+     consider x being Element of TOP-REAL 2 such that
+PP:  C = {x} by Z1,Th2;
+PL:  x in C by PP,TARSKI:def 1; then
+l1:  x in D by A1;
+     consider y being Element of D such that
+Z2:  x <> y by ZZ;
+     reconsider Y = {y} as compact non empty Subset of TOP-REAL 2;
+     reconsider Cy = C \/ Y as
+       non empty compact Subset of TOP-REAL 2 by XX,COMPTS_1:19;
+KK:  C c= Cy by XBOOLE_1:7;
+     y in Y by TARSKI:def 1; then
+     y in Cy by XBOOLE_0:def 2; then
+J1:  Cy is non trivial by KK,PL,Z2,REALSET1:14;
+     {y} c= D by ZFMISC_1:37; then
+J2:  Cy c= D by A1,XBOOLE_1:8;
+     Cy <> D
+     proof
+       assume Cy = D; then
+H1:    D \ Cy = {} by XBOOLE_1:37; then
+       reconsider E = D \ Cy as Subset of (TOP-REAL 2)|D by XBOOLE_1:2;
+       Cy = {x,y} by PP,ENUMSET1:41; then
+       not {}((TOP-REAL 2)|D) is connected by JORDAN6:60,l1,H1,Z2;
+       hence thesis;
+     end; then
+     consider p1,p2 being Point of TOP-REAL 2,
+              B being Subset of TOP-REAL 2 such that
+K1:  B is_an_arc_of p1,p2 & Cy c= B & B c= D by J1,J2,WW;
+     take p1, p2, B;
+     thus B is_an_arc_of p1,p2 by K1;
+     thus C c= B by KK,XBOOLE_1:1,K1;
+     thus B c= D by K1;
+   end;
+  end;
+   suppose C is non trivial;
+     hence thesis by WW,A1,A2,XX;
+   end;
+  end;

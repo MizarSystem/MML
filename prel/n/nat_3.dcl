@@ -152,20 +152,6 @@
 </Cluster>
 </FCluster>
 <FCluster>
-<ArgTypes/>
-<Func kind="K" nr="438"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="17" value="false"/>
-<Adjective nr="83"/>
-<Adjective nr="84"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="155" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

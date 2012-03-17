@@ -31,32 +31,6 @@ Lm1: one = succ 0 by ORDINAL2:def 4 .= 1;
          k,k1,l,l1 for Nat,
          m,m1,n,n1 for Integer;
 
-:: Auxiliary theorems & redefinitions.
-
-Lm2:0<b & 0<d implies (a*d<c*b iff a/b<c/d)
- proof
-  assume A1:0<b & 0<d; then A2:0<b" & 0<d" by XREAL_1:124;
-  A3:now assume a*d<c*b;
-   then (a*d)*d"<(c*b)*d" by A2,XREAL_1:70;
-   then a*(d*d")<(c*b)*d";
-   then a*1<(c*b)*d" by A1,XCMPLX_0:def 7;
-   then a<b*(c*d");
-   then a<b*(c/d) by XCMPLX_0:def 9;
-   then b"*a<b"*(b*(c/d)) by A2,XREAL_1:70;
-   then b"*a<(b"*b)*(c/d);
-   then b"*a<1*(c/d) by A1,XCMPLX_0:def 7;
-   hence a/b<c/d by XCMPLX_0:def 9;
-  end;
-       now assume a/b<c/d;
-   then a/b*b<c/d*b by A1,XREAL_1:70;
-   then a<b*(c/d) by A1,XCMPLX_1:88;
-   then a*d<(b*(c/d))*d by A1,XREAL_1:70;
-   then a*d<b*(c/d*d);
-   hence a*d<c*b by A1,XCMPLX_1:88;
-  end;
-  hence thesis by A3;
- end;
-
 :: We define RAT as a set of real numbers, each of which can be expressed
 :: as a quotient of integer dividend and divisor (divisor is not equal
 :: to zero).
@@ -151,7 +125,7 @@ A33:   *(x1,y1) = x1' *' y1' by A23,ARYTM_0:def 3,ARYTM_2:1,2;
 end;
 end;
 
-     0 in omega;
+0 in omega;
   then reconsider 0' = 0 as Element of REAL+ by ARYTM_2:2;
 
 Lm4:
@@ -291,7 +265,7 @@ A2:  n = k or n = -k by INT_1:def 1;
  end;
 
 definition
- redefine func RAT means
+  redefine func RAT means
   :Def1: x in it iff ex m,n st x = m/n;
   compatibility
    proof let R be set;
@@ -313,12 +287,12 @@ A1:   for x holds x in R iff ex m,n st x = m/n;
  end;
 
 definition let r be number;
- attr r is rational means
+  attr r is rational means
   :Def2: r in RAT;
 end;
 
 registration
- cluster rational Real;
+  cluster rational Real;
   existence
    proof
     reconsider a = 0, b = 1 as Integer;
@@ -329,22 +303,21 @@ registration
 end;
 
 registration
- cluster rational number;
+  cluster rational number;
   existence
    proof
-    reconsider a = 0 as Integer;
-    reconsider b = 1 as Integer;
+    reconsider a = 0, b = 1 as Integer;
     take x=a/b;
     thus x in RAT by Def1;
    end;
 end;
 
 definition
- mode Rational is rational number;
+  mode Rational is rational number;
 end;
 
 theorem Th1:
- x in RAT implies ex m,n st n<>0 & x = m/n
+  x in RAT implies ex m,n st n<>0 & x = m/n
  proof assume
 A1: x in RAT;
   per cases;
@@ -368,16 +341,16 @@ A4:  x = m*n" by A3,XCMPLX_0:def 9;
 
 canceled;
 
- theorem Th3:
+theorem Th3:
   x is Rational implies ex m,n st n<>0 & x = m/n
    proof assume x is Rational;
-     then x in RAT by Def2;
+    then x in RAT by Def2;
     hence thesis by Th1;
    end;
 
 registration
- cluster rational -> real number;
- coherence
+  cluster rational -> real number;
+  coherence
   proof let n be number;
    assume n in RAT;
    hence n in REAL by NUMBERS:12;
@@ -386,19 +359,19 @@ end;
 
 canceled 2;
 
- theorem Th6:
+theorem Th6:
   (ex m,n st x = m/n) implies x is rational
    proof
-       x is Rational iff x in RAT by Def2;
+    x is Rational iff x in RAT by Def2;
     hence thesis by Def1;
    end;
 
 theorem Th7:
- for x being Integer holds x is Rational
+  for x being Integer holds x is Rational
   proof
-  let x be Integer;
-     x = x/1;
-  hence thesis by Th6;
+    let x be Integer;
+    x = x/1;
+    hence thesis by Th6;
  end;
 
 registration
@@ -411,104 +384,103 @@ end;
 :: Now we prove that fractions of integer denominator and natural numerator
 :: or of natural denominator and numerator, etc., are all rational numbers.
 
-  registration let p,q;
-    cluster p*q -> rational;
-    coherence
-     proof
-      consider m1,n1 being Integer such that n1<>0
-                         and A1: p = m1/n1 by Th3;
-      consider m2,n2 being Integer such that n2<>0
-                         and A2: q = m2/n2 by Th3;
-          p*q=(m1*m2)/(n1*n2) by A1,A2,XCMPLX_1:77;
-       hence thesis by Th6;
-     end;
-    cluster p+q -> rational;
-    coherence
-     proof
-      consider m1,n1 being Integer such that A3: n1<>0
-                         and A4: p = m1/n1 by Th3;
-      consider m2,n2 being Integer such that A5: n2<>0
-                         and A6: q = m2/n2 by Th3;
-         p+q=(m1*n2+m2*n1)/(n1*n2) by A3,A4,A5,A6,XCMPLX_1:117;
-      hence thesis by Th6;
-     end;
-    cluster p-q -> rational;
-    coherence
-     proof
-      consider m1,n1 being Integer such that A7: n1<>0
-                         and A8: p = m1/n1 by Th3;
-      consider m2,n2 being Integer such that A9: n2<>0
-                         and A10: q = m2/n2 by Th3;
-         p-q=(m1*n2-m2*n1)/(n1*n2) by A7,A8,A9,A10,XCMPLX_1:131;
-      hence thesis by Th6;
-     end;
-  end;
-
- registration let p,m;
-   cluster p+m -> rational;
-    coherence;
-   cluster p-m -> rational;
-    coherence;
-   cluster p*m -> rational;
-    coherence;
- end;
-
- registration let m,p;
-   cluster m+p -> rational;
-    coherence;
-   cluster m-p -> rational;
-    coherence;
-   cluster m*p -> rational;
-    coherence;
- end;
-
- registration let p,k;
-   cluster p+k -> rational;
-    coherence;
-   cluster p-k -> rational;
-    coherence;
-   cluster p*k -> rational;
-    coherence;
- end;
-
- registration let k,p;
-   cluster k+p -> rational;
-    coherence;
-   cluster k-p -> rational;
-    coherence;
-   cluster k*p -> rational;
-    coherence;
- end;
-
- registration
-  let p;
-  cluster -p -> rational;
-   coherence
-    proof
-     consider m,n such that n<>0 and A1: p=m/n by Th3;
-        -p = (-m)/n by A1,XCMPLX_1:188;
+registration let p,q;
+  cluster p*q -> rational;
+  coherence
+  proof
+    consider m1,n1 being Integer such that n1<>0
+                       and A1: p = m1/n1 by Th3;
+    consider m2,n2 being Integer such that n2<>0
+                       and A2: q = m2/n2 by Th3;
+        p*q=(m1*m2)/(n1*n2) by A1,A2,XCMPLX_1:77;
      hence thesis by Th6;
-    end;
   end;
+  cluster p+q -> rational;
+  coherence
+  proof
+    consider m1,n1 being Integer such that A3: n1<>0
+                       and A4: p = m1/n1 by Th3;
+    consider m2,n2 being Integer such that A5: n2<>0
+                       and A6: q = m2/n2 by Th3;
+    p+q=(m1*n2+m2*n1)/(n1*n2) by A3,A4,A5,A6,XCMPLX_1:117;
+    hence thesis by Th6;
+  end;
+  cluster p-q -> rational;
+  coherence
+  proof
+    consider m1,n1 being Integer such that A7: n1<>0 and
+A8: p = m1/n1 by Th3;
+    consider m2,n2 being Integer such that A9: n2<>0 and
+A10: q = m2/n2 by Th3;
+    p-q=(m1*n2-m2*n1)/(n1*n2) by A7,A8,A9,A10,XCMPLX_1:131;
+    hence thesis by Th6;
+  end;
+end;
+
+registration let p,m;
+  cluster p+m -> rational;
+  coherence;
+  cluster p-m -> rational;
+  coherence;
+  cluster p*m -> rational;
+  coherence;
+end;
+
+registration let m,p;
+  cluster m+p -> rational;
+  coherence;
+  cluster m-p -> rational;
+  coherence;
+  cluster m*p -> rational;
+  coherence;
+end;
+
+registration let p,k;
+  cluster p+k -> rational;
+  coherence;
+  cluster p-k -> rational;
+  coherence;
+  cluster p*k -> rational;
+  coherence;
+end;
+
+registration let k,p;
+  cluster k+p -> rational;
+  coherence;
+  cluster k-p -> rational;
+  coherence;
+  cluster k*p -> rational;
+  coherence;
+end;
+
+registration let p;
+  cluster -p -> rational;
+  coherence
+  proof
+    consider m,n such that n<>0 and A1: p=m/n by Th3;
+    -p = (-m)/n by A1,XCMPLX_1:188;
+    hence thesis by Th6;
+  end;
+end;
 
 :: Now we prove that the quotient of two rational numbers is rational
 
 canceled 8;
 
- theorem Th16:
-   for p,q holds p/q is Rational
-    proof
-     let p,q;
-     consider m1,n1 being Integer such that n1<>0
+theorem Th16:
+  for p,q holds p/q is Rational
+  proof
+    let p,q;
+    consider m1,n1 being Integer such that n1<>0
                          and A1: p = m1/n1 by Th3;
-     consider m2,n2 being Integer such that n2<>0
+    consider m2,n2 being Integer such that n2<>0
                          and A2: q = m2/n2 by Th3;
-        p/q = p*(m2/n2)" by A2,XCMPLX_0:def 9
-           .= p*(1/(m2/n2)) by XCMPLX_1:217
-           .= p*((1*n2)/m2) by XCMPLX_1:78
-           .= (m1*n2)/(n1*m2) by A1,XCMPLX_1:77;
-     hence thesis by Th6;
-    end;
+    p/q = p*(m2/n2)" by A2,XCMPLX_0:def 9
+        .= p*(1/(m2/n2)) by XCMPLX_1:217
+        .= p*((1*n2)/m2) by XCMPLX_1:78
+        .= (m1*n2)/(n1*m2) by A1,XCMPLX_1:77;
+    hence thesis by Th6;
+  end;
 
 registration let p, q be rational number;
   cluster p/q -> rational;
@@ -520,7 +492,7 @@ canceled 4;
 theorem Th21:
   p" is Rational
   proof
-      p" = 1/p by XCMPLX_1:217;
+   p" = 1/p by XCMPLX_1:217;
    hence thesis;
   end;
 
@@ -533,21 +505,21 @@ end;
 :: any two distinct real numbers.
 
 theorem
-      a<b implies ex p st a<p & p<b
+  a<b implies ex p st a<p & p<b
   proof
    assume A1:a<b;
    set d=b-a;set m=[\d"/]+1;set l=[\m*a/]+1;
-        A2: a-a<b-a by A1,XREAL_1:11;
+A2: a-a<b-a by A1,XREAL_1:11;
     then A3:0<d;
-A4:    d"<=m by INT_1:52;
+A4: d"<=m by INT_1:52;
     then A5:0<m by A2,XREAL_1:124;
-    A6:0<>m by A3,A4,XREAL_1:124;
-   reconsider p=l/m as Rational;
-   take p;
-   A7:0<m" by A5,XREAL_1:124;
-   thus a<p
+A6: 0<>m by A3,A4,XREAL_1:124;
+    reconsider p=l/m as Rational;
+    take p;
+A7: 0<m" by A5,XREAL_1:124;
+    thus a<p
     proof
-          m*a-1<[\m*a/] by INT_1:def 4;
+     m*a-1<[\m*a/] by INT_1:def 4;
      then m*a<[\m*a/]+1 by XREAL_1:21;
      then m"*(m*a)<m"*l by A7,XREAL_1:70;
      then (m"*m)*a<m"*l;
@@ -557,7 +529,7 @@ A4:    d"<=m by INT_1:52;
    A8:[\m*a/]<=m*a by INT_1:def 4;
    thus p<b
     proof
-          d"-1<[\d"/] by INT_1:def 4;
+     d"-1<[\d"/] by INT_1:def 4;
      then d"<[\d"/]+1 by XREAL_1:21;
      then d"*d<m*d by A2,XREAL_1:70;
      then 1<m*d by A2,XCMPLX_0:def 7;
@@ -572,25 +544,23 @@ A4:    d"<=m by INT_1:52;
 canceled;
 
 theorem Th24:
- ex m,k st k<>0 & p=m/k
+  ex m,k st k<>0 & p=m/k
   proof
    consider m,n such that A1:n<>0 & p=m/n by Th3;
-        now per cases by A1;
-     suppose 0<n;
-      then n is Nat by INT_1:16;
-      hence thesis by A1;
-     end;
-     suppose n<0;
-      then 0<=-n by XREAL_1:60;
-      then A2:-n is Nat by INT_1:16;
-      A3:p = -(-m/n) by A1
-         .= -(-m)/n by XCMPLX_1:188
-         .= (-m)/(-n) by XCMPLX_1:189;
-           -n<>0 by A1,XCMPLX_1:135;
-      hence thesis by A2,A3;
-     end;
-     end;
-    hence thesis;
+   per cases by A1;
+    suppose 0<n;
+     then n is Nat by INT_1:16;
+     hence thesis by A1;
+    end;
+    suppose n<0;
+     then 0<=-n by XREAL_1:60;
+     then A2:-n is Nat by INT_1:16;
+     A3:p = -(-m/n) by A1
+        .= -(-m)/n by XCMPLX_1:188
+        .= (-m)/(-n) by XCMPLX_1:189;
+     -n<>0 by A1,XCMPLX_1:135;
+     hence thesis by A2,A3;
+    end;
   end;
 
 :: Each rational number can be uniquely expressed as a ratio of two
@@ -600,7 +570,7 @@ theorem Th24:
 :: Function numerator(p) is defined as a product of p and denominator(p).
 
 theorem Th25:
- ex m,k st k<>0 & p=m/k & for n,l st l<>0 & p=n/l holds k<=l
+  ex m,k st k<>0 & p=m/k & for n,l st l<>0 & p=n/l holds k<=l
   proof
    defpred P[Nat] means ($1<>0 & ex m1 st p=m1/$1);
    consider m,k such that A1:k<>0 & p=m/k by Th24;
@@ -624,7 +594,7 @@ definition let p;
   existence
    proof
     consider m,k such that A1:k<>0 & p=m/k
-                  & for n,l st l<>0 & p=n/l holds k<=l by Th25;
+        & for n,l st l<>0 & p=n/l holds k<=l by Th25;
     take k;
     thus thesis by A1;
    end;
@@ -638,69 +608,69 @@ definition let p;
    end;
  end;
 
- definition let p;
+definition let p;
   func numerator(p) -> Integer equals
  :Def4:  denominator(p)*p;
-    coherence
-     proof
-      consider m such that A1:p=m/denominator(p) by Def3;
-      denominator(p)<>0 by Def3;
-      hence thesis by A1,XCMPLX_1:88;
-     end;
- end;
+  coherence
+  proof
+    consider m such that A1:p=m/denominator(p) by Def3;
+    denominator(p)<>0 by Def3;
+    hence thesis by A1,XCMPLX_1:88;
+  end;
+end;
 
 :: Some basic theorems concerning p, numerator(p) and denominator(p).
 
 canceled;
 
- theorem Th27:
+theorem Th27:
   0<denominator(p)
-   proof
+  proof
     0 <> denominator p by Def3;
     hence thesis;
-   end;
+  end;
 
 canceled;
 
- theorem Th29:
+theorem Th29:
   1<=denominator(p)
-   proof 0<denominator(p) by Th27;
+  proof 0<denominator(p) by Th27;
    then 0+1<=denominator(p) by NAT_1:38;
    hence thesis;
   end;
 
- theorem Th30:
+theorem Th30:
   0<denominator(p)"
    proof
-         0<denominator(p) by Th27;
+    0<denominator(p) by Th27;
     hence thesis by XREAL_1:124;
    end;
 
 canceled 3;
 
- theorem Th34:
+theorem Th34:
   1>=denominator(p)"
-   proof
-    A1:0<>denominator(p) by Def3;
-    A2:1<=denominator(p) by Th29;
+  proof
+A1: 0<>denominator(p) by Def3;
+A2: 1<=denominator(p) by Th29;
     1*denominator(p)"<=denominator(p)*denominator(p)" by A2,XREAL_1:66;
     hence thesis by A1,XCMPLX_0:def 7;
-   end;
+  end;
 
 canceled;
 
- theorem Th36:
+theorem Th36:
   numerator(p)=0 iff p=0
-   proof
-    A1:numerator(p)=denominator(p)*p by Def4;
+  proof
+A1: numerator(p)=denominator(p)*p by Def4;
          denominator(p)<>0 by Def3;
     hence thesis by A1,XCMPLX_1:6;
-   end;
+  end;
 
- theorem Th37:
+theorem Th37:
   p=numerator(p)/denominator(p) & p=numerator(p)*denominator(p)"
                                 & p=denominator(p)"*numerator(p)
-   proof set x=denominator(p);A1:x<>0 by Def3;
+  proof set x=denominator(p);A1:x<>0 by Def3;
     thus A2:numerator(p)/denominator(p)=numerator(p)*x" by XCMPLX_0:def 9
                    .=(p*x)*x" by Def4
                    .=p*(x*x")
@@ -708,11 +678,11 @@ canceled;
                    .=p;
     hence p=numerator(p)*denominator(p)" by XCMPLX_0:def 9;
     thus p=denominator(p)"*numerator(p) by A2,XCMPLX_0:def 9;
-   end;
+  end;
 
- theorem
-       p<>0 implies denominator(p)=numerator(p)/p
-   proof
+theorem
+  p<>0 implies denominator(p)=numerator(p)/p
+  proof
     assume A1:p<>0;
     A2:denominator(p)<>0 by Def3;
          p*denominator(p)=numerator(p)/denominator(p)*denominator(p) by Th37;
@@ -720,28 +690,28 @@ canceled;
     then (p"*p)*denominator(p)=p"*numerator(p) by XCMPLX_1:4;
     then 1*denominator(p)=p"*numerator(p) by A1,XCMPLX_0:def 7;
     hence denominator(p) =numerator(p)/p by XCMPLX_0:def 9;
-   end;
+  end;
 
 canceled;
 
 theorem Th40:
- p is Integer implies denominator(p)=1 & numerator(p)=p
+  p is Integer implies denominator(p)=1 & numerator(p)=p
   proof
     assume p is Integer;
     then reconsider m=p as Integer;
          p =m/1;
     then A1:denominator(p)<=1 by Def3;
-         1<=denominator(p) by Th29;
+    1<=denominator(p) by Th29;
     hence A2:denominator(p)=1 by A1,XREAL_1:1;
-         numerator(p)=denominator(p)*p by Def4;
+    numerator(p)=denominator(p)*p by Def4;
     hence numerator(p)=p by A2;
   end;
 
 theorem Th41:
- (numerator(p)=p or denominator(p)=1) implies p is Integer
+  (numerator(p)=p or denominator(p)=1) implies p is Integer
   proof
    assume A1:numerator(p)=p or denominator(p)=1;
-        now per cases by A1;
+   per cases by A1;
     suppose numerator(p)=p;hence thesis;
     end;
     suppose denominator(p)=1;
@@ -749,14 +719,12 @@ theorem Th41:
                      .=p;
      hence thesis;
    end;
-   end;
-   hence thesis;
   end;
 
 theorem
-      numerator(p)=p iff denominator(p)=1
+  numerator(p)=p iff denominator(p)=1
   proof
-        now assume denominator(p)=1;
+    now assume denominator(p)=1;
     then p is Integer by Th41;
     hence numerator(p)=p by Th40;
    end;
@@ -766,108 +734,108 @@ theorem
 canceled;
 
 theorem
-      (numerator(p)=p or denominator(p)=1) & 0<=p implies p is Nat
+  (numerator(p)=p or denominator(p)=1) & 0<=p implies p is Nat
   proof
    assume A1:(numerator(p)=p or denominator(p)=1) & 0<=p;
    then p is Integer by Th41;
    hence thesis by A1,INT_1:16;
   end;
 
- theorem
-       1<denominator(p) iff p is not integer
-   proof
-         now assume not p is Integer;
+theorem
+  1<denominator(p) iff p is not integer
+  proof
+    now assume not p is Integer;
      then A1:denominator(p)<>1 by Th41;
-          denominator(p)>=1 by Th29;
+     denominator(p)>=1 by Th29;
      hence denominator(p)>1 by A1,REAL_1:def 5;
     end;
     hence thesis by Th40;
-   end;
+  end;
 
 Lm8:1"=1;
 
- theorem
-       1>denominator(p)" iff p is not integer
-   proof
-    A1:denominator(p)"<=1 by Th34;
-         now assume not p is Integer;
-      then denominator(p)" <> 1 by Lm8,Th41;
-     hence denominator(p)"<1 by A1,REAL_1:def 5;
+theorem
+  1>denominator(p)" iff p is not integer
+  proof
+A1: denominator(p)"<=1 by Th34;
+    now assume not p is Integer;
+    then denominator(p)" <> 1 by Lm8,Th41;
+    hence denominator(p)"<1 by A1,REAL_1:def 5;
     end;
     hence thesis by Lm8,Th40;
-   end;
+  end;
 
- theorem Th47:
+theorem Th47:
   numerator(p)=denominator(p) iff p=1
-   proof
-    A1:denominator(p)<>0 by Def3;
-    A2:now assume numerator(p)=denominator(p);
+  proof
+A1: denominator(p)<>0 by Def3;
+A2: now assume numerator(p)=denominator(p);
      then numerator(p)/denominator(p)=1 by A1,XCMPLX_1:60;
      hence p=1 by Th37;
     end;
-         now assume A3:p=1; then numerator(p)=1 by Th40;
+    now assume A3:p=1; then numerator(p)=1 by Th40;
      hence numerator(p)=denominator(p) by A3,Th40;
     end;
     hence thesis by A2;
-   end;
+  end;
 
- theorem Th48:
+theorem Th48:
   numerator(p)=-denominator(p) iff p=-1
-   proof
-    A1:0<>denominator(p) by Def3;
-    A2:now assume numerator(p)=-denominator(p);
-     hence p=(-denominator(p))/denominator(p) by Th37
-           .=-denominator(p)/denominator(p) by XCMPLX_1:188
-           .=-1 by A1,XCMPLX_1:60;
-    end;
-         now assume A3:p=-1; then numerator(p)=-1 by Th40;
-     hence numerator(p)=-denominator(p) by A3,Th40;
-    end;
-    hence thesis by A2;
+  proof
+A1: 0<>denominator(p) by Def3;
+A2: now assume numerator(p)=-denominator(p);
+    hence p=(-denominator(p))/denominator(p) by Th37
+          .=-denominator(p)/denominator(p) by XCMPLX_1:188
+          .=-1 by A1,XCMPLX_1:60;
    end;
+    now assume A3:p=-1; then numerator(p)=-1 by Th40;
+    hence numerator(p)=-denominator(p) by A3,Th40;
+   end;
+   hence thesis by A2;
+  end;
 
- theorem
-       -numerator(p)=denominator(p) iff p=-1
-   proof
-         -numerator(p)=denominator(p) iff numerator(p)=-denominator(p);
+theorem
+  -numerator(p)=denominator(p) iff p=-1
+  proof
+    -numerator(p)=denominator(p) iff numerator(p)=-denominator(p);
     hence thesis by Th48;
-   end;
+  end;
 
 :: We can multiple the numerator and the denominator of any rational number
 :: by any integer (natural) number which is not equal to zero.
 
 theorem Th50:
- m<>0 implies p=(numerator(p)*m)/(denominator(p)*m)
-    proof
-     assume m<>0;
-     then numerator(p)/denominator(p)=(numerator(p)*m)/(denominator(p)*m)
+  m<>0 implies p=(numerator(p)*m)/(denominator(p)*m)
+  proof
+    assume m<>0;
+    then numerator(p)/denominator(p)=(numerator(p)*m)/(denominator(p)*m)
                                                            by XCMPLX_1:92;
-     hence p=(numerator(p)*m)/(denominator(p)*m) by Th37;
-    end;
+    hence p=(numerator(p)*m)/(denominator(p)*m) by Th37;
+  end;
 
 canceled 9;
 
 theorem Th60:
- k<>0 & p=m/k implies (ex l st m=numerator(p)*l & k=denominator(p)*l)
+  k<>0 & p=m/k implies (ex l st m=numerator(p)*l & k=denominator(p)*l)
   proof
    assume A1:k<>0 & p=m/k;
-     A2:denominator(p)<>0 by Def3;
+A2:  denominator(p)<>0 by Def3;
      defpred P[Nat] means $1*denominator(p)<=k;
-     A3:for l st P[l] holds l<=k
-           proof
-            let l such that A4:l*denominator(p)<=k;
-            assume A5: not thesis;
-                 0<denominator(p) by A2;
-            then 0+1<=denominator(p) by NAT_1:38;
-            then A6:k*1<=k*denominator(p) by NAT_1:20;
-                 0<denominator(p) by A2;
-            then k*denominator(p)<l*denominator(p) by A5,XREAL_1:70;
-            hence contradiction by A4,A6,XREAL_1:2;
-           end;
+A3:  for l st P[l] holds l<=k
+     proof
+      let l such that A4:l*denominator(p)<=k;
+      assume A5: not thesis;
+      0<denominator(p) by A2;
+      then 0+1<=denominator(p) by NAT_1:38;
+      then A6:k*1<=k*denominator(p) by NAT_1:20;
+      0<denominator(p) by A2;
+      then k*denominator(p)<l*denominator(p) by A5,XREAL_1:70;
+      hence contradiction by A4,A6,XREAL_1:2;
+     end;
      A7:1*denominator(p)<=k by A1,Def3;
      then A8:ex l1 st P[l1];
      consider l such that A9:P[l] and
-           A10:for l1 st P[l1] holds l1<=l from NAT_1:sch 6(A3,A8);
+A10: for l1 st P[l1] holds l1<=l from NAT_1:sch 6(A3,A8);
      take l;
      A11:0<>l by A7,A10;
      then A12:l*denominator(p)<>0 by A2,XCMPLX_1:6;
@@ -877,7 +845,7 @@ then A15:      0+l*denominator(p)<k;
       then 0<=k-l*denominator(p) by XREAL_1:22;
       then reconsider x=k-l*denominator(p) as Nat by INT_1:16;
       A16:0<>x by A15;
-           m/k=(numerator(p)*l)/(l*denominator(p)) by A1,A11,Th50;
+      m/k=(numerator(p)*l)/(l*denominator(p)) by A1,A11,Th50;
       then p=(m-numerator(p)*l)/x by A1,A12,A14,XCMPLX_1:124;
       then denominator(p)<=k-l*denominator(p) by A16,Def3;
       then l*denominator(p)+1*denominator(p)<=k by XREAL_1:21;
@@ -894,7 +862,7 @@ then A15:      0+l*denominator(p)<k;
   end;
 
 theorem
-      p=m/n & n<>0 implies ex m1 st m=numerator(p)*m1 & n=denominator(p)*m1
+  p=m/n & n<>0 implies ex m1 st m=numerator(p)*m1 & n=denominator(p)*m1
   proof
    assume A1:p=m/n & n<>0;
    per cases by A1;
@@ -913,30 +881,29 @@ theorem
     end;
     suppose 0<n;
      then reconsider x=n as Nat by INT_1:16;
-     consider k such that A4:m=numerator(p)*k & x=denominator(p)*k
-                                                                by A1,Th60;
+     consider k such that
+A4:  m=numerator(p)*k & x=denominator(p)*k by A1,Th60;
      reconsider y=k as Integer;take y;
-     thus m=numerator(p)*y by A4;
-     thus n=denominator(p)*y by A4;
+     thus m=numerator(p)*y & n=denominator(p)*y by A4;
   end;
   end;
 
 :: Fraction numerator(p)/denominator(p) is irreducible.
 
 theorem Th62:
- not ex l st 1<l & ex m,k st numerator(p)=m*l & denominator(p)=k*l
+  not ex l st 1<l & ex m,k st numerator(p)=m*l & denominator(p)=k*l
   proof
    assume not thesis;
    then consider l such that A1:1<l
                         & ex m,k st numerator(p)=m*l & denominator(p)=k*l;
    consider m,k such that A2:numerator(p)=m*l & denominator(p)=k*l by A1;
 A3:0<>l by A1;
-   A4:k<>0 by A2,Def3;
+A4:k<>0 by A2,Def3;
    then A5:0<k;
-   A6:now k*1<k*l by A1,A5,XREAL_1:70;
+A6:now k*1<k*l by A1,A5,XREAL_1:70;
     hence k<denominator(p) by A2;
    end;
-        p=(m*l)/(k*l) by A2,Th37
+   p=(m*l)/(k*l) by A2,Th37
    .=(m/k)*(l/l) by XCMPLX_1:77
    .=m/k*1 by A3,XCMPLX_1:60
    .=m/k;
@@ -955,10 +922,10 @@ theorem Th63:
     then A4:l=1 by A3,XREAL_1:1;
     hence k=denominator(p) by A2;
     thus m=numerator(p) by A2,A4;
-   end;
+  end;
 
 theorem Th64:
- p<-1 iff numerator(p)<-denominator(p)
+  p<-1 iff numerator(p)<-denominator(p)
   proof
    A1:0<>denominator(p) by Def3;
    A2:0<denominator(p)" by Th30;
@@ -970,7 +937,7 @@ theorem Th64:
                                                               by A3,XREAL_1:70;
     hence numerator(p)<-denominator(p) by A1,XCMPLX_1:88;
    end;
-        now
+   now
     assume numerator(p)<-denominator(p);
     then numerator(p)*denominator(p)"<((-1)*denominator(p))*denominator(p)"
                                                               by A2,XREAL_1:70;
@@ -982,45 +949,41 @@ theorem Th64:
   end;
 
 theorem Th65:
- p<=-1 iff numerator(p)<=-denominator(p)
+  p<=-1 iff numerator(p)<=-denominator(p)
   proof
    A1:now assume A2:p<=-1;
-         now per cases by A2,REAL_1:def 5;
+    per cases by A2,REAL_1:def 5;
      suppose p=-1;
       hence numerator(p)<=-denominator(p) by Th48;
      end;
      suppose p<-1;
       hence numerator(p)<=-denominator(p) by Th64;
     end;
-    end;
-    hence numerator(p)<=-denominator(p);
    end;
-        now assume A3:numerator(p)<=-denominator(p);
-         now per cases by A3,REAL_1:def 5;
+   now assume A3:numerator(p)<=-denominator(p);
+     per cases by A3,REAL_1:def 5;
      suppose numerator(p)=-denominator(p);
       hence p<=-1 by Th48;
      end;
      suppose numerator(p)<-denominator(p);
       hence p<=-1 by Th64;
     end;
-    end;
-    hence p<=-1;
    end;
    hence thesis by A1;
   end;
 
 theorem
-      p<-1 iff denominator(p)<-numerator(p)
+  p<-1 iff denominator(p)<-numerator(p)
   proof
-        denominator(p)<-numerator(p) iff -(-numerator(p))<-denominator(p)
+   denominator(p)<-numerator(p) iff -(-numerator(p))<-denominator(p)
                                                               by XREAL_1:26;
    hence thesis by Th64;
   end;
 
 theorem
-      p<=-1 iff denominator(p)<=-numerator(p)
+  p<=-1 iff denominator(p)<=-numerator(p)
   proof
-        denominator(p)<=-numerator(p) iff -(-numerator(p))<=-denominator(p)
+   denominator(p)<=-numerator(p) iff -(-numerator(p))<=-denominator(p)
                                                              by XREAL_1:26;
    hence thesis by Th65;
   end;
@@ -1028,7 +991,7 @@ theorem
 canceled 4;
 
 theorem Th72:
- p<1 iff numerator(p)<denominator(p)
+  p<1 iff numerator(p)<denominator(p)
   proof
    A1:0<denominator(p) by Th27;
    A2:0<>denominator(p) by Def3;
@@ -1049,29 +1012,25 @@ theorem Th72:
   end;
 
 theorem
-      p<=1 iff numerator(p)<=denominator(p)
+  p<=1 iff numerator(p)<=denominator(p)
   proof
    A1:now assume A2:p<=1;
-         now per cases by A2,REAL_1:def 5;
+   per cases by A2,REAL_1:def 5;
      suppose p=1;
       hence numerator(p)<=denominator(p) by Th47;
      end;
      suppose p<1;
       hence numerator(p)<=denominator(p) by Th72;
     end;
-    end;
-    hence numerator(p)<=denominator(p);
    end;
-        now assume A3:numerator(p)<=denominator(p);
-         now per cases by A3,REAL_1:def 5;
+   now assume A3:numerator(p)<=denominator(p);
+    per cases by A3,REAL_1:def 5;
      suppose numerator(p)=denominator(p);
       hence p<=1 by Th47;
      end;
      suppose numerator(p)<denominator(p);
       hence p<=1 by Th72;
     end;
-    end;
-    hence p<=1;
    end;
    hence thesis by A1;
   end;
@@ -1079,7 +1038,7 @@ theorem
 canceled 2;
 
 theorem Th76:
- p<0 iff numerator(p)<0
+  p<0 iff numerator(p)<0
   proof
    A1:0<denominator(p) by Th27;
    A2:0<>denominator(p) by Def3;
@@ -1090,7 +1049,7 @@ theorem Th76:
                                                             by A1,XREAL_1:70;
     hence numerator(p)<0 by A2,XCMPLX_1:88;
    end;
-        now assume numerator(p)<0;
+   now assume numerator(p)<0;
     then numerator(p)*denominator(p)"<0*denominator(p)" by A3,XREAL_1:70;
     hence p<0 by Th37;
    end;
@@ -1098,29 +1057,25 @@ theorem Th76:
   end;
 
 theorem Th77:
- p<=0 iff numerator(p)<=0
+  p<=0 iff numerator(p)<=0
   proof
    A1:now assume A2:p<=0;
-         now per cases by A2;
+    per cases by A2;
      suppose p=0;
       hence numerator(p)<=0 by Th40;
      end;
      suppose p<0;
       hence numerator(p)<=0 by Th76;
     end;
-    end;
-    hence numerator(p)<=0;
    end;
-        now assume A3:numerator(p)<=0;
-         now per cases by A3;
+   now assume A3:numerator(p)<=0;
+     per cases by A3;
      suppose numerator(p)=0;
       hence p<=0 by Th36;
      end;
      suppose numerator(p)<0;
       hence p<=0 by Th76;
     end;
-    end;
-    hence p<=0;
    end;
    hence thesis by A1;
   end;
@@ -1128,7 +1083,7 @@ theorem Th77:
 canceled 2;
 
 theorem Th80:
- a<p iff a*denominator(p)<numerator(p)
+  a<p iff a*denominator(p)<numerator(p)
   proof
    A1:0<denominator(p) by Th27;
    A2:0<>denominator(p) by Def3;
@@ -1137,9 +1092,9 @@ theorem Th80:
     then a*denominator(p)<p*denominator(p) by A1,XREAL_1:70;
     hence a*denominator(p)<numerator(p) by Def4;
    end;
-        now assume a*denominator(p)<numerator(p);
+   now assume a*denominator(p)<numerator(p);
     then (a*denominator(p))*denominator(p)"<numerator(p)*denominator(p)"
-                                                              by A3,XREAL_1:70;
+                                                        by A3,XREAL_1:70;
     then a*(denominator(p)*denominator(p)")<numerator(p)*denominator(p)";
     then a*1<numerator(p)*denominator(p)" by A2,XCMPLX_0:def 7;
     hence a<p by Th37;
@@ -1148,22 +1103,20 @@ theorem Th80:
   end;
 
 theorem
-      a<=p iff a*denominator(p)<=numerator(p)
+  a<=p iff a*denominator(p)<=numerator(p)
   proof
    A1:denominator(p)<>0 by Def3;
    A2:now assume A3:a<=p;
-         now per cases by A3,REAL_1:def 5;
+    per cases by A3,REAL_1:def 5;
      suppose a=p;
       hence numerator(p)>=a*denominator(p) by Def4;
      end;
      suppose a<p;
       hence a*denominator(p)<=numerator(p) by Th80;
     end;
-    end;
-    hence a*denominator(p)<=numerator(p);
    end;
-        now assume A4:a*denominator(p)<=numerator(p);
-         now per cases by A4,REAL_1:def 5;
+   now assume A4:a*denominator(p)<=numerator(p);
+    per cases by A4,REAL_1:def 5;
      suppose a*denominator(p)=numerator(p);
       then p=(a*denominator(p))/(1*denominator(p)) by Th37
            .=(a/1)*(denominator(p)/denominator(p)) by XCMPLX_1:77
@@ -1174,8 +1127,6 @@ theorem
      suppose a*denominator(p)<numerator(p);
       hence a<=p by Th80;
     end;
-    end;
-    hence a<=p;
    end;
    hence thesis by A2;
   end;
@@ -1183,49 +1134,46 @@ theorem
 canceled 2;
 
 theorem
-      p=q iff (denominator(p)=denominator(q) & numerator(p)=numerator(q))
+  denominator p=denominator q & numerator p=numerator q implies p = q
   proof
-        now assume denominator(p)=denominator(q) & numerator(p)=numerator(q);
+   assume denominator(p)=denominator(q) & numerator(p)=numerator(q);
     hence p=numerator(q)/denominator(q) by Th37
          .=q by Th37;
-   end;
-   hence thesis;
   end;
 
 canceled;
 
 theorem
-      p<q iff numerator(p)*denominator(q)<numerator(q)*denominator(p)
+  p<q iff numerator(p)*denominator(q)<numerator(q)*denominator(p)
   proof A1:0<denominator(p) & 0<denominator(q) by Th27;
-        p<q iff numerator(p)/denominator(p)<q by Th37;
+   p<q iff numerator(p)/denominator(p)<q by Th37;
    then p<q iff numerator(p)/denominator(p)<numerator(q)/denominator(q)
-                                                                   by Th37;
-   hence thesis by A1,Lm2;
+                                                                by Th37;
+   hence thesis by A1,XREAL_1:104,108;
   end;
 
 theorem Th87:
- denominator(-p)=denominator(p) & numerator(-p)=-numerator(p)
+  denominator(-p)=denominator(p) & numerator(-p)=-numerator(p)
   proof
-   A1:denominator(p)<>0 by Def3;
-   A2:denominator(-p)<>0 by Def3;
-   A5:p=numerator(p)/denominator(p) by Th37;
-        -p=-numerator(p)/denominator(p) by Th37
+A1:denominator(p)<>0 by Def3;
+A2:denominator(-p)<>0 by Def3;
+A5:p=numerator(p)/denominator(p) by Th37;
+   -p=-numerator(p)/denominator(p) by Th37
         .=(-numerator(p))/denominator(p) by XCMPLX_1:188;
    then consider k such that A6:-numerator(p)=numerator(-p)*k
                             & denominator(p)=denominator(-p)*k by A1,Th60;
-        k<>0 by A6,Def3;
+   k<>0 by A6,Def3;
    then 0<k; then 0+1<=k by NAT_1:38;
    then A7: denominator(-p)*1<=denominator(-p)*k by XREAL_1:66;
-   A8:p=-(-p)
-        .=-numerator(-p)/denominator(-p) by Th37
+   A8:p=-(-p) .=-numerator(-p)/denominator(-p) by Th37
         .=(-numerator(-p))/denominator(-p) by XCMPLX_1:188;
    then consider l such that A9:-numerator(-p)=numerator(p)*l
                             & denominator(-p)=denominator(p)*l by A2,Th60;
-        l<>0 by A9,Def3;
+   l<>0 by A9,Def3;
    then 0<l; then 0+1<=l by NAT_1:38;
    then A10:  denominator(p)*1<=denominator(p)*l by XREAL_1:66;
    hence denominator(p)=denominator(-p) by A6,A7,A9,XREAL_1:1;
-        numerator(p)/denominator(p)*denominator(p)
+     numerator(p)/denominator(p)*denominator(p)
                                =(-numerator(-p))/denominator(p)*denominator(p)
  by A5,A6,A7,A8,A9,A10,XREAL_1:1;
    then numerator(p)=(-numerator(-p))/denominator(p)*denominator(p)
@@ -1235,22 +1183,22 @@ theorem Th87:
   end;
 
 theorem Th88:
- 0<p & q=1/p iff numerator(q)=denominator(p) & denominator(q)=numerator(p)
+  0<p & q=1/p iff numerator(q)=denominator(p) & denominator(q)=numerator(p)
   proof
    A1:now assume A2:0<p & q=1/p;
     then A3:0<numerator(p) by Th77;A4:0<>numerator(p) by A2,Th77;
     A5:q=1/(numerator(p)/denominator(p)) by A2,Th37
       .=(1*denominator(p))/numerator(p) by XCMPLX_1:78
       .=denominator(p)/numerator(p);
-    reconsider x=denominator(p) as Integer;
+    set x=denominator(p);
     reconsider y=numerator(p) as Nat by A3,INT_1:16;
-         not ex k st 1<k & ex m,l st x=m*k & y=l*k
+    not ex k st 1<k & ex m,l st x=m*k & y=l*k
       proof
        assume not thesis;
        then consider k such that A6:1<k & ex m,l st x=m*k & y=l*k;
        consider m,l such that A7:x=m*k & y=l*k by A6;
 A8:    0<k by A6;
-             now assume not 0<=m;
+       now assume not 0<=m;
         then m*k<0*m by A8,XREAL_1:71;
         hence contradiction by A7;
        end;
@@ -1262,8 +1210,7 @@ A8:    0<k by A6;
     hence numerator(p)=denominator(q) & denominator(p)=numerator(q) by A4,A5,
 Th63;
    end;
-        now assume A9:numerator(q)=denominator(p) & denominator(q)=numerator(p)
-;
+   now assume A9:numerator(q)=denominator(p) & denominator(q)=numerator(p);
     then 0<numerator(p) by Th27;
     hence 0<p by Th77;
     thus q =(1*denominator(p))/numerator(p) by A9,Th37
@@ -1274,9 +1221,8 @@ Th63;
   end;
 
 theorem
-      p<0 & q=1/p iff numerator(q)=-denominator(p) & denominator(q)=-numerator(
-p
-)
+  p<0 & q=1/p iff numerator(q)=-denominator(p) &
+    denominator(q)=-numerator(p)
   proof
    A1:now assume A2:p<0 & q=1/p;
     set r=-p;A3:0<r by A2,XREAL_1:60;
@@ -1287,10 +1233,8 @@ p
 Th87;
     hence numerator(q)=-denominator(p) & denominator(q)=-numerator(p);
    end;
-        now assume A4:numerator(q)=-denominator(p) & denominator(q)=-numerator(
-p
-)
-;
+   now assume A4:numerator(q)=-denominator(p) & denominator(q)=-numerator(
+p);
     then 0<-numerator(p) by Th27;
     then numerator(p)<0 by XREAL_1:60;
     hence p<0 by Th76;

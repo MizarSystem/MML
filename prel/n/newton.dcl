@@ -18,6 +18,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
@@ -37,8 +38,8 @@
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="25" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -84,7 +85,7 @@
 <Adjective nr="16"/>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
-<Adjective nr="26"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -123,6 +124,19 @@
 <Cluster>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="138"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 </Registrations>

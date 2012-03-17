@@ -1,0 +1,686 @@
+:: Jordan's Curve Theorem
+::  by Artur Korni{\l}owicz
+:: 
+:: Received September 15, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, PRE_TOPC, EUCLID, TOPREAL1, RELAT_1, ARYTM_1, TOPS_1,
+      SUBSET_1, JORDAN2C, METRIC_1, BOOLE, TOPREAL2, CONNSP_1, PSCOMP_1,
+      TOPS_2, MCART_1, SQUARE_1, ARYTM_3, SPPOL_1, ASYMPT_0, PCOMPS_1, FUNCT_1,
+      FUNCT_5, JORDAN1, JGRAPH_6, JORDAN6, JORDAN19, JORDAN21, JORDAN24,
+      LATTICES, CONNSP_3, BORSUK_2, BORSUK_6, GRAPH_1, JORDAN5C, TOPGRP_1,
+      COMPLEX1, BORSUK_1, ORDINAL2, TOPREALA, RELAT_2, RCOMP_1, TOPMETR,
+      COMPTS_1, REALSET1, JORDAN1A, TOPREAL4, FUNCOP_1, TARSKI, JORDAN3, ABIAN,
+      ZF_LANG, TREAL_1, SEQ_1, XREAL_0, COLLSP, CONNSP_2, SGRAPH1, FUNCT_4,
+      SETFAM_1, PARTFUN3, PARTFUN1, KNASTER, FINSEQ_1, BROUWER, TOPREALB,
+      ABSVALUE, TERMORD, PROB_1, JORDAN;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, SQUARE_1, NAT_1,
+      MCART_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, FUNCT_4,
+      PSCOMP_1, NUMBERS, XCMPLX_0, XREAL_0, REAL_1, FINSEQ_1, COMPLEX1,
+      RCOMP_1, STRUCT_0, PRE_TOPC, TOPS_1, BORSUK_1, TOPS_2, COMPTS_1, TREAL_1,
+      CONNSP_1, CONNSP_2, CONNSP_3, TEX_2, METRIC_1, PCOMPS_1, TBSP_1, EUCLID,
+      TOPRNS_1, BORSUK_2, TOPREAL1, TOPREAL2, TOPMETR, SPPOL_1, JORDAN1,
+      JORDAN2C, JORDAN5C, TOPREAL4, JORDAN6, JGRAPH_6, JORDAN1A, GOBRD14,
+      TOPREAL9, BORSUK_6, TOPREALA, JORDAN19, JORDAN21, TOPGRP_1, JORDAN24,
+      ABIAN, PARTFUN3, TOPREALB, BROUWER;
+ constructors TOPREAL1, COMPTS_1, TBSP_1, JORDAN2C, TOPREAL9, CONNSP_1, TOPS_1,
+      TOPRNS_1, MONOID_0, TOPREALA, JORDAN1, JGRAPH_6, SPPOL_2, GOBRD14,
+      JORDAN6, JORDAN19, JORDAN21, CONNSP_3, JORDAN5C, SPPOL_1, JCT_MISC,
+      TEX_2, JORDAN1A, TOPREAL4, YELLOW_8, REALSET2, JORDAN24, TOPGRP_1, ABIAN,
+      TREAL_1, PARTFUN3, BROUWER, BORSUK_3, LIMFUNC1, WAYBEL_3, COMPLEX1,
+      TSEP_1;
+ registrations XREAL_0, RELSET_1, SUBSET_1, STRUCT_0, EUCLID, PRE_TOPC,
+      BORSUK_1, BORSUK_2, TOPREAL9, TOPS_1, NAT_1, TOPREALA, MEMBERED,
+      JORDAN21, JORDAN22, JORDAN2C, TOPGEN_3, TOPREAL6, GOBRD14, SPPOL_2,
+      YELLOW13, RCOMP_3, JORDAN5A, PSCOMP_1, SQUARE_1, JORDAN1A, FUNCT_1,
+      JGRAPH_8, TOPGRP_1, WAYBEL_2, PARTFUN3, METRIC_1, REALSET1, BORSUK_4,
+      BROUWER, WAYBEL_3, FUNCT_2, TOPREALB, TOPMETR, SEQ_1, ISOMICHI, TOPALG_5,
+      JORDAN1K, TEX_4, SPRECT_4;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin :: Preliminaries
+
+reserve
+  a, b, c, d, r, s for real number,
+  n for Nat,
+  p, p1, p2 for Point of TOP-REAL 2,
+  x, y for Point of TOP-REAL n,
+  C for Simple_closed_curve,
+  A, B, P for Subset of TOP-REAL 2,
+  U, V for Subset of (TOP-REAL 2)|C`,
+  D for compact with_the_max_arc Subset of TOP-REAL 2;
+
+registration
+  let M be symmetric triangle Reflexive MetrStruct, x, y be Point of M;
+  cluster dist(x,y) -> non negative;
+end;
+
+registration
+  let n be Nat, x, y be Point of TOP-REAL n;
+  cluster dist(x,y) -> non negative;
+end;
+
+registration
+  let n be Nat, x, y be Point of TOP-REAL n;
+  cluster |.x-y.| -> non negative;
+end;
+
+theorem :: JORDAN:1
+  for p1, p2 being Point of TOP-REAL n st p1 <> p2 holds 1/2*(p1+p2) <> p1;
+
+theorem :: JORDAN:2
+  p1`2 < p2`2 implies p1`2 < (1/2*(p1+p2))`2;
+
+theorem :: JORDAN:3
+  p1`2 < p2`2 implies (1/2*(p1+p2))`2 < p2`2;
+
+theorem :: JORDAN:4
+  for A being vertical Subset of TOP-REAL 2 holds
+  A /\ B is vertical;
+
+theorem :: JORDAN:5
+  for A being horizontal Subset of TOP-REAL 2 holds
+  A /\ B is horizontal;
+
+theorem :: JORDAN:6
+  p in LSeg(p1,p2) & LSeg(p1,p2) is vertical implies
+  LSeg(p,p2) is vertical;
+
+theorem :: JORDAN:7
+  p in LSeg(p1,p2) & LSeg(p1,p2) is horizontal implies
+  LSeg(p,p2) is horizontal;
+
+registration
+:: LSeg(NW-corner C,NE-corner C) is horizontal; ::SPRECT_3:29
+  let P be Subset of TOP-REAL 2;
+  cluster LSeg(SW-corner P,SE-corner P) -> horizontal;
+  cluster LSeg(NW-corner P,SW-corner P) -> vertical;
+  cluster LSeg(NE-corner P,SE-corner P) -> vertical;
+end;
+
+registration
+  let P be Subset of TOP-REAL 2;
+  cluster LSeg(SE-corner P,SW-corner P) -> horizontal;
+  cluster LSeg(SW-corner P,NW-corner P) -> vertical;
+  cluster LSeg(SE-corner P,NE-corner P) -> vertical;
+end;
+
+registration
+  cluster vertical non empty compact -> with_the_max_arc Subset of TOP-REAL 2;
+end;
+
+theorem :: JORDAN:8
+  for X, Y being non empty compact Subset of TOP-REAL 2 st
+  X c= Y & (W-min Y in X or W-max Y in X) holds W-bound X = W-bound Y;
+
+theorem :: JORDAN:9
+  for X, Y being non empty compact Subset of TOP-REAL 2 st
+  X c= Y & (E-min Y in X or E-max Y in X) holds E-bound X = E-bound Y;
+
+theorem :: JORDAN:10
+  for X, Y being non empty compact Subset of TOP-REAL 2 st
+  X c= Y & (N-min Y in X or N-max Y in X) holds N-bound X = N-bound Y;
+
+theorem :: JORDAN:11
+  for X, Y being non empty compact Subset of TOP-REAL 2 st
+  X c= Y & (S-min Y in X or S-max Y in X) holds S-bound X = S-bound Y;
+
+theorem :: JORDAN:12
+  W-bound C = W-bound North_Arc C;
+
+theorem :: JORDAN:13
+  E-bound C = E-bound North_Arc C;
+
+theorem :: JORDAN:14
+  W-bound C = W-bound South_Arc C;
+
+theorem :: JORDAN:15
+  E-bound C = E-bound South_Arc C;
+
+theorem :: JORDAN:16
+  p1`1 <= r & r <= p2`1 implies LSeg(p1,p2) meets Vertical_Line(r);
+
+theorem :: JORDAN:17
+  p1`2 <= r & r <= p2`2 implies LSeg(p1,p2) meets Horizontal_Line(r);
+
+registration
+  let n;
+  cluster empty -> Bounded Subset of TOP-REAL n;
+  cluster non Bounded -> non empty Subset of TOP-REAL n;
+end;
+
+registration
+  let n be non empty Nat;
+  cluster open closed non Bounded convex Subset of TOP-REAL n;
+end;
+
+theorem :: JORDAN:18
+  for C being compact Subset of TOP-REAL 2 holds
+  north_halfline UMP C \ {UMP C} misses C;
+
+theorem :: JORDAN:19
+  for C being compact Subset of TOP-REAL 2 holds
+  south_halfline LMP C \ {LMP C} misses C;
+
+theorem :: JORDAN:20
+  for C being compact Subset of TOP-REAL 2 holds
+  north_halfline UMP C \ {UMP C} c= UBD C;
+
+theorem :: JORDAN:21
+  for C being compact Subset of TOP-REAL 2 holds
+  south_halfline LMP C \ {LMP C} c= UBD C;
+
+theorem :: JORDAN:22
+  A is_inside_component_of B implies UBD B misses A;
+
+theorem :: JORDAN:23
+  A is_outside_component_of B implies BDD B misses A;
+
+theorem :: JORDAN:24
+  for r being positive (real number)
+  for a being Point of TOP-REAL n holds a in Ball(a,r);
+
+theorem :: JORDAN:25
+  for r being non negative (real number)
+  for p being Point of TOP-REAL n holds p is Point of Tdisk(p,r);
+
+registration
+  let r be positive (real number);
+  let n be non empty Nat;
+  let p, q be Point of TOP-REAL n;
+  cluster cl_Ball(p,r) \ {q} -> non empty;
+end;
+
+theorem :: JORDAN:26
+  r <= s implies Ball(x,r) c= Ball(x,s);
+
+theorem :: JORDAN:27
+  cl_Ball(x,r) \ Ball(x,r) = Sphere(x,r);
+
+theorem :: JORDAN:28
+  y in Sphere(x,r) implies LSeg(x,y) \ {x,y} c= Ball(x,r);
+
+theorem :: JORDAN:29
+  r < s implies cl_Ball(x,r) c= Ball(x,s);
+
+theorem :: JORDAN:30
+  r < s implies Sphere(x,r) c= Ball(x,s);
+
+theorem :: JORDAN:31
+  for r being non zero (real number) holds Cl Ball(x,r) = cl_Ball(x,r);
+
+theorem :: JORDAN:32
+  for r being non zero (real number) holds
+  Fr Ball(x,r) = Sphere(x,r);
+
+registration
+  let n be non empty Nat;
+  cluster Bounded -> proper Subset of TOP-REAL n;
+end;
+
+registration
+  let n;
+  cluster non empty closed convex Bounded Subset of TOP-REAL n;
+  cluster non empty open convex Bounded Subset of TOP-REAL n;
+end;
+
+registration
+  let n be Nat; let A be Bounded Subset of TOP-REAL n;
+  cluster Cl A -> Bounded;
+end;
+
+registration
+  let n be Nat; let A be Bounded Subset of TOP-REAL n;
+  cluster Fr A -> Bounded;
+end;
+
+theorem :: JORDAN:33
+  for A being closed Subset of TOP-REAL n, p being Point of TOP-REAL n st
+  not p in A
+  ex r being positive (real number) st Ball(p,r) misses A;
+
+theorem :: JORDAN:34
+  for A being Bounded Subset of TOP-REAL n, a being Point of TOP-REAL n
+  ex r being positive (real number) st A c= Ball(a,r);
+
+theorem :: JORDAN:35
+  for S, T being TopStruct, f being map of S, T st f is_homeomorphism holds
+  f is onto;
+
+theorem :: JORDAN:36
+  for T being TopSpace, S being SubSpace of T,
+  A being Subset of T, B being Subset of S st A = B holds
+  T|A = S|B;
+
+registration
+  let T be non empty being_T2 TopSpace;
+  cluster -> being_T2 (non empty SubSpace of T);
+end;
+
+registration
+  let p, r;
+  cluster Tdisk(p,r) -> closed;
+end;
+
+registration
+  let p, r;
+  cluster Tdisk(p,r) -> compact;
+end;
+
+begin :: Paths
+
+theorem :: JORDAN:37
+  for T being non empty TopSpace, a, b being Point of T
+  for f being Path of a,b st a,b are_connected holds rng f is connected;
+
+theorem :: JORDAN:38
+  for X being non empty TopSpace, Y being non empty SubSpace of X,
+  x1, x2 being Point of X, y1, y2 being Point of Y,
+  f being Path of x1,x2 st x1 = y1 & x2 = y2 & x1,x2 are_connected &
+  rng f c= the carrier of Y holds
+  y1,y2 are_connected & f is Path of y1,y2;
+
+theorem :: JORDAN:39
+  for X being arcwise_connected non empty TopSpace,
+  Y being non empty SubSpace of X,
+  x1, x2 being Point of X, y1, y2 being Point of Y,
+  f being Path of x1,x2 st x1 = y1 & x2 = y2 &
+  rng f c= the carrier of Y holds
+  y1,y2 are_connected & f is Path of y1,y2;
+
+theorem :: JORDAN:40
+  for T being non empty TopSpace, a, b being Point of T
+  for f being Path of a,b st a,b are_connected holds
+  rng f = rng -f;
+
+theorem :: JORDAN:41
+  for T being arcwise_connected non empty TopSpace, a, b being Point of T
+  for f being Path of a,b holds rng f = rng -f;
+
+theorem :: JORDAN:42
+  for T being non empty TopSpace, a, b, c being Point of T
+  for f being Path of a,b, g being Path of b,c st
+  a,b are_connected & b,c are_connected holds
+  rng f c= rng(f+g);
+
+theorem :: JORDAN:43
+  for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
+  for f being Path of a,b, g being Path of b,c holds
+  rng f c= rng(f+g);
+
+theorem :: JORDAN:44
+  for T being non empty TopSpace, a, b, c being Point of T
+  for f being Path of b,c, g being Path of a,b st
+  a,b are_connected & b,c are_connected holds
+  rng f c= rng(g+f);
+
+theorem :: JORDAN:45
+  for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
+  for f being Path of b,c, g being Path of a,b holds
+  rng f c= rng(g+f);
+
+theorem :: JORDAN:46
+  for T being non empty TopSpace, a, b, c being Point of T
+  for f being Path of a,b, g being Path of b,c st
+  a,b are_connected & b,c are_connected holds
+  rng(f+g) = rng f \/ rng g;
+
+theorem :: JORDAN:47
+  for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
+  for f being Path of a,b, g being Path of b,c holds
+  rng(f+g) = rng f \/ rng g;
+
+theorem :: JORDAN:48
+  for T being non empty TopSpace, a, b, c, d being Point of T
+  for f being Path of a,b, g being Path of b,c, h being Path of c,d st
+  a,b are_connected & b,c are_connected & c,d are_connected holds
+  rng(f+g+h) = rng f \/ rng g \/ rng h;
+
+theorem :: JORDAN:49
+  for T being arcwise_connected non empty TopSpace, a, b, c, d being Point of T
+  for f being Path of a,b, g being Path of b,c, h being Path of c,d
+  holds rng(f+g+h) = rng f \/ rng g \/ rng h;
+
+theorem :: JORDAN:50
+  for T being non empty TopSpace, a being Point of T holds
+  I[01] --> a is Path of a,a;
+
+theorem :: JORDAN:51
+  for p1, p2 being Point of TOP-REAL n, P being Subset of TOP-REAL n
+  holds P is_an_arc_of p1,p2 implies
+  ex F being Path of p1,p2, f being map of I[01], (TOP-REAL n)|P st
+  rng f = P & F = f;
+
+theorem :: JORDAN:52
+  for p1, p2 being Point of TOP-REAL n
+  ex F being Path of p1,p2, f being map of I[01], (TOP-REAL n)|LSeg(p1,p2) st
+  rng f = LSeg(p1,p2) & F = f;
+
+theorem :: JORDAN:53
+  for p1,p2,q1,q2 being Point of TOP-REAL 2
+  st P is_an_arc_of p1,p2 & q1 in P & q2 in P &
+  q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2
+  ex f being Path of q1,q2 st rng f c= P & rng f misses {p1,p2};
+
+begin :: Rectangles
+
+theorem :: JORDAN:54
+  a <= b & c <= d implies
+  rectangle(a,b,c,d) c= closed_inside_of_rectangle(a,b,c,d);
+
+theorem :: JORDAN:55
+  inside_of_rectangle(a,b,c,d) c= closed_inside_of_rectangle(a,b,c,d);
+
+theorem :: JORDAN:56
+  closed_inside_of_rectangle(a,b,c,d) = outside_of_rectangle(a,b,c,d)`;
+
+registration
+  let a, b, c, d be real number;
+  cluster closed_inside_of_rectangle(a,b,c,d) -> closed;
+end;
+
+theorem :: JORDAN:57
+  closed_inside_of_rectangle(a,b,c,d) misses outside_of_rectangle(a,b,c,d);
+
+theorem :: JORDAN:58
+  closed_inside_of_rectangle(a,b,c,d) /\ inside_of_rectangle(a,b,c,d)
+  = inside_of_rectangle(a,b,c,d);
+
+theorem :: JORDAN:59
+  a < b & c < d implies
+  Int closed_inside_of_rectangle(a,b,c,d) = inside_of_rectangle(a,b,c,d);
+
+theorem :: JORDAN:60
+  a <= b & c <= d implies
+  closed_inside_of_rectangle(a,b,c,d) \ inside_of_rectangle(a,b,c,d)
+  = rectangle(a,b,c,d);
+
+theorem :: JORDAN:61
+  a < b & c < d implies
+  Fr closed_inside_of_rectangle(a,b,c,d) = rectangle(a,b,c,d);
+
+theorem :: JORDAN:62
+  a <= b & c <= d implies W-bound closed_inside_of_rectangle(a,b,c,d) = a;
+
+theorem :: JORDAN:63
+  a <= b & c <= d implies S-bound closed_inside_of_rectangle(a,b,c,d) = c;
+
+theorem :: JORDAN:64
+  a <= b & c <= d implies E-bound closed_inside_of_rectangle(a,b,c,d) = b;
+
+theorem :: JORDAN:65
+  a <= b & c <= d implies N-bound closed_inside_of_rectangle(a,b,c,d) = d;
+
+theorem :: JORDAN:66
+  a < b & c < d &
+  p1 in closed_inside_of_rectangle(a,b,c,d) &
+  not p2 in closed_inside_of_rectangle(a,b,c,d) &
+  P is_an_arc_of p1,p2 implies
+  Segment(P,p1,p2,p1,First_Point(P,p1,p2,rectangle(a,b,c,d))) c=
+  closed_inside_of_rectangle(a,b,c,d);
+
+begin :: Some useful functions
+
+definition
+  let S, T be non empty TopSpace,
+  x be Point of [:S,T:];
+  redefine func x`1 -> Element of S;
+  redefine func x`2 -> Element of T;
+end;
+
+definition
+  let o be Point of TOP-REAL 2;
+  func diffX2_1(o) -> RealMap of [:TOP-REAL 2,TOP-REAL 2:] means
+:: JORDAN:def 1
+  for x being Point of [:TOP-REAL 2,TOP-REAL 2:] holds it.x = x`2`1 - o`1;
+  func diffX2_2(o) -> RealMap of [:TOP-REAL 2,TOP-REAL 2:] means
+:: JORDAN:def 2
+  for x being Point of [:TOP-REAL 2,TOP-REAL 2:] holds it.x = x`2`2 - o`2;
+end;
+
+definition
+  func diffX1_X2_1 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means
+:: JORDAN:def 3
+  for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`1`1 - x`2`1;
+  func diffX1_X2_2 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means
+:: JORDAN:def 4
+  for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`1`2 - x`2`2;
+  func Proj2_1 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means
+:: JORDAN:def 5
+  for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`2`1;
+  func Proj2_2 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means
+:: JORDAN:def 6
+  for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`2`2;
+end;
+
+theorem :: JORDAN:67
+  for o being Point of TOP-REAL 2 holds
+  diffX2_1(o) is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+theorem :: JORDAN:68
+  for o being Point of TOP-REAL 2 holds
+  diffX2_2(o) is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+theorem :: JORDAN:69
+  diffX1_X2_1 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+theorem :: JORDAN:70
+  diffX1_X2_2 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+theorem :: JORDAN:71
+  Proj2_1 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+theorem :: JORDAN:72
+  Proj2_2 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1;
+
+registration
+  let o be Point of TOP-REAL 2;
+  cluster diffX2_1(o) -> continuous;
+  cluster diffX2_2(o) -> continuous;
+end;
+
+registration
+  cluster diffX1_X2_1 -> continuous;
+  cluster diffX1_X2_2 -> continuous;
+  cluster Proj2_1 -> continuous;
+  cluster Proj2_2 -> continuous;
+end;
+
+definition
+  let n be non empty Nat, o, p be Point of TOP-REAL n,
+  r be positive (real number) such that
+ p is Point of Tdisk(o,r);
+  func DiskProj(o,r,p) -> map of (TOP-REAL n)|(cl_Ball(o,r)\{p}), Tcircle(o,r)
+  means
+:: JORDAN:def 7
+  for x being Point of (TOP-REAL n)|(cl_Ball(o,r)\{p})
+  ex y being Point of TOP-REAL n st x = y & it.x = HC(p,y,o,r);
+end;
+
+theorem :: JORDAN:73
+  for o, p being Point of TOP-REAL 2,
+  r being positive (real number) st p is Point of Tdisk(o,r) holds
+  DiskProj(o,r,p) is continuous;
+
+theorem :: JORDAN:74
+  for n being non empty Nat, o, p being Point of TOP-REAL n,
+  r being positive (real number) st p in Ball(o,r) holds
+  DiskProj(o,r,p)|Sphere(o,r) = id Sphere(o,r);
+
+definition
+  let n be non empty Nat, o, p be Point of TOP-REAL n,
+  r be positive (real number) such that
+ p in Ball(o,r);
+  func RotateCircle(o,r,p) -> map of Tcircle(o,r), Tcircle(o,r)
+  means
+:: JORDAN:def 8
+  for x being Point of Tcircle(o,r)
+  ex y being Point of TOP-REAL n st x = y & it.x = HC(y,p,o,r);
+end;
+
+theorem :: JORDAN:75
+  for o, p being Point of TOP-REAL 2,
+  r being positive (real number) st p in Ball(o,r) holds
+  RotateCircle(o,r,p) is continuous;
+
+theorem :: JORDAN:76
+  for n being non empty Nat
+  for o, p being Point of TOP-REAL n,
+  r being positive (real number) st p in Ball(o,r)
+  holds RotateCircle(o,r,p) has_no_fixpoint;
+
+begin :: Jordan's Curve Theorem
+
+theorem :: JORDAN:77
+  U = P & U is_a_component_of (TOP-REAL 2)|C` &
+  V is_a_component_of (TOP-REAL 2)|C` & U <> V
+  implies Cl P misses V;
+
+theorem :: JORDAN:78
+  U is_a_component_of (TOP-REAL 2)|C` implies
+  (TOP-REAL 2)|C`|U is arcwise_connected;
+
+theorem :: JORDAN:79
+  U = P & U is_a_component_of (TOP-REAL 2)|C` implies C = Fr P;
+
+theorem :: JORDAN:80
+  for h being Homeomorphism of TOP-REAL 2 holds
+  h.:C is being_simple_closed_curve;
+
+theorem :: JORDAN:81
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  P c= closed_inside_of_rectangle(-1,1,-3,3);
+
+theorem :: JORDAN:82
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  P misses LSeg(|[-1,3]|,|[1,3]|);
+
+theorem :: JORDAN:83
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  P misses LSeg(|[-1,-3]|,|[1,-3]|);
+
+theorem :: JORDAN:84
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  P /\ rectangle(-1,1,-3,3) = {|[-1,0]|,|[1,0]|};
+
+theorem :: JORDAN:85
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies W-bound P = -1;
+
+theorem :: JORDAN:86
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies E-bound P = 1;
+
+theorem :: JORDAN:87
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies SW-corner P = |[-1,S-bound P]|
+;
+
+theorem :: JORDAN:88
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies NW-corner P = |[-1,N-bound P]|
+;
+
+theorem :: JORDAN:89
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies SE-corner P = |[1,S-bound P]|;
+
+theorem :: JORDAN:90
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies NE-corner P = |[1,N-bound P]|;
+
+theorem :: JORDAN:91
+  for P being compact Subset of TOP-REAL 2 holds
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies W-most P = {|[-1,0]|};
+
+theorem :: JORDAN:92
+  for P being compact Subset of TOP-REAL 2 holds
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies E-most P = {|[1,0]|};
+
+theorem :: JORDAN:93
+  for P being compact Subset of TOP-REAL 2 holds
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  W-min P = |[-1,0]| & W-max P = |[-1,0]|;
+
+theorem :: JORDAN:94
+  for P being compact Subset of TOP-REAL 2 holds
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  E-min P = |[1,0]| & E-max P = |[1,0]|;
+
+theorem :: JORDAN:95
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  LSeg(|[0,3]|,UMP P) is vertical;
+
+theorem :: JORDAN:96
+  |[-1,0]|,|[1,0]| realize-max-dist-in P implies
+  LSeg(LMP P,|[0,-3]|) is vertical;
+
+theorem :: JORDAN:97
+  |[-1,0]|,|[1,0]| realize-max-dist-in P & p in P implies p`2 < 3;
+
+theorem :: JORDAN:98
+  |[-1,0]|,|[1,0]| realize-max-dist-in P & p in P implies -3 < p`2;
+
+theorem :: JORDAN:99
+  |[-1,0]|,|[1,0]| realize-max-dist-in D & p in LSeg(|[0,3]|,UMP D) implies
+  (UMP D)`2 <= p`2;
+
+theorem :: JORDAN:100
+  |[-1,0]|,|[1,0]| realize-max-dist-in D & p in LSeg(LMP D,|[0,-3]|) implies
+  p`2 <= (LMP D)`2;
+
+theorem :: JORDAN:101
+  |[-1,0]|,|[1,0]| realize-max-dist-in D implies
+  LSeg(|[0,3]|,UMP D) c= north_halfline UMP D;
+
+theorem :: JORDAN:102
+  |[-1,0]|,|[1,0]| realize-max-dist-in D implies
+  LSeg(LMP D,|[0,-3]|) c= south_halfline LMP D;
+
+theorem :: JORDAN:103
+  |[-1,0]|,|[1,0]| realize-max-dist-in C & P is_inside_component_of C implies
+  LSeg(|[0,3]|,UMP C) misses P;
+
+theorem :: JORDAN:104
+  |[-1,0]|,|[1,0]| realize-max-dist-in C & P is_inside_component_of C implies
+  LSeg(LMP C,|[0,-3]|) misses P;
+
+theorem :: JORDAN:105
+  |[-1,0]|,|[1,0]| realize-max-dist-in D implies
+  LSeg(|[0,3]|,UMP D) /\ D = {UMP D};
+
+theorem :: JORDAN:106
+  |[-1,0]|,|[1,0]| realize-max-dist-in D implies
+  LSeg(|[0,-3]|,LMP D) /\ D = {LMP D};
+
+theorem :: JORDAN:107
+  P is compact &
+  |[-1,0]|,|[1,0]| realize-max-dist-in P & A is_inside_component_of P implies
+  A c= closed_inside_of_rectangle(-1,1,-3,3);
+
+theorem :: JORDAN:108
+  |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(|[0,3]|,|[0,-3]|) meets C
+;
+
+theorem :: JORDAN:109
+  |[-1,0]|,|[1,0]| realize-max-dist-in C implies
+  for Jc, Jd being compact with_the_max_arc Subset of T2 st
+  Jc is_an_arc_of |[-1,0]|,|[1,0]| & Jd is_an_arc_of |[-1,0]|,|[1,0]| &
+  C = Jc \/ Jd & Jc /\ Jd = {|[-1,0]|,|[1,0]|} & UMP C in Jc & LMP C in Jd &
+  W-bound C = W-bound Jc & E-bound C = E-bound Jc
+  for Ux being Subset of TOP-REAL 2 st
+  Ux = skl Down ((1/2) * ((UMP (LSeg(LMP Jc,|[0,-3]|) /\ Jd)) + LMP Jc), C`)
+  holds Ux is_inside_component_of C &
+  for V being Subset of T2 st V is_inside_component_of C holds
+  V = Ux;
+
+theorem :: JORDAN:110
+  |[-1,0]|,|[1,0]| realize-max-dist-in C implies
+  for Jc, Jd being compact with_the_max_arc Subset of T2 st
+  Jc is_an_arc_of |[-1,0]|,|[1,0]| & Jd is_an_arc_of |[-1,0]|,|[1,0]| &
+  C = Jc \/ Jd & Jc /\ Jd = {|[-1,0]|,|[1,0]|} & UMP C in Jc & LMP C in Jd &
+  W-bound C = W-bound Jc & E-bound C = E-bound Jc holds
+  BDD C = skl Down ((1/2) * ((UMP (LSeg(LMP Jc,|[0,-3]|) /\ Jd)) + LMP Jc), C`)
+;
+
+registration
+:: Jordan's Curve Theorem
+  cluster -> Jordan Simple_closed_curve;
+end;

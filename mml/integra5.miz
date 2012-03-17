@@ -590,7 +590,6 @@ proof
    let D be Element of divs A;
    assume that A1:A c= X and A2:f is_differentiable_on X and
    A3:f`|X is_bounded_on A;
-
 A4:for k st k in dom D holds ex r st r in divset(D,k) &
    f.(sup divset(D,k))-f.(inf divset(D,k))=diff(f,r)*vol(divset(D,k))
    proof
@@ -608,9 +607,9 @@ A10:  a<=b & a=inf divset(D,k) & b=sup divset(D,k) by INTEGRA1:4;
       thus thesis by A8,A10,INTEGRA2:1;
      end;
 A11:  diff(f,r)*vol(divset(D,k)) = 0 by A7;
-        f.(sup divset(D,k))-f.(inf divset(D,k)) = 0 by A6;
+        f.(sup divset(D,k))-f.(inf divset(D,k)) =
+        f.(sup divset(D,k))-f.(sup divset(D,k)) by A6 .= 0;
      hence thesis by A9,A11;
-
      end;
      suppose A12:inf divset(D,k)<>sup divset(D,k);
         f is_continuous_on X by A2,FDIFF_1:33;
@@ -1705,8 +1704,7 @@ end;
 
 theorem
    for f being PartFunc of REAL,REAL, A,B,C being closed-interval Subset of
-REAL
-,
+REAL,
 X st A c= X & f is_differentiable_on X &f`|X is_continuous_on A &inf A = inf B
 & sup B = inf C & sup C = sup A holds
 B c= A & C c= A & integral(f`|X,A)=integral(f`|X,B)+integral(f`|X,C)
@@ -1717,7 +1715,6 @@ proof
    assume that A1:A c=X and A2:f is_differentiable_on X and
    A3:f`|X is_continuous_on A and A4:inf A=inf B and A5:sup B=inf C and
    A6:sup C=sup A;
-
    consider x such that
 A7:x in B by SUBSET_1:10;
       inf B <= x & x <= sup B by A7,INTEGRA2:1;
@@ -1726,7 +1723,6 @@ then A8:inf B <= sup B by XREAL_1:2;
 A9:x in C by SUBSET_1:10;
       inf C <= x & x <= sup C by A9,INTEGRA2:1;
 then A10:inf C <= sup C by XREAL_1:2;
-
       for x being set st x in B holds x in A
    proof
     let x be set;
@@ -1737,7 +1733,6 @@ then A10:inf C <= sup C by XREAL_1:2;
     hence thesis by INTEGRA2:1;
    end; hence
 A12:B c= A by TARSKI:def 3;
-
       for x being set st x in C holds x in A
    proof
     let x be set;
@@ -1748,36 +1743,40 @@ A12:B c= A by TARSKI:def 3;
     hence thesis by INTEGRA2:1;
    end; hence
 A14:C c= A by TARSKI:def 3;
-
 then A15:f`|X is_integrable_on A & f`|X is_integrable_on B &
    f`|X is_integrable_on C by A3,A12,Th17;
-
 A16:f`|X is_bounded_on A by A3,Th10;
 then A17:f`|X is_bounded_on B & f`|X is_bounded_on C by A12,A14,RFUNCT_1:91;
       B c= X & C c= X by A1,A12,A14,XBOOLE_1:1;
-
    then integral(f`|X,A) = f.(sup A)-f.(inf A) &
    integral(f`|X,B) = f.(sup B)-f.(inf B) &
    integral(f`|X,C) = f.(sup C)-f.(inf C) by A1,A2,A15,A16,A17,Th13;
-   hence thesis by A4,A5,A6;
+   then B1:integral(f`|X,A) = f.(sup A)-f.(inf A) &
+   integral(f`|X,B) = f.(sup B)-f.(inf B) &
+   integral(f`|X,C) = f.(sup C)-f.(inf C) by A4,A5,A6;
+   then integral(f`|X,B) + integral(f`|X,C) =
+       f.(sup B)-f.(inf B)+(f.(sup C)-f.(inf C)) by A6,A5
+    .= f.(sup B)-f.(inf A)+(f.(sup A)-f.(sup B)) by A4,A6,A5
+    .= f.(sup A)-f.(inf A) by A4;
+   hence thesis by B1,A4,A5,A6;
 end;
 
 definition let a,b be real number;
 assume A1:a<=b;
 func [' a,b '] -> closed-interval Subset of REAL equals :Def4:
-[.a,b.];
+  [.a,b.];
   correctness
   proof
-       a is Real & b is Real by XREAL_0:def 1;
+    a is Real & b is Real by XREAL_0:def 1;
     hence thesis by A1,INTEGRA1:def 1;
   end;
 end;
 
 definition let a,b be real number;
-let f be PartFunc of REAL,REAL;
-func integral(f,a,b) -> Real equals :Def5:
-integral(f,[' a,b ']) if a<=b otherwise -integral(f,[' b,a ']);
-correctness;
+  let f be PartFunc of REAL,REAL;
+  func integral(f,a,b) -> Real equals :Def5:
+  integral(f,[' a,b ']) if a<=b otherwise -integral(f,[' b,a ']);
+  correctness;
 end;
 
 theorem
@@ -1838,16 +1837,13 @@ proof
    assume that A1:f is_differentiable_on X and A2:g is_differentiable_on X and
    A3:A c= X and A4:f`|X is_integrable_on A and A5:f`|X is_bounded_on A and
    A6:g`|X is_integrable_on A and A7:g`|X is_bounded_on A;
-
 A8:f(#)g is_differentiable_on X & (f(#)g)`|X = (f`|X)(#)g + f(#)(g`|X)
    by A1,A2,FDIFF_2:20;
-
       f is_continuous_on X & g is_continuous_on X by A1,A2,FDIFF_1:33;
 then A9:f is_continuous_on A & g is_continuous_on A by A3,FCONT_1:17;
    then f is_integrable_on A & g is_integrable_on A by Th11;
 then A10:f||A is_integrable_on A & g||A is_integrable_on A &
    (f`|X)||A is_integrable_on A & (g`|X)||A is_integrable_on A by A4,A6,Def2;
-
       X c= dom f & X c= dom g by A1,A2,FDIFF_1:def 7;
 then A11:A c= dom f & A c= dom g by A3,XBOOLE_1:1;
 then f||A is total & g||A is total by Th6;
@@ -1855,7 +1851,6 @@ then A12: f||A is Function of A,REAL & g||A is Function of A,REAL by
 FUNCT_2:131;
 A13:f is_bounded_on A & g is_bounded_on A by A9,Th10;
 then A14:f||A is_bounded_on A & g||A is_bounded_on A by Th9;
-
 A15:A c= dom(f`|X) & A c= dom(g`|X) by A1,A2,A3,FDIFF_1:def 8;
 then (f`|X)||A is total & (g`|X)||A is total by Th6;
 then A16: (f`|X)||A is Function of A,REAL & (g`|X)||A is Function of A,REAL
@@ -1867,7 +1862,6 @@ then A16: (f`|X)||A is Function of A,REAL & (g`|X)||A is Function of A,REAL
 then A17:((f`|X)(#)g)||A is_integrable_on A & (f(#)(g`|X))||A is_integrable_on
 A
    by Th4;
-
       dom ((f`|X)(#)g) = dom (f`|X) /\ dom g by SEQ_1:def 5;
    then A c= dom((f`|X)(#)g) by A11,A15,XBOOLE_1:19;
 then ((f`|X)(#)g)||A is total by Th6;

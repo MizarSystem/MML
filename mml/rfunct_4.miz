@@ -152,7 +152,6 @@ A2:len(mlt(n |-> (0 qua Real),R))
    .=len (n |-> (0 qua Real)) by A1,FINSEQ_2:86
    .=n by FINSEQ_2:109;
 A3:len (n |-> (0 qua Real)) = n by FINSEQ_2:69;
-
       for k st 1 <= k & k <= len mlt(n |-> (0 qua Real),R) holds
    mlt(n |-> (0 qua Real),R).k = (n |-> (0 qua Real)).k
    proof
@@ -169,10 +168,10 @@ end;
 begin :: Convex and strictly convex functions
 
 definition let f, X;
-pred f is_strictly_convex_on X means :Def1:
-X c= dom f &
-for p being Real st 0<p & p<1 holds
- for r,s being Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
+  pred f is_strictly_convex_on X means :Def1:
+  X c= dom f &
+  for p being Real st 0<p & p<1 holds
+  for r,s being Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
   f.(p*r + (1-p)*s) < p*f.r + (1-p)*f.s;
 end;
 
@@ -184,19 +183,18 @@ then A2:X c= dom f &
    for p being Real st 0<p & p<1 holds
    for r,s be Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    f.(p*r + (1-p)*s) < p*f.r + (1-p)*f.s by Def1;
-
-      for p being Real st 0<=p & p<=1 holds
+   for p being Real st 0<=p & p<=1 holds
    for r,s being Real st r in X & s in X & p*r + (1-p)*s in X holds
    f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
    proof
     let p be Real;
     assume A3:0<=p & p<=1;
-       for r,s being Real st r in X & s in X & p*r+(1-p)*s in X holds
+    for r,s being Real st r in X & s in X & p*r+(1-p)*s in X holds
     f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
     proof
      let r,s be Real;
      assume A4:r in X & s in X & p*r+(1-p)*s in X;
-         now per cases by A3,REAL_1:def 5;
+     now per cases by A3,REAL_1:def 5;
        suppose p=0;
        hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s;
        end;
@@ -204,8 +202,10 @@ then A2:X c= dom f &
        hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s;
        end;
        suppose A5:0<p & p<1;
-           now per cases;
-         suppose r=s;
+       now per cases;
+         suppose B1:r=s; then
+         f.(p*r + (1-p)*s) = f.(p*r+s-p*s) .= f.s by B1
+           .= p*f.r + f.s - p*f.s by B1,XCMPLX_1:26;
          hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s;
          end;
          suppose r<>s;
@@ -278,7 +278,6 @@ A1:f is_convex_on X implies
    a<b & b<c holds f.b <=((c-b)/(c-a))*f.a + ((b-a)/(c-a))*f.c
    proof
     assume A2:f is_convex_on X;
-
        for a,b,c being Real st a in X & b in X & c in X & a < b & b < c
     holds f.b <=((c-b)/(c-a))*f.a + ((b-a)/(c-a))*f.c
     proof
@@ -302,7 +301,6 @@ A5:  0 < (c-b)/(c-a) & (c-b)/(c-a) < 1 by A4,REAL_2:127,142;
     end;
     hence thesis by A2,RFUNCT_3:def 13;
    end;
-
       (X c= dom f & for a,b,c being Real st a in X & b in X & c in X &
    a<b & b<c holds f.b <=((c-b)/(c-a))*f.a + ((b-a)/(c-a))*f.c) implies
    f is_convex_on X
@@ -320,11 +318,10 @@ A5:  0 < (c-b)/(c-a) & (c-b)/(c-a) < 1 by A4,REAL_2:127,142;
      f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
      proof
       let r,s be Real;
-
       assume A10: r in X & s in X & p*r + (1-p)*s in X;
-         f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
+      f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
       proof
-          now per cases by A9,REAL_1:def 5;
+       per cases by A9,REAL_1:def 5;
         suppose p=0;
         hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s;
         end;
@@ -334,42 +331,38 @@ A5:  0 < (c-b)/(c-a) & (c-b)/(c-a) < 1 by A4,REAL_2:127,142;
         suppose A11:0<p & p<1;
         then 1 < 1+p by XREAL_1:31;
 then A12:    0 < 1-p & 1-p < 1 by A11,XREAL_1:21,XREAL_1:52;
-            now per cases by REAL_1:def 5;
-          suppose r=s;
+        per cases by REAL_1:def 5;
+          suppose B1:r=s;
+          f.(p*r + (1-p)*s) = f.(p*r+s-p*s) .= f.s by B1
+           .= p*f.r + f.s - p*f.s by B1,XCMPLX_1:26;
           hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s;
           end;
           suppose r>s;
 then A13:       r-s > 0 by XREAL_1:52;
           set t = p*r + (1-p)*s;
-A14:       t - s =p*(r-s);
+A14:      t - s =p*(r-s);
           then t - s > 0 by A11,A13,REAL_2:122;
 then A15:       s < t by REAL_2:106;
-
-A16:       r - t = (1-p)*(r-s);
+A16:      r - t = (1-p)*(r-s);
           then r - t > 0 by A12,A13,REAL_2:122;
 then A17:       t < r by REAL_2:106;
-             (r-t)/(r-s)=(1-p) & (t-s)/(r-s)=p by A13,A14,A16,XCMPLX_1:90
+          (r-t)/(r-s)=(1-p) & (t-s)/(r-s)=p by A13,A14,A16,XCMPLX_1:90
 ;
           hence f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s by A8,A10,A15,A17;
           end;
           suppose r<s;
 then A18:       s-r > 0 by XREAL_1:52;
           set t = p*r + (1-p)*s;
-A19:       t - r = (1-p)*(s-r);
+A19:      t - r = (1-p)*(s-r);
           then t - r > 0 by A12,A18,REAL_2:122;
 then A20:       r < t by REAL_2:106;
-
-A21:       s - t = p*(s-r);
+A21:      s - t = p*(s-r);
           then s - t > 0 by A11,A18,REAL_2:122;
 then A22:       t < s by REAL_2:106;
-             (s-t)/(s-r)=p & (t-r)/(s-r)=1-p by A18,A19,A21,XCMPLX_1:90;
+          (s-t)/(s-r)=p & (t-r)/(s-r)=1-p by A18,A19,A21,XCMPLX_1:90;
           hence thesis by A8,A10,A20,A22;
          end;
-         end;
-        hence thesis;
        end;
-       end;
-       hence thesis;
       end;
       hence thesis;
      end;
@@ -702,13 +695,7 @@ then A5: b(#)g is_strictly_convex_on X by A1,Th12;
 end;
 
 Lm3:
-for a,b,r be real number holds r*(a/b)=r*a/b
-proof
- let a,b,r be real number;
- thus r*(a/b)=r*(a*b") by XCMPLX_0:def 9
-            .=r*a*b"
-            .=r*a/b by XCMPLX_0:def 9;
-end;
+for a,b,r be real number holds r*(a/b)=r*a/b by XCMPLX_1:75;
 
 theorem Th16:
 f is_convex_on X iff
@@ -734,7 +721,6 @@ then A4:   b-r < b-a & 0 < b-r & 0 < r-a by REAL_2:105,XREAL_1:52;
 then A5:   0 < b-a;
 A6:   0 < (b-r)/(b-a) & (b-r)/(b-a) < 1 by A4,REAL_2:127,142;
       set p = (b-r)/(b-a);
-
 A7:   1-p = (r-a)/(b-a) & p*a + (1-p)*b = r
       proof
          A8: p+(r-a)/(b-a) = ((b-r)+(r-a))/(b-a) by XCMPLX_1:63
@@ -777,18 +763,16 @@ XREAL_1:66;
     assume A11:X c= dom f &
     (for a,b,r st a in X & b in X & r in X & a < r & r < b holds
     (f.r-f.a)/(r-a) <= (f.b-f.a)/(b-a) & (f.b-f.a)/(b-a) <= (f.b-f.r)/(b-r));
-
        for p being Real st 0<=p & p<=1 holds
     for r,s be Real st r in X & s in X & p*r + (1-p)*s in X holds
     f.(p*r + (1-p)*s) <= p*f.r + (1-p)*f.s
     proof
      let p be Real; assume A12:0<=p & p<=1;
-        for s,t being Real st s in X & t in X & p*s+(1-p)*t in X holds
+     for s,t being Real st s in X & t in X & p*s+(1-p)*t in X holds
      f.(p*s+(1-p)*t) <= p*f.s + (1-p)*f.t
      proof
       let s,t be Real; assume A13:s in X & t in X & p*s+(1-p)*t in X;
-
-         now per cases by A12,REAL_1:def 5;
+      now per cases by A12,REAL_1:def 5;
        suppose p=0;
        hence thesis;
        end;
@@ -798,7 +782,9 @@ XREAL_1:66;
        suppose A14:0<p & p<1;
 then A15:   1-p > 0 by XREAL_1:52;
           now per cases by REAL_1:def 5;
-        suppose s=t;
+        suppose B1:s=t;
+        f.(p*s + (1-p)*t) = f.(p*s+t-p*t) .= f.t by B1
+           .= p*f.s + f.t - p*f.t by B1,XCMPLX_1:26;
         hence thesis;
         end;
         suppose s<t;
@@ -1491,14 +1477,14 @@ then A47:     M*abs(x-a) < M*s by A30,A42,XREAL_1:70;
         end;
         hence thesis;
         end;
-        suppose x=a;
+        suppose x=a; then
+        f.x - f.a = f.x - f.x .= 0;
         hence thesis by A38,ABSVALUE:7;
        end;
        end;
        hence thesis;
       end;
       hence thesis by A40;
-
       end;
       suppose A48:M=0;
 A49:   for x being real number st x1<=x & x<=x2 & x<>a holds
@@ -1534,7 +1520,8 @@ then A53:    x1 <= x & x <= x2 by XREAL_1:11;
         suppose x<>a;
         hence thesis by A38,A49,A53;
         end;
-        suppose x=a;
+        suppose x=a; then
+        f.x - f.a = f.x - f.x .= 0;
         hence thesis by A38,ABSVALUE:7;
        end;
        end;

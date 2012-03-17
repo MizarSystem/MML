@@ -32,8 +32,17 @@
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL2"/>
 <ArticleID name="CONNSP_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="PCOMPS_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="EQREL_1"/>
 <ArticleID name="COMPTS_1"/>
 <ArticleID name="SPPOL_1"/>
+<ArticleID name="CONNSP_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="BORSUK_1"/>
+<ArticleID name="TOPMETR"/>
 </Signature>
 <RCluster>
 <ArgTypes>
@@ -57,7 +66,7 @@
 <Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="90">
+<Adjective nr="107">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -102,6 +111,17 @@
 <Adjective nr="10" value="false"/>
 </Cluster>
 </RCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="268"/>
+</Func>
+<Cluster>
+<Adjective nr="6" value="false"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+</Cluster>
+</FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
@@ -126,13 +146,13 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="90">
+<Adjective nr="107">
 <Func kind="K" nr="198">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="91" value="false"/>
-<Adjective nr="92" value="false"/>
+<Adjective nr="108" value="false"/>
+<Adjective nr="109" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>
