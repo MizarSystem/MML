@@ -10,26 +10,26 @@ environ
       FINSET_1, TARSKI, CARD_1, ARYTM_1, FRAENKEL, SETFAM_1, CARD_3, PRALG_2,
       FINSEQ_2, FINSEQ_1, CAT_1, FUNCOP_1, GOBOARD5, WAYBEL_0, AMISTD_1,
       MCART_1, AMI_5, UNIALG_1, REALSET1, SGRAPH1, CARD_5, FRECHET, PRE_TOPC,
-      RELOC, FUNCT_7, ORDINAL1, SQUARE_1, SCMFSA6A, AMISTD_2, MEMBERED, NAT_1;
+      RELOC, FUNCT_7, ORDINAL1, SQUARE_1, SCMFSA6A, AMISTD_2, MEMBERED;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, MCART_1, SETFAM_1,
       MEMBERED, FINSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, FRAENKEL,
       REALSET1, FUNCT_4, NUMBERS, XCMPLX_0, NAT_1, CARD_3, CARD_1, FINSEQ_1,
-      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, STRUCT_0, AMI_1, AMI_3,
-      SCMFSA_4, PRE_CIRC, PRALG_2, AMISTD_1, XXREAL_0;
- constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, BINARITH, PRE_CIRC, FUNCT_7,
-      PRALG_2, AMI_5, SCMFSA_4, AMISTD_1;
+      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, STRUCT_0, AMI_1, PRE_CIRC,
+      PRALG_2, AMISTD_1, XXREAL_0;
+ constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, BINARITH, PRE_CIRC, PRALG_2,
+      AMI_5, AMISTD_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1,
       FINSET_1, FRAENKEL, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1,
       FINSEQ_2, CARD_3, REALSET1, CARD_4, PRE_CIRC, FUNCT_7, STRUCT_0, AMI_1,
       AMISTD_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, WELLORD2, FRAENKEL, REAL_1, FUNCT_7,
-      AMI_1, AMI_3, PRALG_2, YELLOW_8, AMISTD_1, XBOOLE_0, FUNCOP_1;
- theorems AMI_1, AMI_3, AMI_5, BINARITH, CARD_1, CARD_2, AMISTD_1, FUNCOP_1,
-      FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1, FUNCT_2, FUNCT_4, GRFUNC_1, INT_1,
-      KNASTER, MCART_1, SCMFSA6A, CATALG_1, NAT_1, PRE_CIRC, REAL_1, REALSET1,
-      RELAT_1, SETFAM_1, TARSKI, YELLOW_8, ZFMISC_1, CARD_3, PRALG_2, ORDINAL1,
-      XBOOLE_0, XBOOLE_1, FINSET_1, XREAL_1, XXREAL_0, DOMAIN_1;
+      AMI_1, PRALG_2, YELLOW_8, AMISTD_1, XBOOLE_0, FUNCOP_1;
+ theorems AMI_1, BINARITH, CARD_1, CARD_2, AMISTD_1, FUNCOP_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_3, FUNCT_1, FUNCT_2, FUNCT_4, GRFUNC_1, INT_1, KNASTER,
+      MCART_1, CATALG_1, NAT_1, PRE_CIRC, REAL_1, REALSET1, RELAT_1, SETFAM_1,
+      TARSKI, YELLOW_8, ZFMISC_1, CARD_3, PRALG_2, ORDINAL1, XBOOLE_0,
+      XBOOLE_1, FINSET_1, XREAL_1, XXREAL_0, DOMAIN_1;
  schemes FUNCT_7, FINSEQ_1, CLASSES1, XBOOLE_0;
 
 begin  :: Preliminaries
@@ -1283,10 +1283,10 @@ defpred P[set,set] means
     ((product" AddressParts InsCode I).$1 <> the Instruction-Locations of S
     implies
       $2 = (AddressPart I).$1);
-A1: for m being Element of NAT st m in Seg len AddressPart I
+A1: for m being Nat st m in Seg len AddressPart I
       ex x being Element of D st P[m,x]
     proof
-      let m be Element of NAT;
+      let m be Nat;
       assume m in Seg len AddressPart I;
 then A2:   m in dom AddressPart I by FINSEQ_1:def 3;
 then A3:   (AddressPart I).m in rng AddressPart I by FUNCT_1:def 5;
@@ -1309,7 +1309,7 @@ A5:     (product" AddressParts InsCode I).m <> the Instruction-Locations of S;
     end;
     consider p being FinSequence of D such that
 A6:   dom p = Seg len AddressPart I and
-A7:   for k being Element of NAT st k in Seg len AddressPart I holds P[k,p.k]
+A7:   for k being Nat st k in Seg len AddressPart I holds P[k,p.k]
         from FINSEQ_1:sch 5(A1);
     set f = product" AddressParts InsCode I;
 A8: AddressPart I in AddressParts InsCode I;
@@ -1345,15 +1345,18 @@ A15:   InsCode I = InsCode IT;
     thus dom AddressPart IT = dom AddressPart I by A6,A14,FINSEQ_1:def 3;
     let n be set;
     assume n in dom AddressPart I;
-    then n in Seg len AddressPart I by FINSEQ_1:def 3;
-    hence thesis by A7,A14;
+    then
+A16: n in Seg len AddressPart I by FINSEQ_1:def 3;
+    then reconsider n as Element of NAT by ORDINAL1:def 13;
+    n in Seg len AddressPart I by A16;
+    hence thesis by A7,A14,A16;
   end;
 uniqueness
   proof
     let a, b be Instruction of S such that
-A16:   InsCode a = InsCode I and
-A17:   dom AddressPart a = dom AddressPart I and
-A18:   for n being set st n in dom AddressPart I holds
+A17:   InsCode a = InsCode I and
+A18:   dom AddressPart a = dom AddressPart I and
+A19:   for n being set st n in dom AddressPart I holds
       ((product" AddressParts InsCode I).n = the Instruction-Locations of S
       implies
         ex f being Instruction-Location of S st
@@ -1361,9 +1364,9 @@ A18:   for n being set st n in dom AddressPart I holds
       ((product" AddressParts InsCode I).n <> the Instruction-Locations of S
       implies
        (AddressPart a).n = (AddressPart I).n) and
-A19:   InsCode b = InsCode I and
-A20:   dom AddressPart b = dom AddressPart I and
-A21:   for n being set st n in dom AddressPart I holds
+A20:   InsCode b = InsCode I and
+A21:   dom AddressPart b = dom AddressPart I and
+A22:   for n being set st n in dom AddressPart I holds
       ((product" AddressParts InsCode I).n = the Instruction-Locations of S
       implies
         ex f being Instruction-Location of S st
@@ -1371,11 +1374,11 @@ A21:   for n being set st n in dom AddressPart I holds
       ((product" AddressParts InsCode I).n <> the Instruction-Locations of S
       implies
        (AddressPart b).n = (AddressPart I).n);
-A22: Seg len AddressPart a = dom AddressPart a by FINSEQ_1:def 3;
-         for n being Element of NAT st n in Seg len AddressPart a holds
+A23: Seg len AddressPart a = dom AddressPart a by FINSEQ_1:def 3;
+         for n being Nat st n in Seg len AddressPart a holds
      (AddressPart a).n = (AddressPart b).n
  proof
-      let n be Element of NAT;
+      let n be Nat;
       assume n in Seg len AddressPart a;
   then ((product" AddressParts InsCode I).n = the Instruction-Locations of S
 implies
@@ -1391,11 +1394,11 @@ implies
       ((product" AddressParts InsCode I).n <> the Instruction-Locations of S
       implies
        (AddressPart b).n = (AddressPart I).n)
-        by A17,A18,A21,A22;
+        by A18,A19,A22,A23;
       hence (AddressPart a).n = (AddressPart b).n;
     end;
-    then AddressPart a = AddressPart b by A17,A20,A22,FINSEQ_1:17;
-    hence thesis by A16,A19,Th16;
+    then AddressPart a = AddressPart b by A18,A21,A23,FINSEQ_1:17;
+    hence thesis by A17,A20,Th16;
   end;
 end;
 
@@ -1410,10 +1413,10 @@ theorem Th28:
         I be Element of the Instructions of S;
 A1: InsCode IncAddr(I, 0) = InsCode I by Def14;
 A2: dom AddressPart I = dom AddressPart IncAddr(I, 0) by Def14;
-         for k being Element of NAT st k in dom AddressPart I holds
+    for k being Nat st k in dom AddressPart I holds
      (AddressPart IncAddr(I, 0)).k = (AddressPart I).k
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A3:     k in dom AddressPart I;
       per cases;
@@ -1748,7 +1751,7 @@ then A8:   ex m being Element of NAT st x = il.(S,m) & f.x = IncAddr(pi
       hence f.x in (the Object-Kind of S).x by A8;
     end;
     then reconsider f as finite Element of sproduct the Object-Kind of S
-                               by A6,CARD_3:def 9,A4,FINSET_1:29;
+                               by A4,A6,CARD_3:def 9,FINSET_1:29;
     reconsider f as FinPartState of S by AMI_1:77;
     take f;
     thus dom f = dom p by A4;
@@ -1952,7 +1955,7 @@ A12:    il.(S,m+k) = il.(S,j+k) and
 A13:    il.(S,j) in dom p by A3,A7,A8;
 A14:      j+k = m+k by A12,AMISTD_1:25;
        s.il.(S,m) in the Instructions of S;
-     hence f.x in (the Object-Kind of S).x by A9,A10,A11,A14,A13,GRFUNC_1:8;
+     hence f.x in (the Object-Kind of S).x by A9,A10,A11,A13,A14,GRFUNC_1:8;
     end;
     then reconsider f as Element of sproduct the Object-Kind of S
                    by A6,CARD_3:def 9
@@ -2538,7 +2541,7 @@ then A3: dom R = {LastLoc F} by FUNCOP_1:19;
       then consider y being set such that
 A4:     [x,y] in F \ R by A2,RELAT_1:def 4;
 A5:   [x,y] in F & not [x,y] in R by A4,XBOOLE_0:def 4;
-A6:   x in dom F by RELAT_1:def 4,A4;
+A6:   x in dom F by A4,RELAT_1:def 4;
       per cases by A5,TARSKI:def 1;
       suppose x <> LastLoc F;
       then not x in dom R by A3,TARSKI:def 1;
@@ -2549,7 +2552,7 @@ A7:     y <> F.LastLoc F;
            now
         assume x in dom R;
         then x = LastLoc F by A3,TARSKI:def 1;
-        hence contradiction by A7,FUNCT_1:8,A4;
+        hence contradiction by A4,A7,FUNCT_1:8;
       end;
       hence thesis by A1,A2,A6,XBOOLE_0:def 4;
     end;
@@ -2585,7 +2588,7 @@ then A1: [LastLoc F,F.LastLoc F] in F by FUNCT_1:def 4;
     assume not thesis;
     then consider a being set such that
 A2:   a in CutLastLoc F by XBOOLE_0:def 1;
-A3: a = [LastLoc F,F.LastLoc F] by A1,YELLOW_8:def 1,A2;
+A3: a = [LastLoc F,F.LastLoc F] by A1,A2,YELLOW_8:def 1;
          not a in LastLoc F .--> F.LastLoc F by A2,XBOOLE_0:def 4;
     then not a in {[LastLoc F,F.LastLoc F]} by FUNCT_4:87;
     hence thesis by A3,TARSKI:def 1;
@@ -2632,8 +2635,8 @@ A4:     LastLoc F = il.(S, max M) by AMISTD_1:def 21;
            R = LastLoc F .--> (F.LastLoc F) by FUNCT_4:87;
 then A5:   dom R = {LastLoc F} by FUNCOP_1:19;
 then A6:   dom F \ dom R = dom G by Th47;
-then A7:   m in dom F by A2,AMISTD_1:def 20,A1;
-           locnum l in M by A3,A1,A6;
+then A7:   m in dom F by A1,A2,AMISTD_1:def 20;
+           locnum l in M by A1,A3,A6;
 then A8:   locnum l <= max M by PRE_CIRC:def 1;
            now
         assume m = LastLoc F;
@@ -3554,7 +3557,7 @@ A43:     dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ))
         assume x in dom (LastLoc (F ';' G) .--> (F ';' G).LastLoc (F ';' G ));
         then x = il.(S,card (F ';' G) -' 1) by A43,TARSKI:def 1;
         then k = (card G -' 1) + (card F -' 1) by A9,A15,AMISTD_1:25;
-        then card G - 1 = 0 by PRE_CIRC:25,A39;
+        then card G - 1 = 0 by A39,PRE_CIRC:25;
         hence contradiction by A4,Th26;
       end;
 then A44:   x in dom (F ';' G) \
@@ -3757,8 +3760,8 @@ A93:   k - (card F -' 1) >= 0 by A91,XREAL_1:50;
 then A96:   il.(S,k -' (card F -' 1)) in dom (G ';' H) by AMISTD_1:50;
       then il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
          by Def15;
-then A97:   x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11
-,A92;
+then A97:   x in dom Shift(IncAddr(G ';' H,card F -' 1),card F -' 1) by A11,A92
+;
 A98:   il.(S,k -' (card F -' 1)) in dom IncAddr(G ';' H,card F -' 1)
         by A96,Def15;
          A99: k - (card F -' 1) >= card (F ';' G) -' 1 - (card F -' 1)
@@ -3783,7 +3786,7 @@ A105:   k -' (card F -' 1) -' (card G -' 1)
         = k -' (card F -' 1) - (card G -' 1) by A100,BINARITH:50
        .= k - (card F -' 1) - (card G -' 1) by A91,BINARITH:50
        .= k - ((card F -' 1) + (card G -' 1))
-       .= k -' (card (F ';' G) -' 1) by BINARITH:50,A15,A85,A14;
+       .= k -' (card (F ';' G) -' 1) by A14,A15,A85,BINARITH:50;
 A106:   pi(G ';' H,il.(S,k -' (card F -' 1)))
 
         = ((CutLastLoc G) +* Shift(IncAddr(H,card G -' 1),card G -' 1)).
@@ -3826,6 +3829,6 @@ A2:  AddressPart I in AddressParts InsCode I;
 A3:  dom product" AddressParts InsCode I = DOM AddressParts InsCode I by Th7
           .= dom AddressPart I by A2,PRALG_2:def 2;
     (AddressPart I).x in pi(AddressParts InsCode I,x) by A2,CARD_3:def 6;
-  hence (AddressPart I).x in (product" AddressParts InsCode I).x by A3,Th8,A1;
+  hence (AddressPart I).x in (product" AddressParts InsCode I).x by A1,A3,Th8;
  end;
 

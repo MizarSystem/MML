@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -99,7 +99,7 @@
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="96">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>
@@ -211,7 +211,7 @@
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="96">
 <Var nr="3"/>
 <Num nr="1"/>
 </Func>

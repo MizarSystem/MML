@@ -11,17 +11,17 @@ environ
       FINSET_1, PARTFUN1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, INT_2,
       NAT_1, INT_1, CARD_3, PARTFUN1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, FINSET_1, FUNCT_2, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, AMI_3,
-      SCMFSA_2, SCMFSA_4, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, FUNCT_7, AMI_5,
-      RELOC, SCMFSA_4;
- registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, ARYTM_3, FRAENKEL,
-      NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, AMI_5, SCMFSA_2, SCMFSA_4;
+      FINSEQ_4, FINSET_1, FUNCT_2, FUNCT_4, FUNCT_7, STRUCT_0, AMI_1, SCMFSA_2,
+      SCMFSA_4, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, AMI_5, RELOC,
+      PARTFUN1, SCMFSA_4;
+ registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FRAENKEL, NUMBERS,
+      XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions FUNCOP_1, AMI_1, TARSKI, AMI_3, AMI_5, SCMFSA_2;
- theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
-      FUNCT_2, ZFMISC_1, AMI_5, RELAT_1, RELSET_1, SCMFSA_2, ENUMSET1,
-      SCMFSA_3, SCMFSA_4, XBOOLE_0, XBOOLE_1, PARTFUN1, FINSET_1, CARD_3;
+ definitions FUNCOP_1, AMI_1, TARSKI, AMI_3, SCMFSA_2;
+ theorems AMI_1, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1, FUNCT_2,
+      ZFMISC_1, RELAT_1, RELSET_1, SCMFSA_2, ENUMSET1, SCMFSA_3, SCMFSA_4,
+      XBOOLE_0, XBOOLE_1, PARTFUN1, FINSET_1, CARD_3;
  schemes NAT_1;
 
 begin  :: Relocatability
@@ -221,8 +221,8 @@ A1: loc in dom ProgramPart p & I = p.loc;
 A2: ProgramPart p c= p by RELAT_1:88;
    consider i being Element of NAT such that
 A3:  loc = insloc i by SCMFSA_2:21;
-        insloc(i+k) in { insloc(j+k) : insloc j in dom ProgramPart(p) } by A1,
-A3
+        insloc(i+k) in { insloc(j+k) : insloc j in dom ProgramPart(p) } by A1
+,A3
 ;
     then insloc(i+k) in dom ProgramPart(Relocated(p,k)) by Th3;
    then A4: loc + k in dom ProgramPart(Relocated(p, k)) by A3,SCMFSA_4:def 1;
@@ -305,7 +305,7 @@ A9: DataPart (p +* s)
     .= DataPart p +* s by A5,RELAT_1:97;
     set ICP = Start-At((IC(p+*s))+k)+*IncAddr(Shift(ProgramPart(p+*s),k),k);
    thus Relocated((p +* s), k)
-          = Relocated(p,k) +*s by A9,FUNCT_4:15,A7,A8;
+          = Relocated(p,k) +*s by A7,A8,A9,FUNCT_4:15;
    end;
 
 theorem Th10:
@@ -501,7 +501,7 @@ A21:  Exec(IncAddr(CurInstr (Computation (s)).i,k),
          = Following((Computation (s +* Relocated(p,k))).i) by AMI_1:def 19
         .= (Computation (s)).(i+1)
           +* Start-At (IC (Computation (s)).(i+1) + k)
-          +* ProgramPart (Relocated(p,k)) by A20,A12,A13,A21,SCMFSA_3:10;
+          +* ProgramPart (Relocated(p,k)) by A12,A13,A20,A21,SCMFSA_3:10;
     end;
     thus for i being Element of NAT holds X[i] from NAT_1:sch 1 (A10,A11);
    end;
@@ -765,7 +765,7 @@ A68: Next (IC Cs1i + k) = Next (insloc(j + k)) by A67,SCMFSA_4:def 1
 A70: InsCode I <= 10+1 implies InsCode I <= 10 or InsCode I = 11 by NAT_1:8;
 A71: InsCode I <= 9+1 implies InsCode I <= 8+1 or InsCode I = 10 by NAT_1:8;
 A72: InsCode I <= 8+1 implies InsCode I <= 7+1 or InsCode I = 9 by NAT_1:8;
-    per cases by A69,A70,A71,A72,NAT_1:33,8;
+    per cases by A69,A70,A71,A72,NAT_1:8,33;
     suppose InsCode I = 0;
 then A73:  I = halt SCM+FSA by SCMFSA_2:122;
 then A74:  CurInstr(Cs2i) = halt SCM+FSA
@@ -793,7 +793,7 @@ A79:  Cs3i.db = Cs2i.db by A45;
 
    thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A77,A78,SCMFSA_2:89,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A77,A78,SCMFSA_2:89;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A77,A78,
@@ -843,8 +843,8 @@ A87:  Cs3i1.f = Cs3i.f by A66,A76,SCMFSA_2:89;
    end;
    suppose
 A88:   da = x;
-        Cs2i1.da = Cs2i.db & Cs3i1.da=Cs3i.db by A22,A65,A66,A76,A77,SCMFSA_2:
-89
+        Cs2i1.da = Cs2i.db & Cs3i1.da=Cs3i.db by A22,A65,A66,A76,A77,
+SCMFSA_2:89
 ;
     hence (Cs3i1|(Int-Locations \/ FinSeq-Locations)).x =
      (Cs2i1|(Int-Locations \/ FinSeq-Locations)).x
@@ -877,7 +877,7 @@ A94: Cs3i.da = Cs2i.da by A45;
 A95:  Cs3i.db = Cs2i.db by A45;
      thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A92,A93,SCMFSA_2:90,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A92,A93,SCMFSA_2:90;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A92,A93,
@@ -963,7 +963,7 @@ A111: Cs3i.da = Cs2i.da by A45;
 A112:  Cs3i.db = Cs2i.db by A45;
      thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A109,A110,SCMFSA_2:91,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A109,A110,SCMFSA_2:91;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A109,A110
@@ -985,8 +985,7 @@ then A116:  Cs1i1.x = Cs1i.da - Cs1i.db by A64,A108,SCMFSA_2:91;
          DPp c= p by RELAT_1:88;
      then A117: dom DPp c= dom p by GRFUNC_1:8;
          Cs2i1.x = Cs2i.da - Cs2i.db by A22,A65,A109,A115,SCMFSA_2:91;
-     then Cs1i.da - Cs1i.db = Cs2i1.x by A2,A9,A10,A33,A108,A111,A112,A113,
-A115
+     then Cs1i.da - Cs1i.db = Cs2i1.x by A2,A9,A10,A33,A108,A111,A112,A113,A115
 ,A117,SCMFSA_3:21;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A33,A52,A113,A116;
    end;
@@ -1050,7 +1049,7 @@ A129:  Cs3i.db = Cs2i.db by A45;
 
      thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A126,A127,SCMFSA_2:92,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A126,A127,SCMFSA_2:92;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A126,A127
@@ -1140,7 +1139,7 @@ A146: da <> db;
     A147: Exec(I, Cs1i).IC SCM+FSA = Next IC Cs1i by A142,SCMFSA_2:93;
 
      hence IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A143,SCMFSA_2:93,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A143,SCMFSA_2:93;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A143,A147
@@ -1175,8 +1174,7 @@ then A154:  Cs1i1.x = Cs1i.da mod Cs1i.db by A64,A142,SCMFSA_2:93;
          DPp c= p by RELAT_1:88;
      then A155: dom DPp c= dom p by GRFUNC_1:8;
      Cs2i1.x = Cs2i.da mod Cs2i.db by A22,A65,A143,A153,SCMFSA_2:93;
-then Cs1i1.x = Cs2i1.x by A2,A9,A10,A33,A142,A144,A145,A146,A148,A153,A154,
-A155
+then Cs1i1.x = Cs2i1.x by A2,A9,A10,A33,A142,A144,A145,A146,A148,A153,A154,A155
 ,SCMFSA_3:24;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A33,A52,A148;
    end;
@@ -1241,7 +1239,7 @@ A164:  Cs3i1.d = Cs3i.d by A66,A142,A163,SCMFSA_2:93;
 A165: da = db;
 then A166: Exec(I, Cs1i).IC SCM+FSA = Next IC Cs1i by A142,SCMFSA_2:94;
   hence IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A143,A165,SCMFSA_2:94,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A143,A165,SCMFSA_2:94;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A143,A165
@@ -1335,7 +1333,7 @@ A180:  CurInstr(Cs2i) = goto (loc+k) by A22,A179,SCMFSA_4:14;
      thus
        IC (Computation s1).(i+1) + k
     = loc + k by A64,A179,SCMFSA_2:95
-   .= IC (Computation s2).(i+1) by A180,SCMFSA_2:95,A65;
+   .= IC (Computation s2).(i+1) by A65,A180,SCMFSA_2:95;
 
      hence IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A59;
@@ -1545,7 +1543,7 @@ A203:  Cs3i.f = Cs2i.f by A47;
 
    thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A200,A201,SCMFSA_2:98,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A200,A201,SCMFSA_2:98;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A200,A201
@@ -1557,8 +1555,8 @@ A205:  dom DPp c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    suppose
       x in FinSeq-Locations;
      then reconsider d = x as FinSeq-Location by SCMFSA_2:12;
-        Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A22,A64,A65,A199,A200,SCMFSA_2:
-98
+        Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A22,A64,A65,A199,A200,
+SCMFSA_2:98
 ;
    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A33,A49,A204;
    end;
@@ -1641,7 +1639,7 @@ A222:  Cs3i.f = Cs2i.f by A47;
 
    thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A218,A219,SCMFSA_2:99,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A218,A219,SCMFSA_2:99;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A218,A219
@@ -1653,8 +1651,8 @@ A224:  dom DPp c= Int-Locations \/ FinSeq-Locations by SCMFSA_3:8;
    suppose
       x in Int-Locations;
      then reconsider d = x as Int-Location by SCMFSA_2:11;
-        Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A22,A64,A65,A217,A218,SCMFSA_2:
-99
+        Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A22,A64,A65,A217,A218,
+SCMFSA_2:99
 ;
    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A33,A49,A223;
    end;
@@ -1735,7 +1733,7 @@ A239:  Cs3i.f = Cs2i.f by A47;
 
    thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A237,A238,SCMFSA_2:100,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A237,A238,SCMFSA_2:100;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A237,A238
@@ -1758,8 +1756,7 @@ then A243:  Cs1i1.x = len(Cs1i.f) by A64,A236,SCMFSA_2:100;
 A244: Cs2i1.x = len(Cs2i.f) by A22,A65,A237,A242,SCMFSA_2:100;
          DPp c= p by RELAT_1:88;
      then dom DPp c= dom p by GRFUNC_1:8;
-     then len(Cs3i.f) = len(Cs1i.f) by A2,A9,A10,A33,A236,A240,A242,SCMFSA_3:
-29
+     then len(Cs3i.f) = len(Cs1i.f) by A2,A9,A10,A33,A236,A240,A242,SCMFSA_3:29
 ;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A33,A52,A239,A240,A243,A244
 ;
@@ -1822,7 +1819,7 @@ A255:  Cs3i.da = Cs2i.da by A45;
 
    thus
      IC (Computation s1).(i+1) + k
-    = IC (Computation s2).(i+1) by A21,A22,A64,A68,A253,A254,SCMFSA_2:101,A65;
+    = IC (Computation s2).(i+1) by A21,A22,A64,A65,A68,A253,A254,SCMFSA_2:101;
 
      thus IncAddr(CurInstr((Computation s1).(i+1)), k)
         = CurInstr((Computation s2).(i+1)) by A21,A22,A59,A64,A65,A68,A253,A254

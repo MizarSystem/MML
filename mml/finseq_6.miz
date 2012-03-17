@@ -7,19 +7,20 @@
 environ
 
  vocabularies FINSEQ_1, REALSET1, FINSEQ_5, RELAT_1, BOOLE, FUNCT_1, FINSEQ_4,
-      ARYTM_1, RLSUB_2, RFINSEQ, FINSEQ_6, ORDINAL2, ARYTM, NAT_1;
+      ARYTM_1, RLSUB_2, RFINSEQ, FINSEQ_6, ORDINAL2, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      NAT_1, RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ, FINSEQ_5,
-      REALSET1, XXREAL_0;
- constructors XXREAL_0, NAT_1, INT_1, FINSEQ_4, REALSET1, RFINSEQ, BINARITH,
-      FINSEQ_5;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ARYTM_3, XREAL_0, NAT_1, INT_1,
-      FINSEQ_1, REALSET1, FINSEQ_5, SUBSET_1;
+      NAT_1, RELAT_1, PARTFUN1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_4, RFINSEQ,
+      FINSEQ_5, REALSET1, XXREAL_0;
+ constructors XXREAL_0, NAT_1, INT_1, PARTFUN1, FINSEQ_4, REALSET1, RFINSEQ,
+      BINARITH, FINSEQ_5;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, NAT_1, INT_1, FINSEQ_1,
+      REALSET1, FINSEQ_5, SUBSET_1, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems NAT_1, REAL_1, FINSEQ_1, FINSEQ_4, FINSEQ_3, FINSEQ_2, FUNCT_1,
       ZFMISC_1, FINSEQ_5, RELAT_1, REAL_2, RFINSEQ, TARSKI, ENUMSET1, PARTFUN2,
-      GRFUNC_1, REALSET1, INT_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0;
+      GRFUNC_1, REALSET1, INT_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      ORDINAL1, PARTFUN1;
 
 begin :: Preliminaries
 
@@ -248,8 +249,8 @@ A9:   k <= len(f1|--p) by A7,FINSEQ_3:27;
                 .= f1.(k + p..f1) by A1,A7,FINSEQ_4:def 7
                 .= (f1^f2).(k + p..(f1^f2)) by A3,A10,FINSEQ_1:def 7;
     end;
-    suppose ex n being Element of NAT st n in dom f2 & k = len(f1|--p) + n;
-     then consider n being Element of NAT such that
+    suppose ex n being Nat st n in dom f2 & k = len(f1|--p) + n;
+     then consider n being Nat such that
 A11:   n in dom f2 and
 A12:   k = len(f1|--p) + n;
     thus ((f1|--p)^f2).k = f2.n by A11,A12,FINSEQ_1:def 7
@@ -291,7 +292,12 @@ theorem Th12:
  f1 c= f1^f2
  proof
 A1: dom f1 c= dom(f1^f2) by FINSEQ_1:39;
-       for x st x in dom f1 holds f1.x = (f1^f2).x by FINSEQ_1:def 7;
+    for x be set st x in dom f1 holds f1.x = (f1^f2).x
+    proof
+      let x be set; assume
+A2:   x in dom f1; then x is Nat by ORDINAL1:def 13;
+      hence thesis by A2,FINSEQ_1:def 7;
+    end;
   hence f1 c= f1^f2 by A1,GRFUNC_1:8;
  end;
 
@@ -339,8 +345,8 @@ A4:    i in dom f3;
           dom f3 c= dom(f3^f2) by FINSEQ_1:39;
      hence x in dom(f3^f2) by A4;
      end;
-     suppose ex n being Element of NAT st n in dom f1 & i=len f3 + n;
-      then consider k such that
+     suppose ex n being Nat st n in dom f1 & i=len f3 + n;
+      then consider k be Nat such that
 A5:    k in dom f1 and
 A6:   i = len f3 + k;
           dom f1 c= dom f2 by A1,RELAT_1:25;
@@ -358,8 +364,8 @@ A8:    i in dom f3;
      hence (f3^f1).x = f3.i by FINSEQ_1:def 7
                     .= (f3^f2).x by A8,FINSEQ_1:def 7;
      end;
-     suppose ex n being Element of NAT st n in dom f1 & i=len f3 + n;
-      then consider k such that
+     suppose ex n being Nat st n in dom f1 & i=len f3 + n;
+      then consider k be Nat such that
 A9:    k in dom f1 and
 A10:   i = len f3 + k;
       A11: dom f1 c= dom f2 by A1,RELAT_1:25;
@@ -390,8 +396,8 @@ then A4:     j in Seg len f1 by FINSEQ_1:def 3;
        then Seg len f1 c= Seg(len f1 + i) by FINSEQ_1:7;
       hence x in Seg(len f1 + i) by A4;
      end;
-     suppose ex n being Element of NAT st n in dom(f2|Seg i) & j=len f1 + n;
-      then consider k such that
+     suppose ex n being Nat st n in dom(f2|Seg i) & j=len f1 + n;
+      then consider k be Nat such that
 A5:    k in dom(f2|Seg i) and
 A6:   j = len f1 + k;
            dom(f2|Seg i) = dom f2 /\ Seg i by RELAT_1:90;
@@ -416,8 +422,8 @@ A11:    j in dom f1;
           dom f1 c= dom(f1^(f2|Seg i)) by FINSEQ_1:39;
      hence x in dom(f1^(f2|Seg i)) by A11;
      end;
-     suppose ex n being Element of NAT st n in dom f2 & j=len f1 + n;
-      then consider k such that
+     suppose ex n being Nat st n in dom f2 & j=len f1 + n;
+      then consider k be Nat such that
 A12:    k in dom f2 and
 A13:   j = len f1 + k;
           j in Seg(len f1 + i) by A9,XBOOLE_0:def 3;
@@ -431,9 +437,8 @@ then A15:   k in Seg i by A14,FINSEQ_1:3;
     end;
     end;
    then A16: dom((f1^f2)|Seg(len f1 + i)) = dom(f1^(f2|Seg i)) by A1,A8,
-XBOOLE_0:def 10
-;
-      now let k;
+XBOOLE_0:def 10;
+      now let k be Nat;
    assume
 A17:  k in dom((f1^f2)|Seg(len f1 + i));
 then A18:  1 <= k by FINSEQ_3:27;
@@ -456,7 +461,7 @@ then A22: 1 <= j by NAT_1:14;
 then A23:  j in Seg i by A22,FINSEQ_1:3;
 A24: not k in dom f1 by A20,FINSEQ_3:27;
         k in dom(f1^f2) by A1,A17,XBOOLE_0:def 3;
-    then consider n being Element of NAT such that
+    then consider n being Nat such that
 A25:  n in dom f2 and
 A26:  k =len f1 + n by A24,FINSEQ_1:38;
         dom(f2|Seg i) = (dom f2) /\ Seg i by RELAT_1:90;
@@ -852,8 +857,8 @@ A14: 1 <= k by A7,FINSEQ_3:27;
         k <= k + x..Rev f by NAT_1:11;
 then A15: 1 <= k + x..Rev f by A14,XXREAL_0:2;
         x..f - k <= x..f - 1 by A14,REAL_1:92;
-    then A16:  x..f - 1 - k + 1 in dom(f | Seg m) by A9,A10,A12,A13,
-FINSEQ_3:27;
+    then A16:  x..f - 1 - k + 1 in dom(f | Seg m) by A9,A10,A12,A13,FINSEQ_3:27
+;
         k < x..f by A11,NAT_1:13;
     then k + x..Rev f < len f + 1 by A4,XREAL_1:8;
     then k + x..Rev f <= len f by NAT_1:13;
@@ -1142,7 +1147,7 @@ then A6: len((f/^k)-:p) = p..f - k by A4,FINSEQ_5:45
 A7:   m in dom((f/^k)-:p);
 A8:   m+k >= m by NAT_1:11;
          1 <= m & m <= len(f-:p) - k by A6,A7,FINSEQ_3:27;
-     then 1 <= m+k & m+k <= len(f-:p) by A8,XXREAL_0:2,XREAL_1:21;
+     then 1 <= m+k & m+k <= len(f-:p) by A8,XREAL_1:21,XXREAL_0:2;
 then A9:   m+k in dom(f-:p) by FINSEQ_3:27;
          len(f-:p) = p..f by A1,FINSEQ_5:45;
 then A10:   m+k in Seg(p..f) by A9,FINSEQ_1:def 3;
@@ -1150,11 +1155,11 @@ then A10:   m+k in Seg(p..f) by A9,FINSEQ_1:def 3;
 then A11:   m in Seg(p..(f/^k)) by A7,FINSEQ_1:def 3;
          (f/^k)-:p = (f/^k)|(p..(f/^k)) by FINSEQ_5:def 1;
      then A12: dom((f/^k)-:p) c= dom(f/^k) by FINSEQ_5:20;
-    thus ((f/^k)-:p).m = ((f/^k)-:p)/.m by A7,FINSEQ_4:def 4
+    thus ((f/^k)-:p).m = ((f/^k)-:p)/.m by A7,PARTFUN1:def 8
                  .= (f/^k)/.m by A5,A11,FINSEQ_5:46
                  .= f/.(m+k) by A7,A12,FINSEQ_5:30
                  .= (f-:p)/.(m+k) by A1,A10,FINSEQ_5:46
-                 .= (f-:p).(m+k) by A9,FINSEQ_4:def 4;
+                 .= (f-:p).(m+k) by A9,PARTFUN1:def 8;
    end;
    hence (f/^k)-:p = (f-:p)/^k by A3,A6,RFINSEQ:def 2;
   end;
@@ -1482,9 +1487,8 @@ then A13:  i + j < p..f by A10,XREAL_1:8;
 then A14: 1 <= i + j by A9,XXREAL_0:2;
         i + j <= len f by A4,A13,XXREAL_0:2;
 then A15:  i + j in dom f by A14,FINSEQ_3:27;
-        f.(i+k) = p by A1,FINSEQ_4:29; hence (f/^i).j <> (f/^i).k by A11,A12,
-A13
-,A15,FINSEQ_4:34;
+        f.(i+k) = p by A1,FINSEQ_4:29; hence (f/^i).j <> (f/^i).k by A11,A12
+,A13,A15,FINSEQ_4:34;
   end;
   then p..(f/^i) = k by A7,A8,Th4;
  hence i + p..(f/^i) = p..f;
@@ -1568,7 +1572,7 @@ A1: i + k = len f;
 then A2: i <= len f by NAT_1:11;
 A3: k <= len f by A1,NAT_1:11;
        i <= len Rev f by A2,FINSEQ_5:def 3;
-then A4: len(Rev f|i) = len f - k by FINSEQ_1:80,A1
+then A4: len(Rev f|i) = len f - k by A1,FINSEQ_1:80
                .= len(f/^k) by A3,RFINSEQ:def 2;
       now let j be Element of NAT;
    assume
@@ -1582,9 +1586,9 @@ A8: 1 <= m + 1 by NAT_1:11;
     then len(f/^k) - j <= len(f/^k) - 1 by REAL_2:106;
     then len(f/^k) - j + 1 <= len(f/^k) by XREAL_1:21;
 then A9: m + 1 in dom(f/^k) by A8,FINSEQ_3:27;
-   thus (Rev f|i).j = (Rev f|i)/.j by A5,FINSEQ_4:def 4
+   thus (Rev f|i).j = (Rev f|i)/.j by A5,PARTFUN1:def 8
                     .= (Rev f)/.j by A5,FINSEQ_4:85
-                    .= (Rev f).j by A5,A6,FINSEQ_4:def 4
+                    .= (Rev f).j by A5,A6,PARTFUN1:def 8
                     .= f.(len(f/^k) + k - j + 1) by A5,A6,A7,FINSEQ_5:def 3
                     .= f.(m + 1 + k)
                     .= (f/^k).(len(f/^k) - j + 1) by A3,A9,RFINSEQ:def 2;
@@ -1767,10 +1771,10 @@ A6: rng(f-:p) c= rng f by FINSEQ_5:51;
   let x be set;
   assume
      x in rng f;
-   then consider i such that
+   then consider i being Nat such that
 A7: i in dom f and
 A8: f.i = x by FINSEQ_2:11;
-    A9: x = f/.i by A7,A8,FINSEQ_4:def 4;
+    A9: x = f/.i by A7,A8,PARTFUN1:def 8;
    per cases;
    suppose i = 1;
    then A10: x = f/.len f by A1,A9,Def1
@@ -2252,12 +2256,12 @@ A2: x in {x} by TARSKI:def 1;
   then consider y, z being set such that
 A3: x = [y,z] by A1,RELAT_1:def 1;
   take z;
-X: z in rng f by A1,A2,A3,RELAT_1:def 5;
+A4: z in rng f by A1,A2,A3,RELAT_1:def 5;
    rng f c= D by FINSEQ_1:def 4;
-  hence z is Element of D by X;
-A4: 1 in dom f by A1,FINSEQ_5:6;
+  hence z is Element of D by A4;
+A5: 1 in dom f by A1,FINSEQ_5:6;
        dom f = {y} by A1,A3,RELAT_1:23;
-  then 1 = y by A4,TARSKI:def 1;
+  then 1 = y by A5,TARSKI:def 1;
   hence f = <*z*> by A1,A3,FINSEQ_1:def 5;
 end;
 

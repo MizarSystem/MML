@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -76,22 +76,6 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="276">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="77"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="12">
-<Cluster>
-<Adjective nr="77"/>
-</Cluster>
-<Func kind="K" nr="83"/>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="277">
 <LocusVar nr="1"/>
 </Func>
@@ -108,7 +92,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="279">
+<Func kind="K" nr="278">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -139,6 +123,22 @@
 </Cluster>
 <Func kind="K" nr="83"/>
 </Typ>
+</ArgTypes>
+<Func kind="K" nr="281">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="77"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="12">
+<Cluster>
+<Adjective nr="77"/>
+</Cluster>
+<Func kind="K" nr="83"/>
+</Typ>
 <Typ kind="M" nr="12">
 <Cluster>
 <Adjective nr="77"/>
@@ -146,7 +146,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="278">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -169,7 +169,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="281">
+<Func kind="K" nr="282">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -185,7 +185,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="302">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -229,7 +229,7 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 <Func kind="K" nr="23">
-<Func kind="K" nr="301">
+<Func kind="K" nr="302">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -237,7 +237,7 @@
 </ArgTypes>
 <Func kind="U" nr="7">
 <LocusVar nr="4"/>
-<Func kind="K" nr="318">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -276,16 +276,16 @@
 <Adjective nr="7" value="false"/>
 </Cluster>
 <Func kind="K" nr="23">
-<Func kind="K" nr="301">
+<Func kind="K" nr="302">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="301">
+<Func kind="K" nr="302">
 <Func kind="U" nr="7">
 <LocusVar nr="4"/>
-<Func kind="K" nr="318">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -302,7 +302,7 @@
 <Func kind="K" nr="68">
 <Func kind="U" nr="7">
 <LocusVar nr="4"/>
-<Func kind="K" nr="318">
+<Func kind="K" nr="319">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

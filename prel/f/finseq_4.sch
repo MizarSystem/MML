@@ -11,10 +11,10 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_4"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -37,7 +37,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="67">
+<Func kind="K" nr="74">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
@@ -51,14 +51,14 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="73">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="86">
+<Func kind="K" nr="65">
 <Func kind="K" nr="57"/>
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
@@ -82,7 +82,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="73">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>

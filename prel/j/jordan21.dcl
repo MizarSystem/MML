@@ -12,9 +12,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
@@ -40,7 +40,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,17 +49,17 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="31">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="34">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="40">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -77,14 +77,14 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="218">
+<Func kind="K" nr="219">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -100,14 +100,14 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="217">
+<Func kind="K" nr="218">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -124,7 +124,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -143,7 +143,7 @@
 <Cluster/>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="201">
+<Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Func>

@@ -10,7 +10,7 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
       RELAT_1, HAHNBAN1, RLSUB_1, REALSET1, SEQM_3, GROUP_6, VECTSP10,
       BILINEAR, HERMITAN, COMPLEX1, ABSVALUE, ARYTM_3, SQUARE_1, COMPLFLD,
-      ARYTM, XCMPLX_0, GROUP_1, NAT_1;
+      ARYTM, XCMPLX_0, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, REALSET1, STRUCT_0, FUNCT_1,
       RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1, FUNCT_2, SQUARE_1,
@@ -24,8 +24,8 @@ environ
       SQUARE_1, RLVECT_1, BINOP_1, COMPLEX1, VECTSP_1;
  theorems COMPLEX1, SQUARE_1, ABSVALUE, COMPLFLD, XREAL_0, FUNCT_2, HAHNBAN1,
       VECTSP_1, RLVECT_1, VECTSP_4, VECTSP_6, TARSKI, VECTSP10, BILINEAR,
-      DOMAIN_1, ZFMISC_1, FUNCT_1, XCMPLX_1, GROUP_1, XREAL_1, BINOP_1,
-      XXREAL_0, FUNCOP_1, STRUCT_0;
+      DOMAIN_1, ZFMISC_1, FUNCT_1, XCMPLX_1, XREAL_1, BINOP_1, XXREAL_0,
+      FUNCOP_1, STRUCT_0;
  schemes FUNCT_2, BINOP_1;
 
 begin :: Auxiliary Facts about Complex Numbers
@@ -53,7 +53,7 @@ A1: a = (Re z)/r+((-Im z)/r)*<i> by COMPLEX1:27;
       |.z*z.| = (Re z)^2 + (Im z)^2 by COMPLEX1:154;
  then 0 <= (Re z)^2 + (Im z)^2 by COMPLEX1:132;
  then A3: r^2 = (Re z)^2 + (Im z)^2 by SQUARE_1:def 4;
- A4: Re a = (Re z)/r & Im a = (-Im z)/r by COMPLEX1:28,A1;
+ A4: Re a = (Re z)/r & Im a = (-Im z)/r by A1,COMPLEX1:28;
   then (Re a)^2 + (Im a)^2 = (Re z)^2/r^2 + ((-Im z)/r)^2 by XCMPLX_1:77
         .= (Re z)^2/r^2 + (-Im z)^2/r^2 by XCMPLX_1:77
         .= ((Re z)^2 + (Im z)^2)/r^2 by XCMPLX_1:63
@@ -64,7 +64,7 @@ A1: a = (Re z)/r+((-Im z)/r)*<i> by COMPLEX1:27;
         .= ((Re z)*(Re z))/r - (-Im z)/r * Im z by XCMPLX_1:75
         .= (Re z)^2/r - ((-Im z)* Im z )/r by XCMPLX_1:75
         .= ((Re z)^2 - -(Im z * Im z) )/r by XCMPLX_1:121
-        .= r by A3,A2,XCMPLX_1:90;
+        .= r by A2,A3,XCMPLX_1:90;
   thus Im(a*z) = (Re z)/r * Im z + Re z * ((-Im z)/r) by A4,COMPLEX1:24
         .= (Re z) * (Im z) /r + Re z * ((-Im z)/r) by XCMPLX_1:75
         .= (Re z) * (Im z) /r + (-Im z)* (Re z) /r by XCMPLX_1:75
@@ -128,7 +128,7 @@ A1: z <> 0.F_Complex;
   set a1 = (Re z)/|.z.|+((-Im z)/|.z.|)*<i>;
 A2: a1 = [*(Re z)/|.z.|,((-Im z)/|.z.|)*] by COMPLEX1:27;
     a*z = a1*b;
-  hence thesis by A1,Th2,COMPLFLD:9,A2;
+  hence thesis by A1,A2,Th2,COMPLFLD:9;
  end;
 
 theorem Th9:
@@ -196,7 +196,7 @@ for a be Element of F_Complex st Im a = 0 holds a = a*'
   assume
  A1: Im x = 0;
   reconsider d = x as Element of COMPLEX by COMPLFLD:def 1;
-  thus x = Re d+(-Im d)*<i> by COMPLEX1:29,A1
+  thus x = Re d+(-Im d)*<i> by A1,COMPLEX1:29
   .= x*';
  end;
 
@@ -722,7 +722,7 @@ for f be Functional of V holds FormFunctional(f,0Functional(V)) is hermitan
       v1,w be Vector of V;
   set 0F = 0Functional(V), F= FormFunctional(f,0F);
   thus F.(v1,w) = 0.F_Complex by Lm2
-    .= (F.(w,v1))*' by COMPLFLD:83,Lm2;
+    .= (F.(w,v1))*' by Lm2,COMPLFLD:83;
  end;
 
 registration
@@ -747,7 +747,7 @@ cluster NulForm(V,V) -> hermitan;
 cluster NulForm(V,V) -> diagReR+0valued;
  coherence
   proof let v be Vector of V;
-    Re (0.F_Complex) = 0 by COMPLFLD:9,COMPLEX1:def 2;
+    Re (0.F_Complex) = 0 by COMPLEX1:def 2,COMPLFLD:9;
    hence thesis by FUNCOP_1:85;
   end;
 end;
@@ -1191,7 +1191,7 @@ theorem
   set f= NulForm(V,W);
        now let v be Vector of V,w be Vector of W;
    thus f*'.(v,w) = (f.(v,w))*' by Def8
-    .= 0.F_Complex by FUNCOP_1:85,COMPLFLD:83
+    .= 0.F_Complex by COMPLFLD:83,FUNCOP_1:85
     .= f.(v,w) by FUNCOP_1:85;
    end;
   hence thesis by BINOP_1:2;
@@ -1365,8 +1365,8 @@ then A2: f.(v1+w,v1+w) - f.(v1-w,v1-w) =
     .= v3 + i_FC*' * v4 + i_FC*(w1 + i_FC*' * w2);
 then A3: i_FC *f.(v1+i_FC*w,v1+i_FC*w)
     = i_FC * (v3 + i_FC*' * v4)+ i_FC*i_FC*(w1 + i_FC*' * w2)
-    .= i_FC * v3 + (i_FC *i_FC*') * v4 -(w1 + i_FC*' * w2) by HAHNBAN1:8,
-VECTSP_6:81
+    .= i_FC * v3 + (i_FC *i_FC*') * v4 -(w1 + i_FC*' * w2) by HAHNBAN1:8
+,VECTSP_6:81
     .= i_FC * v3 + v4 -(w1 + i_FC*' * w2) by Th7,VECTSP_1:def 19;
         f.(v1-i_FC * w,v1 - i_FC * w)
      = f.(v1,v1-i_FC*w) - f.(i_FC*w,v1-i_FC*w) by BILINEAR:36
@@ -2579,8 +2579,7 @@ cluster LQForm(RQ*Form(f)) -> non degenerated-on-left non degenerated-on-right;
  coherence
  proof
        rightker RQ*Form(f) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:def 25;
-   then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:
-45
+   then rightker LQForm(RQ*Form(f)) = {0.(VectQuot(W,RKer f*'))} by BILINEAR:45
 ;
    hence thesis by BILINEAR:def 25;
   end;
@@ -2622,8 +2621,8 @@ registration
    per cases;
     suppose v = 0.V;
      then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:31;
-      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29,
-COMPLFLD:9;
+      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29
+,COMPLFLD:9;
      hence thesis by A2,COMPLEX1:163;
     end;
     suppose v <> 0.V; hence thesis by A1,Def13;
@@ -2642,8 +2641,8 @@ registration
    per cases;
     suppose v = 0.V;
      then A2: f.(v,v) = 0.F_Complex by A1,BILINEAR:30;
-      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29,
-COMPLFLD:9;
+      [**Re (0.F_Complex), Im(0.F_Complex)**] = [**0,0**] by COMPLEX1:29
+,COMPLFLD:9;
      hence thesis by A2,COMPLEX1:163;
     end;
     suppose v <> 0.V;

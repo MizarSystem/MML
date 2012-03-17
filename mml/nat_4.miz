@@ -27,7 +27,7 @@ environ
       ABSVALUE, NEWTON, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1,
       CARD_4, XBOOLE_0, PRE_CIRC, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
       FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1, PROB_3, INTEGRA5,
-      COMPTRIG, HEINE, XXREAL_0, SEQ_1, NAT_D;
+      COMPTRIG, XXREAL_0, SEQ_1, NAT_D;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -68,7 +68,7 @@ A2: for n being natural number holds P[n] implies P[n+1]
 then A5:     a*n>=2*n by XREAL_1:66;
         per cases;
         suppose n=0;
-          hence a|^(n+1)>n+1 by NEWTON:10,A4;
+          hence a|^(n+1)>n+1 by A4,NEWTON:10;
         end;
         suppose n>0;
           then n>=0+1 by NAT_1:13;
@@ -87,53 +87,54 @@ then A6:       a*n>=n+1 by A5,XXREAL_0:2;
   end;
 
 theorem Th4:
-  for n,k,m being Element of NAT st k <= n & m = [\ n/2 /]
+  for n,k,m being Nat st k <= n & m = [\ n/2 /]
   holds n choose m >= n choose k
   proof
     A1: 0 <= 1/2 & 1/2 - 1 < 0;
-    defpred P[Element of NAT] means
-    for k,m being Element of NAT st k <= m & m = [\ $1/2 /]
+    defpred P[Nat] means
+    for k,m being Nat st k <= m & m = [\ $1/2 /]
       holds $1 choose m >= $1 choose k;
 A2: P[0]
     proof
-      let k,m be Element of NAT;
+      let k,m be Nat;
       assume A3: k <= m;
       assume A4: m = [\ 0/2 /];
       then m = 0 by INT_1:47;
       then k = 0 by A3;
       hence 0 choose m >= 0 choose k by A4,INT_1:47;
     end;
-A5: for n being Element of NAT st P[n] holds P[n+1]
+A5: for n being Nat st P[n] holds P[n+1]
     proof
-      let n be Element of NAT;
-      assume A6: P[n];
-       for k,m1 being Element of NAT st k <= m1 & m1 = [\ (n+1)/2 /]
+      let n be Nat;
+A6:   n in NAT by ORDINAL1:def 13;
+      assume A7: P[n];
+       for k,m1 being Nat st k <= m1 & m1 = [\ (n+1)/2 /]
         holds (n+1) choose m1 >= (n+1) choose k
       proof
-        let k,m1 be Element of NAT;
-        assume A7: k <= m1;
-        assume A8: m1 = [\ (n+1)/2 /];
+        let k,m1 be Nat;
+        assume A8: k <= m1;
+        assume A9: m1 = [\ (n+1)/2 /];
         then m1 <= (n+1)/2 & (n+1)/2 - 1 < m1 by INT_1:def 4;
-        then A9: m1*2 <= (n+1)/2*2 by XREAL_1:66;
+        then A10: m1*2 <= (n+1)/2*2 by XREAL_1:66;
          1*m1 <= 2*m1 by XREAL_1:66;
-        then A10: n+1 >= m1 by A9,XXREAL_0:2;
+        then A11: n+1 >= m1 by A10,XXREAL_0:2;
         set l1 = (n+1) -' m1;
-        A11: l1=(n+1) - m1 by A10,BINARITH:50;
+        A12: l1=(n+1) - m1 by A11,BINARITH:50;
         set m = [\ n/2 /];
         set l = n - m;
         reconsider m as Element of NAT by INT_1:80;
-        A12: n/2 >= [\ n/2 /] by INT_1:def 4;
-        A13: (n+1)/2 >= [\ (n+1)/2 /] by INT_1:def 4;
+        A13: n/2 >= [\ n/2 /] by INT_1:def 4;
+        A14: (n+1)/2 >= [\ (n+1)/2 /] by INT_1:def 4;
          2*n >= 1*n by XREAL_1:66;
         then 2*n/2 >= n/2 by XREAL_1:74;
-        then A14: n >= m by A12,XXREAL_0:2;
+        then A15: n >= m by A13,XXREAL_0:2;
         then n - m = n -' m by BINARITH:50;
         then reconsider l as Element of NAT;
-        A15: n >= k
+        A16: n >= k
         proof
           per cases;
           suppose n=0;
-            hence thesis by A7,A8,A1,INT_1:def 4;
+            hence thesis by A1,A8,A9,INT_1:def 4;
           end;
           suppose n<>0;
             then n>0;
@@ -141,62 +142,62 @@ A5: for n being Element of NAT st P[n] holds P[n+1]
             then n>=1 by NAT_1:13;
             then n+n>=1+n by XREAL_1:8;
             then 2*n/2>=(n+1)/2 by XREAL_1:74;
-            then n>=[\ (n+1)/2 /] by A13,XXREAL_0:2;
-            hence thesis by A7,A8,XXREAL_0:2;
+            then n>=[\ (n+1)/2 /] by A14,XXREAL_0:2;
+            hence thesis by A8,A9,XXREAL_0:2;
           end;
         end;
         set nk = n-k;
-         n - k = n -' k by A15,BINARITH:50;
+         n - k = n -' k by A16,BINARITH:50;
         then reconsider nk as Element of NAT;
         set nk1 = n + 1 - k;
          n + 1 - k = nk + 1;
         then reconsider nk1 as Element of NAT;
-        A16: n!<>0 by NEWTON:23;
+        A17: n!<>0 by NEWTON:23;
          ((n+1)!)/(n!) = (n+1)*(n!)/(n!) by NEWTON:21
         .= (n+1)*((n!)/(n!)) by XCMPLX_1:75
-        .= (n+1)*1 by A16,XCMPLX_1:60;
-        then A17: (n!)/((n+1)!) = 1/(n+1) by XCMPLX_1:57;
-        A18: k!<>0 by NEWTON:23;
-        A19: nk!<>0 by NEWTON:23;
-        A20: (nk1!)/(nk!) = (nk+1)*(nk!)/(nk!) by NEWTON:21
+        .= (n+1)*1 by A17,XCMPLX_1:60;
+        then A18: (n!)/((n+1)!) = 1/(n+1) by XCMPLX_1:57;
+        A19: k!<>0 by NEWTON:23;
+        A20: nk!<>0 by NEWTON:23;
+        A21: (nk1!)/(nk!) = (nk+1)*(nk!)/(nk!) by NEWTON:21
         .= (nk+1)*((nk!)/(nk!)) by XCMPLX_1:75
-        .= (nk+1)*1 by A19,XCMPLX_1:60;
-        A21: n choose k = (n!)/((nk!)*(k!)) by A15,NEWTON:def 3;
+        .= (nk+1)*1 by A20,XCMPLX_1:60;
+        A22: n choose k = (n!)/((nk!)*(k!)) by A16,NEWTON:def 3;
          0+n<=1+n by XREAL_1:8;
-        then A22: k<=n+1 by A15,XXREAL_0:2;
-        then A23: (n+1) choose k = ((n+1)!)/((nk1!)*(k!)) by NEWTON:def 3;
-        A24: (n choose k)/((n+1) choose k) =
-        ((n!)/((nk!)*(k!)))/(((n+1)!)/((nk1!)*(k!))) by A22,NEWTON:def 3,A21
+        then A23: k<=n+1 by A16,XXREAL_0:2;
+        then A24: (n+1) choose k = ((n+1)!)/((nk1!)*(k!)) by NEWTON:def 3;
+        A25: (n choose k)/((n+1) choose k) =
+        ((n!)/((nk!)*(k!)))/(((n+1)!)/((nk1!)*(k!))) by A22,A23,NEWTON:def 3
         .= ((n!)/((nk!)*(k!)))/((n+1)!)*((nk1!)*(k!)) by XCMPLX_1:83
         .= ((n!)/(((n+1)!)*((nk!)*(k!))))*((nk1!)*(k!)) by XCMPLX_1:79
-        .= ((1/(n+1))/((nk!)*(k!)))*((nk1!)*(k!)) by A17,XCMPLX_1:79
+        .= ((1/(n+1))/((nk!)*(k!)))*((nk1!)*(k!)) by A18,XCMPLX_1:79
         .= (1/(n+1))/(((nk!)*(k!))/((nk1!)*(k!))) by XCMPLX_1:83
         .= (1/(n+1))/(((nk!)/(nk1!))/((k!)/(k!))) by XCMPLX_1:85
-        .= (1/(n+1))/(((nk!)/(nk1!))/1) by A18,XCMPLX_1:60
-        .= (1/(n+1))/(1/(nk+1)) by A20,XCMPLX_1:57
+        .= (1/(n+1))/(((nk!)/(nk1!))/1) by A19,XCMPLX_1:60
+        .= (1/(n+1))/(1/(nk+1)) by A21,XCMPLX_1:57
         .= (1*(nk+1))/(1*(n+1)) by XCMPLX_1:85
         .= (nk+1)/(n+1);
-        A25: ((nk1!)*(k!))<>0 by NEWTON:25;
+        A26: ((nk1!)*(k!))<>0 by NEWTON:25;
          (n+1)!<>0 by NEWTON:23;
-        then A26: (n+1) choose k <> 0 by A23,A25,XCMPLX_1:50;
-        A27: (n choose k)/(((n+1) choose k)/((n+1) choose k)) =
-        (nk+1)/(n+1)*((n+1) choose k) by XCMPLX_1:83,A24;
-        A28: n choose k = (n choose k)/1
-        .= (nk+1)/(n+1)*((n+1) choose k) by A26,A27,XCMPLX_1:60;
+        then A27: (n+1) choose k <> 0 by A24,A26,XCMPLX_1:50;
+        A28: (n choose k)/(((n+1) choose k)/((n+1) choose k)) =
+        (nk+1)/(n+1)*((n+1) choose k) by A25,XCMPLX_1:83;
+        A29: n choose k = (n choose k)/1
+        .= (nk+1)/(n+1)*((n+1) choose k) by A27,A28,XCMPLX_1:60;
          [\ n/2 /]<=n/2 by INT_1:def 4;
         then -[\ n/2 /] >= -n/2 by XREAL_1:26;
-        then A29: -[\ n/2 /]+(n+1) >= -n/2+(n+1) by XREAL_1:8;
-        A30: -n/2+(n+1)=n/2+1;
+        then A30: -[\ n/2 /]+(n+1) >= -n/2+(n+1) by XREAL_1:8;
+        A31: -n/2+(n+1)=n/2+1;
          n/2 - 1 < [\  n/2 /] by INT_1:def 4;
-        then A31: n/2 - 1 +1 < [\ n/2 /]+1 by XREAL_1:8;
-        A32: (n choose k)*((n+1)/(l+1))
-        = ((nk+1)/(n+1)*((n+1) choose k)*(n+1))/(l+1) by A28,XCMPLX_1:75
+        then A32: n/2 - 1 +1 < [\ n/2 /]+1 by XREAL_1:8;
+        A33: (n choose k)*((n+1)/(l+1))
+        = ((nk+1)/(n+1)*((n+1) choose k)*(n+1))/(l+1) by A29,XCMPLX_1:75
         .= ((nk+1)/(n+1)*(n+1)*((n+1) choose k))/(l+1)
         .= (((n+1)/(n+1))*(nk+1)*((n+1) choose k))/(l+1) by XCMPLX_1:76
         .= (1*(nk+1)*((n+1) choose k))/(l+1) by XCMPLX_1:60
         .= ((n+1) choose k)*((nk+1)/(l+1)) by XCMPLX_1:75;
-        A33: (n choose k)*((n+1)/(m+1))
-        = ((nk+1)/(n+1)*((n+1) choose k)*(n+1))/(m+1) by A28,XCMPLX_1:75
+        A34: (n choose k)*((n+1)/(m+1))
+        = ((nk+1)/(n+1)*((n+1) choose k)*(n+1))/(m+1) by A29,XCMPLX_1:75
         .= ((nk+1)/(n+1)*(n+1)*((n+1) choose k))/(m+1)
         .= (((n+1)/(n+1))*(nk+1)*((n+1) choose k))/(m+1) by XCMPLX_1:76
         .= (1*(nk+1)*((n+1) choose k))/(m+1) by XCMPLX_1:60
@@ -204,129 +205,129 @@ A5: for n being Element of NAT st P[n] holds P[n+1]
         per cases;
         suppose n is even;
           then consider k1 be Element of NAT such that
-          A34: n = 2*k1 by ABIAN:def 2;
-          A35: [\ (n+1)/2 /]
-          = [\ 2*k1/2 + 1/2 /] by A34
+          A35: n = 2*k1 by A6,ABIAN:def 2;
+          A36: [\ (n+1)/2 /]
+          = [\ 2*k1/2 + 1/2 /] by A35
           .= k1 + [\ 1/2 /] by INT_1:51
           .= k1 + 0 by A1,INT_1:def 4
-          .= [\ n/2 /] by A34,INT_1:47;
-          A36: l1 = (n + 1 - m1) by A10,BINARITH:50
-          .= l + 1 by A35,A8;
-          A37: n choose m >= n choose k by A7,A35,A8,A6;
-           (n+1) choose m1 = ((n+1)!)/((m1!)*(l1!)) by A11,A10,NEWTON:def 3
-          .= ((n+1)*(n!))/((m!)*((l + 1)!)) by NEWTON:21,A35,A8,A36
+          .= [\ n/2 /] by A35,INT_1:47;
+          A37: l1 = (n + 1 - m1) by A11,BINARITH:50
+          .= l + 1 by A9,A36;
+          A38: n choose m >= n choose k by A7,A8,A9,A36;
+           (n+1) choose m1 = ((n+1)!)/((m1!)*(l1!)) by A11,A12,NEWTON:def 3
+          .= ((n+1)*(n!))/((m!)*((l + 1)!)) by A9,A36,A37,NEWTON:21
           .= ((n+1)*(n!))/((m!)*((l + 1)*(l!))) by NEWTON:21
           .= ((n+1)*(n!))/((l + 1)*((m!)*(l!)))
           .= ((n+1)/(l+1))/(((m!)*(l!))/(n!)) by XCMPLX_1:85
           .= ((n!)/((m!)*(l!)))*((n+1)/(l+1)) by XCMPLX_1:81
-          .= (n choose m)*((n+1)/(l+1)) by A14,NEWTON:def 3;
-          then A38: (n+1) choose m >=
-            ((n+1) choose k)*((nk+1)/(l+1)) by A32,A35,A8,A37,XREAL_1:66;
-           -k>=-[\ n/2 /] by A7,A35,A8,XREAL_1:26;
+          .= (n choose m)*((n+1)/(l+1)) by A15,NEWTON:def 3;
+          then A39: (n+1) choose m >=
+            ((n+1) choose k)*((nk+1)/(l+1)) by A9,A33,A36,A38,XREAL_1:66;
+           -k>=-[\ n/2 /] by A8,A9,A36,XREAL_1:26;
           then -k+(n+1)>=-[\ n/2 /]+(n+1) by XREAL_1:8;
           then (n-k+1)/(n-[\ n/2 /]+1)>=
-          (n-[\ n/2 /]+1)/(n-[\ n/2 /]+1) by A30,A29,XREAL_1:74;
-          then (n-k+1)/(n-[\ n/2 /]+1)>=1 by A30,A29,XCMPLX_1:60;
+          (n-[\ n/2 /]+1)/(n-[\ n/2 /]+1) by A30,A31,XREAL_1:74;
+          then (n-k+1)/(n-[\ n/2 /]+1)>=1 by A30,A31,XCMPLX_1:60;
           then ((n-k+1)/(n-[\ n/2 /]+1))*((n+1) choose k)>=
           1*((n+1) choose k) by XREAL_1:66;
-          hence thesis by A38,XXREAL_0:2,A8,A35;
+          hence thesis by A9,A36,A39,XXREAL_0:2;
         end;
         suppose n is not even;
           then consider j be Integer such that
-          A39: n = 2*j+1 by ABIAN:1;
-          A40: [\ (n+1)/2 /]
-          = j + 0 + 1 by A39,INT_1:47
+          A40: n = 2*j+1 by ABIAN:1;
+          A41: [\ (n+1)/2 /]
+          = j + 0 + 1 by A40,INT_1:47
           .= j + [\ 1/2 /] + 1 by A1,INT_1:def 4
           .= [\ j + 1/2 /] + 1 by INT_1:51
-          .= [\ n/2 /] + 1 by A39;
-          A41: l1 = (n + 1 - m1) by A10,BINARITH:50
-          .= l by A40,A8;
-          per cases by A7,A8,A40,XXREAL_0:1;
+          .= [\ n/2 /] + 1 by A40;
+          A42: l1 = (n + 1 - m1) by A11,BINARITH:50
+          .= l by A9,A41;
+          per cases by A8,A9,A41,XXREAL_0:1;
           suppose k=m+1;
-            hence (n+1) choose m1 >= (n+1) choose k by A40,A8;
+            hence (n+1) choose m1 >= (n+1) choose k by A9,A41;
           end;
           suppose k<m+1;
-            then A42: k<=m by NAT_1:13;
-            then A43: n choose m >= n choose k by A6;
-             (n+1) choose m1 = ((n+1)!)/((m1!)*(l1!)) by A11,A10
-,NEWTON:def 3
-            .= ((n+1)*(n!))/(((m+1)!)*(l!)) by NEWTON:21,A40,A8,A41
+            then A43: k<=m by NAT_1:13;
+            then A44: n choose m >= n choose k by A7;
+             (n+1) choose m1 = ((n+1)!)/((m1!)*(l1!)) by A11,A12,NEWTON:def 3
+            .= ((n+1)*(n!))/(((m+1)!)*(l!)) by A9,A41,A42,NEWTON:21
             .= ((n+1)*(n!))/(((m!)*(m+1))*(l!)) by NEWTON:21
             .= ((n+1)*(n!))/((m + 1)*((m!)*(l!)))
             .= ((n+1)/(m+1))/(((m!)*(l!))/(n!)) by XCMPLX_1:85
             .= ((n!)/((m!)*(l!)))*((n+1)/(m+1)) by XCMPLX_1:81
-            .= (n choose m)*((n+1)/(m+1)) by A14,NEWTON:def 3;
-            then A44: (n+1) choose m1 >= ((n+1) choose k)*((nk+1)/(m+1))
-              by A33,A43,XREAL_1:66;
+            .= (n choose m)*((n+1)/(m+1)) by A15,NEWTON:def 3;
+            then A45: (n+1) choose m1 >= ((n+1) choose k)*((nk+1)/(m+1))
+              by A34,A44,XREAL_1:66;
              n/2>=[\ n/2 /] by INT_1:def 4;
             then n/2*2>=[\ n/2 /]*2 by XREAL_1:66;
             then n - [\ n/2 /] >= [\ n/2 /]*2 - [\ n/2 /] by XREAL_1:11;
-            then n - [\ n/2 /] >= k by A42,XXREAL_0:2;
+            then n - [\ n/2 /] >= k by A43,XXREAL_0:2;
             then n - [\ n/2 /] - (k - [\ n/2 /]) >= k - (k - [\ n/2 /])
               by XREAL_1:11;
             then n-k+1>=[\ n/2 /]+1 by XREAL_1:8;
             then (n-k+1)/([\ n/2 /]+1)>=
-            ([\ n/2 /]+1)/([\ n/2 /]+1) by A31,XREAL_1:74;
-            then (n-k+1)/([\ n/2 /]+1)>=1 by A31,XCMPLX_1:60;
+            ([\ n/2 /]+1)/([\ n/2 /]+1) by A32,XREAL_1:74;
+            then (n-k+1)/([\ n/2 /]+1)>=1 by A32,XCMPLX_1:60;
             then ((n-k+1)/([\ n/2 /]+1))*((n+1) choose k)>=
             1*((n+1) choose k) by XREAL_1:66;
-            hence thesis by A44,XXREAL_0:2;
+            hence thesis by A45,XXREAL_0:2;
           end;
         end;
       end;
       hence thesis;
     end;
-A45: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A5);
-     for n,k,m being Element of NAT st k <= n & m = [\ n/2 /]
+A46: for n being Nat holds P[n] from NAT_1:sch 2(A2,A5);
+     for n,k,m being Nat st k <= n & m = [\ n/2 /]
       holds n choose m >= n choose k
       proof
-        let n,k,m be Element of NAT;
-        assume A46: k <= n;
-        assume A47: m = [\ n/2 /];
+        let n,k,m be Nat;
+A47:     n in NAT by ORDINAL1:def 13;
+        assume A48: k <= n;
+        assume A49: m = [\ n/2 /];
         per cases;
-        suppose k<=m; hence thesis by A47,A45; end;
-        suppose A48: k>m;
+        suppose k<=m; hence thesis by A46,A49; end;
+        suppose A50: k>m;
           set r=n-'k;
-          A49: n-'k=n-k by BINARITH:50,A46;
-          then A50: n choose k = n choose r by A46,NEWTON:30;
+          A51: n-'k=n-k by A48,BINARITH:50;
+          then A52: n choose k = n choose r by A48,NEWTON:30;
           per cases;
           suppose n is even;
             then consider j be Element of NAT such that
-            A51: n = 2*j by ABIAN:def 2;
-            A52: n/2 = [\ n/2 /] by A51,INT_1:47;
-             -k < -m by A48,XREAL_1:26;
+            A53: n = 2*j by A47,ABIAN:def 2;
+            A54: n/2 = [\ n/2 /] by A53,INT_1:47;
+             -k < -m by A50,XREAL_1:26;
             then -k+n < -m+n by XREAL_1:8;
-            hence n choose m >= n choose k by A45,A50,A47,A49,A52;
+            hence n choose m >= n choose k by A46,A49,A51,A52,A54;
           end;
           suppose n is not even;
             then consider j be Integer such that
-            A53: n = 2*j+1 by ABIAN:1;
-            A54: [\ n/2 /] = [\ j + 1/2 /] by A53
+            A55: n = 2*j+1 by ABIAN:1;
+            A56: [\ n/2 /] = [\ j + 1/2 /] by A55
             .= j + [\ 1/2 /] by INT_1:51
             .= j + 0 by A1,INT_1:def 4 .=j;
-            A55: k>=m+1 by NAT_1:13,A48;
-            per cases by A55,XXREAL_0:1;
-            suppose A56: k=m+1;
-              A57: n/2 >= [\ n/2 /] by INT_1:def 4;
+            A57: k>=m+1 by A50,NAT_1:13;
+            per cases by A57,XXREAL_0:1;
+            suppose A58: k=m+1;
+              A59: n/2 >= [\ n/2 /] by INT_1:def 4;
                2*m >= 1*m by XREAL_1:66;
-              then A58: n>= m+1 by A54,A47,A53,XREAL_1:8;
+              then A60: n>= m+1 by A49,A55,A56,XREAL_1:8;
                2*n >= 1*n by XREAL_1:66;
               then 2*n/2 >= n/2 by XREAL_1:74;
-              then A59: n>=m by A47,A57,XXREAL_0:2;
+              then A61: n>=m by A49,A59,XXREAL_0:2;
               set nm = n-m;
-               n - m = n -' m by A59,BINARITH:50;
+               n - m = n -' m by A61,BINARITH:50;
               then reconsider nm as Element of NAT;
               set nm1 = n-(m+1);
-               n - (m+1) = n -' (m+1) by A58,BINARITH:50;
+               n - (m+1) = n -' (m+1) by A60,BINARITH:50;
               then reconsider nm1 as Element of NAT;
-              A60: n choose (m+1) = (n!)/((nm1!)*((m+1)!)) by A58,NEWTON:def 3;
-               nm = m+1 by A54,A47,A53;
-              hence thesis by A56,A59,A60,NEWTON:def 3;
+              A62: n choose (m+1) = (n!)/((nm1!)*((m+1)!)) by A60,NEWTON:def 3;
+               nm = m+1 by A49,A55,A56;
+              hence thesis by A58,A61,A62,NEWTON:def 3;
             end;
             suppose k>m+1;
               then -k < -(m+1) by XREAL_1:26;
               then -k+n < -(m+1)+n by XREAL_1:8;
-              hence n choose m >= n choose k by A45,A50,A47,A49,A54,A53;
+              hence n choose m >= n choose k by A46,A49,A51,A52,A55,A56;
             end;
           end;
         end;
@@ -335,10 +336,10 @@ A45: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A5);
   end;
 
 theorem Th5:
-  for n,m being Element of NAT st m=[\ n/2 /] & n>=2
+  for n,m being Nat st m=[\ n/2 /] & n>=2
   holds n choose m >= 2|^n / n
 proof
-  let n,m be Element of NAT;
+  let n,m be Nat;
   assume A1: m=[\ n/2 /];
   assume A2: n>=2;
   then A3: n>=1 by XXREAL_0:2;
@@ -362,7 +363,7 @@ proof
   proof
     let i be Element of NAT;
     assume A9: i in dom f1;
-    per cases by A9,A8,FINSEQ_1:38;
+    per cases by A8,A9,FINSEQ_1:38;
     suppose A10: i in dom (f2a ^ f2b);
       then A11: f2.i=(f2a^f2b).i by FINSEQ_1:def 7;
       per cases by A10,FINSEQ_1:38;
@@ -375,32 +376,32 @@ proof
         then reconsider k as Element of NAT;
          f1.i = n choose k by A9,A14,NEWTON:def 5
         .= 1 by NEWTON:29;
-        hence thesis by A14,A13,FINSEQ_1:57;
+        hence thesis by A13,A14,FINSEQ_1:57;
       end;
-      suppose ex j be Element of NAT st j in dom f2b & i=len f2a + j;
-        then consider j be Element of NAT such that
+      suppose ex j be Nat st j in dom f2b & i=len f2a + j;
+        then consider j be Nat such that
         A15: j in dom f2b and
         A16: i=len f2a + j;
-        A17: f2.i = f2b.j by A11,A16,A15,FINSEQ_1:def 7;
+        A17: f2.i = f2b.j by A11,A15,A16,FINSEQ_1:def 7;
         A18: j in Seg (n-'1) by A15,FUNCOP_1:19;
         then A19: f2.i = n choose m by A17,FUNCOP_1:13;
         A20: j+1>=0+1 by XREAL_1:8;
         A21: i=1+j by A16,FINSEQ_1:56;
-        A22: i>=1 by A20,A16,FINSEQ_1:56;
+        A22: i>=1 by A16,A20,FINSEQ_1:56;
         A23: -1+n<0+n by XREAL_1:8;
         set k = i-'1;
         A24: k=i-1 by A22,BINARITH:50;
         then A25: f1.i = n choose k by A9,NEWTON:def 5;
-         i-1<=n-1 by A21,A4,A18,FINSEQ_1:3;
-        then k <= n by A23,XXREAL_0:2,A24;
-        hence thesis by A19,A25,A1,Th4;
+         i-1<=n-1 by A4,A18,A21,FINSEQ_1:3;
+        then k <= n by A23,A24,XXREAL_0:2;
+        hence thesis by A1,A19,A25,Th4;
       end;
     end;
-    suppose ex j be Element of NAT st j in dom f2a & i=len (f2a ^ f2b) + j;
-      then consider j be Element of NAT such that
+    suppose ex j be Nat st j in dom f2a & i=len (f2a ^ f2b) + j;
+      then consider j be Nat such that
       A26: j in dom f2a  and
       A27: i=len(f2a^f2b)+j;
-      A28: f2.i = f2a.j by A27,A26,FINSEQ_1:def 7;
+      A28: f2.i = f2a.j by A26,A27,FINSEQ_1:def 7;
       A29: j in Seg 1 by A26,FINSEQ_1:55;
       then A30: j = 1 by FINSEQ_1:4,TARSKI:def 1;
       A31: i = len(f2a^f2b)+1 by A27,A29,FINSEQ_1:4,TARSKI:def 1
@@ -408,13 +409,13 @@ proof
       .= len f2a + (n - 1) + 1 by A4,FINSEQ_2:69
       .= 1 + (n - 1) + 1 by FINSEQ_1:56
       .= n+1;
-      reconsider k=(n+1)-1 as Element of NAT;
+      reconsider k=(n+1)-1 as Element of NAT by ORDINAL1:def 13;
        f1.i = n choose k by A9,A31,NEWTON:def 5
       .= 1 by NEWTON:31;
-      hence thesis by A30,A28,FINSEQ_1:57;
+      hence thesis by A28,A30,FINSEQ_1:57;
     end;
   end;
-  then A32: Sum f1 <= Sum f2 by INTEGRA5:3,A7;
+  then A32: Sum f1 <= Sum f2 by A7,INTEGRA5:3;
   A33: 1<=n by A2,XXREAL_0:2;
   then A34: n choose 1 <= n choose m by A1,Th4;
    2 <= n choose 1 by A2,A33,NEWTON:33;
@@ -425,16 +426,16 @@ proof
   .= (1 + Sum(f2b)) +1 by RVSUM_1:106
   .= 2 + (n-'1)*(n choose m) by A36
   .= 2 + (n-1)*(n choose m) by A3,BINARITH:50;
-  then 2|^n <= 2 + (n-1)*(n choose m) by NEWTON:44,A32;
+  then 2|^n <= 2 + (n-1)*(n choose m) by A32,NEWTON:44;
   then 2|^n <= n*(n choose m) by A35,XXREAL_0:2;
   then 2|^n / n <= n*(n choose m)/n by XREAL_1:74;
   hence n choose m >= 2|^n / n by A2,XCMPLX_1:90;
 end;
 
 theorem Th6:
-  for n being Element of NAT holds 2*n choose n >= 4|^n / (2*n)
+  for n being Nat holds 2*n choose n >= 4|^n / (2*n)
 proof
-  let n be Element of NAT;
+  let n be Nat;
   per cases;
   suppose A1: n = 0;
      4|^0 / (2*0) = 0;
@@ -447,17 +448,17 @@ proof
     .= 2*2 by RVSUM_1:129 .= 4;
     set m=[\ 2*n/2 /];
     A4: m = n by INT_1:47;
-    reconsider m as Element of NAT by INT_1:47;
+    then reconsider m as Element of NAT by ORDINAL1:def 13;
      (2*n) choose m >= 2|^(2*n) / (2*n) by A2,Th5;
     hence (2*n) choose n >= 4|^n / (2*n) by A3,A4,NEWTON:14;
   end;
 end;
 
 theorem Th7:
-  for n,p being Element of NAT holds
+  for n,p being Nat holds
     p>0 & n divides p & n <> 1 & n <> p implies 1 < n & n < p
   proof
-    let n,p be Element of NAT;
+    let n,p be Nat;
     assume A1:p>0 & n divides p;
     assume A2:n <> 1;
     assume A3:n <> p;
@@ -468,11 +469,11 @@ theorem Th7:
   end;
 
 theorem Th8:
-  for p being Element of NAT holds
+  for p being Nat holds
     (ex n being Element of NAT st n divides p & 1<n & n<p) implies
     ex n being Element of NAT st n divides p & 1<n & n*n <= p
   proof
-    let p be Element of NAT;
+    let p be Nat;
     given n be Element of NAT such that
 A1: n divides p & 1<n & n<p;
     per cases;
@@ -498,9 +499,9 @@ A6:   k*k<=p
   end;
 
 theorem Th9:
-  for i,j,k,l being Element of NAT st i=j*k+l & l<j & 0<l holds not j divides i
+  for i,j,k,l being Nat st i=j*k+l & l<j & 0<l holds not j divides i
   proof
-    let i,j,k,l be Element of NAT;
+    let i,j,k,l be Nat;
     assume A1: i=j*k+l;
     assume A2: l<j & 0<l;
     assume j divides i;
@@ -510,21 +511,23 @@ theorem Th9:
   end;
 
 theorem Th10:
-  for n,q,b being Element of NAT
+  for n,q,b being Nat
   holds q hcf b = 1 & q<>0 & b<>0 implies q|^n hcf b = 1
   proof
-    let n,q,b be Element of NAT;
-    assume A1:q hcf b = 1 & q<>0 & b<>0;
+    let n,q,b be Nat;
+A1: q in NAT & n in NAT & b in NAT by ORDINAL1:def 13;
+    assume A2:q hcf b = 1 & q<>0 & b<>0;
     then q,b are_relative_prime by INT_2:def 6;
-    then (q|^n),b are_relative_prime by A1,EULER_2:32;
+    then (q|^n),b are_relative_prime by A1,A2,EULER_2:32;
     hence thesis by INT_2:def 6;
   end;
 
 theorem Th11:
-  for a,b,c being Element of NAT
+  for a,b,c being Nat
   holds a|^(2*b) mod c = (a|^b mod c)*(a|^b mod c) mod c
   proof
-    let a,b,c be Element of NAT;
+    let a,b,c be Nat;
+    reconsider a,b,c as Element of NAT by ORDINAL1:def 13;
      a|^(2*b) mod c = a|^(b+b) mod c
     .=(a|^b*a|^b) mod c by NEWTON:13
     .=(a|^b mod c) * (a|^b mod c) mod c by EULER_2:11;
@@ -532,12 +535,12 @@ theorem Th11:
   end;
 
 theorem Th12:
-  for p being Element of NAT holds
+  for p being Nat holds
     not p is prime iff p<=1 or
     ex n being Element of NAT st n divides p & 1<n & n<p
   proof
      now
-      let p be Element of NAT;
+      let p be Nat;
       assume A1: not p is prime & not p<=1;
       then consider n being natural number such that
 A2:   n divides p & n<>1 & n<>p by INT_2:def 5;
@@ -550,10 +553,10 @@ A2:   n divides p & n<>1 & n<>p by INT_2:def 5;
   end;
 
 theorem Th13:
-  for n,k being Element of NAT st n divides k & 1<n holds
+  for n,k being Nat st n divides k & 1<n holds
      ex p being Element of NAT st p divides k & p<=n & p is prime
   proof
-    let n,k be Element of NAT;
+    let n,k be Nat;
     assume A1: n divides k;
     assume A2: 1<n;
     then 1+1<n+1 by XREAL_1:8;
@@ -561,18 +564,19 @@ theorem Th13:
     then consider p be Element of NAT such that
     A3: p is prime & p divides n by INT_2:48;
     take p;
-    thus p divides k by A3,A1,NAT_D:4;
+    thus p divides k by A1,A3,NAT_D:4;
     thus p<=n by A2,A3,NAT_D:7;
     thus p is prime by A3;
   end;
 
 Lm1:
-  for p being Element of NAT holds
+  for p being Nat holds
     not p is prime iff
     p<=1 or
     ex n being Element of NAT st n divides p & 1<n & n*n<=p & n is prime
   proof
-    A1: now let p be Element of NAT;
+    let p be Nat;
+A1: now
       assume A2: not p is prime;
       assume not p<=1;
       then ex k be Element of NAT st k divides p & 1<k & k<p by A2,Th12;
@@ -588,7 +592,6 @@ Lm1:
       thus n is prime by A4;
     end;
      now
-      let p be Element of NAT;
       assume A5: p<=1 or
       (ex n being Element of NAT st n divides p & 1<n & n*n<=p);
       per cases by A5;
@@ -606,11 +609,11 @@ A6:     n divides p & 1<n & n*n<=p;
   end;
 
 theorem Th14:
-  for p being Element of NAT holds p is prime iff
+  for p being Nat holds p is prime iff
     p>1 & for n being Element of NAT holds 1<n & n*n<=p & n is prime
       implies not n divides p
   proof
-     now let p be Element of NAT;
+     now let p be Nat;
       assume A1:p>1;
       assume for n being Element of NAT holds not (1<n & n*n<=p & n is prime)
         or not n divides p;
@@ -622,18 +625,20 @@ theorem Th14:
   end;
 
 theorem Th15:
-  for a,p,k being Element of NAT holds
+  for a,p,k being Nat holds
     a|^k mod p = 1 & k>=1 & p is prime implies a,p are_relative_prime
   proof
-    let a,p,k be Element of NAT;
+    let a,p,k be Nat;
     assume A1: a|^k mod p = 1 & k>=1;
     assume A2: p is prime;
-    assume not a,p are_relative_prime;
-    then a hcf p = p by A2,PEPIN:2;
+    assume
+A3: not a,p are_relative_prime;
+    reconsider a,p,k as Element of NAT by ORDINAL1:def 13;
+    a hcf p = p by A2,A3,PEPIN:2;
 then p divides a by NAT_D:def 5;
     then consider i being Nat such that
-A3: a=p*i by NAT_D:def 3;
-     ((p*i mod p)|^k) mod p = 1 by A3,A1,PEPIN:12;
+A4: a=p*i by NAT_D:def 3;
+     ((p*i mod p)|^k) mod p = 1 by A1,A4,PEPIN:12;
     then 0|^k mod p = 1 by NAT_D:13;
     then p*0 mod p = 1 by A1,NEWTON:16;
     hence contradiction by NAT_D:13;
@@ -647,7 +652,7 @@ proof
   let p be Prime, a be Element of NAT, x be set;
   assume A1: a<>0;
   assume A2: x=p |^ (p |-count a);
-  then reconsider b = x as Element of NAT;
+  then reconsider b = x as Element of NAT by ORDINAL1:def 13;
   take b;
   thus b=x;
    p >= 1 by INT_2:def 5;
@@ -756,7 +761,7 @@ theorem Th18:
      k<>q1
     proof
       assume k=q1;
-      then q=1 by XCMPLX_1:7,A3,A4;
+      then q=1 by A3,A4,XCMPLX_1:7;
       hence contradiction by A1,INT_2:def 5;
     end;
     hence thesis by A4,A5;
@@ -830,6 +835,7 @@ theorem Th20:
           then consider x be set such that
           A6: x in support pfexp a by XBOOLE_0:def 1;
           reconsider x as Prime by A6,NAT_3:34;
+          reconsider x as prime Element of NAT by ORDINAL1:def 13;
            (pfexp a).x<>0 by A6,POLYNOM1:def 7;
           then x|-count a<>0 by NAT_3:def 8;
           then x|-count a>0;
@@ -840,7 +846,7 @@ theorem Th20:
         then A7: a=1 by NAT_3:52;
         set d=1;
         take d;
-        thus b=a*d by A5,NAT_3:52,A7;
+        thus b=a*d by A5,A7,NAT_3:52;
       end;
       hence thesis;
     end;
@@ -862,7 +868,7 @@ theorem Th20:
         set xca=x|^(x|-count a);
         A12: ex t being Nat
         st a = xca * 0 + t & t < xca by A9,NAT_D:def 1;
-         xca divides a by NAT_3:def 7,A11;
+         xca divides a by A11,NAT_3:def 7;
         hence contradiction by A12,NAT_D:7;
       end;
     end;
@@ -892,30 +898,30 @@ theorem Th20:
       then A19: b=b1*x|^xcb by A13,A16;
        (pfexp b).x<>0 by A17,POLYNOM1:def 7;
       then A20: xcb<>0 by NAT_3:def 8;
+A21:   x in NAT by ORDINAL1:def 13;
       reconsider b1 as Element of NAT by ORDINAL1:def 13;
        b1,x are_relative_prime
       proof
         assume not b1,x are_relative_prime;
-        then b1 hcf x = x by PEPIN:2;
+        then b1 hcf x = x by A21,PEPIN:2;
         then x divides b1 by NAT_D:def 5;
         then consider c be Nat such that
-        A21: b1=x*c by NAT_D:def 3;
-        A22: x|^xcb divides b & not(x|^(xcb+1) divides b) by A18
-,NAT_3:def 7;
-        then b = x*c*x|^xcb by A13,A16,A21
+        A22: b1=x*c by NAT_D:def 3;
+        A23: x|^xcb divides b & not(x|^(xcb+1) divides b) by A18,NAT_3:def 7;
+        then b = x*c*x|^xcb by A13,A16,A22
         .= c*(x|^xcb*x)
         .= c*x|^(xcb+1) by NEWTON:11;
-        hence contradiction by A22,NAT_D:def 3;
+        hence contradiction by A23,NAT_D:def 3;
       end;
-      then A23: x|^xcb,b1 are_relative_prime by EULER_2:32;
+      then A24: x|^xcb,b1 are_relative_prime by A21,EULER_2:32;
       reconsider b1 as non empty natural number;
        card support pfexp (x|^xcb*b1) =
-      card support pfexp x|^xcb + card support pfexp b1 by A23,NAT_3:47;
-      then n+1=card {x} + card support pfexp b1 by A19,A15,A20,NAT_3:42;
+      card support pfexp x|^xcb + card support pfexp b1 by A24,NAT_3:47;
+      then n+1=card {x} + card support pfexp b1 by A15,A19,A20,NAT_3:42;
       then n+1=1+card (support pfexp b1) by CARD_2:60;
       hence thesis;
     end;
-    A24: for a,a1,b,b1 being non empty natural number, x being Prime
+    A25: for a,a1,b,b1 being non empty natural number, x being Prime
       st (for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b)
         & a1=a div (x|^(x|-count a)) & b1=b div (x|^(x|-count b))
@@ -924,85 +930,86 @@ theorem Th20:
     proof
       let a,a1,b,b1 be non empty natural number;
       let x be Prime;
-      assume A25: for p being Element of NAT st p is prime
+      assume A26: for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b;
-      assume A26: a1=a div (x|^(x|-count a));
-      assume A27: b1=b div (x|^(x|-count b));
+      assume A27: a1=a div (x|^(x|-count a));
+      assume A28: b1=b div (x|^(x|-count b));
       let p be Element of NAT;
-      assume A28: p is prime;
-      then A29: p>1 by INT_2:def 5;
+      assume A29: p is prime;
+      then A30: p>1 by INT_2:def 5;
       set xca=x|-count a; set xcb=x|-count b;
-      A30: x>1 by INT_2:def 5;
+      A31: x>1 by INT_2:def 5;
       then x|^xca divides a by NAT_3:def 7;
-      then A31: p|-count a1
-      =(p|-count a)-'(p|-count x|^xca) by A26,A28,NAT_3:31;
-       x|^xcb divides b by A30,NAT_3:def 7;
-      then A32: p|-count b1 = (p|-count b)-'(p|-count x|^xcb) by A27,A28
-,NAT_3:31;
+      then A32: p|-count a1
+      =(p|-count a)-'(p|-count x|^xca) by A27,A29,NAT_3:31;
+       x|^xcb divides b by A31,NAT_3:def 7;
+      then A33: p|-count b1 = (p|-count b)-'(p|-count x|^xcb) by A28,A29,
+NAT_3:31;
       per cases;
       suppose x=p;
-        then p|-count x|^xca = p|-count a by A29,NAT_3:25;
-        hence p |-count a1 <= p |-count b1 by A31,NAT_2:10;
+        then p|-count x|^xca = p|-count a by A30,NAT_3:25;
+        hence p |-count a1 <= p |-count b1 by A32,NAT_2:10;
       end;
-      suppose A33: x<>p;
-         p|-count x|^xca=xca * (p|-count x) by A28,NAT_3:32
-        .= xca * 0 by A29,A33,NAT_3:24
+      suppose A34: x<>p;
+         p|-count x|^xca=xca * (p|-count x) by A29,NAT_3:32
+        .= xca * 0 by A30,A34,NAT_3:24
         .= 0;
-        then A34: p|-count a1=(p|-count a)-0 by A31,BINARITH:50
+        then A35: p|-count a1=(p|-count a)-0 by A32,BINARITH:50
         .=p|-count a;
-         p|-count x|^xcb=xcb * (p|-count x) by A28,NAT_3:32
-        .= xcb * 0 by A29,A33,NAT_3:24
+         p|-count x|^xcb=xcb * (p|-count x) by A29,NAT_3:32
+        .= xcb * 0 by A30,A34,NAT_3:24
         .= 0;
-        then p|-count b1=(p|-count b)-0 by A32,BINARITH:50
+        then p|-count b1=(p|-count b)-0 by A33,BINARITH:50
         .=p|-count b;
-        hence p |-count a1 <= p |-count b1 by A25,A28,A34;
+        hence p |-count a1 <= p |-count b1 by A26,A29,A35;
       end;
     end;
-    A35: for n being Element of NAT holds P[n] implies P[n+1]
+    A36: for n being Element of NAT holds P[n] implies P[n+1]
     proof
       let n be Element of NAT;
-      assume A36: P[n];
+      assume A37: P[n];
        for a,b being non empty natural number st card(support pfexp b)=n+1
         holds (for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b)
         implies (ex c being Element of NAT st b=a*c)
       proof
         let a,b be non empty natural number;
-        assume A37: card(support pfexp b)=n+1;
-        assume A38: for p being Element of NAT st p is prime
+        assume A38: card(support pfexp b)=n+1;
+        assume A39: for p being Element of NAT st p is prime
           holds p |-count a <= p |-count b;
-         support pfexp b<>{} by A37,CARD_4:17;
+         support pfexp b<>{} by A38,CARD_4:17;
         then consider x being set such that
-        A39: x in support pfexp b by XBOOLE_0:def 1;
-        reconsider x as Prime by A39,NAT_3:34;
+        A40: x in support pfexp b by XBOOLE_0:def 1;
+        reconsider x as Prime by A40,NAT_3:34;
+A41:     x in NAT by ORDINAL1:def 13;
         set a1=a div (x|^(x|-count a));
         set b1=b div (x|^(x|-count b));
         reconsider a1,b1 as non empty natural number by A8;
-        A40: card(support pfexp b1)=n by A37,A39,A14;
+        A42: card(support pfexp b1)=n by A14,A38,A40;
          for p being Element of NAT st p is prime
         holds p |-count a1 <= p |-count b1
-              by A38,A24;
+              by A25,A39;
         then consider d be Element of NAT such that
-        A41: b1=a1*d by A40,A36;
+        A43: b1=a1*d by A37,A42;
         set xcb=x|-count b; set xca=x|-count a;
-         xcb>=xca by A38;
-        then A42: xcb-xca=xcb-'xca by BINARITH:50;
+         xcb>=xca by A39,A41;
+        then A44: xcb-xca=xcb-'xca by BINARITH:50;
          x<>1 by INT_2:def 5;
-        then A43: x|^(xcb) divides b & x|^(xca) divides a by NAT_3:def 7;
-        then A44: b = d*(a div (x|^xca))*(x|^(xca+(xcb-'xca))) by A42,A13,A41
+        then A45: x|^(xcb) divides b & x|^(xca) divides a by NAT_3:def 7;
+        then A46: b = d*(a div (x|^xca))*(x|^(xca+(xcb-'xca))) by A13,A43,A44
         .= d*(a div (x|^xca))*(x|^xca*x|^(xcb-'xca)) by NEWTON:13
         .= d*((a div (x|^xca))*x|^xca)*x|^(xcb-'xca)
-        .= d*a*x|^(xcb-'xca) by A13,A43
+        .= d*a*x|^(xcb-'xca) by A13,A45
         .= a*(d*x|^(xcb-'xca));
-        set e=d*x|^(xcb-'xca);
+        reconsider e=d*x|^(xcb-'xca) as Element of NAT by ORDINAL1:def 13;
         take e;
-        thus b=a*e by A44;
+        thus b=a*e by A46;
       end;
       hence thesis;
     end;
-    A45: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A35);
+    A47: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A36);
      ex n1 being Element of NAT st n1=card(support pfexp b);
-    hence thesis by A1,A45;
+    hence thesis by A1,A47;
   end;
 
 theorem Th21:
@@ -1070,13 +1077,13 @@ theorem Th23:
     consider i being Nat such that
     A11: n=p*i by A3,NAT_D:def 3;
     reconsider i as Element of NAT by ORDINAL1:def 13;
-     i*p<>0 by A11,A1,A7;
-    then A12: a|^(n-'1) mod p = 1 by A5,A11,A2,A3,PEPIN:9;
+     i*p<>0 by A1,A7,A11;
+    then A12: a|^(n-'1) mod p = 1 by A2,A3,A5,A11,PEPIN:9;
     set nn=n-'1;
      0+1<nn+1 by A8,BINARITH:50;
     then 1<=nn by NAT_1:13;
     then A13: a,p are_relative_prime by A3,A12,Th15;
-    then A14: order(a,p) divides k*q|^(n1-'1+1) by A10,A5,A1,A7,A9,A12,PEPIN:52
+    then A14: order(a,p) divides k*q|^(n1-'1+1) by A1,A5,A7,A9,A10,A12,PEPIN:52
 ;
      a|^((n-'1) div q)>=1
     proof
@@ -1099,12 +1106,12 @@ theorem Th23:
     .=q*q|^(n1-'1)*k div q by NEWTON:11
     .=q*(q|^(n1-'1)*k) div q
     .=k*q|^(n1-'1) by A5,NAT_D:18;
-    then A18: q|^n1 divides order(a,p) by A16,A17,A14,A1,Th17;
+    then A18: q|^n1 divides order(a,p) by A1,A14,A16,A17,Th17;
      p-'1=p-1 by A5,BINARITH:50;
     then A19: p-'1+1=p;
     A20:1<q|^n1 by A1,A5,PEPIN:26;
      order(a,p) divides p-'1 by A3,A13,PEPIN:54;
-    then q|^n1 divides p-'1 by NAT_D:4,A18;
+    then q|^n1 divides p-'1 by A18,NAT_D:4;
     then p-'1 mod q|^n1 = 0 by A6,PEPIN:6;
     hence thesis by A19,A20,NAT_D:16;
   end;
@@ -1150,7 +1157,7 @@ theorem Th24:
         assume k<=0;
         then 0=d*c;
         then d=0 by A1,XCMPLX_1:6;
-        hence contradiction by A11,A1;
+        hence contradiction by A1,A11;
       end;
       A14: q1 is prime by A6,NAT_3:34;
        not (p divides (a|^((n-'1) div q1)-'1))
@@ -1159,7 +1166,7 @@ theorem Th24:
         then p divides (n hcf (a|^((n-'1) div q1)-'1)) by A4,NEWTON:63;
         hence contradiction by A4,A9,NAT_D:7;
       end;
-      hence p mod q1|^n1 = 1 by A12,A13,A7,A14,A9,A4,Th23;
+      hence p mod q1|^n1 = 1 by A4,A7,A9,A12,A13,A14,Th23;
     end;
     A15: p-1>1-1 by A4,XREAL_1:11;
     then A16: p-'1>0 by A4,BINARITH:50;
@@ -1203,7 +1210,7 @@ theorem Th24:
     then f>=2 by A26,XXREAL_0:2;
     then f-1>=2-1 by XREAL_1:11;
     then n+(f-1)>=n+1 by XREAL_1:8;
-    then p^2>=n+1 by XXREAL_0:2,A25;
+    then p^2>=n+1 by A25,XXREAL_0:2;
     then p^2>n by NAT_1:13;
     hence contradiction by A4,SQUARE_1:def 3;
   end;
@@ -1239,7 +1246,7 @@ theorem Th25:
       consider a be Element of NAT such that
       A8: a|^(n-'1) mod n = 1 & (a|^((n-'1) div q)-'1) hcf n = 1 by A2,A3;
       take a;
-      thus thesis by A8,Th18,A1,A6,A7,A5;
+      thus thesis by A1,A5,A6,A7,A8,Th18;
     end;
     hence n is prime by A1,A4,Th24;
   end;
@@ -1260,7 +1267,7 @@ Lm3: for k being Element of NAT st k<25 holds
     assume A1: k<25;
     let n be Element of NAT;
     assume A2: 1<n & n*n<=k & n is prime;
-    then n*n<5*5 by XXREAL_0:2,A1;
+    then n*n<5*5 by A1,XXREAL_0:2;
     then n<5 by Th1;
     hence thesis by A2,Lm2;
   end;
@@ -1576,33 +1583,33 @@ theorem Th38:
     .= 1 by NEWTON:64;
      2|^1=2 by NEWTON:10;
     then A4: 2|^1 mod 1259 = 2 by NAT_D:24;
-    A5: 2|^2 mod 1259=2|^(2*1) mod 1259 .=2*2 mod 1259 by Th11,A4
+    A5: 2|^2 mod 1259=2|^(2*1) mod 1259 .=2*2 mod 1259 by A4,Th11
       .= 4 by NAT_D:24;
-    A6: 2|^4 mod 1259=2|^(2*2) mod 1259 .=4*4 mod 1259 by Th11,A5
+    A6: 2|^4 mod 1259=2|^(2*2) mod 1259 .=4*4 mod 1259 by A5,Th11
       .= 16 by NAT_D:24;
-    A7: 2|^8 mod 1259=2|^(2*4) mod 1259 .=16*16 mod 1259 by Th11,A6
+    A7: 2|^8 mod 1259=2|^(2*4) mod 1259 .=16*16 mod 1259 by A6,Th11
       .=256 by NAT_D:24;
      256*256 = 1259*52+68;
     then A8: 256*256 mod 1259 = 68 by NAT_D:def 2;
     A9: 2|^16 mod 1259=2|^(2*8) mod 1259 .= 68 by A7,A8,Th11;
      68*68=1259*3+847;
     then A10: 68*68 mod 1259=847 by NAT_D:def 2;
-    A11: 2|^32 mod 1259=2|^(2*16) mod 1259 .=847 by Th11,A9,A10;
+    A11: 2|^32 mod 1259=2|^(2*16) mod 1259 .=847 by A9,A10,Th11;
      847*847=1259*569+1038;
     then A12: 847*847 mod 1259=1038 by NAT_D:def 2;
-    A13: 2|^64 mod 1259=2|^(2*32) mod 1259 .= 1038 by A11,Th11,A12;
+    A13: 2|^64 mod 1259=2|^(2*32) mod 1259 .= 1038 by A11,A12,Th11;
      1038*1038=1259*855+999;
     then A14: 1038*1038 mod 1259=999 by NAT_D:def 2;
-    A15: 2|^128 mod 1259=2|^(2*64) mod 1259 .=999 by Th11,A13,A14;
+    A15: 2|^128 mod 1259=2|^(2*64) mod 1259 .=999 by A13,A14,Th11;
      999*999=1259*792+873;
     then A16: 999*999 mod 1259=873 by NAT_D:def 2;
-    A17: 2|^256 mod 1259=2|^(2*128) mod 1259 .=873 by Th11,A15,A16;
+    A17: 2|^256 mod 1259=2|^(2*128) mod 1259 .=873 by A15,A16,Th11;
      873*873=1259*605+434;
     then A18: 873*873 mod 1259=434 by NAT_D:def 2;
-    A19: 2|^512 mod 1259=2|^(2*256) mod 1259 .=434 by Th11,A17,A18;
+    A19: 2|^512 mod 1259=2|^(2*256) mod 1259 .=434 by A17,A18,Th11;
      434*434=1259*149+765;
     then A20:434*434 mod 1259=765 by NAT_D:def 2;
-    A21: 2|^1024 mod 1259=2|^(2*512) mod 1259 .=765 by Th11,A19,A20;
+    A21: 2|^1024 mod 1259=2|^(2*512) mod 1259 .=765 by A19,A20,Th11;
     A22: 847*1024=1259*688+1136;
     A23: 1038*1136=1259*936+744;
     A24: 999*744=1259*590+446;
@@ -1636,7 +1643,7 @@ theorem Th38:
     A30: 847*4=1259*2+870;
     A31: 2|^34 mod 1259 = 2|^(32+2) mod 1259
     .= 2|^32*2|^2 mod 1259 by NEWTON:13
-    .= (847*4) mod 1259 by A11,A5,EULER_2:11
+    .= (847*4) mod 1259 by A5,A11,EULER_2:11
     .= 870 by A30,NAT_D:def 2;
     A32: 2128=1259*1+869;
      (2|^((1259-'1)div 37)-'1)hcf 1259
@@ -1652,7 +1659,7 @@ theorem Th38:
     .= 5 hcf (5*1+3) by EULER_1:9 .= (3*1+2) hcf 3 by EULER_1:9
     .= 2 hcf (2*1+1) by EULER_1:9 .= 2 hcf 1 by EULER_1:9
     .= 1 by NEWTON:64;
-    hence thesis by A1,A2,A3,Th31,A27,Th25;
+    hence thesis by A1,A2,A3,A27,Th25,Th31;
   end;
 
 theorem Th39:
@@ -1669,36 +1676,36 @@ theorem Th39:
     .= 1 by NEWTON:64;
      2|^1=2 by NEWTON:10;
     then A4: 2|^1 mod 2503 = 2 by NAT_D:24;
-    A5: 2|^2 mod 2503=2|^(2*1) mod 2503 .=2*2 mod 2503 by Th11,A4
+    A5: 2|^2 mod 2503=2|^(2*1) mod 2503 .=2*2 mod 2503 by A4,Th11
       .= 4 by NAT_D:24;
-    A6: 2|^4 mod 2503=2|^(2*2) mod 2503 .=4*4 mod 2503 by Th11,A5
+    A6: 2|^4 mod 2503=2|^(2*2) mod 2503 .=4*4 mod 2503 by A5,Th11
       .= 16 by NAT_D:24;
-    A7: 2|^8 mod 2503=2|^(2*4) mod 2503 .=16*16 mod 2503 by Th11,A6
+    A7: 2|^8 mod 2503=2|^(2*4) mod 2503 .=16*16 mod 2503 by A6,Th11
       .=256 by NAT_D:24;
      256*256 = 2503*26+458;
     then A8: 256*256 mod 2503 = 458 by NAT_D:def 2;
     A9: 2|^16 mod 2503=2|^(2*8) mod 2503 .= 458 by A7,A8,Th11;
      458*458=2503*83+2015;
     then A10: 458* 458 mod 2503=2015 by NAT_D:def 2;
-    A11: 2|^32 mod 2503=2|^(2*16) mod 2503 .=2015 by Th11,A9,A10;
+    A11: 2|^32 mod 2503=2|^(2*16) mod 2503 .=2015 by A9,A10,Th11;
      2015*2015=2503*1622+359;
     then A12: 2015*2015 mod 2503=359 by NAT_D:def 2;
-    A13: 2|^64 mod 2503=2|^(2*32) mod 2503 .= 359 by A11,Th11,A12;
+    A13: 2|^64 mod 2503=2|^(2*32) mod 2503 .= 359 by A11,A12,Th11;
      359*359=2503*51+1228;
     then A14: 359*359 mod 2503=1228 by NAT_D:def 2;
-    A15: 2|^128 mod 2503=2|^(2*64) mod 2503 .=1228 by Th11,A13,A14;
+    A15: 2|^128 mod 2503=2|^(2*64) mod 2503 .=1228 by A13,A14,Th11;
      1228*1228=2503*602+1178;
     then A16: 1228*1228 mod 2503=1178 by NAT_D:def 2;
-    A17: 2|^256 mod 2503=2|^(2*128) mod 2503 .=1178 by Th11,A15,A16;
+    A17: 2|^256 mod 2503=2|^(2*128) mod 2503 .=1178 by A15,A16,Th11;
      1178*1178=2503*554+1022;
     then A18: 1178*1178 mod 2503=1022 by NAT_D:def 2;
-    A19: 2|^512 mod 2503=2|^(2*256) mod 2503 .=1022 by Th11,A17,A18;
+    A19: 2|^512 mod 2503=2|^(2*256) mod 2503 .=1022 by A17,A18,Th11;
      1022*1022=2503*417+733;
     then A20: 1022*1022 mod 2503=733 by NAT_D:def 2;
-    A21: 2|^1024 mod 2503=2|^(2*512) mod 2503 .=733 by Th11,A19,A20;
+    A21: 2|^1024 mod 2503=2|^(2*512) mod 2503 .=733 by A19,A20,Th11;
      733*733=2503*214+1647;
     then A22: 733*733 mod 2503=1647 by NAT_D:def 2;
-    A23: 2|^2048 mod 2503=2|^(2*1024) mod 2503 .=1647 by Th11,A21,A22;
+    A23: 2|^2048 mod 2503=2|^(2*1024) mod 2503 .=1647 by A21,A22,Th11;
     A24: 359*64=2503*9+449;
     A25: 1228*449=2503*220+712;
     A26: 1178*712=2503*335+231;
@@ -1732,7 +1739,7 @@ theorem Th39:
     then A31: 2|^18-'1=2|^18-1 by BINARITH:50;
     A32: 2|^18 mod 2503 = 2|^(16+2) mod 2503
     .= 2|^16*2|^2 mod 2503 by NEWTON:13
-    .= (458*4) mod 2503 by A9,A5,EULER_2:11
+    .= (458*4) mod 2503 by A5,A9,EULER_2:11
     .= 1832 by NAT_D:24;
     A33: 4334=2503*1+1831;
      (2|^((2503-'1)div 139)-'1)hcf 2503 = (2|^18 -' 1) hcf 2503
@@ -1749,7 +1756,7 @@ theorem Th39:
     .= (11*1+8) hcf 11 by EULER_1:9 .= 8 hcf (8*1+3) by EULER_1:9
     .= (3*2+2) hcf 3 by EULER_1:9 .= 2 hcf (2*1+1) by EULER_1:9
     .= 2 hcf 1 by EULER_1:9 .= 1 by NEWTON:64;
-    hence thesis by A1,A2,A3,Th34,A29,Th25;
+    hence thesis by A1,A2,A3,A29,Th25,Th34;
   end;
 
 theorem Th40:
@@ -1763,36 +1770,36 @@ theorem Th40:
     .= 1 by NEWTON:64;
      2|^1=2 by NEWTON:10;
     then A4: 2|^1 mod 4001 = 2 by NAT_D:24;
-    A5: 2|^2 mod 4001=2|^(2*1) mod 4001 .=2*2 mod 4001 by Th11,A4
+    A5: 2|^2 mod 4001=2|^(2*1) mod 4001 .=2*2 mod 4001 by A4,Th11
       .= 4 by NAT_D:24;
-    A6: 2|^4 mod 4001=2|^(2*2) mod 4001 .=4*4 mod 4001 by Th11,A5
+    A6: 2|^4 mod 4001=2|^(2*2) mod 4001 .=4*4 mod 4001 by A5,Th11
       .= 16 by NAT_D:24;
-    A7: 2|^8 mod 4001=2|^(2*4) mod 4001 .=16*16 mod 4001 by Th11,A6
+    A7: 2|^8 mod 4001=2|^(2*4) mod 4001 .=16*16 mod 4001 by A6,Th11
       .=256 by NAT_D:24;
      256*256 = 4001*16+1520;
     then A8: 256*256 mod 4001 = 1520 by NAT_D:def 2;
     A9: 2|^16 mod 4001=2|^(2*8) mod 4001 .= 1520 by A7,A8,Th11;
      1520*1520=4001*577+1823;
     then A10: 1520*1520 mod 4001=1823 by NAT_D:def 2;
-    A11: 2|^32 mod 4001=2|^(2*16) mod 4001 .=1823 by Th11,A9,A10;
+    A11: 2|^32 mod 4001=2|^(2*16) mod 4001 .=1823 by A9,A10,Th11;
      1823*1823=4001*830+2499;
     then A12: 1823*1823 mod 4001=2499 by NAT_D:def 2;
-    A13: 2|^64 mod 4001=2|^(2*32) mod 4001 .= 2499 by A11,Th11,A12;
+    A13: 2|^64 mod 4001=2|^(2*32) mod 4001 .= 2499 by A11,A12,Th11;
      2499*2499=4001*1560+3441;
     then A14: 2499*2499 mod 4001=3441 by NAT_D:def 2;
-    A15: 2|^128 mod 4001=2|^(2*64) mod 4001 .=3441 by Th11,A13,A14;
+    A15: 2|^128 mod 4001=2|^(2*64) mod 4001 .=3441 by A13,A14,Th11;
      3441*3441=4001*2959+1522;
     then A16: 3441*3441 mod 4001=1522 by NAT_D:def 2;
-    A17: 2|^256 mod 4001=2|^(2*128) mod 4001 .=1522 by Th11,A15,A16;
+    A17: 2|^256 mod 4001=2|^(2*128) mod 4001 .=1522 by A15,A16,Th11;
      1522*1522=4001*578+3906;
     then A18: 1522*1522 mod 4001=3906 by NAT_D:def 2;
-    A19: 2|^512 mod 4001=2|^(2*256) mod 4001 .=3906 by Th11,A17,A18;
+    A19: 2|^512 mod 4001=2|^(2*256) mod 4001 .=3906 by A17,A18,Th11;
      3906*3906=4001*3813+1023;
     then A20: 3906*3906 mod 4001=1023 by NAT_D:def 2;
-    A21: 2|^1024 mod 4001=2|^(2*512) mod 4001 .=1023 by Th11,A19,A20;
+    A21: 2|^1024 mod 4001=2|^(2*512) mod 4001 .=1023 by A19,A20,Th11;
      1023*1023=4001*261+2268;
     then A22: 1023*1023 mod 4001=2268 by NAT_D:def 2;
-    A23: 2|^2048 mod 4001=2|^(2*1024) mod 4001 .=2268 by Th11,A21,A22;
+    A23: 2|^2048 mod 4001=2|^(2*1024) mod 4001 .=2268 by A21,A22,Th11;
     A24: 3441*1823=4001*1567+3376;
     A25: 1522*3376=4001*1284+988;
     A26: 3906*988=4001*964+2164;
@@ -1831,7 +1838,7 @@ theorem Th40:
     .= 2|^512*2|^288 mod 4001 by NEWTON:13
     .= (3906*(2|^(256+32) mod 4001)) mod 4001 by A19,EULER_2:11
     .= (3906*(2|^256*2|^32 mod 4001)) mod 4001 by NEWTON:13
-    .= (3906*(1522*1823 mod 4001)) mod 4001 by A17,A11,EULER_2:11
+    .= (3906*(1522*1823 mod 4001)) mod 4001 by A11,A17,EULER_2:11
     .= 3906*1913 mod 4001 by A33,NAT_D:def 2
     .= 2311 by A34,NAT_D:def 2;
     A36: 6311=4001*1+2310;
@@ -1848,7 +1855,7 @@ theorem Th40:
     .= (31*1+14) hcf 31 by EULER_1:9 .= 14 hcf (14*2+3) by EULER_1:9
     .= (3*4+2) hcf 3 by EULER_1:9 .= 2 hcf (2*1+1) by EULER_1:9
     .= 2 hcf 1 by EULER_1:9 .= 1 by NEWTON:64;
-    hence thesis by A1,A2,A3,PEPIN:64,A30,Th25;
+    hence thesis by A1,A2,A3,A30,Th25,PEPIN:64;
   end;
 
 Lm7:
@@ -1865,46 +1872,46 @@ A2: for a,n,p being Element of NAT st a<=n & p<=2*a holds p<=2*n
     end;
     per cases by A1;
     suppose A4: 1<=n & n<2;  2<=2*1;
-      then n<2 & 2<=2*n by A4,A2;
+      then n<2 & 2<=2*n by A2,A4;
       hence thesis by INT_2:44; end;
     suppose A5: 2<=n & n<3;  3<=2*2;
-      then n<3 & 3<=2*n by A5,A2;
+      then n<3 & 3<=2*n by A2,A5;
       hence thesis by PEPIN:44; end;
     suppose A6: 3<=n & n<5;  5<=2*3;
-      then n<5 & 5<=2*n by A6,A2;
+      then n<5 & 5<=2*n by A2,A6;
       hence thesis by PEPIN:64; end;
     suppose A7: 5<=n & n<7;  7<=2*5;
-      then n<7 & 7<=2*n by A7,A2;
+      then n<7 & 7<=2*n by A2,A7;
       hence thesis by Th26; end;
     suppose A8: 7<=n & n<13;  13<=2*7;
-      then n<13 & 13<=2*n by A8,A2;
+      then n<13 & 13<=2*n by A2,A8;
       hence thesis by Th28; end;
     suppose A9: 13<=n & n<23;  23<=2*13;
-      then n<23 & 23<=2*n by A9,A2;
+      then n<23 & 23<=2*n by A2,A9;
       hence thesis by Th30; end;
     suppose A10: 23<=n & n<43;  43<=2*23;
-      then n<43 & 43<=2*n by A10,A2;
+      then n<43 & 43<=2*n by A2,A10;
       hence thesis by Th32; end;
     suppose A11: 43<=n & n<83;  83<=2*43;
-      then n<83 & 83<=2*n by A11,A2;
+      then n<83 & 83<=2*n by A2,A11;
       hence thesis by Th33; end;
     suppose A12: 83<=n & n<163;  163<=2*83;
-      then n<163 & 163<=2*n by A12,A2;
+      then n<163 & 163<=2*n by A2,A12;
       hence thesis by Th35; end;
     suppose A13: 163<=n & n<317;  317<=2*163;
-      then n<317 & 317<=2*n by A13,A2;
+      then n<317 & 317<=2*n by A2,A13;
       hence thesis by Th36; end;
     suppose A14: 317<=n & n<631;  631<=2*317;
-      then n<631 & 631<=2*n by A14,A2;
+      then n<631 & 631<=2*n by A2,A14;
       hence thesis by Th37; end;
     suppose A15: 631<=n & n<1259;  1259<=2*631;
-      then n<1259 & 1259<=2*n by A15,A2;
+      then n<1259 & 1259<=2*n by A2,A15;
       hence thesis by Th38; end;
     suppose A16: 1259<=n & n<2503;  2503<=2*1259;
-      then n<2503 & 2503<=2*n by A16,A2;
+      then n<2503 & 2503<=2*n by A2,A16;
       hence thesis by Th39; end;
     suppose A17: 2503<=n & n<4001;  4001<=2*2503;
-      then n<4001 & 4001<=2*n by A17,A2;
+      then n<4001 & 4001<=2*n by A2,A17;
       hence thesis by Th40; end;
   end;
 
@@ -1953,20 +1960,20 @@ proof
       proof
         let k be Element of NAT;
         assume A10: k in dom F1;
-        then k in dom F by FINSEQ_2:18,A9;
+        then k in dom F by A9,FINSEQ_2:18;
         then F.k > 0 by A5;
-        hence thesis by A10,A9,FINSEQ_1:def 7;
+        hence thesis by A9,A10,FINSEQ_1:def 7;
       end;
       then A11: Product F1 > 0 by A4,A7;
        1 in Seg 1 by FINSEQ_1:5;
       then 1 in dom F2 by A8,FINSEQ_1:def 3;
-      then A12: F.(n+1) = F2.1 by A7,FINSEQ_1:def 7,A9;
+      then A12: F.(n+1) = F2.1 by A7,A9,FINSEQ_1:def 7;
        Seg (n+1) = dom F by A6,FINSEQ_1:def 3;
       then n+1 in dom F by FINSEQ_1:5;
       then A13: x > 0 by A5,A12;
        Product F = Product (F1^<*x*>) by A8,A9,FINSEQ_1:57
       .= Product F1 * x by RVSUM_1:126;
-      hence thesis by A13,A11,XREAL_1:131;
+      hence thesis by A11,A13,XREAL_1:131;
     end;
     hence thesis;
   end;
@@ -2010,16 +2017,16 @@ proof
       set m = max A;
       set X11=X1 \ {m};
       set X12=X2 \ {m};
-      A6: X11 c= X12 by XBOOLE_1:33,A5;
+      A6: X11 c= X12 by A5,XBOOLE_1:33;
       A7: X12 c= X2 by XBOOLE_1:36;
-      then A8: X12 c= NAT by XBOOLE_1:1,A5;
+      then A8: X12 c= NAT by A5,XBOOLE_1:1;
       A9: m in X2 by PRE_CIRC:def 1;
       then A10: X12 \/ {m} = X2 by ZFMISC_1:140;
       A11: X12 /\ {m} = (X2 /\ {m}) \ {m} by XBOOLE_1:49
       .= {m} \ {m} by A9,ZFMISC_1:52 .= {} by XBOOLE_1:37;
        card(X12\/{m})=card X12 + card {m} - card(X12 /\{m}) by CARD_2:64;
       then A12: card X2 = card X12 + 1 - card {} by A10,A11,CARD_1:79;
-       not {} in X12 by A7,A5;
+       not {} in X12 by A5,A7;
       then A13: Product Sgm X11 <= Product Sgm X12 by A4,A5,A6,A8,A12;
       reconsider m as Element of NAT by A5,A9;
        now let x be set;
@@ -2027,8 +2034,8 @@ proof
         then A15: x in A by A7;
         set r=x;
         reconsider r as Element of NAT by A5,A15;
-        A16: r <= m by A14,A7,PRE_CIRC:def 1;
-         not r=0 by A5,A14,A7;
+        A16: r <= m by A7,A14,PRE_CIRC:def 1;
+         not r=0 by A5,A7,A14;
         then 0 < r;
         then 0+1 < r+1 by XREAL_1:8;
         then 1 <= r by NAT_1:13;
@@ -2046,16 +2053,16 @@ proof
         then A22: n2=m by TARSKI:def 1;
          not n1 in {m} by A21,XBOOLE_0:def 4;
         then A23: n1<>m by TARSKI:def 1;
-         n1 <= m by PRE_CIRC:def 1,A21,A7;
+         n1 <= m by A7,A21,PRE_CIRC:def 1;
         hence n1 < n2 by A22,A23,XXREAL_0:1;
       end;
       then Product Sgm X2 = Product((Sgm X12) ^ (Sgm {m}))
         by A10,A17,A20,FINSEQ_3:48;
       then A24: Product Sgm X2 = (Product (Sgm X12))*(Product (Sgm {m}))
         by RVSUM_1:127
-      .= (Product (Sgm X12))*(Product <*m*>) by FINSEQ_3:50,A18
+      .= (Product (Sgm X12))*(Product <*m*>) by A18,FINSEQ_3:50
       .= (Product (Sgm X12))*m by RVSUM_1:125;
-      A25: 1*Product (Sgm X12) <= m*Product (Sgm X12) by XREAL_1:66,A19;
+      A25: 1*Product (Sgm X12) <= m*Product (Sgm X12) by A19,XREAL_1:66;
       per cases;
       suppose m in X1;
         then A26: X1 = X11 \/ {m} by ZFMISC_1:140;
@@ -2064,7 +2071,7 @@ proof
           then A27: x in X1 by XBOOLE_0:def 4;
           then A28: x in A by A5;
           set r=x;
-          reconsider r as Element of NAT by A28,A5;
+          reconsider r as Element of NAT by A5,A28;
           A29: r <= m by A5,A27,PRE_CIRC:def 1;
            not r=0 by A5,A27;
           then 0 < r;
@@ -2078,20 +2085,20 @@ proof
           then A32: n2=m by TARSKI:def 1;
            not n1 in {m} by A31,XBOOLE_0:def 4;
           then A33: n1<>m by TARSKI:def 1;
-           n1 in X12 by A31,A6;
+           n1 in X12 by A6,A31;
           then n1 <= m by A7,PRE_CIRC:def 1;
           hence n1 < n2 by A32,A33,XXREAL_0:1;
         end;
         then Product Sgm X1 = Product((Sgm X11) ^ (Sgm {m}))
-          by A26,A30,A20,FINSEQ_3:48
+          by A20,A26,A30,FINSEQ_3:48
         .= (Product (Sgm X11))*(Product (Sgm {m})) by RVSUM_1:127
-        .= (Product (Sgm X11))*(Product <*m*>) by FINSEQ_3:50,A18
+        .= (Product (Sgm X11))*(Product <*m*>) by A18,FINSEQ_3:50
         .= (Product (Sgm X11))*m by RVSUM_1:125;
-        hence Product Sgm X1 <= Product Sgm X2 by A24,A13,XREAL_1:66;
+        hence Product Sgm X1 <= Product Sgm X2 by A13,A24,XREAL_1:66;
       end;
       suppose not m in X1;
         then Product Sgm X1 <= Product Sgm X12 by A13,ZFMISC_1:65;
-        hence Product Sgm X1 <= Product Sgm X2 by A25,XXREAL_0:2,A24;
+        hence Product Sgm X1 <= Product Sgm X2 by A24,A25,XXREAL_0:2;
       end;
     end;
     hence thesis;
@@ -2134,11 +2141,11 @@ proof
     per cases by A4;
     suppose A6: not(p in rng F implies p |-count a = 1);
        rng {}={};
-      hence contradiction by A6,A5;
+      hence contradiction by A5,A6;
     end;
     suppose A7: not(not(p in rng F) implies p |-count a = 0);
-       a=1 & p<>1 by A3,FINSEQ_1:32,RVSUM_1:124,INT_2:def 5;
-      hence contradiction by NAT_3:21,A7;
+       a=1 & p<>1 by A3,FINSEQ_1:32,INT_2:def 5,RVSUM_1:124;
+      hence contradiction by A7,NAT_3:21;
     end;
   end;
   A8: for n being Element of NAT st P[n] holds P[n+1]
@@ -2181,34 +2188,34 @@ proof
       proof
         let m1,n1 be Element of NAT;
         assume A20: m1 in X1 & n1 in {x};
-        then A21: m1 in rng F by A17,A14;
+        then A21: m1 in rng F by A14,A17;
         A22: F is one-to-one by A10,FINSEQ_3:99;
         then A23: m1 in dom (F") by A21,FUNCT_1:55;
         set l=(F").m1;
          l in rng (F") by A23,FUNCT_1:def 5;
-        then A24: l in Seg (n+1) by A12,FUNCT_1:55,A22;
+        then A24: l in Seg (n+1) by A12,A22,FUNCT_1:55;
         then reconsider l as Element of NAT;
         A25: 1<= l & l <= n+1 by A24,FINSEQ_1:3;
         set n'=n+1;
-        A26: m1=F.l by FUNCT_1:57,A17,A20,A14,A22;
+        A26: m1=F.l by A14,A17,A20,A22,FUNCT_1:57;
         A27: n1=F.n' by A20,TARSKI:def 1;
-         not n'=l by ZFMISC_1:64,A20,A26;
+         not n'=l by A20,A26,ZFMISC_1:64;
         then l < n' by A25,XXREAL_0:1;
-        hence m1<n1 by A10,FINSEQ_1:def 13,A25,A11,A26,A27;
+        hence m1<n1 by A10,A11,A25,A26,A27,FINSEQ_1:def 13;
       end;
       A28: X1 \/ {x} = X \/ {x} by XBOOLE_1:39
-      .= X by ZFMISC_1:46,A13,A17;
-      then A29: F = F1 ^ F2 by A10,A16,A19,A18,FINSEQ_3:48;
+      .= X by A13,A17,ZFMISC_1:46;
+      then A29: F = F1 ^ F2 by A10,A16,A18,A19,FINSEQ_3:48;
       then A30: len F = len F1 + len F2 by FINSEQ_1:35;
       A31: F2 = <*x*> by FINSEQ_3:50;
-      then A32: n+1=len F1 + 1 by A30,A11,FINSEQ_1:56;
+      then A32: n+1=len F1 + 1 by A11,A30,FINSEQ_1:56;
       A33: rng F c= SetPrimes by FINSEQ_1:def 4;
        rng F1 c= rng F by A29,FINSEQ_1:42;
-      then A34: rng F1 c= SetPrimes by A33, XBOOLE_1:1;
+      then A34: rng F1 c= SetPrimes by A33,XBOOLE_1:1;
       then reconsider F1 as FinSequence of SetPrimes by FINSEQ_1:def 4;
       A35: rng F2 = {x} by A31,FINSEQ_1:56;
       A36: Product F = Product (F1^F2)
-        by A28,A10,A16,A19,A18,FINSEQ_3:48
+        by A10,A16,A18,A19,A28,FINSEQ_3:48
       .= Product (F1^<*x*>) by FINSEQ_3:50
       .= Product F1 * x by RVSUM_1:126;
        now let k be Element of NAT;
@@ -2219,7 +2226,7 @@ proof
       end;
       then a1<>0 by Th42;
       then A37: p |-count a = (p |-count a1) + (p |-count x)
-        by A36,A10,NAT_3:28;
+        by A10,A36,NAT_3:28;
       A38: rng F1 = X \ {x} by A16,FINSEQ_1:def 13;
       A39: now assume p in rng F;
         then p in (rng F1 \/ rng F2) by A29,FINSEQ_1:44;
@@ -2229,14 +2236,14 @@ proof
         suppose A42: p in rng F1;
           then not (p in {x}) by A38,XBOOLE_0:def 4;
           then p<>x by TARSKI:def 1;
-          then p |-count x = 0 by NAT_3:24,A41;
-          hence p |-count a=1 by A42,A37,A9,A15,A16,A32;
+          then p |-count x = 0 by A41,NAT_3:24;
+          hence p |-count a=1 by A9,A15,A16,A32,A37,A42;
         end;
         suppose A43: p=x;
           then p in {x} by TARSKI:def 1;
           then not (p in rng F1) by A38,XBOOLE_0:def 4;
           then p |-count a1 = 0 by A9,A15,A16,A32;
-          hence p |-count a=1 by A43,A41,NAT_3:22,A37;
+          hence p |-count a=1 by A37,A41,A43,NAT_3:22;
         end;
       end;
        now assume not(p in rng F);
@@ -2244,7 +2251,7 @@ proof
         then not(p in rng F1) & not(p in {x}) by A35,XBOOLE_0:def 2;
         then A44: p |-count a1 = 0 & p<>x by A9,A15,A16,A32,TARSKI:def 1;
          p<>1 by INT_2:def 5;
-        hence p |-count a=0 by A44,A37,NAT_3:24;
+        hence p |-count a=0 by A37,A44,NAT_3:24;
       end;
       hence thesis by A39;
     end;
@@ -2260,11 +2267,11 @@ end;
 
 theorem Th45:
   for n being Element of NAT
-  holds Product Sgm{p where p is Prime:p<=n+1} <= 4 to_power n
+  holds Product Sgm{p where p is prime Element of NAT:p<=n+1} <= 4 to_power n
 proof
   let n be Element of NAT;
   defpred P[Element of NAT] means
-  Product Sgm{p where p is Prime:p<=$1+1}<=(4 to_power $1);
+  Product Sgm{p where p is prime Element of NAT:p<=$1+1}<=(4 to_power $1);
   A1: for m being Element of NAT st (for n being Element of NAT st n < m
   holds P[n]) holds P[m]
   proof
@@ -2274,27 +2281,27 @@ proof
     suppose m<1;
       then A3: m=0 by NAT_1:14;
        now
-        assume {p where p is Prime:p<=0+1}<>{};
+        assume {p where p is prime Element of NAT:p<=0+1}<>{};
         then consider y being set such that
-        A4: y in {p where p is Prime:p<=1} by XBOOLE_0:def 1;
-         ex y' being Prime st y'=y & y'<=1 by A4;
+        A4: y in {p where p is prime Element of NAT:p<=1} by XBOOLE_0:def 1;
+        ex y' being prime Element of NAT st y'=y & y'<=1 by A4;
         hence contradiction by Lm1;
       end;
-      hence thesis by A3,POWER:29,RVSUM_1:124,FINSEQ_3:49;
+      hence thesis by A3,FINSEQ_3:49,POWER:29,RVSUM_1:124;
     end;
     suppose A5: m=1;
-      A6: {p where p is Prime:p<=2}={2}
+      A6: {p where p is prime Element of NAT:p<=2}={2}
       proof
         A7: now
           let y be set;
-          assume y in {p where p is Prime:p<=2};
-          then consider y' being Prime such that
+          assume y in {p where p is prime Element of NAT:p<=2};
+          then consider y' being prime Element of NAT such that
           A8: y'=y & y'<=2;
            y'>1 by Lm1; then y'>=1+1 by NAT_1:13;
           hence y=2 by A8,XXREAL_0:1;
         end;
          for y being set st y = 2
-          holds y in {p where p is Prime:p<=2} by INT_2:44;
+          holds y in {p where p is prime Element of NAT:p<=2} by INT_2:44;
         hence thesis by A7,TARSKI:def 1;
       end;
       A9: Product Sgm{2}=Product <*2*> by FINSEQ_3:50 .=2 by RVSUM_1:125;
@@ -2306,16 +2313,16 @@ proof
       suppose m+1 is odd;
         then consider k being Element of NAT such that
         A11: m+1=2*k+1 by ABIAN:9;
-        set X={p where p is Prime:p<=k+1};
-        set Y={p where p is Prime:p>k+1 & p<=2*k+1};
+        set X={p where p is prime Element of NAT:p<=k+1};
+        set Y={p where p is prime Element of NAT:p>k+1 & p<=2*k+1};
         A12: X c= Seg (k+1)
         proof
            for y being set holds y in X implies y in Seg (k+1)
           proof
             let y be set;
             assume y in X;
-            then A13: ex y' being Prime st y'=y & y'<=k+1;
-            then reconsider y as Prime;
+            then A13: ex y' being prime Element of NAT st y'=y & y'<=k+1;
+            then reconsider y as prime Element of NAT;
              y>=1 by Lm1;
             hence thesis by A13,FINSEQ_1:3;
           end;
@@ -2327,22 +2334,24 @@ proof
           proof
             let y be set;
             assume y in Y;
-            then A15: ex y' being Prime st y'=y & y'>k+1 & y'<=2*k+1;
-            then reconsider y as Prime;
+            then A15: ex y' being prime Element of NAT st
+            y'=y & y'>k+1 & y'<=2*k+1;
+            then reconsider y as prime Element of NAT;
              y>=1 by Lm1;
             hence thesis by A15,FINSEQ_1:3;
           end;
           hence thesis by TARSKI:def 3;
         end;
-        A16: {p where p is Prime:p<=2*k+1}=X \/ Y
+        A16: {p where p is prime Element of NAT: p<=2*k+1}=X \/ Y
         proof
            for y being set
-            holds y in {p where p is Prime:p<=2*k+1} iff y in X \/ Y
+            holds y in {p where p is prime Element of NAT:p<=2*k+1} iff
+            y in X \/ Y
           proof
             let y be set;
             A17: now
-              assume y in {p where p is Prime:p<=2*k+1};
-              then consider y' being Prime such that
+              assume y in {p where p is prime Element of NAT:p<=2*k+1};
+              then consider y' being prime Element of NAT such that
               A18: y'=y & y'<=2*k+1;
                y in X or y in Y
               proof
@@ -2357,16 +2366,17 @@ proof
               assume A19: y in X \/ Y;
               per cases by A19,XBOOLE_0:def 2;
               suppose y in X;
-                then consider y' being Prime such that
+                then consider y' being prime Element of NAT such that
                 A20: y'=y & y'<=k+1;
                  1*k<=2*k by XREAL_1:70;
                 then k+1<=2*k+1 by XREAL_1:8;
                 then y'=y & y'<=2*k+1 by A20,XXREAL_0:2;
-                hence y in {p where p is Prime:p<=2*k+1};
+                hence y in {p where p is prime Element of NAT:p<=2*k+1};
               end;
               suppose y in Y;
-                then ex y' being Prime st y'=y & y'>k+1 & y'<=2*k+1;
-                hence y in {p where p is Prime:p<=2*k+1};
+                then ex y' being prime Element of NAT st y'=y & y'>k+1 &
+                y'<=2*k+1;
+                hence y in {p where p is prime Element of NAT:p<=2*k+1};
               end;
             end;
             hence thesis by A17;
@@ -2378,9 +2388,10 @@ proof
           let a,b be Element of NAT;
           assume A22: a in X;
           assume A23: b in Y;
-          A24: ex y' being Prime st y'=a & y'<=k+1 by A22;
-           ex y'' being Prime st y''=b & y''>k+1 & y''<=2*k+1 by A23;
-          hence a < b by XXREAL_0:2,A24;
+A24:      ex y' being prime Element of NAT st y'=a & y'<=k+1 by A22;
+          ex y'' being prime Element of NAT st y''=b & y''>k+1 & y''<=2*k+1
+          by A23;
+          hence a < b by A24,XXREAL_0:2;
         end;
         set SX = Sgm X;
         set SY = Sgm Y;
@@ -2412,7 +2423,8 @@ proof
           assume A30: k' in dom SY;
            rng SY = Y by A14,FINSEQ_1:def 13;
           then SY.k' in Y by A30,FUNCT_1:12;
-          then ex y' being Prime st y'=SY.k' & y'>k+1 & y'<=2*k+1;
+          then ex y' being prime Element of NAT st y'=SY.k' & y'>k+1 &
+          y'<=2*k+1;
           hence SY.k' > 0;
         end;
         then A31: 0<Product SY by Th42;
@@ -2448,7 +2460,8 @@ proof
                  now
                   let y be set;
                   assume y in Y;
-                  then ex y' being Prime st y'=y & y'>k+1 & y'<=2*k+1;
+                  then ex y' being prime Element of NAT
+                  st y'=y & y'>k+1 & y'<=2*k+1;
                   hence y in SetPrimes by NEWTON:def 6;
                 end;
                 hence thesis by TARSKI:def 3;
@@ -2459,7 +2472,8 @@ proof
               proof
                 assume p divides a;
                 then p in rng SY by A41,NAT_3:8;
-                then ex y' being Prime st y'=p & y'>k+1 & y'<=2*k+1 by A42;
+                then ex y' being prime Element of NAT
+                st y'=p & y'>k+1 & y'<=2*k+1 by A42;
                 hence thesis;
               end;
               per cases;
@@ -2471,40 +2485,41 @@ proof
                    now
                     let y be set;
                     assume y in Y;
-                    then ex y' being Prime st y'=y & y'>k+1 & y'<=2*k+1;
+                    then ex y' being prime Element of NAT st
+                    y'=y & y'>k+1 & y'<=2*k+1;
                     hence y in SetPrimes by NEWTON:def 6;
                   end; hence thesis by TARSKI:def 3;
                 end;
                 A47: p in rng SY by A41,A42,A44;
-                A48: p<>1 & b<>0 by A41,A38,INT_2:def 5;
+                A48: p<>1 & b<>0 by A38,A41,INT_2:def 5;
                  b*c = ((2*k+1)!)/c*c by A35,NEWTON:def 3
                 .= (2*k+1)! by A45,XCMPLX_1:88;
                 then A49: p divides b*c by A44,NEWTON:54;
                  p divides b
                 proof
                   assume not p divides b;
-                  then A50: p divides c by A49,A41,NEWTON:98;
-                  per cases by A50,A41,NEWTON:98;
+                  then A50: p divides c by A41,A49,NEWTON:98;
+                  per cases by A41,A50,NEWTON:98;
                   suppose A51: p divides k!;
                      k+0<k+1 by XREAL_1:8;
-                    then k<p by XXREAL_0:2,A44;
-                    hence contradiction by A41,Th19,A51;
+                    then k<p by A44,XXREAL_0:2;
+                    hence contradiction by A41,A51,Th19;
                   end;
                   suppose p divides r!;
-                    hence contradiction by A41,Th19,A44;
+                    hence contradiction by A41,A44,Th19;
                   end;
                 end;
                 then p |-count b <> 0 by A48,NAT_3:27;
                 then 0 < p |-count b;
                 then 0+1 < p |-count b +1 by XREAL_1:8;
                 then 1 <= p |-count b by NAT_1:13;
-                hence thesis by A47,A14,A46,A41,Th44;
+                hence thesis by A14,A41,A46,A47,Th44;
               end;
               suppose A52: not(p>k+1 & p<=2*k+1);
                  1 divides a by NAT_D:6;
                 then A53: p |^ 0 divides a
-                  & not p |^ (0+1) divides a by A52,NEWTON:9,A43,NEWTON:10;
-                 p<>1 & a<>0 by Th42,A29,A41,INT_2:def 5;
+                  & not p |^ (0+1) divides a by A43,A52,NEWTON:9,10;
+                 p<>1 & a<>0 by A29,A41,Th42,INT_2:def 5;
                 hence thesis by A53,NAT_3:def 7;
               end;
             end;
@@ -2527,8 +2542,8 @@ proof
               reconsider r as Element of NAT by A58;
               A59: 2*k+1-k+k>=0+k by A58,XREAL_1:8;
               A60: (k!)*(r!)<>0 by NEWTON:25;
-              then A61: (2*k+1)! = (2*k+1)!/((k!)*(r!))*((k!)*(r!)) by XCMPLX_1
-:88
+              then A61: (2*k+1)! = (2*k+1)!/((k!)*(r!))*((k!)*(r!)) by
+XCMPLX_1:88
               .=((2*k+1) choose k)*((k!)*(r!)) by A59,NEWTON:def 3;
               A62: k+2>=0;
               set r'=2*k+3-(k+1);
@@ -2590,14 +2605,14 @@ proof
           assume A68: k' in dom SX;
            rng SX = X by A12,FINSEQ_1:def 13;
           then SX.k' in X by A68,FUNCT_1:12;
-          then ex y' being Prime st y'=SX.k' & y'<=k+1;
+          then ex y' being prime Element of NAT st y'=SX.k' & y'<=k+1;
           hence SX.k' > 0;
         end;
         then 0<=Product SX by Th42;
         then (Product SX)*(Product SY)<=(4 to_power k)*(4 to_power k)
-          by A28,A32,A31,XREAL_1:68;
+          by A28,A31,A32,XREAL_1:68;
         then Product (SX^SY)<=4 to_power (k+k) by A27,POWER:32;
-        hence thesis by A11,A21,A12,A14,A16,FINSEQ_3:48;
+        hence thesis by A11,A12,A14,A16,A21,FINSEQ_3:48;
       end;
       suppose A69: m+1 is even;
         A70: m-1>1-1 by A10,XREAL_1:11;
@@ -2605,35 +2620,37 @@ proof
         reconsider k as Element of NAT by A70,INT_1:16;
          k+1=m;
         then A71: k<m by NAT_1:13;
-        A72: {p where p is Prime:p<=m+1}={p where p is Prime:p<=m}
+        A72: {p where p is prime Element of NAT:p<=m+1}=
+        {p where p is prime Element of NAT:p<=m}
         proof
-           for y being set holds y in {p where p is Prime:p<=m+1}
-          iff y in {p where p is Prime:p<=m}
+          for y being set holds y in {p where p is prime Element of NAT:p<=m+1}
+          iff y in {p where p is prime Element of NAT:p<=m}
           proof
             let y be set;
             A73: now
-              assume y in {p where p is Prime:p<=m+1};
-              then consider y' being Prime such that
+              assume y in {p where p is prime Element of NAT:p<=m+1};
+              then consider y' being prime Element of NAT such that
               A74: y=y' & y'<=m+1;
                m+1>1+1 by A10,XREAL_1:8;
               then not (m+1 is Prime) by A69,PEPIN:17;
               then y'<m+1 by A74,XXREAL_0:1;
               then y'<=m by NAT_1:13;
-              hence y in {p where p is Prime:p<=m} by A74;
+              hence y in {p where p is prime Element of NAT:p<=m} by A74;
             end;
              now
-              assume y in {p where p is Prime:p<=m};
-              then consider y' being Prime such that
+              assume y in {p where p is prime Element of NAT:p<=m};
+              then consider y' being prime Element of NAT such that
               A75: y=y' & y'<=m;
                0+m<=1+m by XREAL_1:8;
               then y'<=m+1 by A75,XXREAL_0:2;
-              hence y in {p where p is Prime:p<=m+1} by A75;
+              hence y in {p where p is prime Element of NAT:p<=m+1} by A75;
             end;
             hence thesis by A73;
           end;
           hence thesis by TARSKI:2;
         end;
-        A76: Product Sgm {p where p is Prime:p<=k+1}<=4 to_power k by A71,A2;
+        A76: Product Sgm {p where p is prime Element of NAT:p<=k+1}<=
+        4 to_power k by A2,A71;
          4 to_power k <= 4 to_power m by A71,POWER:44;
         hence P[m] by A72,A76,XXREAL_0:2;
       end;
@@ -2644,12 +2661,12 @@ proof
 end;
 
 theorem Th46:
-  for x being Real st x>=2
-    holds Product Sgm{p where p is Prime:p<=x} <= 4 to_power (x-1)
+  for x being Real st x>=2 holds
+  Product Sgm{p where p is prime Element of NAT:p<=x} <= 4 to_power (x-1)
   proof
     let x be Real;
     assume A1: x>=2;
-    set A={p where p is Prime:p<=x};
+    set A={p where p is prime Element of NAT:p<=x};
     A2: A is finite
     proof
        ex m being Element of NAT st x<m
@@ -2667,8 +2684,8 @@ theorem Th46:
        A c= B
       proof
         let y be set;
-        assume y in {p where p is Prime:p<=x};
-        then consider y' be Prime such that
+        assume y in {p where p is prime Element of NAT:p<=x};
+        then consider y' be prime Element of NAT such that
         A6: y'=y & y'<=x;
          y'=y & y'<m by A5,A6,XXREAL_0:2;
         hence thesis by NEWTON:def 7;
@@ -2678,7 +2695,7 @@ theorem Th46:
     A7: A is non empty
     proof
       assume A8: A is empty;
-       2 in A by INT_2:44,A1;
+       2 in A by A1,INT_2:44;
       hence contradiction by A8;
     end;
      A is real-membered
@@ -2686,8 +2703,8 @@ theorem Th46:
       let y be set;
        y in A implies y is real
       proof
-        assume y in {p where p is Prime:p<=x};
-        then ex y' being Prime st y'=y & y'<=x;
+        assume y in {p where p is prime Element of NAT:p<=x};
+        then ex y' being prime Element of NAT st y'=y & y'<=x;
         hence thesis;
       end;
       hence thesis;
@@ -2695,27 +2712,29 @@ theorem Th46:
     then reconsider A as finite non empty real-membered set by A2,A7;
     set q = max A;
      q in A by PRE_CIRC:def 1;
-    then consider q' being Prime such that
+    then consider q' being prime Element of NAT such that
     A9: q'=q & q'<=x;
     reconsider q as Prime by A9;
-    A10: {p where p is Prime:p<=q}={p where p is Prime:p<=x}
+    A10: {p where p is prime Element of NAT:p<=q}=
+    {p where p is prime Element of NAT:p<=x}
     proof
-       for y being set holds
-      y in {p where p is Prime:p<=q} iff y in {p where p is Prime:p<=x}
+      for y being set holds
+      y in {p where p is prime Element of NAT:p<=q} iff
+      y in {p where p is prime Element of NAT:p<=x}
       proof
         let y be set;
         hereby
-          assume y in {p where p is Prime:p<=q};
-          then consider y' being Prime such that
+          assume y in {p where p is prime Element of NAT:p<=q};
+          then consider y' being prime Element of NAT such that
           A11: y'=y & y'<=q;
-           y'<=x by A11,A9,XXREAL_0:2;
-          hence y in {p where p is Prime:p<=x} by A11;
+           y'<=x by A9,A11,XXREAL_0:2;
+          hence y in {p where p is prime Element of NAT:p<=x} by A11;
         end;
-        assume A12: y in {p where p is Prime:p<=x};
-        then consider y' being Prime such that
+        assume A12: y in {p where p is prime Element of NAT:p<=x};
+        then consider y' being prime Element of NAT such that
         A13: y'=y & y'<=x;
          y'<=q by A12,A13,PRE_CIRC:def 1;
-        hence y in {p where p is Prime:p<=q} by A13;
+        hence y in {p where p is prime Element of NAT:p<=q} by A13;
       end;
       hence thesis by TARSKI:2;
     end;
@@ -2730,13 +2749,13 @@ theorem Th46:
         hence thesis by POWER:44;
       end;
     end;
-     Product Sgm{p where p is Prime:p<=x} <= (4 to_power (x-1))
+     Product Sgm{p where p is prime Element of NAT:p<=x} <= (4 to_power (x-1))
     proof
        q>1 by Lm1;
       then A15: q-'1=q-1 by BINARITH:50;
       set n=q-'1;
       A16: q=n+1 by A15;
-      set a = Product Sgm{p where p is Prime:p<=q};
+      set a = Product Sgm{p where p is prime Element of NAT:p<=q};
       set b = 4 to_power (q-1);
       set c = 4 to_power (x-1);
        a<=b by A16,Th45;
@@ -2756,13 +2775,13 @@ proof
   let n be Element of NAT;
   let p be Prime;
   assume A1: n<>0;
-  defpred P[Element of NAT,set] means
+  defpred P[Nat,set] means
   ($2=1 iff p|^$1 divides n) & ($2=0 iff not p|^$1 divides n);
-  A2: for k being Element of NAT,y1,y2 being set st
+  A2: for k being Nat,y1,y2 being set st
       k in Seg n & P[k,y1] & P[k,y2] holds y1 = y2;
-  A3: for k being Element of NAT st k in Seg n ex x being set st P[k,x]
+  A3: for k being Nat st k in Seg n ex x being set st P[k,x]
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume k in Seg n;
     per cases;
     suppose A4: p|^k divides n;
@@ -2778,14 +2797,14 @@ proof
   end;
   consider f being FinSequence such that
   A6: dom f = Seg n and
-  A7: for k being Element of NAT st k in Seg n holds P[k,f.k]
+  A7: for k being Nat st k in Seg n holds P[k,f.k]
   from FINSEQ_1:sch 1(A2,A3);
    now let x be set;
     assume x in rng f;
     then consider k being set such that
     A8: k in dom f & f.k=x by FUNCT_1:def 5;
     reconsider k as Element of NAT by A8;
-     P[k,f.k] by A8,A6,A7;
+     P[k,f.k] by A6,A7,A8;
     hence x in NAT by A8;
   end;
   then rng f c= NAT by TARSKI:def 3;
@@ -2819,16 +2838,15 @@ proof
   proof
     let x be set;
     assume A17: x in dom f;
-    then A18: x in dom f1 by A14,A6,FINSEQ_1:def 3;
+    then A18: x in dom f1 by A6,A14,FINSEQ_1:def 3;
     set ff1=n1 |-> 1;
     set ff2=n2 |-> 0;
-    set x1=x;
-    reconsider x1 as Element of NAT by A17;
+    reconsider x1 = x as Element of NAT by A17;
     per cases by A18,FINSEQ_1:38;
-    suppose A19: x in dom ff1;
+    suppose A19: x1 in dom ff1;
       then A20: x in Seg n1 by FUNCOP_1:19;
       then ff1.x=1 by FUNCOP_1:13;
-      then A21: f1.x=1 by A19,FINSEQ_1:def 7;
+      then A21: f1.x1=1 by A19,FINSEQ_1:def 7;
        p |^ x1 divides n
       proof
         per cases;
@@ -2852,10 +2870,10 @@ proof
           hence thesis by A23,A25,NAT_3:4;
         end;
       end;
-      hence f.x=f1.x by A21,A17,A6,A7;
+      hence f.x=f1.x by A6,A7,A17,A21;
     end;
-    suppose (ex m being Element of NAT st m in dom ff2 & x=len ff1 + m);
-      then consider m being Element of NAT such that
+    suppose (ex m being Nat st m in dom ff2 & x1=len ff1 + m);
+      then consider m being Nat such that
       A26: m in dom ff2 & x=len ff1 + m;
       A27: m in Seg n2 by A26,FUNCOP_1:19;
       then ff2.m=0 by FUNCOP_1:13;
@@ -2870,7 +2888,7 @@ proof
          p>1 by INT_2:def 5;
         hence contradiction by A29,A30,NAT_3:25;
       end;
-      hence f.x=f1.x by A28,A17,A6,A7;
+      hence f.x=f1.x by A6,A7,A17,A28;
     end;
   end;
   set fa=(p |-count n) |-> 1;
@@ -2903,7 +2921,7 @@ proof
     thus len f = 0;
     thus for k being Element of NAT st k in dom f holds f.k=[\ 0/(p|^k) /];
      p<>1 by INT_2:def 5;
-    hence p |-count (0!) = Sum f by RVSUM_1:102,NAT_3:21,NEWTON:18;
+    hence p |-count (0!) = Sum f by NAT_3:21,NEWTON:18,RVSUM_1:102;
   end;
   A2:for n being Element of NAT st P[n] holds P[n+1]
   proof
@@ -2957,19 +2975,19 @@ then   rng f c= NAT by TARSKI:def 3;
             then fn.k=[\ n/(p|^k) /] by A4;
             hence thesis by A14,FINSEQ_1:def 7;
           end;
-          suppose ex n1 being Element of NAT
+          suppose ex n1 being Nat
           st n1 in dom <* 0 *> & k=len fn + n1;
-            then consider n1 being Element of NAT such that
+            then consider n1 being Nat such that
             A15: n1 in dom <* 0 *> & k=len fn + n1;
              n1 in Seg 1 by A15,FINSEQ_1:55;
-            then A16: n1=1 by TARSKI:def 1,FINSEQ_1:4;
+            then A16: n1=1 by FINSEQ_1:4,TARSKI:def 1;
             then fn0.(n+1)=<* 0 *>.1 by A4,A15,FINSEQ_1:def 7;
-            then A17: fn0.k=0 by A16,A4,A15,FINSEQ_1:57;
+            then A17: fn0.k=0 by A4,A15,A16,FINSEQ_1:57;
             A18: p|^(n+1)=p|^n*p by NEWTON:11;
             A19: p>1 by INT_2:def 5;
             then A20: p*p|^n>1*p|^n by XREAL_1:70;
              p|^n>n by A19,Th3;
-            then p|^k>n by A16,A20,A18,A4,A15,XXREAL_0:2;
+            then p|^k>n by A4,A15,A16,A18,A20,XXREAL_0:2;
             then n/(p|^k)<1 by XREAL_1:191;
             then n/(p|^k)-1<1-1 by XREAL_1:11;
             hence thesis by A17,INT_1:def 4;
@@ -2984,7 +3002,7 @@ then   rng f c= NAT by TARSKI:def 3;
           A24: n+1=(p|^k)*r by NAT_D:def 3;
           A25: (n+1)/(p|^k) = r/((p|^k)/(p|^k)) by A24,XCMPLX_1:78
           .= r/(1/1) by XCMPLX_1:60 .= r;
-           p|^k-1>=1-1 by XREAL_1:11,A21;
+           p|^k-1>=1-1 by A21,XREAL_1:11;
           then A26: 0/(p|^k)<=(p|^k-1)/(p|^k) by XREAL_1:74;
            ((p|^k)/(p|^k))+((-1)/(p|^k))-1<0 by A22;
           then A27: (p|^k+(-1))/(p|^k)-1<0 by XCMPLX_1:63;
@@ -2995,11 +3013,11 @@ then   rng f c= NAT by TARSKI:def 3;
           .=[\ (n+1)/(p|^k) + (p|^k-1)/(p|^k) /] by XCMPLX_1:63
           .=(n+1)/(p|^k) + [\ (p|^k-1)/(p|^k) /] by A25,INT_1:51
           .=(n+1)/(p|^k) + 0 by A26,A27,INT_1:def 4
-          .=[\ (n+1)/(p|^k) /] by INT_1:47,A25;
-          hence f.k=[\ (n+1)/(p|^k) /] by A23,A11,A12,A13,A5;
+          .=[\ (n+1)/(p|^k) /] by A25,INT_1:47;
+          hence f.k=[\ (n+1)/(p|^k) /] by A5,A11,A12,A13,A23;
         end;
         suppose A28: not p|^k divides (n+1);
-          then A29: fn1.k=0 by A12,A5;
+          then A29: fn1.k=0 by A5,A12;
           set d=(n+1) div (p|^k);
           set m=(n+1) mod (p|^k);
           A30: n+1 = (p|^k) * d + m by NAT_D:2;
@@ -3015,7 +3033,7 @@ then   rng f c= NAT by TARSKI:def 3;
           then m-1<p|^k+1-1 by XREAL_1:11;
           then (m-1)/(p|^k)<(p|^k)/(p|^k) by XREAL_1:76;
           then A33: (m-1)/(p|^k)-1<1-1 by A22,XREAL_1:11;
-           m/(p|^k)<(p|^k)/(p|^k) by XREAL_1:76,A32;
+           m/(p|^k)<(p|^k)/(p|^k) by A32,XREAL_1:76;
           then A34: m/(p|^k)-1<1-1 by A22,XREAL_1:11;
            n = (p|^k) * d + (m-1) by A30;
           then [\ n/(p|^k) /]
@@ -3030,7 +3048,7 @@ then   rng f c= NAT by TARSKI:def 3;
           .= [\ ((p|^k) * d)/(p|^k) + m/(p|^k) /] by XCMPLX_1:75
           .= [\ ((p|^k) * d + m)/(p|^k) /] by XCMPLX_1:63
           .= [\ (n+1)/(p|^k) /] by NAT_D:2;
-          hence f.k=[\ (n+1)/(p|^k) /] by A29,A13,A11;
+          hence f.k=[\ (n+1)/(p|^k) /] by A11,A13,A29;
         end;
       end;
       reconsider fn0 as Element of (n+1)-tuples_on REAL by A8,FINSEQ_2:110;
@@ -3084,28 +3102,28 @@ theorem Th49:
     A8: dom ((-(f1^f0))+(-(f1^f0))) = dom (-(f1^f0)) /\ dom (-(f1^f0)) by Th41
     .= Seg (2*n) by A7,SEQ_1:def 7;
     A9: dom f = dom f2 /\ dom ((-(f1^f0))+(-(f1^f0))) by Th41
-    .= Seg (2*n) /\ Seg (2*n) by A8,A4,FINSEQ_1:def 3;
+    .= Seg (2*n) /\ Seg (2*n) by A4,A8,FINSEQ_1:def 3;
     hence len f = 2*n by FINSEQ_1:def 3;
     thus (for k being Element of NAT st k in dom f
        holds f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] )
     proof
       let k be Element of NAT;
       assume A10: k in dom f;
-      then A11: k in dom f2 by A9,A4,FINSEQ_1:def 3;
-      A12: f.k = f2.k+((-(f1^f0))+(-(f1^f0))).k by SEQ_1:def 3,A10
-      .=f2.k+((-(f1^f0)).k+(-(f1^f0)).k) by SEQ_1:def 3,A10,A8,A9
+      then A11: k in dom f2 by A4,A9,FINSEQ_1:def 3;
+      A12: f.k = f2.k+((-(f1^f0))+(-(f1^f0))).k by A10,SEQ_1:def 3
+      .=f2.k+((-(f1^f0)).k+(-(f1^f0)).k) by A8,A9,A10,SEQ_1:def 3
       .=f2.k+2*(-(f1^f0)).k
       .=f2.k+2*(-(f1^f0).k) by RVSUM_1:35
       .=f2.k-2*(f1^f0).k
-      .=[\(2*n)/(p|^k)/]-2*(f1^f0).k by A11,A5;
-      per cases by FINSEQ_1:38,A7,A10,A9;
+      .=[\(2*n)/(p|^k)/]-2*(f1^f0).k by A5,A11;
+      per cases by A7,A9,A10,FINSEQ_1:38;
       suppose A13: k in dom f1;
         then (f1^f0).k=f1.k by FINSEQ_1:def 7
         .=[\n/(p|^k)/] by A2,A13;
         hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A12;
       end;
-      suppose ex e being Element of NAT st e in dom f0 & k=len f1 + e;
-        then consider e being Element of NAT such that
+      suppose ex e being Nat st e in dom f0 & k=len f1 + e;
+        then consider e being Nat such that
         A14: e in dom f0 & k=len f1 + e;
         A15: dom f0 = Seg n by FUNCOP_1:19;
         then e >= 1 by A14,FINSEQ_1:3;
@@ -3119,21 +3137,21 @@ theorem Th49:
         then p*p|^n>1*p|^n by XREAL_1:70;
         then p|^(1+n)>p|^n by NEWTON:11;
         then A19: p|^k>p|^n by A17,XXREAL_0:2;
-        A20: (f1^f0).k = f0.e by A14,FINSEQ_1:def 7 .= 0 by A14,A15
-,FUNCOP_1:13;
+        A20: (f1^f0).k = f0.e by A14,FINSEQ_1:def 7 .= 0 by A14,A15,FUNCOP_1:13
+;
         per cases;
         suppose n=0;
-          hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A20,A12,INT_1:47;
+          hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A12,A20,INT_1:47;
         end;
         suppose n<>0;
         then n>0;
         then A21: n/(p|^n)>n/(p|^k) by A19,XREAL_1:78;
-         p|^n>n by Th3,A18;
+         p|^n>n by A18,Th3;
         then (p|^n)/(p|^n)>n/(p|^n) by XREAL_1:76;
         then 1>n/(p|^n) by XCMPLX_1:60;
         then 1>n/(p|^k) by A21,XXREAL_0:2;
         then 1-1>n/(p|^k)-1 by XREAL_1:11;
-        hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A20,A12,INT_1:def 4;
+        hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A12,A20,INT_1:def 4;
         end;
       end;
     end;
@@ -3143,8 +3161,8 @@ theorem Th49:
       suppose A22: n=0;
          p>1 by INT_2:def 5;
         then A23: p |-count (2*n choose n)
-        = 0 by A22,NEWTON:27,NAT_3:21;
-         len f = 0 by A22,A9,FINSEQ_1:def 3;
+        = 0 by A22,NAT_3:21,NEWTON:27;
+         len f = 0 by A9,A22,FINSEQ_1:def 3;
         hence thesis by A23,PROB_3:67;
       end;
       suppose A24: n<>0;
@@ -3172,15 +3190,15 @@ theorem Th49:
         A37: -(f1^f0) is Element of len(-(f1^f0))-tuples_on REAL
             by FINSEQ_2:110;
          Sum f
-        = Sum f2 + Sum((-(f1^f0))+(-(f1^f0))) by RVSUM_1:119,A34,A35,A36
-        .= Sum f2 + (Sum(-(f1^f0)) + Sum(-(f1^f0))) by RVSUM_1:119,A37
+        = Sum f2 + Sum((-(f1^f0))+(-(f1^f0))) by A34,A35,A36,RVSUM_1:119
+        .= Sum f2 + (Sum(-(f1^f0)) + Sum(-(f1^f0))) by A37,RVSUM_1:119
         .= Sum f2 + (- Sum(f1^f0) + Sum(-(f1^f0))) by RVSUM_1:118
         .= Sum f2 + (- Sum(f1^f0) + (- Sum(f1^f0))) by RVSUM_1:118
         .= Sum f2 - 2*Sum(f1^f0)
         .= Sum f2 - 2*(Sum(f1) + Sum(f0)) by RVSUM_1:105
         .= Sum f2 - 2*(Sum f1 + n*0) by RVSUM_1:110
         .= p |-count ((2*n)!) -(p |-count (n!) + p |-count (n!)) by A3,A6
-        .= p |-count (((2*n)!) div ((n!)*(n!))) by A33,NAT_3:28,A25;
+        .= p |-count (((2*n)!) div ((n!)*(n!))) by A25,A33,NAT_3:28;
         hence thesis by A30;
       end;
     end;
@@ -3218,25 +3236,25 @@ Lm8:
       then p|^(2*n)<p to_power r by POWER:46;
       then p|^(2*n)<p|^r by POWER:46;
       then p|^(2*n)<2*n by A2,XXREAL_0:2;
-      hence contradiction by Th3,A7;
+      hence contradiction by A7,Th3;
     end;
     A9: len f0 = len(r |-> 1) + len((2*n -' r)|-> 0) by FINSEQ_1:35
     .= r + len((2*n -' r)|->0) by FINSEQ_2:69
     .= r + (2*n -' r) by FINSEQ_2:69
-    .= r + (2*n - r) by BINARITH:50,A8
+    .= r + (2*n - r) by A8,BINARITH:50
     .= len f by A4;
     A10: for k be Element of NAT st k in dom f holds f.k <= f0.k
     proof
       let k be Element of NAT;
       assume A11: k in dom f;
       then k in Seg (2*n) by A4,FINSEQ_1:def 3;
-      then A12: k in dom f0 by A9,A4,FINSEQ_1:def 3;
+      then A12: k in dom f0 by A4,A9,FINSEQ_1:def 3;
       A13: f.k=[\(2*n)/(p|^k)/] - 2*[\n/(p|^k)/] by A5,A11;
       per cases by A12,FINSEQ_1:38;
       suppose A14: k in dom (r |-> 1);
         then A15: k in Seg r by FUNCOP_1:19;
         A16: f0.k = (r |-> 1).k by A14,FINSEQ_1:def 7
-        .= 1 by FUNCOP_1:13,A15;
+        .= 1 by A15,FUNCOP_1:13;
         A17: (2*n)/(p|^k)= 2*(n/(p|^k)) by XCMPLX_1:75;
         A18: (2*n)/(p|^k) - 1 < [\(2*n)/(p|^k)/] by INT_1:def 4;
          [\n/(p|^k)/] <= n/(p|^k) by INT_1:def 4;
@@ -3254,17 +3272,17 @@ Lm8:
         then (-[\n/(p|^k)/])*2 < (-(n/(p|^k) - 1))*2 by XREAL_1:70;
         then -2*[\n/(p|^k)/] + [\(2*n)/(p|^k)/] <
         2*(-n/(p|^k) + 1) + (2*n)/(p|^k) by A20,XREAL_1:10;
-        then f.k < 1+1 by A17,A13;
+        then f.k < 1+1 by A13,A17;
         hence f.k <= f0.k by A16,A19,NAT_1:13;
       end;
-      suppose ex n0 being Element of NAT
+      suppose ex n0 being Nat
         st n0 in dom ((2*n -' r)|-> 0) & k=len (r |-> 1)+ n0;
-        then consider n0 be Element of NAT such that
+        then consider n0 be Nat such that
         A21: n0 in dom ((2*n -' r)|-> 0) & k=len (r |-> 1)+ n0;
         A22: n0 in Seg (2*n -' r) by A21,FUNCOP_1:19;
         A23: k=r + n0 by A21,FINSEQ_2:69;
         reconsider k1=k as Element of NAT;
-         1<=n0 by FINSEQ_1:3,A22;
+         1<=n0 by A22,FINSEQ_1:3;
         then 1+r<=n0+r by XREAL_1:8;
         then r+1<k or r+1=k by A23,XXREAL_0:1;
         then p to_power (r+1) <= p to_power k by A7,POWER:44;
@@ -3285,7 +3303,7 @@ Lm8:
      Sum f0 = Sum (r |-> 1) + Sum ((2*n -' r)|-> 0) by RVSUM_1:105
     .= r*1 + Sum ((2*n -' r)|-> 0) by RVSUM_1:110
     .= r + (2*n -' r)*0 by RVSUM_1:110 .= r;
-    hence Sum f <= r by A10,INTEGRA5:3,A9;
+    hence Sum f <= r by A9,A10,INTEGRA5:3;
   end;
 
 Lm9:
@@ -3311,7 +3329,7 @@ Lm9:
       A5: (for k being Element of NAT st k in dom f
         holds f.k=[\(2*n)/(p|^k)/] - 2*[\n/(p|^k)/]) and
       A6: p |-count (2*n choose n) = Sum f by Th49;
-      thus p |-count (2*n choose n) <= r by Lm8,A3,A4,A5,A6;
+      thus p |-count (2*n choose n) <= r by A3,A4,A5,A6,Lm8;
     end;
     thus (p>2*n implies p |-count (2*n choose n) = 0)
     proof
@@ -3379,11 +3397,11 @@ Lm9:
           then n/p<(2*p)/p by XREAL_1:76;
           then n/p < 2 by A23;
           then n/p - 1 < 2 - 1 by XREAL_1:11;
-          then A29: [\n/p/] = 1 by INT_1:def 4,A28;
-           f.k = [\(2*n)/(p|^1)/] - 2*[\n/(p|^1)/] by A27,A18,A21
+          then A29: [\n/p/] = 1 by A28,INT_1:def 4;
+           f.k = [\(2*n)/(p|^1)/] - 2*[\n/(p|^1)/] by A18,A21,A27
           .= [\ (2*n)/p /] - 2*[\ n/(p|^1) /] by NEWTON:10
           .= [\ (2*n)/p /] - 2*[\ n/p /] by NEWTON:10
-          .= 2 - 2*1 by INT_1:def 4,A24,A26,A29;
+          .= 2 - 2*1 by A24,A26,A29,INT_1:def 4;
           hence f.k=0;
         end;
         suppose 1<k & k<=2*n;
@@ -3398,7 +3416,7 @@ Lm9:
           then 2*n<p*p by A25,XXREAL_0:2;
           then 2*n<(p|^1)*p  by NEWTON:10;
           then A31: 2*n<p|^(1+1) by NEWTON:11;
-           p>1 & (k=2 or 2<k) by A30,XXREAL_0:1,INT_2:def 5;
+           p>1 & (k=2 or 2<k) by A30,INT_2:def 5,XXREAL_0:1;
           then p to_power 2 <= p to_power k by POWER:44;
           then p|^2 <= p to_power k by POWER:48;
           then A32: p|^2 <= p|^k by POWER:48;
@@ -3412,23 +3430,23 @@ Lm9:
           then n/(p|^k) < (p|^k)/(p|^k) by XREAL_1:76;
           then n/(p|^k) < 1 by XCMPLX_1:60;
           then A34: n/(p|^k) - 1 < 1-1 by XREAL_1:11;
-          A35: [\2*n/(p|^k)/] = 0 by INT_1:def 4,A33;
+          A35: [\2*n/(p|^k)/] = 0 by A33,INT_1:def 4;
            f.k=[\(2*n)/(p|^k)/] - 2*[\n/(p|^k)/] by A18,A21
-          .= 0 - 2*0 by INT_1:def 4,A34,A35;
+          .= 0 - 2*0 by A34,A35,INT_1:def 4;
           hence f.k=0;
         end;
       end;
       set q = (2*n) |-> 0;
       A36: dom q = Seg (2*n) by FUNCOP_1:19;
       A37: dom f = Seg (2*n) by A17,FINSEQ_1:def 3;
-       for k being Element of NAT st k in dom f holds f.k = q.k
+       for k being Nat st k in dom f holds f.k = q.k
       proof
-        let k be Element of NAT;
+        let k be Nat;
         assume A38: k in dom f;
         then f.k=0 by A20;
-        hence f.k = q.k by A38,A37,FUNCOP_1:13;
+        hence f.k = q.k by A37,A38,FUNCOP_1:13;
       end;
-      then q=f by FINSEQ_1:17,A36,A37;
+      then q=f by A36,A37,FINSEQ_1:17;
       then Sum f = 2*n*0 by RVSUM_1:110;
       hence p |-count (2*n choose n) = 0 by A19;
     end;
@@ -3463,18 +3481,18 @@ Lm9:
     then (sqrt(2*n))^2 >= p*p by SQUARE_1:def 3;
     then A50: 2*n>=p*p by SQUARE_1:def 4;
     then 2*n>p by A47,XXREAL_0:2;
-    then log(p,2*n)>log(p,p) by POWER:65,A46;
-    then log(p,2*n)>1 by POWER:60,A46;
+    then log(p,2*n)>log(p,p) by A46,POWER:65;
+    then log(p,2*n)>1 by A46,POWER:60;
     then log(p,2*n)-1>1-1 by XREAL_1:11;
     then reconsider r as Element of NAT by A48,INT_1:16;
      r < log(p,2*n) or r = log(p,2*n) by A48,XXREAL_0:1;
     then p to_power r <= p to_power log(p,2*n) by A46,POWER:44;
     then p|^r <= p to_power log(p,2*n) by POWER:48;
-    then A51: p|^r <= 2*n by POWER:def 3,A50,A46;
+    then A51: p|^r <= 2*n by A46,A50,POWER:def 3;
      log(p,2*n) - 1 +1 < r +1 by A48,XREAL_1:8;
     then p to_power log(p,2*n) < p to_power (r+1) by A46,POWER:44;
     then p to_power log(p,2*n) < p|^(r+1) by POWER:48;
-    then A52: 2*n < p|^(r+1) by POWER:def 3,A46;
+    then A52: 2*n < p|^(r+1) by A46,POWER:def 3;
     set k0=p |-count (2*n choose n);
      n>=2 by A1,XXREAL_0:2;
     then k0 <= r  by A2,A51,A52;
@@ -3492,10 +3510,10 @@ definition
   for i being set st i in dom it holds it.i = p |-count f.i;
 existence
 proof
-  deffunc F(Element of NAT) = p |-count f.$1;
+  deffunc F(Nat) = p |-count f.$1;
   consider g being FinSequence such that
   A1: len g = len f and
-  A2: for k being Element of NAT st k in Seg len f holds g.k = F(k)
+  A2: for k being Nat st k in Seg len f holds g.k = F(k)
   from FINSEQ_1:sch 2;
   A3: dom g = Seg len g by FINSEQ_1:def 3;
    now let y be set;
@@ -3503,7 +3521,7 @@ proof
     then consider x be set such that
     A4: x in dom g & y=g.x by FUNCT_1:def 5;
     reconsider x as Element of NAT by A4;
-     x in Seg len f by A4,A1,FINSEQ_1:def 3;
+     x in Seg len f by A1,A4,FINSEQ_1:def 3;
     then y=F(x) by A2,A4;
     hence y in NAT;
   end;
@@ -3511,25 +3529,28 @@ proof
   then reconsider g as FinSequence of NAT by FINSEQ_1:def 4;
   take g;
   thus len g = len f by A1;
-  thus thesis by A1,A2,A3;
+  let i be set; assume
+A5: i in dom g;
+  then i is Nat by ORDINAL1:def 13;
+  hence thesis by A1,A2,A3,A5;
 end;
 uniqueness
 proof
   let g,h be FinSequence of NAT such that
-  A5: len g = len f and
-  A6: for i being set st i in dom g holds g.i = p |-count f.i and
-  A7: len h = len f and
-  A8: for i being set st i in dom h holds h.i = p |-count f.i;
-  A9: dom g = Seg len g by FINSEQ_1:def 3;
-  A10: dom h = Seg len h by FINSEQ_1:def 3;
-   for k being Element of NAT st k in dom g holds g.k = h.k
+  A6: len g = len f and
+  A7: for i being set st i in dom g holds g.i = p |-count f.i and
+  A8: len h = len f and
+  A9: for i being set st i in dom h holds h.i = p |-count f.i;
+  A10: dom g = Seg len g by FINSEQ_1:def 3;
+  A11: dom h = Seg len h by FINSEQ_1:def 3;
+   for k being Nat st k in dom g holds g.k = h.k
   proof
-    let k be Element of NAT; assume
-A11: k in dom g;
-    hence g.k = p |-count f.k by A6
-      .= h.k by A5,A7,A8,A9,A10,A11;
+    let k be Nat; assume
+A12: k in dom g;
+    hence g.k = p |-count f.k by A7
+      .= h.k by A6,A8,A9,A10,A11,A12;
   end;
-  hence g = h by A5,A7,A9,A10,FINSEQ_1:17;
+  hence g = h by A6,A8,A10,A11,FINSEQ_1:17;
 end;
 end;
 
@@ -3556,13 +3577,13 @@ proof
   A2: dom (p |-count (f1^f2)) = Seg len (p |-count (f1^f2)) by FINSEQ_1:def 3
   .= Seg len (f1^f2) by Def1;
   A3: Seg len (f1^f2) = Seg (len f1 + len f2) by FINSEQ_1:35
-  .= Seg (len (p |-count f1) + len (p |-count f2)) by Def1,A1
+  .= Seg (len (p |-count f1) + len (p |-count f2)) by A1,Def1
   .= Seg len ((p |-count f1)^(p |-count f2)) by FINSEQ_1:35
   .= dom ((p |-count f1)^(p |-count f2)) by FINSEQ_1:def 3;
-   for k being Element of NAT st k in dom (p |-count (f1^f2))
+   for k being Nat st k in dom (p |-count (f1^f2))
   holds (p |-count (f1^f2)).k = ((p |-count f1)^(p |-count f2)).k
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume A4: k in dom (p |-count (f1^f2));
     then A5: k in dom (f1^f2) by A2,FINSEQ_1:def 3;
     per cases by A5,FINSEQ_1:38;
@@ -3572,25 +3593,25 @@ proof
       .= dom (p |-count f1) by FINSEQ_1:def 3;
        (p |-count (f1^f2)).k = p |-count (f1^f2).k by A4,Def1
       .= p |-count (f1.k) by A6,FINSEQ_1:def 7
-      .= (p |-count f1).k by Def1,A6,A7;
+      .= (p |-count f1).k by A6,A7,Def1;
       hence thesis by A6,A7,FINSEQ_1:def 7;
     end;
-    suppose ex n being Element of NAT st n in dom f2 & k=len f1 + n;
-      then consider n be Element of NAT such that
+    suppose ex n being Nat st n in dom f2 & k=len f1 + n;
+      then consider n be Nat such that
       A8: n in dom f2 & k=len f1 + n;
       A9: (f1^f2).k = f2.n by A8,FINSEQ_1:def 7;
       A10: dom f2 = Seg len f2 by FINSEQ_1:def 3
       .= Seg len (p |-count f2) by Def1
       .= dom (p |-count f2) by FINSEQ_1:def 3;
       A11: ((p |-count f1)^(p |-count f2)).k =
-      ((p |-count f1)^(p |-count f2)).(len (p |-count f1) + n) by Def1,A8
-      .= (p |-count f2).n by FINSEQ_1:def 7,A10,A8;
-       (p |-count (f1^f2)).k = p |-count (f2.n) by A9,A4,Def1
-      .= (p |-count f2).n by Def1,A10,A8;
+      ((p |-count f1)^(p |-count f2)).(len (p |-count f1) + n) by A8,Def1
+      .= (p |-count f2).n by A8,A10,FINSEQ_1:def 7;
+       (p |-count (f1^f2)).k = p |-count (f2.n) by A4,A9,Def1
+      .= (p |-count f2).n by A8,A10,Def1;
       hence thesis by A11;
     end;
   end;
-  hence thesis by A3,FINSEQ_1:17,A2;
+  hence thesis by A2,A3,FINSEQ_1:17;
 end;
 
 theorem Th52:
@@ -3605,13 +3626,13 @@ proof
    Seg 1 = Seg len <* p |-count n *> by FINSEQ_1:56;
   then A2: dom (p |-count <*n*>) = dom <* (p |-count n) *> by A1,FINSEQ_1:def 3
 ;
-   for k being Element of NAT st k in dom (p |-count <*n*>)
+   for k being Nat st k in dom (p |-count <*n*>)
   holds (p |-count <*n*>).k = <* p |-count n *>.k
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume A3: k in dom (p |-count <*n*>);
     then A4: (p |-count <*n*>).k = p |-count <*n*>.k by Def1;
-     1<=k & k<=1 by A3,A1,FINSEQ_1:3;
+     1<=k & k<=1 by A1,A3,FINSEQ_1:3;
     then A5: k=1 by XXREAL_0:1;
     then (p |-count <*n*>).k = p |-count n by A4,FINSEQ_1:57;
     hence thesis by A5,FINSEQ_1:57;
@@ -3632,9 +3653,9 @@ A1: P[0]
     let p be Prime;
     assume 0=len f & Product f<>0;
     then A2: f={} by FINSEQ_1:25;
-    then A3: Sum (p |-count f) = 0 by RVSUM_1:102,Th50;
+    then A3: Sum (p |-count f) = 0 by Th50,RVSUM_1:102;
      p<>1 by INT_2:def 5;
-    hence thesis by A2,RVSUM_1:124,A3,NAT_3:21;
+    hence thesis by A2,A3,NAT_3:21,RVSUM_1:124;
   end;
   A4: for n being Element of NAT st P[n] holds P[n+1]
   proof
@@ -3650,7 +3671,7 @@ A1: P[0]
       then consider g being FinSequence of NAT, d being Element of NAT such
 that
       A7: f = g^<*d*> by FINSEQ_2:22;
-      A8: (Product g) * d <> 0 by RVSUM_1:126,A6,A7;
+      A8: (Product g) * d <> 0 by A6,A7,RVSUM_1:126;
       then A9: Product g <> 0;
       A10: d <> 0 by A8;
        len f = len g + len <*d*> by A7,FINSEQ_1:35;
@@ -3658,9 +3679,9 @@ that
        p |-count (Product f)
       = p |-count ((Product g) * d) by A7,RVSUM_1:126
       .= (p |-count (Product g)) + (p |-count d) by A9,A10,NAT_3:28
-      .= Sum (p |-count g) + (p |-count d) by A5,A11,A9
+      .= Sum (p |-count g) + (p |-count d) by A5,A9,A11
       .= Sum ((p |-count g)^<*(p |-count d)*>) by RVSUM_1:104
-      .= Sum ((p |-count g)^(p |-count <*d*>)) by Th52,A10
+      .= Sum ((p |-count g)^(p |-count <*d*>)) by A10,Th52
       .= Sum (p |-count (g^<*d*>)) by Th51;
       hence thesis by A7;
     end;
@@ -3716,23 +3737,23 @@ proof
       A10: now let k be Element of NAT;
         assume A11: k in dom g1;
         then A12: f1.k=g1.k by A6,FINSEQ_1:def 7;
-         k in Seg len g2 by A9,A8,A11,FINSEQ_1:def 3;
+         k in Seg len g2 by A8,A9,A11,FINSEQ_1:def 3;
         then k in dom g2 by FINSEQ_1:def 3;
         then A13: f2.k=g2.k by A7,FINSEQ_1:def 7;
          dom g1 c= dom f1 by A6,FINSEQ_1:39;
-        hence g1.k<=g2.k & g1.k>0 by A11,A12,A13,A5;
+        hence g1.k<=g2.k & g1.k>0 by A5,A11,A12,A13;
       end;
-      then A14: Product g1 <= Product g2 by A3,A9,A8;
-      A15: Product f1 = (Product g1) * r1 by RVSUM_1:126,A6;
-      A16: Product f2 = (Product g2) * r2 by RVSUM_1:126,A7;
+      then A14: Product g1 <= Product g2 by A3,A8,A9;
+      A15: Product f1 = (Product g1) * r1 by A6,RVSUM_1:126;
+      A16: Product f2 = (Product g2) * r2 by A7,RVSUM_1:126;
       set k1 = len g1+1;
        n+1>=0+1 by XREAL_1:8;
       then k1 in Seg (n+1) by A8,FINSEQ_1:3;
       then k1 in dom f1 by A4,FINSEQ_1:def 3;
       then A17: f1.k1<=f2.k1 & f1.k1>0 by A5;
-      then A18: r1>0 by FINSEQ_1:59,A6;
-       r1 <= f2.k1 by FINSEQ_1:59,A17,A6;
-      then A19: r1 <= r2 by FINSEQ_1:59,A9,A7,A8;
+      then A18: r1>0 by A6,FINSEQ_1:59;
+       r1 <= f2.k1 by A6,A17,FINSEQ_1:59;
+      then A19: r1 <= r2 by A7,A8,A9,FINSEQ_1:59;
       A20: (Product g1) * r1 <= (Product g2) * r1 by A14,A18,XREAL_1:66;
        for k being Element of NAT st k in dom g1 holds g1.k > 0 by A10;
       then Product g2 > 0 by A14,Th42;
@@ -3758,7 +3779,7 @@ proof
   proof
     let r be Real;
     assume r>0;
-     Product (0 |-> r) = 1 by RVSUM_1:124,FINSEQ_2:72;
+     Product (0 |-> r) = 1 by FINSEQ_2:72,RVSUM_1:124;
     hence thesis by POWER:29;
   end;
   A2: for n being Element of NAT st P[n] holds P[n+1]
@@ -3779,17 +3800,18 @@ proof
   hence thesis;
 end;
 
-scheme scheme1 { P[Element of NAT, Element of NAT, Prime] } :
+scheme scheme1 { P[set,set,set] } :
 for p being Prime, n being Element of NAT, m being non empty Element of NAT,
 X being set
-  st X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+  st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']}
   holds Product Sgm X > 0
 proof
   let p be Prime;
   let n be Element of NAT;
   let m be non empty Element of NAT;
   let X be set;
-  assume A1: X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']};
+  assume
+A1: X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']};
   set f = Sgm X;
    rng f c= REAL;
   then A2: f is FinSequence of REAL by FINSEQ_1:def 4;
@@ -3800,25 +3822,28 @@ proof
     set XX=Seg m;
      now let x be set;
       assume x in X;
-      then ex y' being Prime st y'|^(y' |-count m) = x & P[n,m,y'] by A1;
+      then ex y' being prime Element of NAT
+      st y'|^(y' |-count m) = x & P[n,m,y'] by A1;
       then ex b being Element of NAT st b=x & 1<=b & b<=m by Th16;
       hence x in XX by FINSEQ_1:3;
     end;
     then X c= Seg m by TARSKI:def 3;
-    then rng f = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
-      by A1,FINSEQ_1:def 13;
-    then f.k in {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+    then rng f = {p'|^(p' |-count m) where
+    p' is prime Element of NAT: P[n,m,p']} by A1,FINSEQ_1:def 13;
+    then f.k in {p'|^(p' |-count m) where
+    p' is prime Element of NAT: P[n,m,p']}
       by A3,FUNCT_1:12;
-    then ex y' being Prime st y'|^(y' |-count m) = f.k & P[n,m,y'];
+      then ex y' being prime Element of NAT st
+      y'|^(y' |-count m) = f.k & P[n,m,y'];
     hence f.k > 0;
   end;
-  hence thesis by Th42,A2;
+  hence thesis by A2,Th42;
 end;
 
-scheme scheme2 { P[Element of NAT, Element of NAT, Prime] } :
+scheme scheme2 { P[set,set,set] } :
 for p being Prime, n being Element of NAT, m being non empty Element of NAT,
 X being set
-  st X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+  st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']}
      & not p|^(p |-count m) in X
   holds p |-count (Product Sgm X) = 0
 proof
@@ -3826,54 +3851,59 @@ proof
   let n be Element of NAT;
   let m be non empty Element of NAT;
   let X be set;
-  assume A1: X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']};
+  assume
+A1: X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']};
   assume A2: not p|^(p |-count m) in X;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X being set
-    st X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+    st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']}
     holds Product Sgm X > 0 from scheme1;
   then Product Sgm X <> 0 by A1;
   then A3: p |-count (Product Sgm X) = Sum (p |-count (Sgm X)) by Th53;
   set f=p |-count (Sgm X);
   set g=(len f) |-> 0;
   A4: len f = len g by FINSEQ_2:69;
-  A5: for k being Element of NAT st 1 <=k & k <= len f holds f.k=g.k
+  A5: for k being Nat st 1 <=k & k <= len f holds f.k=g.k
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume A6: 1 <=k;
     assume k <= len f;
     then A7: k in Seg len f by A6,FINSEQ_1:3;
     then k in dom f by FINSEQ_1:def 3;
     then A8: f.k = p |-count (Sgm X).k & len f = len (Sgm X) by Def1;
     set XX=Seg m;
-     now let x be set;
+    now let x be set;
       assume x in X;
-      then ex y' being Prime st y'|^(y' |-count m) = x & P[n,m,y'] by A1;
+      then ex y' being prime Element of NAT st
+      y'|^(y' |-count m) = x & P[n,m,y'] by A1;
       then ex b being Element of NAT st b=x & 1<=b & b<=m by Th16;
       hence x in XX by FINSEQ_1:3;
     end;
     then X c= Seg m by TARSKI:def 3;
-    then A9: rng Sgm X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+    then
+A9: rng Sgm X = {p'|^(p' |-count m) where
+    p' is prime Element of NAT: P[n,m,p']}
       by A1,FINSEQ_1:def 13;
-     k in dom Sgm X by A8,A7,FINSEQ_1:def 3;
-    then (Sgm X).k in {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+     k in dom Sgm X by A7,A8,FINSEQ_1:def 3;
+     then (Sgm X).k in {p'|^(p' |-count m) where
+     p' is prime Element of NAT: P[n,m,p']}
       by A9,FUNCT_1:12;
-    then consider p1 be Prime such that
+    then consider p1 be prime Element of NAT such that
     A10: p1|^(p1 |-count m) = (Sgm X).k & P[n,m,p1];
     A11: p<>1 & p1|^(p1 |-count m)<>0 by INT_2:def 5;
-     p1<>p by A10,A1,A2;
+     p1<>p by A1,A2,A10;
     then not p divides p1|^(p1 |-count m) by NAT_3:6;
     then f.k = 0 by A8,A10,A11,NAT_3:27;
-    hence f.k=g.k by FUNCOP_1:13,A7;
+    hence f.k=g.k by A7,FUNCOP_1:13;
   end;
    Sum g = (len f)*0 by RVSUM_1:110;
-  hence thesis by A4,A3,FINSEQ_1:18,A5;
+  hence thesis by A3,A4,A5,FINSEQ_1:18;
 end;
 
-scheme scheme3 { P[Element of NAT, Element of NAT, Prime] } :
+scheme scheme3 { P[set,set,set] } :
 for p being Prime, n being Element of NAT, m being non empty Element of NAT,
 X being set
-  st X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+  st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']}
      & p|^(p |-count m) in X
   holds p |-count (Product Sgm X) = p |-count m
 proof
@@ -3881,51 +3911,55 @@ proof
   let n be Element of NAT;
   let m be non empty Element of NAT;
   let X be set;
-  assume A1: X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']};
+  assume
+A1: X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']};
   assume A2: p|^(p |-count m) in X;
   set XX=Seg m;
    now let x be set;
     assume x in X;
-    then ex y' being Prime st y'|^(y' |-count m) = x & P[n,m,y'] by A1;
+    then ex y' being prime Element of NAT st y'|^(y' |-count m) = x & P[n,m,y']
+    by A1;
     then ex b being Element of NAT st b=x & 1<=b & b<=m by Th16;
     hence x in XX by FINSEQ_1:3;
   end;
   then A3: X c= Seg m by TARSKI:def 3;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X being set
-  st X = {p'|^(p' |-count m) where p' is Prime : P[n,m,p']}
+  st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P[n,m,p']}
   holds Product Sgm X > 0 from scheme1;
   then A4: Product Sgm X <> 0 by A1;
   defpred P1[Element of NAT,Element of NAT,Prime] means
     P[$1,$2,$3] & $3|^($3 |-count $2) <= p|^(p |-count $2);
   defpred P2[Element of NAT,Element of NAT,Prime] means
     P[$1,$2,$3] & $3|^($3 |-count $2) > p|^(p |-count $2);
-  set X1 = {p'|^(p' |-count m) where p' is Prime : P1[n,m,p']};
-  set X2 = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']};
+  set X1 = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']};
+  set X2 = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']};
    now let x be set;
     assume x in X1;
-    then ex p' being Prime st p'|^(p' |-count m)=x & P1[n,m,p'];
+    then ex p' being prime Element of NAT st p'|^(p' |-count m)=x & P1[n,m,p'];
     hence x in X by A1;
   end;
   then A5: X1 c= X by TARSKI:def 3;
    now let x be set;
     assume x in X2;
-    then ex p' being Prime st p'|^(p' |-count m)=x & P2[n,m,p'];
+    then ex p' being prime Element of NAT st p'|^(p' |-count m)=x & P2[n,m,p'];
     hence x in X by A1;
   end;
   then A6: X2 c= X by TARSKI:def 3;
-  A7: X1 c= Seg m by A5,A3,XBOOLE_1:1;
-  A8: X2 c= Seg m by A6,A3,XBOOLE_1:1;
+  A7: X1 c= Seg m by A3,A5,XBOOLE_1:1;
+  A8: X2 c= Seg m by A3,A6,XBOOLE_1:1;
   A9: now let k1,k2 be Element of NAT;
     assume A10: k1 in X1 & k2 in X2;
-    then A11: ex p1 being Prime st p1|^(p1 |-count m)=k1 & P1[n,m,p1];
-     ex p2 being Prime st p2|^(p2 |-count m)=k2 & P2[n,m,p2] by A10;
-    hence k1 < k2 by XXREAL_0:2,A11;
+    then A11: ex p1 being prime Element of NAT st
+    p1|^(p1 |-count m)=k1 & P1[n,m,p1];
+    ex p2 being prime Element of NAT st p2|^(p2 |-count m)=k2 & P2[n,m,p2]
+    by A10;
+    hence k1 < k2 by A11,XXREAL_0:2;
   end;
   A12: X1 \/ X2 c= X \/ X by A5,A6,XBOOLE_1:13;
    now let x be set;
     assume x in X;
-    then consider p' being Prime such that
+    then consider p' being prime Element of NAT such that
     A13: p'|^(p' |-count m)=x & P[n,m,p'] by A1;
      (p'|^(p' |-count m)=x & P1[n,m,p']) or
     (p'|^(p' |-count m)=x & P2[n,m,p']) by A13;
@@ -3935,39 +3969,43 @@ proof
   then A14: X c= X1 \/ X2 by TARSKI:def 3;
   then A15: Sum (p |-count (Sgm X)) = Sum (p |-count (Sgm (X1 \/ X2)))
     by A12,XBOOLE_0:def 10
-  .= Sum (p |-count (Sgm(X1) ^ Sgm(X2))) by FINSEQ_3:48,A9,A7,A8
+  .= Sum (p |-count (Sgm(X1) ^ Sgm(X2))) by A7,A8,A9,FINSEQ_3:48
   .= Sum ((p |-count Sgm(X1)) ^ (p |-count Sgm(X2))) by Th51
   .= Sum (p |-count Sgm(X1)) + Sum (p |-count Sgm(X2)) by RVSUM_1:105;
   defpred P11[Element of NAT,Element of NAT,Prime] means
     P[$1,$2,$3] & $3|^($3 |-count $2) < p|^(p |-count $2);
   defpred P12[Element of NAT,Element of NAT,Prime] means
     P[$1,$2,$3] & $3|^($3 |-count $2) = p|^(p |-count $2);
-  set X11 = {p'|^(p' |-count m) where p' is Prime : P11[n,m,p']};
-  set X12 = {p'|^(p' |-count m) where p' is Prime : P12[n,m,p']};
+  set X11 = {p'|^(p' |-count m) where p' is prime Element of NAT: P11[n,m,p']};
+  set X12 = {p'|^(p' |-count m) where p' is prime Element of NAT: P12[n,m,p']};
    now let x be set;
     assume x in X11;
-    then ex p' being Prime st p'|^(p' |-count m)=x & P11[n,m,p'];
+    then ex p' being prime Element of NAT st
+    p'|^(p' |-count m)=x & P11[n,m,p'];
     hence x in X1;
   end;
   then A16: X11 c= X1 by TARSKI:def 3;
    now let x be set;
     assume x in X12;
-    then ex p' being Prime st p'|^(p' |-count m)=x & P12[n,m,p'];
+    then ex p' being prime Element of NAT st
+    p'|^(p' |-count m)=x & P12[n,m,p'];
     hence x in X1;
   end;
   then A17: X12 c= X1 by TARSKI:def 3;
-  A18: X11 c= Seg m by A16,A7,XBOOLE_1:1;
-  A19: X12 c= Seg m by A17,A7,XBOOLE_1:1;
+  A18: X11 c= Seg m by A7,A16,XBOOLE_1:1;
+  A19: X12 c= Seg m by A7,A17,XBOOLE_1:1;
   A20: now let k1,k2 be Element of NAT;
     assume A21: k1 in X11 & k2 in X12;
-    then A22: ex p1 being Prime st p1|^(p1 |-count m)=k1 & P11[n,m,p1];
-     ex p2 being Prime st p2|^(p2 |-count m)=k2 & P12[n,m,p2] by A21;
+    then
+A22: ex p1 being prime Element of NAT st p1|^(p1 |-count m)=k1 & P11[n,m,p1];
+     ex p2 being prime Element of NAT st p2|^(p2 |-count m)=k2 & P12[n,m,p2]
+     by A21;
     hence k1 < k2 by A22;
   end;
   A23: X11 \/ X12 c= X1 \/ X1 by A16,A17,XBOOLE_1:13;
    now let x be set;
     assume x in X1;
-    then consider p' being Prime such that
+    then consider p' being prime Element of NAT such that
     A24: p'|^(p' |-count m)=x & P1[n,m,p'];
      (p'|^(p' |-count m)=x & P11[n,m,p']) or
     (p'|^(p' |-count m)=x & P12[n,m,p']) by A24,XXREAL_0:1;
@@ -3977,38 +4015,38 @@ proof
   then A25: X1 c= X11 \/ X12 by TARSKI:def 3;
   then A26: Sum (p |-count (Sgm X1)) = Sum (p |-count (Sgm (X11 \/ X12)))
     by A23,XBOOLE_0:def 10
-  .= Sum (p |-count (Sgm(X11) ^ Sgm(X12))) by FINSEQ_3:48,A20,A18,A19
+  .= Sum (p |-count (Sgm(X11) ^ Sgm(X12))) by A18,A19,A20,FINSEQ_3:48
   .= Sum ((p |-count Sgm(X11)) ^ (p |-count Sgm(X12))) by Th51
   .= Sum (p |-count Sgm(X11)) + Sum (p |-count Sgm(X12)) by RVSUM_1:105;
   A27: now assume p|^(p |-count m) in X11;
-    then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P11[n,m,p'
-];
+  then ex p' being prime Element of NAT st
+  p'|^(p' |-count m)=p|^(p |-count m) & P11[n,m,p'];
     hence contradiction;
   end;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X11 being set
-  st X11 = {p'|^(p' |-count m) where p' is Prime : P11[n,m,p']}
+  st X11 = {p'|^(p' |-count m) where p' is prime Element of NAT: P11[n,m,p']}
   holds Product Sgm X11 > 0 from scheme1;
   then A28: Product Sgm(X11) <> 0;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X11 being set
-    st X11 = {p'|^(p' |-count m) where p' is Prime : P11[n,m,p']}
+    st X11 = {p'|^(p' |-count m) where p' is prime Element of NAT: P11[n,m,p']}
     & not p|^(p |-count m) in X11
     holds p |-count (Product Sgm X11) = 0 from scheme2;
   then A29: p |-count (Product Sgm X11) = 0 by A27;
   A30: now assume p|^(p |-count m) in X2;
-    then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p']
-;
+  then ex p' being prime Element of NAT
+  st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p'];
     hence contradiction;
   end;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X2 being set
-  st X2 = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']}
+  st X2 = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']}
   holds Product Sgm X2 > 0 from scheme1;
   then A31: Product Sgm(X2) <> 0;
    for p being Prime, n being Element of NAT, m being non empty Element of NAT,
   X2 being set
-    st X2 = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']}
+    st X2 = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']}
     & not p|^(p |-count m) in X2
     holds p |-count (Product Sgm X2) = 0 from scheme2;
   then A32: p |-count (Product Sgm X2) = 0 by A30;
@@ -4019,20 +4057,20 @@ proof
   then A33: {p|^(p |-count m)} c= X12 by TARSKI:def 3;
    now let x be set;
     assume x in X12;
-    then ex p' be Prime st p'|^(p' |-count m) = x & P12[n,m,p'];
+    then ex p' be prime Element of NAT st p'|^(p' |-count m) = x & P12[n,m,p'];
     hence x in {p|^(p |-count m)} by TARSKI:def 1;
   end;
   then A34: X12 c= {p|^(p |-count m)} by TARSKI:def 3;
   set m1=p|^(p |-count m);
-  reconsider m1 as non empty Element of NAT;
+  reconsider m1 as non empty Element of NAT by ORDINAL1:def 13;
   A35: 1 < p by INT_2:def 5;
   A36: p |-count (p|^(p |-count m)) = (p |-count m) * (p |-count p) by NAT_3:32
-  .= (p |-count m) * 1 by NAT_3:22,A35;
+  .= (p |-count m) * 1 by A35,NAT_3:22;
    p |-count (Product Sgm X) =
-  Sum (p |-count Sgm(X1)) + Sum (p |-count Sgm(X2)) by A4,Th53,A15
-  .= Sum (p |-count Sgm(X1)) + 0 by A32,A31,Th53
+  Sum (p |-count Sgm(X1)) + Sum (p |-count Sgm(X2)) by A4,A15,Th53
+  .= Sum (p |-count Sgm(X1)) + 0 by A31,A32,Th53
   .= 0 + Sum (p |-count Sgm(X12)) by A26,A28,A29,Th53
-  .= Sum (p |-count Sgm({p|^(p |-count m)})) by A34,A33,XBOOLE_0:def 10
+  .= Sum (p |-count Sgm({p|^(p |-count m)})) by A33,A34,XBOOLE_0:def 10
   .= Sum (p |-count <* m1 *>) by FINSEQ_3:50
   .= Sum <* p |-count m1 *> by Th52
   .= p |-count m1 by RVSUM_1:103;
@@ -4041,11 +4079,11 @@ end;
 
 Lm10:
   for n, m being Element of NAT st m = 2*n choose n & n>=3
-  holds m = Product Sgm {p|^(p |-count m) where p is Prime :
+  holds m = Product Sgm {p|^(p |-count m) where p is prime Element of NAT:
                           p<=sqrt(2*n) & p |-count m>0} *
-            Product Sgm {p|^(p |-count m) where p is Prime :
+            Product Sgm {p|^(p |-count m) where p is prime Element of NAT:
                           sqrt(2*n)<p & p<=2*n/3 & p |-count m>0} *
-            Product Sgm {p|^(p |-count m) where p is Prime :
+            Product Sgm {p|^(p |-count m) where p is prime Element of NAT:
                           n<p & p<=2*n & p |-count m>0}
   proof
     let n, m be Element of NAT;
@@ -4057,29 +4095,29 @@ Lm10:
     then A4: m<>0 by A3,XCMPLX_1:88;
     defpred P1[Element of NAT,Element of NAT,Prime] means
      $3<=sqrt(2*$1) & $3 |-count $2>0;
-    set X1 = {p|^(p |-count m) where p is Prime : P1[n,m,p]};
+    set X1 = {p|^(p |-count m) where p is prime Element of NAT: P1[n,m,p]};
     set f1 = Sgm X1;
     A5: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P1[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']}
       holds Product Sgm X > 0 from scheme1;
     then A6: Product f1 > 0 by A4;
     defpred P2[Element of NAT,Element of NAT,Prime] means
       sqrt(2*$1)<$3 & $3<=2*$1/3 & $3 |-count $2>0;
-    set X2 = {p|^(p |-count m) where p is Prime : P2[n,m,p]};
+    set X2 = {p|^(p |-count m) where p is prime Element of NAT: P2[n,m,p]};
     set f2 = Sgm X2;
     A7: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']}
       holds Product Sgm X > 0 from scheme1;
     then A8: Product f2 > 0 by A4;
     defpred P3[Element of NAT,Element of NAT,Prime] means
      $1<$3 & $3<=2*$1 & $3 |-count $2>0;
-    set X3 = {p|^(p |-count m) where p is Prime : P3[n,m,p]};
+    set X3 = {p|^(p |-count m) where p is prime Element of NAT: P3[n,m,p]};
     set f3 = Sgm X3;
     A9: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P3[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P3[n,m,p']}
       holds Product Sgm X > 0 from scheme1;
     then A10: Product f3 > 0 by A4;
     set k = Product f1 * Product f2 * Product f3;
@@ -4090,39 +4128,39 @@ Lm10:
     then A11: k<>0 by A10,XCMPLX_1:6;
     A12: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P1[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']}
         & p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = p |-count m from scheme3;
     A13: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']}
         & p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = p |-count m from scheme3;
     A14: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P3[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P3[n,m,p']}
         & p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = p |-count m from scheme3;
     A15: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P1[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']}
         & not p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = 0 from scheme2;
     A16: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P2[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P2[n,m,p']}
         & not p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = 0 from scheme2;
     A17: for p being Prime, n being Element of NAT,
     m being non empty Element of NAT, X being set
-      st X = {p'|^(p' |-count m) where p' is Prime : P3[n,m,p']}
+      st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P3[n,m,p']}
         & not p|^(p |-count m) in X
       holds p |-count (Product Sgm X) = 0 from scheme2;
     A18: now
       assume A19: n<sqrt(2*n);
       A20: sqrt 2 < sqrt 3 by SQUARE_1:95;
-       sqrt 3 <= sqrt n by SQUARE_1:94,A2;
-      then A21: sqrt 2 < sqrt n by XXREAL_0:2,A20;
+       sqrt 3 <= sqrt n by A2,SQUARE_1:94;
+      then A21: sqrt 2 < sqrt n by A20,XXREAL_0:2;
        sqrt n > 0 by A2,SQUARE_1:93;
       then (sqrt 2)*(sqrt n) < (sqrt n)*(sqrt n) by A21,XREAL_1:70;
       then sqrt(2*n) < (sqrt n)*(sqrt n) by SQUARE_1:97;
@@ -4141,197 +4179,200 @@ Lm10:
     proof
       let p be Prime;
       assume A25: p>2*n;
-      then A26: p |-count m = 0 by Lm9,A2,A1;
+      then A26: p |-count m = 0 by A1,A2,Lm9;
        now assume p|^(p |-count m) in X1;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m
-,p'];
-        hence contradiction by A26,A4,Th22;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m,p'];
+        hence contradiction by A4,A26,Th22;
       end;
-      hence p |-count n1 = 0 by A15,A4;
+      hence p |-count n1 = 0 by A4,A15;
        now assume p|^(p |-count m) in X2;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m
-,p'];
-        hence contradiction by A26,Th22,A4;
+        then ex p' being prime Element of NAT st
+        p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p'];
+        hence contradiction by A4,A26,Th22;
       end;
-      hence p |-count n2 = 0 by A16,A4;
+      hence p |-count n2 = 0 by A4,A16;
        now assume p|^(p |-count m) in X3;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m
-,p'];
-        hence contradiction by A25,Th22,A4;
+        then ex p' being prime Element of NAT st
+        p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m,p'];
+        hence contradiction by A4,A25,Th22;
       end;
-      hence p |-count n3 = 0 by A17,A4;
+      hence p |-count n3 = 0 by A4,A17;
     end;
     A27: for p being Prime st n<p & p<=2*n
     holds p |-count n1 = 0 & p |-count n2 = 0 & p |-count n3 = p |-count m
     proof
       let p be Prime;
       assume A28: n<p & p<=2*n;
+A29:   p in NAT by ORDINAL1:def 13;
        now assume p|^(p |-count m) in X1;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m
-,p'];
-        then p<=sqrt(2*n) by Th22,A4;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m,p'];
+        then p<=sqrt(2*n) by A4,Th22;
         hence contradiction by A18,A28,XXREAL_0:2;
       end;
-      hence p |-count n1 = 0 by A15,A4;
+      hence p |-count n1 = 0 by A4,A15;
        now assume p|^(p |-count m) in X2;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m
-,p'];
-        then p<=2*n/3 by Th22,A4;
+        then ex p' being prime Element of NAT st
+        p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p'];
+        then p<=2*n/3 by A4,Th22;
         hence contradiction by A22,A28,XXREAL_0:2;
       end;
-      hence p |-count n2 = 0 by A16,A4;
+      hence p |-count n2 = 0 by A4,A16;
       per cases;
       suppose p |-count m > 0;
-        then p|^(p |-count m) in X3 by A28;
-        hence thesis by A14,A4;
+        then p|^(p |-count m) in X3 by A28,A29;
+        hence thesis by A4,A14;
       end;
-      suppose A29: p |-count m = 0;
+      suppose A30: p |-count m = 0;
          now assume p|^(p |-count m) in X3;
-          then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m)& P3[n,
-m,p'];
-          hence contradiction by A29,Th22,A4;
+           then ex p' being prime Element of NAT st
+           p'|^(p' |-count m)=p|^(p |-count m)& P3[n,m,p'];
+          hence contradiction by A4,A30,Th22;
         end;
-        hence thesis by A17,A4,A29;
+        hence thesis by A4,A17,A30;
       end;
     end;
-    A30: for p being Prime st 2*n/3<p & p<=n
+    A31: for p being Prime st 2*n/3<p & p<=n
     holds p |-count n1 = 0 & p |-count n2 = 0 & p |-count n3 = 0
     proof
       let p be Prime;
-      assume A31: 2*n/3<p & p<=n;
-then A32:   p |-count m = 0 by Lm9,A2,A1;
+      assume A32: 2*n/3<p & p<=n;
+then A33:   p |-count m = 0 by A1,A2,Lm9;
        now assume p|^(p |-count m) in X1;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m
-,p'];
-        hence contradiction by A32,Th22,A4;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m,p'];
+        hence contradiction by A4,A33,Th22;
       end;
-      hence p |-count n1 = 0 by A15,A4;
+      hence p |-count n1 = 0 by A4,A15;
        now assume p|^(p |-count m) in X2;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m
-,p'];
-        hence contradiction by A31,Th22,A4;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p'];
+        hence contradiction by A4,A32,Th22;
       end;
-      hence p |-count n2 = 0 by A16,A4;
+      hence p |-count n2 = 0 by A4,A16;
        now assume p|^(p |-count m) in X3;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m
-,p'];
-        hence contradiction by A31,Th22,A4;
+        then ex p' being prime Element of NAT st
+        p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m,p'];
+        hence contradiction by A4,A32,Th22;
       end;
-      hence p |-count n3 = 0 by A17,A4;
+      hence p |-count n3 = 0 by A4,A17;
     end;
-A33:for p being Prime st sqrt(2*n)<p & p<=2*n/3
+A34:for p being Prime st sqrt(2*n)<p & p<=2*n/3
     holds p |-count n1 = 0 & p |-count n3 = 0 & p |-count n2 = p |-count m
     proof
       let p be Prime;
-      assume A34: sqrt(2*n)<p & p<=2*n/3;
+      assume A35: sqrt(2*n)<p & p<=2*n/3;
+A36:   p in NAT by ORDINAL1:def 13;
        now assume p|^(p |-count m) in X1;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m
-,p'];
-        hence contradiction by A34,Th22,A4;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P1[n,m,p'];
+        hence contradiction by A4,A35,Th22;
       end;
-      hence p |-count n1 = 0 by A15,A4;
+      hence p |-count n1 = 0 by A4,A15;
        now assume p|^(p |-count m) in X3;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m
-,p'];
-        then n<p by Th22,A4;
-        hence contradiction by A22,A34,XXREAL_0:2;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m,p'];
+        then n<p by A4,Th22;
+        hence contradiction by A22,A35,XXREAL_0:2;
       end;
-      hence p |-count n3 = 0 by A17,A4;
+      hence p |-count n3 = 0 by A4,A17;
       per cases;
       suppose p |-count m > 0;
-        then p|^(p |-count m) in X2 by A34;
-        hence p |-count n2 = p |-count m by A13,A4;
+        then p|^(p |-count m) in X2 by A35,A36;
+        hence p |-count n2 = p |-count m by A4,A13;
       end;
-      suppose A35: p |-count m = 0;
+      suppose A37: p |-count m = 0;
          now assume p|^(p |-count m) in X2;
-          then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m)& P2[n,
-m,p'];
-          hence contradiction by A35,Th22,A4;
+           then ex p' being prime Element of NAT st
+           p'|^(p' |-count m)=p|^(p |-count m)& P2[n,m,p'];
+          hence contradiction by A4,A37,Th22;
         end;
-        hence p |-count n2 = p |-count m by A16,A4,A35;
+        hence p |-count n2 = p |-count m by A4,A16,A37;
       end;
     end;
-A36:for p being Prime st p<=sqrt(2*n)
+A38:for p being Prime st p<=sqrt(2*n)
     holds p |-count n2 = 0 & p |-count n3 = 0 & p |-count n1 = p |-count m
     proof
       let p be Prime;
-      assume A37: p<=sqrt(2*n);
+      assume A39: p<=sqrt(2*n);
+A40:   p in NAT by ORDINAL1:def 13;
        now assume p|^(p |-count m) in X2;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m
-,p'];
-        hence contradiction by A37,Th22,A4;
+         then ex p' being prime Element of NAT st
+         p'|^(p' |-count m)=p|^(p |-count m) & P2[n,m,p'];
+        hence contradiction by A4,A39,Th22;
       end;
-      hence p |-count n2 = 0 by A16,A4;
+      hence p |-count n2 = 0 by A4,A16;
        now assume p|^(p |-count m) in X3;
-        then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m
-,p'];
-        then n<p by Th22,A4;
-        hence contradiction by A18,A37,XXREAL_0:2;
+        then ex p' being prime Element of NAT st
+        p'|^(p' |-count m)=p|^(p |-count m) & P3[n,m,p'];
+        then n<p by A4,Th22;
+        hence contradiction by A18,A39,XXREAL_0:2;
       end;
-      hence p |-count n3 = 0 by A17,A4;
+      hence p |-count n3 = 0 by A4,A17;
       per cases;
       suppose p |-count m > 0;
-        then p|^(p |-count m) in X1 by A37;
-        hence p |-count n1 = p |-count m by A12,A4;
+        then p|^(p |-count m) in X1 by A39,A40;
+        hence p |-count n1 = p |-count m by A4,A12;
       end;
-      suppose A38: p |-count m = 0;
+      suppose A41: p |-count m = 0;
          now assume p|^(p |-count m) in X1;
-          then ex p' being Prime st p'|^(p' |-count m)=p|^(p |-count m)& P1[n,
-m,p'];
-          hence contradiction by A38,Th22,A4;
+          then ex p' being prime Element of NAT st
+          p'|^(p' |-count m)=p|^(p |-count m)& P1[n,m,p'];
+          hence contradiction by A4,A41,Th22;
         end;
-        hence p |-count n1 = p |-count m by A15,A4,A38;
+        hence p |-count n1 = p |-count m by A4,A15,A41;
       end;
     end;
      for p being Element of NAT st p is prime holds p |-count m = p |-count k
     proof
       let p be Element of NAT;
-      assume A39: p is prime;
-      reconsider n1 as non empty Element of NAT by A5,A4;
-      reconsider n2 as non empty Element of NAT by A7,A4;
-      reconsider n3 as non empty Element of NAT by A9,A4;
-      A40: p |-count k = (p |-count (n1*n2)) + (p |-count n3) by A39,NAT_3:28
-      .= (p |-count n1)+(p |-count n2)+(p |-count n3) by A39,NAT_3:28;
+      assume A42: p is prime;
+      reconsider n1 as non empty Element of NAT by A4,A5;
+      reconsider n2 as non empty Element of NAT by A4,A7;
+      reconsider n3 as non empty Element of NAT by A4,A9;
+      A43: p |-count k = (p |-count (n1*n2)) + (p |-count n3) by A42,NAT_3:28
+      .= (p |-count n1)+(p |-count n2)+(p |-count n3) by A42,NAT_3:28;
       per cases;
-      suppose A41: p>2*n;
-        then A42: p |-count m = 0 by A1,A2,A39,Lm9;
-        A43: p |-count n1 = 0 by A24,A39,A41;
-         p |-count n2 = 0 by A24,A39,A41;
-        hence thesis by A40,A42,A43,A24,A39,A41;
+      suppose A44: p>2*n;
+        then A45: p |-count m = 0 by A1,A2,A42,Lm9;
+        A46: p |-count n1 = 0 by A24,A42,A44;
+         p |-count n2 = 0 by A24,A42,A44;
+        hence thesis by A24,A42,A43,A44,A45,A46;
       end;
-      suppose A44: n<p & p<=2*n;
-        then A45: p |-count n1 = 0 by A27,A39;
-         p |-count n2 = 0 by A27,A39,A44;
-        hence thesis by A40,A45,A27,A39,A44;
+      suppose A47: n<p & p<=2*n;
+        then A48: p |-count n1 = 0 by A27,A42;
+         p |-count n2 = 0 by A27,A42,A47;
+        hence thesis by A27,A42,A43,A47,A48;
       end;
-      suppose A46: 2*n/3<p & p<=n;
-        then A47: p |-count m = 0 by A1,A2,A39,Lm9;
-        A48: p |-count n1 = 0 by A30,A39,A46;
-         p |-count n2 = 0 by A30,A39,A46;
-        hence thesis by A40,A47,A48,A30,A39,A46;
+      suppose A49: 2*n/3<p & p<=n;
+        then A50: p |-count m = 0 by A1,A2,A42,Lm9;
+        A51: p |-count n1 = 0 by A31,A42,A49;
+         p |-count n2 = 0 by A31,A42,A49;
+        hence thesis by A31,A42,A43,A49,A50,A51;
       end;
-      suppose A49: sqrt(2*n)<p & p<=2*n/3;
-        then A50: p |-count n1 = 0 by A33,A39;
-         p |-count n2 = p |-count m by A33,A39,A49;
-        hence thesis by A40,A50,A33,A39,A49;
+      suppose A52: sqrt(2*n)<p & p<=2*n/3;
+        then A53: p |-count n1 = 0 by A34,A42;
+         p |-count n2 = p |-count m by A34,A42,A52;
+        hence thesis by A34,A42,A43,A52,A53;
       end;
-      suppose A51: p<=sqrt(2*n);
-then A52:     p |-count n1 = p |-count m by A36,A39;
-         p |-count n2 = 0 by A36,A39,A51;
-        hence thesis by A40,A52,A36,A39,A51;
+      suppose A54: p<=sqrt(2*n);
+then A55:     p |-count n1 = p |-count m by A38,A42;
+         p |-count n2 = 0 by A38,A42,A54;
+        hence thesis by A38,A42,A43,A54,A55;
       end;
     end;
-    hence thesis by Th21,A4,A11;
+    hence thesis by A4,A11,Th21;
   end;
 
-scheme scheme4 { A(Prime, Element of NAT) -> set, P[Prime, Element of NAT] } :
+scheme scheme4 { A(set,set) -> set, P[set,set] } :
   for n,m being Element of NAT, r being Real, X being finite set
-    st X = {A(p,m) where p is Prime : p <= r & P[p,m]} & r>=0
+    st X = {A(p,m) where p is prime Element of NAT: p <= r & P[p,m]} & r>=0
     holds card X <= [\ r /]
 proof
   defpred P1[Element of NAT] means
   for n,m being Element of NAT, r being Real, X being finite set
-    st X = {A(p,m) where p is Prime : p <= r & P[p,m]} & r>=0
+    st X = {A(p,m) where p is prime Element of NAT: p <= r & P[p,m]} & r>=0
       & $1 = [\ r /]
     holds card X <= [\ r /];
   A1: P1[0]
@@ -4339,14 +4380,14 @@ proof
     let n,m be Element of NAT;
     let r be Real;
     let X be finite set;
-    assume A2: X = {A(p,m) where p is Prime : p <= r & P[p,m]};
+    assume A2: X = {A(p,m) where p is prime Element of NAT: p <= r & P[p,m]};
     assume r>=0;
     assume A3: 0 = [\ r /];
     then r - 1 < 0 by INT_1:def 4;
     then A4: r - 1 + 1 < 0 + 1 by XREAL_1:8;
      now let x be set;
       assume x in X;
-      then consider p be Prime such that
+      then consider p be prime Element of NAT such that
       A5: A(p,m)=x & p<=r & P[p,m] by A2;
        p<1 by A4,A5,XXREAL_0:2;
       hence contradiction by INT_2:def 5;
@@ -4361,7 +4402,7 @@ proof
       let m be Element of NAT;
       let r be Real;
       let X be finite set;
-      assume A8: X = {A(p,m) where p is Prime : p <= r & P[p,m]};
+      assume A8: X = {A(p,m) where p is prime Element of NAT: p <= r & P[p,m]};
       assume r >= 0;
       assume A9: n+1 = [\ r /];
       set r1 = r - 1;
@@ -4369,11 +4410,12 @@ proof
       .= [\ r+(-1) /] by INT_1:51
       .= [\ r1 /];
       then A11: r1>=0 by INT_1:def 4;
-      set X1 = {A(p,m) where p is Prime : p <= r1 & P[p,m]};
-      set X2 = {A(p,m) where p is Prime : r1 < p & p <= r & P[p,m]};
+      set X1 = {A(p,m) where p is prime Element of NAT: p <= r1 & P[p,m]};
+      set X2 = {A(p,m) where p is prime Element of NAT:
+      r1 < p & p <= r & P[p,m]};
        now let x be set;
         assume x in X;
-        then consider p being Prime such that
+        then consider p being prime Element of NAT such that
         A12: A(p,m)=x & p<=r & P[p,m] by A8;
          (A(p,m)=x & p<=r1 & P[p,m])
           or (A(p,m)=x & r1<p & p<=r & P[p,m]) by A12;
@@ -4385,14 +4427,15 @@ proof
         assume A14: x in X1 \/ X2;
         per cases by A14,XBOOLE_0:def 2;
         suppose x in X1;
-          then consider p being Prime such that
+          then consider p being prime Element of NAT such that
           A15: A(p,m)=x & p<=r1 & P[p,m];
            -1+r<=0+r by XREAL_1:8;
           then A(p,m)=x & p<=r & P[p,m] by A15,XXREAL_0:2;
           hence x in X by A8;
         end;
         suppose x in X2;
-          then ex p being Prime st A(p,m)=x & r1 < p & p<=r & P[p,m];
+          then ex p being prime Element of NAT st
+          A(p,m)=x & r1 < p & p<=r & P[p,m];
           hence x in X by A8;
         end;
       end;
@@ -4400,12 +4443,12 @@ proof
       then A16: X = X1 \/ X2 by A13,XBOOLE_0:def 10;
       then X1 c= X by XBOOLE_1:7;
       then reconsider X1 as finite set by FINSET_1:13;
-      A17: card X1 <= [\ r1 /] by A10,A11,A7;
+      A17: card X1 <= [\ r1 /] by A7,A10,A11;
       A18: 0+n <= 1+n by XREAL_1:8;
       per cases;
       suppose not (ex x being set st x in X2);
         then X2={} by XBOOLE_0:def 1;
-        hence card X <= [\ r /] by A10,A16,A17,A18,XXREAL_0:2,A9;
+        hence card X <= [\ r /] by A9,A10,A16,A17,A18,XXREAL_0:2;
       end;
       suppose A19: ex x being set st x in X2;
         then consider x be set such that
@@ -4414,12 +4457,12 @@ proof
           assume X2<>{x};
           then consider y be set such that
           A22: y in X2 & y<>x by A19,ZFMISC_1:41;
-          consider p1 be Prime such that
+          consider p1 be prime Element of NAT such that
           A23: A(p1,m)=x & r1<p1 & p1<=r & P[p1,m] by A20;
-          consider p2 be Prime such that
+          consider p2 be prime Element of NAT such that
           A24: A(p2,m)=y & r1<p2 & p2<=r & P[p2,m] by A22;
-           p1 = [\ r /] by INT_1:def 4,A23;
-          hence contradiction by A23,A24,A22,INT_1:def 4;
+           p1 = [\ r /] by A23,INT_1:def 4;
+          hence contradiction by A22,A23,A24,INT_1:def 4;
         end;
         per cases;
         suppose not x in X1;
@@ -4427,8 +4470,8 @@ proof
           hence card X <= [\ r /] by A9,A10,A17,XREAL_1:8;
         end;
         suppose x in X1;
-          then X2 c= X1 by ZFMISC_1:37,A21;
-          then card X <= n by A10,A17,A16,XBOOLE_1:12;
+          then X2 c= X1 by A21,ZFMISC_1:37;
+          then card X <= n by A10,A16,A17,XBOOLE_1:12;
           hence card X <= [\ r /] by A9,A18,XXREAL_0:2;
         end;
       end;
@@ -4439,14 +4482,16 @@ proof
   let n,m be Element of NAT;
   let r be Real;
   let X be finite set;
-  assume A26: X = {A(p,m) where p is Prime : p <= r & P[p,m]} & r>=0;
+  assume
+A26: X = {A(p,m) where p is prime Element of NAT: p <= r & P[p,m]} & r>=0;
   then [\ r /] is Element of NAT by INT_1:80;
   hence card X <= [\ r /] by A25,A26;
 end;
 
 Lm11:
 for n, m being Element of NAT st m = 2*n choose n & n>=3 holds
-Product Sgm {p|^(p |-count m) where p is Prime : p<=sqrt(2*n) & p |-count m>0}
+Product Sgm {p|^(p |-count m) where p is prime Element of NAT:
+p<=sqrt(2*n) & p |-count m>0}
         <= (2*n) to_power sqrt(2*n)
 proof
   let n, m be Element of NAT;
@@ -4456,15 +4501,16 @@ proof
    m >= 4|^n / (2*n) by A1,Th6;
   then m * (2*n) >= 4|^n / (2*n) * (2*n) by XREAL_1:66;
   then A4: m<>0 by A3,XCMPLX_1:88;
-  set X = {p|^(p |-count m) where p is Prime : p<=sqrt(2*n) & p |-count m>0};
+  set X = {p|^(p |-count m) where
+  p is prime Element of NAT: p<=sqrt(2*n) & p |-count m>0};
   set f1 = Sgm X;
   set f2 = (len f1) |-> (2*n);
   A5: len f1 = len f2 by FINSEQ_2:69;
   set XX=Seg m;
    now let x be set;
     assume x in X;
-    then ex p being Prime st p|^(p |-count m) = x & p<=sqrt(2*n) & p |-count m
->0;
+    then ex p being prime Element of NAT st
+    p|^(p |-count m) = x & p<=sqrt(2*n) & p |-count m>0;
     then ex b being Element of NAT st b=x & 1<=b & b<=m by A4,Th16;
     hence x in XX by FINSEQ_1:3;
   end;
@@ -4474,10 +4520,10 @@ proof
     assume A8: k in dom f1;
     then k in Seg len f1 by FINSEQ_1:def 3;
     then A9: f2.k = 2*n by FUNCOP_1:13;
-     rng f1 = X by FINSEQ_1:def 13,A6;
+     rng f1 = X by A6,FINSEQ_1:def 13;
     then f1.k in X by A8,FUNCT_1:12;
-    then ex p being Prime st p|^(p |-count m)=f1.k & p<=sqrt(2*n) & p |-count
-m>0;
+    then ex p being prime Element of NAT st
+    p|^(p |-count m)=f1.k & p<=sqrt(2*n) & p |-count m>0;
     hence f1.k<=f2.k & f1.k>0 by A1,A2,A9,Lm9;
   end;
   A10: rng f1 c= REAL;
@@ -4488,18 +4534,18 @@ m>0;
   then A12: Product f1 <= (2*n) to_power len(f1) by A3,Th55;
    n*2 >= 3*2 by A2,XREAL_1:66;
   then A13: 2*n > 1 by XXREAL_0:2;
-  reconsider X as finite set by FINSET_1:13,A6;
-  A14: len f1 = card X by FINSEQ_3:44,A6;
+  reconsider X as finite set by A6,FINSET_1:13;
+  A14: len f1 = card X by A6,FINSEQ_3:44;
   A15: [\ sqrt(2*n) /] <= sqrt(2*n) by INT_1:def 4;
   defpred P[Element of NAT,Element of NAT] means $1 |-count $2 > 0;
   deffunc A(Element of NAT,Element of NAT) = $1|^($1 |-count $2);
   set r = sqrt(2*n);
   A16: r>=0 by SQUARE_1:def 4;
    for n,m being Element of NAT, r being Real, X being finite set
-    st X = {A(k,m) where k is Prime : k <= r & P[k,m]} & r>=0
+    st X = {A(k,m) where k is prime Element of NAT: k <= r & P[k,m]} & r>=0
     holds card X <= [\ r /] from scheme4;
   then len f1 <= [\ sqrt(2*n) /] by A14,A16;
-  then len f1 <= sqrt(2*n) by XXREAL_0:2,A15;
+  then len f1 <= sqrt(2*n) by A15,XXREAL_0:2;
   then len f1 < sqrt(2*n) or len f1 = sqrt(2*n) by XXREAL_0:1;
   then (2*n) to_power len f1 <= (2*n) to_power sqrt(2*n) by A13,POWER:44;
   hence thesis by A12,XXREAL_0:2;
@@ -4522,75 +4568,75 @@ proof
     set m = 2*n choose n;
     A4: n>=3 by A2,XXREAL_0:2;
     then A5: 2*n >= 3*2 by XREAL_1:66;
-    set X1={p|^(p |-count m) where p is Prime : p<=sqrt(2*n) & p |-count m>0};
-    set X2={p|^(p |-count m) where p is Prime :
+    set X1={p|^(p |-count m) where p is prime Element of NAT: p<=sqrt(2*n) &
+    p |-count m>0};
+    set X2={p|^(p |-count m) where p is prime Element of NAT:
              sqrt(2*n)<p & p<=2*n/3 & p |-count m>0};
-    set X3={p|^(p |-count m) where p is Prime : n<p & p<=2*n & p |-count m>0};
+    set X3={p|^(p |-count m) where p is prime Element of NAT: n<p & p<=2*n &
+    p |-count m>0};
      n>=3 by A2,XXREAL_0:2;
     then A6: Product Sgm X1 <= (2*n) to_power sqrt(2*n) by Lm11;
-    set X = {p where p is Prime : p<=2*n/3};
+    set X = {p where p is prime Element of NAT: p<=2*n/3};
     set mm=[/ 2*n/3 \];
     reconsider mm as Element of NAT by INT_1:80;
     set XX=Seg mm;
      now let x be set;
       assume x in X;
-      then consider p being Prime such that
+      then consider p being prime Element of NAT such that
       A7: p = x & p<=2*n/3;
        2*n/3<=[/ 2*n/3 \] by INT_1:def 5;
       then A8: p<=[/ 2*n/3 \] by A7,XXREAL_0:2;
-      A9: 1<=p by INT_2:def 5;
-      reconsider p as Element of NAT;
-      thus x in XX by A7,A8,A9,FINSEQ_1:3;
+      1<=p by INT_2:def 5;
+      hence x in XX by A7,A8,FINSEQ_1:3;
     end;
     then X c= Seg mm by TARSKI:def 3;
-    then A10: X c= NAT & X is finite by XBOOLE_1:1,FINSET_1:13;
-    A11: now assume {} in X;
-      then ex p being Prime st p = {} & p<=2*n/3;
+    then A9: X c= NAT & X is finite by FINSET_1:13,XBOOLE_1:1;
+    A10: now assume {} in X;
+    then ex p being prime Element of NAT st p = {} & p<=2*n/3;
       hence contradiction;
     end;
      now let x be set;
       assume x in X2;
-      then consider p be Prime such that
-      A12: p|^(p |-count m)=x & sqrt(2*n)<p & p<=2*n/3 & p |-count m>0;
-       p |-count m <= 1 by Lm9,A12,A4;
+      then consider p be prime Element of NAT such that
+      A11: p|^(p |-count m)=x & sqrt(2*n)<p & p<=2*n/3 & p |-count m>0;
+       p |-count m <= 1 by A4,A11,Lm9;
       then p |-count m < 1+1 by NAT_1:13;
-      then p |-count m = 1 by A12,NAT_1:23;
-      then p=x by A12,NEWTON:10;
-      hence x in X by A12;
+      then p |-count m = 1 by A11,NAT_1:23;
+      then p=x by A11,NEWTON:10;
+      hence x in X by A11;
     end;
     then X2 c= X by TARSKI:def 3;
-    then A13: Product Sgm X2 <= Product Sgm X by A10,A11,Th43;
+    then A12: Product Sgm X2 <= Product Sgm X by A9,A10,Th43;
      n/3>=3/3 by A4,XREAL_1:74;
     then (n/3)*2>=1*2 by XREAL_1:66;
     then Product Sgm X <= (4 to_power ((2*n/3)-1)) by Th46;
-    then A14: Product Sgm X2 <= (4 to_power ((2*n/3)-1)) by A13,XXREAL_0:2;
+    then A13: Product Sgm X2 <= (4 to_power ((2*n/3)-1)) by A12,XXREAL_0:2;
      now assume X3<>{};
       then consider x be set such that
-      A15: x in X3 by XBOOLE_0:def 1;
-       ex p be Prime st p|^(p |-count m)=x & n<p & p<=2*n & p |-count m>0 by
-A15
-;
+      A14: x in X3 by XBOOLE_0:def 1;
+      ex p be prime Element of NAT st
+      p|^(p |-count m)=x & n<p & p<=2*n & p |-count m>0 by A14;
       hence contradiction by A3;
     end;
-    then A16: m = (Product Sgm X1)*(Product Sgm X2)*1
-      by RVSUM_1:124,FINSEQ_3:49,A4,Lm10;
+    then A15: m = (Product Sgm X1)*(Product Sgm X2)*1
+      by A4,Lm10,FINSEQ_3:49,RVSUM_1:124;
     set XX=Seg m;
-    A17: m <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1))
-      by A16,XREAL_1:68,A14,A6;
+    A16: m <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1))
+      by A6,A13,A15,XREAL_1:68;
      4|^n / (2*n) <= m by Th6;
-    then A18: 4|^n / (2*n) <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1
-))
-      by A17,XXREAL_0:2;
-    A19: (2*n) to_power sqrt(2*n)>0 by A5,POWER:39;
-    A20: 4|^n = 4 to_power (3*n/3) by POWER:46;
-    A21: 4 to_power (2*n/3)>0 by POWER:39;
-    A22: 4 to_power (n/3)>0 by POWER:39;
+    then
+A17: 4|^n / (2*n) <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1))
+      by A16,XXREAL_0:2;
+    A18: (2*n) to_power sqrt(2*n)>0 by A5,POWER:39;
+    A19: 4|^n = 4 to_power (3*n/3) by POWER:46;
+    A20: 4 to_power (2*n/3)>0 by POWER:39;
+    A21: 4 to_power (n/3)>0 by POWER:39;
      -1+(2*n/3)<0+(2*n/3) by XREAL_1:8;
     then 4 to_power ((2*n/3)-1) < 4 to_power (2*n/3) by POWER:44;
     then (4 to_power ((2*n/3)-1))*((2*n) to_power sqrt(2*n))
-    < (4 to_power (2*n/3))*((2*n) to_power sqrt(2*n)) by A19,XREAL_1:70;
+    < (4 to_power (2*n/3))*((2*n) to_power sqrt(2*n)) by A18,XREAL_1:70;
     then 4|^n / (2*n) <= ((2*n) to_power sqrt(2*n))*(4 to_power (2*n/3))
-      by A18,XXREAL_0:2;
+      by A17,XXREAL_0:2;
     then 4|^n/(2*n)*(2*n)<=((2*n) to_power sqrt(2*n))*(4 to_power (2*n/3))*(2*
 n)
       by XREAL_1:66;
@@ -4598,9 +4644,9 @@ n)
       by A5,XCMPLX_1:88;
     then (4 to_power (3*n/3))/(4 to_power (2*n/3)) <=
       (((2*n) to_power sqrt(2*n))*(2*n))*
-      (4 to_power (2*n/3))/(4 to_power (2*n/3)) by A21,A20,XREAL_1:74;
+      (4 to_power (2*n/3))/(4 to_power (2*n/3)) by A19,A20,XREAL_1:74;
     then (4 to_power (3*n/3))/(4 to_power (2*n/3)) <=
-    ((2*n) to_power sqrt(2*n))*(2*n) by A21,XCMPLX_1:90;
+    ((2*n) to_power sqrt(2*n))*(2*n) by A20,XCMPLX_1:90;
     then 4 to_power ((3*n/3)-(2*n/3)) <= ((2*n) to_power sqrt(2*n))*(2*n)
       by POWER:34;
     then 4 to_power (n/3) <= ((2*n) to_power sqrt(2*n))*((2*n) to_power 1)
@@ -4609,83 +4655,83 @@ n)
     then 4 to_power (n/3) < (2*n) to_power (sqrt(2*n)+1) or
     4 to_power (n/3) = (2*n) to_power (sqrt(2*n)+1) by XXREAL_0:1;
     then (4 to_power (n/3)) to_power 3 <=
-    ((2*n) to_power (sqrt(2*n)+1)) to_power 3 by A22,POWER:42;
+    ((2*n) to_power (sqrt(2*n)+1)) to_power 3 by A21,POWER:42;
     then 4 to_power ((n/3)*3) <= ((2*n) to_power (sqrt(2*n)+1)) to_power 3
       by POWER:38;
-    then A23: 4 to_power n <= (2*n) to_power ((sqrt(2*n)+1)*3) by A5,POWER:38;
+    then A22: 4 to_power n <= (2*n) to_power ((sqrt(2*n)+1)*3) by A5,POWER:38;
     set n1=[\ 6-root(2*n) /];
      6-root(2*n) -1 < n1 by INT_1:def 4;
-    then A24: 6-root(2*n) -1 +1 < n1 +1 by XREAL_1:8;
-     6-root(2*n) > 6-root 0 by POWER:18,A5;
-    then A25: 6-root(2*n) > 0 by POWER:6;
+    then A23: 6-root(2*n) -1 +1 < n1 +1 by XREAL_1:8;
+     6-root(2*n) > 6-root 0 by A5,POWER:18;
+    then A24: 6-root(2*n) > 0 by POWER:6;
     then reconsider n1 as Element of NAT by INT_1:80;
      n1+1 <= 2|^n1 by NEWTON:104;
-    then A26: n1+1 <= 2 to_power n1 by POWER:46;
+    then A25: n1+1 <= 2 to_power n1 by POWER:46;
      n1 <= 6-root(2*n) by INT_1:def 4;
     then n1 < 6-root(2*n) or n1 = 6-root(2*n) by XXREAL_0:1;
     then 2 to_power n1 <= 2 to_power (6-root(2*n)) by POWER:44;
-    then n1+1 <= 2 to_power (6-root(2*n)) by A26,XXREAL_0:2;
+    then n1+1 <= 2 to_power (6-root(2*n)) by A25,XXREAL_0:2;
     then n1+1 < 2 to_power (6-root(2*n)) or n1+1 = 2 to_power (6-root(2*n))
       by XXREAL_0:1;
-    then A27: (n1+1) to_power 6 <= (2 to_power (6-root(2*n))) to_power 6
+    then A26: (n1+1) to_power 6 <= (2 to_power (6-root(2*n))) to_power 6
       by POWER:42;
      sqrt(2*n)>0 by A5,SQUARE_1:93;
     then sqrt(2*n)+1>0+1 by XREAL_1:8;
-    then A28: (sqrt(2*n)+1)*3>0*3 by XREAL_1:70;
+    then A27: (sqrt(2*n)+1)*3>0*3 by XREAL_1:70;
     reconsider 2n=2*n as real number;
-A29:  6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:47
+A28:  6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:47
        .= 2n by COMPTRIG:17;
-     6-root(2*n) to_power 6 < (n1+1) to_power 6 by A25,A24,POWER:42;
-    then 2*n < (2 to_power (6-root(2*n))) to_power 6 by A27,A29,XXREAL_0:2;
+     6-root(2*n) to_power 6 < (n1+1) to_power 6 by A23,A24,POWER:42;
+    then 2*n < (2 to_power (6-root(2*n))) to_power 6 by A26,A28,XXREAL_0:2;
     then 2*n < 2 to_power ((6-root(2*n))*6) by POWER:38;
     then (2*n) to_power ((sqrt(2*n)+1)*3) <
     (2 to_power ((6-root(2*n))*6)) to_power ((sqrt(2*n)+1)*3)
-      by A5,A28,POWER:42;
+      by A5,A27,POWER:42;
     then 4 to_power n < (2 to_power ((6-root(2*n))*6))
-    to_power ((sqrt(2*n)+1)*3) by A23,XXREAL_0:2;
-    then A30: 4 to_power n < 2 to_power (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))
+    to_power ((sqrt(2*n)+1)*3) by A22,XXREAL_0:2;
+    then A29: 4 to_power n < 2 to_power (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))
       by POWER:38;
      81=9*9;
     then 81=9^2 by SQUARE_1:def 3;
-    then A31: sqrt 81 = 9 by SQUARE_1:89;
+    then A30: sqrt 81 = 9 by SQUARE_1:89;
      42 < n by A2,XXREAL_0:2;
     then 42*2 < n*2 by XREAL_1:70;
     then 81 < 2*n by XXREAL_0:2;
     then sqrt(81) < sqrt(2*n) by SQUARE_1:95;
-    then 9*2 < sqrt(2*n)*2 by A31,XREAL_1:70;
+    then 9*2 < sqrt(2*n)*2 by A30,XREAL_1:70;
     then 18 + 18*sqrt(2*n) < 2*sqrt(2*n)+18*sqrt(2*n) by XREAL_1:8;
-    then A32: (18 + 18*sqrt(2*n))*(6-root(2*n)) <
-    20*sqrt(2*n)*(6-root(2*n)) by XREAL_1:70,A25;
-    A33: 2 to_power (2*n)>0 by POWER:39;
-    A34: (2*n) to_power (2/3)>0 by POWER:39,A5;
-    A35: (2*n) to_power (2/3)<>0 by POWER:39,A5;
-    A36: (2*n) to_power (1/3)>0 by POWER:39,A5;
+    then A31: (18 + 18*sqrt(2*n))*(6-root(2*n)) <
+    20*sqrt(2*n)*(6-root(2*n)) by A24,XREAL_1:70;
+    A32: 2 to_power (2*n)>0 by POWER:39;
+    A33: (2*n) to_power (2/3)>0 by A5,POWER:39;
+    A34: (2*n) to_power (2/3)<>0 by A5,POWER:39;
+    A35: (2*n) to_power (1/3)>0 by A5,POWER:39;
      2 to_power 2 = 2|^2 by POWER:46
     .= Product <* 2, 2 *> by FINSEQ_2:75
     .= 2*2 by RVSUM_1:129;
     then 4 to_power n = 2 to_power (2*n) by POWER:38;
     then log(2,2 to_power (2*n)) <
     log(2,2 to_power (((6-root(2*n))*6)*((sqrt(2*n)+1)*3)))
-      by POWER:65,A33,A30;
+      by A29,A32,POWER:65;
     then (2*n)*log(2,2) <
     log(2,2 to_power (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))) by POWER:63;
     then (2*n)*log(2,2) < (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))*log(2,2)
       by POWER:63;
     then (2*n)*1 < (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))*log(2,2) by POWER:60;
     then 2*n < (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))*1 by POWER:60;
-    then 2*n < 20*(sqrt(2*n)*(6-root(2*n))) by A32,XXREAL_0:2;
+    then 2*n < 20*(sqrt(2*n)*(6-root(2*n))) by A31,XXREAL_0:2;
     then 2*n < 20*((2-Root(2*n))*(6-root(2*n))) by PREPOWER:41;
     then 2*n < 20*((2-root(2*n))*(6-root(2*n))) by POWER:def 1;
     then 2*n < 20*(((2*n) to_power (1/2))*(6-root(2*n))) by POWER:52;
     then 2*n < 20*(((2*n) to_power (1/2))*((2*n) to_power (1/6))) by POWER:52;
-    then 2*n < 20*((2*n) to_power (1/2+1/6)) by POWER:32,A5;
+    then 2*n < 20*((2*n) to_power (1/2+1/6)) by A5,POWER:32;
     then (2*n)/((2*n) to_power (2/3)) <
-    20*((2*n) to_power (2/3))/((2*n) to_power (2/3)) by XREAL_1:76,A34;
-    then (2*n)/((2*n) to_power (2/3)) < 20 by XCMPLX_1:90,A35;
+    20*((2*n) to_power (2/3))/((2*n) to_power (2/3)) by A33,XREAL_1:76;
+    then (2*n)/((2*n) to_power (2/3)) < 20 by A34,XCMPLX_1:90;
     then ((2*n) to_power 1)/((2*n) to_power (2/3)) < 20 by POWER:30;
-    then ((2*n) to_power (1-(2/3))) < 20 by POWER:34,A5;
-    then ((2*n) to_power (1/3)) to_power 3 < 20 to_power 3 by A36,POWER:42;
-    then ((2*n) to_power ((1/3)*3)) < 20 to_power 3 by POWER:38,A5;
+    then ((2*n) to_power (1-(2/3))) < 20 by A5,POWER:34;
+    then ((2*n) to_power (1/3)) to_power 3 < 20 to_power 3 by A35,POWER:42;
+    then ((2*n) to_power ((1/3)*3)) < 20 to_power 3 by A5,POWER:38;
     then 2*n < 20 to_power (2+1) by POWER:30;
     then 2*n < (20 to_power 2)*(20 to_power 1) by POWER:32;
     then 2*n < (20 to_power (1+1))*20 by POWER:30;

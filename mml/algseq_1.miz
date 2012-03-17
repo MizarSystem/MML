@@ -8,16 +8,15 @@
 environ
 
  vocabularies BOOLE, NORMSP_1, FUNCT_1, RLVECT_1, RELAT_1, FINSEQ_1, ALGSEQ_1,
-      FUNCOP_1, NAT_1, GR_CY_1;
+      FUNCOP_1, GR_CY_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, FUNCT_1,
       CARD_1, FUNCOP_1, STRUCT_0, FUNCT_2, XXREAL_0;
  constructors FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, RLVECT_1;
- registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, ARYTM_3, XREAL_0,
-      STRUCT_0;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, XREAL_0, STRUCT_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, CARD_1;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, REAL_1, NAT_1, FUNCOP_1, XREAL_1,
-      XXREAL_0, CARD_1;
+      XXREAL_0, CARD_1, ORDINAL1;
  schemes FUNCT_2, NAT_1;
 
 begin
@@ -83,7 +82,7 @@ end;
 
 reserve p,q for AlgSequence of R;
 
-definition let R,p,k;
+definition let R,p; let k be Nat;
   pred k is_at_least_length_of p means :Def3:
   for i st i>=k holds p.i=0.R;
 end;
@@ -186,7 +185,7 @@ canceled;
 theorem
    k = len p iff Segm k = support p;
 
- scheme AlgSeqLambdaF{R()->non empty ZeroStr,A()->Element of NAT,
+ scheme AlgSeqLambdaF{R()->non empty ZeroStr,A()->Nat,
                       F(Element of NAT)->Element of R()}:
    ex p being AlgSequence of R()
      st len p <= A() & for k st k < A() holds p.k=F(k)
@@ -206,15 +205,17 @@ proof
           x<A()&f.x=F(x) or x>=A()&f.x=0.R();
        ex n st for i st i >= n holds f.i = 0.R()
      proof
-       take A();
+       reconsider n=A() as Element of NAT by ORDINAL1:def 13;
+       take n;
        thus thesis by A2;
      end;
    then reconsider f as AlgSequence of R() by Def2;
    A3:len f <= A()
      proof
+A4:     A() in NAT by ORDINAL1:def 13;
         for i st i>=A() holds f.i=0.R() by A2;
        then A() is_at_least_length_of f by Def3;
-       hence thesis by Def4;
+       hence thesis by A4,Def4;
      end;
    take f;
    thus thesis by A2,A3;

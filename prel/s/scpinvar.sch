@@ -19,8 +19,8 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
@@ -122,7 +122,7 @@
 </Pred>
 </And>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="94">
 <Func kind="F" nr="3"/>
 </Func>
@@ -161,7 +161,7 @@
 <Num nr="0"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Num nr="0"/>
 <Func kind="K" nr="238">
 <Var nr="1"/>
@@ -179,7 +179,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Num nr="0"/>
 <Func kind="K" nr="238">
 <Var nr="1"/>
@@ -244,7 +244,7 @@
 </Func>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Num nr="0"/>
 <Func kind="K" nr="238">
 <Var nr="1"/>
@@ -282,7 +282,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="F" nr="1">
 <Func kind="K" nr="283">
 <Var nr="1"/>
@@ -396,7 +396,7 @@
 </Pred>
 </And>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="94">
 <Func kind="F" nr="3"/>
 </Func>
@@ -435,7 +435,7 @@
 <Num nr="0"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="238">
 <Var nr="1"/>
 <Func kind="K" nr="239">
@@ -453,7 +453,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="238">
 <Var nr="1"/>
 <Func kind="K" nr="239">
@@ -518,7 +518,7 @@
 </Func>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="238">
 <Var nr="1"/>
 <Func kind="K" nr="239">
@@ -556,7 +556,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="F" nr="1">
 <Func kind="K" nr="283">
 <Var nr="1"/>
@@ -659,7 +659,7 @@
 </Pred>
 </And>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="94">
 <Func kind="F" nr="3"/>
 </Func>
@@ -784,7 +784,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="F" nr="1">
 <Func kind="K" nr="283">
 <Var nr="1"/>
@@ -890,7 +890,7 @@
 </Func>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="94">
 <Func kind="F" nr="3"/>
 </Func>
@@ -1030,7 +1030,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="F" nr="1">
 <Func kind="K" nr="283">
 <Var nr="1"/>
@@ -1144,7 +1144,7 @@
 </Pred>
 </And>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="K" nr="94">
 <Func kind="F" nr="3"/>
 </Func>
@@ -1304,7 +1304,7 @@
 <Var nr="1"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="24">
+<Pred kind="R" nr="22">
 <Func kind="F" nr="1">
 <Func kind="K" nr="283">
 <Var nr="1"/>

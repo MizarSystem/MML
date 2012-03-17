@@ -8,19 +8,20 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, ARYTM_1, ZFMISC_1, RELAT_1, INT_1, FUNCT_1,
       FINSET_1, CARD_1, TARSKI, FINSEQ_2, ORDINAL2, ARYTM, MATRIX_2, FUNCT_2,
-      SUBSET_1, NAT_1;
+      SUBSET_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, ORDINAL1, XCMPLX_0,
       RELAT_1, FUNCT_1, FINSEQ_1, FUNCT_2, FINSEQ_2, FINSET_1, CARD_1, NAT_1,
       INT_1, FINSEQOP, XXREAL_0;
- constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, FINSEQOP;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1;
+ constructors ENUMSET1, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, INT_1,
+      FINSEQOP;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI, WELLORD2, XBOOLE_0, FINSEQ_2;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSET_1, FUNCT_1,
       INT_1, NAT_1, REAL_1, TARSKI, TREES_1, WELLORD2, ZFMISC_1, RELAT_1,
       XREAL_1, XBOOLE_0, XBOOLE_1, FUNCT_2, GRFUNC_1, SUBSET_1, XXREAL_0,
-      ORDINAL1;
+      ORDINAL1, NUMBERS;
  schemes FINSEQ_1, FUNCT_1, NAT_1;
 
 begin
@@ -246,7 +247,7 @@ theorem
             then (k = 1 or k = 2) & 1 <= 3 & 2 <= 3 by A1,A6,TARSKI:def 2;
            hence contradiction by A7;
           end;
-        hence thesis by A1,A5,XXREAL_0:1,FINSEQ_1:4;
+        hence thesis by A1,A5,FINSEQ_1:4,XXREAL_0:1;
        end;
        end;
       hence thesis;
@@ -376,7 +377,7 @@ theorem
   end;
 
 theorem
-      <* u,v *> <> <* x,y,z *>
+  <* u,v *> <> <* x,y,z *>
   proof
          len<* u,v *> = 2 & len<* x,y,z *> = 3 by FINSEQ_1:61,62;
    hence thesis;
@@ -388,8 +389,15 @@ theorem Th43:
   (for k being Element of NAT st k in dom q
    holds r.(len p + k) = q.k) implies r = p ^ q
    proof assume len r = len p + len q;
-     then dom r = Seg(len p + len q) by FINSEQ_1:def 3;
-    hence thesis by FINSEQ_1:def 7;
+     then
+A1:  dom r = Seg(len p + len q) by FINSEQ_1:def 3;
+     assume  (for k being Element of NAT st k in dom p holds r.k = p.k) &
+     (for k being Element of NAT st k in dom q
+     holds r.(len p + k) = q.k);
+     then  (for k being Nat st k in dom p holds r.k = p.k) &
+     (for k being Nat st k in dom q
+     holds r.(len p + k) = q.k);
+    hence thesis by A1,FINSEQ_1:def 7;
    end;
 
 Lm1: A c= Seg k implies Sgm A is one-to-one
@@ -425,8 +433,7 @@ theorem Th44:
   proof let A be finite set;
     assume A c= Seg k;
     then dom(Sgm A) = Seg(len(Sgm A)) & rng(Sgm A) = A & Sgm A is one-to-one
-                                              by Lm1,FINSEQ_1:def 3,
-def 13;
+                                              by Lm1,FINSEQ_1:def 3,def 13;
     then Seg(len(Sgm A)),A are_equipotent & Seg(len(Sgm A)) is finite
                                             by WELLORD2:def 4;
     then card(Seg(len(Sgm A))) = len(Sgm A) & card A = card(Seg(len(Sgm A)))
@@ -630,7 +637,7 @@ A44:           1 <= k + 1 & k + 1 <= a by NAT_1:12;
               then reconsider n1 = q.k as Element of NAT by A42;
                A53: 1 <= k & k <= len q & k <= len p + k by A52,Th27,NAT_1:12;
                then A54: 1 <= len p + k & len p + k <= len r
-                                              by A7,XXREAL_0:2,XREAL_1:9;
+                                              by A7,XREAL_1:9,XXREAL_0:2;
                then len p + k in dom r by Th27;
                then r.(len p + k) in rng r by FUNCT_1:def 5;
               then reconsider m1 = r.(len p + k) as Element of NAT by A46;
@@ -754,8 +761,7 @@ theorem
 theorem
       0 < n & n < m implies Sgm{n,m} = <* n,m *>
   proof assume that A1: 0 < n and A2: n < m;
-         Seg n c= Seg m & m in Seg m & n in Seg n by A1,A2,FINSEQ_1:5,
-7;
+         Seg n c= Seg m & m in Seg m & n in Seg n by A1,A2,FINSEQ_1:5,7;
     then A3: {n,m} c= Seg m by ZFMISC_1:38;
     then A4: len(Sgm{n,m}) = card{n,m} by Th44
                          .= 2 by A2,CARD_2:76;
@@ -828,8 +834,7 @@ Lm3: now let n;
           end;
           then x < k + 1 by A14,REAL_1:def 5;
           then k + 1 < n & n <= k & k < k + 1
-                         by A5,A11,A13,A14,FINSEQ_1:3,
-def 13,XREAL_1:31;
+                         by A5,A11,A13,A14,FINSEQ_1:3,def 13,XREAL_1:31;
         hence contradiction by XXREAL_0:2;
        end;
            rng p = rng Y \ {Y.(k + 1)}
@@ -868,12 +873,12 @@ def 13,XREAL_1:31;
            now let i,j,l,m;
         assume that A26: 1 <= i & i < j & j <= len p and
                     A27: l = p.i & m = p.j;
-         A28: len p = k & i <= len p & 1 <= j by A5,A6,A26,XXREAL_0:2
-,FINSEQ_1:21;
+         A28: len p = k & i <= len p & 1 <= j by A5,A6,A26,FINSEQ_1:21
+,XXREAL_0:2;
          then i in dom p & j in dom p & len Y = k + 1 & k <= k + 1
                                        by A7,A26,Th52,FINSEQ_1:3,NAT_1:12;
-         then p.i = Y.i & p.j = Y.j & j <= len Y by A26,A28,XXREAL_0:2
-,FUNCT_1:70;
+         then p.i = Y.i & p.j = Y.j & j <= len Y by A26,A28,FUNCT_1:70
+,XXREAL_0:2;
        hence l < m by A26,A27,FINSEQ_1:def 13;
       end;
      hence thesis by A25,FINSEQ_1:def 13;
@@ -896,11 +901,11 @@ end;
 theorem
      Sgm(Seg(k + n)) | Seg k = Sgm(Seg k) by Lm4;
 
-Lm5: now let k be Element of NAT;
+Lm5: now let k be Nat;
  assume A1: Sgm(Seg k) = idseq k;
    A2: len(idseq(k + 1)) = k + 1 by FINSEQ_2:55;
    then A3: len(Sgm(Seg(k + 1))) = len(idseq(k + 1)) by Th52;
-        now let j be Element of NAT;
+        now let j be Nat;
      assume A4: j in Seg(k + 1);
       then A5: j in Seg k \/ {k + 1} by FINSEQ_1:11;
            now per cases by A5,XBOOLE_0:def 2;
@@ -1033,8 +1038,9 @@ theorem
    thus p | X is FinSequence implies
     ex k being Element of NAT st X /\ dom p = Seg k
     proof assume p | X is FinSequence;
-      then consider k being Element of NAT such that A1: dom(p | X) = Seg k
+      then consider k being Nat such that A1: dom(p | X) = Seg k
       by FINSEQ_1:def 2;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
       take k;
       thus X /\ dom p = Seg k by A1,RELAT_1:90;
     end;
@@ -1061,63 +1067,64 @@ A1:     X = p " A \/ B
                then k in p " A by A4,FUNCT_1:def 13;
               hence thesis by XBOOLE_0:def 2;
              end;
-             suppose ex m being Element of NAT st m in dom q & k = len p + m;
-               then consider m being Element of NAT such that
+             suppose ex m being Nat st m in dom q & k = len p + m;
+               then consider m being Nat such that
                A5: m in dom q and
                A6: k = len p + m;
-                     q.m = (p ^ q).k by A5,A6,FINSEQ_1:def 7;
+A7:            m in NAT by ORDINAL1:def 13;
+               q.m = (p ^ q).k by A5,A6,FINSEQ_1:def 7;
                 then q.m in A by A2,FUNCT_1:def 13;
                 then m in q " A by A5,FUNCT_1:def 13;
-                then k in B by A6;
+                then k in B by A6,A7;
              hence thesis by XBOOLE_0:def 2;
             end;
             end;
          hence thesis;
         end;
        let x;
-        assume A7: x in p " A \/ B;
-              now per cases by A7,XBOOLE_0:def 2;
-          suppose A8: x in p " A;
-             then A9: x in dom p by FUNCT_1:def 13;
-             then A10: x in dom(p ^ q) by Th24;
-            reconsider k = x as Element of NAT by A9;
-                  (p ^ q).k = p.k by A9,FINSEQ_1:def 7;
-             then (p ^ q).x in A by A8,FUNCT_1:def 13;
-           hence thesis by A10,FUNCT_1:def 13;
+        assume A8: x in p " A \/ B;
+              now per cases by A8,XBOOLE_0:def 2;
+          suppose A9: x in p " A;
+             then A10: x in dom p by FUNCT_1:def 13;
+             then A11: x in dom(p ^ q) by Th24;
+            reconsider k = x as Element of NAT by A10;
+                  (p ^ q).k = p.k by A10,FINSEQ_1:def 7;
+             then (p ^ q).x in A by A9,FUNCT_1:def 13;
+           hence thesis by A11,FUNCT_1:def 13;
           end;
           suppose x in B;
             then consider n being Element of NAT such that
-            A11: x = len p + n and A12: n in q " A;
-             A13: n in dom q by A12,FUNCT_1:def 13;
-             then A14: x in dom(p ^ q) by A11,FINSEQ_1:41;
-                  (p ^ q).(len p + n) = q.n by A13,FINSEQ_1:def 7;
-             then (p ^ q).x in A by A11,A12,FUNCT_1:def 13;
-          hence thesis by A14,FUNCT_1:def 13;
+            A12: x = len p + n and A13: n in q " A;
+             A14: n in dom q by A13,FUNCT_1:def 13;
+             then A15: x in dom(p ^ q) by A12,FINSEQ_1:41;
+                  (p ^ q).(len p + n) = q.n by A14,FINSEQ_1:def 7;
+             then (p ^ q).x in A by A12,A13,FUNCT_1:def 13;
+          hence thesis by A15,FUNCT_1:def 13;
          end;
          end;
        hence thesis;
       end;
           p " A /\ B = {}
       proof assume
-A15:     not thesis;
+A16:     not thesis;
         consider x being Element of p " A /\ B;
-              x in B by A15,XBOOLE_0:def 3;
+              x in B by A16,XBOOLE_0:def 3;
         then consider n being Element of NAT such that
-        A16: x = len p + n and A17: n in q " A;
-            len p + n in p " A by A15,A16,XBOOLE_0:def 3;
+        A17: x = len p + n and A18: n in q " A;
+            len p + n in p " A by A16,A17,XBOOLE_0:def 3;
          then len p + n in dom p by FUNCT_1:def 13;
          then len p + n <= len p + 0 by Th27;
          then n <= 0 & 0 <= n by XREAL_1:8;
-         then n = 0 & n in dom q by A17,FUNCT_1:def 13;
+         then n = 0 & n in dom q by A18,FUNCT_1:def 13;
        hence thesis by Th26;
       end;
-     then A18: p " A misses B by XBOOLE_0:def 7;
+     then A19: p " A misses B by XBOOLE_0:def 7;
           p " A c= p " A \/ B & B c= p " A \/ B by XBOOLE_1:7;
      then reconsider B as finite set by A1,FINSET_1:13;
-     A19: card X = card(p " A) + card B by A1,A18,CARD_2:53;
+     A20: card X = card(p " A) + card B by A1,A19,CARD_2:53;
      defpred P[set,set] means ex i st $1 = i & $2 = len p + i;
-     A20: for x,y,z st x in q " A & P[x,y] & P[x,z] holds y = z;
-     A21: for x st x in q " A ex y st P[x,y]
+     A21: for x,y,z st x in q " A & P[x,y] & P[x,z] holds y = z;
+     A22: for x st x in q " A ex y st P[x,y]
       proof let x;
         assume x in q " A;
           then x in dom q by FUNCT_1:def 13;
@@ -1127,36 +1134,36 @@ A15:     not thesis;
        take i;
        thus thesis;
       end;
-    consider f being Function such that A22: dom f = q " A and
-     A23: for x st x in q " A holds P[x,f.x] from FUNCT_1:sch 2(A20,A21);
-     A24: rng f = B
+    consider f being Function such that A23: dom f = q " A and
+     A24: for x st x in q " A holds P[x,f.x] from FUNCT_1:sch 2(A21,A22);
+     A25: rng f = B
       proof
        thus rng f c= B
         proof let x;
           assume x in rng f;
-           then consider y such that A25: y in dom f and A26: f.y = x
+           then consider y such that A26: y in dom f and A27: f.y = x
                                                            by FUNCT_1:def 5;
            consider i such that
-A27:        y = i & f.y = len p + i by A22,A23,A25;
+A28:        y = i & f.y = len p + i by A23,A24,A26;
           i is Element of NAT by ORDINAL1:def 13;
-         hence thesis by A22,A25,A26,A27;
+         hence thesis by A23,A26,A27,A28;
         end;
        let x;
         assume x in B;
          then consider n being Element of NAT such that
-         A28: x = len p + n and A29: n in q " A;
-               ex i st n = i & f.n = len p + i by A23,A29;
-       hence thesis by A22,A28,A29,FUNCT_1:def 5;
+         A29: x = len p + n and A30: n in q " A;
+               ex i st n = i & f.n = len p + i by A24,A30;
+       hence thesis by A23,A29,A30,FUNCT_1:def 5;
       end;
           f is one-to-one
       proof let x,y;
-        assume that A30: x in dom f and A31: y in dom f and A32: f.x = f.y;
- A33:         ex i st x = i & f.x = len p + i by A22,A23,A30;
-               ex j st y = j & f.y = len p + j by A22,A23,A31;
-       hence thesis by A32,A33;
+        assume that A31: x in dom f and A32: y in dom f and A33: f.x = f.y;
+ A34:         ex i st x = i & f.x = len p + i by A23,A24,A31;
+               ex j st y = j & f.y = len p + j by A23,A24,A32;
+       hence thesis by A33,A34;
       end;
-     then q " A,B are_equipotent by A22,A24,WELLORD2:def 4;
-   hence thesis by A19,CARD_1:21;
+     then q " A,B are_equipotent by A23,A25,WELLORD2:def 4;
+   hence thesis by A20,CARD_1:21;
   end;
 
 theorem Th64:
@@ -1265,8 +1272,8 @@ A1:  dom p = Seg len p by FINSEQ_1:def 3;
    thus rng(p - A) c= rng p \ A
     proof let x;
       assume A2: x in rng(p - A);
-       then A3: x in rng(p * q) & rng(p * q) c= rng p by FINSEQ_1:def 3,RELAT_1
-:45;
+       then A3: x in rng(p * q) & rng(p * q) c= rng p by FINSEQ_1:def 3
+,RELAT_1:45;
             now assume A4: x in A;
          consider y such that A5: y in dom(p - A) and
                               A6: (p - A).y = x by A2,FUNCT_1:def 5;
@@ -1284,14 +1291,13 @@ A1:  dom p = Seg len p by FINSEQ_1:def 3;
     end;
    let x;
     assume A11: x in rng p \ A;
-     then consider y such that A12: y in dom p and A13: p.y = x by FUNCT_1:def
-5;
+     then consider y such that A12: y in dom p and A13: p.y = x by
+FUNCT_1:def 5;
            not p.y in A by A11,A13,XBOOLE_0:def 4;
       then A14: not y in p " A by FUNCT_1:def 13;
            Seg(len p) \ p " A c= Seg(len p) by XBOOLE_1:36;
       then dom p = Seg(len p) & rng q = Seg(len p) \ p " A
-                                                  by FINSEQ_1:def 3,
-def 13;
+                                                  by FINSEQ_1:def 3,def 13;
       then y in rng q by A12,A14,XBOOLE_0:def 4;
      then consider z such that A15: z in dom q and A16: q.z = y by
 FUNCT_1:def 5;
@@ -1484,8 +1490,7 @@ A14:            y in Seg(len s2) by A13,FINSEQ_1:def 3;
                  then A26: y in dom p by FINSEQ_1:def 3;
                 reconsider j = y as Element of NAT by A25;
                       p.j = t.j & t.y in A by A23,A26,FINSEQ_1:def 7
-,FUNCT_1:def 13
-;
+,FUNCT_1:def 13;
                  then y in p " A by A26,FUNCT_1:def 13;
                hence thesis by XBOOLE_0:def 2;
               end;
@@ -1588,16 +1593,16 @@ XBOOLE_1:53
             assume that A47: m in Seg(len p) \ p " A and A48: n in {len p + 1};
                   m in Seg(len p) by A47,XBOOLE_0:def 4;
              then m <= len p & n = len p + 1 & len p < len p + 1
-                                  by A48,FINSEQ_1:3,XREAL_1:31,TARSKI:def 1;
+                                  by A48,FINSEQ_1:3,TARSKI:def 1,XREAL_1:31;
            hence m < n by XXREAL_0:2;
           end;
           then s1 = s2 ^ Sgm{len p + 1} by A18,A44,A46,Th48;
          hence s1.k = s2.k by A7,FINSEQ_1:def 7;
        end;
        end;
-       A49: r.k = t.(s1.k) by A5,A7,A12,FUNCT_1:23;
-             (p - A).k = p.(s2.k) by A6,A7,FUNCT_1:23;
-    hence r.k = (p - A).k by A20,A45,A49,FINSEQ_1:def 7;
+       A49: r.k = t.l by A5,A7,A12,FUNCT_1:23;
+       (p - A).k = p.(s2.k) by A6,A7,FUNCT_1:23;
+       hence r.k = (p - A).k by A20,A45,A49,FINSEQ_1:def 7;
    end;
         now let k be Element of NAT;
      assume A50: k in dom q;
@@ -1623,7 +1628,7 @@ XBOOLE_1:53
             then A57: y in dom t & t.y in A by FUNCT_1:def 13;
            then reconsider z = y as Element of NAT;
             A58: z in dom p or
-           ex n being Element of NAT st n in dom q & z = len p + n
+           ex n being Nat st n in dom q & z = len p + n
             by A52,A57,FINSEQ_1:38;
 A59:            now given n such that A60: n in dom q and A61: z = len p + n;
                    n = 1 by A53,A60,TARSKI:def 1;
@@ -1750,8 +1755,7 @@ theorem
         (not y in A implies <* y *> - A = <* y *>) by Lm6,Lm7;
     assume not thesis;
      then <* y *> = {} or <* x *> = <* y *> or <* y *> = <* x,y *>
-                                              by A3,A4,FINSEQ_1:47,
-def 9;
+                                              by A3,A4,FINSEQ_1:47,def 9;
      then <* x *> = <* y *> & <* x *>.1 = x & <* y *>.1 = y
                                 by Th40,FINSEQ_1:57;
    hence thesis by A2;
@@ -1778,8 +1782,7 @@ theorem
         (not y in A implies <* y *> - A = <* y *>) by Lm6,Lm7;
     assume not thesis;
      then <* x *> = {} or <* x *> = <* y *> or <* x *> = <* x,y *>
-                                              by A3,A4,FINSEQ_1:47,
-def 9;
+                                              by A3,A4,FINSEQ_1:47,def 9;
      then <* x *> = <* y *> & <* x *>.1 = x & <* y *>.1 = y
                                 by Th40,FINSEQ_1:57;
    hence thesis by A2;
@@ -2027,7 +2030,7 @@ FINSEQ_1:35
                  then A56: x in Seg n by XBOOLE_0:def 4;
                 reconsider z = x as Element of NAT by A55;
                  A57: z <= n & n <= l by A26,A56,FINSEQ_1:3;
-                 then 1 <= z & z <= l by A56,XXREAL_0:2,FINSEQ_1:3;
+                 then 1 <= z & z <= l by A56,FINSEQ_1:3,XXREAL_0:2;
                  then A58: z in Seg l by FINSEQ_1:3;
                       now assume z in q " A;
                    then q.z in A & z in dom q by FUNCT_1:def 13;
@@ -2170,8 +2173,8 @@ theorem Th98:
            hence thesis by A2,A6,A7,FUNCT_1:def 8;
           end;
           suppose A8: k1 in dom p &
-            ex n being Element of NAT st n in dom q & k2 = len p + n;
-            then consider n being Element of NAT such that
+            ex n being Nat st n in dom q & k2 = len p + n;
+            then consider n being Nat such that
             A9: n in dom q and A10: k2 = len p + n;
                    (p ^ q).k1 = p.k1 & (p ^ q).k2 = q.n by A8,A10,
 FINSEQ_1:def 7;
@@ -2179,8 +2182,8 @@ FINSEQ_1:def 7;
           hence thesis by A1,XBOOLE_0:3;
           end;
           suppose A11: k2 in dom p &
-            ex n being Element of NAT st n in dom q & k1 = len p + n;
-            then consider n being Element of NAT such that
+            ex n being Nat st n in dom q & k1 = len p + n;
+            then consider n being Nat such that
             A12: n in dom q and A13: k1 = len p + n;
                    (p ^ q).k2 = p.k2 & (p ^ q).k1 = q.n by A11,A13,
 FINSEQ_1:def 7;
@@ -2188,11 +2191,11 @@ FINSEQ_1:def 7;
           hence thesis by A1,XBOOLE_0:3;
           end;
           suppose
-          A14: (ex n being Element of NAT st n in dom q & k1 = len p + n) &
-                   ex n being Element of NAT st n in dom q & k2 = len p + n;
-           then consider n1 being Element of NAT such that A15: n1 in dom q and
+          A14: (ex n being Nat st n in dom q & k1 = len p + n) &
+                   ex n being Nat st n in dom q & k2 = len p + n;
+           then consider n1 being Nat such that A15: n1 in dom q and
                                                 A16: k1 = len p + n1;
-           consider n2 being Element of NAT such that A17: n2 in dom q and
+           consider n2 being Nat such that A17: n2 in dom q and
                                            A18: k2 = len p + n2 by A14;
                  (p ^ q).k1 = q.n1 & (p ^ q).k2 = q.n2 by A15,A16,A17,A18,
 FINSEQ_1:def 7;
@@ -2231,10 +2234,10 @@ FINSEQ_1:def 7;
      end;
     let x,y;
      assume that A31: x in dom q and A32: y in dom q and A33: q.x = q.y;
-     consider k being Element of NAT such that
+     consider k being Nat such that
      A34: x = k and A35: len p + k in dom(p ^ q)
                                                            by A31,FINSEQ_1:40;
-      consider l being Element of NAT such that
+      consider l being Nat such that
       A36: y = l and A37: len p + l in dom(p ^ q)
                                                            by A32,FINSEQ_1:40;
             (p ^ q).(len p + k) = q.k & (p ^ q).(len p + l) = q.l
@@ -2407,12 +2410,12 @@ then A1: 1 <= len df by NAT_1:14; then 1 in dom df by Th27;
   then reconsider d = df.1 as Element of D by FINSEQ_2:13;
   take d;
   reconsider lend1 = len df - 1 as Element of NAT by A1,INT_1:18;
-  deffunc F(Element of NAT) = df.($1+1);
+  deffunc F(Nat) = df.($1+1);
   consider dta being FinSequence such that
 A2: len dta = lend1 and
-A3: for j being Element of NAT st j in Seg lend1 holds dta.j=F(j)
+A3: for j being Nat st j in Seg lend1 holds dta.j=F(j)
        from FINSEQ_1:sch 2;
-       now let j be Element of NAT; assume
+       now let j be Nat; assume
          j in dom dta;
 then A4:  j in Seg len dta by FINSEQ_1:def 3;
     then j + 1 in Seg (len dta + 1) by FINSEQ_1:81;
@@ -2426,7 +2429,7 @@ then A4:  j in Seg len dta by FINSEQ_1:def 3;
 A5: len (<*d*>^dta) = len <*d*> + len dta by FINSEQ_1:35
                    .= 1 + (len df - 1) by A2,FINSEQ_1:57
                    .= len df;
-   let i be Element of NAT; assume i in Seg len df;
+   let i be Nat; assume i in Seg len df;
 then A6:  1 <= i & i <= len df by FINSEQ_1:3;
    per cases by A6,REAL_1:def 5;
    suppose i = 1; hence df.i = (<*d*>^dta).i by FINSEQ_1:58;
@@ -2668,15 +2671,14 @@ then A18:      i<g by A10,REAL_1:def 5;
 then A25:      ex j st Sgm(X).(k+1) = j & 1<=j & j<=g & j<>i by A20;
           1<=g & g<=g & g<>i by A10,A17,XXREAL_0:2;
       then g in rng Sgm(X) by A8,A21;
-      then consider x be Element of NAT such that
+      then consider x be Nat such that
       A26: x in dom Sgm(X) & Sgm(X).x=g by FINSEQ_2:11;
       A27: 1<=x & x<=k+1 & k+1<=len Sgm(X) by A9,A26,Th27;
 then A28:      k+1<=x by A7,A25,A26,FINSEQ_1:def 13;
            now per cases by A10,REAL_1:def 5;
        suppose A29: n=k+1;
         hence 1<=n & n<i implies Sgm(X).n = n by A4,A18,NAT_1:13;
-        thus i<=n & n<=k+1 implies Sgm(Seg g \ {i}).n=n+1 by A4,A26,A27,A28,
-A29
+        thus i<=n & n<=k+1 implies Sgm(Seg g \ {i}).n=n+1 by A4,A26,A27,A28,A29
 ,XXREAL_0:1;
        end;
        suppose A30: n<k+1;
@@ -2713,11 +2715,11 @@ A29
              then consider s be Element of NAT such that
             A37: x=s & 1<=s & s<=k+1;
                 k+1<=g by A4,NAT_1:11;
-            then s<=g & s<>i by A36,A37,XXREAL_0:2,TARSKI:def 1;
+            then s<=g & s<>i by A36,A37,TARSKI:def 1,XXREAL_0:2;
             hence x in X by A21,A37;
            end;
            suppose x in {g};
-            then x=g & 1<=g by A10,XXREAL_0:2,TARSKI:def 1;
+            then x=g & 1<=g by A10,TARSKI:def 1,XXREAL_0:2;
             hence thesis by A17,A21;
            end;
            end;
@@ -2853,8 +2855,8 @@ A1: p c= q;
    len p <= len q by A1,FINSEQ_1:84;
   then len(q|len p) = len p by FINSEQ_1:80;
   then A2: dom(q|len p) = dom p by Th31;
-   for k being Element of NAT st k in dom p holds p.k = (q|len p).k
-   proof let k be Element of NAT;
+   for k being Nat st k in dom p holds p.k = (q|len p).k
+   proof let k be Nat;
     assume
 A3:  k in dom p;
      then A4:   k <= len p by Th27;
@@ -3035,10 +3037,30 @@ theorem
   proof
     let f be FinSubsequence;
     assume f is FinSequence;
-    then reconsider ss'=f as FinSequence; consider k such that
+    then reconsider ss'=f as FinSequence; consider k be Nat such that
 A1: dom ss' = Seg k by FINSEQ_1:def 2;
+    k in NAT by ORDINAL1:def 13;
+    then
 A2: len ss' <= k by A1,FINSEQ_1:def 3;
      Seq f = f* Sgm Seg k by A1,FINSEQ_1:def 14
     .= f* idseq k by Th54 .= f by A2,FINSEQ_2:64;
     hence thesis;
   end;
+
+:: Moved from SCMBSORT by AK on 10.10.2007
+
+theorem
+  for t be FinSequence of INT holds t is FinSequence of REAL
+proof
+  let t be FinSequence of INT;
+  now
+    let i be Nat;
+    assume i in dom t;
+    then
+A1: t.i in rng t by FUNCT_1:def 5;
+    rng t c= INT by FINSEQ_1:def 4;
+    then t.i in INT by A1;
+    hence t.i in REAL by NUMBERS:15;
+  end;
+  hence thesis by FINSEQ_2:14;
+end;

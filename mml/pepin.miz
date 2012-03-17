@@ -8,25 +8,26 @@
 environ
 
  vocabularies EULER_1, NAT_1, SQUARE_1, ARYTM_3, INT_1, FINSET_1, ARYTM_1,
-      ABSVALUE, FILTER_0, MATRIX_2, CARD_1, POWER, FINSEQ_1, PEPIN, RELAT_1,
-      GROUP_1, ARYTM, ORDINAL2;
+      FILTER_0, MATRIX_2, CARD_1, POWER, PEPIN, RELAT_1, GROUP_1, ARYTM,
+      ORDINAL2, FINSOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      INT_1, INT_2, NAT_1, NAT_D, CARD_1, SETWOP_2, SERIES_1, BINARITH, ABIAN,
+      INT_1, INT_2, NAT_1, NAT_D, CARD_1, SETWOP_2, POWER,
+      SERIES_1, BINARITH, ABIAN,
       SQUARE_1, NEWTON, EULER_1, FINSET_1, XXREAL_0;
  constructors SQUARE_1, NAT_1, NAT_D, SETWOP_2, NEWTON, SERIES_1, BINARITH,
       EULER_1, ABIAN;
- registrations ORDINAL1, ARYTM_3, FINSET_1, FINSUB_1, XXREAL_0, XREAL_0,
-      SQUARE_1, NAT_1, INT_1, NEWTON, ABIAN;
+ registrations ORDINAL1, FINSET_1, FINSUB_1, XXREAL_0, XREAL_0, SQUARE_1,
+      NAT_1, INT_1, NEWTON, ABIAN, SERIES_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, INT_1, SQUARE_1;
  theorems REAL_2, REAL_1, NAT_1, NAT_2, INT_1, INT_2, FINSEQ_1, CARD_2,
-      FINSET_1, EULER_1, EULER_2, BINARITH, PREPOWER, PRE_FF, POWER,
-      NEWTON, XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1, NAT_D;
+      FINSET_1, EULER_1, EULER_2, BINARITH, PREPOWER, PRE_FF, POWER, NEWTON,
+      XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1, NAT_D;
  schemes NAT_1;
 
 begin :: Some selected Basic Theorems
 
-reserve d,i,j,k,m,n,p,q,x,n1,n2,k1,k2 for Element of NAT,
+reserve d,i,j,k,m,n,p,q,x,n1,n2,k1,k2 for Nat,
         a,b,c,i1,i2,i3,i5 for Integer;
 
 Lm1:
@@ -73,7 +74,7 @@ end;
 Lm2:
   2 |^ (2 |^ n) > 1
 proof
-  defpred P[Element of NAT] means 2 |^ (2 |^ $1) > 1;
+  defpred P[Nat] means 2 |^ (2 |^ $1) > 1;
       2 |^ 0 = 1 by NEWTON:9;
   then 2 |^ (2 |^ 0) = 2 by NEWTON:10;
   then A1: P[0];
@@ -86,7 +87,7 @@ proof
     then 1 < (2 |^ (2 |^ k)) |^ 2 by A3,XXREAL_0:2;
     hence thesis by A4,NEWTON:14;
   end;
-    for n holds P[n] from NAT_1:sch 1(A1,A2);
+    for n holds P[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
@@ -117,13 +118,15 @@ proof
 A1: k in NAT by ORDINAL1:def 13;
       k hcf (k+1) = (1+k*1) hcf k
              .= 1 hcf k by EULER_1:9
-             .= 1 by NEWTON:64,A1;
+             .= 1 by A1,NEWTON:64;
   hence thesis by INT_2:def 6;
 end;
 
 theorem Th2:
+  for p being Nat holds
   p is prime implies m,p are_relative_prime or m hcf p = p
-proof
+  proof
+    let p be Nat;
   assume A1:p is prime;
       m hcf p divides p by NAT_D:def 5;
   then m hcf p = 1 or m hcf p = p by A1,INT_2:def 5;
@@ -131,12 +134,15 @@ proof
 end;
 
 theorem Th3:
+  for k,m,n being Nat holds
   k divides n*m & n,k are_relative_prime implies k divides m
 proof
+  let k,m,n be Nat;
   assume A1:k divides n*m & n,k are_relative_prime;
-  then n hcf k = 1 by INT_2:def 6;
+  reconsider k,m,n as Element of NAT by ORDINAL1:def 13;
+  n hcf k = 1 by A1,INT_2:def 6;
   then A2:(n*m hcf k*m) = m by EULER_1:6;
-      k divides k*m by NAT_D:9;
+  k divides k*m by NAT_D:9;
   hence thesis by A1,A2,NEWTON:63;
 end;
 
@@ -154,23 +160,26 @@ proof
   hence thesis by NAT_D:def 3;
 end;
 
-definition let n be Element of NAT;
-  redefine func n^2 -> Element of NAT;
+registration let n be Nat;
+  cluster n^2 -> natural;
 coherence
 proof
-    defpred P[Element of NAT] means $1^2 is Element of NAT;
+  defpred P[Nat] means $1^2 is natural;
     A1:P[0];
-    A2:for k be Element of NAT st P[k] holds P[k+1]
+A2: for k st P[k] holds P[k+1]
     proof
-      let kk be Element of NAT;
-      assume A3:kk^2 is Element of NAT;
-      A4:i + j + k is Element of NAT;
-          (kk+1)^2 = kk^2 + 2*kk + 1;
-      hence thesis by A3,A4;
+      let kk be Nat;
+      (kk+1)^2 = kk^2 + 2*kk + 1;
+      hence thesis;
     end;
-        for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
+    for k holds P[k] from NAT_1:sch 2(A1,A2);
     hence thesis;
   end;
+end;
+
+definition let n be Element of NAT;
+  redefine func n^2 -> Element of NAT;
+coherence by ORDINAL1:def 13;
 end;
 
 theorem
@@ -184,9 +193,9 @@ proof
 end;
 
 theorem Th6:
-  for i st i <> 0 holds i divides n iff n mod i = 0
+  for i,n be Nat st i <> 0 holds i divides n iff n mod i = 0
 proof
-  let i;
+  let i,n be Nat;
   assume A1:i <> 0;
   A2:i divides n implies n mod i = 0
   proof
@@ -206,8 +215,10 @@ proof
 end;
 
 theorem Th7:
+  for m,n being Nat holds
   m <> 0 & m divides n mod m implies m divides n
 proof
+  let m,n be Nat;
   assume A1:m <> 0 & m divides n mod m;
   then consider x be Nat such that A2:n mod m = m * x by NAT_D:def 3;
     A3:m > 0 by A1;
@@ -217,8 +228,10 @@ proof
 end;
 
 theorem
-      0 < n & m mod n = k implies n divides (m - k)
+  for m,n,k being Nat holds
+  0 < n & m mod n = k implies n divides (m - k)
 proof
+  let m,n,k be Nat;
   assume 0 < n & m mod n = k;
   then A1:m = n*(m div n) + k by NAT_D:2;
   take m div n;
@@ -274,7 +287,6 @@ proof
   then consider tt being Integer such that
     A5:n - 1 = m*tt by INT_1:def 9;
   A6:n = m*tt + 1 by A5;
-  reconsider n,m as Element of NAT;
       n mod m = (1 qua Integer) mod m by A6,EULER_1:13
          .= 1 by A1,NAT_D:14;
   hence thesis;
@@ -283,7 +295,7 @@ end;
 theorem Th12:
   (p |^ k) mod m = ((p mod m) |^ k) mod m
 proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
      (p |^ $1) mod m = ((p mod m) |^ $1) mod m;
   A1:P[0]
   proof
@@ -302,7 +314,7 @@ proof
                       .= ((p mod m) |^ (n + 1)) mod m by NEWTON:11;
      hence thesis;
   end;
-      for n holds P[n] from NAT_1:sch 1(A1,A2);
+      for n holds P[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
@@ -398,14 +410,12 @@ proof
   assume A1:p is prime & i mod p = -1;
   then A2:p > 1 by INT_2:def 5;
   A3:p <> 0 by A1,INT_2:def 5;
-  reconsider i as Integer;
       i mod p = i - (i div p)*p by A3,INT_1:def 8;
   then i = i mod p + (i div p)*p
         .= (i div p)*p - 1 by A1;
   then A4:i^2
           = ((((i div p)*p) - 2)*(i div p))*p + 1;
   reconsider ii = (((i div p)*p) - 2)*(i div p) as Integer;
-  reconsider i as Element of NAT;
       i^2 mod p = 1 mod p by A4,Th10
           .= 1 by A2,NAT_D:24;
   hence thesis;
@@ -424,19 +434,22 @@ proof
 end;
 
 theorem
-      p > 2 & p is prime implies p is odd
+  for p being Nat holds
+  p > 2 & p is prime implies p is odd
 proof
-  assume A1:p > 2 & p is prime;
+  let p be Nat;
+A1: p in NAT by ORDINAL1:def 13;
+  assume A2:p > 2 & p is prime;
   assume p is even;
-  then p mod 2 = 0 by NAT_2:23;
+  then p mod 2 = 0 by A1,NAT_2:23;
   then consider k being Nat such that
-    A2:p = 2*k + 0 & 0 < 2 by NAT_D:def 2;
-      2 divides p by A2,NAT_D:def 3;
-  hence contradiction by A1,INT_2:def 5;
+    A3:p = 2*k + 0 & 0 < 2 by NAT_D:def 2;
+      2 divides p by A3,NAT_D:def 3;
+  hence contradiction by A2,INT_2:def 5;
 end;
 
 theorem
-      n > 0 implies 2 to_power(n) is even
+  n > 0 implies 2 to_power(n) is even
 proof
   assume n > 0;
   then 2 to_power(n) mod 2 = 0 by NAT_2:19;
@@ -447,7 +460,7 @@ Lm11:
   i is even & j is even implies i*j is even
 proof
   assume i is even & j is even;
-  then reconsider i'=i, j'=j as even Element of NAT;
+  then reconsider i'=i, j'=j as even Element of NAT by ORDINAL1:def 13;
       i'*j' is even;
   hence thesis;
 end;
@@ -466,22 +479,21 @@ proof
 end;
 
 theorem
-   for k holds i is odd implies i |^ k is odd
+  i is odd implies i |^ k is odd
 proof
-  let k;
   assume A1:i is odd;
   A2:i |^ 0 = 1 by NEWTON:9;
-  defpred P[Element of NAT] means i |^ $1 is odd;
+  defpred P[Nat] means i |^ $1 is odd;
       1 mod 2 = 1 by NAT_D:24;
   then A3: P[0] by A2,NAT_2:24;
-  A4: for n being Element of NAT holds P[n] implies P[n+1]
+  A4: for n holds P[n] implies P[n+1]
   proof
-    let n be Element of NAT;
+    let n;
     assume A5:i |^ n is odd;
         i |^ (n+1) = i |^ n * i by NEWTON:11;
     hence thesis by A1,A5,Th19;
   end;
-      for n being Element of NAT holds P[n] from NAT_1:sch 1(A3,A4);
+  for n holds P[n] from NAT_1:sch 2(A3,A4);
   hence thesis;
 end;
 
@@ -489,12 +501,12 @@ theorem Th21:
   k > 0 & i is even implies i |^ k is even
 proof
   assume A1:k > 0 & i is even;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     $1 > 0 & i is even implies i |^ $1 is even;
   A2:P[0];
-  A3:for n being Element of NAT holds P[n] implies P[n+1]
+  A3:for n holds P[n] implies P[n+1]
   proof
-    let n be Element of NAT;
+    let n;
     assume A4:P[n];
         P[n+1]
     proof
@@ -511,12 +523,12 @@ proof
     end;
     hence thesis;
   end;
-      for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  for n holds P[n] from NAT_1:sch 2(A2,A3);
   hence thesis by A1;
 end;
 
 theorem
-      2 divides n iff n is even
+  2 divides n iff n is even
 proof
   A1:2 divides n implies n is even
   proof
@@ -555,10 +567,10 @@ theorem Th26:
   m > 1 & n > 0 implies m |^ n > 1
 proof
   assume A1:m > 1 & n > 0;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     $1 > 0 implies m |^ $1 > 1;
   A2: P[0];
-  A3: for n being Element of NAT holds P[n] implies P[n+1]
+  A3: for n holds P[n] implies P[n+1]
   proof
     let n;
     assume A4:P[n];
@@ -579,14 +591,14 @@ proof
     end;
   hence thesis;
   end;
-      for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  for n holds P[n] from NAT_1:sch 2(A2,A3);
   hence thesis by A1;
 end;
 
 Lm12:
   (2 |^ (2 |^ n))^2 = (2 |^ (2 |^ (n + 1)))
 proof
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
      (2 |^ (2 |^ $1))^2 = (2 |^ (2 |^ ($1 + 1)));
     A1: P[0]
     proof
@@ -596,9 +608,9 @@ proof
                               .= 2^2 by POWER:53;
       hence thesis by A2,NEWTON:10;
     end;
-    A3:for k being Element of NAT st P[k] holds P[k+1]
+    A3:for k st P[k] holds P[k+1]
     proof
-      let x be Element of NAT;
+      let x;
       assume A4:(2 |^ (2 |^ x))^2 = (2 |^ (2 |^ (x + 1)));
           (2 |^ (2 |^ (x + 1)))^2 = (2 |^ ((2 |^ x)*2))^2 by NEWTON:11
                             .= ((2 |^ (2 |^ x)) |^ 2)^2 by NEWTON:14
@@ -608,7 +620,7 @@ proof
                             .= 2 |^ (2 |^ ((x + 1) + 1)) by NEWTON:11;
       hence thesis;
     end;
-      for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A3);
+    for k holds P[k] from NAT_1:sch 2(A1,A3);
     hence thesis;
 end;
 
@@ -616,12 +628,12 @@ theorem Th27:
   n <> 0 & p <> 0 implies n |^ p = n*(n |^ (p -'1))
 proof
   assume A1:n <> 0 & p <> 0;
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
       n <> 0 & $1 <> 0 implies n |^ $1 = n*(n |^ ($1 -' 1));
   A2:P[0];
-  A3:for m being Element of NAT holds P[m] implies P[m+1]
+  A3:for m holds P[m] implies P[m+1]
   proof
-    let m be Element of NAT;
+    let m;
     assume P[m];
         now per cases;
       suppose A4: m = 0;
@@ -639,7 +651,7 @@ proof
     end;
     hence thesis;
   end;
-      for m being Element of NAT holds P[m] from NAT_1:sch 1(A2,A3);
+  for m holds P[m] from NAT_1:sch 2(A2,A3);
   hence thesis by A1;
 end;
 
@@ -669,7 +681,7 @@ end;
 theorem
       2 |^ (n + 1) = (2 |^ n)+(2 |^ n)
 proof
-  defpred P[Element of NAT] means 2 |^ ($1+1) = (2 |^ $1)+(2 |^ $1);
+  defpred P[Nat] means 2 |^ ($1+1) = (2 |^ $1)+(2 |^ $1);
   A1: P[0]
   proof
         2 |^ (0+1) = 1 + 1 by NEWTON:10
@@ -687,7 +699,7 @@ proof
                              .= 2 |^ ((m+1)+1) by A3,NEWTON:11;
     hence thesis;
   end;
-    for n holds P[n] from NAT_1:sch 1(A1,A2);
+  for n holds P[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
@@ -699,9 +711,9 @@ proof
    suppose n = m;
    hence thesis;
    end;
-   suppose not (n = m);
+   suppose n <> m;
     then A2:k to_power m <> k to_power n by A1,POWER:57;
-        k to_power n = k |^ n by A1,POWER:46;
+    k to_power n = k |^ n by A1,POWER:46;
    hence thesis by A1,A2,POWER:46;
    end;
    end;
@@ -753,7 +765,7 @@ proof
   assume A1:p is prime;
   then A2:p <> 0 by INT_2:def 5;
 
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     i divides p |^ $1 implies i = 1 or (ex k being Element of NAT st i = p*k);
 
   A3:P[0]
@@ -797,7 +809,7 @@ proof
     end;
     hence thesis;
   end;
-      for n holds P[n] from NAT_1:sch 1(A3,A5);
+  for n holds P[n] from NAT_1:sch 2(A3,A5);
   hence thesis;
 end;
 
@@ -827,7 +839,7 @@ A7:    u in NAT by ORDINAL1:def 13;
         then A10:u divides p |^ k by NAT_D:def 3;
             u <> 1 by A1,A5,A9,NEWTON:11;
         then consider j being Element of NAT such that
-          A11:u = p*j by A7,A1,A10,Th33;
+          A11:u = p*j by A1,A7,A10,Th33;
             p |^ k = n*j by A2,A5,A8,A11,NAT_D:18;
       hence thesis by NAT_D:def 3;
     end;
@@ -850,7 +862,7 @@ proof
   let n;
   assume A1:p is prime & d divides (p |^ n) & d <> 0;
   then A2:p > 0 by INT_2:def 5;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
      d divides (p |^ $1) implies
       ex t being Element of NAT st d = p |^ t & t <= $1;
     A3:P[0]
@@ -888,7 +900,7 @@ proof
       end;
       hence thesis;
     end;
-        for n holds P[n] from NAT_1:sch 1(A3,A6);
+    for n holds P[n] from NAT_1:sch 2(A3,A6);
     hence thesis by A1;
 end;
 
@@ -896,10 +908,10 @@ theorem Th36:
   p > 1 & i mod p = 1 implies (i |^ n) mod p = 1
 proof
   assume A1:p > 1 & i mod p = 1;
-  defpred P[Element of NAT] means (i |^ $1) mod p = 1;
+  defpred P[Nat] means (i |^ $1) mod p = 1;
     1 mod p = 1 by A1,NAT_D:24;
   then A2: P[0] by NEWTON:9;
-  A3:for k being Element of NAT holds P[k] implies P[k+1]
+  A3:for k holds P[k] implies P[k+1]
   proof
     let k;
     assume A4:(i |^ k) mod p = 1;
@@ -908,7 +920,7 @@ proof
                         .= 1 by A1,A4;
     hence thesis;
   end;
-      for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  for n holds P[n] from NAT_1:sch 2(A2,A3);
   hence thesis;
 end;
 
@@ -939,23 +951,26 @@ proof
 end;
 
 theorem Th38:
+  for p being Nat holds
   p is prime & n,p are_relative_prime
     implies (n |^ (p -'1)) mod p = 1
 proof
-  assume A1:p is prime & n,p are_relative_prime;
-  then A2:p > 1 by INT_2:def 5;
-  A3:p <> 0 by A1,INT_2:def 5;
-  A4:n <> 0
+  let p be Nat;
+A1: p in NAT by ORDINAL1:def 13;
+  assume A2:p is prime & n,p are_relative_prime;
+  then A3:p > 1 by INT_2:def 5;
+  A4:p <> 0 by A2,INT_2:def 5;
+  A5:n <> 0
   proof
     assume n = 0;
-    then n hcf p = p by NEWTON:65;
-    then n hcf p > 1 by A1,INT_2:def 5;
-    hence contradiction by A1,INT_2:def 6;
+    then n hcf p = p by A1,NEWTON:65;
+    then n hcf p > 1 by A2,INT_2:def 5;
+    hence contradiction by A2,INT_2:def 6;
   end;
-  then (n |^ p) mod p = n mod p by A1,EULER_2:34;
-  then A5:(n |^ (p -' 1))*n mod p = n mod p by A3,A4,Th27;
-      (n |^ (p -'1)) <> 0 by A4,PREPOWER:12;
-  hence thesis by A1,A2,A4,A5,EULER_2:27;
+  then (n |^ p) mod p = n mod p by A1,A2,EULER_2:34;
+  then A6:(n |^ (p -' 1))*n mod p = n mod p by A1,A4,A5,Th27;
+      (n |^ (p -'1)) <> 0 by A5,PREPOWER:12;
+  hence thesis by A1,A2,A3,A5,A6,EULER_2:27;
 end;
 
 theorem Th39:
@@ -1015,10 +1030,9 @@ proof
     then consider t being Integer such that
       A4:n*t = m - 1 by INT_1:def 3;
     reconsider m,n as Integer;
-    A5:m mod n = (n*t + 1) mod n by A4
-              .= 1 mod n by EULER_1:13;
-    reconsider m,n,1' = 1 as Element of NAT;
-    thus thesis by A1,A5,NAT_D:14;
+    m mod n = (n*t + 1) mod n by A4
+    .= 1 mod n by EULER_1:13;
+    hence  thesis by A1,NAT_D:14;
   end;
   hence thesis by A2;
 end;
@@ -1088,8 +1102,8 @@ proof
   assume A2:Euler n = 0;
   set X = {k where k is Element of NAT :
    n,k are_relative_prime & k >= 1 & k <= n};
-  A3:Card X = 0 by A2,EULER_1:def 1;
-      X c= Seg n
+A3: Card X = 0 by A2,EULER_1:def 1;
+    X c= finSeg n
   proof
     let x be set;
     assume x in X;
@@ -1319,11 +1333,12 @@ definition
     consider k being Element of NAT such that
       A9:k = kk & k > 0 & (i |^ k) mod p = 1 by A7;
     take kk;
-        for k st k > 0 & (i |^ k) mod p = 1 holds kk <= k
+    for k st k > 0 & (i |^ k) mod p = 1 holds kk <= k
     proof
       let k;
+A1:   k in NAT by ORDINAL1:def 13;
       assume k > 0 & (i |^ k) mod p = 1;
-      then k in A;
+      then k in A by A1;
       hence thesis by A8;
     end;
     hence thesis by A9;
@@ -1412,7 +1427,7 @@ end;
 begin :: Fermat Number
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
   func Fermat(n) -> Element of NAT equals
      2 |^ (2 |^ n) + 1;
   correctness;
@@ -1742,10 +1757,9 @@ proof
 end;
 
 Lm25:
-  for i being Element of NAT holds Fermat(1) divides (3 |^ (4*i + 2)) + 1
+  Fermat(1) divides (3 |^ (4*i + 2)) + 1
 proof
-  let i;
-  defpred P[Element of NAT] means Fermat(1) divides (3 |^ (4*$1 + 2)) + 1;
+  defpred P[Nat] means Fermat(1) divides (3 |^ (4*$1 + 2)) + 1;
 A1: P[0]
   proof
      3 |^ (4*0+2) + 1 = 5 * 2 by Lm21;
@@ -1782,7 +1796,7 @@ A1: P[0]
 
     hence thesis by NAT_D:def 3;
   end;
-    for n holds P[n] from NAT_1:sch 1(A1,A2);
+    for n holds P[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 
@@ -1810,10 +1824,9 @@ proof
 end;
 
 Lm27:
-  for n being Element of NAT holds Fermat(2) divides (3 |^ (16*n + 8)) + 1
+     Fermat(2) divides (3 |^ (16*n + 8)) + 1
 proof
-  let n;
-  defpred P[Element of NAT] means Fermat(2) divides (3 |^ (16*$1 + 8)) + 1;
+  defpred P[Nat] means Fermat(2) divides (3 |^ (16*$1 + 8)) + 1;
 A1: P[0]
   proof
      3 |^ (16*0 + 8) + 1 = 17 * 386 by Lm23;
@@ -1854,7 +1867,7 @@ A1: P[0]
 
     hence thesis by NAT_D:def 3;
   end;
-    for n holds P[n] from NAT_1:sch 1(A1,A2);
+    for n holds P[n] from NAT_1:sch 2(A1,A2);
   hence thesis;
 end;
 

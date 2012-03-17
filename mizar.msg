@@ -392,7 +392,7 @@ Directives are not allowed in the text proper
 # 251
 "it" is allowed only inside the definiens of a public functor or mode
 # 253
-"means" expected
+"means" or "equals" expected
 # 255
 It is not allowed for expandable modes
 # 271
@@ -478,7 +478,7 @@ Associative notation must not be used for "iff" and "implies"
 # 385
 "->" expected
 # 386
-"means" expected
+"means" or "equals" expected
 # 387
 "st" expected
 # 388

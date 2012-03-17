@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -26,7 +26,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="4">
+<Func kind="K" nr="17">
 <Var nr="1"/>
 <Func kind="F" nr="2">
 <Var nr="1"/>
@@ -62,7 +62,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="5">
+<Func kind="K" nr="1">
 <Func kind="F" nr="2"/>
 </Func>
 <Fraenkel>
@@ -83,7 +83,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="4">
+<Func kind="K" nr="17">
 <Var nr="1"/>
 <Func kind="F" nr="3">
 <Var nr="1"/>
@@ -117,7 +117,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="12">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -132,7 +132,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Func kind="K" nr="4">
+<Func kind="K" nr="17">
 <Var nr="1"/>
 <Func kind="F" nr="4">
 <Var nr="1"/>

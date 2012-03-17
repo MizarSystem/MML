@@ -8,9 +8,9 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, PARTFUN1, BOOLE, SEQ_1, FINSEQ_1, ARYTM_1,
       ABSVALUE, ARYTM_3, TDGROUP, SEQ_2, ORDINAL2, FCONT_1, SQUARE_1, SEQFUNC,
-      ARYTM, FUNCOP_1, NAT_1;
+      ARYTM, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0,
-      XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FUNCOP_1,
+      XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, RELSET_1, FUNCOP_1,
       PARTFUN1, RFUNCT_1, SEQ_1, SEQ_2, FCONT_1, LIMFUNC1;
  constructors PARTFUN1, FUNCOP_1, REAL_1, COMPLEX1, SEQ_2, RFUNCT_1, FCONT_1,
       LIMFUNC1;
@@ -41,7 +41,7 @@ dom it = NAT & rng it c= PFuncs(D1,D2);
 A1: dom f = NAT by FUNCOP_1:19;
    let x; assume x in rng f;
    then ex y st y in dom f & f.y = x by FUNCT_1:def 5;
-   then x = {} by FUNCOP_1:13,A1;
+   then x = {} by A1,FUNCOP_1:13;
    then x is PartFunc of D1,D2 by PARTFUN1:56;
    hence x in PFuncs(D1,D2) by PARTFUN1:119;
   end;
@@ -124,10 +124,11 @@ for F1,F2 st (for n holds F1.n = F2.n) holds F1 = F2
    end;
 
 scheme ExFuncSeq{D1() -> set, D2() -> set,
-                 F(Element of NAT)->PartFunc of D1(),D2()}:
-ex G being Functional_Sequence of D1(), D2() st for n holds G.n = F(n)
+  F(set)->PartFunc of D1(),D2()}:
+ex G being Functional_Sequence of D1(), D2() st
+for n being Nat holds G.n = F(n)
 proof
-   defpred P[set,set] means ex n st (n=$1 & $2=F(n));
+   defpred P[set,set] means $2=F($1);
  A1: now let x;
      assume x in NAT;
      then consider n such that
@@ -140,33 +141,33 @@ proof
    consider f such that
 A4: dom f = NAT and
 A5: for x st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A3,A1);
-        now let x;
+    now let x;
      assume x in NAT;
-     then ex n st n=x & f.x=F(n) by A5;
+     then f.x=F(x) by A5;
      hence f.x is PartFunc of D1(),D2();
     end;
    then reconsider f as Functional_Sequence of D1(),D2() by A4,Lm1;
    take f;
-   let n;
-       ex k st k=n & f.n=F(k) by A5;
-   hence f.n=F(n);
+   let n be Nat;
+   n in NAT by ORDINAL1:def 13;
+   hence f.n=F(n) by A5;
   end;
 
 definition
  let D,H; let r be real number;
  func r(#)H ->Functional_Sequence of D,REAL means :Def2:
-   for n holds it.n = r(#)(H.n);
+   for n being Nat holds it.n = r(#)(H.n);
  existence
-  proof deffunc U(Element of NAT) = r(#)(H.$1);
+  proof deffunc U(Nat) = r(#)(H.$1);
    thus ex f being Functional_Sequence of D,REAL
-    st for n holds f.n = U(n) from ExFuncSeq;
+    st for n being Nat holds f.n = U(n) from ExFuncSeq;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A1: for n holds H1.n=r(#)(H.n) and
-A2: for n holds H2.n=r(#)(H.n);
-        now let n;
+A1: for n being Nat holds H1.n=r(#)(H.n) and
+A2: for n being Nat holds H2.n=r(#)(H.n);
+    now let n;
          H1.n=r(#)(H.n) & H2.n=r(#)(H.n) by A1,A2;
      hence H1.n=H2.n;
     end;
@@ -177,17 +178,17 @@ end;
 definition
  let D,H;
  func H" -> Functional_Sequence of D,REAL means :Def3:
-  for n holds it.n=(H.n)^;
+  for n being Nat holds it.n=(H.n)^;
  existence
-  proof deffunc U(Element of NAT) = (H.$1)^;
+  proof deffunc U(Nat) = (H.$1)^;
    thus ex f being Functional_Sequence of D,REAL st
-    for n holds f.n=U(n) from ExFuncSeq;
+   for n being Nat holds f.n=U(n) from ExFuncSeq;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A1: for n holds H1.n=(H.n)^ and
-A2: for n holds H2.n=(H.n)^;
+A1: for n being Nat holds H1.n=(H.n)^ and
+A2: for n being Nat holds H2.n=(H.n)^;
         now let n;
          H1.n=(H.n)^ & H2.n=(H.n)^ by A1,A2;
      hence H1.n=H2.n;
@@ -196,19 +197,19 @@ A2: for n holds H2.n=(H.n)^;
   end;
 
 func - H -> Functional_Sequence of D,REAL means :Def4:
- for n holds it.n = -H.n;
+ for n being Nat holds it.n = -H.n;
  existence
   proof
    take H1=(-1)(#)H;
-   let n;
+   let n be Nat;
    thus H1.n=(-1)(#)H.n by Def2
     .=-H.n by RFUNCT_1:38;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A3: for n holds H1.n=-H.n and
-A4: for n holds H2.n=-H.n;
+A3: for n being Nat holds H1.n=-H.n and
+A4: for n being Nat holds H2.n=-H.n;
         now let n;
          H1.n=-H.n & H2.n=-H.n by A3,A4;
      hence H1.n=H2.n;
@@ -217,17 +218,17 @@ A4: for n holds H2.n=-H.n;
   end;
 
 func abs(H)->Functional_Sequence of D,REAL means :Def5:
-   for n holds it.n=abs(H.n);
+for n being Nat holds it.n=abs(H.n);
  existence
-  proof deffunc U(Element of NAT) = abs(H.$1);
+  proof deffunc U(Nat) = abs(H.$1);
    thus ex f being Functional_Sequence of D,REAL st
-    for n holds f.n=U(n) from ExFuncSeq;
+    for n being Nat holds f.n=U(n) from ExFuncSeq;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A5: for n holds H1.n=abs(H.n) and
-A6: for n holds H2.n=abs(H.n);
+A5: for n being Nat holds H1.n=abs(H.n) and
+A6: for n being Nat holds H2.n=abs(H.n);
         now let n;
          H2.n=abs(H.n) by A6;
      hence H1.n=H2.n by A5;
@@ -239,17 +240,17 @@ end;
 definition
  let D,G,H;
 func G + H -> Functional_Sequence of D,REAL means :Def6:
-   for n holds it.n = G.n + H.n;
+for n being Nat holds it.n = G.n + H.n;
  existence
-  proof deffunc U(Element of NAT) = G.$1 + H.$1;
+  proof deffunc U(Nat) = G.$1 + H.$1;
    thus ex f being Functional_Sequence of D,REAL st
-    for n holds f.n = U(n) from ExFuncSeq;
+    for n being Nat holds f.n = U(n) from ExFuncSeq;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A1: for n holds H1.n=G.n+H.n and
-A2: for n holds H2.n=G.n+H.n;
+A1: for n being Nat holds H1.n=G.n+H.n and
+A2: for n being Nat holds H2.n=G.n+H.n;
         now let n;
          H1.n=G.n+H.n & H2.n=G.n+H.n by A1,A2;
      hence H1.n=H2.n;
@@ -268,17 +269,17 @@ end;
 definition
  let D,G,H;
 func G (#) H -> Functional_Sequence of D,REAL means :Def8:
-  for n holds it.n =G.n (#) H.n;
+for n being Nat holds it.n =G.n (#) H.n;
  existence
-  proof deffunc U(Element of NAT) = G.$1 (#) H.$1;
+  proof deffunc U(Nat) = G.$1 (#) H.$1;
    thus ex f being Functional_Sequence of D,REAL st
-    for n holds f.n =U(n) from ExFuncSeq;
+    for n being Nat holds f.n =U(n) from ExFuncSeq;
   end;
  uniqueness
   proof
    let H1,H2 such that
-A1: for n holds H1.n=G.n (#) H.n and
-A2: for n holds H2.n=G.n (#) H.n;
+A1: for n being Nat holds H1.n=G.n (#) H.n and
+A2: for n being Nat holds H2.n=G.n (#) H.n;
         now let n;
          H1.n=G.n(#)H.n & H2.n=G.n(#)H.n by A1,A2;
      hence H1.n=H2.n;

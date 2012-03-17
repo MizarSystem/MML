@@ -18,14 +18,13 @@ environ
  constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, FUNCT_5, INT_2, FINSEQ_4,
       SERIES_1, BINARITH, WSIERP_1, FUNCT_7, MATRIX_1, BINARI_3;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
-      ARYTM_3, FRAENKEL, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, MARGREL1,
-      FUNCT_7;
+      FRAENKEL, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, MARGREL1, FUNCT_7;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSEQ_2, XBOOLEAN;
  theorems REAL_1, NAT_1, NAT_2, NEWTON, INT_1, INT_2, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_5, FUNCT_7, FUNCOP_1, POWER, EULER_1,
-      EULER_2, BINARITH, BINARI_3, MATRIX_1, RELSET_1, RELAT_1, XBOOLE_1,
-      XREAL_1, XXREAL_0, XBOOLEAN, NAT_D;
+      FUNCT_1, FUNCT_2, FUNCT_5, FUNCT_7, FUNCOP_1, POWER, EULER_1, EULER_2,
+      BINARITH, BINARI_3, MATRIX_1, RELSET_1, RELAT_1, XBOOLE_1, XREAL_1,
+      XXREAL_0, XBOOLEAN, NAT_D, PARTFUN1;
  schemes FINSEQ_1, FINSEQ_2, NAT_1, FUNCT_2;
 
 begin ::Some selected theorems on integers
@@ -197,7 +196,7 @@ theorem Th5:
     let a,b,c be Element of NAT;
     assume A1: 0<a & 0<b & a<c & b<c & c is prime;
     assume (a * b) mod c = 0;
-      then (a * b) = c * ((a * b) div c) + 0 by NAT_D:2,A1;
+      then (a * b) = c * ((a * b) div c) + 0 by A1,NAT_D:2;
       then c divides (a * b) by NAT_D:def 3;
       then c divides a or c divides b by A1,NEWTON:98;
       hence contradiction by A1,NAT_D:7;
@@ -228,17 +227,17 @@ definition
   for i st i in Seg n holds it/.i = (x/.i) 'xor' (y/.i);
   existence
     proof
-      deffunc F(Element of NAT)=(x/.$1) 'xor' (y/.$1);
+      deffunc F(Nat)=(x/.$1) 'xor' (y/.$1);
       consider z being FinSequence of BOOLEAN such that
         A1: len z = n and
-        A2: for j st j in Seg n holds
+        A2: for j be Nat st j in Seg n holds
                            z.j = F(j) from FINSEQ_2:sch 1;
       reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
       take z;
       let i;
       assume A3: i in Seg n;
       then i in dom z by A1,FINSEQ_1:def 3;
-      hence z/.i = z.i by FINSEQ_4:def 4
+      hence z/.i = z.i by PARTFUN1:def 8
                 .= (x/.i) 'xor' (y/.i) by A2,A3;
     end;
   uniqueness
@@ -247,13 +246,13 @@ definition
         A4: for i st i in Seg n holds z1/.i = (x/.i) 'xor' (y/.i) and
         A5: for i st i in Seg n holds z2/.i = (x/.i) 'xor' (y/.i);
         A6: len z1 = n & len z2 = n by FINSEQ_2:109;
-          now let j;
+          now let j be Nat;
         assume A7: j in Seg n;
         then A8: j in dom z1 & j in dom z2 by A6,FINSEQ_1:def 3;
-        hence z1.j = z1/.j by FINSEQ_4:def 4
+        hence z1.j = z1/.j by PARTFUN1:def 8
                   .= (x/.j) 'xor' (y/.j) by A4,A7
                   .= z2/.j by A5,A7
-                  .= z2.j by A8,FINSEQ_4:def 4;
+                  .= z2.j by A8,PARTFUN1:def 8;
       end;
       hence z1 = z2 by A6,FINSEQ_2:10;
     end;
@@ -267,11 +266,11 @@ proof
   let n;
   let x be Tuple of n, BOOLEAN;
   A1:len (x 'xor' x) = n & len (ZERO(n)) = n by FINSEQ_2:109;
-      now let j;
+      now let j be Nat;
   assume A2:j in Seg n;
     then A3:j in dom (x 'xor' x) & j in dom (ZERO(n)) by A1,FINSEQ_1:def 3;
     A4:ZERO(n).j = FALSE by A2,FUNCOP_1:13;
-    thus (x 'xor' x).j = (x 'xor' x)/.j by A3,FINSEQ_4:def 4
+    thus (x 'xor' x).j = (x 'xor' x)/.j by A3,PARTFUN1:def 8
                       .= (x/.j) 'xor' (x/.j) by A2,Def2
                       .= ZERO(n).j by A4,XBOOLEAN:138;
   end;
@@ -284,13 +283,13 @@ proof
   let n;
   let x,y be Tuple of n, BOOLEAN;
   A1:len (x 'xor' y) = n & len (y 'xor' x) = n by FINSEQ_2:109;
-      now let j;
+      now let j be Nat;
   assume A2:j in Seg n;
     then A3:j in dom (x 'xor' y) & j in dom (y 'xor' x) by A1,FINSEQ_1:def 3;
-    hence (x 'xor' y).j = (x 'xor' y)/.j by FINSEQ_4:def 4
+    hence (x 'xor' y).j = (x 'xor' y)/.j by PARTFUN1:def 8
                        .= (y/.j) 'xor' (x/.j) by A2,Def2
                        .= (y 'xor' x)/.j by A2,Def2
-                       .= (y 'xor' x).j by A3,FINSEQ_4:def 4;
+                       .= (y 'xor' x).j by A3,PARTFUN1:def 8;
   end;
   hence thesis by A1,FINSEQ_2:10;
 end;
@@ -308,16 +307,16 @@ proof
   let n;
   let x be Tuple of n, BOOLEAN;
   A1:len ((ZERO(n)) 'xor' x) = n & len x = n by FINSEQ_2:109;
-      now let j;
+      now let j be Nat;
   assume A2:j in Seg n;
     then A3:j in dom ((ZERO(n)) 'xor' x) & j in dom x by A1,FINSEQ_1:def 3;
         j in dom (ZERO(n)) by A2,FUNCOP_1:19;
-    then A4:(ZERO(n))/.j = (n |-> FALSE).j by FINSEQ_4:def 4
+    then A4:(ZERO(n))/.j = (n |-> FALSE).j by PARTFUN1:def 8
                           .= FALSE by A2,FUNCOP_1:13;
-    thus ((ZERO(n)) 'xor' x).j = ((ZERO(n)) 'xor' x)/.j by A3,FINSEQ_4:def 4
+    thus ((ZERO(n)) 'xor' x).j = ((ZERO(n)) 'xor' x)/.j by A3,PARTFUN1:def 8
                               .= FALSE 'xor' (x/.j) by A2,A4,Def2
                               .= x/.j by BINARITH:14
-                              .= x.j by A3,FINSEQ_4:def 4;
+                              .= x.j by A3,PARTFUN1:def 8;
   end;
   hence thesis by A1,FINSEQ_2:10;
 end;
@@ -329,18 +328,18 @@ proof
   let x,y,z be Tuple of n, BOOLEAN;
   A1:len ((x 'xor' y) 'xor' z) = n &
      len (x 'xor' (y 'xor' z)) = n by FINSEQ_2:109;
-      now let j;
+      now let j be Nat;
   assume A2:j in Seg n;
     then A3:j in dom ((x 'xor' y) 'xor' z) &
             j in dom (x 'xor' (y 'xor' z)) by A1,FINSEQ_1:def 3;
     hence ((x 'xor' y) 'xor' z).j
-                 = ((x 'xor' y) 'xor' z)/.j by FINSEQ_4:def 4
+                 = ((x 'xor' y) 'xor' z)/.j by PARTFUN1:def 8
                 .= ((x 'xor' y)/.j) 'xor' (z/.j) by A2,Def2
                 .= ((x/.j) 'xor' (y/.j)) 'xor' (z/.j) by A2,Def2
                 .= (x/.j) 'xor' ((y/.j) 'xor' (z/.j)) by XBOOLEAN:73
                 .= (x/.j) 'xor' ((y 'xor' z)/.j) by A2,Def2
                 .= ((x 'xor' (y 'xor' z)))/.j by A2,Def2
-                .= (x 'xor' (y 'xor' z)).j by A3,FINSEQ_4:def 4;
+                .= (x 'xor' (y 'xor' z)).j by A3,PARTFUN1:def 8;
   end;
   hence thesis by A1,FINSEQ_2:10;
 end;
@@ -359,20 +358,20 @@ theorem
     A1:len (n-BinarySequence 0) = n & len (ZERO(n)) = n by FINSEQ_2:109;
     then A2:dom (n-BinarySequence 0) = Seg n &
             dom ZERO(n) = Seg n by FINSEQ_1:def 3;
-        now let j;
+        now let j be Nat;
       assume A3: j in Seg n;
       A4: (0 div 2 to_power(j-'1)) mod 2
               = 0 mod 2 by NAT_2:4
              .= 0 by NAT_D:26;
           j in dom (ZERO(n)) by A3,FUNCOP_1:19;
-      then A5:(ZERO(n))/.j = (n |-> FALSE).j by FINSEQ_4:def 4
+      then A5:(ZERO(n))/.j = (n |-> FALSE).j by PARTFUN1:def 8
                           .= FALSE by A3,FUNCOP_1:13;
       thus (n-BinarySequence 0).j
-        = (n-BinarySequence 0)/.j by A2,A3,FINSEQ_4:def 4
+        = (n-BinarySequence 0)/.j by A2,A3,PARTFUN1:def 8
        .= IFEQ((0 div 2 to_power(j-'1)) mod 2,0,FALSE,TRUE)
                                          by A3,BINARI_3:def 1
        .= (ZERO(n))/.j by A4,A5,FUNCOP_1:def 8
-       .= ZERO(n).j by A2,A3,FINSEQ_4:def 4;
+       .= ZERO(n).j by A2,A3,PARTFUN1:def 8;
     end;
     hence thesis by A1,FINSEQ_2:10;
   end;
@@ -656,7 +655,7 @@ Def7
           consider b being Integer such that A33: b = b2 - b1;
               b1 - b1 <= b2 - b1 by A31,XREAL_1:11;
           then reconsider b as Element of NAT by A33,INT_1:16;
-           (2 to_power(n)+1) divides k*b by NAT_D:def 3,A32,A33;
+           (2 to_power(n)+1) divides k*b by A32,A33,NAT_D:def 3;
           then A34: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
  divides b
                                                      by A1,NEWTON:98;
@@ -675,7 +674,7 @@ Def7
           consider b being Integer such that A38: b = b1 - b2;
               b2 - b2 <= b1 - b2 by A36,XREAL_1:11;
           then reconsider b as Element of NAT by A38,INT_1:16;
-           (2 to_power(n)+1) divides k*b by NAT_D:def 3,A37,A38;
+           (2 to_power(n)+1) divides k*b by A37,A38,NAT_D:def 3;
           then A39: (2 to_power(n)+1) divides k or (2 to_power(n)+1)
  divides b
                                                      by A1,NEWTON:98;
@@ -714,7 +713,7 @@ proof
           2 to_power n < (2 to_power n)+1 by XREAL_1:31;
       then i < (2 to_power n)+1 by A1,XXREAL_0:2;
       then (ChangeVal_1(i,n)) mod ((2 to_power n)+1) = i by A5,NAT_D:24;
-    hence thesis by A2,A1,Def8;
+    hence thesis by A1,A2,Def8;
 end;
 end;
 
@@ -886,10 +885,11 @@ defpred P[set,set] means
              ($1=3 implies $2 = ADD_MOD(m.3, k.3, n)) &
              ($1=4 implies $2 = MUL_MOD(m.4, k.4, n)) &
              ($1<>1 & $1 <> 2 & $1<>3 & $1<>4 implies $2 = m.$1);
-             A1: for j st j in Seg len m ex x being Element of NAT st
+             A1: for j be Nat st j in Seg len m ex x being Element of NAT st
              P[j,x]
       proof
-        let j be Element of NAT such that j in Seg len m;
+        let j be Nat; assume j in Seg len m;
+        then reconsider j as Element of NAT;
         per cases;
           suppose A2: j = 1;
               take MUL_MOD(m.1, k.1, n);
@@ -914,8 +914,8 @@ defpred P[set,set] means
       end;
      A7:dom m = Seg len m by FINSEQ_1:def 3;
      consider z being FinSequence of NAT such that
-        A8: dom z = Seg len m and
-        A9: for i st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
+A8:  dom z = Seg len m and
+A9:  for i be Nat st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
       take z;
       thus thesis by A7,A8,A9,FINSEQ_1:def 3;
     end;
@@ -943,7 +943,7 @@ defpred P[set,set] means
        A13:dom m = Seg len z2 by A11,FINSEQ_1:def 3
                 .= dom z2 by FINSEQ_1:def 3;
 
-          now let j be Element of NAT;
+          now let j be Nat;
         assume A14: j in dom m;
             now per cases;
           suppose A15: j = 1;
@@ -1037,9 +1037,10 @@ defpred P[set,set] means
                 k.5,n),Absval((n-BinarySequence m.2) 'xor'
                  (n-BinarySequence m.4)),n),k.6,n),n))))&
    ($1<>1 & $1 <> 2 & $1<>3 & $1<>4 implies $2 = m.$1);
-A1: for j st j in Seg len m ex x being Element of NAT st P[j,x]
+A1: for j be Nat st j in Seg len m ex x being Element of NAT st P[j,x]
   proof
-   let j be Element of NAT such that j in Seg len m;
+    let j be Nat; assume j in Seg len m;
+    then reconsider j as Element of NAT;
    per cases;
     suppose A2: j = 1;
      take Absval((n-BinarySequence m.1) 'xor' (n-BinarySequence
@@ -1080,7 +1081,7 @@ A1: for j st j in Seg len m ex x being Element of NAT st P[j,x]
   end;
   consider z being FinSequence of NAT such that
    A7: dom z = Seg len m and
-   A8: for i st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
+A8: for i be Nat st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
    A9:Seg len m = dom m by FINSEQ_1:def 3;
       take z;
       thus thesis by A7,A8,A9,FINSEQ_1:def 3;
@@ -1147,7 +1148,7 @@ A1: for j st j in Seg len m ex x being Element of NAT st P[j,x]
                  .= dom z1 by FINSEQ_1:def 3;
        A13: dom m = Seg len(z2) by A11,FINSEQ_1:def 3
                  .= dom z2 by FINSEQ_1:def 3;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume A14: j in dom m;
             now per cases;
           suppose A15: j = 1;
@@ -1212,11 +1213,12 @@ definition
 defpred P[set,set] means
              ($1=2 implies $2 = m.3) & ($1=3 implies $2 = m.2) &
              ($1<>2 & $1<>3 implies $2 = m.$1);
-      A1: for k be Element of NAT st k in Seg len m ex x being Element of NAT
+A1:  for k be Nat st k in Seg len m ex x being Element of NAT
        st P[k,x]
       proof
-        let k be Element of NAT such that
-               k in Seg len m;
+        let k be Nat;
+        assume k in Seg len m;
+        then reconsider k as Element of NAT;
         per cases;
           suppose A2: k = 2;
               take m.3;
@@ -1232,8 +1234,8 @@ defpred P[set,set] means
       end;
       end;
       consider z being FinSequence of NAT such that
-        A5: dom z = Seg len m and
-        A6: for i st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
+A5:   dom z = Seg len m and
+A6:   for i be Nat st i in Seg len m holds P[i,z.i] from FINSEQ_1:sch 5(A1);
       A7:for i st i in Seg len m holds IFEQ(i,2,m.3,IFEQ(i,3,m.2,m.i)) = z.i
       proof
         let i be Element of NAT;
@@ -1278,7 +1280,7 @@ FUNCOP_1:def 8;
                  .= dom z1 by FINSEQ_1:def 3;
        A17: dom m = Seg len(z2) by A15,FINSEQ_1:def 3
                  .= dom z2 by FINSEQ_1:def 3;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume A18: j in dom m;
             now per cases;
           suppose j = 2;
@@ -1303,9 +1305,8 @@ FUNCOP_1:def 8;
             proof
               assume A25:j <> 2 & j <> 3;
               then IFEQ(j,2,m.3,IFEQ(j,3,m.2,m.j)) = IFEQ(j,3,m.2,m.j)
-                                                          by FUNCOP_1:def 8
-                                                   .= m.j by A25,FUNCOP_1:def 8
-;
+              by FUNCOP_1:def 8
+              .= m.j by A25,FUNCOP_1:def 8;
               hence thesis;
             end;
             then z2.j = m.j by A15,A18,A23;
@@ -1508,7 +1509,7 @@ theorem Th30:
     then 1 in Seg len m by FINSEQ_1:3;
     then A15:1 in dom m by FINSEQ_1:def 3;
 
-        now let j be Element of NAT;
+        now let j be Nat;
       assume A16:j in Seg len m;
       then j in Seg len I1 by A8,Def11;
       then A17:j in dom I1 by FINSEQ_1:def 3;
@@ -1657,7 +1658,7 @@ theorem Th31:
               4 in dom(I3) & 4 in dom(I4) by FINSEQ_1:def 3;
     A28:4 in dom m by A26,FINSEQ_1:def 3;
 
-        now let j be Element of NAT;
+        now let j be Nat;
       assume A29:j in Seg len m;
       then A30: j in Seg len I1 by A8,Def13;
       then A31: j in Seg len I2 by A9,Def11;
@@ -1859,7 +1860,7 @@ theorem Th32:
                  ),n),k2.6,n) by Th7
         .= t11 by A3,A5,Th9;
 
-        now let j be Element of NAT;
+        now let j be Nat;
       assume A19:j in Seg len m;
       then j in Seg len I1 by A7,Def12;
       then A20: j in dom I1 by FINSEQ_1:def 3;
@@ -1959,7 +1960,7 @@ theorem
     then 2 in dom m by FINSEQ_1:def 3;
     then A7:I1.2 = m.3 by A2,Lm3;
 
-        now let j be Element of NAT;
+        now let j be Nat;
       assume A8:j in Seg len m;
       then j in Seg len I1 by A2,Def13;
       then A9:j in dom I1 by FINSEQ_1:def 3;
@@ -2144,10 +2145,10 @@ definition
   len it = r & for i st i in dom it holds it.i = IDEA_P(Line(Key,i),n);
   existence
     proof
-      deffunc F(Element of NAT)=IDEA_P(Line(Key,$1),n);
+      deffunc F(Nat)=IDEA_P(Line(Key,$1),n);
       consider z being FinSequence such that
          A1: len z = r and
-         A2: for k being Element of NAT st k in Seg r holds
+         A2: for k being Nat st k in Seg r holds
                           z.k= F(k) from FINSEQ_1:sch 2;
       A3:Seg r = dom z by A1,FINSEQ_1:def 3;
       take z;
@@ -2165,7 +2166,7 @@ definition
 
        A6: Seg r = dom z1 by A4,FINSEQ_1:def 3;
        A7: Seg r = dom z2 by A5,FINSEQ_1:def 3;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume A8: j in Seg r;
         then A9:j in dom z2 by A5,FINSEQ_1:def 3;
             j in dom z1 by A4,A8,FINSEQ_1:def 3;
@@ -2204,10 +2205,10 @@ definition
   len it = r & for i st i in dom it holds it.i = IDEA_Q(Line(Key,r-'i+1),n);
   existence
     proof
-      deffunc F(Element of NAT)=IDEA_Q(Line(Key,r-'$1+1),n);
+      deffunc F(Nat)=IDEA_Q(Line(Key,r-'$1+1),n);
       consider z being FinSequence such that
          A1: len z = r and
-         A2: for k being Element of NAT st k in Seg r holds
+         A2: for k being Nat st k in Seg r holds
                           z.k= F(k) from FINSEQ_1:sch 2;
       A3:Seg r = dom z by A1,FINSEQ_1:def 3;
       take z;
@@ -2224,7 +2225,7 @@ definition
                       z2.i = IDEA_Q(Line(Key,r-'i+1),n);
        A6: Seg r = dom z1 by A4,FINSEQ_1:def 3;
        A7: Seg r = dom z2 by A5,FINSEQ_1:def 3;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume A8: j in Seg r;
         then A9:j in dom z2 by A5,FINSEQ_1:def 3;
             j in dom z1 by A4,A8,FINSEQ_1:def 3;
@@ -2647,11 +2648,11 @@ theorem Th37:
        .= k + 1 by FINSEQ_1:56;
      then A1: len IDEA_P_F(Key,n,(k+1))
       = len (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>) by Def17;
-         for i being Element of NAT st 1 <= i & i <= len IDEA_P_F(Key,n,(k+1))
+         for i being Nat st 1 <= i & i <= len IDEA_P_F(Key,n,(k+1))
         holds IDEA_P_F(Key,n,(k+1)).i =
                 (IDEA_P_F(Key,n,k)^<* IDEA_P(Line(Key,(k+1)),n) *>).i
        proof
-         let i be Element of NAT;
+         let i be Nat;
          assume A2: 1 <= i & i <= len IDEA_P_F(Key,n,(k+1));
                 then A3: 1 <= i & i <= k+1 by Def17;
              i in Seg len IDEA_P_F(Key,n,(k+1)) by A2,FINSEQ_1:3;
@@ -2702,11 +2703,11 @@ theorem Th38:
      then A1: len IDEA_Q_F(Key,n,(k+1))
           = len (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k))
                                              by Def18;
-         for i being Element of NAT st 1 <= i & i <= len IDEA_Q_F(Key,n,(k+1))
+         for i being Nat st 1 <= i & i <= len IDEA_Q_F(Key,n,(k+1))
         holds IDEA_Q_F(Key,n,(k+1)).i =
                 (<* IDEA_Q(Line(Key,k+1),n) *>^IDEA_Q_F(Key,n,k)).i
        proof
-         let i be Element of NAT;
+         let i be Nat;
          assume A2: 1 <= i & i <= len IDEA_Q_F(Key,n,(k+1));
          then A3: 1 <= i & i <= k+1 by Def18;
              i in Seg len IDEA_Q_F(Key,n,(k+1)) by A2,FINSEQ_1:3;
@@ -2780,7 +2781,7 @@ A1:  dom p = Seg(k+1) by FUNCOP_1:19;
         then i in Seg k by Def17;
         then 1 <= i & i <= k by FINSEQ_1:3;
         then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
- k+1 by XREAL_1:8,NAT_1:12;
+ k+1 by NAT_1:12,XREAL_1:8;
         then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
         then A4: p.i = MESSAGES & p.(i+1) = MESSAGES by FUNCOP_1:13;
             IDEA_P_F(Key,n,k).i = IDEA_P(Line(Key,i),n) by A3,Def17;
@@ -2812,7 +2813,7 @@ A1:  dom p = Seg(k+1) by FUNCOP_1:19;
         then i in Seg k by Def18;
         then 1 <= i & i <= k by FINSEQ_1:3;
         then 1 <= i & i <= k+1 & 1 <= (i+1) & (i+1) <=
- k+1 by XREAL_1:8,NAT_1:12;
+ k+1 by NAT_1:12,XREAL_1:8;
         then i in Seg (k+1) & (i+1) in Seg (k+1) by FINSEQ_1:3;
         then A4: p.i = MESSAGES & p.(i+1) = MESSAGES by FUNCOP_1:13;
             IDEA_Q_F(Key,n,k).i = IDEA_Q(Line(Key,k-'i+1),n) by A3,Def18;
@@ -3401,7 +3402,7 @@ theorem Th48:
                     M.2 is_expressible_by n &
                     M.3 is_expressible_by n &
                     M.4 is_expressible_by n by A8,A9,Th47;
-              width Key1 = 6 & width Key2 = 6 by MATRIX_1:24,A6;
+              width Key1 = 6 & width Key2 = 6 by A6,MATRIX_1:24;
              then A21: 1 in Seg(width Key1) & 2 in Seg(width Key1) &
                           3 in Seg(width Key1) & 4 in Seg(width Key1) &
                           5 in Seg(width Key1) & 6 in Seg(width Key1) &
@@ -3482,7 +3483,7 @@ theorem Th48:
              .=(compose(IDEA_Q_F(Key2,n,k),MESSAGES) *
                  compose(IDEA_P_F(Key1,n,k),MESSAGES)).m
                                                         by A17,A19,FUNCT_1:23
-             .= m by A5,A6,A7,A8,A9,A11,A12,A13,XXREAL_0:2,FUNCT_7:50;
+             .= m by A5,A6,A7,A8,A9,A11,A12,A13,FUNCT_7:50,XXREAL_0:2;
              hence thesis;
            end;
          thus for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A4);

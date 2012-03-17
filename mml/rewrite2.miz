@@ -1,6 +1,6 @@
 :: String Rewriting Systems
 ::  by Micha{\l} Trybulec
-:: 
+::
 :: Received July 17, 2007
 :: Copyright (c) 2007 Association of Mizar Users
 
@@ -14,10 +14,9 @@ environ
       RELAT_2, FINSEQ_1, REWRITE1, FINSEQ_2, FLANG_1, LANG1, OPOSET_1,
       FUNCOP_1;
  constructors POLYNOM1, XXREAL_0, NAT_1, FINSEQ_5, REWRITE1, FLANG_1, LANG1,
-      OPOSET_1, NUMBERS;
- registrations SUBSET_1, RELSET_1, NAT_1, AFINSQ_1, REWRITE1, FINSEQ_1,
-      FUNCOP_1, ARYTM_3, XXREAL_0, XBOOLE_0, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, XREAL_0, REAL_1, ORDINAL1;
+      OPOSET_1;
+ registrations NAT_1, AFINSQ_1, REWRITE1, FINSEQ_1, FUNCOP_1, XXREAL_0,
+      XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1;
  theorems AFINSQ_1, NAT_1, RELAT_1, RELAT_2, XREAL_1, ZFMISC_1, FINSEQ_1,
@@ -35,36 +34,36 @@ begin
  reserve k, l for Nat;
  reserve p, q for FinSequence;
 
-theorem ThSeq10:
+theorem Th1:
 not k in dom p & k + 1 in dom p implies k = 0
 proof
-  assume 
-A:  not k in dom p & k + 1 in dom p;
-  then 
-B:  1 <= k + 1 & k + 1 <= len p by FINSEQ_3:27;
-  per cases by A, FINSEQ_3:27;
+  assume
+A1:  not k in dom p & k + 1 in dom p;
+  then
+A2:  1 <= k + 1 & k + 1 <= len p by FINSEQ_3:27;
+  per cases by A1,FINSEQ_3:27;
   suppose k < 1;
     hence thesis by NAT_1:14;
   end;
   suppose k > len p;
-    hence thesis by B, NAT_1:13;
+    hence thesis by A2,NAT_1:13;
   end;
-end;  
+end;
 
-theorem ThSeq40:
+theorem Th2:
 k > len p & k <= len (p^q) implies
   ex l st k = len p + l & l >= 1 & l <= len q
 proof
   assume
-A:  k > len p & k <= len (p^q);
+A1:  k > len p & k <= len (p^q);
   then consider l such that
-L:  k = len p + l by NAT_1:10;
+A2:  k = len p + l by NAT_1:10;
   take l;
-  thus k = len p + l by L;
-  len p + l > len p + 0 by A, L;
+  thus k = len p + l by A2;
+  len p + l > len p + 0 by A1,A2;
   then l > 0 & 0 + 1 = 1 by XREAL_1:8;
   hence l >= 1 by NAT_1:13;
-  len p + l <= len p + len q by L, A, FINSEQ_1:35;
+  len p + l <= len p + len q by A1,A2,FINSEQ_1:35;
   hence thesis by XREAL_1:8;
 end;
 
@@ -75,62 +74,62 @@ end;
  reserve R for Relation;
  reserve p, q for RedSequence of R;
 
-theorem ThRed9:
+theorem Th3:
 k >= 1 implies p | k is RedSequence of R
 proof
-  assume 
-A:  k >= 1;
+  assume
+A1:  k >= 1;
   per cases;
   suppose k >= len p;
     hence thesis by FINSEQ_1:79;
   end;
   suppose k < len p;
-    then 
-B:    len (p | k) > 0 by A, FINSEQ_1:80;
+    then
+A2:    len (p | k) > 0 by A1,FINSEQ_1:80;
     now
       let i be Element of NAT such that
-C:      i in dom (p | k) & i + 1 in dom (p | k);
-D:    dom (p | k) c= dom p by RELAT_1:89;
-      (p | k).i = p.i & (p | k).(i + 1) = p.(i + 1) by C, FUNCT_1:70;
-      hence [(p | k).i, (p | k).(i + 1)] in R by C, D, REWRITE1:def 2;
+A3:      i in dom (p | k) & i + 1 in dom (p | k);
+A4:    dom (p | k) c= dom p by RELAT_1:89;
+      (p | k).i = p.i & (p | k).(i + 1) = p.(i + 1) by A3,FUNCT_1:70;
+      hence [(p | k).i, (p | k).(i + 1)] in R by A3,A4,REWRITE1:def 2;
     end;
-    hence thesis by B, REWRITE1:def 2;
+    hence thesis by A2,REWRITE1:def 2;
   end;
-end;  
+end;
 
-theorem ThRed10:
-k in dom p implies 
+theorem Th4:
+k in dom p implies
   ex q st len q = k & q.1 = p.1 & q.len q = p.k
 proof
   assume k in dom p;
   then
-B:  1 <= k & k <= len p by FINSEQ_3:27;
+A1:  1 <= k & k <= len p by FINSEQ_3:27;
   set q = p | k;
   take q;
-  thus q is RedSequence of R by B, ThRed9;
-  thus len q = k by B, FINSEQ_1:80;
-  hence thesis by B, FINSEQ_3:121;
-end;  
+  thus q is RedSequence of R by A1,Th3;
+  thus len q = k by A1,FINSEQ_1:80;
+  hence thesis by A1,FINSEQ_3:121;
+end;
 
 begin
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: XFinSequence yielding functions and finite sequences.
-:: These definitions will be later used for introduction of 
+:: These definitions will be later used for introduction of
 :: reduction sequences between words from E^omega (XFinSequences).
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition 
+definition
   let f be Function;
-  attr f is XFinSequence-yielding means :defXFin:
+  attr f is XFinSequence-yielding means :Def1:
     x in dom f implies f.x is XFinSequence;
 end;
 
 registration
   cluster {} -> XFinSequence-yielding;
-  coherence 
-  proof 
-    let x; 
+  coherence
+  proof
+    let x;
     thus thesis;
   end;
 end;
@@ -138,9 +137,9 @@ end;
 registration
   let f be XFinSequence;
   cluster <*f*> -> XFinSequence-yielding;
-  coherence 
-  proof 
-    let x be set; 
+  coherence
+  proof
+    let x be set;
     assume x in dom <*f*>;
     then x in {1} by FINSEQ_1:4,55;
     then x = 1 by TARSKI:def 1;
@@ -153,11 +152,11 @@ registration
   existence
   proof
     consider f being XFinSequence, x being set;
-A:  dom (x --> f) = x by FUNCOP_1:19;
+A1:  dom (x --> f) = x by FUNCOP_1:19;
     take F = x --> f;
     let x;
     assume x in dom F;
-    hence thesis by A, FUNCOP_1:13;
+    hence thesis by A1,FUNCOP_1:13;
   end;
 end;
 
@@ -169,20 +168,20 @@ definition
   proof
     per cases;
     suppose x in dom p;
-      hence thesis by defXFin;
-    end;  
+      hence thesis by Def1;
+    end;
     suppose not x in dom p;
       hence thesis by FUNCT_1:def 4;
-    end;  
+    end;
   end;
 end;
 
 registration
   cluster XFinSequence-yielding FinSequence;
   existence
-  proof 
-    take {}; 
-    thus thesis; 
+  proof
+    take {};
+    thus thesis;
   end;
 end;
 
@@ -190,12 +189,15 @@ registration
   let E be set;
   cluster -> XFinSequence-yielding FinSequence of E^omega;
   coherence
-  proof 
+  proof
     let f be FinSequence of E^omega;
-    let x; 
-    assume x in dom f; 
-    then f.x in E^omega by FINSEQ_2:13;
-    hence f.x is XFinSequence by AFINSQ_1:def 8;
+    let x;
+    assume
+A1: x in dom f;
+    then reconsider x as Element of NAT;
+    x in dom f by A1;
+    then f.x in E^omega by A1,FINSEQ_2:13;
+    hence thesis by AFINSQ_1:def 8;
   end;
 end;
 
@@ -206,35 +208,36 @@ registration
   proof
     now
       let x;
-      assume 
-A:      x in dom(p^q);
-      per cases by A, FINSEQ_1:38;
-      suppose x in dom p;
-        then p.x = (p^q).x by FINSEQ_1:def 7;
+      assume
+A1:      x in dom(p^q);
+        then reconsider x1=x as Element of NAT;
+      per cases by A1,FINSEQ_1:38;
+      suppose x1 in dom p;
+        then p.x1 = (p^q).x1 by FINSEQ_1:def 7;
         hence (p^q).x is XFinSequence;
       end;
-      suppose ex l being Element of NAT st l in dom q & x = len p + l;
+      suppose ex l being Nat st l in dom q & x1 = len p + l;
         then consider l being Element of NAT such that
-B:        l in dom q & x = len p + l;
-        (p^q).(len p + l) = q.l by B, FINSEQ_1:def 7;
-        hence (p^q).x is XFinSequence by B;
+A2:        l in dom q & x = len p + l;
+        (p^q).(len p + l) = q.l by A2,FINSEQ_1:def 7;
+        hence (p^q).x is XFinSequence by A2;
       end;
-    end;  
-    hence thesis by defXFin;
+    end;
+    hence thesis by Def1;
   end;
 end;
 
 begin
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Concatenation (left-sided and right-sided ) of an XFinSequence 
+:: Concatenation (left-sided and right-sided ) of an XFinSequence
 :: with all elements of a XFinSequence-yielding Function.
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
   let s be XFinSequence;
   let p be XFinSequence-yielding Function;
-  func s ^+ p -> XFinSequence-yielding Function means :defConcatL:
+  func s ^+ p -> XFinSequence-yielding Function means :Def2:
     dom it = dom p & (for x st x in dom p holds it.x = s^(p.x));
   existence
   proof
@@ -255,45 +258,45 @@ A2: for x st x in dom p ex y being set st P[x, y]
       thus thesis;
     end;
     consider f being Function such that
-B:    dom f = dom p & for x st x in dom p holds P[x, f.x]
+A3:    dom f = dom p & for x st x in dom p holds P[x, f.x]
         from FUNCT_1:sch 2(A1, A2);
     now
       let x;
       assume x in dom f;
-      then f.x = s^(p.x) by B;
+      then f.x = s^(p.x) by A3;
       hence f.x is XFinSequence;
-    end;    
-    then reconsider g = f as XFinSequence-yielding Function by defXFin;
+    end;
+    then reconsider g = f as XFinSequence-yielding Function by Def1;
     take g;
-    thus thesis by B;
+    thus thesis by A3;
   end;
   uniqueness
   proof
     let f, g be XFinSequence-yielding Function such that
-A1:   dom f = dom p & (for x st x in dom p holds f.x = s^(p.x)) and 
-A2:   dom g = dom p & (for x st x in dom p holds g.x = s^(p.x));
-    now 
+A4:   dom f = dom p & (for x st x in dom p holds f.x = s^(p.x)) and
+A5:   dom g = dom p & (for x st x in dom p holds g.x = s^(p.x));
+    now
       let x;
       assume x in dom f;
-      then f.x = s^(p.x) & g.x = s^(p.x) by A1, A2;
+      then f.x = s^(p.x) & g.x = s^(p.x) by A4,A5;
       hence f.x = g.x;
     end;
-    hence thesis by A1, A2, FUNCT_1:9;
+    hence thesis by A4,A5,FUNCT_1:9;
   end;
-  func p +^ s -> XFinSequence-yielding Function means :defConcatR:
+  func p +^ s -> XFinSequence-yielding Function means :Def3:
     dom it = dom p & (for x st x in dom p holds it.x = (p.x)^s);
   existence
   proof
     defpred P[set, set] means
       for x st x = $1 holds $2 = (p.x)^s;
-A1: for x, y1, y2 being set st x in dom p & P[x, y1] & P[x, y2] holds y1 = y2
+A6: for x, y1, y2 being set st x in dom p & P[x, y1] & P[x, y2] holds y1 = y2
     proof
       let x, y1, y2 be set;
       assume x in dom p & P[x, y1] & P[x, y2];
       then y1 = (p.x)^s & y2 = (p.x)^s;
       hence thesis;
     end;
-A2: for x st x in dom p ex y being set st P[x, y]
+A7: for x st x in dom p ex y being set st P[x, y]
     proof
       let x;
       assume x in dom p;
@@ -301,31 +304,31 @@ A2: for x st x in dom p ex y being set st P[x, y]
       thus thesis;
     end;
     consider f being Function such that
-B:    dom f = dom p & for x st x in dom p holds P[x, f.x]
-        from FUNCT_1:sch 2(A1, A2);
+A8:    dom f = dom p & for x st x in dom p holds P[x, f.x]
+        from FUNCT_1:sch 2(A6, A7);
     now
       let x;
       assume x in dom f;
-      then f.x = (p.x)^s by B;
+      then f.x = (p.x)^s by A8;
       hence f.x is XFinSequence;
-    end;    
-    then reconsider g = f as XFinSequence-yielding Function by defXFin;
+    end;
+    then reconsider g = f as XFinSequence-yielding Function by Def1;
     take g;
-    thus thesis by B;
+    thus thesis by A8;
   end;
   uniqueness
   proof
     let f, g be XFinSequence-yielding Function such that
-A1:   dom f = dom p & (for x st x in dom p holds f.x = (p.x)^s) and 
-A2:   dom g = dom p & (for x st x in dom p holds g.x = (p.x)^s);
-    now 
+A9:   dom f = dom p & (for x st x in dom p holds f.x = (p.x)^s) and
+A10:   dom g = dom p & (for x st x in dom p holds g.x = (p.x)^s);
+    now
       let x;
       assume x in dom f;
-      then f.x = (p.x)^s & g.x = (p.x)^s by A1, A2;
+      then f.x = (p.x)^s & g.x = (p.x)^s by A9,A10;
       hence f.x = g.x;
     end;
-    hence thesis by A1, A2, FUNCT_1:9;
-  end;  
+    hence thesis by A9,A10,FUNCT_1:9;
+  end;
 end;
 
 registration
@@ -334,213 +337,213 @@ registration
   cluster s ^+ p -> FinSequence-like;
   coherence
   proof
-    consider n being Element of NAT such that
-A:    dom p = Seg n by FINSEQ_1:def 2;
-    dom (s ^+ p) = Seg n by A, defConcatL;
+    consider n being Nat such that
+A1:    dom p = Seg n by FINSEQ_1:def 2;
+    dom (s ^+ p) = Seg n by A1,Def2;
     hence thesis by FINSEQ_1:def 2;
   end;
   cluster p +^ s -> FinSequence-like;
   coherence
   proof
-    consider n being Element of NAT such that
-A:    dom p = Seg n by FINSEQ_1:def 2;
-    dom (p +^ s) = Seg n by A, defConcatR;
+    consider n being Nat such that
+A2:    dom p = Seg n by FINSEQ_1:def 2;
+    dom (p +^ s) = Seg n by A2,Def3;
     hence thesis by FINSEQ_1:def 2;
   end;
-end;  
+end;
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Properties of the left-sided and right-sided concatenation. 
+:: Properties of the left-sided and right-sided concatenation.
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
  reserve E for set;
  reserve s, t for XFinSequence;
  reserve p, q for XFinSequence-yielding FinSequence;
 
-theorem ThConcatLen:
+theorem Th5:
 len (s ^+ p) = len p & len(p +^ s) = len p
 proof
-  dom (s ^+ p) = dom p & dom (p +^ s) = dom p by defConcatL, defConcatR;
+  dom (s ^+ p) = dom p & dom (p +^ s) = dom p by Def2,Def3;
   hence thesis by FINSEQ_3:31;
 end;
 
-theorem 
+theorem
 <%>E ^+ p = p & p +^ <%>E = p
 proof
-A: 
-  dom (<%>E ^+ p) = dom p by defConcatL;
+A1:
+  dom (<%>E ^+ p) = dom p by Def2;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B:    k in dom p;
-    thus (<%>E ^+ p).k = (<%>E)^(p.k) by B, defConcatL
+A2:    k in dom p;
+    thus (<%>E ^+ p).k = (<%>E)^(p.k) by A2,Def2
                       .= p.k by AFINSQ_1:32;
   end;
-  hence <%>E ^+ p = p by A, FINSEQ_1:17;
-A: 
-  dom (p +^ <%>E) = dom p by defConcatR;
+  hence <%>E ^+ p = p by A1,FINSEQ_1:17;
+A3:
+  dom (p +^ <%>E) = dom p by Def3;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B:    k in dom p;
-    thus (p +^ <%>E).k = (p.k)^(<%>E) by B, defConcatR
+A4:    k in dom p;
+    thus (p +^ <%>E).k = (p.k)^(<%>E) by A4,Def3
                       .= p.k by AFINSQ_1:32;
   end;
-  hence thesis by A, FINSEQ_1:17;
+  hence thesis by A3,FINSEQ_1:17;
 end;
 
-theorem 
+theorem
 s ^+ (t ^+ p) = (s^t) ^+ p & (p +^ t) +^ s = p +^ (t^s)
 proof
-A1: 
-  dom (s ^+ (t ^+ p)) = dom (t ^+ p) by defConcatL
-                     .= dom p by defConcatL
-                     .= dom ((s^t) ^+ p) by defConcatL;
+A1:
+  dom (s ^+ (t ^+ p)) = dom (t ^+ p) by Def2
+                     .= dom p by Def2
+                     .= dom ((s^t) ^+ p) by Def2;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B2:   k in dom (s ^+ (t ^+ p));
-B1: k in dom (t ^+ p) by B2, defConcatL;
-B:  k in dom p by B1, defConcatL;
-    thus (s ^+ (t ^+ p)).k = s^((t ^+ p).k) by B1, defConcatL
-                          .= s^(t^(p.k)) by B, defConcatL
+A2:   k in dom (s ^+ (t ^+ p));
+A3: k in dom (t ^+ p) by A2,Def2;
+A4:  k in dom p by A3,Def2;
+    thus (s ^+ (t ^+ p)).k = s^((t ^+ p).k) by A3,Def2
+                          .= s^(t^(p.k)) by A4,Def2
                           .= s^t^(p.k) by AFINSQ_1:30
-                          .= ((s^t) ^+ p).k by B, defConcatL;
+                          .= ((s^t) ^+ p).k by A4,Def2;
   end;
-  hence s ^+ (t ^+ p) = (s^t) ^+ p by A1, FINSEQ_1:17;
-A1: 
-  dom ((p +^ t) +^ s) = dom (p +^ t) by defConcatR
-                     .= dom p by defConcatR
-                     .= dom (p +^ (t^s)) by defConcatR;
+  hence s ^+ (t ^+ p) = (s^t) ^+ p by A1,FINSEQ_1:17;
+A5:
+  dom ((p +^ t) +^ s) = dom (p +^ t) by Def3
+                     .= dom p by Def3
+                     .= dom (p +^ (t^s)) by Def3;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B2:   k in dom ((p +^ t) +^ s);
-B1: k in dom (p +^ t) by B2, defConcatR;
-B:  k in dom p by B1, defConcatR;
-    thus ((p +^ t) +^ s).k = ((p +^ t).k)^s by B1, defConcatR
-                          .= (p.k)^t^s by B, defConcatR
+A6:   k in dom ((p +^ t) +^ s);
+A7: k in dom (p +^ t) by A6,Def3;
+A8:  k in dom p by A7,Def3;
+    thus ((p +^ t) +^ s).k = ((p +^ t).k)^s by A7,Def3
+                          .= (p.k)^t^s by A8,Def3
                           .= (p.k)^(t^s) by AFINSQ_1:30
-                          .= (p +^ (t^s)).k by B, defConcatR;
+                          .= (p +^ (t^s)).k by A8,Def3;
   end;
-  hence thesis by A1, FINSEQ_1:17;
+  hence thesis by A5,FINSEQ_1:17;
 end;
 
-theorem 
+theorem
 s ^+ (p +^ t) = (s ^+ p) +^ t
 proof
-A1: 
-  dom (s ^+ (p +^ t)) = dom (p +^ t) by defConcatL
-                     .= dom p by defConcatR
-                     .= dom (s ^+ p) by defConcatL
-                     .= dom ((s ^+ p) +^ t) by defConcatR;
+A1:
+  dom (s ^+ (p +^ t)) = dom (p +^ t) by Def2
+                     .= dom p by Def3
+                     .= dom (s ^+ p) by Def2
+                     .= dom ((s ^+ p) +^ t) by Def3;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B2:   k in dom (s ^+ (p +^ t));
-B1: k in dom (p +^ t) by B2, defConcatL;
-B:  k in dom p by B1, defConcatR;
-B3: k in dom (s ^+ p) by B, defConcatL;
-    thus (s ^+ (p +^ t)).k = s^((p +^ t).k) by B1, defConcatL
-                          .= s^((p.k)^t) by B, defConcatR
+A2:   k in dom (s ^+ (p +^ t));
+A3: k in dom (p +^ t) by A2,Def2;
+A4:  k in dom p by A3,Def3;
+A5: k in dom (s ^+ p) by A4,Def2;
+    thus (s ^+ (p +^ t)).k = s^((p +^ t).k) by A3,Def2
+                          .= s^((p.k)^t) by A4,Def3
                           .= s^(p.k)^t by AFINSQ_1:30
-                          .= ((s ^+ p).k)^t by B, defConcatL
-                          .= ((s ^+ p) +^ t).k by B3, defConcatR;
+                          .= ((s ^+ p).k)^t by A4,Def2
+                          .= ((s ^+ p) +^ t).k by A5,Def3;
   end;
-  hence thesis by A1, FINSEQ_1:17;
+  hence thesis by A1,FINSEQ_1:17;
 end;
 
-theorem 
+theorem
 s ^+ (p^q) = (s ^+ p)^(s ^+ q) & (p^q) +^ s = (p +^ s)^(q +^ s)
 proof
-  len (s ^+ (p^q)) = len (p^q) by ThConcatLen
+  len (s ^+ (p^q)) = len (p^q) by Th5
                   .= len p + len q by FINSEQ_1:35
-                  .= len (s ^+ p) + len q by ThConcatLen
-                  .= len (s ^+ p) + len (s ^+ q) by ThConcatLen
+                  .= len (s ^+ p) + len q by Th5
+                  .= len (s ^+ p) + len (s ^+ q) by Th5
                   .= len ((s ^+ p)^(s ^+ q)) by FINSEQ_1:35;
   then
-A:  dom (s ^+ (p^q)) = dom ((s ^+ p)^(s ^+ q)) by FINSEQ_3:31;
+A1:  dom (s ^+ (p^q)) = dom ((s ^+ p)^(s ^+ q)) by FINSEQ_3:31;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B1:   k in dom (s ^+ (p^q));
-B2: k in dom (p^q) by B1, defConcatL;
+A2:   k in dom (s ^+ (p^q));
+A3: k in dom (p^q) by A2,Def2;
     now per cases;
       suppose
-C1:     k in dom p;
-C2:     k in dom (s ^+ p) by C1, defConcatL;
-        thus (s ^+ (p^q)).k = s^((p^q).k) by B2, defConcatL
-                           .= s^(p.k) by C1, FINSEQ_1:def 7
-                           .= (s ^+ p).k by C1, defConcatL
-                           .= ((s ^+ p)^(s ^+ q)).k by C2, FINSEQ_1:def 7;
+A4:     k in dom p;
+A5:     k in dom (s ^+ p) by A4,Def2;
+        thus (s ^+ (p^q)).k = s^((p^q).k) by A3,Def2
+                           .= s^(p.k) by A4,FINSEQ_1:def 7
+                           .= (s ^+ p).k by A4,Def2
+                           .= ((s ^+ p)^(s ^+ q)).k by A5,FINSEQ_1:def 7;
       end;
       suppose
-C':     not k in dom p;
-D1:     k < 1 or k > len p by C', FINSEQ_3:27;
-        1 <= k & k <= len (p^q) by B2, FINSEQ_3:27;
+A6:     not k in dom p;
+A7:     k < 1 or k > len p by A6,FINSEQ_3:27;
+        1 <= k & k <= len (p^q) by A3,FINSEQ_3:27;
         then consider i being Nat such that
-L:        k = len p + i & i >= 1 & i <= len q by D1, ThSeq40;
-L1:     i in dom q by L, FINSEQ_3:27;
-        then    
-L2:       i in dom (s ^+ q) by defConcatL;
-C3:     len (s ^+ p) = len p by ThConcatLen;
+A8:        k = len p + i & i >= 1 & i <= len q by A7,Th2;
+A9:     i in dom q by A8,FINSEQ_3:27;
+        then
+A10:       i in dom (s ^+ q) by Def2;
+A11:     len (s ^+ p) = len p by Th5;
         thus (s ^+ (p^q)).k
-                = s^((p^q).(len p + i)) by L, B2, defConcatL
-               .= s^(q.i) by L1, FINSEQ_1:def 7
-               .= (s ^+ q).i by L1, defConcatL
-               .= ((s ^+ p)^(s ^+ q)).k by L, L2, C3, FINSEQ_1:def 7;
-      end;         
+                = s^((p^q).(len p + i)) by A3,A8,Def2
+               .= s^(q.i) by A9,FINSEQ_1:def 7
+               .= (s ^+ q).i by A9,Def2
+               .= ((s ^+ p)^(s ^+ q)).k by A8,A10,A11,FINSEQ_1:def 7;
+      end;
     end;
     hence (s ^+ (p^q)).k = ((s ^+ p)^(s ^+ q)).k;
   end;
-  hence s ^+ (p^q) = (s ^+ p)^(s ^+ q) by A, FINSEQ_1:17;
-  len ((p^q) +^ s) = len (p^q) by ThConcatLen
+  hence s ^+ (p^q) = (s ^+ p)^(s ^+ q) by A1,FINSEQ_1:17;
+  len ((p^q) +^ s) = len (p^q) by Th5
                   .= len p + len q by FINSEQ_1:35
-                  .= len (p +^ s) + len q by ThConcatLen
-                  .= len (p +^ s) + len (q +^ s) by ThConcatLen
+                  .= len (p +^ s) + len q by Th5
+                  .= len (p +^ s) + len (q +^ s) by Th5
                   .= len ((p +^ s)^(q +^ s)) by FINSEQ_1:35;
   then
-A:  dom ((p^q) +^ s) = dom ((p +^ s)^(q +^ s)) by FINSEQ_3:31;
+A12:  dom ((p^q) +^ s) = dom ((p +^ s)^(q +^ s)) by FINSEQ_3:31;
   now
-    let k be Element of NAT;
+    let k be Nat;
     assume
-B1:   k in dom ((p^q) +^ s);
-B2: k in dom (p^q) by B1, defConcatR;
+A13:   k in dom ((p^q) +^ s);
+A14: k in dom (p^q) by A13,Def3;
     now per cases;
       suppose
-C1:     k in dom p;
-C2:     k in dom (p +^ s) by C1, defConcatR;
-        thus ((p^q) +^ s).k = ((p^q).k)^s by B2, defConcatR
-                           .= (p.k)^s by C1, FINSEQ_1:def 7
-                           .= (p +^ s).k by C1, defConcatR
-                           .= ((p +^ s)^(q +^ s)).k by C2, FINSEQ_1:def 7;
+A15:     k in dom p;
+A16:     k in dom (p +^ s) by A15,Def3;
+        thus ((p^q) +^ s).k = ((p^q).k)^s by A14,Def3
+                           .= (p.k)^s by A15,FINSEQ_1:def 7
+                           .= (p +^ s).k by A15,Def3
+                           .= ((p +^ s)^(q +^ s)).k by A16,FINSEQ_1:def 7;
       end;
       suppose
-C':     not k in dom p;
-D1:     k < 1 or k > len p by C', FINSEQ_3:27;
-        1 <= k & k <= len (p^q) by B2, FINSEQ_3:27;
+A17:     not k in dom p;
+A18:     k < 1 or k > len p by A17,FINSEQ_3:27;
+        1 <= k & k <= len (p^q) by A14,FINSEQ_3:27;
         then consider i being Nat such that
-L:        k = len p + i & i >= 1 & i <= len q by D1, ThSeq40;
-L1:     i in dom q by L, FINSEQ_3:27;
+A19:        k = len p + i & i >= 1 & i <= len q by A18,Th2;
+A20:     i in dom q by A19,FINSEQ_3:27;
         then
-L2:       i in dom (q +^ s) by defConcatR;
-C3:     len (p +^ s) = len p by ThConcatLen;
+A21:       i in dom (q +^ s) by Def3;
+A22:     len (p +^ s) = len p by Th5;
         thus ((p^q) +^ s).k
-                = ((p^q).(len p + i))^s by L, B2, defConcatR
-               .= (q.i)^s by L1, FINSEQ_1:def 7
-               .= (q +^ s).i by L1, defConcatR
-               .= ((p +^ s)^(q +^ s)).k by L, L2, C3, FINSEQ_1:def 7;
-      end;          
+                = ((p^q).(len p + i))^s by A14,A19,Def3
+               .= (q.i)^s by A20,FINSEQ_1:def 7
+               .= (q +^ s).i by A20,Def3
+               .= ((p +^ s)^(q +^ s)).k by A19,A21,A22,FINSEQ_1:def 7;
+      end;
     end;
     hence ((p^q) +^ s).k = ((p +^ s)^(q +^ s)).k;
   end;
-  hence thesis by A, FINSEQ_1:17;
+  hence thesis by A12,FINSEQ_1:17;
 end;
 
 begin
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Redefinitions for E^omega: 
+:: Redefinitions for E^omega:
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
@@ -553,12 +556,12 @@ definition
     per cases;
     suppose k in dom p;
       hence thesis by FINSEQ_2:13;
-    end;  
+    end;
     suppose not k in dom p;
       then p.k = {} by FUNCT_1:def 4;
       then p.k is XFinSequence of E by AFINSQ_1:19;
       hence thesis by AFINSQ_1:def 8;
-    end;  
+    end;
   end;
 end;
 
@@ -578,27 +581,27 @@ definition
   coherence
   proof
     now
-      let i be Element of NAT such that
-A:    i in dom (s ^+ p);
-      i in dom p by A, defConcatL;
-      then (s ^+ p).i = s^(p.i) by defConcatL;  
+      let i be Nat such that
+A1:    i in dom (s ^+ p);
+      i in dom p by A1,Def2;
+      then (s ^+ p).i = s^(p.i) by Def2;
       hence (s ^+ p).i in E^omega;
-    end;   
+    end;
     hence s ^+ p is FinSequence of E^omega by FINSEQ_2:14;
   end;
   redefine func p +^ s -> FinSequence of E^omega;
   coherence
   proof
     now
-      let i be Element of NAT such that
-A:      i in dom (p +^ s);
-      i in dom p by A, defConcatR;
-      then (p +^ s).i = (p.i)^s by defConcatR;  
+      let i be Nat such that
+A2:      i in dom (p +^ s);
+      i in dom p by A2,Def3;
+      then (p +^ s).i = (p.i)^s by Def3;
       hence (p +^ s).i in E^omega;
-    end;   
+    end;
     hence p +^ s is FinSequence of E^omega by FINSEQ_2:14;
   end;
-end;  
+end;
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Definitions of semi-Thue systems and Thue systems.
@@ -641,7 +644,7 @@ end;
 begin
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Direct derivations. 
+:: Direct derivations.
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
  reserve s, t, s1, t1, u, v, u1, v1, w for Element of E^omega;
@@ -649,149 +652,149 @@ begin
 
 definition
   let E, S, s, t;
-  pred s -->. t, S means :defProd:
+  pred s -->. t, S means :Def4:
     [s, t] in S;
 end;
 
 definition
   let E, S, s, t;
-  pred s ==>. t, S means :defDeriv1:
+  pred s ==>. t, S means :Def5:
     ex v, w, s1, t1 st s = v^s1^w & t = v^t1^w & s1 -->. t1, S;
 end;
 
-theorem ThProd10:
+theorem Th10:
 s -->. t, S implies s ==>. t, S
 proof
   assume
-A:  s -->. t, S;
+A1:  s -->. t, S;
   take e = <%>E;
-B: s = s^e by AFINSQ_1:32
+A2: s = s^e by AFINSQ_1:32
    .= e^s^e by AFINSQ_1:32;
   t = t^e by AFINSQ_1:32
    .= e^t^e by AFINSQ_1:32;
-  hence thesis by A, B;
+  hence thesis by A1,A2;
 end;
 
-theorem 
-s ==>. s, S implies 
+theorem
+s ==>. s, S implies
   ex v, w, s1 st s = v^s1^w & s1 -->. s1, S
 proof
   given v, w, s1, t1 such that
-A:  s = v^s1^w & s = v^t1^w & s1 -->. t1, S;
-  v^s1 = v^t1 by A, AFINSQ_1:31;
+A1:  s = v^s1^w & s = v^t1^w & s1 -->. t1, S;
+  v^s1 = v^t1 by A1,AFINSQ_1:31;
   then s1 = t1 by AFINSQ_1:31;
-  hence thesis by A;
+  hence thesis by A1;
 end;
 
-theorem ThProd30:
+theorem Th12:
 s ==>. t, S implies u^s ==>. u^t, S & s^u ==>. t^u, S
 proof
   given v, w, s1, t1 such that
-A:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S;
-B1: u^s = u^(v^s1)^w by A, AFINSQ_1:30
+A1:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S;
+A2: u^s = u^(v^s1)^w by A1,AFINSQ_1:30
      .= u^v^s1^w by AFINSQ_1:30;
-  u^t = u^(v^t1)^w by A, AFINSQ_1:30
+  u^t = u^(v^t1)^w by A1,AFINSQ_1:30
      .= u^v^t1^w by AFINSQ_1:30;
-  hence u^s ==>. u^t, S by A, B1, defDeriv1;
-B2: 
-  s^u = v^s1^(w^u) by A, AFINSQ_1:30;
-  t^u = v^t1^(w^u) by A, AFINSQ_1:30;
-  hence thesis by A, B2, defDeriv1;
+  hence u^s ==>. u^t, S by A1,A2,Def5;
+A3:
+  s^u = v^s1^(w^u) by A1,AFINSQ_1:30;
+  t^u = v^t1^(w^u) by A1,AFINSQ_1:30;
+  hence thesis by A1,A3,Def5;
 end;
 
-theorem ThProd40:
+theorem Th13:
 s ==>. t, S implies u^s^v ==>. u^t^v, S
 proof
   assume s ==>. t, S;
-  then u^s ==>. u^t, S by ThProd30;
-  hence u^s^v ==>. u^t^v, S by ThProd30;
+  then u^s ==>. u^t, S by Th12;
+  hence u^s^v ==>. u^t^v, S by Th12;
 end;
 
-theorem ThProd50:
+theorem Th14:
 s -->. t, S implies u^s ==>. u^t, S & s^u ==>. t^u, S
 proof
   assume s -->. t, S;
-  then s ==>. t, S by ThProd10;
-  hence thesis by ThProd30;
+  then s ==>. t, S by Th10;
+  hence thesis by Th12;
 end;
 
-theorem ThProd60:
+theorem Th15:
 s -->. t, S implies u^s^v ==>. u^t^v, S
 proof
   assume s -->. t, S;
-  then u^s ==>. u^t, S by ThProd50;
-  hence u^s^v ==>. u^t^v, S by ThProd30;
+  then u^s ==>. u^t, S by Th14;
+  hence u^s^v ==>. u^t^v, S by Th12;
 end;
 
-theorem ThProd70:
+theorem Th16:
 S is Thue-system of E & s -->. t, S implies t -->. s, S
 proof
-  assume 
-A:  S is Thue-system of E & s -->. t, S;
-  then 
-B:  S = S~ by RELAT_2:30;
-  [s, t] in S by A, defProd;
-  then [t, s] in S by B, RELAT_1:def 7;
-  hence thesis by defProd;
+  assume
+A1:  S is Thue-system of E & s -->. t, S;
+  then
+A2:  S = S~ by RELAT_2:30;
+  [s, t] in S by A1,Def4;
+  then [t, s] in S by A2,RELAT_1:def 7;
+  hence thesis by Def4;
 end;
 
-theorem ThProd80:
+theorem Th17:
 S is Thue-system of E & s ==>. t, S implies t ==>. s, S
 proof
-  assume 
-A:  S is Thue-system of E & s ==>. t, S;
+  assume
+A1:  S is Thue-system of E & s ==>. t, S;
   consider v, w, s1, t1 such that
-C:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S by A, defDeriv1;
-  t1 -->. s1, S by A, C, ThProd70;
-  hence thesis by C, defDeriv1;
+A2:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S by A1,Def5;
+  t1 -->. s1, S by A1,A2,Th16;
+  hence thesis by A2,Def5;
 end;
 
-theorem ThProd90:
+theorem Th18:
 S c= T & s -->. t, S implies s -->.t, T
 proof
-  assume 
-A:  S c= T & s -->. t, S;
-  then [s, t] in S by defProd;
-  hence thesis by A, defProd;
-end;
- 
-theorem ThProd100:
-S c= T & s ==>. t, S implies s ==>.t, T
-proof
-  assume 
-A:  S c= T & s ==>. t, S;
-  then consider v, w, s1, t1 such that
-B:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S by defDeriv1;
-  s1 -->. t1, T by A, B, ThProd90;
-  hence thesis by B, defDeriv1;
+  assume
+A1:  S c= T & s -->. t, S;
+  then [s, t] in S by Def4;
+  hence thesis by A1,Def4;
 end;
 
-theorem ThProd110:
+theorem Th19:
+S c= T & s ==>. t, S implies s ==>.t, T
+proof
+  assume
+A1:  S c= T & s ==>. t, S;
+  then consider v, w, s1, t1 such that
+A2:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S by Def5;
+  s1 -->. t1, T by A1,A2,Th18;
+  hence thesis by A2,Def5;
+end;
+
+theorem Th20:
 not s ==>. t, {}(E^omega, E^omega)
 proof
   assume s ==>. t, {}(E^omega, E^omega);
   then consider v, w, s1, t1 such that
-B:  s = v^s1^w & t = v^t1^w & s1 -->. t1, {}(E^omega, E^omega) by defDeriv1;
-  [s1, t1] in {}(E^omega, E^omega) by B, defProd;
-  hence contradiction by OPOSET_1:def 1; 
+A1:  s = v^s1^w & t = v^t1^w & s1 -->. t1, {}(E^omega, E^omega) by Def5;
+  [s1, t1] in {}(E^omega, E^omega) by A1,Def4;
+  hence contradiction by OPOSET_1:def 1;
 end;
 
-theorem ThProd120:
+theorem Th21:
 s ==>. t, S \/ T implies s ==>. t, S or s ==>. t, T
 proof
   assume s ==>. t, S \/ T;
   then consider v, w, s1, t1 such that
-B:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S \/ T by defDeriv1;
-C:
-  [s1, t1] in S \/ T by B, defProd;
-  per cases by C, XBOOLE_0:def 2;
+A1:  s = v^s1^w & t = v^t1^w & s1 -->. t1, S \/ T by Def5;
+A2:
+  [s1, t1] in S \/ T by A1,Def4;
+  per cases by A2,XBOOLE_0:def 2;
   suppose [s1, t1] in S;
-    then s1 -->. t1, S by defProd;
-    hence thesis by B, defDeriv1;
+    then s1 -->. t1, S by Def4;
+    hence thesis by A1,Def5;
   end;
   suppose [s1, t1] in T;
-    then s1 -->. t1, T by defProd;
-    hence thesis by B, defDeriv1;
+    then s1 -->. t1, T by Def4;
+    hence thesis by A1,Def5;
   end;
 end;
 
@@ -806,285 +809,285 @@ definition
   let E;
   redefine func id E -> Relation of E;
   coherence by RELSET_1:29;
-end;  
+end;
 
 definition
   let E, S;
-  func ==>.-relation(S) -> Relation of E^omega means :defRed:
+  func ==>.-relation(S) -> Relation of E^omega means :Def6:
     [s, t] in it iff s ==>. t, S;
   existence
   proof
     defpred P[Element of E^omega, Element of E^omega] means
       $1 ==>. $2, S;
     consider R being Relation of E^omega such that
-A:    for s, t being Element of E^omega holds 
+A1:    for s, t being Element of E^omega holds
         [s, t] in R iff P[s, t] from RELSET_1:sch 2;
-    take R; 
-    thus thesis by A;
+    take R;
+    thus thesis by A1;
   end;
-  uniqueness  
-  proof 
+  uniqueness
+  proof
     let R1, R2 be Relation of E^omega such that
-A1:   for s, t being Element of E^omega holds 
-        [s, t] in R1 iff s ==>. t, S 
+A2:   for s, t being Element of E^omega holds
+        [s, t] in R1 iff s ==>. t, S
       and
-A2:   for s, t being Element of E^omega holds 
+A3:   for s, t being Element of E^omega holds
         [s, t] in R2 iff s ==>. t, S;
-    now 
+    now
       let s, t be Element of E^omega;
-      [s, t] in R1 iff s ==>.t, S by A1;
-      hence [s, t] in R1 iff [s, t] in R2 by A2;
+      [s, t] in R1 iff s ==>.t, S by A2;
+      hence [s, t] in R1 iff [s, t] in R2 by A3;
     end;
     hence thesis by RELSET_1:def 3;
   end;
-end;      
+end;
 
-theorem ThRedSeq5:
+theorem Th22:
 S c= ==>.-relation(S)
 proof
   thus x in S implies x in ==>.-relation(S)
   proof
-    assume 
-A:    x in S;
-    then consider a, b being set such that 
-B:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-    reconsider a, b as Element of E^omega by B;
-    a -->. b, S by A, B, defProd;
-    then a ==>.b, S by ThProd10;
-    hence thesis by B, defRed;
+    assume
+A1:    x in S;
+    then consider a, b being set such that
+A2:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+    reconsider a, b as Element of E^omega by A2;
+    a -->. b, S by A1,A2,Def4;
+    then a ==>.b, S by Th10;
+    hence thesis by A2,Def6;
   end;
 end;
 
-theorem ThRedSeq10:
-p is RedSequence of ==>.-relation(S) implies 
+theorem Th23:
+p is RedSequence of ==>.-relation(S) implies
   p +^ u is RedSequence of ==>.-relation(S) &
   u ^+ p is RedSequence of ==>.-relation(S)
 proof
-  assume 
-A:  p is RedSequence of ==>.-relation(S);
-  len (p +^ u) = len p & len (u ^+ p) = len p by ThConcatLen;
+  assume
+A1:  p is RedSequence of ==>.-relation(S);
+  len (p +^ u) = len p & len (u ^+ p) = len p by Th5;
   then
-B:  len (p +^ u) > 0 & len (u ^+ p) > 0 by A, REWRITE1:def 2;
+A2:  len (p +^ u) > 0 & len (u ^+ p) > 0 by A1,REWRITE1:def 2;
   now
     let i being Element of NAT such that
-C:    i in dom (p +^ u) & (i + 1) in dom (p +^ u);
-D:  i in dom p & (i + 1) in dom p by C, defConcatR;
-    then [p.i, p.(i + 1)] in ==>.-relation(S) by A, REWRITE1:def 2;
+A3:    i in dom (p +^ u) & (i + 1) in dom (p +^ u);
+A4:  i in dom p & (i + 1) in dom p by A3,Def3;
+    then [p.i, p.(i + 1)] in ==>.-relation(S) by A1,REWRITE1:def 2;
     then
-F:    p.i ==>. p.(i + 1), S by defRed;    
-E:  (p +^ u).i = (p.i)^u & (p +^ u).(i + 1) = (p.(i + 1))^u 
-      by D, defConcatR;
-    (p.i)^u ==>. (p.(i + 1))^u, S by F, ThProd30;    
-    hence [(p +^ u).i, (p +^ u).(i + 1)] in ==>.-relation(S) by E, defRed;
-  end;  
-  hence p +^ u is RedSequence of ==>.-relation(S) by B, REWRITE1:def 2;
-  now
-    let i being Element of NAT such that
-C:    i in dom (u ^+ p) & (i + 1) in dom (u ^+ p);
-D:  i in dom p & (i + 1) in dom p by C, defConcatL;
-    then [p.i, p.(i + 1)] in ==>.-relation(S) by A, REWRITE1:def 2;
-    then
-F:    p.i ==>. p.(i + 1), S by defRed;    
-E:  (u ^+ p).i = u^(p.i) & (u ^+ p).(i + 1) = u^(p.(i + 1)) 
-      by D, defConcatL;
-    u^(p.i) ==>. u^(p.(i + 1)), S by F, ThProd30;    
-    hence [(u ^+ p).i, (u ^+ p).(i + 1)] in ==>.-relation(S) by E, defRed;
+A5:    p.i ==>. p.(i + 1), S by Def6;
+A6:  (p +^ u).i = (p.i)^u & (p +^ u).(i + 1) = (p.(i + 1))^u
+      by A4,Def3;
+    (p.i)^u ==>. (p.(i + 1))^u, S by A5,Th12;
+    hence [(p +^ u).i, (p +^ u).(i + 1)] in ==>.-relation(S) by A6,Def6;
   end;
-  hence thesis by B, REWRITE1:def 2;  
+  hence p +^ u is RedSequence of ==>.-relation(S) by A2,REWRITE1:def 2;
+  now
+    let i being Element of NAT such that
+A7:    i in dom (u ^+ p) & (i + 1) in dom (u ^+ p);
+A8:  i in dom p & (i + 1) in dom p by A7,Def2;
+    then [p.i, p.(i + 1)] in ==>.-relation(S) by A1,REWRITE1:def 2;
+    then
+A9:    p.i ==>. p.(i + 1), S by Def6;
+A10:  (u ^+ p).i = u^(p.i) & (u ^+ p).(i + 1) = u^(p.(i + 1))
+      by A8,Def2;
+    u^(p.i) ==>. u^(p.(i + 1)), S by A9,Th12;
+    hence [(u ^+ p).i, (u ^+ p).(i + 1)] in ==>.-relation(S) by A10,Def6;
+  end;
+  hence thesis by A2,REWRITE1:def 2;
 end;
 
-theorem   
-p is RedSequence of ==>.-relation(S) implies 
+theorem
+p is RedSequence of ==>.-relation(S) implies
   t ^+ p +^ u is RedSequence of ==>.-relation(S)
 proof
   assume p is RedSequence of ==>.-relation(S);
-  then t ^+ p is RedSequence of ==>.-relation(S) by ThRedSeq10;
-  hence thesis by ThRedSeq10;
-end;  
+  then t ^+ p is RedSequence of ==>.-relation(S) by Th23;
+  hence thesis by Th23;
+end;
 
-theorem ThRedSeq30:
+theorem Th25:
 S is Thue-system of E implies ==>.-relation(S) = (==>.-relation(S))~
 proof
-  assume 
-A:  S is Thue-system of E;
+  assume
+A1:  S is Thue-system of E;
   now
     let x;
     thus x in ==>.-relation(S) implies x in (==>.-relation(S))~
     proof
-      assume 
-B:      x in ==>.-relation(S);
-      then consider a, b being set such that 
-C:      a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-      reconsider a, b as Element of E^omega by C;
-      a ==>. b, S by B, C, defRed;
-      then b ==>. a, S by A, ThProd80;
-      then [b, a] in ==>.-relation(S) by defRed;
-      hence thesis by C, RELAT_1:def 7;
+      assume
+A2:      x in ==>.-relation(S);
+      then consider a, b being set such that
+A3:      a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+      reconsider a, b as Element of E^omega by A3;
+      a ==>. b, S by A2,A3,Def6;
+      then b ==>. a, S by A1,Th17;
+      then [b, a] in ==>.-relation(S) by Def6;
+      hence thesis by A3,RELAT_1:def 7;
     end;
     thus x in (==>.-relation(S))~ implies x in ==>.-relation(S)
     proof
-      assume 
-B:      x in (==>.-relation(S))~;
-      then consider a, b being set such that 
-C:      a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-      reconsider a, b as Element of E^omega by C;
-      [b, a] in ==>.-relation(S) by B, C, RELAT_1:def 7;
-      then b ==>. a, S by defRed;
-      then a ==>. b, S by A, ThProd80;
-      hence thesis by C, defRed;
+      assume
+A4:      x in (==>.-relation(S))~;
+      then consider a, b being set such that
+A5:      a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+      reconsider a, b as Element of E^omega by A5;
+      [b, a] in ==>.-relation(S) by A4,A5,RELAT_1:def 7;
+      then b ==>. a, S by Def6;
+      then a ==>. b, S by A1,Th17;
+      hence thesis by A5,Def6;
     end;
   end;
   hence thesis by TARSKI:2;
 end;
 
-theorem ThRedSeq40:
+theorem Th26:
 S c= T implies ==>.-relation(S) c= ==>.-relation(T)
 proof
-  assume 
-A:  S c= T;
+  assume
+A1:  S c= T;
   thus x in ==>.-relation(S) implies x in ==>.-relation(T)
   proof
     assume
-B:    x in ==>.-relation(S);
+A2:    x in ==>.-relation(S);
     consider s, t being set such that
-C:    x = [s, t] & s in E^omega & t in E^omega by B, RELSET_1:6;
-    reconsider s, t as Element of E^omega by C;
-    s ==>. t, S by C, B, defRed;
-    then s ==>. t, T by A, ThProd100;
-    hence thesis by C, defRed;
+A3:    x = [s, t] & s in E^omega & t in E^omega by A2,RELSET_1:6;
+    reconsider s, t as Element of E^omega by A3;
+    s ==>. t, S by A2,A3,Def6;
+    then s ==>. t, T by A1,Th19;
+    hence thesis by A3,Def6;
   end;
 end;
 
-theorem ThRedSeq45:
+theorem Th27:
 ==>.-relation(id (E^omega)) = id (E^omega)
 proof
-A:
-  id (E^omega) c= ==>.-relation(id (E^omega)) by ThRedSeq5;
+A1:
+  id (E^omega) c= ==>.-relation(id (E^omega)) by Th22;
   ==>.-relation(id (E^omega)) c= id (E^omega)
   proof
     let x;
-    assume 
-B:    x in ==>.-relation(id (E^omega));
-    then consider a, b being set such that 
-C:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-    reconsider a, b as Element of E^omega by C;
-    a ==>. b, id (E^omega) by B, C, defRed;
+    assume
+A2:    x in ==>.-relation(id (E^omega));
+    then consider a, b being set such that
+A3:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+    reconsider a, b as Element of E^omega by A3;
+    a ==>. b, id (E^omega) by A2,A3,Def6;
     then consider v, w, s1, t1 such that
-D:    a = v^s1^w & b = v^t1^w & s1 -->. t1, id (E^omega) by defDeriv1;
-    [s1, t1] in id (E^omega) by D, defProd;
+A4:    a = v^s1^w & b = v^t1^w & s1 -->. t1, id (E^omega) by Def5;
+    [s1, t1] in id (E^omega) by A4,Def4;
     then s1 = t1 by RELAT_1:def 10;
-    hence x in id (E^omega) by C, D, RELAT_1:def 10;
+    hence x in id (E^omega) by A3,A4,RELAT_1:def 10;
   end;
-  hence thesis by A, XBOOLE_0:def 10; 
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem ThRedSeq50:
+theorem Th28:
 ==>.-relation(S \/ id (E^omega)) = ==>.-relation(S) \/ id (E^omega)
 proof
-A:
-  ==>.-relation(S \/ id (E^omega)) c= 
+A1:
+  ==>.-relation(S \/ id (E^omega)) c=
     ==>.-relation(S) \/ id (E^omega)
   proof
     let x;
-    assume 
-B:    x in ==>.-relation(S \/ id (E^omega));
-    then consider a, b being set such that 
-C:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-    reconsider a, b as Element of E^omega by C;
-    a ==>. b, S \/ id (E^omega) by B, C, defRed;
+    assume
+A2:    x in ==>.-relation(S \/ id (E^omega));
+    then consider a, b being set such that
+A3:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+    reconsider a, b as Element of E^omega by A3;
+    a ==>. b, S \/ id (E^omega) by A2,A3,Def6;
     then consider v, w, s1, t1 such that
-D:    a = v^s1^w & b = v^t1^w & s1 -->. t1, S \/ id (E^omega) by defDeriv1;
-E:  [s1, t1] in S \/ id (E^omega) by D, defProd;
-    per cases by E, XBOOLE_0:def 2;
+A4:    a = v^s1^w & b = v^t1^w & s1 -->. t1, S \/ id (E^omega) by Def5;
+A5:  [s1, t1] in S \/ id (E^omega) by A4,Def4;
+    per cases by A5,XBOOLE_0:def 2;
     suppose [s1, t1] in S;
-      then s1 -->. t1, S by defProd;
-      then v^s1^w ==>. v^t1^w, S by ThProd60;
-      then x in ==>.-relation(S) by C, D, defRed;
+      then s1 -->. t1, S by Def4;
+      then v^s1^w ==>. v^t1^w, S by Th15;
+      then x in ==>.-relation(S) by A3,A4,Def6;
       hence x in ==>.-relation(S) \/ id (E^omega) by XBOOLE_0:def 2;
     end;
     suppose [s1, t1] in id (E^omega);
       then s1 = t1 by RELAT_1:def 10;
-      then x in id (E^omega) by C, D, RELAT_1:def 10;
+      then x in id (E^omega) by A3,A4,RELAT_1:def 10;
       hence x in ==>.-relation(S) \/ id (E^omega) by XBOOLE_0:def 2;
     end;
-  end;  
+  end;
   ==>.-relation(S) \/ id (E^omega) c=
     ==>.-relation(S \/ id (E^omega))
   proof
     let x;
-    assume 
-B:    x in ==>.-relation(S) \/ id (E^omega);
-    per cases by B, XBOOLE_0:def 2;
-    suppose 
-C:    x in ==>.-relation(S);
+    assume
+A6:    x in ==>.-relation(S) \/ id (E^omega);
+    per cases by A6,XBOOLE_0:def 2;
+    suppose
+A7:    x in ==>.-relation(S);
       S c= S \/ id (E^omega) by XBOOLE_1:7;
-      then ==>.-relation(S) c= 
-             ==>.-relation(S \/ id (E^omega)) by ThRedSeq40;
-      hence x in ==>.-relation(S \/ id (E^omega)) by C;
+      then ==>.-relation(S) c=
+             ==>.-relation(S \/ id (E^omega)) by Th26;
+      hence x in ==>.-relation(S \/ id (E^omega)) by A7;
     end;
-    suppose x in id (E^omega); 
-      then 
-C:      x in ==>.-relation(id (E^omega)) by ThRedSeq45;
+    suppose x in id (E^omega);
+      then
+A8:      x in ==>.-relation(id (E^omega)) by Th27;
       id (E^omega) c= S \/ id (E^omega) by XBOOLE_1:7;
       then ==>.-relation(id (E^omega)) c=
-        ==>.-relation(S \/ id (E^omega)) by ThRedSeq40;
-      hence x in ==>.-relation(S \/ id (E^omega)) by C;
-    end;  
+        ==>.-relation(S \/ id (E^omega)) by Th26;
+      hence x in ==>.-relation(S \/ id (E^omega)) by A8;
+    end;
   end;
-  hence thesis by A, XBOOLE_0:def 10;  
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem ThRedSeq60:
+theorem Th29:
 ==>.-relation({}(E^omega, E^omega)) = {}(E^omega, E^omega)
 proof
   {}(E^omega, E^omega) = {} by OPOSET_1:def 1;
-  then 
-A:  {}(E^omega, E^omega) c= ==>.-relation({}(E^omega, E^omega)) 
-      by XBOOLE_1:2; 
+  then
+A1:  {}(E^omega, E^omega) c= ==>.-relation({}(E^omega, E^omega))
+      by XBOOLE_1:2;
   ==>.-relation({}(E^omega, E^omega)) c= {}(E^omega, E^omega)
   proof
     let x;
-    assume 
-B:    x in ==>.-relation({}(E^omega, E^omega));
-    then consider a, b being set such that 
-C:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-    reconsider a, b as Element of E^omega by C;
-    a ==>. b, {}(E^omega, E^omega) by B, C, defRed;
-    hence thesis by ThProd110;
+    assume
+A2:    x in ==>.-relation({}(E^omega, E^omega));
+    then consider a, b being set such that
+A3:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+    reconsider a, b as Element of E^omega by A3;
+    a ==>. b, {}(E^omega, E^omega) by A2,A3,Def6;
+    hence thesis by Th20;
   end;
-  hence thesis by A, XBOOLE_0:def 10;
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem ThRedSeq69:
+theorem Th30:
 s ==>. t, ==>.-relation(S) implies s ==>. t, S
 proof
   assume s ==>. t, ==>.-relation(S);
   then consider v, w, s1, t1 such that
-B:  s = v^s1^w & t = v^t1^w & s1 -->. t1, ==>.-relation(S) by defDeriv1;
-  [s1, t1] in ==>.-relation(S) by B, defProd;
-  then s1 ==>. t1, S by defRed;
-  hence thesis by B, ThProd40;
+A1:  s = v^s1^w & t = v^t1^w & s1 -->. t1, ==>.-relation(S) by Def5;
+  [s1, t1] in ==>.-relation(S) by A1,Def4;
+  then s1 ==>. t1, S by Def6;
+  hence thesis by A1,Th13;
 end;
 
-theorem ThRedSeq70:
+theorem Th31:
 ==>.-relation(==>.-relation(S)) = ==>.-relation(S)
 proof
-A:  
+A1:
   ==>.-relation(S) c= ==>.-relation(==>.-relation(S))
-    by ThRedSeq5;
+    by Th22;
   ==>.-relation(==>.-relation(S)) c= ==>.-relation(S)
   proof
     let x;
-    assume 
-B:    x in ==>.-relation(==>.-relation(S));
-    then consider a, b being set such that 
-C:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
-    reconsider a, b as Element of E^omega by C;
-    a ==>. b, ==>.-relation(S) by B, C, defRed;
-    then a ==>. b, S by ThRedSeq69;
-    hence thesis by C, defRed;
+    assume
+A2:    x in ==>.-relation(==>.-relation(S));
+    then consider a, b being set such that
+A3:    a in E^omega & b in E^omega & x = [a, b] by ZFMISC_1:def 2;
+    reconsider a, b as Element of E^omega by A3;
+    a ==>. b, ==>.-relation(S) by A2,A3,Def6;
+    then a ==>. b, S by Th30;
+    hence thesis by A3,Def6;
   end;
-  hence thesis by A, XBOOLE_0:def 10;   
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
 begin
@@ -1095,258 +1098,258 @@ begin
 
 definition
   let E, S, s, t;
-  pred s ==>* t, S means :defDerivN:
+  pred s ==>* t, S means :Def7:
     ==>.-relation(S) reduces s, t;
 end;
 
-theorem ThDerivN10:
+theorem Th32:
 s ==>* s, S
 proof
   ==>.-relation(S) reduces s, s by REWRITE1:13;
-  hence thesis by defDerivN;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN20:
+theorem Th33:
 s ==>. t, S implies s ==>* t, S
 proof
   assume s ==>. t, S;
-  then [s, t] in ==>.-relation(S) by defRed;
+  then [s, t] in ==>.-relation(S) by Def6;
   then ==>.-relation(S) reduces s, t by REWRITE1:16;
-  hence thesis by defDerivN;
+  hence thesis by Def7;
 end;
 
-theorem 
+theorem
 s -->. t, S implies s ==>* t, S
 proof
   assume s -->. t, S;
-  then s ==>. t, S by ThProd10;
-  hence thesis by ThDerivN20;
+  then s ==>. t, S by Th10;
+  hence thesis by Th33;
 end;
 
-theorem ThDerivN40:
+theorem Th35:
 s ==>* t, S & t ==>* u, S implies s ==>* u, S
 proof
   assume s ==>* t, S & t ==>* u, S;
-  then ==>.-relation(S) reduces s, t & 
-    ==>.-relation(S) reduces t, u by defDerivN;
+  then ==>.-relation(S) reduces s, t &
+    ==>.-relation(S) reduces t, u by Def7;
   then ==>.-relation(S) reduces s, u by REWRITE1:17;
-  hence thesis by defDerivN;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN50:
+theorem Th36:
 s ==>* t, S implies s^u ==>* t^u, S & u^s ==>* u^t, S
 proof
   assume s ==>* t, S;
-  then ==>.-relation(S) reduces s, t by defDerivN;
+  then ==>.-relation(S) reduces s, t by Def7;
   then consider p being RedSequence of ==>.-relation(S) such that
-A:  p.1 = s & p.(len p) = t by REWRITE1:def 3;
-  reconsider p as FinSequence of E^omega by A, ABCMIZ_0:74;
-B1:
-  p +^ u is RedSequence of ==>.-relation(S) by ThRedSeq10;
+A1:  p.1 = s & p.(len p) = t by REWRITE1:def 3;
+  reconsider p as FinSequence of E^omega by A1,ABCMIZ_0:74;
+A2:
+  p +^ u is RedSequence of ==>.-relation(S) by Th23;
   (p +^ u).1 = s^u & (p +^ u).(len (p +^ u)) = t^u
   proof
     1 in dom p by FINSEQ_5:6;
-    hence (p +^ u).1 = s^u by A, defConcatR;
-B2: len p = len (p +^ u) by ThConcatLen;
+    hence (p +^ u).1 = s^u by A1,Def3;
+A3: len p = len (p +^ u) by Th5;
     then len (p +^ u) in dom p by FINSEQ_5:6;
-    hence thesis by A, B2, defConcatR;
+    hence thesis by A1,A3,Def3;
   end;
-  then ==>.-relation(S) reduces s^u, t^u by B1, REWRITE1:def 3;
-  hence s^u ==>* t^u, S by defDerivN; 
-B1:    
-  u ^+ p is RedSequence of ==>.-relation(S) by ThRedSeq10;
+  then ==>.-relation(S) reduces s^u, t^u by A2,REWRITE1:def 3;
+  hence s^u ==>* t^u, S by Def7;
+A4:
+  u ^+ p is RedSequence of ==>.-relation(S) by Th23;
   (u ^+ p).1 = u^s & (u ^+ p).(len (u ^+ p)) = u^t
   proof
     1 in dom p by FINSEQ_5:6;
-    hence (u ^+ p).1 = u^s by A, defConcatL;
-B2: len p = len (u ^+ p) by ThConcatLen;
+    hence (u ^+ p).1 = u^s by A1,Def2;
+A5: len p = len (u ^+ p) by Th5;
     then len (u ^+ p) in dom p by FINSEQ_5:6;
-    hence thesis by A, B2, defConcatL;
+    hence thesis by A1,A5,Def2;
   end;
-  then ==>.-relation(S) reduces u^s, u^t by B1, REWRITE1:def 3;
-  hence u^s ==>* u^t, S by defDerivN; 
+  then ==>.-relation(S) reduces u^s, u^t by A4,REWRITE1:def 3;
+  hence u^s ==>* u^t, S by Def7;
 end;
 
-theorem ThDerivN60:
+theorem Th37:
 s ==>* t, S implies u^s^v ==>* u^t^v, S
 proof
   assume s ==>* t, S;
-  then u^s ==>* u^t, S by ThDerivN50;
-  hence thesis by ThDerivN50;
+  then u^s ==>* u^t, S by Th36;
+  hence thesis by Th36;
 end;
 
-theorem 
+theorem
 s ==>* t, S & u ==>* v, S implies s^u ==>* t^v, S & u^s ==>* v^t, S
 proof
   assume
-A:  s ==>* t, S & u ==>* v, S;
-B1: 
-  s^u ==>* t^u, S by A, ThDerivN50;
-  t^u ==>* t^v, S by A, ThDerivN50;
-  hence s^u ==>* t^v, S by B1, ThDerivN40;
-B2: 
-  u^s ==>* u^t, S by A, ThDerivN50;
-  u^t ==>* v^t, S by A, ThDerivN50;
-  hence thesis by B2, ThDerivN40;
+A1:  s ==>* t, S & u ==>* v, S;
+A2:
+  s^u ==>* t^u, S by A1,Th36;
+  t^u ==>* t^v, S by A1,Th36;
+  hence s^u ==>* t^v, S by A2,Th35;
+A3:
+  u^s ==>* u^t, S by A1,Th36;
+  u^t ==>* v^t, S by A1,Th36;
+  hence thesis by A3,Th35;
 end;
 
-theorem 
+theorem
 S is Thue-system of E & s ==>* t, S implies t ==>* s, S
 proof
-  assume 
-A:  S is Thue-system of E & s ==>* t, S;
-  then ==>.-relation(S) reduces s, t by defDerivN;
+  assume
+A1:  S is Thue-system of E & s ==>* t, S;
+  then ==>.-relation(S) reduces s, t by Def7;
   then consider p being RedSequence of ==>.-relation(S) such that
-B:  p.1 = s & p.(len p) = t by REWRITE1:def 3;
+A2:  p.1 = s & p.(len p) = t by REWRITE1:def 3;
   set q = Rev p;
   q is RedSequence of (==>.-relation(S))~ by REWRITE1:10;
-  then 
-C:  q is RedSequence of ==>.-relation(S) by A, ThRedSeq30;
-D:
-  q.1 = t by B, FINSEQ_5:65;
-  q.(len p) = s by B, FINSEQ_5:65;
+  then
+A3:  q is RedSequence of ==>.-relation(S) by A1,Th25;
+A4:
+  q.1 = t by A2,FINSEQ_5:65;
+  q.(len p) = s by A2,FINSEQ_5:65;
   then q.(len q) = s by FINSEQ_5:def 3;
-  then ==>.-relation(S) reduces t, s by C, D, REWRITE1:def 3;
-  hence thesis by defDerivN;
+  then ==>.-relation(S) reduces t, s by A3,A4,REWRITE1:def 3;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN80:
+theorem Th40:
 S c= T & s ==>* t, S implies s ==>* t, T
 proof
   assume
-A:  S c= T & s ==>* t, S;
-  then 
-B:  ==>.-relation(S) c= ==>.-relation(T) by ThRedSeq40;
-  ==>.-relation(S) reduces s, t by A, defDerivN;
-  then ==>.-relation(T) reduces s, t by B, REWRITE1:23;
-  hence thesis by defDerivN;  
+A1:  S c= T & s ==>* t, S;
+  then
+A2:  ==>.-relation(S) c= ==>.-relation(T) by Th26;
+  ==>.-relation(S) reduces s, t by A1,Def7;
+  then ==>.-relation(T) reduces s, t by A2,REWRITE1:23;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN90:
+theorem Th41:
 s ==>* t, S iff s ==>* t, S \/ id (E^omega)
 proof
   thus s ==>* t, S implies s ==>* t, S \/ id (E^omega)
   proof
     S c= S \/ id (E^omega) by XBOOLE_1:7;
-    hence thesis by ThDerivN80;
+    hence thesis by Th40;
   end;
   assume s ==>* t, S \/ id (E^omega);
-  then ==>.-relation(S \/ id (E^omega)) reduces s, t by defDerivN;
-  then ==>.-relation(S) \/ id (E^omega) reduces s, t by ThRedSeq50;
+  then ==>.-relation(S \/ id (E^omega)) reduces s, t by Def7;
+  then ==>.-relation(S) \/ id (E^omega) reduces s, t by Th28;
   then ==>.-relation(S) reduces s, t by REWRITE1:24;
-  hence thesis by defDerivN;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN100:
+theorem Th42:
 s ==>* t, {}(E^omega, E^omega) implies s = t
 proof
   assume s ==>* t, {}(E^omega, E^omega);
-  then ==>.-relation({}(E^omega, E^omega)) reduces s, t by defDerivN;
-  then {}(E^omega, E^omega) reduces s, t by ThRedSeq60;
+  then ==>.-relation({}(E^omega, E^omega)) reduces s, t by Def7;
+  then {}(E^omega, E^omega) reduces s, t by Th29;
   then {} reduces s, t by OPOSET_1:def 1;
   hence thesis by REWRITE1:14;
 end;
 
-theorem ThDerivN110:
+theorem Th43:
 s ==>* t, ==>.-relation(S) implies s ==>* t, S
 proof
   assume s ==>* t, ==>.-relation(S);
-  then ==>.-relation(==>.-relation(S)) reduces s, t by defDerivN;
-  then ==>.-relation(S) reduces s, t by ThRedSeq70;
-  hence thesis by defDerivN;
+  then ==>.-relation(==>.-relation(S)) reduces s, t by Def7;
+  then ==>.-relation(S) reduces s, t by Th31;
+  hence thesis by Def7;
 end;
 
-theorem ThDerivN119:
+theorem Th44:
 s ==>* t, S & u ==>. v, {[s, t]} implies u ==>* v, S
 proof
   assume that
 A1: s ==>* t, S and
 A2: u ==>. v, {[s, t]};
   consider u1, v1, s1, t1 such that
-B:  u = u1^s1^v1 & v = u1^t1^v1 & s1 -->. t1, {[s, t]} by A2, defDeriv1;
-  [s1, t1] in {[s, t]} by B, defProd;
+A3:  u = u1^s1^v1 & v = u1^t1^v1 & s1 -->. t1, {[s, t]} by A2,Def5;
+  [s1, t1] in {[s, t]} by A3,Def4;
   then [s1, t1] = [s, t] by TARSKI:def 1;
   then s1 = s & t1 = t by ZFMISC_1:33;
-  hence thesis by A1, B, ThDerivN60;
+  hence thesis by A1,A3,Th37;
 end;
 
-theorem ThDerivN120:
+theorem Th45:
 s ==>* t, S & u ==>* v, S \/ {[s, t]} implies u ==>* v, S
 proof
-  assume that 
+  assume that
 A1: s ==>* t, S and
 A2: u ==>* v, S \/ {[s, t]};
-  ==>.-relation(S \/ {[s, t]}) reduces u, v by A2, defDerivN;
-  then consider p2 
+  ==>.-relation(S \/ {[s, t]}) reduces u, v by A2,Def7;
+  then consider p2
     being RedSequence of ==>.-relation(S \/ {[s, t]}) such that
-B2:   p2.1 = u & p2.len p2 = v by REWRITE1:def 3;
+A3:   p2.1 = u & p2.len p2 = v by REWRITE1:def 3;
   defpred P[Nat] means
     for p being RedSequence of ==>.-relation(S \/ {[s, t]}), s1, t1 st
       len p = $1 & p.1 = s1 & p.len p = t1
     ex q being RedSequence of ==>.-relation(S) st
       q.1 = s1 & q.len q = t1;
-C:
+A4:
   P[0] by REWRITE1:def 2;
-D:
+A5:
   now
     let k;
-    assume 
-D0:   P[k];
+    assume
+A6:   P[k];
     thus P[k + 1]
     proof
-      let p be RedSequence of ==>.-relation(S \/ {[s, t]}), 
+      let p be RedSequence of ==>.-relation(S \/ {[s, t]}),
         s1, t1 such that
-D1:       len p = k + 1 & p.1 = s1 & p.len p = t1;
+A7:       len p = k + 1 & p.1 = s1 & p.len p = t1;
       per cases;
       suppose not k in dom p & k + 1 in dom p;
-        then k = 0 by ThSeq10;
-        then p = <*s1*> by D1, FINSEQ_1:57;
+        then k = 0 by Th1;
+        then p = <*s1*> by A7,FINSEQ_1:57;
         then reconsider p as RedSequence of ==>.-relation(S)
           by REWRITE1:7;
-        take p;  
-        thus thesis by D1;
+        take p;
+        thus thesis by A7;
       end;
       suppose not k + 1 in dom p;
-        then 0 + 1 > k + 1 by D1, FINSEQ_3:27;
+        then 0 + 1 > k + 1 by A7,FINSEQ_3:27;
         hence thesis by XREAL_1:8;
       end;
-      suppose 
-D1a:    k in dom p & k + 1 in dom p;
-        then 
-D1b:      [p.k, p.(k + 1)] in ==>.-relation(S \/ {[s, t]}) 
+      suppose
+A8:    k in dom p & k + 1 in dom p;
+        then
+A9:      [p.k, p.(k + 1)] in ==>.-relation(S \/ {[s, t]})
             by REWRITE1:def 2;
         set w = p.k;
-        reconsider w as Element of E^omega by D1b, ZFMISC_1:106;
-D1c:    w ==>. t1, S \/ {[s, t]} by D1, D1b, defRed;
-        consider p1 
+        reconsider w as Element of E^omega by A9,ZFMISC_1:106;
+A10:    w ==>. t1, S \/ {[s, t]} by A7,A9,Def6;
+        consider p1
           being RedSequence of ==>.-relation(S \/ {[s, t]}) such that
-D2:         len p1 = k & p1.1 = s1 & p1.len p1 = w by D1, D1a, ThRed10;
+A11:         len p1 = k & p1.1 = s1 & p1.len p1 = w by A7,A8,Th4;
         consider q being RedSequence of ==>.-relation(S) such that
-D3:       q.1 = s1 & q.len q = w by D0, D2;
-        ==>.-relation(S) reduces s1, w by D3, REWRITE1:def 3;
-        then 
-D3a:      s1 ==>* w, S by defDerivN;
+A12:       q.1 = s1 & q.len q = w by A6,A11;
+        ==>.-relation(S) reduces s1, w by A12,REWRITE1:def 3;
+        then
+A13:      s1 ==>* w, S by Def7;
         w ==>* t1, S
         proof
-          per cases by D1c, ThProd120;
+          per cases by A10,Th21;
           suppose w ==>. t1, S;
-            hence thesis by ThDerivN20;
+            hence thesis by Th33;
           end;
           suppose w ==>. t1, {[s, t]};
-            hence thesis by A1, ThDerivN119;
+            hence thesis by A1,Th44;
           end;
         end;
-        then s1 ==>* t1, S by D3a, ThDerivN40;
-        then ==>.-relation(S) reduces s1, t1 by defDerivN;
+        then s1 ==>* t1, S by A13,Th35;
+        then ==>.-relation(S) reduces s1, t1 by Def7;
         hence thesis by REWRITE1:def 3;
-      end;  
+      end;
     end;
-  end;          
-  for k holds P[k] from NAT_1:sch 2(C, D);  
+  end;
+  for k holds P[k] from NAT_1:sch 2(A4, A5);
   then consider q being RedSequence of ==>.-relation(S) such that
-E:  q.1 = u & q.len q = v by B2;
-  ==>.-relation(S) reduces u, v by E, REWRITE1:def 3;
-  hence thesis by defDerivN;  
+A14:  q.1 = u & q.len q = v by A3;
+  ==>.-relation(S) reduces u, v by A14,REWRITE1:def 3;
+  hence thesis by Def7;
 end;
 
 begin
@@ -1364,16 +1367,16 @@ definition
     set X = { s : w ==>* s, S };
     X c= E^omega
     proof
-      let x; 
-      assume x in X; 
+      let x;
+      assume x in X;
       then ex t st t = x & w ==>* t, S;
       hence thesis;
-    end;  
+    end;
     hence thesis;
-  end;    
+  end;
 end;
 
-theorem ThLang10:
+theorem Th46:
 s in Lang(w, S) iff w ==>* s, S
 proof
   thus s in Lang(w, S) implies w ==>* s, S
@@ -1385,10 +1388,10 @@ proof
   thus thesis;
 end;
 
-theorem ThLang15: 
+theorem Th47:
 w in Lang(w, S)
 proof
-  w ==>* w, S by ThDerivN10;
+  w ==>* w, S by Th32;
   hence thesis;
 end;
 
@@ -1397,67 +1400,67 @@ registration
   let S be semi-Thue-system of E;
   let w be Element of E^omega;
   cluster Lang(w, S) -> non empty;
-  coherence by ThLang15;
-end;
-  
-theorem ThLang20:
-S c= T implies Lang(w, S) c= Lang(w, T)
-proof
-  assume 
-A:  S c= T;
-  thus x in Lang(w, S) implies x in Lang(w, T)
-  proof
-    assume 
-B:    x in Lang(w, S);
-    reconsider y = x as Element of E^omega by B;
-    w ==>* y, S by B, ThLang10;
-    then w ==>* y, T by A, ThDerivN80;
-    hence x in Lang(w, T);
-  end;  
+  coherence by Th47;
 end;
 
-theorem ThLang25:
+theorem Th48:
+S c= T implies Lang(w, S) c= Lang(w, T)
+proof
+  assume
+A1:  S c= T;
+  thus x in Lang(w, S) implies x in Lang(w, T)
+  proof
+    assume
+A2:    x in Lang(w, S);
+    reconsider y = x as Element of E^omega by A2;
+    w ==>* y, S by A2,Th46;
+    then w ==>* y, T by A1,Th40;
+    hence x in Lang(w, T);
+  end;
+end;
+
+theorem Th49:
 Lang(w, S) = Lang(w, S \/ id (E^omega))
 proof
   S c= S \/ id (E^omega) by XBOOLE_1:7;
-  then 
-A:  Lang(w, S) c= Lang(w, S \/ id (E^omega)) by ThLang20;
+  then
+A1:  Lang(w, S) c= Lang(w, S \/ id (E^omega)) by Th48;
   Lang(w, S \/ id (E^omega)) c= Lang(w, S)
   proof
     let x;
-    assume 
-B:    x in Lang(w, S \/ id (E^omega));
+    assume
+A2:    x in Lang(w, S \/ id (E^omega));
     then reconsider s = x as Element of E^omega;
-    w ==>* s, S \/ id (E^omega) by B, ThLang10;
-    then w ==>* s, S by ThDerivN90;
+    w ==>* s, S \/ id (E^omega) by A2,Th46;
+    then w ==>* s, S by Th41;
     hence x in Lang(w, S);
   end;
-  hence thesis by A, XBOOLE_0:def 10;
+  hence thesis by A1,XBOOLE_0:def 10;
 end;
 
-theorem ThLang29:
+theorem Th50:
 Lang(w, {}(E^omega, E^omega)) = {w}
 proof
   now
     let x;
     assume that
-B1:   x <> w and
-B2:   x in Lang(w, {}(E^omega, E^omega));
-    reconsider t = x as Element of E^omega by B2;
-    w ==>* t, {}(E^omega, E^omega) by B2, ThLang10;
-    hence contradiction by B1, ThDerivN100;
+A1:   x <> w and
+A2:   x in Lang(w, {}(E^omega, E^omega));
+    reconsider t = x as Element of E^omega by A2;
+    w ==>* t, {}(E^omega, E^omega) by A2,Th46;
+    hence contradiction by A1,Th42;
   end;
-  then x in Lang(w, {}(E^omega, E^omega)) iff x = w by ThLang15;
-  hence thesis by TARSKI:def 1;  
+  then x in Lang(w, {}(E^omega, E^omega)) iff x = w by Th47;
+  hence thesis by TARSKI:def 1;
 end;
 
-theorem 
+theorem
 Lang(w, id (E^omega)) = {w}
 proof
   {}(E^omega, E^omega) \/ id (E^omega) = {} \/ id (E^omega) by OPOSET_1:def 1
                                       .= id (E^omega);
-  hence Lang(w, id (E^omega)) = Lang(w, {}(E^omega, E^omega)) by ThLang25
-                             .= {w} by ThLang29;
+  hence Lang(w, id (E^omega)) = Lang(w, {}(E^omega, E^omega)) by Th49
+                             .= {w} by Th50;
 end;
 
 begin
@@ -1468,69 +1471,69 @@ begin
 
 definition
   let E, S, T, w;
-  pred S, T are_equivalent_wrt w means :defEq:
+  pred S, T are_equivalent_wrt w means :Def9:
     Lang(w, S) = Lang(w, T);
 end;
 
-theorem 
+theorem
 S, S are_equivalent_wrt w
 proof
   thus Lang(w, S) = Lang(w, S);
 end;
 
-theorem 
+theorem
 S, T are_equivalent_wrt w implies T, S are_equivalent_wrt w
 proof
   assume Lang(w, S) = Lang(w, T);
-  hence thesis by defEq;
+  hence thesis by Def9;
 end;
 
-theorem 
+theorem
 S, T are_equivalent_wrt w & T, U are_equivalent_wrt w implies
   S, U are_equivalent_wrt w
 proof
   assume Lang(w, S) = Lang(w, T) & Lang(w, T) = Lang(w, U);
-  hence thesis by defEq;
-end;  
-
-theorem 
-S, S \/ id (E^omega) are_equivalent_wrt w
-proof
-  Lang(w, S) = Lang(w, S \/ id (E^omega)) by ThLang25;
-  hence thesis by defEq;
+  hence thesis by Def9;
 end;
 
-theorem  ThEq50:
+theorem
+S, S \/ id (E^omega) are_equivalent_wrt w
+proof
+  Lang(w, S) = Lang(w, S \/ id (E^omega)) by Th49;
+  hence thesis by Def9;
+end;
+
+theorem  Th56:
 S, T are_equivalent_wrt w & S c= U & U c= T implies
   S, U are_equivalent_wrt w & U, T are_equivalent_wrt w
 proof
-  assume that 
+  assume that
 A1: Lang(w, S) = Lang(w, T) and
 A2: S c= U & U c= T;
-  Lang(w, S) c= Lang(w, U) & Lang(w, U) c= Lang(w, T) by A2, ThLang20;
-  hence Lang(w, S) = Lang(w, U) by A1, XBOOLE_0:def 10;
-  hence thesis by A1, defEq;
-end;  
-
-theorem ThEq60: 
-S, ==>.-relation(S) are_equivalent_wrt w
-proof
-  S c= ==>.-relation(S) by ThRedSeq5;
-  then
-A:  Lang(w, S) c= Lang(w, ==>.-relation(S)) by ThLang20;
-  Lang(w, ==>.-relation(S)) c= Lang(w, S)
-  proof
-    let x such that 
-C:    x in Lang(w, ==>.-relation(S));
-    reconsider s = x as Element of E^omega by C;
-    w ==>* s, ==>.-relation(S) by C, ThLang10;
-    then w ==>* s, S by ThDerivN110;
-    hence thesis;
-  end;
-  hence Lang(w, S) = Lang(w, ==>.-relation(S)) by A, XBOOLE_0:def 10;
+  Lang(w, S) c= Lang(w, U) & Lang(w, U) c= Lang(w, T) by A2,Th48;
+  hence Lang(w, S) = Lang(w, U) by A1,XBOOLE_0:def 10;
+  hence thesis by A1,Def9;
 end;
 
-theorem ThEq68:
+theorem Th57:
+S, ==>.-relation(S) are_equivalent_wrt w
+proof
+  S c= ==>.-relation(S) by Th22;
+  then
+A1:  Lang(w, S) c= Lang(w, ==>.-relation(S)) by Th48;
+  Lang(w, ==>.-relation(S)) c= Lang(w, S)
+  proof
+    let x such that
+A2:    x in Lang(w, ==>.-relation(S));
+    reconsider s = x as Element of E^omega by A2;
+    w ==>* s, ==>.-relation(S) by A2,Th46;
+    then w ==>* s, S by Th43;
+    hence thesis;
+  end;
+  hence Lang(w, S) = Lang(w, ==>.-relation(S)) by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th58:
 S, T are_equivalent_wrt w &
   ==>.-relation(S \/ T) reduces w, s implies
     ==>.-relation(S) reduces w, s
@@ -1539,143 +1542,143 @@ proof
 A1: Lang(w, S) = Lang(w, T) and
 A2: ==>.-relation(S \/ T) reduces w, s;
   consider p being RedSequence of ==>.-relation(S \/ T) such that
-B:  p.1 = w & p.len p = s by A2, REWRITE1:def 3;
+A3:  p.1 = w & p.len p = s by A2,REWRITE1:def 3;
   defpred P[Nat] means
     for p being RedSequence of ==>.-relation(S \/ T), t st
       len p = $1 & p.1 = w & p.len p = t
     ex q being RedSequence of ==>.-relation(S) st
       q.1 = w & q.len q = t;
-C:      
+A4:
   P[0] by REWRITE1:def 2;
-D:  
+A5:
   now
     let k;
-    assume 
-D0:   P[k];
+    assume
+A6:   P[k];
     thus P[k + 1]
     proof
       let p be RedSequence of ==>.-relation(S \/ T), t such that
-D1:     len p = k + 1 & p.1 = w & p.len p = t;
+A7:     len p = k + 1 & p.1 = w & p.len p = t;
       per cases;
       suppose not k in dom p & k + 1 in dom p;
-        then k = 0 by ThSeq10;
-        then p = <*w*> by D1, FINSEQ_1:57;
+        then k = 0 by Th1;
+        then p = <*w*> by A7,FINSEQ_1:57;
         then reconsider p as RedSequence of ==>.-relation(S)
           by REWRITE1:7;
-        take p;  
-        thus thesis by D1;
+        take p;
+        thus thesis by A7;
       end;
       suppose not k + 1 in dom p;
-        then 0 + 1 > k + 1 by D1, FINSEQ_3:27;
+        then 0 + 1 > k + 1 by A7,FINSEQ_3:27;
         hence thesis by XREAL_1:8;
       end;
-      suppose 
-D1a:    k in dom p & k + 1 in dom p;
-        then 
-D1b:      [p.k, p.(k + 1)] in ==>.-relation(S \/ T) by REWRITE1:def 2;
+      suppose
+A8:    k in dom p & k + 1 in dom p;
+        then
+A9:      [p.k, p.(k + 1)] in ==>.-relation(S \/ T) by REWRITE1:def 2;
         set u = p.k;
-        reconsider u as Element of E^omega by D1b, ZFMISC_1:106;
-D1c:    u ==>. t, S \/ T by D1, D1b, defRed;
+        reconsider u as Element of E^omega by A9,ZFMISC_1:106;
+A10:    u ==>. t, S \/ T by A7,A9,Def6;
         consider p1 being RedSequence of ==>.-relation(S \/ T) such that
-D2:       len p1 = k & p1.1 = w & p1.len p1 = u by D1, D1a, ThRed10;
+A11:       len p1 = k & p1.1 = w & p1.len p1 = u by A7,A8,Th4;
         consider q being RedSequence of ==>.-relation(S) such that
-D3:       q.1 = w & q.len q = u by D0, D2;
-        ==>.-relation(S) reduces w, u by D3, REWRITE1:def 3;
-        then 
-D3a:      w ==>* u, S by defDerivN;
-        per cases by D1c, ThProd120;
+A12:       q.1 = w & q.len q = u by A6,A11;
+        ==>.-relation(S) reduces w, u by A12,REWRITE1:def 3;
+        then
+A13:      w ==>* u, S by Def7;
+        per cases by A10,Th21;
         suppose u ==>. t, S;
-          then u ==>* t, S by ThDerivN20;
-          then w ==>* t, S by D3a, ThDerivN40;
-          then ==>.-relation(S) reduces w, t by defDerivN;
+          then u ==>* t, S by Th33;
+          then w ==>* t, S by A13,Th35;
+          then ==>.-relation(S) reduces w, t by Def7;
           hence thesis by REWRITE1:def 3;
         end;
         suppose u ==>. t, T;
-          then 
-D5:         u ==>* t, T by ThDerivN20;
-          u in Lang(w, S) by D3a;
-          then w ==>* u, T by A1, ThLang10;
-          then w ==>* t, T by D5, ThDerivN40;
+          then
+A14:         u ==>* t, T by Th33;
+          u in Lang(w, S) by A13;
+          then w ==>* u, T by A1,Th46;
+          then w ==>* t, T by A14,Th35;
           then t in Lang(w, T);
-          then w ==>* t, S by A1, ThLang10;
-          then ==>.-relation(S) reduces w, t by defDerivN;
+          then w ==>* t, S by A1,Th46;
+          then ==>.-relation(S) reduces w, t by Def7;
           hence thesis by REWRITE1:def 3;
         end;
-      end;  
+      end;
     end;
   end;
-  for k holds P[k] from NAT_1:sch 2(C, D);
+  for k holds P[k] from NAT_1:sch 2(A4, A5);
   then consider q being RedSequence of ==>.-relation(S) such that
-E:  q.1 = w & q.len q = s by B;
-  thus thesis by E, REWRITE1:def 3;
-end;    
+A15:  q.1 = w & q.len q = s by A3;
+  thus thesis by A15,REWRITE1:def 3;
+end;
 
-theorem ThEq69:
+theorem Th59:
 S, T are_equivalent_wrt w & w ==>* s, S \/ T implies w ==>* s, S
 proof
   assume that
 A1: S, T are_equivalent_wrt w and
 A2: w ==>* s, S \/ T;
-  ==>.-relation(S \/ T) reduces w, s by A2, defDerivN;
-  then ==>.-relation(S) reduces w, s by A1, ThEq68;
-  hence thesis by defDerivN;
+  ==>.-relation(S \/ T) reduces w, s by A2,Def7;
+  then ==>.-relation(S) reduces w, s by A1,Th58;
+  hence thesis by Def7;
 end;
 
-theorem ThEq70: 
+theorem Th60:
 S, T are_equivalent_wrt w implies S, S \/ T are_equivalent_wrt w
 proof
-  assume 
-A:  S, T are_equivalent_wrt w;
+  assume
+A1:  S, T are_equivalent_wrt w;
   thus Lang(w, S) = Lang(w, S \/ T)
   proof
     S c= S \/ T by XBOOLE_1:7;
-    then 
-B:    Lang(w, S) c= Lang(w, S \/ T) by ThLang20;
+    then
+A2:    Lang(w, S) c= Lang(w, S \/ T) by Th48;
     Lang(w, S \/ T) c= Lang(w, S)
     proof
-      let x such that 
-C:      x in Lang(w, S \/ T);
-      reconsider s = x as Element of E^omega by C;
-      w ==>* s, S \/ T by C, ThLang10;
-      then w ==>* s, S by A, ThEq69;
+      let x such that
+A3:      x in Lang(w, S \/ T);
+      reconsider s = x as Element of E^omega by A3;
+      w ==>* s, S \/ T by A3,Th46;
+      then w ==>* s, S by A1,Th59;
       hence x in Lang(w, S);
     end;
-    hence thesis by B, XBOOLE_0:def 10;
+    hence thesis by A2,XBOOLE_0:def 10;
   end;
 end;
 
-theorem 
+theorem
 s ==>. t, S implies S, (S \/ {[s, t]}) are_equivalent_wrt w
 proof
   assume
-A:  s ==>. t, S;  
-  S, ==>.-relation(S) are_equivalent_wrt w by ThEq60;
-  then 
-B:  S, S \/ ==>.-relation(S) are_equivalent_wrt w by ThEq70;
-C:
+A1:  s ==>. t, S;
+  S, ==>.-relation(S) are_equivalent_wrt w by Th57;
+  then
+A2:  S, S \/ ==>.-relation(S) are_equivalent_wrt w by Th60;
+A3:
   S c= S \/ {[s, t]} by XBOOLE_1:7;
-  [s, t] in ==>.-relation(S) by A, defRed;
+  [s, t] in ==>.-relation(S) by A1,Def6;
   then {[s, t]} c= ==>.-relation(S) by ZFMISC_1:37;
   then S \/ {[s, t]} c= S \/ ==>.-relation(S) by XBOOLE_1:9;
-  hence thesis by B, C, ThEq50;
-end;         
-        
-theorem 
+  hence thesis by A2,A3,Th56;
+end;
+
+theorem
 s ==>* t, S implies S, (S \/ {[s, t]}) are_equivalent_wrt w
 proof
-  assume 
-A:  s ==>* t, S;
+  assume
+A1:  s ==>* t, S;
   S c= S \/ {[s, t]} by XBOOLE_1:7;
-  then 
-B:  Lang(w, S) c= Lang(w, S \/ {[s, t]}) by ThLang20;
+  then
+A2:  Lang(w, S) c= Lang(w, S \/ {[s, t]}) by Th48;
   Lang(w, S \/ {[s, t]}) c= Lang(w, S)
   proof
-    let x such that 
-C:    x in Lang(w, S \/ {[s, t]});
-    reconsider u = x as Element of E^omega by C;
-    w ==>* u, S \/ {[s, t]} by C, ThLang10;
-    then w ==>* u, S by A, ThDerivN120;
+    let x such that
+A3:    x in Lang(w, S \/ {[s, t]});
+    reconsider u = x as Element of E^omega by A3;
+    w ==>* u, S \/ {[s, t]} by A3,Th46;
+    then w ==>* u, S by A1,Th45;
     hence thesis;
   end;
-  hence Lang(w, S) = Lang(w, S \/ {[s, t]}) by B, XBOOLE_0:def 10;
+  hence Lang(w, S) = Lang(w, S \/ {[s, t]}) by A2,XBOOLE_0:def 10;
 end;                      

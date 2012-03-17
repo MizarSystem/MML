@@ -7,14 +7,14 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, NAT_1, COMPLEX1, GR_CY_1, ARYTM;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2,
       WELLORD2, FINSET_1, XXREAL_0;
  constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, ARYTM_3,
-      FINSET_1, XREAL_0, NAT_1;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
+      XREAL_0, NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -24,7 +24,7 @@ begin
          X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
          R for Relation,
          f,g,h for Function,
-         k,m,n for Element of NAT;
+         k,m,n for Nat;
 
 definition let IT be set;
  attr IT is cardinal means
@@ -75,6 +75,7 @@ definition let X;
  func Card X -> Cardinal means
 :: CARD_1:def 5
   X,it are_equipotent;
+  projectivity;
 end;
 
 canceled 6;
@@ -132,7 +133,7 @@ theorem :: CARD_1:35
 theorem :: CARD_1:36
       A in nextcard A;
 
- reserve L for T-Sequence;
+ reserve S for T-Sequence;
 
 definition let M;
  attr M is limit means
@@ -147,10 +148,10 @@ end;
 definition let A;
  func alef A -> set means
 :: CARD_1:def 8
-   ex L st it = last L & dom L = succ A & L.{} = Card NAT &
-        (for B st succ B in succ A holds L.succ B = nextcard union { L.B }) &
+   ex S st it = last S & dom S = succ A & S.{} = Card NAT &
+        (for B st succ B in succ A holds S.succ B = nextcard union { S.B }) &
          for B st B in succ A & B <> {} & B is_limit_ordinal
-                holds L.B = Card sup(L|B);
+                holds S.B = Card sup(S|B);
 end;
 
 registration let A;
@@ -167,8 +168,8 @@ theorem :: CARD_1:39
 
 theorem :: CARD_1:40
      A <> {} & A is_limit_ordinal implies
-   for L st dom L = A & for B st B in A holds L.B = alef B holds
-            alef A = Card sup L;
+   for S st dom S = A & for B st B in A holds S.B = alef B holds
+            alef A = Card sup S;
 
 theorem :: CARD_1:41
   A in B iff alef A <` alef B;
@@ -205,7 +206,7 @@ theorem :: CARD_1:51
    0 = {};
 
 theorem :: CARD_1:52
-  succ n = n + 1;
+ for n being natural number holds succ n = n + 1;
 
 canceled 3;
 
@@ -269,6 +270,12 @@ canceled;
 theorem :: CARD_1:76
   nextcard Card n = Card(n+1);
 
+definition let n be natural number;
+ redefine func succ n equals
+:: CARD_1:def 9
+n+1;
+end;
+
 notation let X be finite set;
  synonym card X for Card X;
 end;
@@ -276,9 +283,7 @@ end;
 definition let X be finite set;
  redefine  canceled 2;
 
-func card X -> Element of NAT means
-:: CARD_1:def 11
-             Card it = Card X;
+func card X -> Element of NAT;
   end;
 
 canceled;
@@ -405,5 +410,19 @@ theorem :: CARD_1:100
 theorem :: CARD_1:101
    k <= n implies k = k /\ n;
 
+:: from CARD_4, 2007.08.16, A.T.
+
 theorem :: CARD_1:102
-    succ n = n+1;
+  A,n are_equipotent implies A = n;
+
+theorem :: CARD_1:103
+ A is finite iff A in omega;
+
+registration
+ cluster natural -> finite set;
+end;
+
+registration
+ cluster natural -> cardinal set;
+end;
+

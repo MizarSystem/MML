@@ -10,25 +10,26 @@ environ
       LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
       ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
       UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1, REALSET1,
-      NAT_1, VECTSP_2, STRUCT_0;
+      VECTSP_2, STRUCT_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      REALSET1, STRUCT_0, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_4,
-      FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1, VECTSP_1,
-      NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3, POLYNOM5,
-      VECTSP_4, XXREAL_0;
- constructors SETFAM_1, BINOP_1, XXREAL_0, FINSOP_1, REALSET1, RFINSEQ,
-      BINARITH, ALGSTR_1, VECTSP_4, BHSP_1, POLYNOM1, POLYNOM3, POLYNOM5;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, ARYTM_3, NUMBERS,
-      XREAL_0, NAT_1, FINSEQ_1, REALSET1, STRUCT_0, VECTSP_1, FVSUM_1,
-      POLYNOM3, POLYNOM5, BINOM;
+      REALSET1, STRUCT_0, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
+      VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3,
+      POLYNOM5, VECTSP_4, XXREAL_0;
+ constructors FINSEQ_4, SETFAM_1, BINOP_1, XXREAL_0, FINSOP_1, REALSET1,
+      RFINSEQ, BINARITH, ALGSTR_1, VECTSP_4, BHSP_1, POLYNOM1, POLYNOM3,
+      POLYNOM5;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, XREAL_0, NAT_1, FINSEQ_1,
+      REALSET1, STRUCT_0, VECTSP_1, FVSUM_1, POLYNOM3, POLYNOM5, BINOM,
+      ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1,
       STRUCT_0;
  theorems TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1, FUNCT_2,
-      FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINOP_1,
-      POLYNOM1, POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1,
-      VECTSP_4, SETFAM_1, ALGSTR_1, XBOOLE_0, XBOOLE_1, GROUP_1, XREAL_1,
-      ORDINAL1, NORMSP_1;
+      FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, RFINSEQ, BINOP_1, POLYNOM1,
+      POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1, VECTSP_4,
+      SETFAM_1, ALGSTR_1, XBOOLE_0, XBOOLE_1, GROUP_1, XREAL_1, ORDINAL1,
+      NORMSP_1, PARTFUN1;
  schemes SUBSET_1, BINOP_1;
 
 begin :: Preliminaries
@@ -435,19 +436,19 @@ end;
      reconsider i as Element of NAT by ORDINAL1:def 13;
 A2:  1 <= len f by A1,NAT_1:11;
       (len (f/^1) = len Del(f,1)) &
-     for k be Element of NAT st 1 <=k & k <= len (f/^1)
+     for k be Nat st 1 <=k & k <= len (f/^1)
      holds (f/^1).k=Del(f,1).k
       proof
 A3:    1 in dom f by FINSEQ_5:6;
 A4:    len (f/^1) = (i+1)-1 by A1,A2,RFINSEQ:def 2
                  .= i;
        hence len (f/^1) = len Del(f,1) by A1,A3,FINSEQ_3:118;
-       let k be Element of NAT such that
+       let k be Nat such that
 A5:    1 <=k & k <= len (f/^1);
 A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
-        k in dom (f/^1) by A5,FINSEQ_3:27;
+A7:    k in dom (f/^1) by A5,FINSEQ_3:27;
        hence (f/^1).k= f.(k+1) by A2,RFINSEQ:def 2
-                   .= Del(f,1).k by A1,A6,FINSEQ_3:120;
+                   .= Del(f,1).k by A1,A6,A7,FINSEQ_3:120;
       end;
      hence thesis by FINSEQ_1:18;
     end;
@@ -461,7 +462,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
      let f be non empty FinSequence of D;
      A1: 1 in dom f by FINSEQ_5:6;
      thus f = <*f/.1*>^(f/^1) by FINSEQ_5:32
-           .= <*f.1*>^(f/^1) by A1,FINSEQ_4:def 4
+           .= <*f.1*>^(f/^1) by A1,PARTFUN1:def 8
            .= <*f.1*>^Del(f,1) by Th3;
     end;
 
@@ -484,7 +485,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
       A4: r <> {} by A1,FINSEQ_1:25;
      then A5: 1 in dom r by FINSEQ_5:6;
           r = <*r.1*>^Del(r,1) by A4,Th4
-      .= <*r/.1*>^Del(r,1) by A5,FINSEQ_4:def 4;
+      .= <*r/.1*>^Del(r,1) by A5,PARTFUN1:def 8;
      then A6: Sum r = Sum <*r/.1*> + Sum Del(r,1) by RLVECT_1:58
         .= r/.1 + Sum Del(r,1)by RLVECT_1:61;
           now let k be Element of NAT;
@@ -502,7 +503,7 @@ A6:    1 in dom f & 1<=k & k<=i by A4,A5,FINSEQ_5:6;
          .= 0.(L) by VECTSP_1:39;
      end;
      then A12: Sum Del(r,1) = 0.(L) by POLYNOM3:1;
-          r/.1 = r.1 by A5,FINSEQ_4:def 4
+          r/.1 = r.1 by A5,PARTFUN1:def 8
         .= (1_.(L)).(1-'1)*p.(i+1-'1) by A3,A5
         .= (1_.(L)).(1-'1)*p.i by BINARITH:39
         .= (1_.(L)).(0)*p.i by BINARITH:51
@@ -710,18 +711,18 @@ A6:    for k be Element of NAT st k in dom f2 holds
        f2.k = (a*p).(k-'1) * q.(i+1-'k) by POLYNOM3:def 11;
 A7:    dom (a*f1) = dom f1 by POLYNOM1:def 2
          .= dom f2 by A1,A4,FINSEQ_3:31;
-A8:    for k be Element of NAT st k in dom f2 holds f2.k = (a*f1).k
+A8:    for k be Nat st k in dom f2 holds f2.k = (a*f1).k
         proof
-         let k be Element of NAT such that
+         let k be Nat such that
 A9:      k in dom f2;
 A10:      k in dom f1 by A1,A4,A9,FINSEQ_3:31;
 then A11:    p.(k-'1) * q.(i+1-'k) = f1.k by A3
-          .= f1/.k by A10,FINSEQ_4:def 4;
+          .= f1/.k by A10,PARTFUN1:def 8;
          thus f2.k = (a*p).(k-'1) * q.(i+1-'k) by A6,A9
          .= a*p.(k-'1) * q.(i+1-'k) by POLYNOM5:def 3
          .= a*(f1/.k) by A11,GROUP_1:def 4
          .= (a*f1)/.k by A10,POLYNOM1:def 2
-         .= (a*f1).k by A7,A9,FINSEQ_4:def 4;
+         .= (a*f1).k by A7,A9,PARTFUN1:def 8;
         end;
        thus (a*(p*'q)).i = a*(Sum f1) by A2,POLYNOM5:def 3
          .= Sum (a* f1) by BINOM:4

@@ -9,20 +9,22 @@ environ
  vocabularies INT_1, NAT_1, ARYTM_1, POWER, MIDSP_3, FINSEQ_1, FUNCT_1,
       RELAT_1, RLVECT_1, RADIX_1, FINSEQ_4, RADIX_3, RADIX_4, GROUP_1;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, INT_1, NAT_1, NAT_D, FUNCT_1,
-      NEWTON, POWER, XXREAL_0, FINSEQ_1, FINSEQ_4, BINARITH, GR_CY_1, RADIX_1,
-      RADIX_3;
- constructors NAT_D, FINSEQ_4, NEWTON, POWER, BINARITH, GR_CY_1, RADIX_3;
- registrations RELSET_1, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1;
+      PARTFUN1, NEWTON, POWER, XXREAL_0, FINSEQ_1, FINSEQ_4, BINARITH, GR_CY_1,
+      RADIX_1, RADIX_3;
+ constructors PARTFUN1, REAL_1, NAT_D, FINSEQ_4, NEWTON, POWER, BINARITH,
+      GR_CY_1, RADIX_3, NAT_1;
+ registrations RELSET_1, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1,
+      NEWTON;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
 
 
 begin :: Some Useful Theorems
 
-reserve i,n,m,k,x,y for Element of NAT,
+reserve i,n,m,k,x,y for Nat,
         i1 for Integer;
 
 theorem :: RADIX_4:1
-  for k be Element of NAT st 2 <= k holds 2 < Radix(k);
+  2 <= k implies 2 < Radix(k);
 
 begin :: Carry operation at n+1 digits Radix-2^k SD_Sub number
 
@@ -60,7 +62,7 @@ theorem :: RADIX_4:7
 begin :: Definition for adder operation on Radix-2^k SD-Sub number
 
 definition
-  let i,n,k be Element of NAT,
+  let i,n,k be Nat,
       x be Tuple of n,(k-SD_Sub), y be Tuple of n,(k-SD_Sub);
   assume i in Seg n & k >= 2;
   func SDSubAddDigit(x,y,i,k) -> Element of k-SD_Sub equals
@@ -70,7 +72,7 @@ definition
       + SDSub_Add_Carry( DigA_SDSub(x,i -'1) + DigA_SDSub(y,i -'1), k);
 end;
 
-definition let n,k be Element of NAT,x,y be Tuple of n,(k-SD_Sub);
+definition let n,k be Nat,x,y be Tuple of n,(k-SD_Sub);
   func x '+' y -> Tuple of n,(k-SD_Sub) means
 :: RADIX_4:def 2
 
@@ -86,7 +88,7 @@ theorem :: RADIX_4:8
            SD2SDSub(DecSD((y mod (Radix(k) |^ n)),n,k)),i,k);
 
 theorem :: RADIX_4:9
-      for n st n >= 1 holds
+  for n st n >= 1 holds
     for k,x,y st
       k >= 3 & x is_represented_by n,k & y is_represented_by n,k holds
         x + y =

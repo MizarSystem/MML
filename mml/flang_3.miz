@@ -1,0 +1,1686 @@
+:: Regular Expression Quantifiers -- at least $m$ Occurrences
+::  by Micha{\l} Trybulec
+::
+:: Received October 9, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, FINSEQ_1, TARSKI, AFINSQ_1, MEASURE6, GROUP_1, ARYTM,
+      SETFAM_1, MODAL_1, FLANG_3, ALGSEQ_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      DOMAIN_1, FUNCT_1, RELSET_1, FUNCT_2, ORDINAL1, SETFAM_1, XREAL_0,
+      XXREAL_0, AFINSQ_1, CATALAN2, FLANG_1, FLANG_2;
+ constructors XXREAL_0, NAT_1, XREAL_0, CATALAN2, FLANG_1, FLANG_2;
+ registrations SUBSET_1, RELSET_1, NAT_1, ORDINAL1, AFINSQ_1, XREAL_0,
+      XBOOLE_0, ARYTM_3, XXREAL_0;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ definitions TARSKI;
+ theorems NAT_1, TARSKI, REAL_2, XBOOLE_0, XBOOLE_1, XREAL_1, ZFMISC_1,
+      FLANG_1, XXREAL_0, FLANG_2;
+ schemes CARD_FIL, DOMAIN_1, NAT_1;
+
+begin
+
+reserve E, x, y, X, Y, Z for set;
+reserve A, B, C, D for Subset of E^omega;
+reserve a, a1, a2, b, c, d, ab, bc for Element of E^omega;
+reserve e for Element of E;
+reserve i, j, k, l, kl, m, n, mn, n1, n2 for Nat;
+reserve p, q, r, r1, r2 for real number;
+
+theorem
+B c= A* implies A* ^^ B c= A* & B ^^ (A*) c= A*
+proof
+  assume B c= A*;
+  then A* ^^ B c= A* ^^ (A*) & B ^^ (A*) c= A* ^^ (A*) by FLANG_1:18;
+  hence thesis by FLANG_1:64;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: At least n Occurences
+:: Definition of |^.. n
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, A, n;
+  func A |^.. n -> Subset of E^omega equals
+    union { B: ex m st n <= m & B = A |^ m };
+  coherence
+  proof
+    defpred P[set] means ex m st n <= m & $1 = A |^ m;
+    reconsider M = { B: P[B] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
+    union M is Subset of E^omega;
+    hence thesis;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: At least n Occurences
+:: Properties of |^.. n
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th2:
+x in A |^.. n iff ex m st n <= m & x in A |^ m
+proof
+  thus x in A |^.. n implies ex m st n <= m & x in A |^ m
+  proof
+    assume x in A |^.. n;
+    then consider X such that
+A1:   x in X and
+A2:   X in { B: ex m st n <= m & B = A |^ m } by TARSKI:def 4;
+    defpred P[set] means ex m st n <= m & $1 = A |^ m;
+A3: X in { B: P[B] } by A2;
+    P[X] from CARD_FIL:sch 1(A3);
+    hence thesis by A1;
+  end;
+  given m such that
+A4:  n <= m & x in A |^ m;
+  defpred P[set] means ex m st n <= m & $1 = A |^ m;
+  consider B such that
+A5:  x in B & P[B] by A4;
+  reconsider A = { C : P[C] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
+  B in A by A5;
+  hence thesis by A5,TARSKI:def 4;
+end;
+
+theorem Th3:
+n <= m implies A |^ m c= A |^.. n
+proof
+  assume n <= m;
+  then for x holds x in A |^ m implies x in A |^.. n by Th2;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th4:
+A |^.. n = {} iff n > 0 & A = {}
+proof
+  thus A |^.. n = {} implies n > 0 & A = {}
+  proof
+    assume that
+A1:   A |^.. n = {} and
+A2:   n <= 0 or A <> {};
+A3: n <= 0 implies <%>E in A |^.. n
+    proof
+      assume n <= 0;
+      then
+A4:    n = 0;
+      A |^ 0 c= A |^.. 0 by Th3;
+      then {<%>E} c= A |^.. 0 by FLANG_1:25;
+      hence thesis by A4,ZFMISC_1:37;
+    end;
+A5: A <> {} implies A |^.. n <> {}
+    proof
+      assume
+A6:    A <> {};
+      now
+        let m;
+        consider m such that
+A7:      n <= m;
+        A |^ m <> {} by A6,FLANG_1:28;
+        then consider x such that
+A8:      x in A |^ m by XBOOLE_0:def 1;
+        thus A |^.. n <> {} by A7,A8,Th2;
+      end;
+      hence thesis;
+    end;
+    thus contradiction by A1,A2,A3,A5;
+  end;
+  assume
+A9: n > 0 & A = {};
+  now
+    let x;
+    assume x in A |^.. n;
+    then consider m such that
+A10:   n <= m & x in A |^ m by Th2;
+    thus contradiction by A9,A10,FLANG_1:28;
+  end;
+  hence thesis by XBOOLE_0:def 1;
+end;
+
+theorem Th5:
+m <= n implies A |^.. n c= A |^.. m
+proof
+  assume
+A1:  m <= n;
+  now
+    let x;
+    assume x in A |^.. n;
+    then consider k such that
+A2:    n <= k & x in A |^ k by Th2;
+    m <= k by A1,A2,XXREAL_0:2;
+    hence x in A |^.. m by A2,Th2;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th6:
+k <= m implies A |^ (m, n) c= A |^.. k
+proof
+  assume
+A1:  k <= m;
+  now
+    let x;
+    assume x in A |^ (m, n);
+    then consider l such that
+A2:    m <= l & l <= n & x in A |^ l by FLANG_2:19;
+    k <= l by A1,A2,XXREAL_0:2;
+    hence x in A |^.. k by A2,Th2;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th7:
+m <= n + 1 implies A |^ (m, n) \/ A |^.. (n + 1) = A |^.. m
+proof
+  assume m <= n + 1;
+  then
+A1: A |^.. (n + 1) c= A |^.. m by Th5;
+  A |^ (m, n) c= A |^.. m by Th6;
+  then
+A2: A |^ (m, n) \/ A |^.. (n + 1) c= A |^.. m by A1,XBOOLE_1:8;
+  A |^.. m c= A |^ (m, n) \/ A |^.. (n + 1)
+  proof
+    now
+      let x;
+      assume x in A |^.. m;
+      then consider k such that
+A3:      m <= k & x in A |^ k by Th2;
+A4:    k <= n implies x in A |^ (m, n) by A3,FLANG_2:19;
+      now
+        assume k > n;
+        then k >= n + 1 by NAT_1:13;
+        hence x in A |^.. (n + 1) by A3,Th2;
+      end;
+      hence x in A |^ (m, n) \/ A |^.. (n + 1) by A4,XBOOLE_0:def 2;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+A |^ n \/ A |^.. (n + 1) = A |^.. n
+proof
+A1:
+  n <= n + 1 by NAT_1:13;
+  thus A |^ n \/ A |^.. (n + 1) = A |^ (n, n) \/ A |^.. (n + 1) by FLANG_2:22
+                               .= A |^.. n by A1,Th7;
+end;
+
+theorem Th9:
+A |^.. n c= A*
+proof
+  now
+    let x;
+    assume x in A |^.. n;
+    then consider k such that
+A1:    n <= k & x in A |^ k by Th2;
+    thus x in A* by A1,FLANG_1:42;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th10:
+<%>E in A |^.. n iff n = 0 or <%>E in A
+proof
+  thus <%>E in A |^.. n implies n = 0 or <%>E in A
+  proof
+    assume <%>E in A |^.. n;
+    then consider k such that
+A1:    n <= k & <%>E in A |^ k by Th2;
+    n = 0 or n > 0;
+    hence thesis by A1,FLANG_1:32;
+  end;
+  assume
+A2:  n = 0 or <%>E in A;
+  per cases by A2;
+  suppose
+A3:  n = 0;
+    {<%>E} = A |^ 0 by FLANG_1:25;
+    then <%>E in A |^ n by A3,TARSKI:def 1;
+    hence thesis by Th2;
+  end;
+  suppose <%>E in A;
+    then <%>E in A |^ n by FLANG_1:31;
+    hence thesis by Th2;
+  end;
+end;
+
+theorem Th11:
+A |^.. n = A* iff <%>E in A or n = 0
+proof
+  thus A |^.. n = A* implies <%>E in A or n = 0
+  proof
+    assume that
+A1:   A |^.. n = A* and
+A2:   not <%>E in A & n <> 0;
+    <%>E in A* & not <%>E in A |^.. n by A2,Th10,FLANG_1:49;
+    hence contradiction by A1;
+  end;
+  assume
+A3:  <%>E in A or n = 0;
+  per cases by A3;
+  suppose <%>E in A;
+A4: A |^.. n c= A* by Th9;
+A5: A* c= A |^.. n
+    proof
+      now
+        let x;
+        assume x in A*;
+        then consider k such that
+A6:      x in A |^ k by FLANG_1:42;
+        per cases;
+        suppose n <= k;
+          hence x in A |^.. n by A6,Th2;
+        end;
+        suppose k < n;
+          then A |^ k c= A |^ n by A3,FLANG_1:37;
+          hence x in A |^.. n by A6,Th2;
+        end;
+      end;
+      hence thesis by TARSKI:def 3;
+    end;
+    thus thesis by A4,A5,XBOOLE_0:def 10;
+  end;
+  suppose
+A7:  n = 0;
+A8: now
+      let x;
+      assume x in A |^.. n;
+      then consider k such that
+A9:     0 <= k & x in A |^ k by A7,Th2;
+      thus x in A* by A9,FLANG_1:42;
+    end;
+    now
+      let x;
+      assume x in A*;
+      then consider k such that
+A10:     x in A |^ k by FLANG_1:42;
+      thus x in A |^.. n by A7,A10,Th2;
+    end;
+    hence thesis by A8,TARSKI:2;
+  end;
+end;
+
+theorem
+A* = A |^ (0, n) \/ A |^.. (n + 1)
+proof
+  thus A* = A |^.. 0 by Th11
+         .= A |^ (0, n) \/ A |^.. (n + 1) by Th7;
+end;
+
+theorem Th13:
+A c= B implies A |^.. n c= B |^.. n
+proof
+  assume
+A1:  A c= B;
+  now
+    let x;
+    assume x in A |^.. n;
+    then consider k such that
+A2:     n <= k & x in A |^ k by Th2;
+    A |^ k c= B |^ k by A1,FLANG_1:38;
+    hence x in B |^.. n by A2,Th2;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th14:
+x in A & x <> <%>E implies A |^.. n <> {<%>E}
+proof
+  assume
+A1:  x in A & x <> <%>E;
+  per cases;
+  suppose
+A2:  n = 0;
+    x in A |^ 1 by A1,FLANG_1:26;
+    then x in A |^.. n by A2,Th2;
+    hence thesis by A1,TARSKI:def 1;
+  end;
+  suppose n > 0;
+    then
+A3:   A |^ n <> {<%>E} by A1,FLANG_2:7;
+    A |^ n <> {} by A1,FLANG_1:28;
+    then consider y such that
+A4:   y in A |^ n & y <> <%>E by A3,ZFMISC_1:41;
+    y in A |^.. n by A4,Th2;
+    hence thesis by A4,TARSKI:def 1;
+  end;
+end;
+
+theorem Th15:
+A |^.. n = {<%>E} iff A = {<%>E} or (n = 0 & A = {})
+proof
+  thus A |^.. n = {<%>E} implies A = {<%>E} or (n = 0 & A = {})
+  proof
+    assume that
+A1:   A |^.. n = {<%>E} and
+A2:   A <> {<%>E} and
+A3:   n <> 0 or A <> {};
+    per cases by A3;
+    suppose
+A4:  n <> 0;
+      <%>E in A |^.. n by A1,ZFMISC_1:37;
+      then consider k such that
+A5:    n <= k & <%>E in A |^ k by Th2;
+      k > 0 by A4,A5;
+      then
+A6:    <%>E in A by A5,FLANG_1:32;
+      not ex x st x in A & x <> <%>E by A1,Th14;
+      hence contradiction by A2,A6,ZFMISC_1:41;
+    end;
+    suppose A <> {};
+      then consider x such that
+A7:     x in A & x <> <%>E by A2,ZFMISC_1:41;
+      thus contradiction by A1,A7,Th14;
+    end;
+  end;
+  assume
+A8:  A = {<%>E} or (n = 0 & A = {});
+  per cases by A8;
+  suppose
+A9: A = {<%>E};
+A10:  now
+      let x;
+      assume x in A |^.. n;
+      then consider k such that
+A11:    n <= k & x in A |^ k by Th2;
+      thus x in {<%>E} by A9,A11,FLANG_1:29;
+    end;
+    now
+      let x;
+      assume x in {<%>E};
+      then x in A |^ n by A9,FLANG_1:29;
+      hence x in A |^.. n by Th2;
+    end;
+    hence thesis by A10,TARSKI:2;
+  end;
+  suppose
+A12: n = 0 & A = {};
+    thus A |^.. n = A* by A12,Th11
+                 .= {<%>E} by A12,FLANG_1:48;
+  end;
+end;
+
+theorem Th16:
+A |^.. (n + 1) = (A |^.. n) ^^ A
+proof
+A1:
+  (A |^.. n) ^^ A c= A |^.. (n + 1)
+  proof
+    now
+      let x;
+      assume x in (A |^.. n) ^^ A;
+      then consider a, b such that
+A2:     a in (A |^.. n) & b in A & x = a ^ b by FLANG_1:def 1;
+A3:   b in A |^ 1 by A2,FLANG_1:26;
+      consider k such that
+A4:     n <= k & a in A |^ k by A2,Th2;
+A5:   x in A |^ (k + 1) by A2,A3,A4,FLANG_1:41;
+      n + 1 <= k + 1 by A4,XREAL_1:8;
+      hence x in A |^.. (n + 1) by A5,Th2;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  A |^.. (n + 1) c= (A |^.. n) ^^ A
+  proof
+    now
+      let x;
+      assume x in A |^.. (n + 1);
+      then consider k such that
+A6:     n + 1 <= k & x in A |^ k by Th2;
+      consider l such that
+A7:     l + 1 = k by A6,NAT_1:6;
+A8:   n <= l by A6,A7,XREAL_1:8;
+      x in (A |^ l) ^^ (A |^ 1) by A6,A7,FLANG_1:34;
+      then consider a, b such that
+A9:     a in A |^ l & b in A |^ 1 & x = a ^ b by FLANG_1:def 1;
+      a in A |^.. n by A8,A9,Th2;
+      then x in (A |^.. n) ^^ (A |^ 1) by A9,FLANG_1:def 1;
+      hence x in (A |^.. n) ^^ A by FLANG_1:26;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th17:
+(A |^.. m) ^^ (A*) = A |^.. m
+proof
+A1:
+  (A |^.. m) ^^ (A*) c= A |^.. m
+  proof
+    now
+      let x;
+      assume x in (A |^.. m) ^^ (A*);
+      then consider a, b such that
+A2:     a in A |^.. m & b in A* & x = a ^ b by FLANG_1:def 1;
+      consider k such that
+A3:     b in A |^ k by A2,FLANG_1:42;
+      consider l such that
+A4:     m <= l & a in A |^ l by A2,Th2;
+A5:   a ^ b in A |^ (l + k) by A3,A4,FLANG_1:41;
+      l + k >= m by A4,NAT_1:12;
+      hence x in A |^.. m by A2,A5,Th2;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  A |^.. m c= (A |^.. m) ^^ (A*)
+  proof
+    <%>E in A* by FLANG_1:49;
+    hence thesis by FLANG_1:17;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th18:
+(A |^.. m) ^^ (A |^.. n) = A |^.. (m + n)
+proof
+  defpred P[Nat] means (A |^.. m) ^^ (A |^.. $1) = A |^.. (m + $1);
+A1:
+  P[0]
+  proof
+    thus (A |^.. m) ^^ (A |^.. 0) = (A |^.. m) ^^ (A*) by Th11
+                                 .= (A |^.. (m + 0)) by Th17;
+  end;
+A2:
+  now
+    let n;
+    assume
+A3:  P[n];
+    (A |^.. m) ^^ (A |^.. (n + 1))
+      = (A |^.. m) ^^ ((A |^.. n) ^^ A) by Th16
+     .= A |^.. (m + n) ^^ A by A3,FLANG_1:19
+     .= A |^.. (m + n + 1) by Th16;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem Th19:
+n > 0 implies (A |^.. m) |^ n = A |^.. (m * n)
+proof
+  defpred P[Nat] means $1 > 0 implies (A |^.. m) |^ $1 = A |^.. (m * $1);
+A1:
+  P[0];
+A2:
+  now
+    let n;
+    assume
+A3:  P[n];
+    now
+      assume n + 1 > 0;
+      per cases;
+        suppose
+A4:      n = 0;
+          thus (A |^.. m) |^ (n + 1) = A |^.. (m * (n + 1)) by A4,FLANG_1:26;
+        end;
+        suppose
+A5:      n > 0;
+          thus (A |^.. m) |^ (n + 1)
+            = (A |^.. (m * n)) ^^ (A |^.. m) by A3,A5,FLANG_1:24
+           .= A |^.. (m * n + m) by Th18
+           .= A |^.. (m * (n + 1));
+        end;
+    end;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem
+(A |^.. n)* = (A |^.. n)?
+proof
+A1:
+  (A |^.. n)? c= (A |^.. n)* by FLANG_2:86;
+  (A |^.. n)* c= (A |^.. n)?
+  proof
+    now
+      let x;
+      assume x in (A |^.. n)*;
+      then consider k such that
+A2:      x in (A |^.. n) |^ k by FLANG_1:42;
+      per cases;
+      suppose k = 0;
+        then x in (A |^.. n) |^ 0 \/ (A |^.. n) |^ 1 by A2,XBOOLE_0:def 2;
+        hence x in (A |^.. n)? by FLANG_2:75;
+      end;
+      suppose
+A3:      k > 0;
+        then
+A4:       k >= 0 + 1 by NAT_1:13;
+        (A |^.. n) |^ k c= A |^.. (n * k) by A3,Th19;
+        then consider l such that
+A5:       n * k <= l & x in A |^ l by A2,Th2;
+        n * k >= n by A4,REAL_2:146;
+        then l >= n by A5,XXREAL_0:2;
+        then x in A |^.. n by A5,Th2;
+        then x in (A |^.. n) |^ 1 by FLANG_1:26;
+        then x in (A |^.. n) |^ 0 \/ (A |^.. n) |^ 1 by XBOOLE_0:def 2;
+        hence x in (A |^.. n)? by FLANG_2:75;
+      end;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem Th21:
+A c= C |^.. m & B c= C |^.. n implies A ^^ B c= C |^.. (m + n)
+proof
+  assume
+A1:  A c= C |^.. m & B c= C |^.. n;
+  thus x in A ^^ B implies x in C |^.. (m + n)
+  proof
+    assume x in A ^^ B;
+    then consider a, b such that
+A2:    a in A & b in B & x = a ^ b by FLANG_1:def 1;
+    a ^ b in (C |^.. m) ^^ (C |^.. n) by A1,A2,FLANG_1:def 1;
+    hence thesis by A2,Th18;
+  end;
+end;
+
+theorem Th22:
+A |^.. (n + k) = (A |^.. n) ^^ (A |^ k)
+proof
+  defpred P[Nat] means A |^.. (n + $1) = (A |^.. n) ^^ (A |^ $1);
+A1:
+  P[0]
+  proof
+    thus A |^.. (n + 0) = (A |^.. n) ^^ {<%>E} by FLANG_1:14
+                       .= (A |^.. n) ^^ (A |^ 0) by FLANG_1:25;
+  end;
+A2:
+  now
+    let k be Nat;
+    assume
+A3:    P[k];
+    A |^.. (n + (k + 1)) = (A |^.. (n + k + 1))
+                        .= (A |^.. n) ^^ (A |^ k) ^^ A by A3,Th16
+                        .= (A |^.. n) ^^ ((A |^ k) ^^ A) by FLANG_1:19
+                        .= (A |^.. n) ^^ (A |^ (k + 1)) by FLANG_1:24;
+    hence P[k + 1];
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem Th23:
+A ^^ (A |^.. n) = (A |^.. n) ^^ A
+proof
+  defpred P[Nat] means A ^^ (A |^.. $1) = (A |^.. $1) ^^ A;
+A1:
+  P[0]
+  proof
+    thus A ^^ (A |^.. 0) = A ^^ (A*) by Th11
+                        .= (A*) ^^ A by FLANG_1:58
+                        .= (A |^.. 0) ^^ A by Th11;
+  end;
+A2:
+  now
+    let k be Nat;
+    assume
+A3:    P[k];
+    A ^^ (A |^.. (k + 1)) = A ^^ ((A |^.. k) ^^ A) by Th16
+                         .= (A |^.. k) ^^ A ^^ A by A3,FLANG_1:19
+                         .= (A |^.. (k + 1)) ^^ A by Th16;
+    hence P[k + 1];
+  end;
+  for k being Nat holds P[k] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem Th24:
+(A |^ k) ^^ (A |^.. n) = (A |^.. n) ^^ (A |^ k)
+proof
+  defpred P[Nat] means (A |^ $1) ^^ (A |^.. n) = (A |^.. n) ^^ (A |^ $1);
+A1:
+  P[0]
+  proof
+    thus (A |^ 0) ^^ (A |^.. n) = {<%>E} ^^ (A |^.. n) by FLANG_1:25
+                               .= (A |^.. n) by FLANG_1:14
+                               .= (A |^.. n) ^^ {<%>E} by FLANG_1:14
+                               .= (A |^.. n) ^^ (A |^ 0) by FLANG_1:25;
+  end;
+A2:
+  now
+    let k;
+    assume
+A3:    P[k];
+    (A |^ (k + 1)) ^^ (A |^.. n)
+      = ((A |^ k) ^^ A) ^^ (A |^.. n) by FLANG_1:24
+     .= (A ^^ (A |^ k)) ^^ (A |^.. n) by FLANG_1:33
+     .= A ^^ ((A |^.. n) ^^ (A |^ k)) by A3,FLANG_1:19
+     .= (A ^^ (A |^.. n)) ^^ (A |^ k) by FLANG_1:19
+     .= (A |^.. n) ^^ A ^^ (A |^ k) by Th23
+     .= (A |^.. n) ^^ (A ^^ (A |^ k)) by FLANG_1:19
+     .= (A |^.. n) ^^ ((A |^ k) ^^ A) by FLANG_1:33
+     .= (A |^.. n) ^^ (A |^ (k + 1)) by FLANG_1:24;
+    hence P[k + 1];
+  end;
+  for k holds P[k] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem Th25:
+(A |^ (k, l)) ^^ (A |^.. n) = (A |^.. n) ^^ (A |^ (k, l))
+proof
+  defpred P[Nat] means
+    (A |^ (k, l)) ^^ (A |^.. $1) = (A |^.. $1) ^^ (A |^ (k, l));
+A1:
+  P[0]
+  proof
+    thus (A |^ (k, l)) ^^ (A |^.. 0) = (A |^ (k, l)) ^^ (A*) by Th11
+                                    .= A* ^^ (A |^ (k, l)) by FLANG_2:66
+                                    .= (A |^.. 0) ^^ (A |^ (k, l)) by Th11;
+  end;
+A2:
+  now
+    let n;
+    assume
+A3:    P[n];
+    (A |^ (k, l)) ^^ (A |^.. (n + 1))
+      = (A |^ (k, l)) ^^ ((A |^.. n) ^^ A) by Th16
+     .= (A |^.. n) ^^ (A |^ (k, l)) ^^ A by A3,FLANG_1:19
+     .= (A |^.. n) ^^ ((A |^ (k, l)) ^^ A) by FLANG_1:19
+     .= (A |^.. n) ^^ (A ^^ (A |^ (k, l))) by FLANG_2:36
+     .= (A |^.. n) ^^ A ^^ (A |^ (k, l)) by FLANG_1:19
+     .= (A |^.. (n + 1)) ^^ (A |^ (k, l)) by Th16;
+    hence P[n + 1];
+  end;
+  for n holds P[n] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem
+<%>E in B implies A c= A ^^ (B |^.. n) & A c= (B |^.. n) ^^ A
+proof
+  assume <%>E in B;
+  then <%>E in B |^.. n by Th10;
+  hence thesis by FLANG_1:17;
+end;
+
+theorem Th27:
+(A |^.. m) ^^ (A |^.. n) = (A |^.. n) ^^ (A |^.. m)
+proof
+  thus (A |^.. m) ^^ (A |^.. n) = A |^.. (m + n) by Th18
+                               .= (A |^.. n) ^^ (A |^.. m) by Th18;
+end;
+
+theorem Th28:
+A c= B |^.. k & n > 0 implies A |^ n c= B |^.. k
+proof
+  assume
+A1:  A c= B |^.. k & n > 0;
+  defpred P[Nat] means $1 > 0 implies A |^ $1 c= B |^.. k;
+A2:
+  P[0];
+A3:
+  now
+    let m;
+    assume
+A4:    P[m];
+    per cases;
+    suppose m <= 0;
+      then m = 0;
+      hence P[m + 1] by A1,FLANG_1:26;
+    end;
+    suppose m > 0;
+      then (A |^ m) ^^ A c= (B |^.. k) ^^ (B |^.. k) by A1,A4,FLANG_1:18;
+      then A |^ (m + 1) c= (B |^.. k) ^^ (B |^.. k) by FLANG_1:24;
+      then
+A5:      A |^ (m + 1) c= (B |^.. (k + k)) by Th18;
+      k + k >= k by NAT_1:11;
+      then B |^.. (k + k) c= B |^.. k by Th5;
+      hence P[m + 1] by A5,XBOOLE_1:1;
+    end;
+  end;
+  for m holds P[m] from NAT_1:sch 2(A2, A3);
+  hence thesis by A1;
+end;
+
+theorem Th29:
+A c= B |^.. k & n > 0 implies A |^.. n c= B |^.. k
+proof
+  assume
+A1:  A c= B |^.. k & n > 0;
+  let x;
+  assume x in A |^.. n;
+  then consider m such that
+A2:  m >= n & x in A |^ m by Th2;
+  A |^ m c= B |^.. k by A1,A2,Th28;
+  hence x in B |^.. k by A2;
+end;
+
+theorem Th30:
+A* ^^ A = A |^.. 1
+proof
+A1:
+  now
+    let x;
+    assume x in A |^.. 1;
+    then consider n such that
+A2:   n >= 1 & x in A |^ n by Th2;
+    consider m such that
+A3:   m + 1 = n by A2,NAT_1:6;
+    A |^ (m + 1) c= (A*) ^^ A by FLANG_1:52;
+    hence x in (A*) ^^ A by A2,A3;
+  end;
+A4:
+  now
+    let x;
+    assume x in (A*) ^^ A;
+    then consider a1, a2 such that
+A5:   a1 in A* & a2 in A & x = a1 ^ a2 by FLANG_1:def 1;
+A6: a2 in A |^ 1 by A5,FLANG_1:26;
+    consider n such that
+A7:   a1 in A |^ n by A5,FLANG_1:42;
+    a1 ^ a2 in A |^ (n + 1) & n + 1 >= 1 by A6,A7,FLANG_1:41,NAT_1:11;
+    hence x in A |^.. 1 by A5,Th2;
+  end;
+  thus thesis by A1,A4,TARSKI:2;
+end;
+
+theorem
+A* ^^ (A |^ k) = A |^.. k
+proof
+  defpred P[Nat] means A* ^^ (A |^ $1) = A |^.. $1;
+A1:
+  P[0]
+  proof
+    thus A* ^^ (A |^ 0) = A* ^^ {<%>E} by FLANG_1:25
+                       .= A* by FLANG_1:14
+                       .= A |^.. 0 by Th11;
+  end;
+A2:
+  now
+    let k;
+    assume
+A3:    P[k];
+    A* ^^ (A |^ (k + 1)) = A* ^^ ((A |^ k) ^^ A) by FLANG_1:24
+                        .= A |^.. k ^^ A by A3,FLANG_1:19
+                        .= A |^.. (k + 1) by Th16;
+    hence P[k + 1];
+  end;
+  for k holds P[k] from NAT_1:sch 2(A1, A2);
+  hence thesis;
+end;
+
+theorem Th32:
+(A |^.. m) ^^ (A*) = A* ^^ (A |^.. m)
+proof
+  thus (A |^.. m) ^^ (A*) = (A |^.. m) ^^ (A |^.. 0) by Th11
+                         .= (A |^.. 0) ^^ (A |^.. m) by Th27
+                         .= A* ^^ (A |^.. m) by Th11;
+end;
+
+theorem Th33:
+k <= l implies (A |^.. n) ^^ (A |^ (k, l))  = A |^.. (n + k)
+proof
+  assume
+A1:  k <= l;
+A2:
+  (A |^.. n) ^^ (A |^ (k, l)) c= A |^.. (n + k)
+  proof
+    let x;
+    assume x in (A |^.. n) ^^ (A |^ (k, l));
+    then consider a, b such that
+A3:    a in A |^.. n & b in A |^ (k, l) & x = a ^ b by FLANG_1:def 1;
+    A |^ (k, l) c= A |^.. k by Th6;
+    then a ^ b in (A |^.. n) ^^ (A |^.. k) by A3,FLANG_1:def 1;
+    hence x in A |^.. (n + k) by A3,Th18;
+  end;
+  A |^.. (n + k) c= (A |^.. n) ^^ (A |^ (k, l))
+  proof
+    let x;
+    assume x in A |^.. (n + k);
+    then consider i such that
+A4:    i >= n + k & x in A |^ i by Th2;
+    consider m such that
+A5:    n + k + m = i by A4,NAT_1:10;
+    i = n + m + k by A5;
+    then x in (A |^ (n + m)) ^^ (A |^ k) by A4,FLANG_1:34;
+    then consider a, b such that
+A6:    a in A |^ (n + m) & b in A |^ k & x = a ^ b by FLANG_1:def 1;
+A7:  A |^ k c= A |^ (k, l) by A1,FLANG_2:20;
+    n + m >= n by NAT_1:11;
+    then A |^ (n + m) c= A |^.. n by Th3;
+    hence x in (A |^.. n) ^^ (A |^ (k, l)) by A6,A7,FLANG_1:def 1;
+  end;
+  hence thesis by A2,XBOOLE_0:def 10;
+end;
+
+theorem
+k <= l implies A* ^^ (A |^ (k, l)) = A |^.. k
+proof
+  assume k <= l;
+  then (A |^.. 0) ^^ (A |^ (k, l))  = A |^.. (0 + k) by Th33;
+  hence thesis by Th11;
+end;
+
+theorem Th35:
+(A |^ m) |^.. n c= A |^.. (m * n)
+proof
+  let x;
+  assume x in (A |^ m) |^.. n;
+  then consider k such that
+A1:  k >= n & x in (A |^ m) |^ k by Th2;
+A2:
+  x in A |^ (m * k) by A1,FLANG_1:35;
+  m * k >= m * n by A1,XREAL_1:66;
+  hence x in A |^.. (m * n) by A2,Th2;
+end;
+
+theorem
+(A |^ m) |^.. n c= (A |^.. n) |^ m
+proof
+  per cases;
+  suppose
+A1:  m > 0;
+    (A |^ m) |^.. n c= A |^.. (m * n) by Th35;
+    hence thesis by A1,Th19;
+  end;
+  suppose m <= 0;
+    then
+A2:    m = 0;
+    (A |^ m) |^.. n = {<%>E} |^.. n by A2,FLANG_1:25
+                   .= {<%>E} by Th15
+                   .= (A |^.. n) |^ m by A2,FLANG_1:25;
+    hence thesis;
+  end;
+end;
+
+theorem Th37:
+a in C |^.. m & b in C |^.. n implies a ^ b in C |^.. (m + n)
+proof
+  assume a in C |^.. m & b in C |^.. n;
+  then
+A1:  a ^ b in (C |^.. m) ^^ (C |^.. n) by FLANG_1:def 1;
+  (C |^.. m) ^^ (C |^.. n) c= C |^.. (m + n) by Th21;
+  hence thesis by A1;
+end;
+
+theorem Th38:
+A |^.. k = {x} implies x = <%>E
+proof
+  assume
+A1:  A |^.. k = {x} & x <> <%>E;
+  then
+A2:  x in A |^.. k by ZFMISC_1:37;
+  k + k >= k by NAT_1:11;
+  then
+A3:  A |^.. (k + k) c= A |^.. k by Th5;
+  reconsider a = x as Element of E^omega by A1,ZFMISC_1:37;
+A4:
+  a ^ a in A |^.. (k + k) by A2,Th37;
+  a ^ a <> x by A1,FLANG_1:12;
+  hence thesis by A1,A3,A4,TARSKI:def 1;
+end;
+
+theorem
+A c= B* implies A |^.. n c= B*
+proof
+  assume
+A1:  A c= B*;
+  let x;
+  assume x in A |^.. n;
+  then consider k such that
+A2:  k >= n & x in A |^ k by Th2;
+  A |^ k c= B* by A1,FLANG_1:60;
+  hence x in B* by A2;
+end;
+
+theorem Th40:
+A? c= A |^.. k iff k = 0 or <%>E in A
+proof
+  thus A? c= A |^.. k implies k = 0 or <%>E in A
+  proof
+    assume
+A1:    A? c= A |^.. k;
+    <%>E in A? by FLANG_2:78;
+    hence thesis by A1,Th10;
+  end;
+  assume k = 0 or <%>E in A;
+  then A |^.. k = A* by Th11;
+  hence thesis by FLANG_2:86;
+end;
+
+theorem Th41:
+A |^.. k ^^ (A?) = A |^.. k
+proof
+  thus A |^.. k ^^ (A?) = A |^.. k ^^ (A |^ (0, 1)) by FLANG_2:79
+                       .= A |^.. (k + 0) by Th33
+                       .= A |^.. k;
+
+end;
+
+theorem
+A |^.. k ^^ (A?) = A? ^^ (A |^.. k)
+proof
+  thus A |^.. k ^^ (A?) = A |^.. k ^^ (A |^ (0, 1)) by FLANG_2:79
+                       .= A |^ (0, 1) ^^ (A |^.. k) by Th25
+                       .= A? ^^ (A |^.. k) by FLANG_2:79;
+end;
+
+theorem
+B c= A* implies A |^.. k ^^ B c= A |^.. k & B ^^ (A |^.. k) c= A |^.. k
+proof
+  assume B c= A*;
+  then A |^.. k ^^ B c= A |^.. k ^^ (A*) &
+       B ^^ (A |^.. k) c= A* ^^ (A |^.. k) by FLANG_1:18;
+  then A |^.. k ^^ B c= A |^.. k ^^ (A*) &
+       B ^^ (A |^.. k) c= A |^.. k ^^ (A*) by Th32;
+  hence thesis by Th17;
+end;
+
+theorem Th44:
+(A /\ B) |^.. k c= (A |^.. k) /\ (B |^.. k)
+proof
+  thus x in (A /\ B) |^.. k implies x in (A |^.. k) /\ (B |^.. k)
+  proof
+    assume x in (A /\ B) |^.. k;
+    then consider m such that
+A1:    k <= m & x in (A /\ B) |^ m by Th2;
+    (A /\ B) |^ m c= (A |^ m) /\ (B |^ m) by FLANG_1:40;
+    then
+A2:    x in (A |^ m) /\ (B |^ m) by A1;
+    A |^ m c= A |^.. k & B |^ m c= B |^.. k by A1,Th3;
+    then (A |^ m) /\ (B |^ m) c= (A |^.. k) /\ (B |^.. k) by XBOOLE_1:27;
+    hence thesis by A2;
+  end;
+end;
+
+theorem Th45:
+(A |^.. k) \/ (B |^.. k) c= (A \/ B) |^.. k
+proof
+  thus x in (A |^.. k) \/ (B |^.. k) implies x in (A \/ B) |^.. k
+  proof
+    assume
+A1:    x in (A |^.. k) \/ (B |^.. k);
+    per cases by A1,XBOOLE_0:def 2;
+    suppose x in (A |^.. k);
+      then consider m such that
+A2:      k <= m & x in A |^ m by Th2;
+A3:    A |^ m c= (A |^ m) \/ (B |^ m) by XBOOLE_1:7;
+      (A |^ m) \/ (B |^ m) c= (A \/ B) |^ m by FLANG_1:39;
+      then A |^ m c= (A \/ B) |^ m by A3,XBOOLE_1:1;
+      then
+A4:      x in (A \/ B) |^ m by A2;
+      (A \/ B) |^ m c= (A \/ B) |^.. k by A2,Th3;
+      hence thesis by A4;
+    end;
+    suppose x in (B |^.. k);
+      then consider m such that
+A5:      k <= m & x in B |^ m by Th2;
+A6:    B |^ m c= (A |^ m) \/ (B |^ m) by XBOOLE_1:7;
+      (A |^ m) \/ (B |^ m) c= (A \/ B) |^ m by FLANG_1:39;
+      then B |^ m c= (A \/ B) |^ m by A6,XBOOLE_1:1;
+      then
+A7:      x in (A \/ B) |^ m by A5;
+      (A \/ B) |^ m c= (A \/ B) |^.. k by A5,Th3;
+      hence thesis by A7;
+    end;
+  end;
+end;
+
+theorem Th46:
+<%x%> in A |^.. k iff <%x%> in A & (<%>E in A or k <= 1)
+proof
+  thus <%x%> in A |^.. k implies <%x%> in A & (<%>E in A or k <= 1)
+  proof
+    assume <%x%> in A |^.. k;
+    then consider m such that
+A1:    k <= m & <%x%> in A |^ m by Th2;
+    thus thesis by A1,FLANG_2:9;
+  end;
+  assume
+A2:  <%x%> in A & (<%>E in A or k <= 1);
+  per cases by A2,NAT_1:26;
+  suppose <%>E in A & k > 1;
+    then <%x%> in A |^ k by A2,FLANG_2:9;
+    hence thesis by Th2;
+  end;
+  suppose k = 0;
+    then A |^.. k = A* by Th11;
+    hence thesis by A2,FLANG_1:73;
+  end;
+  suppose k = 1;
+    then <%x%> in A |^ k by A2,FLANG_1:26;
+    hence thesis by Th2;
+  end;
+end;
+
+theorem Th47:
+A c= B |^.. k implies B |^.. k = (B \/ A) |^.. k
+proof
+  assume
+A1:  A c= B |^.. k;
+  B |^ 1 c= B |^.. 1 by Th3;
+  then
+A2: B c= B |^.. 1 by FLANG_1:26;
+  defpred P[Nat] means $1 >= k implies (B \/ A) |^ $1 c= B |^.. k;
+A3:
+  P[0]
+  proof
+    assume 0 >= k;
+    then k = 0;
+    then
+A4:   B |^.. k = B* by Th11;
+A5: (B \/ A) |^ 0 = {<%>E} by FLANG_1:25;
+    <%>E in B* by FLANG_1:49;
+    hence thesis by A4,A5,ZFMISC_1:37;
+  end;
+A6:
+  now
+    let n;
+    assume
+A7:   P[n];
+    now
+      assume
+A8:     n + 1 >= k;
+      per cases by A8,NAT_1:8;
+      suppose
+A9:     n + 1 = k;
+        per cases;
+        suppose k = 0;
+          hence (B \/ A) |^ (n + 1) c= B |^.. k by A9;
+        end;
+        suppose
+A10:       k > 0;
+          then k >= 0 + 1 by NAT_1:13;
+          then B |^.. k c= B |^.. 1 by Th5;
+          then A c= B |^.. 1 by A1,XBOOLE_1:1;
+          then B \/ A c= B |^.. 1 by A2,XBOOLE_1:8;
+          then
+A11:          (B \/ A) |^ k c= (B |^.. 1) |^ k by FLANG_1:38;
+          (B |^.. 1) |^ k c= B |^.. (1 * k) by A10,Th19;
+          hence (B \/ A) |^ (n + 1) c= B |^.. k by A9,A11,XBOOLE_1:1;
+        end;
+      end;
+      suppose
+A12:     n >= k;
+A13:     (B \/ A) |^ (n + 1)
+          = (B \/ A) |^ n ^^ (B \/ A) by FLANG_1:24
+         .= (B \/ A) |^ n ^^ B \/ (B \/ A) |^ n ^^ A by FLANG_1:21;
+A14:    (B \/ A) |^ n ^^ B c= B |^.. (k + 1) by A2,A7,A12,Th21;
+        k + 1 >= k by NAT_1:11;
+        then B |^.. (k + 1) c= B |^.. k by Th5;
+        then
+A15:       (B \/ A) |^ n ^^ B c= B |^.. k by A14,XBOOLE_1:1;
+A16:     (B \/ A) |^ n ^^ A c= B |^.. (k + k) by A1,A7,A12,Th21;
+        k + k >= k by NAT_1:11;
+        then B |^.. (k + k) c= B |^.. k by Th5;
+        then (B \/ A) |^ n ^^ A c= B |^.. k by A16,XBOOLE_1:1;
+        hence (B \/ A) |^ (n + 1) c= B |^.. k by A13,A15,XBOOLE_1:8;
+      end;
+    end;
+    hence P[n + 1];
+  end;
+A17:
+  for n holds P[n] from NAT_1:sch 2(A3, A6);
+A18:
+  (B \/ A) |^.. k c= B |^.. k
+  proof
+    let x;
+    assume x in (B \/ A) |^.. k;
+    then consider n such that
+A19:   n >= k & x in (B \/ A) |^ n by Th2;
+    (B \/ A) |^ n c= B |^.. k by A17,A19;
+    hence x in B |^.. k by A19;
+  end;
+  B c= B \/ A by XBOOLE_1:7;
+  then B |^.. k c= (B \/ A) |^.. k by Th13;
+  hence thesis by A18,XBOOLE_0:def 10;
+end;
+
+begin
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Positive Closure
+:: Definition of +
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition
+  let E, A;
+  func A+ -> Subset of E^omega equals
+    union { B: ex n st n > 0 & B = A |^ n };
+  coherence
+  proof
+    defpred P[set] means ex n st n > 0 & $1 = A |^ n;
+    reconsider M = { B: P[B] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
+    union M is Subset of E^omega;
+    hence thesis;
+  end;
+end;
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Positive Closure
+:: Properties of +
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+theorem Th48:
+x in A+ iff ex n st n > 0 & x in A |^ n
+proof
+  thus x in A+ implies ex n st n > 0 & x in A |^ n
+  proof
+    assume x in A+;
+    then consider X such that
+A1:   x in X and
+A2:   X in { B: ex n st n > 0 & B = A |^ n } by TARSKI:def 4;
+    defpred P[set] means ex n st n > 0 & $1 = A |^ n;
+A3: X in { B: P[B] } by A2;
+    P[X] from CARD_FIL:sch 1(A3);
+    hence thesis by A1;
+  end;
+  given n such that
+A4:  n > 0 & x in A |^ n;
+  defpred P[set] means ex n st n > 0 & $1 = A |^ n;
+  consider B such that
+A5:  x in B & P[B] by A4;
+  reconsider A = { C : P[C] } as Subset-Family of E^omega from DOMAIN_1:sch 7;
+  B in A by A5;
+  hence thesis by A5,TARSKI:def 4;
+end;
+
+theorem Th49:
+n > 0 implies A |^ n c= A+
+proof
+  assume n > 0;
+  then for x holds x in A |^ n implies x in A+ by Th48;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem Th50:
+A+ = A |^.. 1
+proof
+A1:
+  now
+    let x;
+    assume x in A |^.. 1;
+    then consider k such that
+A2:    1 <= k & x in A |^ k by Th2;
+    thus x in A+ by A2,Th48;
+  end;
+  now
+    let x;
+    assume x in A+;
+    then consider k such that
+A3:    0 < k & x in A |^ k by Th48;
+    0 + 1 <= k by A3,NAT_1:13;
+    hence x in A |^.. 1 by A3,Th2;
+  end;
+  hence thesis by A1,TARSKI:2;
+end;
+
+theorem
+A+ = {} iff A = {}
+proof
+  A+ = A |^.. 1 by Th50;
+  hence thesis by Th4;
+end;
+
+theorem Th52:
+A+ = (A*) ^^ A
+proof
+  A* ^^ A = A |^.. 1 by Th30;
+  hence thesis by Th50;
+end;
+
+theorem Th53:
+A* = {<%>E} \/ (A+)
+proof
+  thus A* = {<%>E} \/ ((A*) ^^ A) by FLANG_1:57
+         .= {<%>E} \/ (A+) by Th52;
+end;
+
+theorem
+A+ = A |^ (1, n) \/ A |^.. (n + 1)
+proof
+A1:
+  0 + 1 <= n + 1 by XREAL_1:9;
+  thus A+ = A |^.. 1 by Th50
+         .= A |^ (1, n) \/ A |^.. (n + 1) by A1,Th7;
+end;
+
+theorem Th55:
+A+ c= A*
+proof
+  A |^.. 1 c= A* by Th9;
+  hence thesis by Th50;
+end;
+
+theorem Th56:
+<%>E in A+ iff <%>E in A
+proof
+  A+ = A |^.. 1 by Th50;
+  hence thesis by Th10;
+end;
+
+theorem Th57:
+A+ = A* iff <%>E in A
+proof
+  thus A+ = A* implies <%>E in A
+  proof
+    assume A+ = A*;
+    then <%>E in A+ by FLANG_1:49;
+    hence thesis by Th56;
+  end;
+  assume <%>E in A;
+  then A* = (A*) ^^ A by FLANG_1:55;
+  hence thesis by Th52;
+end;
+
+theorem Th58:
+A c= B implies A+ c= B+
+proof
+  assume A c= B;
+  then A |^.. 1 c= B |^.. 1 by Th13;
+  then A+ c= B |^.. 1 by Th50;
+  hence thesis by Th50;
+end;
+
+theorem Th59:
+A c= A+
+proof
+  A |^ 1 c= A+ by Th49;
+  hence thesis by FLANG_1:26;
+end;
+
+theorem Th60:
+(A*)+ = A* & (A+)* = A*
+proof
+A1:
+  A* c= (A*)+ by Th59;
+  A c= A+ by Th59;
+  then
+A2:  A* c= (A+)* by FLANG_1:62;
+A3:
+  (A*)+ c= A*
+  proof
+    now
+      let x;
+      assume x in (A*)+;
+      then consider k such that
+A4:      0 < k & x in (A*) |^ k by Th48;
+      (A*) |^ k c= A* by FLANG_1:66;
+      hence x in A* by A4;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+A5:
+  (A+)* c= A*
+  proof
+    now
+      let x;
+      assume x in (A+)*;
+      then consider k such that
+A6:      x in (A+) |^ k by FLANG_1:42;
+      A+ c= A* by Th55;
+      then (A+) |^ k c= A* by FLANG_1:60;
+      hence x in A* by A6;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  thus thesis by A1,A2,A3,A5,XBOOLE_0:def 10;
+end;
+
+theorem Th61:
+A c= B* implies A+ c= B*
+proof
+  assume A c= B*;
+  then A+ c= (B*)+ by Th58;
+  hence thesis by Th60;
+end;
+
+theorem
+(A+)+ = A+
+proof
+A1:
+  A+ c= (A+)+ by Th59;
+  (A+)+ c= A+
+  proof
+    now
+      let x;
+      assume that
+A2:      x in (A+)+;
+      per cases;
+      suppose x = <%>E;
+        hence x in A+ by A2,Th56;
+      end;
+      suppose x <> <%>E;
+        then
+A3:       not x in {<%>E} by TARSKI:def 1;
+        A+ c= A* by Th55;
+        then (A+)+ c= A* by Th61;
+        then x in A* by A2;
+        then x in (A+) \/ {<%>E} by Th53;
+        hence x in A+ by A3,XBOOLE_0:def 2;
+      end;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+  hence thesis by A1,XBOOLE_0:def 10;
+end;
+
+theorem
+x in A & x <> <%>E implies A+ <> {<%>E}
+proof
+  assume
+A1:  x in A & x <> <%>E;
+  A+ = A |^.. 1 by Th50;
+  hence thesis by A1,Th14;
+end;
+
+theorem
+A+ = {<%>E} iff A = {<%>E}
+proof
+  A+ = A |^.. 1 by Th50;
+  hence thesis by Th15;
+end;
+
+theorem
+(A+)? = A* & (A?)+ = A*
+proof
+  thus (A+)? = {<%>E} \/ (A+) by FLANG_2:76
+            .= A* by Th53;
+  thus (A?)+ = A*
+  proof
+    <%>E in A? by FLANG_2:78;
+    then (A?)+ = (A?)* by Th57;
+    hence thesis by FLANG_2:85;
+  end;
+end;
+
+theorem Th66:
+a in C+ & b in C+ implies a ^ b in C+
+proof
+  assume
+A1:  a in C+ & b in C+;
+  consider k such that
+A2: k > 0 & a in C |^ k by A1,Th48;
+  consider l such that
+A3: l > 0 & b in C |^ l by A1,Th48;
+A4:
+  k + l > 0 by A2,XREAL_1:36;
+  a ^ b in C |^ (k + l) by A2,A3,FLANG_1:41;
+  hence thesis by A4,Th48;
+end;
+
+theorem
+A c= C+ & B c= C+ implies A ^^ B c= C+
+proof
+  assume
+A1:  A c= C+ & B c= C+;
+  now
+    let x;
+    assume x in A ^^ B;
+    then consider a, b such that
+A2:    a in A & b in B & x = a ^ b by FLANG_1:def 1;
+    thus x in C+ by A1,A2,Th66;
+  end;
+  hence thesis by TARSKI:def 3;
+end;
+
+theorem
+A ^^ A c= A+
+proof
+  A ^^ A = A |^ 2 by FLANG_1:27;
+  hence thesis by Th49;
+end;
+
+theorem
+A+ = {x} implies x = <%>E
+proof
+  assume A+ = {x} & x <> <%>E;
+  then A |^.. 1 = {x} & x <> <%>E by Th50;
+  hence thesis by Th38;
+end;
+
+theorem
+A ^^ (A+) = (A+) ^^ A
+proof
+  thus A ^^ (A+) = A ^^ (A |^.. 1) by Th50
+                .= (A |^.. 1) ^^ A by Th23
+                .= A+ ^^ A by Th50;
+end;
+
+theorem
+(A |^ k) ^^ (A+) = (A+) ^^ (A |^ k)
+proof
+  thus (A |^ k) ^^ (A+) = (A |^ k) ^^ (A |^.. 1) by Th50
+                       .= (A |^.. 1) ^^ (A |^ k) by Th24
+                       .= A+ ^^ (A |^ k) by Th50;
+end;
+
+theorem Th72:
+(A |^ (m, n)) ^^ (A+) = A+ ^^ (A |^ (m, n))
+proof
+  thus (A |^ (m, n)) ^^ (A+) = (A |^ (m, n)) ^^ (A |^.. 1) by Th50
+                            .= (A |^.. 1) ^^ (A |^ (m, n)) by Th25
+                            .= A+ ^^ (A |^ (m, n)) by Th50;
+end;
+
+theorem
+<%>E in B implies A c= A ^^ (B+) & A c= (B+) ^^ A
+proof
+  assume <%>E in B;
+  then B+ = B* by Th57;
+  hence thesis by FLANG_2:18;
+end;
+
+theorem
+A+ ^^ (A+) = A |^.. 2
+proof
+  thus A+ ^^ (A+) = A |^.. 1 ^^ (A+) by Th50
+                 .= A |^.. 1 ^^ (A |^.. 1) by Th50
+                 .= A |^.. (1 + 1) by Th18
+                 .= A |^.. 2;
+end;
+
+theorem Th75:
+A+ ^^ (A |^ k) = A |^.. (k + 1)
+proof
+  thus A+ ^^ (A |^ k) = (A |^.. 1) ^^ (A |^ k) by Th50
+                     .= A |^.. (k + 1) by Th22;
+end;
+
+theorem
+A+ ^^ A = A |^.. 2
+proof
+  A+ ^^ A = A+ ^^ (A |^ 1) by FLANG_1:26
+         .= A |^.. (1 + 1) by Th75;
+  hence thesis;
+end;
+
+theorem
+k <= l implies A+ ^^ (A |^ (k, l)) = A |^.. (k + 1)
+proof
+  assume k <= l;
+  then (A |^.. 1) ^^ (A |^ (k, l))  = A |^.. (1 + k) by Th33;
+  hence thesis by Th50;
+end;
+
+theorem
+A c= B+ & n > 0 implies A |^ n c= B+
+proof
+  assume
+A1:  A c= B+ & n > 0;
+  then A c= B |^.. 1 by Th50;
+  then A |^ n c= B |^.. 1 by A1,Th28;
+  hence thesis by Th50;
+end;
+
+theorem
+A+ ^^ (A?) = A? ^^ (A+)
+proof
+  thus A+ ^^ (A?) = A+ ^^ (A |^ (0, 1)) by FLANG_2:79
+                 .= A |^ (0, 1) ^^ (A+) by Th72
+                 .= A? ^^ (A+) by FLANG_2:79;
+end;
+
+theorem
+A+ ^^ (A?) = A+
+proof
+  thus A+ ^^ (A?) = A |^.. 1 ^^ (A?) by Th50
+                 .= A |^.. 1 by Th41
+                 .= A+ by Th50;
+end;
+
+theorem
+A? c= A+ iff <%>E in A
+proof
+  A+ = A |^.. 1 by Th50;
+  hence thesis by Th40;
+end;
+
+theorem
+A c= B+ implies A+ c= B+
+proof
+  assume A c= B+;
+  then A c= B |^.. 1 by Th50;
+  then A |^.. 1 c= B |^.. 1 by Th29;
+  then A+ c= B |^.. 1 by Th50;
+  hence A+ c= B+ by Th50;
+end;
+
+theorem
+A c= B+ implies B+ = (B \/ A)+
+proof
+  assume A c= B+;
+  then A c= B |^.. 1 by Th50;
+  then B |^.. 1 = (B \/ A) |^.. 1 by Th47;
+  then B |^.. 1 = (B \/ A)+ by Th50;
+  hence thesis by Th50;
+end;
+
+theorem
+n > 0 implies A |^.. n c= A+
+proof
+  assume
+A1:  n > 0;
+  let x;
+  assume x in A |^.. n;
+  then consider k such that
+A2:  k >= n & x in A |^ k by Th2;
+  thus x in A+ by A1,A2,Th48;
+end;
+
+theorem
+m > 0 implies A |^ (m, n) c= A+
+proof
+  assume
+A1:  m > 0;
+  let x;
+  assume x in A |^ (m, n);
+  then consider k such that
+A2:  m <= k & k <= n & x in A |^ k by FLANG_2:19;
+  thus x in A+ by A1,A2,Th48;
+end;
+
+theorem Th86:
+A* ^^ (A+) = A+ ^^ (A*)
+proof
+  thus A* ^^ (A+) = A* ^^ (A |^.. 1) by Th50
+                 .= (A |^.. 1) ^^ (A*) by Th32
+                 .= A+ ^^ (A*) by Th50;
+end;
+
+theorem Th87:
+A+ |^ k c= A |^.. k
+proof
+  per cases;
+  suppose k > 0;
+    then (A |^.. 1) |^ k c= A |^.. (1 * k) by Th19;
+    hence thesis by Th50;
+  end;
+  suppose
+A1:  k = 0;
+    then
+A2:    A+ |^ k = {<%>E} by FLANG_1:25;
+    A |^.. 0 = A* by Th11;
+    then <%>E in A |^.. 0 by FLANG_1:49;
+    hence thesis by A1,A2,ZFMISC_1:37;
+  end;
+end;
+
+theorem
+A+ |^ (m, n) c= A |^.. m
+proof
+  let x;
+  assume x in A+ |^ (m, n);
+  then consider k such that
+A1:  m <= k & k <= n & x in A+ |^ k by FLANG_2:19;
+  A+ |^ k c= A |^.. k by Th87;
+  then
+A2:  x in A |^.. k by A1;
+  A |^.. k c= A |^.. m by A1,Th5;
+  hence thesis by A2;
+end;
+
+theorem
+A c= B+ & n > 0 implies A |^.. n c= B+
+proof
+  assume
+A1:  A c= B+ & n > 0;
+  A c= B |^.. 1 by A1,Th50;
+  then A |^.. n c= B |^.. 1 by A1,Th29;
+  hence thesis by Th50;
+end;
+
+theorem Th90:
+A+ ^^ (A |^.. k) = A |^.. (k + 1)
+proof
+  thus A+ ^^ (A |^.. k) = (A |^.. 1) ^^ (A |^.. k) by Th50
+                       .= A |^.. (k + 1) by Th18;
+end;
+
+theorem
+A+ ^^ (A |^.. k) = A |^.. k ^^ (A+)
+proof
+  thus A+ ^^ (A |^.. k) = A |^.. (k + 1) by Th90
+                       .= (A |^.. k) ^^ (A |^.. 1) by Th18
+                       .= A |^.. k ^^ (A+) by Th50;
+end;
+
+theorem Th92:
+A+ ^^ (A*) = A+
+proof
+  thus A+ ^^ (A*) = (A |^.. 1) ^^ (A*) by Th50
+                 .= A |^.. 1 by Th17
+                 .= A+ by Th50;
+end;
+
+theorem
+B c= A* implies A+ ^^ B c= A+ & B ^^ (A+) c= A+
+proof
+  assume B c= A*;
+  then A+ ^^ B c= A+ ^^ (A*) & B ^^ (A+) c= A* ^^ (A+) by FLANG_1:18;
+  then A+ ^^ B c= A+ ^^ (A*) & B ^^ (A+) c= A+ ^^ (A*) by Th86;
+  hence thesis by Th92;
+end;
+
+theorem
+(A /\ B)+ c= (A+) /\ (B+)
+proof
+  (A /\ B)+ = (A /\ B) |^.. 1 & A+ = A |^.. 1 & B+ = B |^.. 1 by Th50;
+  hence thesis by Th44;
+end;
+
+theorem
+(A+) \/ (B+) c= (A \/ B)+
+proof
+  (A \/ B)+ = (A \/ B) |^.. 1 & A+ = A |^.. 1 & B+ = B |^.. 1 by Th50;
+  hence thesis by Th45;
+end;
+
+theorem
+<%x%> in A+ iff <%x%> in A
+proof
+  A+ = A |^.. 1 by Th50;
+  hence thesis by Th46;
+end;

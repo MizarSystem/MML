@@ -7,13 +7,13 @@
 environ
 
  vocabularies FUNCT_1, PARTFUN1, BOOLE, RELAT_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
-      BINOP_1, SETWISEO, FINSEQOP, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, RELAT_1,
+      BINOP_1, SETWISEO, FINSEQOP;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NAT_1, RELAT_1,
       FUNCT_1, FINSEQ_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3, FUNCOP_1,
       FINSEQ_2, SETWISEO;
  constructors PARTFUN1, BINOP_1, FUNCT_3, FUNCOP_1, SETWISEO, NAT_1, FINSEQ_2;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      ARYTM_3, FINSEQ_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1,
+      FINSEQ_2, ORDINAL1, XCMPLX_0;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions BINOP_1, FUNCOP_1, FINSEQ_2;
  theorems ZFMISC_1, FUNCT_1, FUNCT_2, FUNCOP_1, FINSEQ_1, BINOP_1, SETWISEO,
@@ -111,7 +111,7 @@ A1:  [x1,x2] in dom F;
          .= X --> F.(x1,x2) by A1,FUNCOP_1:23;
  end;
 
- reserve i,j for Element of NAT;
+ reserve i,j for Nat;
 
  reserve F for Function of [:D,D':],E;
  reserve p,q for FinSequence of D, p',q' for FinSequence of D';
@@ -154,7 +154,7 @@ A1:  len q = len(p^<*d*>) by FINSEQ_2:37;
 A2:  len(p^<*d*>) = i by FINSEQ_2:19;
 A3:  len r = len(h*p)+1 by FINSEQ_2:19;
 A4:  len(h*p) = len p by FINSEQ_2:37;
-       now let j;
+       now let j be Nat;
     assume
 A5:   j in Seg i;
 then A6:   j in dom q & j in dom r by A1,A2,A3,A4,FINSEQ_1:def 3;
@@ -234,7 +234,7 @@ A1:  len T = i & len T' = i by FINSEQ_2:109;
 then A2:  len r = i+1 by FINSEQ_2:86;
 A3:  len pq = i by A1,FINSEQ_2:86;
 A4:  len s = len pq + 1 by FINSEQ_2:19;
-       now let j;
+       now let j be Nat;
     assume
 A5:   j in Seg(i+1);
 then A6:   j in dom r by A2,FINSEQ_1:def 3;
@@ -260,9 +260,9 @@ A10:     j = i+1;
  end;
 
 theorem
-       F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'))
+  F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'))
  proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
      for S being Element of $1-tuples_on D,
          S' being Element of $1-tuples_on D' holds
        F.:(T^S,T'^S') = (F.:(T,T'))^(F.:(S,S'));
@@ -292,7 +292,7 @@ A4:     S' = S1'^<*d'*> by FINSEQ_2:137;
          .= (F.:(T,T'))^(F.:(S,S')) by A3,A4,Th11;
      end;
 then A5: for j st P[j] holds P[j+1];
-    for j holds P[j] from NAT_1:sch 1(A1,A5);
+    for j holds P[j] from NAT_1:sch 2(A1,A5);
   hence thesis;
  end;
 
@@ -305,7 +305,7 @@ A1: len pd = i + 1 by FINSEQ_2:19;
 A2: len q = i by FINSEQ_2:92;
 A3: len r = i + 1 by A1,FINSEQ_2:92;
 A4: len s = len q + 1 by FINSEQ_2:19;
-       now let j;
+       now let j be Nat;
     assume
 A5:   j in Seg(i+1);
 then A6:   j in dom r by A3,FINSEQ_1:def 3;
@@ -361,7 +361,7 @@ A1: len pd = i + 1 by FINSEQ_2:19;
 A2: len q = i by FINSEQ_2:98;
 A3: len r = i + 1 by A1,FINSEQ_2:98;
 A4: len s = len q + 1 by FINSEQ_2:19;
-       now let j;
+       now let j be Nat;
     assume
 A5:   j in Seg(i+1);
 then A6:   j in dom r by A3,FINSEQ_1:def 3;
@@ -386,7 +386,7 @@ A9:     j = i+1;
  end;
 
 theorem
-       F[:](p^q,d') = (F[:](p,d'))^(F[:](q,d'))
+  F[:](p^q,d') = (F[:](p,d'))^(F[:](q,d'))
  proof
   defpred P[FinSequence of D] means
     F[:](p^($1),d') = (F[:](p,d'))^(F[:]($1,d'));
@@ -719,7 +719,7 @@ A3: dom(h*f) = C by FUNCT_2:def 1;
   reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
   thus h*(F[;](d,f)) = h*(F.:(g,f)) by FUNCT_2:def 1
                   .= H.:(h*g,h*f) by A1,Th38
-                  .= H[;](h.d,h*f) by A2,FUNCOP_1:23,A3;
+                  .= H[;](h.d,h*f) by A2,A3,FUNCOP_1:23;
  end;
 
 theorem Th40:
@@ -732,7 +732,7 @@ A3: dom(h*f) = C by FUNCT_2:def 1;
   reconsider g = C --> d as Function of C,D by FUNCOP_1:58;
   thus h*(F[:](f,d)) = h*(F.:(f,g)) by FUNCT_2:def 1
                   .= H.:(h*f,h*g) by A1,Th38
-                  .= H[:](h*f,h.d) by A2,FUNCOP_1:23,A3;
+                  .= H[:](h*f,h.d) by A2,A3,FUNCOP_1:23;
  end;
 
 theorem

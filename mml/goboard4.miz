@@ -8,13 +8,13 @@ environ
 
  vocabularies PRE_TOPC, EUCLID, FINSEQ_1, GOBOARD1, FINSEQ_4, RELAT_1, INCSP_1,
       MATRIX_1, TREES_1, BOOLE, FUNCT_1, ARYTM_1, ABSVALUE, MATRIX_2, TOPREAL1,
-      GOBOARD2, MCART_1, TOPREAL4, GOBOARD4, NAT_1, RCOMP_1;
+      GOBOARD2, MCART_1, TOPREAL4, GOBOARD4, RCOMP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, REAL_1,
-      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, FINSEQ_1, STRUCT_0, PRE_TOPC,
-      FINSEQ_4, MATRIX_1, EUCLID, TOPREAL1, TOPREAL4, GOBOARD1, GOBOARD2,
-      XXREAL_0, XXREAL_1;
- constructors NAT_1, XXREAL_1, COMPLEX1, FINSEQ_3, FINSEQ_4, TOPREAL1,
-      TOPREAL4, GOBOARD2;
+      COMPLEX1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, STRUCT_0,
+      PRE_TOPC, FINSEQ_4, MATRIX_1, EUCLID, TOPREAL1, TOPREAL4, GOBOARD1,
+      GOBOARD2, XXREAL_0, XXREAL_1;
+ constructors PARTFUN1, NAT_1, XXREAL_1, COMPLEX1, FINSEQ_3, FINSEQ_4,
+      TOPREAL1, TOPREAL4, GOBOARD2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
       FINSEQ_1, STRUCT_0, EUCLID, GOBOARD2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -22,7 +22,7 @@ environ
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FINSEQ_1, ABSVALUE, FINSEQ_2,
       REAL_2, MATRIX_1, TOPREAL1, TOPREAL4, GOBOARD1, GOBOARD2, FINSEQ_3,
       FINSEQ_4, FUNCT_1, PARTFUN2, INT_1, XBOOLE_0, XBOOLE_1, XREAL_1,
-      COMPLEX1, XXREAL_0, XXREAL_1;
+      COMPLEX1, XXREAL_0, XXREAL_1, ORDINAL1, PARTFUN1;
  schemes NAT_1, GOBOARD2, FINSEQ_4;
 
 begin
@@ -90,9 +90,10 @@ then A13:    0+1<=width G1 & 0+1<=len G1 by NAT_1:14;
      $1 in dom G1 & rng g /\ rng Line(G1,$1) <> {};
     A20: ex n st P[n]
      proof
-      consider i such that
+      consider i being Nat such that
       A21: i in dom Col(G1,1) & g/.1=Col(G1,1).i
        by A11,FINSEQ_2:11;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
 A22:  i in Seg len Col(G1,1) by A21,FINSEQ_1:def 3;
       take i;
          len Col(G1,1)=len G1 & len Line(G1,i)=width G1
@@ -153,9 +154,9 @@ A47:  g1/.n in rng g1 by A38,PARTFUN2:4;
           len Line(G1,mi) = width G1 by MATRIX_1:def 8
          .= len Lj by MATRIX_1:def 8;
 then A48:   dom Line(G1,mi) = dom Lj by A40,FINSEQ_1:def 3;
-A49:  g/.m = Ci.j by A44,FINSEQ_4:def 4
+A49:  g/.m = Ci.j by A44,PARTFUN1:def 8
             .= Lj.i by A39,A40,A41,A43,A44,GOBOARD1:17
-            .= Lj/.i by A39,A48,FINSEQ_4:def 4;
+            .= Lj/.i by A39,A48,PARTFUN1:def 8;
           len Lj=width G1 by MATRIX_1:def 8;
       then i in dom Lj by A39,A40,A41,FINSEQ_1:def 3;
       then g/.m in rng Lj by A49,PARTFUN2:4;
@@ -194,7 +195,7 @@ GOBOARD2:sch 1;
       A59: m in dom g1 & g1/.m in rng lx by A5,GOBOARD1:45;
       consider y being Element of NAT such that
       A60: y in dom lx & lx/.y=g1/.m by A59,PARTFUN2:4;
-A61:   lx/.y = lx.y & c1/.x = c1.x by A56,A60,FINSEQ_4:def 4;
+A61:   lx/.y = lx.y & c1/.x = c1.x by A56,A60,PARTFUN1:def 8;
 A62:   y=1 & 1 in dom g2 by A5,A55,A58,A60,FINSEQ_1:4,FINSEQ_3:27,TARSKI:def 1
 ;
 then A63:   g1/.m=g2/.1 by A56,A58,A60,A61,GOBOARD1:17;
@@ -252,7 +253,7 @@ A82:    dom h2 = Seg len h2 by FINSEQ_1:def 3;
         set ff = h1^f^h2;
             ma1+1<=mi1 & mi1<=mi1+1 by A71,NAT_1:13;
         then A83: ma1+1<=mi1+1 & Seg len f=dom f & Seg len h2=dom h2 &
-            dom h1=Seg len h1 by XXREAL_0:2,FINSEQ_1:def 3;
+            dom h1=Seg len h1 by FINSEQ_1:def 3,XXREAL_0:2;
         then A84: 1<=l & len f=l by A76,XREAL_1:21;
         A85: Indices G1=[:dom G1,Seg width G1:] by MATRIX_1:def 5;
         A86: now let n; assume n in dom h1;
@@ -263,7 +264,7 @@ then A87:   1<=n & n<=l1 & l1<=mi & mi<=len G1
          end;
         A88: now let n; assume n in dom h2;
           then 1<=n & n<=l2 & n<=n+ma by A81,FINSEQ_3:27,NAT_1:11;
-          then 1<=n+ma & ma+n<=ma+l2 by XXREAL_0:2,XREAL_1:9;
+          then 1<=n+ma & ma+n<=ma+l2 by XREAL_1:9,XXREAL_0:2;
           hence ma+n in dom G1 by FINSEQ_3:27;
          end;
         A89: now let n; assume n in dom h1;
@@ -344,7 +345,7 @@ GOBOARD1:21;
           then A107: h1/.len h1=G1*(l1,k1) & l1 in dom G1 by A53,A86;
           then [l1,k1] in Indices G1 by A54,A85,ZFMISC_1:106;
           then A108: i1=l1 & i2=k1 & 0<=1 by A106,A107,GOBOARD1:21;
-A109:       Lmi/.k1 = Lmi.k1 by A51,FINSEQ_4:def 4;
+A109:       Lmi/.k1 = Lmi.k1 by A51,PARTFUN1:def 8;
 A110:       w+1=ma1;
           then 1 in Seg l & dom f=Seg l & f/.1=f1/.ma1 by A76,A77,A106;
           then A111: f/.1=g1/.ma1 by A72,A110
@@ -369,7 +370,7 @@ A113: [i1,i2] in Indices G1 & [j1,j2] in Indices G1 & hf/.len hf=G1*(i1,i2)
           then [ma+1,k2] in Indices G1 by A80,A85,ZFMISC_1:106;
           then A115: j1=ma+1 & j2=k2 by A113,A114,GOBOARD1:21;
           A116: len f in dom f & 0<=1 by A77,A84,FINSEQ_1:3;
-A117:       Lma/.k2 = Lma.k2 by A78,FINSEQ_4:def 4;
+A117:       Lma/.k2 = Lma.k2 by A78,PARTFUN1:def 8;
           A118: hf/.len hf=hf/.(len h1+len f) by FINSEQ_1:35
           .= f/.len f by A116,FINSEQ_4:84
           .= f1/.(w+l) by A76,A77,A116
@@ -408,7 +409,7 @@ A125:       w+1=ma1;
           A129: len(h1^f)=len h1 + len f by FINSEQ_1:35;
 A130:       len Line(G1,1)=width G1 by MATRIX_1:def 8;
           then dom Line(G1,1) = Seg width G1 by FINSEQ_1:def 3;
-then A131:       L1/.k1 = L1.k1 by A54,FINSEQ_4:def 4;
+then A131:       L1/.k1 = L1.k1 by A54,PARTFUN1:def 8;
               0<=len f by NAT_1:2;
           then 0+1<=len(h1^f) by A53,A127,A129,XREAL_1:9;
           then 1 in dom(h1^f) by FINSEQ_3:27;
@@ -444,7 +445,7 @@ then A140:          1<=l2 by XREAL_1:21;
           A142: len h2 in dom h2 by A81,A140,FINSEQ_3:27;
 A143:       len Line(G1,len G1)=width G1 by MATRIX_1:def 8;
           then k2 in dom Ll by A80,FINSEQ_1:def 3;
-then A144:       Ll/.k2 = Ll.k2 by FINSEQ_4:def 4;
+then A144:       Ll/.k2 = Ll.k2 by PARTFUN1:def 8;
           A145: ff/.len ff=ff/.(len(h1^f)+len h2) by FINSEQ_1:35
           .=h2/.l2 by A81,A142,FINSEQ_4:84
           .=G1*(ma+l2,k2) by A81,A82,A141
@@ -481,8 +482,8 @@ A151:       w+1=ma1;
                .= dom G1 by FINSEQ_1:def 3;
 then A158:        i in dom Ck1 by A86,A155;
 A159:       Lmi/.k1 = Lmi.k1 & Ck1/.mi = Ck1.mi
-              by A25,A51,A157,FINSEQ_4:def 4;
-                Ck1/.i = Ck1.i by A158,FINSEQ_4:def 4;
+              by A25,A51,A157,PARTFUN1:def 8;
+                Ck1/.i = Ck1.i by A158,PARTFUN1:def 8;
             then y=Ck1/.i by A156,A157,A158,MATRIX_1:def 9;
             then y in rng Ck1 by A158,PARTFUN2:4;
 then A160: k1=k & 1 in Seg l by A54,A84,A148,A154,FINSEQ_1:3,GOBOARD1:20;
@@ -502,8 +503,8 @@ then A160: k1=k & 1 in Seg l by A54,A84,A148,A154,FINSEQ_1:3,GOBOARD1:20;
                .= dom G1 by FINSEQ_1:def 3;
              then A165:        ma+i in dom Ck2 by A88,A162;
 A166:         Lma/.k2 = Lma.k2 &
-Ck2/.ma = Ck2.ma by A27,A78,A164,FINSEQ_4:def 4;
-                Ck2/.(ma+i) = Ck2.(ma+i) by A165,FINSEQ_4:def 4;
+Ck2/.ma = Ck2.ma by A27,A78,A164,PARTFUN1:def 8;
+                Ck2/.(ma+i) = Ck2.(ma+i) by A165,PARTFUN1:def 8;
             then y=Ck2/.(ma+i) by A163,A164,A165,MATRIX_1:def 9;
             then y in rng Ck2 by A165,PARTFUN2:4;
             then A167: k2=k & l in Seg l by A80,A84,A148,A161,FINSEQ_1:3
@@ -534,7 +535,7 @@ A169:      not thesis; consider x being Element of rng h1 /\ rng g;
 A175:      Seg len L = dom L by FINSEQ_1:def 3;
          A176: i1 in dom G1 & i2 in Seg width G1 by A85,A174,ZFMISC_1:106;
 A177:      len L=width G1 by MATRIX_1:def 8;
-         then L/.i2 = L.i2 by A175,A176,FINSEQ_4:def 4;
+         then L/.i2 = L.i2 by A175,A176,PARTFUN1:def 8;
          then g/.n2=L/.i2 by A174,A176,MATRIX_1:def 8;
          then g/.n2 in rng L & g/.n2 in rng g
          by A173,A175,A176,A177,PARTFUN2:4;
@@ -543,7 +544,7 @@ A177:      len L=width G1 by MATRIX_1:def 8;
              n1 in dom G1 by A86,A171;
          then [n1,k1] in Indices G1 by A54,A85,ZFMISC_1:106;
          then i1=n1 & 0<1 by A172,A173,A174,GOBOARD1:21;
-         then mi<=mi-1 & mi-1<mi by A172,A178,XXREAL_0:2,XREAL_1:46;
+         then mi<=mi-1 & mi-1<mi by A172,A178,XREAL_1:46,XXREAL_0:2;
          hence contradiction;
         end;
            rng h2 /\ rng g = {}
@@ -562,7 +563,7 @@ A179:      not thesis; consider x being Element of rng h2 /\ rng g;
 A185:      Seg len L = dom L by FINSEQ_1:def 3;
          A186: i1 in dom G1 & i2 in Seg width G1 by A85,A184,ZFMISC_1:106;
 A187:      len L=width G1 by MATRIX_1:def 8;
-      then L/.i2 = L.i2 by A185,A186,FINSEQ_4:def 4;
+      then L/.i2 = L.i2 by A185,A186,PARTFUN1:def 8;
          then g/.n2=L/.i2 by A184,A186,MATRIX_1:def 8;
          then g/.n2 in rng L & g/.n2 in rng g
          by A183,A185,A186,A187,PARTFUN2:4;
@@ -625,7 +626,7 @@ A204: Seg len t = dom t by FINSEQ_1:def 3;
    A206: for n st n in dom t holds m+n in dom g
     proof let n; assume n in dom t;
      then 1<=n & n<=ll & n<=n+m by A205,FINSEQ_1:3,NAT_1:11;
-     then 1<=n+m & m+n<=m+ll by XXREAL_0:2,XREAL_1:9;
+     then 1<=n+m & m+n<=m+ll by XREAL_1:9,XXREAL_0:2;
      hence thesis by FINSEQ_3:27;
     end;
    A207: rng t c= rng g
@@ -633,7 +634,7 @@ A204: Seg len t = dom t by FINSEQ_1:def 3;
       then consider x being Element of NAT such that
      A208: x in dom t & t/.x=y by PARTFUN2:4;
          1<=x & x<=ll & x<=x+m by A205,A208,FINSEQ_1:3,NAT_1:11;
-     then 1<=x+m & m+x<=m+ll by XXREAL_0:2,XREAL_1:9;
+     then 1<=x+m & m+x<=m+ll by XREAL_1:9,XXREAL_0:2;
      then m+x in dom g by FINSEQ_3:27;
      then g/.(m+x) in rng g by PARTFUN2:4;
      hence thesis by A203,A208;
@@ -670,7 +671,7 @@ that
       len Ci2 = len G1 by MATRIX_1:def 9;
 then A220:  dom Ci2 = Seg len G1 by FINSEQ_1:def 3
             .= dom G1 by FINSEQ_1:def 3;
-     then Ci2/.i1 = Ci2.i1 by A219,FINSEQ_4:def 4;
+     then Ci2/.i1 = Ci2.i1 by A219,PARTFUN1:def 8;
      then Ci2/.i1 = G1*(i1,i2) & dom Col(G1,i2)=dom Col(G1,i2) &
      len Col(G1,i2)=len G1 by A219,MATRIX_1:def 9;
      then A221: g/.(m+n) in rng Col(G1,i2) by A218,A219,A220,PARTFUN2:4;
@@ -687,8 +688,7 @@ then A220:  dom Ci2 = Seg len G1 by FINSEQ_1:def 3
      reconsider l=i2-1 as Element of NAT by A223,INT_1:18;
      take l;
          1+1<=i2 by A224,NAT_1:13;
-     then A225: 1<=l & l<=width D & l+1=i2 by A5,A209,A223,XREAL_1:21,
-22;
+     then A225: 1<=l & l<=width D & l+1=i2 by A5,A209,A223,XREAL_1:21,22;
      then l in Seg width D by FINSEQ_1:3;
      hence [i1,l] in Indices D by A196,A215,A219,ZFMISC_1:106;
      thus t/.n = D*(i1,l) by A5,A14,A66,A209,A218,A219,A225,GOBOARD1:32;
@@ -716,8 +716,7 @@ then A220:  dom Ci2 = Seg len G1 by FINSEQ_1:def 3
    then A232: t is_sequence_on D by A216,GOBOARD1:def 11;
        ff is_sequence_on D &
    ff/.1 in rng Line(D,1) & ff/.len ff in rng Line(D,len D)
-      by A14,A16,A17,A119,A120,A135,A193,A194,A195,A197,GOBOARD1:37,
-41;
+      by A14,A16,A17,A119,A120,A135,A193,A194,A195,A197,GOBOARD1:37,41;
 then A233:rng ff /\ rng t <> {} by A4,A66,A133,A134,A209,A211,A213,A214,A232;
    consider x being Element of rng ff /\ rng t;
        rng ff /\ rng t c= rng ff /\ rng g by A207,XBOOLE_1:26;
@@ -738,8 +737,7 @@ then A233:rng ff /\ rng t <> {} by A4,A66,A133,A134,A209,A211,A213,A214,A232;
      A238: width D = k by A5,A15,A66,GOBOARD1:26;
          ff/.1 in rng Line(D,1) & ff/.len ff in rng Line(D,len D) &
      ff is_sequence_on D
-       by A15,A16,A17,A119,A120,A135,A193,A194,A195,A236,GOBOARD1:37,
-41;
+       by A15,A16,A17,A119,A120,A135,A193,A194,A195,A236,GOBOARD1:37,41;
 then A239:  rng ff /\ rng t <> {} by A4,A66,A133,A134,A237,A238;
      consider x being Element of rng ff /\ rng t;
          rng ff /\ rng t c= rng ff /\ rng g by A237,XBOOLE_1:26;
@@ -807,14 +805,14 @@ then A255: dom C = Seg len G1 by FINSEQ_1:def 3
 A257: Seg len Li = dom Li by FINSEQ_1:def 3;
      reconsider CK1 = Col(G1,K1) as FinSequence of TOP-REAL 2;
      A258: len Li=width G1 by MATRIX_1:def 8;
-       A259: Li/.K1 = Li.K1 by A256,FINSEQ_4:def 4;
+       A259: Li/.K1 = Li.K1 by A256,PARTFUN1:def 8;
      then A260: K1 in Seg width G1 & g/.pf=G1*(mi,K1)
      by A256,A257,A258,MATRIX_1:def 8;
           now assume
        A261: pf=len g;
        consider i2 be Element of NAT such that
        A262: i2 in dom C & C/.i2=g/.len g by A12,PARTFUN2:4;
-           C/.i2 = C.i2 by A262,FINSEQ_4:def 4;
+           C/.i2 = C.i2 by A262,PARTFUN1:def 8;
        then A263: i2 in dom G1 & g/.len g=G1*(i2,width G1)
            by A255,A262,MATRIX_1:def 9;
        A264: [i2,width G1] in Indices G1
@@ -833,7 +831,7 @@ A269:      abs(n1-mi)=1 & n2=width G1;
          A270: dom C = Seg len C by FINSEQ_1:def 3
          .= Seg len G1 by MATRIX_1:def 9
          .= dom G1 by FINSEQ_1:def 3;
-      then C/.n1 = C.n1 by A268,FINSEQ_4:def 4;
+      then C/.n1 = C.n1 by A268,PARTFUN1:def 8;
          then g/.lg=C/.n1 by A266,A268,A269,MATRIX_1:def 9;
          then g/.lg in rng C & 0<1 & g/.lg=g2/.lg
            by A8,A19,A33,A253,A268,A270,FINSEQ_4:86,PARTFUN2:4;
@@ -844,7 +842,7 @@ A269:      abs(n1-mi)=1 & n2=width G1;
 A271:      abs(n2-width G1)=1 & n1=mi;
              len Li = width G1 by MATRIX_1:def 8;
 then A272:      n2 in dom Li by A268,FINSEQ_1:def 3;
-      then Li/.n2 = Li.n2 by FINSEQ_4:def 4;
+      then Li/.n2 = Li.n2 by PARTFUN1:def 8;
          then g/.lg=Li/.n2 by A266,A268,A271,MATRIX_1:def 8;
          then g/.lg in rng Li & 0<1 by A272,PARTFUN2:4;
          then len g<=lg & lg<len g by A248,A253,A261,XREAL_1:46;
@@ -859,7 +857,7 @@ then A272:      n2 in dom Li by A268,FINSEQ_1:def 3;
 A275: Seg len Lma = dom Lma by FINSEQ_1:def 3;
      reconsider CK2 = Col(G1,K2) as FinSequence of TOP-REAL 2;
      A276: len Lma=width G1 by MATRIX_1:def 8;
-       A277: Lma/.K2 = Lma.K2 by A274,FINSEQ_4:def 4;
+       A277: Lma/.K2 = Lma.K2 by A274,PARTFUN1:def 8;
      then A278: K2 in Seg width G1 & g/.pl=G1*(ma,K2)
      by A274,A275,A276,MATRIX_1:def 8;
           now assume
@@ -869,7 +867,7 @@ A275: Seg len Lma = dom Lma by FINSEQ_1:def 3;
 A281:  dom C = Seg len C by FINSEQ_1:def 3
          .= Seg len G1 by MATRIX_1:def 9
          .= dom G1 by FINSEQ_1:def 3;
-           C/.i2 = C.i2 by A280,FINSEQ_4:def 4;
+           C/.i2 = C.i2 by A280,PARTFUN1:def 8;
        then A282: i2 in dom G1 & g/.len g=G1*(i2,width G1)
          by A280,A281,MATRIX_1:def 9;
        A283: [i2,width G1] in Indices G1
@@ -888,7 +886,7 @@ A288:      abs(n1-ma)=1 & n2=width G1;
          A289: dom C = Seg len C by FINSEQ_1:def 3
          .= Seg len G1 by MATRIX_1:def 9
          .= dom G1 by FINSEQ_1:def 3;
-      then C/.n1 = C.n1 by A287,FINSEQ_4:def 4;
+      then C/.n1 = C.n1 by A287,PARTFUN1:def 8;
          then g/.lg=C/.n1 by A285,A287,A288,MATRIX_1:def 9;
          then g/.lg in rng C & 0<1 & g/.lg=g2/.lg
            by A8,A19,A33,A253,A287,A289,FINSEQ_4:86,PARTFUN2:4;
@@ -899,7 +897,7 @@ A288:      abs(n1-ma)=1 & n2=width G1;
 A290:      abs(n2-width G1)=1 & n1=ma;
              len Lma = width G1 by MATRIX_1:def 8;
 then A291:      n2 in dom Lma by A287,FINSEQ_1:def 3;
-      then La/.n2 = Lma.n2 by FINSEQ_4:def 4;
+      then La/.n2 = Lma.n2 by PARTFUN1:def 8;
          then g/.lg=Lma/.n2 by A285,A287,A290,MATRIX_1:def 8;
          then g/.lg in rng Lma & 0<1 by A291,PARTFUN2:4;
          then len g<=lg & lg<len g by A249,A253,A279,XREAL_1:46;
@@ -928,7 +926,7 @@ A296: Seg len h2 = dom h2 by FINSEQ_1:def 3;
       end;
      A299: now let n; assume n in dom h2;
        then 1<=n & n<=l2 & n<=n+ma by A295,FINSEQ_3:27,NAT_1:11;
-       then 1<=n+ma & ma+n<=ma+l2 by XXREAL_0:2,XREAL_1:9;
+       then 1<=n+ma & ma+n<=ma+l2 by XREAL_1:9,XXREAL_0:2;
        hence ma+n in dom G1 by FINSEQ_3:27;
       end;
      A300: now let n; assume n in dom h1;
@@ -1000,7 +998,7 @@ A316:      w+1=ma1;
 A320:      Seg len Li1 = dom Li1 by FINSEQ_1:def 3;
          A321: i1 in dom G1 & i2 in Seg width G1 by A85,A319,ZFMISC_1:106;
 A322:      len Li1=width G1 by MATRIX_1:def 8;
-then A323:      Li1/.i2 = Li1.i2 by A320,A321,FINSEQ_4:def 4;
+then A323:      Li1/.i2 = Li1.i2 by A320,A321,PARTFUN1:def 8;
    then f/.k=Li1/.i2 by A319,A321,MATRIX_1:def 8;
 then A324:      f/.k in rng Li1 by A320,A321,A322,PARTFUN2:4;
          then A325: mi<=i1 by A312,A317,A321,FINSEQ_3:27;
@@ -1010,7 +1008,7 @@ then A324:      f/.k in rng Li1 by A320,A321,A322,PARTFUN2:4;
 A327:     Seg len Lj1 = dom Lj1 by FINSEQ_1:def 3;
          A328: j1 in dom G1 & j2 in Seg width G1 by A85,A326,ZFMISC_1:106;
 A329:     len Lj1=width G1 by MATRIX_1:def 8;
-      then Lj1/.j2 = Lj1.j2 by A327,A328,FINSEQ_4:def 4;
+      then Lj1/.j2 = Lj1.j2 by A327,A328,PARTFUN1:def 8;
          then f/.(k+1)=Lj1/.j2 by A326,A328,MATRIX_1:def 8;
 then A330:      f/.(k+1) in rng Lj1 by A327,A328,A329,PARTFUN2:4;
               now per cases by A325,REAL_1:def 5;
@@ -1083,7 +1081,7 @@ A341:     not thesis; consider x being Element of rng h1 /\ rng tt;
 A345:      Seg len Ln1 = dom Ln1 by FINSEQ_1:def 3;
          A346: n1 in dom G1 & n2 in Seg width G1 by A85,A344,ZFMISC_1:106;
 A347:      len Ln1=width G1 by MATRIX_1:def 8;
-      then Ln1/.n2 = Ln1.n2 by A345,A346,FINSEQ_4:def 4;
+      then Ln1/.n2 = Ln1.n2 by A345,A346,PARTFUN1:def 8;
          then f/.i1=Ln1/.n2 by A344,A346,MATRIX_1:def 8;
          then f/.i1 in rng Ln1 by A345,A346,A347,PARTFUN2:4;
        then A348: mi<=n1 by A339,A343,A346;
@@ -1124,7 +1122,7 @@ len f by A83,A356,FINSEQ_1:3,NAT_1:3,11;
 A363:      Seg len Li1 = dom Li1 by FINSEQ_1:def 3;
          A364: i1 in dom G1 & i2 in Seg width G1 by A85,A362,ZFMISC_1:106;
 A365:      len Li1=width G1 by MATRIX_1:def 8;
-      then Li1/.i2 = Li1.i2 by A363,A364,FINSEQ_4:def 4;
+      then Li1/.i2 = Li1.i2 by A363,A364,PARTFUN1:def 8;
    then f/.k=Li1/.i2 by A362,A364,MATRIX_1:def 8;
 then A366:      f/.k in rng Li1 by A363,A364,A365,PARTFUN2:4;
          then A367: i1<=ma by A355,A360,A364,FINSEQ_3:27;
@@ -1134,7 +1132,7 @@ then A366:      f/.k in rng Li1 by A363,A364,A365,PARTFUN2:4;
 A369:     Seg len Lj1 = dom Lj1 by FINSEQ_1:def 3;
          A370: j1 in dom G1 & j2 in Seg width G1 by A85,A368,ZFMISC_1:106;
 A371:     len Lj1=width G1 by MATRIX_1:def 8;
-      then Lj1/.j2 = Lj1.j2 by A369,A370,FINSEQ_4:def 4;
+      then Lj1/.j2 = Lj1.j2 by A369,A370,PARTFUN1:def 8;
          then f/.(k+1)=Lj1/.j2 by A368,A370,MATRIX_1:def 8;
 then A372:      f/.(k+1) in rng Lj1 by A369,A370,A371,PARTFUN2:4;
          then A373: j1=m by A357,A370,GOBOARD1:19;
@@ -1195,7 +1193,7 @@ A382:    not thesis; consider x being Element of rng h2 /\ rng tt;
 A386:      Seg len Ln1 = dom Ln1 by FINSEQ_1:def 3;
          A387: n1 in dom G1 & n2 in Seg width G1 by A85,A385,ZFMISC_1:106;
 A388:      len Ln1=width G1 by MATRIX_1:def 8;
-      then Ln1/.n2 = Ln1.n2 by A386,A387,FINSEQ_4:def 4;
+      then Ln1/.n2 = Ln1.n2 by A386,A387,PARTFUN1:def 8;
          then f/.i1=Ln1/.n2 by A385,A387,MATRIX_1:def 8;
          then f/.i1 in rng Ln1 by A386,A387,A388,PARTFUN2:4;
        then A389: n1<=ma by A380,A384,A387;
@@ -1335,7 +1333,7 @@ i1,i2)
           A428: len(h1^F)=len h1 + len F by FINSEQ_1:35;
               len Line(G1,1)=width G1 by MATRIX_1:def 8;
 then A429:       K1 in dom L1 by A256,A257,A258,FINSEQ_1:def 3;
-then A430:       L1/.K1 = L1.K1 by FINSEQ_4:def 4;
+then A430:       L1/.K1 = L1.K1 by PARTFUN1:def 8;
               0<=len F by NAT_1:2;
           then 0+1<=len(h1^F) by A293,A426,A428,XREAL_1:9;
           then 1 in dom(h1^F) by FINSEQ_3:27;
@@ -1371,7 +1369,7 @@ then A438:          1<=l2 by XREAL_1:21;
           then A439: l2 in Seg l2 by FINSEQ_1:3;
            len Line(G1,len G1)=width G1 by MATRIX_1:def 8;
           then A440:       K2 in dom Ll by A274,A275,A276,FINSEQ_1:def 3;
-then A441:       Ll/.K2 = Ll.K2 by FINSEQ_4:def 4;
+then A441:       Ll/.K2 = Ll.K2 by PARTFUN1:def 8;
           A442: len h2 in dom h2 by A295,A438,FINSEQ_3:27;
                FF/.len FF=FF/.(len(h1^F)+len h2) by FINSEQ_1:35
           .=h2/.l2 by A295,A442,FINSEQ_4:84
@@ -1407,8 +1405,8 @@ A453:        dom CK1 = Seg len G1 by A449,FINSEQ_1:def 3
             .= dom G1 by FINSEQ_1:def 3;
 then A454:        i in dom CK1 by A297,A451;
 A455:         Lmi/.K1 = Lmi.K1 & CK1/.mi = CK1.mi
-              by A25,A256,A453,FINSEQ_4:def 4;
-                CK1/.i = CK1.i by A454,FINSEQ_4:def 4;
+              by A25,A256,A453,PARTFUN1:def 8;
+                CK1/.i = CK1.i by A454,PARTFUN1:def 8;
             then y=CK1/.i by A452,A453,A454,MATRIX_1:def 9;
             then y in rng CK1 by A454,PARTFUN2:4;
             then A456: K1=k & 1 in Seg LL
@@ -1429,8 +1427,8 @@ A460:        dom CK2 = Seg len G1 by A449,FINSEQ_1:def 3
             .= dom G1 by FINSEQ_1:def 3;
              then A461:        ma+i in dom CK2 by A299,A458;
   A462:         Lma/.K2 = Lma.K2 & CK2/.ma = CK2.ma by A27,A274,A460,
-FINSEQ_4:def 4;
-                CK2/.(ma+i) = CK2.(ma+i) by A461,FINSEQ_4:def 4;
+PARTFUN1:def 8;
+                CK2/.(ma+i) = CK2.(ma+i) by A461,PARTFUN1:def 8;
             then y=CK2/.(ma+i) by A459,A460,A461,MATRIX_1:def 9;
             then y in rng CK2 by A461,PARTFUN2:4;
             then A463: K2=k by A274,A275,A276,A445,A457,GOBOARD1:20;
@@ -1641,7 +1639,7 @@ A505:[i1,i2] in Indices G1 & [j1,j2] in Indices G1 & hf/.len hf=G1*(i1,i2)
           A519: len(h1^F)=len h1 + len F by FINSEQ_1:35;
               len Line(G1,1)=width G1 by MATRIX_1:def 8;
 then A520:       K1 in dom L1 by A256,A257,A258,FINSEQ_1:def 3;
-then A521:       L1/.K1 = L1.K1 by FINSEQ_4:def 4;
+then A521:       L1/.K1 = L1.K1 by PARTFUN1:def 8;
               0<=len F by NAT_1:2;
           then 0+1<=len(h1^F) by A293,A517,A519,XREAL_1:9;
           then 1 in dom(h1^F) by FINSEQ_3:27;
@@ -1677,7 +1675,7 @@ then A530:          1<=l2 by XREAL_1:21;
           then A531: l2 in Seg l2 by FINSEQ_1:3;
            len Line(G1,len G1)=width G1 by MATRIX_1:def 8;
           then A532:       K2 in dom Ll by A274,A275,A276,FINSEQ_1:def 3;
-then A533:       Ll/.K2 = Ll.K2 by FINSEQ_4:def 4;
+then A533:       Ll/.K2 = Ll.K2 by PARTFUN1:def 8;
           A534: len h2 in dom h2 by A295,A530,FINSEQ_3:27;
                FF/.len FF=FF/.(len(h1^F)+len h2) by FINSEQ_1:35
           .=h2/.l2 by A295,A534,FINSEQ_4:84
@@ -1714,8 +1712,8 @@ A546:        dom CK1 = Seg len G1 by A541,FINSEQ_1:def 3
             .= dom G1 by FINSEQ_1:def 3;
              then A547:        i in dom CK1 by A297,A543;
 A548:         Lmi/.K1 = Lmi.K1 &
-            CK1/.mi = CK1.mi by A25,A256,A546,FINSEQ_4:def 4;
-                CK1/.i = CK1.i by A547,FINSEQ_4:def 4;
+            CK1/.mi = CK1.mi by A25,A256,A546,PARTFUN1:def 8;
+                CK1/.i = CK1.i by A547,PARTFUN1:def 8;
             then y=CK1/.i by A544,A546,A547,MATRIX_1:def 9;
             then y in rng CK1 by A547,PARTFUN2:4;
             then A549: K1=k & 1 in Seg LL
@@ -1738,8 +1736,8 @@ A554:        dom CK2 = Seg len G1 by A541,FINSEQ_1:def 3
             .= dom G1 by FINSEQ_1:def 3;
              then A555:        ma+i in dom CK2 by A299,A551;
 A556:         Lma/.K2 = Lma.K2 & CK2/.ma = CK2.ma by A27,A274,A554,
-FINSEQ_4:def 4;
-                CK2/.(ma+i) = CK2.(ma+i) by A555,FINSEQ_4:def 4;
+PARTFUN1:def 8;
+                CK2/.(ma+i) = CK2.(ma+i) by A555,PARTFUN1:def 8;
             then y=CK2/.(ma+i) by A552,A554,A555,MATRIX_1:def 9;
             then y in rng CK2 by A555,PARTFUN2:4;
             then A557: K2=k by A274,A275,A276,A537,A550,GOBOARD1:20;

@@ -8,7 +8,7 @@ environ
 
  vocabularies FINSEQ_1, FUNCT_1, RELAT_1, FINSET_1, MCART_1, TREES_1, TREES_2,
       BOOLE, FUNCT_2, TARSKI, FINSEQ_2, FUNCOP_1, FUNCT_6, PARTFUN1, FUNCT_3,
-      ARYTM_1, SQUARE_1, TREES_3, DTCONSTR, NAT_1;
+      ARYTM_1, SQUARE_1, TREES_3, DTCONSTR;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, DOMAIN_1, FUNCOP_1, RELSET_1,
       PARTFUN1, BINOP_1, FUNCT_2, FUNCT_3, FINSEQ_2, TREES_1, TREES_2, FUNCT_6,
@@ -16,7 +16,7 @@ environ
  constructors PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_3, SQUARE_1, NAT_1, FUNCT_5,
       FINSEQ_2, FUNCT_6, TREES_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      ARYTM_3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, TREES_1, TREES_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, TREES_1, TREES_2, BINOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
@@ -1147,7 +1147,7 @@ theorem Th41:
     then A1:   dom T`1 = dom T & dom T`2 = dom T by RELAT_1:46;
      T.t = [(T.t)`1,(T.t)`2] by MCART_1:23;
     then T`1.t = pr1(D1,D2).((T.t)`1,(T.t)`2) &
-    T`2.t = pr2(D1,D2).((T.t)`1,(T.t)`2) by FUNCT_1:22,A1;
+    T`2.t = pr2(D1,D2).((T.t)`1,(T.t)`2) by A1,FUNCT_1:22;
    hence thesis by FUNCT_3:def 5,def 6;
   end;
 
@@ -1273,10 +1273,11 @@ A2:  for n st <*n*> in T1 holds T1|<*n*> = T2|<*n*>;
    let x; assume x in T1;
    then reconsider t = x as Element of T1;
         now assume t <> {};
-     then consider p being FinSequence of NAT, n such that
+     then consider p being FinSequence of NAT, n being Nat such that
 A3:    t = <*n*>^p by FINSEQ_2:150;
 A4:    T1-level 1 = {t1 where t1 is Element of T1: len t1 = 1} &
       len <*n*> = 1 by FINSEQ_1:56;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider q = <*n*> as Element of T1 by A3,TREES_1:46;
           q in T1-level 1 by A4;
       then q in T2-level 1 & T2-level 1 c= T2 by A1;
@@ -1437,7 +1438,8 @@ A8:            r = w|Seg k by TREES_1:def 1;
               then reconsider r as FinSequence of NAT by FINSEQ_1:def 4;
 A9:            r in NAT* by FINSEQ_1:def 11;
                    now assume r <> {};
-                then consider r1 being FinSequence of NAT, i such that
+                then consider r1 being FinSequence of NAT, i being Nat
+                such that
 A10:              r = <*i*>^r1 by FINSEQ_2:150;
                      dom <*i*> = Seg 1 by FINSEQ_1:55;
                  then 1 in Seg 1 & Seg 1 c= dom r by A10,FINSEQ_1:4,39
@@ -1473,7 +1475,7 @@ NAT*
         end;
             now assume
         w <> {};
-         then consider q being FinSequence of NAT, m being Element of NAT
+         then consider q being FinSequence of NAT, m being Nat
          such that
 A17:       w = <*m*>^q by FINSEQ_2:150;
          consider m' being Element of NAT,r such that
@@ -1615,7 +1617,7 @@ A3:   <*n1*> = <*i*> & i < n1;
     end;
     then not (len p < len q or len p > len q) by A1,A2;
 then A4:  len p = len q by REAL_1:def 5;
-        now let i; assume
+        now let i be Nat; assume
 A5:    i >= 1 & i <= len p;
      then consider k be Nat such that
 A6:    i = 1+k by NAT_1:10;
@@ -1632,8 +1634,7 @@ theorem Th54:
    p in T iff <*len p1*>^p in tree(p1^<*T*>^p2)
   proof let p1,p2 be Tree-yielding FinSequence, T be Tree;
 A1:  len (p1^<*T*>^p2) = len (p1^<*T*>) + len p2 &
-    len (p1^<*T*>) = len p1 + len <*T*> & len <*T*> = 1 by FINSEQ_1:35,
-57;
+    len (p1^<*T*>) = len p1 + len <*T*> & len <*T*> = 1 by FINSEQ_1:35,57;
         len p1+1+len p2 = (len p1+len p2)+1;
     then len p1+len p2 < len (p1^<*T*>^p2) & len p1 <= len p1+len p2
      by A1,NAT_1:11,13;
@@ -1767,7 +1768,7 @@ A15:    now assume q in tree(p);
 A16:     n < len p & r in p.(n+1) & q = <*n*>^r by A11;
             n+1 in dom p & len p < len p+1 by A16,Lm4,NAT_1:13;
         then p.(n+1) = (p^<*T*>).(n+1) & n < len (p^<*T*>)
-         by A1,A16,XXREAL_0:2,FINSEQ_1:def 7;
+         by A1,A16,FINSEQ_1:def 7,XXREAL_0:2;
        hence thesis by A11,A16,Def15;
       end;
           now assume
@@ -1783,7 +1784,7 @@ A19:     now assume n < len p;
 A20:     q = <*n*>^{} by A18,FINSEQ_1:47;
         then n >= len p & n <= len p by A17,A18,A19,Def15,NAT_1:13;
         then len p = n & n < n+1 & (p^<*T*>).(len p+1) = T & {} in T
-         by XXREAL_0:1,FINSEQ_1:59,NAT_1:13,TREES_1:47;
+         by FINSEQ_1:59,NAT_1:13,TREES_1:47,XXREAL_0:1;
        hence thesis by A1,A11,A20,Def15;
       end;
      hence thesis by A15;
@@ -1927,7 +1928,7 @@ theorem
   proof let T be Tree; let p be FinSequence of NAT;
 A1:  <*T*>.1 = T & len <*T*> = 1 & 0+1 = 1 & {} in T & 0 < 1
      by FINSEQ_1:57,TREES_1:47;
-A2:  <*0*> in elementary_tree 1 by TREES_1:88,TARSKI:def 2;
+A2:  <*0*> in elementary_tree 1 by TARSKI:def 2,TREES_1:88;
    thus p in ^T implies p in elementary_tree 1 with-replacement(<*0*>, T)
      proof assume
 A3:     p in ^T;
@@ -1946,7 +1947,7 @@ then A5:  p in elementary_tree 1 & not <*0*> is_a_proper_prefix_of p or
     ex r being FinSequence of NAT st r in T & p = <*0*>^r by A2,TREES_1:def 12;
         now assume p in elementary_tree 1;
       then p = {} or p = <*0*> & p^{} = p
-       by FINSEQ_1:47,TREES_1:88,TARSKI:def 2;
+       by FINSEQ_1:47,TARSKI:def 2,TREES_1:88;
      hence thesis by A1,Def15;
     end;
    hence thesis by A1,A5,Def15;
@@ -2095,7 +2096,7 @@ theorem
   proof let T be Tree; let x; assume x in elementary_tree 1;
    then reconsider p = x as Element of elementary_tree 1;
         p = {} or p = <*0*> & {} in T & <*0*>^{} = <*0*>
-     by FINSEQ_1:47,TREES_1:88,TARSKI:def 2,TREES_1:47;
+     by FINSEQ_1:47,TARSKI:def 2,TREES_1:47,88;
    hence thesis by Th63;
   end;
 
@@ -2120,8 +2121,7 @@ A1:  ^T1 = ^T2;
 theorem
      for T being Tree holds (^T)|<*0*> = T
   proof let T be Tree; set p = <*T*>;
-        len p = 1 & p.1 = T & 0+1 = 1 & 0 < 1 & ^T = tree(p) by
-FINSEQ_1:57
+        len p = 1 & p.1 = T & 0+1 = 1 & 0 < 1 & ^T = tree(p) by FINSEQ_1:57
 ;
    hence thesis by Th52;
   end;
@@ -2196,7 +2196,7 @@ theorem
    then reconsider p = x as Element of elementary_tree 2;
         p = {} or p = <*0*> & {} in T1 & <*0*>^{} = <*0*> or
     p = <*1*> & {} in T2 & <*1*>^{} = <*1*>
-     by ENUMSET1:def 1,FINSEQ_1:47,TREES_1:90,TREES_1:47;
+     by ENUMSET1:def 1,FINSEQ_1:47,TREES_1:47,90;
    hence thesis by Th71;
   end;
 
@@ -2241,8 +2241,7 @@ theorem
         len {} = 0 & <*T1*> = {}^<*T1*> & <*T*> = {}^<*T*> &
     <*T1,T2*>^{} = <*T1,T2*> & <*T1,T*>^{} = <*T1,T*> & len <*T1*> = 1 &
     <*T1,T2*> = <*T1*>^<*T2*> & <*T1,T*> = <*T1*>^<*T*> &
-    <*T,T2*> = <*T*>^<*T2*> by FINSEQ_1:25,47,57,
-def 9
+    <*T,T2*> = <*T*>^<*T2*> by FINSEQ_1:25,47,57,def 9
 ;
    hence thesis by Th23,Th60;
   end;
@@ -2272,7 +2271,7 @@ A5:    w.(k+1) in rng w & rng w is constituted-FinTrees by A4,Def10,Lm4;
      reconsider q as FinSequence of NAT by A4,FINSEQ_1:50;
           len q <= height t & height t <= n & len <*k*> = 1
        by A1,A4,A5,FINSEQ_1:57,TREES_1:def 15;
-      then len q <= n & len p = 1+len q by A4,XXREAL_0:2,FINSEQ_1:35;
+      then len q <= n & len p = 1+len q by A4,FINSEQ_1:35,XXREAL_0:2;
      hence height tree(w) <= n+1 by A2,XREAL_1:9;
     end;
    hence thesis by A2,A3;
@@ -2326,7 +2325,7 @@ theorem
 then A1:  tree(T1,T2) = tree(<*T1,T2*>) & rng <*T1,T2*> = {T1,T2} & T1 in {T1,
 T2} &
     T2 in {T1,T2} & (m = height T1 or m = height T2)
-     by FINSEQ_2:147,XXREAL_0:def 9,TARSKI:def 2;
+     by FINSEQ_2:147,TARSKI:def 2,XXREAL_0:def 9;
         now let t be finite Tree; assume t in rng <*T1,T2*>;
       then t = T1 or t = T2 by A1,TARSKI:def 2;
      hence height t <= m by XXREAL_0:25;
@@ -2347,18 +2346,18 @@ end;
 definition
  let p be FinSequence such that
 A1: p is DTree-yielding;
- defpred P[Element of NAT, set] means
+ defpred P[Nat, set] means
        ex T being DecoratedTree st T = p.$1 & $2 = T.{};
  func roots p -> FinSequence means
     dom it = dom p & for i being Element of NAT st i in dom p
    ex T being DecoratedTree st T = p.i & it.i = T.{};
   existence proof
 A2: Seg len p = dom p by FINSEQ_1:def 3;
-A3: for k being Element of NAT, y1, y2 being set
+A3: for k being Nat, y1, y2 being set
  st k in Seg len p & P[k,y1] & P[k,y2]
           holds y1=y2;
-A4: for k being Element of NAT st k in Seg len p ex x being set st P[k,x]
-  proof let k be Element of NAT; assume k in Seg len p;
+A4: for k being Nat st k in Seg len p ex x being set st P[k,x]
+  proof let k be Nat; assume k in Seg len p;
      then p.k in rng p & rng p is constituted-DTrees
          by A1,A2,Def11,FUNCT_1:def 5;
      then reconsider T = p.k as DecoratedTree by Def5;
@@ -2366,9 +2365,8 @@ A4: for k being Element of NAT st k in Seg len p ex x being set st P[k,x]
     thus thesis;
    end;
    consider q being FinSequence such that
-A5: dom q = Seg len p & for k being Element of NAT st k in Seg len p
- holds P[k,q.k]
-                        from FINSEQ_1:sch 1(A3, A4);
+A5: dom q = Seg len p & for k being Nat st k in Seg len p
+ holds P[k,q.k] from FINSEQ_1:sch 1(A3, A4);
    take q;
    thus dom q = dom p by A5,FINSEQ_1:def 3;
    thus thesis by A2,A5;
@@ -2379,7 +2377,7 @@ A6:   (dom x1 = dom p & for i being Element of NAT st i in dom p
             holds P[i,x1.i]) &
      (dom x2 = dom p & for i being Element of NAT st i in dom p
       holds P[i,x2.i]);
-       now let k be Element of NAT; assume k in dom p;
+      now let k be Nat; assume k in dom p;
     then P[k,x1.k] & P[k,x2.k] by A6;
     hence x1.k = x2.k;
    end;

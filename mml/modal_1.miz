@@ -8,20 +8,20 @@ environ
 
  vocabularies TREES_2, FINSEQ_1, BOOLE, TREES_1, FUNCT_1, RELAT_1, ZFMISC_1,
       PARTFUN1, ORDINAL1, TARSKI, FINSET_1, PRELAMB, CARD_1, FUNCOP_1,
-      QC_LANG1, MCART_1, ZF_LANG, SEQ_1, MODAL_1, NAT_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1,
-      DOMAIN_1, MCART_1, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_1, FINSEQ_2,
+      QC_LANG1, MCART_1, ZF_LANG, SEQ_1, MODAL_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      NAT_1, DOMAIN_1, MCART_1, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_1, FINSEQ_2,
       FUNCT_2, FINSET_1, CARD_1, PARTFUN1, TREES_1, TREES_2, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
       TREES_2;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
-      FINSET_1, XXREAL_0, XREAL_0, FINSEQ_1, TREES_1, TREES_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      XXREAL_0, XREAL_0, FINSEQ_1, TREES_1, TREES_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, FUNCT_1, NAT_1, ENUMSET1, TREES_1, TREES_2, FUNCOP_1,
       MCART_1, DOMAIN_1, PARTFUN1, FINSEQ_1, FINSET_1, CARD_1, WELLORD2,
       CARD_2, ZFMISC_1, FINSEQ_2, RELAT_1, FUNCT_2, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes TREES_2, FUNCT_1, NAT_1, FUNCT_2, XBOOLE_0;
 
 begin
@@ -75,7 +75,8 @@ n <> m implies not <*n*>,<*m*>^s are_c=-comparable
  end;
 
 theorem
-for s st s <> {} ex w,n st s = <*n*>^w by FINSEQ_2:150;
+for s st s <> {} ex w being FinSequence of NAT,
+n being Nat st s = <*n*>^w by FINSEQ_2:150;
 
 theorem Th5:
 n <> m implies not <*n*> is_a_proper_prefix_of <*m*>^s
@@ -201,7 +202,7 @@ st v = w & w is_a_proper_prefix_of p holds succ v = succ w
    then w is_a_prefix_of p & w <> p by XBOOLE_0:def 8;
   then consider r be FinSequence such that
   A3: p = w^r by TREES_1:8;
-       now let n; assume
+       now let n be Nat; assume
 A4:     n in dom r;
     then A5: p.(len w + n) = r.n by A3,FINSEQ_1:def 7;
         len w + n in dom p by A3,A4,FINSEQ_1:41;
@@ -213,8 +214,7 @@ A4:     n in dom r;
        now let x;
     thus x in succ v implies x in succ w
      proof
-      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def
-5;
+      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def 5;
       then consider n such that
       A7: x = v^<*n*> & v^<*n*> in Z;
       reconsider x' = x as FinSequence of NAT by A7;
@@ -236,8 +236,7 @@ A4:     n in dom r;
            then len r > 0 by NAT_1:3;
            then 0+1 <= len r by NAT_1:13;
            then 1 + 1 <= len r + len s by A10,XREAL_1:9;
-           then 2 <= len (<*n*>) by A9,FINSEQ_1:35; then 2 <= 1 by FINSEQ_1:
-56;
+           then 2 <= len (<*n*>) by A9,FINSEQ_1:35; then 2 <= 1 by FINSEQ_1:56;
            hence contradiction;
           end;
           then <*n*> = r by A9,FINSEQ_1:47;
@@ -283,8 +282,7 @@ st v = w & not p,w are_c=-comparable holds succ v = succ w
        now let x;
     thus x in succ v implies x in succ w
      proof
-      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def
-5;
+      assume x in succ v; then x in { v^<*n*> : v^<*n*> in Z} by TREES_2:def 5;
       then consider n such that
       A4: x = v^<*n*> & v^<*n*> in Z;
       reconsider x' = x as FinSequence of NAT by A4;
@@ -422,10 +420,12 @@ for Z being finite Tree st branchdeg (Root Z) = 0 holds
        proof
         assume x in Z;
         then reconsider z = x as Element of Z;
-        assume not thesis; then z <> Root Z by TARSKI:def 1; then consider w,
-n such that
+        assume not thesis; then z <> Root Z by TARSKI:def 1;
+        then consider w being FinSequence of NAT,
+        n being Nat such that
         A2: z = <*n*>^w by FINSEQ_2:150;
-            <*n*> is_a_prefix_of z by A2,TREES_1:8;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
+        <*n*> is_a_prefix_of z by A2,TREES_1:8;
         then <*n*> in Z by TREES_1:45;
         then {}^<*n*> in Z by FINSEQ_1:47;
         hence contradiction by A1,TREES_2:14;
@@ -635,12 +635,14 @@ for Z being finite Tree,z being Element of Z st succ (Root Z) = {z}
           by TREES_1:47;
         end;
         suppose x' <> {};
-        then consider w,n such that
+        then consider w be FinSequence of NAT,
+        n being Nat such that
         A6: x' = <*n*>^w by FINSEQ_2:150;
-            <*n*> is_a_prefix_of x' by A6,TREES_1:8;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
+        <*n*> is_a_prefix_of x' by A6,TREES_1:8;
         then A7: <*n*> in Z by TREES_1:45;
-            <*n*> = (Root Z)^<*n*> by FINSEQ_1:47;
-then A8:        <*n*> in succ (Root Z) by A7,TREES_2:14;
+        <*n*> = (Root Z)^<*n*> by FINSEQ_1:47;
+        then A8:        <*n*> in succ (Root Z) by A7,TREES_2:14;
         then A9: <*n*> = <*0*> by A2,A3,TARSKI:def 1;
             <*n*> = z by A2,A8,TARSKI:def 1;
          then w in Z|z by A6,TREES_1:def 9;
@@ -711,7 +713,7 @@ for Z being finite DecoratedTree of D,z be Element of dom Z st
          suppose A12: s = {}; then A13: s in e by TREES_1:47;
 A14:      not ex w st w in dom (Z|z) & s = <*0*>^w &
             (E with-replacement (<*0*>,Z|z)).s = (Z|z).w by A12;
-              E.s = Z.s by A13,FUNCOP_1:13,A12;
+              E.s = Z.s by A12,A13,FUNCOP_1:13;
           hence thesis by A5,A8,A9,A14,TREES_2:def 12;
          end;
          suppose s = <*0*>;
@@ -759,8 +761,11 @@ by TREES_1:16;
         suppose s = {};
          hence thesis by TREES_1:36,39,47;
         end;
-        suppose s <> {}; then consider w,n such that
+        suppose s <> {};
+          then consider w be FinSequence of NAT,
+          n being Nat such that
          A5: s = <*n*>^w by FINSEQ_2:150;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
              <*n*> is_a_prefix_of s by A5,TREES_1:8;
          then A6: <*n*> in Z by A4,TREES_1:45;
              <*n*> = (Root Z)^<*n*> by FINSEQ_1:47;
@@ -843,7 +848,7 @@ for Z being DecoratedTree of D,x1,x2 being Element of dom Z st
                now per cases by A15,ENUMSET1:def 1,TREES_1:90;
             suppose A16: s = {};
 then A17:        not ex u st u in dom(Z|x2) & s = <*1*>^u & T.s = (Z|x2).u;
-                 E.s = Z.s by A15,FUNCOP_1:13,A16;
+                 E.s = Z.s by A15,A16,FUNCOP_1:13;
              hence thesis by A8,A9,A11,A14,A16,A17,TREES_2:def 12;
             end;
             suppose s = <*0*>;
@@ -1786,8 +1791,8 @@ card dom A = 1 implies A = VERUM or ex p st A = @p
  proof
   assume A1: card dom A = 1;
   A2: {} in dom A by TREES_1:47;
-  consider x such that A3: dom A = {x} by A1,CARD_2:60; A4: dom A = {{}} by A2,
-A3,TARSKI:def 1;
+  consider x such that A3: dom A = {x} by A1,CARD_2:60; A4: dom A = {{}} by A2
+,A3,TARSKI:def 1;
   A5: dom A = elementary_tree 0 by A2,A3,TARSKI:def 1,TREES_1:56;
   reconsider x as Element of dom A by A3,TARSKI:def 1;
        succ x = {}
@@ -2316,8 +2321,8 @@ VERUM <> @p
  end;
 
 theorem
-    VERUM <> @p & VERUM <> 'not' A & VERUM <> (#)A & VERUM <> A '&' B by Lm4,
-Lm6
+    VERUM <> @p & VERUM <> 'not' A & VERUM <> (#)A & VERUM <> A '&' B by Lm4
+,Lm6
 ;
 
 scheme MPFuncEx{ D() -> non empty set,

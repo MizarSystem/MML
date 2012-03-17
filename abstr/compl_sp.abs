@@ -1,0 +1,487 @@
+:: Complete Spaces
+::  by Karol P\c{a}k
+:: 
+:: Received October 12, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies WELLFND1, FRECHET2, REARRAN1, BOOLE, PRE_TOPC, COMPTS_1,
+      SETFAM_1, METRIC_1, SUBSET_1, PCOMPS_1, RELAT_1, ORDINAL2, LATTICES,
+      SEQ_2, PROB_1, SEQ_1, FUNCT_1, FRECHET, ARYTM_3, ARYTM, ARYTM_1,
+      NORMSP_1, INT_1, ZF_REFLE, RELAT_2, ABSVALUE, FINSET_1, TARSKI, BHSP_3,
+      TBSP_1, URYSOHN1, CARD_1, RLVECT_3, PARTFUN1, WELLORD1, METRIC_6,
+      TOPGEN_1, RAT_1, CARD_4, AMI_1, ORDERS_1, WAYBEL23, SQUARE_1, COMPL_SP;
+ notations BHSP_3, METRIC_6, RELAT_2, BINOP_1, URYSOHN1, TOPMETR, CARD_1,
+      CANTOR_1, WELLORD1, COMPLEX1, FINSET_1, SEQ_2, TARSKI, XBOOLE_0,
+      SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, ZFMISC_1, XXREAL_0, XREAL_0,
+      REAL_1, NAT_1, SETFAM_1, DOMAIN_1, STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1,
+      RELAT_1, FUNCT_1, SEQ_1, TBSP_1, RELSET_1, PARTFUN1, FUNCT_2, METRIC_1,
+      PCOMPS_1, CARD_3, PROB_1, SEQM_3, FRECHET, KURATO_2, WELLFND1, WAYBEL23,
+      ORDERS_2, CARD_4, TOPGEN_1, FLANG_1;
+ constructors REAL_1, NAT_1, TBSP_1, YELLOW_6, FRECHET, FRECHET2, KURATO_2,
+      COMPLEX1, SEQ_2, TOPS_2, WELLORD1, CARD_4, CANTOR_1, URYSOHN3, METRIC_6,
+      REALSET1, WELLFND1, TOPGEN_4, WAYBEL23, TOPGEN_1, FLANG_1;
+ registrations REALSET1, TOPMETR, PRE_TOPC, PCOMPS_1, NAT_1, TBSP_1, XREAL_0,
+      RELSET_1, SUBSET_1, STRUCT_0, TOPS_1, METRIC_1, METRIC_3, HAUSDORF,
+      MEMBERED, ORDINAL1, XXREAL_0, YELLOW13, CARD_1, WAYBEL12, ORDERS_2,
+      XBOOLE_0;
+ requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Preliminaries
+
+reserve i,j,n,m for natural number,
+        x,y,X,Y for set,
+        r,s for Real;
+
+definition
+  let M be non empty MetrStruct;
+  let S be SetSequence of M;
+  attr S is bounded means
+:: COMPL_SP:def 1
+    for i holds S.i is bounded;
+end;
+
+registration
+  let M be non empty Reflexive MetrStruct;
+  cluster bounded non-empty SetSequence of M;
+end;
+
+definition let M be Reflexive non empty MetrStruct;
+  let S be SetSequence of M;
+  func diameter S -> Real_Sequence means
+:: COMPL_SP:def 2
+    for i holds it.i = diameter S.i;
+end;
+
+theorem :: COMPL_SP:1
+  for M be Reflexive non empty MetrStruct
+    for S be bounded SetSequence of M holds
+      diameter S is bounded_below;
+
+theorem :: COMPL_SP:2
+  for M be Reflexive non empty MetrStruct
+    for S be bounded SetSequence of M st S is descending holds
+      diameter S is bounded_above & diameter S is non-increasing;
+
+theorem :: COMPL_SP:3
+  for M be Reflexive non empty MetrStruct
+    for S be bounded SetSequence of M st S is ascending holds
+      diameter S is non-decreasing;
+
+theorem :: COMPL_SP:4
+  for M be non empty Reflexive MetrStruct
+    for S be bounded SetSequence of M st
+        S is descending & lim diameter S = 0
+        for F be sequence of M st for i holds F.i in S.i
+      holds F is Cauchy;
+
+theorem :: COMPL_SP:5
+  for M be Reflexive symmetric triangle non empty MetrStruct
+    for p be Point of M holds
+      0 <= r implies diameter cl_Ball(p,r) <= 2*r;
+
+definition
+  let M be MetrStruct;
+  let U be Subset of M;
+  attr U is open means
+:: COMPL_SP:def 3
+    U in Family_open_set M;
+end;
+
+definition
+  let M be MetrStruct;
+  let A be Subset of M;
+  attr A is closed means
+:: COMPL_SP:def 4
+    A` is open;
+end;
+
+registration
+  let M be MetrStruct;
+  cluster open empty Subset of M;
+  cluster closed empty Subset of M;
+end;
+
+registration
+  let M be non empty MetrStruct;
+  cluster open non empty Subset of M;
+  cluster closed non empty Subset of M;
+end;
+
+theorem :: COMPL_SP:6
+  for M be MetrStruct
+    for A be Subset of M, A' be Subset of TopSpaceMetr M st A' = A
+      holds
+  ( A is open iff A' is open ) & ( A is closed iff A' is closed );
+
+definition
+  let T be TopStruct;
+  let S be SetSequence of T;
+  attr S is open means
+:: COMPL_SP:def 5
+    for i holds S.i is open;
+  attr S is closed means
+:: COMPL_SP:def 6
+    for i holds S.i is closed;
+end;
+
+registration
+  let T be TopSpace;
+  cluster open SetSequence of T;
+  cluster closed SetSequence of T;
+end;
+
+registration
+  let T be non empty TopSpace;
+  cluster open non-empty SetSequence of T;
+  cluster closed non-empty SetSequence of T;
+ end;
+
+definition
+  let M be MetrStruct;
+  let S be SetSequence of M;
+  attr S is open means
+:: COMPL_SP:def 7
+    for i holds S.i is open;
+  attr S is closed means
+:: COMPL_SP:def 8
+    for i holds S.i is closed;
+end;
+
+registration
+  let M be non empty MetrSpace;
+  cluster non-empty bounded open SetSequence of M;
+  cluster non-empty bounded closed SetSequence of M;
+end;
+
+theorem :: COMPL_SP:7
+  for M be MetrStruct
+    for S be SetSequence of M, S' be SetSequence of TopSpaceMetr M st S' = S
+      holds
+  ( S is open iff S' is open ) & ( S is closed iff S' is closed );
+
+theorem :: COMPL_SP:8
+  for M be Reflexive symmetric triangle non empty MetrStruct
+    for S, CL be Subset of M st S is bounded
+      for S' be Subset of TopSpaceMetr M st S = S' & CL = Cl S'
+        holds CL is bounded & diameter S = diameter CL;
+
+begin :: Cantor's theorem on complete spaces
+
+theorem :: COMPL_SP:9
+  for M be non empty MetrSpace
+    for C be sequence of M
+      ex S be non-empty closed SetSequence of M st
+          S is descending &
+        ( C is Cauchy implies S is bounded & lim diameter S = 0 ) &
+          for i ex U be Subset of TopSpaceMetr M st
+            U = { C.j where j is Element of NAT: j >= i } & S.i = Cl U;
+
+theorem :: COMPL_SP:10
+  for M be non empty MetrSpace holds
+    M is complete iff
+           for S be non-empty bounded closed SetSequence of M st
+             S is descending & lim diameter S = 0 holds meet S is non empty;
+
+theorem :: COMPL_SP:11
+  for T be non empty TopSpace
+    for S be non-empty SetSequence of T st S is descending
+      for F be Subset-Family of T st F = rng S
+    holds F is centered;
+
+theorem :: COMPL_SP:12
+  for M be non empty MetrStruct
+    for S be SetSequence of M
+      for F be Subset-Family of TopSpaceMetr M st F = rng S
+    holds
+      ( S is open implies F is open ) & ( S is closed implies F is closed );
+
+theorem :: COMPL_SP:13
+  for T be non empty TopSpace
+    for F be Subset-Family of T
+      for S be SetSequence of T st rng S c= F
+      ex R be SetSequence of T st
+        R is descending &
+       ( F is centered implies R is non-empty ) &
+       ( F is open implies R is open ) & ( F is closed implies R is closed ) &
+        for i holds R.i = meet {S.j where j is Element of NAT: j <= i};
+
+theorem :: COMPL_SP:14
+  for M be non empty MetrSpace holds
+    M is complete iff
+       for F be Subset-Family of TopSpaceMetr M st F is closed & F is centered
+           & for r be Real st r > 0
+                ex A be Subset of M st A in F & A is bounded & diameter A < r
+         holds meet F is non empty;
+
+theorem :: COMPL_SP:15
+  for M be non empty MetrSpace,A be non empty Subset of M
+    for B be Subset of M, B' be Subset of M|A st B = B' holds
+      B' is bounded iff B is bounded;
+
+theorem :: COMPL_SP:16
+  for M be non empty MetrSpace,A be non empty Subset of M
+    for B be Subset of M, B' be Subset of M|A st B = B' & B is bounded holds
+      diameter B' <= diameter B;
+
+theorem :: COMPL_SP:17
+  for M be non empty MetrSpace, A be non empty Subset of M
+    for S be sequence of (M|A) holds S is sequence of M;
+
+theorem :: COMPL_SP:18
+  for M be non empty MetrSpace, A be non empty Subset of M
+    for S be sequence of (M|A),S' be sequence of M st S = S' holds
+      S' is Cauchy iff S is Cauchy;
+
+theorem :: COMPL_SP:19
+  for M be non empty MetrSpace st M is complete
+    for A be non empty Subset of M, A' be Subset of TopSpaceMetr M st A = A'
+      holds
+    M|A is complete iff A' is closed;
+
+begin :: Countable compact spaces
+
+definition let T be TopStruct;
+  attr T is countably_compact means
+:: COMPL_SP:def 9
+   for F being Subset-Family of T st
+     F is_a_cover_of T & F is open & F is countable
+      ex G being Subset-Family of T
+       st G c= F & G is_a_cover_of T & G is finite;
+end;
+
+theorem :: COMPL_SP:20
+  for T be TopStruct st T is compact holds T is countably_compact;
+
+theorem :: COMPL_SP:21
+  for T being non empty TopSpace holds
+   T is countably_compact iff
+           for F being Subset-Family of T st
+               F is centered & F is closed & F is countable
+             holds meet F <> {};
+
+theorem :: COMPL_SP:22
+  for T being non empty TopSpace holds
+    T is countably_compact iff
+           for S be non-empty closed SetSequence of T st S is descending
+             holds meet S <> {};
+
+theorem :: COMPL_SP:23
+  for T being non empty TopSpace
+    for F be Subset-Family of T
+      for S be SetSequence of T st rng S c= F & S is non-empty
+        ex R be non-empty closed SetSequence of T st
+           R is descending &
+           ( F is locally_finite & S is one-to-one implies meet R = {} ) &
+           for i ex Si be Subset-Family of T st
+             R.i = Cl union Si &
+             Si = {S.j where j is Element of NAT: j >= i};
+
+theorem :: COMPL_SP:24
+  for F be Function st dom F is infinite & rng F is finite
+    ex x st x in rng F & F"{x} is infinite;
+
+theorem :: COMPL_SP:25
+  for X be non empty set, F be SetSequence of X st F is descending
+    for S be Function of NAT,X st for n holds S.n in F.n holds
+      rng S is finite implies meet F is non empty;
+
+theorem :: COMPL_SP:26
+  for T be non empty TopSpace holds
+    T is countably_compact iff
+                 for F be Subset-Family of T st
+                      F is locally_finite & F is with_non-empty_elements
+                   holds F is finite;
+
+theorem :: COMPL_SP:27
+  for T be non empty TopSpace holds
+    T is countably_compact iff
+          for F be Subset-Family of T st F is locally_finite &
+                for A be Subset of T st A in F holds Card A = 1
+            holds F is finite;
+
+theorem :: COMPL_SP:28
+  for T be being_T1 non empty TopSpace holds
+    T is countably_compact iff
+          for A be Subset of T st A is infinite holds Der A is non empty;
+
+theorem :: COMPL_SP:29
+  for T be being_T1 non empty TopSpace holds
+    T is countably_compact iff
+          for A be Subset of T st A is infinite countable holds
+       Der A is non empty;
+
+scheme :: COMPL_SP:sch 1
+ Th39{X()->non empty set,P[set,set]}:
+ex A be Subset of X() st
+  ( for x,y be Element of X() st x in A & y in A & x <> y holds P[x,y] ) &
+     for x be Element of X() ex y be Element of X() st y in A & not P[x,y]
+provided
+  for x,y be Element of X() holds P[x,y] iff P[y,x]
+  and
+  for x be Element of X() holds not P[x,x];
+
+theorem :: COMPL_SP:30
+  for M be Reflexive symmetric non empty MetrStruct
+    for r be Real st r > 0
+      ex A be Subset of M st
+        (for p,q be Point of M st p <> q & p in A & q in A holds
+           dist(p,q) >= r) &
+        for p be Point of M ex q be Point of M st q in A & p in Ball(q,r);
+
+theorem :: COMPL_SP:31
+  for M be Reflexive symmetric triangle non empty MetrStruct holds
+    M is totally_bounded iff
+        for r be Real,A be Subset of M st r>0 &
+             for p,q be Point of M st p <> q & p in A & q in A holds
+                dist(p,q) >= r
+           holds A is finite;
+
+theorem :: COMPL_SP:32
+  for M be Reflexive symmetric triangle non empty MetrStruct st
+      TopSpaceMetr M is countably_compact
+    holds M is totally_bounded;
+
+theorem :: COMPL_SP:33
+  for M be non empty MetrSpace st M is totally_bounded
+    holds TopSpaceMetr M is second-countable;
+
+theorem :: COMPL_SP:34
+  for T be non empty TopSpace holds
+    T is second-countable implies
+        for F being Subset-Family of T st F is_a_cover_of T & F is open
+          ex G being Subset-Family of T
+            st G c= F & G is_a_cover_of T & G is countable;
+
+begin :: The main theorem
+
+theorem :: COMPL_SP:35
+  for M be non empty MetrSpace holds
+     TopSpaceMetr M is compact iff TopSpaceMetr M is countably_compact;
+
+theorem :: COMPL_SP:36
+  for X be set, F be Subset-Family of X st F is finite
+    for A be Subset of X st A is infinite & A c= union F
+      ex Y be Subset of X st Y in F & Y /\ A is infinite;
+
+theorem :: COMPL_SP:37
+  for M be non empty MetrSpace holds
+     TopSpaceMetr M is compact iff M is totally_bounded & M is complete;
+
+begin :: Well spaces
+
+definition let T be set;
+           let S be Function of NAT,T;
+           let i be natural number;
+ redefine func S.i -> Element of T;
+end;
+
+theorem :: COMPL_SP:38
+  for M be MetrStruct, a be Point of M,x holds
+    x in [:X,(the carrier of M)\{a}:]\/{[X,a]} iff
+       ex y be set,b be Point of M st
+          x=[y,b] & (y in X & b<>a or y = X & b = a);
+
+definition
+  let M be MetrStruct;
+  let a be Point of M;
+  let X be set;
+  func well_dist(a,X) -> Function of
+         [:[:X,(the carrier of M)\{a}:]\/{[X,a]},
+           [:X,(the carrier of M)\{a}:]\/{[X,a]}:],REAL means
+:: COMPL_SP:def 10
+    for x,y be Element of [:X,(the carrier of M)\{a}:]\/{[X,a]}
+      for x1,y1 be set,x2,y2 be Point of M st x = [x1,x2] & y = [y1,y2] holds
+      (x1 = y1 implies it.(x,y) = dist(x2,y2) ) &
+      (x1 <> y1 implies it.(x,y) = dist(x2,a)+dist(a,y2) );
+end;
+
+theorem :: COMPL_SP:39
+  for M be MetrStruct,a be Point of M
+      for X be non empty set holds
+    ( well_dist(a,X) is Reflexive           implies M is Reflexive  ) &
+    ( well_dist(a,X) is symmetric           implies M is symmetric  ) &
+    ( well_dist(a,X) is triangle Reflexive  implies M is triangle   ) &
+    (well_dist(a,X) is discerning Reflexive implies M is discerning );
+
+definition
+  let M be MetrStruct;
+  let a be Point of M;
+  let X be set;
+  func WellSpace(a,X) -> strict MetrStruct equals
+:: COMPL_SP:def 11
+    MetrStruct (#[:X,(the carrier of M)\{a}:]\/{[X,a]},well_dist(a,X)#);
+end;
+
+registration
+  let M be MetrStruct;
+  let a be Point of M;
+  let X be set;
+  cluster WellSpace(a,X) -> non empty;
+end;
+
+registration
+  let M be Reflexive MetrStruct;
+  let a be Point of M;
+  let X be set;
+  cluster WellSpace(a,X) -> Reflexive;
+end;
+
+registration
+  let M be symmetric MetrStruct;
+  let a be Point of M;
+  let X be set;
+  cluster WellSpace(a,X) -> symmetric;
+end;
+
+registration
+  let M be symmetric triangle Reflexive MetrStruct;
+  let a be Point of M;
+  let X be set;
+  cluster WellSpace(a,X) -> triangle;
+end;
+
+registration
+  let M be MetrSpace;
+  let a be Point of M;
+  let X be set;
+  cluster WellSpace(a,X) -> discerning;
+end;
+
+theorem :: COMPL_SP:40
+  for M be triangle Reflexive non empty MetrStruct
+    for a be Point of M
+      for X be non empty set holds
+      WellSpace(a,X) is complete implies M is complete;
+
+theorem :: COMPL_SP:41
+  for M be symmetric triangle Reflexive non empty MetrStruct
+    for a be Point of M
+      for S be sequence of WellSpace(a,X) st S is Cauchy holds
+  (for Xa be Point of WellSpace(a,X) st Xa=[X,a]
+     for r st r > 0 ex n st for m st m >= n holds dist(S.m,Xa) < r)
+     or
+   ex n,Y st for m st m >= n ex p be Point of M st S.m = [Y,p];
+
+theorem :: COMPL_SP:42
+  for M be symmetric triangle Reflexive non empty MetrStruct
+    for a be Point of M holds
+      M is complete implies WellSpace(a,X) is complete;
+
+theorem :: COMPL_SP:43
+  for M be symmetric triangle Reflexive non empty MetrStruct st
+        M is complete
+    for a be Point of M st
+        ex b be Point of M st dist(a,b)<>0
+      for X be infinite set holds
+  WellSpace(a,X) is complete &
+  ex S be non-empty bounded SetSequence of WellSpace(a,X) st
+     S is closed & S is descending & meet S is empty;
+
+theorem :: COMPL_SP:44
+  ex M be non empty MetrSpace st
+    M is complete &
+    ex S be non-empty bounded SetSequence of M st
+      S is closed & S is descending & meet S is empty;

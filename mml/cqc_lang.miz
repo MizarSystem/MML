@@ -7,19 +7,19 @@
 environ
 
  vocabularies CAT_1, FUNCOP_1, FUNCT_1, RELAT_1, BOOLE, QC_LANG1, FINSEQ_1,
-      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG, CAT_4, FUNCT_4, NAT_1;
+      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG, CAT_4, FUNCT_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, FINSEQ_1, QC_LANG1,
-      QC_LANG2, QC_LANG3, XXREAL_0;
+      QC_LANG2, QC_LANG3, XXREAL_0, NAT_1;
  constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FUNCT_4, XXREAL_0,
       MEMBERED, QC_LANG2, QC_LANG3;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCOP_1, FUNCT_4, MEMBERED,
-      QC_LANG1;
+      QC_LANG1, XXREAL_0;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, FUNCOP_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1,
       FUNCOP_1, QC_LANG1, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1, FINSEQ_3,
-      XBOOLE_1, FUNCT_4;
+      XBOOLE_1, FUNCT_4, ORDINAL1;
  schemes FINSEQ_1, QC_LANG1, QC_LANG3;
 
 begin
@@ -91,17 +91,17 @@ definition let l,f;
   defpred P[set,set] means
    (l.$1 in dom f implies $2 = f.(l.$1)) &
    (not l.$1 in dom f implies $2 = l.$1);
-A1: for k for y1,y2 being set st k in Seg len l & P[k,y1] & P[k,y2]
+A1: for k be Nat for y1,y2 being set st k in Seg len l & P[k,y1] & P[k,y2]
      holds y1 = y2;
-A2: for k st k in Seg len l ex y being set st P[k,y]
-     proof let k; assume k in Seg len l;
+A2: for k be Nat st k in Seg len l ex y being set st P[k,y]
+     proof let k be Nat; assume k in Seg len l;
            (l.k in dom f implies thesis) &
        (not l.k in dom f implies thesis);
       hence thesis;
      end;
   consider s being FinSequence such that
 A3:  dom s = Seg len l and
-A4:  for k st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
+A4:  for k be Nat st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
       rng s c= QC-variables
    proof let y be set;
     assume y in rng s;
@@ -138,12 +138,13 @@ A10:  len l2 = len l and
 A11:  for k st 1 <= k & k <= len l holds
       (l.k in dom f implies l2.k = f.(l.k)) &
       (not l.k in dom f implies l2.k = l.k);
-      now let k;
+      now let k be Nat;
+A12: k in NAT by ORDINAL1:def 13;
    assume 1 <= k & k <= len l;
    then (l.k in dom f implies l1.k = f.(l.k)) &
      (not l.k in dom f implies l1.k = l.k) &
      (l.k in dom f implies l2.k = f.(l.k)) &
-     (not l.k in dom f implies l2.k = l.k) by A9,A11;
+     (not l.k in dom f implies l2.k = l.k) by A9,A11,A12;
    hence l1.k = l2.k;
   end;
   hence thesis by A8,A10,FINSEQ_1:18;
@@ -248,13 +249,14 @@ registration let k;
    deffunc f(set) = x.0;
    consider l being FinSequence such that
 A1: len l = k and
-A2: for i st i in Seg k holds l.i = f(i) from FINSEQ_1:sch 2;
+A2: for i be Nat st i in Seg k holds l.i = f(i) from FINSEQ_1:sch 2;
       rng l c= QC-variables
    proof let y be set;
     assume y in rng l;
     then consider x being set such that
 A3:   x in dom l and
 A4:   l.x = y by FUNCT_1:def 5;
+      reconsider x as Element of NAT by A3,ORDINAL1:def 13;
        x in Seg k by A1,A3,FINSEQ_1:def 3;
     then y = x.0 by A2,A4;
     hence y in QC-variables;
@@ -267,6 +269,7 @@ A4:   l.x = y by FUNCT_1:def 5;
   then consider i being set such that
 A5: i in dom l and
 A6: x = l.i by FUNCT_1:def 5;
+    reconsider i as Element of NAT by A5,ORDINAL1:def 13;
       i in Seg k by A1,A5,FINSEQ_1:def 3;
   then l.i = x.0 by A2;
   hence x in bound_QC-variables by A6;
@@ -395,8 +398,7 @@ theorem Th19:
     then Free(p '&' q) = {} & Fixed(p '&' q) = {} by Th13;
     then Free p \/ Free q = {} & Fixed p \/ Fixed q = {}
      by QC_LANG3:69,80;
-    then Free p = {} & Free q = {} & Fixed p = {} & Fixed q = {} by XBOOLE_1:
-15
+    then Free p = {} & Free q = {} & Fixed p = {} & Fixed q = {} by XBOOLE_1:15
 ;
     hence thesis by Th13;
    end;
@@ -1230,38 +1232,39 @@ A1:  for k for P being (QC-pred_symbol of k),l being QC-variable_list of k
    proof let k; let P be (QC-pred_symbol of k),l be QC-variable_list of k;
     assume A2: Free(P!l) = {};
 A3:    len Subst(l,a.0.-->x) = len l by Def3;
-        now let j;
+        now let j be Nat;
+A4:       j in NAT by ORDINAL1:def 13;
      assume
-A4:     1 <= j & j <= len l;
+A5:     1 <= j & j <= len l;
          now assume
          l.j = a.0;
       then a.0 in { l.i : 1 <= i & i <= len l & l.i in free_QC-variables }
-      by A4;
+      by A4,A5;
       hence contradiction by A2,QC_LANG3:66;
      end;
-     hence Subst(l,a.0.-->x).j = l.j by A4,Th11;
+     hence Subst(l,a.0.-->x).j = l.j by A4,A5,Th11;
     end;
     then Subst(l,a.0.-->x) = l by A3,FINSEQ_1:18;
     hence thesis by Th30;
    end;
-A5:  P[VERUM] by Th28;
-A6:  for p st P[p] holds P['not' p] by Th32,QC_LANG3:67;
-A7:  for p,q st P[p] & P[q] holds P[p '&' q]
+A6:  P[VERUM] by Th28;
+A7:  for p st P[p] holds P['not' p] by Th32,QC_LANG3:67;
+A8:  for p,q st P[p] & P[q] holds P[p '&' q]
    proof let p,q; assume
-A8:   (Free p = {} implies p.x = p) & (Free q = {} implies q.x = q);
+A9:   (Free p = {} implies p.x = p) & (Free q = {} implies q.x = q);
     assume Free(p '&' q) = {};
     then (Free p) \/ (Free q) = {} by QC_LANG3:69;
-    hence thesis by A8,Th34,XBOOLE_1:15;
+    hence thesis by A9,Th34,XBOOLE_1:15;
    end;
-A9:  for y,p st P[p] holds P[All(y, p)]
+A10:  for y,p st P[p] holds P[All(y, p)]
    proof let y,p; assume
-A10:    Free p = {} implies p.x = p;
+A11:    Free p = {} implies p.x = p;
     assume Free All(y,p) = {};
     then (x = y implies All(y, p).x = All(y, p)) &
-         (x <> y implies All(y, p).x = All(y, p)) by A10,Th37,Th38,QC_LANG3:70;
+         (x <> y implies All(y, p).x = All(y, p)) by A11,Th37,Th38,QC_LANG3:70;
     hence thesis;
    end;
-      for p holds P[p] from QC_LANG1:sch 1(A1,A5,A6,A7,A9);
+      for p holds P[p] from QC_LANG1:sch 1(A1,A6,A7,A8,A10);
   hence thesis;
  end;
 

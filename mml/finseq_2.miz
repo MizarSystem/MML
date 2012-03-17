@@ -6,15 +6,15 @@
 
 environ
 
- vocabularies ORDINAL2, ARYTM, FINSEQ_1, SQUARE_1, BOOLE, ARYTM_1, FUNCT_1,
-      RELAT_1, FUNCT_2, FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2, NAT_1;
- notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
-      XCMPLX_0, DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
-      FINSEQ_1, BINOP_1, FUNCOP_1, XXREAL_0;
+ vocabularies FINSEQ_1, SQUARE_1, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, FUNCT_2,
+      FUNCOP_1, PARTFUN1, TARSKI, FINSEQ_2;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0,
+      DOMAIN_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, FINSEQ_1,
+      BINOP_1, FUNCOP_1, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, DOMAIN_1, FUNCT_3, FUNCOP_1,
       SQUARE_1, NAT_1, FINSEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
-      FUNCT_2, FUNCOP_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+      FUNCT_2, FUNCOP_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1;
  theorems TARSKI, ZFMISC_1, ENUMSET1, NAT_1, FUNCT_1, FUNCT_2, FUNCT_3,
@@ -24,8 +24,7 @@ environ
 
 begin
 
- reserve i,j,l for Element of NAT;
- reserve k for natural number;
+ reserve i,j,k,l for Nat;
  reserve A,a,b,x,x1,x2,x3 for set;
  reserve D,D',E for non empty set;
  reserve d,d1,d2,d3 for Element of D;
@@ -35,8 +34,11 @@ begin
 :: Auxiliary theorems
 
 theorem
-   min(i,j) is Element of NAT & max(i,j) is Element of NAT
-    by XXREAL_0:15,16;
+  min(i,j) is Element of NAT & max(i,j) is Element of NAT
+proof
+  i is Element of NAT & j is Element of NAT by ORDINAL1:def 13;
+  hence thesis by XXREAL_0:15,16;
+end;
 
 theorem Th2:
   l = min(i,j) implies Seg i /\ Seg j = Seg l
@@ -85,10 +87,12 @@ canceled;
 
 theorem
    i in Seg (l+1) implies i in Seg l or i = l+1
- proof assume i in Seg(l+1);
+ proof
+A1: i is Element of NAT by ORDINAL1:def 13;
+  assume i in Seg(l+1);
   then 1 <= i & i <= l+1 by FINSEQ_1:3;
   then 1 <= i & i <= l or i = l+1 by NAT_1:8;
-  hence i in Seg l or i = l+1;
+  hence i in Seg l or i = l+1 by A1;
  end;
 
 theorem
@@ -105,14 +109,17 @@ theorem Th10:
  proof assume that
 A1:  len p = i & len q = i and
 A2:  for j st j in Seg i holds p.j = q.j;
-        dom p = Seg i & dom q = Seg i by A1,FINSEQ_1:def 3;
+     dom p = Seg i & dom q = Seg i by A1,FINSEQ_1:def 3;
   hence thesis by A2,FINSEQ_1:17;
  end;
 
 theorem Th11:
   b in rng p implies ex i st i in dom p & p.i = b
  proof assume b in rng p;
-  then ex a st a in dom p & b = p.a by FUNCT_1:def 5;
+  then consider a such that
+A1: a in dom p & b = p.a by FUNCT_1:def 5;
+   reconsider a as Element of NAT by A1,ORDINAL1:def 13;
+ a in dom p & b = p.a by A1;
   hence thesis;
  end;
 
@@ -211,15 +218,16 @@ theorem Th21:
  end;
 
 theorem Th22:
-  for p being FinSequence of D
-    st len p <> 0 ex q being (FinSequence of D),d st p = q^<*d*>
- proof let p be FinSequence of D;
+  for p being FinSequence of A
+    st len p <> 0
+     ex q being FinSequence of A, d being Element of A st p = q^<*d*>
+ proof let p be FinSequence of A;
   assume
 A1:  len p <> 0;
   then p <> {} by FINSEQ_1:25;
   then consider q being FinSequence,d being set such that
 A2:  p = q^<*d*> by FINSEQ_1:63;
-A3:  for i st i in dom q holds q.i in D
+A3:  for i st i in dom q holds q.i in A
    proof let i; assume i in dom q;
     then p.i = q.i & i in dom p by A2,Th18,FINSEQ_1:def 7;
     hence thesis by Th13;
@@ -227,7 +235,7 @@ A3:  for i st i in dom q holds q.i in D
 A4:  len p in Seg len p by A1,FINSEQ_1:5;
         len p = len q + 1 by A2,Th19;
   then len p in dom p & p.(len p) = d by A2,A4,FINSEQ_1:59,def 3;
-  then d is Element of D & q is FinSequence of D by A3,Th13,Th14;
+  then d is Element of A & q is FinSequence of A by A3,Th13,Th14;
   hence thesis by A2;
  end;
 
@@ -259,7 +267,8 @@ theorem Th25:
   len r = i+j implies ex p,q st len p = i & len q = j & r = p^q
  proof assume
 A1:  len r = i+j;
-  reconsider p = r|(Seg i) as FinSequence by FINSEQ_1:19;
+  reconsider z=i as Element of NAT by ORDINAL1:def 13;
+  reconsider p = r|(Seg z) as FinSequence by FINSEQ_1:19;
   consider q being FinSequence such that
 A2:  r = p^q by FINSEQ_1:101;
   take p,q;
@@ -283,23 +292,26 @@ A2:  r = p^q by Th25;
  end;
 
 scheme
- SeqLambdaD{i()->Element of NAT,D()->non empty set,F(set)->Element of D()}:
+ SeqLambdaD{i()->Nat,D()->non empty set,F(set)->Element of D()}:
   ex z being FinSequence of D() st len z = i() &
-   for j st j in Seg i() holds z.j = F(j)
+   for j being Nat st j in Seg i() holds z.j = F(j)
 proof
   consider z being FinSequence such that
 A1:  len z = i() and
-A2:  for i st i in Seg i() holds z.i = F(i) from FINSEQ_1:sch 2;
+A2:  for i being Nat
+   st i in Seg i() holds z.i = F(i) from FINSEQ_1:sch 2;
 A3:  Seg i() = dom z by A1,FINSEQ_1:def 3;
-        for j st j in Seg i() holds z.j in D()
-   proof let j; assume j in Seg i(); then z.j = F(j) by A2;
+     for j be Nat st j in Seg i() holds z.j in D()
+   proof let j be Nat; assume j in Seg i(); then z.j = F(j) by A2;
     hence z.j in D();
    end;
-  then z is FinSequence of D() by A3,Th14;
-  hence thesis by A1,A2;
+   then reconsider z as FinSequence of D() by A3,Th14;
+   take z; thus len z = i() by A1;
+   let j be Nat;
+   thus thesis by A1,A2;
  end;
 
-scheme IndSeqD{D()->non empty set, P[set]}:
+scheme IndSeqD{D()->set, P[set]}:
   for p being FinSequence of D() holds P[p]
  provided
 A1: P[<*> D()] and
@@ -322,7 +334,7 @@ A7:     p = q^<*x*> by Th22;
      then P[q] by A5,A6;
      hence thesis by A2,A7;
     end;
-A8:  for i holds R[i] from NAT_1:sch 1(A3,A4);
+A8:  for i holds R[i] from NAT_1:sch 2(A3,A4);
    let p be FinSequence of D();
          len p = len p; hence thesis by A8;
  end;
@@ -338,6 +350,7 @@ theorem Th27:
 theorem Th28:
   for f being Function of Seg i, D holds f is FinSequence of D
  proof let f be Function of Seg i, D;
+  reconsider i as Element of NAT by ORDINAL1:def 13;
    dom f = Seg i by FUNCT_2:def 1;
   then f is FinSequence & rng f c= D by FINSEQ_1:def 2,RELSET_1:12;
   hence thesis by FINSEQ_1:def 4;
@@ -362,6 +375,7 @@ theorem
 theorem
    for f being Function of NAT,D st q = f|(Seg i) holds len q = i
  proof let f be Function of NAT,D;
+  reconsider i as Element of NAT by ORDINAL1:def 13;
     f|(Seg i) is Function of Seg i, D by FUNCT_2:38;
    then dom(f|(Seg i)) = Seg i by FUNCT_2:def 1;
    hence thesis by FINSEQ_1:def 3;
@@ -490,12 +504,14 @@ theorem Th42:
  proof let f be Function of Seg i,Seg j; assume
         j = 0 implies i = 0;
 then A1:  Seg j = {} implies Seg i = {} by FINSEQ_1:5;
+A2: i is Element of NAT by ORDINAL1:def 13;
+
   assume j <= len p;
   then rng f c= Seg j & Seg j c= Seg len p by FINSEQ_1:7,RELSET_1:12;
   then rng f c= Seg len p by XBOOLE_1:1;
   then rng f c= dom p by FINSEQ_1:def 3;
   then dom(p*f) = dom f & dom f = Seg i by A1,FUNCT_2:def 1,RELAT_1:46;
-  hence thesis by FINSEQ_1:def 2;
+  hence thesis by A2,FINSEQ_1:def 2;
  end;
 
 theorem Th43:
@@ -515,11 +531,12 @@ theorem Th45:
   for f being Function of Seg i,Seg i st rng f = Seg i & i <= len p & q = p*f
     holds len q = i
  proof let f be Function of Seg i,Seg i;
+A1: i is Element of NAT by ORDINAL1:def 13;
   assume rng f = Seg i & i <= len p;
   then rng f c= Seg len p by FINSEQ_1:7;
   then rng f c= dom p by FINSEQ_1:def 3;
   then dom(p*f) = dom f & dom f = Seg i by FUNCT_2:67,RELAT_1:46;
-  hence thesis by FINSEQ_1:def 3;
+  hence thesis by A1,FINSEQ_1:def 3;
  end;
 
 theorem Th46:
@@ -578,7 +595,7 @@ theorem Th52:
   hence thesis by FINSEQ_1:def 4;
  end;
 
-definition let i be natural number;
+definition let i be Nat;
   func idseq i -> FinSequence equals
    id Seg i;
  coherence by Th52;
@@ -676,7 +693,7 @@ theorem Th66:
   hence p is FinSequence by FINSEQ_1:def 2;
  end;
 
-definition let i be natural number, a be set;
+definition let i be Nat, a be set;
   func i |-> a -> FinSequence equals
    Seg i --> a;
   coherence by Th66;
@@ -1209,7 +1226,7 @@ theorem
 
 reserve s for Element of D*;
 
-definition let i be natural number; let D be set;
+definition let i be Nat; let D be set;
   func i-tuples_on D -> FinSequenceSet of D equals
    { s where s is Element of D*: len s = i };
   coherence
@@ -1221,7 +1238,7 @@ definition let i be natural number; let D be set;
  end;
 end;
 
-registration let i be natural number, D;
+registration let i be Nat, D;
   cluster i-tuples_on D -> non empty;
  coherence
  proof consider d being Element of D;
@@ -1266,16 +1283,16 @@ A2:      len s = i;
             dom s = Seg i & rng s c= D by A2,FINSEQ_1:def 3,def 4;
       hence z in Funcs(Seg i,D) by A1,FUNCT_2:def 2;
      end;
+  reconsider j=i as Element of NAT by ORDINAL1:def 13;
     assume z in Funcs(Seg i,D);
     then consider p being Function such that
 A3:   z = p and
-A4:  dom p = Seg i and
+A4:  dom p = Seg j and
 A5:  rng p c= D by FUNCT_2:def 2;
           p is FinSequence by A4,FINSEQ_1:def 2;
     then p is FinSequence of D by A5,FINSEQ_1:def 4;
     then reconsider p as Element of D* by FINSEQ_1:def 11;
-          len p = i & { s : len s = i } = i-tuples_on D by A4,
-FINSEQ_1:def 3;
+    len p = i & { s : len s = i } = i-tuples_on D by A4,FINSEQ_1:def 3;
     hence z in i-tuples_on D by A3;
    end;
   hence thesis by TARSKI:2;
@@ -1494,23 +1511,28 @@ theorem
  end;
 
 theorem
-   D* = union {i-tuples_on D: not contradiction}
+   D* = union {i-tuples_on D where i is Element of NAT: not contradiction}
  proof
-    a in D* iff a in union {i-tuples_on D: not contradiction}
+    a in D* iff a in union {i-tuples_on D where i is Element of NAT
+  : not contradiction}
    proof
-    thus a in D* implies a in union {i-tuples_on D: not contradiction}
+    thus a in D* implies a in union {i-tuples_on D where i is Element of NAT
+    : not contradiction}
      proof assume a in D*;
       then reconsider a as FinSequence of D by FINSEQ_1:def 11;
             a is Element of (len a)-tuples_on D by Th110;
-      then (len a)-tuples_on D in {i-tuples_on D: not contradiction} &
+      then (len a)-tuples_on D in {i-tuples_on D where i is Element of NAT
+   : not contradiction} &
       a in (len a)-tuples_on D;
       hence thesis by TARSKI:def 4;
      end;
-    assume a in union {i-tuples_on D: not contradiction};
+    assume a in union {i-tuples_on D where i is Element of NAT:
+    not contradiction};
     then consider Z being set such that
 A1:  a in Z and
-A2:  Z in {i-tuples_on D: not contradiction} by TARSKI:def 4;
-    consider i such that
+A2:  Z in {i-tuples_on D where i is Element of NAT: not contradiction}
+     by TARSKI:def 4;
+    consider i being Element of NAT such that
 A3:  Z = i-tuples_on D by A2;
           a is Element of i-tuples_on D by A1,A3;
     hence thesis by FINSEQ_1:def 11;
@@ -1648,7 +1670,7 @@ theorem
 theorem
    (i+j)|->x = (i|->x)^(j|->x)
  proof
-  defpred P[Element of NAT] means (i+$1)|->x = (i|->x)^($1|->x);
+  defpred P[Nat] means (i+$1)|->x = (i|->x)^($1|->x);
         (i+0)|->x = (i|->x)^{} by FINSEQ_1:47
              .= (i|->x)^(0|->x) by Th72;
 then A1: P[0];
@@ -1660,7 +1682,7 @@ A3:  (i+j)|->x = (i|->x)^(j|->x);
                       .= (i|->x)^((j|->x) ^ <*x*>) by A3,FINSEQ_1:45
                       .= (i|->x)^((j+1)|->x) by Th74;
    end;
-        for j holds P[j] from NAT_1:sch 1(A1,A2);
+        for j holds P[j] from NAT_1:sch 2(A1,A2);
   hence thesis;
  end;
 
@@ -1728,7 +1750,7 @@ A3: len p1 = len p2;
    reconsider i = len p1 as Element of NAT;
 A4: dom p1 = Seg i by FINSEQ_1:def 3;
 A5: dom p2 = Seg i by A3,FINSEQ_1:def 3;
-       now let j be Element of NAT; assume
+       now let j; assume
    A6: j in Seg i;
       hence p1.j = q.j by A1,A4,GRFUNC_1:8
       .= p2.j by A2,A5,A6,GRFUNC_1:8;
@@ -1738,7 +1760,7 @@ A5: dom p2 = Seg i by A3,FINSEQ_1:def 3;
 
 :: from MODAL_1, 2007.03.14, A.T.
 
-reserve m,n for Element of NAT,
+reserve m,n for Nat,
         s,w for FinSequence of NAT;
 
 theorem
@@ -1747,8 +1769,8 @@ theorem
  defpred P[FinSequence of NAT] means $1 <> {} implies ex w,n
         st $1 = <*n*>^w;
  A1: P[<*> NAT];
- A2: for s,m st P[s] holds P[s^<*m*>]
-  proof let s,m such that
+ A2: for s for m being Element of NAT st P[s] holds P[s^<*m*>]
+  proof let s; let m be Element of NAT such that
    A3: s <> {} implies ex w,n st s = <*n*>^w; assume s^<*m*> <> {};
      per cases;
      suppose A4: s = {};

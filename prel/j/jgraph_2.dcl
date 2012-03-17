@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -54,7 +54,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -64,21 +64,21 @@
 <Adjective nr="4"/>
 <Adjective nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="46">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Adjective>

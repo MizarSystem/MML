@@ -7,18 +7,19 @@
 environ
 
  vocabularies FINSEQ_1, RFINSEQ, ARYTM_1, FUNCT_1, RELAT_1, ZF_REFLE, PROB_1,
-      TARSKI, BOOLE, SUBSET_1, GENEALG1, FINSEQ_4, NAT_1;
+      TARSKI, BOOLE, SUBSET_1, GENEALG1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_1,
-      RELAT_1, FINSEQ_1, CARD_3, FINSEQ_4, RFINSEQ, BINARITH, XXREAL_0;
+      RELAT_1, PARTFUN1, FINSEQ_1, CARD_3, FINSEQ_4, RFINSEQ, BINARITH,
+      XXREAL_0;
  constructors SETFAM_1, XXREAL_0, XREAL_0, NAT_1, CARD_3, FINSEQ_4, RFINSEQ,
-      BINARITH;
- registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, ARYTM_3, XREAL_0,
-      FINSEQ_1;
+      PARTFUN1, BINARITH;
+ registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, XREAL_0, FINSEQ_1,
+      ORDINAL1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions SUBSET_1;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, NAT_1, SUBSET_1, REAL_2, BINARITH,
       ZFMISC_1, FINSEQ_4, FINSEQ_5, FINSEQ_6, RFINSEQ, CARD_3, XREAL_1,
-      XXREAL_0, ORDINAL1;
+      XXREAL_0, ORDINAL1, PARTFUN1;
  schemes FINSEQ_1;
 
 begin :: Preliminaries
@@ -41,11 +42,13 @@ A4:len((f1/^n)^f2) = len(f1/^n) + len f2 by FINSEQ_1:35
     .= len f1 - n + len f2 by A1,RFINSEQ:def 2
     .= len f1 + len f2 - n;
 then A5:len((f1^f2)/^n) = len((f1/^n)^f2) by A3,FINSEQ_1:35;
- for i st 1 <= i & i <= len((f1^f2)/^n) holds ((f1^f2)/^n).i = ((f1/^n)^f2).i
+ for i be Nat
+ st 1 <= i & i <= len((f1^f2)/^n) holds ((f1^f2)/^n).i = ((f1/^n)^f2).i
    proof
-     let i; assume A6:1 <= i & i <= len((f1^f2)/^n);
+     let i be Nat; assume A6:1 <= i & i <= len((f1^f2)/^n);
      then i in Seg len((f1^f2)/^n) by FINSEQ_1:3;
 then A7:  i in dom((f1^f2)/^n) by FINSEQ_1:def 3;
+reconsider i as Element of NAT by ORDINAL1:def 13;
          now per cases;
        suppose A8:i <= len f1 - n;
 then A9:     i+n <= len f1 by XREAL_1:21;
@@ -114,9 +117,9 @@ definition let S be Gene-Set;
 existence
 proof
    defpred P[set,set] means $2 in S.$1;
-A1:for k st k in Seg len S ex x being Element of GA-Space S st P[k,x]
+A1:for k be Nat st k in Seg len S ex x being Element of GA-Space S st P[k,x]
    proof
-     let k; assume A2: k in Seg len S;
+     let k be Nat; assume A2: k in Seg len S;
 then A3:  k in dom S by FINSEQ_1:def 3;
      reconsider k' = k as Element of dom S by A2,FINSEQ_1:def 3;
       S.k' <> {};
@@ -129,7 +132,7 @@ A4:  x in [#](S.k) by SUBSET_1:10;
      thus thesis by A4;
    end;
    consider IT being FinSequence of GA-Space S such that
-A5:dom IT = Seg len S & for k st k in Seg len S holds P[k,IT.k]
+A5:dom IT = Seg len S & for k be Nat st k in Seg len S holds P[k,IT.k]
      from FINSEQ_1:sch 5(A1);
    take IT;
    thus thesis by A5,FINSEQ_1:def 3;
@@ -226,15 +229,16 @@ then A6:     p1|n = p1 by A4,FINSEQ_2:23;
          now per cases by A7,FINSEQ_1:38;
        suppose A8:i in dom(p1|n);
 A9:    dom(p1|n) c= dom p1 by FINSEQ_5:20;
-        (p1|n).i = (p1|n)/.i by A8,FINSEQ_4:def 4
+        (p1|n).i = (p1|n)/.i by A8,PARTFUN1:def 8
          .= p1/.i by A8,FINSEQ_4:85
-         .= p1.i by A8,A9,FINSEQ_4:def 4;
+         .= p1.i by A8,A9,PARTFUN1:def 8;
         then (p1|n).i in S.i by A8,A9,Def1;
         hence thesis by A8,FINSEQ_1:def 7;
        end;
-       suppose (ex k st k in dom(p2/^n) & i = len(p1|n)+k);
-        then consider k such that
+       suppose (ex k be Nat st k in dom(p2/^n) & i = len(p1|n)+k);
+        then consider k being Nat such that
 A10:    k in dom(p2/^n) & i = len(p1|n)+k;
+        reconsider k as Element of NAT by ORDINAL1:def 13;
 A11:    len(p1|n) = n
         proof
 A12:      len(p1|n) <= n by FINSEQ_5:19;
@@ -264,9 +268,9 @@ then A15:        n <= len p1 - 1 by XREAL_1:21;
 then A16:    n+k in dom p2 by FINSEQ_1:def 3;
             crossover(p1,p2,n).i
           = (p2/^n).k by A10,FINSEQ_1:def 7
-         .= (p2/^n)/.k by A10,FINSEQ_4:def 4
+         .= (p2/^n)/.k by A10,PARTFUN1:def 8
          .= p2/.(n+k) by A10,FINSEQ_5:30
-         .= p2.(n+k) by A16,FINSEQ_4:def 4;
+         .= p2.(n+k) by A16,PARTFUN1:def 8;
         hence thesis by A10,A11,A16,Def1;
      end;
      end;
@@ -1232,8 +1236,7 @@ A15:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n2,n3,n1)
      by Th26;
      hence thesis;
    end;
-   hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13
-,A14,A15;
+   hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11,A12,A13,A14,A15;
 end;
 
 theorem Th38:

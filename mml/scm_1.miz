@@ -8,18 +8,16 @@ environ
 
  vocabularies AMI_3, INT_1, FINSEQ_1, AMI_1, AMI_2, FUNCT_1, RELAT_1, ARYTM_1,
       NAT_1, MCART_1, SCM_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, NAT_1,
-      INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, AMI_1,
-      AMI_2, AMI_3, XXREAL_0;
- constructors XXREAL_0, NAT_1, MEMBERED, AMI_2, AMI_3, DOMAIN_1;
+ notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
+      FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, AMI_2, AMI_3, XXREAL_0;
+ constructors XXREAL_0, NAT_1, AMI_2, AMI_3;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_1, AMI_3,
-      AMI_2;
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, AMI_3, AMI_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, AMI_2;
  theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_3, AMI_1,
-      AMI_2, AMI_3, FINSEQ_3, RELSET_1, XXREAL_0, ORDINAL1;
- schemes NAT_1, PARTFUN1, WELLORD2;
+      AMI_2, AMI_3, FINSEQ_3, RELSET_1, ORDINAL1;
+ schemes PARTFUN1, WELLORD2;
 
 begin
 
@@ -38,7 +36,7 @@ canceled;
 theorem  for s being State of SCM, k being Element of NAT
      holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
        CurInstr (Computation s).k = s.((Computation s).k.NAT)
-          by AMI_3:4, AMI_1:54;
+          by AMI_1:54,AMI_3:4;
 
 theorem Th3:
 for s being State of SCM
@@ -158,7 +156,7 @@ PARTFUN1:sch 1;
    per cases;
    suppose x = NAT;
      then s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
-       by A10,AMI_2:def 5,30,AMI_3:def 1;
+       by A10,AMI_2:30,def 5,AMI_3:def 1;
     hence s1.x in (the Object-Kind of SCM).x by AMI_3:def 1;
    end;
    suppose x <> NAT; then s1.n = s.x by A10;
@@ -178,11 +176,11 @@ A11: dom s2 = SCM-Memory &
       then reconsider n = x as Element of SCM-Memory;
    per cases;
    suppose
-S:  ex n being Element of NAT st x = il.n;
+A12:  ex n being Element of NAT st x = il.n;
      then
-X:    s2.x = I1.n & x is Instruction-Location of SCM by A11;
-     (the Object-Kind of SCM).x = SCM-Instr by AMI_2:11,AMI_3:def 1,S;
-    hence s2.x in (the Object-Kind of SCM).x by AMI_3:def 1,X;
+A13:    s2.x = I1.n & x is Instruction-Location of SCM by A11;
+     (the Object-Kind of SCM).x = SCM-Instr by A12,AMI_2:11,AMI_3:def 1;
+    hence s2.x in (the Object-Kind of SCM).x by A13,AMI_3:def 1;
    end;
    suppose not ex n being Element of NAT st x = il.n;
     then s2.n = s1.x by A11;
@@ -195,7 +193,7 @@ X:    s2.x = I1.n & x is Instruction-Location of SCM by A11;
   defpred X[set] means ex n being Element of NAT st $1 = dl.n;
 
   consider s3 being Function such that
-A12: dom s3 = SCM-Memory &
+A14: dom s3 = SCM-Memory &
     for x being set st x in SCM-Memory holds
      (X[x] implies s3.x = U(x)) &
      (not X[x] implies s3.x = V(x)) from PARTFUN1:sch 1;
@@ -204,36 +202,36 @@ A12: dom s3 = SCM-Memory &
    per cases;
    suppose ex n being Element of NAT st x = dl.n;
      then
-X:    s3.x = D1.n & x in SCM-Data-Loc by A12,AMI_3:def 2;
+A15:    s3.x = D1.n & x in SCM-Data-Loc by A14,AMI_3:def 2;
      then (the Object-Kind of SCM).x = INT by AMI_2:10,AMI_3:def 1;
-    hence s3.x in (the Object-Kind of SCM).x by X;
+    hence s3.x in (the Object-Kind of SCM).x by A15;
    end;
    suppose not ex n being Element of NAT st x = dl.n;
-    then s3.n = s2.x by A12;
+    then s3.n = s2.x by A14;
     hence s3.x in (the Object-Kind of SCM).x by A9,CARD_3:18;
   end;
   end;
-  then reconsider s3 as State of SCM by A9,A12,CARD_3:18;
+  then reconsider s3 as State of SCM by A9,A14,CARD_3:18;
 
   take s3;
-  thus IC s3 = s2.NAT by AMI_3:4,A12,Th7,AMI_2:30
-            .= s1.NAT by A11,Th7,AMI_3:4,AMI_2:30
+  thus IC s3 = s2.NAT by A14,Th7,AMI_2:30,AMI_3:4
+            .= s1.NAT by A11,Th7,AMI_2:30,AMI_3:4
             .= il.il by A10,AMI_2:30;
   hereby let k be Element of NAT; assume k<len I;
   then consider k' being Element of NAT such that
-A13: il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1)
+A16: il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1)
      by A4,AMI_3:def 1;
-A14:    ps+k = ps+k' by A13,AMI_3:53;
+A17:    ps+k = ps+k' by A16,AMI_3:53;
         for n being Element of NAT holds il.(ps+k) <> dl.n by AMI_3:56;
-   hence s3.il.(ps+k) = s2.il.(ps+k) by A12,AMI_3:def 1
-               .= I.(k+1) by A11,AMI_3:def 1,A13,A14;
+   hence s3.il.(ps+k) = s2.il.(ps+k) by A14,AMI_3:def 1
+               .= I.(k+1) by A11,A16,A17,AMI_3:def 1;
    end;
    let k be Element of NAT; assume k < len D;
    then consider k' being Element of NAT such that
-A15: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
+A18: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
                 by A8,AMI_3:def 1;
-     ds+k = ds+k' by A15,AMI_3:52;
-   hence s3.dl.(ds+k) = D.(k+1) by A12,AMI_3:def 1,A15;
+     ds+k = ds+k' by A18,AMI_3:52;
+   hence s3.dl.(ds+k) = D.(k+1) by A14,A18,AMI_3:def 1;
  end;
 end;
 
@@ -335,8 +333,8 @@ theorem Th17:
 A1: IC (Computation s).k <> IC (Computation s).(k+1) &
    s.(IC (Computation s).(k+1)) = halt SCM;
         now assume s.(IC (Computation s).k) = halt SCM;
-     then CurInstr (Computation s).k = halt SCM & k <= k+1 by AMI_1:54,NAT_1:
-11;
+     then CurInstr (Computation s).k = halt SCM & k <= k+1 by AMI_1:54,NAT_1:11
+;
     hence contradiction by A1,AMI_1:52;
    end;
  hence thesis by A1,Th16;
@@ -373,8 +371,7 @@ A2:  s.il.n = a := b or s.il.n = AddTo(a,b) or s.il.n = SubFrom(a, b) or
     thus
   csk1 = (Exec(CurInstr csk, csk)) by Lm4
            .= (Exec(s.il.n, csk)) by A1,AMI_1:54;
-    hence IC csk1 = Next IC csk by A2,AMI_3:8,9,10,11,
-12
+    hence IC csk1 = Next IC csk by A2,AMI_3:8,9,10,11,12
       .= il.(n+1) by A1,Lm3;
 end;
 

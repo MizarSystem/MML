@@ -37,7 +37,6 @@
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="NAT_1"/>
@@ -122,7 +121,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="382">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -142,7 +141,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="390">
+<Func kind="K" nr="383">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -158,7 +157,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="390">
+<Func kind="K" nr="383">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -181,7 +180,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="392">
+<Func kind="K" nr="385">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>

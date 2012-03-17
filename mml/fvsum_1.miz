@@ -10,7 +10,7 @@ environ
       LATTICES, FUNCOP_1, ARYTM_1, FINSEQOP, FINSEQ_1, RELAT_1, FINSEQ_2,
       RVSUM_1, SQUARE_1, FINSUB_1, BOOLE, SUBSET_1, FINSEQ_4, RLSUB_2,
       FINSET_1, CARD_1, CAT_3, FVSUM_1, CARD_3, GROUP_1, ORDINAL2, ARYTM,
-      NAT_1, VECTSP_2;
+      VECTSP_2, FINSOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, ORDINAL1, NAT_1, RELAT_1,
       FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4, BINOP_1,
       FUNCOP_1, RLVECT_1, SETWISEO, FINSOP_1, FINSEQ_2, FINSEQOP, SETWOP_2,
@@ -18,15 +18,15 @@ environ
       MATRIX_2, XXREAL_0;
  constructors PARTFUN1, BINOP_1, SETWISEO, SQUARE_1, NAT_1, FINSEQOP, FINSEQ_4,
       FINSOP_1, SETWOP_2, ALGSTR_1, GROUP_4, MATRIX_2;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, ARYTM_3,
-      FINSET_1, FINSUB_1, XREAL_0, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0,
-      VECTSP_1, ALGSTR_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FINSET_1,
+      FINSUB_1, XREAL_0, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1,
+      ALGSTR_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions SETWISEO, ALGSTR_1, GROUP_4, RLVECT_1, GROUP_1;
  theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_1, FUNCT_2, NAT_1, BINOP_1,
       FINSEQOP, VECTSP_1, FUNCOP_1, SETWOP_2, RLVECT_1, RELAT_1, SETWISEO,
       FINSEQ_3, ZFMISC_1, FINSEQ_4, ALGSTR_1, FINSOP_1, GROUP_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, ORDINAL1, GROUP_4, XXREAL_0, VECTSP_2;
+      XBOOLE_1, XCMPLX_1, ORDINAL1, GROUP_4, XXREAL_0, PARTFUN1;
  schemes NAT_1, FUNCT_2;
 
 begin :: Auxiliary theorems
@@ -911,14 +911,13 @@ Th78:mlt(p,q)=mlt(q,p)
  proof
      reconsider r=mlt(p,q) as FinSequence of the carrier of K;
      reconsider s=mlt(q,p) as FinSequence of the carrier of K;
-      A1:len r =min(len p,len q) & len s=min(len q,len p) by
-FINSEQ_2:85;
+      A1:len r =min(len p,len q) & len s=min(len q,len p) by FINSEQ_2:85;
      reconsider k=min(len p,len q) as Element of NAT by XXREAL_0:15;
      A2:dom r=Seg k & dom s=Seg k by A1,FINSEQ_1:def 3;
          min(len p,len q)<= len p & min(len p,len q)<=len q by XXREAL_0:17;
      then Seg k c= Seg len p & Seg k c= Seg len q by FINSEQ_1:7;
      then A3:Seg k c= dom p & Seg k c= dom q by FINSEQ_1:def 3;
-         now let i;
+         now let i be Nat;
       assume A4:i in Seg k;
       then reconsider d1=(p.i),d2=(q.i) as Element of K
        by A3,FINSEQ_2:13;
@@ -1051,7 +1050,7 @@ FINSEQ_1:def 4;
 A8:   for B being Element of Fin NAT holds P[B,G.B] from FUNCT_2:sch 3(A4);
     consider q1 being FinSequence of the carrier of K such that
 A9: q1 = p*Sgm dom(p|dom p) and
-A10: G.dom p = Sum q1 by A8;
+A10: G.findom p = Sum q1 by A8;
 A11:  q1 = p*Sgm dom p by A9,RELAT_1:98
        .= p*Sgm Seg len p by FINSEQ_1:def 3
        .= p*idseq len p by FINSEQ_3:54
@@ -1087,7 +1086,7 @@ then dom p /\ {x} = {} by XBOOLE_0:def 7;
      end;
      suppose
 A21:    x in dom p;
-      then p.x = p/.x by FINSEQ_4:def 4;
+      then p.x = p/.x by PARTFUN1:def 8;
       then reconsider px = p.x as Element of K;
       A22:    x <> 0 by A21,FINSEQ_3:27;
 A23:    dom<*x*> = Seg 1 & dom<*px*> = Seg 1 by FINSEQ_1:55;
@@ -1130,7 +1129,7 @@ A33:  dom(p|(B' \/ {x})) c= dom p by RELAT_1:89;
 A34:  rng Sgm dom pp = dom pp by FINSEQ_1:71;
 then A35:    rng f2 c= dom p by RELAT_1:89;
 A36:    x in dom p by A30,XBOOLE_0:def 4;
-      then p.x = p/.x by FINSEQ_4:def 4;
+      then p.x = p/.x by PARTFUN1:def 8;
       then reconsider px = p.x as Element of K;
           x in {x} by TARSKI:def 1;
 then A37:   x in B' \/ {x} by XBOOLE_0:def 2;
@@ -1142,7 +1141,7 @@ then A39:    dom(p|(B' \/ {x})) c= Seg len p by FINSEQ_1:def 3;
       then reconsider pB'x = p|(B' \/ {x}) as FinSubsequence
                                          by FINSEQ_1:def 12;
 A40:   f2 is one-to-one by A39,FINSEQ_3:99;
-      reconsider Y = Seg(len f2) \ f2 " {x} as finite set;
+      reconsider Y = finSeg(len f2) \ f2 " {x} as finite set;
          A41: Seg(len f2) = dom f2 by FINSEQ_1:def 3;
 A42:   dom(p|B') = dom p /\ B' by RELAT_1:90;
           not x in B' by A30,XBOOLE_0:def 4;
@@ -1162,7 +1161,7 @@ A45:   rng ((Sgm (dom(p|(B' \/ {x}))))|
         .= dom(p|B') \ {x} by A42,XBOOLE_1:40
         .= dom(p|B') by A43,ZFMISC_1:65;
   set M = f2*(Sgm Y);
-A46: dom Sgm Y = Seg card Y by FINSEQ_3:45;
+A46: dom Sgm Y = finSeg card Y by FINSEQ_3:45;
 A47: rng Sgm Y = Y by FINSEQ_1:def 13;
   then dom M = Seg card Y by A41,A46,RELAT_1:46;
   then reconsider M as FinSequence by FINSEQ_1:def 2;
@@ -1254,7 +1253,7 @@ A71:   q1 = p3^p4 by A28,A64,FINSEQOP:10;
       .= (the add of K).(G.B',[#](p,the_unity_wrt the add of K).x)
                        by A29,A36,SETWOP_2:22;
     end;
-    hence s = (the add of K)$$(dom p,[#](p,the_unity_wrt the add of K))
+    hence s = (the add of K)$$(findom p,[#](p,the_unity_wrt the add of K))
                     by A1,A2,A10,A11,A12,A17,SETWISEO:def 3
            .= (the add of K) $$ p by A2,SETWOP_2:def 2;
    end;
@@ -1282,9 +1281,9 @@ then A80:    len(p|(j+1)) = j + 1 by FINSEQ_1:80;
 A81:    1 <= j+1 by NAT_1:11;
 then A82:    j+1 in dom(p|(j+1)) by A80,FINSEQ_3:27;
           j+1 in dom p by A79,A81,FINSEQ_3:27;
-then A83:    a = p/.(j+1) by A78,FINSEQ_4:def 4 .= (p|(j+1))/.(j+1)
+then A83:    a = p/.(j+1) by A78,PARTFUN1:def 8 .= (p|(j+1))/.(j+1)
         by A82,FINSEQ_4:85
-              .= (p|(j+1)).(j + 1) by A82,FINSEQ_4:def 4;
+              .= (p|(j+1)).(j + 1) by A82,PARTFUN1:def 8;
           j <= j+1 by NAT_1:11;
 then A84:    Seg j c= Seg(j+1) by FINSEQ_1:7;
           p|j = p|Seg j by FINSEQ_1:def 15

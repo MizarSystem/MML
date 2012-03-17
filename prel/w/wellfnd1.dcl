@@ -21,8 +21,8 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="CARD_5"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -104,7 +104,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="271">
+<Func kind="K" nr="273">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

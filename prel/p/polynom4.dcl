@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -45,7 +45,6 @@
 <ArticleID name="QUOFIELD"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_3"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="RELAT_2"/>
@@ -101,7 +100,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="437">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -141,7 +140,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="447">
+<Func kind="K" nr="439">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -149,7 +148,7 @@
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -158,7 +157,7 @@
 </Func>
 </Adjective>
 <Adjective nr="53">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -185,7 +184,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="447">
+<Func kind="K" nr="439">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -193,7 +192,7 @@
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -202,7 +201,7 @@
 </Func>
 </Adjective>
 <Adjective nr="99">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -232,7 +231,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="447">
+<Func kind="K" nr="439">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -240,7 +239,7 @@
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -249,7 +248,7 @@
 </Func>
 </Adjective>
 <Adjective nr="105">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -279,7 +278,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="447">
+<Func kind="K" nr="439">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -287,7 +286,7 @@
 <Adjective nr="4"/>
 <Adjective nr="17">
 <Func kind="U" nr="1">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -296,7 +295,7 @@
 </Func>
 </Adjective>
 <Adjective nr="114">
-<Func kind="K" nr="444">
+<Func kind="K" nr="436">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>

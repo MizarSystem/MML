@@ -16,8 +16,8 @@ environ
       STRUCT_0, GROUP_1, INT_2;
  constructors WELLORD2, BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
       INT_2, PBOOLE, REALSET2, GROUP_4, GROUP_6, GR_CY_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, FINSEQ_1, STRUCT_0, GROUP_1, GROUP_2, GR_CY_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      FINSEQ_1, STRUCT_0, GROUP_1, GROUP_2, GR_CY_1, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, GROUP_1, REALSET1, STRUCT_0;
  theorems GROUP_2, GR_CY_1, GR_CY_2, NAT_1, TARSKI, XBOOLE_0, GROUP_1, CARD_1,
@@ -179,9 +179,9 @@ proof
   assume A1: b is_not_of_order_0;
   then ord b <> 0 by GROUP_1:def 12;
   then A2: ord b > 0;
-  deffunc B(Element of NAT) = b |^ $1;
+  deffunc B(Nat) = b |^ $1;
   consider f being FinSequence such that
-A3: len f = ord b & for i being Element of NAT st i in Seg ord b holds
+A3: len f = ord b & for i being Nat st i in Seg ord b holds
   f.i = B(i) from FINSEQ_1:sch 2;
 A4: dom f = Seg ord b by A3,FINSEQ_1:def 3;
   the carrier of gr {b} c= rng f
@@ -240,29 +240,29 @@ proof
    thus b is_of_order_0 implies for n being Integer st
      b |^n = 1_G holds n = 0
    proof
-     assume A2: b is_of_order_0;
- A3: for m being Element of NAT holds b |^ - m = 1_G implies m = 0
+     assume A1: b is_of_order_0;
+ A2: for m being Element of NAT holds b |^ - m = 1_G implies m = 0
      proof
        let m be Element of NAT;
-       assume A4: b |^ - m = 1_G;
+       assume A3: b |^ - m = 1_G;
        b |^ -m = (b |^ m)" by GROUP_1:71;
-       then A5: b" |^ m = 1_G by A4,GROUP_1:72;
-       b" is_of_order_0 by A2,Th12;
-       hence thesis by A5,GROUP_1:def 11;
+       then A4: b" |^ m = 1_G by A3,GROUP_1:72;
+       b" is_of_order_0 by A1,Th12;
+       hence thesis by A4,GROUP_1:def 11;
      end;
      for n being Integer holds b |^ n = 1_G implies n = 0
      proof
        let n be Integer;
-       assume A6: b |^ n = 1_G;
+       assume A5: b |^ n = 1_G;
        consider k being Element of NAT such that
-       A7: n = k or n = - k by INT_1:8;
-       per cases by A7;
+       A6: n = k or n = - k by INT_1:8;
+       per cases by A6;
        suppose n = k;
-         hence thesis by A2,A6,GROUP_1:def 11;
+         hence thesis by A1,A5,GROUP_1:def 11;
        end;
-       suppose A8: n = -k;
-         then k = 0 by A3,A6;
-         hence thesis by A8;
+       suppose A7: n = -k;
+         then k = 0 by A2,A5;
+         hence thesis by A7;
        end;
      end;
      hence thesis;
@@ -283,103 +283,103 @@ thus (for H holds H = G or H = (1).G) implies
 G is cyclic Group & G is finite & ex p being Element of NAT
 st ord G = p & p is prime
 proof
-   assume A4: for H holds H = G or H = (1).G;
-   consider b such that A2: b <> 1_G by A1;
-      gr {b} <> (1).G by A2,Th7;
-     then A5: gr {b} = G by A4;
-     A6: b is_not_of_order_0
+   assume A2: for H holds H = G or H = (1).G;
+   consider b such that A3: b <> 1_G by A1;
+      gr {b} <> (1).G by A3,Th7;
+     then A4: gr {b} = G by A2;
+     A5: b is_not_of_order_0
         proof
-          assume A7: b is_of_order_0;
+          assume A6: b is_of_order_0;
           then b|^2 <> 1_G by GROUP_1:def 11;
-          then A8: gr{b|^2} <> (1).G by Th7;
+          then A7: gr{b|^2} <> (1).G by Th7;
           gr{b|^2} <> G
           proof
             not b in gr{b|^2}
             proof
               assume b in gr{b|^2};
               then consider j1 being Integer such that
-A9:           b = (b|^2)|^j1 by GR_CY_1:25;
-               b = b |^ (2 *j1) by A9,GROUP_1:67;
+A8:           b = (b|^2)|^j1 by GR_CY_1:25;
+               b = b |^ (2 *j1) by A8,GROUP_1:67;
               then b" * (b |^ (2 * j1)) = 1_G by GROUP_1:def 6;
               then (b|^ -1) * (b |^(2 * j1)) = 1_G by GROUP_1:62;
               then b |^ (-1 + (2 * j1)) = 1_G by GROUP_1:63;
-              then -1 + (2 * j1) = 0 by A7,Th13;
+              then -1 + (2 * j1) = 0 by A6,Th13;
               hence thesis by INT_1:22;
             end;
-            hence thesis by A5,GR_CY_2:8;
+            hence thesis by A4,GR_CY_2:8;
             end;
-          hence contradiction by A4,A8;
+          hence contradiction by A2,A7;
           end;
      then consider n being Element of NAT such that
-     A10: n = ord b & b is_not_of_order_0;
-     A11: G is finite by A5,A6,Th11;
-     then A12: ord G = n by A5,A10,GR_CY_1:27;
+     A9: n = ord b & b is_not_of_order_0;
+     A10: G is finite by A4,A5,Th11;
+     then A11: ord G = n by A4,A9,GR_CY_1:27;
       n is prime
        proof
-        assume A13: not n is prime;
+        assume A12: not n is prime;
          ex u,v being Element of NAT st u >1 & v > 1 & n = u * v
         proof
-          A14: not (n>1 & for m being natural number holds
+          A13: not (n>1 & for m being natural number holds
               m divides n implies m = 1 or m = n)
-                by A13,INT_2:def 5;
-          A15: n > 1
+                by A12,INT_2:def 5;
+          A14: n > 1
             proof
-              A16: n >= 1 by A11,A12,GROUP_1:90;
-               n <> 1 by A2,A10,GROUP_1:85;
-              hence thesis by A16,REAL_1:def 5;
+              A15: n >= 1 by A10,A11,GROUP_1:90;
+               n <> 1 by A3,A9,GROUP_1:85;
+              hence thesis by A15,REAL_1:def 5;
               end;
           then consider m being natural number such that
-A17:       m <> 1 & m <> n & m divides n by A14;
+A16:       m <> 1 & m <> n & m divides n by A13;
           reconsider m as Element of NAT by ORDINAL1:def 13;
           consider o being Nat such that
-A18:       n = m * o by A17,NAT_D:def 3;
+A17:       n = m * o by A16,NAT_D:def 3;
            reconsider o as Element of NAT by ORDINAL1:def 13;
           take u = m;
           take v = o;
-          A19: u > 1
+          A18: u > 1
               proof
                  u <> 0
                  proof
                    assume u = 0;
-                   then n = 0 * (n div 0) by A17,NAT_D:3;
-                   hence contradiction by A15;
+                   then n = 0 * (n div 0) by A16,NAT_D:3;
+                   hence contradiction by A14;
                  end;
               then 0 < u;
               then 0 + 1 <= u by INT_1:20;
-              hence thesis by A17,REAL_1:def 5;
+              hence thesis by A16,REAL_1:def 5;
               end;
              v > 1
             proof
-              v <> 0 by A15,A18;
+              v <> 0 by A14,A17;
               then 0 < v;
-              then A20: 0 + 1 <= v by INT_1:20;
-              v <> 1 by A17,A18;
-              hence thesis by A20,REAL_1:def 5;
+              then A19: 0 + 1 <= v by INT_1:20;
+              v <> 1 by A16,A17;
+              hence thesis by A19,REAL_1:def 5;
             end;
-          hence thesis by A18,A19;
+          hence thesis by A17,A18;
         end;
         then consider u, v being Element of NAT such that
-        A21: u > 1 & v > 1 & n = u *v;
-         ord (b |^v) = u by A5,A11,A12,A21,GR_CY_2:14;
-        then A22: ord gr {b |^v } = u by A11,GR_CY_1:27;
-        A23: u <> n by A21,XCMPLX_1:7;
-         gr {b |^v } <> (1).G by A21,A22,GROUP_2:81;
-        hence thesis by A4,A12,A22,A23;
+        A20: u > 1 & v > 1 & n = u *v;
+         ord (b |^v) = u by A4,A10,A11,A20,GR_CY_2:14;
+        then A21: ord gr {b |^v } = u by A10,GR_CY_1:27;
+        A22: u <> n by A20,XCMPLX_1:7;
+         gr {b |^v } <> (1).G by A20,A21,GROUP_2:81;
+        hence thesis by A2,A11,A21,A22;
        end;
-     hence thesis by A5,A6,A12,Th11,GR_CY_2:10;
+     hence thesis by A4,A5,A11,Th11,GR_CY_2:10;
    end;
-   assume A24: G is cyclic Group & G is finite &
+   assume A23: G is cyclic Group & G is finite &
    ex p being Element of NAT st ord G = p & p is prime;
    let H;
-    ord G = ord H * index H by A24,GROUP_2:177;
-   then A25: ord H divides ord G by NAT_D:def 3;
-   per cases by A24,A25,INT_2:def 5;
+    ord G = ord H * index H by A23,GROUP_2:177;
+   then A24: ord H divides ord G by NAT_D:def 3;
+   per cases by A23,A24,INT_2:def 5;
    suppose ord H = ord G;
-     hence thesis by A24,GROUP_2:85;
+     hence thesis by A23,GROUP_2:85;
    end;
-   suppose A26: ord H = 1;
-     H is finite by A24,GROUP_2:48;
-     hence thesis by A26,GROUP_2:82;
+   suppose A25: ord H = 1;
+     H is finite by A23,GROUP_2:48;
+     hence thesis by A25,GROUP_2:82;
    end;
 end;
 
@@ -397,18 +397,18 @@ proof
    proof
    assume z in x * A * y;
    then consider b being Element of G such that
-   A2: z = b * y & b in x * A by GROUP_2:34;
+   A1: z = b * y & b in x * A by GROUP_2:34;
    consider u being Element of G such that
-   A3: b = x * u & u in A by A2,GROUP_2:33;
+   A2: b = x * u & u in A by A1,GROUP_2:33;
    take a = u;
-   thus thesis by A2,A3;
+   thus thesis by A1,A2;
    end;
      given a being Element of G such that
-A4:  z = x * a * y & a in A;
+A3:  z = x * a * y & a in A;
      ex h being Element of G st z = h * y & h in x * A
      proof
        take h = x * a;
-       thus thesis by A4,GROUP_2:33;
+       thus thesis by A3,GROUP_2:33;
      end;
      hence thesis by GROUP_2:34;
 end;
@@ -568,20 +568,20 @@ proof
   proof
     assume z in H * x * K;
     then consider g1, g2 being Element of G such that
-A2: z = g1 * g2 & g1 in H * x & g2 in K by GROUP_2:114;
+A1: z = g1 * g2 & g1 in H * x & g2 in K by GROUP_2:114;
     consider h1 being Element of G such that
-A3: g1 = h1 * x & h1 in H by A2,GROUP_2:126;
-    thus thesis by A2,A3;
+A2: g1 = h1 * x & h1 in H by A1,GROUP_2:126;
+    thus thesis by A1,A2;
    end;
    given g,h being Element of G such that
-A4:z = g * x * h & g in H & h in K;
+A3:z = g * x * h & g in H & h in K;
    ex g1, g2 being Element of G st
    z = g1 * g2 & g1 in H * x & g2 in K
    proof
      set g2 = h;
      set g1 = g * x;
-     g1 in H * x by A4,GROUP_2:126;
-     hence thesis by A4;
+     g1 in H * x by A3,GROUP_2:126;
+     hence thesis by A3;
    end;
    hence thesis by GROUP_2:114;
 end;
@@ -990,69 +990,69 @@ proof
   suppose H = (1).G;
     hence thesis;
   end;
-  suppose A2:H <> (1).G;
+  suppose A1:H <> (1).G;
   consider b being Element of G such that
-A3:the HGrStr of G = gr{b} by GR_CY_1:def 9;
+A2:the HGrStr of G = gr{b} by GR_CY_1:def 9;
   consider i being Integer;
    ex m being Element of NAT
    st 0 < m & b |^m in H & for j being Element of NAT st
     0 < j & b |^j in H holds m <= j
     proof
       defpred P[Element of NAT] means 0 < $1 & b |^$1 in H;
-  A4: ex k being Element of NAT st P[k] by A2,A3,Th24;
+  A3: ex k being Element of NAT st P[k] by A1,A2,Th24;
        ex m being Element of NAT st P[m] & for j being Element of NAT st P[j]
-      holds m <= j from NAT_1:sch 5(A4);
+      holds m <= j from NAT_1:sch 5(A3);
       hence thesis;
     end;
   then consider m being Element of NAT such that
-A5: 0 < m & b |^m in H & for j being Element of NAT st 0 < j & b |^ j in H
+A4: 0 < m & b |^m in H & for j being Element of NAT st 0 < j & b |^ j in H
 holds m <= j;
 set c = b |^ m;
-reconsider c as Element of H by A5,STRUCT_0:def 5;
+reconsider c as Element of H by A4,STRUCT_0:def 5;
  for a being Element of H holds
 ex i being Integer st a = c |^ i
        proof
          let a be Element of H;
           ex t being Integer st b |^t in H & b|^t = a
          proof
-           A6: a in G by GROUP_2:50;
-           A7: a in gr{b} by A3,GROUP_2:50;
-           a is Element of G by A6,STRUCT_0:def 5;
-           then consider j1 being Integer such that A8: a = b |^ j1
-             by A7,GR_CY_1:25;
-            b |^ j1 in H by A8,STRUCT_0:def 5;
-           hence thesis by A8;
+           A5: a in G by GROUP_2:50;
+           A6: a in gr{b} by A2,GROUP_2:50;
+           a is Element of G by A5,STRUCT_0:def 5;
+           then consider j1 being Integer such that A7: a = b |^ j1
+             by A6,GR_CY_1:25;
+            b |^ j1 in H by A7,STRUCT_0:def 5;
+           hence thesis by A7;
          end;
-         then consider t being Integer such that A9: b |^ t in H & b |^t = a;
+         then consider t being Integer such that A8: b |^ t in H & b |^t = a;
           ex r,s being Integer st 0 <= s & s < m & t = m * r + s
          proof
            take r = t div m;
            take s = t mod m;
-           thus thesis by A5,NEWTON:78,79,80;
-         end; then consider r,s being Integer such that A10:
+           thus thesis by A4,NEWTON:78,79,80;
+         end; then consider r,s being Integer such that A9:
          0 <= s & s < m & t = m * r + s;
-         reconsider s as Element of NAT by A10,INT_1:16;
-         A11: b |^ t = b |^(m *r) * (b |^s) by A10,GROUP_1:63
+         reconsider s as Element of NAT by A9,INT_1:16;
+         A10: b |^ t = b |^(m *r) * (b |^s) by A9,GROUP_1:63
       .= ((b |^m)|^ r) * (b |^ s) by GROUP_1:67;
-      A12: (b |^m) |^r in H by A5,Th22;
-      A13: b |^s in H
+      A11: (b |^m) |^r in H by A4,Th22;
+      A12: b |^s in H
       proof
         set u = b |^t;
         set v = (b |^m) |^ r;
-        A14: v" * u = (v" * v) * b|^s by A11,GROUP_1:def 4
+        A13: v" * u = (v" * v) * b|^s by A10,GROUP_1:def 4
            .= 1_G * b |^ s by GROUP_1:def 6
            .= b |^ s by GROUP_1:def 5;
-            v" in H by A12,GROUP_2:60;
-           hence thesis by A9,A14,GROUP_2:59;
+            v" in H by A11,GROUP_2:60;
+           hence thesis by A8,A13,GROUP_2:59;
          end;
     b |^ s = 1_G
    proof
-      s = 0 by A5,A10,A13;
+      s = 0 by A4,A9,A12;
      hence thesis by GROUP_1:43;
    end;
-   then A15: b |^ t = (b |^ m) |^r by A11,GROUP_1:def 5;
+   then A14: b |^ t = (b |^ m) |^r by A10,GROUP_1:def 5;
      (b |^m)|^ r = (c) |^ r by GROUP_4:4;
-    hence thesis by A9,A15;
+    hence thesis by A8,A14;
   end;
   then H = gr{c} by GR_CY_2:11;
   hence thesis by GR_CY_2:10;

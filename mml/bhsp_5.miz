@@ -8,10 +8,11 @@ environ
 
  vocabularies BOOLE, BHSP_1, PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM_1,
       FINSET_1, RELAT_1, BHSP_5, BINOP_1, VECTSP_1, PROB_2, FUZZY_2, SQUARE_1,
-      FUNCT_2, FINSEQ_1, SETWISEO, CARD_1, FINSOP_1, DECOMP_1, NAT_1;
- notations TARSKI, SUBSET_1, XBOOLE_0, NUMBERS, XCMPLX_0, XXREAL_0, STRUCT_0,
-      REAL_1, FUNCT_2, FINSET_1, RELAT_1, BINOP_2, PRE_TOPC, RLVECT_1, BHSP_1,
-      SQUARE_1, BINOP_1, CARD_1, SETWISEO, FUNCT_1, FINSEQ_1, FINSOP_1;
+      FUNCT_2, FINSEQ_1, SETWISEO, CARD_1, FINSOP_1, DECOMP_1;
+ notations TARSKI, SUBSET_1, XBOOLE_0, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
+      STRUCT_0, REAL_1, FUNCT_2, FINSET_1, RELAT_1, BINOP_2, PRE_TOPC,
+      RLVECT_1, BHSP_1, SQUARE_1, BINOP_1, CARD_1, SETWISEO, FUNCT_1, FINSEQ_1,
+      FINSOP_1;
  constructors PARTFUN1, BINOP_1, DOMAIN_1, SETWISEO, REAL_1, SQUARE_1, NAT_1,
       NAT_D, BINOP_2, MEMBERED, FINSOP_1, BHSP_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
@@ -158,7 +159,7 @@ end;
 
 definition let X, x;
            let p be FinSequence;
-           let i;
+           let i be Nat;
   func PO(i,p,x) equals
    (the scalar of X).[x,p.i];
   correctness;
@@ -265,7 +266,7 @@ end;
 definition let X, x;
            let Y be finite Subset of X;
  func setop_xPre_PROD(x,Y,X) -> Real means
-        ex p being FinSequence of the carrier of X st p is one-to-one &
+ ex p being FinSequence of the carrier of X st p is one-to-one &
     rng p = Y
     & ex q being FinSequence of REAL st dom(q) = dom(p) &
     (for i st i in dom q holds
@@ -277,15 +278,15 @@ A1: rng p0 = Y and
 A2: p0 is one-to-one by FINSEQ_4:73;
   reconsider p = p0 as FinSequence of the carrier of X by A1,FINSEQ_1:def 4;
   set ll = len p;
-    deffunc F(Element of NAT) = PO($1,p,x);
+    deffunc F(Nat) = PO($1,p,x);
       ex q0 being FinSequence st len q0 = ll &
-    for i st i in Seg ll holds q0.i = F(i) from FINSEQ_1:sch 2;
+    for i be Nat st i in Seg ll holds q0.i = F(i) from FINSEQ_1:sch 2;
   then consider q0 being FinSequence such that
-A3: len q0 = ll & for i st i in Seg ll holds q0.i = PO(i,p,x);
+A3: len q0 = ll & for i be Nat st i in Seg ll holds q0.i = PO(i,p,x);
 A4: dom q0 = Seg ll by A3,FINSEQ_1:def 3;
 then A5: dom q0 = dom p by FINSEQ_1:def 3;
-      now
-    let i;
+now
+    let i be Nat;
     assume
 A6: i in dom q0;
 then A7: q0.i = PO(i,p,x) by A3,A4
@@ -295,8 +296,10 @@ then A7: q0.i = PO(i,p,x) by A3,A4
     hence q0.i in REAL by A7;
   end;
   then reconsider q = q0 as FinSequence of REAL by FINSEQ_2:14;
-  take addreal "**" q;
-  thus thesis by A1,A2,A3,A4,A5;
+  take addreal "**" q, p;
+  thus p is one-to-one & rng p = Y by A1,A2;
+  take q;
+  thus thesis by A3,A4,A5;
 end;
 uniqueness
 proof
@@ -597,7 +600,7 @@ then A39:          p.(i+1) in rng p by FUNCT_1:12;
                   0 < i by A36,NAT_1:3;
 then A41:          0 + 1 <= i by INT_1:20;
                   i < i + 1 by XREAL_1:31;
-then A42:           s.|.y = 0 by A32,A34,A41,XXREAL_0:2,BHSP_1:def 1;
+then A42:           s.|.y = 0 by A32,A34,A41,BHSP_1:def 1,XXREAL_0:2;
 A43:           i+1 + 0 < n + 1 by A34,XREAL_1:10;
                   (the scalar of X).[f.(i+1), y]
               = (the scalar of X).[s + t, y] by A5,A36,A40
@@ -708,8 +711,8 @@ A23:      p.(n+1) in rng p by A21,FUNCT_1:12;
              .=addreal.( (x.|.z ),(x .|. y)) by BHSP_1:def 1
              .= (x.|.z ) + (x.|.y) by BINOP_2:def 9
              .= x .|. (z+y) by BHSP_1:7
-             .= (the scalar of X). [x,(the add of X).(f.n,p.(n + 1))] by BHSP_1
-:def 1
+             .= (the scalar of X). [x,(the add of X).(f.n,p.(n + 1))] by
+BHSP_1:def 1
              .= (the scalar of X). [x,f.(n + 1)] by A4,A7,A16,A18;
       end;
       end;

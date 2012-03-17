@@ -12,7 +12,7 @@ environ
       WAYBEL_1, SGRAPH1, T_0TOPSP, TOPS_2, METRIC_1, RELAT_2, ORDERS_1,
       WAYBEL11, YELLOW_9, YELLOW_1, LATTICE3, FILTER_1, WAYBEL_0, QUANTAL1,
       YELLOW_0, FINSET_1, BHSP_3, WAYBEL_8, LATTICES, CAT_1, WAYBEL_9,
-      COMPTS_1, WAYBEL18, RLVECT_3, MONOID_0, NAT_1;
+      COMPTS_1, WAYBEL18, RLVECT_3, MONOID_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
       FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, DOMAIN_1, PRALG_3, STRUCT_0,
       PRE_TOPC, T_0TOPSP, FUNCT_3, FUNCT_6, FUNCT_7, PBOOLE, CARD_3, FUNCOP_1,
@@ -21,7 +21,7 @@ environ
       WAYBEL_3, WAYBEL_8, WAYBEL_9, WAYBEL11;
  constructors SETFAM_1, FUNCT_3, FUNCT_7, TOPS_2, BORSUK_1, LATTICE3, TMAP_1,
       T_0TOPSP, CANTOR_1, MONOID_0, PRALG_1, PRALG_3, WAYBEL_3, WAYBEL_5,
-      WAYBEL_8, WAYBEL11, YELLOW_9, STRUCT_0, XBOOLE_0;
+      WAYBEL_8, WAYBEL11, YELLOW_9;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, FUNCOP_1, CARD_3,
       STRUCT_0, PRE_TOPC, BORSUK_1, LATTICE3, YELLOW_0, MONOID_0, WAYBEL_0,
       YELLOW_1, WAYBEL_3, WAYBEL_8, WAYBEL11, YELLOW_9;
@@ -460,12 +460,12 @@ for I being non empty set,
 proof
  let I be non empty set,
      J be TopSpace-yielding non-Empty ManySortedSet of I, i be Element of I;
-A: [#](J.i) <> {};
+A1: [#](J.i) <> {};
   for P being Subset of J.i st P is open
     holds proj(J,i)"P is open
   proof
    let P be Subset of J.i; assume
-A1:   P is open;
+A2:   P is open;
       proj(J,i)"P c= product Carrier J
       proof let x be set; assume x in proj(J,i)"P;
         then x in dom proj(Carrier J,i) by FUNCT_1:def 13;
@@ -473,12 +473,12 @@ A1:   P is open;
       end;
     then reconsider x = proj(J,i)"P as Subset of product Carrier J;
     x = product ((Carrier J) +* (i,P)) by Th5;
-then A2:   proj(J,i)"P in product_prebasis J by A1,Def2;
+then A3:   proj(J,i)"P in product_prebasis J by A2,Def2;
     product_prebasis J is prebasis of product J by Def3;
     then product_prebasis J c= the topology of product J by CANTOR_1:def 5;
-   hence proj(J,i)"P is open by A2,PRE_TOPC:def 5;
+   hence proj(J,i)"P is open by A3,PRE_TOPC:def 5;
   end;
- hence proj(J,i) is continuous by A,TOPS_2:55;
+ hence proj(J,i) is continuous by A1,TOPS_2:55;
 end;
 
 theorem Th7:
@@ -701,8 +701,7 @@ FUNCT_1:def 5;
           hence z.j = g.x by A8,A53,A57,A58,FUNCT_6:54
                    .= (proj(J,i)*f).x by A44,A46,A56,FUNCT_1:72
                    .= proj(Carrier J,i).y by A44,A46,A49,FUNCT_2:21
- .= y.j by A54,A59,
-PRALG_3:def 2;
+ .= y.j by A54,A59,PRALG_3:def 2;
          end;
       hence (h|(the carrier of X)).x = f.x by A49,A50,A51,A52,FUNCT_1:9;
      end;
@@ -730,7 +729,7 @@ A60:  B is prebasis of product J by Def3;
  A69:   G.i = g by A67;
      reconsider V as Subset of J.j by A64,A66;
  A70:   proj(J,j)"V = p by A65,A66,Th5;
-        [#](J.j) <> {}; then        
+        [#](J.j) <> {}; then
  A71:   g"V is open by A63,A64,A66,A68,TOPS_2:55;
  A72:   dom g = the carrier of Y by FUNCT_2:def 1 .= dom h by FUNCT_2:def 1;
  A73:   dom proj(J,j) = product Carrier J by PRALG_3:def 2;
@@ -872,25 +871,25 @@ for X, Y being non empty TopSpace, f being Function of X,Y st
 proof let X, Y be non empty TopSpace; let f be Function of X,Y; assume
 A1:f is continuous;
 A2:f is Function of dom f,rng f by FUNCT_2:3;
-A: [#]Y <> {} & [#]Image f <> {};    
+A3: [#]Y <> {} & [#]Image f <> {};
    for R being Subset of Image f st R is open holds (corestr f)"R is open
     proof let R be Subset of Image f; assume R is open;
        then R in the topology of Image f by PRE_TOPC:def 5;
      then consider Q being Subset of Y such that
-  A3:  Q in the topology of Y and
-  A4:  R = Q /\ [#](Image f) by PRE_TOPC:def 9;
+  A4:  Q in the topology of Y and
+  A5:  R = Q /\ [#](Image f) by PRE_TOPC:def 9;
      reconsider Q as Subset of Y;
-     Q is open by A3,PRE_TOPC:def 5;
-  then A5:  f"Q is open by A,A1,TOPS_2:55;
+     Q is open by A4,PRE_TOPC:def 5;
+  then A6:  f"Q is open by A1,A3,TOPS_2:55;
              [#](Image f) = rng f by Th10;
-  then A6:  f"([#](Image f)) = dom f by A2,FUNCT_2:48
+  then A7:  f"([#](Image f)) = dom f by A2,FUNCT_2:48
                      .= the carrier of X by FUNCT_2:def 1;
              the carrier of X in the topology of X by PRE_TOPC:def 1;
-  then A7:  f"([#](Image f)) is open by A6,PRE_TOPC:def 5;
+  then A8:  f"([#](Image f)) is open by A7,PRE_TOPC:def 5;
              f"Q /\ f"([#](Image f)) = f"(Q /\ [#](Image f)) by FUNCT_1:137;
-     hence (corestr f)"R is open by A4,A5,A7,TOPS_1:38;
+     hence (corestr f)"R is open by A5,A6,A8,TOPS_1:38;
     end;
- hence corestr f is continuous by A,TOPS_2:55;
+ hence corestr f is continuous by A3,TOPS_2:55;
 end;
 
 registration let X be 1-sorted,Y be non empty TopStruct; let f be Function
@@ -915,208 +914,208 @@ for T,S being non empty TopSpace st T is injective
   T is_Retract_of S
 proof let T,S be non empty TopSpace; assume
 A1:T is injective;
-A: [#]S <> {} & [#]T <> {}; 
+A2: [#]S <> {} & [#]T <> {};
  let f be Function of T,S; assume
-A2:corestr(f) is_homeomorphism;
-then A3:corestr(f) is continuous by TOPS_2:def 5;
+A3:corestr(f) is_homeomorphism;
+then A4:corestr(f) is continuous by TOPS_2:def 5;
  consider g being Function of Image f, T such that
-A4:g = (corestr f)";
-  g is continuous by A2,A4,TOPS_2:def 5;
+A5:g = (corestr f)";
+  g is continuous by A3,A5,TOPS_2:def 5;
  then consider h being Function of S,T such that
-A5:h is continuous and
-A6:h|(the carrier of Image f) = g by A1,Def5;
-   g is_homeomorphism by A2,A4,TOPS_2:70;
-then A7:g is one-to-one by TOPS_2:def 5;
+A6:h is continuous and
+A7:h|(the carrier of Image f) = g by A1,Def5;
+   g is_homeomorphism by A3,A5,TOPS_2:70;
+then A8:g is one-to-one by TOPS_2:def 5;
  reconsider p = incl(Image f) as Function of Image f,S;
  p is continuous by TMAP_1:98;
-then A8:p*(corestr f) is continuous by A3,TOPS_2:58;
-A9:dom (p*(corestr f)) = the carrier of T by FUNCT_2:def 1
+then A9:p*(corestr f) is continuous by A4,TOPS_2:58;
+A10:dom (p*(corestr f)) = the carrier of T by FUNCT_2:def 1
                       .= dom f by FUNCT_2:def 1;
  take F = f*h;
-A10:the carrier of Image f = rng f by Th10;
+A11:the carrier of Image f = rng f by Th10;
       dom h = the carrier of S & rng h c= the carrier of T by FUNCT_2:def 1;
-then A11:rng h c= dom f by FUNCT_2:def 1;
-A12:for P being Subset of S holds f"P = (p*(corestr f))"P
+then A12:rng h c= dom f by FUNCT_2:def 1;
+A13:for P being Subset of S holds f"P = (p*(corestr f))"P
     proof let P be Subset of S;
      hereby let x be set; assume x in f"P;
-   then A13:  x in dom f & f.x in P by FUNCT_1:def 13;
+   then A14:  x in dom f & f.x in P by FUNCT_1:def 13;
    then f.x in rng f by FUNCT_1:def 5;
-   then A14:  f.x in the carrier of Image f by Th10;
-      reconsider y = f.x as Point of S by A13;
-      (p*(corestr f)).x = p.(f.x) by A13,FUNCT_1:23
-                         .= y by A14,TMAP_1:95;
-      hence x in (p*(corestr f))"P by A9,A13,FUNCT_1:def 13;
+   then A15:  f.x in the carrier of Image f by Th10;
+      reconsider y = f.x as Point of S by A14;
+      (p*(corestr f)).x = p.(f.x) by A14,FUNCT_1:23
+                         .= y by A15,TMAP_1:95;
+      hence x in (p*(corestr f))"P by A10,A14,FUNCT_1:def 13;
      end; let x be set; assume x in (p*(corestr f))"P;
-  then A15:  x in dom(p*(corestr f)) & (p*(corestr f)).x in P by FUNCT_1:def 13
+  then A16:  x in dom(p*(corestr f)) & (p*(corestr f)).x in P by FUNCT_1:def 13
 ;
-  then A16:  f.x in rng f by A9,FUNCT_1:def 5;
-  then A17:  f.x in the carrier of Image f by Th10;
-     reconsider y = f.x as Point of S by A16;
-     (p*(corestr f)).x = p.(f.x) by A9,A15,FUNCT_1:23
-                        .= y by A17,TMAP_1:95;
-     hence x in f"P by A9,A15,FUNCT_1:def 13;
+  then A17:  f.x in rng f by A10,FUNCT_1:def 5;
+  then A18:  f.x in the carrier of Image f by Th10;
+     reconsider y = f.x as Point of S by A17;
+     (p*(corestr f)).x = p.(f.x) by A10,A16,FUNCT_1:23
+                        .= y by A18,TMAP_1:95;
+     hence x in f"P by A10,A16,FUNCT_1:def 13;
     end;
     for P being Subset of S st P is open holds F"P is open
     proof let P be Subset of S; assume
-       P is open; then (p*(corestr f))"P is open by A,A8,TOPS_2:55;
-       then f"P is open by A12; then h"(f"P) is open by A,A5,TOPS_2:55;
+       P is open; then (p*(corestr f))"P is open by A2,A9,TOPS_2:55;
+       then f"P is open by A13; then h"(f"P) is open by A2,A6,TOPS_2:55;
      hence F"P is open by RELAT_1:181;
     end;
- hence F is continuous by A,TOPS_2:55;
-A18:dom (h*f) = the carrier of T by FUNCT_2:def 1;
+ hence F is continuous by A2,TOPS_2:55;
+A19:dom (h*f) = the carrier of T by FUNCT_2:def 1;
     for x being set st x in the carrier of T holds (h*f).x = x
     proof let x be set; assume
-  A19:  x in the carrier of T;
-  then A20:  x in dom f by FUNCT_2:def 1;
-  A21:  x in dom (corestr f) by A19,FUNCT_2:def 1;
-  A22:  corestr f is one-to-one by A2,TOPS_2:def 5;
-  A23:  rng (corestr f) = [#](Image f) by FUNCT_2:def 3;
-  A24:   f.x in rng f by A20,FUNCT_1:def 5;
-     thus (h*f).x = h.(f.x) by A20,FUNCT_1:23
-       .= ((corestr f)").((corestr f).x) by A4,A6,A10,A24,FUNCT_1:72
+  A20:  x in the carrier of T;
+  then A21:  x in dom f by FUNCT_2:def 1;
+  A22:  x in dom (corestr f) by A20,FUNCT_2:def 1;
+  A23:  corestr f is one-to-one by A3,TOPS_2:def 5;
+  A24:  rng (corestr f) = [#](Image f) by FUNCT_2:def 3;
+  A25:   f.x in rng f by A21,FUNCT_1:def 5;
+     thus (h*f).x = h.(f.x) by A21,FUNCT_1:23
+       .= ((corestr f)").((corestr f).x) by A5,A7,A11,A25,FUNCT_1:72
        .= ((corestr f qua Function)").((corestr f).x)
-            by A22,A23,TOPS_2:def 4
-       .= x by A21,A22,FUNCT_1:56;
+            by A23,A24,TOPS_2:def 4
+       .= x by A22,A23,FUNCT_1:56;
     end;
-then A25:h*f = id (the carrier of T) by A18,FUNCT_1:34;
- thus F*F = (f*h*f)*h by RELAT_1:55 .= f*(id T)*h by RELAT_1:55,
-A25 .= F by FUNCT_2:23;
-  A26: rng F c= rng f
+then A26:h*f = id (the carrier of T) by A19,FUNCT_1:34;
+ thus F*F = (f*h*f)*h by RELAT_1:55 .= f*(id T)*h by A26,RELAT_1:55 .= F by
+FUNCT_2:23;
+  A27: rng F c= rng f
         proof let y be set; assume y in rng F;
          then consider x being set such that
-       A27: x in dom F and
-       A28: y = F.x by FUNCT_1:def 5;
-        x in the carrier of S by A27;
-       then A29: x in dom h by FUNCT_2:def 1;
-       then A30:  h.x in rng h by FUNCT_1:def 5;
-         f.(h.x) = y by A28,A29,FUNCT_1:23;
-         hence y in rng f by A11,A30,FUNCT_1:def 5;
+       A28: x in dom F and
+       A29: y = F.x by FUNCT_1:def 5;
+        x in the carrier of S by A28;
+       then A30: x in dom h by FUNCT_2:def 1;
+       then A31:  h.x in rng h by FUNCT_1:def 5;
+         f.(h.x) = y by A29,A30,FUNCT_1:23;
+         hence y in rng f by A12,A31,FUNCT_1:def 5;
         end;
  set H = h*(incl Image F);
-A31:dom incl Image F = the carrier of Image F by FUNCT_2:def 1;
-A32:dom H = [#](Image F) by FUNCT_2:def 1;
-B: [#]Image F <> {};
-A33:rng H = [#]T
+A32:dom incl Image F = the carrier of Image F by FUNCT_2:def 1;
+A33:dom H = [#](Image F) by FUNCT_2:def 1;
+A34: [#]Image F <> {};
+A35:rng H = [#]T
     proof
       thus rng H c= [#](T);
       let y be set; assume
-  A34:  y in [#](T);
-  A35:  dom H = rng F by A32,Th10;
-  A36:  y in dom f by A34,FUNCT_2:def 1;
-  then A37:  f.y in rng f by FUNCT_1:def 5;
+  A36:  y in [#](T);
+  A37:  dom H = rng F by A33,Th10;
+  A38:  y in dom f by A36,FUNCT_2:def 1;
+  then A39:  f.y in rng f by FUNCT_1:def 5;
        then f.y in the carrier of S;
-  then A38:  f.y in dom F by FUNCT_2:def 1;
-  A39:  F.(f.y) = ((f*h)*f).y by A36,FUNCT_1:23 .= (f*id T).y by RELAT_1:55,
-A25 .= f.y by FUNCT_2:23;
-  then A40:  f.y in dom H by A35,A38,FUNCT_1:def 5;
-     reconsider pp = f.y as Point of S by A37;
-             F.(f.y) in rng F by A38,FUNCT_1:def 5;
-  then A41:  f.y in the carrier of Image F by A39,Th10;
-  then A42:  y in dom((incl Image F)*f) by A31,A36,FUNCT_1:21;
-             H.(f.y) = ((h*(incl Image F))*f).y by A36,FUNCT_1:23
+  then A40:  f.y in dom F by FUNCT_2:def 1;
+  A41:  F.(f.y) = ((f*h)*f).y by A38,FUNCT_1:23 .= (f*id T).y by A26,RELAT_1:55
+ .= f.y by FUNCT_2:23;
+  then A42:  f.y in dom H by A37,A40,FUNCT_1:def 5;
+     reconsider pp = f.y as Point of S by A39;
+             F.(f.y) in rng F by A40,FUNCT_1:def 5;
+  then A43:  f.y in the carrier of Image F by A41,Th10;
+  then A44:  y in dom((incl Image F)*f) by A32,A38,FUNCT_1:21;
+             H.(f.y) = ((h*(incl Image F))*f).y by A38,FUNCT_1:23
         .= (h*((incl Image F)*f)).y by RELAT_1:55
-        .= h.(((incl Image F)*f).y) by A42,FUNCT_1:23
-        .= h.((incl Image F).pp) by A36,FUNCT_1:23
-        .= h.(f.y) by A41,TMAP_1:95 .= (id T).y by A36,FUNCT_1:23,
-A25 .= y by A34,FUNCT_1:35;
-     hence y in rng H by A40,FUNCT_1:def 5;
+        .= h.(((incl Image F)*f).y) by A44,FUNCT_1:23
+        .= h.((incl Image F).pp) by A38,FUNCT_1:23
+        .= h.(f.y) by A43,TMAP_1:95 .= (id T).y by A26,A38,FUNCT_1:23 .= y by
+A36,FUNCT_1:35;
+     hence y in rng H by A42,FUNCT_1:def 5;
     end;
-A43:H is one-to-one
+A45:H is one-to-one
     proof let x,y be Element of Image F; assume
-  A44:  H.x = H.y;
-  A45:  x in the carrier of Image F;
-  then A46:  x in rng F by Th10;
-  A47:  x in dom (incl Image F) by A45,FUNCT_2:def 1;
-  A48:  y in the carrier of Image F;
-  then A49:  y in rng F by Th10;
-  A50:  y in dom (incl Image F) by A48,FUNCT_2:def 1;
-     reconsider a = x, b = y as Point of S by A46,A49;
-     reconsider x' = x, y' = y as Element of Image f by A26,A46,A49,Th10;
-     g.x' = h.x by A6,FUNCT_1:72
+  A46:  H.x = H.y;
+  A47:  x in the carrier of Image F;
+  then A48:  x in rng F by Th10;
+  A49:  x in dom (incl Image F) by A47,FUNCT_2:def 1;
+  A50:  y in the carrier of Image F;
+  then A51:  y in rng F by Th10;
+  A52:  y in dom (incl Image F) by A50,FUNCT_2:def 1;
+     reconsider a = x, b = y as Point of S by A48,A51;
+     reconsider x' = x, y' = y as Element of Image f by A27,A48,A51,Th10;
+     g.x' = h.x by A7,FUNCT_1:72
            .= h.((incl Image F).a) by TMAP_1:95
-           .= (h*(incl Image F)).b by A44,A47,FUNCT_1:23
-           .= h.((incl Image F).b) by A50,FUNCT_1:23
+           .= (h*(incl Image F)).b by A46,A49,FUNCT_1:23
+           .= h.((incl Image F).b) by A52,FUNCT_1:23
            .= h.y by TMAP_1:95
-           .= g.y' by A6,FUNCT_1:72;
-     hence x = y by A7,WAYBEL_1:def 1;
+           .= g.y' by A7,FUNCT_1:72;
+     hence x = y by A8,WAYBEL_1:def 1;
     end;
     incl Image F is continuous by TMAP_1:98;
-then A51:H is continuous by A5,TOPS_2:58;
+then A53:H is continuous by A6,TOPS_2:58;
     for P being Subset of Image F st P is open holds (H")"P is open
     proof let P be Subset of Image F; assume P is open;
        then P in the topology of Image F by PRE_TOPC:def 5;
      then consider Q being Subset of S such that
-   A52: Q in the topology of S and
-   A53: P = Q /\ [#](Image F) by PRE_TOPC:def 9;
+   A54: Q in the topology of S and
+   A55: P = Q /\ [#](Image F) by PRE_TOPC:def 9;
      reconsider Q as Subset of S;
-   A54: Q is open by A52,PRE_TOPC:def 5;
+   A56: Q is open by A54,PRE_TOPC:def 5;
        p is continuous by TMAP_1:98;
-       then p*(corestr f) is continuous by A3,TOPS_2:58;
-       then (p*(corestr f))"Q is open by A,A54,TOPS_2:55;
-   then A55: f"Q is open by A12;
-   A56: (incl Image F).:P = P
+       then p*(corestr f) is continuous by A4,TOPS_2:58;
+       then (p*(corestr f))"Q is open by A2,A56,TOPS_2:55;
+   then A57: f"Q is open by A13;
+   A58: (incl Image F).:P = P
         proof
          hereby let y be set; assume y in (incl Image F).:P;
           then consider x being set such that
-        A57: x in dom (incl Image F) and
-        A58: x in P and
-        A59: y = (incl Image F).x by FUNCT_1:def 12;
-         x in the carrier of Image F by A57;
+        A59: x in dom (incl Image F) and
+        A60: x in P and
+        A61: y = (incl Image F).x by FUNCT_1:def 12;
+         x in the carrier of Image F by A59;
           then x in rng F by Th10;
           then reconsider xx = x as Point of S;
-          (incl Image F).xx = x by A57,TMAP_1:95;
-          hence y in P by A58,A59;
+          (incl Image F).xx = x by A59,TMAP_1:95;
+          hence y in P by A60,A61;
          end; let y be set; assume
-       A60: y in P;
-       then A61: y in the carrier of Image F;
-       then A62: y in dom (incl Image F) by FUNCT_2:def 1;
-         y in rng F by A61,Th10;
+       A62: y in P;
+       then A63: y in the carrier of Image F;
+       then A64: y in dom (incl Image F) by FUNCT_2:def 1;
+         y in rng F by A63,Th10;
          then reconsider yy = y as Point of S;
-         yy = (incl Image F).y by A60,TMAP_1:95;
-         hence y in (incl Image F).:P by A60,A62,FUNCT_1:def 12;
+         yy = (incl Image F).y by A62,TMAP_1:95;
+         hence y in (incl Image F).:P by A62,A64,FUNCT_1:def 12;
         end;
-   A63: f"Q = h.:P
+   A65: f"Q = h.:P
         proof
          hereby let x be set; assume
-        A64: x in f"Q;
-        then A65: x in dom f by FUNCT_1:def 13;
-        A66: f.x in Q by A64,FUNCT_1:def 13;
-                  f.x in rng f by A65,FUNCT_1:def 5;
-        then A67: f.x in the carrier of S;
-        then A68: f.x in dom h by FUNCT_2:def 1;
-        A69: f.x in dom F by A67,FUNCT_2:def 1;
-                  F.(f.x) = f.(h.(f.x)) by A68,FUNCT_1:23
-             .= f.((id T).x) by A65,FUNCT_1:23,A25
-             .= f.x by A64,FUNCT_1:35;
-            then f.x in rng F by A69,FUNCT_1:def 5;
+        A66: x in f"Q;
+        then A67: x in dom f by FUNCT_1:def 13;
+        A68: f.x in Q by A66,FUNCT_1:def 13;
+                  f.x in rng f by A67,FUNCT_1:def 5;
+        then A69: f.x in the carrier of S;
+        then A70: f.x in dom h by FUNCT_2:def 1;
+        A71: f.x in dom F by A69,FUNCT_2:def 1;
+                  F.(f.x) = f.(h.(f.x)) by A70,FUNCT_1:23
+             .= f.((id T).x) by A26,A67,FUNCT_1:23
+             .= f.x by A66,FUNCT_1:35;
+            then f.x in rng F by A71,FUNCT_1:def 5;
             then f.x in the carrier of Image F by Th10;
-        then A70: f.x in P by A53,A66,XBOOLE_0:def 3;
-                  h.(f.x) = (id T).x by A65,FUNCT_1:23,
-A25 .= x by A64,FUNCT_1:35;
-          hence x in h.:P by A68,A70,FUNCT_1:def 12;
+        then A72: f.x in P by A55,A68,XBOOLE_0:def 3;
+                  h.(f.x) = (id T).x by A26,A67,FUNCT_1:23 .= x by A66,
+FUNCT_1:35;
+          hence x in h.:P by A70,A72,FUNCT_1:def 12;
          end; let x be set; assume x in h.:P;
          then consider y being set such that
-       A71: y in dom h and
-       A72: y in P and
-       A73: x = h.y by FUNCT_1:def 12;
-       A74:  x in rng h by A71,A73,FUNCT_1:def 5;
-       A75: y in Q by A53,A72,XBOOLE_0:def 3;
-           y in the carrier of Image F by A72;
-           then A76: y in rng F by Th10;
-         f.x in rng f by A11,A74,FUNCT_1:def 5;
-         then reconsider a = f.x, b = y as Element of Image f by A26,A76,Th10;
-         g.a = h.(f.x) by A6,FUNCT_1:72
-           .= (id T).x by A11,A74,FUNCT_1:23,
-A25 .= h.y by A73,A74,FUNCT_1:35 .= g
-.b by A6,FUNCT_1:72;
-           then f.x in Q by A7,A75,WAYBEL_1:def 1;
-         hence x in f"Q by A11,A74,FUNCT_1:def 13;
+       A73: y in dom h and
+       A74: y in P and
+       A75: x = h.y by FUNCT_1:def 12;
+       A76:  x in rng h by A73,A75,FUNCT_1:def 5;
+       A77: y in Q by A55,A74,XBOOLE_0:def 3;
+           y in the carrier of Image F by A74;
+           then A78: y in rng F by Th10;
+         f.x in rng f by A12,A76,FUNCT_1:def 5;
+         then reconsider a = f.x, b = y as Element of Image f by A27,A78,Th10;
+         g.a = h.(f.x) by A7,FUNCT_1:72
+           .= (id T).x by A12,A26,A76,FUNCT_1:23 .= h.y by A75,A76,FUNCT_1:35
+ .= g
+.b by A7,FUNCT_1:72;
+           then f.x in Q by A8,A77,WAYBEL_1:def 1;
+         hence x in f"Q by A12,A76,FUNCT_1:def 13;
         end;
-       H.:P = h.:P by A56,RELAT_1:159;
-     hence (H")"P is open by A33,A43,A55,A63,TOPS_2:67;
+       H.:P = h.:P by A58,RELAT_1:159;
+     hence (H")"P is open by A35,A45,A57,A65,TOPS_2:67;
     end;
-   then H" is continuous by B,TOPS_2:55;
-   then H is_homeomorphism by A32,A33,A43,A51,TOPS_2:def 5;
+   then H" is continuous by A34,TOPS_2:55;
+   then H is_homeomorphism by A33,A35,A45,A53,TOPS_2:def 5;
  hence Image F,T are_homeomorphic by T_0TOPSP:def 1;
 end;
 
@@ -1297,24 +1296,24 @@ proof
  set S = Sierpinski_Space;
  let X be non empty TopSpace; let f be Function of X, S; assume
 A1:  f is continuous;
-A: [#]S <> {}; 
+A2: [#]S <> {};
  let Y be non empty TopSpace; assume
-A2:  X is SubSpace of Y;
-then A3:  the carrier of X c= the carrier of Y by BORSUK_1:35;
+A3:  X is SubSpace of Y;
+then A4:  the carrier of X c= the carrier of Y by BORSUK_1:35;
      {1} c= {0,1} by ZFMISC_1:12;
  then reconsider u = {1} as Subset of S by Def9;
      u in {{}, {1}, {0,1} } by ENUMSET1:def 1;
      then u in the topology of S by Def9;
      then u is open by PRE_TOPC:def 5;
-     then f"u is open by A,A1,TOPS_2:55;
+     then f"u is open by A1,A2,TOPS_2:55;
      then f"u in the topology of X by PRE_TOPC:def 5;
  then consider V being Subset of Y such that
-A4:  V in the topology of Y and
-A5:  f"u = V /\ [#](X) by A2,PRE_TOPC:def 9;
+A5:  V in the topology of Y and
+A6:  f"u = V /\ [#](X) by A3,PRE_TOPC:def 9;
  reconsider V as Subset of Y;
-A6:  V is open by A4,PRE_TOPC:def 5;
+A7:  V is open by A5,PRE_TOPC:def 5;
  set g = chi(V,the carrier of Y);
-A7:  dom g = the carrier of Y by FUNCT_3:def 3;
+A8:  dom g = the carrier of Y by FUNCT_3:def 3;
   the carrier of S = {0,1} by Def9;
  then reconsider g as Function of Y,S;
  take g;
@@ -1322,27 +1321,27 @@ A7:  dom g = the carrier of Y by FUNCT_3:def 3;
   proof
    let P be Subset of S; assume P is open;
      then P in the topology of S by PRE_TOPC:def 5;
- then A8: P in {{}, {1}, {0,1} } by Def9;
-   per cases by A8,ENUMSET1:def 1;
+ then A9: P in {{}, {1}, {0,1} } by Def9;
+   per cases by A9,ENUMSET1:def 1;
     suppose P = {}; then g"P = {} by RELAT_1:171; then g"P in the topology
 of Y
      by PRE_TOPC:5; hence g"P is open by PRE_TOPC:def 5;
     end;
-    suppose A9: P = {1};
-  A10: g"P c= V
+    suppose A10: P = {1};
+  A11: g"P c= V
        proof let x be set; assume
-     A11: x in g"P;
-         then x in dom g & g.x in {1} by A9,FUNCT_1:def 13;
+     A12: x in g"P;
+         then x in dom g & g.x in {1} by A10,FUNCT_1:def 13;
          then g.x = 1 by TARSKI:def 1;
-        hence x in V by A11,FUNCT_3:def 3;
+        hence x in V by A12,FUNCT_3:def 3;
        end;
        V c= g"P
        proof let x be set; assume
-     A12: x in V; then g.x = 1 by FUNCT_3:def 3;
-         then x in dom g & g.x in {1} by A7,A12,TARSKI:def 1;
-         hence x in g"P by A9,FUNCT_1:def 13;
+     A13: x in V; then g.x = 1 by FUNCT_3:def 3;
+         then x in dom g & g.x in {1} by A8,A13,TARSKI:def 1;
+         hence x in g"P by A10,FUNCT_1:def 13;
        end;
-     hence g"P is open by A6,A10,XBOOLE_0:def 10;
+     hence g"P is open by A7,A11,XBOOLE_0:def 10;
     end;
     suppose P = {0,1};
       then g"P = the carrier of Y by FUNCT_2:48;
@@ -1350,33 +1349,33 @@ of Y
     hence g"P is open by PRE_TOPC:def 5;
   end;
   end;
- hence g is continuous by A,TOPS_2:55;
-A13:   dom g /\ (the carrier of X) = (the carrier of Y) /\ (the carrier of X)
-         by FUNCT_3:def 3 .= the carrier of X by A3,XBOOLE_1:28
+ hence g is continuous by A2,TOPS_2:55;
+A14:   dom g /\ (the carrier of X) = (the carrier of Y) /\ (the carrier of X)
+         by FUNCT_3:def 3 .= the carrier of X by A4,XBOOLE_1:28
       .= dom f by FUNCT_2:def 1;
            for x being set st x in dom f holds f.x = g.x
       proof
        let x be set; assume
-  A14:    x in dom f;
-  then A15:    x in the carrier of X;
+  A15:    x in dom f;
+  then A16:    x in the carrier of X;
         per cases;
-         suppose A16: x in V;
-       then A17:  g.x = 1 by FUNCT_3:def 3;
-                 x in f"u by A5,A14,A16,XBOOLE_0:def 3;
+         suppose A17: x in V;
+       then A18:  g.x = 1 by FUNCT_3:def 3;
+                 x in f"u by A6,A15,A17,XBOOLE_0:def 3;
            then x in dom f & f.x in {1} by FUNCT_1:def 13;
-          hence f.x = g.x by A17,TARSKI:def 1;
+          hence f.x = g.x by A18,TARSKI:def 1;
          end;
-         suppose A18: not x in V;
-              f.x in rng f by A14,FUNCT_1:def 5;
+         suppose A19: not x in V;
+              f.x in rng f by A15,FUNCT_1:def 5;
            then f.x in the carrier of S;
            then f.x in {0,1} by Def9;
-       then A19: f.x = 0 or f.x = 1 by TARSKI:def 2;
-                 not x in f"{1} by A5,A18,XBOOLE_0:def 3;
+       then A20: f.x = 0 or f.x = 1 by TARSKI:def 2;
+                 not x in f"{1} by A6,A19,XBOOLE_0:def 3;
            then not x in dom f or not f.x in {1} by FUNCT_1:def 13;
-          hence f.x = g.x by A3,A14,A15,A18,A19,FUNCT_3:def 3,TARSKI:def 1;
+          hence f.x = g.x by A4,A15,A16,A19,A20,FUNCT_3:def 3,TARSKI:def 1;
       end;
       end;
- hence g|(the carrier of X) = f by A13,FUNCT_1:68;
+ hence g|(the carrier of X) = f by A14,FUNCT_1:68;
 end;
 end;
 
@@ -1779,8 +1778,8 @@ then A15: f is one-to-one by WAYBEL_1:def 1;
        then A26:  g.a = 0 or g.a = 1 by A25,TARSKI:def 2;
           per cases;
           suppose a in A;
-            then chi(A,X).a = 1 & g.a in {1} by A21,FUNCT_1:def 13,FUNCT_3:def
-3;
+            then chi(A,X).a = 1 & g.a in {1} by A21,FUNCT_1:def 13
+,FUNCT_3:def 3;
            hence chi(A,X).a = g.a by TARSKI:def 1;
           end;
           suppose A27: not a in A;
@@ -2320,8 +2319,7 @@ PBOOLE:def 3;
 ;
                   end;
                   suppose w <> j;
-                   then ((Carrier IS)+*(j,{1})).w =(Carrier IS).w by FUNCT_7:
-34
+                   then ((Carrier IS)+*(j,{1})).w =(Carrier IS).w by FUNCT_7:34
 ;
                   hence h2.w in ((Carrier IS)+*(j,{1})).w
                                          by A10,A117,A119,A121,A137;
@@ -2350,36 +2348,36 @@ proof
 A1: the carrier of T = the carrier of S and
 A2: the topology of T = the topology of S and
 A3: T is injective;
-A: [#]S <> {} & [#]T <> {};
+A4: [#]S <> {} & [#]T <> {};
  let X be non empty TopSpace; let f be Function of X,S; assume
-A4: f is continuous;
+A5: f is continuous;
  reconsider f' = f as Function of X,T by A1;
      for P being Subset of T st P is open holds (f')"P is open
      proof let P be Subset of T; assume
-   A5:  P is open;
+   A6:  P is open;
       reconsider P' = P as Subset of S by A1;
-      P' in the topology of S by A2,A5,PRE_TOPC:def 5;
+      P' in the topology of S by A2,A6,PRE_TOPC:def 5;
       then P' is open by PRE_TOPC:def 5;
-      hence f'"P is open by A,A4,TOPS_2:55;
+      hence f'"P is open by A4,A5,TOPS_2:55;
      end;
-then A6: f' is continuous by A,TOPS_2:55;
+then A7: f' is continuous by A4,TOPS_2:55;
  let Y be non empty TopSpace; assume
  X is SubSpace of Y;
  then consider h being Function of Y,T such that
-A7: h is continuous and
-A8: h|(the carrier of X) = f' by A3,A6,Def5;
+A8: h is continuous and
+A9: h|(the carrier of X) = f' by A3,A7,Def5;
  reconsider g = h as Function of Y,S by A1;
  take g;
      for P being Subset of S st P is open holds g"P is open
      proof let P be Subset of S; assume
-   A9:  P is open;
+   A10:  P is open;
       reconsider P' = P as Subset of T by A1;
-      P' in the topology of T by A2,A9,PRE_TOPC:def 5;
+      P' in the topology of T by A2,A10,PRE_TOPC:def 5;
       then P' is open by PRE_TOPC:def 5;
-      hence g"P is open by A,A7,TOPS_2:55;
+      hence g"P is open by A4,A8,TOPS_2:55;
      end;
- hence g is continuous by A,TOPS_2:55;
- thus g|(the carrier of X) = f by A8;
+ hence g is continuous by A4,TOPS_2:55;
+ thus g|(the carrier of X) = f by A9;
 end;
 
 theorem       ::p.122 lemma 3.4.(i) part II
@@ -2431,87 +2429,87 @@ for T being T_0-TopSpace ex M being non empty set,
  f being Function of T, product (M --> Sierpinski_Space) st
   corestr(f) is_homeomorphism
 proof let T be T_0-TopSpace;
-A: [#]T <> {};
+A1: [#]T <> {};
  take M = the carrier of (InclPoset the topology of T);
  set J = M --> Sierpinski_Space;
  deffunc F(set) = chi({u where u is Subset of T: $1 in u & u is open},
                                               the topology of T);
  consider f being Function such that
-A1:dom f = the carrier of T and
-A2:for x being set st x in the carrier of T holds f.x = F(x) from FUNCT_1:sch 3
+A2:dom f = the carrier of T and
+A3:for x being set st x in the carrier of T holds f.x = F(x) from FUNCT_1:sch 3
 ;
         rng f c= the carrier of product J
     proof let y be set; assume y in rng f;
      then consider x being set such that
-  A3:  x in dom f and
-  A4:  y = f.x by FUNCT_1:def 5;
+  A4:  x in dom f and
+  A5:  y = f.x by FUNCT_1:def 5;
      set ch = chi({u where u is Subset of T: x in u & u is open},
                                                           the topology of T);
-  A5:  y = ch by A1,A2,A3,A4;
-  A6:  dom ch = the topology of T by FUNCT_3:def 3
+  A6:  y = ch by A2,A3,A4,A5;
+  A7:  dom ch = the topology of T by FUNCT_3:def 3
              .= M by YELLOW_1:1
              .= dom (Carrier J) by PBOOLE:def 3;
              for z being set st z in dom (Carrier J) holds ch.z in (Carrier J).
 z
         proof let z be set; assume z in dom (Carrier J);
-       then A7: z in M by PBOOLE:def 3;
-       then A8: z in the topology of T by YELLOW_1:1;
+       then A8: z in M by PBOOLE:def 3;
+       then A9: z in the topology of T by YELLOW_1:1;
          consider R being 1-sorted such that
-       A9:  R = J.z and
-       A10: (Carrier J).z = the carrier of R by A7,PRALG_1:def 13;
-       A11: (Carrier J).z = the carrier of Sierpinski_Space by A7,A9,A10,
+       A10:  R = J.z and
+       A11: (Carrier J).z = the carrier of R by A8,PRALG_1:def 13;
+       A12: (Carrier J).z = the carrier of Sierpinski_Space by A8,A10,A11,
 FUNCOP_1:13 .= {0,1} by Def9;
-       z in dom ch by A8,FUNCT_3:def 3;
+       z in dom ch by A9,FUNCT_3:def 3;
        then ch.z in rng ch by FUNCT_1:def 5;
-         hence ch.z in (Carrier J).z by A11;
+         hence ch.z in (Carrier J).z by A12;
         end;
-       then y in product Carrier J by A5,A6,CARD_3:def 5;
+       then y in product Carrier J by A6,A7,CARD_3:def 5;
      hence y in the carrier of product J by Def3;
     end;
  then reconsider f as Function
- of T, product J by A1,FUNCT_2:def 1,RELSET_1:11;
+ of T, product J by A2,FUNCT_2:def 1,RELSET_1:11;
  reconsider PP = {product((Carrier J)+*(m,{1})) where m is Element of M:
     not contradiction } as prebasis of product J by Th14;
          for A being Subset of product J st A in PP holds f"A is open
     proof let A be Subset of product J; assume
-  A12:  A in PP;
+  A13:  A in PP;
      reconsider a = A as Subset of product Carrier J by Def3;
      consider i being Element of M such that
-  A13:  a = product ((Carrier J) +* (i,{1})) by A12;
-  A14:  i in M;
-  then A15:  i in the topology of T by YELLOW_1:1;
+  A14:  a = product ((Carrier J) +* (i,{1})) by A13;
+  A15:  i in M;
+  then A16:  i in the topology of T by YELLOW_1:1;
      then reconsider i' = i as Subset of T;
-  A16:  i in dom (Carrier J) by A14,PBOOLE:def 3;
+  A17:  i in dom (Carrier J) by A15,PBOOLE:def 3;
         {1} c= {0,1} by ZFMISC_1:12;
      then reconsider V = {1} as Subset of Sierpinski_Space by Def9;
-    A17: ((Carrier J)+*(i,V)).i = {1} by A16,FUNCT_7:33;
-    A18: f"A c= i
+    A18: ((Carrier J)+*(i,V)).i = {1} by A17,FUNCT_7:33;
+    A19: f"A c= i
          proof let z be set; assume
-       A19:  z in f"A;
-       then A20:  f.z in a by FUNCT_1:def 13;
+       A20:  z in f"A;
+       then A21:  f.z in a by FUNCT_1:def 13;
           set W = {u where u is Subset of T: z in u & u is open};
-          f.z = chi(W,the topology of T) by A2,A19;
+          f.z = chi(W,the topology of T) by A3,A20;
           then consider g being Function such that
-       A21:  chi(W,the topology of T) = g and
+       A22:  chi(W,the topology of T) = g and
                   dom g = dom ((Carrier J) +* (i,V)) and
-       A22:  for w being set st w in dom ((Carrier J) +* (i,V)) holds
-                       g.w in ((Carrier J) +* (i,V)).w by A13,A20,CARD_3:def 5;
-            i in dom ((Carrier J) +* (i,V)) by A16,FUNCT_7:32;
-            then g.i in ((Carrier J) +* (i,V)).i by A22;
-            then chi(W,the topology of T).i = 1 by A17,A21,TARSKI:def 1;
+       A23:  for w being set st w in dom ((Carrier J) +* (i,V)) holds
+                       g.w in ((Carrier J) +* (i,V)).w by A14,A21,CARD_3:def 5;
+            i in dom ((Carrier J) +* (i,V)) by A17,FUNCT_7:32;
+            then g.i in ((Carrier J) +* (i,V)).i by A23;
+            then chi(W,the topology of T).i = 1 by A18,A22,TARSKI:def 1;
             then i in W by FUNCT_3:42;
             then ex uu being Subset of T st i = uu & z in uu & uu is open;
           hence z in i;
          end;
          i c= f"A
          proof let z be set; assume
-       A23:  z in i;
+       A24:  z in i;
           set W = {u where u is Subset of T: z in u & u is open};
-                  i' is open by A15,PRE_TOPC:def 5;
-       then A24:  i in W by A23;
-       A25:  z in i' by A23;
-       then A26:  f.z = chi(W,the topology of T) by A2;
-       A27:  dom chi(W,the topology of T) = the topology of T by FUNCT_3:def 3
+                  i' is open by A16,PRE_TOPC:def 5;
+       then A25:  i in W by A24;
+       A26:  z in i' by A24;
+       then A27:  f.z = chi(W,the topology of T) by A3;
+       A28:  dom chi(W,the topology of T) = the topology of T by FUNCT_3:def 3
               .= M by YELLOW_1:1
               .= dom (Carrier J) by PBOOLE:def 3
               .= dom ((Carrier J) +* (i,V)) by FUNCT_7:32;
@@ -2520,177 +2518,177 @@ FUNCOP_1:13 .= {0,1} by Def9;
              proof let w be set; assume
                       w in dom ((Carrier J) +* (i,V));
              then w in dom (Carrier J) by FUNCT_7:32;
-           then A28:  w in M by PBOOLE:def 3;
+           then A29:  w in M by PBOOLE:def 3;
                 then w in the topology of T by YELLOW_1:1;
-           then A29:  w in dom chi(W,the topology of T) by FUNCT_3:def 3;
+           then A30:  w in dom chi(W,the topology of T) by FUNCT_3:def 3;
               per cases;
               suppose
-            A30:  w = i;
-            then A31:  ((Carrier J) +* (i,V)).w = {1} by A16,FUNCT_7:33;
-                       chi(W,the topology of T).w = 1 by A15,A24,A30,
+            A31:  w = i;
+            then A32:  ((Carrier J) +* (i,V)).w = {1} by A17,FUNCT_7:33;
+                       chi(W,the topology of T).w = 1 by A16,A25,A31,
 FUNCT_3:def 3
 ;
                hence chi(W,the topology of T).w in ((Carrier J) +* (i,V)).w
-                                                         by A31,TARSKI:def 1;
+                                                         by A32,TARSKI:def 1;
               end;
               suppose w <> i;
-            then A32: ((Carrier J) +* (i,V)).w = (Carrier J).w by FUNCT_7:34;
+            then A33: ((Carrier J) +* (i,V)).w = (Carrier J).w by FUNCT_7:34;
                consider r being 1-sorted such that
-            A33: r = J.w and
-            A34: (Carrier J).w = the carrier of r by A28,PRALG_1:def 13;
-            A35: (Carrier J).w = the carrier of Sierpinski_Space by A28,A33,A34
+            A34: r = J.w and
+            A35: (Carrier J).w = the carrier of r by A29,PRALG_1:def 13;
+            A36: (Carrier J).w = the carrier of Sierpinski_Space by A29,A34,A35
 ,FUNCOP_1:13 .= {0,1} by Def9;
                       chi(W,the topology of T).w in rng chi(W,the topology of T
 )
-                                                     by A29,FUNCT_1:def 5;
+                                                     by A30,FUNCT_1:def 5;
                hence chi(W,the topology of T).w in ((Carrier J) +* (i,V)).w
-                                                     by A32,A35;
+                                                     by A33,A36;
              end;
              end;
-            then f.z in A by A13,A26,A27,CARD_3:def 5;
-          hence z in f"A by A1,A25,FUNCT_1:def 13;
+            then f.z in A by A14,A27,A28,CARD_3:def 5;
+          hence z in f"A by A2,A26,FUNCT_1:def 13;
          end;
-        then f"A = i by A18,XBOOLE_0:def 10;
-      hence f"A is open by A15,PRE_TOPC:def 5;
+        then f"A = i by A19,XBOOLE_0:def 10;
+      hence f"A is open by A16,PRE_TOPC:def 5;
     end;
-then A36:f is continuous by YELLOW_9:36;
+then A37:f is continuous by YELLOW_9:36;
  take f;
-A37:dom (corestr f) = [#]T by FUNCT_2:def 1;
-A38:rng (corestr f) = [#](Image f) by FUNCT_2:def 3;
-A39:corestr f is one-to-one
+A38:dom (corestr f) = [#]T by FUNCT_2:def 1;
+A39:rng (corestr f) = [#](Image f) by FUNCT_2:def 3;
+A40:corestr f is one-to-one
     proof let x,y be Element of T; assume
-            A40: (corestr f).x = (corestr f).y;
+            A41: (corestr f).x = (corestr f).y;
      set U1 = {u where u is Subset of T: x in u & u is open};
      set U2 = {u where u is Subset of T: y in u & u is open};
      thus x = y
       proof assume not thesis;
        then consider V being Subset of T such that
-    A41:  V is open and
-    A42:  ((x in V & not y in V) or (y in V & not x in V)) by T_0TOPSP:def 7;
-    A43:  f.x = chi(U1,the topology of T) by A2;
-    A44:  f.y = chi(U2,the topology of T) by A2;
-    A45:  V in the topology of T by A41,PRE_TOPC:def 5;
-       per cases by A42;
+    A42:  V is open and
+    A43:  ((x in V & not y in V) or (y in V & not x in V)) by T_0TOPSP:def 7;
+    A44:  f.x = chi(U1,the topology of T) by A3;
+    A45:  f.y = chi(U2,the topology of T) by A3;
+    A46:  V in the topology of T by A42,PRE_TOPC:def 5;
+       per cases by A43;
        suppose
-     A46:   x in V & not y in V;
+     A47:   x in V & not y in V;
          reconsider v = V as Subset of T;
-     A47:   not v in U2
+     A48:   not v in U2
             proof assume not thesis;
              then ex u being Subset of T st u = v & y in u & u is open;
-             hence thesis by A46;
+             hence thesis by A47;
             end;
-                 v in U1 by A41,A46;
-     then chi(U1,the topology of T).v = 1 by A45,FUNCT_3:def 3;
-           hence thesis by A40,A43,A44,A45,A47,FUNCT_3:def 3;
+                 v in U1 by A42,A47;
+     then chi(U1,the topology of T).v = 1 by A46,FUNCT_3:def 3;
+           hence thesis by A41,A44,A45,A46,A48,FUNCT_3:def 3;
        end;
        suppose
-     A48:   y in V & not x in V;
+     A49:   y in V & not x in V;
          reconsider v = V as Subset of T;
-     A49:   not v in U1
+     A50:   not v in U1
             proof assume not thesis;
                then ex u being Subset of T st u = v & x in u & u is open;
-             hence thesis by A48;
+             hence thesis by A49;
             end;
-            v in U2 by A41,A48;
-     then chi(U2,the topology of T).v = 1 by A45,FUNCT_3:def 3;
-           hence thesis by A40,A43,A44,A45,A49,FUNCT_3:def 3;
+            v in U2 by A42,A49;
+     then chi(U2,the topology of T).v = 1 by A46,FUNCT_3:def 3;
+           hence thesis by A41,A44,A45,A46,A50,FUNCT_3:def 3;
       end;
       end;
     end;
-A50:corestr f is continuous by A36,Th11;
-A51: for V being Subset of T st V is open holds
+A51:corestr f is continuous by A37,Th11;
+A52: for V being Subset of T st V is open holds
       f.:V = product ((Carrier J) +* (V,{1})) /\ the carrier of Image f
     proof let V be Subset of T; assume
-   A52: V is open;
+   A53: V is open;
      hereby let y be set; assume y in f.:V;
       then consider x being set such that
-   A53:  x in dom f and
-   A54:  x in V and
-   A55:  y = f.x by FUNCT_1:def 12;
+   A54:  x in dom f and
+   A55:  x in V and
+   A56:  y = f.x by FUNCT_1:def 12;
       set Q = {u where u is Subset of T: x in u & u is open};
-   A56:  V in Q by A52,A54;
-   A57:  y = chi(Q,the topology of T) by A2,A53,A55;
-   A58:  dom chi(Q,the topology of T) = the topology of T by FUNCT_3:def 3
+   A57:  V in Q by A53,A55;
+   A58:  y = chi(Q,the topology of T) by A3,A54,A56;
+   A59:  dom chi(Q,the topology of T) = the topology of T by FUNCT_3:def 3
            .= M by YELLOW_1:1 .= dom Carrier J by PBOOLE:def 3
            .= dom ((Carrier J) +* (V,{1})) by FUNCT_7:32;
               for W being set st W in dom ((Carrier J) +* (V,{1})) holds
             chi(Q,the topology of T).W in ((Carrier J) +* (V,{1})).W
          proof let W be set; assume W in dom ((Carrier J) +* (V,{1}));
-       then A59:  W in dom (Carrier J) by FUNCT_7:32;
-       then A60:  W in M by PBOOLE:def 3;
-       then A61:  W in the topology of T by YELLOW_1:1;
-       then A62:  W in dom chi(Q,the topology of T) by FUNCT_3:def 3;
+       then A60:  W in dom (Carrier J) by FUNCT_7:32;
+       then A61:  W in M by PBOOLE:def 3;
+       then A62:  W in the topology of T by YELLOW_1:1;
+       then A63:  W in dom chi(Q,the topology of T) by FUNCT_3:def 3;
           per cases;
           suppose
-         A63:  W = V;
-         then A64:  ((Carrier J) +* (V,{1})).W = {1} by A59,FUNCT_7:33;
-                    chi(Q,the topology of T).W = 1 by A56,A61,A63,FUNCT_3:def 3
+         A64:  W = V;
+         then A65:  ((Carrier J) +* (V,{1})).W = {1} by A60,FUNCT_7:33;
+                    chi(Q,the topology of T).W = 1 by A57,A62,A64,FUNCT_3:def 3
 ;
            hence chi(Q,the topology of T).W in ((Carrier J) +* (V,{1})).W
-                                                         by A64,TARSKI:def 1;
+                                                         by A65,TARSKI:def 1;
           end;
           suppose W <> V;
-         then A65:  ((Carrier J) +* (V,{1})).W = (Carrier J).W by FUNCT_7:34;
+         then A66:  ((Carrier J) +* (V,{1})).W = (Carrier J).W by FUNCT_7:34;
            consider r being 1-sorted such that
-         A66:  r = J.W and
-         A67:  (Carrier J).W = the carrier of r by A60,PRALG_1:def 13;
-         A68:  (Carrier J).W = the carrier of Sierpinski_Space by A60,A66,A67,
+         A67:  r = J.W and
+         A68:  (Carrier J).W = the carrier of r by A61,PRALG_1:def 13;
+         A69:  (Carrier J).W = the carrier of Sierpinski_Space by A61,A67,A68,
 FUNCOP_1:13 .= {0,1} by Def9;
                     chi(Q,the topology of T).W in rng chi(Q,the topology of T)
-                                                     by A62,FUNCT_1:def 5;
+                                                     by A63,FUNCT_1:def 5;
             hence chi(Q,the topology of T).W in ((Carrier J) +* (V,{1})).W
-                                                               by A65,A68;
+                                                               by A66,A69;
          end;
          end;
-   then A69:   y in product ((Carrier J) +* (V,{1})) by A57,A58,CARD_3:def 5;
-              y in rng f by A53,A55,FUNCT_1:def 5;
+   then A70:   y in product ((Carrier J) +* (V,{1})) by A58,A59,CARD_3:def 5;
+              y in rng f by A54,A56,FUNCT_1:def 5;
         then y in the carrier of Image f by Th10;
       hence y in product ((Carrier J) +* (V,{1})) /\ the carrier of Image f
-                                                     by A69,XBOOLE_0:def 3;
+                                                     by A70,XBOOLE_0:def 3;
      end; let y be set; assume
-  A70:   y in product ((Carrier J) +* (V,{1})) /\ the carrier of Image f;
+  A71:   y in product ((Carrier J) +* (V,{1})) /\ the carrier of Image f;
               rng f = the carrier of Image f by Th10;
-        then y in rng f by A70,XBOOLE_0:def 3;
+        then y in rng f by A71,XBOOLE_0:def 3;
       then consider x being set such that
-  A71:   x in dom f and
-  A72:   y = f.x by FUNCT_1:def 5;
+  A72:   x in dom f and
+  A73:   y = f.x by FUNCT_1:def 5;
       set Q = {u where u is Subset of T: x in u & u is open};
-  A73:   y = chi(Q,the topology of T) by A2,A71,A72;
-              y in product ((Carrier J) +* (V,{1})) by A70,XBOOLE_0:def 3;
+  A74:   y = chi(Q,the topology of T) by A3,A72,A73;
+              y in product ((Carrier J) +* (V,{1})) by A71,XBOOLE_0:def 3;
       then consider g being Function such that
-  A74:   y = g and
+  A75:   y = g and
               dom g = dom ((Carrier J) +* (V,{1})) and
-  A75:   for W being set st W in dom ((Carrier J) +* (V,{1}))
+  A76:   for W being set st W in dom ((Carrier J) +* (V,{1}))
                   holds g.W in ((Carrier J) +* (V,{1})).W by CARD_3:def 5;
-           V in the topology of T by A52,PRE_TOPC:def 5;
+           V in the topology of T by A53,PRE_TOPC:def 5;
         then V in M by YELLOW_1:1;
-  then A76:   V in dom (Carrier J) by PBOOLE:def 3;
+  then A77:   V in dom (Carrier J) by PBOOLE:def 3;
         then V in dom ((Carrier J) +* (V,{1})) by FUNCT_7:32;
-        then g.V in ((Carrier J) +* (V,{1})).V by A75;
-        then g.V in {1} by A76,FUNCT_7:33;
-        then chi(Q,the topology of T).V = 1 by A73,A74,TARSKI:def 1;
+        then g.V in ((Carrier J) +* (V,{1})).V by A76;
+        then g.V in {1} by A77,FUNCT_7:33;
+        then chi(Q,the topology of T).V = 1 by A74,A75,TARSKI:def 1;
         then V in Q by FUNCT_3:42;
         then ex u being Subset of T st u = V & x in u & u is open;
-      hence y in f.:V by A71,A72,FUNCT_1:def 12;
+      hence y in f.:V by A72,A73,FUNCT_1:def 12;
     end;
          for V being Subset of T st V is open holds
      ((corestr f)")"V is open
     proof let V be Subset of T; assume
-  A77:  V is open;
+  A78:  V is open;
        then V in the topology of T by PRE_TOPC:def 5;
      then reconsider W = V as Element of M by YELLOW_1:1;
-  A78:  product((Carrier J)+*(W,{1})) in PP;
+  A79:  product((Carrier J)+*(W,{1})) in PP;
      then reconsider Q = product((Carrier J)+*(V,{1})) as
                                          Subset of product J;
-  A79:  (corestr f).:V = Q /\ [#](Image f) by A51,A77;
+  A80:  (corestr f).:V = Q /\ [#](Image f) by A52,A78;
        PP c= the topology of product J by CANTOR_1:def 5;
        then (corestr f).:
-V in the topology of Image f by A78,A79,PRE_TOPC:def 9;
+V in the topology of Image f by A79,A80,PRE_TOPC:def 9;
        then (corestr f).:V is open by PRE_TOPC:def 5;
-     hence ((corestr f)")"V is open by A38,A39,TOPS_2:67;
+     hence ((corestr f)")"V is open by A39,A40,TOPS_2:67;
     end;
-   then (corestr f)" is continuous by A,TOPS_2:55;
- hence corestr f is_homeomorphism by A37,A38,A39,A50,TOPS_2:def 5;
+   then (corestr f)" is continuous by A1,TOPS_2:55;
+ hence corestr f is_homeomorphism by A38,A39,A40,A51,TOPS_2:def 5;
 end;
 
 theorem       ::p.122 lemma 3.4.(iii)

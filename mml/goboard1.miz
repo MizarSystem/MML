@@ -7,20 +7,21 @@
 environ
 
  vocabularies PRE_TOPC, EUCLID, FINSEQ_1, ABSVALUE, ARYTM_1, FINSEQ_4, FUNCT_1,
-      RELAT_1, BOOLE, CARD_1, MATRIX_2, ORDINAL2, SEQM_3, MCART_1, TOPREAL1,
-      MATRIX_1, TREES_1, INCSP_1, GOBOARD1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, REAL_1,
-      NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1, NAT_1, CARD_1, FINSEQ_1, FINSEQ_3,
+      RELAT_1, BOOLE, MATRIX_2, ORDINAL2, SEQM_3, MCART_1, TOPREAL1, MATRIX_1,
+      TREES_1, INCSP_1, GOBOARD1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
+      REAL_1, NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1, NAT_1, FINSEQ_1, FINSEQ_3,
       FINSEQ_4, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, MATRIX_1, MATRIX_2;
- constructors XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, MATRIX_2, TOPREAL1;
- registrations XBOOLE_0, RELAT_1, ORDINAL1, ARYTM_3, NUMBERS, XXREAL_0,
-      XREAL_0, REAL_1, NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID;
+ constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, MATRIX_2,
+      TOPREAL1;
+ registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
+      NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FUNCT_1;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       FINSEQ_2, FINSEQ_3, REAL_2, MATRIX_1, TOPREAL1, MATRIX_2, TOPREAL3,
       FINSEQ_4, RELAT_1, INT_1, CARD_1, PARTFUN2, XBOOLE_0, XBOOLE_1, CARD_4,
-      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, PARTFUN1;
  schemes NAT_1, MATRIX_1, FINSEQ_1, FINSEQ_4;
 
 begin
@@ -89,7 +90,7 @@ abs(i-j)+abs(n-m)=1 iff abs(i-j)=1 & n=m or abs(n-m)=1 & i=j
         then reconsider l=m-n as Element of NAT by INT_1:18;
             0<l & abs(-(m-n))=abs(l) by A4,COMPLEX1:138,XREAL_1:52;
         then A5: 0+1<=l & abs(l)=l & 0<=abs(i-j) & abs(n-m)=abs(l)
-         by COMPLEX1:132,ABSVALUE:def 1,NAT_1:13;
+         by ABSVALUE:def 1,COMPLEX1:132,NAT_1:13;
 then A6:        l<=1 by A1,REAL_2:173;
          then l=1 by A5,XXREAL_0:1;
         then i-j=0 by A1,A5,ABSVALUE:7;
@@ -98,8 +99,8 @@ then A6:        l<=1 by A1,REAL_2:173;
        suppose A7: n>m;
         then reconsider l=n-m as Element of NAT by INT_1:18;
             0<l by A7,XREAL_1:52;
-        then A8: 0+1<=l & abs(n-m)=l & 0<=abs(i-j)by COMPLEX1:132,ABSVALUE:
-def 1,NAT_1:13;
+        then A8: 0+1<=l & abs(n-m)=l & 0<=abs(i-j)by ABSVALUE:def 1
+,COMPLEX1:132,NAT_1:13;
 then A9:        l<=1 by A1,REAL_2:173;
          then l=1 by A8,XXREAL_0:1;
         then i-j=0 by A1,A8,ABSVALUE:7;
@@ -171,7 +172,7 @@ definition let f be FinSequence of REAL, k be Element of NAT;
   proof
    per cases;
    suppose k in dom f;
-    then f.k = f/.k by FINSEQ_4:def 4;
+    then f.k = f/.k by PARTFUN1:def 8;
    hence thesis;
    end;
    suppose not k in dom f;
@@ -229,11 +230,11 @@ func X_axis(f) -> FinSequence of REAL means :Def3:
  len it = len f & for n st n in dom it holds it.n = (f/.n)`1;
   existence
    proof
-    defpred P[Element of NAT,set] means $2 = (f/.$1)`1;
-    A1: for k st k in Seg len f ex r st P[k,r];
+    defpred P[Nat,set] means $2 = (f/.$1)`1;
+A1: for k be Nat st k in Seg len f ex r st P[k,r];
     consider v such that
     A2: dom v = Seg len f and
-    A3: for k st k in Seg len f holds P[k,v.k] from FINSEQ_1:sch 5(A1);
+A3: for k be Nat st k in Seg len f holds P[k,v.k] from FINSEQ_1:sch 5(A1);
     take v;
     thus len v = len f by A2,FINSEQ_1:def 3;
     let n; assume
@@ -247,7 +248,7 @@ func X_axis(f) -> FinSequence of REAL means :Def3:
     A5: len v2 = len f & for n st n in dom v2 holds v2.n = (f/.n)`1;
     A6: dom v1 = Seg len v1 & dom v2 = Seg len v2 & dom f = Seg len f
       by FINSEQ_1:def 3;
-         now let n; assume
+         now let n be Nat; assume
       A7: n in (dom f);
       hence v1.n = (f/.n)`1 by A4,A6
                .= v2.n by A5,A6,A7;
@@ -258,11 +259,11 @@ func Y_axis(f) -> FinSequence of REAL means :Def4:
  len it = len f & for n st n in dom it holds it.n = (f/.n)`2;
   existence
    proof
-    defpred P[Element of NAT,set] means $2 = (f/.$1)`2;
-    A8: for k st k in Seg len f ex r st P[k,r];
+    defpred P[Nat,set] means $2 = (f/.$1)`2;
+    A8: for k be Nat st k in Seg len f ex r st P[k,r];
     consider v such that
     A9: dom v = Seg len f and
-    A10: for k st k in Seg len f holds P[k,v.k] from FINSEQ_1:sch 5(A8);
+    A10: for k be Nat st k in Seg len f holds P[k,v.k] from FINSEQ_1:sch 5(A8);
     take v;
     thus len v = len f by A9,FINSEQ_1:def 3;
     let n; assume
@@ -276,7 +277,7 @@ func Y_axis(f) -> FinSequence of REAL means :Def4:
     A12: len v2 = len f & for n st n in dom v2 holds v2.n = (f/.n)`2;
     A13: dom v1 = Seg len v1 & dom v2 = Seg len v2 & dom f = Seg len f
       by FINSEQ_1:def 3;
-         now let n; assume
+      now let n be Nat; assume
       A14: n in (dom f);
       hence v1.n = (f/.n)`2 by A11,A13
                .= v2.n by A12,A13,A14;
@@ -338,7 +339,7 @@ m+1 in dom v & v.(m+1)=i+1
           suppose k<>0;
            then A22: 0<k & m<=m+k & m+k<=m+k+1 & m+k+1 = m+(k+1)
             by NAT_1:11;
-           then A23: 1<=m+k & m+(k+1)<=len v by A12,A21,XXREAL_0:2,FINSEQ_3:27;
+           then A23: 1<=m+k & m+(k+1)<=len v by A12,A21,FINSEQ_3:27,XXREAL_0:2;
            then 1<=m+k & m+k<=len v by A22,XXREAL_0:2;
            then A24: m+k in dom v by FINSEQ_3:27;
            then v.(m+k) in rng v by FUNCT_1:def 5;
@@ -471,8 +472,8 @@ A20: i in rng v by A18,FUNCT_1:def 5;
        suppose k<>0;
         then A27: 0<k & m+(k+1)<=len v & m+k+1 = m+(k+1) & m+k<=m+k+1 & m<=m+k
            by A26,FINSEQ_3:27,NAT_1:11;
-        then A28: 1<=m+k & m+k<=len v & m+k<= len v - 1 by A19,XXREAL_0:2
-,XREAL_1:21;
+        then A28: 1<=m+k & m+k<=len v & m+k<= len v - 1 by A19,XREAL_1:21
+,XXREAL_0:2;
         then A29: m+k in dom v by FINSEQ_3:27;
         then v.(m+k) in rng v by FUNCT_1:def 5;
         then v.(m+k) in Seg n & Seg n c= NAT by A2;
@@ -525,7 +526,7 @@ i in dom f & 2<=len f implies f/.i in L~f
    suppose A3: i=len f;
     reconsider l=i-1 as Element of NAT by A2,INT_1:18;
         1+1<=i & 0<=1 by A1,A3;
-then 1<=l & l<=i by XREAL_1:45,21;
+then 1<=l & l<=i by XREAL_1:21,45;
     then f/.(l+1) in LSeg(f,l) & LSeg(f,l) c=L~f
      by A2,TOPREAL1:27,TOPREAL3:26;
     hence f/.i in L~f;
@@ -681,10 +682,10 @@ for M being X_increasing-in-column X_equal-in-line
        n in dom M & m in dom M & n<>m;
    A2: X_axis(Line(M,m)) is constant by A1,Def6;
    reconsider Ln = Line(M,n), Lm = Line(M,m) as FinSequence of TOP-REAL 2;
-   consider i such that
+   consider i being Nat such that
    A3: i in dom Ln & Ln.i = x by A1,FINSEQ_2:11;
    reconsider Mi = Col(M,i) as FinSequence of TOP-REAL 2;
-   consider j such that
+   consider j being Nat such that
    A4: j in dom Lm & Lm.j = x by A1,FINSEQ_2:11;
    A5: dom X_axis(Ln)=Seg len X_axis(Ln) & dom X_axis(Lm)=Seg len X_axis(Lm) &
        len Ln = width M & len Lm = width M by FINSEQ_1:def 3,MATRIX_1:def 8;
@@ -700,17 +701,17 @@ A8:  Seg len Ln = dom Ln & Seg len Lm = dom Lm by FINSEQ_1:def 3;
    then reconsider p=x as Point of TOP-REAL 2 by A3;
    A11: i in dom X_axis(Lm) & j in dom X_axis(Lm) by A3,A4,A5,A8,Def3;
        i in dom Lm by A3,A5,FINSEQ_3:31;
-then A12: Lm/.i = M*(m,i) by A10,FINSEQ_4:def 4;
-A13: Lm/.j = p by A4,FINSEQ_4:def 4;
+then A12: Lm/.i = M*(m,i) by A10,PARTFUN1:def 8;
+A13: Lm/.j = p by A4,PARTFUN1:def 8;
        i in dom(X_axis(Lm)) & j in dom(X_axis(Lm)) by A3,A4,A5,A6,FINSEQ_3:31;
    then (X_axis(Lm)).i = (X_axis(Lm)).j by A2,Def2;
 then A14: (M*(m,i))`1 = (X_axis(Lm)).j by A3,A5,A6,A8,A12,Def3
                .= p`1 by A11,A13,Def3;
 A15:  (M*(n,i))`1 = p`1 by A3,A5,A8,MATRIX_1:def 8;
        m in dom(Col(M,i)) by A1,A7,A9,FINSEQ_1:def 3;
-then A16: M*(m,i) = Mi/.m by A10,FINSEQ_4:def 4;
+then A16: M*(m,i) = Mi/.m by A10,PARTFUN1:def 8;
        n in dom(Col(M,i)) by A1,A9,FINSEQ_3:31;
- then M*(n,i) = Mi/.n by A10,FINSEQ_4:def 4;
+ then M*(n,i) = Mi/.n by A10,PARTFUN1:def 8;
 then A17: C.n = p`1 by A1,A7,A9,A15,Def3
        .= C.m by A1,A7,A9,A14,A16,Def3;
         n < m or m < n by A1,REAL_1:def 5;
@@ -728,10 +729,10 @@ for x,n,m st x in rng Col(M,n) & x in rng Col(M,m) &
    n in Seg width M & m in Seg width M & n<>m;
    A2: Y_axis(Col(M,m)) is constant by A1,Def7;
    reconsider Ln = Col(M,n), Lm = Col(M,m) as FinSequence of TOP-REAL 2;
-   consider i such that
+   consider i being Nat such that
    A3: i in dom Ln & Ln.i = x by A1,FINSEQ_2:11;
    reconsider Li = Line(M,i) as FinSequence of TOP-REAL 2;
-   consider j such that
+   consider j being Nat such that
    A4: j in dom Lm & Lm.j = x by A1,FINSEQ_2:11;
    A5: dom Y_axis(Ln)=Seg len Y_axis(Ln) & dom Y_axis(Lm)=Seg len Y_axis(Lm) &
      len Ln=len M & len Lm=len M by FINSEQ_1:def 3,MATRIX_1:def 9;
@@ -747,16 +748,16 @@ A8:  Seg len Ln = dom Ln & Seg len Lm = dom Lm by FINSEQ_1:def 3;
    then reconsider p=x as Point of TOP-REAL 2 by A3;
    A11: i in dom Y_axis(Lm) & j in dom Y_axis(Lm) by A3,A4,A5,A8,Def4;
        i in dom Lm by A3,A5,FINSEQ_3:31;
-then A12: Lm/.i = M*(i,m) by A10,FINSEQ_4:def 4;
-A13: Lm/.j = p by A4,FINSEQ_4:def 4;
+then A12: Lm/.i = M*(i,m) by A10,PARTFUN1:def 8;
+A13: Lm/.j = p by A4,PARTFUN1:def 8;
        (Y_axis(Lm)).i = (Y_axis(Lm)).j by A2,A3,A4,A5,A6,A8,Def2;
 then A14: (M*(i,m))`2 = (Y_axis(Lm)).j by A3,A5,A6,A8,A12,Def4
                .= p`2 by A11,A13,Def4;
 A15:  (M*(i,n))`2 = p`2 by A3,A5,A7,A8,MATRIX_1:def 9;
        m in dom(Line(M,i)) by A1,A9,FINSEQ_1:def 3;
-then A16: M*(i,m) = Li/.m by A10,FINSEQ_4:def 4;
+then A16: M*(i,m) = Li/.m by A10,PARTFUN1:def 8;
        n in dom(Line(M,i)) by A1,A9,FINSEQ_1:def 3;
- then M*(i,n) = Li/.n by A10,FINSEQ_4:def 4;
+ then M*(i,n) = Li/.n by A10,PARTFUN1:def 8;
 then A17: C.n = p`2 by A1,A9,A15,Def4
        .= C.m by A1,A9,A14,A16,Def4;
         n < m or m < n by A1,REAL_1:def 5;
@@ -824,7 +825,7 @@ A2: f/.n=G*(m,k) and
 A3: n in dom f and
 A4: m in dom G and
 A5: i=k;
-        f.n = G*(m,k) by A2,A3,FINSEQ_4:def 4;
+        f.n = G*(m,k) by A2,A3,PARTFUN1:def 8;
 then A6: G*(m,i) in rng f by A3,A5,FUNCT_1:def 5;
       dom G = Seg len G &
   dom Col(G,i)=Seg len Col(G,i) & len Col(G,i)=len G & Col(G,i).m=G*(m,i)
@@ -894,13 +895,13 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
      A19: k in Seg m;
      then A20: 1<=k & k<=m by FINSEQ_1:3;
          m<=m+1 & k<=k+1 by NAT_1:11;
-     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A20,XXREAL_0:2,XREAL_1:8;
+     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A20,XREAL_1:8,XXREAL_0:2;
      then A21: k in Seg width G & k+1 in Seg width G by A3,A20,FINSEQ_1:3;
      A22: len Col(N,k) = len N & len Col(G,k)=len G &
          len Col(G,k+1) = len G by MATRIX_1:def 9;
           now per cases;
       suppose A23: k<i;
-            now let j; assume 1<=j & j<=len Col(N,k);
+            now let j be Nat; assume 1<=j & j<=len Col(N,k);
          then A24: j in dom N by A22,FINSEQ_3:27;
          A25: len Line(G,j) = m+1 by A3,MATRIX_1:def 8;
          thus Col(N,k).j= N*(j,k) by A24,MATRIX_1:def 9
@@ -911,7 +912,7 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
        hence thesis by A12,A22,FINSEQ_1:18;
       end;
       suppose A26: k>=i;
-            now let j; assume 1<=j & j<=len Col(N,k);
+            now let j be Nat; assume 1<=j & j<=len Col(N,k);
          then A27: j in dom N by A22,FINSEQ_3:27;
          A28: len Line(G,j) = m+1 by A3,MATRIX_1:def 8;
          A29: dom Line(G,j) = Seg len Line(G,j) by FINSEQ_1:def 3;
@@ -944,10 +945,10 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
        then A38: (L.n=lg.n or L.n=lg.(n+1)) & (L.j=lg.j or L.j=lg.(j+1))
         by A4,A11,A12,A14,A32;
            n in dom L & j in dom L by A35,A36,FINSEQ_1:def 3;
-       then L.n = L/.n & L.j = L/.j by FINSEQ_4:def 4;
+       then L.n = L/.n & L.j = L/.j by PARTFUN1:def 8;
        then A39: X.n = M*(k,n)`1 & X.j=M*(k,j)`1 by A35,A37,Def3;
             1<=n & n<=m & 1<=j & j<=m by A12,A35,A36,FINSEQ_3:27;
-       then A40: n<=n+1 & n+1<=m+1 & j<=j+1 & j+1<=m+1 by XREAL_1:8,NAT_1:11;
+       then A40: n<=n+1 & n+1<=m+1 & j<=j+1 & j+1<=m+1 by NAT_1:11,XREAL_1:8;
            1<=n+1 & 1<=j+1 by NAT_1:11;
        then A41: n+1 in Seg width G & j+1 in Seg width G &
         n in Seg width G & j in Seg width G
@@ -956,7 +957,7 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
        lg.(j+1)=G*(k,j+1) by MATRIX_1:def 8;
            dom lg = Seg len xg by A36,FINSEQ_1:def 3;
        then lg.n = lg/.n & lg.(n+1) = lg/.(n+1) &
-       lg.j = lg/.j & lg.(j+1) = lg/.(j+1) by A36,A41,FINSEQ_4:def 4;
+       lg.j = lg/.j & lg.(j+1) = lg/.(j+1) by A36,A41,PARTFUN1:def 8;
        then xg.n=G*(k,n)`1 & xg.(n+1)=G*(k,n+1)`1 & xg.j=G*(k,j)`1 &
        xg.(j+1)=G*(k,j+1)`1 by A36,A41,A42,Def3;
        hence X.n = X.j by A33,A36,A37,A38,A39,A41,A42,Def2;
@@ -968,7 +969,7 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
      then A45: Col(M,k)=Col(G,k) or Col(M,k)=Col(G,k+1) by A12,A18;
      A46: 1<=k & k<=m by A12,A44,FINSEQ_1:3;
          m<=m+1 & k<=k+1 by NAT_1:11;
-     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A46,XXREAL_0:2,XREAL_1:8;
+     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A46,XREAL_1:8,XXREAL_0:2;
      then k in Seg width G & k+1 in Seg width G by A3,A46,FINSEQ_1:3;
      hence Y_axis(Col(M,k)) is constant by A45,Def7;
     end;
@@ -988,10 +989,10 @@ A11:  Seg len N = dom N by FINSEQ_1:def 3;
 then A53:    L.n = M*(k,n) & L.j=M*(k,j) & n in Seg m & j in Seg m
          by A2,A51,MATRIX_1:24,def 8;
            dom L = Seg len X by A52,FINSEQ_1:def 3;
-       then L.n = L/.n & L.j = L/.j by A51,A52,FINSEQ_4:def 4;
+       then L.n = L/.n & L.j = L/.j by A51,A52,PARTFUN1:def 8;
 then A54:    X.n = M*(k,n)`2 & X.j=M*(k,j)`2 by A51,A53,Def4;
        A55: 1<=n & n<=m & 1<=j & j<=m by A12,A51,A52,FINSEQ_3:27;
-       then A56: n<=n+1 & n+1<=m+1 & j<=j+1 & j+1<=m+1 by XREAL_1:8,NAT_1:11;
+       then A56: n<=n+1 & n+1<=m+1 & j<=j+1 & j+1<=m+1 by NAT_1:11,XREAL_1:8;
            1<=n+1 & 1<=j+1 by NAT_1:11;
        then A57: n+1 in Seg width G & j+1 in Seg width G &
          n in Seg width G & j in Seg width G
@@ -1000,7 +1001,7 @@ then A54:    X.n = M*(k,n)`2 & X.j=M*(k,j)`2 by A51,A53,Def4;
            lg.(j+1)=G*(k,j+1) by MATRIX_1:def 8;
            dom lg = Seg len xg by A52,FINSEQ_1:def 3;
        then lg.n = lg/.n & lg.(n+1) = lg/.(n+1) &
-       lg.j = lg/.j & lg.(j+1) = lg/.(j+1) by A52,A57,FINSEQ_4:def 4;
+       lg.j = lg/.j & lg.(j+1) = lg/.(j+1) by A52,A57,PARTFUN1:def 8;
 then A59:    xg.n=G*(k,n)`2 & xg.(n+1)=G*(k,n+1)`2 & xg.j=G*(k,j)`2 &
         xg.(j+1)=G*(k,j+1)`2 by A52,A57,A58,Def4;
        set r = X.n, s = X.j;
@@ -1041,7 +1042,7 @@ then A59:    xg.n=G*(k,n)`2 & xg.(n+1)=G*(k,n+1)`2 & xg.j=G*(k,j)`2 &
      then A71: Col(M,k)=Col(G,k) or Col(M,k)=Col(G,k+1) by A12,A18;
      A72: 1<=k & k<=m by A12,A70,FINSEQ_1:3;
          m<=m+1 & k<=k+1 by NAT_1:11;
-     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A72,XXREAL_0:2,XREAL_1:8;
+     then k<=m+1 & 1<=k+1 & k+1<=m+1 by A72,XREAL_1:8,XXREAL_0:2;
      then k in Seg width G & k+1 in Seg width G by A3,A72,FINSEQ_1:3;
      hence X_axis(Col(M,k)) is increasing by A71,Def9;
     end;
@@ -1056,7 +1057,7 @@ then A59:    xg.n=G*(k,n)`2 & xg.(n+1)=G*(k,n+1)`2 & xg.j=G*(k,j)`2 &
    then reconsider s = M.k as FinSequence;
    A76: len s= m by A12,A75,MATRIX_1:def 8;
    A77: len (Del(Line(G,k),i))=m by A5,A74;
-        now let j; assume
+        now let j be Nat; assume
      A78: j in Seg m;
      then Line(M,k).j=M*(k,j) by A12,MATRIX_1:def 8;
      hence s.j=Del(Line(G,k),i).j by A13,A74,A75,A78;
@@ -1067,7 +1068,7 @@ then A59:    xg.n=G*(k,n)`2 & xg.(n+1)=G*(k,n+1)`2 & xg.j=G*(k,j)`2 &
   proof let G1,G2 be Go-board; assume that
    A79: len G1=len G & for k st k in dom G holds G1.k=Del(Line(G,k),i) and
    A80: len G2=len G & for k st k in dom G holds G2.k=Del(Line(G,k),i);
-        now let k; assume k in Seg len G;
+        now let k be Nat; assume k in Seg len G;
      then A81: k in dom G by FINSEQ_1:def 3;
      hence G1.k = Del(Line(G,k),i) by A79
                .= G2.k by A80,A81;
@@ -1135,7 +1136,7 @@ then A3:  k<=m+1 & k<=m by NAT_1:13;
   A5: len Col(N,k) = len N & len Col(G,k)=len G by MATRIX_1:def 9;
   A6: 1<width G by A1,Th3;
   then A7: len N = len G by A1,Def10;
-       now let j; assume 1<=j & j<=len Col(N,k);
+       now let j be Nat; assume 1<=j & j<=len Col(N,k);
     then A8: j in dom N by A5,FINSEQ_3:27;
 A9: dom N = Seg len N & dom G = Seg len G by FINSEQ_1:def 3;
     A10: len Line(G,j) = m+1 by A1,MATRIX_1:def 8;
@@ -1155,12 +1156,12 @@ Col(DelCol(G,i),k) = Col(G,k+1) &
   set N = DelCol(G,i); assume
   A1: i in Seg width G & width G = m+1 & m>0 & i<=k & k<=m;
   then A2: 1<=i & i<=m+1 & width N = m by Th26,FINSEQ_1:3;
-then A3:  1<=k+1 & k+1<=m+1 & 1<=k by A1,XXREAL_0:2,XREAL_1:8,NAT_1:11;
+then A3:  1<=k+1 & k+1<=m+1 & 1<=k by A1,NAT_1:11,XREAL_1:8,XXREAL_0:2;
   then A4: k+1 in Seg width G & k in Seg width N by A1,A2,FINSEQ_1:3;
   A5: len Col(N,k) = len N & len Col(G,k+1)=len G by MATRIX_1:def 9;
   A6: 1<width G by A1,Th3;
   then A7: len N = len G by A1,Def10;
-       now let j; assume 1<=j & j<=len Col(N,k);
+       now let j be Nat; assume 1<=j & j<=len Col(N,k);
     then A8: j in dom N by A5,FINSEQ_3:27;
 A9:  dom N = Seg len N & dom G = Seg len G by FINSEQ_1:def 3;
     A10: len Line(G,j) = m+1 by A1,MATRIX_1:def 8;
@@ -1259,8 +1260,9 @@ m in dom G & width G>1 implies f/.n in rng Line(DelCol(G,i),m)
  proof set D = DelCol(G,i); assume
   A1: rng f misses rng Col(G,i) & f/.n in rng Line(G,m) & n in dom f &
       i in Seg width G & m in dom G & width G>1;
-  then consider j such that
+  then consider j being Nat such that
   A2: j in dom Line(G,m) & f/.n=Line(G,m).j by FINSEQ_2:11;
+     reconsider j as Element of NAT by ORDINAL1:def 13;
 A3: dom Line(G,m) = Seg len Line(G,m) by FINSEQ_1:def 3;
       len Line(G,m) = width G by MATRIX_1:def 8;
   then A4: f/.n=G*(m,j) & 1<=j & j<=width G & 1<=i & i<=width G &
@@ -1281,7 +1283,7 @@ A3: dom Line(G,m) = Seg len Line(G,m) by FINSEQ_1:def 3;
     hence thesis;
    end;
    suppose i<j;
-    then A10: 1<j & i+1<=j by A4,XXREAL_0:2,NAT_1:13;
+    then A10: 1<j & i+1<=j by A4,NAT_1:13,XXREAL_0:2;
     reconsider l=j-1 as Element of NAT by A4,INT_1:18;
     A11: i<=l & l<=M & l+1=j by A4,A6,A10,XREAL_1:21,22;
     then A12: f/.n=D*(m,l) & 1<=l by A1,A4,A6,Th32,XXREAL_0:2;
@@ -1375,8 +1377,8 @@ for n st n in dom(f1^f2) ex i,j st [i,j] in Indices M & (f1^f2)/.n=M*(i,j)
     thus [i,j] in Indices M by A5;
     thus (f1^f2)/.n=M*(i,j) by A4,A5,FINSEQ_4:83;
    end;
-   suppose ex m st m in dom f2 & n=len f1+m;
-    then consider m such that
+   suppose ex m be Nat st m in dom f2 & n=len f1+m;
+    then consider m be Nat such that
     A6: m in dom f2 & n=len f1+m;
     consider i,j such that
     A7: [i,j] in Indices M & f2/.m=M*(i,j) by A2,A6;
@@ -1429,8 +1431,8 @@ for m,k,i,j st [m,k] in Indices M & [i,j] in Indices M & (f1^f2)/.n =M*
       then f1/.(n+1)=M*(i,j) by A5,FINSEQ_4:83;
       hence thesis by A1,A5,A7,A8,A9;
      end;
-     suppose ex m st m in dom f2 & n+1=len f1+m;
-      then consider mm be Element of NAT such that
+     suppose ex m be Nat st m in dom f2 & n+1=len f1+m;
+      then consider mm be Nat such that
       A10: mm in dom f2 & n+1=len f1+mm;
           1<=mm by A10,FINSEQ_3:27;
       then A11: 0<=mm-1 by XREAL_1:50;
@@ -1443,8 +1445,8 @@ for m,k,i,j st [m,k] in Indices M & [i,j] in Indices M & (f1^f2)/.n =M*
      end;
     hence thesis;
    end;
-   suppose ex m st m in dom f2 & n=len f1+m;
-    then consider mm be Element of NAT such that
+   suppose ex m be Nat st m in dom f2 & n=len f1+m;
+    then consider mm be Nat such that
     A14: mm in dom f2 & n=len f1+mm;
          1<=mm & mm<=mm+1 & n+1<=len(f1^f2) by A4,A14,FINSEQ_3:27,NAT_1:11;
     then len f1+mm+1<=len f1+len f2 & len f1+mm+1=len f1+(mm+1)
@@ -1492,11 +1494,11 @@ A6: dom G = Seg len G & dom D = Seg len D by FINSEQ_1:def 3;
       suppose A14: i<=k;
           i<>k by A1,A9,A10,A11,Th24;
       then i<k by A14,REAL_1:def 5;
-then A15:   i+1<=k & 1<k by A4,XXREAL_0:2,NAT_1:13;
+then A15:   i+1<=k & 1<k by A4,NAT_1:13,XXREAL_0:2;
       then A16: i<=k-1 & 1<=k by XREAL_1:21;
       reconsider l = k-1 as Element of NAT by A15,INT_1:18;
       take l;
-          1<=l & l<=M by A4,A12,A16,XXREAL_0:2,XREAL_1:22;
+          1<=l & l<=M by A4,A12,A16,XREAL_1:22,XXREAL_0:2;
       then l in Seg M & D*(m,l)=G*(m,l+1) by A1,A3,A11,A16,Th32,FINSEQ_1:3;
       hence [m,l] in Indices D & f/.n=D*(m,l)
         by A2,A5,A6,A7,A10,A11,ZFMISC_1:106;
@@ -1513,8 +1515,7 @@ then A15:   i+1<=k & 1<k by A4,XXREAL_0:2,NAT_1:13;
        by A7,ZFMISC_1:106;
     then A20: 1<=i2 & i2<=M & 1<=j2 & j2<=M & i2<=i2+1 & j2<=j2+1 & M<=M+1
      by A5,FINSEQ_1:3,NAT_1:11;
-    then 1<=i2+1 & i2+1<=M+1 & 1<=j2+1 & j2+1<=M+1 by XXREAL_0:2,
-XREAL_1:8;
+    then 1<=i2+1 & i2+1<=M+1 & 1<=j2+1 & j2+1<=M+1 by XREAL_1:8,XXREAL_0:2;
     then A21: i2+1 in Seg(M+1) & j2+1 in Seg(M+1) by FINSEQ_1:3;
         Seg width D c= Seg width G by A3,A5,A20,FINSEQ_1:7;
     then A22: [i1,i2] in Indices G & [j1,j2] in Indices G &
@@ -1534,7 +1535,7 @@ XREAL_1:8;
       then j2<i2+1 by A23,XXREAL_0:2;
       then j2+1<=i2+1 & 0<i2+1-j2 by NAT_1:13,XREAL_1:52;
       then A25: 1<=i2+1-j2 & abs(i2+1-j2) = i2+1-j2 & 0<=abs(i1-j1)
-         by COMPLEX1:132,ABSVALUE:def 1,XREAL_1:21;
+         by ABSVALUE:def 1,COMPLEX1:132,XREAL_1:21;
       then 0+(i2+1-j2)<=1 by A24,XREAL_1:9;
       then i2+1-j2 = 1 by A25,XXREAL_0:1;
       hence contradiction by A23;
@@ -1549,7 +1550,7 @@ XREAL_1:8;
       then i2<j2+1 by A26,XXREAL_0:2;
       then i2+1<=j2+1 & 0<j2+1-i2 by NAT_1:13,XREAL_1:52;
       then A28: 1<=j2+1-i2 & abs(j2+1-i2) = j2+1-i2 & 0<=abs(i1-j1)
-         by COMPLEX1:132,ABSVALUE:def 1,XREAL_1:21;
+         by ABSVALUE:def 1,COMPLEX1:132,XREAL_1:21;
       then 0+(j2+1-i2)<=1 by A27,XREAL_1:9;
       then j2+1-i2 = 1 by A28,XXREAL_0:1;
       hence contradiction by A26;
@@ -1643,10 +1644,10 @@ A8: dom G = Seg len G by FINSEQ_1:def 3;
      then j in dom Line(G,i) by FINSEQ_1:def 3;
      hence contradiction by A12,A13,FUNCT_1:def 5;
     end;
-  defpred P[Element of NAT,set] means
+  defpred P[Nat,set] means
   $2 in dom G & for k st k=$2 holds f/.$1 in rng Line(G,k);
-  A14: for n st n in Seg len f ex r st P[n,r]
-    proof let n; assume n in Seg len f;
+  A14: for n be Nat st n in Seg len f ex r st P[n,r]
+    proof let n be Nat ; assume n in Seg len f;
      then n in dom f by FINSEQ_1:def 3;
      then consider k such that
      A15: k in dom G & f/.n in rng Line(G,k) by A9;
@@ -1657,7 +1658,7 @@ A8: dom G = Seg len G by FINSEQ_1:def 3;
     end;
   consider v such that
   A16: dom v = Seg len f and
-  A17: for n st n in Seg len f holds P[n,v.n]
+  A17: for n be Nat st n in Seg len f holds P[n,v.n]
    from FINSEQ_1:sch 5(A14);
 A18: len v = len f by A16,FINSEQ_1:def 3;
   A19: dom v = Seg len v & dom f = Seg len f & dom f c= NAT &
@@ -1666,10 +1667,11 @@ A18: len v = len f by A16,FINSEQ_1:def 3;
   then 1<=1 & 1<=len f & len f<=len f by XXREAL_0:2;
   then A20: 1 in dom f & len f in dom f by FINSEQ_3:27;
   reconsider p=f/.len f, q=f/.m as Point of TOP-REAL 2;
-  A21: v<>{} by A1,FINSEQ_1:25,A18;
+  A21: v<>{} by A1,A18,FINSEQ_1:25;
   A22: rng v c= dom G
     proof let x; assume x in rng v;
-     then ex y be Element of NAT st y in dom v & v.y=x by FINSEQ_2:11;
+     then ex y be Nat st y in dom v & v.y=x by FINSEQ_2:11;
+     then ex y be Element of NAT st y in dom v & v.y=x by ORDINAL1:def 13;
      hence x in dom G by A16,A17;
     end;
   A23: v.(len v) = len G
@@ -1700,12 +1702,13 @@ then A31: r in rng v & s in rng v by A16,A19,A29,FUNCT_1:def 5;
          L2 = Line(G,n2);
 A32:   dom L1 = Seg len L1 & Seg len L2 = dom L2 by FINSEQ_1:def 3;
      A33: f/.k in rng L1 & f/.(k+1) in rng L2 by A17,A19,A29,A30;
-     then consider x be Element of NAT such that
+     then consider x be Nat such that
      A34: x in dom L1 & L1.x = f/.k by FINSEQ_2:11;
      A35: len L1 = width G & len L2 = width G by MATRIX_1:def 8;
      then A36: f/.k = G*(n1,x) by A32,A34,MATRIX_1:def 8;
-     consider y be Element of NAT such that
+     consider y be Nat such that
      A37: y in dom L2 & L2.y = f/.(k+1) by A33,FINSEQ_2:11;
+     reconsider x,y as Element of NAT by ORDINAL1:def 13;
      A38: f/.(k+1) = G*(n2,y) by A32,A35,A37,MATRIX_1:def 8;
          [n1,x] in [:dom G,Seg width G:] &
      [n2,y] in [:dom G,Seg width G:]
@@ -1946,10 +1949,10 @@ A8: dom G = Seg len G by FINSEQ_1:def 3;
      then i in dom Col(G,j) by FINSEQ_1:def 3;
      hence contradiction by A12,A13,FUNCT_1:def 5;
     end;
-  defpred P[Element of NAT,set] means
+  defpred P[Nat,set] means
   $2 in Seg width G & for k st k=$2 holds f/.$1 in rng Col(G,k);
-  A14: for n st n in Seg len f ex r st P[n,r]
-    proof let n; assume n in Seg len f;
+  A14: for n be Nat st n in Seg len f ex r st P[n,r]
+    proof let n be Nat ; assume n in Seg len f;
      then n in dom f by FINSEQ_1:def 3;
      then consider k such that
      A15: k in Seg width G & f/.n in rng Col(G,k) by A9;
@@ -1959,8 +1962,8 @@ A8: dom G = Seg len G by FINSEQ_1:def 3;
      hence f/.n in rng Col(G,m) by A15;
     end;
   consider v such that
-  A16: dom v = Seg len f and
-  A17: for n st n in Seg len f holds P[n,v.n] from FINSEQ_1:sch 5(A14);
+A16: dom v = Seg len f and
+A17: for n be Nat st n in Seg len f holds P[n,v.n] from FINSEQ_1:sch 5(A14);
 A18: len v = len f by A16,FINSEQ_1:def 3;
   A19: dom v = Seg len v & dom f = Seg len f & dom f c= NAT &
       Seg width G c= NAT by FINSEQ_1:def 3;
@@ -1970,7 +1973,8 @@ A18: len v = len f by A16,FINSEQ_1:def 3;
   A21: v<>{} by A1,A18,FINSEQ_1:25;
   A22: rng v c= Seg width G
     proof let x; assume x in rng v;
-      then ex y be Element of NAT st y in dom v & v.y=x by FINSEQ_2:11;
+      then ex y be Nat st y in dom v & v.y=x by FINSEQ_2:11;
+      then ex y be Element of NAT st y in dom v & v.y=x by ORDINAL1:def 13;
      hence x in Seg width G by A16,A17;
     end;
   A23: v.(len v) = width G
@@ -2001,12 +2005,13 @@ then A31: r in rng v & s in rng v by A16,A19,A29,FUNCT_1:def 5;
          L2 = Col(G,n2);
 A32:   dom L1 = Seg len L1 & dom L2 = Seg len L2 by FINSEQ_1:def 3;
      A33: f/.k in rng L1 & f/.(k+1) in rng L2 by A17,A19,A29,A30;
-     then consider x be Element of NAT such that
+     then consider x be Nat such that
      A34: x in dom L1 & L1.x = f/.k by FINSEQ_2:11;
      A35: len L1 = len G & len L2 = len G by MATRIX_1:def 9;
      then A36: f/.k = G*(x,n1) by A8,A32,A34,MATRIX_1:def 9;
-     consider y be Element of NAT such that
+     consider y be Nat such that
      A37: y in dom L2 & L2.y = f/.(k+1) by A33,FINSEQ_2:11;
+     reconsider x,y as Element of NAT by ORDINAL1:def 13;
      A38: f/.(k+1) = G*(y,n2) by A8,A32,A35,A37,MATRIX_1:def 9;
          [x,n1] in [:dom G,Seg width G:] &
      [y,n2] in [:dom G,Seg width G:]
@@ -2357,7 +2362,7 @@ ex g st rng g c= rng f & g/.1 in rng Col(G,1) &
 A10:      k in Seg 1;
        then A11:      k = 1 by FINSEQ_1:4,TARSKI:def 1;
            k in dom h by A10,FINSEQ_1:def 8;
-      hence h/.k = h.k by FINSEQ_4:def 4 .= x by A11,FINSEQ_1:57;
+      hence h/.k = h.k by PARTFUN1:def 8 .= x by A11,FINSEQ_1:57;
      end;
     A12: rng h c= rng f
      proof let z be set; assume z in rng h;
@@ -2438,7 +2443,7 @@ A20: now let i; assume i in Seg l;
       hence z in rng f by PARTFUN2:4;
      end;
         m+1<=n & n<=n+1 by A19,NAT_1:13;
-    then A29: m+1<=n+1 & dom g=Seg len g by XXREAL_0:2,FINSEQ_1:def 3;
+    then A29: m+1<=n+1 & dom g=Seg len g by FINSEQ_1:def 3,XXREAL_0:2;
      then m <= n & 1<=l & len g=l by A26,XREAL_1:8,21;
     then A30:1 in Seg l & m in Seg n & len g in dom g & n in Seg n
      by A6,FINSEQ_1:3,FINSEQ_3:27;
@@ -2513,7 +2518,7 @@ A43: dom g = Seg l by A42,FINSEQ_1:def 3;
       hence z in rng f by PARTFUN2:4;
      end;
         n+1<=m & m<=m+1 by A38,NAT_1:13;
-     then A46: n+1<=m+1 & dom g=Seg len g by XXREAL_0:2,FINSEQ_1:def 3;
+     then A46: n+1<=m+1 & dom g=Seg len g by FINSEQ_1:def 3,XXREAL_0:2;
     then n <= m & 1<=l & len g=l by A42,XREAL_1:8,21;
     then A47:1 in Seg l & n in Seg m & len g in dom g & m in Seg m
      by A6,FINSEQ_1:3,FINSEQ_3:27;

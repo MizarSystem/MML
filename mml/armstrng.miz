@@ -10,18 +10,17 @@ environ
       CARD_3, PBOOLE, ZF_REFLE, MCART_1, ORDERS_1, SETFAM_1, INT_1, EQREL_1,
       WAYBEL_4, SUBSET_1, CANTOR_1, CARD_1, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       MARGREL1, MATRLIN, BINARITH, BINARI_3, ZF_LANG, MIDSP_3, POWER, EUCLID,
-      FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1, NAT_1;
+      FINSEQ_4, CONLAT_1, FINSUB_1, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSET_1, FINSUB_1, RELAT_1,
       RELAT_2, RELSET_1, SETFAM_1, PARTFUN1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_4,
       FUNCT_1, ORDERS_2, MCART_1, EQREL_1, CARD_3, PBOOLE, STRUCT_0, WAYBEL_4,
       CARD_1, FINSEQ_1, PRE_CIRC, MARGREL1, FUNCT_2, FINSEQ_2, MATRLIN,
-      BINARITH, BINARI_3, FINSEQ_4, SERIES_1, EUCLID, XXREAL_0;
+      BINARITH, BINARI_3, SERIES_1, EUCLID, XXREAL_0;
  constructors SETFAM_1, FINSUB_1, XXREAL_0, NAT_1, CARD_3, FINSEQOP, SERIES_1,
       BINARITH, PRE_CIRC, EUCLID, MATRLIN, WAYBEL_4, BINARI_3;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ARYTM_3, FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
-      EQREL_1, MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN,
-      GOBRD13;
+      FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, EQREL_1,
+      MARGREL1, FINSEQ_2, CARD_3, PBOOLE, ORDERS_2, ALTCAT_1, MATRLIN, GOBRD13;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
  definitions TARSKI, RELAT_2, YELLOW_0, MATRLIN, WAYBEL_4, FINSUB_1, FINSEQ_2,
       SUBSET_1, XBOOLEAN;
@@ -458,31 +457,34 @@ definition
   deffunc F(set) = (p/.$1) '&' (q/.$1);
   consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j being Element of NAT st j in Seg n holds z.j = F(j)
- from FINSEQ_2:sch 1;
-       z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1;
+A2: for j being Nat st j in Seg n holds z.j = F(j)
+    from FINSEQ_2:sch 1;
+    z in BOOLEAN* by FINSEQ_1:def 11; then z in n-tuples_on BOOLEAN by A1;
    then reconsider z as Element of n-tuples_on BOOLEAN;
-   take z; thus thesis by A2;
+   take z;
+   let i be set; assume
+A3: i in Seg n; then i is Nat by ORDINAL1:def 13;
+    hence thesis by A2,A3;
  end;
  uniqueness proof let it1, it2 be Element of n-tuples_on BOOLEAN such that
-A3: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
-A4: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
+A4: for i being set st i in Seg n holds it1.i = (p/.i) '&' (q/.i) and
+A5: for i being set st i in Seg n holds it2.i = (p/.i) '&' (q/.i);
       now
-  A5: dom it1 = Seg n by Lm1;
+  A6: dom it1 = Seg n by Lm1;
    hence dom it1 = dom it2 by Lm1;
    let x be set; assume
-  A6: x in dom it1;
-   hence it1.x = (p/.x) '&' (q/.x) by A3,A5 .=it2.x by A4,A5,A6;
+  A7: x in dom it1;
+   hence it1.x = (p/.x) '&' (q/.x) by A4,A6 .=it2.x by A5,A6,A7;
   end;
   hence it1 = it2 by FUNCT_1:9;
  end;
  commutativity
   proof let r,p,q be Tuple of n, BOOLEAN;
    assume
-A7:   for i being set st i in Seg n holds r.i = (p/.i) '&' (q/.i);
+A8:   for i being set st i in Seg n holds r.i = (p/.i) '&' (q/.i);
    let i be set;
    assume i in Seg n;
-   hence r.i = (q/.i) '&' (p/.i) by A7;
+   hence r.i = (q/.i) '&' (p/.i) by A8;
   end;
 end;
 
@@ -499,7 +501,7 @@ set B = n-BinarySequence 0;
   A3: dom B = Seg n by Lm1;
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
    then B.x = 0 by A1,A2,FUNCOP_1:13;
-   then B/.x = FALSE by A1,A2,A3,FINSEQ_4:def 4;
+   then B/.x = FALSE by A1,A2,A3,PARTFUN1:def 8;
   hence (B '&' p).x = FALSE '&' (p/.x) by A1,A2,Def5
    .= B.x by A1,A2,A4,FUNCOP_1:13;
   end;
@@ -519,11 +521,11 @@ set B = n-BinarySequence 0; set nB = 'not' B;
   A4: B = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
   A5: dom B = Seg n by Lm1;
        B.x = 0 by A1,A3,A4,FUNCOP_1:13;
-  then A6: B/.x = FALSE by A1,A3,A5,FINSEQ_4:def 4;
+  then A6: B/.x = FALSE by A1,A3,A5,PARTFUN1:def 8;
           nB/.x = 'not' (B/.x) by A1,A3,BINARITH:def 4
               .= TRUE by A6;
   hence (nB '&' p).x = TRUE '&' (p/.x) by A1,A3,Def5
-        .= p.x by A2,A3,FINSEQ_4:def 4;
+        .= p.x by A2,A3,PARTFUN1:def 8;
   end;
  hence 'not' (n-BinarySequence 0) '&' p = p by FUNCT_1:9;
 end;
@@ -550,8 +552,8 @@ A3: now let n be Element of NAT such that
     suppose A6: n = 0;
     then A7: i = 0 by A5;
             0*n = n |-> 0 by EUCLID:def 4; then dom 0*n =Seg n by FUNCOP_1:19;
-    then A8: len 0*n = n by FINSEQ_1:def 3;   dom <*TRUE*> =Seg 1 by FINSEQ_1:
-55
+    then A8: len 0*n = n by FINSEQ_1:def 3;   dom <*TRUE*> =Seg 1 by
+FINSEQ_1:55
 ;
     then A9: 1 in dom <*TRUE*> by FINSEQ_1:3;
      thus B(n+1).(i+1) = (0*n^<*TRUE*>).(i+1)
@@ -1188,8 +1190,7 @@ then A6: S is (F2) by Th20;
     then A10: f|B = g|B by A7,Def8;
             f|A'=(f|(A\/A'))|A' by A9,RELAT_1:103.=g|A' by A8,A9,RELAT_1:103;
     then A11: f|B' = g|B' by A7,Def8;
-     thus f|(B\/B')=f|B\/f|B' by RELAT_1:107.= g|(B\/B') by A10,A11,RELAT_1:
-107
+     thus f|(B\/B')=f|B\/f|B' by RELAT_1:107.= g|(B\/B') by A10,A11,RELAT_1:107
 ;
     end;
    hence [A\/A', B\/B'] in S;
@@ -2547,9 +2548,9 @@ A12: dom H = Seg n by FINSEQ_1:def 3;
 A13: now let x be Element of X;
      defpred P[set,set] means
        (x in H.$1 implies $2 = 0) & (not x in H.$1 implies $2 = 1);
-   A14: for i being Element of NAT st i in Seg n ex x being Element of BOOLEAN
+   A14: for i being Nat st i in Seg n ex x being Element of BOOLEAN
          st P[i,x]
-      proof let i be Element of NAT; assume i in Seg n;
+      proof let i be Nat; assume i in Seg n;
        per cases;
        suppose A15: x in H.i;
         reconsider b = FALSE as Element of BOOLEAN;
@@ -2563,7 +2564,7 @@ A13: now let x be Element of X;
        end;
        end; consider y being FinSequence of BOOLEAN such that
    A17: dom y = Seg n and
-   A18: for i being Element of NAT st i in Seg n holds P[i,y.i]
+   A18: for i being Nat st i in Seg n holds P[i,y.i]
     from FINSEQ_1:sch 5(A14);
    A19: y in BOOLEAN* by FINSEQ_1:def 11;
            len y = n by A17,FINSEQ_1:def 3;
@@ -2639,7 +2640,7 @@ then A22: X --> 0 in R by A7;
              suppose A39: A c= H.i;
                      H.i in G by A3,A12,A37,A38,FUNCT_1:12;
             then A40: B c= H.i by A24,A39;
-            A41: Mx/.i = Mx.i by A36,A37,A38,FINSEQ_4:def 4
+            A41: Mx/.i = Mx.i by A36,A37,A38,PARTFUN1:def 8
                       .= 0 by A20,A35,A37,A38,A40;
               thus nf.i = (nbf/.i) '&' (Mx/.i) by A37,A38,Def5
                .= (nbg/.i) '&' (Mx/.i) by A41
@@ -2653,7 +2654,7 @@ then A22: X --> 0 in R by A7;
                   reconsider xx as Element of X by A43;
                   reconsider Mxx = M.xx as Tuple of n, BOOLEAN;
                   dom (M.xx) = Seg n by Lm1;
-              then A45: Mxx/.i = Mxx.i by A37,A38,FINSEQ_4:def 4
+              then A45: Mxx/.i = Mxx.i by A37,A38,PARTFUN1:def 8
                     .= 1 by A20,A37,A38,A44;
               A46: f.xx = (g|A).xx by A25,A43,FUNCT_1:72
                       .= g.xx by A43,FUNCT_1:72;
@@ -2689,7 +2690,7 @@ then A22: X --> 0 in R by A7;
         consider bx being set such that
     A55: bx in B & not bx in gg by A54,TARSKI:def 3;
         reconsider bx as Element of X by A55;
-        consider i being Element of NAT such that
+        consider i being Nat such that
     A56: i in dom H and
     A57: H.i = gg by A3,A11,FINSEQ_2:11;
     A58: 1 <= i & i <= n by A12,A56,FINSEQ_1:3;   i <> 0 by A12,A56,FINSEQ_1:3;
@@ -2743,19 +2744,19 @@ A62
               reconsider nj = j as Element of NAT by A72;
              A74: bs0 = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
                       dom bs0 = Seg n by Lm1;
-             then A75:  bs0/.nj = bs0.nj by A73,FINSEQ_4:def 4
+             then A75:  bs0/.nj = bs0.nj by A73,PARTFUN1:def 8
                             .= 0 by A73,A74,FUNCOP_1:13;
              A76:  L.j = (bs0/.nj) '&' (Ma/.nj) by A73,Def5
                      .= 0 by A75;
               per cases;
               suppose A77:  i <> nj;   dom bsi = Seg n by Lm1;
-             then A78:  bsi/.nj = bsi.nj by A73,FINSEQ_4:def 4
+             then A78:  bsi/.nj = bsi.nj by A73,PARTFUN1:def 8
                             .= FALSE by A59,A60,A73,A77,Th8;
                       R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5;
                 hence L.j = R.j by A76,A78;
               end;
               suppose A79: i = nj;   dom Ma = Seg n by Lm1;
-              then A80: Ma/.nj = Ma.i by A73,A79,FINSEQ_4:def 4
+              then A80: Ma/.nj = Ma.i by A73,A79,PARTFUN1:def 8
                         .= 0 by A20,A53,A57,A69,A73,A79;
                       R.j = (bsi/.nj) '&' (Ma/.nj) by A73,Def5
                      .= 0 by A80;
@@ -2772,18 +2773,18 @@ A62
           .= Absval (bsi '&' (M.bx)) by A62;
          reconsider Mbx = M.bx as Tuple of n, BOOLEAN;
              dom Mbx = Seg n by Lm1;
-    then A83:  Mbx/.i = Mbx.i by A12,A56,FINSEQ_4:def 4 .= 1 by A12,A20,A55,A56
+    then A83:  Mbx/.i = Mbx.i by A12,A56,PARTFUN1:def 8 .= 1 by A12,A20,A55,A56
 ,A57;
     A84: bs0 = 0*n by BINARI_3:26 .= n |-> 0 by EUCLID:def 4;
              dom bs0 = Seg n by Lm1;
-    then A85:  bs0/.i = bs0.i by A12,A56,FINSEQ_4:def 4
+    then A85:  bs0/.i = bs0.i by A12,A56,PARTFUN1:def 8
                   .= 0 by A12,A56,A84,FUNCOP_1:13;
     A86:  (bs0 '&' (Mbx)).i = (bs0/.i) '&' (Mbx/.i) by A12,A56,Def5
                           .= bs0/.i by A83;
     A87:  (bsi '&' (Mbx)).i = (bsi/.i) '&' (Mbx/.i) by A12,A56,Def5
                           .= bsi/.i by A83;
               dom bsi = Seg n by Lm1;
-          then bsi/.i = bsi.i by A12,A56,FINSEQ_4:def 4 .= 1 by A59,A60,Th8;
+          then bsi/.i = bsi.i by A12,A56,PARTFUN1:def 8 .= 1 by A59,A60,Th8;
      hence contradiction by A82,A85,A86,A87,BINARI_3:2;
     end;
    hence x in F by A2,A50;
@@ -3286,7 +3287,7 @@ set m = { a where a is Element of X:
        set r0 = X --> 0, r1 = (X --> 0) +* (m --> m);
            0 in {0} by TARSKI:def 1; then 0 in M0 by XBOOLE_0:def 2;
        then A86: (X --> 0) +* ({}X --> {}X) in R;
-        m in M0 by A85, XBOOLE_0:def 2;
+        m in M0 by A85,XBOOLE_0:def 2;
        then r1 in R;
        then reconsider r0, r1 as Element of the Relationship of DB by A86,
 FUNCT_4:22;
@@ -3401,8 +3402,7 @@ A11: F is (DC6);
   A12: now let A, B, C be Subset of X such that
   A13: [A, B] in F and
   A14: [B, C] in F;
-          [B\/A, C] in F by A11,A14,Def31; then [A\/A, C] in F by A10,A13,
-Def30
+          [B\/A, C] in F by A11,A14,Def31; then [A\/A, C] in F by A10,A13,Def30
 ;
    hence [A, C] in F;
   end;
@@ -3413,8 +3413,7 @@ Def30
  A17: A c= A' & B' c= B by A16,Th15; then A' = A\/(A'\A) by XBOOLE_1:45;
  then A18: [A', B] in F by A11,A15,Def31;
  A19: [B', B'] in F by A9,Def12;
-         B = B'\/(B\B') by A17,XBOOLE_1:45; then [ B, B'] in F by A11,A19,
-Def31
+         B = B'\/(B\B') by A17,XBOOLE_1:45; then [ B, B'] in F by A11,A19,Def31
 ;
   hence [A', B'] in F by A12,A18;
  end;
@@ -3704,8 +3703,7 @@ A32: [K, [#]X] in dcF proof
    A40: [K, [#]X] <= [x',y'];
    A41: x' c= K & X c= y' by A40,Th15;
    then A42: X = y' by XBOOLE_0:def 10;
-         x' c< K by A39,A41,XBOOLE_0:def 8,
-def 10; then consider a being Subset
+         x' c< K by A39,A41,XBOOLE_0:def 8,def 10; then consider a being Subset
 of X such that
    A43: x' c= a and
    A44: a <> X and

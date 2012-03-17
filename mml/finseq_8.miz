@@ -8,16 +8,16 @@
 environ
 
  vocabularies FINSEQ_8, ARYTM_1, RELAT_1, FINSEQ_1, FUNCT_1, FINSEQ_5, BOOLE,
-      RFINSEQ, JORDAN3, SQUARE_1, NAT_1;
+      RFINSEQ, JORDAN3, SQUARE_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1,
       BINARITH, RELAT_1, RFINSEQ, FINSEQ_1, FUNCT_1, JORDAN3, FINSEQ_5;
  constructors SQUARE_1, NAT_1, RFINSEQ, BINARITH, FINSEQ_5, JORDAN3;
- registrations RELSET_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1;
  theorems REAL_1, REAL_2, NAT_1, NAT_2, JORDAN3, FINSEQ_1, FINSEQ_3, FINSEQ_5,
       FINSEQ_6, BINARITH, SQUARE_1, RFINSEQ, RELAT_1, XREAL_1, XBOOLE_1,
-      XXREAL_0;
+      XXREAL_0, ORDINAL1;
  schemes NAT_1;
 
 begin
@@ -461,7 +461,7 @@ proof let D be non empty set,CR be FinSequence of D;
                   .=len CR +1 -1-len ovlpart(CR/^1,CR)
                   .=len CR -'len ovlpart(CR/^1,CR) by A14,BINARITH:50;
     then A21: smid(f,j,j+len CR-'1)
-       =CR|len CR by A20,A6,A7,A8,FINSEQ_5:40
+       =CR|len CR by A6,A7,A8,A20,FINSEQ_5:40
        .=smid(f,1,1+len CR-'1) by A18,FINSEQ_1:79;
       len ovlpart(CR/^1,CR) <= len (CR/^1) by Th10;
     then len ovlpart(CR/^1,CR) <= len CR -'1 by JORDAN3:19;
@@ -597,13 +597,14 @@ BINARITH:def 3
                   .=len CR-'1-k+1 by A40,A50,BINARITH:50
                   .=len CR -1-k+1 by A54,BINARITH:50
                   .=len CR -'k by A51,BINARITH:def 3;
-         for jj being Element of NAT st 1<=jj & jj<=len CR -'k holds
+         for jj being Nat st 1<=jj & jj<=len CR -'k holds
        smid(CR,1,(len CR) -'k).jj
        =smid(CR/^1,len (CR/^1) -'(len CR-'k)+1,len (CR/^1)).jj
-        proof let jj be Element of NAT;
+        proof let jj be Nat;
          assume A78: 1<=jj & jj<=len CR-'k;
          then A79: jj+k<=len CR -'k+k by XREAL_1:9;
          then A80: jj+k-1<=len CR -1 by A53,XREAL_1:11;
+         reconsider j1=jj as Element of NAT by ORDINAL1:def 13;
          A81: len mid(f,i,i+len CR-'1)=i+len CR-'1-'i+1
                   by A29,A35,A36,A37,A38,A58,A66,JORDAN3:27
                .=i+len CR -1-i+1 by A35,A36,A37,BINARITH:50
@@ -623,16 +624,16 @@ BINARITH:def 3
                   =mid(f,j,j+len CR-'1) by A64,A68,Th4;
          thus
            smid(CR/^1,len (CR/^1) -'(len CR-'k)+1,len (CR/^1)).jj
-         =(CR/^1).(jj+k-'1) by A39,A40,A50,A55,A56,A75,A76,A77,A78,JORDAN3:27
+         =(CR/^1).(j1+k-'1) by A39,A40,A50,A55,A56,A75,A76,A77,A78,JORDAN3:27
         .= smid(f,i,i+len CR-'1).(jj+k-'1+1) by A29,A34,A87,RFINSEQ:def 2
         .= mid(f,i,i+len CR-'1).(jj+k-'1+1) by A35,A36,A37,Th4
         .= mid(f,i,i+len CR-'1).(jj+k-1+1) by A86,BINARITH:50
-        .=f.(i+(jj+k)-'1)
+        .=f.(i+(j1+k)-'1)
                  by A29,A35,A36,A37,A38,A53,A58,A66,A79,A81,A86,JORDAN3:27
-        .=f.(i+k+jj-'1)
+        .=f.(i+k+j1-'1)
         .=CR.jj by A29,A32,A59,A61,A64,A67,A68,A78,A82,A88,JORDAN3:27
-        .=CR.(jj+1-'1) by BINARITH:39
-        .= mid(CR,1,(len CR) -'k).jj
+        .=CR.(j1+1-'1) by BINARITH:39
+        .= mid(CR,1,(len CR) -'k).j1
                    by A34,A52,A53,A70,A73,A78,JORDAN3:27
         .= smid(CR,1,(len CR) -'k).jj by A52,Th4;
         end;
@@ -1233,8 +1234,7 @@ proof
           .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A50,A60,FINSEQ_5:31
           .=mid(f,i,(i-'1)+len g) by A59,A61,JORDAN3:def 1;
 
-         then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A51,A56,
-A58
+         then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A51,A56,A58
 ,Th27;
          hence not g is_preposition_of f/^(i-'1) by A57,Def8;
         end;
@@ -1257,8 +1257,7 @@ A58
                            by A52,JORDAN3:def 1
           .=(f/^(i-'1))|(((i-'1)+len g)-'i+1) by A50,A66,FINSEQ_5:31
           .=mid(f,i,(i-'1)+len g) by A65,A67,JORDAN3:def 1;
-         then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A51,A62,
-A64
+         then not(1<=len (f/^(i-'1)) & mid(f/^(i-'1),1,len g)=g) by A51,A62,A64
 ,Th27;
          hence not g is_preposition_of f/^(i-'1) by A63,Def8;
         end;

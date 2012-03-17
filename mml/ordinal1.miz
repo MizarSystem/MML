@@ -177,7 +177,7 @@ A1:   succ X = succ Y and
 A2:   X <> Y;
      X in Y \/ { Y } by A1,Th10;
     then A3: X in Y or X in { Y } by XBOOLE_0:def 2;
-     Y in X \/ { X } by A1, Th10;
+     Y in X \/ { X } by A1,Th10;
     then Y in X or Y in { X } by XBOOLE_0:def 2;
    hence contradiction by A2,A3,TARSKI:def 1;
   end;
@@ -287,7 +287,7 @@ A1:  x c< A;
 A3:  y in A \ x and
 A4:  not ex a st a in A \ x & a in y by TARSKI:7;
 A5:  y in A & not y in x by A3,XBOOLE_0:def 4;
-A6:  y c= A by Def2,A3;
+A6:  y c= A by A3,Def2;
          now let a;
      assume
 A7:   a in y;
@@ -340,7 +340,7 @@ A6:   z in y \ a & not ex c st c in y \ a & c in z by TARSKI:7;
 A7:   z in y & not z in a by A6,XBOOLE_0:def 4;
            y c= A by A2,A4,Def2;
       then z in a or z = a or a in z by A1,A7,Def3;
-     hence contradiction by A4,A6,XBOOLE_0:def 4,Th3;
+     hence contradiction by A4,A6,Th3,XBOOLE_0:def 4;
     end;
     then a is epsilon-transitive by Def2;
    hence thesis by A3,Def4;
@@ -358,7 +358,7 @@ A2:  a in A & not a in B by TARSKI:def 3;
     then consider X such that
 A3:  X in A \ B & not ex a st a in A \ B & a in X by TARSKI:7;
 A4:  X in A & not X in B by A3,XBOOLE_0:def 4;
-A5:  X c= A by Def2,A3;
+A5:  X c= A by A3,Def2;
 A6:  X is Ordinal by A3,Th23;
          now let b;
      assume
@@ -1445,4 +1445,45 @@ A8:  dom F = D() & for x st x in D() holds Q[x,F.x] from FUNCT_1:sch 2(A2,A5);
    let d be Element of D();
    thus Q[d,F.d] by A8;
   end;
+
+:: from CARD_4, 2007.08.06, A.T.
+
+theorem
+ succ A \ {A} = A
+  proof
+   thus succ A \ {A} c= A
+     proof let x; assume x in succ A \ {A};
+       then x in succ A & not x in {A} by XBOOLE_0:def 4;
+       then (x in A or x = A) & x <> A by Th13,TARSKI:def 1;
+      hence thesis;
+     end;
+   let x; assume x in A;
+    then x in succ A & x <> A by Th13;
+    then x in succ A & not x in {A} by TARSKI:def 1;
+   hence thesis by XBOOLE_0:def 4;
+  end;
+
+:: from ARYTM_3, 2007.09.16, A.T.
+
+registration
+ cluster empty -> natural number;
+ coherence
+  proof
+    {} in omega by Def12;
+   hence thesis by Def13;
+  end;
+ cluster -> natural Element of omega;
+ coherence by Def13;
+end;
+
+registration
+ cluster non empty natural number;
+ existence
+  proof take succ{};
+   thus succ{} is non empty;
+A1: omega is_limit_ordinal by Def12;
+    0 in omega by Def13;
+   hence succ{} in omega by A1,Th41;
+  end;
+end;
 

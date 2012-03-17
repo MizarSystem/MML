@@ -8,19 +8,19 @@ environ
 
  vocabularies REALSET1, FINSEQ_1, GROUP_3, FUNCT_1, RLSUB_1, GROUP_2, RELAT_1,
       GROUP_6, BOOLE, QC_LANG1, WELLORD1, GROUP_1, VECTSP_1, GRAPH_1, SETFAM_1,
-      ISOCAT_1, FUNCT_2, ARYTM_1, ARYTM, ARYTM_3, ORDINAL2, FINSET_1, FINSEQ_2,
-      TARSKI, INT_1, MATRIX_2, CARD_1, SGRAPH1, SUBSET_1, GROUP_4, NAT_1,
-      NATTRA_1, FINSEQ_5, LATTICES, SQUARE_1, PARTFUN1, RFINSEQ, MEMBERED,
-      RFUNCT_2, FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9;
+      ISOCAT_1, FUNCT_2, ARYTM_1, ARYTM, ARYTM_3, FINSET_1, FINSEQ_2, TARSKI,
+      INT_1, MATRIX_2, CARD_1, SGRAPH1, SUBSET_1, GROUP_4, NAT_1, NATTRA_1,
+      FINSEQ_5, LATTICES, SQUARE_1, PARTFUN1, RFINSEQ, MEMBERED, RFUNCT_2,
+      FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, ORDINAL1, XREAL_0, RELAT_1,
       FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, PARTFUN1, FINSEQ_1, ZFMISC_1,
       CARD_1, PRE_CIRC, FINSET_1, INT_1, NAT_1, FINSEQ_2, FINSEQ_3, GROUP_1,
       GROUP_2, GROUP_3, XXREAL_0, SETFAM_1, GROUP_4, FINSEQ_5, RFUNCT_2,
       NUMBERS, MEMBERED, MATRIX_2, FINSEQ_4, RFINSEQ, BINOP_1, REALSET1,
       GROUP_6, NAT_D;
- constructors SETFAM_1, PARTFUN1, BINOP_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4,
-      RFUNCT_1, RFUNCT_2, RFINSEQ, BINARITH, FINSEQ_5, PRE_CIRC, REALSET2,
-      GROUP_4, GROUP_6, MATRIX_2;
+ constructors SETFAM_1, PARTFUN1, BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D,
+      FINSEQ_4, RFUNCT_1, RFUNCT_2, RFINSEQ, BINARITH, FINSEQ_5, PRE_CIRC,
+      REALSET2, GROUP_4, GROUP_6, MATRIX_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
       SEQ_1, PRE_CIRC, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, GROUP_6, MATRIX_2;
@@ -65,7 +65,7 @@ definition
   it = id E if len F = 0 otherwise
   ex PF being FinSequence of Funcs(E,E) st
     it = PF.(len F) & len PF = len F & PF.1 = A.(F.1) &
-    (for n being natural number st n<>0 & n<len F
+    (for n being Nat st n<>0 & n<len F
        holds ex f,g being Function of E,E
          st f = PF.n & g = A.(F.(n+1)) & PF.(n+1) = f*g);
 end;
@@ -960,7 +960,7 @@ definition
   attr IT is composition_series means
 :: GROUP_9:def 31
   IT.1=(Omega).G & IT.(len IT)=(1).G &
-  for i being natural number st i in dom IT & i+1 in dom IT
+  for i being Nat st i in dom IT & i+1 in dom IT
     for H1,H2 being StableSubgroup of G st H1=IT.i & H2=IT.(i+1)
       holds H2 is normal StableSubgroup of H1;
 end;
@@ -995,7 +995,7 @@ definition
   let IT be CompositionSeries of G;
   attr IT is strictly_decreasing means
 :: GROUP_9:def 33
-  for i being natural number st i in dom IT & i+1 in dom IT
+  for i being Nat st i in dom IT & i+1 in dom IT
     for H being StableSubgroup of G,
         N being normal StableSubgroup of H st H=IT.i & N=IT.(i+1)
       holds H./.N is not trivial;
@@ -1021,11 +1021,11 @@ definition
   let s2 be CompositionSeries of G2;
   pred s1 is_equivalent_with s2 means
 :: GROUP_9:def 35
-  len s1 = len s2 & for n being natural number st n + 1 = len s1 holds
+  len s1 = len s2 & for n being Nat st n + 1 = len s1 holds
     ex p being Permutation of Seg n st
       for H1 being StableSubgroup of G1, H2 being StableSubgroup of G2,
           N1 being normal StableSubgroup of H1,
-          N2 being normal StableSubgroup of H2, i,j being natural number
+          N2 being normal StableSubgroup of H2, i,j being Nat
       st 1<=i & i<=n & j=p.i & H1=s1.i & H2=s2.j & N1=s1.(i+1) & N2=s2.(j+1)
       holds H1./.N1,H2./.N2 are_isomorphic;
 end;
@@ -1037,7 +1037,7 @@ definition
   let s be CompositionSeries of G;
   func the_series_of_quotients_of s -> FinSequence means
 :: GROUP_9:def 36
-  len s = len it + 1 & for i being natural number st i in dom it
+  len s = len it + 1 & for i being Nat st i in dom it
     for H being StableSubgroup of G, N being normal StableSubgroup of H
     st H=s.i & N=s.(i+1) holds it.i = H./.N if len s > 1
   otherwise it={};
@@ -1050,7 +1050,7 @@ definition
   pred f1,f2 are_equivalent_under p,O means
 :: GROUP_9:def 37
   len f1 = len f2 &
-    for H1,H2 being GroupWithOperators of O, i,j being natural number
+    for H1,H2 being GroupWithOperators of O, i,j being Nat
     st i in dom f1 & j=p".i & H1=f1.i & H2=f2.j
     holds H1,H2 are_isomorphic;
 end;
@@ -1061,7 +1061,7 @@ reserve y for set,
         s1,s1',s2,s2' for CompositionSeries of G,
         fs for FinSequence of the_stable_subgroups_of G,
         f1,f2 for FinSequence,
-        i,j,n for natural number;
+        i,j,n for Nat;
 
 theorem :: GROUP_9:94
   i in dom s1 & i+1 in dom s1 & s1.i=s1.(i+1) & fs=Del(s1,i)
@@ -1170,7 +1170,7 @@ definition
   assume  len s1>1 & len s2>1;
   func the_schreier_series_of(s1,s2) -> CompositionSeries of G means
 :: GROUP_9:def 38
-    for k,i,j being natural number, H1,H2,H3 being StableSubgroup of G holds
+    for k,i,j being Nat, H1,H2,H3 being StableSubgroup of G holds
      (k=(i-1)*(len s2-1)+j & 1<=i & i<=len s1-1 & 1<=j & j<=len s2-1 &
           H1=s1.(i+1) & H2=s1.i & H3=s2.j implies it.k = H1"\/"(H2/\H3)) &
      (k=(len s1-1)*(len s2-1) + 1 implies it.k = (1).G) &
@@ -1205,24 +1205,24 @@ theorem :: GROUP_9:121
    for X being set, P,R being Relation holds P*(R|X) = (X|P)*R;
 
 theorem :: GROUP_9:122
-   for n being natural number, X being set, f being PartFunc of REAL, REAL
+   for n being Nat, X being set, f being PartFunc of REAL, REAL
   st X c= Seg n & X c= dom f & f is_increasing_on X & f.:X c= NAT \ {0}
   holds Sgm(f.:X) = f * Sgm X;
 
 theorem :: GROUP_9:123
-   for y being set, i,n being natural number
+   for y being set, i,n being Nat
   st y c= Seg(n+1) & i in Seg(n+1) & not i in y
   holds ex x st Sgm x = Sgm(Seg(n+1)\{i})" * Sgm y & x c= Seg n;
 
 theorem :: GROUP_9:124
    for D being non empty set, f being FinSequence of D,
-      p being Element of D, n being Element of NAT
+      p being Element of D, n being Nat
   st n in dom f holds f = Del(Ins(f,n,p),n+1);
 
 theorem :: GROUP_9:125
    for G,H being Group, F1 being FinSequence of the carrier of G,
       F2 being FinSequence of the carrier of H,
       I being FinSequence of INT, f being Homomorphism of G,H
-  st (for k being Element of NAT st k in Seg len F1 holds F2.k = f.(F1.k))
+  st (for k being Nat st k in Seg len F1 holds F2.k = f.(F1.k))
       & len F1 = len I & len F2 = len I
   holds f.(Product(F1 |^ I)) = Product(F2 |^ I);

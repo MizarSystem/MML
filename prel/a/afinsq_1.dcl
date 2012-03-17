@@ -351,16 +351,4 @@
 <Adjective nr="13" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster>
-<Adjective nr="13"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="24"/>
-</Cluster>
-</CCluster>
 </Registrations>

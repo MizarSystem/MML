@@ -8,11 +8,11 @@ environ
 
  vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
       FINTOPO3, INT_1, PRE_TOPC, CONNSP_1, SUBSET_1, ORDINAL2, BORSUK_2,
-      FINTOPO6, RFINSEQ, FINSEQ_4, ORDERS_1, NAT_1, EQREL_1, COMPLEX1;
+      FINTOPO6, RFINSEQ, FINSEQ_4, ORDERS_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, XXREAL_0, NAT_1,
-      DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, FINSEQ_1, STRUCT_0, ORDERS_2,
-      FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, FINTOPO4, PRE_TOPC, RFINSEQ,
-      FINSEQ_4;
+      DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FINSEQ_1, STRUCT_0,
+      ORDERS_2, FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, FINTOPO4, PRE_TOPC,
+      RFINSEQ, FINSEQ_4;
  constructors DOMAIN_1, NAT_1, EQREL_1, FINSEQ_4, RFINSEQ, RFUNCT_3, BINARITH,
       FIN_TOPO, FINTOPO3, FINTOPO4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0, NAT_1,
@@ -22,7 +22,7 @@ environ
  theorems NAT_1, ZFMISC_1, REAL_1, FUNCT_1, FINSEQ_1, RELSET_1, XBOOLE_0,
       XBOOLE_1, FIN_TOPO, FINTOPO3, BINARITH, ENUMSET1, STRUCT_0, FINTOPO4,
       JORDAN3, JORDAN4, TARSKI, XREAL_1, SUBSET_1, PRE_TOPC, RFINSEQ, FINSEQ_3,
-      FINSEQ_5, REVROT_1, FINSEQ_4, ORDINAL1, XXREAL_0;
+      FINSEQ_5, REVROT_1, ORDINAL1, XXREAL_0, PARTFUN1;
  schemes NAT_1, RELSET_1;
 
 begin :: Connectedness and Subspaces
@@ -49,7 +49,7 @@ proof let A,B be Subset of FT;
    proof let x be set;assume x in (A\/B)^b;
     then consider y being Element of FT such that
 A2: x=y & U_FT y meets (A\/B);
-     (U_FT y meets A) or (U_FT y meets B) by XBOOLE_1:70,A2;
+     (U_FT y meets A) or (U_FT y meets B) by A2,XBOOLE_1:70;
      then x in {u where u is Element of FT: U_FT u meets A} or x in B^b by A2;
     hence x in (A^b) \/ (B^b) by XBOOLE_0:def 2;
    end;
@@ -57,7 +57,7 @@ A2: x=y & U_FT y meets (A\/B);
    then A3: A^b c= (A\/B)^b by FIN_TOPO:19;
     B c= (A\/B) by XBOOLE_1:7;
    then B^b c= (A\/B)^b by FIN_TOPO:19;
-   then (A^b) \/ (B^b) c= (A\/B)^b by XBOOLE_1:8,A3;
+   then (A^b) \/ (B^b) c= (A\/B)^b by A3,XBOOLE_1:8;
   hence (A\/B)^b=(A^b) \/ (B^b) by A1,XBOOLE_0:def 10;
 end;
 
@@ -68,7 +68,7 @@ proof assume not thesis;
 A1:x in ({}FT)^b by XBOOLE_0:def 1;
   consider y being Element of FT such that
 A2: x=y & U_FT y meets {}FT by A1;
- thus contradiction by XBOOLE_1:65,A2;
+ thus contradiction by A2,XBOOLE_1:65;
 end;
 
 registration let FT;
@@ -137,8 +137,8 @@ A4: x=y & U_FT y meets B by A3;
     consider z being set such that
 A5: z in U_FT y & z in B by A4,XBOOLE_0:3;
     reconsider z2=z as Element of FT by A5;
-     y in U_FT z2 by A5,A1,FIN_TOPO:def 15;
-    then U_FT z2 meets A by A4,A3,XBOOLE_0:3;
+     y in U_FT z2 by A1,A5,FIN_TOPO:def 15;
+    then U_FT z2 meets A by A3,A4,XBOOLE_0:3;
     then z in A^b;
    hence contradiction by A2,A5,XBOOLE_0:def 3;
 end;
@@ -226,7 +226,7 @@ A2: for y being Element of T st y in P holds Im(G,y)=F(y)
        x in the carrier of FS holds
        U_FT x =Im(the InternalRel of T,x)/\ (the carrier of FS) by A2;
     A4: [#]FS = the carrier of FS;
-     FS is strict non empty SubSpace of T by Def2,A3,STRUCT_0:def 1;
+     FS is strict non empty SubSpace of T by A3,Def2,STRUCT_0:def 1;
    hence thesis by A4;
   end;
   uniqueness
@@ -239,10 +239,10 @@ A2: for y being Element of T st y in P holds Im(G,y)=F(y)
     proof let z be set;
       assume A7: z in P;
       then reconsider z1=z as Element of Z1 by A5;
-      reconsider z2=z as Element of Z2 by A7,A6;
+      reconsider z2=z as Element of Z2 by A6,A7;
      thus Im(R1,z) = U_FT z1
          .= Im(the InternalRel of T,z1)/\ (the carrier of Z1) by Def2
-         .= U_FT z2 by Def2,A5,A6
+         .= U_FT z2 by A5,A6,Def2
          .= Im(R2,z);
     end;
      hence Z1 = Z2 by A5,A6,RELSET_1:54;
@@ -281,7 +281,7 @@ proof let X be non empty SubSpace of FT;
     A3: y2 in U_FT x2 implies x2 in U_FT y2 by A1,FIN_TOPO:def 15;
 A4:U_FT x=U_FT x2 /\ ([#]X) by Def2;
      U_FT y=U_FT y2 /\ ([#]X) by Def2;
-   hence x in U_FT y by A4,XBOOLE_0:def 3,A3,A2;
+   hence x in U_FT y by A2,A3,A4,XBOOLE_0:def 3;
   end;
  hence X is symmetric by FIN_TOPO:def 15;
 end;
@@ -332,7 +332,7 @@ proof let A be Subset of FT;
       assume u in { y where y is Element of FT: U_FT y c= A};
       then consider y being Element of FT such that
       A7: y=u & U_FT y c= A;
-     thus u in A by A7,A4;
+     thus u in A by A4,A7;
     end;
     then A = A^i by A5,XBOOLE_0:def 10;
    hence A is open by FIN_TOPO:def 16;
@@ -356,7 +356,7 @@ proof
       then reconsider z=y as Element of FT by A5;
        U_FT y =Im(the InternalRel of FT,y)/\ (the carrier of X')
        by Def2;
-     then U_FT z meets A by XBOOLE_1:74,A1,A4;
+     then U_FT z meets A by A1,A4,XBOOLE_1:74;
       then z in {u where u is Element of FT: U_FT u meets A};
      hence x in (A^b) /\ ([#]X') by A4,XBOOLE_0:def 3;
     end;
@@ -365,11 +365,11 @@ proof
      then u in A^b & u in [#]X' by XBOOLE_0:def 3;
      then consider y2 being Element of FT such that
      A7: u=y2 & (U_FT y2) meets A;
-     reconsider y3=y2 as Element of X' by A7,A6;
+     reconsider y3=y2 as Element of X' by A6,A7;
      consider z being set such that
-     A8: z in (U_FT y2) & z in A by XBOOLE_0:3,A7;
+     A8: z in (U_FT y2) & z in A by A7,XBOOLE_0:3;
       U_FT y3=(U_FT y2) /\ [#]X' by Def2;
-     then z in U_FT y3 by A8,A1,XBOOLE_0:def 3;
+     then z in U_FT y3 by A1,A8,XBOOLE_0:def 3;
      then (U_FT y3) meets A1 by A1,A8,XBOOLE_0:3;
     hence u in A1^b by A7;
    end;
@@ -454,8 +454,8 @@ then A6:[#](FT|A) is connected by Def1;
     assume A7: A = B \/ C & B <> {} & C <> {} & B misses C;
    A8: [#](FT|A) =A by Def3;
    then reconsider B2=B as Subset of (FT|A) by A7,XBOOLE_1:7;
-   reconsider C2=C as Subset of (FT|A) by XBOOLE_1:7,A7,A8;
-   A9: B2^b meets C2 by A7,A6,A8,FIN_TOPO:def 18;
+   reconsider C2=C as Subset of (FT|A) by A7,A8,XBOOLE_1:7;
+   A9: B2^b meets C2 by A6,A7,A8,FIN_TOPO:def 18;
    A10: ([#](FT|A))/\ C2=C2 by XBOOLE_1:28;
     B2^b=B^b /\ [#](FT|A) by Th13;
    then B^b /\ C = B2^b /\ C2 by A10,XBOOLE_1:16;
@@ -481,14 +481,14 @@ proof let FT be filled (non empty RelStr), A be non empty Subset of FT;
      A5:  P^b misses Q by FIN_TOPO:def 18;
           reconsider P1 = P, Q1 = Q as Subset of FT by Th10;
        take P1,Q1;
-       thus A = P1 \/ Q1 & P1 misses Q1 by Def3,A2,A4;
+       thus A = P1 \/ Q1 & P1 misses Q1 by A2,A4,Def3;
           A6: ([#](FT|A))/\ Q1=Q1 by XBOOLE_1:28;
           A7: P^b=P1^b /\ [#](FT|A) by Th13;
            P1^b /\ Q1=P1^b /\ ([#](FT|A))/\ Q by A6,XBOOLE_1:16
-                   .={} by A7,A5,XBOOLE_0:def 7;
+                   .={} by A5,A7,XBOOLE_0:def 7;
           then P1^b misses Q1 by XBOOLE_0:def 7;
       hence P1,Q1 are_separated & P1 <> {}FT & Q1 <> {}FT
-         by A3,FINTOPO4:10,A1;
+         by A1,A3,FINTOPO4:10;
      end;
    hence thesis by Th4;
 end;
@@ -501,7 +501,7 @@ proof let A be Subset of FT;
   A2: {}={}FT;
   A3: A misses A` by XBOOLE_1:79;
    A \/ A` = [#]FT by XBOOLE_1:45;
-then A4:not A,A` are_separated by Th5,A1,A2,A3;
+then A4:not A,A` are_separated by A1,A2,A3,Th5;
   A5: now assume A^b meets A`;
     then consider x being set such that
     A6: x in A^b & x in A` by XBOOLE_0:3;
@@ -521,8 +521,8 @@ then A4:not A,A` are_separated by Th5,A1,A2,A3;
    hence ex z being Element of FT st U_FT z meets A & U_FT z meets A` by A9;
   end;
   then consider x being Element of FT such that
-  A10: U_FT x meets A & U_FT x meets A` by A5,A4,FINTOPO4:def 1;
- thus A^delta <>{} by FIN_TOPO:10,A10;
+  A10: U_FT x meets A & U_FT x meets A` by A4,A5,FINTOPO4:def 1;
+ thus A^delta <>{} by A10,FIN_TOPO:10;
 end;
 
 theorem
@@ -538,7 +538,7 @@ A4: A` <>{};
   A5: {}={}FT;
   A6: A misses A` by XBOOLE_1:79;
    A \/ A` = [#]FT by XBOOLE_1:45;
-then A7:not A,A` are_separated by Th5,A2,A3,A4,A5,A6;
+then A7:not A,A` are_separated by A2,A3,A4,A5,A6,Th5;
   A8: now assume A^b meets A`;
     then consider x being set such that
     A9: x in A^b & x in A` by XBOOLE_0:3;
@@ -550,7 +550,7 @@ then A7:not A,A` are_separated by Th5,A2,A3,A4,A5,A6;
     A11: x in U_FT y by A1,A10,FIN_TOPO:def 15;
      y in U_FT y by A1,FIN_TOPO:def 4;
     then A12: U_FT y meets A by A10,XBOOLE_0:3;
-     U_FT y meets A` by A11,A9,XBOOLE_0:3;
+     U_FT y meets A` by A9,A11,XBOOLE_0:3;
     then y in A^delta by A12;
    hence A^deltai <>{} by A10,XBOOLE_0:def 3;
   end;
@@ -577,7 +577,7 @@ proof let A be Subset of FT;
   A2: {}={}FT;
   A3: A misses A` by XBOOLE_1:79;
    A \/ A` = [#]FT by XBOOLE_1:45;
-then A4:not A,A` are_separated by Th5,A1,A2,A3;
+then A4:not A,A` are_separated by A1,A2,A3,Th5;
   A5: now assume A^b meets A`;
     then consider x being set such that
     A6: x in A^b & x in A` by XBOOLE_0:3;
@@ -599,7 +599,7 @@ then A4:not A,A` are_separated by Th5,A1,A2,A3;
     A10: x in U_FT y by A1,A9,FIN_TOPO:def 15;
      y in U_FT y by A1,FIN_TOPO:def 4;
     then A11: U_FT y meets A` by A9,XBOOLE_0:3;
-     U_FT y meets A by A10,A8,XBOOLE_0:3;
+     U_FT y meets A by A8,A10,XBOOLE_0:3;
     then y in A^delta by A11;
    hence A^deltao <>{} by A9,XBOOLE_0:def 3;
   end;
@@ -638,7 +638,7 @@ proof let A,B be Subset of FT;
  thus (A^deltao)/\ B = A` /\ ((A^delta) /\ B) by XBOOLE_1:16
                      .= A` /\ ((A^b) /\ ((A`)^b)/\ B) by FIN_TOPO:24
                      .= A` /\ (((A`)^b) /\ ((A^b)/\ B)) by XBOOLE_1:16
-                     .= A` /\ (((A`)^b) /\ ({})) by XBOOLE_0:def 7,A1
+                     .= A` /\ (((A`)^b) /\ ({})) by A1,XBOOLE_0:def 7
                      .= {};
 end;
 
@@ -653,9 +653,9 @@ proof let A, B be Subset of FT;
   then A` /\ ((A^b) /\ ((A`)^b)/\ B) = {} by FIN_TOPO:24;
   then A` /\ (((A`)^b) /\ ((A^b)/\ B)) = {} by XBOOLE_1:16;
   then A2: A` /\ ((A`)^b) /\ ((A^b)/\ B) = {} by XBOOLE_1:16;
-   A` c= (A`)^b by FIN_TOPO:18,A1;
+   A` c= (A`)^b by A1,FIN_TOPO:18;
   then A` /\ ((A`)^b)=A` by XBOOLE_1:28;
-  then A` misses ((A^b)/\ B) by XBOOLE_0:def 7,A2;
+  then A` misses ((A^b)/\ B) by A2,XBOOLE_0:def 7;
   then ((A^b)/\ B) c= A by SUBSET_1:44;
   then ((A^b)/\ B)/\ B c= A /\ B by XBOOLE_1:26;
   then (A^b)/\ (B/\ B) c= A /\ B by XBOOLE_1:16;
@@ -664,14 +664,14 @@ proof let A, B be Subset of FT;
   then B` /\ ((B^b) /\ ((B`)^b)/\ A) = {} by FIN_TOPO:24;
   then B` /\ (((B`)^b) /\ ((B^b)/\ A)) = {} by XBOOLE_1:16;
   then A4: B` /\ ((B`)^b) /\ ((B^b)/\ A) = {} by XBOOLE_1:16;
-   B` c= (B`)^b by FIN_TOPO:18,A1;
+   B` c= (B`)^b by A1,FIN_TOPO:18;
   then B` /\ ((B`)^b)=B` by XBOOLE_1:28;
-  then B` misses ((B^b)/\ A) by XBOOLE_0:def 7,A4;
+  then B` misses ((B^b)/\ A) by A4,XBOOLE_0:def 7;
    then ((B^b)/\ A) c= B by SUBSET_1:44;
   then ((B^b)/\ A)/\ A c= B /\ A by XBOOLE_1:26;
   then (B^b)/\ (A/\ A) c= B /\ A by XBOOLE_1:16;
    then B^b /\ A ={} by A1,XBOOLE_1:3;
-  then A^b misses B & A misses B^b by XBOOLE_0:def 7,A3;
+  then A^b misses B & A misses B^b by A3,XBOOLE_0:def 7;
  hence A,B are_separated by FINTOPO4:def 1;
 end;
 
@@ -727,8 +727,8 @@ theorem Th28:
 proof assume that
 A1:  FT is filled & [#]FT = A \/ B and
 A2:  A,B are_separated;
-A3:  A misses B by A2,FINTOPO4:6,A1;
-A4:  A c= A^b & B c= B^b by FIN_TOPO:18,A1;
+A3:  A misses B by A1,A2,FINTOPO4:6;
+A4:  A c= A^b & B c= B^b by A1,FIN_TOPO:18;
 A5:  now assume (A^b) misses B;
       then A^b c= A by A1,XBOOLE_1:73;
       hence A^b = A by A4,XBOOLE_0:def 10;
@@ -737,7 +737,7 @@ A5:  now assume (A^b) misses B;
       then B^b c= B by A1,XBOOLE_1:73;
       hence B^b = B by A4,XBOOLE_0:def 10;
      end;
-then A6: A is closed & B is closed by FIN_TOPO:def 17,A5,A2,FINTOPO4:def 1;
+then A6: A is closed & B is closed by A2,A5,FINTOPO4:def 1,FIN_TOPO:def 17;
       B`= A by A1,A3,PRE_TOPC:25;
     hence thesis by A6,FIN_TOPO:31;
 end;
@@ -794,9 +794,9 @@ A2: for A, B being Subset of FT
       then consider P, Q being Subset of FT such that
     A3:  [#]FT = P \/ Q and
     A4:  P misses Q & P,Q are_separated and
-    A5:  P <> {}FT & Q <> {}FT by Th7,A1;
-      P is closed & Q is closed by A3,A4,Th28,A1;
-     hence contradiction by A3,A5,A4,A2;
+    A5:  P <> {}FT & Q <> {}FT by A1,Th7;
+      P is closed & Q is closed by A1,A3,A4,Th28;
+     hence contradiction by A2,A3,A4,A5;
 end;
 
 theorem
@@ -829,10 +829,10 @@ then A5:  A /\ B <> {} & A /\ C <> {} by XBOOLE_0:def 7;
 A6: {}FT={};
       A /\ B c= B & A /\ C c= C by XBOOLE_1:17;
 then A7:  A /\ B,A /\ C are_separated by A4,Th29;
-     then A8:  (A /\ B) misses (A /\ C) by FINTOPO4:6,A1;
+     then A8:  (A /\ B) misses (A /\ C) by A1,FINTOPO4:6;
           (A /\ B) \/ (A /\ C) = A /\ (B \/ C) by XBOOLE_1:23
                       .= A by A3,XBOOLE_1:28;
-  hence contradiction by A5,A7,A6,A8,Th4,A2;
+  hence contradiction by A2,A5,A6,A7,A8,Th4;
 end;
 
 theorem Th34:
@@ -851,7 +851,7 @@ A6:  P <> {} and
 A7:  Q <> {} and
 A8: P misses Q and
 A9:  P^b misses Q;
-A10: Q^b misses P by Th6,A9,A1;
+A10: Q^b misses P by A1,A9,Th6;
 A11: now assume A12: A c= P & B c= Q;
        then A13: A^b c= P^b by FIN_TOPO:19;
        per cases by A4,FINTOPO4:def 1;
@@ -859,7 +859,7 @@ A11: now assume A12: A c= P & B c= Q;
         hence contradiction by A9,A12,A13,XBOOLE_1:64;
        end;
        suppose A meets (B^b);
-         then not A^b misses B by Th6,A1;
+         then not A^b misses B by A1,Th6;
          hence contradiction by A9,A12,A13,XBOOLE_1:64;
        end;
      end;
@@ -870,7 +870,7 @@ A14: now assume A15: A c= Q & B c= P;
          then Q^b meets B by A16,XBOOLE_1:63;
         hence contradiction by A10,A15,XBOOLE_1:63;
        end;
-       suppose A meets (B^b); then not A^b misses B by Th6,A1;
+       suppose A meets (B^b); then not A^b misses B by A1,Th6;
          then Q^b meets B by A16,XBOOLE_1:63;
          hence contradiction by A10,A15,XBOOLE_1:63;
        end;
@@ -888,12 +888,12 @@ then A19:    A/\Q=A/\P \/ A/\Q .=A/\(P\/Q) by XBOOLE_1:23
        set P3=B/\P,Q3=B/\Q;
        A22: P3\/Q3=B/\(P\/Q) by XBOOLE_1:23
                .=B by A5,XBOOLE_1:21;
-       A23: P3 misses Q3 by XBOOLE_1:76,A8;
+       A23: P3 misses Q3 by A8,XBOOLE_1:76;
         P3 c= P by XBOOLE_1:17;
        then A24: P3^b c= P^b by FIN_TOPO:19;
         Q3 c= Q by XBOOLE_1:17;
-       then P3^b misses Q3 by XBOOLE_1:64,A24,A9;
-     hence contradiction by A3,A21,A20,A6,A23,A22,FIN_TOPO:def 18;
+       then P3^b misses Q3 by A9,A24,XBOOLE_1:64;
+     hence contradiction by A3,A6,A20,A21,A22,A23,FIN_TOPO:def 18;
     end;
 A25: now assume A26: A/\Q={};
 then A27:    A/\P=A/\Q \/ A/\P .=A/\(Q\/P) by XBOOLE_1:23
@@ -908,22 +908,22 @@ then A27:    A/\P=A/\Q \/ A/\P .=A/\(Q\/P) by XBOOLE_1:23
        set P3=B/\Q,Q3=B/\P;
        A30: Q3\/P3=B/\(P\/Q) by XBOOLE_1:23
                .=B by A5,XBOOLE_1:21;
-       A31: P3 misses Q3 by XBOOLE_1:76,A8;
+       A31: P3 misses Q3 by A8,XBOOLE_1:76;
         P3 c= Q by XBOOLE_1:17;
        then A32: P3^b c= Q^b by FIN_TOPO:19;
         Q3 c= P by XBOOLE_1:17;
-       then P3^b misses Q3 by XBOOLE_1:64,A32,A10;
-     hence contradiction by A3,A29,A28,A7,A31,A30,FIN_TOPO:def 18;
+       then P3^b misses Q3 by A10,A32,XBOOLE_1:64;
+     hence contradiction by A3,A7,A28,A29,A30,A31,FIN_TOPO:def 18;
      end;
      set P2=A/\P,Q2=A/\Q;
      A33: P2\/Q2=A/\(P\/Q) by XBOOLE_1:23
                .=A by A5,XBOOLE_1:21;
-     A34: P2 misses Q2 by XBOOLE_1:76,A8;
+     A34: P2 misses Q2 by A8,XBOOLE_1:76;
       P2 c= P by XBOOLE_1:17;
      then A35: P2^b c= P^b by FIN_TOPO:19;
       Q2 c= Q by XBOOLE_1:17;
-     then P2^b misses Q2 by XBOOLE_1:64,A35,A9;
-   hence contradiction by A17,A25,A34,A33,FIN_TOPO:def 18,A2;
+     then P2^b misses Q2 by A9,A35,XBOOLE_1:64;
+   hence contradiction by A2,A17,A25,A33,A34,FIN_TOPO:def 18;
 end;
 
 theorem Th35:
@@ -940,7 +940,7 @@ A4:  A c= C^b;
     assume A5: A=P2\/Q2 & P2<>{} & Q2<>{} & P2 misses Q2;
     assume A6: not thesis;
        P2 c= P2\/Q2 by XBOOLE_1:7;
-      then A7: P2 c= C^b by XBOOLE_1:1,A5,A4;
+      then A7: P2 c= C^b by A4,A5,XBOOLE_1:1;
       consider x being Element of P2;
        x in P2 by A5;
       then x in C^b by A7;
@@ -951,13 +951,13 @@ A4:  A c= C^b;
       A10: y in U_FT z /\ C by A9;
       A11: y in U_FT z & y in C by A9,XBOOLE_0:def 3;
       reconsider y2=y as Element of FT by A10;
-       z in U_FT y2 by A11,FIN_TOPO:def 15,A1;
-      then z in (U_FT y2)/\P2 by A8,A5,XBOOLE_0:def 3;
+       z in U_FT y2 by A1,A11,FIN_TOPO:def 15;
+      then z in (U_FT y2)/\P2 by A5,A8,XBOOLE_0:def 3;
       then (U_FT y2) meets P2 by XBOOLE_0:def 7;
       then A12: y2 in P2^b;
       A13: y2 in C by A9,XBOOLE_0:def 3;
        Q2 c= Q2 \/P2 by XBOOLE_1:7;
-      then A14: Q2 c= C^b by A5,A4,XBOOLE_1:1;
+      then A14: Q2 c= C^b by A4,A5,XBOOLE_1:1;
       consider x2 being Element of Q2;
        x2 in Q2 by A5;
       then x2 in C^b by A14;
@@ -968,7 +968,7 @@ A4:  A c= C^b;
       A17: y3 in U_FT z2 /\ C by A16;
       A18: y3 in U_FT z2 & y3 in C by A16,XBOOLE_0:def 3;
       reconsider y4=y3 as Element of FT by A17;
-       z2 in U_FT y4 by A18,FIN_TOPO:def 15,A1;
+       z2 in U_FT y4 by A1,A18,FIN_TOPO:def 15;
       then z2 in U_FT y4 /\ Q2 by A5,A15,XBOOLE_0:def 3;
 then A19:  U_FT y4 meets Q2 by XBOOLE_0:def 7;
       A20: y4 in C by A16,XBOOLE_0:def 3;
@@ -980,23 +980,23 @@ then A19:  U_FT y4 meets Q2 by XBOOLE_0:def 7;
        Q3 c= Q2 by XBOOLE_1:17;
       then A23: P3 misses Q3 by A22,XBOOLE_1:63;
       A24: now assume P3={};
-        then y2 in Q2 by A21,A13,XBOOLE_0:def 3;
+        then y2 in Q2 by A13,A21,XBOOLE_0:def 3;
         then y2 in P2^b /\ Q2 by A12,XBOOLE_0:def 3;
        hence contradiction by A6,XBOOLE_0:def 7;
       end;
        now assume Q3={};
-        then A25: y4 in P2 by A21,A20,XBOOLE_0:def 3;
+        then A25: y4 in P2 by A20,A21,XBOOLE_0:def 3;
         consider w being Element of FT such that
         A26: w=y4 & U_FT w meets Q2 by A19;
         consider s being set such that
         A27: s in U_FT w & s in Q2 by A26,XBOOLE_0:3;
         reconsider s2=s as Element of FT by A27;
-         w in U_FT s2 by A27,FIN_TOPO:def 15,A1;
-        then U_FT s2 meets P2 by XBOOLE_0:3,A26,A25;
+         w in U_FT s2 by A1,A27,FIN_TOPO:def 15;
+        then U_FT s2 meets P2 by A25,A26,XBOOLE_0:3;
         then s2 in P2^b;
-       hence contradiction by A27,XBOOLE_0:3,A6;
+       hence contradiction by A6,A27,XBOOLE_0:3;
       end;
-      then A28: P3^b meets Q3 by A24,A21,A23,FIN_TOPO:def 18,A2;
+      then A28: P3^b meets Q3 by A2,A21,A23,A24,FIN_TOPO:def 18;
        P3 c= P2 by XBOOLE_1:17;
       then P3^b c= P2^b by FIN_TOPO:19;
       then A29: P2^b meets Q3 by A28,XBOOLE_1:63;
@@ -1011,7 +1011,7 @@ proof let C be Subset of FT;
  assume
 A1: FT is filled symmetric & C is connected;
   then C c= C^b by FIN_TOPO:18;
- hence C^b is connected by Th35,A1;
+ hence C^b is connected by A1,Th35;
 end;
 
 theorem Th37:
@@ -1057,9 +1057,9 @@ A10:             A c= P \/ Q by A7,XBOOLE_1:7;
                  then P = {}FT or Q \/ C = {}FT by A6,A16,A17,Th4;
                  hence P = {}FT or Q = {}FT by XBOOLE_1:15;
                end;
-            hence P = {}FT or Q = {}FT by A3,A8,A10,A11,Th33,A1;
+            hence P = {}FT or Q = {}FT by A1,A3,A8,A10,A11,Th33;
           end;
-       hence A \/ B is connected by Th7,A1;
+       hence A \/ B is connected by A1,Th7;
 end;
 
 theorem Th38:
@@ -1092,16 +1092,16 @@ A5:   now assume not A8 is connected;
      A9:  P misses Q and
      A10:  P^b misses Q by FIN_TOPO:def 18;
       P c= A8 by A6,XBOOLE_1:7;
-     then reconsider P'=P as Subset of X by XBOOLE_1:1,A1;
+     then reconsider P'=P as Subset of X by A1,XBOOLE_1:1;
       Q c= A8 by A6,XBOOLE_1:7;
-     then reconsider Q'=Q as Subset of X by XBOOLE_1:1,A1;
+     then reconsider Q'=Q as Subset of X by A1,XBOOLE_1:1;
      A11: P'^b=P^b /\ [#]X by Th13;
 A12: Q' c= the carrier of X;
       P'^b /\ Q' =P^b /\ ([#]X /\ Q) by A11,XBOOLE_1:16
                .=P^b /\ Q by A12,XBOOLE_1:28
                .={} by A10,XBOOLE_0:def 7;
      then (P'^b) misses Q' by XBOOLE_0:def 7;
-      hence not B8 is connected by A1,FIN_TOPO:def 18,A6,A7,A8,A9;
+      hence not B8 is connected by A1,A6,A7,A8,A9,FIN_TOPO:def 18;
      end;
        now assume not B is connected;
        then consider P,Q being Subset of X' such that
@@ -1119,7 +1119,7 @@ A12: Q' c= the carrier of X;
                .=P^b /\ Q by A18,XBOOLE_1:16
                .={} by A17,XBOOLE_0:def 7;
      then (P'^b) misses Q' by XBOOLE_0:def 7;
-      hence not A is connected by FIN_TOPO:def 18,A1,A13,A14,A15,A16;
+      hence not A is connected by A1,A13,A14,A15,A16,FIN_TOPO:def 18;
      end;
    hence A8 is connected iff B8 is connected by A5;
  end;
@@ -1134,7 +1134,7 @@ proof
   assume A1: FT is filled symmetric & A is_a_component_of FT;
 then A2: A c= A^b by FIN_TOPO:18;
     A is connected by A1,Def4;
-   then A^b is connected by Th36,A1;
+   then A^b is connected by A1,Th36;
   hence A = A^b by A1,A2,Def4;
 end;
 
@@ -1166,7 +1166,7 @@ assume that
 A1: FT is filled symmetric & A is_a_component_of FT and
 A2: B is_a_component_of FT;
      A <> B implies A,B are_separated by A1,A2,Th40;
-  hence thesis by FINTOPO4:6,A1;
+  hence thesis by A1,FINTOPO4:6;
 end;
 
 theorem
@@ -1234,10 +1234,10 @@ A17: now assume
                       .= {} by A4,A14,A19,XBOOLE_1:3;
          then (C \/ Q) misses A by XBOOLE_0:def 7;
          then C \/ Q c= A` by SUBSET_1:43;
-         then C \/ Q c= [#](FT|D) by Def3,A1;
+         then C \/ Q c= [#](FT|D) by A1,Def3;
          then reconsider C1Q1 = C \/ Q as Subset of FT|D;
            C \/ Q is connected by A1,A10,A12,A15,Th37;
-          then A20: C1Q1 is connected by Th38,A1;
+          then A20: C1Q1 is connected by A1,Th38;
 A21:      C misses C` by XBOOLE_1:79;
            C1 c= C1 \/ Q by XBOOLE_1:7;
           then C1Q1 = C1 by A4,A5,A20,Def4;
@@ -1256,10 +1256,10 @@ A23:      Q misses Q` by XBOOLE_1:79;
                         .= {} by A4,A14,A24,XBOOLE_1:3;
           then C \/ P misses A by XBOOLE_0:def 7;
           then C \/ P c= A` by SUBSET_1:43;
-          then C \/ P c= [#](FT|D) by Def3,A1;
+          then C \/ P c= [#](FT|D) by A1,Def3;
           then reconsider C1P1 = C \/ P as Subset of FT|D;
            C \/ P is connected by A1,A10,A12,A15,Th37;
-          then A25: C1P1 is connected by Th38,A1;
+          then A25: C1P1 is connected by A1,Th38;
            C c= C1 \/ P by A4,XBOOLE_1:7;
           then C1P1 = C1 by A4,A5,A25,Def4;
           then A26: P c= C by A4,XBOOLE_1:7;
@@ -1271,7 +1271,7 @@ A27:      C misses C` by XBOOLE_1:79;
         end;
       hence P = {}FT or Q = {}FT by A1,A2,A4,A9,A10,A12,A17,Th33;
      end;
-  hence [#]FT \ C is connected by Th7,A1;
+  hence [#]FT \ C is connected by A1,Th7;
 end;
 
 begin ::Continuous Finite Sequences and Minimum Path
@@ -1309,23 +1309,23 @@ proof let f be FinSequence of FT,x,y be Element of FT;
      then A6: i+1 <=len g by NAT_1:13;
       1<i+1 by A5,NAT_1:13;
      then i+1 in dom g by A6,FINSEQ_3:27;
-     then g.(i+1)=g/.(i+1) by FINSEQ_4:def 4;
+     then g.(i+1)=g/.(i+1) by PARTFUN1:def 8;
      then reconsider x2=g.(i+1) as Element of FT;
       now per cases;
      suppose A7: i<len f;
        then A8: i+1<=len f by NAT_1:13;
         1<=i+1 by NAT_1:11;
-       then i+1 in dom f by FINSEQ_3:27,A8;
+       then i+1 in dom f by A8,FINSEQ_3:27;
        then A9: g.(i+1)=f.(i+1) by FINSEQ_1:def 7;
-        i in dom f by A2,FINSEQ_1:3,A5,A7;
+        i in dom f by A2,A5,A7,FINSEQ_1:3;
        then g.i=f.i by FINSEQ_1:def 7;
-      hence x2 in U_FT x1 by A5,A1,A7,A9,Def6;
+      hence x2 in U_FT x1 by A1,A5,A7,A9,Def6;
      end;
      suppose A10: i>=len f;
-        len g=len f+1 by FINSEQ_1:35,A3;
+        len g=len f+1 by A3,FINSEQ_1:35;
 then A11:    i<=len f by A5,NAT_1:13;
        then A12: i=len f by A10,XXREAL_0:1;
-        i in dom f by A11,A5,A2,FINSEQ_1:3;
+        i in dom f by A2,A5,A11,FINSEQ_1:3;
        then x1=y by A1,A5,A12,FINSEQ_1:def 7;
       hence x2 in U_FT x1 by A1,A12,FINSEQ_1:59;
      end;
@@ -1335,7 +1335,7 @@ then A11:    i<=len f by A5,NAT_1:13;
     len (f^<*x*>)=len f+len (<*x*>) by FINSEQ_1:35
                     .=len f+1 by FINSEQ_1:56;
    then len (f^<*x*>)>=1 by NAT_1:11;
- hence f^(<*x*>) is continuous by Def6,A4;
+ hence f^(<*x*>) is continuous by A4,Def6;
 end;
 
 theorem Th45:
@@ -1357,31 +1357,31 @@ g.1 in U_FT (f/.(len f));
      then A6: i+1 <=len g2 by NAT_1:13;
       1<i+1 by A5,NAT_1:13;
      then i+1 in dom g2 by A6,FINSEQ_3:27;
-     then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+     then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
      then reconsider x2=g2.(i+1) as Element of FT;
      per cases;
      suppose A7: i<len f;
        then A8: i+1<=len f by NAT_1:13;
         1<=i+1 by NAT_1:11;
-       then i+1 in dom f by FINSEQ_3:27,A8;
+       then i+1 in dom f by A8,FINSEQ_3:27;
        then A9: g2.(i+1)=f.(i+1) by FINSEQ_1:def 7;
-        i in dom f by A3,FINSEQ_1:3,A5,A7;
+        i in dom f by A3,A5,A7,FINSEQ_1:3;
        then g2.i=f.i by FINSEQ_1:def 7;
-      hence (f^g).(i+1) in U_FT x1 by A5,A1,Def6,A7,A9;
+      hence (f^g).(i+1) in U_FT x1 by A1,A5,A7,A9,Def6;
      end;
      suppose A10: i>=len f;
       then A11: i+1>len f by NAT_1:13;
       A12: len g2=len f+len g by FINSEQ_1:35;
       then A13: i+1<=len f+len g by A5,NAT_1:13;
-      A14: i<len f+len g by FINSEQ_1:35,A5;
+      A14: i<len f+len g by A5,FINSEQ_1:35;
       per cases by A10,REAL_1:def 5;
       suppose A15: i=len f;
-      A16: x2=g.(i+1-len f) by A13,A11,A12,FINSEQ_1:37
+      A16: x2=g.(i+1-len f) by A11,A12,A13,FINSEQ_1:37
         .= g.1 by A15;
        A17: len f in dom f by A2,FINSEQ_3:27;
        then x1=f.(len f) by A5,A15,FINSEQ_1:def 7
-                     .=f/.(len f) by A17,FINSEQ_4:def 4;
-      hence (f^g).(i+1) in U_FT x1 by A16,A1;
+                     .=f/.(len f) by A17,PARTFUN1:def 8;
+      hence (f^g).(i+1) in U_FT x1 by A1,A16;
       end;
       suppose A18: i>len f;
        then A19: i-len f>0 by XREAL_1:52;
@@ -1389,11 +1389,11 @@ g.1 in U_FT (f/.(len f));
        A21: i>=len f+1 by A18,NAT_1:13;
        set j=i-'len f;
         j+1=i+1-len f by A20;
-       then A22: x2=g.(j+1) by A13,A11,A12,FINSEQ_1:37;
-       A23: x1=g.j by A5,A20,A21,A14,FINSEQ_1:36;
+       then A22: x2=g.(j+1) by A11,A12,A13,FINSEQ_1:37;
+       A23: x1=g.j by A5,A14,A20,A21,FINSEQ_1:36;
        A24: i-'len f>=0+1 by A19,A20,NAT_1:13;
         i-len f<len g by A14,XREAL_1:21;
-      hence (f^g).(i+1) in U_FT x1 by A20,A24,A22,A23,Def6,A1;
+      hence (f^g).(i+1) in U_FT x1 by A1,A20,A22,A23,A24,Def6;
       end;
       end;
 end;
@@ -1486,7 +1486,7 @@ proof let A be Subset of FT;
        then x1 in G by A2,A9,A10;
       hence contradiction by A8;
      end;
-     A11: A= G \/ (A\G) by XBOOLE_1:45,A3;
+     A11: A= G \/ (A\G) by A3,XBOOLE_1:45;
      A12: G misses (A\G) by XBOOLE_1:79;
        now assume G^b meets (A\G);
        then consider u being set such that
@@ -1495,7 +1495,7 @@ proof let A be Subset of FT;
       consider x being Element of FT such that
       A15: u=x & U_FT x meets G by A13;
       consider y being set such that
-      A16: y in U_FT x & y in G by XBOOLE_0:3,A15;
+      A16: y in U_FT x & y in G by A15,XBOOLE_0:3;
       consider z2 being Element of FT such that
       A17: y=z2 & z2 in A &
        ex f being FinSequence of FT
@@ -1505,18 +1505,18 @@ proof let A be Subset of FT;
       reconsider g=f^(<*x*>) as FinSequence of FT;
       A19: len g=len f+len (<*x*>) by FINSEQ_1:35
               .=len f+1 by FINSEQ_1:56;
-       x in U_FT z2 by A17,A16,A1,FIN_TOPO:def 15;
-      then A20: g is continuous & g.(len f+1)=x by Th44,A18,FINSEQ_1:59;
+       x in U_FT z2 by A1,A16,A17,FIN_TOPO:def 15;
+      then A20: g is continuous & g.(len f+1)=x by A18,Th44,FINSEQ_1:59;
        1<=len f by A18,Def6;
       then 1 in dom f by FINSEQ_3:27;
-      then A21: g.1=x1 by FINSEQ_1:def 7,A18;
+      then A21: g.1=x1 by A18,FINSEQ_1:def 7;
       A22: rng g =rng f \/ rng (<*x*>) by FINSEQ_1:44
            .=rng f \/ {x} by FINSEQ_1:55;
        {x} c= A by A14,A15,ZFMISC_1:37;
-      then rng g c= A by A22,A18,XBOOLE_1:8;
+      then rng g c= A by A18,A22,XBOOLE_1:8;
      hence contradiction by A14,A15,A19,A20,A21;
      end;
-   hence not A is connected by A7,A11,A12,A5,FIN_TOPO:def 18;
+   hence not A is connected by A5,A7,A11,A12,FIN_TOPO:def 18;
   end;
  hence A is connected implies A is arcwise_connected;
    now assume not A is connected;
@@ -1534,10 +1534,10 @@ proof let A be Subset of FT;
     hereby assume A is arcwise_connected;
       then consider f being FinSequence of FT such that
        A26: f is continuous & rng f c=A
-        & f.1=p1 & f.(len f)=q1 by Def7,A24,A25;
+        & f.1=p1 & f.(len f)=q1 by A24,A25,Def7;
       A27: len f>=1 by A26,Def6;
       defpred P[Nat] means 1<=$1 & $1<=len f & f.$1 in P;
-      A28: ex k being Element of NAT st P[k] by A27,A26,A23;
+      A28: ex k being Element of NAT st P[k] by A23,A26,A27;
       A29: for k being Element of NAT st P[k] holds k <= len f;
         ex k being Element of NAT st P[k] &
         for n being Element of NAT st
@@ -1545,7 +1545,7 @@ proof let A be Subset of FT;
        then consider i0 being Element of NAT such that
        A30: P[i0] & for n being Element of NAT st P[n] holds n <= i0;
        reconsider u0=f.i0 as Element of FT by A30;
-        i0<>len f by A26,A30,A23,XBOOLE_0:3;
+        i0<>len f by A23,A26,A30,XBOOLE_0:3;
        then A31: i0<len f by A30,REAL_1:def 5;
        then A32: i0+1 <=len f by NAT_1:13;
        A33: 1<i0+1 by A30,NAT_1:13;
@@ -1555,9 +1555,9 @@ proof let A be Subset of FT;
        end;
         i0+1 in dom f by A32,A33,FINSEQ_3:27;
        then A35: f.(i0+1) in rng f by FUNCT_1:def 5;
-       then A36: f.(i0+1) in Q by A26,A34,A23,XBOOLE_0:def 2;
+       then A36: f.(i0+1) in Q by A23,A26,A34,XBOOLE_0:def 2;
        reconsider z0=f.(i0+1) as Element of FT by A35;
-        z0 in U_FT u0 by Def6,A26,A31,A30;
+        z0 in U_FT u0 by A26,A30,A31,Def6;
        then f.i0 in U_FT z0 by A1,FIN_TOPO:def 15;
        then U_FT z0 meets P by A30,XBOOLE_0:3;
        then z0 in P^b;
@@ -1580,14 +1580,14 @@ proof let g be FinSequence of FT, k be Nat;
  suppose
 A2: k<=len g;
   hence len(g|k) >= 1 by A1,FINSEQ_1:80;
- A3: len (g|k)=k by FINSEQ_1:80,A2;
+ A3: len (g|k)=k by A2,FINSEQ_1:80;
   let i be Nat,x11 be Element of FT;
    assume A4: 1<=i & i<len (g|k) & x11=(g|k).i;
-    then A5: (g|k).i=g.i by FINSEQ_3:121,A3;
-     i+1<=k by A4,NAT_1:13,A3;
+    then A5: (g|k).i=g.i by A3,FINSEQ_3:121;
+     i+1<=k by A3,A4,NAT_1:13;
     then A6: (g|k).(i+1)=g.(i+1) by FINSEQ_3:121;
-     i<len g by A4,A3,XXREAL_0:2,A2;
-   hence (g|k).(i+1) in U_FT x11 by A6,A1,Def6,A4,A5;
+     i<len g by A2,A3,A4,XXREAL_0:2;
+   hence (g|k).(i+1) in U_FT x11 by A1,A4,A5,A6,Def6;
  end;
 end;
 
@@ -1598,26 +1598,26 @@ theorem Th48:
 proof let g be FinSequence of FT, k be Element of NAT;
  assume A1: g is continuous & k<len g;
  then A2: len (g/^k)=len g-k by RFINSEQ:def 2;
- A3: len g-k>0 by XREAL_1:52,A1;
+ A3: len g-k>0 by A1,XREAL_1:52;
  then A4: len g-k=len g -'k by BINARITH:def 3;
- then A5: len g -'k>=0+1 by NAT_1:13,A3;
+ then A5: len g -'k>=0+1 by A3,NAT_1:13;
   for i being Nat,x11 being Element of FT st
    1<=i & i<len (g/^k) & x11=(g/^k).i holds (g/^k).(i+1) in U_FT x11
   proof let i be Nat,x11 be Element of FT;
    assume A6: 1<=i & i<len (g/^k) & x11=(g/^k).i;
     then i in dom (g/^k) by FINSEQ_3:27;
     then A7: (g/^k).(i)=g.(i+k) by A1,RFINSEQ:def 2;
-    A8: i+1<=len g -'k by A4,NAT_1:13,A2,A6;
+    A8: i+1<=len g -'k by A2,A4,A6,NAT_1:13;
      1<=1+i by NAT_1:11;
     then i+1 in dom (g/^k) by A2,A4,A8,FINSEQ_3:27;
     then A9: (g/^k).(i+1)=g.(i+1+k) by A1,RFINSEQ:def 2;
     A10: i+1+k=i+k+1;
      i<=i+k by NAT_1:11;
     then A11: 1<=i+k by A6,XXREAL_0:2;
-     i+k<len g-k+k by A6,A2,XREAL_1:8;
-   hence (g/^k).(i+1) in U_FT x11 by A9,A1,Def6,A6,A10,A11,A7;
+     i+k<len g-k+k by A2,A6,XREAL_1:8;
+   hence (g/^k).(i+1) in U_FT x11 by A1,A6,A7,A9,A10,A11,Def6;
   end;
- hence g/^k is continuous by Def6,A2,A5,A4;
+ hence g/^k is continuous by A2,A4,A5,Def6;
 end;
 
 definition let FT;let g be FinSequence of FT,A be Subset of FT,
@@ -1661,7 +1661,7 @@ x1,x2 be Element of FT;
   A4: g0 is continuous
    & rng g0 c=A & g0.1=x1 & g0.(len g0)=x2 & k0=len g0 by A3;
    for h being FinSequence of FT st h is continuous
-  & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g0 <= len h by A4,A3;
+  & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g0 <= len h by A3,A4;
  hence thesis by A4;
 end;
 
@@ -1679,12 +1679,12 @@ ex g being FinSequence of FT st g is_minimum_path_in A,x1,x2
  proof let x1,x2 be Element of FT;
   assume x1 in A & x2 in A;
   then consider f being FinSequence of FT such that
-A2: f is continuous & rng f c= A & f.1=x1 & f.(len f)=x2 by Def7,A1;
+A2: f is continuous & rng f c= A & f.1=x1 & f.(len f)=x2 by A1,Def7;
  consider g2 being FinSequence of FT such that
  A3: g2 is continuous & rng g2 c=A & g2.1=x1 & g2.(len g2)=x2 &
     (for h being FinSequence of FT st h is continuous
-   & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g2 <= len h) by Lm5,A2;
-   g2 is_minimum_path_in A,x1,x2 by Def8,A3;
+   & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g2 <= len h) by A2,Lm5;
+   g2 is_minimum_path_in A,x1,x2 by A3,Def8;
   hence ex g being FinSequence of FT st
     g is_minimum_path_in A,x1,x2;
  end;
@@ -1698,7 +1698,7 @@ end;
     assume x1 in A & x2 in A;
       then consider g being FinSequence of FT such that
       A5: g is_minimum_path_in A,x1,x2 by A4;
-       g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by Def8,A5;
+       g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by A5,Def8;
      hence thesis;
    end;
   hence A is arcwise_connected by Def7;
@@ -1715,8 +1715,8 @@ A1: f is continuous & rng f c=A & f.1=x1 & f.(len f)=x2;
    consider g2 being FinSequence of FT such that
 A2: g2 is continuous & rng g2 c=A & g2.1=x1 & g2.(len g2)=x2 &
     (for h being FinSequence of FT st h is continuous
-   & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g2 <= len h) by Lm5,A1;
-   g2 is_minimum_path_in A,x1,x2 by Def8,A2;
+   & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g2 <= len h) by A1,Lm5;
+   g2 is_minimum_path_in A,x1,x2 by A2,Def8;
   hence thesis;
 end;
 
@@ -1729,14 +1729,14 @@ proof let g be FinSequence of FT,A be Subset of FT,
 x1,x2 be Element of FT, k be Element of NAT;
  assume A1: g is_minimum_path_in A,x1,x2 & 1<=k & k<=len g;
   then A2: len (g|k)=k by FINSEQ_1:80;
-A3: g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by Def8,A1;
- hence g|k is continuous by Th47,A1;
+A3: g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by A1,Def8;
+ hence g|k is continuous by A1,Th47;
   rng (g|k) c= rng g by FINSEQ_5:21;
  hence rng (g|k) c=A by A3,XBOOLE_1:1;
  thus (g|k).1=x1 by A1,A3,FINSEQ_3:121;
 A4: k in dom g by A1,FINSEQ_3:27;
  thus (g|k).(len (g|k))=g.k by A2,FINSEQ_3:121
-                      .=g/.k by FINSEQ_4:def 4,A4;
+                      .=g/.k by A4,PARTFUN1:def 8;
 end;
 
 theorem Th53:
@@ -1749,8 +1749,8 @@ proof let g be FinSequence of FT,A be Subset of FT,
 x1,x2 be Element of FT, k be Element of NAT;
  assume A1: g is_minimum_path_in A,x1,x2 & k<len g;
   then A2: len (g/^k)=len g-k by RFINSEQ:def 2;
-  A3: g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by Def8,A1;
- hence g/^k is continuous by Th48,A1;
+  A3: g is continuous & rng g c=A & g.1=x1 & g.(len g)=x2 by A1,Def8;
+ hence g/^k is continuous by A1,Th48;
    rng (g/^k) c= rng g by FINSEQ_5:36;
  hence rng (g/^k) c=A by A3,XBOOLE_1:1;
   A4: 1<=1+k by NAT_1:11;
@@ -1758,17 +1758,17 @@ x1,x2 be Element of FT, k be Element of NAT;
   then A5: 1+k in dom g by A4,FINSEQ_3:27;
   A6: len g-k>0 by A1,XREAL_1:52;
   then len g-'k=len g -k by BINARITH:def 3;
-  then len g-k>=0+1 by NAT_1:13,A6;
+  then len g-k>=0+1 by A6,NAT_1:13;
   then 1 in dom (g/^k) by A2,FINSEQ_3:27;
  hence (g/^k).1=g.(1+k) by A1,RFINSEQ:def 2
-              .=g/.(1+k) by A5,FINSEQ_4:def 4;
+              .=g/.(1+k) by A5,PARTFUN1:def 8;
 A7: len g-k>0 by A1,XREAL_1:52;
 then A8: len g-k=len g-'k by BINARITH:def 3;
-then A9: len g-'k>=0+1 by NAT_1:13,A7;
-A10: len (g/^k)=len g-k by RFINSEQ:def 2,A1;
- len g-'k in dom (g/^k) by A9,A2,A8,FINSEQ_3:27;
- hence (g/^k).(len (g/^k))=g.(len g-'k+k) by A8,RFINSEQ:def 2,A10,A1
-                        .=x2 by Def8,A1,A8;
+then A9: len g-'k>=0+1 by A7,NAT_1:13;
+A10: len (g/^k)=len g-k by A1,RFINSEQ:def 2;
+ len g-'k in dom (g/^k) by A2,A8,A9,FINSEQ_3:27;
+ hence (g/^k).(len (g/^k))=g.(len g-'k+k) by A1,A8,A10,RFINSEQ:def 2
+                        .=x2 by A1,A8,Def8;
 end;
 
 theorem
@@ -1788,46 +1788,46 @@ then A3: 1<=len g & for i being Nat,x11 being Element of FT st
   assume A4: 1<=k & k<=len g;
   reconsider k as Element of NAT by ORDINAL1:def 13;
    A5: g|k is continuous
-   & rng (g|k) c=A & (g|k).1=x1 & (g|k).(len (g|k))=g/.k by A4,Th52,A1;
+   & rng (g|k) c=A & (g|k).1=x1 & (g|k).(len (g|k))=g/.k by A1,A4,Th52;
     now per cases by A4,REAL_1:def 5;
    suppose A6: k<len g;
     now assume not g|k is_minimum_path_in A,x1,g/.k;
     then consider h being FinSequence of FT such that
     A7: h is continuous
-      & rng h c=A & h.1=x1 & h.(len h)=g/.k & len (g|k) > len h by Def8,A5;
+      & rng h c=A & h.1=x1 & h.(len h)=g/.k & len (g|k) > len h by A5,Def8;
     reconsider s=h^(g/^k) as FinSequence of FT;
     A8: len s=len h +len(g/^k) by FINSEQ_1:35;
      g=(g|k)^(g/^k) by RFINSEQ:21;
     then len g=len (g|k) + len (g/^k) by FINSEQ_1:35;
-    then A9: len s<len g by A8,A7,XREAL_1:10;
+    then A9: len s<len g by A7,A8,XREAL_1:10;
      k+1<=len g by A6,NAT_1:13;
     then A10: (g/^k).1=g.(k+1) by JORDAN3:23;
     A11: 1<=len h by A7,Def6;
     then len h in dom h by FINSEQ_3:27;
-    then A12: h.len h=h/.len h by FINSEQ_4:def 4;
+    then A12: h.len h=h/.len h by PARTFUN1:def 8;
      k in dom g by A4,FINSEQ_3:27;
-    then 1<=k & k<len g & g/.k=g.k by A4,A6,FINSEQ_4:def 4;
-    then A13: (g/^k).1 in U_FT (h/.(len h)) by A10,A7,A12,A2,Def6;
-    A14: g/^k is continuous by A6,A1,Th53;
-    then A15: s is continuous by A7,Th45,A13;
-    A16: 1<= len (g/^k) by Def6,A14;
+    then 1<=k & k<len g & g/.k=g.k by A4,A6,PARTFUN1:def 8;
+    then A13: (g/^k).1 in U_FT (h/.(len h)) by A2,A7,A10,A12,Def6;
+    A14: g/^k is continuous by A1,A6,Th53;
+    then A15: s is continuous by A7,A13,Th45;
+    A16: 1<= len (g/^k) by A14,Def6;
      rng (g/^k) c= rng g by FINSEQ_5:36;
     then A17: rng (g/^k) c= A by A2,XBOOLE_1:1;
      rng s = rng h \/ rng (g/^k) by FINSEQ_1:44;
-    then A18: rng s c= A by A17,A7,XBOOLE_1:8;
+    then A18: rng s c= A by A7,A17,XBOOLE_1:8;
      1 in dom h by A11,FINSEQ_3:27;
     then A19: s.1=x1 by A7,FINSEQ_1:def 7;
      len (g/^k) in dom (g/^k) by A16,FINSEQ_3:27;
     then s.(len s)=(g/^k).(len (g/^k)) by A8,FINSEQ_1:def 7
-            .=x2 by A2,JORDAN4:18,A6;
-    hence contradiction by A9,A1,Def8,A15,A18,A19;
+            .=x2 by A2,A6,JORDAN4:18;
+    hence contradiction by A1,A9,A15,A18,A19,Def8;
    end;
   hence g|k is_minimum_path_in A,x1,g/.k;
   end;
   suppose A20: k=len g;
     then A21: g|k=g by FINSEQ_1:79;
      len g in dom g by A3,FINSEQ_3:27;
-   hence g|k is_minimum_path_in A,x1,g/.k by A21,A1,A20,A2,FINSEQ_4:def 4;
+   hence g|k is_minimum_path_in A,x1,g/.k by A1,A2,A20,A21,PARTFUN1:def 8;
   end;
   end;
   hence thesis;
@@ -1848,63 +1848,63 @@ A1: g is_minimum_path_in A,x1,x2;
     A3: y1 in dom g & y2 in dom g & g.y1=g.y2 & y1<>y2 by FUNCT_1:def 8;
     A4: dom g=Seg len g by FINSEQ_1:def 3;
     reconsider n1=y1,n2=y2 as Element of NAT by A3;
-     A5: 1<=n1 & n1 <=len g by A4,A3,FINSEQ_1:3;
-     A6: 1<=n2 & n2 <=len g by A4,A3,FINSEQ_1:3;
+     A5: 1<=n1 & n1 <=len g by A3,A4,FINSEQ_1:3;
+     A6: 1<=n2 & n2 <=len g by A3,A4,FINSEQ_1:3;
     per cases by A3,REAL_1:def 5;
     suppose A7: n1>n2;
     set g2=(g|n2)^(g/^n1);
-     A8: len (g|n2)=n2 by FINSEQ_1:80,A6;
-     then A9: g2.1=(g|n2).1 by FINSEQ_1:85,A6
+     A8: len (g|n2)=n2 by A6,FINSEQ_1:80;
+     then A9: g2.1=(g|n2).1 by A6,FINSEQ_1:85
          .=g.1 by A6,FINSEQ_3:121;
       A10: len g2=len (g|n2)+len (g/^n1) by FINSEQ_1:35
-           .=n2+(len g-n1) by A8,RFINSEQ:def 2,A5;
+           .=n2+(len g-n1) by A5,A8,RFINSEQ:def 2;
 A11:   len g-n1>=0 by A5,XREAL_1:50;
       then A12: len g-'n1=len g-n1 by BINARITH:def 3;
       set k=len g-'n1;
-      A13: len (g/^n1)=len g-n1 by RFINSEQ:def 2,A5;
+      A13: len (g/^n1)=len g-n1 by A5,RFINSEQ:def 2;
       per cases by A5,REAL_1:def 5;
       suppose n1<len g; then n1+1<=len g by NAT_1:13;
 then A14:  n1+1-n1<=len g-n1 by XREAL_1:15;
-      then A15: k in dom ((g/^n1)) by A13,A12,FINSEQ_3:27;
+      then A15: k in dom ((g/^n1)) by A12,A13,FINSEQ_3:27;
 A16:   k+n1=len g by A12;
 A17:  0+1<=n2+(len g-n1) by A14,XREAL_1:9;
-       g2.(len (g|n2) + k) = (g/^n1).k by FINSEQ_1:def 7,A15
-                         .= x2 by A2,A16,A15,RFINSEQ:def 2,A5;
+       g2.(len (g|n2) + k) = (g/^n1).k by A15,FINSEQ_1:def 7
+                         .= x2 by A2,A5,A15,A16,RFINSEQ:def 2;
       then A18: g2.(len g2)=x2 by A8,A10,A11,BINARITH:def 3;
       A19: rng g2=rng (g|n2) \/ rng (g/^n1) by FINSEQ_1:44;
       A20: rng (g|n2) c= rng g by FINSEQ_5:21;
        rng (g/^n1) c= rng g by FINSEQ_5:36;
       then rng g2 c= rng g by A19,A20,XBOOLE_1:8;
-      then A21: rng g2 c= A by XBOOLE_1:1,A2;
+      then A21: rng g2 c= A by A2,XBOOLE_1:1;
        g2 is continuous
-        proof thus len g2 >= 1 by A17,A10;
+        proof thus len g2 >= 1 by A10,A17;
          let i be Nat,z1 be Element of FT;
           assume A22: 1<=i & i<len g2 & z1=g2.i;
            then A23: i+1 <=len g2 by NAT_1:13;
            reconsider i as Element of NAT by ORDINAL1:def 13;
             1<i+1 by A22,NAT_1:13;
            then i+1 in dom g2 by A23,FINSEQ_3:27;
-           then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+           then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
            then reconsider z2=g2.(i+1) as Element of FT;
            now per cases;
           suppose A24: i<n2;
             then A25: i+1<=n2 by NAT_1:13;
             A26: i<len g by A6,A24,XXREAL_0:2;
-            A27: z1=(g|n2).i by FINSEQ_1:85,A22,A8,A24
-             .=g.i by FINSEQ_3:121,A24;
+            A27: z1=(g|n2).i by A8,A22,A24,FINSEQ_1:85
+             .=g.i by A24,FINSEQ_3:121;
             A28: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n2) by A8,A24,NAT_1:13;
-            then z2=(g|n2).(i+1) by FINSEQ_1:85,A28
-             .=g.(i+1) by FINSEQ_3:121,A25;
-            hence z2 in U_FT z1 by A2,A27,A26,A22,Def6;
+            then z2=(g|n2).(i+1) by A28,FINSEQ_1:85
+             .=g.(i+1) by A25,FINSEQ_3:121;
+            hence z2 in U_FT z1 by A2,A22,A26,A27,Def6;
           end;
           suppose A29: i>=n2;
-              i-n2<n2+(len g-n1)-n2 by A22,XREAL_1:11,A10;
+              i-n2<n2+(len g-n1)-n2 by A10,A22,XREAL_1:11;
              then A30: i-'n2<len g - n1 by A29,BINARITH:50;
             then i-'n2<len g-'n1 by A5,BINARITH:50;
             then i-'n2+1<=len g-'n1 by NAT_1:13;
              then A31: 1<=i-'n2+1 & i-'n2+1<=len (g/^n1)
-                              by NAT_1:12,A13,A5,BINARITH:50;
+                              by A5,A13,BINARITH:50,NAT_1:12;
             then A32: i-'n2+1 in dom (g/^n1) by FINSEQ_3:27;
             A33: len (g|n2) +(i-'n2)=n2+(i-n2) by A8,A29,BINARITH:50
                                    .=i;
@@ -1913,69 +1913,69 @@ A17:  0+1<=n2+(len g-n1) by A14,XREAL_1:9;
             then A35: i-n2>0 by XREAL_1:52;
             then i-'n2=i-n2 by BINARITH:def 3;
 then A36:        0+1<=i-'n2 by A35,NAT_1:13;
-            then A37: i-'n2 in dom (g/^n1) by A13,FINSEQ_3:27,A30;
-            thus z1=(g/^n1).(i-'n2) by FINSEQ_1:86,A36,A30,A13,A33,A22
-             .=g.(i-'n2+n1) by RFINSEQ:def 2,A37,A5;
+            then A37: i-'n2 in dom (g/^n1) by A13,A30,FINSEQ_3:27;
+            thus z1=(g/^n1).(i-'n2) by A13,A22,A30,A33,A36,FINSEQ_1:86
+             .=g.(i-'n2+n1) by A5,A37,RFINSEQ:def 2;
             end;
             suppose A38: i=n2;
-             hence z1=(g|n2).n2 by A8,FINSEQ_1:85,A22
+             hence z1=(g|n2).n2 by A8,A22,FINSEQ_1:85
              .=g.(0+n1) by A3,FINSEQ_3:121
              .=g.(i-'n2+n1) by A38,BINARITH:51;
             end;
             end;
-             len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A29,BINARITH:50,A8
+             len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A8,A29,BINARITH:50
                                .=i+1;
-        then A39: z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A31
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A32,A5
+        then A39: z2=(g/^n1).(i-'n2+1) by A31,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A5,A32,RFINSEQ:def 2
              .=g.(i-'n2+n1+1);
-            A40: 1<=i-'n2+n1 by NAT_1:12,A5;
-             i-'n2+n1<len g-n1+n1 by XREAL_1:8,A30;
-            hence z2 in U_FT z1 by A2,Def6,A34,A39,A40;
+            A40: 1<=i-'n2+n1 by A5,NAT_1:12;
+             i-'n2+n1<len g-n1+n1 by A30,XREAL_1:8;
+            hence z2 in U_FT z1 by A2,A34,A39,A40,Def6;
           end;
          end;
          hence thesis;
         end;
-      then len g<=len g2 by A2,A21,A9,A18;
-       then len g-n2<= n2+(len g-n1)-n2 by XREAL_1:15,A10;
-     hence contradiction by XREAL_1:12,A7;
+      then len g<=len g2 by A2,A9,A18,A21;
+       then len g-n2<= n2+(len g-n1)-n2 by A10,XREAL_1:15;
+     hence contradiction by A7,XREAL_1:12;
      end;
      suppose A41: n1=len g;
        then A42: g2=(g|n2)^({}) by REVROT_1:2
         .= (g|n2) by FINSEQ_1:47;
       set k=len g-'n1;
-      A43: len (g/^n1)=len g-n1 by RFINSEQ:def 2,A5;
-      A44: g2.len g2=x2 by A3,A2,A41,A42,FINSEQ_3:121,A8;
+      A43: len (g/^n1)=len g-n1 by A5,RFINSEQ:def 2;
+      A44: g2.len g2=x2 by A2,A3,A8,A41,A42,FINSEQ_3:121;
        rng (g|n2) c= rng g by FINSEQ_5:21;
-      then A45: rng g2 c= A by XBOOLE_1:1,A2,A42;
+      then A45: rng g2 c= A by A2,A42,XBOOLE_1:1;
        g2 is continuous
-        proof thus 1<=len g2 by A10,A41,A4,A3,FINSEQ_1:3;
+        proof thus 1<=len g2 by A3,A4,A10,A41,FINSEQ_1:3;
          let i be Nat,z1 be Element of FT;
           assume A46: 1<=i & i<len g2 & z1=g2.i;
           then A47: i+1 <=len g2 by NAT_1:13;
           reconsider i as Element of NAT by ORDINAL1:def 13;
            1<i+1 by A46,NAT_1:13;
           then i+1 in dom g2 by A47,FINSEQ_3:27;
-          then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+          then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
           then reconsider z2=g2.(i+1) as Element of FT;
           per cases;
           suppose A48: i<n2;
             then A49: i+1<=n2 by NAT_1:13;
             A50: i<len g by A6,A48,XXREAL_0:2;
-            A51: z1=(g|n2).i by FINSEQ_1:85,A46,A8,A48
-             .=g.i by FINSEQ_3:121,A48;
+            A51: z1=(g|n2).i by A8,A46,A48,FINSEQ_1:85
+             .=g.i by A48,FINSEQ_3:121;
             A52: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n2) by A8,A48,NAT_1:13;
-            then z2=(g|n2).(i+1) by FINSEQ_1:85,A52
-             .=g.(i+1) by FINSEQ_3:121,A49;
-           hence thesis by A2,Def6,A51,A50,A46;
+            then z2=(g|n2).(i+1) by A52,FINSEQ_1:85
+             .=g.(i+1) by A49,FINSEQ_3:121;
+           hence thesis by A2,A46,A50,A51,Def6;
           end;
           suppose A53: i>=n2;
-             i-n2<n2+(len g-n1)-n2 by A46,XREAL_1:11,A10;
+             i-n2<n2+(len g-n1)-n2 by A10,A46,XREAL_1:11;
             then A54: i-'n2<len g - n1 by A53,BINARITH:50;
             then i-'n2<len g-'n1 by A5,BINARITH:50;
             then i-'n2+1<=len g-'n1 by NAT_1:13;
             then A55: 1<=i-'n2+1 & i-'n2+1<=len (g/^n1)
-                          by A43,NAT_1:12,A5,BINARITH:50;
+                          by A5,A43,BINARITH:50,NAT_1:12;
             then A56: i-'n2+1 in dom (g/^n1) by FINSEQ_3:27;
             A57: len (g|n2) +(i-'n2)=n2+(i-n2) by A8,A53,BINARITH:50
                                    .=i;
@@ -1984,56 +1984,56 @@ then A36:        0+1<=i-'n2 by A35,NAT_1:13;
             then A59: i-n2>0 by XREAL_1:52;
             then i-'n2=i-n2 by BINARITH:def 3;
 then A60:       0+1<=i-'n2 by A59,NAT_1:13;
-            then A61: i-'n2 in dom (g/^n1) by FINSEQ_3:27,A54,A43;
-            thus z1=(g/^n1).(i-'n2) by FINSEQ_1:86,A60,A54,A43,A46,A57
-             .=g.(i-'n2+n1) by RFINSEQ:def 2,A61,A5;
+            then A61: i-'n2 in dom (g/^n1) by A43,A54,FINSEQ_3:27;
+            thus z1=(g/^n1).(i-'n2) by A43,A46,A54,A57,A60,FINSEQ_1:86
+             .=g.(i-'n2+n1) by A5,A61,RFINSEQ:def 2;
             end;
             suppose A62: i=n2;
-             hence z1=(g|n2).n2 by FINSEQ_1:85,A8,A46
+             hence z1=(g|n2).n2 by A8,A46,FINSEQ_1:85
              .=g.(0+n1) by A3,FINSEQ_3:121
              .=g.(i-'n2+n1) by A62,BINARITH:51;
             end;
             end;
-             len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A53,BINARITH:50,A8
+             len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A8,A53,BINARITH:50
                                .=i+1;
-            then A63: z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A55
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A56,A5
+            then A63: z2=(g/^n1).(i-'n2+1) by A55,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A5,A56,RFINSEQ:def 2
              .=g.(i-'n2+n1+1);
-            A64: 1<=i-'n2+n1 by NAT_1:12,A5;
-             i-'n2+n1<len g-n1+n1 by XREAL_1:8,A54;
-            hence thesis by A2,Def6,A58,A63,A64;
+            A64: 1<=i-'n2+n1 by A5,NAT_1:12;
+             i-'n2+n1<len g-n1+n1 by A54,XREAL_1:8;
+            hence thesis by A2,A58,A63,A64,Def6;
           end;
         end;
-      then len g<=len g2 by A2,A45,A9,A44;
-      then len g-n2<= n2+(len g-n1)-n2 by XREAL_1:15,A10;
-      hence contradiction by XREAL_1:12,A7;
+      then len g<=len g2 by A2,A9,A44,A45;
+      then len g-n2<= n2+(len g-n1)-n2 by A10,XREAL_1:15;
+      hence contradiction by A7,XREAL_1:12;
      end;
     end;
     suppose A65: n2>n1;
       set g2=(g|n1)^(g/^n2);
      A66: len (g|n1)=n1 by A5,FINSEQ_1:80;
-     then A67: g2.1=(g|n1).1 by FINSEQ_1:85,A5
+     then A67: g2.1=(g|n1).1 by A5,FINSEQ_1:85
          .=x1 by A2,A5,FINSEQ_3:121;
       A68: len g2=len (g|n1)+len (g/^n2) by FINSEQ_1:35
-           .=n1+(len g-n2) by A66,RFINSEQ:def 2,A6;
+           .=n1+(len g-n2) by A6,A66,RFINSEQ:def 2;
        len g-n2>=0 by A6,XREAL_1:50;
       then A69: len g-'n2=len g-n2 by BINARITH:def 3;
       set k=len g-'n2;
-      A70: len (g/^n2)=len g-n2 by RFINSEQ:def 2,A6;
+      A70: len (g/^n2)=len g-n2 by A6,RFINSEQ:def 2;
       per cases by A6,REAL_1:def 5;
       suppose n2<len g; then n2+1<=len g by NAT_1:13;
 then A71:  n2+1-n2<=len g-n2 by XREAL_1:15;
-      then A72: k in dom ((g/^n2)) by A70,A69,FINSEQ_3:27;
+      then A72: k in dom ((g/^n2)) by A69,A70,FINSEQ_3:27;
       A73: k+n2=len g by A69;
 A74:  0+1<=n1+(len g-n2) by A71,XREAL_1:9;
-       g2.(len (g|n1) + k) = (g/^n2).k by FINSEQ_1:def 7,A72
-                         .= x2 by A2,A73,A72,RFINSEQ:def 2,A6;
-      then A75: g2.(len g2)=x2 by A5,FINSEQ_1:80,A68,A69;
+       g2.(len (g|n1) + k) = (g/^n2).k by A72,FINSEQ_1:def 7
+                         .= x2 by A2,A6,A72,A73,RFINSEQ:def 2;
+      then A75: g2.(len g2)=x2 by A5,A68,A69,FINSEQ_1:80;
       A76: rng g2=rng (g|n1) \/ rng (g/^n2) by FINSEQ_1:44;
       A77: rng (g|n1) c= rng g by FINSEQ_5:21;
        rng (g/^n2) c= rng g by FINSEQ_5:36;
       then rng g2 c= rng g by A76,A77,XBOOLE_1:8;
-      then A78: rng g2 c= A by XBOOLE_1:1,A2;
+      then A78: rng g2 c= A by A2,XBOOLE_1:1;
        g2 is continuous
         proof thus len g2 >= 1 by A68,A74;
          let i be Nat,z1 be Element of FT;
@@ -2042,27 +2042,27 @@ A74:  0+1<=n1+(len g-n2) by A71,XREAL_1:9;
           reconsider i as Element of NAT by ORDINAL1:def 13;
            1<i+1 by A79,NAT_1:13;
           then i+1 in dom g2 by A80,FINSEQ_3:27;
-          then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+          then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
           then reconsider z2=g2.(i+1) as Element of FT;
           per cases;
           suppose A81: i<n1;
             then A82: i+1<=n1 by NAT_1:13;
             A83: i<len g by A5,A81,XXREAL_0:2;
-            A84: z1=(g|n1).i by FINSEQ_1:85,A79,A66,A81
-             .=g.i by FINSEQ_3:121,A81;
+            A84: z1=(g|n1).i by A66,A79,A81,FINSEQ_1:85
+             .=g.i by A81,FINSEQ_3:121;
             A85: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n1) by A66,A81,NAT_1:13;
-            then z2=(g|n1).(i+1) by FINSEQ_1:85,A85
-             .=g.(i+1) by FINSEQ_3:121,A82;
-            hence thesis by A2,Def6,A84,A83,A79;
+            then z2=(g|n1).(i+1) by A85,FINSEQ_1:85
+             .=g.(i+1) by A82,FINSEQ_3:121;
+            hence thesis by A2,A79,A83,A84,Def6;
           end;
           suppose A86: i>=n1;
-              i-n1<n1+(len g-n2)-n1 by A79,XREAL_1:11,A68;
+              i-n1<n1+(len g-n2)-n1 by A68,A79,XREAL_1:11;
              then A87: i-'n1<len g - n2 by A86,BINARITH:50;
             then i-'n1<len g-'n2 by A6,BINARITH:50;
             then i-'n1+1<=len g-'n2 by NAT_1:13;
              then A88: 1<=i-'n1+1 & i-'n1+1<=len (g/^n2)
-                              by NAT_1:12,A70,A6,BINARITH:50;
+                              by A6,A70,BINARITH:50,NAT_1:12;
             then A89: i-'n1+1 in dom (g/^n2) by FINSEQ_3:27;
             A90: len (g|n1) +(i-'n1)=n1+(i-n1) by A66,A86,BINARITH:50
                                    .=i;
@@ -2071,99 +2071,99 @@ A74:  0+1<=n1+(len g-n2) by A71,XREAL_1:9;
             then A92: i-n1>0 by XREAL_1:52;
             then i-'n1=i-n1 by BINARITH:def 3;
 then A93:        0+1<=i-'n1 by A92,NAT_1:13;
-            then A94: i-'n1 in dom (g/^n2) by A87,A70,FINSEQ_3:27;
+            then A94: i-'n1 in dom (g/^n2) by A70,A87,FINSEQ_3:27;
             thus z1=(g/^n2).(i-'n1)
-            by FINSEQ_1:86,A93,A87,A70,A90,A79
-             .=g.(i-'n1+n2) by RFINSEQ:def 2,A94,A6;
+            by A70,A79,A87,A90,A93,FINSEQ_1:86
+             .=g.(i-'n1+n2) by A6,A94,RFINSEQ:def 2;
             end;
             suppose A95: i=n1;
-             hence z1=(g|n1).n1 by FINSEQ_1:85,A66,A79
+             hence z1=(g|n1).n1 by A66,A79,FINSEQ_1:85
              .=g.(0+n2) by A3,FINSEQ_3:121
              .=g.(i-'n1+n2) by A95,BINARITH:51;
             end;
             end;
-             len (g|n1)+(i-'n1+1)=i-n1+1+n1 by A86,BINARITH:50,A66
+             len (g|n1)+(i-'n1+1)=i-n1+1+n1 by A66,A86,BINARITH:50
                                .=i+1;
-            then A96: z2=(g/^n2).(i-'n1+1) by FINSEQ_1:86,A88
-             .=g.(i-'n1+1+n2) by RFINSEQ:def 2,A89,A6
+            then A96: z2=(g/^n2).(i-'n1+1) by A88,FINSEQ_1:86
+             .=g.(i-'n1+1+n2) by A6,A89,RFINSEQ:def 2
              .=g.(i-'n1+n2+1);
-            A97: 1<=i-'n1+n2 by NAT_1:12,A6;
-             i-'n1+n2<len g-n2+n2 by XREAL_1:8,A87;
-            hence thesis by A2,Def6,A91,A96,A97;
+            A97: 1<=i-'n1+n2 by A6,NAT_1:12;
+             i-'n1+n2<len g-n2+n2 by A87,XREAL_1:8;
+            hence thesis by A2,A91,A96,A97,Def6;
           end;
         end;
-      then len g<=len g2 by A1,Def8,A78,A67,A75;
-      then len g-n1<= n1+(len g-n2)-n1 by XREAL_1:15,A68;
-     hence contradiction by XREAL_1:12,A65;
+      then len g<=len g2 by A1,A67,A75,A78,Def8;
+      then len g-n1<= n1+(len g-n2)-n1 by A68,XREAL_1:15;
+     hence contradiction by A65,XREAL_1:12;
      end;
      suppose A98: n2=len g;
        then A99: g2=(g|n1)^({}) by REVROT_1:2
         .= (g|n1) by FINSEQ_1:47;
       set k=len g-'n2;
-      A100: len (g/^n2)=len g-n2 by RFINSEQ:def 2,A6;
-      A101: g2.(len g2)=x2 by A2,A98,A3,FINSEQ_3:121,A66,A99;
+      A100: len (g/^n2)=len g-n2 by A6,RFINSEQ:def 2;
+      A101: g2.(len g2)=x2 by A2,A3,A66,A98,A99,FINSEQ_3:121;
        rng (g|n1) c= rng g by FINSEQ_5:21;
-      then A102: rng g2 c= A by XBOOLE_1:1,A2,A99;
+      then A102: rng g2 c= A by A2,A99,XBOOLE_1:1;
        g2 is continuous
-        proof thus len g2 >= 1 by A68,A98,A4,A3,FINSEQ_1:3;
+        proof thus len g2 >= 1 by A3,A4,A68,A98,FINSEQ_1:3;
          let i be Nat,z1 be Element of FT;
           assume A103: 1<=i & i<len g2 & z1=g2.i;
           then A104: i+1 <=len g2 by NAT_1:13;
           reconsider i as Element of NAT by ORDINAL1:def 13;
            1<i+1 by A103,NAT_1:13;
           then i+1 in dom g2 by A104,FINSEQ_3:27;
-          then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+          then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
           then reconsider z2=g2.(i+1) as Element of FT;
           per cases;
           suppose A105: i<n1;
             then A106: i+1<=n1 by NAT_1:13;
             A107: i<len g by A5,A105,XXREAL_0:2;
-            A108: z1=(g|n1).i by FINSEQ_1:85,A103,A66,A105
-             .=g.i by FINSEQ_3:121,A105;
+            A108: z1=(g|n1).i by A66,A103,A105,FINSEQ_1:85
+             .=g.i by A105,FINSEQ_3:121;
             A109: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n1) by A66,A105,NAT_1:13;
-            then z2=(g|n1).(i+1) by FINSEQ_1:85,A109
-             .=g.(i+1) by FINSEQ_3:121,A106;
-           hence thesis by A2,Def6,A108,A107,A103;
+            then z2=(g|n1).(i+1) by A109,FINSEQ_1:85
+             .=g.(i+1) by A106,FINSEQ_3:121;
+           hence thesis by A2,A103,A107,A108,Def6;
           end;
           suppose A110: i>=n1;
-             i-n1<n1+(len g-n2)-n1 by A103,XREAL_1:11,A68;
+             i-n1<n1+(len g-n2)-n1 by A68,A103,XREAL_1:11;
             then A111: i-'n1<len g - n2 by A110,BINARITH:50;
             then i-'n1<len g-'n2 by A6,BINARITH:50;
             then i-'n1+1<=len g-'n2 by NAT_1:13;
             then A112: 1<=i-'n1+1 & i-'n1+1<=len (g/^n2)
-                          by A100,NAT_1:12,A6,BINARITH:50;
+                          by A6,A100,BINARITH:50,NAT_1:12;
             then A113: i-'n1+1 in dom (g/^n2) by FINSEQ_3:27;
-            A114: len (g|n1) +(i-'n1)=n1+(i-n1) by A110,BINARITH:50,A66
+            A114: len (g|n1) +(i-'n1)=n1+(i-n1) by A66,A110,BINARITH:50
                                    .=i;
             A115: now per cases by A110,REAL_1:def 5;
             suppose i>n1;
             then A116: i-n1>0 by XREAL_1:52;
             then i-'n1=i-n1 by BINARITH:def 3;
 then A117:        0+1<=i-'n1 by A116,NAT_1:13;
-            then A118: i-'n1 in dom (g/^n2) by A111,A100,FINSEQ_3:27;
-            thus z1=(g/^n2).(i-'n1) by FINSEQ_1:86,A117,A111,A100,A114,A103
-             .=g.(i-'n1+n2) by RFINSEQ:def 2,A118,A6;
+            then A118: i-'n1 in dom (g/^n2) by A100,A111,FINSEQ_3:27;
+            thus z1=(g/^n2).(i-'n1) by A100,A103,A111,A114,A117,FINSEQ_1:86
+             .=g.(i-'n1+n2) by A6,A118,RFINSEQ:def 2;
             end;
             suppose A119: i=n1;
-             hence z1=(g|n1).n1 by FINSEQ_1:85,A66,A103
+             hence z1=(g|n1).n1 by A66,A103,FINSEQ_1:85
              .=g.(0+n2) by A3,FINSEQ_3:121
              .=g.(i-'n1+n2) by A119,BINARITH:51;
             end;
             end;
-             len (g|n1)+(i-'n1+1)=i-n1+1+n1 by A110,BINARITH:50,A66
+             len (g|n1)+(i-'n1+1)=i-n1+1+n1 by A66,A110,BINARITH:50
                                .=i+1;
-            then A120: z2=(g/^n2).(i-'n1+1) by FINSEQ_1:86,A112
-             .=g.(i-'n1+1+n2) by RFINSEQ:def 2,A113,A6
+            then A120: z2=(g/^n2).(i-'n1+1) by A112,FINSEQ_1:86
+             .=g.(i-'n1+1+n2) by A6,A113,RFINSEQ:def 2
              .=g.(i-'n1+n2+1);
-            A121: 1<=i-'n1+n2 by NAT_1:12,A6;
-             i-'n1+n2<len g-n2+n2 by XREAL_1:8,A111;
-            hence thesis by A2,Def6,A115,A120,A121;
+            A121: 1<=i-'n1+n2 by A6,NAT_1:12;
+             i-'n1+n2<len g-n2+n2 by A111,XREAL_1:8;
+            hence thesis by A2,A115,A120,A121,Def6;
           end;
         end;
-      then len g<=len g2 by A1,Def8,A102,A67,A101;
-      then len g-n1<= n1+(len g-n2)-n1 by XREAL_1:15,A68;
-      hence contradiction by XREAL_1:12,A65;
+      then len g<=len g2 by A1,A67,A101,A102,Def8;
+      then len g-n1<= n1+(len g-n2)-n1 by A68,XREAL_1:15;
+      hence contradiction by A65,XREAL_1:12;
      end;
     end;
 end;
@@ -2197,98 +2197,98 @@ proof let g be FinSequence of FT,A be Subset of FT, x1,x2 be Element of FT;
       then i2 <j2-1 by XREAL_1:22;
       then A6: n1>n2 by A3,BINARITH:50;
       reconsider g2=(g|n2)^(g/^n1) as FinSequence of FT;
-       1<j2 by A5,A3,XXREAL_0:2;
+       1<j2 by A3,A5,XXREAL_0:2;
       then 1+1<=j2 by NAT_1:13;
 then A7:  1<=j2-1 by XREAL_1:21;
        j2-'1<=j2 by BINARITH:52;
-     then A8: 1<=n1 & n1 <=len g by A7,A3,XXREAL_0:2,BINARITH:50;
+     then A8: 1<=n1 & n1 <=len g by A3,A7,BINARITH:50,XXREAL_0:2;
      A9: len (g|n2)=n2 by A3,FINSEQ_1:80;
-     then A10: g2.1=(g|n2).1 by FINSEQ_1:85,A3
+     then A10: g2.1=(g|n2).1 by A3,FINSEQ_1:85
          .=x1 by A2,A3,FINSEQ_3:121;
       A11: len g2=len (g|n2)+len (g/^n1) by FINSEQ_1:35
-           .=n2+(len g-n1) by A9,RFINSEQ:def 2,A8;
+           .=n2+(len g-n1) by A8,A9,RFINSEQ:def 2;
 A12:   len g-n1>=0 by A8,XREAL_1:50;
       then A13: len g-'n1=len g-n1 by BINARITH:def 3;
       set k=len g-'n1;
-      A14: len (g/^n1)=len g-n1 by RFINSEQ:def 2,A8;
+      A14: len (g/^n1)=len g-n1 by A8,RFINSEQ:def 2;
        now per cases by A8,REAL_1:def 5;
       suppose n1<len g; then n1+1<=len g by NAT_1:13;
 then A15:  n1+1-n1<=len g-n1 by XREAL_1:15;
-      then A16: k in dom (g/^n1) by A14,A13,FINSEQ_3:27;
+      then A16: k in dom (g/^n1) by A13,A14,FINSEQ_3:27;
       A17: k+n1=len g by A13;
 A18:  0+1<=n2+(len g-n1) by A15,XREAL_1:9;
-       g2.(len (g|n2) + k) = (g/^n1).k by FINSEQ_1:def 7,A16
-                         .= x2 by A2,A17,A16,RFINSEQ:def 2,A8;
-      then A19: g2.(len g2)=x2 by A11,A12,A9,BINARITH:def 3;
+       g2.(len (g|n2) + k) = (g/^n1).k by A16,FINSEQ_1:def 7
+                         .= x2 by A2,A8,A16,A17,RFINSEQ:def 2;
+      then A19: g2.(len g2)=x2 by A9,A11,A12,BINARITH:def 3;
       A20: rng g2=rng (g|n2) \/ rng (g/^n1) by FINSEQ_1:44;
       A21: rng (g|n2) c= rng g by FINSEQ_5:21;
        rng (g/^n1) c= rng g by FINSEQ_5:36;
       then rng g2 c= rng g by A20,A21,XBOOLE_1:8;
-      then A22: rng g2 c= A by XBOOLE_1:1,A2;
+      then A22: rng g2 c= A by A2,XBOOLE_1:1;
        g2 is continuous
-        proof thus len g2 >= 1 by A18,A11;
+        proof thus len g2 >= 1 by A11,A18;
          let i be Nat,z1 be Element of FT;
           assume A23: 1<=i & i<len g2 & z1=g2.i;
           then A24: i+1 <=len g2 by NAT_1:13;
           reconsider i as Element of NAT by ORDINAL1:def 13;
            1<i+1 by A23,NAT_1:13;
           then i+1 in dom g2 by A24,FINSEQ_3:27;
-          then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+          then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
           then reconsider z2=g2.(i+1) as Element of FT;
           per cases;
           suppose A25: i<n2;
             then A26: i+1<=n2 by NAT_1:13;
             A27: i<len g by A3,A25,XXREAL_0:2;
-            A28: z1=(g|n2).i by FINSEQ_1:85,A23,A9,A25
-             .=g.i by FINSEQ_3:121,A25;
+            A28: z1=(g|n2).i by A9,A23,A25,FINSEQ_1:85
+             .=g.i by A25,FINSEQ_3:121;
             A29: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n2) by A9,A25,NAT_1:13;
-            then z2=(g|n2).(i+1) by FINSEQ_1:85,A29
-             .=g.(i+1) by FINSEQ_3:121,A26;
-            hence thesis by A2,A28,A27,A23,Def6;
+            then z2=(g|n2).(i+1) by A29,FINSEQ_1:85
+             .=g.(i+1) by A26,FINSEQ_3:121;
+            hence thesis by A2,A23,A27,A28,Def6;
           end;
           suppose A30: i>=n2;
-             i-n2<n2+(len g-n1)-n2 by A23,XREAL_1:11,A11;
+             i-n2<n2+(len g-n1)-n2 by A11,A23,XREAL_1:11;
             then A31: i-'n2<len g - n1 by A30,BINARITH:50;
             then i-'n2<len g-'n1 by A8,BINARITH:50;
             then i-'n2+1<=len g-'n1 by NAT_1:13;
             then A32: 1<=i-'n2+1 & i-'n2+1<=len (g/^n1)
-                              by NAT_1:12,A14,A8,BINARITH:50;
+                              by A8,A14,BINARITH:50,NAT_1:12;
             then A33: i-'n2+1 in dom (g/^n1) by FINSEQ_3:27;
             A34: len (g|n2) +(i-'n2)=n2+(i-n2) by A9,A30,BINARITH:50
                                    .=i;
-            A35: len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A30,A9,BINARITH:50
+            A35: len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A9,A30,BINARITH:50
                                .=i+1;
             per cases by A30,REAL_1:def 5;
             suppose i>n2;
             then A36: i-n2>0 by XREAL_1:52;
             then i-'n2=i-n2 by BINARITH:def 3;
 then A37:        0+1<=i-'n2 by A36,NAT_1:13;
-            then A38: i-'n2 in dom (g/^n1) by A14,FINSEQ_3:27,A31;
-            A39: z1=(g/^n1).(i-'n2) by FINSEQ_1:86,A37,A14,A34,A23,A31
-             .=g.(i-'n2+n1) by RFINSEQ:def 2,A38,A8;
-            A40: z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A32,A35
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A33,A8
+            then A38: i-'n2 in dom (g/^n1) by A14,A31,FINSEQ_3:27;
+            A39: z1=(g/^n1).(i-'n2) by A14,A23,A31,A34,A37,FINSEQ_1:86
+             .=g.(i-'n2+n1) by A8,A38,RFINSEQ:def 2;
+            A40: z2=(g/^n1).(i-'n2+1) by A32,A35,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A8,A33,RFINSEQ:def 2
              .=g.(i-'n2+n1+1);
-            A41: 1<=i-'n2+n1 by NAT_1:12,A8;
-             i-'n2+n1<len g-n1+n1 by XREAL_1:8,A31;
+            A41: 1<=i-'n2+n1 by A8,NAT_1:12;
+             i-'n2+n1<len g-n1+n1 by A31,XREAL_1:8;
             hence thesis by A2,A39,A40,A41,Def6;
             end;
             suppose A42: i=n2;
-             then A43: z1=(g|n2).n2 by FINSEQ_1:85,A9,A23
+             then A43: z1=(g|n2).n2 by A9,A23,FINSEQ_1:85
              .=y by A3,FINSEQ_3:121;
-              z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A32,A35
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A33,A8
+              z2=(g/^n1).(i-'n2+1) by A32,A35,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A8,A33,RFINSEQ:def 2
              .=g.(i-'n2+n1+1)
-             .=g.(0+(j2-'1)+1) by BINARITH:51,A42
+             .=g.(0+(j2-'1)+1) by A42,BINARITH:51
              .=g.(j2-1+1) by A3,BINARITH:50;
-             hence thesis by A43,A3;
+             hence thesis by A3,A43;
            end;
           end;
         end;
-      then len g<=len g2 by A1,Def8,A22,A10,A19;
-       then len g-n2<= n2+(len g-n1)-n2 by XREAL_1:15,A11;
-     hence contradiction by XREAL_1:12,A6;
+      then len g<=len g2 by A1,A10,A19,A22,Def8;
+       then len g-n2<= n2+(len g-n1)-n2 by A11,XREAL_1:15;
+     hence contradiction by A6,XREAL_1:12;
      end;
      suppose n1=len g;
        then j2-1=len g by A3,BINARITH:50;
@@ -2305,65 +2305,65 @@ then A37:        0+1<=i-'n2 by A36,NAT_1:13;
       then j2 <i2-1 by XREAL_1:22;
       then A45: n1>n2 by A3,BINARITH:50;
       reconsider g2=(g|n2)^(g/^n1) as FinSequence of FT;
-       1<i2 by A44,A3,XXREAL_0:2;
+       1<i2 by A3,A44,XXREAL_0:2;
       then 1+1<=i2 by NAT_1:13;
 then A46:  1<=i2-1 by XREAL_1:21;
        i2-'1<=i2 by BINARITH:52;
-     then A47: 1<=n1 & n1 <=len g by A46,A3,XXREAL_0:2,BINARITH:50;
+     then A47: 1<=n1 & n1 <=len g by A3,A46,BINARITH:50,XXREAL_0:2;
      A48: len (g|n2)=n2 by A3,FINSEQ_1:80;
-     then A49: g2.1=(g|n2).1 by FINSEQ_1:85,A3
+     then A49: g2.1=(g|n2).1 by A3,FINSEQ_1:85
          .=x1 by A2,A3,FINSEQ_3:121;
       A50: len g2=len (g|n2)+len (g/^n1) by FINSEQ_1:35
-           .=n2+(len g-n1) by A48,RFINSEQ:def 2,A47;
+           .=n2+(len g-n1) by A47,A48,RFINSEQ:def 2;
 A51:   len g-n1>=0 by A47,XREAL_1:50;
       then A52: len g-'n1=len g-n1 by BINARITH:def 3;
       set k=len g-'n1;
-      A53: len (g/^n1)=len g-n1 by RFINSEQ:def 2,A47;
+      A53: len (g/^n1)=len g-n1 by A47,RFINSEQ:def 2;
        now per cases by A47,REAL_1:def 5;
       suppose n1<len g; then n1+1<=len g by NAT_1:13;
 then A54:  n1+1-n1<=len g-n1 by XREAL_1:15;
-      then A55: k in dom (g/^n1) by FINSEQ_3:27,A53,A52;
+      then A55: k in dom (g/^n1) by A52,A53,FINSEQ_3:27;
       A56: k+n1=len g by A52;
 A57:  0+1<=n2+(len g-n1) by A54,XREAL_1:9;
-       g2.(len (g|n2) + k) = (g/^n1).k by FINSEQ_1:def 7,A55
-                         .= x2 by A2,A56,A55,RFINSEQ:def 2,A47;
-      then A58: g2.(len g2)=x2 by A50,A51,A48,BINARITH:def 3;
+       g2.(len (g|n2) + k) = (g/^n1).k by A55,FINSEQ_1:def 7
+                         .= x2 by A2,A47,A55,A56,RFINSEQ:def 2;
+      then A58: g2.(len g2)=x2 by A48,A50,A51,BINARITH:def 3;
       A59: rng g2=rng (g|n2) \/ rng (g/^n1) by FINSEQ_1:44;
       A60: rng (g|n2) c= rng g by FINSEQ_5:21;
        rng (g/^n1) c= rng g by FINSEQ_5:36;
       then rng g2 c= rng g by A59,A60,XBOOLE_1:8;
-      then A61: rng g2 c= A by XBOOLE_1:1,A2;
+      then A61: rng g2 c= A by A2,XBOOLE_1:1;
        g2 is continuous
-        proof thus len g2 >= 1 by A57,A50;
+        proof thus len g2 >= 1 by A50,A57;
          let i be Nat,z1 be Element of FT;
           assume A62: 1<=i & i<len g2 & z1=g2.i;
           then A63: i+1 <=len g2 by NAT_1:13;
           reconsider i as Element of NAT by ORDINAL1:def 13;
            1<i+1 by A62,NAT_1:13;
-          then i+1 in dom g2 by FINSEQ_3:27,A63;
-          then g2.(i+1)=g2/.(i+1) by FINSEQ_4:def 4;
+          then i+1 in dom g2 by A63,FINSEQ_3:27;
+          then g2.(i+1)=g2/.(i+1) by PARTFUN1:def 8;
           then reconsider z2=g2.(i+1) as Element of FT;
           per cases;
           suppose A64: i<n2;
             then A65: i+1<=n2 by NAT_1:13;
             A66: i<len g by A3,A64,XXREAL_0:2;
-            A67: z1=(g|n2).i by FINSEQ_1:85,A62,A48,A64
-             .=g.i by FINSEQ_3:121,A64;
+            A67: z1=(g|n2).i by A48,A62,A64,FINSEQ_1:85
+             .=g.i by A64,FINSEQ_3:121;
             A68: 1<=i+1 by NAT_1:12;
              i+1<=len (g|n2) by A48,A64,NAT_1:13;
-            then z2=(g|n2).(i+1) by FINSEQ_1:85,A68
-             .=g.(i+1) by FINSEQ_3:121,A65;
-            hence thesis by A2,Def6,A67,A66,A62;
+            then z2=(g|n2).(i+1) by A68,FINSEQ_1:85
+             .=g.(i+1) by A65,FINSEQ_3:121;
+            hence thesis by A2,A62,A66,A67,Def6;
           end;
           suppose A69: i>=n2;
-             i-n2<n2+(len g-n1)-n2 by A62,XREAL_1:11,A50;
+             i-n2<n2+(len g-n1)-n2 by A50,A62,XREAL_1:11;
             then A70: i-'n2<len g - n1 by A69,BINARITH:50;
             then i-'n2<len g-'n1 by A47,BINARITH:50;
             then i-'n2+1<=len g-'n1 by NAT_1:13;
             then A71: 1<=i-'n2+1 & i-'n2+1<=len (g/^n1)
-                              by NAT_1:12,A53,A47,BINARITH:50;
+                              by A47,A53,BINARITH:50,NAT_1:12;
             then A72: i-'n2+1 in dom (g/^n1) by FINSEQ_3:27;
-            A73: len (g|n2) +(i-'n2)=n2+(i-n2) by A69,BINARITH:50,A48
+            A73: len (g|n2) +(i-'n2)=n2+(i-n2) by A48,A69,BINARITH:50
                                    .=i;
             A74: len (g|n2)+(i-'n2+1)=i-n2+1+n2 by A48,A69,BINARITH:50
                                .=i+1;
@@ -2372,32 +2372,32 @@ A57:  0+1<=n2+(len g-n1) by A54,XREAL_1:9;
             then A75: i-n2>0 by XREAL_1:52;
             then i-'n2=i-n2 by BINARITH:def 3;
 then A76:        0+1<=i-'n2 by A75,NAT_1:13;
-            then A77: i-'n2 in dom (g/^n1) by A70,A53,FINSEQ_3:27;
-            A78: z1=(g/^n1).(i-'n2) by A62,FINSEQ_1:86,A73,A76,A70,A53
-             .=g.(i-'n2+n1) by RFINSEQ:def 2,A77,A47;
-            A79: z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A71,A74
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A72,A47
+            then A77: i-'n2 in dom (g/^n1) by A53,A70,FINSEQ_3:27;
+            A78: z1=(g/^n1).(i-'n2) by A53,A62,A70,A73,A76,FINSEQ_1:86
+             .=g.(i-'n2+n1) by A47,A77,RFINSEQ:def 2;
+            A79: z2=(g/^n1).(i-'n2+1) by A71,A74,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A47,A72,RFINSEQ:def 2
              .=g.(i-'n2+n1+1);
-            A80: 1<=i-'n2+n1 by NAT_1:12,A47;
-             i-'n2+n1<len g-n1+n1 by XREAL_1:8,A70;
-            hence thesis by A2,Def6,A78,A79,A80;
+            A80: 1<=i-'n2+n1 by A47,NAT_1:12;
+             i-'n2+n1<len g-n1+n1 by A70,XREAL_1:8;
+            hence thesis by A2,A78,A79,A80,Def6;
             end;
             suppose A81: i=n2;
-             then A82: z1=(g|n2).n2 by FINSEQ_1:85,A48,A62
+             then A82: z1=(g|n2).n2 by A48,A62,FINSEQ_1:85
              .=g.j2 by FINSEQ_3:121;
-              z2=(g/^n1).(i-'n2+1) by FINSEQ_1:86,A71,A74
-             .=g.(i-'n2+1+n1) by RFINSEQ:def 2,A72,A47
+              z2=(g/^n1).(i-'n2+1) by A71,A74,FINSEQ_1:86
+             .=g.(i-'n2+1+n1) by A47,A72,RFINSEQ:def 2
              .=g.(i-'n2+n1+1)
-             .=g.(0+(i2-'1)+1) by BINARITH:51,A81
+             .=g.(0+(i2-'1)+1) by A81,BINARITH:51
              .=g.(i2-1+1) by A3,BINARITH:50
              .=y by A3;
-             hence thesis by A1,FIN_TOPO:def 15,A82,A3;
+             hence thesis by A1,A3,A82,FIN_TOPO:def 15;
            end;
           end;
         end;
-      then len g<=len g2 by A1,Def8,A61,A49,A58;
-       then len g-n2<= n2+(len g-n1)-n2 by XREAL_1:15,A50;
-     hence contradiction by XREAL_1:12,A45;
+      then len g<=len g2 by A1,A49,A58,A61,Def8;
+       then len g-n2<= n2+(len g-n1)-n2 by A50,XREAL_1:15;
+     hence contradiction by A45,XREAL_1:12;
      end;
      suppose n1=len g;
        then i2-1=len g by A3,BINARITH:50;
@@ -2429,10 +2429,10 @@ then A2: g is inv_continuous by Th56;
    A4: g is continuous
     & rng g c=A & g.1=x1 & g.(len g)=x2 &
     (for h being FinSequence of FT st h is continuous
-    & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g <= len h) by Def8,A1;
+    & rng h c=A & h.1=x1 & h.(len h)=x2 holds len g <= len h) by A1,Def8;
    then A5: 1<=len g & for i being Nat,x11,x21 being Element of FT st
     1<=i & i<len g & x11=g.i & x21=g.(i+1) holds x21 in U_FT x11 by Def6;
-   then A6: 1< len g by REAL_1:def 5,A4,A1;
+   then A6: 1< len g by A1,A4,REAL_1:def 5;
    then A7: 1+1<=len g by NAT_1:13;
 then A8:  1+1-1<=len g-1 by XREAL_1:15;
    A9: dom g=Seg len g by FINSEQ_1:def 3;
@@ -2443,11 +2443,11 @@ then A8:  1+1-1<=len g-1 by XREAL_1:15;
     then A11: i in Seg len g by FINSEQ_1:3;
      1+1<=i by A10,NAT_1:13;
 then A12: 1<= i-1 by XREAL_1:21;
-    then A13: 1<=i-'1 by BINARITH:50,A10;
+    then A13: 1<=i-'1 by A10,BINARITH:50;
      i-'1<=i by BINARITH:52;
     then A14: i-'1< len g by A10,XXREAL_0:2;
     then A15: i-'1 in Seg len g by A13;
-    A16: i-'1+1=i-1+1 by BINARITH:50,A10 .=i;
+    A16: i-'1+1=i-1+1 by A10,BINARITH:50 .=i;
     A17: 1<i+1 by A10,NAT_1:13;
      i+1<=len g by A10,NAT_1:13;
     then A18: i+1 in Seg len g by A17,FINSEQ_1:3;
@@ -2461,46 +2461,46 @@ then A12: 1<= i-1 by XREAL_1:21;
         A20: nx in dom g & x=g.nx by FUNCT_1:def 5;
         reconsider j=nx as Element of NAT by A20;
         A21: 1<=j & j<=len g by A9,A20,FINSEQ_1:3;
-         g/.i=g.i by FINSEQ_4:def 4,A11,A9;
-        then A22: j=i or i=j+1 or j=i+1 by A20,A2,Def9,A10,A21,A19;
+         g/.i=g.i by A9,A11,PARTFUN1:def 8;
+        then A22: j=i or i=j+1 or j=i+1 by A2,A10,A19,A20,A21,Def9;
          i=j+1 implies i-1=j;
         then i=j+1 implies i-'1=j by A10,BINARITH:50;
-       hence x in {g.(i-'1),g.i,g.(i+1)} by ENUMSET1:def 1,A20,A22;
+       hence x in {g.(i-'1),g.i,g.(i+1)} by A20,A22,ENUMSET1:def 1;
       end;
       let x be set;assume
 A23:     x in {g.(i-'1),g.i,g.(i+1)};
-        A24: g.i=g/.i by FINSEQ_4:def 4,A11,A9;
-        A25: g.(i-'1)=g/.(i-'1) by FINSEQ_4:def 4,A9,A15;
+        A24: g.i=g/.i by A9,A11,PARTFUN1:def 8;
+        A25: g.(i-'1)=g/.(i-'1) by A9,A15,PARTFUN1:def 8;
         per cases by A23,ENUMSET1:def 1;
         suppose A26: x=g.(i-'1);
-          then A27: x in rng g by FUNCT_1:def 5,A15,A9;
-           g.i in U_FT (g/.(i-'1)) by A4,A16,A12,A14,A25,Def6;
-          then x in U_FT (g/.i) by A26,FIN_TOPO:def 15,A1,A25,A24;
+          then A27: x in rng g by A9,A15,FUNCT_1:def 5;
+           g.i in U_FT (g/.(i-'1)) by A4,A12,A14,A16,A25,Def6;
+          then x in U_FT (g/.i) by A1,A24,A25,A26,FIN_TOPO:def 15;
          hence x in (rng g) /\ U_FT (g/.i) by A27,XBOOLE_0:def 3;
         end;
         suppose A28: x=g.i;
-      then A29: x in rng g by FUNCT_1:def 5,A9,A11;
-           x in U_FT (g/.i) by A28,A1,FIN_TOPO:def 4,A24;
+      then A29: x in rng g by A9,A11,FUNCT_1:def 5;
+           x in U_FT (g/.i) by A1,A24,A28,FIN_TOPO:def 4;
          hence x in (rng g) /\ U_FT (g/.i) by A29,XBOOLE_0:def 3;
         end;
         suppose A30: x=g.(i+1);
-      then A31: x in rng g by FUNCT_1:def 5,A18,A9;
-           x in U_FT (g/.i) by A30,A24,A10,A4,Def6;
+      then A31: x in rng g by A9,A18,FUNCT_1:def 5;
+           x in U_FT (g/.i) by A4,A10,A24,A30,Def6;
          hence x in (rng g) /\ U_FT (g/.i) by A31,XBOOLE_0:def 3;
         end;
     end;
   end;
   A32: 1 in dom g by A3,FINSEQ_3:27;
-  then A33: g.1=g/.1 by FINSEQ_4:def 4;
-  A34: len g in dom g by A9,A5;
-  then A35: g.len g=g/.len g by FINSEQ_4:def 4;
+  then A33: g.1=g/.1 by PARTFUN1:def 8;
+  A34: len g in dom g by A5,A9;
+  then A35: g.len g=g/.len g by PARTFUN1:def 8;
   A36: len g-'1=len g -1 by A3,BINARITH:50;
-  A37: 1<=len g-'1 by A8,A3,BINARITH:50;
+  A37: 1<=len g-'1 by A3,A8,BINARITH:50;
    len g<len g+1 by NAT_1:13;
 then A38: len g-1<len g+1-1 by XREAL_1:16;
   then A39: len g-'1<len g by A3,BINARITH:50;
-  A40: len g-'1 in dom g by A36,A8,FINSEQ_3:27,A38;
-  then A41: g.(len g-'1)=g/.(len g-'1) by FINSEQ_4:def 4;
+  A40: len g-'1 in dom g by A8,A36,A38,FINSEQ_3:27;
+  then A41: g.(len g-'1)=g/.(len g-'1) by PARTFUN1:def 8;
  thus (rng g) /\ U_FT (g/.1)={g.1,g.2}
   proof
    thus (rng g) /\ U_FT (g/.1) c= {g.1,g.2}
@@ -2510,10 +2510,10 @@ then A38: len g-1<len g+1-1 by XREAL_1:16;
       then consider y being set such that
       A43: y in dom g & x=g.y by FUNCT_1:def 5;
       reconsider j=y as Element of NAT by A43;
-      A44: 1<=j & j<=len g by A43,A9,FINSEQ_1:3;
-      then 1+1=j or 1=j or j+1=1 by A33,A43,A42,A3;
+      A44: 1<=j & j<=len g by A9,A43,FINSEQ_1:3;
+      then 1+1=j or 1=j or j+1=1 by A3,A33,A42,A43;
       then 1+1=j or 1=j by A44,XREAL_1:9;
-     hence x in {g.1,g.2} by TARSKI:def 2,A43;
+     hence x in {g.1,g.2} by A43,TARSKI:def 2;
     end;
    let x be set;assume
 A45:  x in {g.1,g.2};
@@ -2522,15 +2522,15 @@ A45:  x in {g.1,g.2};
      A47: x=g.1 implies x in rng g by A32,FUNCT_1:def 5;
       now per cases by A45,TARSKI:def 2;
      case x=g.1;
-      hence x in U_FT (g/.1) by A33,A1,FIN_TOPO:def 4;
+      hence x in U_FT (g/.1) by A1,A33,FIN_TOPO:def 4;
      end;
      case A48: x=g.2;
       then reconsider xx=x as Element of FT by A46;
         xx=g.(1+1) by A48;
-       hence x in U_FT (g/.1) by A33,A4,Def6,A6;
+       hence x in U_FT (g/.1) by A4,A6,A33,Def6;
      end;
      end;
-    hence x in (rng g) /\ U_FT (g/.1) by XBOOLE_0:def 3,A46,A47;
+    hence x in (rng g) /\ U_FT (g/.1) by A46,A47,XBOOLE_0:def 3;
   end;
  thus (rng g) /\ U_FT (g/.len g)={g.(len g -'1),g.len g}
   proof
@@ -2540,19 +2540,19 @@ A45:  x in {g.1,g.2};
       then consider y being set such that
       A50: y in dom g & x=g.y by FUNCT_1:def 5;
       reconsider ny=y as Element of NAT by A50;
-      A51: 1<=ny & ny<=len g by A50,A9,FINSEQ_1:3;
-      then ny+1=len g or len g +1=ny or len g=ny by A49,A50,A3,A35;
+      A51: 1<=ny & ny<=len g by A9,A50,FINSEQ_1:3;
+      then ny+1=len g or len g +1=ny or len g=ny by A3,A35,A49,A50;
        then ny=len g-1 or len g=ny by A51,NAT_1:13;
-      then x=g.(len g -'1) or x=g.len g by A5,BINARITH:50,A50;
+      then x=g.(len g -'1) or x=g.len g by A5,A50,BINARITH:50;
      hence x in {g.(len g -'1),g.len g} by TARSKI:def 2;
     end;
     let x be set;assume x in {g.(len g -'1),g.len g};
 then A52: x=g.(len g -'1) or x=g.len g by TARSKI:def 2;
-then A53: x in rng g by A34,FUNCT_1:def 5,A40;
-A54: g.len g in U_FT (g/.len g) by A35,A1,FIN_TOPO:def 4;
-     g.(len g-'1+1) in U_FT (g/.(len g-'1)) by A4,Def6,A37,A39,A41;
-    then g.(len g-'1) in U_FT (g/.len g) by FIN_TOPO:def 15,A1,A41,A35,A36;
-    hence x in (rng g) /\ U_FT (g/.len g) by XBOOLE_0:def 3,A53,A52,A54;
+then A53: x in rng g by A34,A40,FUNCT_1:def 5;
+A54: g.len g in U_FT (g/.len g) by A1,A35,FIN_TOPO:def 4;
+     g.(len g-'1+1) in U_FT (g/.(len g-'1)) by A4,A37,A39,A41,Def6;
+    then g.(len g-'1) in U_FT (g/.len g) by A1,A35,A36,A41,FIN_TOPO:def 15;
+    hence x in (rng g) /\ U_FT (g/.len g) by A52,A53,A54,XBOOLE_0:def 3;
   end;
 end;
 
@@ -2573,9 +2573,9 @@ x1,x2 be Element of FT, B0 be Subset of FT|A;
   then 1<=len g by Def6;
   then 1 in dom g by FINSEQ_3:27;
 then A3:x1 in rng g by A2,FUNCT_1:def 5;
- A4: FT|A is filled by Th8,A1;
+ A4: FT|A is filled by A1,Th8;
  A5: [#](FT|A)=A by Def3;
- A6: {x1} c= A by A3,A2,ZFMISC_1:37;
+ A6: {x1} c= A by A2,A3,ZFMISC_1:37;
   let i be Element of NAT;
    assume i < len g;
     then A7: i+1<=len g by NAT_1:13;
@@ -2588,13 +2588,13 @@ then A3:x1 in rng g by A2,FUNCT_1:def 5;
       h is continuous & rng h c= A & h.1=x1 & h.len h=y & len h <= 0+1
      proof let y be Element of FT;
        assume y in Finf(B0,0);
-       then y in {x1} by FINTOPO3:32,A1;
+       then y in {x1} by A1,FINTOPO3:32;
        then A8: y=x1 by TARSKI:def 1;
        A9: rng (<*x1*>)={x1} by FINSEQ_1:56;
         (<*x1*>).1=x1 & len (<*x1*>)=1 by FINSEQ_1:57;
       hence ex h being FinSequence of FT st
       h is continuous & rng h c= A & h.1=x1 & h.len h=y & len h <= 0+1
-                                   by A8,A9,A6;
+                                   by A6,A8,A9;
      end;
     then A10: Q[0];
     A11: for k being Element of NAT st Q[k] holds Q[k+1]
@@ -2620,22 +2620,22 @@ A12:     Q[k];
                        & h2.len h2=y3 & len h2 <= k+1 by A12,A15;
          reconsider h3=h2^(<*y*>) as FinSequence of FT;
          A19: len (<*y*>)=1 & (<*y*>).1=y by FINSEQ_1:57;
-          U_FT y2=(U_FT y3)/\ A by Def2,A17;
+          U_FT y2=(U_FT y3)/\ A by A17,Def2;
          then y in U_FT y3 by A14,A15,XBOOLE_0:def 3;
          then A20: h3 is continuous by A18,Th44;
          A21: rng(h2^(<*y*>)) = rng h2 \/ rng (<*y*>) by FINSEQ_1:44;
-         A22: {y} c= A by A17,A14,ZFMISC_1:37;
+         A22: {y} c= A by A14,A17,ZFMISC_1:37;
           rng (<*y*>)={y} by FINSEQ_1:56;
-         then A23: rng h3 c= A by A21,A18,A22,XBOOLE_1:8;
+         then A23: rng h3 c= A by A18,A21,A22,XBOOLE_1:8;
           1<= len h2 by A18,Def6;
          then 1 in dom h2 by FINSEQ_3:27;
-         then A24: h3.1=x1 by FINSEQ_1:def 7,A18;
+         then A24: h3.1=x1 by A18,FINSEQ_1:def 7;
          A25: len h3=len h2 +1 by A19,FINSEQ_1:35;
          then A26: len h3<=k+1+1 by A18,XREAL_1:8;
           h3.len h3=y by A25,FINSEQ_1:59;
          hence ex h being FinSequence of FT st
          h is continuous & rng h c= A & h.1=x1 & h.len h=y & len h <= k+1+1
-                    by A20,A24,A26,A23;
+                    by A20,A23,A24,A26;
        end;
       hence Q[k+1];
      end;
@@ -2659,25 +2659,25 @@ A31:    P[k];
        then A33: k+1<len g by NAT_1:13;
        A34: 1<=k+1 by NAT_1:12;
        then k+1 in dom g by A33,FINSEQ_3:27;
-       then A35: g.(k+1)=g/.(k+1) by FINSEQ_4:def 4;
-       reconsider y0=g.(k+1) as Element of FT|A by A32,A31,NAT_1:13;
+       then A35: g.(k+1)=g/.(k+1) by PARTFUN1:def 8;
+       reconsider y0=g.(k+1) as Element of FT|A by A31,A32,NAT_1:13;
         [#](FT|A)=A by Def3;
-       then A36: U_FT y0 = U_FT(g/.(k+1))/\ A by Def2,A35;
+       then A36: U_FT y0 = U_FT(g/.(k+1))/\ A by A35,Def2;
         1<k+1+1 by A34,NAT_1:13;
        then k+1+1 in dom g by A32,FINSEQ_3:27;
 then A37:   g.(k+1+1) in rng g by FUNCT_1:def 5;
-        g.(k+1+1) in U_FT (g/.(k+1)) by A2,Def6,A33,A34,A35;
-then A38:   g.(k+1+1) in U_FT y0 by A36,XBOOLE_0:def 3,A37,A2;
+        g.(k+1+1) in U_FT (g/.(k+1)) by A2,A33,A34,A35,Def6;
+then A38:   g.(k+1+1) in U_FT y0 by A2,A36,A37,XBOOLE_0:def 3;
          1<k+1+1 by A34,NAT_1:13;
        then A39: k+1+1 in dom g by A32,FINSEQ_3:27;
-A40:   g.(k+1+1) in (Finf(B0,k))^f by A38,A31,A32,NAT_1:13;
+A40:   g.(k+1+1) in (Finf(B0,k))^f by A31,A32,A38,NAT_1:13;
        A41: k+1-'1=k+1-1 by BINARITH:55 .=k;
         now assume A42: g.(k+1+1) in Finf(B0,k);
           now per cases;
          suppose A43: k=0;
          then k-1<0;
          then k-'1=0 by BINARITH:def 3;
-         then Finf(B0,k) c= (Finf(B0,k-'1))^f by A43,FINTOPO3:1,A4;
+         then Finf(B0,k) c= (Finf(B0,k-'1))^f by A4,A43,FINTOPO3:1;
          hence g.(k+1+1) in Finf(B0,k-'1)^f by A42;
          end;
          suppose k>0; then k>=0+1 by NAT_1:13;
@@ -2692,48 +2692,48 @@ A40:   g.(k+1+1) in (Finf(B0,k))^f by A38,A31,A32,NAT_1:13;
          then reconsider x3=x as Element of FT;
         consider h being FinSequence of FT such that
         A45: h is continuous & rng h c= A & h.1=x1
-          & h.len h=x3 & len h <= k+1 by A42,A44,A27;
+          & h.len h=x3 & len h <= k+1 by A27,A42,A44;
         A46: 1<=len h by A45,Def6;
         then len h in dom h by FINSEQ_3:27;
-        then A47: h.(len h)=h/.(len h) by FINSEQ_4:def 4;
-         len (g|(k+1+1))=k+1+1 by FINSEQ_1:80,A32;
+        then A47: h.(len h)=h/.(len h) by PARTFUN1:def 8;
+         len (g|(k+1+1))=k+1+1 by A32,FINSEQ_1:80;
         then A48: len (g|(k+1+1))>len h by A45,NAT_1:13;
         reconsider s=h^(g/^(k+1+1)) as FinSequence of FT;
         A49: len s=len h +len(g/^(k+1+1)) by FINSEQ_1:35;
          g=(g|(k+1+1))^(g/^(k+1+1)) by RFINSEQ:21;
 then A50:    len g=len (g|(k+1+1)) + len (g/^(k+1+1)) by FINSEQ_1:35;
-        then A51: len s<len g by A49,A48,XREAL_1:10;
+        then A51: len s<len g by A48,A49,XREAL_1:10;
         per cases;
         suppose A52: k+1+1<len g;
         A53: 1<=k+1+1 by NAT_1:12;
-        A54: g.(k+1+1)=g/.(k+1+1) by FINSEQ_4:def 4,A39;
-        then A55: g.(k+1+1+1) in U_FT (g/.(k+1+1)) by A53,A2,Def6,A52;
+        A54: g.(k+1+1)=g/.(k+1+1) by A39,PARTFUN1:def 8;
+        then A55: g.(k+1+1+1) in U_FT (g/.(k+1+1)) by A2,A52,A53,Def6;
          len g>=1+(k+1+1) by A52,NAT_1:13;
         then 1<=len g -(k+1+1) by XREAL_1:21;
-        then 1<=len (g/^(k+1+1)) by RFINSEQ:def 2,A52;
+        then 1<=len (g/^(k+1+1)) by A52,RFINSEQ:def 2;
         then 1 in dom (g/^(k+1+1)) by FINSEQ_3:27;
         then A56: (g/^(k+1+1)).1 in U_FT (h/.(len h))
-         by A55,A44,A54,A45,A47,A52,RFINSEQ:def 2;
-        A57: g/^(k+1+1) is continuous by A52,A2,Th48;
-        then A58: s is continuous by Th45,A45,A56;
-        A59: 1<= len (g/^(k+1+1)) by Def6,A57;
+         by A44,A45,A47,A52,A54,A55,RFINSEQ:def 2;
+        A57: g/^(k+1+1) is continuous by A2,A52,Th48;
+        then A58: s is continuous by A45,A56,Th45;
+        A59: 1<= len (g/^(k+1+1)) by A57,Def6;
          rng (g/^(k+1+1)) c= rng g by FINSEQ_5:36;
         then A60: rng (g/^(k+1+1)) c= A by A2,XBOOLE_1:1;
          rng s = rng h \/ rng (g/^(k+1+1)) by FINSEQ_1:44;
-        then A61: rng s c= A by A60,A45,XBOOLE_1:8;
+        then A61: rng s c= A by A45,A60,XBOOLE_1:8;
          1 in dom h by A46,FINSEQ_3:27;
         then A62: s.1=x1 by A45,FINSEQ_1:def 7;
          len (g/^(k+1+1)) in dom (g/^(k+1+1)) by A59,FINSEQ_3:27;
         then s.(len s)=(g/^(k+1+1)).(len (g/^(k+1+1))) by A49,FINSEQ_1:def 7
-                .=x2 by A2,JORDAN4:18,A52;
-        hence contradiction by A51,A1,Def8,A61,A62,A58;
+                .=x2 by A2,A52,JORDAN4:18;
+        hence contradiction by A1,A51,A58,A61,A62,Def8;
         end;
         suppose
 A63:       k+1+1>=len g;
          then A64: k+1+1=len g by A32,XXREAL_0:1;
-          g/^(k+1+1)=<*>the carrier of FT by FINSEQ_5:35,A63;
+          g/^(k+1+1)=<*>the carrier of FT by A63,FINSEQ_5:35;
          then s=h by FINSEQ_1:47;
-        hence contradiction by A50,A2,A44,A64,A45,A49,A48;
+        hence contradiction by A2,A44,A45,A48,A49,A50,A64;
        end;
         end;
       hence P[k+1] by A40,A41,FINTOPO3:31;

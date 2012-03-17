@@ -8,13 +8,13 @@ environ
 
  vocabularies UNIALG_1, UNIALG_2, FINSEQ_1, FUNCT_1, RELAT_1, FINSEQ_4, BOOLE,
       CQC_SIM1, GROUP_6, WELLORD1, FINSEQ_2, EQREL_1, FUNCT_2, PARTFUN1,
-      TARSKI, ZF_REFLE, RELAT_2, ALG_1, NAT_1;
+      TARSKI, ZF_REFLE, RELAT_2, ALG_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, RELAT_2,
       FUNCT_1, RELSET_1, FINSEQ_1, PARTFUN1, EQREL_1, FINSEQ_2, FUNCT_2,
       STRUCT_0, UNIALG_1, FINSEQOP, UNIALG_2;
  constructors EQREL_1, FINSEQOP, UNIALG_2;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, ARYTM_3, EQREL_1,
-      FINSEQ_2, STRUCT_0, UNIALG_1, UNIALG_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, EQREL_1,
+      FINSEQ_2, STRUCT_0, UNIALG_1, UNIALG_2, ORDINAL1;
  requirements BOOLE, SUBSET;
  definitions UNIALG_2, RELAT_2, TARSKI, FUNCT_1, XBOOLE_0;
  theorems FINSEQ_1, FINSEQ_2, FUNCT_1, FUNCT_2, PARTFUN1, UNIALG_1, UNIALG_2,
@@ -34,7 +34,7 @@ reserve U1,U2,U3 for Universal_Algebra,
 theorem Th1:
 for D1,D2 be non empty set, p be FinSequence of D1, f be Function of D1,D2
  holds dom(f*p) = dom p & len (f*p) = len p &
-      for n st n in dom (f*p) holds (f*p).n = f.(p.n)
+      for n being Nat st n in dom (f*p) holds (f*p).n = f.(p.n)
  proof
   let D1,D2 be non empty set, p be FinSequence of D1, f be Function of D1,D2;
   A1: rng p c= D1;
@@ -42,7 +42,7 @@ for D1,D2 be non empty set, p be FinSequence of D1, f be Function of D1,D2
    then A3: rng(f*p) c= rng f & dom(f*p) = dom p by A1,RELAT_1:45,46;
   thus dom(f*p) = dom p by A1,A2,RELAT_1:46;
   thus len(f*p) = len p by A3,FINSEQ_3:31;
-  let n; assume n in dom (f*p);
+  let n be Nat; assume n in dom (f*p);
   hence thesis by FUNCT_1:22;
  end;
 
@@ -54,7 +54,7 @@ Opers(U1,B) = the charact of(U1)
   assume A1: B = the carrier of U1;
   A2: dom Opers(U1,B) = dom the charact of(U1) by UNIALG_2:def 7;
        now
-    let n; assume A3: n in dom the charact of(U1);
+    let n be Nat; assume A3: n in dom the charact of(U1);
     then reconsider o = (the charact of U1).n as operation of U1 by
 FUNCT_1:def 5;
     thus Opers(U1,B).n = o/.B by A2,A3,UNIALG_2:def 7
@@ -81,7 +81,7 @@ theorem Th4:
   A2: dom (f*a) = dom a by Th1;
   A3: dom a = Seg len a by FINSEQ_1:def 3;
        now
-    let n; assume A4: n in dom a;
+    let n be Nat; assume A4: n in dom a;
     then reconsider u = a.n as Element of U1 by FINSEQ_2:13;
         f.u = u by FUNCT_1:35;
     hence (f*a).n = a.n by A2,A4,Th1;
@@ -107,7 +107,7 @@ for h1 be Function of U1,U2, h2 be Function of U2,U3,a be FinSequence of U1
       dom (h1*a) = Seg len a &
       dom ((h2 * h1)*a) = Seg len a by A2,A4,A5,FINSEQ_1:def 3;
        now
-    let n; assume A8: n in dom a;
+    let n be Nat; assume A8: n in dom a;
     then A9: a.n in the carrier of U1 by FINSEQ_2:13;
     thus (h2*(h1*a)).n = h2.((h1*a).n) by A2,A4,A8,Th1
                  .= h2.(h1.(a.n)) by A4,A8,Th1
@@ -255,9 +255,9 @@ A8:  o2 = (the charact of U2).n & o1 = (the charact of U1).n;
     then consider s be Element of (the carrier of U2)* such that
     A9: x=s & len s = arity o2;
     defpred P[set,set] means h.$2 = x.$1;
-    A10: for m st m in Seg len x ex a being Element of U1
+    A10: for m be Nat st m in Seg len x ex a being Element of U1
          st P[m,a]
-     proof let m; assume m in Seg len x;
+     proof let m be Nat; assume m in Seg len x;
      then m in dom x by FINSEQ_1:def 3;
       then x.m in the carrier of U2 by FINSEQ_2:13;
       then consider a be set such that
@@ -268,12 +268,12 @@ A8:  o2 = (the charact of U2).n & o1 = (the charact of U1).n;
      end;
     consider p being FinSequence of U1 such that
     A12: dom p = Seg len x &
-        for m st m in Seg len x holds P[m,p.m] from FINSEQ_1:sch 5(A10);
+        for m be Nat st m in Seg len x holds P[m,p.m] from FINSEQ_1:sch 5(A10);
     A13: (h1 * h) = (id dom h) by A1,A2,FUNCT_1:61
                 .= id the carrier of U1 by FUNCT_2:def 1;
     A14: len p = len x & dom x = Seg len x & dom (h*p) = dom p
       by A12,Th1,FINSEQ_1:def 3;
-         now let n; assume A15: n in dom x;
+         now let n be Nat; assume A15: n in dom x;
       hence x.n = h.(p.n) by A12,A14
       .= (h*p).n by A12,A14,A15,Th1;
      end;
@@ -383,7 +383,7 @@ the carrier of it = f .: (the carrier of U1);
       A is opers_closed
   proof
    let o2 be operation of U2;
-   consider n such that
+   consider n being Nat such that
    A3: n in dom the charact of(U2) & (the charact of U2).n = o2
       by FINSEQ_2:11;
    A4: U1,U2 are_similar by A1,Def1;
@@ -431,7 +431,7 @@ the carrier of it = f .: (the carrier of U1);
    then A16: f.(o1.s1) = o2.(f*s1) by A1,A3,A6,A7,Def1;
    A17: len (f*s1) = len s1 by Th1;
    A18: dom (f*s1) = Seg len (f*s1) by FINSEQ_1:def 3;
-        now let m;
+        now let m be Nat;
      assume A19: m in Seg len s1;
      then m in dom s1 by FINSEQ_1:def 3;
      then f.(s1.m) = s.m by A13;
@@ -573,9 +573,8 @@ for D be non empty set holds ExtendRel(id D) = id (D*)
       A2: len a1 = len b1 &
           for n st n in dom a1 holds [a1.n,b1.n] in id D by A1,Def9;
 A3:   dom a1 = Seg len a1 by FINSEQ_1:def 3;
-          for n st n in dom a1 holds a1.n = b1.n
-       proof
-        let n; assume n in dom a1;
+      now
+        let n be Nat; assume n in dom a1;
         then [a1.n,b1.n] in id D by A1,Def9;
         hence a1.n = b1.n by RELAT_1:def 10;
        end;
@@ -702,7 +701,7 @@ func QuotOp(o,E) -> homogeneous quasi_total non empty
      A8: a = e;
      let b be FinSequence of the carrier of U1; assume
      A9: b is_representatives_FS a;
-     consider n such that
+     consider n being Nat such that
      A10: n in dom the charact of(U1) & (the charact of U1).n = o
       by FINSEQ_2:11;
      A11: len b = arity o by A2,A8,A9,Def11;
@@ -801,13 +800,13 @@ func QuotOpSeq(U1,E) -> PFuncFinSequence of Class E means:Def13:
   for o1 st (the charact of(U1)).n = o1 holds it.n = QuotOp(o1,E);
  existence
   proof
-   defpred P[Element of NAT,set] means
+   defpred P[set,set] means
    for o be Element of Operations(U1) st o = (the charact of(U1)).$1 holds
      $2 = QuotOp(o,E);
-   A1: for n st n in Seg len the charact of(U1)
+   A1: for n be Nat st n in Seg len the charact of(U1)
       ex x be Element of PFuncs((Class E)*,(Class E)) st P[n,x]
        proof
-        let n; assume n in Seg len the charact of(U1);
+        let n be Nat; assume n in Seg len the charact of(U1);
         then n in dom the charact of(U1) by FINSEQ_1:def 3;
         then reconsider o = (the charact of(U1)).n as operation of U1 by
 FUNCT_1:def 5;
@@ -818,7 +817,7 @@ FUNCT_1:def 5;
        end;
    consider p be FinSequence of PFuncs((Class E)*,(Class E)) such that
    A2: dom p = Seg len the charact of(U1) &
-   for n st n in Seg len the charact of(U1) holds
+   for n be Nat st n in Seg len the charact of(U1) holds
          P[n,p.n] from FINSEQ_1:sch 5(A1);
     reconsider p as PFuncFinSequence of Class E;
    take p;
@@ -840,7 +839,7 @@ FUNCT_1:def 5;
        & dom F = Seg len the charact of(U1)
        & dom G = Seg len the charact of(U1)
                                         by A3,A4,FINSEQ_1:def 3,FINSEQ_3:31;
-     let n; assume A6: n in Seg len the charact of(U1);
+     let n be Nat; assume A6: n in Seg len the charact of(U1);
      then n in dom the charact of(U1) by FINSEQ_1:def 3;
      then reconsider o1 = (the charact of U1).n as operation of U1 by
 FUNCT_1:def 5;
@@ -961,7 +960,7 @@ for U1,E holds Nat_Hom(U1,E) is_homomorphism U1,QuotUnivAlg(U1,E)
    len (signature QuotUnivAlg(U1,E)) = len the charact of(QuotUnivAlg(U1,E)) &
    len (signature U1) = len the charact of(U1) by Def13,UNIALG_1:def 11;
         now
-     let n; assume n in Seg len (signature U1);
+     let n be Nat; assume n in Seg len (signature U1);
      then A2: n in dom (signature U1) & n in dom the charact of(U1) &
      n in dom QuotOpSeq(U1,E) &
         n in dom (signature QuotUnivAlg(U1,E)) by A1,FINSEQ_1:def 3;
@@ -1098,7 +1097,7 @@ definition let U1,U2;let f be Function of U1,U2;
       A11: f.(o.x) = o2.(f*x) & f.(o.y) = o2.(f*y) by A1,A7,A8,Def1;
       A12: len (f*x) = len x & len (f*y) = len y by Th1;
            now
-        let m; assume m in Seg len x;
+        let m be Nat; assume m in Seg len x;
         then A13: m in dom x & m in dom y & m in dom (f*x) &
             m in dom (f*y) by A9,A12,FINSEQ_1:def 3;
         then A14: [x.m,y.m] in R by A8,Def9;
@@ -1263,7 +1262,7 @@ then signature U2 = signature qa by A4,UNIALG_2:def 2;
     A15: len (F*x) = len y by A12,Th1;
     A16: len y = len (f*y) by Th1;
          now
-      let m; assume
+      let m be Nat; assume
       A17: m in Seg len y;
       then A18: m in dom y by FINSEQ_1:def 3;
       A19: m in dom (F*x) & m in dom y & m in dom(f*y)

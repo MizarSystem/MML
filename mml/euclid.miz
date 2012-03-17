@@ -11,11 +11,11 @@ environ
       FUNCT_2, ARYTM_3, MCART_1, EUCLID, BOOLE, MONOID_0, SEQ_1, ZF_LANG,
       XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, COMPLEX1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2, REAL_1, SEQ_1,
-      FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL, SQUARE_1, RVSUM_1, MONOID_0,
-      PRE_TOPC, PCOMPS_1, XXREAL_0;
+      XREAL_0, COMPLEX1, NAT_1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2, REAL_1,
+      SEQ_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL, SQUARE_1, RVSUM_1,
+      MONOID_0, PRE_TOPC, PCOMPS_1, XXREAL_0;
  constructors FRAENKEL, REAL_1, SQUARE_1, BINOP_2, COMPLEX1, FINSEQOP,
-      FINSOP_1, SETWOP_2, PCOMPS_1, MONOID_0;
+      PCOMPS_1, MONOID_0;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       BINOP_2, MEMBERED, SEQ_1, FINSEQ_2, RVSUM_1, METRIC_1, PCOMPS_1,
       MONOID_0;
@@ -24,14 +24,14 @@ environ
       MONOID_0;
  theorems ABSVALUE, BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FUNCT_1, FUNCT_2,
       PCOMPS_1, RVSUM_1, SQUARE_1, TARSKI, XREAL_0, XCMPLX_1, COMPLEX1,
-      XREAL_1, XXREAL_0, FUNCOP_1, SEQ_1;
+      XREAL_1, XXREAL_0, FUNCOP_1, SEQ_1, ORDINAL1;
  schemes FUNCT_2, BINOP_1;
 
 begin
 
- reserve k,j,n for Element of NAT, r for real number;
+ reserve k,j,n for Nat, r for real number;
 
- definition let n;
+definition let n be Nat;
   func REAL n -> FinSequence-DOMAIN of REAL equals
    n-tuples_on REAL;
   coherence;
@@ -79,7 +79,12 @@ A3:    for r holds g.r = abs r;
 
  definition let n;
   redefine func 0*n -> Element of REAL n;
-  coherence;
+  coherence
+  proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    0*n is Element of REAL n;
+    hence thesis;
+  end;
  end;
 
 reserve x,x1,x2,y,z for Element of REAL n;
@@ -88,8 +93,9 @@ reserve x,x1,x2,y,z for Element of REAL n;
    redefine func -x -> Element of REAL n;
    coherence
     proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider R1=x as Element of n-tuples_on REAL;
-         -R1 in n-tuples_on REAL;
+     -R1 in n-tuples_on REAL;
      hence thesis;
     end;
  end;
@@ -98,6 +104,7 @@ reserve x,x1,x2,y,z for Element of REAL n;
    redefine func x + y -> Element of REAL n;
    coherence
     proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider R1=x,R2=y as Element of n-tuples_on REAL;
          R1 + R2 in n-tuples_on REAL;
      hence thesis;
@@ -105,6 +112,7 @@ reserve x,x1,x2,y,z for Element of REAL n;
    redefine func x - y -> Element of REAL n;
    coherence
     proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider R1=x,R2=y as Element of n-tuples_on REAL;
          R1 - R2 in n-tuples_on REAL;
      hence thesis;
@@ -115,6 +123,7 @@ reserve x,x1,x2,y,z for Element of REAL n;
   redefine func r*x -> Element of REAL n;
    coherence
     proof
+    reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider R=x as Element of n-tuples_on REAL;
       r*R in n-tuples_on REAL;
      hence thesis;
@@ -189,7 +198,8 @@ Lm2: f is Element of REAL len f
 
 theorem   abs 0*n = n |-> (0 qua Real)
 proof
-  thus abs 0*n = n |-> absreal.(0 qua Real) by FINSEQOP:17
+  reconsider m=n as Element of NAT by ORDINAL1:def 13;
+  thus abs 0*n = m |-> absreal.(0 qua Real) by FINSEQOP:17
                .= n |-> abs 0 by Def2
                .= n |-> 0 by ABSVALUE:7;
 end;
@@ -214,6 +224,7 @@ theorem Th9:
    abs(r*f) = abs(r)*(abs f)
  proof
    set n = len f;
+   reconsider n as Element of NAT;
    reconsider x=f as Element of REAL n by Lm2;
       now let j such that
         j in Seg n;
@@ -390,7 +401,7 @@ A7:  k in Seg n implies 0 <= (mlt(abs x1,abs x2)).k
    then 0 + 0 <= (sqrt Sum sqr abs x1) + (sqrt Sum sqr abs x2) &
     sqrt Sum sqr (x1 + x2) <=
       sqrt(((sqrt Sum sqr abs x1) + (sqrt Sum sqr abs x2))^2)
-     by A2,XREAL_1:9,SQUARE_1:94;
+     by A2,SQUARE_1:94,XREAL_1:9;
    then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) +
      (sqrt Sum sqr abs x2) by SQUARE_1:89;
    then sqrt Sum sqr (x1 + x2) <= (sqrt Sum sqr abs x1) +
@@ -463,7 +474,7 @@ theorem Th22: |.x1 - x2.| <= |.x1 - x .| + |.x - x2.|
    hence thesis by Th15;
  end;
 
- definition let n;
+ definition let n be Nat;
   func Pitag_dist n -> Function of [:REAL n,REAL n:],REAL means :Def6:
   for x,y being Element of REAL n holds it.(x,y) = |.x-y.|;
   existence
@@ -482,8 +493,10 @@ A1:   for x,y being Element of REAL n holds f.(x,y) = F(x,y)
     assume that
      A2: for x,y being Element of REAL n holds f.(x,y) = |.x-y.| and
      A3: for x,y being Element of REAL n holds g.(x,y) = |.x-y.|;
-        f.(x,y) = g.(x,y)
-     proof
+     reconsider n as Element of NAT by ORDINAL1:def 13;
+     reconsider f,g as Function of [:REAL n, REAL n:], REAL;
+     now
+      let x,y be Element of REAL n;
       thus f.(x,y) = |.x-y.| by A2 .= g.(x,y) by A3;
      end;
     hence thesis by BINOP_1:2;
@@ -501,9 +514,11 @@ theorem   sqr(x-y) = sqr(y-x)
    .= sqr(y-x) by RVSUM_1:99;
  end;
 
-theorem Th24: Pitag_dist n is_metric_of REAL n
+theorem Th24:
+for n being Nat holds Pitag_dist n is_metric_of REAL n
  proof
-  let x,y,z;
+  let n be Nat;
+  let x,y,z be Element of REAL n;
   thus (Pitag_dist n).(x,y) = 0 iff x=y
    proof
         (Pitag_dist n).(x,y) = |.x-y.| by Def6;
@@ -519,7 +534,7 @@ theorem Th24: Pitag_dist n is_metric_of REAL n
    end;
  end;
 
- definition let n;
+ definition let n be Nat;
   func Euclid n -> strict MetrSpace equals
       MetrStruct(#REAL n,Pitag_dist n#);
   coherence
@@ -531,7 +546,7 @@ theorem Th24: Pitag_dist n is_metric_of REAL n
    end;
  end;
 
- registration let n;
+ registration let n be Nat;
   cluster Euclid n -> non empty;
  coherence
  proof
@@ -539,13 +554,13 @@ theorem Th24: Pitag_dist n is_metric_of REAL n
  end;
  end;
 
- definition let n;
+ definition let n be Nat;
   func TOP-REAL n -> strict TopSpace equals
       TopSpaceMetr (Euclid n);
   coherence;
  end;
 
-registration let n;
+registration let n be Nat;
  cluster TOP-REAL n -> non empty;
  coherence;
 end;
@@ -735,8 +750,7 @@ theorem Th50: p1 - (p2 + p3) = p1 - p2 - p3
 
 theorem   p1 - (p2 - p3) = p1 - p2 + p3
  proof
-  thus p1 - (p2 - p3) = p1 - (p2 + -p3) by FINSEQOP:89 .= p1 - p2 - -p3 by
-Th50
+  thus p1 - (p2 - p3) = p1 - (p2 + -p3) by FINSEQOP:89 .= p1 - p2 - -p3 by Th50
    .= p1 - p2 + --p3 by FINSEQOP:89 .= p1 - p2 + p3;
  end;
 

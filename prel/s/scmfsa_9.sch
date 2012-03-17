@@ -3,9 +3,9 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="XXREAL_0"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -16,19 +16,22 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="50"/>
 </Typ>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="50"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="50"/>
 </Typ>
 <Not>
@@ -40,8 +43,9 @@
 <Num nr="0"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="50"/>
 </Typ>
 <Not>
@@ -72,8 +76,9 @@
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="50"/>
 </Typ>
 <Not>
@@ -83,7 +88,7 @@
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1">
-<Func kind="K" nr="59">
+<Func kind="K" nr="60">
 <Var nr="1"/>
 <Num nr="1"/>
 </Func>

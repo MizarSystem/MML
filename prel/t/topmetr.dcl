@@ -99,7 +99,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -110,7 +110,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="193"/>
+<Func kind="K" nr="194"/>
 <Cluster>
 <Adjective nr="20" value="false"/>
 <Adjective nr="27"/>
@@ -128,7 +128,7 @@
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="193"/>
+<Func kind="K" nr="194"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">

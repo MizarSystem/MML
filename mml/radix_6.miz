@@ -10,9 +10,12 @@ environ
       GROUP_1, RELAT_1, RLVECT_1, FUNCT_1, RADIX_5, RADIX_6;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, INT_1, NAT_1, NAT_D,
       NEWTON, BINARITH, RADIX_1, FINSEQ_4, FINSEQ_1, FUNCT_1, RELSET_1,
+      PARTFUN1,
       GR_CY_1, RADIX_5;
- constructors NAT_1, NAT_D, FINSEQ_4, NEWTON, BINARITH, GR_CY_1, RADIX_5;
- registrations RELSET_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1, INT_1;
+ constructors REAL_1, NAT_1, NAT_D, PARTFUN1,
+FINSEQ_4, NEWTON, BINARITH, GR_CY_1,
+      RADIX_5;
+ registrations RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems RADIX_1, RADIX_2, RADIX_4, RADIX_5, REAL_1, REAL_2, INT_1, INT_3,
       NAT_1, NAT_2, FINSEQ_1, FINSEQ_2, RVSUM_1, NEWTON, PREPOWER, FUNCT_1,
@@ -63,7 +66,7 @@ then A6:     i in Seg (m+1) by FINSEQ_2:9;
       end;
       then SDDec(Fmin(m+1,m,k))
         = SDDec(Fmin(m,m,k)) + (Radix(k) |^ m)*DigA(Fmin(m+1,m,k),m+1)
-                                                            by RADIX_2:10;
+        by RADIX_2:10;
       hence thesis by A4;
     end;
 
@@ -173,7 +176,7 @@ end;
 begin :: Definitions of Upper 3 Digits of Radix-$2^k$ SD number and its property
 
 definition
-  let i,m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+  let i,m,k be Nat, r be Tuple of (m+2),(k-SD);
   assume
 A1: i in Seg (m+2);
   func M0Digit(r,i) -> Element of k-SD equals
@@ -195,20 +198,20 @@ consistency;
 end;
 
 definition
-  let m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+  let m,k be Nat, r be Tuple of (m+2),(k-SD);
   func M0(r) -> Tuple of (m+2),k-SD means
     :Def2:
-    for i be Element of NAT st i in Seg (m+2) holds DigA(it,i) = M0Digit(r,i);
+    for i be Nat st i in Seg (m+2) holds DigA(it,i) = M0Digit(r,i);
 existence
  proof
-    deffunc F1(Element of NAT) = M0Digit(r,$1);
+    deffunc F1(Nat) = M0Digit(r,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = m+2 and
-A2:   for j be Element of NAT st j in Seg (m+2) holds z.j = F1(j)
+A2:   for j be Nat st j in Seg (m+2) holds z.j = F1(j)
 from FINSEQ_2:sch 1;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3:   i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -217,12 +220,12 @@ A3:   i in Seg (m+2);
 uniqueness
   proof
       let k1,k2 be Tuple of (m+2),k-SD such that
-A4:  for i be Element of NAT st i in Seg (m+2) holds DigA(k1,i)
+A4:  for i be Nat st i in Seg (m+2) holds DigA(k1,i)
  = M0Digit(r,i) and
-A5:  for i be Element of NAT st i in Seg (m+2) holds DigA(k2,i)
+A5:  for i be Nat st i in Seg (m+2) holds DigA(k2,i)
  = M0Digit(r,i);
 A6:  len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume
 A7:      j in Seg (m+2);
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -235,7 +238,7 @@ A7:      j in Seg (m+2);
   end;
 end;
 
-definition let i,m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+definition let i,m,k be Nat, r be Tuple of (m+2),(k-SD);
   assume that
 A1:  k >= 2 and
 A2: i in Seg (m+2);
@@ -257,21 +260,21 @@ coherence
 consistency;
 end;
 
-definition let m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+definition let m,k be Nat, r be Tuple of (m+2),(k-SD);
   func Mmax(r) -> Tuple of (m+2),k-SD means
     :Def4:
-    for i be Element of NAT st i in Seg (m+2) holds DigA(it,i) =
+    for i be Nat st i in Seg (m+2) holds DigA(it,i) =
     MmaxDigit(r,i);
 existence
   proof
-    deffunc F(Element of NAT) = MmaxDigit(r,$1);
+    deffunc F(Nat) = MmaxDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = m+2 and
-A2:   for j be Element of NAT st j in Seg (m+2) holds
+A2:   for j be Nat st j in Seg (m+2) holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3:   i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -280,12 +283,12 @@ A3:   i in Seg (m+2);
 uniqueness
   proof
       let k1,k2 be Tuple of (m+2),k-SD such that
-A4:  for i be Element of NAT st i in Seg (m+2) holds DigA(k1,i) =
+A4:  for i be Nat st i in Seg (m+2) holds DigA(k1,i) =
 MmaxDigit(r,i) and
-A5:  for i be Element of NAT st i in Seg (m+2) holds DigA(k2,i) =
+A5:  for i be Nat st i in Seg (m+2) holds DigA(k2,i) =
 MmaxDigit(r,i);
 A6:  len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume
 A7:      j in Seg (m+2);
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -298,7 +301,7 @@ A7:      j in Seg (m+2);
   end;
 end;
 
-definition let i,m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+definition let i,m,k be Nat, r be Tuple of (m+2),(k-SD);
   assume that
 A1:  k >= 2 and
 A2:  i in Seg (m+2);
@@ -328,21 +331,21 @@ A4: k-SD = {w where w is Element of INT:w <= Radix(k)-1 & w >= -Radix(k)+1}
 consistency;
 end;
 
-definition let m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+definition let m,k be Nat, r be Tuple of (m+2),(k-SD);
   func Mmin(r) -> Tuple of (m+2),k-SD means
     :Def6:
-    for i be Element of NAT st i in Seg (m+2) holds DigA(it,i) =
+    for i be Nat st i in Seg (m+2) holds DigA(it,i) =
     MminDigit(r,i);
 existence
   proof
-    deffunc F(Element of NAT) = MminDigit(r,$1);
+    deffunc F(Nat) = MminDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = m+2 and
-A2:   for j be Element of NAT st j in Seg (m+2) holds
+A2:   for j be Nat st j in Seg (m+2) holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3:   i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -351,12 +354,12 @@ A3:   i in Seg (m+2);
 uniqueness
   proof
       let k1,k2 be Tuple of (m+2),k-SD such that
-A4:  for i be Element of NAT st i in Seg (m+2) holds DigA(k1,i) =
+A4:  for i be Nat st i in Seg (m+2) holds DigA(k1,i) =
 MminDigit(r,i) and
-A5:  for i be Element of NAT st i in Seg (m+2) holds DigA(k2,i) =
+A5:  for i be Nat st i in Seg (m+2) holds DigA(k2,i) =
 MminDigit(r,i);
 A6:  len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume
 A7:      j in Seg (m+2);
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -445,7 +448,7 @@ end;
 
 begin :: Properties of minimum digits of Radix-$2^k$ SD number
 
-definition let n,k be Element of NAT, x be Integer;
+definition let n,k be Nat, x be Integer;
   pred x needs_digits_of n,k means
   :Def7:
     x < (Radix(k) |^ n) & x >= (Radix(k) |^ (n-'1));
@@ -773,7 +776,7 @@ end;
 begin :: How to identify the range of modulo arithmetic result
 
 definition
-  let i,m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+  let i,m,k be Nat, r be Tuple of (m+2),(k-SD);
   assume
 A1: i in Seg (m+2);
   func MmaskDigit(r,i) -> Element of k-SD equals
@@ -795,21 +798,21 @@ consistency;
 end;
 
 definition
-  let m,k be Element of NAT, r be Tuple of (m+2),(k-SD);
+  let m,k be Nat, r be Tuple of (m+2),(k-SD);
   func Mmask(r) -> Tuple of (m+2),k-SD means
     :Def9:
-    for i be Element of NAT st i in Seg (m+2) holds DigA(it,i) =
+    for i be Nat st i in Seg (m+2) holds DigA(it,i) =
     MmaskDigit(r,i);
 existence
  proof
-    deffunc F(Element of NAT) = MmaskDigit(r,$1);
+    deffunc F(Nat) = MmaskDigit(r,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = m+2 and
-A2:   for j be Element of NAT st j in Seg (m+2) holds z.j = F(j)
+A2:   for j be Nat st j in Seg (m+2) holds z.j = F(j)
 from FINSEQ_2:sch 1;
     reconsider z as Tuple of (m+2),(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3:   i in Seg (m+2);
     hence DigA(z,i) = z.i by RADIX_1:def 3
@@ -818,12 +821,12 @@ A3:   i in Seg (m+2);
 uniqueness
   proof
       let k1,k2 be Tuple of (m+2),k-SD such that
-A4:  for i be Element of NAT st i in Seg (m+2) holds DigA(k1,i) =
+A4:  for i be Nat st i in Seg (m+2) holds DigA(k1,i) =
 MmaskDigit(r,i) and
-A5:  for i be Element of NAT st i in Seg (m+2) holds DigA(k2,i) =
+A5:  for i be Nat st i in Seg (m+2) holds DigA(k2,i) =
 MmaskDigit(r,i);
 A6:  len k1 = m+2 & len k2 = m+2 by FINSEQ_2:109;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume
 A7:      j in Seg (m+2);
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -894,7 +897,7 @@ A3:    SDDec(Mmask(r)) > 0;
       hence thesis by A3,REAL_2:106;
 end;
 
-definition let i,m,k be Element of NAT;
+definition let i,m,k be Nat;
   assume
 A1:  k >= 2;
   func FSDMinDigit(m,k,i) -> Element of k-SD equals
@@ -929,21 +932,21 @@ A5:   Radix(k) > 2 by A1,RADIX_4:1;
 consistency;
 end;
 
-definition let n,m,k be Element of NAT;
+definition let n,m,k be Nat;
   func FSDMin(n,m,k) -> Tuple of n,k-SD means
     :Def11:
-    for i be Element of NAT st i in Seg n holds DigA(it,i) =
+    for i be Nat st i in Seg n holds DigA(it,i) =
     FSDMinDigit(m,k,i);
 existence
   proof
-    deffunc F(Element of NAT) = FSDMinDigit(m,k,$1);
+    deffunc F(Nat) = FSDMinDigit(m,k,$1);
     consider z being FinSequence of k-SD such that
 A1:   len z = n and
-A2:   for j be Element of NAT st j in Seg n holds
+A2:   for j be Nat st j in Seg n holds
         z.j = F(j) from FINSEQ_2:sch 1;
     reconsider z as Tuple of n,(k-SD) by A1,FINSEQ_2:110;
     take z;
-    let i be Element of NAT;
+    let i be Nat;
     assume
 A3:   i in Seg n;
     then DigA(z,i) = z.i by RADIX_1:def 3;
@@ -952,12 +955,12 @@ A3:   i in Seg n;
 uniqueness
   proof
       let k1,k2 be Tuple of n,k-SD such that
-A4:  for i be Element of NAT st i in Seg n holds DigA(k1,i) =
+A4:  for i be Nat st i in Seg n holds DigA(k1,i) =
 FSDMinDigit(m,k,i) and
-A5:  for i be Element of NAT st i in Seg n holds DigA(k2,i) =
+A5:  for i be Nat st i in Seg n holds DigA(k2,i) =
 FSDMinDigit(m,k,i);
 A6:  len k1 = n & len k2 = n by FINSEQ_2:109;
-          now let j be Element of NAT;
+          now let j be Nat;
         assume
 A7:      j in Seg n;
         then k1.j = DigA(k1,j) by RADIX_1:def 3
@@ -1053,11 +1056,10 @@ A14:              DigA(FSDMin(n,m,k),i)
       hence thesis by A1,A2,RADIX_5:9;
 end;
 
-definition let n,m,k be Element of NAT, r be Tuple of m+2,k-SD;
+definition let n,m,k be Nat, r be Tuple of m+2,k-SD;
   pred r is_Zero_over n means
   :Def12:
-    for i be Element of NAT st i > n holds
-      DigA(r,i) = 0;
+    for i be Nat st i > n holds DigA(r,i) = 0;
 end;
 
 theorem

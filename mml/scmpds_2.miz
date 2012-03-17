@@ -8,24 +8,22 @@ environ
 
  vocabularies AMI_1, INT_1, AMI_2, GR_CY_1, SCMPDS_1, RELAT_1, FUNCT_1, BOOLE,
       CAT_1, FINSET_1, AMI_3, AMI_5, ORDINAL2, FINSEQ_1, MCART_1, ABSVALUE,
-      CARD_3, ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2, TARSKI,
-      FUNCT_7;
+      CARD_3, ARYTM_1, NAT_1, CQC_LANG, FUNCT_4, SCMPDS_2, TARSKI, FUNCT_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       FUNCT_1, FUNCT_2, INT_1, NAT_1, MCART_1, FUNCOP_1, CARD_1, CARD_3,
-      ZFMISC_1, STRUCT_0, RELAT_1, FUNCT_4,
-      FINSET_1, FINSEQ_1, FINSEQ_4, FUNCT_7,
-      AMI_1, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, INT_2, FINSEQ_4, CAT_2,
-      AMI_5, SCMPDS_1;
+      ZFMISC_1, STRUCT_0, RELAT_1, FUNCT_4, FINSET_1, FINSEQ_1, FINSEQ_4,
+      FUNCT_7, AMI_1, AMI_2, SCMPDS_1, AMI_3, INT_2, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2, FINSEQ_4, CAT_2, AMI_5,
+      SCMPDS_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
-      ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
-      AMI_1, AMI_2, SCMPDS_1;
+      FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2,
+      SCMPDS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, FUNCOP_1, AMI_2, CARD_1, SCMPDS_1;
  theorems NAT_1, FUNCT_1, TARSKI, ZFMISC_1, ENUMSET1, AMI_2, FUNCOP_1, FUNCT_4,
       AMI_1, CARD_3, FUNCT_2, MCART_1, INT_1, GR_CY_1, SCMPDS_1, AMI_3, AMI_5,
-      ABSVALUE, NAT_2, ORDINAL1, STRUCT_0, XBOOLE_0, XBOOLE_1, RELAT_1,
-      XREAL_1, COMPLEX1, SYSREL, FUNCT_7,XCMPLX_1, ARYTM_3;
+      ABSVALUE, ORDINAL1, STRUCT_0, XBOOLE_0, XBOOLE_1, RELAT_1, XREAL_1,
+      SYSREL, FUNCT_7, ARYTM_3;
  schemes FUNCT_2;
 
 begin :: The SCMPDS Computer
@@ -80,7 +78,7 @@ registration
   proof
     SCMPDS is IC-Ins-separated
    proof
-     IC SCMPDS = In(NAT,SCM-Memory) .= NAT by FUNCT_7:def 1,AMI_2:30;
+     IC SCMPDS = In(NAT,SCM-Memory) .= NAT by AMI_2:30,FUNCT_7:def 1;
      then ObjectKind IC SCMPDS =
             the Instruction-Locations of SCMPDS by SCMPDS_1:def 4;
   hence thesis by AMI_1:def 11;
@@ -99,11 +97,11 @@ canceled;
 
 reserve s for State of SCMPDS;
 
-theorem Tx:
+theorem Th6:
   IC SCMPDS = NAT
  proof
   thus IC SCMPDS = In(NAT,SCM-Memory)
-      .= NAT by FUNCT_7:def 1,AMI_2:30;
+      .= NAT by AMI_2:30,FUNCT_7:def 1;
  end;
 
 begin :: The Memory Structure
@@ -132,8 +130,7 @@ theorem
 theorem
    for I being Int_position holds I is Data-Location
 proof let I be Int_position;
-   I in SCM-Data-Loc by Def2; hence I is Data-Location by AMI_3:def 1,
-def 2;
+   I in SCM-Data-Loc by Def2; hence I is Data-Location by AMI_3:def 1,def 2;
 end;
 
 theorem Th13:
@@ -996,7 +993,7 @@ A6:   SCM-Memory = dom g1 & SCM-Memory = dom g2
          now let x be set such that
 A7:  x in SCM-Memory;
      A8:   x in {IC SCMPDS} \/ SCM-Data-Loc or x in SCM-Instr-Loc
-          by A7,XBOOLE_0:def 2,Tx;
+          by A7,Th6,XBOOLE_0:def 2;
      per cases by A8,XBOOLE_0:def 2;
      suppose x in {IC SCMPDS};
 then   x = IC SCMPDS by TARSKI:def 1;
@@ -1057,8 +1054,8 @@ A1:  I = [ i, <*mk,k1*>];
 A2: Exec(a:=k1, s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P21address = mk & I P22const = k1 by A1,SCMPDS_1:35;
-  thus Exec(a:=k1, s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(a:=k1, s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(a:=k1, s).a = S1.mk by A2,SCMPDS_1:27
        .= k1 by A3,SCMPDS_1:30;
   let b;
@@ -1084,8 +1081,8 @@ A1:  I = [ i, <*mk,k1,k2*>];
 A2: Exec((a,k1):=k2, s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
-  thus Exec((a,k1):=k2, s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec((a,k1):=k2, s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec((a,k1):=k2, s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= k2 by A3,SCMPDS_1:30;
@@ -1113,8 +1110,8 @@ A2: Exec((a,k1):=(b,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
-  thus Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec((a,k1):=(b,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec((a,k1):=(b,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= s.DataLoc(s.b,k2) by A3,SCMPDS_1:30;
@@ -1141,8 +1138,8 @@ A1:  I = [ i, <*mk,k1,k2*>];
 A2: Exec(AddTo(a,k1,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P31address = mk & I P32const = k1 & I P33const = k2 by A1,SCMPDS_1:36;
-  thus Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(AddTo(a,k1,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(AddTo(a,k1,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= s.DataLoc(s.a,k1)+k2 by A3,SCMPDS_1:30;
@@ -1173,8 +1170,8 @@ A2: Exec(AddTo(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
-  thus Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(AddTo(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(AddTo(a,k1,b,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= s.DataLoc(s.a,k1) + s.DataLoc(s.b,k2) by A3,SCMPDS_1:30;
@@ -1205,8 +1202,8 @@ A2: Exec(SubFrom(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
-  thus Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(SubFrom(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(SubFrom(a,k1,b,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= s.DataLoc(s.a,k1) - s.DataLoc(s.b,k2) by A3,SCMPDS_1:30;
@@ -1237,8 +1234,8 @@ A2: Exec(MultBy(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= (SCM-Chg(S1, Next IC S)) by A1,SCMPDS_1:def 24;
 A3: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
-  thus Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(MultBy(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(MultBy(a,k1,b,k2), s).DataLoc(s.a,k1)
        = S1.A2 by A2,A3,SCMPDS_1:27
        .= s.DataLoc(s.a,k1) * s.DataLoc(s.b,k2) by A3,SCMPDS_1:30;
@@ -1274,8 +1271,8 @@ A2: Exec(Divide(a,k1,b,k2), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= SCM-Chg(S2, Next IC S) by A1,SCMPDS_1:def 24;
 A3: I P41address = da & I P42address = db & I P43const = k1
     & I P44const = k2 by A1,SCMPDS_1:37;
-  thus Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(Divide(a,k1,b,k2), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
     set Da=DataLoc(s.a,k1),
         Db=DataLoc(s.b,k2);
     hereby
@@ -1333,7 +1330,7 @@ A3: I const_INT = k1 by A1,SCMPDS_1:34;
    consider n be Element of NAT such that
 A4: n=IC s & ICplusConst(s,k1)=abs(n+k1) by Def20;
    thus Exec(goto k1, s).IC SCMPDS =ICplusConst(s,k1)
-            by A2,A3,SCMPDS_1:26,A4,Tx;
+            by A2,A3,A4,Th6,SCMPDS_1:26;
   let a;
   reconsider mn = a as Element of SCM-Data-Loc by Def2;
   thus Exec(goto k1, s).a = S.mn by A2,SCMPDS_1:27
@@ -1365,15 +1362,15 @@ A4: n=IC s & ICplusConst(s,k2)=abs(n+k2) by Def20;
          Exec((a,k1)<>0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A5: s.Da <> 0;
    reconsider m=IC S as Element of SCM-Memory;
-    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
-      .=ICplusConst(s,k2) by A3,A5,FUNCOP_1:def 8,A4,Tx;
+    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .=ICplusConst(s,k2) by A3,A4,A5,Th6,FUNCOP_1:def 8;
    end;
   thus s.Da = 0 implies
          Exec((a,k1)<>0_goto k2,s).IC SCMPDS = Next IC s
   proof assume A6: s.Da = 0;
-    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
+    thus Exec((a,k1)<>0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
       .= Next IC S by A3,A6,FUNCOP_1:def 8
-      .= Next IC s by Th55,Tx;
+      .= Next IC s by Th6,Th55;
    end;
   reconsider mn = b as Element of SCM-Data-Loc by Def2;
   thus Exec((a,k1)<>0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
@@ -1405,15 +1402,15 @@ A4: n=IC s & ICplusConst(s,k2)=abs(n+k2) by Def20;
          Exec((a,k1)<=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A5: s.Da <= 0;
    reconsider m=IC S as Element of SCM-Memory;
-    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
-      .=ICplusConst(s,k2) by A3,A5,AMI_2:def 14,A4,Tx;
+    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .=ICplusConst(s,k2) by A3,A4,A5,Th6,AMI_2:def 14;
    end;
   thus s.Da > 0 implies
          Exec((a,k1)<=0_goto k2,s).IC SCMPDS = Next IC s
   proof assume A6: s.Da > 0;
-    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
+    thus Exec((a,k1)<=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
       .= Next IC S by A3,A6,AMI_2:def 14
-      .= Next IC s by Th55,Tx;
+      .= Next IC s by Th6,Th55;
    end;
   reconsider mn = b as Element of SCM-Data-Loc by Def2;
   thus Exec((a,k1)<=0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
@@ -1445,15 +1442,15 @@ A4: n=IC s & ICplusConst(s,k2)=abs(n+k2) by Def20;
          Exec((a,k1)>=0_goto k2,s).IC SCMPDS = ICplusConst(s,k2)
   proof assume A5: s.Da >= 0;
    reconsider m=IC S as Element of SCM-Memory;
-    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
-      .=ICplusConst(s,k2) by A3,A5,AMI_2:def 14,A4,Tx;
+    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
+      .=ICplusConst(s,k2) by A3,A4,A5,Th6,AMI_2:def 14;
    end;
   thus s.Da < 0 implies
          Exec((a,k1)>=0_goto k2,s).IC SCMPDS = Next IC s
   proof assume A6: s.Da < 0;
-    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,SCMPDS_1:26,Tx
+    thus Exec((a,k1)>=0_goto k2, s).IC SCMPDS = IF by A2,Th6,SCMPDS_1:26
       .= Next IC S by A3,A6,AMI_2:def 14
-      .= Next IC s by Th55,Tx;
+      .= Next IC s by Th6,Th55;
    end;
   reconsider mn = b as Element of SCM-Data-Loc by Def2;
   thus Exec((a,k1)>=0_goto k2, s).b = S.mn by A2,SCMPDS_1:27
@@ -1478,7 +1475,7 @@ A2: Exec(return a, s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= SCM-Chg(S1,lc) by A1,SCMPDS_1:def 24;
 A3: I address_1 = da by A1,SCMPDS_1:33;
     hence Exec(return a, s).IC SCMPDS =(abs(s.DataLoc(s.a,RetIC)))+2
-               by A2,SCMPDS_1:26,Tx;
+               by A2,Th6,SCMPDS_1:26;
    thus Exec(return a, s).a = S1.da by A2,SCMPDS_1:27
        .= s.DataLoc(s.a,RetSP) by A3,SCMPDS_1:30;
   let b;
@@ -1506,10 +1503,10 @@ A2: Exec(saveIC(a,k1), s) = SCM-Exec-Res(I,S) by SCMPDS_1:def 25
    .= SCM-Chg(S1,Next IC S) by A1,SCMPDS_1:def 24;
 A3: I P21address = da & I P22const = k1 by A1,SCMPDS_1:35;
     set DL=DataLoc(s.a,k1);
-  thus Exec(saveIC(a,k1), s).IC SCMPDS = Next IC S by A2,SCMPDS_1:26,Tx
-    .= Next IC s by Th55,Tx;
+  thus Exec(saveIC(a,k1), s).IC SCMPDS = Next IC S by A2,Th6,SCMPDS_1:26
+    .= Next IC s by Th6,Th55;
   thus Exec(saveIC(a,k1), s).DL =S1.A1 by A2,A3,SCMPDS_1:27
-       .=IC s by SCMPDS_1:30,Tx;
+       .=IC s by Th6,SCMPDS_1:30;
   let b;
   reconsider mn = b as Element of SCM-Data-Loc by Def2;
   assume
@@ -1589,7 +1586,7 @@ A2: dom(NAT .--> loc) = {NAT} by FUNCOP_1:19;
     then NAT in dom (NAT.--> loc) by TARSKI:def 1;
 then A3: t.NAT = (NAT.--> loc).NAT by FUNCT_4:14
        .= loc by FUNCOP_1:87;
-A4: {NAT} c= SCM-Memory by ZFMISC_1:37,AMI_2:30;
+A4: {NAT} c= SCM-Memory by AMI_2:30,ZFMISC_1:37;
 A5: dom S = dom SCMPDS-OK by CARD_3:18;
 A6: dom t = dom S \/ dom (NAT.--> loc) by FUNCT_4:def 1
          .= SCM-Memory \/ dom (NAT.--> loc) by A5,FUNCT_2:def 1
@@ -1604,7 +1601,7 @@ A8:     x in dom f;
       suppose
 A9:     x = NAT;
       reconsider loc as Element of SCM-Instr-Loc;
-           f.x = SCM-Instr-Loc by A9,SCMPDS_1:18,AMI_2:30;
+           f.x = SCM-Instr-Loc by A9,AMI_2:30,SCMPDS_1:18;
       hence t.x in f.x by A3,A9;
       end;
       suppose x <> NAT;
@@ -1650,10 +1647,10 @@ A2: now let x be set;
        reconsider n=IC s as Element of SCM-Instr-Loc;
         consider k being Element of NAT such that
      A6: n=k;
-X:      n >= 0 by NAT_1:2;
-       thus Es.x=abs(0+k) by A4,A5,A6,Th66,Tx
-        .= k by A6,ABSVALUE:def 1,X
-        .=S.x by A4,A6,Tx;
+A7:      n >= 0 by NAT_1:2;
+       thus Es.x=abs(0+k) by A4,A5,A6,Th6,Th66
+        .= k by A6,A7,ABSVALUE:def 1
+        .=S.x by A4,A6,Th6;
      end;
      suppose m in SCM-Data-Loc;
          then x in SCM-Data-Loc;
@@ -1687,12 +1684,12 @@ proof
 A1:   Exec(I, s).IC SCMPDS = Next IC s;
     assume
 A2:   I is halting;
-A3: IC s = s.NAT by Tx;
-A4: Exec(I,s).IC SCMPDS = s.NAT by A2,AMI_1:def 8,Tx;
+A3: IC s = s.NAT by Th6;
+A4: Exec(I,s).IC SCMPDS = s.NAT by A2,Th6,AMI_1:def 8;
     reconsider w = s.NAT as Instruction-Location of SCMPDS by A3;
     consider mj being Element of SCM-Instr-Loc such that
 A5:   mj = w & Next w = Next mj by Def19;
-   thus contradiction by A1,A4,A5,A3;
+   thus contradiction by A1,A3,A4,A5;
   end;
 
 theorem Th77:
@@ -1773,7 +1770,7 @@ A2: s.NAT=loc & for d being Int_position holds s.d = 0 by Th74;
 then A3:  (n+k1)*1>=0 by XREAL_1:22;
      consider m be Element of NAT such that
 A4:  m=IC s & ICplusConst(s,k1)=abs(m+k1) by Def20;
-A5: Exec(goto k1, s).IC SCMPDS = abs((n+1+k1)) by A2,A4,Tx,Th66
+A5: Exec(goto k1, s).IC SCMPDS = abs((n+1+k1)) by A2,A4,Th6,Th66
     .= abs(n+1+k1)
     .= abs(n+k1+1)
     .= (abs(n+k1)+abs(1)) by A3,ABSVALUE:24
@@ -1782,7 +1779,7 @@ A5: Exec(goto k1, s).IC SCMPDS = abs((n+1+k1)) by A2,A4,Tx,Th66
     .=(n+k1)+1 by A3,ABSVALUE:def 1
     .=n+1+k1;
      assume goto k1 is halting;
-then Exec(goto k1,s).IC SCMPDS = n+1 by A2,AMI_1:def 8,Tx; hence
+then Exec(goto k1,s).IC SCMPDS = n+1 by A2,Th6,AMI_1:def 8; hence
 contradiction by A1,A5;
 end;
 
@@ -1829,7 +1826,7 @@ A2:   mj = loc & Next loc = Next mj by Def19;
    .=(abs(0))+2 by A1
    .=(0)+2 by ABSVALUE:def 1
    .=0+2
-   .=Next IC s by A1,A2,Tx;
+   .=Next IC s by A1,A2,Th6;
     hence thesis by Th76;
 end;
 
@@ -2059,41 +2056,41 @@ A3:    c = [I1,<*d1,k1*>] & I1 in { 2,3 };
     then consider I1 being Element of Segm 14,
              d1 being Element of SCM-Data-Loc,
              k1,k2 being Element of INT such that
-A6:     c = [I1,<*d1,k1,k2*>] & I1 in { 4,5,6,7,8};
-           now per cases by A6,ENUMSET1:def 3;
+A5:     c = [I1,<*d1,k1,k2*>] & I1 in { 4,5,6,7,8};
+           now per cases by A5,ENUMSET1:def 3;
        case I1 = 4;
         hence SCM-Exec-Res(c,S).l'
           = SCM-Chg(S, IFEQ(S.Address_Add(S,c P31address,c P32const), 0,
            Next IC S,jump_address(S,c P33const ))).l'
-             by A6,SCMPDS_1:def 24
+             by A5,SCMPDS_1:def 24
           .= S.l' by SCMPDS_1:28;
        end;
        case I1 = 5;
         hence SCM-Exec-Res(c,S).l'
          = SCM-Chg(S, IFGT(S.Address_Add(S,c P31address,c P32const), 0,
            Next IC S,jump_address(S,c P33const ))).l'
-             by A6,SCMPDS_1:def 24
+             by A5,SCMPDS_1:def 24
           .= S.l' by SCMPDS_1:28;
        end;
        case I1 = 6;
         hence SCM-Exec-Res(c,S).l'
          = SCM-Chg(S,IFGT(0, S.Address_Add(S,c P31address,c P32const),
            Next IC S,jump_address(S,c P33const ))).l'
-             by A6,SCMPDS_1:def 24
+             by A5,SCMPDS_1:def 24
           .= S.l' by SCMPDS_1:28;
        end;
-       case A7:I1 = 7;
+       case A6:I1 = 7;
         set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),c P33const);
         thus SCM-Exec-Res(c,S).l'
-          =SCM-Chg(SS,Next IC S).l' by A6,A7,SCMPDS_1:def 24
+          =SCM-Chg(SS,Next IC S).l' by A5,A6,SCMPDS_1:def 24
          .= SS.l' by SCMPDS_1:28
          .= S.l' by SCMPDS_1:32;
        end;
-       case A8:I1 = 8;
+       case A7:I1 = 8;
            set SS=SCM-Chg(S,Address_Add(S,c P31address,c P32const),
          S.Address_Add(S,c P31address,c P32const)+ (c P33const));
         thus SCM-Exec-Res(c,S).l'
-           = SCM-Chg(SS,Next IC S).l' by A6,A8,SCMPDS_1:def 24
+           = SCM-Chg(SS,Next IC S).l' by A5,A7,SCMPDS_1:def 24
          .= SS.l' by SCMPDS_1:28
          .= S.l' by SCMPDS_1:32;
       end;
@@ -2104,36 +2101,36 @@ A6:     c = [I1,<*d1,k1,k2*>] & I1 in { 4,5,6,7,8};
       then consider I1 being Element of Segm 14,
                d1,d2 being Element of SCM-Data-Loc,
                k1,k2 being Element of INT such that
-A9:     c = [I1,<*d1,d2,k1,k2*>] & I1 in { 9,10,11,12,13 };
-           now per cases by A9,ENUMSET1:def 3;
-       case A10: I1 = 9;
+A8:     c = [I1,<*d1,d2,k1,k2*>] & I1 in { 9,10,11,12,13 };
+           now per cases by A8,ENUMSET1:def 3;
+       case A9: I1 = 9;
         set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
           S.Address_Add(S,c P41address,c P43const)+
           S.Address_Add(S,c P42address,c P44const));
         thus SCM-Exec-Res(c,S).l'
-         = SCM-Chg(SS,Next IC S).l' by A9,A10,SCMPDS_1:def 24
+         = SCM-Chg(SS,Next IC S).l' by A8,A9,SCMPDS_1:def 24
         .= SS.l' by SCMPDS_1:28
         .= S.l' by SCMPDS_1:32;
        end;
-       case A11: I1 = 10;
+       case A10: I1 = 10;
         set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
           S.Address_Add(S,c P41address,c P43const)-
           S.Address_Add(S,c P42address,c P44const));
         thus SCM-Exec-Res(c,S).l'
-         = SCM-Chg(SS,Next IC S).l' by A9,A11,SCMPDS_1:def 24
+         = SCM-Chg(SS,Next IC S).l' by A8,A10,SCMPDS_1:def 24
         .= SS.l' by SCMPDS_1:28
         .= S.l' by SCMPDS_1:32;
        end;
-       case A12: I1 = 11;
+       case A11: I1 = 11;
         set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
           S.Address_Add(S,c P41address,c P43const)*
           S.Address_Add(S,c P42address,c P44const));
         thus SCM-Exec-Res(c,S).l'
-         = SCM-Chg(SS,Next IC S).l' by A9,A12,SCMPDS_1:def 24
+         = SCM-Chg(SS,Next IC S).l' by A8,A11,SCMPDS_1:def 24
         .= SS.l' by SCMPDS_1:28
         .= S.l' by SCMPDS_1:32;
        end;
-       case A13: I1 = 12;
+       case A12: I1 = 12;
            set SA= SCM-Chg(S,Address_Add(S,c P41address,c P43const),
              S.Address_Add(S,c P41address,c P43const) div
              S.Address_Add(S,c P42address,c P44const)),
@@ -2141,16 +2138,16 @@ A9:     c = [I1,<*d1,d2,k1,k2*>] & I1 in { 9,10,11,12,13 };
              S.Address_Add(S,c P41address,c P43const) mod
              S.Address_Add(S,c P42address,c P44const));
         thus SCM-Exec-Res(c,S).l'
-           = SCM-Chg(SB,Next IC S).l' by A9,A13,SCMPDS_1:def 24
+           = SCM-Chg(SB,Next IC S).l' by A8,A12,SCMPDS_1:def 24
         .= SB.l' by SCMPDS_1:28
         .= SA.l' by SCMPDS_1:32
         .= S.l' by SCMPDS_1:32;
        end;
-       case A14:I1 = 13;
+       case A13:I1 = 13;
          set SS=SCM-Chg(S, Address_Add(S,c P41address,c P43const),
            S.Address_Add(S,c P42address,c P44const));
         thus SCM-Exec-Res(c,S).l'
-         = SCM-Chg(SS,Next IC S).l' by A9,A14,SCMPDS_1:def 24
+         = SCM-Chg(SS,Next IC S).l' by A8,A13,SCMPDS_1:def 24
         .= SS.l' by SCMPDS_1:28
         .= S.l' by SCMPDS_1:32;
       end;
@@ -2166,7 +2163,7 @@ theorem Th97:
   proof
    assume the Instruction-Counter of SCMPDS in
             the Instruction-Locations of SCMPDS;
-    then ex k st NAT = 2*k by Tx;
+    then ex k st NAT = 2*k by Th6;
     then NAT in NAT;
    hence contradiction;
   end;
@@ -2190,11 +2187,11 @@ theorem
  proof
    let i be Element of NAT;
   hereby assume IC SCMPDS = dl.i;
-    then NAT = [1,i] by AMI_3:def 19,Tx;
+    then NAT = [1,i] by Th6,AMI_3:def 19;
    hence contradiction by ARYTM_3:36;
   end;
   assume IC SCMPDS = il.i;
-   then NAT = i by AMI_3:def 20,Tx;
+   then NAT = i by Th6,AMI_3:def 20;
     then NAT in NAT;
   hence contradiction;
  end;

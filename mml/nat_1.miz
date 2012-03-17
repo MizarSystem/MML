@@ -10,7 +10,7 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, XXREAL_0;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0;
- registrations SUBSET_1, ORDINAL1, ARYTM_3, NUMBERS, XXREAL_0, XREAL_0, REAL_1;
+ registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions REAL_1;
  theorems AXIOMS, REAL_1, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, TARSKI;
@@ -46,39 +46,40 @@ then A2:  NAT c= A by A1,AXIOMS:29;
 :: The natural numbers are real numbers therefore some theorems of real
 :: numbers are translated for natural numbers.
 
-definition let n,k be Element of NAT;
-  redefine func n + k -> Element of NAT;
-  coherence
-    proof
-     defpred P[Real] means ex k st $1 = k & n + k is Element of NAT;
-     consider X such that
-A1:  x in X iff P[x] from REAL_1:sch 1;
-      n + 0 = n;
-     then A2:    0 in X by A1;
-      now let x; assume x in X;
-       then consider k such that
-A3:    x = k & n + k is Element of NAT by A1;
-A4:    (n + k) + 1 = n + (k + 1);
-       reconsider k as Element of NAT by ORDINAL1:def 13;
-        k + 1 is Element of NAT & (n + k) + 1 is Element of NAT
-       by A3,AXIOMS:28;
-       hence x + 1 in X by A1,A3,A4;
-     end;
-     then k in X by A2,Th1;
-     then ex m st k = m & n + m is Element of NAT by A1;
-     hence thesis;
-   end;
- end;
-
 registration let n,k be Nat;
   cluster n + k -> natural;
   coherence
   proof
-    reconsider n,k as Element of NAT by ORDINAL1:def 13;
-     n+k is Element of NAT;
-    hence thesis;
+     defpred P[Real] means ex k st $1 = k & n + k is natural;
+     consider X such that
+A1:  x in X iff P[x] from REAL_1:sch 1;
+     n + 0 = n;
+     then A2:    0 in X by A1;
+      now let x; assume x in X;
+       then consider k such that
+A3:    x = k & n + k is natural by A1;
+A4:    (n + k) + 1 = n + (k + 1);
+       reconsider k as Element of NAT by ORDINAL1:def 13;
+       n + k is Element of NAT by A3,ORDINAL1:def 13;
+       then k + 1 is Element of NAT & (n + k) + 1 is Element of NAT
+       by AXIOMS:28;
+       hence x + 1 in X by A1,A3,A4;
+     end;
+     then k in X by A2,Th1;
+     then ex m st k = m & n + m is natural by A1;
+     hence thesis;
   end;
 end;
+
+definition let n be Nat, k be Element of NAT;
+  redefine func n + k -> Element of NAT;
+  coherence by ORDINAL1:def 13;
+ end;
+
+definition let n be Element of NAT, k be Nat;
+  redefine func n + k -> Element of NAT;
+  coherence by ORDINAL1:def 13;
+ end;
 
 :: Now we can form and prove the scheme of induction.
 
@@ -122,32 +123,33 @@ A5:   for k be Element of NAT holds P[k] from Ind(A3,A4);
 :: Like addition, the result of multiplication of two natural numbers is
 :: a natural number.
 
-definition let n,k be Element of NAT;
-  redefine func n * k -> Element of NAT;
-  coherence
-  proof  defpred P[Nat] means n*$1 is Element of NAT;
-A1: P[0];
-A2: for m be Element of NAT holds P[m] implies P[m+1]
-    proof
-      let m be Element of NAT;
-      assume P[m];
-      then reconsider k = n * m as Element of NAT;
-       k + n is Element of NAT;
-      hence n * (m + 1) is Element of NAT;
-    end;
-     for m be Element of NAT holds P[m] from Ind(A1,A2);
-    hence thesis;
-  end;
-end;
-
 registration let n,k be Nat;
   cluster n * k -> natural;
   coherence
   proof
-    reconsider n,k as Element of NAT by ORDINAL1:def 13;
-     n*k is Element of NAT;
+    defpred P[Nat] means n*$1 is natural;
+A1: P[0];
+A2: for m be Nat holds P[m] implies P[m+1]
+    proof
+      let m be Nat;
+      assume P[m];
+      then reconsider k = n * m as Nat;
+      k + n is Nat;
+      hence thesis;
+    end;
+    for m be Nat holds P[m] from NatInd(A1,A2);
     hence thesis;
   end;
+end;
+
+definition let n be Nat, k be Element of NAT;
+  redefine func n * k -> Element of NAT;
+  coherence by ORDINAL1:def 13;
+end;
+
+definition let n be Element of NAT, k be Nat;
+  redefine func n * k -> Element of NAT;
+  coherence by ORDINAL1:def 13;
 end;
 
                 ::::::::::::::::::::
@@ -682,16 +684,7 @@ end;
 
 :: from SCMFSA_7, 2006.03.15, A.T.
 
-theorem
-   k < n iff 1 <= k + 1 & k + 1 <= n
- proof
-   hereby assume A1: k < n;
-       0 + 1 <= k + 1 by XREAL_1:8;
-      hence 1 <= k + 1 & k + 1 <= n by A1,Th13;
-     end;
-   assume 1 <= k + 1 & k + 1 <= n;
-   hence k < n by Th13;
- end;
+canceled; :: NAT_1:25 - refer to NAT_1:11 and NAT_1:13
 
 :: from BINOM, 2006.05.28, A.T.
 

@@ -9,9 +9,9 @@ environ
  vocabularies ROUGHS_1, ARYTM_3, RCOMP_1, SQUARE_1, ARYTM_1, FUNCT_1, BOOLE,
       TARSKI, RELAT_1, RELAT_2, SUBSET_1, ORDERS_1, PARTFUN1, EQREL_1, CARD_1,
       FINSET_1, TOLER_1, NATTRA_1, REALSET1, FUNCT_3, PROB_2, FINSEQ_1, PROB_1,
-      RLVECT_1, FINSEQ_2, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, CARD_1,
-      XXREAL_0, FINSET_1, RELAT_1, RELAT_2, FUNCT_1, FINSEQ_1, RVSUM_1,
+      RLVECT_1, FINSEQ_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
+      CARD_1, XXREAL_0, FINSET_1, RELAT_1, RELAT_2, FUNCT_1, FINSEQ_1, RVSUM_1,
       FINSEQ_2, RELSET_1, PARTFUN1, CARD_3, PROB_2, FUNCT_2, FUNCT_3, REALSET1,
       DOMAIN_1, STRUCT_0, ORDERS_2, EQREL_1, RCOMP_1, TOLER_1, ORDERS_3;
  constructors NAT_1, EQREL_1, PROB_2, RCOMP_1, RVSUM_1, FUNCT_6, REALSET2,
@@ -22,11 +22,11 @@ environ
  requirements BOOLE, SUBSET, ARITHM, NUMERALS, REAL;
  definitions TARSKI, XBOOLE_0, PROB_2, FINSEQ_2, SUBSET_1, CARD_3, STRUCT_0;
  theorems EQREL_1, XBOOLE_0, XBOOLE_1, SUBSET_1, XCMPLX_1, TRIANG_1, CARD_2,
-      CARD_1, REAL_1, TOLER_1, REAL_2, NAT_1, SQUARE_1, GROUP_1, TARSKI,
-      ZFMISC_1, RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2, FUNCT_3, RVSUM_1,
-      FUNCT_6, FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1, FINSEQ_6,
-      FINSEQ_2, ORDERS_2, RELSET_1, SYSREL, FUNCOP_1, REALSET1, ORDERS_1,
-      RCOMP_1, XREAL_0, STRUCT_0;
+      CARD_1, REAL_1, TOLER_1, REAL_2, NAT_1, SQUARE_1, TARSKI, ZFMISC_1,
+      RELAT_1, RELAT_2, ORDERS_3, CHAIN_1, FUNCT_2, FUNCT_3, RVSUM_1, FUNCT_6,
+      FINSEQ_1, FINSEQ_3, PROB_2, FUNCT_1, GRFUNC_1, FINSEQ_6, FINSEQ_2,
+      ORDERS_2, RELSET_1, SYSREL, FUNCOP_1, REALSET1, ORDERS_1, RCOMP_1,
+      XREAL_0, STRUCT_0, ORDINAL1;
  schemes FUNCT_2, BINOP_2, FINSEQ_2;
 
 begin :: Preliminaries
@@ -276,7 +276,7 @@ end;
 
 definition let A be set;
            let X be FinSequence of bool A;
-           let n be Element of NAT;
+           let n be Nat;
   redefine func X.n -> Subset of A;
   coherence
   proof
@@ -1367,22 +1367,21 @@ definition let A be finite Tolerance_Space;
            let x be Element of A;
   func FinSeqM (x,X) -> FinSequence of REAL means :Def10:
     dom it = dom X &
-     for n being Element of NAT st n in dom X
+     for n being Nat st n in dom X
       holds it.n = MemberFunc (X.n, A).x;
   existence
   proof
-    deffunc F(Element of NAT) = MemberFunc (X.$1, A).x;
+    deffunc F(Nat) = MemberFunc (X.$1, A).x;
       ex z being FinSequence of REAL st len z = len X &
-    for j being Element of NAT st j in Seg len X holds z.j = F(j)
-     from FINSEQ_2:sch 1
-;
+    for j being Nat st j in Seg len X holds z.j = F(j)
+     from FINSEQ_2:sch 1;
     then consider z being FinSequence of REAL such that
-A1: len z = len X & for j being Element of NAT st j in Seg len X
+A1: len z = len X & for j being Nat st j in Seg len X
  holds z.j = F(j);
     take z;
     thus dom z = Seg len z by FINSEQ_1:def 3
               .= dom X by A1,FINSEQ_1:def 3;
-    let n be Element of NAT;
+    let n be Nat;
     assume n in dom X;
     then n in Seg len X by FINSEQ_1:def 3;
     hence thesis by A1;
@@ -1391,17 +1390,18 @@ A1: len z = len X & for j being Element of NAT st j in Seg len X
   proof
     let A1, A2 be FinSequence of REAL such that
 A2: dom A1 = dom X &
-    for n being Element of NAT st n in dom X
+    for n being Nat st n in dom X
      holds A1.n = MemberFunc (X.n, A).x and
 A3: dom A2 = dom X &
-    for n being Element of NAT st n in dom X
+    for n being Nat st n in dom X
      holds A2.n = MemberFunc (X.n, A).x;
-      for n being Element of NAT st n in dom A1 holds A1.n = A2.n
+     for n being Nat st n in dom A1 holds A1.n = A2.n
     proof
-      let n be Element of NAT;
+      let n be Nat;
       assume
 A4:   n in dom A1;
-      then A1.n = MemberFunc (X.n, A).x by A2
+      reconsider n as Element of NAT by ORDINAL1:def 13;
+      A1.n = MemberFunc (X.n, A).x by A2,A4
           .= A2.n by A2,A3,A4;
       hence thesis;
     end;
@@ -1430,12 +1430,13 @@ A2: dom p = dom (X^<*y*>) by Def10
 A3: dom q = Seg (len FinSeqM (x, X) + len <* MemberFunc (y, A).x *>)
             by FINSEQ_1:def 7
       .= Seg (len X + 1) by A1,FINSEQ_1:56;
-      for k being Element of NAT st k in dom p holds p.k = q.k
+      for k being Nat st k in dom p holds p.k = q.k
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A4:   k in dom p;
-      then k in dom (X^<*y*>) by Def10;
+      then reconsider k as Element of NAT;
+      k in dom (X^<*y*>) by A4,Def10;
 then A5:   p.k = MemberFunc ((X^<*y*>).k, A).x by Def10;
 A6:   k <= len X + 1 by A2,A4,FINSEQ_1:3;
 A7:   1 <= k by A4,FINSEQ_3:27;

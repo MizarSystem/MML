@@ -6,23 +6,23 @@
 
 environ
 
- vocabularies ORDINAL2, ARYTM, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI,
-      ORDINAL1, CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0,
-      FUNCOP_1, FRAENKEL, FUNCT_4, NAT_1, ZF_REFLE;
+ vocabularies ORDINAL2, FUNCT_1, BOOLE, RELAT_1, FINSET_1, TARSKI, ORDINAL1,
+      CARD_1, PARTFUN1, ARYTM_1, FINSEQ_1, MCART_1, MONOID_0, FUNCOP_1,
+      FRAENKEL, FUNCT_4, ZF_REFLE;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1,
       FRAENKEL, FUNCOP_1, WELLORD2, ORDINAL1, REAL_1, NAT_1, NUMBERS, PARTFUN1,
       FUNCT_4, MCART_1, FINSET_1, CARD_1, XXREAL_0;
  constructors WELLORD2, FUNCOP_1, FUNCT_4, FRAENKEL, XXREAL_0, XREAL_0, NAT_1,
       CARD_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ARYTM_3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
 begin
 
- reserve k,l,m,n,k1 for Element of NAT,
-         a,b,c,i for natural number,
+ reserve k,l,m,n,k1 for Nat,
+         a,b,c,i for Nat,
          x,y,z,y1,y2,X,Y for set,
          f,g for Function;
 
@@ -32,13 +32,13 @@ begin
 ::                                  ::
 ::::::::::::::::::::::::::::::::::::::
 
- definition let n be natural number;
+ definition let n be Nat;
   func Seg n -> set equals
 :: FINSEQ_1:def 1
-   { k : 1 <= k & k <= n };
+   { k where k is Element of NAT: 1 <= k & k <= n };
  end;
 
- definition let n be natural number;
+ definition let n be Nat;
   redefine func Seg n -> Subset of NAT;
  end;
 
@@ -72,7 +72,7 @@ theorem :: FINSEQ_1:11
     Seg a \/ { a+1 } = Seg (a+1);
 
 theorem :: FINSEQ_1:12
-   for k being natural number holds Seg k = Seg(k + 1) \ {k + 1};
+   for k being Nat holds Seg k = Seg(k + 1) \ {k + 1};
 
 ::  Finite Sequences
 
@@ -92,7 +92,7 @@ end;
 
  reserve p,q,r,s,t for FinSequence;
 
-registration let n be natural number;
+registration let n be Nat;
  cluster Seg n -> finite;
 end;
 
@@ -117,13 +117,13 @@ definition let p;
 canceled;
 
 theorem :: FINSEQ_1:14
-    {} is FinSequence;
+  {} is FinSequence;
 
 theorem :: FINSEQ_1:15
-      (ex k st dom f c= Seg k) implies ex p st f c= p;
+  (ex k st dom f c= Seg k) implies ex p st f c= p;
 
 scheme :: FINSEQ_1:sch 1
- SeqEx{A()->Element of NAT,P[set,set]}:
+ SeqEx{A()->Nat,P[set,set]}:
  ex p st dom p = Seg A() & for k st k in Seg A() holds P[k,p.k]
  provided
   for k,y1,y2 st k in Seg A() & P[k,y1] & P[k,y2] holds y1=y2
@@ -131,7 +131,7 @@ scheme :: FINSEQ_1:sch 1
   for k st k in Seg A() ex x st P[k,x];
 
 scheme :: FINSEQ_1:sch 2
- SeqLambda{A()->Element of NAT,F(set) -> set}:
+ SeqLambda{A()->Nat,F(set) -> set}:
  ex p being FinSequence st len p = A() & for k st k in Seg A() holds p.k=F(k);
 
 theorem :: FINSEQ_1:16
@@ -141,7 +141,7 @@ theorem :: FINSEQ_1:17
   dom p = dom q & (for k st k in dom p holds p.k = q.k) implies p=q;
 
 theorem :: FINSEQ_1:18
-  (len p = len q & for k st 1 <=k & k <= len p holds p.k=q.k )
+  len p = len q & (for k st 1 <=k & k <= len p holds p.k=q.k)
       implies p=q;
 
 theorem :: FINSEQ_1:19
@@ -246,15 +246,15 @@ theorem :: FINSEQ_1:35
   len(p^q) = len p + len q;
 
 theorem :: FINSEQ_1:36
-  for k being natural number st
+  for k being Nat st
     (len p + 1 <= k & k <= len p + len q) holds (p^q).k=q.(k-len p);
 
 theorem :: FINSEQ_1:37
-  for k being natural number st
+  for k being Nat st
     len p < k & k <= len(p^q) holds (p^q).k = q.(k - len p);
 
 theorem :: FINSEQ_1:38
-  for k being Element of NAT st k in dom (p^q) holds
+  for k being Nat st k in dom (p^q) holds
     (k in dom p or (ex n st n in dom q & k=len p + n));
 
 theorem :: FINSEQ_1:39
@@ -442,10 +442,10 @@ theorem :: FINSEQ_1:69
 reserve p' for FinSubsequence;
 
 definition let X;
-  given k being natural number such that  X c= Seg k;
+  given k being Nat such that  X c= Seg k;
   func Sgm X -> FinSequence of NAT means
 :: FINSEQ_1:def 13
- rng it = X & for l,m,k1,k2 being natural number st
+ rng it = X & for l,m,k1,k2 being Nat st
                ( 1 <= l & l < m & m <= len it &
                     k1=it.l & k2=it.m) holds k1 < k2;
 end;
@@ -492,8 +492,7 @@ theorem :: FINSEQ_1:77
       X is finite implies ex n st X,Seg n are_equipotent;
 
 theorem :: FINSEQ_1:78
-   (for n being natural number holds card Seg n = n) &
-   for n being Element of NAT holds card n = n & card Card n = n;
+  for n being Nat holds card Seg n = n;
 
 begin :: Addenda
 
@@ -520,7 +519,7 @@ end;
 :: from MATRIX_2
 
 scheme :: FINSEQ_1:sch 5
- SeqDEx{D()->non empty set,A()->Element of NAT,P[set,set]}:
+ SeqDEx{D()->non empty set,A()->Nat,P[set,set]}:
   ex p being FinSequence of D() st dom p = Seg A() &
                      for k st k in Seg A() holds P[k,p.k]
  provided
@@ -529,7 +528,7 @@ scheme :: FINSEQ_1:sch 5
 :: from TOPREAL1
 
 reserve D for set, p for FinSequence of D,
-        m for natural number;
+        m for Nat;
 
 definition let p be FinSequence; let m;
  func p|m -> FinSequence equals
@@ -538,8 +537,7 @@ definition let p be FinSequence; let m;
 end;
 
 definition let D,p,m;
- redefine
- func p|m -> FinSequence of D;
+ redefine func p|m -> FinSequence of D;
 end;
 
 registration let D be set, f be FinSequence of D;
@@ -568,7 +566,7 @@ definition
 :: FINSEQ_1:def 16
    for x,y being set holds [x,y] in it iff x in field R & y in field R &
    ex p being FinSequence st len p >= 1 & p.1 = x & p.(len p) = y &
-    for i being Element of NAT st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
+    for i being Nat st i >= 1 & i < len p holds [p.i,p.(i+1)] in R;
 end;
 
 theorem :: FINSEQ_1:83
@@ -592,20 +590,20 @@ theorem :: FINSEQ_1:84
      p c= q holds len p <= len q;
 
 theorem :: FINSEQ_1:85
-  for p,q being FinSequence, i being Element of NAT st
+  for p,q being FinSequence, i being Nat st
      1 <= i & i <= len p holds (p ^ q).i = p.i;
 
 theorem :: FINSEQ_1:86
-  for p,q being FinSequence, i being Element of NAT st
+  for p,q being FinSequence, i being Nat st
      1 <= i & i <= len q holds (p ^ q).(len p + i) = q.i;
 
 :: from GRAPH_2, 2006.01.09, A.T.
 
-reserve i,j for Element of NAT;
+reserve i,j for Nat;
 
 scheme :: FINSEQ_1:sch 6
- FinSegRng{m, n() -> Element of NAT, F(set)->set, P[Element of NAT]}:
-  {F(i): m()<=i & i<=n() & P[i]} is finite;
+ FinSegRng{m, n() -> Nat, F(set)->set, P[set]}:
+  {F(i) where i is Element of NAT: m()<=i & i<=n() & P[i]} is finite;
 
 theorem :: FINSEQ_1:87
 for x1, x2, x3, x4 being set, p being FinSequence

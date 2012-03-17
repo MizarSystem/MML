@@ -17,10 +17,10 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="FINSEQ_2"/>

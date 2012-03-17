@@ -18,8 +18,8 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -47,7 +47,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="208">
+<Func kind="K" nr="210">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

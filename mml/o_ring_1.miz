@@ -8,12 +8,13 @@ environ
 
  vocabularies VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, SQUARE_1, O_RING_1,
       FINSEQ_4;
- notations SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, FUNCT_1, FINSEQ_1, FINSEQ_4,
-      STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, XXREAL_0;
- constructors XXREAL_0, NAT_1, FINSEQ_4, VECTSP_1;
- registrations RELSET_1, ARYTM_3, XREAL_0, NAT_1, STRUCT_0, VECTSP_1;
+ notations XCMPLX_0, NAT_1, FUNCT_1, FINSEQ_1, PARTFUN1, FINSEQ_4, STRUCT_0,
+      RLVECT_1, GROUP_1, VECTSP_1, XXREAL_0;
+ constructors PARTFUN1, XXREAL_0, NAT_1, FINSEQ_4, VECTSP_1;
+ registrations RELSET_1, XREAL_0, NAT_1, STRUCT_0, VECTSP_1, ORDINAL1;
  requirements NUMERALS, SUBSET, ARITHM;
- theorems REAL_1, NAT_1, FINSEQ_1, FINSEQ_3, XREAL_1, FINSEQ_4, XXREAL_0;
+ theorems REAL_1, NAT_1, FINSEQ_1, FINSEQ_3, XREAL_1, FINSEQ_4, XXREAL_0,
+      PARTFUN1;
  schemes NAT_1;
 
 begin :: Field-like Algebras
@@ -44,21 +45,21 @@ A1:   len f >= 0 by NAT_1:2;
                1<=k & k<=len f by A4,FINSEQ_3:27;
               then 1<=k & k<=len h by A3,A5,XXREAL_0:2;
               then k in dom h by FINSEQ_3:27;
-              then h/.k=h.k by FINSEQ_4:def 4
+              then h/.k=h.k by PARTFUN1:def 8
                      .=f.k by A2,A4,FINSEQ_1:def 7
-                     .=f/.k by A4,FINSEQ_4:def 4;
+                     .=f/.k by A4,PARTFUN1:def 8;
               hence thesis;
             end;
           thus for k be Nat st k in dom g holds h/.(len f + k)=g/.k
             proof
               let k be Nat; assume A6:k in dom g;
               then A7:1<=k & k<=len g by FINSEQ_3:27;
-              then A8:             0+1<=len f+k by XREAL_1:9,A1;
-               len f+k<=len f+len g by XREAL_1:9,A7;
-              then len f + k in dom h by A3,FINSEQ_3:27,A8;
-              then h/.(len f + k)=h.(len f+k) by FINSEQ_4:def 4
+              then A8:             0+1<=len f+k by A1,XREAL_1:9;
+               len f+k<=len f+len g by A7,XREAL_1:9;
+              then len f + k in dom h by A3,A8,FINSEQ_3:27;
+              then h/.(len f + k)=h.(len f+k) by PARTFUN1:def 8
                           .=g.k by A2,A6,FINSEQ_1:def 7
-                          .=g/.k by FINSEQ_4:def 4,A6;
+                          .=g/.k by A6,PARTFUN1:def 8;
               hence thesis;
             end;
         end;
@@ -67,27 +68,27 @@ A1:   len f >= 0 by NAT_1:2;
             A10:for k be Nat st k in dom f holds h/.k=f/.k and
             A11:for k be Nat st k in dom g holds h/.(len f + k)=g/.k;
           A12:len h=len f+len g by A9,FINSEQ_1:def 3;
-          A13:for k be Element of NAT st k in dom f holds h.k=f.k
+          A13:for k be Nat st k in dom f holds h.k=f.k
             proof
-              let k be Element of NAT such that A14:k in dom f;
+              let k be Nat such that A14:k in dom f;
               A15:len f<=len f+len g by NAT_1:11;
                1<=k & k<=len f by A14,FINSEQ_3:27;
               then 1<=k & k<=len h by A12,A15,XXREAL_0:2;
               then k in dom h by FINSEQ_3:27;
-              then h.k=h/.k by FINSEQ_4:def 4
+              then h.k=h/.k by PARTFUN1:def 8
                      .=f/.k by A10,A14
-                     .=f.k by FINSEQ_4:def 4,A14;
+                     .=f.k by A14,PARTFUN1:def 8;
               hence thesis;
             end;
-             for k be Element of NAT st k in dom g holds h.(len f + k)=g.k
+             for k be Nat st k in dom g holds h.(len f + k)=g.k
             proof
-              let k be Element of NAT; assume A16:k in dom g;
+              let k be Nat; assume A16:k in dom g;
               then 1<=k & k<=len g by FINSEQ_3:27;
-              then 0+1<=len f+k & len f+k<=len f+len g by XREAL_1:9,A1;
+              then 0+1<=len f+k & len f+k<=len f+len g by A1,XREAL_1:9;
               then len f + k in dom h by A12,FINSEQ_3:27;
-              then h.(len f + k)=h/.(len f+k) by FINSEQ_4:def 4
+              then h.(len f + k)=h/.(len f+k) by PARTFUN1:def 8
                           .=g/.k by A11,A16
-                          .=g.k by FINSEQ_4:def 4,A16;
+                          .=g.k by A16,PARTFUN1:def 8;
               hence thesis;
             end;
           hence h=f^g by A9,A13,FINSEQ_1:def 7;
@@ -106,7 +107,7 @@ Lm2:
         A2:len f=1 and
         A3:f/.1=x;
          1 in dom f by A2,FINSEQ_3:27;
-        then f.1=x by A3,FINSEQ_4:def 4;
+        then f.1=x by A3,PARTFUN1:def 8;
         hence thesis by A2,FINSEQ_1:57;
     end;
 
@@ -117,7 +118,7 @@ Lm3:
             .=len(f^<*x*>) by FINSEQ_1:35;
       then 1<=len f+1 & len f+1<=len(f^<*x*>) by NAT_1:11;
       then len f+1 in dom(f^<*x*>) by FINSEQ_3:27;
-      then (f^<*x*>)/.(len f+1)=(f^<*x*>).(len f+1) by FINSEQ_4:def 4
+      then (f^<*x*>)/.(len f+1)=(f^<*x*>).(len f+1) by PARTFUN1:def 8
                              .=x by FINSEQ_1:59;
       hence thesis;
     end;
@@ -758,7 +759,7 @@ Lm34:
     proof
       assume A1:f is_a_generation_from_squares & x is_a_square;
       then <*x*> is_a_generation_from_squares by Lm30;
-      hence thesis by Lm33,A1;
+      hence thesis by A1,Lm33;
     end;
 
 Lm35:
@@ -1070,7 +1071,7 @@ Lm50: x is_a_product_of_squares implies <*x*> is_a_generation_from_squares
            n<1+1 by A2,A3,NAT_1:13;
           then n=1 by A3,NAT_1:23;
           then g/.n=x by Lm2;
-          hence thesis by Lm19,A1;
+          hence thesis by A1,Lm19;
         end;
       hence thesis by A2,Def14;
     end;
@@ -1196,7 +1197,7 @@ Lm55:
       A5:for n st n<>0 & n<len g holds f/.n=g/.n
         proof
           let n; assume n<>0 & n<len g;
-          then 1<=n & n<=len f by A3,NAT_1:26,NAT_1:13;
+          then 1<=n & n<=len f by A3,NAT_1:13,26;
           then n in dom f by FINSEQ_3:27;
           hence thesis by Lm1;
         end;
@@ -1256,7 +1257,7 @@ Lm57:
       A5:for n st n<>0 & n<len g holds f/.n=g/.n
       proof
         let n; assume n<>0 & n<len g;
-        then 1<=n & n<=len f by A3,NAT_1:26,NAT_1:13;
+        then 1<=n & n<=len f by A3,NAT_1:13,26;
         then n in dom f by FINSEQ_3:27;
         hence thesis by Lm1;
       end;
@@ -1317,7 +1318,7 @@ Lm59:
    A5:for n st n<>0 & n<len g holds f/.n=g/.n
         proof
           let n; assume n<>0 & n<len g;
-          then 1<=n & n<=len f by A3,NAT_1:26,NAT_1:13;
+          then 1<=n & n<=len f by A3,NAT_1:13,26;
           then n in dom f by FINSEQ_3:27;
           hence thesis by Lm1;
         end;
@@ -1434,7 +1435,7 @@ Lm63:
       A3:(f^g) is_a_generation_from_squares by A1,A2,Lm33;
       A4:len f<>0 by A1,Def14;
           len f<=len f+len g by NAT_1:11;
-      then A5:len f<>0 & len f<=len(f^g) by A1,FINSEQ_1:35,Def14;
+      then A5:len f<>0 & len f<=len(f^g) by A1,Def14,FINSEQ_1:35;
       A6:len g<>0 by A2,Def14;
       then A7:len f+len g<>0 & len f+len g<=len(f^g) by FINSEQ_1:35,NAT_1:7;
        1<=len f & len f<=len f by A4,NAT_1:26;
@@ -1585,7 +1586,7 @@ Lm71:
     assume A1:x is_a_square & y is_a_product_of_squares;
     then A2:x is_generated_from_squares by Lm31;
      y is_generated_from_squares by A1,Lm49;
-    hence thesis by Lm64,A2;
+    hence thesis by A2,Lm64;
   end;
 
 Lm72:
@@ -1594,7 +1595,7 @@ Lm72:
   proof
     assume A1:x is_a_square & y is_generated_from_squares;
     then x is_generated_from_squares by Lm31;
-    hence thesis by Lm64,A1;
+    hence thesis by A1,Lm64;
   end;
 
 Lm73:
@@ -1604,7 +1605,7 @@ Lm73:
     assume A1:x is_a_square & y is_a_sum_of_products_of_squares;
     then A2:x is_generated_from_squares by Lm31;
      y is_generated_from_squares by A1,Lm54;
-    hence thesis by Lm64,A2;
+    hence thesis by A2,Lm64;
   end;
 
 Lm74:
@@ -1632,7 +1633,7 @@ theorem
   y is_a_product_of_squares or y is_a_sum_of_products_of_squares or
   y is_an_amalgam_of_squares or y is_a_sum_of_amalgams_of_squares or
   y is_generated_from_squares) implies x+y is_generated_from_squares
-    by Lm70,Lm71,Lm73,Lm74,Lm75,Lm72;
+    by Lm70,Lm71,Lm72,Lm73,Lm74,Lm75;
 
 theorem
    x is_a_sum_of_squares & y is_a_sum_of_squares
@@ -2166,7 +2167,7 @@ Lm83:
       A5:for n st n<>0 & n<len g holds f/.n=g/.n
         proof
           let n; assume n<>0 & n<len g;
-          then 1<=n & n<=len f by A3,NAT_1:26,NAT_1:13;
+          then 1<=n & n<=len f by A3,NAT_1:13,26;
           then n in dom f by FINSEQ_3:27;
           hence thesis by Lm1;
         end;
@@ -2206,7 +2207,7 @@ Lm84:
       A1:f is_an_Amalgam_of_squares and
       A2:g is_an_Amalgam_of_squares;
       A3:len f<>0 & len f<=len f by A1,Def10;
-       len f<>0 & len f<=len f+len g by A1,NAT_1:11,Def10;
+       len f<>0 & len f<=len f+len g by A1,Def10,NAT_1:11;
       then A4:len f<>0 & len f<=len(f^g) by FINSEQ_1:35;
       A5:len g<>0 & len g<=len g by A2,Def10;
       then A6:len f+len g<>0 & len f+len g<=len(f^g) by FINSEQ_1:35,NAT_1:7;
@@ -2226,7 +2227,7 @@ Lm85:
       A3:f^g is_a_generation_from_squares by A1,A2,Lm33;
       A4:len f<>0 by A1,Def14;
        len f<=len f+len g by NAT_1:11;
-      then A5:len f<>0 & len f<=len(f^g) by A1,FINSEQ_1:35,Def14;
+      then A5:len f<>0 & len f<=len(f^g) by A1,Def14,FINSEQ_1:35;
       A6:len g<>0 by A2,Def14;
       then A7:len f+len g<>0 & len f+len g<=len(f^g) by FINSEQ_1:35,NAT_1:7;
        1<=len f & len f<=len f by A4,NAT_1:26;
@@ -2306,7 +2307,7 @@ theorem
     A1:x is_a_square and
     A2:y is_an_amalgam_of_squares;
      x is_an_amalgam_of_squares by A1,Lm17;
-    hence thesis by Lm86,A2;
+    hence thesis by A2,Lm86;
   end;
 
 theorem
@@ -2769,7 +2770,7 @@ theorem
     A1:x is_generated_from_squares and
     A2:y is_a_square;
      y is_generated_from_squares by A2,Lm31;
-    hence thesis by Lm87,A1;
+    hence thesis by A1,Lm87;
   end;
 
 theorem

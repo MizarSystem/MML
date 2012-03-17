@@ -3,9 +3,9 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="ENUMSET1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -115,7 +115,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="12">
+<Func kind="K" nr="25">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -131,7 +131,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
+<Func kind="K" nr="22">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -151,7 +151,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="10">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -272,7 +272,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="9">
+<Func kind="K" nr="22">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -292,7 +292,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="10">
+<Func kind="K" nr="23">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -335,7 +335,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="155">
+<Func kind="K" nr="157">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -355,7 +355,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -381,7 +381,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="163">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -400,7 +400,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="14">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -423,7 +423,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="78">
+<Func kind="K" nr="80">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -446,21 +446,21 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
-<Func kind="K" nr="172">
+<Func kind="K" nr="174">
 <Num nr="2"/>
-<Func kind="K" nr="375"/>
+<Func kind="K" nr="378"/>
 </Func>
-<Func kind="K" nr="375"/>
+<Func kind="K" nr="378"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="172">
+<Func kind="K" nr="174">
 <Num nr="2"/>
-<Func kind="K" nr="375"/>
+<Func kind="K" nr="378"/>
 </Func>
-<Func kind="K" nr="375"/>
+<Func kind="K" nr="378"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="388">
+<Func kind="K" nr="391">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

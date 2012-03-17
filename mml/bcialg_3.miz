@@ -1,0 +1,1827 @@
+:: Several Classes of {BCK}-algebras and Their Properties
+::  by Tao Sun , Dahai Hu and Xiquan Liang
+::
+:: Received September 19, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BCIALG_3, BCIALG_1, BINOP_1, LATTICES, BOOLE, RLVECT_1, FILTER_2,
+      SUBSET_1;
+ notations XBOOLE_0, SUBSET_1, STRUCT_0, BCIALG_1;
+ constructors MIDSP_1, VECTSP_2, BCIALG_1;
+ registrations STRUCT_0, BCIALG_1;
+ requirements SUBSET, BOOLE;
+ definitions BCIALG_1;
+ theorems TARSKI, BCIALG_1;
+
+begin :: The Basics of General Theory of commutative BCK-algebra
+
+definition let IT be non empty BCIStr_0;
+  attr IT is commutative means :Def1:
+    for x,y being Element of IT holds x\(x\y) = y\(y\x);
+end;
+
+registration
+  cluster BCI-EXAMPLE -> commutative;
+  coherence
+  proof
+    let x,y be Element of BCI-EXAMPLE;
+    x\(x\y)={} & y\(y\x)={} by TARSKI:def 1;
+    hence x\(x\y) = y\(y\x);
+  end;
+end;
+
+registration
+  cluster commutative BCK-algebra;
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
+end;
+
+ reserve X for BCK-algebra;
+ reserve x,y,z,u,v,a,b for Element of X;
+ reserve IT for non empty Subset of X;
+
+theorem Th1:
+  X is commutative BCK-algebra iff
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+proof
+ thus X is commutative BCK-algebra implies
+     (for x,y being Element of X holds x\(x\y) <= y\(y\x))
+  proof
+   assume A1:X is commutative BCK-algebra;
+    let x,y be Element of X;
+    x\(x\y) = y\(y\x) by A1,Def1; then
+    (x\(x\y))\(y\(y\x)) = 0.X by BCIALG_1:def 5;
+    hence thesis by BCIALG_1:def 11;
+  end;
+  assume A2:(for x,y being Element of X holds x\(x\y) <= y\(y\x));
+  for x,y being Element of X holds x\(x\y) = y\(y\x)
+  proof
+    let x,y;
+    x\(x\y) <= y\(y\x) & y\(y\x) <= x\(x\y) by A2;
+    then (x\(x\y))\(y\(y\x)) = 0.X & (y\(y\x))\(x\(x\y)) = 0.X
+      by BCIALG_1:def 11;
+    hence thesis by BCIALG_1:def 7;
+  end;
+  hence thesis by Def1;
+end;
+
+theorem Th2:
+  for X being BCK-algebra holds
+     (for x,y being Element of X holds x\(x\y) <= y & x\(x\y) <= x)
+proof
+  let X be BCK-algebra;
+  let x,y be Element of X;
+A1:(x\(x\y))\y = 0.X by BCIALG_1:1;
+A2:((x\(x\y))\(0.X\(x\y)))\(x\0.X)=0.X by BCIALG_1:def 3;
+  0.X\(x\y) = (x\y)`
+    .= 0.X by BCIALG_1:def 8;
+  then ((x\(x\y))\0.X)\x = 0.X by A2,BCIALG_1:2;
+  then (x\(x\y))\x = 0.X by BCIALG_1:2;
+  hence thesis by A1,BCIALG_1:def 11;
+end;
+
+theorem Th3:
+  X is commutative BCK-algebra iff
+     (for x,y being Element of X holds x\y = x\(y\(y\x)) )
+proof
+   thus X is commutative BCK-algebra implies
+      (for x,y being Element of X holds x\y = x\(y\(y\x)))
+   proof
+    assume A1:X is commutative BCK-algebra;
+    let x,y be Element of X;
+    x\y = x\(x\(x\y)) by BCIALG_1:8
+         .= x\(y\(y\x)) by A1,Def1;
+    hence thesis;
+   end;
+    assume A2:(for x,y being Element of X holds x\y = x\(y\(y\x)));
+    for x,y being Element of X holds x\(x\y) <= y\(y\x)
+    proof
+      let x,y;
+      x\(x\(y\(y\x))) <= y\(y\x) by Th2;
+      hence thesis by A2;
+    end;
+    hence thesis by Th1;
+end;
+
+theorem Th4:
+  X is commutative BCK-algebra iff
+     (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+proof
+  thus X is commutative BCK-algebra implies
+      (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))))
+  proof
+    assume A1:X is commutative BCK-algebra;
+    let x,y be Element of X;
+    x\(x\y) = x\(x\(y\(y\x))) & y\(y\x) = y\(y\(x\(x\y))) by A1,Th3;
+    hence thesis by A1,Def1;
+  end;
+  assume A2:for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y)));
+  for x,y being Element of X holds x\(x\y) <= y\(y\x)
+  proof
+    let x,y;
+A3:x\(x\y) = y\(y\(x\(x\y))) by A2;
+    x\(x\y) <= x by Th2;
+    then y\x <= y\(x\(x\y)) by BCIALG_1:5;
+    hence thesis by A3,BCIALG_1:5;
+  end;
+  hence thesis by Th1;
+end;
+
+theorem Th5:
+  X is commutative BCK-algebra iff
+    (for x,y being Element of X st x<= y holds x= y\(y\x))
+proof
+  thus X is commutative BCK-algebra implies
+    (for x,y being Element of X st x<= y holds x= y\(y\x) )
+  proof
+    assume A1:X is commutative BCK-algebra;
+    let x,y be Element of X;
+    assume x<= y;
+    then A2:x\y = 0.X by BCIALG_1:def 11;
+    y\(y\x) = x\0.X by A1,A2,Def1
+           .=x by BCIALG_1:2;
+    hence thesis;
+  end;
+  assume A3:for x,y being Element of X st x<= y holds x= y\(y\x);
+  for x,y being Element of X holds x\(x\y) <= y\(y\x)
+  proof
+    let x,y be Element of X;
+    (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+               .= 0.X by BCIALG_1:def 5;
+    then (x\(x\y)) <= y by BCIALG_1:def 11;
+    then A4:(x\(x\y))= y\(y\(x\(x\y))) by A3;
+    (x\(x\y))\x = (x\x)\(x\y) by BCIALG_1:7
+               .= (x\y)` by BCIALG_1:def 5
+               .= 0.X by BCIALG_1:def 8;
+    then (x\(x\y)) <= x by BCIALG_1:def 11;
+    then y\x <= y\(x\(x\y)) by BCIALG_1:5;
+    hence thesis by A4,BCIALG_1:5;
+  end;
+  hence thesis by Th1;
+end;
+
+theorem Th6:
+  for X being non empty BCIStr_0 holds
+    (X is commutative BCK-algebra iff (for x,y,z being Element of X
+       holds x\(0.X\y) = x & (x\z)\(x\y) = (y\z)\(y\x) ))
+proof
+   let X be non empty BCIStr_0;
+   thus X is commutative BCK-algebra implies
+      (for x,y,z being Element of X
+         holds x\(0.X\y) = x & (x\z)\(x\y) = (y\z)\(y\x) )
+    proof
+      assume A1:X is commutative BCK-algebra;
+      let x,y,z be Element of X;
+      A2:0.X\y = y`
+           .= 0.X by A1,BCIALG_1:def 8;
+      A3: (x\(x\y))\z = (y\(y\x))\z by A1,Def1;
+      (x\z)\(x\y) = (y\(y\x))\z by A1,A3,BCIALG_1:7
+                 .= (y\z)\(y\x) by A1,BCIALG_1:7;
+      hence thesis by A1,A2,BCIALG_1:2;
+     end;
+    assume A4:for x,y,z being Element of X holds x\(0.X\y) = x
+          & (x\z)\(x\y) = (y\z)\(y\x);
+      A5:for x,y being Element of X holds x\0.X = x
+           proof
+            let x,y be Element of X;
+            0.X\(0.X\0.X) = 0.X & x\(0.X\(0.X\0.X)) = x by A4;
+            hence thesis;
+           end;
+      A6:for x being Element of X holds x\x = 0.X
+          proof
+            let x be Element of X;
+            x = (x\0.X) by A5;
+            then x\x = (0.X\0.X)\(0.X\x) by A4
+                         .= 0.X\(0.X\x) by A5
+                         .= 0.X by A4;
+            hence thesis;
+          end;
+      A7:for x,y being Element of X
+           holds (x\y=0.X & y\x=0.X implies x = y)
+          proof
+            let x,y be Element of X;
+            assume x\y=0.X & y\x=0.X;
+            then A8:(x\0.X)\0.X = (y\0.X)\0.X by A4;
+            x\0.X = (y\0.X)\0.X by A5,A8
+                        .= (y\0.X) by A5;
+            hence x = (y\0.X) by A5
+                  .= y by A5;
+           end;
+       A9:for x,y being Element of X holds x\(x\y) = y\(y\x)
+          proof
+            let x,y be Element of X;
+            x\(x\y) = (x\(0.X\y))\(x\y) by A4
+                   .= (y\(0.X\y))\(y\x) by A4
+                   .= y\(y\x) by A4;
+            hence thesis;
+           end;
+       A10:for x being Element of X holds 0.X\x = 0.X
+          proof
+            let x be Element of X;
+            0.X = (0.X\x)\(0.X\x) by A6
+                       .= 0.X\x by A4;
+            hence thesis;
+          end;
+       A11:for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X
+         proof
+           let x,y,z be Element of X;
+           ((x\y)\(x\z))\(z\y) = ((z\y)\(z\x))\(z\y) by A4
+              .= ((z\y)\(z\x))\((z\y)\0.X) by A5
+              .= (0.X\(z\x))\(0.X\(z\y)) by A4
+              .= 0.X\(0.X\(z\y)) by A10
+              .= 0.X by A10;
+           hence thesis;
+          end;
+        A12:for x,y being Element of X holds (x\(x\y))\y = 0.X
+          proof
+            let x,y be Element of X;
+            0.X = ((x\0.X)\(x\y))\(y\0.X) by A11
+               .= (x\(x\y))\(y\0.X) by A5
+               .= (x\(x\y))\y by A5;
+           hence thesis;
+           end;
+        A13:for x being Element of X holds x`=0.X by A10;
+  X is_I & X is_BCI-4 by A6,A7,BCIALG_1:def 5,def 7;
+  hence thesis by A9,A11,A12,A13,Def1,BCIALG_1:1,def 8;
+end;
+
+theorem
+  X is commutative BCK-algebra implies
+    (for x,y being Element of X st x\y=x holds y\x=y)
+proof
+   assume A1:X is commutative BCK-algebra;
+   let x,y be Element of X;
+   assume A2:x\y=x;
+A3:y\(y\x) = x\x by A1,A2,Def1
+       .= 0.X by BCIALG_1:def 5;
+   y\x = y\0.X by A3,BCIALG_1:8
+      .= y by BCIALG_1:2;
+   hence thesis;
+end;
+
+theorem Th8:
+  X is commutative BCK-algebra implies
+   (for x,y,a being Element of X st y <= a holds (a\x)\(a\y) = y\x)
+proof
+assume A1:X is commutative BCK-algebra;
+let x,y,a be Element of X;
+assume y <= a;
+then A2:y\a = 0.X by BCIALG_1:def 11;
+(a\x)\(a\y) = (a\(a\y))\x by BCIALG_1:7
+           .= (y\0.X)\x by A1,A2,Def1
+           .= y\x by BCIALG_1:2;
+hence thesis;
+end;
+
+theorem
+  X is commutative BCK-algebra implies
+    (for x,y being Element of X holds (x\y=x iff y\(y\x)=0.X))
+proof
+assume A1:X is commutative BCK-algebra;
+ A2:for x,y being Element of X holds (x\y=x implies y\(y\x)=0.X)
+  proof
+   let x,y be Element of X;
+   assume A3:x\y=x;
+   y\(y\x) = x\x by A1,A3,Def1
+          .= 0.X by BCIALG_1:def 5;
+    hence thesis;
+   end;
+ for x,y being Element of X holds (y\(y\x)=0.X implies x\y=x)
+  proof
+   let x,y be Element of X;
+   assume A4:y\(y\x)=0.X;
+    x\y = x\(x\(x\y)) by BCIALG_1:8
+       .= x\0.X by A1,A4,Def1
+       .= x by BCIALG_1:2;
+    hence thesis;
+   end;
+hence thesis by A2;
+end;
+
+theorem
+X is commutative BCK-algebra implies (for x,y being Element of X
+   holds x\(y\(y\x))=x\y & (x\y)\((x\y)\x)=x\y )
+proof
+assume A1:X is commutative BCK-algebra;
+let x,y be Element of X;
+A2:x\(y\(y\x)) = x\(x\(x\y)) by A1,Def1
+              .= x\y by BCIALG_1:8;
+(x\y)\((x\y)\x) = x\(x\(x\y)) by A1,Def1
+                  .= x\y by BCIALG_1:8;
+hence thesis by A2;
+end;
+
+theorem
+  X is commutative BCK-algebra implies (for x,y,a being Element of X
+    st x <= a holds (a\y)\((a\y)\(a\x)) = (a\y)\(x\y)) by Th8;
+
+definition let X be BCI-algebra;
+           let a be Element of X;
+  attr a is being_greatest means :Def2:
+    for x being Element of X holds x\a=0.X;
+  attr a is being_positive means
+    0.X\a=0.X;
+end;
+
+begin :: Several Classes of BCI-algebra---commutative BCI-algebra
+
+definition let IT be BCI-algebra;
+  attr IT is BCI-commutative means :Def4:
+    for x,y being Element of IT
+      st x\y=0.IT holds x = y\(y\x);
+  attr IT is BCI-weakly-commutative means :Def5:
+    for x,y being Element of IT
+      holds (x\(x\y))\(0.IT\(x\y)) = y\(y\x);
+end;
+
+registration
+  cluster BCI-EXAMPLE -> BCI-commutative BCI-weakly-commutative;
+  coherence
+  proof
+    set IT = BCI-EXAMPLE;
+  thus IT is BCI-commutative
+   proof
+    let x,y be Element of IT;
+    assume x\y=0.IT;
+    x={} & y\(y\x)={} by TARSKI:def 1;
+    hence thesis;
+  end;
+   let x,y be Element of IT;
+   (x\(x\y))\(0.IT\(x\y))={} & y\(y\x) = {} by TARSKI:def 1;
+   hence thesis;
+end;
+end;
+
+registration
+  cluster BCI-commutative BCI-weakly-commutative BCI-algebra;
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for X being BCI-algebra holds ((ex a be Element of X
+    st a is being_greatest) implies X is BCK-algebra)
+proof
+  let X be BCI-algebra;
+  given a being Element of X such that A1:a is being_greatest;
+  for x being Element of X holds x`=0.X
+  proof
+   let x be Element of X;
+A2:x\a=0.X by A1,Def2;
+   x` = (x\x)\a by A2,BCIALG_1:7
+     .= 0.X by A1,Def2;
+   hence thesis;
+ end;
+hence thesis by BCIALG_1:def 8;
+end;
+
+theorem
+for X being BCI-algebra holds (X is p-Semisimple implies
+  (X is BCI-commutative & X is BCI-weakly-commutative))
+proof
+let X being BCI-algebra;
+assume A1:X is p-Semisimple;
+ A2:for x,y being Element of X st x\y=0.X holds x = y\(y\x)
+   by A1,BCIALG_1:def 26;
+ for x,y being Element of X holds (x\(x\y))\(0.X\(x\y)) = y\(y\x)
+  proof
+    let x,y be Element of X;
+    (0.X\(x\y)) = ((0.X\0.X)\(x\y)) by BCIALG_1:def 5
+                  .= (0.X\x)\(0.X\y) by A1,BCIALG_1:64
+                  .= (y\x)\(0.X\0.X) by A1,BCIALG_1:58
+                  .= (y\x)\0.X by BCIALG_1:def 5
+                  .= y\x by BCIALG_1:2;
+    hence thesis by A1,BCIALG_1:def 26;
+  end;
+hence thesis by A2,Def4,Def5;
+end;
+
+theorem
+for X being commutative BCK-algebra
+   holds X is BCI-commutative BCI-algebra &
+         X is BCI-weakly-commutative BCI-algebra
+proof
+  let X be commutative BCK-algebra;
+  A1:for x,y being Element of X st x\y=0.X holds x = y\(y\x)
+  proof
+   let x,y be Element of X;
+   assume x\y=0.X;
+   then x <= y by BCIALG_1:def 11;
+   hence thesis by Th5;
+  end;
+ for x,y being Element of X holds (x\(x\y))\(0.X\(x\y)) = y\(y\x)
+  proof
+    let x,y be Element of X;
+A2: (x\(x\y)) = y\(y\x) by Def1;
+    (0.X\(x\y)) = (x\y)`
+               .= 0.X by BCIALG_1:def 8;
+    hence thesis by A2,BCIALG_1:2;
+  end;
+hence thesis by A1,Def4,Def5;
+end;
+
+theorem
+  X is BCI-weakly-commutative BCI-algebra implies X is BCI-commutative
+proof
+ assume A1:X is BCI-weakly-commutative BCI-algebra;
+   let x,y be Element of X;
+   assume x\y=0.X;
+   then (x\0.X)\(0.X\0.X) = y\(y\x) by A1,Def5;
+   then (x\0.X)\0.X = y\(y\x) by BCIALG_1:def 5;
+   then x\0.X = y\(y\x) by BCIALG_1:2;
+   hence thesis by BCIALG_1:2;
+end;
+
+theorem Th16:
+for X being BCI-algebra holds (X is BCI-commutative iff
+ (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) ))
+proof
+let X be BCI-algebra;
+A1: X is BCI-commutative implies
+ (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+   proof
+    assume A2:X is BCI-commutative;
+      let x,y be Element of X;
+       (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+                  .= 0.X by BCIALG_1:def 5;
+      hence thesis by A2,Def4;
+  end;
+ (for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))) )
+   implies X is BCI-commutative
+     proof
+      assume A3:(for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y))));
+        let x,y be Element of X;
+        assume x\y=0.X;
+        then x\(x\y) = x by BCIALG_1:2;
+        hence thesis by A3;
+  end;
+hence thesis by A1;
+end;
+
+theorem Th17:
+for X being BCI-algebra holds (X is BCI-commutative iff
+ (for x,y being Element of X holds (x\(x\y))\(y\(y\x)) = 0.X\(x\y) ))
+proof
+let X be BCI-algebra;
+A1: X is BCI-commutative implies
+ (for x,y being Element of X holds (x\(x\y))\(y\(y\x)) = 0.X\(x\y) )
+   proof
+    assume A2:X is BCI-commutative;
+    let x,y be Element of X;
+    (x\(x\y))\(y\(y\x)) = (y\(y\(x\(x\y))))\(y\(y\x)) by A2,Th16
+                          .= (y\(y\(y\x)))\(y\(x\(x\y))) by BCIALG_1:7
+                          .= (y\x)\(y\(x\(x\y))) by BCIALG_1:8
+                          .= (y\(y\(x\(x\y))))\x by BCIALG_1:7
+                          .= (x\(x\y))\x by A2,Th16
+                          .= (x\x)\(x\y) by BCIALG_1:7;
+    hence thesis by BCIALG_1:def 5;
+  end;
+ (for x,y being Element of X holds (x\(x\y))\(y\(y\x)) = 0.X\(x\y) )
+   implies X is BCI-commutative
+     proof
+      assume A3:(for x,y being Element of X
+       holds (x\(x\y))\(y\(y\x)) = 0.X\(x\y));
+      for x,y being Element of X st x\y=0.X holds x = y\(y\x)
+      proof
+       let x,y be Element of X;
+       assume A4:x\y=0.X;
+       A5:0.X = 0.X\(x\y) by A4,BCIALG_1:2
+                  .= (x\0.X)\(y\(y\x)) by A3,A4
+                  .= x\(y\(y\x)) by BCIALG_1:2;
+       (y\(y\x))\x = (y\x)\(y\x) by BCIALG_1:7
+                 .= 0.X by BCIALG_1:def 5;
+       hence thesis by A5,BCIALG_1:def 7;
+     end;
+    hence thesis by Def4;
+  end;
+hence thesis by A1;
+end;
+
+theorem
+for X being BCI-algebra holds (X is BCI-commutative iff
+ (for a being Element of AtomSet(X),x,y being Element of BranchV(a)
+   holds x\(x\y) = y\(y\x) ))
+proof
+let X be BCI-algebra;
+thus X is BCI-commutative implies (for a being Element of AtomSet(X),
+     x,y being Element of BranchV(a) holds x\(x\y) = y\(y\x))
+   proof
+    assume A1:X is BCI-commutative;
+       let a be Element of AtomSet(X);
+       let x,y be Element of BranchV(a);
+        x\y in BranchV(a\a) by BCIALG_1:39;
+       then consider z being Element of X such that A2:x\y=z & (a\a) <= z;
+       0.X <= x\y by A2,BCIALG_1:def 5;
+       then 0.X\(x\y) = 0.X by BCIALG_1:def 11;
+       then A3: (x\(x\y))\(y\(y\x)) = 0.X by A1,Th17;
+        y\x in BranchV(a\a) by BCIALG_1:39;
+       then consider z1 being Element of X such that
+        A4:y\x=z1 & (a\a) <= z1;
+       0.X <= y\x by A4,BCIALG_1:def 5;
+       then 0.X\(y\x) = 0.X by BCIALG_1:def 11;
+       then (y\(y\x))\(x\(x\y)) = 0.X by A1,Th17;
+       hence thesis by A3,BCIALG_1:def 7;
+   end;
+     assume A5:for a being Element of AtomSet(X),
+     x,y being Element of BranchV(a) holds x\(x\y) = y\(y\x);
+     for x,y being Element of X holds (x\y=0.X implies x = y\(y\x))
+      proof
+       let x,y be Element of X;
+       assume A6:x\y=0.X;
+       set aa = 0.X\(0.X\x);
+       aa``= aa by BCIALG_1:8;
+       then A7:aa in AtomSet(X) by BCIALG_1:29;
+       A8:aa\x = (0.X\x)\(0.X\x) by BCIALG_1:7
+               .= 0.X by BCIALG_1:def 5;
+       then aa\y = 0.X by A6,BCIALG_1:3;
+       then A9:aa<=y by BCIALG_1:def 11;
+       aa<=x by A8,BCIALG_1:def 11;
+       then consider aa be Element of AtomSet(X) such that A10:
+       aa<=x & aa<= y by A7,A9;
+       x in BranchV(aa) & y in BranchV(aa) by A10;
+       then x\(x\y) = y\(y\x) by A5;
+       hence thesis by A6,BCIALG_1:2;
+      end;
+    hence thesis by Def4;
+end;
+
+theorem
+for X being non empty BCIStr_0 holds (X is BCI-commutative BCI-algebra iff
+  for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X & x\0.X = x &
+     x\(x\y) = y\(y\(x\(x\y))) )
+proof
+let X be non empty BCIStr_0;
+(for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X &
+  x\0.X = x & x\(x\y) = y\(y\(x\(x\y)))) implies
+    X is BCI-commutative BCI-algebra
+ proof
+  assume A1:for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X &
+  x\0.X = x & x\(x\y) = y\(y\(x\(x\y)));
+   for x,y being Element of X holds (x\y=0.X & y\x=0.X implies x = y)
+    proof
+     let x,y be Element of X;
+     assume A2:x\y=0.X & y\x=0.X;
+     then A3:x\(x\y) = x by A1;
+     y\(y\(x\(x\y))) = y\0.X by A1,A2
+                    .= y by A1;
+     hence thesis by A1,A3;
+    end;
+    then X is_BCI-4 by BCIALG_1:def 7;
+    hence thesis by A1,Th16,BCIALG_1:11;
+  end;
+  hence thesis by Th16,BCIALG_1:1,2;
+end;
+
+theorem
+for X being BCI-algebra holds (X is BCI-commutative iff
+  for x,y,z being Element of X st x<=z & z\y<=z\x holds x<=y )
+proof
+ let X be BCI-algebra;
+A1: X is BCI-commutative implies
+  for x,y,z being Element of X st x<=z & z\y<=z\x holds x<=y
+ proof
+  assume A2:X is BCI-commutative;
+   for x,y,z being Element of X st x<=z & z\y<=z\x holds x<=y
+    proof
+     let x,y,z be Element of X;
+     assume x<=z & z\y<=z\x;
+     then A3:x\z = 0.X & (z\y)\(z\x) = 0.X by BCIALG_1:def 11;
+     then A4:x = z\(z\x) by A2,Def4;
+     0.X = x\y by A3,A4,BCIALG_1:7;
+     hence thesis by BCIALG_1:def 11;
+   end;
+  hence thesis;
+ end;
+ (for x,y,z being Element of X st x<=z & z\y<=z\x holds x<=y) implies
+   X is BCI-commutative
+ proof
+  assume A5:for x,y,z being Element of X st x<=z & z\y<=z\x holds x<=y;
+  for x,z being Element of X holds (x\z=0.X implies x = z\(z\x))
+   proof
+    let x,z be Element of X;
+    assume x\z=0.X;
+    then A6: x<=z by BCIALG_1:def 11;
+    set y = z\(z\x);
+    (z\y)\(z\x) = (z\x)\(z\x) by BCIALG_1:8
+               .= 0.X by BCIALG_1:def 5;
+    then (z\y)<=(z\x) by BCIALG_1:def 11;
+    then x <= z\(z\x) by A5,A6;
+    then A7:x\(z\(z\x)) = 0.X by BCIALG_1:def 11;
+    (z\(z\x))\x = (z\x)\(z\x) by BCIALG_1:7
+               .= 0.X by BCIALG_1:def 5;
+    hence thesis by A7,BCIALG_1:def 7;
+   end;
+  hence thesis by Def4;
+ end;
+hence thesis by A1;
+end;
+
+theorem
+  for X being BCI-algebra holds (X is BCI-commutative iff
+    for x,y,z being Element of X st x<=y & x<=z holds x<=y\(y\z) )
+proof
+  let X be BCI-algebra;
+  thus X is BCI-commutative implies
+  for x,y,z being Element of X st x<=y & x<=z holds x<=y\(y\z)
+ proof
+  assume A1:X is BCI-commutative;
+   for x,y,z being Element of X st x<=y & x<=z holds x<=y\(y\z)
+    proof
+     let x,y,z be Element of X;
+     assume x<=y & x<=z;
+     then A2:x\z = 0.X & x\y = 0.X by BCIALG_1:def 11;
+     then A3:x = y\(y\x) by A1,Def4;
+     then x\(y\(y\z)) = (y\(y\(y\z)))\(y\x) by BCIALG_1:7
+                     .= (y\z)\(y\x) by BCIALG_1:8
+                     .= 0.X by A2,A3,BCIALG_1:7;
+     hence thesis by BCIALG_1:def 11;
+   end;
+  hence thesis;
+ end;
+  assume A4:for x,y,z being Element of X st x<=y & x<=z holds x<=y\(y\z);
+  for x,y being Element of X st x\y=0.X holds x = y\(y\x)
+   proof
+    let x,y be Element of X;
+    assume x\y=0.X;
+    then A5: x<=y by BCIALG_1:def 11;
+    x\x =0.X by BCIALG_1:def 5;
+    then x<=x by BCIALG_1:def 11;
+    then x<=y\(y\x) by A4,A5;
+    then A6:x\(y\(y\x)) = 0.X by BCIALG_1:def 11;
+    (y\(y\x))\x = (y\x)\(y\x) by BCIALG_1:7
+               .= 0.X by BCIALG_1:def 5;
+    hence thesis by A6,BCIALG_1:def 7;
+   end;
+  hence thesis by Def4;
+end;
+
+begin :: Several Classes of BCK-algebra---bounded BCK-algebra
+
+definition let IT be BCK-algebra;
+  attr IT is bounded means
+    ex a be Element of IT st a is being_greatest;
+end;
+
+registration
+  cluster BCI-EXAMPLE -> bounded;
+  coherence
+  proof
+    set IT = BCI-EXAMPLE;
+    IT is bounded
+    proof
+    reconsider a = {} as Element of IT by TARSKI:def 1;
+    A1:for x being Element of IT holds x\a=0.IT
+    proof
+      let x be Element of IT;
+      x\a = {} & 0.IT = {} by TARSKI:def 1;
+      hence thesis;
+    end;
+    take a;
+    thus thesis by A1,Def2;
+  end;
+  hence thesis;
+  end;
+end;
+
+registration
+  cluster bounded commutative BCK-algebra;
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
+end;
+
+definition let IT be bounded BCK-algebra;
+  attr IT is involutory means :Def7:
+   for a being Element of IT st a is being_greatest holds
+    (for x being Element of IT holds a\(a\x)=x);
+end;
+
+theorem Th22:
+for X being bounded BCK-algebra holds (X is involutory iff
+ for a being Element of X st a is being_greatest holds
+   (for x,y being Element of X holds x\y = (a\y)\(a\x)))
+proof
+  let X be bounded BCK-algebra;
+  thus X is involutory implies
+  for a being Element of X st a is being_greatest holds
+   (for x,y being Element of X holds x\y = (a\y)\(a\x))
+  proof
+   assume A1:X is involutory;
+     let a be Element of X;
+     assume A2:a is being_greatest;
+     for x,y being Element of X holds x\y = (a\y)\(a\x)
+      proof
+       let x,y be Element of X;
+       x\y = (a\(a\x))\y by A1,A2,Def7
+          .= (a\y)\(a\x) by BCIALG_1:7;
+       hence thesis;
+    end;
+  hence thesis;
+ end;
+  assume A3:(for a being Element of X st a is being_greatest
+   holds (for x,y being Element of X holds x\y = (a\y)\(a\x)));
+     let a be Element of X;
+     assume A4:a is being_greatest;
+     now let x be Element of X;
+     (a\(a\x))\0.X = (a\0.X)\(a\x) by BCIALG_1:7
+                     .= x\0.X by A3,A4
+                     .= x by BCIALG_1:2;
+      hence a\(a\x)=x by BCIALG_1:2;
+     end;
+   hence thesis;
+end;
+
+theorem Th23:
+for X being bounded BCK-algebra holds (X is involutory iff
+ for a being Element of X st a is being_greatest holds
+   (for x,y being Element of X holds x\(a\y) = y\(a\x)))
+proof
+ let X be bounded BCK-algebra;
+thus X is involutory implies
+    for a being Element of X st a is being_greatest holds
+     (for x,y being Element of X holds x\(a\y) = y\(a\x))
+    proof
+     assume A1:X is involutory;
+       let a be Element of X;
+       assume A2:a is being_greatest;
+       let x,y be Element of X;
+       A3:x\(a\y) = (a\(a\y))\(a\x) &
+          y\(a\x) = (a\(a\x))\(a\y) by A1,A2,Th22;
+       thus thesis by A3,BCIALG_1:7;
+      end;
+   assume A4:(for a being Element of X st a is being_greatest holds
+     (for x,y being Element of X holds x\(a\y) = y\(a\x)));
+   let a be Element of X;
+   assume A5:a is being_greatest;
+   let x be Element of X;
+   a\(a\x) = x\(a\a) by A4,A5
+          .= x\0.X by BCIALG_1:def 5
+          .= x by BCIALG_1:2;
+   hence thesis;
+end;
+
+theorem
+for X being bounded BCK-algebra holds (X is involutory iff
+ for a being Element of X st a is being_greatest holds
+  (for x,y being Element of X holds x <= a\y implies y <= a\x))
+proof
+ let X be bounded BCK-algebra;
+thus X is involutory implies
+ for a being Element of X st a is being_greatest holds
+  (for x,y being Element of X st x <= a\y holds y <= a\x)
+ proof
+  assume A1:X is involutory;
+    let a be Element of X;
+    assume A2:a is being_greatest;
+    let x,y be Element of X;
+    assume x <= a\y;
+    then x\(a\y) = 0.X by BCIALG_1:def 11;
+    then y\(a\x) = 0.X by A1,A2,Th23;
+    hence thesis by BCIALG_1:def 11;
+  end;
+  assume A3: for a being Element of X st a is being_greatest holds
+   (for x,y being Element of X st x <= a\y holds y <= a\x);
+    let a be Element of X;
+    assume A4:a is being_greatest;
+    let x be Element of X;
+    A5:(a\(a\x))\x = (a\x)\(a\x) by BCIALG_1:7
+                    .= 0.X by BCIALG_1:def 5;
+    (a\x)\(a\x) = 0.X by BCIALG_1:def 5;
+    then (a\x)<=(a\x) by BCIALG_1:def 11;
+    then x <= a\(a\x) by A3,A4;
+    then x\(a\(a\x)) = 0.X by BCIALG_1:def 11;
+    hence thesis by A5,BCIALG_1:def 7;
+ end;
+
+definition let IT be BCK-algebra;
+           let a be Element of IT;
+  attr a is being_Iseki means :Def8:
+    for x being Element of IT holds x\a=0.IT & a\x=a;
+end;
+
+definition let IT be BCK-algebra;
+  attr IT is Iseki_extension means
+    ex a be Element of IT st a is being_Iseki;
+end;
+
+registration
+  cluster BCI-EXAMPLE -> Iseki_extension;
+  coherence
+  proof
+    set IT = BCI-EXAMPLE;
+    IT is Iseki_extension
+    proof
+      {} is Element of IT by TARSKI:def 1;
+      then consider a being Element of IT such that A1:a = {};
+  A2:for x being Element of IT holds x\a=0.IT & a\x=a
+      proof
+        let x be Element of IT;
+        x\a = {} & a\x = {} & 0.IT = {} by TARSKI:def 1;
+        hence thesis by A1;
+      end;
+      take a;
+      thus thesis by A2,Def8;
+    end;
+    hence thesis;
+  end;
+end;
+
+:: Commutative Ideal
+
+definition let X be BCK-algebra;
+  mode Commutative-Ideal of X -> non empty Subset of X means :Def10:
+    0.X in it &
+    (for x,y,z being Element of X st (x\y)\z in it & z in it
+     holds x\(y\(y\x)) in it);
+  existence
+   proof
+    set X1 = BCK-part(X);
+ A1:0.X in X1 by BCIALG_1:19;
+ for x,y,z being Element of X st (x\y)\z in X1 & z in X1
+      holds x\(y\(y\x)) in X1
+    proof
+     let x,y,z be Element of X;
+     assume (x\y)\z in X1 & z in X1;
+     0.X\(x\(y\(y\x)))=(x\(y\(y\x)))`
+                     .= 0.X by BCIALG_1:def 8;
+     then 0.X <= (x\(y\(y\x))) by BCIALG_1:def 11;
+     hence thesis;
+    end;
+    hence thesis by A1;
+   end;
+end;
+
+theorem
+  IT is Commutative-Ideal of X implies (for x,y being Element of X st
+     x\y in IT holds x\(y\(y\x)) in IT)
+proof
+  assume A1:IT is Commutative-Ideal of X;
+  let x,y be Element of X;
+  assume x\y in IT;
+  then A2:(x\y)\0.X in IT by BCIALG_1:2;
+  0.X in IT by A1,Def10;
+  hence thesis by A1,A2,Def10;
+end;
+
+theorem Th26:
+ for X being BCK-algebra st IT is Commutative-Ideal of X holds
+  IT is Ideal of X
+proof
+  let X be BCK-algebra;
+   assume A1:IT is Commutative-Ideal of X;
+   then A2:0.X in IT by Def10;
+   for x,y being Element of X st x\y in IT & y in IT holds x in IT
+    proof
+     let x,y be Element of X;
+     assume x\y in IT & y in IT;
+     then A3:(x\0.X)\y in IT & y in IT by BCIALG_1:2;
+     x\(0.X\(0.X\x)) = x\(0.X\x`)
+                    .= x\(0.X\0.X) by BCIALG_1:def 8
+                    .= x\0.X by BCIALG_1:def 5
+                    .= x by BCIALG_1:2;
+     hence thesis by A1,A3,Def10;
+    end;
+    hence thesis by A1,A2,BCIALG_1:def 18;
+end;
+
+theorem
+ IT is Commutative-Ideal of X implies (for x,y being Element of X st
+   x\(x\y) in IT holds (y\(y\x))\(x\y) in IT)
+proof
+ assume IT is Commutative-Ideal of X;
+ then A1:IT is Ideal of X by Th26;
+   let x,y be Element of X;
+   assume A2:x\(x\y) in IT;
+   ((y\(y\x))\(x\y))\(x\(x\y)) = ((y\(x\y))\(y\x))\(x\(x\y)) by BCIALG_1:7
+                              .= 0.X by BCIALG_1:11;
+   then (y\(y\x))\(x\y) <= x\(x\y) by BCIALG_1:def 11;
+   hence thesis by A1,A2,BCIALG_1:46;
+end;
+
+begin :: Several Classes of BCK-algebra---implicative BCK-algebra
+
+definition let IT be BCK-algebra;
+  attr IT is BCK-positive-implicative means :Def11:
+    for x,y,z being Element of IT holds (x\y)\z=(x\z)\(y\z);
+  attr IT is BCK-implicative means :Def12:
+    for x,y being Element of IT holds x\(y\x)=x;
+end;
+
+registration
+  cluster BCI-EXAMPLE -> BCK-positive-implicative BCK-implicative;
+  coherence
+  proof
+   set IT = BCI-EXAMPLE;
+   thus IT is BCK-positive-implicative
+   proof
+     let x,y,z be Element of IT;
+     (x\y)\z={} & (x\z)\(y\z)={} by TARSKI:def 1;
+     hence (x\y)\z=(x\z)\(y\z);
+   end;
+   let x,y be Element of IT;
+   x\(y\x)={} & x={} by TARSKI:def 1;
+   hence x\(y\x)=x;
+end;
+end;
+
+registration
+  cluster Iseki_extension BCK-positive-implicative BCK-implicative
+    bounded commutative BCK-algebra;
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
+end;
+
+theorem Th28:
+  X is BCK-positive-implicative BCK-algebra iff
+    (for x,y being Element of X holds x\y = (x\y)\y)
+proof
+  thus X is BCK-positive-implicative BCK-algebra implies
+    (for x,y being Element of X holds x\y = (x\y)\y)
+  proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+  let x,y be Element of X;
+  (x\y)\y = (x\y)\(y\y) by A1,Def11
+           .= (x\y)\0.X by BCIALG_1:def 5
+           .= x\y by BCIALG_1:2;
+  hence thesis;
+ end;
+  assume A2:for x,y being Element of X holds x\y = (x\y)\y;
+   for x,y,z being Element of X holds (x\y)\z=(x\z)\(y\z)
+   proof
+    let x,y,z be Element of X;
+A3: ((x\z)\(y\z))\((x\y)\z) = (((x\z)\z)\(y\z))\((x\y)\z) by A2
+                           .= (((x\z)\z)\(y\z))\((x\z)\y) by BCIALG_1:7
+                           .= 0.X by BCIALG_1:def 3;
+    (y\z)\y = (y\y)\z by BCIALG_1:7
+           .= z` by BCIALG_1:def 5
+           .= 0.X by BCIALG_1:def 8;
+    then y\z <= y by BCIALG_1:def 11;
+    then (x\z)\y <= (x\z)\(y\z) by BCIALG_1:5;
+    then ((x\z)\y)\((x\z)\(y\z)) = 0.X by BCIALG_1:def 11;
+    then ((x\y)\z)\((x\z)\(y\z)) = 0.X by BCIALG_1:7;
+    hence thesis by A3,BCIALG_1:def 7;
+   end;
+   hence thesis by Def11;
+end;
+
+theorem Th29:
+ X is BCK-positive-implicative BCK-algebra iff
+  (for x,y being Element of X holds (x\(x\y))\(y\x) = x\(x\(y\(y\x))))
+proof
+ thus X is BCK-positive-implicative BCK-algebra implies
+  (for x,y being Element of X holds (x\(x\y))\(y\x) = x\(x\(y\(y\x))))
+ proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+  for x,y being Element of X holds (x\(x\y))\(y\x) = x\(x\(y\(y\x)))
+  proof
+   let x,y be Element of X;
+   A2:(x\(x\y))\(x\(x\(y\(y\x)))) = (x\(x\(x\(y\(y\x)))))\(x\y) by BCIALG_1:7
+                              .= (x\(y\(y\x)))\(x\y) by BCIALG_1:8
+                              .= (x\(x\y))\(y\(y\x)) by BCIALG_1:7;
+   (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+              .= 0.X by BCIALG_1:def 5;
+   then (x\(x\y)) <= y by BCIALG_1:def 11;
+   then (x\(x\y))\(y\(y\x)) <= y\(y\(y\x)) by BCIALG_1:5;
+   then (x\(x\y))\(x\(x\(y\(y\x)))) <= y\x by A2,BCIALG_1:8;
+   then ((x\(x\y))\(x\(x\(y\(y\x)))))\(y\x) = 0.X by BCIALG_1:def 11;
+   then A3:((x\(x\y))\(y\x))\(x\(x\(y\(y\x)))) =0.X by BCIALG_1:7;
+   A4:(x\(x\(y\(y\x))))\(y\(y\x)) = (x\(y\(y\x)))\(x\(y\(y\x))) by BCIALG_1:7
+                              .= 0.X by BCIALG_1:def 5;
+   (y\(y\x))\y = (y\y)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   then (y\(y\x)) <= y by BCIALG_1:def 11;
+   then x\y <= x\(y\(y\x)) by BCIALG_1:5;
+   then A5:x\(x\(y\(y\x))) <= x\(x\y) by BCIALG_1:5;
+   (y\(y\x))\x = (y\x)\(y\x) by BCIALG_1:7
+              .= 0.X by BCIALG_1:def 5;
+   then (y\(y\x)) <= x by BCIALG_1:def 11;
+   then (y\(y\x))\(y\x) <= x\(y\x) by BCIALG_1:5;
+   then (y\(y\x)) <= x\(y\x) by A1,Th28;
+   then (y\(y\x))\(x\(y\x)) = 0.X by BCIALG_1:def 11;
+   then (x\(x\(y\(y\x))))\(x\(y\x)) = 0.X by A4,BCIALG_1:3;
+   then (x\(x\(y\(y\x)))) <= (x\(y\x)) by BCIALG_1:def 11;
+   then (x\(x\(y\(y\x))))\(x\(y\(y\x))) <= (x\(y\x))\(x\(y\(y\x)))
+     by BCIALG_1:5;
+   then (x\(x\(y\(y\x))))\(x\(y\(y\x))) <= (x\(x\(y\(y\x))))\(y\x)
+     by BCIALG_1:7;
+   then (x\(x\(y\(y\x)))) <= (x\(x\(y\(y\x))))\(y\x) by A1,Th28;
+   then A6:(x\(x\(y\(y\x))))\((x\(x\(y\(y\x))))\(y\x)) = 0.X
+     by BCIALG_1:def 11;
+   (x\(x\(y\(y\x))))\(y\x) <= x\(x\y)\(y\x) by A5,BCIALG_1:5;
+   then ((x\(x\(y\(y\x))))\(y\x))\(x\(x\y)\(y\x)) = 0.X by BCIALG_1:def 11;
+   then (x\(x\(y\(y\x))))\(x\(x\y)\(y\x)) = 0.X by A6,BCIALG_1:3;
+   hence thesis by A3,BCIALG_1:def 7;
+  end;
+  hence thesis;
+ end;
+ assume A7:for x,y being Element of X holds
+ (x\(x\y))\(y\x) = x\(x\(y\(y\x)));
+ for x,y being Element of X holds x\y = (x\y)\y
+ proof
+  let x,y be Element of X;
+  A8:((x\y)\((x\y)\x))\(x\(x\y))=((x\y)\((x\x)\y))\(x\(x\y)) by BCIALG_1:7
+                          .=((x\y)\y`)\(x\(x\y)) by BCIALG_1:def 5
+                          .=((x\y)\0.X)\(x\(x\y)) by BCIALG_1:def 8
+                          .=(x\y)\(x\(x\y)) by BCIALG_1:2
+                          .=(x\(x\(x\y)))\y by BCIALG_1:7
+                          .=(x\y)\y by BCIALG_1:8;
+  (x\y)\((x\y)\(x\(x\(x\y)))) = (x\y)\((x\y)\(x\y)) by BCIALG_1:8
+                             .= (x\y)\0.X by BCIALG_1:def 5
+                             .= x\y by BCIALG_1:2;
+  hence thesis by A7,A8;
+ end;
+ hence thesis by Th28;
+end;
+
+theorem
+ X is BCK-positive-implicative BCK-algebra iff
+  (for x,y being Element of X holds x\y = (x\y)\(x\(x\y)))
+proof
+thus X is BCK-positive-implicative BCK-algebra implies
+  (for x,y being Element of X holds x\y = (x\y)\(x\(x\y)))
+ proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+   let x,y be Element of X;
+   A2:(x\y)\((x\y)\(x\(x\(x\y)))) = (x\y)\((x\y)\(x\y)) by BCIALG_1:8
+                                 .= (x\y)\0.X by BCIALG_1:def 5
+                                 .= x\y by BCIALG_1:2;
+  ((x\y)\((x\y)\x))\(x\(x\y))=((x\y)\((x\x)\y))\(x\(x\y)) by BCIALG_1:7
+                          .=((x\y)\y`)\(x\(x\y)) by BCIALG_1:def 5
+                          .=((x\y)\0.X)\(x\(x\y)) by BCIALG_1:def 8
+                          .=(x\y)\(x\(x\y)) by BCIALG_1:2;
+   hence thesis by A1,A2,Th29;
+ end;
+  assume A3:(for x,y being Element of X holds x\y = (x\y)\(x\(x\y)));
+  for x,y being Element of X holds x\y = (x\y)\y
+  proof
+   let x,y be Element of X;
+   (x\y)\(x\(x\y)) = (x\(x\(x\y)))\y by BCIALG_1:7
+                  .= (x\y)\y by BCIALG_1:8;
+   hence thesis by A3;
+  end;
+  hence thesis by Th28;
+end;
+
+theorem
+ X is BCK-positive-implicative BCK-algebra iff
+  (for x,y,z being Element of X holds (x\z)\(y\z) <= (x\y)\z)
+proof
+ thus X is BCK-positive-implicative BCK-algebra implies
+  (for x,y,z being Element of X holds (x\z)\(y\z) <= (x\y)\z)
+ proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+    let x,y,z be Element of X;
+    ((x\z)\(y\z))\((x\y)\z) = ((x\z)\(y\z))\((x\z)\(y\z)) by A1,Def11
+                           .= 0.X by BCIALG_1:def 5;
+    hence thesis by BCIALG_1:def 11;
+ end;
+  assume A2:for x,y,z being Element of X holds (x\z)\(y\z) <= (x\y)\z;
+  for x,y,z being Element of X holds (x\y)\z=(x\z)\(y\z)
+  proof
+   let x,y,z be Element of X;
+   (y\z)\y = (y\y)\z by BCIALG_1:7
+          .= z` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8;
+   then y\z <= y by BCIALG_1:def 11;
+   then x\y <= x\(y\z) by BCIALG_1:5;
+   then ((x\y)\z) <= ((x\(y\z))\z) by BCIALG_1:5;
+   then ((x\y)\z)\((x\(y\z))\z) = 0.X by BCIALG_1:def 11;
+   then A3:((x\y)\z)\((x\z)\(y\z)) = 0.X by BCIALG_1:7;
+   (x\z)\(y\z) <= (x\y)\z by A2;
+   then ((x\z)\(y\z))\((x\y)\z) = 0.X by BCIALG_1:def 11;
+   hence thesis by A3,BCIALG_1:def 7;
+   end;
+   hence thesis by Def11;
+end;
+
+theorem
+ X is BCK-positive-implicative BCK-algebra iff
+  (for x,y being Element of X holds x\y <= (x\y)\y)
+proof
+ thus X is BCK-positive-implicative BCK-algebra implies
+  (for x,y being Element of X holds x\y <= (x\y)\y)
+ proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+    let x,y be Element of X;
+    (x\y)\((x\y)\y) = ((x\y)\y)\((x\y)\y) by A1,Th28
+                  .= 0.X by BCIALG_1:def 5;
+    hence thesis by BCIALG_1:def 11;
+ end;
+  assume A2:(for x,y being Element of X holds x\y <= (x\y)\y);
+  for x,y being Element of X holds x\y = (x\y)\y
+  proof
+   let x,y be Element of X;
+   A3:((x\y)\y)\(x\y) = ((x\y)\(x\y))\y by BCIALG_1:7
+                     .= y` by BCIALG_1:def 5
+                     .= 0.X by BCIALG_1:def 8;
+   x\y <= (x\y)\y by A2;
+   then (x\y)\((x\y)\y) = 0.X by BCIALG_1:def 11;
+   hence thesis by A3,BCIALG_1:def 7;
+  end;
+  hence thesis by Th28;
+end;
+
+theorem
+ X is BCK-positive-implicative BCK-algebra iff (for x,y being Element
+  of X holds (x\(x\(y\(y\x)))) <= (x\(x\y))\(y\x))
+proof
+ thus X is BCK-positive-implicative BCK-algebra implies (for x,y being
+   Element of X holds (x\(x\(y\(y\x)))) <= (x\(x\y))\(y\x))
+ proof
+  assume A1:X is BCK-positive-implicative BCK-algebra;
+   let x,y be Element of X;
+   ((x\(x\(y\(y\x)))))\((x\(x\y))\(y\x))
+    = ((x\(x\(y\(y\x)))))\((x\(x\(y\(y\x))))) by A1,Th29
+   .= 0.X by BCIALG_1:def 5;
+    hence thesis by BCIALG_1:def 11;
+ end;
+ assume A2:for x,y being Element of X holds
+   (x\(x\(y\(y\x)))) <= (x\(x\y))\(y\x);
+ for x,y being Element of X holds (x\(x\y))\(y\x) = x\(x\(y\(y\x)))
+ proof
+  let x,y be Element of X;
+  (x\(x\(y\(y\x)))) <= (x\(x\y))\(y\x) by A2;
+  then A3:(x\(x\(y\(y\x))))\((x\(x\y))\(y\x)) = 0.X by BCIALG_1:def 11;
+  ((x\(x\y))\(y\x))\(x\(x\(y\(y\x))))=0.X by BCIALG_1:10;
+  hence thesis by A3,BCIALG_1:def 7;
+  end;
+  hence thesis by Th29;
+end;
+
+theorem Th34:
+ X is BCK-implicative BCK-algebra iff (X is commutative BCK-algebra &
+  X is BCK-positive-implicative BCK-algebra)
+proof
+ thus X is BCK-implicative BCK-algebra implies (X is commutative
+  BCK-algebra & X is BCK-positive-implicative BCK-algebra)
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+  A2:X is commutative BCK-algebra
+  proof
+   for x,y being Element of X holds x\(x\y) <= y\(y\x)
+   proof
+    let x,y be Element of X;
+    (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+              .= 0.X by BCIALG_1:def 5;
+    then (x\(x\y)) <= y by BCIALG_1:def 11;
+    then (x\(x\y))\(y\x) <= y\(y\x) by BCIALG_1:5;
+    then (x\(y\x))\(x\y) <= y\(y\x) by BCIALG_1:7;
+    hence thesis by A1,Def12;
+   end;
+   hence thesis by Th1;
+  end;
+  X is BCK-positive-implicative BCK-algebra
+  proof
+   for x,y being Element of X holds x\y = (x\y)\y
+   proof
+    let x,y be Element of X;
+    (x\y)\(y\(x\y))=(x\y) by A1,Def12;
+    hence thesis by A1,Def12;
+   end;
+   hence thesis by Th28;
+  end;
+  hence thesis by A2;
+ end;
+  assume A3:X is commutative BCK-algebra &
+    X is BCK-positive-implicative BCK-algebra;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   x\(x\(x\(y\x))) = x\(y\x) by BCIALG_1:8;
+   then A4:x\(y\x) = x\((y\x)\((y\x)\x)) by A3,Def1;
+   (y\x)\((y\x)\x) = (y\x)\(y\x) by A3,Th28
+                  .= 0.X by BCIALG_1:def 5;
+   hence thesis by A4,BCIALG_1:2;
+  end;
+  hence thesis by Def12;
+end;
+
+theorem Th35:
+ X is BCK-implicative BCK-algebra iff (for x,y being Element
+  of X holds (x\(x\y))\(x\y) = (y\(y\x)))
+proof
+ thus X is BCK-implicative BCK-algebra implies (for x,y being Element
+  of X holds (x\(x\y))\(x\y) = (y\(y\x)))
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+  then A2:X is commutative BCK-algebra by Th34;
+   let x,y be Element of X;
+   (x\(x\y))\(x\y) = (y\(y\x))\(x\y) by A2,Def1
+                  .= (y\(x\y))\(y\x) by BCIALG_1:7;
+   hence thesis by A1,Def12;
+ end;
+  assume A3:for x,y being Element of X holds (x\(x\y))\(x\y)=y\(y\x);
+  for x,y being Element of X holds ( x<= y implies x= y\(y\x) )
+  proof
+   let x,y be Element of X;
+   assume x<=y;
+   then A4:x\y = 0.X by BCIALG_1:def 11;
+   then (y\(y\x)) = (x\(x\y))\0.X by A3
+                 .= (x\0.X) by A4,BCIALG_1:2;
+   hence thesis by BCIALG_1:2;
+  end;
+   then A5:X is commutative BCK-algebra by Th5;
+   for x,y being Element of X holds (x\y)\y = x\y
+   proof
+    let x,y be Element of X;
+   A6:(x\(x\(x\y)))\(x\(x\y)) = ((x\y)\((x\y)\x)) by A3;
+   A7:(x\(x\(x\y)))\(x\(x\y)) = (x\y)\(x\(x\y)) by BCIALG_1:8
+                             .= (x\(x\(x\y)))\y by BCIALG_1:7
+                             .= (x\y)\y by BCIALG_1:8;
+   (x\y)\x = (x\x)\y by BCIALG_1:7
+          .= y` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8;
+    hence thesis by A6,A7,BCIALG_1:2;
+   end;
+   then X is BCK-positive-implicative BCK-algebra by Th28;
+   hence thesis by A5,Th34;
+end;
+
+theorem
+  for X being non empty BCIStr_0 holds
+    (X is BCK-implicative BCK-algebra iff (for x,y,z being Element of X
+       holds x\(0.X\y) = x & (x\z)\(x\y) = ((y\z)\(y\x))\(x\y) ))
+proof
+ let X be non empty BCIStr_0;
+ thus X is BCK-implicative BCK-algebra implies (for x,y,z being Element
+    of X holds x\(0.X\y) = x & (x\z)\(x\y) = ((y\z)\(y\x))\(x\y) )
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+   let x,y,z be Element of X;
+   A2:x\(0.X\y) = x\y`
+               .= x\0.X by A1,BCIALG_1:def 8
+               .= x by A1,BCIALG_1:2;
+   A3:X is commutative BCK-algebra by A1,Th34;
+   ((y\z)\(y\x))\(x\y) = ((y\z)\(x\y))\(y\x) by A1,BCIALG_1:7
+                      .= ((y\(x\y))\z)\(y\x) by A1,BCIALG_1:7
+                      .= (y\z)\(y\x) by A1,Def12
+                      .= (y\(y\x))\z by A1,BCIALG_1:7
+                      .= (x\(x\y))\z by A3,Def1
+                      .= (x\z)\(x\y) by A1,BCIALG_1:7;
+   hence thesis by A2;
+ end;
+ assume A4:for x,y,z being Element of X holds x\(0.X\y) = x &
+  (x\z)\(x\y) = ((y\z)\(y\x))\(x\y);
+   A5:for x,y being Element of X holds x\0.X = x
+      proof
+        let x,y be Element of X;
+        0.X\(0.X\0.X) = 0.X & x\(0.X\(0.X\0.X)) = x by A4;
+        hence thesis;
+      end;
+     A6:for x,y being Element of X holds x\(x\y) = (y\(y\x))\(x\y)
+         proof
+           let x,y be Element of X;
+           x\(x\y) = (x\0.X)\(x\y) by A5
+                  .= ((y\0.X)\(y\x))\(x\y) by A4;
+           hence thesis by A5;
+         end;
+      A7:for y being Element of X holds y\y = 0.X
+         proof
+           let y be Element of X;
+           0.X\(0.X\y) = (y\(y\0.X))\(0.X\y) by A6
+                      .= (y\y)\(0.X\y) by A5
+                      .= y\y by A4;
+           hence thesis by A4;
+         end;
+      A8:for x,y being Element of X st x\y=0.X & y\x=0.X holds x = y
+          proof
+            let x,y be Element of X;
+            assume x\y=0.X & y\x=0.X;
+            then A9:(x\0.X)\0.X = ((y\0.X)\0.X)\0.X by A4
+                                .= (y\0.X)\0.X by A5;
+             A10:(x\0.X) = (y\0.X)\0.X by A5,A9
+                        .= (y\0.X) by A5;
+            thus x = (y\0.X) by A5,A10
+                  .= y by A5;
+           end;
+       A11:for x being Element of X holds 0.X\x = 0.X
+          proof
+            let x be Element of X;
+            (0.X\x)\(0.X\x) = 0.X\x by A4;
+            hence thesis by A7;
+          end;
+       A12:for x,y being Element of X holds (x\y)\x = 0.X
+           proof
+             let x,y be Element of X;
+             (x\y)\x = (x\y)\(x\0.X) by A5
+                    .= ((0.X\y)\(0.X\x))\(x\0.X) by A4
+                    .= ((0.X)\(0.X\x))\(x\0.X) by A11
+                    .= 0.X\(x\0.X) by A11;
+           hence thesis by A11;
+          end;
+       A13:for x,y,z being Element of X
+            holds ((x\z)\(x\y))\((y\z)\(y\x)) = 0.X
+          proof
+            let x,y,z be Element of X;
+            (((y\z)\(y\x))\(x\y))\((y\z)\(y\x)) = 0.X by A12;
+            hence thesis by A4;
+          end;
+       A14:for x,y,z being Element of X holds ((x\z)\(x\y)) = ((y\z)\(y\x))
+           proof
+             let x,y,z be Element of X;
+             A15:((y\z)\(y\x))\((x\z)\(x\y)) = 0.X by A13;
+             ((x\z)\(x\y))\((y\z)\(y\x)) = 0.X by A13;
+             hence thesis by A8,A15;
+          end;
+ then A16:X is commutative BCK-algebra by A4,Th6;
+ for x,y being Element of X holds (x\(x\y))\(x\y) = (y\(y\x))
+ proof
+  let x,y be Element of X;
+  x\(x\y) = (y\(y\x)) by A16,Def1;
+  hence thesis by A6;
+ end;
+ hence thesis by A4,A14,Th6,Th35;
+end;
+
+Lm1:
+for X being bounded BCK-algebra holds (X is BCK-implicative implies
+ (for a being Element of X st a is being_greatest holds
+   (for x being Element of X holds a\(a\x)=x)))
+proof
+  let X be bounded BCK-algebra;
+  assume X is BCK-implicative;
+  then A1:X is commutative BCK-algebra by Th34;
+  let a be Element of X;
+  assume A2:a is being_greatest;
+  let x be Element of X;
+  a\(a\x) = x\(x\a) by A1,Def1
+         .= x\0.X by A2,Def2;
+  hence thesis by BCIALG_1:2;
+end;
+
+theorem Th37:
+for X being bounded BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+  (X is involutory & X is BCK-positive-implicative))
+proof
+let X be bounded BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+thus X is BCK-implicative implies
+    (X is involutory & X is BCK-positive-implicative)
+ proof
+   assume A2:X is BCK-implicative;
+   for a being Element of X st a is being_greatest holds
+     (for x being Element of X holds a\(a\x)=x) by A2,Lm1;
+   hence thesis by A2,Def7,Th34;
+ end;
+  assume A3:X is involutory & X is BCK-positive-implicative;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   A4:(x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+                  .= (y\x)` by BCIALG_1:def 5
+                  .= 0.X by BCIALG_1:def 8;
+     y\a = 0.X by A1,Def2;
+     then y<=a by BCIALG_1:def 11;
+     then A5:y\x <= a\x by BCIALG_1:5;
+     x\(a\x) = (a\(a\x))\(a\x) by A1,A3,Def7
+            .= a\(a\x) by A3,Th28
+            .= x by A1,A3,Def7;
+     then x <= x\(y\x) by A5,BCIALG_1:5;
+     then x\(x\(y\x)) = 0.X by BCIALG_1:def 11;
+    hence thesis by A4,BCIALG_1:def 7;
+   end;
+   hence thesis by Def12;
+end;
+
+theorem
+ X is BCK-implicative BCK-algebra iff (for x,y being Element
+  of X holds x\(x\(y\x)) = 0.X)
+proof
+ thus X is BCK-implicative BCK-algebra implies (for x,y being Element
+  of X holds x\(x\(y\x)) = 0.X)
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+   let x,y be Element of X;
+   x\(x\(y\x)) = x\x by A1,Def12;
+   hence thesis by BCIALG_1:def 5;
+ end;
+  assume A2:for x,y being Element of X holds x\(x\(y\x)) = 0.X;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   A3:x\(x\(y\x)) = 0.X by A2;
+   (x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   hence thesis by A3,BCIALG_1:def 7;
+  end;
+  hence thesis by Def12;
+end;
+
+theorem
+ X is BCK-implicative BCK-algebra iff ( for x,y being Element
+  of X holds (x\(x\y))\(x\y) = y\(y\(x\(x\y))) )
+proof
+ thus X is BCK-implicative BCK-algebra implies (for x,y being Element
+  of X holds (x\(x\y))\(x\y) = y\(y\(x\(x\y))))
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+  then A2:X is commutative BCK-algebra by Th34;
+  let x,y be Element of X;
+  y\(y\(x\(x\y))) = y\(y\(y\(y\x))) by A2,Def1
+                 .= y\(y\x) by BCIALG_1:8;
+  hence thesis by A1,Th35;
+ end;
+  assume
+A3:for x,y being Element of X holds (x\(x\y))\(x\y) = y\(y\(x\(x\y)));
+  A4:for x,y being Element of X holds (x\y)\y = x\y
+  proof
+   let x,y be Element of X;
+   A5:(x\(x\(x\y)))\(x\(x\y)) = (x\y)\(x\(x\y)) by BCIALG_1:8
+                             .= (x\(x\(x\y)))\y by BCIALG_1:7
+                             .= (x\y)\y by BCIALG_1:8;
+   (x\y)\((x\y)\(x\(x\(x\y)))) = (x\y)\((x\y)\(x\y)) by BCIALG_1:8
+                              .= (x\y)\0.X by BCIALG_1:def 5
+                              .= x\y by BCIALG_1:2;
+   hence thesis by A3,A5;
+  end;
+  for x,y being Element of X holds x\(x\y) = y\(y\(x\(x\y)))
+  proof
+   let x,y be Element of X;
+   x\(x\y) = (x\(x\y))\(x\y) by A4;
+   hence thesis by A3;
+  end;
+  then A6:X is commutative BCK-algebra by Th4;
+  for x,y being Element of X holds (x\(x\y))\(x\y) = (y\(y\x))
+  proof
+   let x,y be Element of X;
+   (x\(x\y))\(x\y) = y\(y\(x\(x\y))) by A3
+                  .= y\(y\(y\(y\x))) by A6,Def1;
+   hence thesis by BCIALG_1:8;
+  end;
+  hence thesis by Th35;
+end;
+
+theorem Th40:
+ X is BCK-implicative BCK-algebra iff ( for x,y,z being Element
+  of X holds (x\z)\(x\y) = (y\z)\((y\x)\z) )
+proof
+ thus X is BCK-implicative BCK-algebra implies ( for x,y,z being Element
+  of X holds (x\z)\(x\y) = (y\z)\((y\x)\z) )
+ proof
+  assume X is BCK-implicative BCK-algebra;
+  then A1:X is commutative BCK-algebra &
+   X is BCK-positive-implicative BCK-algebra by Th34;
+   let x,y,z be Element of X;
+   (x\z)\(x\y) = (x\(x\y))\z by BCIALG_1:7
+              .= (y\(y\x))\z by A1,Def1;
+   hence thesis by A1,Def11;
+ end;
+ assume A2:for x,y,z being Element of X holds (x\z)\(x\y)=(y\z)\((y\x)\z);
+  A3:for x,y being Element of X holds x\(x\y)= y\(y\x)
+  proof
+   let x,y be Element of X;
+   (x\0.X)\(x\y) = (y\0.X)\((y\x)\0.X) by A2;
+   then (x\0.X)\(x\y) = y\((y\x)\0.X) by BCIALG_1:2;
+   then (x\0.X)\(x\y) = y\(y\x) by BCIALG_1:2;
+   hence thesis by BCIALG_1:2;
+  end;
+  for x,y being Element of X holds (y\(y\x))\(y\x) = x\(x\y)
+  proof
+   let x,y be Element of X;
+   (x\(y\x))\(x\y) = (y\(y\x))\((y\x)\(y\x)) by A2;
+   then (x\(y\x))\(x\y) = (y\(y\x))\0.X by BCIALG_1:def 5;
+   then (x\(y\x))\(x\y) = y\(y\x) by BCIALG_1:2;
+   then (x\(x\y))\(y\x) = y\(y\x) by BCIALG_1:7;
+   then (y\(y\x))\(y\x) = y\(y\x) by A3;
+   hence thesis by A3;
+  end;
+  then for x,y being Element of X holds (x\(x\y))\(x\y) = y\(y\x);
+  hence thesis by Th35;
+end;
+
+theorem
+ X is BCK-implicative BCK-algebra iff ( for x,y,z being Element
+  of X holds x\(x\(y\z)) = (y\z)\((y\z)\(x\z)) )
+proof
+ thus X is BCK-implicative BCK-algebra implies ( for x,y,z being Element
+  of X holds x\(x\(y\z)) = (y\z)\((y\z)\(x\z)) )
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+  then A2:X is commutative BCK-algebra &
+   X is BCK-positive-implicative BCK-algebra by Th34;
+  for x,y,z being Element of X holds x\(x\(y\z)) = (y\z)\((y\z)\(x\z))
+  proof
+   let x,y,z be Element of X;
+   (x\0.X)\(x\(y\z)) = ((y\z)\0.X)\(((y\z)\x)\0.X) by A1,Th40;
+   then x\(x\(y\z)) = ((y\z)\0.X)\(((y\z)\x)\0.X) by BCIALG_1:2
+      .= (y\z)\(((y\z)\x)\0.X) by BCIALG_1:2;
+   then x\(x\(y\z)) = (y\z)\((y\z)\x) by BCIALG_1:2
+                   .= (y\z)\((y\x)\z) by BCIALG_1:7;
+   hence thesis by A2,Def11;
+  end;
+  hence thesis;
+ end;
+  assume A3:for x,y,z being Element of X
+   holds x\(x\(y\z)) = (y\z)\((y\z)\(x\z));
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   x\(x\(y\x)) = (y\x)\((y\x)\(x\x)) by A3;
+   then x\(x\(y\x)) = (y\x)\((y\x)\0.X) by BCIALG_1:def 5;
+   then x\(x\(y\x)) = (y\x)\(y\x) by BCIALG_1:2;
+   then A4:x\(x\(y\x)) = 0.X by BCIALG_1:def 5;
+   (x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   hence thesis by A4,BCIALG_1:def 7;
+  end;
+  hence thesis by Def12;
+end;
+
+theorem
+ X is BCK-implicative BCK-algebra iff ( for x,y being Element
+  of X holds (x\(x\y)) = (y\(y\x))\(x\y) )
+proof
+ thus X is BCK-implicative BCK-algebra implies ( for x,y being Element
+  of X holds (x\(x\y)) = (y\(y\x))\(x\y) )
+ proof
+  assume A1:X is BCK-implicative BCK-algebra;
+  then A2:X is commutative BCK-algebra by Th34;
+  for x,y being Element of X holds x\(x\y) = (y\(y\x))\(x\y)
+  proof
+   let x,y be Element of X;
+   (x\(x\y))\(x\y) = y\(y\x) by A1,Th35;
+   then (y\(y\x))\(x\y) = y\(y\x) by A2,Def1;
+   hence thesis by A2,Def1;
+  end;
+  hence thesis;
+ end;
+  assume A3:for x,y being Element of X holds (x\(x\y)) = (y\(y\x))\(x\y);
+  for x,y being Element of X holds x\y = (x\y)\y
+  proof
+   let x,y be Element of X;
+   A4:(x\(x\(x\y))) = ((x\y)\((x\y)\x))\(x\(x\y)) by A3;
+   (x\y)\x = (x\x)\y by BCIALG_1:7
+              .= y` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   then (x\(x\(x\y))) = (x\y)\(x\(x\y)) by A4,BCIALG_1:2
+                     .= (x\(x\(x\y)))\y by BCIALG_1:7
+                     .= (x\y)\y by BCIALG_1:8;
+   hence thesis by BCIALG_1:8;
+  end;
+  then A5:X is BCK-positive-implicative BCK-algebra by Th28;
+  for x,y being Element of X st x<= y holds x= y\(y\x)
+  proof
+   let x,y be Element of X;
+   assume x<=y;
+   then x\y = 0.X by BCIALG_1:def 11;
+   then (x\0.X) = (y\(y\x))\0.X by A3;
+   then (x\0.X) = y\(y\x) by BCIALG_1:2;
+   hence thesis by BCIALG_1:2;
+  end;
+  then X is commutative BCK-algebra by Th5;
+  hence thesis by A5,Th34;
+end;
+
+theorem Th43:
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x being Element of X holds (a\x)\((a\x)\x) = 0.X ))
+proof
+let X be bounded commutative BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+ thus X is BCK-implicative implies
+  (for x being Element of X holds (a\x)\((a\x)\x) = 0.X )
+ proof
+  assume A2:X is BCK-implicative;
+   let x be Element of X;
+   (a\x)\((a\x)\x) = x\(x\(a\x)) by Def1
+                    .= x\x by A2,Def12;
+   hence thesis by BCIALG_1:def 5;
+ end;
+  assume A3:for x being Element of X holds (a\x)\((a\x)\x) = 0.X;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   (a\x)\((a\x)\x) = 0.X by A3;
+   then A4:x\(x\(a\x)) = 0.X by Def1;
+   (x\(a\x))\x = (x\x)\(a\x) by BCIALG_1:7
+              .= (a\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   then A5:x\(a\x) = x by A4,BCIALG_1:def 7;
+   y\a = 0.X by A1,Def2;
+   then y<=a by BCIALG_1:def 11;
+   then y\x <= a\x by BCIALG_1:5;
+   then x\(a\x) <= x\(y\x) by BCIALG_1:5;
+   then A6:x\(x\(y\x)) = 0.X by A5,BCIALG_1:def 11;
+   (x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   hence thesis by A6,BCIALG_1:def 7;
+  end;
+  hence thesis by Def12;
+end;
+
+theorem
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x being Element of X holds x\(a\x) = x ))
+proof
+let X be bounded commutative BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+ thus X is BCK-implicative implies
+  (for x being Element of X holds x\(a\x) = x )
+ proof
+  assume A2:X is BCK-implicative;
+  for x being Element of X holds x\(a\x) = x
+  proof
+   let x be Element of X;
+   (a\x)\((a\x)\x) = 0.X by A1,A2,Th43;
+   then A3:x\(x\(a\x)) = 0.X by Def1;
+   (x\(a\x))\x = (x\x)\(a\x) by BCIALG_1:7
+               .= ((a\x))` by BCIALG_1:def 5
+               .= 0.X by BCIALG_1:def 8;
+   hence thesis by A3,BCIALG_1:def 7;
+  end;
+  hence thesis;
+ end;
+  assume A4:for x being Element of X holds x\(a\x) = x;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   A5:x\(x\(a\x)) = x\x by A4
+               .= 0.X by BCIALG_1:def 5;
+   (x\(a\x))\x = (x\x)\(a\x) by BCIALG_1:7
+              .= (a\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   then A6:x\(a\x) = x by A5,BCIALG_1:def 7;
+   y\a = 0.X by A1,Def2;
+   then y<=a by BCIALG_1:def 11;
+   then y\x <= a\x by BCIALG_1:5;
+   then x\(a\x) <= x\(y\x) by BCIALG_1:5;
+   then A7:x\(x\(y\x)) = 0.X by A6,BCIALG_1:def 11;
+   (x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   hence thesis by A7,BCIALG_1:def 7;
+  end;
+  hence thesis by Def12;
+end;
+
+theorem
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x being Element of X holds (a\x)\x = (a\x) ))
+proof
+let X be bounded commutative BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+ thus X is BCK-implicative implies
+  (for x being Element of X holds (a\x)\x = (a\x) )
+ proof
+  assume A2:X is BCK-implicative;
+   let x be Element of X;
+   A3:(a\x)\((a\x)\x) = 0.X by A1,A2,Th43;
+   ((a\x)\x)\(a\x) = ((a\x)\(a\x))\x by BCIALG_1:7
+                    .= x` by BCIALG_1:def 5
+                    .= 0.X by BCIALG_1:def 8;
+   hence thesis by A3,BCIALG_1:def 7;
+ end;
+  assume A4:for x being Element of X holds (a\x)\x = (a\x);
+   let x,y be Element of X;
+   (a\x)\((a\x)\x) = (a\x)\(a\x) by A4
+                  .= 0.X by BCIALG_1:def 5;
+   then A5:x\(x\(a\x)) = 0.X by Def1;
+   (x\(a\x))\x = (x\x)\(a\x) by BCIALG_1:7
+              .= (a\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   then A6:x\(a\x) = x by A5,BCIALG_1:def 7;
+   y\a = 0.X by A1,Def2;
+   then y<=a by BCIALG_1:def 11;
+   then y\x <= a\x by BCIALG_1:5;
+   then x\(a\x) <= x\(y\x) by BCIALG_1:5;
+   then A7:x\(x\(y\x)) = 0.X by A6,BCIALG_1:def 11;
+   (x\(y\x))\x = (x\x)\(y\x) by BCIALG_1:7
+              .= (y\x)` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   hence thesis by A7,BCIALG_1:def 7;
+end;
+
+theorem Th46:
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x,y being Element of X holds (a\y)\((a\y)\x) = x\y ))
+proof
+let X be bounded commutative BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+ thus X is BCK-implicative implies
+  (for x,y being Element of X holds (a\y)\((a\y)\x) = x\y )
+ proof
+  assume A2:X is BCK-implicative;
+  then A3:X is commutative BCK-algebra &
+   X is BCK-positive-implicative BCK-algebra by Th34;
+   let x,y be Element of X;
+   (a\y)= (a\y)\y by A3,Th28;
+   then A4:((a\y)\((a\y)\x))\(x\y) = 0.X by BCIALG_1:1;
+   A5:X is involutory by A1,A2,Th37;
+   A6:(a\y)\((a\y)\x) = x\(x\(a\y)) by Def1;
+   A7:x\(a\y) = y\(a\x) by A1,A5,Th23;
+   (y\(a\x))\y = (y\y)\(a\x) by BCIALG_1:7
+               .= ((a\x))` by BCIALG_1:def 5
+               .= 0.X by BCIALG_1:def 8;
+   then x\(a\y) <= y by A7,BCIALG_1:def 11;
+   then x\y <= (a\y)\((a\y)\x) by A6,BCIALG_1:5;
+   then (x\y)\((a\y)\((a\y)\x)) = 0.X by BCIALG_1:def 11;
+   hence thesis by A4,BCIALG_1:def 7;
+ end;
+  assume A8:for x,y being Element of X holds (a\y)\((a\y)\x) = x\y;
+  for x being Element of X holds (a\x)\((a\x)\x) = 0.X
+  proof
+   let x be Element of X;
+   (a\x)\((a\x)\x) = x\x by A8;
+   hence thesis by BCIALG_1:def 5;
+  end;
+  hence thesis by A1,Th43;
+end;
+
+theorem Th47:
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x,y being Element of X holds y\(y\x) = x\(a\y) ))
+proof
+  let X be bounded commutative BCK-algebra;
+  let a be Element of X;
+  assume A1:a is being_greatest;
+  thus X is BCK-implicative implies
+    (for x,y being Element of X holds y\(y\x) = x\(a\y) )
+  proof
+    assume A2:X is BCK-implicative;
+    let x,y be Element of X;
+    y\(y\x) = x\(x\y) by Def1
+           .= x\((a\y)\((a\y)\x)) by A1,A2,Th46
+           .= x\(x\(x\(a\y))) by Def1;
+    hence thesis by BCIALG_1:8;
+  end;
+  assume A3:for x,y being Element of X holds y\(y\x) = x\(a\y);
+  for x,y being Element of X holds (a\y)\((a\y)\x) = x\y
+  proof
+    let x,y be Element of X;
+    (a\y)\((a\y)\x) = x\(a\(a\y)) by A3
+                   .= x\(y\(y\a)) by Def1
+                   .= x\(y\0.X) by A1,Def2;
+    hence thesis by BCIALG_1:2;
+  end;
+  hence thesis by A1,Th46;
+end;
+
+theorem
+for X being bounded commutative BCK-algebra,a being Element of X st
+  a is being_greatest holds (X is BCK-implicative iff
+ (for x,y,z being Element of X holds (x\(y\z))\(x\y) <= x\(a\z) ))
+proof
+let X be bounded commutative BCK-algebra;
+let a be Element of X;
+assume A1:a is being_greatest;
+ thus X is BCK-implicative implies
+  (for x,y,z being Element of X holds (x\(y\z))\(x\y) <= x\(a\z) )
+ proof
+  assume A2:X is BCK-implicative;
+  then A3:X is commutative BCK-algebra &
+   X is BCK-positive-implicative BCK-algebra by Th34;
+   let x,y,z be Element of X;
+   A4:((x\(y\z))\(x\(x\z)))\((x\y)\z)
+       = ((x\(y\z))\(x\(x\z)))\((x\z)\(y\z)) by A3,Def11
+      .= 0.X by BCIALG_1:1;
+   ((x\y)\z)\(x\y) = ((x\y)\(x\y))\z by BCIALG_1:7
+                  .= z` by BCIALG_1:def 5
+                  .= 0.X by BCIALG_1:def 8;
+   then A5:((x\(y\z))\(x\(x\z)))\(x\y) = 0.X by A4,BCIALG_1:3;
+   ((x\(y\z))\(x\y))\(x\(a\z)) = ((x\(y\z))\(x\y))\(z\(z\x)) by A1,A2,Th47
+                  .= ((x\(y\z))\(x\y))\(x\(x\z)) by Def1
+                  .= 0.X by A5,BCIALG_1:7;
+   hence thesis by BCIALG_1:def 11;
+ end;
+  assume A6:for x,y,z being Element of X holds (x\(y\z))\(x\y) <= x\(a\z);
+  for x being Element of X holds (a\x)\((a\x)\x) = 0.X
+  proof
+   let x be Element of X;
+   (x\(x\x))\(x\x) <= x\(a\x) by A6;
+   then (x\(0.X))\(x\x) <= x\(a\x) by BCIALG_1:def 5;
+   then x\(x\x) <= x\(a\x) by BCIALG_1:2;
+   then x\0.X <= x\(a\x) by BCIALG_1:def 5;
+   then x <= x\(a\x) by BCIALG_1:2;
+   then x\(x\(a\x)) = 0.X by BCIALG_1:def 11;
+   hence thesis by Def1;
+  end;
+  hence thesis by A1,Th43;
+end;

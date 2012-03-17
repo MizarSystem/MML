@@ -8,24 +8,22 @@ environ
 
  vocabularies GR_CY_1, TARSKI, INT_1, BOOLE, FINSEQ_1, NAT_1, FUNCT_1, CARD_3,
       RELAT_1, AMI_1, FUNCT_4, CAT_1, MCART_1, ARYTM_1, CQC_LANG, FUNCT_2,
-      FUNCT_5, AMI_2, FINSEQ_4, ARYTM, ORDINAL2, MEMBERED, MATRIX_2;
+      FUNCT_5, AMI_2, FINSEQ_4, ARYTM, ORDINAL2;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS,
-      MEMBERED, ABIAN,
-      XCMPLX_0, XREAL_0, CARD_1, CARD_3, RELAT_1, FUNCT_1, FUNCT_2, XXREAL_0,
-      BINOP_1, DOMAIN_1, INT_1, NAT_1, NAT_D, FUNCOP_1, FRAENKEL, FUNCT_4,
+      XCMPLX_0, XREAL_0, CARD_1, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      XXREAL_0, BINOP_1, DOMAIN_1, INT_1, NAT_1, FUNCOP_1, FRAENKEL, FUNCT_4,
       CAT_2, FINSEQ_1, FINSEQ_4;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_1,
-      MEMBERED, ABIAN, REAL_1;
- registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      ARYTM_3, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1,
-      CARD_3, AFINSQ_1, MEMBERED, RELAT_1, CARD_4, FINSET_1;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, CAT_2, AMI_1, ABIAN,
+      REAL_1;
+ registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, FUNCOP_1, FRAENKEL,
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, AFINSQ_1,
+      RELAT_1, CARD_4, FINSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCOP_1, CARD_1;
- theorems ZFMISC_1, FUNCT_2, TARSKI, NAT_1, CAT_2, FUNCOP_1, GR_CY_1, SCHEME1,
-      ENUMSET1, INT_1, CARD_3, FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, AMI_1,
-      XBOOLE_0, XBOOLE_1, NUMBERS, ORDINAL1, NAT_D, ABIAN, XREAL_1, RELAT_1,
-      ARYTM_3;
- schemes FUNCT_2, BINOP_1, DOMAIN_1;
+ theorems ZFMISC_1, FUNCT_2, TARSKI, CAT_2, FUNCOP_1, GR_CY_1, ENUMSET1, INT_1,
+      CARD_3, FINSEQ_1, FINSEQ_4, MCART_1, FUNCT_4, XBOOLE_0, XBOOLE_1,
+      ORDINAL1, RELAT_1;
+ schemes FUNCT_2, BINOP_1;
 
 begin :: A small concrete machine
 
@@ -46,7 +44,6 @@ definition
   [:{1},NAT:];
   coherence;
  func SCM-Instr-Loc equals
-:::   { 2*k : not contradiction };
    NAT;
   coherence;
 end;
@@ -206,23 +203,23 @@ now let k be Element of SCM-Memory;
  hence k = NAT or k in SCM-Data-Loc or k in SCM-Instr-Loc by TARSKI:def 1;
 end;
 
-Lm27:
+Lm2:
  not NAT in SCM-Data-Loc
   proof assume NAT in SCM-Data-Loc;
     then ex x,y st NAT = [x,y] by RELAT_1:def 1;
    hence contradiction;
   end;
 
-Lm29:
+Lm3:
  SCM-Data-Loc misses SCM-Instr-Loc
   proof assume SCM-Data-Loc meets SCM-Instr-Loc;
     then consider x such that
-W1:  x in SCM-Data-Loc and
-W2:  x in SCM-Instr-Loc by XBOOLE_0:3;
+A1:  x in SCM-Data-Loc and
+A2:  x in SCM-Instr-Loc by XBOOLE_0:3;
     consider y,z such that
-W3:  x = [y,z] by W1,RELAT_1:def 1;
-    ex k st x = k by W2;
-   hence contradiction by W3;
+A3:  x = [y,z] by A1,RELAT_1:def 1;
+    ex k st x = k by A2;
+   hence contradiction by A3;
   end;
 
 definition
@@ -254,37 +251,37 @@ then A2:   INT in {INT} \/ { SCM-Instr, SCM-Instr-Loc } &
 A3:   for a being Element of SCM-Memory holds P[a,h.a] from FUNCT_2:sch 3(A1);
    take h;
    let k be Element of SCM-Memory;
-X:  P[k,h.k] by A3;
-   thus k = NAT implies h.k = SCM-Instr-Loc by Lm27,X;
-   thus k in SCM-Data-Loc implies h.k = INT by Lm27,Lm29,XBOOLE_0:3,X;
+A4:  P[k,h.k] by A3;
+   thus k = NAT implies h.k = SCM-Instr-Loc by A4,Lm2;
+   thus k in SCM-Data-Loc implies h.k = INT by A4,Lm2,Lm3,XBOOLE_0:3;
    thus k in SCM-Instr-Loc implies h.k = SCM-Instr
-         by Lm29,XBOOLE_0:3,X;
+         by A4,Lm3,XBOOLE_0:3;
   end;
  uniqueness
   proof
    let f,g be Function of SCM-Memory, {INT} \/ { SCM-Instr, SCM-Instr-Loc }
   such that
-A4: for k being Element of SCM-Memory holds
+A5: for k being Element of SCM-Memory holds
    (k = NAT implies f.k = SCM-Instr-Loc) &
    (k in SCM-Data-Loc implies f.k = INT) &
    (k in SCM-Instr-Loc implies f.k = SCM-Instr)
     and
-A5: for k being Element of SCM-Memory holds
+A6: for k being Element of SCM-Memory holds
    (k = NAT implies g.k = SCM-Instr-Loc) &
    (k in SCM-Data-Loc implies g.k = INT) &
    (k in SCM-Instr-Loc implies g.k = SCM-Instr);
         now let k be Element of SCM-Memory;
           now per cases by Lm1;
      suppose
-S:    k = NAT;
-        hence f.k = SCM-Instr-Loc by A4 .= g.k by A5,S;
+A7:    k = NAT;
+        hence f.k = SCM-Instr-Loc by A5 .= g.k by A6,A7;
        end;
-       suppose A6: k in SCM-Data-Loc;
-        hence f.k = INT by A4 .= g.k by A5,A6;
+       suppose A8: k in SCM-Data-Loc;
+        hence f.k = INT by A5 .= g.k by A6,A8;
        end;
-       suppose A7: k in SCM-Instr-Loc;
+       suppose A9: k in SCM-Instr-Loc;
 
-        hence f.k = SCM-Instr by A4 .= g.k by A5,A7;
+        hence f.k = SCM-Instr by A5 .= g.k by A6,A9;
       end;
       end;
      hence f.k = g.k;
@@ -299,8 +296,8 @@ theorem Th6:
   hereby assume SCM-Instr-Loc = INT;
     then -1 in SCM-Instr-Loc by INT_1:def 1;
     then consider k such that
-W:   -1 = k;
-    k < 0 by W;
+A1:   -1 = k;
+    k < 0 by A1;
    hence contradiction;
   end;
    now assume 2 in SCM-Instr;
@@ -385,7 +382,7 @@ theorem
   hence a <> t by Th6;
  end;
 
-LmX0: NAT in SCM-Memory
+Lm4: NAT in SCM-Memory
 proof
  NAT in {NAT} by TARSKI:def 1;
  then NAT in {NAT} \/ SCM-Data-Loc by XBOOLE_0:def 2;
@@ -396,8 +393,8 @@ theorem Th13:
  pi(product SCM-OK,NAT) = SCM-Instr-Loc
  proof
    dom SCM-OK = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCM-OK,NAT) = SCM-OK.NAT by CARD_3:22,LmX0
-       .= SCM-Instr-Loc by Th7,LmX0;
+  hence pi(product SCM-OK,NAT) = SCM-OK.NAT by Lm4,CARD_3:22
+       .= SCM-Instr-Loc by Lm4,Th7;
  end;
 
 theorem Th14:
@@ -434,7 +431,7 @@ A1:  dom(SCM-OK) = SCM-Memory by FUNCT_2:def 1;
 then A2:  dom(s +* (NAT .--> u))
        = SCM-Memory \/ dom(NAT .--> u) by FUNCT_4:def 1
       .= SCM-Memory \/ {NAT} by FUNCOP_1:19
-      .= dom(SCM-OK) by A1,ZFMISC_1:46,LmX0;
+      .= dom(SCM-OK) by A1,Lm4,ZFMISC_1:46;
         now let x be set;
      assume
 A3:    x in dom(SCM-OK);
@@ -446,7 +443,7 @@ A4:     x = NAT;
         then (s +* (NAT .--> u)).NAT = (NAT .--> u).NAT by FUNCT_4:14
           .= u by FUNCOP_1:87;
         then (s +* (NAT .--> u)).NAT in SCM-Instr-Loc;
-       hence (s +* (NAT .--> u)).x in SCM-OK.x by A4,Th7,LmX0;
+       hence (s +* (NAT .--> u)).x in SCM-OK.x by A4,Lm4,Th7;
       end;
       suppose
 A5:     x <> NAT;
@@ -478,7 +475,7 @@ theorem
   holds SCM-Chg(s,u).mk = s.mk
 proof let s be SCM-State, u be Element of SCM-Instr-Loc,
      mk be Element of SCM-Data-Loc;
-A1:  SCM-OK.NAT = SCM-Instr-Loc & SCM-OK.mk = INT by Th7,Th10,LmX0;
+A1:  SCM-OK.NAT = SCM-Instr-Loc & SCM-OK.mk = INT by Lm4,Th7,Th10;
       {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
 then  not mk in dom(NAT .--> u) by A1,Th6,TARSKI:def 1;
   hence SCM-Chg(s,u).mk = s.mk by FUNCT_4:12;
@@ -488,8 +485,11 @@ theorem
      for s being SCM-State, u,v being Element of SCM-Instr-Loc
   holds SCM-Chg(s,u).v = s.v
 proof let s be SCM-State, u,v be Element of SCM-Instr-Loc;
+  v in NAT by ORDINAL1:def 13;
+  then
+A1: v <> NAT;
       {NAT} = dom(NAT .--> u) by FUNCOP_1:19;
-then not v in dom(NAT .--> u) by TARSKI:def 1;
+then not v in dom(NAT .--> u) by A1,TARSKI:def 1;
   hence SCM-Chg(s,u).v = s.v by FUNCT_4:12;
 end;
 
@@ -534,7 +534,7 @@ theorem
      for s being SCM-State, t being Element of SCM-Data-Loc, u being Integer
   holds SCM-Chg(s,t,u).NAT = s.NAT
 proof let s be SCM-State, t be Element of SCM-Data-Loc, u be Integer;
-A1:  SCM-OK.NAT = SCM-Instr-Loc & SCM-OK.t = INT by Th7,Th10,LmX0;
+A1:  SCM-OK.NAT = SCM-Instr-Loc & SCM-OK.t = INT by Lm4,Th7,Th10;
       {t} = dom(t .--> u) by FUNCOP_1:19;
 then  not NAT in dom(t .--> u) by A1,Th6,TARSKI:def 1;
  hence SCM-Chg(s,t,u).NAT = s.NAT by FUNCT_4:12;
@@ -790,16 +790,16 @@ begin :: Addenda
 canceled;
 
 theorem
- not NAT in SCM-Data-Loc by Lm27;
+ not NAT in SCM-Data-Loc by Lm2;
 
 theorem
  not NAT in SCM-Instr-Loc;
 
 theorem
- SCM-Data-Loc misses SCM-Instr-Loc by Lm29;
+ SCM-Data-Loc misses SCM-Instr-Loc by Lm3;
 
 theorem
- NAT in SCM-Memory by LmX0;
+ NAT in SCM-Memory by Lm4;
 
 theorem
  SCM-Instr-Loc <> INT by Th6;
@@ -808,18 +808,18 @@ theorem
  x in SCM-Data-Loc implies ex k being Element of NAT st x = [1,k]
  proof assume x in SCM-Data-Loc;
    then consider y,z such that
-W1: y in {1} and
-W2: z in NAT and
-W3: x = [y,z] by ZFMISC_1:103;
-   reconsider k = z as Element of NAT by W2;
+A1: y in {1} and
+A2: z in NAT and
+A3: x = [y,z] by ZFMISC_1:103;
+   reconsider k = z as Element of NAT by A2;
   take k;
-   y = 1 by W1, TARSKI:def 1;
-  hence x = [1,k] by W3;
+   y = 1 by A1,TARSKI:def 1;
+  hence x = [1,k] by A3;
  end;
 
 theorem
  for k being natural number holds [1,k] in SCM-Data-Loc
 proof let k be natural number;
-  1 in {1} & k in NAT by TARSKI:def 1,ORDINAL1:def 13;
+  1 in {1} & k in NAT by ORDINAL1:def 13,TARSKI:def 1;
  hence [1,k] in SCM-Data-Loc by ZFMISC_1:106;
 end;

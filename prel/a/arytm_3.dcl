@@ -15,19 +15,6 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="10"/>
-<Adjective nr="14"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="67"/>
@@ -47,14 +34,6 @@
 <Adjective nr="1"/>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="61"/>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="14"/>
-</Cluster>
-</FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -198,31 +177,6 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="10"/>
-</Cluster>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="10"/>
-<Adjective nr="14"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="41"/>
-</Typ>
-<Cluster>
-<Adjective nr="14"/>
-</Cluster>
-</CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>

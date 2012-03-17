@@ -12,21 +12,21 @@ environ
       TRIANG_1, MATRLIN, MEASURE6, SQUARE_1, CARD_3, REALSET1, GROUP_1,
       ALGSTR_1, LATTICES, DTCONSTR, MSUALG_3, SEQM_3, ALGSEQ_1, ORDINAL1,
       ARYTM_3, FUNCT_2, FRAENKEL, FINSUB_1, SETWISEO, TARSKI, RFINSEQ,
-      POLYNOM1, FVSUM_1, FINSEQ_4, SEQ_1, NAT_1, VECTSP_2;
+      POLYNOM1, FVSUM_1, FINSEQ_4, SEQ_1, VECTSP_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, ORDERS_1, RELAT_1,
-      XCMPLX_0, RELSET_1, RELAT_2, FUNCT_1, FINSET_1, FINSUB_1, SETWISEO,
-      ORDINAL1, PBOOLE, PARTFUN1, FUNCT_2, BINOP_2, FINSEQ_1, STRUCT_0,
-      FUNCT_3, XXREAL_0, BINOP_1, FUNCT_4, NAT_1, ALGSTR_1, RLVECT_1, FINSEQ_2,
-      WELLORD1, SEQM_3, CARD_1, CARD_3, FINSEQ_4, GROUP_1, VECTSP_1, TRIANG_1,
+      XCMPLX_0, RELAT_2, FUNCT_1, RELSET_1, FINSET_1, FINSUB_1, SETWISEO,
+      ORDINAL1, PBOOLE, PARTFUN1, FUNCT_2, BINOP_2, FINSEQ_1, FINSEQ_4,
+      STRUCT_0, FUNCT_3, XXREAL_0, BINOP_1, FUNCT_4, NAT_1, ALGSTR_1, RLVECT_1,
+      FINSEQ_2, WELLORD1, SEQM_3, CARD_1, CARD_3, GROUP_1, VECTSP_1, TRIANG_1,
       WSIERP_1, FUNCOP_1, FUNCT_7, FRAENKEL, DTCONSTR, BINARITH, MATRLIN,
       RFUNCT_3, RFINSEQ, FVSUM_1, SEQ_1;
  constructors WELLORD2, BINOP_1, SETWISEO, NAT_1, CARD_3, FINSEQOP, FINSOP_1,
-      RFINSEQ, RFUNCT_3, BINARITH, WSIERP_1, FUNCT_7, ALGSTR_1, FVSUM_1,
-      DTCONSTR, MATRLIN, TRIANG_1;
+      FINSEQ_4, RFINSEQ, RFUNCT_3, BINARITH, WSIERP_1, FUNCT_7, ALGSTR_1,
+      FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       ORDINAL3, FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, BINOP_2,
       CARD_1, MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, CARD_3, STRUCT_0, VECTSP_1,
-      ALGSTR_1, CIRCCOMB, HEYTING2, GOBRD13;
+      ALGSTR_1, CIRCCOMB, HEYTING2, GOBRD13, SEQM_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, MATRLIN, CARD_3,
       RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, SEQM_3, GROUP_1,
@@ -350,9 +350,12 @@ end;
 registration
  cluster -> Cardinal-yielding FinSequence of NAT;
  coherence proof let f be FinSequence of NAT;
-  let x be set; assume x in dom f;
+  let x be set; assume
+A1: x in dom f;
+  then reconsider x as Element of NAT;
+  x in dom f by A1;
   then f.x in NAT by FINSEQ_2:13;
-  hence f.x is Cardinal by CARD_1:65;
+  hence thesis by CARD_1:65;
  end;
 end;
 
@@ -449,7 +452,7 @@ A5: dom (Card F ^ Card G) = Seg (len Card F + len Card G) by FINSEQ_1:def 7
      .= Card ((F^G).x) by A9,FINSEQ_1:def 7;
    end;
    suppose len F < k; then not k in dom F by FINSEQ_3:27;
-      then consider n being Element of NAT such that
+      then consider n being Nat such that
    A10: n in dom G & k = len F + n by A6,FINSEQ_1:38;
     thus (Card F ^ Card G).x = (Card G).n by A2,A3,A10,FINSEQ_1:def 7
       .= Card (G.n) by A10,CARD_3:def 2
@@ -552,19 +555,19 @@ then A5: dom (Sum F^Sum G) = dom (F^G) by FINSEQ_3:31;
    A6: i in dom (F^G);
    per cases by A6,FINSEQ_1:38;
    suppose A7: i in dom F;
-    thus (Sum F^Sum G)/.i = (Sum F^Sum G).i by A5,A6,FINSEQ_4:def 4
+    thus (Sum F^Sum G)/.i = (Sum F^Sum G).i by A5,A6,PARTFUN1:def 8
           .= (Sum F).i by A1,A7,FINSEQ_1:def 7
-          .= (Sum F)/.i by A1,A7,FINSEQ_4:def 4
+          .= (Sum F)/.i by A1,A7,PARTFUN1:def 8
           .= Sum (F/.i) by A1,A7,MATRLIN:def 8
           .= Sum((F^G)/.i) by A7,FINSEQ_4:83;
    end;
-   suppose ex n being Element of NAT st n in dom G & i = len F + n;
-      then consider n being Element of NAT such that
+   suppose ex n being Nat st n in dom G & i = len F + n;
+      then consider n being Nat such that
    A8: n in dom G and
    A9: i = len F + n;
-    thus (Sum F^Sum G)/.i = (Sum F^Sum G).i by A5,A6,FINSEQ_4:def 4
+    thus (Sum F^Sum G)/.i = (Sum F^Sum G).i by A5,A6,PARTFUN1:def 8
           .= (Sum G).n by A2,A3,A8,A9,FINSEQ_1:def 7
-          .= (Sum G)/.n by A2,A8,FINSEQ_4:def 4
+          .= (Sum G)/.n by A2,A8,PARTFUN1:def 8
           .= Sum(G/.n) by A2,A8,MATRLIN:def 8
           .= Sum((F^G)/.i) by A8,A9,FINSEQ_4:84;
    end;
@@ -600,9 +603,9 @@ A5: for i being set st i in dom p holds F/.i = a*(p/.i)
 A6:   i in dom p;
          F.i = ((a multfield)*p).i by FVSUM_1:def 6
          .= (a multfield).(p.i) by A6,FUNCT_1:23
-         .= (a multfield).(p/.i) by A6,FINSEQ_4:def 4
+         .= (a multfield).(p/.i) by A6,PARTFUN1:def 8
          .= a * (p/.i) by FVSUM_1:61;
-      hence thesis by A4,A6,FINSEQ_4:def 4;
+      hence thesis by A4,A6,PARTFUN1:def 8;
     end;
        now let G be FinSequence of the carrier of L;
       assume
@@ -617,10 +620,10 @@ then A9:   dom G = dom R by A7,A8,RELAT_1:46;
         let k be set;
         assume
 A10:     k in dom G;
-        then G.k = G/.k by FINSEQ_4:def 4
+        then G.k = G/.k by PARTFUN1:def 8
            .= a*(p/.k) by A7,A10
            .= (a multfield).(p/.k) by FVSUM_1:61
-           .= (a multfield).(p.k) by A7,A10,FINSEQ_4:def 4
+           .= (a multfield).(p.k) by A7,A10,PARTFUN1:def 8
            .= R.k by A7,A10,FUNCT_1:23;
         hence thesis;
       end;
@@ -737,8 +740,8 @@ then A7: dom (a*(p^q)) = dom ((a*p)^(a*q)) by A5,FINSEQ_3:31;
        .= (a*p)/.i by A9,Def2
        .= ((a*p)^(a*q))/.i by A1,A9,FINSEQ_4:83;
     end;
-    suppose ex n being Element of NAT st n in dom q & i = len p+n;
-        then consider n being Element of NAT such that
+    suppose ex n being Nat st n in dom q & i = len p+n;
+        then consider n being Nat such that
     A10: n in dom q & i = len p+n;
      thus (a*(p^q))/.i = a*((p^q)/.i) by A6,A8,Def2
        .= a*(q/.n) by A10,FINSEQ_4:84
@@ -772,8 +775,8 @@ then A7: dom ((p^q)*a) = dom ((p*a)^(q*a)) by A5,FINSEQ_3:31;
        .= (p*a)/.i by A9,Def3
        .= ((p*a)^(q*a))/.i by A1,A9,FINSEQ_4:83;
     end;
-    suppose ex n being Element of NAT st n in dom q & i = len p+n;
-        then consider n being Element of NAT such that
+    suppose ex n being Nat st n in dom q & i = len p+n;
+        then consider n being Nat such that
     A10: n in dom q & i = len p+n;
      thus (p^q*a)/.i = ((p^q)/.i)*a by A6,A8,Def3
        .= (q/.n)*a by A10,FINSEQ_4:84
@@ -979,8 +982,9 @@ proof
              i-'1 <= i by BINARITH:52;
         then i-'1 <= len F by A21,XXREAL_0:2;
      hence k = (Sum Card ((F^<*p*>)|(i-'1))) + j by A18,FINSEQ_5:25;
-     thus ((F^<*p*>).i).j = (FlattenSeq (F^<*p*>)).k
-          by A5,A15,A19,A20,FINSEQ_1:def 7;
+     ((F^<*p*>).i).j = (FlattenSeq (F^<*p*>)).m
+     by A5,A15,A19,A20,FINSEQ_1:def 7;
+     hence ((F^<*p*>).i).j = (FlattenSeq (F^<*p*>)).k;
  end;
  end;
  thus for F being FinSequence of D* holds P[F] from FINSEQ_2:sch 2(A1,A2);
@@ -1089,19 +1093,22 @@ proof let X, Y be non empty set, f be FinSequence of X*,
 A1:  dom F = dom (dom f --> v) /\ dom f by PBOOLE:def 24
         .= dom f /\ dom f by FUNCOP_1:19
         .= dom f;
-    then dom F = Seg len f by FINSEQ_1:def 3;
-then A2: F is FinSequence-like by FINSEQ_1:def 2;
+    then
+A2: dom F = Seg len f by FINSEQ_1:def 3;
+then A3: F is FinSequence-like by FINSEQ_1:def 2;
         rng F c= Y* proof let y be set; assume y in rng F;
        then consider x being set such that
-   A3: x in dom F & y = F.x by FUNCT_1:def 5;
-   A4: y = (dom f --> v).x * (f.x) by A3,PBOOLE:def 24
-        .= v*(f.x) by A1,A3,FUNCOP_1:13;
-            f.x in X* by A1,A3,FINSEQ_2:13;
+   A4: x in dom F & y = F.x by FUNCT_1:def 5;
+   dom F c= NAT by A2;
+   then reconsider x as Element of NAT by A4;
+   A5: y = (dom f --> v).x * (f.x) by A4,PBOOLE:def 24
+        .= v*(f.x) by A1,A4,FUNCOP_1:13;
+            f.x in X* by A1,A4,FINSEQ_2:13;
        then f.x is FinSequence of X by FINSEQ_1:def 11;
-       then y is FinSequence of Y by A4,FINSEQ_2:36;
+       then y is FinSequence of Y by A5,FINSEQ_2:36;
     hence y in Y* by FINSEQ_1:def 11;
    end;
- hence (dom f --> v)**f is FinSequence of Y* by A2,FINSEQ_1:def 4;
+ hence (dom f --> v)**f is FinSequence of Y* by A3,FINSEQ_1:def 4;
 end;
 
 theorem Th36:
@@ -1128,9 +1135,11 @@ proof let X, Y be non empty set, f be FinSequence of X*,
         now
     let k be set; assume
    A5: k in dom f;
-   then A6: F.k = ((dom f --> v).k)*(f.k) by A3,PBOOLE:def 24
+   then reconsider k1=k as Element of NAT by A3;
+   k1 in dom f by A5;
+   then A6: F.k = ((dom f --> v).k)*(f.k) by A3,A5,PBOOLE:def 24
           .= v*(f.k) by A5,FUNCOP_1:13;
-            f.k in X* by A5,FINSEQ_2:13;
+            f.k1 in X* by A5,FINSEQ_2:13;
        then reconsider fk = f.k as FinSequence of X by FINSEQ_1:def 11;
     thus (Card f).k = len fk by A5,CARD_3:def 2
       .= len (F.k) by A6,FINSEQ_2:37
@@ -1139,7 +1148,7 @@ proof let X, Y be non empty set, f be FinSequence of X*,
   then A7:  Card f = Card F by A2,A4,FUNCT_1:9;
        then len fl = len Fl by Th31;
   hence dom fl = dom Fl by FINSEQ_3:31;
-  let k be Element of NAT; assume
+  let k be Nat; assume
   A8: k in dom fl;
      then consider i, j being Element of NAT such that
   A9: i in dom f and
@@ -1187,26 +1196,11 @@ registration
  coherence proof thus rng {} c= NAT by XBOOLE_1:2; end;
 end;
 
-registration
- cluster natural-yielding Function;
- existence proof take {}; thus thesis;
- end;
-end;
-
 definition
  let f be natural-yielding Function;
  let x be set;
  redefine func f.x -> Element of NAT;
- coherence proof
- per cases;
- suppose x in dom f;
- then f.x in rng f & rng f c= NAT by FUNCT_1:def 5,SEQM_3:def 8;
-  hence thesis;
- end;
- suppose not x in dom f;
-  hence thesis by CARD_1:51,FUNCT_1:def 4;
- end;
- end;
+ coherence by ORDINAL1:def 13;
 end;
 
 registration
@@ -1248,15 +1242,6 @@ A1: a in dom F & y = F.a by FUNCT_1:def 5;
    suppose not x in dom f; then F.a = f.a by FUNCT_7:def 3;
     hence y in REAL by A1;
  end;
- end;
-end;
-
-registration
- let X be set;
- cluster -> natural-yielding Function of X, NAT;
- coherence proof let f be Function of X, NAT;
-        rng f c= NAT by RELSET_1:12;
-  hence thesis by SEQM_3:def 8;
  end;
 end;
 
@@ -2212,8 +2197,7 @@ A7:  BO is_transitive_in Bags n proof let x, y, z be set such that
    end;
       dom BO = Bags n & field BO = Bags n by A2,ORDERS_1:98;
    then reconsider BO as Order of Bags n
-               by A2,A3,A7,PARTFUN1:def 4,RELAT_2:def 9,def 12,
-def 16;
+               by A2,A3,A7,PARTFUN1:def 4,RELAT_2:def 9,def 12,def 16;
    take BO;
    let p, q be bag of n;
 A11: p in Bags n & q in Bags n by Def14;
@@ -2601,8 +2585,8 @@ then A41:        e is ManySortedSet of X by PBOOLE:def 3;
    hence Card NatMinor f = card [:ng,f.b+1 :] by CARD_1:21
      .= cng * card(f.b+1) by CARD_2:65
      .= cng * (f.b+1) by CARD_1:def 5
-     .= multnat.(multnat $$ (B, addnat[:](f,1)), f.b+1) by A13,A14,BINOP_2:def
-24
+     .= multnat.(multnat $$ (B, addnat[:](f,1)), f.b+1) by A13,A14,
+BINOP_2:def 24
      .= multnat $$ (B \/ {.b.}, addnat[:](f,1)) by A6,A8,SETWOP_2:4;
   end;
 A47: for B being Element of Fin X holds P[B] from SETWISEO:sch 2(A1,A5);
@@ -2698,7 +2682,7 @@ A2: divisors b = SgmX(BagOrder n, S) and
 A3: (for p being bag of n holds p in S iff p divides b) by Def18;
         BagOrder n linearly_orders Bags n by Lm4;
 then A4: BagOrder n linearly_orders S by ORDERS_1:134;
-A5: (divisors b)/.i = (divisors b).i by A1,FINSEQ_4:def 4;
+A5: (divisors b)/.i = (divisors b).i by A1,PARTFUN1:def 8;
         (divisors b)/.i is Element of Bags n;
    then reconsider pid = (divisors b)/.i as bag of n;
         (divisors b).i in rng divisors b by A1,FUNCT_1:def 5;
@@ -2905,7 +2889,7 @@ A5:   x in dom decomp b;
     then reconsider k = x as Element of NAT;
     reconsider p = (divisors b)/.k as bag of n by Def14;
          (decomp b)/.k = <*p,b-'p*> by A5,Def19;
-   hence (decomp b).x is FinSequence by A5,FINSEQ_4:def 4;
+   hence (decomp b).x is FinSequence by A5,PARTFUN1:def 8;
   end;
 end;
 
@@ -3042,7 +3026,7 @@ A4: (for k being Element of NAT st k in dom g holds
    A16: ddbi1/.j = <*b11, b12*> and
    A17: b1 = b11+b12 by A7,A13,Th72;
    A18: dom ddbi1 = Seg len ddbi1 by FINSEQ_1:def 3;
-   A19: ddbi1/.j = ddbi1.j by A7,A15,FINSEQ_4:def 4;
+   A19: ddbi1/.j = ddbi1.j by A7,A15,PARTFUN1:def 8;
              ((len ddbi1) |-> <*(db/.i)/.2*>).j = <*(db/.i)/.2*>
                       by A7,A15,A18,FUNCOP_1:13;
    then A20: (f.i).j = <*b11,b12*>^<*b2*> by A7,A9,A14,A16,A19,MATRLIN:def 2
@@ -3070,7 +3054,7 @@ A4: (for k being Element of NAT st k in dom g holds
          .= dom ddbi'2;
    then A30: j' in dom (g.i') by A23,A26,FINSEQ_4:26;
    then A31: j' in Seg len ddbi'2 by A29,FINSEQ_1:def 3;
-   A32: (decomp b3)/.j' = (decomp b3).j' by A23,FINSEQ_4:def 4;
+   A32: (decomp b3)/.j' = (decomp b3).j' by A23,PARTFUN1:def 8;
    A33: (g.i').j' = (((len ddbi'2) |-> <*((decomp b)/.i')/.1*>)).j'
                      ^ (ddbi'2).j' by A25,A30,MATRLIN:def 2
           .= <*b11*>^<*b12,b2*> by A24,A27,A28,A31,A32,FUNCOP_1:13
@@ -3104,7 +3088,7 @@ A4: (for k being Element of NAT st k in dom g holds
        then consider b11, b12 being bag of n such that
    A46: ddbi1/.j = <*b11, b12*> and
    A47: b2 = b11+b12 by A37,A44,Th72;
-   A48: ddbi1/.j = ddbi1.j by A37,A45,FINSEQ_4:def 4;
+   A48: ddbi1/.j = ddbi1.j by A37,A45,PARTFUN1:def 8;
          dom ddbi1 = Seg len ddbi1 by FINSEQ_1:def 3;
         then ((len ddbi1) |-> <*(db/.i)/.1*>).j = <*(db/.i)/.1*>
                       by A37,A45,FUNCOP_1:13;
@@ -3131,7 +3115,7 @@ A4: (for k being Element of NAT st k in dom g holds
          .= dom ddbi'2 /\ dom ddbi'2 by FINSEQ_1:def 3
          .= dom ddbi'2;
    A59: j' in Seg len ddbi'2 by A52,A57,FINSEQ_1:def 3;
-   A60: (decomp b3)/.j' = (decomp b3).j' by A52,FINSEQ_4:def 4;
+   A60: (decomp b3)/.j' = (decomp b3).j' by A52,PARTFUN1:def 8;
    A61: (f.i').j' = (ddbi'2).j' ^
                    (((len ddbi'2) |-> <*((decomp b)/.i')/.2*>)).j'
                       by A52,A54,A57,A58,MATRLIN:def 2
@@ -3159,7 +3143,7 @@ A64: Ff is one-to-one proof let k1, k2 be set such that
    A75: (f.i2).j2 = Ff.k2 by A66,Th32;
        set ddbi11 = decomp (((db/.i1)/.1) qua Element of Bags n);
    A76: f.i1 = ddbi11 ^^ ((len ddbi11) |-> <*(db/.i1)/.2*>) by A3,A68;
-   A77: db/.i1 = db.i1 by A1,A68,FINSEQ_4:def 4;
+   A77: db/.i1 = db.i1 by A1,A68,PARTFUN1:def 8;
        consider b11, b12 being bag of n such that
    A78: db/.i1 = <*b11,b12*> and
              b = b11+b12 by A1,A68,Th72;
@@ -3175,7 +3159,7 @@ A64: Ff is one-to-one proof let k1, k2 be set such that
        then consider b111, b112 being bag of n such that
    A83: ddbi11/.j1 = <*b111, b112*> and
    A84: b11 = b111+b112 by A69,A80,Th72;
-   A85: ddbi11/.j1 = ddbi11.j1 by A69,A82,FINSEQ_4:def 4;
+   A85: ddbi11/.j1 = ddbi11.j1 by A69,A82,PARTFUN1:def 8;
          dom ddbi11 = Seg len ddbi11 by FINSEQ_1:def 3;
    then ((len ddbi11) |-> <*(db/.i1)/.2*>).j1 = <*(db/.i1)/.2*>
                       by A69,A82,FUNCOP_1:13;
@@ -3184,7 +3168,7 @@ MATRLIN:def 2
               .= <*b111,b112,b12*> by FINSEQ_1:60;
        set ddbi21 = decomp (((db/.i2)/.1) qua Element of Bags n);
    A87: f.i2 = ddbi21 ^^ ((len ddbi21) |-> <*(db/.i2)/.2*>) by A3,A72;
-   A88: db/.i2 = db.i2 by A1,A72,FINSEQ_4:def 4;
+   A88: db/.i2 = db.i2 by A1,A72,PARTFUN1:def 8;
        consider b21, b22 being bag of n such that
    A89: db/.i2 = <*b21,b22*> and
              b = b21+b22 by A1,A72,Th72;
@@ -3201,11 +3185,10 @@ MATRLIN:def 2
    A94: ddbi21/.j2 = <*b211, b212*> and
    A95: b21 = b211+b212 by A73,A91,Th72;
    A96: dom ddbi21 = Seg len ddbi21 by FINSEQ_1:def 3;
-   A97: ddbi21/.j2 = ddbi21.j2 by A73,A93,FINSEQ_4:def 4;
+   A97: ddbi21/.j2 = ddbi21.j2 by A73,A93,PARTFUN1:def 8;
               ((len ddbi21) |-> <*(db/.i2)/.2*>).j2 = <*(db/.i2)/.2*>
                       by A73,A93,A96,FUNCOP_1:13;
-    then (f.i2).j2 = <*b211,b212*>^<*b22*> by A73,A87,A92,A94,A97,MATRLIN:def
-2
+    then (f.i2).j2 = <*b211,b212*>^<*b22*> by A73,A87,A92,A94,A97,MATRLIN:def 2
               .= <*b211,b212,b22*> by FINSEQ_1:60;
    then A98: b111 = b211 & b112 = b212 & b12 = b22
              by A67,A71,A75,A86,GROUP_7:3;
@@ -3228,7 +3211,7 @@ MATRLIN:def 2
    A109: (g.i2).j2 = Fg.k2 by A100,Th32;
        set ddbi11 = decomp (((db/.i1)/.2) qua Element of Bags n);
    A110: g.i1 = ((len ddbi11) |-> <*(db/.i1)/.1*>)^^ddbi11 by A4,A102;
-   A111: db/.i1 = db.i1 by A2,A102,FINSEQ_4:def 4;
+   A111: db/.i1 = db.i1 by A2,A102,PARTFUN1:def 8;
        consider b11, b12 being bag of n such that
    A112: db/.i1 = <*b11,b12*> and
              b = b11+b12 by A2,A102,Th72;
@@ -3245,7 +3228,7 @@ MATRLIN:def 2
    A117: ddbi11/.j1 = <*b111, b112*> and
    A118: b12 = b111+b112 by A103,A115,Th72;
    A119: dom ddbi11 = Seg len ddbi11 by FINSEQ_1:def 3;
-   A120: ddbi11/.j1 = ddbi11.j1 by A103,A116,FINSEQ_4:def 4;
+   A120: ddbi11/.j1 = ddbi11.j1 by A103,A116,PARTFUN1:def 8;
               ((len ddbi11) |-> <*(db/.i1)/.1*>).j1 = <*(db/.i1)/.1*>
                       by A103,A116,A119,FUNCOP_1:13;
    then A121: (g.i1).j1 = <*b11*>^<*b111,b112*> by A103,A110,A114,A117,A120,
@@ -3253,7 +3236,7 @@ MATRLIN:def 2
               .= <*b11,b111,b112*> by FINSEQ_1:60;
        set ddbi21 = decomp (((db/.i2)/.2) qua Element of Bags n);
    A122: g.i2 = ((len ddbi21) |-> <*(db/.i2)/.1*>) ^^ ddbi21 by A4,A106;
-   A123: db/.i2 = db.i2 by A2,A106,FINSEQ_4:def 4;
+   A123: db/.i2 = db.i2 by A2,A106,PARTFUN1:def 8;
        consider b21, b22 being bag of n such that
    A124: db/.i2 = <*b21,b22*> and
              b = b21+b22 by A2,A106,Th72;
@@ -3269,7 +3252,7 @@ MATRLIN:def 2
        then consider b211, b212 being bag of n such that
    A129: ddbi21/.j2 = <*b211, b212*> and
    A130: b22 = b211+b212 by A107,A127,Th72;
-   A131: ddbi21/.j2 = ddbi21.j2 by A107,A128,FINSEQ_4:def 4;
+   A131: ddbi21/.j2 = ddbi21.j2 by A107,A128,PARTFUN1:def 8;
          dom ddbi21 = Seg len ddbi21 by FINSEQ_1:def 3;
     then ((len ddbi21) |-> <*(db/.i2)/.1*>).j2 = <*(db/.i2)/.1*>
                       by A107,A128,FUNCOP_1:13;
@@ -3572,7 +3555,7 @@ A8: for b being bag of n
   A14: for k being Element of NAT st k in dom sb
       ex b1, b2 being bag of n st (decomp b)/.k = <*b1, b2*> &
                                   sb/.k = p.b1*q.b2 by A8;
-           now let k be Element of NAT; assume
+           now let k be Nat; assume
        A15: 1 <= k & k <= len sa;
       then A16: k in dom sa by FINSEQ_3:27;
           then consider ab1, ab2 being bag of n such that
@@ -3582,7 +3565,7 @@ A8: for b being bag of n
           then consider bb1, bb2 being bag of n such that
       A20: (decomp b)/.k = <*bb1, bb2*> and
       A21: sb/.k = p.bb1*q.bb2 by A14;
-     A22: sa/.k = sa.k & sb/.k = sb.k by A16,A19,FINSEQ_4:def 4;
+     A22: sa/.k = sa.k & sb/.k = sb.k by A16,A19,PARTFUN1:def 8;
                ab1 = bb1 & ab2 = bb2 by A17,A20,GROUP_7:2;
        hence sa.k = sb.k by A18,A21,A22;
       end;
@@ -3629,7 +3612,7 @@ A9: for k being Element of NAT st k in dom u
 A10: dom t = dom s & dom u = dom s by A2,A5,A8,FINSEQ_3:31;
 then A11:  dom (t+u) = dom s by Th5;
 then A12: len (t+u) = len s by FINSEQ_3:31;
-         now let i be Element of NAT; assume i in Seg len S;
+         now let i be Nat; assume i in Seg len S;
          then 1 <= i & i <= len s by FINSEQ_1:3;
     then A13: i in dom s by FINSEQ_3:27;
         then consider sb1, sb2 being bag of n such that
@@ -3643,7 +3626,7 @@ then A12: len (t+u) = len s by FINSEQ_3:31;
     A17: sb1 = tb1 & sb1 = ub1 & sb2 = tb2 & sb2 = ub2
            by A14,A15,A16,GROUP_7:2;
     A18:  s/.i = s.i & t/.i = t.i & u/.i = u.i
-              by A10,A13,FINSEQ_4:def 4;
+              by A10,A13,PARTFUN1:def 8;
      hence s.i = p.sb1*(q.sb2+r.sb2) by A14,Def21
              .= p.sb1*q.sb2+p.sb1*r.sb2 by VECTSP_1:def 18
              .= (t + u).i by A11,A13,A15,A16,A17,A18,FVSUM_1:21;
@@ -3781,7 +3764,7 @@ A30: Sum vfdbl = Sum Sum vdbl by A29,Th34;
          .= dom dbl /\ dom dbl by FUNCOP_1:19
          .= dom dbl;
       hence len Sum vdbl = len ls by A2,A7,A31,FINSEQ_3:31;
-      let k be Element of NAT such that
+      let k be Nat such that
      A33: 1 <= k & k <= len ls;
      A34: dom ls = dom f by A2,A7,A31,A32,FINSEQ_3:31;
      A35: k in dom f by A2,A7,A31,A32,A33,FINSEQ_3:27;
@@ -3802,9 +3785,9 @@ A30: Sum vfdbl = Sum Sum vdbl by A29,Th34;
          set dbk2 = (db/.k)/.2;
                len <*b1,b2*> = 2 by FINSEQ_1:61;
      then A43: 1 in dom <*b1,b2*> & 2 in dom <*b1,b2*> by FINSEQ_3:27;
-     then A44: dbk2 = <*b1,b2*>.2 by A36,FINSEQ_4:def 4
+     then A44: dbk2 = <*b1,b2*>.2 by A36,PARTFUN1:def 8
               .= b2 by FINSEQ_1:61;
-     A45: (db/.k)/.1 = <*b1,b2*>.1 by A36,A43,FINSEQ_4:def 4
+     A45: (db/.k)/.1 = <*b1,b2*>.1 by A36,A43,PARTFUN1:def 8
               .= b1 by FINSEQ_1:61;
      A46: dbl.k = ddbk1 ^^ ((len ddbk1) |-> <*dbk2*>) by A8,A32,A42;
          set dblk = dbl.k;
@@ -3828,17 +3811,17 @@ A30: Sum vfdbl = Sum Sum vdbl by A29,Th34;
                len vdblk = len pqs by A39,A45,A47,A50,FINSEQ_3:31
               .= len (pqs*r.b2) by A51,FINSEQ_3:31;
          then A52: dom vdblk = dom (pqs*r.b2) by FINSEQ_3:31;
-          let i be Element of NAT; assume
+          let i be Nat; assume
          A53: 1 <= i & i <= len (pqs*r.b2);
          then A54:     i in dom (pqs*r.b2) by FINSEQ_3:27;
          then consider b11, b12 being bag of n such that
          A55: (decomp b1)/.i = <*b11, b12*> and
          A56: pqs/.i = p.b11*q.b12 by A40,A51;
-             reconsider i' = i as Element of NAT;
+             reconsider i' = i as Element of NAT by ORDINAL1:def 13;
          A57: ((len ddbk1) |-> <*dbk2*>).i' = <*dbk2*>
                   by A47,A49,A50,A52,A54,FUNCOP_1:13;
               (decomp b1)/.i = (decomp b1).i
-                  by A45,A47,A50,A52,A54,FINSEQ_4:def 4;
+                  by A45,A47,A50,A52,A54,PARTFUN1:def 8;
          then A58: dblk.i = <*b11,b12*>^<*b2*>
                by A44,A45,A46,A50,A52,A54,A55,A57,MATRLIN:def 2
               .= <*b11,b12,b2*> by FINSEQ_1:60;
@@ -3854,14 +3837,14 @@ A30: Sum vfdbl = Sum Sum vdbl by A29,Th34;
            .= p.b11*q.b12*r.(B/.3) by FINSEQ_4:27
            .= (pqs/.i)*r.b2 by A56,FINSEQ_4:27
            .= (pqs*r.b2)/.i by A59,Def3
-           .= (pqs*r.b2).i by A59,A60,FINSEQ_4:def 4;
+           .= (pqs*r.b2).i by A59,A60,PARTFUN1:def 8;
          end;
      then A61: vdblk = pqs*r.b2 by FINSEQ_1:18;
-     A62: vdbl/.k = vdbl.k by A42,FINSEQ_4:def 4
+     A62: vdbl/.k = vdbl.k by A42,PARTFUN1:def 8
           .= ((dom dbl --> v).k)*(dbl.k) by A28,A42,PBOOLE:def 24
           .= pqs*r.b2 by A32,A42,A61,FUNCOP_1:13;
-     A63: ls/.k = ls.k by A34,A35,FINSEQ_4:def 4;
-               f/.k = f.k by A35,FINSEQ_4:def 4;
+     A63: ls/.k = ls.k by A34,A35,PARTFUN1:def 8;
+               f/.k = f.k by A35,PARTFUN1:def 8;
       hence (Sum vdbl).k = ls.k by A35,A37,A38,A41,A62,A63,MATRLIN:def 8;
      end;
 then A64: Sum vdbl = ls by FINSEQ_1:18;
@@ -3876,7 +3859,7 @@ A67: Sum vfdbr = Sum Sum vdbr by A66,Th34;
          .= dom dbr /\ dom dbr by FUNCOP_1:19
          .= dom dbr;
       hence len Sum vdbr = len rs by A5,A9,A68,FINSEQ_3:31;
-      let k be Element of NAT such that
+      let k be Nat such that
      A70: 1 <= k & k <= len rs;
      A71: dom rs = dom f by A5,A9,A68,A69,FINSEQ_3:31;
      A72: k in dom f by A5,A9,A68,A69,A70,FINSEQ_3:27;
@@ -3897,9 +3880,9 @@ A67: Sum vfdbr = Sum Sum vdbr by A66,Th34;
          set dbk2 = (db/.k)/.1;
                len <*b1,b2*> = 2 by FINSEQ_1:61;
      then A80: 1 in dom <*b1,b2*> & 2 in dom <*b1,b2*> by FINSEQ_3:27;
-     then A81: dbk2 = <*b1,b2*>.1 by A73,FINSEQ_4:def 4
+     then A81: dbk2 = <*b1,b2*>.1 by A73,PARTFUN1:def 8
               .= b1 by FINSEQ_1:61;
-     A82: (db/.k)/.2 = <*b1,b2*>.2 by A73,A80,FINSEQ_4:def 4
+     A82: (db/.k)/.2 = <*b1,b2*>.2 by A73,A80,PARTFUN1:def 8
               .= b2 by FINSEQ_1:61;
      A83: dbr.k = ((len ddbk1) |-> <*dbk2*>) ^^ ddbk1 by A10,A69,A79;
          set dbrk = dbr.k;
@@ -3923,16 +3906,16 @@ A67: Sum vfdbr = Sum Sum vdbr by A66,Th34;
      then A90: len vdbrk = len (p.b1*qrs) by A76,A82,A84,A87,FINSEQ_3:31;
          A91: dom vdbrk = dom (p.b1*qrs) by A76,A82,A84,A87,A88,FINSEQ_3:31;
             now
-          let i be Element of NAT; assume
+          let i be Nat; assume
          A92: 1 <= i & i <= len (p.b1*qrs);
          then A93: i in dom dbrk by A76,A82,A84,A89,FINSEQ_3:27;
              then consider b11, b12 being bag of n such that
          A94: (decomp b2)/.i = <*b11, b12*> and
          A95: qrs/.i = q.b11*r.b12 by A77,A87,A88,A91;
-             reconsider i' = i as Element of NAT;
+             reconsider i' = i as Element of NAT by ORDINAL1:def 13;
          A96: ((len ddbk1) |-> <*dbk2*>).i' = <*dbk2*>
                   by A84,A86,A93,FUNCOP_1:13;
-              (decomp b2)/.i = (decomp b2).i by A82,A84,A93,FINSEQ_4:def 4;
+              (decomp b2)/.i = (decomp b2).i by A82,A84,A93,PARTFUN1:def 8;
          then A97: dbrk.i = <*b1*>^<*b11,b12*> by A81,A82,A83,A93,A94,A96,
 MATRLIN:def 2
               .= <*b1,b11,b12*> by FINSEQ_1:60;
@@ -3948,14 +3931,14 @@ MATRLIN:def 2
            .= p.b1*q.b11*r.b12 by FINSEQ_4:27
            .= p.b1*(qrs/.i) by A95,GROUP_1:def 4
            .= (p.b1*qrs)/.i by A98,Def2
-           .= (p.b1*qrs).i by A88,A98,FINSEQ_4:def 4;
+           .= (p.b1*qrs).i by A88,A98,PARTFUN1:def 8;
          end;
      then A99: vdbrk = p.b1*qrs by A90,FINSEQ_1:18;
-     A100: vdbr/.k = vdbr.k by A79,FINSEQ_4:def 4
+     A100: vdbr/.k = vdbr.k by A79,PARTFUN1:def 8
           .= ((dom dbr --> v).k)*(dbr.k) by A65,A79,PBOOLE:def 24
           .= p.b1*qrs by A69,A79,A99,FUNCOP_1:13;
-     A101:   rs/.k = rs.k by A71,A72,FINSEQ_4:def 4;
-                 f/.k = f.k by A72,FINSEQ_4:def 4;
+     A101:   rs/.k = rs.k by A71,A72,PARTFUN1:def 8;
+                 f/.k = f.k by A72,PARTFUN1:def 8;
       hence (Sum vdbr).k = rs.k
          by A72,A74,A75,A78,A100,A101,MATRLIN:def 8;
      end;
@@ -4013,7 +3996,7 @@ A8: now let e be set; assume
         proof
          take b1, b2;
           thus (decomp b).e = <*b1, b2*> & (decomp b).d = <*b2, b1*>
-           by A7,A9,A10,A12,A13,FINSEQ_4:def 4;
+           by A7,A9,A10,A12,A13,PARTFUN1:def 8;
         end;
     end;
    consider f being Function of ds, ds such that
@@ -4059,10 +4042,10 @@ then A28:  f.i in rng f by A7,A15,FUNCT_1:def 5;
     A31: (decomp b).i = <*b5, b6*> & (decomp b).(f.i) = <*b6, b5*> by A7,A14
 ,A27;
     A32: dom s = dom t by A2,A5,FINSEQ_3:31;
-    A33: t/.i = t.i & s/.fi = s.fi by A15,A27,A28,FINSEQ_4:def 4;
+    A33: t/.i = t.i & s/.fi = s.fi by A15,A27,A28,PARTFUN1:def 8;
               dom s = dom decomp b by A2,FINSEQ_3:31;
         then (decomp b)/.i = (decomp b).i & (decomp b)/.fi = (decomp b).fi
-            by A15,A27,A28,A32,FINSEQ_4:def 4;
+            by A15,A27,A28,A32,PARTFUN1:def 8;
     then b1 = b5 & b2 = b6 & b3 = b6 & b4 = b5 by A29,A30,A31,GROUP_7:2;
      hence t.i = s.(f.i) by A29,A30,A33;
     end;
@@ -4131,7 +4114,7 @@ then A7: len s in dom s by FINSEQ_5:6;
 then A10: b1 = b & b2 = EmptyBag n by A8,GROUP_7:2;
 A11: s.len s = (t^<*s1*>).(len t +1) by A5,FINSEQ_2:19
             .= s1 by FINSEQ_1:59;
-A12: s/.len s = s.len s by A7,FINSEQ_4:def 4;
+A12: s/.len s = s.len s by A7,PARTFUN1:def 8;
 A13: Sum <*s1*> = s1 by RLVECT_1:61
      .= p.b*1_L by A9,A10,A11,A12,Th84
      .= p.b by GROUP_1:def 5;
@@ -4143,7 +4126,7 @@ A13: Sum <*s1*> = s1 by RLVECT_1:61
    suppose A14: t <> <*>(cL);
       now let k be Nat; assume
      A15: k in dom t;
-     then A16: t/.k = t.k by FINSEQ_4:def 4 .= s.k by A5,A15,FINSEQ_1:def 7;
+     then A16: t/.k = t.k by PARTFUN1:def 8 .= s.k by A5,A15,FINSEQ_1:def 7;
      A17: 1 <= k by A15,FINSEQ_3:27;
      A18: dom s = dom decomp b by A2,FINSEQ_3:31;
      A19: len s = len t + len <*s1*> by A5,FINSEQ_1:35
@@ -4151,7 +4134,7 @@ A13: Sum <*s1*> = s1 by RLVECT_1:61
               k <= len t by A15,FINSEQ_3:27;
      then A20: k < len s by A19,NAT_1:13;
      then A21: k in dom decomp b by A2,A17,FINSEQ_3:27;
-     then A22: s/.k = s.k by A18,FINSEQ_4:def 4;
+     then A22: s/.k = s.k by A18,PARTFUN1:def 8;
 
       per cases by A17,XXREAL_0:1;
       suppose A23: 1 < k;
@@ -4218,7 +4201,7 @@ then A8: 1 in dom s by FINSEQ_5:6;
  A10: s/.1 = O.b1*p.b2 by A3;
           (decomp b)/.1 = <*EmptyBag n, b*> by Th75;
  then A11: b2 = b & b1 = EmptyBag n by A9,GROUP_7:2;
-A12: s/.1 = s.1 by A8,FINSEQ_4:def 4;
+A12: s/.1 = s.1 by A8,PARTFUN1:def 8;
  A13: Sum <*s1*> = s1 by RLVECT_1:61
      .= 1_L*p.b by A5,A10,A11,A12,Th84
      .= p.b by GROUP_1:def 5;
@@ -4230,7 +4213,7 @@ A12: s/.1 = s.1 by A8,FINSEQ_4:def 4;
    suppose A14: t <> <*>(cL);
           now let k be Nat; assume
      A15: k in dom t;
-     then A16: t/.k = t.k by FINSEQ_4:def 4 .= s.(k+1) by A6,A15,FINSEQ_3:112;
+     then A16: t/.k = t.k by PARTFUN1:def 8 .= s.(k+1) by A6,A15,FINSEQ_3:112;
           1 <= k by A15,FINSEQ_3:27;
      then A17: 1 < k+1 by NAT_1:13;
      A18: dom s = dom decomp b by A2,FINSEQ_3:31;
@@ -4239,7 +4222,7 @@ A12: s/.1 = s.1 by A8,FINSEQ_4:def 4;
               k <= len t by A15,FINSEQ_3:27;
      then A20: k+1 <= len s by A19,XREAL_1:8;
      then A21: k+1 in dom decomp b by A2,A17,FINSEQ_3:27;
-     then A22: s/.(k+1) = s.(k+1) by A18,FINSEQ_4:def 4;
+     then A22: s/.(k+1) = s.(k+1) by A18,PARTFUN1:def 8;
 
       per cases by A20,XXREAL_0:1;
       suppose A23: k+1 < len s;
@@ -4718,7 +4701,7 @@ A1: e = 1.Pm;
 A2:  1.Pm = 1_(n,L) by Def27;
  hence x*e = p*'1_(n,L) by A1,Def27
           .= x by Th88;
- thus e*x = 1_(n,L)*'p by A2,A1,Def27
+ thus e*x = 1_(n,L)*'p by A1,A2,Def27
          .= x by Th89;
 end;
 

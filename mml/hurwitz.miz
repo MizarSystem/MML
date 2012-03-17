@@ -12,7 +12,7 @@ environ
       POLYNOM5, NAT_1, XCMPLX_0, SQUARE_1, SGRAPH1, INT_1, VECTSP_2, ALGSTR_2,
       HURWITZ;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XCMPLX_0, VECTSP_2,
-      FUNCT_1, FUNCT_2, NAT_1, XXREAL_0, GROUP_1, FINSEQ_4, INT_1, FUNCOP_1,
+      FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, XXREAL_0, GROUP_1, INT_1, FUNCOP_1,
       RLVECT_1, POLYNOM1, COMPLEX1, COMPLFLD, FINSEQ_1, BINOP_1, BINARITH,
       NORMSP_1, BHSP_1, ALGSEQ_1, FUNCT_4, POLYNOM3, POLYNOM4, RELSET_1,
       POLYNOM5, STRUCT_0, VECTSP_1, SQUARE_1;
@@ -26,8 +26,8 @@ environ
  theorems GROUP_1, VECTSP_1, ALGSEQ_1, NAT_1, FUNCT_1, FUNCT_2, XREAL_1,
       REAL_1, SQUARE_1, VECTSP_2, INT_1, FINSEQ_1, RLVECT_1, POLYNOM4,
       BINARITH, TARSKI, FUNCT_4, POLYNOM3, XBOOLE_1, POLYNOM2, FUNCOP_1,
-      XCMPLX_1, XCMPLX_0, FINSEQ_4, COMPLFLD, POLYNOM5, XXREAL_0, ALGSTR_1,
-      COMPLEX1, FINSEQ_2, POLYNOM1, FINSEQ_3, BHSP_1, NORMSP_1, STRUCT_0;
+      XCMPLX_1, XCMPLX_0, COMPLFLD, POLYNOM5, XXREAL_0, ALGSTR_1, COMPLEX1,
+      FINSEQ_2, POLYNOM1, FINSEQ_3, BHSP_1, NORMSP_1, ORDINAL1, PARTFUN1;
  schemes NAT_1, FUNCT_2, FINSEQ_1;
 
 begin :: Preliminaries
@@ -48,9 +48,9 @@ A2: k <= len F by A1,NAT_1:13; then A3: len G = k by A1,FINSEQ_1:21;
    A4: x in dom G & G.x = u by FUNCT_1:def 5;
    reconsider x' = x as Element of NAT by A4;
    A5: 1 <= x' & x' <= len G by A4,FINSEQ_3:27;
-   then x' <= len F by A3,A1,NAT_1:12;
+   then x' <= len F by A1,A3,NAT_1:12;
    then A6: x in dom F by A5,FINSEQ_3:27;
-    G.x = F.x by A1,A4,FUNCT_1:70 .= F/.x by A6,FINSEQ_4:def 4;
+    G.x = F.x by A1,A4,FUNCT_1:70 .= F/.x by A6,PARTFUN1:def 8;
    hence u in the carrier of L by A4; end;
 then A7: rng G c= the carrier of L by TARSKI:def 3;
 then reconsider G as FinSequence of L by FINSEQ_1:def 4;
@@ -58,8 +58,8 @@ thus G1 is FinSequence of L by A7,FINSEQ_1:def 4;
 A8: dom(G^<*F/.(k+1)*>) = Seg(len G + len <*F/.(k+1)*>) by FINSEQ_1:def 7
          .= Seg(k+1) by A3,FINSEQ_1:57 .= dom F by A1,FINSEQ_1:def 3;
 hence dom G1 c= dom F by FINSEQ_1:39;
-thus len G1 = k by A2,A1,FINSEQ_1:21;
- now let j be Element of NAT; assume A9: j in dom F;
+thus len G1 = k by A1,A2,FINSEQ_1:21;
+now let j be Nat; assume A9: j in dom F;
   per cases;
   suppose A10: j in dom G;
     hence F.j = G.j by A1,FUNCT_1:70
@@ -69,14 +69,14 @@ thus len G1 = k by A2,A1,FINSEQ_1:21;
         dom F = Seg len F by FINSEQ_1:def 3;
        then A13: 1 <= j & j <= k + 1 by A1,A9,FINSEQ_1:3;
         now assume j < k + 1;
-         then j <= k by NAT_1:13; then j in Seg k by A13;
-         hence contradiction by A1,A11,A2,FINSEQ_1:21; end;
+         then j <= k by NAT_1:13; then j in Seg k by A9,A13;
+         hence contradiction by A1,A2,A11,FINSEQ_1:21; end;
        hence thesis by A13,XXREAL_0:1;
        end;
         dom <*F/.(k+1)*> = {1} by FINSEQ_1:4,55;
        then 1 in dom <*F/.(k+1)*> by TARSKI:def 1;
        hence (G^<*F/.(k+1)*>).j = <*F/.(k+1)*>.1 by A3,A12,FINSEQ_1:def 7
-           .= F/.(k+1) by FINSEQ_1:57 .= F.j by A12,A9,FINSEQ_4:def 4; end;
+           .= F/.(k+1) by FINSEQ_1:57 .= F.j by A9,A12,PARTFUN1:def 8; end;
   end;
 hence thesis by A8,FINSEQ_1:17;
 end;
@@ -152,7 +152,7 @@ Lm2: Im(1_F_Complex) = 0 & Im(-1_F_Complex) = 0 & Im(0.F_Complex) = 0 proof
 thus Im(1_F_Complex) = 0 by COMPLEX1:15,COMPLFLD:10;
  -1_F_Complex = -1r by COMPLFLD:4,10; hence Im(-1_F_Complex)
 = -0 by COMPLEX1:15,34 .= 0;
-thus Im(0.F_Complex) = 0 by COMPLFLD:9,COMPLEX1:12; end;
+thus Im(0.F_Complex) = 0 by COMPLEX1:12,COMPLFLD:9; end;
 
 Lm3: for z being Element of F_Complex st Im(z) = 0 holds z*' = z
 proof let z be Element of F_Complex; assume A1: Im(z) = 0;
@@ -247,20 +247,19 @@ A5: now let k be Element of NAT; assume A6: P[k];
               .= dom F1 by FINSEQ_1:def 3;
      A12: now let i be Element of NAT; assume A13: i in dom G1;
         A14: dom G1 c= dom G by A7,Lm1;
-        then A15: F/.i = F.i by A10,A13,FINSEQ_4:def 4
-         .= F1.i by A13,A11,A9,FINSEQ_1:def 7 .= F1/.i by A13,A11
-,FINSEQ_4:def 4;
-        thus G1/.i = G1.i by A13,FINSEQ_4:def 4 .= G.i by A9,A13,FINSEQ_1:def
-7
-            .= G/.i by A14,A13,FINSEQ_4:def 4 .= (F1/.i)*' by A14,A13,A7,A15;
+        then A15: F/.i = F.i by A10,A13,PARTFUN1:def 8
+         .= F1.i by A9,A11,A13,FINSEQ_1:def 7 .= F1/.i by A11,A13,
+PARTFUN1:def 8;
+        thus G1/.i = G1.i by A13,PARTFUN1:def 8 .= G.i by A9,A13,FINSEQ_1:def 7
+            .= G/.i by A13,A14,PARTFUN1:def 8 .= (F1/.i)*' by A7,A13,A14,A15;
         end;
       1 <= k + 1 by NAT_1:11;
      then A16: k + 1 in dom G by A7,FINSEQ_3:27;
      thus (Sum F)*' = (Sum F1 + Sum<*F/.(k+1)*>)*' by A9,RLVECT_1:58
         .= (Sum F1)*' + (Sum<*F/.(k+1)*>)*' by COMPLFLD:87
-        .= Sum G1 + (Sum<*F/.(k+1)*>)*' by A12,A8,A6
-        .= Sum G1 + (F/.(k+1))*' by RLVECT_1:61 .= Sum G1 + G/.(k+1) by A16,A7
-        .= Sum G1 + Sum<*G/.(k+1)*> by RLVECT_1:61 .= Sum G by RLVECT_1:58,A9;
+        .= Sum G1 + (Sum<*F/.(k+1)*>)*' by A6,A8,A12
+        .= Sum G1 + (F/.(k+1))*' by RLVECT_1:61 .= Sum G1 + G/.(k+1) by A7,A16
+        .= Sum G1 + Sum<*G/.(k+1)*> by RLVECT_1:61 .= Sum G by A9,RLVECT_1:58;
      end;
    hence P[k+1];
    end;
@@ -301,21 +300,21 @@ A4: now let k be Element of NAT; assume A5: P[k];
      A7: len f1 = k & len g1 = k by A6,Lm1;
      A8: f = f1^<*f/.(k+1)*> by A6,Lm1;
      A9: g = g1^<*g/.(k+1)*> by A6,Lm1;
-     A10: dom f1 = Seg len g1 by FINSEQ_1:def 3,A7 .= dom g1 by FINSEQ_1:def 3;
+     A10: dom f1 = Seg len g1 by A7,FINSEQ_1:def 3 .= dom g1 by FINSEQ_1:def 3;
      A11: now let i be Element of NAT; assume A12: i in dom f1;
         A13: dom f1 c= dom f & dom g1 c= dom g by A6,Lm1;
-        then A14: g/.i = g.i by A12,A10,FINSEQ_4:def 4
-         .= g1.i by A10,A9,A12,FINSEQ_1:def 7 .= g1/.i by A12,A10
-,FINSEQ_4:def 4;
-        thus f1/.i = f1.i by A12,FINSEQ_4:def 4
+        then A14: g/.i = g.i by A10,A12,PARTFUN1:def 8
+         .= g1.i by A9,A10,A12,FINSEQ_1:def 7 .= g1/.i by A10,A12,
+PARTFUN1:def 8;
+        thus f1/.i = f1.i by A12,PARTFUN1:def 8
                   .= f.i by A8,A12,FINSEQ_1:def 7
-                  .= f/.i by A13,A12,FINSEQ_4:def 4 .= -(g1/.i) by A13,A12,A6,
-A14;
+                  .= f/.i by A12,A13,PARTFUN1:def 8 .= -(g1/.i) by A6,A12,A13
+,A14;
         end;
       1 <= k + 1 by NAT_1:11;
      then A15: k+1 in dom f by A6,FINSEQ_3:27;
      thus Sum f = Sum f1 + Sum <*f/.(k+1)*> by A8,RLVECT_1:58
-     .= -(Sum g1) + Sum <*f/.(k+1)*> by A7,A11,A5
+     .= -(Sum g1) + Sum <*f/.(k+1)*> by A5,A7,A11
      .= -(Sum g1) + f/.(k+1) by RLVECT_1:61
      .= -(Sum g1) + -(g/.(k+1)) by A6,A15
  .= -(Sum g1 + g/.(k+1)) by RLVECT_1:45
@@ -460,17 +459,17 @@ existence
  proof
  defpred P[set,set] means
    ex p being Polynomial of L st p = F.$1 & $2 = p.i;
- A1: for k being Element of NAT st k in Seg(len F)
+ A1: for k being Nat st k in Seg(len F)
     ex x being Element of the carrier of L st P[k,x]
     proof
-    let k be Element of NAT; assume k in Seg len F;
+    let k be Nat; assume k in Seg len F;
     then A2: k in dom F by FINSEQ_1:def 3;
     reconsider t = F/.k as Polynomial of L by POLYNOM3:def 12;
     take t.i; take t;
-    thus t = F.k by A2,FINSEQ_4:def 4; thus t.i = t.i;
+    thus t = F.k by A2,PARTFUN1:def 8; thus t.i = t.i;
     end;
  consider G being FinSequence of L such that
- A3: dom G = Seg len F & for k being Element of NAT
+ A3: dom G = Seg len F & for k being Nat
      st k in Seg len F holds P[k,G.k] from FINSEQ_1:sch 5(A1);
  take G;
  thus len G = len F by A3,FINSEQ_1:def 3; thus thesis by A3;
@@ -483,11 +482,11 @@ uniqueness
  assume A5: len z2 = len F & for j being Element of NAT st j in dom z2
   ex p being Polynomial of L st p = F.j & z2.j = p.i;
  A6: dom z1 = Seg len F by A4,FINSEQ_1:def 3 .= dom z2 by A5,FINSEQ_1:def 3;
-  now let k be Element of NAT; assume A7: k in dom z1;
+  now let k be Nat; assume A7: k in dom z1;
    then consider p1 being Polynomial of L such that
    A8: p1 = F.k & z1.k = p1.i by A4;
    consider p2 being Polynomial of L such that
-   A9: p2 = F.k & z2.k = p2.i by A5,A7,A6;
+   A9: p2 = F.k & z2.k = p2.i by A5,A6,A7;
    thus z1.k = z2.k by A8,A9;
    end;
  hence thesis by A6,FINSEQ_1:17;
@@ -534,7 +533,7 @@ A5: now let k be Element of NAT; assume A6: P[k];
          .= k + 1 by A8,Def1 .= len Coeff(F,i) by A7,Def1;
      then A11: dom Coeff(F,i) = Seg(len(Coeff(G,i)^<*rf.i*>)) by FINSEQ_1:def 3
                             .= dom(Coeff(G,i)^<*rf.i*>) by FINSEQ_1:def 3;
-      now let j be Element of NAT;
+      now let j be Nat;
        assume A12: j in dom Coeff(F,i);
        A13: dom Coeff(G,i) = Seg(len(Coeff(G,i))) by FINSEQ_1:def 3
                          .= Seg len G by Def1 .= dom G by FINSEQ_1:def 3;
@@ -542,11 +541,11 @@ A5: now let k be Element of NAT; assume A6: P[k];
        suppose A14: j in dom Coeff(G,i);
          then A15: (Coeff(G,i)^<*rf.i*>).j = Coeff(G,i).j by FINSEQ_1:def 7;
          consider p1 being Polynomial of L such that
-         A16: p1 = G.j & Coeff(G,i).j = p1.i by Def1,A14;
+         A16: p1 = G.j & Coeff(G,i).j = p1.i by A14,Def1;
          consider p being Polynomial of L such that
-         A17: p = F.j & Coeff(F,i).j = p.i by Def1,A12;
+         A17: p = F.j & Coeff(F,i).j = p.i by A12,Def1;
          thus Coeff(F,i).j = (Coeff(G,i)^<*rf.i*>).j
-                                            by A17,A16,A13,A14,FUNCT_1:70,A15;
+                                            by A13,A14,A15,A16,A17,FUNCT_1:70;
          end;
        suppose A18: not j in dom Coeff(G,i);
          A19: j = k + 1
@@ -555,8 +554,8 @@ A5: now let k be Element of NAT; assume A6: P[k];
                             .= Seg len F by Def1;
               then A20: 1 <= j & j <= k + 1 by A7,A12,FINSEQ_1:3;
                now assume j < k + 1;
-                then j <= k by NAT_1:13; then j in Seg k by A20;
-                hence contradiction by A13,A18,A9,FINSEQ_1:21;
+                then j <= k by NAT_1:13; then j in Seg k by A12,A20;
+                hence contradiction by A9,A13,A18,FINSEQ_1:21;
                 end;
               hence thesis by A20,XXREAL_0:1;
               end;
@@ -566,18 +565,18 @@ A5: now let k be Element of NAT; assume A6: P[k];
          then A22: (Coeff(G,i)^<*rf.i*>).j
              = <*rf.i*>.1 by A19,A21,FINSEQ_1:def 7 .= rf.i by FINSEQ_1:57;
          consider p being Polynomial of L such that
-         A23: p = F.j & Coeff(F,i).j = p.i by Def1,A12;
+         A23: p = F.j & Coeff(F,i).j = p.i by A12,Def1;
           1 <= k + 1 by NAT_1:11;
          then k + 1 in dom F by A7,FINSEQ_3:27;
          hence Coeff(F,i).j = (Coeff(G,i)^<*rf.i*>).j
-                                         by A23,A22,A19,FINSEQ_4:def 4;
+                                         by A19,A22,A23,PARTFUN1:def 8;
          end;
        end;
      then A24: Coeff(F,i) = Coeff(G,i)^<*rf.i*> by A11,FINSEQ_1:17;
       Sum F = Sum G + Sum <*F/.(k+1)*> by A10,RLVECT_1:58
           .= Sum G + F/.(k+1) by RLVECT_1:61 .= pg + rf by POLYNOM3:def 12;
      hence p.i = pg.i + rf.i by A7,NORMSP_1:def 5
-          .= Sum Coeff(G,i) + rf.i by A8,A6
+          .= Sum Coeff(G,i) + rf.i by A6,A8
           .= Sum Coeff(G,i) + Sum <*rf.i*> by RLVECT_1:61
           .= Sum Coeff(F,i) by A24,RLVECT_1:58;
     end;
@@ -715,22 +714,22 @@ A1: dom f = NAT by FUNCT_2:def 1 .= dom g by FUNCT_2:def 1;
    holds rp.k = p1.(k-'1) * p2.(i+1-'k) by POLYNOM3:def 11;
    A4: Seg(len(x*rp)) = dom(x*rp) by FINSEQ_1:def 3
         .= dom rp by POLYNOM1:def 2 .= Seg len rp by FINSEQ_1:def 3;
-   then A5: len(x*rp) = len rf by A3,A2,FINSEQ_1:8;
-   A6: dom(x*rp) = Seg len rf by FINSEQ_1:def 3,A4,A3,A2
+   then A5: len(x*rp) = len rf by A2,A3,FINSEQ_1:8;
+   A6: dom(x*rp) = Seg len rf by A2,A3,A4,FINSEQ_1:def 3
                 .= dom rf by FINSEQ_1:def 3;
    A7: dom(x*rp) = dom rp by POLYNOM1:def 2;
-   A8: now let j be Element of NAT; assume 1 <= j & j <= len rf;
+   A8: now let j be Nat; assume 1 <= j & j <= len rf;
      then A9: j in dom rf by FINSEQ_3:27;
-     then A10: rp/.j = rp.j by FINSEQ_4:def 4,A6,A7;
-     thus (x*rp).j = (x*rp)/.j by A9,A6,FINSEQ_4:def 4
-          .= x * (rp/.j) by A7,A9,A6,POLYNOM1:def 2
-          .= x * (p1.(j-'1) * p2.(i+1-'j)) by A10,A3,A6,A9,A7
+     then A10: rp/.j = rp.j by A6,A7,PARTFUN1:def 8;
+     thus (x*rp).j = (x*rp)/.j by A6,A9,PARTFUN1:def 8
+          .= x * (rp/.j) by A6,A7,A9,POLYNOM1:def 2
+          .= x * (p1.(j-'1) * p2.(i+1-'j)) by A3,A6,A7,A9,A10
           .= p1.(j-'1) * (x * p2.(i+1-'j)) by GROUP_1:def 4
           .= p1.(j-'1) * (x*p2).(i+1-'j) by POLYNOM5:def 3
           .= rf.j by A2,A9;
      end;
     g.i = x * Sum rp by A3,POLYNOM5:def 3
-      .= Sum(x * rp) by Th8 .= f.i by A8,A2,A5,FINSEQ_1:18;
+      .= Sum(x * rp) by Th8 .= f.i by A2,A5,A8,FINSEQ_1:18;
    hence f.i' = g.i';
    end;
 hence thesis by A1,FUNCT_1:9;
@@ -856,8 +855,8 @@ suppose p1 <> 0_.(L) & p2 <> 0_.(L);
     hence (p1+p2).k = 0.L + 0.L by NORMSP_1:def 5 .= 0.L by RLVECT_1:def 7;
     end;
   then m+1 is_at_least_length_of (p1+p2) by ALGSEQ_1:def 3;
-  then len(p1+p2)<=m+1 by ALGSEQ_1:def 4; then len(p1+p2)-1<=m+1-1 by XREAL_1
-:11;
+  then len(p1+p2)<=m+1 by ALGSEQ_1:def 4; then len(p1+p2)-1<=m+1-1 by
+XREAL_1:11;
   hence thesis;
   end;
 end;
@@ -875,7 +874,7 @@ assume A1: p1 <> 0_.(L) & p2 <> 0_.(L);
 A2: dom p1 = NAT & dom p2 = NAT by FUNCT_2:def 1;
  deg p1 is Element of NAT & deg p2 is Element of NAT by A1,Lm9;
 then A3: p1/.(deg(p1)) = p1.(deg(p1)) & p2/.(deg(p2)) = p2.(deg(p2))
-        by A2,FINSEQ_4:def 4;
+        by A2,PARTFUN1:def 8;
  len p1 <> 0 & len p2 <> 0 by A1,POLYNOM4:8; then len p1 > 0 & len p2 > 0;
 then len p1 + 1 > 0 + 1 & len p2 + 1 > 0 + 1 by XREAL_1:8;
 then len p1 >= 1 & len p2 >= 1 by NAT_1:13;
@@ -897,10 +896,10 @@ let L be add-associative right_zeroed right_complementable unital
          (non empty doubleLoopStr), p be Polynomial of L;
 assume A1: deg p = 0; then A2: p = <%p.0%> by ALGSEQ_1:def 6;
  now assume p is with_roots;
-  then consider x be Element of L such that A3: x is_a_root_of p by POLYNOM5:
-def 7;
+  then consider x be Element of L such that A3: x is_a_root_of p by
+POLYNOM5:def 7;
    0.L = eval(p,x) by A3,POLYNOM5:def 6 .= p.0 by A2,POLYNOM5:38;
-  hence contradiction by A2,A1,ALGSEQ_1:31; end;
+  hence contradiction by A1,A2,ALGSEQ_1:31; end;
 hence thesis;
 end;
 
@@ -966,7 +965,7 @@ then A5: dom p = NAT by FUNCT_4:def 1;
   suppose A6: k = 0 & x = 0; then x in dom f by A3,TARSKI:def 2;
       then p.x = f.x by FUNCT_4:14
         .= (({0} --> a) +* ({k} --> 1_L)).x by FUNCT_4:def 4
-        .= ({k} --> 1_L).x by A6,A2,FUNCT_4:14  .= 1_L by A1,A6,FUNCOP_1:13;
+        .= ({k} --> 1_L).x by A2,A6,FUNCT_4:14  .= 1_L by A1,A6,FUNCOP_1:13;
       hence p.x' in the carrier of L;end;
   suppose x = 0 & k <> 0; then p.x = -power(L).(z,k) by Lm11;
     hence p.x' in the carrier of L; end;
@@ -1015,9 +1014,8 @@ then A2: 1 is_at_least_length_of t by ALGSEQ_1:def 3;
    now assume m < 1; then A4: m = 0 by NAT_1:14;
     A5: k in {k} by TARSKI:def 1; then A6: k in dom({k}-->1_L) by FUNCOP_1:19;
      dom f = {0,k} by FUNCT_4:65; then 0 in dom f by TARSKI:def 2;
-    then t.0 = f.0 by FUNCT_4:14 .= (({0}-->a)+*({k}-->1_L)).0 by FUNCT_4:def
-4
-            .= ({0} --> 1_L).0 by A6,A1,FUNCT_4:14 .= 1_L by A5,A1,FUNCOP_1:13;
+    then t.0 = f.0 by FUNCT_4:14 .= (({0}-->a)+*({k}-->1_L)).0 by FUNCT_4:def 4
+            .= ({0} --> 1_L).0 by A1,A6,FUNCT_4:14 .= 1_L by A1,A5,FUNCOP_1:13;
     then t.0 <> 0.L by VECTSP_1:def 21;
     hence contradiction by A3,A4,ALGSEQ_1:def 3;
     end;
@@ -1050,7 +1048,7 @@ let L be add-associative right_zeroed right_complementable well-unital
 (non empty doubleLoopStr), p be Polynomial of L;
 A1:now given x,z being Element of L such that A2: x <> 0.L & p = x * rpoly(1,z)
 ;
-  thus deg p = deg rpoly(1,z) by POLYNOM5:26,A2 .= 1 by Th27;
+  thus deg p = deg rpoly(1,z) by A2,POLYNOM5:26 .= 1 by Th27;
   end;
  now assume A3: deg(p) = 1; then A4: len p = 1 + 1;
   set x = p.1, z = (-p.0)*(p.1)"; set f = x * rpoly(1,z);
@@ -1106,7 +1104,7 @@ then F.2 = p.1* (power L).(x,1+0) by A1,A6
         .= p.1* ((power L).(x,0) * x) by GROUP_1:def 8
         .= p.1* (1_L * x) by GROUP_1:def 8 .= p.1* x by VECTSP_1:def 19
         .= 1_L * x by Lm11  .= x by VECTSP_1:def 19;
-hence eval(p,x) = Sum(<*-z*>) + Sum(<*x*>) by A3,A5,A1,RLVECT_1:58
+hence eval(p,x) = Sum(<*-z*>) + Sum(<*x*>) by A1,A3,A5,RLVECT_1:58
               .= Sum(<*-z*>) + x by RLVECT_1:61
               .= -z + x by RLVECT_1:61 .= x - z by RLVECT_1:def 11;
 end;
@@ -1126,10 +1124,10 @@ hence thesis by POLYNOM5:def 6; end;
 definition
 let L be well-unital (non empty doubleLoopStr);
 let z be Element of L;
-let k be Element of NAT;
+let k be Nat;
 func qpoly(k,z) -> Polynomial of L means :Def4:
- (for i being Element of NAT st i < k holds it.i = power(L).(z,k-i-1)) &
- (for i being Element of NAT st i >= k holds it.i = 0.L);
+ (for i being Nat st i < k holds it.i = power(L).(z,k-i-1)) &
+ (for i being Nat st i >= k holds it.i = 0.L);
 existence
  proof
 defpred P[set,set] means ex n being Element of NAT st n = $1 &
@@ -1155,27 +1153,28 @@ A1: for x being set st x in NAT
 consider f being Function of NAT,the carrier of L such that
 A4: for x being set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A1);
 reconsider f as sequence of L;
-A5: for i being Element of NAT st i >= k holds f.i = 0.L
+A5: for i being Nat st i >= k holds f.i = 0.L
    proof
-   let i be Element of NAT; assume A6: i >= k;
-   consider n being Element of NAT such that
+   let i be Nat; assume A6: i >= k;
+   i in NAT by ORDINAL1:def 13;
+   then consider n being Element of NAT such that
    A7: n = i & (n < k implies f.i = power(L).(z,k-n-1)) &
                (n >= k implies f.i = 0.L) by A4;
-   thus thesis by A7,A6;
+   thus thesis by A6,A7;
    end;
  ex n being Element of NAT st
 for i being Element of NAT st i >= n holds f.i = 0.L
     proof
+      reconsider k as Element of NAT by ORDINAL1:def 13;
     take n = k+1;
-     now let i be Element of NAT;
-      assume i >= n; then i > k by NAT_1:13; hence f.i = 0.L by A5;
-      end;
-    hence thesis;
+    let i be Element of NAT;
+    assume i >= n; then i > k by NAT_1:13; hence f.i = 0.L by A5;
     end;
 then reconsider p = f as AlgSequence of L by ALGSEQ_1:def 2;
 take p;
- now let i be Element of NAT; assume A8: i < k;
-  consider n being Element of NAT such that
+ now let i be Nat; assume A8: i < k;
+   i in NAT by ORDINAL1:def 13;
+   then consider n being Element of NAT such that
   A9: n = i & (n < k implies f.i = power(L).(z,k-n-1)) &
               (n >= k implies f.i = 0.L) by A4;
   thus p.i = power(L).(z,k-i-1) by A8,A9; end;
@@ -1185,19 +1184,19 @@ uniqueness
  proof
  let z1,z2 be AlgSequence of L;
  assume A10:
- (for i being Element of NAT st i < k holds z1.i = power(L).(z,k-i-1)) &
- (for i being Element of NAT st i >= k holds z1.i = 0.L);
+ (for i being Nat st i < k holds z1.i = power(L).(z,k-i-1)) &
+ (for i being Nat st i >= k holds z1.i = 0.L);
  assume A11:
- (for i being Element of NAT st i < k holds z2.i = power(L).(z,k-i-1)) &
- (for i being Element of NAT st i >= k holds z2.i = 0.L);
+ (for i being Nat st i < k holds z2.i = power(L).(z,k-i-1)) &
+ (for i being Nat st i >= k holds z2.i = 0.L);
  A12: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
   now let x be set;
    assume x in dom z1; then reconsider x' = x as Element of NAT;
    per cases;
    suppose A13: x' < k;
-   hence z1.x = power(L).(z,k-x'-1) by A10 .= z2.x by A13,A11; end;
+   hence z1.x = power(L).(z,k-x'-1) by A10 .= z2.x by A11,A13; end;
    suppose A14: x' >= k;
-   hence z1.x = 0.L by A10 .= z2.x by A14,A11; end;
+   hence z1.x = 0.L by A10 .= z2.x by A11,A14; end;
    end;
  hence z1 = z2 by A12,FUNCT_1:9;
  end;
@@ -1252,7 +1251,7 @@ A4: dom p = NAT by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
   A6: 0 + 1 = 1 & 1 - 1 >= 0; A7: 2 - 1 >= 0;
    len fp >= 1 by A5,NAT_1:11; then 1 in Seg(len fp);
   then A8: 1 in dom fp by FINSEQ_1:def 3;
-  then A9: fp/.1 = fp.1 by FINSEQ_4:def 4
+  then A9: fp/.1 = fp.1 by PARTFUN1:def 8
           .= rpoly(1,z).(1-'1) * qpoly(k,z).(i+1-'1) by A5,A8
           .= rpoly(1,z).0 * qpoly(k,z).(i+1-'1) by A6,BINARITH:def 3
           .= (-power(L).(z,1)) * qpoly(k,z).(i+1-'1) by Lm11
@@ -1271,7 +1270,7 @@ A4: dom p = NAT by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
            .= 1_L * qpoly(k,z).(i+1-'2) by Lm11
            .= qpoly(k,z).(i+1-'2) by VECTSP_1:def 19
            .= qpoly(k,z).i1 by A10,BINARITH:def 3;
-      thus fp/.2 = fp.2 by A13,FINSEQ_4:def 4
+      thus fp/.2 = fp.2 by A13,PARTFUN1:def 8
                 .= qpoly(k,z).(i-'1) by A14,BINARITH:def 3;
       end;
   A15: now let j be Element of NAT; assume A16: j in dom fp & j <> 1 & j <> 2;
@@ -1294,36 +1293,36 @@ A4: dom p = NAT by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
       A23: len g1 = 1 & len g2 = i & fp = g1 ^ g2 by A5,FINSEQ_2:26;
        1 in Seg len g2 by A22,A23;
       then A24: 1 in dom g2 by FINSEQ_1:def 3; A25: 1 + 1 = 2;
-       1+1 <= len fp by A21,A5,NAT_1:13; then 2 in Seg(len fp);
+       1+1 <= len fp by A5,A21,NAT_1:13; then 2 in Seg(len fp);
       then A26: 2 in dom fp by FINSEQ_1:def 3;
        now let i be Element of NAT; assume A27: i in dom g2 & i <> 1;
         then A28: i in Seg(len g2) by FINSEQ_1:def 3;
         then A29: 1 <= i & i <= len g2 by FINSEQ_1:3;
         then A30: g2.i = fp.(i+1) by A23,FINSEQ_1:86;
          len fp = 1 + len g2 by A23,FINSEQ_1:35;
-        then 1 <= i + 1 & i + 1 <= len fp by A29,XREAL_1:8,NAT_1:11;
+        then 1 <= i + 1 & i + 1 <= len fp by A29,NAT_1:11,XREAL_1:8;
         then i + 1 in Seg(len fp);
         then A31: i+1 in dom fp by FINSEQ_1:def 3;
-         i+1<>0+1 & i+1<>2 by A28,A27,FINSEQ_1:3; then fp.(i+1)=0.L by A31,A15
+         i+1<>0+1 & i+1<>2 by A27,A28,FINSEQ_1:3; then fp.(i+1)=0.L by A15,A31
 ;
-        hence g2/.i = 0.L by A30,A27,FINSEQ_4:def 4;
+        hence g2/.i = 0.L by A27,A30,PARTFUN1:def 8;
         end;
-      then A32: Sum g2 = g2/.1 by A24,POLYNOM2:5 .= g2.1 by A24,FINSEQ_4:def 4
-         .= fp.2 by A25,A22,A23,FINSEQ_1:86  .= fp/.2 by A26,FINSEQ_4:def 4;
+      then A32: Sum g2 = g2/.1 by A24,POLYNOM2:5 .= g2.1 by A24,PARTFUN1:def 8
+         .= fp.2 by A22,A23,A25,FINSEQ_1:86  .= fp/.2 by A26,PARTFUN1:def 8;
       A33: g1 = <*g1.1*> by A23,FINSEQ_1:57 .= <*fp.1*> by A23,FINSEQ_1:85
-            .= <*fp/.1*> by A8,FINSEQ_4:def 4;
-      thus p.i = Sum(g1) + fp/.2 by A32,A5,A23,RLVECT_1:58
+            .= <*fp/.1*> by A8,PARTFUN1:def 8;
+      thus p.i = Sum(g1) + fp/.2 by A5,A23,A32,RLVECT_1:58
               .= fp/.1 + fp/.2 by A33,RLVECT_1:61;
       end;
   per cases by REAL_1:def 5;
   suppose A34: i < k;
     per cases;
     suppose A35: i = 0; A36: k-0-1 = k1 & k1 + 1 = k;
-       fp = <*fp.1*> by A35,A5,FINSEQ_1:57 .= <*fp/.1*> by A8,FINSEQ_4:def 4;
-      hence p.i' = (-z) * qpoly(k,z).0 by A35,A9,A5,RLVECT_1:61
+       fp = <*fp.1*> by A5,A35,FINSEQ_1:57 .= <*fp/.1*> by A8,PARTFUN1:def 8;
+      hence p.i' = (-z) * qpoly(k,z).0 by A5,A9,A35,RLVECT_1:61
                .= (-z) * power(L).(z,k1) by A36,Def4
                .= -(z* power(L).(z,k1)) by VECTSP_1:41
-               .= - power(L).(z,k) by A36,GROUP_1:def 8 .= u.i' by A35,Lm11,A1
+               .= - power(L).(z,k) by A36,GROUP_1:def 8 .= u.i' by A1,A35,Lm11
 ; end;
   suppose A37: i > 0; then i + 1 > 0 + 1 by XREAL_1:8;
       then i >= 1 by NAT_1:13; then i - 1 >= 1 - 1 by XREAL_1:11;
@@ -1337,24 +1336,24 @@ A4: dom p = NAT by FUNCT_2:def 1 .= dom u by FUNCT_2:def 1;
        k-1 < k-0 by XREAL_1:12; then i-1 < k-1 & k-1 < k by A34,XREAL_1:11;
       then A40: i - 1 < k by XXREAL_0:2; A41: ki1 + 1 = ki;
       thus p.i' = ((-z)*power(L).(z,ki1))+qpoly(k,z).(i-'1)
-             by Def4,A34,A9,A11,A37,A20
-         .= ((-z) * power(L).(z,ki1)) + power(L).(z,ki) by Def4,A39,A40
+             by A9,A11,A20,A34,A37,Def4
+         .= ((-z) * power(L).(z,ki1)) + power(L).(z,ki) by A39,A40,Def4
          .= (-(z * power(L).(z,ki1))) + power(L).(z,ki) by VECTSP_1:41
          .= - power(L).(z,ki) + power(L).(z,ki) by A41,GROUP_1:def 8
-         .= 0.L by RLVECT_1:16 .= u.i' by A37,A34,Lm12;
+         .= 0.L by RLVECT_1:16 .= u.i' by A34,A37,Lm12;
       end; end;
   suppose A42: i = k; then i - 1 >= 1 - 1 by A1,XREAL_1:11;
     then A43: i -' 1 = i - 1 by BINARITH:def 3; A44: k - k1 - 1 = 0;
      fp/.1 = (-z) * 0.L by A9,A42,Def4 .= 0.L by VECTSP_1:36;
-    hence p.i' = qpoly(k,z).(k1) by A20,A11,A42,A1,A43,ALGSTR_1:def 5
-             .= power(L).(z,0) by Def4,A3,A44
-             .= 1_L by GROUP_1:def 8 .= u.i' by A1,Lm11,A42; end;
+    hence p.i' = qpoly(k,z).(k1) by A1,A11,A20,A42,A43,ALGSTR_1:def 5
+             .= power(L).(z,0) by A3,A44,Def4
+             .= 1_L by GROUP_1:def 8 .= u.i' by A1,A42,Lm11; end;
   suppose A45: i > k; then i + 1 > 0 + 1 by XREAL_1:8;
     then i >= 1 by NAT_1:13; then i - 1 >= 1 - 1 by XREAL_1:11;
     then A46: i -' 1 = i - 1 by BINARITH:def 3;  i >= k+1 by A45,NAT_1:13;
     then A47: i - 1 >= k + 1 - 1 by XREAL_1:11;
-     fp/.1 = (-z) * 0.L by Def4,A45,A9  .= 0.L by VECTSP_1:36;
-    hence p.i' = qpoly(k,z).(i-'1) by A45,A11,A20,ALGSTR_1:def 5
+     fp/.1 = (-z) * 0.L by A9,A45,Def4  .= 0.L by VECTSP_1:36;
+    hence p.i' = qpoly(k,z).(i-'1) by A11,A20,A45,ALGSTR_1:def 5
              .= 0.L by A46,A47,Def4 .= u.i' by A45,Lm12;
     end; end;
 hence thesis by A4,FUNCT_1:9;
@@ -1386,9 +1385,9 @@ suppose A3: m > 0; then m >= 0+1 by NAT_1:13;
      ($1 = 1 & $2 = p.1 * 1_.(L)) or
      ($1 <> 1 & ex u being Element of L st
      ex b being Element of NAT st u = p.$1 & b = $1 & $2 = u*qpoly(b,z));
-  A6: for k being Element of NAT st k in Seg(m1) ex x being Element
+  A6: for k being Nat st k in Seg(m1) ex x being Element
      of the carrier of Polynom-Ring(L) st Pq[k,x]
-     proof let k be Element of NAT; assume k in Seg(m1);
+     proof let k be Nat; assume k in Seg(m1);
      then A7: 1 <= k & k <= m1 by FINSEQ_1:3;
      A8: dom p = NAT by FUNCT_2:def 1;
      per cases by A7,REAL_1:def 5;
@@ -1402,13 +1401,16 @@ suppose A3: m > 0; then m >= 0+1 by NAT_1:13;
        take t;
         Pq[k,t] proof ex u being Element of L st
            ex b being Element of NAT st u = p.k & b = k & t = u*qpoly(b,z)
-           proof take p/.k; take k;
-           thus thesis by A8,FINSEQ_4:def 4; end;
+           proof
+             reconsider b = k as Element of NAT by ORDINAL1:def 13;
+             take p/.k; take b;
+             b in NAT;
+             hence thesis by A8,PARTFUN1:def 8; end;
          hence thesis by A10; end;
        hence thesis; end;
      end;
   consider hs being FinSequence of Polynom-Ring(L) such that
-  A11: dom hs = Seg m1 & for k being Element of NAT st k in Seg(m1)
+  A11: dom hs = Seg m1 & for k being Nat st k in Seg(m1)
                          holds Pq[k,hs.k] from FINSEQ_1:sch 5(A6);
   A12: len hs = m1 & hs.1 = p.1*1_.(L) & for i being Element of NAT
       st 1 < i & i <= m-1 holds hs.i = p.i * qpoly(i,z)
@@ -1427,193 +1429,196 @@ suppose A3: m > 0; then m >= 0+1 by NAT_1:13;
       hence thesis; end;
   defpred Pr[set,set] means ex u being Element of L st
      ex b being Element of NAT st u = p.$1 & b = $1 & $2 = u * rpoly(b,z);
-  A16: for k being Element of NAT st k in Seg(m1) ex x being Element
+  A16: for k being Nat st k in Seg(m1) ex x being Element
      of the carrier of Polynom-Ring(L) st Pr[k,x]
      proof
-     let k be Element of NAT; assume k in Seg(m1);
-     reconsider t = p/.k * rpoly(k,z) as Element of
+     let k be Nat; assume k in Seg(m1);
+     then reconsider k1=k as Element of NAT;
+     reconsider t = p/.k * rpoly(k1,z) as Element of
           the carrier of Polynom-Ring(L) by POLYNOM3:def 12;
-     take t; take p/.k; take k;
-      dom p = NAT by FUNCT_2:def 1; hence p.k = p/.k by FINSEQ_4:def 4;
-     thus k = k; thus t = p/.k * rpoly(k,z); end;
+     take t; take p/.k; take k1;
+A17:  dom p = NAT by FUNCT_2:def 1; k1 in NAT;
+      hence thesis by A17,PARTFUN1:def 8;
+    end;
   consider h being FinSequence of Polynom-Ring(L) such that
-  A17: dom h = Seg m1 & for k being Element of NAT st k in Seg(m1)
+  A18: dom h = Seg m1 & for k being Nat st k in Seg(m1)
                         holds Pr[k,h.k] from FINSEQ_1:sch 5(A16);
-  A18: len h = m1 & for i being Element of NAT st 1 <= i & i <= m1
+  A19: len h = m1 & for i being Element of NAT st 1 <= i & i <= m1
                    holds h.i = p.i * rpoly(i,z)
-      proof thus len h = m1 by A17,FINSEQ_1:def 3;
+      proof thus len h = m1 by A18,FINSEQ_1:def 3;
        now let k be Element of NAT; assume 1 <= k & k <= m1;
         then k in Seg(m1);
-        then consider u being Element of L such that A19:
+        then consider u being Element of L such that A20:
         ex b being Element of NAT st u = p.k & b = k & h.k = u*rpoly(b,z)
-          by A17;
+          by A18;
         consider b being Element of NAT such that
-        A20: u = p.k & b = k & h.k = u*rpoly(b,z) by A19;
-        thus h.k = p.k * rpoly(k,z) by A20;
+        A21: u = p.k & b = k & h.k = u*rpoly(b,z) by A20;
+        thus h.k = p.k * rpoly(k,z) by A21;
         end;
       hence thesis; end;
   set s = Sum hs, rs = Sum h;
   reconsider s, rs as Polynomial of L by POLYNOM3:def 12;
   take s;
-  A21: rpoly(1,z) *' s = rs proof
-      A22: dom(rpoly(1,z) *' s) = NAT by FUNCT_2:def 1 .= dom rs
+  A22: rpoly(1,z) *' s = rs proof
+      A23: dom(rpoly(1,z) *' s) = NAT by FUNCT_2:def 1 .= dom rs
          by FUNCT_2:def 1;
        now let i' be set;
         assume i' in dom rs; then reconsider i = i' as Element of NAT;
         reconsider r1z = rpoly(1,z) as Element of Polynom-Ring(L)
                                                          by POLYNOM3:def 12;
-        A23: dom(r1z * hs) = dom h by A11,A17,POLYNOM1:def 2;
-         now let k be Element of NAT;
-          assume A24: k in dom h; then k in Seg m1 by A18,FINSEQ_1:def 3;
-          then A25: 1 <= k & k <= m1 by FINSEQ_1:3;
-          per cases by A25,REAL_1:def 5;
-          suppose A26: k = 1;
-            then A27: hs/.k = p.1*1_.(L) by A12,A24,A11,A17,FINSEQ_4:def 4;
-            thus (r1z*hs).k = (r1z*hs)/.k by A24,A23,FINSEQ_4:def 4
-                    .= r1z * hs/.k by A11,A17,A24,POLYNOM1:def 2
-                    .= rpoly(1,z) *' (p.1 * 1_.(L)) by A27,POLYNOM3:def 12
+        A24: dom(r1z * hs) = dom h by A11,A18,POLYNOM1:def 2;
+         now let k be Nat;
+          assume A25: k in dom h; then k in Seg m1 by A19,FINSEQ_1:def 3;
+          then A26: 1 <= k & k <= m1 by FINSEQ_1:3;
+          per cases by A26,REAL_1:def 5;
+          suppose A27: k = 1;
+            then A28: hs/.k = p.1*1_.(L) by A11,A12,A18,A25,PARTFUN1:def 8;
+            thus (r1z*hs).k = (r1z*hs)/.k by A24,A25,PARTFUN1:def 8
+                    .= r1z * hs/.k by A11,A18,A25,POLYNOM1:def 2
+                    .= rpoly(1,z) *' (p.1 * 1_.(L)) by A28,POLYNOM3:def 12
                     .= p.1 * (rpoly(1,z) *' 1_.(L)) by Th19
-                    .= p.1 * rpoly(1,z) by POLYNOM3:36 .= h.k by A18,A26,A25;
+                    .= p.1 * rpoly(1,z) by POLYNOM3:36 .= h.k by A19,A26,A27;
             end;
-          suppose A28: k > 1;
-            A29: hs/.k = hs.k by A24,FINSEQ_4:def 4,A11,A17
-                     .= p.k * qpoly(k,z) by A28,A25,A12;
-            thus (r1z*hs).k = (r1z*hs)/.k by A24,A23,FINSEQ_4:def 4
-                .= r1z * hs/.k by A11,A17,A24,POLYNOM1:def 2
-                .= rpoly(1,z) *' (p.k*qpoly(k,z)) by A29,POLYNOM3:def 12
-                .= p.k * (rpoly(1,z) *' qpoly(k,z)) by Th19
-                .= p.k * rpoly(k,z) by A28,Th32 .= h.k by A25,A18;
+          suppose A29: k > 1;
+            reconsider k1 = k as Element of NAT by A25;
+            A30: hs/.k = hs.k by A11,A18,A25,PARTFUN1:def 8
+                     .= p.k1 * qpoly(k1,z) by A12,A26,A29;
+            thus (r1z*hs).k = (r1z*hs)/.k by A24,A25,PARTFUN1:def 8
+                .= r1z * hs/.k by A11,A18,A25,POLYNOM1:def 2
+                .= rpoly(1,z) *' (p.k1*qpoly(k1,z)) by A30,POLYNOM3:def 12
+                .= p.k1 * (rpoly(1,z) *' qpoly(k1,z)) by Th19
+                .= p.k1 * rpoly(k1,z) by A29,Th32 .= h.k by A19,A26;
             end;
           end;
-        then r1z * hs = h by A23,FINSEQ_1:17;
+        then r1z * hs = h by A24,FINSEQ_1:17;
         hence rs.i' = (rpoly(1,z) *' s).i' by Lm6;
         end;
-      hence thesis by A22,FUNCT_1:9; end;
-  A30: now let i be Element of NAT;
-      assume A31: i > 0 & i < len p; then i + 1 > 0 + 1 by XREAL_1:10;
-      then A32: i >= 1 by NAT_1:13;  i < m1 + 1 by A31;
-      then A33: i <= m1 by NAT_1:13;
-      then A34: i in Seg len h by A18,A32;
+      hence thesis by A23,FUNCT_1:9; end;
+  A31: now let i be Element of NAT;
+      assume A32: i > 0 & i < len p; then i + 1 > 0 + 1 by XREAL_1:10;
+      then A33: i >= 1 by NAT_1:13;  i < m1 + 1 by A32;
+      then A34: i <= m1 by NAT_1:13;
+      then A35: i in Seg len h by A19,A33;
       set co = Coeff(h,i);
-      A35: dom h = Seg len h by FINSEQ_1:def 3
+      A36: dom h = Seg len h by FINSEQ_1:def 3
                .= Seg len co by Def1 .= dom co by FINSEQ_1:def 3;
-      then A36: i in dom co by A34,FINSEQ_1:def 3;
+      then A37: i in dom co by A35,FINSEQ_1:def 3;
        now let i' be Element of NAT;
-        assume A37: i' in dom co & i' <> i;
+        assume A38: i' in dom co & i' <> i;
         then consider ci being Polynomial of L such that
-        A38: ci = h.i' & co.i' = ci.i by Def1;
-         i' in Seg m1 by A18,A35,A37,FINSEQ_1:def 3;
+        A39: ci = h.i' & co.i' = ci.i by Def1;
+         i' in Seg m1 by A19,A36,A38,FINSEQ_1:def 3;
         then 1 <= i' & i' <= m-1 by FINSEQ_1:3;
-        then co.i' = (p.i' * rpoly(i',z)).i by A18,A38
+        then co.i' = (p.i' * rpoly(i',z)).i by A19,A39
                   .= p.i' * rpoly(i',z).i by POLYNOM5:def 3
-                  .= p.i' * 0.L by A37,A31,Lm12 .= 0.L by VECTSP_1:36;
-        hence co/.i' = 0.L by A37,FINSEQ_4:def 4;
+                  .= p.i' * 0.L by A32,A38,Lm12 .= 0.L by VECTSP_1:36;
+        hence co/.i' = 0.L by A38,PARTFUN1:def 8;
         end;
-      then A39: Sum co = co/.i by A36,POLYNOM2:5
-                     .= co.i by A36,FINSEQ_4:def 4;
+      then A40: Sum co = co/.i by A37,POLYNOM2:5
+                     .= co.i by A37,PARTFUN1:def 8;
       consider cc being Polynomial of L such that
-      A40: cc = h.i & co.i = cc.i by Def1,A36;
-       h.i = p.i * rpoly(i,z) by A18,A32,A33;
-      hence rs.i = (p.i * rpoly(i,z)).i by A39,A40,Th13; end;
-  A41: now let i be Element of NAT;
-      assume A42: i >= len p; set co = Coeff(h,i);
-      A43: dom h = Seg(len h) by FINSEQ_1:def 3
+      A41: cc = h.i & co.i = cc.i by A37,Def1;
+       h.i = p.i * rpoly(i,z) by A19,A33,A34;
+      hence rs.i = (p.i * rpoly(i,z)).i by A40,A41,Th13; end;
+  A42: now let i be Element of NAT;
+      assume A43: i >= len p; set co = Coeff(h,i);
+      A44: dom h = Seg(len h) by FINSEQ_1:def 3
                .= Seg(len co) by Def1 .= dom co by FINSEQ_1:def 3;
        now let j be Element of NAT;
-        assume A44: j in dom co;
+        assume A45: j in dom co;
         then consider ci being Polynomial of L such that
-        A45: ci = h.j & co.j = ci.i by Def1;
-         j in Seg(m1) by A44,A18,A43,FINSEQ_1:def 3;
-        then A46: 1 <= j & j <= m1 by FINSEQ_1:3;
-        then A47: j <> i by A42,A4,XXREAL_0:2;
-        thus co.j = (p.j * rpoly(j,z)).i by A18,A45,A46
+        A46: ci = h.j & co.j = ci.i by Def1;
+         j in Seg(m1) by A19,A44,A45,FINSEQ_1:def 3;
+        then A47: 1 <= j & j <= m1 by FINSEQ_1:3;
+        then A48: j <> i by A4,A43,XXREAL_0:2;
+        thus co.j = (p.j * rpoly(j,z)).i by A19,A46,A47
                  .= p.j * rpoly(j,z).i by POLYNOM5:def 3
-                 .= p.j * 0.L by A42,A3,A47,Lm12 .= 0.L by VECTSP_1:36;
+                 .= p.j * 0.L by A3,A43,A48,Lm12 .= 0.L by VECTSP_1:36;
         end;
       then Sum co = 0.L by POLYNOM3:1; hence rs.i = 0.L by Th13; end;
    rs = p proof
-    A48: dom p = NAT by FUNCT_2:def 1 .= dom rs by FUNCT_2:def 1;
+    A49: dom p = NAT by FUNCT_2:def 1 .= dom rs by FUNCT_2:def 1;
      now let i' be set;
       assume i' in dom p; then reconsider i = i' as Element of NAT;
       per cases;
-      suppose A49: i = 0;
+      suppose A50: i = 0;
         consider evp being FinSequence of L such that
-        A50: eval(p,z) = Sum evp & len evp = len p &
+        A51: eval(p,z) = Sum evp & len evp = len p &
             for n being Element of NAT st n in dom evp holds evp.n =
             p.(n-'1) * (power L).(z,n-'1) by POLYNOM4:def 2;
-        A51: Sum evp = 0.L by A50,A1,POLYNOM5:def 6;
+        A52: Sum evp = 0.L by A1,A51,POLYNOM5:def 6;
         set co = Coeff(h,0);
-        A52: dom h = Seg len h by FINSEQ_1:def 3
+        A53: dom h = Seg len h by FINSEQ_1:def 3
                  .= Seg len co by Def1 .= dom co by FINSEQ_1:def 3;
-        A53: now let j be Element of NAT;
-            assume A54: j in dom co;
+        A54: now let j be Element of NAT;
+            assume A55: j in dom co;
             then consider ci being Polynomial of L such that
-            A55: ci = h.j & co.j = ci.i by A49,Def1;
+            A56: ci = h.j & co.j = ci.i by A50,Def1;
             reconsider aj = -power(L).(z,j) as Element of L;
-             j in Seg(m1) by A54,A18,A52,FINSEQ_1:def 3;
-            then A56: 1 <= j & j <= m1 by FINSEQ_1:3;
-            hence co.j = (p.j * rpoly(j,z)).i by A18,A55
-              .= p.j * rpoly(j,z).i by POLYNOM5:def 3 .= p.j * aj by A56,A49,
+             j in Seg(m1) by A19,A53,A55,FINSEQ_1:def 3;
+            then A57: 1 <= j & j <= m1 by FINSEQ_1:3;
+            hence co.j = (p.j * rpoly(j,z)).i by A19,A56
+              .= p.j * rpoly(j,z).i by POLYNOM5:def 3 .= p.j * aj by A50,A57,
 Lm11
               .= -(p.j * power(L).(z,j)) by VECTSP_1:40; end;
         set cop = <*-(p.0)*> ^ co;
-          A57: len cop = len <*-(p.0)*> + len co by FINSEQ_1:35
+          A58: len cop = len <*-(p.0)*> + len co by FINSEQ_1:35
                       .= 1 + len co by FINSEQ_1:56;
-          then A58: len cop = 1 + len h by Def1 .= len evp by A18,A50;
-          then A59: dom cop = Seg(len evp) by FINSEQ_1:def 3
+          then A59: len cop = 1 + len h by Def1 .= len evp by A19,A51;
+          then A60: dom cop = Seg(len evp) by FINSEQ_1:def 3
                           .= dom evp by FINSEQ_1:def 3;
            now let j be Element of NAT; assume
-            A60: j in dom cop; then A61:j in Seg len cop by FINSEQ_1:def 3;
-            then A62: 1 <= j & j <= len cop by FINSEQ_1:3;
-            A63: dom <*-(p.0)*> = {1} by FINSEQ_1:4,55;
-            A64: evp/.j = evp.j by A60,A59,FINSEQ_4:def 4
-                       .= p.(j-'1) * (power L).(z,j-'1) by A60,A50,A59;
-            per cases by A62,REAL_1:def 5;
-            suppose A65: j = 1;
-              then j in dom <*-(p.0)*> by A63,TARSKI:def 1;
-              then A66: cop.j = <*-(p.0)*>.j by FINSEQ_1:def 7
-                            .= -(p.0) by A65,FINSEQ_1:57;
-               j -' 1 = 1 - 1 by A65,BINARITH:def 3;
-              then evp/.j = p.0 * 1_L by A64,GROUP_1:def 8
+            A61: j in dom cop; then A62:j in Seg len cop by FINSEQ_1:def 3;
+            then A63: 1 <= j & j <= len cop by FINSEQ_1:3;
+            A64: dom <*-(p.0)*> = {1} by FINSEQ_1:4,55;
+            A65: evp/.j = evp.j by A60,A61,PARTFUN1:def 8
+                       .= p.(j-'1) * (power L).(z,j-'1) by A51,A60,A61;
+            per cases by A63,REAL_1:def 5;
+            suppose A66: j = 1;
+              then j in dom <*-(p.0)*> by A64,TARSKI:def 1;
+              then A67: cop.j = <*-(p.0)*>.j by FINSEQ_1:def 7
+                            .= -(p.0) by A66,FINSEQ_1:57;
+               j -' 1 = 1 - 1 by A66,BINARITH:def 3;
+              then evp/.j = p.0 * 1_L by A65,GROUP_1:def 8
                     .= p.0 by VECTSP_1:def 13;
-              hence cop/.j = - evp/.j by A66,A60,FINSEQ_4:def 4;
+              hence cop/.j = - evp/.j by A61,A67,PARTFUN1:def 8;
               end;
-            suppose A67: j > 1;
+            suppose A68: j > 1;
               then reconsider j1 = j - 1 as Element of NAT by INT_1:18;
-               1 < j1 + 1 by A67; then A68: 1 <= j1 by NAT_1:13;
-               j1 <= len cop - 1 by A62,XREAL_1:11;
-              then j1 in Seg(len co) by A57,A68;
-              then A69: j1 in dom co by FINSEQ_1:def 3;
-               len<*-(p.0)*> < j&j <= len cop by A67,A61,FINSEQ_1:3,57;
-              then A70: cop.j = co.(j - len <*-(p.0)*>) by FINSEQ_1:37
+               1 < j1 + 1 by A68; then A69: 1 <= j1 by NAT_1:13;
+               j1 <= len cop - 1 by A63,XREAL_1:11;
+              then j1 in Seg(len co) by A58,A69;
+              then A70: j1 in dom co by FINSEQ_1:def 3;
+               len<*-(p.0)*> < j&j <= len cop by A62,A68,FINSEQ_1:3,57;
+              then A71: cop.j = co.(j - len <*-(p.0)*>) by FINSEQ_1:37
                             .= co.(j - 1) by FINSEQ_1:57
-                            .= -(p.j1 * power(L).(z,j1)) by A53,A69;
-               j-1 >= 1-1 by A67,XREAL_1:11; then j-'1 = j-1 by BINARITH:def 3
+                            .= -(p.j1 * power(L).(z,j1)) by A54,A70;
+               j-1 >= 1-1 by A68,XREAL_1:11; then j-'1 = j-1 by BINARITH:def 3
 ;
-              hence cop/.j = - evp/.j by A64,A70,A60,FINSEQ_4:def 4;
+              hence cop/.j = - evp/.j by A61,A65,A71,PARTFUN1:def 8;
               end;
             end;
-          then - Sum evp = Sum cop by A58,Th7
+          then - Sum evp = Sum cop by A59,Th7
                         .= Sum <*-(p.0)*> + Sum co by RLVECT_1:58
                         .= -(p.0) + Sum co by RLVECT_1:61;
-          then 0.L = -(p.0) + Sum co by A51,RLVECT_1:25;
+          then 0.L = -(p.0) + Sum co by A52,RLVECT_1:25;
           then p.0 = p.0 + (-(p.0) + Sum co) by ALGSTR_1:def 5
                .= (p.0 + -(p.0)) + Sum co by RLVECT_1:def 6
                .= 0.L + Sum co by RLVECT_1:16 .= Sum co by ALGSTR_1:def 5;
-          hence p.i' = rs.i' by A49,Th13; end;
-        suppose A71: i > 0;
+          hence p.i' = rs.i' by A50,Th13; end;
+        suppose A72: i > 0;
           per cases;
-          suppose A72: i >= len p;
-            hence rs.i' = 0.L by A41 .= p.i' by A72,ALGSEQ_1:22; end;
+          suppose A73: i >= len p;
+            hence rs.i' = 0.L by A42 .= p.i' by A73,ALGSEQ_1:22; end;
           suppose i < len p;
-            hence rs.i' = (p.i * rpoly(i,z)).i by A71,A30
+            hence rs.i' = (p.i * rpoly(i,z)).i by A31,A72
                .= p.i * rpoly(i,z).i by POLYNOM5:def 3
-               .= p.i * 1_L by A71,Lm11 .= p.i' by VECTSP_1:def 13; end;
+               .= p.i * 1_L by A72,Lm11 .= p.i' by VECTSP_1:def 13; end;
           end;
         end;
-      hence thesis by A48,FUNCT_1:9;
+      hence thesis by A49,FUNCT_1:9;
     end;
-  hence thesis by A21; end;
+  hence thesis by A22; end;
 end;
 
 
@@ -1657,7 +1662,7 @@ existence
  suppose f = 0_.(L);
    then A11: deg(f) = -1 by Th20;
    reconsider s' = deg s as Nat by A1,Lm9;
-    s' >= 0; hence thesis by A6,A5,A11; end;
+    s' >= 0; hence thesis by A5,A6,A11; end;
  suppose f <> 0_.(L);
    then len f <> 0 by POLYNOM4:8;
    then len f > 0; then len f + 1 > 0 + 1 by XREAL_1:8;
@@ -1734,8 +1739,8 @@ existence
        A28: dom f = NAT & dom(g1 *' s) = NAT by FUNCT_2:def 1;
        A29: s1.i = f.i + (-(g1 *' s)).i by A27,NORMSP_1:def 5
            .= f.i + -(g1 *' s).i by BHSP_1:def 10
-           .= f/.i + -(g1 *' s).i by A28,FINSEQ_4:def 4
-           .= f/.i + -(g1 *' s)/.i by A28,FINSEQ_4:def 4;
+           .= f/.i + -(g1 *' s).i by A28,PARTFUN1:def 8
+           .= f/.i + -(g1 *' s)/.i by A28,PARTFUN1:def 8;
        consider sf being FinSequence of L such that
        A30: len sf = i+1 & (g1 *' s).i = Sum sf &
            for m being Element of NAT st m in dom sf
@@ -1753,26 +1758,26 @@ existence
        A35: now let i' be Element of NAT;
            assume A36: i' in dom sf & i' <> degn + 1;
            then sf.i' = g1.(i'-'1) * s.(i+1-'i') by A30
-                     .= 0.L * s.(i+1-'i') by A36,A33
+                     .= 0.L * s.(i+1-'i') by A33,A36
                      .= 0.L by VECTSP_1:39;
-           hence sf/.i' = 0.L by A36,FINSEQ_4:def 4; end;
-        i + 1 >= k by A25,A14,XREAL_1:8;
+           hence sf/.i' = 0.L by A36,PARTFUN1:def 8; end;
+        i + 1 >= k by A14,A25,XREAL_1:8;
        then A37: i + 1 >= degn + 1 by A32,XXREAL_0:2;
        then A38: i + 1 - (degn + 1) is Element of NAT by INT_1:18;
         1 <= degn + 1 by NAT_1:11;
-       then A39: degn + 1 in dom sf by A37,A30,A31;
+       then A39: degn + 1 in dom sf by A30,A31,A37;
        then A40: Sum sf = sf/.(degn + 1) by A35,POLYNOM2:5
-                  .= sf.(degn+1) by A39,FINSEQ_4:def 4
-                  .= g1.(degn+1-'1) * s.(i+1-'(degn+1)) by A39,A30
+                  .= sf.(degn+1) by A39,PARTFUN1:def 8
+                  .= g1.(degn+1-'1) * s.(i+1-'(degn+1)) by A30,A39
                   .= al * s.(i+1-'(degn+1)) by A21,BINARITH:39;
        per cases by A25,REAL_1:def 5;
        suppose A41: i > k';
          then i + 1 > k' + 1 by XREAL_1:8;
          then i >= len f by NAT_1:13;
          then f.i = 0.L by ALGSEQ_1:22;
-         then A42: f/.i = 0.L by A28,FINSEQ_4:def 4;
+         then A42: f/.i = 0.L by A28,PARTFUN1:def 8;
          A43: i+1-'(degn+1) = i - k' + (len(s)-1) by A38,BINARITH:def 3;
-         reconsider e = i - k' as Element of NAT by INT_1:18,A41;
+         reconsider e = i - k' as Element of NAT by A41,INT_1:18;
           i - k' > k' - k' by A41,XREAL_1:11;
          then e + 1 > 0 + 1 by XREAL_1:8;
          then e >= 1 by NAT_1:13;
@@ -1780,19 +1785,19 @@ existence
          then (i - k' - 1) + len(s) >= 0 + len(s) by XREAL_1:8;
          then s.(i+1-'(degn+1)) = 0.L by A43,ALGSEQ_1:22;
          then Sum sf = 0.L by A40,VECTSP_1:36;
-         hence s1.i = 0.L + -(0.L) by A42,A29,A30,A28,FINSEQ_4:def 4
+         hence s1.i = 0.L + -(0.L) by A28,A29,A30,A42,PARTFUN1:def 8
                    .= 0.L + 0.L by RLVECT_1:25 .= 0.L by RLVECT_1:def 7; end;
        suppose A44: i = k';
           (i+1)-'(degn+1) = i + 1 - (degn + 1) by A38,BINARITH:def 3
-               .= len s -' 1 by A44,A9,BINARITH:def 3;
+               .= len s -' 1 by A9,A44,BINARITH:def 3;
          then Sum sf = f.(len f-'1) * ((s.(len s-'1))" * s.(len s-'1))
                      by A40,GROUP_1:def 4
                .= f.(len f-'1) * 1_L by A10,VECTSP_1:def 22
                .= f.(len f-'1) by VECTSP_1:def 13
                .= f.(len f-1) by A12,BINARITH:def 3
-               .= f/.(len f-1) by A13,FINSEQ_4:def 4;
+               .= f/.(len f-1) by A13,PARTFUN1:def 8;
          hence s1.i = f/.(len f-1)+-(f/.(len f-1))
-                      by A44,A29,A30,A28,FINSEQ_4:def 4
+                      by A28,A29,A30,A44,PARTFUN1:def 8
                    .= 0.L by RLVECT_1:16; end;
        end;
      then k' is_at_least_length_of s1 by ALGSEQ_1:def 3;
@@ -1800,7 +1805,7 @@ existence
      then len(s1) < k by A14,NAT_1:13;
      hence contradiction by A3,A24;
      end;
-   hence thesis by A6,A5;
+   hence thesis by A5,A6;
    end;
  end;
 uniqueness
@@ -1823,14 +1828,14 @@ uniqueness
               .= f2 + (f1 - f1) by POLYNOM3:26 .= f2 + 0_.(L) by POLYNOM3:30;
        hence contradiction by A49,POLYNOM3:29; end;
    then reconsider d = deg(f2-f1), degs = deg(s) as Nat by A1,Lm9;
-   A51: deg(t1-t2) = d + degs by A1,A48,A47,A50,Th23;
+   A51: deg(t1-t2) = d + degs by A1,A47,A48,A50,Th23;
     deg(t1-t2) <= max(deg(t1),deg(-t2)) by Th22;
    then A52: deg(t1-t2) <= max(deg(t1),deg(t2)) by POLYNOM4:11;
     deg(t1-t2) < degs proof
     per cases by XXREAL_0:16;
-    suppose max(deg(t1),deg(t2))=deg(t1);hence thesis by A52,A45,XXREAL_0:2
+    suppose max(deg(t1),deg(t2))=deg(t1);hence thesis by A45,A52,XXREAL_0:2
 ;end;
-    suppose max(deg(t1),deg(t2))=deg(t2);hence thesis by A52,A46,XXREAL_0:2
+    suppose max(deg(t1),deg(t2))=deg(t2);hence thesis by A46,A52,XXREAL_0:2
 ;end;
     end;
    hence contradiction by A51,NAT_1:11;
@@ -1930,7 +1935,7 @@ p = s *' rpoly(1,z) + t & deg t < deg rpoly(1,z)
   proof
   take t = 0_.(L); thus s *' rpoly(1,z) + t = p by A2,POLYNOM3:29;
    deg t = -1 by Th20; hence thesis by Th27; end;
-hence thesis by A5,A4,Def5;
+hence thesis by A4,A5,Def5;
 end;
 
 
@@ -1947,7 +1952,7 @@ theorem
 proof
  eval(0_.(F_Complex),1_F_Complex) = 0.F_Complex by POLYNOM4:20;
 then 1_F_Complex is_a_root_of 0_.(F_Complex) by POLYNOM5:def 6;
-hence thesis by COMPLEX1:15,COMPLFLD:10,Def8;
+hence thesis by Def8,COMPLEX1:15,COMPLFLD:10;
 end;
 
 theorem
@@ -1961,7 +1966,7 @@ set p = x * 1_.(F_Complex);
   then A2: eval(p,z) = 0.F_Complex by POLYNOM5:def 6;
    eval(p,z) = x * eval(1_.(F_Complex),z) by POLYNOM5:31
            .= x * 1_F_Complex by POLYNOM4:21;
-  hence Re(z) < 0 by A2,A1,VECTSP_1:def 13; end;
+  hence Re(z) < 0 by A1,A2,VECTSP_1:def 13; end;
 hence thesis by Def8;
 end;
 
@@ -2020,7 +2025,7 @@ holds (x is_a_root_of g or x is_a_root_of h) implies x is_a_root_of f
 proof
 let f,g,h be Polynomial of F_Complex; assume A1: f = g *' h; let x be
 Element of F_Complex; assume A2: x is_a_root_of g or x is_a_root_of h;
-A3: eval(f,x) = eval(g,x) * eval(h,x) by POLYNOM4:27,A1;
+A3: eval(f,x) = eval(g,x) * eval(h,x) by A1,POLYNOM4:27;
 per cases by A2;
 suppose x is_a_root_of g; then eval(g,x) = 0.F_Complex by POLYNOM5:def 6;
   then eval(f,x) = 0.F_Complex by A3,VECTSP_1:39;
@@ -2087,7 +2092,7 @@ for i being Element of NAT st i >= n holds g.i = 0.F_Complex
       consider m being Element of NAT such that
       A4: m = i & g.i = power(F_Complex).(-1_F_Complex,m) * (f.m)*' by A2;
       thus g.i = power(F_Complex).(-1_F_Complex,i) * (0.F_Complex)*'
-                 by A4,A3,ALGSEQ_1:22
+                 by A3,A4,ALGSEQ_1:22
               .= 0.F_Complex by COMPLFLD:83,VECTSP_1:36; end;
     hence thesis; end;
 then reconsider p = g as AlgSequence of F_Complex by ALGSEQ_1:def 2;
@@ -2144,7 +2149,7 @@ then A3: len f >= len (f*') by ALGSEQ_1:def 4;
    then l >= len(f*') by NAT_1:13;
    then A5: (f*').l = 0.F_Complex by ALGSEQ_1:22;
     len f = l + 1; then f.l <> 0.F_Complex by ALGSEQ_1:25;
-   hence contradiction by A5,A1; end;
+   hence contradiction by A1,A5; end;
 hence thesis by A3,XXREAL_0:1;
 end;
 
@@ -2165,7 +2170,7 @@ A1: dom g = NAT by FUNCT_2:def 1 .= dom f by FUNCT_2:def 1;
      .= (power(F_Complex).(-1_F_Complex,k) *
          power(F_Complex).((-1_F_Complex)*',k)) * f.k by Th5
      .= (power(F_Complex).(-1_F_Complex,k) *
-         power(F_Complex).(-1_F_Complex,k)) * f.k by Lm3,Lm2
+         power(F_Complex).(-1_F_Complex,k)) * f.k by Lm2,Lm3
      .= power(F_Complex).(-1_F_Complex,k+k) * f.k by Th3
      .= power(F_Complex).(-1_F_Complex,2*k) * f.k
      .= 1_F_Complex * f.k by Th4;
@@ -2248,8 +2253,8 @@ A1: dom(h1*') = NAT by FUNCT_2:def 1 .= dom((f*') *' (g*')) by FUNCT_2:def 1;
       then A7: k + 1 - j >= j - j & j - 1 >= 1 - 1 by XREAL_1:11;
       then A8: (j-'1) + (k+1-'j) = j-1 + (k+1-'j) by BINARITH:def 3
                 .= j - 1 + (k + 1 - j) by A7,BINARITH:def 3 .= k;
-       s.j = s/.j by A6,A4,FINSEQ_4:def 4;
-      then A9: (s/.j)*' = (f.(j-'1) * g.(k+1-'j))*' by A2,A6,A4;
+       s.j = s/.j by A4,A6,PARTFUN1:def 8;
+      then A9: (s/.j)*' = (f.(j-'1) * g.(k+1-'j))*' by A2,A4,A6;
       thus t.j = (f*').(j-'1) * (g*').(k+1-'j) by A3,A6
               .= (power(F_Complex).(-1_F_Complex,j-'1) * (f.(j-'1))*') *
                  (g*').(k+1-'j) by Def9
@@ -2264,30 +2269,30 @@ A1: dom(h1*') = NAT by FUNCT_2:def 1 .= dom((f*') *' (g*')) by FUNCT_2:def 1;
               .= power(F_Complex).(-1_F_Complex,k) * (s/.j)*'
                  by A9,COMPLFLD:90; end;
   defpred P[set,set] means $2 = (s/.$1)*';
-  A10: for j being Element of NAT st j in Seg(len s)
+  A10: for j being Nat st j in Seg(len s)
      ex x being Element of F_Complex st P[j,x];
   consider u being FinSequence of F_Complex such that
-  A11: dom u = Seg(len s) & for j being Element of NAT
+  A11: dom u = Seg(len s) & for j being Nat
        st j in Seg(len s) holds P[j,u.j] from FINSEQ_1:sch 5(A10);
   A12: len u = len s &
       for j be Element of NAT st j in dom u holds u/.j = (s/.j)*'
       proof
       thus len u = len s by A11,FINSEQ_1:def 3;
        now let j be Element of NAT; assume A13: j in dom u;
-        hence u/.j = u.j by FINSEQ_4:def 4 .= (s/.j)*' by A13,A11; end;
+        hence u/.j = u.j by PARTFUN1:def 8 .= (s/.j)*' by A11,A13; end;
       hence thesis; end;
   then A14: dom u = Seg(len t) by A2,A3,FINSEQ_1:def 3
             .= dom t by FINSEQ_1:def 3;
   A15: power(F_Complex).(-1_F_Complex,k) * u = t
     proof set b = power(F_Complex).(-1_F_Complex,k); set a = b * u;
     A16: dom a = dom u by POLYNOM1:def 2;
-     now let j be Element of NAT; assume A17: j in dom t;
-      hence a.j = a/.j by A14,A16,FINSEQ_4:def 4
+     now let j be Nat; assume A17: j in dom t;
+      hence a.j = a/.j by A14,A16,PARTFUN1:def 8
                .= b * u/.j by A14,A17,POLYNOM1:def 2
-               .= b * (s/.j)*' by A12,A14,A17  .= t.j by A17,A5; end;
-    hence thesis by FINSEQ_1:17,A14,A16;
+               .= b * (s/.j)*' by A12,A14,A17  .= t.j by A5,A17; end;
+    hence thesis by A14,A16,FINSEQ_1:17;
     end;
-   Sum u = (Sum s)*' by A12, Th6;
+   Sum u = (Sum s)*' by A12,Th6;
   then (h1*').k = power(F_Complex).(-1_F_Complex,k) * (Sum u) by A2,Def9
                .= ((f*') *' (g*')).k by A3,A15,Th8;
   hence (h1*').k' = ((f*') *' (g*')).k'; end;
@@ -2389,7 +2394,7 @@ A6: rpoly(1,z).0 = -power(F_Complex).(z,1+0) by Lm11
             .= -(1_F_Complex * z) by GROUP_1:def 8
             .= -z by VECTSP_1:def 19;
  1 in Seg(len F) by A1,A3; then 1 in dom F by FINSEQ_1:def 3;
-then A7: F.1 = p.0 * (power F_Complex).(x,0) by A5,A1
+then A7: F.1 = p.0 * (power F_Complex).(x,0) by A1,A5
         .= p.0 * 1_F_Complex by GROUP_1:def 8
         .= p.0 by VECTSP_1:def 13
         .= power(F_Complex).(-1_F_Complex,0) * (-z)*' by A6,Def9
@@ -2398,7 +2403,7 @@ then A7: F.1 = p.0 * (power F_Complex).(x,0) by A5,A1
         .= -(z*') by COMPLFLD:88;
 A8: 2-'1 = 2-1 by BINARITH:def 3;
  2 in Seg(len F) by A1,A2; then 2 in dom F by FINSEQ_1:def 3;
-then F.2 = p.1 * (power F_Complex).(x,1+0) by A8,A1
+then F.2 = p.1 * (power F_Complex).(x,1+0) by A1,A8
         .= p.1 * ((power F_Complex).(x,0) * x) by GROUP_1:def 8
         .= p.1 * (1_F_Complex * x) by GROUP_1:def 8
         .= p.1 * x by VECTSP_1:def 19
@@ -2413,7 +2418,7 @@ COMPLFLD:85
         .= (-(1_F_Complex)) * x by VECTSP_1:def 13
         .= -(1_F_Complex * x) by VECTSP_1:41
         .= -x by VECTSP_1:def 19;
-hence eval(p,x) = Sum(<*-(z*')*>) + Sum(<*-x*>) by A4,A7,A1,RLVECT_1:58
+hence eval(p,x) = Sum(<*-(z*')*>) + Sum(<*-x*>) by A1,A4,A7,RLVECT_1:58
               .= Sum(<*-(z*')*>) + -x by RLVECT_1:61
               .= -(z*') + -x by RLVECT_1:61 .= -x - (z*') by RLVECT_1:def 11;
 end;
@@ -2460,7 +2465,7 @@ A3: now let y,z be Element of F_Complex; assume A4: rpoly(1,z) is Hurwitz;
     then A9: |.y' - z'.| < |.y' + (z'*').| by A5,A6,Lm15;
      |.(y' + (z'*')).| = |.-(y' + (z'*')).| by COMPLEX1:138;
     hence |.eval(rpoly(1,z),y).| < |.eval((rpoly(1,z))*',y).|
-      by A9,A8,COMPLFLD:5;
+      by A8,A9,COMPLFLD:5;
     end;
 A10: now let a,y,z be Element of F_Complex;
     assume A11: rpoly(1,z) is Hurwitz & a <> 0.F_Complex; assume A12: Re(y) < 0
@@ -2468,7 +2473,7 @@ A10: now let a,y,z be Element of F_Complex;
     reconsider a' = a, e' = eval(rpoly(1,z),y)
                          as Element of COMPLEX by COMPLFLD:def 1;
     A13: |.eval(rpoly(1,z),y).| < |.eval((rpoly(1,z))*',y).| by A3,A11,A12;
-    A14: |.a.| > 0 by COMPLEX1:133,A11,COMPLFLD:9;
+    A14: |.a.| > 0 by A11,COMPLEX1:133,COMPLFLD:9;
     A15: |.eval(a*rpoly(1,z),y).| = |.a * eval(rpoly(1,z),y).| by POLYNOM5:31
                             .= |.a.| * |.eval(rpoly(1,z),y).| by COMPLEX1:151;
     reconsider r' = eval((rpoly(1,z))*',y) as Element of COMPLEX
@@ -2479,7 +2484,7 @@ A10: now let a,y,z be Element of F_Complex;
        .= |.eval((a*')*(rpoly(1,z))*',y).| by POLYNOM5:31
        .= |.eval((a*rpoly(1,z))*',y).| by Th44;
     hence |.eval(a*rpoly(1,z),y).|<|.eval((a*rpoly(1,z))*',y).|
-      by A14,A15,A13,XREAL_1:70;
+      by A13,A14,A15,XREAL_1:70;
     end;
 A16: now let y,z be Element of F_Complex; assume A17: rpoly(1,z) is Hurwitz;
     assume A18: Re(y) > 0;
@@ -2494,7 +2499,7 @@ A16: now let y,z be Element of F_Complex; assume A17: rpoly(1,z) is Hurwitz;
     then A22: |.y' - z'.| > |.y' + (z'*').| by A18,A19,Lm15;
      |.(y' + (z'*')).| = |.-(y' + (z'*')).| by COMPLEX1:138;
     hence |.eval(rpoly(1,z),y).| > |.eval((rpoly(1,z))*',y).|
-      by A22,A21,COMPLFLD:5;
+      by A21,A22,COMPLFLD:5;
     end;
 A23: now let a,y,z be Element of F_Complex;
     assume A24: rpoly(1,z) is Hurwitz & a <> 0.F_Complex; assume A25: Re(y) > 0
@@ -2502,7 +2507,7 @@ A23: now let a,y,z be Element of F_Complex;
     reconsider a' = a, e' = eval(rpoly(1,z),y)
                          as Element of COMPLEX by COMPLFLD:def 1;
     A26: |.eval(rpoly(1,z),y).| > |.eval((rpoly(1,z))*',y).| by A16,A24,A25;
-    A27: |.a.| > 0 by COMPLEX1:133,A24,COMPLFLD:9;
+    A27: |.a.| > 0 by A24,COMPLEX1:133,COMPLFLD:9;
     A28: |.eval(a*rpoly(1,z),y).| = |.a * eval(rpoly(1,z),y).| by POLYNOM5:31
                             .= |.a.| * |.eval(rpoly(1,z),y).| by COMPLEX1:151;
     reconsider r' = eval((rpoly(1,z))*',y) as Element of COMPLEX
@@ -2513,7 +2518,7 @@ A23: now let a,y,z be Element of F_Complex;
        .= |.eval((a*')*(rpoly(1,z))*',y).| by POLYNOM5:31
        .= |.eval((a*rpoly(1,z))*',y).| by Th44;
     hence |.eval(a*rpoly(1,z),y).|>|.eval((a*rpoly(1,z))*',y).|
-      by A28,A27,A26,XREAL_1:70;
+      by A26,A27,A28,XREAL_1:70;
     end;
 A29: now let y,z be Element of F_Complex; assume A30: rpoly(1,z) is Hurwitz;
     assume A31: Re(y) = 0;
@@ -2528,7 +2533,7 @@ A29: now let y,z be Element of F_Complex; assume A30: rpoly(1,z) is Hurwitz;
     then A35: |.y' - z'.| = |.y' + (z'*').| by A31,A32,Lm15;
      |.(y' + (z'*')).| = |.-(y' + (z'*')).| by COMPLEX1:138;
     hence |.eval(rpoly(1,z),y).| = |.eval((rpoly(1,z))*',y).|
-      by A35,A34,COMPLFLD:5;
+      by A34,A35,COMPLFLD:5;
     end;
 A36: now let a,y,z be Element of F_Complex;
     assume A37: rpoly(1,z) is Hurwitz & a <> 0.F_Complex; assume A38: Re(y) = 0
@@ -2545,7 +2550,7 @@ A39: |.eval(a*rpoly(1,z),y).| = |.a * eval(rpoly(1,z),y).| by POLYNOM5:31
        .= |.eval((a*')*(rpoly(1,z))*',y).| by POLYNOM5:31
        .= |.eval((a*rpoly(1,z))*',y).| by Th44;
     hence |.eval(a*rpoly(1,z),y).| = |.eval((a*rpoly(1,z))*',y).|
-      by A39,A29,A37,A38;
+      by A29,A37,A38,A39;
     end;
 A40: now let k be Element of NAT; assume A41: P[k];
     now let f be Polynomial of F_Complex;
@@ -2555,11 +2560,11 @@ A40: now let k be Element of NAT; assume A41: P[k];
      suppose k+1 = 1;
        then consider z1,z2 being Element of F_Complex such that
        A43: z1 <> 0.F_Complex & f = z1 * rpoly(1,z2) by A42,Th28;
-        rpoly(1,z2) is Hurwitz by A43,A42,Th40;
+        rpoly(1,z2) is Hurwitz by A42,A43,Th40;
        hence (Re(x) < 0 implies |.eval(f,x).| < |.eval(f*',x).|) &
              (Re(x) > 0 implies |.eval(f,x).| > |.eval(f*',x).|) &
              (Re(x) = 0 implies |.eval(f,x).| = |.eval(f*',x).|)
-                   by A43,A10,A23,A36; end;
+                   by A10,A23,A36,A43; end;
      suppose A44: k+1 > 1; A45: k + 1 + 1 > k + 1 + 0 by XREAL_1:8;
        then len f > 1 by A42,XXREAL_0:2;
        then f is with_roots by POLYNOM5:75;
@@ -2567,10 +2572,10 @@ A40: now let k be Element of NAT; assume A41: P[k];
        A46: z is_a_root_of f by POLYNOM5:def 7;
        consider f1 being Polynomial of F_Complex such that
        A47: f = rpoly(1,z) *' f1 by A46,Th33;
-       A48: f <> 0_.(F_Complex) by A45,POLYNOM4:6,A42;
+       A48: f <> 0_.(F_Complex) by A42,A45,POLYNOM4:6;
        then A49: rpoly(1,z) <> 0_.(F_Complex) by A47,POLYNOM3:35;
-        f1 <> 0_.(F_Complex) by A48,A47,POLYNOM3:35;
-       then A50: deg f = deg(rpoly(1,z)) + deg(f1) by A47,Th23,A49
+        f1 <> 0_.(F_Complex) by A47,A48,POLYNOM3:35;
+       then A50: deg f = deg(rpoly(1,z)) + deg(f1) by A47,A49,Th23
                       .= 1 + deg(f1) by Th27;
        A51: f1 is Hurwitz & rpoly(1,z) is Hurwitz by A42,A47,Th41;
        A52: k >= 1 by A44,NAT_1:13;
@@ -2579,11 +2584,11 @@ A40: now let k be Element of NAT; assume A41: P[k];
                            as Element of COMPLEX by COMPLFLD:def 1;
           reconsider r1' = eval(rpoly(1,z)*',x), e1' = eval(f1*',x)
                            as Element of COMPLEX by COMPLFLD:def 1;
-          A55: |.e'.| < |.e1'.| & |.r'.| < |.r1'.|by A51,A3,A54,A41,A50,A42,A52
+          A55: |.e'.| < |.e1'.| & |.r'.| < |.r1'.|by A3,A41,A42,A50,A51,A52,A54
 ;
           A56: 0 <= |.e'.| & 0 <= |.r'.| by COMPLEX1:132;
           then A57: |.r1'.| * |.e'.| < |.r1'.| * |.e1'.| by A55,XREAL_1:70;
-           |.r'.| * |.e'.| <= |.r1'.| * |.e'.| by A56,A55,XREAL_1:66;
+           |.r'.| * |.e'.| <= |.r1'.| * |.e'.| by A55,A56,XREAL_1:66;
           then |.r'.| * |.e'.| < |.r1'.| * |.e1'.| by A57,XXREAL_0:2;
           then |.r' * e'.| < |.r1'.| * |.e1'.| by COMPLEX1:151;
           then A58: |.eval(rpoly(1,z),x) * eval(f1,x).| <
@@ -2592,18 +2597,18 @@ A40: now let k be Element of NAT; assume A41: P[k];
            eval(rpoly(1,z),x) * eval(f1,x) = eval(rpoly(1,z)*'f1,x) &
           eval(rpoly(1,z)*',x) * eval(f1*',x) =
             eval((rpoly(1,z)*')*'((f1)*'),x) by POLYNOM4:27;
-          hence |.eval(f,x).| < |.eval(f*',x).| by A58,A47,Th47;
+          hence |.eval(f,x).| < |.eval(f*',x).| by A47,A58,Th47;
           end;
        A59: now assume A60: Re(x) > 0;
           reconsider r' = eval(rpoly(1,z),x), e' = eval(f1,x)
                            as Element of COMPLEX by COMPLFLD:def 1;
           reconsider r1' = eval(rpoly(1,z)*',x), e1' = eval(f1*',x)
                            as Element of COMPLEX by COMPLFLD:def 1;
-          A61: |.e'.| > |.e1'.| & |.r'.| > |.r1'.|by A51,A16,A60,A41,A50,A42,
-A52;
+          A61: |.e'.| > |.e1'.| & |.r'.| > |.r1'.|by A16,A41,A42,A50,A51,A52
+,A60;
           A62: 0 <= |.e1'.| & 0 <= |.r1'.| by COMPLEX1:132;
           then A63: |.r'.| * |.e'.| > |.r1'.| * |.e'.| by A61,XREAL_1:70;
-           |.r1'.| * |.e'.| >= |.r1'.| * |.e1'.| by A62,A61,XREAL_1:66;
+           |.r1'.| * |.e'.| >= |.r1'.| * |.e1'.| by A61,A62,XREAL_1:66;
           then |.r'.| * |.e'.| > |.r1'.| * |.e1'.| by A63,XXREAL_0:2;
           then |.r' * e'.| > |.r1'.| * |.e1'.| by COMPLEX1:151;
           then A64: |.eval(rpoly(1,z),x) * eval(f1,x).| >
@@ -2612,15 +2617,15 @@ A52;
            eval(rpoly(1,z),x) * eval(f1,x) = eval(rpoly(1,z)*'f1,x) &
           eval(rpoly(1,z)*',x) * eval(f1*',x) =
             eval((rpoly(1,z)*')*'((f1)*'),x) by POLYNOM4:27;
-          hence |.eval(f,x).| > |.eval(f*',x).| by A64,A47,Th47;
+          hence |.eval(f,x).| > |.eval(f*',x).| by A47,A64,Th47;
           end;
         now assume A65: Re(x) = 0;
-          then A66: |.eval(f1,x).| = |.eval(f1*',x).| by A41,A50,A42,A51,A52;
+          then A66: |.eval(f1,x).| = |.eval(f1*',x).| by A41,A42,A50,A51,A52;
           reconsider r' = eval(rpoly(1,z),x), e' = eval(f1,x)
                            as Element of COMPLEX by COMPLFLD:def 1;
           reconsider r1' = eval(rpoly(1,z)*',x), e1' = eval(f1*',x)
                            as Element of COMPLEX by COMPLFLD:def 1;
-           |.r'.| * |.e'.| = |.r1'.| * |.e1'.| by A51,A29,A65,A66;
+           |.r'.| * |.e'.| = |.r1'.| * |.e1'.| by A29,A51,A65,A66;
           then |.r' * e'.| = |.r1'.| * |.e1'.| by COMPLEX1:151;
           then A67: |.eval(rpoly(1,z),x) * eval(f1,x).| =
                    |.eval((rpoly(1,z))*',x) * eval(f1*',x).|
@@ -2628,7 +2633,7 @@ A52;
            eval(rpoly(1,z),x) * eval(f1,x) = eval(rpoly(1,z)*'f1,x) &
           eval(rpoly(1,z)*',x) * eval(f1*',x) =
             eval((rpoly(1,z)*')*'((f1)*'),x) by POLYNOM4:27;
-          hence |.eval(f,x).| = |.eval(f*',x).| by A67,A47,Th47;
+          hence |.eval(f,x).| = |.eval(f*',x).| by A47,A67,Th47;
           end;
        hence (Re(x) < 0 implies |.eval(f,x).| < |.eval(f*',x).|) &
              (Re(x) > 0 implies |.eval(f,x).| > |.eval(f*',x).|) &
@@ -2640,7 +2645,7 @@ A52;
 A68: for k be Element of NAT holds P[k] from NAT_1:sch 1(A2,A40);
  f <> 0_.(F_Complex) by A1,Th20; then deg f is Element of NAT by Lm9;
 then consider j be Element of NAT such that A69: deg(f) = j;
-thus thesis by A69,A68,A1;
+thus thesis by A1,A68,A69;
 end;
 
 definition
@@ -2660,13 +2665,13 @@ let a,b be Element of F_Complex; assume A1: |.a.| > |.b.|;
 let f be Polynomial of F_Complex; assume A2: deg(f) >= 1;
 set g = a * f - b * f*';
 A3: 0 < |.a.| by A1,COMPLEX1:132;
-then A4: a <> 0.F_Complex by COMPLFLD:9,COMPLEX1:133;
+then A4: a <> 0.F_Complex by COMPLEX1:133,COMPLFLD:9;
 per cases;
 suppose b = 0.F_Complex;
   then g = a * f - 0_.(F_Complex) by POLYNOM5:27
         .= a * f + 0_.(F_Complex) by Th9
         .= a * f by POLYNOM3:29;
-  hence thesis by Th40,A4; end;
+  hence thesis by A4,Th40; end;
 suppose A5: b <> 0.F_Complex;
 then A6: 0 < |.b.| by COMPLEX1:133,COMPLFLD:9;
 A7:now assume A8: f is Hurwitz;
@@ -2683,18 +2688,17 @@ A7:now assume A8: f is Hurwitz;
       A13: 0 <= |.b.| by COMPLEX1:132;
       per cases by A10;
       suppose Re(z) = 0;
-        then |.eval(f,z).|=|.eval(f*',z).| & |.eval(f,z).|>0 by Th49,Th50,A2,
-A8
+        then |.eval(f,z).|=|.eval(f*',z).| & |.eval(f,z).|>0 by A2,A8,Th49,Th50
 ;
         then |.a.|*|.eval(f,z).| > |.b.|*|.eval(f*',z).| by A1,XREAL_1:70;
         hence contradiction by A9,A11,A12,VECTSP_1:66; end;
       suppose Re(z) > 0;
-        then A14: |.eval(f,z).| > |.eval(f*',z).| by Th50,A2,A8;
+        then A14: |.eval(f,z).| > |.eval(f*',z).| by A2,A8,Th50;
         then |.eval(f,z).| > 0 by COMPLEX1:132;
         then A15: |.a.| * |.eval(f,z).| >
                  |.b.| * |.eval(f,z).| by A1,XREAL_1:70;
-         |.b.|*|.eval(f,z).| >= |.b.|*|.eval(f*',z).| by A14,A13,XREAL_1:66;
-        hence contradiction by A9,A11,A12,VECTSP_1:66,A15; end;
+         |.b.|*|.eval(f,z).| >= |.b.|*|.eval(f*',z).| by A13,A14,XREAL_1:66;
+        hence contradiction by A9,A11,A12,A15,VECTSP_1:66; end;
       end;
     hence Re(z) < 0; end;
   hence g is Hurwitz by Def8; end;
@@ -2705,8 +2709,8 @@ A16: g*' = (a * f)*' + (-(b * f*'))*' by Th46
        .= ((a*') * (f*')) + - ((b*') * f) by Th43;
 reconsider a'=a, b'=b as Element of COMPLEX by COMPLFLD:def 1;
  (|.a.|^2 - |.b.|^2)" in COMPLEX by XCMPLX_0:def 2;
-then reconsider zz = (|.a.|^2 - |.b.|^2)" as Element of F_Complex by COMPLFLD:
-def 1;
+then reconsider zz = (|.a.|^2 - |.b.|^2)" as Element of F_Complex by
+COMPLFLD:def 1;
 set a1 = (a*') * zz, b1 = - b * zz;
 reconsider a1' = a1, b1' = b1 as Element of COMPLEX by COMPLFLD:def 1;
 A17:now let z be Element of COMPLEX;
@@ -2714,7 +2718,7 @@ A17:now let z be Element of COMPLEX;
   A19: Re(z*z*') +(Im(z*z*')) * <i> = (z*z*') by COMPLEX1:29;
    (Re z)^2 >= 0 & (Im z)^2 >= 0 by XREAL_1:65;
   then (Re z)^2 + (Im z)^2 >= 0 + 0 by XREAL_1:9;
-  hence z*' * z = |.z.|^2 by A19,A18,SQUARE_1:def 4; end;
+  hence z*' * z = |.z.|^2 by A18,A19,SQUARE_1:def 4; end;
 then A20: b'*' * b' = |.b'.|^2 & a'*' * a' = |.a'.|^2;
 A21: (a'*' * a') * (b'") - (b'*') = (|.a'.|^2 * (b'") - (b'*')) * 1 by A17
      .= (|.a'.|^2 * (b'")-(b'*')) * (b'*b'") by A5,COMPLFLD:9,XCMPLX_0:def 7
@@ -2753,12 +2757,12 @@ then A24: (a'*' * a') * (b'") - (b'*') = (a*' * a) * (b") - (b*') by COMPLFLD:5
 ;
 A25:  (a*' * a) * (b") - (b*')
    = ((a*') * (b" * a)) + -(b*') by RLVECT_1:def 11;
- |.a'.|*|.b'.|  > |.b'.|*|.b'.| by A6,A1,XREAL_1:70;
+ |.a'.|*|.b'.|  > |.b'.|*|.b'.| by A1,A6,XREAL_1:70;
 then A26: |.a'.|^2  - |.b'.|^2 <> 0 by A1,A3,XREAL_1:70;
 then A27: (|.a'.|^2  - |.b'.|^2)" <> 0 by XCMPLX_1:203;
- b'" <> 0 by XCMPLX_1:203,A5,COMPLFLD:9;
+ b'" <> 0 by A5,COMPLFLD:9,XCMPLX_1:203;
 then A28: (((a*') * (b" * a)) + -(b*')) <> 0.F_Complex
-      by A26,XCMPLX_1:6,A21,A24,A25,COMPLFLD:9;
+      by A21,A24,A25,A26,COMPLFLD:9,XCMPLX_1:6;
 A29: b1' = -b' * (|.a.|^2 - |.b.|^2)" by COMPLFLD:4
        .= (-b') * (|.a.|^2 - |.b.|^2)";
 A30: now assume b1' = 0;
@@ -2780,9 +2784,9 @@ A36: -((a'*' * a') * (b'") - (b'*'))"
 A37: (a'*') * (b'" * a') = (a*') * (b" * a) by A5,COMPLFLD:7;
 A38: -(b'*') = -(b*') by COMPLFLD:4;
  -b1 = -b1' by COMPLFLD:4;
-then A39: (-b1')" = (-b1)" by COMPLFLD:7,A31 .= -(b1)" by A30,COMPLFLD:9,Th1;
-A40: (-(b1"))" = -((b1)")" by A32,Th1 .= -b1 by VECTSP_1:73,A30,COMPLFLD:9;
- b1" = b1'" by A30,COMPLFLD:9,7;
+then A39: (-b1')" = (-b1)" by A31,COMPLFLD:7 .= -(b1)" by A30,Th1,COMPLFLD:9;
+A40: (-(b1"))" = -((b1)")" by A32,Th1 .= -b1 by A30,COMPLFLD:9,VECTSP_1:73;
+ b1" = b1'" by A30,COMPLFLD:7,9;
 then -(b1") = -(b1'") by COMPLFLD:4;
 then (-(b1"))" = (-(b1'"))" by A34,COMPLFLD:7;
 then A41: (-(b1'"))" * ((a'*') * b'")
@@ -2791,7 +2795,7 @@ then A41: (-(b1'"))" * ((a'*') * b'")
   .= 1 * ((|.a.|^2 - |.b.|^2)") * (a'*') by A5,COMPLFLD:9,XCMPLX_0:def 7
   .= a1';
 A42: ((a*') * b") = ((a'*') * b'") by A5,COMPLFLD:7;
- b1" = b1'" by A30,COMPLFLD:9,7;
+ b1" = b1'" by A30,COMPLFLD:7,9;
 then -(b1") = -(b1'") by COMPLFLD:4;
 then A43: ((-(b1"))") * ((a*') * b") = a1 by A34,A41,A42,COMPLFLD:7;
 A44:f = (1_F_Complex) * f by POLYNOM5:28
@@ -2802,7 +2806,7 @@ A44:f = (1_F_Complex) * f by POLYNOM5:28
  .= (-(b1"))" * g*' + (-(b1"))" * (((a*') * b") * (--g)) by Th16
  .= (-(b1"))" * g*' + (-(b1"))" * (((a*') * b") * g) by Lm4
  .= (-(b1"))" * g*' + a1 * g by A43,Th14
- .= ((-b1)")" * g*' + a1 * g by Th1,A30,COMPLFLD:9
+ .= ((-b1)")" * g*' + a1 * g by A30,Th1,COMPLFLD:9
  .= (-b1) * g*' + a1 * g by A31,VECTSP_1:73
  .= -(b1 * g*') + a1 * g by Th15;
 A45: |.a1.| = |.a*'.| * |.(|.a.|^2 - |.b.|^2)".| by COMPLEX1:151
@@ -2816,15 +2820,15 @@ then |.a.|^2 > |.b.| * |.b.| by A47,XXREAL_0:2;
 then |.a.|^2  - |.b.|^2 > |.b.|^2 - |.b.|^2 by XREAL_1:11;
 then A48: (|.a.|^2 - |.b.|^2)" > 0 by XREAL_1:124;
 then |. (|.a.|^2 - |.b.|^2)" .| > 0 by COMPLEX1:133;
-then A49: |.a1.| > |.b1.| by A46,A45,A1,XREAL_1:70;
+then A49: |.a1.| > |.b1.| by A1,A45,A46,XREAL_1:70;
 A50: now assume b1' = 0.F_Complex;
      then (- b) * zz = 0.F_Complex by VECTSP_1:41;
      then -b = 0.F_Complex by A48,COMPLFLD:9,VECTSP_1:44;
      then b = - 0.F_Complex by RLVECT_1:30;
      hence contradiction by A5,RLVECT_1:25; end;
  |.a1.| > 0 by A49,COMPLEX1:132;
-then A51: a1 <> 0.F_Complex & b1 <> 0.F_Complex by A50,COMPLFLD:9,COMPLEX1:133;
- deg f <= max(deg(a1 * g),deg(-(b1 * g*'))) by Th22,A44;
+then A51: a1 <> 0.F_Complex & b1 <> 0.F_Complex by A50,COMPLEX1:133,COMPLFLD:9;
+ deg f <= max(deg(a1 * g),deg(-(b1 * g*'))) by A44,Th22;
 then deg f <= max(deg(a1 * g),deg(b1 * g*')) by POLYNOM4:11;
 then deg f <= max(deg(g),deg(b1 * g*')) by A51,POLYNOM5:26;
 then deg f <= max(deg(g),deg(g*')) by A50,POLYNOM5:26;
@@ -2844,18 +2848,18 @@ then A52: deg(g) >= 1 by A2,XXREAL_0:2;
       A58: 0 <= |.b1.| by COMPLEX1:132;
       per cases by A55;
       suppose Re(z) = 0;
-        then |.eval(g,z).|=|.eval(g*',z).| & |.eval(g,z).|>0 by Th49,Th50,A52,
-A53;
+        then |.eval(g,z).|=|.eval(g*',z).| & |.eval(g,z).|>0 by A52,A53,Th49
+,Th50;
         then |.a1.|*|.eval(g,z).| > |.b1.|*|.eval(g*',z).| by A49,XREAL_1:70;
         hence contradiction by A54,A56,A57,VECTSP_1:66;
         end;
       suppose Re(z) > 0;
-        then A59: |.eval(g,z).| > |.eval(g*',z).| by Th50,A52,A53;
+        then A59: |.eval(g,z).| > |.eval(g*',z).| by A52,A53,Th50;
         then |.eval(g,z).| > 0 by COMPLEX1:132;
         then A60: |.a1.| * |.eval(g,z).| >
                  |.b1.| * |.eval(g,z).| by A49,XREAL_1:70;
-         |.b1.|*|.eval(g,z).| >= |.b1.|*|.eval(g*',z).| by A59,A58,XREAL_1:66;
-        hence contradiction by A54,A56,A57,VECTSP_1:66,A60;
+         |.b1.|*|.eval(g,z).| >= |.b1.|*|.eval(g*',z).| by A58,A59,XREAL_1:66;
+        hence contradiction by A54,A56,A57,A60,VECTSP_1:66;
         end;
       end;
     hence Re(z) < 0; end;
@@ -2884,8 +2888,8 @@ then rho is_a_root_of (ef1 * f - ef * (f*')) by POLYNOM5:def 6;
 then consider s being Polynomial of F_Complex such that
 A6: ef1 * f - ef * (f*') = rpoly(1,rho) *' s by Th33;
 A7: s is Hurwitz by A5,A6,Th41;
-A8: ef1 * f - ef * (f*') = s *' rpoly(1,rho) + 0_.(F_Complex) by A6
-,POLYNOM3:29;
+A8: ef1 * f - ef * (f*') = s *' rpoly(1,rho) + 0_.(F_Complex) by A6,POLYNOM3:29
+;
  -1 < deg rpoly(1,rho) by Th27;
 then deg 0_.(F_Complex) < deg rpoly(1,rho) by Th20;
 hence thesis by A7,A8,Def5;
@@ -2924,7 +2928,7 @@ reconsider ef = eval(f,rho), ef1 = eval(f*',rho) as Element of F_Complex;
    1_F_Complex <> 0.F_Complex by VECTSP_1:def 21;
   then (1_F_Complex) * rpoly(1,rho) is Hurwitz by A2,Th39;
   then rpoly(1,rho) is Hurwitz by POLYNOM5:28;
-  then F*(f,rho) is Hurwitz by A6,A3,Th41;
-  hence f is Hurwitz by Th51,A1,A2; end;
+  then F*(f,rho) is Hurwitz by A3,A6,Th41;
+  hence f is Hurwitz by A1,A2,Th51; end;
 hence thesis by A1,A2,Th52;
 end;

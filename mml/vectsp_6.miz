@@ -8,20 +8,21 @@ environ
 
  vocabularies FINSEQ_1, RLVECT_1, BINOP_1, VECTSP_1, LATTICES, FUNCT_1,
       FINSET_1, RELAT_1, BOOLE, ARYTM_1, RLVECT_2, FUNCT_2, SEQ_1, FINSEQ_4,
-      RLSUB_1, CARD_1, GROUP_1, FUNCOP_1, NAT_1, COMPLEX1, VECTSP_2;
+      RLSUB_1, CARD_1, FUNCOP_1, COMPLEX1, VECTSP_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, FINSET_1,
-      FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, NAT_1, CARD_1,
-      DOMAIN_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4, VECTSP_4;
+      PARTFUN1, FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, FRAENKEL, NAT_1,
+      CARD_1, DOMAIN_1, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4,
+      VECTSP_4;
  constructors PARTFUN1, DOMAIN_1, FUNCOP_1, FRAENKEL, XXREAL_0, NAT_1,
       MEMBERED, FINSEQ_4, VECTSP_4;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, NUMBERS,
-      MEMBERED, STRUCT_0, VECTSP_1;
+      MEMBERED, STRUCT_0, VECTSP_1, XXREAL_0, XCMPLX_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET;
  definitions FUNCT_1, TARSKI, VECTSP_4, XBOOLE_0, RELAT_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4,
       FINSET_1, FUNCT_1, FUNCT_2, RLVECT_1, RLVECT_2, TARSKI, VECTSP_1,
       VECTSP_3, VECTSP_4, ZFMISC_1, NAT_1, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, GROUP_1, FUNCOP_1, XREAL_1;
+      XBOOLE_1, XCMPLX_1, GROUP_1, FUNCOP_1, XREAL_1, PARTFUN1;
  schemes FINSEQ_1, FUNCT_2, NAT_1;
 
 begin
@@ -199,12 +200,12 @@ definition let GF be non empty LoopStr;
   let f be Function of the carrier of V, the carrier of GF;
  func f (#) F -> FinSequence of the carrier of V means
   :Def8: len it = len F &
-         for i st i in dom it holds it.i = f.(F/.i) * F/.i;
+  for i be Nat st i in dom it holds it.i = f.(F/.i) * F/.i;
  existence
   proof
-    deffunc G(Element of NAT) = f.(F/.$1) * F/.$1;
+    deffunc G(Nat) = f.(F/.$1) * F/.$1;
     consider G being FinSequence such that A1: len G = len F and
-     A2: for n st n in Seg(len F) holds G.n = G(n) from FINSEQ_1:sch 2;
+     A2: for n be Nat st n in Seg(len F) holds G.n = G(n) from FINSEQ_1:sch 2;
           rng G c= the carrier of V
       proof let x;
         assume x in rng G;
@@ -224,10 +225,10 @@ definition let GF be non empty LoopStr;
  uniqueness
   proof let H1,H2 be FinSequence of the carrier of V;
     assume that A6: len H1 = len F and
-                A7: for i st i in dom H1 holds H1.i = f.(F/.i) * F/.i and
-                A8: len H2 = len F and
-                A9: for i st i in dom H2 holds H2.i = f.(F/.i) * F/.i;
-          now let k;
+A7: for i be Nat st i in dom H1 holds H1.i = f.(F/.i) * F/.i and
+A8: len H2 = len F and
+A9: for i be Nat st i in dom H2 holds H2.i = f.(F/.i) * F/.i;
+    now let k be Nat;
        assume 1 <= k & k <= len H1;
         then k in Seg(len H1) by FINSEQ_1:3;
         then k in dom H1 & k in dom H2 by A6,A8,FINSEQ_1:def 3;
@@ -245,7 +246,7 @@ theorem Th32:
   proof assume that A1: i in dom F and A2: v = F.i;
          len(f (#) F) = len F by Def8;
     then A3: i in dom(f (#) F) by A1,FINSEQ_3:31;
-          F/.i = F.i by A1,FINSEQ_4:def 4;
+          F/.i = F.i by A1,PARTFUN1:def 8;
    hence (f (#) F).i = f.v * v by A2,A3,Def8;
   end;
 
@@ -274,8 +275,7 @@ theorem Th35:
   proof A1: len(f (#) <* v1,v2 *>) = len<* v1,v2 *> by Def8
                                .= 2 by FINSEQ_1:61;
     then A2: dom(f (#) <* v1,v2 *>) = {1,2} & 1 in {1,2} & 2 in {1,2}
-                                        by FINSEQ_1:4,
-def 3,TARSKI:def 2;
+                                        by FINSEQ_1:4,def 3,TARSKI:def 2;
     then A3: (f (#) <* v1,v2 *>).1 = f.(<* v1,v2 *>/.1) * <* v1,v2 *>/.1
                                                                         by Def8
                                .= f.(<* v1,v2 *>/.1) * v1 by FINSEQ_4:26
@@ -316,26 +316,26 @@ theorem Th37:
              .= len F + len G by Def8
              .= len I by FINSEQ_1:35;
     A2: len F = len(f (#) F) & len G = len(f (#) G) by Def8;
-         now let k;
+    now let k be Nat;
       assume A3: k in dom H;
             now per cases by A3,FINSEQ_1:38;
         suppose A4: k in dom(f (#) F);
           then A5: k in dom F by A2,FINSEQ_3:31;
           then A6: k in dom(F ^ G) by FINSEQ_3:24;
-          A7: F/.k = F.k by A5,FINSEQ_4:def 4
+          A7: F/.k = F.k by A5,PARTFUN1:def 8
                    .= (F ^ G).k by A5,FINSEQ_1:def 7
-                   .= (F ^ G)/.k by A6,FINSEQ_4:def 4;
+                   .= (F ^ G)/.k by A6,PARTFUN1:def 8;
          thus H.k = (f (#) F).k by A4,FINSEQ_1:def 7
                  .= f.(I/.k) * I/.k by A4,A7,Def8;
         end;
-        suppose ex n st n in dom(f (#) G) & k = len(f (#) F) + n;
-          then consider n such that A8: n in dom(f (#) G) and
+        suppose ex n be Nat st n in dom(f (#) G) & k = len(f (#) F) + n;
+          then consider n be Nat such that A8: n in dom(f (#) G) and
                                     A9: k = len(f (#) F) + n;
            A10: n in dom G by A2,A8,FINSEQ_3:31;
            A11: k in dom I by A1,A3,FINSEQ_3:31;
-           A12: G/.n = G.n by A10,FINSEQ_4:def 4
+           A12: G/.n = G.n by A10,PARTFUN1:def 8
                     .= (F ^ G).k by A2,A9,A10,FINSEQ_1:def 7
-                    .= (F ^ G)/.k by A11,FINSEQ_4:def 4;
+                    .= (F ^ G)/.k by A11,PARTFUN1:def 8;
          thus H.k = (f (#) G).n by A8,A9,FINSEQ_1:def 7
                  .= f.(I/.k) * I/.k by A8,A12,Def8;
        end;
@@ -435,7 +435,7 @@ FUNCT_1:def 5
           then {F1.(f.i)} c= {F2.i} by FUNCT_1:145;
           then u = v & G2.i = L.(F2/.i) * F2/.i &
                G1.m = L.(F1/.m) * F1/.m & F1.m = F1/.m & F2.i = F2/.i
-                by A10,A11,A12,A26,A27,Def8,FINSEQ_4:def 4,ZFMISC_1:24;
+                by A10,A11,A12,A26,A27,Def8,PARTFUN1:def 8,ZFMISC_1:24;
        hence G2.i = G1.(f.i);
       end;
    hence thesis by A1,A6,A9,A10,RLVECT_2:8;
@@ -524,8 +524,7 @@ A1: 0.GF <> 1_GF;
                then l.u = f.u by A18,A23;
             hence thesis by A23;
            end;
-          then Carrier(f) c= A \ {v} & A \ {v} c= A by A15,XBOOLE_1:33,
-36;
+          then Carrier(f) c= A \ {v} & A \ {v} c= A by A15,XBOOLE_1:33,36;
           then Carrier(f) c= A by XBOOLE_1:1;
          then reconsider f as Linear_Combination of A by Def7;
           A24: G is one-to-one by A8,FUNCT_1:84;
@@ -1175,7 +1174,7 @@ and
        assume A13: k in dom p;
         then k in dom(L1 (#) p) by A12,FINSEQ_3:31;
         then A14: (L1 (#) p).k = L1.(p/.k) * p/.k by Def8;
-             p/.k = p.k by A13,FINSEQ_4:def 4;
+             p/.k = p.k by A13,PARTFUN1:def 8;
         then p/.k in C1 by A10,A13,FUNCT_1:def 5;
         then not p/.k in Carrier(L1) by XBOOLE_0:def 4;
       hence (L1 (#) p).k = 0.GF * p/.k by A14;
@@ -1189,15 +1188,13 @@ A16:      Sum(g) = Sum((L1 (#) G) ^ (L1 (#) p)) by Th37
     set C2 = A \ Carrier(L2);
     consider q such that A17: rng q = C2 and A18: q is one-to-one
                                                                by FINSEQ_4:73;
-    reconsider q as FinSequence of the carrier of V
-                                                             by A17,
-FINSEQ_1:def 4;
+    reconsider q as FinSequence of the carrier of V by A17,FINSEQ_1:def 4;
      A19: len q = len(L2 (#) q) by Def8;
           now let k;
        assume A20: k in dom q;
         then k in dom(L2 (#) q) by A19,FINSEQ_3:31;
         then A21: (L2 (#) q).k = L2.(q/.k) * q/.k by Def8;
-             q/.k = q.k by A20,FINSEQ_4:def 4;
+             q/.k = q.k by A20,PARTFUN1:def 8;
         then q/.k in C2 by A17,A20,FUNCT_1:def 5;
         then not q/.k in Carrier(L2) by XBOOLE_0:def 4;
       hence (L2 (#) q).k = 0.GF * q/.k by A21;
@@ -1217,7 +1214,7 @@ A23:      Sum(h) = Sum((L2 (#) H) ^ (L2 (#) q)) by Th37
        assume A27: k in dom r;
         then k in dom((L1 + L2) (#) r) by A26,FINSEQ_3:31;
         then A28: ((L1 + L2) (#) r).k = (L1 + L2).(r/.k) * r/.k by Def8;
-             r/.k = r.k by A27,FINSEQ_4:def 4;
+             r/.k = r.k by A27,PARTFUN1:def 8;
         then r/.k in C3 by A24,A27,FUNCT_1:def 5;
         then not r/.k in Carrier((L1 + L2)) by XBOOLE_0:def 4;
       hence ((L1 + L2) (#) r).k = 0.GF * r/.k by A28;
@@ -1260,13 +1257,12 @@ XBOOLE_1:39;
           A = Carrier(L1) \/ (Carrier(L1 + L2) \/ Carrier(L2)) &
           A = Carrier(L1 + L2) \/ (Carrier(L1) \/ Carrier(L2)) by XBOOLE_1:4;
      then Carrier(L1) c= A & Carrier(L2) c= A & Carrier(L1 + L2) c= A
-                                                                  by XBOOLE_1:7
-;
+     by XBOOLE_1:7;
      then A38: rng GG = A & rng HH = A & rng FF = A by A37,XBOOLE_1:12;
      then A39: len GG = len FF & len GG = len HH by A36,FINSEQ_1:65;
-     deffunc F(Element of NAT) = FF <- (GG.$1);
+     deffunc F(Nat) = FF <- (GG.$1);
     consider P being FinSequence such that A40: len P = len FF and
-     A41: for k st k in Seg(len FF) holds P.k = F(k) from FINSEQ_1:sch 2;
+A41: for k be Nat st k in Seg(len FF) holds P.k = F(k) from FINSEQ_1:sch 2;
      A42: rng P c= dom FF
       proof let x;
         assume x in rng P;
@@ -1328,9 +1324,9 @@ XBOOLE_1:39;
     then reconsider P as Permutation of dom f;
     reconsider Fp = f * P as FinSequence of the carrier of V by FINSEQ_2:51;
      A58: Sum(Fp) = Sum(f) by RLVECT_2:9;
-     deffunc F(Element of NAT) = HH <- (GG.$1);
+     deffunc F(Nat) = HH <- (GG.$1);
     consider R being FinSequence such that A59: len R = len HH and
-     A60: for k st k in Seg(len HH) holds R.k = F(k) from FINSEQ_1:sch 2;
+A60: for k be Nat st k in Seg(len HH) holds R.k = F(k) from FINSEQ_1:sch 2;
      A61: rng R c= dom HH
       proof let x;
         assume x in rng R;
@@ -1392,59 +1388,59 @@ XBOOLE_1:39;
     then reconsider R as Permutation of dom h;
     reconsider Hp = h * R as FinSequence of the carrier of V by FINSEQ_2:51;
     A77: Sum(Hp) = Sum(h) by RLVECT_2:9;
-    deffunc F(Element of NAT) = g/.$1 + Hp/.$1;
+    deffunc F(Nat) = g/.$1 + Hp/.$1;
     consider I being FinSequence such that A78: len I = len GG and
-A79:  for k st k in Seg(len GG) holds I.k = F(k) from FINSEQ_1:sch 2;
+A79:  for k be Nat st k in Seg(len GG) holds I.k = F(k) from FINSEQ_1:sch 2;
+A80:  for k be Element of NAT st k in Seg(len GG) holds I.k = F(k) by A79;
           rng I c= the carrier of V
       proof let x;
         assume x in rng I;
-         then consider y such that A80: y in dom I and
-         A81: I.y = x by FUNCT_1:def 5;
-         reconsider y as Element of NAT by A80,FINSEQ_3:25;
+         then consider y such that A81: y in dom I and
+         A82: I.y = x by FUNCT_1:def 5;
+         reconsider y as Element of NAT by A81,FINSEQ_3:25;
                dom I = Seg(len I) by FINSEQ_1:def 3;
-          then I.y = g/.y + Hp/.y by A78,A79,A80;
-       hence thesis by A81;
+          then I.y = g/.y + Hp/.y by A78,A80,A81;
+       hence thesis by A82;
       end;
     then reconsider I as FinSequence of the carrier of V by FINSEQ_1:def 4;
-    A82: len Fp = len I by A39,A57,A78,FINSEQ_2:48;
-    then A83: dom I = Seg(len I) & dom Fp = Seg(len I) by FINSEQ_1:def 3;
-A84:  len Hp = len GG & len g = len GG by A39,A76,Def8,FINSEQ_2:48;
+    A83: len Fp = len I by A39,A57,A78,FINSEQ_2:48;
+    then A84: dom I = Seg(len I) & dom Fp = Seg(len I) by FINSEQ_1:def 3;
+A85:  len Hp = len GG & len g = len GG by A39,A76,Def8,FINSEQ_2:48;
          now let x;
-      assume A85: x in Seg(len I);
-        then A86: x in dom g & x in dom Hp & x in dom HH & x in dom GG &
-                 x in dom Fp by A39,A78,A82,A84,FINSEQ_1:def 3;
-       reconsider k = x as Element of NAT by A85;
+      assume A86: x in Seg(len I);
+        then A87: x in dom g & x in dom Hp & x in dom HH & x in dom GG &
+                 x in dom Fp by A39,A78,A83,A85,FINSEQ_1:def 3;
+       reconsider k = x as Element of NAT by A86;
        set v = GG/.k;
-        A87: g/.k = g.k by A86,FINSEQ_4:def 4
-                  .= L1.v * v by A86,Def8;
-        A88: Hp/.k = (h * R).k by A86,FINSEQ_4:def 4
-                   .= h.(R.k) by A86,FUNCT_1:22;
-        A89: R.k in dom R by A73,A74,A86,FUNCT_1:def 5;
-        A90: R.k in dom HH by A73,A74,A86,FUNCT_1:def 5;
-       reconsider j = R.k as Element of NAT by A89,FINSEQ_3:25;
-             HH.j = GG.k by A67,A86
-            .= GG/.k by A86,FINSEQ_4:def 4;
-        then A91: h.j = L2.v * v by A90,Th32;
-        A92: Fp.k = f.(P.k) by A86,FUNCT_1:22;
-        A93: dom FF = dom GG by A39,FINSEQ_3:31;
-        then A94: P.k in dom P by A54,A55,A86,FUNCT_1:def 5;
-        A95: P.k in dom FF by A54,A55,A86,A93,FUNCT_1:def 5;
-       reconsider l = P.k as Element of NAT by A94,FINSEQ_3:25;
-             FF.l = GG.k by A48,A86
-            .= GG/.k by A86,FINSEQ_4:def 4;
-        then f.l = (L1 + L2).v * v by A95,Th32
+        A88: g/.k = g.k by A87,PARTFUN1:def 8
+                  .= L1.v * v by A87,Def8;
+        A89: Hp/.k = (h * R).k by A87,PARTFUN1:def 8
+                   .= h.(R.k) by A87,FUNCT_1:22;
+        A90: R.k in dom R by A73,A74,A87,FUNCT_1:def 5;
+        A91: R.k in dom HH by A73,A74,A87,FUNCT_1:def 5;
+       reconsider j = R.k as Element of NAT by A90,FINSEQ_3:25;
+             HH.j = GG.k by A67,A87
+            .= GG/.k by A87,PARTFUN1:def 8;
+        then A92: h.j = L2.v * v by A91,Th32;
+        A93: Fp.k = f.(P.k) by A87,FUNCT_1:22;
+        A94: dom FF = dom GG by A39,FINSEQ_3:31;
+        then A95: P.k in dom P by A54,A55,A87,FUNCT_1:def 5;
+        A96: P.k in dom FF by A54,A55,A87,A94,FUNCT_1:def 5;
+       reconsider l = P.k as Element of NAT by A95,FINSEQ_3:25;
+             FF.l = GG.k by A48,A87
+            .= GG/.k by A87,PARTFUN1:def 8;
+        then f.l = (L1 + L2).v * v by A96,Th32
                 .= (L1.v + L2.v) * v by Def11
                 .= L1.v * v + L2.v * v by VECTSP_1:def 26;
-     hence I.x = Fp.x by A78,A79,A85,A87,A88,A91,A92;
+     hence I.x = Fp.x by A78,A80,A86,A88,A89,A92,A93;
     end;
-then A96:    I = Fp by A83,FUNCT_1:9;
-        Seg len GG = dom g by A84,FINSEQ_1:def 3;
-   hence thesis by A3,A6,A9,A16,A23,A30,A58,A77,A78,A79,A84,A96,RLVECT_2:4;
+then A97:    I = Fp by A84,FUNCT_1:9;
+Seg len GG = dom g by A85,FINSEQ_1:def 3;
+   hence thesis by A3,A6,A9,A16,A23,A30,A58,A77,A78,A80,A85,A97,RLVECT_2:4;
   end;
 
 theorem
-      for GF being Field, V being VectSp of GF, L being Linear_Combination of V
-,
+  for GF being Field, V being VectSp of GF, L being Linear_Combination of V,
      a being Element of GF
  holds Sum(a * L) = a * Sum(L)
   proof
@@ -1460,9 +1456,9 @@ A4:     Sum(a * L) = Sum((a * L) (#) F) by Def9;
       A5: G is one-to-one and A6: rng G = Carrier(L) and
                            A7: Sum(L) = Sum(L (#) G) by Def9;
       set g = L (#) G; set f = (a * L) (#) F; set l = a * L;
-       deffunc F(Element of NAT) = F <- (G.$1);
+       deffunc F(Nat) = F <- (G.$1);
        consider P being FinSequence such that A8: len P = len F and
-        A9: for k st k in Seg(len F) holds P.k = F(k) from FINSEQ_1:sch 2;
+A9:    for k be Nat st k in Seg(len F) holds P.k = F(k) from FINSEQ_1:sch 2;
         A10: Carrier(l) = Carrier(L) by A1,Th59;
         then A11: len G = len F by A2,A3,A5,A6,FINSEQ_1:65;
         A12: rng P c= Seg(len F)
@@ -1540,10 +1536,10 @@ then A30:    dom Fp = dom g by FINSEQ_3:31;
             then A35: F <- (G.k) in dom F by FINSEQ_4:def 3;
            then reconsider i = F <- (G.k) as Element of NAT by FINSEQ_3:25;
             A36: k in dom P by A8,A26,A28,A29,A33,FINSEQ_1:def 3;
-            A37: G/.k = G.k by A34,FINSEQ_4:def 4
+            A37: G/.k = G.k by A34,PARTFUN1:def 8
                       .= F.(P.k) by A19,A36,FUNCT_1:23
                       .= F.i by A9,A26,A28,A29,A33
-                      .= F/.i by A35,FINSEQ_4:def 4;
+                      .= F/.i by A35,PARTFUN1:def 8;
                  i in Seg(len f) by A26,A35,FINSEQ_1:def 3;
             then A38: i in dom f by FINSEQ_1:def 3;
          thus Fp.k = f.(P.k) by A36,FUNCT_1:23

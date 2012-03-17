@@ -45,7 +45,6 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="FVSUM_1"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM1"/>
@@ -117,7 +116,7 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="400">
+<Func kind="K" nr="393">
 <Func kind="K" nr="5"/>
 </Func>
 <Cluster>
@@ -133,7 +132,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="448">
+<Func kind="K" nr="441">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -150,7 +149,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="449">
+<Func kind="K" nr="442">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -164,7 +163,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="450">
+<Func kind="K" nr="443">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -179,7 +178,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="450">
+<Func kind="K" nr="443">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -195,7 +194,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="451">
+<Func kind="K" nr="444">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -212,7 +211,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="452">
+<Func kind="K" nr="445">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -228,7 +227,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="452">
+<Func kind="K" nr="445">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

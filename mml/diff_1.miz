@@ -8,10 +8,10 @@ environ
 
  vocabularies DIFF_1, ARYTM, ARYTM_1, SEQM_3, SEQ_1, PARTFUN1, FUNCT_1, INT_1,
       SEQFUNC, RELAT_1, BOOLE, ORDINAL2, RAT_1, ARYTM_3, SERIES_1, FUNCOP_1,
-      NEWTON, RLVECT_1, RELOC, NAT_1, FUZZY_2;
+      NEWTON, RLVECT_1, RELOC, FUZZY_2, INCPROJ;
  notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
-      TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1, SEQ_1, SEQ_4,
-      SEQFUNC, RELAT_1, PARTFUN3, FUNCOP_1, BINARITH, NEWTON, MEASURE6,
+      TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1, SEQ_1,
+      SEQ_4, SEQFUNC, RELAT_1, PARTFUN3, FUNCOP_1, BINARITH, NEWTON, MEASURE6,
       FUNCT_2, RELSET_1;
  constructors PARTFUN1, REAL_1, NAT_1, SEQFUNC, NEWTON, SERIES_1, MEASURE6,
       BINARITH, PARTFUN3;
@@ -20,7 +20,7 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  theorems FUNCT_2, PARTFUN1, SEQFUNC, ORDINAL1, FUNCT_1, SEQ_1, XBOOLE_0,
       XCMPLX_1, BINARITH, NEWTON, FUNCOP_1, XBOOLE_1, SERIES_1, TARSKI,
-      MEASURE6, RFUNCT_1;
+      MEASURE6, RFUNCT_1, ZFMISC_1, XREAL_0;
  schemes NAT_1, RECDEF_1, SEQ_1;
 
 begin
@@ -76,7 +76,7 @@ coherence
   proof
 A1: dom Shift(f,h) = -h ++ dom f by Def1;
      dom f = REAL by FUNCT_2:def 1;
-    then dom Shift(f,h) = REAL by MEASURE6:60,A1;
+    then dom Shift(f,h) = REAL by A1,MEASURE6:60;
     hence Shift(f,h) is Function of REAL,REAL by FUNCT_2:def 1;
   end;
 compatibility
@@ -95,15 +95,15 @@ then A3:  dom Shift(f,h) = REAL by FUNCT_2:def 1;
     assume A4:for x holds IT.x = f.(x+h);
 A5:  dom Shift(f,h) = -h ++ dom f by Def1;
       dom f = REAL by FUNCT_2:def 1;
-     then dom Shift(f,h) = REAL by MEASURE6:60,A5;
+     then dom Shift(f,h) = REAL by A5,MEASURE6:60;
 then A6:  dom IT = dom Shift(f,h) by FUNCT_2:def 1;
       for x being Element of REAL st x in dom IT holds IT.x = Shift(f,h).x
       proof
        let x be Element of REAL;
 A7:    IT.x = f.(x+h) by A4;
        assume x in dom IT;
-       then x in (-h ++ dom f) by Def1,A6;
-       hence thesis by Def1,A7;
+       then x in (-h ++ dom f) by A6,Def1;
+       hence thesis by A7,Def1;
       end;
      hence thesis by A6,PARTFUN1:34;
    end;
@@ -265,29 +265,26 @@ A2: for k st X[k] holds X[k+1]
 end;
 
 theorem Th3:
-  for x holds fD(f,h).x = f.(x+h) - f.x
+  fD(f,h).x = f.(x+h) - f.x
 proof
-  let x;
    dom (Shift(f,h) - f) = REAL by FUNCT_2:def 1;
   hence fD(f,h).x = Shift(f,h).x - f.x by SEQ_1:def 4
                  .= f.(x+h) - f.x by Def2;
 end;
 
 theorem Th4:
-  for x holds bD(f,h).x = f.x - f.(x-h)
+  bD(f,h).x = f.x - f.(x-h)
 proof
-    let x;
 A1: dom (-fD(f,-h)) = REAL by FUNCT_2:def 1;
     thus bD(f,h).x = (-fD(f,-h)).x by Th1
-                  .= - fD(f,-h).x by SEQ_1:def 7,A1
+                  .= - fD(f,-h).x by A1,SEQ_1:def 7
                   .= - (f.(x+-h) - f.x) by Th3
                   .= f.x - f.(x-h);
 end;
 
 theorem Th5:
-  for x holds cD(f,h).x = f.(x+h/2) - f.(x-h/2)
+  cD(f,h).x = f.(x+h/2) - f.(x-h/2)
 proof
-    let x;
  dom (Shift(f,h/2) - Shift(f,-h/2)) = REAL by FUNCT_2:def 1;
     hence cD(f,h).x = Shift(f,h/2).x - Shift(f,-h/2).x by SEQ_1:def 4
                   .= f.(x+h/2) - Shift(f,-h/2).x by Def2
@@ -306,7 +303,7 @@ A2:for x holds f.(x+h) - f.x = 0
 then A3:x in dom f by FUNCT_2:def 1;
      x+h in REAL;
     then x+h in dom f by FUNCT_2:def 1;
-    then f.x = f.(x+h) by FUNCT_1:def 16,A3,A1;
+    then f.x = f.(x+h) by A1,A3,FUNCT_1:def 16;
     hence thesis;
    end;
     for x holds fdif(f,h).(n+1).x=0
@@ -329,7 +326,7 @@ A7:  fdif(f,h).(k+1) is Function of REAL,REAL by Th2;
 A8:  fdif(f,h).(k+1).(x+h)=0 by A6;
       (fdif(f,h).(k+2)).x = (fdif(f,h).(k+1+1)).x
       .= fD(fdif(f,h).(k+1),h).x by Def6
-      .= fdif(f,h).(k+1).(x+h) - fdif(f,h).(k+1).x by Th3,A7
+      .= fdif(f,h).(k+1).(x+h) - fdif(f,h).(k+1).x by A7,Th3
       .= 0 - 0 by A6,A8
       .= 0;
      hence thesis;
@@ -351,12 +348,12 @@ A1: X[0]
 A2:  x in REAL;
       x+h in REAL;
 then A3:  x+h in dom (r(#)f) by FUNCT_2:def 1;
-A4:  x in dom (r(#)f) by FUNCT_2:def 1,A2;
+A4:  x in dom (r(#)f) by A2,FUNCT_2:def 1;
       fdif(r(#)f,h).(0+1).x = fD(fdif(r(#)f,h).0,h).x by Def6
                           .= fD(r(#)f,h).x by Def6
                           .= (r(#)f).(x+h) - (r(#)f).x by Th3
-                          .= r * f.(x+h) - (r(#)f).x by SEQ_1:def 6,A3
-                          .= r * f.(x+h) - r * f.x by SEQ_1:def 6,A4
+                          .= r * f.(x+h) - (r(#)f).x by A3,SEQ_1:def 6
+                          .= r * f.(x+h) - r * f.x by A4,SEQ_1:def 6
                           .= r * (f.(x+h) - f.x)
                           .= r * fD(f,h).x by Th3
                           .= r * fD(fdif(f,h).0,h).x by Def6
@@ -374,9 +371,9 @@ A9:  fdif(r(#)f,h).(k+1) is Function of REAL,REAL &
      fdif(f,h).(k+1) is Function of REAL,REAL by Th2;
       fdif(r(#)f,h).(k+1+1).x
       = fD(fdif(r(#)f,h).(k+1),h).x by Def6
-     .= r * fdif(f,h).(k+1).(x+h) - r * fdif(f,h).(k+1).x by Th3,A7,A8,A9
+     .= r * fdif(f,h).(k+1).(x+h) - r * fdif(f,h).(k+1).x by A7,A8,A9,Th3
      .= r * (fdif(f,h).(k+1).(x+h) - fdif(f,h).(k+1).x)
-     .= r * fD(fdif(f,h).(k+1),h).x by Th3,A9
+     .= r * fD(fdif(f,h).(k+1),h).x by A9,Th3
      .= r * fdif(f,h).(k+1+1).x by Def6;
      hence thesis;
    end;
@@ -427,12 +424,12 @@ A8:  fdif(f1+f2,h).(k+1) is Function of REAL,REAL by Th2;
 A9:  fdif(f1,h).(k+1) is Function of REAL,REAL by Th2;
 A10:  fdif(f2,h).(k+1) is Function of REAL,REAL by Th2;
       fdif(f1+f2,h).(k+1+1).x = fD(fdif(f1+f2,h).(k+1),h).x by Def6
-      .= fdif(f1+f2,h).(k+1).(x+h) - fdif(f1+f2,h).(k+1).x by Th3,A8
+      .= fdif(f1+f2,h).(k+1).(x+h) - fdif(f1+f2,h).(k+1).x by A8,Th3
       .= (fdif(f1,h).(k+1).(x+h) - fdif(f1,h).(k+1).x)
          + (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by A6,A7
       .= fD(fdif(f1,h).(k+1),h).x
-         + (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by Th3,A9
-      .= fD(fdif(f1,h).(k+1),h).x + fD(fdif(f2,h).(k+1),h).x by Th3,A10
+         + (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by A9,Th3
+      .= fD(fdif(f1,h).(k+1),h).x + fD(fdif(f2,h).(k+1),h).x by A10,Th3
       .= fdif(f1,h).(k+1+1).x + fD(fdif(f2,h).(k+1),h).x by Def6
       .= fdif(f1,h).(k+1+1).x + fdif(f2,h).(k+1+1).x by Def6;
      hence thesis;
@@ -486,12 +483,12 @@ A9:fdif(f1,h).(k+1) is Function of REAL,REAL by Th2;
 A10:fdif(f2,h).(k+1) is Function of REAL,REAL by Th2;
       fdif(f1-f2,h).(k+1+1).x
    = fD(fdif(f1-f2,h).(k+1),h).x by Def6
-  .= fdif(f1-f2,h).(k+1).(x+h) - fdif(f1-f2,h).(k+1).x by Th3,A8
+  .= fdif(f1-f2,h).(k+1).(x+h) - fdif(f1-f2,h).(k+1).x by A8,Th3
   .= (fdif(f1,h).(k+1).(x+h) - fdif(f1,h).(k+1).x)
      - (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by A6,A7
   .= fD(fdif(f1,h).(k+1),h).x
-     - (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by Th3,A9
-  .= fD(fdif(f1,h).(k+1),h).x - fD(fdif(f2,h).(k+1),h).x by Th3,A10
+     - (fdif(f2,h).(k+1).(x+h) - fdif(f2,h).(k+1).x) by A9,Th3
+  .= fD(fdif(f1,h).(k+1),h).x - fD(fdif(f2,h).(k+1),h).x by A10,Th3
   .= fdif(f1,h).(k+1+1).x - fD(fdif(f2,h).(k+1),h).x by Def6
   .= fdif(f1,h).(k+1+1).x - fdif(f2,h).(k+1+1).x by Def6;
     hence thesis;
@@ -501,24 +498,22 @@ A10:fdif(f2,h).(k+1) is Function of REAL,REAL by Th2;
   end;
 
 theorem
-   f=r1(#)f1+r2(#)f2 implies for x holds
-  fdif(f,h).(n+1).x = r1* fdif(f1,h).(n+1).x + r2* fdif(f2,h).(n+1).x
+  fdif(r1(#)f1+r2(#)f2,h).(n+1).x =
+    r1* fdif(f1,h).(n+1).x + r2* fdif(f2,h).(n+1).x
 proof
-  assume A1:f=r1(#)f1+r2(#)f2;
   set g1=r1(#)f1;
   set g2=r2(#)f2;
-  let x;
-   fdif(f,h).(n+1).x = fdif(g1,h).(n+1).x + fdif(g2,h).(n+1).x by A1,Th8
-    .= r1* fdif(f1,h).(n+1).x + fdif(g2,h).(n+1).x by Th7
-    .= r1* fdif(f1,h).(n+1).x + r2* fdif(f2,h).(n+1).x by Th7;
+  fdif(r1(#)f1+r2(#)f2,h).(n+1).x =
+  fdif(g1,h).(n+1).x + fdif(g2,h).(n+1).x by Th8
+  .= r1* fdif(f1,h).(n+1).x + fdif(g2,h).(n+1).x by Th7
+  .= r1* fdif(f1,h).(n+1).x + r2* fdif(f2,h).(n+1).x by Th7;
   hence thesis;
 end;
 
 theorem
-   for x holds (fdif(f,h).1).x = Shift(f,h).x - f.x
+  (fdif(f,h).1).x = Shift(f,h).x - f.x
 proof
   set f1 = Shift(f,h);
-  let x;
    (fdif(f,h).1).x = fdif(f,h).(0+1).x
     .= fD(fdif(f,h).0,h).x by Def6
     .= fD(f,h).x by Def6
@@ -622,7 +617,7 @@ A2:for x holds f.x - f.(x-h) = 0
 then A3:x in dom f by FUNCT_2:def 1;
  x-h in REAL;
     then x-h in dom f by FUNCT_2:def 1;
-    then f.x = f.(x-h) by FUNCT_1:def 16,A3,A1;
+    then f.x = f.(x-h) by A1,A3,FUNCT_1:def 16;
     hence thesis;
    end;
     for x holds bdif(f,h).(n+1).x=0
@@ -645,7 +640,7 @@ A7:  bdif(f,h).(k+1).(x-h)=0 by A6;
 A8:  bdif(f,h).(k+1) is Function of REAL,REAL by Th12;
       (bdif(f,h).(k+2)).x = (bdif(f,h).(k+1+1)).x
       .= bD(bdif(f,h).(k+1),h).x by Def7
-      .= bdif(f,h).(k+1).x - bdif(f,h).(k+1).(x-h) by Th4,A8
+      .= bdif(f,h).(k+1).x - bdif(f,h).(k+1).(x-h) by A8,Th4
       .= 0 by A6,A7;
      hence thesis;
    end;
@@ -666,12 +661,12 @@ A1: X[0]
 A2:  x in REAL;
       x-h in REAL;
 then A3:  x-h in dom (r(#)f) by FUNCT_2:def 1;
-A4:  x in dom (r(#)f) by FUNCT_2:def 1,A2;
+A4:  x in dom (r(#)f) by A2,FUNCT_2:def 1;
       bdif(r(#)f,h).(0+1).x = bD(bdif(r(#)f,h).0,h).x by Def7
                           .= bD(r(#)f,h).x by Def7
                           .= (r(#)f).x - (r(#)f).(x-h) by Th4
-                          .= (r(#)f).x - r * f.(x-h) by SEQ_1:def 6,A3
-                          .= r * f.x - r * f.(x-h) by SEQ_1:def 6,A4
+                          .= (r(#)f).x - r * f.(x-h) by A3,SEQ_1:def 6
+                          .= r * f.x - r * f.(x-h) by A4,SEQ_1:def 6
                           .= r * (f.x - f.(x-h))
                           .= r * bD(f,h).x by Th4
                           .= r * bD(bdif(f,h).0,h).x by Def7
@@ -689,9 +684,9 @@ A9:  bdif(r(#)f,h).(k+1) is Function of REAL,REAL by Th12;
 A10:  bdif(f,h).(k+1) is Function of REAL,REAL by Th12;
        bdif(r(#)f,h).(k+1+1).x
     = bD(bdif(r(#)f,h).(k+1),h).x by Def7
-   .= bdif(r(#)f,h).(k+1).x - bdif(r(#)f,h).(k+1).(x-h) by Th4,A9
+   .= bdif(r(#)f,h).(k+1).x - bdif(r(#)f,h).(k+1).(x-h) by A9,Th4
    .= r * (bdif(f,h).(k+1).x - bdif(f,h).(k+1).(x-h)) by A7,A8
-   .= r * bD(bdif(f,h).(k+1),h).x by Th4,A10
+   .= r * bD(bdif(f,h).(k+1),h).x by A10,Th4
    .= r * bdif(f,h).(k+1+1).x by Def7;
    hence thesis;
    end;
@@ -743,12 +738,12 @@ A9:  bdif(f1,h).(k+1) is Function of REAL,REAL by Th12;
 A10:  bdif(f2,h).(k+1) is Function of REAL,REAL by Th12;
       bdif(f1+f2,h).(k+1+1).x
    = bD(bdif(f1+f2,h).(k+1),h).x by Def7
-  .= bdif(f1+f2,h).(k+1).x - bdif(f1+f2,h).(k+1).(x-h) by Th4,A8
+  .= bdif(f1+f2,h).(k+1).x - bdif(f1+f2,h).(k+1).(x-h) by A8,Th4
   .= (bdif(f1,h).(k+1).x - bdif(f1,h).(k+1).(x-h))
      + (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by A6,A7
   .= bD(bdif(f1,h).(k+1),h).x
-     + (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by Th4,A9
-  .= bD(bdif(f1,h).(k+1),h).x + bD(bdif(f2,h).(k+1),h).x by Th4,A10
+     + (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by A9,Th4
+  .= bD(bdif(f1,h).(k+1),h).x + bD(bdif(f2,h).(k+1),h).x by A10,Th4
   .= bdif(f1,h).(k+1+1).x + bD(bdif(f2,h).(k+1),h).x by Def7
   .= bdif(f1,h).(k+1+1).x + bdif(f2,h).(k+1+1).x by Def7;
     hence thesis;
@@ -802,12 +797,12 @@ A9:  bdif(f1,h).(k+1) is Function of REAL,REAL by Th12;
 A10:  bdif(f2,h).(k+1) is Function of REAL,REAL by Th12;
       bdif(f1-f2,h).(k+1+1).x
    = bD(bdif(f1-f2,h).(k+1),h).x by Def7
-  .= bdif(f1-f2,h).(k+1).x - bdif(f1-f2,h).(k+1).(x-h) by Th4,A8
+  .= bdif(f1-f2,h).(k+1).x - bdif(f1-f2,h).(k+1).(x-h) by A8,Th4
   .= (bdif(f1,h).(k+1).x - bdif(f1,h).(k+1).(x-h))
      - (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by A6,A7
   .= bD(bdif(f1,h).(k+1),h).x
-     - (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by Th4,A9
-  .= bD(bdif(f1,h).(k+1),h).x - bD(bdif(f2,h).(k+1),h).x by Th4,A10
+     - (bdif(f2,h).(k+1).x - bdif(f2,h).(k+1).(x-h)) by A9,Th4
+  .= bD(bdif(f1,h).(k+1),h).x - bD(bdif(f2,h).(k+1),h).x by A10,Th4
   .= bdif(f1,h).(k+1+1).x - bD(bdif(f2,h).(k+1),h).x by Def7
   .= bdif(f1,h).(k+1+1).x - bdif(f2,h).(k+1+1).x by Def7;
     hence thesis;
@@ -817,22 +812,20 @@ A10:  bdif(f2,h).(k+1) is Function of REAL,REAL by Th12;
   end;
 
 theorem
-   f=r1(#)f1+r2(#)f2 implies for x holds
-  bdif(f,h).(n+1).x = r1* bdif(f1,h).(n+1).x + r2* bdif(f2,h).(n+1).x
+  bdif(r1(#)f1+r2(#)f2,h).(n+1).x =
+    r1* bdif(f1,h).(n+1).x + r2* bdif(f2,h).(n+1).x
 proof
-  assume A1:f=r1(#)f1+r2(#)f2;
   set g1=r1(#)f1;
   set g2=r2(#)f2;
-  let x;
-   bdif(f,h).(n+1).x
-    = bdif(g1,h).(n+1).x + bdif(g2,h).(n+1).x by A1,Th15
+   bdif(r1(#)f1+r2(#)f2,h).(n+1).x
+    = bdif(g1,h).(n+1).x + bdif(g2,h).(n+1).x by Th15
    .= r1* bdif(f1,h).(n+1).x + bdif(g2,h).(n+1).x by Th14
    .= r1* bdif(f1,h).(n+1).x + r2* bdif(f2,h).(n+1).x by Th14;
   hence thesis;
 end;
 
 theorem
-   (bdif(f,h).1).x = f.x - Shift(f,-h).x
+  (bdif(f,h).1).x = f.x - Shift(f,-h).x
 proof
    set f2 = Shift(f,-h);
     (bdif(f,h).1).x = bdif(f,h).(0+1).x
@@ -940,7 +933,7 @@ A3: x+h/2 in REAL;
      x-h/2 in REAL;
 then A4:x-h/2 in dom f by FUNCT_2:def 1;
      x+h/2 in dom f by A3,FUNCT_2:def 1;
-    then f.(x+h/2) = f.(x-h/2) by FUNCT_1:def 16,A4,A1;
+    then f.(x+h/2) = f.(x-h/2) by A1,A4,FUNCT_1:def 16;
     hence thesis;
    end;
     defpred X[Element of NAT] means for x holds cdif(f,h).($1+1).x=0;
@@ -962,8 +955,8 @@ A9:  cdif(f,h).(k+1) is Function of REAL,REAL by Th19;
           (cdif(f,h).(k+2)).x
        = (cdif(f,h).(k+1+1)).x
       .= cD(cdif(f,h).(k+1),h).x by Def8
-      .= cdif(f,h).(k+1).(x+h/2) - cdif(f,h).(k+1).(x-h/2) by Th5,A9
-      .= 0 by A8,A7;
+      .= cdif(f,h).(k+1).(x+h/2) - cdif(f,h).(k+1).(x-h/2) by A9,Th5
+      .= 0 by A7,A8;
      hence thesis;
    end;
     for n holds X[n] from NAT_1:sch 1(A5,A6);
@@ -985,8 +978,8 @@ then A3:  x-h/2 in dom (r(#)f) by FUNCT_2:def 1;
       cdif(r(#)f,h).(0+1).x = cD(cdif(r(#)f,h).0,h).x by Def8
                           .= cD(r(#)f,h).x by Def8
                           .= (r(#)f).(x+h/2) - (r(#)f).(x-h/2) by Th5
-                          .= r * f.(x+h/2) - (r(#)f).(x-h/2) by SEQ_1:def 6,A2
-                          .= r * f.(x+h/2) - r * f.(x-h/2) by SEQ_1:def 6,A3
+                          .= r * f.(x+h/2) - (r(#)f).(x-h/2) by A2,SEQ_1:def 6
+                          .= r * f.(x+h/2) - r * f.(x-h/2) by A3,SEQ_1:def 6
                           .= r * (f.(x+h/2) - f.(x-h/2))
                           .= r * cD(f,h).x by Th5
                           .= r * cD(cdif(f,h).0,h).x by Def8
@@ -1003,9 +996,9 @@ A7:  cdif(r(#)f,h).(k+1).(x+h/2) = r* cdif(f,h).(k+1).(x+h/2) by A5;
 A8:  cdif(r(#)f,h).(k+1) is Function of REAL,REAL by Th19;
 A9:  cdif(f,h).(k+1) is Function of REAL,REAL by Th19;
       cdif(r(#)f,h).(k+1+1).x = cD(cdif(r(#)f,h).(k+1),h).x by Def8
-     .= cdif(r(#)f,h).(k+1).(x+h/2) - cdif(r(#)f,h).(k+1).(x-h/2) by Th5,A8
+     .= cdif(r(#)f,h).(k+1).(x+h/2) - cdif(r(#)f,h).(k+1).(x-h/2) by A8,Th5
      .= r * (cdif(f,h).(k+1).(x+h/2) - cdif(f,h).(k+1).(x-h/2)) by A6,A7
-     .= r * cD(cdif(f,h).(k+1),h).x by Th5,A9
+     .= r * cD(cdif(f,h).(k+1),h).x by A9,Th5
      .= r * cdif(f,h).(k+1+1).x by Def8;
      hence thesis;
    end;
@@ -1057,12 +1050,12 @@ A8:  cdif(f1+f2,h).(k+1) is Function of REAL,REAL by Th19;
 A9:  cdif(f1,h).(k+1) is Function of REAL,REAL by Th19;
 A10:  cdif(f2,h).(k+1) is Function of REAL,REAL by Th19;
       cdif(f1+f2,h).(k+1+1).x = cD(cdif(f1+f2,h).(k+1),h).x by Def8
-  .= cdif(f1+f2,h).(k+1).(x+h/2) - cdif(f1+f2,h).(k+1).(x-h/2) by Th5,A8
+  .= cdif(f1+f2,h).(k+1).(x+h/2) - cdif(f1+f2,h).(k+1).(x-h/2) by A8,Th5
   .= (cdif(f1,h).(k+1).(x+h/2) - cdif(f1,h).(k+1).(x-h/2))
      + (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by A6,A7
   .= cD(cdif(f1,h).(k+1),h).x
-     + (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by Th5,A9
-  .= cD(cdif(f1,h).(k+1),h).x + cD(cdif(f2,h).(k+1),h).x by Th5,A10
+     + (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by A9,Th5
+  .= cD(cdif(f1,h).(k+1),h).x + cD(cdif(f2,h).(k+1),h).x by A10,Th5
   .= cdif(f1,h).(k+1+1).x + cD(cdif(f2,h).(k+1),h).x by Def8
   .= cdif(f1,h).(k+1+1).x + cdif(f2,h).(k+1+1).x by Def8;
     hence thesis;
@@ -1115,12 +1108,12 @@ A8:  cdif(f1-f2,h).(k+1) is Function of REAL,REAL by Th19;
 A9:  cdif(f1,h).(k+1) is Function of REAL,REAL by Th19;
 A10:  cdif(f2,h).(k+1) is Function of REAL,REAL by Th19;
       cdif(f1-f2,h).(k+1+1).x = cD(cdif(f1-f2,h).(k+1),h).x by Def8
-  .= cdif(f1-f2,h).(k+1).(x+h/2) - cdif(f1-f2,h).(k+1).(x-h/2) by Th5,A8
+  .= cdif(f1-f2,h).(k+1).(x+h/2) - cdif(f1-f2,h).(k+1).(x-h/2) by A8,Th5
   .= (cdif(f1,h).(k+1).(x+h/2) - cdif(f1,h).(k+1).(x-h/2))
      - (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by A6,A7
   .= cD(cdif(f1,h).(k+1),h).x
-     - (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by Th5,A9
-  .= cD(cdif(f1,h).(k+1),h).x - cD(cdif(f2,h).(k+1),h).x by Th5,A10
+     - (cdif(f2,h).(k+1).(x+h/2) - cdif(f2,h).(k+1).(x-h/2)) by A9,Th5
+  .= cD(cdif(f1,h).(k+1),h).x - cD(cdif(f2,h).(k+1),h).x by A10,Th5
   .= cdif(f1,h).(k+1+1).x - cD(cdif(f2,h).(k+1),h).x by Def8
   .= cdif(f1,h).(k+1+1).x - cdif(f2,h).(k+1+1).x by Def8;
     hence thesis;
@@ -1130,21 +1123,20 @@ A10:  cdif(f2,h).(k+1) is Function of REAL,REAL by Th19;
   end;
 
 theorem
-   f=r1(#)f1+r2(#)f2 implies for x holds
-  cdif(f,h).(n+1).x = r1* cdif(f1,h).(n+1).x + r2* cdif(f2,h).(n+1).x
+  cdif(r1(#)f1+r2(#)f2,h).(n+1).x =
+     r1* cdif(f1,h).(n+1).x + r2* cdif(f2,h).(n+1).x
 proof
-  assume A1:f=r1(#)f1+r2(#)f2;
   set g1=r1(#)f1;
   set g2=r2(#)f2;
-  let x;
-   cdif(f,h).(n+1).x = cdif(g1,h).(n+1).x + cdif(g2,h).(n+1).x by A1,Th22
+   cdif(r1(#)f1+r2(#)f2,h).(n+1).x = cdif(g1,h).(n+1).x + cdif(g2,h).(n+1).x
+   by Th22
    .= r1* cdif(f1,h).(n+1).x + cdif(g2,h).(n+1).x by Th21
    .= r1* cdif(f1,h).(n+1).x + r2* cdif(f2,h).(n+1).x by Th21;
   hence thesis;
 end;
 
 theorem
-   (cdif(f,h).1).x = Shift(f,h/2).x - Shift(f,-h/2).x
+  (cdif(f,h).1).x = Shift(f,h/2).x - Shift(f,-h/2).x
 proof
    set f2 = Shift(f,-h/2);
    set f1 = Shift(f,h/2);
@@ -1177,10 +1169,10 @@ A4:  fdif(f,h).k is Function of REAL,REAL by Th2;
 A5:  bdif(f,h).k is Function of REAL,REAL by Th12;
 A6:  (fdif(f,h).k).(x+h) = (bdif(f,h).k).(x+h+k*h) by A3;
       (fdif(f,h).(k+1)).x = fD(fdif(f,h).k,h).x by Def6
-       .= (fdif(f,h).k).(x+h) - (fdif(f,h).k).x by Th3,A4
-       .= (bdif(f,h).k).(x+h+k*h) - (bdif(f,h).k).(x+k*h) by A6,A3
+       .= (fdif(f,h).k).(x+h) - (fdif(f,h).k).x by A4,Th3
+       .= (bdif(f,h).k).(x+h+k*h) - (bdif(f,h).k).(x+k*h) by A3,A6
        .= (bdif(f,h).k).(x+(k+1)*h) - (bdif(f,h).k).((x+(k+1)*h)-h)
-       .= bD(bdif(f,h).k,h).(x+(k+1)*h) by Th4,A5
+       .= bD(bdif(f,h).k,h).(x+(k+1)*h) by A5,Th4
        .= (bdif(f,h).(k+1)).(x+(k+1)*h) by Def7;
      hence thesis;
    end;
@@ -1216,24 +1208,24 @@ A9:  cdif(f,h).(2*k+1) is Function of REAL,REAL by Th19;
 A10:  fdif(f,h).(2*(k+1)).x
    = fdif(f,h).(2*k+1+1).x
   .= fD(fdif(f,h).(2*k+1),h).x by Def6
-  .= (fdif(f,h).(2*k+1)).(x+h) - (fdif(f,h).(2*k+1)).x by Th3,A6
+  .= (fdif(f,h).(2*k+1)).(x+h) - (fdif(f,h).(2*k+1)).x by A6,Th3
   .= fD(fdif(f,h).(2*k),h).(x+h) - (fdif(f,h).(2*k+1)).x by Def6
   .= fD(fdif(f,h).(2*k),h).(x+h) - fD(fdif(f,h).(2*k),h).x by Def6
   .= fdif(f,h).(2*k).(x+h+h) - fdif(f,h).(2*k).(x+h)
-        - fD(fdif(f,h).(2*k),h).x by Th3,A7
+        - fD(fdif(f,h).(2*k),h).x by A7,Th3
   .= fdif(f,h).(2*k).(x+h+h) - fdif(f,h).(2*k).(x+h)
-        - (fdif(f,h).(2*k).(x+h) - fdif(f,h).(2*k).x) by Th3,A7
+        - (fdif(f,h).(2*k).(x+h) - fdif(f,h).(2*k).x) by A7,Th3
   .= cdif(f,h).(2*k).(x+(k+2)*h) - cdif(f,h).(2*k).(x+(k+1)*h)
-     - (cdif(f,h).(2*k).(x+(k+1)*h) - cdif(f,h).(2*k).(x+k*h)) by A4,A5,A3;
+     - (cdif(f,h).(2*k).(x+(k+1)*h) - cdif(f,h).(2*k).(x+k*h)) by A3,A4,A5;
 A11:  cdif(f,h).(2*k+1).(x+(k+1)*h+h/2)
    = cD(cdif(f,h).(2*k),h).(x+(k+1)*h+h/2) by Def8
   .= cdif(f,h).(2*k).(x+(k+1)*h+h/2+h/2) - cdif(f,h).(2*k).(x+(k+1)*h+h/2-h/2)
-       by Th5,A8
+       by A8,Th5
   .= cdif(f,h).(2*k).(x+(k+2)*h) - cdif(f,h).(2*k).(x+(k+1)*h);
 A12:  cdif(f,h).(2*k+1).(x+(k+1)*h-h/2)
    = cD(cdif(f,h).(2*k),h).(x+(k+1)*h-h/2) by Def8
   .= cdif(f,h).(2*k).(x+(k+1)*h-h/2+h/2) - cdif(f,h).(2*k).(x+(k+1)*h-h/2-h/2)
-       by Th5,A8
+       by A8,Th5
   .= cdif(f,h).(2*k).(x+(k+1)*h) - cdif(f,h).(2*k).(x+k*h);
 set r1 = cdif(f,h).(2*k).(x+(k+2)*h);
 set r2 = cdif(f,h).(2*k).(x+(k+1)*h);
@@ -1241,7 +1233,7 @@ set r3 = cdif(f,h).(2*k).(x+k*h);
       cdif(f,h).(2*(k+1)).(x+(k+1)*h)
    = cdif(f,h).(2*k+1+1).(x+(k+1)*h)
   .= cD(cdif(f,h).(2*k+1),h).(x+(k+1)*h) by Def8
-  .= (r1 - r2) - (r2 - r3) by Th5,A11,A12,A9;
+  .= (r1 - r2) - (r2 - r3) by A9,A11,A12,Th5;
      hence thesis by A10;
    end;
     for n holds X[n] from NAT_1:sch 1(A1,A2);
@@ -1283,28 +1275,28 @@ A8:  cdif(f,h).(2*k+1) is Function of REAL,REAL by Th19;
 A9:  cdif(f,h).(2*(k+1)) is Function of REAL,REAL by Th19;
 A10:  fdif(f,h).(2*(k+1)+1).x
    = fD(fdif(f,h).(2*(k+1)),h).x by Def6
-  .= fdif(f,h).(2*(k+1)).(x+h) - fdif(f,h).(2*(k+1)).x by Th3,A6
+  .= fdif(f,h).(2*(k+1)).(x+h) - fdif(f,h).(2*(k+1)).x by A6,Th3
   .= fD(fdif(f,h).(2*k+1),h).(x+h) - fdif(f,h).((2*k+1)+1).x by Def6
   .= fD(fdif(f,h).(2*k+1),h).(x+h) - fD(fdif(f,h).(2*k+1),h).x by Def6
   .= (fdif(f,h).(2*k+1).(x+h+h) - fdif(f,h).(2*k+1).(x+h))
-        - fD(fdif(f,h).(2*k+1),h).x by Th3,A7
+        - fD(fdif(f,h).(2*k+1),h).x by A7,Th3
   .= (fdif(f,h).(2*k+1).(x+h+h) - fdif(f,h).(2*k+1).(x+h))
-        - (fdif(f,h).(2*k+1).(x+h) - fdif(f,h).(2*k+1).x) by Th3,A7
-  .= (r1 - r2) - (r2 - r3) by A4,A5,A3;
+        - (fdif(f,h).(2*k+1).(x+h) - fdif(f,h).(2*k+1).x) by A7,Th3
+  .= (r1 - r2) - (r2 - r3) by A3,A4,A5;
 A11:  cdif(f,h).(2*(k+1)).(x+(k+2)*h) = cdif(f,h).(2*k+1+1).(x+(k+2)*h)
   .= cD(cdif(f,h).(2*k+1),h).(x+(k+2)*h) by Def8
   .= cdif(f,h).(2*k+1).(x+(k+2)*h+h/2) - cdif(f,h).(2*k+1).(x+(k+2)*h-h/2)
-       by Th5,A8
+       by A8,Th5
   .= cdif(f,h).(2*k+1).(x+(k+2)*h+h/2) - cdif(f,h).(2*k+1).(x+(k+1)*h+h/2);
 A12:  cdif(f,h).(2*(k+1)).(x+(k+1)*h) = cdif(f,h).(2*k+1+1).(x+(k+1)*h)
   .= cD(cdif(f,h).(2*k+1),h).(x+(k+1)*h) by Def8
   .= cdif(f,h).(2*k+1).(x+(k+1)*h+h/2) - cdif(f,h).(2*k+1).(x+(k+1)*h-h/2)
-       by Th5,A8
+       by A8,Th5
   .= cdif(f,h).(2*k+1).(x+(k+1)*h+h/2) - cdif(f,h).(2*k+1).(x+k*h+h/2);
       cdif(f,h).(2*(k+1)+1).(x+(k+1)*h+h/2)
    = cD(cdif(f,h).(2*(k+1)),h).(x+(k+1)*h+h/2) by Def8
   .= cdif(f,h).(2*(k+1)).(x+(k+1)*h+h/2+h/2)
-        - cdif(f,h).(2*(k+1)).(x+(k+1)*h+h/2-h/2) by Th5,A9
+        - cdif(f,h).(2*(k+1)).(x+(k+1)*h+h/2-h/2) by A9,Th5
   .= (r1 - r2) - (r2 - r3) by A11,A12;
    hence thesis by A10;
    end;
@@ -1313,136 +1305,115 @@ A12:  cdif(f,h).(2*(k+1)).(x+(k+1)*h) = cdif(f,h).(2*k+1+1).(x+(k+1)*h)
   end;
 
 definition         :: Forward difference quotient
-  let f be Function of REAL,REAL;let x0,x1;
-  func [!f,x0,x1!] -> Real equals :Def9:
-    (f.x0-f.x1)/(x0-x1) if x0<>x1;
-  correctness;
+  let f be real-yielding Function;let x0,x1 be real number;
+  func [!f,x0,x1!] -> Real equals
+    (f.x0-f.x1)/(x0-x1);
+  correctness by XREAL_0:def 1;
 end;
 
 definition         :: Forward difference quotient of the second order
-  let x0,x1,x2 be Real;
-  let f be Function of REAL,REAL;
-  func [!f,x0,x1,x2!] -> Real equals :Def10:
-    ([!f,x0,x1!] - [!f,x1,x2!])/(x0-x2) if x0<>x2;
-  correctness;
+  let f be real-yielding Function;let x0,x1,x2 be real number;
+  func [!f,x0,x1,x2!] -> Real equals
+    ([!f,x0,x1!] - [!f,x1,x2!])/(x0-x2);
+  correctness by XREAL_0:def 1;
 end;
 
 definition         :: Forward difference quotient of the third order
-  let x0,x1,x2,x3 be Real;
-  let f be Function of REAL,REAL;
+  let f be real-yielding Function;let x0,x1,x2,x3 be real number;
   func [!f,x0,x1,x2,x3!] -> Real equals
-     ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-x3) if x0<>x3;
-  correctness;
+     ([!f,x0,x1,x2!] - [!f,x1,x2,x3!])/(x0-x3);
+  correctness by XREAL_0:def 1;
 end;
 
 theorem
-   x0<>x1 implies [!f,x0,x1!] = [!f,x1,x0!]
+  [!f,x0,x1!] = [!f,x1,x0!]
 proof
-  assume A1: x0<>x1;
-  then [!f,x0,x1!] = (f.x0 - f.x1)/(x0-x1) by Def9
-                 .= (-(f.x1-f.x0))/(-(x1-x0))
-                 .= (f.x1 - f.x0)/(x1-x0) by XCMPLX_1:192
-                 .= [!f,x1,x0!] by A1,Def9;
- hence thesis;
+  thus [!f,x0,x1!] = (-(f.x1-f.x0))/(-(x1-x0))
+                  .= [!f,x1,x0!] by XCMPLX_1:192;
 end;
 
 theorem
-   f is constant & x0<>x1 implies [!f,x0,x1!] = 0
+  f is constant implies [!f,x0,x1!] = 0
 proof
-   assume that A1: f is constant and
-               A2: x0<>x1;
+  assume A1: f is constant;
     x0 in REAL & x1 in REAL;
    then x0 in dom f & x1 in dom f by FUNCT_2:def 1;
-then A3:f.x0 = f.x1 by FUNCT_1:def 16,A1;
-    [!f,x0,x1!]=(f.x0 - f.x1)/(x0-x1) by A2,Def9
-           .=0 by A3;
+   then f.x0 = f.x1 by A1,FUNCT_1:def 16;
    hence [!f,x0,x1!] = 0;
 end;
 
 theorem Th31:
-  x0<>x1 implies [!(r(#)f),x0,x1!] = r*[!f,x0,x1!]
+  [!(r(#)f),x0,x1!] = r*[!f,x0,x1!]
 proof
-   assume A1: x0<>x1;
     x0 in REAL & x1 in REAL;
-then A2:x0 in dom (r(#)f) & x1 in dom (r(#)f) by FUNCT_2:def 1;
-    [!(r(#)f),x0,x1!] = ((r(#)f).x0-(r(#)f).x1)/(x0-x1) by A1,Def9
-                    .= (r*f.x0-(r(#)f).x1)/(x0-x1) by A2,SEQ_1:def 6
-                    .= (r*f.x0-r*f.x1)/(x0-x1) by A2,SEQ_1:def 6
+then A1:x0 in dom (r(#)f) & x1 in dom (r(#)f) by FUNCT_2:def 1;
+    [!(r(#)f),x0,x1!] = (r*f.x0-(r(#)f).x1)/(x0-x1) by A1,SEQ_1:def 6
+                    .= (r*f.x0-r*f.x1)/(x0-x1) by A1,SEQ_1:def 6
                     .= r*(f.x0-f.x1)/(x0-x1)
-                    .= r*((f.x0-f.x1)/(x0-x1)) by XCMPLX_1:75
-                    .= r*[!f,x0,x1!] by A1,Def9;
+                    .= r*[!f,x0,x1!] by XCMPLX_1:75;
    hence thesis;
 end;
 
 theorem Th32:
-  x0<>x1 implies [!(f1+f2),x0,x1!]=[!f1,x0,x1!]+[!f2,x0,x1!]
+  [!(f1+f2),x0,x1!] = [!f1,x0,x1!] + [!f2,x0,x1!]
 proof
-   assume A1: x0<>x1;
     x0 in REAL & x1 in REAL;
-   then x0 in dom f1 & x0 in dom f2 & x1 in dom f1 & x1 in dom f2 by FUNCT_2:
-def 1;
+   then x0 in dom f1 & x0 in dom f2 & x1 in dom f1 & x1 in dom f2 by
+FUNCT_2:def 1;
    then x0 in dom f1 /\ dom f2 & x1 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:x0 in dom (f1+f2) & x1 in dom (f1+f2) by SEQ_1:def 3;
-    [!(f1+f2),x0,x1!] = ((f1+f2).x0-(f1+f2).x1)/(x0-x1) by Def9,A1
-    .= (f1.x0+f2.x0-(f1+f2).x1)/(x0-x1) by A2,SEQ_1:def 3
-    .= (f1.x0+f2.x0-(f1.x1+f2.x1))/(x0-x1) by A2,SEQ_1:def 3
+then A1:x0 in dom (f1+f2) & x1 in dom (f1+f2) by SEQ_1:def 3;
+   [!(f1+f2),x0,x1!] = (f1.x0+f2.x0-(f1+f2).x1)/(x0-x1) by A1,SEQ_1:def 3
+    .= (f1.x0+f2.x0-(f1.x1+f2.x1))/(x0-x1) by A1,SEQ_1:def 3
     .= ((f1.x0-f1.x1)+(f2.x0-f2.x1))/(x0-x1)
-    .= (f1.x0-f1.x1)/(x0-x1)+(f2.x0-f2.x1)/(x0-x1) by XCMPLX_1:63
-    .= [!f1,x0,x1!]+(f2.x0-f2.x1)/(x0-x1) by A1,Def9
-    .= [!f1,x0,x1!]+[!f2,x0,x1!] by A1,Def9;
+    .= [!f1,x0,x1!]+[!f2,x0,x1!] by XCMPLX_1:63;
    hence thesis;
 end;
 
 theorem
-   x0<>x1 implies [!(r1(#)f1+r2(#)f2),x0,x1!]=r1*[!f1,x0,x1!]+r2*[!f2,x0,x1!]
+  [!(r1(#)f1+r2(#)f2),x0,x1!] = r1*[!f1,x0,x1!] + r2*[!f2,x0,x1!]
 proof
-   assume A1: x0<>x1;
-   then [!(r1(#)f1+r2(#)f2),x0,x1!]
+   [!(r1(#)f1+r2(#)f2),x0,x1!]
      = [!(r1(#)f1),x0,x1!]+[!(r2(#)f2),x0,x1!] by Th32
-    .= r1*[!f1,x0,x1!]+[!(r2(#)f2),x0,x1!] by A1,Th31
-    .= r1*[!f1,x0,x1!]+r2*[!f2,x0,x1!] by A1,Th31;
+    .= r1*[!f1,x0,x1!]+[!(r2(#)f2),x0,x1!] by Th31
+    .= r1*[!f1,x0,x1!]+r2*[!f2,x0,x1!] by Th31;
    hence thesis;
 end;
 
 theorem Th34:
-  x0<>x1 & x0<>x2 & x1<>x2 implies [!f,x0,x1,x2!] = [!f,x1,x2,x0!]
-                                 & [!f,x0,x1,x2!] = [!f,x2,x1,x0!]
+ x0,x1,x2 are_mutually_different implies [!f,x0,x1,x2!] = [!f,x1,x2,x0!]
+                                       & [!f,x0,x1,x2!] = [!f,x2,x1,x0!]
 proof
-    assume A1: x0<>x1 & x0<>x2 & x1<>x2;
-then A2: x1-x2<>0 & x2-x0<>0 & x1-x0<>0;
+  assume x0,x1,x2 are_mutually_different;
+then A1: x1-x2<>0 & x2-x0<>0 & x1-x0<>0 by ZFMISC_1:def 5;
     set x10 = x1-x0;
     set x20 = x2-x0;
     set x12 = x1-x2;
     set x = [!f,x0,x1!];
     set y = [!f,x1,x2!];
-A3: [!f,x0,x1,x2!] = (x - y)/(x0-x2) by Def10,A1
- .= ((f.x0-f.x1)/(x0-x1) - [!f,x1,x2!])/(x0-x2) by Def9,A1
- .= ((f.x0-f.x1)/(-(x1-x0)) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0)) by Def9,A1
+A2: [!f,x0,x1,x2!] = ((f.x0-f.x1)/(-(x1-x0)) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0))
  .= (-(f.x0-f.x1)/(x1-x0) - (f.x1-f.x2)/(x1-x2))/(-(x2-x0)) by XCMPLX_1:189
  .= (-((f.x0-f.x1)/(x1-x0) + (f.x1-f.x2)/(x1-x2)))/(-(x2-x0))
  .= ((f.x0-f.x1)/(x1-x0) + (f.x1-f.x2)/(x1-x2))/(x2-x0) by XCMPLX_1:192
- .= (((f.x0-f.x1)*x12 + (f.x1-f.x2)*x10)/(x10*x12))/x20 by XCMPLX_1:117,A2
+ .= (((f.x0-f.x1)*x12 + (f.x1-f.x2)*x10)/(x10*x12))/x20 by A1,XCMPLX_1:117
  .= (f.x0*x12 + f.x1*x20 - f.x2*x10)/(x10*x12*x20) by XCMPLX_1:79;
-A4: [!f,x1,x2,x0!] = ([!f,x1,x2!] - [!f,x2,x0!])/(x1-x0) by Def10,A1
- .= ((f.x1-f.x2)/(x1-x2) - [!f,x2,x0!])/(x1-x0) by Def9,A1
- .= ((f.x1-f.x2)/(x1-x2) - (f.x2-f.x0)/(x2-x0))/(x1-x0) by Def9,A1
- .= (((f.x1-f.x2)*x20 - (f.x2-f.x0)*x12)/(x12*x20))/x10 by XCMPLX_1:131,A2
+A3: [!f,x1,x2,x0!]
+  = (((f.x1-f.x2)*x20 - (f.x2-f.x0)*x12)/(x12*x20))/x10 by A1,XCMPLX_1:131
  .= (f.x0*x12 + f.x1*x20 - f.x2*x10)/(x12*x20*x10) by XCMPLX_1:79
- .= [!f,x0,x1,x2!] by A3;
-    [!f,x2,x1,x0!] = ([!f,x2,x1!] - [!f,x1,x0!])/(x2-x0) by Def10,A1
- .= ((f.x2-f.x1)/(x2-x1) - [!f,x1,x0!])/(x2-x0) by Def9,A1
- .= ((-(f.x1-f.x2))/(-(x1-x2)) - (f.x1-f.x0)/(x1-x0))/(x2-x0) by Def9,A1
+ .= [!f,x0,x1,x2!] by A2;
+    [!f,x2,x1,x0!] = ((-(f.x1-f.x2))/(-(x1-x2)) - (f.x1-f.x0)/(x1-x0))/(x2-x0)
  .= ((f.x1-f.x2)/(x1-x2) - (f.x1-f.x0)/(x1-x0))/(x2-x0) by XCMPLX_1:192
- .= (((f.x1-f.x2)*x10 - (f.x1-f.x0)*x12)/(x12*x10))/x20 by XCMPLX_1:131,A2
- .= [!f,x0,x1,x2!] by A3,XCMPLX_1:79;
-   hence thesis by A4;
+ .= (((f.x1-f.x2)*x10 - (f.x1-f.x0)*x12)/(x12*x10))/x20 by A1,XCMPLX_1:131
+ .= [!f,x0,x1,x2!] by A2,XCMPLX_1:79;
+   hence thesis by A3;
 end;
 
 theorem
-   x0<>x1 & x0<>x2 & x1<>x2 implies [!f,x0,x1,x2!] = [!f,x2,x0,x1!]
-                                 & [!f,x0,x1,x2!] = [!f,x1,x0,x2!]
+  x0,x1,x2 are_mutually_different implies [!f,x0,x1,x2!] = [!f,x2,x0,x1!]
+                                        & [!f,x0,x1,x2!] = [!f,x1,x0,x2!]
 proof
-  assume A1: x0<>x1 & x0<>x2 & x1<>x2;
+  assume x0,x1,x2 are_mutually_different;
+  then x0<>x1 & x0<>x2 & x1<>x2 by ZFMISC_1:def 5; then
+A1: x2,x0,x1 are_mutually_different by ZFMISC_1:def 5;
   then [!f,x0,x1,x2!] = [!f,x2,x0,x1!] by Th34;
   hence thesis by A1,Th34;
 end;
@@ -1462,10 +1433,10 @@ then A4:  fdif(fdif(f,h).m,h).k is Function of REAL,REAL by Th2;
 A5:  fdif(f,h).(m+k) is Function of REAL,REAL by Th2;
          fdif(fdif(f,h).m,h).(k+1).x
       = fD(fdif(fdif(f,h).m,h).k,h).x by Def6
-     .= fdif(fdif(f,h).m,h).k.(x+h) - fdif(fdif(f,h).m,h).k.x by Th3,A4
+     .= fdif(fdif(f,h).m,h).k.(x+h) - fdif(fdif(f,h).m,h).k.x by A4,Th3
      .= fdif(f,h).(m+k).(x+h) - fdif(fdif(f,h).m,h).k.x by A3
      .= fdif(f,h).(m+k).(x+h) - fdif(f,h).(m+k).x by A3
-     .= fD(fdif(f,h).(m+k),h).x by Th3,A5
+     .= fD(fdif(f,h).(m+k),h).x by A5,Th3
      .= fdif(f,h).(m+k+1).x by Def6;
      hence thesis;
    end;
@@ -1490,12 +1461,12 @@ then A2: s1 is Real_Sequence by A1,SEQ_1:4;
 A3: s1 is PartFunc of dom s1,rng s1 by PARTFUN1:24;
 rng s1 c= {1} by FUNCOP_1:19;
     then rng s1 c= REAL by XBOOLE_1:1;
-then A4:s1 is PartFunc of REAL,REAL by A3,A1,PARTFUN1:32;
+then A4:s1 is PartFunc of REAL,REAL by A1,A3,PARTFUN1:32;
     set S = NAT --> s1;
 A5:dom S = NAT by FUNCOP_1:19;
  for n holds S.n is PartFunc of REAL,REAL by A4,FUNCOP_1:13;
     then reconsider S as Functional_Sequence of REAL,REAL by A5,SEQFUNC:1;
-     for n holds S.n is Real_Sequence by FUNCOP_1:13,A2;
+     for n holds S.n is Real_Sequence by A2,FUNCOP_1:13;
     hence thesis;
 end;
 
@@ -1506,7 +1477,7 @@ proof
    consider S being Functional_Sequence of REAL,REAL such that
 A1:for n holds S.n is Real_Sequence by Lm4;
    take S;
-   thus thesis by Def12,A1;
+   thus thesis by A1,Def12;
   end;
 end;
 
@@ -1536,8 +1507,8 @@ then A2: x+h in dom (f1(#)f2) by SEQ_1:def 5;
     .= fD(fdif(f1(#)f2,h).0,h).x by Def6
     .= fD(f1(#)f2,h).x by Def6
     .= (f1(#)f2).(x+h) - (f1(#)f2).x by Th3
-    .= f1.(x+h) * f2.(x+h) - (f1(#)f2).x by SEQ_1:def 5,A2
-    .= f1.(x+h) * f2.(x+h) - f1.x * f2.x by SEQ_1:def 5,A1
+    .= f1.(x+h) * f2.(x+h) - (f1(#)f2).x by A2,SEQ_1:def 5
+    .= f1.(x+h) * f2.(x+h) - f1.x * f2.x by A1,SEQ_1:def 5
     .= f1.x * (f2.(x+h) - f2.x) + (f1.(x+h) - f1.x) * f2.(x+h)
     .= f1.x * fD(f2,h).x + (f1.(x+h) - f1.x) * f2.(x+h) by Th3
     .= f1.x * fD(f2,h).x + fD(f1,h).x * f2.(x+h) by Th3
@@ -1560,12 +1531,12 @@ A2: 1-'0 = 1-0 by BINARITH:50 .= 1;
 A3: (S.1).0
   = (1 choose 0) * (fdif(f1,h).0).x * fdif(f2,h).(1-'0).(x+0*h) by A1
  .= 1 * (fdif(f1,h).0).x * fdif(f2,h).(1-'0).(x+0*h) by NEWTON:29
- .= f1.x * fdif(f2,h).1.x by Def6,A2;
+ .= f1.x * fdif(f2,h).1.x by A2,Def6;
 A4: 1-'1 = 1-1 by BINARITH:50 .= 0;
 A5: (S.1).1
   = (1 choose 1) * (fdif(f1,h).1).x * fdif(f2,h).(1-'1).(x+1*h) by A1
  .= 1 * (fdif(f1,h).1).x * fdif(f2,h).(1-'1).(x+1*h) by NEWTON:31
- .= fdif(f1,h).1.x * f2.(x+h) by Def6,A4;
+ .= fdif(f1,h).1.x * f2.(x+h) by A4,Def6;
 A6: Sum(S.1, 1) = Partial_Sums(S.1).(0+1) by SERIES_1:def 6
  .= Partial_Sums(S.1).0 + S.1.1 by SERIES_1:def 1
  .= (S.1).0 + (S.1).1 by SERIES_1:def 1
@@ -1576,7 +1547,7 @@ A9: fdif(f1,h).1 is Function of REAL,REAL by Th2;
 A10: fdif(f1(#)f2,h).2.x
   = fdif(f1(#)f2,h).(1+1).x
  .= fD(fdif(f1(#)f2,h).1,h).x by Def6
- .= fdif(f1(#)f2,h).1.(x+h) - fdif(f1(#)f2,h).1.x by Th3,A7
+ .= fdif(f1(#)f2,h).1.(x+h) - fdif(f1(#)f2,h).1.x by A7,Th3
  .= f1.(x+h) * fdif(f2,h).1.(x+h) + fdif(f1,h).1.(x+h) * f2.(x+h+h)
      - fdif(f1(#)f2,h).1.x by Lm5
  .= f1.(x+h) * fdif(f2,h).1.(x+h) + fdif(f1,h).1.(x+h) * f2.(x+h+h)
@@ -1587,13 +1558,13 @@ A10: fdif(f1(#)f2,h).2.x
      + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h))
  .= f1.x * fD(fdif(f2,h).1,h).x + (f1.(x+h) - f1.x) * fdif(f2,h).1.(x+h)
      + (fdif(f1,h).1.(x+h) - fdif(f1,h).1.x) * f2.(x+h+h)
-     + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h)) by Th3,A8
+     + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h)) by A8,Th3
  .= f1.x * fD(fdif(f2,h).1,h).x + fD(f1,h).x * fdif(f2,h).1.(x+h)
      + (fdif(f1,h).1.(x+h) - fdif(f1,h).1.x) * f2.(x+h+h)
      + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h)) by Th3
  .= (f1.x * fD(fdif(f2,h).1,h).x + fD(f1,h).x * fdif(f2,h).1.(x+h))
      + fD(fdif(f1,h).1,h).x * f2.(x+h+h)
-     + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h)) by Th3,A9
+     + fdif(f1,h).1.x * (f2.(x+h+h) - f2.(x+h)) by A9,Th3
  .= (f1.x * fD(fdif(f2,h).1,h).x + fD(f1,h).x * fdif(f2,h).1.(x+h))
      + fD(fdif(f1,h).1,h).x * f2.(x+h+h)
      + fdif(f1,h).1.x * fD(f2,h).(x+h) by Th3
@@ -1619,19 +1590,19 @@ A11:2-'0 = 2-0 by BINARITH:50  .= 2;
 A12: (S.2).0
   = (2 choose 0) * (fdif(f1,h).0).x * fdif(f2,h).(2-'0).(x+0*h) by A1
  .= 1 * (fdif(f1,h).0).x * fdif(f2,h).(2-'0).(x+0*h) by NEWTON:29
- .= f1.x * fdif(f2,h).2.x by Def6,A11;
+ .= f1.x * fdif(f2,h).2.x by A11,Def6;
 A13:2-'1 = 2-1 by BINARITH:50  .= 1;
 A14:(S.2).1
   = (2 choose 1) * (fdif(f1,h).1).x * fdif(f2,h).(2-'1).(x+1*h) by A1
- .= 2 * (fdif(f1,h).1).x * fdif(f2,h).1.(x+h) by NEWTON:33,A13;
+ .= 2 * (fdif(f1,h).1).x * fdif(f2,h).1.(x+h) by A13,NEWTON:33;
 A15:2-'2 = 2-2 by BINARITH:50  .= 0;
 A16:(S.2).2
   = (2 choose 2) * (fdif(f1,h).2).x * fdif(f2,h).(2-'2).(x+2*h) by A1
  .= 1 * (fdif(f1,h).2).x * fdif(f2,h).(2-'2).(x+2*h) by NEWTON:31
- .= fdif(f1,h).2.x * f2.(x+2*h) by Def6,A15;
+ .= fdif(f1,h).2.x * f2.(x+2*h) by A15,Def6;
     Sum(S.2, 2) = Partial_Sums(S.2).(1+1) by SERIES_1:def 6
       .= Partial_Sums(S.2).(0+1) + S.2.2 by SERIES_1:def 1
       .= Partial_Sums(S.2).0 + S.2.1 + S.2.2 by SERIES_1:def 1
-      .= fdif(f1(#)f2,h).2.x by SERIES_1:def 1,A10,A12,A14,A16;
+      .= fdif(f1(#)f2,h).2.x by A10,A12,A14,A16,SERIES_1:def 1;
    hence thesis by A6;
  end;

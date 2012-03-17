@@ -2,20 +2,20 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="RELSET_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MCART_1"/>
@@ -53,7 +53,7 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="94">
 <Func kind="U" nr="1">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -64,22 +64,22 @@
 <Adjective nr="101"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="277">
+<Func kind="K" nr="278">
 <Num nr="2"/>
-<Func kind="K" nr="264">
+<Func kind="K" nr="265">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="41">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -93,7 +93,7 @@
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -101,15 +101,15 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="46"/>
+<Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="132">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="276">
-<Func kind="K" nr="283">
+<Func kind="K" nr="277">
+<Func kind="K" nr="284">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -117,7 +117,7 @@
 </Func>
 <Cluster>
 <Adjective nr="108">
-<Func kind="K" nr="230">
+<Func kind="K" nr="231">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -7,16 +7,16 @@
 environ
 
  vocabularies RELAT_1, FINSEQ_4, ORDINAL2, COMPLEX1, SIN_COS, PREPOWER,
-      SIN_COS2, SIN_COS3, FUNCT_1, ARYTM_1, ARYTM_3, XCMPLX_0, NAT_1;
+      SIN_COS2, SIN_COS3, FUNCT_1, ARYTM_1, ARYTM_3, XCMPLX_0;
  notations SUBSET_1, NUMBERS, XCMPLX_0, COMPLEX1, REAL_1, RELAT_1, NAT_1,
-      FINSEQ_4, ARYTM_0, FUNCT_2, SEQ_1, COMSEQ_3, SIN_COS, SIN_COS2;
- constructors FUNCT_4, ARYTM_0, REAL_1, NAT_1, BINOP_2, SEQ_1, FINSEQ_4,
-      COMSEQ_1, COMSEQ_3, SIN_COS, SIN_COS2;
+      PARTFUN1, FINSEQ_4, ARYTM_0, FUNCT_2, SEQ_1, COMSEQ_3, SIN_COS, SIN_COS2;
+ constructors FUNCT_4, ARYTM_0, REAL_1, NAT_1, BINOP_2, SEQ_1, PARTFUN1,
+      FINSEQ_4, COMSEQ_1, COMSEQ_3, SIN_COS, SIN_COS2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0, MEMBERED,
       COMPLEX1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- theorems COMPLEX1, SIN_COS, SIN_COS2, COMSEQ_3, FINSEQ_4, FUNCT_2, XCMPLX_1,
-      ARYTM_0;
+ theorems COMPLEX1, SIN_COS, SIN_COS2, COMSEQ_3, FUNCT_2, XCMPLX_1, ARYTM_0,
+      PARTFUN1;
  schemes NAT_1, BINOP_2, FUNCT_2;
 
 begin  :: Definitions of trigonometric functions
@@ -116,7 +116,7 @@ end;
 Lm2: sin_C/.z = (exp(<i>*z)-(exp(-<i> * z)))/(2 * <i>)
 proof
    dom sin_C = COMPLEX by FUNCT_2:def 1;
-  then sin_C/.z = sin_C.z by FINSEQ_4:def 4
+  then sin_C/.z = sin_C.z by PARTFUN1:def 8
           .= (exp(<i>*z)-(exp(-<i> * z)))/(2 * <i>) by Def1;
   hence thesis;
 end;
@@ -124,7 +124,7 @@ end;
 Lm3: cos_C/.z = (exp(<i>*z) + exp(-<i>*z))/2
 proof
    dom cos_C = COMPLEX by FUNCT_2:def 1;
-  then cos_C/.z = cos_C.z by FINSEQ_4:def 4
+  then cos_C/.z = cos_C.z by PARTFUN1:def 8
           .= (exp(<i>*z) + exp(-<i>*z))/2 by Def2;
   hence thesis;
 end;
@@ -132,7 +132,7 @@ end;
 Lm4: sinh_C/.z = (exp(z) - exp(-z))/2
 proof
    dom sinh_C = COMPLEX by FUNCT_2:def 1;
-  then sinh_C/.z = sinh_C.z by FINSEQ_4:def 4
+  then sinh_C/.z = sinh_C.z by PARTFUN1:def 8
           .= (exp(z) - exp(-z))/2 by Def3;
   hence thesis;
 end;
@@ -140,7 +140,7 @@ end;
 Lm5: cosh_C/.z = (exp(z) + exp(-z))/2
 proof
    dom cosh_C = COMPLEX by FUNCT_2:def 1;
-  then cosh_C/.z = cosh_C.z by FINSEQ_4:def 4
+  then cosh_C/.z = cosh_C.z by PARTFUN1:def 8
           .= (exp(z) + exp(-z))/2 by Def4;
   hence thesis;
 end;
@@ -509,8 +509,8 @@ end;
 theorem Th20:
 exp(0c) = 1
  proof
-  thus exp(0c) = [*exp_R 0,0*] by Lm6, SIN_COS:54
-       .= 1+0*<i> by SIN_COS:56, COMPLEX1:27
+  thus exp(0c) = [*exp_R 0,0*] by Lm6,SIN_COS:54
+       .= 1+0*<i> by COMPLEX1:27,SIN_COS:56
        .= 1;
  end;
 
@@ -607,7 +607,7 @@ A2: Re z+(Im z)*<i>= [*Re z,Im z*] by COMPLEX1:27;
     by SIN_COS2:11
   .=[*exp_R.(Re z)*cos.(Im z),exp_R.(Re z)*sin.(Im z)*] by SIN_COS2:10
   .=exp([*Re z,Im z*]) by Th19;
-  hence thesis by COMPLEX1:29,A2;
+  hence thesis by A2,COMPLEX1:29;
  end;
  hence thesis by Lm9;
 end;
@@ -623,7 +623,7 @@ proof
  .=[*cos.(0+2*PI*n),sin.(0+2*PI*n)*] by SIN_COS:def 21
  .=[*cos.(0+2*PI*n),sin.(0)*] by SIN_COS2:10
  .=[*1,sin.(0)*] by SIN_COS:33,SIN_COS2:11
- .= 1 + 0*<i>  by SIN_COS:33, COMPLEX1:27
+ .= 1 + 0*<i>  by COMPLEX1:27,SIN_COS:33
  .= 1;
 end;
  hence thesis by Lm9;
@@ -642,7 +642,7 @@ proof
  .=[*cos.(0+2*PI*n),-sin.(0+2*PI*n)*] by SIN_COS:def 21
  .=[*cos.(0+2*PI*n),-sin.(0)*] by SIN_COS2:10
  .=[*1,-sin.(0)*] by SIN_COS:33,SIN_COS2:11
- .=1+(-0)*<i> by SIN_COS:33,COMPLEX1:27
+ .=1+(-0)*<i> by COMPLEX1:27,SIN_COS:33
  .= 1;
  end;
  hence thesis by Lm9;
@@ -697,7 +697,7 @@ proof
  .= [*cos.(PI*2*n+1/2*PI),sin(PI*2*n+1/2*PI)*] by SIN_COS:def 23
  .= [*cos.(PI*2*n+1/2*PI),sin.(PI*2*n+1/2*PI)*] by SIN_COS:def 21
  .= [*cos.(1/2*PI),sin.(PI*2*n+1/2*PI)*] by SIN_COS2:11
- .= [*0,sin.(PI/2)*] by SIN_COS2:10,SIN_COS:81;
+ .= [*0,sin.(PI/2)*] by SIN_COS:81,SIN_COS2:10;
  hence thesis by SIN_COS:81;
  end;
  hence thesis by Lm9;
@@ -717,7 +717,7 @@ proof
   .= [*cos.(PI*2*n+1/2*PI),-sin(PI*2*n+1/2*PI)*] by SIN_COS:def 23
   .= [*cos.(PI*2*n+1/2*PI),-sin.(PI*2*n+1/2*PI)*] by SIN_COS:def 21
   .= [*cos.(1/2*PI),-sin.(PI*2*n+1/2*PI)*] by SIN_COS2:11
-  .= [*0,-sin.(PI/2)*] by SIN_COS2:10,SIN_COS:81;
+  .= [*0,-sin.(PI/2)*] by SIN_COS:81,SIN_COS2:10;
   hence thesis by SIN_COS:81;
  end;
  hence thesis by Lm9;
@@ -828,18 +828,17 @@ proof
  .= [*0,2*sin.x*] by COMPLEX1:27;
 A2:[*0,2*] <> 0c
  proof
-       2*<i> = [*-0,2*] by Lm11,Lm1
+       2*<i> = [*-0,2*] by Lm1,Lm11
   .= [*0,2*];
   hence thesis;
  end;
 A3: [*cos.x,sin.x*] = cos.x+(sin.x)*<i> &
    [*-cos.x,--sin.x*] = -cos.x+(--sin.x)*<i> by COMPLEX1:27;
-      sin_C/.[*x,0*] = (exp(<i>*[*x,0*]) - exp(-<i>*[*x,0*]))/(2*<i>) by
-Lm2
+      sin_C/.[*x,0*] = (exp(<i>*[*x,0*]) - exp(-<i>*[*x,0*]))/(2*<i>) by Lm2
  .= (exp([*-0,x*]) - exp(-<i>*[*x,0*]))/(2*<i>) by Lm11
  .= (exp([*0,x*]) - exp(-[*0,x*]))/(2*<i>) by Lm11
  .= (exp([*0,x*]) - exp([*-0,-x*]))/(2*<i>) by Lm10
- .= (exp([*0,x*]) - exp([*0,-x*]))/[*0,2*] by Lm11,Lm1
+ .= (exp([*0,x*]) - exp([*0,-x*]))/[*0,2*] by Lm1,Lm11
  .= ([*exp_R.0*cos.x,exp_R.0*sin.x*] - exp([*0,-x*]))/[*0,2*] by Th19
  .= ([*exp_R(0)*cos.x,exp_R.0*sin.x*] - exp([*0,-x*]))/[*0,2*]
      by SIN_COS:def 27
@@ -913,8 +912,8 @@ A2:[*exp_R.x-exp_R.(-x),0*] = [*sinh.x,0*]*2
  .= ([*exp_R.x,0*] - exp([*-x,-0*]))/2 by Lm10,SIN_COS:33
  .= ([*exp_R.x,0*] - [*exp_R.(-x)*cos.0,exp_R.(-x)*sin.0*])/2 by Th19
  .= ([*exp_R.x,0*] +- [*exp_R.(-x),0*])/2 by SIN_COS:33
- .= (exp_R.x+-exp_R.(-x)+0+0*<i>)/2 by Lm10,A1
- .= ([*sinh.x,0*]*2)/2 by COMPLEX1:27,A2;
+ .= (exp_R.x+-exp_R.(-x)+0+0*<i>)/2 by A1,Lm10
+ .= ([*sinh.x,0*]*2)/2 by A2,COMPLEX1:27;
  hence thesis by ARYTM_0:def 7;
 end;
 
@@ -939,7 +938,7 @@ A2: [*exp_R.x,0*] = exp_R.x+0*<i> &
  .= ([*exp_R.x,0*] + exp([*-x,-0*]))/2 by Lm10,SIN_COS:33
  .= ([*exp_R.x,0*] + [*exp_R.(-x)*1,exp_R.(-x)*0*])/2 by Th19,SIN_COS:33
  .= (exp_R.x+0*<i> + exp_R.(-x)+0*<i>)/2 by A2
- .= ([*cosh.x,0*]*2)/2 by COMPLEX1:27,A1;
+ .= ([*cosh.x,0*]*2)/2 by A1,COMPLEX1:27;
  hence thesis by ARYTM_0:def 7;
 end;
 
@@ -1185,9 +1184,9 @@ proof
  .= (e1*e1 + e2*e2 - 2*(e1*e2))/2/2
  .= (e1*e1 + e2*e2 - 2*1)/2/2 by Lm7
  .= (exp(z+z) + e2*e2 - 2)/2/2 by SIN_COS:24
- .= (exp([*2,0*]*z) + exp(-z+-z) - 2)/2/2 by SIN_COS:24,Lm1
+ .= (exp([*2,0*]*z) + exp(-z+-z) - 2)/2/2 by Lm1,SIN_COS:24
  .= (( exp([*2,0*]*z) + exp(-[*2,0*]*(z)) )/2 - 1)/2 by Lm1;
- hence thesis by Lm5,Lm1;
+ hence thesis by Lm1,Lm5;
 end;
 
 theorem Th58:
@@ -1199,9 +1198,9 @@ proof
  .= (e1*e1 + e2*e2 + 2*(e1*e2))/2/2
  .= (e1*e1 + e2*e2 + 2*1)/2/2 by Lm7
  .= (exp(z+z) + e2*e2 + 2)/2/2 by SIN_COS:24
- .= (exp([*2,0*]*z) + exp(-z+-z) + 2)/2/2 by SIN_COS:24,Lm1
+ .= (exp([*2,0*]*z) + exp(-z+-z) + 2)/2/2 by Lm1,SIN_COS:24
  .= (( exp([*2,0*]*z) + exp(-[*2,0*]*(z)) )/2 + 1)/2 by Lm1;
- hence thesis by Lm5,Lm1;
+ hence thesis by Lm1,Lm5;
 end;
 
 theorem Th59:
@@ -1217,9 +1216,9 @@ A1:sinh_C/.(2*z) = 2*(sinh_C/.z)*(cosh_C/.z)
   .= 2*((e1 - e2)/2*((e1 + e2)/2)) by Lm4
   .= (e1*e1 - e2*e2)/2
   .= (exp(z+z) - e2*e2)/2 by SIN_COS:24
-  .= (exp([*2,0*]*z) - exp(-z+-z))/2 by SIN_COS:24,Lm1
+  .= (exp([*2,0*]*z) - exp(-z+-z))/2 by Lm1,SIN_COS:24
   .= (exp([*2,0*]*z) - exp(-[*2,0*]*z))/2 by Lm1;
-  hence thesis by Lm4,Lm1;
+  hence thesis by Lm1,Lm4;
  end;
       cosh_C/.(2*z) = 2*(cosh_C/.z)*(cosh_C/.z) - 1
  proof

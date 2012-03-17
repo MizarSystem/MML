@@ -161,7 +161,7 @@ proof
   assume that
 A1: p divides a |^ b and
 A2: not p divides a;
-  reconsider a as Element of NAT by ORDINAL1:def 13;
+  reconsider p,a as Element of NAT by ORDINAL1:def 13;
   defpred P[Nat] means p divides a|^($1+1);
     now
     assume 0+1 > b;
@@ -287,30 +287,34 @@ proof
   deffunc F(Nat) = f.$1 |^ a;
   consider p being FinSequence such that
 A1: len p = len f and
-A2: for k being Element of NAT st k in Seg len f holds p.k = F(k)
+A2: for k being Nat st k in Seg len f holds p.k = F(k)
     from FINSEQ_1:sch 2;
   take p;
   thus len p = len f by A1;
-    dom p = Seg len p by FINSEQ_1:def 3;
-  hence thesis by A1,A2;
+A3: dom p = Seg len p by FINSEQ_1:def 3;
+  let i be set;
+  assume
+A4: i in dom p;
+  then i is Nat by ORDINAL1:def 13;
+  hence thesis by A1,A2,A3,A4;
 end;
 uniqueness
 proof
   let g,h be FinSequence such that
-A3: len g = len f and
-A4: for i being set st i in dom g holds g.i = f.i |^ a and
-A5: len h = len f and
-A6: for i being set st i in dom h holds h.i = f.i |^ a;
-A7: dom g = Seg len g by FINSEQ_1:def 3;
-A8: dom h = Seg len h by FINSEQ_1:def 3;
-    for k being Element of NAT st k in dom g holds g.k = h.k
+A5: len g = len f and
+A6: for i being set st i in dom g holds g.i = f.i |^ a and
+A7: len h = len f and
+A8: for i being set st i in dom h holds h.i = f.i |^ a;
+A9: dom g = Seg len g by FINSEQ_1:def 3;
+A10: dom h = Seg len h by FINSEQ_1:def 3;
+    for k being Nat st k in dom g holds g.k = h.k
   proof
-    let k be Element of NAT such that
-A9:   k in dom g;
-    thus g.k = f.k |^ a by A4,A9
-      .= h.k by A3,A5,A6,A7,A8,A9;
+    let k be Nat such that
+A11:   k in dom g;
+    thus g.k = f.k |^ a by A6,A11
+      .= h.k by A5,A7,A8,A9,A10,A11;
   end;
-  hence g = h by A3,A5,A7,A8,FINSEQ_1:17;
+  hence g = h by A5,A7,A9,A10,FINSEQ_1:17;
 end;
 end;
 
@@ -371,12 +375,13 @@ f |^ 0 = (len f) |-> 1
 proof
 A1: len (f|^0) = len f by Def1;
 A2: len (len f |-> 1) = len f by FINSEQ_2:69;
-    for k being Element of NAT st 1 <= k & k <= len (f|^0)
+    for k being Nat st 1 <= k & k <= len (f|^0)
    holds (f|^0).k = (len f |-> 1).k
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume A3: 1 <= k & k <= len (f|^0);
     then A4: k in dom (f|^0) by FINSEQ_3:27;
+    then
     A5: k in Seg len f by A1,A3;
     thus (f|^0).k = f.k |^ 0 by A4,Def1
      .= 1 by NEWTON:9
@@ -389,9 +394,9 @@ theorem
   f |^ 1 = f
 proof
 A1: len (f|^1) = len f by Def1;
-    for k being Element of NAT st 1 <= k & k <= len (f|^1) holds (f|^1).k = f.k
+    for k being Nat st 1 <= k & k <= len (f|^1) holds (f|^1).k = f.k
   proof
-    let k be Element of NAT;
+    let k be Nat;
     assume 1 <= k & k <= len (f|^1);
     then k in dom (f|^1) by FINSEQ_3:27;
     hence (f|^1).k = f.k |^ 1 by Def1
@@ -429,7 +434,7 @@ A2: len ((f|^a)^(<*r*>|^a)) = len (f|^a) + len (<*r*>|^a) by FINSEQ_1:35
    .= len f + len (<*r|^a*>) by Th12
    .= len f + 1 by FINSEQ_1:57;
 A3: len (f|^a) = len f by Def1;
-    now let i be Element of NAT such that
+    now let i be Nat such that
   A4: i in Seg (len f +1);
   A5: 1 <= i & i <= len f + 1 by A4,FINSEQ_1:3;
   A6: i in dom ((f^<*r*>) |^ a) by A1,A4,FINSEQ_1:def 3;
@@ -1480,7 +1485,7 @@ A1: for i being set st i in SetPrimes ex j being set st P[i,j]
   proof
     let i be set;
     assume i in SetPrimes;
-    then reconsider i as Prime by NEWTON:def 6;
+    then reconsider i as prime Element of NAT by NEWTON:def 6;
     take F(i), i;
     thus thesis;
   end;
@@ -1494,7 +1499,7 @@ uniqueness proof let f, g be ManySortedSet of SetPrimes such that
 A3:  for i being Prime holds f.i = i |-count n and
 A4:  for i being Prime holds g.i = i |-count n;
     now let i be set; assume i in SetPrimes;
-    then reconsider a = i as Prime by NEWTON:def 6;
+    then reconsider a = i as prime Element of NAT by NEWTON:def 6;
     thus f.i = a |-count n by A3 .= g.i by A4;
   end;
   hence thesis by PBOOLE:3;
@@ -1510,7 +1515,8 @@ theorem Th33:
 for x being set st x in dom pfexp n holds x is Prime
 proof let x be set; assume x in dom pfexp n;
   then x in SetPrimes by PBOOLE:def 3;
- hence x is Prime by NEWTON:def 6;
+  then x is prime Element of NAT by NEWTON:def 6;
+  hence x is Prime by ORDINAL1:def 13;
 end;
 
 theorem Th34:
@@ -1584,9 +1590,10 @@ A1: A is finite from FINSEQ_1:sch 6;
     support f c= A proof let x be set; assume
 A2:   x in support f;
     then reconsider x as Prime by Th34;
- f.x <> 0 by A2,POLYNOM1:def 7;
+A3: x is prime Element of NAT by ORDINAL1:def 13;
+    f.x <> 0 by A2,POLYNOM1:def 7;
      then x <= n by Th35;
-    hence thesis;
+    hence thesis by A3;
   end;
   hence support f is finite by A1,FINSET_1:13;
 end;
@@ -1685,18 +1692,19 @@ proof let a, b be non empty Nat; assume a,b are_relative_prime;
 A2: x in support f and
 A3: x in support g by XBOOLE_0:3;
   reconsider x as Prime by A2,Th34;
-A4: f.x <> 0 by A2,POLYNOM1:def 7;
-A5: f.x = x |-count a by Def8;
-A6: x <> 1 by INT_2:def 5;
-then A7: x |^ (x |-count a) divides a by Def7;
-    x divides x |^ (x |-count a) by A4,A5,Th3;
-then A8: x divides a by A7,NAT_D:4;
-A9: g.x <> 0 by A3,POLYNOM1:def 7;
-A10: g.x = x |-count b by Def8;
-A11: x |^ (x |-count b) divides b by A6,Def7;
-    x divides x |^ (x |-count b) by A9,A10,Th3;
-  then x divides b by A11,NAT_D:4; then x divides 1 by A1,A8,NAT_D:def 5;
-  hence contradiction by A6,WSIERP_1:20;
+A4: x in NAT by ORDINAL1:def 13;
+A5: f.x <> 0 by A2,POLYNOM1:def 7;
+A6: f.x = x |-count a by Def8;
+A7: x <> 1 by INT_2:def 5;
+then A8: x |^ (x |-count a) divides a by Def7;
+    x divides x |^ (x |-count a) by A5,A6,Th3;
+then A9: x divides a by A8,NAT_D:4;
+A10: g.x <> 0 by A3,POLYNOM1:def 7;
+A11: g.x = x |-count b by Def8;
+A12: x |^ (x |-count b) divides b by A7,Def7;
+    x divides x |^ (x |-count b) by A10,A11,Th3;
+  then x divides b by A12,NAT_D:4; then x divides 1 by A1,A9,NAT_D:def 5;
+  hence contradiction by A4,A7,WSIERP_1:20;
 end;
 
 theorem Th45:
@@ -1786,13 +1794,12 @@ end;
 theorem
   pfexp (n*m) = pfexp n + pfexp m
 proof
-  for i being set st i in SetPrimes holds (pfexp (n*m)).i = (pfexp n + pfexp m)
-.
-i
+  for i being set st i in SetPrimes holds
+  (pfexp (n*m)).i = (pfexp n + pfexp m).i
   proof
     let i be set;
     assume i in SetPrimes;
-    then reconsider a = i as Prime by NEWTON:def 6;
+    then reconsider a = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n*m)).i = a |-count (n*m) by Def8
       .= (a |-count n) + (a |-count m) by Th28
       .= (pfexp n).i + (a |-count m) by Def8
@@ -1812,7 +1819,7 @@ A1: m divides n;
   proof
     let i be set;
     assume i in SetPrimes;
-    then reconsider a = i as Prime by NEWTON:def 6;
+    then reconsider a = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n div m)).i = a |-count (n div m) by Def8
       .= (a |-count n) -' (a |-count m) by A1,Th31
       .= (pfexp n).i -' (a |-count m) by Def8
@@ -1829,7 +1836,7 @@ proof
   proof
     let i be set;
     assume i in SetPrimes;
-    then reconsider x = i as Prime by NEWTON:def 6;
+    then reconsider x = i as prime Element of NAT by NEWTON:def 6;
     thus (pfexp (n|^a)).i = x |-count (n|^a) by Def8
        .= a * (x |-count n) by Th32
        .= a * (pfexp n).i by Def8
@@ -1858,7 +1865,7 @@ theorem
   for m, n being non empty Nat holds pfexp (n hcf m) = min(pfexp n, pfexp m)
 proof let m, n be non empty Nat;
     now let i be set; assume i in SetPrimes;
-    then reconsider j = i as Prime by NEWTON:def 6;
+    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
     set lhs = pfexp (n hcf m); set rhs = min(pfexp n, pfexp m);
     set x = j |-count n, y = j |-count m, z = j |-count (n hcf m);
     A1: j <> 1 by INT_2:def 5;
@@ -1909,7 +1916,7 @@ theorem
   for m, n being non empty Nat holds pfexp (n lcm m) = max(pfexp n, pfexp m)
 proof let m, n be non empty Nat;
     now let i be set; assume i in SetPrimes;
-    then reconsider j = i as Prime by NEWTON:def 6;
+    then reconsider j = i as prime Element of NAT by NEWTON:def 6;
     set lhs = pfexp (n lcm m); set rhs = max(pfexp n, pfexp m);
     set x = j |-count n, y = j |-count m, z = j |-count (n lcm m);
     A1: j > 1 by INT_2:def 5;
@@ -1949,7 +1956,7 @@ proof let m, n be non empty Nat;
           A25: y = x+p by A6,A9,A16,NAT_1:10;
            (j |^ x)*((j |^ p) *(k*j)) =  ((j |^ x)*(j |^ p)) *(k*j)
           .= (j |^ x)*(t*u)
-            by NEWTON:13,A20,A23,A24,A25;
+            by A20,A23,A24,A25,NEWTON:13;
           then (j |^p)*k*j = t*u by XCMPLX_1:5;
           then A26: j divides t*u by NAT_D:def 3;
                 now assume j divides t;
@@ -1969,7 +1976,7 @@ proof let m, n be non empty Nat;
          A30: m = (j |^ y) * t by A10,NAT_D:def 3;
               consider u being Nat such that
          A31: n lcm m = m*u by A12,NAT_D:def 3;
-               (j |^ y)*(k*j) = (j |^ y)*(t*u) by A20,A31,A30;
+               (j |^ y)*(k*j) = (j |^ y)*(t*u) by A20,A30,A31;
               then k*j = t*u by XCMPLX_1:5;
           then A32: j divides t*u by NAT_D:def 3;
                now assume j divides t;
@@ -2080,7 +2087,7 @@ A1: for x,y1,y2 being set st x in SetPrimes & P[x,y1] & P[x,y2] holds y1 = y2
    A2: x in SetPrimes and
    A3: P[x,y1] and
    A4: P[x,y2];
-       reconsider p = x as Prime by A2,NEWTON:def 6;
+       reconsider p = x as prime Element of NAT by A2,NEWTON:def 6;
        (p in support pfexp n implies y1 = p |^ (p |-count n)) &
      (not p in support pfexp n implies y1 = 0) by A3;
     hence y1 = y2 by A4;
@@ -2088,7 +2095,7 @@ A1: for x,y1,y2 being set st x in SetPrimes & P[x,y1] & P[x,y2] holds y1 = y2
 A5: for x being set st x in SetPrimes ex y being set st P[x,y] proof
      let x be set such that
    A6: x in SetPrimes;
-       reconsider i = x as Prime by A6,NEWTON:def 6;
+       reconsider i = x as prime Element of NAT by A6,NEWTON:def 6;
      per cases;
      suppose A7: i in support pfexp n;
        take i |^ (i |-count n);
@@ -2110,7 +2117,7 @@ A12: now let x be set;
      hereby assume
      A13: x in support f;
       then x in SetPrimes by A11;
-         then reconsider i = x as Prime by NEWTON:def 6;
+         then reconsider i = x as prime Element of NAT by NEWTON:def 6;
       assume not x in support pfexp n;
        then f.i = 0 by A10,A11,A13;
       hence contradiction by A13,POLYNOM1:def 7;
@@ -2118,7 +2125,7 @@ A12: now let x be set;
      assume
     A14: x in support pfexp n;
         then x in SetPrimes;
-        then reconsider i = x as Prime by NEWTON:def 6;
+        then reconsider i = x as prime Element of NAT by NEWTON:def 6;
           f.i = i |^ (i |-count n) by A10,A14;
      hence x in support f by POLYNOM1:def 7;
     end;
@@ -2139,7 +2146,7 @@ A19: for p being natural number st p in support pfexp n holds
      it2.p = p|^(p|-count n);
       now let i be set such that
     A20: i in SetPrimes;
-      reconsider p = i as Prime by A20,NEWTON:def 6;
+      reconsider p = i as prime Element of NAT by A20,NEWTON:def 6;
      per cases;
      suppose A21: p in support pfexp n;
       hence it1.i = p|^(p|-count n) by A17 .= it2.i by A19,A21;
@@ -2171,7 +2178,7 @@ proof
 A1:   x in dom ppf n and
 A2:   (ppf n).x = y by FUNCT_1:def 5;
       dom ppf n = SetPrimes by PBOOLE:def 3;
-    then reconsider x as Prime by A1,NEWTON:def 6;
+    then reconsider x as prime Element of NAT by A1,NEWTON:def 6;
     per cases;
     suppose x in support pfexp n;
     then (ppf n).x = x |^ (x |-count n) by Def9;
@@ -2219,7 +2226,7 @@ A1: a, b are_relative_prime;
    reconsider an = a, bn = b as non empty natural number;
     now let i be set such that
   A2: i in SetPrimes;
-      reconsider p = i as Prime by A2,NEWTON:def 6;
+      reconsider p = i as prime Element of NAT by A2,NEWTON:def 6;
   A3: p |-count (an*bn) = (p |-count a) + (p |-count b) by Th28;
   A4: p > 1 by INT_2:def 5;
   A5: a hcf b = 1 by A1,INT_2:def 6;
@@ -2307,7 +2314,7 @@ theorem
 proof
    now let i be set; assume
     i in SetPrimes;
-     then reconsider p = i as Prime by NEWTON:def 6;
+     then reconsider p = i as prime Element of NAT by NEWTON:def 6;
  A1: m >= 0+1 by NAT_1:13;
  A2: p |-count (n |^ m) = m * (p |-count n) by Th32;
  A3: ((ppf n) |^ m).i = (ppf n).i |^ m by Def6;

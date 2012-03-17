@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -38,15 +38,15 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
-<Func kind="K" nr="243"/>
-<Func kind="K" nr="213">
+<Func kind="K" nr="9">
+<Func kind="K" nr="244"/>
+<Func kind="K" nr="214">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -59,13 +59,55 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
+<Func kind="K" nr="9">
+<Func kind="K" nr="244"/>
+<Func kind="K" nr="216">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+<Cluster>
+<Adjective nr="7" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="200">
+<Num nr="2"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="9">
+<Func kind="K" nr="243"/>
+<Func kind="K" nr="217">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+<Cluster>
+<Adjective nr="7" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="200">
+<Num nr="2"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="9">
 <Func kind="K" nr="243"/>
 <Func kind="K" nr="215">
 <LocusVar nr="1"/>
@@ -80,60 +122,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="13">
-<Func kind="K" nr="242"/>
-<Func kind="K" nr="216">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Cluster>
-<Adjective nr="7" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="13">
-<Func kind="K" nr="242"/>
 <Func kind="K" nr="214">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-<Cluster>
-<Adjective nr="7" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="31">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -144,7 +144,29 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
+<Num nr="2"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="216">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="31">
+<Func kind="K" nr="200">
+<Num nr="2"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -155,7 +177,7 @@
 </Func>
 <Cluster>
 <Adjective nr="31">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -166,40 +188,18 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="214">
+<Func kind="K" nr="217">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="31">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="K" nr="199">
-<Num nr="2"/>
-</Func>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="216">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="31">
-<Func kind="K" nr="199">
+<Func kind="K" nr="200">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -10,7 +10,7 @@ environ
       FUNCT_1, VECTSP_1, QC_LANG1, SETWISEO, RLVECT_1, FINSEQ_2, GROUP_1,
       GROUP_4, RELAT_1, ARYTM_1, FINSET_1, CARD_1, GROUP_2, TARSKI, ARYTM_3,
       FILTER_0, RLSUB_1, GRAPH_1, GR_CY_1, CARD_3, COMPLEX1, COMPLSP1,
-      SUBSET_1, BOOLE, XREAL_0;
+      SUBSET_1, BOOLE, XREAL_0, FINSOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       RELAT_1, FUNCT_1, REAL_1, FUNCT_2, CARD_1, FINSET_1, BINOP_1, DOMAIN_1,
       INT_1, FINSEQ_1, FINSOP_1, SETWISEO, SETWOP_2, BINOP_2, REALSET1, INT_2,
@@ -118,28 +118,28 @@ Lm2: now let n be natural number;
 theorem Th16:
   Sum I = addint $$ I
   proof
-    rng I c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+    rng I c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
     then reconsider f = I as FinSequence of COMPLEX by FINSEQ_1:def 4;
     set g = addint, h = addcomplex;
-    consider n being Element of NAT such that
+    consider n being Nat such that
 A1: dom f = Seg n by FINSEQ_1:def 2;
     set i = [#](I,the_unity_wrt g);
     set j = [#](f,the_unity_wrt h);
-A2: g $$ I = g $$ (Seg n,i) by A1,SETWOP_2:def 2;
-A3: h $$ f = h $$ (Seg n,j) by A1,SETWOP_2:def 2;
-    defpred P[Element of NAT] means
-      g $$ (Seg $1,i) = h $$ (Seg $1,j);
+A2: g $$ I = g $$ (finSeg n,i) by A1,SETWOP_2:def 2;
+A3: h $$ f = h $$ (finSeg n,j) by A1,SETWOP_2:def 2;
+    defpred P[Nat] means
+      g $$ (finSeg $1,i) = h $$ (finSeg $1,j);
 A4: Seg 0 = {}.NAT by FINSEQ_1:4;
 A5: P[0]
     proof
-       g $$ (Seg 0,[#](I,the_unity_wrt g)) =
-           the_unity_wrt h by BINOP_2:1,4,SETWISEO:40,A4
-        .= h $$ (Seg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
+       g $$ (finSeg 0,[#](I,the_unity_wrt g)) =
+           the_unity_wrt h by A4,BINOP_2:1,4,SETWISEO:40
+        .= h $$ (finSeg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
       hence thesis;
     end;
-A6: for k being Element of NAT st P[k] holds P[k+1]
+A6: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A7:   P[k];
 A8:   i.(k+1) = j.(k+1)
@@ -156,18 +156,19 @@ A9:       k+1 in dom f;
           thus thesis by BINOP_2:1,4;
         end;
       end;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
       set a = i.(k+1);
-      set b = g $$(Seg k,i);
+      set b = g $$(finSeg k,i);
 A10:   not (k + 1) in Seg k by FINSEQ_3:9;
-       g $$ (Seg (k+1),i) = g $$ (Seg k \/ {. k+1 .},i) by FINSEQ_1:11
+       g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {. k+1 .},i) by FINSEQ_1:11
         .= g.(b,a) by A10,SETWOP_2:4
         .= b + a by BINOP_2:def 20
-        .= h.(h $$(Seg k,j),j.(k+1)) by BINOP_2:def 3,A7,A8
-        .= h $$ (Seg k \/ {. k+1 .},j) by A10,SETWOP_2:4
-        .= h $$ (Seg (k+1),j) by FINSEQ_1:11;
+        .= h.(h $$(finSeg k,j),j.(k+1)) by A7,A8,BINOP_2:def 3
+        .= h $$ (finSeg k \/ {. k+1 .},j) by A10,SETWOP_2:4
+        .= h $$ (finSeg (k+1),j) by FINSEQ_1:11;
       hence thesis;
     end;
-     for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
+     for k being Nat holds P[k] from NAT_1:sch 2(A5,A6);
     then g $$ I = h $$ f by A2,A3;
     hence thesis by RVSUM_1:def 11;
   end;
@@ -253,9 +254,9 @@ proof
    take Sum I;
 A5:dom ((len F) |-> a) = Seg len F by FUNCOP_1:19
                       .= dom F by FINSEQ_1:def 3;
-        for p st p in dom F holds F.p = ((len F)|-> a).p
+        for p be Nat st p in dom F holds F.p = ((len F)|-> a).p
     proof
-     let p;
+     let p be Nat;
 A6:  dom F = Seg len F by FINSEQ_1:def 3;
      assume A7: p in dom F;
      then F.p in rng F by FUNCT_1:def 5;
@@ -309,9 +310,10 @@ theorem Th26:
     assume A1:G is finite;
    ex n st n<> 0 & a|^n = 1_G
    proof
-    deffunc F(Element of NAT) = a|^$1;
+    deffunc F(Nat) = a|^$1;
     consider F being FinSequence such that A2: len F = ord G +1 and
-    A3: for p st p in Seg (ord G +1) holds F.p = F(p) from FINSEQ_1:sch 2;
+    A3: for p be Nat st p in Seg (ord G +1) holds F.p = F(p)
+    from FINSEQ_1:sch 2;
     A4: dom F = Seg (ord G + 1) by A2,FINSEQ_1:def 3;
 A5: Seg (ord G +1) c= NAT by Lm2;
     A6: for y st y in rng F holds ex n st y=a|^n
@@ -319,7 +321,7 @@ A5: Seg (ord G +1) c= NAT by Lm2;
        let y;
        assume y in rng F;
        then consider x such that A7: x in dom F and A8: F.x=y by FUNCT_1:def 5;
-       reconsider n=x as Element of NAT by A7,A5,A4;
+       reconsider n=x as Element of NAT by A4,A5,A7;
        take n;
        thus thesis by A3,A4,A7,A8;
       end;
@@ -338,14 +340,14 @@ then reconsider F'=F as Function of Seg (ord G +1),the carrier of G by A4,
 FUNCT_2:def 1,RELSET_1:11;
   consider c being finite set such that
 A9: c = the carrier of G & ord G = card c by A1,GROUP_1:def 15;
-A10:Card ord G = Card the carrier of G by A9,CARD_1:def 11;
+A10:Card ord G = Card the carrier of G by A9;
 A11:Card Seg(ord G+1) = Card (ord G +1) by FINSEQ_1:76;
      ord G < ord G +1 by XREAL_1:31;
 then Card the carrier of G <` Card Seg (ord G +1) by A10,A11,CARD_1:73;
 then consider x,y such that A12:x in Seg (ord G +1) and
 A13: y in Seg (ord G +1) and
 A14:x <> y and A15: F'.x = F'.y by FINSEQ_4:80;
-reconsider p=x,n=y as Element of NAT by A12,A13,A5;
+reconsider p=x,n=y as Element of NAT by A5,A12,A13;
       per cases by A14,REAL_1:def 5;
   suppose A16: n>p;
       then reconsider t = n-p as Element of NAT by INT_1:18;
@@ -357,7 +359,7 @@ reconsider p=x,n=y as Element of NAT by A12,A13,A5;
       then a|^t =a|^(p+-p) by GROUP_1:64;
       hence thesis by A16,GROUP_1:59;
    end;
-   suppose A18: p>n;
+   suppose A17: p>n;
       then reconsider t = p-n as Element of NAT by INT_1:18;
       take t;
       reconsider e=0 as Integer;
@@ -365,7 +367,7 @@ reconsider p=x,n=y as Element of NAT by A12,A13,A5;
       then a|^n=a|^p by A3,A13,A15;
       then a|^(p+-n)=a|^n *a|^(-n) by GROUP_1:64;
       then a|^t =a|^(n+-n) by GROUP_1:64;
-      hence thesis by A18,GROUP_1:59;
+      hence thesis by A17,GROUP_1:59;
     end;
   end;
  hence thesis by GROUP_1:def 11;
@@ -376,9 +378,9 @@ theorem Th27:
  proof
   assume A1:G is finite;
   then A2:gr {a} is finite by GROUP_2:48;
-  deffunc F(Element of NAT) = a|^$1;
+  deffunc F(Nat) = a|^$1;
   consider F being FinSequence such that A3: len F = ord a and
-  A4:  for p st p in Seg ord a holds F.p = F(p) from FINSEQ_1:sch 2;
+  A4:  for p be Nat st p in Seg ord a holds F.p = F(p) from FINSEQ_1:sch 2;
   A5: dom F = Seg ord a by A3,FINSEQ_1:def 3;
   a is_not_of_order_0 by A1,Th26;
   then A6:ord a <> 0 by GROUP_1:def 12;
@@ -408,7 +410,7 @@ A11: rng F = the carrier of gr {a}
       assume y in rng F;
       then consider x such that
 A13:  x in dom F and A14: F.x=y by FUNCT_1:def 5;
-      reconsider n=x as Element of NAT by A13,A10,A5;
+      reconsider n=x as Element of NAT by A5,A10,A13;
       take n;
       thus thesis by A4,A5,A13,A14;
      end;
@@ -494,8 +496,8 @@ NAT_D:2
    end;
 hence thesis by TARSKI:def 3;
   end;
- then reconsider op=(the mult of G)||car as BinOp of car by A19,
-   FUNCT_2:def 1,RELSET_1:11;
+ then reconsider op=(the mult of G)||car as BinOp of car by A19,FUNCT_2:def 1
+,RELSET_1:11;
  set H=HGrStr(#car,op#);
  H is Group
  proof
@@ -558,7 +560,7 @@ A32: for f,g being Element of H, f',g' being Element of G
        ex n st h=a|^n & (1 <= n & ord a >= n)
        proof
         consider x such that A38: x in dom F and A39: F.x=h by FUNCT_1:def 5;
-        reconsider n=x as Element of NAT by A38,A10,A5;
+        reconsider n=x as Element of NAT by A5,A10,A38;
         take n;
         thus thesis by A4,A5,A38,A39,FINSEQ_1:3;
        end;
@@ -641,8 +643,8 @@ end;
   let x,y;
   assume that A49: x in dom F and A50: y in dom F and A51: F.x = F.y
              and A52:x<>y;
-  reconsider p=x as Element of NAT by A10,A49,A5;
-  reconsider s=y as Element of NAT by A10,A50,A5;
+  reconsider p=x as Element of NAT by A5,A10,A49;
+  reconsider s=y as Element of NAT by A5,A10,A50;
   reconsider s'=s,p'=p,z= ord a as Real;
   A53:F.p=a|^p by A4,A5,A49;
   A54:F.s=a|^s by A4,A5,A50;
@@ -689,7 +691,7 @@ end;
 end;
 end;
 then A65: Seg ord a,the carrier of gr {a} are_equipotent by A5,A11,
-     WELLORD2:def 4;
+WELLORD2:def 4;
    consider ca being finite set such that
 A66: ca = the carrier of gr {a} & ord gr {a} = card ca by A2,GROUP_1:def 15;
   reconsider So = Seg ord a as finite set;
@@ -1068,7 +1070,7 @@ theorem Th39:
       reconsider k'=k as Integer;
       reconsider k' as Element of INT.Group by INT_1:def 2;
        (@'1)|^j1 = ((@'1)|^k)" by A2,GROUP_1:71
-      .= (k')" by Th38 .= j1 by Th37,A2;
+      .= (k')" by Th38 .= j1 by A2,Th37;
       hence thesis;
     end;
   end;
@@ -1091,19 +1093,19 @@ proof
    INT.Group is Subgroup of G1
     proof
       let G1;
-      assume A2:{h} c= the carrier of G1;
+      assume A1:{h} c= the carrier of G1;
       the carrier of (Omega).INT.Group c= the carrier of G1
       proof
         let x;
-        assume that A3: x in the carrier of (Omega).INT.Group and
-        A4: not x in the carrier of G1;
-        x in INT by A3;
+        assume that A2: x in the carrier of (Omega).INT.Group and
+        A3: not x in the carrier of G1;
+        x in INT by A2;
         then reconsider x'=x as Integer by INT_1:def 2;
         h in {h} by TARSKI:def 1;
-        then reconsider h''=h as Element of G1 by A2;
-        A5: (h'')|^x' in the carrier of G1;
+        then reconsider h''=h as Element of G1 by A1;
+        A4: (h'')|^x' in the carrier of G1;
         (h'')|^x'=h|^x' by GROUP_4:4;
-        hence contradiction by A4,A5,Th39;
+        hence contradiction by A3,A4,Th39;
       end;
 hence thesis by GROUP_2:66;
 end;
@@ -1139,9 +1141,9 @@ theorem Th40:
      (Omega).(1).G is Subgroup of G1
      proof
        let G1 be Subgroup of (1).G;
-       assume A2:{PG} c= the carrier of G1;
+       assume A1:{PG} c= the carrier of G1;
        the carrier of (Omega).(1).G c=the carrier of G1
-         by A2,GROUP_2:def 7;
+         by A1,GROUP_2:def 7;
        hence thesis by GROUP_2:66;
      end;
      hence thesis;
@@ -1229,18 +1231,18 @@ A6:  for b being Element of G ex n st b=a|^n;
    hence thesis by Th41;
  end;
 
-Lm01: for G, H being Group st G is finite &
+Lm6: for G, H being Group st G is finite &
   the HGrStr of G = the HGrStr of H holds ord G = ord H
   proof
     let G, H be Group;
     assume A1:G is finite & the HGrStr of G = the HGrStr of H; then
     the carrier of G is finite by STRUCT_0:def 11; then
-A4: H is finite by A1,STRUCT_0:def 11;
+A2: H is finite by A1,STRUCT_0:def 11;
     consider B being finite set such that
-A2: B = the carrier of G & ord G = card B by A1,GROUP_1:def 15;
+A3: B = the carrier of G & ord G = card B by A1,GROUP_1:def 15;
     consider C being finite set such that
-A3: C = the carrier of H & ord H = card C by A4,GROUP_1:def 15;
-    thus thesis by A1,A3,A2;
+A4: C = the carrier of H & ord H = card C by A2,GROUP_1:def 15;
+    thus thesis by A1,A3,A4;
   end;
 
 theorem Th43:
@@ -1257,8 +1259,8 @@ proof let G be Group;
  A2: the HGrStr of G = gr {a} by Def9;
      take a;
      reconsider H = the HGrStr of G as Group;
-     ord a = ord H by A2,A1,Th27;
-     hence thesis by Lm01,A1;
+     ord a = ord H by A1,A2,Th27;
+     hence thesis by A1,Lm6;
    end;
    given a being Element of G such that A3:ord a = ord G;
    ex a being Element of G st the HGrStr of G = gr {a}

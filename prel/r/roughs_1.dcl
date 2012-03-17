@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -14,9 +14,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -192,7 +192,7 @@
 </ArgTypes>
 <Func kind="G" nr="5">
 <LocusVar nr="1"/>
-<Func kind="K" nr="65">
+<Func kind="K" nr="66">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -298,7 +298,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="332">
+<Func kind="K" nr="333">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -325,7 +325,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="333">
+<Func kind="K" nr="334">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -351,8 +351,8 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="103">
-<Func kind="K" nr="70">
+<Func kind="K" nr="104">
+<Func kind="K" nr="71">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

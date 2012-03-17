@@ -8,14 +8,14 @@ environ
 
  vocabularies TREES_2, RELAT_1, FINSEQ_1, FUNCT_1, TREES_1, BOOLE, FUNCOP_1,
       TREES_3, FINSEQ_2, FUNCT_6, FINSEQ_4, FINSET_1, MCART_1, FUNCT_3,
-      PARTFUN1, TREES_4, NAT_1;
+      PARTFUN1, TREES_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, FUNCT_1, FINSET_1, DOMAIN_1, FUNCOP_1, FUNCT_3, FINSEQ_1,
       FINSEQ_2, TREES_1, TREES_2, FUNCT_6, TREES_3, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FUNCT_5, FINSEQ_2,
       FUNCT_6, TREES_3;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ARYTM_3, XREAL_0, FINSEQ_1, TREES_2, TREES_3;
+      XREAL_0, FINSEQ_1, TREES_2, TREES_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_1, TREES_1, TREES_2, FINSEQ_2, FUNCT_6;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
@@ -216,13 +216,13 @@ A1:  x-flat_tree p = y-flat_tree q;
         dom (x-flat_tree p) = elementary_tree len p &
     dom (y-flat_tree q) = elementary_tree len q by Def3;
 then A2:  len p = len q by A1,Th2;
-        now let i; assume
+        now let i be Nat; assume
 A3:    i >= 1 & i <= len p; then consider n be Nat such that
 A4:    i = 1+n by NAT_1:10;
 A5:    n in NAT by ORDINAL1:def 13;
         n < len p by A3,A4,NAT_1:13;
-      then p.i = (x-flat_tree p).<*n*> & q.i = (y-flat_tree q).<*n*> by A2,A4,
-Def3,A5;
+      then p.i = (x-flat_tree p).<*n*> & q.i = (y-flat_tree q).<*n*> by A2,A4
+,A5,Def3;
      hence p.i = q.i by A1;
     end;
    hence p = q by A2,FINSEQ_1:18;
@@ -272,8 +272,9 @@ A3:  for y st y in tree(q) ex z st X[y,z]
             y in tree(q); then reconsider s = y as Element of tree(q);
             now assume
          y <> {};
-         then consider w being (FinSequence of NAT), n such that
+         then consider w being (FinSequence of NAT), n being Nat such that
 A4:       s = <*n*>^w by FINSEQ_2:150;
+          reconsider n as Element of NAT by ORDINAL1:def 13;
          reconsider w as FinSequence;
          take z = p..(n+1,w);
          thus y = {} & z = x or y <> {} &
@@ -325,9 +326,10 @@ A17:  T2.{} = x & for n st n < len p holds T2|<*n*> = p.(n+1);
          now let q be FinSequence of NAT; assume
 A18:     q in dom T1;
            now assume q <> {};
-        then consider s being FinSequence of NAT, n being Element of NAT
+        then consider s being FinSequence of NAT, n being Nat
         such that
 A19:       q = <*n*>^s by FINSEQ_2:150;
+          reconsider n as Element of NAT by ORDINAL1:def 13;
 A20:       <*n*> in dom T1 & n < len doms q1 & len doms q1 = len p
           by A14,A18,A19,TREES_1:46,TREES_3:40,51;
 then A21:       T1|<*n*> = p.(n+1) & T2|<*n*> = p.(n+1) by A15,A17;
@@ -440,7 +442,7 @@ A1:  x-tree p = y-tree q;
     then doms p = doms q & dom p = dom doms p & dom doms q = dom q
      by A1,TREES_3:39,53;
 then A2:  len p = len q by FINSEQ_3:31;
-        now let i; assume
+        now let i be Nat; assume
 A3:    i >= 1 & i <= len p; then consider n be Nat such that
 A4:    i = 1+n by NAT_1:10;
        reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -546,14 +548,14 @@ A1:  dom (x-flat_tree <*y*>) = elementary_tree len <*y*> by Def3
                       .= elementary_tree 1 by FINSEQ_1:57;
 A2:  dom ((elementary_tree 1) --> x) = elementary_tree 1 &
     dom root-tree y = elementary_tree 0 & <*0*> in elementary_tree 1
-     by FUNCOP_1:19,TREES_1:88,TARSKI:def 2;
+     by FUNCOP_1:19,TARSKI:def 2,TREES_1:88;
 then A3:  dom T = elementary_tree 1 with-replacement (<*0*>, elementary_tree 0)
        by TREES_2:def 12
          .= elementary_tree 1 by TREES_3:61,70;
         now let z; assume
           z in elementary_tree 1;
 then A4:    (z = {} or z = <*0*>) & {} in elementary_tree 1 &
-      <*0*> in elementary_tree 1 by TREES_1:88,TARSKI:def 2;
+      <*0*> in elementary_tree 1 by TARSKI:def 2,TREES_1:88;
 A5:    not <*0*> is_a_prefix_of {} & len <*y*> = 1 & 0 < 1 & <*y*>.1 = y
        by FINSEQ_1:57,XBOOLE_1:3;
       then (x-flat_tree <*y*>).{} = x & T.{} = ((elementary_tree 1) --> x).{}
@@ -577,7 +579,7 @@ A1:  dom (x-tree <*T*>) = tree(doms <*T*>) by Th10
       .= W by TREES_3:61;
 A2:  dom ((elementary_tree 1) --> x) = elementary_tree 1 by FUNCOP_1:19;
    reconsider t1 = {}, t2 = <*0*> as Element of elementary_tree 1
-     by TREES_1:88,TARSKI:def 2;   t2 = t2;
+     by TARSKI:def 2,TREES_1:88;   t2 = t2;
 then A3:  dom D = W by A2,TREES_2:def 12;
 A4:  {} in dom T & <*0*>^{} = <*0*> & not <*0*> is_a_proper_prefix_of {} &
     {} NAT = {} by FINSEQ_1:47,TREES_1:47,XBOOLE_1:115;
@@ -586,7 +588,7 @@ A4:  {} in dom T & <*0*>^{} = <*0*> & not <*0*> is_a_proper_prefix_of {} &
           q in elementary_tree 1 or ex v st v in dom T & q = t2^v
        by TREES_1:def 12;
 then A5:   q = {} or q = t2 & t2 = t2^t1 or
-      ex v st v in dom T & q = <*0*>^v by FINSEQ_1:47,TREES_1:88,TARSKI:def 2;
+      ex v st v in dom T & q = <*0*>^v by FINSEQ_1:47,TARSKI:def 2,TREES_1:88;
        not t2 is_a_prefix_of t1 by XBOOLE_1:3;
 then A6:   D.{} = ((elementary_tree 1)-->x).t1 by A2,TREES_3:48
            .= x by FUNCOP_1:13 .= (x-tree <*T*>).{} by Def4;
@@ -646,8 +648,9 @@ A2:   tree(doms p) = dom T & tree(doms p)-level 1 = {<*n*>: n < len doms p} &
      for n st n < len p holds T|<*n*> = p.(n+1)
       by Def4,Th10,TREES_3:40,52;
          now assume y <> {};
-      then consider q being FinSequence of NAT, n such that
+      then consider q being FinSequence of NAT, n being Nat such that
 A3:     y = <*n*>^q by FINSEQ_2:150;
+          reconsider n as Element of NAT by ORDINAL1:def 13;
            <*n*> in dom T & len <*n*> = 1 by A3,FINSEQ_1:57,TREES_1:46;
 then A4:     q in (dom T)|<*n*> & <*n*> in (dom T)-level 1 &
        dom (T|<*n*>) = (dom T)|<*n*> by A3,TREES_1:def 9,TREES_2:def 11
@@ -1093,7 +1096,7 @@ A2:  for i st i in dom p for T st T = p.i holds p1.i = T`1;
 A3:  len doms p = len p & len doms p1 = len p1 & len p = len p1
      by A1,FINSEQ_3:31,TREES_3:40;
 then A4:  dom doms p = dom doms p1 & dom doms p = dom p by FINSEQ_3:31;
-        now let i; assume
+        now let i be Nat; assume
 A5:    i in dom p;
      then reconsider T = p.i as Element of F by Lm1;
           p1.i = T`1 by A2,A5;
@@ -1138,7 +1141,7 @@ A3:  len doms p = len p & len doms p2 = len p2 & len p = len p2
      by A1,FINSEQ_3:31,TREES_3:40;
 then A4: dom doms p = dom doms p2 & dom doms p = dom p by FINSEQ_3:31;
 
-        now let i; assume
+        now let i be Nat; assume
 A5:    i in dom p;
      then reconsider T = p.i as Element of F by Lm1;
           p2.i = T`2 by A2,A5;
@@ -1178,14 +1181,14 @@ theorem Th29:
    let p be FinSequence of F;
 A1:Seg len p = dom p by FINSEQ_1:def 3;
     defpred X[set,set] means ex T being Element of F st T = p.$1 & $2 = T`1;
-A2: for i st i in Seg len p ex x being Element of Trees D1 st X[i,x]
-    proof let i; assume i in Seg len p;
+A2: for i be Nat st i in Seg len p ex x being Element of Trees D1 st X[i,x]
+    proof let i be Nat; assume i in Seg len p;
      then reconsider T = p.i as Element of F by A1,Lm1;
      reconsider y = T`1 as Element of Trees D1 by TREES_3:def 7;
      take y, T; thus T = p.i & y = T`1;
     end;
    consider p1 being FinSequence of Trees D1 such that
-A3:  dom p1 = Seg len p & for i st i in Seg len p holds X[i,p1.i]
+A3:  dom p1 = Seg len p & for i be Nat st i in Seg len p holds X[i,p1.i]
      from FINSEQ_1:sch 5(A2);
    take p1; thus
 A4:  dom p1 = dom p by A3,FINSEQ_1:def 3;
@@ -1206,16 +1209,16 @@ theorem Th30:
   proof let D1,D2, d1,d2, F;
    let p be FinSequence of F;
 A1:Seg len p = dom p by FINSEQ_1:def 3;
-     defpred X[Element of NAT,set] means
+     defpred X[Nat,set] means
        ex T being Element of F st T = p.$1 & $2 = T`2;
-A2: for i st i in Seg len p ex x being Element of Trees D2 st X[i,x]
-    proof let i; assume i in Seg len p;
+A2: for i be Nat st i in Seg len p ex x being Element of Trees D2 st X[i,x]
+    proof let i be Nat; assume i in Seg len p;
      then reconsider T = p.i as Element of F by A1,Lm1;
      reconsider y = T`2 as Element of Trees D2 by TREES_3:def 7;
      take y, T; thus T = p.i & y = T`2;
     end;
    consider p2 being FinSequence of Trees D2 such that
-A3:  dom p2 = Seg len p & for i st i in Seg len p holds X[i,p2.i]
+A3:  dom p2 = Seg len p & for i be Nat st i in Seg len p holds X[i,p2.i]
      from FINSEQ_1:sch 5(A2);
    take p2; thus
 A4:  dom p2 = dom p by A3,FINSEQ_1:def 3;

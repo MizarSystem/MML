@@ -2,13 +2,14 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
@@ -18,7 +19,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="INT_1"/>
@@ -37,24 +37,24 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="67"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="31" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="32" value="false"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="48"/>
-<Adjective nr="50"/>
-<Adjective nr="58"/>
+<Adjective nr="40"/>
+<Adjective nr="49"/>
+<Adjective nr="51"/>
 <Adjective nr="59"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
+<Adjective nr="62"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -63,18 +63,18 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="62">
-<LocusVar nr="1"/>
-</Adjective>
+<Adjective nr="40"/>
 <Adjective nr="63">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="68">
+<Adjective nr="64">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -88,17 +88,17 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="65"/>
+<Adjective nr="66"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="164">
+<Func kind="K" nr="160">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="65"/>
-<Adjective nr="67"/>
+<Adjective nr="66"/>
+<Adjective nr="68"/>
 </Cluster>
 </CCluster>
 </Registrations>

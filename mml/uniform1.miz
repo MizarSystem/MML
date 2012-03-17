@@ -9,12 +9,12 @@ environ
  vocabularies ARYTM_1, ARYTM_3, METRIC_1, PRE_TOPC, FINSEQ_4, PCOMPS_1,
       ORDINAL2, RELAT_1, FUNCT_1, BOOLE, SETFAM_1, COMPTS_1, FINSET_1, TARSKI,
       SUBSET_1, TOPMETR, BORSUK_1, EUCLID, INT_1, FINSEQ_1, ABSVALUE, RCOMP_1,
-      SEQM_3, TBSP_1, SQUARE_1, LATTICES, UNIFORM1, HAHNBAN, ARYTM, NAT_1;
+      SEQM_3, TBSP_1, SQUARE_1, LATTICES, UNIFORM1, HAHNBAN, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       SETFAM_1, COMPLEX1, REAL_1, NAT_1, ORDINAL1, INT_1, BINARITH, RCOMP_1,
-      FINSEQ_1, FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_4, STRUCT_0, TOPMETR,
-      PRE_TOPC, TOPS_2, COMPTS_1, EUCLID, FINSET_1, TBSP_1, METRIC_1, PCOMPS_1,
-      GOBOARD1, SQUARE_1;
+      FUNCT_1, PARTFUN1, FINSEQ_1, RELSET_1, FUNCT_2, FINSEQ_4, STRUCT_0,
+      TOPMETR, PRE_TOPC, TOPS_2, COMPTS_1, EUCLID, FINSET_1, TBSP_1, METRIC_1,
+      PCOMPS_1, GOBOARD1, SQUARE_1;
  constructors SETFAM_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, RCOMP_1, FINSEQ_4,
       BINARITH, TOPS_2, COMPTS_1, TBSP_1, TOPMETR, GOBOARD1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
@@ -27,7 +27,7 @@ environ
       SQUARE_1, PRE_TOPC, TOPS_2, FINSEQ_4, GOBOARD6, PCOMPS_1, SETFAM_1,
       SUBSET_1, COMPTS_1, SEQ_4, HEINE, INT_1, JORDAN2B, GOBOARD1, XBOOLE_0,
       XBOOLE_1, XREAL_0, FINSEQ_2, XCMPLX_1, FINSET_1, XREAL_1, BINARITH,
-      XXREAL_0;
+      XXREAL_0, PARTFUN1;
  schemes FUNCT_2, DOMAIN_1, SUBSET_1, FINSEQ_1, NAT_1;
 
 begin :: 1. Lebesgue's Covering Lemma
@@ -68,10 +68,10 @@ f being Function of X,TopSpaceMetr(M)
     proof let r be Real,u be Element of
       the carrier of M,P be Subset of TopSpaceMetr(M);
       reconsider P'=P as Subset of TopSpaceMetr(M);
-A:    [#]TopSpaceMetr M <> {};
+A2:    [#]TopSpaceMetr M <> {};
       assume P=Ball(u,r);
       then P' is open by TOPMETR:21;
-      hence f"P is open by A,A1,TOPS_2:55;
+      hence f"P is open by A1,A2,TOPS_2:55;
     end;
  end;
 
@@ -540,8 +540,7 @@ end;
 
 Lm1: Closed-Interval-TSpace(0,1)=TopSpaceMetr(Closed-Interval-MSpace(0,1))
                         by TOPMETR:def 8;
-Lm2: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,
-def 8;
+Lm2: I[01]=TopSpaceMetr(Closed-Interval-MSpace(0,1)) by TOPMETR:27,def 8;
 Lm3:the carrier of I[01]=the carrier of Closed-Interval-MSpace(0,1)
                       by Lm1,TOPMETR:16,27;
 
@@ -686,8 +685,8 @@ proof let f be FinSequence of REAL;
   then j-'(i+1)=j-(i+1) by BINARITH:50;
   then i+(1+(j-'(i+1))) = j;
  then A14:f/.i<f/.j by A4,A13;
-      f/.i=f.i by A2,FINSEQ_4:def 4;
- hence f.i<f.j by A2,A14,FINSEQ_4:def 4;
+      f/.i=f.i by A2,PARTFUN1:def 8;
+ hence f.i<f.j by A2,A14,PARTFUN1:def 8;
  end;
  hence i in dom f & j in dom f & i<j implies f.i<f.j;
  end;
@@ -726,8 +725,8 @@ proof let f be FinSequence of REAL;
   then j-'(i+1)=j-(i+1) by BINARITH:50;
   then i+(1+(j-'(i+1)))= j;
  then A14:f/.i>f/.j by A4,A13;
-      f/.i=f.i by A2,FINSEQ_4:def 4;
- hence f.i>f.j by A2,A14,FINSEQ_4:def 4;
+      f/.i=f.i by A2,PARTFUN1:def 8;
+ hence f.i>f.j by A2,A14,PARTFUN1:def 8;
  end;
  hence i in dom f & j in dom f & i<j implies f.i>f.j;
  end;
@@ -788,12 +787,12 @@ proof let e be Real,g be Function of I[01],TOP-REAL n,
            2/s-j<=0 by A16,REAL_2:106;
       then 1+(2/s-j)<=1+0 by XREAL_1:8;
       then A21: s/2*(1+(2/s-j))<=s/2*1 by A15,XREAL_1:66;
-    defpred P[Element of NAT,set] means $2=s/2*($1-1);
-    A22:for k being Element of NAT,y1,y2 being set st
+    defpred P[Nat,set] means $2=s/2*($1-1);
+    A22:for k being Nat,y1,y2 being set st
     k in Seg j &  P[k,y1]& P[k,y2] holds y1=y2;
-    A23:for k being Element of NAT st k in Seg j ex x st P[k,x];
+    A23:for k being Nat st k in Seg j ex x st P[k,x];
     consider p being FinSequence such that
-     A24: dom p = Seg j & for k being Element of NAT st k in Seg j holds
+     A24: dom p = Seg j & for k being Nat st k in Seg j holds
      P[k,p.k] from FINSEQ_1:sch 1(A22,A23);
     A25:p.1=s/2*(1-1) by A19,A24 .=0;
     A26: Seg len p=Seg j by A24,FINSEQ_1:def 3;
@@ -1049,13 +1048,12 @@ proof let e be Real,g be Function of I[01], (TOP-REAL n),
            2/s-j<=0 by A16,REAL_2:106;
       then 1+(2/s-j)<=1+0 by XREAL_1:8;
       then A21: s/2*(1+(2/s-j))<=s/2*1 by A15,XREAL_1:66;
-    defpred P[Element of NAT,set] means $2=1-s/2*($1-1);
-    A22:for k being Element of NAT,y1,y2 being set st
+    defpred P[Nat,set] means $2=1-s/2*($1-1);
+    A22:for k being Nat,y1,y2 being set st
     k in Seg j & P[k,y1] & P[k,y2]  holds y1=y2;
-    A23:for k being Element of NAT st k in Seg j
-    ex x st P[k,x];
+    A23:for k being Nat st k in Seg j ex x st P[k,x];
     consider p being FinSequence such that
-     A24: dom p = Seg j & for k being Element of NAT st k in Seg j holds
+     A24: dom p = Seg j & for k being Nat st k in Seg j holds
       P[k,p.k] from FINSEQ_1:sch 1(A22,A23);
     A25:p.1=1-s/2*(1-1) by A19,A24 .=1;
     A26: Seg len p=Seg j by A24,FINSEQ_1:def 3;

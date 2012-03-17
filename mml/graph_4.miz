@@ -7,19 +7,19 @@
 environ
 
  vocabularies FINSEQ_1, GRAPH_1, ARYTM_1, FUNCT_1, ORDERS_1, BOOLE, GRAPH_2,
-      RELAT_1, FINSET_1, CARD_1, FINSEQ_2, GRAPH_4, FINSEQ_4, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, CARD_1, FINSET_1, NUMBERS, XCMPLX_0, NAT_1, GRAPH_1, GRAPH_2,
-      BINARITH, XXREAL_0;
+      RELAT_1, FINSET_1, CARD_1, FINSEQ_2, GRAPH_4, FINSEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, CARD_1, FINSET_1, NUMBERS, XCMPLX_0, NAT_1, GRAPH_1,
+      GRAPH_2, BINARITH, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, XREAL_0, NAT_1, RECDEF_1, FINSEQ_4, BINARITH,
       GRAPH_2;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ARYTM_3, XXREAL_0, XREAL_0, NAT_1,
-      FINSEQ_1, GRAPH_2;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
+      GRAPH_2, ORDINAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FINSEQ_2;
  theorems TARSKI, NAT_1, REAL_1, FINSEQ_1, FINSEQ_2, GRAPH_1, RELAT_1, FUNCT_1,
       GRFUNC_1, FUNCT_2, BINARITH, REAL_2, FINSET_1, FINSEQ_3, FINSEQ_4,
-      GRAPH_2, XBOOLE_0, XBOOLE_1, XREAL_1, CARD_1, XXREAL_0;
+      GRAPH_2, XBOOLE_0, XBOOLE_1, XREAL_1, CARD_1, XXREAL_0, ORDINAL1;
  schemes NAT_1, FINSEQ_1, FUNCT_1;
 
 begin   ::Oriented vertex sequences and V-sets
@@ -196,8 +196,7 @@ A4: 1<=x & x<=len vs by A3,FINSEQ_3:27;
 A5:  x<=len c;
 then A6: 1<=x+1 & x+1<=len vs & x<=len vs by A2,NAT_1:12,XREAL_1:9;
         x in dom c by A4,A5,FINSEQ_3:27;
-    then c.x in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def
-5
+    then c.x in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5
 ;
     then reconsider e = c.x as Element of the Edges of G;
    set v1 = vs/.x; set v2 = vs/.(x+1);
@@ -214,8 +213,7 @@ A9:  x=len c+1; set l = len c;
         l <> 0 by A1,FINSEQ_1:25; then 0<l & 0+1=1;
 then A10:  1<=l & l<=l+1 by NAT_1:13;
     then l in dom c by FINSEQ_3:27;
-    then c.l in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def
-5
+    then c.l in rng c & rng c c= the Edges of G by FINSEQ_1:def 4,FUNCT_1:def 5
 ;
     then reconsider e = c.l as Element of the Edges of G;
    set v1 = vs/.l; set v2 = vs/.(l+1);
@@ -243,13 +241,13 @@ theorem Th10:  ex vs st vs is_oriented_vertex_seq_of c
 proof
      now per cases;
  case c <>{}; then A1:len c <>0 by FINSEQ_1:25;
-  defpred P[Element of NAT,set] means
+  defpred P[Nat,set] means
   (($1=len c+1 implies $2=(the Target of G).(c.len c)) &
   ($1<>len c+1 implies $2=(the Source of G).(c.$1)));
-  A2:  for k,y1,y2 st k in Seg (len c +1) & P[k,y1] & P[k,y2]
+  A2:  for k be Nat,y1,y2 st k in Seg (len c +1) & P[k,y1] & P[k,y2]
    holds y1=y2;
-  A3:for k st k in Seg (len c+1) ex x being set st P[k,x]
-  proof let k;assume k in Seg (len c+1);
+  A3:for k be Nat st k in Seg (len c+1) ex x being set st P[k,x]
+  proof let k be Nat;assume k in Seg (len c+1);
         now per cases;
     case k=len c+1;
      hence ex x being set st
@@ -266,10 +264,10 @@ proof
   ((k=len c+1 implies x=(the Target of G).(c.len c)) &
   (k<>len c+1 implies x=(the Source of G).(c.k)));
   end;
-    ex p st dom p = Seg (len c+1) & for k st k in Seg (len c+1) holds
+    ex p st dom p = Seg (len c+1) & for k be Nat st k in Seg (len c+1) holds
   P[k,p.k] from FINSEQ_1:sch 1(A2,A3);
   then consider p such that
-  A4: dom p = Seg (len c+1) & for k st k in Seg (len c+1) holds
+  A4: dom p = Seg (len c+1) & for k be Nat st k in Seg (len c+1) holds
   ((k=len c+1 implies p.k=(the Target of G).(c.len c)) &
   (k<>len c+1 implies p.k=(the Source of G).(c.k)));
   A5: len p=len c+1 by A4,FINSEQ_1:def 3;
@@ -361,39 +359,40 @@ A1: c <>{} & vs1 is_oriented_vertex_seq_of c &
    A3:   len vs2 = len c + 1 &
       for n st 1<=n & n<=len c holds c.n orientedly_joins vs2/.n, vs2/.(n+1)
                                  by A1,Def5;
-          for n st 1<=n & n<=len vs1 holds vs1.n=vs2.n
-      proof let n;assume A4:1<=n & n<=len vs1;
+          for n be Nat st 1<=n & n<=len vs1 holds vs1.n=vs2.n
+      proof let n be Nat;assume A4:1<=n & n<=len vs1;
         then A5:n<=len c +1 by A1,Def5;
+A6:     n in NAT by ORDINAL1:def 13;
         per cases;
         suppose n<len c +1;
-          then A6:n<=len c by NAT_1:13;
-          then c.n orientedly_joins vs1/.n, vs1/.(n+1) by A1,A4,Def5;
-          then A7:(the Source of G).(c.n) = vs1/.n
+          then A7:n<=len c by NAT_1:13;
+          then c.n orientedly_joins vs1/.n, vs1/.(n+1) by A1,A4,A6,Def5;
+          then A8:(the Source of G).(c.n) = vs1/.n
           & (the Target of G).(c.n) = vs1/.(n+1) by Def1;
-              c.n orientedly_joins vs2/.n, vs2/.(n+1) by A1,A4,A6,Def5;
-          then A8:(the Source of G).(c.n) = vs2/.n
+              c.n orientedly_joins vs2/.n, vs2/.(n+1) by A1,A4,A6,A7,Def5;
+          then A9:(the Source of G).(c.n) = vs2/.n
           & (the Target of G).(c.n) = vs2/.(n+1) by Def1;
-              vs1.n=vs1/.n by A4,FINSEQ_4:24;
-         hence thesis by A2,A3,A4,A7,A8,FINSEQ_4:24;
+              vs1.n=vs1/.n by A4,A6,FINSEQ_4:24;
+         hence thesis by A2,A3,A4,A6,A8,A9,FINSEQ_4:24;
         end;
         suppose n>=len c+1;
-          then A9: n=len c+1 by A5,XXREAL_0:1;
-          then A10:n-1=len c;
+          then A10: n=len c+1 by A5,XXREAL_0:1;
+          then A11:n-1=len c;
               0<>len c by A1,FINSEQ_1:25;
           then 0<len c;
-then A11:       0+1<=len c by NAT_1:13;
-          then A12:n-1=n-'1 by A9,BINARITH:57;
-          A13:1<=n-'1 & n-'1=len c by A10,A11,BINARITH:57;
+then A12:       0+1<=len c by NAT_1:13;
+          then A13:n-1=n-'1 by A10,BINARITH:57;
+          A14:1<=n-'1 & n-'1=len c by A11,A12,BINARITH:57;
           then c.(n-'1) orientedly_joins vs1/.(n-'1), vs1/.((n-'1)+1)
                                     by A1,Def5;
-          then A14:(the Source of G).(c.(n-'1)) = vs1/.(n-'1)
+          then A15:(the Source of G).(c.(n-'1)) = vs1/.(n-'1)
           & (the Target of G).(c.(n-'1)) = vs1/.((n-'1)+1) by Def1;
               c.(n-'1) orientedly_joins vs2/.(n-'1), vs2/.((n-'1)+1)
-                                    by A1,A13,Def5;
-          then A15:(the Source of G).(c.(n-'1)) = vs2/.(n-'1)
+                                    by A1,A14,Def5;
+          then A16:(the Source of G).(c.(n-'1)) = vs2/.(n-'1)
           & (the Target of G).(c.(n-'1)) = vs2/.((n-'1)+1) by Def1;
-              vs1.n=vs1/.n by A4,FINSEQ_4:24;
-         hence thesis by A2,A3,A4,A12,A14,A15,FINSEQ_4:24;
+              vs1.n=vs1/.n by A4,A6,FINSEQ_4:24;
+         hence thesis by A2,A3,A4,A13,A15,A16,FINSEQ_4:24;
       end;
       end;
   hence thesis by A2,A3,FINSEQ_1:18;
@@ -495,7 +494,7 @@ A1: 1<=m & m<=n & n<=len c; assume
 A2: c1 = (m,n)-cut c; assume
 A3: vs is_oriented_vertex_seq_of c & vs1 = (m,n+1)-cut vs;
 then A4: len vs = len c + 1 by Def5;
-then A5: m<=n+1 & n+1<=len vs by A1,XREAL_1:8,NAT_1:12;
+then A5: m<=n+1 & n+1<=len vs by A1,NAT_1:12,XREAL_1:8;
 A6: len c1 +m= n+1 by A1,A2,GRAPH_2:def 1;
      len vs1 +m = n+1+1 by A1,A3,A5,GRAPH_2:def 1;
 hence A7: len vs1 = len c1 + 1 by A6;
@@ -505,7 +504,7 @@ A9:  0<=j & j<len c1 & k=j+1 by A8,GRAPH_2:1;
      set i = m+j; set v1 = vs/.i; set v2 = vs/.(i+1);
          m+k<=len c1 +m by A8,XREAL_1:9;
      then m+j+1-1<=len c1 +m-1 by A9,XREAL_1:11;
-then A10:  1<=i & i<=len c by A1,A6,XXREAL_0:2,NAT_1:12;
+then A10:  1<=i & i<=len c by A1,A6,NAT_1:12,XXREAL_0:2;
 then A11:  c.i orientedly_joins v1, v2 by A3,Def5;
           j<len vs1 by A7,A9,NAT_1:13;
 then A12: vs1.k = vs.i by A1,A3,A5,A9,GRAPH_2:def 1;
@@ -548,16 +547,17 @@ then A9:   q.n = c1.n by FINSEQ_1:def 7;
 A10:   1<=n & n<=len c1 by A8,FINSEQ_3:27;
 then A11:   c1.n orientedly_joins v1, v2 by A1,Def5;
      A12:   n<=len vs1 by A3,A10,NAT_1:12;
-         1<=n+1 & n+1<=len c1+1 by A10,XREAL_1:8,NAT_1:12;
+         1<=n+1 & n+1<=len c1+1 by A10,NAT_1:12,XREAL_1:8;
 then A13:  1<=n+1 & n+1<=len vs1 by A1,Def5;
 then A14:  vs1/.n=vs1.n & vs1/.(n+1)=vs1.(n+1) by A10,A12,FINSEQ_4:24;
          p.n = vs1.n & p.(n+1) = vs1.(n+1) by A10,A12,A13,GRAPH_2:14;
     hence ex v1, v2 being Element of the Vertices of G st
       v1 = p.n & v2 = p.(n+1) & q.n orientedly_joins v1, v2 by A9,A11,A14;
     end;
-    case ex k being Element of NAT st k in dom c2 & n=len c1 + k;
-     then consider k being Element of NAT such that
+    case ex k being Nat st k in dom c2 & n=len c1 + k;
+     then consider k being Nat such that
 A15:   k in dom c2 & n = len c1 + k;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
 A16:   q.n = c2.k by A15,FINSEQ_1:def 7;
 A17:   1<=k & k<=len c2 by A15,FINSEQ_3:27;
 then A18:  1<=k+1 & k<=len vs2 & k+1<=len vs2 by A3,NAT_1:12,XREAL_1:9;
@@ -599,20 +599,20 @@ then A31:   q.(n+1) = c1.(n+1) by FINSEQ_1:def 7;
 A32:   1<=n+1 & n+1<=len c1 by A30,FINSEQ_3:27;
 then A33:   c1.(n+1) orientedly_joins v2', v3 by A1,Def5;
      A34:   n+1<=len vs1 by A3,A32,NAT_1:12;
-         1<=n+1+1 & n+1+1<=len c1+1 by A32,XREAL_1:8,NAT_1:12;
+         1<=n+1+1 & n+1+1<=len c1+1 by A32,NAT_1:12,XREAL_1:8;
 then A35:  1<=n+1+1 & n+1+1<=len vs1 by A1,Def5;
 then A36:  vs1/.(n+1)=vs1.(n+1) &
       vs1/.(n+1+1)=vs1.(n+1+1) by A32,A34,FINSEQ_4:24;
-         p.(n+1) = vs1.(n+1) & p.(n+1+1) = vs1.(n+1+1) by A32,A34,A35,GRAPH_2:
-14
-;
+         p.(n+1) = vs1.(n+1) & p.(n+1+1) = vs1.(n+1+1) by A32,A34,A35,
+GRAPH_2:14;
     hence ex v2'',v3' being Element of the Vertices of G st
            v2'' = p.(n+1) & v3' = p.(n+1+1)
            & q.(n+1) orientedly_joins v2'', v3' by A31,A33,A36;
     end;
-    case ex k being Element of NAT st k in dom c2 & (n+1)=len c1 + k;
-     then consider k being Element of NAT such that
+    case ex k being Nat st k in dom c2 & (n+1)=len c1 + k;
+     then consider k being Nat such that
 A37:   k in dom c2 & (n+1) = len c1 + k;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
 A38:   q.(n+1) = c2.k by A37,FINSEQ_1:def 7;
 A39:   1<=k & k<=len c2 by A37,FINSEQ_3:27;
 then A40:  1<=k+1 & k<=len vs2 & k+1<=len vs2 by A3,NAT_1:12,XREAL_1:9;
@@ -683,16 +683,17 @@ A9:   n in dom c1;
 A10:   1<=n & n<=len c1 by A9,FINSEQ_3:27;
 then A11:   c1.n orientedly_joins v1, v2 by A1,Def5;
      A12:   n<=len vs1 by A3,A10,NAT_1:12;
-         1<=n+1 & n+1<=len c1+1 by A10,XREAL_1:8,NAT_1:12;
+         1<=n+1 & n+1<=len c1+1 by A10,NAT_1:12,XREAL_1:8;
 then A13:  1<=n+1 & n+1<=len vs1 by A1,Def5;
 then A14:  vs1/.n=vs1.n & vs1/.(n+1)=vs1.(n+1) by A10,A12,FINSEQ_4:24;
          p.n = vs1.n & p.(n+1) = vs1.(n+1) by A10,A12,A13,GRAPH_2:14;
     hence q.n orientedly_joins p/.n, p/.(n+1)
       by A7,A9,A11,A14,FINSEQ_1:def 7;
     end;
-    suppose ex k being Element of NAT st k in dom c2 & n=len c1 + k;
-     then consider k being Element of NAT such that
+    suppose ex k being Nat st k in dom c2 & n=len c1 + k;
+     then consider k being Nat such that
 A15:   k in dom c2 & n = len c1 + k;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
 A16:   q.n = c2.k by A15,FINSEQ_1:def 7;
 A17:   1<=k & k<=len c2 by A15,FINSEQ_3:27;
 then 1<=k+1 & k<=len vs2 & k+1<=len vs2 by A3,NAT_1:12,XREAL_1:9;
@@ -749,7 +750,7 @@ existence
          for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
      proof
       let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
-       then 1<m & m<=1 by XXREAL_0:2,FINSEQ_1:56;
+       then 1<m & m<=1 by FINSEQ_1:56,XXREAL_0:2;
       hence n =1 & m = len p;
      end;
      then q is Simple by A1,Def7;
@@ -769,7 +770,7 @@ existence
          for n,m st 1<=n & n<m & m<=len p & p.n=p.m holds n=1 & m=len p
      proof
       let n,m; assume 1<=n & n<m & m<=len p & p.n = p.m;
-       then 1<m & m<=1 by XXREAL_0:2,FINSEQ_1:56;
+       then 1<m & m<=1 by FINSEQ_1:56,XXREAL_0:2;
       hence n =1 & m = len p;
      end;
      then q' is simple by A1,GRAPH_2:def 10;
@@ -882,7 +883,7 @@ then A9: 1+1-1<=n-1 by XREAL_1:11;
 A11: 1<=n1+1 by NAT_1:12;
 A12:   m < len vs by A2,A8,REAL_1:def 5;
 then A13:  m<=len c by A3,NAT_1:13;
-A14: 1<=m & m<=len c & len c <=len c by A2,A3,A12,XXREAL_0:2,NAT_1:13;
+A14: 1<=m & m<=len c & len c <=len c by A2,A3,A12,NAT_1:13,XXREAL_0:2;
    reconsider c1 = (1,n1)-cut c as oriented Chain of G by A6,A9,A10,Th13;
    reconsider c2 = (m,len c)-cut c as oriented Chain of G by A14,Th13;
    set pp = (1,n)-cut vs; set p2 = (m,len c+1)-cut vs;
@@ -1091,8 +1092,8 @@ then A95:   x in dom (fc*SR) by A67,A92,FUNCT_1:21;
  0+1<=k by A90,FINSEQ_3:27;
       then consider i being Element of NAT such that
 A96:   0<=i & i<len c2 & k=i+1 by A91,GRAPH_2:1;
-          (fc*SR).x = fc.(m1+k) by A93,A95,FUNCT_1:22 .= c.(m+i) by A67,A93
-,A94,GRFUNC_1:8,A96
+          (fc*SR).x = fc.(m1+k) by A93,A95,FUNCT_1:22 .= c.(m+i) by A67,A93,A94
+,A96,GRFUNC_1:8
         .= y by A14,A90,A96,GRAPH_2:def 1;
       hence p in fc*(Sgm DR) by A89,A95,FUNCT_1:8;
      end; assume
@@ -1107,8 +1108,7 @@ then A103:   m1+k=SR.k by A21,A22,A24,GRAPH_2:5;   0+1<=k by A100,FINSEQ_3:27;
      then consider i being Element of NAT such that
 A104:   0<=i & i<len c2 & k=i+1 by A102,GRAPH_2:1;
          c2.k = c.(m1+1+i) by A14,A104,GRAPH_2:def 1
-         .= fc.(SR.k) by A104,A100,A103,GRFUNC_1:8 .= y by
-A99,A100,FUNCT_1:23;
+         .= fc.(SR.k) by A100,A103,A104,GRFUNC_1:8 .= y by A99,A100,FUNCT_1:23;
      hence p in c2 by A98,A101,FUNCT_1:8;
     end;
 then A105: c2 = fc*(Sgm DR) by TARSKI:2;
@@ -1167,7 +1167,7 @@ A118:  m+1+lp22 = m+((lp21 -1)+1)
             .= len c +1;
 then A119:  card DR = lp22 + 1 by A3,GRAPH_2:4
         .= lp21;
-A120:  1<=m+1 & m+1<=len c +1+1 by A16,XREAL_1:8,NAT_1:12;
+A120:  1<=m+1 & m+1<=len c +1+1 by A16,NAT_1:12,XREAL_1:8;
          A121: len p2 +m = len c +1+1 by A16,GRAPH_2:def 1
      .= len p2' +(m+1) by A16,A120,Lm2
      .= (len p2'+1)+m;
@@ -1234,8 +1234,7 @@ FINSEQ_3:27;
       then consider i being Element of NAT such that
 A157:   0<=i & i<len p2' & k=i+1 by A152,GRAPH_2:1;
           (fvs*SR).x = fvs.(m+k) by A154,A156,FUNCT_1:22 .= vs.(m+1+i) by A126
-,
-A154,A155,GRFUNC_1:8,A157 .= y by A3,A148,A151,A157,Lm2;
+,A154,A155,A157,GRFUNC_1:8 .= y by A3,A148,A151,A157,Lm2;
       hence p in fvs*(Sgm DR) by A150,A156,FUNCT_1:8;
      end; assume
 A158:  p in fvs*(Sgm DR); then consider x,y being set such that
@@ -1250,8 +1249,8 @@ FINSEQ_3:27;
      then consider i being Element of NAT such that
 A165:   0<=i & i<len p2' & k=i+1 by A163,GRAPH_2:1;
          p2'.k = vs.(m+1+i) by A3,A148,A165,Lm2
-         .= fvs.(SR.k) by A165,A161,A164,GRFUNC_1:8 .= y by
-A160,A161,FUNCT_1:23;
+         .= fvs.(SR.k) by A161,A164,A165,GRFUNC_1:8 .= y by A160,A161,
+FUNCT_1:23;
      hence p in p2' by A159,A162,FUNCT_1:8;
     end;
 then A166: p2' = fvs*(Sgm DR) by TARSKI:2;
@@ -1263,7 +1262,7 @@ A167: n=1 & m <> len vs;
      then A168: m < len vs by A2,REAL_1:def 5;
 then A169:  m<=len c by A3,NAT_1:13;
 A170:  1 < m by A2,XXREAL_0:2;
-A171: 1<=m & m<=len c & len c <=len c by A2,A3,A168,XXREAL_0:2,NAT_1:13;
+A171: 1<=m & m<=len c & len c <=len c by A2,A3,A168,NAT_1:13,XXREAL_0:2;
    reconsider c2 = (m,len c)-cut c as oriented Chain of G by A169,A170,Th13;
    set p2 = (m,len c+1)-cut vs;
 A172: p2 is_oriented_vertex_seq_of c2 by A1,A169,A170,Th14;
@@ -1369,8 +1368,8 @@ then A210:   x in dom (fc*SR) by A202,A207,FUNCT_1:21;   0+1<=k by A205,
 FINSEQ_3:27;
       then consider i being Element of NAT such that
 A211:   0<=i & i<len c2 & k=i+1 by A206,GRAPH_2:1;
-          (fc*SR).x = fc.(m1+k) by A208,A210,FUNCT_1:22 .= c.(m+i) by A202
-,A208,A209,GRFUNC_1:8,A211
+          (fc*SR).x = fc.(m1+k) by A208,A210,FUNCT_1:22 .= c.(m+i) by A202,A208
+,A209,A211,GRFUNC_1:8
         .= y by A2,A3,A167,A205,A211,Lm2;
       hence p in fc*(Sgm domfc) by A204,A210,FUNCT_1:8;
      end; assume
@@ -1381,14 +1380,13 @@ then A215:   x in dom SR & SR.x in dom fc by FUNCT_1:21;
       then reconsider k=x as Element of NAT;
 A216:   k in dom c2 by A200,A201,A215,FINSEQ_3:31;
 A217:   1<=k & k<=len c2 by A200,A201,A215,FINSEQ_3:27;
-then A218:   m1+k=SR.k by A189,A191,A192,GRAPH_2:5;   0+1<=k by A215,FINSEQ_3:
-27
+then A218:   m1+k=SR.k by A189,A191,A192,GRAPH_2:5;   0+1<=k by A215,
+FINSEQ_3:27
 ;
      then consider i being Element of NAT such that
 A219:   0<=i & i<len c2 & k=i+1 by A217,GRAPH_2:1;
          c2.k = c.(m1+1+i) by A2,A3,A167,A219,Lm2
-         .= fc.(SR.k) by A219,A215,A218,GRFUNC_1:8 .= y by A214,A215,FUNCT_1:
-23
+         .= fc.(SR.k) by A215,A218,A219,GRFUNC_1:8 .= y by A214,A215,FUNCT_1:23
 ;
      hence p in c2 by A213,A216,FUNCT_1:8;
     end;
@@ -1425,8 +1423,8 @@ then A234:   x in dom (fvs*SR) by A226,A231,FUNCT_1:21;   0+1<=k by A229,
 FINSEQ_3:27;
       then consider i being Element of NAT such that
 A235:   0<=i & i<len p2 & k=i+1 by A230,GRAPH_2:1;
-          (fvs*SR).x = fvs.(m1+k) by A232,A234,FUNCT_1:22 .= vs.(m+i) by A226,
-A232,A233,GRFUNC_1:8,A235
+          (fvs*SR).x = fvs.(m1+k) by A232,A234,FUNCT_1:22 .= vs.(m+i) by A226
+,A232,A233,A235,GRFUNC_1:8
         .= y by A193,A229,A235,Lm2;
       hence p in fvs*(Sgm domfvs) by A228,A234,FUNCT_1:8;
      end; assume
@@ -1442,7 +1440,7 @@ FINSEQ_3:27;
      then consider i being Element of NAT such that
 A243:   0<=i & i<len p2 & k=i+1 by A241,GRAPH_2:1;
          p2.k = vs.(m1+1+i) by A193,A243,Lm2
-        .= fvs.(SR.k) by A243,A239,A242,GRFUNC_1:8 .= y
+        .= fvs.(SR.k) by A239,A242,A243,GRFUNC_1:8 .= y
 by A238,A239,FUNCT_1:23
 ;
      hence p in p2 by A237,A240,FUNCT_1:8;
@@ -1469,8 +1467,8 @@ A251: dom fc = domfc and
 A252: for x st x in domfc holds fc.x = F(x) from FUNCT_1:sch 3;
     domfc c= Seg len c proof let x be set; assume x in domfc;
        then consider kk being Element of NAT such that
-A253:    x = kk & 1<=kk & kk<=n1;   1<=kk & kk<=len c by A6,A246,A253,XXREAL_0:
-2
+A253:    x = kk & 1<=kk & kk<=n1;   1<=kk & kk<=len c by A6,A246,A253,
+XXREAL_0:2
 ;
       hence x in Seg len c by A253,FINSEQ_1:3;
      end;
@@ -1546,8 +1544,8 @@ then A279:   x in dom (fc*SL)
 by A251,A276,A277,FUNCT_1:21;   0+1<=k by A274,FINSEQ_3:27;
       then consider i being Element of NAT such that
 A280:   0<=i & i<n1 & k=i+1 by A267,A275,GRAPH_2:1;
-          (fc*SL).x = fc.k by A277,A279,FUNCT_1:22 .= c.(1+i) by A251,A278
-,A280,GRFUNC_1:8
+          (fc*SL).x = fc.k by A277,A279,FUNCT_1:22 .= c.(1+i) by A251,A278,A280
+,GRFUNC_1:8
         .= y by A6,A246,A247,A267,A274,A280,Lm2;
       hence p in fc*(Sgm domfc) by A273,A279,FUNCT_1:8;
      end; assume
@@ -1594,8 +1592,8 @@ then A301:   x in dom (fvs*SL) by A259,A298,A299,FUNCT_1:21;   0+1<=
 k by A296,FINSEQ_3:27;
       then consider i being Element of NAT such that
 A302:   0<=i & i<n & k=i+1 by A250,A268,A297,GRAPH_2:1;
-          (fvs*SL).x = fvs.k by A299,A301,FUNCT_1:22 .= vs.(1+i) by A259,A300,
-A302,GRFUNC_1:8
+          (fvs*SL).x = fvs.k by A299,A301,FUNCT_1:22 .= vs.(1+i) by A259,A300
+,A302,GRFUNC_1:8
         .= y by A248,A250,A268,A296,A302,GRAPH_2:def 1;
       hence p in fvs*(Sgm domfvs) by A295,A301,FUNCT_1:8;
      end; assume
@@ -1722,7 +1720,7 @@ A2: vs is_oriented_vertex_seq_of sc &
 A3: len vs = len sc + 1 by A2,Def5; A4: m<=len sc by A1,XXREAL_0:2;
 A5: 1<=n by A1,XXREAL_0:2;
 A6: 1<=m & m<n & n<=len vs by A1,A3,NAT_1:12;
-A7: 1<=m+1 & m+1<n+1 & n+1<=len vs by A1,A3,XREAL_1:8,NAT_1:12;
+A7: 1<=m+1 & m+1<n+1 & n+1<=len vs by A1,A3,NAT_1:12,XREAL_1:8;
      then A8: 1<=m & m<n+1 & n+1<=len vs by A1,NAT_1:12;
  set v1 = vs/.m; set v2 = vs/.(m+1);
 A9: sc.m orientedly_joins v1, v2 by A1,A2,A4,Def5;

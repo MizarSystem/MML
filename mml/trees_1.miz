@@ -7,12 +7,12 @@
 environ
 
  vocabularies FUNCT_1, FINSEQ_1, RELAT_1, BOOLE, ARYTM_1, FINSET_1, CARD_1,
-      ZFMISC_1, TARSKI, ORDINAL2, TREES_1, NAT_1;
+      ZFMISC_1, TARSKI, ORDINAL2, TREES_1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, NAT_1, NUMBERS,
       ORDINAL1, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, CARD_1, XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
-      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
+      XXREAL_0, XREAL_0, NAT_1, FINSEQ_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, REAL_1, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0;
  theorems TARSKI, REAL_1, NAT_1, FINSEQ_1, FINSET_1, FUNCT_1, CARD_1, RELAT_1,
@@ -99,8 +99,9 @@ definition let p,q be FinSequence;
    thus p c= q implies ex n st p = q|Seg n
     proof assume
 A1:    p c= q;
-      consider n such that
+      consider n be Nat such that
 A2:     dom p = Seg n by FINSEQ_1:def 2;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
      take n;
      thus thesis by A1,A2,GRFUNC_1:64;
     end;
@@ -507,7 +508,7 @@ A1:  q^r in T;
         len p = len q + len r by FINSEQ_1:35;
     then len q <= len p by NAT_1:11;
 then A2:  len s = len q & Seg len q c= Seg len p by FINSEQ_1:7,21;
-        now let n; assume 1 <= n & n <= len q;
+        now let n be Nat; assume 1 <= n & n <= len q;
 then A3:    n in Seg len q & Seg len q = dom q by FINSEQ_1:3,def 3;
       then p.n = q.n & n in Seg len p & dom p = Seg len p
        by A2,FINSEQ_1:def 3,def 7;
@@ -515,9 +516,7 @@ then A3:    n in Seg len q & Seg len q = dom q by FINSEQ_1:3,def 3;
     end;
     then q = s by A2,FINSEQ_1:18;
 then A4:  q is_a_prefix_of p by Def1;
-        now assume q <> p; then q is_a_proper_prefix_of p by A4,XBOOLE_0:def
-8
-;
+now assume q <> p; then q is_a_proper_prefix_of p by A4,XBOOLE_0:def 8;
       then q in ProperPrefixes p & ProperPrefixes p c= T by A1,Def4,Def5;
      hence thesis;
     end;
@@ -672,7 +671,7 @@ then A4:     p = {} by FINSEQ_1:25;
         then <*k*> = <*l*> & <*k*>.1 = k by A3,FINSEQ_1:47,def 8;
 then A5:     k = l by FINSEQ_1:def 8;
        assume m <= k;
-        then p^<*m*> = <*m*> & m < n by A3,A4,A5,XXREAL_0:2,FINSEQ_1:47;
+        then p^<*m*> = <*m*> & m < n by A3,A4,A5,FINSEQ_1:47,XXREAL_0:2;
         then p^<*m*> in { <*j*> where j is Element of NAT : j < n };
        hence p^<*m*> in IT by XBOOLE_0:def 2;
       end;
@@ -870,9 +869,8 @@ A8:  p in T;
     defpred X[set] means for q st $1 = q holds p^q in T;
     consider X such that
 A9:   x in X iff x in NAT* & X[x] from XBOOLE_0:sch 1;
-         <*> NAT in NAT* & for q st <*> NAT = q holds p^q in T by A8,FINSEQ_1:
-47
-,def 11;
+         <*> NAT in NAT* & for q st <*> NAT = q holds p^q in T by A8,
+FINSEQ_1:47,def 11;
     then reconsider X as non empty set by A9;
 A10:   X c= NAT* proof let x; thus thesis by A9; end;
 A11:   now let q such that
@@ -1109,7 +1107,7 @@ A19:               dom r = Seg len r by FINSEQ_1:def 3;
 FINSEQ_1:23;
 A20:                  r3 is_a_prefix_of p by A18,A19,Def1;
 then A21:               r3 in T & not p is_a_proper_prefix_of r3
-                           by A1,XBOOLE_0:def 8,Th45;
+                           by A1,Th45,XBOOLE_0:def 8;
                  reconsider r3 as Element of T by A1,A20,Th45;
                       r3 in { t : not p is_a_proper_prefix_of t } by A21;
                  hence r in X by XBOOLE_0:def 2;
@@ -1429,7 +1427,7 @@ A1:  dom p = Seg len p by FINSEQ_1:def 3;
      dom p is finite & ProperPrefixes p,dom p are_equipotent by Th67;
     then Card dom p = Card len p & ProperPrefixes p is finite &
      Card ProperPrefixes p = Card dom p by A1,CARD_1:21,FINSEQ_1:76;
-   hence thesis by CARD_1:def 11;
+   hence thesis;
   end;
 
 ::
@@ -1557,60 +1555,67 @@ definition let T be finite Tree;
 :Def15:  (ex p st p in T & len p = it) & for p st p in T holds len p <= it;
   existence
    proof
-    consider n such that
+    consider n be Nat such that
 A1:   T,Seg n are_equipotent by FINSEQ_1:77;
-    defpred X[Element of NAT] means for p st p in T holds len p <= $1;
-         now given p such that
-A2:     p in T & not len p <= n;
+    defpred X[Nat] means for p st p in T holds len p <= $1;
+    A2:  ex n st X[n]
+     proof
+    now given p such that
+A3:     p in T & not len p <= n;
            ProperPrefixes p c= T & ProperPrefixes p,dom p are_equipotent
-                      by A2,Def5,Th67;
-then A3:     Card ProperPrefixes p <=` Card T & Card T = Card Seg n &
+                      by A3,Def5,Th67;
+then A4:     Card ProperPrefixes p <=` Card T & Card T = Card Seg n &
         Card ProperPrefixes p = Card dom p by A1,CARD_1:21,27;
-A4:     dom p = Seg len p by FINSEQ_1:def 3;
-         Seg n c= Seg len p by A2,FINSEQ_1:7;
+A5:     dom p = Seg len p by FINSEQ_1:def 3;
+         Seg n c= Seg len p by A3,FINSEQ_1:7;
        then Card Seg n <=` Card Seg len p & Card Seg n = Card n &
         Card Seg len p = Card len p by CARD_1:27,FINSEQ_1:76;
-       then Card n = Card len p by A3,A4,XBOOLE_0:def 10;
-      hence contradiction by A2,CARD_1:71;
+       then Card n = Card len p by A4,A5,XBOOLE_0:def 10;
+      hence contradiction by A3,CARD_1:71;
      end;
-then A5:   ex n st X[n];
+     then consider n be Nat such that
+A6:  X[n];
+     reconsider n as Element of NAT by ORDINAL1:def 13;
+     take n;
+     thus thesis by A6;
+   end;
     consider n such that
-A6:   X[n] and
-A7:   for m st X[m] holds n <= m from NAT_1:sch 5(A5);
+A7:   X[n] and
+A8:   for m st X[m] holds n <= m from NAT_1:sch 5(A2);
     consider x being Element of T;
     take n;
     thus ex p st p in T & len p = n
       proof assume
-A8:      for p st p in T holds len p <> n;
+A9:      for p st p in T holds len p <> n;
        reconsider x as FinSequence of NAT;
-            len x <> n & len x <= n by A6,A8;
+            len x <> n & len x <= n by A7,A9;
         then 0 <= len x & len x < n by REAL_1:def 5;
        then consider k be Nat such that
-A9:      n = k+1 by NAT_1:6;
+A10:      n = k+1 by NAT_1:6;
        reconsider k as Element of NAT by ORDINAL1:def 13;
             for p st p in T holds len p <= k
          proof let p; assume p in T;
-           then len p <= n & len p <> n by A6,A8;
-           then len p < k+1 by A9,REAL_1:def 5;
+           then len p <= n & len p <> n by A7,A9;
+           then len p < k+1 by A10,REAL_1:def 5;
           hence len p <= k by NAT_1:13;
          end;
-        then n <= k by A7;
-       hence contradiction by A9,NAT_1:13;
+        then n <= k by A8;
+       hence contradiction by A10,NAT_1:13;
       end;
     let p; assume p in T;
-    hence len p <= n by A6;
+    hence len p <= n by A7;
    end;
   uniqueness
    proof let l1,l2 be Element of NAT;
     given p1 being FinSequence of NAT such that
-A10:  p1 in T & len p1 = l1;
+A11:  p1 in T & len p1 = l1;
     assume
-A11:  for p st p in T holds len p <= l1;
+A12:  for p st p in T holds len p <= l1;
     given p2 being FinSequence of NAT such that
-A12:  p2 in T & len p2 = l2;
+A13:  p2 in T & len p2 = l2;
     assume
       for p st p in T holds len p <= l2;
-     then l1 <= l2 & l2 <= l1 by A10,A11,A12;
+     then l1 <= l2 & l2 <= l1 by A11,A12,A13;
     hence thesis by XXREAL_0:1;
    end;
  func width T -> Element of NAT means
@@ -1624,55 +1629,55 @@ A12:  p2 in T & len p2 = l2;
          0 = card {} & {} c= T &
      for p,q st p in {} & q in {} & p <> q holds not p,q are_c=-comparable
        by CARD_1:78,XBOOLE_1:2;
-then A13:  ex n st X[n];
-A14:  for n st X[n] holds n <= card T
+then A14:  ex n st X[n];
+A15:  for n st X[n] holds n <= card T
       proof let n; given X being finite set such that
-A15:     n = card X & X c= T and
+A16:     n = card X & X c= T and
             for p,q st p in X & q in X & p <> q holds not p,q are_c=-comparable
 ;
-A16:     Card X <=` Card T by A15,CARD_1:27;
-            Card X = Card n & Card T = Card card T by A15,CARD_1:def 11;
-       hence thesis by A16,CARD_1:72;
+A17:     Card X <=` Card T by A16,CARD_1:27;
+            Card X = Card n & Card T = Card card T by A16;
+       hence thesis by A17,CARD_1:72;
       end;
     consider n such that
-A17:  X[n] and
-A18:  for m st X[m] holds m <= n from NAT_1:sch 6(A14,A13);
+A18:  X[n] and
+A19:  for m st X[m] holds m <= n from NAT_1:sch 6(A15,A14);
     consider X being finite set such that
-A19:  n = card X & X c= T &
+A20:  n = card X & X c= T &
       for p,q st p in X & q in X & p <> q holds
-       not p,q are_c=-comparable by A17;
+       not p,q are_c=-comparable by A18;
          X is AntiChain_of_Prefixes-like
       proof
        thus for x st x in X holds x is FinSequence
          proof let x; assume x in X;
-           then x in T & T c= NAT* by A19,Def5;
+           then x in T & T c= NAT* by A20,Def5;
            hence x is FinSequence by FINSEQ_1:def 11;
          end;
        let p1,p2; assume
-A20:     p1 in X & p2 in X;
-       then reconsider q1 = p1, q2 = p2 as Element of T by A19;
+A21:     p1 in X & p2 in X;
+       then reconsider q1 = p1, q2 = p2 as Element of T by A20;
             p1 = q1 & p2 = q2;
-       hence thesis by A19,A20;
+       hence thesis by A20,A21;
       end;
     then reconsider X as AntiChain_of_Prefixes;
-    reconsider X as AntiChain_of_Prefixes of T by A19,Def14;
+    reconsider X as AntiChain_of_Prefixes of T by A20,Def14;
     take n,X;
-    thus n = card X by A19;
+    thus n = card X by A20;
     let Y be AntiChain_of_Prefixes of T;
          Y c= T & for p,q st p in Y & q in Y & p <> q holds
      not p,q are_c=-comparable by Def13,Def14;
-    hence card Y <= card X by A18,A19;
+    hence card Y <= card X by A19,A20;
    end;
   uniqueness
    proof let n1,n2 be Element of NAT;
     given X1 being AntiChain_of_Prefixes of T such that
-A21:  n1 = card X1 &
+A22:  n1 = card X1 &
       for Y being AntiChain_of_Prefixes of T holds card Y <= card X1;
     given X2 being AntiChain_of_Prefixes of T such that
-A22:  n2 = card X2 &
+A23:  n2 = card X2 &
       for Y being AntiChain_of_Prefixes of T holds card Y <= card X2;
-         card X1 <= card X2 & card X2 <= card X1 by A21,A22;
-    hence thesis by A21,A22,XXREAL_0:1;
+         card X1 <= card X2 & card X2 <= card X1 by A22,A23;
+    hence thesis by A22,A23,XXREAL_0:1;
    end;
 end;
 
@@ -1856,8 +1861,7 @@ A24:    card { {} } = 1 & 1 <= 1+n & 1+n = n+1 by CARD_1:79,NAT_1:11;
 A25:      not {} in Y;
             Y c= X
          proof let x; assume A26: x in Y;
-           then x in { <*k*> : k < n+1 } or x in { {} } by A19,
-XBOOLE_0:def 2;
+           then x in { <*k*> : k < n+1 } or x in { {} } by A19,XBOOLE_0:def 2;
           hence x in X by A25,A26,TARSKI:def 1;
          end;
        hence card Y <= card X by CARD_1:80;
@@ -2025,11 +2029,11 @@ A3:  q in T & t is_a_proper_prefix_of q by Def8;
    then consider r being FinSequence such that
 A4:  q = t^r by Th8;
    reconsider r as FinSequence of NAT by A4,FINSEQ_1:50;
-        len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,Th24
-;
+   len q = len t+len r by A4,FINSEQ_1:35; then len r <> 0 by A3,Th24;
     then r <> {} by FINSEQ_1:25;
-   then consider p being FinSequence of NAT, x being Element of NAT such that
+   then consider p being FinSequence of NAT, x being Nat such that
 A5:  r = <*x*>^p by FINSEQ_2:150;
+     reconsider x as Element of NAT by ORDINAL1:def 13;
         q = t^<*x*>^p by A4,A5,FINSEQ_1:45;
     then t^<*x*> in T & 0 <= x by A3,Th46;
    hence contradiction by A2,Def5;
@@ -2043,7 +2047,7 @@ theorem
     given n being Element of NAT such that
 A2:   t^<*n*> in T;
          not t is_a_proper_prefix_of t^<*n*> & t is_a_prefix_of t^<*n*>
-      by A1,A2,Th8,Def8;
+      by A1,A2,Def8,Th8;
      then t = t^<*n*> & t = t^{} by FINSEQ_1:47,XBOOLE_0:def 8;
     hence contradiction by FINSEQ_1:46;
    end;
@@ -2055,12 +2059,12 @@ A4:  q in T & t is_a_proper_prefix_of q by Def8;
    then consider r being FinSequence such that
 A5:  q = t^r by Th8;
    reconsider r as FinSequence of NAT by A5,FINSEQ_1:50;
-        len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,Th24
-;
+   len q = len t+len r by A5,FINSEQ_1:35; then len r <> 0 by A4,Th24;
     then r <> {} by FINSEQ_1:25;
-   then consider p being FinSequence of NAT, x being Element of NAT such that
+   then consider p being FinSequence of NAT, x being Nat such that
 A6:  r = <*x*>^p by FINSEQ_2:150;
-        q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
+     reconsider x as Element of NAT by ORDINAL1:def 13;
+     q = t^<*x*>^p by A5,A6,FINSEQ_1:45;
     then t^<*x*> in T by A4,Th46;
    hence contradiction by A3;
   end;

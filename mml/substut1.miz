@@ -7,18 +7,20 @@
 environ
 
  vocabularies CQC_LANG, QC_LANG1, FINSEQ_1, RELAT_1, ZF_LANG, BOOLE, FUNCT_1,
-      SQUARE_1, PARTFUN1, FINSET_1, MCART_1, CARD_1, SUBSTUT1, FRAENKEL, NAT_1;
+      SQUARE_1, PARTFUN1, FINSET_1, MCART_1, CARD_1, SUBSTUT1, FRAENKEL;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, NUMBERS,
       CARD_1, FRAENKEL, FINSEQ_1, NAT_1, QC_LANG1, QC_LANG3, PARTFUN1, SEQ_4,
       CQC_LANG, FINSET_1, RELSET_1, FUNCT_2, DOMAIN_1, MCART_1, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, SEQ_4, QC_LANG3, CQC_SIM1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, PARTFUN1,
-      FINSET_1, FRAENKEL, MEMBERED, FINSEQ_1, RFINSEQ, QC_LANG1, CQC_LANG;
+      FINSET_1, FRAENKEL, MEMBERED, FINSEQ_1, RFINSEQ, QC_LANG1, CQC_LANG,
+      XXREAL_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, QC_LANG1, QC_LANG3;
  theorems TARSKI, FINSEQ_1, FUNCT_1, MCART_1, CQC_SIM1, XBOOLE_0, CQC_LANG,
       QC_LANG1, ZFMISC_1, RELAT_1, XBOOLE_1, CARD_2, CARD_3, FUNCT_2, PARTFUN1,
-      RELSET_1, FINSET_1, NAT_1, QC_LANG2, FINSEQ_3, CARD_1, XXREAL_0;
+      RELSET_1, FINSET_1, NAT_1, QC_LANG2, FINSEQ_3, CARD_1, XXREAL_0,
+      ORDINAL1;
  schemes FUNCT_1, FUNCT_2, QC_LANG1, QC_LANG3, NAT_1, XBOOLE_0, FRAENKEL,
       FINSEQ_1;
 
@@ -78,17 +80,17 @@ definition let l be FinSequence of QC-variables; let Sub;
   proof
   defpred P[set,set] means (l.$1 in dom Sub implies $2 = Sub.(l.$1)) &
       (not l.$1 in dom Sub implies $2 = l.$1);
-A1: for k for y1,y2 being set st k in Seg len l & P[k,y1] & P[k,y2]
+A1: for k be Nat for y1,y2 being set st k in Seg len l & P[k,y1] & P[k,y2]
                                                       holds y1  = y2;
-A2: for k st k in Seg len l ex y being set st P[k,y]
-     proof let k; assume k in Seg len l;
+A2: for k be Nat st k in Seg len l ex y being set st P[k,y]
+     proof let k be Nat; assume k in Seg len l;
         (l.k in dom Sub implies thesis) &
        (not l.k in dom Sub implies thesis);
       hence thesis;
      end;
   consider s being FinSequence such that
 A3:  dom s = Seg len l and
-A4:  for k st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
+A4:  for k be Nat st k in Seg len l holds P[k,s.k] from FINSEQ_1:sch 1(A1,A2);
    rng s c= QC-variables
    proof let y be set;
     assume y in rng s;
@@ -134,12 +136,13 @@ A10:  len l2 = len l and
 A11:  for k st 1 <= k & k <= len l holds
       (l.k in dom Sub implies l2.k = Sub.(l.k)) &
       (not l.k in dom Sub implies l2.k = l.k);
-   now let k;
+   now let k be Nat;
+A12:  k in NAT by ORDINAL1:def 13;
    assume 1 <= k & k <= len l;
    then (l.k in dom Sub implies l1.k = Sub.(l.k)) &
      (not l.k in dom Sub implies l1.k = l.k) &
      (l.k in dom Sub implies l2.k = Sub.(l.k)) &
-     (not l.k in dom Sub implies l2.k = l.k) by A9,A11;
+     (not l.k in dom Sub implies l2.k = l.k) by A9,A11,A12;
    hence l1.k = l2.k;
   end;
   hence thesis by A8,A10,FINSEQ_1:18;

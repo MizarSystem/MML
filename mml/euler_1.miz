@@ -13,8 +13,8 @@ environ
       CARD_1, INT_1, NAT_1, NAT_D, INT_2, FINSEQ_1, FINSET_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, XXREAL_0, NEWTON;
  constructors BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, NEWTON;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, ARYTM_3, FINSET_1,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
+      XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_1;
  theorems TARSKI, INT_2, AXIOMS, FINSEQ_1, CARD_1, FINSET_1, NAT_1, ABSVALUE,
@@ -25,7 +25,7 @@ environ
 
 begin :: Preliminary
 
-reserve a,b,c,k,l,m,n for Element of NAT,
+reserve a,b,c,k,l,m,n for Nat,
         i,j,x,y for Integer;
 
 Lm1:k gcd n = k hcf n
@@ -64,19 +64,18 @@ proof
 end;
 
 theorem Th1:
-  for k, n being natural number holds k in n iff k < n
+  k in n iff k < n
 proof
-  let k, n be natural number;
 A1:k in NAT & n in NAT by ORDINAL1:def 13;
   thus k in n implies k < n
   proof
     assume k in n;
-    then k in {l : l < n} by AXIOMS:30;
+    then k in {l where l is Element of NAT: l < n} by AXIOMS:30;
     then ex j being Element of NAT st k = j & j < n;
     hence k < n;
   end;
   assume k < n;
-  then k in {l: l < n} by A1;
+  then k in {l where l is Element of NAT: l < n} by A1;
   hence thesis by AXIOMS:30;
 end;
 
@@ -90,8 +89,10 @@ proof
 end;
 
 theorem Th3:
+  for k,n be Nat holds
   k <> 0 & k < n & n is prime implies k,n are_relative_prime
 proof
+  let k,n be Nat;
   assume A1:k <> 0 & k < n & n is prime;
   A2:(k hcf n) divides n by NAT_D:def 5;
   per cases by A1,A2,INT_2:def 5;
@@ -127,8 +128,9 @@ proof
   then A4:k < n by Th1;
   A5:k <> 0 by A3,TARSKI:def 1;
   then A6:k >= 1 by NAT_1:14;
-      k,n are_relative_prime by A3,A4,A5,Th3;
-  hence thesis by A3,A4,A6;
+A7: k in NAT by ORDINAL1:def 13;
+  k,n are_relative_prime by A3,A4,A5,Th3;
+  hence thesis by A3,A4,A6,A7;
 end;
 
 theorem Th5:
@@ -148,7 +150,7 @@ proof
   reconsider a' = a , b' = b as Integer;
       a' gcd b' = 1 by A1,A2,INT_2:def 3;
   then A3:a',b' are_relative_prime by INT_2:def 4;
-  let m be Element of NAT;
+  let m;
   A4:a*m = abs(a*m) & b*m = abs(b*m) by ABSVALUE:def 1;
      abs(a*m) = abs(a')*abs(m) & abs(b*m) = abs(b')*abs(m) by COMPLEX1:151;
   then a*m hcf b*m = a'*abs(m) gcd b'*abs(m) by A2,A4,INT_2:def 3
@@ -210,8 +212,7 @@ proof
         then A6:(a + b*kk)
                = (a hcf b)*((a + b*kk) div (a hcf b)) by NAT_D:3;
         set T = a hcf b;
-         a in NAT & b in NAT by ORDINAL1:def 13;
-        then A7:a hcf b > 0 by A4,NEWTON:71;
+         A7:a hcf b > 0 by A4,NEWTON:71;
             now per cases;
           suppose (a + b*kk) = 0;
             then a = 0 & b*kk = 0 & a hcf b = 0 hcf b by NAT_1:7;
@@ -250,7 +251,7 @@ theorem Th10:
       for l st (ex i,j being Integer st l = i*m + j*n & l > 0)
                                                        holds k <= l
 proof
-  defpred P[Integer] means
+  defpred P[Nat] means
      ex i0,j0 being Integer st $1 = i0*m + j0*n & $1>0;
   assume A1:m,n are_relative_prime;
    m > 0 or n > 0
@@ -262,11 +263,15 @@ proof
   end;
   then m + n <> 0 by NAT_1:7;
   then 1*m + 1*n > 0;
-  then A2:ex k st P[k];
-  consider k such that
+  then A2:ex k be Element of NAT st P[k];
+  consider k be Element of NAT such that
 A3: P[k] and
-A4: for l st P[l] holds k<=l from NAT_1:sch 5(A2);
-  thus thesis by A3,A4;
+A4: for l be Element of NAT st P[l] holds k<=l from NAT_1:sch 5(A2);
+   take k;
+   thus ex i0,j0 being Integer st k = i0*m + j0*n & k > 0 by A3;
+   let l;
+   l in NAT by ORDINAL1:def 13;
+   hence thesis by A4;
 end;
 
 theorem Th11:
@@ -304,9 +309,8 @@ proof
           suppose m = 0;
             hence thesis by NAT_D:6;
           end;
-          suppose A13: m > 0;
-            reconsider c = 1'*m + 0'*n as Element of NAT;
-                c > 0 by A13;
+          suppose m > 0;
+            then 1'*m + 0'*n > 0;
             then m mod a = 0 by A6;
             then m = a*(m div a) + 0 by A2,NAT_D:2;
             hence thesis by NAT_D:3;
@@ -318,9 +322,8 @@ proof
           suppose n = 0;
             hence thesis by NAT_D:6;
           end;
-          suppose A14: n > 0;
-            reconsider c = 0'*m + 1'*n as Element of NAT;
-                c > 0 by A14;
+          suppose n > 0;
+            then 0'*m + 1'*n > 0;
             then n mod a = 0 by A6;
             then n = a*(n div a) + 0 by A2,NAT_D:2;
             hence thesis by NAT_D:3;
@@ -515,7 +518,7 @@ end;
 begin :: Euler's function
 
 definition
-  let n be Element of NAT;
+  let n be Nat;
     func Euler n -> Element of NAT
     equals
      Card {k where k is Element of NAT :
@@ -608,11 +611,11 @@ proof
     A5: not k in {0} by A4,TARSKI:def 1;
         not n,n are_relative_prime by A1,Th2;
     then k < n by A4,REAL_1:def 5;
-    then k in {l: l < n};
+    then k in {l where l is Element of NAT: l < n};
     then k in n by AXIOMS:30;
     hence thesis by A4,A5,XBOOLE_0:def 4;
   end;
-   0 in {l: l < n} by A1;
+   0 in {l where l is Element of NAT: l < n} by A1;
   then 0 in n by AXIOMS:30;
   then A6:card(n \ {0}) = card n - card {0} by Th5;
       Card n = n & Card {0} = 1 by CARD_1:66,79;
@@ -649,13 +652,13 @@ proof
       let x be set;
       assume x in n \ {0};
       then A6:x in n & not x in {0} by XBOOLE_0:def 4;
-      then x in {k: k< n} by AXIOMS:30;
-      then ex k st k = x & k < n;
+      then x in {k where k is Element of NAT: k< n} by AXIOMS:30;
+      then ex k be Element of NAT st k = x & k < n;
       hence x in X by A1,A6,Th4;
     end;
     then A7: card (n \ {0}) <= card X by CARD_1:80;
         0 < n by A4;
-    then 0 in {l: l < n};
+    then 0 in {l where l is Element of NAT: l < n};
     then A8:0 in n by AXIOMS:30;
         Card n = n & Card {0} = 1 by CARD_1:66,79;
     hence thesis by A7,A8,Th5;
@@ -664,8 +667,8 @@ proof
 end;
 
 theorem
-      m > 1 & n > 1 & m,n are_relative_prime
-                      implies Euler (m*n) = Euler m * Euler n
+  m > 1 & n > 1 & m,n are_relative_prime
+  implies Euler (m*n) = Euler m * Euler n
 proof
   assume A1:m > 1 & n > 1 & m,n are_relative_prime;
   then A2:m*n <> 1 by NAT_1:15;
@@ -923,7 +926,7 @@ proof
            A83:y2 <= m;
     assume A84:f.x = f.y;
     A85:(x1*m+x2*n) mod (m*n) = f.(xx1,xx2) by A67,A71,A74
-                    .= f.(yy1,yy2) by A84,A77,A70
+                    .= f.(yy1,yy2) by A70,A77,A84
                     .= (y1*m+y2*n) mod (m*n) by A67,A78,A81;
     reconsider y1,y2,x1,x2 as Element of NAT;
     set k = (x1*m+x2*n) mod (m*n);
@@ -1172,7 +1175,7 @@ proof
       set j = x0 div m;
       A155:(m*y0 + n*x0) mod m*n =
  m*(y0 + (n*j)) - ((m*(y0 + (n*j))) div m*n)*(m*n)
-             by A154,A3,INT_1:def 8
+             by A3,A154,INT_1:def 8
            .= m*((y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n)));
       set jj = (y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n));
       reconsider g = m*jj as Element of NAT by A119,A155;
@@ -1206,7 +1209,7 @@ proof
       set j = y0 div n;
       A164:(m*y0 + n*x0) mod m*n =
  n*((m*j) + x0) - ((n*((m*j) + x0)) div m*n)*(m*n)
-             by A163,A3,INT_1:def 8
+             by A3,A163,INT_1:def 8
            .= n*(((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n)));
       set jj = ((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n));
       reconsider g = n*jj as Element of NAT by A119,A164;
@@ -1260,7 +1263,7 @@ proof
      A176:w = [y,x];
    A177:w in dom f by A175,A176,ZFMISC_1:106;
        i = f.(y,x) by A67,A119,A126;
-   hence z in rng f by A117,A177,FUNCT_1:def 5,A176;
+   hence z in rng f by A117,A176,A177,FUNCT_1:def 5;
  end;
  then Card[:A,B:] = Card C by A68,Th12;
 hence thesis by A18,CARD_2:65;

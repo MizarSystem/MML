@@ -1,0 +1,419 @@
+:: The Vector Space of Subsets of a Set Based on Disjoint Union
+::  by Jesse Alama
+::
+:: Received October 9, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies FINSET_1, BSPACE, FUNCT_1, CARD_1, SUBSET_1, TARSKI, BOOLE,
+      RELAT_1, NAT_1, GROUP_1, FINSEQ_1, FINSEQ_2, QC_LANG1, BINOP_1, VECTSP_1,
+      RLVECT_1, RLVECT_3, RLVECT_2, SEQ_1, FINSEQ_4, FUNCT_4, ORDINAL2,
+      MATRLIN, VECTSP_9, INT_3, GR_CY_1, REALSET1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELAT_1, DOMAIN_1,
+      RELSET_1, FUNCT_1, NUMBERS, ORDINAL1, NAT_1, INT_1, NAT_D, COMPLEX1,
+      PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1, FUNCOP_1, FUNCT_4, FUNCT_7,
+      WELLORD2, FRAENKEL, XCMPLX_0, XXREAL_0, CARD_1, ARYTM_2, FINSET_1,
+      FINSEQ_1, SEQ_1, FINSEQOP, CARD_2, FINSEQ_2, NEWTON, CARD_3, FINSEQ_4,
+      REALSET1, STRUCT_0, GROUP_1, RLSUB_2, RLVECT_1, RLVECT_2, RLVECT_3,
+      VECTSP_1, VECTSP_2, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, MOD_2,
+      FVSUM_1, GR_CY_1, GCD_1, MATRIX_3, MATRLIN, VECTSP_9, VECTSP10, INT_3,
+      LOPBAN_1, RANKNULL;
+ constructors TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FRAENKEL, NAT_1, CARD_1, FINSET_1, FINSEQ_1, FINSEQOP,
+      MATRLIN, STRUCT_0, XCMPLX_0, HAHNBAN, RLVECT_1, RLSUB_2, VECTSP_1,
+      VECTSP_4, VECTSP_6, VECTSP_7, MOD_2, VECTSP_9, REALSET1, RLVECT_2,
+      WELLORD2, RLVECT_3, FUNCOP_1, LOPBAN_1, GROUP_1, VECTSP_5, VECTSP10,
+      VECTSP_2, SEQ_1, FINSEQ_4, NUMBERS, ARYTM_2, XXREAL_0, NAT_D, DOMAIN_1,
+      ORDINAL1, ENUMSET1, FUNCT_7, FINSEQ_3, FINSEQ_2, FVSUM_1, FUNCT_3,
+      BINOP_1, FUNCT_4, LATTICES, CARD_2, RANKNULL, CARD_3, MATRIX_3, INT_2,
+      INT_3, NEWTON, GCD_1, GR_CY_1, REAL_1, INT_1, COMPLEX1;
+ registrations ZFMISC_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, CARD_1, FINSET_1, FINSEQ_1, REALSET1, XCMPLX_0, FRAENKEL,
+      VECTSP_4, VECTSP_9, SUBSET_1, XBOOLE_0, VECTSP_1, RLVECT_1, RLSUB_2,
+      VECTSP_7, MOD_2, RLVECT_2, MATRLIN, RLVECT_3, FUNCOP_1, LOPBAN_1,
+      GROUP_1, VECTSP_5, VECTSP10, VECTSP_2, SEQ_1, FINSEQ_4, NUMBERS, ARYTM_2,
+      ORDINAL1, XREAL_0, ORDINAL2, XXREAL_0, FUNCT_7, FINSEQ_2, FVSUM_1,
+      FUNCT_4, RANKNULL, CARD_3, INT_2, INT_3, NEWTON, GR_CY_1, GCD_1, INT_1,
+      ARYTM_3, NAT_1, RPR_1;
+ requirements NUMERALS, BOOLE, ARITHM, SUBSET, REAL;
+
+
+begin
+
+definition
+  let S be 1-sorted;
+  func <*>S -> FinSequence of S
+  equals
+:: BSPACE:def 1
+    <*>([#]S);
+end;
+
+:: exactly as in FINSEQ_2
+reserve S for 1-sorted,
+        d for Element of S,
+        i for Element of NAT,
+        p for FinSequence,
+        b,X for set;
+
+:: copied from FINSEQ_2:13
+theorem :: BSPACE:1
+ for p being FinSequence of S st i in dom p holds p.i in S;
+
+:: copied from FINSEQ_2:14
+theorem :: BSPACE:2
+ (for i being Nat st i in dom p holds p.i in S) implies p is FinSequence of S;
+
+scheme :: BSPACE:sch 1
+ IndSeqS{S() -> 1-sorted, P[set]}:
+  for p being FinSequence of S() holds P[p]
+ provided
+ P[<*> S()] and
+ for p being FinSequence of S() for x being Element of S()
+      st P[p] holds P[p^<*x*>];
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: The two-element field Z_2
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+  func
+    Z_2 -> Field
+  equals
+:: BSPACE:def 2
+    INT.Ring(2);
+end;
+
+theorem :: BSPACE:3
+[#]Z_2 = {0,1};
+
+theorem :: BSPACE:4
+for a being Element of Z_2 holds a = 0 or a = 1;
+
+theorem :: BSPACE:5
+0.Z_2 = 0;
+
+theorem :: BSPACE:6
+1.Z_2 = 1;
+
+theorem :: BSPACE:7
+1.Z_2 + 1.Z_2 = 0.Z_2;
+
+theorem :: BSPACE:8
+for x being Element of Z_2 holds x = 0.Z_2 iff x <> 1.Z_2;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Set-theoretical Preliminaries
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+  let X,x be set;
+  func
+    X@x -> Element of Z_2
+  equals
+:: BSPACE:def 3
+    1.Z_2 if x in X
+    otherwise 0.Z_2;
+end;
+
+theorem :: BSPACE:9
+for X,x being set holds
+  X@x = 1.Z_2 iff x in X;
+
+theorem :: BSPACE:10
+for X,x being set holds
+  X@x = 0.Z_2 iff not x in X;
+
+theorem :: BSPACE:11
+for X,x being set holds X@x <> 0.Z_2 iff X@x = 1.Z_2;
+
+theorem :: BSPACE:12
+for X,x,y being set holds X@x = X@y iff (x in X iff y in X);
+
+theorem :: BSPACE:13
+for X,Y,x being set holds X@x = Y@x iff (x in X iff x in Y);
+
+theorem :: BSPACE:14
+for x being set holds {}@x = 0.Z_2;
+
+theorem :: BSPACE:15
+for X being set,
+    u,v being Subset of X,
+    x being Element of X
+   holds (u \+\ v)@x = u@x + v@x;
+
+theorem :: BSPACE:16
+for X,Y being set holds
+  X = Y iff for x being set holds X@x = Y@x;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: The Boolean Bector Space of Subsets of a Set
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+  let X be set,
+      a be Element of Z_2,
+      c be Subset of X;
+  func
+    a \*\ c -> Subset of X
+  equals
+:: BSPACE:def 4
+    c if a = 1.Z_2,
+    {}X if a = 0.Z_2;
+end;
+
+definition
+  let X be set;
+  func
+    bspace-sum(X) -> BinOp of bool X
+  means
+:: BSPACE:def 5
+    for c,d being Subset of X
+      holds it.(c,d) = c \+\ d;
+end;
+
+theorem :: BSPACE:17
+for a being Element of Z_2,
+    c,d being Subset of X
+  holds a \*\ (c \+\ d) = (a \*\ c) \+\ (a \*\ d);
+
+theorem :: BSPACE:18
+for a,b being Element of Z_2,
+    c being Subset of X
+  holds (a+b) \*\ c = (a \*\ c) \+\ (b \*\ c);
+
+theorem :: BSPACE:19
+for c being Subset of X
+  holds (1.Z_2) \*\ c = c;
+
+theorem :: BSPACE:20
+for a,b being Element of Z_2,
+    c being Subset of X
+  holds a \*\ (b \*\ c) = (a*b) \*\ c;
+
+definition
+  let X be set;
+  func
+    bspace-scalar-mult(X) -> Function of [:the carrier of Z_2,bool X:],bool X
+  means
+:: BSPACE:def 6
+    for a being Element of Z_2,
+        c being Subset of X
+      holds it.(a,c) = a \*\ c;
+end;
+
+definition
+  let X be set;
+  func
+    bspace(X) -> non empty VectSpStr over Z_2
+  equals
+:: BSPACE:def 7
+    VectSpStr (# bool X,
+                 bspace-sum(X),
+                 {}X,
+                 bspace-scalar-mult(X) #);
+end;
+
+theorem :: BSPACE:21
+bspace(X) is Abelian;
+
+theorem :: BSPACE:22
+bspace(X) is add-associative;
+
+theorem :: BSPACE:23
+bspace(X) is right_zeroed;
+
+theorem :: BSPACE:24
+bspace(X) is right_complementable;
+
+theorem :: BSPACE:25
+for a being Element of Z_2,
+    x,y being Element of bspace(X)
+  holds a*(x+y) = (a*x)+(a*y);
+
+theorem :: BSPACE:26
+for a,b being Element of Z_2,
+    x being Element of bspace(X)
+  holds (a+b)*x = (a*x)+(b*x);
+
+theorem :: BSPACE:27
+for a,b being Element of Z_2,
+    x being Element of bspace(X)
+  holds (a*b)*x = a*(b*x);
+
+theorem :: BSPACE:28
+ for x being Element of bspace(X)
+         holds (1_Z_2)*x = x;
+
+theorem :: BSPACE:29
+ bspace(X) is VectSp-like;
+
+registration let X be set;
+  cluster bspace(X) -> VectSp-like Abelian right_complementable
+       add-associative right_zeroed;
+end;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: The Linear Independence and Linear Span of Singleton Subsets
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+begin
+
+definition
+  let X be set;
+  attr
+    X is Singleton
+  means
+:: BSPACE:def 8
+    X is non empty trivial;
+end;
+
+registration
+ cluster Singleton -> non empty trivial set;
+ cluster non empty trivial -> Singleton set;
+end;
+
+definition
+  let X be set,
+      f be Subset of X;
+  redefine attr
+    f is Singleton
+  means
+:: BSPACE:def 9
+    ex x being set st x in X & f = {x};
+end;
+
+definition
+  let X be set;
+  func
+    singletons(X)
+  equals
+:: BSPACE:def 10
+    { f where f is Subset of X : f is Singleton };
+end;
+
+definition
+  let X be set;
+  redefine func
+    singletons(X) -> Subset of bspace(X);
+end;
+
+registration
+  let X be non empty set;
+  cluster singletons(X) -> non empty;
+end;
+
+theorem :: BSPACE:30
+for X being non empty set,
+    f being Subset of X
+  st f is Element of singletons(X)
+  holds f is Singleton;
+
+definition
+  let F be Field,
+      V be VectSp of F,
+      l be Linear_Combination of V,
+      x be Element of V;
+  redefine func l.x -> Element of F;
+end;
+
+definition
+  let X be non empty set,
+      s be FinSequence of bspace(X),
+      x be Element of X;
+  func
+    s@x -> FinSequence of Z_2
+  means
+:: BSPACE:def 11
+    len it = len s
+    & for j being Nat
+        st 1 <= j & j <= len s
+        holds it.j = (s.j)@x;
+end;
+
+theorem :: BSPACE:31
+for X being non empty set,
+    x being Element of X
+  holds (<*>(bspace(X)))@x = <*>Z_2;
+
+theorem :: BSPACE:32
+for X being set,
+    u,v being Element of bspace(X),
+    x being Element of X
+   holds (u + v)@x = u@x + v@x;
+
+theorem :: BSPACE:33
+for X being non empty set,
+    s being FinSequence of bspace(X),
+    f being Element of bspace(X),
+    x being Element of X
+  holds (s ^ <*f*>)@x = (s@x) ^ <*f@x*>;
+
+theorem :: BSPACE:34
+for X being non empty set,
+    s being FinSequence of bspace(X),
+    x being Element of X
+  holds (Sum s)@x = Sum (s@x);
+
+theorem :: BSPACE:35
+for X being non empty set,
+    l being Linear_Combination of bspace(X),
+    x being Element of bspace(X)
+  st x in Carrier l
+  holds l.x = 1_Z_2;
+
+theorem :: BSPACE:36
+singletons {} = {};
+
+theorem :: BSPACE:37
+singletons(X) is linearly-independent;
+
+theorem :: BSPACE:38
+for f being Element of bspace(X)
+  st (ex x being set st x in X & f = {x})
+  holds f in singletons(X);
+
+theorem :: BSPACE:39
+for X being finite set,
+    A being Subset of X
+  ex l being Linear_Combination of singletons(X)
+    st Sum l = A;
+
+theorem :: BSPACE:40
+for X being finite set
+  holds Lin(singletons(X)) = bspace(X);
+
+theorem :: BSPACE:41
+for X being finite set
+  holds singletons(X) is Basis of bspace(X);
+
+registration
+  let X be finite set;
+  cluster bool(X) -> finite;
+end;
+
+registration
+  let X be finite set;
+  cluster singletons(X) -> finite;
+end;
+
+registration
+  let X be finite set;
+  cluster
+    bspace(X) -> finite-dimensional;
+end;
+
+theorem :: BSPACE:42
+Card (singletons X) = Card X;
+
+theorem :: BSPACE:43
+Card [#](bspace X) = exp(2,Card(X));
+
+theorem :: BSPACE:44
+dim bspace {} = 0;

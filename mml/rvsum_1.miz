@@ -8,7 +8,7 @@ environ
 
  vocabularies FINSEQ_1, FINSEQ_2, ARYTM_1, FUNCT_1, RELAT_1, BINOP_1, VECTSP_1,
       SETWISEO, SQUARE_1, ARYTM, FUNCOP_1, FINSEQOP, RLVECT_1, RVSUM_1, CARD_3,
-      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1, NAT_1;
+      BOOLE, COMPLEX1, COMPLSP1, SEQ_1, XCMPLX_0, SUBSET_1, FINSOP_1;
  notations TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XBOOLE_0, XCMPLX_0,
       XXREAL_0, XREAL_0, REAL_1, NAT_1, SQUARE_1, RELAT_1, FUNCT_1, RELSET_1,
       PARTFUN1, BINOP_2, SETWISEO, FUNCT_2, BINOP_1, FUNCOP_1, FINSEQ_1,
@@ -22,7 +22,8 @@ environ
  definitions SEQ_1, BINOP_1, FINSEQOP, FINSEQ_1, SQUARE_1, FINSEQ_2, TARSKI;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1, FINSEQ_2,
       FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0, ZFMISC_1, XCMPLX_0,
-      XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, SEQ_1, NUMBERS, XBOOLE_1, FINSEQ_3;
+      XCMPLX_1, BINOP_2, SETWISEO, XREAL_1, SEQ_1, NUMBERS, XBOOLE_1, FINSEQ_3,
+      ORDINAL1;
  schemes NAT_1, FUNCT_2;
 
 begin :: Auxiliary theorems
@@ -77,12 +78,12 @@ registration
   cluster F*F1 -> FinSequence-like;
   coherence
   proof
-    consider n1 being Element of NAT such that
+    consider n1 being Nat such that
 A1: dom F1 = Seg n1 by FINSEQ_1:def 2;
     take n1;
 A2: dom F = REAL by FUNCT_2:def 1;
      rng F1 c= REAL;
-    hence dom(F*F1) = Seg n1 by A2,RELAT_1:46,A1;
+    hence dom(F*F1) = Seg n1 by A1,A2,RELAT_1:46;
   end;
 end;
 
@@ -139,7 +140,7 @@ registration let f, g be real-yielding FinSequence;
   end;
 end;
 
-reserve i,j,k for Element of NAT,
+reserve i,j,k for Nat,
         x,x1,x2,x3 for Element of REAL,
         r,r1,r2,r3 for real number,
         F,F1,F2 for real-yielding FinSequence,
@@ -291,20 +292,20 @@ Lm5: now let F1,F2;
   thus F1 + F2 is FinSequence-like
   proof
 A1: dom (F1+F2) = dom F1 /\ dom F2 by SEQ_1:def 3;
-    consider n1 being Element of NAT such that
+    consider n1 being Nat such that
 A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
-    consider n2 being Element of NAT such that
+    consider n2 being Nat such that
 A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
     per cases;
     suppose n1 <= n2;
       then A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
       take n1;
-      thus dom(F1+F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+      thus dom(F1+F2) = Seg n1 by A1,A2,A3,A4,XBOOLE_1:28;
     end;
     suppose n2 <= n1;
       then A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
       take n2;
-      thus dom(F1+F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+      thus dom(F1+F2) = Seg n2 by A1,A2,A3,A5,XBOOLE_1:28;
     end;
   end;
 end;
@@ -333,10 +334,10 @@ A3:   F = F1+F2;
       holds F.z = addreal.(F1.z,F2.z)
       proof let z be set;
         assume z in dom(addreal.:(F1,F2));
-        hence F.z = F1.z + F2.z by A1,A3,A2,SEQ_1:def 3
+        hence F.z = F1.z + F2.z by A1,A2,A3,SEQ_1:def 3
         .= addreal.(F1.z,F2.z) by BINOP_2:def 9;
      end;
-     hence thesis by A1,A3,A2,FUNCOP_1:27;
+     hence thesis by A1,A2,A3,FUNCOP_1:27;
    end;
    assume
 A4: F = addreal.:(F1,F2);
@@ -432,7 +433,7 @@ Lm6: now
   let F;
   thus -F is FinSequence-like
   proof
-    consider n being Element of NAT such that
+    consider n being Nat such that
 A1: dom F = Seg n by FINSEQ_1:def 2;
     take n;
     thus thesis by A1,SEQ_1:def 7;
@@ -548,7 +549,7 @@ theorem
  proof assume R1 + R = R2 + R;
   then R1 + (R + -R)= (R2 + R)+-R by FINSEQOP:29;
   then R1 + (R + -R)= R2 + (R + -R) & R + -R = (i|->0)
-  by FINSEQOP:29,77,Th22,Th23,BINOP_2:2;
+  by Th22,Th23,BINOP_2:2,FINSEQOP:29,77;
   then R1 = R2 + (i|->(0 qua Real)) by BINOP_2:2,FINSEQOP:57;
   hence R1 = R2 by BINOP_2:2,FINSEQOP:57;
  end;
@@ -568,20 +569,20 @@ Lm7: now let F1,F2;
   thus F1 - F2 is FinSequence-like
   proof
 A1: dom (F1-F2) = dom F1 /\ dom F2 by SEQ_1:def 4;
-    consider n1 being Element of NAT such that
+    consider n1 being Nat such that
 A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
-    consider n2 being Element of NAT such that
+    consider n2 being Nat such that
 A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
     per cases;
     suppose n1 <= n2;
       then A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
       take n1;
-      thus dom(F1-F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+      thus dom(F1-F2) = Seg n1 by A1,A2,A3,A4,XBOOLE_1:28;
     end;
     suppose n2 <= n1;
       then A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
       take n2;
-      thus dom(F1-F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+      thus dom(F1-F2) = Seg n2 by A1,A2,A3,A5,XBOOLE_1:28;
     end;
   end;
 end;
@@ -610,10 +611,10 @@ A3:   F = F1-F2;
       holds F.z = diffreal.(F1.z,F2.z)
       proof let z be set;
         assume z in dom(diffreal.:(F1,F2));
-        hence F.z = F1.z - F2.z by A1,A3,A2,SEQ_1:def 4
+        hence F.z = F1.z - F2.z by A1,A2,A3,SEQ_1:def 4
         .= diffreal.(F1.z,F2.z) by BINOP_2:def 10;
      end;
-     hence thesis by A1,A3,A2,FUNCOP_1:27;
+     hence thesis by A1,A2,A3,FUNCOP_1:27;
    end;
    assume
 A4: F = diffreal.:(F1,F2);
@@ -780,7 +781,7 @@ Lm8: now
   let F,r;
   thus r*F is FinSequence-like
   proof
-    consider n being Element of NAT such that
+    consider n being Nat such that
 A1: dom F = Seg n by FINSEQ_1:def 2;
     take n;
     thus thesis by A1,SEQ_1:def 6;
@@ -1027,20 +1028,20 @@ Lm9: now let F1,F2;
   thus mlt(F1,F2) is FinSequence-like
   proof
 A1: dom mlt(F1,F2) = dom F1 /\ dom F2 by SEQ_1:def 5;
-    consider n1 being Element of NAT such that
+    consider n1 being Nat such that
 A2: dom F1 = Seg n1 by FINSEQ_1:def 2;
-    consider n2 being Element of NAT such that
+    consider n2 being Nat such that
 A3: dom F2 = Seg n2 by FINSEQ_1:def 2;
     per cases;
     suppose n1 <= n2;
       then A4:   Seg n1 c= Seg n2 by FINSEQ_1:7;
       take n1;
-      thus dom mlt(F1,F2) = Seg n1 by A2,A3,A4,A1,XBOOLE_1:28;
+      thus dom mlt(F1,F2) = Seg n1 by A1,A2,A3,A4,XBOOLE_1:28;
     end;
     suppose n2 <= n1;
       then A5:   Seg n2 c= Seg n1 by FINSEQ_1:7;
       take n2;
-      thus dom mlt(F1,F2) = Seg n2 by A2,A3,A5,A1,XBOOLE_1:28;
+      thus dom mlt(F1,F2) = Seg n2 by A1,A2,A3,A5,XBOOLE_1:28;
     end;
   end;
 end;
@@ -1069,10 +1070,10 @@ A3:   F = mlt(F1,F2);
       holds F.z = multreal.(F1.z,F2.z)
       proof let z be set;
         assume z in dom(multreal.:(F1,F2));
-        hence F.z = F1.z * F2.z by A1,A3,A2,SEQ_1:def 5
+        hence F.z = F1.z * F2.z by A1,A2,A3,SEQ_1:def 5
         .= multreal.(F1.z,F2.z) by BINOP_2:def 11;
      end;
-     hence thesis by A1,A3,A2,FUNCOP_1:27;
+     hence thesis by A1,A2,A3,FUNCOP_1:27;
    end;
    assume
 A4: F = multreal.:(F1,F2);
@@ -1265,7 +1266,7 @@ registration
     let f be FinSequence;
     assume f is real-yielding;
     then rng f c= REAL by SEQ_1:def 1;
-    then rng f c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+    then rng f c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
     hence thesis by Def10;
   end;
   cluster real-yielding complex-yielding FinSequence;
@@ -1300,19 +1301,20 @@ A1: f = F & Sum F = addcomplex $$ f by Def11;
 A2: rng f c= REAL by A1,SEQ_1:def 1;
     then reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
     set mc = addcomplex, mr = addreal;
-A3: mc $$ f = mc $$ (dom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
-    consider n being Element of NAT such that
+A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
+    consider n being Nat such that
 A4: dom f = Seg n by FINSEQ_1:def 2;
-    defpred P[Element of NAT] means
-      mc $$ (Seg $1,[#](f,the_unity_wrt mc)) is real;
+    defpred P[Nat] means
+      mc $$ (finSeg $1,[#](f,the_unity_wrt mc)) is real;
      Seg 0 = {}.NAT by FINSEQ_1:4;
-then A5: P[0] by SETWISEO:40,BINOP_2:1;
+then A5: P[0] by BINOP_2:1,SETWISEO:40;
     set g = [#](f,the_unity_wrt mc);
-A6: for k being Element of NAT st P[k] holds P[k+1]
+A6: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A7:   P[k];
+      reconsider k as Element of NAT by ORDINAL1:def 13;
    g.(k+1) is real
       proof
         per cases;
@@ -1326,15 +1328,15 @@ A8:       k+1 in dom f;
           hence thesis by BINOP_2:1,SETWOP_2:22;
         end;
       end;
-      then reconsider a = g.(k+1), b = mc $$(Seg k,g) as real number by A7;
+      then reconsider a = g.(k+1), b = mc $$(finSeg k,g) as real number by A7;
        not (k + 1) in Seg k by FINSEQ_3:9;
-      then mc $$ (Seg k \/ {.k+1.},g) = mc.(mc $$(Seg k,g),g.(k+1))
+      then mc $$ (finSeg k \/ {.k+1.},g) = mc.(mc $$(finSeg k,g),g.(k+1))
         by SETWOP_2:4
         .= b + a by BINOP_2:def 3;
       hence thesis by FINSEQ_1:11;
     end;
-     for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
-    hence thesis by A1,A4,A3;
+     for n being Nat holds P[n] from NAT_1:sch 2(A5,A6);
+    hence thesis by A1,A3,A4;
   end;
 end;
 
@@ -1343,29 +1345,30 @@ theorem Th101:
     Sum F = addreal $$ F
   proof
     let F be FinSequence of REAL;
-     rng F c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+     rng F c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
     then reconsider f = F as FinSequence of COMPLEX by FINSEQ_1:def 4;
     set g = addreal, h = addcomplex;
-    consider n being Element of NAT such that
+    consider n being Nat such that
 A1: dom f = Seg n by FINSEQ_1:def 2;
-A2: g $$ F = g $$ (Seg n,[#](F,the_unity_wrt g)) by A1,SETWOP_2:def 2;
-A3: h $$ f = h $$ (Seg n,[#](f,the_unity_wrt h)) by A1,SETWOP_2:def 2;
-    defpred P[Element of NAT] means
-      g $$ (Seg $1,[#](F,the_unity_wrt g)) =
-        h $$ (Seg $1,[#](f,the_unity_wrt h));
+A2: g $$ F = g $$ (finSeg n,[#](F,the_unity_wrt g)) by A1,SETWOP_2:def 2;
+A3: h $$ f = h $$ (finSeg n,[#](f,the_unity_wrt h)) by A1,SETWOP_2:def 2;
+    defpred P[Nat] means
+      g $$ (finSeg $1,[#](F,the_unity_wrt g)) =
+        h $$ (finSeg $1,[#](f,the_unity_wrt h));
 A4: Seg 0 = {}.NAT by FINSEQ_1:4;
 A5: P[0]
     proof
-       g $$ (Seg 0,[#](F,the_unity_wrt g)) =
-           the_unity_wrt h by BINOP_2:1,2,SETWISEO:40,A4
-        .= h $$ (Seg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
+       g $$ (finSeg 0,[#](F,the_unity_wrt g)) =
+           the_unity_wrt h by A4,BINOP_2:1,2,SETWISEO:40
+        .= h $$ (finSeg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
       hence thesis;
     end;
-A6: for k being Element of NAT st P[k] holds P[k+1]
+A6: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A7:   P[k];
+      reconsider k as Element of NAT by ORDINAL1:def 13;
       set i = [#](F,the_unity_wrt g);
       set j = [#](f,the_unity_wrt h);
 A8:   i.(k+1) = j.(k+1)
@@ -1380,21 +1383,21 @@ A9:       k+1 in dom f;
         suppose
 A10:       not k+1 in dom f;
           then j.(k+1) = the_unity_wrt h by SETWOP_2:22
-                 .= i.(k+1) by A10,SETWOP_2:22,BINOP_2:1,2;
+                 .= i.(k+1) by A10,BINOP_2:1,2,SETWOP_2:22;
           hence thesis;
         end;
       end;
-      reconsider a = i.(k+1), b = g $$(Seg k,i) as real number;
+      reconsider a = i.(k+1), b = g $$(finSeg k,i) as real number;
 A11:   not (k + 1) in Seg k by FINSEQ_3:9;
-       g $$ (Seg (k+1),i) = g $$ (Seg k \/ {.k+1.},i) by FINSEQ_1:11
-        .= g.(g $$(Seg k,i),i.(k+1)) by A11,SETWOP_2:4
-        .= g $$(Seg k,i) + (i.(k+1)) by BINOP_2:def 9
-        .= h.(h $$(Seg k,j),j.(k+1)) by BINOP_2:def 3,A7,A8
-        .= h $$ (Seg k \/ {.k+1.},j) by A11,SETWOP_2:4
-        .= h $$ (Seg (k+1),j) by FINSEQ_1:11;
+       g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {.k+1.},i) by FINSEQ_1:11
+        .= g.(g $$(finSeg k,i),i.(k+1)) by A11,SETWOP_2:4
+        .= g $$(finSeg k,i) + (i.(k+1)) by BINOP_2:def 9
+        .= h.(h $$(finSeg k,j),j.(k+1)) by A7,A8,BINOP_2:def 3
+        .= h $$ (finSeg k \/ {.k+1.},j) by A11,SETWOP_2:4
+        .= h $$ (finSeg (k+1),j) by FINSEQ_1:11;
       hence thesis;
     end;
-     for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
+     for k being Nat holds P[k] from NAT_1:sch 2(A5,A6);
     then g $$ F = h $$ f by A2,A3;
     hence thesis by Def11;
   end;
@@ -1476,7 +1479,7 @@ theorem Th110:
   Sum(i |-> r) = i*r
  proof
    reconsider r as Element of REAL by XREAL_0:def 1;
-   defpred P[Element of NAT] means Sum($1 |->r) = $1*r;
+   defpred P[Nat] means Sum($1 |->r) = $1*r;
 A1: P[0] by Th102,FINSEQ_2:113;
 A2:  for i st P[i] holds P[(i+1)]
    proof let i such that
@@ -1485,7 +1488,7 @@ A3:   Sum(i |-> r) = i*r;
                        .= i*r + 1*r by A3,Th104
                        .= (i+1)*r;
    end;
-    for i holds P[i] from NAT_1:sch 1(A1,A2);
+    for i holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
  end;
 
@@ -1498,7 +1501,7 @@ theorem Th111:
 theorem Th112:
   (for j st j in Seg i holds R1.j <= R2.j) implies Sum R1 <= Sum R2
  proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
      for R1,R2 being Element of $1-tuples_on REAL
       st for j st j in Seg $1 holds R1.j <= R2.j holds
        Sum R1 <= Sum R2;
@@ -1534,7 +1537,7 @@ A8:   j in Seg i;
       by A3,A5,A6,Th104;
     hence Sum R1 <= Sum R2 by A7,XREAL_1:9;
    end;
-     for i holds P[i] from NAT_1:sch 1(A1,A2);
+     for i holds P[i] from NAT_1:sch 2(A1,A2);
   hence thesis;
  end;
 
@@ -1543,7 +1546,7 @@ theorem Th113:
     (ex j st j in Seg i & R1.j < R2.j)
       implies Sum R1 < Sum R2
  proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
      for R1,R2 be Element of $1-tuples_on REAL st
       (for j st j in Seg $1 holds R1.j <= R2.j) &
        (ex j st j in Seg $1 & R1.j < R2.j)
@@ -1594,7 +1597,7 @@ A12:   j = i+1;
    end;
    hence thesis;
   end;
-    for i holds P[i] from NAT_1:sch 1(A1,A2);
+    for i holds P[i] from NAT_1:sch 2(A1,A2);
    hence thesis;
  end;
 
@@ -1716,7 +1719,7 @@ A9:  j in dom sqr R by A5,A7,FINSEQ_2:37;
 theorem
    (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2)
  proof
-  defpred P[Element of NAT] means
+  defpred P[Nat] means
     for R1,R2 being Element of $1-tuples_on REAL
       holds (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
 A1: P[0]
@@ -1789,7 +1792,7 @@ A11:  Sum sqr(x1*R2')+Sum sqr(x2*R1') + -2*Sum(mlt(x1*R2',x2*R1'))
     then (Sum mlt(R1,R2))^2 + 0 <= (Sum sqr R1)*(Sum sqr R2) by XREAL_1:21;
     hence (Sum mlt(R1,R2))^2 <= (Sum sqr R1)*(Sum sqr R2);
    end;
-    for i holds P[i] from NAT_1:sch 1(A1,A2);
+    for i holds P[i] from NAT_1:sch 2(A1,A2);
    hence thesis;
  end;
 
@@ -1818,19 +1821,20 @@ A1: f = F & Product F = multcomplex $$ f by Def14;
 A2: rng f c= REAL by A1,SEQ_1:def 1;
     then reconsider f' = f as FinSequence of REAL by FINSEQ_1:def 4;
     set mc = multcomplex, mr = multreal;
-A3: mc $$ f = mc $$ (dom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
-    consider n being Element of NAT such that
+A3: mc $$ f = mc $$ (findom f,[#](f,the_unity_wrt mc)) by SETWOP_2:def 2;
+    consider n being Nat such that
 A4: dom f = Seg n by FINSEQ_1:def 2;
-    defpred P[Element of NAT] means
-      mc $$ (Seg $1,[#](f,the_unity_wrt mc)) is real;
+    defpred P[Nat] means
+      mc $$ (finSeg $1,[#](f,the_unity_wrt mc)) is real;
      Seg 0 = {}.NAT by FINSEQ_1:4;
-then A5: P[0] by SETWISEO:40,BINOP_2:6;
+then A5: P[0] by BINOP_2:6,SETWISEO:40;
     set g = [#](f,the_unity_wrt mc);
-A6: for k being Element of NAT st P[k] holds P[k+1]
+A6: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A7:   P[k];
+      reconsider k as Element of NAT by ORDINAL1:def 13;
    g.(k+1) is real
       proof
         per cases;
@@ -1844,15 +1848,15 @@ A8:       k+1 in dom f;
           hence thesis by BINOP_2:6,SETWOP_2:22;
         end;
       end;
-      then reconsider a = g.(k+1), b = mc $$(Seg k,g) as real number by A7;
+      then reconsider a = g.(k+1), b = mc $$(finSeg k,g) as real number by A7;
        not (k + 1) in Seg k by FINSEQ_3:9;
-      then mc $$ (Seg k \/ {.k+1.},g) = mc.(mc $$(Seg k,g),g.(k+1))
+      then mc $$ (finSeg k \/ {.k+1.},g) = mc.(mc $$(finSeg k,g),g.(k+1))
         by SETWOP_2:4
         .= b * a by BINOP_2:def 5;
       hence thesis by FINSEQ_1:11;
     end;
-     for n being Element of NAT holds P[n] from NAT_1:sch 1(A5,A6);
-    hence thesis by A1,A4,A3;
+    for n being Nat holds P[n] from NAT_1:sch 2(A5,A6);
+    hence thesis by A1,A3,A4;
   end;
 end;
 
@@ -1861,27 +1865,27 @@ theorem Th123:
     Product F = multreal $$ F
   proof
     let F be FinSequence of REAL;
-     rng F c= COMPLEX by XBOOLE_1:1,NUMBERS:11;
+     rng F c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
     then reconsider f = F as FinSequence of COMPLEX by FINSEQ_1:def 4;
     set g = multreal, h = multcomplex;
-    consider n being Element of NAT such that
+    consider n being Nat such that
 A1: dom f = Seg n by FINSEQ_1:def 2;
-A2: g $$ F = g $$ (Seg n,[#](F,the_unity_wrt g)) by A1,SETWOP_2:def 2;
-A3: h $$ f = h $$ (Seg n,[#](f,the_unity_wrt h)) by A1,SETWOP_2:def 2;
-    defpred P[Element of NAT] means
-      g $$ (Seg $1,[#](F,the_unity_wrt g)) =
-        h $$ (Seg $1,[#](f,the_unity_wrt h));
+A2: g $$ F = g $$ (finSeg n,[#](F,the_unity_wrt g)) by A1,SETWOP_2:def 2;
+A3: h $$ f = h $$ (finSeg n,[#](f,the_unity_wrt h)) by A1,SETWOP_2:def 2;
+    defpred P[Nat] means
+      g $$ (finSeg $1,[#](F,the_unity_wrt g)) =
+        h $$ (finSeg $1,[#](f,the_unity_wrt h));
 A4: Seg 0 = {}.NAT by FINSEQ_1:4;
 A5: P[0]
     proof
-       g $$ (Seg 0,[#](F,the_unity_wrt g)) =
-           the_unity_wrt h by BINOP_2:6,7,SETWISEO:40,A4
-        .= h $$ (Seg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
+       g $$ (finSeg 0,[#](F,the_unity_wrt g)) =
+           the_unity_wrt h by A4,BINOP_2:6,7,SETWISEO:40
+        .= h $$ (finSeg 0,[#](f,the_unity_wrt h)) by A4,SETWISEO:40;
       hence thesis;
     end;
-A6: for k being Element of NAT st P[k] holds P[k+1]
+A6: for k being Nat st P[k] holds P[k+1]
     proof
-      let k be Element of NAT;
+      let k be Nat;
       assume
 A7:   P[k];
       set i = [#](F,the_unity_wrt g);
@@ -1898,21 +1902,22 @@ A9:       k+1 in dom f;
         suppose
 A10:       not k+1 in dom f;
           then j.(k+1) = the_unity_wrt h by SETWOP_2:22
-                 .= i.(k+1) by A10,SETWOP_2:22,BINOP_2:7,6;
+                 .= i.(k+1) by A10,BINOP_2:6,7,SETWOP_2:22;
           hence thesis;
         end;
       end;
-      reconsider a = i.(k+1), b = g $$(Seg k,i) as real number;
+      reconsider a = i.(k+1), b = g $$(finSeg k,i) as real number;
 A11:   not (k + 1) in Seg k by FINSEQ_3:9;
-       g $$ (Seg (k+1),i) = g $$ (Seg k \/ {.k+1.},i) by FINSEQ_1:11
-        .= g.(g $$(Seg k,i),i.(k+1)) by A11,SETWOP_2:4
-        .= g $$(Seg k,i) * (i.(k+1)) by BINOP_2:def 11
-        .= h.(h $$(Seg k,j),j.(k+1)) by BINOP_2:def 5,A7,A8
-        .= h $$ (Seg k \/ {.k+1.},j) by A11,SETWOP_2:4
-        .= h $$ (Seg (k+1),j) by FINSEQ_1:11;
+       reconsider k as Element of NAT by ORDINAL1:def 13;
+       g $$ (finSeg (k+1),i) = g $$ (finSeg k \/ {.k+1.},i) by FINSEQ_1:11
+        .= g.(g $$(finSeg k,i),i.(k+1)) by A11,SETWOP_2:4
+        .= g $$(finSeg k,i) * (i.(k+1)) by BINOP_2:def 11
+        .= h.(h $$(finSeg k,j),j.(k+1)) by A7,A8,BINOP_2:def 5
+        .= h $$ (finSeg k \/ {.k+1.},j) by A11,SETWOP_2:4
+        .= h $$ (finSeg (k+1),j) by FINSEQ_1:11;
       hence thesis;
     end;
-     for k being Element of NAT holds P[k] from NAT_1:sch 1(A5,A6);
+     for k being Nat holds P[k] from NAT_1:sch 2(A5,A6);
     then g $$ F = h $$ f by A2,A3;
     hence thesis by Def14;
   end;
@@ -1937,7 +1942,7 @@ registration
   proof
     let F be FinSequence;
     assume F is empty;
-    then rng F c= COMPLEX by XBOOLE_1:2,RELAT_1:60;
+    then rng F c= COMPLEX by RELAT_1:60,XBOOLE_1:2;
     hence thesis by Def10;
   end;
 end;
@@ -2088,14 +2093,14 @@ A2:  p = q^<*d*> by FINSEQ_1:63;
 then A3:  p is FinSequence of COMPLEX by FINSEQ_1:def 4;
 A4:  for i st i in dom q holds q.i in COMPLEX
    proof let i; assume i in dom q;
-    then p.i = q.i & i in dom p by A2,FINSEQ_2:18,FINSEQ_1:def 7;
+    then p.i = q.i & i in dom p by A2,FINSEQ_1:def 7,FINSEQ_2:18;
     hence thesis by A3,FINSEQ_2:13;
    end;
 A5:  len p in Seg len p by A1,FINSEQ_1:5;
         len p = len q + 1 by A2,FINSEQ_2:19;
   then len p in dom p & p.(len p) = d by A2,A5,FINSEQ_1:59,def 3;
   then d is Element of COMPLEX &
-       q is FinSequence of COMPLEX by A3,A4,FINSEQ_2:13,FINSEQ_2:14;
+       q is FinSequence of COMPLEX by A3,A4,FINSEQ_2:13,14;
   hence thesis by A2;
  end;
 
@@ -2104,7 +2109,7 @@ theorem
     (ex k st k in dom F & F.k = 0) iff Product F = 0
  proof
    let F be complex-yielding FinSequence;
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
     for F being complex-yielding FinSequence st
       len F = $1 holds (ex k st k in
         Seg $1 & F.k = 0) iff Product F = 0;
@@ -2129,7 +2134,7 @@ A9:    F.k = 0;
          suppose
 A10:      k in Seg i;
            Seg len F' = dom F' by FINSEQ_1:def 3;
-          then F'.k = F.k by A5,A4,A6,A10,FINSEQ_1:def 7;
+          then F'.k = F.k by A4,A5,A6,A10,FINSEQ_1:def 7;
           then Product F' = 0 by A3,A4,A6,A9,A10;
           hence thesis by A7;
          end;
@@ -2148,7 +2153,7 @@ A11:  Product F = 0;
 A12:    k in Seg i & F'.k = 0 by A3,A4,A6;
          Seg len F' = dom F' by FINSEQ_1:def 3;
         then k in Seg (i+1) & F.k = 0
-        by A5,A4,A6,A12,FINSEQ_1:def 7,FINSEQ_2:9;
+        by A4,A5,A6,A12,FINSEQ_1:def 7,FINSEQ_2:9;
         hence thesis;
        end;
        suppose x = 0;
@@ -2157,7 +2162,7 @@ A12:    k in Seg i & F'.k = 0 by A3,A4,A6;
      end;
      end;
 A13: Seg len F = dom F by FINSEQ_1:def 3;
-      for i holds P[i] from NAT_1:sch 1(A1,A2);
+      for i holds P[i] from NAT_1:sch 2(A1,A2);
      hence thesis by A13;
   end;
 
@@ -2238,11 +2243,7 @@ end;
 
 theorem
    for F being FinSequence of COMPLEX holds
-    Product F = multcomplex $$ F
-  proof
-    let F be FinSequence of COMPLEX;
-    thus thesis;
-  end;
+    Product F = multcomplex $$ F;
 
 theorem
    Product ((i+j)|->z) = (Product (i|->z))*(Product (j|->z))

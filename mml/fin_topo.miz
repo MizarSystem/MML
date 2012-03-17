@@ -8,22 +8,22 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, BOOLE, FUNCT_1, RELAT_1, ABSVALUE, ARYTM_1,
       CAT_1, FUNCT_2, SUBSET_1, PRE_TOPC, TARSKI, RELAT_2, SETFAM_1, CARD_1,
-      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, NAT_1, EQREL_1;
+      FIN_TOPO, HAHNBAN, FINSEQ_4, ORDERS_1, EQREL_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      FINSET_1, NAT_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      DOMAIN_1, RELSET_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2, XXREAL_0,
-      STRUCT_0, ORDERS_2;
+      FINSET_1, NAT_1, SETFAM_1, RELAT_1, EQREL_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, DOMAIN_1, RELSET_1, FINSEQ_1, FINSEQ_4, CARD_1, INT_2,
+      XXREAL_0, STRUCT_0, ORDERS_2;
  constructors SETFAM_1, DOMAIN_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, INT_2,
       EQREL_1, FINSEQ_4, ORDERS_2;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, ARYTM_3,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, STRUCT_0;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCOP_1, XXREAL_0,
+      XREAL_0, NAT_1, INT_1, FINSEQ_1, STRUCT_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, STRUCT_0, ORDINAL1, XBOOLE_0, SUBSET_1, RELAT_2, ORDERS_2,
       RELAT_1, FUNCOP_1;
  theorems NAT_1, TARSKI, FUNCOP_1, SUBSET_1, ZFMISC_1, FINSET_1, INT_1, CARD_1,
-      FINSEQ_4, FUNCT_1, FUNCT_2, FINSEQ_1, ABSVALUE, RELSET_1,
-      XBOOLE_0, XBOOLE_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1,
-      EQREL_1, ORDERS_2;
+      FINSEQ_4, FUNCT_1, FUNCT_2, FINSEQ_1, ABSVALUE, RELSET_1, XBOOLE_0,
+      XBOOLE_1, MEASURE2, XREAL_1, XXREAL_0, ORDINAL1, RELAT_1, EQREL_1,
+      ORDERS_2, PARTFUN1;
  schemes RECDEF_1, NAT_1, FINSEQ_2, DOMAIN_1;
 
 begin
@@ -173,14 +173,14 @@ A5:for n being Element of NAT holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 4;
     A21:P[k] and
     A22:for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A20);
 A23:  k+1 in Seg(k+1) by FINSEQ_1:6;
-  deffunc G(Element of NAT) = f.(abs($1-1));
+  deffunc G(Nat) = f.(abs($1-1));
   consider z being FinSequence of bool X() such that
 A24:  len z = k+1 and
-A25:  for j being Element of NAT st j in Seg(k+1) holds
+A25:  for j being Nat st j in Seg(k+1) holds
         z.j = G(j) from FINSEQ_2:sch 1;
   take z;
   thus 0 < len z by A24;
-  A26: 0+1 <= len z by NAT_1:13,A24;
+  A26: 0+1 <= len z by A24,NAT_1:13;
   then A27:1 in Seg(k+1) by A24,FINSEQ_1:3;
   thus z/.1 = z.1 by A26,FINSEQ_4:24
                .= f.(abs(1-1)) by A25,A27
@@ -205,7 +205,7 @@ A36:   i in dom z by A24,A31,FINSEQ_1:def 3;
                    .= f.(abs(i-1)+abs(1)) by A35,ABSVALUE:24
                    .= f.(abs(i-1)+1) by ABSVALUE:def 1
                    .= F(f.(abs(i-1))) by A5
-                   .= F(z/.i) by A32,A36,FINSEQ_4:def 4;
+                   .= F(z/.i) by A32,A36,PARTFUN1:def 8;
     end;
   thus F(z/.len z)=z/.len z
     proof
@@ -218,10 +218,10 @@ A39:   len z = 0 or len z in Seg(len z) by FINSEQ_1:5;
 then A40:   len z in dom z by A24,FINSEQ_1:def 3;
 A41:  z.len z = f.(abs(k+1-1)) by A24,A25,A39
                         .= f.k by ABSVALUE:def 1;
-      hence F(z/.len z) = F(f.k) by A40,FINSEQ_4:def 4
+      hence F(z/.len z) = F(f.k) by A40,PARTFUN1:def 8
                          .= f.(k+1) by A5
                          .= z.len z by A37,A38,A41,XBOOLE_0:def 10
-                         .= z/.len z by A40,FINSEQ_4:def 4;
+                         .= z/.len z by A40,PARTFUN1:def 8;
     end;
   let i, j be Element of NAT; assume A42:0 < i & i < j & j <= len z;
   then A43: 0+1 <= i by NAT_1:13;
@@ -275,7 +275,7 @@ A51:  1-1 <= i-1 by A49,XREAL_1:11;
 A64:  k+1 in dom z by A23,A24,FINSEQ_1:def 3;
       i+n0=len z by A63;
      then f.l = z/.(k+1) by A24,A47,A62
-           .= z.(k+1) by A64,FINSEQ_4:def 4
+           .= z.(k+1) by A64,PARTFUN1:def 8
            .= f.(abs(k+1-1)) by A23,A25
            .= m by A21,ABSVALUE:def 1;
   then k <= l by A22;

@@ -8,11 +8,12 @@ environ
 
  vocabularies PROB_1, FUNCT_2, FUNCT_1, BOOLE, SEQ_2, ORDINAL2, RELAT_1,
       ARYTM_1, ORDERS_2, MCART_1, SUBSET_1, ZF_LANG, EQREL_1, RELAT_2, QMAX_1,
-      NAT_1;
+      OPOSET_1, ORDERS_1, ROBBINS1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
       RELSET_1, RELAT_2, FUNCT_1, REAL_1, FUNCT_2, ORDERS_1, DOMAIN_1, SEQ_2,
-      PROB_1, MCART_1, EQREL_1, XXREAL_0;
- constructors DOMAIN_1, XCMPLX_0, XXREAL_0, ORDERS_1, EQREL_1, SEQ_2, PROB_1;
+      PROB_1, MCART_1, EQREL_1, XXREAL_0, STRUCT_0, ORDERS_2, ROBBINS1;
+ constructors DOMAIN_1, XCMPLX_0, XXREAL_0, ORDERS_1, EQREL_1, SEQ_2, PROB_1,
+      STRUCT_0, ORDERS_2, ROBBINS1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, PARTFUN1, NUMBERS,
       XREAL_0, MEMBERED, EQREL_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -277,10 +278,10 @@ reserve Q for Quantum_Mechanics;
 
 reserve s for Element of Sts Q;
 
-definition let X be set;
-  struct POI_Str over X (#
-           Ordering -> (Relation of X),
-         Involution -> Function of X,X #);
+definition
+  struct(RelStr,ComplStr) OrthoRelStr(# carrier -> set,
+           InternalRel -> (Relation of the carrier),
+         Compl -> Function of the carrier,the carrier #);
 end;
 
 reserve x1 for Element of X1;
@@ -291,14 +292,13 @@ definition let X1, Inv;
       Inv.(Inv.x1) = x1;
 end;
 
-definition let X1; let W be POI_Str over X1;
-  pred W is_a_Quantuum_Logic_on X1 means :Def7:
-  ex Ord being (Relation of X1),
-  Inv being Function of X1,X1 st
-  W = POI_Str(#Ord,Inv#) & Ord partially_orders X1 &
-  Inv is_an_involution_in X1 &
-  for x,y being Element of X1 st [x,y] in Ord holds
-  [Inv.y,Inv.x] in Ord;
+definition let W be OrthoRelStr;
+  pred W is_a_Quantuum_Logic_on means :Def7:
+  the InternalRel of W partially_orders the carrier of W &
+  the Compl of W is_an_involution_in the carrier of W &
+  for x,y being Element of the carrier of W st [x,y] in the InternalRel of W
+   holds
+  [(the Compl of W).y,(the Compl of W).x] in the InternalRel of W;
 end;
 
 definition let Q;
@@ -429,7 +429,7 @@ proof assume A1: p |- q;
 end;
 
 definition let Q;
-  func PropRel(Q) -> Equivalence_Relation of Prop Q means :Def12:
+  func PropRel Q -> Equivalence_Relation of Prop Q means :Def12:
   [p,q] in it iff p <==> q;
   existence
   proof
@@ -500,16 +500,16 @@ reserve B,C for Subset of Prop Q;
 canceled;
 
 theorem Th30:
-for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+for B,C st (B in Class PropRel Q & C in Class PropRel Q)
 for a,b,c,d being Element of Prop Q holds
 (a in B & b in B & c in C & d in C & a |- c) implies b |- d
 proof
- let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let B,C such that A1: B in Class PropRel Q & C in Class PropRel Q;
  let a,b,c,d be Element of Prop Q;
- A2: ex x st x in Prop Q & B = Class(PropRel(Q),x) by A1,EQREL_1:def 5;
- A3: ex y st y in Prop Q & C = Class(PropRel(Q),y) by A1,EQREL_1:def 5;
+ A2: ex x st x in Prop Q & B = Class(PropRel Q,x) by A1,EQREL_1:def 5;
+ A3: ex y st y in Prop Q & C = Class(PropRel Q,y) by A1,EQREL_1:def 5;
  assume a in B & b in B & c in C & d in C;
- then [a,b] in PropRel(Q) & [c,d] in PropRel(Q) by A2,A3,EQREL_1:30;
+ then [a,b] in PropRel Q & [c,d] in PropRel Q by A2,A3,EQREL_1:30;
  then A4: a <==> b & c <==> d by Def12;
  assume A5: a |- c;
  let s;
@@ -519,43 +519,43 @@ proof
 end;
 
 definition let Q;
-  func OrdRel(Q) -> Relation of Class PropRel (Q) means :Def13:
-  [B,C] in it iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+  func OrdRel Q -> Relation of Class PropRel (Q) means :Def13:
+  [B,C] in it iff B in Class PropRel Q & C in Class PropRel Q &
   for p,q st p in B & q in C holds p |- q;
   existence
   proof
    defpred P[set,set] means ex B,C st $1 = B & $2 = C &
     for p,q st p in B & q in C holds p |- q;
-   consider R being Relation of Class PropRel(Q),Class PropRel(Q)
+   consider R being Relation of Class PropRel Q,Class PropRel Q
    such that A1: for x,y holds
-   [x,y] in R iff x in Class PropRel(Q) & y in Class PropRel(Q) & P[x,y]
+   [x,y] in R iff x in Class PropRel Q & y in Class PropRel Q & P[x,y]
     from RELSET_1:sch 1;
-       [B,C] in R iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+       [B,C] in R iff B in Class PropRel Q & C in Class PropRel Q &
    for p,q st p in B & q in C holds p |- q
    proof
-    thus [B,C] in R implies B in Class PropRel(Q) & C in Class PropRel(Q) &
+    thus [B,C] in R implies B in Class PropRel Q & C in Class PropRel Q &
     for p,q st p in B & q in C holds p |- q
     proof
      assume [B,C] in R;
-     then B in Class PropRel(Q) & C in Class PropRel(Q) &
+     then B in Class PropRel Q & C in Class PropRel Q &
      ex B',C' being Subset of Prop Q st B = B' & C = C' &
      for p,q st p in B' & q in C' holds p |- q by A1;
      hence thesis;
     end;
-    assume B in Class PropRel(Q) & C in Class PropRel(Q) &
+    assume B in Class PropRel Q & C in Class PropRel Q &
     for p,q st p in B & q in C holds p |- q;
     hence thesis by A1;
    end;
    hence thesis;
   end;
   uniqueness
-  proof let R1,R2 be Relation of Class PropRel(Q);
-   assume that A2: for B,C holds [B,C] in R1 iff B in Class PropRel(Q) &
-   C in Class PropRel(Q) & for p,q st p in B & q in C holds p |- q and
-   A3: for B,C holds [B,C] in R2 iff B in Class PropRel(Q) &
-   C in Class PropRel(Q) & for p,q st p in B & q in C holds p |- q;
+  proof let R1,R2 be Relation of Class PropRel Q;
+   assume that A2: for B,C holds [B,C] in R1 iff B in Class PropRel Q &
+   C in Class PropRel Q & for p,q st p in B & q in C holds p |- q and
+   A3: for B,C holds [B,C] in R2 iff B in Class PropRel Q &
+   C in Class PropRel Q & for p,q st p in B & q in C holds p |- q;
    A4: now let B,C;
-             [B,C] in R1 iff B in Class PropRel(Q) & C in Class PropRel(Q) &
+             [B,C] in R1 iff B in Class PropRel Q & C in Class PropRel Q &
         for p,q st p in B & q in C holds p |- q by A2;
         hence [B,C] in R1 iff [B,C] in R2 by A3;
        end;
@@ -563,11 +563,11 @@ definition let Q;
    proof let x,y;
     thus [x,y] in R1 implies [x,y] in R2
     proof assume A5: [x,y] in R1;
-      then x in Class PropRel(Q) & y in Class PropRel(Q) by ZFMISC_1:106;
+      then x in Class PropRel Q & y in Class PropRel Q by ZFMISC_1:106;
      hence thesis by A4,A5;
     end;
     assume A6: [x,y] in R2;
-     then x in Class PropRel(Q) & y in Class PropRel(Q) by ZFMISC_1:106;
+     then x in Class PropRel Q & y in Class PropRel Q by ZFMISC_1:106;
     hence thesis by A4,A6;
    end;
    hence thesis by RELAT_1:def 2;
@@ -577,39 +577,39 @@ end;
 canceled;
 
 theorem Th32:
-p |- q iff [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q)
+p |- q iff [Class(PropRel Q,p),Class(PropRel Q,q)] in OrdRel Q
 proof
      p <==> p & q <==> q by Th23;
- then [p,p] in PropRel(Q) & [q,q] in PropRel(Q) by Def12;
- then A1: p in Class(PropRel(Q),p) & q in Class(PropRel(Q),q) by EQREL_1:27;
- A2: Class(PropRel(Q),p) in Class PropRel(Q) &
-     Class(PropRel(Q),q) in Class PropRel(Q) by EQREL_1:def 5;
- thus p |- q implies [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q)
+ then [p,p] in PropRel Q & [q,q] in PropRel Q by Def12;
+ then A1: p in Class(PropRel Q,p) & q in Class(PropRel Q,q) by EQREL_1:27;
+ A2: Class(PropRel Q,p) in Class PropRel Q &
+     Class(PropRel Q,q) in Class PropRel Q by EQREL_1:def 5;
+ thus p |- q implies [Class(PropRel Q,p),Class(PropRel Q,q)] in OrdRel Q
  proof
   assume p |- q;
-then for p1,q1 holds p1 in Class(PropRel(Q),p) & q1 in Class(PropRel(Q),q)
+then for p1,q1 holds p1 in Class(PropRel Q,p) & q1 in Class(PropRel Q,q)
 implies
  p1 |- q1 by A1,A2,Th30;
   hence thesis by A2,Def13;
  end;
- assume [Class(PropRel(Q),p),Class(PropRel(Q),q)] in OrdRel(Q);
+ assume [Class(PropRel Q,p),Class(PropRel Q,q)] in OrdRel Q;
  hence thesis by A1,Def13;
 end;
 
 theorem Th33:
-for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+for B,C st (B in Class PropRel Q & C in Class PropRel Q)
 for p1,q1 holds (p1 in B & q1 in B & 'not' p1 in C) implies 'not' q1 in C
 proof
- let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let B,C such that A1: B in Class PropRel Q & C in Class PropRel Q;
  let p1,q1;
  consider x such that
- A2: x in Prop Q & B = Class(PropRel(Q),x) by A1,EQREL_1:def 5;
+ A2: x in Prop Q & B = Class(PropRel Q,x) by A1,EQREL_1:def 5;
  consider y such that
- A3: y in Prop Q & C = Class(PropRel(Q),y) by A1,EQREL_1:def 5;
+ A3: y in Prop Q & C = Class(PropRel Q,y) by A1,EQREL_1:def 5;
  reconsider q = y as Element of Prop Q by A3;
  assume p1 in B & q1 in B & 'not' p1 in C;
- then [p1,q1] in PropRel(Q) & ['not'
-p1,q] in PropRel(Q) by A2,A3,EQREL_1:27,30
+ then [p1,q1] in PropRel Q & ['not'
+p1,q] in PropRel Q by A2,A3,EQREL_1:27,30
 ;
 then A4: p1 <==> q1 & 'not' p1 <==> q by Def12;
  then A5: p1 <==> q1 & q <==> 'not' p1 by Th24;
@@ -627,57 +627,57 @@ then A4: p1 <==> q1 & 'not' p1 <==> q by Def12;
  end;
  then 'not' p1 <==> 'not' q1 by Th20;
  then q <==> 'not' q1 by A5,Th25;
- then [q,'not' q1] in PropRel(Q) by Def12;
- then ['not' q1,q] in PropRel(Q) by EQREL_1:12;
+ then [q,'not' q1] in PropRel Q by Def12;
+ then ['not' q1,q] in PropRel Q by EQREL_1:12;
  hence thesis by A3,EQREL_1:27;
 end;
 
 theorem
-    for B,C st (B in Class PropRel(Q) & C in Class PropRel(Q))
+    for B,C st (B in Class PropRel Q & C in Class PropRel Q)
 for p,q holds 'not' p in C & 'not' q in C & p in B implies q in B
 proof
- let B,C such that A1: B in Class PropRel(Q) & C in Class PropRel(Q);
+ let B,C such that A1: B in Class PropRel Q & C in Class PropRel Q;
  let p,q;   'not'('not' p) = p & 'not'('not' q) =q by Th27;
  hence thesis by A1,Th33;
 end;
 
 definition let Q;
-  func InvRel(Q) -> Function of Class PropRel(Q),Class PropRel(Q)
+  func InvRel Q -> Function of Class PropRel Q,Class PropRel Q
   means :Def14:
-  it.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p);
+  it.Class(PropRel Q,p) = Class(PropRel Q,'not' p);
   existence
   proof
    defpred P[set,set] means
-    for p st $1 = Class(PropRel(Q),p) holds $2 = Class(PropRel(Q),'not' p);
-   A1: for x st x in Class PropRel(Q) ex y st y in Class PropRel(Q) & P[x,y]
-   proof let x; assume A2: x in Class PropRel(Q); then consider q such that
-    A3: x = Class(PropRel(Q),q) by EQREL_1:45;
-    reconsider y = Class(PropRel(Q),'not' q) as set; take y; thus
-    A4: y in Class PropRel(Q) by EQREL_1:def 5;
+    for p st $1 = Class(PropRel Q,p) holds $2 = Class(PropRel Q,'not' p);
+   A1: for x st x in Class PropRel Q ex y st y in Class PropRel Q & P[x,y]
+   proof let x; assume A2: x in Class PropRel Q; then consider q such that
+    A3: x = Class(PropRel Q,q) by EQREL_1:45;
+    reconsider y = Class(PropRel Q,'not' q) as set; take y; thus
+    A4: y in Class PropRel Q by EQREL_1:def 5;
     reconsider y'=y as Subset of Prop Q; let p;
-    assume A5: x = Class(PropRel(Q),p);
+    assume A5: x = Class(PropRel Q,p);
     then reconsider x as Subset of Prop Q;
         p in x & q in x & 'not' q in y' by A3,A5,EQREL_1:28;
     then 'not' p in y' by A2,A4,Th33;
-    hence y = Class(PropRel(Q),'not' p) by EQREL_1:31;
+    hence y = Class(PropRel Q,'not' p) by EQREL_1:31;
    end;
-   consider F being Function of Class PropRel(Q),Class PropRel(Q)
-   such that A6: for x st x in Class PropRel(Q) holds P[x,F.x]
+   consider F being Function of Class PropRel Q,Class PropRel Q
+   such that A6: for x st x in Class PropRel Q holds P[x,F.x]
     from FUNCT_2:sch 1(A1);
    take F; let p;
-       Class(PropRel(Q),p) in Class PropRel(Q) by EQREL_1:def 5;
-   hence F.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) by A6;
+       Class(PropRel Q,p) in Class PropRel Q by EQREL_1:def 5;
+   hence F.Class(PropRel Q,p) = Class(PropRel Q,'not' p) by A6;
   end;
   uniqueness
-  proof let F1,F2 be Function of Class PropRel(Q),Class PropRel(Q);
+  proof let F1,F2 be Function of Class PropRel Q,Class PropRel Q;
    assume that
-   A7: for p holds F1.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) and
-   A8: for p holds F2.Class(PropRel(Q),p) = Class(PropRel(Q),'not' p);
+   A7: for p holds F1.Class(PropRel Q,p) = Class(PropRel Q,'not' p) and
+   A8: for p holds F2.Class(PropRel Q,p) = Class(PropRel Q,'not' p);
        now let x;
-    assume x in Class PropRel(Q);
+    assume x in Class PropRel Q;
     then consider p such that
     A9: x = Class(PropRel Q, p) by EQREL_1:45;
-        F1.x = Class(PropRel(Q),'not' p) & F2.x = Class(PropRel(Q),'not'
+        F1.x = Class(PropRel Q,'not' p) & F2.x = Class(PropRel Q,'not'
 p) by A7,A8,A9;
     hence F1.x = F2.x;
    end;
@@ -688,68 +688,68 @@ end;
 canceled;
 
 theorem ::Main Theorem
-    for Q holds POI_Str(#OrdRel(Q),InvRel(Q)#)
-is_a_Quantuum_Logic_on Class PropRel(Q)
+    for Q holds OrthoRelStr(#Class PropRel Q,OrdRel Q,InvRel Q#)
+is_a_Quantuum_Logic_on
 proof let Q;
-A1: OrdRel(Q) partially_orders Class PropRel(Q)
+A1: OrdRel Q partially_orders Class PropRel Q
      proof
-      thus OrdRel(Q) is_reflexive_in Class PropRel(Q)
-           proof let x; assume x in Class PropRel(Q);
+      thus OrdRel Q is_reflexive_in Class PropRel Q
+           proof let x; assume x in Class PropRel Q;
             then consider p such that
-            A2: x = Class(PropRel(Q),p) by EQREL_1:45;
+            A2: x = Class(PropRel Q,p) by EQREL_1:45;
                 p |- p by Th21;
             hence thesis by A2,Th32;
            end;
-      thus OrdRel(Q) is_transitive_in Class PropRel(Q)
+      thus OrdRel Q is_transitive_in Class PropRel Q
            proof let x,y,z;
-            assume that A3: x in Class PropRel(Q) & y in Class PropRel(Q) &
-            z in Class PropRel(Q) and
-            A4: [x,y] in OrdRel(Q) & [y,z] in OrdRel(Q);
+            assume that A3: x in Class PropRel Q & y in Class PropRel Q &
+            z in Class PropRel Q and
+            A4: [x,y] in OrdRel Q & [y,z] in OrdRel Q;
             consider p such that
-            A5: x = Class(PropRel(Q),p) by A3,EQREL_1:45;
+            A5: x = Class(PropRel Q,p) by A3,EQREL_1:45;
             consider q such that
-            A6: y = Class(PropRel(Q),q) by A3,EQREL_1:45;
+            A6: y = Class(PropRel Q,q) by A3,EQREL_1:45;
             consider r such that
-            A7: z = Class(PropRel(Q),r) by A3,EQREL_1:45;
+            A7: z = Class(PropRel Q,r) by A3,EQREL_1:45;
                 p |- q & q |- r implies p |- r by Th22;
             hence thesis by A4,A5,A6,A7,Th32;
            end;
-      thus OrdRel(Q) is_antisymmetric_in Class PropRel(Q)
+      thus OrdRel Q is_antisymmetric_in Class PropRel Q
            proof let x,y;
             assume that
-            A8: x in Class PropRel(Q) & y in Class PropRel(Q) and
-            A9: [x,y] in OrdRel(Q) & [y,x] in OrdRel(Q);
+            A8: x in Class PropRel Q & y in Class PropRel Q and
+            A9: [x,y] in OrdRel Q & [y,x] in OrdRel Q;
             consider p such that
-            A10: x = Class(PropRel(Q),p) by A8,EQREL_1:45;
+            A10: x = Class(PropRel Q,p) by A8,EQREL_1:45;
             consider q such that
-            A11: y = Class(PropRel(Q),q) by A8,EQREL_1:45;
+            A11: y = Class(PropRel Q,q) by A8,EQREL_1:45;
                 (p |- q & q |- p implies p <==> q) &
-            (p <==> q implies [p,q] in PropRel(Q)) by Def11,Def12;
+            (p <==> q implies [p,q] in PropRel Q) by Def11,Def12;
             hence thesis by A9,A10,A11,Th32,EQREL_1:44;
            end;
      end;
-A12: InvRel(Q) is_an_involution_in Class PropRel(Q)
-     proof let x be Element of Class PropRel(Q);
+A12: InvRel Q is_an_involution_in Class PropRel Q
+     proof let x be Element of Class PropRel Q;
       consider r;
-      reconsider D = Class PropRel(Q) as non empty set;
+      reconsider D = Class PropRel Q as non empty set;
       consider p such that
-      A13: x = Class(PropRel(Q),p) by EQREL_1:45;
-          (InvRel(Q)).((InvRel(Q)).x)
-           = (InvRel(Q)).Class(PropRel(Q),'not' p) by A13,Def14
-          .= Class(PropRel(Q),'not'('not' p)) by Def14;
+      A13: x = Class(PropRel Q,p) by EQREL_1:45;
+          (InvRel Q).((InvRel Q).x)
+           = (InvRel Q).Class(PropRel Q,'not' p) by A13,Def14
+          .= Class(PropRel Q,'not'('not' p)) by Def14;
       hence thesis by A13,Th27;
      end;
-     for x,y being Element of Class PropRel(Q) st [x,y] in OrdRel(Q) holds
- [(InvRel(Q)).y,(InvRel(Q)).x] in OrdRel(Q)
- proof let x,y be Element of Class PropRel(Q);
+     for x,y being Element of Class PropRel Q st [x,y] in OrdRel Q holds
+ [(InvRel Q).y,(InvRel Q).x] in OrdRel Q
+ proof let x,y be Element of Class PropRel Q;
       consider r;
-      reconsider D = Class PropRel(Q) as non empty set;
+      reconsider D = Class PropRel Q as non empty set;
       consider p such that
-      A14: x = Class(PropRel(Q),p) by EQREL_1:45;
+      A14: x = Class(PropRel Q,p) by EQREL_1:45;
       consider q such that
-      A15: y = Class(PropRel(Q),q) by EQREL_1:45;
-      A16: (InvRel(Q)).Class(PropRel(Q),p) = Class(PropRel(Q),'not' p) &
-      (InvRel(Q)).Class(PropRel(Q),q) = Class(PropRel(Q),'not' q) by Def14;
+      A15: y = Class(PropRel Q,q) by EQREL_1:45;
+      A16: (InvRel Q).Class(PropRel Q,p) = Class(PropRel Q,'not' p) &
+      (InvRel Q).Class(PropRel Q,q) = Class(PropRel Q,'not' q) by Def14;
           p |- q implies 'not' q |- 'not' p by Th28;
       hence thesis by A14,A15,A16,Th32;
  end;

@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -37,7 +37,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -50,7 +50,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="225">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -59,17 +59,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
-<Num nr="2"/>
-</Func>
-</Func>
-<Func kind="K" nr="184">
-<Func kind="U" nr="1">
-<Func kind="K" nr="224">
-<Num nr="2"/>
-</Func>
-</Func>
 <Func kind="K" nr="225">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="185">
+<Func kind="U" nr="1">
+<Func kind="K" nr="225">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -83,7 +83,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -96,7 +96,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="225">
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -105,7 +105,7 @@
 </Fraenkel>
 <Func kind="K" nr="35">
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -113,7 +113,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -125,17 +125,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="224">
-<Num nr="2"/>
-</Func>
-</Func>
-<Func kind="K" nr="184">
-<Func kind="U" nr="1">
-<Func kind="K" nr="224">
-<Num nr="2"/>
-</Func>
-</Func>
 <Func kind="K" nr="225">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="185">
+<Func kind="U" nr="1">
+<Func kind="K" nr="225">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="226">
 <Num nr="2"/>
 </Func>
 </Func>

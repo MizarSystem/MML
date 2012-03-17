@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -21,9 +21,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="FINSOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MEMBERED"/>
@@ -42,7 +40,6 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FVSUM_1"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM1"/>
@@ -103,7 +100,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="118">
-<Func kind="K" nr="318">
+<Func kind="K" nr="299">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="136">
@@ -127,8 +124,8 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="152">
-<Func kind="K" nr="318">
+<Func kind="K" nr="119">
+<Func kind="K" nr="299">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="136">
@@ -141,8 +138,8 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
-<Func kind="K" nr="318">
+<Func kind="K" nr="12">
+<Func kind="K" nr="299">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="136">
@@ -214,7 +211,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="20">
-<Func kind="K" nr="183">
+<Func kind="K" nr="174">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -236,7 +233,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="195">
+<Func kind="K" nr="186">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

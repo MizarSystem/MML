@@ -3,9 +3,9 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="ENUMSET1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -168,7 +168,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="27">
 <Var nr="1"/>
-<Func kind="K" nr="9">
+<Func kind="K" nr="22">
 <Var nr="2"/>
 </Func>
 </Func>
@@ -315,7 +315,7 @@
 <Pred kind="P" nr="1">
 <Func kind="K" nr="27">
 <Var nr="1"/>
-<Func kind="K" nr="9">
+<Func kind="K" nr="22">
 <Var nr="2"/>
 </Func>
 </Func>

@@ -34,14 +34,13 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DICKSON"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="SEQ_1"/>
+<ArticleID name="FINSUB_1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
-<ArticleID name="FINSEQ_4"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM1"/>
@@ -55,10 +54,10 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="12">
-<Func kind="K" nr="332">
+<Func kind="K" nr="323">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="352">
+<Func kind="K" nr="343">
 <LocusVar nr="1"/>
 </Func>
 </Func>

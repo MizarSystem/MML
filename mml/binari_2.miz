@@ -8,30 +8,21 @@ environ
 
  vocabularies CQC_LANG, MIDSP_3, MARGREL1, FINSEQ_1, FUNCT_1, RELAT_1, ZF_LANG,
       INT_1, BINARITH, ARYTM_1, POWER, MONOID_0, SETWISEO, FINSEQ_2, BINARI_2,
-      FINSEQ_4, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, FUNCT_1, INT_1,
-      BINOP_1, SETWOP_2, SERIES_1, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      BINOP_2, XXREAL_0, XBOOLEAN, MARGREL1, BINARITH;
- constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, FINSEQ_4, FINSOP_1,
-      SERIES_1, BINARITH;
- registrations SUBSET_1, ORDINAL1, RELSET_1, ARYTM_3, XREAL_0, NAT_1, INT_1,
-      BINOP_2, XBOOLEAN, MARGREL1;
+      FINSEQ_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, NUMBERS, FUNCT_1, NAT_1,
+      INT_1, PARTFUN1, BINOP_1, SETWOP_2, SERIES_1, FUNCOP_1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, BINOP_2, XBOOLEAN, MARGREL1, BINARITH;
+ constructors PARTFUN1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, FINSEQ_4,
+      FINSOP_1, SERIES_1, BINARITH;
+ registrations ORDINAL1, RELSET_1, XREAL_0, NAT_1, INT_1, BINOP_2, XBOOLEAN,
+      MARGREL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions XBOOLEAN;
- theorems BINARITH, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, POWER,
-      NAT_1, FINSOP_1, BINOP_2, XBOOLEAN;
+ theorems BINARITH, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCOP_1, POWER, NAT_1,
+      FINSOP_1, BINOP_2, XBOOLEAN, PARTFUN1;
  schemes FINSEQ_2, BINARITH;
 
 begin
-
-definition let X be non empty set; let D be non empty Subset of X;
- let x,y be set, a,b be Element of D;
- redefine func IFEQ(x,y,a,b) -> Element of D;
- coherence
-  proof x = y or x <> y;
-   hence thesis by FUNCOP_1:def 8;
-  end;
-end;
 
  reserve i,j,n for Element of NAT;
  reserve m for non empty Element of NAT;
@@ -45,12 +36,12 @@ proof
   assume that
         A1: len p = n & len q = n and
         A2: for i st i in Seg n holds p/.i = q/.i;
-     for i st i in Seg n holds p.i = q.i
+     for i being Nat st i in Seg n holds p.i = q.i
     proof
-    let i; assume
+    let i be Nat; assume
        A3: i in Seg n;
        then i in dom p & i in dom q by A1,FINSEQ_1:def 3;
-       then p/.i=p.i & q/.i = q.i by FINSEQ_4:def 4;
+       then p/.i=p.i & q/.i = q.i by PARTFUN1:def 8;
            hence thesis by A2,A3;
     end;
   hence thesis by A1,FINSEQ_2:10;
@@ -64,13 +55,13 @@ definition let n be Element of NAT;
    deffunc F(set) = IFEQ($1,1,TRUE,FALSE);
    consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
    reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
    take z;
    let i;
   assume A3: i in Seg n;
   then i in dom z by A1,FINSEQ_1:def 3;
-  hence z/.i = z.i by FINSEQ_4:def 4
+  hence z/.i = z.i by PARTFUN1:def 8
             .= IFEQ(i,1,TRUE,FALSE) by A2,A3;
   end;
   uniqueness
@@ -79,13 +70,13 @@ A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         A4: for i st i in Seg n holds z1/.i = IFEQ(i,1,TRUE,FALSE)
   and A5: for i st i in Seg n holds z2/.i = IFEQ(i,1,TRUE,FALSE);
         A6: len z1 = n & len z2 = n by FINSEQ_2:109;
-        now let j;
+        now let j be Nat;
     assume A7: j in Seg n;
     then A8: j in dom z1 & j in dom z2 by A6,FINSEQ_1:def 3;
-    hence z1.j = z1/.j by FINSEQ_4:def 4
+    hence z1.j = z1/.j by PARTFUN1:def 8
                .= IFEQ(j,1,TRUE,FALSE) by A4,A7
                .= z2/.j by A5,A7
-               .= z2.j by A8,FINSEQ_4:def 4;
+               .= z2.j by A8,PARTFUN1:def 8;
     end;
     hence z1 = z2 by A6,FINSEQ_2:10;
   end;
@@ -565,8 +556,8 @@ A20: Intval(z1^<*d1*>) + Intval(z2^<*d2*>)
   then Intval(z1^<*d1*>+z2^<*d2*>)
               + IFEQ(Int_add_ovfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
               - IFEQ(Int_add_udfl(z1^<*d1*>,z2^<*d2*>),FALSE,0,2 to_power(m+1))
-              = (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A2,A3,A4,A18,
-A23
+              = (Absval(z1) + Absval(z2)) - (2*2 to_power m) by A2,A3,A4,A18
+,A23
              .= (Absval(z1) + Absval(z2)) - (2 to_power 1*2 to_power m)
  by POWER:30
              .= (Absval(z1) + Absval(z2)) - 2 to_power(m+1) by POWER:32;
@@ -1050,17 +1041,17 @@ definition let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
     it/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
   existence
     proof
-   deffunc F(Element of NAT) = (x/.$1) 'xor' ((Neg2(y))/.$1)
+   deffunc F(Nat) = (x/.$1) 'xor' ((Neg2(y))/.$1)
                      'xor' ((carry(x,Neg2(y)))/.$1);
    consider z being FinSequence of BOOLEAN such that
 A1: len z = n and
-A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
    reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
    take z;
    let i;
   assume A3: i in Seg n;
   then i in dom z by A1,FINSEQ_1:def 3;
-  hence z/.i = z.i by FINSEQ_4:def 4
+  hence z/.i = z.i by PARTFUN1:def 8
       .= (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i) by A2,A3;
      end;
   uniqueness
@@ -1071,14 +1062,14 @@ A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
   and A5: for i st i in Seg n holds
           z2/.i = (x/.i) 'xor' ((Neg2(y))/.i) 'xor' ((carry(x,Neg2(y)))/.i);
         A6: len z1 = n & len z2 = n by FINSEQ_2:109;
-               now let j; assume A7: j in Seg n;
+               now let j be Nat; assume A7: j in Seg n;
             Seg n = Seg len z1 & Seg n = Seg len z2 by FINSEQ_2:109;
   then A8: j in dom z1 & j in dom z2 by A7,FINSEQ_1:def 3;
-  hence z1.j = z1/.j by FINSEQ_4:def 4
+  hence z1.j = z1/.j by PARTFUN1:def 8
             .= (x/.j) 'xor' ((Neg2(y))/.j) 'xor' ((carry(x,Neg2(y)))/.j)
               by A4,A7
             .= z2/.j by A5,A7
-            .= z2.j by A8,FINSEQ_4:def 4;
+            .= z2.j by A8,PARTFUN1:def 8;
          end;
         hence z1 = z2 by A6,FINSEQ_2:10;
     end;

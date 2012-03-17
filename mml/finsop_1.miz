@@ -7,14 +7,14 @@
 environ
 
  vocabularies FINSEQ_1, FUNCT_1, BINOP_1, FUNCT_2, RELAT_1, FINSEQ_2, SETWISEO,
-      FUNCOP_1, FUNCT_4, BOOLE, FINSUB_1, ARYTM_1, FINSEQ_4, FINSOP_1, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, BINOP_1, FINSEQ_2,
-      FINSEQ_1, FINSEQ_4, RELAT_1, RELSET_1, FUNCT_1, FINSUB_1, SETWISEO,
-      FUNCT_2, NAT_1, FUNCOP_1, FUNCT_4, XXREAL_0;
- constructors BINOP_1, FUNCOP_1, FUNCT_4, SETWISEO, XXREAL_0, XREAL_0, NAT_1,
-      FINSEQ_2, FINSEQ_4;
+      FUNCOP_1, FUNCT_4, BOOLE, FINSUB_1, ARYTM_1, FINSEQ_4, FINSOP_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, BINOP_1, PARTFUN1,
+      FINSEQ_2, FINSEQ_1, FINSEQ_4, RELAT_1, RELSET_1, FUNCT_1, FINSUB_1,
+      SETWISEO, FUNCT_2, NAT_1, FUNCOP_1, FUNCT_4, XXREAL_0;
+ constructors BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, SETWISEO, XXREAL_0,
+      XREAL_0, NAT_1, FINSEQ_2, FINSEQ_4;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
-      FUNCOP_1, ARYTM_3, XXREAL_0, XREAL_0, FINSEQ_1;
+      FUNCOP_1, XXREAL_0, XREAL_0, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, TARSKI, XBOOLE_0;
  theorems BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2,
@@ -216,8 +216,12 @@ A4:  rng F c= A by RELSET_1:12;
   end;
 end;
 
+notation let f be FinSequence;
+  synonym findom f for dom f;
+end;
+
 definition let f be FinSequence;
- redefine func dom f -> Element of Fin NAT;
+ redefine func findom f -> Element of Fin NAT;
  coherence
  proof dom f = Seg len f by FINSEQ_1:def 3;
   hence thesis by FINSUB_1:def 5;
@@ -225,13 +229,13 @@ definition let f be FinSequence;
 end;
 
 Lm1: len F >= 1 & g is associative & g is commutative
-       implies g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+       implies g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F)
  proof assume that A1: len F >= 1 and A2: g is associative & g is commutative;
    consider f such that A3: f.1 = F.1 and
     A4: for n st 0 <> n & n < len F holds f.(n + 1) = g.(f.n,F.(n + 1)) and
     A5: g "**" F = f.(len F) by A1,Def1;
    set h = (NAT-->the_unity_wrt g)+*F;
-   set A = dom F;
+   set A = findom F;
 A6: dom F = Seg len F by FINSEQ_1:def 3;
    then dom F <> {} by A1,FINSEQ_1:5;
    then consider G being Function of Fin NAT,D such that
@@ -272,23 +276,23 @@ then h.1 = F.1 by FUNCT_4:14;
       hence thesis;
      end;
      for n holds P[n] from NAT_1:sch 1(A10,A11);
-  hence g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F) by A1,A5,A6,A7;
+  hence g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F) by A1,A5,A6,A7;
  end;
 
 Lm2: len F = 0 & g has_a_unity & g is associative & g is commutative implies
- g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+ g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F)
   proof assume A1: len F = 0 & g has_a_unity & g is associative &
                   g is commutative;
     then F = {} by FINSEQ_1:25;
 then A2:  dom F = {}.NAT by FINSEQ_1:26;
    thus g "**" F = the_unity_wrt g by A1,Def1
-               .= g $$(dom F,(NAT-->the_unity_wrt g)+*F) by A1,A2,SETWISEO:40;
+   .= g $$(findom F,(NAT-->the_unity_wrt g)+*F) by A1,A2,SETWISEO:40;
   end;
 
 theorem
      (g has_a_unity or len F >= 1) & g is associative & g is commutative
 implies
-  g "**" F = g $$(dom F,(NAT-->the_unity_wrt g)+*F)
+  g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F)
    proof len F = 0 or len F >= 1 by NAT_1:14;
     hence thesis by Lm1,Lm2;
    end;
@@ -472,16 +476,17 @@ Lm7: g is associative & g is commutative implies
         A16: n + m2 = k + 1 by NAT_1:10;
         reconsider m1, m2 as Element of NAT by ORDINAL1:def 13;
         reconsider q1 = H1 | (Seg m1) as FinSequence of D by FINSEQ_1:23;
-        defpred P[Element of NAT,set] means $2 = H1.(n + $1);
-         A17: for j,y1,y2 st j in Seg m2 & P[j,y1] & P[j,y2] holds y1 = y2;
-         A18: for j st j in Seg m2 ex x st P[j,x];
+        defpred P[Nat,set] means $2 = H1.(n + $1);
+         A17: for j be Nat ,y1,y2 st j in Seg m2 & P[j,y1] & P[j,y2] holds
+         y1 = y2;
+         A18: for j be Nat st j in Seg m2 ex x st P[j,x];
         consider q2 being FinSequence such that A19: dom q2 = Seg m2 and
-         A20: for k st k in Seg m2 holds P[k,q2.k] from FINSEQ_1:sch 1
+A20:    for k be Nat st k in Seg m2 holds P[k,q2.k] from FINSEQ_1:sch 1
 (A17,A18);
              rng q2 c= D
           proof let x;
             assume x in rng q2;
-             then consider y such that A21: y in dom q2 and A22: x = q2.y
+             then consider y such that A21: y in findom q2 and A22: x = q2.y
                                             by FUNCT_1:def 5;
              reconsider y as Element of NAT by A21,SETWISEO:14;
                   1 <= y & y <= n + y by A19,A21,FINSEQ_1:3,NAT_1:12;
@@ -511,7 +516,7 @@ Lm7: g is associative & g is commutative implies
                                    .= k + 1 by A14,A16,A27,FINSEQ_1:57;
          then A30: dom H1 = Seg(len(q1 ^ <* d *>) + len q2)
                                                   by A6,FINSEQ_1:def 3;
-         A31: now let j;
+         A31: now let j be Nat;
            assume A32: j in dom(q1 ^ <* d *>);
              len(q1 ^ <* d *>) = m1 + len <* d *> by A27,FINSEQ_1:35
                              .= m1 + 1 by FINSEQ_1:57;
@@ -532,7 +537,7 @@ Lm7: g is associative & g is commutative implies
             end;
           hence H1.j = (q1 ^ <* d *>).j by A33,A34,XBOOLE_0:def 2;
          end;
-          now let j;
+          now let j be Nat;
            assume A37: j in dom q2;
                 len(q1 ^ <* d *>) = m1 + len<* d *> by A27,FINSEQ_1:35
                              .= n by A14,FINSEQ_1:56;
@@ -547,14 +552,14 @@ Lm7: g is associative & g is commutative implies
           hence f.n is Element of NAT;
          end;
          A42: dom q1 = Seg m1 by A6,A26,FINSEQ_1:21;
-         A43: dom p = Seg k & dom q = Seg k by A6,A7,A14,A16,A24,A28,FINSEQ_1:
-21,def 3;
-         defpred P[Element of NAT,set] means
+         A43: dom p = Seg k & dom q = Seg k by A6,A7,A14,A16,A24,A28,
+FINSEQ_1:21,def 3;
+         defpred P[Nat,set] means
               (f.$1 in dom q1 implies $2 = f.$1) &
               (not f.$1 in dom q1 implies
                 for l st l = f.$1 holds $2 = l - 1);
-         A44: for i st i in Seg k ex y st P[i,y]
-          proof let i;
+         A44: for i be Nat st i in Seg k ex y st P[i,y]
+          proof let i be Nat;
             assume
 A45:         i in Seg k;
                  now assume A46: not f.i in dom q1;
@@ -568,9 +573,9 @@ A45:         i in Seg k;
              end;
            hence thesis;
           end;
-         A47: for i,y1,y2 st i in Seg k & P[i,y1] & P[i,y2]
+         A47: for i be Nat,y1,y2 st i in Seg k & P[i,y1] & P[i,y2]
                 holds y1 = y2
-          proof let i,y1,y2;
+          proof let i be Nat,y1,y2;
             assume that A48: i in Seg k and A49: f.i in dom q1 implies y1 = f.i
 and
              A50: not f.i in dom q1 implies for l st l = f.i holds y1 = l - 1
@@ -586,7 +591,7 @@ and
            hence y1 = y2 by A49,A51;
           end;
         consider gg being FinSequence such that A54: dom gg = Seg k and
-         A55: for i st i in Seg k holds P[i,gg.i]
+         A55: for i be Nat st i in Seg k holds P[i,gg.i]
                 from FINSEQ_1:sch 1(A47,A44);
          A56: now let i,l;
            assume that A57: l = f.i and A58: not f.i in dom q1 and
@@ -606,7 +611,7 @@ and
          A62: rng gg c= dom p
           proof let y;
             assume y in rng gg;
-             then consider x such that A63: x in dom gg and A64: gg.x = y
+             then consider x such that A63: x in findom gg and A64: gg.x = y
                                                           by FUNCT_1:def 5;
              reconsider x as Element of NAT by A63,SETWISEO:14;
                   now per cases;
@@ -688,8 +693,7 @@ and
                  then consider x1 being set such that A81: x1 in dom f and
                   A82: f.x1 = j + 1 by FUNCT_1:def 5;
                   A83: now assume not x1 in dom gg;
-                    then x1 in Seg(k + 1) \ Seg k by A10,A54,A81,XBOOLE_0:def
-4
+                    then x1 in Seg(k + 1) \ Seg k by A10,A54,A81,XBOOLE_0:def 4
 ;
                     then x1 in {k + 1} by FINSEQ_3:16;
                     then j + 1 = j + 0 by A74,A80,A82,TARSKI:def 1;
@@ -774,21 +778,21 @@ and
                 then m1 + 2 - 1 <= j - 1 by XREAL_1:11;
                 then m1 < m1 + 1 & m1 + 1 <= j - 1
                                          by XREAL_1:31;
-                then A96: m1 < j - 1 & j - 1 < j by XXREAL_0:2,XREAL_1:148;
+                then A96: m1 < j - 1 & j - 1 < j by XREAL_1:148,XXREAL_0:2;
                 then m1 < j by XXREAL_0:2;
                then reconsider j1 = j - 1 as Element of NAT by NAT_1:20;
                     not j1 in dom q1 by A42,A96,FINSEQ_1:3;
-               then consider a being Element of NAT such that
+               then consider a being Nat such that
                A97: a in dom q2 and
                 A98: j1 = len q1 + a by A95,FINSEQ_1:38;
                 A99: H1 = q1 ^ (<* d *> ^ q2) & j in dom H1
                             by A10,A11,A38,A40,A43,A92,FINSEQ_1:45
 ,FUNCT_1:def 5;
-               then consider b being Element of NAT such that
+               then consider b being Nat such that
                 A100: b in dom(<* d *> ^ q2) and A101: j = len q1 + b
                                                         by A93,FINSEQ_1:38;
-                A102: q.(j - 1) = q2.a & H1.j = (<* d *> ^ q2).b by A97,A98
-,A99,A100,A101,FINSEQ_1:def 7;
+                A102: q.(j - 1) = q2.a & H1.j = (<* d *> ^ q2).b by A97,A98,A99
+,A100,A101,FINSEQ_1:def 7;
                 A103: b = 1 + a by A98,A101;
                     len<* d *> = 1 by FINSEQ_1:56;
                hence p.i = q.(gg.i) by A94,A97,A102,A103,FINSEQ_1:def 7;

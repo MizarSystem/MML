@@ -8,13 +8,13 @@ environ
 
  vocabularies VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, TREES_1,
       FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1, MATRIX_1,
-      ROUGHS_1, NAT_1;
+      ROUGHS_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, FUNCT_1,
       FUNCT_2, FINSEQ_1, FINSEQ_2, STRUCT_0, BINOP_1, FINSEQOP, RLVECT_1,
       GROUP_1, VECTSP_1, XXREAL_0;
  constructors BINOP_1, XXREAL_0, FINSEQOP, VECTSP_1;
- registrations XBOOLE_0, RELAT_1, FUNCT_1, ARYTM_3, XREAL_0, FINSEQ_1,
-      FINSEQ_2, STRUCT_0, GROUP_1, VECTSP_1;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, FINSEQ_1, FINSEQ_2,
+      STRUCT_0, GROUP_1, VECTSP_1, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, RLVECT_1, BINOP_1, FINSEQ_2, STRUCT_0;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, FUNCOP_1, FUNCT_1, FUNCT_2,
@@ -483,9 +483,9 @@ theorem Th21:
   assume that A1:len M1 =len M2 and A2:width M1= width M2 and
 A3:(for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j));
 A4: dom M1= dom M2 by A1,FINSEQ_3:31;
-     for k be Element of NAT st k in dom M1 holds M1.k = M2.k
+     for k be Nat st k in dom M1 holds M1.k = M2.k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume A5:k in dom M1;
       then A6:M1.k in rng M1 & M2.k in rng M2 by A4,FUNCT_1:def 5;
 A7:   rng M1 c= D* & rng M2 c= D* by FINSEQ_1:def 4;
@@ -500,8 +500,8 @@ A7:   rng M1 c= D* & rng M2 c= D* by FINSEQ_1:def 4;
        by A6,A7,FINSEQ_1:def 11;
        M2 is Matrix of len M1,width M1,D by A1,A2,A8,Th20;
       then A10:len q = width M1 by A6,Def3;
-       for l be Element of NAT st 1 <= l & l <= len p holds p.l = q.l
-       proof let l be Element of NAT;
+       for l be Nat st 1 <= l & l <= len p holds p.l = q.l
+       proof let l be Nat;
         assume 1 <= l & l <= len p;
         then A11:l in Seg width M1 by A9,FINSEQ_1:3;
         then l in dom p & l in dom q by A9,A10,FINSEQ_1:def 3;
@@ -511,8 +511,7 @@ A7:   rng M1 c= D* & rng M2 c= D* by FINSEQ_1:def 4;
         reconsider b = q.l as Element of D by A12;
 A13:    [k,l] in [:dom M1,Seg width M1:] &
         [k,l] in [:dom M2,Seg width M2:] by A2,A4,A5,A11,ZFMISC_1:106;
-         [k,l] in Indices M1 & [k,l] in Indices M2 by A2,A4,A5,A11,ZFMISC_1:106
-;
+        [k,l] in Indices M1 & [k,l] in Indices M2 by A2,A4,A5,A11,ZFMISC_1:106;
         then M1*(k,l)=a & M2*(k,l)= b by Def6;
         hence thesis by A3,A13;
        end;
@@ -529,42 +528,42 @@ proof
    defpred P[set,set] means
     ex p being FinSequence st
     $2=p & len p = m() & for i st i in Seg m() holds p.i = f($1,i);
-A1: for k be Element of NAT,y1,y2 st k in Seg n() & P[k,y1] & P[k,y2]
+A1: for k be Nat,y1,y2 st k in Seg n() & P[k,y1] & P[k,y2]
     holds y1=y2
    proof
-    let k be Element of NAT,y1,y2;
+    let k be Nat,y1,y2;
     assume k in Seg n();
     given p1 being FinSequence such that A2:y1 =p1 and A3:len p1 =m() and
 A4: for i st i in Seg m() holds p1.i =f(k,i);
     given p2 being FinSequence such that A5:y2 =p2 and A6:len p2 =m() and
 A7: for i st i in Seg m() holds p2.i =f(k,i);
-     now let j be Element of NAT; assume A8:j in Seg m();
+     now let j be Nat; assume A8:j in Seg m();
     then p1.j=f(k,j) by A4;
     hence p1.j=p2.j by A7,A8;
     end;
     hence y1=y2 by A2,A3,A5,A6,FINSEQ_2:10;
    end;
-  A9:for k be Element of NAT st k in Seg n() ex y st P[k,y]
+  A9:for k be Nat st k in Seg n() ex y st P[k,y]
    proof
-    let k be Element of NAT;
+    let k be Nat;
     assume k in Seg n();
-    deffunc F(Element of NAT) = f(k,$1);
+    deffunc F(Nat) = f(k,$1);
     consider p being FinSequence such that
-A10: len p =m() & for i be Element of NAT st i in Seg m() holds p.i = F(i)
+A10: len p =m() & for i be Nat st i in Seg m() holds p.i = F(i)
       from FINSEQ_1:sch 2;
     take p,p;
     thus thesis by A10;
    end;
    consider M being FinSequence such that
 A11:dom M = Seg n() and
-A12:for k be Element of NAT st k in Seg n() holds P[k,M.k]
+A12:for k be Nat st k in Seg n() holds P[k,M.k]
     from FINSEQ_1:sch 1(A1,A9);
 A13:len M = n() by A11,FINSEQ_1:def 3;
      rng M c=D()*
     proof
      let x;
      assume x in rng M;
-     then consider i be Element of NAT such that
+     then consider i be Nat such that
 A14:  i in dom M & M.i=x by FINSEQ_2:11;
       consider p being FinSequence such that
 A15:    M.i=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
@@ -573,7 +572,7 @@ A15:    M.i=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
        proof
          let z;
          assume z in rng p;
-         then consider k be Element of NAT such that
+         then consider k be Nat such that
      A16:k in dom p and A17:p.k =z by FINSEQ_2:11;
           k in Seg len p by A16,FINSEQ_1:def 3;
          then z = f(i,k) by A15,A17;
@@ -588,7 +587,7 @@ A15:    M.i=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
      proof take m();
       let x;
       assume x in rng M;
-      then consider i be Element of NAT such that
+      then consider i be Nat such that
 A18:  i in dom M and A19:M.i =x by FINSEQ_2:11;
       consider p being FinSequence such that
 A20:  x=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
@@ -597,7 +596,7 @@ A20:  x=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
        proof
          let z;
          assume z in rng p;
-         then consider k be Element of NAT such that
+         then consider k be Nat such that
      A21:k in dom p and A22:p.k =z by FINSEQ_2:11;
           k in Seg len p by A21,FINSEQ_1:def 3;
          then z = f(i,k) by A20,A22;
@@ -612,7 +611,7 @@ A20:  x=p & len p = m() & for j st j in Seg m() holds p.j = f(i,j)
     proof
       let p be FinSequence of D();
       assume p in rng M;
-      then consider i be Element of NAT such that
+      then consider i be Nat such that
 A23:  i in dom M and A24:M.i =p by FINSEQ_2:11;
        P[i,p] by A11,A12,A23,A24;
       hence thesis;
@@ -661,42 +660,42 @@ A5:  for x,y st x in Seg n() & y in Seg m() holds Q[x,y,f.(x,y)]
     defpred R[set,set] means
      ex p being FinSequence st
      $2=p & len p = m() & for i st i in Seg m() holds p.i = f.($1,i);
-A6:  for k be Element of NAT,y1,y2 st k in Seg n() & R[k,y1] & R[k,y2]
+A6:  for k be Nat,y1,y2 st k in Seg n() & R[k,y1] & R[k,y2]
      holds y1=y2
      proof
-       let k be Element of NAT,y1,y2;
+       let k be Nat,y1,y2;
        assume k in Seg n();
        given p1 being FinSequence such that A7:y1 =p1 and A8:len p1 =m() and
     A9:for i st i in Seg m() holds p1.i =f.(k,i);
        given p2 being FinSequence such that A10:y2 =p2 and A11:len p2 =m() and
    A12:for i st i in Seg m() holds p2.i =f.(k,i);
-        now let j be Element of NAT; assume A13:j in Seg m();
+        now let j be Nat; assume A13:j in Seg m();
          then p1.j=f.(k,j) by A9;
          hence p1.j=p2.j by A12,A13;
        end;
        hence y1=y2 by A7,A8,A10,A11,FINSEQ_2:10;
      end;
- A14:for k be Element of NAT st k in Seg n() ex y st R[k,y]
+ A14:for k be Nat st k in Seg n() ex y st R[k,y]
      proof
-       let k be Element of NAT;
+       let k be Nat;
        assume k in Seg n();
-       deffunc F(Element of NAT) = f.[k,$1];
+       deffunc F(Nat) = f.[k,$1];
        consider p being FinSequence such that
-  A15: len p =m() & for i be Element of NAT st i in Seg m() holds p.i = F(i)
+  A15: len p =m() & for i be Nat st i in Seg m() holds p.i = F(i)
          from FINSEQ_1:sch 2;
        take p,p;
        thus thesis by A15;
      end;
      consider M being FinSequence such that
  A16:dom M = Seg n() and
- A17:for k be Element of NAT st k in Seg n() holds R[k,M.k]
+ A17:for k be Nat st k in Seg n() holds R[k,M.k]
  from FINSEQ_1:sch 1(A6,A14);
  A18:len M = n() by A16,FINSEQ_1:def 3;
       rng M c=D()*
      proof
        let x;
        assume x in rng M;
-       then consider i be Element of NAT such that
+       then consider i be Nat such that
    A19:i in Seg n() & M.i=x by A16,FINSEQ_2:11;
        consider p being FinSequence such that
    A20:M.i=p & len p = m() & for j st j in Seg m() holds p.j = f.(i,j)
@@ -705,7 +704,7 @@ A6:  for k be Element of NAT,y1,y2 st k in Seg n() & R[k,y1] & R[k,y2]
        proof
          let z;
          assume z in rng p;
-         then consider k be Element of NAT such that
+         then consider k be Nat such that
      A21:k in dom p and A22:p.k =z by FINSEQ_2:11;
 A23:     k in Seg len p by A21,FINSEQ_1:def 3;
 then A24:     z = f.(i,k) by A20,A22;
@@ -721,7 +720,7 @@ then A24:     z = f.(i,k) by A20,A22;
      proof take m();
        let x;
        assume x in rng M;
-       then consider i be Element of NAT such that A25:i in dom M and
+       then consider i be Nat such that A25:i in dom M and
    A26:M.i = x by FINSEQ_2:11;
        consider p being FinSequence such that
    A27:x=p & len p = m() & for j st j in Seg m() holds p.j =f.(i,j)
@@ -730,7 +729,7 @@ then A24:     z = f.(i,k) by A20,A22;
        proof
          let z;
          assume z in rng p;
-         then consider k be Element of NAT such that
+         then consider k be Nat such that
      A28:k in dom p and A29:p.k =z by FINSEQ_2:11;
 A30:     k in Seg len p by A28,FINSEQ_1:def 3;
 then A31:     z = f.(i,k) by A27,A29;
@@ -746,7 +745,7 @@ then A31:     z = f.(i,k) by A27,A29;
      proof
        let p be FinSequence of D();
        assume p in rng M;
-       then consider i be Element of NAT such that A32:i in dom M and
+       then consider i be Nat such that A32:i in dom M and
 A33:   M.i = p by FINSEQ_2:11;
         R[i,p] by A16,A17,A32,A33;
        hence thesis;
@@ -786,7 +785,7 @@ theorem Th24:
     let M be Matrix of n,m,D;
 A2: Seg len M = dom M by FINSEQ_1:def 3;
      len M = n by Def3;
-    hence thesis by A2,A1,Th20;
+    hence thesis by A1,A2,Th20;
   end;
 
 theorem Th25:
@@ -906,7 +905,7 @@ A2:     Seg len M = dom M by FINSEQ_1:def 3;
           take M1;
            len M1 = 0 by FINSEQ_1:25;
           then Indices M1=[:{},Seg width M1:] by FINSEQ_1:4,def 3;
-          hence thesis by A5,FINSEQ_1:25,4,ZFMISC_1:113;
+          hence thesis by A5,FINSEQ_1:4,25,ZFMISC_1:113;
          end;
        end;
        end;
@@ -1024,7 +1023,7 @@ A2: len A = n & for p being FinSequence of K
 A3: now A4: n >= 0 by NAT_1:2;
   per cases by A4,REAL_1:def 5;
   case n>0;
-   hence len (A@)=n by A1,Th20,A2;
+   hence len (A@)=n by A1,A2,Th20;
   end;
   case n=0;
    hence len (A@)=n by A1,A2,Def4;
@@ -1048,13 +1047,13 @@ A8:  s=p2 & len s = n2 by A6;
 A9: s=p & len s = n2 by A5,A6;
      now per cases;
     case A10: n>0;
-then A11:  width A=n by Th20,A2;
+then A11:  width A=n by A2,Th20;
 then A12: len (A@)=width A & width (A@)=len A by A10,Lm1;
-     then A@ is Matrix of n,n2,K by A7,Def3,A11;
-     hence len p = n by A9,A2,A12,A11,A10,Th20;
+     then A@ is Matrix of n,n2,K by A7,A11,Def3;
+     hence len p = n by A2,A9,A10,A11,A12,Th20;
    end;
    case n<=0;
-then A13: width A=0 by Def4,A2;
+then A13: width A=0 by A2,Def4;
      A14: len (A@) = width A by Def7;
      consider x0 being set such that
 A15: x0 in dom (A@) & p=(A@).x0 by A5,FUNCT_1:def 5;
@@ -1063,7 +1062,7 @@ A15: x0 in dom (A@) & p=(A@).x0 by A5,FUNCT_1:def 5;
     end;
    hence len p = n;
   end;
-  hence A@ is Matrix of n,K by Def3,A3;
+  hence A@ is Matrix of n,K by A3,Def3;
 end;
 
 definition let n,D; let M be Matrix of n,D;
@@ -1083,7 +1082,7 @@ definition let D,M,i;
       deffunc F(Nat) = M*(i,$1);
       consider f being FinSequence of D such that
 A1:   len f = width M and
-A2:   for j be Element of NAT st j in Seg width M holds f.j = F(j)
+A2:   for j be Nat st j in Seg width M holds f.j = F(j)
       from FINSEQ_2:sch 1;
       take f;
       thus len f = width M by A1;
@@ -1097,9 +1096,9 @@ A2:   for j be Element of NAT st j in Seg width M holds f.j = F(j)
                  A4:for j st j in Seg width M holds p1.j = M*(i,j) and
                  A5:len p2=width M and
                  A6:for j st j in Seg width M holds p2.j = M*(i,j);
-      for j be Element of NAT st j in Seg width M holds p1.j=p2.j
+      for j be Nat st j in Seg width M holds p1.j=p2.j
      proof
-      let j be Element of NAT;
+      let j be Nat;
       assume j in Seg width M;
       then p1.j = M*(i,j) & p2.j = M*(i,j) by A4,A6;
       hence thesis;
@@ -1114,7 +1113,7 @@ A2:   for j be Element of NAT st j in Seg width M holds f.j = F(j)
     deffunc F(Nat) = M*($1,i);
     consider z being FinSequence of D such that
 A7: len z = len M and
-A8: for j be Element of NAT st j in Seg len M holds z.j = F(j)
+A8: for j be Nat st j in Seg len M holds z.j = F(j)
       from FINSEQ_2:sch 1;
     take z;
     thus len z = len M by A7;
@@ -1129,9 +1128,9 @@ A8: for j be Element of NAT st j in Seg len M holds z.j = F(j)
 A10: for j st j in dom M holds p1.j = M*(j,i) and
 A11: len p2= len M and
 A12: for j st j in dom M holds p2.j = M*(j,i);
-     for j be Element of NAT st j in Seg len M holds p1.j=p2.j
+     for j be Nat st j in Seg len M holds p1.j=p2.j
     proof
-      let j be Element of NAT;
+      let j be Nat;
       assume j in Seg len M;
       then j in dom M by FINSEQ_1:def 3;
       then p1.j = M*(j,i) & p2.j = M*(j,i) by A10,A12;
@@ -1497,7 +1496,7 @@ A5:  ex A st a=A & b= -A by A4;
      consider A such that A6:a=A & b= -A by A5;
      reconsider b = -A as Element of G by A6;
      take b;
-     thus a+b=A+-A by A6,A3 .=0.G by Th35;
+     thus a+b=A+-A by A3,A6 .=0.G by Th35;
     end;
     then reconsider G as strict AbGroup;
     take G;
@@ -1535,7 +1534,7 @@ theorem
 A1:  len M1 = 0 & len M2 = 0 by Def3;
 then A2:  width M1 = 0 & width M2 = 0 by Def4;
      for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j) by Th23;
-    hence thesis by A2,A1,Th21;
+    hence thesis by A1,A2,Th21;
   end;
 
 theorem
@@ -1549,7 +1548,7 @@ then A2:  width M1 = 0 & width M2 = 0 by Def4;
      for i,j st [i,j] in Indices M1 holds M1*(i,j) = M2*(i,j)
     proof
       let i,j; assume [i,j] in Indices M1;
-       dom M1 = {} & dom M2 = {} by A1,FINSEQ_1:def 3,4;
+       dom M1 = {} & dom M2 = {} by A1,FINSEQ_1:4,def 3;
       then M1 = {} & M2 = {} by RELAT_1:64;
       hence thesis;
     end;

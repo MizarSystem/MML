@@ -7,15 +7,14 @@
 environ
 
  vocabularies PRE_TOPC, SETFAM_1, SUBSET_1, BOOLE, TARSKI, FINSET_1, FUNCT_1,
-      RELAT_1, FINSEQ_1, ORDINAL2, TOPS_2, SEQ_1, RELAT_2, CONNSP_1, NAT_1,
-      COMPLEX1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0, RELAT_1,
-      FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1, FINSET_1,
-      SETFAM_1, STRUCT_0, PRE_TOPC, CONNSP_1;
+      RELAT_1, FINSEQ_1, ORDINAL2, TOPS_2, SEQ_1, RELAT_2, CONNSP_1, COMPLEX1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1,
+      FINSET_1, SETFAM_1, STRUCT_0, PRE_TOPC, CONNSP_1;
  constructors SETFAM_1, PARTFUN1, FUNCT_3, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       FINSEQ_1, CONNSP_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, MEMBERED, STRUCT_0,
-      PRE_TOPC;
+      PRE_TOPC, NAT_1, XREAL_0;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, PRE_TOPC, SUBSET_1, STRUCT_0, RELAT_1;
  theorems TARSKI, FINSET_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3, NAT_1,
@@ -315,9 +314,9 @@ theorem Th27:
   proof
    assume that A1: W is open and A2: W is finite;
    consider p being FinSequence such that A3: rng p = W by A2,FINSEQ_1:73;
-   consider n being Element of NAT such that
+   consider n being Nat such that
    A4: dom p = Seg n by FINSEQ_1:def 2;
-   defpred X[Element of NAT] means
+   defpred X[Nat] means
       for Z st Z = p.:(Seg $1) & $1 <= n & 1 <= n holds meet Z is open;
 A5: X[0]
     proof
@@ -326,8 +325,9 @@ A5: X[0]
       {} in the topology of GX by PRE_TOPC:5;
      hence thesis by A7,PRE_TOPC:def 5;
     end;
-A8:  X[k] implies X[k+1]
+A8: for k be Nat holds  X[k] implies X[k+1]
     proof
+      let k be Nat;
      assume A9: for Z st Z = p.:(Seg k) & k <= n & 1 <= n holds meet Z is open;
      let Z such that A10: Z = p.:(Seg(k+1)); assume A11: k+1 <= n & 1 <= n;
 A12:  now assume A13: k=0;
@@ -339,7 +339,7 @@ A12:  now assume A13: k=0;
     end;
      now assume A15: 0 < k;
       0+1 = 1;
-     then 1 <= 1 & 1 <= k by A15,NAT_1:13;
+     then 1 <= k by A15,NAT_1:13;
      then A16: Seg k <> {} by FINSEQ_1:3;
       k+1 <= n+1 by A11,NAT_1:12;
      then k <= n by XREAL_1:8;
@@ -367,7 +367,7 @@ then A21:  meet Z = meet G1 /\ meet G2 by A10,A18,A19,SETFAM_1:10;
     end;
    hence thesis by A12,NAT_1:3;
   end;
-A23: X[k] from NAT_1:sch 1(A5,A8);
+A23: for k be Nat holds X[k] from NAT_1:sch 2(A5,A8);
 A24: now assume
 A25:  1 <= n;
     W = p.:(Seg n) by A3,A4,RELAT_1:146;
@@ -885,33 +885,33 @@ reserve S for non empty TopStruct,
 
 theorem Th55:
   for X,Y being TopStruct, f being Function of X,Y
-   st [#]Y = {} implies [#]X = {} 
+   st [#]Y = {} implies [#]X = {}
   holds f is continuous iff
     (for P being Subset of Y st P is open holds f"P is open)
 proof let X,Y be TopStruct, f be Function of X,Y;
-  assume 
-Z:   [#]Y={} implies [#]X={};
-   hereby assume 
-A1:  f is continuous;
-    let P1 be Subset of Y; 
+  assume
+A1:   [#]Y={} implies [#]X={};
+   hereby assume
+A2:  f is continuous;
+    let P1 be Subset of Y;
     assume P1 is open;
     then P1` is closed by TOPS_1:30; then
-A2:  f"(P1`) is closed by A1,PRE_TOPC:def 12;
+A3:  f"(P1`) is closed by A2,PRE_TOPC:def 12;
     f"(P1`) = f"([#]Y) \ f"P1 by FUNCT_1:138
-           .= [#]X \ f"P1 by Z,Th52
+           .= [#]X \ f"P1 by A1,Th52
            .= (f"P1)`;
-    hence f"P1 is open by A2,TOPS_1:30;
+    hence f"P1 is open by A3,TOPS_1:30;
    end;
-   assume 
-A3:  for P1 being Subset of Y st P1 is open holds f"P1 is open;
+   assume
+A4:  for P1 being Subset of Y st P1 is open holds f"P1 is open;
    let P1 be Subset of Y;
    assume P1 is closed;
    then P1` is open by TOPS_1:29; then
-A4:f"(P1`) is open by A3;
+A5:f"(P1`) is open by A4;
    f"(P1`) = f"([#]Y) \ f"P1 by FUNCT_1:138
-          .= [#]X \ f"P1 by Z,Th52
+          .= [#]X \ f"P1 by A1,Th52
           .= (f"P1)`;
-   hence thesis by A4,TOPS_1:29;
+   hence thesis by A5,TOPS_1:29;
 end;
 
 theorem Th56:
@@ -995,10 +995,10 @@ theorem
     then consider y being set such that A4: y in dom "f and A5: y in H and
 A6: X=("f).y by A3,FUNCT_1:def 12;
     reconsider Y=y as Subset of S by A5;
-Z:  [#]S={} implies [#]T={};
-A7: X = f"Y by A4,A6,FUNCT_3:24;
+A7:  [#]S={} implies [#]T={};
+A8: X = f"Y by A4,A6,FUNCT_3:24;
     Y is open by A2,A5,Def1;
-    hence thesis by A1,A7,Th55,Z;
+    hence thesis by A1,A7,A8,Th55;
  end;
 
 theorem

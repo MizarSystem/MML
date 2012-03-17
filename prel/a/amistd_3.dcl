@@ -20,15 +20,15 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="TREES_1"/>
-<ArticleID name="TREES_2"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="FUNCT_7"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="AMISTD_1"/>
 <ArticleID name="AMISTD_3"/>
@@ -44,30 +44,6 @@
 <Adjective nr="20" value="false"/>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="4">
-<Cluster>
-<Adjective nr="4"/>
-</Cluster>
-<LocusVar nr="1"/>
-<Func kind="K" nr="88"/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="12">
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-<Cluster>
-<Adjective nr="16"/>
-</Cluster>
-</FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -279,7 +255,7 @@
 <Func kind="K" nr="242"/>
 <Cluster>
 <Adjective nr="9" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -293,12 +269,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="64" value="false">
 <LocusVar nr="1"/>
 </Adjective>
@@ -339,12 +315,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="64" value="false">
 <LocusVar nr="1"/>
 </Adjective>
@@ -385,12 +361,12 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="39"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="35" value="false"/>
 <Adjective nr="64" value="false">
 <LocusVar nr="1"/>
 </Adjective>

@@ -18,9 +18,10 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Not>
@@ -43,9 +44,10 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -72,9 +74,10 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <For>
 <Typ kind="M" nr="1">
@@ -112,9 +115,10 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -141,9 +145,10 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -167,9 +172,10 @@
 <Func kind="F" nr="1"/>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -351,9 +357,10 @@
 <Adjective nr="14" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Not>
@@ -373,9 +380,10 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -402,9 +410,10 @@
 </For>
 </Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Not>
 <And>
@@ -432,13 +441,15 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="61"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster/>

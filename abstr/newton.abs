@@ -8,11 +8,11 @@ environ
 
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
-      NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI,
-      SQUARE_1, XCMPLX_0, SEQ_1, COMPLEX1;
+      NAT_1, INT_1, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI, SQUARE_1,
+      XCMPLX_0, SEQ_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      CARD_1, REAL_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
+      CARD_1, REAL_1, FUNCT_1, PARTFUN1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2,
       INT_2, FINSEQ_4, FINSOP_1, RVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XCMPLX_0,
@@ -23,8 +23,7 @@ environ
 
 begin
 
- reserve i,k,n,m,l for Element of NAT;
- reserve s,t,r for Nat;
+ reserve i,j,k,n,m,l,s,t,r for Nat;
  reserve a,b for real number;
  reserve F,G,H for FinSequence of REAL;
 
@@ -37,10 +36,11 @@ theorem :: NEWTON:3
 canceled;
 
 theorem :: NEWTON:5
- for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n};
+  n>=1 implies
+  Seg n = {1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n};
 
 theorem :: NEWTON:6
- for F holds len (a*F) = len F;
+  len (a*F) = len F;
 
 theorem :: NEWTON:7
  n in dom G iff n in dom (a*G);
@@ -49,25 +49,25 @@ theorem :: NEWTON:7
 ::    x |^ n  Function                                                      ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let i be natural number; let x be real number;
+definition let i be Nat; let x be real number;
   redefine func i |-> x -> FinSequence of REAL;
 end;
 
-registration let x be complex number, n be natural number;
+registration let x be complex number, n be Nat;
   cluster n |-> x -> complex-yielding;
 end;
 
-definition let x be complex number, n be natural number;
+definition let x be complex number, n be Nat;
   func x |^ n equals
 :: NEWTON:def 1
      Product (n |-> x);
 end;
 
-registration let x be real number, n be natural number;
+registration let x be real number, n be Nat;
   cluster x |^ n -> real;
 end;
 
-definition let x be Real, n be natural number;
+definition let x be Real, n be Nat;
   redefine func x |^ n -> Real;
 end;
 
@@ -78,7 +78,7 @@ canceled;
 theorem :: NEWTON:9
  z|^0 = 1;
 
-registration let z be complex number, n be natural number;
+registration let z be complex number, n be Nat;
  cluster z|^n -> complex;
 end;
 
@@ -88,7 +88,7 @@ theorem :: NEWTON:10
 theorem :: NEWTON:11
  z|^(s+1) = z|^s*z;
 
-registration let x, n be natural number;
+registration let x, n be Nat;
   cluster x|^n -> natural;
 end;
 
@@ -113,21 +113,21 @@ theorem :: NEWTON:16
 ::     n!  Function                                                         ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let n be natural number;
+definition let n be Nat;
  redefine func idseq n -> FinSequence of REAL;
 end;
 
-definition let n be natural number;
+definition let n be Nat;
   func n! -> Real equals
 :: NEWTON:def 2
      Product idseq n;
 end;
 
-registration let n be natural number;
+registration let n be Nat;
   cluster n! -> real;
 end;
 
-definition let n be natural number;
+definition let n be Nat;
   redefine func n! -> Real;
 end;
 
@@ -143,36 +143,36 @@ theorem :: NEWTON:20
    2! = 2;
 
 theorem :: NEWTON:21
-  for s holds (s+1)! = (s!) * (s+1);
+  (s+1)! = (s!) * (s+1);
 
 theorem :: NEWTON:22
-  for s holds s! is Element of NAT;
+  s! is Element of NAT;
 
 theorem :: NEWTON:23
- for s holds s!>0;
+ s!>0;
 
 canceled;
 
 theorem :: NEWTON:25
- for s,t holds (s!) * (t!)<>0;
+  (s!) * (t!)<>0;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::     n choose k  Function                                                 ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let k,n be natural number;
+definition let k,n be Nat;
   func n choose k means
 :: NEWTON:def 3
-    for l be natural number st l = n-k holds
+    for l be Nat st l = n-k holds
      it = (n!)/((k!) * (l!)) if n >= k
   otherwise it = 0;
 end;
 
-registration let k,n be natural number;
+registration let k,n be Nat;
   cluster n choose k -> real;
 end;
 
-definition let k,n be natural number;
+definition let k,n be Nat;
   redefine func n choose k -> Real;
 end;
 
@@ -187,20 +187,20 @@ theorem :: NEWTON:29
  s choose 0 = 1;
 
 theorem :: NEWTON:30
- for s,t st s>=t holds
+ s>=t implies
        (for r st r = s-t holds s choose t = s choose r);
 
 theorem :: NEWTON:31
- for s holds s choose s = 1;
+ s choose s = 1;
 
 theorem :: NEWTON:32
   (t+1) choose (s+1) = (t choose (s+1)) + (t choose s);
 
 theorem :: NEWTON:33
-  for s st s >= 1 holds s choose 1 = s;
+  s >= 1 implies s choose 1 = s;
 
 theorem :: NEWTON:34
-   for s,t st s>=1 & t = s-1 holds s choose t = s;
+  s>=1 & t = s-1 implies s choose t = s;
 
 theorem :: NEWTON:35
   s choose r is Element of NAT;
@@ -210,21 +210,21 @@ theorem :: NEWTON:36
     holds F.i = l choose n) holds Sum F = (n+m) choose (n+1);
 
 registration
-  let k,n be natural number;
+  let k,n be Nat;
   cluster n choose k -> natural;
 end;
 
 definition
-  let k,n be natural number;
+  let k,n be Nat;
   redefine func n choose k -> Element of NAT;
 end;
 
 definition let a,b be real number;
-           let n be natural number;
+           let n be Nat;
   func (a,b) In_Power n -> FinSequence of REAL means
 :: NEWTON:def 4
    len it = n+1 &
-   (for i,l,m being natural number st i in dom it & m = i - 1 & l = n-m holds
+   (for i,l,m being Nat st i in dom it & m = i - 1 & l = n-m holds
    it.i = (n choose m)* a|^l * b|^m);
 end;
 
@@ -240,23 +240,23 @@ theorem :: NEWTON:40
   ((a,b) In_Power s).(s+1) = b|^s;
 
 theorem :: NEWTON:41
- for s holds (a+b)|^s = Sum((a,b) In_Power s);
+  (a+b)|^s = Sum((a,b) In_Power s);
 
-definition let n be natural number;
+definition let n be Nat;
   func Newton_Coeff n -> FinSequence of REAL means
 :: NEWTON:def 5
     len it = n+1 &
-    (for i,k be natural number st i in dom it & k = i-1 holds
+    (for i,k be Nat st i in dom it & k = i-1 holds
       it.i = n choose k);
 end;
 
 canceled;
 
 theorem :: NEWTON:43
-  for s holds Newton_Coeff s = (1,1) In_Power s;
+  Newton_Coeff s = (1,1) In_Power s;
 
 theorem :: NEWTON:44
-   for s holds 2|^s = Sum(Newton_Coeff s);
+  2|^s = Sum(Newton_Coeff s);
 
 begin :: Addenda
 
@@ -282,24 +282,22 @@ theorem :: NEWTON:49
   k/(k+1) < 1;
 
 theorem :: NEWTON:50
-  for l being Element of NAT holds l! >= l;
-
- reserve s,j,r for Element of NAT;
+  l! >= l;
 
 theorem :: NEWTON:51
-  for m,n st m<>1 holds m divides n implies not m divides (n+1);
+  m<>1 & m divides n implies not m divides (n+1);
 
 theorem :: NEWTON:52
    j divides l & j divides l+1 iff j=1;
 
 theorem :: NEWTON:53
-  for k,j st j<>0 holds j divides (j+k)!;
+  j<>0 implies j divides (j+k)!;
 
 theorem :: NEWTON:54
   j<=l & j<>0 implies j divides l!;
 
 theorem :: NEWTON:55
-  for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l;
+  j<>1 & j<>0 & j divides (l!+1) implies j>l;
 
 :: The fundamental properties of lcm, hcf
 
@@ -367,11 +365,11 @@ theorem :: NEWTON:76
 
 :: from GR_CY_2
 
- reserve k,m,n,p for Element of NAT;
+ reserve p,q for Nat;
  reserve i0,i,i1,i2,i3,i4 for Integer;
 
 theorem :: NEWTON:77
-   for n,m st 0 < m holds n mod m= n - m * (n div m);
+   0 < m implies n mod m= n - m * (n div m);
 
 theorem :: NEWTON:78
    i2 >= 0 implies i1 mod i2 >= 0;
@@ -383,11 +381,9 @@ theorem :: NEWTON:80
    i2 <> 0 implies i1 = (i1 div i2) * i2 + (i1 mod i2);
 
 theorem :: NEWTON:81
-   for m,n st m>0 or n>0 holds ex i,i1 st i*m + i1*n = m hcf n;
+  m>0 or n>0 implies ex i,i1 st i*m + i1*n = m hcf n;
 
 :: from NAT_LAT
-
- reserve n,j,k,m,l for Element of NAT;
 
 definition
   func SetPrimes -> Subset of NAT means
@@ -401,11 +397,10 @@ registration
 end;
 
 definition
-  mode Prime is prime Element of NAT;
+  mode Prime is prime Nat;
 end;
 
- reserve
-         x for set;
+reserve x for set;
 
 definition let p be Nat;
   func SetPrimenumber p -> Subset of NAT means
@@ -414,17 +409,16 @@ definition let p be Nat;
 end;
 
 theorem :: NEWTON:82
-  for p being Nat holds SetPrimenumber p c= SetPrimes;
+  SetPrimenumber p c= SetPrimes;
 
 theorem :: NEWTON:83
-   for p,q being Nat st p <= q holds
-    SetPrimenumber p c= SetPrimenumber q;
+  p <= q implies SetPrimenumber p c= SetPrimenumber q;
 
 theorem :: NEWTON:84
-  for p being Nat holds SetPrimenumber p c= Seg p;
+  SetPrimenumber p c= Seg p;
 
 theorem :: NEWTON:85
-  for p being Nat holds SetPrimenumber p is finite;
+  SetPrimenumber p is finite;
 
 registration
   let n be Nat;
@@ -434,7 +428,7 @@ end;
  reserve p for Prime;
 
 theorem :: NEWTON:86
-  for l being Nat ex p st p is prime & p>l;
+  ex p st p is prime & p>l;
 
 theorem :: NEWTON:87
    SetPrimes <> {};
@@ -459,7 +453,7 @@ theorem :: NEWTON:92
    k>=m implies not k in SetPrimenumber m;
 
 theorem :: NEWTON:93
-   for f being Nat holds SetPrimenumber f \/ {f} is finite;
+  SetPrimenumber n \/ {n} is finite;
 
 theorem :: NEWTON:94
   for f being Prime, g being Nat st f < g holds
@@ -469,13 +463,13 @@ theorem :: NEWTON:95
    k>=m implies not k in SetPrimenumber m;
 
 definition let n be Nat;
-  func primenumber n -> Prime means
+  func primenumber n -> prime Element of NAT means
 :: NEWTON:def 8
   n = card SetPrimenumber it;
 end;
 
 theorem :: NEWTON:96
-   SetPrimenumber n = {k: k<n & k is prime};
+   SetPrimenumber n = {k where k is Element of NAT: k<n & k is prime};
 
 theorem :: NEWTON:97  :: Euclid
   SetPrimes is infinite;
@@ -484,10 +478,10 @@ registration
   cluster SetPrimes -> non empty infinite;
 end;
 
- reserve m,i for Nat;
+ reserve i for Nat;
 
 theorem :: NEWTON:98 :: divisibility
-   for i st i is prime holds
+  i is prime implies
     for m,n being Nat holds i divides m * n implies i divides m or i divides n;
 
 canceled;
@@ -498,14 +492,12 @@ theorem :: NEWTON:100
 :: from SCMFSA9A, 2005.11.16, A.T
 
 theorem :: NEWTON:101
-  for m,n being natural number holds
- m qua Integer div n = m div n &
- m qua Integer mod n = m mod n;
+  m qua Integer div n = m div n &
+  m qua Integer mod n = m mod n;
 
 :: from HEINE, 2006.01.07, A.T
 
- reserve k for Nat,
-         x for real number;
+ reserve x for real number;
 
 theorem :: NEWTON:102
   x > 0 implies x|^k > 0;

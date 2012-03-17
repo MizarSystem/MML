@@ -7,19 +7,19 @@
 environ
 
  vocabularies ORDINAL1, RELAT_1, FUNCT_1, BOOLE, WELLORD1, TARSKI, WELLORD2,
-      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, NAT_1, COMPLEX1, GR_CY_1, ARYTM;
+      ORDINAL2, FINSET_1, CARD_1, FUNCOP_1, COMPLEX1, GR_CY_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       RELAT_1, ENUMSET1, FUNCT_1, FUNCOP_1, WELLORD1, ORDINAL1, ORDINAL2,
       WELLORD2, FINSET_1, XXREAL_0;
  constructors ENUMSET1, WELLORD1, WELLORD2, FUNCOP_1, ORDINAL2, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1;
- registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, ARYTM_3,
-      FINSET_1, XREAL_0, NAT_1;
+ registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, FUNCOP_1, FINSET_1,
+      XREAL_0, NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions ORDINAL1, TARSKI, FUNCT_1, FINSET_1, WELLORD2, XBOOLE_0, RELAT_1;
  theorems TARSKI, FUNCT_1, ZFMISC_1, ORDINAL1, ORDINAL2, WELLORD1, WELLORD2,
       NAT_1, AXIOMS, REAL_1, RELAT_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
-      XREAL_1, ENUMSET1, XXREAL_0;
+      XREAL_1, ENUMSET1, XXREAL_0, ORDINAL3;
  schemes ORDINAL1, ORDINAL2, FUNCT_1, NAT_1, FINSET_1, XBOOLE_0;
 
 begin
@@ -28,17 +28,7 @@ begin
          X,X1,Y,Y1,Z,a,b,b1,b2,x,y,z for set,
          R for Relation,
          f,g,h for Function,
-         k,m,n for Element of NAT;
-
- Lm1: A c= B implies succ A c= succ B
-  proof assume
-A1:  A c= B;
-   let x; assume x in succ A;
-then A2:  x in A or x = A by ORDINAL1:13;
-      B in succ B by ORDINAL1:10;
-    then (x in B or x in succ B) & B c= succ B by A1,A2,ORDINAL1:22;
-   hence thesis;
-  end;
+         k,m,n for Nat;
 
 definition let IT be set;
  attr IT is cardinal means
@@ -97,8 +87,7 @@ A4:   dom f = field Q & rng f = field RelIncl A & f is one-to-one &
         a in field Q & b in field Q & [f.a,f.b] in
  RelIncl A by A3,WELLORD1:def 7;
     take f;
-    thus f is one-to-one & dom f = X & rng f = A by A1,A4,WELLORD2:25,
-def 1;
+    thus f is one-to-one & dom f = X & rng f = A by A1,A4,WELLORD2:25,def 1;
   end;
 
 notation let M,N;
@@ -131,7 +120,7 @@ theorem
      hence thesis by ORDINAL1:21,def 2;
    end;
 
-theorem
+theorem Th14:
       M <` N iff not N <=` M by ORDINAL1:7,26;
 
 definition let X;
@@ -163,6 +152,7 @@ A4:  X,N are_equipotent;
          M,N are_equipotent by A3,A4,WELLORD2:22;
     hence thesis by Th8;
    end;
+  projectivity;
 end;
 
 canceled 6;
@@ -476,7 +466,7 @@ theorem
    hence contradiction by ORDINAL1:7;
   end;
 
- reserve L for T-Sequence;
+ reserve S for T-Sequence;
 
 definition let M;
  attr M is limit means
@@ -489,54 +479,54 @@ end;
 
 definition let A;
  func alef A -> set means
-:Def8:   ex L st it = last L & dom L = succ A & L.{} = Card NAT &
-        (for B st succ B in succ A holds L.succ B = nextcard union { L.B }) &
+:Def8:   ex S st it = last S & dom S = succ A & S.{} = Card NAT &
+        (for B st succ B in succ A holds S.succ B = nextcard union { S.B }) &
          for B st B in succ A & B <> {} & B is_limit_ordinal
-                holds L.B = Card sup(L|B);
+                holds S.B = Card sup(S|B);
   correctness
   proof
     deffunc C(Ordinal,set) = nextcard union {$2};
     deffunc D(Ordinal,T-Sequence) = Card sup $2;
     set B = Card NAT;
-    thus (ex x,L st x = last L & dom L = succ A & L.{} = B &
-     (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+    thus (ex x,S st x = last S & dom S = succ A & S.{} = B &
+     (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
       for C st C in succ A & C <> {} & C is_limit_ordinal
-             holds L.C = D(C,L|C) ) &
+             holds S.C = D(C,S|C) ) &
    for x1,x2 being set st
-    (ex L st x1 = last L & dom L = succ A & L.{} = B &
-      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+    (ex S st x1 = last S & dom S = succ A & S.{} = B &
+      (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
-              holds L.C = D(C,L|C) ) &
-    (ex L st x2 = last L & dom L = succ A & L.{} = B &
-      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+              holds S.C = D(C,S|C) ) &
+    (ex S st x2 = last S & dom S = succ A & S.{} = B &
+      (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
-              holds L.C = D(C,L|C) )
+              holds S.C = D(C,S|C) )
      holds x1 = x2 from ORDINAL2:sch 7;
   end;
 end;
 
-Lm2:
+Lm1:
  now
    deffunc F(Ordinal) = alef $1;
    deffunc C(Ordinal,set) = nextcard union { $2 };
    deffunc D(Ordinal,T-Sequence) = Card sup $2;
 A1: for A,x holds x = F(A) iff
-     ex L st x = last L & dom L = succ A & L.{} = Card NAT &
-      (for C st succ C in succ A holds L.succ C = C(C,L.C)) &
+     ex S st x = last S & dom S = succ A & S.{} = Card NAT &
+      (for C st succ C in succ A holds S.succ C = C(C,S.C)) &
        for C st C in succ A & C <> {} & C is_limit_ordinal
-              holds L.C = D(C,L|C) by Def8;
+              holds S.C = D(C,S|C) by Def8;
      F({}) = Card NAT from ORDINAL2:sch 8(A1);
   hence alef 0 = Card NAT;
   thus for A holds F(succ A) = C(A,F(A)) from ORDINAL2:sch 9(A1);
   thus A <> {} & A is_limit_ordinal implies
-     for L st dom L = A & for B st B in A holds L.B = alef B holds
-              alef A = Card sup L
+     for S st dom S = A & for B st B in A holds S.B = alef B holds
+              alef A = Card sup S
     proof assume
 A2:    A <> {} & A is_limit_ordinal;
-     let L such that
-A3:    dom L = A and
-A4:    for B st B in A holds L.B = F(B);
-     thus F(A) = D(A,L) from ORDINAL2:sch 10(A1,A2,A3,A4);
+     let S such that
+A3:    dom S = A and
+A4:    for B st B in A holds S.B = F(B);
+     thus F(A) = D(A,S) from ORDINAL2:sch 10(A1,A2,A3,A4);
     end;
  end;
 
@@ -548,37 +538,37 @@ registration let A;
    proof
 A1:   now given B such that
 A2:    A = succ B;
-           alef A = nextcard union {alef B} by A2,Lm2;
+           alef A = nextcard union {alef B} by A2,Lm1;
       hence thesis;
      end;
          now assume
 A3:    A <> {} & for B holds A <> succ B;
 then A4:    A is_limit_ordinal by ORDINAL1:42;
-      consider L such that
-A5:    dom L = A & for B st B in A holds L.B = f(B) from ORDINAL2:sch 2;
-         alef A = Card sup L by A3,A4,A5,Lm2;
+      consider S such that
+A5:    dom S = A & for B st B in A holds S.B = f(B) from ORDINAL2:sch 2;
+         alef A = Card sup S by A3,A4,A5,Lm1;
       hence alef A is Cardinal;
      end;
-    hence thesis by A1,Lm2;
+    hence thesis by A1,Lm1;
    end;
 end;
 
 canceled;
 
 theorem
-      alef 0 = Card NAT by Lm2;
+      alef 0 = Card NAT by Lm1;
 
 theorem
  Th39: alef succ A = nextcard alef A
   proof
-   thus alef succ A = nextcard union { alef A } by Lm2
+   thus alef succ A = nextcard union { alef A } by Lm1
                    .= nextcard alef A by ZFMISC_1:31;
   end;
 
 theorem
      A <> {} & A is_limit_ordinal implies
-   for L st dom L = A & for B st B in A holds L.B = alef B holds
-            alef A = Card sup L by Lm2;
+   for S st dom S = A & for B st B in A holds S.B = alef B holds
+            alef A = Card sup S by Lm1;
 
 theorem
  Th41: A in B iff alef A <` alef B
@@ -602,21 +592,21 @@ A7:  for B st B <> {} & B is_limit_ordinal &
      proof let B such that
 A8:    B <> {} & B is_limit_ordinal and
         for C st C in B for A st A in C holds alef A <` alef C;
-      consider L such that
-A9:    dom L = B and
-A10:    for C st C in B holds L.C = f(C) from ORDINAL2:sch 2;
-A11:    alef B = Card sup L by A8,A9,A10,Lm2;
+      consider S such that
+A9:    dom S = B and
+A10:    for C st C in B holds S.C = f(C) from ORDINAL2:sch 2;
+A11:    alef B = Card sup S by A8,A9,A10,Lm1;
       let A; assume A in B;
        then succ A in B by A8,ORDINAL1:41;
-       then L.succ A in rng L & L.succ A = alef succ A &
+       then S.succ A in rng S & S.succ A = alef succ A &
         alef succ A = alef succ A by A9,A10,FUNCT_1:def 5;
-       then alef succ A in sup rng L & sup rng L = sup L
+       then alef succ A in sup rng S & sup rng S = sup S
          by ORDINAL2:27,35;
-       then alef succ A c= sup L & Card alef succ A = alef succ A
+       then alef succ A c= sup S & Card alef succ A = alef succ A
          by Def5,ORDINAL1:def 2;
 then A12:    alef succ A <=` alef B by A11,Th27;
-          alef succ A = nextcard alef A & alef A <` nextcard alef A by Th32,
-Th39
+          alef succ A = nextcard alef A & alef A <` nextcard alef A by Th32
+,Th39
 ;
       hence thesis by A12;
      end;
@@ -676,7 +666,7 @@ theorem
    hence thesis by Th21;
   end;
 
-theorem
+theorem Th46:
       X,{} are_equipotent iff X = {}
   proof
    thus X,{} are_equipotent implies X = {}
@@ -754,29 +744,37 @@ theorem
   end;
 
 theorem
- Th51:  0 = {};
+   0 = {};
 
-theorem
- Th52: succ n = n + 1
-  proof
-A1:  n = {k: k < n} & n+1 = {m: m < n+1} by AXIOMS:30;
+theorem Th52:
+ for n being natural number holds succ n = n + 1
+  proof let n be natural number;
+A1:  n = {K where K is Element of NAT: K < n} &
+     n+1 = {L where L is Element of NAT: L < n+1} by AXIOMS:30;
    thus succ n c= n+1
-     proof let x; assume x in succ n;
-then A2:     (x in n or x = n) & n < n+1 by NAT_1:13,ORDINAL1:13;
-           now assume x in n;
-        then consider k such that
-A3:       x = k & k < n by A1;
-             k < n+1 by A3,NAT_1:13;
-        hence thesis by A1,A3;
-       end;
-      hence thesis by A1,A2;
+     proof let x such that
+A2:     x in succ n;
+      per cases by A2,ORDINAL1:13;
+      suppose x in n;
+        then consider K being Element of NAT such that
+A3:      x = K and
+A4:      K < n by A1;
+        K < n+1 by A4,NAT_1:13;
+       hence thesis by A1,A3;
+      end;
+      suppose
+A5:      x = n;
+        reconsider n as Element of NAT by ORDINAL1:def 13;
+        n < n+1 by NAT_1:13;
+       hence thesis by A1,A5;
+      end;
      end;
    let x; assume x in n+1;
-   then consider k such that
-A4:  x = k & k < n+1 by A1;
-        k <= n by A4,NAT_1:13;
-    then k = n or k < n by REAL_1:def 5;
-    then x = n or x in n by A1,A4;
+   then consider K being Element of NAT such that
+A6:  x = K & K < n+1 by A1;
+        K <= n by A6,NAT_1:13;
+    then K = n or K < n by REAL_1:def 5;
+    then x = n or x in n by A1,A6;
    hence thesis by ORDINAL1:13;
   end;
 
@@ -785,7 +783,7 @@ canceled 3;
 theorem
  Th56: n <= m iff n c= m
   proof
-defpred P[Element of NAT] means for m holds $1 <= m iff $1 c= m;
+defpred P[Nat] means for m holds $1 <= m iff $1 c= m;
 A1:  P[0] by NAT_1:2,XBOOLE_1:2;
 A2:  for n st P[n] holds P[n+1]
      proof let n such that
@@ -799,7 +797,7 @@ A4:       m = n+1+k by NAT_1:10;
               n <= n+k by NAT_1:11;
           then n c= (n+k) by A3;
       then succ n c= succ (n+k) & (n+1) = succ n &
-          (n+k+1) = succ (n+k) by Lm1,Th52;
+          (n+k+1) = succ (n+k) by Th52,ORDINAL2:1;
          hence thesis by A4;
         end;
       assume
@@ -811,7 +809,7 @@ A5:    (n+1) c= m;
        then n < m by REAL_1:def 5;
       hence thesis by NAT_1:13;
      end;
-      for n holds P[n] from NAT_1:sch 1(A1,A2);
+      for n holds P[n] from NAT_1:sch 2(A1,A2);
    hence thesis;
   end;
 
@@ -983,38 +981,40 @@ canceled 2;
 theorem Th64:
    n,m are_equipotent implies n = m
   proof
-    defpred P[Element of NAT] means ex n st n,$1 are_equipotent & n <> $1;
+    defpred P[natural number] means ex n st n,$1 are_equipotent & n <> $1;
     assume
-        n,m are_equipotent & n <> m;
-then A1:  ex m st P[m];
-   consider m such that
-A2:  P[m] and
-A3:  for k st P[k] holds m <= k from NAT_1:sch 5(A1);
+A1:      n,m are_equipotent & n <> m;
+    m in NAT by ORDINAL1:def 13;
+    then
+A2:  ex m being Element of NAT st P[m] by A1;
+   consider m being Element of NAT such that
+A3:  P[m] and
+A4:  for k being Element of NAT st P[k] holds m <= k from NAT_1:sch 5(A2);
    consider n such that
-A4:  n,m are_equipotent & n <> m by A2;
+A5:  n,m are_equipotent & n <> m by A3;
   consider f such that
-A5:  f is one-to-one & dom f = n & rng f = m by A4,WELLORD2:def 4;
-         m <> 0 by A4,A5,RELAT_1:65;
+A6:  f is one-to-one & dom f = n & rng f = m by A5,WELLORD2:def 4;
+         m <> 0 by A5,A6,RELAT_1:65;
    then consider m1 being Nat such that
-A6:  m = m1+1 by NAT_1:6;
+A7:  m = m1+1 by NAT_1:6;
      reconsider m1 as Element of NAT by ORDINAL1:def 13;
-A7: not m1 in m1;
-A8: m1 \/ {m1} = succ m1 .= m by A6,Th52;
-    then A9:  m \ {m1} = m1 \ {m1} by XBOOLE_1:40
-            .= m1 by A7,ZFMISC_1:65;
-        n <> 0 by A4,A5,RELAT_1:65;
+A8: not m1 in m1;
+A9: m1 \/ {m1} = succ m1 .= m by A7,Th52;
+    then A10:  m \ {m1} = m1 \ {m1} by XBOOLE_1:40
+            .= m1 by A8,ZFMISC_1:65;
+        n <> 0 by A5,A6,RELAT_1:65;
    then consider n1 being Nat such that
-A10:  n = n1+1 by NAT_1:6;
+A11:  n = n1+1 by NAT_1:6;
       reconsider n1 as Element of NAT by ORDINAL1:def 13;
-A11: not n1 in n1;
-A12: n1 \/ {n1} = succ n1 .= n by A10,Th52;
-then A13:  n \ {n1} = n1 \ {n1} by XBOOLE_1:40
-            .= n1 by A11,ZFMISC_1:65;
+A12: not n1 in n1;
+A13: n1 \/ {n1} = succ n1 .= n by A11,Th52;
+then A14:  n \ {n1} = n1 \ {n1} by XBOOLE_1:40
+            .= n1 by A12,ZFMISC_1:65;
         n1 in {n1} & m1 in {m1} by TARSKI:def 1;
-    then n1 in n & m1 in m by A8,A12,XBOOLE_0:def 2;
-then n1,m1 are_equipotent by A4,A9,A13,Th61;
-    then m <= m1 by A3,A4,A6,A10;
-   hence contradiction by A6,XREAL_1:31;
+    then n1 in n & m1 in m by A9,A13,XBOOLE_0:def 2;
+then n1,m1 are_equipotent by A5,A10,A14,Th61;
+    then m <= m1 by A4,A5,A7,A11;
+   hence contradiction by A7,XREAL_1:31;
   end;
 
 theorem
@@ -1027,14 +1027,16 @@ A2:  for B st x = B ex C st C,B are_equipotent & not B c= C;
 A3:  B,A are_equipotent & not A c= B by A2;
       B in A by A3,ORDINAL1:26;
     then B in omega by A1,ORDINAL1:19;
-    hence contradiction by A1,A3,Th64;
+    then reconsider n = A, m = B as natural number by A1,ORDINAL1:def 13;
+     n,m are_equipotent by A3;
+    hence contradiction by A3,Th64;
   end;
 
 registration cluster -> cardinal Element of NAT;
   correctness by Th65;
 end;
 
-theorem
+theorem Th66:
   for n being Nat holds n = Card n
   proof let n be Nat;
     reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1058,12 +1060,9 @@ A3:  dom p in omega;
 
 theorem
  Th69:  n is finite & Card n is finite
-  proof
-   thus n is finite
-    proof
-          rng id n = n & dom id n = n by RELAT_1:71;
-     hence thesis by FINSET_1:def 1;
-    end;
+  proof reconsider n as Element of NAT by ORDINAL1:def 13;
+    rng id n = n & dom id n = n by RELAT_1:71;
+    then n is finite by FINSET_1:def 1;
    hence thesis by Def5;
   end;
 
@@ -1073,16 +1072,17 @@ theorem
  Th71: Card n = Card m implies n = m
   proof assume
 A1:  Card n = Card m;
-        Card n = n & Card m = m by Def5;
+    reconsider n,m as Element of NAT by ORDINAL1:def 13;
+    Card n = n & Card m = m by Def5;
    hence thesis by A1;
   end;
 
 theorem
  Th72: Card n <=` Card m iff n <= m
-  proof
+  proof reconsider n,m as Element of NAT by ORDINAL1:def 13;
         (Card n <=` Card m iff Card n c= Card m) &
      Card n = n & Card m = m &
-      ( n c= m iff n <= m) by Th56,Def5;
+      ( n c= m iff n <= m) by Def5,Th56;
    hence thesis;
   end;
 
@@ -1094,8 +1094,7 @@ theorem
     then (Card n <=` Card m & Card n <> Card m iff Card n <` Card m) &
      (Card n = Card m iff n = m) &
       (n <= m & n <> m iff n < m) &
-    (Card n <=` Card m iff n <= m) by Th71,Th72,ORDINAL1:21,
-def 2,REAL_1:def 5;
+    (Card n <=` Card m iff n <= m) by Th71,Th72,ORDINAL1:21,def 2,REAL_1:def 5;
    hence thesis;
   end;
 
@@ -1105,7 +1104,7 @@ theorem
     defpred P[set] means ex n st $1,n are_equipotent;
     assume
 A1:  X is finite;
-A2:  P[{}] by Th51;
+A2:  P[{}];
 A3:  for Z,Y st Z in X & Y c= X & P[Y] holds P[Y \/ {Z}]
      proof let Z,Y such that
          Z in X & Y c= X;
@@ -1145,8 +1144,8 @@ canceled;
 
 theorem
  Th76: nextcard Card n = Card(n+1)
-  proof
-      n < n+1 & Card Card n = Card n by Def5,NAT_1:13;
+  proof reconsider n as Element of NAT by ORDINAL1:def 13;
+      n < n+1 & Card Card n = Card n by NAT_1:13;
 then A1:  Card Card n <` Card(n+1) by Th73;
         for M st Card Card n <` M holds Card(n+1) <=` M
      proof let M such that
@@ -1159,6 +1158,11 @@ A2:     Card Card n in M;
    hence thesis by A1,Def6;
   end;
 
+definition let n be natural number;
+ redefine func succ n equals n+1;
+ compatibility by Th52;
+end;
+
 notation let X be finite set;
  synonym card X for Card X;
 end;
@@ -1166,14 +1170,14 @@ end;
 definition let X be finite set;
  redefine  canceled 2;
 
-func card X -> Element of NAT means
-             Card it = Card X;
+func card X -> Element of NAT;
   coherence
    proof consider n such that
 A1:   X,n are_equipotent by Th74;
-    thus thesis by A1,Def5;
+    reconsider n as Element of NAT by ORDINAL1:def 13;
+    X,n are_equipotent by A1;
+   hence thesis by Def5;
    end;
-  compatibility by Def5;
   end;
 
 canceled;
@@ -1184,17 +1188,17 @@ theorem
 theorem
       card { x } = 1
   proof
-        { k : k < 1} = { 0 }
+        { K where K is Element of NAT : K < 1} = { 0 }
      proof
-      thus { k : k < 1} c= { 0 }
+      thus { K where K is Element of NAT : K < 1} c= { 0 }
        proof let x;
-        assume x in { k : k < 1};
-         then consider k such that
-A1:       x = k and
-A2:       k < 1;
-             k < 0 + 1 by A2;
-         then k <= 0 by NAT_1:13;
-         then k = 0 by NAT_1:3;
+        assume x in { K where K is Element of NAT : K < 1};
+         then consider K being Element of NAT such that
+A1:       x = K and
+A2:       K < 1;
+             K < 0 + 1 by A2;
+         then K <= 0 by NAT_1:13;
+         then K = 0 by NAT_1:3;
         hence x in { 0 } by A1,TARSKI:def 1;
        end;
       let x;
@@ -1213,8 +1217,7 @@ theorem
   proof let X,Y be finite set;
    assume
       X c= Y;
-    then Card X <=` Card Y & Card card X = Card X & Card card Y = Card Y &
-     Card card X = card X & Card card Y = card Y by Def5,Th27;
+    then Card X <=` Card Y by Th27;
    hence card X <= card Y by Th56;
   end;
 
@@ -1287,36 +1290,36 @@ A4:  for A holds P[A] from ORDINAL1:sch 2(A2);
 theorem
  Th83: alef 0 = omega
   proof
-   thus alef 0 c= omega by Lm2,Th24;
+   thus alef 0 c= omega by Lm1,Th24;
    thus omega c= alef 0
      proof let x; assume
 A1:     x in omega;
       then reconsider A = x as Ordinal by ORDINAL1:23;
-       consider n such that
+       consider n being Element of NAT such that
 A2:     A = n by A1;
-A3:     succ n c= omega & (n+1) = succ n by Th52,ORDINAL1:33;
+       succ n c= omega by ORDINAL1:33;
        then Card (n+1) c= Card omega & n in succ n &
         Card (n+1) = (n+1) by Def5,Th27,ORDINAL1:10;
-      hence x in alef 0 by A2,A3,Lm2;
+      hence x in alef 0 by A2,Lm1;
      end;
   end;
 
-theorem
-   Card omega = omega by Lm2,Th83;
+theorem Th84:
+   Card omega = omega by Lm1,Th83;
 
-Lm3: omega is_limit_ordinal by ORDINAL1:def 12;
+Lm2: omega is_limit_ordinal by ORDINAL1:def 12;
 
 theorem
    Card omega is_limit_cardinal
   proof given N such that
 A1:  Card omega = nextcard N;
-A2:  N in omega by A1,Lm2,Th32,Th83;
-then A3:  succ N in omega & N is natural by ORDINAL1:41,def 13,Lm3;
-   consider n such that
+A2:  N in omega by A1,Lm1,Th32,Th83;
+then A3:  succ N in omega & N is natural by Lm2,ORDINAL1:41,def 13;
+   consider n being Element of NAT such that
 A4:   N = n by A2;
     nextcard Card n = Card(n+1) & Card n = n & Card(n+1) = (n+1) &
-   (n+1) = succ n & N = N by Th52,Def5,Th76;
-   hence contradiction by A1,A3,A4,Lm2,Th83;
+    n+1 = succ n & N = N by Def5,Th76;
+   hence contradiction by A1,A3,A4,Lm1,Th83;
   end;
 
 registration
@@ -1473,7 +1476,7 @@ A1:  k < n;
   end;
 
 theorem
- Th99: n in n+1
+  n in n+1
   proof
     reconsider n as Element of NAT by ORDINAL1:def 13;
      n<n+1 by XREAL_1:31;
@@ -1514,32 +1517,72 @@ proof
    hence thesis by XBOOLE_1:28;
 end;
 
+:: from CARD_4, 2007.08.16, A.T.
+
 theorem
-    succ n = n+1
-proof
-  thus succ n c= n+1
+ Th102: A,n are_equipotent implies A = n
   proof
-     n+0<=n+1 by XREAL_1:9;
-then A1:     Segm n c= Segm(n+1) by Th100;
-       let x;
-       assume x in succ n;
-       then x in Segm n or x in { n } by XBOOLE_0:def 2;
-       then x in Segm (n+1) or x = n by A1,TARSKI:def 1;
-       hence thesis by Th99;
-    end;
-    let x;
-    assume A2:x in n+1;
-     then x in Segm(n+1);
-    then reconsider x as Element of NAT;
-A3: x<n+1 by A2,Th98;
-    per cases by A3,NAT_1:22;
-    suppose x < n;
-    then x in { l : l < n };
-    then x in Segm n by AXIOMS:30;
-    hence thesis by XBOOLE_0:def 2;
-    end;
-    suppose x = n;
-     then x in {n} by TARSKI:def 1;
-     hence thesis by XBOOLE_0:def 2;
-    end;
+ defpred P[Nat] means for A st A,$1 are_equipotent holds A = $1;
+A1:  P[0] by Th46;
+A2:  for n st P[n] holds P[n+1]
+     proof let n such that
+A3:    P[n];
+      let A; assume
+A4:    A,n+1 are_equipotent;
+then A5:     (n+1) = succ n & succ n <> {} & (n+1),A are_equipotent;
+           A <> {} by A4,Th46;
+then A6:    {} in A by ORDINAL3:10;
+           now assume A is_limit_ordinal;
+         then omega c= A & (n+1) in omega & Card (n+1) = (n+1)
+          by A6,Th66,ORDINAL1:def 12,def 13;
+         then Card omega <=` Card A & Card A = Card (n+1) &
+          Card (n+1) <` Card omega
+           by A4,Th21,Th27,Th84;
+        hence contradiction by Th14;
+       end;
+      then consider B such that
+A7:    A = succ B by ORDINAL1:42;
+           B in A & n in (n+1) by A5,A7,ORDINAL1:10;
+       then A \ {B},(n+1) \ { n} are_equipotent & A\{B} = B &
+         (n+1) \ { n} = n by A5,A7,Th61,ORDINAL1:52;
+      hence thesis by A3,A5,A7;
+     end;
+       for n holds P[n] from NAT_1:sch 2(A1,A2);
+   hence thesis;
+  end;
+
+theorem
+ A is finite iff A in omega
+  proof
+   thus A is finite implies A in omega
+     proof assume A is finite;
+      then consider n such that
+A1:     A,n are_equipotent by Th74;
+           A = n by A1,Th102;
+      hence thesis by ORDINAL1:def 13;
+     end;
+   assume A in omega;
+    then A is Element of omega;
+   hence thesis;
+  end;
+
+registration
+ cluster natural -> finite set;
+ coherence
+  proof let a be set; assume a in omega;
+    then a is Element of NAT;
+   hence thesis;
+  end;
 end;
+
+registration
+ cluster natural -> cardinal set;
+ coherence
+  proof
+   let X be set;
+   assume X is natural;
+   then X in omega by ORDINAL1:def 13;
+   hence X is cardinal by Th65;
+  end;
+end;
+

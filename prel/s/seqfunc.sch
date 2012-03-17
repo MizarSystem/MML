@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -41,10 +41,10 @@
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="79"/>
-<Func kind="K" nr="83"/>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
 </Typ>
 <Pred kind="R" nr="16">
 <Func kind="F" nr="1"/>

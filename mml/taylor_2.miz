@@ -9,7 +9,7 @@ environ
  vocabularies PRE_TOPC, BOOLE, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, SUBSET_1, ORDINAL2, QC_LANG1, PARTFUN1, SEQ_1, SEQ_2,
       RCOMP_1, SIN_COS, FDIFF_1, SERIES_1, GROUP_1, SUPINF_2, TAYLOR_1,
-      TAYLOR_2, RFUNCT_2, MATRIX_2, NAT_1;
+      TAYLOR_2, RFUNCT_2, MATRIX_2;
  notations SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XCMPLX_0,
       XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, SEQ_1, SEQ_2,
       SERIES_1, FDIFF_1, SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN;
@@ -45,7 +45,7 @@ A2: for k be Element of NAT st P[k] holds P[k+1]
 A3: P[k];
      abs(x |^ (k+1)) = abs(x * x |^ k) by NEWTON:11
                    .= abs(x) * abs(x |^ k) by COMPLEX1:151
-                   .= abs(x) |^ (k+1) by NEWTON:11,A3;
+                   .= abs(x) |^ (k+1) by A3,NEWTON:11;
   hence thesis;
   end;
    for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
@@ -81,7 +81,7 @@ A3: x in ].-r, r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].0-r,0+r.[,0,x)).n
                + (diff(f,].0-r,0+r.[).(n+1)).(0+s*(x-0))
-               * (x-0) |^ (n+1) / ((n+1)!) by TAYLOR_1:33,A1,A2,A3;
+               * (x-0) |^ (n+1) / ((n+1)!) by A1,A2,A3,TAYLOR_1:33;
   take s;
   thus thesis by A4,A5;
 end;
@@ -106,7 +106,7 @@ A3: x in ].x0-r,x0+r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
                + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
-               * (x-x0) |^ (n+1) /((n+1)!) by TAYLOR_1:33,A1,A2,A3;
+               * (x-x0) |^ (n+1) /((n+1)!) by A1,A2,A3,TAYLOR_1:33;
  thus thesis by A4,A5;
 end;
 
@@ -130,7 +130,7 @@ A3: x in ].-r,r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Maclaurin(f, ].-r,r.[,x)).n
                + (diff(f,].-r,r.[).(n+1)).(s*x)
-               * x |^ (n+1) / ((n+1)!) by Th2,A1,A2,A3;
+               * x |^ (n+1) / ((n+1)!) by A1,A2,A3,Th2;
   thus thesis by A4,A5;
 end;
 
@@ -143,15 +143,15 @@ proof
 A1:exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
 then A2:dom (exp_R `| ].-r,r.[) = ].-r,r.[ by FDIFF_1:def 8;
 A3:dom (exp_R | ].-r,r.[) = dom(exp_R) /\ ].-r,r.[ by FUNCT_1:68
-                        .= ].-r,r.[ by XBOOLE_1:28,TAYLOR_1:16;
+                        .= ].-r,r.[ by TAYLOR_1:16,XBOOLE_1:28;
     for x be Real st x in ].-r,r.[ holds
          (exp_R `| ].-r,r.[).x=(exp_R | ].-r,r.[).x
   proof
     let x be Real such that
 A4:x in ].-r,r.[;
-    thus (exp_R `| ].-r,r.[).x=diff(exp_R,x) by FDIFF_1:def 8,A1,A4
+    thus (exp_R `| ].-r,r.[).x=diff(exp_R,x) by A1,A4,FDIFF_1:def 8
                         .=exp_R.x by TAYLOR_1:16
-                        .=(exp_R | ].-r,r.[).x by FUNCT_1:70,A4,A3;
+                        .=(exp_R | ].-r,r.[).x by A3,A4,FUNCT_1:70;
   end;
   hence thesis by A2,A3,PARTFUN1:34;
 end;
@@ -170,7 +170,7 @@ proof
     A4: exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
      diff(exp_R,].-r,r.[).(k+1)=(diff(exp_R,].-r,r.[).k) `| ].-r,r.[
                            by TAYLOR_1:def 5
-                   .=exp_R `| ].-r,r.[ by FDIFF_2:16,A4,A3
+                   .=exp_R `| ].-r,r.[ by A3,A4,FDIFF_2:16
                    .=exp_R | ].-r,r.[ by Th5;
    hence thesis;
    end;
@@ -185,9 +185,9 @@ proof
   let n be Element of NAT;
   let r,x be Real such that
 A1: x in ].-r,r.[;
-A2: x in dom(exp_R | ].-r,r.[) by Th5,A1;
+A2: x in dom(exp_R | ].-r,r.[) by A1,Th5;
    (diff(exp_R,].-r,r.[).n).x=(exp_R | ].-r,r.[).x by Th6
-                         .=exp_R.x by FUNCT_1:70,A2;
+                         .=exp_R.x by A2,FUNCT_1:70;
   hence thesis;
 end;
 
@@ -224,16 +224,16 @@ then A3: abs(x-0) < r by RCOMP_1:8;
 A4: abs(s*x-0) = abs(s) * abs(x) by COMPLEX1:151
                 .= s * abs(x) by A2,ABSVALUE:def 1;
    abs(x)>=0 by COMPLEX1:132;
-  then abs(x) * s < r * 1 by A2,XREAL_1:99,A3;
-  then (s*x) in ].0-r,0+r.[ by RCOMP_1:8,A4;
+  then abs(x) * s < r * 1 by A2,A3,XREAL_1:99;
+  then (s*x) in ].0-r,0+r.[ by A4,RCOMP_1:8;
 then A5: (s*x) in dom(exp_R | ].-r,r.[) by Th5;
    ((n+1)!) > 0 by NEWTON:23;
 then A6: abs((n+1)!) = ((n+1)!) by ABSVALUE:def 1;
    abs( (diff(exp_R,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) /((n+1)!) )
      = abs((exp_R | ].-r,r.[).(s*x) * x |^ (n+1) /((n+1)!) ) by Th6
-    .= abs(exp_R.(s*x) * x |^ (n+1) /((n+1)!) ) by FUNCT_1:70,A5
+    .= abs(exp_R.(s*x) * x |^ (n+1) /((n+1)!) ) by A5,FUNCT_1:70
     .= abs(exp_R.(s*x) * x |^ (n+1)) /abs((n+1)!) by COMPLEX1:153
-    .= abs(exp_R.(s*x)) * abs(x |^ (n+1)) /((n+1)!) by COMPLEX1:151,A6;
+    .= abs(exp_R.(s*x)) * abs(x |^ (n+1)) /((n+1)!) by A6,COMPLEX1:151;
   hence thesis by Th1;
 end;
 
@@ -254,7 +254,7 @@ proof
 A3: diff(exp_R,].-r,r.[).i | ].-r,r.[ = exp_R | ].-r,r.[ | ].-r,r.[ by Th6
                              .= exp_R | ].-r,r.[ by FUNCT_1:82;
      exp_R is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
-    hence thesis by A3,A2,FDIFF_1:def 7;
+    hence thesis by A2,A3,FDIFF_1:def 7;
   end;
   hence thesis by A1,FDIFF_1:def 7;
 end;
@@ -278,7 +278,7 @@ theorem Th11:
       then A3: abs(x-0) < r by RCOMP_1:8;
        abs(x) >= 0 by COMPLEX1:132;
       then s * abs(x) < 1 * r by A2,A3,XREAL_1:99;
-      then abs(s) * abs(x) < r by ABSVALUE:def 1,A2;
+      then abs(s) * abs(x) < r by A2,ABSVALUE:def 1;
       then abs(s*x - 0) < r by COMPLEX1:151;
       then A4:(s*x) in ].0-r,0+r.[ by RCOMP_1:8;
       A5: abs(exp_R.(s*x)) >= 0 by COMPLEX1:132;
@@ -291,7 +291,7 @@ theorem Th11:
       A9: r in [#](REAL) /\ dom exp_R by TAYLOR_1:16;
        exp_R.(s*x) >= 0 by SIN_COS:59;
       then abs(exp_R.(s*x)) = exp_R.(s*x) by ABSVALUE:def 1;
-      then A10: abs(exp_R.(s*x)) <= M by A7,A8,TAYLOR_1:16,RFUNCT_2:48,A9;
+      then A10: abs(exp_R.(s*x)) <= M by A7,A8,A9,RFUNCT_2:48,TAYLOR_1:16;
       A11: n! > 0 by NEWTON:23;
       A12: abs(x |^ n /(n!)) =abs(x |^ n) / abs(n!) by COMPLEX1:153
                            .=abs(x |^ n) / (n!) by A11,ABSVALUE:def 1
@@ -316,24 +316,24 @@ theorem Th11:
            0*a <= a |^ k*a by A14,A18,XREAL_1:68;
           hence a |^ (k+1) >= 0 by NEWTON:11;
            a |^ k*a <= b |^ k*b by A14,A18,XREAL_1:68;
-          hence thesis by NEWTON:11,A19;
+          hence thesis by A19,NEWTON:11;
         end;
          for n be Element of NAT holds P[n] from NAT_1:sch 1(A15,A17);
         hence thesis;
       end;
        abs(x) >= 0 by COMPLEX1:132;
-      then abs(x) |^ n <= L |^ n by A13,A3;
-then A20:  abs(x |^ n /(n!)) <=L |^ n / (n!) by A12,XREAL_1:74,A11;
+      then abs(x) |^ n <= L |^ n by A3,A13;
+then A20:  abs(x |^ n /(n!)) <=L |^ n / (n!) by A11,A12,XREAL_1:74;
        abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n / (n!))
                          =abs(exp_R.(s*x)* x |^ n / (n!))
-                                   by Th7,A4
+                                   by A4,Th7
                          .=abs(exp_R.(s*x)* (x |^ n / (n!)))
                                    by XCMPLX_1:75
                          .=abs(exp_R.(s*x))*abs(x |^ n / (n!))
                                    by COMPLEX1:151;
       then abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n / (n!))
                          <= M*(L |^ n / (n!))
-                                   by XREAL_1:68,A5,A6,A10,A20;
+                                   by A5,A6,A10,A20,XREAL_1:68;
       hence abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n /(n!))
                          <= M*L |^ n / (n!) by XCMPLX_1:75;
     end;
@@ -341,7 +341,7 @@ then A20:  abs(x |^ n /(n!)) <=L |^ n / (n!) by A12,XREAL_1:74,A11;
             abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n / (n!))
                          <= M*L |^ n / (n!);
   end;
-  hence thesis by SIN_COS:59,A1;
+  hence thesis by A1,SIN_COS:59;
 end;
 
 theorem Th12:
@@ -368,11 +368,11 @@ proof
     A4: p > 0;
     consider n be Element of NAT such that
     A5: for m be Element of NAT st n<=m holds abs((M(#)(L ExpSeq)).m - 0) < p
-                           by A4,SEQ_2:def 7,A3;
+                           by A3,A4,SEQ_2:def 7;
     take n;
      now let m be Element of NAT such that
       A6: n <= m;
-      A7: L |^ m >= 0 by POWER:3,A1;
+      A7: L |^ m >= 0 by A1,POWER:3;
        m! > 0 by NEWTON:23;
       then A8: L |^ m / (m!) >= 0 by A7,REAL_2:125;
        abs((M(#)(L ExpSeq)).m - 0) = abs(M*(L |^ m /(m!))) by A2
@@ -381,7 +381,7 @@ proof
                                   .=M*abs(L |^ m /(m!))
                                              by A1,ABSVALUE:def 1
                                   .=M*(L |^ m /(m!))
-                                             by ABSVALUE:def 1,A8
+                                             by A8,ABSVALUE:def 1
                                   .=M*L |^ m /(m!) by XCMPLX_1:75;
       hence (M*L |^ m /(m!)) < p by A5,A6;
     end;
@@ -403,10 +403,10 @@ proof
   A4: for n be Element of NAT holds
           for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
              abs((diff(exp_R,].-r,r.[).n).(s*x) * x |^ n / (n!))
-                     <= M*L |^ n / (n!) by Th11,A1;
+                     <= M*L |^ n / (n!) by A1,Th11;
    consider n be Element of NAT such that
 A5: for m be Element of NAT st n <= m holds (M*L |^ m / (m!)) < e
- by A3,A2,Th12;
+ by A2,A3,Th12;
    take n;
      let m be Element of NAT such that
 A6: n <= m;
@@ -432,7 +432,7 @@ A2: e > 0;
     A3: for m be Element of NAT st n <= m holds
             for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
                 abs( (diff(exp_R,].-r,r.[).m).(s*x)
-                 * x |^ m / (m!) )< e  by Th13,A1,A2;
+                 * x |^ m / (m!) )< e  by A1,A2,Th13;
     take n;
     let m be Element of NAT such that
     A4: n <= m;
@@ -443,9 +443,9 @@ A2: e > 0;
     A7: 0 < s & s < 1 and
     A8: abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m)
              =abs( (diff(exp_R,].-r,r.[).(m+1)).(s*x)
-             * x |^ (m+1) / ((m+1)!) ) by Th4,A5,A1,A6;
+             * x |^ (m+1) / ((m+1)!) ) by A1,A5,A6,Th4;
      m <= m+1 by NAT_1:11;
-    then n <= m+1 by XXREAL_0:2,A4;
+    then n <= m+1 by A4,XXREAL_0:2;
     hence abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m) < e
       by A3,A6,A7,A8;
     end;
@@ -462,7 +462,7 @@ proof
 A1: n! > 0 by NEWTON:23;
      abs(x ExpSeq.n) = abs(x |^ n / (n!)) by SIN_COS:def 9
                    .= abs(x |^ n) / abs(n!) by COMPLEX1:153
-                   .= abs(x |^ n) / (n!) by ABSVALUE:def 1,A1
+                   .= abs(x |^ n) / (n!) by A1,ABSVALUE:def 1
                    .= abs(x) |^ n / (n!) by Th1
                    .= (abs(x) ExpSeq).n by SIN_COS:def 9;
     hence thesis;
@@ -515,22 +515,22 @@ proof
                               .= dom((-1)(#)sin) /\ ].-r,r.[
                                      by RFUNCT_1:38
                               .= dom(sin) /\ ].-r,r.[ by SEQ_1:def 6
-                              .= ].-r,r.[ by XBOOLE_1:28,SIN_COS:27;
+                              .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
   A5: dom (sin | ].-r,r.[) = dom(sin) /\ ].-r,r.[ by FUNCT_1:68
-                           .= ].-r,r.[ by XBOOLE_1:28,SIN_COS:27;
+                           .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
   A6: dom (cos | ].-r,r.[) = dom(cos) /\ ].-r,r.[ by FUNCT_1:68
-                           .= ].-r,r.[ by XBOOLE_1:28,SIN_COS:27;
+                           .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
   A7: for x be Real st x in ].-r,r.[ holds
          (sin `| ].-r,r.[).x = (cos | ].-r,r.[).x
   proof
     let x be Real such that
     A8: x in ].-r,r.[;
-     (sin `| ].-r,r.[).x=diff(sin,x) by FDIFF_1:def 8,A1,A8
+     (sin `| ].-r,r.[).x=diff(sin,x) by A1,A8,FDIFF_1:def 8
                        .=cos.x by SIN_COS:69
-                       .=(cos | ].-r,r.[).x by FUNCT_1:70,A8,A6;
+                       .=(cos | ].-r,r.[).x by A6,A8,FUNCT_1:70;
     hence thesis;
   end;
-  A9: dom (cos `| ].-r,r.[) = ].-r,r.[ by FDIFF_1:def 8,A3;
+  A9: dom (cos `| ].-r,r.[) = ].-r,r.[ by A3,FDIFF_1:def 8;
    for x be Real st x in ].-r,r.[ holds
     (cos `| ].-r,r.[).x = ((-sin) | ].-r,r.[).x
   proof
@@ -538,12 +538,12 @@ proof
 A10: x in ].-r,r.[;
      x in dom (sin) by SIN_COS:27;
 then A11: x in dom ((-1)(#)sin ) by SEQ_1:def 6;
-     (cos `| ].-r,r.[).x=diff(cos,x) by FDIFF_1:def 8,A3,A10
+     (cos `| ].-r,r.[).x=diff(cos,x) by A3,A10,FDIFF_1:def 8
                        .=-sin.x by SIN_COS:68
                        .=(-1)*sin.x
-                       .= ((-1)(#)sin ).x by SEQ_1:def 6,A11
+                       .= ((-1)(#)sin ).x by A11,SEQ_1:def 6
                        .=(-sin).x by RFUNCT_1:38
-                       .=((-sin) | ].-r,r.[).x by FUNCT_1:70,A10,A4;
+                       .=((-sin) | ].-r,r.[).x by A4,A10,FUNCT_1:70;
     hence thesis;
   end;
   hence thesis by A2,A4,A5,A6,A7,A9,PARTFUN1:34;
@@ -559,7 +559,7 @@ proof
 A1: f is_differentiable_on Z;
 A2: Z is open Subset of REAL by A1,FDIFF_1:17;
    (-f) `| Z = ( (-1)(#) f) `| Z by RFUNCT_1:38
-            .= (-1)(#) (f `| Z) by FDIFF_2:19,A1,A2
+            .= (-1)(#) (f `| Z) by A1,A2,FDIFF_2:19
             .= -f `| Z by RFUNCT_1:38;
   hence thesis;
 end;
@@ -590,7 +590,7 @@ A3: P[0]
                                                by TAYLOR_1:def 5
                                .= sin | ].-r,r.[ `| ].-r,r.[
                                                by TAYLOR_1:def 5
-                               .= sin `| ].-r,r.[ by FDIFF_2:16,A1
+                               .= sin `| ].-r,r.[ by A1,FDIFF_2:16
                                .= cos | ].-r,r.[ by Th17
                                .= 1 (#) (cos | ].-r,r.[) by RFUNCT_1:33
                                .= (-1) |^ 0 (#) (cos | ].-r,r.[)
@@ -601,7 +601,7 @@ A3: P[0]
        diff(cos,].-r,r.[).(2*0+1) = diff(cos,].-r,r.[).0 `| ].-r,r.[
                                                by TAYLOR_1:def 5
                 .= cos | ].-r,r.[ `| ].-r,r.[ by TAYLOR_1:def 5
-                .= cos `| ].-r,r.[ by FDIFF_2:16,A2
+                .= cos `| ].-r,r.[ by A2,FDIFF_2:16
                 .= (-sin) | ].-r,r.[ by Th17
                 .= 1 (#) (-sin) | ].-r,r.[ by RFUNCT_1:33
                 .= (-1) |^ 0 (#) (-sin) | ].-r,r.[ by NEWTON:9
@@ -617,13 +617,13 @@ A3: P[0]
       A8: P[k];
       A9: (sin | ].-r,r.[) is_differentiable_on ].-r,r.[ &
            (cos | ].-r,r.[) is_differentiable_on ].-r,r.[
-                                by FDIFF_2:16,A1,A2;
+                                by A1,A2,FDIFF_2:16;
       A10: diff(sin,].-r,r.[).(2*(k+1))
              = diff(sin,].-r,r.[).((2*k+1)+1)
             .= diff(sin,].-r,r.[).(2*k+1) `| ].-r,r.[ by TAYLOR_1:def 5
             .= ((-1) |^ k) (#) ((cos | ].-r,r.[) `| ].-r,r.[)
-                                by FDIFF_2:19,A9,A8
-            .= ((-1) |^ k) (#) (cos `| ].-r,r.[) by FDIFF_2:16,A2
+                                by A8,A9,FDIFF_2:19
+            .= ((-1) |^ k) (#) (cos `| ].-r,r.[) by A2,FDIFF_2:16
             .= ((-1) |^ k) (#) ((-sin) | ].-r,r.[) by Th17
             .= ((-1) |^ k) (#) (((-1) (#) sin) | ].-r,r.[) by RFUNCT_1:38
             .= ((-1) |^ k) (#) ((-1) (#) sin | ].-r,r.[) by RFUNCT_1:65
@@ -633,24 +633,24 @@ A3: P[0]
                   = diff(sin,].-r,r.[).(2*(k+1)) `| ].-r,r.[
                                 by TAYLOR_1:def 5
                   .= ((-1) |^ (k+1)) (#) ((sin | ].-r,r.[) `| ].-r,r.[)
-                                by FDIFF_2:19,A9,A10
-                  .= ((-1) |^ (k+1)) (#) (sin `| ].-r,r.[) by FDIFF_2:16,A1
+                                by A9,A10,FDIFF_2:19
+                  .= ((-1) |^ (k+1)) (#) (sin `| ].-r,r.[) by A1,FDIFF_2:16
                   .= (-1) |^ (k+1) (#) cos | ].-r,r.[ by Th17;
       A12: diff(cos,].-r,r.[).(2*(k+1))
                    = diff(cos,].-r,r.[).((2*k+1)+1)
                   .= diff(cos,].-r,r.[).(2*k+1) `| ].-r,r.[
                                 by TAYLOR_1:def 5
                   .= ((-1) |^ (k+1)) (#) ((sin | ].-r,r.[) `| ].-r,r.[)
-                                by FDIFF_2:19,A9,A8
-                  .= (-1) |^ (k+1) (#) (sin `| ].-r,r.[) by FDIFF_2:16,A1
+                                by A8,A9,FDIFF_2:19
+                  .= (-1) |^ (k+1) (#) (sin `| ].-r,r.[) by A1,FDIFF_2:16
                   .= (-1) |^ (k+1) (#) cos | ].-r,r.[ by Th17;
        diff(cos,].-r,r.[).(2*(k+1)+1)
                    = diff(cos,].-r,r.[).(2*(k+1)) `| ].-r,r.[
                                 by TAYLOR_1:def 5
                   .= ((-1) |^ (k+1)) (#) ((cos | ].-r,r.[) `| ].-r,r.[)
-                                by FDIFF_2:19,A9,A12
+                                by A9,A12,FDIFF_2:19
                   .= ((-1) |^ (k+1)) (#) (cos `| ].-r,r.[)
-                                by FDIFF_2:16,A2
+                                by A2,FDIFF_2:16
                   .= ((-1) |^ (k+1)) (#) ((-sin) | ].-r,r.[) by Th17
                   .= ((-1) |^ (k+1)) (#) ((-1) (#) sin) | ].-r,r.[
                                 by RFUNCT_1:38
@@ -692,8 +692,8 @@ proof
                      by TAYLOR_1:def 7
         .= ((-1) |^ n (#) sin | ].-r,r.[).0 * x |^ (2*n) / ((2*n)!) by Th19
         .= (((-1) |^ n) * (sin | ].-r,r.[).0) * x |^ (2*n) / ((2*n)!)
-                     by SEQ_1:def 6,A2,A3
-        .= ((-1) |^ n) * sin.0 * x |^ (2*n) / ((2*n)!) by FUNCT_1:70,A4
+                     by A2,A3,SEQ_1:def 6
+        .= ((-1) |^ n) * sin.0 * x |^ (2*n) / ((2*n)!) by A4,FUNCT_1:70
         .= 0 by SIN_COS:33;
   A9: Maclaurin(sin, ].-r,r.[,x).(2*n+1)
          = (diff(sin,].-r,r.[).(2*n+1)).0 * (x-0) |^ (2*n+1) / ((2*n+1)!)
@@ -701,16 +701,16 @@ proof
          .= ((-1) |^ n (#) cos | ].-r,r.[).0 * x |^ (2*n+1) / ((2*n+1)!)
                      by Th19
          .= (((-1) |^ n) * (cos | ].-r,r.[).0) * x |^ (2*n+1) / ((2*n+1)!)
-                     by SEQ_1:def 6,A5,A2
-         .= ((-1) |^ n) * cos.0 * x |^ (2*n+1) / ((2*n+1)!) by FUNCT_1:70,A6
+                     by A2,A5,SEQ_1:def 6
+         .= ((-1) |^ n) * cos.0 * x |^ (2*n+1) / ((2*n+1)!) by A6,FUNCT_1:70
          .= (-1) |^ n * x |^ (2*n+1) / ((2*n+1)!) by SIN_COS:33;
   A10: Maclaurin(cos, ].-r,r.[,x).(2*n)
          = (diff(cos,].-r,r.[).(2*n)).0 * (x-0) |^ (2*n) / ((2*n)!)
                      by TAYLOR_1:def 7
          .= ((-1) |^ n (#) cos | ].-r,r.[).0 * x |^ (2*n) / ((2*n)!) by Th19
          .= (((-1) |^ n) * (cos | ].-r,r.[).0) * x |^ (2*n) / ((2*n)!)
-                     by SEQ_1:def 6,A5,A2
-         .= ((-1) |^ n) * cos.0 * x |^ (2*n) / ((2*n)!) by FUNCT_1:70,A6
+                     by A2,A5,SEQ_1:def 6
+         .= ((-1) |^ n) * cos.0 * x |^ (2*n) / ((2*n)!) by A6,FUNCT_1:70
          .= (-1) |^ n * x |^ (2*n) / ((2*n)!) by SIN_COS:33;
    Maclaurin(cos, ].-r,r.[,x).(2*n+1)
       = (diff(cos,].-r,r.[).(2*n+1)).0 * (x-0) |^ (2*n+1) / ((2*n+1)!)
@@ -718,8 +718,8 @@ proof
       .= ((-1) |^ (n+1) (#) sin | ].-r,r.[).0 * x |^ (2*n+1) / ((2*n+1)!)
                      by Th19
       .= (((-1) |^ (n+1)) * (sin | ].-r,r.[).0) * x |^ (2*n+1) / ((2*n+1)!)
-                     by SEQ_1:def 6,A7,A2
-      .= ((-1) |^ (n+1)) * sin.0 * x |^ (2*n+1) / ((2*n+1)!) by FUNCT_1:70,A4
+                     by A2,A7,SEQ_1:def 6
+      .= ((-1) |^ (n+1)) * sin.0 * x |^ (2*n+1) / ((2*n+1)!) by A4,FUNCT_1:70
       .= 0 by SIN_COS:33;
   hence thesis by A8,A9,A10;
 end;
@@ -736,7 +736,7 @@ proof
         then consider j be Element of NAT such that
         A2: i=2*j by ABIAN:def 2;
         thus dom(diff(sin,].-r,r.[).i)
-                    = dom((-1) |^ j (#) sin | ].-r,r.[) by Th19,A2
+                    = dom((-1) |^ j (#) sin | ].-r,r.[) by A2,Th19
                    .= dom((sin | ].-r,r.[)) by SEQ_1:def 6
                    .= ].-r,r.[ by Th17;
       end;
@@ -744,7 +744,7 @@ proof
         then consider j be Element of NAT such that
         A3: i=2*j+1 by ABIAN:9;
         thus dom(diff(sin,].-r,r.[).i)
-                    = dom((-1) |^ j (#) cos | ].-r,r.[) by Th19,A3
+                    = dom((-1) |^ j (#) cos | ].-r,r.[) by A3,Th19
                    .= dom((cos | ].-r,r.[)) by SEQ_1:def 6
                    .= ].-r,r.[ by Th17;
       end;
@@ -759,23 +759,23 @@ proof
           then consider j be Element of NAT such that
           A5: i = 2*j by ABIAN:def 2;
           A6: diff(sin,].-r,r.[).i
-                  = (-1) |^ j (#) sin | ].-r,r.[ by Th19,A5;
+                  = (-1) |^ j (#) sin | ].-r,r.[ by A5,Th19;
            sin is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:73;
-          then (sin | ].-r,r.[) is_differentiable_in x by FDIFF_1:def 7,A4;
+          then (sin | ].-r,r.[) is_differentiable_in x by A4,FDIFF_1:def 7;
           hence diff(sin,].-r,r.[).i is_differentiable_in x by A6,FDIFF_1:23;
         end;
         suppose i is odd;
           then consider j be Element of NAT such that
           A7: i = 2*j+1 by ABIAN:9;
           A8: diff(sin,].-r,r.[).i
-                  = (-1) |^ j (#) cos | ].-r,r.[ by Th19,A7;
+                  = (-1) |^ j (#) cos | ].-r,r.[ by A7,Th19;
            cos is_differentiable_on ].-r,r.[ by FDIFF_1:34,SIN_COS:72;
-          then (cos | ].-r,r.[) is_differentiable_in x by FDIFF_1:def 7,A4;
+          then (cos | ].-r,r.[) is_differentiable_in x by A4,FDIFF_1:def 7;
           hence diff(sin,].-r,r.[).i is_differentiable_in x
                              by A8,FDIFF_1:23;
         end;
       end;
-      hence thesis by RELAT_1:97,A1;
+      hence thesis by A1,RELAT_1:97;
     end;
     hence diff(sin,].-r,r.[).i is_differentiable_on ].-r,r.[
                         by A1,FDIFF_1:def 7;
@@ -787,7 +787,7 @@ proof
         then consider j be Element of NAT such that
         A10: i = 2*j by ABIAN:def 2;
         thus dom(diff(cos,].-r,r.[).i)
-                    = dom((-1) |^ j (#) cos | ].-r,r.[) by Th19,A10
+                    = dom((-1) |^ j (#) cos | ].-r,r.[) by A10,Th19
                    .= dom((cos | ].-r,r.[)) by SEQ_1:def 6
                    .= ].-r,r.[ by Th17;
       end;
@@ -795,7 +795,7 @@ proof
         then consider j be Element of NAT such that
         A11: i = 2*j+1 by ABIAN:9;
         thus dom(diff(cos,].-r,r.[).i)
-                    = dom((-1) |^ (j+1) (#) sin | ].-r,r.[) by Th19,A11
+                    = dom((-1) |^ (j+1) (#) sin | ].-r,r.[) by A11,Th19
                    .= dom((sin | ].-r,r.[)) by SEQ_1:def 6
                    .= ].-r,r.[ by Th17;
       end;
@@ -810,25 +810,25 @@ proof
           then consider j be Element of NAT such that
           A13: i = 2*j by ABIAN:def 2;
           A14: diff(cos,].-r,r.[).i
-                   = (-1) |^ j (#) cos | ].-r,r.[ by Th19,A13;
+                   = (-1) |^ j (#) cos | ].-r,r.[ by A13,Th19;
            cos is_differentiable_on ].-r,r.[
                              by FDIFF_1:34,SIN_COS:72;
-          then (cos | ].-r,r.[) is_differentiable_in x by FDIFF_1:def 7,A12;
+          then (cos | ].-r,r.[) is_differentiable_in x by A12,FDIFF_1:def 7;
           hence diff(cos,].-r,r.[).i is_differentiable_in x by A14,FDIFF_1:23;
         end;
         suppose i is odd;
           then consider j be Element of NAT such that
           A15: i = 2*j+1 by ABIAN:9;
           A16: diff(cos,].-r,r.[).i
-                  = (-1) |^ (j+1) (#) sin | ].-r,r.[ by Th19,A15;
+                  = (-1) |^ (j+1) (#) sin | ].-r,r.[ by A15,Th19;
            sin is_differentiable_on ].-r,r.[
                              by FDIFF_1:34,SIN_COS:73;
-          then (sin | ].-r,r.[) is_differentiable_in x by FDIFF_1:def 7,A12;
+          then (sin | ].-r,r.[) is_differentiable_in x by A12,FDIFF_1:def 7;
           hence diff(cos,].-r,r.[).i is_differentiable_in x
                              by A16,FDIFF_1:23;
         end;
       end;
-      hence thesis by RELAT_1:97,A9;
+      hence thesis by A9,RELAT_1:97;
     end;
     hence diff(cos,].-r,r.[).i is_differentiable_on ].-r,r.[
                         by A9,FDIFF_1:def 7;
@@ -857,7 +857,7 @@ proof
       then A3: abs(x-0) < r by RCOMP_1:8;
        abs x >= 0 by COMPLEX1:132;
       then s * abs(x) < 1 * r by A2,A3,XREAL_1:99;
-      then abs(s) * abs(x) < r by ABSVALUE:def 1,A2;
+      then abs(s) * abs(x) < r by A2,ABSVALUE:def 1;
       then abs(s*x - 0) < r by COMPLEX1:151;
       then A4: (s*x) in ].0-r,0+r.[ by RCOMP_1:8;
       A5: n! > 0 by NEWTON:23;
@@ -870,14 +870,14 @@ proof
                .= abs((diff(sin,].-r,r.[).n).(s*x)) * abs(x |^ n / (n!))
                               by COMPLEX1:151
                .= abs((diff(sin,].-r,r.[).n).(s*x)) * abs(x) |^ n / (n!)
-                     by XCMPLX_1:75,A6;
+                     by A6,XCMPLX_1:75;
       A8: abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
                 = abs((diff(cos,].-r,r.[).n).(s*x) * (x |^ n / (n!)))
                               by XCMPLX_1:75
                .= abs((diff(cos,].-r,r.[).n).(s*x)) * abs(x |^ n / (n!))
                               by COMPLEX1:151
                .= abs((diff(cos,].-r,r.[).n).(s*x)) * abs(x) |^ n / (n!)
-                     by XCMPLX_1:75,A6;
+                     by A6,XCMPLX_1:75;
       A9: abs((diff(sin,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
       A10: abs((diff(cos,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
       A11: abs(x) |^ n / (n!) >= 0 by A6,COMPLEX1:132;
@@ -888,7 +888,7 @@ proof
           suppose k is even;
             then consider j be Element of NAT such that
             A13: k = 2*j by ABIAN:def 2;
-            thus abs((-1) |^ k) = abs(((-1) |^ (1+1)) |^ j) by NEWTON:14,A13
+            thus abs((-1) |^ k) = abs(((-1) |^ (1+1)) |^ j) by A13,NEWTON:14
                                .= abs(((-1) |^ 1 * (-1)) |^ j) by NEWTON:11
                                .= abs(((-1) * (-1)) |^ j) by NEWTON:10
                                .= abs(1) by NEWTON:15
@@ -898,7 +898,7 @@ proof
             then consider j be Element of NAT such that
             A14: k = 2*j+1 by ABIAN:9;
             thus abs((-1) |^ k) = abs((-1) |^ (2*j) * (-1))
-                                               by NEWTON:11,A14
+                                               by A14,NEWTON:11
                    .= abs(((-1) |^ (1+1)) |^ j * (-1)) by NEWTON:14
                    .= abs(((-1) |^ 1 * (-1)) |^ j * (-1)) by NEWTON:11
                    .= abs(((-1) * (-1)) |^ j * (-1)) by NEWTON:10
@@ -918,13 +918,13 @@ proof
                    .= ].-r,r.[ by Th17;
             A18: (s*x) in dom(sin | ].-r,r.[) by A4,Th17;
             A19: abs((diff(sin,].-r,r.[).n).(s*x))
-                    = abs(((-1) |^ k (#) sin | ].-r,r.[).(s*x)) by Th19,A16
+                    = abs(((-1) |^ k (#) sin | ].-r,r.[).(s*x)) by A16,Th19
                     .= abs(((-1) |^ k) * ((sin | ].-r,r.[).(s*x)))
-                        by SEQ_1:def 6,A17,A4
+                        by A4,A17,SEQ_1:def 6
                     .= abs((-1) |^ k) * abs((sin | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by A12
-                    .= abs(sin.(s*x)) by FUNCT_1:70,A18;
+                    .= abs(sin.(s*x)) by A18,FUNCT_1:70;
              abs(sin (s*x)) <= 1 by SIN_COS:30;
             hence thesis by A19,SIN_COS:def 21;
           end;
@@ -936,13 +936,13 @@ proof
                    .= ].-r,r.[ by Th17;
             A22: (s*x) in dom(cos | ].-r,r.[) by A4,Th17;
             A23: abs((diff(sin,].-r,r.[).n).(s*x))
-                     = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by Th19,A20
+                     = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by A20,Th19
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
-                        by SEQ_1:def 6,A21,A4
+                        by A4,A21,SEQ_1:def 6
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by A12
-                    .= abs(cos.(s*x)) by FUNCT_1:70,A22;
+                    .= abs(cos.(s*x)) by A22,FUNCT_1:70;
              abs(cos (s*x)) <= 1 by SIN_COS:30;
             hence thesis by A23,SIN_COS:def 23;
           end;
@@ -958,13 +958,13 @@ proof
                   .= ].-r,r.[ by Th17;
             A27: (s*x) in dom(cos | ].-r,r.[) by A4,Th17;
             A28: abs((diff(cos,].-r,r.[).n).(s*x))
-                     = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by Th19,A25
+                     = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by A25,Th19
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
-                        by SEQ_1:def 6,A26,A4
+                        by A4,A26,SEQ_1:def 6
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by A12
-                    .= abs(cos.(s*x)) by FUNCT_1:70,A27;
+                    .= abs(cos.(s*x)) by A27,FUNCT_1:70;
              abs(cos (s*x)) <= 1 by SIN_COS:30;
             hence thesis by A28,SIN_COS:def 23;
           end;
@@ -977,13 +977,13 @@ proof
             A31: (s*x) in dom(sin | ].-r,r.[) by A4,Th17;
             A32: abs((diff(cos,].-r,r.[).n).(s*x))
                      = abs(((-1) |^ (k+1) (#) sin | ].-r,r.[).(s*x))
-                        by Th19,A29
+                        by A29,Th19
                     .= abs(((-1) |^ (k+1)) * ((sin | ].-r,r.[).(s*x)))
-                        by SEQ_1:def 6,A30,A4
+                        by A4,A30,SEQ_1:def 6
                     .= abs((-1) |^ (k+1)) * abs((sin | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by A12
-                    .= abs(sin.(s*x)) by FUNCT_1:70,A31;
+                    .= abs(sin.(s*x)) by A31,FUNCT_1:70;
              abs(sin (s*x)) <= 1 by SIN_COS:30;
             hence thesis by A32,SIN_COS:def 21;
           end;
@@ -1035,7 +1035,7 @@ proof
           then A39: abs(x) |^ k / (k!) >= 0 by COMPLEX1:132;
            abs x >= 0 by COMPLEX1:132;
           then abs(x) |^ k / (k!) * abs(x) <= r2 |^ k / (k!) * r2
-                          by A35,A39,A3,XREAL_1:68;
+                          by A3,A35,A39,XREAL_1:68;
           hence thesis by A36,A37,XREAL_1:74;
         end;
          for i be Element of NAT holds P[i] from NAT_1:sch 1(A33,A34);
@@ -1044,7 +1044,7 @@ proof
       then abs((diff(sin,].-r,r.[).n).(s*x)) * (abs(x) |^ n / (n!))
           <= r1*(r2 |^ n / (n!)) &
       abs((diff(cos,].-r,r.[).n).(s*x)) * (abs(x) |^ n / (n!))
-          <= r1*(r2 |^ n / (n!)) by XREAL_1:68,A9,A10,A11,A15,A24;
+          <= r1*(r2 |^ n / (n!)) by A9,A10,A11,A15,A24,XREAL_1:68;
       hence abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
           <= r1*r2 |^ n / (n!) &
             abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
@@ -1070,10 +1070,10 @@ proof
              abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
                      <= r1*r2 |^ n / (n!) &
              abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
-                     <= r1*r2 |^ n / (n!) by Th22,A1;
+                     <= r1*r2 |^ n / (n!) by A1,Th22;
   consider n be Element of NAT such that
   A4: for m be Element of NAT st n <= m holds
-     (r1 * r2 |^ m / (m!)) < e by Th12,A2,A3;
+     (r1 * r2 |^ m / (m!)) < e by A2,A3,Th12;
   take n;
   let m be Element of NAT such that
 A5: n <= m;
@@ -1085,7 +1085,7 @@ A6: x in ].-r,r.[ & 0 < s & s < 1;
                 <= r1*r2 |^ m /(m!) by A3,A6;
      (r1*r2 |^ m /(m!)) < e by A4,A5;
     hence abs((diff(sin,].-r,r.[).m).(s*x) * x |^ m /(m!)) < e &
-      abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m /(m!)) < e by XXREAL_0:2,A7;
+      abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m /(m!)) < e by A7,XXREAL_0:2;
 end;
 
 theorem
@@ -1102,7 +1102,7 @@ proof
 A3: for m be Element of NAT st n <= m holds
       for x,s be Real st x in ].-r,r.[ & 0 < s & s < 1 holds
       abs((diff(sin,].-r,r.[).m).(s*x) * x |^ m /(m!) )< e &
-      abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m /(m!))< e by Th23,A1,A2;
+      abs((diff(cos,].-r,r.[).m).(s*x) * x |^ m /(m!))< e by A1,A2,Th23;
     take n;
     let m be Element of NAT such that
 A4:n <= m;
@@ -1114,18 +1114,18 @@ A5: sin is_differentiable_on m+1, ].-r,r.[ &
       A7: 0 < s & s < 1 and
       A8: abs(sin.x-Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m)
                =abs((diff(sin,].-r,r.[).(m+1)).(s*x)
-               * x |^ (m+1) / ((m+1)!)) by Th4,A5,A1,A6;
+               * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4;
        m <= m+1 by NAT_1:11;
-  then A9: n <= m+1 by XXREAL_0:2,A4;
+  then A9: n <= m+1 by A4,XXREAL_0:2;
       hence abs(sin.x-Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m) < e
                             by A3,A6,A7,A8;
       consider s be Real such that
 A10: 0 < s & s < 1 and
 A11: abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m)
                =abs((diff(cos,].-r,r.[).(m+1)).(s*x)
-               * x |^ (m+1) / ((m+1)!)) by Th4,A5,A1,A6;
+               * x |^ (m+1) / ((m+1)!)) by A1,A5,A6,Th4;
       thus abs(cos.x-Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m) < e
-                            by A9,A3,A6,A10,A11;
+                            by A3,A6,A9,A10,A11;
     end;
   hence thesis;
 end;
@@ -1152,8 +1152,8 @@ proof
                  + Maclaurin(sin,].-r,r.[,x).((2*0)+1) by SERIES_1:def 1
            .= Maclaurin(sin,].-r,r.[,x).(2*0)
                  + Maclaurin(sin,].-r,r.[,x).(2*0+1) by SERIES_1:def 1
-           .= 0 + Maclaurin(sin,].-r,r.[,x).(2*0+1) by Th20,A1
-           .= (-1) |^ 0 * x |^ (2*0+1) / ((2*0+1)!) by Th20,A1
+           .= 0 + Maclaurin(sin,].-r,r.[,x).(2*0+1) by A1,Th20
+           .= (-1) |^ 0 * x |^ (2*0+1) / ((2*0+1)!) by A1,Th20
            .= (x P_sin).0 by SIN_COS:def 24
            .= Partial_Sums(x P_sin).0 by SERIES_1:def 1;
       hence thesis;
@@ -1167,15 +1167,15 @@ A3: for k be Element of NAT st P[k] holds P[k+1]
                  + Maclaurin(sin,].-r,r.[,x).(2*k+3) by SERIES_1:def 1
             .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*k+2)
                  + (-1) |^ (k+1) * x |^ (2*(k+1)+1) / ((2*(k+1)+1)!)
-                      by Th20,A1
+                      by A1,Th20
             .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).((2*k+1)+1)
                  + (x P_sin).(k+1) by SIN_COS:def 24
             .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*k+1)
                  + Maclaurin(sin,].-r,r.[,x).(2*(k+1))
                     + (x P_sin).(k+1) by SERIES_1:def 1
             .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*k+1)
-                 + 0 + (x P_sin).(k+1) by Th20,A1
-            .= Partial_Sums(x P_sin).(k+1) by SERIES_1:def 1,A4;
+                 + 0 + (x P_sin).(k+1) by A1,Th20
+            .= Partial_Sums(x P_sin).(k+1) by A4,SERIES_1:def 1;
       hence thesis;
     end;
      for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
@@ -1191,8 +1191,8 @@ A5: P[0]
                  + Maclaurin(cos,].-r,r.[,x).((2*0)+1) by SERIES_1:def 1
            .= Maclaurin(cos,].-r,r.[,x).(2*0)
                  + Maclaurin(cos,].-r,r.[,x).(2*0+1) by SERIES_1:def 1
-           .= Maclaurin(cos,].-r,r.[,x).(2*0) + 0 by Th20,A1
-           .= (-1) |^ 0 * x |^ (2*0) / ((2*0)!) by Th20,A1
+           .= Maclaurin(cos,].-r,r.[,x).(2*0) + 0 by A1,Th20
+           .= (-1) |^ 0 * x |^ (2*0) / ((2*0)!) by A1,Th20
            .= (x P_cos).0 by SIN_COS:def 25
            .= Partial_Sums(x P_cos).0 by SERIES_1:def 1;
       hence thesis;
@@ -1205,13 +1205,13 @@ A6: for k be Element of NAT st P[k] holds P[k+1]
              = Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+2)
                  + Maclaurin(cos,].-r,r.[,x).(2*(k+1)+1) by SERIES_1:def 1
             .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+2) + 0
-                      by Th20,A1
+                      by A1,Th20
             .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).((2*k+1)+1)
             .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+1)
                  + Maclaurin(cos,].-r,r.[,x).(2*k+2) by SERIES_1:def 1
             .= Partial_Sums(x P_cos).k
                  + (-1) |^ (k+1) * x |^ (2*(k+1)) / ((2*(k+1))!)
-                      by Th20,A1,A7
+                      by A1,A7,Th20
             .= Partial_Sums(x P_cos).k + (x P_cos).(k+1) by SIN_COS:def 25
             .= Partial_Sums(x P_cos).(k+1) by SERIES_1:def 1;
       hence thesis;
@@ -1232,24 +1232,24 @@ proof
   A2: m > 0;
    2*m > 2*0 by A2,XREAL_1:70;
   then A3: 2*m-1 is Element of NAT by NAT_1:20;
-  A4: m-1 is Element of NAT by NAT_1:20,A2;
+  A4: m-1 is Element of NAT by A2,NAT_1:20;
   A5: Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m)
          = Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m-1)
-           + Maclaurin(sin,].-r,r.[,x).((2*m-1)+1) by SERIES_1:def 1,A3
+           + Maclaurin(sin,].-r,r.[,x).((2*m-1)+1) by A3,SERIES_1:def 1
         .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*m-1) + 0
-           by Th20,A1
+           by A1,Th20
         .= Partial_Sums(Maclaurin(sin,].-r,r.[,x)).(2*(m-1)+1)
-        .= Partial_Sums(x P_sin).(m-1) by Th25,A1,A4;
+        .= Partial_Sums(x P_sin).(m-1) by A1,A4,Th25;
    Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m)
          = Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m-1)
-           + Maclaurin(cos,].-r,r.[,x).((2*m-1)+1) by SERIES_1:def 1,A3
+           + Maclaurin(cos,].-r,r.[,x).((2*m-1)+1) by A3,SERIES_1:def 1
         .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*m-1)
-           + (-1) |^ m * x |^ (2*m) / ((2*m)!) by Th20,A1
+           + (-1) |^ m * x |^ (2*m) / ((2*m)!) by A1,Th20
         .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*(m-1)+1)
            + (x P_cos).m by SIN_COS:def 25
         .= Partial_Sums(x P_cos).((m-1)) + (x P_cos).((m-1)+1)
-           by Th25,A1,A4
-        .= Partial_Sums(x P_cos).m by SERIES_1:def 1,A4;
+           by A1,A4,Th25
+        .= Partial_Sums(x P_cos).m by A4,SERIES_1:def 1;
   hence thesis by A5;
 end;
 
@@ -1266,7 +1266,7 @@ proof
   proof
     thus Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*0)
                   = Maclaurin(cos,].-r,r.[,x).(2*0) by SERIES_1:def 1
-                 .= (-1) |^ 0 * x |^ (2*0) / ((2*0)!) by Th20,A1
+                 .= (-1) |^ 0 * x |^ (2*0) / ((2*0)!) by A1,Th20
                  .= (x P_cos).0 by SIN_COS:def 25
                  .= Partial_Sums(x P_cos).0 by SERIES_1:def 1;
   end;
@@ -1277,9 +1277,9 @@ proof
       = Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+1)
         + Maclaurin(cos,].-r,r.[,x).((2*k+1)+1) by SERIES_1:def 1
      .= Partial_Sums(Maclaurin(cos,].-r,r.[,x)).(2*k+1)
-        + (-1) |^ (k+1) * x |^ (2*(k+1)) / ((2*(k+1))!) by Th20,A1
+        + (-1) |^ (k+1) * x |^ (2*(k+1)) / ((2*(k+1))!) by A1,Th20
      .= Partial_Sums(x P_cos).k
-        + (-1) |^ (k+1) * x |^ (2*(k+1)) / ((2*(k+1))!) by Th25,A1
+        + (-1) |^ (k+1) * x |^ (2*(k+1)) / ((2*(k+1))!) by A1,Th25
      .= Partial_Sums(x P_cos).k + (x P_cos).(k+1) by SIN_COS:def 25
      .= Partial_Sums(x P_cos).(k+1) by SERIES_1:def 1;
   end;
@@ -1308,7 +1308,7 @@ A3: Partial_Sums(x P_sin) is convergent by SIN_COS:39;
 A5: p > 0;
     consider n be Element of NAT such that
 A6: for m being Element of NAT st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
-      by SEQ_2:def 7,A2,A3,A5;
+      by A2,A3,A5,SEQ_2:def 7;
     set n1=2*n+2;
      for m1 be Element of NAT st m1>=n1 holds
       abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g) < p
@@ -1319,24 +1319,24 @@ A6: for m being Element of NAT st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
       suppose m1 is even;
         then consider j be Element of NAT such that
         A8: m1=2*j by ABIAN:def 2;
-        A9: ((n+1)*2)/2 <= (j*2)/2 by XREAL_1:74,A7,A8;
+        A9: ((n+1)*2)/2 <= (j*2)/2 by A7,A8,XREAL_1:74;
          n+1 >= 0+1 by XREAL_1:8;
-        then A10: j-1 is Element of NAT by NAT_1:20,A9;
+        then A10: j-1 is Element of NAT by A9,NAT_1:20;
          (n+1)-1 <= j-1 by A9,XREAL_1:11;
         then abs(Partial_Sums(x P_sin).(j-1)-g) < p by A6,A10;
         hence abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g)<p
-                   by A8,Th26,A1,A9;
+                   by A1,A8,A9,Th26;
       end;
       suppose m1 is odd;
         then consider j be Element of NAT such that
    A11: m1=2*j+1 by ABIAN:9;
    A12: n*2+0 <= n*2+1 by XREAL_1:8;
-         (n*2+2)-1 <= (2*j+1)-1 by XREAL_1:11,A7,A11;
+         (n*2+2)-1 <= (2*j+1)-1 by A7,A11,XREAL_1:11;
         then n*2 <= j*2 by A12,XXREAL_0:2;
         then (n*2)/2 <= (j*2)/2 by XREAL_1:74;
         then abs(Partial_Sums(x P_sin).j-g) < p by A6;
         hence abs(Partial_Sums(Maclaurin(sin,].-r,r.[,x)).m1-g)<p
-                      by Th25,A1,A11;
+                      by A1,A11,Th25;
       end;
     end;
     hence ex n1 being Element of NAT
@@ -1345,7 +1345,7 @@ A6: for m being Element of NAT st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
   end;
   then Partial_Sums(Maclaurin(sin,].-r,r.[,x)) is convergent by SEQ_2:def 6;
   then A13: lim Partial_Sums(Maclaurin(sin,].-r,r.[,x)) = sin.x
-               by SEQ_2:def 7,A4;
+               by A4,SEQ_2:def 7;
    Sum(x P_cos) = cos.x by SIN_COS:40;
   then A14: lim Partial_Sums(x P_cos) = cos.x by SERIES_1:def 3;
   A15: Partial_Sums(x P_cos) is convergent by SIN_COS:39;
@@ -1359,7 +1359,7 @@ A17: p > 0;
     consider n be Element of NAT such that
 A18: for m being Element of NAT
  st n<=m holds abs(Partial_Sums(x P_cos).m-g) < p
-        by SEQ_2:def 7,A14,A15,A17;
+        by A14,A15,A17,SEQ_2:def 7;
     set n1=2*n+1;
      for m1 be Element of NAT st m1>=n1 holds
       abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p
@@ -1371,20 +1371,20 @@ A19: m1>=n1;
         then consider j be Element of NAT such that
    A20: m1=2*j by ABIAN:def 2;
      (n*2)+1 >= n*2 by XREAL_1:31;
-        then n*2 <= j*2 by XXREAL_0:2,A19,A20;
+        then n*2 <= j*2 by A19,A20,XXREAL_0:2;
         then (n*2)/2 <= (j*2)/2 by XREAL_1:74;
         then abs(Partial_Sums(x P_cos).j-g) < p by A18;
         hence abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p
-                          by A20,Th27,A1;
+                          by A1,A20,Th27;
       end;
       suppose m1 is odd;
         then consider j be Element of NAT such that
         A21: m1=2*j+1 by ABIAN:9;
-         (n*2+1)-1 <= (j*2+1)-1 by XREAL_1:11,A19,A21;
+         (n*2+1)-1 <= (j*2+1)-1 by A19,A21,XREAL_1:11;
         then (n*2)/2 <= (j*2)/2 by XREAL_1:74;
         then abs(Partial_Sums(x P_cos).j-g) < p by A18;
         hence abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p
-                      by Th25,A1,A21;
+                      by A1,A21,Th25;
       end;
     end;
     hence ex n1 being Element of NAT
@@ -1392,6 +1392,6 @@ A19: m1>=n1;
         abs(Partial_Sums(Maclaurin(cos,].-r,r.[,x)).m1-g)<p;
   end;
   then Partial_Sums(Maclaurin(cos,].-r,r.[,x)) is convergent by SEQ_2:def 6;
-  then lim Partial_Sums(Maclaurin(cos,].-r,r.[,x)) = cos.x by SEQ_2:def 7,A16;
-  hence thesis by A4,A13,A16,SERIES_1:def 3,SEQ_2:def 6;
+  then lim Partial_Sums(Maclaurin(cos,].-r,r.[,x)) = cos.x by A16,SEQ_2:def 7;
+  hence thesis by A4,A13,A16,SEQ_2:def 6,SERIES_1:def 3;
 end;

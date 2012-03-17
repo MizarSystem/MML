@@ -2,9 +2,9 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -14,8 +14,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="COMSEQ_1"/>
@@ -62,7 +62,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -84,7 +84,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="118">
+<Func kind="K" nr="119">
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -104,7 +104,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="19"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -143,8 +143,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="118">
 <Func kind="K" nr="79"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -167,8 +166,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="118">
 <Func kind="K" nr="79"/>
 <Var nr="2"/>
 <Var nr="3"/>

@@ -9,18 +9,16 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1, NAT_1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1;
+      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, CARD_1, RELAT_1, FUNCT_1, RELSET_1,
       BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FUNCT_4, FUNCT_5, FINSEQ_4, RFINSEQ, BINARITH, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, FUNCT_5, FINSEQ_4, PBOOLE, RFINSEQ, BINARITH,
-      REWRITE1;
- constructors RELAT_2;
+      REWRITE1, RELAT_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
-      FUNCOP_1, FUNCT_4, ARYTM_3, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1,
-      RELSET_1, FUNCT_2;
+      FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2;
  theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
@@ -442,8 +440,8 @@ A1:  len p = len q+1;
    hereby assume
            i in dom q;
 then A2:   i >= 1 & i <= len q & len q <= len p by A1,FINSEQ_3:27,NAT_1:11;
-     then i+1 <= len p & i+1 >= 1 & i <= len p by A1,XXREAL_0:2,XREAL_1:8
-,NAT_1:11;
+     then i+1 <= len p & i+1 >= 1 & i <= len p by A1,NAT_1:11,XREAL_1:8
+,XXREAL_0:2;
     hence i in dom p & i+1 in dom p by A2,FINSEQ_3:27;
    end;
    assume i in dom p & i+1 in dom p;
@@ -522,7 +520,7 @@ A1:  x in dom (p^q);
     hence thesis;
    end;
    suppose not i in dom p;
-    then consider j being Element of NAT such that
+    then consider j being Nat such that
 A2:   j in dom q & i = len p+j by A1,FINSEQ_1:38;
      q.j = (p^q).i by A2,FINSEQ_1:def 7;
     hence thesis;
@@ -536,15 +534,16 @@ theorem Th25:
   proof let p,q be FinSequence; assume
 A1:  for x being set st x in dom (p^q) holds (p^q).x is Function;
    hereby let x be set; assume
-         x in dom p;
-     then (p^q).x = p.x & x in dom (p^q) by FINSEQ_1:def 7,FINSEQ_3:24;
+A2:  x in dom p;
+         then x in NAT;
+         then x is Nat by ORDINAL1:def 13;
+     then (p^q).x = p.x & x in dom (p^q) by A2,FINSEQ_1:def 7,FINSEQ_3:24;
     hence p.x is Function by A1;
    end;
    let x be set; assume
-A2:  x in dom q;
+A3:  x in dom q;
    then reconsider i = x as Element of NAT;
-          (p^q).(len p+i) = q.x & len p+i in dom (p^q) by A2,FINSEQ_1:41,
-def 7;
+          (p^q).(len p+i) = q.x & len p+i in dom (p^q) by A3,FINSEQ_1:41,def 7;
    hence q.x is Function by A1;
   end;
 
@@ -1038,7 +1037,7 @@ proof
  assume
 A1: i in dom f;
   then i in dom(f+*(i,d)) by Th32;
- hence (f+*(i,d))/.i = (f+*(i,d)).i by FINSEQ_4:def 4
+ hence (f+*(i,d))/.i = (f+*(i,d)).i by PARTFUN1:def 8
      .= d by A1,Th33;
 end;
 
@@ -1054,9 +1053,9 @@ proof
 A1: i <> j and
 A2: j in dom f;
         j in dom(f+*(i,d)) by A2,Th32;
- hence (f+*(i,d))/.j = (f+*(i,d)).j by FINSEQ_4:def 4
+ hence (f+*(i,d))/.j = (f+*(i,d)).j by PARTFUN1:def 8
      .= f.j by A1,Th34
-     .= f/.j by A2,FINSEQ_4:def 4;
+     .= f/.j by A2,PARTFUN1:def 8;
 end;
 
 theorem
@@ -1068,7 +1067,7 @@ Element of NAT
       i be Element of NAT;
   per cases;
   suppose i in dom f;
-  hence f+*(i,f/.i) = f+*(i,f.i) by FINSEQ_4:def 4 .= f by Th37;
+  hence f+*(i,f/.i) = f+*(i,f.i) by PARTFUN1:def 8 .= f by Th37;
   end;
   suppose not i in dom f;
   hence f+*(i,f/.i) = f by Def3;
@@ -1215,10 +1214,10 @@ A8: len q2 = len p+1 & q2.1 = x and
 A9: for i being Element of NAT, f being Function st i in dom p & f = p.i
      holds q2.(i+1) = f.(q2.i);
 A10:  dom q1 = dom q2 by A6,A8,FINSEQ_3:31;
-    defpred P[Element of NAT] means $1 in dom q1 implies q1.$1 = q2.$1;
+    defpred P[Nat] means $1 in dom q1 implies q1.$1 = q2.$1;
 A11:  P[ 0] by FINSEQ_3:27;
-A12: for i being Element of NAT st P[i] holds P[i+1]
-     proof let i be Element of NAT such that
+A12: for i being Nat st P[i] holds P[i+1]
+     proof let i be Nat such that
 A13:   i in dom q1 implies q1.i = q2.i and
 A14:   i+1 in dom q1;
             i+1 <= len q1 by A14,FINSEQ_3:27;
@@ -1234,7 +1233,7 @@ then A16:    i in dom p by A15,FINSEQ_3:27;
                    .= q2.(i+1) by A9,A16;
     end;
     end;
-          for i being Element of NAT holds P[i] from NAT_1:sch 1(A11,A12);
+    for i being Nat holds P[i] from NAT_1:sch 2(A11,A12);
    hence thesis by A10,FINSEQ_1:17;
   end;
 end;
@@ -1304,15 +1303,15 @@ A5: (p^<*f*>).(len p+1) = f by FINSEQ_1:59;
           len p+1 >= 1 by NAT_1:11;
 then A6: len p+1 in dom (p^<*f*>) & len p+1 in dom apply(p,x) by A2,A3,
 FINSEQ_3:27;
-    defpred P[Element of NAT] means $1 in dom apply(p,x)
+    defpred P[Nat] means $1 in dom apply(p,x)
      implies apply(p^<*f*>,x).$1 = apply(p,x).$1;
 A7: P[ 0] by FINSEQ_3:27;
-A8: for i being Element of NAT st P[i] holds P[i+1]
-    proof let i be Element of NAT such that
+A8: for i being Nat st P[i] holds P[i+1]
+    proof let i be Nat such that
 A9:   i in dom apply(p,x) implies apply(p^<*f*>,x).i = apply(p,x).i and
 A10:   i+1 in dom apply(p,x);
             i <= i+1 & i+1 <= len apply(p,x) by A10,FINSEQ_3:27,NAT_1:13;
-then A11:   i <= len apply(p,x) & i <= len p by A2,XXREAL_0:2,XREAL_1:8;
+then A11:   i <= len apply(p,x) & i <= len p by A2,XREAL_1:8,XXREAL_0:2;
      per cases by NAT_1:3; suppose i = 0;
       hence apply(p^<*f*>,x).(i+1) = apply(p,x).(i+1) by A2,Def5;
      end;
@@ -1328,8 +1327,8 @@ then A13:    i in dom apply(p,x) & i in dom p by A11,FINSEQ_3:27;
 ;
     end;
     end;
-A14:  for i being Element of NAT holds P[i] from NAT_1:sch 1(A7,A8);
-          now let i be Element of NAT;
+A14:  for i being Nat holds P[i] from NAT_1:sch 2(A7,A8);
+          now let i be Nat;
           assume i in dom <*f.(apply(p,x).(len p+1))*>;
       then i in Seg 1 by FINSEQ_1:55;
 then A15:   i = 1 by FINSEQ_1:4,TARSKI:def 1;
@@ -1978,8 +1977,7 @@ then A13:    dom compose(p,X) = (firstdom p) /\ X & x in (firstdom p) /\ X
             len apply(p,x) = len p+1 & len apply(p^<*f*>,x) = len (p^<*f*>)+1 &
       len (p^<*f*>) = len p+1 by A8,Def5,FINSEQ_1:35;
      hence apply(p^<*f*>,x).(len (p^<*f*>)+1)
-        = f.(compose(p,X).x) by A3,A4,A5,A11,A12,Th62,FINSEQ_1:59,
-def 7
+        = f.(compose(p,X).x) by A3,A4,A5,A11,A12,Th62,FINSEQ_1:59,def 7
        .= compose(p^<*f*>,X).x by A6,A13,FUNCT_1:23;
     end;
     end;
@@ -2009,8 +2007,7 @@ definition
  coherence
   proof
 A1:  firstdom F = X & lastrng F c= Y by Def9;
-          now assume F = {}; then X = {} & compose(F,X) = id X by A1,Def6,
-Th41
+          now assume F = {}; then X = {} & compose(F,X) = id X by A1,Def6,Th41
 ;
      hence rng compose(F,X) = {} by RELAT_1:71;
     end;
@@ -2037,7 +2034,7 @@ A2:  for x being set st x in Seg n ex y being set st P[x,y]
 A3:    x in Seg n; then reconsider i = x as Element of NAT;
              i <= n & n <= n+1 by A3,FINSEQ_1:3,NAT_1:11;
        then i >= 1 & i+1 >= 1 & i+1 <= n+1 & i <= n+1
-        by A3,XXREAL_0:2,XREAL_1:8,FINSEQ_1:3,NAT_1:11;
+        by A3,FINSEQ_1:3,NAT_1:11,XREAL_1:8,XXREAL_0:2;
        then i in dom q & i+1 in dom q by A1,FINSEQ_3:27;
       then reconsider X = q.i, Y = q.(i+1) as non empty set by FUNCT_1:def 15;
       consider y being Function of X,Y;
@@ -2277,14 +2274,13 @@ theorem
 A2:  for k be Nat st P[k] holds P[k+1]
   proof let k be Nat;
    assume dom iter(f,k+1) c= dom f & rng iter(f,k+1) c= rng f;
-    iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71
-,Th73;
+    iter(f,k+1+1) = f*iter(f,k+1) & iter(f,k+1+1) = iter(f,k+1)*f by Th71,Th73;
    hence thesis by RELAT_1:44,45;
   end;
 A3:  for k be Nat holds P[k] from NAT_1:sch 2(A1,A2);
   assume n <> 0; then consider k be Nat such that A4:n = k+1 by NAT_1:6;
   reconsider k as Element of NAT by ORDINAL1:def 13;
-  thus thesis by A4,A3; end;
+  thus thesis by A3,A4; end;
 
 theorem Th76:
    rng f c= dom f implies dom iter(f,n) = dom f & rng iter(f,n) c= dom f
@@ -2687,9 +2683,9 @@ proof
     .=(i-'1)+1+len(w/^i) by A3,FINSEQ_1:80
     .=(i-'1)+1+(len w-i) by A2,RFINSEQ:def 2
     .=(i-1)+1+(len w-i) by A2,BINARITH:50;
-        for j st 1<=j & j<=len (w+*(i,r)) holds
-    (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j
-    proof let j;assume
+    for j be Nat st 1<=j & j<=len (w+*(i,r)) holds
+        (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j
+    proof let j be Nat;assume
       A6: 1<=j & j<=len (w+*(i,r));
       A7:len (w+*(i,r))=len (w) by Th99;
        A8:len ((w|(i-'1))^<*r*>)
@@ -2815,7 +2811,7 @@ A3:  dom F = dom(F+*(x,y)) by Th32;
    end;
    suppose e <> x;
     then (F+*(x,y)).e = F.e by Th34;
-    then z in rng(F+*(x,y)) by A1,A2,FUNCT_1:12,A3;
+    then z in rng(F+*(x,y)) by A1,A2,A3,FUNCT_1:12;
    hence z in rng(F+*(x,y)) \/ {F.x} by XBOOLE_0:def 2;
    end;
   end;
@@ -2831,7 +2827,7 @@ theorem Th104:
 A1:  x in dom F;
    then A2:  x in dom (F+*(x,y)) by Th32;
     (F+*(x,y)).x = y by A1,Th33;
-  hence thesis by FUNCT_1:12,A2;
+  hence thesis by A2,FUNCT_1:12;
  end;
 
 theorem
@@ -2851,19 +2847,19 @@ A7:  rng Swap(F,x,y) c= rng(F+*(x,F.y)) \/ {F.x} by A3,Th102;
     then rng(F+*(x,F.y)) \/ {F.x} c= rng F by A6,XBOOLE_1:9;
     then A8:  rng Swap(F,x,y) c= rng F by A7,XBOOLE_1:1;
 A9: y in dom(F+*(x,F.y)) by A2,Th32;
-    then F.x in rng Swap(F,x,y) by Th104,A3;
+    then F.x in rng Swap(F,x,y) by A3,Th104;
     then A10: F.x in rng Swap(F,x,y) \/ {F.y} by XBOOLE_0:def 2;
 A11: F.y in rng Swap(F,x,y)
      proof per cases;
       suppose F.x = F.y;
-       hence thesis by A9,Th104,A3;
+       hence thesis by A3,A9,Th104;
       end;
       suppose
 A12:     F.x <> F.y;
 A13:      dom Swap(F,x,y) = dom F by Th101;
          Swap(F,x,y).x = F+*(x,F.y).x by A3,A12,Th34
                 .= F.y by A1,Th33;
-       hence thesis by A1,FUNCT_1:12,A13;
+       hence thesis by A1,A13,FUNCT_1:12;
       end;
      end;
 A14:  (F+*(x,F.y)).y = F.y
@@ -2879,7 +2875,7 @@ A15:  rng Swap(F,x,y) \/ {F.y} \/ {F.x}
            = rng Swap(F,x,y) \/ {F.y} by A10,ZFMISC_1:46
           .= rng Swap(F,x,y) by A11,ZFMISC_1:46;
 A16:  rng F c= rng(F+*(x,F.y)) \/ {F.x} by Th103;
-     rng(F+*(x,F.y)) c= rng Swap(F,x,y) \/ {F.y} by A3,Th103,A14;
+     rng(F+*(x,F.y)) c= rng Swap(F,x,y) \/ {F.y} by A3,A14,Th103;
     then rng(F+*(x,F.y)) \/ {F.x} c= rng Swap(F,x,y) by A15,XBOOLE_1:9;
     then rng F c= rng Swap(F,x,y) by A16,XBOOLE_1:1;
     hence thesis by A8,XBOOLE_0:def 10;
@@ -3083,7 +3079,7 @@ then A10:    x in dom f \ dom h by A8,XBOOLE_0:def 4;
 
 :: from SF_MASTR, 2007.07.25, A.T.
 
-theorem Th1:
+theorem Th109:
  for x, y, a being set, f being Function
   st f.x = f.y holds f.a = (f*((id dom f)+*(x,y))).a
 proof
@@ -3152,7 +3148,7 @@ A4: dom g1 = dom f by A2,Th32;
     end;
     hence dom f = dom g by A4,RELAT_1:46;
     let a be set; assume a in dom f;
-    thus f.a = g.a by A1,A3,Th1;
+    thus f.a = g.a by A1,A3,Th109;
    end;
   hence f = f*((id dom f)+*(x,y)) by FUNCT_1:9;
 end;
@@ -3173,7 +3169,7 @@ theorem
 
 :: from SFMASTR3, 2007.07.26, A.T.
 
-theorem Th1:
+theorem Th112:
  for X being set, p being Permutation of X, x, y being Element of X
   holds p+*(x, p.y)+*(y, p.x) is Permutation of X
 proof let X be set, p be Permutation of X, x, y be Element of X;
@@ -3285,7 +3281,7 @@ proof let f be Function, x, y be set such that
 A1: x in dom f & y in dom f;
    set i = id dom f;
        i.x = x & i.y = y by A1,FUNCT_1:35;
-   then reconsider p = i+*(x,y)+*(y,x) as Permutation of dom f by A1,Th1;
+   then reconsider p = i+*(x,y)+*(y,x) as Permutation of dom f by A1,Th112;
  take p;
  set fk = f+*(x, f.y); set fl = fk+*(y, f.x); set fr = f*p;
  set pk = i+*(x, y);

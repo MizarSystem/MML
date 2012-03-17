@@ -2,17 +2,17 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
@@ -57,10 +57,9 @@
 <Func kind="K" nr="57"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="90">
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="111">
 <Func kind="K" nr="53"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="114">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -85,8 +84,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="90">
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="111">
 <Func kind="K" nr="53"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
@@ -109,7 +107,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="113">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -143,8 +141,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="90">
-<Func kind="K" nr="57"/>
+<Func kind="K" nr="111">
 <Func kind="K" nr="53"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>

@@ -8,7 +8,7 @@ environ
 
  vocabularies ARYTM, SEQ_1, FUNCT_1, POWER, SEQ_2, ORDINAL2, ARYTM_3, ARYTM_1,
       ABSVALUE, INT_1, SEQM_3, SUPINF_2, RLVECT_1, PROB_1, LATTICES, PREPOWER,
-      SERIES_1, GROUP_1, FUNCOP_1, NAT_1;
+      SERIES_1, GROUP_1, FUNCOP_1;
  notations SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1,
       NAT_1, SEQ_1, SEQ_2, FUNCT_2, SEQM_3, INT_1, NEWTON, PREPOWER, POWER,
       FUNCOP_1, XXREAL_0;
@@ -388,8 +388,8 @@ proof given n such that A1: s^\n is summable;   s^\n^\1 is summable by A1,Th15;
    (Partial_Sums(s)^\(n+1)).$1 = Partial_Sums(s^\(n+1)).$1 + s1.$1;
      (Partial_Sums(s)^\(n+1)).0 = Partial_Sums(s).(0+(n+1)) by SEQM_3:def 9
                               .= s.(n+1) + Partial_Sums(s).n by Def1
-                              .= Partial_Sums(s^\(n+1)).0 + s1.0 by A4,FUNCOP_1
-:13;
+                              .= Partial_Sums(s^\(n+1)).0 + s1.0 by A4,
+FUNCOP_1:13;
   then A5:  X[0];
   A6: for k st X[k] holds X[k+1]
     proof let k;
@@ -429,8 +429,8 @@ proof assume A1: for n holds s1.n<=s2.n;
   A6: Partial_Sums(s1).(n+1) = Partial_Sums(s1).n + s1.(n+1) by Def1;
   A7: Partial_Sums(s2).(n+1) = Partial_Sums(s2).n + s2.(n+1) by Def1;
       s1.(n+1)<=s2.(n+1) by A1;
-     hence Partial_Sums(s1).(n+1) <= Partial_Sums(s2).(n+1) by A5,A6,A7,XREAL_1
-:9;
+     hence Partial_Sums(s1).(n+1) <= Partial_Sums(s2).(n+1) by A5,A6,A7,
+XREAL_1:9;
  end;
  thus for n holds X[n] from NAT_1:sch 1(A3,A4);
 end;
@@ -528,7 +528,7 @@ proof assume that A1: for n holds 0<=s2.n and
  A4: now let n; A5: (s1^\m).n = s1.(n+m) by SEQM_3:def 9;
  A6: 0<= s2.(n+m) by A1;
    n+m>=m by NAT_1:11;
-  hence 0<=(s1^\m).n by A5,A6,A3;
+  hence 0<=(s1^\m).n by A3,A5,A6;
  end;
      s1^\m is summable by A2,Th15;
  then Partial_Sums(s1^\m) is bounded_above by A4,Th20;
@@ -695,7 +695,7 @@ proof assume A1: abs(a) < 1 & (for n holds s.(n+1) = a * s.n);
  A5: a GeoSeq is summable & Sum(a GeoSeq) = 1/(1-a) by A1,Th28;
  then A6: Partial_Sums(a GeoSeq) is convergent by Def2;
  then A7: Partial_Sums(s) is convergent by A4,SEQ_2:21;
- A8: lim Partial_Sums(s) = s.0 * (1/(1-a)) by A5,A4,A6,SEQ_2:22
+ A8: lim Partial_Sums(s) = s.0 * (1/(1-a)) by A4,A5,A6,SEQ_2:22
  .= s.0*1/(1-a) by XCMPLX_1:75
  .= s.0/(1-a);
  thus s is summable by A7,Def2;
@@ -956,15 +956,15 @@ implies s is not summable
   hence thesis by A1,Th33;
   end;
 
-definition let k, n be Element of NAT;
-  redefine func k to_power n -> Element of NAT;
+registration let k, n be Nat;
+  cluster k to_power n -> natural;
 coherence
 proof
-  defpred X[Element of NAT] means k to_power $1 is Element of NAT;
+  defpred X[Nat] means k to_power $1 is natural;
  A1: X[0] by POWER:29;
- A2: for m st X[m] holds X[m+1]
- proof let m; assume k to_power m is Element of NAT;
-  then reconsider k1 = k to_power m as Element of NAT;
+ A2: for m be Nat st X[m] holds X[m+1]
+ proof let m be Nat; assume k to_power m is natural;
+  then reconsider k1 = k to_power m as Nat;
   per cases;
   suppose k = 0;
   hence thesis by POWER:def 2;
@@ -975,9 +975,14 @@ proof
   hence thesis;
  end;
  end;
-   for m holds X[m] from NAT_1:sch 1(A1,A2);
- hence k to_power n is Element of NAT;
+ for m be Nat holds X[m] from NAT_1:sch 2(A1,A2);
+ hence thesis;
 end;
+end;
+
+definition let k, n be Element of NAT;
+  redefine func k to_power n -> Element of NAT;
+coherence by ORDINAL1:def 13;
 end;
 
 theorem Th35:

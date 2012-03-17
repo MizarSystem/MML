@@ -17,6 +17,7 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="WELLORD1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -157,7 +158,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="182">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -205,8 +206,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
-<Func kind="K" nr="100">
+<Func kind="K" nr="141">
+<Func kind="K" nr="106">
 <LocusVar nr="1"/>
 <Num nr="1"/>
 </Func>
@@ -273,7 +274,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="178">
+<Func kind="K" nr="184">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -293,7 +294,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -315,7 +316,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="43">
-<Func kind="K" nr="183">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="2"/>
@@ -333,7 +334,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="43">
-<Func kind="K" nr="185"/>
+<Func kind="K" nr="191"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -366,8 +367,8 @@
 <Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="K" nr="97"/>
-<Func kind="K" nr="185"/>
-<Func kind="K" nr="183">
+<Func kind="K" nr="191"/>
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -418,7 +419,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="43">
-<Func kind="K" nr="185"/>
+<Func kind="K" nr="191"/>
 <LocusVar nr="1"/>
 </Func>
 </Typ>

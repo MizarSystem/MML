@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -51,6 +51,9 @@
 <Cluster>
 <Adjective nr="7"/>
 <Adjective nr="11"/>
+<Adjective nr="13"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>
@@ -65,6 +68,9 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="11"/>
+<Adjective nr="13"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
 </RCluster>

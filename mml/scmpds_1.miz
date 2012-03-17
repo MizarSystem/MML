@@ -10,20 +10,19 @@ environ
       NAT_1, CARD_3, AMI_1, FUNCT_4, CAT_1, ABSVALUE, ARYTM_1, MCART_1,
       CQC_LANG, FUNCT_2, FUNCT_5, SCMPDS_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      CARD_1, FUNCT_2, BINOP_1, MCART_1, NUMBERS, XCMPLX_0, CARD_3, INT_1,
-      NAT_1, NAT_D, FINSEQ_1, FRAENKEL, FINSEQ_4, FUNCOP_1, FUNCT_4, CAT_2,
-      AMI_2, INT_2, XXREAL_0;
- constructors ENUMSET1, XXREAL_0, REAL_1, NAT_1, NAT_D, MEMBERED, INT_2,
-      FINSEQ_4, CAT_2, AMI_1, AMI_2, DOMAIN_1;
+      CARD_1, PARTFUN1, FUNCT_2, BINOP_1, MCART_1, NUMBERS, XCMPLX_0, CARD_3,
+      INT_1, NAT_1, NAT_D, FINSEQ_1, FRAENKEL, FINSEQ_4, FUNCOP_1, FUNCT_4,
+      CAT_2, AMI_2, INT_2;
+ constructors PARTFUN1, XXREAL_0, NAT_1, NAT_D, INT_2, FINSEQ_4, CAT_2, AMI_1,
+      AMI_2, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, CARD_3,
-      GR_CY_1, AMI_2, AFINSQ_1;
+      FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3, GR_CY_1,
+      AMI_2, AFINSQ_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSEQ_1, FUNCOP_1, AMI_2;
- theorems AMI_1, AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
-      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, GR_CY_1, MCART_1, NAT_1, SCHEME1,
-      TARSKI, ZFMISC_1, INT_1, ABSVALUE, XBOOLE_0, XBOOLE_1, COMPLEX1,
-      ORDINAL1, NAT_D,XCMPLX_1;
+ theorems AMI_2, CAT_2, CARD_3, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_3,
+      FINSEQ_4, FUNCT_1, FUNCT_2, FUNCT_4, MCART_1, TARSKI, ZFMISC_1, INT_1,
+      XBOOLE_0, XBOOLE_1, NAT_D;
  schemes FUNCT_2, BINOP_1;
 
 begin :: Preliminaries
@@ -299,39 +298,39 @@ A2:  INT in {INT} \/ { SCMPDS-Instr,SCM-Instr-Loc } &
 A3:   for a being Element of SCM-Memory holds P[a,h.a] from FUNCT_2:sch 3(A1);
    take h;
    let k be Element of SCM-Memory;
-X:  P[k,h.k] by A3;
-   thus k = NAT implies h.k = SCM-Instr-Loc by AMI_2:27,28,A3;
+A4:  P[k,h.k] by A3;
+   thus k = NAT implies h.k = SCM-Instr-Loc by A3,AMI_2:27,28;
    thus k in SCM-Data-Loc implies h.k = INT
-         by AMI_2:27,29,XBOOLE_0:3,X;
+         by A4,AMI_2:27,29,XBOOLE_0:3;
    thus k in SCM-Instr-Loc implies h.k = SCMPDS-Instr
-         by AMI_2:29,XBOOLE_0:3,X;
+         by A4,AMI_2:29,XBOOLE_0:3;
   end;
 uniqueness
   proof
    let f, g be Function of SCM-Memory, {INT} \/
      { SCMPDS-Instr, SCM-Instr-Loc } such that
-A4: for k being Element of SCM-Memory holds
+A5: for k being Element of SCM-Memory holds
      (k = NAT implies f.k = SCM-Instr-Loc) &
      (k in SCM-Data-Loc implies f.k = INT) &
      (k in SCM-Instr-Loc implies f.k = SCMPDS-Instr) and
-A5: for k being Element of SCM-Memory holds
+A6: for k being Element of SCM-Memory holds
      (k = NAT implies g.k = SCM-Instr-Loc) &
      (k in SCM-Data-Loc implies g.k = INT) &
      (k in SCM-Instr-Loc implies g.k = SCMPDS-Instr);
       now let k be Element of SCM-Memory;
        now per cases by Lm1;
        suppose
-S:       k = NAT;
-        hence f.k = SCM-Instr-Loc by A4
-                 .= g.k by A5,S;
+A7:       k = NAT;
+        hence f.k = SCM-Instr-Loc by A5
+                 .= g.k by A6,A7;
        end;
-       suppose A6: k in SCM-Data-Loc;
-        hence f.k = INT by A4
-                 .= g.k by A5,A6;
+       suppose A8: k in SCM-Data-Loc;
+        hence f.k = INT by A5
+                 .= g.k by A6,A8;
        end;
-       suppose A8: k in SCM-Instr-Loc;
-        hence f.k = SCMPDS-Instr by A4
-                 .= g.k by A5,A8;
+       suppose A9: k in SCM-Instr-Loc;
+        hence f.k = SCMPDS-Instr by A5
+                 .= g.k by A6,A9;
       end;
       end;
      hence f.k = g.k;
@@ -389,10 +388,10 @@ A1: SCMPDS-OK.i = SCM-Instr-Loc;
 A2:   i <> NAT;
     per cases by A2,Lm1;
     suppose i in SCM-Data-Loc;
-    hence contradiction by A1,AMI_2:31,Def4;
+    hence contradiction by A1,Def4,AMI_2:31;
     end;
     suppose i in SCM-Instr-Loc;
-    hence contradiction by A1,Th17,Def4;
+    hence contradiction by A1,Def4,Th17;
    end;
    end;
   thus thesis by Def4;
@@ -448,7 +447,7 @@ theorem Th23:
  pi(product SCMPDS-OK,NAT) = SCM-Instr-Loc
  proof
    dom SCMPDS-OK = SCM-Memory by FUNCT_2:def 1;
-  hence pi(product SCMPDS-OK,NAT) = SCMPDS-OK.NAT by CARD_3:22,AMI_2:30
+  hence pi(product SCMPDS-OK,NAT) = SCMPDS-OK.NAT by AMI_2:30,CARD_3:22
    .= SCM-Instr-Loc by Def4,AMI_2:30;
  end;
 
@@ -485,7 +484,7 @@ A1:  dom SCMPDS-OK = SCM-Memory by FUNCT_2:def 1;
   then
 A2:  dom(s +* (NAT .--> u)) = SCM-Memory \/ dom(NAT .--> u) by FUNCT_4:def 1
       .= SCM-Memory \/ {NAT} by FUNCOP_1:19
-      .= dom SCMPDS-OK by A1,ZFMISC_1:46,AMI_2:30;
+      .= dom SCMPDS-OK by A1,AMI_2:30,ZFMISC_1:46;
         now let x be set;
      assume
 A3:    x in dom SCMPDS-OK;

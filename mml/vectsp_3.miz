@@ -7,15 +7,15 @@
 environ
 
  vocabularies RLVECT_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_4, BINOP_1,
-      VECTSP_1, LATTICES, ARYTM_1, NAT_1, VECTSP_2;
- notations TARSKI, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1, NUMBERS, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4, XXREAL_0, NAT_1;
- constructors XXREAL_0, NAT_1, FINSEQ_4, VECTSP_1;
- registrations RELSET_1, ARYTM_3, XREAL_0, STRUCT_0, VECTSP_1;
+      VECTSP_1, LATTICES, ARYTM_1, VECTSP_2;
+ notations TARSKI, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, NUMBERS,
+      STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, FINSEQ_4, XXREAL_0, NAT_1;
+ constructors PARTFUN1, XXREAL_0, NAT_1, FINSEQ_4, VECTSP_1;
+ registrations RELSET_1, XREAL_0, STRUCT_0, VECTSP_1, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI;
- theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, NAT_1, RLVECT_1,
-      RLVECT_2, VECTSP_1;
+ theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1, NAT_1, RLVECT_1, RLVECT_2,
+      VECTSP_1, PARTFUN1;
  schemes FINSEQ_1, NAT_1;
 
 begin
@@ -117,7 +117,7 @@ theorem
        now let k; let v be Element of V;
      assume that A3: k in dom G and A4: v = F.k;
 A5:   k in dom F by A1,A3,FINSEQ_3:31;
-      then v = F/.k by A4,FINSEQ_4:def 4;
+      then v = F/.k by A4,PARTFUN1:def 8;
     hence G.k = a * v by A2,A5;
    end;
   hence thesis by A1,Th9;
@@ -142,34 +142,35 @@ proof
      F,G,H be FinSequence of the carrier of V;
   assume that A1: len F = len G & len F = len H and
                    A2: for k st k in dom F holds H.k = F/.k - G/.k;
-   deffunc F(Element of NAT) = - G/.$1;
+   deffunc F(Nat) = - G/.$1;
    consider I being FinSequence such that A3: len I = len G and
-    A4: for k st k in Seg(len G) holds I.k = F(k) from FINSEQ_1:sch 2;
-A5: Seg len G = dom G by FINSEQ_1:def 3;
+    A4: for k be Nat st k in Seg(len G) holds I.k = F(k) from FINSEQ_1:sch 2;
+    A5: for k st k in Seg(len G) holds I.k = F(k) by A4;
+A6: Seg len G = dom G by FINSEQ_1:def 3;
         rng I c= the carrier of V
      proof let x;
        assume x in rng I;
-        then consider y such that A6: y in dom I & I.y = x by FUNCT_1:def 5;
-        reconsider y as Element of NAT by A6,FINSEQ_3:25;
-             y in Seg(len G) by A3,A6,FINSEQ_1:def 3;
-         then x = - G/.y by A4,A6;
+        then consider y such that A7: y in dom I & I.y = x by FUNCT_1:def 5;
+        reconsider y as Element of NAT by A7,FINSEQ_3:25;
+             y in Seg(len G) by A3,A7,FINSEQ_1:def 3;
+         then x = - G/.y by A4,A7;
         then reconsider v = x as Element of V;
              v in V by RLVECT_1:3;
       hence thesis;
      end;
    then reconsider I as FinSequence of the carrier of V by FINSEQ_1:def 4;
-    A7: Sum(I) = - Sum(G) by A3,A4,A5,RLVECT_2:6;
+    A8: Sum(I) = - Sum(G) by A3,A5,A6,RLVECT_2:6;
         now let k;
-      assume A8: k in dom F;
+      assume A9: k in dom F;
        then k in dom I by A1,A3,FINSEQ_3:31;
-       then A9: I.k = I/.k by FINSEQ_4:def 4;
-A10:    dom F = dom G by A1,FINSEQ_3:31;
-     thus H.k = F/.k - G/.k by A2,A8
+       then A10: I.k = I/.k by PARTFUN1:def 8;
+A11:    dom F = dom G by A1,FINSEQ_3:31;
+     thus H.k = F/.k - G/.k by A2,A9
              .= F/.k + - G/.k by RLVECT_1:def 11
-             .= F/.k + I/.k by A4,A5,A8,A9,A10;
+             .= F/.k + I/.k by A4,A6,A9,A10,A11;
     end;
     then Sum(H) = Sum(F) + Sum(I) by A1,A3,RLVECT_2:4;
-  hence thesis by A7,RLVECT_1:def 11;
+  hence thesis by A8,RLVECT_1:def 11;
  end;
 
 canceled 7;

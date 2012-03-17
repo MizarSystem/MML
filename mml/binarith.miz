@@ -8,20 +8,20 @@ environ
 
  vocabularies MONOID_0, FUNCT_1, RELAT_1, MIDSP_3, FINSEQ_1, MARGREL1, ZF_LANG,
       ORDINAL2, ARYTM_1, CQC_LANG, POWER, SETWISEO, BOOLE, FINSEQ_2, BINARITH,
-      FINSEQ_4, ARYTM, NAT_1, RFINSEQ;
+      FINSEQ_4, ARYTM, RFINSEQ;
  notations XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, NAT_1,
-      XBOOLEAN, MARGREL1, FUNCT_1, FUNCT_2, BINOP_1, BINOP_2, SETWISEO,
-      FUNCOP_1, SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, RFINSEQ,
-      XXREAL_0;
+      XBOOLEAN, MARGREL1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2,
+      SETWISEO, FUNCOP_1, SETWOP_2, SERIES_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      RFINSEQ, XXREAL_0;
  constructors BINOP_1, SETWISEO, XXREAL_0, NAT_1, INT_1, BINOP_2, MARGREL1,
-      FINSEQ_4, FINSOP_1, SERIES_1, RFINSEQ;
- registrations ORDINAL1, RELSET_1, ARYTM_3, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, BINOP_2, XBOOLEAN, MARGREL1, FINSEQ_2;
+      PARTFUN1, FINSEQ_4, FINSOP_1, SERIES_1, RFINSEQ;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      BINOP_2, XBOOLEAN, MARGREL1, FINSEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI, XBOOLEAN;
  theorems NAT_1, INT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1, TARSKI, POWER,
       FINSOP_1, XBOOLE_0, BINOP_2, REAL_2, XREAL_1, XXREAL_0, ORDINAL1,
-      XBOOLEAN, RFINSEQ, FUNCOP_1;
+      XBOOLEAN, RFINSEQ, FUNCOP_1, PARTFUN1;
  schemes FINSEQ_1, FINSEQ_2, RECDEF_1, NAT_1;
 
 begin
@@ -160,14 +160,14 @@ definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
         for i st i in Seg n holds it/.i = 'not' (x/.i);
     existence
      proof
-        deffunc F(Element of NAT) = 'not' (x/.$1);
+        deffunc F(Nat) = 'not' (x/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
-    A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+    A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
         take z;
         let i; assume A3: i in Seg n;
         then i in dom z by A1,FINSEQ_1:def 3;
-        hence z/.i = z.i by FINSEQ_4:def 4
+        hence z/.i = z.i by PARTFUN1:def 8
                     .= 'not' (x/.i) by A2,A3;
       end;
     uniqueness
@@ -176,12 +176,12 @@ definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
           A4: for i st i in Seg n holds y/.i = 'not' (x/.i) and
           A5: for i st i in Seg n holds z/.i = 'not' (x/.i);
           A6: len y = n & len z = n by FINSEQ_2:109;
-              now let j; assume A7: j in Seg n;
+              now let j be Nat; assume A7: j in Seg n;
 then A8:          j in dom y & j in dom z by A6,FINSEQ_1:def 3;
-             hence y.j = y/.j by FINSEQ_4:def 4
+             hence y.j = y/.j by PARTFUN1:def 8
                      .= 'not' (x/.j) by A4,A7
                      .= z/.j by A5,A7
-                     .= z.j by A8,FINSEQ_4:def 4;
+                     .= z.j by A8,PARTFUN1:def 8;
           end;
         hence y = z by A6,FINSEQ_2:10;
       end;
@@ -199,9 +199,9 @@ definition let n be non empty Element of NAT, x, y be Tuple of n, BOOLEAN;
       consider f being Function of NAT, BOOLEAN such that
         A1: f.0 = FALSE and A2: for i being Element of NAT
           holds f.(i+1) = G(i,f.i) from RECDEF_1:sch 4;
-        deffunc F(Element of NAT) = f.($1-1);
+        deffunc F(Nat) = f.($1-1);
         consider z being FinSequence such that A3: len z = n and
-        A4: for j st j in Seg n holds z.j = F(j) from FINSEQ_1:sch 2;
+        A4: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_1:sch 2;
             z is FinSequence of BOOLEAN
         proof
           let a be set;
@@ -220,7 +220,7 @@ A5:       b in dom z & a = z.b by FUNCT_1:def 5;
          0+1 <= n by NAT_1:13;
         then A7: 1 in Seg n;
         then 1 in dom z by A3,FINSEQ_1:def 3;
-        hence z/.1 = z.1 by FINSEQ_4:def 4
+        hence z/.1 = z.1 by PARTFUN1:def 8
                 .= f.(1-1) by A4,A7
                 .= FALSE by A1;
         let i; assume A8: 1 <= i & i < n;
@@ -229,13 +229,13 @@ A5:       b in dom z & a = z.b by FUNCT_1:def 5;
         A10: j+1 in Seg n by A8,A9;
         A11: i+1-1=i;
          j+1 in dom z by A3,A10,FINSEQ_1:def 3;
-        then A12: z/.(j+1) = z.(j+1) by FINSEQ_4:def 4
+        then A12: z/.(j+1) = z.(j+1) by PARTFUN1:def 8
                    .= f.(j+1-1) by A4,A10
                    .= f.j;
             1 <= i+1 & i+1 <= n by A8,NAT_1:13;
         then A13: i + 1 in Seg n;
         then i + 1 in dom z by A3,FINSEQ_1:def 3;
-        hence z/.(i+1) = z.(i+1) by FINSEQ_4:def 4
+        hence z/.(i+1) = z.(i+1) by PARTFUN1:def 8
                   .= f.(j+1) by A4,A9,A11,A13
                   .= (x/.i) '&' (y/.i) 'or' (x/.i) '&' (z/.i) 'or'
                        (y/.i) '&' (z/.i) by A2,A9,A12;
@@ -250,8 +250,8 @@ A5:       b in dom z & a = z.b by FUNCT_1:def 5;
           A17: for i st 1 <= i & i < n holds z2/.(i+1) = (x/.i) '&' (y/.i)
                 'or' (x/.i) '&' (z2/.i) 'or' (y/.i) '&' (z2/.i);
           A18: len z1 = n & len z2 = n by FINSEQ_2:109;
-              now let j such that A19: j in Seg n;
-           defpred P[Element of NAT] means $1 in Seg n implies z1/.$1 = z2/.$1;
+              now let j be Nat such that A19: j in Seg n;
+           defpred P[Nat] means $1 in Seg n implies z1/.$1 = z2/.$1;
               A20: P[0] by FINSEQ_1:3;
               A21: now let k such that A22: P[k];
                 thus P[k+1]
@@ -276,9 +276,9 @@ A5:       b in dom z & a = z.b by FUNCT_1:def 5;
                end;
             A27:for k holds P[k] from NAT_1:sch 1 (A20,A21);
 A28:         dom z1 = Seg n & dom z2 = Seg n by A18,FINSEQ_1:def 3;
-            hence z1.j = z1/.j by A19,FINSEQ_4:def 4
+            hence z1.j = z1/.j by A19,PARTFUN1:def 8
                       .= z2/.j by A19,A27
-                      .= z2.j by A19,A28,FINSEQ_4:def 4;
+                      .= z2.j by A19,A28,PARTFUN1:def 8;
           end;
         hence z1 = z2 by A18,FINSEQ_2:10;
       end;
@@ -290,14 +290,14 @@ definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
                   it/.i = IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
   existence
   proof
-        deffunc F(Element of NAT) = IFEQ( x/.$1,FALSE,0,2 to_power($1-'1));
+        deffunc F(Nat) = IFEQ( x/.$1,FALSE,0,2 to_power($1-'1));
         consider z being FinSequence of NAT such that A1: len z = n and
-        A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+        A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, NAT by A1,FINSEQ_2:110;
         take z;
         let j; assume A3: j in Seg n;
         then j in dom z by A1,FINSEQ_1:def 3;
-        hence z/.j = z.j by FINSEQ_4:def 4
+        hence z/.j = z.j by PARTFUN1:def 8
                     .= IFEQ(x/.j,FALSE,0,2 to_power(j-'1)) by A2,A3;
   end;
     uniqueness
@@ -309,11 +309,11 @@ definition let n be Element of NAT, x be Tuple of n, BOOLEAN;
               IFEQ(x/.i,FALSE,0,2 to_power(i-'1));
          A6: len z1 = n & len z2 = n by FINSEQ_2:109;
          then A7: dom z1 = Seg n & dom z2 = Seg n by FINSEQ_1:def 3;
-             now let j; assume A8: j in Seg n;
-             hence z1.j = z1/.j by A7,FINSEQ_4:def 4
+             now let j be Nat; assume A8: j in Seg n;
+             hence z1.j = z1/.j by A7,PARTFUN1:def 8
                       .= IFEQ( x/.j,FALSE,0,2 to_power(j-'1)) by A4,A8
                       .= z2/.j by A5,A8
-                      .= z2.j by A7,A8,FINSEQ_4:def 4;
+                      .= z2.j by A7,A8,PARTFUN1:def 8;
          end;
         hence z1 = z2 by A6,FINSEQ_2:10;
       end;
@@ -331,15 +331,15 @@ definition let n, x, y;
       it/.i = (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
     existence
       proof
-        deffunc F(Element of NAT)
+        deffunc F(Nat)
          = (x/.$1) 'xor' (y/.$1) 'xor' (carry(x,y)/.$1);
         consider z being FinSequence of BOOLEAN such that A1: len z = n and
-        A2: for j st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
+        A2: for j be Nat st j in Seg n holds z.j = F(j) from FINSEQ_2:sch 1;
         reconsider z as Tuple of n, BOOLEAN by A1,FINSEQ_2:110;
         take z;
         let i; assume A3: i in Seg n;
         then i in dom z by A1,FINSEQ_1:def 3;
-        hence z/.i = z.i by FINSEQ_4:def 4
+        hence z/.i = z.i by PARTFUN1:def 8
                    .= (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i) by A2,A3;
      end;
   uniqueness
@@ -351,11 +351,11 @@ definition let n, x, y;
                   (x/.i) 'xor' (y/.i) 'xor' (carry(x,y)/.i);
          A6: len z1 = n & len z2 = n by FINSEQ_2:109;
          then A7: dom z1 = Seg n & dom z2 = Seg n by FINSEQ_1:def 3;
-             now let j; assume A8: j in Seg n;
-             hence z1.j = z1/.j by A7,FINSEQ_4:def 4
+             now let j be Nat; assume A8: j in Seg n;
+             hence z1.j = z1/.j by A7,PARTFUN1:def 8
                       .= (x/.j) 'xor' (y/.j) 'xor' (carry(x,y)/.j) by A4,A8
                       .= z2/.j by A5,A8
-                      .= z2.j by A7,A8,FINSEQ_4:def 4;
+                      .= z2.j by A7,A8,PARTFUN1:def 8;
          end;
         hence z1 = z2 by A6,FINSEQ_2:10;
       end;
@@ -368,13 +368,13 @@ definition let n,z1,z2;
   correctness;
 end;
 
-scheme Indfrom1 { P[Element of NAT] } :
+scheme Indfrom1 { P[set] } :
  for k being non empty Element of NAT holds P[k]
    provided
    A1: P[1] and
    A2: for k being non empty Element of NAT st P[k] holds P[k + 1]
 proof
-          defpred P[Element of NAT] means $1 is non empty implies P[$1];
+          defpred P[Nat] means $1 is non empty implies P[$1];
        A3: P[0];
        A4: now
           let k be Element of NAT;
@@ -475,7 +475,7 @@ theorem Th43:
      proof
      let z1,z2 be Tuple of n,BOOLEAN;
      let d1,d2 be Element of BOOLEAN;
-     defpred P[Element of NAT] means $1 in Seg n implies
+     defpred P[Nat] means $1 in Seg n implies
           carry(z1^<*d1*>,z2^<*d2*>)/.$1 = carry(z1,z2)/.$1;
      A1: P[1] proof assume 1 in Seg n;
          thus carry(z1^<*d1*>,z2^<*d2*>)/.1 = FALSE by Def5
@@ -488,7 +488,7 @@ theorem Th43:
        A4: i+1 > i by XREAL_1:31;
          assume i+1 in Seg n;
           then i+1 >= 1 & i+1 <= n by FINSEQ_1:3;
-       then A5: 1 <= i & i < n by A4,XXREAL_0:2,NAT_1:14;
+       then A5: 1 <= i & i < n by A4,NAT_1:14,XXREAL_0:2;
        then A6: i in Seg n;
        then A7: (z1^<*d1*>)/.i = z1/.i by Th2;
        A8: (z2^<*d2*>)/.i = z2/.i by A6,Th2;
@@ -521,7 +521,7 @@ theorem Th44:
       A4: z2/.n = (z2^<*d2*>)/.n by A1,Th2;
        1 <= n & n < n+1 by NAT_1:14,XREAL_1:31;
       hence add_ovfl(z1,z2)
-         = carry(z1^<*d1*>,z2^<*d2*>)/.(n+1) by Def5,A2,A3,A4;
+         = carry(z1^<*d1*>,z2^<*d2*>)/.(n+1) by A2,A3,A4,Def5;
     end;
 
 theorem Th45:
@@ -623,7 +623,7 @@ A3:        Absval(T)=1 & Absval(F)=0 by Th41,Th42;
             suppose A4:z1=<*f*> & z2=<*f*>;
               A5: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1)) = 0
                 proof
-                  add_ovfl(z1,z2) = f by FINSEQ_4:25,A2,A4;
+                  add_ovfl(z1,z2) = f by A2,A4,FINSEQ_4:25;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
                        = 0 by FUNCOP_1:def 8;
                end;
@@ -631,8 +631,8 @@ A3:        Absval(T)=1 & Absval(F)=0 by Th41,Th42;
              let i;
              assume A6: i in Seg 1;
              then A7:i=1 by FINSEQ_1:4,TARSKI:def 1;
-             thus F/.i = (z1/.1) 'xor' f 'xor' f by A4,A6,FINSEQ_1:4,TARSKI:
-def 1
+             thus F/.i = (z1/.1) 'xor' f 'xor' f by A4,A6,FINSEQ_1:4
+,TARSKI:def 1
                      .= (z1/.1) 'xor' (z2/.1) 'xor' f by A4,FINSEQ_4:25
                      .= (z1/.i) 'xor' (z2/.i) 'xor' (carry(z1,z2)/.i) by A7,
 Def5;
@@ -650,8 +650,8 @@ Def5;
              let i;
              assume A10: i in Seg 1;
              then A11:i=1 by FINSEQ_1:4,TARSKI:def 1;
-             thus T/.i = (z1/.1) 'xor' f 'xor' f by A8,A10,FINSEQ_1:4,TARSKI:
-def 1
+             thus T/.i = (z1/.1) 'xor' f 'xor' f by A8,A10,FINSEQ_1:4
+,TARSKI:def 1
            .= (z1/.1) 'xor' (z2/.1) 'xor' f by A8,FINSEQ_4:25
            .= (z1/.i) 'xor' (z2/.i) 'xor' (carry(z1,z2)/.i) by A11,Def5;
             end;
@@ -679,7 +679,7 @@ def 1
             suppose A15:z1=<*t*> & z2=<*t*>;
               A16: IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power 1) = 2
                 proof
-                   add_ovfl(z1,z2) = t by FINSEQ_4:25,A2,A15;
+                   add_ovfl(z1,z2) = t by A2,A15,FINSEQ_4:25;
                   hence IFEQ(add_ovfl(z1,z2),FALSE,0,2 to_power (1))
                        = 2 to_power 1 by FUNCOP_1:def 8
                       .= 2 by POWER:30;
@@ -724,7 +724,7 @@ def 1
           = d1 '&' ((t2^<*d2*>)/.(n+1)) 'or'
         ((t1^<*d1*>)/.(n+1)) '&' (carry(t1^<*d1*>,t2^<*d2*>)/.(n+1))
                 'or' ((t2^<*d2*>)/.(n+1)) '&'
-                  (carry(t1^<*d1*>,t2^<*d2*>)/.(n+1)) by Th3,A20,A21
+                  (carry(t1^<*d1*>,t2^<*d2*>)/.(n+1)) by A20,A21,Th3
           .= d1 '&' d2 'or'
         ((t1^<*d1*>)/.(n+1)) '&' (carry(t1^<*d1*>,t2^<*d2*>)/.(n+1))
           'or' ((t2^<*d2*>)/.(n+1)) '&' (carry(t1^<*d1*>,t2^<*d2*>)/.(n+1))
@@ -749,12 +749,12 @@ def 1
               then A27:C4=0 by FUNCOP_1:def 8;
                now per cases;
                 suppose add_ovfl(t1,t2)=f;
-                  thus C2 + C1 = C5 + C3 + C4 by A22,A24,A26,A27,FUNCOP_1:def
-8;
+                  thus C2 + C1 = C5 + C3 + C4 by A22,A24,A26,A27,FUNCOP_1:def 8
+;
                 end;
                 suppose add_ovfl(t1,t2)<>f;
-                  thus C2 + C1 = C5 + C3 + C4 by A22,A24,A26,A27,FUNCOP_1:def
-8;
+                  thus C2 + C1 = C5 + C3 + C4 by A22,A24,A26,A27,FUNCOP_1:def 8
+;
               end;
               end;
               hence C2 + C1 = C5 + C3 +C4;
@@ -801,8 +801,7 @@ A33:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
 A40:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                           d2 '&' add_ovfl(t1,t2)
                      = f 'or' t '&' add_ovfl(t1,t2)
-                          'or' d2 '&' add_ovfl(t1,t2) by A36,A34,
-XBOOLEAN:def 3
+                          'or' d2 '&' add_ovfl(t1,t2) by A34,A36,XBOOLEAN:def 3
                     .= f 'or' t '&' t
                           'or' d2 '&' add_ovfl(t1,t2) by A38,XBOOLEAN:def 3
                     .= t;
@@ -831,7 +830,7 @@ A45:                   d1 '&' d2 'or' d1 '&' add_ovfl(t1,t2) 'or'
                     .= t;
                       d1 'xor' d2 'xor' add_ovfl(t1,t2)
                      = t 'xor' d2 'xor' add_ovfl(t1,t2) by A34,XBOOLEAN:def 3
-                    .= f by A41,XBOOLEAN:def 3,A43;
+                    .= f by A41,A43,XBOOLEAN:def 3;
                   then C2=0 & C1=2 to_power (n+1)
  by A22,A45,FUNCOP_1:def 8;
                   hence C2 + C1 = 2 to_power n * 2 to_power 1 by POWER:32

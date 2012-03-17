@@ -11,23 +11,23 @@ environ
       VECTSP_1, FINSEQ_2, PARTFUN1, REALSET1, SEQ_1, BOOLE, RFUNCT_1, FCONT_1,
       FCONT_2, COMPTS_1, LATTICES, SEQ_2, ABSVALUE, INTEGRA2, FUNCT_3,
       ORDINAL2, MEASURE5, ARYTM_3, SQUARE_1, FDIFF_1, RCOMP_1, RFUNCT_2,
-      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM, NAT_1;
+      PRE_TOPC, INTEGRA5, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, REALSET1, RELSET_1, FUNCT_2, RCOMP_1, PARTFUN1,
       PSCOMP_1, FINSEQ_1, FUNCOP_1, SEQ_1, RFUNCT_1, FINSEQ_2, SEQ_2, SEQ_4,
       BINOP_2, PRE_CIRC, FDIFF_1, FINSEQ_4, RVSUM_1, INTEGRA1, INTEGRA2,
       FCONT_1, FCONT_2, RFUNCT_2, XXREAL_0;
- constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, FINSEQ_4, FINSOP_1,
-      SETWOP_2, RFUNCT_1, RFUNCT_2, FCONT_1, FCONT_2, FDIFF_1, REALSET1,
-      PRE_CIRC, PSCOMP_1, INTEGRA2;
+ constructors PARTFUN1, REAL_1, NAT_1, BINOP_2, COMPLEX1, FINSEQ_4, RFUNCT_1,
+      RFUNCT_2, FCONT_1, FCONT_2, FDIFF_1, REALSET1, PRE_CIRC, PSCOMP_1,
+      INTEGRA2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1;
+      MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, RCOMP_1, INTEGRA1, NAT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  theorems REAL_1, SEQ_4, SUBSET_1, REAL_2, PARTFUN1, INTEGRA1, RFUNCT_1,
       FUNCT_1, FINSEQ_1, RVSUM_1, SEQ_1, SEQ_2, FDIFF_1, ABSVALUE, PRE_CIRC,
-      NAT_1, TARSKI, FINSEQ_4, INTEGRA2, NAT_2, FINSEQ_2, RCOMP_1, FCONT_2,
-      INTEGRA4, FCONT_1, ROLLE, RFUNCT_2, FDIFF_2, RELAT_1, XREAL_0, FUNCT_2,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1;
+      NAT_1, TARSKI, INTEGRA2, NAT_2, FINSEQ_2, RCOMP_1, FCONT_2, INTEGRA4,
+      FCONT_1, ROLLE, RFUNCT_2, FDIFF_2, RELAT_1, XREAL_0, FUNCT_2, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_2;
 
 begin ::Some useful properties of finite sequence
@@ -59,7 +59,7 @@ then A4: len F1=len F+1 & len F2=1+len F by FINSEQ_1:56;
     let k; assume A5:k in dom F1;
     then k in Seg len F1 by FINSEQ_1:def 3;
 then A6: k in dom (F1-F2) & k in dom F2 by A3,FINSEQ_1:def 3;
-    then F1.k = F1/.k & F2.k = F2/.k by A5,FINSEQ_4:def 4;
+    then F1.k = F1/.k & F2.k = F2/.k by A5,PARTFUN1:def 8;
     hence thesis by A6,SEQ_1:def 4;
    end;
 then A7:Sum(F1-F2)=Sum F1-Sum F2 by A3,INTEGRA1:24;
@@ -83,7 +83,7 @@ proof
     let k; assume A4:k in dom F1;
     then k in Seg len F1 by FINSEQ_1:def 3;
 then A5: k in dom (F1+F2) & k in dom F2 by A1,A2,FINSEQ_1:def 3;
-    then F1.k = F1/.k & F2.k = F2/.k by A4,FINSEQ_4:def 4;
+    then F1.k = F1/.k & F2.k = F2/.k by A4,PARTFUN1:def 8;
     hence thesis by A5,SEQ_1:def 3;
    end;
    hence Sum(F1+F2)=Sum F1 + Sum F2 by A1,A2,INTEGRA1:23;
@@ -92,7 +92,7 @@ then A5: k in dom (F1+F2) & k in dom F2 by A1,A2,FINSEQ_1:def 3;
     let k; assume A6:k in dom F1;
     then k in Seg len F1 by FINSEQ_1:def 3;
 then A7: k in dom (F1-F2) & k in dom F2 by A1,A3,FINSEQ_1:def 3;
-    then F1.k = F1/.k & F2.k = F2/.k by A6,FINSEQ_4:def 4;
+    then F1.k = F1/.k & F2.k = F2/.k by A6,PARTFUN1:def 8;
     hence thesis by A7,SEQ_1:def 4;
    end;
    hence thesis by A1,A3,INTEGRA1:24;
@@ -108,9 +108,9 @@ proof
    A2:for i st i in dom F1 holds F1.i <= F2.i;
    reconsider R1=F1 as Element of (len F1)-tuples_on REAL by FINSEQ_2:110;
    reconsider R2=F2 as Element of (len F1)-tuples_on REAL by A1,FINSEQ_2:110;
-       for i st i in Seg len F1 holds R1.i <= R2.i
+   for i be Nat st i in Seg len F1 holds R1.i <= R2.i
    proof
-    let i;
+    let i be Nat;
     assume i in Seg len F1;
     then i in dom F1 by FINSEQ_1:def 3;
     hence thesis by A2;
@@ -352,8 +352,7 @@ A9:  x in dom f & x in A & y = f.x by FUNCT_1:def 12;
      hence thesis by A8,XBOOLE_0:def 10;
     end;
     then rng g is bounded_above & rng g is bounded_below by A6,SEQ_4:def 3;
-    then g is_bounded_above_on A & g is_bounded_below_on A by INTEGRA1:14,
-16;
+    then g is_bounded_above_on A & g is_bounded_below_on A by INTEGRA1:14,16;
     hence thesis by RFUNCT_1:def 11;
    end;
    then reconsider g as Function of A,REAL by FUNCT_2:131;
@@ -413,8 +412,7 @@ A26:   h is total & h is_bounded_on divset(D,k)
         hence h is total by PARTFUN1:def 4;
             g is_bounded_above_on A & g is_bounded_below_on A
         by A4,RFUNCT_1:def 11;
-        then rng h is bounded_above & rng h is bounded_below by INTEGRA4:18,
-19
+        then rng h is bounded_above & rng h is bounded_below by INTEGRA4:18,19
 ;
         then h is_bounded_above_on divset(D,k) &
         h is_bounded_below_on divset(D,k) by INTEGRA1:14,16;
@@ -520,9 +518,9 @@ A46:   k in Seg(len D) by A24,FINSEQ_1:def 3;
       then reconsider VOL=upper_volume(chi(A,A),D)
       as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
 
-          for k st k in Seg len D holds OSC.k<=(r1*VOL).k
+      for k be Nat st k in Seg len D holds OSC.k<=(r1*VOL).k
       proof
-       let k; assume k in Seg len D;
+       let k be Nat; assume k in Seg len D;
 then A47:   k in dom D by FINSEQ_1:def 3;
            OSC.k = upper_volume(g,D).k-lower_volume(g,D).k by RVSUM_1:48;
        then OSC.k<=r1*VOL.k by A23,A47;
@@ -641,7 +639,7 @@ then A25:(f`|X).r = diff(f,r) by A2,A23,FDIFF_1:def 8;
 A26:dom((f`|X)|A) = dom(f`|X) /\ A by FUNCT_1:68
     .= X /\ A by A2,FDIFF_1:def 8 .= A by A1,XBOOLE_1:28;
 then A27:diff(f,r)= ((f`|X)||A).r by A23,A24,A25,FUNCT_1:68;
-A28:dom(((f`|X)||A)|divset(D,k))= A /\ divset(D,k) by FUNCT_1:68,A26
+A28:dom(((f`|X)||A)|divset(D,k))= A /\ divset(D,k) by A26,FUNCT_1:68
     .=divset(D,k) by A24,XBOOLE_1:28;
     then ((f`|X)||A)|divset(D,k).r in rng(((f`|X)||A)|divset(D,k))
     by A23,FUNCT_1:def 5;
@@ -691,10 +689,10 @@ A38:  A /\ (A /\ dom(f`|X)) = (A /\ A) /\ dom(f`|X) by XBOOLE_1:16
     then rng(((f`|X)||A)|divset(D,k)) is bounded_below by INTEGRA4:19;
     hence thesis by A36,SEQ_4:def 3;
    end;
-   deffunc F(Element of NAT)=f.(sup divset(D,$1))-f.(inf divset(D,$1));
+   deffunc F(Nat)=f.(sup divset(D,$1))-f.(inf divset(D,$1));
    consider p being FinSequence of REAL such that
 A39:len p = len D &
-   for i st i in Seg(len D) holds
+   for i be Nat st i in Seg(len D) holds
    p.i = F(i) from FINSEQ_2:sch 1;
     len D - 1 in NAT
    proof
@@ -705,15 +703,15 @@ A40:  len D = 1 + j by NAT_1:10;
       thus thesis by A40,ORDINAL1:def 13;
    end;
    then reconsider k1 =len D - 1 as Element of NAT;
-   deffunc F(Element of NAT)=f.(sup divset(D,$1));
+   deffunc F(Nat)=f.(sup divset(D,$1));
    consider s1 being FinSequence of REAL such that
 A41:len s1 = k1 &
-   for i st i in Seg k1 holds
+   for i be Nat st i in Seg k1 holds
    s1.i = F(i) from FINSEQ_2:sch 1;
-   deffunc G(Element of NAT)=f.(inf divset(D,$1+1));
+   deffunc G(Nat)=f.(inf divset(D,$1+1));
    consider s2 being FinSequence of REAL such that
 A42:len s2 = k1 &
-   for i st i in Seg k1 holds
+   for i be Nat st i in Seg k1 holds
    s2.i = G(i) from FINSEQ_2:sch 1;
 A43:for i st i in Seg k1 holds
    sup divset(D,i)=inf divset(D,i+1)
@@ -750,9 +748,9 @@ then A50:   i+1 <> 1;
    end;
 A51:s1=s2
    proof
-         for i st i in Seg k1 holds s1.i = s2.i
+     for i being Nat st i in Seg k1 holds s1.i = s2.i
      proof
-       let i; assume A52:i in Seg k1;
+       let i be Nat; assume A52:i in Seg k1;
        then s1.i=f.(sup divset(D,i)) by A41;
        then s1.i=f.(inf divset(D,i+1)) by A43,A52;
        hence thesis by A42,A52;
@@ -785,8 +783,8 @@ A60:len D = 1 or len D >= 2
        then len D = 1 or len D is non trivial by NAT_2:def 1;
        hence thesis by NAT_2:31;
     end;
-A61:(s1^<*f.(sup A)*>)/.i=(s1^<*f.(sup A)*>).i by A58,FINSEQ_4:def 4;
-A62:(<*f.(inf A)*>^s2)/.i=(<*f.(inf A)*>^s2).i by A59,FINSEQ_4:def 4;
+A61:(s1^<*f.(sup A)*>)/.i=(s1^<*f.(sup A)*>).i by A58,PARTFUN1:def 8;
+A62:(<*f.(inf A)*>^s2)/.i=(<*f.(inf A)*>^s2).i by A59,PARTFUN1:def 8;
         now per cases by A60;
      suppose A63:len D = 1;
 then A64: i in Seg 1 by A56,A58,FINSEQ_1:def 3;
@@ -853,7 +851,7 @@ A81:  i-len s1 = 1 & i-len s1 in dom <*f.(sup A)*>
       end;
       then (s1^<*f.(sup A)*>).i=<*f.(sup A)*>.(i-len s1) by FINSEQ_1:def 7;
 then A82:  (s1^<*f.(sup A)*>)/.i=f.(sup A) by A61,A81,FINSEQ_1:def 8;
-A83:  i-len <*f.(inf A)*>=i-1 &
+A83: i-len <*f.(inf A)*>=i-1 &
       len <*f.(inf A)*> + (i - len <*f.(inf A)*>) = i &
       i-1 in Seg k1 & i-len <*f.(inf A)*> in dom s2 & i-1+1=i
       proof
@@ -864,69 +862,71 @@ A83:  i-len <*f.(inf A)*>=i-1 &
        hence i-len <*f.(inf A)*> in dom s2 by A42,A84,FINSEQ_1:def 3;
        thus thesis;
       end;
-A85:  (<*f.(inf A)*>^s2).i = f.(D.(i-1))
+      then
+A85:   i-1 is Nat by ORDINAL1:def 13;
+A86:  (<*f.(inf A)*>^s2).i = f.(D.(i-1))
       proof
-           (<*f.(inf A)*>^s2).i = s2.(i-len <*f.(inf A)*>)
-       by A83,FINSEQ_1:def 7;
-       then (<*f.(inf A)*>^s2).i = f.(inf divset(D,i)) by A42,A83;
+        (<*f.(inf A)*>^s2).i = s2.(i-len <*f.(inf A)*>)
+        by A83,A85,FINSEQ_1:def 7;
+       then (<*f.(inf A)*>^s2).i = f.(inf divset(D,i)) by A42,A83,A85;
        hence thesis by A80,A81,INTEGRA1:def 5;
       end;
           p.i=f.(sup divset(D,i))-f.(inf divset(D,i)) by A39,A80;
       then p.i=f.(sup divset(D,i))-f.(D.(i-1)) by A80,A81,INTEGRA1:def 5;
       then p.i=f.(D.i)-f.(D.(i-1)) by A80,A81,INTEGRA1:def 5;
-      hence thesis by A62,A79,A82,A85,INTEGRA1:def 2;
+      hence thesis by A62,A79,A82,A86,INTEGRA1:def 2;
       end;
-      suppose A86:i<>1 & i<>len D;
-A87:  i in Seg(len D) & i in dom D
+      suppose A87:i<>1 & i<>len D;
+A88:  i in Seg(len D) & i in dom D
       proof
-         A88: len s1+len <*f.(sup A)*> = k1+1 by A41,FINSEQ_1:56;
+         A89: len s1+len <*f.(sup A)*> = k1+1 by A41,FINSEQ_1:56;
        hence i in Seg(len D) by A58,FINSEQ_1:def 7;
-           dom (s1^<*f.(sup A)*>) = Seg(len D) by A88,FINSEQ_1:def 7;
+           dom (s1^<*f.(sup A)*>) = Seg(len D) by A89,FINSEQ_1:def 7;
        hence thesis by A58,FINSEQ_1:def 3;
       end;
-A89:  i in dom s1 & i in Seg k1 & i-1 in Seg k1 & i-1+1=i
+A90:  i in dom s1 & i in Seg k1 & i-1 in Seg k1 & i-1+1=i
       & i-len<*f.(inf A)*> in dom s2
       proof
-A90:  1 <= i & i <= len D by A87,FINSEQ_1:3;
-then A91:  1 <= i & i < k1 + 1 by A86,REAL_1:def 5;
-then A92:  1 <= i & i <= k1 by NAT_1:13;
+A91:  1 <= i & i <= len D by A88,FINSEQ_1:3;
+then A92:  1 <= i & i < k1 + 1 by A87,REAL_1:def 5;
+then A93:  1 <= i & i <= k1 by NAT_1:13;
       then i in Seg(len s1) by A41,FINSEQ_1:3;
       hence i in dom s1 by FINSEQ_1:def 3;
-      thus i in Seg k1 by A92,FINSEQ_1:3;
+      thus i in Seg k1 by A93,FINSEQ_1:3;
       consider j being Nat such that
-A93:  i = 1 + j by A90,NAT_1:10;
-          i <> 0 & i <> 1 by A86,A87,FINSEQ_1:3;
+A94:  i = 1 + j by A91,NAT_1:10;
+          i <> 0 & i <> 1 by A87,A88,FINSEQ_1:3;
       then i is non trivial by NAT_2:def 1;
-      then i >= 2 & i <= k1 by A91,NAT_1:13,NAT_2:31;
+      then i >= 2 & i <= k1 by A92,NAT_1:13,NAT_2:31;
       then i >= 1+1 & i-1 <= k1-1 by XREAL_1:11;
       then i-1 >= 1 & i-1+0 <= k1-1+1 by XREAL_1:9,21;
-      hence i-1 in Seg k1 by A93,FINSEQ_1:3;
-then A94:  i-len<*f.(inf A)*> in Seg(len s2) by A42,FINSEQ_1:56;
+      hence i-1 in Seg k1 by A94,FINSEQ_1:3;
+then A95:  i-len<*f.(inf A)*> in Seg(len s2) by A42,FINSEQ_1:56;
       thus i-1+1=i;
-      thus thesis by A94,FINSEQ_1:def 3;
+      thus thesis by A95,FINSEQ_1:def 3;
      end;
-A95: (s1^<*f.(sup A)*>).i=f.(D.i)
+A96: (s1^<*f.(sup A)*>).i=f.(D.i)
      proof
-          (s1^<*f.(sup A)*>).i = s1.i by A89,FINSEQ_1:def 7;
-      then (s1^<*f.(sup A)*>).i = f.(sup divset(D,i)) by A41,A89;
-      hence thesis by A86,A87,INTEGRA1:def 5;
+          (s1^<*f.(sup A)*>).i = s1.i by A90,FINSEQ_1:def 7;
+      then (s1^<*f.(sup A)*>).i = f.(sup divset(D,i)) by A41,A90;
+      hence thesis by A87,A88,INTEGRA1:def 5;
      end;
-A96: (<*f.(inf A)*>^s2).i = f.(D.(i-1))
+A97: (<*f.(inf A)*>^s2).i = f.(D.(i-1))
      proof
-A97: i-len<*f.(inf A)*> in Seg(len s2) by A89,FINSEQ_1:def 3;
-          i-len<*f.(inf A)*> is Element of NAT by A89;
+A98: i-len<*f.(inf A)*> in Seg(len s2) by A90,FINSEQ_1:def 3;
+A99:   i-1 is Nat by A90,ORDINAL1:def 13;
+          i-len<*f.(inf A)*> is Element of NAT by A90;
       then 1 <= i-len<*f.(inf A)*> & i-len<*f.(inf A)*><=len s2
-       by A97,FINSEQ_1:3;
-      then len<*f.(inf A)*>+1<=i & i<=len<*f.(inf A)*>+len s2 by XREAL_1:21,
-22;
+       by A98,FINSEQ_1:3;
+      then len<*f.(inf A)*>+1<=i & i<=len<*f.(inf A)*>+len s2 by XREAL_1:21,22;
       then (<*f.(inf A)*>^s2).i=s2.(i-len<*f.(inf A)*>) by FINSEQ_1:36;
       then (<*f.(inf A)*>^s2).i=s2.(i-1) by FINSEQ_1:56;
-      then (<*f.(inf A)*>^s2).i= f.(inf divset(D,i)) by A42,A89;
-      hence thesis by A86,A87,INTEGRA1:def 5;
+      then (<*f.(inf A)*>^s2).i= f.(inf divset(D,i)) by A42,A90,A99;
+      hence thesis by A87,A88,INTEGRA1:def 5;
      end;
-         p.i=f.(sup divset(D,i))-f.(inf divset(D,i)) by A39,A87;
-     then p.i=f.(sup divset(D,i))-f.(D.(i-1)) by A86,A87,INTEGRA1:def 5;
-     hence thesis by A61,A62,A86,A87,A95,A96,INTEGRA1:def 5;
+         p.i=f.(sup divset(D,i))-f.(inf divset(D,i)) by A39,A88;
+     then p.i=f.(sup divset(D,i))-f.(D.(i-1)) by A87,A88,INTEGRA1:def 5;
+     hence thesis by A61,A62,A87,A88,A96,A97,INTEGRA1:def 5;
     end;
     end;
     hence thesis;
@@ -934,95 +934,95 @@ A97: i-len<*f.(inf A)*> in Seg(len s2) by A89,FINSEQ_1:def 3;
    end;
    hence thesis;
   end;
-A98:Sum p=Sum s1 + f.(sup A) - f.(inf A) - Sum s2
+A100:Sum p=Sum s1 + f.(sup A) - f.(inf A) - Sum s2
   proof
        Sum p=Sum(s1^<*f.(sup A)*>)-Sum(<*f.(inf A)*>^s2) by A53,INTEGRA1:24;
    then Sum p=Sum s1 + f.(sup A) -Sum(<*f.(inf A)*>^s2) by RVSUM_1:104;
    then Sum p=Sum s1 + f.(sup A) - (f.(inf A) + Sum s2) by RVSUM_1:106;
    hence thesis;
   end;
-A99:lower_sum((f`|X)||A,D) <= f.(sup A)-f.(inf A)
+A101:lower_sum((f`|X)||A,D) <= f.(sup A)-f.(inf A)
    proof
-A100:for k st k in dom D holds
+A102:for k st k in dom D holds
     f.(sup divset(D,k))-f.(inf divset(D,k))>=(lower_volume((f`|X)||A,D)).k
     proof
-     let k; assume A101:k in dom D;
+     let k; assume A103:k in dom D;
      then consider r such that
-A102: r in divset(D,k) &
+A104: r in divset(D,k) &
      f.(sup divset(D,k))-f.(inf divset(D,k))=diff(f,r)*vol(divset(D,k)) by A4;
-A103: diff(f,r) in rng(((f`|X)||A)|divset(D,k)) by A21,A101,A102;
-         rng(((f`|X)||A)|divset(D,k)) is bounded by A29,A101;
+A105: diff(f,r) in rng(((f`|X)||A)|divset(D,k)) by A21,A103,A104;
+         rng(((f`|X)||A)|divset(D,k)) is bounded by A29,A103;
      then rng(((f`|X)||A)|divset(D,k)) is bounded_above &
      rng(((f`|X)||A)|divset(D,k)) is bounded_below by SEQ_4:def 3;
-then A104: diff(f,r) >= inf rng(((f`|X)||A)|divset(D,k)) by A103,SEQ_4:def 5;
-A105: vol(divset(D,k)) >= 0 by INTEGRA1:11;
-         k in Seg len D by A101,FINSEQ_1:def 3;
+then A106: diff(f,r) >= inf rng(((f`|X)||A)|divset(D,k)) by A105,SEQ_4:def 5;
+A107: vol(divset(D,k)) >= 0 by INTEGRA1:11;
+         k in Seg len D by A103,FINSEQ_1:def 3;
      then (inf rng(((f`|X)||A)|divset(D,k)))*vol(divset(D,k))
      =(lower_volume((f`|X)||A,D)).k by INTEGRA1:def 8;
-     hence thesis by A102,A104,A105,XREAL_1:66;
+     hence thesis by A104,A106,A107,XREAL_1:66;
     end;
 
         f.(sup A)-f.(inf A)>=lower_sum((f`|X)||A,D)
     proof
-A106: for k st k in Seg len D holds
+A108: for k be Nat st k in Seg len D holds
      p.k >= (lower_volume((f`|X)||A,D)).k
      proof
-      let k; assume A107:k in Seg len D;
-then A108:  f.(sup divset(D,k))-f.(inf divset(D,k))=p.k by A39;
-          k in dom D by A107,FINSEQ_1:def 3;
-      hence thesis by A100,A108;
+      let k be Nat; assume A109:k in Seg len D;
+then A110:  f.(sup divset(D,k))-f.(inf divset(D,k))=p.k by A39;
+          k in dom D by A109,FINSEQ_1:def 3;
+      hence thesis by A102,A110;
      end;
      reconsider p as Element of (len D)-tuples_on REAL by A39,FINSEQ_2:110;
          len lower_volume((f`|X)||A,D)=len D by INTEGRA1:def 8;
      then reconsider q=(lower_volume((f`|X)||A,D))
      as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
-         Sum q<=Sum p by A106,RVSUM_1:112;
-     hence thesis by A51,A98,INTEGRA1:def 10;
+         Sum q<=Sum p by A108,RVSUM_1:112;
+     hence thesis by A51,A100,INTEGRA1:def 10;
     end;
     hence thesis;
    end;
 
        f.(sup A)-f.(inf A) <= upper_sum((f`|X)||A,D)
    proof
-A109:for k st k in dom D holds
+A111:for k st k in dom D holds
     f.(sup divset(D,k))-f.(inf divset(D,k))<=(upper_volume((f`|X)||A,D)).k
     proof
-     let k; assume A110:k in dom D;
+     let k; assume A112:k in dom D;
      then consider r such that
-A111: r in divset(D,k) &
+A113: r in divset(D,k) &
      f.(sup divset(D,k))-f.(inf divset(D,k))=diff(f,r)*vol(divset(D,k)) by A4;
-A112: diff(f,r) in rng(((f`|X)||A)|divset(D,k)) by A21,A110,A111;
-         rng(((f`|X)||A)|divset(D,k)) is bounded by A29,A110;
+A114: diff(f,r) in rng(((f`|X)||A)|divset(D,k)) by A21,A112,A113;
+         rng(((f`|X)||A)|divset(D,k)) is bounded by A29,A112;
      then rng(((f`|X)||A)|divset(D,k)) is bounded_above &
      rng(((f`|X)||A)|divset(D,k)) is bounded_below by SEQ_4:def 3;
-then A113: diff(f,r) <= sup rng(((f`|X)||A)|divset(D,k)) by A112,SEQ_4:def 4;
+then A115: diff(f,r) <= sup rng(((f`|X)||A)|divset(D,k)) by A114,SEQ_4:def 4;
          vol(divset(D,k)) >= 0 by INTEGRA1:11;
-then A114: diff(f,r)*vol(divset(D,k))
-     <=(sup rng(((f`|X)||A)|divset(D,k)))*vol(divset(D,k)) by A113,XREAL_1:66;
-         k in Seg len D by A110,FINSEQ_1:def 3;
-     hence thesis by A111,A114,INTEGRA1:def 7;
+then A116: diff(f,r)*vol(divset(D,k))
+     <=(sup rng(((f`|X)||A)|divset(D,k)))*vol(divset(D,k)) by A115,XREAL_1:66;
+         k in Seg len D by A112,FINSEQ_1:def 3;
+     hence thesis by A113,A116,INTEGRA1:def 7;
     end;
 
         f.(sup A)-f.(inf A)<=upper_sum((f`|X)||A,D)
     proof
-A115: for k st k in Seg len D holds
+A117: for k be Nat st k in Seg len D holds
      p.k <= (upper_volume((f`|X)||A,D)).k
      proof
-      let k; assume A116:k in Seg len D;
-then A117:  f.(sup divset(D,k))-f.(inf divset(D,k))=p.k by A39;
-          k in dom D by A116,FINSEQ_1:def 3;
-      hence thesis by A109,A117;
+      let k be Nat; assume A118:k in Seg len D;
+then A119:  f.(sup divset(D,k))-f.(inf divset(D,k))=p.k by A39;
+          k in dom D by A118,FINSEQ_1:def 3;
+      hence thesis by A111,A119;
      end;
      reconsider p as Element of (len D)-tuples_on REAL by A39,FINSEQ_2:110;
          len upper_volume((f`|X)||A,D)=len D by INTEGRA1:def 7;
      then reconsider q=(upper_volume((f`|X)||A,D))
      as Element of (len D)-tuples_on REAL by FINSEQ_2:110;
-         Sum p<=Sum q by A115,RVSUM_1:112;
-     hence thesis by A51,A98,INTEGRA1:def 9;
+         Sum p<=Sum q by A117,RVSUM_1:112;
+     hence thesis by A51,A100,INTEGRA1:def 9;
     end;
     hence thesis;
    end;
-   hence thesis by A99;
+   hence thesis by A101;
 end;
 
 theorem Th13:
@@ -1219,8 +1219,7 @@ A15: k in Seg len D by A4,FINSEQ_1:def 3;
 then A16: vol(divset(D,k))=upper_volume(chi(A,A),D).k by INTEGRA1:22;
          k in Seg len upper_volume(chi(A,A),D) by A15,INTEGRA1:def 7;
      then k in dom upper_volume(chi(A,A),D) by FINSEQ_1:def 3;
-     then vol(divset(D,k)) in rng upper_volume(chi(A,A),D) by A16,FUNCT_1:def
-5
+     then vol(divset(D,k)) in rng upper_volume(chi(A,A),D) by A16,FUNCT_1:def 5
 ;
      then vol(divset(D,k)) <= max rng upper_volume(chi(A,A),D) by
 PRE_CIRC:def 1;
@@ -1250,22 +1249,22 @@ A19:len D - 1 in NAT
 A20: len D = 1 + j by NAT_1:10;
      thus thesis by A20,ORDINAL1:def 13;
     end;
-    deffunc F(Element of NAT)=f.(sup divset(D,$1));
+    deffunc F(Nat)=f.(sup divset(D,$1));
     consider F1 being FinSequence of REAL such that
 A21:len F1 = len D &
-    for i st i in Seg len D holds
+    for i be Nat st i in Seg len D holds
     F1.i = F(i) from FINSEQ_2:sch 1;
-    deffunc G(Element of NAT)=f.(inf divset(D,$1));
+    deffunc G(Nat)=f.(inf divset(D,$1));
     consider F2 being FinSequence of REAL such that
 A22:len F2 = len D &
-    for i st i in Seg len D holds
+    for i be Nat st i in Seg len D holds
     F2.i = G(i) from FINSEQ_2:sch 1;
     consider k1 being Element of NAT such that
 A23:k1=len D - 1 by A19;
-    deffunc G(Element of NAT)=f.(sup divset(D,$1));
+    deffunc G(Nat)=f.(sup divset(D,$1));
     consider F being FinSequence of REAL such that
 A24:len F = k1 &
-    for i st i in Seg k1 holds
+    for i be Nat st i in Seg k1 holds
     F.i = G(i) from FINSEQ_2:sch 1;
 
         F1=F^<*f.(sup A)*> & F2=<*f.(inf A)*>^F
@@ -1273,9 +1272,9 @@ A24:len F = k1 &
 A25: len (F^<*f.(sup A)*>)= len F + len <*f.(sup A)*> by FINSEQ_1:35
      .= len D - 1 + 1 by A23,A24,FINSEQ_1:56
      .= len D;
-         for i st 1<=i & i<=len F1 holds F1.i=(F^<*f.(sup A)*>).i
+     for i be Nat st 1<=i & i<=len F1 holds F1.i=(F^<*f.(sup A)*>).i
      proof
-      let i; assume A26:1<=i & i<=len F1;
+      let i be Nat; assume A26:1<=i & i<=len F1;
           now per cases;
        suppose i <= len F;
 then A27:   i in Seg len F1 & i in Seg len F by A26,FINSEQ_1:3;
@@ -1311,9 +1310,9 @@ then A31:   F1.i = f.(sup divset(D,i)) & i in dom D by A21,FINSEQ_1:def 3;
 A32: len (<*f.(inf A)*>^F) = len <*f.(inf A)*> + len F by FINSEQ_1:35
      .= 1 + (len D - 1) by A23,A24,FINSEQ_1:56
      .= len D;
-         for i st 1<=i & i<=len F2 holds F2.i=(<*f.(inf A)*>^F).i
+     for i be Nat st 1<=i & i<=len F2 holds F2.i=(<*f.(inf A)*>^F).i
      proof
-      let i; assume A33:1<=i & i<=len F2;
+      let i be Nat; assume A33:1<=i & i<=len F2;
       per cases;
        suppose A34:i=1;
 A35:   i in Seg len D by A22,A33,FINSEQ_1:3;
@@ -1392,10 +1391,10 @@ then A55: k in dom (F1-F2) by FINSEQ_1:def 3;
     by A51,Th3;
     hence upper_sum(f||A,D)-lower_sum(f||A,D)<=delta(D)*(f.(sup A)-f.(inf A))
     by A18,A47,RVSUM_1:117;
-        for k st k in dom (upper_volume(f||A,D)-lower_volume(f||A,D))
+    for k be Nat st k in dom (upper_volume(f||A,D)-lower_volume(f||A,D))
      holds 0<=(upper_volume(f||A,D)-lower_volume(f||A,D)).k
     proof
-     let k;
+     let k be Nat;
      assume A56:k in dom (upper_volume(f||A,D)-lower_volume(f||A,D));
       set r = (upper_volume(f||A,D)-lower_volume(f||A,D)).k;
 A57: len upper_volume(f||A,D)=len D & len lower_volume(f||A,D)=len D
@@ -1584,8 +1583,8 @@ A11:   sup A in A by A8,INTEGRA2:1;
 then A12:    x in A /\ dom (-f) & sup A in A /\ dom (-f) by A8,A10,INTEGRA2:1;
 reconsider x as Element of A by A10;
 A13:    x <= sup A by INTEGRA2:1;
-        (-f).x = ((-f)|A).x & (-f).(sup A)=((-f)|A).(sup A) by A6,A11,FUNCT_1:
-68;
+        (-f).x = ((-f)|A).x & (-f).(sup A)=((-f)|A).(sup A) by A6,A11,
+FUNCT_1:68;
        hence thesis by A3,A12,A13,RFUNCT_2:48;
       end;
       hence thesis by RFUNCT_1:def 9;
@@ -1601,8 +1600,8 @@ A15:    inf A in A by A8,INTEGRA2:1;
 then A16:    x in A /\ dom (-f) & inf A in A /\ dom (-f) by A8,A14,INTEGRA2:1;
 reconsider x as Element of A by A14;
 A17:    x >= inf A by INTEGRA2:1;
-        (-f).x = ((-f)|A).x & (-f).(inf A)=((-f)|A).(inf A) by A6,A15,FUNCT_1:
-68;
+        (-f).x = ((-f)|A).x & (-f).(inf A)=((-f)|A).(inf A) by A6,A15,
+FUNCT_1:68;
        hence thesis by A3,A16,A17,RFUNCT_2:48;
       end;
       hence thesis by RFUNCT_1:def 10;

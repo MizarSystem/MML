@@ -8,11 +8,11 @@ environ
 
  vocabularies ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
-      NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI,
-      SQUARE_1, XCMPLX_0, SEQ_1, COMPLEX1;
+      NAT_1, INT_1, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI, SQUARE_1,
+      XCMPLX_0, SEQ_1, COMPLEX1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      CARD_1, REAL_1, FUNCT_1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
-      INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
+      CARD_1, REAL_1, FUNCT_1, PARTFUN1, SEQ_1, FINSET_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, INT_1, INT_2, NAT_1, NAT_D, RVSUM_1, SQUARE_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2,
       INT_2, FINSEQ_4, FINSOP_1, RVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XCMPLX_0,
@@ -21,15 +21,14 @@ environ
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_1, SQUARE_1, FINSEQ_2, RVSUM_1;
  theorems TARSKI, REAL_1, NAT_1, RVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FUNCT_1, INT_1, XREAL_0, XBOOLE_0, XCMPLX_1, REAL_2, INT_2,
-      FINSET_1, CARD_2, CARD_1, XBOOLE_1, XREAL_1, XCMPLX_0, XXREAL_0, RELAT_1,
-      FINSOP_1, ORDINAL1, SEQ_1, NAT_D;
+      FUNCT_1, INT_1, XREAL_0, XBOOLE_0, XCMPLX_1, REAL_2, INT_2, FINSET_1,
+      CARD_2, CARD_1, XBOOLE_1, XREAL_1, XCMPLX_0, XXREAL_0, RELAT_1, FINSOP_1,
+      ORDINAL1, SEQ_1, NAT_D, PARTFUN1;
  schemes NAT_1, FINSEQ_1, SUBSET_1;
 
 begin
 
- reserve i,k,n,m,l for Element of NAT;
- reserve s,t,r for Nat;
+ reserve i,j,k,n,m,l,s,t,r for Nat;
  reserve a,b for real number;
  reserve F,G,H for FinSequence of REAL;
 
@@ -41,19 +40,22 @@ Th3: for F,G being FinSequence st
   proof
    let F,G be FinSequence;
    assume A1: len F = len G & for i st i in dom F holds F.i = G.i;
-   A2: dom F = Seg len F by FINSEQ_1:def 3;
+   then
+   A2: for i be Nat st i in dom F holds F.i = G.i;
+   A3: dom F = Seg len F by FINSEQ_1:def 3;
        dom G = Seg len F by A1,FINSEQ_1:def 3;
-   hence thesis by A1,A2,FINSEQ_1:17;
+   hence thesis by A2,A3,FINSEQ_1:17;
   end;
 
 canceled;
 
-theorem
-Th5: for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n}
+theorem Th5:
+  n>=1 implies
+  Seg n = {1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n}
   proof
-   let n;
    assume A1: n>=1;
-   A2: Seg n c= {1} \/ {k: 1<k & k<n} \/ {n}
+A10: n in NAT by ORDINAL1:def 13;
+   A2: Seg n c= {1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n}
     proof let d be set;
      assume A3: d in Seg n;
      per cases by A1,REAL_1:def 5;
@@ -61,17 +63,20 @@ Th5: for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n}
       reconsider l = d as Element of NAT by A3;
        1 <= l & l <= n by A3,FINSEQ_1:3;
       then 1 = l or (1<l & l<n) or l = n or 1 = n by REAL_1:def 5;
-      then d in {1} or d in {k: 1<k & k<n} or d in {n} by A4,TARSKI:def 1;
-      then d in {1} \/ {k: 1<k & k<n} or d in {n} by XBOOLE_0:def 2;
+      then d in {1} or d in {k where k is Element of NAT: 1<k & k<n} or
+      d in {n} by A4,TARSKI:def 1;
+      then d in {1} \/ {k where k is Element of NAT: 1<k & k<n} or d in {n}
+      by XBOOLE_0:def 2;
       hence thesis by XBOOLE_0:def 2;
       end;
       suppose n = 1;
       hence thesis by A3,FINSEQ_1:4,XBOOLE_0:def 2;
       end;
     end;
-     {1} \/ {k: 1<k & k<n} \/ {n} c= Seg n
+     {1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n} c= Seg n
     proof
-       for d be set holds d in {1} \/ {k: 1<k & k<n} \/ {n} implies d in Seg n
+       for d be set holds d in {1} \/ {k where k is Element of NAT: 1<k & k<n}
+       \/ {n} implies d in Seg n
       proof
   A5: for d be set holds d in {1} implies d in Seg n
       proof
@@ -79,23 +84,26 @@ Th5: for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n}
        then d = 1 by TARSKI:def 1;
        hence d in Seg n by A1;
       end;
-     A6: for d be set holds d in {k: 1<k & k<n} implies d in Seg n
+     A6: for d be set holds d in {k where k is Element of NAT: 1<k & k<n}
+     implies d in Seg n
       proof
        let d be set;
-       assume d in {k: 1<k & k<n};
-        then consider k such that A7: d = k & 1<k & k<n;
+       assume d in {k where k is Element of NAT: 1<k & k<n};
+        then consider k being Element of NAT such that A7: d = k & 1<k & k<n;
         thus d in Seg n by A7;
       end;
      A8: for d be set holds d in {n} implies d in Seg n
       proof
        let d be set; assume d in {n};
        then d = n by TARSKI:def 1;
-       hence d in Seg n by A1;
+       hence d in Seg n by A1,A10;
       end;
        let d be set;
-       assume d in ({1} \/ {k: 1<k & k<n} \/ {n});
-       then d in ({1} \/ {k: 1<k & k<n}) or d in {n} by XBOOLE_0:def 2;
-       then d in {1} or d in {k: 1<k & k<n} or d in {n} by XBOOLE_0:def 2;
+       assume d in ({1} \/ {k where k is Element of NAT: 1<k & k<n} \/ {n});
+       then d in ({1} \/ {k where k is Element of NAT: 1<k & k<n}) or
+       d in {n} by XBOOLE_0:def 2;
+       then d in {1} or d in {k where k is Element of NAT: 1<k & k<n} or
+       d in {n} by XBOOLE_0:def 2;
        hence thesis by A5,A6,A8;
       end;
      hence thesis by TARSKI:def 3;
@@ -103,10 +111,9 @@ Th5: for n st n>=1 holds Seg n = {1} \/ {k: 1<k & k<n} \/ {n}
    hence thesis by A2,XBOOLE_0:def 10;
   end;
 
-theorem
-Th6: for F holds len (a*F) = len F
+theorem Th6:
+  len (a*F) = len F
  proof
-  let F;
   reconsider G = F as Element of (len F)-tuples_on REAL by FINSEQ_2:110;
    len (a*G) = len G by FINSEQ_2:109;
   hence thesis;
@@ -122,20 +129,18 @@ Th7: n in dom G iff n in dom (a*G)
 ::    x |^ n  Function                                                      ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let i be natural number; let x be real number;
+definition let i be Nat; let x be real number;
   redefine func i |-> x -> FinSequence of REAL;
   coherence
   proof
    let z be set;
    assume z in rng (i |-> x);
-   then consider y be set such that A1: y in dom (i |-> x) and
-    A2: z = (i |-> x).y by FUNCT_1:def 5;
-   reconsider y as Element of NAT by A1;
-   thus z in REAL by A2;
+   then ex y be set st y in dom (i |-> x) & z = (i |-> x).y by FUNCT_1:def 5;
+   hence thesis;
   end;
 end;
 
-registration let x be complex number, n be natural number;
+registration let x be complex number, n be Nat;
   cluster n |-> x -> complex-yielding;
   coherence
   proof
@@ -145,18 +150,18 @@ registration let x be complex number, n be natural number;
   end;
 end;
 
-definition let x be complex number, n be natural number;
+definition let x be complex number, n be Nat;
   func x |^ n equals
      Product (n |-> x);
   coherence;
 end;
 
-registration let x be real number, n be natural number;
+registration let x be real number, n be Nat;
   cluster x |^ n -> real;
   coherence;
 end;
 
-definition let x be Real, n be natural number;
+definition let x be Real, n be Nat;
   redefine func x |^ n -> Real;
   coherence by XREAL_0:def 1;
 end;
@@ -168,7 +173,7 @@ canceled;
 theorem Th9:
  z|^0 = 1 by FINSEQ_2:72,RVSUM_1:124;
 
-registration let z be complex number, n be natural number;
+registration let z be complex number, n be Nat;
  cluster z|^n -> complex;
  coherence;
 end;
@@ -185,7 +190,7 @@ Th10: z|^1 = z
 theorem
 Th11: z|^(s+1) = z|^s*z
  proof
-   defpred P[natural number] means z|^($1+1) = z|^$1*z;
+   defpred P[Nat] means z|^($1+1) = z|^$1*z;
   A1: P[0] proof
      reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
        z|^(0+1) = Product(<*z*>)
@@ -195,8 +200,7 @@ Th11: z|^(s+1) = z|^s*z
   A2: for s st P[s] holds P[s+1] proof let s;
     assume z|^(s+1) = z|^s*z;
      reconsider z as Element of COMPLEX by XCMPLX_0:def 2;
-      s+1 is Element of NAT by ORDINAL1:def 13;
-          then z|^(s+1+1) = Product(((s+1) |-> z) ^ <*z*>)
+     z|^(s+1+1) = Product(((s+1) |-> z) ^ <*z*>)
         by FINSEQ_2:74 .= Product((s+1) |-> z)*z by RVSUM_1:126;
        hence thesis;
    end;
@@ -204,21 +208,21 @@ Th11: z|^(s+1) = z|^s*z
   hence thesis;
  end;
 
-registration let x, n be natural number;
+registration let x, n be Nat;
   cluster x|^n -> natural;
 coherence
  proof
-   defpred P[natural number] means x|^$1 is natural;
+   defpred P[Nat] means x|^$1 is natural;
 A1: P[0] by FINSEQ_2:72,RVSUM_1:124;
-A2: for a being natural number st P[a] holds P[a+1]
+A2: for a being Nat st P[a] holds P[a+1]
   proof
-    let a be natural number;
+    let a be Nat;
     assume P[a];
-    then reconsider b = x|^a as natural number;
+    then reconsider b = x|^a as Nat;
       x|^(a+1) = b*x by Th11;
     hence thesis;
   end;
-     for a being natural number holds P[a]
+     for a being Nat holds P[a]
      from NAT_1:sch 2(A1,A2);
    hence thesis;
  end;
@@ -230,7 +234,6 @@ theorem
    (x*y)|^s = x|^s * y|^s
  proof
   reconsider x, y as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider s as Element of NAT by ORDINAL1:def 13;
    x|^s*y|^s = Product(s |-> (x*y)) by RVSUM_1:143;
   hence thesis;
  end;
@@ -239,7 +242,6 @@ theorem
    x|^(s+t) = x|^s * x|^t
  proof
   reconsider x as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider s,t as Element of NAT by ORDINAL1:def 13;
    x|^s*x|^t = Product((s+t) |-> x) by RVSUM_1:141;
   hence thesis;
  end;
@@ -248,7 +250,6 @@ theorem
    (x|^s)|^t = x|^(s*t)
  proof
   reconsider x as Element of COMPLEX by XCMPLX_0:def 2;
-  reconsider s,t as Element of NAT by ORDINAL1:def 13;
    x|^(s*t) = Product(t |-> x|^s) by RVSUM_1:142;
  hence thesis;
  end;
@@ -256,7 +257,7 @@ theorem
 theorem
 Th15: 1|^s = 1
  proof
-   defpred P[natural number] means 1|^$1 = 1;
+   defpred P[Nat] means 1|^$1 = 1;
   A1: P[0] by FINSEQ_2:72,RVSUM_1:124;
   A2: now
     let s;
@@ -274,10 +275,11 @@ theorem Th16:
   A1: s is Element of NAT by ORDINAL1:def 13;
   defpred P[Element of NAT] means 0|^$1 = 0;
   A2: P[1] by Th10;
-  A3: now let n; assume n>=1 & P[n];   0|^(n+1) = 0|^n * 0 by Th11 .= 0;
-       hence P[n+1];
-      end;
-      for n st n >=1 holds P[n] from NAT_1:sch 8(A2,A3);
+  A3: now let n be Element of NAT;
+  assume n>=1 & P[n];   0|^(n+1) = 0|^n * 0 by Th11 .= 0;
+  hence P[n+1];
+end;
+for n be Element of NAT st n >=1 holds P[n] from NAT_1:sch 8(A2,A3);
   hence thesis by A1;
  end;
 
@@ -285,7 +287,7 @@ theorem Th16:
 ::     n!  Function                                                         ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let n be natural number;
+definition let n be Nat;
  redefine func idseq n -> FinSequence of REAL;
  coherence
   proof
@@ -301,18 +303,18 @@ A3: y in Seg n by A1,RELAT_1:71;
   end;
 end;
 
-definition let n be natural number;
+definition let n be Nat;
   func n! -> Real equals
      Product idseq n;
   coherence;
 end;
 
-registration let n be natural number;
+registration let n be Nat;
   cluster n! -> real;
   coherence;
 end;
 
-definition let n be natural number;
+definition let n be Nat;
   redefine func n! -> Real;
   coherence;
 end;
@@ -333,10 +335,8 @@ theorem
  end;
 
 theorem Th21:
-  for s holds (s+1)! = (s!) * (s+1)
+  (s+1)! = (s!) * (s+1)
 proof
-  let s;
-  reconsider s as Element of NAT by ORDINAL1:def 13;
   set r1 = s+1;
    (s+1)! = (s!) * (s+1)
   proof
@@ -347,35 +347,36 @@ proof
 end;
 
 theorem Th22:
-  for s holds s! is Element of NAT
+  s! is Element of NAT
  proof
-   defpred P[natural number] means $1! is Element of NAT;
+   defpred P[Nat] means $1! is Element of NAT;
   A1: P[0] by FINSEQ_2:58,RVSUM_1:124;
   A2: now let s; assume P[s]; then reconsider k=s! as Element of NAT;
          (s+1)! = (s+1) * k by Th21;
-    hence P[s+1] by ORDINAL1:def 13;
+    hence P[s+1];
    end;
-  thus for s holds P[s] from NAT_1:sch 2(A1,A2);
+   for s holds P[s] from NAT_1:sch 2(A1,A2);
+   hence thesis;
  end;
 
 theorem
-Th23: for s holds s!>0
+Th23: s!>0
  proof
-   defpred P[natural number] means $1!>0;
+   defpred P[Nat] means $1!>0;
   A1: P[0] by FINSEQ_2:58,RVSUM_1:124;
   A2: now let s; assume P[s];
     then (s+1) * (s!)>(s+1) * 0 by XREAL_1:70;
     hence P[s+1] by Th21;
    end;
-  thus for s holds P[s] from NAT_1:sch 2(A1,A2);
+   for s holds P[s] from NAT_1:sch 2(A1,A2);
+   hence thesis;
  end;
 
 canceled;
 
 theorem
-Th25: for s,t holds (s!) * (t!)<>0
+Th25:  (s!) * (t!)<>0
  proof
-  let s,t;
    s!<>0 & t!<>0 by Th23;
   hence thesis by XCMPLX_1:6;
  end;
@@ -384,16 +385,16 @@ Th25: for s,t holds (s!) * (t!)<>0
 ::     n choose k  Function                                                 ::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition let k,n be natural number;
+definition let k,n be Nat;
   func n choose k means :Def3:
-    for l be natural number st l = n-k holds
+    for l be Nat st l = n-k holds
      it = (n!)/((k!) * (l!)) if n >= k
   otherwise it = 0;
  consistency;
  existence
   proof
    thus n >= k implies ex r1 be set st
-    for l being natural number st l = n-k holds r1 = (n!)/((k!) * (l!))
+    for l being Nat st l = n-k holds r1 = (n!)/((k!) * (l!))
     proof
      assume n >= k;
      then reconsider m = n-k as Element of NAT by INT_1:18;
@@ -405,14 +406,14 @@ definition let k,n be natural number;
   uniqueness
   proof let r1,r2 be set;
    thus n>=k &
-    (for l being natural number st l = n-k holds r1 = (n!)/((k!) * (l!))) &
-    (for l being natural number st l = n-k holds r2 = (n!)/((k!) * (l!)))
+    (for l being Nat st l = n-k holds r1 = (n!)/((k!) * (l!))) &
+    (for l being Nat st l = n-k holds r2 = (n!)/((k!) * (l!)))
      implies r1 = r2
     proof
      assume A1: n>=k;
-     assume A2: (for l being natural number st l = n-k holds
+     assume A2: (for l being Nat st l = n-k holds
      r1 = (n!)/((k!) * (l!))) &
-     (for l being natural number st l = n-k holds r2 = (n!)/((k!) * (l!)));
+     (for l being Nat st l = n-k holds r2 = (n!)/((k!) * (l!)));
      reconsider m = n-k as Element of NAT by A1,INT_1:18;
       r1 = (n!)/((k!) * (m!)) & r2 = (n!)/((k!) * (m!)) by A2;
      hence thesis;
@@ -421,7 +422,7 @@ definition let k,n be natural number;
   end;
 end;
 
-registration let k,n be natural number;
+registration let k,n be Nat;
   cluster n choose k -> real;
   coherence
   proof
@@ -437,7 +438,7 @@ A1: n >= k;
   end;
 end;
 
-definition let k,n be natural number;
+definition let k,n be Nat;
   redefine func n choose k -> Real;
   coherence by XREAL_0:def 1;
 end;
@@ -466,10 +467,9 @@ Th29: s choose 0 = 1
  end;
 
 theorem
-Th30: for s,t st s>=t holds
+Th30: s>=t implies
        (for r st r = s-t holds s choose t = s choose r)
  proof
-  let s,t;
   assume A1: s>=t;
   let r;
   assume A2: r = s-t;
@@ -485,9 +485,8 @@ Th30: for s,t st s>=t holds
  end;
 
 theorem
-Th31: for s holds s choose s = 1
+Th31: s choose s = 1
  proof
-  let s;
   reconsider m = s-s as Element of NAT by INT_1:18;
    m = 0;
   then s choose s = s choose 0 by Th30;
@@ -529,7 +528,7 @@ theorem Th32:
     suppose A9:s=t;
       then s<t+1 by NAT_1:13;
       then (t+1) choose (s+1)=1 & t choose s =1 & t choose (s+1)=0
-      by A9,Th31,Def3;
+      by A9,Def3,Th31;
       hence thesis;
     end;
     suppose A10:s>t;
@@ -541,25 +540,23 @@ theorem Th32:
  end;
 
 theorem Th33:
-  for s st s >= 1 holds s choose 1 = s
+  s >= 1 implies s choose 1 = s
 proof
-    let s;
 A1: s is Element of NAT by ORDINAL1:def 13;
     defpred P[Element of NAT] means $1 choose 1 = $1;
 A2: P[1] by Th31;
-A3: now let n; assume A4: n>=1 & P[n];
+A3: now let n be Element of NAT; assume A4: n>=1 & P[n];
        (n+1) choose 1 = (n+1) choose (0+1)
                     .= n + n choose 0 by A4,Th32 .= n+1 by Th29;
       hence P[n+1];
     end;
-     for n st n >= 1 holds P[n] from NAT_1:sch 8(A2,A3);
+     for n be Element of NAT st n >= 1 holds P[n] from NAT_1:sch 8(A2,A3);
     hence thesis by A1;
 end;
 
 theorem
-   for s,t st s>=1 & t = s-1 holds s choose t = s
+  s>=1 & t = s-1 implies s choose t = s
 proof
-  let s,t;
   assume A1: s>=1 & t = s-1;
   then s choose t = s choose 1 by Th30;
   hence thesis by A1,Th33;
@@ -568,7 +565,7 @@ end;
 theorem Th35:
   s choose r is Element of NAT
  proof
-   defpred P[natural number] means for r holds ($1 choose r) is Element of NAT;
+   defpred P[Nat] means for r holds ($1 choose r) is Element of NAT;
 A1: P[0] proof let r;
      r = 0 or r > 0;
     hence 0 choose r is Element of NAT by Def3,Th27;
@@ -602,7 +599,7 @@ theorem
    for m,F st m <> 0 & len F = m & (for i,l st i in dom F & l = n+i-1
     holds F.i = l choose n) holds Sum F = (n+m) choose (n+1)
  proof
-   defpred P[Element of NAT] means
+   defpred P[Nat] means
    for F st $1 <> 0 & len F = $1 & (for i,l st i in dom F & l =
    n+i-1 holds F.i = l choose n) holds Sum F = (n+$1) choose (n+1);
 A1: P[0];
@@ -647,36 +644,37 @@ FINSEQ_1:59;
     .= (n+(m+1)) choose (n+1);
    end;
   end;
-  thus for m holds P[m] from NAT_1:sch 1(A1,A2);
+  thus for m holds P[m] from NAT_1:sch 2(A1,A2);
  end;
 
 registration
-  let k,n be natural number;
+  let k,n be Nat;
   cluster n choose k -> natural;
   coherence by Th35;
 end;
 
 definition
-  let k,n be natural number;
+  let k,n be Nat;
   redefine func n choose k -> Element of NAT;
   coherence by ORDINAL1:def 13;
 end;
 
 definition let a,b be real number;
-           let n be natural number;
+           let n be Nat;
   func (a,b) In_Power n -> FinSequence of REAL means
  :Def4:  len it = n+1 &
-   (for i,l,m being natural number st i in dom it & m = i - 1 & l = n-m holds
+   (for i,l,m being Nat st i in dom it & m = i - 1 & l = n-m holds
    it.i = (n choose m)* a|^l * b|^m);
 existence
  proof
   reconsider n as Element of NAT by ORDINAL1:def 13;
-  defpred P[Element of NAT,set] means
-   for l,m be natural number st m = $1 - 1 & l = n-m holds
+  defpred P[Nat,set] means
+   for l,m be Nat st m = $1 - 1 & l = n-m holds
     $2 = (n choose m)* a|^l * b|^m;
- A1: for k for y1,y2 being set st k in Seg(n+1) & P[k,y1] & P[k,y2] holds y1=y2
+ A1: for k be Nat, y1,y2 being set st k in Seg(n+1) & P[k,y1] & P[k,y2]
+ holds y1=y2
   proof
-   let k;
+   let k be Nat;
    let y1,y2 be set;
    assume A2: k in Seg (n+1) & P[k,y1] & P[k,y2];
    then A3: k >= 1 & k <= n+1 by FINSEQ_1:3;
@@ -686,9 +684,9 @@ existence
     y1 = (n choose m1)* a|^l1 * b|^m1 by A2;
    hence thesis by A2;
   end;
- A4: for k st k in Seg(n+1) ex x being set st P[k,x]
+ A4: for k be Nat st k in Seg(n+1) ex x being set st P[k,x]
   proof
-   let k;
+   let k be Nat;
    assume k in Seg (n+1);
    then A5: k >= 1 & k <= n+1 by FINSEQ_1:3;
    then reconsider m1 = k-1 as Element of NAT by INT_1:18;
@@ -699,7 +697,7 @@ existence
   end;
   consider p being FinSequence such that
 A6: dom p = Seg(n+1) and
-A7: for k st k in Seg(n+1) holds P[k,p.k] from FINSEQ_1:sch 1(A1,A4);
+A7: for k be Nat st k in Seg(n+1) holds P[k,p.k] from FINSEQ_1:sch 1(A1,A4);
       rng p c= REAL
      proof
       let x be set;
@@ -712,7 +710,7 @@ FUNCT_1:def 5;
        y-1<=n+1-1 by A9,XREAL_1:11;
       then reconsider l1 = n-m1 as Element of NAT by INT_1:18;
        p.y = (n choose m1) *a|^l1*b|^m1 by A6,A7,A8;
-      then reconsider x as Real by A8,XREAL_0:def 1;
+      then reconsider x as Real by A8;
        x in REAL;
      hence thesis;
      end;
@@ -724,10 +722,10 @@ uniqueness
  proof
   let G,H;
   assume A10: len G = n+1 &
-   (for i,l,m be natural number st i in dom G & m = i - 1 & l = n-m holds
+   (for i,l,m be Nat st i in dom G & m = i - 1 & l = n-m holds
    G.i = (n choose m)* a|^l * b|^m);
    assume A11: len H = n+1 &
-   (for i,l,m be natural number st i in dom H & m = i - 1 & l = n-m holds
+   (for i,l,m be Nat st i in dom H & m = i - 1 & l = n-m holds
    H.i = (n choose m)* a|^l * b|^m);
     for i st i in dom G holds G.i = H.i
    proof
@@ -771,7 +769,7 @@ theorem Th39:
   ((a,b) In_Power s).1 = a|^s
   proof
     reconsider m1 = 1-1 as Element of NAT by INT_1:18;
-    reconsider l1 = s-m1 as natural number;
+    reconsider l1 = s-m1 as Nat;
      len ((a,b) In_Power s) = s+1 by Def4;
     then A1: dom ((a,b) In_Power s) = Seg (s+1) by FINSEQ_1:def 3;
      s+1>=0+1 by XREAL_1:8;
@@ -797,11 +795,11 @@ theorem Th40:
  end;
 
 theorem
-Th41: for s holds (a+b)|^s = Sum((a,b) In_Power s)
+Th41:  (a+b)|^s = Sum((a,b) In_Power s)
  proof
-   defpred P[Element of NAT] means (a+b)|^$1 = Sum((a,b) In_Power $1);
-     (a+b)|^0 = 1 by FINSEQ_2:72,RVSUM_1:124 .= Sum<*1 qua Real*> by FINSOP_1:
-12
+   defpred P[Nat] means (a+b)|^$1 = Sum((a,b) In_Power $1);
+     (a+b)|^0 = 1 by FINSEQ_2:72,RVSUM_1:124 .= Sum<*1 qua Real*> by
+FINSOP_1:12
            .= Sum((a,b) In_Power 0) by Th38;
 then A1: P[0];
   A2: for n st P[n] holds P[n+1]
@@ -866,26 +864,27 @@ A17:  i in dom F2 by A6,A14,FINSEQ_1:def 3;
         then 1 in Seg len (((a,b) In_Power n)) by Def4;
         then A22: 1 in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then A23: 1 in dom (a*((a,b) In_Power n)) by Th7;
-         A24:r = ((a,b) In_Power n).i by A21,A22,FINSEQ_4:def 4;
-        A25: r = ((a,b) In_Power n).1 by A21,A22,FINSEQ_4:def 4;
+         A24:r = ((a,b) In_Power n).i by A21,A22,PARTFUN1:def 8;
+        A25: r = ((a,b) In_Power n).1 by A21,A22,PARTFUN1:def 8;
         A26: r = a|^n by A21,A24,Th39;
-        A27: r1 = F1.i by A16,FINSEQ_4:def 4;
-        A28: r1 = ((a*((a,b) In_Power n))^<*0*>).1 by A16,A21,FINSEQ_4:def 4
+        A27: r1 = F1.i by A16,PARTFUN1:def 8;
+        A28: r1 = ((a*((a,b) In_Power n))^<*0*>).1 by A16,A21,PARTFUN1:def 8
          .= (a*((a,b) In_Power n)).1 by A23,FINSEQ_1:def 7
          .= a *a|^n by A25,A26,RVSUM_1:66 .= a|^(n+1) by Th11;
-        A29: r2 = F2.i by A17,FINSEQ_4:def 4;
-             r2 = (<*0*>^(b*((a,b) In_Power n))).1 by A17,A21,FINSEQ_4:def 4
+        A29: r2 = F2.i by A17,PARTFUN1:def 8;
+             r2 = (<*0*>^(b*((a,b) In_Power n))).1 by A17,A21,PARTFUN1:def 8
          .= 0 by FINSEQ_1:58;
         then F.i = r1+0 by A27,A29,RVSUM_1:27
          .= ((a,b) In_Power (n+1)).i by A21,A28,Th39;
         hence thesis;
        end;
-      A30: i in {k: k>1 & k<n+1+1} implies F.i = ((a,b) In_Power (n+1)).i
+      A30: i in {k where k is Element of NAT: k>1 & k<n+1+1} implies
+      F.i = ((a,b) In_Power (n+1)).i
        proof
-        assume i in {k: 1<k & k<n+1+1};
-         then A31:ex k st k=i & 1<k & k<n+1+1;
+        assume i in {k where k is Element of NAT: 1<k & k<n+1+1};
+         then A31:ex k being Element of NAT st k=i & 1<k & k<n+1+1;
         then A32: 1<=i & i<=n+1 by NAT_1:13;
-        then i in Seg (n+1);
+        then i in Seg (n+1) by A31;
         then i in Seg len ((a,b) In_Power n) by Def4;
         then A33: i in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then A34: i in dom (a*((a,b) In_Power n)) by Th7;
@@ -902,10 +901,10 @@ A35:        1<=j & j+1<=n+1+1 by A18,A31,NAT_1:13;
         A39: l1+1 = n+1-(m2+1);
             j-1<=n+1-1 by A36,XREAL_1:11;
         then reconsider l2 = n-m2 as Element of NAT by INT_1:18;
-        A40: x = ((a,b) In_Power n).j by A37,FINSEQ_4:def 4;
-        A41: r = ((a,b) In_Power n).i by A33,FINSEQ_4:def 4;
-        A42: r1 = ((a*((a,b) In_Power n))^<*0*>).i by A16,FINSEQ_4:def 4;
-        A43: r2 = (<*0*>^(b*((a,b) In_Power n))).i by A17,FINSEQ_4:def 4;
+        A40: x = ((a,b) In_Power n).j by A37,PARTFUN1:def 8;
+        A41: r = ((a,b) In_Power n).i by A33,PARTFUN1:def 8;
+        A42: r1 = ((a*((a,b) In_Power n))^<*0*>).i by A16,PARTFUN1:def 8;
+        A43: r2 = (<*0*>^(b*((a,b) In_Power n))).i by A17,PARTFUN1:def 8;
         A44: r1 = (a*((a,b) In_Power n)).i by A34,A42,FINSEQ_1:def 7
          .= a*r by A41,RVSUM_1:66;
              r2 = (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A18,A43,
@@ -938,17 +937,17 @@ a|^(l1+1)*((n choose (m2+1))*b|^(m2+1)) + b|^(m2+1)*((n choose m2)*a|^l2)
         then j in Seg len (((a,b) In_Power n)) by A48,Def4;
         then A50: j in dom ((a,b) In_Power n) by FINSEQ_1:def 3;
         then A51: j in dom (b*((a,b) In_Power n)) by Th7;
-        A52: x = ((a,b) In_Power n).j by A50,FINSEQ_4:def 4;
-        A53: x = ((a,b) In_Power n).(n+1) by A48,A50,FINSEQ_4:def 4
+        A52: x = ((a,b) In_Power n).j by A50,PARTFUN1:def 8;
+        A53: x = ((a,b) In_Power n).(n+1) by A48,A50,PARTFUN1:def 8
                .= b|^n by Th40;
-        A54: r1 = F1.i by A16,FINSEQ_4:def 4;
+        A54: r1 = F1.i by A16,PARTFUN1:def 8;
         A55: r1 =
 ((a*((a,b) In_Power n))^<*0*>).(len (a*((a,b) In_Power n))+1)
-           by A16,A47,A49,FINSEQ_4:def 4
+           by A16,A47,A49,PARTFUN1:def 8
          .= 0 by FINSEQ_1:59;
-        A56: r2 = F2.i by A17,FINSEQ_4:def 4;
+        A56: r2 = F2.i by A17,PARTFUN1:def 8;
         A57: r2 = (<*0*>^(b*((a,b) In_Power n))).(1+n+1) by A17,A47,
-FINSEQ_4:def 4
+PARTFUN1:def 8
          .= (<*0*>^(b*((a,b) In_Power n))).(len <*0*> +j) by A48,FINSEQ_1:56
          .= (b*((a,b) In_Power n)).j by A51,FINSEQ_1:def 7
          .= b*b|^n by A52,A53,RVSUM_1:66 .= b|^(n+1) by Th11;
@@ -956,8 +955,10 @@ FINSEQ_4:def 4
          .= ((a,b) In_Power (n+1)).i by A47,A57,Th40;
         hence thesis;
        end;
-          now assume i in {1} \/ {k: 1<k & k<n+1+1} \/ {n+1+1};
-      then i in {1} \/ {k: 1<k & k<n+1+1} or i in {n+1+1} by XBOOLE_0:def 2;
+          now assume i in {1} \/ {k where k is Element of NAT: 1<k & k<n+1+1}
+            \/ {n+1+1};
+      then i in {1} \/ {k where k is Element of NAT: 1<k & k<n+1+1} or
+      i in {n+1+1} by XBOOLE_0:def 2;
       hence F.i = ((a,b) In_Power (n+1)).i by A20,A30,A45,XBOOLE_0:def 2;
       end;
       hence thesis by A11,A13,A19,Th5;
@@ -965,26 +966,24 @@ FINSEQ_4:def 4
         len ((a,b) In_Power (n+1)) = len F by A9,Def4;
     hence thesis by A4,A8,A10,Th3;
    end;
-A58:  for n holds P[n] from NAT_1:sch 1(A1,A2);
-  let s;
-   s is Element of NAT by ORDINAL1:def 13;
-  hence thesis by A58;
+   for n holds P[n] from NAT_1:sch 2(A1,A2);
+   hence thesis;
  end;
 
-definition let n be natural number;
+definition let n be Nat;
   func Newton_Coeff n -> FinSequence of REAL means :Def5:
     len it = n+1 &
-    (for i,k be natural number st i in dom it & k = i-1 holds
+    (for i,k be Nat st i in dom it & k = i-1 holds
       it.i = n choose k);
 existence
  proof
   reconsider n as Element of NAT by ORDINAL1:def 13;
- defpred P[natural number,set] means
+ defpred P[Nat,set] means
  for s st s = $1-1 holds $2 = n choose s;
- A1: for l for r1,r2 being set
+ A1: for l be Nat for r1,r2 being set
       st l in Seg (n+1) & P[l,r1] & P[l,r2] holds r1 = r2
    proof
-    let l;
+    let l be Nat;
     let r1,r2 be set;
     assume A2: l in Seg (n+1) & P[l,r1] & P[l,r2];
     then l>=1 & l<=n+1 by FINSEQ_1:3;
@@ -992,9 +991,9 @@ existence
      r1 = n choose k by A2;
     hence thesis by A2;
    end;
- A3: for l st l in Seg (n+1) ex x being set st P[l,x]
+ A3: for l be Nat st l in Seg (n+1) ex x being set st P[l,x]
    proof
-    let l;
+    let l be Nat;
     assume l in Seg (n+1);
     then l>=1 & l<=n+1 by FINSEQ_1:3;
     then reconsider k = l-1 as Element of NAT by INT_1:18;
@@ -1003,7 +1002,7 @@ existence
     thus thesis;
    end;
   consider F being FinSequence such that A4:
-   dom F = Seg (n+1) & for l st l in Seg (n+1) holds
+   dom F = Seg (n+1) & for l be Nat st l in Seg (n+1) holds
    P[l,F.l] from FINSEQ_1:sch 1(A1,A3);
       rng F c= REAL
    proof
@@ -1027,10 +1026,10 @@ uniqueness
  proof
   let G,H;
   assume A6: len G = n+1 &
-   (for i,m be natural number st i in dom G & m = i - 1 holds
+   (for i,m be Nat st i in dom G & m = i - 1 holds
    G.i = n choose m);
   assume A7: len H = n+1 &
-   (for i,m be natural number st i in dom H & m = i - 1 holds
+   (for i,m be Nat st i in dom H & m = i - 1 holds
    H.i = n choose m);
      for i st i in dom G holds G.i = H.i
     proof
@@ -1050,9 +1049,8 @@ end;
 canceled;
 
 theorem Th43:
-  for s holds Newton_Coeff s = (1,1) In_Power s
+  Newton_Coeff s = (1,1) In_Power s
  proof
-  let s;
   A1: len (Newton_Coeff s) = s+1 by Def5 .= len ((1,1) In_Power s) by Def4;
     for i st i in dom (Newton_Coeff s) holds
    (Newton_Coeff s).i = ((1,1) In_Power s).i
@@ -1076,9 +1074,8 @@ A5: i>=1 & i<=(s+1) by A2,A3,FINSEQ_1:3;
  end;
 
 theorem
-   for s holds 2|^s = Sum(Newton_Coeff s)
+  2|^s = Sum(Newton_Coeff s)
   proof
-    let s;
      2|^s = (1+1)|^s .= Sum((1,1) In_Power s) by Th41 .= Sum(Newton_Coeff s)
       by Th43;
     hence thesis;
@@ -1094,7 +1091,7 @@ theorem Th45:
     assume A1: l>=1;
      for k holds k*l>=k
     proof
-      defpred P[Element of NAT] means $1*l>=$1;
+      defpred P[Nat] means $1*l>=$1;
    A2:P[0];
    A3:for k st P[k] holds P[k+1]
    proof let k;
@@ -1104,7 +1101,7 @@ theorem Th45:
       k+l>=k+1 by A1,XREAL_1:9;
      hence (k+1)*l>=k+1 by A5,XXREAL_0:2;
     end;
-   thus for k holds P[k] from NAT_1:sch 1(A2,A3);
+   thus for k holds P[k] from NAT_1:sch 2(A2,A3);
   end;
  hence thesis;
 end;
@@ -1150,7 +1147,7 @@ A3:(n+1)/n=n/n+1/n by XCMPLX_1:63
 theorem Th49:
   k/(k+1) < 1
   proof
-    defpred P[Element of NAT] means $1/($1+1)<1;
+    defpred P[Nat] means $1/($1+1)<1;
 A1: P[0];
 A2: P[m] implies P[m+1] proof
     assume m/(m+1)<1;
@@ -1158,14 +1155,14 @@ A2: P[m] implies P[m+1] proof
      (m+1) < ((m+1)+1) by XREAL_1:31;
     hence thesis by REAL_2:142;
    end;
-    for m holds P[m] from NAT_1:sch 1(A1,A2);
+    for m holds P[m] from NAT_1:sch 2(A1,A2);
   hence thesis;
  end;
 
 theorem Th50:
-  for l being Element of NAT holds l! >= l
+  l! >= l
   proof
-    defpred P[Element of NAT] means $1! >= $1;
+    defpred P[Nat] means $1! >= $1;
 A1: P[0];
 A2: for l st P[l] holds P[l+1] proof let l;
     assume A3:l!>=l;
@@ -1182,14 +1179,13 @@ A4: l!*(l+1)=(l+1)! by Th21;
     end;
     hence (l+1)!>=(l+1);
    end;
-   thus for l being Element of NAT holds P[l] from NAT_1:sch 1(A1,A2);
+   for l being Nat holds P[l] from NAT_1:sch 2(A1,A2);
+   hence thesis;
   end;
 
- reserve s,j,r for Element of NAT;
-
 theorem Th51:
-  for m,n st m<>1 holds m divides n implies not m divides (n+1)
-   proof let m,n;
+  m<>1 & m divides n implies not m divides (n+1)
+   proof
     assume that A1:m<>1 and A2:m divides n and A3: m divides (n+1);
     consider t being Nat such that A4: n = m * t by A2,NAT_D:def 3;
     consider s being Nat such that A5: n+1 = m * s by A3,NAT_D:def 3;
@@ -1214,9 +1210,9 @@ theorem
    j divides l & j divides l+1 iff j=1 by Th51,NAT_D:6;
 
 theorem Th53:
-  for k,j st j<>0 holds j divides (j+k)!
+  j<>0 implies j divides (j+k)!
   proof
-    defpred P[Element of NAT] means for j st j<>0 holds j divides (j+$1)!;
+    defpred P[Nat] means for j st j<>0 holds j divides (j+$1)!;
 A1: P[0] by Th47;
 A2: for k st P[k] holds P[k+1]  proof let k;
     assume A3: for j st j<>0 holds j divides (j+k)!;
@@ -1226,7 +1222,8 @@ A2: for k st P[k] holds P[k+1]  proof let k;
       then j divides ((j+k)!)*((j+k)+1) by NAT_D:9;
      hence thesis by Th21;
     end;
-   thus for k holds P[k] from NAT_1:sch 1(A1,A2);
+   for k holds P[k] from NAT_1:sch 2(A1,A2);
+   hence thesis;
   end;
 
 theorem Th54:
@@ -1234,14 +1231,13 @@ theorem Th54:
   proof
     assume that A1: j<=l and A2: j<>0;
     consider k being Nat such that A3: l=j+k by A1,NAT_1:10;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
      l=j+k by A3;
     hence thesis by A2,Th53;
   end;
 
 theorem Th55:
-  for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l
-  proof let l,j;
+  j<>1 & j<>0 & j divides (l!+1) implies j>l
+  proof
     assume that A1: j<>1 and A2: j<>0 and A3: j divides (l!+1);
      not j divides l! by A1,A3,Th51;
     hence thesis by A2,Th54;
@@ -1552,13 +1548,13 @@ end;
 
 :: from GR_CY_2
 
- reserve k,m,n,p for Element of NAT;
+ reserve p,q for Nat;
  reserve i0,i,i1,i2,i3,i4 for Integer;
 
 theorem
-   for n,m st 0 < m holds n mod m= n - m * (n div m)
+   0 < m implies n mod m= n - m * (n div m)
   proof
-   let n,m such that A1: m >0;
+   assume that A1: m >0;
    reconsider z1=m * (n div m),z2=(n mod m) as Integer;
     n - z1 = z1 + z2 -z1 by A1,NAT_D:2;
    hence n -m * (n div m) = n mod m;
@@ -1574,36 +1570,35 @@ theorem
    i2 <> 0 implies i1 = (i1 div i2) * i2 + (i1 mod i2) by INT_1:86;
 
 theorem
-   for m,n st m>0 or n>0 holds ex i,i1 st i*m + i1*n = m hcf n
+  m>0 or n>0 implies ex i,i1 st i*m + i1*n = m hcf n
   proof
-    let m,n;
     assume A1:m>0 or n>0;
     defpred P[Element of NAT] means $1>0 & ex i,i1 st i*m+i1*n=$1;
-A2: ex p st P[p]
+A2: ex p being Element of NAT st P[p]
     proof
       per cases by A1;
       suppose A3:m>0;
-         ex i,i1 st i*m+i1*n=m
+         ex i,i1 be Element of NAT st i*m+i1*n=m
         proof
-          set i1=0;
-           1*m + i1*n=m;
+           1*m + 0*n=m;
           hence thesis;
         end;
         hence thesis by A3;
       end;
       suppose A4:n>0;
-         ex i,i1 st i*m+i1*n=n
+        ex i,i1 be Element of NAT st i*m+i1*n=n
         proof
-          set i=0;
-           i*m + 1*n=n;
+          0*m + 1*n=n;
           hence thesis;
         end;
         hence thesis by A4;
       end;
     end;
-     ex p st P[p] & for n st P[n] holds p <= n from NAT_1:sch 5(A2);
-    then consider p such that A5:p>0 and A6:ex i,i0 st i*m+i0*n=p and
-A7: for k st (k>0 & ex i1,i2 st i1*m+i2*n=k) holds p <= k;
+     ex p be Element of NAT st P[p] & for n be Element of NAT st
+     P[n] holds p <= n  from NAT_1:sch 5(A2);
+    then consider p being Element of NAT such that
+A5: p>0 and A6:ex i,i0 st i*m+i0*n=p and
+A7: for k be Element of NAT st (k>0 & ex i1,i2 st i1*m+i2*n=k) holds p <= k;
     consider i,i0 such that A8:i*m+i0*n=p by A6;
 A9: for k st ex i1,i2 st i1*m+i2*n=k holds p divides k
     proof
@@ -1660,8 +1655,6 @@ A17: p divides n by A9,A15;
 
 :: from NAT_LAT
 
- reserve n,j,k,m,l for Element of NAT;
-
 definition
   func SetPrimes -> Subset of NAT means
 :Def6: for n being Nat holds n in it iff n is prime;
@@ -1707,11 +1700,10 @@ registration
 end;
 
 definition
-  mode Prime is prime Element of NAT;
+  mode Prime is prime Nat;
 end;
 
- reserve
-         x for set;
+reserve x for set;
 
 definition let p be Nat;
   func SetPrimenumber p -> Subset of NAT means :Def7:
@@ -1750,9 +1742,8 @@ A6: x in B;
 end;
 
 theorem Th82:
-  for p being Nat holds SetPrimenumber p c= SetPrimes
+  SetPrimenumber p c= SetPrimes
 proof
-  let p be Nat;
    for x holds x in SetPrimenumber p implies x in SetPrimes
   proof let x;
    assume A1: x in SetPrimenumber p;
@@ -1764,9 +1755,8 @@ proof
 end;
 
 theorem
-   for p,q being Nat st p <= q holds
-    SetPrimenumber p c= SetPrimenumber q
-proof let p,q be Nat;
+  p <= q implies SetPrimenumber p c= SetPrimenumber q
+proof
   assume A1: p <= q;
    for x holds x in SetPrimenumber p implies x in SetPrimenumber q
   proof let x;
@@ -1780,8 +1770,8 @@ proof let p,q be Nat;
 end;
 
 theorem Th84:
-  for p being Nat holds SetPrimenumber p c= Seg p
-proof let p be Nat; let x be set;
+  SetPrimenumber p c= Seg p
+proof let x be set;
   assume A1: x in SetPrimenumber p;
   then reconsider q = x as Element of NAT;
   A2: q < p & q is prime by A1,Def7;
@@ -1790,9 +1780,8 @@ proof let p be Nat; let x be set;
 end;
 
 theorem Th85:
-  for p being Nat holds SetPrimenumber p is finite
+  SetPrimenumber p is finite
 proof
-  let p be Nat;
    SetPrimenumber p c= Seg p by Th84;
   hence thesis by FINSET_1:13;
 end;
@@ -1806,8 +1795,8 @@ end;
  reserve p for Prime;
 
 theorem Th86:
-  for l being Nat ex p st p is prime & p>l
-  proof let l be Nat;
+  ex p st p is prime & p>l
+  proof 
    reconsider l as Element of NAT by ORDINAL1:def 13;
    reconsider two = 2 as Prime by INT_2:44;
     l=0 & (ex p st p is prime & p>l) or (l=1 & (ex p st p is prime & p>l)) or
@@ -1822,7 +1811,7 @@ theorem Th86:
        l<=l! by Th50;
       then 2<=l! by A3,XXREAL_0:2;
       then (2+0) <= (l!+1) by XREAL_1:9;
-      then consider j such that
+      then consider j being Element of NAT such that
       A4: j is prime and A5: j divides (l!+1) by INT_2:48;
       A6: j<>1 by A4,INT_2:def 5;
 A7:   j<>0 by A4,INT_2:def 5;
@@ -1876,7 +1865,7 @@ theorem
    k>=m implies not k in SetPrimenumber m by Def7;
 
 theorem
-   for f being Nat holds SetPrimenumber f \/ {f} is finite;
+  SetPrimenumber n \/ {n} is finite;
 
 theorem Th94:
   for f being Prime, g being Nat st f < g holds
@@ -1887,7 +1876,7 @@ theorem Th94:
     let x be set;
     assume A2: x in SetPrimenumber f\/{f};
     then x in SetPrimenumber f or x in {f} by XBOOLE_0:def 2;
-    then reconsider x as Element of NAT by TARSKI:def 1;
+    then reconsider x as Nat by ORDINAL1:def 13,TARSKI:def 1;
     per cases by A2,XBOOLE_0:def 2;
     suppose x in SetPrimenumber f;
       then x < f & x is prime by Def7;
@@ -1904,9 +1893,9 @@ theorem
    k>=m implies not k in SetPrimenumber m by Def7;
 
 Lm1:
-SetPrimenumber n = {k:k<n & k is prime}
+SetPrimenumber n = {k where k is Element of NAT:k<n & k is prime}
 proof
-  thus SetPrimenumber n c= {k:k<n & k is prime}
+  thus SetPrimenumber n c= {k where k is Element of NAT:k<n & k is prime}
   proof
     let x be set;
     assume
@@ -1916,36 +1905,34 @@ A1: x in SetPrimenumber n;
     hence thesis;
   end;
   let x be set;
-  assume x in {k:k<n & k is prime};
-  then ex k st x=k & k<n & k is prime;
+  assume x in {k where k is Element of NAT:k<n & k is prime};
+  then ex k be Element of NAT st x=k & k<n & k is prime;
   hence thesis by Def7;
 end;
 
 definition let n be Nat;
-  func primenumber n -> Prime means :Def8:
+  func primenumber n -> prime Element of NAT means :Def8:
   n = card SetPrimenumber it;
 existence
 proof
-A1: n in NAT by ORDINAL1:def 13;
   defpred P1[Nat] means
   ex m st $1=card SetPrimenumber m & m is Prime;
-    SetPrimenumber 2 = {k:k<2 & k is prime} by Lm1;
+    SetPrimenumber 2 = {k where k is Element of NAT:k<2 & k is prime} by Lm1;
    then A2: P1[0] by CARD_1:78,INT_2:44;
 A3: for n st P1[n] holds P1[n+1]
     proof let n;
      given m such that
 A4:  n=card SetPrimenumber m & m is Prime;
-     defpred P[Nat] means $1 is prime & $1>m;
-     A5: ex k st P[k]
+     defpred P[Element of NAT] means $1 is prime & $1>m;
+     A5: ex k be Element of NAT st P[k]
      proof
-        ex p st p is prime & p>m by Th86;
-       then consider k being Nat such that
-A6:    P[k];
-        k in NAT by ORDINAL1:def 13;
+       consider p such that
+A6:    p is prime & p>m by Th86;
+        p in NAT by ORDINAL1:def 13;
        hence thesis by A6;
      end;
-     consider k such that
-A7:  P[k] & for l st P[l] holds k <= l from NAT_1:sch 5(A5);
+     consider k be Element of NAT such that
+A7:  P[k] & for l be Element of NAT st P[l] holds k <= l from NAT_1:sch 5(A5);
      take k;
 A8:  SetPrimenumber k=SetPrimenumber m\/{m}
      proof
@@ -1973,12 +1960,14 @@ then A11:      s<=m by A7;
      hence n + 1 = card SetPrimenumber k by A4,A8,CARD_2:54;
      thus k is Prime by A7;
    end;
-    for n holds P1[n] from NAT_1:sch 1(A2,A3);
-   then ex m st n=card SetPrimenumber m & m is Prime by A1;
-   hence thesis;
+    for n holds P1[n] from NAT_1:sch 2(A2,A3);
+   then consider m such that
+A13: n=card SetPrimenumber m & m is Prime;
+     m in NAT by ORDINAL1:def 13;
+   hence thesis by A13;
 end;
 uniqueness
- proof let f,g be Prime;
+ proof let f,g be prime Element of NAT;
    assume that
 A13: n = card SetPrimenumber f and
 A14: n = card SetPrimenumber g;
@@ -2005,18 +1994,19 @@ A19: not g in SetPrimenumber g by Def7;
 end;
 
 theorem
-   SetPrimenumber n = {k: k<n & k is prime} by Lm1;
+   SetPrimenumber n = {k where k is Element of NAT: k<n & k is prime} by Lm1;
 
 theorem Th97: :: Euclid
   SetPrimes is infinite
 proof
   assume A1: SetPrimes is finite;
   then reconsider SP = SetPrimes as finite set;
-  consider n such that A2: SetPrimes,Seg n are_equipotent by A1,FINSEQ_1:77;
+  consider n be Nat such that
+A2: SetPrimes,Seg n are_equipotent by A1,FINSEQ_1:77;
   set p=primenumber (n+1);
    Card SetPrimes = Card Seg n by A2,CARD_1:21;
   then Card SetPrimes = Card n by FINSEQ_1:76;
-  then A3: card SP = n by CARD_1:def 11;
+  then A3: card SP = n by CARD_1:66;
 A4: SetPrimenumber p c= SP by Th82;
   set SPp = SetPrimenumber p;
 A5: card SPp <= card SP by A4,CARD_1:80;
@@ -2029,13 +2019,12 @@ registration
   coherence by Th97;
 end;
 
- reserve m,i for Nat;
+ reserve i for Nat;
 
 theorem :: divisibility
-   for i st i is prime holds
+  i is prime implies
     for m,n being Nat holds i divides m * n implies i divides m or i divides n
 proof
-  let i;
   assume A1: i is prime;
    given m,n being Nat such that
 A2: not (i divides m * n implies (i divides m or i divides n));
@@ -2136,7 +2125,7 @@ A31:  m1 > 0
         hence thesis by NAT_D:def 3;
       end;
        not p' divides m1 by A12,A29,NAT_D:9;
-      hence contradiction by A30,A10,A12,A32,A34;
+      hence contradiction by A10,A12,A30,A32,A34;
    end;
     m >= 2
    proof
@@ -2162,14 +2151,12 @@ theorem
 :: from SCMFSA9A, 2005.11.16, A.T
 
 theorem
-  for m,n being natural number holds
- m qua Integer div n = m div n &
- m qua Integer mod n = m mod n;
+  m qua Integer div n = m div n &
+  m qua Integer mod n = m mod n;
 
 :: from HEINE, 2006.01.07, A.T
 
- reserve k for Nat,
-         x for real number;
+ reserve x for real number;
 
 theorem
   x > 0 implies x|^k > 0
@@ -2206,9 +2193,9 @@ end;
 
 :: from HEINE, 2007.07.27, A.T.
 
-  defpred P[Element of NAT] means 2|^$1 >= $1 + 1;
-  Lm1: P[0] by Th9;
-  Lm2: for n st P[n] holds P[n+1]
+  defpred P[Nat] means 2|^$1 >= $1 + 1;
+  Lm2: P[0] by Th9;
+  Lm3: for n st P[n] holds P[n+1]
       proof
        let n; assume 2|^n >= n+1;
         then 2|^n - n >= 1 & 2 >= 0 by XREAL_1:21;
@@ -2223,7 +2210,7 @@ end;
 
 theorem Th104:
   2|^n >= n + 1
-   proof for n holds P[n] from NAT_1:sch 1(Lm1,Lm2); hence thesis; end;
+  proof for n holds P[n] from NAT_1:sch 2(Lm2,Lm3); hence thesis; end;
 
 theorem
   2|^n > n

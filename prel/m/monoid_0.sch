@@ -3,8 +3,8 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -85,7 +85,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -180,7 +180,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -261,7 +261,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -271,7 +271,7 @@
 </For>
 </For>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="130">
+<Func kind="K" nr="131">
 <Func kind="F" nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
@@ -362,7 +362,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="145">
+<Func kind="K" nr="146">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -374,7 +374,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="130">
+<Func kind="K" nr="131">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

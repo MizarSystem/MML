@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -33,7 +33,7 @@
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="132">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -90,7 +90,7 @@
 <Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="K" nr="51">
-<Func kind="K" nr="132">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -136,11 +136,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="7">
 <LocusVar nr="1"/>
-<Func kind="K" nr="133">
+<Func kind="K" nr="134">
 <LocusVar nr="2"/>
-<Func kind="K" nr="104"/>
+<Func kind="K" nr="105"/>
 </Func>
 </Func>
 <Cluster>
@@ -158,7 +158,7 @@
 <Typ kind="M" nr="9">
 <Cluster/>
 <Func kind="K" nr="51">
-<Func kind="K" nr="132">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -188,7 +188,7 @@
 </Adjective>
 </Cluster>
 <Func kind="K" nr="51">
-<Func kind="K" nr="132">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -198,7 +198,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="16">
+<Func kind="K" nr="12">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

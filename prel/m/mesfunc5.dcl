@@ -10,8 +10,8 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -19,22 +19,22 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="SEQFUNC"/>
-<ArticleID name="CARD_3"/>
-<ArticleID name="PROB_1"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SUPINF_1"/>
-<ArticleID name="CARD_4"/>
-<ArticleID name="SUPINF_2"/>
-<ArticleID name="MEASURE1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
 <ArticleID name="RFUNCT_3"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="SUPINF_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="PROB_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="CARD_4"/>
+<ArticleID name="SUPINF_2"/>
+<ArticleID name="MEASURE1"/>
 <ArticleID name="MESFUNC5"/>
 </Signature>
 <CCluster>
@@ -47,7 +47,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="57"/>
+<Adjective nr="65"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>

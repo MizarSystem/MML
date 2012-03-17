@@ -100,4 +100,28 @@
 <Adjective nr="15"/>
 </Cluster>
 </CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="15"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="13"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="17"/>
+</Cluster>
+</CCluster>
 </Registrations>

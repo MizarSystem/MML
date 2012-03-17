@@ -2,9 +2,9 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -19,11 +19,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
@@ -62,7 +62,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="75">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>
@@ -72,7 +72,7 @@
 </Adjective>
 </Cluster>
 <Func kind="K" nr="214">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>
@@ -94,7 +94,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="75">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>
@@ -104,7 +104,7 @@
 </Adjective>
 </Cluster>
 <Func kind="K" nr="214">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>
@@ -135,7 +135,7 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="75">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>
@@ -145,7 +145,7 @@
 </Adjective>
 </Cluster>
 <Func kind="K" nr="214">
-<Func kind="K" nr="2">
+<Func kind="K" nr="15">
 <Func kind="K" nr="87"/>
 <Func kind="K" nr="240">
 <Func kind="K" nr="87"/>

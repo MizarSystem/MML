@@ -7,20 +7,21 @@
 environ
 
  vocabularies FINSUB_1, BINOP_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETWISEO, BOOLE,
-      RELAT_1, TARSKI, FINSEQOP, FUNCOP_1, SUBSET_1, FUNCT_4, FINSOP_1, NAT_1,
+      RELAT_1, TARSKI, FINSEQOP, FUNCOP_1, SUBSET_1, FUNCT_4, FINSOP_1,
       COMPLEX1;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, NAT_1, RELAT_1, RELSET_1,
-      FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1,
-      SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
+      RELSET_1, FUNCT_1, FINSEQ_1, FINSUB_1, PARTFUN1, FUNCT_2, BINOP_1,
+      FUNCOP_1, SETWISEO, FINSEQ_2, FINSEQOP, FINSOP_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, XREAL_0, NAT_1,
       FINSEQOP, FINSOP_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
-      ARYTM_3, FINSUB_1, XREAL_0, FINSEQ_1, FINSEQ_2;
+      FINSUB_1, XREAL_0, FINSEQ_1, FINSEQ_2, NAT_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions BINOP_1, XBOOLE_0, RELAT_1;
  theorems TARSKI, ENUMSET1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
       FINSEQ_1, FINSUB_1, BINOP_1, SETWISEO, FINSEQ_2, WELLORD2, CARD_1,
-      FINSEQOP, RELAT_1, FUNCT_4, FINSOP_1, XBOOLE_0, XBOOLE_1, XREAL_1;
+      FINSEQOP, RELAT_1, FUNCT_4, FINSOP_1, XBOOLE_0, XBOOLE_1, XREAL_1,
+      ORDINAL1;
  schemes NAT_1, SETWISEO, FINSEQ_2;
 
 begin
@@ -37,12 +38,13 @@ begin
  reserve g for Function of C',D;
  reserve H for BinOp of E;
  reserve h for Function of D,E;
- reserve i,j for Element of NAT;
+ reserve i,j for Nat;
  reserve s for Function;
  reserve p,q for FinSequence of D;
  reserve T1,T2 for Element of i-tuples_on D;
 
  Lm1:
+for i be Nat holds
    Seg i is Element of Fin NAT by FINSUB_1:def 5;
 
 Lm2:
@@ -702,9 +704,10 @@ theorem Th22:
    (not i in dom p implies [#](p,d).i = d)
 proof
  thus i in dom p implies [#](p,d).i = p.i by FUNCT_4:14;
+A1: i in NAT by ORDINAL1:def 13;
  assume
      not i in dom p;
- hence [#](p,d).i = (NAT --> d).i by FUNCT_4:12 .= d by FUNCOP_1:13;
+ hence [#](p,d).i = (NAT --> d).i by FUNCT_4:12 .= d by A1,FUNCOP_1:13;
 end;
 
 theorem
@@ -723,7 +726,7 @@ A2:   x in Seg k;
  end;
 
 theorem
-       [#](p^q,d)|(dom p) = p
+  [#](p^q,d)|(dom p) = p
  proof set k = len p, f = [#](p^q,d);
       Seg k c= NAT;
   then Seg k c= dom f by FUNCT_2:def 1;
@@ -731,19 +734,21 @@ then A1:  dom (f|Seg k) = Seg k & dom p = Seg k by FINSEQ_1:def 3,RELAT_1:91;
       now let x;
    assume
 A2:   x in Seg k;
-A3:   Seg(len(p^q)) = dom (p^q) by FINSEQ_1:def 3;
+then
+A3: x is Nat by ORDINAL1:def 13;
+A4:   Seg(len(p^q)) = dom (p^q) by FINSEQ_1:def 3;
        k <= k + len q by NAT_1:12;
    then k <= len (p^q) by FINSEQ_1:35;
    then Seg k c= Seg len(p^q) by FINSEQ_1:7;
    then (f|Seg k).x = f.x & x in Seg(len(p^q)) by A1,A2,FUNCT_1:70;
-   hence (f|Seg k).x = (p^q).x by A3,Th22
-                    .= p.x by A1,A2,FINSEQ_1:def 7;
+   hence (f|Seg k).x = (p^q).x by A3,A4,Th22
+                    .= p.x by A1,A2,A3,FINSEQ_1:def 7;
   end;
   hence thesis by A1,FUNCT_1:9;
  end;
 
 theorem
-       rng [#](p,d) = rng p \/ {d}
+  rng [#](p,d) = rng p \/ {d}
  proof
       now let y;
    thus y in rng [#](p,d) implies y in rng p \/ {d}
@@ -769,7 +774,7 @@ A3:      i in dom p;
 A4:   y in rng p \/ {d};
         now per cases by A4,XBOOLE_0:def 2;
      suppose y in rng p;
-       then consider i such that
+       then consider i being Nat such that
 A5:     i in dom p & y = p.i by FINSEQ_2:11;
           i in NAT & y = [#](p,d).i by A5,Th22;
       hence y in rng [#](p,d) by FUNCT_2:6;
@@ -892,9 +897,13 @@ A5:    not i in dom p;
   hence thesis by FUNCT_2:113;
  end;
 
-definition let i;
- redefine func Seg i -> Element of Fin NAT;
-  coherence by Lm1;
+notation let i be Nat;
+  synonym finSeg i for Seg i;
+end;
+
+definition let i be Nat;
+ redefine func finSeg i -> Element of Fin NAT;
+ coherence by Lm1;
 end;
 
 notation let D,p,F;
@@ -905,7 +914,7 @@ definition let D,p,F;
  assume
 A1: (F has_a_unity or len p >= 1) & F is associative commutative;
  redefine func F $$ p equals
-:Def2: F $$(dom p,[#](p,the_unity_wrt F));
+:Def2: F $$(findom p,[#](p,the_unity_wrt F));
   compatibility by A1,FINSOP_1:4;
  end;
 
@@ -916,7 +925,7 @@ theorem Th35:
  proof assume
 A1:  F has_a_unity;
    set e = the_unity_wrt F;
-    defpred X[Element of NAT] means F"**"($1|->e) = e;
+    defpred X[Nat] means F"**"($1|->e) = e;
    F"**"(0|->e) = F"**" <*>D by FINSEQ_2:72
       .= e by A1,FINSOP_1:11;
     then A2:  X[0];
@@ -928,7 +937,7 @@ A4:   F"**"(i|->e) = e;
           .= F.(F"**"(i|->e),e) by A1,FINSOP_1:5
           .= e by A1,A4,SETWISEO:23;
    end;
-       for i holds X[i] from NAT_1:sch 1(A2,A3);
+       for i holds X[i] from NAT_1:sch 2(A2,A3);
   hence thesis;
  end;
 
@@ -971,7 +980,7 @@ A3:  now per cases by A2;
    end;
    suppose
 A4:   i > 0 & j > 0;
-      defpred X[Element of NAT] means $1 <> 0
+      defpred X[Nat] means $1 <> 0
         implies F"**"((i*$1)|->d) = F"**"($1|->(F"**"(i|->d)));
 A5:  X[0];
 A6:  for j st X[j] holds X[j+1]
@@ -997,7 +1006,7 @@ then A9:     i*j >= 1+0 by NAT_1:13;
     end;
     hence thesis;
    end;
-       for j holds X[j] from NAT_1:sch 1(A5,A6);
+       for j holds X[j] from NAT_1:sch 2(A5,A6);
    hence thesis by A4;
  end;
  end;
@@ -1082,10 +1091,10 @@ A7:   len p = len(G.:(p,q)) by A6,FINSEQ_2:86;
 A8:   dom p = Seg len p & dom q = Seg len q by FINSEQ_1:def 3;
 A9:   dom(G.:(p,q)) = Seg len(G.:(p,q)) by FINSEQ_1:def 3;
    thus G.(F "**"p,F "**"q)
-      = G.(F $$(dom p,[#](p,e)),F "**"q) by A1,A2,A3,Def2
-     .= G.(F $$(dom p,[#](p,e)),F $$(dom q,[#](q,e))) by A1,A2,A3,Def2
-     .= F $$(dom p,G.:([#](p,e),[#](q,e))) by A1,A2,A3,A4,A5,A6,A8,Th11
-     .= F $$(dom(G.:(p,q)),[#](G.:(p,q),e)) by A4,A6,A7,A8,A9,Lm4
+      = G.(F $$(findom p,[#](p,e)),F "**"q) by A1,A2,A3,Def2
+     .= G.(F $$(findom p,[#](p,e)),F $$(findom q,[#](q,e))) by A1,A2,A3,Def2
+     .= F $$(findom p,G.:([#](p,e),[#](q,e))) by A1,A2,A3,A4,A5,A6,A8,Th11
+     .= F $$(findom(G.:(p,q)),[#](G.:(p,q),e)) by A4,A6,A7,A8,A9,Lm4
      .= F "**"(G.:(p,q)) by A1,A2,A3,Def2;
  end;
 
@@ -1148,9 +1157,9 @@ A3:  G is_distributive_wrt F and
 A4:  G.(d,e) = e;
 A5:  len p = len(G[;](d,p)) by FINSEQ_2:92;
 A6:  Seg len p = dom p & Seg len(G[;](d,p)) = dom(G[;](d,p)) by FINSEQ_1:def 3;
-   thus G.(d,F"**"p) = G.(d,F$$(dom p,[#](p,e))) by A1,A2,Def2
-                  .= F $$(dom p,G[;](d,[#](p,e))) by A1,A2,A3,A4,Th14
-                  .= F $$(dom p,[#](G[;](d,p),e)) by A4,Lm6
+   thus G.(d,F"**"p) = G.(d,F$$(findom p,[#](p,e))) by A1,A2,Def2
+                  .= F $$(findom p,G[;](d,[#](p,e))) by A1,A2,A3,A4,Th14
+                  .= F $$(findom p,[#](G[;](d,p),e)) by A4,Lm6
                   .= F "**"(G[;](d,p)) by A1,A2,A5,A6,Def2;
  end;
 
@@ -1165,9 +1174,9 @@ A3:  G is_distributive_wrt F and
 A4:  G.(e,d) = e;
 A5:  len p = len(G[:](p,d)) by FINSEQ_2:98;
 A6:  Seg len p = dom p & Seg len(G[:](p,d)) = dom(G[:](p,d)) by FINSEQ_1:def 3;
-   thus G.(F"**"p,d) = G.(F$$(dom p,[#](p,e)),d) by A1,A2,Def2
-                  .= F $$(dom p,G[:]([#](p,e),d)) by A1,A2,A3,A4,Th15
-                  .= F $$(dom p,[#](G[:](p,d),e)) by A4,Lm5
+   thus G.(F"**"p,d) = G.(F$$(findom p,[#](p,e)),d) by A1,A2,Def2
+                  .= F $$(findom p,G[:]([#](p,e),d)) by A1,A2,A3,A4,Th15
+                  .= F $$(findom p,[#](G[:](p,d),e)) by A4,Lm5
                   .= F "**"(G[:](p,d)) by A1,A2,A5,A6,Def2;
  end;
 

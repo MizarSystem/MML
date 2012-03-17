@@ -11,24 +11,21 @@ environ
       SCMPDS_5, SCMFSA6B, UNIALG_2, SCMFSA7B, SCMFSA_7, SCMPDS_7, ARYTM_1,
       RELOC, FUNCT_4, SCMPDS_3, FUNCT_7, SCM_1, BOOLE, AMI_5, SCMISORT,
       SCMFSA_9, SCMFSA8B, ABSVALUE, SCPISORT;
- notations TARSKI,
-      XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_4,
-      INT_1, NAT_1, COMPLEX1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2, SCMPDS_3,
-      CARD_1, SCMPDS_4, SCM_1, SCMPDS_5, SCMPDS_6, SCMP_GCD, DOMAIN_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
+      FUNCT_4, INT_1, NAT_1, COMPLEX1, AMI_1, AMI_2, FUNCT_7, SCMPDS_2,
+      SCMPDS_3, CARD_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, DOMAIN_1,
       FINSEQ_1, SCMPDS_7, SCMPDS_8, GRAPH_2, RFINSEQ, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, SEQ_1, INT_2, RFINSEQ, SCM_1,
-      AMI_5, SFMASTR3, SCMPDS_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD,
-      SCMPDS_7, SCMPDS_8;
+      SCMPDS_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMP_GCD, SCMPDS_7, SCMPDS_8;
  registrations SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FRAENKEL, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1, CARD_3, STRUCT_0,
-      SCMPDS_2, SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_7, SCMPDS_8, AMI_1;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1, CARD_3, SCMPDS_2,
+      SCMPDS_4, SCMPDS_5, SCMPDS_6, SCMPDS_7, SCMPDS_8, AMI_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions SCMPDS_2, SCMP_GCD,AMI_3;
+ definitions SCMPDS_2, SCMP_GCD, AMI_3;
  theorems AMI_1, AMI_3, NAT_1, REAL_1, TARSKI, FUNCT_4, INT_1, SCMPDS_2,
-      SCMPDS_3, GRFUNC_1, SCMPDS_4, SCMPDS_5, SCMPDS_6,
-      ENUMSET1, SCMP_GCD, SCMPDS_7, SCMPDS_8, ABSVALUE, FINSEQ_1,
-      FINSEQ_2, RFINSEQ, RELAT_1, XBOOLE_1, XREAL_1, ORDINAL1, AMI_5,
-      XXREAL_0, GRAPH_2, AMI_2, ZFMISC_1;
+      SCMPDS_3, GRFUNC_1, SCMPDS_4, SCMPDS_5, SCMPDS_6, ENUMSET1, SCMP_GCD,
+      SCMPDS_7, SCMPDS_8, ABSVALUE, FINSEQ_1, FINSEQ_2, RFINSEQ, RELAT_1,
+      XBOOLE_1, XREAL_1, ORDINAL1, XXREAL_0, GRAPH_2, AMI_2, ZFMISC_1;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Preliminaries
@@ -85,15 +82,16 @@ theorem Th2:
      for i be Element of NAT st 1<=i & i <= len f holds f.i=s.intpos(m+i)
 proof
    let s be State of SCMPDS,n,m be Element of NAT;
-   deffunc U(Element of NAT) = s.intpos (m+$1);
+   deffunc U(Nat) = s.intpos (m+$1);
    consider f being FinSequence such that
-A1:  len f = n & for i be Element of NAT st i in Seg n holds f.i=U(i)
-from FINSEQ_1:sch 2;
-          now
-       let i be Element of NAT;
+A1:  len f = n & for i be Nat st i in Seg n holds f.i=U(i)
+     from FINSEQ_1:sch 2;
+     now
+       let i be Nat;
+       reconsider a = i as Element of NAT by ORDINAL1:def 13;
        assume i in dom f;
        then i in Seg n by A1,FINSEQ_1:def 3;
-       then f.i = s.intpos (m+i) by A1;
+       then f.i = s.intpos (m+a) by A1;
        hence f.i in INT by INT_1:def 2;
     end;
     then reconsider f as FinSequence of INT by FINSEQ_2:14;
@@ -405,7 +403,7 @@ then A36:     (Computation t2).m2 | D = t5 | D
         by A11,A14,A16,A17,A25,A27,SCMPDS_7:36;
         A37: dom (t | A) = A by SCMPDS_6:1;
 A38:     t5|D =(Result t2)|D by A15,A36,AMI_1:122
-        .= (Result t2 +* t | A)|D by A37,FUNCT_4:76,AMI_2:29
+        .= (Result t2 +* t | A)|D by A37,AMI_2:29,FUNCT_4:76
         .= Jt | D by SCMPDS_4:def 8;
 
 A39:     t5.a()=(Computation t2).m2.a() by A36,SCMPDS_4:23
@@ -489,8 +487,8 @@ AMI_1:51
               end;
               suppose A60:k=m3;
                      l1 in dom pFOR by A32,SCMPDS_6:18;
-               hence IC (Computation t3).k in dom pFOR by A11,A14,A16,A17,A25,
-A27,A35,A42,A60,SCMPDS_7:36;
+               hence IC (Computation t3).k in dom pFOR by A11,A14,A16,A17,A25
+,A27,A35,A42,A60,SCMPDS_7:36;
             end;
             end;
           end;
@@ -1021,7 +1019,7 @@ Lm7:
   IExec(B1,s).a2=s.a2 & IExec(B1,s).a3=s.a3 &
   IExec(B1,s).a6 < s.a6 &
   IExec(B1,s).a4 >= 7+IExec(B1,s).a6 &
-  (for i be Element of NAT st i>=7 & i<>s.a4-1 & i<>s.a4 holds
+  (for i be Nat st i>=7 & i<>s.a4-1 & i<>s.a4 holds
     IExec(B1,s).intpos i=s.intpos i) &
   (s.DataLoc(s.a4,-1) > s.DataLoc(s.a4,0) implies
      IExec(B1,s).DataLoc(s.a4,-1)=s.DataLoc(s.a4,0) &
@@ -1053,88 +1051,88 @@ A8:  7+s.a6>7+0 by A1,XREAL_1:8;
 then s.a4 > 7 by A1,XXREAL_0:2;
      then 2*(s.a4) > 2*7 by XREAL_1:70;
 then A9:  2*(s.a4)+1>14+1 by XREAL_1:8;
-B10:  abs(s.a4)=s.a4 by A1,A8,ABSVALUE:def 1;
+A10:  abs(s.a4)=s.a4 by A1,A8,ABSVALUE:def 1;
 
-A18: t0.a=0 by A1,SCMPDS_5:40;
-A19: t0.a1=s.a1 by SCMPDS_5:40;
-A20: t0.a2=s.a2 by SCMPDS_5:40;
-A21: t0.a3=s.a3 by SCMPDS_5:40;
-A22: t0.a4=s.a4 by SCMPDS_5:40;
-A23: t0.a6=s.a6 by SCMPDS_5:40;
-A24: t0.x=s.x by SCMPDS_5:40;
-A25: t0.y=s.y by SCMPDS_5:40;
+A11: t0.a=0 by A1,SCMPDS_5:40;
+A12: t0.a1=s.a1 by SCMPDS_5:40;
+A13: t0.a2=s.a2 by SCMPDS_5:40;
+A14: t0.a3=s.a3 by SCMPDS_5:40;
+A15: t0.a4=s.a4 by SCMPDS_5:40;
+A16: t0.a6=s.a6 by SCMPDS_5:40;
+A17: t0.x=s.x by SCMPDS_5:40;
+A18: t0.y=s.y by SCMPDS_5:40;
 
-A26: DataLoc(t0.a,5)=intpos (0+5) by A18,SCMP_GCD:5;
+A19: DataLoc(t0.a,5)=intpos (0+5) by A11,SCMP_GCD:5;
      then
-X2:  abs(t0.a+5)=0+5 by ZFMISC_1:33;
-      a<>DataLoc(t0.a,5) by AMI_3:52,A26;
-then A27: t1.a=0 by A18,SCMPDS_2:59;
-           a1<>DataLoc(t0.a,5) by A26,AMI_3:52;
-then A28: t1.a1=s.a1 by A19,SCMPDS_2:59;
-           a2<>DataLoc(t0.a,5) by A26,AMI_3:52;
-then A29: t1.a2=s.a2 by A20,SCMPDS_2:59;
-           a3<>DataLoc(t0.a,5) by A26,AMI_3:52;
-then A30: t1.a3=s.a3 by A21,SCMPDS_2:59;
-           a4<>DataLoc(t0.a,5) by A26,AMI_3:52;
-then A31: t1.a4=s.a4 by A22,SCMPDS_2:59;
-A32: t1.a5=s.x by A22,A24,A26,SCMPDS_2:59;
-           a6<>DataLoc(t0.a,5) by A26,AMI_3:52;
-then A33: t1.a6=s.a6 by A23,SCMPDS_2:59;
-           abs(s.a4+-1)<>abs(t0.a+5) by A5,A7,X2;
+A20:  abs(t0.a+5)=0+5 by ZFMISC_1:33;
+      a<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A21: t1.a=0 by A11,SCMPDS_2:59;
+           a1<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A22: t1.a1=s.a1 by A12,SCMPDS_2:59;
+           a2<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A23: t1.a2=s.a2 by A13,SCMPDS_2:59;
+           a3<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A24: t1.a3=s.a3 by A14,SCMPDS_2:59;
+           a4<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A25: t1.a4=s.a4 by A15,SCMPDS_2:59;
+A26: t1.a5=s.x by A15,A17,A19,SCMPDS_2:59;
+           a6<>DataLoc(t0.a,5) by A19,AMI_3:52;
+then A27: t1.a6=s.a6 by A16,SCMPDS_2:59;
+           abs(s.a4+-1)<>abs(t0.a+5) by A5,A7,A20;
          then x<>DataLoc(t0.a,5) by ZFMISC_1:33;
-then A34: t1.x=s.x by A24,SCMPDS_2:59;
-      abs(s.a4+0)<>abs(t0.a+5) by A9,B10,X2;
+then A28: t1.x=s.x by A17,SCMPDS_2:59;
+      abs(s.a4+0)<>abs(t0.a+5) by A9,A10,A20;
       then y<>DataLoc(t0.a,5) by ZFMISC_1:33;
-then A35: t1.y=s.y by A25,SCMPDS_2:59;
-A36: now let i be Element of NAT;
+then A29: t1.y=s.y by A18,SCMPDS_2:59;
+A30: now let i be Element of NAT;
         assume i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XXREAL_0:2;
-        then intpos i <> DataLoc(t0.a,5) by A26,AMI_3:52;
+        then intpos i <> DataLoc(t0.a,5) by A19,AMI_3:52;
         hence t1.intpos i=t0.intpos i by SCMPDS_2:59
         .=s.intpos i by SCMPDS_5:40;
       end;
 
-A37: DataLoc(t1.a,5)=intpos (0+5) by A27,SCMP_GCD:5;
+A31: DataLoc(t1.a,5)=intpos (0+5) by A21,SCMP_GCD:5;
      then
-X3:  abs(t1.a+5)=0+5 by ZFMISC_1:33;
-A38: a<>DataLoc(t1.a,5) by AMI_3:52,A37;
-A39: t2.a=Exec(k2, t1).a by SCMPDS_5:47
-     .=0 by A27,A38,SCMPDS_2:62;
-A40:  a1<>DataLoc(t1.a,5) by A37,AMI_3:52;
-A41: t2.a1=Exec(k2, t1).a1 by SCMPDS_5:47
-     .=s.a1 by A28,A40,SCMPDS_2:62;
-A42: a2<>DataLoc(t1.a,5) by A37,AMI_3:52;
-A43: t2.a2=Exec(k2, t1).a2 by SCMPDS_5:47
-     .=s.a2 by A29,A42,SCMPDS_2:62;
-A44: a3<>DataLoc(t1.a,5) by A37,AMI_3:52;
-A45: t2.a3=Exec(k2, t1).a3 by SCMPDS_5:47
-     .=s.a3 by A30,A44,SCMPDS_2:62;
-A46: a4<>DataLoc(t1.a,5) by A37,AMI_3:52;
-A47: t2.a4=Exec(k2, t1).a4 by SCMPDS_5:47
-     .=s.a4 by A31,A46,SCMPDS_2:62;
-A48: t2.a5=Exec(k2, t1).a5 by SCMPDS_5:47
-     .=s.x-s.y by A31,A32,A35,A37,SCMPDS_2:62;
-then A49: t2.DataLoc(t2.a,5)=s.x-s.y by A39,SCMP_GCD:5;
-A50: a6<>DataLoc(t1.a,5) by A37,AMI_3:52;
-A51: t2.a6=Exec(k2, t1).a6 by SCMPDS_5:47
-     .=s.a6 by A33,A50,SCMPDS_2:62;
-     abs(s.a4+-1)<>abs(t1.a+5) by A5,A7,X3;
+A32:  abs(t1.a+5)=0+5 by ZFMISC_1:33;
+A33: a<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A34: t2.a=Exec(k2, t1).a by SCMPDS_5:47
+     .=0 by A21,A33,SCMPDS_2:62;
+A35:  a1<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A36: t2.a1=Exec(k2, t1).a1 by SCMPDS_5:47
+     .=s.a1 by A22,A35,SCMPDS_2:62;
+A37: a2<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A38: t2.a2=Exec(k2, t1).a2 by SCMPDS_5:47
+     .=s.a2 by A23,A37,SCMPDS_2:62;
+A39: a3<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A40: t2.a3=Exec(k2, t1).a3 by SCMPDS_5:47
+     .=s.a3 by A24,A39,SCMPDS_2:62;
+A41: a4<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A42: t2.a4=Exec(k2, t1).a4 by SCMPDS_5:47
+     .=s.a4 by A25,A41,SCMPDS_2:62;
+A43: t2.a5=Exec(k2, t1).a5 by SCMPDS_5:47
+     .=s.x-s.y by A25,A26,A29,A31,SCMPDS_2:62;
+then A44: t2.DataLoc(t2.a,5)=s.x-s.y by A34,SCMP_GCD:5;
+A45: a6<>DataLoc(t1.a,5) by A31,AMI_3:52;
+A46: t2.a6=Exec(k2, t1).a6 by SCMPDS_5:47
+     .=s.a6 by A27,A45,SCMPDS_2:62;
+     abs(s.a4+-1)<>abs(t1.a+5) by A5,A7,A32;
      then
-A52: x<>DataLoc(t1.a,5) by ZFMISC_1:33;
-A53: t2.x=Exec(k2, t1).x by SCMPDS_5:47
-     .=s.x by A34,A52,SCMPDS_2:62;
-     abs(s.a4+0)<>abs(t1.a+5) by A9,B10,X3;
+A47: x<>DataLoc(t1.a,5) by ZFMISC_1:33;
+A48: t2.x=Exec(k2, t1).x by SCMPDS_5:47
+     .=s.x by A28,A47,SCMPDS_2:62;
+     abs(s.a4+0)<>abs(t1.a+5) by A9,A10,A32;
      then
-A54: y<>DataLoc(t1.a,5) by ZFMISC_1:33;
-A55: t2.y=Exec(k2, t1).y by SCMPDS_5:47
-     .=s.y by A35,A54,SCMPDS_2:62;
-A56: now let i be Element of NAT;
-        assume A57: i>=7 & i<>s.a4-1 & i <> s.a4;
+A49: y<>DataLoc(t1.a,5) by ZFMISC_1:33;
+A50: t2.y=Exec(k2, t1).y by SCMPDS_5:47
+     .=s.y by A29,A49,SCMPDS_2:62;
+A51: now let i be Element of NAT;
+        assume A52: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XXREAL_0:2;
-      then A58: intpos i <> DataLoc(t1.a,5) by A37,AMI_3:52;
+      then A53: intpos i <> DataLoc(t1.a,5) by A31,AMI_3:52;
         thus t2.intpos i=Exec(k2, t1).intpos i by SCMPDS_5:47
-        .=t1.intpos i by A58,SCMPDS_2:62
-        .=s.intpos i by A36,A57;
+        .=t1.intpos i by A53,SCMPDS_2:62
+        .=s.intpos i by A30,A52;
       end;
 
       set Fi= (a,6):=0,
@@ -1144,366 +1142,367 @@ A56: now let i be Element of NAT;
           t5=IExec(k3 ';' k4,t2),
           t6=Exec(k3, t02);
 
-A59: t02.a=0 by A39,SCMPDS_5:40;
-A60: t02.a1=s.a1 by A41,SCMPDS_5:40;
-A61: t02.a2=s.a2 by A43,SCMPDS_5:40;
-A62: t02.a3=s.a3 by A45,SCMPDS_5:40;
-A63: t02.a4=s.a4 by A47,SCMPDS_5:40;
-A64: t02.a6=s.a6 by A51,SCMPDS_5:40;
-A65: t02.x=s.x by A53,SCMPDS_5:40;
-A66: t02.y=s.y by A55,SCMPDS_5:40;
+A54: t02.a=0 by A34,SCMPDS_5:40;
+A55: t02.a1=s.a1 by A36,SCMPDS_5:40;
+A56: t02.a2=s.a2 by A38,SCMPDS_5:40;
+A57: t02.a3=s.a3 by A40,SCMPDS_5:40;
+A58: t02.a4=s.a4 by A42,SCMPDS_5:40;
+A59: t02.a6=s.a6 by A46,SCMPDS_5:40;
+A60: t02.x=s.x by A48,SCMPDS_5:40;
+A61: t02.y=s.y by A50,SCMPDS_5:40;
 
-A67:  DataLoc(t02.a,5)=intpos (0+5) by A59,SCMP_GCD:5;
+A62:  DataLoc(t02.a,5)=intpos (0+5) by A54,SCMP_GCD:5;
      then
-X4:  abs(t02.a+5)=0+5 by ZFMISC_1:33;
-     a<>DataLoc(t02.a,5) by AMI_3:52,A67;
-then A68: t6.a=0 by A59,SCMPDS_2:59;
-           a1<>DataLoc(t02.a,5) by A67,AMI_3:52;
-then A69: t6.a1=s.a1 by A60,SCMPDS_2:59;
-           a2<>DataLoc(t02.a,5) by A67,AMI_3:52;
-then A70: t6.a2=s.a2 by A61,SCMPDS_2:59;
-           a3<>DataLoc(t02.a,5) by A67,AMI_3:52;
-then A71: t6.a3=s.a3 by A62,SCMPDS_2:59;
-           a4<>DataLoc(t02.a,5) by A67,AMI_3:52;
-then A72: t6.a4=s.a4 by A63,SCMPDS_2:59;
-A73: t6.a5=s.x by A63,A65,A67,SCMPDS_2:59;
-           a6<>DataLoc(t02.a,5) by A67,AMI_3:52;
-then A74: t6.a6=s.a6 by A64,SCMPDS_2:59;
-     abs(s.a4+0)<>abs(t02.a+5) by A9,B10,X4;
+A63:  abs(t02.a+5)=0+5 by ZFMISC_1:33;
+     a<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A64: t6.a=0 by A54,SCMPDS_2:59;
+           a1<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A65: t6.a1=s.a1 by A55,SCMPDS_2:59;
+           a2<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A66: t6.a2=s.a2 by A56,SCMPDS_2:59;
+           a3<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A67: t6.a3=s.a3 by A57,SCMPDS_2:59;
+           a4<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A68: t6.a4=s.a4 by A58,SCMPDS_2:59;
+A69: t6.a5=s.x by A58,A60,A62,SCMPDS_2:59;
+           a6<>DataLoc(t02.a,5) by A62,AMI_3:52;
+then A70: t6.a6=s.a6 by A59,SCMPDS_2:59;
+     abs(s.a4+0)<>abs(t02.a+5) by A9,A10,A63;
      then y<>DataLoc(t02.a,5) by ZFMISC_1:33;
-then A75: t6.y=s.y by A66,SCMPDS_2:59;
-A76: now let i be Element of NAT;
-        assume A77: i>=7 & i<>s.a4-1 & i <> s.a4;
+then A71: t6.y=s.y by A61,SCMPDS_2:59;
+A72: now let i be Element of NAT;
+        assume A73: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>5 by XXREAL_0:2;
-        then intpos i <> DataLoc(t02.a,5) by A67,AMI_3:52;
+        then intpos i <> DataLoc(t02.a,5) by A62,AMI_3:52;
         hence t6.intpos i=t02.intpos i by SCMPDS_2:59
         .=t2.intpos i by SCMPDS_5:40
-        .=s.intpos i by A56,A77;
+        .=s.intpos i by A51,A73;
       end;
 
-      DataLoc(t6.a4,-1) =[1,s.a4-1] by A6,A72,ABSVALUE:def 1;
+      DataLoc(t6.a4,-1) =[1,s.a4-1] by A6,A68,ABSVALUE:def 1;
       then
-X1:   abs(t6.a4+-1) =s.a4-1 by ZFMISC_1:33;
-      0<>abs(t6.a4+-1) by A3,A4,A72,ABSVALUE:def 1;
+A74:   abs(t6.a4+-1) =s.a4-1 by ZFMISC_1:33;
+      0<>abs(t6.a4+-1) by A3,A4,A68,ABSVALUE:def 1;
       then
-A79:  a<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A80: t5.a =Exec(k4, t6).a by SCMPDS_5:47
-     .=0 by A68,A79,SCMPDS_2:59;
-     1<>abs(t6.a4+-1) by A3,A4,XXREAL_0:2,X1;
+A75:  a<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A76: t5.a =Exec(k4, t6).a by SCMPDS_5:47
+     .=0 by A64,A75,SCMPDS_2:59;
+     1<>abs(t6.a4+-1) by A3,A4,A74,XXREAL_0:2;
      then
-A81:  a1<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A82:  t5.a1 =Exec(k4, t6).a1 by SCMPDS_5:47
-     .=s.a1 by A69,A81,SCMPDS_2:59;
-      2<>abs(t6.a4+-1) by A3,A4,XXREAL_0:2,X1;
+A77:  a1<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A78:  t5.a1 =Exec(k4, t6).a1 by SCMPDS_5:47
+     .=s.a1 by A65,A77,SCMPDS_2:59;
+      2<>abs(t6.a4+-1) by A3,A4,A74,XXREAL_0:2;
       then
-A83:  a2<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A84:  t5.a2 =Exec(k4, t6).a2 by SCMPDS_5:47
-     .=s.a2 by A70,A83,SCMPDS_2:59;
-      3<>abs(t6.a4+-1) by A3,A4,XXREAL_0:2,X1;
+A79:  a2<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A80:  t5.a2 =Exec(k4, t6).a2 by SCMPDS_5:47
+     .=s.a2 by A66,A79,SCMPDS_2:59;
+      3<>abs(t6.a4+-1) by A3,A4,A74,XXREAL_0:2;
       then
-A85:  a3<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A86:  t5.a3 =Exec(k4, t6).a3 by SCMPDS_5:47
-     .=s.a3 by A71,A85,SCMPDS_2:59;
-      4<>abs(t6.a4+-1) by A3,A4,XXREAL_0:2,X1;
+A81:  a3<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A82:  t5.a3 =Exec(k4, t6).a3 by SCMPDS_5:47
+     .=s.a3 by A67,A81,SCMPDS_2:59;
+      4<>abs(t6.a4+-1) by A3,A4,A74,XXREAL_0:2;
       then
-A87:  a4<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A88:  t5.a4 =Exec(k4, t6).a4 by SCMPDS_5:47
-     .=s.a4 by A72,A87,SCMPDS_2:59;
-      5<>abs(t6.a4+-1) by A3,A4,XXREAL_0:2,X1;
+A83:  a4<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A84:  t5.a4 =Exec(k4, t6).a4 by SCMPDS_5:47
+     .=s.a4 by A68,A83,SCMPDS_2:59;
+      5<>abs(t6.a4+-1) by A3,A4,A74,XXREAL_0:2;
       then
-A89:  a5<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A90:  t5.a5 =Exec(k4, t6).a5 by SCMPDS_5:47
-     .=s.x by A73,A89,SCMPDS_2:59;
-      6<>abs(t6.a4+-1) by A2,A4,XREAL_1:21,X1;
+A85:  a5<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A86:  t5.a5 =Exec(k4, t6).a5 by SCMPDS_5:47
+     .=s.x by A69,A85,SCMPDS_2:59;
+      6<>abs(t6.a4+-1) by A2,A4,A74,XREAL_1:21;
       then
-A91:  a6<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
-A92: t5.a6 =Exec(k4, t6).a6 by SCMPDS_5:47
-     .=s.a6 by A74,A91,SCMPDS_2:59;
-A93: t5.x =Exec(k4, t6).DataLoc(t6.a4,-1) by A72,SCMPDS_5:47
-     .=s.y by A72,A75,SCMPDS_2:59;
-A94: now let i be Element of NAT;
-        assume A95: i>=7 & i<>s.a4-1 & i <> s.a4;
-    A96: intpos i <> DataLoc(t6.a4,-1)
+A87:  a6<>DataLoc(t6.a4,-1) by ZFMISC_1:33;
+A88: t5.a6 =Exec(k4, t6).a6 by SCMPDS_5:47
+     .=s.a6 by A70,A87,SCMPDS_2:59;
+A89: t5.x =Exec(k4, t6).DataLoc(t6.a4,-1) by A68,SCMPDS_5:47
+     .=s.y by A68,A71,SCMPDS_2:59;
+A90: now let i be Element of NAT;
+        assume A91: i>=7 & i<>s.a4-1 & i <> s.a4;
+    A92: intpos i <> DataLoc(t6.a4,-1)
         proof
-           assume A97:intpos i=DataLoc(t6.a4,-1);
-            i =abs(t6.a4+-1) by A97,ZFMISC_1:33;
-           hence contradiction by A6,A72,A95,ABSVALUE:def 1;
+           assume A93:intpos i=DataLoc(t6.a4,-1);
+            i =abs(t6.a4+-1) by A93,ZFMISC_1:33;
+           hence contradiction by A6,A68,A91,ABSVALUE:def 1;
         end;
         thus t5.intpos i=Exec(k4, t6).intpos i by SCMPDS_5:47
-        .=t6.intpos i by A96,SCMPDS_2:59
-        .=s.intpos i by A76,A95;
+        .=t6.intpos i by A92,SCMPDS_2:59
+        .=s.intpos i by A72,A91;
      end;
 
-X1:   abs(t5.a4+0) = s.a4 by A1,A8,A88,ABSVALUE:def 1;
-      0<>abs(t5.a4+0) by A1,A8,A88,ABSVALUE:def 1;
+A94:   abs(t5.a4+0) = s.a4 by A1,A8,A84,ABSVALUE:def 1;
+      0<>abs(t5.a4+0) by A1,A8,A84,ABSVALUE:def 1;
       then
-A99:  a<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A100: t4.a=Exec(k5,t5).a by SCMPDS_5:46
-     .=0 by A80,A99,SCMPDS_2:59;
-      1<>abs(t5.a4+0) by A1,A8,XXREAL_0:2,X1;
+A95:  a<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A96: t4.a=Exec(k5,t5).a by SCMPDS_5:46
+     .=0 by A76,A95,SCMPDS_2:59;
+      1<>abs(t5.a4+0) by A1,A8,A94,XXREAL_0:2;
       then
-A101:  a1<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A102: t4.a1=Exec(k5,t5).a1 by SCMPDS_5:46
-     .=s.a1 by A82,A101,SCMPDS_2:59;
-      2<>abs(t5.a4+0) by A1,A8,XXREAL_0:2,X1;
+A97:  a1<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A98: t4.a1=Exec(k5,t5).a1 by SCMPDS_5:46
+     .=s.a1 by A78,A97,SCMPDS_2:59;
+      2<>abs(t5.a4+0) by A1,A8,A94,XXREAL_0:2;
       then
-A103:  a2<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A104: t4.a2=Exec(k5,t5).a2 by SCMPDS_5:46
-     .=s.a2 by A84,A103,SCMPDS_2:59;
-      3<>abs(t5.a4+0) by A1,A8,XXREAL_0:2,X1;
+A99:  a2<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A100: t4.a2=Exec(k5,t5).a2 by SCMPDS_5:46
+     .=s.a2 by A80,A99,SCMPDS_2:59;
+      3<>abs(t5.a4+0) by A1,A8,A94,XXREAL_0:2;
       then
-A105:  a3<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A106: t4.a3=Exec(k5,t5).a3 by SCMPDS_5:46
-     .=s.a3 by A86,A105,SCMPDS_2:59;
-       4<>abs(t5.a4+0) by A1,A8,XXREAL_0:2,X1;
+A101:  a3<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A102: t4.a3=Exec(k5,t5).a3 by SCMPDS_5:46
+     .=s.a3 by A82,A101,SCMPDS_2:59;
+       4<>abs(t5.a4+0) by A1,A8,A94,XXREAL_0:2;
        then
-A107:  a4<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A108: t4.a4=Exec(k5,t5).a4 by SCMPDS_5:46
-     .=s.a4 by A88,A107,SCMPDS_2:59;
-       6<>abs(t5.a4+0) by A1,A8,XXREAL_0:2,X1;
+A103:  a4<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A104: t4.a4=Exec(k5,t5).a4 by SCMPDS_5:46
+     .=s.a4 by A84,A103,SCMPDS_2:59;
+       6<>abs(t5.a4+0) by A1,A8,A94,XXREAL_0:2;
        then
-A109:  a6<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A110: t4.a6=Exec(k5,t5).a6 by SCMPDS_5:46
-     .=s.a6 by A92,A109,SCMPDS_2:59;
-       abs(s.a4+-1)<>abs(t5.a4+0) by A7,X1;
+A105:  a6<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A106: t4.a6=Exec(k5,t5).a6 by SCMPDS_5:46
+     .=s.a6 by A88,A105,SCMPDS_2:59;
+       abs(s.a4+-1)<>abs(t5.a4+0) by A7,A94;
        then
-A111:  x<>DataLoc(t5.a4,0) by ZFMISC_1:33;
-A112: t4.x=Exec(k5,t5).x by SCMPDS_5:46
-     .=s.y by A93,A111,SCMPDS_2:59;
-A113: t4.y =Exec(k5, t5).DataLoc(t5.a4,0) by A88,SCMPDS_5:46
+A107:  x<>DataLoc(t5.a4,0) by ZFMISC_1:33;
+A108: t4.x=Exec(k5,t5).x by SCMPDS_5:46
+     .=s.y by A89,A107,SCMPDS_2:59;
+A109: t4.y =Exec(k5, t5).DataLoc(t5.a4,0) by A84,SCMPDS_5:46
      .=t5.DataLoc(t5.a,5) by SCMPDS_2:59
-     .=s.x by A80,SCMP_GCD:5,A90;
-A114: now let i be Element of NAT;
-        assume A115: i>=7 & i<>s.a4-1 & i <> s.a4;
-    A116: intpos i <> DataLoc(t5.a4,0)
+     .=s.x by A76,A86,SCMP_GCD:5;
+A110: now let i be Element of NAT;
+        assume A111: i>=7 & i<>s.a4-1 & i <> s.a4;
+    A112: intpos i <> DataLoc(t5.a4,0)
         proof
            assume intpos i=DataLoc(t5.a4,0);
             then i=abs(t5.a4+0) by ZFMISC_1:33;
-           hence contradiction by A1,A8,A88,A115,ABSVALUE:def 1;
+           hence contradiction by A1,A8,A84,A111,ABSVALUE:def 1;
         end;
         thus t4.intpos i=Exec(k5, t5).intpos i by SCMPDS_5:46
-        .=t5.intpos i by A116,SCMPDS_2:59
-        .=s.intpos i by A94,A115;
+        .=t5.intpos i by A112,SCMPDS_2:59
+        .=s.intpos i by A90,A111;
      end;
 
-A118:  DataLoc(t4.a,4)=intpos (0+4) by A100,SCMP_GCD:5;
+A113:  DataLoc(t4.a,4)=intpos (0+4) by A96,SCMP_GCD:5;
      then
-X5:  abs(t4.a+4)=0+4 by ZFMISC_1:33;
-A119:  a<>DataLoc(t4.a,4) by AMI_3:52,A118;
-A120: t3.a=Exec(k6,t4).a by SCMPDS_5:46
-     .=0 by A100,A119,SCMPDS_2:60;
-A121:  a1<>DataLoc(t4.a,4) by A118,AMI_3:52;
-A122: t3.a1=Exec(k6,t4).a1 by SCMPDS_5:46
-     .=s.a1 by A102,A121,SCMPDS_2:60;
-A123:  a2<>DataLoc(t4.a,4) by A118,AMI_3:52;
-A124: t3.a2=Exec(k6,t4).a2 by SCMPDS_5:46
-     .=s.a2 by A104,A123,SCMPDS_2:60;
-A125:  a3<>DataLoc(t4.a,4) by A118,AMI_3:52;
-A126: t3.a3=Exec(k6,t4).a3 by SCMPDS_5:46
-     .=s.a3 by A106,A125,SCMPDS_2:60;
-A127: t3.a4=Exec(k6,t4).a4 by SCMPDS_5:46
-     .=t4.a4+-1 by A118,SCMPDS_2:60
-     .=s.a4-1 by A108;
-A128:  a6<>DataLoc(t4.a,4) by A118,AMI_3:52;
-A129: t3.a6=Exec(k6,t4).a6 by SCMPDS_5:46
-     .=s.a6 by A110,A128,SCMPDS_2:60;
-      abs(s.a4+-1)<>abs(t4.a+4) by A5,A7,X5;
+A114:  abs(t4.a+4)=0+4 by ZFMISC_1:33;
+A115:  a<>DataLoc(t4.a,4) by A113,AMI_3:52;
+A116: t3.a=Exec(k6,t4).a by SCMPDS_5:46
+     .=0 by A96,A115,SCMPDS_2:60;
+A117:  a1<>DataLoc(t4.a,4) by A113,AMI_3:52;
+A118: t3.a1=Exec(k6,t4).a1 by SCMPDS_5:46
+     .=s.a1 by A98,A117,SCMPDS_2:60;
+A119:  a2<>DataLoc(t4.a,4) by A113,AMI_3:52;
+A120: t3.a2=Exec(k6,t4).a2 by SCMPDS_5:46
+     .=s.a2 by A100,A119,SCMPDS_2:60;
+A121:  a3<>DataLoc(t4.a,4) by A113,AMI_3:52;
+A122: t3.a3=Exec(k6,t4).a3 by SCMPDS_5:46
+     .=s.a3 by A102,A121,SCMPDS_2:60;
+A123: t3.a4=Exec(k6,t4).a4 by SCMPDS_5:46
+     .=t4.a4+-1 by A113,SCMPDS_2:60
+     .=s.a4-1 by A104;
+A124:  a6<>DataLoc(t4.a,4) by A113,AMI_3:52;
+A125: t3.a6=Exec(k6,t4).a6 by SCMPDS_5:46
+     .=s.a6 by A106,A124,SCMPDS_2:60;
+      abs(s.a4+-1)<>abs(t4.a+4) by A5,A7,A114;
       then
-A130:  x<>DataLoc(t4.a,4) by ZFMISC_1:33;
-A131: t3.x=Exec(k6, t4).x by SCMPDS_5:46
-     .=s.y by A112,A130,SCMPDS_2:60;
-     abs(s.a4+0)<>abs(t4.a+4) by A9,B10,X5;
+A126:  x<>DataLoc(t4.a,4) by ZFMISC_1:33;
+A127: t3.x=Exec(k6, t4).x by SCMPDS_5:46
+     .=s.y by A108,A126,SCMPDS_2:60;
+     abs(s.a4+0)<>abs(t4.a+4) by A9,A10,A114;
      then
-A132:  y<>DataLoc(t4.a,4) by ZFMISC_1:33;
-A133: t3.y=Exec(k6, t4).y by SCMPDS_5:46
-     .=s.x by A113,A132,SCMPDS_2:60;
-A134: now let i be Element of NAT;
-        assume A135: i>=7 & i<>s.a4-1 & i <> s.a4;
+A128:  y<>DataLoc(t4.a,4) by ZFMISC_1:33;
+A129: t3.y=Exec(k6, t4).y by SCMPDS_5:46
+     .=s.x by A109,A128,SCMPDS_2:60;
+A130: now let i be Element of NAT;
+        assume A131: i>=7 & i<>s.a4-1 & i <> s.a4;
         then i>4 by XXREAL_0:2;
-      then A136: intpos i <> DataLoc(t4.a,4) by A118,AMI_3:52;
+      then A132: intpos i <> DataLoc(t4.a,4) by A113,AMI_3:52;
       thus t3.intpos i=Exec(k6, t4).intpos i by SCMPDS_5:46
-        .=t4.intpos i by A136,SCMPDS_2:60
-        .=s.intpos i by A114,A135;
+        .=t4.intpos i by A132,SCMPDS_2:60
+        .=s.intpos i by A110,A131;
      end;
 
-A137:  DataLoc(t3.a,6)=intpos (0+6) by A120,SCMP_GCD:5;
+A133:  DataLoc(t3.a,6)=intpos (0+6) by A116,SCMP_GCD:5;
      then
-X6:  abs(t3.a+6)=0+6 by ZFMISC_1:33;
-A138:  a<>DataLoc(t3.a,6) by AMI_3:52,A137;
-A139:  DataLoc(t02.a,6)=intpos (0+6) by A59,SCMP_GCD:5;
+A134:  abs(t3.a+6)=0+6 by ZFMISC_1:33;
+A135:  a<>DataLoc(t3.a,6) by A133,AMI_3:52;
+A136:  DataLoc(t02.a,6)=intpos (0+6) by A54,SCMP_GCD:5;
       then
-X7:  abs(t02.a+6)=0+6 by ZFMISC_1:33;
+A137:  abs(t02.a+6)=0+6 by ZFMISC_1:33;
            now per cases;
-         suppose A140: t2.DataLoc(t2.a,5) <= 0;
-         A141: a<>DataLoc(t02.a,6) by A139,AMI_3:52;
-         thus IExec(IF,t2).a=IExec(FA,t2).a by A140,SCMPDS_6:88
+         suppose A138: t2.DataLoc(t2.a,5) <= 0;
+         A139: a<>DataLoc(t02.a,6) by A136,AMI_3:52;
+         thus IExec(IF,t2).a=IExec(FA,t2).a by A138,SCMPDS_6:88
               .=Exec(Fi,t02).a by SCMPDS_5:45
-              .=0 by A59,A141,SCMPDS_2:58;
+              .=0 by A54,A139,SCMPDS_2:58;
 
          end;
          suppose t2.DataLoc(t2.a,5) > 0;
           hence IExec(IF,t2).a=IExec(TR,t2).a by SCMPDS_6:87
           .=Exec(k7,t3).a by SCMPDS_5:46
-          .=0 by A120,A138,SCMPDS_2:60;
+          .=0 by A116,A135,SCMPDS_2:60;
      end;
      end;
      hence IExec(B1,s).a=0 by SCMPDS_5:39;
            now
          per cases;
-         suppose A142: t2.DataLoc(t2.a,5) <= 0;
-         A143: a1<>DataLoc(t02.a,6) by A139,AMI_3:52;
-         thus IExec(IF,t2).a1=IExec(FA,t2).a1 by A142,SCMPDS_6:88
+         suppose A140: t2.DataLoc(t2.a,5) <= 0;
+         A141: a1<>DataLoc(t02.a,6) by A136,AMI_3:52;
+         thus IExec(IF,t2).a1=IExec(FA,t2).a1 by A140,SCMPDS_6:88
               .=Exec(Fi,t02).a1 by SCMPDS_5:45
-              .=s.a1 by A60,A143,SCMPDS_2:58;
+              .=s.a1 by A55,A141,SCMPDS_2:58;
          end;
-         suppose A144:t2.DataLoc(t2.a,5) > 0;
-     A145:  a1<>DataLoc(t3.a,6) by A137,AMI_3:52;
-          thus IExec(IF,t2).a1=IExec(TR,t2).a1 by A144,SCMPDS_6:87
+         suppose A142:t2.DataLoc(t2.a,5) > 0;
+     A143:  a1<>DataLoc(t3.a,6) by A133,AMI_3:52;
+          thus IExec(IF,t2).a1=IExec(TR,t2).a1 by A142,SCMPDS_6:87
           .=Exec(k7,t3).a1 by SCMPDS_5:46
-          .=s.a1 by A122,A145,SCMPDS_2:60;
+          .=s.a1 by A118,A143,SCMPDS_2:60;
      end;
      end;
      hence IExec(B1,s).a1=s.a1 by SCMPDS_5:39;
            now
          per cases;
-         suppose A146: t2.DataLoc(t2.a,5) <= 0;
-         A147: a2<>DataLoc(t02.a,6) by A139,AMI_3:52;
-         thus IExec(IF,t2).a2=IExec(FA,t2).a2 by A146,SCMPDS_6:88
+         suppose A144: t2.DataLoc(t2.a,5) <= 0;
+         A145: a2<>DataLoc(t02.a,6) by A136,AMI_3:52;
+         thus IExec(IF,t2).a2=IExec(FA,t2).a2 by A144,SCMPDS_6:88
               .=Exec(Fi,t02).a2 by SCMPDS_5:45
-              .=s.a2 by A61,A147,SCMPDS_2:58;
+              .=s.a2 by A56,A145,SCMPDS_2:58;
          end;
-         suppose A148: t2.DataLoc(t2.a,5) > 0;
-     A149:  a2<>DataLoc(t3.a,6) by A137,AMI_3:52;
-          thus IExec(IF,t2).a2=IExec(TR,t2).a2 by A148,SCMPDS_6:87
+         suppose A146: t2.DataLoc(t2.a,5) > 0;
+     A147:  a2<>DataLoc(t3.a,6) by A133,AMI_3:52;
+          thus IExec(IF,t2).a2=IExec(TR,t2).a2 by A146,SCMPDS_6:87
           .=Exec(k7,t3).a2 by SCMPDS_5:46
-          .=s.a2 by A124,A149,SCMPDS_2:60;
+          .=s.a2 by A120,A147,SCMPDS_2:60;
      end;
      end;
      hence IExec(B1,s).a2=s.a2 by SCMPDS_5:39;
            now
          per cases;
-         suppose A150: t2.DataLoc(t2.a,5) <= 0;
-         A151: a3<>DataLoc(t02.a,6) by A139,AMI_3:52;
-         thus IExec(IF,t2).a3=IExec(FA,t2).a3 by A150,SCMPDS_6:88
+         suppose A148: t2.DataLoc(t2.a,5) <= 0;
+         A149: a3<>DataLoc(t02.a,6) by A136,AMI_3:52;
+         thus IExec(IF,t2).a3=IExec(FA,t2).a3 by A148,SCMPDS_6:88
               .=Exec(Fi,t02).a3 by SCMPDS_5:45
-              .=s.a3 by A62,A151,SCMPDS_2:58;
+              .=s.a3 by A57,A149,SCMPDS_2:58;
          end;
-         suppose A152: t2.DataLoc(t2.a,5) > 0;
-     A153:  a3<>DataLoc(t3.a,6) by A137,AMI_3:52;
-          thus IExec(IF,t2).a3=IExec(TR,t2).a3 by A152,SCMPDS_6:87
+         suppose A150: t2.DataLoc(t2.a,5) > 0;
+     A151:  a3<>DataLoc(t3.a,6) by A133,AMI_3:52;
+          thus IExec(IF,t2).a3=IExec(TR,t2).a3 by A150,SCMPDS_6:87
           .=Exec(k7,t3).a3 by SCMPDS_5:46
-          .=s.a3 by A126,A153,SCMPDS_2:60;
+          .=s.a3 by A122,A151,SCMPDS_2:60;
      end;
      end;
      hence IExec(B1,s).a3=s.a3 by SCMPDS_5:39;
-A154:  now
+A152:  now
         assume t2.DataLoc(t2.a,5) <= 0;
           then IExec(IF,t2).a6=IExec(FA,t2).a6 by SCMPDS_6:88
           .=Exec(Fi,t02).a6 by SCMPDS_5:45
-          .=0 by A139,SCMPDS_2:58;
+          .=0 by A136,SCMPDS_2:58;
           hence IExec(B1,s).a6 =0 by SCMPDS_5:39;
      end;
-A155:  now
-         assume A156: t2.DataLoc(t2.a,5) > 0;
+A153:  now
+         assume A154: t2.DataLoc(t2.a,5) > 0;
           then IExec(IF,t2).a6=IExec(TR,t2).a6 by SCMPDS_6:87
           .=Exec(k7,t3).a6 by SCMPDS_5:46
-          .=s.a6+ -1 by A129,A137,SCMPDS_2:60
+          .=s.a6+ -1 by A125,A133,SCMPDS_2:60
           .=s.a6-1;
           hence IExec(B1,s).a6=s.a6-1 by SCMPDS_5:39;
-      A157: a4<>DataLoc(t3.a,6) by A137,AMI_3:52;
-                IExec(IF,t2).a4=IExec(TR,t2).a4 by A156,SCMPDS_6:87
+      A155: a4<>DataLoc(t3.a,6) by A133,AMI_3:52;
+                IExec(IF,t2).a4=IExec(TR,t2).a4 by A154,SCMPDS_6:87
           .=Exec(k7,t3).a4 by SCMPDS_5:46
-          .=s.a4-1 by A127,A157,SCMPDS_2:60;
+          .=s.a4-1 by A123,A155,SCMPDS_2:60;
         hence IExec(B1,s).a4=s.a4-1 by SCMPDS_5:39;
      end;
      hereby
          per cases;
          suppose t2.DataLoc(t2.a,5) <= 0;
-          hence IExec(B1,s).a6 < s.a6 by A1,A154;
+          hence IExec(B1,s).a6 < s.a6 by A1,A152;
          end;
          suppose t2.DataLoc(t2.a,5) > 0;
-          hence IExec(B1,s).a6 < s.a6 by A155,XREAL_1:148;
+          hence IExec(B1,s).a6 < s.a6 by A153,XREAL_1:148;
      end;
      end;
      hereby
         per cases;
-        suppose A158:t2.DataLoc(t2.GBP,5) <= 0;
-      A159: a4<>DataLoc(t02.a,6) by A139,AMI_3:52;
-                IExec(IF,t2).a4=IExec(FA,t2).a4 by A158,SCMPDS_6:88
+        suppose A156:t2.DataLoc(t2.GBP,5) <= 0;
+      A157: a4<>DataLoc(t02.a,6) by A136,AMI_3:52;
+                IExec(IF,t2).a4=IExec(FA,t2).a4 by A156,SCMPDS_6:88
           .=Exec(Fi,t02).a4 by SCMPDS_5:45
-          .=s.a4 by A63,A159,SCMPDS_2:58;
+          .=s.a4 by A58,A157,SCMPDS_2:58;
       then IExec(B1,s).a4=s.a4 by SCMPDS_5:39;
-        hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A1,A8,A154,A158,XXREAL_0:2;
+        hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A1,A8,A152,A156,XXREAL_0:2;
 
         end;
-        suppose A160:t2.DataLoc(t2.a,5) > 0;
+        suppose A158:t2.DataLoc(t2.a,5) > 0;
                   s.a4-1 >= 7+s.a6-1 by A1,XREAL_1:11;
-        hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A155,A160;
+        hence IExec(B1,s).a4 >= 7+IExec(B1,s).a6 by A153,A158;
       end;
       end;
-      hereby let i be Element of NAT;
+      hereby let i be Nat;
+A159:     i in NAT by ORDINAL1:def 13;
          set xi=intpos i;
-         assume A161: i>=7 & i<>s.a4-1 & i <> s.a4;
-     then A162: i>6 by XXREAL_0:2;
+         assume A160: i>=7 & i<>s.a4-1 & i <> s.a4;
+     then A161: i>6 by XXREAL_0:2;
          per cases;
-         suppose A163: t2.DataLoc(t2.a,5) <= 0;
-     A164: xi<>DataLoc(t02.a,6) by A139,A162,AMI_3:52;
-               IExec(IF,t2).xi=IExec(FA,t2).xi by A163,SCMPDS_6:88
+         suppose A162: t2.DataLoc(t2.a,5) <= 0;
+     A163: xi<>DataLoc(t02.a,6) by A136,A161,AMI_3:52;
+               IExec(IF,t2).xi=IExec(FA,t2).xi by A162,SCMPDS_6:88
          .=Exec(Fi,t02).xi by SCMPDS_5:45
-         .=t02.xi by A164,SCMPDS_2:58
+         .=t02.xi by A163,SCMPDS_2:58
          .=t2.xi by SCMPDS_5:40
-         .=s.xi by A56,A161;
+         .=s.xi by A51,A159,A160;
          hence IExec(B1,s).xi=s.xi by SCMPDS_5:39;
 
          end;
-         suppose A165: t2.DataLoc(t2.a,5) > 0;
-        A166: xi<>DataLoc(t3.a,6) by A137,A162,AMI_3:52;
-                 IExec(IF,t2).xi=IExec(TR,t2).xi by A165,SCMPDS_6:87
+         suppose A164: t2.DataLoc(t2.a,5) > 0;
+        A165: xi<>DataLoc(t3.a,6) by A133,A161,AMI_3:52;
+                 IExec(IF,t2).xi=IExec(TR,t2).xi by A164,SCMPDS_6:87
           .=Exec(k7,t3).xi by SCMPDS_5:46
-          .=t3.xi by A166,SCMPDS_2:60
-          .=s.xi by A134,A161;
+          .=t3.xi by A165,SCMPDS_2:60
+          .=s.xi by A130,A159,A160;
           hence IExec(B1,s).xi=s.xi by SCMPDS_5:39;
     end;
     end;
 
     hereby
          assume s.x > s.y;
-         then A167: s.x-s.y > s.y-s.y by XREAL_1:11;
-     abs(s.a4+-1)<>abs(t3.a+6) by A5,A7,X6;
+         then A166: s.x-s.y > s.y-s.y by XREAL_1:11;
+     abs(s.a4+-1)<>abs(t3.a+6) by A5,A7,A134;
      then
-     A168: x<>DataLoc(t3.a,6) by ZFMISC_1:33;
-               IExec(IF,t2).x=IExec(TR,t2).x by A49,A167,SCMPDS_6:87
+     A167: x<>DataLoc(t3.a,6) by ZFMISC_1:33;
+               IExec(IF,t2).x=IExec(TR,t2).x by A44,A166,SCMPDS_6:87
           .=Exec(k7,t3).x by SCMPDS_5:46
-          .=s.y by A131,A168,SCMPDS_2:60;
+          .=s.y by A127,A167,SCMPDS_2:60;
        hence IExec(B1,s).x=s.y by SCMPDS_5:39;
-     abs(s.a4+0)<>abs(t3.a+6) by A9,B10,X6;
+     abs(s.a4+0)<>abs(t3.a+6) by A9,A10,A134;
      then
-     A169: y<>DataLoc(t3.a,6) by ZFMISC_1:33;
-               IExec(IF,t2).y=IExec(TR,t2).y by A49,A167,SCMPDS_6:87
+     A168: y<>DataLoc(t3.a,6) by ZFMISC_1:33;
+               IExec(IF,t2).y=IExec(TR,t2).y by A44,A166,SCMPDS_6:87
           .=Exec(k7,t3).y by SCMPDS_5:46
-          .=s.x by A133,A169,SCMPDS_2:60;
+          .=s.x by A129,A168,SCMPDS_2:60;
        hence IExec(B1,s).y=s.x by SCMPDS_5:39;
-       thus IExec(B1,s).a6=s.a6-1 & IExec(B1,s).a4=s.a4-1 by A39,A48,A155,A167
-,SCMP_GCD:5;
+       thus IExec(B1,s).a6=s.a6-1 & IExec(B1,s).a4=s.a4-1 by A34,A43,A153,A166,
+SCMP_GCD:5;
       end;
       hereby
          assume s.x <= s.y;
-         then A170: s.x-s.y <= s.y-s.y by XREAL_1:11;
-     abs(s.a4+-1)<>abs(t02.a+6) by A5,A7,X7;
+         then A169: s.x-s.y <= s.y-s.y by XREAL_1:11;
+     abs(s.a4+-1)<>abs(t02.a+6) by A5,A7,A137;
      then
-     A171: x<>DataLoc(t02.a,6) by ZFMISC_1:33;
-               IExec(IF,t2).x=IExec(FA,t2).x by A49,A170,SCMPDS_6:88
+     A170: x<>DataLoc(t02.a,6) by ZFMISC_1:33;
+               IExec(IF,t2).x=IExec(FA,t2).x by A44,A169,SCMPDS_6:88
           .=Exec(Fi,t02).x by SCMPDS_5:45
-          .=s.x by A65,A171,SCMPDS_2:58;
+          .=s.x by A60,A170,SCMPDS_2:58;
         hence IExec(B1,s).x=s.x by SCMPDS_5:39;
-    abs(s.a4+0)<>abs(t02.a+6) by A9,B10,X7;
+    abs(s.a4+0)<>abs(t02.a+6) by A9,A10,A137;
     then
-    A172: y<>DataLoc(t02.a,6) by ZFMISC_1:33;
-              IExec(IF,t2).y=IExec(FA,t2).y by A49,A170,SCMPDS_6:88
+    A171: y<>DataLoc(t02.a,6) by ZFMISC_1:33;
+              IExec(IF,t2).y=IExec(FA,t2).y by A44,A169,SCMPDS_6:88
         .=Exec(Fi,t02).y by SCMPDS_5:45
-        .=s.y by A66,A172,SCMPDS_2:58;
+        .=s.y by A61,A171,SCMPDS_2:58;
         hence IExec(B1,s).y=s.y by SCMPDS_5:39;
-        thus IExec(B1,s).a6 =0 by A39,A48,A154,A170,SCMP_GCD:5;
+        thus IExec(B1,s).a6 =0 by A34,A43,A152,A169,SCMP_GCD:5;
     end;
 end;
 
@@ -1586,8 +1585,7 @@ A5: for k be Element of NAT st P[k] holds P[k+1]
            set Iv=IExec(B1,v);
            A16: Iv.a=0 & Iv.a6 < v.a6 & Iv.a4 >= 7+Iv.a6 by A7,A8,A12,A14,Lm7;
            thus IExec(B1,v).a=v.a by A7,A8,A12,A15,Lm7;
-           thus B1 is_closed_on v & B1 is_halting_on v by SCMPDS_6:34,
-35;
+           thus B1 is_closed_on v & B1 is_halting_on v by SCMPDS_6:34,35;
            thus IExec(B1,v).bt < v.bt by A7,A8,A12,A15,Lm7;
            thus for x st x in {a4} holds IExec(B1,v).x >= 7+IExec(B1,v).bt
             by A8,A16,TARSKI:def 1;
@@ -2001,135 +1999,136 @@ A4: P[0]
           len f1=len f2 & len f1 > 0 & f1 is_non_decreasing_on 1,0;
    then A6:    t.DataLoc(t.a,6) =0 by SCMP_GCD:5;
    A7:    now
-             let i be Element of NAT;
-             assume A8: 1 <= i & i <= len f1;
-             hence f1.i=t.intpos(m+i) by A5,Def1
+             let i be Nat;
+A8:          i in NAT by ORDINAL1:def 13;
+             assume A9: 1 <= i & i <= len f1;
+             hence f1.i=t.intpos(m+i) by A5,A8,Def1
               .=IExec(WH,t).intpos(m+i) by A6,SCMPDS_8:23
-              .=f2.i by A5,A8,Def1;
+              .=f2.i by A5,A8,A9,Def1;
          end;
-    then A9:  f1=f2 by A5,FINSEQ_1:18;
+    then A10:  f1=f2 by A5,FINSEQ_1:18;
          thus f1,f2 are_fiberwise_equipotent by A5,A7,FINSEQ_1:18;
          thus f2 is_non_decreasing_on 1,0+1 by Th1;
          thus for i be Element of NAT st i>0+1 & i <= len f1 holds f1.i=f2.i
          by A7;
          thus for i be Element of NAT st 1 <= i & i <= 0+1
-          ex j be Element of NAT st 1 <= j & j <= 0+1 & f2.i=f1.j by A9;
+          ex j be Element of NAT st 1 <= j & j <= 0+1 & f2.i=f1.j by A10;
     end;
-A10: now let k be Element of NAT;
-      assume A11:P[k];
+A11: now let k be Element of NAT;
+      assume A12:P[k];
             now
         let t be State of SCMPDS,f1,f2 be FinSequence of INT;
-       assume A12: t.a4 >= 7+t.a6 & t.a=0 & k+1=t.a6 & m=t.a4-t.a6-1 &
+       assume A13: t.a4 >= 7+t.a6 & t.a=0 & k+1=t.a6 & m=t.a4-t.a6-1 &
           f1 is_FinSequence_on t,m & f2 is_FinSequence_on IExec(WH,t),m &
           len f1=len f2 & len f1 > k+1 & f1 is_non_decreasing_on 1,k+1;
           set Bt=IExec(B1,t),
               x=DataLoc(t.a4,-1),
               y=DataLoc(t.a4,0);
-      A13:  x=DataLoc(m,k+1) by A12
+      A14:  x=DataLoc(m,k+1) by A13
            .=intpos(m+(k+1)) by SCMP_GCD:5;
-      A14:  y=intpos(m+(k+2)) by A12,SCMP_GCD:5;
-                m+1+(k+1) >= 7+t.a6 by A12;
-      then A15: m+1 >= 7 by A12,XREAL_1:8;
-      A16: Bt.a=0 & Bt.a1=t.a1 & Bt.a4 >= 7+Bt.a6 &
+      A15:  y=intpos(m+(k+2)) by A13,SCMP_GCD:5;
+                m+1+(k+1) >= 7+t.a6 by A13;
+      then A16: m+1 >= 7 by A13,XREAL_1:8;
+      A17: Bt.a=0 & Bt.a1=t.a1 & Bt.a4 >= 7+Bt.a6 &
           (for i be Element of NAT st i>=7 & i<>t.a4-1 & i<>t.a4 holds
             Bt.intpos i=t.intpos i) &
           (t.x > t.y implies Bt.x=t.y & Bt.y =t.x &
                 Bt.a6=t.a6-1 & Bt.a4=t.a4-1) &
-          (t.x <= t.y implies Bt.x=t.x & Bt.y =t.y & Bt.a6=0) by A12,Lm7;
+          (t.x <= t.y implies Bt.x=t.x & Bt.y =t.y & Bt.a6=0) by A13,Lm7;
           per cases;
-          suppose A17: t.x > t.y;
+          suppose A18: t.x > t.y;
            consider h be FinSequence of INT such that
-        A18: len h=len f1 & for i be Element of NAT st 1<=i & i <= len h
+        A19: len h=len f1 & for i be Element of NAT st 1<=i & i <= len h
             holds h.i=Bt.intpos(m+i) by Th2;
-        A19: Bt.a4-Bt.a6-1=m by A12,A16,A17;
-        A20: h is_FinSequence_on Bt,m by A18,Def1;
+        A20: Bt.a4-Bt.a6-1=m by A13,A17,A18;
+        A21: h is_FinSequence_on Bt,m by A19,Def1;
                   now
                let i be Element of NAT;
                assume 1<=i & i <= len f2;
-              hence f2.i=IExec(WH,t).intpos(m+i) by A12,Def1
-               .=IExec(WH,Bt).intpos(m+i) by A12,Lm14;
+              hence f2.i=IExec(WH,t).intpos(m+i) by A13,Def1
+               .=IExec(WH,Bt).intpos(m+i) by A13,Lm14;
             end;
-        then A21: f2 is_FinSequence_on IExec(WH,Bt),m by Def1;
+        then A22: f2 is_FinSequence_on IExec(WH,Bt),m by Def1;
                   k+1 > k by XREAL_1:31;
-        then A22: len h > k by A12,A18,XXREAL_0:2;
-        A23: now
+        then A23: len h > k by A13,A19,XXREAL_0:2;
+        A24: now
                let i be Element of NAT;
-               assume A24: i <> k+1 & i<>k+2 & 1 <= i & i <= len f1;
+               assume A25: i <> k+1 & i<>k+2 & 1 <= i & i <= len f1;
                 then m+i >= m+1 by XREAL_1:8;
-            then A25: m+i >= 7 by A15,XXREAL_0:2;
-            A26: m+i <> t.a4-1 by A12,A24;
-            A27: m+i <> t.a4 by A12,A24;
-            thus h.i=Bt.intpos(m+i) by A18,A24
-                 .=t.intpos(m+i) by A12,A25,A26,A27,Lm7
-                 .=f1.i by A12,A24,Def1;
+            then A26: m+i >= 7 by A16,XXREAL_0:2;
+            A27: m+i <> t.a4-1 by A13,A25;
+            A28: m+i <> t.a4 by A13,A25;
+            thus h.i=Bt.intpos(m+i) by A19,A25
+                 .=t.intpos(m+i) by A13,A26,A27,A28,Lm7
+                 .=f1.i by A13,A25,Def1;
             end;
 
                   now
                  let i,j be Element of NAT;
-                 assume A28: 1 <= i & i <= j & j <= k;
-            A29:  k < k+1 by XREAL_1:31;
+                 assume A29: 1 <= i & i <= j & j <= k;
+            A30:  k < k+1 by XREAL_1:31;
                        k+1 < k+1+1 by XREAL_1:31;
-                 then A30: k < k+1+1 by A29,XXREAL_0:2;
-            A31:  j < k+1 by A28,A29,XXREAL_0:2;
-            A32:  j < k+2 by A28,A30,XXREAL_0:2;
-            A33:  j <= len f1 by A18,A22,A28,XXREAL_0:2;
-                   j >= 1 by A28,XXREAL_0:2;
-            then A34:  h.j=f1.j by A23,A28,A29,A30,A33;
-                   i <= len f1 by A28,A33,XXREAL_0:2;
-                 then h.i=f1.i by A23,A28,A31,A32;
-             hence h.i <= h.j by A12,A28,A31,A34,GRAPH_2:def 13;
+                 then A31: k < k+1+1 by A30,XXREAL_0:2;
+            A32:  j < k+1 by A29,A30,XXREAL_0:2;
+            A33:  j < k+2 by A29,A31,XXREAL_0:2;
+            A34:  j <= len f1 by A19,A23,A29,XXREAL_0:2;
+                   j >= 1 by A29,XXREAL_0:2;
+            then A35:  h.j=f1.j by A24,A29,A30,A31,A34;
+                   i <= len f1 by A29,A34,XXREAL_0:2;
+                 then h.i=f1.i by A24,A29,A32,A33;
+             hence h.i <= h.j by A13,A29,A32,A35,GRAPH_2:def 13;
           end;
-          then A35: h is_non_decreasing_on 1,k by GRAPH_2:def 13;
-     then A36:  h,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,k+1 &
+          then A36: h is_non_decreasing_on 1,k by GRAPH_2:def 13;
+     then A37:  h,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,k+1 &
           (for i be Element of NAT st i>k+1 & i <= len h holds h.i=f2.i) &
           (for i be Element of NAT st 1 <= i & i <= k+1
           ex j be Element of NAT st
           1 <= j & j <= k+1 & f2.i=h.j)
-           by A11,A12,A16,A17,A18,A19,A20,A21,A22;
-     A37:  1 <= k+1 by NAT_1:11;
-     A38:  k+1 < k+2 by XREAL_1:8;
-     then A39:  1 <= k+2 by A37,XXREAL_0:2;
-              A40: len f1 >= k+1+1 by A12,INT_1:20;
-     A41:  h.(k+1)=t.y by A12,A13,A16,A17,A18,A37;
-     then A42:  h.(k+1)=f1.(k+2) by A12,A14,A39,A40,Def1;
-     A43:  h.(k+2)=t.x by A14,A16,A17,A18,A39,A40;
-     then A44:   h.(k+2)=f1.(k+1) by A12,A13,A37,Def1;
-           then f1,h are_fiberwise_equipotent by A12,A18,A23,A37,A39,A40,A42,
+           by A12,A13,A17,A18,A19,A20,A21,A22,A23;
+     A38:  1 <= k+1 by NAT_1:11;
+     A39:  k+1 < k+2 by XREAL_1:8;
+     then A40:  1 <= k+2 by A38,XXREAL_0:2;
+              A41: len f1 >= k+1+1 by A13,INT_1:20;
+     A42:  h.(k+1)=t.y by A13,A14,A17,A18,A19,A38;
+     then A43:  h.(k+1)=f1.(k+2) by A13,A15,A40,A41,Def1;
+     A44:  h.(k+2)=t.x by A15,A17,A18,A19,A40,A41;
+     then A45:   h.(k+2)=f1.(k+1) by A13,A14,A38,Def1;
+           then f1,h are_fiberwise_equipotent by A13,A19,A24,A38,A40,A41,A43,
 Th4
 ;
-           hence f1,f2 are_fiberwise_equipotent by A36,RFINSEQ:2;
+           hence f1,f2 are_fiberwise_equipotent by A37,RFINSEQ:2;
                  now
               let i,j be Element of NAT;
-              assume A45: 1 <= i & i <= j & j <= (k+1)+1;
-              per cases by A45,NAT_1:8;
+              assume A46: 1 <= i & i <= j & j <= (k+1)+1;
+              per cases by A46,NAT_1:8;
               suppose j <= k+1;
-                hence f2.i <= f2.j by A36,A45,GRAPH_2:def 13;
+                hence f2.i <= f2.j by A37,A46,GRAPH_2:def 13;
               end;
-              suppose A46:j = k+1+1;
+              suppose A47:j = k+1+1;
                 hereby
                   per cases;
                   suppose i=j;
                     hence f2.i <= f2.j;
                   end;
                   suppose i<>j;
-                    then i < j by A45,REAL_1:def 5;
-                    then i <= k+1 by A46,NAT_1:13;
+                    then i < j by A46,REAL_1:def 5;
+                    then i <= k+1 by A47,NAT_1:13;
                    then consider mm be Element of NAT such that
-                A47: 1 <= mm & mm <= k+1 & f2.i=h.mm by A11,A12,A16,A17,A18,A19
-,A20,A21,A22,A35,A45;
-                A48: f2.j=h.(k+2) by A11,A12,A16,A17,A18,A19,A20,A21,A22,A35,
-A38,A40,A46;
+                A48: 1 <= mm & mm <= k+1 & f2.i=h.mm by A12,A13,A17,A18,A19,A20
+,A21,A22,A23,A36,A46;
+                A49: f2.j=h.(k+2) by A12,A13,A17,A18,A19,A20,A21,A22,A23,A36
+,A39,A41,A47;
                    hereby
                       per cases;
                       suppose mm=k+1;
-                        hence f2.i <= f2.j by A12,A13,A16,A18,A43,A47,A48;
+                        hence f2.i <= f2.j by A13,A14,A17,A19,A44,A48,A49;
                       end;
-                      suppose A49: mm<>k+1;
-                           mm < k+2 by A38,A47,XXREAL_0:2;
-                         then mm < len h by A18,A40,XXREAL_0:2;
-                     then A50: h.mm=f1.mm by A18,A23,A38,A47,A49;
-                           f2.j=f1.(k+1) by A12,A13,A37,A43,A48,Def1;
-                      hence f2.i <= f2.j by A12,A47,A50,GRAPH_2:def 13;
+                      suppose A50: mm<>k+1;
+                           mm < k+2 by A39,A48,XXREAL_0:2;
+                         then mm < len h by A19,A41,XXREAL_0:2;
+                     then A51: h.mm=f1.mm by A19,A24,A39,A48,A50;
+                           f2.j=f1.(k+1) by A13,A14,A38,A44,A49,Def1;
+                      hence f2.i <= f2.j by A13,A48,A51,GRAPH_2:def 13;
                   end;
                   end;
                end;
@@ -2139,118 +2138,120 @@ A38,A40,A46;
            hence f2 is_non_decreasing_on 1,(k+1)+1 by GRAPH_2:def 13;
            hereby
               let i be Element of NAT;
-              assume A51: i>(k+1)+1 & i <= len f1;
-              A52: k+1 < k+1+1 by XREAL_1:31;
-            then A53: i > k+1 by A51,XXREAL_0:2;
+              assume A52: i>(k+1)+1 & i <= len f1;
+              A53: k+1 < k+1+1 by XREAL_1:31;
+            then A54: i > k+1 by A52,XXREAL_0:2;
                       1 <= k+1 by NAT_1:11;
-            then A54: 1 <= i by A53,XXREAL_0:2;
-             thus f2.i=h.i by A11,A12,A16,A17,A18,A19,A20,A21,A22,A35,A51,A53
-               .=f1.i by A23,A51,A52,A54;
+            then A55: 1 <= i by A54,XXREAL_0:2;
+             thus f2.i=h.i by A12,A13,A17,A18,A19,A20,A21,A22,A23,A36,A52,A54
+               .=f1.i by A24,A52,A53,A55;
           end;
           hereby
              let i be Element of NAT;
-             assume A55: 1 <= i & i <= (k+1)+1;
+             assume A56: 1 <= i & i <= (k+1)+1;
              per cases;
-            suppose A56: i=k+1+1;
+            suppose A57: i=k+1+1;
                take j=k+1;
                thus 1 <= j by NAT_1:11;
                thus j <= (k+1)+1 by NAT_1:11;
-               thus f2.i=f1.j by A11,A12,A16,A17,A18,A19,A20,A21,A22,A35,A38,
-A40,A44,A56;
+               thus f2.i=f1.j by A12,A13,A17,A18,A19,A20,A21,A22,A23,A36,A39
+,A41,A45,A57;
            end;
            suppose i<>k+1+1;
-               then i < k+1+1 by A55,REAL_1:def 5;
+               then i < k+1+1 by A56,REAL_1:def 5;
                then i <= k+1 by NAT_1:13;
                then consider mm be Element of NAT such that
-          A57: 1 <= mm & mm <= k+1 & f2.i=h.mm by A11,A12,A16,A17,A18,A19,A20,
-A21,A22,A35,A55;
+          A58: 1 <= mm & mm <= k+1 & f2.i=h.mm by A12,A13,A17,A18,A19,A20,A21
+,A22,A23,A36,A56;
                hereby
-                 A58: k+2=(k+1)+1;
+                 A59: k+2=(k+1)+1;
                    per cases;
-                   suppose A59: mm=k+1;
+                   suppose A60: mm=k+1;
                       take j=k+2;
-                      thus 1 <= j by A58,NAT_1:11;
+                      thus 1 <= j by A59,NAT_1:11;
                       thus j <= k+1+1;
-                      thus f2.i=f1.j by A12,A14,A39,A40,A41,A57,A59,Def1;
+                      thus f2.i=f1.j by A13,A15,A40,A41,A42,A58,A60,Def1;
                   end;
-                  suppose A60: mm<>k+1;
-                           mm < k+2 by A38,A57,XXREAL_0:2;
-                         then A61: mm < len f1 by A40,XXREAL_0:2;
+                  suppose A61: mm<>k+1;
+                           mm < k+2 by A39,A58,XXREAL_0:2;
+                         then A62: mm < len f1 by A41,XXREAL_0:2;
                         take mm;
-                        thus 1 <= mm by A57;
-                        thus mm <= k+1+1 by A38,A57,XXREAL_0:2;
-                        thus f2.i=f1.mm by A23,A38,A57,A60,A61;
+                        thus 1 <= mm by A58;
+                        thus mm <= k+1+1 by A39,A58,XXREAL_0:2;
+                        thus f2.i=f1.mm by A24,A39,A58,A61,A62;
                 end;
                 end;
           end;
           end;
 
           end;
-          suppose A62: t.x <= t.y;
-            A63: now let i be Element of NAT;
-                assume A64: i>=1 & i <= len f1;
+          suppose A63: t.x <= t.y;
+            A64: now let i be Nat;
+A65:          i in NAT by ORDINAL1:def 13;
+                assume A66: i>=1 & i <= len f1;
                      then m+i >= m+1 by XREAL_1:8;
-             then A65: m+i >= 7 by A15,XXREAL_0:2;
-             A66: f1.i=t.intpos(m+i) by A12,A64,Def1;
-             A67: Bt.DataLoc(Bt.a,6) =0 by A16,SCMP_GCD:5,A62;
+             then A67: m+i >= 7 by A16,XXREAL_0:2;
+             A68: f1.i=t.intpos(m+i) by A13,A65,A66,Def1;
+             A69: Bt.DataLoc(Bt.a,6) =0 by A17,A63,SCMP_GCD:5;
                  per cases;
-                 suppose A68: m+i=t.a4-1;
-              hence f1.i=IExec(WH,Bt).x by A12,A13,A16,A62,A66,A67,SCMPDS_8:23
-                 .=IExec(WH,t).x by A12,Lm14
-                 .=f2.i by A12,A13,A64,A68,Def1;
+                 suppose A70: m+i=t.a4-1;
+              hence f1.i=IExec(WH,Bt).x by A13,A14,A17,A63,A68,A69,SCMPDS_8:23
+                 .=IExec(WH,t).x by A13,Lm14
+                 .=f2.i by A13,A14,A66,A70,Def1;
                end;
-               suppose A69: m+i=t.a4;
-              hence f1.i=IExec(WH,Bt).y by A12,A14,A16,A62,A66,A67,SCMPDS_8:23
-                 .=IExec(WH,t).y by A12,Lm14
-                 .=f2.i by A12,A14,A64,A69,Def1;
+               suppose A71: m+i=t.a4;
+              hence f1.i=IExec(WH,Bt).y by A13,A15,A17,A63,A68,A69,SCMPDS_8:23
+                 .=IExec(WH,t).y by A13,Lm14
+                 .=f2.i by A13,A15,A66,A71,Def1;
                end;
                suppose m+i<>t.a4-1 & m+i<>t.a4;
-                hence f1.i=Bt.intpos (m+i) by A12,A65,A66,Lm7
-                 .=IExec(WH,Bt).intpos (m+i) by A67,SCMPDS_8:23
-                 .=IExec(WH,t).intpos (m+i) by A12,Lm14
-                 .=f2.i by A12,A64,Def1;
+                hence f1.i=Bt.intpos (m+i) by A13,A65,A67,A68,Lm7
+                 .=IExec(WH,Bt).intpos (m+i) by A69,SCMPDS_8:23
+                 .=IExec(WH,t).intpos (m+i) by A13,Lm14
+                 .=f2.i by A13,A65,A66,Def1;
            end;
            end;
-          then A70: f1=f2 by A12,FINSEQ_1:18;
-          thus f1,f2 are_fiberwise_equipotent by A12,A63,FINSEQ_1:18;
+          then A72: f1=f2 by A13,FINSEQ_1:18;
+          thus f1,f2 are_fiberwise_equipotent by A13,A64,FINSEQ_1:18;
                 now
                let i, j be Element of NAT;
-               assume A71:  1 <= i & i <= j & j <= (k+1)+1;
-              per cases by A71,NAT_1:8;
+               assume A73:  1 <= i & i <= j & j <= (k+1)+1;
+              per cases by A73,NAT_1:8;
               suppose j <= k+1;
-                hence f1.i <= f1.j by A12,A71,GRAPH_2:def 13;
+                hence f1.i <= f1.j by A13,A73,GRAPH_2:def 13;
               end;
-              suppose A72:j = k+1+1;
+              suppose A74:j = k+1+1;
                 hereby
                   per cases;
                   suppose i=j;
                     hence f1.i <= f1.j;
                   end;
                   suppose i<>j;
-                    then i < j by A71,REAL_1:def 5;
-                    then i <= k+1 by A72,NAT_1:13;
-                then A73: f1.i <= f1.(k+1) by A12,A71,GRAPH_2:def 13;
+                    then i < j by A73,REAL_1:def 5;
+                    then i <= k+1 by A74,NAT_1:13;
+                then A75: f1.i <= f1.(k+1) by A13,A73,GRAPH_2:def 13;
                            1<=k+1 by NAT_1:11;
-                then A74: f1.(k+1)=t.x by A12,A13,Def1;
-                    A75: 1<=(k+1)+1 by NAT_1:11;
-                          j<=len f1 by A12,A72,INT_1:20;
-                    then f1.j=t.y by A12,A14,A72,A75,Def1;
-                  hence f1.i <= f1.j by A62,A73,A74,XXREAL_0:2;
+                then A76: f1.(k+1)=t.x by A13,A14,Def1;
+                    A77: 1<=(k+1)+1 by NAT_1:11;
+                          j<=len f1 by A13,A74,INT_1:20;
+                    then f1.j=t.y by A13,A15,A74,A77,Def1;
+                  hence f1.i <= f1.j by A63,A75,A76,XXREAL_0:2;
               end;
               end;
          end;
          end;
-         hence f2 is_non_decreasing_on 1,(k+1)+1 by A70,GRAPH_2:def 13;
-         thus for i be Element of NAT st i>(k+1)+1 & i <= len f1
-         holds f1.i=f2.i by A12
-,A63,FINSEQ_1:18;
+         hence f2 is_non_decreasing_on 1,(k+1)+1 by A72,GRAPH_2:def 13;
+         for i be Nat st i>(k+1)+1 & i <= len f1
+         holds f1.i=f2.i by A13,A64,FINSEQ_1:18;
+         hence for i be Element of NAT st i>(k+1)+1 & i <= len f1
+         holds f1.i=f2.i by A13,A64,FINSEQ_1:18;
          thus for i be Element of NAT st 1 <= i & i <= (k+1)+1
-           ex j be Element of NAT st 1 <= j & j <= (k+1)+1 & f2.i=f1.j by A70;
+           ex j be Element of NAT st 1 <= j & j <= (k+1)+1 & f2.i=f1.j by A72;
       end;
       end;
       hence P[k+1];
     end;
-          for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A10);
+          for k be Element of NAT holds P[k] from NAT_1:sch 1(A4,A11);
     hence thesis by A1,A2,A3;
 end;
 
@@ -2291,100 +2292,101 @@ A4: P[0]
            f2 is_FinSequence_on IExec(FR,t),p0 &
            f1 is_non_decreasing_on 1,m & len f1=n & len f2 = n;
        then A6: t.DataLoc(t.a,2)=0 by SCMP_GCD:5;
-           A7: now let i be Element of NAT;
-               assume A8: 1 <= i & i <= len f2;
-               hence f2.i=IExec(FR,t).intpos(p0+i) by A5,Def1
+           A7: now let i be Nat;
+A8:          i in NAT by ORDINAL1:def 13;
+               assume A9: 1 <= i & i <= len f2;
+               hence f2.i=IExec(FR,t).intpos(p0+i) by A5,A8,Def1
                .=t.intpos(p0+i) by A6,SCMPDS_7:66
-               .=f1.i by A5,A8,Def1;
+               .=f1.i by A5,A8,A9,Def1;
            end;
           hence f1,f2 are_fiberwise_equipotent by A5,FINSEQ_1:18;
           thus f2 is_non_decreasing_on 1,n by A5,A7,FINSEQ_1:18;
     end;
-A9: now
+A10: now
        let k be Element of NAT;
-       assume A10:P[k];
+       assume A11:P[k];
              now
            let t be State of SCMPDS,f1,f2 be FinSequence of INT,
            m be Element of NAT;
-           assume A11: t.a=0 & t.a2+t.a1=n-1 & t.a2=k+1 & m=n-t.a2 &
+           assume A12: t.a=0 & t.a2+t.a1=n-1 & t.a2=k+1 & m=n-t.a2 &
              p0=t.a3-t.a1-1 & f1 is_FinSequence_on t,p0 &
              f2 is_FinSequence_on IExec(FR,t),p0 &
              f1 is_non_decreasing_on 1,m & len f1=n & len f2 = n;
              set t1=IExec(J4,t),
                   Bt=IExec(B3,t);
-         A12: t1.a =0 & t1.a1 = t.a1+1 &
+         A13: t1.a =0 & t1.a1 = t.a1+1 &
              t1.a2=t.a2 & t1.a3 =t.a3+1 &
              t1.a4 =t.a3+1 & t1.a6 =t.a1+1 &
              for i be Element of NAT st i >= 7 holds t1.intpos i=t.intpos i
-             by A11,Lm10;
+             by A12,Lm10;
              consider h be FinSequence of INT such that
-         A13: len h=n & for i be Element of NAT st 1<=i & i <= len h holds
+         A14: len h=n & for i be Element of NAT st 1<=i & i <= len h holds
              h.i=IExec(WH,t1).intpos(p0+i) by Th2;
-         A14: p0=t1.a4-t1.a6-1 by A11,A12;
-              t1.a4=p0+(t1.a6+1) by A11,A12;
+         A15: p0=t1.a4-t1.a6-1 by A12,A13;
+              t1.a4=p0+(t1.a6+1) by A12,A13;
              then t1.a4 >= 6+(t1.a6+1) by A1,XREAL_1:8;
-             then A15: t1.a4 >= 6+1+t1.a6;
+             then A16: t1.a4 >= 6+1+t1.a6;
                    now
                  let i be Element of NAT;
-                 assume A16: 1 <= i & i <= len f1;
-                 then A17: p0+1 <= p0+i by XREAL_1:8;
+                 assume A17: 1 <= i & i <= len f1;
+                 then A18: p0+1 <= p0+i by XREAL_1:8;
                            p0+1 >= 6+1 by A1,XREAL_1:8;
-                 then A18: p0+i >= 7 by A17,XXREAL_0:2;
-                 thus f1.i=t.intpos(p0+i) by A11,A16,Def1
-                      .= t1.intpos(p0+i) by A11,A18,Lm10;
+                 then A19: p0+i >= 7 by A18,XXREAL_0:2;
+                 thus f1.i=t.intpos(p0+i) by A12,A17,Def1
+                      .= t1.intpos(p0+i) by A12,A19,Lm10;
              end;
-         then A19: f1 is_FinSequence_on t1,p0 by Def1;
-         A20: h is_FinSequence_on IExec(WH,t1),p0 by A13,Def1;
-          m+(k+1)=n by A11;
+         then A20: f1 is_FinSequence_on t1,p0 by Def1;
+         A21: h is_FinSequence_on IExec(WH,t1),p0 by A14,Def1;
+          m+(k+1)=n by A12;
              then n > 0+m by XREAL_1:8;
-        then A21:  f1,h are_fiberwise_equipotent & h is_non_decreasing_on 1,m+1
-             by A11,A12,A13,A14,A15,A19,A20,Th17;
-               p0+(t.a1+1)=t.a3 by A11;
+        then A22:  f1,h are_fiberwise_equipotent & h is_non_decreasing_on 1,m+1
+             by A12,A13,A14,A15,A16,A20,A21,Th17;
+               p0+(t.a1+1)=t.a3 by A12;
              then t.a3 >= 6+(t.a1+1) by A1,XREAL_1:8;
-             then A22: t.a3 >= 6+1+t.a1;
-        then A23:  Bt.a=0 & Bt.a2=t.a2-1 & Bt.a3=t.a3+1 & Bt.a1=t.a1+1 &
+             then A23: t.a3 >= 6+1+t.a1;
+        then A24:  Bt.a=0 & Bt.a2=t.a2-1 & Bt.a3=t.a3+1 & Bt.a1=t.a1+1 &
              for i be Element of NAT st i <> 2
              holds Bt.intpos i=IExec(WH,t1).intpos i
-             by A11,Lm11;
-        then A24:  Bt.a2+Bt.a1=n-1 by A11;
-        A25:  n-Bt.a2=m+1 by A11,A23;
-        A26:  Bt.a3-Bt.a1-1=p0 by A11,A23;
+             by A12,Lm11;
+        then A25:  Bt.a2+Bt.a1=n-1 by A12;
+        A26:  n-Bt.a2=m+1 by A12,A24;
+        A27:  Bt.a3-Bt.a1-1=p0 by A12,A24;
                    now
                  let i be Element of NAT;
-                 assume A27: 1 <= i & i <= len h;
-                 then A28: p0+1 <= p0+i by XREAL_1:8;
+                 assume A28: 1 <= i & i <= len h;
+                 then A29: p0+1 <= p0+i by XREAL_1:8;
                            p0+1 >= 6+1 by A1,XREAL_1:8;
-                 then p0+i >= 7 by A28,XXREAL_0:2;
-                 then A29: p0+i > 2 by XXREAL_0:2;
-                 thus h.i=IExec(WH,t1).intpos(p0+i) by A13,A27
-                      .= Bt.intpos(p0+i) by A11,A22,A29,Lm11;
+                 then p0+i >= 7 by A29,XXREAL_0:2;
+                 then A30: p0+i > 2 by XXREAL_0:2;
+                 thus h.i=IExec(WH,t1).intpos(p0+i) by A14,A28
+                      .= Bt.intpos(p0+i) by A12,A23,A30,Lm11;
              end;
-        then A30:  h is_FinSequence_on Bt,p0 by Def1;
+        then A31:  h is_FinSequence_on Bt,p0 by Def1;
                    now
                  let i be Element of NAT;
                  assume 1 <= i & i <= len f2;
-                 hence f2.i=IExec(FR,t).intpos(p0+i) by A11,Def1
-                      .= IExec(FR,Bt).intpos(p0+i) by A11,A22,Lm13;
+                 hence f2.i=IExec(FR,t).intpos(p0+i) by A12,Def1
+                      .= IExec(FR,Bt).intpos(p0+i) by A12,A23,Lm13;
              end;
-             then A31: f2 is_FinSequence_on IExec(FR,Bt),p0 by Def1;
+             then A32: f2 is_FinSequence_on IExec(FR,Bt),p0 by Def1;
         then h,f2 are_fiberwise_equipotent & f2 is_non_decreasing_on 1,n
-             by A10,A11,A13,A21,A23,A24,A25,A26,A30;
-             hence f1,f2 are_fiberwise_equipotent by A21,RFINSEQ:2;
-             thus f2 is_non_decreasing_on 1,n by A10,A11,A13,A21,A23,A24,A25
-,A26,A30,A31;
+             by A11,A12,A14,A22,A24,A25,A26,A27,A31;
+             hence f1,f2 are_fiberwise_equipotent by A22,RFINSEQ:2;
+             thus f2 is_non_decreasing_on 1,n by A11,A12,A14,A22,A24,A25,A26
+,A27,A31,A32;
        end;
        hence P[k+1];
      end;
-A32:  for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A9);
+A33:  for k being Element of NAT holds P[k] from NAT_1:sch 1(A4,A10);
            n >= 1+0 by A3,INT_1:20;
      then n-1 >= 0 by XREAL_1:21;
      then reconsider n1=n-1 as Element of NAT by INT_1:16;
-A33:  s.a2+s.a1=n-1+0 by A1;
-A34:  1=n-s.a2 by A1;
-A35:  p0=s.a3-s.a1-1 by A1;
-A36:  f is_non_decreasing_on 1,1 by Th1;
-           P[n1] by A32;
-     hence thesis by A1,A33,A34,A35,A36;
+A34:  s.a2+s.a1=n-1+0 by A1;
+A35:  1=n-s.a2 by A1;
+A36:  p0=s.a3-s.a1-1 by A1;
+A37:  f is_non_decreasing_on 1,1 by Th1;
+           P[n1] by A33;
+     hence thesis by A1,A34,A35,A36,A37;
 end;
 end;
 

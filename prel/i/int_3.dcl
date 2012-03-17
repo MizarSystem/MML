@@ -163,11 +163,11 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="14"/>
 <Adjective nr="21"/>
 </Cluster>
-<Func kind="K" nr="66"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="198">
@@ -254,14 +254,15 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
+<Adjective nr="14"/>
 <Adjective nr="21"/>
 </Cluster>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="1">
 <Cluster/>
-<Func kind="K" nr="66"/>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="14"/>
 <Adjective nr="21"/>
 </Cluster>
 </CCluster>

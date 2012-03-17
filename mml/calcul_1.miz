@@ -8,8 +8,7 @@ environ
 
  vocabularies RELAT_1, CQC_THE1, CQC_LANG, QC_LANG1, FINSEQ_1, ZF_LANG,
       ZF_MODEL, BOOLE, FUNCT_1, FUNCT_4, CALCUL_1, FINSET_1, VALUAT_1, CAT_1,
-      MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA,
-      NAT_1, FUNCOP_1;
+      MCART_1, QMAX_1, ORDINAL2, FINSEQ_2, CARD_1, TARSKI, SUBSTUT1, SUBLEMMA;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, RELAT_1, FUNCT_1,
       QC_LANG1, NUMBERS, ORDINAL1, FINSEQ_2, CARD_1, XCMPLX_0, XXREAL_0, NAT_1,
       FUNCOP_1, CQC_LANG, FINSET_1, VALUAT_1, CQC_THE1, RELSET_1, PARTFUN1,
@@ -17,8 +16,7 @@ environ
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_2,
       CQC_THE1, SUBSTUT2;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1,
-      ARYTM_3, FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_5, QC_LANG1,
-      CQC_LANG;
+      FINSET_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, CARD_5, QC_LANG1, CQC_LANG;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, XBOOLE_0, FINSEQ_2, FUNCOP_1;
  theorems TARSKI, FUNCT_1, MCART_1, XBOOLE_0, XBOOLE_1, QC_LANG1, ZFMISC_1,
@@ -127,7 +125,8 @@ theorem Th1:
     assume f is_Subsequence_of g;
     then consider N being Subset of NAT such that A1: f c= Seq (g|N) by Def4;
 A2: now let a be set such that A3: a in rng f;
-      consider n such that A4: n in dom f & f.n = a by A3,FINSEQ_2:11;
+      consider n being Nat such that A4: n in dom f & f.n = a
+      by A3,FINSEQ_2:11;
 A5:   dom f c= dom Seq (g|N) by A1,RELAT_1:25;
        [n,f.n] in f by A4,FUNCT_1:8;
       then (Seq (g|N)).n = a by A1,A4,FUNCT_1:8;
@@ -168,7 +167,7 @@ theorem Th3:
 then A2: len f = len Ant(f)+1 by Th2;
     then len f = len Ant(f) + len <*Suc(f)*> by FINSEQ_1:56;
 then A3: len f = len (Ant(f)^<*Suc(f)*>) by FINSEQ_1:35;
-A4: now let j such that A5: j in Seg len f;
+A4: now let j be Nat such that A5: j in Seg len f;
 A6:   1 <= j & j <= len Ant(f)+1 by A2,A5,FINSEQ_1:3;
 A7:   now assume j <= len Ant(f);
 then A8:     j in dom Ant(f) by A6,FINSEQ_3:27;
@@ -214,8 +213,8 @@ A1:   len fin = len f + 1 by FINSEQ_2:19;
       proof
         set fin = f^<*p*>;
          now let a be set; assume a in f;
-          then consider k such that A2: k in dom f & a = [k,f.k] by FINSEQ_1:16
-;
+          then consider k being Nat such that
+A2: k in dom f & a = [k,f.k] by FINSEQ_1:16;
 A3:       k in dom fin by A2,FINSEQ_2:18;
            f.k = fin.k by A2,FINSEQ_1:def 7;
           hence a in fin by A2,A3,FUNCT_1:8;
@@ -485,7 +484,7 @@ end;
  reserve PR,PR1 for
                     FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 
-definition let PR; let n be Element of NAT;
+definition let PR; let n be Nat;
   pred PR,n is_a_correct_step means
   :Def7: ex f st Suc(f) is_tail_of Ant(f) & (PR.n)`1 = f if (PR.n)`2 = 0,
   ex f st (PR.n)`1 = f^<*VERUM*>                         if (PR.n)`2 = 1,
@@ -516,7 +515,8 @@ end;
 
 definition let PR;
   attr PR is a_proof means
-  :Def8: PR <> {} & for n st 1 <= n & n <= len PR holds PR,n is_a_correct_step;
+  :Def8: PR <> {} &
+  for n being Nat st 1 <= n & n <= len PR holds PR,n is_a_correct_step;
 end;
 
 definition let f;
@@ -754,7 +754,8 @@ theorem Th27:
       assume J,v |= f;
 then A2:   J,v |= rng(f) by Def14;
       let p such that A3: p in rng(f);
-      consider i such that A4: i in dom f & p = f.i by A3,FINSEQ_2:11;
+      consider i being Nat such that A4: i in dom f & p = f.i
+      by A3,FINSEQ_2:11;
 A5:    J,v |= p by A2,A3,Def11;
        for b st b in still_not-bound_in p holds b in still_not-bound_in f
                                                                by A4,Def5;
@@ -820,11 +821,13 @@ theorem Th30:
    end;
 
 theorem Th31:
+  for n being Nat holds
   1 <= n & n <= len PR implies
   (PR.n)`2 = 0 or (PR.n)`2 = 1 or (PR.n)`2 = 2 or (PR.n)`2 = 3 or
   (PR.n)`2 = 4 or (PR.n)`2 = 5 or (PR.n)`2 = 6 or (PR.n)`2 = 7 or
   (PR.n)`2 = 8 or (PR.n)`2 = 9
   proof
+    let n be Nat;
     assume 1 <= n & n <= len PR;
     then n in dom PR by FINSEQ_3:27;
     then PR.n in rng PR by FUNCT_1:def 5;
@@ -1008,7 +1011,7 @@ A4:   a = [f,0] by A2,A3,TARSKI:def 1;
     then reconsider PR as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds
 :]
                                                            by FINSEQ_1:def 4;
-     now let n such that A5: 1 <= n & n <= len PR;
+     now let n be Nat such that A5: 1 <= n & n <= len PR;
        1 <= n & n <= 1 by A5,FINSEQ_1:56;
       then n = 1 by XXREAL_0:1;
       then PR.n = [f,0] by FINSEQ_1:57;
@@ -1023,9 +1026,11 @@ then A6: PR is a_proof by Def8;
   end;
 
 theorem Th34:
+  for n being Nat holds
   1 <= n & n <= len PR implies
          (PR,n is_a_correct_step iff PR^PR1,n is_a_correct_step)
    proof
+     let n be Nat;
      assume A1: 1 <= n & n <= len PR;
      then n in dom PR by FINSEQ_3:27;
 then A2:  (PR^PR1).n = PR.n by FINSEQ_1:def 7;
@@ -1059,7 +1064,7 @@ and
                 Suc(f) = Suc(g) & f = (PR.j)`1 &
                 g = (PR.i)`1 & Ant(Ant(f))^<*Suc(f)*> = (PR.n)`1 by A2,A4,Def7;
            i <= len PR & j <= n by A1,A7,XXREAL_0:2;
-          then i in Seg(len PR) & j <= len PR by A7,XXREAL_0:2,FINSEQ_1:3;
+          then i in Seg(len PR) & j <= len PR by A7,FINSEQ_1:3,XXREAL_0:2;
           then i in dom PR & j in dom PR by A7,FINSEQ_1:def 3,FINSEQ_3:27;
           then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A7,A8;
@@ -1071,7 +1076,7 @@ and
                = Suc(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                Ant(Ant(f))^<*p*> = (PR.n)`1 by A2,A4,Def7;
            i <= len PR & j <= n by A1,A9,XXREAL_0:2;
-          then i in Seg(len PR) & j <= len PR by A9,XXREAL_0:2,FINSEQ_1:3;
+          then i in Seg(len PR) & j <= len PR by A9,FINSEQ_1:3,XXREAL_0:2;
           then i in dom PR & j in dom PR by A9,FINSEQ_1:def 3,FINSEQ_3:27;
           then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A9,A10;
@@ -1082,7 +1087,7 @@ and
 A12:      Ant(f) = Ant(g) & f = (PR.j)`1 & g = (PR.i)`1 &
                      Ant(f)^<*(Suc(f)) '&' (Suc(g))*> = (PR.n)`1 by A2,A4,Def7;
            i <= len PR & j <= n by A1,A11,XXREAL_0:2;
-          then i in Seg(len PR) & j <= len PR by A11,XXREAL_0:2,FINSEQ_1:3;
+          then i in Seg(len PR) & j <= len PR by A11,FINSEQ_1:3,XXREAL_0:2;
           then i in dom PR & j in dom PR by A11,FINSEQ_1:def 3,FINSEQ_3:27;
           then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
           hence thesis by A2,A11,A12;
@@ -1150,7 +1155,7 @@ and
              &   Suc(f) = Suc(f1) & f = ((PR^PR1).j)`1 & f1 = ((PR^PR1).i)`1 &
                  Ant(Ant(f))^<*Suc(f)*> = ((PR^PR1).n)`1 by A2,A21,Def7;
         i <= len PR & j <= n by A1,A24,XXREAL_0:2;
-       then i in Seg(len PR) & j <= len PR by A24,XXREAL_0:2,FINSEQ_1:3;
+       then i in Seg(len PR) & j <= len PR by A24,FINSEQ_1:3,XXREAL_0:2;
        then i in dom PR & j in dom PR by A24,FINSEQ_1:def 3,FINSEQ_3:27;
        then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A24,A25;
@@ -1163,7 +1168,7 @@ and
                 f = ((PR^PR1).j)`1 & g = ((PR^PR1).i)`1 &
                 Ant(Ant(f))^<*p*> = ((PR^PR1).n)`1  by A2,A21,Def7;
         i <= len PR & j <= n by A1,A26,XXREAL_0:2;
-       then i in Seg(len PR) & j <= len PR by A26,XXREAL_0:2,FINSEQ_1:3;
+       then i in Seg(len PR) & j <= len PR by A26,FINSEQ_1:3,XXREAL_0:2;
        then i in dom PR & j in dom PR by A26,FINSEQ_1:def 3,FINSEQ_3:27;
        then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A26,A27;
@@ -1174,7 +1179,7 @@ and
                 g = ((PR^PR1).i)`1 & Ant(f)^<*(Suc(f)) '&' (Suc(g))*> =
                                              ((PR^PR1).n)`1 by A2,A21,Def7;
         i <= len PR & j <= n by A1,A28,XXREAL_0:2;
-       then i in Seg(len PR) & j <= len PR by A28,XXREAL_0:2,FINSEQ_1:3;
+       then i in Seg(len PR) & j <= len PR by A28,FINSEQ_1:3,XXREAL_0:2;
        then i in dom PR & j in dom PR by A28,FINSEQ_1:def 3,FINSEQ_3:27;
        then PR.i = (PR^PR1).i & PR.j = (PR^PR1).j by FINSEQ_1:def 7;
        hence thesis by A2,A28,A29;
@@ -1257,7 +1262,7 @@ and
 A10:     1 <= len PR+i & len PR+i < n+len PR by A8,NAT_1:12,XREAL_1:8;
 A11:    1 <= len PR+j & len PR+j < i+len PR by A8,NAT_1:12,XREAL_1:8;
 A12:     i <= len PR1 & j <= n by A1,A8,XXREAL_0:2;
-        then i in Seg(len PR1) & j <= len PR1 by A8,XXREAL_0:2,FINSEQ_1:3;
+        then i in Seg(len PR1) & j <= len PR1 by A8,FINSEQ_1:3,XXREAL_0:2;
         then i in dom PR1 & j in dom PR1 by A8,A12,FINSEQ_3:27;
         then PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                      by FINSEQ_1:def 7;
@@ -1273,7 +1278,7 @@ and
 A15:    1 <= len PR+i & len PR+i < n+len PR by A13,NAT_1:12,XREAL_1:8;
 A16:    1 <= len PR+j & len PR+j < i+len PR by A13,NAT_1:12,XREAL_1:8;
 A17:     i <= len PR1 & j <= n by A1,A13,XXREAL_0:2;
-        then i in Seg(len PR1) & j <= len PR1 by A13,XXREAL_0:2,FINSEQ_1:3;
+        then i in Seg(len PR1) & j <= len PR1 by A13,FINSEQ_1:3,XXREAL_0:2;
         then i in dom PR1 & j in dom PR1 by A13,A17,FINSEQ_3:27;
         then PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                              by FINSEQ_1:def 7;
@@ -1288,7 +1293,7 @@ and
 A20:    1 <= len PR+i & len PR+i < n+len PR by A18,NAT_1:12,XREAL_1:8;
 A21:    1 <= len PR+j & len PR+j < i+len PR by A18,NAT_1:12,XREAL_1:8;
 A22:     i <= len PR1 & j <= n by A1,A18,XXREAL_0:2;
-        then i in Seg(len PR1) & j <= len PR1 by A18,XXREAL_0:2,FINSEQ_1:3;
+        then i in Seg(len PR1) & j <= len PR1 by A18,FINSEQ_1:3,XXREAL_0:2;
         then i in dom PR1 & j in dom PR1 by A18,A22,FINSEQ_3:27;
         then PR1.i = (PR^PR1).(len PR+i) & PR1.j = (PR^PR1).(len PR+j)
                                                             by FINSEQ_1:def 7;
@@ -1349,22 +1354,22 @@ A3: g in set_of_CQC-WFF-seq & 2 in Proof_Step_Kinds by Def6,CQC_THE1:43;
       then a = [g,2] by TARSKI:def 1;
       hence a in [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by A3,ZFMISC_1:106;
     end;
-    then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by TARSKI:
-def 3;
+    then rng <*[g,2]*> c= [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by
+TARSKI:def 3;
     then reconsider PR1 = <*[g,2]*> as FinSequence of
                      [:set_of_CQC-WFF-seq,Proof_Step_Kinds:] by FINSEQ_1:def 4;
     set PR2 = PR^PR1;
     reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 A5: PR <> {} by A2,Def8;
 A6: PR2 <> {} by FINSEQ_1:48;
-     now let n such that A7: 1 <= n & n <= len PR2;
+     now let n be Nat such that A7: 1 <= n & n <= len PR2;
 A8:   n in dom PR2 by A7,FINSEQ_3:27;
 A9:   now assume n in dom PR;
 then A10:    1 <= n & n <= len PR by FINSEQ_3:27;
         then PR,n is_a_correct_step by A2,Def8;
         hence PR2,n is_a_correct_step by A10,Th34;
       end;
-       now given k such that A11: k in dom PR1 & n = len PR + k;
+       now given k being Nat such that A11: k in dom PR1 & n = len PR + k;
          k in Seg 1 by A11,FINSEQ_1:55;
 then A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR1.k = [g,2]  by FINSEQ_1:57;
@@ -1414,7 +1419,7 @@ A4: Ant(Ant(f))^<*Suc(f)*> in set_of_CQC-WFF-seq &
 A6: PR <> {} by A2,Def8;
 then A7: PR^PR1 <> {} by FINSEQ_1:48;
 A8: PR3 <> {} by FINSEQ_1:48;
-     now let n such that A9: 1 <= n & n <= len PR3;
+     now let n be Nat such that A9: 1 <= n & n <= len PR3;
 A10:  n in dom PR3 by A9,FINSEQ_3:27;
 A11:  now assume A12: n in dom (PR^PR1);
 A13:    now assume n in dom PR;
@@ -1425,18 +1430,19 @@ then A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           then 1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
-         now given k such that A16: k in dom PR1 & n = len PR + k;
+         now given k being Nat such that A16: k in dom PR1 & n = len PR + k;
 A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27;
           then PR1,k is_a_correct_step by A3,Def8;
 then A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
            k <= n by A16,NAT_1:11;
-          then 1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
+          then 1 <= n & n <= len (PR^PR1) by A17,A19,FINSEQ_1:35,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
       end;
-       now given k such that A20: k in dom PR2 & n = len (PR^PR1) + k;
+       now given k being Nat such that
+A20:     k in dom PR2 & n = len (PR^PR1) + k;
          k in Seg 1 by A20,FINSEQ_1:55;
 then A21:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR2.k = [Ant(Ant(f))^<*Suc(f)*>,3] by FINSEQ_1:57;
@@ -1497,7 +1503,7 @@ A4: Ant(Ant(f))^<*p*> in set_of_CQC-WFF-seq &
 A6: PR <> {} by A2,Def8;
 then A7: PR^PR1 <> {} by FINSEQ_1:48;
 A8: PR3 <> {} by FINSEQ_1:48;
-     now let n such that A9: 1 <= n & n <= len PR3;
+     now let n be Nat such that A9: 1 <= n & n <= len PR3;
 A10:  n in dom PR3 by A9,FINSEQ_3:27;
 A11:  now assume A12: n in dom (PR^PR1);
 A13:    now assume n in dom PR;
@@ -1508,24 +1514,25 @@ then A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           then 1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
-         now given k such that A16: k in dom PR1 & n = len PR + k;
+         now given k being Nat such that A16: k in dom PR1 & n = len PR + k;
 A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27;
           then PR1,k is_a_correct_step by A3,Def8;
 then A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
            k <= n by A16,NAT_1:11;
-          then 1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
+          then 1 <= n & n <= len (PR^PR1) by A17,A19,FINSEQ_1:35,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
       end;
-       now given k such that A20: k in dom PR2 & n = len (PR^PR1) + k;
+       now given k being Nat such that
+A20:     k in dom PR2 & n = len (PR^PR1) + k;
          k in Seg 1 by A20,FINSEQ_1:55;
 then A21:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR2.k = [Ant(Ant(f))^<*p*>,4] by FINSEQ_1:57;
         then (PR2.k)`1 = Ant(Ant(f))^<*p*> & (PR2.k)`2 = 4 by MCART_1:7;
-then A22:    (PR3.n)`1 = Ant(Ant(f))^<*p*> & (PR3.n)`2 = 4 by A20,FINSEQ_1:def
-7;
+then A22:    (PR3.n)`1 = Ant(Ant(f))^<*p*> & (PR3.n)`2 = 4 by A20,
+FINSEQ_1:def 7;
 A23:    PR1 <> {} by A3,Def8;
 then A24:    1 <= len PR & len PR < len (PR^PR1) by A6,Th6;
         then len PR in dom PR by FINSEQ_3:27;
@@ -1580,7 +1587,7 @@ A4: Ant(f)^<*(Suc(f)) '&' (Suc(g))*> in set_of_CQC-WFF-seq &
 A6: PR <> {} by A2,Def8;
 then A7: PR^PR1 <> {} by FINSEQ_1:48;
 A8: PR3 <> {} by FINSEQ_1:48;
-     now let n such that A9: 1 <= n & n <= len PR3;
+     now let n be Nat such that A9: 1 <= n & n <= len PR3;
 A10:  n in dom PR3 by A9,FINSEQ_3:27;
 A11:  now assume A12: n in dom (PR^PR1);
 A13:    now assume n in dom PR;
@@ -1591,18 +1598,19 @@ then A15:      PR^PR1,n is_a_correct_step by A14,Th34;
           then 1 <= n & n <= len (PR^PR1) by A14,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A15,Th34;
         end;
-         now given k such that A16: k in dom PR1 & n = len PR + k;
+         now given k being Nat such that A16: k in dom PR1 & n = len PR + k;
 A17:      1 <= k & k <= len PR1 by A16,FINSEQ_3:27;
           then PR1,k is_a_correct_step by A3,Def8;
 then A18:      (PR^PR1),n is_a_correct_step by A16,A17,Th35;
 A19:      n <= len PR1 + len PR by A16,A17,XREAL_1:8;
            k <= n by A16,NAT_1:11;
-          then 1 <= n & n <= len (PR^PR1) by A17,A19,XXREAL_0:2,FINSEQ_1:35;
+          then 1 <= n & n <= len (PR^PR1) by A17,A19,FINSEQ_1:35,XXREAL_0:2;
           hence PR3,n is_a_correct_step by A18,Th34;
         end;
         hence PR3,n is_a_correct_step by A12,A13,FINSEQ_1:38;
       end;
-       now given k such that A20: k in dom PR2 & n = len (PR^PR1) + k;
+       now given k being Nat such that
+A20: k in dom PR2 & n = len (PR^PR1) + k;
          k in Seg 1 by A20,FINSEQ_1:55;
 then A21:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR2.k = [Ant(f)^<*(Suc(f)) '&' (Suc(g))*>,5] by FINSEQ_1:57;
@@ -1659,14 +1667,14 @@ A3:  Ant(f)^<*p*> in set_of_CQC-WFF-seq &
     reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 A5: PR <> {} by A2,Def8;
 A6: PR2 <> {} by FINSEQ_1:48;
-     now let n such that A7: 1 <= n & n <= len PR2;
+     now let n be Nat such that A7: 1 <= n & n <= len PR2;
 A8:   n in dom PR2 by A7,FINSEQ_3:27;
 A9:   now assume n in dom PR;
 then A10:    1 <= n & n <= len PR by FINSEQ_3:27;
         then PR,n is_a_correct_step by A2,Def8;
         hence PR2,n is_a_correct_step by A10,Th34;
       end;
-       now given k such that A11: k in dom PR1 & n = len PR + k;
+       now given k being Nat such that A11: k in dom PR1 & n = len PR + k;
          k in Seg 1 by A11,FINSEQ_1:55;
 then A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR1.k = [Ant(f)^<*p*>,6] by FINSEQ_1:57;
@@ -1710,14 +1718,14 @@ A3:  Ant(f)^<*q*> in set_of_CQC-WFF-seq &
     reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 A5: PR <> {} by A2,Def8;
 A6: PR2 <> {} by FINSEQ_1:48;
-     now let n such that A7: 1 <= n & n <= len PR2;
+     now let n be Nat such that A7: 1 <= n & n <= len PR2;
 A8:   n in dom PR2 by A7,FINSEQ_3:27;
 A9:   now assume n in dom PR;
 then A10:    1 <= n & n <= len PR by FINSEQ_3:27;
         then PR,n is_a_correct_step by A2,Def8;
         hence PR2,n is_a_correct_step by A10,Th34;
       end;
-       now given k such that A11: k in dom PR1 & n = len PR + k;
+       now given k being Nat such that A11: k in dom PR1 & n = len PR + k;
          k in Seg 1 by A11,FINSEQ_1:55;
 then A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR1.k = [Ant(f)^<*q*>,7] by FINSEQ_1:57;
@@ -1761,20 +1769,20 @@ A3: Ant(f)^<*p.(x,y)*> in set_of_CQC-WFF-seq &
     reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 A5: PR <> {} by A2,Def8;
 A6: PR2 <> {} by FINSEQ_1:48;
-     now let n such that A7: 1 <= n & n <= len PR2;
+     now let n be Nat such that A7: 1 <= n & n <= len PR2;
 A8:   n in dom PR2 by A7,FINSEQ_3:27;
 A9:   now assume n in dom PR;
 then A10:    1 <= n & n <= len PR by FINSEQ_3:27;
         then PR,n is_a_correct_step by A2,Def8;
         hence PR2,n is_a_correct_step by A10,Th34;
       end;
-       now given k such that A11: k in dom PR1 & n = len PR + k;
+       now given k being Nat such that A11: k in dom PR1 & n = len PR + k;
          k in Seg 1 by A11,FINSEQ_1:55;
 then A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR1.k = [Ant(f)^<*p.(x,y)*>,8] by FINSEQ_1:57;
         then (PR1.k)`1 = Ant(f)^<*p.(x,y)*> & (PR1.k)`2 = 8 by MCART_1:7;
-then A13:    (PR2.n)`1 = Ant(f)^<*p.(x,y)*> & (PR2.n)`2 = 8 by A11,FINSEQ_1:def
-7;
+then A13:    (PR2.n)`1 = Ant(f)^<*p.(x,y)*> & (PR2.n)`2 = 8 by A11,
+FINSEQ_1:def 7;
 A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13;
         then len PR in dom PR by FINSEQ_3:27;
         then f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
@@ -1816,20 +1824,20 @@ A3: Ant(f)^<*All(x,p)*> in set_of_CQC-WFF-seq &
     reconsider PR2 as FinSequence of [:set_of_CQC-WFF-seq,Proof_Step_Kinds:];
 A5: PR <> {} by A2,Def8;
 A6: PR2 <> {} by FINSEQ_1:48;
-     now let n such that A7: 1 <= n & n <= len PR2;
+     now let n be Nat such that A7: 1 <= n & n <= len PR2;
 A8:   n in dom PR2 by A7,FINSEQ_3:27;
 A9:   now assume n in dom PR;
 then A10:    1 <= n & n <= len PR by FINSEQ_3:27;
         then PR,n is_a_correct_step by A2,Def8;
         hence PR2,n is_a_correct_step by A10,Th34;
       end;
-       now given k such that A11: k in dom PR1 & n = len PR + k;
+       now given k being Nat such that A11: k in dom PR1 & n = len PR + k;
          k in Seg 1 by A11,FINSEQ_1:55;
 then A12:    k = 1 by FINSEQ_1:4,TARSKI:def 1;
         then PR1.k = [Ant(f)^<*All(x,p)*>,9] by FINSEQ_1:57;
         then (PR1.k)`1 = Ant(f)^<*All(x,p)*> & (PR1.k)`2 = 9 by MCART_1:7;
-then A13:    (PR2.n)`1 = Ant(f)^<*All(x,p)*> & (PR2.n)`2 = 9 by A11,FINSEQ_1:
-def 7;
+then A13:    (PR2.n)`1 = Ant(f)^<*All(x,p)*> & (PR2.n)`2 = 9 by A11,
+FINSEQ_1:def 7;
 A14:    1 <= len PR & len PR < n by A5,A11,A12,Th6,NAT_1:13;
         then len PR in dom PR by FINSEQ_3:27;
         then f = (PR2.(len PR))`1 by A2,FINSEQ_1:def 7;
@@ -2187,7 +2195,7 @@ then A3: Ant(f1) = f^<*p,'not' p *> by FINSEQ_1:def 9;
 then A4: (Ant(f1)).(len f+1) = p by Th14;
      len f+2 = len f + len <*p,'not' p *> by FINSEQ_1:61;
     then len f+2 = len Ant(f1) by A3,FINSEQ_1:35;
-    then 1 <= len f+1 & len f+1 <= len Ant(f1) by XREAL_1:8,NAT_1:11;
+    then 1 <= len f+1 & len f+1 <= len Ant(f1) by NAT_1:11,XREAL_1:8;
     then len f+1 in dom Ant(f1) by FINSEQ_3:27;
     then Suc(f1) is_tail_of Ant(f1) by A2,A4,Def3;
 then A5: |- f1 by Th33;
@@ -2251,7 +2259,7 @@ then A7: Ant(f2) = f^<*'not' 'not' p,'not' p *> by FINSEQ_1:def 9;
 then A8: (Ant(f2)).(len f+1) = 'not' 'not' p by Th14;
      len f+2 = len f + len <*'not' 'not' p,'not' p *> by FINSEQ_1:61;
     then len f+2 = len Ant(f2) by A7,FINSEQ_1:35;
-    then 1 <= len f+1 & len f+1 <= len Ant(f2) by XREAL_1:8,NAT_1:11;
+    then 1 <= len f+1 & len f+1 <= len Ant(f2) by NAT_1:11,XREAL_1:8;
     then len f+1 in dom Ant(f2) by FINSEQ_3:27;
     then Suc(f2) is_tail_of Ant(f2) by A6,A8,Def3;
 then A9: |- f2 by Th33;
@@ -2381,7 +2389,7 @@ then A5:     b in still_not-bound_in f by A2,A4,Def5;
                                                        by XBOOLE_1:7;
         hence thesis by A5;
       end;
-       now given n such that A6: n in dom g & i = len f + n;
+       now given n being Nat such that A6: n in dom g & i = len f + n;
      (f^g).i = g.n by A6,FINSEQ_1:def 7;
 then A7:     b in still_not-bound_in g by A2,A6,Def5;
          still_not-bound_in g c= still_not-bound_in f \/ still_not-bound_in g
@@ -2503,7 +2511,7 @@ A2: for a being set st a in dom f ex b st P[a,b]
     end;
     consider F2 being Function such that A4: dom F2 = dom f &
     for b st b in dom f holds P[b,F2.b] from FUNCT_1:sch 2(A1,A2);
-    consider n such that A5: dom f = Seg n by FINSEQ_1:def 2;
+    consider n being Nat such that A5: dom f = Seg n by FINSEQ_1:def 2;
     consider F1 being Function such that
 A6:             rng F1 = Seg n & dom F1 in omega by FINSET_1:def 1;
     set F = F2*F1;

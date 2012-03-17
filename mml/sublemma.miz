@@ -8,19 +8,19 @@ environ
 
  vocabularies RELAT_1, FUNCT_2, CQC_LANG, QC_LANG1, QC_LANG3, FINSEQ_1,
       SQUARE_1, ZF_LANG, ZF_MODEL, BOOLE, FUNCT_1, FUNCT_4, PARTFUN1, SUBSTUT1,
-      SUBLEMMA, VALUAT_1, FUNCOP_1, MARGREL1, CAT_1, ARYTM_3, MCART_1, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, QC_LANG1,
-      QC_LANG3, PARTFUN1, NUMBERS, XXREAL_0, FUNCOP_1, CQC_LANG, RELAT_1,
-      FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2, FRAENKEL, MARGREL1,
+      SUBLEMMA, VALUAT_1, FUNCOP_1, MARGREL1, CAT_1, ARYTM_3, MCART_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSEQ_1, FUNCT_1, NAT_1,
+      QC_LANG1, QC_LANG3, PARTFUN1, NUMBERS, XXREAL_0, FUNCOP_1, CQC_LANG,
+      RELAT_1, FUNCT_4, SEQ_4, VALUAT_1, RELSET_1, FUNCT_2, FRAENKEL, MARGREL1,
       DOMAIN_1, MCART_1, SUBSTUT1;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, SEQ_4, QC_LANG3, VALUAT_1, SUBSTUT1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FRAENKEL, MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1;
+      FRAENKEL, MEMBERED, QC_LANG1, CQC_LANG, SUBSTUT1, XXREAL_0;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, FINSEQ_1, FUNCT_1, MCART_1, VALUAT_1, XBOOLE_0, XBOOLE_1,
       FINSEQ_2, CQC_LANG, QC_LANG1, ZFMISC_1, RELAT_1, QC_LANG3, FUNCOP_1,
-      FUNCT_2, RELSET_1, QC_LANG2, SUBSTUT1, FUNCT_4, FUNCT_7, SEQ_4;
+      FUNCT_2, RELSET_1, QC_LANG2, SUBSTUT1, FUNCT_4, FUNCT_7, SEQ_4, ORDINAL1;
  schemes CQC_LANG, XBOOLE_0, SUBSTUT1;
 
 begin :: Preliminaries
@@ -334,11 +334,13 @@ theorem Th14:
 then A1: (S')`2 = Sub by MCART_1:7;
     set ll' = CQC_Subst(ll,Sub);
 A2: len ll = k by QC_LANG1:def 8;
-A3: for j st j in Seg k holds (v.Val_S(v,S'))*'ll.j = v*'(CQC_Subst(ll,Sub)).j
+A3: for j be Nat st j in Seg k holds
+    (v.Val_S(v,S'))*'ll.j = v*'(CQC_Subst(ll,Sub)).j
     proof
-      let j such that
+      let j be Nat such that
 A4:   j in Seg k;
 A5:   1 <= j & j <= k by A4,FINSEQ_1:3;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
        j in Seg (len ll) by A4,QC_LANG1:def 8;
       then j in dom ll by FINSEQ_1:def 3;
       then reconsider x = ll.j as bound_QC-variable by Th5;
@@ -734,8 +736,8 @@ theorem Th36:
      assume A1: B is quantifiable & B1 is quantifiable &
                 Sub_All(B,SQ) = Sub_All(B1,SQ1);
       then Sub_All(B,SQ) = [All(B`2,(B`1)`1),SQ] by SUBSTUT1:def 24;
-      then [All(B`2,(B`1)`1),SQ] = [All(B1`2,(B1`1)`1),SQ1] by A1,SUBSTUT1:def
-24;
+      then [All(B`2,(B`1)`1),SQ] = [All(B1`2,(B1`1)`1),SQ1] by A1,
+SUBSTUT1:def 24;
       then All(B`2,(B`1)`1) = All(B1`2,(B1`1)`1) & SQ = SQ1 by ZFMISC_1:33;
       hence thesis by QC_LANG2:6;
   end;
@@ -1059,8 +1061,8 @@ then A6:   S1`1 = All(x,S`1) by MCART_1:7;
 A7:   x = bound_in S1`1 by A5,QC_LANG2:8;
 A8:  bound_in(S1`1) in rng finSub by A2,A3,A4,A5,MCART_1:7;
        @S1 = S1 by SUBSTUT1:def 35;
-      then S_Bound(@S1) = x.upVar(finSub,the_scope_of S1`1) by A8,SUBSTUT1:def
-36;
+      then S_Bound(@S1) = x.upVar(finSub,the_scope_of S1`1) by A8,
+SUBSTUT1:def 36;
       hence thesis by A3,A6,A7,QC_LANG2:8;
  end;
 
@@ -1343,7 +1345,8 @@ theorem Th58:
        proof
          let b;
          assume A4: b in rng l1;
-         then consider k such that A5: k in dom l1 & l1.k = b by FINSEQ_2:11;
+         then consider k being Nat such that
+A5: k in dom l1 & l1.k = b by FINSEQ_2:11;
           k in Seg len l1 by A5,FINSEQ_1:def 3;
          then 1 <= k & k <= len l1 by FINSEQ_1:3;
          hence thesis by A1,A2,A4,A5;
@@ -1379,9 +1382,10 @@ then A2: dom (ll*(v|still_not-bound_in ll)) = Seg len ll by FINSEQ_1:def 3;
 A3: len f = len ll by A2,FINSEQ_1:def 3;
 then A4: len f = k by SUBSTUT1:34;
 A5: len (v*'ll) = k by VALUAT_1:def 8;
-     for j st j in Seg k holds f.j = (v*'ll).j
+     for j be Nat st j in Seg k holds f.j = (v*'ll).j
     proof
-      let j such that A6: j in Seg k;
+      let j be Nat such that A6: j in Seg k;
+      reconsider j as Element of NAT by ORDINAL1:def 13;
 A7:   j in dom ll by A3,A4,A6,FINSEQ_1:def 3;
 then A8:  ll.j in still_not-bound_in ll by A1,FUNCT_1:12;
 A9:  ll.j in rng ll by A7,FUNCT_1:12;
@@ -1761,8 +1765,8 @@ theorem Th75:
      proof
        assume A1: for a holds J,v.(NEx_Val(v,S,x,xSQ)+*(x|a)) |= S;
        let a;
-        v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a) by FUNCT_4
-:15;
+        v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a) by
+FUNCT_4:15;
        hence thesis by A1;
      end;
      thus (for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S) implies
@@ -1770,8 +1774,8 @@ theorem Th75:
      proof
        assume A2: for a holds J,(v.NEx_Val(v,S,x,xSQ)).(x|a) |= S;
        let a;
-        v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a) by FUNCT_4
-:15;
+        v.(NEx_Val(v,S,x,xSQ)+*(x|a)) = (v.NEx_Val(v,S,x,xSQ)).(x|a) by
+FUNCT_4:15;
        hence thesis by A2;
      end;
    end;
@@ -1814,10 +1818,11 @@ A1:          (for y st y in dom vS1 holds not y in still_not-bound_in ll) &
      set ll1 = (v.vS)*'ll;
      set ll2 = (v.(vS+*vS1+*vS2))*'ll;
 A2:  len ll1 = k & len ll2  = k by VALUAT_1:def 8;
-      for i st i in Seg k holds ll1.i = ll2.i
+      for i be Nat st i in Seg k holds ll1.i = ll2.i
      proof
-       let i such that A3: i in Seg k;
+       let i be Nat such that A3: i in Seg k;
 A4:    i in dom ll2 by A2,A3,FINSEQ_1:def 3;
+       reconsider i as Element of NAT by ORDINAL1:def 13;
 A5:    dom ll2 c= dom ll by RELAT_1:44;
 A6:    now assume A7: not ll.i in dom (vS+*vS1+*vS2);
          then not ll.i in dom (vS +* vS1) by FUNCT_4:13;
@@ -1848,7 +1853,7 @@ then A19:          not x in still_not-bound_in ll by A1;
               then 1 <= i & i <= len ll & x in bound_QC-variables
                                                       by A3,FINSEQ_1:3;
               then consider j such that A20: j = i & 1 <= j & j <= len ll &
-                                     ll.j = ll.i &  ll.j in bound_QC-variables;
+              ll.j = ll.i & ll.j in bound_QC-variables;
                x in { ll.n : 1 <= n & n <= len ll & ll.n in bound_QC-variables}
                                                                   by A20;
               then x in variables_in(ll,bound_QC-variables) by QC_LANG3:def 2;

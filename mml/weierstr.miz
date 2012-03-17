@@ -9,7 +9,7 @@ environ
  vocabularies METRIC_1, PRE_TOPC, BOOLE, ABSVALUE, ARYTM_1, SETFAM_1, FINSEQ_1,
       FINSET_1, TOPMETR, RELAT_1, TARSKI, FUNCT_1, SUBSET_1, ORDINAL2,
       COMPTS_1, EUCLID, LATTICES, PCOMPS_1, SEQ_2, SEQ_1, SEQ_4, WEIERSTR,
-      ARYTM, FRECHET2, NAT_1;
+      ARYTM, FRECHET2;
  notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1, FUNCT_2,
       ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, TOPMETR,
       METRIC_1, COMPTS_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FINSEQ_1, FINSET_1,
@@ -54,7 +54,7 @@ proof
            thus the carrier of M is non empty by A3;
          end;
       A5:dist(x,a) < r1 by A3,METRIC_1:12;
-            r1 <= abs(r1) & 0 <= abs(r2) by COMPLEX1:132,ABSVALUE:11;
+            r1 <= abs(r1) & 0 <= abs(r2) by ABSVALUE:11,COMPLEX1:132;
          then A6: r1 + 0 <= abs(r1) + abs(r2) by XREAL_1:9;
              0 <= dist(x1,x2) by METRIC_1:5;
          then r1 + 0 <= abs(r1) + abs(r2) + dist(x1,x2)
@@ -264,7 +264,7 @@ A1:F is finite & F is_ball-family;
       end;
       consider p being FinSequence such that
    A18:rng p = F by A1,FINSEQ_1:73;
-    ex n being Element of NAT st dom p = Seg n by FINSEQ_1:def 2;
+    ex n being Nat st dom p = Seg n by FINSEQ_1:def 2;
    hence thesis by A1,A2,A18;
 end;
 
@@ -361,9 +361,9 @@ A1:f is continuous & B is open;
          consider C being Subset of S such that
       A3:C in B & P = f"C by A2,Def1;
          reconsider C as Subset of S;
-A0:      [#]S <> {};
+A4:      [#]S <> {};
          C is open by A1,A3,TOPS_2:def 1;
-         hence thesis by A0,A1,A3,TOPS_2:55;
+         hence thesis by A1,A3,A4,TOPS_2:55;
       end;
    end;
    hence thesis by TOPS_2:def 1;
@@ -1350,13 +1350,13 @@ theorem Th22:
 proof
    let M be non empty MetrSpace;
    let x be Point of M;
-A: [#]R^1 <> {};
+A1: [#]R^1 <> {};
    for P being Subset of R^1 st P is open holds
    (dist x)"P is open
    proof
       let P be Subset of R^1;
       assume
-   A1:P is open;
+   A2:P is open;
       thus (dist(x))"P is open
       proof
          for p being Point of M st p in (dist(x))"P
@@ -1365,45 +1365,45 @@ A: [#]R^1 <> {};
             let p be Point of M;
             assume
             p in (dist(x))"P;
-            then A2: p in dom dist(x) & (dist(x)).p in P by FUNCT_1:def 13;
+            then A3: p in dom dist(x) & (dist(x)).p in P by FUNCT_1:def 13;
             consider y being Point of RealSpace such that
-         A3:y = dist(p,x) by METRIC_1:def 14;
+         A4:y = dist(p,x) by METRIC_1:def 14;
             reconsider P as Subset of TopSpaceMetr(RealSpace)
               by TOPMETR:def 7;
-            y in P by A2,A3,Def6;
+            y in P by A3,A4,Def6;
             then consider r being real number such that
-         A4:r>0 & Ball(y,r) c= P by A1,TOPMETR:22,def 7;
+         A5:r>0 & Ball(y,r) c= P by A2,TOPMETR:22,def 7;
             reconsider r as Real by XREAL_0:def 1;
-         A5:Ball(p,r) c= (dist(x))"P
+         A6:Ball(p,r) c= (dist(x))"P
             proof
                let z be set;
                assume
-            A6:z in Ball(p,r);
+            A7:z in Ball(p,r);
                then reconsider z as Point of M;
-            A7:dist(p,z) < r by A6,METRIC_1:12;
+            A8:dist(p,z) < r by A7,METRIC_1:12;
                    abs(dist(p,x)-dist(z,x)) <= dist(p,z)
                by METRIC_6:1;
                then abs(dist(p,x)-dist(z,x))+dist(p,z) < r+dist(p,z)
-               by A7,XREAL_1:10;
-           then A8:abs(dist(p,x)-dist(z,x)) < r by XREAL_1:8;
+               by A8,XREAL_1:10;
+           then A9:abs(dist(p,x)-dist(z,x)) < r by XREAL_1:8;
                consider q being Point of RealSpace such that
-           A9:q = dist(z,x) by METRIC_1:def 14;
-                   dist(y,q) < r by A3,A8,A9,TOPMETR:15;
+           A10:q = dist(z,x) by METRIC_1:def 14;
+                   dist(y,q) < r by A4,A9,A10,TOPMETR:15;
                then q in Ball(y,r) by METRIC_1:12;
-           then q in P by A4;
-           then A10:(dist(x)).z in P by A9,Def6;
+           then q in P by A5;
+           then A11:(dist(x)).z in P by A10,Def6;
                    dom (dist(x)) = the carrier of TopSpaceMetr(M)
                by FUNCT_2:def 1;
                then dom (dist(x)) = the carrier of M by TOPMETR:16;
-               hence thesis by A10,FUNCT_1:def 13;
+               hence thesis by A11,FUNCT_1:def 13;
             end;
             take r;
-            thus thesis by A4,A5;
+            thus thesis by A5,A6;
          end;
          hence thesis by TOPMETR:22;
       end;
    end;
-   hence thesis by A,TOPS_2:55;
+   hence thesis by A1,TOPS_2:55;
 end;
 
 theorem Th23:
@@ -1714,7 +1714,7 @@ A2:x1 = (dist_min(P)).p1 & x2 = (dist_min(P)).p2;
    hence thesis by A1,A2,Th28;
 end;
 
-A: [#]R^1 <> {};
+Lm2: [#]R^1 <> {};
 
 theorem Th30:
    for M being non empty MetrSpace holds
@@ -1778,7 +1778,7 @@ A1:X <> {} & X is compact;
      end;
      hence thesis by TOPMETR:22;
   end;
-  hence thesis by A,TOPS_2:55;
+  hence thesis by Lm2,TOPS_2:55;
 end;
 
 theorem Th31:
@@ -1886,7 +1886,7 @@ A1:X <> {} & X is compact;
          hence thesis by TOPMETR:22;
       end;
    end;
-   hence thesis by A,TOPS_2:55;
+   hence thesis by Lm2,TOPS_2:55;
 end;
 
 theorem Th34:

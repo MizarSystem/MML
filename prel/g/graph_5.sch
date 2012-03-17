@@ -2,12 +2,12 @@
 <Schemes>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="XXREAL_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="XREAL_0"/>
 </Signature>
@@ -27,14 +27,14 @@
 <For>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="7"/>
 </Cluster>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="5">
+<Func kind="K" nr="1">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -52,7 +52,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="16">
+<Func kind="K" nr="12">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -73,7 +73,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="7" value="false"/>
 <Adjective nr="11"/>
 </Cluster>
 </Typ>
@@ -95,7 +95,7 @@
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
-<Pred kind="R" nr="3">
+<Pred kind="R" nr="13">
 <Func kind="F" nr="2">
 <Var nr="1"/>
 </Func>

@@ -9,15 +9,14 @@ environ
  vocabularies PRE_TOPC, RLVECT_1, VECTSP_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
       EUCLID, BINOP_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, COMPLEX1, ABSVALUE,
       SQUARE_1, ORDINAL2, SEQ_1, SEQ_2, BOOLE, REALSET1, NORMSP_1, RSSPACE3,
-      LOPBAN_1, REAL_NS1, BHSP_1, METRIC_1, BHSP_3, PROB_2, EUCLID_2, NAT_1;
+      LOPBAN_1, REAL_NS1, BHSP_1, METRIC_1, BHSP_3, PROB_2, EUCLID_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, PRE_TOPC, FINSEQ_1, FINSEQ_2, STRUCT_0, FUNCOP_1, ORDINAL1,
-      NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, COMPLEX1, REAL_1, RLVECT_1, BHSP_1,
-      BHSP_2, BINOP_2, SEQ_1, SEQ_2, RVSUM_1, NORMSP_1, EUCLID, EUCLID_2,
-      RSSPACE3, LOPBAN_1, BHSP_3;
+      BINOP_1, PRE_TOPC, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, FUNCOP_1,
+      ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, COMPLEX1, REAL_1,
+      RLVECT_1, BHSP_1, BHSP_2, BINOP_2, SEQ_1, SEQ_2, RVSUM_1, NORMSP_1,
+      EUCLID, EUCLID_2, RSSPACE3, LOPBAN_1, BHSP_3;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, SUPINF_1, SEQ_2,
-      FINSEQOP, FINSOP_1, REALSET2, BHSP_2, BHSP_3, EUCLID_2, RSSPACE3,
-      LOPBAN_1;
+      FINSEQOP, REALSET2, BHSP_2, BHSP_3, EUCLID_2, RSSPACE3, LOPBAN_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1, FINSEQ_2, STRUCT_0, NORMSP_1,
       BHSP_1, REVROT_1, RSSPACE3;
@@ -245,7 +244,7 @@ proof
      proof
       reconsider x1=x as Element of REAL n by Def4;
        |.x1.| = 0 iff x1 = 0*n by EUCLID:10,11;
-      hence ||.x.|| = 0 iff x= 0.(REAL-NS n) by Th1,Def4;
+      hence ||.x.|| = 0 iff x= 0.(REAL-NS n) by Def4,Th1;
      end;
      thus ||.a * x.|| = abs(a) * ||.x.||
      proof
@@ -262,7 +261,7 @@ proof
 then A1:   ||.x + y.|| = |. x1+ y1 .| by Th1;
        |. x1+ y1 .| <= |. x1 .| + |. y1 .| by EUCLID:15;
       then |. x1+ y1 .| <= ||.x.|| +|. y1 .| by Th1;
-      hence thesis by Th1,A1;
+      hence thesis by A1,Th1;
      end;
     end;
     hence thesis by NORMSP_1:def 2;
@@ -380,7 +379,7 @@ A10:   v + w =v1+w1 by Th2;
 A11:   0.(REAL-NS n) = 0*n by Def4;
       reconsider zero = n|->0 as Element of n-tuples_on REAL by FINSEQ_2:132;
       reconsider v2=v1 as Element of n-tuples_on REAL by EUCLID:def 1;
-      thus v + 0.(REAL-NS n) =v1 + 0*n by Th2,A11
+      thus v + 0.(REAL-NS n) =v1 + 0*n by A11,Th2
               .= v2 + zero by EUCLID:def 4
               .=v by RVSUM_1:33;
      end;
@@ -415,7 +414,7 @@ proof
 A1:x=a;
    reconsider a1=a as Element of n-tuples_on REAL by EUCLID:def 1;
     -x = (-1)*x by RLVECT_1:29
-        .= (-1)*a by Th3,A1
+        .= (-1)*a by A1,Th3
         .=-a1 by RVSUM_1:76;
    hence thesis;
 end;
@@ -507,15 +506,15 @@ then A15:    1 <= i & i <=k+1 by FINSEQ_1:3;
 then A16:      i in Seg k by A15,FINSEQ_1:3;
          then xk.i <= Sum xk by A3,A6;
 then A17:      x.i <= Sum xk by A10,A16,FUNCT_1:72;
-          0 <= x.(k+1) by A12,A4;
+          0 <= x.(k+1) by A4,A12;
          then Sum xk <= Sum xk + x.(k+1) by XREAL_1:33;
          hence x.i <=Sum x by A14,A17,XXREAL_0:2;
         end;
         suppose i=k+1;
-         hence x.i <= Sum x by A14,A8,XREAL_1:33;
+         hence x.i <= Sum x by A8,A14,XREAL_1:33;
         end;
       end;
-      hence thesis by A14,A8,A13,XREAL_1:35;
+      hence thesis by A8,A13,A14,XREAL_1:35;
      end;
     end;
     hence P[k+1];
@@ -608,8 +607,8 @@ A7:|.(x|n).| = sqrt Sum sqr (x|n) by EUCLID:def 5;
    then 0 <= Sum sqr (x|n) by Th7;
 then A8:|.(x|n).|^2 + (x.(n+1))^2 = Sum sqr (x|n) + (x.(n+1))^2
       by A7,SQUARE_1:def 4;
-    (sqr(x|n))^<*(x.(n+1))^2*> = mlt(xn,xn)^<*(x.(n+1))*(x.(n+1))*> by RVSUM_1:
-97
+    (sqr(x|n))^<*(x.(n+1))^2*> = mlt(xn,xn)^<*(x.(n+1))*(x.(n+1))*> by
+RVSUM_1:97
     .= mlt((xn)^<*x.(n+1)*>,(x|n)^<*x.(n+1)*>) by RFUNCT_4:2
     .= sqr x by A4,RVSUM_1:97;
    hence thesis by A6,A8,RVSUM_1:104;
@@ -664,7 +663,7 @@ A2:  xs= x & xseq=seq;
      thus seq is convergent & lim seq = x
      proof
        xs = 0*0 by JORDAN2C:113,TARSKI:def 1;
-then A3:   x=0.(REAL-NS 0) by Def4,A2;
+then A3:   x=0.(REAL-NS 0) by A2,Def4;
 A4:   for i be Element of NAT holds seq.i=0.(REAL-NS 0)
       proof
        let i be Element of NAT;
@@ -726,12 +725,12 @@ A16:       for m be Element of NAT st m >= k holds
            assume k<=m;
 then A17:       ||.(seq.m) - x.|| < e by A16;
             len ((xseq.m) - xs) = (n+1) by EUCLID:2;
-           then i in dom ((xseq.m) - xs) by FINSEQ_1:def 3,A12;
+           then i in dom ((xseq.m) - xs) by A12,FINSEQ_1:def 3;
 then A18:       (xseq.m).i-xs.i = ((xseq.m) - xs).i by SEQ_1:def 4;
             (xseq.m)-xs = (seq.m) - x by A9,Th5;
-then A19:       abs((xseq.m).i-xs.i) <= ||.(seq.m) - x.|| by Th9,A12,A18;
+then A19:       abs((xseq.m).i-xs.i) <= ||.(seq.m) - x.|| by A12,A18,Th9;
             rseqi.m-xs.i=(xseq.m).i-xs.i by A13;
-           hence abs(rseqi.m-xs.i) < e by XXREAL_0:2,A17,A19;
+           hence abs(rseqi.m-xs.i) < e by A17,A19,XXREAL_0:2;
           end;
          end;
          then rseqi is convergent by SEQ_2:def 6;
@@ -797,7 +796,7 @@ A26:      now let k be Element of NAT;
               .=xs.i by A24,FUNCT_1:72;
          hence thesis by A25,A26;
         end;
-then A27:     seqn is convergent & xn=lim seqn by A23,A8;
+then A27:     seqn is convergent & xn=lim seqn by A8,A23;
          n+1 in Seg (n+1) by FINSEQ_1:6;
         then consider rseqn1 be Real_Sequence such that
 A28:     for k be Element of NAT holds rseqn1.k = (xseq.k).(n+1)
@@ -805,8 +804,8 @@ A28:     for k be Element of NAT holds rseqn1.k = (xseq.k).(n+1)
 A29:     ||.seqn - xn.|| is convergent & lim ||.seqn - xn.|| = 0
           by A27,NORMSP_1:41;
         set seqn2 = ||.seqn - xn.|| (#) ||.seqn - xn.||;
-A30:     seqn2 is convergent by SEQ_2:28,A29;
-A31:    lim seqn2 = 0 * 0 by SEQ_2:29,A29 .= 0;
+A30:     seqn2 is convergent by A29,SEQ_2:28;
+A31:    lim seqn2 = 0 * 0 by A29,SEQ_2:29 .= 0;
         deffunc F(Element of NAT)=abs(rseqn1.$1 -xs.(n+1));
         consider absrseq be Real_Sequence such that
 A32:    for i be Element of NAT holds absrseq.i =F(i) from SEQ_1:sch 1;
@@ -817,7 +816,7 @@ A34:    now let e be real number;
      e > 0;
           then consider m be Element of NAT such that
 A35:     for k be Element of NAT st m <= k holds
-          abs(rseqn1.k -xs.(n+1)) < e by SEQ_2:def 7,A28;
+          abs(rseqn1.k -xs.(n+1)) < e by A28,SEQ_2:def 7;
            now let k be Element of NAT;
           assume m <= k;
           then abs(abs(rseqn1.k -xs.(n+1))-0)  < e by A35;
@@ -830,8 +829,8 @@ A35:     for k be Element of NAT st m <= k holds
         hence thesis by A34,SEQ_2:def 7;
        end;
        set rseqn2 =absrseq (#) absrseq;
-A36:   rseqn2 is convergent by SEQ_2:28,A33;
-A37:   lim rseqn2 = 0 * 0 by SEQ_2:29,A33 .=0;
+A36:   rseqn2 is convergent by A33,SEQ_2:28;
+A37:   lim rseqn2 = 0 * 0 by A33,SEQ_2:29 .=0;
        set seq2 = ||.seq - x.|| (#) ||.seq - x.||;
 A38:   seq2=seqn2+rseqn2
        proof
@@ -857,9 +856,9 @@ then A45:      len ((xseq.k-xs) |n) = n by FINSEQ_1:80;
 A46:      len (xseqn.k -xsn) = n by EUCLID:2;
 A47:      dom ((xseq.k-xs) |n) = Seg n by A45,FINSEQ_1:def 3;
 A48:      dom(xseqn.k -xsn) = Seg n by A46,FINSEQ_1:def 3;
-          now let i be Element of NAT such that
+          now let i be Nat such that
 A49:       i in dom ((xseq.k-xs) |n);
-A50:       i in Seg n by A49,A45,FINSEQ_1:def 3;
+A50:       i in Seg n by A45,A49,FINSEQ_1:def 3;
           reconsider xseq1 = xseq.k, xs1 = xs
             as Element of (n+1)-tuples_on REAL by EUCLID:def 1;
           reconsider xseq2 = xseqn.k, xs2 = xsn
@@ -873,17 +872,17 @@ A52:       (xseqn.k-xsn).i = xseq2.i-xs2.i by RVSUM_1:48;
            .= ((xseq.k) |Seg n).i - (xs|Seg n).i by A50,FUNCT_1:72
            .= ((xseq.k) |n).i- (xs|Seg n).i by FINSEQ_1:def 15
            .= ((xseq.k) |n).i-(xs|n).i by FINSEQ_1:def 15
-           .= (xseqn.k -xsn).i by A52,A22;
+           .= (xseqn.k -xsn).i by A22,A52;
          end;
          hence thesis by A47,A48,FINSEQ_1:17;
         end;
    A53: 0<= (rseqn1.k - xs.(n+1))^2 by XREAL_1:65;
    A54: absrseq.k = abs(rseqn1.k - xs.(n+1)) by A32;
-        thus seq2.k = |.xseq.k-xs .|^2 by SEQ_1:12,A41,A39
-              .= |.xseqn.k-xsn .|^2 +(rseqn1.k - xs.(n+1))^2 by Th10,A43,A44
+        thus seq2.k = |.xseq.k-xs .|^2 by A39,A41,SEQ_1:12
+              .= |.xseqn.k-xsn .|^2 +(rseqn1.k - xs.(n+1))^2 by A43,A44,Th10
               .= ||. seqn.k-xn .||^2 +(rseqn1.k - xs.(n+1))^2 by A42,Th1
               .= ( ||.seqn - xn.|| (#) ||.seqn - xn.||).k
-                + (rseqn1.k - xs.(n+1))^2 by SEQ_1:12,A40
+                + (rseqn1.k - xs.(n+1))^2 by A40,SEQ_1:12
               .= seqn2.k + abs((rseqn1.k - xs.(n+1))*(rseqn1.k - xs.(n+1))) by
 A53,ABSVALUE:def 1
               .= seqn2.k + abs(rseqn1.k - xs.(n+1)) *abs(rseqn1.k - xs.(n+1))
@@ -892,8 +891,8 @@ A53,ABSVALUE:def 1
        end;
        hence thesis by SEQ_1:11;
       end;
- then A55: seq2 is convergent by SEQ_2:19,A30,A36;
- A56: lim seq2 = 0+ 0 by SEQ_2:20,A30,A31,A36,A37,A38 .= 0;
+ then A55: seq2 is convergent by A30,A36,SEQ_2:19;
+ A56: lim seq2 = 0+ 0 by A30,A31,A36,A37,A38,SEQ_2:20 .= 0;
  A57: for e be Real st e > 0
        ex m be Element of NAT st for k be Element of NAT st k >= m
        holds ||.seq.k - x.|| < e
@@ -919,7 +918,7 @@ A53,ABSVALUE:def 1
          sqrt( ||.seq.k - x.|| * ||.seq.k - x.|| )
                             = sqrt( ||.seq.k - x.||^2)
                            .= ||.seq.k - x.|| by A62,SQUARE_1:89;
-        hence ||.seq.k - x.|| < e by SQUARE_1:95,A63,A64,A65;
+        hence ||.seq.k - x.|| < e by A63,A64,A65,SQUARE_1:95;
        end;
        hence thesis;
       end;
@@ -950,9 +949,9 @@ the carrier of REAL-NS n = REAL n by Def4;
     ex rseqi be Real_Sequence st
      for l be Element of NAT holds rseqi.l = (xvseq.l).$1
    & rseqi is convergent & $2 = lim rseqi;
-A2:for i be Element of NAT st i in Seg n ex y be Element of REAL st P[i,y]
+A2:for i be Nat st i in Seg n ex y be Element of REAL st P[i,y]
    proof
-    let i be Element of NAT such that
+    let i be Nat such that
 A3: i in Seg n;
     deffunc F(Element of NAT) = (xvseq.$1).i;
     consider rseqi be Real_Sequence such that
@@ -973,13 +972,13 @@ A7:   for n, m be Element of NAT st n >= k & m >= k holds
 A8:   k<=m;
 A9:   ||.(vseq.m) - (vseq.k).|| < e by A7,A8;
          len ((xvseq.m) - (xvseq.k)) =n by EUCLID:2;
-        then i in dom ((xvseq.m) - (xvseq.k)) by FINSEQ_1:def 3,A3;
+        then i in dom ((xvseq.m) - (xvseq.k)) by A3,FINSEQ_1:def 3;
 then A10:   (xvseq.m).i-(xvseq.k).i = ((xvseq.m) - (xvseq.k)).i by SEQ_1:def 4;
          (xvseq.m)-(xvseq.k) = (vseq.m) - (vseq.k) by Th5;
 then A11:   abs((xvseq.m).i-(xvseq.k).i)
-                   <= ||.(vseq.m) - (vseq.k).|| by A10,Th9,A3;
+                   <= ||.(vseq.m) - (vseq.k).|| by A3,A10,Th9;
         rseqi.m=(xvseq.m).i & rseqi.k=(xvseq.k).i by A4;
-       hence abs(rseqi.m-rseqi.k) < e by XXREAL_0:2,A9,A11;
+       hence abs(rseqi.m-rseqi.k) < e by A9,A11,XXREAL_0:2;
       end;
      end;
      hence thesis by SEQ_4:58;
@@ -988,12 +987,13 @@ then A11:   abs((xvseq.m).i-(xvseq.k).i)
     thus thesis by A4,A5;
    end;
    consider f be FinSequence of REAL such that
-A12:dom f = Seg n & for k be Element of NAT st k in Seg n holds P[k,f.k]
+A12:dom f = Seg n & for k be Nat st k in Seg n holds P[k,f.k]
      from FINSEQ_1:sch 5(A2);
-   reconsider tseq=f as Element of REAL n by Th6,A12;
+A13: for k be Element of NAT st k in Seg n holds P[k,f.k] by A12;
+   reconsider tseq=f as Element of REAL n by A12,Th6;
    reconsider xseq=tseq as Point of REAL-NS n by Def4;
     xseq=tseq & xvseq=vseq;
-   hence thesis by Th11,A12;
+   hence thesis by A13,Th11;
 end;
 
 Lm3:
@@ -1081,9 +1081,9 @@ A3:  x .|. z = (Euclid_scalar n).(x,z) by Def6
             .= Sum mlt(x1,z1) by Def5;
 A4:  y .|. z = (Euclid_scalar n).(y,z) by Def6
             .= Sum mlt(y1,z1) by Def5;
-A5:  for k be Element of NAT st k in dom mlt(x1,x1) holds 0 <= mlt(x1,x1).k
+A5:  for k be Nat st k in dom mlt(x1,x1) holds 0 <= mlt(x1,x1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in dom mlt(x1,x1);
       then mlt(x1,x1).k = x1.k * x1.k by RVSUM_1:86;
       hence thesis by XREAL_1:65;
@@ -1102,7 +1102,7 @@ A7:     k in dom x2;
         then [:rng x1, rng x1:] c= dom multreal by ZFMISC_1:119;
         then dom(multreal.:(x1,x1)) = dom x1 /\ dom x1 by FUNCOP_1:84;
 then A8:     k in dom mlt(x1,x1) by A7,RVSUM_1:def 9;
-        then 0 <= mlt(x1,x1).k & mlt(x1,x1).k <= 0 by A6,A2,A5,RVSUM_1:115;
+        then 0 <= mlt(x1,x1).k & mlt(x1,x1).k <= 0 by A2,A5,A6,RVSUM_1:115;
         then mlt(x1,x1).k = 0;
         then (x1.k)^2 = 0 by A8,RVSUM_1:86;
         hence thesis by SQUARE_1:74;
@@ -1134,9 +1134,9 @@ then A8:     k in dom mlt(x1,x1) by A7,RVSUM_1:def 9;
       a*x is Element of REAL n by Def6;
      then reconsider ax = a*x as Element of n-tuples_on REAL by EUCLID:def 1;
 A9:  a*x1 is Element of n-tuples_on REAL by EUCLID:def 1;
-A10:  for k be Element of NAT st k in Seg n holds (ax).k = (a*x1).k
+A10:  for k be Nat st k in Seg n holds (ax).k = (a*x1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
       reconsider a as Element of REAL;
       reconsider a1 = n |-> a as Element of n-tuples_on REAL by FINSEQ_2:132;
@@ -1171,11 +1171,10 @@ A11:  a * (v + w) = (Euclid_mult n).(a,v+w) by Def6
       a*v is Element of REAL n by Def6;
      then reconsider av = a*v as Element of n-tuples_on REAL by EUCLID:def 1;
 A12:  a*v1 is Element of n-tuples_on REAL by EUCLID:def 1;
-A13:  for k be Element of NAT st k in Seg n holds av.k = (a*v1).k
+A13:  for k be Nat st k in Seg n holds av.k = (a*v1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
-::      reconsider a as Element of REAL;
       reconsider a1 = n |-> a as Element of n-tuples_on REAL by FINSEQ_2:132;
        a*v = (Euclid_mult n).(a,v1) by Def6
          .= a*v1 by Def2;
@@ -1184,9 +1183,9 @@ A13:  for k be Element of NAT st k in Seg n holds av.k = (a*v1).k
       a*w is Element of REAL n by Def6;
      then reconsider aw = a*w as Element of n-tuples_on REAL by EUCLID:def 1;
 A14:  a*w1 is Element of n-tuples_on REAL by EUCLID:def 1;
-      for k be Element of NAT st k in Seg n holds aw.k = (a*w1).k
+      for k be Nat st k in Seg n holds aw.k = (a*w1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
       reconsider a as Element of REAL;
       reconsider a1 = n |-> a as Element of n-tuples_on REAL by FINSEQ_2:132;
@@ -1196,7 +1195,7 @@ A14:  a*w1 is Element of n-tuples_on REAL by EUCLID:def 1;
      end;
 then A15:  a*w1 = a*w by A14,FINSEQ_2:139;
       a*v + a*w = (Euclid_add n).(a*v,a*w) by Def6
-              .= (Euclid_add n).(a*v1,a*w1) by A12,A13,FINSEQ_2:139,A15
+              .= (Euclid_add n).(a*v1,a*w1) by A12,A13,A15,FINSEQ_2:139
               .= a*v2 + a*w2 by Def1;
      hence thesis by A11;
     end;
@@ -1213,9 +1212,9 @@ A16:  (a+b)*v = (Euclid_mult n).(a+b,v1) by Def6
       a*v is Element of REAL n by Def6;
      then reconsider av = a*v as Element of n-tuples_on REAL by EUCLID:def 1;
 A17:  a*v1 is Element of n-tuples_on REAL by EUCLID:def 1;
-A18:  for k be Element of NAT st k in Seg n holds av.k = (a*v1).k
+A18:  for k be Nat st k in Seg n holds av.k = (a*v1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
       reconsider a as Element of REAL;
       reconsider a1 = n |-> a as Element of n-tuples_on REAL by FINSEQ_2:132;
@@ -1226,9 +1225,9 @@ A18:  for k be Element of NAT st k in Seg n holds av.k = (a*v1).k
       b*v is Element of REAL n by Def6;
      then reconsider bv = b*v as Element of n-tuples_on REAL by EUCLID:def 1;
 A19:  b*v1 is Element of n-tuples_on REAL by EUCLID:def 1;
-      for k be Element of NAT st k in Seg n holds bv.k = (b*v1).k
+      for k be Nat st k in Seg n holds bv.k = (b*v1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
       reconsider b as Element of REAL;
       reconsider b1 = n |-> b as Element of n-tuples_on REAL by FINSEQ_2:132;
@@ -1238,7 +1237,7 @@ A19:  b*v1 is Element of n-tuples_on REAL by EUCLID:def 1;
      end;
 then A20:  b*v1 = b*v by A19,FINSEQ_2:139;
       a*v + b*v = (Euclid_add n).(a*v,b*v) by Def6
-              .= (Euclid_add n).(a*v1,b*v1) by A17,A18,FINSEQ_2:139,A20
+              .= (Euclid_add n).(a*v1,b*v1) by A17,A18,A20,FINSEQ_2:139
               .= a*v2 + b*v2 by Def1;
      hence thesis by A16;
     end;
@@ -1252,9 +1251,9 @@ then A20:  b*v1 = b*v by A19,FINSEQ_2:139;
       b*v is Element of REAL n by Def6;
      then reconsider bv = b*v as Element of n-tuples_on REAL by EUCLID:def 1;
 A21:  b*v1 is Element of n-tuples_on REAL by EUCLID:def 1;
-      for k be Element of NAT st k in Seg n holds bv.k = (b*v1).k
+      for k be Nat st k in Seg n holds bv.k = (b*v1).k
      proof
-      let k be Element of NAT;
+      let k be Nat;
       assume k in Seg n;
       reconsider b as Element of REAL;
       reconsider b1 = n |-> b as Element of n-tuples_on REAL by FINSEQ_2:132;
@@ -1455,7 +1454,7 @@ then A13:  p = seq2.k - LIMIT by Th13;
        .= sqrt Sum mlt(p,p) by EUCLID_2:def 1
        .= sqrt ((Euclid_scalar n).(p,p)) by Def5
        .= ||. seq2.k-LIMIT .|| by A13,Def6;
-      hence thesis by A12,A10;
+      hence thesis by A10,A12;
      end;
      take m;
      thus thesis by A11;

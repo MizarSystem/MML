@@ -8,7 +8,7 @@ environ
 
  vocabularies FUNCT_1, BOOLE, ORDINAL1, FINSEQ_1, FINSET_1, RELAT_1, ORDINAL2,
       CARD_1, TARSKI, PARTFUN1, ALGSEQ_1, ARYTM_1, FUNCT_4, FINSEQ_7, CAT_1,
-      AFINSQ_1, FUNCOP_1, NAT_1, ARYTM;
+      AFINSQ_1, FUNCOP_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
       ORDINAL1, ORDINAL2, ORDINAL4, XCMPLX_0, REAL_1, NAT_1, PARTFUN1,
       FINSET_1, CARD_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, XXREAL_0;
@@ -18,9 +18,9 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, ORDINAL1, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
-      PARTFUN1, ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_4, CARD_5, FUNCT_7,
-      ORDINAL4, CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1,
-      FINSET_1, FUNCOP_1, XREAL_1;
+      PARTFUN1, ORDINAL1, CARD_1, FINSEQ_1, EULER_1, CARD_5, FUNCT_7, ORDINAL4,
+      CARD_2, FUNCT_4, ORDINAL3, XBOOLE_0, XBOOLE_1, FINSET_1, FUNCOP_1,
+      XREAL_1;
  schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0;
 
 begin
@@ -106,7 +106,7 @@ theorem Th7:
   proof let r be Function;
    hereby assume r is finite T-Sequence-like;
       then dom r is finite & dom r is Ordinal by FINSET_1:29,ORDINAL1:def 7;
-      then dom r in omega by CARD_4:7;
+      then dom r in omega by CARD_1:103;
      hence ex n st dom r = n;
     end;
    assume ex n st dom r = n;
@@ -130,12 +130,6 @@ end;
  reserve p,q,r,s,t for XFinSequence;
 
 registration
- cluster natural -> finite set;
- coherence
-  proof let a be set; assume a in omega;
-    then a is Element of NAT;
-   hence thesis;
-  end;
  let p;
  cluster dom p -> natural;
  coherence
@@ -232,7 +226,7 @@ A4: [y,z] = x by RELAT_1:def 1;
   hence thesis by A4;
 end;
 
-scheme XSeqEx{A()->Element of NAT,P[set,set]}:
+scheme XSeqEx{A()->Nat,P[set,set]}:
  ex p st dom p = A() & for k st k in A() holds P[k,p.k]
  provided
  A1: for k,y1,y2 st k in A() & P[k,y1] & P[k,y2] holds y1=y2
@@ -253,17 +247,19 @@ proof
     end;
     consider f being Function such that A9: dom f = A() &
         (for x st x in A() holds P[x,f.x]) from FUNCT_1:sch 2(A3,A6);
-    reconsider p=f as XFinSequence by A9,Th7;
+    A() in NAT by ORDINAL1:def 13;
+    then reconsider p=f as XFinSequence by A9,Th7;
     take p;
     thus thesis by A9;
  end;
 
-scheme XSeqLambda{A()->Element of NAT,F(set) -> set}:
+scheme XSeqLambda{A()->Nat,F(set) -> set}:
  ex p being XFinSequence st len p = A() & for k st k in A() holds p.k=F(k)
 proof
    consider f being Function such that
     A1: dom f = A() & for x st x in A() holds f.x=F(x) from FUNCT_1:sch 3;
-   reconsider p=f as XFinSequence by A1,Th7;
+   A() in NAT by ORDINAL1:def 13;
+   then reconsider p=f as XFinSequence by A1,Th7;
    take p;
   thus thesis by A1,Def1;
  end;
@@ -391,7 +387,7 @@ A2:  rng p c= {y} by FUNCOP_1:19;
    then rng p c= D by A2,XBOOLE_1:1;
    then reconsider p as XFinSequence of D by ORDINAL1:def 8;
   take p;
-  thus thesis by A1, Def1;
+  thus thesis by A1,Def1;
 end;
 
 ::::::::::::::::::::::::::::::::::::
@@ -1269,10 +1265,10 @@ registration let x,y;
     hence contradiction;
    end;
    suppose n = 1;
-    hence contradiction by ZFMISC_1:8, CARD_1:87;
+    hence contradiction by CARD_1:87,ZFMISC_1:8;
    end;
    suppose n = 2;
-    hence contradiction by ZFMISC_1:10, CARD_1:88;
+    hence contradiction by CARD_1:88,ZFMISC_1:10;
    end;
   end;
 end;

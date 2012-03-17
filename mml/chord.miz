@@ -11,22 +11,23 @@ environ
       MATRIX_2, MSAFREE2, XREAL_0, NAT_1, INT_1, PRE_TOPC, REALSET1, RELAT_1,
       RELAT_2, CHORD, TOPGEN_1, SQUARE_1, GRAPH_2, MEMBERED, BHSP_3;
  notations TARSKI, XBOOLE_0, SUBSET_1, SEQ_4, ORDINAL1, INT_1, XCMPLX_0,
-      XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_1,
+      XXREAL_0, DOMAIN_1, RELAT_1, FUNCT_1, PARTFUN1,
+      FUNCT_2, FINSEQ_1, CARD_1,
       FINSET_1, NAT_1, GLIB_000, GLIB_001, GLIB_002, ZFMISC_1, FUNCOP_1, ABIAN,
       ENUMSET1, FINSEQ_4, NUMBERS, GRAPH_2, PRE_CIRC, MEMBERED;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, BINARITH, PRE_CIRC,
-      GRAPH_2, GLIB_001, GLIB_002;
+ constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, NAT_D, FINSEQ_4, BINARITH,
+      PRE_CIRC, GRAPH_2, GLIB_001, GLIB_002;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      ARYTM_3, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED,
-      FINSEQ_1, PRE_CIRC, GLIB_000, ABIAN, GRAPH_2, HEYTING3, GLIB_001,
-      GLIB_002;
+      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
+      PRE_CIRC, GLIB_000, ABIAN, GRAPH_2, HEYTING3, GLIB_001, GLIB_002;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI, XBOOLE_0, GLIB_000, GLIB_001, GLIB_002, FUNCOP_1;
  theorems FINSEQ_1, FUNCT_1, GLIB_000, GLIB_001, GLIB_002, GRAPH_2, GRAPH_5,
       GRAPH_3, TREES_1, HEYTING3, INT_1, JORDAN12, NAT_1, ORDINAL1, REAL_1,
       RELAT_1, TARSKI, TRIANG_1, XBOOLE_0, XBOOLE_1, FINSET_1, CARD_1,
       FUNCOP_1, FUNCT_2, FINSEQ_3, FINSEQ_4, ZFMISC_1, ABIAN, CARD_2, ENUMSET1,
-      FINSEQ_2, XREAL_1, SEQ_4, PRE_CIRC, MEMBERED, FINSEQ_5, XXREAL_0, NAT_D;
+      FINSEQ_2, XREAL_1, SEQ_4, PRE_CIRC, MEMBERED, FINSEQ_5, XXREAL_0, NAT_D,
+      PARTFUN1;
  schemes BINARITH, NAT_1, GRAPH_5, FUNCT_2, FRAENKEL;
 
 begin :: Preliminaries
@@ -86,7 +87,7 @@ for n being odd natural number st 1 <> n
 proof let n being odd Nat; assume
 A1: 1 <> n;
     1 <= n by HEYTING3:1;
-   then 2*0+1 < n by A1, REAL_1:def 5;
+   then 2*0+1 < n by A1,REAL_1:def 5;
    then 1+2 <= n by Th4;
    then 1+2-2 <= n-2 by XREAL_1:11;
    then n-2*1 in NAT by INT_1:16;
@@ -99,7 +100,7 @@ theorem Th6: :: Odd100
 for n being odd natural number st n<=2 holds n=1
 proof let n be odd Nat such that A1: n<=2;
    n <> 2*1; then n < 1+1 by A1,REAL_1:def 5;
-  then n <= 1 & n >= 1 by NAT_1:13,HEYTING3:1;
+  then n <= 1 & n >= 1 by HEYTING3:1,NAT_1:13;
   hence n = 1 by XXREAL_0:1;
 end;
 
@@ -186,7 +187,7 @@ A3: jjj in NAT by ORDINAL1:def 13;
         hence contradiction by A2;
     end;
     then consider jj being Element of NAT such that
-A4: 2*jj = jjj by A3, ABIAN:def 2;
+A4: 2*jj = jjj by A3,ABIAN:def 2;
     reconsider jj as Nat;
     take jj;
     thus i + 2*jj = j by A2,A4;
@@ -218,7 +219,7 @@ A1: for y being Element of T holds F(m) <= F(y) from GRAPH_5:sch 2;
     take m;
     thus m in T;
     let y be set such that A2: y in T;
-    thus m..S <= y..S by A1, A2;
+    thus m..S <= y..S by A1,A2;
 end;
 
 definition let p be FinSequence, n be natural number;
@@ -238,34 +239,34 @@ A2: n in dom p and
 A3: p is one-to-one;
 
 hereby assume x in p.followSet(n);
-    then consider a being Element of NAT such that
+    then consider a being Nat such that
 A4: a in dom (n, len p)-cut p and
 A5: ((n, len p)-cut p).a = x by FINSEQ_2:11;
       n in NAT by ORDINAL1:def 13;
     then consider k being Element of NAT such that
 A6: k in dom p and
 A7: p.k = ((n, len p)-cut p).a and k+1 = n+a and
-A8: n <= k & k <= len p by A4, GRAPH_3:2;
+A8: n <= k & k <= len p by A4,GRAPH_3:2;
 A9: x..p in dom p by A1,FINSEQ_4:30;
-     p.(x..p) = x by A1, FINSEQ_4:29;
-  hence x..p >= n by A8, A3,A6,A9,A7,A5,FUNCT_1:def 8;
+     p.(x..p) = x by A1,FINSEQ_4:29;
+  hence x..p >= n by A3,A5,A6,A7,A8,A9,FUNCT_1:def 8;
 end;
 assume
 A10: x..p >= n;
-A11: p.(x..p) = x by A1, FINSEQ_4:29;
+A11: p.(x..p) = x by A1,FINSEQ_4:29;
     consider k being Nat such that
 A12: x..p = n + k by A10,NAT_1:10;
 A13: 1 <= n & n <= len p by A2,FINSEQ_3:27;
 then A14: len ((n, len p)-cut p) + n = len p + 1 by GRAPH_2:def 1;
      x..p in dom p by A1,FINSEQ_4:30;
-    then k + n <= len p by A12, FINSEQ_3:27;
+    then k + n <= len p by A12,FINSEQ_3:27;
     then k + n + (-n) <= len p + (-n) by XREAL_1:9;
 then A15:    k + 1 <= len p - n + 1 by XREAL_1:9;
      0+1 <= k+1 by XREAL_1:9;
-then A16: k+1 in dom ((n, len p)-cut p) by A15,A14,FINSEQ_3:27;
-     k < len ((n, len p)-cut p) by A15,A14, NAT_1:13;
-    then ((n, len p)-cut p).(k+1) = p.(x..p) by A12,A13, GRAPH_2:def 1;
-  hence x in p.followSet(n) by A11, A16, FUNCT_1:12;
+then A16: k+1 in dom ((n, len p)-cut p) by A14,A15,FINSEQ_3:27;
+     k < len ((n, len p)-cut p) by A14,A15,NAT_1:13;
+    then ((n, len p)-cut p).(k+1) = p.(x..p) by A12,A13,GRAPH_2:def 1;
+  hence x in p.followSet(n) by A11,A16,FUNCT_1:12;
 end;
 
 theorem Th17: :: Follow03
@@ -283,11 +284,11 @@ suppose A3: n > len q;
   hence p.followSet(n+1) = q.followSet(n) by A3,GRAPH_2:def 1; end;
 suppose A4: n <= len q;
 A5: 0+1 <= n by NAT_1:13;
-then A6: len (n, len q)-cut q + n = len q + 1 by A4, GRAPH_2:def 1;
-A7: 1 <= n+1 & n+1 <= len p & len p <= len p by A2,XREAL_1:9,A5,A4;
+then A6: len (n, len q)-cut q + n = len q + 1 by A4,GRAPH_2:def 1;
+A7: 1 <= n+1 & n+1 <= len p & len p <= len p by A2,A4,A5,XREAL_1:9;
 then A8:len ((n+1, len p)-cut p) + (n+1) = len p + 1 by GRAPH_2:def 1;
     then dom ((n+1,len p)-cut p) =
-    Seg (len ((n, len q)-cut q)) by A6,A2,FINSEQ_1:def 3;
+    Seg (len ((n, len q)-cut q)) by A2,A6,FINSEQ_1:def 3;
 then A9: dom ((n+1,len p)-cut p) = dom ((n, len q)-cut q) by FINSEQ_1:def 3;
 
 A10: now let i be Nat such that A11: i in dom q;
@@ -295,37 +296,37 @@ A10: now let i be Nat such that A11: i in dom q;
       hence p.(i+1) = q.i by FINSEQ_1:57;
     end;
 A12: now let k be Nat such that A13: k in dom ((n, len q)-cut q);
-    A14: 1 <= k & k <= (len p - n) by A8, A9,A13,FINSEQ_3:27;
+    A14: 1 <= k & k <= (len p - n) by A8,A9,A13,FINSEQ_3:27;
     then A15: n+k <= n+((len p)-n) by XREAL_1:9;
       1+-1 <= k+-1 by A14,XREAL_1:9;
         then k-1 in NAT by INT_1:16;
         then reconsider k1 = k-1 as Nat by ORDINAL1:def 13;
     A16: -1 + k < 0 + (len p - n) by A14,XREAL_1:10;
-    A17: k1+n +1 + -1 <= len q + 1 + -1 by A15,A2,XREAL_1:9;
+    A17: k1+n +1 + -1 <= len q + 1 + -1 by A2,A15,XREAL_1:9;
          1+0 <= n+k1 by NAT_1:13;
     then A18: n+k1 in dom q by A17,FINSEQ_3:27;
       thus ((n+1,len p)-cut p).k = ((n+1, len p)-cut p).(k1+1)
-                    .= p.(n+1+k1) by A16,A8,A7,GRAPH_2:def 1
+                    .= p.(n+1+k1) by A7,A8,A16,GRAPH_2:def 1
                     .= p.(n+k1+1)
                     .= q.(n+k1) by A10,A18
-                   .= ((n,len q)-cut q).(k1+1) by A16,A6,A2,A5,A4,GRAPH_2:def 1
+                   .= ((n,len q)-cut q).(k1+1) by A2,A4,A5,A6,A16,GRAPH_2:def 1
                     .= ((n,len q)-cut q).k;
     end;
 
      now let y be set;
       hereby assume y in rng (n+1,len p)-cut p;
-        then consider k being Element of NAT such that
+        then consider k being Nat such that
     A19: k in dom (n+1, len p)-cut p and
     A20: ((n+1,len p)-cut p).k = y by FINSEQ_2:11;
-         ((n+1,len p)-cut p).k = ((n, len q)-cut q).k by A9,A19,A12;
-       hence y in rng (n, len q)-cut q by A20,A9,A19,FUNCT_1:12;
+         ((n+1,len p)-cut p).k = ((n, len q)-cut q).k by A9,A12,A19;
+       hence y in rng (n, len q)-cut q by A9,A19,A20,FUNCT_1:12;
       end;
       assume y in rng ((n, len q)-cut q);
-        then consider k being Element of NAT such that
+        then consider k being Nat such that
     A21: k in dom (n, len q)-cut q and
     A22: ((n, len q)-cut q).k = y by FINSEQ_2:11;
-         ((n+1,len p)-cut p).k = ((n, len q)-cut q).k by A21,A12;
-      hence y in rng (n+1,len p)-cut p by A22, A21,A9,FUNCT_1:12;
+         ((n+1,len p)-cut p).k = ((n, len q)-cut q).k by A12,A21;
+      hence y in rng (n+1,len p)-cut p by A9,A21,A22,FUNCT_1:12;
     end;
   hence p.followSet(n+1) = q.followSet(n) by TARSKI:2; end;
 end;
@@ -337,7 +338,7 @@ proof let X be set, f be FinSequence of X, g be Subset of f such that
 A1: len Seq g = len f;
 A2: len Seq g = card g by GLIB_001:5;
     now assume g <> f; then g c< f by XBOOLE_0:def 8;
-    hence contradiction by A1, A2, CARD_2:67;
+    hence contradiction by A1,A2,CARD_2:67;
    end;
   hence Seq g = f by FINSEQ_3:125;
 end;
@@ -356,7 +357,7 @@ A1: u in S & v in S;
     reconsider S as non empty Subset of the_Vertices_of G by A1;
     let e be set such that
 A2: e Joins u,v,G;
-     e in G.edgesBetween(S) by A2,A1,GLIB_000:35;
+     e in G.edgesBetween(S) by A1,A2,GLIB_000:35;
 then A3: e in the_Edges_of H by GLIB_000:def 39;
 A4: (((the_Source_of G).e = u & (the_Target_of G).e = v) or
     ((the_Source_of G).e = v & (the_Target_of G).e = u)) by A2,GLIB_000:def 15;
@@ -364,7 +365,7 @@ A4: (((the_Source_of G).e = u & (the_Target_of G).e = v) or
     the_Target_of H = (the_Target_of G) | the_Edges_of H by GLIB_000:48;
     then (the_Source_of H).e = (the_Source_of G).e &
     (the_Target_of H).e = (the_Target_of G).e by A3,FUNCT_1:72;
-    hence thesis by A4, A3,GLIB_000:def 15;
+    hence thesis by A3,A4,GLIB_000:def 15;
 end;
 
 theorem
@@ -390,22 +391,22 @@ A1: for n being odd Nat st n <= len W holds not W.n in S;
  now assume the_Vertices_of G\S = {};
     then A2: the_Vertices_of G c= S & S c= the_Vertices_of G by XBOOLE_1:37;
          W.last() in the_Vertices_of G;
-     hence contradiction by A1, A2;
+     hence contradiction by A1,A2;
     end;
 then A3: the_Vertices_of H = the_Vertices_of G\S &
     the_Edges_of H = G.edgesBetween(the_Vertices_of G\S) by GLIB_000:def 39;
      now let x be set such that A4: x in W.vertices();
         consider n being odd Element of NAT such that
     A5: n <= len W & W.n = x by A4,GLIB_001:88;
-         x in the_Vertices_of G & not x in S by A1, A5, GLIB_001:8;
-        hence x in the_Vertices_of H by A3, XBOOLE_0:def 4;
+         x in the_Vertices_of G & not x in S by A1,A5,GLIB_001:8;
+        hence x in the_Vertices_of H by A3,XBOOLE_0:def 4;
     end;
 then A6: W.vertices() c= the_Vertices_of H by TARSKI:def 3;
 A7: W.edges() c= G.edgesBetween(W.vertices()) by GLIB_001:110;
      G.edgesBetween(W.vertices()) c= G.edgesBetween(the_Vertices_of H)
         by A6,GLIB_000:39;
     then W.edges() c= G.edgesBetween(the_Vertices_of H) by A7,XBOOLE_1:1;
-    hence W is Walk of H by A3, A6,GLIB_001:171;
+    hence W is Walk of H by A3,A6,GLIB_001:171;
 end;
 
 theorem Th22: :: Walk03
@@ -423,34 +424,34 @@ A4: now let x be set such that
     A6: y in {a,b} \ {x};
     A7:x in {x} by TARSKI:def 1;
         set k = W.find(y);
-    A8: x = a or x = b by A5,A2,A3,TARSKI:def 2;
+    A8: x = a or x = b by A2,A3,A5,TARSKI:def 2;
     A9: k <= len W by A2,A6,GLIB_001:def 19;
     A10: W.k = y by A2,A6,GLIB_001:def 19;
-        then k <> 1 by A7,A6,XBOOLE_0:def 4,A5;
+        then k <> 1 by A5,A6,A7,XBOOLE_0:def 4;
         then consider m being odd Nat such that
     A11: m+2 = k by Th5;
-    A12: m < k by A11, NAT_1:16;
-    then A13: m < len W by A9, XXREAL_0:2;
+    A12: m < k by A11,NAT_1:16;
+    then A13: m < len W by A9,XXREAL_0:2;
     A14: m in NAT by ORDINAL1:def 13;
-        then W.m in {a,b} by A13,A2,GLIB_001:88;
+        then W.m in {a,b} by A2,A13,GLIB_001:88;
     then A15: W.m = a or W.m = b by TARSKI:def 2;
     A16: y = a or y = b by A6,TARSKI:def 2;
-         W.(m+1) Joins W.m,W.k,G by A14, A13, A11, GLIB_001:def 3;
+         W.(m+1) Joins W.m,W.k,G by A11,A13,A14,GLIB_001:def 3;
      hence ex e being set st e Joins x,y,G
-        by A15,A16,A8,A7,XBOOLE_0:def 4,A12,A14,A13,A10,A2,A6,GLIB_001:def 19;
+        by A2,A6,A7,A8,A10,A12,A13,A14,A15,A16,GLIB_001:def 19,XBOOLE_0:def 4;
    end;
-   per cases by A2, A3, TARSKI:def 2;
+   per cases by A2,A3,TARSKI:def 2;
    suppose A17: W.first() = a;
            b in {b} by TARSKI:def 1;
-     then b in {a,b}\{a} by A1, ZFMISC_1:23;
-    hence thesis by A17, A4;
+     then b in {a,b}\{a} by A1,ZFMISC_1:23;
+    hence thesis by A4,A17;
    end;
    suppose A18: W.first() = b;
            a in {a} by TARSKI:def 1;
-     then a in {a,b}\{b} by A1, ZFMISC_1:23;
+     then a in {a,b}\{b} by A1,ZFMISC_1:23;
      then consider e be set such that
-   A19: e Joins b,a,G by A18,A4;
-        e Joins a,b,G by A19, GLIB_000:17;
+   A19: e Joins b,a,G by A4,A18;
+        e Joins a,b,G by A19,GLIB_000:17;
     hence thesis;
    end;
 end;
@@ -469,7 +470,7 @@ A3: W.vertices() c= the_Vertices_of H by A1,GLIB_000:def 39;
 A4: W.edges() c= G.edgesBetween(W.vertices()) by GLIB_001:110;
      G.edgesBetween(W.vertices()) c= G.edgesBetween(the_Vertices_of H)
         by A3,GLIB_000:39;
-    then W.edges() c= the_Edges_of H by A2, A4,XBOOLE_1:1;
+    then W.edges() c= the_Edges_of H by A2,A4,XBOOLE_1:1;
     hence W is Walk of H by A3,GLIB_001:171;
 end;
 
@@ -483,13 +484,13 @@ proof let G1,G2 be _Graph such that A1: G1 == G2;
     then W1 is Path-like by GLIB_001:def 31;
 then A4: W2 is Path-like by A1,A2,GLIB_001:182;
      W1 is non trivial by A3,GLIB_001:def 31;
-    then len W2 <> 1 by A2, GLIB_001:127;
+    then len W2 <> 1 by A2,GLIB_001:127;
 then A5: W2 is non trivial by GLIB_001:127;
      W1 is closed by A3,GLIB_001:def 31;
     then W1.first() = W1.last() by GLIB_001:def 24;
     then W2.first() = W2.last() by A2;
     then W2 is closed by GLIB_001:def 24;
-    hence W2 is Cycle-like by A5,A4,GLIB_001:def 31;
+    hence W2 is Cycle-like by A4,A5,GLIB_001:def 31;
 end;
 
 theorem Th25: :: Path01
@@ -522,9 +523,9 @@ then A5: J.3 = T.last() by A3,GLIB_001:15;
 then A6: J.3 = b by A3,GLIB_001:16;
 A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
         assume A9: J.m = J.n;
-    A10: 1 <= m & m < len J by HEYTING3:1,A8,XXREAL_0:2;
+    A10: 1 <= m & m < len J by A8,HEYTING3:1,XXREAL_0:2;
     then A11: m in dom J by FINSEQ_3:27;
-         2*0+1 < n by A10,A8,XXREAL_0:2;
+         2*0+1 < n by A8,A10,XXREAL_0:2;
     then A12: 1+2 <= n by Th4;
          now assume m = 1;
             then J.m = J.first();
@@ -532,13 +533,13 @@ A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
         then A13: not J.m in P.vertices() by A2,A3,GLIB_001:16;
             per cases by A12,REAL_1:def 5;
           suppose n=3;
-            hence contradiction by A9,A13, A3,A6,GLIB_001:89; end;
+            hence contradiction by A3,A6,A9,A13,GLIB_001:89; end;
           suppose A14: n > 3;
             then not n in Seg 3 by FINSEQ_1:3;
             then not n in Seg (len T) by A3,GLIB_001:15;
         then A15: not n in dom T by FINSEQ_1:def 3;
              1 <= n by A14,XXREAL_0:2;
-        then n in dom J by A8, FINSEQ_3:27;
+        then n in dom J by A8,FINSEQ_3:27;
             then consider j being Element of NAT such that
         A16: j < len P & n = len T + j by A15,GLIB_001:35;
              now assume j is odd;
@@ -549,10 +550,10 @@ A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
             reconsider j1=jj+1 as odd Nat;
              j+1 <= len P by A16,NAT_1:13;
             then P.j1 in P.vertices() by GLIB_001:88;
-          hence contradiction by A9,A13, A16,A4,GLIB_001:34; end;
+          hence contradiction by A4,A9,A13,A16,GLIB_001:34; end;
         end; then 2*0+1 < m by A10,REAL_1:def 5;
     then A17: 1+2 <= m by Th4;
-        then 3 < n by XXREAL_0:2,A8;
+        then 3 < n by A8,XXREAL_0:2;
         then not n in Seg 3 by FINSEQ_1:3;
         then not n in Seg (len T) by A3,GLIB_001:15;
     then A18: not n in dom T by FINSEQ_1:def 3;
@@ -562,7 +563,7 @@ A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
     then n in dom J by FINSEQ_1:def 3;
         then consider j being Element of NAT such that
     A19: j < len P & n = len T + j by A18,GLIB_001:35;
-    A20: J.n = P.(j+1) by A19,A4,GLIB_001:34;
+    A20: J.n = P.(j+1) by A4,A19,GLIB_001:34;
          now assume j is odd;
             then reconsider jj=j as odd Nat;
              len T + jj is even;
@@ -571,10 +572,10 @@ A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
         reconsider j1=jj+1 as odd Nat;
     A21: j1 <= len P by A19,NAT_1:13;
          now assume m = 3;
-        then A22: J.m = P.1 by A3,GLIB_001:16,A5;
-             0 <> j & 0 <= j by A8,A17,A3,A19,GLIB_001:15;
+        then A22: J.m = P.1 by A3,A5,GLIB_001:16;
+             0 <> j & 0 <= j by A3,A8,A17,A19,GLIB_001:15;
             then 2*0+1 < j1 by XREAL_1:10;
-         hence contradiction by A22,A20,A9, A1,A21,GLIB_001:148;
+         hence contradiction by A1,A9,A20,A21,A22,GLIB_001:148;
         end;
         then 3 < m by A17,REAL_1:def 5;
         then not m in Seg 3 by FINSEQ_1:3;
@@ -582,21 +583,21 @@ A7: now let m,n be odd Nat such that A8: m < n & n <= len J;
     then not m in dom T by FINSEQ_1:def 3;
         then consider k being Element of NAT such that
     A23: k < len P & m = len T + k by A11,GLIB_001:35;
-    A24: J.m = P.(k+1) by A23,A4,GLIB_001:34;
+    A24: J.m = P.(k+1) by A4,A23,GLIB_001:34;
          now assume k is odd;
             then reconsider kk=k as odd Nat;
              len T + kk is even;
             hence contradiction by A23;
         end; then reconsider kk=k as even Nat;
         reconsider k1=kk+1 as odd Nat;
-         k < j by A23,A19,A8,XREAL_1:9;
+         k < j by A8,A19,A23,XREAL_1:9;
         then k1 < j1 by XREAL_1:10;
-        hence contradiction by A24,A20,A9, A1,A21,GLIB_001:148;
+        hence contradiction by A1,A9,A20,A21,A24,GLIB_001:148;
     end;
      now let m,n be odd Element of NAT such that A25: m <= len J & n <= len J;
         assume A26: J.m = J.n;
-    then A27: m >= n by A25,A7;
-         not n < m by A25,A7,A26;
+    then A27: m >= n by A7,A25;
+         not n < m by A7,A25,A26;
         hence n = m by A27,REAL_1:def 5;
     end;
     hence thesis by GLIB_001:147;
@@ -626,7 +627,7 @@ A7: now let m be odd Nat; assume m <= len P;
 A8: for m being odd Nat st m > len P & m <= len J holds
         m in dom J & not m in dom P
     proof let m be odd Nat such that A9: m > len P & m <= len J;
-         1 <= m & m <= len J by HEYTING3:1,A9;
+         1 <= m & m <= len J by A9,HEYTING3:1;
         hence thesis by A9,FINSEQ_3:27;
     end;
      J.first() = P.first() & J.last() = P.first() by A5,GLIB_001:31;
@@ -640,7 +641,7 @@ then A10: J is closed by GLIB_001:def 24;
             then len H <= 0 & 0 <= len H;
             hence contradiction;
         end;
-        hence contradiction by A3,A11, GLIB_001:127;
+        hence contradiction by A3,A11,GLIB_001:127;
     end;
 then A13: J is non trivial by GLIB_001:127;
  rng P.edgeSeq() = P.edges() & rng H.edgeSeq() = H.edges() &
@@ -650,18 +651,18 @@ then A13: J is non trivial by GLIB_001:127;
     then J.edgeSeq() is one-to-one by A5,GLIB_001:86;
 then A14: J is Trail-like by GLIB_001:def 27;
      now let m,n being odd Element of NAT such that A15: m < n & n <= len J;
-    A16: 1 <= m & m <= len J by HEYTING3:1,A15,XXREAL_0:2;
+    A16: 1 <= m & m <= len J by A15,HEYTING3:1,XXREAL_0:2;
       per cases;
       suppose m <= len P & n <= len P;
-        then P.m <> P.n & P.m = J.m & J.n = P.n by A2,A15,A7,GLIB_001:148;
+        then P.m <> P.n & P.m = J.m & J.n = P.n by A2,A7,A15,GLIB_001:148;
         hence J.m = J.n implies (m = 1 & n = len J);
       end;
       suppose A17: m <= len P & n > len P;
         then A18: J.m = P.m by A7;
-         n in dom J & not n in dom P by A17,A15,A8;
+         n in dom J & not n in dom P by A8,A15,A17;
         then consider j being Element of NAT such that
         A19: j < len H & n = len P + j by GLIB_001:35;
-        A20: J.n = H.(j+1) by A19,A5,GLIB_001:34;
+        A20: J.n = H.(j+1) by A5,A19,GLIB_001:34;
          now assume j is odd; then reconsider j as odd Nat;
            len P + j is even;
           hence contradiction by A19;
@@ -671,27 +672,27 @@ then A14: J is Trail-like by GLIB_001:def 27;
         A22: j1 in NAT by ORDINAL1:def 13;
          now assume A23: J.m = J.n;
           then J.m in P.vertices() & J.m in H.vertices()
-               by A17,A18,A21,A20,GLIB_001:88;
+               by A17,A18,A20,A21,GLIB_001:88;
           then A24: J.m in P.vertices() /\ H.vertices() by XBOOLE_0:def 3;
           A25: now assume A26: J.m = P.last();
                    j <> 0 & 0 <= j by A17,A19;
                   then 0+1 < j1 by XREAL_1:10;
-                  then H.(2*0+1) <> H.j1 by A22,A21,A3,GLIB_001:148;
-                 hence contradiction by A23,A19,A5,GLIB_001:34,A26;
+                  then H.(2*0+1) <> H.j1 by A3,A21,A22,GLIB_001:148;
+                 hence contradiction by A5,A19,A23,A26,GLIB_001:34;
                end;
-        then A27: J.m = P.first() by A24,A4,TARSKI:def 2;
-        A28: J.n = H.last() by A5,A23, A25, A24,A4,TARSKI:def 2;
+        then A27: J.m = P.first() by A4,A24,TARSKI:def 2;
+        A28: J.n = H.last() by A4,A5,A23,A24,A25,TARSKI:def 2;
         A29: now assume A30: n < len J;
-             A31: H.j1 = H.(len H) by A19,A5,GLIB_001:34,A28;
-                 j1 <> len H by A30,A6,A19;
+             A31: H.j1 = H.(len H) by A5,A19,A28,GLIB_001:34;
+                 j1 <> len H by A6,A19,A30;
                 then j1 < len H by A21,REAL_1:def 5;
-               hence contradiction by A22,A31,A3,GLIB_001:148;
+               hence contradiction by A3,A22,A31,GLIB_001:148;
              end;
               now assume 1 < m;
-               then P.m <> P.(2*0+1) by A17,A2,GLIB_001:148;
-               hence contradiction by A17,A7,A27;
+               then P.m <> P.(2*0+1) by A2,A17,GLIB_001:148;
+               hence contradiction by A7,A17,A27;
              end;
-           hence m = 1 & n = len J by A29,A15,A16,REAL_1:def 5;
+           hence m = 1 & n = len J by A15,A16,A29,REAL_1:def 5;
         end;
         hence J.m = J.n implies (m = 1 & n = len J);
       end;
@@ -699,14 +700,14 @@ then A14: J is Trail-like by GLIB_001:def 27;
         hence J.m = J.n implies (m = 1 & n = len J) by A15,XXREAL_0:2;
       end;
       suppose A32: m > len P & n > len P;
-        then m in dom J & not m in dom P by A16,A8;
+        then m in dom J & not m in dom P by A8,A16;
         then consider k being Element of NAT such that
       A33: k < len H & m = len P + k by GLIB_001:35;
-         n in dom J & not n in dom P by A32,A15,A8;
+         n in dom J & not n in dom P by A8,A15,A32;
         then consider j being Element of NAT such that
       A34: j < len H & n = len P + j by GLIB_001:35;
-      A35: J.(len P + k) = H.(k+1) by A33,A5,GLIB_001:34;
-      A36: J.(len P + j) = H.(j+1) by A34,A5,GLIB_001:34;
+      A35: J.(len P + k) = H.(k+1) by A5,A33,GLIB_001:34;
+      A36: J.(len P + j) = H.(j+1) by A5,A34,GLIB_001:34;
            now assume k is odd; then reconsider k as odd Nat;
              len P + k is even;
             hence contradiction by A33;
@@ -718,11 +719,11 @@ then A14: J is Trail-like by GLIB_001:def 27;
           end;
           then reconsider jj=j as even Nat;
           reconsider j1=jj+1 as odd Element of NAT by ORDINAL1:def 13;
-           k < j by XREAL_1:9,A33,A34,A15;
+           k < j by A15,A33,A34,XREAL_1:9;
           then A37: k1 < j1 by XREAL_1:10;
            j1 <= len H by A34,NAT_1:13;
         hence J.m = J.n implies (m = 1 & n = len J)
-          by A35,A36,A33,A34, A37,A3,GLIB_001:148;
+          by A3,A33,A34,A35,A36,A37,GLIB_001:148;
         end;
       end;
       then J is Path-like by A14,GLIB_001:def 28;
@@ -734,8 +735,7 @@ for G being _Graph, W1,W2 being Walk of G st W1.last() = W2.first()
  holds W1.append(W2).length() = W1.length() + W2.length()
 proof let G being _Graph, P,H being Walk of G such that
 A1:  H.first() = P.last();
- thus P.append(H).length() = len (P.edgeSeq() ^ H.edgeSeq()) by A1, GLIB_001:
-86
+ thus P.append(H).length() = len (P.edgeSeq() ^ H.edgeSeq()) by A1,GLIB_001:86
                           .= P.length() + H.length() by FINSEQ_1:35;
 end;
 
@@ -760,7 +760,7 @@ then A4: the_Edges_of H2 c= the_Edges_of G by XBOOLE_1:1;
     end;
 then A6: H2 is Subgraph of G by A3,A4,GLIB_000:def 34;
      H1.edgesBetween(B) c= G.edgesBetween(B) by GLIB_000:79;
-then A7: the_Edges_of H2 c= G.edgesBetween(B) by A2,A1,GLIB_000:def 39;
+then A7: the_Edges_of H2 c= G.edgesBetween(B) by A1,A2,GLIB_000:def 39;
      now let e be set such that A8: e in G.edgesBetween(B);
     A9: (the_Source_of G).e in B &
         (the_Target_of G).e in B by A8,GLIB_000:34;
@@ -769,7 +769,7 @@ then A7: the_Edges_of H2 c= G.edgesBetween(B) by A2,A1,GLIB_000:def 39;
         then (the_Source_of H1).e = (the_Source_of G).e &
         (the_Target_of H1).e = (the_Target_of G).e by GLIB_000:def 34;
         then e in H1.edgesBetween(B) by A9,A10,GLIB_000:34;
-        hence e in the_Edges_of H2 by A2,A1,GLIB_000:def 39;
+        hence e in the_Edges_of H2 by A1,A2,GLIB_000:def 39;
     end;
     then for x being set holds x in the_Edges_of H2 iff x in G.edgesBetween(B)
         by A7;
@@ -794,18 +794,18 @@ then A5: the_Edges_of H2 c= the_Edges_of H1 by A1,A4,GLIB_000:39;
      now let e be set such that
     A6: e in the_Edges_of H2;
      thus (the_Source_of H2).e = (the_Source_of G).e by A6,GLIB_000:def 34
-          .= (the_Source_of H1).e by A6, A5,GLIB_000:def 34;
+          .= (the_Source_of H1).e by A5,A6,GLIB_000:def 34;
      thus (the_Target_of H2).e = (the_Target_of G).e by A6,GLIB_000:def 34
-          .= (the_Target_of H1).e by A6, A5,GLIB_000:def 34;
+          .= (the_Target_of H1).e by A5,A6,GLIB_000:def 34;
     end;
 then A7: H2 is Subgraph of H1 by A1,A2,A3,A5,GLIB_000:def 34;
-A8: H1.edgesBetween(B) c= the_Edges_of H2 by A4, GLIB_000:79;
+A8: H1.edgesBetween(B) c= the_Edges_of H2 by A4,GLIB_000:79;
      now let e be set such that A9: e in the_Edges_of H2;
-    A10: (the_Source_of G).e = (the_Source_of H1).e by A9, A5,GLIB_000:def 34;
-    A11: (the_Target_of G).e = (the_Target_of H1).e by A9, A5,GLIB_000:def 34;
+    A10: (the_Source_of G).e = (the_Source_of H1).e by A5,A9,GLIB_000:def 34;
+    A11: (the_Target_of G).e = (the_Target_of H1).e by A5,A9,GLIB_000:def 34;
          (the_Source_of G).e in B &
-        (the_Target_of G).e in B by A9,A4,GLIB_000:34;
-     hence e in H1.edgesBetween(B) by A10,A11,A9,A5,GLIB_000:34;
+        (the_Target_of G).e in B by A4,A9,GLIB_000:34;
+     hence e in H1.edgesBetween(B) by A5,A9,A10,A11,GLIB_000:34;
     end;
     then for x being set holds x in the_Edges_of H2 iff x in H1.edgesBetween(B
 )
@@ -826,12 +826,12 @@ A2: the_Vertices_of G2 = S &
     the_Edges_of G2 = G.edgesBetween(S) by GLIB_000:def 39;
      now let e be set;
         hereby assume A3: e in G.edgesBetween(T);
-    A4: G.edgesBetween(T) c= G.edgesBetween(S) by A1, GLIB_000:39;
+    A4: G.edgesBetween(T) c= G.edgesBetween(S) by A1,GLIB_000:39;
     A5: e in the_Edges_of G & (the_Source_of G).e in T &
         (the_Target_of G).e in T by A3,GLIB_000:34;
          (the_Source_of G2).e = (the_Source_of G).e &
        (the_Target_of G2).e = (the_Target_of G).e by A2,A3,A4,GLIB_000:def 34;
-        hence e in G2.edgesBetween(T) by A4, A2, A3, A5, GLIB_000:34; end;
+        hence e in G2.edgesBetween(T) by A2,A3,A4,A5,GLIB_000:34; end;
         assume e in G2.edgesBetween(T);
     then A6: e in the_Edges_of G2 & (the_Source_of G2).e in T &
         (the_Target_of G2).e in T by GLIB_000:34;
@@ -858,7 +858,7 @@ A3: for n being non zero Element of NAT holds pP[n] implies pP[n+1] proof
          now let Gk be finite _Graph such that A5: Gk.order() < n+1;
              Gk.order() <= n by A5,NAT_1:13;
             then Gk.order() < n or Gk.order() = n by REAL_1:def 5;
-            hence P[Gk] by A1, A4;
+            hence P[Gk] by A1,A4;
         end;
         hence pP[n+1];
     end;
@@ -910,13 +910,13 @@ that
     A8: n+2 <= len W & v1 = W.n & e = W.(n+1) & v2 = W.(n+2) and
     A9: e Joins v1,v2,G by GLIB_001:104;
     A10: n < len W by A8,XREAL_1:41;
-      per cases by A9,A3,GLIB_000:18;
+      per cases by A3,A9,GLIB_000:18;
       suppose A11: v1 = W.first() & v2 = W.last();
          now assume 1 <> n; then 1 <= n & 1 <> n by Th2;
           then 2*0+1 < n by REAL_1:def 5;
-          hence contradiction by A1,A10,A11,A8,GLIB_001:148;
+          hence contradiction by A1,A8,A10,A11,GLIB_001:148;
         end;
-        hence contradiction by A11,A8,A1,A2,GLIB_001:148; end;
+        hence contradiction by A1,A2,A8,A11,GLIB_001:148; end;
       suppose v1 = W.last() & v2 = W.first();
         hence contradiction by A1,A8,A10,GLIB_001:148; end;
     end;
@@ -931,18 +931,18 @@ then A12: P is Trail-like by A7,GLIB_001:143;
     A19: now assume n < len P;
             then n < len W + 2*1 by A3,GLIB_001:65;
         then A20: n <= len W + 2 - 2 by Th3;
-        then A21: W.n <> W.m by A13,A1,GLIB_001:148;
+        then A21: W.n <> W.m by A1,A13,GLIB_001:148;
              1 <= n by Th2;
             then n in dom W by A20,FINSEQ_3:27;
-          hence contradiction by A18,A14,A21,A3,GLIB_001:66;
+          hence contradiction by A3,A14,A18,A21,GLIB_001:66;
         end;
     then A22: P.n = W.1 by A4,A13,XXREAL_0:1;
          now assume m <> 1; then m <> 1 & 1 <= m by Th2;
             then 2*0+1 < m by REAL_1:def 5;
         then W.1 <> W.m by A1,A16,GLIB_001:148;
-          hence contradiction by A14,A3,A22,A17,GLIB_001:66;
+          hence contradiction by A3,A14,A17,A22,GLIB_001:66;
         end;
-      hence m = 1 & n = len P by A19, A13,XXREAL_0:1;
+      hence m = 1 & n = len P by A13,A19,XXREAL_0:1;
     end;
 then A23: P is Path-like by A12,GLIB_001:def 28;
  P is non trivial by A3,GLIB_001:133;
@@ -975,7 +975,7 @@ A4: now let k be Element of NAT such that
           per cases;
           suppose A7: k is even;
               then S.k = S.edgeSeq().(k div 2) by A6,GLIB_001:78;
-              hence P[k] by A2,A6,A3,A7,GLIB_001:78; end;
+              hence P[k] by A2,A3,A6,A7,GLIB_001:78; end;
           suppose k is odd;
             then reconsider kk=k as odd Nat;
             per cases by A6,REAL_1:def 5;
@@ -988,16 +988,16 @@ A4: now let k be Element of NAT such that
                  0<=1 & 3+-2 <= k+-2 by A8,XREAL_1:9;
                 then reconsider k2=kk-2*1 as odd Element of NAT by INT_1:16;
                  3+-1 <= k+-1 by A8,XREAL_1:9;
-            then A9: 1 <= k1 & k1 < k by XXREAL_0:2,XREAL_1:46;
+            then A9: 1 <= k1 & k1 < k by XREAL_1:46,XXREAL_0:2;
                 then k1 <= len S by A6,XXREAL_0:2;
-            then k1 in dom S by FINSEQ_3:27,A9;
+            then k1 in dom S by A9,FINSEQ_3:27;
             then A10: S.k1 = W.k1 by A5,A9;
             A11: 3+-2 <= k+-2 by A8,XREAL_1:9;
             then A12: 1 <= k2 & k2 < k by XREAL_1:46;
                 then k2 <= len S by A6,XXREAL_0:2;
-            then k2 in dom S by FINSEQ_3:27,A11;
+            then k2 in dom S by A11,FINSEQ_3:27;
             then A13: S.k2 = W.k2 by A5,A12;
-             k2 < len S & k2 < len W by A3,A12,A6,XXREAL_0:2;
+             k2 < len S & k2 < len W by A3,A6,A12,XXREAL_0:2;
                 then S.(k2+1) Joins S.k2,S.(k2+2),G &
                 W.(k2+1) Joins W.k2,W.(k2+2),G by GLIB_001:def 3;
                 then (S.k2 = S.k2 & S.k = W.k) or
@@ -1007,7 +1007,7 @@ A4: now let k be Element of NAT such that
         suppose not k in dom S; hence P[k]; end;
     end;
 A14: for n being Element of NAT holds P[n] from NAT_1:sch 4(A4);
-     now let k be Element of NAT such that A15: 1 <= k & k <= len S;
+     now let k be Nat such that A15: 1 <= k & k <= len S;
          k in dom S by A15,FINSEQ_3:27;
         hence S.k = W.k by A14;
     end;
@@ -1023,9 +1023,9 @@ A1: len S = len W;
 A2: S.edgeSeq() = Seq es by GLIB_001:def 32;
 A3: len S = 2*len S.edgeSeq() +1 by GLIB_001:def 15;
  len W = 2*len W.edgeSeq() +1 by GLIB_001:def 15;
-then A4: S.edgeSeq() = W.edgeSeq() by A1, A3, A2, Th18;
+then A4: S.edgeSeq() = W.edgeSeq() by A1,A2,A3,Th18;
     S.first() = W.first() by GLIB_001:162;
-  hence S = W by A4, Th34;
+  hence S = W by A4,Th34;
 end;
 
 theorem
@@ -1035,9 +1035,9 @@ A1: W is minlength and
 A2: not W is Path-like;
    consider s being Path-like Subwalk of W;
  s is_Walk_from W.first(),W.last() by GLIB_001:def 32;
-   then len s <= len W & len W <= len s by GLIB_001:163, A1, Def2;
+   then len s <= len W & len W <= len s by A1,Def2,GLIB_001:163;
    then len s = len W by XXREAL_0:1;
- hence contradiction by A2, Th35;
+ hence contradiction by A2,Th35;
 end;
 
 theorem
@@ -1055,27 +1055,27 @@ A4: m <> n by GLIB_001:147;  :: can we do this only once? :-/
     A6: 2*0+1 <= m by HEYTING3:1;
     then A7: R.first() = W.(2*0+1) & R.last() = W.m by A2,GLIB_001:38;
     A8: S.first() = W.m & S.last() = W.(len W) by A2,A3,GLIB_001:38;
-    A9: len R + 1 - 1 = m + 1 - 1 by A6,A2,GLIB_001:37;
+    A9: len R + 1 - 1 = m + 1 - 1 by A2,A6,GLIB_001:37;
     A10: len S + n - n = len W + 1 - n by A2,GLIB_001:37;
         set P = R.append(S);
     A11: P is_Walk_from W.first(),W.last() by A7,A8,GLIB_001:31;
          len P + 1 = len R + len S by A7,A8,GLIB_001:29;
-        then len P = len W - n + m by A9, A10;
+        then len P = len W - n + m by A9,A10;
         then len P < len W - n + n by A5,XREAL_1:10;
-      hence contradiction by A11,A1,Def2; end;
+      hence contradiction by A1,A11,Def2; end;
     suppose A12: n < m;
         set R = W.cut(1,n), S = W.cut(m,len W);
     A13: 2*0+1 <= n by HEYTING3:1;
     then A14: R.first() = W.(2*0+1) & R.last() = W.n by A2,GLIB_001:38;
     A15: S.first() = W.n & S.last() = W.(len W) by A2,A3,GLIB_001:38;
-    A16: len R + 1 - 1 = n + 1 - 1 by A13,A2,GLIB_001:37;
+    A16: len R + 1 - 1 = n + 1 - 1 by A2,A13,GLIB_001:37;
     A17: len S + m - m = len W + 1 - m by A2,GLIB_001:37;
         set P = R.append(S);
     A18: P is_Walk_from W.first(),W.last() by A14,A15,GLIB_001:31;
          len P + 1 = len R + len S by A14,A15,GLIB_001:29;
         then len P = len W - m + n by A16,A17;
         then len P < len W - m + m by A12,XREAL_1:10;
-      hence contradiction by A18,A1,Def2; end;
+      hence contradiction by A1,A18,Def2; end;
 end;
 
 theorem Th38: :: TopPath01
@@ -1122,13 +1122,13 @@ A3: P is_Walk_from W.first(),W.last();
 A4: W2 is_Walk_from P.first(),P.last();
     consider T being Path-like Subwalk of W2;
 A5: len T <= len W2 by GLIB_001:163;
-A6: P.first() = W2.first() & P.last() = W2.last() by A4, GLIB_001:def 23;
-A7: P.first() = W.first() & P.last() = W.last() by A3, GLIB_001:def 23;
+A6: P.first() = W2.first() & P.last() = W2.last() by A4,GLIB_001:def 23;
+A7: P.first() = W.first() & P.last() = W.last() by A3,GLIB_001:def 23;
      T.first() = W2.first() & T.last() = W2.last() by GLIB_001:162;
-    then T is_Walk_from W.first(),W.last() by A6,A7, GLIB_001:def 23;
+    then T is_Walk_from W.first(),W.last() by A6,A7,GLIB_001:def 23;
     then len T in X;
-    then len P <= len T by A2, SEQ_4:def 6;
-  hence len P <= len W2 by A5, XXREAL_0:2;
+    then len P <= len T by A2,SEQ_4:def 6;
+  hence len P <= len W2 by A5,XXREAL_0:2;
 end;
 
 theorem Th40: :: TopPath03
@@ -1145,19 +1145,19 @@ proof
 A4: m in NAT & n in NAT by ORDINAL1:def 13;
      2*0 <= m & m+0 <= m+2 by XREAL_1:9;
     then 0 < m & m <= n by A2,REAL_1:def 5,XXREAL_0:2;
-then A5: 2*0+1 <= m & m <= len P by A2,XXREAL_0:2,HEYTING3:1;
-then A6: P1.first() = P.1 & P1.last() = P.m by A4, GLIB_001:38;
-A7: P1.first() = P.first() & P1.last() = P.m by A5,A4,GLIB_001:38;
-A8: len P1 + 1 = m + 1 by A4, A5,GLIB_001:37;
+then A5: 2*0+1 <= m & m <= len P by A2,HEYTING3:1,XXREAL_0:2;
+then A6: P1.first() = P.1 & P1.last() = P.m by A4,GLIB_001:38;
+A7: P1.first() = P.first() & P1.last() = P.m by A4,A5,GLIB_001:38;
+A8: len P1 + 1 = m + 1 by A4,A5,GLIB_001:37;
 A9: P2.first() = P.first() & P2.last() = P.n by A3,A7,GLIB_001:64;
-A10: len P2 = m + 2 by A6,A3,A8,GLIB_001:65;
-A11: P3.first() = P.n & P3.last() = P.(len P) by A4, A2,GLIB_001:38;
-A12: P3.first() = P.n & P3.last() = P.last() by A4,A2,GLIB_001:38;
-A13: len P3 + n = len P+1 by A4, A2,GLIB_001:37;
+A10: len P2 = m + 2 by A3,A6,A8,GLIB_001:65;
+A11: P3.first() = P.n & P3.last() = P.(len P) by A2,A4,GLIB_001:38;
+A12: P3.first() = P.n & P3.last() = P.last() by A2,A4,GLIB_001:38;
+A13: len P3 + n = len P+1 by A2,A4,GLIB_001:37;
 A14: P4 is_Walk_from P.first(),P.last() by A9,A12,GLIB_001:31;
 A15: len P4 + 1 = len P2 + len P3 by A9,A11,GLIB_001:29;
      len P - n + (m + 2) < len P - n + n by A2,XREAL_1:10;
-    hence contradiction by A1,A14,A15, A10, A13, Def2;
+    hence contradiction by A1,A10,A13,A14,A15,Def2;
 end;
 
 theorem Th41: :: TopPath04
@@ -1180,7 +1180,7 @@ A2: S = the_Vertices_of GA by GLIB_000:def 39;
         then m <= n by A3,XXREAL_0:2;
         then m <= len P by A3,XXREAL_0:2;
         then P.m in the_Vertices_of GA & P.n in the_Vertices_of GA
-           by A4,A3,GLIB_001:8;
+           by A3,A4,GLIB_001:8;
         then e Joins P.m,P.n,GA by A2,A5,Th19;
      hence contradiction by A1,A3,Th40;
     end;
@@ -1200,20 +1200,20 @@ A3: 2*0+1 <= m & 1 <= n & m <= len W by A2,HEYTING3:1,XXREAL_0:2;
     set R = W.cut(1,m);     set S = W.cut(m,n);     set T = W.cut(n,len W);
 A4: m in NAT & n in NAT by ORDINAL1:def 13;
 then A5: R.first() = W.1 by A3,GLIB_001:38;
-A6: R.last() = W.m by A4,A3,GLIB_001:38;
-A7: len R + 1 = m + 1 by A4,A3,GLIB_001:37;
-A8: S.first() = W.m by A4,A2,GLIB_001:38;
-A9: S.last() = W.n by A4,A2,GLIB_001:38;
-A10: len S + m = n + 1 by A4,A2,GLIB_001:37;
-A11: T.first() = W.n by A4,A2,GLIB_001:38;
-A12: T.last() = W.(len W) by A4,A2,GLIB_001:38;
-A13: len T + n = len W + 1 by A4,A2,GLIB_001:37;
+A6: R.last() = W.m by A3,A4,GLIB_001:38;
+A7: len R + 1 = m + 1 by A3,A4,GLIB_001:37;
+A8: S.first() = W.m by A2,A4,GLIB_001:38;
+A9: S.last() = W.n by A2,A4,GLIB_001:38;
+A10: len S + m = n + 1 by A2,A4,GLIB_001:37;
+A11: T.first() = W.n by A2,A4,GLIB_001:38;
+A12: T.last() = W.(len W) by A2,A4,GLIB_001:38;
+A13: len T + n = len W + 1 by A2,A4,GLIB_001:37;
     assume not S is minlength;
     then consider M being Walk of G such that
 A14: M is_Walk_from S.first(),S.last() and
 A15: len M < len S by Def2;
-A16: M.first() = W.m by A14,A8,GLIB_001:def 23;
-A17: M.last() = W.n by A14,A9,GLIB_001:def 23;
+A16: M.first() = W.m by A8,A14,GLIB_001:def 23;
+A17: M.last() = W.n by A9,A14,GLIB_001:def 23;
     set A = R.append(M);
 A18: A.first() = W.1 by A5,A6,A16,GLIB_001:31;
 A19: A.last() = W.n by A6,A16,A17,GLIB_001:31;
@@ -1221,9 +1221,9 @@ A19: A.last() = W.n by A6,A16,A17,GLIB_001:31;
     then len A + 1 < len R + len S by A15,XREAL_1:10;
 then A20: len A + 1 - 1 < n + 1 - 1 by A7,A10,XREAL_1:16;
     set B = A.append(T);
-A21: B.first() = W.first() by A18,A19,A11,GLIB_001:31;
-A22: B.last() = W.last()  by A19,A11,A12,GLIB_001:31;
-     len B + 1 = len A + len T by A19,A11,GLIB_001:29;
+A21: B.first() = W.first() by A11,A18,A19,GLIB_001:31;
+A22: B.last() = W.last()  by A11,A12,A19,GLIB_001:31;
+     len B + 1 = len A + len T by A11,A19,GLIB_001:29;
     then len B + 1 < len T + n by A20,XREAL_1:10;
 then A23: len B + 1 - 1 < len W + 1 - 1 by A13,XREAL_1:16;
      B is_Walk_from W.first(),W.last() by A21,A22,GLIB_001:def 23;
@@ -1264,12 +1264,12 @@ then A7: len W2 in X;
 A8: len M = min X & M.first() in A & M.last() in B;
 
      now assume M.first() = M.last();
-         then M.first() in A /\ B by A8, XBOOLE_0:def 3;
+         then M.first() in A /\ B by A8,XBOOLE_0:def 3;
          hence contradiction by A2,XBOOLE_0:def 7;
     end;
 then A9: M is non trivial by GLIB_001:128;
      now let P2 be Path of G such that A10: P2 is_Walk_from M.first(),M.last();
-         P2.first() in A & P2.last() in B by A8, A10,GLIB_001:def 23;
+         P2.first() in A & P2.last() in B by A8,A10,GLIB_001:def 23;
         then len P2 in X;
         hence len P2 >= len M by A8,SEQ_4:def 6;
     end;
@@ -1280,11 +1280,11 @@ then A11: M is minlength by Th38;
         per cases by A13;
         suppose A14: M.n in A;
             reconsider T = M.cut(nn,len M) as Path of G;
-             T.first() in A & T.last() in B by A8, A14,A12,GLIB_001:38;
+             T.first() in A & T.last() in B by A8,A12,A14,GLIB_001:38;
         then A15: len T in X;
          len T + nn = len M+1 by A12,GLIB_001:37;
             then len T + 0 < len M + 1 + (-n) + (n + (-1)) by A12,XREAL_1:10;
-            hence contradiction by A15, A8, SEQ_4:def 6; end;
+            hence contradiction by A8,A15,SEQ_4:def 6; end;
 
         suppose A16: M.n in B;
             reconsider T = M.cut(1,nn) as Path of G;
@@ -1293,9 +1293,9 @@ then A11: M is minlength by Th38;
         then A17: len T in X by A8,A16;
              2*0+1 <= n & n <= len M by A12;
             then len T + 1 = nn + 1 by GLIB_001:37;
-            hence contradiction by A17, A12, A8, SEQ_4:def 6; end;
+            hence contradiction by A8,A12,A17,SEQ_4:def 6; end;
     end;
-    hence thesis by A9,A8,A11;
+    hence thesis by A8,A9,A11;
 end;
 
 begin :: Adjacency and complete graphs
@@ -1321,7 +1321,7 @@ proof let G1,G2 be _Graph such that A1: G1 == G2;
     let u2,v2 be Vertex of G2 such that A3: u1=u2 & v1=v2;
     consider e being set such that
 A4: e Joins u1,v1,G1 by A2,Def3;
-     e Joins u2,v2,G2 by A3, A4, A1,GLIB_000:91;
+     e Joins u2,v2,G2 by A1,A3,A4,GLIB_000:91;
     hence thesis by Def3;
 end;
 
@@ -1337,12 +1337,12 @@ A1: u = t & v = w;
 A2: S = the_Vertices_of H by GLIB_000:def 39;
     hereby assume u,v are_adjacent; then consider e being set such that
     A3: e Joins u,v,G by Def3;
-         e Joins t,w,H by A1, A3, A2, Th19;
+         e Joins t,w,H by A1,A2,A3,Th19;
       hence t,w are_adjacent by Def3;
     end;
     assume t,w are_adjacent; then consider e being set such that
     A4: e Joins t,w,H by Def3;
-         e Joins u,v,G by A4, A1, GLIB_000:75;
+         e Joins u,v,G by A1,A4,GLIB_000:75;
     hence u,v are_adjacent by Def3;
 end;
 
@@ -1356,17 +1356,17 @@ A2: not W.first(),W.last() are_adjacent;
    set l = W.length();
    assume l < 2; then l < 1+1;
 then A3: l <= 1 by NAT_1:13;
-   per cases by A3, NAT_1:26;
+   per cases by A3,NAT_1:26;
    suppose l = 0; then W is trivial by GLIB_001:def 26;
-    hence contradiction by A1, GLIB_001:128;
+    hence contradiction by A1,GLIB_001:128;
    end;
    suppose l = 1;
    then A4: len W = 2*1+1 by GLIB_001:113 .= 3;
         1 = 2*0+1;
-   then A5: W.(1+1) Joins W.1,W.(1+2),G by A4, GLIB_001:def 3;
+   then A5: W.(1+1) Joins W.1,W.(1+2),G by A4,GLIB_001:def 3;
        reconsider W1 = W.1 as Vertex of G by GLIB_001:def 3;
        reconsider WlW = W.len W as Vertex of G by GLIB_001:8;
-    thus contradiction by A2, A5, A4,Def3;
+    thus contradiction by A2,A4,A5,Def3;
    end;
 end;
 
@@ -1393,14 +1393,14 @@ A7: P1.first() = v1 by A5,GLIB_001:16;
 A8: P1.last() = v2 by A5,GLIB_001:16;
 A9: len P1 = 3 by A5,GLIB_001:15;
 A10: P1.vertices() = {v1,v2} by A5,GLIB_001:92;
-A11: P1 is open by A7,A8,A1,GLIB_001:def 24;
+A11: P1 is open by A1,A7,A8,GLIB_001:def 24;
     set P = P1.addEdge(e2);
-A12: P.first() = v1 by A7,A8,A6,GLIB_001:64;
-A13: P.last() = v3 by A8,A6,GLIB_001:64;
-     not v3 in P1.vertices() by A10,A1,A2,TARSKI:def 2;
-    then reconsider P as Path of G by A8,A6,A11,GLIB_001:152;
+A12: P.first() = v1 by A6,A7,A8,GLIB_001:64;
+A13: P.last() = v3 by A6,A8,GLIB_001:64;
+     not v3 in P1.vertices() by A1,A2,A10,TARSKI:def 2;
+    then reconsider P as Path of G by A6,A8,A11,GLIB_001:152;
     take P,e1,e2;
-    thus P is open by A12,A13,A1,GLIB_001:def 24;
+    thus P is open by A1,A12,A13,GLIB_001:def 24;
 A14: len P = 3 + 2 by A6,A8,A9,GLIB_001:65;
     hence len P = 5;
      5 = 2*P.length() + 1 by A14,GLIB_001:113;
@@ -1408,15 +1408,15 @@ A14: len P = 3 + 2 by A6,A8,A9,GLIB_001:65;
     thus e1 Joins v1,v2,G by A5;
     thus e2 Joins v2,v3,G by A6;
      P1.edges() = {e1} by A5,GLIB_001:109;
-    then P.edges() = {e1} \/ {e2} by A8,A6,GLIB_001:112;
+    then P.edges() = {e1} \/ {e2} by A6,A8,GLIB_001:112;
     hence P.edges() = {e1,e2} by ENUMSET1:41;
      P.vertices() = {v1,v2} \/ {v3} by A6,A8,A10,GLIB_001:96;
     hence P.vertices() = {v1,v2,v3} by ENUMSET1:43;
     thus P.1 = v1 by A12;
      3 in dom P1 by A9,FINSEQ_3:27;
     hence P.3 = P1.3 by A6,A8,GLIB_001:66
-             .= v2 by A8,A5,GLIB_001:15;
-    thus P.5 = v3 by A14,A13;
+             .= v2 by A5,A8,GLIB_001:15;
+    thus P.5 = v3 by A13,A14;
 end;
 
 theorem Th48:  :: PathBuilder01
@@ -1438,33 +1438,33 @@ A6: e1 Joins v1,v2,G & e2 Joins v2,v3,G & R.edges() = {e1,e2} and
 A7: R.vertices() = {v1,v2,v3} and
 A8: R.1 = v1 & R.3 = v2 & R.5 = v3 by A1,A2,Th47;
 
-A9: e1 <> e3 by A1,A6,A3,GLIB_000:18;
- e2 <> e3 by A1,A6,A3,GLIB_000:18;
+A9: e1 <> e3 by A1,A3,A6,GLIB_000:18;
+ e2 <> e3 by A1,A3,A6,GLIB_000:18;
 then A10: not e3 in R.edges() by A6,A9,TARSKI:def 2;
 A11: for n being odd Element of NAT st 1 < n & n <= len R holds R.n <> v4
     proof let n be odd Element of NAT such that
     A12: 1 < n and A13: n <= len R;
-    A14: n <= 6 by A5, A13, XXREAL_0:2;
-        per cases by A14, A12, Th8;
-        suppose n = 3; hence R.n <> v4 by A8,A1; end;
-        suppose n = 5; hence R.n <> v4 by A8,A1; end;
+    A14: n <= 6 by A5,A13,XXREAL_0:2;
+        per cases by A12,A14,Th8;
+        suppose n = 3; hence R.n <> v4 by A1,A8; end;
+        suppose n = 5; hence R.n <> v4 by A1,A8; end;
     end;
     set P = R.addEdge(e3);
-    reconsider P as Path of G by A5,A8,A3,A10,A4,A11,GLIB_001:151;
+    reconsider P as Path of G by A3,A4,A5,A8,A10,A11,GLIB_001:151;
     take P;
-    A15: len P = 5 + 2 by A5,A8,A3,GLIB_001:65;
+    A15: len P = 5 + 2 by A3,A5,A8,GLIB_001:65;
     hence len P = 7;
-     7 = 2*P.length() + 1 by A15, GLIB_001:113;
+     7 = 2*P.length() + 1 by A15,GLIB_001:113;
     hence P.length() = 3;
-     P.vertices() = {v1,v2,v3} \/ {v4} by A7,A5,A8,A3,GLIB_001:96;
+     P.vertices() = {v1,v2,v3} \/ {v4} by A3,A5,A7,A8,GLIB_001:96;
     hence P.vertices() = {v1,v2,v3,v4} by ENUMSET1:46;
      1 in dom R by A5,FINSEQ_3:27;
-    hence P.1 = v1 by A8,A5,A3,GLIB_001:66;
+    hence P.1 = v1 by A3,A5,A8,GLIB_001:66;
      3 in dom R by A5,FINSEQ_3:27;
-    hence P.3 = v2 by A8,A5,A3,GLIB_001:66;
+    hence P.3 = v2 by A3,A5,A8,GLIB_001:66;
      5 in dom R by A5,FINSEQ_3:27;
-    hence P.5 = v3 by A8,A5,A3,GLIB_001:66;
-     P.last() = v4 by A5,A8,A3,GLIB_001:64;
+    hence P.5 = v3 by A3,A5,A8,GLIB_001:66;
+     P.last() = v4 by A3,A5,A8,GLIB_001:64;
     hence P.7 = v4 by A15;
 end;
 
@@ -1522,8 +1522,8 @@ A2: now let x be set such that A3: x in G1.AdjacentSet(S);
   A4: not t1 in S & ex v being Vertex of G1 st (v in S&t1,v are_adjacent)
          by A3,Th50;
       consider v1 being Vertex of G1 such that
-  A5: v1 in S & t1,v1 are_adjacent by A3, Th50;
-      reconsider t2 = t1, v2 = v1 as Vertex of G2 by A1, GLIB_000:def 36;
+  A5: v1 in S & t1,v1 are_adjacent by A3,Th50;
+      reconsider t2 = t1, v2 = v1 as Vertex of G2 by A1,GLIB_000:def 36;
        t2,v2 are_adjacent by A1,A5,Th44;
     hence x in G2.AdjacentSet(S) by A4,A5;
    end;
@@ -1532,12 +1532,12 @@ A2: now let x be set such that A3: x in G1.AdjacentSet(S);
   A7: not t2 in S & ex v being Vertex of G2 st (v in S&t2,v are_adjacent)
          by A6,Th50;
       consider v2 being Vertex of G2 such that
-  A8: v2 in S & t2,v2 are_adjacent by A6, Th50;
+  A8: v2 in S & t2,v2 are_adjacent by A6,Th50;
       reconsider t1 = t2, v1 = v2 as Vertex of G1 by A1,GLIB_000:def 36;
        t1,v1 are_adjacent by A1,A8,Th44;
      hence x in G1.AdjacentSet(S) by A7,A8;
    end;
-  hence G1.AdjacentSet(S) = G2.AdjacentSet(S) by A2, TARSKI:2;
+  hence G1.AdjacentSet(S) = G2.AdjacentSet(S) by A2,TARSKI:2;
 end;
 
 theorem Th52: :: AdjacentV00
@@ -1569,7 +1569,7 @@ proof let G be _Graph, x,y be set;
       hence contradiction by A2;
     end;
     then reconsider yg = y as Vertex of G;
-     xg <> yg & xg,yg are_adjacent by A1, Th52;
+     xg <> yg & xg,yg are_adjacent by A1,Th52;
    hence y in G.AdjacentSet({x}) by Th52;
   end;
   assume A4: y in G.AdjacentSet({x});
@@ -1581,7 +1581,7 @@ proof let G be _Graph, x,y be set;
       hence contradiction by A5;
     end;
     then reconsider xg = x as Vertex of G;
-     xg <> yg & xg,yg are_adjacent by A4, Th52;
+     xg <> yg & xg,yg are_adjacent by A4,Th52;
   hence x in G.AdjacentSet({y}) by Th52;
 end;
 
@@ -1617,7 +1617,7 @@ A6: C is closed by A1,GLIB_001:def 31;
     A10: len C + 0 > len C+(-2) by XREAL_1:10;
      hence j <= len C;
      thus not (i=1 & j=len C) & not (i=1 & j=len C-2) & not (i=3 & j=len C);
-     hereby assume A11: C.i = C.j;  i+2+(-2) < j+0 by A9, XXREAL_0:2;
+     hereby assume A11: C.i = C.j;  i+2+(-2) < j+0 by A9,XXREAL_0:2;
       hence contradiction by A8,A10,A11,GLIB_001:def 28;
      end;
         reconsider k=2*0+1 as odd Nat;
@@ -1632,10 +1632,10 @@ A6: C is closed by A1,GLIB_001:def 31;
               then x = C.first() by A6,GLIB_001:def 24;
               hence x = C.k; end;
         end;
-    then A15: x,Ci are_adjacent by A13, Def3;
-         x <> Ci by A14,A12,GLIB_001:def 28;
+    then A15: x,Ci are_adjacent by A13,Def3;
+         x <> Ci by A12,A14,GLIB_001:def 28;
      hence C.i in G.AdjacentSet({x}) by A15,Th52;
-        reconsider Cj=C.j as Vertex of G by A8, A10,GLIB_001:8;
+        reconsider Cj=C.j as Vertex of G by A8,A10,GLIB_001:8;
     A16: now per cases by A7;
           suppose n = 1; then x = C.first() by A4;
               then x = C.last() by A6,GLIB_001:def 24;
@@ -1645,14 +1645,14 @@ A6: C is closed by A1,GLIB_001:def 31;
         then C.(j+1) Joins Cj,x,G by A8,A10,GLIB_001:def 3;
     then A17: x,Cj are_adjacent by Def3;
          now assume x = Cj;
-             then j = 1 & j+2 = len C by A8,A16,A10,GLIB_001:def 28;
+             then j = 1 & j+2 = len C by A8,A10,A16,GLIB_001:def 28;
             hence contradiction by A3;
         end;
       hence C.j in G.AdjacentSet({x}) by A17,Th52;
     end;
 
     suppose A18: not (n = 1 or n = len C);
-    then A19: 2*0+1 < n & n < len C by A5,A4,REAL_1:def 5;
+    then A19: 2*0+1 < n & n < len C by A4,A5,REAL_1:def 5;
         then 1+2 <= n & n <= len C-2 by Th3,Th4;
         then 3+(-2) <= n+(-2) by XREAL_1:9;
         then 0 <= n-2*1;
@@ -1673,20 +1673,20 @@ A6: C is closed by A1,GLIB_001:def 31;
        hence contradiction by A24;
      end;
      hereby assume A25: i = 3 & j = len C;  j = i + 4;
-       hence contradiction by A25,A3;
+       hence contradiction by A3,A25;
      end;
      hereby assume A26: C.i = C.j;
         i+2+(-2) < j+0 by XREAL_1:10;
-       hence contradiction by A20,A22,A21,A26,GLIB_001:def 28;
+       hence contradiction by A20,A21,A22,A26,GLIB_001:def 28;
      end;
          i+0 < i+2 by XREAL_1:10;
-    then A27: i < len C by XXREAL_0:2, A4;
+    then A27: i < len C by A4,XXREAL_0:2;
         then reconsider Ci=C.i as Vertex of G by A20,GLIB_001:8;
          C.(i+1) Joins C.i,C.(i+2),G by A20,A27,GLIB_001:def 3;
     then A28: x,Ci are_adjacent by A4,Def3;
          now assume A29: Ci = x;
              n+0 > n+(-2) by XREAL_1:10;
-            hence contradiction by A20,A4,A18,A29,GLIB_001:def 28;
+            hence contradiction by A4,A18,A20,A29,GLIB_001:def 28;
         end;
      hence C.i in G.AdjacentSet({x}) by A28,Th52;
     A30: n+2 <= len C -2 + 2 by A19,Th4;
@@ -1695,7 +1695,7 @@ A6: C is closed by A1,GLIB_001:def 31;
     then A31: x,Cj are_adjacent by A4,Def3;
          now assume A32: Cj = x;
              n+2 > n+0 by XREAL_1:10;
-            hence contradiction by A30,A18,A32, A4, GLIB_001:def 28;
+            hence contradiction by A4,A18,A30,A32,GLIB_001:def 28;
         end;
       hence C.j in G.AdjacentSet({x}) by A31,Th52;
       end;
@@ -1747,8 +1747,8 @@ A6: C is closed by A1,GLIB_001:def 31;
               then x = C.first() by A6,GLIB_001:def 24;
               hence x = C.k; end;
         end;
-    then A15: x,Ci are_adjacent by A13, Def3;
-         x <> Ci by A14,A12,GLIB_001:def 28;
+    then A15: x,Ci are_adjacent by A13,Def3;
+         x <> Ci by A12,A14,GLIB_001:def 28;
      hence C.i in G.AdjacentSet({x}) by A15,Th52;
         reconsider Cj=C.j as Vertex of G by A8,A10,GLIB_001:8;
     A16: C.(j+1) Joins C.j,C.(j+2),G by A8,A10,GLIB_001:def 3;
@@ -1760,7 +1760,7 @@ A6: C is closed by A1,GLIB_001:def 31;
         end;
     then A18: x,Cj are_adjacent by A16,Def3;
          now assume x = Cj;
-              then j = 1 & j+2 = len C by A8,A17,A10,GLIB_001:def 28;
+              then j = 1 & j+2 = len C by A8,A10,A17,GLIB_001:def 28;
             hence contradiction by A3;
         end;
       hence C.j in G.AdjacentSet({x}) by A18,Th52;
@@ -1771,7 +1771,7 @@ A6: C is closed by A1,GLIB_001:def 31;
      A21: 1 <= k and
      A22: k <= len C and
      A23: C.k = e by A19,GLIB_001:100;
-          k in dom C by A21, A22, FINSEQ_3:27;
+          k in dom C by A21,A22,FINSEQ_3:27;
          then consider ku1 being odd Element of NAT such that
      A24: ku1 = k-1 and
      A25: k-1 in dom C and
@@ -1781,26 +1781,26 @@ A6: C is closed by A1,GLIB_001:def 31;
           (the_Source_of G).e = C.j & (the_Target_of G).e = C.i) &
          ((the_Source_of G).e = C.ku1 & (the_Target_of G).e = C.(k+1) or
           (the_Source_of G).e = C.(k+1) & (the_Target_of G).e = C.(ku1))
-           by A20, A27, A23, GLIB_000:def 15;
+           by A20,A23,A27,GLIB_000:def 15;
      A29: ku1 <= len C by A24,A25,FINSEQ_3:27;
-     A30: k+1 <= len C by A26, FINSEQ_3:27;
+     A30: k+1 <= len C by A26,FINSEQ_3:27;
        i < j by A9,XXREAL_0:2;
-     then A31: i < len C by A10, XXREAL_0:2;
+     then A31: i < len C by A10,XXREAL_0:2;
      A32: j <> 1 by A9;
       per cases by A28;
        suppose A33: C.i = C.ku1 & C.j = C.(k+1);
-           then i+2 = k-1+(1+1) by A31,A29,Th25,A24
-              .= j by A33,A10,A30,A32,Th25;
+           then i+2 = k-1+(1+1) by A24,A29,A31,Th25
+              .= j by A10,A30,A32,A33,Th25;
          hence contradiction by A9;
        end;
        suppose A34: C.i = C.(k+1) & C.j = C.ku1;
-                   then i = k+1 by A31,A30,Th25;
-         hence contradiction by A34,A10,A24,A29,A32,Th25;
+                   then i = k+1 by A30,A31,Th25;
+         hence contradiction by A10,A24,A29,A32,A34,Th25;
        end;
     end;
 
     suppose A35: not (n = 1 or n = len C);
-    then A36: 2*0+1 < n & n < len C by A5,A4,REAL_1:def 5;
+    then A36: 2*0+1 < n & n < len C by A4,A5,REAL_1:def 5;
         then 1+2 <= n & n <= len C-2 by Th3,Th4;
         then 3+(-2) <= n+(-2) by XREAL_1:9;
         then n-2*1 is odd Element of NAT by INT_1:16;
@@ -1816,16 +1816,16 @@ A6: C is closed by A1,GLIB_001:def 31;
         end;
      hereby assume A41: C.i = C.j;
         i+2+(-2) < j+0 by XREAL_1:10;
-      hence contradiction by A37,A39,A38,A41,GLIB_001:def 28;
+      hence contradiction by A37,A38,A39,A41,GLIB_001:def 28;
      end;
          i+0 < i+2 by XREAL_1:10;
-    then A42: i < len C by XXREAL_0:2, A4;
+    then A42: i < len C by A4,XXREAL_0:2;
         then reconsider Ci=C.i as Vertex of G by A37,GLIB_001:8;
          C.(i+1) Joins C.i,C.(i+2),G by A37,A42,GLIB_001:def 3;
     then A43: x,Ci are_adjacent by A4,Def3;
          now assume A44: Ci = x;
              n+0 > n+(-2) by XREAL_1:10;
-            hence contradiction by A37,A4,A35,A44,GLIB_001:def 28;
+            hence contradiction by A4,A35,A37,A44,GLIB_001:def 28;
         end;
      hence C.i in G.AdjacentSet({x}) by A43,Th52;
     A45: n+2 <= len C -2 + 2 by A36,Th4;
@@ -1834,7 +1834,7 @@ A6: C is closed by A1,GLIB_001:def 31;
     then A46: x,Cj are_adjacent by A4,Def3;
          now assume A47: Cj = x;
              n+2 > n+0 by XREAL_1:10;
-            hence contradiction by A45,A35,A47,A4,GLIB_001:def 28;
+            hence contradiction by A4,A35,A45,A47,GLIB_001:def 28;
         end;
       hence C.j in G.AdjacentSet({x}) by A46,Th52;
       let e be set such that
@@ -1844,7 +1844,7 @@ A6: C is closed by A1,GLIB_001:def 31;
      A50: 1 <= k and
      A51: k <= len C and
      A52: C.k = e by A48,GLIB_001:100;
-          k in dom C by A50, A51, FINSEQ_3:27;
+          k in dom C by A50,A51,FINSEQ_3:27;
          then consider ku1 being odd Element of NAT such that
      A53: ku1 = k-1 and k-1 in dom C and
      A54: k+1 in dom C and
@@ -1853,32 +1853,32 @@ A6: C is closed by A1,GLIB_001:def 31;
           (the_Source_of G).e = C.j & (the_Target_of G).e = C.i) &
          ((the_Source_of G).e = C.ku1 & (the_Target_of G).e = C.(k+1) or
           (the_Source_of G).e = C.(k+1) & (the_Target_of G).e = C.(ku1))
-           by A49, A55, A52, GLIB_000:def 15;
+           by A49,A52,A55,GLIB_000:def 15;
            k-1 < k by XREAL_1:148;
      then A57: k-1 < len C by A51,XXREAL_0:2;
-     A58: k+1 <= len C by A54, FINSEQ_3:27;
+     A58: k+1 <= len C by A54,FINSEQ_3:27;
           1+2 <= j by A5,XREAL_1:9;
      then A59: j <> 1;
-          1+1 <= k+1 by A50, XREAL_1:9;
+          1+1 <= k+1 by A50,XREAL_1:9;
      then A60: k+1 <> 1;
       per cases by A56;
        suppose A61: C.i = C.ku1 & C.j = C.(k+1);
-          then i+2 = k-1+(1+1) by A53,A42,A57,Th25 :: .= k-1+1+1 .= k+1
-              .= j by A61,A58,A38,A59,A60,Th25;
+          then i+2 = k-1+(1+1) by A42,A53,A57,Th25 :: .= k-1+1+1 .= k+1
+              .= j by A38,A58,A59,A60,A61,Th25;
          hence contradiction;
        end;
        suppose A62: C.i = C.(k+1) & C.j = C.ku1;
-         per cases by A62,A38,A57,A53,A42,A58,Th25;
+         per cases by A38,A42,A53,A57,A58,A62,Th25;
          suppose i = k+1 & j = k-1;
            hence contradiction;
          end;
          suppose A63: i = k+1 & k-1 = 1 & j = len C;
             j = i+4;
-           hence contradiction by A63,A3;
+           hence contradiction by A3,A63;
          end;
          suppose A64: i = 1 & k+1 = len C & j = k-1;
              then k+1 = 7;
-           hence contradiction by A64,A3;
+           hence contradiction by A3,A64;
          end;
          suppose i = 1 & k+1 = len C & k-1 = 1 & j = len C;
           hence contradiction;
@@ -1910,10 +1910,10 @@ proof
              now assume u = v;
                 then e in the_Edges_of G &
                 (the_Source_of G).e = u & (the_Target_of G).e = u
-                    by A3, GLIB_000:def 15;
+                    by A3,GLIB_000:def 15;
                 hence contradiction by GLIB_000:def 20;
             end; then u <> v & v,u are_adjacent by A3,Def3;
-            hence contradiction by A1, Th52;
+            hence contradiction by A1,Th52;
         end;
         hence u is isolated by GLIB_000:def 51;
     end;
@@ -1925,7 +1925,7 @@ then A4: u.edgesInOut() = {} by GLIB_000:def 51;
         then consider e being set such that
     A6: e Joins v,u,G by Def3;
          e Joins u,v,G by A6,GLIB_000:17;
-        hence contradiction by A4, GLIB_000:65;
+        hence contradiction by A4,GLIB_000:65;
     end;
     hence G.AdjacentSet({u}) = {} by XBOOLE_0:def 1;
 end;
@@ -1953,39 +1953,39 @@ then A4: G1 is inducedSubgraph of G2,S by Th30;
 A5: the_Vertices_of G1 = S by GLIB_000:def 39;
     then consider xs being Vertex of G such that
 A6: xs in S and
-A7: x,xs are_adjacent by A2, Th50;
+A7: x,xs are_adjacent by A2,Th50;
    consider e being set such that
-A8: e Joins x,xs,G by A7, Def3;
-A9: e Joins xs,x,G by A8, GLIB_000:17;
+A8: e Joins x,xs,G by A7,Def3;
+A9: e Joins xs,x,G by A8,GLIB_000:17;
     x in {x} by TARSKI:def 1;
    then x in Sx & xs in Sx by A6,XBOOLE_0:def 2;
-then A10: e Joins xs,x,G2 by A9, Th19;
+then A10: e Joins xs,x,G2 by A9,Th19;
 then A11: e Joins x,xs,G2 by GLIB_000:17;
-   per cases by A3, TARSKI:def 1;
+   per cases by A3,TARSKI:def 1;
    suppose A12: u in S & v in S;
       the_Vertices_of G1 = S by GLIB_000:def 39;
      then consider W being Walk of G1 such that
-   A13: W is_Walk_from u,v by A1, A12, GLIB_002:def 1;
-     reconsider W as Walk of G2 by A4, GLIB_001:168;
+   A13: W is_Walk_from u,v by A1,A12,GLIB_002:def 1;
+     reconsider W as Walk of G2 by A4,GLIB_001:168;
      take W;
-     thus thesis by A13, GLIB_001:20;
+     thus thesis by A13,GLIB_001:20;
    end;
    suppose A14: u in S & v = x;
      then consider W being Walk of G1 such that
-   A15: W is_Walk_from u,xs by A6, A5, A1, GLIB_002:def 1;
-     reconsider W as Walk of G2 by A4, GLIB_001:168;
+   A15: W is_Walk_from u,xs by A1,A5,A6,GLIB_002:def 1;
+     reconsider W as Walk of G2 by A4,GLIB_001:168;
      take WW = W.append(G2.walkOf(xs,e,x));
    A16: W is_Walk_from u, xs by A15,GLIB_001:20;
-       G2.walkOf(xs,e,x) is_Walk_from xs,x by A10, GLIB_001:16;
+       G2.walkOf(xs,e,x) is_Walk_from xs,x by A10,GLIB_001:16;
      hence thesis by A14,A16,GLIB_001:32;
    end;
    suppose A17: u = x & v in S;
      then consider W being Walk of G1 such that
-   A18: W is_Walk_from xs,v by A6, A5, A1, GLIB_002:def 1;
-     reconsider W as Walk of G2 by A4, GLIB_001:168;
+   A18: W is_Walk_from xs,v by A1,A5,A6,GLIB_002:def 1;
+     reconsider W as Walk of G2 by A4,GLIB_001:168;
      take WW = G2.walkOf(x,e,xs).append(W);
    A19: W is_Walk_from xs, v by A18,GLIB_001:20;
-       G2.walkOf(x,e,xs) is_Walk_from x,xs by A11, GLIB_001:16;
+       G2.walkOf(x,e,xs) is_Walk_from x,xs by A11,GLIB_001:16;
      hence thesis by A17,A19,GLIB_001:32;
    end;
    suppose u = x & v = x;
@@ -2012,8 +2012,8 @@ A2: u=v;
              y <> u & y,u are_adjacent by A3,Th52;
             then consider e being set such that
         A4: e Joins y,u,G by Def3;
-             e Joins y,u,G2 by Th19,A3,A1,A4;
-            then w <> v & w,v are_adjacent by A3,Th52,A2,Def3;
+             e Joins y,u,G2 by A1,A3,A4,Th19;
+            then w <> v & w,v are_adjacent by A2,A3,Def3,Th52;
             hence x in G2.AdjacentSet({v}) by Th52;
         end;
         assume A5: x in G2.AdjacentSet({v});
@@ -2024,7 +2024,7 @@ A2: u=v;
         then consider e being set such that
     A6: e Joins y,v,G2 by Def3;
          e Joins y,v,G by A6,GLIB_000:75;
-        then w <> u & w,u are_adjacent by A5,Th52,A2,Def3;
+        then w <> u & w,u are_adjacent by A2,A5,Def3,Th52;
         hence x in G.AdjacentSet({u}) by Th52;
     end;
   hence G.AdjacentSet({u}) = G2.AdjacentSet({v}) by TARSKI:2;
@@ -2065,7 +2065,7 @@ A5: G1Adj = G2Adj by A1,A2,Th51;
     then A9: the_Vertices_of H1 = G1Adj &
         the_Edges_of H1 = G1.edgesBetween(G1Adj) by A3,GLIB_000:def 39;
     A10: the_Vertices_of H2 = G2Adj &
-        the_Edges_of H2 = G2.edgesBetween(G2Adj) by A4,A8,A5,GLIB_000:def 39;
+        the_Edges_of H2 = G2.edgesBetween(G2Adj) by A4,A5,A8,GLIB_000:def 39;
          G1 is Subgraph of G2 & G2 is Subgraph of G1 by A1,GLIB_000:90;
         then G1.edgesBetween(G1Adj) c= G2.edgesBetween(G1Adj) &
         G2.edgesBetween(G1Adj) c= G1.edgesBetween(G1Adj) by GLIB_000:79;
@@ -2092,22 +2092,22 @@ A2: G.AdjacentSet({u}) <> {};
 let v be Vertex of H such that
 A3: u=v;
 let Ga be AdjGraph of G,{u}, Ha being AdjGraph of H,{v};
-A4: G.AdjacentSet({u}) = H.AdjacentSet({v}) by A1, A3, Th58;
+A4: G.AdjacentSet({u}) = H.AdjacentSet({v}) by A1,A3,Th58;
      Ga is inducedSubgraph of G,G.AdjacentSet({u}) by Def5;
 then A5: the_Vertices_of Ga = G.AdjacentSet({u}) &
     the_Edges_of Ga = G.edgesBetween(G.AdjacentSet({u})) by A2,GLIB_000:def 39;
 A6:Ha is inducedSubgraph of H,H.AdjacentSet({v}) by Def5;
 then A7: the_Edges_of Ha = H.edgesBetween(H.AdjacentSet({v})) &
-    the_Vertices_of Ha = H.AdjacentSet({v}) by A4,A2,GLIB_000:def 39;
+    the_Vertices_of Ha = H.AdjacentSet({v}) by A2,A4,GLIB_000:def 39;
 thus the_Vertices_of Ga = the_Vertices_of Ha
-            by A5,A6,A4,GLIB_000:def 39;
-thus A8: the_Edges_of Ga = the_Edges_of Ha by A5,A7,A4,A1,Th31;
+            by A4,A5,A6,GLIB_000:def 39;
+thus A8: the_Edges_of Ga = the_Edges_of Ha by A1,A4,A5,A7,Th31;
  A9: the_Source_of Ga = (the_Source_of G)|the_Edges_of Ga &
      the_Target_of Ga = (the_Target_of G)|the_Edges_of Ga by GLIB_000:48;
-      Ha is inducedSubgraph of H,G.AdjacentSet({u}) by Def5,A4;
+      Ha is inducedSubgraph of H,G.AdjacentSet({u}) by A4,Def5;
      then Ha is inducedSubgraph of G,G.AdjacentSet({u}) by A1,A2,Th29;
 hence the_Source_of Ha = the_Source_of Ga &
-      the_Target_of Ha = the_Target_of Ga by A9, A8,GLIB_000:48;
+      the_Target_of Ha = the_Target_of Ga by A8,A9,GLIB_000:48;
 end;
 
 definition let G be _Graph;
@@ -2146,12 +2146,12 @@ A1: dom S = E & dom T = E by FUNCOP_1:19;
         then x = 0 by TARSKI:def 1;
         then S.x = 0 by FUNCOP_1:87;
         hence S.x in V by TARSKI:def 2;
-    end; then reconsider S as Function of E,V by A1, FUNCT_2:5;
+    end; then reconsider S as Function of E,V by A1,FUNCT_2:5;
      now let x be set; assume x in E;
         then x = 0 by TARSKI:def 1;
         then T.x = 1 by FUNCOP_1:87;
         hence T.x in V by TARSKI:def 2;
-    end; then reconsider T as Function of E,V by A1, FUNCT_2:5;
+    end; then reconsider T as Function of E,V by A1,FUNCT_2:5;
     set G = createGraph(V,E,S,T);
 A2: the_Vertices_of G = V & the_Edges_of G = E & the_Source_of G = S &
       the_Target_of G = T by GLIB_000:8;
@@ -2170,7 +2170,7 @@ then A6: 0 Joins 0,1,G by A4,A5,GLIB_000:def 15;
         let e being set such that A7: e Joins v,v,G;
         reconsider v as Vertex of G by A7,GLIB_000:16;
          e in the_Edges_of G by A7,GLIB_000:def 15;
-        then e Joins 0,1,G by A6,A2,TARSKI:def 1;
+        then e Joins 0,1,G by A2,A6,TARSKI:def 1;
         then (0 = v & 1 = v) or (0 = v & 1 = v) by A7,GLIB_000:18;
         hence contradiction;
     end;
@@ -2185,11 +2185,11 @@ then A8: G is loopless by GLIB_000:21;
     hence G is simple by A8,GLIB_000:def 24;
      now let u,v be Vertex of G such that A11: u <> v;
         per cases by A2,TARSKI:def 2;
-        suppose A12: u = 0; then A13: v = 1 by A11,A2,TARSKI:def 2;
+        suppose A12: u = 0; then A13: v = 1 by A2,A11,TARSKI:def 2;
              0 in the_Edges_of G by A2,TARSKI:def 1;
             then 0 Joins u,v,G by A4,A5,A12,A13,GLIB_000:def 15;
             hence u,v are_adjacent by Def3; end;
-        suppose A14: u = 1; then A15: v = 0 by A11, A2,TARSKI:def 2;
+        suppose A14: u = 1; then A15: v = 0 by A2,A11,TARSKI:def 2;
              0 in the_Edges_of G by A2,TARSKI:def 1;
             then 0 Joins v,u,G by A4,A5,A14,A15,GLIB_000:def 15;
             hence u,v are_adjacent by Def3; end;
@@ -2205,7 +2205,7 @@ proof let G1,G2 be _Graph such that A1: G1 == G2;
      now let u,v be Vertex of G2 such that A3: u <> v;
         reconsider u2=u as Vertex of G1 by A1,GLIB_000:def 36;
         reconsider v2=v as Vertex of G1 by A1,GLIB_000:def 36;
-         u2,v2 are_adjacent by A3,A2,Def6;
+         u2,v2 are_adjacent by A2,A3,Def6;
         hence u,v are_adjacent by A1,Th44;
     end;
     hence G2 is complete by Def6;
@@ -2265,8 +2265,8 @@ proof let G be trivial _Graph, v be Vertex of G;
             ex v1 being Vertex of G st (v1 in {v} & u,v1 are_adjacent) by A1;
       consider w being Vertex of G such that
    A3: the_Vertices_of G = {w} by GLIB_000:25;
-       u = w & v = w by A3, TARSKI:def 1;
-    hence contradiction by A2, TARSKI:def 1;
+       u = w & v = w by A3,TARSKI:def 1;
+    hence contradiction by A2,TARSKI:def 1;
    end;
  hence v is simplicial by Def7;
 end;
@@ -2311,24 +2311,24 @@ A3: G.AdjacentSet({u}) = {} iff G2.AdjacentSet({v}) = {} by A1,A2,Th58;
    suppose G.AdjacentSet({u}) = {};
         hence thesis by A3,Def7; end;
    suppose A4: G.AdjacentSet({u}) <> {};
-    then A5: G2.AdjacentSet({v}) <> {} by A1, A2, Th58;
+    then A5: G2.AdjacentSet({v}) <> {} by A1,A2,Th58;
    hereby assume A6: u is simplicial;
        consider Ga being AdjGraph of G,{u};
-   A7: Ga is complete by A6, A4, Def7;
+   A7: Ga is complete by A4,A6,Def7;
      thus v is simplicial proof
        assume G2.AdjacentSet({v}) <> {};
        let Ha be AdjGraph of G2,{v};
-          Ga == Ha by A1, A2, A4, Th60;
+          Ga == Ha by A1,A2,A4,Th60;
        hence Ha is complete by A7,Th62;
      end;
    end;
    assume A8: v is simplicial;
        consider Ha being AdjGraph of G2,{v};
-   A9: Ha is complete by A8, A5, Def7;
+   A9: Ha is complete by A5,A8,Def7;
      thus u is simplicial proof
        assume G.AdjacentSet({u}) <> {};
        let Ga be AdjGraph of G,{u};
-          Ga == Ha by A1, A2, A4, Th60;
+          Ga == Ha by A1,A2,A4,Th60;
        hence Ga is complete by A9,Th62;
      end;
    end;
@@ -2372,7 +2372,7 @@ suppose A3: G.AdjacentSet({v}) <> {};
     A4: H is inducedSubgraph of G,G.AdjacentSet({v}) by Def5;
          now let a,b be Vertex of H such that
         A5: a<>b;
-        A6: the_Vertices_of H = G.AdjacentSet({v}) by A4,A3,GLIB_000:def 39;
+        A6: the_Vertices_of H = G.AdjacentSet({v}) by A3,A4,GLIB_000:def 39;
             then a in G.AdjacentSet({v}) & b in G.AdjacentSet({v});
             then reconsider vv=v,aa=a,bb=b as Vertex of G;
         A7: aa<>vv & aa,vv are_adjacent by A6,Th52;
@@ -2430,8 +2430,8 @@ definition let G be _Graph, a,b be Vertex of G;
               then ex n being odd Element of NAT
                     st n<=len W2 & W2.n=x by GLIB_001:88;
               hence x in W2.vertices() by GLIB_001:88;
-          end; then W2.vertices() = {a,b} by TARSKI:2,A7;
-          hence contradiction by A2, A1,Th22;
+          end; then W2.vertices() = {a,b} by A7,TARSKI:2;
+          hence contradiction by A1,A2,Th22;
       end;
      hence thesis by A3;
   end;
@@ -2450,7 +2450,7 @@ A2: not a in S & not b in S by A1,Def8;
     proof let G2 be removeVertices of G,S;
         let W be Walk of G2 such that A3: W is_Walk_from b,a;
          W.reverse() is_Walk_from a,b by A3,GLIB_001:24;
-        hence contradiction by A1, Def8;
+        hence contradiction by A1,Def8;
     end;
     hence thesis by A1,A2,Def8;
 end;
@@ -2484,7 +2484,7 @@ proof
            A10: W.edges() c= G.edgesBetween(W.vertices()) by GLIB_001:110;
                 G.edgesBetween(W.vertices()) c=
                G.edgesBetween(the_Vertices_of G2) by A9,GLIB_000:39;
-               then W.edges() c= the_Edges_of G2 by A10,A7,XBOOLE_1:1;
+               then W.edges() c= the_Edges_of G2 by A7,A10,XBOOLE_1:1;
                then reconsider W2=W as Walk of G2 by A9,GLIB_001:171;
                 W.first() = a & W.last() = b by A4,GLIB_001:def 23;
                then W2.first()=a&W2.last()=b;
@@ -2517,7 +2517,7 @@ GLIB_001:88;
            end; then W2.vertices() = W.vertices() by TARSKI:2;
            then for x being Vertex of G holds not (x in S & x in W2.vertices()
 )
-            by XBOOLE_0:def 4,A12;
+            by A12,XBOOLE_0:def 4;
            hence contradiction by A11,A14;
     end;
    hence S is VertexSeparator of a,b by A1,A11,Def8;
@@ -2542,11 +2542,11 @@ A5: n <= len W & W.n = x by A4,GLIB_001:88;
 A6: 1 <= n by HEYTING3:1;
      now assume 1 = n;
         then W.n = W.first();
-        hence contradiction by A3,A4,A5,A2,GLIB_001:def 23;
+        hence contradiction by A2,A3,A4,A5,GLIB_001:def 23;
     end; then A7: 1 < n by A6,REAL_1:def 5;
      now assume n = len W;
         then W.n = W.last();
-        hence contradiction by A3,A4,A5, A2,GLIB_001:def 23;
+        hence contradiction by A2,A3,A4,A5,GLIB_001:def 23;
     end; then n < len W by A5,REAL_1:def 5;
     hence thesis by A4,A5,A7;
 end;
@@ -2621,7 +2621,7 @@ proof
     let S be VertexSeparator of a,b, G2 be removeVertices of G,S;
     let a2 be Vertex of G2 such that a2=a;
     set A = G2.reachableFrom(a2);
-     not a in S by Def8,A1;
+     not a in S by A1,Def8;
     then a in the_Vertices_of G \ S by XBOOLE_0:def 4;
 then A2: the_Vertices_of G2 = the_Vertices_of G \ S by GLIB_000:def 39;
      now let x be set such that A3: x in A /\ S;
@@ -2666,7 +2666,7 @@ proof
     let G be _Graph;
     let a,b be Vertex of G such that A1: a<>b & not a,b are_adjacent;
     let S be VertexSeparator of a,b, G2 be removeVertices of G,S;
-     not a in S & not b in S by Def8,A1;
+     not a in S & not b in S by A1,Def8;
     then a in the_Vertices_of G\S & b in the_Vertices_of G\S by XBOOLE_0:def 4
 ;
     hence thesis by GLIB_000:def 39;
@@ -2688,7 +2688,7 @@ proof
     now assume not S is minimal;
        then consider T being Subset of S such that
    A2: T <> S & T is VertexSeparator of a,b by Def9;
-      thus contradiction by A2,A1, XBOOLE_1:3;
+      thus contradiction by A1,A2,XBOOLE_1:3;
    end;
    hence S is minimal;
 end;
@@ -2705,7 +2705,7 @@ A1: s in X;
         thus x in bool the_Vertices_of G by A2;
     end;
     then X c= bool the_Vertices_of G by TARSKI:def 3;
-    then reconsider X as non empty finite set by A1, FINSET_1:13;
+    then reconsider X as non empty finite set by A1,FINSET_1:13;
 
     defpred P[set,set] means
       ex p being VertexSeparator of a,b st $1 = p & $2 = card p;
@@ -2725,7 +2725,7 @@ A8: for N being Element of X holds FF(Min) <= FF(N) from GRAPH_5:sch 2;
     consider M being VertexSeparator of a,b such that
 A9: M = Min & card M = F.Min by A6;
      M in dom F by A7;
-then A10: F/.M = F.M by FINSEQ_4:def 4;
+then A10: F/.M = F.M by PARTFUN1:def 8;
 
      now per cases;
     suppose M = {}; hence M is minimal by Th78; end;
@@ -2738,11 +2738,11 @@ then A10: F/.M = F.M by FINSEQ_4:def 4;
             consider Tp being VertexSeparator of a,b such that
         A12: Tp=T2 & card Tp = F.T2 by A6;
              Tp in dom F by A7;
-        then F/.Tp = F.Tp by FINSEQ_4:def 4;
-        then A13: card M <= card T by A10,A9,A12,A8;
+        then F/.Tp = F.Tp by PARTFUN1:def 8;
+        then A13: card M <= card T by A8,A9,A10,A12;
         A14: card T <= card M by CARD_1:80;
              card T <> card M by A11,TRIANG_1:3;
-            hence contradiction by A13, A14,REAL_1:def 5;
+            hence contradiction by A13,A14,REAL_1:def 5;
         end;
         hence M is minimal; end;
     end;
@@ -2765,7 +2765,7 @@ proof
         then consider H being Subset of T such that
     A5: H <> T & H is VertexSeparator of b,a by Def9;
          H is Subset of S & H <> S & H is VertexSeparator of a,b
-            by A1,A2,A5,A4,Th70;
+            by A1,A2,A4,A5,Th70;
     hence contradiction by A3,Def9;
 end;
 
@@ -2828,7 +2828,7 @@ proof
                 then W.(W.find(x)) = W.first();
                 then W.(W.find(x)) = a by A8,GLIB_001:def 23;
                  then not W.(W.find(x)) in S by A1,A2,Def8;
-              hence contradiction by A5, A9,GLIB_001:def 19;
+              hence contradiction by A5,A9,GLIB_001:def 19;
             end;
             then 2*0+1 < W.find(x) by A11,REAL_1:def 5;
             then 2*1+1 <= W.find(x) by Th4;
@@ -2841,15 +2841,15 @@ proof
             per cases;
             suppose A16: W.j in T;
                  W.j in the_Vertices_of G & W.j in W.vertices()
-                    by A13, A15,GLIB_001:8,88;
+                    by A13,A15,GLIB_001:8,88;
                 hence thesis by A16;
             end;
             suppose not W.j in T;
               assume
             A17: not ex y being Vertex of G st y in T & y in W.vertices();
                     set P = W.cut(1,j);
-                A18: 2*0+1 <= j & j <= len W by A15,A12;
-                then A19: len P + 1 + (-1) = j + 1 + (-1) by A13, GLIB_001:37;
+                A18: 2*0+1 <= j & j <= len W by A12,A15;
+                then A19: len P + 1 + (-1) = j + 1 + (-1) by A13,GLIB_001:37;
                 A20: for n being odd Nat st n <= j holds not P.n in S & P.n=W.n
                     proof let n be odd Nat such that A21: n <= j;
                          1 <= n by HEYTING3:1;
@@ -2858,14 +2858,13 @@ proof
                         then reconsider nu1 = n-1 as Nat;
                          n < j + 1 by A21,NAT_1:13;
                         then n+(-1) < j+1+(-1) by XREAL_1:10;
-                    then A23: P.(nu1+1) = W.(1+nu1) by A22, A19,A18,GLIB_001:37
+                    then A23: P.(nu1+1) = W.(1+nu1) by A18,A19,A22,GLIB_001:37
 ;
                          now assume A24: P.n in S;
                         A25: n in NAT by ORDINAL1:def 13;
                         then A26: P.n in P.vertices() by A19,A21,GLIB_001:88;
-                        P.vertices() c= W.vertices() by A13, A18
-,GLIB_001:95;
-                        then A27: not P.n in T by A26,A17;
+                        P.vertices() c= W.vertices() by A13,A18,GLIB_001:95;
+                        then A27: not P.n in T by A17,A26;
                         A28: {x} c= S by A5,ZFMISC_1:37;
                              S \/ {x} = {x} \/ T by XBOOLE_1:39;
                             then S = {x} \/ T by A28,XBOOLE_1:12;
@@ -2873,8 +2872,8 @@ proof
                         A30: n <= len W by A15,A21,XXREAL_0:2;
                              n < j + 1 by A21,NAT_1:13;
                         then n+0 < j + 1 + 1 by XREAL_1:10;
-                            then n < W.find(W.n) by A29,A23,TARSKI:def 1;
-                            hence contradiction by A25, A30,GLIB_001:116;
+                            then n < W.find(W.n) by A23,A29,TARSKI:def 1;
+                            hence contradiction by A25,A30,GLIB_001:116;
                         end;
                         hence thesis by A23;
                     end;
@@ -2892,10 +2891,10 @@ proof
                     then W.find(x)+(-2) < len W + 1 + (-2) by XREAL_1:10;
                     then j < len W - 1 & len W +(-1) < len W+0 by XREAL_1:10;
                     then j < len W by XXREAL_0:2;
-                    then W.(j+1) Joins Wj,W.(j+2),G by A13, GLIB_001:def 3;
+                    then W.(j+1) Joins Wj,W.(j+2),G by A13,GLIB_001:def 3;
                     then W.(j+1) Joins Wj,x,G by A9,GLIB_001:def 19;
                     then Wj,x are_adjacent by Def3;
-                    hence contradiction by A32,A31,A6;
+                    hence contradiction by A6,A31,A32;
                 end;
             end;
          x in {x} by TARSKI:def 1;
@@ -2908,16 +2907,16 @@ proof
             per cases;
             suppose y = x;
              hence ex y being Vertex of G st y in T & y in W.vertices()
-                     by A36,A37,A7;
+                     by A7,A36,A37;
             end;
             suppose A38: y <> x;
               take y;
-                 not y in {x} by A38, TARSKI:def 1;
+                 not y in {x} by A38,TARSKI:def 1;
               hence y in T by A37,XBOOLE_0:def 4;
               thus y in W.vertices() by A37;
             end;
         end; then T is VertexSeparator of a,b by A1,A2,A35,Th71;
-      hence contradiction by A3,A34,A33,Def9;
+      hence contradiction by A3,A33,A34,Def9;
 end;
 
 theorem Th83: :: VertexSep01
@@ -2939,7 +2938,7 @@ A4: aa=b;
    let x be Vertex of G such that
 A5: x in S;
    reconsider S1 = S as VertexSeparator of b,a by A1,A2,Th70;
- S1 is minimal by A1, A2, A3, Th80;
+ S1 is minimal by A1,A2,A3,Th80;
  hence thesis by A1,A2,A4,A5,Th82;
 end;
 
@@ -2995,13 +2994,13 @@ A5: for f being set st f in W.edges() holds not f Joins W.m,W.n,G;
     thus ex e being set st e Joins W.m,W.n,G by A4;
     assume A6: W is Cycle-like;
   then A7: W is closed by GLIB_001:def 31;
-       W is non trivial by A6, GLIB_001:def 31;
+       W is non trivial by A6,GLIB_001:def 31;
   then A8: 3 <= len W by GLIB_001:126;
   then A9: 1 < len W by XXREAL_0:2;
   A10:  W.first() = W.1 & W.last() = W.len W;
-  then A11: W.1 = W.len W by A7, GLIB_001:def 24;
-    thus not (m=1 & n = len W) by A3, A10, A7, GLIB_001:def 24;
-        2 <= len W by A8, XXREAL_0:2;
+  then A11: W.1 = W.len W by A7,GLIB_001:def 24;
+    thus not (m=1 & n = len W) by A3,A7,A10,GLIB_001:def 24;
+        2 <= len W by A8,XXREAL_0:2;
        then reconsider lW2 = len W -2*1 as odd Element of NAT by INT_1:18;
        reconsider lW2 as odd Nat;
   A12: lW2 < len W by XREAL_1:46;
@@ -3011,19 +3010,19 @@ A5: for f being set st f in W.edges() holds not f Joins W.m,W.n,G;
   A14:  le in NAT by ORDINAL1:def 13;
   A15: 1 <= le by NAT_1:12;
   A16: le <= len W by A12,NAT_1:13;
-       then le div 2 in dom W.edgeSeq() by A15, A14,GLIB_001:78;
+       then le div 2 in dom W.edgeSeq() by A14,A15,GLIB_001:78;
        then W.edgeSeq().(le div 2) in rng W.edgeSeq() by FUNCT_1:12;
-       then W.(len W -2+1) in W.edges() by A15, A16,A14, GLIB_001:78;
-    hence not (m=1 & n = len W-2) by A13, A5;
+       then W.(len W -2+1) in W.edges() by A14,A15,A16,GLIB_001:78;
+    hence not (m=1 & n = len W-2) by A5,A13;
    2*0+1 is odd Nat;
       then W.(1+1) Joins W.1,W.(1+2),G by A9,GLIB_001:def 3;
-  then A17: W.(1+1) Joins W.(1+2),W.len W,G by A11, GLIB_000:17;
+  then A17: W.(1+1) Joins W.(1+2),W.len W,G by A11,GLIB_000:17;
   A18: 2*1 div 2 = 1 by NAT_D:18;
   A19: 1+1 <= len W by A8,XXREAL_0:2;
-      then 1 in dom W.edgeSeq() by A18, GLIB_001:78;
+      then 1 in dom W.edgeSeq() by A18,GLIB_001:78;
       then W.edgeSeq().1 in rng W.edgeSeq() by FUNCT_1:12;
-      then W.(1+1) in rng W.edgeSeq() by A18, A19, GLIB_001:78;
-    hence not (m=3 & n = len W) by A17, A5;
+      then W.(1+1) in rng W.edgeSeq() by A18,A19,GLIB_001:78;
+    hence not (m=3 & n = len W) by A5,A17;
 end;
 
 theorem Th85: :: ChordalPath01
@@ -3043,106 +3042,107 @@ A4: P is Cycle-like implies
      not (m=1 & n = len P) & not (m=1 & n = len P-2) & not (m=3 & n = len P);
   take m,n;
 A5: m in NAT & n in NAT by ORDINAL1:def 13;
-A6: m < n by A1, NAT_1:12;
+A6: m < n by A1,NAT_1:12;
   thus m+2 < n by A1;
   thus n <= len P by A2;
-A7: m < len P by A6, A2, XXREAL_0:2;
-    now assume len P = 1; then m+2 < 1 by A1, A2, XXREAL_0:2;
+A7: m < len P by A2,A6,XXREAL_0:2;
+    now assume len P = 1; then m+2 < 1 by A1,A2,XXREAL_0:2;
     hence contradiction by NAT_1:12;
    end;
 then A8: P is non trivial by GLIB_001:127;
   hereby assume A9: P.m = P.n;
-  then A10: m = 1 & n = len P by A5, A6, A2, GLIB_001:def 28;
+  then A10: m = 1 & n = len P by A2,A5,A6,GLIB_001:def 28;
        P.first() = P.1 & P.last() = P.len P;
-      then P is closed by A9, A10, GLIB_001:def 24;
-    hence contradiction by A5, A9,A6,A2,GLIB_001:def 28, A4,A8,GLIB_001:def 31;
+      then P is closed by A9,A10,GLIB_001:def 24;
+    hence contradiction by A2,A4,A5,A6,A8,A9,GLIB_001:def 28,def 31;
   end;
   thus ex e being set st e Joins P.m,P.n,G by A3;
   let f be set such that
 A11: f in P.edges() and
 A12: f Joins P.m,P.n,G;
-   consider i being Element of NAT such that
+   consider i being Nat such that
 A13: i in dom P.edgeSeq() and
 A14: P.edgeSeq().i = f by A11,FINSEQ_2:11;
-A15: 1 <= i & i <= len P.edgeSeq() by A13, FINSEQ_3:27;
+     reconsider i as Element of NAT by ORDINAL1:def 13;
+A15: 1 <= i & i <= len P.edgeSeq() by A13,FINSEQ_3:27;
 then A16: P.edgeSeq().i = P.(2*i) by GLIB_001:def 15;
    set k = 2*i-1;
-    2*1 <= 2*i by A15, XREAL_1:66;
+    2*1 <= 2*i by A15,XREAL_1:66;
    then 2-1 <= k by XREAL_1:11;
    then k is Element of NAT by INT_1:16;
    then reconsider k as odd Nat;
 A17: k+1 = 2*i;
 A18: k in NAT by ORDINAL1:def 13;
-    2*i in dom P by A13, GLIB_001:79;
+    2*i in dom P by A13,GLIB_001:79;
    then 2*i <= len P by FINSEQ_3:27;
-then A19: k < len P by A17, NAT_1:13;
+then A19: k < len P by A17,NAT_1:13;
 then A20: P.(k+1) Joins P.k,P.(k+2),G by A18,GLIB_001:def 3;
-A21: k+2 <= len P by A19, Th4;
+A21: k+2 <= len P by A19,Th4;
 A22: k+2 in NAT by ORDINAL1:def 13;
-   per cases by A20, A16, A14, A12, GLIB_000:18;
+   per cases by A12,A14,A16,A20,GLIB_000:18;
    suppose A23: P.k = P.m & P.(k+2) = P.n;
     per cases by XXREAL_0:1;
     suppose k < m;
-     hence contradiction by A23, A7, A18,A5,GLIB_001:def 28;
+     hence contradiction by A5,A7,A18,A23,GLIB_001:def 28;
     end;
     suppose A24: k = m;
      per cases by XXREAL_0:1;
      suppose k+2 < n;
-     then A25: k+2 = 1 by A23, A2,A22,A5,GLIB_001:def 28;
+     then A25: k+2 = 1 by A2,A5,A22,A23,GLIB_001:def 28;
           1 <= k by HEYTING3:1;
-         then k+2 < k+1 by A25, NAT_1:13;
+         then k+2 < k+1 by A25,NAT_1:13;
       hence contradiction by XREAL_1:8;
      end;
      suppose k+2 = n;
-       hence contradiction by A24, A1;
+       hence contradiction by A1,A24;
      end;
      suppose A26: k+2 > n;
         k+2 <= len P by A19,Th4;
-       then n = 1 by A23, A26, A22,A5,GLIB_001:def 28;
+       then n = 1 by A5,A22,A23,A26,GLIB_001:def 28;
       hence contradiction by A1,HEYTING3:1;
      end;
     end;
     suppose k > m;
-     hence contradiction by A23, A19, A18,A5,GLIB_001:def 28;
+     hence contradiction by A5,A18,A19,A23,GLIB_001:def 28;
     end;
    end;
    suppose A27: P.k = P.n & P.(k+2) = P.m;
     per cases by XXREAL_0:1;
     suppose A28: k < n;
-    then A29: k = 1 & n = len P by A27, A2, A18,A5,GLIB_001:def 28;
+    then A29: k = 1 & n = len P by A2,A5,A18,A27,GLIB_001:def 28;
      per cases by XXREAL_0:1;
      suppose k+2 < m;
-      hence contradiction by A27,A7,A22,A5,GLIB_001:def 28;
+      hence contradiction by A5,A7,A22,A27,GLIB_001:def 28;
      end;
      suppose A30: k+2 = m;
           P.first() = P.1 & P.last() = P.len P;
-         then P is closed by A29, A27, GLIB_001:def 24;
-      hence contradiction by A29, A30, A4, A8, GLIB_001:def 31;
+         then P is closed by A27,A29,GLIB_001:def 24;
+      hence contradiction by A4,A8,A29,A30,GLIB_001:def 31;
     end;
      suppose k+2 > m;
-     then A31: m = 1 & k+2 = len P by A21, A27, A22,A5,GLIB_001:def 28;
-     A32: k+2 <= n by A28, Th4;
+     then A31: m = 1 & k+2 = len P by A5,A21,A22,A27,GLIB_001:def 28;
+     A32: k+2 <= n by A28,Th4;
           P.first() = P.1 & P.last() = P.len P;
-         then P is closed by A31, A27, GLIB_001:def 24;
-      hence contradiction by A32,A2,XXREAL_0:1,A31, A4, A8, GLIB_001:def 31;
+         then P is closed by A27,A31,GLIB_001:def 24;
+      hence contradiction by A2,A4,A8,A31,A32,GLIB_001:def 31,XXREAL_0:1;
      end;
     end;
     suppose A33: k = n;
      per cases by XXREAL_0:1;
-     suppose k+2 < m;       hence contradiction by NAT_1:12, A33, A6;
+     suppose k+2 < m;       hence contradiction by A6,A33,NAT_1:12;
      end;
      suppose k+2 = m;
-       hence contradiction by A6, A33, NAT_1:12;
+       hence contradiction by A6,A33,NAT_1:12;
      end;
      suppose k+2 > m;
-     then A34: m = 1 & k+2 = len P by A27, A21, A22,A5,GLIB_001:def 28;
+     then A34: m = 1 & k+2 = len P by A5,A21,A22,A27,GLIB_001:def 28;
           P.first() = P.1 & P.last() = P.len P;
-         then P is closed by A34, A27, GLIB_001:def 24;
-      hence contradiction by A34, A4, A33, A8, GLIB_001:def 31;
+         then P is closed by A27,A34,GLIB_001:def 24;
+      hence contradiction by A4,A8,A33,A34,GLIB_001:def 31;
      end;
     end;
     suppose k > n;
-     hence contradiction by A19, A27, A18,A5,GLIB_001:def 28;
+     hence contradiction by A5,A18,A19,A27,GLIB_001:def 28;
     end;
    end;
 end;
@@ -3158,15 +3158,15 @@ A3: m+2 < n & n <= len W1 & W1.m <> W1.n and
 A4: ex e being set st e Joins W1.m,W1.n,G1 and
 A5: for f being set st f in W1.edges() holds not f Joins W1.m,W1.n,G1;
   take m,n;
-  thus m+2 < n & n <= len W2 & W2.m <> W2.n by A3, A2;
+  thus m+2 < n & n <= len W2 & W2.m <> W2.n by A2,A3;
        consider e being set such that
 A6: e Joins W1.m,W1.n,G1 by A4;
-    e Joins W2.m,W2.n,G2 by A6, A1, A2, GLIB_000:91;
+    e Joins W2.m,W2.n,G2 by A1,A2,A6,GLIB_000:91;
   hence ex e being set st e Joins W2.m,W2.n,G2;
   let f be set;
-  assume f in W2.edges(); then f in W1.edges() by A2, GLIB_001:111;
+  assume f in W2.edges(); then f in W1.edges() by A2,GLIB_001:111;
     then not f Joins W1.m,W1.n,G1 by A5;
-  hence not f Joins W2.m,W2.n,G2 by A1, A2, GLIB_000:91;
+  hence not f Joins W2.m,W2.n,G2 by A1,A2,GLIB_000:91;
 end;
 
 theorem Th87: :: ChordalWalk03
@@ -3183,16 +3183,16 @@ A3: m+2 < n & n <= len W2 & W2.m <> W2.n and
 A4: ex e being set st e Joins W2.m,W2.n,H and
 A5: for f being set st f in W2.edges() holds not f Joins W2.m,W2.n,H;
   take m,n;
-  thus m+2 < n & n <= len W1 & W1.m <> W1.n by A3, A1;
+  thus m+2 < n & n <= len W1 & W1.m <> W1.n by A1,A3;
        consider e being set such that
 A6: e Joins W2.m,W2.n,H by A4;
-    e Joins W1.m,W1.n,G by A6, A1, GLIB_000:75;
+    e Joins W1.m,W1.n,G by A1,A6,GLIB_000:75;
   hence ex e being set st e Joins W1.m,W1.n,G;
   let f be set;
   assume f in W1.edges();
-then A7: f in W2.edges() by A1, GLIB_001:111;
-   then not f Joins W1.m,W1.n,H by A5, A1;
-  hence not f Joins W1.m,W1.n,G by A7, GLIB_000:76;
+then A7: f in W2.edges() by A1,GLIB_001:111;
+   then not f Joins W1.m,W1.n,H by A1,A5;
+  hence not f Joins W1.m,W1.n,G by A7,GLIB_000:76;
  end;
  thus W1 is chordal implies W2 is chordal
  proof given m, n being odd Nat such that
@@ -3201,19 +3201,19 @@ A9: ex e being set st e Joins W1.m,W1.n,G and
 A10: for f being set st f in W1.edges() holds not f Joins W1.m,W1.n,G;
   take m,n;
 A11: m in NAT & n in NAT by ORDINAL1:def 13;
-  thus m+2 < n & n <= len W2 & W2.m <> W2.n by A8, A1;
+  thus m+2 < n & n <= len W2 & W2.m <> W2.n by A1,A8;
        consider e being set such that
 A12: e Joins W1.m,W1.n,G by A9;
-    m < n by A8, NAT_1:12;
-   then m <= len W2 by A8, A1, XXREAL_0:2;
+    m < n by A8,NAT_1:12;
+   then m <= len W2 by A1,A8,XXREAL_0:2;
    then W1.m in the_Vertices_of H & W1.n in the_Vertices_of H
-        by A8,A1,A11,GLIB_001:8;
-     then e Joins W2.m,W2.n,H  by A1, A2, A12, Th19;
+        by A1,A8,A11,GLIB_001:8;
+     then e Joins W2.m,W2.n,H  by A1,A2,A12,Th19;
   hence ex e being set st e Joins W2.m,W2.n,H;
   let f be set;
   assume f in W2.edges();
-   then f in W1.edges() by A1, GLIB_001:111;
-   then not f Joins W2.m,W2.n,G by A10, A1;
+   then f in W1.edges() by A1,GLIB_001:111;
+   then not f Joins W2.m,W2.n,G by A1,A10;
   hence not f Joins W2.m,W2.n,H by GLIB_000:75;
  end;
 end;
@@ -3243,26 +3243,26 @@ A8: 0+1 <= m by HEYTING3:1;
             reconsider jj=2*3+1 as odd Nat;
              n < jj by A1,A4,A6,A9,A10,REAL_1:def 5;
         then A11: n <= jj-2 by Th3;
-             n <> 5 by A7,A9,A5; then n < 2*2+1 by A11,REAL_1:def 5;
+             n <> 5 by A5,A7,A9; then n < 2*2+1 by A11,REAL_1:def 5;
             then n <= 5-2 by Th3;
-            hence contradiction by A6, A9;
+            hence contradiction by A6,A9;
     end; then 2*0+1 < m by A8,REAL_1:def 5;
     then A12: 1+2 <= m by Th4;
          now assume A13: m = 3;
             then n < len W by A1,A6,REAL_1:def 5;
         then A14: n <= 9 - 2 by A4,Th3;
-             n <> 7 by A7,A13,A5; then n < 2*3+1 by A14,REAL_1:def 5;
+             n <> 7 by A5,A7,A13; then n < 2*3+1 by A14,REAL_1:def 5;
             then n <= 7 - 2 by Th3;
-            hence contradiction by A6, A13;
+            hence contradiction by A6,A13;
         end; then 2*1+1 < m by A12,REAL_1:def 5;
     then A15: 3+2 <= m by Th4;
          now assume A16: m = 5;
              now assume n = 9;
-                then e Joins W.1,W.5,G by A16,A7,A4,A3,GLIB_000:17;
+                then e Joins W.1,W.5,G by A3,A4,A7,A16,GLIB_000:17;
                 hence contradiction by A5;
-            end; then n < len W by A6,A4,REAL_1:def 5;
+            end; then n < len W by A4,A6,REAL_1:def 5;
             then n <= len W - 2 by Th3;
-            hence contradiction by A4,A16,A6;
+            hence contradiction by A4,A6,A16;
         end; then 2*2+1 < m by A15,REAL_1:def 5;
         then 5+2 <= m by Th4;
         then 7+2 <= m + 2 by XREAL_1:9;
@@ -3283,7 +3283,7 @@ A4: ex e being set st e Joins W.m,W.n,G and
     (W is Cycle-like implies not (m=1 & n = len W) &
                             not (m=1 & n = len W-2) &
                             not (m=3 & n = len W)) by Th84;
- thus contradiction by A1, A2, A3, A4, Th40;
+ thus contradiction by A1,A2,A3,A4,Th40;
 end;
 
 theorem
@@ -3305,9 +3305,9 @@ A5: now assume m <> 1; then 1 <> m & 1 <= m by Th2;
        then 2*0+1 < m by REAL_1:def 5;
        then 1+2 <= m by Th4;
        then 3+2 <= m+2 by XREAL_1:9;
-      hence contradiction by A2,A1,XXREAL_0:2;
+      hence contradiction by A1,A2,XXREAL_0:2;
     end;
-    then 3+2 <= n by Th4, A2;
+    then 3+2 <= n by A2,Th4;
     then W.n = W.last() by A1,A2,XXREAL_0:1;
   hence contradiction by A1,A4,A5,Def3;
 end;
@@ -3328,11 +3328,11 @@ A4: m in NAT & n in NAT by ORDINAL1:def 13;
 A5: e Joins W.m,W.n,G by A2;
      m < m+2 by XREAL_1:31;
     then m < n by A1,XXREAL_0:2;
-then A6: 1 <= m & m <= len W & 1 <= n & n <= len W by Th2,A1,XXREAL_0:2;
+then A6: 1 <= m & m <= len W & 1 <= n & n <= len W by A1,Th2,XXREAL_0:2;
 then A7: m in dom W & n in dom W by FINSEQ_3:27;
 
     set um = len W - m + 1, un = len W - n + 1;
-    reconsider um, un as odd Element of NAT by A6,A4,FINSEQ_5:1;
+    reconsider um, un as odd Element of NAT by A4,A6,FINSEQ_5:1;
     reconsider um, un as odd Nat;
 A8: un + 2 < um by A1,Lm1;
      len W - m < len W by A6,XREAL_1:46;
@@ -3343,10 +3343,10 @@ A11: W.m = U.um & W.n = U.un & un in dom U & um in dom U by A7,GLIB_001:25;
 A12: now let f be set such that A13: f in U.edges();
       assume f Joins U.un,U.um,G;
         then f Joins W.m,W.n,G by A11,GLIB_000:17;
-      hence contradiction by A13,A10,A3;
+      hence contradiction by A3,A10,A13;
     end;
      e Joins U.un,U.um,G by A5,A11,GLIB_000:17;
-  hence U is chordal by A8,A9,A11,A1,A12,Def10;
+  hence U is chordal by A1,A8,A9,A11,A12,Def10;
 end;
 
 theorem
@@ -3380,12 +3380,12 @@ A6: m <= len P by A2,XXREAL_0:2;
         A12: k+2 <= len P by A11,Th4;
         A13: f Joins P.k,P.(k+2),G by A11,GLIB_001:def 3;
           assume A14: f Joins P.m,P.n,G;
-          per cases by A14,A13,GLIB_000:18;
+          per cases by A13,A14,GLIB_000:18;
           suppose P.m = P.k & P.n = P.(k+2);
-            then m = k & n = k+2*1 by A6,A2,A11,A12,A5,A3,GLIB_001:def 29;
+            then m = k & n = k+2*1 by A2,A3,A5,A6,A11,A12,GLIB_001:def 29;
           hence contradiction by A9; end;
           suppose P.m = P.(k+2) & P.n = P.k;
-          then m = k+2*1 & n = k by A6,A2,A11,A12,A5,A3,GLIB_001:def 29;
+          then m = k+2*1 & n = k by A2,A3,A5,A6,A11,A12,GLIB_001:def 29;
           then A15: m > n by XREAL_1:31;
                m+2 > m by XREAL_1:31;
           hence contradiction by A9,A15,XXREAL_0:2; end;
@@ -3397,7 +3397,7 @@ A6: m <= len P by A2,XXREAL_0:2;
   assume A16: m+2 = n;
   take P.(m+1);
      m < len P by A2,XXREAL_0:2;
-  hence P.(m+1) Joins P.m,P.n,G by A16,A3,GLIB_001:def 3;
+  hence P.(m+1) Joins P.m,P.n,G by A3,A16,GLIB_001:def 3;
 end;
 
 theorem
@@ -3430,20 +3430,20 @@ then A9: Q.j = P.mj & mj in dom P by A2,A3,GLIB_001:48;
     reconsider mi as odd Nat;
     reconsider mj as odd Element of NAT by A9;
     reconsider mj as odd Nat;
-A10: e Joins P.mi,P.mj,G by A7, A2,A3,GLIB_001:48,A9,A6;
+A10: e Joins P.mi,P.mj,G by A2,A3,A6,A7,A9,GLIB_001:48;
      i+2+m < j+m by A4,XREAL_1:10;
 then A11: m+i+2-1 < m+j-1 by XREAL_1:11;
 then A12: mi+2 < mj;
      mi+0 < mi+2 by XREAL_1:10;
 then A13: mi < mj by A11,XXREAL_0:2;
      mj <= len P by A9,FINSEQ_3:27;
-  hence contradiction by A12, A1,A10,A13,Th92;
+  hence contradiction by A1,A10,A12,A13,Th92;
   end;
   hence Q is chordless;
    now assume Q is closed;
   then A14: Q.first() = Q.last() by GLIB_001:def 24;
        P.m = Q.first() & P.n = Q.last() by A2,A3,GLIB_001:38;
-    hence contradiction by A14, A1,A2,A3,GLIB_001:148;
+    hence contradiction by A1,A2,A3,A14,GLIB_001:148;
   end;
   hence Q is open;
 end;
@@ -3466,7 +3466,7 @@ A5: for f being set st f in V.edges() holds not f Joins V.m,V.n,H
 A6: m in NAT & n in NAT by ORDINAL1:def 13;
     consider e being set such that
 A7: e Joins V.m,V.n,H by A4;
-A8: e Joins W.m,W.n,G by A1, A7,GLIB_000:75;
+A8: e Joins W.m,W.n,G by A1,A7,GLIB_000:75;
      m+0 <= m+2 by XREAL_1:9; then m <= n by A3,XXREAL_0:2;
     then m <= len V by A3,XXREAL_0:2;
     then V.n in V.vertices() & V.m in V.vertices() by A3,A6,GLIB_001:88;
@@ -3475,11 +3475,11 @@ then A9: V.n in S & V.m in S by GLIB_000:def 39;
      for f being set st f in W.edges() holds not f Joins W.m,W.n,G proof
         let f be set such that A10: f in W.edges();
         assume f Joins W.m,W.n,G;
-    then A11: f Joins V.m,V.n,H by A1, A9,Th19;
+    then A11: f Joins V.m,V.n,H by A1,A9,Th19;
          f in V.edges() by A1,A10,GLIB_001:111;
       hence contradiction by A5,A11;
     end;
-  hence contradiction by A2,Def10,A8,A1,A3;
+  hence contradiction by A1,A2,A3,A8,Def10;
   end;
     assume
 A12: V is chordless;
@@ -3498,7 +3498,7 @@ A17: e Joins W.m,W.n,G by A14;
     then W.n in V.vertices() & W.m in V.vertices() by A1,A13,A16,GLIB_001:88;
     then W.n in the_Vertices_of H & W.m in the_Vertices_of H;
     then W.n in S & W.m in S by GLIB_000:def 39;
-then A18: e Joins V.m,V.n,H by A1, A17,Th19;
+then A18: e Joins V.m,V.n,H by A1,A17,Th19;
      for f being set st f in V.edges() holds not f Joins V.m,V.n,H proof
         let f be set such that A19: f in V.edges();
         assume f Joins V.m,V.n,H;
@@ -3506,7 +3506,7 @@ then A18: e Joins V.m,V.n,H by A1, A17,Th19;
          f in W.edges() by A1,A19,GLIB_001:111;
       hence contradiction by A15,A20;
     end;
-  hence contradiction by A12,Def10,A18,A1, A13;
+  hence contradiction by A1,A12,A13,A18,Def10;
 end;
 
 definition let G be _Graph;
@@ -3523,8 +3523,8 @@ proof
         reconsider W2=W as Walk of G1 by A1,GLIB_001:180;
          2*W2.length() + 1 = len W by GLIB_001:113;
     then A4: 2*W2.length() + 1 = 2*W.length() + 1 by GLIB_001:113;
-         W2 is Cycle-like by A3,A1,Th24;
-        then W2 is chordal by A4,A3,A2,Def11;
+         W2 is Cycle-like by A1,A3,Th24;
+        then W2 is chordal by A2,A3,A4,Def11;
         hence W is chordal by A1,Th86;
     end;
     hence thesis by Def11;
@@ -3542,13 +3542,13 @@ proof let G be finite _Graph such that A1: card the_Vertices_of G <= 3;
         then 2*W.length() + 1 >= 8 + 1 by XREAL_1:9;
         then len W >= 9 by GLIB_001:113;
     then A3: n1 < len W & n2 < len W & n3 < len W & n4 < len W by XXREAL_0:2;
-    A4: W is Path-like by A2, GLIB_001:def 31;
+    A4: W is Path-like by A2,GLIB_001:def 31;
     then A5: x1 <> x2 by A3,GLIB_001:def 28;
-    A6: x1 <> x3 by A4, A3,GLIB_001:def 28;
-    A7: x1 <> x4 by A4, A3,GLIB_001:def 28;
-    A8: x2 <> x3 by A4, A3,GLIB_001:def 28;
-    A9: x2 <> x4 by A4, A3,GLIB_001:def 28;
-     x3 <> x4 by A4, A3,GLIB_001:def 28;
+    A6: x1 <> x3 by A3,A4,GLIB_001:def 28;
+    A7: x1 <> x4 by A3,A4,GLIB_001:def 28;
+    A8: x2 <> x3 by A3,A4,GLIB_001:def 28;
+    A9: x2 <> x4 by A3,A4,GLIB_001:def 28;
+     x3 <> x4 by A3,A4,GLIB_001:def 28;
    then A10: card {x1,x2,x3,x4} = 4 by A5,A6,A7,A8,A9,CARD_2:78;
          now let x be set; assume A11: x in {x1,x2,x3,x4};
            now per cases by A11,ENUMSET1:def 2;
@@ -3581,9 +3581,9 @@ registration
           reconsider j5=2*2+1 as odd Nat;
       A4: j3 <= len W & j5 <= len W by A3,XXREAL_0:2;
           then W.j3 in W.vertices() & W.j5 in W.vertices() by GLIB_001:88;
-          then W.j3 = v & W.j5 = v by A1, TARSKI:def 1;
-          then not W is Path-like by A4, GLIB_001:def 28;
-          hence contradiction by A2, GLIB_001:def 31;
+          then W.j3 = v & W.j5 = v by A1,TARSKI:def 1;
+          then not W is Path-like by A4,GLIB_001:def 28;
+          hence contradiction by A2,GLIB_001:def 31;
       end;
       then for W being Walk of G st W.length() > 3 & W is Cycle-like
           holds W is chordal;
@@ -3599,12 +3599,12 @@ A5: dom S = E & dom T = E by FUNCOP_1:19;
         then x = 0 by TARSKI:def 1;
         then S.x = 0 by FUNCOP_1:87;
         hence S.x in V by TARSKI:def 2;
-    end; then reconsider S as Function of E,V by A5, FUNCT_2:5;
+    end; then reconsider S as Function of E,V by A5,FUNCT_2:5;
      now let x be set; assume x in E;
         then x = 0 by TARSKI:def 1;
         then T.x = 1 by FUNCOP_1:87;
         hence T.x in V by TARSKI:def 2;
-    end; then reconsider T as Function of E,V by A5, FUNCT_2:5;
+    end; then reconsider T as Function of E,V by A5,FUNCT_2:5;
     set G = createGraph(V,E,S,T);
 A6: the_Vertices_of G = V & the_Edges_of G = E & the_Source_of G = S &
       the_Target_of G = T by GLIB_000:8;
@@ -3623,7 +3623,7 @@ then A10: 0 Joins 0,1,G by A8,A9,GLIB_000:def 15;
         let e being set such that A11: e Joins v,v,G;
         reconsider v as Vertex of G by A11,GLIB_000:16;
          e in the_Edges_of G by A11,GLIB_000:def 15;
-        then e Joins 0,1,G by A10, A6,TARSKI:def 1;
+        then e Joins 0,1,G by A6,A10,TARSKI:def 1;
         then (0 = v & 1 = v) or (0 = v & 1 = v) by A11,GLIB_000:18;
         hence contradiction;
     end;
@@ -3636,7 +3636,7 @@ then A12: G is loopless by GLIB_000:21;
         hence contradiction by A14;
     end; then G is non-multi by GLIB_000:def 22;
     hence G is simple by A12,GLIB_000:def 24;
-     card the_Vertices_of G = 2 by A6, CARD_2:76;
+     card the_Vertices_of G = 2 by A6,CARD_2:76;
     hence G is chordal by Th96;
   end;
 
@@ -3655,12 +3655,12 @@ then A12: G is loopless by GLIB_000:21;
         then reconsider W3=W.t3 as Vertex of G by GLIB_001:8;
     A19: t7 <= len W by A18,XXREAL_0:2;
         then reconsider W7=W.t7 as Vertex of G by GLIB_001:8;
-         W3 <> W7 by A17, A19,GLIB_001:def 28;
+         W3 <> W7 by A17,A19,GLIB_001:def 28;
         then W3,W7 are_adjacent by A15,Def6;
         then consider e being set such that
     A20: e Joins W3,W7,G by Def3;
          t3+2 < t7 & t7 <= len W & not (t3=3 & t7 = len W) by A18,XXREAL_0:2;
-        hence W is chordal by A17, A20,Th85;
+        hence W is chordal by A17,A20,Th85;
     end;
     hence G is chordal by Def11;
   end;
@@ -3678,9 +3678,9 @@ registration let G be chordal _Graph, V be set;
     then A1: V = the_Vertices_of H by GLIB_000:def 39;
      now let W be Walk of H such that
     A2: W.length() > 3 and A3: W is Cycle-like;
-    A4: W is Path-like by A3, GLIB_001:def 31;
+    A4: W is Path-like by A3,GLIB_001:def 31;
         reconsider P=W as Walk of G by GLIB_001:168;
-        reconsider P as Path of G by A4, GLIB_001:176;
+        reconsider P as Path of G by A4,GLIB_001:176;
          W is closed & W is non trivial & W is Path-like
             by A3,GLIB_001:def 31;
    then A5: P is closed & P is non trivial & P is Path-like by GLIB_001:177;
@@ -3702,7 +3702,7 @@ registration let G be chordal _Graph, V be set;
         then P.m in the_Vertices_of H & P.n in the_Vertices_of H
             by A7,A9,GLIB_001:8;
         then e Joins P.m,W.n,H by A1,A10,Th19;
-        hence W is chordal by A4,A5,GLIB_001:def 31,A7,A8,Th85;
+        hence W is chordal by A4,A5,A7,A8,Th85,GLIB_001:def 31;
     end;
     hence H is chordal by Def11; end; end;
     hence H is chordal;
@@ -3723,7 +3723,7 @@ A3: e Joins P.last(),x,G and
 A4: not ex f being set st f Joins P.(len P-2),x,G;
     reconsider Q = P.addEdge(e) as Path of G by A1,A2,A3,GLIB_001:152;
 A5: now let n be odd Nat such that A6: n <= len P;
-        1 <= n & n <= len P by Th2,A6;
+        1 <= n & n <= len P by A6,Th2;
        then n in dom P by FINSEQ_3:27;
       hence P.n = Q.n by A3,GLIB_001:66;
     end;
@@ -3750,7 +3750,7 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
       per cases by A16,REAL_1:def 5;
       suppose j = len P - 2;
         then Q.j = P.(len P - 2) by A5,A17;
-      hence contradiction by A14,A4; end;
+      hence contradiction by A4,A14; end;
       suppose A19: j < len P - 2*1;
          len P < len P + 2 by XREAL_1:31;
     then A20: j <= len P + 2 by A18,XXREAL_0:2;
@@ -3763,12 +3763,12 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
     A22: len P + 3 - (len P - 2) < len P + 3 - j by A19,XREAL_1:17;
    then A23: 3 < len B by A21,XXREAL_0:2;
    A24: B.first() = Q.j & B.last() = Q.(len P + 2)
-             by A20,A9,GLIB_001:38;
-   A25: B.first() = Q.j & B.last() = x by A7,A20,A9,GLIB_001:38;
+             by A9,A20,GLIB_001:38;
+   A25: B.first() = Q.j & B.last() = x by A7,A9,A20,GLIB_001:38;
          P.vertexAt(j) = P.j by A18,GLIB_001:def 8;
         then P.j in P.vertices() by A15,A18,GLIB_001:90;
-        then B.first() in P.vertices() by A24,A18,A5;
-    then A26: B is open by A25,A2,GLIB_001:def 24;
+        then B.first() in P.vertices() by A5,A18,A24;
+    then A26: B is open by A2,A25,GLIB_001:def 24;
     A27: now let i be even Nat such that A28: i < len B-1;
         A29: i in NAT by ORDINAL1:def 13;
              len B - 1 < len B by XREAL_1:46;
@@ -3783,16 +3783,16 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
         set C = B.addEdge(e);
     A32: e Joins B.last(),B.first(),G by A14,A25,GLIB_000:17;
     A33: now let n be odd Nat such that A34: n <= len B;
-            1 <= n & n <= len B by Th2,A34;
+            1 <= n & n <= len B by A34,Th2;
            then n in dom B by FINSEQ_3:27;
          hence C.n = B.n by A32,GLIB_001:66;
         end;
-    A35: C is Cycle-like by A32,A23,A26,Th33;
+    A35: C is Cycle-like by A23,A26,A32,Th33;
 
     A36: C.first() = Q.j & C.last() = Q.j
              by A24,A32,GLIB_001:64;
     A37: len C = len B + 2 by A32,GLIB_001:65;
-         len B + 2 > 5 + 2 by A22,A21, XREAL_1:10;
+         len B + 2 > 5 + 2 by A21,A22,XREAL_1:10;
    then A38: len C > 7 by A32,GLIB_001:65;
          now assume C.length() <= 3;
             then 2*C.length() <= 2*3 by XREAL_1:66;
@@ -3819,28 +3819,28 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
         then m < n by A39,XXREAL_0:2;
     then A43: m1 < n1 by XREAL_1:11;
     A44: m+2-1 <n-1 by A39,XREAL_1:11;
-         m+2 < len B+2 by A39,XXREAL_0:2,A37;
+         m+2 < len B+2 by A37,A39,XXREAL_0:2;
     then A45: m+2-2 < len B+2-2 by XREAL_1:11;
         then m1 < len B-1 by XREAL_1:11;
     then A46: B.(m1+1) = P.(j+m1) & j+m1 in dom P by A27;
     then A47: B.m = P.(j+m1) & j+m1 <= len P by FINSEQ_3:27;
          now assume A48: n = len C;
-             then e Joins P.(j+m1),Q.j,G by A36,A42,A46,A33,A45;
+             then e Joins P.(j+m1),Q.j,G by A33,A36,A42,A45,A46;
              then e Joins P.(j+m1),P.j,G by A5,A18;
          then A49: e Joins P.j,P.(j+m1),G by GLIB_000:17;
              now assume m <= 3; then m <= 4 by XXREAL_0:2;
-              hence contradiction by A48,A41,A32,A23,A26,Th33,Th7;
+              hence contradiction by A23,A26,A32,A41,A48,Th7,Th33;
             end;
         then A50: 2+1-1 < m-1 by XREAL_1:11;
         then A51: j + 2 < j+m1 by XREAL_1:10;
              j < j+m1 by A50,XREAL_1:31;
-          hence contradiction by A49,A51,A1,A47,Th92;
+          hence contradiction by A1,A47,A49,A51,Th92;
         end; then n < len B+2*1 by A37,A39,REAL_1:def 5;
     then A52: n <= len B+2-2 by Th3;
 
          now assume A53: n = len B;
         then A54: C.n = x by A25,A33;
-             1 <> m & 1 <= m by Th2,A53,A37,A41,A32,A23,A26,Th33;
+             1 <> m & 1 <= m by A23,A26,A32,A37,A41,A53,Th2,Th33;
             then 1 < m by REAL_1:def 5;
         then A55: 1-1 < m-1 by XREAL_1:11;
               j+m1 <= len P & len P < len P + 2
@@ -3850,32 +3850,32 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
         A56: (j+m1) + 2*kk = len P+2 by Lm2;
         A57:   now assume 2*kk < 3+1; then 2*kk <= 3 by NAT_1:13;
                   then 2*kk = 0 or 2*kk = 2 by Th11;
-              hence contradiction by A53,A39,A21,A56;
+              hence contradiction by A21,A39,A53,A56;
             end;
         A58:  now assume 2*kk > len P + 1;
             then A59:2*kk >= len P + 1 + 1 by NAT_1:13;
                2*kk + m1 > 2*kk & 2*kk + m1 +j >= 2*kk + m1
-                 by A55,XREAL_1:31,NAT_1:11;
-              hence contradiction by A56,A59, XXREAL_0:2;
+                 by A55,NAT_1:11,XREAL_1:31;
+              hence contradiction by A56,A59,XXREAL_0:2;
             end;
         A60: now assume kk >= k;
             then A61: 2*kk >= 2*k by XREAL_1:66;
                  j + 2*kk + m1 > j + 2*kk by A55,XREAL_1:31;
-              hence contradiction by A56,A13, A61, XREAL_1:9;
+              hence contradiction by A13,A56,A61,XREAL_1:9;
             end;
-             C.m = B.m by A45,A33;
-            then C.m = Q.(j+m1) by A47,A5;
-          hence contradiction by A60,A11,A56,A57,A58,A54,A42;
+             C.m = B.m by A33,A45;
+            then C.m = Q.(j+m1) by A5,A47;
+          hence contradiction by A11,A42,A54,A56,A57,A58,A60;
         end;
         then n < len B by A52,REAL_1:def 5;
         then n1 < len B-1 by XREAL_1:11;
         then B.(n1+1) = P.(j+n1) & j+n1 in dom P by A27;
    then A62: B.n = P.(j+n1) & j+n1 <= len P by FINSEQ_3:27;
-   A63: C.m = B.m & C.n = B.n by A45,A52,A33;
+   A63: C.m = B.m & C.n = B.n by A33,A45,A52;
    A64: j+m1 < j+n1 by A43,XREAL_1:10;
          j+(m1+2) < j+n1 by A44,XREAL_1:10;
         then j+m1+2 < j+n1;
-      hence contradiction by A1,A62,A63,A42,A46,A64,Th92; end;
+      hence contradiction by A1,A42,A46,A62,A63,A64,Th92; end;
     end;
 
 A65: for k being Element of NAT st
@@ -3906,7 +3906,7 @@ A69: now let n be odd Nat such that A70: n <= len P-2;
             then n + 2*k > 1 + (len P + 1) by A75,XREAL_1:10;
           hence contradiction by A71;
         end;
-      hence not ex e being set st e Joins Q.n,x,G by A71,A73,A68,A72;
+      hence not ex e being set st e Joins Q.n,x,G by A68,A71,A72,A73;
     end;
      now assume Q is chordal;
         then consider m,n being odd Nat such that
@@ -3918,20 +3918,20 @@ A69: now let n be odd Nat such that A70: n <= len P-2;
     A78: e Joins Q.m,Q.n,G by A77;
          m < m+2 by XREAL_1:31;
     then A79: m < n by A76,XXREAL_0:2;
-         m+2 < len P+2 by A76,XXREAL_0:2,A9;
+         m+2 < len P+2 by A9,A76,XXREAL_0:2;
     then A80: m+2-2 < len P+2-2 by XREAL_1:11;
       per cases by A76,REAL_1:def 5;
       suppose A81: n = len Q;
           then m+2-2 < len P+2-2 by A9,A76,XREAL_1:11;
           then m <= len P-2 by Th3;
 
-      hence contradiction by A69,A78,A81,A7; end;
+      hence contradiction by A7,A69,A78,A81; end;
       suppose n < len Q;
     then A82: n <= len P + 2 - 2 by A9,Th3;
         then Q.m = P.m & Q.n = P.n by A5,A80;
-      hence contradiction by A76,A78,A1,A79,A82,Th92; end;
+      hence contradiction by A1,A76,A78,A79,A82,Th92; end;
     end;
-  hence thesis by A8,A2,A7,GLIB_001:def 24;
+  hence thesis by A2,A7,A8,GLIB_001:def 24;
 end;
 
 
@@ -3952,11 +3952,11 @@ proof let G be chordal _Graph;
      let Gs be inducedSubgraph of G,S;
 
      consider Gns being removeVertices of G,S;
-     reconsider sa = a, sb = b as Vertex of Gns by A1, A2, Th77;
+     reconsider sa = a, sb = b as Vertex of Gns by A1,A2,Th77;
      set A = Gns.reachableFrom(sa), B = Gns.reachableFrom(sb);
 A5:  S is VertexSeparator of b,a by A1,A2,Th70;
-A6: A/\B = {} by A1, A2,Th76;
- A7: A/\S = {} & B /\ S = {} by A5,A1,A2,Th75;
+A6: A/\B = {} by A1,A2,Th76;
+ A7: A/\S = {} & B /\ S = {} by A1,A2,A5,Th75;
 
      consider Ga being inducedSubgraph of Gns,A;
      consider Gb being inducedSubgraph of Gns,B;
@@ -3985,7 +3985,7 @@ A15: x <> y and
 A16: not x,y are_adjacent;
     reconsider xg = x, yg = y as Vertex of G by GLIB_000:45;
 A17: S = the_Vertices_of Gs by A4,GLIB_000:def 39;
-A18: not xg,yg are_adjacent by A16, A4, Th45;
+A18: not xg,yg are_adjacent by A4,A16,Th45;
     set xy = {xg, yg}; :: xy is Subset of tVG
 
         :: We construct minimal paths in Ga1 and Gb1 and append them
@@ -4002,21 +4002,21 @@ A18: not xg,yg are_adjacent by A16, A4, Th45;
       then reconsider xa = x, ya = y as Vertex of Ga1 by A20,GLIB_000:def 39;
       consider xag being Vertex of G such that
   A22: xag in A and
-  A23: xg,xag are_adjacent by A1, A2, A3, A17, Th82;
-       not x in A by A17, A12, XBOOLE_0:def 4;
-      then x in G.AdjacentSet(the_Vertices_of Ga) by A8, A22, A23;
+  A23: xg,xag are_adjacent by A1,A2,A3,A17,Th82;
+       not x in A by A12,A17,XBOOLE_0:def 4;
+      then x in G.AdjacentSet(the_Vertices_of Ga) by A8,A22,A23;
   then A24: Gax is connected by Th57;
        consider yag being Vertex of G such that
   A25: yag in A and
-  A26: yg,yag are_adjacent by A1, A2, A3, A17, Th82;
-  A27: yag in Ax by A25, XBOOLE_0:def 2;
-        not y in A & not y in {x} by A17, A12,XBOOLE_0:def 4,A15,TARSKI:def 1;
-       then not yg in the_Vertices_of Gax by A19, XBOOLE_0:def 2;
-      then y in G.AdjacentSet(the_Vertices_of Gax) by A19, A27,A26;
-      then Ga1 is connected by A24, Th57;
+  A26: yg,yag are_adjacent by A1,A2,A3,A17,Th82;
+  A27: yag in Ax by A25,XBOOLE_0:def 2;
+        not y in A & not y in {x} by A12,A15,A17,TARSKI:def 1,XBOOLE_0:def 4;
+       then not yg in the_Vertices_of Gax by A19,XBOOLE_0:def 2;
+      then y in G.AdjacentSet(the_Vertices_of Gax) by A19,A26,A27;
+      then Ga1 is connected by A24,Th57;
       then consider Wa being Walk of Ga1 such that
   A28: Wa is_Walk_from xa,ya by GLIB_002:def 1;
-  A29: Wa.first() = xa & Wa.last() = ya by A28, GLIB_001:def 23;
+  A29: Wa.first() = xa & Wa.last() = ya by A28,GLIB_001:def 23;
       consider Pa being Path of Ga1 such that
   A30: Pa is_Walk_from Wa.first(),Wa.last() and
   A31: Pa is minlength by Th39;
@@ -4033,21 +4033,21 @@ A18: not xg,yg are_adjacent by A16, A4, Th45;
       then reconsider xb = x, yb = y as Vertex of Gb1 by A33,GLIB_000:def 39;
       consider xbg being Vertex of G such that
   A35: xbg in B and
-  A36: xg,xbg are_adjacent by A1, A2, A3, A17, Th83;
-       not x in B by A17, A14, XBOOLE_0:def 4;
-      then x in G.AdjacentSet(the_Vertices_of Gb) by A9, A35, A36;
+  A36: xg,xbg are_adjacent by A1,A2,A3,A17,Th83;
+       not x in B by A14,A17,XBOOLE_0:def 4;
+      then x in G.AdjacentSet(the_Vertices_of Gb) by A9,A35,A36;
   then A37: Gbx is connected by Th57;
        consider ybg being Vertex of G such that
   A38: ybg in B and
-  A39: yg,ybg are_adjacent by A1, A2, A3, A17, Th83;
-  A40: ybg in Bx by A38, XBOOLE_0:def 2;
-        not y in B & not y in {x} by A17, A14,XBOOLE_0:def 4,A15,TARSKI:def 1;
-       then not yg in the_Vertices_of Gbx by A32, XBOOLE_0:def 2;
-      then y in G.AdjacentSet(the_Vertices_of Gbx) by A32, A40,A39;
-      then Gb1 is connected by A37, Th57;
+  A39: yg,ybg are_adjacent by A1,A2,A3,A17,Th83;
+  A40: ybg in Bx by A38,XBOOLE_0:def 2;
+        not y in B & not y in {x} by A14,A15,A17,TARSKI:def 1,XBOOLE_0:def 4;
+       then not yg in the_Vertices_of Gbx by A32,XBOOLE_0:def 2;
+      then y in G.AdjacentSet(the_Vertices_of Gbx) by A32,A39,A40;
+      then Gb1 is connected by A37,Th57;
        then consider Wb being Walk of Gb1 such that
   A41: Wb is_Walk_from yb,xb by GLIB_002:def 1;
-  A42: Wb.first() = ya & Wb.last() = xa by A41, GLIB_001:def 23;
+  A42: Wb.first() = ya & Wb.last() = xa by A41,GLIB_001:def 23;
        consider Pb being Path of Gb1 such that
   A43: Pb is_Walk_from Wb.first(),Wb.last() and
   A44: Pb is minlength by Th39;
@@ -4055,23 +4055,23 @@ A18: not xg,yg are_adjacent by A16, A4, Th45;
         reconsider Pag = Pa, Pbg = Pb as Path of G by GLIB_001:176;
   A45: Pag.first() = Pag.1 & Pag.last() = Pag.len Pag;
          Pa.first() = Pa.1 & Pa.last() = Pa.len Pa;
-  then A46: Pag.1 = xg & Pag.len Pag = yg by A29, A30, GLIB_001:def 23;
-  then A47: Pag is open by A45, A15, GLIB_001:def 24;
+  then A46: Pag.1 = xg & Pag.len Pag = yg by A29,A30,GLIB_001:def 23;
+  then A47: Pag is open by A15,A45,GLIB_001:def 24;
   then A48: not Pag is Cycle-like by GLIB_001:def 31;
-  A49: x in Pag.vertices() & y in Pag.vertices() by A46, A45, GLIB_001:89;
+  A49: x in Pag.vertices() & y in Pag.vertices() by A45,A46,GLIB_001:89;
   A50: Pbg.first() = Pbg.1 & Pbg.last() = Pbg.len Pbg;
   A51: Pb.first() = Pb.1 & Pb.last() = Pb.len Pb;
-  then A52: Pbg.1 = yg & Pbg.len Pbg = xg by A42, A43, GLIB_001:def 23;
-  then A53: Pbg is open by A50, A15, GLIB_001:def 24;
+  then A52: Pbg.1 = yg & Pbg.len Pbg = xg by A42,A43,GLIB_001:def 23;
+  then A53: Pbg is open by A15,A50,GLIB_001:def 24;
   then A54: not Pbg is Cycle-like by GLIB_001:def 31;
-  A55: x in Pbg.vertices() & y in Pbg.vertices() by A52,A50,GLIB_001:89;
+  A55: x in Pbg.vertices() & y in Pbg.vertices() by A50,A52,GLIB_001:89;
 
       set P = Pag.append(Pbg);
   A56: len P +1 = len Pag + len Pbg by A45,A46,A50,A52,GLIB_001:29;
-  A57: Pag is non trivial by A15, A45, A46, GLIB_001:128;
-  A58: Pag.length() >= 2 by A46,A45,A15,A18,Th46;
-  A59: Pbg is non trivial by A15, A50, A52, GLIB_001:128;
-  A60: Pbg.length() >= 2 by A52,A50,A15,A18,Th46;
+  A57: Pag is non trivial by A15,A45,A46,GLIB_001:128;
+  A58: Pag.length() >= 2 by A15,A18,A45,A46,Th46;
+  A59: Pbg is non trivial by A15,A50,A52,GLIB_001:128;
+  A60: Pbg.length() >= 2 by A15,A18,A50,A52,Th46;
 A61: Pag.vertices() /\ Pbg.vertices() = xy  proof
      thus Pag.vertices() /\ Pbg.vertices() c= xy proof
            Pag.vertices() = Pa.vertices() by GLIB_001:99;
@@ -4105,28 +4105,28 @@ A64: Pag.edges() misses Pbg.edges() proof
            nb+2 <= len Pbg and b1 = Pbg.nb and e = Pbg.(nb+1) and
            b2 = Pbg.(nb+2) and
     A72: e Joins b1, b2,Gb1 by A67,GLIB_001:104;
-    A73: e Joins a1,a2,G  & e Joins b1,b2,G by A71, A72, GLIB_000:75;
+    A73: e Joins a1,a2,G  & e Joins b1,b2,G by A71,A72,GLIB_000:75;
     then A74:  a1=b1 & a2=b2 or a1=b2 & a2=b1 by GLIB_000:18;
           the_Vertices_of Ga1 = A\/xy by A20,GLIB_000:def 39;
     then A75:  (a1 in A or a1 in xy) & (a2 in A or a2 in xy) by XBOOLE_0:def 2;
           the_Vertices_of Gb1 = B\/xy by A33,GLIB_000:def 39;
-    then A76:  (a1 in B or a1 in xy) & (a2 in B or a2 in xy) by A74,XBOOLE_0:
-def 2;
-      per cases by TARSKI:def 2, A75,A76,A6,XBOOLE_0:def 3;
+    then A76:  (a1 in B or a1 in xy) & (a2 in B or a2 in xy) by A74,
+XBOOLE_0:def 2;
+      per cases by A6,A75,A76,TARSKI:def 2,XBOOLE_0:def 3;
       suppose A77: a1 = x & a2 = x or a1 = y & a2 = y;
           na < na+2 by XREAL_1:41;
-     hence contradiction by A77,A70,A69,A46,A15,A68,GLIB_001:def 28;
+     hence contradiction by A15,A46,A68,A69,A70,A77,GLIB_001:def 28;
       end;
       suppose a1 = x & a2 = y or a1 = y & a2 = x;
-       hence contradiction by A18, A73, Def3;
+       hence contradiction by A18,A73,Def3;
       end;
 end;
      P.length() = Pag.length()+Pbg.length()
            by A45,A46,A50,A52,Th28;
     then P.length() >= 2+2 by A58,A60,XREAL_1:9; then P.length() >= 3+1;
 then A78: P.length() > 3 by NAT_1:13;
-     P is Cycle-like by A64,A57,A59,A47,A53,A61,A45,A46,A50,A52,Th27;
-    then P is chordal by A78, Def11;
+     P is Cycle-like by A45,A46,A47,A50,A52,A53,A57,A59,A61,A64,Th27;
+    then P is chordal by A78,Def11;
     then consider m, n being odd Nat such that
 A79: m+2 < n and
 A80: n <= len P and
@@ -4135,7 +4135,7 @@ A82: ex e being set st e Joins P.m,P.n,G and
 A83: for f being set st f in P.edges() holds not f Joins P.m,P.n,G
        by Def10;
 A84: m in NAT & n in NAT by ORDINAL1:def 13;
-A85: m < n by A79, NAT_1:12;
+A85: m < n by A79,NAT_1:12;
     consider e being set such that
 A86: e Joins P.m,P.n,G by A82;
 A87: e Joins P.n,P.m,G by A86,GLIB_000:17;
@@ -4144,82 +4144,81 @@ A88: 1 <= m by HEYTING3:1;
 A89: 1 <= n by HEYTING3:1;
     per cases;
     suppose A90: m < len Pag & n <= len Pag; :: chord in minimal path Pa
-        then m in dom Pag & n in dom Pag by A88, A89, FINSEQ_3:27;
+        then m in dom Pag & n in dom Pag by A88,A89,FINSEQ_3:27;
         then P.m = Pag.m & P.n = Pag.n by GLIB_001:33;
-        then Pag is chordal by A79, A82, A90, A48, Th85;
+        then Pag is chordal by A48,A79,A82,A90,Th85;
         then Pa is chordal by A20,Th87;
-      hence contradiction by A31, Th89;
+      hence contradiction by A31,Th89;
     end;
     suppose A91: m < len Pag & len Pag < n;
-        then m in dom Pag by A88, FINSEQ_3:27;
+        then m in dom Pag by A88,FINSEQ_3:27;
     then A92: P.m = Pag.m by GLIB_001:33;
-         n in dom P & not n in dom Pag by A91, A89, A80, FINSEQ_3:27;
+         n in dom P & not n in dom Pag by A80,A89,A91,FINSEQ_3:27;
         then consider n1 being Element of NAT such that
     A93: n1 < len Pbg and
     A94: n = len Pag + n1 by GLIB_001:35;
     A95: P.(len Pag +n1) = Pbg.(n1+1) by A45,A46,A50,A52,A93,GLIB_001:34;
-    A96:  Pag.m in the_Vertices_of Ga1 by A91, A84,GLIB_001:8;
+    A96:  Pag.m in the_Vertices_of Ga1 by A84,A91,GLIB_001:8;
          n1 - 0 = n - len Pag by A94;
         then reconsider n1 as even Element of NAT;
         reconsider n11 = n1+1 as odd Element of NAT;
-    A97: n11 <= len Pbg by A93, NAT_1:13;
+    A97: n11 <= len Pbg by A93,NAT_1:13;
     then A98:  Pbg.n11 in the_Vertices_of Gb1 by GLIB_001:8;
-      per cases by A96, A21, A98, A34, XBOOLE_0:def 2;
+      per cases by A21,A34,A96,A98,XBOOLE_0:def 2;
       suppose A99: Pag.m in A & Pbg.n11 in xy; :: chord in minimal path Pa
-        per cases by A99, A46, TARSKI:def 2;
+        per cases by A46,A99,TARSKI:def 2;
         suppose A100: Pbg.n11 = Pag.1;
              now assume A101: 1+2 >= m;
-             per cases by A101, REAL_1:def 5;
-             suppose 1+2 > m; then 1 >= m by JORDAN12:3,Th4;
-              hence contradiction by A100,A92,A94,A95,A81,A88,XXREAL_0:1;
+             per cases by A101,REAL_1:def 5;
+             suppose 1+2 > m; then 1 >= m by Th4,JORDAN12:3;
+              hence contradiction by A81,A88,A92,A94,A95,A100,XXREAL_0:1;
              end;
              suppose A102: 1+2 = m;
-                  1 < len Pag by A88, A91, XXREAL_0:2;
+                  1 < len Pag by A88,A91,XXREAL_0:2;
                  then Pag.(1+1) Joins Pag.1,Pag.m,G
-                     by JORDAN12:3,A102,GLIB_001:def 3;
+                     by A102,GLIB_001:def 3,JORDAN12:3;
              then A103: Pag.(1+1) Joins Pag.m,Pag.1,G by GLIB_000:17;
-             A104: 1+1 < len Pag by A91, A102, XXREAL_0:2;
+             A104: 1+1 < len Pag by A91,A102,XXREAL_0:2;
                  then 1+1 in dom Pag by FINSEQ_3:27;
              then A105: Pag.(1+1) = P.(1+1) by GLIB_001:33;
-                  1 < len Pag -1 by A104, XREAL_1:22;
+                  1 < len Pag -1 by A104,XREAL_1:22;
                  then 1+0 < (len Pag -1) + len Pbg by XREAL_1:10;
-                 then P.(1+1) in P.edges() by JORDAN12:3,A56,GLIB_001:101;
-               hence contradiction by A105, A103, A100, A92, A94, A95, A83;
+                 then P.(1+1) in P.edges() by A56,GLIB_001:101,JORDAN12:3;
+               hence contradiction by A83,A92,A94,A95,A100,A103,A105;
              end;
             end;
-          then Pag is chordal by JORDAN12:3,A87,A91,A100,A48,A92,A94,A95,Th85;
+          then Pag is chordal by A48,A87,A91,A92,A94,A95,A100,Th85,JORDAN12:3;
           then Pa is chordal by A20,Th87;
-         hence contradiction by A31, Th89;
+         hence contradiction by A31,Th89;
         end;
         suppose A106: Pbg.n11 = Pag.len Pag;
            now assume A107: m+2 >= len Pag; set L = len Pag;
-           per cases by A107, REAL_1:def 5;
+           per cases by A107,REAL_1:def 5;
            suppose A108: m+2 = L;
            then A109: L = m+1+1;
            then A110: m +1 < L by NAT_1:13; then m < L by NAT_1:13;
-           then A111: Pag.(m+1) Joins Pag.m,Pag.L,G by A108,A84,GLIB_001:def 3;
-                1<=m+1 by NAT_1:12; then m+1 in dom Pag by A110
-,FINSEQ_3:27;
+           then A111: Pag.(m+1) Joins Pag.m,Pag.L,G by A84,A108,GLIB_001:def 3;
+                1<=m+1 by NAT_1:12; then m+1 in dom Pag by A110,FINSEQ_3:27;
            then A112: Pag.(m+1) = P.(m+1) by GLIB_001:33;
-                m < len Pag -1 by A109, NAT_1:13;
+                m < len Pag -1 by A109,NAT_1:13;
                then m+0 < (len Pag -1) + len Pbg by XREAL_1:10;
                then P.(m+1) in P.edges() by A56,A84,GLIB_001:101;
-             hence contradiction by A112, A111, A106, A92, A94, A95, A83;
+             hence contradiction by A83,A92,A94,A95,A106,A111,A112;
            end;
            suppose m+2 > len Pag;
-             hence contradiction by A91, Th4;
+             hence contradiction by A91,Th4;
            end;
           end;
-          then Pag is chordal by A82, A106, A48, A92, A94, A95, Th85;
+          then Pag is chordal by A48,A82,A92,A94,A95,A106,Th85;
           then Pa is chordal by A20,Th87;
-        hence contradiction by A31, Th89;
+        hence contradiction by A31,Th89;
        end;
       end;
       suppose A113: Pag.m in A & Pbg.n11 in B;  :: construct a walk
          then reconsider ac = Pa.m as Vertex of Ga by GLIB_000:def 39;
           a in A by GLIB_002:9;
          then reconsider aa = a as Vertex of Ga by GLIB_000:def 39;
-         reconsider bc = Pb.n11 as Vertex of Gb by A113, GLIB_000:def 39;
+         reconsider bc = Pb.n11 as Vertex of Gb by A113,GLIB_000:def 39;
           b in B by GLIB_002:9;
          then reconsider bb = b as Vertex of Gb by GLIB_000:def 39;
          consider WA being Walk of Ga such that
@@ -4228,23 +4227,23 @@ A89: 1 <= n by HEYTING3:1;
       A115: WB is_Walk_from bc, bb by GLIB_002:def 1;
          reconsider WA, WB as Walk of Gns by GLIB_001:168;
          set WAB = Gns.walkOf(ac,e,bc);
-           e Joins ac,bc,Gns by A12, A14,A113,A86,A92, A94, A95, Th19;
+           e Joins ac,bc,Gns by A12,A14,A86,A92,A94,A95,A113,Th19;
       then A116: WAB is_Walk_from ac,bc by GLIB_001:16;
           reconsider WAs = WA, WBs = WB as Walk of Gns;
           set WaB = WAs.append(WAB);
           set Wab = WaB.append(WBs);
-           WAs is_Walk_from aa, ac by A114, GLIB_001:20;
-      then A117: WaB is_Walk_from aa, bc by A116, GLIB_001:32;
-           WBs is_Walk_from bc, bb by A115, GLIB_001:20;
-          then Wab is_Walk_from a,b by A117, GLIB_001:32;
-        hence contradiction by A1, A2,Def8;
+           WAs is_Walk_from aa, ac by A114,GLIB_001:20;
+      then A117: WaB is_Walk_from aa, bc by A116,GLIB_001:32;
+           WBs is_Walk_from bc, bb by A115,GLIB_001:20;
+          then Wab is_Walk_from a,b by A117,GLIB_001:32;
+        hence contradiction by A1,A2,Def8;
       end;
       suppose Pag.m in xy & Pbg.n11 in B; :: chord in minimal path Pb
           then Pag.m = x or Pag.m = y by TARSKI:def 2;
-      then A118: Pag.m = x by A91, A46, A84,GLIB_001:def 28
-               .= Pbg.len Pbg by A51,A42, A43, GLIB_001:def 23;
+      then A118: Pag.m = x by A46,A84,A91,GLIB_001:def 28
+               .= Pbg.len Pbg by A42,A43,A51,GLIB_001:def 23;
         now assume A119: n11+2 >= len Pbg;         set L = len Pbg;
-        per cases by A119, REAL_1:def 5;
+        per cases by A119,REAL_1:def 5;
          suppose A120: n11+2 = L;
          then A121: L = :: n11+(1+1) .=
                  n11+1+1;
@@ -4257,69 +4256,69 @@ A89: 1 <= n by HEYTING3:1;
                       by A45,A46,A50,A52,A122,GLIB_001:34;
               1 <= n11 by HEYTING3:1;
          then A125: 1 <= len Pag +n11 by NAT_1:12;
-              n11 < len Pbg -1 by A121, NAT_1:13;
+              n11 < len Pbg -1 by A121,NAT_1:13;
              then len Pag +n11 < (len Pbg -1) + len Pag by XREAL_1:8;
-             then Pbg.(n11+1) in P.edges() by A124,A125,A56,GLIB_001:100;
-          hence contradiction by A123, A92, A118, A94, A95, A83;
+             then Pbg.(n11+1) in P.edges() by A56,A124,A125,GLIB_001:100;
+          hence contradiction by A83,A92,A94,A95,A118,A123;
          end;
          suppose n11+2 > len Pbg; then n11 >= len Pbg by Th4;
-           hence contradiction by A118, A92, A94, A95, A81, A97, XXREAL_0:1;
+           hence contradiction by A81,A92,A94,A95,A97,A118,XXREAL_0:1;
          end;
        end;
-       then Pbg is chordal by A87, A54, A118, A92, A94, A95, Th85;
+       then Pbg is chordal by A54,A87,A92,A94,A95,A118,Th85;
        then Pb is chordal by A33,Th87;
-      hence contradiction by A44, Th89;
+      hence contradiction by A44,Th89;
       end;
       suppose Pag.m in xy & Pbg.n11 in xy;
-        then (Pag.m = x or Pag.m = y)&(Pbg.n11 = x or Pbg.n11 = y) by TARSKI:
-def 2;
-        then xg,yg are_adjacent by A82,A92,A95,A94,A81,Def3;
-       hence contradiction by A4, A16, Th45;
+        then (Pag.m = x or Pag.m = y)&(Pbg.n11 = x or Pbg.n11 = y) by
+TARSKI:def 2;
+        then xg,yg are_adjacent by A81,A82,A92,A94,A95,Def3;
+       hence contradiction by A4,A16,Th45;
       end;
     end;
     suppose A126: len Pag <= m;             :: chord in minimal path Pb
         then consider m1 being Nat such that
     A127: m = len Pag + m1 by NAT_1:10;
     A128: m1 in NAT by ORDINAL1:def 13;
-         n > len Pag by A126, A85, XXREAL_0:2;
-        then n in dom P & not n in dom Pag by A89, A80, FINSEQ_3:27;
+         n > len Pag by A85,A126,XXREAL_0:2;
+        then n in dom P & not n in dom Pag by A80,A89,FINSEQ_3:27;
         then consider n1 being Element of NAT such that
     A129: n1 < len Pbg and
     A130: n = len Pag + n1 by GLIB_001:35;
-    A131: P.(len Pag +n1) = Pbg.(n1+1) by A129,A45,A46,A50,A52,GLIB_001:34;
-    A132: m1 < n1 by A85, A127, A130, XREAL_1:8;
-         then m1 < len Pbg by A129, XXREAL_0:2;
-    then A133: P.(len Pag +m1) = Pbg.(m1+1) by A128,A45,A46,A50,A52,GLIB_001:34
+    A131: P.(len Pag +n1) = Pbg.(n1+1) by A45,A46,A50,A52,A129,GLIB_001:34;
+    A132: m1 < n1 by A85,A127,A130,XREAL_1:8;
+         then m1 < len Pbg by A129,XXREAL_0:2;
+    then A133: P.(len Pag +m1) = Pbg.(m1+1) by A45,A46,A50,A52,A128,GLIB_001:34
 ;
-         n1 - 0 = n - len Pag & m1 -0 = m - len Pag by A127, A130;
+         n1 - 0 = n - len Pag & m1 -0 = m - len Pag by A127,A130;
         then reconsider n1, m1 as even Element of NAT by ORDINAL1:def 13;
         reconsider m11 = m1+1, n11 = n1+1 as odd Element of NAT;
-    A134: n11 <= len Pbg by A129, NAT_1:13;
-          m11 < n11 by A132, XREAL_1:8;
-    then A135: m11 < len Pbg by A134, XXREAL_0:2;
+    A134: n11 <= len Pbg by A129,NAT_1:13;
+          m11 < n11 by A132,XREAL_1:8;
+    then A135: m11 < len Pbg by A134,XXREAL_0:2;
     A136: now assume A137: m11+2 >= n11;
-         per cases by A137, REAL_1:def 5;
+         per cases by A137,REAL_1:def 5;
          suppose A138: m11+2 = n11;
          then A139: Pbg.(m11+1) Joins Pbg.m11,Pbg.n11,G by A135,GLIB_001:def 3;
          A140: Pbg.(m11+1) = P.(len Pag +m11)
-               by A135,A45,A46,A50,A52,GLIB_001:34;
+               by A45,A46,A50,A52,A135,GLIB_001:34;
               1 <= m11 by HEYTING3:1;
          then A141: 1 <= len Pag +m11 by NAT_1:12;
-              m11 +1 < len Pbg by A129, A138;
+              m11 +1 < len Pbg by A129,A138;
              then m11 < len Pbg -1 by XREAL_1:22;
              then len Pag +m11 < (len Pbg -1) + len Pag by XREAL_1:8;
-             then Pbg.(m11+1) in P.edges() by A56,A140, A141,GLIB_001:100;
-          hence contradiction by A139, A127, A133, A130, A131, A83;
+             then Pbg.(m11+1) in P.edges() by A56,A140,A141,GLIB_001:100;
+          hence contradiction by A83,A127,A130,A131,A133,A139;
          end;
          suppose m11+2 > n11; then m11 >= n11 by Th4;
-           hence contradiction by A132, XREAL_1:8;
+           hence contradiction by A132,XREAL_1:8;
          end;
         end;
-     n11 <= len Pbg by A129, NAT_1:13;
-        then Pbg is chordal by A136, A130, A131, A127, A133, A82, A54, Th85
+     n11 <= len Pbg by A129,NAT_1:13;
+        then Pbg is chordal by A54,A82,A127,A130,A131,A133,A136,Th85
 ;
         then Pb is chordal by A33,Th87;
-      hence contradiction by A44, Th89;
+      hence contradiction by A44,Th89;
     end;
 end;
 
@@ -4335,7 +4334,7 @@ A1: for a,b being Vertex of G st a<>b & not a,b are_adjacent holds
      for S being VertexSeparator of a,b st S is minimal & S is non empty
       for G2 being inducedSubgraph of G,S holds G2 is complete;
   let P be Walk of G such that A2: P.length() > 3 & P is Cycle-like;
-A3: P is Path-like by A2, GLIB_001:def 31;
+A3: P is Path-like by A2,GLIB_001:def 31;
     P.length() >= 3+1 by A2,NAT_1:13;
    then 2*P.length() >= 2*4 by XREAL_1:66;
    then 2*P.length() + 1 >= 8 + 1 by XREAL_1:9;
@@ -4344,7 +4343,7 @@ then A4: len P >= 9 by GLIB_001:113;
     reconsider n = 2*2+1 as odd Nat;
 A5: now assume A6: P.m = P.n;
        m < n & n <= len P by A4,XXREAL_0:2;
-      then m=1 & n=len P by A3, A6,GLIB_001:def 28;
+      then m=1 & n=len P by A3,A6,GLIB_001:def 28;
      hence contradiction by A4;
     end;
    per cases;
@@ -4353,7 +4352,7 @@ A5: now assume A6: P.m = P.n;
    A9: not (m=1 & n = len P) by A4;
         len P+(-2) >= 9+(-2) by A4,XREAL_1:9;
        then not (m=1 & n = len P-2);
-     hence P is chordal by A3, A7,A8,A9,Th85; end;
+     hence P is chordal by A3,A7,A8,A9,Th85; end;
    suppose A10: not ex e being set st e Joins P.m,P.n,G;
              m <= len P by A4,XXREAL_0:2;
             then reconsider Pm=P.m as Vertex of G by GLIB_001:8;
@@ -4375,7 +4374,7 @@ A5: now assume A6: P.m = P.n;
         A18: m < k & k < n and A19: P15.k in S by A5,A11,A14,Th72;
         A20: 1+2 <= k & k <= 5-2 by A18,Th3,Th4;
         then A21: k = 3 by XXREAL_0:1;
-             P15.(2+1) = P.(1+2) by A13, A17, GLIB_001:37;
+             P15.(2+1) = P.(1+2) by A13,A17,GLIB_001:37;
         then A22: P.3 in S by A19,A20,XXREAL_0:1;
 
        A23: P is closed by A2,GLIB_001:def 31;
@@ -4389,26 +4388,26 @@ A5: now assume A6: P.m = P.n;
             then reconsider l2=l-1 as even Element of NAT by INT_1:16;
             reconsider l2 as even Nat;
 
-             l+(-1) < l+0 & l < len P5l by XREAL_1:10,A26;
+             l+(-1) < l+0 & l < len P5l by A26,XREAL_1:10;
             then l-1 < len P5l by XXREAL_0:2;
        then A29: P5l.(l2+1) = P.(n+l2) by A24,GLIB_001:37;
             reconsider aa=P.3 as Vertex of G2 by A22,GLIB_000:def 39;
             reconsider bb=P.(n+l2) as Vertex of G2
-                       by A29,A27,GLIB_000:def 39;
+                       by A27,A29,GLIB_000:def 39;
       A30: len P5l + 5 + (-5) = len P + 1 + (-5) by A24,GLIB_001:37;
              l+(-1) < len P5l + (-1) by A26,XREAL_1:10;
       then A31: l2+n < len P-5+n by A30,XREAL_1:10;
        A32: k+2+0 < k+2+l2 by A28,XREAL_1:10;
         A33: n+l2 in NAT by ORDINAL1:def 13;
              now assume A34: aa = bb;
-                 k < n+l2 & n+l2 <= len P by A32, A21, A31, XXREAL_0:2;
+                 k < n+l2 & n+l2 <= len P by A21,A31,A32,XXREAL_0:2;
               hence contradiction
-             by A33,A21, A3,A34,GLIB_001:def 28;
+             by A3,A21,A33,A34,GLIB_001:def 28;
             end; then aa,bb are_adjacent by A16,Def6;
             then consider e being set such that
        A35: e Joins P.3,P.(n+l2),G2 by Def3;
              e Joins P.k,P.(n+l2),G by A21,A35,GLIB_000:75;
-            hence P is chordal by A21,A32,A31, A3,Th85; end;
+            hence P is chordal by A3,A21,A31,A32,Th85; end;
 end;
 
 :: Exercise 12, p. 101.
@@ -4450,8 +4449,8 @@ A8: M is finite from FRAENKEL:sch 21(A7);
    A10: x = card (G.AdjacentSet({y}) /\ S) and y in A by A9;
        thus x is natural by A10;
    end;
- then reconsider M as finite non empty natural-membered set by A6,A8,MEMBERED:
-def 6;
+ then reconsider M as finite non empty natural-membered set by A6,A8,
+MEMBERED:def 6;
 
      max M in M by PRE_CIRC:def 1;
     then consider c being Vertex of G such that
@@ -4479,24 +4478,24 @@ then A c= tVG \ S by TARSKI:def 3;
       consider Gay being inducedSubgraph of G,Ay;
 A19: the_Vertices_of Gay = Ay by GLIB_000:def 39;
        y in {y} by TARSKI:def 1;
-      then c in Ay & y in Ay by A12, XBOOLE_0:def 2;
+      then c in Ay & y in Ay by A12,XBOOLE_0:def 2;
       then reconsider ca = c, ya = y as Vertex of Gay by GLIB_000:def 39;
       consider yaa being Vertex of G such that
 A20: yaa in A and
-A21: y,yaa are_adjacent by A1, A2, A3, A4, A13, Th82;
-      not y in A by A15, A13, XBOOLE_0:def 3;
-     then y in G.AdjacentSet(the_Vertices_of Ga) by A16, A20, A21;
+A21: y,yaa are_adjacent by A1,A2,A3,A4,A13,Th82;
+      not y in A by A13,A15,XBOOLE_0:def 3;
+     then y in G.AdjacentSet(the_Vertices_of Ga) by A16,A20,A21;
       then Gay is connected by Th57;
      then consider Wa being Walk of Gay such that
  A22: Wa is_Walk_from ca,ya by GLIB_002:def 1;
-A23: Wa.first() = ca & Wa.last() = ya by A22, GLIB_001:def 23;
+A23: Wa.first() = ca & Wa.last() = ya by A22,GLIB_001:def 23;
       consider P being Path of Gay such that
  A24: P is_Walk_from Wa.first(),Wa.last() and
  A25: P is minlength by Th39;
-A26:P.first() = ca by A24,A23,GLIB_001:def 23;
-A27:P.last() = y by A24,GLIB_001:def 23,A23;
-     c <> y by A12, A15, A13, XBOOLE_0:def 3;
-    then P is non trivial by A27,A26,GLIB_001:128;
+A26:P.first() = ca by A23,A24,GLIB_001:def 23;
+A27:P.last() = y by A23,A24,GLIB_001:def 23;
+     c <> y by A12,A13,A15,XBOOLE_0:def 3;
+    then P is non trivial by A26,A27,GLIB_001:128;
 then A28: len P >= 3 by GLIB_001:126;
 A29: now assume len P < 2*2+1;
         then len P <= 5-2 by Th3;
@@ -4504,7 +4503,7 @@ A29: now assume len P < 2*2+1;
         then 2*0+1 < len P;
         then P.(1+1) Joins P.1,P.(1+2),Gay by GLIB_001:def 3;
         then P.2 Joins c,y,G by A26,A27,A30,GLIB_000:75;
-        hence contradiction by A14, Def3;
+        hence contradiction by A14,Def3;
     end;
     then 5 + -2 <= len P + -2 by XREAL_1:9;
     then 0 <= len P - 2 by XXREAL_0:2;
@@ -4525,36 +4524,36 @@ then A35: P.(j+1) Joins d,y,G by A27,GLIB_000:75;
     then d <> y & d,y are_adjacent by A34,Def3;
 then A36: y in G.AdjacentSet({d}) by Th52;
 then A37: y in G.AdjacentSet({d}) /\ S by A13,XBOOLE_0:def 3;
-A38: not y in G.AdjacentSet({c}) by A14, Th52;
+A38: not y in G.AdjacentSet({c}) by A14,Th52;
 
     set gds = G.AdjacentSet({d}) /\ S;
     set gcs = G.AdjacentSet({c}) /\ S;
      now assume A39: gcs c= gds;
          not y in gcs by A38,XBOOLE_0:def 3;
-        then gcs c< gds by A39,A37,XBOOLE_0:def 8;
+        then gcs c< gds by A37,A39,XBOOLE_0:def 8;
     then A40: card gcs < card gds by TREES_1:24;
-         card gds in M by A34,A33,TARSKI:def 1;
-        hence contradiction by A40,A11,PRE_CIRC:def 1;
+         card gds in M by A33,A34,TARSKI:def 1;
+        hence contradiction by A11,A40,PRE_CIRC:def 1;
     end;
     then consider x being set such that
 A41: x in G.AdjacentSet({c}) /\ S and
 A42: not x in G.AdjacentSet({d}) /\ S by TARSKI:def 3;
-A43: x in S by A41, XBOOLE_0:def 3;
-then A44: not x in G.AdjacentSet({d}) by A42, XBOOLE_0:def 3;
+A43: x in S by A41,XBOOLE_0:def 3;
+then A44: not x in G.AdjacentSet({d}) by A42,XBOOLE_0:def 3;
     reconsider x as Vertex of G by A41;
-A45: x <> y by A42,A36, A13,XBOOLE_0:def 3;
+A45: x <> y by A13,A36,A42,XBOOLE_0:def 3;
     consider Gs being inducedSubgraph of G,S;
-    reconsider xs=x, ys=y as Vertex of Gs by A13,A43, GLIB_000:def 39;
+    reconsider xs=x, ys=y as Vertex of Gs by A13,A43,GLIB_000:def 39;
      Gs is complete by A1,A2,A3,Th98;
     then xs,ys are_adjacent by A45,Def6;
     then consider ej being set such that
 A46: ej Joins xs,ys,Gs by Def3;
      ej Joins x,y,G by A46,GLIB_000:75;
 then A47: x,y are_adjacent by Def3;
-     x in G.AdjacentSet({c}) by A41, XBOOLE_0:def 3;
+     x in G.AdjacentSet({c}) by A41,XBOOLE_0:def 3;
 then A48: c,x are_adjacent by Th52;
-     d <> x by A34,A33,TARSKI:def 1, A15, A43, XBOOLE_0:def 3;
-then A49: not d,x are_adjacent by A44, Th52;
+     d <> x by A15,A33,A34,A43,TARSKI:def 1,XBOOLE_0:def 3;
+then A49: not d,x are_adjacent by A44,Th52;
 
    defpred Pmax[Nat] means
    $1 in dom P & $1 is odd & $1 < len P & ex e being set st e Joins x,P.($1),G;
@@ -4563,7 +4562,7 @@ A50: for k being Element of NAT st Pmax[k] holds k <= N();
 A51: 1 < len P by A29,XXREAL_0:2;
 then A52: 1 in dom P by FINSEQ_3:27;
 A53: 2*0+1 is odd;
-     ex e being set st e Joins x,P.1,G by A48,Def3,A26;
+     ex e being set st e Joins x,P.1,G by A26,A48,Def3;
 then A54: ex k being Element of NAT st Pmax[k] by A51,A52,A53;
     consider k being Element of NAT such that
 A55: Pmax[k] and
@@ -4571,36 +4570,36 @@ A56: for i being Element of NAT st Pmax[i] holds k >= i
          from NAT_1:sch 6(A50,A54);
     reconsider k as odd Element of NAT by A55;
 A57: k <= j & j < len P by A55,Th3,XREAL_1:46;
-A58: P.k <> P.j by A49,Def3,A55;
+A58: P.k <> P.j by A49,A55,Def3;
 A59: now assume A60: P.k = P.(len P);
     A61: 2*0+1 <= k & k <= len P
              by A55,HEYTING3:1;
     then A62: P.cut(1,k) is_Walk_from P.first(),P.last() by A60,GLIB_001:38;
          len P.cut(1,k) + 1 = k + 1 by A61,GLIB_001:37;
         hence contradiction
-          by A25,A62,A55,Def2;
+          by A25,A55,A62,Def2;
     end;
     :::::::::: properties of Q ::::::::::
     set Q1 = P.cut(k,j);
-A63: Q1 is minlength by A57,A25,Th42;
+A63: Q1 is minlength by A25,A57,Th42;
 A64: Q1.first() = P.k & Q1.last() = P.j by A57,GLIB_001:38;
     reconsider Q=Q1 as Path of G by GLIB_001:176;
 A65: Q.vertices() = Q1.vertices() by GLIB_001:99;
 A66: Q.first() = P.k by A64;
 A67: Q.last() = P.j by A64;
-A68: Q.first() <> Q.last() by A64,A49,Def3,A55;
-A69: Q is non trivial by A66,A67,A58,GLIB_001:128;
+A68: Q.first() <> Q.last() by A49,A55,A64,Def3;
+A69: Q is non trivial by A58,A66,A67,GLIB_001:128;
     then Q.length() <> 0 & Q.length() >= 0 by GLIB_001:def 26;
 then A70: Q.length() >= 0+1 by NAT_1:13;
-A71: Q is open by GLIB_001:def 24,A68;
+A71: Q is open by A68,GLIB_001:def 24;
 A72: len Q + k = j + 1 by A57,GLIB_001:37;
     set cc = Q.first(), dd = Q.last();
 
-A73: not x in A & not x in {y} by A43,A15,XBOOLE_0:def 3, A45,TARSKI:def 1;
-     dd in Q1.vertices() by GLIB_001:89,A65;
-then A74: dd <> x by A73, XBOOLE_0:def 2, A19;
-     cc in Q1.vertices() by GLIB_001:89,A65;
-then A75: cc <> x by A73, XBOOLE_0:def 2, A19;
+A73: not x in A & not x in {y} by A15,A43,A45,TARSKI:def 1,XBOOLE_0:def 3;
+     dd in Q1.vertices() by A65,GLIB_001:89;
+then A74: dd <> x by A19,A73,XBOOLE_0:def 2;
+     cc in Q1.vertices() by A65,GLIB_001:89;
+then A75: cc <> x by A19,A73,XBOOLE_0:def 2;
 A76: dd,y are_adjacent by A35,A64,Def3;
 A77: x,cc are_adjacent by A55,A64,Def3;
 
@@ -4620,16 +4619,16 @@ A78: now let i be odd Nat such that
     then A84: ki1 <= len P by FINSEQ_3:27;
          now assume A85: ki1 = len P;
              len P - k + -1 < len P - k by XREAL_1:32;
-            hence contradiction by A82,A81,XXREAL_0:2,A72,A85;
+            hence contradiction by A72,A81,A82,A85,XXREAL_0:2;
         end;
         then ki1 < len P by A84,REAL_1:def 5;
     then A86: ki1+2 <= len P by Th4;
-         ki1+2 <> len P by A79, A72;
+         ki1+2 <> len P by A72,A79;
     then A87: ki1+2 < len P by A86,REAL_1:def 5;
          P.(ki1) in Ay & P.(len P) in Ay
               by A19,A84,GLIB_001:8;
         then e Joins P.(ki1), P.(len P),Gay by A27,A80,A83,Th19;
-        hence contradiction by A87,A25,Th40;
+        hence contradiction by A25,A87,Th40;
     end;
 
 A88: now let i be odd Nat such that
@@ -4644,15 +4643,15 @@ A88: now let i be odd Nat such that
          i+-1 < i+-0 by XREAL_1:10;
     then A92: i1 < len Q by A91,XXREAL_0:2;
     then A93: Q.(i1+1) = P.(ki1) & ki1 in dom P by A57,GLIB_001:37;
-    A94: i1+k < len P - 1 - k + k by XREAL_1:10,A92,A72;
+    A94: i1+k < len P - 1 - k + k by A72,A92,XREAL_1:10;
          len P+-1 < len P+-0 by XREAL_1:10;
-        then 1 <= ki1 & ki1 < len P by HEYTING3:1,A94,XXREAL_0:2;
+        then 1 <= ki1 & ki1 < len P by A94,HEYTING3:1,XXREAL_0:2;
     then A95: ki1 in dom P & ki1 < len P by FINSEQ_3:27;
-    A96: e Joins x,P.(ki1),G by GLIB_000:17,A90,A93;
+    A96: e Joins x,P.(ki1),G by A90,A93,GLIB_000:17;
          now assume i1 <> 0;
             then i1 <> 0 & i1 >= 0;
             then k+0 < k + i1 by XREAL_1:10;
-            hence contradiction by A96,A56,A95;
+            hence contradiction by A56,A95,A96;
         end;
         hence contradiction by A89;
     end;
@@ -4673,16 +4672,16 @@ A97: now let v be set such that A98: v in Q.vertices();
          len P+-1 < len P+-0 by XREAL_1:10;
     then A104: kn1 < len P by A103,XXREAL_0:2;
          now assume A105: v = y;
-        then A106: k+(n+-1) = 1 by A102,A100,A27,A104,GLIB_001:def 28;
+        then A106: k+(n+-1) = 1 by A27,A100,A102,A104,GLIB_001:def 28;
         A107: 1 <= k & 1 <= n by HEYTING3:1;
              now assume 1 < n;
                 then 1+1 <= n by NAT_1:13;
                 then 2+1 <= k+n by A107,XREAL_1:9;
                 hence contradiction by A106;
             end;
-            hence contradiction by A107,REAL_1:def 5,A105,A100,A64,A59,A27;
+            hence contradiction by A27,A59,A64,A100,A105,A107,REAL_1:def 5;
         end; then not v in {y} by TARSKI:def 1;
-        hence v in A by A99,A19,XBOOLE_0:def 2;
+        hence v in A by A19,A99,XBOOLE_0:def 2;
     end;
 
     :::    R: building path dd - y - x - cc ::::::::::::::
@@ -4690,9 +4689,9 @@ A97: now let v be set such that A98: v in Q.vertices();
 A108: len R = 7 & R.length() = 3 and
 A109: R.vertices() = {dd,y,x,cc} and
 A110: R.1 = dd & R.3 = y & R.5 = x & R.7 = cc
-        by A45,A34,A74,A64,A59,A27,A75,A76,A47,A77,Th48;
+        by A27,A34,A45,A47,A59,A64,A74,A75,A76,A77,Th48;
 A111: R.first() = dd by A110;
-A112: R.last() = cc by A110,A108;
+A112: R.last() = cc by A108,A110;
 A113: R is non trivial by A108,GLIB_001:127;
 A114: R is open by A68,A111,A112,GLIB_001:def 24;
 
@@ -4708,17 +4707,17 @@ A115: Q.edges() misses R.edges() proof
         per cases by A118,Th13;
         suppose A119: n = 2;  2*0+1 < len R by A108;
             then R.(1+1) Joins R.1,R.(1+2),G by GLIB_001:def 3;
-            then y in Q.vertices() by A118,A119,A117,A110,GLIB_001:106;
+            then y in Q.vertices() by A110,A117,A118,A119,GLIB_001:106;
             then y in A by A97;
-            hence contradiction by A15,A13,XBOOLE_0:def 3; end;
+            hence contradiction by A13,A15,XBOOLE_0:def 3; end;
         suppose A120: n = 4;  2*1+1 < len R by A108;
             then R.(3+1) Joins R.3,R.(3+2),G by GLIB_001:def 3;
-            then y in Q.vertices() by A118,A120,A117,A110,GLIB_001:106;
+            then y in Q.vertices() by A110,A117,A118,A120,GLIB_001:106;
             then y in A by A97;
-            hence contradiction by A15,A13,XBOOLE_0:def 3; end;
+            hence contradiction by A13,A15,XBOOLE_0:def 3; end;
         suppose A121: n = 6;  2*2+1 < len R by A108;
             then R.(5+1) Joins R.5,R.(5+2),G by GLIB_001:def 3;
-            then x in Q.vertices() by A118,A121,A117,A110,GLIB_001:106;
+            then x in Q.vertices() by A110,A117,A118,A121,GLIB_001:106;
             then x in A by A97;
             hence contradiction by A15,A43,XBOOLE_0:def 3; end;
     end;
@@ -4728,7 +4727,7 @@ A115: Q.edges() misses R.edges() proof
          v in {dd,y,x,cc} by A109,A122,XBOOLE_0:def 3;
         then v = dd or v = y or v = x or v = cc by ENUMSET1:def 2;
       hence v in {Q.first(), Q.last()}
-         by A13,TARSKI:def 2,A43,A15,A123,XBOOLE_0:def 3;
+         by A13,A15,A43,A123,TARSKI:def 2,XBOOLE_0:def 3;
     end;
 then A124:Q.vertices() /\ R.vertices() c= {Q.first(), Q.last()} by TARSKI:def 3
 ;
@@ -4736,11 +4735,11 @@ then A124:Q.vertices() /\ R.vertices() c= {Q.first(), Q.last()} by TARSKI:def 3
         per cases by A125,TARSKI:def 2;
         suppose A126: v = cc;
         then A127: v in Q.vertices() by GLIB_001:89;
-             v in R.vertices() by A126,A110,A108,GLIB_001:88;
+             v in R.vertices() by A108,A110,A126,GLIB_001:88;
            hence v in Q.vertices() /\ R.vertices() by A127,XBOOLE_0:def 3; end;
         suppose A128: v = dd;
         then A129: v in Q.vertices() by GLIB_001:89;  2*0+1 <= len R by A108;
-            then v in R.vertices() by A128,A110,GLIB_001:88;
+            then v in R.vertices() by A110,A128,GLIB_001:88;
            hence v in Q.vertices() /\ R.vertices() by A129,XBOOLE_0:def 3; end;
     end;
     then {Q.first(),Q.last()} c= Q.vertices()/\R.vertices() by TARSKI:def 3;
@@ -4749,16 +4748,16 @@ then A130: Q.vertices() /\ R.vertices() = { Q.first(), Q.last() }
 
     :::::::::: properties of C ::::::::::::
     set C = Q.append(R);
-A131:  C is Cycle-like by A115, A69, A71, A113, A114, A130, A111, A112, Th27;
+A131:  C is Cycle-like by A69,A71,A111,A112,A113,A114,A115,A130,Th27;
 A132: len C +1+-1 = len Q + len R+-1 by A111,GLIB_001:29;
 
 A133: C.(len Q+6) = R.(6+1) by A108,A111,GLIB_001:34;
 A134: C.(len Q+4) = R.(4+1) by A108,A111,GLIB_001:34;
 A135: C.(len Q+2) = R.(2+1) by A108,A111,GLIB_001:34;
-     C.length() = Q.length() + 3 by A111,A108,Th28;
+     C.length() = Q.length() + 3 by A108,A111,Th28;
     then C.length() >= 1 + 3 by A70,XREAL_1:9;
     then C.length() > 3 by NAT_1:13;
-    then C is chordal by A131, Def11;
+    then C is chordal by A131,Def11;
     then consider m, n being odd Nat such that
 A136: m+2 < n and
 A137: n <= len C and C.m <> C.n and
@@ -4773,10 +4772,10 @@ A141: n <= len Q or n = len Q+2 or n = len Q+4 or n = len Q+6 proof
       per cases by A142,REAL_1:def 5;
        suppose len Q +2 = n; hence thesis; end;
        suppose len Q +2 < n; then A143: len Q +2+2 <= n by Th4;
-      per cases by A143, REAL_1:def 5;
+      per cases by A143,REAL_1:def 5;
        suppose len Q +4 = n; hence thesis; end;
        suppose len Q +2*2 < n; then len Q +4+2 <= n by Th4;
-      hence thesis by A132, A108, A137, REAL_1:def 5; end; end; end;
+      hence thesis by A108,A132,A137,REAL_1:def 5; end; end; end;
     end;
 
     ::::::::::::: show C has no chord :::::::::::::
@@ -4789,44 +4788,44 @@ A141: n <= len Q or n = len Q+2 or n = len Q+4 or n = len Q+6 proof
       then m <= len Q by XXREAL_0:2;
   then m in dom Q by A140,FINSEQ_3:27;
       then Q.m = C.m & Q.n = C.n by A146,GLIB_001:33;
-      hence contradiction by A144,A145,A136,A63,Th41; end;
+      hence contradiction by A63,A136,A144,A145,Th41; end;
   suppose A147: n = len Q + 2;
-      then m < len Q by A136, XREAL_1:8;
-  then A148: m in dom Q by A140, FINSEQ_3:27;
-      then e Joins Q.m,y,G by A147,A135,A110,A144,GLIB_001:33;
-      hence contradiction by A78,A147,A136,A148; end;
+      then m < len Q by A136,XREAL_1:8;
+  then A148: m in dom Q by A140,FINSEQ_3:27;
+      then e Joins Q.m,y,G by A110,A135,A144,A147,GLIB_001:33;
+      hence contradiction by A78,A136,A147,A148; end;
   suppose A149: n = len Q + 4;
       then m+2+2 <= len Q+4 by A136,Th4; then m+4 <= len Q +4;
       then m <= len Q by XREAL_1:8;
-  then A150: m in dom Q by A140, FINSEQ_3:27;
-  then A151: e Joins Q.m,x,G by A149,A134,A110,A144,GLIB_001:33;
+  then A150: m in dom Q by A140,FINSEQ_3:27;
+  then A151: e Joins Q.m,x,G by A110,A134,A144,A149,GLIB_001:33;
       per cases by A140,REAL_1:def 5;
       suppose 1 = m; hence contradiction
-        by A115,A69,A71,A113,A114,A130,A111,A112,Th27,A139,A149,A132,A108; end;
-      suppose 1 < m; hence contradiction by A151,A88,A150; end; end;
+        by A69,A71,A108,A111,A112,A113,A114,A115,A130,A132,A139,A149,Th27; end;
+      suppose 1 < m; hence contradiction by A88,A150,A151; end; end;
   suppose A152: n = len Q +6;
       then m+2+2 <= len Q+6 by A136,Th4; then m+4 <= len Q +2+4;
   then A153: m <= len Q +2 by XREAL_1:8;
-      per cases by A153, REAL_1:def 5;
+      per cases by A153,REAL_1:def 5;
       suppose m < len Q +2;
       then A154: m <= len Q by Th4;
-          then m in dom Q by A140, FINSEQ_3:27;
+          then m in dom Q by A140,FINSEQ_3:27;
       then C.m = Q.m by GLIB_001:33;
-      then A155: e Joins Q.1,Q.m,G by A152, A144, A133, A110,GLIB_000:17;
+      then A155: e Joins Q.1,Q.m,G by A110,A133,A144,A152,GLIB_000:17;
            now assume 1+2 >= m;
-              then m< 2*1+1 by A115,A69,A71,A113,A114,A130,A111,A112,Th27,
-                          A139,A152,A132,A108,REAL_1:def 5;
+              then m< 2*1+1 by A69,A71,A108,A111,A112,A113,A114,A115,A130,A132
+,A139,A152,Th27,REAL_1:def 5;
               then m <= 3-2 by Th3;
-              then m < 1 by A115,A69,A71,A113,A114,A130,A111,A112,Th27,
-                       A139,A152,A132,A108,REAL_1:def 5;
+              then m < 1 by A69,A71,A108,A111,A112,A113,A114,A115,A130,A132
+,A139,A152,Th27,REAL_1:def 5;
              hence contradiction by HEYTING3:1;
           end; then 2*0+1+2 < m;
-          hence contradiction by A155, A154,A63,Th41; end;
+          hence contradiction by A63,A154,A155,Th41; end;
       suppose m = len Q + 2;
-      then A156: e Joins Q.1,y,G by A152,A133,A144,A135,A110,GLIB_000:17;
+      then A156: e Joins Q.1,y,G by A110,A133,A135,A144,A152,GLIB_000:17;
            3 <= len Q & 1 <= 3 by A69,GLIB_001:126;
           then 1 <= len Q by XXREAL_0:2;
-          then 2*0+1 in dom Q & 1 <> len Q by A64,A49,Def3,A55,FINSEQ_3:27;
+          then 2*0+1 in dom Q & 1 <> len Q by A49,A55,A64,Def3,FINSEQ_3:27;
           hence contradiction by A78,A156; end; end;
   end;
 end;
@@ -4881,7 +4880,7 @@ A2: for k being non zero Nat
          reconsider G=Gk1 as non trivial finite chordal _Graph by A5,A6;
          consider a,b being Vertex of G such that
     A8: a <> b and
-    A9: not a,b are_adjacent by Def6, A7;
+    A9: not a,b are_adjacent by A7,Def6;
          consider S being VertexSeparator of a,b such that
     A10: S is minimal by Th79;
         consider Gs being inducedSubgraph of G,S;
@@ -4898,14 +4897,14 @@ A2: for k being non zero Nat
    A14: now assume
         A15: b in A \/ S;
              not b in S by A8,A9,Def8;
-        then A16: b in A by A15, XBOOLE_0:def 2;
+        then A16: b in A by A15,XBOOLE_0:def 2;
              b in B by GLIB_002:9;
          hence contradiction by A13,A16,XBOOLE_0:def 3;
         end;
    A17: now assume
         A18: a in B \/ S;
              not a in S by A8,A9,Def8;
-        then A19: a in B by A18, XBOOLE_0:def 2;
+        then A19: a in B by A18,XBOOLE_0:def 2;
              a in A by GLIB_002:9;
          hence contradiction by A13,A19,XBOOLE_0:def 3;
         end;
@@ -4934,7 +4933,7 @@ A2: for k being non zero Nat
             consider aa being set such that
         A27: aa in A by XBOOLE_0:def 1;
         A28: the_Vertices_of Gas = A \/ S by A12,GLIB_000:def 39;
-            then reconsider a = aa as Vertex of Gas by A27, XBOOLE_0:def 2;
+            then reconsider a = aa as Vertex of Gas by A27,XBOOLE_0:def 2;
              ex c being Vertex of Gas st c in A & c is simplicial
             proof
               per cases;
@@ -4946,17 +4945,17 @@ A2: for k being non zero Nat
                   then consider a2,b2 being Vertex of Gas such that
               A30: a2 <> b2 and
               A31: not a2,b2 are_adjacent and
-              A32: a2 is simplicial & b2 is simplicial by A29,A23,A3;
+              A32: a2 is simplicial & b2 is simplicial by A3,A23,A29;
                    now assume A33: a2 in S & b2 in S;
                       then reconsider a3 = a2, b3 = b2 as Vertex of G;
-                  A34: not a3,b3 are_adjacent by A31,A12,Th45;
-                  A35: Gs is complete by A33, A8, A9,A10,Th98;
+                  A34: not a3,b3 are_adjacent by A12,A31,Th45;
+                  A35: Gs is complete by A8,A9,A10,A33,Th98;
                       reconsider a4 = a2, b4 = b2 as Vertex of Gs
                                                   by A33,GLIB_000:def 39;
-                       a4,b4 are_adjacent by A35,A30,Def6;
-                   hence contradiction by A34, A33, Th45;
+                       a4,b4 are_adjacent by A30,A35,Def6;
+                   hence contradiction by A33,A34,Th45;
                   end;
-                  then b2 in A or a2 in A by A28, XBOOLE_0:def 2;
+                  then b2 in A or a2 in A by A28,XBOOLE_0:def 2;
                  hence thesis by A32;
                end;
             end;
@@ -4974,8 +4973,8 @@ A2: for k being non zero Nat
                   c,x are_adjacent by A38,Th52;
                  then consider e being set such that
              A41: e Joins c,x,Gk1 by Def3;
-                  e Joins c,x,Gns by A20,A40,A41,A36,Th19;
-               hence contradiction by A39, A36, GLIB_002:10;
+                  e Joins c,x,Gns by A20,A36,A40,A41,Th19;
+               hence contradiction by A36,A39,GLIB_002:10;
              end;
              then A42: Gk1.AdjacentSet({c}) c= A\/S by TARSKI:def 3;
                    c in A\/S by A36,XBOOLE_0:def 2;
@@ -4990,7 +4989,7 @@ A2: for k being non zero Nat
              consider aa being set such that
            A44: aa in B by XBOOLE_0:def 1;
            A45: the_Vertices_of Gbs = B \/ S by A12,GLIB_000:def 39;
-               then reconsider a = aa as Vertex of Gbs by A44, XBOOLE_0:def 2;
+               then reconsider a = aa as Vertex of Gbs by A44,XBOOLE_0:def 2;
 
                 ex c being Vertex of Gbs st c in B & c is simplicial
                proof
@@ -5004,17 +5003,17 @@ A2: for k being non zero Nat
                         then consider a2,b2 being Vertex of Gbs such that
                     A47: a2 <> b2 and
                     A48: not a2,b2 are_adjacent and
-                    A49: a2 is simplicial & b2 is simplicial by A46,A26,A3;
+                    A49: a2 is simplicial & b2 is simplicial by A3,A26,A46;
                          now assume A50: a2 in S & b2 in S;
                             then reconsider a3 = a2, b3 = b2 as Vertex of G;
-                        A51: not a3,b3 are_adjacent by A48,A12,Th45;
-                        A52: Gs is complete by A50, A8,A9,A10,Th98;
+                        A51: not a3,b3 are_adjacent by A12,A48,Th45;
+                        A52: Gs is complete by A8,A9,A10,A50,Th98;
                             reconsider a4 = a2, b4 = b2 as Vertex of Gs
                                                    by A50,GLIB_000:def 39;
-                             a4,b4 are_adjacent by A52,A47,Def6;
-                         hence contradiction by A51, A50, Th45;
+                             a4,b4 are_adjacent by A47,A52,Def6;
+                         hence contradiction by A50,A51,Th45;
                         end;
-                        then b2 in B or a2 in B by A45, XBOOLE_0:def 2;
+                        then b2 in B or a2 in B by A45,XBOOLE_0:def 2;
                       hence thesis by A49;
                      end;
                    end;
@@ -5032,8 +5031,8 @@ A2: for k being non zero Nat
                         c,x are_adjacent by A55,Th52;
                        then consider e being set such that
                    A58: e Joins c,x,Gk1 by Def3;
-                        e Joins c,x,Gns by A53,A20,A57,A58,Th19;
-                       hence contradiction by A56, A53, GLIB_002:10;
+                        e Joins c,x,Gns by A20,A53,A57,A58,Th19;
+                       hence contradiction by A53,A56,GLIB_002:10;
                    end;
               then A59: Gk1.AdjacentSet({c}) c= B\/S by TARSKI:def 3;
                     c in B\/S by A53,XBOOLE_0:def 2;
@@ -5069,7 +5068,7 @@ proof let G be finite chordal _Graph;
     then not G is trivial by Th61;
         then consider a,b being Vertex of G such that
     A3: a<>b & not a,b are_adjacent &
-        a is simplicial & b is simplicial by A2, Th102;
+        a is simplicial & b is simplicial by A2,Th102;
      thus thesis by A3;
     end;
 end;
@@ -5152,8 +5151,8 @@ proof
   let G be finite _Graph, S be VertexScheme of G;
   let n be non zero Nat such that A1: n <= len S;
    0+1 <= n by NAT_1:13;
-then A2: len ((n, len S)-cut S) + n = len S + 1 by A1, GRAPH_2:def 1;
-      len S + 1 - n <> 0 by A1, NAT_1:13;
+then A2: len ((n, len S)-cut S) + n = len S + 1 by A1,GRAPH_2:def 1;
+      len S + 1 - n <> 0 by A1,NAT_1:13;
   then (n, len S)-cut S <> {} by A2,FINSEQ_1:25;
  hence S.followSet(n) is non empty by FINSEQ_1:27;
 end;
@@ -5172,11 +5171,11 @@ for G being finite trivial _Graph, v being Vertex of G
 proof let G be finite trivial _Graph, v being Vertex of G;
    consider v1 being Vertex of G such that
 A1: the_Vertices_of G = {v1} by GLIB_000:25;
-A2: v1 = v by A1, TARSKI:def 1;
+A2: v1 = v by A1,TARSKI:def 1;
   set S = <*v*>;
 A3: S is one-to-one by FINSEQ_3:102;
- rng S = the_Vertices_of G by A1, A2, FINSEQ_1:56;
-  then reconsider S as VertexScheme of G by A3, Def12;
+ rng S = the_Vertices_of G by A1,A2,FINSEQ_1:56;
+  then reconsider S as VertexScheme of G by A3,Def12;
   take S;
   thus S = <*v*>;
   let n be non zero Nat such that n <= len S;
@@ -5200,7 +5199,7 @@ A4: b<>c & a,b are_adjacent & a,c are_adjacent & not b,c are_adjacent;
        let va,vb,vc be Nat such that
 A5: va in dom V & vb in dom V & vc in dom V &
     V.va=a & V.vb=b & V.vc=c & va < vb & va < vc;
-A6: a <> b & a <> c by A5,A2,FUNCT_1:def 8;
+A6: a <> b & a <> c by A2,A5,FUNCT_1:def 8;
     assume A7: V is perfect;
 A8: 1 <= va & va <= len V by A5,FINSEQ_3:27;
 A9: 0 < va by A5,FINSEQ_3:27;
@@ -5215,17 +5214,17 @@ A13: va + jb = vb by A5,NAT_1:10;
 A14: va + jc = vc by A5,NAT_1:10;
 
       va - va <= len V - va by A8,XREAL_1:11;
-then A15: 0 < len fs by XREAL_1:41,A12;
+then A15: 0 < len fs by A12,XREAL_1:41;
 then A16: fs.(0+1) = V.(va + 0) by A8,GRAPH_2:def 1;
 A17: now assume jb >= len fs;
        then va + jb >= len V + 1 - va + va by A11,XREAL_1:9;
-       then vb > len V by A13, NAT_1:13;
+       then vb > len V by A13,NAT_1:13;
        hence contradiction by A5,FINSEQ_3:27;
      end;
 then A18: fs.(jb+1) = V.(va + jb) by A8,GRAPH_2:def 1;
 A19: now assume jc >= len fs;
-       then va + jc >= len V + 1 - va + va by A11, XREAL_1:9;
-       then vc > len V by A14, NAT_1:13;
+       then va + jc >= len V + 1 - va + va by A11,XREAL_1:9;
+       then vc > len V by A14,NAT_1:13;
        hence contradiction by A5,FINSEQ_3:27;
      end;
 then A20: fs.(jc+1) = V.(va + jc) by A8,GRAPH_2:def 1;
@@ -5234,21 +5233,21 @@ then A20: fs.(jc+1) = V.(va + jc) by A8,GRAPH_2:def 1;
 then A21: a in V.followSet(va) by A5,A16,FUNCT_1:12;  0+1 <= jb+1 by XREAL_1:9;
     then 1 <= jb+1 & jb+1 <= len fs by A17,NAT_1:13;
     then jb+1 in dom fs by FINSEQ_3:27;
-then A22: b in V.followSet(va) by A5,A18,A13,FUNCT_1:12;  0+1 <= jc+1 by
+then A22: b in V.followSet(va) by A5,A13,A18,FUNCT_1:12;  0+1 <= jc+1 by
 XREAL_1:9;
 then 1 <= jc+1 & jc+1 <= len fs by A19,NAT_1:13;
     then jc+1 in dom fs by FINSEQ_3:27;
-then A23: c in V.followSet(va) by A5,A20,A14,FUNCT_1:12;
-    reconsider ag=a as Vertex of Gf by GLIB_000:def 39,A21;
+then A23: c in V.followSet(va) by A5,A14,A20,FUNCT_1:12;
+    reconsider ag=a as Vertex of Gf by A21,GLIB_000:def 39;
 
-reconsider bg=b as Vertex of Gf by GLIB_000:def 39,A22;
-    reconsider cg=c as Vertex of Gf by GLIB_000:def 39,A23;
-A24: ag is simplicial by A7,A9,A8,A5,Def13;
+reconsider bg=b as Vertex of Gf by A22,GLIB_000:def 39;
+    reconsider cg=c as Vertex of Gf by A23,GLIB_000:def 39;
+A24: ag is simplicial by A5,A7,A8,A9,Def13;
 A25: ag,bg are_adjacent & ag,cg are_adjacent & not bg,cg are_adjacent
-       by A10,A4,Th45;
+       by A4,A10,Th45;
     then bg in Gf.AdjacentSet({ag}) & cg in Gf.AdjacentSet({ag}) by A6,Th52;
-    then ex e being set st e Joins bg,cg,Gf by A24,A4,Th68;
-    hence contradiction by A25, Def3;
+    then ex e being set st e Joins bg,cg,Gf by A4,A24,Th68;
+    hence contradiction by A25,Def3;
    end;
 
     now assume not V is perfect;
@@ -5273,24 +5272,24 @@ A25: ag,bg are_adjacent & ag,cg are_adjacent & not bg,cg are_adjacent
        reconsider ag=a, bg=b as Vertex of G by A31,TARSKI:def 3;
    A33: b in the_Vertices_of G by A31,TARSKI:def 3;
    A34: vg,ag are_adjacent & vg,bg are_adjacent & not ag,bg are_adjacent
-          by A30,A29,Th45;
-   A35: a in rng V by A31,TARSKI:def 3,A1;
-       consider va being Element of NAT such that
-   A36: va in dom V & V.va = a by A32, A1,FINSEQ_2:11;
-   A37: b in rng V by A31,TARSKI:def 3,A1;
-       consider vb being Element of NAT such that
-   A38: vb in dom V & V.vb = b by A33, A1, FINSEQ_2:11;
+          by A29,A30,Th45;
+   A35: a in rng V by A1,A31,TARSKI:def 3;
+       consider va being Nat such that
+   A36: va in dom V & V.va = a by A1,A32,FINSEQ_2:11;
+   A37: b in rng V by A1,A31,TARSKI:def 3;
+       consider vb being Nat such that
+   A38: vb in dom V & V.vb = b by A1,A33,FINSEQ_2:11;
    A39: now assume va <= n;
-       then A40: va < n by A28,A26,A36,REAL_1:def 5;
-            a..V >= n by Th16,A35,A31,A27,A2;
+       then A40: va < n by A26,A28,A36,REAL_1:def 5;
+            a..V >= n by A2,A27,A31,A35,Th16;
            then va < a..V by A40,XXREAL_0:2;
-         hence contradiction by A36, FINSEQ_4:34;
+         hence contradiction by A36,FINSEQ_4:34;
        end;
    A41:  now assume vb <= n;
-       then A42: vb < n by A28,A26,A38,REAL_1:def 5;
-            b..V >= n by Th16,A37,A31,A27,A2;
+       then A42: vb < n by A26,A28,A38,REAL_1:def 5;
+            b..V >= n by A2,A27,A31,A37,Th16;
            then vb < b..V by A42,XXREAL_0:2;
-         hence contradiction by A38, FINSEQ_4:34;
+         hence contradiction by A38,FINSEQ_4:34;
        end;
        per cases by A28,A36,A38,REAL_1:def 5;
        suppose va < vb;
@@ -5298,13 +5297,13 @@ A25: ag,bg are_adjacent & ag,cg are_adjacent & not bg,cg are_adjacent
              b<>c & a,b are_adjacent & a,c are_adjacent &
              va in dom V & vb in dom V & vc in dom V &
              V.va = a & V.vb = b & V.vc = c & va < vb & va < vc &
-             not b,c are_adjacent by A28,A34,A26,A36,A38,A39,A41,A27; end;
+             not b,c are_adjacent by A26,A27,A28,A34,A36,A38,A39,A41; end;
        suppose vb < va;
        thus ex a,b,c being Vertex of G, va,vb,vc being Nat st
              b<>c & a,b are_adjacent & a,c are_adjacent &
              va in dom V & vb in dom V & vc in dom V &
              V.va = a & V.vb = b & V.vc = c & va < vb & va < vc &
-             not b,c are_adjacent by A28,A34,A26,A36,A38,A39,A41,A27; end;
+             not b,c are_adjacent by A26,A27,A28,A34,A36,A38,A39,A41; end;
    end;
   hence thesis by A3;
 end;
@@ -5326,12 +5325,12 @@ A1: now let k be non zero Nat such that
         then A5: Gk1 is trivial by A3,GLIB_000:29;
             consider v being Vertex of Gk1;
              ex S being VertexScheme of Gk1 st S = <*v*> & S is perfect
-               by A5, Th108;
+               by A5,Th108;
           hence thesis;
         end;
         suppose k <> 1;
             then reconsider G=Gk1 as non trivial finite chordal _Graph
-                     by A4,A3,GLIB_000:29;
+                     by A3,A4,GLIB_000:29;
             consider x being Vertex of G such that
         A6: x is simplicial by Th103;
             consider H being removeVertex of G,x;
@@ -5339,7 +5338,7 @@ A1: now let k be non zero Nat such that
         then A8: the_Vertices_of H=the_Vertices_of G\{x} by GLIB_000:def 39;
              H.order() = card (the_Vertices_of G\{x}) by A7,GLIB_000:def 39
                   .= G.order() - card {x} by CARD_2:63
-                  .= k - 1 by A3, CARD_2:60;
+                  .= k - 1 by A3,CARD_2:60;
             then H.order() < k by XREAL_1:148;
                 then consider T being VertexScheme of H such that
             A9: T is perfect by A2;
@@ -5372,7 +5371,7 @@ A1: now let k be non zero Nat such that
                 per cases by A15,REAL_1:def 5;
                 suppose A16: 1 = n;
                 then A17: x = v by A14,FINSEQ_1:58;
-                     S.followSet(n) = rng S by A16, GRAPH_2:7
+                     S.followSet(n) = rng S by A16,GRAPH_2:7
                                   .= the_Vertices_of G by Def12;
                     then Gf == G by GLIB_000:97;
                     hence v is simplicial by A6,A17,Th66;
@@ -5389,8 +5388,8 @@ A1: now let k be non zero Nat such that
                A21: T.followSet(n1) = S.followSet(n1+1) by Th17;
                      T.followSet(n1) is non empty by A20,Th107;
                   then Gf is inducedSubgraph of H,T.followSet(n1)
-                      by A21,A8,Th30;
-                hence v is simplicial by A20,A14,A19,A9,Def13;
+                      by A8,A21,Th30;
+                hence v is simplicial by A9,A14,A19,A20,Def13;
               end;
               end;
             end;
@@ -5446,8 +5445,8 @@ A9: n in dom S by A7,FINSEQ_4:30;
 A10: S is one-to-one by Def12;
          now let y be set such that A11: y in P.vertices();
             reconsider z=y as Vertex of G by A11;
-             x..S <= z..S by A11,A6;
-            hence y in S.followSet(n) by A7, A9, A10, Th16;
+             x..S <= z..S by A6,A11;
+            hence y in S.followSet(n) by A7,A9,A10,Th16;
         end;
 then A12: P.vertices() c= S.followSet(n) by TARSKI:def 3;
     consider H being inducedSubgraph of G,S.followSet(n);
@@ -5458,9 +5457,9 @@ then A14: n <= len S by FINSEQ_4:31;
      S.n = x by A13,FINSEQ_4:29;
 then A15: y is simplicial by A1,A14,Def13;
 
-A16: S.followSet(n) is non empty by A8, Th107;
+A16: S.followSet(n) is non empty by A8,Th107;
     then reconsider C=P as Walk of H by A12,Th23;
-    reconsider C as Path of H by A3, GLIB_001:177;
+    reconsider C as Path of H by A3,GLIB_001:177;
      P is non trivial & P is closed by A2,GLIB_001:def 31;
     then C is non trivial & C is closed by GLIB_001:177;
 then A17: C is Cycle-like by GLIB_001:def 31;
@@ -5472,7 +5471,7 @@ A20: C.a <> C.b & C.a in H.AdjacentSet({y}) & C.b in H.AdjacentSet({y}) and
 A21: for e being set st e in C.edges() holds not e Joins C.a,C.b,H
      by A17,A18,Th55;  :: <==
     consider e being set such that
-A22: e Joins C.a,C.b,H by A20,A15,Th68;
+A22: e Joins C.a,C.b,H by A15,A20,Th68;
      C is chordal by A19,A20,A21,A22,Def10;
-  hence P is chordal by A16, Th87;
+  hence P is chordal by A16,Th87;
 end;

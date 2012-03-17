@@ -13,7 +13,7 @@ environ
       ZF_REFLE, PBOOLE, MSATERM, TREES_9, FREEALG, MSUALG_2, MSAFREE2,
       PRE_CIRC, PRALG_1, MSAFREE, GROUP_6, PRELAMB, ALG_1, REALSET1, MSUALG_3,
       FUNCT_6, TARSKI, TDGROUP, QC_LANG1, UNIALG_2, DTCONSTR, TREES_3,
-      MSSCYC_1, FINSEQ_4, NAT_1;
+      MSSCYC_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, NUMBERS, NAT_1,
       CARD_1, STRUCT_0, CARD_3, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
       FINSEQ_1, FINSEQ_4, GRAPH_1, GRAPH_2, TREES_1, TREES_2, TREES_3, FUNCT_6,
@@ -21,10 +21,10 @@ environ
       PRE_CIRC, MSAFREE2, TREES_9, MSATERM, XXREAL_0;
  constructors WELLORD2, XXREAL_0, NAT_1, NAT_D, FINSEQ_4, TREES_9, MSSUBFAM,
       MSUALG_3, MSATERM, MSAFREE2, GRAPH_2;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ARYTM_3, FINSET_1,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, PBOOLE, TREES_2, TREES_3,
-      PRE_CIRC, TREES_9, STRUCT_0, DTCONSTR, MSUALG_1, MSAFREE, MSATERM,
-      MSAFREE2, EXTENS_1, GRAPH_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, XXREAL_0,
+      XREAL_0, NAT_1, INT_1, FINSEQ_1, PBOOLE, TREES_2, TREES_3, PRE_CIRC,
+      TREES_9, STRUCT_0, DTCONSTR, MSUALG_1, MSAFREE, MSATERM, MSAFREE2,
+      EXTENS_1, GRAPH_2, ORDINAL1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, GRAPH_1, GRAPH_2, MSAFREE, PBOOLE, PRE_CIRC, MSUALG_3;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FINSET_1, FRAENKEL, GRAPH_1,
@@ -32,7 +32,7 @@ environ
       FINSEQ_3, FINSEQ_4, FINSEQ_5, RELAT_1, CARD_1, CARD_3, CARD_4, TREES_1,
       TREES_3, TREES_4, PBOOLE, MSUALG_1, MSUALG_2, MSUALG_3, MSAFREE,
       MSAFREE2, PRE_CIRC, MSATERM, EXTENS_1, RELSET_1, INT_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0;
+      XBOOLE_1, XREAL_1, XXREAL_0, ORDINAL1, PARTFUN1;
  schemes NAT_1, FRAENKEL, PBOOLE, DOMAIN_1;
 
 begin :: Some properties of graphs and trees
@@ -67,9 +67,11 @@ A3:   for n st 1 <= n & n <= len p holds p.n in the Vertices of G and
 A4:   for n st 1 <= n & n <= len c
            ex x', y' being Element of the Vertices of G st
              x' = p.n & y' = p.(n+1) & c.n joins x', y' by GRAPH_1:def 11;
-         now let i be Element of NAT; assume i in dom p;
+         now let i be Nat;
+A5:        i in NAT by ORDINAL1:def 13;
+           assume i in dom p;
        then 1<=i & i<=len p by FINSEQ_3:27;
-      hence p.i in the Vertices of G by A3;
+      hence p.i in the Vertices of G by A3,A5;
      end;
      then reconsider p as FinSequence of the Vertices of G by FINSEQ_2:14;
      thus c is FinSequence of the Edges of G by A1;
@@ -78,27 +80,27 @@ A4:   for n st 1 <= n & n <= len c
      proof
       thus len p = len c + 1 by A2;
       let n; assume
-A5:     1<=n & n<=len c;
-       then 1<=n+1 & n<=len p & n+1<=len p by A2,XREAL_1:8,NAT_1:12;
-       then A6: p/.n=p.n & p/.(n+1)=p.(n+1) by A5,FINSEQ_4:24;
+A6:     1<=n & n<=len c;
+       then 1<=n+1 & n<=len p & n+1<=len p by A2,NAT_1:12,XREAL_1:8;
+       then A7: p/.n=p.n & p/.(n+1)=p.(n+1) by A6,FINSEQ_4:24;
                ex x', y' being Element of the Vertices of G st
-             x' = p.n & y' = p.(n+1) & c.n joins x', y' by A4,A5;
-      hence c.n joins p/.n, p/.(n+1) by A6;
+             x' = p.n & y' = p.(n+1) & c.n joins x', y' by A4,A6;
+      hence c.n joins p/.n, p/.(n+1) by A7;
      end;
    end; assume
-   A7: c is FinSequence of the Edges of G;
+   A8: c is FinSequence of the Edges of G;
     given p being FinSequence of the Vertices of G such that
-   A8: p is_vertex_seq_of c;
+   A9: p is_vertex_seq_of c;
      hereby let n; assume
           1 <= n & n <= len c; then n in dom c by FINSEQ_3:27;
-      then c.n in rng c & rng c c= the Edges of G by A7,FINSEQ_1:def 4
+      then c.n in rng c & rng c c= the Edges of G by A8,FINSEQ_1:def 4
 ,FUNCT_1:def 5
 ;
       hence c.n in the Edges of G;
      end;
      take p;
      thus
-   A9:  len p = len c + 1 by A8,GRAPH_2:def 7;
+   A10:  len p = len c + 1 by A9,GRAPH_2:def 7;
      hereby let n; assume
           1 <= n & n <= len p; then n in dom p by FINSEQ_3:27;
       then p.n in rng p & rng p c= the Vertices of G by FINSEQ_1:def 4
@@ -107,11 +109,11 @@ A5:     1<=n & n<=len c;
       hence p.n in the Vertices of G;
      end;
      let n; assume
-   A10:  1 <= n & n <= len c;
+   A11:  1 <= n & n <= len c;
      take x'=p/.n, y'=p/.(n+1);
-          1<=n+1 & n<=len p & n+1<=len p by A9,A10,XREAL_1:8,NAT_1:12;
-     hence x' = p.n & y' = p.(n+1) by A10,FINSEQ_4:24;
-     thus c.n joins x', y' by A8,A10,GRAPH_2:def 7;
+          1<=n+1 & n<=len p & n+1<=len p by A10,A11,NAT_1:12,XREAL_1:8;
+     hence x' = p.n & y' = p.(n+1) by A11,FINSEQ_4:24;
+     thus c.n joins x', y' by A9,A11,GRAPH_2:def 7;
   end;
  end;
 
@@ -134,7 +136,7 @@ A2: 1<=n;
 then A3:  n<=len (p^q) by A1,NAT_1:12;
     then A4: len cp +1 = n+1 & len cpq +1 = n +1 by A1,A2,GRAPH_2:def 1;
    hence len cp = len cpq;
-   let k; assume
+   let k be Nat; assume
 A5:  1 <=k & k <= len cp;   0+1 = 1;
  then consider i being Element of NAT such that
 A6:  0<=i & i<len cp & k=i+1 by A5,GRAPH_2:1;
@@ -436,9 +438,9 @@ A7: m+k = (m+i)+1 by A4;
         m+(i+1)<len mnc +m & len mnc +m<=len c +1
                                 by A1,A2,A3,A4,XREAL_1:8;
     then m+i+1 < len c + 1 by XXREAL_0:2;
-    then 1<=m+i & m+i<len c by A1,XREAL_1:8,NAT_1:12;
-   hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A5,A6
-,A7,GRAPH_1:def 12;
+    then 1<=m+i & m+i<len c by A1,NAT_1:12,XREAL_1:8;
+   hence (the Source of G).(mnc.(k+1)) = (the Target of G).(mnc.k) by A5,A6,A7,
+GRAPH_1:def 12;
   end;
  hence thesis by GRAPH_1:def 12;
 end;
@@ -479,7 +481,7 @@ A10:   vsoc/.1=vsoc/.(1+1) or vsoc/.1<>vsoc/.(1+1);
           len vsoc = len oc +1 by Th10;
       then 1<=1+1 & 1+1<=len vsoc by A8,XREAL_1:8;
       then 1 in dom vsoc & 1+1 in dom vsoc by FINSEQ_3:27,FINSEQ_5:6;
-      then vsoc/.1=vsoc.1 & vsoc/.(1+1)=vsoc.(1+1) by FINSEQ_4:def 4;
+      then vsoc/.1=vsoc.1 & vsoc/.(1+1)=vsoc.(1+1) by PARTFUN1:def 8;
      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A6,A7,A9,A10,GRAPH_1:def 9;
      end;
      suppose n<>0;
@@ -491,10 +493,10 @@ A14:    oc.(n+1) joins vsoc/.(n+1),vsoc/.(n+1+1) by A4,A5,GRAPH_2:def 7;
 A15:   vsoc/.(n+1)=vsoc/.(n+1+1) or vsoc/.(n+1)<>vsoc/.(n+1+1);
           len vsoc = len oc +1 by Th10;
       then n+1<=len vsoc & 1<=n+1+1 & n+1+1<=len vsoc
-                                           by A4,A12,XREAL_1:8,NAT_1:11;
+                                           by A4,A12,NAT_1:11,XREAL_1:8;
       then n+1 in dom vsoc & n+1+1 in dom vsoc by A4,FINSEQ_3:27;
       then vsoc/.(n+1)=vsoc.(n+1) & vsoc/.(n+1+1)=vsoc.(n+1+1) by
-FINSEQ_4:def 4;
+PARTFUN1:def 8;
      hence vsoc.(n+1+1) = T.(oc.(n+1)) by A13,A14,A15,GRAPH_1:def 9;
     end;
     end;
@@ -676,7 +678,7 @@ A10:  n = 0;
     suppose n<>0;
 then A11:  ch is non empty by A5,FINSEQ_1:25;
       then 1 in dom ch by FINSEQ_5:6; then ch.1 in rng ch by FUNCT_1:def 5;
-then consider i being Element of NAT such that
+then consider i being Nat such that
 A12:    i in dom c & c.i = ch.1 by A5,FINSEQ_2:11;
 A13:    1<=i & i<=len c by A12,FINSEQ_3:27;
         now per cases;
@@ -963,8 +965,7 @@ A6: G c= the Sorts of A by PBOOLE:def 23;
    end;
    then C c= the Sorts of A by PBOOLE:def 5;
    then G \/ C c= the Sorts of A by A6,PBOOLE:18;
-  then reconsider H as non-empty MSSubset of A by A4,A5,PBOOLE:143,
-def 23;
+  then reconsider H as non-empty MSSubset of A by A4,A5,PBOOLE:143,def 23;
       G c= H by PBOOLE:16;
   then reconsider H as GeneratorSet of A by Th21;
   take H;
@@ -1277,7 +1278,7 @@ A11:    Den(o, FreeMSA X) = (FreeOper X).o by MSUALG_1:def 11
 A12:    Sym(o, X) ==> roots ars by MSATERM:21;
        reconsider ars' = ars as FinSequence of TS DTConMSA X by A8,FINSEQ_1:29
 ;
-A13:    DenOp(o, X).ars' = t by A12,MSAFREE:def 14,A7;
+A13:    DenOp(o, X).ars' = t by A7,A12,MSAFREE:def 14;
            dom Den(o, FreeMSA X) = {{}} by A9,Th25;
        then {} in dom Den(o, FreeMSA X) by TARSKI:def 1;
 then A14:    t in rng Den(o, FreeMSA X) by A8,A11,A13,FUNCT_1:def 5;

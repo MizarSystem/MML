@@ -8,19 +8,20 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      NAT_1;
- notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0, RELAT_1,
-      PARTFUN1, FUNCT_1, FUNCT_3, SEQ_1, SEQ_2, COMPLEX1, NAT_1, FUNCOP_1,
-      XXREAL_0;
+      FINSEQ_1, MEMBERED;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED,
+      XCMPLX_0, XREAL_0, RELAT_1,
+      PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, SEQ_1, SEQ_2, COMPLEX1, NAT_1,
+      FUNCOP_1, XXREAL_0;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
-      SEQ_2;
+      SEQ_2, FINSEQ_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, MEMBERED, SEQ_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SEQ_2, FUNCT_1;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, FUNCT_2, RELAT_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      ORDINAL1;
+      ORDINAL1, FINSEQ_1, MEMBERED;
  schemes NAT_1, SEQ_1;
 
 begin
@@ -173,7 +174,7 @@ A6:   m=n+k1 by NAT_1:10;
       then consider k1 be Nat such that
 A6:   m=n+k1 by NAT_1:10;
        k1 in NAT by ORDINAL1:def 13;
-      hence seq.m<=seq.n by A6,A5;
+      hence seq.m<=seq.n by A5,A6;
      end;
     assume A7:for n,m st n<=m holds seq.m<=seq.n;
     let n;
@@ -482,13 +483,13 @@ theorem
        then consider k be Nat such that
 A14:    m=n+k by NAT_1:10;
         k in NAT by ORDINAL1:def 13;
-       hence seq.n=seq.m by A14,A12;
+       hence seq.n=seq.m by A12,A14;
       end;
        now assume m<=n;
        then consider k be Nat such that
 A15:    n=m+k by NAT_1:10;
         k in NAT by ORDINAL1:def 13;
-       hence seq.n=seq.m by A15,A12;
+       hence seq.n=seq.m by A12,A15;
       end;
      hence seq.n=seq.m by A13;
     end;
@@ -594,7 +595,7 @@ A1: f is increasing;
    let m,n such that
 A2: m in dom f & n in dom f and
 A3: m <= n;
-   per cases by A3, XXREAL_0:1;
+   per cases by A3,XXREAL_0:1;
    suppose m < n;
    hence f.m <= f.n by A1,A2,Def1;
    end;
@@ -609,7 +610,7 @@ A4: f is decreasing;
    let m,n such that
 A5: m in dom f & n in dom f and
 A6: m <= n;
-   per cases by A6, XXREAL_0:1;
+   per cases by A6,XXREAL_0:1;
    suppose m < n;
    hence f.m >= f.n by A4,A5,Def2;
    end;
@@ -705,7 +706,7 @@ Lm11: incl NAT is increasing natural-yielding
     then consider x such that A1:x in dom seq and
                          A2:seq.x=y by FUNCT_1:def 5;
         x in NAT by A1,FUNCT_2:def 1;
-    hence y in NAT by FUNCT_1:35,A2;
+    hence y in NAT by A2,FUNCT_1:35;
    end;
   then A3: rng seq c=NAT by TARSKI:def 3;
    now let n;
@@ -1864,3 +1865,47 @@ end;
 
 theorem
   incl NAT is increasing natural-yielding by Lm11;
+
+
+registration
+  cluster natural-yielding Function;
+  existence
+  proof
+    take incl NAT;
+    thus thesis by Lm11;
+  end;
+end;
+
+registration
+  let f be natural-yielding Function, n be set;
+  cluster f.n -> natural;
+coherence
+proof
+  per cases;
+  suppose n in dom f;
+  then A1: f.n in rng f by FUNCT_1:def 5;
+   rng f c= NAT by Def8;
+  hence thesis by A1,ORDINAL1:def 13;
+  end;
+  suppose not n in dom f;
+  hence thesis by FUNCT_1:def 4;
+  end;
+end;
+end;
+
+registration
+  let X be set; let Y be natural-membered set;
+  cluster -> natural-yielding PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+A1: rng f c= Y by RELSET_1:12;
+    Y c= NAT by MEMBERED:6;
+    hence rng f c= NAT by A1,XBOOLE_1:1;
+  end;
+end;
+
+registration
+ cluster -> natural-yielding FinSequence of NAT;
+ coherence;
+end;

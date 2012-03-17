@@ -16,7 +16,7 @@ environ
  requirements SUBSET, BOOLE;
  definitions STRUCT_0, TARSKI, XBOOLE_0, BINOP_1, REALSET1;
  theorems TARSKI, VECTSP_2, ZFMISC_1, XBOOLE_0, FUNCT_1, SUBSET_1, STRUCT_0,
-      FUNCT_2, RELAT_1, REALSET1;
+      FUNCT_2, RELAT_1;
 
 begin :: The Basics of General Theory of BCI-algebra
 
@@ -47,7 +47,7 @@ then A2:   [:the carrier of A,the carrier of A:] = {} by ZFMISC_1:113;
      then [:the carrier of A,the carrier of A:] =
        dom the InternalDiff of A by FUNCT_2:def 1;
      then (the InternalDiff of A).(x,y) = {} by A2,FUNCT_1:def 4;
-    hence thesis by SUBSET_1:def 2,A1;
+    hence thesis by A1,SUBSET_1:def 2;
    end;
    suppose A is non empty;
      then reconsider A as non empty BCIStr;
@@ -107,7 +107,7 @@ end;
 
 definition
   func BCI-EXAMPLE -> BCIStr_0 equals
-     BCIStr_0 (# {{}}, op2, op0 #);
+    BCIStr_0 (# {{}}, op2, op0 #);
   coherence;
 end;
 
@@ -119,40 +119,57 @@ registration
   end;
 end;
 
-Lm1: BCI-EXAMPLE is_B & BCI-EXAMPLE is_C & BCI-EXAMPLE is_I &
-     BCI-EXAMPLE is_BCI-4
-proof
-  thus BCI-EXAMPLE is_B
+registration
+  cluster BCI-EXAMPLE -> being_B being_C being_I being_BCI-4 being_BCK-5;
+  coherence
   proof
-    let x,y,z be Element of BCI-EXAMPLE;
-     ((x\y)\(z\y))\(x\z)={}&0.BCI-EXAMPLE={}by TARSKI:def 1;
-    hence thesis;
+    thus BCI-EXAMPLE is_B
+    proof
+      let x,y,z be Element of BCI-EXAMPLE;
+      ((x\y)\(z\y))\(x\z)={}&0.BCI-EXAMPLE={} by TARSKI:def 1;
+      hence thesis;
+    end;
+    thus BCI-EXAMPLE is_C
+    proof
+      let x,y,z be Element of BCI-EXAMPLE;
+      ((x\y)\z)\((x\z)\y)={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
+      hence thesis;
+    end;
+    thus BCI-EXAMPLE is_I
+    proof
+      let x be Element of BCI-EXAMPLE;
+      x\x={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
+      hence thesis;
+    end;
+    thus BCI-EXAMPLE is_BCI-4
+    proof
+      let x,y be Element of BCI-EXAMPLE;
+      x = {} & y = {} & 0.BCI-EXAMPLE = {} by TARSKI:def 1;
+      hence thesis;
+    end;
+    for x being Element of BCI-EXAMPLE holds x` = 0.BCI-EXAMPLE
+      by VECTSP_2:def 18;
+    hence thesis by Def8;
   end;
-  thus BCI-EXAMPLE is_C
-  proof
-  let x,y,z be Element of BCI-EXAMPLE;
-    ((x\y)\z)\((x\z)\y)={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
-   hence thesis;
-  end;
-  thus BCI-EXAMPLE is_I
-  proof
-    let x be Element of BCI-EXAMPLE;
-     x\x={} & 0.BCI-EXAMPLE={} by TARSKI:def 1;
-    hence thesis;
-  end;
-   let x,y be Element of BCI-EXAMPLE;
-    x = {} & y = {} & 0.BCI-EXAMPLE = {} by TARSKI:def 1;
-   hence thesis;
 end;
 
 registration
-  cluster strict being_B being_C being_I being_BCI-4 (non empty BCIStr_0);
-  existence by Lm1;
+  cluster strict being_B being_C being_I being_BCI-4 being_BCK-5
+    (non empty BCIStr_0);
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
 end;
 
 definition
   mode BCI-algebra is being_B being_C being_I being_BCI-4
       (non empty BCIStr_0);
+end;
+
+definition
+  mode BCK-algebra is being_BCK-5 BCI-algebra;
 end;
 
 definition let X be BCI-algebra;
@@ -172,7 +189,7 @@ end;
 
 ::T1.1.11
 theorem Th1:
-  for X being non empty BCIStr_0  holds (X is BCI-algebra iff
+  for X being non empty BCIStr_0 holds (X is BCI-algebra iff
       (X is_I & X is_BCI-4 &for x,y,z being Element of X holds
       ((x\y)\(x\z))\(z\y)=0.X &
       (x\(x\y))\y = 0.X ))
@@ -189,13 +206,13 @@ proof
     A3:for x,y,z being Element of X holds (x\y)\z = (x\z)\y
        proof
          let x,y,z be Element of X;
-          ((x\y)\z)\((x\z)\y)=0.X &((x\z)\y)\((x\y)\z)=0.X by Def4,A1;
+          ((x\y)\z)\((x\z)\y)=0.X &((x\z)\y)\((x\y)\z)=0.X by A1,Def4;
          hence (x\y)\z = (x\z)\y by A1,Def7;
        end;
    then (x\(x\y))\y=(x\y)\(x\y);
    hence ((x\y)\(x\z))\(z\y)=0.X & (x\(x\y))\y = 0.X & x\x = 0.X &
-      (x\y = 0.X & y\x = 0.X implies x = y) by A2,A1,Def5,A3,Def7;
-   end;
+      (x\y = 0.X & y\x = 0.X implies x = y) by A1,A2,A3,Def5,Def7;
+     end;
       hence thesis by A1;
    end;
     assume A4:(X is_I & X is_BCI-4 &for x,y,z being Element of X holds
@@ -207,33 +224,33 @@ proof
           assume A6:x\0.X =0.X;
           then x` = (x \ (x\x)) \ x by A4,Def5
         .= 0.X by A4;
-         hence thesis by A6,A4,Def7;
+         hence thesis by A4,A6,Def7;
       end;
     A7:for x being Element of X holds x \ 0.X = x
        proof
          let x be Element of X;
       A8:0.X = (x\(x\x))\x by A4
-                .= (x\0.X)\x by A4,Def5;
-          (x\(x\0.X))\0.X = 0.X by A4;
+            .= (x\0.X)\x by A4,Def5;
+         (x\(x\0.X))\0.X = 0.X by A4;
          then x\(x\0.X) = 0.X by A5;
-         hence thesis by A8,A4,Def7;
+         hence thesis by A4,A8,Def7;
        end;
      A9:for x,y,z being Element of X st x\y=0.X & y\z=0.X holds
         x\z=0.X
         proof
           let x,y,z be Element of X;
           assume A10: x\y=0.X & y\z=0.X;
-           ((x\z)\(x\y))\(y\z)=0.X by A4;
-          then (x\z)\(x\y)=0.X by A10,A7;
-          hence thesis by A10,A7;
+          ((x\z)\(x\y))\(y\z)=0.X by A4;
+          then (x\z)\(x\y)=0.X by A7,A10;
+          hence thesis by A7,A10;
         end;
      A11:for x,y,z being Element of X st
       x\y=0.X holds (x\z)\(y\z)=0.X&(z\y)\(z\x)=0.X
       proof let x,y,z be Element of X;
       assume A12: x\y=0.X;
       A13:((z\y)\(z\x))\(x\y)=0.X by A4;
-       ((x\z)\(x\y))\(y\z)=0.X by A4;
-      hence thesis by A12,A7,A13;
+      ((x\z)\(x\y))\(y\z)=0.X by A4;
+      hence thesis by A7,A12,A13;
       end;
 A14:  for x,y,z being Element of X holds ((x\y)\(z\y))\(x\z) = 0.X
     proof
@@ -251,24 +268,9 @@ A14:  for x,y,z being Element of X holds ((x\y)\(z\y))\(x\z) = 0.X
       then (((x\y)\z)\((x\y)\(x\(x\z))))\0.X=0.X by A4;
       then A15:((x\y)\z)\((x\y)\(x\(x\z)))=0.X by A5;
        ((x\y)\(x\(x\z)))\((x\z)\y) = 0.X by A4;
-      hence thesis by A15,A9;
+      hence thesis by A9,A15;
     end;
-    hence thesis by A4,A14,Def4,Def3;
-end;
-
-registration
-  cluster strict being_BCK-5 BCI-algebra;
-  existence
-  proof
-     for x being Element of BCI-EXAMPLE holds x` =0.BCI-EXAMPLE
-      by VECTSP_2:def 18;
-    then BCI-EXAMPLE is_BCK-5 by Def8;
-    hence thesis by Lm1;
-  end;
-end;
-
-definition
-  mode BCK-algebra is being_BCK-5 BCI-algebra;
+    hence thesis by A4,A14,Def3,Def4;
 end;
 
 definition let IT be non empty BCIStr_0;
@@ -281,7 +283,7 @@ end;
  reserve x,y,z,u,v,a,b for Element of X;
  reserve IT for non empty Subset of X;
 
-Lm2: x\0.X = 0.X implies x = 0.X
+Lm1: x\0.X = 0.X implies x = 0.X
 proof
   assume A1:x\0.X =0.X;
   then x` = (x \ (x\x)) \ x by Def5
@@ -294,8 +296,8 @@ theorem Th2:
 proof
 A1:0.X = (x\(x\x))\x by Th1
       .= (x\0.X)\x by Def5;
-    (x\(x\0.X))\0.X = 0.X by Th1;
-   then x\(x\0.X) = 0.X by Lm2;
+   (x\(x\0.X))\0.X = 0.X by Th1;
+   then x\(x\0.X) = 0.X by Lm1;
    hence thesis by A1,Def7;
 end;
 
@@ -314,11 +316,11 @@ proof
   assume A1: x\y=0.X;
 A2:((z\y)\(z\x))\(x\y)=0.X by Th1;
    ((x\z)\(x\y))\(y\z)=0.X by Th1;
-  hence thesis by A1,Th2,A2;
+  hence thesis by A1,A2,Th2;
 end;
 
 theorem
-   x <= y implies x\z <= y\z & z\y <= z\x
+  x <= y implies x\z <= y\z & z\y <= z\x
 proof
   assume x <= y;
   then x\y = 0.X by Def11;
@@ -327,7 +329,7 @@ proof
 end;
 
 theorem
-   x\y=0.X implies (y\x)` = 0.X
+  x\y=0.X implies (y\x)` = 0.X
 proof
   assume x\y = 0.X;
   then (x\x)\(y\x) = 0.X by Th4;
@@ -340,12 +342,12 @@ proof
    (x\(x\z))\z = 0.X by Th1;
 then A1: ((x\y)\z)\((x\y)\(x\(x\z)))=0.X by Th4;
    ((x\y)\(x\(x\z)))\((x\z)\y) = 0.X by Th1;
-then A2:((x\y)\z)\((x\z)\y) = 0.X by Th3,A1;
+then A2:((x\y)\z)\((x\z)\y) = 0.X by A1,Th3;
    (x\(x\y))\y = 0.X by Th1;
 then A3: ((x\z)\y)\((x\z)\(x\(x\y)))=0.X by Th4;
    ((x\z)\(x\(x\y)))\((x\y)\z) = 0.X by Th1;
-  then ((x\z)\y)\((x\y)\z) = 0.X by Th3,A3;
-  hence thesis by Def7,A2;
+  then ((x\z)\y)\((x\y)\z) = 0.X by A3,Th3;
+  hence thesis by A2,Def7;
 end;
 
 theorem Th8:
@@ -391,7 +393,7 @@ proof
    thus X is BCI-algebra implies (X is_BCI-4 &
       for x,y,z being Element of X holds
       ((x\y)\(x\z))\(z\y)=0.X &
-       x\0.X = x ) by Th2,Th1;
+       x\0.X = x ) by Th1,Th2;
    thus (X is_BCI-4 &
       for x,y,z being Element of X holds
       ((x\y)\(x\z))\(z\y)=0.X &
@@ -403,25 +405,25 @@ proof
        x\0.X = x;
   A2:X is_I
   proof
-    let x be Element of X;
-         x\x=(x\x)\0.X by A1;
+   let x be Element of X;
+   x\x=(x\x)\0.X by A1;
    then x\x=((x\0.X)\x)\0.X by A1;
    then x\x=((x\0.X)\(x\0.X))\0.X by A1;
    then x\x=((x\0.X)\(x\0.X))\(0.X)` by A1;
    hence thesis by A1;
   end;
    now let x,y,z be Element of X;
-         ((x\0.X)\(x\y))\(y\0.X)=0.X by A1;
+   ((x\0.X)\(x\y))\(y\0.X)=0.X by A1;
    then (x\(x\y))\(y\0.X)=0.X by A1;
    hence ((x\y)\(x\z))\(z\y)=0.X & (x\(x\y))\y = 0.X by A1;
    end;
-    hence thesis by Th1,A1,A2;
+    hence thesis by A1,A2,Th1;
    end;
 end;
 
 theorem
-   (for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x))
-       implies X is BCK-algebra
+  (for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x))
+     implies X is BCK-algebra
 proof
    assume
 A1:for X being BCI-algebra,x,y being Element of X holds x\(x\y)=y\(y\x);
@@ -516,7 +518,7 @@ A1:for X being BCI-algebra,x,y being Element of X holds
 end;
 
 theorem
-   for X being BCI-algebra holds X is_K iff X is BCK-algebra
+  for X being BCI-algebra holds X is_K iff X is BCK-algebra
 proof
   let X be BCI-algebra;
   thus X is_K implies X is BCK-algebra
@@ -533,7 +535,7 @@ proof
   end;
   assume A2: X is BCK-algebra;
   let x,y be Element of X;
-   y` = 0.X by Def8,A2;
+   y` = 0.X by A2,Def8;
   then (x\y)\(x\0.X) = 0.X by Th4;
   hence thesis by Th2;
 end;
@@ -552,7 +554,7 @@ proof
    then ex x being Element of X st y=x & 0.X<=x;
    hence y in the carrier of X;
    end;
-   hence thesis by TARSKI:def 3,A1;
+   hence thesis by A1,TARSKI:def 3;
  end;
 end;
 
@@ -564,13 +566,8 @@ proof
   hence thesis;
 end;
 
-registration let X;
-  cluster 0.X -> Element of BCK-part(X);
-  coherence by Th19;
-end;
-
 theorem
-    for x,y being Element of BCK-part(X) holds x\y in BCK-part(X)
+  for x,y being Element of BCK-part(X) holds x\y in BCK-part(X)
 proof
     let x,y be Element of BCK-part(X);
     A1:x in {x1 where x1 is Element of X:0.X<=x1} &
@@ -609,7 +606,7 @@ proof
                                                   by FUNCT_2:def 1;
   then the InternalDiff of X =(the InternalDiff of X)||the carrier of X
                   by RELAT_1:97;
- hence thesis by Def10,A1;
+ hence thesis by A1,Def10;
 end;
 
 definition let X be BCI-algebra,IT be SubAlgebra of X;
@@ -647,7 +644,7 @@ definition let X be BCI-algebra;
    A2:y=x & x is atom;
    thus y in the carrier of X by A2;
    end;
-   hence thesis by TARSKI:def 3,A1;
+   hence thesis by A1,TARSKI:def 3;
  end;
 end;
 
@@ -739,7 +736,7 @@ proof
     then (x\(z\0.X))\0.X = 0.X by Th2;
     then x\(z\0.X) = 0.X by Th2;
     then x\z = 0.X by Th2;
-    hence z=x by Def7,A4;
+    hence z=x by A4,Def7;
     end;
     then x is atom by Def14;
     hence thesis;
@@ -778,7 +775,7 @@ proof
     then (x\0.X)\(z\0.X)=0.X by Th2;
     then (x\0.X)\z=0.X by Th2;
     then x\z = 0.X by Th2;
-    hence z=x by Def7,A4;
+    hence z=x by A4,Def7;
     end;
     then x is atom by Def14;
     hence thesis;
@@ -808,7 +805,7 @@ proof
      then (z\x)`=0.X by Def5;
      then z`\x`=0.X by Th9;
      then x\z = 0.X by A3;
-    hence z=x by Def7,A4;
+    hence z=x by A4,Def7;
     end;
     then x is atom by Def14;
     hence thesis;
@@ -828,9 +825,9 @@ proof
     assume A1: x``=x;
      now let z be Element of X;
      assume A2:z\x=0.X;
-     then ((z\x)\(x`))\(z\0.X)=x\z by Th2,A1;
+     then ((z\x)\(x`))\(z\0.X)=x\z by A1,Th2;
      then 0.X=x\z by Def3;
-    hence z=x by Def7,A2;
+    hence z=x by A2,Def7;
     end;
     then x is atom by Def14;
     hence thesis;
@@ -881,7 +878,7 @@ proof
     then ((x\z)`)`=(((z\z)\(z\x))`)` by Th7;
     then ((x\z)`)`=(((z\x)`)`)` by Def5;
     then ((x\z)`)`=(z\x)` by Th8;
-    hence thesis by Th30,A1;
+    hence thesis by A1,Th30;
  end;
     assume for z being Element of X holds (x\z)``=x\z;
     then ((x\0.X)`)`=x\0.X;
@@ -891,8 +888,8 @@ proof
 end;
 
 theorem
-   for x being Element of X holds x in AtomSet(X) iff
-      for z,u being Element of X holds z\(z\(x\u))=x\u
+  for x being Element of X holds x in AtomSet(X) iff
+     for z,u being Element of X holds z\(z\(x\u))=x\u
 proof
      let x be Element of X;
      thus x in AtomSet(X) implies
@@ -917,9 +914,9 @@ theorem Th33:    ::tuilun1.3.3
   for a being Element of AtomSet(X),x being Element of X  holds
        a\x in AtomSet(X)
 proof
-    let a be Element of AtomSet(X),x be Element of X;
-     ((a\x)`)`=a\x by Th31;
-    hence thesis by Th29;
+  let a be Element of AtomSet(X),x be Element of X;
+  ((a\x)`)`=a\x by Th31;
+  hence thesis by Th29;
 end;
 
 definition let X be BCI-algebra,a,b be Element of AtomSet(X);
@@ -927,7 +924,7 @@ definition let X be BCI-algebra,a,b be Element of AtomSet(X);
   coherence by Th33;
 end;
 
-theorem  Th34:
+theorem Th34:
   for x being Element of X holds x` in AtomSet(X)
 proof
   let x be Element of X;
@@ -935,7 +932,7 @@ proof
   hence thesis by Th33;
 end;
 
-theorem  Th35:
+theorem Th35:
   for x being Element of X holds
     ex a being Element of AtomSet(X) st a<=x
 proof
@@ -969,7 +966,7 @@ proof
    A2:y=x & a<=x;
    thus y in the carrier of X by A2;
    end;
-   hence thesis by TARSKI:def 3,A1;
+   hence thesis by A1,TARSKI:def 3;
  end;
 end;
 
@@ -996,7 +993,7 @@ proof
     (a\x)\(a\b)=(a\(a\b))\x by Th7;
    then (a\x)\(a\b)=b\x by Th24;
    then (a\x)\(a\b)=0.X by A2,Def11;
-   hence thesis by Def14,A1;
+   hence thesis by A1,Def14;
 end;
 
 theorem  Th38:
@@ -1014,18 +1011,18 @@ A2:x=x2 & 0.X<=x2;
    then (a\x)\(a\0.X)=(a\a)\x by Th2;
    then (a\x)\(a\0.X)=x` by Def5;
    then (a\x)\(a\0.X)=0.X by A2,Def11;
-   then a\x=a\0.X by Def14,A1;
+   then a\x=a\0.X by A1,Def14;
    hence thesis by Th2;
 end;
 
-Lm3:for a being Element of AtomSet(X),x being Element of BranchV(a)
+Lm2:for a being Element of AtomSet(X),x being Element of BranchV(a)
               holds a\x=0.X
 proof
   let a be Element of AtomSet(X),x be Element of BranchV(a);
    x in {x1 where x1 is Element of X:a<=x1};
   then consider x1 being Element of X such that
   A1:x=x1 & a<=x1;
-  thus a\x =0.X by Def11,A1;
+  thus a\x =0.X by A1,Def11;
 end;
 
 theorem  Th39:
@@ -1041,9 +1038,9 @@ proof
    then (a\b)\(x\y)=((((a\b)`)`)\x)\(y`) by Th7;
    then (a\b)\(x\y)=((a\b)\x)\(y`) by Th29;
    then (a\b)\(x\y)=((a\x)\b)\(y`) by Th7;
-   then (a\b)\(x\y)=b`\y` by Lm3;
+   then (a\b)\(x\y)=b`\y` by Lm2;
    then (a\b)\(x\y)=(b\y)` by Th9;
-   then (a\b)\(x\y)=(0.X)` by Lm3;
+   then (a\b)\(x\y)=(0.X)` by Lm2;
    then (a\b)\(x\y)=0.X by Def5;
    then a\b <= x\y by Def11;
    hence thesis;
@@ -1075,7 +1072,7 @@ proof
    then (a\(x\y))\b =0.X by Th7;
    then (a\(x\y))\((a\(x\y))\b) =a\(x\y) by Th2;
    then b = a\(x\y) by Th24;
-   hence contradiction by A1,Th38,A2;
+   hence contradiction by A1,A2,Th38;
 end;
 
 theorem
@@ -1098,7 +1095,7 @@ proof
    A4:0.X = x3 & a\b <= x3;
     (a\b)\0.X = 0.X by A4,Def11;
    then a\b = 0.X by Th2;
-   hence contradiction by A1,Def14,A2;
+   hence contradiction by A1,A2,Def14;
 end;
 
 ::Ideal
@@ -1125,7 +1122,7 @@ definition let X be BCI-algebra;
       then x=0.X by Th2;
       hence thesis by TARSKI:def 1;
       end;
-      hence thesis by TARSKI:def 1,A1;
+      hence thesis by A1,TARSKI:def 1;
    end;
 end;
 
@@ -1134,7 +1131,7 @@ definition let X be BCI-algebra, IT be Ideal of X;
     for x being Element of IT  holds x` in IT;
 end;
 
-Lm4:
+Lm3:
    {0.X} is Ideal of X
 proof
      set X1={0.X};
@@ -1157,30 +1154,30 @@ proof
       then x=0.X by Th2;
       hence thesis by TARSKI:def 1;
       end;
-     hence thesis by Def18,A1,A2;
+     hence thesis by A1,A2,Def18;
 end;
 
-Lm5:
+Lm4:
   for X1 being Ideal of X st X1={0.X} holds
     for x being Element of X1 holds x` in { 0.X }
 proof
     let X1 be Ideal of X;
     assume A1:X1={0.X};
     let x be Element of X1;
-     x=0.X by TARSKI:def 1,A1;
+     x=0.X by A1,TARSKI:def 1;
     then x`=0.X by Def5;
     hence x` in {0.X} by TARSKI:def 1;
 end;
 
-registration  let X;
+registration let X;
   cluster closed Ideal of X;
   existence
   proof
     set X1={0.X};
-    reconsider X1 as Ideal of X by Lm4;
-   take X1;
-    for x being Element of X1 holds x` in X1 by Lm5;
-   hence thesis by Def19;
+    reconsider X1 as Ideal of X by Lm3;
+    take X1;
+    for x being Element of X1 holds x` in X1 by Lm4;
+    hence thesis by Def19;
   end;
 end;
 
@@ -1188,20 +1185,20 @@ theorem
    {0.X} is closed Ideal of X
 proof
   set X1={0.X};
-  reconsider X1 as Ideal of X by Lm4;
-   for x being Element of X1 holds x` in X1 by Lm5;
+  reconsider X1 as Ideal of X by Lm3;
+   for x being Element of X1 holds x` in X1 by Lm4;
   hence thesis by Def19;
 end;
 
 theorem
-   the carrier of X is closed Ideal of X
+  the carrier of X is closed Ideal of X
 proof
-    A1:the carrier of X is non empty Subset of X by ZFMISC_1:def 1;
+A1:the carrier of X is non empty Subset of X by ZFMISC_1:def 1;
     A2: 0.X in the carrier of X &
-              for x being Element of X holds x` in the carrier of X;
+         for x being Element of X holds x` in the carrier of X;
       for x,y being Element of the carrier of X st x\y in the carrier of X
            & y in the carrier of X  holds x in the carrier of X;
-   hence thesis by Def18,A2,A1,Def19;
+   hence thesis by A1,A2,Def18,Def19;
 end;
 
 theorem
@@ -1217,14 +1214,14 @@ A1: 0.X in BCK-part(X) by Th19;
     A3:x\y=x1 & 0.X<= x1 by A2;
             consider x2 being Element of X such that
     A4:y=x2 & 0.X<= x2 by A2;
-        (x\y)`=0.X by Def11,A3;
+        (x\y)`=0.X by A3,Def11;
      then x`\y`=0.X by Th9;
      then x`\0.X = 0.X by A4,Def11;
      then x`=0.X by Th2;
      then 0.X<= x by Def11;
      hence x in X1;
     end;
-     then reconsider X1 as Ideal of X by Def18,A1;
+     then reconsider X1 as Ideal of X by A1,Def18;
       now let x be Element of X1;
        x in X1;
      then consider x1 being Element of X such that
@@ -1237,8 +1234,7 @@ A1: 0.X in BCK-part(X) by Th19;
    hence thesis by Def19;
 end;
 
-Lm6:
-    IT is Ideal of X implies (for x,y being Element of IT  holds
+Lm5: IT is Ideal of X implies (for x,y being Element of IT  holds
          {z where z is Element of X : z\x<=y}  c= IT)
 proof
     assume A1:IT is Ideal of X;
@@ -1260,7 +1256,7 @@ proof
 end;
 
 theorem
-    IT is Ideal of X implies (for x,y being Element of X  st
+  IT is Ideal of X implies (for x,y being Element of X  st
      x in IT & y<=x holds y in IT)
 proof
     assume A1:IT is Ideal of X;
@@ -1269,7 +1265,7 @@ proof
     assume A3:x in IT & y<=x;
     then y\0.X <= x by Th2;
     then A4:y in  {z where z is Element of X : z\0.X<=x};
-     {z where z is Element of X : z\0.X<=x} c= IT by A1,Lm6,A2,A3;
+     {z where z is Element of X : z\0.X<=x} c= IT by A1,A2,A3,Lm5;
     hence y in IT by A4;
 end;
 
@@ -1303,11 +1299,11 @@ definition let IT be BCI-algebra;
 end;
 
 registration
-  cluster implicative positive-implicative p-Semisimple
-    associative weakly-implicative weakly-positive-implicative BCI-algebra;
- existence
+  cluster BCI-EXAMPLE -> implicative positive-implicative p-Semisimple
+    associative weakly-implicative weakly-positive-implicative;
+  coherence
   proof
-    reconsider IT = BCI-EXAMPLE as BCI-algebra by Lm1;
+   set IT = BCI-EXAMPLE;
 A1:IT is implicative
    proof
     let x,y be Element of IT;
@@ -1344,21 +1340,31 @@ A5:IT is weakly-implicative
      (x\y)\z={} & ((x\z)\z)\(y\z)={} by TARSKI:def 1;
     hence (x\y)\z=((x\z)\z)\(y\z);
    end;
-   hence thesis by A4,A5,A3,A1,A2;
+   hence thesis by A1,A2,A3,A4,A5;
   end;
 end;
 
-Lm7:
+registration
+  cluster implicative positive-implicative p-Semisimple
+    associative weakly-implicative weakly-positive-implicative BCI-algebra;
+  existence
+  proof
+    take BCI-EXAMPLE;
+    thus thesis;
+  end;
+end;
+
+Lm6:
   (for x,y being Element of X holds y\x=x\y) implies X is associative
 proof
   assume A1:for x,y being Element of X holds y\x=x\y;
-    let x,y,z be Element of X;
+   let x,y,z be Element of X;
      x\(y\z) = (y\z)\x by A1
     .=(y\x)\z by Th7;
    hence thesis by A1;
 end;
 
-Lm8:
+Lm7:
    (for x holds x`=x) implies (for x,y holds x\y=y\x)
 proof
    assume A1:for x holds x`=x;
@@ -1383,21 +1389,21 @@ A2:x`\x=(x\x)` by A1,Def20
       .=(0.X)` by Def5 .=0.X by Def5;
     x\x`=(x\0.X)\x by A1,Def20
       .=x\x by Th2 .=0.X by Def5;
-   hence thesis by Def7,A2;
+   hence thesis by A2,Def7;
  end;
   assume for x being Element of X holds x`=x;
-  then for x,y holds x\y=y\x by Lm8;
-  hence thesis by Lm7;
+  then for x,y holds x\y=y\x by Lm7;
+  hence thesis by Lm6;
 end;
 
 theorem Th48:
   (for x,y being Element of X holds y\x=x\y) iff X is associative
 proof
   thus
-  (for x,y being Element of X holds y\x=x\y) implies X is associative by Lm7;
+  (for x,y being Element of X holds y\x=x\y) implies X is associative by Lm6;
    assume X is associative;
    then for x being Element of X holds x`=x by Th47;
-   hence thesis by Lm8;
+   hence thesis by Lm7;
 end;
 
 theorem Th49:
@@ -1411,12 +1417,12 @@ proof
     assume A1:X is associative BCI-algebra;
     let x,y,z be Element of X;
      (z\y)\((y\x)\(z\x))=((z\y)\(y\x))\(z\x) by A1,Def20;
-    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(y\x) by Th7,A1;
-    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(x\y) by Th48,A1;
-    then A2:(z\y)\((y\x)\(z\x)) = 0.X by Th1,A1;
-     ((y\x)\(z\x))\(z\y)=((y\x)\(z\x))\(y\z) by Th48,A1;
-    then ((y\x)\(z\x))\(z\y)=0.X by Def3,A1;
-   hence thesis by Th2,A1,Def7,A2;
+    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(y\x) by A1,Th7;
+    then (z\y)\((y\x)\(z\x)) = ((z\y)\(z\x))\(x\y) by A1,Th48;
+    then A2:(z\y)\((y\x)\(z\x)) = 0.X by A1,Th1;
+     ((y\x)\(z\x))\(z\y)=((y\x)\(z\x))\(y\z) by A1,Th48;
+    then ((y\x)\(z\x))\(z\y)=0.X by A1,Def3;
+   hence thesis by A1,A2,Def7,Th2;
   end;
   thus (for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x)
     implies X is associative BCI-algebra
@@ -1482,7 +1488,7 @@ A4:for x,y being Element of X holds y\x=x\y
     end;
     end;
    then reconsider Y=X as BCI-algebra by Th1;
-     Y is associative by Th48,A4;
+     Y is associative by A4,Th48;
     hence thesis;
    end;
 end;
@@ -1498,8 +1504,8 @@ proof
      assume A1:X is associative BCI-algebra;
      let x,y,z be Element of X;
       (y\x)\(z\x)=z\y & x\0.X=x by A1,Th49;
-    then (x\y)\(z\x)=z\y & x\0.X=x by Th48,A1;
-    hence thesis by Th48,A1;
+    then (x\y)\(z\x)=z\y & x\0.X=x by A1,Th48;
+    hence thesis by A1,Th48;
    end;
    assume A2:for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x;
     for x,y,z being Element of X holds (y\x)\(z\x)=z\y & x\0.X=x
@@ -1529,10 +1535,10 @@ proof
    proof
      assume A1:X is associative BCI-algebra;
      let x,y,z be Element of X;
-      (y\x)\(z\x)=z\y & x\0.X=x by Th49,A1;
-     then (x\y)\(z\x)=z\y & x\0.X=x by Th48,A1;
-     then (x\y)\(x\z)=z\y & x\0.X=x by Th48,A1;
-    hence thesis by Th48,A1;
+      (y\x)\(z\x)=z\y & x\0.X=x by A1,Th49;
+     then (x\y)\(z\x)=z\y & x\0.X=x by A1,Th48;
+     then (x\y)\(x\z)=z\y & x\0.X=x by A1,Th48;
+    hence thesis by A1,Th48;
    end;
    assume A2:for x,y,z being Element of X holds (x\y)\(x\z)=y\z & x\0.X=x;
     for x,y,z being Element of X holds (x\y)\(x\z)=z\y & x`=x
@@ -1601,14 +1607,14 @@ proof
     let x be set;
     assume A3:x in {0.X};
     then reconsider x as Element of X by TARSKI:def 1;
-          x=0.X by TARSKI:def 1,A3;
+          x=0.X by A3,TARSKI:def 1;
     then x`=0.X by Def5;
     then 0.X <= x by Def11;
     hence thesis;
   end;
 end;
 
-Lm9:
+Lm8:
   (for x holds x``=x) iff for x,y holds y\(y\x) = x
 proof
   thus (for x holds x``=x) implies for x,y holds y\(y\x) = x
@@ -1622,12 +1628,12 @@ A2: x\(y\(y\x))= (x\(y\(y\x)))`` by A1
     .=0.X \0.X by Th1
     .=0.X by Def5;
       (y\(y\x))\x=0.X by Th1;
-   hence thesis by Def7,A2;
+   hence thesis by A2,Def7;
   end;
   thus thesis;
 end;
 
-Lm10:
+Lm9:
   (for x,y holds y\(y\x) = x) iff for x,y,z holds (z\y)\(z\x) = x\y
 proof
   thus (for x,y holds y\(y\x) = x) implies for x,y,z holds (z\y)\(z\x) = x\y
@@ -1659,7 +1665,7 @@ A2:   y\(x\(x\y))=(y\(x\(x\y)))`` by A1
        .=0.X \0.X by Th1
        .=0.X by Def5;
        (x\(x\y))\y=0.X by Th1;
-      hence x\(x\y) = y by Def7,A2;
+      hence x\(x\y) = y by A2,Def7;
      end;
     hence thesis by Def26;
    end;
@@ -1670,14 +1676,14 @@ theorem Th55:
   X is p-Semisimple iff (for x,y holds y\(y\x) = x)
 proof
    X is p-Semisimple iff (for x being Element of X holds x`` = x) by Th54;
-  hence thesis by Lm9;
+  hence thesis by Lm8;
 end;
 
 theorem Th56:
   X is p-Semisimple iff (for x,y,z holds (z\y)\(z\x) = x\y)
 proof
    X is p-Semisimple iff (for x,y holds y\(y\x) = x)by Th55;
-  hence thesis by Lm10;
+  hence thesis by Lm9;
 end;
 
 theorem  Th57:
@@ -1691,7 +1697,7 @@ proof
        then A2:(x\(z\y))\(y\(z\x))=0.X by Th1;
         y\(z\x) =(z\(z\y))\(z\x) by A1,Def26;
        then (y\(z\x))\(x\(z\y))=0.X by Th1;
-       hence thesis by Def7,A2;
+       hence thesis by A2,Def7;
      end;
     assume A3: for x,y,z holds x\(z\y) = y\(z\x);
      for x holds x`` = x
@@ -1704,76 +1710,76 @@ proof
     hence thesis by Th54;
 end;
 
-Lm11:
+Lm10:
   X is p-Semisimple implies (for x,y,z,u holds
         (x\u)\(z\y)=(y\u)\(z\x)&(x\u)\(z\y)=(x\z)\(u\y))
 proof
   assume A1:X is p-Semisimple;
   let x,y,z,u;
-A2:(x\u)\(z\y)=y\(z\(x\u)) by Th57,A1
-    .=y\(u\(x\z)) by Th57,A1
-    .=(x\z)\(u\y) by Th57,A1;
+A2:(x\u)\(z\y)=y\(z\(x\u)) by A1,Th57
+    .=y\(u\(x\z)) by A1,Th57
+    .=(x\z)\(u\y) by A1,Th57;
     (x\u)\(z\y)=(x\(z\y))\u by Th7
-    .=(y\(z\x))\u by Th57,A1;
+    .=(y\(z\x))\u by A1,Th57;
    hence thesis by A2,Th7;
 end;
 
-Lm12:
+Lm11:
   X is p-Semisimple implies (for x,y holds y`\(0.X \x)=x\y)
 proof
   assume A1:X is p-Semisimple;
   let x,y;
-   y`\(0.X \x)=(x\y)\(0.X \0.X) by Lm11,A1
+   y`\(0.X \x)=(x\y)\(0.X \0.X) by A1,Lm10
     .=(x\y)\0.X by Def5;
   hence thesis by Th2;
 end;
 
-Lm13:
+Lm12:
   X is p-Semisimple implies (for x,y,z holds (x\y)\(z\y)=x\z)
 proof
   assume A1:X is p-Semisimple;
   let x,y,z;
-   (x\y)\(z\y)=(x\z)\(y\y) by Lm11,A1
+   (x\y)\(z\y)=(x\z)\(y\y) by A1,Lm10
     .=(x\z)\0.X by Def5;
   hence thesis by Th2;
 end;
 
-Lm14:
+Lm13:
   X is p-Semisimple implies (for x,y,z st x\y=x\z holds y=z)
 proof
   assume A1:X is p-Semisimple;
   let x,y,z;
   assume A2:x\y=x\z;
-   (x\y)\(x\z)=(z\y)\(x\x) by Lm11,A1;
+   (x\y)\(x\z)=(z\y)\(x\x) by A1,Lm10;
   then (x\y)\(x\z)=(z\y)\0.X by Def5;
   then (x\y)\(x\z)=z\y by Th2;
   then A3: 0.X=z\y by A2,Def5;
-   (x\z)\(x\y)=(y\z)\(x\x) by Lm11,A1;
+   (x\z)\(x\y)=(y\z)\(x\x) by A1,Lm10;
   then (x\z)\(x\y)=(y\z)\0.X by Def5;
   then (x\z)\(x\y)=y\z by Th2;
-  then 0.X=y\z by Def5,A2;
+  then 0.X=y\z by A2,Def5;
   hence thesis by A3,Def7;
 end;
 
-Lm15:
+Lm14:
   X is p-Semisimple implies for x,y,z holds x\(y\z)=(z\y)\x`
 proof
   assume A1:X is p-Semisimple;
   let x,y,z;
    x\(y\z)=z\(y\x) by A1,Th57
   .=(z\0.X)\(y\x) by Th2;
-  hence thesis by A1,Lm11;
+  hence thesis by A1,Lm10;
 end;
 
-Lm16:
+Lm15:
   X is p-Semisimple implies for x,y,z st y\x=z\x holds y=z
 proof
   assume A1:X is p-Semisimple;
   let x,y,z;
   assume A2:y\x=z\x;
-A3:y\z=(y\x)\(z\x) by Lm13,A1
+A3:y\z=(y\x)\(z\x) by A1,Lm12
     .=0.X by A2,Def5;
-      z\y=(z\x)\(y\x) by Lm13,A1
+      z\y=(z\x)\(y\x) by A1,Lm12
     .=0.X by A2,Def5;
   hence thesis by A3,Def7;
 end;
@@ -1782,7 +1788,7 @@ theorem
    X is p-Semisimple iff (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x))
 proof
  thus X is p-Semisimple implies
-      (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x))by Lm11;
+      (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x))by Lm10;
  thus (for x,y,z,u holds (x\u)\(z\y) = (y\u)\(z\x)) implies
         X is p-Semisimple
  proof
@@ -1802,7 +1808,7 @@ theorem  Th59:
   X is p-Semisimple iff (for x,z holds z`\x` = x\z)
 proof
   thus X is p-Semisimple implies
-      (for x,z holds z`\x` = x\z) by Lm12;
+      (for x,z holds z`\x` = x\z) by Lm11;
    assume A1:for x,z holds z`\x` = x\z;
     for x holds x`` = x
    proof
@@ -1844,7 +1850,7 @@ proof
   let x,u,z;
    (z\(z\(x\u)))\(x\u)=0.X by Th1
   .= (x\u)\(x\u) by Def5;
-  hence thesis by Lm16,A1;
+  hence thesis by A1,Lm15;
  end;
  assume A2:for x,u,z holds z\(z\(x\u)) = x\u;
   now let x;
@@ -1875,7 +1881,7 @@ assume A2:for x st x`=0.X holds x=0.X;
     .=0.X by Def5;
     then A3: x\((x)`)`=0.X by A2;
       ((x)`)`\x=0.X by Th1;
-    hence thesis by Def7,A3;
+    hence thesis by A3,Def7;
    end;
    hence thesis by Th54;
 end;
@@ -1898,7 +1904,7 @@ theorem
    X is p-Semisimple iff (for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u))
 proof
  thus X is p-Semisimple implies
-          (for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u))by Lm11;
+          (for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u))by Lm10;
  assume A1:for x,y,z,u holds (x\y)\(z\u)=(x\z)\(y\u);
   for x,z holds z`\x` = x\z
  proof
@@ -1916,7 +1922,7 @@ theorem
    X is p-Semisimple iff (for x,y,z holds (x\y)\(z\y)=x\z)
 proof
  thus X is p-Semisimple implies
-               (for x,y,z holds (x\y)\(z\y)=x\z)by Lm13;
+               (for x,y,z holds (x\y)\(z\y)=x\z)by Lm12;
  assume A1:for x,y,z holds (x\y)\(z\y)=x\z;
    for x,z holds z`\x` = x\z
  proof
@@ -1932,7 +1938,7 @@ theorem
    X is p-Semisimple iff (for x,y,z holds x\(y\z)=(z\y)\x`)
 proof
 thus X is p-Semisimple implies
-         (for x,y,z holds x\(y\z)=(z\y)\x`)by Lm15;
+         (for x,y,z holds x\(y\z)=(z\y)\x`)by Lm14;
   assume A1:for x,y,z holds x\(y\z)=(z\y)\x`;
    for x,y holds x\y`=y\x`
   proof
@@ -1947,7 +1953,7 @@ theorem
    X is p-Semisimple iff (for x,y,z st y\x=z\x holds y=z)
 proof
  thus X is p-Semisimple implies
-          (for x,y,z st y\x=z\x holds y=z)by Lm16;
+          (for x,y,z st y\x=z\x holds y=z)by Lm15;
    assume A1:for x,y,z st y\x=z\x holds y=z;
    for x,y holds x\(x\y) = y
   proof let x,y;
@@ -1962,7 +1968,7 @@ theorem
    X is p-Semisimple iff (for x,y,z st x\y=x\z holds y=z)
 proof
  thus X is p-Semisimple implies
-        (for x,y,z st x\y=x\z holds y=z)by Lm14;
+        (for x,y,z st x\y=x\z holds y=z)by Lm13;
  assume A1:for x,y,z st x\y=x\z holds y=z;
   for x st x`=0.X holds x=0.X
  proof
@@ -2021,7 +2027,7 @@ proof
             hence thesis by A1;
           end;
    end;
-   hence thesis by Th1,Def26,A2,A3;
+   hence thesis by A2,A3,Def26,Th1;
 end;
 
 theorem
@@ -2031,7 +2037,7 @@ proof
   let X be non empty BCIStr_0;
   thus X is p-Semisimple BCI-algebra implies
    (X is_I & for x,y,z being Element of X holds x\(y\z)=z\(y\x) & x\0.X=x)
-      by Th57,Th2;
+      by Th2,Th57;
    assume
    A1:X is_I & for x,y,z being Element of X holds x\(y\z)=z\(y\x) & x\0.X=x;
    A2:X is_BCI-4
@@ -2067,12 +2073,12 @@ proof
       hence thesis by A1;
     end;
    end;
-   hence thesis by Th1,Def26,A1,A2;
+   hence thesis by A1,A2,Def26,Th1;
 end;
 
 begin :: Several Classes of BCI-algebra----quasi-associative BCI-algebra
 
-Lm17:(for x being Element of X holds x`<=x) implies
+Lm16:(for x being Element of X holds x`<=x) implies
                  for x,y being Element of X holds (x\y)`=(y\x)`
 proof
       assume A1:for x being Element of X holds x`<=x;
@@ -2096,7 +2102,7 @@ proof
      hence thesis by A2,Def7;
 end;
 
-Lm18:(for x,y being Element of X holds (x\y)`=(y\x)`)implies
+Lm17:(for x,y being Element of X holds (x\y)`=(y\x)`)implies
                 (for x,y being Element of X holds x`\y=(x\y)`)
 proof
     assume A1:for x,y being Element of X holds (x\y)`=(y\x)`;
@@ -2108,7 +2114,7 @@ proof
                   .=x`\y by Th7;
 end;
 
-Lm19:(for x,y being Element of X holds x`\y=(x\y)`) implies
+Lm18:(for x,y being Element of X holds x`\y=(x\y)`) implies
                (for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))
 proof
   assume A1:for x,y being Element of X holds x`\y=(x\y)`;
@@ -2123,7 +2129,7 @@ proof
     hence thesis;
 end;
 
-Lm20:(for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))implies
+Lm19:(for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X))implies
               X is quasi-associative
 proof
      assume A1:for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X);
@@ -2147,7 +2153,7 @@ proof
      hence thesis by Def21;
 end;
 
-Lm21:(for x being Element of X holds x`<=x) iff
+Lm20:(for x being Element of X holds x`<=x) iff
              (for x,y,z being Element of X holds (x\y)\z<=x\(y\z))
 proof
 thus (for x being Element of X holds x`<=x) implies
@@ -2163,7 +2169,7 @@ A3: ((x\y)\z)\(x\(y\z)) = ((x\y)\(x\(y\z)))\z by Th7
  then ((x\(x\(y\z)))\y)\((y\z)\y) =0.X by Th4;
  then ((x\y)\z)\(x\(y\z))\(((y\z)\y)\z) =0.X by A3,Th4;
  then ((x\y)\z)\(x\(y\z))\(((y\y)\z)\z) =0.X by Th7;
- then ((x\y)\z)\(x\(y\z))\0.X =0.X by Def5,A2;
+ then ((x\y)\z)\(x\(y\z))\0.X =0.X by A2,Def5;
  then ((x\y)\z)\(x\(y\z)) =0.X by Th2;
  hence thesis by Def11;
 end;
@@ -2185,14 +2191,14 @@ thus X is quasi-associative implies (for x being Element of X holds x`<=x)
   assume A1:X is quasi-associative;
   let x be Element of X;
     (x`)`\x=0.X by Th1;
-  then x`\x=0.X by Def21,A1;
+  then x`\x=0.X by A1,Def21;
   hence thesis by Def11;
 end;
    assume for x being Element of X holds x`<=x;
-   then for x,y being Element of X holds (x\y)`=(y\x)` by Lm17;
-   then for x,y being Element of X holds x`\y=(x\y)` by Lm18;
-   then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm19;
-   hence thesis by Lm20;
+   then for x,y being Element of X holds (x\y)`=(y\x)` by Lm16;
+   then for x,y being Element of X holds x`\y=(x\y)` by Lm17;
+   then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm18;
+   hence thesis by Lm19;
 end;
 
 theorem Th72:
@@ -2204,12 +2210,12 @@ proof
  proof
     assume X is quasi-associative;
     then for x being Element of X holds x`<=x by Th71;
-    hence thesis by Lm17;
+    hence thesis by Lm16;
  end;
   assume for x,y being Element of X holds (x\y)`=(y\x)`;
-  then for x,y being Element of X holds x`\y=(x\y)` by Lm18;
-  then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm19;
-  hence thesis by Lm20;
+  then for x,y being Element of X holds x`\y=(x\y)` by Lm17;
+  then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm18;
+  hence thesis by Lm19;
 end;
 
 theorem Th73:
@@ -2220,11 +2226,11 @@ proof
      implies (for x,y being Element of X holds x`\y=(x\y)`)
   proof assume X is quasi-associative;
   then for x,y being Element of X holds (x\y)`=(y\x)` by Th72;
-  hence thesis by Lm18;
+  hence thesis by Lm17;
   end;
   assume for x,y being Element of X holds x`\y=(x\y)`;
-  then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm19;
-  hence thesis by Lm20;
+  then for x,y being Element of X holds (x\y)\(y\x) in BCK-part(X)by Lm18;
+  hence thesis by Lm19;
 end;
 
 theorem
@@ -2236,9 +2242,9 @@ proof
    proof
     assume X is quasi-associative;
     then for x,y being Element of X holds x`\y=(x\y)` by Th73;
-    hence thesis by Lm19;
+    hence thesis by Lm18;
    end;
- thus thesis by Lm20;
+ thus thesis by Lm19;
 end;
 
 theorem
@@ -2250,10 +2256,10 @@ proof
     proof
       assume X is quasi-associative;
       then for x being Element of X holds x`<=x by Th71;
-      hence thesis by Lm21;
+      hence thesis by Lm20;
     end;
     assume for x,y,z being Element of X holds (x\y)\z<=x\(y\z);
-    then for x being Element of X holds x`<=x by Lm21;
+    then for x being Element of X holds x`<=x by Lm20;
     hence thesis by Th71;
 end;
 
@@ -2264,21 +2270,21 @@ theorem Th76:
 proof
    assume A1:X is alternative;
    thus x` = x
-   proof x\(x\x) = (x\x)\x by Def27,A1;
+   proof x\(x\x) = (x\x)\x by A1,Def27;
     then x\0.X = (x\x)\x by Def5;
     then x\0.X = x` by Def5;
     hence thesis by Th2;
    end;
    thus x\(x\y) = y
    proof
-      y\(y\y) = (y\y)\y by Def27,A1;
+      y\(y\y) = (y\y)\y by A1,Def27;
      then y\0.X = (y\y)\y by Def5;
      then y\0.X = y` by Def5;
      then A2:y = y` by Th2;
-      x\(x\y) = (x\x)\y by Def27,A1;
-     hence thesis by Def5,A2;
+      x\(x\y) = (x\x)\y by A1,Def27;
+     hence thesis by A2,Def5;
    end;
-     (x\y)\y=x\(y\y) by Def27,A1;
+     (x\y)\y=x\(y\y) by A1,Def27;
     then (x\y)\y=x\0.X by Def5;
     hence thesis by Th2;
 end;
@@ -2291,8 +2297,8 @@ proof
   then (x\x)\a=(x\x)\b by A1,Def27;
   then a`=(x\x)\b by Def5;
   then a`=b` by Def5;
-  then a=b` by Th76,A1;
-  hence thesis by Th76,A1;
+  then a=b` by A1,Th76;
+  hence thesis by A1,Th76;
 end;
 
 theorem
@@ -2325,13 +2331,13 @@ proof
   then (x\a)\0.X = b` by Def5;
   then x\a = b` by Th2;
   then x\(x\a) = x\b by A1,Th76;
-  then (x\x)\a = x\b by Def27,A1;
+  then (x\x)\a = x\b by A1,Def27;
   then a` = x\b by Def5;
   then a=x\b by A1,Th76;
   hence thesis by A1,Th76;
 end;
 
-Lm22:
+Lm21:
   X is alternative iff X is associative
 proof
   thus X is alternative implies X is associative
@@ -2342,19 +2348,19 @@ proof
      let x,y,z be Element of X;
       ((x\y)\z)\(x\(y\z))=((x\y)\(x\(y\z)))\z by Th7;
      then ((x\y)\z)\(x\(y\z))=((x\(x\(y\z)))\y)\z by Th7;
-     then ((x\y)\z)\(x\(y\z))=(((x\x)\(y\z))\y)\z by Def27,A1;
+     then ((x\y)\z)\(x\(y\z))=(((x\x)\(y\z))\y)\z by A1,Def27;
      then ((x\y)\z)\(x\(y\z))=(((y\z)`)\y)\z by Def5;
-     then ((x\y)\z)\(x\(y\z))=((y\z)\y)\z by Th76,A1;
+     then ((x\y)\z)\(x\(y\z))=((y\z)\y)\z by A1,Th76;
      then ((x\y)\z)\(x\(y\z))=((y\y)\z)\z by Th7;
      then ((x\y)\z)\(x\(y\z))=z`\z by Def5;
-     then A2:((x\y)\z)\(x\(y\z))=0.X by Th76,A1;
+     then A2:((x\y)\z)\(x\(y\z))=0.X by A1,Th76;
 A3:  (x\(y\z))\((x\y)\z)=(((x\y)\y)\(y\z))\((x\y)\z) by A1,Th76
       .=(((x\y)\y)\((x\y)\z))\(y\z) by Th7;
         (((x\y)\y)\((x\y)\z))\(z\y)=0.X by Th1;
   then ((((x\y)\y)\((x\y)\z))\(y\z))\((z\y)\(y\z))=0.X by Th4;
   then ((((x\y)\y)\((x\y)\z))\(y\z))\((z\(y\z))\y)=0.X by Th7;
-  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y)=0.X by Th76,A1;
-  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y`)=0.X by Th76,A1;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y)=0.X by A1,Th76;
+  then ((((x\y)\y)\((x\y)\z))\(y\z))\((z`\(y\z))\y`)=0.X by A1,Th76;
   then ((((x\y)\y)\((x\y)\z))\(y\z))\0.X=0.X by Def3;
   then (x\(y\z))\((x\y)\z)=0.X by A3,Th2;
   hence thesis by A2,Def7;
@@ -2367,7 +2373,7 @@ A3:  (x\(y\z))\((x\y)\z)=(((x\y)\y)\(y\z))\((x\y)\z) by A1,Th76
   hence thesis by Def27;
 end;
 
-Lm23:
+Lm22:
   X is alternative implies X is implicative
 proof
   assume X is alternative;
@@ -2377,11 +2383,11 @@ end;
 
 registration
   cluster alternative -> associative BCI-algebra;
-  coherence by Lm22;
+  coherence by Lm21;
   cluster associative -> alternative BCI-algebra;
-  coherence by Lm22;
+  coherence by Lm21;
   cluster alternative -> implicative BCI-algebra;
-  coherence by Lm23;
+  coherence by Lm22;
 end;
 
 theorem
@@ -2389,7 +2395,7 @@ theorem
 proof
   assume A1:X is alternative;
   then x\(x\y)=y by Th76;
-  hence thesis by Th76,A1;
+  hence thesis by A1,Th76;
 end;
 
 theorem
@@ -2405,31 +2411,31 @@ end;
 begin
 :: Several Classes of BCI-algebra-
 ::-implicative & positive-implicative & weakly-positive-implicative BCI-algebra
-Lm24:
+Lm23:
   X is associative implies X is weakly-positive-implicative
 proof
   assume A1:X is associative;
    for x,y,z being Element of X holds (x\y)\z=((x\z)\z)\(y\z)
   proof
      let x,y,z be Element of X;
-      (x\y)\z=x\(y\z) by Def20,A1;
+      (x\y)\z=x\(y\z) by A1,Def20;
      then (x\y)\z=(x\0.X)\(y\z) by Th2;
      then (x\y)\z=(x\(z\z))\(y\z) by Def5;
-   hence thesis by Def20,A1;
+   hence thesis by A1,Def20;
   end;
   hence thesis by Def23;
 end;
 
-Lm25: X is p-Semisimple BCI-algebra implies
+Lm24: X is p-Semisimple BCI-algebra implies
     X is weakly-positive-implicative BCI-algebra
 proof
  assume A1: X is p-Semisimple BCI-algebra;
   for x,y,z being Element of X holds (x\y)\z=((x\z)\z)\(y\z)
  proof
   let x,y,z be Element of X;
-   ((x\z)\z)\(y\z)=(x\z)\y by A1,Lm13
+   ((x\z)\z)\(y\z)=(x\z)\y by A1,Lm12
   .=(x\z)\(y\0.X) by Th2
-  .=(x\y)\(z\0.X) by A1,Lm11;
+  .=(x\y)\(z\0.X) by A1,Lm10;
   hence thesis by Th2;
  end;
  hence thesis by Def23;
@@ -2437,9 +2443,9 @@ end;
 
 registration
   cluster associative -> weakly-positive-implicative BCI-algebra;
-  coherence by Lm24;
+  coherence by Lm23;
   cluster p-Semisimple -> weakly-positive-implicative BCI-algebra;
-  coherence by Lm25;
+  coherence by Lm24;
 end;
 
 theorem
@@ -2451,7 +2457,7 @@ proof
  let X be non empty BCIStr_0;
  thus X is implicative BCI-algebra implies (for x,y,z being Element of X holds
            ((x\y)\(x\z))\(z\y)=0.X & x\0.X=x & (x\(x\y))\(y\x)=y\(y\x))
-           by Th1,Th2,Def24;
+           by Def24,Th1,Th2;
  thus (for x,y,z being Element of X holds
               ((x\y)\(x\z))\(z\y)=0.X & x\0.X=x & (x\(x\y))\(y\x)=y\(y\x))
            implies X is implicative BCI-algebra
@@ -2487,7 +2493,7 @@ proof
       hence thesis by A1;
     end;
    end;
-   hence thesis by Th1,Def24,A1,A2,A3;
+   hence thesis by A1,A2,A3,Def24,Th1;
 end;
 end;
 
@@ -2521,12 +2527,12 @@ proof
   then (((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\y)\(((y\z)\z`)\(y\0.X))=0.X by Th2;
    then (((((x\z)\z)\(((x\z)\z)\(y\z)))\z`)\y)\0.X=0.X by Def3;
    then ((x\y)\z)\(((x\z)\z)\(y\z))=0.X by A4,Th2;
-   hence thesis by Def7,A3;
+   hence thesis by A3,Def7;
   end;
   hence thesis by Def23;
 end;
 
-Lm26:
+Lm25:
    X is weakly-positive-implicative implies
                      (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y)
 proof
@@ -2539,19 +2545,19 @@ proof
   then (((x\(x\y))\(x\y))\((x\y)`))\((y\(x\y))\((x\y)`))=0.X by Th4;
   then ((((x\(x\y))\(x\y))\((x\y)`))\(y\x))\(((y\(x\y))
                                         \((x\y)`))\(y\x))=0.X by Th4;
-  then ((x\(x\y))\(y\x))\(((y\(x\y))\((x\y)`))\(y\x))=0.X by Th84,A1;
+  then ((x\(x\y))\(y\x))\(((y\(x\y))\((x\y)`))\(y\x))=0.X by A1,Th84;
   then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\((x\y)`\(y\x)))
-                                                  =0.X by Def23,A1;
+                                                  =0.X by A1,Def23;
   then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\(((x\x)\(x\y))\(y\x)))
                                                   =0.X by Def5;
   then ((x\(x\y))\(y\x))\((((y\(x\y))\(y\x))\(y\x))\0.X) =0.X by Th1;
   then ((x\(x\y))\(y\x))\(((y\(x\y))\(y\x))\(y\x)) =0.X by Th2;
   then ((x\(x\y))\(y\x))\(((y\(y\x))\(x\y))\(y\x)) =0.X by Th7;
   then ((x\(x\y))\(y\x))\(((y\(y\x))\(y\x))\(x\y))=0.X by Th7;
-  hence thesis by Def7,A2;
+  hence thesis by A2,Def7;
 end;
 
-Lm27:
+Lm26:
   X is positive-implicative iff X is weakly-positive-implicative
 proof
    thus X is positive-implicative implies X is weakly-positive-implicative
@@ -2579,7 +2585,7 @@ proof
      (y\(y\x))\x = 0.X by Th1;
     then (x\x)\(x\(y\(y\x)))=0.X by Th4;
     then (x\(y\(y\x)))`=0.X by Def5;
-    then x\(x\(y\(y\x)))=((x\(x\(y\(y\x))))\(x\(y\(y\x))))\0.X by Th84,A2;
+    then x\(x\(y\(y\x)))=((x\(x\(y\(y\x))))\(x\(y\(y\x))))\0.X by A2,Th84;
     then x\(x\(y\(y\x)))=(x\(x\(y\(y\x))))\(x\(y\(y\x))) by Th2;
     then (x\(x\(y\(y\x))))\( (y\(y\x))\(x\(y\(y\x))) )=0.X by Th1;
     then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
@@ -2587,10 +2593,10 @@ proof
     then A3:((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))
          \(((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\(x\(y\(y\x))))=0.X by Th7;
     A4: (x\(x\(y\(y\x)))) \ ((x\(x\y))\(y\x))
-     =(x\(x\(y\(y\x)))) \ (((y\(y\x))\(y\x))\(x\y)) by Lm26,A2;
+     =(x\(x\(y\(y\x)))) \ (((y\(y\x))\(y\x))\(x\y)) by A2,Lm25;
         ((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\((x\y)\(y\x)`)
     =((((y\(y\x))\(y\x))\((y\x)`))\(((y\(y\x))\(y\x))\(x\y)))
-        \((x\y)\((y\x)`)) by Th84,A2
+        \((x\y)\((y\x)`)) by A2,Th84
    .=0.X by Th1;
     then (((y\(y\x))\(((y\(y\x))\(y\x))\(x\y)))\(x\(y\(y\x))))
           \(((x\y)\((y\x)`))\(x\(y\(y\x))))=0.X by Th4;
@@ -2600,15 +2606,15 @@ proof
          \(((x\y)\(x\(y\(y\x))))\((y\x)`))=0.X by Th7;
         ((x\y)\(x\(y\(y\x))))\((y\(y\x))\y)=0.X by Th1;
   then ((x\y)\(x\(y\(y\x))))\((y\y)\(y\x))=0.X by Th7;
-  then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))\0.X=0.X by Def5,A5;
+  then ((x\(x\(y\(y\x)))))\(((y\(y\x))\(y\x))\(x\y))\0.X=0.X by A5,Def5;
   then A6:(x\(x\(y\(y\x))))\((x\(x\y))\(y\x))=0.X by A4,Th2;
    ((x\(x\y))\(y\x))\(x\(x\(y\(y\x))))=0.X by Th10;
-  hence thesis by Def7,A6;
+  hence thesis by A6,Def7;
   end;
    hence thesis by Def22;
 end;
 
-Lm28:
+Lm27:
   X is alternative implies X is weakly-positive-implicative
 proof
   assume A1:X is alternative;
@@ -2623,15 +2629,15 @@ end;
 
 registration
   cluster positive-implicative -> weakly-positive-implicative BCI-algebra;
-  coherence by Lm27;
+  coherence by Lm26;
   cluster alternative -> weakly-positive-implicative BCI-algebra;
-  coherence by Lm28;
+  coherence by Lm27;
 end;
 
 theorem
    X is weakly-positive-implicative BCI-algebra implies
      for x,y being Element of X holds (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y)
-     by Lm26;
+     by Lm25;
 
 theorem
    for X being non empty BCIStr_0 holds (X is positive-implicative BCI-algebra
@@ -2647,7 +2653,7 @@ proof
                 & x\0.X=x
                 & x\y=((x\y)\y)\y`
                 & (x\(x\y))\(y\x)=((y\(y\x))\(y\x))\(x\y))
-                by Th84,Th1,Lm26,Th2;
+                by Lm25,Th1,Th2,Th84;
    assume
 A1:(for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X
                 & x\0.X=x
@@ -2683,6 +2689,6 @@ A3: X is_BCI-4
      then (x\(x\y))\(y\0.X)=0.X by A1;
      hence (x\(x\y))\y = 0.X by A1;
    end;
- then X is weakly-positive-implicative BCI-algebra by A1,Th84,Th1,A2,A3;
-hence thesis by Lm27;
+ then X is weakly-positive-implicative BCI-algebra by A1,A2,A3,Th1,Th84;
+ hence thesis by Lm26;
 end;
