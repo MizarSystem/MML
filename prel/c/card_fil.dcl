@@ -17,7 +17,6 @@ SETFAM_1
 CARD_5
 CARD_FIL
 #
-«V5 ;V6 ;V7 ;V8 ;;;M1 ;
 «W11 ;W25 A1 ;V26 A1 ;;M1 W19 ;;;M9 A1 ;
 «V5 ;V6 ;V7 ;W11 ;W19 ;V20 ;W21 ;;;M1 ;
 fV5 ;V6 ;V7 ;W11 ;W19 ;V20 ;;M1 W19 ;;;K76 A1 ;

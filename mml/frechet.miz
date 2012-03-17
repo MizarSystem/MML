@@ -36,13 +36,13 @@ proof
   let n be Nat;
   assume
 A1:  n<>0;
-       n >= 0 by NAT_1:18;
+   n >= 0 by NAT_1:18;
   hence 1/n>0 by A1,REAL_2:127;
 end;
 
 Lm2:
 for r being Real st r>0
-  ex n being Nat st 1/n < r & n<>0
+  ex n being Nat st 1/n < r & n > 0
 proof
   let r be Real;
   assume
@@ -50,10 +50,11 @@ A1:  r>0;
   consider n being Nat such that
 A2:  1/r < n by SEQ_4:10;
   take n;
-       1/r > 0 by A1,REAL_2:127;
+  1/r > 0 by A1,REAL_2:127;
   then 1/(1/r) > 1/n by A2,REAL_2:151;
   hence 1/n < r by XCMPLX_1:56;
-  thus n <> 0 by A1,A2,REAL_2:127;
+  n <> 0 by A1,A2,REAL_2:127;
+  hence n > 0 by NAT_1:19;
 end;
 
 ::
@@ -205,7 +206,7 @@ A9: for A being Subset of T holds
     proof
         let A be Subset of T;
         assume A in COMPLEMENT(G);
-        then A` in G' by YELLOW_8:13;
+        then A` in G' by SETFAM_1:def 8;
         then [#]T \ A` is closed by A9;
         then [#]T \([#]T \ A) is closed by PRE_TOPC:17;
         hence A is closed by PRE_TOPC:22;
@@ -236,7 +237,6 @@ A11:     B in the topology of T;
       then (A /\ B) is open by Lm3;
       hence thesis by PRE_TOPC:def 5;
     end;
-
    hence thesis by A4,A5,PRE_TOPC:def 1;
   end;
 
@@ -696,7 +696,7 @@ A11:   Ball(x',r) c= O by A1,TOPMETR:22;
     reconsider r as Real by XREAL_0:def 1;
     consider n being Nat such that
 A12:   1/n < r and
-A13:   n <> 0 by A10,Lm2;
+A13:   n > 0 by A10,Lm2;
     A14: Ball(x',1/n) c= Ball(x',r) by A12,PCOMPS_1:1;
     reconsider Ba=Ball(x',1/n) as Subset of
       TopSpaceMetr(M) by TOPMETR:16;
@@ -2325,15 +2325,14 @@ A49:      Ball(k',r) c= U2 by A47,TOPMETR:22,def 7;
         reconsider r as Real by XREAL_0:def 1;
         consider n being Nat such that
 A50:      1/n < r and
-A51:      n <> 0 by A48,Lm2;
+A51:      n > 0 by A48,Lm2;
         take n;
         thus for m being Nat st n <= m holds S'.m in U1
         proof
           let m be Nat;
-          assume
-                 n <= m;
+          assume n <= m;
           then A52:        n < m + 1 by NAT_1:38;
-               n > 0 by A51,NAT_1:19;
+               n > 0 by A51;
           then 1/(m+1) < 1/n by A52,REAL_2:151;
           then 1/(m+1) < r by A50,AXIOMS:22;
           then Ball(k',1/(m+1)) c= Ball(k',r) by PCOMPS_1:1;
@@ -2479,4 +2478,4 @@ begin
 canceled 2;
 
 theorem
-       for r being Real st r>0 ex n being Nat st (1/n < r & n<>0) by Lm2;
+       for r being Real st r>0 ex n being Nat st (1/n < r & n>0) by Lm2;

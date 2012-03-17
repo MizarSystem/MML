@@ -447,7 +447,16 @@ A3:  j + (- j) = 0;
    hence contradiction by A1,A2,A3,AXIOMS:24;
   end;
 
-canceled;
+theorem Th39:
+  for j being natural number holds j < 1 implies j = 0
+ proof
+  let j be natural number;
+  assume j < 1;
+    then j < 0 + 1;
+    then A1: j <= 0 by Th38;
+   assume j <> 0;
+  hence thesis by A1,Th18;
+ end;
 
 theorem
  Th40: i * j = 1 implies i = 1 & j = 1
@@ -465,6 +474,19 @@ A3:  j = l + 1 by Th22;
     then m * l + m = 0 & l = 0 by Th23;
    hence thesis by A2,A3;
   end;
+
+theorem Th41:
+  for k, n being natural number holds k <> 0 implies n < n + k
+ proof
+  let k, n be natural number;
+  assume A1: k <> 0;
+   A2: now assume n = n + k;
+     then n + 0 = n + k;
+    hence contradiction by A1,XCMPLX_1:2;
+   end;
+    n <= n + k & n <= k + n by Th37;
+  hence n < n + k by A2,REAL_1:def 5;
+ end;
 
 scheme Regr { P[Nat] } :
  P[0]
@@ -486,8 +508,6 @@ A4:  _P[k] & for n st _P[n] holds k <= n from Min(A3);
 :: Exact division and rest of division
 
  reserve k1,t,t1 for Nat;
-
-canceled;
 
 theorem
  Th42:  for m st 0 < m for n ex k,t st n = (m*k)+t & t < m
@@ -997,12 +1017,184 @@ A36:       m divides Q(k) & m divides Q(k + 1);
   end;
 
 registration
- cluster -> ordinal Nat;
- coherence;
+  cluster -> ordinal Nat;
+  coherence;
 end;
 
 registration
- cluster non empty ordinal Subset of REAL;
+  cluster non empty ordinal Subset of REAL;
   existence proof take NAT; thus thesis; end;
 end;
+
+theorem
+  for k, n being natural number holds
+    k < k + n iff 1 <= n
+ proof
+  let k, n be natural number;
+  thus k < k + n implies 1 <= n
+   proof assume A1: k < k + n;
+     assume not 1 <= n;
+      then n = 0 by Th39;
+    hence thesis by A1;
+   end;
+   assume 1 <= n;
+    then 0 <> n;
+  hence thesis by Th41;
+ end;
+
+theorem
+  for k, n being natural number holds
+    k < n implies n - 1 is Nat
+ proof
+   let k, n be natural number;
+   assume k < n;
+   then k + 1 <= n by Th38;
+   then consider j being Nat such that A1: n = k + 1 + j by Th28;
+   n - 1 = k + j by A1;
+   hence thesis by ORDINAL2:def 21;
+ end;
+
+theorem Th61:
+  for k, n being natural number holds
+    k <= n implies n - k is Nat
+ proof
+   let k, n be natural number;
+   assume
+A1: k <= n;
+   per cases by A1, REAL_1:def 5;
+   suppose k < n;
+   then k + 1 <= n by Th38;
+   then consider j being Nat such that A1: n = k + 1 + j by Th28;
+   n - k = 1 + j by A1;
+   hence thesis;
+   end;
+   suppose k = n; then
+   n - k = 0;
+   hence thesis;
+   end;
+ end;
+
+theorem
+Lm4: for n being natural number holds n mod 2 = 0 or n mod 2 = 1
+ proof
+  let n be natural number;
+  assume A1: n mod 2 <> 0;
+    2 = 1 + 1 & n mod 2 < 2 by Th46;
+   then n mod 2 <= 1 & n mod 2 >= 1 by A1,Th38,Th39;
+  hence n mod 2 = 1 by AXIOMS:21;
+ end;
+
+theorem Lm5:
+ for k, n being natural number holds (k * n) mod k = 0
+ proof
+  let k, n be natural number;
+  reconsider k,n as Nat by ORDINAL2:def 21;
+     now per cases;
+    suppose k = 0;
+     hence thesis by Def2;
+    end;
+    suppose k <> 0;
+      then k * n = k * n + 0 & 0 < k by Th18;
+     hence thesis by Def2;
+   end;
+   end;
+  hence thesis;
+ end;
+
+theorem Lm6:
+  for k, l being natural number holds k > 1 implies 1 mod k = 1
+ proof
+  let k, l be natural number;
+  assume A1: k > 1;
+      1 = k * 0 + 1;
+  hence thesis by A1,Def2;
+ end;
+
+theorem Lm7:
+  for k, l, n, m being natural number holds
+    k mod n = 0 & l = k - m * n implies l mod n = 0
+ proof
+  let k, l, n, m be natural number;
+  assume that A1: k mod n = 0 and A2: l = k - m * n;
+      now per cases;
+    suppose n = 0;
+     hence thesis by A1,A2;
+    end;
+    suppose n <> 0;
+      then consider t being Nat such that
+A3:    k = n * t + 0 and A4: 0 < n by A1,Def2;
+       A5: l = n * (t - m) + 0 by A2,A3;
+       now assume t < m + 0; then
+         t - m < 0 by REAL_1:84;
+         then l < n * 0 by A4,A5,REAL_1:70;
+        hence contradiction by Th18;
+       end;
+       then t - m is Nat by Th61;
+    hence thesis by A4,A5,Def2;
+   end;
+   end;
+  hence thesis;
+ end;
+
+theorem Lm8:
+  for k,l,n being natural number holds n <> 0 & k mod n = 0 & l < n
+implies k + l mod n = l
+ proof
+   let k,l,n be natural number;
+A1: l is Nat by ORDINAL2:def 21;
+   assume that A2: n <> 0 and A3: k mod n = 0 and A4: l < n;
+    ex t being Nat st k = n * t + 0 & 0 < n by A2,A3,Def2;
+  hence thesis by A1,A4,Def2;
+ end;
+
+theorem Lm9:
+  for k,l,n being natural number holds k mod n = 0 implies
+    k + l mod n = l mod n
+ proof
+   let k,l,n be natural number;
+   assume that A1: k mod n = 0;
+      now per cases;
+    suppose
+A2:     n = 0;
+     hence k + l mod n = 0 by Def2
+          .= l mod n by A2,Def2;
+    end;
+    suppose A3: n <> 0;
+      then consider m such that A4: k = n * m + 0 & 0 < n by A1,Def2;
+      consider t being Nat such that
+A5:    l = n * t + (l mod n) & l mod n < n by A3,Def2;
+          k + l = n * (m + t) + (l mod n) by A4,A5;
+    hence thesis by A5,Def2;
+   end;
+   end;
+  hence thesis;
+ end;
+
+theorem Lm10:
+  for k,n being natural number holds k <> 0 implies (k * n) div k = n
+ proof let k,n be natural number;
+A1: n is Nat by ORDINAL2:def 21;
+  assume k <> 0;
+   then k * n = k * n + 0 & 0 < k by Th18;
+  hence thesis by A1,Def1;
+ end;
+
+theorem Lm11:
+  for k,n,l being natural number holds k mod n = 0 implies
+  (k + l) div n = (k div n) + (l div n)
+ proof let k,n,l be natural number; assume A1: k mod n = 0;
+   per cases;
+   suppose A2: n <> 0;
+    A3: 0 <= n by Th18;
+   then A4: k = n * (k div n) + 0 by A1,A2,Th47;
+A5: ex t being Nat st l = n * t + (l mod n) & l mod n < n by A2,Def2;
+      l = n * (l div n) + (l mod n) by A2,A3,Th47;
+   then k + l = n * ((k div n) + (l div n)) + (l mod n) by A4;
+  hence thesis by A5,Def1;
+  end;
+  suppose n = 0;
+  then (k + l) div n = 0 & k div n = 0 & l div n = 0 by Def1;
+  hence thesis;
+  end;
+ end;
 

@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.89 $
+;; $Revision: 1.90 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -679,7 +679,7 @@ Used for exact completion.")
     (cond
      ((looking-at "::::::") 0)		;Large comment starts
      ((looking-at "::") (current-column)) ;Small comment starts
-     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)\\b") 0)
+     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|environ\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\|reserve\\|begin\\)\\b") 0)
      ((bobp) 0)				;Beginning of buffer
      (t
       (let ((empty t) ind more less res)
@@ -706,17 +706,18 @@ Used for exact completion.")
  	    (setq ind 0)		;Beginning of buffer
 	  (setq ind (current-column)))	;Beginning of clause
 	;; See its beginning
-	(if (and more (= ind 2) (string-equal more "proof"))
-	    0                           ;proof begins inside theorem
+;	(if (and more (= ind 2) (string-equal more "proof"))
+;	    0                           ;proof begins inside theorem
 	  ;; Real mizar code
 	  (cond ((looking-at "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b")
 		 (setq res (+ ind mizar-indent-width)))
-		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\)\\b")
+		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|vocabulary\\|constructors\\|requirements\\|notation\\|clusters\\|reserve\\|begin\\)\\b")
 		 (setq res (+ ind 2)))
  		(t (setq res ind)))
 	  (if less (max (- ind mizar-indent-width) 0)
 	    res)
-	  )))
+	  ))
+;)
      )))
 
 

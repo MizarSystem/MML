@@ -12,9 +12,9 @@ environ
       FINSET_1, FINSEQ_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, RLVECT_1,
       REAL_1, RLSUB_1, FRAENKEL, NAT_1, BINOP_1, FINSEQ_4, CARD_1, PRE_TOPC;
  constructors REAL_1, RLSUB_1, DOMAIN_1, FRAENKEL, NAT_1, BINOP_1, FINSEQ_4,
-      PRE_TOPC, XREAL_0, MEMBERED, XBOOLE_0;
+      PRE_TOPC, XREAL_0, MEMBERED, XBOOLE_0, FINSET_1, TARSKI, PARTFUN1;
  clusters RLVECT_1, RLSUB_1, RELSET_1, STRUCT_0, FINSET_1, PRE_TOPC, ARYTM_3,
-      FUNCT_2, MEMBERED, ZFMISC_1, XBOOLE_0;
+      FUNCT_2, MEMBERED, ZFMISC_1, XBOOLE_0, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, RLSUB_1, STRUCT_0, TARSKI, XBOOLE_0;
  theorems BINOP_1, CARD_1, CARD_2, ENUMSET1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
@@ -74,7 +74,6 @@ reserve X,Y,x,y,y1,y2 for set,
         V for RealLinearSpace,
         u,v,v1,v2,v3,w for VECTOR of V,
         a,b for Real,
-
         F,G,H1,H2 for FinSequence of the carrier of V,
         A,B for Subset of V,
         f for Function of the carrier of V, REAL;
@@ -166,7 +165,6 @@ then A12:         dom f c= dom F by FINSEQ_3:32;
              .= Sum(F) + Sum(g) + u by A16,RLVECT_1:def 6
              .= Sum(F) + Sum(G) by A16,RLVECT_1:def 6;
    end;
-
    hence thesis;
    end;
         for k holds P[k] from NAT_1:sch 1(A1,A2);
@@ -251,13 +249,7 @@ A8:   dom F = Seg len F & dom I = Seg len I by FINSEQ_1:def 3;
   hence thesis by A7,RLVECT_1:def 11;
  end;
 
-Lm1: k < n implies n - 1 is Nat
- proof assume k < n;
-    then k + 1 <= n by NAT_1:38;
-   then consider j such that A1: n = k + 1 + j by NAT_1:28;
-        n - 1 = k + j by A1;
-  hence thesis;
- end;
+Lm1: k < n implies n - 1 is Nat by NAT_1:60;
 
 theorem Th8:
  for V being Abelian add-associative right_zeroed right_complementable
@@ -454,7 +446,7 @@ dom g;
                  reconsider j = f.x as Nat by A9,A39,A40,A53,A62;
                       j < 1 or m1 < j by A41,A66,FINSEQ_1:3;
                   then A67: (j = 0 or m1 < j) & f.x in Seg(k + 1)
-                         by A9,A39,A53,A62,FUNCT_1:def 5,RLVECT_1:98;
+                         by A9,A39,A53,A62,FUNCT_1:def 5,NAT_1:39;
                  then reconsider l = j - 1 as Nat by Lm1,FINSEQ_1:3;
                   A68: g.x = j - 1 by A53,A54,A62,A66;
                       m1 + 2 <= j by A55,A62,A66;
@@ -670,11 +662,7 @@ registration let V be 1-sorted;
 end;
 
 Lm2: X is finite & Y is finite implies X \+\ Y is finite
- proof assume X is finite & Y is finite;
-   then X \ Y is finite & Y \ X is finite by FINSET_1:16;
-   then (X \ Y) \/ (Y \ X) is finite by FINSET_1:14;
-    hence thesis by XBOOLE_0:def 6;
- end;
+  by FINSET_1:28;
 
 definition let V be 1-sorted; let S,T be finite Subset of V;
  redefine func S \/ T -> finite Subset of V;
@@ -698,7 +686,7 @@ definition let V be 1-sorted; let S,T be finite Subset of V;
   func S \+\ T -> finite Subset of V;
    coherence
     proof
-          S \+\ T is finite by Lm2;
+          S \+\ T is finite;
      hence thesis;
     end;
 end;
@@ -769,7 +757,7 @@ theorem Th14:
     let V be Abelian add-associative right_zeroed (non empty LoopStr);
     A1: rng(<*>(the carrier of V)) = {}V by FINSEQ_1:27;
         Sum(<*>(the carrier of V)) = 0.V by RLVECT_1:60;
-   hence thesis by A1,Def4,FINSEQ_3:101;
+   hence thesis by A1,Def4;
   end;
 
 theorem
@@ -1095,11 +1083,7 @@ theorem Th35:
 
 Lm3: for f being Function st
           f " X = f " Y & X c= rng f & Y c= rng f holds X = Y
- proof let f be Function;
-   assume that A1: f " X = f " Y and A2: X c= rng f & Y c= rng f;
-        X c= Y & Y c= X by A1,A2,FUNCT_1:158;
-  hence thesis by XBOOLE_0:def 10;
- end;
+           by FUNCT_1:161;
 
 definition let V; let F; let f;
  func f (#) F -> FinSequence of the carrier of V means
@@ -1234,7 +1218,7 @@ definition let V; let L;
  F2);
     set G1 = L (#) F1; set G2 = L (#) F2;
       A9: len F1 = len F2 & len G1 = len F1 & len G2 = len F2
-                                         by A3,A4,A6,A7,Def9,RLVECT_1:106;
+                                         by A3,A4,A6,A7,Def9,FINSEQ_1:65;
       A10: dom F1 = Seg(len F1) & dom F2 = Seg(len F2) by FINSEQ_1:def 3;
       A11: dom(G1) = Seg(len G1) & dom G2 = Seg(len G2) by FINSEQ_1:def 3;
       defpred P[set,set] means {$2} = F1 " {F2.$1};
@@ -1275,7 +1259,7 @@ definition let V; let L;
 def 5
 ;
            then {F2.y1} c= rng F1 & {F2.y2} c= rng F1 by ZFMISC_1:37;
-           then {F2.y1} = {F2.y2} by A22,A24,Lm3;
+           then {F2.y1} = {F2.y2} by A22,A24,FUNCT_1:161;
            then F2.y1 = F2.y2 & y1 in dom F2 & y2 in dom F2
                   by A9,A10,A14,A21,FUNCT_2:def 1,ZFMISC_1:6;
         hence thesis by A6,FUNCT_1:def 8;
@@ -2354,16 +2338,3 @@ definition let V; let A;
  uniqueness by RLSUB_1:38;
 end;
 
-canceled 3;
-
-theorem
-     k < n implies n - 1 is Nat by Lm1;
-
-canceled 3;
-
-theorem
-     X is finite & Y is finite implies X \+\ Y is finite by Lm2;
-
-theorem
-     for f being Function st
-  f " X = f " Y & X c= rng f & Y c= rng f holds X = Y by Lm3;
