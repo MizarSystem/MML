@@ -27,7 +27,6 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="TURING_1"/>
 </Signature>
@@ -37,7 +36,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -54,11 +53,6 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="18"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
 </Cluster>
 </FCluster>
 </Registrations>

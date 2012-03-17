@@ -102,9 +102,6 @@
 <Adjective nr="40">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="41">
-<LocusVar nr="1"/>
-</Adjective>
 </Cluster>
 </CCluster>
 <CCluster>

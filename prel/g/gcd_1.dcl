@@ -23,7 +23,6 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="ALGSTR_1"/>
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="GCD_1"/>
 </Signature>
@@ -49,13 +48,7 @@
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="61"/>
 <Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -78,14 +71,8 @@
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="61"/>
 <Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="73"/>
-<Adjective nr="80"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -100,7 +87,7 @@
 <Adjective nr="47"/>
 <Adjective nr="53"/>
 <Adjective nr="55"/>
-<Adjective nr="80"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -115,7 +102,7 @@
 <Adjective nr="47"/>
 <Adjective nr="53"/>
 <Adjective nr="55"/>
-<Adjective nr="80"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -138,14 +125,8 @@
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="61"/>
 <Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="73"/>
-<Adjective nr="80"/>
+<Adjective nr="69"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -168,13 +149,7 @@
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="61"/>
 <Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -192,7 +167,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="158">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -208,7 +183,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="167">
+<Func kind="K" nr="159">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -293,12 +268,6 @@
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -331,13 +300,7 @@
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="63"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
-<Adjective nr="80"/>
+<Adjective nr="69"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -18,7 +18,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="RFINSEQ"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_5"/>
 </Signature>
 <RCluster>
@@ -239,11 +238,6 @@
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="24"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>

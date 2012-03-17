@@ -56,8 +56,6 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="UNIALG_1"/>
-<ArticleID name="PRALG_1"/>
 <ArticleID name="WAYBEL17"/>
 </Signature>
 <FCluster>
@@ -78,9 +76,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="99"/>
 <Adjective nr="105"/>
-<Adjective nr="189"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -106,18 +102,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
 <Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="93"/>
-<Adjective nr="130"/>
-<Adjective nr="131"/>
-<Adjective nr="174"/>
-<Adjective nr="175"/>
 <Adjective nr="176"/>
 </Cluster>
 </FCluster>
@@ -148,7 +133,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="471">
+<Func kind="K" nr="443">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -183,7 +168,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="444">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -221,7 +206,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="473">
+<Func kind="K" nr="445">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -257,7 +242,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="473">
+<Func kind="K" nr="445">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -293,7 +278,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="473">
+<Func kind="K" nr="445">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

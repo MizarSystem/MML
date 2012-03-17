@@ -367,9 +367,7 @@
 <Adjective nr="51"/>
 <Adjective nr="54"/>
 <Adjective nr="58"/>
-<Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="61"/>
 <Adjective nr="62"/>
 <Adjective nr="69"/>
 <Adjective nr="78"/>

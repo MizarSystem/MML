@@ -20,7 +20,6 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -38,7 +37,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -53,8 +52,8 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -114,11 +113,6 @@
 <Adjective nr="17"/>
 <Adjective nr="20"/>
 <Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -139,7 +133,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -166,7 +160,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -200,7 +194,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -225,7 +219,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -235,7 +229,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -243,7 +237,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -256,7 +250,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -306,8 +300,8 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -316,7 +310,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="42"/>
+<Adjective nr="37"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -326,7 +320,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -345,8 +339,8 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -368,7 +362,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="3"/>
-<Adjective nr="42"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 </Registrations>

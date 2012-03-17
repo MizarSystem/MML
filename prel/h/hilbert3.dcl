@@ -22,7 +22,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="HILBERT1"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="HILBERT3"/>
 </Signature>
@@ -153,7 +152,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -165,11 +164,6 @@
 <Adjective nr="5"/>
 <Adjective nr="6"/>
 <Adjective nr="25"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -422,7 +416,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -543,7 +537,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="41"/>
+<Adjective nr="36"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -553,7 +547,7 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="42"/>
+<Adjective nr="37"/>
 </Cluster>
 </CCluster>
 </Registrations>

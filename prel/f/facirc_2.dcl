@@ -34,7 +34,6 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
@@ -61,9 +60,9 @@
 <Cluster>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="119"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -79,11 +78,11 @@
 <Adjective nr="30" value="false"/>
 <Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="111"/>
-<Adjective nr="119"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
-<Adjective nr="123"/>
+<Adjective nr="106"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -103,16 +102,11 @@
 <Adjective nr="39"/>
 <Adjective nr="40" value="false"/>
 <Adjective nr="41" value="false"/>
-<Adjective nr="85"/>
-<Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="88"/>
-<Adjective nr="89"/>
-<Adjective nr="115"/>
-<Adjective nr="117"/>
-<Adjective nr="125" value="false"/>
-<Adjective nr="126" value="false"/>
-<Adjective nr="127"/>
+<Adjective nr="110"/>
+<Adjective nr="112"/>
+<Adjective nr="120" value="false"/>
+<Adjective nr="121" value="false"/>
+<Adjective nr="122"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -121,7 +115,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="127"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -133,7 +127,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="125" value="false"/>
+<Adjective nr="120" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -164,7 +158,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="125"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -176,9 +170,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="119"/>
-<Adjective nr="120"/>
-<Adjective nr="121"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -190,7 +184,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="125" value="false"/>
+<Adjective nr="120" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

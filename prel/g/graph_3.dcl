@@ -198,7 +198,6 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="20"/>
-<Adjective nr="57"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
@@ -233,7 +232,6 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="20"/>
-<Adjective nr="57"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
@@ -268,7 +266,6 @@
 <Cluster>
 <Adjective nr="12"/>
 <Adjective nr="20"/>
-<Adjective nr="57"/>
 <Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>

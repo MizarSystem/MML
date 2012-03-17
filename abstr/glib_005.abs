@@ -1,0 +1,540 @@
+:: Proof of Ford/Fulkerson's Maximum Network Flow Algorithm
+::  by Gilbert Lee
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, ARYTM, ARYTM_1, ARYTM_3, BOOLE, CARD_1, CAT_1, FINSEQ_1,
+      FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
+      GLIB_001, GLIB_003, GLIB_005, MATRIX_2, MSAFREE2, NAT_1, NEWTON,
+      ORDINAL2, PARTFUN1, PBOOLE, POLYNOM1, PRE_TOPC, REALSET1, RELAT_1,
+      RLVECT_1, SEQ_1, SEQM_3, SGRAPH1, TREES_1, UPROOTS;
+ notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XCMPLX_0, XREAL_0, DOMAIN_1,
+      REAL_1, RELAT_1, PARTFUN1, FUNCT_1, FINSEQ_1, SEQ_1, CARD_1, PBOOLE,
+      CARD_FIL, FUNCT_2, GRAPH_5, ORDINAL1, ORDINAL2, POLYNOM1, UPROOTS,
+      RELSET_1, FINSET_1, NAT_1, CQC_LANG, FUNCT_4, PRE_CIRC, SEQM_3, GLIB_000,
+      GLIB_001, ABIAN, GLIB_002, GLIB_003;
+ constructors GRAPH_5, DOMAIN_1, CARD_FIL, REAL_1, BINOP_2, AMISTD_2, PRE_CIRC,
+      UPROOTS, GLIB_002, GLIB_003;
+ registrations RELSET_1, FINSET_1, XREAL_0, BINARITH, INT_1, ABIAN, FINSEQ_1,
+      NAT_1, FUNCOP_1, AMISTD_2, JORDAN1D, MEMBERED, ORDINAL2, POLYNOM1,
+      BAGORDER, RFINSEQ, GLIB_000, GLIB_001, GLIB_002, GLIB_003;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin ::Preliminary theorems
+
+registration let x be set, y be real number;
+  cluster x.-->y -> real-yielding;
+end;
+
+registration let x be set, y be natural number;
+  cluster x --> y -> natural-yielding;
+end;
+
+registration let f,g be real-yielding Function;
+  cluster f +* g -> real-yielding;
+end;
+
+begin ::Preliminaries definitions for Maximum Flow Algorithm
+
+definition let G be EGraph;
+  attr G is complete-elabeled means
+:: GLIB_005:def 1  ::dCMPELABEL
+    dom the_ELabel_of G = the_Edges_of G;
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector, X) -> complete-elabeled;
+end;
+
+registration let G be _Graph, Y be non empty set,
+                 X be Function of the_Edges_of G, Y;
+  cluster G.set(ELabelSelector, X) -> complete-elabeled;
+end;
+
+definition let GSq be EGraphSeq;
+  attr GSq is complete-elabeled means
+:: GLIB_005:def 2  ::dGSEQCELABEL
+    for x being Nat holds GSq.->x is complete-elabeled;
+end;
+
+definition let G be WGraph;
+  attr G is natural-weighted means
+:: GLIB_005:def 3  ::dNATWEIGHT
+    the_Weight_of G is natural-yielding;
+end;
+
+definition let G be EGraph;
+  attr G is natural-elabeled means
+:: GLIB_005:def 4  ::dNATELABEL
+    the_ELabel_of G is natural-yielding;
+end;
+
+definition let GSq be WGraphSeq;
+  attr GSq is natural-weighted means
+:: GLIB_005:def 5  ::dGSEQNWEIGHT
+    for x being Nat holds GSq.->x is natural-weighted;
+end;
+
+definition let GSq be EGraphSeq;
+  attr GSq is natural-elabeled means
+:: GLIB_005:def 6  ::dGSEQNELABEL
+    for x being Nat holds GSq.->x is natural-elabeled;
+end;
+
+registration
+  cluster natural-weighted -> nonnegative-weighted WGraph;
+end;
+
+registration
+  cluster natural-elabeled -> real-elabeled EGraph;
+end;
+
+registration
+  cluster finite trivial Tree-like natural-weighted
+          natural-elabeled complete-elabeled real-vlabeled WEVGraph;
+end;
+
+registration
+  cluster finite natural-weighted real-WEV natural-elabeled
+          complete-elabeled WEVGraphSeq;
+end;
+
+registration let GSq be complete-elabeled EGraphSeq, x be Nat;
+  cluster GSq.->x -> complete-elabeled;
+end;
+
+registration let GSq be natural-elabeled EGraphSeq, x be Nat;
+  cluster GSq.->x -> natural-elabeled;
+end;
+
+registration let GSq be natural-weighted WGraphSeq, x be Nat;
+  cluster GSq.->x -> natural-weighted;
+end;
+
+registration let G be natural-weighted WGraph;
+  cluster the_Weight_of G -> natural-yielding;
+end;
+
+registration let G be natural-elabeled EGraph;
+  cluster the_ELabel_of G -> natural-yielding;
+end;
+
+definition let G be complete-elabeled EGraph;
+  redefine func the_ELabel_of G -> ManySortedSet of the_Edges_of G;
+end;
+
+registration let G be natural-weighted WGraph, X be set;
+  cluster G.set(ELabelSelector, X) -> natural-weighted;
+  cluster G.set(VLabelSelector, X) -> natural-weighted;
+end;
+
+registration let G be _Graph,
+                 X be natural-yielding ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector, X) -> natural-elabeled;
+end;
+
+definition let G be finite real-weighted
+                    real-elabeled complete-elabeled WEGraph,
+               source,sink be set;
+  pred G has_valid_flow_from source,sink means
+:: GLIB_005:def 7  ::dVFLOW
+     source is Vertex of G & sink is Vertex of G &
+     (for e being set st e in the_Edges_of G holds
+        0 <= (the_ELabel_of G).e &
+             (the_ELabel_of G).e <= (the_Weight_of G).e) &
+     (for v being Vertex of G st v <> source & v <> sink holds
+       Sum ((the_ELabel_of G) | v.edgesIn()) =
+       Sum ((the_ELabel_of G) | v.edgesOut()));
+end;
+
+definition let G be finite real-weighted real-elabeled
+                    complete-elabeled WEGraph, source, sink be set; assume
+ G has_valid_flow_from source,sink; ::
+  func G.flow(source,sink) -> real number equals
+:: GLIB_005:def 8  ::dGFLOW
+    Sum ((the_ELabel_of G) | G.edgesInto({sink})) -
+    Sum ((the_ELabel_of G) | G.edgesOutOf({sink}));
+end;
+
+definition let G be finite real-weighted real-elabeled
+                    complete-elabeled WEGraph, source,sink be set;
+  pred G has_maximum_flow_from source,sink means
+:: GLIB_005:def 9  ::dGMAXFLOW
+    G has_valid_flow_from source,sink &
+    for G2 being finite real-weighted real-elabeled complete-elabeled WEGraph
+     st G2 == G & the_Weight_of G = the_Weight_of G2 &
+        G2 has_valid_flow_from source,sink holds
+        G2.flow(source,sink) <= G.flow(source,sink);
+end;
+
+definition let G be real-weighted real-elabeled WEVGraph, e be set;
+  pred e is_forward_labeling_in G means
+:: GLIB_005:def 10  ::dFORLABEL
+    e in the_Edges_of G &
+    (the_Source_of G).e in G.labeledV() &
+    not (the_Target_of G).e in G.labeledV() &
+    (the_ELabel_of G).e < (the_Weight_of G).e;
+end;
+
+definition let G be real-elabeled EVGraph, e be set;
+  pred e is_backward_labeling_in G means
+:: GLIB_005:def 11  ::dBACKLABEL
+    e in the_Edges_of G &
+    (the_Target_of G).e in G.labeledV() &
+    not (the_Source_of G).e in G.labeledV() &
+    0 < (the_ELabel_of G).e;
+end;
+
+definition let G be real-weighted real-elabeled WEGraph, W be Walk of G;
+  attr W is augmenting means
+:: GLIB_005:def 12  ::dWAUGMENT
+   for n being odd Nat st n < len W holds
+     (W.(n+1) DJoins W.n, W.(n+2), G implies
+       (the_ELabel_of G).(W.(n+1)) < (the_Weight_of G).(W.(n+1))) &
+     (not W.(n+1) DJoins W.n,W.(n+2), G implies
+       0 < (the_ELabel_of G).(W.(n+1)));
+end;
+
+registration let G be real-weighted real-elabeled WEGraph;
+  cluster trivial -> augmenting Walk of G;
+end;
+
+registration let G be real-weighted real-elabeled WEGraph;
+  cluster vertex-distinct augmenting Path of G;
+end;
+
+registration let G be real-weighted real-elabeled WEGraph,
+                 W be augmenting Walk of G, m,n be Nat;
+  cluster W.cut(m,n) -> augmenting;
+end;
+
+theorem :: GLIB_005:1 ::tWAUGMENT01
+  for G1,G2 being real-weighted real-elabeled WEGraph, W1 being Walk of G1,
+      W2 being Walk of G2
+   st W1 is augmenting & G1 == G2 & the_Weight_of G1 = the_Weight_of G2 &
+      the_ELabel_of G1 = the_ELabel_of G2 & W1 = W2 holds
+      W2 is augmenting;
+
+theorem :: GLIB_005:2  ::tWAUGMENT02
+  for G being real-weighted real-elabeled WEGraph,
+      W being augmenting Walk of G, e,v being set
+   st not v in W.vertices() &
+      ((e DJoins W.last(),v,G & (the_ELabel_of G).e < (the_Weight_of G).e) or
+       (e DJoins v,W.last(),G & 0 < (the_ELabel_of G).e))
+   holds W.addEdge(e) is augmenting;
+
+begin :: Finding an Augmenting Path in a Graph
+definition let G be real-weighted real-elabeled WEVGraph;
+  func AP:NextBestEdges(G) -> Subset of the_Edges_of G means
+:: GLIB_005:def 13  ::dAPNEXT
+     for e being set holds e in it iff
+     (e is_forward_labeling_in G or e is_backward_labeling_in G);
+end;
+
+definition let G be real-weighted real-elabeled WEVGraph;
+  func AP:Step(G) -> real-weighted real-elabeled WEVGraph equals
+:: GLIB_005:def 14  ::dAPSTEP
+     G if AP:NextBestEdges(G) = {},
+     G.labelVertex((the_Source_of G).e, e) if
+          AP:NextBestEdges(G) <> {} &
+          not (the_Source_of G).e in G.labeledV() otherwise
+     G.labelVertex((the_Target_of G).e, e);
+end;
+
+registration let G be finite real-weighted real-elabeled WEVGraph;
+  cluster AP:Step(G) -> finite;
+end;
+
+definition let G be real-weighted real-elabeled WEGraph, source be Vertex of G;
+  func AP:CompSeq(G,source) -> real-weighted real-elabeled WEVGraphSeq means
+:: GLIB_005:def 15
+ ::dAPCS
+    it.->0 = G.set(VLabelSelector, source .--> 1) &
+    for n being Nat holds it.->(n+1) = AP:Step(it.->n);
+end;
+
+registration let G be finite real-weighted real-elabeled WEGraph,
+               source be Vertex of G;
+  cluster AP:CompSeq(G,source) -> finite;
+end;
+
+theorem :: GLIB_005:3  ::tAPCS01
+  for G being real-weighted real-elabeled WEGraph,
+      source being Vertex of G holds
+     G == AP:CompSeq(G,source).->0 &
+     the_Weight_of G = the_Weight_of (AP:CompSeq(G,source).->0) &
+     the_ELabel_of G = the_ELabel_of (AP:CompSeq(G,source).->0) &
+     (AP:CompSeq(G,source).->0).labeledV() = {source};
+
+theorem :: GLIB_005:4  ::tAPCS02
+  for G being real-weighted real-elabeled WEGraph,
+      source being Vertex of G, i,j being Nat
+   st i <= j holds (AP:CompSeq(G,source).->i).labeledV() c=
+                   (AP:CompSeq(G,source).->j).labeledV();
+
+theorem :: GLIB_005:5  ::tAPCS04
+   for G being real-weighted real-elabeled WEGraph,
+       source being Vertex of G, n being Nat holds
+     G == AP:CompSeq(G,source).->n &
+     the_Weight_of G = the_Weight_of (AP:CompSeq(G,source).->n) &
+     the_ELabel_of G = the_ELabel_of (AP:CompSeq(G,source).->n);
+
+definition let G be real-weighted real-elabeled WEGraph, source be Vertex of G;
+  func AP:FindAugPath(G,source) -> real-weighted real-elabeled WEVGraph equals
+:: GLIB_005:def 16
+ ::dAPFAUGP
+    AP:CompSeq(G,source).Result();
+end;
+
+theorem :: GLIB_005:6  ::tAPFAP01
+  for G being finite real-weighted real-elabeled WEGraph,
+      source being Vertex of G
+    holds AP:CompSeq(G,source) is halting;
+
+theorem :: GLIB_005:7  ::tAPCS05
+  for G being finite real-weighted real-elabeled WEGraph,
+      source being Vertex of G, n being Nat, v being set
+      st v in (AP:CompSeq(G,source).->n).labeledV() holds
+      (the_VLabel_of (AP:CompSeq(G,source).->n)).v =
+      (the_VLabel_of AP:FindAugPath(G,source)).v;
+
+definition let G be finite real-weighted real-elabeled WEGraph,
+               source,sink be Vertex of G;
+  func AP:GetAugPath(G,source,sink) -> vertex-distinct
+                                       augmenting Path of G means
+:: GLIB_005:def 17  ::dAPGETAUG
+    it is_Walk_from source,sink &
+    for n being even Nat st n in dom it holds
+      it.n = (the_VLabel_of AP:FindAugPath(G,source)).(it.(n+1)) if
+    (sink in AP:FindAugPath(G,source).labeledV()) otherwise
+    it = G.walkOf(source);
+end;
+
+theorem :: GLIB_005:8  ::tAPCS03
+  for G being real-weighted real-elabeled WEGraph,
+      source being Vertex of G, n being Nat, v being set
+   st v in (AP:CompSeq(G,source).->n).labeledV() holds
+     ex P being Path of G
+       st P is augmenting & P is_Walk_from source,v &
+       P.vertices() c= (AP:CompSeq(G,source).->n).labeledV();
+
+theorem :: GLIB_005:9  ::tAPFAP02
+  for G being finite real-weighted real-elabeled WEGraph,
+      source being Vertex of G, v being set
+   holds v in AP:FindAugPath(G,source).labeledV() iff
+      ex P being Path of G st
+        P is augmenting & P is_Walk_from source,v;
+
+theorem :: GLIB_005:10  ::tAPFAP03
+  for G being finite real-weighted real-elabeled WEGraph,
+      source being Vertex of G holds
+    source in AP:FindAugPath(G,source).labeledV() &
+    G == AP:FindAugPath(G,source) &
+    the_Weight_of G = the_Weight_of AP:FindAugPath(G,source) &
+    the_ELabel_of G = the_ELabel_of AP:FindAugPath(G,source);
+
+begin :: Ford-Fulkerson Algorithm definitions
+
+definition let G be real-weighted real-elabeled WEGraph,
+               W be augmenting Walk of G;
+  func W.flowSeq() -> FinSequence of REAL means
+:: GLIB_005:def 18  ::dWFLOWSEQ
+    dom it = dom W.edgeSeq() &
+    for n being Nat st n in dom it holds
+     ((W.(2*n) DJoins W.(2*n-1),W.(2*n+1),G implies
+         it.n = (the_Weight_of G).(W.(2*n)) - (the_ELabel_of G).(W.(2*n))) &
+      (not W.(2*n) DJoins W.(2*n-1),W.(2*n+1),G implies
+         it.n = (the_ELabel_of G).(W.(2*n))));
+end;
+
+definition let G be real-weighted real-elabeled WEGraph,
+               W be augmenting Walk of G;
+  func W.tolerance() -> Real means
+:: GLIB_005:def 19  ::dWTOLERANCE
+    it in rng W.flowSeq() &
+    for k being Real st k in rng W.flowSeq() holds it <= k
+    if W is non trivial otherwise it = 0;
+end;
+
+definition let G be natural-weighted natural-elabeled WEGraph,
+               W be augmenting Walk of G;
+   redefine func W.tolerance() -> Nat;
+end;
+
+definition let G be real-weighted real-elabeled WEGraph,
+               P be augmenting Path of G;
+  func FF:PushFlow(G,P) -> ManySortedSet of the_Edges_of G means
+:: GLIB_005:def 20  ::dFFPUSH
+    (for e being set st e in the_Edges_of G & not e in P.edges()
+      holds it.e = (the_ELabel_of G).e) &
+    (for n being odd Nat st n < len P holds
+      (P.(n+1) DJoins P.n, P.(n+2),G implies
+       it.(P.(n+1)) = (the_ELabel_of G).(P.(n+1)) + P.tolerance()) &
+      (not P.(n+1) DJoins P.n,P.(n+2),G implies
+       it.(P.(n+1)) = (the_ELabel_of G).(P.(n+1)) - P.tolerance()));
+end;
+
+registration let G be real-weighted real-elabeled WEGraph,
+                 P be augmenting Path of G;
+  cluster FF:PushFlow(G,P) -> real-yielding;
+end;
+
+registration let G be natural-weighted natural-elabeled WEGraph,
+                 P be augmenting Path of G;
+  cluster FF:PushFlow(G,P) -> natural-yielding;
+end;
+
+definition let G be real-weighted real-elabeled WEGraph,
+               P be augmenting Path of G;
+  func FF:AugmentPath(G,P) -> real-weighted real-elabeled
+                              complete-elabeled WEGraph equals
+:: GLIB_005:def 21  ::dFFAUGP
+    G.set(ELabelSelector, FF:PushFlow(G,P));
+end;
+
+registration let G be finite real-weighted real-elabeled WEGraph,
+               P be augmenting Path of G;
+  cluster FF:AugmentPath(G,P) -> finite;
+end;
+
+registration let G be finite nonnegative-weighted real-elabeled WEGraph,
+                 P be augmenting Path of G;
+  cluster FF:AugmentPath(G,P) -> nonnegative-weighted;
+end;
+
+registration let G be finite natural-weighted natural-elabeled WEGraph,
+                 P be augmenting Path of G;
+  cluster FF:AugmentPath(G,P) -> natural-weighted natural-elabeled;
+end;
+
+definition let G be finite real-weighted
+                    real-elabeled complete-elabeled WEGraph,
+               sink, source be Vertex of G;
+  func FF:Step(G, source, sink) -> finite real-weighted real-elabeled
+                                   complete-elabeled WEGraph equals
+:: GLIB_005:def 22  ::dFFSTEP
+    FF:AugmentPath(G, AP:GetAugPath(G,source,sink))
+      if sink in AP:FindAugPath(G,source).labeledV()
+    otherwise G;
+end;
+
+registration let G be finite nonnegative-weighted real-elabeled
+                      complete-elabeled WEGraph, source,sink be Vertex of G;
+  cluster FF:Step(G,source,sink) -> nonnegative-weighted;
+end;
+
+registration let G be finite natural-weighted natural-elabeled
+                      complete-elabeled WEGraph, source,sink be Vertex of G;
+  cluster FF:Step(G,source,sink) -> natural-weighted natural-elabeled;
+end;
+
+definition let G be finite real-weighted WGraph,
+               source,sink be Vertex of G;
+  func FF:CompSeq(G,source,sink) -> finite real-weighted real-elabeled
+                                    complete-elabeled
+                                    WEGraphSeq means
+:: GLIB_005:def 23  ::dFFCS
+    it.->0 = G.set(ELabelSelector, the_Edges_of G --> 0) &
+    for n being Nat holds
+      ex source',sink' being Vertex of it.->n
+      st source' = source & sink' = sink &
+         it.->(n+1) = FF:Step(it.->n,source',sink');
+end;
+
+registration let G be finite nonnegative-weighted WGraph,
+                 sink, source be Vertex of G;
+  cluster FF:CompSeq(G,source,sink) -> nonnegative-weighted;
+end;
+
+registration let G be finite natural-weighted WGraph,
+                 sink,source be Vertex of G;
+  cluster FF:CompSeq(G,source,sink) -> natural-weighted natural-elabeled;
+end;
+
+definition let G be finite real-weighted WGraph, sink,source be Vertex of G;
+  func FF:MaxFlow(G,source, sink) -> finite real-weighted real-elabeled
+                                  complete-elabeled WEGraph equals
+:: GLIB_005:def 24  ::dFFMAXFLOW
+    FF:CompSeq(G,source,sink).Result();
+end;
+
+begin :: Ford Fulkerson Maximum Flow Theorems
+
+theorem :: GLIB_005:11  :: tFLOW01
+  for G being finite real-weighted real-elabeled complete-elabeled WEGraph,
+        source, sink being set, V being Subset of the_Vertices_of G
+   st G has_valid_flow_from source,sink &
+      source in V & not sink in V holds
+      G.flow(source,sink) =
+      Sum ((the_ELabel_of G) | G.edgesDBetween(V, the_Vertices_of G \ V)) -
+      Sum ((the_ELabel_of G) | G.edgesDBetween(the_Vertices_of G \ V, V));
+
+theorem :: GLIB_005:12  ::tFLOW02
+  for G being finite real-weighted real-elabeled complete-elabeled WEGraph,
+      source,sink being set, V being Subset of the_Vertices_of G
+   st G has_valid_flow_from source,sink &
+      source in V & not sink in V holds
+      G.flow(source,sink) <=
+      Sum ((the_Weight_of G) | G.edgesDBetween(V,the_Vertices_of G \ V));
+
+theorem :: GLIB_005:13  ::tFLOWAUG03
+  for G being real-weighted real-elabeled WEGraph, P being augmenting Path of G
+   holds G == FF:AugmentPath(G,P) &
+         the_Weight_of G = the_Weight_of FF:AugmentPath(G,P);
+
+theorem :: GLIB_005:14  ::tWTOLERANCE01
+  for G being finite real-weighted real-elabeled WEGraph,
+      W being augmenting Walk of G st W is non trivial holds
+      0 < W.tolerance();
+
+theorem :: GLIB_005:15  ::tFLOWAUG02
+  for G being finite real-weighted real-elabeled complete-elabeled WEGraph,
+      source,sink being set, P being augmenting Path of G
+   st source <> sink & G has_valid_flow_from source,sink &
+      P is_Walk_from source,sink
+   holds FF:AugmentPath(G,P) has_valid_flow_from source,sink;
+
+theorem :: GLIB_005:16  ::tFLOWAUG01
+  for G being finite real-weighted real-elabeled complete-elabeled WEGraph,
+      source,sink being set, P being augmenting Path of G
+   st source <> sink & G has_valid_flow_from source,sink &
+      P is_Walk_from source,sink holds
+     G.flow(source,sink) + P.tolerance() =
+       (FF:AugmentPath(G,P)).flow(source,sink);
+
+theorem :: GLIB_005:17  ::tFLOWCS02
+  for G being finite real-weighted WGraph, source,sink being Vertex of G,
+      n being Nat
+  holds FF:CompSeq(G,source,sink).->n == G &
+  the_Weight_of G = the_Weight_of (FF:CompSeq(G,source,sink).->n);
+
+theorem :: GLIB_005:18  ::tFLOWCS01
+  for G being finite nonnegative-weighted WGraph,
+              source,sink being Vertex of G, n being Nat
+   st source <> sink
+    holds FF:CompSeq(G,source,sink).->n has_valid_flow_from source,sink;
+
+theorem :: GLIB_005:19  ::tMAXFLOW01
+  for G being finite natural-weighted WGraph,source,sink being Vertex of G st
+      source <> sink holds FF:CompSeq(G,source,sink) is halting;
+
+theorem :: GLIB_005:20  ::tMAXFLOW02
+  for G being finite real-weighted real-elabeled complete-elabeled WEGraph,
+      source,sink being set
+   st source <> sink & G has_valid_flow_from source,sink &
+   not ex P being augmenting Path of G st P is_Walk_from source,sink
+   holds G has_maximum_flow_from source,sink;
+
+theorem :: GLIB_005:21 ::tMAXFLOW03
+  for G being finite real-weighted WGraph, source, sink being Vertex of G holds
+     G == FF:MaxFlow(G,source,sink) &
+     the_Weight_of G = the_Weight_of FF:MaxFlow(G,source,sink);
+
+theorem :: GLIB_005:22 ::tMAXFLOW04
+  for G being finite natural-weighted WGraph, source,sink being Vertex of G
+   st sink <> source holds
+   FF:MaxFlow(G,source,sink) has_maximum_flow_from source,sink;

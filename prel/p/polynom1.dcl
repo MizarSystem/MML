@@ -122,7 +122,6 @@
 <Adjective nr="5"/>
 <Adjective nr="23"/>
 <Adjective nr="26"/>
-<Adjective nr="37"/>
 <Adjective nr="147"/>
 </Cluster>
 </RCluster>
@@ -443,7 +442,6 @@
 <Adjective nr="26"/>
 <Adjective nr="36"/>
 <Adjective nr="99"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>
@@ -595,7 +593,6 @@
 <Adjective nr="5"/>
 <Adjective nr="6"/>
 <Adjective nr="23"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>
@@ -622,7 +619,6 @@
 <Adjective nr="26"/>
 <Adjective nr="36"/>
 <Adjective nr="99"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>
@@ -651,7 +647,6 @@
 <Adjective nr="26"/>
 <Adjective nr="36"/>
 <Adjective nr="99"/>
-<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -711,7 +706,6 @@
 <Adjective nr="6"/>
 <Adjective nr="23"/>
 <Adjective nr="26"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>
@@ -732,7 +726,6 @@
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="99"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>
@@ -900,7 +893,6 @@
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="99"/>
-<Adjective nr="101"/>
 <Adjective nr="128"/>
 <Adjective nr="129"/>
 <Adjective nr="130"/>

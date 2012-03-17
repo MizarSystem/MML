@@ -44,7 +44,6 @@
 <ArticleID name="INT_3"/>
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="GCD_1"/>
-<ArticleID name="ALGSTR_1"/>
 <ArticleID name="MEMBERED"/>
 </Signature>
 <RCluster>
@@ -90,10 +89,10 @@
 <Adjective nr="12" value="false"/>
 <Adjective nr="20" value="false"/>
 <Adjective nr="117" value="false"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -121,12 +120,6 @@
 <Adjective nr="122"/>
 <Adjective nr="124"/>
 <Adjective nr="131"/>
-<Adjective nr="132"/>
-<Adjective nr="133"/>
-<Adjective nr="134"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -217,11 +210,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -269,11 +262,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -321,11 +314,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -373,11 +366,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -425,11 +418,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -479,11 +472,11 @@
 <Adjective nr="4"/>
 <Adjective nr="5"/>
 <Adjective nr="12"/>
-<Adjective nr="143"/>
-<Adjective nr="144"/>
-<Adjective nr="145"/>
-<Adjective nr="146"/>
-<Adjective nr="147"/>
+<Adjective nr="132"/>
+<Adjective nr="133"/>
+<Adjective nr="134"/>
+<Adjective nr="135"/>
+<Adjective nr="136"/>
 </Cluster>
 </FCluster>
 <FCluster>

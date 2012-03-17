@@ -1,0 +1,314 @@
+:: The Fundamental Group of the Circle
+::  by Artur Korni{\l}owicz
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, EUCLID, RELAT_1, ARYTM, SUBSET_1, TOPALG_1, WELLORD1,
+      GR_CY_1, FINSET_1, METRIC_1, INT_1, ALGSTR_1, BORSUK_1, FUNCT_1, SIN_COS,
+      WAYBEL20, EQREL_1, BORSUK_2, ORDINAL2, ARYTM_1, MCART_1, COMPLEX1,
+      SQUARE_1, GROUP_6, VECTSP_1, T_0TOPSP, TOPS_2, ARYTM_3, RCOMP_1, TEX_2,
+      ASYMPT_0, FUNCOP_1, TOPMETR, JGRAPH_2, GRAPH_1, TOPALG_2, JORDAN1,
+      BORSUK_6, SGRAPH1, PCOMPS_1, FUNCT_4, BOOLE, SEQM_3, SETFAM_1, TARSKI,
+      COMPTS_1, TOPREAL2, TAXONOM2, FINSEQ_1, RELAT_2, RCOMP_3, TOPREALB,
+      TOPS_1, CONNSP_1, CONNSP_2, CONNSP_3, RLVECT_3, CANTOR_1, CARD_4, PBOOLE,
+      PROB_1, TOPALG_5;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, RELAT_1, EQREL_1,
+      FUNCT_1, CARD_3, CARD_4, RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, SEQ_1,
+      PBOOLE, YELLOW18, FINSET_1, ORDINAL2, NUMBERS, XCMPLX_0, XREAL_0, REAL_1,
+      SQUARE_1, NAT_1, INT_1, SEQM_3, FINSEQ_1, FUNCT_4, RCOMP_1, RCOMP_2,
+      STRUCT_0, PRE_TOPC, TOPS_1, GROUP_1, GR_CY_1, GROUP_6, GRCAT_1, METRIC_1,
+      CANTOR_1, YELLOW_8, BORSUK_1, TOPS_2, COMPTS_1, CONNSP_1, CONNSP_2,
+      CONNSP_3, TEX_2, TSEP_1, TOPMETR, EUCLID, TOPRNS_1, PCOMPS_1, BORSUK_2,
+      SIN_COS, BORSUK_3, JORDAN16, TAXONOM2, BORSUK_6, TOPALG_1, TOPREAL9,
+      TOPALG_2, TOPREALB, RCOMP_3;
+ constructors TOPRNS_1, GRCAT_1, SIN_COS, JORDAN16, TOPREAL9, BORSUK_3,
+      CONNSP_1, COMPTS_1, TAXONOM2, REALSET2, TEX_2, TOPALG_3, COMPUT_1,
+      PSCOMP_1, MONOID_0, TOPREALB, FINSEQ_4, TRIANG_1, BINARITH, JCT_MISC,
+      RCOMP_2, TOPS_1, CARD_4, CONNSP_3, TSEP_1, TOPGEN_2, WAYBEL35, RCOMP_3;
+ registrations STRUCT_0, RELSET_1, XREAL_0, BORSUK_1, PRE_TOPC, SUBSET_1,
+      XBOOLE_0, FUNCT_1, TOPALG_1, BORSUK_2, SCMRING3, INT_1, SIN_COS,
+      SQUARE_1, TOPMETR, TOPALG_2, PCOMPS_1, TOPS_1, YELLOW13, GOBOARD1,
+      TOPREAL6, TOPALG_3, TOPREALB, NAT_1, MEMBERED, BORSUK_5, TSEP_1,
+      YELLOW12, REALSET1, METRIC_1, RCOMP_3;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+registration
+  cluster -> integer Element of INT.Group;
+end;
+
+registration
+  cluster INT.Group -> infinite;
+end;
+
+registration
+  let S be infinite 1-sorted;
+  cluster the carrier of S -> infinite;
+end;
+
+reserve a, r, s for real number;
+
+theorem :: TOPALG_5:1
+  r <= s & 0 < a implies
+  for p being Point of Closed-Interval-MSpace(r,s) holds Ball(p,a) = [.r,s.] or
+  Ball(p,a) = [.r,p+a.[ or Ball(p,a) = ].p-a,s.] or Ball(p,a) = ].p-a,p+a.[;
+
+theorem :: TOPALG_5:2
+  r <= s implies
+  ex B being Basis of Closed-Interval-TSpace(r,s) st
+   (ex f being ManySortedSet of Closed-Interval-TSpace(r,s) st
+    for y being Point of Closed-Interval-MSpace(r,s) holds
+     f.y = {Ball(y,1/n) where n is Nat: n <> 0} & B = Union f) &
+  for X being Subset of Closed-Interval-TSpace(r,s) st X in B holds
+  X is connected;
+
+theorem :: TOPALG_5:3
+  for T being TopStruct, A being Subset of T, t be Point of T st t in A
+  holds skl(t,A) c= A;
+
+registration
+  let T be TopSpace, A be open Subset of T;
+  cluster T|A -> open;
+end;
+
+theorem :: TOPALG_5:4
+  for T being TopSpace, S being SubSpace of T,
+  A being Subset of T, B being Subset of S st A = B holds
+  T|A = S|B;
+
+theorem :: TOPALG_5:5
+  for S, T being TopSpace, A, B being Subset of T, C, D being Subset of S
+  st the TopStruct of S = the TopStruct of T & A = C & B = D &
+  A,B are_separated holds C,D are_separated;
+
+theorem :: TOPALG_5:6
+  for S, T being TopSpace st the TopStruct of S = the TopStruct of T &
+  S is connected holds T is connected;
+
+theorem :: TOPALG_5:7
+  for S, T being TopSpace, A being Subset of S, B being Subset of T
+  st the TopStruct of S = the TopStruct of T & A = B &
+  A is connected holds B is connected;
+
+theorem :: TOPALG_5:8
+  for S, T being non empty TopSpace, s being Point of S, t being Point of T,
+  A being a_neighborhood of s
+  st the TopStruct of S = the TopStruct of T & s = t holds
+  A is a_neighborhood of t;
+
+theorem :: TOPALG_5:9
+  for S, T being non empty TopSpace, A being Subset of S, B being Subset of T,
+  N being a_neighborhood of A
+  st the TopStruct of S = the TopStruct of T & A = B holds
+  N is a_neighborhood of B;
+
+theorem :: TOPALG_5:10
+  for S, T being non empty TopSpace, A, B being Subset of T,
+  f being map of S,T st f is_homeomorphism & A is_a_component_of B
+  holds f"A is_a_component_of f"B;
+
+begin :: Locally connectedness
+
+theorem :: TOPALG_5:11
+  for T being non empty TopSpace, S being non empty SubSpace of T,
+  A being non empty Subset of T, B being non empty Subset of S st A = B &
+  A is locally_connected holds B is locally_connected;
+
+theorem :: TOPALG_5:12
+  for S, T being non empty TopSpace st
+  the TopStruct of S = the TopStruct of T &
+  S is locally_connected holds T is locally_connected;
+
+theorem :: TOPALG_5:13
+  for T being non empty TopSpace holds
+  T is locally_connected iff [#]T is locally_connected;
+
+theorem :: TOPALG_5:14
+  for T being non empty TopSpace, S being non empty open SubSpace of T st
+  T is locally_connected holds S is locally_connected;
+
+theorem :: TOPALG_5:15
+  for S, T being non empty TopSpace st S,T are_homeomorphic &
+  S is locally_connected holds T is locally_connected;
+
+theorem :: TOPALG_5:16
+  for T being non empty TopSpace st
+  ex B being Basis of T st for X being Subset of T st X in B holds
+  X is connected holds
+  T is locally_connected;
+
+theorem :: TOPALG_5:17
+  r <= s implies Closed-Interval-TSpace(r,s) is locally_connected;
+
+registration
+  cluster I[01] -> locally_connected;
+end;
+
+registration
+  let A be non empty open Subset of I[01];
+  cluster I[01] | A -> locally_connected;
+end;
+
+begin :: Some useful functions
+
+definition
+  let r be real number;
+  func ExtendInt(r) -> map of I[01], R^1 means
+:: TOPALG_5:def 1
+  for x being Point of I[01] holds it.x = r*x;
+end;
+
+registration
+  let r be real number;
+  cluster ExtendInt(r) -> continuous;
+end;
+
+definition
+  let r be real number;
+  redefine func ExtendInt(r) -> Path of R^1(0),R^1(r);
+end;
+
+definition
+  let S, T, Y be non empty TopSpace,
+      H be map of [:S,T:],Y,
+      t be Point of T;
+  func Prj1(t,H) -> map of S,Y means
+:: TOPALG_5:def 2
+  for s being Point of S holds it.s = H.(s,t);
+end;
+
+definition
+  let S, T, Y be non empty TopSpace,
+      H be map of [:S,T:],Y,
+      s be Point of S;
+  func Prj2(s,H) -> map of T,Y means
+:: TOPALG_5:def 3
+  for t being Point of T holds it.t = H.(s,t);
+end;
+
+registration
+  let S, T, Y be non empty TopSpace,
+      H be continuous map of [:S,T:],Y,
+      t be Point of T;
+  cluster Prj1(t,H) -> continuous;
+end;
+
+registration
+  let S, T, Y be non empty TopSpace,
+      H be continuous map of [:S,T:],Y,
+      s be Point of S;
+  cluster Prj2(s,H) -> continuous;
+end;
+
+theorem :: TOPALG_5:18
+  for T being non empty TopSpace, a, b being Point of T,
+      P, Q being Path of a,b,
+      H being Homotopy of P,Q,
+      t being Point of I[01] st H is continuous
+  holds Prj1(t,H) is continuous;
+
+theorem :: TOPALG_5:19
+  for T being non empty TopSpace, a, b being Point of T,
+      P, Q being Path of a,b,
+      H being Homotopy of P,Q,
+      s being Point of I[01] st H is continuous
+  holds Prj2(s,H) is continuous;
+
+definition
+  let r be real number;
+  func cLoop(r) -> map of I[01], Tunit_circle(2) means
+:: TOPALG_5:def 4
+  for x being Point of I[01] holds it.x = |[ cos(2*PI*r*x), sin(2*PI*r*x) ]|;
+end;
+
+theorem :: TOPALG_5:20
+  cLoop(r) = CircleMap * ExtendInt(r);
+
+definition
+  let n be Integer;
+  redefine func cLoop(n) -> Loop of c[10];
+end;
+
+begin
+
+theorem :: TOPALG_5:21
+  for UL being Subset-Family of Tunit_circle(2) st
+    UL is_a_cover_of Tunit_circle(2) & UL is open
+  for Y being non empty TopSpace,
+      F being continuous map of [:Y,I[01]:], Tunit_circle(2),
+      y being Point of Y
+   ex T being non empty FinSequence of REAL st
+      T.1 = 0 & T.len T = 1 & T is increasing &
+      ex N being open Subset of Y st y in N &
+      for i being natural number st i in dom T & i+1 in dom T
+       ex Ui being non empty Subset of Tunit_circle(2) st Ui in UL &
+        F.:[:N,[.T.i,T.(i+1).]:] c= Ui;
+
+theorem :: TOPALG_5:22
+  for Y being non empty TopSpace,
+      F being map of [:Y,I[01]:], Tunit_circle(2),
+      Ft being map of [:Y,Sspace(0[01]):], R^1 st
+    F is continuous & Ft is continuous &
+    F | [:the carrier of Y,{0}:] = CircleMap*Ft
+  ex G being map of [:Y,I[01]:], R^1 st G is continuous & F = CircleMap*G &
+    G | [:the carrier of Y,{0}:] = Ft &
+    for H being map of [:Y,I[01]:], R^1 st
+        H is continuous & F = CircleMap*H & H | [:the carrier of Y,{0}:] = Ft
+        holds G = H;
+
+theorem :: TOPALG_5:23
+  for x0, y0 being Point of Tunit_circle(2),
+      xt being Point of R^1,
+      f being Path of x0,y0 st xt in (CircleMap)"{x0}
+   ex ft being map of I[01], R^1 st ft.0 = xt &
+    f = CircleMap*ft & ft is continuous &
+    for f1 being map of I[01], R^1 st f1 is continuous & f = CircleMap*f1 &
+        f1.0 = xt holds ft = f1;
+
+theorem :: TOPALG_5:24
+  for x0, y0 being Point of Tunit_circle(2),
+      P, Q being Path of x0,y0,
+      F being Homotopy of P,Q,
+      xt being Point of R^1 st P,Q are_homotopic & xt in (CircleMap)"{x0}
+  ex yt being Point of R^1, Pt, Qt being Path of xt,yt,
+     Ft being Homotopy of Pt,Qt st Pt,Qt are_homotopic & F = CircleMap*Ft &
+     yt in (CircleMap)"{y0} &
+     for F1 being Homotopy of Pt,Qt st F = CircleMap*F1 holds Ft = F1;
+
+definition
+  func Ciso -> map of INT.Group, pi_1(Tunit_circle(2),c[10]) means
+:: TOPALG_5:def 5
+  for n being Integer holds
+   it.n = Class(EqRel(Tunit_circle(2),c[10]),cLoop(n));
+end;
+
+theorem :: TOPALG_5:25
+  for i being Integer, f being Path of R^1(0),R^1(i) holds
+  Ciso.i = Class(EqRel(Tunit_circle(2),c[10]),CircleMap*f);
+
+definition
+  redefine func Ciso -> Homomorphism of INT.Group, pi_1(Tunit_circle(2),c[10]);
+end;
+
+registration
+  cluster Ciso -> one-to-one onto;
+end;
+
+theorem :: TOPALG_5:26
+  Ciso is being_isomorphism;
+
+theorem :: TOPALG_5:27
+  for S being being_simple_closed_curve SubSpace of TOP-REAL 2,
+      x being Point of S holds
+   INT.Group, pi_1(S,x) are_isomorphic;
+
+registration
+  let S be being_simple_closed_curve SubSpace of TOP-REAL 2,
+      x be Point of S;
+  cluster pi_1(S,x) -> infinite;
+end;

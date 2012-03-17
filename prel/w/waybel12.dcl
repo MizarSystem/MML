@@ -47,7 +47,6 @@
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="WAYBEL_6"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="WAYBEL12"/>
 </Signature>
 <RCluster>
@@ -68,11 +67,6 @@
 <Adjective nr="1"/>
 <Adjective nr="18"/>
 <Adjective nr="28"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -93,11 +87,6 @@
 <Adjective nr="1"/>
 <Adjective nr="18"/>
 <Adjective nr="28"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -159,11 +148,6 @@
 <Adjective nr="1"/>
 <Adjective nr="18"/>
 <Adjective nr="28"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -221,7 +205,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="141">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -250,7 +234,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="18"/>
 <Adjective nr="28"/>
-<Adjective nr="142">
+<Adjective nr="137">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -269,11 +253,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="18"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -285,11 +264,6 @@
 <Adjective nr="8"/>
 <Adjective nr="9"/>
 <Adjective nr="18" value="false"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -344,7 +318,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="141">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -369,11 +343,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="18"/>
-<Adjective nr="135"/>
-<Adjective nr="136"/>
-<Adjective nr="137"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </CCluster>
 <CCluster>

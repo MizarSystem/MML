@@ -178,11 +178,6 @@
 <Func kind="K" nr="267"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="56">
-<Func kind="K" nr="247">
-<Num nr="2"/>
-</Func>
-</Adjective>
 <Adjective nr="58">
 <Func kind="K" nr="247">
 <Num nr="2"/>

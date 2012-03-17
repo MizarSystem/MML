@@ -17,7 +17,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="GRAPH_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="GRAPH_2"/>
 </Signature>
 <RCluster>
@@ -30,8 +29,8 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -53,11 +52,6 @@
 <Adjective nr="12"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -77,7 +71,7 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="42">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -100,7 +94,7 @@
 <Adjective nr="5"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="42">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

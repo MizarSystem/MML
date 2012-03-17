@@ -20,11 +20,7 @@
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="FUNCT_4"/>
-<ArticleID name="FINSOP_1"/>
 <ArticleID name="CALCUL_2"/>
 </Signature>
 <FCluster>
@@ -38,7 +34,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

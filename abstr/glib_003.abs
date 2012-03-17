@@ -1,0 +1,1022 @@
+:: Weighted and Labeled Graphs
+::  by Gilbert Lee
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, ARYTM, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1, FINSEQ_5,
+      FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
+      GLIB_001, GLIB_002, GLIB_003, MSAFREE2, PARTFUN1, PBOOLE, REALSET1,
+      RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1;
+ notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XREAL_0, DOMAIN_1, REAL_1,
+      RELAT_1, PARTFUN1, FUNCT_1, SEQ_1, CARD_1, GRAPH_2, PBOOLE, CARD_FIL,
+      FUNCT_2, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1, RELSET_1,
+      FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, FUNCT_4, GLIB_000, GLIB_001,
+      GLIB_002;
+ constructors GRAPH_5, DOMAIN_1, SEQ_1, CARD_FIL, REAL_1, AMISTD_2, PSCOMP_1,
+      POLYNOM2, BINARITH, GRAPH_2, FINSEQ_5, GLIB_001, GLIB_002;
+ registrations RELSET_1, FINSET_1, PNPROC_1, INT_1, FINSEQ_1, NAT_1, SEQ_1,
+      TREES_2, FUNCT_1, MEMBERED, ORDINAL2, GLIB_000, GLIB_002, POLYNOM1,
+      CIRCCMB3;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin :: Preliminaries
+
+definition let D be set, fs be FinSequence of D, fss be FinSubsequence of fs;
+  redefine func Seq fss -> FinSequence of D;
+end;
+
+registration let F be real-yielding Relation, X be set;
+  cluster F | X -> real-yielding;
+end;
+
+theorem :: GLIB_003:1  ::tFINSEQ01
+  for x1,x2,x3,x4,x5,x6,x7,x8,x9,x10 being set, p being FinSequence
+   st p=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>^<*x10*>
+     holds len p = 10 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+       p.6 = x6 & p.7 = x7 & p.8 = x8 & p.9 = x9 & p.10 = x10;
+
+theorem :: GLIB_003:2  ::tFINSUBSEQ05
+   for fs being FinSequence of REAL, fss being FinSubsequence of fs holds
+   (for i being Nat st i in dom fs holds 0 <= fs.i ) implies
+   Sum (Seq fss) <= Sum fs;
+
+begin :: Definitions
+
+definition
+  func WeightSelector -> Nat equals
+:: GLIB_003:def 1  ::dSELW
+    5;
+
+  func ELabelSelector -> Nat equals
+:: GLIB_003:def 2  ::dSELEL
+    6;
+
+  func VLabelSelector -> Nat equals
+:: GLIB_003:def 3  ::dSELVL
+    7;
+
+end;
+
+definition let G be GraphStruct;
+  attr G is [Weighted] means
+:: GLIB_003:def 4  ::dWEIGHTED
+    WeightSelector in dom G &
+    G.WeightSelector is ManySortedSet of the_Edges_of G;
+
+  attr G is [ELabeled] means
+:: GLIB_003:def 5  ::dELABELED
+    ELabelSelector in dom G &
+    ex f being Function st G.ELabelSelector = f & dom f c= the_Edges_of G;
+
+  attr G is [VLabeled] means
+:: GLIB_003:def 6  ::dVLABELED
+    VLabelSelector in dom G &
+    ex f being Function st G.VLabelSelector = f & dom f c= the_Vertices_of G;
+end;
+
+registration
+  cluster [Graph-like] [Weighted] [ELabeled] [VLabeled] GraphStruct;
+end;
+
+definition
+  mode   WGraph is [Weighted]                       _Graph;
+  mode   EGraph is            [ELabeled]            _Graph;
+  mode   VGraph is                       [VLabeled] _Graph;
+  mode  WEGraph is [Weighted] [ELabeled]            _Graph;
+  mode  WVGraph is [Weighted]            [VLabeled] _Graph;
+  mode  EVGraph is            [ELabeled] [VLabeled] _Graph;
+  mode WEVGraph is [Weighted] [ELabeled] [VLabeled] _Graph;
+end;
+
+definition let G be WGraph;
+  func the_Weight_of G -> ManySortedSet of the_Edges_of G equals
+:: GLIB_003:def 7  ::dWEIGHT
+    G.WeightSelector;
+
+end;
+
+definition let G be EGraph;
+  func the_ELabel_of G -> Function equals
+:: GLIB_003:def 8  ::dELABEL
+    G.ELabelSelector;
+end;
+
+definition let G be VGraph;
+  func the_VLabel_of G -> Function equals
+:: GLIB_003:def 9  ::dVLABEL
+    G.VLabelSelector;
+end;
+
+registration let G be _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> [Graph-like];
+  cluster G.set(ELabelSelector,  X) -> [Graph-like];
+  cluster G.set(VLabelSelector,  X) -> [Graph-like];
+end;
+
+registration let G be finite _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> finite;
+  cluster G.set(ELabelSelector,  X) -> finite;
+  cluster G.set(VLabelSelector,  X) -> finite;
+end;
+
+registration let G be loopless _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> loopless;
+  cluster G.set(ELabelSelector,  X) -> loopless;
+  cluster G.set(VLabelSelector,  X) -> loopless;
+end;
+
+registration let G be trivial _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> trivial;
+  cluster G.set(ELabelSelector,  X) -> trivial;
+  cluster G.set(VLabelSelector,  X) -> trivial;
+end;
+
+registration let G be non trivial _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non trivial;
+  cluster G.set(ELabelSelector,  X) -> non trivial;
+  cluster G.set(VLabelSelector,  X) -> non trivial;
+end;
+
+registration let G be non-multi _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non-multi;
+  cluster G.set(ELabelSelector,  X) -> non-multi;
+  cluster G.set(VLabelSelector,  X) -> non-multi;
+end;
+
+registration let G be non-Dmulti _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non-Dmulti;
+  cluster G.set(ELabelSelector,  X) -> non-Dmulti;
+  cluster G.set(VLabelSelector,  X) -> non-Dmulti;
+end;
+
+registration let G be connected _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> connected;
+  cluster G.set(ELabelSelector,  X) -> connected;
+  cluster G.set(VLabelSelector,  X) -> connected;
+end;
+
+registration let G be acyclic _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> acyclic;
+  cluster G.set(ELabelSelector,  X) -> acyclic;
+  cluster G.set(VLabelSelector,  X) -> acyclic;
+end;
+
+registration let G be WGraph, X be set;
+  cluster G.set(ELabelSelector,  X) -> [Weighted];
+  cluster G.set(VLabelSelector,  X) -> [Weighted];
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Edges_of G;
+  cluster G.set(WeightSelector,  X) -> [Weighted];
+end;
+registration let G be _Graph, WL be non empty set,
+               W be Function of the_Edges_of G, WL;
+  cluster G.set(WeightSelector, W) -> [Weighted];
+end;
+
+registration let G be EGraph, X be set;
+  cluster G.set(WeightSelector,  X) -> [ELabeled];
+  cluster G.set(VLabelSelector,  X) -> [ELabeled];
+end;
+
+registration let G be _Graph, Y be set, X be PartFunc of the_Edges_of G, Y;
+  cluster G.set(ELabelSelector, X) -> [ELabeled];
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector, X) -> [ELabeled];
+end;
+
+registration let G be VGraph, X be set;
+  cluster G.set(WeightSelector,  X) -> [VLabeled];
+  cluster G.set(ELabelSelector,  X) -> [VLabeled];
+end;
+
+registration let G be _Graph, Y be set, X be PartFunc of the_Vertices_of G,Y;
+  cluster G.set(VLabelSelector,  X) -> [VLabeled];
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Vertices_of G;
+  cluster G.set(VLabelSelector,  X) -> [VLabeled];
+end;
+
+registration let G be _Graph;
+  cluster G.set(ELabelSelector, {}) -> [ELabeled];
+  cluster G.set(VLabelSelector, {}) -> [VLabeled];
+end;
+
+registration let G be _Graph;
+  cluster [Weighted] [ELabeled] [VLabeled] Subgraph of G;
+end;
+
+definition let G be WGraph, G2 be [Weighted] Subgraph of G;
+  attr G2 is weight-inheriting means
+:: GLIB_003:def 10  ::dGWINHERIT
+    the_Weight_of  G2 = (the_Weight_of G) | the_Edges_of G2;
+end;
+
+definition let G be EGraph, G2 be [ELabeled] Subgraph of G;
+  attr G2 is elabel-inheriting means
+:: GLIB_003:def 11  ::dEINHERIT
+    the_ELabel_of  G2 = (the_ELabel_of G) | the_Edges_of G2;
+end;
+
+definition let G be VGraph, G2 be [VLabeled] Subgraph of G;
+  attr G2 is vlabel-inheriting means
+:: GLIB_003:def 12  ::dGVINHERIT
+    the_VLabel_of  G2 = (the_VLabel_of G) | the_Vertices_of G2;
+end;
+
+registration let G be WGraph;
+  cluster weight-inheriting ([Weighted] Subgraph of G);
+end;
+registration let G be EGraph;
+  cluster elabel-inheriting ([ELabeled] Subgraph of G);
+end;
+registration let G be VGraph;
+  cluster vlabel-inheriting ([VLabeled] Subgraph of G);
+end;
+registration let G be WEGraph;
+  cluster weight-inheriting elabel-inheriting
+    ([Weighted] [ELabeled] Subgraph of G);
+end;
+registration let G be WVGraph;
+  cluster weight-inheriting vlabel-inheriting
+    ([Weighted] [VLabeled] Subgraph of G);
+end;
+registration let G be EVGraph;
+  cluster elabel-inheriting vlabel-inheriting
+    ([ELabeled] [VLabeled] Subgraph of G);
+end;
+registration let G be WEVGraph;
+  cluster weight-inheriting elabel-inheriting vlabel-inheriting
+    ([Weighted] [ELabeled] [VLabeled] Subgraph of G);
+end;
+
+definition let G be WGraph;
+  mode WSubgraph of G is weight-inheriting ([Weighted] Subgraph of G);
+end;
+definition let G be EGraph;
+  mode ESubgraph of G is elabel-inheriting ([ELabeled] Subgraph of G);
+end;
+definition let G be VGraph;
+  mode VSubgraph of G is vlabel-inheriting ([VLabeled] Subgraph of G);
+end;
+definition let G be WEGraph;
+  mode WESubgraph of G is weight-inheriting elabel-inheriting
+    ([Weighted] [ELabeled] Subgraph of G);
+end;
+definition let G be WVGraph;
+  mode WVSubgraph of G is weight-inheriting vlabel-inheriting
+    ([Weighted] [VLabeled] Subgraph of G);
+end;
+definition let G be EVGraph;
+  mode EVSubgraph of G is elabel-inheriting vlabel-inheriting
+    ([ELabeled] [VLabeled] Subgraph of G);
+end;
+definition let G be WEVGraph;
+  mode WEVSubgraph of G is weight-inheriting elabel-inheriting
+    vlabel-inheriting ([Weighted] [ELabeled] [VLabeled] Subgraph of G);
+end;
+
+registration let G be _Graph, V,E be set;
+  cluster [Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E;
+end;
+
+registration let G be WGraph, V,E be set;
+  cluster weight-inheriting ([Weighted] inducedSubgraph of G,V,E);
+end;
+
+registration let G be EGraph, V,E be set;
+  cluster elabel-inheriting ([ELabeled] inducedSubgraph of G,V,E);
+end;
+
+registration let G be VGraph, V,E be set;
+  cluster vlabel-inheriting ([VLabeled] inducedSubgraph of G,V,E);
+end;
+
+registration let G be WEGraph, V,E be set;
+  cluster weight-inheriting elabel-inheriting
+          ([Weighted] [ELabeled] inducedSubgraph of G,V,E);
+end;
+
+registration let G be WVGraph, V,E be set;
+  cluster weight-inheriting vlabel-inheriting
+          ([Weighted] [VLabeled] inducedSubgraph of G,V,E);
+end;
+
+registration let G be EVGraph, V,E be set;
+  cluster elabel-inheriting vlabel-inheriting
+          ([ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+
+registration let G be WEVGraph, V,E be set;
+  cluster weight-inheriting elabel-inheriting vlabel-inheriting
+          ([Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+
+definition let G be WGraph, V,E be set;
+  mode inducedWSubgraph of G,V,E is weight-inheriting
+       ([Weighted] inducedSubgraph of G,V,E);
+end;
+definition let G be EGraph, V,E be set;
+  mode inducedESubgraph of G,V,E is elabel-inheriting
+       ([ELabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be VGraph, V,E be set;
+  mode inducedVSubgraph of G,V,E is vlabel-inheriting
+       ([VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WEGraph, V,E be set;
+  mode inducedWESubgraph of G,V,E is weight-inheriting elabel-inheriting
+       ([Weighted] [ELabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WVGraph, V,E be set;
+  mode inducedWVSubgraph of G,V,E is weight-inheriting vlabel-inheriting
+       ([Weighted] [VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be EVGraph, V,E be set;
+  mode inducedEVSubgraph of G,V,E is elabel-inheriting vlabel-inheriting
+       ([ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WEVGraph, V,E be set;
+  mode inducedWEVSubgraph of G,V,E is
+       weight-inheriting elabel-inheriting vlabel-inheriting
+       ([Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+
+definition let G be WGraph, V be set;
+  mode inducedWSubgraph of G,V is inducedWSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be EGraph, V be set;
+  mode inducedESubgraph of G,V is inducedESubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be VGraph, V be set;
+  mode inducedVSubgraph of G,V is inducedVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WEGraph, V be set;
+  mode inducedWESubgraph of G,V is inducedWESubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WVGraph, V be set;
+  mode inducedWVSubgraph of G,V is inducedWVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be EVGraph, V be set;
+  mode inducedEVSubgraph of G,V is inducedEVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WEVGraph, V be set;
+  mode inducedWEVSubgraph of G,V is
+       inducedWEVSubgraph of G,V,G.edgesBetween(V);
+end;
+
+definition let G be WGraph;
+  attr G is real-weighted means
+:: GLIB_003:def 13  ::dWREALWL
+    the_Weight_of G is real-yielding;
+end;
+
+definition let G be WGraph;
+  attr G is nonnegative-weighted means
+:: GLIB_003:def 14  ::dWNNWEIGHT
+    rng the_Weight_of G c= Real>=0;
+end;
+
+registration
+  cluster nonnegative-weighted -> real-weighted WGraph;
+end;
+
+definition let G be EGraph;
+  attr G is real-elabeled means
+:: GLIB_003:def 15  ::dEREALEL
+    the_ELabel_of G is real-yielding;
+end;
+
+definition let G be VGraph;
+  attr G is real-vlabeled means
+:: GLIB_003:def 16  ::dVREALVL
+    the_VLabel_of G is real-yielding;
+end;
+
+definition let G be WEVGraph;
+  attr G is real-WEV means
+:: GLIB_003:def 17  ::dWEVREAL
+    G is real-weighted & G is real-elabeled & G is real-vlabeled;
+end;
+
+registration
+  cluster real-WEV -> real-weighted real-elabeled real-vlabeled WEVGraph;
+  cluster real-weighted real-elabeled real-vlabeled -> real-WEV WEVGraph;
+end;
+
+registration let G be _Graph, X be Function of the_Edges_of G, REAL;
+  cluster G.set(WeightSelector,X) -> real-weighted;
+end;
+registration let G be _Graph, X be PartFunc of the_Edges_of G, REAL;
+  cluster G.set(ELabelSelector, X) -> real-elabeled;
+end;
+
+registration let G be _Graph,
+                 X be real-yielding ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector,X) -> real-elabeled;
+end;
+
+registration let G be _Graph, X be PartFunc of the_Vertices_of G, REAL;
+  cluster G.set(VLabelSelector, X) -> real-vlabeled;
+end;
+
+registration let G be _Graph,
+                 X be real-yielding ManySortedSet of the_Vertices_of G;
+  cluster G.set(VLabelSelector, X) -> real-vlabeled;
+end;
+
+registration let G be _Graph;
+  cluster G.set(ELabelSelector, {}) -> real-elabeled;
+  cluster G.set(VLabelSelector, {}) -> real-vlabeled;
+end;
+
+registration let G be _Graph, v be Vertex of G, val be real number;
+  cluster G.set(VLabelSelector, v.-->val) -> [VLabeled];
+end;
+
+registration let G be _Graph, v be Vertex of G, val be real number;
+  cluster G.set(VLabelSelector, v.-->val) -> real-vlabeled;
+end;
+
+registration
+  cluster finite trivial Tree-like nonnegative-weighted real-WEV WEVGraph;
+  cluster finite non trivial Tree-like nonnegative-weighted real-WEV WEVGraph;
+end;
+
+registration let G be finite WGraph;
+  cluster the_Weight_of G -> finite;
+end;
+
+registration let G be finite EGraph;
+  cluster the_ELabel_of G -> finite;
+end;
+
+registration let G be finite VGraph;
+  cluster the_VLabel_of G -> finite;
+end;
+
+registration let G be real-weighted WGraph;
+  cluster the_Weight_of G -> real-yielding;
+end;
+
+registration let G be real-elabeled EGraph;
+  cluster the_ELabel_of G -> real-yielding;
+end;
+
+registration let G be real-vlabeled VGraph;
+  cluster the_VLabel_of G -> real-yielding;
+end;
+
+registration let G be real-weighted WGraph, X be set;
+  cluster G.set(ELabelSelector ,X) -> real-weighted;
+  cluster G.set(VLabelSelector ,X) -> real-weighted;
+end;
+
+registration let G be nonnegative-weighted WGraph, X be set;
+  cluster G.set(ELabelSelector ,X) -> nonnegative-weighted;
+  cluster G.set(VLabelSelector ,X) -> nonnegative-weighted;
+end;
+
+registration let G be real-elabeled EGraph, X be set;
+  cluster G.set(WeightSelector ,X) -> real-elabeled;
+  cluster G.set(VLabelSelector ,X) -> real-elabeled;
+end;
+
+registration let G be real-vlabeled VGraph, X be set;
+  cluster G.set(WeightSelector ,X) -> real-vlabeled;
+  cluster G.set(ELabelSelector ,X) -> real-vlabeled;
+end;
+
+definition let G be WGraph, W be Walk of G;
+  func W.weightSeq() -> FinSequence means
+:: GLIB_003:def 18  ::dWWSEQ
+    len it = len W.edgeSeq() &
+    for n being Nat st 1 <= n & n <= len it
+      holds it.n = (the_Weight_of G).(W.edgeSeq().n);
+end;
+
+definition let G be real-weighted WGraph, W be Walk of G;
+  redefine func W.weightSeq() -> FinSequence of REAL;
+end;
+
+definition let G be real-weighted WGraph, W be Walk of G;
+  func W.cost() -> Real equals
+:: GLIB_003:def 19  ::dWCOST
+    Sum (W.weightSeq());
+end;
+
+definition let G be EGraph;
+  func G.labeledE() -> Subset of the_Edges_of G equals
+:: GLIB_003:def 20  ::dGLABELEDE
+    dom the_ELabel_of G;
+end;
+
+definition let G be EGraph, e,x be set;
+  func G.labelEdge(e,x) -> EGraph equals
+:: GLIB_003:def 21  ::dGELABEL
+    G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) if
+    e in the_Edges_of G otherwise G;
+end;
+
+registration let G be finite EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> finite;
+end;
+
+registration let G be loopless EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> loopless;
+end;
+registration let G be trivial EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> trivial;
+end;
+registration let G be non trivial EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non trivial;
+end;
+registration let G be non-multi EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non-multi;
+end;
+registration let G be non-Dmulti EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non-Dmulti;
+end;
+registration let G be connected EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> connected;
+end;
+registration let G be acyclic EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> acyclic;
+end;
+registration let G be WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> [Weighted];
+end;
+registration let G be EVGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> [VLabeled];
+end;
+registration let G be real-weighted WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> real-weighted;
+end;
+registration let G be nonnegative-weighted WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> nonnegative-weighted;
+end;
+registration let G be real-elabeled EGraph, e be set, x be Real;
+  cluster G.labelEdge(e,x) -> real-elabeled;
+end;
+registration let G be real-vlabeled EVGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> real-vlabeled;
+end;
+
+definition let G be VGraph, v,x be set;
+  func G.labelVertex(v,x) -> VGraph equals
+:: GLIB_003:def 22  ::dVLABEL
+    G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) if
+    v in the_Vertices_of G otherwise G;
+end;
+
+definition let G be VGraph;
+  func G.labeledV() -> Subset of the_Vertices_of G equals
+:: GLIB_003:def 23  ::dGLABELEDV
+    dom the_VLabel_of G;
+end;
+
+registration let G be finite VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> finite;
+end;
+registration let G be loopless VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> loopless;
+end;
+registration let G be trivial VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> trivial;
+end;
+registration let G be non trivial VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non trivial;
+end;
+registration let G be non-multi VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non-multi;
+end;
+registration let G be non-Dmulti VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non-Dmulti;
+end;
+registration let G be connected VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> connected;
+end;
+registration let G be acyclic VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> acyclic;
+end;
+registration let G be WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> [Weighted];
+end;
+registration let G be EVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> [ELabeled];
+end;
+registration let G be real-weighted WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> real-weighted;
+end;
+registration let G be nonnegative-weighted WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> nonnegative-weighted;
+end;
+registration let G be real-elabeled EVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> real-elabeled;
+end;
+registration let G be real-vlabeled VGraph, v be set, x be Real;
+  cluster G.labelVertex(v,x) -> real-vlabeled;
+end;
+
+registration let G be real-weighted WGraph;
+  cluster -> real-weighted WSubgraph of G;
+end;
+registration let G be nonnegative-weighted WGraph;
+  cluster -> nonnegative-weighted WSubgraph of G;
+end;
+registration let G be real-elabeled EGraph;
+  cluster -> real-elabeled ESubgraph of G;
+end;
+registration let G be real-vlabeled VGraph;
+  cluster -> real-vlabeled VSubgraph of G;
+end;
+
+:: Attributes over GraphSeq
+definition let GSq be GraphSeq;
+  attr GSq is [Weighted] means
+:: GLIB_003:def 24  ::dGSEQWEIGHT
+    for x being Nat holds GSq.->x is [Weighted];
+  attr GSq is [ELabeled] means
+:: GLIB_003:def 25  ::dGSEQELABEL
+    for x being Nat holds GSq.->x is [ELabeled];
+  attr GSq is [VLabeled] means
+:: GLIB_003:def 26  ::dGSEQVLABEL
+    for x being Nat holds GSq.->x is [VLabeled];
+end;
+registration
+  cluster [Weighted] [ELabeled] [VLabeled] GraphSeq;
+end;
+
+definition
+  mode WGraphSeq   is [Weighted]                       GraphSeq;
+  mode EGraphSeq   is            [ELabeled]            GraphSeq;
+  mode VGraphSeq   is                       [VLabeled] GraphSeq;
+  mode WEGraphSeq  is [Weighted] [ELabeled]            GraphSeq;
+  mode WVGraphSeq  is [Weighted]            [VLabeled] GraphSeq;
+  mode EVGraphSeq  is            [ELabeled] [VLabeled] GraphSeq;
+  mode WEVGraphSeq is [Weighted] [ELabeled] [VLabeled] GraphSeq;
+end;
+
+registration let GSq be WGraphSeq, x be Nat;
+  cluster GSq.->x -> [Weighted];
+
+end;
+registration let GSq be EGraphSeq, x be Nat;
+  cluster GSq.->x -> [ELabeled];
+
+end;
+registration let GSq be VGraphSeq, x be Nat;
+  cluster GSq.->x -> [VLabeled];
+
+end;
+
+definition let GSq be WGraphSeq;
+  attr GSq is real-weighted means
+:: GLIB_003:def 27  ::dGSEQWREALWL
+    for x being Nat holds GSq.->x is real-weighted;
+  attr GSq is nonnegative-weighted means
+:: GLIB_003:def 28  ::dGSEQWNNWEIGHT
+    for x being Nat holds GSq.->x is nonnegative-weighted;
+end;
+definition let GSq be EGraphSeq;
+  attr GSq is real-elabeled means
+:: GLIB_003:def 29  ::dGSEQEREALEL
+    for x being Nat holds GSq.->x is real-elabeled;
+end;
+definition let GSq be VGraphSeq;
+  attr GSq is real-vlabeled means
+:: GLIB_003:def 30  ::dGSEQVREALVL
+    for x being Nat holds GSq.->x is real-vlabeled;
+end;
+definition let GSq be WEVGraphSeq;
+  attr GSq is real-WEV means
+:: GLIB_003:def 31  ::dGSEQWEVREAL
+    for x being Nat holds GSq.->x is real-WEV;
+end;
+
+registration
+  cluster real-WEV -> real-weighted real-elabeled real-vlabeled WEVGraphSeq;
+  cluster real-weighted real-elabeled real-vlabeled -> real-WEV WEVGraphSeq;
+end;
+
+registration
+  cluster halting finite loopless trivial non-multi simple real-WEV
+          nonnegative-weighted Tree-like WEVGraphSeq;
+end;
+
+registration let GSq be real-weighted WGraphSeq, x be Nat;
+  cluster GSq.->x -> real-weighted;
+
+end;
+registration let GSq be nonnegative-weighted WGraphSeq, x be Nat;
+  cluster GSq.->x -> nonnegative-weighted;
+
+end;
+registration let GSq be real-elabeled EGraphSeq, x be Nat;
+  cluster GSq.->x -> real-elabeled;
+
+end;
+registration let GSq be real-vlabeled VGraphSeq, x be Nat;
+  cluster GSq.->x -> real-vlabeled;
+
+end;
+
+begin :: Theorems
+
+reserve G for _Graph;
+reserve W for Walk of G;
+reserve E,V,W,X,Y for set;
+reserve n for Nat;
+
+theorem :: GLIB_003:3  ::tSELECT02;
+  WeightSelector = 5 & ELabelSelector = 6 & VLabelSelector = 7;
+
+theorem :: GLIB_003:4  ::tGNAMES02
+  (for G being WGraph holds the_Weight_of G = G.WeightSelector) &
+  (for G being EGraph holds the_ELabel_of G = G.ELabelSelector) &
+  (for G being VGraph holds the_VLabel_of G = G.VLabelSelector);
+
+theorem :: GLIB_003:5   ::tWGRAPH01
+  for G being WGraph holds
+    dom the_Weight_of G  = the_Edges_of G;
+
+theorem :: GLIB_003:6  ::tEGRAPH01
+  for G being EGraph holds
+    dom the_ELabel_of G c= the_Edges_of G;
+
+theorem :: GLIB_003:7  ::tVGRAPH01
+  for G being VGraph holds
+    dom the_VLabel_of G c= the_Vertices_of G;
+
+:: Theorems regarding G.set()
+theorem :: GLIB_003:8  ::tGSET09
+  for G being _Graph, X being set holds
+    G == G.set(WeightSelector, X) &
+    G == G.set(ELabelSelector, X) &
+    G == G.set(VLabelSelector, X);
+
+theorem :: GLIB_003:9  ::tGSETWEIGHT01
+   for G being EGraph, X being set holds
+     the_ELabel_of G = the_ELabel_of G.set(WeightSelector,X);
+
+theorem :: GLIB_003:10  ::tGSETWEIGHT02
+  for G being VGraph, X being set holds
+    the_VLabel_of G = the_VLabel_of G.set(WeightSelector, X);
+
+theorem :: GLIB_003:11  ::tGSETELABEL01
+  for G being WGraph, X being set holds
+    the_Weight_of G = the_Weight_of G.set(ELabelSelector, X);
+
+theorem :: GLIB_003:12  ::tGSETELABEL02
+  for G being VGraph, X being set holds
+    the_VLabel_of G = the_VLabel_of G.set(ELabelSelector, X);
+
+theorem :: GLIB_003:13  ::tGSETVLABEL01
+  for G being WGraph, X being set holds
+    the_Weight_of G = the_Weight_of G.set(VLabelSelector, X);
+
+theorem :: GLIB_003:14  ::tGSETVLABEL02
+  for G being EGraph, X being set holds
+    the_ELabel_of G = the_ELabel_of G.set(VLabelSelector, X);
+
+:: Theorems regarding WSubgraphs
+theorem :: GLIB_003:15  ::tWSUBGRAPH01
+  for G1,G2 being WGraph, G3 being WGraph
+   st G1 == G2 & the_Weight_of G1 = the_Weight_of G2 & G1 is WSubgraph of G3
+   holds G2 is WSubgraph of G3;
+
+theorem :: GLIB_003:16  ::tWSUBGRAPH02
+  for G1 being WGraph, G2 being WSubgraph of G1, G3 being WSubgraph of G2
+    holds G3 is WSubgraph of G1;
+
+theorem :: GLIB_003:17  ::tWSUBGRAPH03
+  for G1,G2 being WGraph, G3 being WSubgraph of G1
+   st G1 == G2 & the_Weight_of G1 = the_Weight_of G2
+   holds G3 is WSubgraph of G2;
+
+theorem :: GLIB_003:18  ::tWSUBGRAPH04
+  for G1 being WGraph, G2 be WSubgraph of G1 holds
+    for x being set st x in the_Edges_of G2 holds
+      (the_Weight_of G2).x = (the_Weight_of G1).x;
+
+:: Theorems regarding W.weightSeq()
+theorem :: GLIB_003:19  ::tWWSEQ01
+  for G being WGraph, W being Walk of G holds
+  W is trivial implies W.weightSeq() = {};
+
+theorem :: GLIB_003:20  ::tWWSEQ02
+  for G being WGraph, W being Walk of G
+    holds len W.weightSeq() = W.length();
+
+theorem :: GLIB_003:21  ::tWWSEQ03
+  for G being WGraph, x,y,e being set st e Joins x,y,G holds
+   G.walkOf(x,e,y).weightSeq() = <* (the_Weight_of G).e *>;
+
+theorem :: GLIB_003:22  ::tWWSEQ04
+  for G being WGraph, W being Walk of G
+   holds W.reverse().weightSeq() = Rev (W.weightSeq());
+
+theorem :: GLIB_003:23  ::tWWSEQ05
+  for G being WGraph, W1,W2 being Walk of G st W1.last() = W2.first() holds
+   W1.append(W2).weightSeq() = W1.weightSeq() ^ W2.weightSeq();
+
+theorem :: GLIB_003:24  ::tWWSEQ06
+  for G being WGraph, W being Walk of G, e being set
+   st e in W.last().edgesInOut() holds
+    W.addEdge(e).weightSeq() = W.weightSeq() ^ <* (the_Weight_of G).e *>;
+
+theorem :: GLIB_003:25  ::tWWSEQ07
+  for G being real-weighted WGraph, W1 being Walk of G, W2 being Subwalk of W1
+    holds ex ws being FinSubsequence of W1.weightSeq()
+       st W2.weightSeq() = Seq ws;
+
+theorem :: GLIB_003:26  ::tWWSEQ08
+  for G1,G2 being WGraph, W1 being Walk of G1, W2 being Walk of G2
+   st W1 = W2 & the_Weight_of G1 = the_Weight_of G2
+   holds W1.weightSeq() = W2.weightSeq();
+
+theorem :: GLIB_003:27  ::tWWSEQ09
+  for G1 being WGraph, G2 being WSubgraph of G1,
+      W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds
+    W1.weightSeq() = W2.weightSeq();
+
+:: Theorems regarding W.cost()
+theorem :: GLIB_003:28  ::tWCOST01
+  for G being real-weighted WGraph, W being Walk of G holds
+     W is trivial implies W.cost() = 0;
+
+theorem :: GLIB_003:29  ::tWCOST02
+  for G being real-weighted WGraph, v1,v2 being Vertex of G, e being set
+   st e Joins v1,v2,G
+   holds (G.walkOf(v1,e,v2)).cost() = (the_Weight_of G).e;
+
+theorem :: GLIB_003:30  ::tWCOST03
+  for G being real-weighted WGraph, W being Walk of G holds
+    W.cost() = W.reverse().cost();
+
+theorem :: GLIB_003:31  ::tWCOST04
+  for G being real-weighted WGraph, W1, W2 being Walk of G
+   st W1.last() = W2.first()
+   holds W1.append(W2).cost() = W1.cost() + W2.cost();
+
+theorem :: GLIB_003:32  ::tWCOST05
+  for G being real-weighted WGraph, W be Walk of G, e be set
+   st e in W.last().edgesInOut()
+   holds W.addEdge(e).cost() = W.cost() + (the_Weight_of G).e;
+
+theorem :: GLIB_003:33  ::tWCOST06
+  for G1,G2 being real-weighted WGraph, W1 being Walk of G1,W2 being Walk of G2
+   st W1 = W2 & the_Weight_of G1 = the_Weight_of G2
+   holds W1.cost() = W2.cost();
+
+theorem :: GLIB_003:34  ::tWCOST07
+  for G1 being real-weighted WGraph, G2 being WSubgraph of G1,
+      W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds
+    W1.cost() = W2.cost();
+
+:: Theorems regarding nonnegative-weighted WGraphs
+theorem :: GLIB_003:35  ::tWNNWEIGHT01
+  for G being nonnegative-weighted WGraph, W being Walk of G,
+      n being Nat st n in dom W.weightSeq() holds 0 <= (W.weightSeq()).n;
+
+theorem :: GLIB_003:36  ::tWNNWEIGHT02
+  for G being nonnegative-weighted WGraph, W being Walk of G
+    holds 0 <= W.cost();
+
+theorem :: GLIB_003:37  ::tWNNWEIGHT03
+  for G being nonnegative-weighted WGraph, W1 being Walk of G,
+      W2 being Subwalk of W1 holds W2.cost() <= W1.cost();
+
+theorem :: GLIB_003:38  ::tWNNWEIGHT04
+  for G being nonnegative-weighted WGraph, e be set holds
+    e in the_Edges_of G implies 0 <= (the_Weight_of G).e;
+
+:: Theorems involving G.labelEdge
+theorem :: GLIB_003:39  ::tGELABEL01
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+   the_ELabel_of G.labelEdge(e,x) = the_ELabel_of G +* (e .--> x);
+
+theorem :: GLIB_003:40  ::tGELABEL02
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+   (the_ELabel_of G.labelEdge(e,x)).e = x;
+
+theorem :: GLIB_003:41  ::tGELABEL03
+  for G being EGraph, e,x being set holds
+    G == G.labelEdge(e,x);
+
+theorem :: GLIB_003:42  ::tGELABEL04
+  for G being WEGraph, e,x being set holds
+    the_Weight_of  G = the_Weight_of  G.labelEdge(e,x);
+
+theorem :: GLIB_003:43  ::tGELABEL05
+  for G being EVGraph, e,x being set holds
+    the_VLabel_of  G = the_VLabel_of  G.labelEdge(e,x);
+
+theorem :: GLIB_003:44  ::tGELABEL06
+  for G being EGraph, e1,e2,x being set
+   st e1 <> e2 holds
+     (the_ELabel_of G.labelEdge(e1,x)).e2 = (the_ELabel_of G).e2;
+
+:: Theorems involving G.labelVertex
+theorem :: GLIB_003:45  ::tGVLABEL01
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+   the_VLabel_of G.labelVertex(v,x) = the_VLabel_of G +* (v .--> x);
+
+theorem :: GLIB_003:46  ::tGVLABEL02
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+   (the_VLabel_of G.labelVertex(v,x)).v = x;
+
+theorem :: GLIB_003:47  ::tGVLABEL03
+  for G being VGraph, v,x being set holds
+    G == G.labelVertex(v,x);
+
+theorem :: GLIB_003:48  ::tGVLABEL04
+  for G being WVGraph, v,x being set holds
+    the_Weight_of  G = the_Weight_of  G.labelVertex(v,x);
+
+theorem :: GLIB_003:49  ::tGVLABEL05
+  for G being EVGraph, v,x being set holds
+    the_ELabel_of  G = the_ELabel_of  G.labelVertex(v,x);
+
+theorem :: GLIB_003:50  ::tGVLABEL06
+  for G being VGraph, v1,v2,x being set
+   st v1 <> v2 holds
+     (the_VLabel_of G.labelVertex(v1,x)).v2 = (the_VLabel_of G).v2;
+
+:: Theorems regarding G.labeledE()
+theorem :: GLIB_003:51  ::tGLABELE01
+  for G1,G2 being EGraph st the_ELabel_of G1 = the_ELabel_of G2
+    holds G1.labeledE() = G2.labeledE();
+
+theorem :: GLIB_003:52  ::tGLABELE02
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+     G.labelEdge(e,x).labeledE() = G.labeledE() \/ {e};
+
+theorem :: GLIB_003:53  ::tGLABELE03
+ for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+     G.labeledE() c= G.labelEdge(e,x).labeledE();
+
+theorem :: GLIB_003:54  ::tGLABELE04
+  for G being finite EGraph, e, x being set
+   st e in the_Edges_of G & not e in G.labeledE()
+   holds card G.labelEdge(e,x).labeledE() = card G.labeledE() + 1;
+
+theorem :: GLIB_003:55  ::tGLABELE05
+  for G being EGraph, e1,e2,x being set
+    st not e2 in G.labeledE() & e2 in G.labelEdge(e1,x).labeledE()
+    holds e1 = e2 & e1 in the_Edges_of G;
+
+theorem :: GLIB_003:56  ::tGLABELE06
+  for G being EVGraph, v,x being set holds
+    G.labeledE() = G.labelVertex(v,x).labeledE();
+
+theorem :: GLIB_003:57  ::tGLABELV07
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G
+   holds e in G.labelEdge(e,x).labeledE();
+
+:: Theorems regarding G.labeledV()
+theorem :: GLIB_003:58  ::tGLABELV01
+  for G1,G2 being VGraph st the_VLabel_of G1 = the_VLabel_of G2
+    holds G1.labeledV() = G2.labeledV();
+
+theorem :: GLIB_003:59  ::tGLABELV02
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+     G.labelVertex(v,x).labeledV() = G.labeledV() \/ {v};
+
+theorem :: GLIB_003:60  ::tGLABELV03
+ for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+     G.labeledV() c= G.labelVertex(v,x).labeledV();
+
+theorem :: GLIB_003:61  ::tGLABELV04
+  for G being finite VGraph, v, x being set
+   st v in the_Vertices_of G & not v in G.labeledV()
+   holds card G.labelVertex(v,x).labeledV() = card G.labeledV() + 1;
+
+theorem :: GLIB_003:62  ::tGLABELV05
+ for G being VGraph, v1,v2,x being set
+   st not v2 in G.labeledV() & v2 in G.labelVertex(v1,x).labeledV()
+   holds v1 = v2 & v1 in the_Vertices_of G;
+
+theorem :: GLIB_003:63  ::tGLABELV06
+  for G being EVGraph, e,x being set holds
+    G.labeledV() = G.labelEdge(e,x).labeledV();
+
+theorem :: GLIB_003:64  ::tGLABELV07
+  for G being VGraph, v being Vertex of G, x being set holds
+    v in G.labelVertex(v,x).labeledV();

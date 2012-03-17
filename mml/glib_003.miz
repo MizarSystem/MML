@@ -1,0 +1,3395 @@
+:: Weighted and Labeled Graphs
+::  by Gilbert Lee
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, ARYTM, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1, FINSEQ_5,
+      FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_4, GRAPH_1, GRAPH_5, GLIB_000,
+      GLIB_001, GLIB_002, GLIB_003, MSAFREE2, PARTFUN1, PBOOLE, REALSET1,
+      RELAT_1, RELAT_2, RLVECT_1, SEQ_1, TREES_1;
+ notations TARSKI, XBOOLE_0, NUMBERS, SUBSET_1, XREAL_0, DOMAIN_1, REAL_1,
+      RELAT_1, PARTFUN1, FUNCT_1, SEQ_1, CARD_1, GRAPH_2, PBOOLE, CARD_FIL,
+      FUNCT_2, GRAPH_5, RVSUM_1, FINSEQ_5, ORDINAL1, POLYNOM1, RELSET_1,
+      FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, FUNCT_4, GLIB_000, GLIB_001,
+      GLIB_002;
+ constructors GRAPH_5, DOMAIN_1, SEQ_1, CARD_FIL, REAL_1, AMISTD_2, PSCOMP_1,
+      POLYNOM2, BINARITH, GRAPH_2, FINSEQ_5, GLIB_001, GLIB_002;
+ registrations RELSET_1, FINSET_1, PNPROC_1, INT_1, FINSEQ_1, NAT_1, SEQ_1,
+      TREES_2, FUNCT_1, MEMBERED, ORDINAL2, GLIB_000, GLIB_002, POLYNOM1,
+      CIRCCMB3;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+ theorems AMISTD_3, AXIOMS, CARD_1, CARD_2, CQC_LANG, FINSEQ_1, FINSEQ_2,
+      FINSEQ_3, FINSEQ_5, FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4,
+      GLIB_000, GLIB_001, GLIB_002, GRAPH_2, GRAPH_5, INT_1, NAT_1, PARTFUN1,
+      PBOOLE, POLYNOM3, REAL_1, RELAT_1, RELSET_1, RVSUM_1, SCM_1, SEQ_1,
+      TARSKI, XBOOLE_0, XBOOLE_1, XREAL_0, XCMPLX_1, ZFMISC_1, PRE_CIRC;
+ schemes NAT_1, FINSEQ_1, FUNCT_1;
+
+begin :: Preliminaries
+
+definition let D be set, fs be FinSequence of D, fss be FinSubsequence of fs;
+  redefine func Seq fss -> FinSequence of D;
+  correctness proof 
+    now let y be set; assume y in rng Seq fss; then
+        consider x being set such that
+    B2: x in dom Seq fss & (Seq fss).x = y by FUNCT_1:def 5;
+        reconsider x as Nat by B2;
+        consider n being Nat such that
+    B3: n in dom fs & x <= n & y = fs.n by B2, GLIB_001:4;
+        y in rng fs by B3, FUNCT_1:def 5;
+        hence y in D;
+    end; then
+    rng Seq fss c= D by TARSKI:def 3;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;  
+
+registration let F be real-yielding Relation, X be set;
+  cluster F | X -> real-yielding;
+  coherence proof
+A1: rng F c= REAL by SEQ_1:def 1;
+    rng (F | X) c= rng F by RELAT_1:99; then
+    rng (F | X) c= REAL by A1, XBOOLE_1:1;
+    hence thesis by SEQ_1:def 1;
+  end;
+end;  
+
+theorem tFINSEQ01: ::tFINSEQ01
+  for x1,x2,x3,x4,x5,x6,x7,x8,x9,x10 being set, p being FinSequence
+   st p=<*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>^<*x10*>
+     holds len p = 10 & p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 &
+       p.6 = x6 & p.7 = x7 & p.8 = x8 & p.9 = x9 & p.10 = x10 proof
+    let x1,x2,x3,x4,x5,x6,x7,x8,x9,x10 be set, p be FinSequence; assume
+A1: p = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>^<*x10*>;
+    set pa = <*x1*>^<*x2*>^<*x3*>^<*x4*>^<*x5*>^<*x6*>^<*x7*>^<*x8*>^<*x9*>;
+A2: len pa = 9 & pa.1 = x1 & pa.2 = x2 & pa.3 = x3 & pa.4 = x4 & pa.5 = x5 &
+      pa.6 = x6 & pa.7 = x7 & pa.8 = x8 & pa.9 = x9 by SCM_1:13;
+    thus len p = len pa + len <*x10*> by A1, FINSEQ_1:35
+              .= 9 + 1 by A2, FINSEQ_1:57
+              .= 10;
+    dom pa = Seg 9 by A2, FINSEQ_1:def 3; then
+    1 in dom pa & 2 in dom pa & 3 in dom pa & 4 in dom pa & 5 in dom pa &
+    6 in dom pa & 7 in dom pa & 8 in dom pa & 9 in dom pa by FINSEQ_1:3;
+    hence p.1 = x1 & p.2 = x2 & p.3 = x3 & p.4 = x4 & p.5 = x5 & p.6 = x6 &
+      p.7 = x7 & p.8 = x8 & p.9 = x9 by A1,A2,FINSEQ_1:def 7;
+    thus p.10 = p.(len pa + 1) by A2
+            .= x10 by A1, FINSEQ_1:59;
+end;      
+
+theorem tFINSUBSEQ05: ::tFINSUBSEQ05
+   for fs being FinSequence of REAL, fss being FinSubsequence of fs holds
+   (for i being Nat st i in dom fs holds 0 <= fs.i ) implies
+   Sum (Seq fss) <= Sum fs proof
+   defpred P[Nat] means
+     for fs being FinSequence of REAL, fss being FinSubsequence of fs
+      st (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss = $1
+        holds Sum (Seq fss) <= Sum fs;
+    now let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+    B1: (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss=0;then
+        Seq fss = <*> REAL by FINSEQ_1:25;
+        hence Sum (Seq fss) <= Sum fs by B1, RVSUM_1:114, RVSUM_1:102;
+    end; then
+A1: P[0];
+    now let k be Nat; assume
+    B1: P[k];
+        let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+    B2: (for i being Nat st i in dom fs holds 0 <= fs.i) & len Seq fss = k+1;
+        defpred P2[Nat] means $1 in dom fss;
+        consider L being Nat such that
+    B3: dom fss c= Seg L by FINSEQ_1:def 12;
+    B4: for n being Nat st P2[n] holds n <= L by B3,FINSEQ_1:3;
+    BY: fss c= fs by GRAPH_2:def 5;
+        card fss = k + 1 by B2, GLIB_001:5; then
+        dom fss <> {} by CARD_1:47,RELAT_1:64; then
+        consider d being set such that
+    B5: d in dom fss by XBOOLE_0:def 1;
+    B6: dom fss c= dom fs by GRAPH_2:27; then
+        d in dom fs by B5; then reconsider d as Nat;
+        d in dom fss by B5; then
+    B7: ex d being Nat st P2[d];
+        consider x being Nat such that
+    B8: P2[x] & for n being Nat st P2[n] holds n <= x from NAT_1:sch 6(B4,B7);
+        set y = fs.x;
+    BA: 1 <= x & x <= len fs by B6,B8,FINSEQ_3:27; then
+        reconsider x_1 = x-1 as Nat by INT_1:18;
+        set fssq = fss | Seg x_1;
+        reconsider fssq as FinSubsequence of fs by GRAPH_2:29;
+        consider j being Nat such that
+    BB: x + j = len fs by BA, NAT_1:28;
+        consider fsD, fsC being FinSequence of REAL such that
+    BC: len fsD = x & len fsC = j & fs = fsD ^ fsC by BB, FINSEQ_2:26;
+    BD: x_1 + 1 = x; then
+        consider fsA, fsB being FinSequence of REAL such that
+    BE: len fsA = x_1 & len fsB = 1 & fsD = fsA ^ fsB by BC,FINSEQ_2:26;
+        x in dom fsD by BA, BC, FINSEQ_3:27; then
+    BG: y = fsD.x by BC, FINSEQ_1:def 7;
+        1 in dom fsB by BE, FINSEQ_3:27; then
+        y = fsB.1 by BD, BE, BG, FINSEQ_1:def 7; then
+    BH: fsB = <* y *> by BE, FINSEQ_1:57;
+    BI: Sum fs = Sum fsD + Sum fsC by BC, RVSUM_1:105
+              .= Sum fsA + Sum <*y*> + Sum fsC by BH, BE, RVSUM_1:105
+              .= Sum fsA + y + Sum fsC by RVSUM_1:103;
+        now let i be Nat; assume
+        C1: i in dom fsC; then
+        C2: fs.(x+i) = fsC.i by BC, FINSEQ_1:def 7;
+            x+i in dom fs by BC, C1, FINSEQ_1:41;
+            hence 0 <= fsC.i by C2, B2;
+        end; then
+        0 <= Sum fsC by RVSUM_1:114; then
+    BJ: Sum fsA + y + 0 <= Sum fs by BI, REAL_1:55;
+        consider q being (FinSequence of REAL), z being Real such that
+    BK: Seq fss = q^<*z*> by B2, FINSEQ_2:22;
+    BX: len Seq fss = len q + len <*z*> by BK, FINSEQ_1:35; then
+    BF: k + 1 = len q + 1 by B2, FINSEQ_1:56; then
+    BL: len q = k by XCMPLX_1:2;
+    BM: now let i be Nat; assume
+        C1: i in dom fsA; then
+        C2: fsA.i = fsD.i by BE, FINSEQ_1:def 7;
+        CZ: dom fsA c= dom fsD by BE, FINSEQ_1:39; then
+        C3: i in dom fsD by C1; 
+        C4: fsA.i = fs.i by BC, C2, FINSEQ_1:def 7,CZ,C1;
+            dom fsD c= dom fs by BC, FINSEQ_1:39;
+            hence 0 <= fsA.i by B2, C4,C3;
+        end;
+        now let z be set; assume
+        C1: z in fssq; then consider a,b being set such that
+        C2: z = [a,b] by RELAT_1:def 1;
+        C3: a in Seg x_1 & [a,b] in fss by C1,C2,RELAT_1:def 11; then
+            reconsider a as Nat;
+        C4: 1 <= a & a <= x_1 by C3, FINSEQ_1:3; then
+        C5: a in dom fsA by BE, FINSEQ_3:27;
+        C6: a in dom fs & b = fs.a by BY,C3,FUNCT_1:8;
+            a+0 <= x by BD, C4, REAL_1:55; then
+            a in dom fsD by BC,C4, FINSEQ_3:27; then
+            b = fsD.a by BC, C6, FINSEQ_1:def 7; then
+            b = fsA.a by BE, C5, FINSEQ_1:def 7;
+            hence z in fsA by C2,C5,FUNCT_1:8;
+        end; then
+        fssq c= fsA by TARSKI:def 3; then
+        reconsider fssq as FinSubsequence of fsA by GRAPH_2:def 5;
+        now
+        C1: len Seq fssq = card fssq by GLIB_001:5;
+        C2: card fss = k+1  by B2, GLIB_001:5;
+        CZ: now let z be set; assume z in {[x,y]}; then
+            D1: z = [x,y] by TARSKI:def 1;
+            D2: [x,fss.x] in fss by B8, FUNCT_1:8;
+                thus z in fss by D1, FUNCT_1:8,D2,BY;
+            end; then
+        C3: {[x,y]} c= fss by TARSKI:def 3;
+            now let z be set;
+                hereby assume
+                E1: z in fssq; then consider a,b being set such that
+                E2: z = [a,b] by RELAT_1:def 1;
+                E3: z in fss & a in Seg x_1 by E1, E2, RELAT_1:def 11; then
+                    reconsider a as Nat;
+                    a <= x_1 by E3, FINSEQ_1:3; then
+                    a < x by BD, NAT_1:38; then
+                    [a,b] <> [x,y] by ZFMISC_1:33; then
+                    not z in {[x,y]} by E2, TARSKI:def 1;
+                    hence z in fss \ {[x,y]} by E3, XBOOLE_0:def 4;
+                end;
+                assume
+            D1: z in fss \ {[x,y]}; then
+            DZ: z in fss & not z in {[x,y]} by XBOOLE_0:def 4;
+                consider a,b being set such that
+            D2: z = [a,b] by D1,RELAT_1:def 1;
+            D4: a in dom fss by D1,D2,FUNCT_1:8;
+            D5: a in dom fs by D2,BY,DZ,FUNCT_1:8; then
+                reconsider a as Nat;
+            D6: 1 <= a by D5, FINSEQ_3:27;
+            D7: a <= x by B8, D4;
+            D8: a <> x or b <> y by D2, DZ, TARSKI:def 1;
+                [x,y] in {[x,y]} by TARSKI:def 1; then
+                [x,y] in fss by CZ; then
+                a <> x by D1,D2,FUNCT_1:def 1,D8; then
+                a < x by D7,REAL_1:def 5; then
+                a+1 <= x by NAT_1:38; then
+                a+1-1 <= x-1 by REAL_1:92; then
+                a in Seg x_1 by D6, FINSEQ_1:3;
+                hence z in fssq by D1, D2, RELAT_1:def 11;
+            end; then
+            fssq = fss \ {[x,y]} by TARSKI:2; then
+        CZ: card fssq = card fss - card {[x,y]} by C3, CARD_2:63
+                     .= k+1-1 by C2, CARD_1:79
+                     .= k;
+            hence
+        C5: len q = len Seq(fssq) by BF,XCMPLX_1:2,C1;
+            let n be Nat;
+            set x1 = Sgm(dom fss).n, x2 = Sgm(dom fssq).n; assume
+        C6: 1 <= n & n <= len q; then
+            n in dom q by FINSEQ_3:27; then
+        C8: q.n = (Seq fss).n by BK, FINSEQ_1:def 7;
+            n <= k+1 by C6,BX,B2,NAT_1:37; then
+        C9: n in dom Seq(fss) by B2, C6, FINSEQ_3:27;
+            Seq fss = fss * Sgm (dom fss) by FINSEQ_1:def 14; then
+        CB: q.n = fss.x1 by C8, C9, FUNCT_1:22;
+        CC: n in dom Seq fssq by C5, C6, FINSEQ_3:27;
+            Seq fssq = fssq * Sgm(dom fssq) by FINSEQ_1:def 14; then
+        CE: (Seq fssq).n = fssq.x2 by CC, FUNCT_1:22;
+            consider lk being Nat such that
+        CF: dom fssq c= Seg lk by FINSEQ_1:def 12;
+            len Sgm (dom fssq) = card dom fssq by CF, FINSEQ_3:44
+                              .= k by CZ,PRE_CIRC:21; then
+        CH: n in dom Sgm(dom fssq) by BL,C6,FINSEQ_3:27; then
+            x2 in rng Sgm(dom fssq) by FUNCT_1:def 5; then
+            x2 in dom fssq by CF,FINSEQ_1:def 13; then
+            [x2,fssq.x2] in fssq by FUNCT_1:8; then
+            [x2,fssq.x2] in fss & x2 in Seg x_1 by RELAT_1:def 11; then
+        CK: fss.x2 = fssq.x2 by FUNCT_1:8;
+            now let z be set;
+                hereby assume
+                E1: z in dom fss; then
+                E2: [z, fss.z] in fss by FUNCT_1:8; then
+                E3: z in dom fs by BY,FUNCT_1:8; then
+                    reconsider z' = z as Nat;
+                E4: z' <= x by B8, E1;
+                E5: 1 <= z' by E3, FINSEQ_3:27;
+                    now assume not z in {x}; then
+                        z <> x by TARSKI:def 1; then
+                        z' < x_1+1 by E4, REAL_1:def 5; then
+                        z' <= x_1 by NAT_1:38; then
+                        z' in Seg x_1 by E5, FINSEQ_1:3; then
+                        [z,fss.z] in fssq by E2, RELAT_1:def 11;
+                        hence z in dom fssq by FUNCT_1:8;
+                    end; 
+                    hence z in (dom fssq) \/ {x} by XBOOLE_0:def 2;
+                end;
+                assume
+            D1:z in (dom fssq) \/ {x};
+                now per cases by D1, XBOOLE_0:def 2;
+                  suppose z in dom fssq; then
+                    [z, fssq.z] in fssq by FUNCT_1:8; then
+                    [z, fssq.z] in fss by RELAT_1:def 11;
+                    hence z in dom fss by FUNCT_1:8;
+                  end;
+                  suppose z in {x};
+                    hence z in dom fss by B8,TARSKI:def 1;
+                  end;
+                end;
+                hence z in dom fss;
+            end; then
+        CL: dom fss = (dom fssq) \/ {x} by TARSKI:2;
+            now let z be set; assume z in {x}; then
+                z = x by TARSKI:def 1;
+                hence z in Seg len fs by BA, FINSEQ_1:3;
+            end; then
+        CM: {x} c= Seg len fs by TARSKI:def 3;
+            now let m,n be Nat; assume
+            D1: m in dom fssq & n in {x};
+            D2: n = x by D1, TARSKI:def 1;
+                [m,fssq.m] in fssq by D1, FUNCT_1:8; then
+                m in Seg x_1 by RELAT_1:def 11; then
+                m <= x_1 by FINSEQ_1:3;
+                hence m < n by BD, D2, NAT_1:38;
+            end; then
+            Sgm(dom fss) = Sgm(dom fssq) ^ Sgm({x}) by CF,CL,CM,FINSEQ_3:48;
+            hence q.n = (Seq fssq).n by CB, CE, CK,CH,FINSEQ_1:def 7;
+        end; then
+        q = Seq fssq by FINSEQ_1:18; then
+    BO: Sum q <= Sum fsA by BL,BM,B1;
+        now 
+        C1: (Seq fss).(len Seq fss) = z by B2, BK, BF,FINSEQ_1:59;
+        C2: Seq fss = (fss * Sgm(dom fss)) by FINSEQ_1:def 14;
+            1 <= k+1 by NAT_1:37; then
+            len Seq fss in dom Seq fss by B2, FINSEQ_3:27; then
+        C4: fss.(Sgm(dom fss).(len Seq fss)) = z
+              by C2,C1,FUNCT_1:22;
+            set g = Sgm(dom fss);
+        C5: len Seq fss = card fss by GLIB_001:5
+                       .= card dom fss by PRE_CIRC:21
+                       .= len Sgm(dom fss) by B3, FINSEQ_3:44;
+            now assume
+            D0: g.(len Seq fss) <> x;
+            DZ: rng g = dom fss by B3, FINSEQ_1:def 13; then
+                consider v being set such that
+            D2: v in dom g & g.v = x by B8,FUNCT_1:def 5;
+                reconsider v as Nat by D2;
+            D3: 1 <= v & v <= len g by D2, FINSEQ_3:27; then
+            D4: v < len g by REAL_1:def 5,C5,D0,D2; 
+                set k2 = g.(len g);
+                1 <= len g by B2, C5, NAT_1:37; then
+                len g in dom g by FINSEQ_3:27; then
+            D5: k2 in rng g by FUNCT_1:def 5;
+                reconsider k2 as Nat;
+                x < k2 by B3, D2, D3, D4, FINSEQ_1:def 13;
+                hence contradiction by B8,D5,DZ;
+            end; then
+            [x,z] in fss by C4,B8,FUNCT_1:8;
+            hence y = z by FUNCT_1:8,BY;
+        end; then
+        Sum (Seq fss) = y + Sum q by BK, RVSUM_1:104; then
+        Sum (Seq fss) + Sum q <= y + Sum q + Sum fsA by BO, REAL_1:55; then
+        Sum (Seq fss) + Sum q <= y + Sum fsA + Sum q; then
+        Sum (Seq fss) <= Sum fsA + y by REAL_1:53; 
+        hence Sum (Seq fss) <= Sum fs by BJ, AXIOMS:22;
+    end; then
+A2: for k being Nat st P[k] holds P[k+1];
+A3: for k being Nat holds P[k] from NAT_1:sch 1(A1,A2);
+    let fs be FinSequence of REAL, fss be FinSubsequence of fs; assume
+A4: for i being Nat st i in dom fs holds 0 <= fs.i;
+    len Seq fss = len Seq fss; 
+    hence Sum (Seq fss) <= Sum fs by A3, A4;
+end;   
+
+begin :: Definitions
+
+definition
+  func WeightSelector -> Nat equals :dSELW: ::dSELW
+    5; coherence;
+  func ELabelSelector -> Nat equals :dSELEL: ::dSELEL
+    6; coherence;
+  func VLabelSelector -> Nat equals :dSELVL: ::dSELVL
+    7; coherence;
+end;
+
+definition let G be GraphStruct;
+  attr G is [Weighted] means :dWEIGHTED: ::dWEIGHTED
+    WeightSelector in dom G &
+    G.WeightSelector is ManySortedSet of the_Edges_of G;
+
+  attr G is [ELabeled] means :dELABELED: ::dELABELED
+    ELabelSelector in dom G &
+    ex f being Function st G.ELabelSelector = f & dom f c= the_Edges_of G;
+      
+  attr G is [VLabeled] means :dVLABELED: ::dVLABELED
+    VLabelSelector in dom G &
+    ex f being Function st G.VLabelSelector = f & dom f c= the_Vertices_of G;
+end;
+  
+registration
+  cluster [Graph-like] [Weighted] [ELabeled] [VLabeled] GraphStruct;
+  existence proof
+    set _V = {1}, _E = {};
+    consider _S being Function of _E,_V;
+    consider _W being ManySortedSet of _E;
+    consider _EL being PartFunc of _E,REAL;
+    consider _VL being PartFunc of _V,REAL;
+    set G=<*_V*>^<*_E*>^<*_S*>^<*_S*>^<*_W*>^<*_EL*>^<*_VL*>;
+A1: len G = 7 & G.1 = _V & G.2 = _E & G.3 = _S & G.4 = _S & G.5 = _W &
+      G.6 = _EL & G.7 = _VL by SCM_1:11; then
+    dom G = Seg 7 by FINSEQ_1:def 3; then
+    reconsider G as GraphStruct by GLIB_000:def 1;
+    take G;
+    dom G = Seg 7 by A1, FINSEQ_1:def 3; then
+A3: VertexSelector in dom G & EdgeSelector in dom G & SourceSelector in dom G &
+    TargetSelector in dom G & WeightSelector in dom G &
+    ELabelSelector in dom G & VLabelSelector in dom G
+      by GLIB_000:1,dSELW,dSELEL,dSELVL,FINSEQ_1:3;
+A4: the_Vertices_of G = _V & the_Edges_of G = _E & the_Source_of G = _S &
+      the_Target_of G = _S & G.WeightSelector = _W & G.ELabelSelector = _EL &
+      G.VLabelSelector = _VL
+      by A1,GLIB_000:4,GLIB_000:1,dSELW,dSELEL,dSELVL;
+    dom _EL c= _E & dom _VL c= _V;
+    hence thesis by A3,A4,GLIB_000:def 11, dWEIGHTED, dELABELED, dVLABELED;
+   end;  
+end;
+
+definition
+  mode   WGraph is [Weighted]                       _Graph;
+  mode   EGraph is            [ELabeled]            _Graph;
+  mode   VGraph is                       [VLabeled] _Graph;
+  mode  WEGraph is [Weighted] [ELabeled]            _Graph;
+  mode  WVGraph is [Weighted]            [VLabeled] _Graph;
+  mode  EVGraph is            [ELabeled] [VLabeled] _Graph;
+  mode WEVGraph is [Weighted] [ELabeled] [VLabeled] _Graph;
+end;
+
+definition let G be WGraph;
+  func the_Weight_of G -> ManySortedSet of the_Edges_of G equals :dWEIGHT: ::dWEIGHT
+    G.WeightSelector; coherence by dWEIGHTED;
+end;
+
+definition let G be EGraph;
+  func the_ELabel_of G -> Function equals :dELABEL: ::dELABEL
+    G.ELabelSelector;
+  coherence proof
+    consider f being Function such that
+A1: G.ELabelSelector = f & dom f c= the_Edges_of G by dELABELED;
+    thus thesis by A1;
+  end;
+end;
+
+definition let G be VGraph;
+  func the_VLabel_of G -> Function equals :dVLABEL: ::dVLABEL
+    G.VLabelSelector;
+  coherence proof
+    consider f being Function such that
+A1: G.VLabelSelector = f & dom f c= the_Vertices_of G by dVLABELED;
+    thus thesis by A1;
+  end;
+end;  
+
+lEGRAPH01:
+  for G being EGraph holds
+    dom the_ELabel_of G c= the_Edges_of G proof
+    let G be EGraph;
+    consider f being Function such that
+A1: G.ELabelSelector = f & dom f c= the_Edges_of G by dELABELED;
+    thus thesis by A1, dELABEL;
+end;
+
+lVGRAPH01:
+  for G being VGraph holds
+    dom the_VLabel_of G c= the_Vertices_of G proof
+    let G be VGraph;
+    consider f being Function such that
+A1: G.VLabelSelector = f & dom f c= the_Vertices_of G by dVLABELED;
+    thus thesis by A1, dVLABEL;
+end;
+
+registration let G be _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> [Graph-like]; coherence proof
+    not WeightSelector in _GraphSelectors by GLIB_000:1,GLIB_000:2,dSELW;
+    hence thesis by GLIB_000:13;
+  end;
+  cluster G.set(ELabelSelector,  X) -> [Graph-like]; coherence proof
+    not ELabelSelector in _GraphSelectors by GLIB_000:1,GLIB_000:2,dSELEL;
+    hence thesis by GLIB_000:13;
+  end;
+  cluster G.set(VLabelSelector,  X) -> [Graph-like]; coherence proof
+    not VLabelSelector in _GraphSelectors by GLIB_000:1,GLIB_000:2,dSELVL;
+    hence thesis by GLIB_000:13;
+  end;
+end;
+
+lGSET09:
+  for G being _Graph, X being set holds
+    G.set(WeightSelector ,X) == G &
+    G.set(ELabelSelector ,X) == G &
+    G.set(VLabelSelector ,X) == G proof
+    let G be _Graph, X be set; set GS = _GraphSelectors;    
+    set G2 = G.set(WeightSelector,X);
+    not WeightSelector in GS by GLIB_000:1,GLIB_000:2,dSELW;then
+    the_Vertices_of G2 = the_Vertices_of G &
+    the_Edges_of G2 = the_Edges_of G &
+    the_Source_of G2 = the_Source_of G &
+    the_Target_of G2 = the_Target_of G by GLIB_000:13;
+    hence G2 == G by GLIB_000:def 36;
+    set G2 = G.set(ELabelSelector,X);
+    not ELabelSelector in GS by GLIB_000:1,GLIB_000:2,dSELEL;then
+    the_Vertices_of G2 = the_Vertices_of G &
+    the_Edges_of G2 = the_Edges_of G &
+    the_Source_of G2 = the_Source_of G &
+    the_Target_of G2 = the_Target_of G by GLIB_000:13;
+    hence G2 == G by GLIB_000:def 36;
+    set G2 = G.set(VLabelSelector,X);
+    not VLabelSelector in GS by GLIB_000:1,GLIB_000:2,dSELVL;then
+    the_Vertices_of G2 = the_Vertices_of G &
+    the_Edges_of G2 = the_Edges_of G &
+    the_Source_of G2 = the_Source_of G &
+    the_Target_of G2 = the_Target_of G by GLIB_000:13;
+    hence G2 == G by GLIB_000:def 36;
+end;
+
+registration let G be finite _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> finite; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> finite; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> finite; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be loopless _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> loopless; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> loopless; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> loopless; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be trivial _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> trivial; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> trivial; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> trivial; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be non trivial _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non trivial; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> non trivial; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> non trivial; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be non-multi _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non-multi; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> non-multi; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> non-multi; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be non-Dmulti _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> non-Dmulti; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(ELabelSelector,  X) -> non-Dmulti; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+  cluster G.set(VLabelSelector,  X) -> non-Dmulti; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_000:92;
+  end;
+end;  
+
+registration let G be connected _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> connected; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_002:8;
+  end;
+  cluster G.set(ELabelSelector,  X) -> connected; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_002:8;
+  end;
+  cluster G.set(VLabelSelector,  X) -> connected; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_002:8;
+  end;
+end;
+
+registration let G be acyclic _Graph, X be set;
+  cluster G.set(WeightSelector,  X) -> acyclic; coherence proof
+    G.set(WeightSelector,X) == G by lGSET09;
+    hence thesis by GLIB_002:44;
+  end;
+  cluster G.set(ELabelSelector,  X) -> acyclic; coherence proof
+    G.set(ELabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_002:44;
+  end;
+  cluster G.set(VLabelSelector,  X) -> acyclic; coherence proof
+    G.set(VLabelSelector, X) == G by lGSET09;
+    hence thesis by GLIB_002:44;
+  end;
+end; 
+
+registration let G be WGraph, X be set;
+  cluster G.set(ELabelSelector,  X) -> [Weighted]; coherence proof
+    set G1 = G.set(ELabelSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    WeightSelector in dom G by dWEIGHTED;
+    hence WeightSelector in dom G1 by A1;
+A2: G == G1 by lGSET09;
+    G1.WeightSelector = G.WeightSelector by dSELW,dSELEL,GLIB_000:12
+                     .= the_Weight_of G by dWEIGHT;
+    hence thesis by A2,GLIB_000:def 36;
+  end;
+  cluster G.set(VLabelSelector,  X) -> [Weighted]; coherence proof
+    set G1 = G.set(VLabelSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    WeightSelector in dom G by dWEIGHTED;
+    hence WeightSelector in dom G1 by A1;
+A2: G == G1 by lGSET09;
+    G1.WeightSelector = G.WeightSelector by dSELW,dSELVL,GLIB_000:12
+                    .= the_Weight_of G by dWEIGHT;
+    hence thesis by A2,GLIB_000:def 36;
+  end;
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Edges_of G;
+  cluster G.set(WeightSelector,  X) -> [Weighted]; coherence proof 
+    set G1 = G.set(WeightSelector, X);
+A1: dom G1 = dom G \/ {WeightSelector} by GLIB_000:9;
+    WeightSelector in {WeightSelector} by TARSKI:def 1;
+    hence WeightSelector in dom G1 by A1,XBOOLE_0:def 2;
+    G == G1 by lGSET09; then
+    the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;
+    hence thesis by GLIB_000:11;
+  end;
+end;  
+registration let G be _Graph, WL be non empty set,
+               W be Function of the_Edges_of G, WL;
+  cluster G.set(WeightSelector, W) -> [Weighted]; coherence proof
+    dom W = the_Edges_of G by FUNCT_2:def 1; then
+    reconsider W'=W as ManySortedSet of the_Edges_of G by PBOOLE:def 3;
+    G.set(WeightSelector,W') is [Weighted];
+    hence thesis;
+  end;
+end;  
+
+registration let G be EGraph, X be set;
+  cluster G.set(WeightSelector,  X) -> [ELabeled]; coherence proof
+    set G1 = G.set(WeightSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    ELabelSelector in dom G by dELABELED;
+    hence ELabelSelector in dom G1 by A1;
+    G == G1 by lGSET09; then
+A2: the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;
+A3: G1.ELabelSelector = G.ELabelSelector by dSELEL,dSELW,GLIB_000:12
+                     .= the_ELabel_of G by dELABEL;
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01;
+    hence thesis by A2,A3;
+  end;
+  cluster G.set(VLabelSelector,  X) -> [ELabeled]; coherence proof
+    set G1 = G.set(VLabelSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    ELabelSelector in dom G by dELABELED;
+    hence ELabelSelector in dom G1 by A1;
+    G == G1 by lGSET09; then
+A2: the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;
+A3: G1.ELabelSelector = G.ELabelSelector by dSELVL,dSELEL,GLIB_000:12
+                      .= the_ELabel_of G by dELABEL;
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01;                 
+    hence thesis by A2,A3;
+  end;
+end;
+
+registration let G be _Graph, Y be set, X be PartFunc of the_Edges_of G, Y;
+  cluster G.set(ELabelSelector, X) -> [ELabeled]; coherence proof
+    set G1 = G.set(ELabelSelector,X);
+A1: dom G1 = dom G \/ {ELabelSelector} by GLIB_000:9;
+    ELabelSelector in {ELabelSelector} by TARSKI:def 1;
+    hence ELabelSelector in dom G1 by A1, XBOOLE_0:def 2;
+    G == G1 by lGSET09; then
+A2: the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;    
+A3: G1.ELabelSelector = X by GLIB_000:11;
+    dom X c= the_Edges_of G;
+    hence thesis by A2, A3;
+  end;
+end;
+
+registration let G be _Graph, X be ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector, X) -> [ELabeled]; coherence proof
+    set G1 = G.set(ELabelSelector,X);
+A1: dom G1 = dom G \/ {ELabelSelector} by GLIB_000:9;
+    ELabelSelector in {ELabelSelector} by TARSKI:def 1;
+    hence ELabelSelector in dom G1 by A1, XBOOLE_0:def 2;
+    G == G1 by lGSET09; then
+A2: the_Edges_of G = the_Edges_of G1 by GLIB_000:def 36;    
+A3: G1.ELabelSelector = X by GLIB_000:11;
+    dom X = the_Edges_of G by PBOOLE:def 3;
+    hence thesis by A2, A3;
+  end;
+end;  
+
+registration let G be VGraph, X be set;
+  cluster G.set(WeightSelector,  X) -> [VLabeled]; coherence proof
+    set G1 = G.set(WeightSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    VLabelSelector in dom G by dVLABELED;
+    hence VLabelSelector in dom G1 by A1;
+    G == G1 by lGSET09; then
+A2: the_Vertices_of G = the_Vertices_of G1 by GLIB_000:def 36;
+A3: G1.VLabelSelector = G.VLabelSelector by dSELW,dSELVL,GLIB_000:12
+                     .= the_VLabel_of G by dVLABEL;
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01;
+    hence thesis by A2,A3;
+  end;
+  cluster G.set(ELabelSelector,  X) -> [VLabeled]; coherence proof
+    set G1 = G.set(ELabelSelector,X);
+A1: dom G c= dom G1 by GLIB_000:10;
+    VLabelSelector in dom G by dVLABELED;
+    hence VLabelSelector in dom G1 by A1;
+    G == G1 by lGSET09; then
+A2: the_Vertices_of G = the_Vertices_of G1 by GLIB_000:def 36;
+A3: G1.VLabelSelector = G.VLabelSelector by dSELEL,dSELVL,GLIB_000:12
+                     .= the_VLabel_of G by dVLABEL;
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01;
+    hence thesis by A2,A3;
+  end;
+end;
+
+registration let G be _Graph, Y be set, X be PartFunc of the_Vertices_of G,Y;
+  cluster G.set(VLabelSelector,  X) -> [VLabeled]; coherence proof
+    set G1 = G.set(VLabelSelector,X);
+A1: dom G1 = dom G \/ {VLabelSelector} by GLIB_000:9;
+    VLabelSelector in {VLabelSelector} by TARSKI:def 1;
+    hence VLabelSelector in dom G1 by A1,XBOOLE_0:def 2;
+    G == G1 by lGSET09; then
+A2: the_Vertices_of G = the_Vertices_of G1 by GLIB_000:def 36;    
+A3: G1.VLabelSelector = X by GLIB_000:11;
+    dom X c= the_Vertices_of G;
+    hence thesis by A2, A3;
+  end;
+end;  
+
+registration let G be _Graph, X be ManySortedSet of the_Vertices_of G;
+  cluster G.set(VLabelSelector,  X) -> [VLabeled]; coherence proof
+    set G1 = G.set(VLabelSelector,X);
+A1: dom G1 = dom G \/ {VLabelSelector} by GLIB_000:9;
+    VLabelSelector in {VLabelSelector} by TARSKI:def 1;
+    hence VLabelSelector in dom G1 by A1,XBOOLE_0:def 2;
+    G == G1 by lGSET09; then
+A2: the_Vertices_of G = the_Vertices_of G1 by GLIB_000:def 36;    
+A3: G1.VLabelSelector = X by GLIB_000:11;
+    dom X = the_Vertices_of G by PBOOLE:def 3;
+    hence thesis by A2, A3;
+  end;
+end;  
+
+registration let G be _Graph;
+  cluster G.set(ELabelSelector, {}) -> [ELabeled]; coherence proof
+    consider Y being set;
+    reconsider X ={} as PartFunc of the_Edges_of G,Y by PARTFUN1:56;   
+    G.set(ELabelSelector, X) is [ELabeled];
+    hence thesis;
+  end;
+  cluster G.set(VLabelSelector, {}) -> [VLabeled]; coherence proof
+    reconsider X ={} as PartFunc of the_Vertices_of G,{} by PARTFUN1:56;   
+    G.set(VLabelSelector, X) is [VLabeled];
+    hence thesis;
+  end;
+end;
+
+registration let G be _Graph;
+  cluster [Weighted] [ELabeled] [VLabeled] Subgraph of G;
+  existence proof
+    consider W being ManySortedSet of the_Edges_of G;
+    set G2 = G.set(WeightSelector, W);
+    consider E being PartFunc of the_Edges_of G2, REAL;
+    set G3 = G2.set(ELabelSelector, E);
+    consider V being PartFunc of the_Vertices_of G3, REAL;
+    set G4 = G3.set(VLabelSelector, V);
+    G == G2 & G2 == G3 & G3 == G4 by lGSET09; then
+A2: G == G3 by GLIB_000:88;
+    G3 == G4 by lGSET09; then
+    G == G4 by A2, GLIB_000:88; then
+    G4 is Subgraph of G by GLIB_000:90;
+    hence thesis;
+  end;
+end;  
+
+definition let G be WGraph, G2 be [Weighted] Subgraph of G;
+  attr G2 is weight-inheriting means :dGWINHERIT: ::dGWINHERIT
+    the_Weight_of  G2 = (the_Weight_of G) | the_Edges_of G2;
+end;
+
+definition let G be EGraph, G2 be [ELabeled] Subgraph of G;
+  attr G2 is elabel-inheriting means :dGEINHERIT: ::dEINHERIT
+    the_ELabel_of  G2 = (the_ELabel_of G) | the_Edges_of G2;
+end;
+
+definition let G be VGraph, G2 be [VLabeled] Subgraph of G;
+  attr G2 is vlabel-inheriting means :dGVINHERIT: ::dGVINHERIT
+    the_VLabel_of  G2 = (the_VLabel_of G) | the_Vertices_of G2;
+end;      
+
+registration let G be WGraph;
+  cluster weight-inheriting ([Weighted] Subgraph of G);
+  existence proof
+    reconsider _G = G as [Weighted] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+    the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+    hence thesis by dGWINHERIT;
+  end;
+end;
+registration let G be EGraph;
+  cluster elabel-inheriting ([ELabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [ELabeled] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+    the_ELabel_of _G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+    hence thesis by dGEINHERIT;
+  end;
+end;  
+registration let G be VGraph;
+  cluster vlabel-inheriting ([VLabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [VLabeled] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+    the_VLabel_of _G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+    hence thesis by dGVINHERIT;
+  end;
+end;
+registration let G be WEGraph;
+  cluster weight-inheriting elabel-inheriting
+    ([Weighted] [ELabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [Weighted] [ELabeled] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+    the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+    hence _G is weight-inheriting by dGWINHERIT;
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+    the_ELabel_of _G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+    hence thesis by dGEINHERIT;
+  end;
+end;
+registration let G be WVGraph;
+  cluster weight-inheriting vlabel-inheriting
+    ([Weighted] [VLabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [Weighted] [VLabeled] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+    the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+    hence _G is weight-inheriting by dGWINHERIT;    
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+    the_VLabel_of _G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+    hence thesis by dGVINHERIT;    
+  end;
+end;
+registration let G be EVGraph;
+  cluster elabel-inheriting vlabel-inheriting
+    ([ELabeled] [VLabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [ELabeled] [VLabeled] Subgraph of G by GLIB_000:43;
+    take _G;
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+    the_ELabel_of _G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+    hence _G is elabel-inheriting by dGEINHERIT;
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+    the_VLabel_of _G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+    hence thesis by dGVINHERIT;     
+  end;
+end;  
+registration let G be WEVGraph;
+  cluster weight-inheriting elabel-inheriting vlabel-inheriting
+    ([Weighted] [ELabeled] [VLabeled] Subgraph of G);
+  existence proof
+    reconsider _G = G as [Weighted] [ELabeled] [VLabeled] Subgraph of G
+      by GLIB_000:43;
+    take _G;
+    dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+    the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+    hence _G is weight-inheriting by dGWINHERIT;    
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+    the_ELabel_of _G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+    hence _G is elabel-inheriting by dGEINHERIT;
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+    the_VLabel_of _G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+    hence thesis by dGVINHERIT;     
+  end;
+end;
+
+definition let G be WGraph;
+  mode WSubgraph of G is weight-inheriting ([Weighted] Subgraph of G);
+end;  
+definition let G be EGraph;
+  mode ESubgraph of G is elabel-inheriting ([ELabeled] Subgraph of G);
+end;
+definition let G be VGraph;
+  mode VSubgraph of G is vlabel-inheriting ([VLabeled] Subgraph of G);
+end;
+definition let G be WEGraph;
+  mode WESubgraph of G is weight-inheriting elabel-inheriting
+    ([Weighted] [ELabeled] Subgraph of G);
+end;
+definition let G be WVGraph;
+  mode WVSubgraph of G is weight-inheriting vlabel-inheriting
+    ([Weighted] [VLabeled] Subgraph of G);
+end;
+definition let G be EVGraph;
+  mode EVSubgraph of G is elabel-inheriting vlabel-inheriting
+    ([ELabeled] [VLabeled] Subgraph of G);
+end;    
+definition let G be WEVGraph;
+  mode WEVSubgraph of G is weight-inheriting elabel-inheriting
+    vlabel-inheriting ([Weighted] [ELabeled] [VLabeled] Subgraph of G);
+end;
+
+registration let G be _Graph, V,E be set;
+  cluster [Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E;
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being inducedSubgraph of G,V,E;
+        consider W being ManySortedSet of the_Edges_of X;
+        set G2 = X.set(WeightSelector, W);
+        consider EL being PartFunc of the_Edges_of G2, REAL;
+        set G3 = G2.set(ELabelSelector, EL);
+        consider VL being PartFunc of the_Vertices_of G3, REAL;
+        set G4 = G3.set(VLabelSelector, VL);
+    B2: X == G2 & G2 == G3 & G3 == G4 by lGSET09; then
+        X == G3 by GLIB_000:88; then
+    B4: X == G4 by B2,GLIB_000:88; then
+        G4 is Subgraph of X by GLIB_000:90; then
+        reconsider G4 as Subgraph of G by GLIB_000:46; 
+        the_Vertices_of X = V & the_Edges_of X = E by B1,GLIB_000:def 39; then
+        the_Vertices_of G4 = V & the_Edges_of G4=E by B4,GLIB_000:def 36; then
+        G4 is inducedSubgraph of G,V,E by B1,GLIB_000:def 39;
+        hence thesis; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        consider W being ManySortedSet of the_Edges_of G;
+        set G2 = G.set(WeightSelector, W);
+        consider EL being PartFunc of the_Edges_of G2, REAL;
+        set G3 = G2.set(ELabelSelector, EL);
+        consider VL being PartFunc of the_Vertices_of G3, REAL;
+        set G4 = G3.set(VLabelSelector, VL);
+    B2: G == G2 & G2 == G3 & G3 == G4 by lGSET09; then
+        G == G3 by GLIB_000:88; then
+    B4: G == G4 by B2, GLIB_000:88; then
+        reconsider G4 as Subgraph of G by GLIB_000:90;
+        G4 is inducedSubgraph of G,V,E by B1,B4,GLIB_000:def 39;
+        hence thesis; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let G be WGraph, V,E be set;
+  cluster weight-inheriting ([Weighted] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [Weighted] inducedSubgraph of G,V,E;
+        set W = (the_Weight_of G) | the_Edges_of X;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        dom W = the_Edges_of X by RELAT_1:91; then
+        reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        set _G = X.set(WeightSelector, W);
+    B2: _G == X by lGSET09; then
+        _G is Subgraph of X by GLIB_000:90; then
+        reconsider _G as Subgraph of G by GLIB_000:46;
+    B3: the_Vertices_of _G = the_Vertices_of X by B2, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of _G = the_Edges_of X by B2, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider _G as [Weighted] inducedSubgraph of G,V,E
+          by B1,B3,GLIB_000:def 39;
+        take _G;
+        the_Weight_of _G = _G.WeightSelector by dWEIGHT 
+                        .= W by GLIB_000:11
+                        .= (the_Weight_of G)|the_Edges_of _G
+                           by B2,GLIB_000:def 36;
+        hence _G is weight-inheriting by dGWINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [Weighted] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+        hence _G is weight-inheriting by dGWINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let G be EGraph, V,E be set;
+  cluster elabel-inheriting ([ELabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [ELabeled] inducedSubgraph of G,V,E;
+        set EL = (the_ELabel_of G) | the_Edges_of X;
+        reconsider EL'=EL as PartFunc of dom EL, rng EL by PARTFUN1:24;
+        dom EL c= the_Edges_of X by RELAT_1:87; then
+        reconsider EL' as PartFunc of the_Edges_of X, rng EL by PARTFUN1:28;
+        set _G = X.set(ELabelSelector, EL');
+    B2: _G == X by lGSET09; then
+        _G is Subgraph of X by GLIB_000:90; then
+        reconsider _G as Subgraph of G by GLIB_000:46;
+    B3: the_Vertices_of _G = the_Vertices_of X by B2, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of _G = the_Edges_of X by B2, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider _G as [ELabeled] inducedSubgraph of G,V,E
+          by B1,B3,GLIB_000:def 39;
+        take _G;
+        the_ELabel_of _G = _G.ELabelSelector by dELABEL
+                        .= EL by GLIB_000:11
+                  .= (the_ELabel_of G)|the_Edges_of _G by B2,GLIB_000:def 36;
+        hence _G is elabel-inheriting by dGEINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [ELabeled] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+        the_ELabel_of G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+        hence _G is elabel-inheriting by dGEINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;  
+
+registration let G be VGraph, V,E be set;
+  cluster vlabel-inheriting ([VLabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [VLabeled] inducedSubgraph of G,V,E;
+        set VL = (the_VLabel_of G) | the_Vertices_of X;
+        reconsider VL'=VL as PartFunc of dom VL, rng VL by PARTFUN1:24;
+        dom VL c= the_Vertices_of X by RELAT_1:87; then
+        reconsider VL' as PartFunc of the_Vertices_of X, rng VL by PARTFUN1:28;
+        set _G = X.set(VLabelSelector, VL');
+    B2: _G == X by lGSET09; then
+        _G is Subgraph of X by GLIB_000:90; then
+        reconsider _G as Subgraph of G by GLIB_000:46;
+    B3: the_Vertices_of _G = the_Vertices_of X by B2, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of _G = the_Edges_of X by B2, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider _G as [VLabeled] inducedSubgraph of G,V,E
+          by B1,B3,GLIB_000:def 39;
+        take _G;
+        the_VLabel_of _G = _G.VLabelSelector by dVLABEL
+                        .= VL by GLIB_000:11
+                        .= (the_VLabel_of G)|the_Vertices_of _G
+                             by B2,GLIB_000:def 36;
+        hence _G is vlabel-inheriting by dGVINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [VLabeled] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+        the_VLabel_of G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+        hence _G is vlabel-inheriting by dGVINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;  
+
+registration let G be WEGraph, V,E be set;
+  cluster weight-inheriting elabel-inheriting
+          ([Weighted] [ELabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [Weighted] [ELabeled] inducedSubgraph of G,V,E;
+        set W = (the_Weight_of G) | the_Edges_of X;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        dom W = the_Edges_of X by RELAT_1:91; then
+        reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        set G1 = X.set(WeightSelector, W);
+    B2: X == G1 by lGSET09;
+        set EL = (the_ELabel_of G) | the_Edges_of G1;
+        reconsider EL'=EL as PartFunc of dom EL, rng EL by PARTFUN1:24;
+        dom EL c= the_Edges_of G1 by RELAT_1:87; then
+        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by PARTFUN1:28;
+        set G2 = G1.set(ELabelSelector, EL');
+    B3: G2 == G1 by lGSET09; then
+    B4: G2 == X by B2, GLIB_000:88; then
+        G2 is Subgraph of X by GLIB_000:90; then
+        reconsider G2 as Subgraph of G by GLIB_000:46;
+    B5: the_Vertices_of G2 = the_Vertices_of X by B4, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of G2 = the_Edges_of X by B4, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider G2 as [Weighted] [ELabeled] inducedSubgraph of G,V,E
+          by B1,B5,GLIB_000:def 39;
+        take G2;
+        the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                        .= G1.WeightSelector by GLIB_000:12,dSELW,dSELEL
+                        .= W by GLIB_000:11
+                        .= (the_Weight_of G)|the_Edges_of G2
+                           by B4,GLIB_000:def 36;
+        hence G2 is weight-inheriting by dGWINHERIT;
+        the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                        .= EL by GLIB_000:11
+                        .= (the_ELabel_of G)|the_Edges_of G2
+                           by B3,GLIB_000:def 36;
+        hence G2 is elabel-inheriting by dGEINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [Weighted] [ELabeled] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+        hence _G is weight-inheriting by dGWINHERIT;
+        dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+        the_ELabel_of G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+        hence _G is elabel-inheriting by dGEINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let G be WVGraph, V,E be set;
+  cluster weight-inheriting vlabel-inheriting
+          ([Weighted] [VLabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [Weighted] [VLabeled] inducedSubgraph of G,V,E;
+        set W = (the_Weight_of G) | the_Edges_of X;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        dom W = the_Edges_of X by RELAT_1:91; then
+        reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        set G1 = X.set(WeightSelector, W);
+    B2: X == G1 by lGSET09;
+        set VL = (the_VLabel_of G) | the_Vertices_of G1;
+        reconsider VL'=VL as PartFunc of dom VL, rng VL by PARTFUN1:24;
+        dom VL c= the_Vertices_of G1 by RELAT_1:87; then
+        reconsider VL' as PartFunc of the_Vertices_of G1, rng VL
+          by PARTFUN1:28;
+        set G2 = G1.set(VLabelSelector, VL');
+    B3: G2 == G1 by lGSET09; then
+    B4: G2 == X by B2, GLIB_000:88; then
+        G2 is Subgraph of X by GLIB_000:90; then
+        reconsider G2 as Subgraph of G by GLIB_000:46;
+    B5: the_Vertices_of G2 = the_Vertices_of X by B4, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of G2 = the_Edges_of X by B4, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider G2 as [Weighted] [VLabeled] inducedSubgraph of G,V,E
+          by B1,B5,GLIB_000:def 39;
+        take G2;
+        the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                        .= G1.WeightSelector by GLIB_000:12,dSELW,dSELVL
+                        .= W by GLIB_000:11
+                        .= (the_Weight_of G)|the_Edges_of G2
+                           by B4,GLIB_000:def 36;
+        hence G2 is weight-inheriting by dGWINHERIT;
+        the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                        .= VL by GLIB_000:11
+                        .= (the_VLabel_of G)|the_Vertices_of G2
+                           by B3,GLIB_000:def 36;
+        hence G2 is vlabel-inheriting by dGVINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [Weighted] [VLabeled] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+        hence _G is weight-inheriting by dGWINHERIT;
+        dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+        the_VLabel_of G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+        hence _G is vlabel-inheriting by dGVINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;          
+
+registration let G be EVGraph, V,E be set;
+  cluster elabel-inheriting vlabel-inheriting
+          ([ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [ELabeled] [VLabeled] inducedSubgraph of G,V,E;
+        set EL = (the_ELabel_of G) | the_Edges_of X;
+        reconsider EL'=EL as PartFunc of dom EL, rng EL by PARTFUN1:24;
+        dom EL c= the_Edges_of X by RELAT_1:87; then
+        reconsider EL' as PartFunc of the_Edges_of X, rng EL by PARTFUN1:28;
+        set G1 = X.set(ELabelSelector, EL');
+    B2: X == G1 by lGSET09;
+        set VL = (the_VLabel_of G) | the_Vertices_of G1;
+        reconsider VL'=VL as PartFunc of dom VL, rng VL by PARTFUN1:24;
+        dom VL c= the_Vertices_of G1 by RELAT_1:87; then
+        reconsider VL' as PartFunc of the_Vertices_of G1, rng VL
+          by PARTFUN1:28;
+        set G2 = G1.set(VLabelSelector, VL');
+    B3: G2 == G1 by lGSET09; then
+    B4: G2 == X by B2, GLIB_000:88; then
+        G2 is Subgraph of X by GLIB_000:90; then
+        reconsider G2 as Subgraph of G by GLIB_000:46;
+    B5: the_Vertices_of G2 = the_Vertices_of X by B4, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of G2 = the_Edges_of X by B4, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider G2 as [ELabeled] [VLabeled] inducedSubgraph of G,V,E
+          by B1,B5,GLIB_000:def 39;
+        take G2;
+        the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                        .= G1.ELabelSelector by GLIB_000:12,dSELEL,dSELVL
+                        .= EL' by GLIB_000:11
+                        .= (the_ELabel_of G)|the_Edges_of G2
+                           by B4,GLIB_000:def 36;
+        hence G2 is elabel-inheriting by dGEINHERIT;
+        the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                        .= VL by GLIB_000:11
+                        .= (the_VLabel_of G)|the_Vertices_of G2
+                           by B3,GLIB_000:def 36;
+        hence G2 is vlabel-inheriting by dGVINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [ELabeled] [VLabeled] inducedSubgraph of G,V,E
+          by B1,GLIB_000:def 39;
+        take _G;
+        dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+        the_ELabel_of G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+        hence _G is elabel-inheriting by dGEINHERIT;
+        dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+        the_VLabel_of G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+        hence _G is vlabel-inheriting by dGVINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let G be WEVGraph, V,E be set;
+  cluster weight-inheriting elabel-inheriting vlabel-inheriting
+          ([Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+  existence proof
+    now per cases;
+    suppose
+    B1: V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V);
+        consider X being [Weighted] [ELabeled] [VLabeled]
+          inducedSubgraph of G,V,E;
+        set W = (the_Weight_of G) | the_Edges_of X;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        dom W = the_Edges_of X by RELAT_1:91; then
+        reconsider W as ManySortedSet of the_Edges_of X by PBOOLE:def 3;
+        set G1 = X.set(WeightSelector, W);
+    B2: X == G1 by lGSET09;
+        set EL = (the_ELabel_of G) | the_Edges_of G1;
+        reconsider EL'=EL as PartFunc of dom EL, rng EL by PARTFUN1:24;
+        dom EL c= the_Edges_of G1 by RELAT_1:87; then
+        reconsider EL' as PartFunc of the_Edges_of G1, rng EL by PARTFUN1:28;
+        set G2 = G1.set(ELabelSelector, EL');
+    B3: G2 == G1 by lGSET09; then
+    B4: G2 == X by B2, GLIB_000:88;
+        set VL = (the_VLabel_of G) | the_Vertices_of G2;
+        reconsider VL'=VL as PartFunc of dom VL, rng VL by PARTFUN1:24;
+        dom VL c= the_Vertices_of G2 by RELAT_1:87; then
+        reconsider VL' as PartFunc of the_Vertices_of G2, rng VL
+          by PARTFUN1:28;        
+        set G3 = G2.set(VLabelSelector, VL');
+    B5: G3 == G2 by lGSET09; then
+    B6: G3 == X by B4, GLIB_000:88; then
+        G3 is Subgraph of X by GLIB_000:90; then
+        reconsider G3 as Subgraph of G by GLIB_000:46;
+    B7: the_Vertices_of G3 = the_Vertices_of X by B6, GLIB_000:def 36
+                          .= V by B1, GLIB_000:def 39;
+        the_Edges_of G3 = the_Edges_of X by B6, GLIB_000:def 36
+                       .= E by B1, GLIB_000:def 39; then
+        reconsider G3 as [Weighted] [ELabeled] [VLabeled]
+          inducedSubgraph of G,V,E by B1,B7,GLIB_000:def 39;
+        take G3;
+        the_Weight_of G3 = G3.WeightSelector by dWEIGHT
+                        .= G2.WeightSelector by GLIB_000:12,dSELW,dSELVL
+                        .= G1.WeightSelector by GLIB_000:12,dSELW,dSELEL
+                        .= W by GLIB_000:11
+                        .= (the_Weight_of G)|the_Edges_of G3
+                           by B6,GLIB_000:def 36;
+        hence G3 is weight-inheriting by dGWINHERIT;
+    B9: G3 == G1 by B3,B5,GLIB_000:88;
+        the_ELabel_of G3 = G3.ELabelSelector by dELABEL
+                        .= G2.ELabelSelector
+                             by GLIB_000:12,dSELVL,dSELEL
+                        .= EL by GLIB_000:11
+                        .= (the_ELabel_of G)|the_Edges_of G3
+                           by B9,GLIB_000:def 36;
+        hence G3 is elabel-inheriting by dGEINHERIT;
+        the_VLabel_of G3 = G3.VLabelSelector by dVLABEL
+                        .= VL by GLIB_000:11
+                        .= (the_VLabel_of G)|the_Vertices_of G3
+                           by B5,GLIB_000:def 36;
+        hence G3 is vlabel-inheriting by dGVINHERIT; end;
+    suppose
+    B1: not (V is non empty Subset of the_Vertices_of G &
+        E c= G.edgesBetween(V));
+        reconsider _G = G as Subgraph of G by GLIB_000:43;
+        reconsider _G as [Weighted] [ELabeled] [VLabeled]
+          inducedSubgraph of G,V,E by B1,GLIB_000:def 39;
+        take _G;
+        dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+        the_Weight_of G = (the_Weight_of G) | the_Edges_of G by RELAT_1:98;
+        hence _G is weight-inheriting by dGWINHERIT;
+        dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+        the_ELabel_of G = (the_ELabel_of G) | the_Edges_of G by RELAT_1:97;
+        hence _G is elabel-inheriting by dGEINHERIT;
+        dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+        the_VLabel_of G = (the_VLabel_of G) | the_Vertices_of G by RELAT_1:97;
+        hence _G is vlabel-inheriting by dGVINHERIT; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let G be WGraph, V,E be set;
+  mode inducedWSubgraph of G,V,E is weight-inheriting
+       ([Weighted] inducedSubgraph of G,V,E);
+end;
+definition let G be EGraph, V,E be set;
+  mode inducedESubgraph of G,V,E is elabel-inheriting
+       ([ELabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be VGraph, V,E be set;
+  mode inducedVSubgraph of G,V,E is vlabel-inheriting
+       ([VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WEGraph, V,E be set;
+  mode inducedWESubgraph of G,V,E is weight-inheriting elabel-inheriting
+       ([Weighted] [ELabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WVGraph, V,E be set;
+  mode inducedWVSubgraph of G,V,E is weight-inheriting vlabel-inheriting
+       ([Weighted] [VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be EVGraph, V,E be set;
+  mode inducedEVSubgraph of G,V,E is elabel-inheriting vlabel-inheriting
+       ([ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+definition let G be WEVGraph, V,E be set;
+  mode inducedWEVSubgraph of G,V,E is
+       weight-inheriting elabel-inheriting vlabel-inheriting
+       ([Weighted] [ELabeled] [VLabeled] inducedSubgraph of G,V,E);
+end;
+
+definition let G be WGraph, V be set;
+  mode inducedWSubgraph of G,V is inducedWSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be EGraph, V be set;
+  mode inducedESubgraph of G,V is inducedESubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be VGraph, V be set;
+  mode inducedVSubgraph of G,V is inducedVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WEGraph, V be set;
+  mode inducedWESubgraph of G,V is inducedWESubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WVGraph, V be set;
+  mode inducedWVSubgraph of G,V is inducedWVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be EVGraph, V be set;
+  mode inducedEVSubgraph of G,V is inducedEVSubgraph of G,V,G.edgesBetween(V);
+end;
+definition let G be WEVGraph, V be set;
+  mode inducedWEVSubgraph of G,V is
+       inducedWEVSubgraph of G,V,G.edgesBetween(V);
+end;
+
+definition let G be WGraph;
+  attr G is real-weighted means :dWREALWL: ::dWREALWL
+    the_Weight_of G is real-yielding;
+end;
+
+definition let G be WGraph;
+  attr G is nonnegative-weighted means :dWNNWEIGHT: ::dWNNWEIGHT
+    rng the_Weight_of G c= Real>=0;
+end;
+
+registration
+  cluster nonnegative-weighted -> real-weighted WGraph;
+  coherence proof
+    let G be WGraph; assume
+    G is nonnegative-weighted; then
+    rng the_Weight_of G c= Real>=0 by dWNNWEIGHT; then
+    rng (the_Weight_of G) c= REAL by XBOOLE_1:1; then
+    the_Weight_of G is real-yielding by SEQ_1:def 1;
+    hence thesis by dWREALWL;
+  end;
+end;
+
+definition let G be EGraph;
+  attr G is real-elabeled means :dEREALEL: ::dEREALEL
+    the_ELabel_of G is real-yielding;
+end;
+
+definition let G be VGraph;
+  attr G is real-vlabeled means :dVREALVL: ::dVREALVL
+    the_VLabel_of G is real-yielding;
+end;
+
+definition let G be WEVGraph;
+  attr G is real-WEV means :dWEVREAL: ::dWEVREAL
+    G is real-weighted & G is real-elabeled & G is real-vlabeled;
+end;
+
+registration
+  cluster real-WEV -> real-weighted real-elabeled real-vlabeled WEVGraph;
+  coherence by dWEVREAL;
+  cluster real-weighted real-elabeled real-vlabeled -> real-WEV WEVGraph;
+  coherence by dWEVREAL;
+end;
+
+registration let G be _Graph, X be Function of the_Edges_of G, REAL;
+  cluster G.set(WeightSelector,X) -> real-weighted; coherence proof
+    set G2 = G.set(WeightSelector,X);
+    the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                    .= X by GLIB_000:11;
+    hence thesis by dWREALWL;
+  end;
+end;
+registration let G be _Graph, X be PartFunc of the_Edges_of G, REAL;
+  cluster G.set(ELabelSelector, X) -> real-elabeled; coherence proof
+    set G2 = G.set(ELabelSelector, X);
+    the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                   .= X by GLIB_000:11;
+    hence thesis by dEREALEL;
+  end;
+end;
+
+registration let G be _Graph,
+                 X be real-yielding ManySortedSet of the_Edges_of G;
+  cluster G.set(ELabelSelector,X) -> real-elabeled; coherence proof
+    set G2 = G.set(ELabelSelector, X);
+    the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                   .= X by GLIB_000:11;
+    hence thesis by dEREALEL;
+  end;
+end;  
+
+registration let G be _Graph, X be PartFunc of the_Vertices_of G, REAL;
+  cluster G.set(VLabelSelector, X) -> real-vlabeled; coherence proof
+    set G2 = G.set(VLabelSelector, X);
+    the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                    .= X by GLIB_000:11;
+    hence thesis by dVREALVL;
+  end;
+end;
+
+registration let G be _Graph,
+                 X be real-yielding ManySortedSet of the_Vertices_of G;
+  cluster G.set(VLabelSelector, X) -> real-vlabeled; coherence proof
+    set G2 = G.set(VLabelSelector, X);
+    the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                    .= X by GLIB_000:11;
+    hence thesis by dVREALVL;
+  end;
+end;
+
+registration let G be _Graph;
+  cluster G.set(ELabelSelector, {}) -> real-elabeled; coherence proof
+    reconsider X = {} as PartFunc of the_Edges_of G,REAL by PARTFUN1:56;
+    G.set(ELabelSelector,X) is real-elabeled;
+    hence thesis;
+  end;
+  cluster G.set(VLabelSelector, {}) -> real-vlabeled; coherence proof
+    reconsider X = {} as PartFunc of the_Vertices_of G,REAL by PARTFUN1:56;
+    G.set(VLabelSelector,X) is real-vlabeled;
+    hence thesis;
+  end;
+end;
+
+registration let G be _Graph, v be Vertex of G, val be real number;
+  cluster G.set(VLabelSelector, v.-->val) -> [VLabeled]; coherence proof
+A1: dom (v.-->val) = {v} & rng (v.-->val) = {val} by CQC_LANG:5; then
+    reconsider X = (v.-->val) as PartFunc of {v},{val} by PARTFUN1:24;
+    reconsider X as PartFunc of the_Vertices_of G, {val} by A1,PARTFUN1:28;
+    now let x be set; assume x in {val}; then
+        x = val by TARSKI:def 1;
+        hence x in REAL by XREAL_0:def 1;
+    end; then
+    {val} c= REAL by TARSKI:def 3; then
+    reconsider X as PartFunc of the_Vertices_of G, REAL by A1,PARTFUN1:29;
+    G.set(VLabelSelector,X) is real-vlabeled;
+    hence thesis;
+  end;
+end;  
+
+registration let G be _Graph, v be Vertex of G, val be real number;
+  cluster G.set(VLabelSelector, v.-->val) -> real-vlabeled; coherence proof
+A1: dom (v.-->val) = {v} & rng (v.-->val) = {val} by CQC_LANG:5; then
+    reconsider X = (v.-->val) as PartFunc of {v},{val} by PARTFUN1:24;
+    reconsider X as PartFunc of the_Vertices_of G, {val} by A1,PARTFUN1:28;
+    now let x be set; assume x in {val}; then
+        x = val by TARSKI:def 1;
+        hence x in REAL by XREAL_0:def 1;
+    end; then
+    {val} c= REAL by TARSKI:def 3; then
+    reconsider X as PartFunc of the_Vertices_of G, REAL by PARTFUN1:31;
+    G.set(VLabelSelector,X) is real-vlabeled;
+    hence thesis;
+  end;
+end;  
+
+registration
+  cluster finite trivial Tree-like nonnegative-weighted real-WEV WEVGraph;
+  existence proof
+    set V = {1}; set E = {};
+    reconsider S = {} as Function of E,V by FUNCT_2:55,RELAT_1:60;
+    set G1 = createGraph(V,E,S,S);
+    consider WL being Function of the_Edges_of G1, REAL;
+    set G2 = G1.set(WeightSelector, WL);
+    consider EL being PartFunc of the_Edges_of G2, REAL;
+    set G3 = G2.set(ELabelSelector, EL);
+    consider VL being PartFunc of the_Vertices_of G3, REAL;
+    set G4 = G3.set(VLabelSelector, VL);
+    take G4;
+    thus G4 is finite & G4 is trivial & G4 is Tree-like;
+A6: the_Weight_of G4 = G4.WeightSelector by dWEIGHT
+                    .= G3.WeightSelector by dSELW,dSELVL,GLIB_000:12
+                    .= G2.WeightSelector by dSELW,dSELEL,GLIB_000:12
+                    .= WL by GLIB_000:11; then
+A4: G4 is real-weighted by dWREALWL;
+    the_ELabel_of G4 = G4.ELabelSelector by dELABEL
+                    .= G3.ELabelSelector by dSELVL,dSELEL,GLIB_000:12
+                    .= EL by GLIB_000:11; then
+A5: G4 is real-elabeled by dEREALEL;
+    the_Edges_of G1 = {} by GLIB_000:8; then
+    rng (the_Weight_of G4) = {} by A6,RELSET_1:26,RELAT_1:60; then
+    rng (the_Weight_of G4) c= Real>=0 by XBOOLE_1:2;
+    hence G4 is nonnegative-weighted by dWNNWEIGHT;
+    thus G4 is real-WEV by A4,A5,dWEVREAL;
+  end;
+  cluster finite non trivial Tree-like nonnegative-weighted real-WEV WEVGraph;
+  existence proof
+    consider G1 being finite non trivial Tree-like _Graph;
+    set W = the_Edges_of G1 --> 0;
+A1: dom W = the_Edges_of G1 & rng W c= {0} by FUNCOP_1:19;
+    now let x be set; assume x in {0}; then
+        x = 0 by TARSKI:def 1;
+        hence x in REAL;
+    end; then
+    {0} c= REAL by TARSKI:def 3; then
+    rng W c= REAL by XBOOLE_1:1;  then
+    reconsider W as Function of the_Edges_of G1, REAL by A1,FUNCT_2:4;
+    set G2 = G1.set(WeightSelector, W);
+    reconsider EL = {} as PartFunc of the_Edges_of G2, REAL by PARTFUN1:56;
+    set G3 = G2.set(ELabelSelector, EL);
+    reconsider VL = {} as PartFunc of the_Vertices_of G3, REAL  by PARTFUN1:56;
+    set G4 = G3.set(VLabelSelector, VL);
+    take G4;
+    thus G4 is finite & G4 is non trivial & G4 is Tree-like;
+A2: the_Weight_of G4 = G4.WeightSelector by dWEIGHT
+                    .= G3.WeightSelector by dSELW,dSELVL,GLIB_000:12
+                    .= G2.WeightSelector by dSELW,dSELEL, GLIB_000:12
+                    .= W by GLIB_000:11; then
+A4: G4 is real-weighted by dWREALWL;
+    the_ELabel_of G4 = G4.ELabelSelector by dELABEL
+                    .= G3.ELabelSelector by dSELVL,dSELEL, GLIB_000:12
+                    .= EL by GLIB_000:11; then
+A5: G4 is real-elabeled by dEREALEL;
+    now let x be set; assume x in {0}; then
+        x = 0 by TARSKI:def 1;
+        hence x in Real>=0 by GRAPH_5:def 12;
+    end; then
+    {0} c= Real>=0 by TARSKI:def 3; then
+    rng W c= Real>=0 by A1,XBOOLE_1:1;
+    hence G4 is nonnegative-weighted by A2,dWNNWEIGHT;
+    thus G4 is real-WEV by A4,A5, dWEVREAL;
+  end;
+end;
+
+registration let G be finite WGraph;
+  cluster the_Weight_of G -> finite;
+  coherence proof
+A1: dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3; then
+    rng the_Weight_of G is finite by FINSET_1:26; 
+    hence thesis by A1,AMISTD_3:4;
+  end;
+end;  
+
+registration let G be finite EGraph;
+  cluster the_ELabel_of G -> finite;
+  coherence proof
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+A1: dom the_ELabel_of G is finite by FINSET_1:13; then
+    rng the_ELabel_of G is finite by FINSET_1:26; 
+    hence thesis by A1,AMISTD_3:4;
+  end;
+end;
+
+registration let G be finite VGraph;
+  cluster the_VLabel_of G -> finite;
+  coherence proof
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+A1: dom the_VLabel_of G is finite by FINSET_1:13; then
+    rng the_VLabel_of G is finite by FINSET_1:26;
+    hence thesis by A1,AMISTD_3:4;
+  end;
+end;
+
+registration let G be real-weighted WGraph;
+  cluster the_Weight_of G -> real-yielding;
+  coherence by dWREALWL;
+end;
+
+registration let G be real-elabeled EGraph;
+  cluster the_ELabel_of G -> real-yielding;
+  coherence by dEREALEL;
+end;
+
+registration let G be real-vlabeled VGraph;
+  cluster the_VLabel_of G -> real-yielding;
+  coherence by dVREALVL;
+end;
+
+registration let G be real-weighted WGraph, X be set;
+  cluster G.set(ELabelSelector ,X) -> real-weighted; coherence proof
+    set G2 = G.set(ELabelSelector,X);  
+    the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                    .= G.WeightSelector by dSELW,dSELEL, GLIB_000:12
+                    .= the_Weight_of G by dWEIGHT;
+    hence thesis by dWREALWL;                   
+  end;
+  cluster G.set(VLabelSelector ,X) -> real-weighted; coherence proof
+    set G2 = G.set(VLabelSelector,X);  
+    the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                    .= G.WeightSelector by dSELW,dSELVL,GLIB_000:12
+                    .= the_Weight_of G by dWEIGHT;
+    hence thesis by dWREALWL;                           
+  end;
+end;
+
+registration let G be nonnegative-weighted WGraph, X be set;
+  cluster G.set(ELabelSelector ,X) -> nonnegative-weighted; coherence proof
+    set G2 = G.set(ELabelSelector,X);  
+A1: the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                    .= G.WeightSelector by dSELW,dSELEL,GLIB_000:12
+                    .= the_Weight_of G by dWEIGHT;
+    rng (the_Weight_of G) c= Real>=0 by dWNNWEIGHT;
+    hence thesis by A1,dWNNWEIGHT;
+  end;
+  cluster G.set(VLabelSelector ,X) -> nonnegative-weighted; coherence proof
+    set G2 = G.set(VLabelSelector,X);  
+A1: the_Weight_of G2 = G2.WeightSelector by dWEIGHT
+                    .= G.WeightSelector by dSELW,dSELVL,GLIB_000:12
+                    .= the_Weight_of G by dWEIGHT;
+    rng (the_Weight_of G) c= Real>=0 by dWNNWEIGHT;
+    hence thesis by A1,dWNNWEIGHT;
+  end;
+end;
+
+registration let G be real-elabeled EGraph, X be set;
+  cluster G.set(WeightSelector ,X) -> real-elabeled; coherence proof
+    set G2 = G.set(WeightSelector,X);
+    the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                     .= G.ELabelSelector by dSELW,dSELEL, GLIB_000:12
+                     .= the_ELabel_of G by dELABEL;
+    hence thesis by dEREALEL;
+  end;
+  cluster G.set(VLabelSelector ,X) -> real-elabeled; coherence proof
+    set G2 = G.set(VLabelSelector,X);
+    the_ELabel_of G2 = G2.ELabelSelector by dELABEL
+                    .= G.ELabelSelector by dSELVL,dSELEL, GLIB_000:12
+                    .= the_ELabel_of G by dELABEL; 
+    hence thesis by dEREALEL;
+  end;
+end;
+
+registration let G be real-vlabeled VGraph, X be set;
+  cluster G.set(WeightSelector ,X) -> real-vlabeled; coherence proof
+    set G2 = G.set(WeightSelector,X);
+    the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                    .= G.VLabelSelector by dSELW,dSELVL,GLIB_000:12
+                    .= the_VLabel_of G by dVLABEL;
+    hence thesis by dVREALVL;
+  end;
+  cluster G.set(ELabelSelector ,X) -> real-vlabeled; coherence proof
+    set G2 = G.set(ELabelSelector,X);
+    the_VLabel_of G2 = G2.VLabelSelector by dVLABEL
+                    .= G.VLabelSelector by dSELVL,dSELEL, GLIB_000:12
+                    .= the_VLabel_of G by dVLABEL;
+    hence thesis by dVREALVL;
+  end;
+end;
+
+definition let G be WGraph, W be Walk of G;
+  func W.weightSeq() -> FinSequence means :dWWSEQ: ::dWWSEQ
+    len it = len W.edgeSeq() &
+    for n being Nat st 1 <= n & n <= len it
+      holds it.n = (the_Weight_of G).(W.edgeSeq().n);
+  existence proof
+    deffunc F(Nat) = (the_Weight_of G).(W.edgeSeq().$1);
+    consider IT being FinSequence such that
+A1: len IT =len W.edgeSeq() & for k being Nat st k in Seg len W.edgeSeq()
+      holds IT.k = F(k) from FINSEQ_1:sch 2;
+    take IT;
+    thus len IT = len W.edgeSeq() by A1;
+    let n be Nat; assume 1 <= n & n <= len IT; then
+    n in Seg len W.edgeSeq() by A1, FINSEQ_1:3;
+    hence IT.n = (the_Weight_of G).(W.edgeSeq().n) by A1;  
+  end;
+  uniqueness proof
+    let IT1, IT2 be FinSequence such that
+A1: len IT1 = len W.edgeSeq() &
+    for n being Nat st 1 <= n & n <= len IT1 holds
+      IT1.n = (the_Weight_of G).(W.edgeSeq().n) and
+A2: len IT2 = len W.edgeSeq() &
+    for n being Nat st 1 <= n & n <= len IT2 holds
+      IT2.n = (the_Weight_of G).(W.edgeSeq().n);
+    now let n be Nat; assume
+    B1: 1 <= n & n <= len IT1; 
+        hence IT1.n = (the_Weight_of G).(W.edgeSeq().n) by A1
+                   .= IT2.n by A1,A2,B1;
+    end;
+    hence IT1 = IT2 by A1,A2,FINSEQ_1:18;
+  end;
+end;
+
+definition let G be real-weighted WGraph, W be Walk of G;
+  redefine func W.weightSeq() -> FinSequence of REAL;
+  coherence proof
+    now let y be set; assume y in rng W.weightSeq(); then
+        consider x being Nat such that
+    B1: x in dom W.weightSeq() & y = W.weightSeq().x by FINSEQ_2:11;
+        1 <= x & x <= len W.weightSeq() by B1, FINSEQ_3:27; then
+        y = (the_Weight_of G).(W.edgeSeq().x) by B1, dWWSEQ;
+        hence y in REAL;
+    end; then
+    rng W.weightSeq() c= REAL by TARSKI:def 3;
+    hence thesis by FINSEQ_1:def 4;
+  end;
+end;  
+
+definition let G be real-weighted WGraph, W be Walk of G;
+  func W.cost() -> Real equals :dWCOST: ::dWCOST
+    Sum (W.weightSeq());
+  coherence;
+end;
+
+lPARTFUN01:
+  for x,y,X,Y being set, f being PartFunc of X,Y st x in X & y in Y holds
+     f +* (x.-->y) is PartFunc of X,Y proof
+    let x,y,X,Y be set, f be PartFunc of X,Y; assume
+A1: x in X & y in Y; set F = f +* (x.-->y);
+A3: rng F c= rng f \/ rng (x.-->y) by FUNCT_4:18;
+    now let z be set; assume
+    B0: z in rng F;
+        now per cases by A3,B0,XBOOLE_0:def 2;
+          suppose z in rng f;
+            hence z in Y;
+          end;
+          suppose z in rng (x.-->y); then
+            z in {y} by CQC_LANG:5;
+            hence z in Y by A1,TARSKI:def 1;
+          end;
+        end;
+        hence z in Y;
+    end; then
+    rng F c= Y by TARSKI:def 3; then
+    reconsider F1=F as PartFunc of dom F,Y by PARTFUN1:25;
+    now let z be set; assume z in dom F1; then
+    B1: z in dom f \/ dom (x.-->y) by FUNCT_4:def 1;
+        now per cases by B1, XBOOLE_0:def 2;
+          suppose z in dom f;
+            hence z in X;
+          end;
+          suppose z in dom (x.-->y); then
+            z in {x} by CQC_LANG:5;
+            hence z in X by A1,TARSKI:def 1;
+          end;
+        end;
+        hence z in X;
+    end; then
+    dom F1 c= X by TARSKI:def 3;
+    hence F is PartFunc of X,Y by PARTFUN1:30;
+end;     
+
+definition let G be EGraph;
+  func G.labeledE() -> Subset of the_Edges_of G equals :dGLABELEDE: ::dGLABELEDE
+    dom the_ELabel_of G;
+  coherence by lEGRAPH01;
+end;
+
+definition let G be EGraph, e,x be set;
+  func G.labelEdge(e,x) -> EGraph equals :dGELABEL: ::dGELABEL
+    G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) if
+    e in the_Edges_of G otherwise G;
+  coherence proof
+    set EL = the_ELabel_of G +* (e.-->x), G2 = G.set(ELabelSelector, EL);
+    G == G2 by lGSET09; then
+A1: the_Edges_of G = the_Edges_of G2 by GLIB_000:def 36;
+    hereby assume
+    B1: e in the_Edges_of G;
+    B2: ELabelSelector in dom G by dELABELED; 
+    BZ: dom G c= dom G2 by GLIB_000:10;
+    B4: dom EL = dom the_ELabel_of G \/ dom (e.-->x) by FUNCT_4:def 1
+              .= dom the_ELabel_of G \/ {e} by CQC_LANG:5;
+        now let z be set; assume
+        C1: z in dom EL;
+            now per cases by B4,C1,XBOOLE_0:def 2;
+              suppose
+            D1: z in dom the_ELabel_of G;
+                dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01;
+                hence z in the_Edges_of G by D1;
+              end;
+              suppose z in {e};
+                hence z in the_Edges_of G by B1,TARSKI:def 1;
+              end;
+            end;
+            hence z in the_Edges_of G;
+        end; then
+    B5: dom EL c= the_Edges_of G2 by A1,TARSKI:def 3;
+        G2.ELabelSelector = EL by GLIB_000:11;
+        hence G2 is EGraph by B2,BZ,B5,dELABELED;
+    end;
+    thus thesis;
+  end;
+  consistency;
+end;
+
+registration let G be finite EGraph, e,x be set; 
+  cluster G.labelEdge(e,x) -> finite; coherence proof
+    now per cases;
+      suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis;
+      end;
+      suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL;
+      end;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration let G be loopless EGraph, e,x be set; 
+  cluster G.labelEdge(e,x) -> loopless; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be trivial EGraph, e,x be set; 
+  cluster G.labelEdge(e,x) -> trivial; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non trivial EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non trivial; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non-multi EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non-multi; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non-Dmulti EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> non-Dmulti; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be connected EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> connected; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be acyclic EGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> acyclic; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> [Weighted]; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be EVGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> [VLabeled]; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be real-weighted WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> real-weighted; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be nonnegative-weighted WEGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> nonnegative-weighted; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be real-elabeled EGraph, e be set, x be Real;
+  cluster G.labelEdge(e,x) -> real-elabeled; coherence proof 
+    now per cases;
+    suppose
+    B1: e in the_Edges_of G;
+        set EL = the_ELabel_of G +* (e.-->x);
+        rng the_ELabel_of G c= REAL by SEQ_1:def 1; then
+    B3: the_ELabel_of G is PartFunc of dom the_ELabel_of G, REAL
+          by PARTFUN1:25;
+        dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01; then
+        the_ELabel_of G is PartFunc of the_Edges_of G, REAL
+          by B3,PARTFUN1:28; then
+        reconsider EL as PartFunc of the_Edges_of G, REAL by B1,lPARTFUN01;
+        G.labelEdge(e,x) = G.set(ELabelSelector, EL) by B1,dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be real-vlabeled EVGraph, e,x be set;
+  cluster G.labelEdge(e,x) -> real-vlabeled; coherence proof
+    now per cases;
+    suppose e in the_Edges_of G; then
+        G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) 
+          by dGELABEL;
+        hence thesis; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+
+definition let G be VGraph, v,x be set;
+  func G.labelVertex(v,x) -> VGraph equals :dGVLABEL: ::dVLABEL
+    G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) if
+    v in the_Vertices_of G otherwise G;
+  coherence proof
+    set VL = the_VLabel_of G +* (v.-->x), G2 = G.set(VLabelSelector, VL);
+    hereby assume
+    B1: v in the_Vertices_of G;
+    B2: dom VL = dom the_VLabel_of G \/ dom (v.-->x) by FUNCT_4:def 1;
+        now let y be set; assume
+        C1: y in dom VL;
+            now per cases by B2, C1, XBOOLE_0:def 2;
+            suppose
+            D1: y in dom the_VLabel_of G;
+                dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01;
+                hence y in the_Vertices_of G by D1; end;
+            suppose y in dom (v.-->x); then
+                    y in {v} by CQC_LANG:5;
+                    hence y in the_Vertices_of G by B1,TARSKI:def 1; end;
+            end;
+            hence y in the_Vertices_of G;
+        end; then
+    B4: dom VL c= the_Vertices_of G by TARSKI:def 3; 
+        VL is PartFunc of dom VL, rng VL by PARTFUN1:24; then
+        reconsider V1=VL as PartFunc of the_Vertices_of G,rng VL
+          by B4,PARTFUN1:28;
+        G2 = G.set(VLabelSelector,V1);
+        hence G2 is VGraph;
+     end;
+     thus thesis;
+  end;
+  consistency;
+end;  
+
+definition let G be VGraph;
+  func G.labeledV() -> Subset of the_Vertices_of G equals :dGLABELEDV: ::dGLABELEDV
+    dom the_VLabel_of G;
+  coherence by lVGRAPH01;
+end;
+
+registration let G be finite VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> finite; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be loopless VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> loopless; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be trivial VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> trivial; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non trivial VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non trivial; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non-multi VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non-multi; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be non-Dmulti VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> non-Dmulti; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be connected VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> connected; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be acyclic VGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> acyclic; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> [Weighted]; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be EVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> [ELabeled]; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be real-weighted WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> real-weighted; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be nonnegative-weighted WVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> nonnegative-weighted; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+registration let G be real-elabeled EVGraph, v,x be set;
+  cluster G.labelVertex(v,x) -> real-elabeled; coherence proof
+    now per cases;
+    suppose v in the_Vertices_of G; then
+        G.labelVertex(v,x) = G.set(VLabelSelector, the_VLabel_of G +* (v.-->x)) 
+          by dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G);
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;
+registration let G be real-vlabeled VGraph, v be set, x be Real;
+  cluster G.labelVertex(v,x) -> real-vlabeled; coherence proof
+    now per cases;
+    suppose
+    B1: v in the_Vertices_of G; 
+        set EL = the_VLabel_of G +* (v.-->x);
+        rng the_VLabel_of G c= REAL by SEQ_1:def 1; then
+    B2: the_VLabel_of G is PartFunc of dom the_VLabel_of G, REAL
+          by PARTFUN1:25;
+        dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01; then
+        the_VLabel_of G is PartFunc of the_Vertices_of G, REAL
+          by B2,PARTFUN1:28; then
+        reconsider EL as PartFunc of the_Vertices_of G, REAL
+          by B1,lPARTFUN01;
+        G.labelVertex(v,x) = G.set(VLabelSelector, EL) by B1,dGVLABEL;
+        hence thesis; end;
+    suppose not (v in the_Vertices_of G); 
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+  end;
+end;  
+  
+registration let G be real-weighted WGraph;
+  cluster -> real-weighted WSubgraph of G;
+  coherence proof
+    let G2 be WSubgraph of G;
+    set W2 = (the_Weight_of G) | the_Edges_of G2;
+    the_Weight_of G2 = W2 by dGWINHERIT;
+    hence thesis by dWREALWL;
+  end;
+end;
+registration let G be nonnegative-weighted WGraph; 
+  cluster -> nonnegative-weighted WSubgraph of G;
+  coherence proof
+    let G2 be WSubgraph of G;
+    now let x be set; assume x in rng (the_Weight_of G2); then
+    B1: x in rng ((the_Weight_of G) | the_Edges_of G2) by dGWINHERIT;
+        rng ((the_Weight_of G) | the_Edges_of G2) c= rng (the_Weight_of G)
+          by FUNCT_1:76; then
+    B2: x in rng (the_Weight_of G) by B1;
+        rng (the_Weight_of G) c= Real>=0 by dWNNWEIGHT;
+        hence x in Real>=0 by B2;
+    end; 
+    hence rng (the_Weight_of G2) c= Real>=0 by TARSKI:def 3;
+  end;
+end;  
+registration let G be real-elabeled EGraph;
+  cluster -> real-elabeled ESubgraph of G;
+  coherence proof
+     let G2 be ESubgraph of G;
+     the_ELabel_of G2 = (the_ELabel_of G)| the_Edges_of G2 by dGEINHERIT;
+     hence thesis by dEREALEL;
+  end;
+end;
+registration let G be real-vlabeled VGraph;
+  cluster -> real-vlabeled VSubgraph of G;
+  coherence proof
+     let G2 be VSubgraph of G;
+     the_VLabel_of G2 = (the_VLabel_of G)| the_Vertices_of G2 by dGVINHERIT;
+     hence thesis by dVREALVL;
+  end;
+end;  
+
+:: Attributes over GraphSeq
+definition let GSq be GraphSeq;
+  attr GSq is [Weighted] means :dGSEQWEIGHT: ::dGSEQWEIGHT
+    for x being Nat holds GSq.->x is [Weighted];
+  attr GSq is [ELabeled] means :dGSEQELABEL: ::dGSEQELABEL
+    for x being Nat holds GSq.->x is [ELabeled];
+  attr GSq is [VLabeled] means :dGSEQVLABEL: ::dGSEQVLABEL
+    for x being Nat holds GSq.->x is [VLabeled];
+end;
+registration
+  cluster [Weighted] [ELabeled] [VLabeled] GraphSeq;
+  existence proof
+    consider G being WEVGraph;
+    consider G being finite loopless trivial non-multi simple
+             real-WEV nonnegative-weighted WEVGraph;
+    set F = NAT --> G;
+A1: dom F = NAT by FUNCOP_1:19; then
+    reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
+    now let x be Nat;
+        F.x in rng F by A1, FUNCT_1:12; then
+        F.x in {G} by FUNCOP_1:14;
+        hence F.x is _Graph by TARSKI:def 1;
+    end; then reconsider F as GraphSeq by GLIB_000:def 55;
+    take F;
+    now let x be Nat;
+        F.x in rng F by A1, FUNCT_1:12; then
+        F.x in {G} by FUNCOP_1:14; then
+        F.x = G by TARSKI:def 1;
+        hence F.->x is [Weighted] & F.->x is [ELabeled] & F.->x is [VLabeled]
+          by GLIB_000:def 59;
+    end;
+    hence F is [Weighted] & F is [ELabeled] & F is [VLabeled]
+      by dGSEQWEIGHT, dGSEQELABEL, dGSEQVLABEL;
+  end;
+end;
+
+definition
+  mode WGraphSeq   is [Weighted]                       GraphSeq;
+  mode EGraphSeq   is            [ELabeled]            GraphSeq;
+  mode VGraphSeq   is                       [VLabeled] GraphSeq;
+  mode WEGraphSeq  is [Weighted] [ELabeled]            GraphSeq;
+  mode WVGraphSeq  is [Weighted]            [VLabeled] GraphSeq;
+  mode EVGraphSeq  is            [ELabeled] [VLabeled] GraphSeq;
+  mode WEVGraphSeq is [Weighted] [ELabeled] [VLabeled] GraphSeq;
+end;
+
+registration let GSq be WGraphSeq, x be Nat;
+  cluster GSq.->x -> [Weighted]; coherence by dGSEQWEIGHT;
+end;
+registration let GSq be EGraphSeq, x be Nat;
+  cluster GSq.->x -> [ELabeled]; coherence by dGSEQELABEL;
+end;
+registration let GSq be VGraphSeq, x be Nat;
+  cluster GSq.->x -> [VLabeled]; coherence by dGSEQVLABEL;
+end;
+  
+definition let GSq be WGraphSeq;
+  attr GSq is real-weighted means :dGSEQWREALWL: ::dGSEQWREALWL
+    for x being Nat holds GSq.->x is real-weighted;
+  attr GSq is nonnegative-weighted means :dGSEQWNNWEIGHT: ::dGSEQWNNWEIGHT
+    for x being Nat holds GSq.->x is nonnegative-weighted;
+end;
+definition let GSq be EGraphSeq;
+  attr GSq is real-elabeled means :dGSEQEREALEL: ::dGSEQEREALEL
+    for x being Nat holds GSq.->x is real-elabeled;
+end;
+definition let GSq be VGraphSeq;
+  attr GSq is real-vlabeled means :dGSEQVREALVL: ::dGSEQVREALVL
+    for x being Nat holds GSq.->x is real-vlabeled;
+end;
+definition let GSq be WEVGraphSeq;
+  attr GSq is real-WEV means :dGSEQWEVREAL: ::dGSEQWEVREAL
+    for x being Nat holds GSq.->x is real-WEV;
+end;
+
+registration
+  cluster real-WEV -> real-weighted real-elabeled real-vlabeled WEVGraphSeq;
+  coherence proof
+    let GSq be [Weighted] [ELabeled] [VLabeled] GraphSeq; assume
+A1: for x being Nat holds GSq.->x is real-WEV;
+    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+        G is real-WEV;
+        hence GSq.->x is real-weighted;
+    end;
+    hence GSq is real-weighted by dGSEQWREALWL;
+    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+        G is real-WEV;
+        hence GSq.->x is real-elabeled;
+    end;
+    hence GSq is real-elabeled by dGSEQEREALEL;
+    now let x be Nat; reconsider G = GSq.->x as real-WEV WEVGraph by A1;
+        G is real-WEV;
+        hence GSq.->x is real-vlabeled;
+    end;
+    hence GSq is real-vlabeled by dGSEQVREALVL;
+  end;
+  cluster real-weighted real-elabeled real-vlabeled -> real-WEV WEVGraphSeq;
+  coherence proof
+    let GSq be [Weighted] [ELabeled] [VLabeled] GraphSeq; assume
+A1: GSq is real-weighted & GSq is real-elabeled & GSq is real-vlabeled;
+    let x be Nat;
+    reconsider G = GSq.->x as real-weighted real-elabeled real-vlabeled
+                   WEVGraph by A1,dGSEQWREALWL,dGSEQEREALEL,dGSEQVREALVL;
+    G is real-WEV;    
+    hence GSq.->x is real-WEV;
+  end;
+end;
+
+registration
+  cluster halting finite loopless trivial non-multi simple real-WEV
+          nonnegative-weighted Tree-like WEVGraphSeq;
+  existence proof
+    consider G being finite loopless trivial non-multi simple
+             real-WEV acyclic connected Tree-like nonnegative-weighted
+             WEVGraph;
+    set F = NAT --> G;
+A1: dom F = NAT by FUNCOP_1:19; then
+    reconsider F as ManySortedSet of NAT by PBOOLE:def 3;
+    now let x be Nat;
+        F.x in rng F by A1, FUNCT_1:12; then
+        F.x in {G} by FUNCOP_1:14;
+        hence F.x is _Graph by TARSKI:def 1;
+    end; then reconsider F as GraphSeq by GLIB_000:def 55;
+    now let x be Nat;
+        F.x in rng F by A1, FUNCT_1:12; then
+        F.x in {G} by FUNCOP_1:14; then
+        F.x = G by TARSKI:def 1;
+        hence F.->x is [Weighted] & F.->x is [ELabeled] & F.->x is [VLabeled]
+          by GLIB_000:def 59;
+    end; then
+    reconsider F as [Weighted] [ELabeled] [VLabeled] GraphSeq
+      by dGSEQWEIGHT, dGSEQELABEL, dGSEQVLABEL;
+    take F;
+    F.1 in rng F & F.(1+1) in rng F by A1, FUNCT_1:12; then
+    F.1 in {G} & F.(1+1) in {G} by FUNCOP_1:14; then
+    F.1 = G & F.(1+1) = G by TARSKI:def 1;
+    hence F is halting by GLIB_000:def 56;
+    now let x be Nat;
+        F.x in rng F by A1, FUNCT_1:12; then
+        F.x in {G} by FUNCOP_1:14; then
+        F.x = G by TARSKI:def 1;
+        hence F.->x is finite & F.->x is loopless & F.->x is trivial &
+          F.->x is non-multi & F.->x is simple & F.->x is real-WEV &
+          F.->x is nonnegative-weighted & F.->x is Tree-like
+          by GLIB_000:def 59;
+    end;
+    hence thesis by GLIB_000:def 60, GLIB_000:def 61, GLIB_000:def 62,
+      GLIB_000:def 64, GLIB_000:def 66, dGSEQWEVREAL, GLIB_002:def 14,
+      dGSEQWNNWEIGHT;
+  end;
+end;
+
+registration let GSq be real-weighted WGraphSeq, x be Nat;
+  cluster GSq.->x -> real-weighted; coherence by dGSEQWREALWL;
+end;
+registration let GSq be nonnegative-weighted WGraphSeq, x be Nat;
+  cluster GSq.->x -> nonnegative-weighted; coherence by dGSEQWNNWEIGHT;
+end;  
+registration let GSq be real-elabeled EGraphSeq, x be Nat;
+  cluster GSq.->x -> real-elabeled; coherence by dGSEQEREALEL;
+end;
+registration let GSq be real-vlabeled VGraphSeq, x be Nat;
+  cluster GSq.->x -> real-vlabeled; coherence by dGSEQVREALVL;
+end;
+
+begin :: Theorems
+
+reserve G for _Graph;
+reserve W for Walk of G;
+reserve E,V,W,X,Y for set;
+reserve n for Nat;
+
+theorem tSELECT02: ::tSELECT02;
+  WeightSelector = 5 & ELabelSelector = 6 & VLabelSelector = 7
+    by dSELW,dSELVL,dSELEL;
+
+theorem tGNAMES02: ::tGNAMES02
+  (for G being WGraph holds the_Weight_of G = G.WeightSelector) &
+  (for G being EGraph holds the_ELabel_of G = G.ELabelSelector) &
+  (for G being VGraph holds the_VLabel_of G = G.VLabelSelector)
+    by dWEIGHT,dELABEL,dVLABEL;
+
+theorem tWGRAPH01:  ::tWGRAPH01
+  for G being WGraph holds
+    dom the_Weight_of G  = the_Edges_of G by PBOOLE:def 3;
+
+theorem tEGRAPH01: ::tEGRAPH01
+  for G being EGraph holds
+    dom the_ELabel_of G c= the_Edges_of G by lEGRAPH01;
+
+theorem tVGRAPH01: ::tVGRAPH01
+  for G being VGraph holds
+    dom the_VLabel_of G c= the_Vertices_of G by lVGRAPH01;
+
+:: Theorems regarding G.set()
+theorem tGSET09: ::tGSET09
+  for G being _Graph, X being set holds
+    G == G.set(WeightSelector, X) &
+    G == G.set(ELabelSelector, X) &
+    G == G.set(VLabelSelector, X) by lGSET09;
+
+theorem tGSETWEIGHT01: ::tGSETWEIGHT01
+   for G being EGraph, X being set holds
+     the_ELabel_of G = the_ELabel_of G.set(WeightSelector,X) proof
+    let G be EGraph, X be set; set G2 = G.set(WeightSelector,X);
+    thus the_ELabel_of G = G.ELabelSelector by dELABEL
+                        .= G2.ELabelSelector
+                             by dSELW,dSELEL,GLIB_000:12
+                        .= the_ELabel_of G2 by dELABEL;
+end;     
+
+theorem tGSETWEIGHT02: ::tGSETWEIGHT02
+  for G being VGraph, X being set holds
+    the_VLabel_of G = the_VLabel_of G.set(WeightSelector, X) proof
+    let G be VGraph, X be set; set G2 = G.set(WeightSelector,X);
+    thus the_VLabel_of G = G.VLabelSelector by dVLABEL
+                        .= G2.VLabelSelector
+                             by dSELW,dSELVL,GLIB_000:12
+                        .= the_VLabel_of G2 by dVLABEL;
+end;
+
+theorem tGSETELABEL01: ::tGSETELABEL01
+  for G being WGraph, X being set holds
+    the_Weight_of G = the_Weight_of G.set(ELabelSelector, X) proof
+    let G be WGraph, X be set; set G2 = G.set(ELabelSelector,X);
+    thus the_Weight_of G = G.WeightSelector by dWEIGHT
+                        .= G2.WeightSelector
+                             by dSELW,dSELEL, GLIB_000:12
+                        .= the_Weight_of G2 by dWEIGHT;
+end;
+
+theorem tGSETELABEL02: ::tGSETELABEL02
+  for G being VGraph, X being set holds
+    the_VLabel_of G = the_VLabel_of G.set(ELabelSelector, X) proof
+    let G be VGraph, X be set; set G2 = G.set(ELabelSelector, X);
+    thus the_VLabel_of G = G.VLabelSelector by dVLABEL
+                        .= G2.VLabelSelector
+                             by dSELVL,dSELEL, GLIB_000:12
+                        .= the_VLabel_of G2 by dVLABEL;
+end;
+
+theorem tGSETVLABEL01: ::tGSETVLABEL01 
+  for G being WGraph, X being set holds
+    the_Weight_of G = the_Weight_of G.set(VLabelSelector, X) proof
+    let G be WGraph, X be set; set G2 = G.set(VLabelSelector,X);
+    thus the_Weight_of G = G.WeightSelector by dWEIGHT
+                        .= G2.WeightSelector
+                             by dSELW,dSELVL,GLIB_000:12
+                        .= the_Weight_of G2 by dWEIGHT;
+end;
+
+theorem tGSETVLABEL01: ::tGSETVLABEL02
+  for G being EGraph, X being set holds
+    the_ELabel_of G = the_ELabel_of G.set(VLabelSelector, X) proof
+    let G be EGraph, X be set; set G2 = G.set(VLabelSelector,X);
+    thus the_ELabel_of G = G.ELabelSelector by dELABEL
+                        .= G2.ELabelSelector
+                             by dSELVL,dSELEL, GLIB_000:12
+                        .= the_ELabel_of G2 by dELABEL;
+end;
+
+:: Theorems regarding WSubgraphs
+theorem tWSUBGRAPH01: ::tWSUBGRAPH01
+  for G1,G2 being WGraph, G3 being WGraph 
+   st G1 == G2 & the_Weight_of G1 = the_Weight_of G2 & G1 is WSubgraph of G3
+   holds G2 is WSubgraph of G3 proof
+    let G1,G2 be WGraph, G3 be WGraph; assume
+A1: G1 == G2 & the_Weight_of G1 = the_Weight_of G2 & G1 is WSubgraph of G3;
+    reconsider G2'=G2 as [Weighted] Subgraph of G3 by A1,GLIB_000:95;
+    the_Edges_of G1 = the_Edges_of G2 by A1,GLIB_000:def 36; then
+    the_Weight_of G2 = (the_Weight_of G3)|the_Edges_of G2 by A1,dGWINHERIT;then
+    G2' is weight-inheriting by dGWINHERIT;
+    hence G2 is WSubgraph of G3;
+end;    
+    
+theorem tWSUBGRAPH02: ::tWSUBGRAPH02
+  for G1 being WGraph, G2 being WSubgraph of G1, G3 being WSubgraph of G2
+    holds G3 is WSubgraph of G1 proof
+    let G1 be WGraph, G2 be WSubgraph of G1, G3 be WSubgraph of G2;
+    reconsider G3'=G3 as [Weighted] Subgraph of G1 by GLIB_000:46;
+    the_Weight_of G3=(the_Weight_of G2) | the_Edges_of G3 by dGWINHERIT
+                   .=((the_Weight_of G1) | the_Edges_of G2) | the_Edges_of G3
+                       by dGWINHERIT
+                   .=(the_Weight_of G1)|the_Edges_of G3 by RELAT_1:103;then
+    G3' is weight-inheriting by dGWINHERIT;
+    hence thesis;
+end;    
+
+theorem tWSUBGRAPH03: ::tWSUBGRAPH03
+  for G1,G2 being WGraph, G3 being WSubgraph of G1
+   st G1 == G2 & the_Weight_of G1 = the_Weight_of G2
+   holds G3 is WSubgraph of G2 proof
+    let G1,G2 be WGraph, G3 be WSubgraph of G1; assume
+A1: G1 == G2 & the_Weight_of G1 = the_Weight_of G2; then
+    reconsider G3'=G3 as [Weighted] Subgraph of G2 by GLIB_000:94;
+    the_Weight_of G3 = (the_Weight_of G2) | the_Edges_of G3
+      by A1,dGWINHERIT; then
+    G3' is WSubgraph of G2 by dGWINHERIT;
+    hence thesis;
+end;   
+
+theorem tWSUBGRAPH04: ::tWSUBGRAPH04
+  for G1 being WGraph, G2 be WSubgraph of G1 holds
+    for x being set st x in the_Edges_of G2 holds
+      (the_Weight_of G2).x = (the_Weight_of G1).x proof
+    let G1 be WGraph, G2 be WSubgraph of G1;
+A2: the_Weight_of G2 = (the_Weight_of G1) | the_Edges_of G2 by dGWINHERIT;
+    let x be set; assume x in the_Edges_of G2; then
+    x in dom the_Weight_of G2 by PBOOLE:def 3;
+    hence (the_Weight_of G2).x = (the_Weight_of G1).x by A2,FUNCT_1:68;
+end;      
+
+:: Theorems regarding W.weightSeq()
+theorem tWWSEQ01: ::tWWSEQ01
+  for G being WGraph, W being Walk of G holds
+  W is trivial implies W.weightSeq() = {} proof
+    let G be WGraph, W be Walk of G; assume W is trivial; then
+    W.length() = 0 by GLIB_001:def 26; then
+    len W.edgeSeq() = 0 by GLIB_001:def 18; then
+    len W.weightSeq() = 0 by dWWSEQ;
+    hence W.weightSeq() = {} by FINSEQ_1:25;
+end;
+
+theorem tWWSEQ02: ::tWWSEQ02
+  for G being WGraph, W being Walk of G
+    holds len W.weightSeq() = W.length() proof
+    let G be WGraph, W be Walk of G;
+    thus len W.weightSeq() = len W.edgeSeq() by dWWSEQ
+                          .= W.length() by GLIB_001:def 18;
+end;
+
+theorem tWWSEQ03: ::tWWSEQ03
+  for G being WGraph, x,y,e being set st e Joins x,y,G holds
+   G.walkOf(x,e,y).weightSeq() = <* (the_Weight_of G).e *> proof
+    let G be WGraph, x,y,e be set;
+    set W = G.walkOf(x,e,y); assume e Joins x,y,G; then
+A2: W.edgeSeq() = <*e*> by GLIB_001:84; then
+    len W.edgeSeq() = 1 by FINSEQ_1:56; then
+A3: len W.weightSeq() = 1 by dWWSEQ; then
+A4: len W.weightSeq() = len <* (the_Weight_of G).e *> by FINSEQ_1:56;
+    now let n be Nat; assume
+    B1: 1 <= n & n <= len W.weightSeq(); then
+    B2: n = 1 by A3,AXIOMS:21;
+        hence W.weightSeq().n = (the_Weight_of G).(<*e*>.1) by A2,B1,dWWSEQ
+                             .= (the_Weight_of G).e by FINSEQ_1:57
+                             .= <* (the_Weight_of G).e *>.n by B2,FINSEQ_1:57;
+    end;
+    hence thesis by A4, FINSEQ_1:18;
+end;   
+
+theorem tWWSEQ04: ::tWWSEQ04
+  for G being WGraph, W being Walk of G
+   holds W.reverse().weightSeq() = Rev (W.weightSeq()) proof
+    let G be WGraph, W be Walk of G;
+    set W1 = W.reverse().weightSeq(), W2 = Rev (W.weightSeq());
+    len W.reverse() = len W by GLIB_001:22; then
+    W.reverse().length() = W.length() by GLIB_001:114; then
+    len W.reverse().edgeSeq() = W.length() by GLIB_001:def 18
+                             .= len W.edgeSeq() by GLIB_001:def 18; then
+A3: len W1 = len W.edgeSeq() by dWWSEQ;
+A4: len W.weightSeq() = len W.edgeSeq() by dWWSEQ; then
+A5: len W1 = len W2 by A3, FINSEQ_5:def 3;
+    now let n be Nat; assume
+    B1: 1 <= n & n <= len W1; then
+    B2: W1.n = (the_Weight_of G).(W.reverse().edgeSeq().n) by dWWSEQ
+            .= (the_Weight_of G).(Rev (W.edgeSeq()).n) by GLIB_001:85;
+        n in dom W.edgeSeq() by B1, A3,FINSEQ_3:27; then
+    B3: W1.n = (the_Weight_of G).(W.edgeSeq().(len W.edgeSeq()-n+1))
+          by B2,FINSEQ_5:61;
+        set rn = len W.weightSeq() - n + 1;
+        reconsider rn as Nat by A3,A4,B1,FINSEQ_5:1;
+        n in Seg len W.weightSeq() by A3,A4,B1,FINSEQ_1:3; then
+        rn in Seg len W.weightSeq() by FINSEQ_5:2; then
+    B4: 1 <= rn & rn <= len W.weightSeq() by FINSEQ_1:3;
+        n in dom W.weightSeq() by A3,A4,B1,FINSEQ_3:27; then
+        W2.n = W.weightSeq().rn by FINSEQ_5:61
+            .= (the_Weight_of G).(W.edgeSeq().rn) by B4, dWWSEQ;
+        hence W1.n = W2.n by dWWSEQ,B3;
+    end;
+    hence thesis by A5, FINSEQ_1:18;
+end;   
+
+theorem tWWSEQ05: ::tWWSEQ05
+  for G being WGraph, W1,W2 being Walk of G st W1.last() = W2.first() holds
+   W1.append(W2).weightSeq() = W1.weightSeq() ^ W2.weightSeq() proof
+    let G being WGraph, W1,W2 be Walk of G;
+    set W3 = W1.append(W2), W4 = W1.weightSeq()^W2.weightSeq(); assume
+A1: W1.last() = W2.first(); then
+    W3.edgeSeq() = W1.edgeSeq() ^ W2.edgeSeq() by GLIB_001:86; then
+    len W3.edgeSeq() = len W1.edgeSeq() + len W2.edgeSeq() by FINSEQ_1:35;then
+A3: len W3.weightSeq() = len W1.edgeSeq() + len W2.edgeSeq() by dWWSEQ
+                      .= len W1.weightSeq() + len W2.edgeSeq() by dWWSEQ
+                      .= len W1.weightSeq() + len W2.weightSeq() by dWWSEQ
+                      .= len W4 by FINSEQ_1:35;
+    now let n be Nat; assume
+    B1: 1 <= n & n <= len W3.weightSeq(); then
+    B2: W3.weightSeq().n = (the_Weight_of G).(W3.edgeSeq().n) by dWWSEQ
+                        .= (the_Weight_of G).((W1.edgeSeq()^W2.edgeSeq()).n)
+                           by A1,GLIB_001:86;
+    B3: n in dom W4 by A3, B1, FINSEQ_3:27;
+        now per cases by B3, FINSEQ_1:38;
+        suppose
+        C1: n in dom W1.weightSeq(); then
+        C2: 1 <= n & n <= len W1.weightSeq() by FINSEQ_3:27;
+        C3: W4.n = W1.weightSeq().n by C1, FINSEQ_1:def 7
+                .= (the_Weight_of G).(W1.edgeSeq().n) by C2, dWWSEQ;
+            n <= len W1.edgeSeq() by C2, dWWSEQ; then
+            n in dom W1.edgeSeq() by C2, FINSEQ_3:27;
+            hence W3.weightSeq().n = W4.n by B2,C3,FINSEQ_1:def 7; end;
+        suppose ex k being Nat st k in dom W2.weightSeq() &
+                n = len W1.weightSeq()+k; then
+            consider k being Nat such that
+        C1: k in dom W2.weightSeq() & n = len W1.weightSeq() + k;
+        C2: 1 <= k & k <= len W2.weightSeq() by C1, FINSEQ_3:27;
+        C3: W4.n = W2.weightSeq().k by C1, FINSEQ_1:def 7
+                .= (the_Weight_of G).(W2.edgeSeq().k) by C2, dWWSEQ;
+            k <= len W2.edgeSeq() by C2, dWWSEQ; then
+        C4: k in dom W2.edgeSeq() by C2, FINSEQ_3:27;
+            n = len W1.edgeSeq() + k by C1, dWWSEQ;
+            hence W3.weightSeq().n = W4.n by B2,C3,C4,FINSEQ_1:def 7; end;
+        end;
+        hence W3.weightSeq().n = W4.n;
+    end;
+    hence thesis by A3, FINSEQ_1:18;
+end;   
+
+theorem tWWSEQ06: ::tWWSEQ06
+  for G being WGraph, W being Walk of G, e being set
+   st e in W.last().edgesInOut() holds
+    W.addEdge(e).weightSeq() = W.weightSeq() ^ <* (the_Weight_of G).e *> proof
+    let G be WGraph, W be Walk of G, e be set;
+    set W2 = W.addEdge(e), WA = G.walkOf(W.last(),e,W.last().adj(e)); assume
+A1: e in W.last().edgesInOut();
+A2: W2 = W.append(WA) by GLIB_001:def 13;
+A3: e Joins W.last(), W.last().adj(e), G by A1, GLIB_000:70; then
+    W.last() = WA.first() by GLIB_001:16;
+    hence W2.weightSeq() = W.weightSeq() ^ WA.weightSeq() by A2, tWWSEQ05
+                        .= W.weightSeq() ^ <* (the_Weight_of G).e *>
+                           by A3, tWWSEQ03;
+end;    
+
+theorem tWWSEQ07: ::tWWSEQ07
+  for G being real-weighted WGraph, W1 being Walk of G, W2 being Subwalk of W1
+    holds ex ws being FinSubsequence of W1.weightSeq()
+       st W2.weightSeq() = Seq ws proof
+    let G be real-weighted WGraph, W1 be Walk of G, W2 be Subwalk of W1;
+    consider es being FinSubsequence of W1.edgeSeq() such that
+A1: W2.edgeSeq() = Seq es by GLIB_001:def 32;
+    deffunc F(set) = (the_Weight_of G).(es.$1);
+    consider ws being Function such that
+A2: dom ws = dom es &
+      for x being set st x in dom es holds ws.x = F(x) from FUNCT_1:sch 3;
+    consider k being Nat such that
+A3: dom ws c= Seg k by A2, FINSEQ_1:def 12;
+A4: es c= W1.edgeSeq() by GRAPH_2:def 5;
+    reconsider ws as FinSubsequence by A3, FINSEQ_1:def 12;
+    now let z be set; assume
+    B1: z in ws; then consider x,y being set such that
+    B2: z = [x,y] by RELAT_1:def 1;
+    B3: x in dom es & ws.x = y by A2,B1,B2,FUNCT_1:8; then
+    BY: [x,es.x] in es by FUNCT_1:8; then
+    B4: x in dom W1.edgeSeq() by A4,FUNCT_1:8; then reconsider x as Nat;
+    B5: 1 <= x & x <= len W1.edgeSeq() by B4, FINSEQ_3:27; then
+    B6: x <= len W1.weightSeq() by dWWSEQ; then
+        x in dom W1.weightSeq() by B5, FINSEQ_3:27; then
+    B7: [x, W1.weightSeq().x] in W1.weightSeq() by FUNCT_1:8;
+    B8: y = (the_Weight_of G).(es.x) by A2, B3;
+        W1.weightSeq().x = (the_Weight_of G).(W1.edgeSeq().x) by B5,B6,dWWSEQ;
+        hence z in W1.weightSeq() by B2,B7,B8,BY,A4,FUNCT_1:8;
+    end; then
+    ws c= W1.weightSeq() by TARSKI:def 3; then
+    reconsider ws as FinSubsequence of W1.weightSeq() by GRAPH_2:def 5;
+    take ws;
+A5: len Seq es = card es by GLIB_001:5
+              .= card dom ws by A2, PRE_CIRC:21
+              .= card ws by PRE_CIRC:21
+              .= len Seq ws by GLIB_001:5; then
+A6: len W2.weightSeq() = len Seq ws by A1,dWWSEQ;
+    now let n be Nat; assume
+    B1: 1 <= n & n <= len W2.weightSeq();
+    B3: Seq ws = ws * Sgm(dom es) by A2, FINSEQ_1:def 14;
+    B4: Seq es = es * Sgm(dom es) by FINSEQ_1:def 14;
+    B5: rng Sgm(dom es) = dom es by A2, A3, FINSEQ_1:def 13;
+    B6: n in dom Seq ws by A6, B1, FINSEQ_3:27; then
+        n in dom Sgm(dom es) by B3, FUNCT_1:21; then
+    B8: Sgm(dom es).n in dom es by B5, FUNCT_1:def 5;
+    B9: n in dom Seq es by B1, A5,A6,FINSEQ_3:27;
+        (Seq ws).n = ws.((Sgm (dom es).n)) by B3,B6,FUNCT_1:22
+                  .= (the_Weight_of G).((es.(Sgm (dom es).n))) by A2,B8
+                  .= (the_Weight_of G).((Seq es).n) by B9,B4,FUNCT_1:22;
+        hence W2.weightSeq().n = (Seq ws).n by A1,B1,dWWSEQ;
+    end; 
+    hence W2.weightSeq() = Seq ws by A6, FINSEQ_1:18;
+end;   
+
+theorem tWWSEQ08: ::tWWSEQ08
+  for G1,G2 being WGraph, W1 being Walk of G1, W2 being Walk of G2
+   st W1 = W2 & the_Weight_of G1 = the_Weight_of G2
+   holds W1.weightSeq() = W2.weightSeq() proof
+    let G1,G2 be WGraph, W1 be Walk of G1, W2 be Walk of G2; assume
+A1: W1 = W2 & the_Weight_of G1 = the_Weight_of G2; then
+A3: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
+    set WS1 = W1.weightSeq(), WS2 = W2.weightSeq();
+    now thus len WS1 = len WS1;
+        thus
+    B1: len WS2 = len W1.edgeSeq() by A3, dWWSEQ
+               .= len WS1 by dWWSEQ;
+        let x be Nat; assume x in Seg len WS1; then
+        x in dom WS1 by FINSEQ_1:def 3; then
+    B2: 1 <= x & x <= len WS1 & x <= len WS2 by B1, FINSEQ_3:27;
+        hence WS2.x = (the_Weight_of G2).(W2.edgeSeq().x) by dWWSEQ
+                   .= (the_Weight_of G1).(W1.edgeSeq().x) by A1,GLIB_001:87
+                   .= WS1.x by B2, dWWSEQ;
+    end;
+    hence W1.weightSeq() = W2.weightSeq() by FINSEQ_2:10;
+end;
+
+theorem tWWSEQ09: ::tWWSEQ09
+  for G1 being WGraph, G2 being WSubgraph of G1,
+      W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds
+    W1.weightSeq() = W2.weightSeq() proof
+    let G1 be WGraph, G2 be WSubgraph of G1,
+        W1 be Walk of G1, W2 be Walk of G2; assume W1 = W2; then
+A3: W1.edgeSeq() = W2.edgeSeq() by GLIB_001:87;
+    set WS1 = W1.weightSeq(), WS2 = W2.weightSeq();
+    now thus len WS1 = len WS1;
+        thus
+    B1: len WS2 = len W1.edgeSeq() by A3, dWWSEQ
+               .= len WS1 by dWWSEQ;
+        let x be Nat; assume x in Seg len WS1; then
+        x in dom WS1 by FINSEQ_1:def 3; then
+    B2: 1 <= x & x <= len WS1 & x <= len WS2 by B1, FINSEQ_3:27; then
+        x <= len W2.edgeSeq() by dWWSEQ; then
+        x in dom W2.edgeSeq() by B2, FINSEQ_3:27; then
+    B3: W2.edgeSeq().x in the_Edges_of G2 by GLIB_001:80;
+        thus WS2.x = (the_Weight_of G2).(W2.edgeSeq().x) by B2, dWWSEQ
+                  .= ((the_Weight_of G1)|(the_Edges_of G2)).(W2.edgeSeq().x)
+                       by dGWINHERIT
+                  .= (the_Weight_of G1).(W1.edgeSeq().x) by A3,B3, FUNCT_1:72
+                  .= WS1.x by B2, dWWSEQ;
+    end;
+    hence W1.weightSeq() = W2.weightSeq() by FINSEQ_2:10;        
+end;    
+
+:: Theorems regarding W.cost()
+theorem tWCOST01: ::tWCOST01
+  for G being real-weighted WGraph, W being Walk of G holds
+     W is trivial implies W.cost() = 0 proof
+    let G be real-weighted WGraph, W be Walk of G;
+    assume W is trivial; then
+    W.weightSeq() = <*> REAL by tWWSEQ01;
+    hence W.cost() = 0 by dWCOST, RVSUM_1:102;
+end;  
+
+theorem tWCOST02: ::tWCOST02
+  for G being real-weighted WGraph, v1,v2 being Vertex of G, e being set
+   st e Joins v1,v2,G
+   holds (G.walkOf(v1,e,v2)).cost() = (the_Weight_of G).e proof
+    let G be real-weighted WGraph, v1,v2 be Vertex of G, e be set; 
+    set W = G.walkOf(v1,e,v2); assume e Joins v1,v2,G; then
+    W.weightSeq() = <* (the_Weight_of G).e *> by tWWSEQ03; 
+    hence W.cost() = Sum <* (the_Weight_of G).e *> by dWCOST
+                  .= (the_Weight_of G).e by RVSUM_1:103;
+end;   
+
+theorem tWCOST03: ::tWCOST03
+  for G being real-weighted WGraph, W being Walk of G holds
+    W.cost() = W.reverse().cost() proof
+    let G be real-weighted WGraph, W be Walk of G;    
+    thus W.cost() = Sum (W.weightSeq()) by dWCOST
+                 .= Sum (Rev (W.weightSeq())) by POLYNOM3:3
+                 .= Sum (W.reverse().weightSeq()) by tWWSEQ04
+                 .= W.reverse().cost() by dWCOST;
+end;
+
+theorem tWCOST04: ::tWCOST04
+  for G being real-weighted WGraph, W1, W2 being Walk of G
+   st W1.last() = W2.first() 
+   holds W1.append(W2).cost() = W1.cost() + W2.cost() proof
+    let G be real-weighted WGraph, W1, W2 be Walk of G; 
+    set W3 = W1.append(W2); assume W1.last() = W2.first(); then
+    W3.weightSeq() = W1.weightSeq() ^ W2.weightSeq() by tWWSEQ05; then
+    Sum (W3.weightSeq()) = Sum (W1.weightSeq()) + Sum (W2.weightSeq())
+      by RVSUM_1:105; 
+    hence W3.cost() = Sum (W1.weightSeq()) + Sum (W2.weightSeq()) by dWCOST
+                   .= W1.cost() + Sum (W2.weightSeq()) by dWCOST
+                   .= W1.cost() + W2.cost() by dWCOST;
+end;
+
+theorem tWCOST05: ::tWCOST05
+  for G being real-weighted WGraph, W be Walk of G, e be set
+   st e in W.last().edgesInOut()
+   holds W.addEdge(e).cost() = W.cost() + (the_Weight_of G).e proof
+    let G be real-weighted WGraph, W be Walk of G, e be set;
+    set W2 = W.addEdge(e); assume e in W.last().edgesInOut(); then
+    W2.weightSeq()=W.weightSeq() ^ <*(the_Weight_of G).e*> by tWWSEQ06; then
+    Sum (W2.weightSeq()) = Sum (W.weightSeq()) + Sum <*(the_Weight_of G).e*>
+      by RVSUM_1:105; then
+    W2.cost() = Sum (W.weightSeq()) + Sum <*(the_Weight_of G).e*> by dWCOST
+                   .= W.cost() + Sum <*(the_Weight_of G).e*> by dWCOST;
+    hence thesis by RVSUM_1:103;
+end;
+
+theorem tWCOST06: ::tWCOST06
+  for G1,G2 being real-weighted WGraph, W1 being Walk of G1,W2 being Walk of G2
+   st W1 = W2 & the_Weight_of G1 = the_Weight_of G2
+   holds W1.cost() = W2.cost() proof
+    let G1,G2 be real-weighted WGraph, W1 be Walk of G1, W2 be Walk of G2;
+    assume W1 = W2 & the_Weight_of G1 = the_Weight_of G2; then
+    W1.weightSeq() = W2.weightSeq() by tWWSEQ08;
+    hence W1.cost() = Sum( W2.weightSeq()) by dWCOST
+                   .= W2.cost() by dWCOST;
+end;   
+
+theorem tWCOST07: ::tWCOST07
+  for G1 being real-weighted WGraph, G2 being WSubgraph of G1,
+      W1 being Walk of G1, W2 being Walk of G2 st W1 = W2 holds
+    W1.cost() = W2.cost() proof
+    let G1 be real-weighted WGraph, G2 be WSubgraph of G1,
+        W1 be Walk of G1, W2 be Walk of G2; assume W1 = W2; then
+    W1.weightSeq() = W2.weightSeq() by tWWSEQ09;
+    hence W1.cost() = Sum (W2.weightSeq()) by dWCOST
+                   .= W2.cost() by dWCOST;
+end;    
+
+:: Theorems regarding nonnegative-weighted WGraphs
+theorem tWNNWEIGHT01: ::tWNNWEIGHT01
+  for G being nonnegative-weighted WGraph, W being Walk of G,
+      n being Nat st n in dom W.weightSeq() holds 0 <= (W.weightSeq()).n proof
+    let G be nonnegative-weighted WGraph, W be Walk of G, n be Nat;
+    set WS = W.weightSeq(); assume n in dom W.weightSeq(); then
+A1: 1 <= n & n <= len WS by FINSEQ_3:27; then
+A2: WS.n = (the_Weight_of G).(W.edgeSeq().n) by dWWSEQ;
+A3: dom the_Weight_of G = the_Edges_of G by PBOOLE:def 3;
+    1 <= n & n <= len W.edgeSeq() by A1,dWWSEQ; then
+    n in dom W.edgeSeq() by FINSEQ_3:27; then
+    (W.edgeSeq().n) in dom the_Weight_of G by A3, GLIB_001:80; then
+A4: WS.n in rng (the_Weight_of G) by A2, FUNCT_1:def 5;
+    rng (the_Weight_of G) c= Real>=0 by dWNNWEIGHT; then
+    WS.n in Real>=0 by A4; then
+    consider r being Real such that
+A5: r = WS.n & r >= 0 by GRAPH_5:def 12;
+    thus 0 <= WS.n by A5;
+end;
+
+theorem tWNNWEIGHT02: ::tWNNWEIGHT02
+  for G being nonnegative-weighted WGraph, W being Walk of G
+    holds 0 <= W.cost() proof
+    let G be nonnegative-weighted WGraph, W be Walk of G;
+    for i being Nat st i in dom W.weightSeq() holds 0 <= (W.weightSeq()).i
+      by tWNNWEIGHT01; then
+    0 <= Sum (W.weightSeq()) by RVSUM_1:114;
+    hence 0 <= W.cost() by dWCOST;
+end;
+
+theorem tWNNWEIGHT03: ::tWNNWEIGHT03
+  for G being nonnegative-weighted WGraph, W1 being Walk of G,
+      W2 being Subwalk of W1 holds W2.cost() <= W1.cost() proof
+    let G be nonnegative-weighted WGraph, W1 be Walk of G,
+        W2 be Subwalk of W1;
+    consider ws being FinSubsequence of W1.weightSeq() such that
+A1: W2.weightSeq() = Seq ws by tWWSEQ07;
+    reconsider ws'=ws as FinSubsequence of W1.weightSeq();
+    for i being Nat st i in dom W1.weightSeq() holds 0 <= (W1.weightSeq()).i
+      by tWNNWEIGHT01; then
+    Sum (W2.weightSeq()) <= Sum (W1.weightSeq()) by A1,tFINSUBSEQ05; then
+    W2.cost() <= Sum (W1.weightSeq()) by dWCOST; 
+    hence W2.cost() <= W1.cost() by dWCOST;
+end;    
+
+theorem tGNNWEIGHT04: ::tWNNWEIGHT04
+  for G being nonnegative-weighted WGraph, e be set holds
+    e in the_Edges_of G implies 0 <= (the_Weight_of G).e proof
+    let G be nonnegative-weighted WGraph, e be set;
+    assume e in the_Edges_of G; then
+    e in dom the_Weight_of G by PBOOLE:def 3; then
+A2: (the_Weight_of G).e in rng (the_Weight_of G) by FUNCT_1:12;
+    rng (the_Weight_of G) c= Real>=0 by dWNNWEIGHT; then
+    (the_Weight_of G).e in Real>=0 by A2; then
+    consider r being Real such that
+A3: (the_Weight_of G).e = r & r >= 0 by GRAPH_5:def 12;
+    thus thesis by A3;
+end;
+
+:: Theorems involving G.labelEdge
+theorem tGELABEL01: ::tGELABEL01
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+   the_ELabel_of G.labelEdge(e,x) = the_ELabel_of G +* (e .--> x) proof
+    let G be EGraph, e,x be set; assume
+A1: e in the_Edges_of G;
+    the_ELabel_of G.labelEdge(e,x)
+  = G.labelEdge(e,x).ELabelSelector by dELABEL
+ .= G.set(ELabelSelector, the_ELabel_of G +* (e .-->x)).ELabelSelector
+      by A1, dGELABEL;
+    hence thesis by GLIB_000:11;
+end;   
+   
+theorem tGELABEL02: ::tGELABEL02
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+   (the_ELabel_of G.labelEdge(e,x)).e = x proof
+    let G be EGraph, e,x be set; assume
+    e in the_Edges_of G; then
+A1: the_ELabel_of G.labelEdge(e,x) = the_ELabel_of G +* (e.-->x)
+      by tGELABEL01;
+    e in {e} by TARSKI:def 1; then
+    e in dom (e.-->x) by CQC_LANG:5; then
+    (the_ELabel_of G.labelEdge(e,x)).e = (e.-->x).e by A1, FUNCT_4:14
+                                      .= x by CQC_LANG:6;
+    hence thesis;
+end;
+
+theorem tGELABEL03: ::tGELABEL03
+  for G being EGraph, e,x being set holds
+    G == G.labelEdge(e,x) proof
+    let G be EGraph, e,x be set;
+    now per cases;
+    suppose e in the_Edges_of G; then
+    B1: G.labelEdge(e,x) = G.set(ELabelSelector, the_ELabel_of G +* (e .-->x))
+          by dGELABEL;
+        not ELabelSelector in _GraphSelectors
+          by dSELEL,GLIB_000:1,GLIB_000:2; then
+        the_Vertices_of G = the_Vertices_of G.labelEdge(e,x) &
+        the_Edges_of G = the_Edges_of G.labelEdge(e,x) &
+        the_Source_of G = the_Source_of G.labelEdge(e,x) &
+        the_Target_of G = the_Target_of G.labelEdge(e,x) by B1,GLIB_000:13;
+        hence thesis by GLIB_000:def 36; end;
+    suppose not (e in the_Edges_of G);
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+end;
+
+theorem tGELABEL04: ::tGELABEL04
+  for G being WEGraph, e,x being set holds
+    the_Weight_of  G = the_Weight_of  G.labelEdge(e,x) proof
+    let G be WEGraph, e,x be set; set G2 = G.labelEdge(e,x);
+    now per cases;
+    suppose e in the_Edges_of G; then
+    B1: G2 = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) by dGELABEL;
+        thus the_Weight_of G = G.WeightSelector by dWEIGHT
+                            .= G2.WeightSelector
+                                 by B1,dSELW,dSELEL,GLIB_000:12
+                            .= the_Weight_of G2 by dWEIGHT; end;
+    suppose not e in the_Edges_of G;
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+end;    
+
+theorem tGELABEL05: ::tGELABEL05
+  for G being EVGraph, e,x being set holds
+    the_VLabel_of  G = the_VLabel_of  G.labelEdge(e,x) proof
+    let G be EVGraph, e,x be set; set G2 = G.labelEdge(e,x);
+    now per cases;
+    suppose e in the_Edges_of G; then
+    B1: G2 = G.set(ELabelSelector, the_ELabel_of G +* (e.-->x)) by dGELABEL;
+        thus the_VLabel_of G = G.VLabelSelector by dVLABEL
+                            .= G2.VLabelSelector
+                                 by B1,dSELVL,dSELEL,GLIB_000:12
+                            .= the_VLabel_of G2 by dVLABEL; end;
+    suppose not e in the_Edges_of G;
+        hence thesis by dGELABEL; end;
+    end;
+    hence thesis;
+end;    
+
+theorem tGELABEL06: ::tGELABEL06
+  for G being EGraph, e1,e2,x being set
+   st e1 <> e2 holds
+     (the_ELabel_of G.labelEdge(e1,x)).e2 = (the_ELabel_of G).e2 proof
+    let G be EGraph, e1,e2,x be set; assume
+A1: e1 <> e2; set G2 = G.labelEdge(e1,x);
+    now per cases;
+      suppose e1 in the_Edges_of G; then
+    B1: the_ELabel_of G2 = the_ELabel_of G +* (e1.-->x) by tGELABEL01;
+        not e2 in {e1} by A1,TARSKI:def 1; then
+        not e2 in dom (e1.-->x) by CQC_LANG:5;
+        hence thesis by B1,FUNCT_4:12;
+      end;
+      suppose not e1 in the_Edges_of G;
+        hence thesis by dGELABEL;
+      end;
+    end;
+    hence thesis;
+end;     
+
+:: Theorems involving G.labelVertex
+theorem tGVLABEL01: ::tGVLABEL01
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+   the_VLabel_of G.labelVertex(v,x) = the_VLabel_of G +* (v .--> x) proof
+    let G be VGraph, e,x be set; assume
+A1: e in the_Vertices_of G; 
+   the_VLabel_of G.labelVertex(e,x)
+ = G.labelVertex(e,x).VLabelSelector by dVLABEL
+.= G.set(VLabelSelector, the_VLabel_of G +* (e .-->x)).VLabelSelector
+      by A1, dGVLABEL;
+    hence thesis by GLIB_000:11;
+end;   
+   
+theorem tGVLABEL02: ::tGVLABEL02
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+   (the_VLabel_of G.labelVertex(v,x)).v = x proof
+    let G be VGraph, e,x be set; assume e in the_Vertices_of G; then
+A1: the_VLabel_of G.labelVertex(e,x) = the_VLabel_of G +* (e.-->x)
+      by tGVLABEL01;
+    e in {e} by TARSKI:def 1; then
+    e in dom (e.-->x) by CQC_LANG:5; then
+    (the_VLabel_of G.labelVertex(e,x)).e = (e.-->x).e by A1, FUNCT_4:14
+                                      .= x by CQC_LANG:6;
+    hence thesis;
+end;
+
+theorem tGVLABEL03: ::tGVLABEL03
+  for G being VGraph, v,x being set holds
+    G == G.labelVertex(v,x) proof
+    let G be VGraph, e,x be set;
+    now per cases;
+    suppose e in the_Vertices_of G; then
+    B1: G.labelVertex(e,x) = G.set(VLabelSelector,
+          the_VLabel_of G +* (e .-->x)) by dGVLABEL;
+        not VLabelSelector in _GraphSelectors
+          by dSELVL,GLIB_000:1, GLIB_000:2; then
+        the_Vertices_of G = the_Vertices_of G.labelVertex(e,x) &
+        the_Edges_of G = the_Edges_of G.labelVertex(e,x) &
+        the_Source_of G = the_Source_of G.labelVertex(e,x) &
+        the_Target_of G = the_Target_of G.labelVertex(e,x) by B1,GLIB_000:13;
+        hence thesis by GLIB_000:def 36; end;
+    suppose not e in the_Vertices_of G;
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+end;
+
+theorem tGVLABEL04: ::tGVLABEL04
+  for G being WVGraph, v,x being set holds
+    the_Weight_of  G = the_Weight_of  G.labelVertex(v,x) proof
+    let G be WVGraph, e,x be set; set G2 = G.labelVertex(e,x);
+    now per cases;
+    suppose e in the_Vertices_of G; then
+    B1: G2 = G.set(VLabelSelector, the_VLabel_of G +* (e.-->x)) by dGVLABEL;
+        thus the_Weight_of G = G.WeightSelector by dWEIGHT
+                            .= G2.WeightSelector
+                                 by B1,dSELW,dSELVL,GLIB_000:12
+                            .= the_Weight_of G2 by dWEIGHT; end;
+    suppose not e in the_Vertices_of G;
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+end;    
+
+theorem tGVLABEL05: ::tGVLABEL05
+  for G being EVGraph, v,x being set holds
+    the_ELabel_of  G = the_ELabel_of  G.labelVertex(v,x) proof
+    let G be EVGraph, e,x be set; set G2 = G.labelVertex(e,x);
+    now per cases;
+    suppose e in the_Vertices_of G; then
+    B1: G2 = G.set(VLabelSelector, the_VLabel_of G +* (e.-->x)) by dGVLABEL;
+        thus the_ELabel_of G = G.ELabelSelector by dELABEL
+                            .= G2.ELabelSelector
+                                 by B1,dSELVL,dSELEL,GLIB_000:12
+                            .= the_ELabel_of G2 by dELABEL; end;
+    suppose not e in the_Vertices_of G;
+        hence thesis by dGVLABEL; end;
+    end;
+    hence thesis;
+end;    
+
+theorem tGVLABEL06: ::tGVLABEL06
+  for G being VGraph, v1,v2,x being set
+   st v1 <> v2 holds
+     (the_VLabel_of G.labelVertex(v1,x)).v2 = (the_VLabel_of G).v2 proof
+    let G be VGraph, v1,v2,x be set; assume
+A1: v1 <> v2; set G2 = G.labelVertex(v1,x);
+    now per cases;
+      suppose v1 in the_Vertices_of G; then
+    B1: the_VLabel_of G2 = the_VLabel_of G +* (v1.-->x) by tGVLABEL01;
+        not v2 in {v1} by A1,TARSKI:def 1; then
+        not v2 in dom (v1.-->x) by CQC_LANG:5;
+        hence thesis by B1,FUNCT_4:12;
+      end;
+      suppose not v1 in the_Vertices_of G;
+        hence thesis by dGVLABEL;
+      end;
+    end;
+    hence thesis;
+end;     
+
+:: Theorems regarding G.labeledE() 
+theorem tGLABELE01: ::tGLABELE01
+  for G1,G2 being EGraph st the_ELabel_of G1 = the_ELabel_of G2
+    holds G1.labeledE() = G2.labeledE() proof
+    let G1,G2 be EGraph; assume the_ELabel_of G1 = the_ELabel_of G2;
+    hence G1.labeledE() = dom the_ELabel_of G2 by dGLABELEDE
+                       .= G2.labeledE() by dGLABELEDE;
+end;
+
+theorem tGLABELE02: ::tGLABELE02
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+     G.labelEdge(e,x).labeledE() = G.labeledE() \/ {e} proof
+    let G be EGraph, e,val be set;
+    set G2 = G.labelEdge(e,val), EG = the_ELabel_of G, EG2 = the_ELabel_of G2;
+    assume e in the_Edges_of G; then
+    EG2 = EG +* (e.--> val) by tGELABEL01; then
+    dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
+    hence G2.labeledE() = dom EG \/ dom (e.--> val) by dGLABELEDE
+                        .= G.labeledE() \/ dom (e .--> val) by dGLABELEDE
+                        .= G.labeledE() \/ {e} by CQC_LANG:5;    
+end;
+
+theorem tGLABELE03: ::tGLABELE03
+ for G being EGraph, e,x being set
+   st e in the_Edges_of G holds
+     G.labeledE() c= G.labelEdge(e,x).labeledE() proof
+    let G be EGraph, e,x be set; assume
+    e in the_Edges_of G; then
+    G.labelEdge(e,x).labeledE() = G.labeledE() \/ {e} by tGLABELE02 ;
+    hence thesis by XBOOLE_1:7;
+end;     
+
+theorem tGLABELE04: ::tGLABELE04
+  for G being finite EGraph, e, x being set
+   st e in the_Edges_of G & not e in G.labeledE()
+   holds card G.labelEdge(e,x).labeledE() = card G.labeledE() + 1 proof
+    let G be finite EGraph, e,val be set;
+    set G2 = G.labelEdge(e,val);
+    set ECurr = the_ELabel_of G, ENext = the_ELabel_of G2; assume
+A0: e in the_Edges_of G & not e in G.labeledE(); then
+    e in the_Edges_of G & not e in dom (the_ELabel_of G) by dGLABELEDE; then
+A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
+A3: ENext = ECurr +* (e .--> val) by A0,tGELABEL01;
+    dom (e.-->val) = {e} by CQC_LANG:5; then
+    card dom ENext = card (dom ECurr) + 1 by A2, A3, FUNCT_4:def 1;
+    hence card G2.labeledE() = card (dom ECurr) + 1 by dGLABELEDE
+                             .= card G.labeledE() + 1 by dGLABELEDE;
+end;         
+
+theorem tGLABELE05: ::tGLABELE05
+  for G being EGraph, e1,e2,x being set
+    st not e2 in G.labeledE() & e2 in G.labelEdge(e1,x).labeledE()
+    holds e1 = e2 & e1 in the_Edges_of G proof
+    let G be EGraph, e1,e2,val be set;
+    set Gn = G.labelEdge(e1,val); assume
+A1: not e2 in G.labeledE() & e2 in Gn.labeledE(); then
+A2: e1 in the_Edges_of G by dGELABEL;
+A3: not e2 in dom (the_ELabel_of G) & e2 in dom (the_ELabel_of Gn)
+      by A1, dGLABELEDE;
+    the_ELabel_of Gn = (the_ELabel_of G) +* (e1 .--> val)
+      by A2, tGELABEL01; then
+    e2 in dom (the_ELabel_of G) or e2 in dom (e1 .--> val)
+      by A3, FUNCT_4:13; then
+    e2 in {e1} by CQC_LANG:5,A1,dGLABELEDE; 
+    hence e1 = e2 by TARSKI:def 1;
+    thus thesis by A1,dGELABEL;
+end;
+
+theorem tGLABELE06: ::tGLABELE06
+  for G being EVGraph, v,x being set holds
+    G.labeledE() = G.labelVertex(v,x).labeledE() proof
+    let G be EVGraph, v,x be set;     
+  dom the_ELabel_of G = dom the_ELabel_of G.labelVertex(v,x) by tGVLABEL05
+                     .= G.labelVertex(v,x).labeledE() by dGLABELEDE;
+  hence thesis by dGLABELEDE;
+end;
+
+theorem tGLABELE07: ::tGLABELV07
+  for G being EGraph, e,x being set
+   st e in the_Edges_of G
+   holds e in G.labelEdge(e,x).labeledE() proof
+    let G be EGraph, e,x be set; assume e in the_Edges_of G; then
+A1: G.labelEdge(e,x).labeledE() = G.labeledE() \/ {e} by tGLABELE02;
+    e in {e} by TARSKI:def 1;
+    hence thesis by A1,XBOOLE_0:def 2;
+end;    
+
+:: Theorems regarding G.labeledV() 
+theorem tGLABELV01: ::tGLABELV01
+  for G1,G2 being VGraph st the_VLabel_of G1 = the_VLabel_of G2
+    holds G1.labeledV() = G2.labeledV() proof
+    let G1,G2 be VGraph; assume the_VLabel_of G1 = the_VLabel_of G2;
+    hence G1.labeledV() = dom the_VLabel_of G2 by dGLABELEDV
+                       .= G2.labeledV() by dGLABELEDV;
+end;
+
+theorem tGLABELV02: ::tGLABELV02
+  for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+     G.labelVertex(v,x).labeledV() = G.labeledV() \/ {v} proof
+    let G be VGraph, e,val be set;
+    set G2 = G.labelVertex(e,val),EG=the_VLabel_of G,EG2=the_VLabel_of G2;
+    assume e in the_Vertices_of G; then
+    EG2 = EG +* (e.--> val) by tGVLABEL01; then
+    dom EG2 = dom EG \/ dom (e.-->val) by FUNCT_4:def 1;
+    hence G2.labeledV() = dom EG \/ dom (e.--> val) by dGLABELEDV
+                        .= G.labeledV() \/ dom (e .--> val) by dGLABELEDV
+                        .= G.labeledV() \/ {e} by CQC_LANG:5;    
+end;
+
+theorem tGLABELV03: ::tGLABELV03
+ for G being VGraph, v,x being set
+   st v in the_Vertices_of G holds
+     G.labeledV() c= G.labelVertex(v,x).labeledV() proof
+    let G be VGraph, e,x be set; assume e in the_Vertices_of G; then
+    G.labelVertex(e,x).labeledV() = G.labeledV() \/ {e} by tGLABELV02;
+    hence thesis by XBOOLE_1:7;
+end;     
+
+theorem tGLABELV04: ::tGLABELV04
+  for G being finite VGraph, v, x being set
+   st v in the_Vertices_of G & not v in G.labeledV()
+   holds card G.labelVertex(v,x).labeledV() = card G.labeledV() + 1 proof
+    let G be finite VGraph, e,val be set;
+    set G2 = G.labelVertex(e,val);
+    set ECurr = the_VLabel_of G, ENext = the_VLabel_of G2; assume
+A0: e in the_Vertices_of G & not e in G.labeledV(); then
+    e in the_Vertices_of G & not e in dom (the_VLabel_of G)
+      by dGLABELEDV; then
+A2: card (dom ECurr \/ {e}) = card (dom ECurr) + 1 by CARD_2:54;
+A3: ENext = ECurr +* (e .--> val) by A0,tGVLABEL01;
+    dom (e.-->val) = {e} by CQC_LANG:5; then
+    card dom ENext = card (dom ECurr) + 1 by A2, A3, FUNCT_4:def 1;
+    hence card G2.labeledV() = card (dom ECurr) + 1 by dGLABELEDV
+                             .= card G.labeledV() + 1 by dGLABELEDV;
+end;         
+
+theorem tGLABELV05: ::tGLABELV05
+ for G being VGraph, v1,v2,x being set
+   st not v2 in G.labeledV() & v2 in G.labelVertex(v1,x).labeledV()
+   holds v1 = v2 & v1 in the_Vertices_of G proof
+    let G be VGraph, e1,e2,val be set;
+    set Gn = G.labelVertex(e1,val); assume
+A1: not e2 in G.labeledV() & e2 in Gn.labeledV(); then
+A2: e1 in the_Vertices_of G by dGVLABEL;
+A3: not e2 in dom (the_VLabel_of G) & e2 in dom (the_VLabel_of Gn)
+      by A1, dGLABELEDV;
+    the_VLabel_of Gn = (the_VLabel_of G) +* (e1 .--> val)
+      by A2,tGVLABEL01; then
+    e2 in dom (the_VLabel_of G) or e2 in dom (e1 .--> val)
+      by A3, FUNCT_4:13; then
+    e2 in {e1} by CQC_LANG:5,A1,dGLABELEDV; 
+    hence e1 = e2 by TARSKI:def 1;
+    thus thesis by A1,dGVLABEL;
+end;
+
+theorem tGLABELV06: ::tGLABELV06
+  for G being EVGraph, e,x being set holds
+    G.labeledV() = G.labelEdge(e,x).labeledV() proof
+    let G be EVGraph, e,x be set;
+    dom the_VLabel_of G = dom the_VLabel_of G.labelEdge(e,x) by tGELABEL05
+                       .= G.labelEdge(e,x).labeledV() by dGLABELEDV;
+    hence thesis by dGLABELEDV;
+end;
+
+theorem tGLABELV07: ::tGLABELV07
+  for G being VGraph, v being Vertex of G, x being set holds
+    v in G.labelVertex(v,x).labeledV() proof
+    let G be VGraph, v be Vertex of G, x be set;
+A1: G.labelVertex(v,x).labeledV() = G.labeledV() \/ {v} by tGLABELV02;
+    v in {v} by TARSKI:def 1;
+    hence thesis by A1,XBOOLE_0:def 2;
+end;    

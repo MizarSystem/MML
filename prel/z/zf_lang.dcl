@@ -15,7 +15,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="ZF_LANG"/>
 </Signature>
 <RCluster>
@@ -29,7 +28,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -37,11 +36,6 @@
 <Func kind="K" nr="89"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -64,7 +58,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -87,14 +81,14 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 </Typ>
@@ -107,20 +101,20 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 </Typ>
@@ -134,7 +128,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -145,7 +139,7 @@
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 <Func kind="K" nr="56"/>
 </Typ>
@@ -159,7 +153,7 @@
 <Adjective nr="5"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

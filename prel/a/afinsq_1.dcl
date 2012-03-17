@@ -23,7 +23,6 @@
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="AFINSQ_1"/>
 </Signature>
 <RCluster>
@@ -93,11 +92,6 @@
 <Adjective nr="30"/>
 <Adjective nr="31" value="false"/>
 <Adjective nr="32" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -125,11 +119,6 @@
 <Adjective nr="30"/>
 <Adjective nr="31" value="false"/>
 <Adjective nr="32" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -176,11 +165,6 @@
 <Adjective nr="30"/>
 <Adjective nr="31" value="false"/>
 <Adjective nr="32" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster>

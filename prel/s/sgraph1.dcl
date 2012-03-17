@@ -16,7 +16,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SGRAPH1"/>
@@ -27,7 +26,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -49,11 +48,6 @@
 </Func>
 <Cluster>
 <Adjective nr="17"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -87,11 +81,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="17"/>
-<Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
 </Cluster>
 </CCluster>
 </Registrations>

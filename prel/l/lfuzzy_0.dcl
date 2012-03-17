@@ -164,11 +164,8 @@
 <Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
-<Adjective nr="78"/>
 <Adjective nr="79"/>
-<Adjective nr="80"/>
 <Adjective nr="109"/>
-<Adjective nr="110"/>
 <Adjective nr="111" value="false"/>
 <Adjective nr="112"/>
 <Adjective nr="113"/>

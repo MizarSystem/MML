@@ -15,7 +15,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="MARGREL1"/>
 </Signature>
 <RCluster>
@@ -24,7 +23,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -33,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -42,11 +41,6 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -75,7 +69,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -83,19 +77,19 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -104,7 +98,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -117,7 +111,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -128,7 +122,7 @@
 <Func kind="K" nr="93"/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="23"/>
 </Cluster>
 </CCluster>
 </Registrations>

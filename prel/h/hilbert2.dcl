@@ -18,13 +18,11 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_9"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="TREES_4"/>
 </Signature>
@@ -39,13 +37,7 @@
 <Adjective nr="17"/>
 <Adjective nr="20"/>
 <Adjective nr="25"/>
-<Adjective nr="26"/>
-<Adjective nr="35"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45"/>
-<Adjective nr="46"/>
+<Adjective nr="34"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -59,19 +51,19 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="187">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
-<Adjective nr="38" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -83,19 +75,19 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="192">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
-<Adjective nr="38" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -107,18 +99,18 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -126,8 +118,8 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="31"/>
-<Adjective nr="38" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

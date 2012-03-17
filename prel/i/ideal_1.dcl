@@ -644,8 +644,12 @@
 <Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="73"/>
+<Adjective nr="83"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
 </Cluster>
 </FCluster>
 <FCluster>

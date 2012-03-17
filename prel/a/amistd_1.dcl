@@ -625,7 +625,6 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="17"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 </Cluster>

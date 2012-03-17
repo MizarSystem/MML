@@ -51,7 +51,6 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="6"/>
 <Adjective nr="9"/>
-<Adjective nr="14"/>
 </Cluster>
 </FCluster>
 <FCluster>

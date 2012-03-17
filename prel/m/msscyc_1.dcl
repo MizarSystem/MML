@@ -287,7 +287,6 @@
 <Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="57"/>
 </Cluster>
 </CCluster>
 <CCluster>

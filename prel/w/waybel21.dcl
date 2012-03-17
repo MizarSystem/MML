@@ -320,15 +320,6 @@
 </Typ>
 <Cluster>
 <Adjective nr="12"/>
-<Adjective nr="14" value="false"/>
-<Adjective nr="15">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-</Adjective>
 <Adjective nr="20">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>

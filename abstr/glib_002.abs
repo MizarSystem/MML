@@ -1,0 +1,422 @@
+:: Trees: Connected, Acyclic Graphs
+::  by Gilbert Lee
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary AMI_1, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1, FINSET_1, FUNCOP_1,
+      FUNCT_1, GLIB_000, GLIB_001, GLIB_002, GRAPH_1, MATRIX_2, MSAFREE2,
+      MSUALG_1, NEWTON, ORDINAL1, ORDINAL2, QUANTAL1, PBOOLE, PRE_TOPC,
+      REALSET1, RELAT_1, RELAT_2, TARSKI, TOPGEN_1, TREES_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, NUMBERS, SUBSET_1, XREAL_0, DOMAIN_1,
+      REAL_1, RELAT_1, FUNCT_1, CARD_1, PBOOLE, FUNCT_2, ORDINAL1, ORDINAL2,
+      FINSEQ_1, FINSET_1, NAT_1, CQC_LANG, GLIB_000, GLIB_001, ABIAN;
+ constructors DOMAIN_1, SEQ_1, CARD_FIL, REAL_1, AMISTD_2, PSCOMP_1, POLYNOM2,
+      BINARITH, GRAPH_2, GLIB_001;
+ registrations SUBSET_1, RELSET_1, FINSET_1, BINARITH, CARD_1, INT_1, ABIAN,
+      JORDAN1D, ORDINAL2, GLIB_000, GLIB_001, POLYNOM1;
+ requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
+
+
+begin :: Preliminary
+
+registration let X be finite set;
+  cluster bool X -> finite;
+end;
+
+theorem :: GLIB_002:1  :: tCARD02
+  for X being finite set st 1 < card X holds
+    ex x1,x2 being set st x1 in X & x2 in X & x1 <> x2;
+
+begin :: Definitions
+
+definition let G be _Graph; ::dGCONNECT
+  attr G is connected means
+:: GLIB_002:def 1
+    for u,v being Vertex of G holds
+      ex W being Walk of G st W is_Walk_from u,v;
+end;
+
+definition let G be _Graph; ::dGACYCLIC
+  attr G is acyclic means
+:: GLIB_002:def 2
+    not ex W being Walk of G st W is Cycle-like;
+end;
+
+definition let G be _Graph; ::dGTREE
+  attr G is Tree-like means
+:: GLIB_002:def 3
+    G is acyclic & G is connected;
+end;
+
+registration
+  cluster trivial -> connected _Graph;
+end;
+
+registration
+  cluster trivial loopless -> Tree-like _Graph;
+end;
+
+registration
+  cluster acyclic -> simple _Graph;
+end;
+
+registration
+  cluster Tree-like -> acyclic connected _Graph;
+end;
+
+registration
+  cluster acyclic connected -> Tree-like _Graph;
+end;
+
+registration let G be _Graph, v be Vertex of G;
+  cluster -> Tree-like inducedSubgraph of G,{v},{};
+end;
+
+definition let G be _Graph, v be set;
+  pred G is_DTree_rooted_at v means
+:: GLIB_002:def 4  ::dGDTREE
+    G is Tree-like &
+     for x being Vertex of G holds
+      ex W being DWalk of G st W is_Walk_from v,x;
+end;
+
+registration
+  cluster trivial finite Tree-like _Graph;
+
+  cluster non trivial finite Tree-like _Graph;
+end;
+
+registration let G be _Graph;
+  cluster trivial finite Tree-like Subgraph of G;
+end;
+
+registration let G be acyclic _Graph;
+  cluster -> acyclic Subgraph of G;
+end;
+
+definition let G be _Graph, v be Vertex of G; ::dGREACH
+  func G.reachableFrom(v) -> non empty Subset of the_Vertices_of G means
+:: GLIB_002:def 5
+
+    for x being set holds x in it iff
+      ex W being Walk of G st W is_Walk_from v,x;
+end;
+
+definition let G be _Graph, v be Vertex of G; ::dGREACHD:
+  func G.reachableDFrom(v) -> non empty Subset of the_Vertices_of G means
+:: GLIB_002:def 6
+
+    for x being set holds x in it iff
+      ex W being DWalk of G st W is_Walk_from v,x;
+end;
+
+definition let G1 be _Graph, G2 be Subgraph of G1;
+  attr G2 is Component-like means
+:: GLIB_002:def 7
+    G2 is connected &
+    not ex G3 being connected Subgraph of G1 st G2 c< G3;
+end;
+
+registration let G be _Graph;
+  cluster Component-like -> connected Subgraph of G;
+end;
+
+registration let G be _Graph, v be Vertex of G;
+  cluster -> Component-like inducedSubgraph of G,G.reachableFrom(v);
+end;
+
+registration let G be _Graph;
+  cluster Component-like Subgraph of G;
+end;
+
+definition let G be _Graph;
+  mode Component of G is Component-like Subgraph of G;
+end;
+
+definition let G be _Graph;
+  func G.componentSet() -> non empty Subset of bool the_Vertices_of G means
+:: GLIB_002:def 8
+     ::dGCOMPSET
+    for x being set holds x in it iff
+       ex v being Vertex of G st x = G.reachableFrom(v);
+end;
+
+registration let G be _Graph, X be Element of G.componentSet();
+  cluster -> Component-like inducedSubgraph of G,X;
+end;
+
+definition let G be _Graph;
+  func G.numComponents() -> Cardinal equals
+:: GLIB_002:def 9  ::dGNUMPCOMP
+    Card G.componentSet();
+end;
+
+definition let G be finite _Graph;
+  redefine func G.numComponents() -> non empty Nat;
+end;
+
+definition let G be _Graph, v be Vertex of G;
+  attr v is cut-vertex means
+:: GLIB_002:def 10  ::dCUTV1
+    for G2 being removeVertex of G,v holds
+      G.numComponents() <` G2.numComponents();
+end;
+
+definition let G be finite _Graph, v be Vertex of G;
+  redefine attr v is cut-vertex means
+:: GLIB_002:def 11  ::dCUTV2
+    for G2 being removeVertex of G,v holds
+      G.numComponents() < G2.numComponents();
+end;
+
+registration let G be non trivial finite connected _Graph;
+  cluster non cut-vertex Vertex of G;
+end;
+
+registration let G be non trivial finite Tree-like _Graph;
+  cluster endvertex Vertex of G;
+end;
+
+registration let G be non trivial finite Tree-like _Graph,
+               v be endvertex Vertex of G;
+  cluster -> Tree-like removeVertex of G,v;
+end;
+
+definition let GSq be GraphSeq;
+  attr GSq is connected means
+:: GLIB_002:def 12  ::dGSEQCONNECT
+    for n being Nat holds GSq.->n is connected;
+
+  attr GSq is acyclic means
+:: GLIB_002:def 13  ::dGSEQACYCLIC
+    for n being Nat holds GSq.->n is acyclic;
+
+  attr GSq is Tree-like means
+:: GLIB_002:def 14  ::dGSEQTREE
+    for n being Nat holds GSq.->n is Tree-like;
+end;
+
+registration
+  cluster trivial -> connected GraphSeq;
+  cluster trivial loopless -> Tree-like GraphSeq;
+  cluster acyclic -> simple GraphSeq;
+  cluster Tree-like -> acyclic connected GraphSeq;
+  cluster acyclic connected -> Tree-like GraphSeq;
+end;
+
+registration
+  cluster halting finite Tree-like GraphSeq;
+end;
+
+registration let GSq be connected GraphSeq, n be Nat;
+  cluster GSq.->n -> connected;
+end;
+
+registration let GSq be acyclic GraphSeq, n be Nat;
+  cluster GSq.->n -> acyclic;
+end;
+
+registration let GSq be Tree-like GraphSeq, n be Nat;
+  cluster GSq.->n -> Tree-like;
+end;
+
+begin :: Theorems
+
+reserve G,G1,G2,G3 for _Graph;
+reserve e,x,y for set;
+reserve v,v1,v2 for Vertex of G;
+reserve W for Walk of G;
+
+theorem :: GLIB_002:2  ::tGCONNECT01
+  for G being non trivial connected _Graph, v being Vertex of G holds
+    not v is isolated;
+
+theorem :: GLIB_002:3  ::tGCONNECT02
+  for G1 being non trivial _Graph, v being Vertex of G1,
+      G2 being removeVertex of G1,v st G2 is connected &
+      ex e being set st e in v.edgesInOut() & not e Joins v,v,G1
+   holds G1 is connected;
+
+theorem :: GLIB_002:4  ::tGCONNECT03
+  for G1 being non trivial connected _Graph, v being Vertex of G1,
+      G2 being removeVertex of G1,v st v is endvertex
+   holds G2 is connected;
+
+theorem :: GLIB_002:5  ::tGCONNECT04
+  for G1 being connected _Graph, W being Walk of G1, e being set,
+      G2 being removeEdge of G1,e st W is Cycle-like & e in W.edges()
+   holds G2 is connected;
+
+theorem :: GLIB_002:6  ::tGCONNECT05
+  (ex v1 being Vertex of G st for v2 being Vertex of G
+    ex W being Walk of G st W is_Walk_from v1,v2) implies
+    G is connected;
+
+theorem :: GLIB_002:7  ::tGCONNECT06: **CLUSTERED
+  for G being trivial _Graph holds G is connected;
+
+theorem :: GLIB_002:8  ::tGCONNECT07
+  G1 == G2 & G1 is connected implies G2 is connected;
+
+theorem :: GLIB_002:9  ::tGREACH01
+  v in G.reachableFrom(v);
+
+theorem :: GLIB_002:10  ::tGREACH02
+  x in G.reachableFrom(v1) & e Joins x,y,G implies
+    y in G.reachableFrom(v1);
+
+theorem :: GLIB_002:11  ::tGREACH03
+  G.edgesBetween(G.reachableFrom(v)) = G.edgesInOut(G.reachableFrom(v));
+
+theorem :: GLIB_002:12  ::tGREACH04
+  v1 in G.reachableFrom(v2) implies
+    G.reachableFrom(v1) = G.reachableFrom(v2);
+
+theorem :: GLIB_002:13  ::tGREACH05
+  v in W.vertices() implies W.vertices() c= G.reachableFrom(v);
+
+theorem :: GLIB_002:14  ::tGREACH06
+  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
+      v2 being Vertex of G2 st v1 = v2 holds
+    G2.reachableFrom(v2) c= G1.reachableFrom(v1);
+
+theorem :: GLIB_002:15  ::tGREACH07
+  (ex v being Vertex of G st G.reachableFrom(v) = the_Vertices_of G)
+    implies G is connected;
+
+theorem :: GLIB_002:16  ::tGREACH08
+  G is connected implies
+    for v being Vertex of G holds G.reachableFrom(v) = the_Vertices_of G;
+
+theorem :: GLIB_002:17  ::tGREACH09
+  for v1 being Vertex of G1, v2 being Vertex of G2 st G1 == G2 & v1 = v2
+    holds G1.reachableFrom(v1) = G2.reachableFrom(v2);
+
+theorem :: GLIB_002:18  ::tGREACHD01
+  v in G.reachableDFrom(v);
+
+theorem :: GLIB_002:19  ::tGREACHD02
+  x in G.reachableDFrom(v1) & e DJoins x,y,G
+    implies y in G.reachableDFrom(v1);
+
+theorem :: GLIB_002:20  ::tGREACHD03
+    G.reachableDFrom(v) c= G.reachableFrom(v);
+
+theorem :: GLIB_002:21  ::tGREACHD04
+  for G1 being _Graph, G2 being Subgraph of G1, v1 being Vertex of G1,
+      v2 being Vertex of G2 st v1 = v2 holds
+    G2.reachableDFrom(v2) c= G1.reachableDFrom(v1);
+
+theorem :: GLIB_002:22  ::tGREACHD05
+  for v1 being Vertex of G1, v2 being Vertex of G2 st G1 == G2 & v1 = v2
+    holds G1.reachableDFrom(v1) = G2.reachableDFrom(v2);
+
+theorem :: GLIB_002:23  ::tSUBGRAPH_GA01
+  for G1 being _Graph, G2 being connected Subgraph of G1 holds
+    G2 is spanning implies G1 is connected;
+
+theorem :: GLIB_002:24  ::tGCOMPSET01
+  union G.componentSet() = the_Vertices_of G;
+
+theorem :: GLIB_002:25  ::tGCOMPSET02
+  G is connected iff G.componentSet() = {the_Vertices_of G};
+
+theorem :: GLIB_002:26  ::tGCOMPSET03
+  G1 == G2 implies G1.componentSet() = G2.componentSet();
+
+theorem :: GLIB_002:27  ::tGCOMPSET04
+  x in G.componentSet() implies
+    x is non empty Subset of the_Vertices_of G;
+
+theorem :: GLIB_002:28  ::tGNUMCOMP01
+  G is connected iff G.numComponents() = 1;
+
+theorem :: GLIB_002:29  ::tGNUMCOMP02
+  G1 == G2 implies G1.numComponents() = G2.numComponents();
+
+theorem :: GLIB_002:30  ::tGCOMP01
+  G is Component of G iff G is connected;
+
+theorem :: GLIB_002:31  ::tGCOMP02
+  for C being Component of G holds
+    the_Edges_of C = G.edgesBetween(the_Vertices_of C);
+
+theorem :: GLIB_002:32  ::tGCOMP03
+  for C1,C2 being Component of G holds
+     the_Vertices_of C1 = the_Vertices_of C2 iff C1 == C2;
+
+theorem :: GLIB_002:33  ::tGCOMP04
+  for C being Component of G, v being Vertex of G holds
+    v in the_Vertices_of C iff the_Vertices_of C = G.reachableFrom(v);
+
+theorem :: GLIB_002:34  ::tGCOMP05
+  for C1,C2 being Component of G, v being set st
+    v in the_Vertices_of C1 & v in the_Vertices_of C2 holds C1 == C2;
+
+theorem :: GLIB_002:35  ::tCUTV01
+  for G being connected _Graph, v being Vertex of G holds
+    v is non cut-vertex iff
+    for G2 being removeVertex of G,v holds
+      G2.numComponents() <=` G.numComponents();
+
+theorem :: GLIB_002:36  ::tCUTV02
+  for G being connected _Graph, v being Vertex of G,
+      G2 being removeVertex of G,v st not v is cut-vertex holds
+   G2 is connected;
+
+theorem :: GLIB_002:37  ::tCUTV03
+  for G being non trivial finite connected _Graph holds
+   ex v1,v2 being Vertex of G st v1 <> v2 & not v1 is cut-vertex &
+      not v2 is cut-vertex;
+
+theorem :: GLIB_002:38  ::tCUTV04
+  v is cut-vertex implies G is non trivial;
+
+theorem :: GLIB_002:39  ::tCUTV05
+  for v1 being Vertex of G1, v2 being Vertex of G2 st G1 == G2 & v1 = v2 holds
+    v1 is cut-vertex implies v2 is cut-vertex;
+
+theorem :: GLIB_002:40  ::tGCONNECT_GF01
+  for G being finite connected _Graph holds
+     G.order() <= G.size() + 1;
+
+theorem :: GLIB_002:41  ::tGACYCLIC01 **CLUSTERED
+  for G being acyclic _Graph holds G is simple;
+
+theorem :: GLIB_002:42  ::tGACYCLIC02
+  for G being acyclic _Graph, W being Path of G, e being set
+    st not e in W.edges() & e in W.last().edgesInOut()
+    holds W.addEdge(e) is Path-like;
+
+theorem :: GLIB_002:43  ::tGACYCLIC03
+  for G being non trivial finite acyclic _Graph st the_Edges_of G <> {}
+    holds ex v1,v2 being Vertex of G st v1 <> v2 & v1 is endvertex &
+    v2 is endvertex & v2 in G.reachableFrom(v1);
+
+theorem :: GLIB_002:44  ::tGACYCLIC04
+  G1 == G2 & G1 is acyclic implies G2 is acyclic;
+
+theorem :: GLIB_002:45  ::tGTREE01
+  for G being non trivial finite Tree-like _Graph holds
+    ex v1,v2 being Vertex of G st v1 <> v2 & v1 is endvertex &
+     v2 is endvertex;
+
+theorem :: GLIB_002:46  ::tGTREE02
+  for G being finite _Graph holds
+    G is Tree-like iff G is acyclic & G.order() = G.size() + 1;
+
+theorem :: GLIB_002:47  ::tGTREE03
+  for G being finite _Graph holds
+    G is Tree-like iff G is connected & G.order() = G.size() + 1;
+
+theorem :: GLIB_002:48  ::tGTREE04
+  G1 == G2 & G1 is Tree-like implies G2 is Tree-like;
+
+theorem :: GLIB_002:49  ::tGDTREE01
+  G is_DTree_rooted_at x implies x is Vertex of G;
+
+theorem :: GLIB_002:50  ::tGDTREE02
+  G1 == G2 & G1 is_DTree_rooted_at x implies G2 is_DTree_rooted_at x;

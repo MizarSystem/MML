@@ -1,0 +1,198 @@
+:: Brouwer Fixed Point Theorem for Disks on the Plane
+::  by Artur Korni{\l}owicz and Yasunari Shidama
+:: 
+:: Received February 22, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabulary FUNCT_1, PRE_TOPC, EUCLID, ORDINAL2, RELAT_1, ARYTM, BROUWER,
+      SEQ_1, COMPLEX1, ARYTM_1, ZF_LANG, PSCOMP_1, MCART_1, ARYTM_3, TERMORD,
+      PROB_1, BOOLE, SUBSET_1, ABIAN, KNASTER, BORSUK_1, TOPALG_1, ALGSTR_1,
+      SEQM_3, BORSUK_2, EQREL_1, WAYBEL20, BORSUK_6, ASYMPT_0, FINSET_1,
+      FUNCOP_1, JORDAN1, TOPS_2, REALSET1, METRIC_1, RCOMP_1, TOPREALB,
+      TOPMETR, ABSVALUE, PARTFUN1, SQUARE_1, SETFAM_1, TARSKI, TOPREALA,
+      FINSEQ_1, FUNCT_3, POLYEQ_1, PARTFUN3, RLVECT_1, EUCLID_2, RVSUM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, EQREL_1, COMPLEX1,
+      SQUARE_1, NAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCT_3,
+      PSCOMP_1, SEQ_1, RFUNCT_1, FINSET_1, FINSEQ_1, NUMBERS, XCMPLX_0,
+      XREAL_0, REAL_1, SEQM_3, RCOMP_1, STRUCT_0, REALSET2, PRE_TOPC, GRCAT_1,
+      BORSUK_1, TOPS_2, EUCLID, TOPRNS_1, JORDAN1, QUIN_1, POLYEQ_1, BORSUK_2,
+      TOPALG_1, TOPREAL9, TOPALG_2, TOPREALA, TOPREALB, PARTFUN3, RVSUM_1,
+      EUCLID_2, ABIAN;
+ constructors TOPRNS_1, JORDAN2C, GRCAT_1, ABIAN, SEQM_3, JORDAN1, QUIN_1,
+      POLYEQ_1, SQUARE_1, TOPREAL9, PSCOMP_1, MONOID_0, TOPALG_5, COMPTS_1,
+      COMPLEX1, TOPREALA, REALSET2, RFUNCT_1, PARTFUN3, EUCLID_2;
+ registrations STRUCT_0, RELSET_1, ARYTM_3, XREAL_0, REAL_1, BORSUK_1,
+      PRE_TOPC, FUNCT_1, TOPALG_1, BORSUK_2, JORDAN5A, TEX_2, QUIN_1, SQUARE_1,
+      TOPS_1, TOPREAL9, BINARITH, TOPALG_2, TOPREALB, TOPMETR, RCOMP_1,
+      RELAT_1, PSCOMP_1, TEX_1, REVROT_1, PARTFUN3, SUBSET_1, TOPALG_5;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
+
+
+begin
+
+reserve
+   n for Nat,
+   a, r for real number,
+   x for Point of TOP-REAL n;
+
+definition
+  let S, T be non empty TopSpace;
+  func DiffElems(S,T) -> Subset of [:S,T:] equals
+:: BROUWER:def 1
+  {[s,t] where s is Point of S, t is Point of T: s <> t};
+end;
+
+theorem :: BROUWER:1
+  for S, T being non empty TopSpace,
+      x being set holds
+   x in DiffElems(S,T) iff
+   ex s being Point of S, t being Point of T st x = [s,t] & s <> t;
+
+registration
+  let S be non trivial non empty TopSpace;
+  let T be non empty TopSpace;
+  cluster DiffElems(S,T) -> non empty;
+end;
+
+registration
+  let S be non empty TopSpace;
+  let T be non trivial non empty TopSpace;
+  cluster DiffElems(S,T) -> non empty;
+end;
+
+theorem :: BROUWER:2
+  cl_Ball(x,0) = {x};
+
+definition
+  let n be Nat, x be Point of TOP-REAL n, r be real number;
+  func Tdisk(x,r) -> SubSpace of TOP-REAL n equals
+:: BROUWER:def 2
+  (TOP-REAL n) | cl_Ball(x,r);
+end;
+
+registration
+  let n be Nat, x be Point of TOP-REAL n;
+  let r be non negative (real number);
+  cluster Tdisk(x,r) -> non empty;
+end;
+
+theorem :: BROUWER:3
+  the carrier of Tdisk(x,r) = cl_Ball(x,r);
+
+registration
+  let n be Nat, x be Point of TOP-REAL n, r be real number;
+  cluster Tdisk(x,r) -> convex;
+end;
+
+reserve
+   n for Nat,
+   r for non negative (real number),
+   s, t, x for Point of TOP-REAL n;
+
+theorem :: BROUWER:4
+  s <> t & s is Point of Tdisk(x,r) & s is not Point of Tcircle(x,r) implies
+  ex e being Point of Tcircle(x,r) st {e} = halfline(s,t) /\ Sphere(x,r);
+
+theorem :: BROUWER:5
+  s <> t & s in the carrier of Tcircle(x,r) & t is Point of Tdisk(x,r) implies
+   ex e being Point of Tcircle(x,r) st e <> s &
+     {s,e} = halfline(s,t) /\ Sphere(x,r);
+
+definition
+  let n be non empty Nat, o be Point of TOP-REAL n,
+      s, t be Point of TOP-REAL n,
+      r be non negative (real number);
+  assume that
+ s is Point of Tdisk(o,r) and
+ t is Point of Tdisk(o,r) and
+ s <> t;
+  func HC(s,t,o,r) -> Point of TOP-REAL n means
+:: BROUWER:def 3
+  it in halfline(s,t) /\ Sphere(o,r) & it <> s;
+end;
+
+reserve
+   n for non empty Nat,
+   s, t, o for Point of TOP-REAL n;
+
+theorem :: BROUWER:6
+  s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t implies
+  HC(s,t,o,r) is Point of Tcircle(o,r);
+
+theorem :: BROUWER:7
+  for S, T, O being Element of REAL n st S = s & T = t & O = o holds
+  s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t &
+  a = (-|(t-s,s-o)| + sqrt(|(t-s,s-o)|^2-(Sum sqr (T-S))*(Sum sqr (S-O)-r^2)))
+      / Sum sqr (T-S)
+  implies HC(s,t,o,r) = (1-a)*s+a*t;
+
+theorem :: BROUWER:8
+  for r1, r2, s1, s2 being real number,
+      s, t, o being Point of TOP-REAL 2 holds
+  s is Point of Tdisk(o,r) & t is Point of Tdisk(o,r) & s <> t &
+  r1 = t`1-s`1 & r2 = t`2-s`2 & s1 = s`1-o`1 & s2 = s`2-o`2 &
+  a = (-(s1*r1+s2*r2)+sqrt((s1*r1+s2*r2)^2-(r1^2+r2^2)*(s1^2+s2^2-r^2)))
+       / (r1^2+r2^2) implies
+  HC(s,t,o,r) = |[ s`1+a*r1, s`2+a*r2 ]|;
+
+definition
+  let n be non empty Nat, o be Point of TOP-REAL n,
+      r be non negative (real number);
+  let x be Point of Tdisk(o,r);
+  let f be map of Tdisk(o,r), Tdisk(o,r) such that
+   not x is_a_fixpoint_of f;
+  func HC(x,f) -> Point of Tcircle(o,r) means
+:: BROUWER:def 4
+  ex y, z being Point of TOP-REAL n st y = x & z = f.x & it = HC(z,y,o,r);
+end;
+
+theorem :: BROUWER:9
+  for x being Point of Tdisk(o,r),
+      f being map of Tdisk(o,r), Tdisk(o,r) st not x is_a_fixpoint_of f &
+   x is Point of Tcircle(o,r) holds HC(x,f) = x;
+
+theorem :: BROUWER:10
+  for r being positive (real number),
+      o being Point of TOP-REAL 2,
+      Y being non empty SubSpace of Tdisk(o,r) st Y = Tcircle(o,r)
+  holds not Y is_a_retract_of Tdisk(o,r);
+
+definition
+  let n be non empty Nat; let r be non negative (real number);
+  let o be Point of TOP-REAL n;
+  let f be map of Tdisk(o,r), Tdisk(o,r);
+  func BR-map(f) -> map of Tdisk(o,r), Tcircle(o,r) means
+:: BROUWER:def 5
+  for x being Point of Tdisk(o,r) holds it.x = HC(x,f);
+end;
+
+theorem :: BROUWER:11
+  for o being Point of TOP-REAL n,
+      x being Point of Tdisk(o,r),
+      f being map of Tdisk(o,r), Tdisk(o,r) st not x is_a_fixpoint_of f &
+   x is Point of Tcircle(o,r) holds (BR-map(f)).x = x;
+
+theorem :: BROUWER:12
+  for f being continuous map of Tdisk(o,r), Tdisk(o,r) holds
+  f has_no_fixpoint implies (BR-map(f)) | Sphere(o,r) = id Tcircle(o,r);
+
+theorem :: BROUWER:13
+  for r being positive (real number),
+      o being Point of TOP-REAL 2,
+      f being continuous map of Tdisk(o,r), Tdisk(o,r) holds
+   f has_no_fixpoint implies BR-map(f) is continuous;
+
+:: Brouwer Fixed Point Theorem
+theorem :: BROUWER:14
+  for r being non negative (real number),
+      o being Point of TOP-REAL 2,
+      f being continuous map of Tdisk(o,r), Tdisk(o,r) holds
+  f has_a_fixpoint;
+
+theorem :: BROUWER:15
+  for r being non negative (real number),
+      o being Point of TOP-REAL 2,
+      f being continuous map of Tdisk(o,r), Tdisk(o,r)
+   ex x being Point of Tdisk(o,r) st f.x = x;
