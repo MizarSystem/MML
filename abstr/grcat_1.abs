@@ -10,15 +10,18 @@ environ
       FUNCT_2, VECTSP_1, MIDSP_2, RLVECT_1, ARYTM_1, CAT_1, TARSKI, CAT_2,
       PRE_TOPC, ORDINAL4, FUNCOP_1, MOD_1, ENS_1, GRCAT_1, ALGSTR_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MOD_1, RELAT_1, FUNCT_1,
-      MCART_1, STRUCT_0, BINOP_1, RLVECT_1, VECTSP_1, VECTSP_2, PARTFUN1,
-      CAT_1, CLASSES2, PRE_TOPC, FUNCT_2, FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1,
-      MIDSP_2;
+      MCART_1, BINOP_1, PARTFUN1, CLASSES2, FUNCT_2, STRUCT_0, PRE_TOPC,
+      CAT_1, RLVECT_1, VECTSP_1, VECTSP_2,
+      FUNCOP_1, CAT_2, ALGSTR_1, MIDSP_1, MIDSP_2;
  constructors BINOP_1, VECTSP_2, CLASSES2, CAT_2, MIDSP_2, ALGSTR_1, CLASSES1,
       PARTFUN1, RELAT_2, FUNCOP_1;
  registrations RELSET_1, GROUP_1, STRUCT_0, SUBSET_1, CLASSES2, ALGSTR_1,
       MIDSP_2, FUNCT_2, PARTFUN1, XBOOLE_0, FUNCOP_1;
  requirements SUBSET, BOOLE;
-
+ theorems BINOP_1, CAT_1, CAT_2, CLASSES2, FUNCOP_1, FUNCT_1, FUNCT_2, MIDSP_2,
+      MCART_1, PARTFUN1, VECTSP_1, TARSKI, ZFMISC_1, RLVECT_1, RELAT_1,
+      RELSET_1, ORDINAL1, XBOOLE_0, ALGSTR_1;
+ schemes FUNCT_2, PARTFUN1, TARSKI, XBOOLE_0;
 
 begin ::  0a. Auxiliary theorems: sets and universums
 
@@ -134,7 +137,7 @@ theorem :: GRCAT_1:10
 ::  1a. Maps of the carriers of groups
 
 definition let G be 1-sorted;
- func id G -> map of G,G equals
+ func id G -> Function of G,G equals
 :: GRCAT_1:def 11
    id the carrier of G;
 end;
@@ -145,15 +148,15 @@ theorem :: GRCAT_1:11
 
 theorem :: GRCAT_1:12
  for G being 1-sorted, H being non empty 1-sorted,
-     f being map of G, H holds f*(id G) = f & (id H)*f = f;
+     f being Function of G, H holds f*(id G) = f & (id H)*f = f;
 
 definition let G,H be non empty ZeroStr;
- func ZeroMap(G,H) -> map of G,H equals
+ func ZeroMap(G,H) -> Function of G,H equals
 :: GRCAT_1:def 12
    (the carrier of G) --> 0.H;
 end;
 
-definition let G,H be non empty LoopStr; let f be map of G,H;
+definition let G,H be non empty LoopStr; let f be Function of G,H;
  attr f is additive means
 :: GRCAT_1:def 13
   for x,y being Element of G holds f.(x+y) = f.x+f.y;
@@ -164,7 +167,7 @@ theorem :: GRCAT_1:13
 
 theorem :: GRCAT_1:14
  for G1,G2,G3 being non empty LoopStr,
-   f being map of G1,G2, g being map of G2,G3
+   f being Function of G1,G2, g being Function of G2,G3
       st f is additive & g is additive holds g*f is additive;
 
 theorem :: GRCAT_1:15
@@ -182,7 +185,7 @@ reserve G,H for AddGroup;
 
 definition
   struct GroupMorphismStr (# Dom,Cod -> AddGroup,
-                          Fun -> map of the Dom, the Cod #);
+                          Fun -> Function of the Dom, the Cod #);
 end;
 
 definition let f be GroupMorphismStr;
@@ -195,7 +198,7 @@ definition let f be GroupMorphismStr;
 end;
 
 definition let f be GroupMorphismStr;
- func fun(f) -> map of dom(f),cod(f) equals
+ func fun(f) -> Function of dom(f),cod(f) equals
 :: GRCAT_1:def 16
    the Fun of f;
 end;
@@ -203,7 +206,7 @@ end;
 theorem :: GRCAT_1:17
     for f being GroupMorphismStr,
           G1,G2 being AddGroup,
-          f0 being map of G1,G2 st f = GroupMorphismStr(# G1,G2,f0#)
+          f0 being Function of G1,G2 st f = GroupMorphismStr(# G1,G2,f0#)
       holds dom f = G1 & cod f = G2 & fun f = f0;
 
 definition let G,H;
@@ -253,7 +256,7 @@ theorem :: GRCAT_1:19
    holds f is strict Morphism of G,H;
 
 theorem :: GRCAT_1:20
- for f being map of G,H st f is additive
+ for f being Function of G,H st f is additive
        holds GroupMorphismStr (# G,H,f#) is strict Morphism of G,H;
 
 theorem :: GRCAT_1:21
@@ -274,19 +277,20 @@ definition let G,H;
 end;
 
 theorem :: GRCAT_1:22
- for F being Morphism of G,H ex f being map of G,H
+ for F being Morphism of G,H ex f being Function of G,H
        st the GroupMorphismStr of F = GroupMorphismStr(# G,H,f#) &
         f is additive;
 
 theorem :: GRCAT_1:23
- for F being strict Morphism of G,H ex f being map of G,H
+ for F being strict Morphism of G,H ex f being Function of G,H
        st F = GroupMorphismStr(# G,H,f#);
 
 theorem :: GRCAT_1:24
  for F being GroupMorphism ex G,H st F is Morphism of G,H;
 
 theorem :: GRCAT_1:25
-    for F being strict GroupMorphism ex G,H being AddGroup, f being map of G,H
+    for F being strict GroupMorphism ex G,H being AddGroup, f being Function
+ of G,H
        st F is Morphism of G,H
         & F = GroupMorphismStr(# G,H,f#)
         & f is additive;
@@ -301,7 +305,7 @@ definition let G,F be GroupMorphism;
  func G*F -> strict GroupMorphism means
 :: GRCAT_1:def 21
   for G1,G2,G3 being AddGroup,
-           g being map of G2,G3, f being map of G1,G2
+           g being Function of G2,G3, f being Function of G1,G2
        st the GroupMorphismStr of G = GroupMorphismStr(# G2,G3,g#) &
           the GroupMorphismStr of F = GroupMorphismStr(# G1,G2,f#)
        holds it = GroupMorphismStr(# G1,G3,g*f#);
@@ -325,14 +329,14 @@ theorem :: GRCAT_1:29
  for G1,G2,G3 being AddGroup,
           G being Morphism of G2,G3,
           F being Morphism of G1,G2,
-          g being map of G2,G3, f being map of G1,G2
+          g being Function of G2,G3, f being Function of G1,G2
       st G = GroupMorphismStr(# G2,G3,g#) & F = GroupMorphismStr(# G1,G2,f#)
       holds G*F = GroupMorphismStr(# G1,G3,g*f#);
 
  theorem :: GRCAT_1:30
   for f,g being strict GroupMorphism st dom g = cod f holds
        ex G1,G2,G3 being AddGroup,
-          f0 being map of G1,G2, g0 being map of G2,G3
+          f0 being Function of G1,G2, g0 being Function of G2,G3
           st f = GroupMorphismStr(# G1,G2,f0#)
            & g = GroupMorphismStr(# G2,G3,g0#)
            & g*f = GroupMorphismStr(# G1,G3,g0*f0#);
@@ -429,7 +433,7 @@ theorem :: GRCAT_1:39
 definition let G,H be 1-sorted;
  mode MapsSet of G,H means
 :: GRCAT_1:def 25
- for x being set st x in it holds x is map of G,H;
+ for x being set st x in it holds x is Function of G,H;
 end;
 
 definition let G,H be 1-sorted;
@@ -448,7 +452,7 @@ end;
 
 definition let G be 1-sorted, H be non empty 1-sorted;
            let M be non empty MapsSet of G,H;
- redefine mode Element of M -> map of G,H;
+ redefine mode Element of M -> Function of G,H;
 end;
 
 definition let G,H;

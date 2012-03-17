@@ -357,7 +357,7 @@ begin :: Nets
 
 definition
  let L1,L2 be non empty 1-sorted;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  let x be Element of L1;
  redefine func f.x -> Element of L2;
  coherence
@@ -368,7 +368,7 @@ end;
 
 definition
  let L1,L2 be RelStr;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  attr f is antitone means
       for x,y being Element of L1 st x <= y
    for a,b being Element of L2 st a = f.x & b = f.y holds a >= b;
@@ -429,7 +429,7 @@ end;
 definition
  let L be non empty 1-sorted;
  let N be non empty NetStr over L;
- func netmap(N,L) -> map of N,L equals:Def7:
+ func netmap(N,L) -> Function of N,L equals:Def7:
    the mapping of N;
  coherence;
  let i be Element of N;
@@ -2416,7 +2416,7 @@ begin :: Maps
 
 definition
  let S,T be non empty RelStr;
- let f be map of S,T;
+ let f be Function of S,T;
  let X be Subset of S;
  pred f preserves_inf_of X means:Def30:
   ex_inf_of X,S implies ex_inf_of f.:X,T & inf (f.:X) = f.inf X;
@@ -2427,13 +2427,13 @@ end;
 theorem
      for S1,S2, T1,T2 being non empty RelStr st
   the RelStr of S1 = the RelStr of T1 & the RelStr of S2 = the RelStr of T2
- for f being map of S1,S2, g being map of T1,T2 st f = g
+ for f being Function of S1,S2, g being Function of T1,T2 st f = g
  for X being Subset of S1, Y being Subset of T1 st X = Y holds
    (f preserves_sup_of X implies g preserves_sup_of Y) &
    (f preserves_inf_of X implies g preserves_inf_of Y)
   proof let S1,S2, T1,T2 be non empty RelStr such that
 A1:  the RelStr of S1 = the RelStr of T1 & the RelStr of S2 = the RelStr of T2;
-   let f be map of S1,S2, g be map of T1,T2 such that
+   let f be Function of S1,S2, g be Function of T1,T2 such that
 A2:  f = g;
    let X be Subset of S1, Y be Subset of T1 such that
 A3:  X = Y;
@@ -2460,7 +2460,7 @@ A7:  ex_inf_of Y,T1;
 
 definition
  let L1,L2 be non empty RelStr;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  attr f is infs-preserving means
       for X being Subset of L1 holds f preserves_inf_of X;
  attr f is sups-preserving means
@@ -2480,18 +2480,18 @@ end;
 registration
  let L1,L2 be non empty RelStr;
  cluster infs-preserving ->
-    filtered-infs-preserving meet-preserving map of L1,L2;
+    filtered-infs-preserving meet-preserving Function of L1,L2;
  coherence
-  proof let f be map of L1,L2; assume
+  proof let f be Function of L1,L2; assume
 A1:  for X being Subset of L1 holds f preserves_inf_of X;
    hence for X being Subset of L1 st X is non empty filtered
      holds f preserves_inf_of X;
    thus for x,y being Element of L1 holds f preserves_inf_of {x,y} by A1;
   end;
  cluster sups-preserving ->
-    directed-sups-preserving join-preserving map of L1,L2;
+    directed-sups-preserving join-preserving Function of L1,L2;
  coherence
-  proof let f be map of L1,L2; assume
+  proof let f be Function of L1,L2; assume
 A2:  for X being Subset of L1 holds f preserves_sup_of X;
    hence for X being Subset of L1 st X is non empty directed
      holds f preserves_sup_of X;
@@ -2501,23 +2501,25 @@ end;
 
 definition
  let S,T be RelStr;
- let f be map of S,T;
+ let f be Function of S,T;
  attr f is isomorphic means:Def38:
-  f is one-to-one monotone & ex g being map of T,S st g = f" & g is monotone
+  f is one-to-one monotone & ex g being Function
+ of T,S st g = f" & g is monotone
   if S is non empty & T is non empty
   otherwise S is empty & T is empty;
  correctness;
 end;
 
 theorem Th66:
- for S,T being non empty RelStr, f being map of S,T holds f is isomorphic iff
+ for S,T being non empty RelStr, f being Function
+ of S,T holds f is isomorphic iff
   f is one-to-one & rng f = the carrier of T &
    for x,y being Element of S holds x <= y iff f.x <= f.y
-  proof let S,T be non empty RelStr; let f be map of S,T;
+  proof let S,T be non empty RelStr; let f be Function of S,T;
    hereby assume
 A1:   f is isomorphic;
     hence f is one-to-one by Def38;
-    consider g being map of T,S such that
+    consider g being Function of T,S such that
 A2:   g = f" & g is monotone by A1,Def38;
 A3:   f is one-to-one monotone by A1,Def38;
      then rng f = dom g & g is Function of the carrier of T, the carrier of S
@@ -2537,7 +2539,7 @@ A5:  f is one-to-one & rng f = the carrier of T &
    thus f is one-to-one by A5;
    thus for x,y being Element of S st x <= y
      for a,b being Element of T st a = f.x & b = f.y holds a <= b by A5;
-   reconsider g = f" as map of T,S by A5,FUNCT_2:31;
+   reconsider g = f" as Function of T,S by A5,FUNCT_2:31;
    take g; thus g = f";
    let x,y be Element of T;
    consider a being set such that
@@ -2554,14 +2556,14 @@ A7:  b in dom f & y = f.b by A5,FUNCT_1:def 5;
 
 registration
  let S,T be non empty RelStr;
- cluster isomorphic -> one-to-one monotone map of S,T;
+ cluster isomorphic -> one-to-one monotone Function of S,T;
  coherence by Def38;
 end;
 
 theorem
-     for S,T being non empty RelStr, f being map of S,T st f is isomorphic
-   holds f" is map of T,S & rng (f") = the carrier of S
-  proof let S,T be non empty RelStr, f be map of S,T; assume
+     for S,T being non empty RelStr, f being Function of S,T st f is isomorphic
+   holds f" is Function of T,S & rng (f") = the carrier of S
+  proof let S,T be non empty RelStr, f be Function of S,T; assume
       f is isomorphic;
 then f is one-to-one & rng f = the carrier of T & dom f = the carrier of S
      by Th66,FUNCT_2:def 1;
@@ -2571,14 +2573,14 @@ then f is one-to-one & rng f = the carrier of T & dom f = the carrier of S
   end;
 
 theorem
-     for S,T being non empty RelStr, f being map of S,T st f is isomorphic
-  for g being map of T,S st g = f" holds g is isomorphic
-  proof let S,T be non empty RelStr, f be map of S,T; assume
+     for S,T being non empty RelStr, f being Function of S,T st f is isomorphic
+  for g being Function of T,S st g = f" holds g is isomorphic
+  proof let S,T be non empty RelStr, f be Function of S,T; assume
 A1:  f is isomorphic;
 then A2:  f is one-to-one monotone by Def38;
-   consider h being map of T,S such that
+   consider h being Function of T,S such that
 A3:  h = f" & h is monotone by A1,Def38;
-   let g be map of T,S; assume
+   let g be Function of T,S; assume
 A4:  g = f";
    per cases;
     case T is non empty & S is non empty;
@@ -2592,10 +2594,10 @@ A4:  g = f";
   end;
 
 theorem Th69:
- for S,T being non empty Poset, f being map of S,T st
+ for S,T being non empty Poset, f being Function of S,T st
    for X being Filter of S holds f preserves_inf_of X
  holds f is monotone
-  proof let S,T be non empty Poset, f be map of S,T; assume
+  proof let S,T be non empty Poset, f be Function of S,T; assume
 A1:  for X being Filter of S holds f preserves_inf_of X;
    let x,y be Element of S;
 A2:  uparrow x = uparrow {x} & uparrow y = uparrow {y} by Def18;
@@ -2615,10 +2617,10 @@ then A5:  f.:uparrow y c= f.:uparrow x by RELAT_1:156;
   end;
 
 theorem
-     for S,T being non empty Poset, f being map of S,T st
+     for S,T being non empty Poset, f being Function of S,T st
    for X being Filter of S holds f preserves_inf_of X
  holds f is filtered-infs-preserving
-  proof let S,T be non empty Poset, f be map of S,T such that
+  proof let S,T be non empty Poset, f be Function of S,T such that
 A1:  for X being Filter of S holds f preserves_inf_of X;
    let X be Subset of S such that
 A2:  X is non empty filtered and
@@ -2660,11 +2662,13 @@ A12:      z >= y & y in X by A11;
   end;
 
 theorem
-     for S being Semilattice, T being non empty Poset, f being map of S,T st
+     for S being Semilattice, T being non empty Poset, f being Function
+ of S,T st
   (for X being finite Subset of S holds f preserves_inf_of X) &
   (for X being non empty filtered Subset of S holds f preserves_inf_of X)
  holds f is infs-preserving
-  proof let S be Semilattice, T be non empty Poset, f be map of S,T such that
+  proof let S be Semilattice, T be non empty Poset, f be Function
+ of S,T such that
 A1: for X being finite Subset of S holds f preserves_inf_of X and
 A2: for X being non empty filtered Subset of S holds f preserves_inf_of X;
    let X be Subset of S such that
@@ -2728,10 +2732,10 @@ A16:      ex_inf_of Y, S & x = "/\"(Y,S) by A4,A15;
   end;
 
 theorem Th72:
- for S,T being non empty Poset, f being map of S,T st
+ for S,T being non empty Poset, f being Function of S,T st
    for X being Ideal of S holds f preserves_sup_of X
  holds f is monotone
-  proof let S,T be non empty Poset, f be map of S,T; assume
+  proof let S,T be non empty Poset, f be Function of S,T; assume
 A1:  for X being Ideal of S holds f preserves_sup_of X;
    let x,y be Element of S;
 A2:  downarrow x = downarrow {x} & downarrow y = downarrow {y} by Def17;
@@ -2752,10 +2756,10 @@ then A5:  f.:downarrow x c= f.:downarrow y by RELAT_1:156;
   end;
 
 theorem
-     for S,T being non empty Poset, f being map of S,T st
+     for S,T being non empty Poset, f being Function of S,T st
    for X being Ideal of S holds f preserves_sup_of X
  holds f is directed-sups-preserving
-  proof let S,T be non empty Poset, f be map of S,T such that
+  proof let S,T be non empty Poset, f be Function of S,T such that
 A1:  for X being Ideal of S holds f preserves_sup_of X;
    let X be Subset of S such that
 A2:  X is non empty directed and
@@ -2800,12 +2804,14 @@ A12:      z <= y & y in X by A11;
   end;
 
 theorem
-     for S being sup-Semilattice, T being non empty Poset, f being map of S,T
+     for S being sup-Semilattice, T being non empty Poset, f being Function
+ of S,T
 st
   (for X being finite Subset of S holds f preserves_sup_of X) &
   (for X being non empty directed Subset of S holds f preserves_sup_of X)
  holds f is sups-preserving
-  proof let S be sup-Semilattice, T be non empty Poset, f be map of S,T such
+  proof let S be sup-Semilattice, T be non empty Poset, f be Function
+ of S,T such
    that
 A1: for X being finite Subset of S holds f preserves_sup_of X and
 A2: for X being non empty directed Subset of S holds f preserves_sup_of X;

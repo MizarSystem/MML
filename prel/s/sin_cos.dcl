@@ -14,8 +14,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="COMSEQ_3"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="COMSEQ_3"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -45,7 +45,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
@@ -67,8 +67,8 @@
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="53"/>
 </Adjective>
-<Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="42">
@@ -89,7 +89,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
@@ -105,7 +105,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>
@@ -121,7 +121,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="27"/>
 <Adjective nr="30"/>
 </Cluster>
 </FCluster>

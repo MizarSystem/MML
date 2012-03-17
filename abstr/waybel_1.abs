@@ -17,17 +17,22 @@ environ
  registrations STRUCT_0, RELSET_1, LATTICE3, YELLOW_0, YELLOW_1, YELLOW_2,
       WAYBEL_0, RELAT_1, FUNCT_2, PARTFUN1;
  requirements SUBSET, BOOLE;
-
+ definitions TARSKI, LATTICE3, QUANTAL1, ORDERS_3, YELLOW_0, WAYBEL_0,
+      XBOOLE_0;
+ theorems STRUCT_0, ZFMISC_1, ORDERS_2, FUNCT_1, FUNCT_2, LATTICE3, RELAT_1,
+      TARSKI, WELLORD1, TMAP_1, ORDERS_3, YELLOW_0, YELLOW_1, YELLOW_2,
+      WAYBEL_0, GRCAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, DOMAIN_1;
 
 begin :: Preliminaries
 
-definition let L1,L2 be non empty 1-sorted, f be map of L1,L2;
+definition let L1,L2 be non empty 1-sorted, f be Function of L1,L2;
  redefine attr f is one-to-one means
 :: WAYBEL_1:def 1
        for x,y being Element of L1 st f.x = f.y holds x=y;
 end;
 
-definition let L1,L2 be non empty RelStr, f be map of L1,L2;
+definition let L1,L2 be non empty RelStr, f be Function of L1,L2;
  redefine attr f is monotone means
 :: WAYBEL_1:def 2
  for x,y being Element of L1 st x <= y holds f.x <= f.y;
@@ -104,7 +109,7 @@ end;
 definition let L1,L2 be RelStr;
  pred L1,L2 are_isomorphic means
 :: WAYBEL_1:def 8
-  ex f being map of L1,L2 st f is isomorphic;
+  ex f being Function of L1,L2 st f is isomorphic;
  reflexivity;
 end;
 
@@ -121,10 +126,10 @@ begin :: Galois Connections
 definition let S,T be RelStr;
    mode Connection of S,T -> set means
 :: WAYBEL_1:def 9
-  ex g being map of S,T, d being map of T,S st it = [g,d];
+  ex g being Function of S,T, d being Function of T,S st it = [g,d];
 end;
 
-definition let S,T be RelStr, g be map of S,T, d be map of T,S;
+definition let S,T be RelStr, g be Function of S,T, d be Function of T,S;
  redefine func [g,d] -> Connection of S,T;
 end;
 
@@ -133,14 +138,15 @@ end;
 definition let S,T be non empty RelStr, gc be Connection of S,T;
   attr gc is Galois means
 :: WAYBEL_1:def 10
- ex g being map of S,T, d being map of T,S
+ ex g being Function of S,T, d being Function of T,S
     st gc = [g,d] & g is monotone & d is monotone &
      for t being Element of T, s being Element of S
       holds t <= g.s iff d.t <= s;
 end;
 
 theorem :: WAYBEL_1:9
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
    holds [g,d] is Galois iff
      g is monotone & d is monotone &
       for t being Element of T, s being Element of S holds t <= g.s iff d.t <=
@@ -148,164 +154,177 @@ theorem :: WAYBEL_1:9
 
 :: Definition 3.1
 
-definition let S,T be non empty RelStr, g be map of S,T;
+definition let S,T be non empty RelStr, g be Function of S,T;
  attr g is upper_adjoint means
 :: WAYBEL_1:def 11
-  ex d being map of T,S st [g,d] is Galois;
+  ex d being Function of T,S st [g,d] is Galois;
  end;
 
-notation let S,T be non empty RelStr, g be map of S,T;
+notation let S,T be non empty RelStr, g be Function of S,T;
  synonym g has_a_lower_adjoint for g is upper_adjoint;
 end;
 
 :: Definition 3.1
 
-definition let S,T be non empty RelStr, d be map of T,S;
+definition let S,T be non empty RelStr, d be Function of T,S;
  attr d is lower_adjoint means
 :: WAYBEL_1:def 12
-  ex g being map of S,T st [g,d] is Galois;
+  ex g being Function of S,T st [g,d] is Galois;
  end;
 
-notation let S,T be non empty RelStr, d be map of T,S;
+notation let S,T be non empty RelStr, d be Function of T,S;
  synonym d has_an_upper_adjoint for d is lower_adjoint;
 end;
 
 theorem :: WAYBEL_1:10
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
    st [g,d] is Galois holds g is upper_adjoint & d is lower_adjoint;
 
 :: Theorem 3.2  (1) iff (2)
 theorem :: WAYBEL_1:11
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
    holds [g,d] is Galois iff
     g is monotone &
      for t being Element of T holds d.t is_minimum_of g"(uparrow t);
 
 :: Theorem 3.2 (1) iff (3)
 theorem :: WAYBEL_1:12
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
    holds [g,d] is Galois iff
      d is monotone &
       for s being Element of S holds g.s is_maximum_of d"(downarrow s);
 
 :: Theorem 3.3 (first part)
 theorem :: WAYBEL_1:13
-  for S,T being non empty Poset,g being map of S,T st g is upper_adjoint
+  for S,T being non empty Poset,g being Function of S,T st g is upper_adjoint
    holds g is infs-preserving;
 
 registration let S,T be non empty Poset;
- cluster upper_adjoint -> infs-preserving map of S,T;
+ cluster upper_adjoint -> infs-preserving Function of S,T;
 end;
 
 :: Theorem 3.3 (second part)
 theorem :: WAYBEL_1:14
-  for S,T being non empty Poset, d being map of T,S st d is lower_adjoint
+  for S,T being non empty Poset, d being Function of T,S st d is lower_adjoint
    holds d is sups-preserving;
 
 registration let S,T be non empty Poset;
- cluster lower_adjoint -> sups-preserving map of S,T;
+ cluster lower_adjoint -> sups-preserving Function of S,T;
 end;
 
 :: Theorem 3.4
 theorem :: WAYBEL_1:15
-  for S,T being non empty Poset,g being map of S,T
+  for S,T being non empty Poset,g being Function of S,T
     st S is complete & g is infs-preserving
-   ex d being map of T,S st [g,d] is Galois &
+   ex d being Function of T,S st [g,d] is Galois &
     for t being Element of T holds d.t is_minimum_of g"(uparrow t);
 
 :: Theorem 3.4 (dual)
 theorem :: WAYBEL_1:16
-  for S,T being non empty Poset, d being map of T,S
+  for S,T being non empty Poset, d being Function of T,S
     st T is complete & d is sups-preserving
-   ex g being map of S,T st [g,d] is Galois &
+   ex g being Function of S,T st [g,d] is Galois &
     for s being Element of S holds g.s is_maximum_of d"(downarrow s);
 
 :: Corollary 3.5 (i)
 theorem :: WAYBEL_1:17
-      for S,T being non empty Poset, g being map of S,T
+      for S,T being non empty Poset, g being Function of S,T
     st S is complete
    holds (g is infs-preserving iff g is monotone & g has_a_lower_adjoint);
 
 :: Corollary 3.5 (ii)
 theorem :: WAYBEL_1:18
-  for S,T being non empty Poset, d being map of T,S
+  for S,T being non empty Poset, d being Function of T,S
     st T is complete
    holds d is sups-preserving iff d is monotone & d has_an_upper_adjoint;
 
 :: Theorem 3.6 (1) iff (2)
 theorem :: WAYBEL_1:19
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
    st [g,d] is Galois holds d*g <= id S & id T <= g*d;
 
 :: Theorem 3.6 (2) implies (1)
 theorem :: WAYBEL_1:20
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st g is monotone & d is monotone & d*g <= id S & id T <= g*d
    holds [g,d] is Galois;
 
 :: Theorem 3.6 (2) implies (3)
 theorem :: WAYBEL_1:21
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st g is monotone & d is monotone & d*g <= id S & id T <= g*d
    holds d = d*g*d & g = g*d*g;
 
 :: Theorem 3.6 (3) implies (4)
 theorem :: WAYBEL_1:22
-  for S,T being non empty RelStr, g being map of S,T, d being map of T,S
+  for S,T being non empty RelStr, g being Function of S,T, d being Function
+ of T,S
     st d = d*g*d & g = g*d*g
    holds g*d is idempotent & d*g is idempotent;
 
 :: Proposition 3.7 (1) implies (2)
 theorem :: WAYBEL_1:23
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st [g,d] is Galois & g is onto
    for t being Element of T holds d.t is_minimum_of g"{t};
 
 :: Proposition 3.7 (2) implies (3)
 theorem :: WAYBEL_1:24
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st for t being Element of T holds d.t is_minimum_of g"{t}
    holds g*d = id T;
 
 :: Proposition 3.7 (3) implies (4)
 theorem :: WAYBEL_1:25
    for L1,L2 being non empty 1-sorted,
-       g1 being map of L1,L2, g2 being map of L2,L1
+       g1 being Function of L1,L2, g2 being Function of L2,L1
     st g2*g1 = id L1 holds g1 is one-to-one & g2 is onto;
 
 :: Proposition 3.7 (4) iff (1)
 theorem :: WAYBEL_1:26
-      for S,T being non empty Poset,g being map of S,T, d being map of T,S
+      for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st [g,d] is Galois
    holds g is onto iff d is one-to-one;
 
 :: Proposition 3.7 (1*) implies (2*)
 theorem :: WAYBEL_1:27
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st [g,d] is Galois & d is onto
    for s being Element of S holds g.s is_maximum_of d"{s};
 
 :: Proposition 3.7 (2*) implies (3*)
 theorem :: WAYBEL_1:28
-  for S,T being non empty Poset,g being map of S,T, d being map of T,S
+  for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st for s being Element of S holds g.s is_maximum_of d"{s}
    holds d*g = id S;
 
 :: Proposition 3.7 (1*) iff (4*)
 theorem :: WAYBEL_1:29
-      for S,T being non empty Poset,g being map of S,T, d being map of T,S
+      for S,T being non empty Poset,g being Function of S,T, d being Function
+ of T,S
     st [g,d] is Galois
    holds g is one-to-one iff d is onto;
 
 :: Definition 3.8 (i)
 
-definition let L be non empty RelStr, p be map of L,L;
+definition let L be non empty RelStr, p be Function of L,L;
   attr p is projection means
 :: WAYBEL_1:def 13
  p is idempotent monotone;
   end;
 
-notation let L be non empty RelStr, p be map of L,L;
+notation let L be non empty RelStr, p be Function of L,L;
   synonym p is_a_projection_operator for p is projection;
 end;
 
@@ -314,27 +333,27 @@ registration let L be non empty RelStr;
 end;
 
 registration let L be non empty RelStr;
- cluster projection map of L,L;
+ cluster projection Function of L,L;
 end;
 
 :: Definition 3.8 (ii)
 
-definition let L be non empty RelStr, c be map of L,L;
+definition let L be non empty RelStr, c be Function of L,L;
   attr c is closure means
 :: WAYBEL_1:def 14
  c is projection & id(L) <= c;
  end;
 
-notation let L be non empty RelStr, c be map of L,L;
+notation let L be non empty RelStr, c be Function of L,L;
   synonym c is_a_closure_operator for c is closure;
 end;
 
 registration let L be non empty RelStr;
- cluster closure -> projection map of L,L;
+ cluster closure -> projection Function of L,L;
 end;
 
 registration let L be non empty reflexive RelStr;
- cluster closure map of L,L;
+ cluster closure Function of L,L;
 end;
 
 registration let L be non empty reflexive RelStr;
@@ -343,22 +362,22 @@ end;
 
 :: Definition 3.8 (iii)
 
-definition let L be non empty RelStr, k be map of L,L;
+definition let L be non empty RelStr, k be Function of L,L;
   attr k is kernel means
 :: WAYBEL_1:def 15
  k is projection & k <= id(L);
  end;
 
-notation let L be non empty RelStr, k be map of L,L;
+notation let L be non empty RelStr, k be Function of L,L;
   synonym k is_a_kernel_operator for k is kernel;
 end;
 
 registration let L be non empty RelStr;
- cluster kernel -> projection map of L,L;
+ cluster kernel -> projection Function of L,L;
 end;
 
 registration let L be non empty reflexive RelStr;
- cluster kernel map of L,L;
+ cluster kernel Function of L,L;
 end;
 
 registration let L be non empty reflexive RelStr;
@@ -366,178 +385,187 @@ registration let L be non empty reflexive RelStr;
 end;
 
 theorem :: WAYBEL_1:30
-  for L being non empty Poset, c being map of L,L, X being Subset of L
+  for L being non empty Poset, c being Function of L,L, X being Subset of L
     st c is_a_closure_operator & ex_inf_of X,L & X c= rng c
    holds inf X = c.(inf X);
 
 theorem :: WAYBEL_1:31
-  for L being non empty Poset, k being map of L,L, X being Subset of L
+  for L being non empty Poset, k being Function of L,L, X being Subset of L
     st k is_a_kernel_operator & ex_sup_of X,L & X c= rng k
    holds sup X = k.(sup X);
 
-definition let L1, L2 be non empty RelStr, g be map of L1,L2;
- func corestr(g) -> map of L1,Image g equals
+definition let L1, L2 be non empty RelStr, g be Function of L1,L2;
+ func corestr(g) -> Function of L1,Image g equals
 :: WAYBEL_1:def 16
   (the carrier of Image g)|g;
 end;
 
 theorem :: WAYBEL_1:32
-  for L1, L2 being non empty RelStr,g being map of L1,L2 holds corestr g = g;
+  for L1, L2 being non empty RelStr,g being Function
+ of L1,L2 holds corestr g = g;
 
-registration let L1, L2 be non empty RelStr, g be map of L1,L2;
+registration let L1, L2 be non empty RelStr, g be Function of L1,L2;
  cluster corestr g -> onto;
 end;
 
 theorem :: WAYBEL_1:33
-  for L1, L2 being non empty RelStr, g being map of L1,L2 st g is monotone
+  for L1, L2 being non empty RelStr, g being Function of L1,L2 st g is monotone
    holds corestr g is monotone;
 
-definition let L1, L2 be non empty RelStr, g be map of L1,L2;
- func inclusion(g) -> map of Image g,L2 equals
+definition let L1, L2 be non empty RelStr, g be Function of L1,L2;
+ func inclusion(g) -> Function of Image g,L2 equals
 :: WAYBEL_1:def 17
   id Image g;
 end;
 
 theorem :: WAYBEL_1:34
-  for L1, L2 being non empty RelStr, g being map of L1,L2,
+  for L1, L2 being non empty RelStr, g being Function of L1,L2,
       s being Element of Image g
    holds (inclusion g).s = s;
 
-registration let L1, L2 be non empty RelStr, g be map of L1,L2;
+registration let L1, L2 be non empty RelStr, g be Function of L1,L2;
  cluster inclusion g -> one-to-one monotone;
 end;
 
 theorem :: WAYBEL_1:35
-  for L being non empty RelStr, f being map of L,L
+  for L being non empty RelStr, f being Function of L,L
    holds (inclusion f)*(corestr f) = f;
 
 ::Theorem 3.10 (1) implies (2)
 theorem :: WAYBEL_1:36
-   for L being non empty Poset, f being map of L,L st f is idempotent
+   for L being non empty Poset, f being Function of L,L st f is idempotent
     holds (corestr f)*(inclusion f) = id(Image f);
 
 ::Theorem 3.10 (1) implies (3)
 theorem :: WAYBEL_1:37
-      for L being non empty Poset, f being map of L,L st f
+      for L being non empty Poset, f being Function of L,L st f
 is_a_projection_operator
-    ex T being non empty Poset, q being map of L,T, i being map of T,L
+    ex T being non empty Poset, q being Function of L,T, i being Function
+ of T,L
       st q is monotone & q is onto & i is monotone & i is one-to-one &
          f = i*q & id(T) = q*i;
 
 ::Theorem 3.10 (3) implies (1)
 theorem :: WAYBEL_1:38
-       for L being non empty Poset, f being map of L,L
-    st (ex T being non empty Poset, q being map of L,T, i being map of T,L
+       for L being non empty Poset, f being Function of L,L
+    st (ex T being non empty Poset, q being Function of L,T, i being Function
+ of T,L
          st q is monotone & i is monotone & f = i*q & id(T) = q*i)
     holds f is_a_projection_operator;
 
 ::Theorem 3.10 (1_1) implies (2_1)
 theorem :: WAYBEL_1:39
-   for L being non empty Poset, f being map of L,L st f is_a_closure_operator
+   for L being non empty Poset, f being Function
+ of L,L st f is_a_closure_operator
     holds [inclusion f,corestr f] is Galois;
 
 ::Theorem 3.10 (2_1) implies (3_1)
 theorem :: WAYBEL_1:40
-       for L being non empty Poset, f being map of L,L st f
+       for L being non empty Poset, f being Function of L,L st f
 is_a_closure_operator
-    ex S being non empty Poset, g being map of S,L, d being map of L,S
+    ex S being non empty Poset, g being Function of S,L, d being Function
+ of L,S
       st [g,d] is Galois & f = g*d;
 
 ::Theorem 3.10 (3_1) implies (1_1)
 theorem :: WAYBEL_1:41
-   for L being non empty Poset, f being map of L,L
+   for L being non empty Poset, f being Function of L,L
       st f is monotone &
-        ex S being non empty Poset, g being map of S,L, d being map of L,S
+        ex S being non empty Poset, g being Function of S,L, d being Function
+ of L,S
          st [g,d] is Galois & f = g*d
     holds f is_a_closure_operator;
 
 ::Theorem 3.10 (1_2) implies (2_2)
 theorem :: WAYBEL_1:42
-   for L being non empty Poset, f being map of L,L st f is_a_kernel_operator
+   for L being non empty Poset, f being Function
+ of L,L st f is_a_kernel_operator
     holds [corestr f,inclusion f] is Galois;
 
 ::Theorem 3.10 (2_2) implies (3_2)
 theorem :: WAYBEL_1:43
-       for L being non empty Poset, f being map of L,L st f
+       for L being non empty Poset, f being Function of L,L st f
 is_a_kernel_operator
-     ex T being non empty Poset, g being map of L,T, d being map of T,L
+     ex T being non empty Poset, g being Function of L,T, d being Function
+ of T,L
       st [g,d] is Galois & f = d*g;
 
 ::Theorem 3.10 (3_2) implies (1_2)
 theorem :: WAYBEL_1:44
-       for L being non empty Poset, f being map of L,L
+       for L being non empty Poset, f being Function of L,L
     st f is monotone &
-      ex T being non empty Poset, g being map of L,T, d being map of T,L
+      ex T being non empty Poset, g being Function of L,T, d being Function
+ of T,L
        st [g,d] is Galois & f = d*g
     holds f is_a_kernel_operator;
 
 :: Lemma 3.11 (i) (part I)
 theorem :: WAYBEL_1:45
-  for L being non empty Poset, p being map of L,L
+  for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   holds rng p = {c where c is Element of L: c <= p.c} /\
                 {k where k is Element of L: p.k <= k};
 
 theorem :: WAYBEL_1:46
-  for L being non empty Poset, p being map of L,L
+  for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   holds {c where c is Element of L: c <= p.c} is non empty Subset of L &
     {k where k is Element of L: p.k <= k} is non empty Subset of L;
 
 :: Lemma 3.11 (i) (part II)
 theorem :: WAYBEL_1:47
-  for L being non empty Poset, p being map of L,L
+  for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   holds rng(p|{c where c is Element of L: c <= p.c}) = rng p &
     rng(p|{k where k is Element of L: p.k <= k}) = rng p;
 
 theorem :: WAYBEL_1:48
-  for L being non empty Poset, p being map of L,L
+  for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   for Lc being non empty Subset of L, Lk being non empty Subset of L
    st Lc = {c where c is Element of L: c <= p.c}
-  holds p|Lc is map of subrelstr Lc,subrelstr Lc;
+  holds p|Lc is Function of subrelstr Lc,subrelstr Lc;
 
 theorem :: WAYBEL_1:49
-      for L being non empty Poset, p being map of L,L
+      for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   for Lk being non empty Subset of L
    st Lk = {k where k is Element of L: p.k <= k}
-  holds p|Lk is map of subrelstr Lk,subrelstr Lk;
+  holds p|Lk is Function of subrelstr Lk,subrelstr Lk;
 
 :: Lemma 3.11 (i) (part IIIa)
 theorem :: WAYBEL_1:50
-  for L being non empty Poset, p being map of L,L
+  for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   for Lc being non empty Subset of L
    st Lc = {c where c is Element of L: c <= p.c}
-  for pc being map of subrelstr Lc,subrelstr Lc st pc = p|Lc
+  for pc being Function of subrelstr Lc,subrelstr Lc st pc = p|Lc
    holds pc is_a_closure_operator;
 
 :: Lemma 3.11 (i) (part IIIb)
 theorem :: WAYBEL_1:51
-      for L being non empty Poset, p being map of L,L
+      for L being non empty Poset, p being Function of L,L
     st p is_a_projection_operator
    for Lk being non empty Subset of L
     st Lk = {k where k is Element of L: p.k <= k}
-   for pk being map of subrelstr Lk,subrelstr Lk st pk = p|Lk
+   for pk being Function of subrelstr Lk,subrelstr Lk st pk = p|Lk
     holds pk is_a_kernel_operator;
 
 :: Lemma 3.11 (ii) (part I)
 theorem :: WAYBEL_1:52
-  for L being non empty Poset, p being map of L,L st p is monotone
+  for L being non empty Poset, p being Function of L,L st p is monotone
    for Lc being Subset of L st Lc = {c where c is Element of L: c <= p.c}
     holds subrelstr Lc is sups-inheriting;
 
 :: Lemma 3.11 (ii) (part II)
 theorem :: WAYBEL_1:53
-  for L being non empty Poset, p being map of L,L st p is monotone
+  for L being non empty Poset, p being Function of L,L st p is monotone
    for Lk being Subset of L st Lk = {k where k is Element of L: p.k <= k}
     holds subrelstr Lk is infs-inheriting;
 
 :: Lemma 3.11 (iii) (part I)
 theorem :: WAYBEL_1:54
-      for L being non empty Poset, p being map of L,L
+      for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   for Lc being non empty Subset of L
     st Lc = {c where c is Element of L: c <= p.c}
@@ -550,7 +578,7 @@ theorem :: WAYBEL_1:54
 
 :: Lemma 3.11 (iii) (part II)
 theorem :: WAYBEL_1:55
-      for L being non empty Poset, p being map of L,L
+      for L being non empty Poset, p being Function of L,L
    st p is_a_projection_operator
   for Lk being non empty Subset of L
     st Lk = {k where k is Element of L: p.k <= k}
@@ -563,19 +591,19 @@ theorem :: WAYBEL_1:55
 
 :: Proposition 3.12 (i)
 theorem :: WAYBEL_1:56
-  for L being non empty Poset, p being map of L,L holds
+  for L being non empty Poset, p being Function of L,L holds
    (p is_a_closure_operator implies Image p is infs-inheriting) &
    (p is_a_kernel_operator implies Image p is sups-inheriting);
 
 :: Proposition 3.12 (ii)
 theorem :: WAYBEL_1:57
-      for L being complete (non empty Poset), p being map of L,L
+      for L being complete (non empty Poset), p being Function of L,L
     st p is_a_projection_operator
    holds Image p is complete;
 
 :: Proposition 3.12 (iii)
 theorem :: WAYBEL_1:58
-      for L being non empty Poset, c being map of L,L
+      for L being non empty Poset, c being Function of L,L
     st c is_a_closure_operator
    holds corestr c is sups-preserving &
     for X being Subset of L
@@ -584,7 +612,7 @@ theorem :: WAYBEL_1:58
 
 :: Proposition 3.12 (iv)
 theorem :: WAYBEL_1:59
-      for L being non empty Poset, k being map of L,L
+      for L being non empty Poset, k being Function of L,L
     st k is_a_kernel_operator
    holds (corestr k) is infs-preserving &
     for X being Subset of L
@@ -605,7 +633,7 @@ theorem :: WAYBEL_1:61
      Image ((IdsMap L)*(SupMap L)),L are_isomorphic;
 
 definition let S be non empty RelStr; let x be Element of S;
- func x "/\" -> map of S,S means
+ func x "/\" -> Function of S,S means
 :: WAYBEL_1:def 18
  for s being Element of S holds it.s = x"/\"s;
 end;
@@ -675,7 +703,7 @@ end;
 definition let H be non empty RelStr, a be Element of H;
  assume
  H is Heyting;
- func a => -> map of H,H means
+ func a => -> Function of H,H means
 :: WAYBEL_1:def 20
  [it,a "/\"] is Galois;
 end;

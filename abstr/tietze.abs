@@ -1,6 +1,6 @@
 :: Tietze {E}xtension {T}heorem
 ::  by Artur Korni{\l}owicz , Grzegorz Bancerek and Adam Naumowicz
-:: 
+::
 :: Received September 14, 2005
 :: Copyright (c) 2005 Association of Mizar Users
 
@@ -24,7 +24,16 @@ environ
       FUNCT_2, PSCOMP_1, BORSUK_3, WAYBEL12, FUNCT_1, METRIC_1, NEWTON,
       SUBSET_1;
  requirements BOOLE, SUBSET, NUMERALS, REAL, ARITHM;
-
+ definitions TARSKI, XBOOLE_0, SEQM_3, SEQFUNC, PRE_TOPC, BORSUK_1, COMPTS_1;
+ theorems PRE_TOPC, LIMFUNC1, RCOMP_1, XBOOLE_0, TARSKI, FUNCT_1, RELAT_1,
+      TOPREALB, URYSOHN3, JORDAN1, TSEP_1, JGRAPH_5, XREAL_0, TOPREALA,
+      TOPMETR, ABSVALUE, FUNCT_2, XREAL_1, TOPS_2, SEQ_1, BORSUK_5, TMAP_1,
+      TOPS_1, XBOOLE_1, BORSUK_1, FUNCOP_1, EXTENS_1, NEWTON, HEINE, TOPREAL6,
+      JGRAPH_3, GRFUNC_1, RFUNCT_1, SEQFUNC, METRIC_1, GOBOARD6, RSSPACE,
+      SEQ_2, SEQ_4, XCMPLX_1, SERIES_1, COMPLEX1, XCMPLX_0, ORDINAL2, POWER,
+      PREPOWER, NAT_1, SEQM_3, UNIFORM1, PARTFUN1, MESFUNC1, JCT_MISC,
+      RELSET_1;
+ schemes NAT_1, RECDEF_1, FUNCT_2;
 
 begin
 
@@ -62,12 +71,12 @@ end;
 
 theorem :: TIETZE:6
   for T1 being empty TopSpace, T2 being TopSpace
-  for f being map of T1,T2 holds f is continuous;
+  for f being Function of T1,T2 holds f is continuous;
 
 registration
   let T1 be TopSpace;
   let T2 be non empty TopSpace;
-  cluster continuous map of T1,T2;
+  cluster continuous Function of T1,T2;
 end;
 
 theorem :: TIETZE:7
@@ -125,7 +134,7 @@ theorem :: TIETZE:13
 :: Topology
 
 registration
-  let S, T be TopStruct, A be empty Subset of S, f be map of S,T;
+  let S, T be TopStruct, A be empty Subset of S, f be Function of S,T;
   cluster f|A -> empty;
 end;
 
@@ -136,7 +145,7 @@ end;
 
 theorem :: TIETZE:14
   for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being map of X1,Y, f2 being map of X2,Y st
+  for f1 being Function of X1,Y, f2 being Function of X2,Y st
   X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2)
   for x being Point of X holds
   (x in the carrier of X1 implies (f1 union f2).x = f1.x) &
@@ -144,13 +153,13 @@ theorem :: TIETZE:14
 
 theorem :: TIETZE:15
   for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being map of X1,Y, f2 being map of X2,Y st
+  for f1 being Function of X1,Y, f2 being Function of X2,Y st
   X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
   rng (f1 union f2) c= rng f1 \/ rng f2;
 
 theorem :: TIETZE:16
   for X, Y being non empty TopSpace, X1, X2 being non empty SubSpace of X
-  for f1 being map of X1,Y, f2 being map of X2,Y st
+  for f1 being Function of X1,Y, f2 being Function of X2,Y st
   X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
   (for A being Subset of X1 holds (f1 union f2).:A = f1.:A) &
   (for A being Subset of X2 holds (f1 union f2).:A = f2.:A);
@@ -168,18 +177,19 @@ theorem :: TIETZE:18
 
 theorem :: TIETZE:19
   r > 0 & T is being_T4 implies
-  for f being continuous map of T|A, R^1 st f,A is_absolutely_bounded_by r
-  ex g being continuous map of T, R^1 st g,dom g is_absolutely_bounded_by r/3 &
+  for f being continuous Function of T|A, R^1 st f,A is_absolutely_bounded_by r
+  ex g being continuous Function
+ of T, R^1 st g,dom g is_absolutely_bounded_by r/3 &
   f-g,A is_absolutely_bounded_by 2*r/3;
 
 :: Urysohn Lemma, simple case
 theorem :: TIETZE:20
   (for A, B being non empty closed Subset of T st A misses B
-  ex f being continuous map of T, R^1 st f.:A = {0} & f.:B = {1})
+  ex f being continuous Function of T, R^1 st f.:A = {0} & f.:B = {1})
   implies T is_T4;
 
 theorem :: TIETZE:21
-  for f being map of T,R^1, x being Point of T holds
+  for f being Function of T,R^1, x being Point of T holds
   f is_continuous_at x iff
   for e being real number st e>0 ex H being Subset of T st
   H is open & x in H & for y being Point of T st y in H holds abs(f.y-f.x)<e;
@@ -187,15 +197,15 @@ theorem :: TIETZE:21
 theorem :: TIETZE:22
   for F being Functional_Sequence of the carrier of T, REAL
   st F is_unif_conv_on the carrier of T &
-  for i being Nat holds F.i is continuous map of T, R^1
-  holds lim(F, the carrier of T) is continuous map of T, R^1;
+  for i being Nat holds F.i is continuous Function of T, R^1
+  holds lim(F, the carrier of T) is continuous Function of T, R^1;
 
 theorem :: TIETZE:23
   for T being non empty TopSpace
-  for f being map of T, R^1
+  for f being Function of T, R^1
   for r being positive (real number) holds
   f, the carrier of T is_absolutely_bounded_by r iff
-  f is map of T, Closed-Interval-TSpace(-r,r);
+  f is Function of T, Closed-Interval-TSpace(-r,r);
 
 theorem :: TIETZE:24
   f-g, X is_absolutely_bounded_by r implies
@@ -204,11 +214,12 @@ theorem :: TIETZE:24
 :: Tietze Extension Theorem
 theorem :: TIETZE:25
   T is being_T4 implies
-  for A for f being map of T|A, Closed-Interval-TSpace(-1,1) st f is continuous
-  ex g being continuous map of T, Closed-Interval-TSpace(-1,1) st g|A = f;
+  for A for f being Function
+ of T|A, Closed-Interval-TSpace(-1,1) st f is continuous
+  ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f;
 
 theorem :: TIETZE:26
   (for A being non empty closed Subset of T
-  for f being continuous map of T|A, Closed-Interval-TSpace(-1,1)
-  ex g being continuous map of T, Closed-Interval-TSpace(-1,1) st g|A = f)
+  for f being continuous Function of T|A, Closed-Interval-TSpace(-1,1)
+  ex g being continuous Function of T, Closed-Interval-TSpace(-1,1) st g|A = f)
   implies T is being_T4;

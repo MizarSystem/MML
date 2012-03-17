@@ -1,6 +1,6 @@
 :: Jordan's Curve Theorem
 ::  by Artur Korni{\l}owicz
-:: 
+::
 :: Received September 15, 2005
 :: Copyright (c) 2005 Association of Mizar Users
 
@@ -59,7 +59,15 @@ environ
  schemes FUNCT_2;
 
 begin :: Preliminaries
-  
+
+:: I would like to thank Professor Yatsuka Nakamura
+:: for including me to the team working on the formalization
+:: of the Jordan Curve Theorem. Especially, I am very grateful
+:: to Professor Nakamura for inviting me to Shinshu University, Nagano
+:: to work on the project together.
+:: I am also thankful to Professor Andrzej Trybulec for his
+:: continual help and fruitful discussions during the formalization.
+
 reserve
   a, b, c, d, r, s for real number,
   n for Nat,
@@ -69,22 +77,22 @@ reserve
   A, B, P for Subset of TOP-REAL 2,
   U, V for Subset of (TOP-REAL 2)|C`,
   D for compact with_the_max_arc Subset of TOP-REAL 2;
-  
+
   set T2 = TOP-REAL 2;
-  
+
 LmZ3: for A, B, C, Z being set st A c= Z & B c= Z & C c= Z holds
       A \/ B \/ C c= Z
-      proof 
+      proof
         let A, B, C, Z be set;
         assume A c= Z & B c= Z;
         then A \/ B c= Z by XBOOLE_1:8;
         hence thesis by XBOOLE_1:8;
       end;
 
-LmZ4: 
+LmZ4:
       for A, B, C, D, Z being set st A c= Z & B c= Z & C c= Z & D c= Z holds
       A \/ B \/ C \/ D c= Z
-      proof 
+      proof
         let A, B, C, D, Z be set;
         assume A c= Z & B c= Z & C c= Z;
         then A \/ B \/ C c= Z by LmZ3;
@@ -94,13 +102,13 @@ LmZ4:
 Lmmisses4:
          for A, B, C, D, Z being set st A misses Z & B misses Z &
          C misses Z & D misses Z holds A \/ B \/ C \/ D misses Z
-         proof 
+         proof
            let A, B, C, D, Z be set;
            assume A misses Z & B misses Z & C misses Z;
            then A \/ B \/ C misses Z by XBOOLE_1:114;
            hence thesis by XBOOLE_1:70;
          end;
-                  
+
 registration
   let M be symmetric triangle Reflexive MetrStruct, x, y be Point of M;
   cluster dist(x,y) -> non negative;
@@ -111,7 +119,7 @@ registration
   let n be Nat, x, y be Point of TOP-REAL n;
   cluster dist(x,y) -> non negative;
   coherence
-  proof 
+  proof
     ex p, q being Point of Euclid n st p = x & q = y & dist(x,y) = dist(p,q)
     by GOBRD14:def 1;
     hence 0 <= dist(x,y);
@@ -122,7 +130,7 @@ registration
   let n be Nat, x, y be Point of TOP-REAL n;
   cluster |.x-y.| -> non negative;
   coherence
-  proof 
+  proof
     reconsider x1 = x, y1 = y as Point of Euclid n by TOPREAL3:13;
     dist(x1,y1) = |.x-y.| by KURATO_2:31;
     hence 0 <= |.x-y.|;
@@ -131,7 +139,7 @@ end;
 
 theorem Taba:
   for p1, p2 being Point of TOP-REAL n st p1 <> p2 holds 1/2*(p1+p2) <> p1
-  proof 
+  proof
     let p1, p2 be Point of TOP-REAL n;
     set r = 1/2;
     assume that
@@ -146,10 +154,10 @@ a1: r*(p1+p2) = p1;
     then p1-p2 = 0.REAL n by EUCLID:35;
     hence thesis by a3,EUCLID:47;
   end;
-  
+
 theorem Lmnowy61:
   p1`2 < p2`2 implies p1`2 < (1/2*(p1+p2))`2
-  proof 
+  proof
     assume
 a1: p1`2 < p2`2;
     (1/2*(p1+p2))`2 = 1/2*((p1+p2)`2) by TOPREAL3:9
@@ -157,10 +165,10 @@ a1: p1`2 < p2`2;
     .= (p1`2+p2`2)/2;
     hence thesis by a1,TOPREAL3:3;
   end;
-  
+
 theorem Lmnowy60:
   p1`2 < p2`2 implies (1/2*(p1+p2))`2 < p2`2
-  proof 
+  proof
     assume
 a1: p1`2 < p2`2;
     (1/2*(p1+p2))`2 = 1/2*((p1+p2)`2) by TOPREAL3:9
@@ -172,29 +180,29 @@ a1: p1`2 < p2`2;
 theorem Thpver:
   for A being vertical Subset of TOP-REAL 2 holds
   A /\ B is vertical
-  proof 
+  proof
     let A be vertical Subset of TOP-REAL 2;
     let p, q be Point of T2;
     assume p in A /\ B & q in A /\ B;
     then p in A & q in A by XBOOLE_0:def 3;
     hence thesis by SPPOL_1:def 3;
   end;
-  
+
 theorem
   for A being horizontal Subset of TOP-REAL 2 holds
   A /\ B is horizontal
-  proof 
+  proof
     let A be horizontal Subset of TOP-REAL 2;
     let p, q be Point of T2;
     assume p in A /\ B & q in A /\ B;
     then p in A & q in A by XBOOLE_0:def 3;
     hence thesis by SPPOL_1:def 2;
   end;
-  
+
 theorem
   p in LSeg(p1,p2) & LSeg(p1,p2) is vertical implies
   LSeg(p,p2) is vertical
-  proof 
+  proof
     assume
 a1: p in LSeg(p1,p2);
     assume
@@ -209,7 +217,7 @@ a2: p1`1 = p2`1 by SPPOL_1:37;
 theorem
   p in LSeg(p1,p2) & LSeg(p1,p2) is horizontal implies
   LSeg(p,p2) is horizontal
-  proof 
+  proof
     assume
 a1: p in LSeg(p1,p2);
     assume
@@ -222,25 +230,25 @@ a2: p1`2 = p2`2 by SPPOL_1:36;
   end;
 
 registration
-:: LSeg(NW-corner C,NE-corner C) is horizontal; ::SPRECT_3:29  
+:: LSeg(NW-corner C,NE-corner C) is horizontal; ::SPRECT_3:29
   let P be Subset of TOP-REAL 2;
   cluster LSeg(SW-corner P,SE-corner P) -> horizontal;
   coherence
-  proof 
+  proof
     (SW-corner P)`2 = S-bound P by PSCOMP_1:73
     .= (SE-corner P)`2 by PSCOMP_1:79;
     hence thesis by SPPOL_1:36;
   end;
   cluster LSeg(NW-corner P,SW-corner P) -> vertical;
   coherence
-  proof 
+  proof
     (NW-corner P)`1 = W-bound P by PSCOMP_1:74
     .= (SW-corner P)`1 by PSCOMP_1:72;
     hence thesis by SPPOL_1:37;
   end;
   cluster LSeg(NE-corner P,SE-corner P) -> vertical;
   coherence
-  proof 
+  proof
     (NE-corner P)`1 = E-bound P by PSCOMP_1:76
     .= (SE-corner P)`1 by PSCOMP_1:78;
     hence thesis by SPPOL_1:37;
@@ -251,19 +259,19 @@ registration
   let P be Subset of TOP-REAL 2;
   cluster LSeg(SE-corner P,SW-corner P) -> horizontal;
   coherence
-  proof 
+  proof
     LSeg(SW-corner P,SE-corner P) = LSeg(SE-corner P,SW-corner P);
     hence thesis;
   end;
   cluster LSeg(SW-corner P,NW-corner P) -> vertical;
   coherence
-  proof 
+  proof
     LSeg(SW-corner P,NW-corner P) = LSeg(NW-corner P,SW-corner P);
     hence thesis;
   end;
   cluster LSeg(SE-corner P,NE-corner P) -> vertical;
   coherence
-  proof 
+  proof
     LSeg(NE-corner P,SE-corner P) = LSeg(SE-corner P,NE-corner P);
     hence thesis;
   end;
@@ -272,7 +280,7 @@ end;
 registration
   cluster vertical non empty compact -> with_the_max_arc Subset of TOP-REAL 2;
   coherence
-  proof 
+  proof
     let A be Subset of TOP-REAL 2;
     assume
 a0: A is vertical non empty compact;
@@ -289,7 +297,7 @@ end;
 theorem Twbwb:
   for X, Y being non empty compact Subset of TOP-REAL 2 st
   X c= Y & (W-min Y in X or W-max Y in X) holds W-bound X = W-bound Y
-  proof 
+  proof
     let X, Y be non empty compact Subset of T2;
     assume
 a1: X c= Y & (W-min Y in X or W-max Y in X);
@@ -298,11 +306,11 @@ a1: X c= Y & (W-min Y in X or W-max Y in X);
     by PSCOMP_1:84;
     hence thesis by a1,JORDAN1J:21,22;
   end;
-  
+
 theorem Tebeb:
   for X, Y being non empty compact Subset of TOP-REAL 2 st
   X c= Y & (E-min Y in X or E-max Y in X) holds E-bound X = E-bound Y
-  proof 
+  proof
     let X, Y be non empty compact Subset of T2;
     assume
 a1: X c= Y & (E-min Y in X or E-max Y in X);
@@ -311,11 +319,11 @@ a1: X c= Y & (E-min Y in X or E-max Y in X);
     by PSCOMP_1:104;
     hence thesis by a1,JORDAN1J:17,18;
   end;
-  
+
 theorem
   for X, Y being non empty compact Subset of TOP-REAL 2 st
   X c= Y & (N-min Y in X or N-max Y in X) holds N-bound X = N-bound Y
-  proof 
+  proof
     let X, Y be non empty compact Subset of T2;
     assume
 a1: X c= Y & (N-min Y in X or N-max Y in X);
@@ -324,11 +332,11 @@ a1: X c= Y & (N-min Y in X or N-max Y in X);
     by PSCOMP_1:94;
     hence thesis by a1,JORDAN1J:15,16;
   end;
-  
+
 theorem
   for X, Y being non empty compact Subset of TOP-REAL 2 st
   X c= Y & (S-min Y in X or S-max Y in X) holds S-bound X = S-bound Y
-  proof 
+  proof
     let X, Y be non empty compact Subset of T2;
     assume
 a1: X c= Y & (S-min Y in X or S-max Y in X);
@@ -340,7 +348,7 @@ a1: X c= Y & (S-min Y in X or S-max Y in X);
 
 theorem
   W-bound C = W-bound North_Arc C
-  proof 
+  proof
 a1: North_Arc C c= C by JORDAN22:11;
     W-min C in North_Arc C by JORDAN22:5;
     hence thesis by a1,Twbwb;
@@ -348,7 +356,7 @@ end;
 
 theorem
   E-bound C = E-bound North_Arc C
-  proof 
+  proof
 a1: North_Arc C c= C by JORDAN22:11;
     E-max C in North_Arc C by JORDAN22:6;
     hence thesis by a1,Tebeb;
@@ -356,7 +364,7 @@ end;
 
 theorem
   W-bound C = W-bound South_Arc C
-  proof 
+  proof
 a1: South_Arc C c= C by JORDAN22:12;
     W-min C in South_Arc C by JORDAN22:7;
     hence thesis by a1,Twbwb;
@@ -364,7 +372,7 @@ end;
 
 theorem
   E-bound C = E-bound South_Arc C
-  proof 
+  proof
 a1: South_Arc C c= C by JORDAN22:12;
     E-max C in South_Arc C by JORDAN22:8;
     hence thesis by a1,Tebeb;
@@ -372,7 +380,7 @@ end;
 
 theorem TSV:
   p1`1 <= r & r <= p2`1 implies LSeg(p1,p2) meets Vertical_Line(r)
-  proof 
+  proof
     assume that
 a1: p1`1 <= r and
 a2: r <= p2`1;
@@ -407,10 +415,10 @@ c1:   p1 in LSeg(p1,p2) by TOPREAL1:6;
       hence thesis by c1,XBOOLE_0:3;
     end;
   end;
-  
+
 theorem
   p1`2 <= r & r <= p2`2 implies LSeg(p1,p2) meets Horizontal_Line(r)
-  proof 
+  proof
     assume that
 a1: p1`2 <= r and
 a2: r <= p2`2;
@@ -445,7 +453,7 @@ c1:   p1 in LSeg(p1,p2) by TOPREAL1:6;
       hence thesis by c1,XBOOLE_0:3;
     end;
   end;
-  
+
 Lm100: now
          let n;
          let A be Subset of TOP-REAL n such that
@@ -454,7 +462,7 @@ a1:      A is empty;
          A c= {p} by a1,XBOOLE_1:2;
          hence A is Bounded by JORDAN2C:16;
        end;
-       
+
 registration
   let n;
   cluster empty -> Bounded Subset of TOP-REAL n;
@@ -467,7 +475,7 @@ registration
   let n be non empty Nat;
   cluster open closed non Bounded convex Subset of TOP-REAL n;
   existence
-  proof 
+  proof
     take [#]TOP-REAL n;
     1 <= n by NAT_1:39;
     hence thesis by JORDAN2C:21,41;
@@ -477,7 +485,7 @@ end;
 theorem Th25:
   for C being compact Subset of TOP-REAL 2 holds
   north_halfline UMP C \ {UMP C} misses C
-  proof 
+  proof
     let C be compact Subset of TOP-REAL 2;
     set p = UMP C;
     set L = north_halfline p;
@@ -501,7 +509,7 @@ a4: x`2 > p`2 by a5,REAL_1:def 5;
 theorem Th24:
   for C being compact Subset of TOP-REAL 2 holds
   south_halfline LMP C \ {LMP C} misses C
-  proof 
+  proof
     let C be compact Subset of TOP-REAL 2;
     set p = LMP C;
     set L = south_halfline p;
@@ -527,7 +535,7 @@ Lm101: for A being non empty convex Subset of T2 holds A is connected;
 theorem Th26:
   for C being compact Subset of TOP-REAL 2 holds
   north_halfline UMP C \ {UMP C} c= UBD C
-  proof 
+  proof
     let C be compact Subset of TOP-REAL 2;
     set A = north_halfline UMP C \ {UMP C};
     north_halfline UMP C is not Bounded by JORDAN1C:10;
@@ -541,7 +549,7 @@ a2: A misses C by Th25;
 theorem Th27:
   for C being compact Subset of TOP-REAL 2 holds
   south_halfline LMP C \ {LMP C} c= UBD C
-  proof 
+  proof
     let C be compact Subset of TOP-REAL 2;
     set A = south_halfline LMP C \ {LMP C};
     south_halfline LMP C is not Bounded by JORDAN1C:11;
@@ -554,7 +562,7 @@ a2: A misses C by Th24;
 
 theorem Th30:
   A is_inside_component_of B implies UBD B misses A
-  proof 
+  proof
     assume A is_inside_component_of B;
     then
 a1: A c= BDD B by JORDAN2C:26;
@@ -564,7 +572,7 @@ a1: A c= BDD B by JORDAN2C:26;
 
 theorem
   A is_outside_component_of B implies BDD B misses A
-  proof 
+  proof
     assume A is_outside_component_of B;
     then
 a1: A c= UBD B by JORDAN2C:27;
@@ -572,9 +580,9 @@ a1: A c= UBD B by JORDAN2C:27;
     hence thesis by a1,XBOOLE_1:63;
   end;
 
-Lm27: 
+Lm27:
       p in C implies {p} misses U
-      proof 
+      proof
         assume
 a1:     p in C;
 a4:     U is Subset of T2 by PRE_TOPC:39;
@@ -583,7 +591,7 @@ a4:     U is Subset of T2 by PRE_TOPC:39;
         then not p in U by a1,XBOOLE_0:3;
         hence thesis by ZFMISC_1:56;
       end;
-      
+
   set C0 = Closed-Interval-TSpace(0,1);
   set C1 = Closed-Interval-TSpace(-1,1);
   set l0 = (#)(-1,1);
@@ -601,7 +609,7 @@ now
   set c = the carrier of T;
   set f = c --> a;
   thus f is continuous
-  proof 
+  proof
 A1: dom f = c by FUNCT_2:def 1;
 A2: rng f = {a} by FUNCOP_1:14;
   let Y be Subset of REAL; assume Y is closed;
@@ -629,17 +637,17 @@ end;
 theorem Taa:
   for r being positive (real number)
   for a being Point of TOP-REAL n holds a in Ball(a,r)
-  proof 
+  proof
     let r be positive (real number);
     let a be Point of TOP-REAL n;
     |. a-a .| = 0 by TOPRNS_1:29;
     hence thesis by TOPREAL9:7;
   end;
-  
+
 theorem Th6:
   for r being non negative (real number)
   for p being Point of TOP-REAL n holds p is Point of Tdisk(p,r)
-  proof 
+  proof
     let r be non negative (real number);
     let p be Point of TOP-REAL n;
 a1: the carrier of Tdisk(p,r) = cl_Ball(p,r) by BROUWER:3;
@@ -653,7 +661,7 @@ registration
   let p, q be Point of TOP-REAL n;
   cluster cl_Ball(p,r) \ {q} -> non empty;
   coherence
-  proof 
+  proof
 d2: the carrier of Tcircle(p,r) = Sphere(p,r) by TOPREALB:9;
 d6: the carrier of Tdisk(p,r) = cl_Ball(p,r) by BROUWER:3;
 d4: Sphere(p,r) c= cl_Ball(p,r) by TOPREAL9:17;
@@ -675,7 +683,7 @@ end;
 
 theorem TBB:
   r <= s implies Ball(x,r) c= Ball(x,s)
-  proof 
+  proof
     reconsider xe = x as Point of Euclid n by TOPREAL3:13;
     Ball(x,r) = Ball(xe,r) & Ball(x,s) = Ball(xe,s) by TOPREAL9:13;
     hence thesis by PCOMPS_1:1;
@@ -683,7 +691,7 @@ theorem TBB:
 
 theorem ThrB:
   cl_Ball(x,r) \ Ball(x,r) = Sphere(x,r)
-  proof 
+  proof
     thus cl_Ball(x,r) \ Ball(x,r) c= Sphere(x,r)
     proof
       let a be set;
@@ -706,7 +714,7 @@ a2: a in Sphere(x,r);
 
 theorem TLes:
   y in Sphere(x,r) implies LSeg(x,y) \ {x,y} c= Ball(x,r)
-  proof 
+  proof
     assume
 w1: y in Sphere(x,r);
     per cases;
@@ -757,7 +765,7 @@ m1: |. k-x .| = abs(l) * |. y-x .| by TOPRNS_1:8
 
 theorem Tdb:
   r < s implies cl_Ball(x,r) c= Ball(x,s)
-  proof 
+  proof
     assume
 a1: r < s;
     let a be set;
@@ -771,7 +779,7 @@ a2: a in cl_Ball(x,r);
 
 theorem Tsb:
   r < s implies Sphere(x,r) c= Ball(x,s)
-  proof 
+  proof
     assume r < s;
     then
 a1: cl_Ball(x,r) c= Ball(x,s) by Tdb;
@@ -781,7 +789,7 @@ a1: cl_Ball(x,r) c= Ball(x,s) by Tdb;
 
 theorem ThClB:
   for r being non zero (real number) holds Cl Ball(x,r) = cl_Ball(x,r)
-  proof 
+  proof
     let r be non zero (real number);
     Ball(x,r) c= cl_Ball(x,r) by TOPREAL9:16;
     hence Cl Ball(x,r) c= cl_Ball(x,r) by TOPS_1:31;
@@ -870,7 +878,7 @@ d1:       q in Sphere(a,s/2) by TOPREAL9:9;
 theorem ThFrB:
   for r being non zero (real number) holds
   Fr Ball(x,r) = Sphere(x,r)
-  proof 
+  proof
     let r be non zero (real number);
     set P = Ball(x,r);
     thus Fr P = Cl P \ P by TOPS_1:76
@@ -882,7 +890,7 @@ registration
   let n be non empty Nat;
   cluster Bounded -> proper Subset of TOP-REAL n;
   coherence
-  proof 
+  proof
 a1: the carrier of TOP-REAL n = [#]TOP-REAL n by PRE_TOPC:12;
     1 <= n by NAT_1:39;
     then [#]TOP-REAL n is not Bounded by JORDAN2C:41;
@@ -894,13 +902,13 @@ registration
   let n;
   cluster non empty closed convex Bounded Subset of TOP-REAL n;
   existence
-  proof 
+  proof
     take cl_Ball(0.REAL n,1);
     thus thesis;
   end;
   cluster non empty open convex Bounded Subset of TOP-REAL n;
   existence
-  proof 
+  proof
     take Ball(0.REAL n,1);
     thus thesis;
   end;
@@ -916,7 +924,7 @@ registration
   let n be Nat; let A be Bounded Subset of TOP-REAL n;
   cluster Fr A -> Bounded;
   coherence
-  proof 
+  proof
     Fr A = Cl A /\ Cl A` by TOPS_1:def 2;
     hence thesis by JORDAN1I:1;
   end;
@@ -926,13 +934,13 @@ theorem TexK:
   for A being closed Subset of TOP-REAL n, p being Point of TOP-REAL n st
   not p in A
   ex r being positive (real number) st Ball(p,r) misses A
-  proof 
+  proof
     let A be closed Subset of TOP-REAL n, p be Point of TOP-REAL n;
     assume not p in A;
     then
 a2: p in A` by SUBSET_1:50;
     reconsider e = p as Point of Euclid n by TOPREAL3:13;
-    TopSpaceMetr Euclid n = TOP-REAL n by EUCLID:def 8;    
+    TopSpaceMetr Euclid n = TOP-REAL n by EUCLID:def 8;
     then consider r being real number such that
 a3: r > 0 and
 a4: Ball(e,r) c= A` by a2,TOPMETR:22;
@@ -941,11 +949,11 @@ a4: Ball(e,r) c= A` by a2,TOPMETR:22;
     Ball(p,r) = Ball(e,r) by TOPREAL9:13;
     hence thesis by a4,SUBSET_1:43;
   end;
-  
+
 theorem Th11:
   for A being Bounded Subset of TOP-REAL n, a being Point of TOP-REAL n
   ex r being positive (real number) st A c= Ball(a,r)
-  proof 
+  proof
     let A be Bounded Subset of TOP-REAL n;
     let a be Point of TOP-REAL n;
     reconsider C = A as bounded Subset of Euclid n by JORDAN2C:def 2;
@@ -970,11 +978,12 @@ a9: |.p1-a.| <= |.p1-x1.| + |.x1-a.| by TOPRNS_1:35;
   end;
 
 theorem Th2:
-  for S, T being TopStruct, f being map of S, T st f is_homeomorphism holds
+  for S, T being TopStruct, f being Function
+ of S, T st f is_homeomorphism holds
   f is onto
-  proof 
+  proof
     let S, T be TopStruct;
-    let f be map of S, T;
+    let f be Function of S, T;
     assume f is_homeomorphism;
     then rng f = [#]T by TOPS_2:def 5
     .= the carrier of T by PRE_TOPC:12;
@@ -985,7 +994,7 @@ theorem Th3:
   for T being TopSpace, S being SubSpace of T,
   A being Subset of T, B being Subset of S st A = B holds
   T|A = S|B
-  proof 
+  proof
     let T be TopSpace;
     let S be SubSpace of T;
     let A be Subset of T;
@@ -1008,7 +1017,7 @@ registration
   let p, r;
   cluster Tdisk(p,r) -> closed;
   coherence
-  proof 
+  proof
     let A be Subset of T2;
     assume A = the carrier of Tdisk(p,r);
     then A = cl_Ball(p,r) by BROUWER:3;
@@ -1020,7 +1029,7 @@ registration
   let p, r;
   cluster Tdisk(p,r) -> compact;
   coherence
-  proof 
+  proof
     set D = Tdisk(p,r);
     the carrier of D is Subset of T2 by TSEP_1:1;
     then reconsider Q = [#]D as Subset of T2 by XBOOLE_1:1;
@@ -1033,11 +1042,11 @@ registration
 end;
 
 begin :: Paths
-  
+
 theorem
   for T being non empty TopSpace, a, b being Point of T
   for f being Path of a,b st a,b are_connected holds rng f is connected
-  proof 
+  proof
     let T be non empty TopSpace, a, b be Point of T;
     let f be Path of a,b such that
 a0: a,b are_connected;
@@ -1051,24 +1060,24 @@ a4: f is continuous by a0,BORSUK_2:def 2;
     f.:B = rng f by a1,BORSUK_1:83,RELAT_1:146;
     hence rng f is connected by a3,a4,TOPREAL5:5;
   end;
-  
+
 theorem Th1:
   for X being non empty TopSpace, Y being non empty SubSpace of X,
   x1, x2 being Point of X, y1, y2 being Point of Y,
   f being Path of x1,x2 st x1 = y1 & x2 = y2 & x1,x2 are_connected &
   rng f c= the carrier of Y holds
   y1,y2 are_connected & f is Path of y1,y2
-  proof 
+  proof
     let X be non empty TopSpace, Y be non empty SubSpace of X,
     x1, x2 be Point of X, y1, y2 be Point of Y,
     f be Path of x1,x2 such that
 A1: x1 = y1 & x2 = y2 and
 A2: x1, x2 are_connected;
     assume rng f c= the carrier of Y;
-    then reconsider g = f as map of I[01], Y by FUNCT_2:8;
+    then reconsider g = f as Function of I[01], Y by FUNCT_2:8;
 A3: f is continuous by A2,BORSUK_2:def 2;
     thus
-A4: ex f being map of I[01], Y st f is continuous & f.0 = y1 & f.1 = y2
+A4: ex f being Function of I[01], Y st f is continuous & f.0 = y1 & f.1 = y2
     proof
       take g;
       thus g is continuous by A3,TOPMETR:8;
@@ -1076,7 +1085,8 @@ A4: ex f being map of I[01], Y st f is continuous & f.0 = y1 & f.1 = y2
     end;
     g is Path of y1,y2
     proof
-      thus ex f being map of I[01], Y st f is continuous & f.0 = y1 & f.1 = y2
+      thus ex f being Function
+ of I[01], Y st f is continuous & f.0 = y1 & f.1 = y2
       by A4;
       thus g is continuous by A3,TOPMETR:8;
       thus g.0 = y1 & g.1 = y2 by A1,A2,BORSUK_2:def 2;
@@ -1088,10 +1098,10 @@ theorem Th1a:
   for X being arcwise_connected non empty TopSpace,
   Y being non empty SubSpace of X,
   x1, x2 being Point of X, y1, y2 being Point of Y,
-  f being Path of x1,x2 st x1 = y1 & x2 = y2 & 
+  f being Path of x1,x2 st x1 = y1 & x2 = y2 &
   rng f c= the carrier of Y holds
   y1,y2 are_connected & f is Path of y1,y2
-  proof 
+  proof
     let X be arcwise_connected non empty TopSpace,
     Y be non empty SubSpace of X,
     x1, x2 be Point of X, y1, y2 be Point of Y;
@@ -1099,11 +1109,11 @@ theorem Th1a:
     hence thesis by Th1;
   end;
 
-Lmrcm: 
+Lmrcm:
   for T being non empty TopSpace, a, b being Point of T
   for f being Path of a,b st a,b are_connected holds
   rng f c= rng -f
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b be Point of T;
     let f be Path of a,b;
@@ -1125,7 +1135,7 @@ theorem Trcm:
   for T being non empty TopSpace, a, b being Point of T
   for f being Path of a,b st a,b are_connected holds
   rng f = rng -f
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b be Point of T;
     let f be Path of a,b;
@@ -1139,7 +1149,7 @@ Z0: a,b are_connected;
 theorem Trcm1:
   for T being arcwise_connected non empty TopSpace, a, b being Point of T
   for f being Path of a,b holds rng f = rng -f
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b be Point of T;
     let f be Path of a,b;
@@ -1152,7 +1162,7 @@ theorem Trc1:
   for f being Path of a,b, g being Path of b,c st
   a,b are_connected & b,c are_connected holds
   rng f c= rng(f+g)
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of a,b;
@@ -1175,12 +1185,12 @@ a6: x/2 is Point of I[01] by BORSUK_6:9;
     then (f+g).(x/2) = f.(2*(x/2)) by Z0,Z1,a6,BORSUK_2:def 5;
     hence y in rng(f+g) by a4,a2,a6,FUNCT_1:def 5;
   end;
-  
+
 theorem
   for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
   for f being Path of a,b, g being Path of b,c holds
   rng f c= rng(f+g)
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of a,b;
@@ -1188,13 +1198,13 @@ theorem
     a,b are_connected & b,c are_connected by BORSUK_2:def 3;
     hence thesis by Trc1;
   end;
-  
+
 theorem Trc2:
   for T being non empty TopSpace, a, b, c being Point of T
   for f being Path of b,c, g being Path of a,b st
   a,b are_connected & b,c are_connected holds
   rng f c= rng(g+f)
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of b,c;
@@ -1221,26 +1231,26 @@ a6: x/2+1/2 is Point of I[01] by a8,JORDAN5A:2;
     then (g+f).(x/2+1/2) = f.(2*(x/2+1/2)-1) by Z0,Z1,a8,BORSUK_2:def 5;
     hence y in rng(g+f) by a4,a2,a6,FUNCT_1:def 5;
   end;
-  
+
 theorem
   for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
   for f being Path of b,c, g being Path of a,b holds
   rng f c= rng(g+f)
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of b,c;
     let g be Path of a,b;
     a,b are_connected & b,c are_connected by BORSUK_2:def 3;
-    hence thesis by Trc2;    
+    hence thesis by Trc2;
   end;
-  
+
 theorem Trc0:
   for T being non empty TopSpace, a, b, c being Point of T
   for f being Path of a,b, g being Path of b,c st
   a,b are_connected & b,c are_connected holds
   rng(f+g) = rng f \/ rng g
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of a,b;
@@ -1281,12 +1291,12 @@ a4:     dom g = the carrier of I[01] by FUNCT_2:def 1;
     rng f c= rng(f+g) & rng g c= rng(f+g) by Z0,Z1,Trc1,Trc2;
     hence thesis by XBOOLE_1:8;
   end;
-  
+
 theorem
   for T being arcwise_connected non empty TopSpace, a, b, c being Point of T
   for f being Path of a,b, g being Path of b,c holds
   rng(f+g) = rng f \/ rng g
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c be Point of T;
     let f be Path of a,b;
@@ -1294,13 +1304,13 @@ theorem
     a,b are_connected & b,c are_connected by BORSUK_2:def 3;
     hence thesis by Trc0;
   end;
-  
+
 theorem Trc30:
   for T being non empty TopSpace, a, b, c, d being Point of T
   for f being Path of a,b, g being Path of b,c, h being Path of c,d st
   a,b are_connected & b,c are_connected & c,d are_connected holds
   rng(f+g+h) = rng f \/ rng g \/ rng h
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c, d be Point of T;
     let f be Path of a,b;
@@ -1314,12 +1324,12 @@ Z2: c,d are_connected;
     hence rng(f+g+h) = rng(f+g) \/ rng h by Z2,Trc0
     .= rng f \/ rng g \/ rng h by Z0,Z1,Trc0;
   end;
-  
+
 theorem Trc31:
   for T being arcwise_connected non empty TopSpace, a, b, c, d being Point of T
   for f being Path of a,b, g being Path of b,c, h being Path of c,d
   holds rng(f+g+h) = rng f \/ rng g \/ rng h
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c, d be Point of T;
     let f be Path of a,b;
@@ -1337,7 +1347,7 @@ Trc32:
   a,b are_connected & b,c are_connected &
   c,d are_connected & d,e are_connected holds
   rng(f+g+h+i) = rng f \/ rng g \/ rng h \/ rng i
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c, d, e be Point of T;
     let f be Path of a,b;
@@ -1354,14 +1364,14 @@ Z3: d,e are_connected;
     hence rng(f+g+h+i) = rng(f+g+h) \/ rng i by Z3,Trc0
     .= rng f \/ rng g \/ rng h \/ rng i by Z0,Z1,Z2,Trc30;
   end;
-  
+
 Trc33:
   for T being arcwise_connected non empty TopSpace,
   a, b, c, d, e being Point of T
   for f being Path of a,b, g being Path of b,c,
   h being Path of c,d, i being Path of d,e
   holds rng(f+g+h+i) = rng f \/ rng g \/ rng h \/ rng i
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c, d, e be Point of T;
     let f be Path of a,b;
@@ -1380,7 +1390,7 @@ Trc34:
   a,b are_connected & b,c are_connected & c,d are_connected &
   d,e are_connected & e,z are_connected holds
   rng(f+g+h+i+j) = rng f \/ rng g \/ rng h \/ rng i \/ rng j
-  proof 
+  proof
     let T be non empty TopSpace;
     let a, b, c, d, e, z be Point of T;
     let f be Path of a,b;
@@ -1400,14 +1410,14 @@ Z4: e,z are_connected;
     hence rng(f+g+h+i+j) = rng(f+g+h+i) \/ rng j by Z4,Trc0
     .= rng f \/ rng g \/ rng h \/ rng i \/ rng j by Z0,Z1,Z2,Z3,Trc32;
   end;
-  
+
 Trc35:
   for T being arcwise_connected non empty TopSpace,
   a, b, c, d, e, z being Point of T
   for f being Path of a,b, g being Path of b,c,
   h being Path of c,d, i being Path of d,e, j being Path of e,z
   holds rng(f+g+h+i+j) = rng f \/ rng g \/ rng h \/ rng i \/ rng j
-  proof 
+  proof
     let T be arcwise_connected non empty TopSpace;
     let a, b, c, d, e, z be Point of T;
     let f be Path of a,b;
@@ -1423,29 +1433,29 @@ Trc35:
 theorem Tloop:
   for T being non empty TopSpace, a being Point of T holds
   I[01] --> a is Path of a,a
-  proof 
+  proof
     let T be non empty TopSpace, a be Point of T;
     set f = I[01] --> a;
     thus a,a are_connected;
     thus thesis by TOPALG_3:5,BORSUK_1:def 17,def 18;
   end;
-  
+
 theorem defa2:
   for p1, p2 being Point of TOP-REAL n, P being Subset of TOP-REAL n
   holds P is_an_arc_of p1,p2 implies
-  ex F being Path of p1,p2, f being map of I[01], (TOP-REAL n)|P st
+  ex F being Path of p1,p2, f being Function of I[01], (TOP-REAL n)|P st
   rng f = P & F = f
-  proof 
+  proof
     let p1, p2 be Point of TOP-REAL n,
     P be Subset of TOP-REAL n;
     assume
 a1: P is_an_arc_of p1,p2;
     then reconsider P1 = P as non empty Subset of TOP-REAL n by TOPREAL1:4;
-    consider h being map of I[01], (TOP-REAL n)|P such that
+    consider h being Function of I[01], (TOP-REAL n)|P such that
 a2: h is_homeomorphism and
 a3: h.0 = p1 & h.1 = p2 by a1,TOPREAL1:def 2;
-    h is map of I[01], (TOP-REAL n)|P1;
-    then reconsider h1 = h as map of I[01],TOP-REAL n by TOPREALA:28;
+    h is Function of I[01], (TOP-REAL n)|P1;
+    then reconsider h1 = h as Function of I[01],TOP-REAL n by TOPREALA:28;
     h1 is Path of p1,p2
     proof
       h is continuous by a2,TOPS_2:def 5;
@@ -1461,9 +1471,10 @@ a3: h.0 = p1 & h.1 = p2 by a1,TOPREAL1:def 2;
 
 theorem defs2:
   for p1, p2 being Point of TOP-REAL n
-  ex F being Path of p1,p2, f being map of I[01], (TOP-REAL n)|LSeg(p1,p2) st
+  ex F being Path of p1,p2, f being Function
+ of I[01], (TOP-REAL n)|LSeg(p1,p2) st
   rng f = LSeg(p1,p2) & F = f
-  proof 
+  proof
     let p1, p2 be Point of TOP-REAL n;
     per cases;
     suppose
@@ -1476,7 +1487,7 @@ a6:   LSeg(p1,p2) = {p1} by a1,TOPREAL1:7;
 a5:   rng g = {p1} by  FUNCOP_1:14;
       the carrier of (TOP-REAL n)|LSeg(p1,p2) = LSeg(p1,p2)
       by JORDAN1:1;
-      then reconsider f = g as map of I[01],(TOP-REAL n)|LSeg(p1,p2)
+      then reconsider f = g as Function of I[01],(TOP-REAL n)|LSeg(p1,p2)
       by a6,a5,FUNCT_2:8;
       take f;
       thus thesis by a5,a1,TOPREAL1:7;
@@ -1491,8 +1502,8 @@ theorem JORDAN1819:
   for p1,p2,q1,q2 being Point of TOP-REAL 2
   st P is_an_arc_of p1,p2 & q1 in P & q2 in P &
   q1 <> p1 & q1 <> p2 & q2 <> p1 & q2 <> p2
-  ex f being Path of q1,q2 st rng f c= P & rng f misses {p1,p2} 
-  proof 
+  ex f being Path of q1,q2 st rng f c= P & rng f misses {p1,p2}
+  proof
     let p1,p2,q1,q2 be Point of TOP-REAL 2 such that
 a1: P is_an_arc_of p1,p2 and
 a2: q1 in P & q2 in P and
@@ -1517,9 +1528,9 @@ a5:   rng f = {q1} by  FUNCOP_1:14;
       then consider Q being non empty Subset of T2 such that
 a4:   Q is_an_arc_of q1,q2 and
 a5:   Q c= P & Q misses {p1,p2} by a1,a2,a3,JORDAN18:19;
-      consider g being Path of q1,q2, f being map of I[01], T2|Q such that
+      consider g being Path of q1,q2, f being Function of I[01], T2|Q such that
 a6:   rng f = Q & g = f by a4,defa2;
-      reconsider h = f as map of I[01],T2 by TOPREALA:28;
+      reconsider h = f as Function of I[01],T2 by TOPREALA:28;
       the carrier of T2|Q = Q by JORDAN1:1;
       then reconsider z1 = q1, z2 = q2 as Point of T2|Q by a4,TOPREAL1:4;
 a7:   z1,z2 are_connected
@@ -1539,13 +1550,13 @@ a7:   z1,z2 are_connected
       thus thesis by a5,a6;
     end;
   end;
-  
+
 begin :: Rectangles
 
 theorem ThdRR:
   a <= b & c <= d implies
   rectangle(a,b,c,d) c= closed_inside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     assume
 a1: a <= b & c <= d;
     let x be set;
@@ -1566,7 +1577,7 @@ a2: ex p st x = p & (p`1 = a & p`2 <= d & p`2 >= c or
 
 theorem ThdRRa:
   inside_of_rectangle(a,b,c,d) c= closed_inside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     let x be set;
     assume x in inside_of_rectangle(a,b,c,d);
     then x in {p: a < p`1 & p`1 < b & c < p`2 & p`2 < d} by JGRAPH_6:def 1;
@@ -1579,7 +1590,7 @@ a2: ex p st x = p & (a < p`1 & p`1 < b & c < p`2 & p`2 < d);
 
 theorem Th80:
   closed_inside_of_rectangle(a,b,c,d) = outside_of_rectangle(a,b,c,d)`
-  proof 
+  proof
     set R = closed_inside_of_rectangle(a,b,c,d);
     set O = outside_of_rectangle(a,b,c,d);
 a2: R = {p: a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d} by JGRAPH_6:def 2;
@@ -1608,12 +1619,12 @@ a4: not x in O by SUBSET_1:54;
     a <= x`1 & x`1 <= b & c <= x`2 & x`2 <= d by a3,a4;
     hence thesis by a2;
   end;
-   
+
 registration
   let a, b, c, d be real number;
   cluster closed_inside_of_rectangle(a,b,c,d) -> closed;
   coherence
-  proof 
+  proof
     set P2 = outside_of_rectangle(a,b,c,d);
 a5: a is Real & b is Real & c is Real & d is Real by XREAL_0:def 1;
     P2 = {pb where pb is Point of T2:
@@ -1626,7 +1637,7 @@ end;
 
 theorem TRmissesP2:
   closed_inside_of_rectangle(a,b,c,d) misses outside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     set P = rectangle(a,b,c,d);
     set R = closed_inside_of_rectangle(a,b,c,d);
     set P1 = inside_of_rectangle(a,b,c,d);
@@ -1642,11 +1653,11 @@ a7: ex p st x = p & a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d by a2,a5;
     ex p st x = p & not (a <= p`1 & p`1 <= b & c <= p`2 & p`2 <= d) by a4,a6;
     hence thesis by a7;
   end;
-  
+
 theorem TRP2:
   closed_inside_of_rectangle(a,b,c,d) /\ inside_of_rectangle(a,b,c,d)
   = inside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     set R = closed_inside_of_rectangle(a,b,c,d);
     set P1 = inside_of_rectangle(a,b,c,d);
     thus R /\ P1 c= P1 by XBOOLE_1:17;
@@ -1654,11 +1665,11 @@ theorem TRP2:
     then P1 /\ P1 c= P1 /\ R by XBOOLE_1:26;
     hence thesis;
   end;
-  
+
 theorem TRecInt:
   a < b & c < d implies
   Int closed_inside_of_rectangle(a,b,c,d) = inside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     assume
 a0: a < b & c < d;
     set P = rectangle(a,b,c,d);
@@ -1684,12 +1695,12 @@ a6: R misses P2 by TRmissesP2;
     .= R /\ P1 \/ {} by a6,XBOOLE_0:def 7
     .= P1 by TRP2;
   end;
-  
+
 theorem Th81:
   a <= b & c <= d implies
   closed_inside_of_rectangle(a,b,c,d) \ inside_of_rectangle(a,b,c,d)
   = rectangle(a,b,c,d)
-  proof 
+  proof
     assume
 a0: a <= b & c <= d;
     set R = rectangle(a,b,c,d);
@@ -1740,7 +1751,7 @@ b2: R c= P by a0,ThdRR;
 theorem TRecFr:
   a < b & c < d implies
   Fr closed_inside_of_rectangle(a,b,c,d) = rectangle(a,b,c,d)
-  proof 
+  proof
     assume
 a0: a < b & c < d;
     set P = closed_inside_of_rectangle(a,b,c,d);
@@ -1748,10 +1759,10 @@ a0: a < b & c < d;
     .= P \ inside_of_rectangle(a,b,c,d) by a0,TRecInt
     .= rectangle(a,b,c,d) by a0,Th81;
   end;
-  
+
 theorem
   a <= b & c <= d implies W-bound closed_inside_of_rectangle(a,b,c,d) = a
-  proof 
+  proof
     assume
 A1: a <= b & c <= d;
     set X = closed_inside_of_rectangle(a,b,c,d);
@@ -1790,10 +1801,10 @@ a1: Z is non empty by A2,b1,RELAT_1:152;
     .= inf Z by PSCOMP_1:def 20
     .= a by A3,A6,a1,SEQ_4:61;
   end;
-  
+
 theorem
   a <= b & c <= d implies S-bound closed_inside_of_rectangle(a,b,c,d) = c
-  proof 
+  proof
     assume
 A1: a <= b & c <= d;
     set X = closed_inside_of_rectangle(a,b,c,d);
@@ -1835,7 +1846,7 @@ a1: Z is non empty by A2,b1,RELAT_1:152;
 
 theorem
   a <= b & c <= d implies E-bound closed_inside_of_rectangle(a,b,c,d) = b
-  proof 
+  proof
     assume
 A1: a <= b & c <= d;
     set X = closed_inside_of_rectangle(a,b,c,d);
@@ -1879,7 +1890,7 @@ a1: Z is non empty by A2,b1,RELAT_1:152;
 
 theorem
   a <= b & c <= d implies N-bound closed_inside_of_rectangle(a,b,c,d) = d
-  proof 
+  proof
     assume
 A1: a <= b & c <= d;
     set X = closed_inside_of_rectangle(a,b,c,d);
@@ -1928,7 +1939,7 @@ theorem TSegZaw:
   P is_an_arc_of p1,p2 implies
   Segment(P,p1,p2,p1,First_Point(P,p1,p2,rectangle(a,b,c,d))) c=
   closed_inside_of_rectangle(a,b,c,d)
-  proof 
+  proof
     set R = closed_inside_of_rectangle(a,b,c,d);
     set dR = rectangle(a,b,c,d);
     set n = First_Point(P,p1,p2,dR);
@@ -1966,7 +1977,7 @@ er:    x in dR by nn,XBOOLE_0:def 3;
     suppose
 ww:   x <> n;
       reconsider P as non empty Subset of T2 by Z2,TOPREAL1:4;
-      consider f being map of I[01], T2|P such that
+      consider f being Function of I[01], T2|P such that
 a3:   f is_homeomorphism and
 a4:   f.0 = p1 & f.1 = p2 by Z2,TOPREAL1:def 2;
 rr:   rng f = [#](T2|P) by a3,TOPS_2:def 5
@@ -2032,14 +2043,14 @@ definition
   x be Point of [:S,T:];
   redefine func x`1 -> Element of S;
   coherence
-  proof 
+  proof
     the carrier of [:S,T:] = [:the carrier of S, the carrier of T:]
     by BORSUK_1:def 5;
     hence thesis by MCART_1:10;
   end;
   redefine func x`2 -> Element of T;
   coherence
-  proof 
+  proof
     the carrier of [:S,T:] = [:the carrier of S, the carrier of T:]
     by BORSUK_1:def 5;
     hence thesis by MCART_1:10;
@@ -2051,7 +2062,7 @@ definition
   func diffX2_1(o) -> RealMap of [:TOP-REAL 2,TOP-REAL 2:] means :dX21:
   for x being Point of [:TOP-REAL 2,TOP-REAL 2:] holds it.x = x`2`1 - o`1;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`2`1 - o`1;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2059,7 +2070,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`2`1 - o`1 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`2`1 - o`1;
@@ -2073,7 +2084,7 @@ a2: for x being Point of [:T2,T2:] holds g.x = x`2`1 - o`1;
   func diffX2_2(o) -> RealMap of [:TOP-REAL 2,TOP-REAL 2:] means :dX22:
   for x being Point of [:TOP-REAL 2,TOP-REAL 2:] holds it.x = x`2`2 - o`2;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`2`2 - o`2;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2081,7 +2092,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`2`2 - o`2 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`2`2 - o`2;
@@ -2098,7 +2109,7 @@ definition
   func diffX1_X2_1 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means :dX1X21:
   for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`1`1 - x`2`1;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`1`1 - $1`2`1;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2106,7 +2117,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`1`1 - x`2`1 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`1`1 - x`2`1;
@@ -2116,11 +2127,11 @@ a2: for x being Point of [:T2,T2:] holds g.x = x`1`1 - x`2`1;
       .= g.x by a2;
     end;
     hence thesis by FUNCT_2:113;
-  end;  
+  end;
   func diffX1_X2_2 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means :dX1X22:
   for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`1`2 - x`2`2;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`1`2 - $1`2`2;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2128,7 +2139,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`1`2 - x`2`2 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`1`2 - x`2`2;
@@ -2138,11 +2149,11 @@ a2: for x being Point of [:T2,T2:] holds g.x = x`1`2 - x`2`2;
       .= g.x by a2;
     end;
     hence thesis by FUNCT_2:113;
-  end;  
+  end;
   func Proj2_1 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means :dP21:
   for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`2`1;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`2`1;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2150,7 +2161,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`2`1 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`2`1;
@@ -2160,11 +2171,11 @@ a2: for x being Point of [:T2,T2:] holds g.x = x`2`1;
       .= g.x by a2;
     end;
     hence thesis by FUNCT_2:113;
-  end;  
+  end;
   func Proj2_2 -> RealMap of [:TOP-REAL 2, TOP-REAL 2:] means :dP22:
   for x being Point of [:TOP-REAL 2, TOP-REAL 2:] holds it.x = x`2`2;
   existence
-  proof 
+  proof
     deffunc F(Point of [:T2,T2:]) = $1`2`2;
     consider xo being RealMap of [:T2,T2:] such that
 u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
@@ -2172,7 +2183,7 @@ u1: for x being Point of [:T2,T2:] holds xo.x = F(x) from FUNCT_2:sch 4;
     thus thesis by u1;
   end;
   uniqueness
-  proof 
+  proof
     let f, g be RealMap of [:T2,T2:] such that
 a1: for x being Point of [:T2,T2:] holds f.x = x`2`2 and
 a2: for x being Point of [:T2,T2:] holds g.x = x`2`2;
@@ -2182,15 +2193,15 @@ a2: for x being Point of [:T2,T2:] holds g.x = x`2`2;
       .= g.x by a2;
     end;
     hence thesis by FUNCT_2:113;
-  end;  
+  end;
 end;
 
 theorem TX21:
   for o being Point of TOP-REAL 2 holds
-  diffX2_1(o) is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
+  diffX2_1(o) is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
     let o be Point of TOP-REAL 2;
-    reconsider Xo = diffX2_1(o) as map of [:T2,T2:],R^1 by TOPMETR:24;
+    reconsider Xo = diffX2_1(o) as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st Xo.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & Xo.:W c= V
@@ -2245,13 +2256,13 @@ a19:  p`2`1-g < x2 & x2 < p`2`1+g;
   end;
   hence thesis by JGRAPH_2:20;
 end;
-  
+
 theorem TX22:
   for o being Point of TOP-REAL 2 holds
-  diffX2_2(o) is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
+  diffX2_2(o) is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
     let o be Point of TOP-REAL 2;
-    reconsider Yo = diffX2_2(o) as map of [:T2,T2:],R^1 by TOPMETR:24;
+    reconsider Yo = diffX2_2(o) as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st Yo.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & Yo.:W c= V
@@ -2308,9 +2319,9 @@ a19:  p`2`2-g < y2 & y2 < p`2`2+g;
   end;
 
 theorem TX1X21:
-  diffX1_X2_1 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
-    reconsider Dx = diffX1_X2_1 as map of [:T2,T2:],R^1 by TOPMETR:24;
+  diffX1_X2_1 is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
+    reconsider Dx = diffX1_X2_1 as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st Dx.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & Dx.:W c= V
@@ -2376,7 +2387,7 @@ a16:  p`1`1-g/2 < x1 and
 a17:  x1 < p`1`1+g/2;
 a21: a`1`1 = x1 by a15,EUCLID:56;
     p`1`1-g/2+g/2 < x1+g/2 & p`1`1-x1 > p`1`1-(p`1`1+g/2)
-    by a16,a17,REAL_1:92,XREAL_1:8; 
+    by a16,a17,REAL_1:92,XREAL_1:8;
     then p`1`1-x1 < x1+g/2-x1 & p`1`1-x1 > -g/2 by XREAL_1:11;
     then
 a24: abs(p`1`1-x1) < g/2 by SEQ_2:9;
@@ -2387,7 +2398,7 @@ a19:  p`2`1-g/2 < x2 and
 a20:  x2 < p`2`1+g/2;
 a22: a`2`1 = x2 by a18,EUCLID:56;
     p`2`1-g/2+g/2 < x2+g/2 & p`2`1-x2 > p`2`1-(p`2`1+g/2)
-    by a19,a20,REAL_1:92,XREAL_1:8; 
+    by a19,a20,REAL_1:92,XREAL_1:8;
     then p`2`1-x2 < x2+g/2-x2 & p`2`1-x2 > -g/2 by XREAL_1:11;
     then
     abs(p`2`1-x2) < g/2 by SEQ_2:9;
@@ -2404,9 +2415,9 @@ a26: abs(p`1`1-x1)+abs(p`2`1-x2) < g/2+g/2 by a24,XREAL_1:10;
   end;
 
 theorem TX1X22:
-  diffX1_X2_2 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
-    reconsider Dy = diffX1_X2_2 as map of [:T2,T2:],R^1 by TOPMETR:24;
+  diffX1_X2_2 is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
+    reconsider Dy = diffX1_X2_2 as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st Dy.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & Dy.:W c= V
@@ -2472,7 +2483,7 @@ a16:  p`1`2-g/2 < y1 and
 a17:  y1 < p`1`2+g/2;
 a21: a`1`2 = y1 by a15,EUCLID:56;
     p`1`2-g/2+g/2 < y1+g/2 & p`1`2-y1 > p`1`2-(p`1`2+g/2)
-    by a16,a17,REAL_1:92,XREAL_1:8; 
+    by a16,a17,REAL_1:92,XREAL_1:8;
     then p`1`2-y1 < y1+g/2-y1 & p`1`2-y1 > -g/2 by XREAL_1:11;
     then
 a24: abs(p`1`2-y1) < g/2 by SEQ_2:9;
@@ -2483,7 +2494,7 @@ a19:  p`2`2-g/2 < y2 and
 a20:  y2 < p`2`2+g/2;
 a22: a`2`2 = y2 by a18,EUCLID:56;
     p`2`2-g/2+g/2 < y2+g/2 & p`2`2-y2 > p`2`2-(p`2`2+g/2)
-    by a19,a20,REAL_1:92,XREAL_1:8; 
+    by a19,a20,REAL_1:92,XREAL_1:8;
     then p`2`2-y2 < y2+g/2-y2 & p`2`2-y2 > -g/2 by XREAL_1:11;
     then
     abs(p`2`2-y2) < g/2 by SEQ_2:9;
@@ -2500,9 +2511,9 @@ a26: abs(p`1`2-y1)+abs(p`2`2-y2) < g/2+g/2 by a24,XREAL_1:10;
 end;
 
 theorem TP1:
-  Proj2_1 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
-    reconsider fX2 = Proj2_1 as map of [:T2,T2:],R^1 by TOPMETR:24;
+  Proj2_1 is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
+    reconsider fX2 = Proj2_1 as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st fX2.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & fX2.:W c= V
@@ -2550,7 +2561,7 @@ a16:  p`2`1-g < x1 and
 a17:  x1 < p`2`1+g;
 a21: a`2`1 = x1 by a15,EUCLID:56;
     p`2`1-g+g < x1+g & p`2`1-x1 > p`2`1-(p`2`1+g)
-    by a16,a17,REAL_1:92,XREAL_1:8; 
+    by a16,a17,REAL_1:92,XREAL_1:8;
     then p`2`1-x1 < x1+g-x1 & p`2`1-x1 > -g by XREAL_1:11;
     then abs(p`2`1-x1) < g by SEQ_2:9;
     then abs-(p`2`1-x1) < g by COMPLEX1:138;
@@ -2562,9 +2573,9 @@ a21: a`2`1 = x1 by a15,EUCLID:56;
 end;
 
 theorem TP2:
-  Proj2_2 is continuous map of [:TOP-REAL 2, TOP-REAL 2:], R^1
-  proof 
-    reconsider fY2 = Proj2_2 as map of [:T2,T2:],R^1 by TOPMETR:24;
+  Proj2_2 is continuous Function of [:TOP-REAL 2, TOP-REAL 2:], R^1
+  proof
+    reconsider fY2 = Proj2_2 as Function of [:T2,T2:],R^1 by TOPMETR:24;
   for p being Point of [:T2,T2:], V being Subset of R^1
    st fY2.p in V & V is open holds
     ex W being Subset of [:T2,T2:] st p in W & W is open & fY2.:W c= V
@@ -2612,7 +2623,7 @@ a16:  p`2`2-g < y1 and
 a17:  y1 < p`2`2+g;
 a21: a`2`2 = y1 by a15,EUCLID:56;
     p`2`2-g+g < y1+g & p`2`2-y1 > p`2`2-(p`2`2+g)
-    by a16,a17,REAL_1:92,XREAL_1:8; 
+    by a16,a17,REAL_1:92,XREAL_1:8;
     then p`2`2-y1 < y1+g-y1 & p`2`2-y1 > -g by XREAL_1:11;
     then abs(p`2`2-y1) < g by SEQ_2:9;
     then abs-(p`2`2-y1) < g by COMPLEX1:138;
@@ -2627,14 +2638,14 @@ registration
   let o be Point of TOP-REAL 2;
   cluster diffX2_1(o) -> continuous;
   coherence
-  proof 
-    diffX2_1(o) is continuous map of [:T2,T2:],R^1 by TX21;
+  proof
+    diffX2_1(o) is continuous Function of [:T2,T2:],R^1 by TX21;
     hence thesis by TOPREAL6:83;
   end;
   cluster diffX2_2(o) -> continuous;
   coherence
-  proof 
-    diffX2_2(o) is continuous map of [:T2,T2:],R^1 by TX22;
+  proof
+    diffX2_2(o) is continuous Function of [:T2,T2:],R^1 by TX22;
     hence thesis by TOPREAL6:83;
   end;
 end;
@@ -2655,12 +2666,13 @@ definition
   r be positive (real number) such that
 b2: p is Point of Tdisk(o,r);
     set X = (TOP-REAL n)|(cl_Ball(o,r)\{p});
-  func DiskProj(o,r,p) -> map of (TOP-REAL n)|(cl_Ball(o,r)\{p}), Tcircle(o,r)
+  func DiskProj(o,r,p) -> Function
+ of (TOP-REAL n)|(cl_Ball(o,r)\{p}), Tcircle(o,r)
   means :dBR:
   for x being Point of (TOP-REAL n)|(cl_Ball(o,r)\{p})
   ex y being Point of TOP-REAL n st x = y & it.x = HC(p,y,o,r);
   existence
-  proof 
+  proof
 d1: the carrier of X = cl_Ball(o,r)\{p} by JORDAN1:1;
     defpred P[set,set] means
     ex z being Point of TOP-REAL n st $1 = z & $2 = HC(p,z,o,r);
@@ -2681,21 +2693,21 @@ b3:   z is Point of Tdisk(o,r) by BROUWER:3;
     such that
 a2: for x being set st x in the carrier of X holds P[x,f.x]
     from FUNCT_2:sch 1(a1);
-    reconsider f as map of X, Tcircle(o,r);
+    reconsider f as Function of X, Tcircle(o,r);
     take f;
     let x be Point of X;
     thus thesis by a2;
   end;
   uniqueness
-  proof 
-    let f, g be map of X, Tcircle(o,r) such that
+  proof
+    let f, g be Function of X, Tcircle(o,r) such that
 a1: for x being Point of X
     ex y being Point of TOP-REAL n st x = y & f.x = HC(p,y,o,r) and
 a2: for x being Point of X
     ex y being Point of TOP-REAL n st x = y & g.x = HC(p,y,o,r);
     now
       let x be set such that
-a3:   x in the carrier of X; 
+a3:   x in the carrier of X;
 a4:   ex y being Point of TOP-REAL n st x = y & f.x = HC(p,y,o,r) by a1,a3;
       ex y being Point of TOP-REAL n st x = y & g.x = HC(p,y,o,r) by a2,a3;
       hence f.x = g.x by a4;
@@ -2703,12 +2715,12 @@ a4:   ex y being Point of TOP-REAL n st x = y & f.x = HC(p,y,o,r) by a1,a3;
     hence thesis by FUNCT_2:18;
   end;
 end;
-  
+
 theorem ThDPC:
   for o, p being Point of TOP-REAL 2,
   r being positive (real number) st p is Point of Tdisk(o,r) holds
   DiskProj(o,r,p) is continuous
-  proof 
+  proof
     let o, p be Point of TOP-REAL 2;
     let r be positive (real number) such that
 no3: p is Point of Tdisk(o,r);
@@ -2734,10 +2746,10 @@ bb: [#]S1 = the carrier of S1 by PRE_TOPC:12;
     set fx2 = Proj2_1;
     set fy2 = Proj2_2;
   reconsider rr = r^2 as Real by XREAL_0:def 1;
-  set f1 = (the carrier of [:T2,T2:]) --> rr; 
+  set f1 = (the carrier of [:T2,T2:]) --> rr;
   reconsider f1 as continuous RealMap of [:T2,T2:] by Lm10;
   set Zf1 = f1 || OK;
-  set Zfx2 = fx2 || OK; 
+  set Zfx2 = fx2 || OK;
   set Zfy2 = fy2 || OK;
   set Zdx = dx || OK;
   set Zdy = dy || OK;
@@ -2897,7 +2909,7 @@ d1: |. z-o .|^2 <= r^2 by SQUARE_1:77;
   set k = (-(xx+yy) + sqrt(pp)) / m;
   set x3 = Zfx2 + k(#)Zdx;
   set y3 = Zfy2 + k(#)Zdy;
-  reconsider X3 = x3, Y3 = y3 as map of TD,R^1 by TOPMETR:24;
+  reconsider X3 = x3, Y3 = y3 as Function of TD,R^1 by TOPMETR:24;
   set F = <:X3,Y3:>;
   set R = R2Homeomorphism;
 ww: for x being Point of D1 holds gg.x = (R*F). [x,p]
@@ -2996,7 +3008,7 @@ no21: y in Bp by no2,b0;
     .= (R*F). [x,p] by RR,no2,D0,FUNCT_2:21;
   end;
   X3 is continuous & Y3 is continuous by TOPREAL6:83;
-  then reconsider F as continuous map of TD,[:R^1,R^1:] by YELLOW12:41;
+  then reconsider F as continuous Function of TD,[:R^1,R^1:] by YELLOW12:41;
   for pp being Point of D1, V being Subset of S1
    st gg.pp in V & V is open holds
     ex W being Subset of D1 st pp in W & W is open & gg.:W c= V
@@ -3098,7 +3110,7 @@ theorem Th8:
   for n being non empty Nat, o, p being Point of TOP-REAL n,
   r being positive (real number) st p in Ball(o,r) holds
   DiskProj(o,r,p)|Sphere(o,r) = id Sphere(o,r)
-  proof 
+  proof
     let n be non empty Nat;
     let o, p be Point of TOP-REAL n;
     let r be positive (real number);
@@ -3147,12 +3159,12 @@ definition
   r be positive (real number) such that
 b2: p in Ball(o,r);
   set X = Tcircle(o,r);
-  func RotateCircle(o,r,p) -> map of Tcircle(o,r), Tcircle(o,r)
+  func RotateCircle(o,r,p) -> Function of Tcircle(o,r), Tcircle(o,r)
   means :dCR:
   for x being Point of Tcircle(o,r)
   ex y being Point of TOP-REAL n st x = y & it.x = HC(y,p,o,r);
   existence
-  proof 
+  proof
 d1: the carrier of X = Sphere(o,r) by TOPREALB:9;
     defpred P[set,set] means
     ex z being Point of TOP-REAL n st $1 = z & $2 = HC(z,p,o,r);
@@ -3177,21 +3189,21 @@ b4:   p is Point of Tdisk(o,r) by b2,BROUWER:3;
     such that
 a2: for x being set st x in the carrier of X holds P[x,f.x]
     from FUNCT_2:sch 1(a1);
-    reconsider f as map of X, X;
+    reconsider f as Function of X, X;
     take f;
     let x be Point of X;
     thus thesis by a2;
   end;
   uniqueness
-  proof 
-    let f, g be map of X, X such that
+  proof
+    let f, g be Function of X, X such that
 a1: for x being Point of X
     ex y being Point of TOP-REAL n st x = y & f.x = HC(y,p,o,r) and
 a2: for x being Point of X
     ex y being Point of TOP-REAL n st x = y & g.x = HC(y,p,o,r);
     now
       let x be set such that
-a3:   x in the carrier of X; 
+a3:   x in the carrier of X;
 a4:   ex y being Point of TOP-REAL n st x = y & f.x = HC(y,p,o,r) by a1,a3;
       ex y being Point of TOP-REAL n st x = y & g.x = HC(y,p,o,r) by a2,a3;
       hence f.x = g.x by a4;
@@ -3199,12 +3211,12 @@ a4:   ex y being Point of TOP-REAL n st x = y & f.x = HC(y,p,o,r) by a1,a3;
     hence thesis by FUNCT_2:18;
   end;
 end;
-  
+
 theorem ThRCC:
   for o, p being Point of TOP-REAL 2,
   r being positive (real number) st p in Ball(o,r) holds
   RotateCircle(o,r,p) is continuous
-  proof 
+  proof
     let o, p be Point of TOP-REAL 2;
     let r be positive (real number) such that
 no3: p in Ball(o,r);
@@ -3234,10 +3246,10 @@ bb: [#]S1 = the carrier of S1 by PRE_TOPC:12;
     set fx2 = Proj2_1;
     set fy2 = Proj2_2;
   reconsider rr = r^2 as Real by XREAL_0:def 1;
-  set f1 = (the carrier of [:T2,T2:]) --> rr; 
+  set f1 = (the carrier of [:T2,T2:]) --> rr;
   reconsider f1 as continuous RealMap of [:T2,T2:] by Lm10;
   set Zf1 = f1 || OK;
-  set Zfx2 = fx2 || OK; 
+  set Zfx2 = fx2 || OK;
   set Zfy2 = fy2 || OK;
   set Zdx = dx || OK;
   set Zdy = dy || OK;
@@ -3397,7 +3409,7 @@ d1: |. z-o .|^2 <= r^2 by SQUARE_1:77;
   set k = (-(xx+yy) + sqrt(pp)) / m;
   set x3 = Zfx2 + k(#)Zdx;
   set y3 = Zfy2 + k(#)Zdy;
-  reconsider X3 = x3, Y3 = y3 as map of TD,R^1 by TOPMETR:24;
+  reconsider X3 = x3, Y3 = y3 as Function of TD,R^1 by TOPMETR:24;
   set F = <:X3,Y3:>;
   set R = R2Homeomorphism;
 ww: for x being Point of D2 holds gg.x = (R*F). [p,x]
@@ -3496,7 +3508,7 @@ z11: Y3. [p,y] = Zfy2. [p,y] + (k(#)Zdy). [p,y] by RR,D0,z8,SEQ_1:def 3
     .= (R*F). [p,x] by RR,no2,D0,FUNCT_2:21;
   end;
   X3 is continuous & Y3 is continuous by TOPREAL6:83;
-  then reconsider F as continuous map of TD,[:R^1,R^1:] by YELLOW12:41;
+  then reconsider F as continuous Function of TD,[:R^1,R^1:] by YELLOW12:41;
   for pp being Point of D2, V being Subset of S1
    st gg.pp in V & V is open holds
     ex W being Subset of D2 st pp in W & W is open & gg.:W c= V
@@ -3600,7 +3612,7 @@ theorem Th9:
   for o, p being Point of TOP-REAL n,
   r being positive (real number) st p in Ball(o,r)
   holds RotateCircle(o,r,p) has_no_fixpoint
-  proof 
+  proof
   let n be non empty Nat;
   let o, p be Point of TOP-REAL n;
   let r be positive (real number);
@@ -3633,7 +3645,7 @@ theorem Th10:
   U = P & U is_a_component_of (TOP-REAL 2)|C` &
   V is_a_component_of (TOP-REAL 2)|C` & U <> V
   implies Cl P misses V
-  proof 
+  proof
     assume that
 a1: U = P and
 a2: U is_a_component_of T2|C` and
@@ -3655,21 +3667,21 @@ a5: ex x being set st x in Cl P & x in V by XBOOLE_0:3;
 theorem Tarcwise:
   U is_a_component_of (TOP-REAL 2)|C` implies
   (TOP-REAL 2)|C`|U is arcwise_connected
-  proof 
+  proof
     set T = T2|C`;
     assume
 a1: U is_a_component_of T;
     let a, b be Point of T|U;
 a9: the carrier of T|U = U by JORDAN1:1;
 x1: U <> {}T by a1,CONNSP_1:34;
-    then 
+    then
 g1: T|U is non empty by a9,STRUCT_0:def 1;
     per cases;
     suppose
 k1:   a = b;
       reconsider TU = T|U as non empty TopSpace by x1,a9,STRUCT_0:def 1;
       reconsider a as Point of TU;
-      reconsider f = I[01] --> a as map of I[01],T|U;
+      reconsider f = I[01] --> a as Function of I[01],T|U;
       take f;
       thus thesis by k1,TOPALG_3:5,BORSUK_1:def 17,def 18;
     end;
@@ -3689,11 +3701,11 @@ a2:   P is_S-P_arc_joining a1,b1 and
 a5:   P c= V by s1,x1,a9,TOPREAL4:30;
 a10:  a1 in P by a2,TOPREAL4:4;
       P is_an_arc_of a1,b1 by a2,TOPREAL4:3;
-      then consider g being map of I[01], T2|P such that
+      then consider g being Function of I[01], T2|P such that
 a3:   g is_homeomorphism and
 a4:   g.0 = a & g.1 = b by TOPREAL1:def 2;
 a12:  the carrier of T2|P = P by JORDAN1:1;
-      then reconsider f = g as map of I[01], T|U by a9,a5,a10,FUNCT_2:9;
+      then reconsider f = g as Function of I[01], T|U by a9,a5,a10,FUNCT_2:9;
       take f;
 a11:  g is continuous by a3,TOPS_2:def 5;
       T2|P is SubSpace of T|U by a12,a9,a5,a13,TSEP_1:4;
@@ -3706,8 +3718,9 @@ a11:  g is continuous by a3,TOPS_2:def 5;
 LmExr:
   for r being non negative (real number) st A is_an_arc_of p1,p2 &
   A is Subset of Tdisk(p,r)
-  ex f being map of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous & f|A = id A
-  proof 
+  ex f being Function
+ of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous & f|A = id A
+  proof
     let r be non negative (real number);
     set D = Tdisk(p,r);
     assume that
@@ -3716,24 +3729,24 @@ A2: A is Subset of D;
     reconsider A1 = A as non empty Subset of D by A1,A2,TOPREAL1:4;
     reconsider A2 = A as non empty Subset of T2 by A1,TOPREAL1:4;
     set TA = T2|A2;
-    consider h being map of I[01],TA such that
+    consider h being Function of I[01],TA such that
 A3: h is_homeomorphism and
     h.0 = p1 and
     h.1 = p2 by A1,TOPREAL1:def 2;
 A4: h1 is_homeomorphism by TREAL_1:20;
     then
 A5: h1 is continuous by TOPS_2:def 5;
-    reconsider hh = h as map of C0,TA by TOPMETR:27;
+    reconsider hh = h as Function of C0,TA by TOPMETR:27;
 A6: TA = D|A1 by Th3;
-    then reconsider f = h1*hh" as map of D|A1,C1;
+    then reconsider f = h1*hh" as Function of D|A1,C1;
     A is closed by A1,JORDAN6:12;
     then
 A7: A1 is closed by TSEP_1:12;
     hh" is continuous by A3,TOPMETR:27,TOPS_2:def 5;
     then h1*hh" is continuous by A5,TOPS_2:58;
-    then consider g being continuous map of D,C1 such that
+    then consider g being continuous Function of D,C1 such that
 A8: g|A1 = f by A7,A6,TIETZE:25;
-    reconsider R = hh*h1"*g as map of D,(TOP-REAL 2)|A;
+    reconsider R = hh*h1"*g as Function of D,(TOP-REAL 2)|A;
     take R;
 A9: hh is continuous by A3,TOPMETR:27,TOPS_2:def 5;
     h1" is continuous by A4,TOPS_2:def 5;
@@ -3773,14 +3786,14 @@ LmExf:
 :: definicja funkcji r
   for r being positive (real number) st A is_an_arc_of p1,p2 & A c= C &
   C c= Ball(p,r) & p in U & Cl P /\ P` c= A & P c= Ball(p,r)
-  for f being map of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous &
+  for f being Function of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous &
   f|A = id A &
 :: komponenty
   U = P & U is_a_component_of (TOP-REAL 2)|C` & B = cl_Ball(p,r) \ {p}
-  ex g being map of Tdisk(p,r), (TOP-REAL 2)|B st g is continuous &
+  ex g being Function of Tdisk(p,r), (TOP-REAL 2)|B st g is continuous &
   for x being Point of Tdisk(p,r) holds (x in Cl P implies g.x = f.x) &
   (x in P` implies g.x = x)
-  proof 
+  proof
     let r be positive (real number);
     set D = Tdisk(p,r);
     assume that
@@ -3790,7 +3803,7 @@ A3: C c= Ball(p,r) and
 A4: p in U and
 A14: Cl P /\ P` c= A and
 k2:  P c= Ball(p,r);
-    let f be map of D, T2|A;
+    let f be Function of D, T2|A;
     assume that
 A5: f is continuous and
 A6: f|A = id A and
@@ -3845,8 +3858,9 @@ A24:   a in F3;
       hence thesis by A24,A13,A4,A7,A10,ZFMISC_1:64;
     end;
     f|F1 is Function of F1,A by A12,A16,FUNCT_2:38;
-    then reconsider f1 = f|F1 as map of T1,T2B1 by A19,A21,A16,A22,FUNCT_2:9;
-    reconsider g1 = id F3 as map of T3,T2B1 by A20,A21,A23,FUNCT_2:9;
+    then reconsider f1 = f|F1 as Function
+ of T1,T2B1 by A19,A21,A16,A22,FUNCT_2:9;
+    reconsider g1 = id F3 as Function of T3,T2B1 by A20,A21,A23,FUNCT_2:9;
     the carrier of T1 = [#]T1 & the carrier of T3 = [#]T3 by PRE_TOPC:12;
     then
 A25: F1 = [#]T1 & F3 = [#]T3 by JORDAN1:1;
@@ -3883,7 +3897,7 @@ A27: F1 is closed by TSEP_1:8;
     then DT /\ P` is closed by TOPS_1:35;
     then
 A28: F3 is closed by TSEP_1:8;
-    reconsider f2 = f|F1 as map of T1,T2|A1 by A19,FUNCT_2:38;
+    reconsider f2 = f|F1 as Function of T1,T2|A1 by A19,FUNCT_2:38;
 A29: T2|A1 is SubSpace of T2B1 by A21,A22,A12,TSEP_1:4;
     T3 is SubSpace of T2 by TSEP_1:7;
     then
@@ -3891,7 +3905,7 @@ A30: T3 is SubSpace of T2B1 by A20,A21,A23,TSEP_1:4;
     f2 is continuous by A5,TOPMETR:10;
     then
 A31: f1 is continuous by A29,TOPMETR:7;
-    reconsider g2 = id F3 as map of T3,T3 by A20;
+    reconsider g2 = id F3 as Function of T3,T3 by A20;
     g2 = id T3 by A20,GRCAT_1:def 11;
     then
 A32: g1 is continuous by A30,TOPMETR:7;
@@ -3916,7 +3930,7 @@ A36:   f.x = x by A33;
       thus f1.x = f.x by A25,A35,FUNCT_1:72
       .= g1.x by A25,A35,A36,FUNCT_1:35;
     end;
-    then consider g being map of D,T2|B such that
+    then consider g being Function of D,T2|B such that
 A37: g = f1+*g1 and
 A38: g is continuous by A25,A26,A27,A28,A31,A32,JGRAPH_2:9;
     take g;
@@ -3956,15 +3970,15 @@ LmExf2:
   for r being positive (real number) st A c= C &
   C c= Ball(p,r) & p in V & Cl P /\ P` c= A &
   Ball(p,r) meets P
-  for f being map of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous &
+  for f being Function of Tdisk(p,r), (TOP-REAL 2)|A st f is continuous &
   f|A = id A &
 :: komponenty
   U = P & U is_a_component_of (TOP-REAL 2)|C` &
   V is_a_component_of T2|C` & B = cl_Ball(p,r) \ {p}
-  ex g being map of Tdisk(p,r), (TOP-REAL 2)|B st g is continuous &
+  ex g being Function of Tdisk(p,r), (TOP-REAL 2)|B st g is continuous &
   for x being Point of Tdisk(p,r) holds (x in Cl P implies g.x = x) &
   (x in P` implies g.x = f.x)
-  proof 
+  proof
     let A be non empty Subset of T2;
     let P1 be Subset of T2 such that
 l11: U <> V;
@@ -3976,7 +3990,7 @@ A3: C c= Ball(p,r) and
 A4: p in V and
 A14: Cl P /\ P` c= A and
 a2:  Ball(p,r) meets P;
-    let f be map of D, T2|A;
+    let f be Function of D, T2|A;
     assume that
 A5: f is continuous and
 A6: f|A = id A and
@@ -4037,10 +4051,10 @@ l12:    p in Cl P;
       end;
       hence thesis by m01,A24,A13,A10,ZFMISC_1:64;
     end;
-    reconsider f1 = id F1 as map of T1,T2B1
+    reconsider f1 = id F1 as Function of T1,T2B1
     by A19,A21,A23,FUNCT_2:9;
     f|F3 is Function of F3,A by A12,FUNCT_2:38;
-    then reconsider g1 = f|F3 as map of T3,T2B1
+    then reconsider g1 = f|F3 as Function of T3,T2B1
     by A20,A21,A22,FUNCT_2:9;
 l21: the carrier of T1 = [#]T1 & the carrier of T3 = [#]T3 by PRE_TOPC:12;
     then
@@ -4084,7 +4098,7 @@ l25: id T1 = id F1 by l21,A25,GRCAT_1:def 11;
      then
 A31: f1 is continuous by l25,TOPMETR:7;
 l30: T2|A is SubSpace of T2B1 by A12,A21,A22,TSEP_1:4;
-     reconsider g2 = g1 as map of T3,T2|A by A20,FUNCT_2:38;
+     reconsider g2 = g1 as Function of T3,T2|A by A20,FUNCT_2:38;
      g2 is continuous by A5,TOPMETR:10;
      then
 A32: g1 is continuous by l30,TOPMETR:7;
@@ -4109,7 +4123,7 @@ A36:   f.x = x by A33;
       thus f1.x = x by A25,A35,FUNCT_1:35
       .= g1.x by A25,A35,A36,FUNCT_1:72;
     end;
-    then consider g being map of D,T2|B such that
+    then consider g being Function of D,T2|B such that
 A37: g = f1+*g1 and
 A38: g is continuous by A25,A26,A27,A28,A31,A32,JGRAPH_2:9;
     take g;
@@ -4144,7 +4158,7 @@ A44: x in F3 by A18,XBOOLE_0:def 3;
 
 theorem LEMAT56:
   U = P & U is_a_component_of (TOP-REAL 2)|C` implies C = Fr P
-  proof 
+  proof
     assume that
 Z3: U = P and
 Z0: U is_a_component_of T2|C` and
@@ -4249,13 +4263,13 @@ a23:  Ball(p,r) misses Sphere(p,r) by TOPREAL9:19;
 a18:  Ball(p,r) c= cl_Ball(p,r) by TOPREAL9:16;
       A c= Ball(p,r) by ee,a4,XBOOLE_1:1;
       then A is Subset of D by a16,a18,XBOOLE_1:1;
-      then consider R being map of D, T2|A such that
+      then consider R being Function of D, T2|A such that
 a6:   R is continuous and
 a7:   R|A = id A by a1,LmExr;
       P c= PC by XBOOLE_1:7;
       then
 w1:   P c= Ball(p,r) by b3,XBOOLE_1:1;
-      then consider f being map of D, T2|B such that
+      then consider f being Function of D, T2|B such that
 a9:   f is continuous and
 a10:  for x being Point of D holds (x in Cl P implies f.x = R.x) &
       (x in P` implies f.x = x)
@@ -4263,7 +4277,7 @@ a10:  for x being Point of D holds (x in Cl P implies f.x = R.x) &
       set g = DiskProj(p,r,p);
       set h = RotateCircle(p,r,p);
 a12:  S is SubSpace of D by a15,a16,a17,TSEP_1:4;
-      reconsider F = h*(g*f) as map of D,D by a15,a16,a17,FUNCT_2:9;
+      reconsider F = h*(g*f) as Function of D,D by a15,a16,a17,FUNCT_2:9;
       p is Point of D by Th6;
       then g is continuous by ThDPC;
       then
@@ -4350,7 +4364,7 @@ o05:  not u in Ball(p,rv) by TARSKI:def 3;
       P misses P1 by l13,l06,Z0,Z3,CONNSP_1:37;
       then p <> u by l02,l04,l51,XBOOLE_0:3;
       then reconsider r as non empty non negative (real number) by TOPRNS_1:29;
-o04:  r >= rv by o05,TOPREAL9:7; 
+o04:  r >= rv by o05,TOPREAL9:7;
       then Ball(p,rv) c= Ball(p,r) by TBB;
       then
 l55:  PC c= Ball(p,r) by b3,XBOOLE_1:1;
@@ -4371,11 +4385,11 @@ a23:  Ball(p,r) misses Sphere(p,r) by TOPREAL9:19;
 a18:  Ball(p,r) c= cl_Ball(p,r) by TOPREAL9:16;
       A c= Ball(p,r) by ee,a4,XBOOLE_1:1;
       then A is Subset of D by a16,a18,XBOOLE_1:1;
-      then consider R being map of D, T2|A such that
+      then consider R being Function of D, T2|A such that
 a6:   R is continuous and
 a7:   R|A = id A by a1,LmExr;
       p1 in A by a1,TOPREAL1:4;
-      then consider f being map of D, T2|B such that
+      then consider f being Function of D, T2|B such that
 a9:   f is continuous and
 a10:  for x being Point of D holds (x in Cl P implies f.x = x) &
       (x in P` implies f.x = R.x)
@@ -4383,7 +4397,7 @@ a10:  for x being Point of D holds (x in Cl P implies f.x = x) &
       set g = DiskProj(p,r,p);
       set h = RotateCircle(p,r,p);
 a12:  S is SubSpace of D by a15,a16,a17,TSEP_1:4;
-      reconsider F = h*(g*f) as map of D,D by a15,a16,a17,FUNCT_2:9;
+      reconsider F = h*(g*f) as Function of D,D by a15,a16,a17,FUNCT_2:9;
       p is Point of D by Th6;
       then g is continuous by ThDPC;
       then
@@ -4492,7 +4506,7 @@ Lm67d: ld = |[ld`1,ld`2]| by EUCLID:57;
 Lm67g: lg = |[lg`1,lg`2]| by EUCLID:57;
 Lm67D: pd = |[pd`1,pd`2]| by EUCLID:57;
 Lm67G: pg = |[pg`1,pg`2]| by EUCLID:57;
-       
+
 Lm32a: dR = (LSeg(ld,lg) \/ LSeg(lg,pg)) \/ (LSeg(pg,pd) \/ LSeg(pd,ld))
        by SPPOL_2:def 3;
        LSeg(ld,lg) c= LSeg(ld,lg) \/ LSeg(lg,pg) &
@@ -4551,27 +4565,27 @@ Lm14a: (2+1)^2 = 2^2 + 2 * 2 * 1 + 1^2 by SQUARE_1:63
 Lms9:  sqrt(9) = 3 by SQUARE_1:def 4;
 Lm8:   dist(a,b) = sqrt ((a`1-b`1)^2 + (a`2-b`2)^2) by GOBRD14:9
        .= --2 by Lm4,Lm5,Lm6,Lm7,SQUARE_1:60,90;
-Lm0:   
+Lm0:
        R = {p: rl <= p`1 & p`1 <= rp & rd <= p`2 & p`2 <= rg}
        by JGRAPH_6:def 2;
 
 theorem Tsim:
   for h being Homeomorphism of TOP-REAL 2 holds
   h.:C is being_simple_closed_curve
-  proof 
+  proof
     let h be Homeomorphism of T2;
-    consider f being map of T2|R^2-unit_square, T2|C such that
+    consider f being Function of T2|R^2-unit_square, T2|C such that
 a1: f is_homeomorphism by TOPREAL2:def 1;
-    reconsider g = h|C as map of T2|C,T2|(h.:C) by JORDAN24:12;
+    reconsider g = h|C as Function of T2|C,T2|(h.:C) by JORDAN24:12;
     take g*f;
     g is_homeomorphism by JORDAN24:14;
     hence g*f is_homeomorphism by a1,TOPS_2:71;
   end;
-  
-theorem Lm1: 
+
+theorem Lm1:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   P c= closed_inside_of_rectangle(-1,1,-3,3)
-  proof 
+  proof
     assume that
 Z0: a in P and
 Z1: b in P and
@@ -4585,7 +4599,7 @@ b4: dist(a,p) = sqrt((rl-p`1)^2 + (0-p`2)^2) by Lm4,Lm6,GOBRD14:9
     .= sqrt((rl-p`1)^2 + (-p`2)^2)
     .= sqrt((rl-p`1)^2 + p`2^2) by SQUARE_1:61;
 nn: now
-      assume 
+      assume
 q3:   9 < p`2^2;
       0 <= (rl-p`1)^2 by SQUARE_1:72;
       then 0+9 < (rl-p`1)^2+p`2^2 by q3,XREAL_1:10;
@@ -4646,38 +4660,38 @@ a3: now
     rg >= p`2 by nn,Lm14a,SQUARE_1:78;
     hence thesis by a1,a2,a3,Lm0;
   end;
-  
+
 Lmw59: dR c= R by ThdRR;
 
       lg`2 = lg`2 & lg`1 <= c`1 & c`1 <= pg`1 by Lm70,Lm74,EUCLID:56;
       then LSeg(lg,c) c= LSeg(lg,pg) by Lm32i,Lm80a,JORDAN15:6;
       then
-Lmnowy62: 
+Lmnowy62:
           LSeg(lg,c) c= dR by Lm32c,XBOOLE_1:1;
 
           LSeg(pg,c) c= LSeg(lg,pg)
           by Lm32I,Lm80a,Lm10,Lm11,Lm70,Lm71,Lm74,JORDAN15:6;
           then
-Lmnowy62a: 
+Lmnowy62a:
            LSeg(pg,c) c= dR by Lm32c,XBOOLE_1:1;
 
       ld`2 = ld`2 & ld`1 <= d`1 & d`1 <= pd`1 by Lm72,Lm76,EUCLID:56;
       then LSeg(ld,d) c= LSeg(ld,pd) by Lm32ix,Lm80A,JORDAN15:6;
       then
-Lmnowy62x: 
+Lmnowy62x:
           LSeg(ld,d) c= dR by Lm32e,XBOOLE_1:1;
 
           LSeg(pd,d) c= LSeg(ld,pd)
           by Lm32iy,Lm80A,Lm12,Lm13,Lm72,Lm73,Lm76,JORDAN15:6;
       then
-Lmnowy62ax: 
+Lmnowy62ax:
             LSeg(pd,d) c= dR by Lm32e,XBOOLE_1:1;
 
-Lmnowy64: 
+Lmnowy64:
   0 <= p`2 & p in dR implies
   p in LSeg(a,lg) or p in LSeg(lg,c) or
   p in LSeg(c,pg) or p in LSeg(pg,b)
-  proof 
+  proof
     assume
 a1: 0 <= p`2;
     assume p in dR;
@@ -4709,11 +4723,11 @@ s1:   p1`1 <= rp & p1`1 >= rl & p1`2 = rg;
     end;
   end;
 
-Lmnowy64a: 
+Lmnowy64a:
   p`2 <= 0 & p in dR implies
   p in LSeg(a,ld) or p in LSeg(ld,d) or
   p in LSeg(d,pd) or p in LSeg(pd,b)
-  proof 
+  proof
     assume
 a1: p`2 <= 0;
     assume p in dR;
@@ -4748,7 +4762,7 @@ s1:   p1`1 <= rp & p1`1 >= rl & p1`2 = rd;
 theorem Tmg:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   P misses LSeg(|[-1,3]|,|[1,3]|)
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     assume P meets LSeg(lg,pg);
@@ -4772,7 +4786,7 @@ a5: dist(a,x) = sqrt ((a`1-x`1)^2 + (a`2-x`2)^2) by GOBRD14:9
 theorem Tmd:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   P misses LSeg(|[-1,-3]|,|[1,-3]|)
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     assume P meets LSeg(ld,pd);
@@ -4792,10 +4806,10 @@ a5: dist(a,x) = sqrt ((a`1-x`1)^2 + (a`2-x`2)^2) by GOBRD14:9
     hence thesis by a1,a2,a6,JORDAN24:def 1,Lm8;
   end;
 
-theorem Lm2:      
+theorem Lm2:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   P /\ rectangle(-1,1,-3,3) = {|[-1,0]|,|[1,0]|}
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     then
@@ -4871,9 +4885,9 @@ a3: x = a or x = b by TARSKI:def 2;
     hence thesis by a2,a3,XBOOLE_0:def 3;
   end;
 
-Lmnowy65: 
+Lmnowy65:
           |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(lg,c) misses C
-          proof 
+          proof
             assume a,b realize-max-dist-in C;
             then
 b20:        C /\ dR = {a,b} by Lm2;
@@ -4887,9 +4901,9 @@ i14:        q in C by XBOOLE_0:3;
             hence contradiction by Lm6,Lm7,i13,TOPREAL3:18;
           end;
 
-Lmnowy65a: 
+Lmnowy65a:
            |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(pg,c) misses C
-           proof 
+           proof
              assume a,b realize-max-dist-in C;
              then
 b20:         C /\ dR = {a,b} by Lm2;
@@ -4902,10 +4916,10 @@ i14:         q in C by XBOOLE_0:3;
              then q = a or q = b by b20,TARSKI:def 2;
              hence contradiction by Lm6,Lm7,i13,TOPREAL3:18;
            end;
-           
-Lmnowy65x: 
+
+Lmnowy65x:
           |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(ld,d) misses C
-          proof 
+          proof
             assume a,b realize-max-dist-in C;
             then
 b20:        C /\ dR = {a,b} by Lm2;
@@ -4918,10 +4932,10 @@ i14:        q in C by XBOOLE_0:3;
             then q = a or q = b by b20,TARSKI:def 2;
             hence contradiction by Lm6,Lm7,i13,TOPREAL3:18;
           end;
-           
-Lmnowy65ax: 
+
+Lmnowy65ax:
             |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(pd,d) misses C
-           proof 
+           proof
              assume a,b realize-max-dist-in C;
              then
 b20:         C /\ dR = {a,b} by Lm2;
@@ -4935,10 +4949,10 @@ i14:         q in C by XBOOLE_0:3;
              hence contradiction by Lm6,Lm7,i13,TOPREAL3:18;
            end;
 
-Lmnowy66: 
+Lmnowy66:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & p in C` & p in LSeg(a,lg) implies
   LSeg(p,lg) misses C
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in C and
 a2: p in C` and
@@ -4975,10 +4989,10 @@ a8:  a`2 < p`2 by a3,Lm6,JGRAPH_6:9;
      a10,a11,Lm67g,JGRAPH_6:9;
    end;
 
-Lmnowy66a: 
+Lmnowy66a:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & p in C` & p in LSeg(b,pg) implies
   LSeg(p,pg) misses C
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in C and
 a2: p in C` and
@@ -4994,7 +5008,7 @@ i14: q in C by XBOOLE_0:3;
 a10: p`1 = pg`1 by a3,Lm33a,SPPOL_1:def 3;
 a11: p`2 <= pg`2 by a3,Lm75,JGRAPH_6:9;
 a20: LSeg(p,pg) is vertical by a10,SPPOL_1:37;
-     b`2 <= p`2 by a3,Lm7,JGRAPH_6:9;     
+     b`2 <= p`2 by a3,Lm7,JGRAPH_6:9;
      then LSeg(p,pg) c= LSeg(pd,pg)
      by a11,a20,Lm32F,a10,Lm7,Lm74,Lm76,Lm77,JORDAN15:5;
      then LSeg(p,pg) c= dR by Lm32d,XBOOLE_1:1;
@@ -5014,10 +5028,10 @@ a8:  b`2 < p`2 by a3,Lm7,JGRAPH_6:9;
      a10,a11,Lm67G,JGRAPH_6:9;
    end;
 
-Lmnowy66y: 
+Lmnowy66y:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & p in C` & p in LSeg(a,ld) implies
   LSeg(p,ld) misses C
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in C and
 a2: p in C` and
@@ -5033,7 +5047,7 @@ i14: q in C by XBOOLE_0:3;
 a10: p`1 = ld`1 by a3,Lm32G,SPPOL_1:def 3;
 a11: ld`2 <= p`2 by a3,Lm73,JGRAPH_6:9;
 a20: LSeg(p,ld) is vertical by a10,SPPOL_1:37;
-     p`2 <= a`2 by a3,Lm6,JGRAPH_6:9;     
+     p`2 <= a`2 by a3,Lm6,JGRAPH_6:9;
      then
      LSeg(p,ld) c= LSeg(ld,lg) by a11,a20,Lm32f,a10,Lm6,Lm71,JORDAN15:5;
      then LSeg(p,ld) c= dR by Lm32b,XBOOLE_1:1;
@@ -5053,10 +5067,10 @@ a8:  p`2 < a`2 by a3,Lm6,JGRAPH_6:9;
      a10,a11,Lm67d,JGRAPH_6:9;
    end;
 
-Lmnowy66ay: 
+Lmnowy66ay:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & p in C` & p in LSeg(b,pd) implies
   LSeg(p,pd) misses C
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in C and
 a2: p in C` and
@@ -5072,7 +5086,7 @@ i14: q in C by XBOOLE_0:3;
 a10: p`1 = pd`1 by a3,Lm33b,SPPOL_1:def 3;
 a11: pd`2 <= p`2 by a3,Lm77,JGRAPH_6:9;
 a20: LSeg(p,pd) is vertical by a10,SPPOL_1:37;
-     p`2 <= b`2 by a3,Lm7,JGRAPH_6:9;     
+     p`2 <= b`2 by a3,Lm7,JGRAPH_6:9;
      then
      LSeg(p,pd) c= LSeg(pd,pg) by a11,a20,Lm32F,a10,Lm7,Lm75,JORDAN15:5;
      then LSeg(p,pd) c= dR by Lm32d,XBOOLE_1:1;
@@ -5094,7 +5108,7 @@ a8:  p`2 < b`2 by a3,Lm7,JGRAPH_6:9;
 
 Lmnowy67:
   |[0,r]| in rectangle(rl,rp,rd,rg) implies r = rd or r = rg
-  proof 
+  proof
     assume |[0,r]| in dR;
     then ex p st p = |[0,r]| &
     (p`1 = rl & p`2 <= rg & p`2 >= rd or
@@ -5106,7 +5120,7 @@ Lmnowy67:
 
 theorem Lm21:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies W-bound P = -1
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     then
@@ -5146,9 +5160,9 @@ A7:   for p being real number st p in Z holds p >= q;
     hence thesis;
   end;
 
-theorem Lm22: 
+theorem Lm22:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies E-bound P = 1
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     then
@@ -5190,16 +5204,16 @@ A7:   for p being real number st p in Z holds p <= q;
 
 theorem ThSW:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies SW-corner P = |[-1,S-bound P]|
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     thus SW-corner P = |[W-bound P, S-bound P]| by PSCOMP_1:def 34
     .= |[rl,S-bound P]| by a1,Lm21;
   end;
-  
+
 theorem ThNW:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies NW-corner P = |[-1,N-bound P]|
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     thus NW-corner P = |[W-bound P, N-bound P]| by PSCOMP_1:def 35
@@ -5208,16 +5222,16 @@ a1: a,b realize-max-dist-in P;
 
 theorem ThSE:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies SE-corner P = |[1,S-bound P]|
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     thus SE-corner P = |[E-bound P, S-bound P]| by PSCOMP_1:def 37
     .= |[rp,S-bound P]| by a1,Lm22;
   end;
-  
+
 theorem ThNE:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies NE-corner P = |[1,N-bound P]|
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in P;
     thus NE-corner P = |[E-bound P, N-bound P]| by PSCOMP_1:def 36
@@ -5227,7 +5241,7 @@ a1: a,b realize-max-dist-in P;
 theorem Lm520a:
   for P being compact Subset of TOP-REAL 2 holds
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies W-most P = {|[-1,0]|}
-  proof 
+  proof
     let P be compact Subset of T2;
     assume
 a1: a,b realize-max-dist-in P;
@@ -5272,10 +5286,10 @@ b3: (SW-corner P)`2 = S-bound P by PSCOMP_1:73;
     hence thesis by a2,b2,b1,XBOOLE_0:def 3;
   end;
 
-theorem Lm520b: 
+theorem Lm520b:
   for P being compact Subset of TOP-REAL 2 holds
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies E-most P = {|[1,0]|}
-  proof 
+  proof
     let P be compact Subset of T2;
     assume
 a1: a,b realize-max-dist-in P;
@@ -5320,11 +5334,11 @@ b3: (SE-corner P)`2 = S-bound P by PSCOMP_1:79;
     hence thesis by a2,b2,b1,XBOOLE_0:def 3;
   end;
 
-theorem Lm52: 
+theorem Lm52:
   for P being compact Subset of TOP-REAL 2 holds
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   W-min P = |[-1,0]| & W-max P = |[-1,0]|
-  proof 
+  proof
     let P be compact Subset of T2;
     set M = W-most P;
     assume
@@ -5349,11 +5363,11 @@ A4: W-max P = |[W-bound P, sup (proj2||M)]| by PSCOMP_1:def 43;
     hence thesis by a3,a4,b3,A4,Lm4,a1,Lm21;
   end;
 
-theorem Lm52e: 
+theorem Lm52e:
   for P being compact Subset of TOP-REAL 2 holds
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   E-min P = |[1,0]| & E-max P = |[1,0]|
-  proof 
+  proof
     let P be compact Subset of T2;
     set M = E-most P;
     assume
@@ -5377,48 +5391,48 @@ A4: E-max P = |[E-bound P, sup (proj2||M)]| by PSCOMP_1:def 46;
     b = |[b`1,b`2]| by EUCLID:57;
     hence thesis by a3,a4,b3,A4,Lm5,a1,Lm22;
   end;
-  
-Lm23: 
+
+Lm23:
       |[-1,0]|,|[1,0]| realize-max-dist-in P implies
       c`1 = (W-bound P + E-bound P) / 2
-      proof 
+      proof
         assume a,b realize-max-dist-in P;
         then W-bound P = rl & E-bound P = rp by Lm21,Lm22;
         hence thesis by EUCLID:56;
       end;
 
-Lm45: 
+Lm45:
       |[-1,0]|,|[1,0]| realize-max-dist-in P implies
       d`1 = (W-bound P + E-bound P) / 2
-      proof 
+      proof
         assume a,b realize-max-dist-in P;
         then W-bound P = rl & E-bound P = rp by Lm21,Lm22;
         hence thesis by EUCLID:56;
       end;
 
-theorem Lm43: 
+theorem Lm43:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   LSeg(|[0,3]|,UMP P) is vertical
-  proof 
+  proof
     assume a,b realize-max-dist-in P;
     then c`1 = (W-bound P + E-bound P) / 2 by Lm23
     .= (UMP P)`1 by JORDAN21:33;
     hence thesis by SPPOL_1:37;
   end;
-  
-theorem Lm44: 
+
+theorem Lm44:
   |[-1,0]|,|[1,0]| realize-max-dist-in P implies
   LSeg(LMP P,|[0,-3]|) is vertical
-  proof 
+  proof
     assume a,b realize-max-dist-in P;
     then d`1 = (W-bound P + E-bound P) / 2 by Lm45
     .= (LMP P)`1 by JORDAN21:35;
     hence thesis by SPPOL_1:37;
   end;
-  
-theorem Lm50: 
+
+theorem Lm50:
   |[-1,0]|,|[1,0]| realize-max-dist-in P & p in P implies p`2 < 3
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in P and
 a2: p in P;
@@ -5438,9 +5452,9 @@ a8:   p`2 = c`2;
     hence thesis by a5,Lm11,REAL_1:def 5;
   end;
 
-theorem Lm51: 
+theorem Lm51:
   |[-1,0]|,|[1,0]| realize-max-dist-in P & p in P implies -3 < p`2
-  proof 
+  proof
     assume that
 a1: a,b realize-max-dist-in P and
 a2: p in P;
@@ -5460,11 +5474,11 @@ a8:   p`2 = d`2;
     end;
     hence thesis by a5,Lm13,REAL_1:def 5;
   end;
-  
-theorem Lm53: 
+
+theorem Lm53:
   |[-1,0]|,|[1,0]| realize-max-dist-in D & p in LSeg(|[0,3]|,UMP D) implies
   (UMP D)`2 <= p`2
-  proof 
+  proof
     set x = UMP D;
     assume that
 a1: a,b realize-max-dist-in D and
@@ -5479,11 +5493,11 @@ a6: c`1 = x`1 by a4,a7,SPPOL_1:def 3;
     then x`2 <= c`2 by a1,Lm11,Lm50;
     hence thesis by a3,a5,a6,JGRAPH_6:9;
   end;
-  
+
 theorem Lmxx:
   |[-1,0]|,|[1,0]| realize-max-dist-in D & p in LSeg(LMP D,|[0,-3]|) implies
   p`2 <= (LMP D)`2
-  proof 
+  proof
     set x = LMP D;
     assume that
 a1: a,b realize-max-dist-in D and
@@ -5498,11 +5512,11 @@ a6: d`1 = x`1 by a4,a7,SPPOL_1:def 3;
     then d`2 <= x`2 by a1,Lm13,Lm51;
     hence thesis by a3,a5,a6,JGRAPH_6:9;
   end;
-  
-theorem Lm41: 
+
+theorem Lm41:
   |[-1,0]|,|[1,0]| realize-max-dist-in D implies
   LSeg(|[0,3]|,UMP D) c= north_halfline UMP D
-  proof 
+  proof
     set p = UMP D;
     assume
 a1: a,b realize-max-dist-in D;
@@ -5517,11 +5531,11 @@ a2: x`1 = p`1 by a3,a4,SPPOL_1:def 3;
     p`2 <= x`2 by a1,a3,Lm53;
     hence thesis by a2,JORDAN1A:def 2;
   end;
-  
-theorem Lm42: 
+
+theorem Lm42:
   |[-1,0]|,|[1,0]| realize-max-dist-in D implies
   LSeg(LMP D,|[0,-3]|) c= south_halfline LMP D
-  proof 
+  proof
     set p = LMP D;
     assume
 a1: a,b realize-max-dist-in D;
@@ -5542,11 +5556,11 @@ a6: d`1 = p`1 by a4,a7,SPPOL_1:def 3;
     then x`2 <= p`2 by a3,a5,a6,JGRAPH_6:9;
     hence thesis by a2,JORDAN1A:def 4;
   end;
-  
-theorem Lm24: 
+
+theorem Lm24:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & P is_inside_component_of C implies
   LSeg(|[0,3]|,UMP C) misses P
-  proof 
+  proof
     set m = UMP C;
     set L = LSeg(c,m);
     assume that
@@ -5573,11 +5587,11 @@ a4:  L \ {m} misses P by a6,XBOOLE_1:63;
      then {m} misses P by a20,Lm27;
      hence thesis by a3,a4,XBOOLE_1:70;
    end;
-   
-theorem Lm25: 
+
+theorem Lm25:
   |[-1,0]|,|[1,0]| realize-max-dist-in C & P is_inside_component_of C implies
   LSeg(LMP C,|[0,-3]|) misses P
-  proof 
+  proof
     set m = LMP C;
     set L = LSeg(m,d);
     assume that
@@ -5604,11 +5618,11 @@ a4:  L \ {m} misses P by a6,XBOOLE_1:63;
      then {m} misses P by a20,Lm27;
      hence thesis by a3,a4,XBOOLE_1:70;
    end;
-      
+
 theorem ThUMP:
   |[-1,0]|,|[1,0]| realize-max-dist-in D implies
   LSeg(|[0,3]|,UMP D) /\ D = {UMP D}
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in D;
     set m = UMP D;
@@ -5626,7 +5640,7 @@ x02:  x in LSeg(c,m) /\ D;
 a16:  x in LSeg(c,m) & x in D by XBOOLE_0:def 3;
       reconsider x as Point of T2 by x02;
       LSeg(c,m) is vertical by a14,a15,SPPOL_1:37;
-      then 
+      then
 a13:  x`1 = m`1 by a11,a16,SPPOL_1:def 3;
       then x in Vertical_Line w by a14,JORDAN6:34;
       then x in D /\ Vertical_Line w by a16,XBOOLE_0:def 3;
@@ -5642,11 +5656,11 @@ c01:  x`2 <= m`2 by JORDAN21:41;
     then x = m by TARSKI:def 1;
     hence thesis by a11,a12,XBOOLE_0:def 3;
   end;
-  
+
 theorem
   |[-1,0]|,|[1,0]| realize-max-dist-in D implies
   LSeg(|[0,-3]|,LMP D) /\ D = {LMP D}
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in D;
     set m = LMP D;
@@ -5664,7 +5678,7 @@ x02:  x in LSeg(d,m) /\ D;
 a16:  x in LSeg(d,m) & x in D by XBOOLE_0:def 3;
       reconsider x as Point of T2 by x02;
       LSeg(d,m) is vertical by a14,a15,SPPOL_1:37;
-      then 
+      then
 a13:  x`1 = m`1 by a11,a16,SPPOL_1:def 3;
       then x in Vertical_Line w by a14,JORDAN6:34;
       then x in D /\ Vertical_Line w by a16,XBOOLE_0:def 3;
@@ -5680,12 +5694,12 @@ c01:  m`2 <= x`2 by JORDAN21:42;
     then x = m by TARSKI:def 1;
     hence thesis by a11,a12,XBOOLE_0:def 3;
   end;
-  
+
 theorem TCompRec:
   P is compact &
   |[-1,0]|,|[1,0]| realize-max-dist-in P & A is_inside_component_of P implies
   A c= closed_inside_of_rectangle(-1,1,-3,3)
-  proof 
+  proof
     assume that
 we: P is compact and
 a1: |[-1,0]|,|[1,0]| realize-max-dist-in P and
@@ -5756,7 +5770,7 @@ a6:   E c= UBD P by we,JORDAN1C:14;
 
 LmBall:
   p in R implies R c= Ball(p,10)
-  proof 
+  proof
     assume p in R;
     then consider p1 such that
 a1: p1 = p and
@@ -5776,17 +5790,19 @@ a4: ex s, t being Point of Euclid 2 st
     hence thesis by TOPREAL9:7;
   end;
 
-theorem      
+theorem
   |[-1,0]|,|[1,0]| realize-max-dist-in C implies LSeg(|[0,3]|,|[0,-3]|) meets C
-  proof 
+  proof
     assume
 a1: a,b realize-max-dist-in C;
     set Jc = Upper_Arc C;
-    consider Pf being Path of c,d, f being map of I[01], T2|LSeg(c,d) such that
+    consider Pf being Path of c,d, f being Function
+ of I[01], T2|LSeg(c,d) such that
 a2: rng f = LSeg(c,d) & Pf = f by defs2;
     a = W-min C & b = E-max C by a1,Lm52,Lm52e;
     then Jc is_an_arc_of a,b by JORDAN6:def 8;
-    then consider Pg being Path of a,b, g being map of I[01], T2|Jc such that
+    then consider Pg being Path of a,b, g being Function
+ of I[01], T2|Jc such that
 a3: rng g = Jc & Pg = g by defa2;
 a4: Jc c= C by JORDAN1A:16;
 a72: C c= R by a1,Lm1;
@@ -5805,15 +5821,15 @@ w50: h.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
      then v.t in rng Pf & h.s in rng Pg by FUNCT_1:def 5;
      hence thesis by a4, a2,a3,w50,XBOOLE_0:3;
    end;
-   
-LEMACISKO: 
+
+LEMACISKO:
   |[-1,0]|,|[1,0]| realize-max-dist-in C implies
   ex Jc, Jd being compact with_the_max_arc Subset of T2 st
   Jc is_an_arc_of |[-1,0]|,|[1,0]| & Jd is_an_arc_of |[-1,0]|,|[1,0]| &
   C = Jc \/ Jd &
   Jc /\ Jd = {|[-1,0]|,|[1,0]|} & UMP C in Jc & LMP C in Jd &
   W-bound C = W-bound Jc & E-bound C = E-bound Jc
-  proof 
+  proof
     assume
 a0: a,b realize-max-dist-in C;
     set U = Upper_Arc C;
@@ -5848,7 +5864,7 @@ theorem TLEMAT:
   holds Ux is_inside_component_of C &
   for V being Subset of T2 st V is_inside_component_of C holds
   V = Ux
-  proof 
+  proof
     set m = UMP C;
     set j = LMP C;
     assume
@@ -5987,7 +6003,7 @@ p16:     W-bound LSeg(l,d) = d`1 & E-bound LSeg(l,d) = d`1
          then q in LJ /\ Vertical_Line ((W-bound LJ + E-bound LJ) / 2)
          by p10,XBOOLE_0:def 3;
          then
-b77:     q`2 <= k`2 by p04,JORDAN21:41;    
+b77:     q`2 <= k`2 by p04,JORDAN21:41;
          k`2 <= q`2 by c06,c12,b55,c08,c13,JGRAPH_6:9;
          then k`2 = q`2 by b77,XREAL_1:1;
          then k = q by c08,b78,b72,b73,TOPREAL3:11;
@@ -6015,8 +6031,8 @@ w55: LSeg(l,k) c= R by a72,a86,a87,JORDAN1:def 1;
 w04: the carrier of TR = R by TOPREALA:53;
      reconsider AR = a, BR = b, CR = c, DR = d
      as Point of TR by a0,a72,Lm30,Lmw59,Lm31,TOPREALA:53;
-     
-     consider Pcm being Path of c,m, fcm being map of I[01], T2|LSeg(c,m)
+
+     consider Pcm being Path of c,m, fcm being Function of I[01], T2|LSeg(c,m)
      such that
 a61: rng fcm = LSeg(c,m) & Pcm = fcm by defs2;
 w07: LSeg(c,m) c= R by a9,a72,Lm30,Lmw59,JORDAN1:def 1;
@@ -6111,14 +6127,16 @@ I41:  alpha c= P1 by JORDAN16:5;
 i12:  alpha misses Jc by i26,XBOOLE_1:63;
 I12:  alpha misses Jd by I41,i27,XBOOLE_1:63;
       consider Pdx being Path of d,x,
-      fdx being map of I[01], T2|LSeg(d,x) such that
+      fdx being Function of I[01], T2|LSeg(d,x) such that
 i77:  rng fdx = LSeg(d,x) & Pdx = fdx by defs2;
-      consider PJc being Path of a,b, fJc being map of I[01], T2|Jc such that
+      consider PJc being Path of a,b, fJc being Function
+ of I[01], T2|Jc such that
 w23:  rng fJc = Jc & PJc = fJc by d01,defa2;
-      consider PJd being Path of a,b, fJd being map of I[01], T2|Jd such that
+      consider PJd being Path of a,b, fJd being Function
+ of I[01], T2|Jd such that
 w24:  rng fJd = Jd & PJd = fJd by d02,defa2;
       consider Palpha being Path of x,n,
-      falpha being map of I[01], T2|alpha such that
+      falpha being Function of I[01], T2|alpha such that
 w28:  rng falpha = alpha & Palpha = falpha by i40,defa2;
       n in R by i51,Lmw59;
       then
@@ -6139,10 +6157,10 @@ J01:  LSeg(pg,c) c= R by Lmw59,Lmnowy62a,XBOOLE_1:1;
       LSeg(pg,c) misses C by a1,Lmnowy65a;
       then
 W32:  LSeg(pg,c) misses Jc by a78,XBOOLE_1:63;
-      consider Plx being Path of l,x, flx being map of I[01], T2|LSeg(l,x)
+      consider Plx being Path of l,x, flx being Function of I[01], T2|LSeg(l,x)
       such that
 z01:  rng flx = LSeg(l,x) & Plx = flx by defs2;
-      
+
       set PCX = Pcm + Pml + Plx;
 
 z02:  rng PCX = rng Pcm \/ rng Pml \/ rng Plx by Trc31;
@@ -6210,7 +6228,7 @@ y02:  LSeg(pd,d) misses C by a1,Lmnowy65ax;
       then
 y03:  LSeg(pd,d) misses Jd by a89,XBOOLE_1:63;
 
-      
+
       per cases;
       suppose
 i60:    n`2 < 0;
@@ -6218,10 +6236,10 @@ i60:    n`2 < 0;
         suppose
 i69:      n in LSeg(a,ld);
           consider Pnld being Path of n,ld,
-          fnld being map of I[01], T2|LSeg(n,ld) such that
+          fnld being Function of I[01], T2|LSeg(n,ld) such that
 w21:      rng fnld = LSeg(n,ld) & Pnld = fnld by defs2;
           consider Pldd being Path of ld,d,
-          fldd being map of I[01], T2|LSeg(ld,d) such that
+          fldd being Function of I[01], T2|LSeg(ld,d) such that
 w22:      rng fldd = LSeg(ld,d) & Pldd = fldd by defs2;
 w41:      ld`1 = n`1 by w44,i69,Lm32hy,Lm32f,SPPOL_1:def 3;
           then LSeg(n,ld) is vertical by SPPOL_1:37;
@@ -6251,8 +6269,8 @@ w50:      H.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(ld,d);
           consider Pnd being Path of n,d,
-          fnd being map of I[01], T2|LSeg(n,d) such that
-w21:      rng fnd = LSeg(n,d) & Pnd = fnd by defs2; 
+          fnd being Function of I[01], T2|LSeg(n,d) such that
+w21:      rng fnd = LSeg(n,d) & Pnd = fnd by defs2;
           set K1 = PCX + Palpha + Pnd;
           ld in LSeg(ld,d) by TOPREAL1:6;
           then
@@ -6285,8 +6303,8 @@ w50:      H.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(d,pd);
           consider Pnd being Path of n,d,
-          fnd being map of I[01], T2|LSeg(n,d) such that
-w21:      rng fnd = LSeg(n,d) & Pnd = fnd by defs2; 
+          fnd being Function of I[01], T2|LSeg(n,d) such that
+w21:      rng fnd = LSeg(n,d) & Pnd = fnd by defs2;
           set K1 = PCX + Palpha + Pnd;
           pd in LSeg(pd,d) by TOPREAL1:6;
           then pd`2 = n`2 by Lm32iy,i69,SPPOL_1:def 2;
@@ -6319,10 +6337,10 @@ w50:      H.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(pd,b);
           consider Pnpd being Path of n,pd,
-          fnpd being map of I[01], T2|LSeg(n,pd) such that
+          fnpd being Function of I[01], T2|LSeg(n,pd) such that
 w21:      rng fnpd = LSeg(n,pd) & Pnpd = fnpd by defs2;
           consider Ppdd being Path of pd,d,
-          fpdd being map of I[01], T2|LSeg(pd,d) such that
+          fpdd being Function of I[01], T2|LSeg(pd,d) such that
 w22:      rng fpdd = LSeg(pd,d) & Ppdd = fpdd by defs2;
 w41:      pd`1 = n`1 by W44,Lm32F,i69,Lm32Hy,SPPOL_1:def 3;
           then LSeg(n,pd) is vertical by SPPOL_1:37;
@@ -6356,10 +6374,10 @@ i60:    n`2 >= 0;
         suppose
 i69:      n in LSeg(a,lg);
           consider Pnlg being Path of n,lg,
-          fnlg being map of I[01], T2|LSeg(n,lg) such that
+          fnlg being Function of I[01], T2|LSeg(n,lg) such that
 w21:      rng fnlg = LSeg(n,lg) & Pnlg = fnlg by defs2;
           consider Plgc being Path of lg,c,
-          flgc being map of I[01], T2|LSeg(lg,c) such that
+          flgc being Function of I[01], T2|LSeg(lg,c) such that
 w22:      rng flgc = LSeg(lg,c) & Plgc = flgc by defs2;
 w41:      ld`1 = n`1 by w44,Lm32f,i69,Lm32h,SPPOL_1:def 3;
           then LSeg(n,lg) is vertical by Lm70,Lm72,SPPOL_1:37;
@@ -6389,8 +6407,8 @@ w50:      h.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(lg,c);
           consider Pnc being Path of n,c,
-          fnc being map of I[01], T2|LSeg(n,c) such that
-w21:      rng fnc = LSeg(n,c) & Pnc = fnc by defs2; 
+          fnc being Function of I[01], T2|LSeg(n,c) such that
+w21:      rng fnc = LSeg(n,c) & Pnc = fnc by defs2;
           set K1 = Pdx + Palpha + Pnc;
           lg in LSeg(lg,c) by TOPREAL1:6;
           then
@@ -6425,8 +6443,8 @@ w50:      h.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(c,pg);
           consider Pnc being Path of n,c,
-          fnc being map of I[01], T2|LSeg(n,c) such that
-w21:      rng fnc = LSeg(n,c) & Pnc = fnc by defs2; 
+          fnc being Function of I[01], T2|LSeg(n,c) such that
+w21:      rng fnc = LSeg(n,c) & Pnc = fnc by defs2;
           set K1 = Pdx + Palpha + Pnc;
           pg in LSeg(pg,c) by TOPREAL1:6;
           then pg`2 = n`2 by Lm32I,i69,SPPOL_1:def 2;
@@ -6461,10 +6479,10 @@ w50:      h.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         suppose
 i69:      n in LSeg(pg,b);
           consider Pnpg being Path of n,pg,
-          fnpg being map of I[01], T2|LSeg(n,pg) such that
+          fnpg being Function of I[01], T2|LSeg(n,pg) such that
 w21:      rng fnpg = LSeg(n,pg) & Pnpg = fnpg by defs2;
           consider Ppgc being Path of pg,c,
-          fpgc being map of I[01], T2|LSeg(pg,c) such that
+          fpgc being Function of I[01], T2|LSeg(pg,c) such that
 w22:      rng fpgc = LSeg(pg,c) & Ppgc = fpgc by defs2;
 w41:      pd`1 = n`1 by W44,Lm32F,i69,Lm32H,SPPOL_1:def 3;
           then LSeg(n,pg) is vertical by Lm74,Lm76,SPPOL_1:37;
@@ -6492,7 +6510,7 @@ w50:      h.s = v.t by Lm4,Lm5,Lm11,Lm13,JGRAPH_8:6;
         end;
       end;
     end;
-    
+
 :: uniqueness
     let V be Subset of T2;
     assume
@@ -6508,10 +6526,10 @@ a21: VP is_a_component_of T2|C` and
      then reconsider VP as non empty Subset of T2C;
 a80: V misses C by a20,a60,SUBSET_1:43;
      consider Pjd being Path of j,d,
-     fjd being map of I[01], T2|LSeg(j,d) such that
+     fjd being Function of I[01], T2|LSeg(j,d) such that
 a62: rng fjd = LSeg(j,d) & Pjd = fjd by defs2;
      consider Plk being Path of l,k,
-     flk being map of I[01], T2|LSeg(l,k) such that
+     flk being Function of I[01], T2|LSeg(l,k) such that
 a41: rng flk = LSeg(l,k) & Plk = flk by defs2;
      set beta = Pcm + Pml + Plk + Pkj + Pjd;
 a70: rng beta = rng Pcm \/ rng Pml \/ rng Plk \/ rng Pkj \/ rng Pjd by Trc35;
@@ -6558,10 +6576,10 @@ e01: not a in LSeg(c,m) by b72,b73,a14,a15,e30,e31,e34,Lm4,JGRAPH_6:9;
      then
 e02: not a in LSeg(c,m) \/ ml by e01,XBOOLE_0:def 2;
      not a in LSeg(l,k) by c08,b55,c12,c13,Lm4,JGRAPH_6:9;
-     then 
+     then
 e03: not a in LSeg(c,m) \/ ml \/ LSeg(l,k) by e02,XBOOLE_0:def 2;
      not a in kj by e10,ZFMISC_1:55;
-     then 
+     then
 e04: not a in LSeg(c,m) \/ ml \/ LSeg(l,k) \/ kj by e03,XBOOLE_0:def 2;
      not a in LSeg(j,d) by d30,c18,c31,e33,Lm4,Lm12,JGRAPH_6:9;
      then not a in rng beta by e04,a70,a61,a62,a41,XBOOLE_0:def 2;
@@ -6573,10 +6591,10 @@ e01: not b in LSeg(c,m) by b72,b73,a14,a15,e30,e31,e34,Lm5,JGRAPH_6:9;
      then
 e02: not b in LSeg(c,m) \/ ml by e01,XBOOLE_0:def 2;
      not b in LSeg(l,k) by c08,b55,c12,c13,Lm5,JGRAPH_6:9;
-     then 
+     then
 e03: not b in LSeg(c,m) \/ ml \/ LSeg(l,k) by e02,XBOOLE_0:def 2;
      not b in kj by e10,ZFMISC_1:55;
-     then 
+     then
 e04: not b in LSeg(c,m) \/ ml \/ LSeg(l,k) \/ kj by e03,XBOOLE_0:def 2;
      not b in LSeg(j,d) by d30,c18,c31,e33,Lm5,Lm12,JGRAPH_6:9;
      then not b in rng beta by e04,a70,a61,a62,a41,XBOOLE_0:def 2;
@@ -6604,7 +6622,7 @@ b12: the carrier of T2C|VP = VP by JORDAN1:1;
      T2C|VP is arcwise_connected by a21,Tarcwise;
      then
 b11: u1,v1 are_connected by BORSUK_2:def 3;
-     then consider fuv being map of I[01], T2C|VP such that
+     then consider fuv being Function of I[01], T2C|VP such that
 b10: fuv is continuous & fuv.0 = u1 & fuv.1 = v1 by BORSUK_2:def 1;
 b13: T2C|VP = T2|V by a20,GOBOARD9:4;
      fuv is Path of u1,v1 by b10,b11,BORSUK_2:def 2;
@@ -6612,10 +6630,10 @@ b13: T2C|VP = T2|V by a20,GOBOARD9:4;
 a34: rng fuv c= the carrier of T2C|VP;
 a54: rng uv misses rng beta by a34,a20,b12,a52,XBOOLE_1:63;
      consider au being Path of a,u,
-     fau being map of I[01], T2|LSeg(a,u) such that
+     fau being Function of I[01], T2|LSeg(a,u) such that
 a50: rng fau = LSeg(a,u) & au = fau by defs2;
      consider vb being Path of v,b,
-     fvb being map of I[01], T2|LSeg(v,b) such that
+     fvb being Function of I[01], T2|LSeg(v,b) such that
 a51: rng fvb = LSeg(v,b) & vb = fvb by defs2;
      set AB = au + uv + vb;
 a56: rng AB = rng au \/ rng uv \/ rng vb by Trc31;
@@ -6777,14 +6795,11 @@ f3:  A1 \/ C misses A2 by f4,XBOOLE_1:70;
      hence (Cl A1) \ A1 = C by z1,XBOOLE_0:def 10
      .= (Cl A2) \ A2 by z2,z3,XBOOLE_0:def 10;
      thus thesis by z02,z30,CONNSP_1:43;
-end;
+   end;
   
-registration
-:: Jordan's Curve Theorem
-  cluster -> Jordan Simple_closed_curve;
-  coherence
+LmJor:
+  C is Jordan 
   proof 
-    let C;
     consider f being Homeomorphism of T2 such that
 a1: a,b realize-max-dist-in f.:C by JORDAN24:7;
 a2: f" is Homeomorphism of T2 by TOPGRP_1:30;
@@ -6798,4 +6813,20 @@ a3: f" = f qua Function" by TOPS_2:def 4;
     dom f = the carrier of T2 by FUNCT_2:def 1;
     hence thesis by a5,a3,JGRAPH_6:22;
   end;
-end;
+
+theorem :: Jordan's Curve Theorem
+  for C being Simple_closed_curve
+  ex A1, A2 being Subset of TOP-REAL 2 st
+  C` = A1 \/ A2 & A1 misses A2 & (Cl A1) \ A1 = (Cl A2) \ A2 &
+     for C1, C2 being Subset of (TOP-REAL 2)|C`
+     st C1 = A1 & C2 = A2 holds
+      C1 is_a_component_of (TOP-REAL 2)|C` &
+      C2 is_a_component_of (TOP-REAL 2)|C`
+  proof
+    let C;
+    C is Jordan by LmJor;
+    hence thesis by JORDAN1:def 2;
+  end;
+
+theorem  
+  for C being Simple_closed_curve holds C is Jordan by LmJor;

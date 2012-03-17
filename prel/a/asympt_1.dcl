@@ -22,9 +22,6 @@
 <ArticleID name="SEQ_1"/>
 <ArticleID name="ASYMPT_0"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="XCMPLX_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
 <ArticleID name="ASYMPT_1"/>
 </Signature>
 <FCluster>
@@ -44,7 +41,7 @@
 <Func kind="K" nr="52"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="139">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -64,7 +61,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="155"/>
+<Func kind="K" nr="140"/>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
@@ -85,7 +82,7 @@
 <Func kind="K" nr="52"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="156">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -103,7 +100,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="157">
+<Func kind="K" nr="142">
 <Num nr="1"/>
 </Func>
 <Cluster>
@@ -123,7 +120,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="158">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -139,23 +136,4 @@
 <Adjective nr="39"/>
 </Cluster>
 </FCluster>
-<CCluster>
-<ArgTypes/>
-<Cluster/>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="56"/>
-</Typ>
-<Cluster>
-<Adjective nr="7"/>
-<Adjective nr="8"/>
-<Adjective nr="9"/>
-<Adjective nr="16"/>
-<Adjective nr="17"/>
-<Adjective nr="19" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-</Cluster>
-</CCluster>
 </Registrations>

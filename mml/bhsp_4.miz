@@ -51,55 +51,50 @@ proof
   holds f.(n+1) = G(n,x) by A1;
 end;
 
-definition
-          let X;
-          let seq;
-          func Partial_Sums(seq) -> sequence of X means
-:Def1:      it.0 = seq.0 &
-          for n holds it.(n + 1) = it.n + seq.(n + 1);
-existence
-         proof deffunc G(Nat,Point of X) = $2 + seq.($1 + 1);
-              consider f being Function of
-              NAT, the carrier of X such that
-         A1:   f.0 = seq.0 &
-              for n being Nat, x being Point of X st x = f.n holds
-              f.(n + 1) = G(n,x) from RecFuncExRUS;
-              take f;
-              thus thesis by A1;
-end;
-uniqueness
-          proof
-               let seq1,seq2;
-               assume that
-          A2:   seq1.0 = seq.0 &
-               for n holds seq1.(n + 1) = seq1.n + seq.(n + 1) and
-          A3:   seq2.0 = seq.0 &
-               for n holds seq2.(n + 1) = seq2.n + seq.(n + 1);
-               defpred P[Nat] means seq1.$1 = seq2.$1;
-          A4:   P[0] by A2,A3;
-          A5:   for k st P[k] holds P[k+1] proof let k;
-                    assume seq1.k =seq2.k;
-                    hence seq1.(k + 1) = seq2.k + seq.(k+1) by A2
-                                      .= seq2.(k + 1) by A3;
-               end;
-                  for n holds P[n] from NAT_1:sch 1(A4,A5);
-               hence seq1 = seq2 by FUNCT_2:113;
-end;
+definition let X;
+           let seq;
+  func Partial_Sums(seq) -> sequence of X means :Def1:
+    it.0 = seq.0 &
+    for n holds it.(n + 1) = it.n + seq.(n + 1);
+  existence
+  proof deffunc G(Nat,Point of X) = $2 + seq.($1 + 1);
+    consider f being Function of NAT, the carrier of X such that
+A1: f.0 = seq.0 &
+    for n being Nat, x being Point of X st x = f.n holds
+      f.(n + 1) = G(n,x) from RecFuncExRUS;
+    take f;
+    thus thesis by A1;
+  end;
+  uniqueness
+  proof
+    let seq1,seq2;
+    assume that
+A2: seq1.0 = seq.0 & for n holds seq1.(n + 1) = seq1.n + seq.(n + 1) and
+A3: seq2.0 = seq.0 & for n holds seq2.(n + 1) = seq2.n + seq.(n + 1);
+    defpred P[Nat] means seq1.$1 = seq2.$1;
+A4: P[0] by A2,A3;
+A5: for k st P[k] holds P[k+1]
+    proof let k;
+      assume seq1.k =seq2.k;
+      hence seq1.(k + 1) = seq2.k + seq.(k+1) by A2
+                        .= seq2.(k + 1) by A3;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A4,A5);
+    hence seq1 = seq2 by FUNCT_2:113;
+  end;
 end;
 
 theorem Th1:
-    Partial_Sums(seq1) + Partial_Sums(seq2) =
-    Partial_Sums(seq1 + seq2)
+  Partial_Sums(seq1) + Partial_Sums(seq2) = Partial_Sums(seq1 + seq2)
 proof
-     set PSseq1 = Partial_Sums(seq1);
-     set PSseq2 = Partial_Sums(seq2);
-A1:   (PSseq1 + PSseq2).0 = PSseq1.0 + PSseq2.0 by NORMSP_1:def 5
-                        .= seq1.0 + PSseq2.0 by Def1
-                        .= seq1.0 + seq2.0 by Def1
-                        .= (seq1 + seq2).0 by NORMSP_1:def 5;
-        now let n;
-     thus
-        (PSseq1 + PSseq2).(n + 1)
+   set PSseq1 = Partial_Sums(seq1);
+   set PSseq2 = Partial_Sums(seq2);
+A1:(PSseq1 + PSseq2).0 = PSseq1.0 + PSseq2.0 by NORMSP_1:def 5
+                      .= seq1.0 + PSseq2.0 by Def1
+                      .= seq1.0 + seq2.0 by Def1
+                      .= (seq1 + seq2).0 by NORMSP_1:def 5;
+   now let n;
+     thus (PSseq1 + PSseq2).(n + 1)
    = PSseq1.(n + 1) + PSseq2.(n + 1) by NORMSP_1:def 5
   .= PSseq1.n + seq1.(n + 1) + PSseq2.(n + 1) by Def1
   .= PSseq1.n + seq1.(n + 1) + (seq2.(n + 1) + PSseq2.n) by Def1
@@ -113,16 +108,15 @@ A1:   (PSseq1 + PSseq2).0 = PSseq1.0 + PSseq2.0 by NORMSP_1:def 5
  end;
 
 theorem Th2:
-    Partial_Sums(seq1) - Partial_Sums(seq2) =
-    Partial_Sums(seq1 - seq2)
+  Partial_Sums(seq1) - Partial_Sums(seq2) = Partial_Sums(seq1 - seq2)
 proof
-     set PSseq1 = Partial_Sums(seq1);
-     set PSseq2 = Partial_Sums(seq2);
-A1:   (PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by NORMSP_1:def 6
-                        .= seq1.0 - (PSseq2).0 by Def1
-                        .= seq1.0 - seq2.0 by Def1
-                        .= (seq1 - seq2).0 by NORMSP_1:def 6;
-        now let n;
+   set PSseq1 = Partial_Sums(seq1);
+   set PSseq2 = Partial_Sums(seq2);
+A1:(PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by NORMSP_1:def 6
+                      .= seq1.0 - (PSseq2).0 by Def1
+                      .= seq1.0 - seq2.0 by Def1
+                      .= (seq1 - seq2).0 by NORMSP_1:def 6;
+   now let n;
      thus (PSseq1 - PSseq2).(n + 1)
    = PSseq1.(n + 1) - PSseq2.(n + 1) by NORMSP_1:def 6
   .= (PSseq1.n + seq1.(n + 1)) - PSseq2.(n + 1) by Def1
@@ -136,56 +130,54 @@ A1:   (PSseq1 - PSseq2).0 = (PSseq1).0 - (PSseq2).0 by NORMSP_1:def 6
   .= (PSseq1 - PSseq2).n + (seq1.(n + 1) - seq2.(n + 1)) by NORMSP_1:def 6
   .= (PSseq1 - PSseq2).n + (seq1 - seq2).(n + 1) by NORMSP_1:def 6;
      end;
-     hence thesis by A1,Def1;
+   hence thesis by A1,Def1;
 end;
 
 theorem Th3:
-    Partial_Sums(a * seq) = a * Partial_Sums(seq)
+  Partial_Sums(a * seq) = a * Partial_Sums(seq)
 proof
-     set PSseq = Partial_Sums(seq);
-A1:   (a * PSseq).0 = a * PSseq.0 by NORMSP_1:def 8
-                  .= a * seq.0 by Def1
-                  .= (a * seq).0 by NORMSP_1:def 8;
-        now let n;
+   set PSseq = Partial_Sums(seq);
+A1:(a * PSseq).0 = a * PSseq.0 by NORMSP_1:def 8
+                .= a * seq.0 by Def1
+                .= (a * seq).0 by NORMSP_1:def 8;
+   now let n;
      thus (a * PSseq).(n + 1) = a * PSseq.(n + 1) by NORMSP_1:def 8
   .= a * (PSseq.n + seq.(n + 1)) by Def1
   .= a * PSseq.n + a * seq.(n + 1) by RLVECT_1:def 9
   .= (a * PSseq).n + a * seq.(n + 1) by NORMSP_1:def 8
   .= (a * PSseq).n + (a * seq).(n + 1) by NORMSP_1:def 8;
-      end;
-      hence thesis by A1,Def1;
- end;
-
-theorem
-       Partial_Sums(- seq) = - Partial_Sums(seq)
-proof
-       Partial_Sums((-1) * seq) = (-1) * Partial_Sums(seq) by Th3;
-    then Partial_Sums(- seq) = (-1) * Partial_Sums(seq) by BHSP_1:77;
-    hence thesis by BHSP_1:77;
+  end;
+  hence thesis by A1,Def1;
 end;
 
 theorem
-       a * Partial_Sums(seq1) + b * Partial_Sums(seq2) =
+  Partial_Sums(- seq) = - Partial_Sums(seq)
+proof
+  Partial_Sums((-1) * seq) = (-1) * Partial_Sums(seq) by Th3;
+  then Partial_Sums(- seq) = (-1) * Partial_Sums(seq) by BHSP_1:77;
+  hence thesis by BHSP_1:77;
+end;
+
+theorem
+  a * Partial_Sums(seq1) + b * Partial_Sums(seq2) =
     Partial_Sums(a * seq1 + b * seq2)
 proof
-    thus a * Partial_Sums(seq1) + b * Partial_Sums(seq2)
-  = Partial_Sums(a * seq1) + b * Partial_Sums(seq2) by Th3
- .= Partial_Sums(a * seq1) + Partial_Sums(b * seq2) by Th3
- .= Partial_Sums(a * seq1 + b * seq2) by Th1;
+  thus a * Partial_Sums(seq1) + b * Partial_Sums(seq2)
+    = Partial_Sums(a * seq1) + b * Partial_Sums(seq2) by Th3
+   .= Partial_Sums(a * seq1) + Partial_Sums(b * seq2) by Th3
+   .= Partial_Sums(a * seq1 + b * seq2) by Th1;
 end;
 
-definition let X;
-           let seq;
-          attr seq is summable means
-:Def2:     Partial_Sums(seq) is convergent;
-
-          func Sum(seq) -> Point of X equals
-:Def3:    lim Partial_Sums(seq);
-correctness;
+definition let X, seq;
+  attr seq is summable means :Def2:
+    Partial_Sums(seq) is convergent;
+  func Sum(seq) -> Point of X equals :Def3:
+    lim Partial_Sums(seq);
+  coherence;
 end;
 
 theorem
-       seq1 is summable & seq2 is summable implies seq1 + seq2 is summable
+  seq1 is summable & seq2 is summable implies seq1 + seq2 is summable
     & Sum(seq1 + seq2) = Sum(seq1) + Sum(seq2)
 proof
      assume that
@@ -207,19 +199,19 @@ A4:  Partial_Sums(seq2) is convergent by A2,Def2;
 end;
 
 theorem
-        seq1 is summable & seq2 is summable implies seq1 - seq2 is summable
+  seq1 is summable & seq2 is summable implies seq1 - seq2 is summable
      & Sum(seq1 - seq2) = Sum(seq1) - Sum(seq2)
 proof
-     assume that
-A1:  seq1 is summable and
-A2:  seq2 is summable;
-A3:  Partial_Sums(seq1) is convergent by A1,Def2;
-A4:  Partial_Sums(seq2) is convergent by A2,Def2;
-     then Partial_Sums(seq1) - Partial_Sums(seq2) is convergent
+   assume that
+A1:seq1 is summable and
+A2:seq2 is summable;
+A3:Partial_Sums(seq1) is convergent by A1,Def2;
+A4:Partial_Sums(seq2) is convergent by A2,Def2;
+   then Partial_Sums(seq1) - Partial_Sums(seq2) is convergent
      by A3,BHSP_2:4;
-     then Partial_Sums(seq1 - seq2) is convergent by Th2;
-     hence seq1 - seq2 is summable by Def2;
-     thus Sum(seq1 - seq2)
+   then Partial_Sums(seq1 - seq2) is convergent by Th2;
+   hence seq1 - seq2 is summable by Def2;
+   thus Sum(seq1 - seq2)
    = lim Partial_Sums(seq1 - seq2) by Def3
   .= lim (Partial_Sums(seq1) - Partial_Sums(seq2)) by Th2
   .= lim Partial_Sums(seq1) - lim Partial_Sums(seq2)
@@ -229,7 +221,7 @@ A4:  Partial_Sums(seq2) is convergent by A2,Def2;
 end;
 
 theorem
-       seq is summable implies
+  seq is summable implies
     a * seq is summable & Sum(a * seq) = a * Sum(seq)
 proof
      assume seq is summable;
@@ -244,8 +236,8 @@ then A1:   Partial_Sums(seq) is convergent by Def2;
 end;
 
 theorem Th9:
-     seq is summable implies
-     seq is convergent & lim seq = 0.X
+  seq is summable implies
+    seq is convergent & lim seq = 0.X
 proof
      set PSseq = Partial_Sums(seq);
      assume seq is summable;
@@ -260,13 +252,12 @@ A4:   seq ^\1 = PSseq ^\1 - PSseq
         now let n;
         (PSseq).(n + 1) = (PSseq).n + seq.(n + 1) by Def1
                     .= (PSseq).n + (seq ^\1).n by BHSP_3:def 5;
-     hence
-        (PSseq ^\1).n = (PSseq).n + (seq ^\1).n by BHSP_3:def 5;
+     hence (PSseq ^\1).n = (PSseq).n + (seq ^\1).n by BHSP_3:def 5;
      end;
      then A5: (PSseq ^\1) = PSseq + seq ^\1 by NORMSP_1:def 5;
-        seq ^\1 + (PSseq - PSseq) = seq ^\1
+     seq ^\1 + (PSseq - PSseq) = seq ^\1
      proof
-             now let n;
+       now let n;
           thus (seq ^\1 + (PSseq - PSseq)).n
         = (seq ^\1).n + (PSseq - PSseq).n by NORMSP_1:def 5
        .= (seq ^\1).n + (PSseq.n - PSseq.n) by NORMSP_1:def 6
@@ -279,54 +270,52 @@ A4:   seq ^\1 = PSseq ^\1 - PSseq
      end;
      then seq ^\1 is convergent by A1,A2,BHSP_2:4; hence
 A6:   seq is convergent by BHSP_3:46;
-        seq ^\1 is subsequence of seq by BHSP_3:43;
+     seq ^\1 is subsequence of seq by BHSP_3:43;
      hence thesis by A3,A4,A6,BHSP_3:33;
 end;
 
 theorem Th10:
-     X is_Hilbert_space implies
-     ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
+  X is_Hilbert_space implies
+   ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
      m >= k ) holds ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r ))
 proof
      assume X is_Hilbert_space;
 then A1:   X is RealUnitarySpace & X is_complete_space by BHSP_3:def 7;
      set PSseq = Partial_Sums(seq);
-     thus
-        seq is summable implies ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.(PSseq).n - (PSseq).m.|| < r )
+     thus seq is summable implies
+     ( for r st r > 0 ex k st for n, m st n >= k & m >= k holds
+       ||.(PSseq).n - (PSseq).m.|| < r )
      proof
-          assume seq is summable;
-          then PSseq is convergent by Def2;
-          then PSseq is_Cauchy_sequence by BHSP_3:9;
-          hence thesis by BHSP_3:2;
+       assume seq is summable;
+       then PSseq is convergent by Def2;
+       then PSseq is_Cauchy_sequence by BHSP_3:9;
+       hence thesis by BHSP_3:2;
      end;
-     thus ( for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
-     ||.(PSseq).n - (PSseq).m.|| < r )
+     thus (for r st r > 0 ex k st for n, m st n >= k & m >= k holds
+     ||.(PSseq).n - (PSseq).m.|| < r)
      implies seq is summable
      proof
-          assume
-             for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
-          holds ||.(PSseq).n - (PSseq).m.|| < r;
-          then PSseq is_Cauchy_sequence by BHSP_3:2;
-          then PSseq is convergent by A1,BHSP_3:def 6;
-          hence thesis by Def2;
+       assume for r st r > 0 ex k st for n, m st n >= k & m >= k
+       holds ||.(PSseq).n - (PSseq).m.|| < r;
+       then PSseq is_Cauchy_sequence by BHSP_3:2;
+       then PSseq is convergent by A1,BHSP_3:def 6;
+       hence thesis by Def2;
      end;
 end;
 
 theorem
-        seq is summable implies Partial_Sums(seq) is bounded
+  seq is summable implies Partial_Sums(seq) is bounded
 proof
-    assume seq is summable;
-    then Partial_Sums(seq) is convergent by Def2;
-    hence thesis by BHSP_3:24;
+  assume seq is summable;
+  then Partial_Sums(seq) is convergent by Def2;
+  hence thesis by BHSP_3:24;
 end;
 
 theorem Th12:
-     for seq, seq1 st for n holds seq1.n = seq.0 holds
-     Partial_Sums(seq^\1) = (Partial_Sums(seq)^\1) - seq1
+  for seq, seq1 st for n holds seq1.n = seq.0 holds
+   Partial_Sums(seq^\1) = (Partial_Sums(seq)^\1) - seq1
 proof
-    let seq;
-    let seq1;
+  let seq, seq1;
     assume
 A1:  for n holds seq1.n = seq.0;
 A2:  ((Partial_Sums(seq)^\1) - seq1).0 = (Partial_Sums(seq)^\1).0 - seq1.0
@@ -339,7 +328,7 @@ A2:  ((Partial_Sums(seq)^\1) - seq1).0 = (Partial_Sums(seq)^\1).0 - seq1.0
  .= seq.(0 + 1) + 0'(X) by RLVECT_1:28
  .= seq.(0 + 1) by RLVECT_1:10
  .= (seq^\1).0 by BHSP_3:def 5;
-       now let n;
+   now let n;
     thus ((Partial_Sums(seq)^\1) - seq1).(n + 1)
   = (Partial_Sums(seq)^\1).(n + 1) - seq1.(n + 1) by NORMSP_1:def 6
   .= (Partial_Sums(seq)^\1).(n + 1) - seq.0 by A1
@@ -355,28 +344,28 @@ A2:  ((Partial_Sums(seq)^\1) - seq1).0 = (Partial_Sums(seq)^\1).0 - seq1.0
 end;
 
 theorem Th13:
-     seq is summable implies for k holds seq^\k is summable
+  seq is summable implies for k holds seq^\k is summable
 proof defpred P[Nat] means seq^\($1) is summable;
      assume seq is summable;
 then A1:  P[0] by BHSP_3:35;
 A2:   for k st P[k] holds P[k+1] proof let k;
-          assume seq^\k is summable;
-          then Partial_Sums(seq^\k) is convergent by Def2;
+      assume seq^\k is summable;
+      then Partial_Sums(seq^\k) is convergent by Def2;
       then A3: Partial_Sums(seq^\k)^\1 is convergent by BHSP_3:44;
       A4: seq^\(k+1)=(seq^\k)^\1 by BHSP_3:37;
       reconsider seq1 = NAT --> (seq^\k).0 as sequence of X by FUNCOP_1:57;
       A5: for m holds seq1.m = (seq^\k).0 by FUNCOP_1:13;
       A6: seq1 is convergent by BHSP_2:1;
-             Partial_Sums(seq^\k^\1) = (Partial_Sums(seq^\k)^\1) - seq1
-          by A5,Th12;
-          then Partial_Sums(seq^\k^\1) is convergent by A3,A6,BHSP_2:4;
-          hence thesis by A4,Def2;
-      end;
+      Partial_Sums(seq^\k^\1) = (Partial_Sums(seq^\k)^\1) - seq1
+        by A5,Th12;
+      then Partial_Sums(seq^\k^\1) is convergent by A3,A6,BHSP_2:4;
+      hence thesis by A4,Def2;
+    end;
      thus for k holds P[k] from NAT_1:sch 1(A1,A2);
 end;
 
 theorem
-        (ex k st seq^\k is summable) implies seq is summable
+  (ex k st seq^\k is summable) implies seq is summable
 proof
      given k such that
 A1:  seq^\k is summable;
@@ -400,7 +389,7 @@ A4: seq1 is convergent by BHSP_2:1;
     A7: now let m;
        assume
    A8: P[m];
-           Partial_Sums(seq^\(k+1)).(m+1) + seq1.(m+1)
+       Partial_Sums(seq^\(k+1)).(m+1) + seq1.(m+1)
       = seq1.(m+1) + (Partial_Sums(seq^\(k+1)).m + (seq^\(k+1)).(m+1)) by Def1
      .= seq1.(m+1) + Partial_Sums(seq^\(k+1)).m + (seq^\(k+1)).(m+1)
         by RLVECT_1:def 6
@@ -411,8 +400,8 @@ A4: seq1 is convergent by BHSP_2:1;
      .= Partial_Sums(seq).(m+(k+1)) + seq.(m+1+(k+1)) by BHSP_3:def 5
      .= Partial_Sums(seq).(m+(k+1)+1) by Def1
      .= Partial_Sums(seq).(m+1+(k+1))
-     .= (Partial_Sums(seq)^\(k+1)).(m+1) by BHSP_3:def 5; hence
-           P[m+1];
+     .= (Partial_Sums(seq)^\(k+1)).(m+1) by BHSP_3:def 5;
+        hence P[m+1];
       end;
      thus thesis from NAT_1:sch 1(A6,A7);
  end;
@@ -424,133 +413,125 @@ NORMSP_1:def 5
  hence thesis by Def2;
 end;
 
-definition
-          let X, seq, n;
-          func Sum(seq,n) -> Point of X equals
-:Def4:    Partial_Sums(seq).n;
-correctness;
+definition let X, seq, n;
+  func Sum(seq,n) -> Point of X equals :Def4:
+    Partial_Sums(seq).n;
+  coherence;
 end;
 
 canceled;
 
 theorem Th16:
-     Sum(seq, 0) = seq.0
+  Sum(seq, 0) = seq.0
 proof
-     thus Sum(seq, 0) = Partial_Sums(seq).0 by Def4
+  thus Sum(seq, 0) = Partial_Sums(seq).0 by Def4
                .= seq.0 by Def1;
 end;
 
 theorem Th17:
-     Sum(seq, 1) = Sum(seq, 0) + seq.1
+  Sum(seq, 1) = Sum(seq, 0) + seq.1
 proof
-      Partial_Sums(seq).1 = Partial_Sums(seq).0 + seq.(0 + 1) by Def1
+  Partial_Sums(seq).1 = Partial_Sums(seq).0 + seq.(0 + 1) by Def1
                         .= Partial_Sums(seq).0 + seq.1;
-     hence Sum(seq, 1) = Partial_Sums(seq).0 + seq.1 by Def4
+  hence Sum(seq, 1) = Partial_Sums(seq).0 + seq.1 by Def4
                .= Sum(seq, 0) + seq.1 by Def4;
 end;
 
 theorem Th18:
-     Sum(seq, 1) = seq.0 + seq.1
+  Sum(seq, 1) = seq.0 + seq.1
 proof
-     thus Sum(seq, 1) = Sum(seq, 0) + seq.1 by Th17
+  thus Sum(seq, 1) = Sum(seq, 0) + seq.1 by Th17
                .= seq.0 + seq.1 by Th16;
 end;
 
 theorem Th19:
-     Sum(seq, n + 1) = Sum(seq, n) + seq.(n + 1)
+  Sum(seq, n + 1) = Sum(seq, n) + seq.(n + 1)
 proof
-     thus
-        Sum(seq, n + 1) = Partial_Sums(seq).(n + 1) by Def4
+  thus Sum(seq, n + 1) = Partial_Sums(seq).(n + 1) by Def4
                    .= Partial_Sums(seq).n + seq.(n + 1) by Def1
                    .= Sum(seq, n) + seq.(n + 1) by Def4;
 end;
 
 theorem Th20:
-     seq.(n + 1) = Sum(seq, n + 1) - Sum(seq, n)
+  seq.(n + 1) = Sum(seq, n + 1) - Sum(seq, n)
 proof
-     thus
-        Sum(seq, n + 1) - Sum(seq, n) = ( seq.(n + 1) + Sum(seq, n) ) - Sum
-(seq, n) by Th19
+  thus Sum(seq, n + 1) - Sum(seq, n) = ( seq.(n + 1) + Sum(seq, n) ) -
+    Sum(seq, n) by Th19
      .= seq.(n + 1) + ( Sum(seq, n) - Sum(seq, n) ) by RLVECT_1:42
      .= seq.(n + 1) + 0.X by RLVECT_1:28
      .= seq.(n + 1) by RLVECT_1:10;
 end;
 
 theorem
-         seq.1 = Sum(seq, 1) - Sum(seq, 0)
+  seq.1 = Sum(seq, 1) - Sum(seq, 0)
 proof
-        seq.(0 + 1) = Sum(seq, 0 + 1) - Sum(seq, 0) by Th20;
-     hence thesis;
+  seq.(0 + 1) = Sum(seq, 0 + 1) - Sum(seq, 0) by Th20;
+  hence thesis;
 end;
 
-definition
-          let X, seq, n, m;
-          func Sum(seq, n, m) -> Point of X equals
-:Def5:    Sum(seq, n) - Sum(seq, m);
-correctness;
+definition let X, seq, n, m;
+  func Sum(seq, n, m) -> Point of X equals :Def5:
+    Sum(seq, n) - Sum(seq, m);
+  coherence;
 end;
 
 canceled;
 
 theorem
-       Sum(seq, 1, 0) = seq.1
+  Sum(seq, 1, 0) = seq.1
 proof
-        Sum(seq, 1, 0) = Sum(seq, 1) - Sum(seq, 0) by Def5
+  Sum(seq, 1, 0) = Sum(seq, 1) - Sum(seq, 0) by Def5
                    .= (seq.0 + seq.1) - Sum(seq, 0) by Th18
                    .= (seq.1 + seq.0) - seq.0 by Th16
                    .= seq.1 + (seq.0 - seq.0) by RLVECT_1:42
                    .= seq.1 + 0'(X) by RLVECT_1:28;
-     hence thesis by RLVECT_1:10;
+  hence thesis by RLVECT_1:10;
 end;
 
 theorem
-       Sum(seq, n+1, n) = seq.(n+1)
+  Sum(seq, n+1, n) = seq.(n+1)
 proof
-        Sum(seq, n+1, n) = Sum(seq, n+1) - Sum(seq, n) by Def5;
-     hence thesis by Th20;
+  Sum(seq, n+1, n) = Sum(seq, n+1) - Sum(seq, n) by Def5;
+  hence thesis by Th20;
 end;
 
 theorem Th25:
-     X is_Hilbert_space implies
-     ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.Sum(seq, n) - Sum(seq, m).|| < r ))
+  X is_Hilbert_space implies
+    ( seq is summable iff ( for r st r > 0 ex k st for n, m st
+      n >= k & m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r ))
 proof
+   assume
+A1:X is_Hilbert_space;
+   thus seq is summable implies ( for r st r > 0 ex k st for n, m st n >= k &
+   m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r )
+   proof
      assume
-A1:   X is_Hilbert_space;
-     thus
-        seq is summable implies ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.Sum(seq, n) - Sum(seq, m).|| < r )
-     proof
-          assume
-A2:          seq is summable;
-             now let r;
-          assume
-             r > 0;
-          then consider k such that
-     A3:   for n, m st ( n >= k & m >= k ) holds
-          ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.||
- < r by A1,A2,Th10;
-          take k;
-          let n, m;
-          assume n >= k & m >= k;
-          then ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r by A3;
-          then ||.Sum(seq, n) - (Partial_Sums(seq)).m.|| < r by Def4; hence
-             ||.Sum(seq, n) - Sum(seq, m).|| < r by Def4;
-          end;
-          hence ( for r st r > 0 ex k st for n, m st ( n >= k &
-          m >= k ) holds ||.Sum(seq, n) - Sum(seq, m).|| < r );
+A2:  seq is summable;
+     now let r;
+       assume r > 0;
+       then consider k such that
+ A3:   for n, m st n >= k & m >= k holds
+       ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r by A1,A2,Th10;
+       take k;
+       let n, m;
+       assume n >= k & m >= k;
+       then ||.(Partial_Sums(seq)).n - (Partial_Sums(seq)).m.|| < r by A3;
+       then ||.Sum(seq, n) - (Partial_Sums(seq)).m.|| < r by Def4; hence
+       ||.Sum(seq, n) - Sum(seq, m).|| < r by Def4;
      end;
-     thus ( for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+     hence ( for r st r > 0 ex k st for n, m st n >= k &
+          m >= k holds ||.Sum(seq, n) - Sum(seq, m).|| < r );
+     end;
+     thus ( for r st r > 0 ex k st for n, m st n >= k & m >= k holds
      ||.Sum(seq, n) - Sum(seq, m).|| < r ) implies seq is summable
      proof
           assume
-     A4:   for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+     A4:   for r st r > 0 ex k st for n, m st n >= k & m >= k holds
           ||.Sum(seq, n) - Sum(seq, m).|| < r;
              now let r;
-          assume
-             r > 0;
+          assume r > 0;
           then consider k such that
-     A5:   for n, m st ( n >= k & m >= k ) holds
+     A5:   for n, m st n >= k & m >= k holds
           ||.Sum(seq, n) - Sum(seq, m).|| < r by A4;
           take k;
           let n, m;
@@ -564,86 +545,79 @@ A2:          seq is summable;
 end;
 
 theorem
-        X is_Hilbert_space implies
-     ( seq is summable iff ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.Sum(seq, n, m).|| < r ))
+  X is_Hilbert_space implies
+   ( seq is summable iff ( for r st r > 0 ex k st for n, m st n >= k &
+     m >= k holds ||.Sum(seq, n, m).|| < r ))
 proof
      assume
 A1:   X is_Hilbert_space;
-     thus
-        seq is summable implies ( for r st r > 0 ex k st for n, m st ( n >= k &
-     m >= k ) holds ||.Sum(seq, n, m).|| < r )
+     thus seq is summable implies ( for r st r > 0 ex k st for n, m st n >= k &
+     m >= k holds ||.Sum(seq, n, m).|| < r )
      proof
-          assume
-A2:          seq is summable;
-             now let r;
+       assume
+A2:    seq is summable;
+       now let r;
           assume r > 0;
           then consider k such that
      A3:   for n, m st ( n >= k & m >= k ) holds
           ||.Sum(seq, n) - Sum(seq, m).|| < r by A1,A2,Th25;
           take k;
           let n, m;
-          assume
-             n >= k & m >= k;
-          then ||.Sum(seq, n) - Sum(seq, m).|| < r by A3; hence
-             ||.Sum(seq, n, m).|| < r by Def5;
+          assume n >= k & m >= k;
+          then ||.Sum(seq, n) - Sum(seq, m).|| < r by A3;
+          hence ||.Sum(seq, n, m).|| < r by Def5;
           end;
-          hence ( for r st r > 0 ex k st for n, m st ( n >= k &
-          m >= k ) holds ||.Sum(seq, n, m).|| < r );
+          hence ( for r st r > 0 ex k st for n, m st n >= k &
+          m >= k holds ||.Sum(seq, n, m).|| < r );
      end;
-     thus
-        ( for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+     thus ( for r st r > 0 ex k st for n, m st n >= k & m >= k holds
      ||.Sum(seq, n, m).|| < r ) implies seq is summable
      proof
           assume
-     A4:   for r st r > 0 ex k st for n, m st ( n >= k & m >= k ) holds
+     A4:   for r st r > 0 ex k st for n, m st n >= k & m >= k holds
           ||.Sum(seq, n, m).|| < r;
-             now let r;
+          now let r;
           assume r > 0;
           then consider k such that
-     A5:   for n, m st ( n >= k & m >= k ) holds
-          ||.Sum(seq, n, m).|| < r by A4;
+     A5:   for n, m st n >= k & m >= k holds ||.Sum(seq, n, m).|| < r by A4;
           take k;
           let n, m;
           assume n >= k & m >= k;
-          then ||.Sum(seq, n, m).|| < r by A5; hence
-             ||.Sum(seq, n) - Sum(seq, m).|| < r by Def5;
+          then ||.Sum(seq, n, m).|| < r by A5;
+          hence ||.Sum(seq, n) - Sum(seq, m).|| < r by Def5;
       end;
       hence seq is summable by A1,Th25;
    end;
 end;
 
-definition
-          let Rseq, n;
-          func Sum(Rseq, n) -> Real equals
-:Def6:    Partial_Sums(Rseq).n;
-correctness;
+definition let Rseq, n;
+  func Sum(Rseq, n) -> Real equals :Def6:
+    Partial_Sums(Rseq).n;
+  coherence;
 end;
 
-definition
-          let Rseq, n,m;
-          func Sum(Rseq, n, m) -> Real equals
-:Def7:    Sum(Rseq, n) - Sum(Rseq, m);
-correctness;
+definition let Rseq, n,m;
+  func Sum(Rseq, n, m) -> Real equals :Def7:
+    Sum(Rseq, n) - Sum(Rseq, m);
+  coherence;
 end;
 
-definition
-          let X, seq;
-          attr seq is absolutely_summable means
-:Def8: ||.seq.|| is summable;
+definition let X, seq;
+  attr seq is absolutely_summable means :Def8:
+    ||.seq.|| is summable;
 end;
 
 theorem
-        seq1 is absolutely_summable & seq2 is absolutely_summable implies
-     seq1 + seq2 is absolutely_summable
+  seq1 is absolutely_summable & seq2 is absolutely_summable implies
+    seq1 + seq2 is absolutely_summable
 proof
-     assume that
-A1:   seq1 is absolutely_summable and
-A2:   seq2 is absolutely_summable;
-A3:   ||.seq1.|| is summable by A1,Def8;
-        ||.seq2.|| is summable by A2,Def8;
+   assume that
+A1:seq1 is absolutely_summable and
+A2:seq2 is absolutely_summable;
+A3:||.seq1.|| is summable by A1,Def8;
+   ||.seq2.|| is summable by A2,Def8;
 then A4:   ||.seq1.|| + ||.seq2.|| is summable by A3,SERIES_1:10;
-        for n holds ||.seq1 + seq2.||.n >= 0 &
+   for n holds ||.seq1 + seq2.||.n >= 0 &
      ||.seq1 + seq2.||.n <= (||.seq1.|| + ||.seq2.||).n
      proof
           let n;
@@ -670,101 +644,101 @@ BHSP_2:def 3;
 end;
 
 theorem
-        seq is absolutely_summable implies a * seq is absolutely_summable
+  seq is absolutely_summable implies a * seq is absolutely_summable
 proof
      assume seq is absolutely_summable;
      then ||.seq.|| is summable by Def8;
 then A1:   abs(a) (#) ||.seq.|| is summable by SERIES_1:13;
-        for n holds ||.a * seq.||.n >= 0 &
+     for n holds ||.a * seq.||.n >= 0 &
      ||.a * seq.||.n <= (abs(a) (#) ||.seq.||).n
      proof
-          let n;
-          thus ||.a * seq.||.n >= 0
-          proof
-             ||.a * seq.||.n = ||.(a * seq).n.|| by BHSP_2:def 3;
-          hence thesis by BHSP_1:34;
-          end;
-          thus ||.a * seq.||.n <= (abs(a) (#) ||.seq.||).n
-          proof
-             ||.a * seq.||.n = ||.(a * seq).n.|| by BHSP_2:def 3
-                       .= ||.a * seq.n.|| by NORMSP_1:def 8
-                       .= abs(a) * ||.seq.n.|| by BHSP_1:33
-                       .= abs(a) * ||.seq.||.n by BHSP_2:def 3
-                       .= (abs(a) (#) ||.seq.||).n by SEQ_1:13;
-          hence thesis;
-          end;
+       let n;
+       thus ||.a * seq.||.n >= 0
+       proof
+         ||.a * seq.||.n = ||.(a * seq).n.|| by BHSP_2:def 3;
+         hence thesis by BHSP_1:34;
+       end;
+       thus ||.a * seq.||.n <= (abs(a) (#) ||.seq.||).n
+       proof
+         ||.a * seq.||.n = ||.(a * seq).n.|| by BHSP_2:def 3
+                    .= ||.a * seq.n.|| by NORMSP_1:def 8
+                    .= abs(a) * ||.seq.n.|| by BHSP_1:33
+                    .= abs(a) * ||.seq.||.n by BHSP_2:def 3
+                    .= (abs(a) (#) ||.seq.||).n by SEQ_1:13;
+         hence thesis;
+       end;
      end;
      then ||.a * seq.|| is summable by A1,SERIES_1:24;
      hence thesis by Def8;
 end;
 
 theorem
-        ( for n holds ||.seq.||.n <= Rseq.n ) & Rseq is summable implies
-     seq is absolutely_summable
+  ( for n holds ||.seq.||.n <= Rseq.n ) & Rseq is summable implies
+    seq is absolutely_summable
 proof
-     assume that
-A1:   for n holds ||.seq.||.n <= Rseq.n and
-A2:   Rseq is summable;
-        for n holds ||.seq.||.n >= 0
-     proof
-          let n;
-             ||.seq.||.n = ||.seq.n.|| by BHSP_2:def 3;
-          hence thesis by BHSP_1:34;
-     end;
-     then ||.seq.|| is summable by A1,A2,SERIES_1:24;
-     hence thesis by Def8;
+    assume that
+A1: for n holds ||.seq.||.n <= Rseq.n and
+A2: Rseq is summable;
+    for n holds ||.seq.||.n >= 0
+    proof
+      let n;
+      ||.seq.||.n = ||.seq.n.|| by BHSP_2:def 3;
+      hence thesis by BHSP_1:34;
+    end;
+    then ||.seq.|| is summable by A1,A2,SERIES_1:24;
+    hence thesis by Def8;
 end;
 
 theorem
-        ( for n holds seq.n <> 0.X &
-       Rseq.n = ||.seq.(n+1).||/||.seq.n.|| )
-       & Rseq is convergent & lim Rseq < 1 implies
+  ( for n holds seq.n <> 0.X &
+    Rseq.n = ||.seq.(n+1).||/||.seq.n.|| ) &
+      Rseq is convergent & lim Rseq < 1 implies
        seq is absolutely_summable
 proof
-     assume that
-A1:   for n holds seq.n <> 0'(X) & Rseq.n = ||.seq.(n+1).||/||.seq.n.|| and
-A2:   Rseq is convergent and
-A3:   lim Rseq < 1;
-        for n holds ||.seq.||.n > 0 & Rseq.n = ||.seq.||.(n+1)/||.seq.||.n
-     proof
-          let n;
-          thus ||.seq.||.n > 0
-          proof
-                  seq.n <> 0'(X) by A1;
-          then A4:   ||.seq.n.|| <> 0 by BHSP_1:32;
-                  ||.seq.n.|| >= 0 by BHSP_1:34;
-               then ||.seq.n.|| > 0 by A4;
-               hence thesis by BHSP_2:def 3;
-          end;
-          thus Rseq.n = ||.seq.||.(n+1)/||.seq.||.n
-          proof
-                  Rseq.n = ||.seq.(n+1).||/||.seq.n.|| by A1
-                     .= ||.seq.||.(n+1)/||.seq.n.|| by BHSP_2:def 3;
-               hence thesis by BHSP_2:def 3;
-          end;
-     end;
-     then ||.seq.|| is summable by A2,A3,SERIES_1:30;
-     hence thesis by Def8;
+    assume that
+A1: for n holds seq.n <> 0'(X) & Rseq.n = ||.seq.(n+1).||/||.seq.n.|| and
+A2: Rseq is convergent and
+A3: lim Rseq < 1;
+    for n holds ||.seq.||.n > 0 & Rseq.n = ||.seq.||.(n+1)/||.seq.||.n
+    proof
+      let n;
+      thus ||.seq.||.n > 0
+      proof
+        seq.n <> 0'(X) by A1;
+        then A4:   ||.seq.n.|| <> 0 by BHSP_1:32;
+        ||.seq.n.|| >= 0 by BHSP_1:34;
+        then ||.seq.n.|| > 0 by A4;
+        hence thesis by BHSP_2:def 3;
+      end;
+      thus Rseq.n = ||.seq.||.(n+1)/||.seq.||.n
+      proof
+        Rseq.n = ||.seq.(n+1).||/||.seq.n.|| by A1
+              .= ||.seq.||.(n+1)/||.seq.n.|| by BHSP_2:def 3;
+        hence thesis by BHSP_2:def 3;
+      end;
+    end;
+    then ||.seq.|| is summable by A2,A3,SERIES_1:30;
+    hence thesis by Def8;
 end;
 
 theorem Th31:
-      r > 0 & ( ex m st for n st n >= m holds ||.seq.n.|| >= r) implies
-      not seq is convergent or lim seq <> 0.X
+  r > 0 & ( ex m st for n st n >= m holds ||.seq.n.|| >= r) implies
+    not seq is convergent or lim seq <> 0.X
 proof
-     assume
-A1:   r > 0;
-     given m such that
-A2:   for n st n >= m holds ||.seq.n.|| >= r;
-        now per cases;
+   assume
+A1:r > 0;
+   given m such that
+A2:for n st n >= m holds ||.seq.n.|| >= r;
+   per cases;
      suppose not seq is convergent;
      hence thesis;
      end;
      suppose
      A3: seq is convergent;
-        now assume lim seq = 0'(X);
+     now assume lim seq = 0'(X);
      then consider k such that
 A4:  for n st n >= k holds ||.seq.n - 0'(X).|| < r by A1,A3,BHSP_2:19;
-        now let n;
+     now let n;
      assume
 A5:   n >= m+k;
         m+k >= m by NAT_1:29;
@@ -779,199 +753,198 @@ then A6:   n >= m by A5,XREAL_1:2;
      end;
      hence thesis;
      end;
-     end;
-     hence thesis;
 end;
 
 theorem Th32:
-     ( for n holds seq.n <> 0.X ) &
-     ( ex m st for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1 )
-     implies not seq is summable
+  ( for n holds seq.n <> 0.X ) &
+    ( ex m st for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1 )
+      implies not seq is summable
 proof
-     assume
-A1:   for n holds seq.n <> 0'(X);
-     given m such that
-A2:   for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1;
-        seq.m <> 0'(X) by A1;
+   assume
+A1:for n holds seq.n <> 0'(X);
+   given m such that
+A2:for n st n >= m holds ||.seq.(n+1).||/||.seq.n.|| >= 1;
+   seq.m <> 0'(X) by A1;
 then A3:   ||.seq.m.|| <> 0 by BHSP_1:32;
-        ||.seq.m.|| >= 0 by BHSP_1:34;
+   ||.seq.m.|| >= 0 by BHSP_1:34;
 then A4:   ||.seq.m.|| > 0 by A3;
-        now let n;
-         assume
-     A5:  n >= m;
+   now let n;
+     assume
+A5:  n >= m;
      defpred P[Nat] means ||.seq.(m+$1).|| >= ||.seq.m.||;
-     A6:  P[0];
-     A7:  for k st P[k] holds P[k+1]       proof        let k;
-              assume
-         A8:   ||.seq.(m+k).|| >= ||.seq.m.||;
-                 m+k >= m by NAT_1:29;
-         then A9:   ||.seq.(m+k+1).||/||.seq.(m+k).|| >= 1 by A2;
-                 seq.(m+k) <> 0'(X) by A1;
-         then A10:   ||.seq.(m+k).|| <> 0 by BHSP_1:32;
-                 ||.seq.(m+k).|| >= 0 by BHSP_1:34;
-              then ||.seq.(m+k).|| > 0 by A10;
-              then ||.seq.(m+k+1).|| >= ||.seq.(m+k).|| by A9,REAL_2:118;
-              hence thesis by A8,XREAL_1:2;
-        end;
-    A11:  for k holds P[k] from NAT_1:sch 1(A6,A7);
-           ex k st n = m + k by A5,NAT_1:28;
-        hence ||.seq.n.|| >= ||.seq.m.|| by A11;
-        end;
+A6:  P[0];
+A7:  for k st P[k] holds P[k+1]
+     proof
+       let k;
+       assume
+A8:    ||.seq.(m+k).|| >= ||.seq.m.||;
+       m+k >= m by NAT_1:29;
+       then A9:   ||.seq.(m+k+1).||/||.seq.(m+k).|| >= 1 by A2;
+       seq.(m+k) <> 0'(X) by A1;
+       then A10:   ||.seq.(m+k).|| <> 0 by BHSP_1:32;
+       ||.seq.(m+k).|| >= 0 by BHSP_1:34;
+       then ||.seq.(m+k).|| > 0 by A10;
+       then ||.seq.(m+k+1).|| >= ||.seq.(m+k).|| by A9,REAL_2:118;
+       hence thesis by A8,XREAL_1:2;
+     end;
+A11: for k holds P[k] from NAT_1:sch 1(A6,A7);
+     ex k st n = m + k by A5,NAT_1:28;
+     hence ||.seq.n.|| >= ||.seq.m.|| by A11;
+   end;
    then not seq is convergent or lim seq <> 0'(X) by A4,Th31;
- hence thesis by Th9;
+   hence thesis by Th9;
 end;
 
 theorem
-        (for n holds seq.n <> 0.X) &
-     (for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.||)
-     & Rseq is convergent & lim Rseq > 1
+  (for n holds seq.n <> 0.X) &
+    (for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.||)
+      & Rseq is convergent & lim Rseq > 1
      implies not seq is summable
 proof
-     assume that
-A1:   for n holds seq.n <> 0'(X) and
-A2:   for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.|| and
-A3:   Rseq is convergent & lim Rseq > 1;
-        lim Rseq - 1 > 0 by A3,XREAL_1:52;
-     then consider m such that
-A4:   for n st n >= m holds abs(Rseq.n - lim Rseq) < lim Rseq - 1
+   assume that
+A1:for n holds seq.n <> 0'(X) and
+A2:for n holds Rseq.n = ||.seq.(n+1).||/||.seq.n.|| and
+A3:Rseq is convergent & lim Rseq > 1;
+   lim Rseq - 1 > 0 by A3,XREAL_1:52;
+   then consider m such that
+A4:for n st n >= m holds abs(Rseq.n - lim Rseq) < lim Rseq - 1
      by A3,SEQ_2:def 7;
-        now let n;
-         assume
-    A5:  n >= m + 1;
-            m + 1 >= m by NAT_1:29;
+   now let n;
+     assume
+A5:  n >= m + 1;
+     m + 1 >= m by NAT_1:29;
      then A6: n >= m by A5,XREAL_1:2;
-            Rseq.n = ||.seq.(n+1).||/||.seq.n.|| by A2;
-         then abs(||.seq.(n+1).||/||.seq.n.|| - lim Rseq) < lim Rseq - 1
-         by A4,A6;
-         then - (lim Rseq - 1) < ||.seq.(n+1).||/||.seq.n.|| - lim Rseq
-         by SEQ_2:9;
-         then 1 - lim Rseq + lim Rseq < ||.seq.(n+1).||/||.seq.n.|| - lim Rseq
+     Rseq.n = ||.seq.(n+1).||/||.seq.n.|| by A2;
+     then abs(||.seq.(n+1).||/||.seq.n.|| - lim Rseq) < lim Rseq - 1
+       by A4,A6;
+     then - (lim Rseq - 1) < ||.seq.(n+1).||/||.seq.n.|| - lim Rseq
+       by SEQ_2:9;
+     then 1 - lim Rseq + lim Rseq < ||.seq.(n+1).||/||.seq.n.|| - lim Rseq
 +
-         lim Rseq by XREAL_1:8;hence
-            ||.seq.(n+1).||/||.seq.n.|| >= 1;
-     end;
-     hence thesis by A1,Th32;
+     lim Rseq by XREAL_1:8;
+     hence ||.seq.(n+1).||/||.seq.n.|| >= 1;
+   end;
+   hence thesis by A1,Th32;
 end;
 
 theorem
-        ( for n holds Rseq.n = n-root (||.seq.n.||) ) &
+  ( for n holds Rseq.n = n-root (||.seq.n.||) ) &
      Rseq is convergent & lim Rseq < 1 implies
      seq is absolutely_summable
 proof
-     assume that
-A1:   for n holds Rseq.n = n-root (||.seq.n.||) and
-A2:   Rseq is convergent and
-A3:   lim Rseq < 1;
-        for n holds ||.seq.||.n >= 0 & Rseq.n = n-root (||.seq.||.n)
+   assume that
+A1:for n holds Rseq.n = n-root (||.seq.n.||) and
+A2:Rseq is convergent and
+A3:lim Rseq < 1;
+   for n holds ||.seq.||.n >= 0 & Rseq.n = n-root (||.seq.||.n)
+   proof
+     let n;
+     thus ||.seq.||.n >= 0
      proof
-          let n;
-          thus ||.seq.||.n >= 0
-          proof
-                  ||.seq.||.n = ||.seq.n.|| by BHSP_2:def 3;
-               hence thesis by BHSP_1:34;
-          end;
-          thus Rseq.n = n-root (||.seq.||.n)
-          proof
-                  Rseq.n = n-root (||.seq.n.||) by A1;
-               hence thesis by BHSP_2:def 3;
-          end;
+       ||.seq.||.n = ||.seq.n.|| by BHSP_2:def 3;
+       hence thesis by BHSP_1:34;
      end;
-     then ||.seq.|| is summable by A2,A3,SERIES_1:32;
-     hence thesis by Def8;
+     thus Rseq.n = n-root (||.seq.||.n)
+     proof
+       Rseq.n = n-root (||.seq.n.||) by A1;
+       hence thesis by BHSP_2:def 3;
+     end;
+   end;
+   then ||.seq.|| is summable by A2,A3,SERIES_1:32;
+   hence thesis by Def8;
 end;
 
 theorem
-         (for n holds Rseq.n = n-root (||.seq.||.n))
-      & (ex m st for n st n >= m holds Rseq.n >= 1)
+  (for n holds Rseq.n = n-root (||.seq.||.n))
+    & (ex m st for n st n >= m holds Rseq.n >= 1)
       implies not seq is summable
 proof
+   assume
+A1:for n holds Rseq.n = n-root (||.seq.||.n);
+   given m such that
+A2:for n st n >= m holds Rseq.n >= 1;
+   now let n;
      assume
-A1:   for n holds Rseq.n = n-root (||.seq.||.n);
-     given m such that
-A2:   for n st n >= m holds Rseq.n >= 1;
-        now let n;
-         assume
-     A3:  n >= m+1;
-            m+1 >= m by NAT_1:29;
+A3:  n >= m+1;
+     m+1 >= m by NAT_1:29;
      then A4: n>=m by A3,XREAL_1:2;
      A5: ||.seq.n.|| >= 0 by BHSP_1:34;
-            Rseq.n = n-root (||.seq.||.n) by A1
-               .= n-root ||.seq.n.|| by BHSP_2:def 3;
-         then n-root ||.seq.n.|| >= 1 by A2,A4;
+     Rseq.n = n-root (||.seq.||.n) by A1
+     .= n-root ||.seq.n.|| by BHSP_2:def 3;
+     then n-root ||.seq.n.|| >= 1 by A2,A4;
      then A6: n-root ||.seq.n.|| |^ n >= 1 by PREPOWER:19;
-            m + 1 >= 1 by NAT_1:29;
-         then n >= 1 by A3,XREAL_1:2;
-        hence ||.seq.n.|| >= 1 by A5,A6,POWER:5;
-     end;
-     then not seq is convergent or lim seq <> 0'(X) by Th31;
-     hence thesis by Th9;
+     m + 1 >= 1 by NAT_1:29;
+     then n >= 1 by A3,XREAL_1:2;
+     hence ||.seq.n.|| >= 1 by A5,A6,POWER:5;
+   end;
+   then not seq is convergent or lim seq <> 0'(X) by Th31;
+   hence thesis by Th9;
 end;
 
 theorem
-        (for n holds Rseq.n = n-root (||.seq.||.n))
+  (for n holds Rseq.n = n-root (||.seq.||.n))
      & Rseq is convergent & lim Rseq > 1
      implies not seq is summable
 proof
-     assume that
-A1:  for n holds Rseq.n = n-root (||.seq.||.n) and
-A2:  Rseq is convergent & lim Rseq > 1;
-        lim Rseq - 1 > 0 by A2,XREAL_1:52;
-     then consider m such that
-A3:  for n st n >= m holds abs(Rseq.n - lim Rseq) < lim Rseq - 1
+   assume that
+A1:for n holds Rseq.n = n-root (||.seq.||.n) and
+A2:Rseq is convergent & lim Rseq > 1;
+   lim Rseq - 1 > 0 by A2,XREAL_1:52;
+   then consider m such that
+A3:for n st n >= m holds abs(Rseq.n - lim Rseq) < lim Rseq - 1
      by A2,SEQ_2:def 7;
-        now let n;
-         assume
-     A4:  n >= m + 1;
-            m + 1 >= m by NAT_1:29;
+   now let n;
+     assume
+A4:  n >= m + 1;
+     m + 1 >= m by NAT_1:29;
      then A5: n >= m by A4,XREAL_1:2;
      A6: ||.seq.n.|| >= 0 by BHSP_1:34;
-            Rseq.n = n-root (||.seq.||.n) by A1
+     Rseq.n = n-root (||.seq.||.n) by A1
                .= n-root ||.seq.n.|| by BHSP_2:def 3;
-         then abs(n-root ||.seq.n.|| - lim Rseq) < lim Rseq - 1 by A3,A5;
-         then - (lim Rseq - 1) < n-root ||.seq.n.|| - lim Rseq by SEQ_2:9;
-         then 1 - lim Rseq + lim Rseq < n-root ||.seq.n.|| - lim Rseq + lim
-Rseq
-         by XREAL_1:8;
+     then abs(n-root ||.seq.n.|| - lim Rseq) < lim Rseq - 1 by A3,A5;
+     then - (lim Rseq - 1) < n-root ||.seq.n.|| - lim Rseq by SEQ_2:9;
+     then 1 - lim Rseq + lim Rseq < n-root ||.seq.n.|| - lim Rseq + lim Rseq
+       by XREAL_1:8;
      then A7: n-root ||.seq.n.|| |^ n >= 1 by PREPOWER:19;
-            m + 1 >= 1 by NAT_1:29;
-         then n >= 1 by A4,XREAL_1:2;
-        hence ||.seq.n.|| >= 1 by A6,A7,POWER:5;
-     end;
-     then not seq is convergent or lim seq <> 0'(X) by Th31;
-     hence thesis by Th9;
+     m + 1 >= 1 by NAT_1:29;
+     then n >= 1 by A4,XREAL_1:2;
+     hence ||.seq.n.|| >= 1 by A6,A7,POWER:5;
+   end;
+   then not seq is convergent or lim seq <> 0'(X) by Th31;
+   hence thesis by Th9;
 end;
 
 theorem Th37:
-     Partial_Sums(||.seq.||) is non-decreasing
+  Partial_Sums(||.seq.||) is non-decreasing
 proof
-        now let n;
-        ||.seq.(n+1).|| >= 0 by BHSP_1:34;
-     then ||.seq.||.(n+1) >= 0 by BHSP_2:def 3;
-     then 0 + Partial_Sums(||.seq.||).n <=
-     ||.seq.||.(n+1) + Partial_Sums(||.seq.||).n by XREAL_1:8;hence
-        Partial_Sums(||.seq.||).n <= Partial_Sums(||.seq.||).(n+1)
-       by SERIES_1:def 1;
-     end;
-     hence thesis by SEQM_3:def 13;
+  now let n;
+    ||.seq.(n+1).|| >= 0 by BHSP_1:34;
+    then ||.seq.||.(n+1) >= 0 by BHSP_2:def 3;
+    then 0 + Partial_Sums(||.seq.||).n <=
+    ||.seq.||.(n+1) + Partial_Sums(||.seq.||).n by XREAL_1:8;
+    hence Partial_Sums(||.seq.||).n <= Partial_Sums(||.seq.||).(n+1)
+      by SERIES_1:def 1;
+  end;
+  hence thesis by SEQM_3:def 13;
 end;
 
 theorem
-        for n holds Partial_Sums(||.seq.||).n >= 0
+  for n holds Partial_Sums(||.seq.||).n >= 0
 proof
-A1:   Partial_Sums(||.seq.||) is non-decreasing by Th37;
-     let n;
-A2:   Partial_Sums(||.seq.||).0 <= Partial_Sums(||.seq.||).n by A1,SEQM_3:21;
-        ||.(seq.0).|| >= 0 by BHSP_1:34;
-     then ||.seq.||.0 >= 0 by BHSP_2:def 3;
-     then Partial_Sums(||.seq.||).0 >= 0 by SERIES_1:def 1;
-     hence thesis by A2;
+A1:Partial_Sums(||.seq.||) is non-decreasing by Th37;
+   let n;
+A2:Partial_Sums(||.seq.||).0 <= Partial_Sums(||.seq.||).n by A1,SEQM_3:21;
+   ||.(seq.0).|| >= 0 by BHSP_1:34;
+   then ||.seq.||.0 >= 0 by BHSP_2:def 3;
+   then Partial_Sums(||.seq.||).0 >= 0 by SERIES_1:def 1;
+   hence thesis by A2;
 end;
 
 theorem Th39:
-     for n holds ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n
+  for n holds ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n
 proof
 defpred P[Nat] means ||.Partial_Sums(seq).$1.|| <= Partial_Sums(||.seq.||).$1;
-        Partial_Sums(||.seq.||).0 = ||.seq.||.0 by SERIES_1:def 1
+  Partial_Sums(||.seq.||).0 = ||.seq.||.0 by SERIES_1:def 1
                             .= ||.(seq.0).|| by BHSP_2:def 3;
 then A1: P[0] by Def1;
 A2:   now let n;
@@ -992,19 +965,19 @@ then A4:   ||.Partial_Sums(seq).(n+1).|| <=
 end;
 
 theorem
-        for n holds ||.Sum(seq, n).|| <= Sum(||.seq.||, n)
+  for n holds ||.Sum(seq, n).|| <= Sum(||.seq.||, n)
 proof
-     let n;
-        ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n by Th39;
-     then ||.Sum(seq, n).|| <= Partial_Sums(||.seq.||).n by Def4;
-     hence thesis by Def6;
+  let n;
+  ||.Partial_Sums(seq).n.|| <= Partial_Sums(||.seq.||).n by Th39;
+  then ||.Sum(seq, n).|| <= Partial_Sums(||.seq.||).n by Def4;
+  hence thesis by Def6;
 end;
 
 theorem Th41:
-    for n, m holds ||.Partial_Sums(seq).m - Partial_Sums(seq).n.|| <=
+  for n, m holds ||.Partial_Sums(seq).m - Partial_Sums(seq).n.|| <=
     abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n)
 proof
-     let n, m;
+  let n, m;
 A1:   now assume
 A2:   n <= m;
       set PSseq = Partial_Sums(seq);
@@ -1034,7 +1007,7 @@ then A10:   ||.PSseq.(n+(k+1)) - PSseq.n.|| <= ||.seq.(n+k+1).|| +
          ||.seq.(n+k+1).|| >= 0 by BHSP_1:34;
 then A11:   ||.seq.(n+k+1).|| + (PSseq'.(n+k) - PSseq'.n) >= 0 + 0 by A9,
 XREAL_1:9;
-         abs(PSseq'.(n+(k+1)) - PSseq'.n) = abs(PSseq'.(n+k) + (||.seq.||).(n+k
+  abs(PSseq'.(n+(k+1)) - PSseq'.n) = abs(PSseq'.(n+k) + (||.seq.||).(n+k
 +1) - PSseq'.n) by SERIES_1:def 1
    .= abs(||.seq.(n+k+1).|| + PSseq'.(n+k) - PSseq'.n) by BHSP_2:def 3
    .= abs(||.seq.(n+k+1).|| + (PSseq'.(n+k) - PSseq'.n));
@@ -1043,10 +1016,10 @@ XREAL_1:9;
 A12: for k holds P[k] from NAT_1:sch 1(A3,A5);
     reconsider d = n, t = m as Integer;
     reconsider k = t - d as Nat by A2,INT_1:18;
-       n + k = m;
+    n + k = m;
     hence thesis by A12;
 end;
-         now assume
+  now assume
 A13:   n >= m;
       set PSseq = Partial_Sums(seq);
       set PSseq' = Partial_Sums(||.seq.||);
@@ -1091,56 +1064,56 @@ XREAL_1:9;
 A23: for k holds P[k] from NAT_1:sch 1(A14,A16);
     reconsider d = n, t = m as Integer;
     reconsider k = d - t as Nat by A13,INT_1:18;
-       m + k = n;
+    m + k = n;
     hence thesis by A23;
 end;
    hence thesis by A1;
 end;
 
 theorem Th42:
-    for n, m holds ||.Sum(seq, m) - Sum(seq, n).|| <=
+  for n, m holds ||.Sum(seq, m) - Sum(seq, n).|| <=
     abs(Sum(||.seq.||, m) - Sum(||.seq.||, n))
 proof
-     let n, m;
-        ||.Partial_Sums(seq).m - Partial_Sums(seq).n.|| <=
-     abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Th41;
-     then ||.Sum(seq, m) - Partial_Sums(seq).n.|| <=
-     abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Def4;
-     then ||.Sum(seq, m) - Sum(seq, n).|| <=
-     abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Def4;
-     then ||.Sum(seq, m) - Sum(seq, n).|| <=
-     abs(Sum(||.seq.||, m) - Partial_Sums(||.seq.||).n) by Def6;
-     hence thesis by Def6;
+  let n, m;
+  ||.Partial_Sums(seq).m - Partial_Sums(seq).n.|| <=
+  abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Th41;
+  then ||.Sum(seq, m) - Partial_Sums(seq).n.|| <=
+  abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Def4;
+  then ||.Sum(seq, m) - Sum(seq, n).|| <=
+  abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).n) by Def4;
+  then ||.Sum(seq, m) - Sum(seq, n).|| <=
+  abs(Sum(||.seq.||, m) - Partial_Sums(||.seq.||).n) by Def6;
+  hence thesis by Def6;
 end;
 
 theorem
-       for n, m holds ||.Sum(seq, m, n).|| <= abs(Sum(||.seq.||, m, n))
+  for n, m holds ||.Sum(seq, m, n).|| <= abs(Sum(||.seq.||, m, n))
 proof
-     let n, m;
-        ||.Sum(seq, m) - Sum(seq, n).|| <=
-     abs(Sum(||.seq.||, m) - Sum(||.seq.||, n)) by Th42;
-     then ||.Sum(seq, m, n).|| <=
-     abs(Sum(||.seq.||, m) - Sum(||.seq.||, n)) by Def5;
-     hence thesis by Def7;
+  let n, m;
+  ||.Sum(seq, m) - Sum(seq, n).|| <=
+  abs(Sum(||.seq.||, m) - Sum(||.seq.||, n)) by Th42;
+  then ||.Sum(seq, m, n).|| <=
+  abs(Sum(||.seq.||, m) - Sum(||.seq.||, n)) by Def5;
+  hence thesis by Def7;
 end;
 
 theorem
-        X is_Hilbert_space implies
-     ( seq is absolutely_summable implies seq is summable )
+  X is_Hilbert_space implies
+    ( seq is absolutely_summable implies seq is summable )
 proof
      assume that
 A1:  X is_Hilbert_space and
 A2:  seq is absolutely_summable;
-A3:   ||.seq.|| is summable by A2,Def8;
-       now let r;
+A3:  ||.seq.|| is summable by A2,Def8;
+     now let r;
      assume r > 0;
      then r/2 > 0 by SEQ_2:3;
      then consider k such that
-A4:   for m st m >= k holds
+A4:  for m st m >= k holds
      abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).k) < r/2
      by A3,SERIES_1:25;
      take k;
-        now let m, n;
+     now let m, n;
      assume
 A5:   m >= k & n >= k;
 then A6:  abs(Partial_Sums(||.seq.||).m - Partial_Sums(||.seq.||).k) < r/2 by
@@ -1170,10 +1143,9 @@ then A9:   abs(Partial_Sums(||.seq.||).n - Partial_Sums(||.seq.||).m) < r
      hence thesis by A1,Th10;
 end;
 
-definition
-          let X, seq, Rseq;
-          func Rseq * seq -> sequence of X means
-:Def9:    for n holds it.n = Rseq.n * seq.n;
+definition let X, seq, Rseq;
+  func Rseq * seq -> sequence of X means :Def9:
+    for n holds it.n = Rseq.n * seq.n;
 existence proof
   deffunc F(Nat) = Rseq.$1 * seq.$1;
  thus ex M being sequence of X st for n holds M.n = F(n)
@@ -1194,9 +1166,9 @@ A2:  for n holds seq2.n = Rseq.n * seq.n;
 end;
 
 theorem
-        Rseq * (seq1 + seq2) = Rseq * seq1 + Rseq * seq2
+  Rseq * (seq1 + seq2) = Rseq * seq1 + Rseq * seq2
 proof
-        now let n;
+  now let n;
      thus (Rseq * (seq1 + seq2)).n = Rseq.n * (seq1 + seq2).n by Def9
   .= Rseq.n * (seq1.n + seq2.n) by NORMSP_1:def 5
   .= Rseq.n * seq1.n + Rseq.n * seq2.n by RLVECT_1:def 9
@@ -1208,61 +1180,61 @@ proof
 end;
 
 theorem
-        (Rseq1 + Rseq2) * seq = Rseq1 * seq + Rseq2 * seq
+  (Rseq1 + Rseq2) * seq = Rseq1 * seq + Rseq2 * seq
 proof
-        now let n;
+  now let n;
      thus ((Rseq1 + Rseq2) * seq).n = (Rseq1 + Rseq2).n * seq.n by Def9
   .= (Rseq1.n + Rseq2.n) * seq.n by SEQ_1:11
   .= Rseq1.n * seq.n + Rseq2.n * seq.n by RLVECT_1:def 9
   .= (Rseq1 * seq).n + Rseq2.n * seq.n by Def9
   .= (Rseq1 * seq).n + (Rseq2 * seq).n by Def9
   .= (Rseq1 * seq + Rseq2 * seq).n by NORMSP_1:def 5;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-        (Rseq1 (#) Rseq2) * seq = Rseq1 * (Rseq2 * seq)
+  (Rseq1 (#) Rseq2) * seq = Rseq1 * (Rseq2 * seq)
 proof
-        now let n;
+  now let n;
      thus ((Rseq1 (#) Rseq2) * seq).n = (Rseq1 (#) Rseq2).n * seq.n by Def9
   .= (Rseq1.n * Rseq2.n) * seq.n by SEQ_1:12
   .= Rseq1.n * (Rseq2.n * seq.n) by RLVECT_1:def 9
   .= Rseq1.n * (Rseq2 * seq).n by Def9
   .= (Rseq1 * (Rseq2 * seq)).n by Def9;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th48:
-     (a (#) Rseq) * seq = a * (Rseq * seq)
+  (a (#) Rseq) * seq = a * (Rseq * seq)
 proof
-        now let n;
+  now let n;
      thus ((a (#) Rseq) * seq).n = (a (#) Rseq).n * seq.n by Def9
   .= (a * Rseq.n) * seq.n by SEQ_1:13
   .= a * (Rseq.n * seq.n) by RLVECT_1:def 9
   .= a * (Rseq * seq).n by Def9
   .= (a * (Rseq * seq)).n by NORMSP_1:def 8;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
-        Rseq * (- seq) = (- Rseq) * seq
+  Rseq * (- seq) = (- Rseq) * seq
 proof
-        now let n;
+  now let n;
      thus (Rseq * (- seq)).n = Rseq.n * (-seq).n by Def9
   .= Rseq.n * (-(seq.n)) by BHSP_1:def 10
   .= (-(Rseq.n)) * seq.n by RLVECT_1:38
   .= (- Rseq).n * seq.n by SEQ_1:14
   .= ((- Rseq) * seq).n by Def9;
-     end;
-     hence thesis by FUNCT_2:113;
+  end;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th50:
-     Rseq is convergent & seq is convergent
-     implies Rseq * seq is convergent
+  Rseq is convergent & seq is convergent
+    implies Rseq * seq is convergent
 proof
      assume that
 A1:  Rseq is convergent and
@@ -1348,7 +1320,7 @@ then A18:   abs(Rseq.n) * ||.seq.n - g.|| < b * (r/(b + ||.g.||))
 end;
 
 theorem
-        Rseq is bounded & seq is bounded implies Rseq * seq is bounded
+  Rseq is bounded & seq is bounded implies Rseq * seq is bounded
 proof
      assume that
 A1:  Rseq is bounded and
@@ -1368,7 +1340,7 @@ A8:  ||.seq.n.|| <= M2 by A6;
         abs(Rseq.n) >= 0 by COMPLEX1:132;
 then A9:   abs(Rseq.n) * ||.seq.n.|| <= abs(Rseq.n) * M2 by A8,XREAL_1:66;
      A10:     abs(Rseq.n) * M2 <= M1 * M2 by A5,A7,XREAL_1:66;
-        ||.(Rseq * seq).n.|| = ||.Rseq.n * seq.n.|| by Def9
+    ||.(Rseq * seq).n.|| = ||.Rseq.n * seq.n.|| by Def9
                        .= abs(Rseq.n) * ||.seq.n.|| by BHSP_1:33;
      hence ||.(Rseq * seq).n.|| <= M by A9,A10,XREAL_1:2;
      end;
@@ -1379,8 +1351,8 @@ then A9:   abs(Rseq.n) * ||.seq.n.|| <= abs(Rseq.n) * M2 by A8,XREAL_1:66;
 end;
 
 theorem
-        Rseq is convergent & seq is convergent implies
-     Rseq * seq is convergent & lim (Rseq * seq) = lim Rseq * lim seq
+  Rseq is convergent & seq is convergent implies
+    Rseq * seq is convergent & lim (Rseq * seq) = lim Rseq * lim seq
 proof
      assume that
 A1:  Rseq is convergent and
@@ -1394,8 +1366,7 @@ A5:  for n holds abs(Rseq.n) < b by SEQ_2:15;
 A6:   ||.lim seq.|| >= 0 by BHSP_1:34;
 then A7:     b + ||.lim seq.|| > 0 + 0 by A4,XREAL_1:10;
         now let r;
-     assume
-       r > 0;
+     assume r > 0;
      then A8:  r/(b + ||.lim seq.||) > 0 by A7,REAL_2:127;
      then consider m1 such that
 A9:  for n st n >= m1 holds
@@ -1479,35 +1450,32 @@ then A17:   abs(Rseq.n) * ||.seq.n - lim seq.|| < b * (r/(b + ||.lim seq.||))
      hence thesis by A3,BHSP_2:def 2;
 end;
 
-definition
-          let Rseq;
-          attr Rseq is Cauchy means
-:Def10:   for r st r > 0 ex k st for n, m st ( n >= k & m >= k )
-          holds abs((Rseq.n - Rseq.m)) < r;
-  end;
+definition let Rseq;
+  attr Rseq is Cauchy means :Def10:
+    for r st r > 0 ex k st for n, m st n >= k & m >= k holds
+      abs((Rseq.n - Rseq.m)) < r;
+end;
 
-notation
-          let Rseq;
-          synonym Rseq is_Cauchy_sequence for Rseq is Cauchy;
+notation let Rseq;
+  synonym Rseq is_Cauchy_sequence for Rseq is Cauchy;
 end;
 
 theorem
-         X is_Hilbert_space implies
-      ( seq is_Cauchy_sequence & Rseq is_Cauchy_sequence implies
+  X is_Hilbert_space implies
+    ( seq is_Cauchy_sequence & Rseq is_Cauchy_sequence implies
       Rseq * seq is_Cauchy_sequence )
 proof
-      assume that
-A1:    X is_Hilbert_space and
-A2:   seq is_Cauchy_sequence and
-A3:   Rseq is_Cauchy_sequence;
-         X is_complete_space by A1,BHSP_3:def 7;
+   assume that
+A1:X is_Hilbert_space and
+A2:seq is_Cauchy_sequence and
+A3:Rseq is_Cauchy_sequence;
+   X is_complete_space by A1,BHSP_3:def 7;
 then A4:    seq is convergent by A2,BHSP_3:def 6;
          now let r be real number;
 A5:   r is Real by XREAL_0:def 1;
-      assume
-         r > 0;
+      assume r > 0;
       then consider k such that
-A6:    for n, m st ( n >= k & m >= k ) holds
+A6:    for n, m st n >= k & m >= k holds
       abs((Rseq.n - Rseq.m)) < r by A3,A5,Def10;
       take k;
       thus for n st n >= k holds
@@ -1519,10 +1487,8 @@ A6:    for n, m st ( n >= k & m >= k ) holds
 end;
 
 theorem Th54:
-     for n holds
-     Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n
-     = Partial_Sums(Rseq * seq).(n+1)
-     - (Rseq * Partial_Sums(seq)).(n+1)
+  for n holds Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n
+     = Partial_Sums(Rseq * seq).(n+1) - (Rseq * Partial_Sums(seq)).(n+1)
 proof
   defpred P[Nat] means Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).$1
      = Partial_Sums(Rseq * seq).($1+1)
@@ -1652,13 +1618,12 @@ then A6:   Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n +
 end;
 
 theorem Th55:
-     for n holds
-     Partial_Sums(Rseq * seq).(n+1) =
-     (Rseq * Partial_Sums(seq)).(n+1) -
+  for n holds Partial_Sums(Rseq * seq).(n+1) =
+    (Rseq * Partial_Sums(seq)).(n+1) -
      Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n
 proof
-     let n;
-        Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n +
+  let n;
+  Partial_Sums((Rseq - Rseq^\1) * Partial_Sums(seq)).n +
      (Rseq * Partial_Sums(seq)).(n+1)
      = (Partial_Sums(Rseq * seq).(n+1)
      - (Rseq * Partial_Sums(seq)).(n+1))
@@ -1694,12 +1659,10 @@ proof
      by SEQ_1:32;
      then Partial_Sums(Rseq * seq).(n+1) =
      (Rseq * Partial_Sums(seq)).(n+1) +
-     Partial_Sums((-1) * ((Rseq^\1 - Rseq) * Partial_Sums(seq))).n
-     by Th48;
+     Partial_Sums((-1) * ((Rseq^\1 - Rseq) * Partial_Sums(seq))).n by Th48;
      then Partial_Sums(Rseq * seq).(n+1) =
      (Rseq * Partial_Sums(seq)).(n+1) +
-     ((-1) * Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq))).n
-     by Th3;
+     ((-1) * Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq))).n by Th3;
      then Partial_Sums(Rseq * seq).(n+1) =
      (Rseq * Partial_Sums(seq)).(n+1) +
      (-1) * Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n
@@ -1712,17 +1675,17 @@ proof
 end;
 
 theorem
-        for n holds
-     Sum(Rseq * seq, n+1) =
+  for n holds
+    Sum(Rseq * seq, n+1) =
      (Rseq * Partial_Sums(seq)).(n+1) -
      Sum((Rseq^\1 - Rseq) * Partial_Sums(seq), n)
 proof
-     let n;
-        Partial_Sums(Rseq * seq).(n+1) =
-     (Rseq * Partial_Sums(seq)).(n+1) -
-     Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n by Th55;
-     then Sum(Rseq * seq, n+1) =
-     (Rseq * Partial_Sums(seq)).(n+1) -
-     Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n by Def4;
-     hence thesis by Def4;
+  let n;
+  Partial_Sums(Rseq * seq).(n+1) =
+  (Rseq * Partial_Sums(seq)).(n+1) -
+  Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n by Th55;
+  then Sum(Rseq * seq, n+1) =
+  (Rseq * Partial_Sums(seq)).(n+1) -
+  Partial_Sums((Rseq^\1 - Rseq) * Partial_Sums(seq)).n by Def4;
+  hence thesis by Def4;
 end;

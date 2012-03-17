@@ -10,8 +10,9 @@ environ
       YELLOW_2, LATTICE3, YELLOW_6, ORDERS_1, PRE_TOPC, RELAT_2, QUANTAL1,
       SUBSET_1, SEQM_3, SETFAM_1, WAYBEL11, CLASSES1, CAT_1, PROB_1, YELLOW_9,
       BOOLE, WAYBEL28;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, RELSET_1,
-      FUNCT_1, FUNCT_2, CLASSES1, SEQM_3, GRCAT_1, PRE_TOPC, ORDERS_2,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1,
+      FUNCT_1, FUNCT_2, STRUCT_0,
+      CLASSES1, SEQM_3, GRCAT_1, PRE_TOPC, ORDERS_2,
       LATTICE3, YELLOW_0, WAYBEL_0, YELLOW_2, WAYBEL_3, YELLOW_6, YELLOW_9,
       WAYBEL_9, WAYBEL11, WAYBEL17;
  constructors SEQM_3, GRCAT_1, CLASSES1, YELLOW_2, WAYBEL_3, YELLOW_9,
@@ -114,7 +115,7 @@ end;
 
 definition
   let N be non empty RelStr;
-  let f be map of N,N;
+  let f be Function of N,N;
   attr f is greater_or_equal_to_id means :Def1:
     for j being Element of N holds j <= f.j;
 end;
@@ -148,7 +149,7 @@ end;
 
 theorem Th6:
 for N being directed non empty RelStr holds
-  ex p being map of N,N st p is greater_or_equal_to_id
+  ex p being Function of N,N st p is greater_or_equal_to_id
 proof
   let N be directed non empty RelStr;
   defpred P[set,set] means
@@ -174,7 +175,7 @@ A3:  dom p = the carrier of N and
 A4:  rng p c= the carrier of N and
 A5:  for e being set st e in the carrier of N holds P[e,p.e]
          from WELLORD2:sch 1(A1);
-  reconsider p as map of N,N by A3,A4,FUNCT_2:4;
+  reconsider p as Function of N,N by A3,A4,FUNCT_2:4;
   take p;
   let j be Element of N;
   reconsider j'=j as Element of N;
@@ -183,13 +184,13 @@ end;
 
 registration
   let N be directed non empty RelStr;
-  cluster greater_or_equal_to_id map of N,N;
+  cluster greater_or_equal_to_id Function of N,N;
   existence by Th6;
 end;
 
 registration
   let N be reflexive non empty RelStr;
-  cluster greater_or_equal_to_id map of N,N;
+  cluster greater_or_equal_to_id Function of N,N;
 existence
 proof
   take id N;
@@ -200,7 +201,7 @@ end;
 definition
   let L be non empty 1-sorted;
   let N be non empty NetStr over L;
-  let f be map of N,N;
+  let f be Function of N,N;
   func N * f -> strict non empty NetStr over L means :Def2:
     the RelStr of it = the RelStr of N &
     the mapping of it = (the mapping of N) * f;
@@ -214,21 +215,22 @@ end;
 
 theorem Th7:
 for L being non empty 1-sorted, N being non empty NetStr over L,
-    f being map of N, N holds
+    f being Function of N, N holds
   the carrier of N * f = the carrier of N
 proof
-  let L be non empty 1-sorted, N be non empty NetStr over L, f be map of N, N;
+  let L be non empty 1-sorted, N be non empty NetStr over L, f be Function
+ of N, N;
        the RelStr of N * f = the RelStr of N by Def2;
   hence the carrier of N * f = the carrier of N;
 end;
 
 theorem Th8:
 for L being non empty 1-sorted, N being non empty NetStr over L,
-    f being map of N,N holds
+    f being Function of N,N holds
   N * f = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*f#)
 proof
   let L be non empty 1-sorted, N be non empty NetStr over L,
-      f be map of N,N;
+      f be Function of N,N;
        the RelStr of N*f=the RelStr of N by Def2;
   hence
        N * f=NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)*f
@@ -265,10 +267,10 @@ correctness by Th9;
 end;
 
 theorem Th10:
-for L being non empty 1-sorted, N being net of L, p being map of N,N holds
+for L being non empty 1-sorted, N being net of L, p being Function of N,N holds
   N * p is net of L
 proof
-  let L be non empty 1-sorted, N be net of L, p be map of N,N;
+  let L be non empty 1-sorted, N be net of L, p be Function of N,N;
        N * p = NetStr(#the carrier of N,the InternalRel of N,(the mapping of N)
 *
 p
@@ -279,17 +281,17 @@ end;
 
 registration
   let L be non empty 1-sorted, N be net of L;
-  let p be map of N,N;
+  let p be Function of N,N;
   cluster N * p -> transitive directed;
   correctness by Th10;
 end;
 
 theorem Th11:
-for L being non empty 1-sorted, N being net of L, p being map of N,N
+for L being non empty 1-sorted, N being net of L, p being Function of N,N
 st N in NetUniv L holds
   N * p in NetUniv L
 proof
-  let L be non empty 1-sorted, N be net of L, p be map of N,N;
+  let L be non empty 1-sorted, N be net of L, p be Function of N,N;
   assume N in NetUniv L;
   then consider N1 being strict net of L such that
 A1:  N1 = N and
@@ -308,17 +310,17 @@ proof
 A1: the NetStr of N = the NetStr of M;
 A2:
   N is subnet of N by YELLOW_6:23;
-       ex f being map of M, N st
+       ex f being Function of M, N st
     the mapping of M = (the mapping of N)*f &
     for m being Element of N ex n being Element of M st
       for p being Element of M st n <= p holds m <= f.p
   proof
-    consider f being map of N, N such that
+    consider f being Function of N, N such that
 A3:   the mapping of N = (the mapping of N)*f and
 A4:    for m being Element of N ex n being Element of N st
         for p being Element of N st n <= p holds m <= f.p
           by A2,YELLOW_6:def 12;
-    reconsider f2=f as map of M,N by A1;
+    reconsider f2=f as Function of M,N by A1;
     take f2;
     thus the mapping of M = (the mapping of N)*f2 by A1,A3;
     let m be Element of N;
@@ -351,18 +353,18 @@ end;
 
 theorem Th13:
 for L being non empty 1-sorted, N being net of L,
-    p being greater_or_equal_to_id map of N,N holds N * p is subnet of N
+    p being greater_or_equal_to_id Function of N,N holds N * p is subnet of N
 proof
   let L be non empty 1-sorted;
   let N be net of L;
-  let p be greater_or_equal_to_id map of N,N;
-       ex f being map of (N * p), N st
+  let p be greater_or_equal_to_id Function of N,N;
+       ex f being Function of (N * p), N st
    the mapping of (N * p) = (the mapping of N)*f &
    for m being Element of N ex n being Element of (N * p) st
     for k being Element of (N * p) st n <= k holds m <= f.k
   proof
          the carrier of N * p = the carrier of N by Th7;
-    then reconsider f=p as map of (N * p), N;
+    then reconsider f=p as Function of (N * p), N;
     take f;
     thus the mapping of (N * p) = (the mapping of N)*f by Def2;
     let m be Element of N;
@@ -384,7 +386,7 @@ definition
 ::3.1 Proposition (2)=>(3)
   let L be non empty 1-sorted;
   let N be net of L;
-  let p be greater_or_equal_to_id map of N,N;
+  let p be greater_or_equal_to_id Function of N,N;
   redefine func N * p -> strict subnet of N;
   correctness by Th13;
 end;
@@ -398,7 +400,7 @@ holds
      for M being subnet of N st M in NetUniv L holds x >= inf M)
 implies
       x=lim_inf N &
-      for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p)
+      for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p)
 proof
   let L be complete LATTICE, N be net of L, x be Element of L;
   assume
@@ -408,7 +410,7 @@ A2: x=lim_inf N and
 A3: for M being subnet of N st M in NetUniv L
       holds x >= inf M;
   thus x=lim_inf N by A2;
-  let p be greater_or_equal_to_id map of N,N;
+  let p be greater_or_equal_to_id Function of N,N;
        N * p in NetUniv L by A1,Th11;
   hence x >= inf (N * p) by A3;
 end;
@@ -417,15 +419,15 @@ theorem ::3.1 Proposition (3)=>(1)
 Th15:
 for L being complete LATTICE, N being net of L, x being Element of L holds
   (x=lim_inf N &
-   for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p) )
+   for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p) )
      implies for M being subnet of N holds x = lim_inf M
 proof
   let L be complete LATTICE, N be net of L, x be Element of L;
   assume that
 A1: x=lim_inf N and
-A2: for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p);
+A2: for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p);
   let M be subnet of N;
-  consider f being map of M, N such that
+  consider f being Function of M, N such that
 A3: the mapping of M = (the mapping of N)*f and
 A4: for j being Element of N ex k being Element of M st
       for m being Element of M st k <= m holds j <= f.m by YELLOW_6:def 12;
@@ -495,8 +497,8 @@ A20:
 A21:    v'>= v;
       thus g.j >= k0 by A19,A21;
     end;
-    reconsider g as map of N,M;
-    reconsider p=f*g as map of N,N;
+    reconsider g as Function of N,M;
+    reconsider p=f*g as Function of N,N;
          for j being Element of N holds j <= p.j
     proof
       let j be Element of N;
@@ -510,7 +512,7 @@ A23:     v' in [#]M & v <= v' & v <=v' by A22,WAYBEL_0:def 1;
            j <= f.(g.j) by A19,A23;
       hence j <= p.j by A17,FUNCT_1:23;
     end;
-    then reconsider p as greater_or_equal_to_id map of N,N by Def1;
+    then reconsider p as greater_or_equal_to_id Function of N,N by Def1;
 A24: ex_inf_of {(N*p).j where j is Element of (N*p):
                  not contradiction},L by YELLOW_0:17;
 A25: ex_inf_of {M.k where k is Element of M:k >= k0},L
@@ -704,7 +706,7 @@ A1:  N in NetUniv L;
        for M being subnet of N st M in NetUniv L holds x >= inf M
            by A1,Th3;
   then x=lim_inf N &
-      for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p)
+      for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p)
          by A1,Th14;
   then for M being subnet of N holds x = lim_inf M by Th15;
   hence [N,x] in lim_inf-Convergence L by A1,Def3;
@@ -719,7 +721,7 @@ proof
   let L be non empty RelStr,
       N be constant net of L,
       M be subnet of N;
-  consider f being map of M, N such that
+  consider f being Function of M, N such that
 A1: the mapping of M = (the mapping of N)*f and
          for m being Element of N ex n being Element of M st
       for p being Element of M st n <= p holds m <= f.p
@@ -825,7 +827,7 @@ A1:  N in NetUniv L & not [N,x] in lim_inf-Convergence L;
   then not for M being subnet of N holds x = lim_inf M by Def3;
   then A2:
     not (x=lim_inf N &
-    for p being greater_or_equal_to_id map of N,N holds x >= inf (N * p))
+    for p being greater_or_equal_to_id Function of N,N holds x >= inf (N * p))
       by Th15;
 A3:
   lim_inf-Convergence L c= [:NetUniv L,the carrier of L:] by YELLOW_6:def 21;
@@ -1018,7 +1020,7 @@ proof
     let M be subnet of Net-Str D;
     consider i being Element of M;
     set f=the mapping of M;
-    consider g being map of M, Net-Str D such that
+    consider g being Function of M, Net-Str D such that
 A1:   the mapping of M = (the mapping of Net-Str D)*g and
            for m being Element of Net-Str D ex n being Element of M st
         for p being Element of M st n <= p holds m <= g.p by YELLOW_6:def 12;
@@ -1038,7 +1040,7 @@ A5: ex_inf_of rng f,L by YELLOW_0:17;
     hence sup D >= inf M by WAYBEL_9:def 2;
   end;
   then lim_inf Net-Str D =sup D &
-   for p being greater_or_equal_to_id map of Net-Str(D),Net-Str(D) holds
+   for p being greater_or_equal_to_id Function of Net-Str(D),Net-Str(D) holds
         sup D >= inf (Net-Str(D)*p) by WAYBEL17:10;
   hence for M being subnet of Net-Str D holds
         lim_inf M = sup D by Th15;

@@ -53,6 +53,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="22"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
@@ -73,6 +74,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="22"/>
+<Adjective nr="24" value="false"/>
 <Adjective nr="25"/>
 </Cluster>
 </CCluster>

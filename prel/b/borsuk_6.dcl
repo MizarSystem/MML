@@ -113,7 +113,6 @@
 <Adjective nr="12" value="false"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="68"/>
 <Adjective nr="125"/>
 <Adjective nr="126"/>
 </Cluster>

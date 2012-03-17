@@ -10,16 +10,18 @@ environ
  vocabularies ARYTM, SQUARE_1, EUCLID, PCOMPS_1, RELAT_1, FUNCT_5, PRE_TOPC,
       MCART_1, ARYTM_1, ARYTM_3, RCOMP_1, COMPLEX1, FUNCT_1, BOOLE, SUBSET_1,
       COMPTS_1, ORDINAL2, TOPMETR, JORDAN2C, FUNCT_4, PARTFUN1, METRIC_1,
-      TOPS_2, TOPREAL2, TOPREAL1, BORSUK_1, JGRAPH_3, SEQ_1;
+      TOPS_2, TOPREAL2, TOPREAL1, BORSUK_1, JGRAPH_3, SEQ_1, XCMPLX_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, EUCLID, RELAT_1, TOPS_2, FUNCT_1, STRUCT_0, PARTFUN1, TOPREAL1,
-      TOPMETR, PCOMPS_1, COMPTS_1, METRIC_1, RCOMP_1, SQUARE_1, FUNCT_2,
+      REAL_1, EUCLID, RELAT_1, TOPS_2, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, TOPREAL1,
+      TOPMETR, PCOMPS_1, COMPTS_1, METRIC_1, RCOMP_1, SQUARE_1, 
       PSCOMP_1, PRE_TOPC, JGRAPH_1, JORDAN2C, FUNCT_4, WELLFND1, TOPREAL2,
       TOPGRP_1;
  constructors REAL_1, GOBOARD5, TOPS_2, RCOMP_1, PSCOMP_1, JORDAN2C, COMPTS_1,
       TOPREAL2, TOPGRP_1, TOPMETR, WELLFND1, TOPRNS_1;
  registrations XREAL_0, STRUCT_0, RELSET_1, FUNCT_1, EUCLID, PRE_TOPC,
-      SQUARE_1, BORSUK_1, TOPREAL2, TOPREAL6, BORSUK_2, BORSUK_3, MEMBERED;
+      SQUARE_1, BORSUK_1, TOPREAL2, TOPREAL6, BORSUK_2, BORSUK_3, MEMBERED,
+      XCMPLX_0, TOPREAL1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0;
  theorems TARSKI, RELAT_1, SUBSET_1, FUNCT_1, FUNCT_2, FUNCT_4, TOPS_1, TOPS_2,
@@ -30,13 +32,13 @@ environ
       XBOOLE_1, XREAL_0, TOPRNS_1, XCMPLX_1, XREAL_1;
  schemes FUNCT_1, FUNCT_2, DOMAIN_1, JGRAPH_2;
 
-begin ::Preliminaries
+begin :: Preliminaries
 
 reserve x,y,z,u,a for real number;
 
 Lm1: x^2+1 > 0
 proof
-      x^2 >= 0 by SQUARE_1:72;
+  x^2 >= 0 by SQUARE_1:72;
   then x^2+1 >= 0+1 by XREAL_1:9;
   hence thesis;
 end;
@@ -45,52 +47,56 @@ Lm2:TOP-REAL 2=TopSpaceMetr(Euclid 2) by EUCLID:def 8;
 Lm3:dom proj1=the carrier of TOP-REAL 2 &
    dom proj2=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
 
-theorem Th1: x^2=y^2 implies x=y or x=-y
- proof assume x^2=y^2; then x^2-y^2=0;
+theorem Th1:
+  for x,y being complex number st x^2=y^2 holds x=y or x=-y
+ proof
+   let x,y be complex number;
+   assume x^2=y^2; then x^2-y^2=0;
    then (x-y)*(x+y)=0 by SQUARE_1:67;
    then x-y=0 or x+y=0 by XCMPLX_1:6;
    then x=y or x=0-y by XCMPLX_1:15;
   hence x=y or x=-y;
  end;
 
-theorem Th2: x^2=1 implies x=1 or x=-1
- proof assume x^2=1;
-   then x^2-1^2=0 by SQUARE_1:59;
-   then (x-1)*(x+1)=0 by SQUARE_1:67;
-   then x-1=0 or x+1=0 by XCMPLX_1:6;
-   then x-1+1=1 or x+1-1=0-1;
+theorem Th2:
+  for x being complex number st x^2=1 holds x=1 or x=-1
+proof
+  let x be complex number;
+  assume x^2=1;
+  then x^2-1^2=0 by SQUARE_1:59;
+  then (x-1)*(x+1)=0 by SQUARE_1:67;
+  then x-1=0 or x+1=0 by XCMPLX_1:6;
+  then x-1+1=1 or x+1-1=0-1;
   hence x=1 or x=-1 by XCMPLX_1:26;
- end;
+end;
 
 theorem Th3: 0<=x & x<=1 implies x^2<=x
- proof assume A1:0<=x & x<=1;
+  proof assume A1:0<=x & x<=1;
    per cases by A1;
    suppose 0=x; hence x^2<=x by SQUARE_1:60;
    end;
    suppose A2:0<x;
-         now per cases by A1,REAL_1:def 5;
-     case x=1; hence x^2<=x by SQUARE_1:59;
+   per cases by A1,REAL_1:def 5;
+   suppose x=1; hence x^2<=x by SQUARE_1:59;
      end;
-     case x<1; hence x^2<=x by A2,SQUARE_1:75;
+   suppose x<1; hence x^2<=x by A2,SQUARE_1:75;
      end;
-     end;
-    hence x^2<=x;
  end;
  end;
 
- Th4: a>=0 & (x-a)*(x+a)<=0 implies -a<=x & x<=a by XREAL_1:95;
+Th4: a>=0 & (x-a)*(x+a)<=0 implies -a<=x & x<=a by XREAL_1:95;
 
 canceled;
 
 theorem Th5:
-x^2-1<=0 implies -1<=x & x<=1
+  x^2-1<=0 implies -1<=x & x<=1
  proof assume x^2-1<=0;
   then 1>=0 & (x-1)*(x+1)<=0 by SQUARE_1:59,67;
   hence thesis by Th4;
  end;
 
 theorem Th6:
- x < y & x < z iff x < min(y,z)
+  x < y & x < z iff x < min(y,z)
  proof
   thus x < y & x < z implies x < min(y,z) by SQUARE_1:38;
   assume A1:x < min(y,z);
@@ -105,27 +111,29 @@ theorem Th8: (x>=1 implies sqrt x>=1) & (x>1 implies sqrt x>1)
 
 theorem Th9: x<=y & z<=u implies ].y,z.[ c= ].x,u.[
 proof assume A1:x<=y & z<=u;
- let a be set;assume a in ].y,z.[;
-   then a in {b where b is Real: y<b & b<z} by RCOMP_1:def 2;
-   then consider b being Real such that A2:b=a & y<b & b<z;
-       x<b & b<u by A1,A2,XREAL_1:2;
+  let a be set;assume a in ].y,z.[;
+  then a in {b where b is Real: y<b & b<z} by RCOMP_1:def 2;
+  then consider b being Real such that A2:b=a & y<b & b<z;
+  x<b & b<u by A1,A2,XREAL_1:2;
   hence a in ].x,u.[ by A2,RCOMP_1:47;
 end;
 
-theorem   for p being Point of TOP-REAL 2 holds
+theorem
+  for p being Point of TOP-REAL 2 holds
  |.p.| = sqrt((p`1)^2+(p`2)^2) &
  |.p.|^2 = (p`1)^2+(p`2)^2 by JGRAPH_1:46,47;
 
-theorem   for f being Function,B,C being set holds (f|B).:C = f.:(C /\ B)
+theorem
+  for f being Function,B,C being set holds (f|B).:C = f.:(C /\ B)
  proof let f be Function,B,C be set;
    thus (f|B).:C c=f.:(C /\ B)
     proof let x be set;assume x in (f|B).:C;
       then consider y being set such that
       A1: y in dom (f|B) & y in C & x=(f|B).y by FUNCT_1:def 12;
-           dom (f|B)=(dom f)/\ B by FUNCT_1:68;
+       dom (f|B)=(dom f)/\ B by FUNCT_1:68;
        then A2:y in dom f & y in B by A1,XBOOLE_0:def 3;
        then A3:y in C /\ B by A1,XBOOLE_0:def 3;
-           (f|B).y=f.y by A1,FUNCT_1:68;
+       (f|B).y=f.y by A1,FUNCT_1:68;
      hence thesis by A1,A2,A3,FUNCT_1:def 12;
     end;
     let x be set;assume x in f.:(C /\ B);
@@ -138,24 +146,24 @@ theorem   for f being Function,B,C being set holds (f|B).:C = f.:(C /\ B)
      hence thesis by A4,A5,A6,FUNCT_1:def 12;
  end;
 
-theorem Th12: for X being TopStruct,Y being non empty TopStruct,
- f being map of X,Y,
- P being Subset of X holds f|P is map of X|P,Y
-proof let X be TopStruct,Y be non empty TopStruct,f be map of X,Y,
+theorem Th12:
+  for X being TopStruct,Y being non empty TopStruct,
+      f being Function of X,Y,
+      P being Subset of X holds f|P is Function of X|P,Y
+proof let X be TopStruct,Y be non empty TopStruct,f be Function of X,Y,
   P be Subset of X;
-  set Q=P;
-      Q = the carrier of (X|Q) by JORDAN1:1;
- hence thesis  by FUNCT_2:38;
+  P = the carrier of (X|P) by JORDAN1:1;
+  hence thesis by FUNCT_2:38;
 end;
 
 theorem Th13:for X,Y being non empty TopSpace,
   p0 being Point of X,
   D being non empty Subset of X,
   E being non empty Subset of Y,
-  f being map of X,Y
+  f being Function of X,Y
  st D`={p0} & E`={f.p0} & X is_T2 & Y is_T2 &
  (for p being Point of X|D holds f.p<>f.p0)&
- f|D is continuous map of X|D,Y|E &
+ f|D is continuous Function of X|D,Y|E &
  (for V being Subset of Y st f.p0 in V & V is open
  ex W being Subset of X st p0 in W & W is open & f.:W c= V)
  holds f is continuous
@@ -163,10 +171,10 @@ theorem Th13:for X,Y being non empty TopSpace,
   p0 be Point of X,
   D be non empty Subset of X,
   E be non empty Subset of Y,
-  f be map of X,Y;
+  f be Function of X,Y;
   assume A1:D`={p0} & E`={f.p0} & X is_T2 & Y is_T2 &
    (for p being Point of X|D holds f.p<>f.p0)&
-   f|D is continuous map of X|D,Y|E &
+   f|D is continuous Function of X|D,Y|E &
    (for V being Subset of Y st f.p0 in V & V is open
      ex W being Subset of X st p0 in W & W is open & f.:W c= V);
        for p being Point of X,V being Subset of Y
@@ -187,7 +195,7 @@ then A5:     p in D`` by SUBSET_1:def 5;
         then consider G1,G2 being Subset of Y such that
         A6: G1 is open & G2 is open &
         f.p in G1 & f.p0 in G2 & G1 misses G2 by A1,COMPTS_1:def 4;
-        consider h being map of X|D,Y|E such that
+        consider h being Function of X|D,Y|E such that
         A7: h=f|D & h is continuous by A1;
         A8:[#](X|D)=D by PRE_TOPC:def 10;
         then reconsider p22=p as Point of X|D by A5;
@@ -377,8 +385,7 @@ proof let p be Point of TOP-REAL 2;assume
                now per cases by A5;
            case p`1=p`2;
             hence Sq_Circ.p=|[p`1/sqrt(1+(p`1/p`2)^2),p`2/sqrt(1+(p`1/p`2)^2)
-]|
-                                       by A1,A4,Def1;
+            ]| by A1,A4,Def1;
            end;
            case A6:p`1=-p`2;
              A7:now assume A8:p`1=0;
@@ -445,12 +452,12 @@ proof let p be Point of TOP-REAL 2;assume
 end;
 
 theorem Th15: for X being non empty TopSpace,
-f1 being map of X,R^1 st f1 is continuous &
+f1 being Function of X,R^1 st f1 is continuous &
 (for q being Point of X ex r being real number st f1.q=r & r>=0)
- holds ex g being map of X,R^1
+ holds ex g being Function of X,R^1
 st (for p being Point of X,r1 being real number st
 f1.p=r1 holds g.p=sqrt(r1)) & g is continuous
-proof let X being non empty TopSpace,f1 be map of X,R^1;
+proof let X being non empty TopSpace,f1 be Function of X,R^1;
 assume A1: f1 is continuous &
 (for q being Point of X ex r being real number st f1.q=r & r>=0);
 defpred P[set,set] means
@@ -469,7 +476,7 @@ defpred P[set,set] means
   then consider f being Function of the carrier of X,REAL
   such that A3:  for x2 being Element of X holds
   (for r11 being real number st f1.x2=r11 holds f.x2=sqrt(r11));
-  reconsider g0=f as map of X,R^1 by TOPMETR:24;
+  reconsider g0=f as Function of X,R^1 by TOPMETR:24;
   A4: for p being Point of X,r11 being real number st
   f1.p=r11 holds g0.p=sqrt(r11) by A3;
       for p being Point of X,V being Subset of R^1
@@ -587,8 +594,7 @@ then A40: r1+r4>0+0 by A6,XREAL_1:10;
       then r1+r4 <=(r+r0)^2 by SQUARE_1:63;
       then sqrt(r1+r4)<=sqrt((r+r0)^2) by A40,SQUARE_1:94;
       then A41:r+r0>=sqrt(r1+r4) by A8,A12,SQUARE_1:89;
-      reconsider G1=].r1-r4,r1+r4.[ as Subset of R^1
-                          by TOPMETR:24;
+      reconsider G1=].r1-r4,r1+r4.[ as Subset of R^1 by TOPMETR:24;
       A42:r1<r1+r4 by A39,XREAL_1:31;
       then r1-r4<r1 by XREAL_1:21;
       then A43:f1.p in G1 by A42,RCOMP_1:47;
@@ -635,19 +641,19 @@ then A40: r1+r4>0+0 by A6,XREAL_1:10;
 end;
 
 theorem Th16: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=(r1/r2)^2) & g is continuous
 proof let X be non empty TopSpace,
-f1,f2 be map of X,R^1;
+f1,f2 be Function of X,R^1;
 assume f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-  then consider g2 being map of X,R^1 such that
+  then consider g2 being Function of X,R^1 such that
 A1: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=r1/r2) & g2 is continuous by JGRAPH_2:37;
-  consider g3 being map of X,R^1 such that
+  consider g3 being Function of X,R^1 such that
 A2: (for p being Point of X,r1 being real number st
   g2.p=r1 holds g3.p=r1*r1) & g3 is continuous by A1,JGRAPH_2:32;
       for p being Point of X,r1,r2 being real number st
@@ -662,19 +668,19 @@ hence thesis by A2;
 end;
 
 theorem Th17: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=1+(r1/r2)^2) & g is continuous
 proof let X be non empty TopSpace,
-f1,f2 be map of X,R^1;
+f1,f2 be Function of X,R^1;
 assume f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A1: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=(r1/r2)^2) & g2 is continuous by Th16;
-consider g3 being map of X,R^1 such that
+consider g3 being Function of X,R^1 such that
 A2: (for p being Point of X,r1 being real number st
   g2.p=r1 holds g3.p=r1+1) & g3 is continuous by A1,JGRAPH_2:34;
     for p being Point of X,r1,r2 being real number st
@@ -688,16 +694,16 @@ hence thesis by A2;
 end;
 
 theorem Th18: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=sqrt(1+(r1/r2)^2)) & g is continuous
 proof let X be non empty TopSpace,
-f1,f2 be map of X,R^1;
+f1,f2 be Function of X,R^1;
 assume f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A1: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=1+(r1/r2)^2) & g2 is continuous by Th17;
     for q being Point of X ex r being real number st g2.q=r & r>=0
@@ -707,7 +713,7 @@ then consider g2 being map of X,R^1
         1+(r1/r2)^2>0 by Lm1;
    hence thesis by A2;
   end;
-then consider g3 being map of X,R^1 such that
+then consider g3 being Function of X,R^1 such that
 A3: (for p being Point of X,r1 being real number st
   g2.p=r1 holds g3.p=sqrt(r1)) & g3 is continuous by A1,Th15;
     for p being Point of X,r1,r2 being real number st
@@ -721,18 +727,17 @@ hence thesis by A3;
 end;
 
 theorem Th19: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=r1/sqrt(1+(r1/r2)^2)) & g is continuous
-proof let X be non empty TopSpace,f1,f2 be map of X,R^1;
+proof let X be non empty TopSpace,f1,f2 be Function of X,R^1;
 assume A1:f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A2: (for p being Point of X,r1,r2 being real number st
-  f1.p=r1 & f2.p=r2 holds g2.p=sqrt(1+(r1/r2)^2)) & g2 is continuous
-           by Th18;
+  f1.p=r1 & f2.p=r2 holds g2.p=sqrt(1+(r1/r2)^2)) & g2 is continuous by Th18;
     for q being Point of X holds g2.q<>0
   proof let q be Point of X;
     reconsider r1=f1.q,r2=f2.q as Real by TOPMETR:24;
@@ -740,7 +745,7 @@ then consider g2 being map of X,R^1
     then sqrt(1+(r1/r2)^2)>0 by SQUARE_1:93;
    hence thesis by A2;
   end;
-then consider g3 being map of X,R^1 such that
+then consider g3 being Function of X,R^1 such that
 A3: (for p being Point of X,r1,r0 being real number st
   f1.p=r1 & g2.p=r0 holds g3.p=r1/r0) & g3 is continuous
    by A1,A2,JGRAPH_2:37;
@@ -755,16 +760,16 @@ hence thesis by A3;
 end;
 
 theorem Th20: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=r2/sqrt(1+(r1/r2)^2)) & g is continuous
 proof let X be non empty TopSpace,
-f1,f2 be map of X,R^1;
+f1,f2 be Function of X,R^1;
 assume A1:f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A2: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=sqrt(1+(r1/r2)^2)) & g2 is continuous
            by Th18;
@@ -775,7 +780,7 @@ then consider g2 being map of X,R^1
     then sqrt(1+(r1/r2)^2)>0 by SQUARE_1:93;
    hence thesis by A2;
   end;
-then consider g3 being map of X,R^1
+then consider g3 being Function of X,R^1
   such that A3: (for p being Point of X,r2,r0 being real number st
   f2.p=r2 & g2.p=r0 holds g3.p=r2/r0) & g3 is continuous
                           by A1,A2,JGRAPH_2:37;
@@ -801,11 +806,11 @@ proof
 end;
 
 Lm5: for K1 being non empty Subset of TOP-REAL 2 holds
-  proj2|K1 is continuous map of (TOP-REAL 2)|K1,R^1
+  proj2|K1 is continuous Function of (TOP-REAL 2)|K1,R^1
 proof
  let K1 be non empty Subset of TOP-REAL 2;
   the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  then reconsider g2=proj2|K1 as map of (TOP-REAL 2)|K1,R^1 by FUNCT_2:38
+  then reconsider g2=proj2|K1 as Function of (TOP-REAL 2)|K1,R^1 by FUNCT_2:38
 ,TOPMETR:24;
       for q be Point of (TOP-REAL 2)|K1 holds g2.q=proj2.q by Lm4;
   hence thesis by JGRAPH_2:40;
@@ -823,39 +828,39 @@ proof
 end;
 
 Lm7: for K1 being non empty Subset of TOP-REAL 2 holds
-  proj1|K1 is continuous map of (TOP-REAL 2)|K1,R^1
+  proj1|K1 is continuous Function of (TOP-REAL 2)|K1,R^1
 proof
  let K1 be non empty Subset of TOP-REAL 2;
   the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  then reconsider g2=proj1|K1 as map of (TOP-REAL 2)|K1,R^1 by FUNCT_2:38
+  then reconsider g2=proj1|K1 as Function of (TOP-REAL 2)|K1,R^1 by FUNCT_2:38
 ,TOPMETR:24;
       for q be Point of (TOP-REAL 2)|K1 holds g2.q=proj1.q by Lm6;
   hence thesis by JGRAPH_2:39;
 end;
 
 theorem Th21: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1/sqrt(1+(p`2/p`1)^2)) & (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of (TOP-REAL 2) st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1/sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       now let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
     then reconsider q2=q as Point of TOP-REAL 2 by A2;
         g1.q=proj1.q by Lm6 .=q2`1 by PSCOMP_1:def 28;
    hence g1.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g2.q=r1 & g1.q=r2
   holds g3.q=r2/sqrt(1+(r1/r2)^2)) & g3 is continuous by Th20;
@@ -879,29 +884,29 @@ hence thesis by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th22: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2/sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2/sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       now let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
     then reconsider q2=q as Point of TOP-REAL 2 by A2;
         g1.q=proj1.q by Lm6 .=q2`1 by PSCOMP_1:def 28;
    hence g1.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g2.q=r1 & g1.q=r2
   holds g3.q=r1/sqrt(1+(r1/r2)^2)) & g3 is continuous by Th19;
@@ -925,28 +930,28 @@ hence f is continuous by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th23: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2/sqrt(1+(p`1/p`2)^2)) & (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2/sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       now let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
     then reconsider q2=q as Point of TOP-REAL 2 by A2;
         g2.q=proj2.q by Lm4 .=q2`2 by PSCOMP_1:def 29;
    hence g2.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g1.q=r1 & g2.q=r2
   holds g3.q=r2/sqrt(1+(r1/r2)^2)) & g3 is continuous by Th20;
@@ -970,29 +975,29 @@ hence f is continuous by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th24: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1/sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1/sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       now let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
     then reconsider q2=q as Point of TOP-REAL 2 by A2;
         g2.q=proj2.q by Lm4 .=q2`2 by PSCOMP_1:def 29;
    hence g2.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g1.q=r1 & g2.q=r2
   holds g3.q=r1/sqrt(1+(r1/r2)^2)) & g3 is continuous by Th19;
@@ -1063,12 +1068,12 @@ end;
 Lm11:(the carrier of TOP-REAL 2) \ {0.REAL 2} <> {} by JGRAPH_2:19;
 
 theorem Th25: for K0,B0 being Subset of TOP-REAL 2,f being
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
 st f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2}
 holds f is continuous
 proof let K0,B0 be Subset of TOP-REAL 2,f be
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
 assume A1:f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2};
      then 1.REAL 2 in K0 by Lm8;
@@ -1077,13 +1082,13 @@ A2:rng ((proj2)*(Sq_Circ|K1)) c= rng (proj2) by RELAT_1:45;
 A3:dom ((proj2)*(Sq_Circ|K1)) = the carrier of (TOP-REAL 2)|K1 by Lm9;
     rng proj2 c= the carrier of R^1 by TOPMETR:24;
 then rng ((proj2)*(Sq_Circ|K1)) c= the carrier of R^1 by A2,XBOOLE_1:1;
-then reconsider g2=(proj2)*(Sq_Circ|K1) as map of (TOP-REAL 2)|K1,R^1
+then reconsider g2=(proj2)*(Sq_Circ|K1) as Function of (TOP-REAL 2)|K1,R^1
                                  by A3,FUNCT_2:4;
 A4:dom ((proj1)*(Sq_Circ|K1)) = the carrier of (TOP-REAL 2)|K1 by Lm10;
 A5:rng ((proj1)*(Sq_Circ|K1)) c= rng (proj1) by RELAT_1:45;
     rng proj1 c= the carrier of R^1 by TOPMETR:24;
 then rng ((proj1)*(Sq_Circ|K1)) c= the carrier of R^1 by A5,XBOOLE_1:1;
-then reconsider g1=(proj1)*(Sq_Circ|K1) as map of (TOP-REAL 2)|K1,R^1
+then reconsider g1=(proj1)*(Sq_Circ|K1) as Function of (TOP-REAL 2)|K1,R^1
                                  by A4,FUNCT_2:4;
 A6: now let q be Point of TOP-REAL 2;
     assume A7:q in the carrier of (TOP-REAL 2)|K1;
@@ -1118,7 +1123,7 @@ A6: now let q be Point of TOP-REAL 2;
       .=p`2/sqrt(1+(p`2/p`1)^2) by EUCLID:56;
     hence g2.p=p`2/sqrt(1+(p`2/p`1)^2);
    end;
-then consider f2 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f2 being Function of (TOP-REAL 2)|K1,R^1 such that
   A15:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f2.p=p`2/sqrt(1+(p`2/p`1)^2);
 A16:f2 is continuous by A6,A15,Th22;
@@ -1143,7 +1148,7 @@ A16:f2 is continuous by A6,A15,Th22;
         .=p`1/sqrt(1+(p`2/p`1)^2) by EUCLID:56;
     hence g1.p=p`1/sqrt(1+(p`2/p`1)^2);
    end;
-then consider f1 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f1 being Function of (TOP-REAL 2)|K1,R^1 such that
   A22:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f1.p=p`1/sqrt(1+(p`2/p`1)^2);
 A23:f1 is continuous by A6,A22,Th21;
@@ -1171,12 +1176,12 @@ Lm12: ((1.REAL 2)`1<=(1.REAL 2)`2 & -(1.REAL 2)`2<=(1.REAL 2)`1 or
     (1.REAL 2)<>0.REAL 2 by JGRAPH_2:13,REVROT_1:19;
 
 theorem Th26: for K0,B0 being Subset of TOP-REAL 2,f being
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
 st f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2}
 holds f is continuous
 proof let K0,B0 be Subset of TOP-REAL 2,f be
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
 assume A1:f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2};
      then 1.REAL 2 in K0 by Lm12;
@@ -1185,13 +1190,13 @@ A2:dom ((proj1)*(Sq_Circ|K1))=the carrier of (TOP-REAL 2)|K1 by Lm10;
 A3:rng ((proj1)*(Sq_Circ|K1)) c= rng (proj1) by RELAT_1:45;
     rng proj1 c= the carrier of R^1 by TOPMETR:24;
 then rng ((proj1)*(Sq_Circ|K1)) c= the carrier of R^1 by A3,XBOOLE_1:1;
-then reconsider g2=(proj1)*(Sq_Circ|K1) as map of (TOP-REAL 2)|K1,R^1
+then reconsider g2=(proj1)*(Sq_Circ|K1) as Function of (TOP-REAL 2)|K1,R^1
                                  by A2,FUNCT_2:4;
 A4:dom ((proj2)*(Sq_Circ|K1))=the carrier of (TOP-REAL 2)|K1 by Lm9;
 A5:rng ((proj2)*(Sq_Circ|K1)) c= rng (proj2) by RELAT_1:45;
     rng proj2 c= the carrier of R^1 by TOPMETR:24;
 then rng ((proj2)*(Sq_Circ|K1)) c= the carrier of R^1 by A5,XBOOLE_1:1;
-then reconsider g1=(proj2)*(Sq_Circ|K1) as map of (TOP-REAL 2)|K1,R^1
+then reconsider g1=(proj2)*(Sq_Circ|K1) as Function of (TOP-REAL 2)|K1,R^1
                                  by A4,FUNCT_2:4;
 A6: for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0
@@ -1228,7 +1233,7 @@ A6: for q being Point of TOP-REAL 2 st q in
         .=p`1/sqrt(1+(p`1/p`2)^2) by EUCLID:56;
     hence g2.p=p`1/sqrt(1+(p`1/p`2)^2);
    end;
-then consider f2 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f2 being Function of (TOP-REAL 2)|K1,R^1 such that
   A15:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f2.p=p`1/sqrt(1+(p`1/p`2)^2);
 A16:f2 is continuous by A6,A15,Th24;
@@ -1253,7 +1258,7 @@ A16:f2 is continuous by A6,A15,Th24;
         .=p`2/sqrt(1+(p`1/p`2)^2) by EUCLID:56;
     hence g1.p=p`2/sqrt(1+(p`1/p`2)^2);
    end;
-then consider f1 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f1 being Function of (TOP-REAL 2)|K1,R^1 such that
   A22:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f1.p=p`2/sqrt(1+(p`1/p`2)^2);
 A23:f1 is continuous by A6,A22,Th23;
@@ -1315,12 +1320,12 @@ proof
 end;
 
 theorem Th27: for B0 being Subset of TOP-REAL 2,K0 being Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
 st f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
 & K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2}
 holds f is continuous & K0 is closed
 proof let B0 be Subset of TOP-REAL 2,K0 be Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
 assume A1: f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
   & K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2};
       the carrier of (TOP-REAL 2)|B0 = B0 by JORDAN1:1;
@@ -1385,12 +1390,12 @@ hence thesis by A1,A2,A14,Th25,PRE_TOPC:43;
 end;
 
 theorem Th28: for B0 being Subset of TOP-REAL 2,K0 being Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
 st f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
 & K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2}
 holds f is continuous & K0 is closed
 proof let B0 be Subset of TOP-REAL 2,K0 be Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
 assume A1: f=Sq_Circ|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
   & K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2};
   defpred P0[Point of TOP-REAL 2] means
@@ -1458,7 +1463,7 @@ end;
 
 theorem Th29:for D being non empty Subset of TOP-REAL 2
 st D`={0.REAL 2} holds
-ex h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+ex h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
 st h=Sq_Circ|D & h is continuous
 proof let D be non empty Subset of TOP-REAL 2;
 assume A1:D`={0.REAL 2};
@@ -1575,7 +1580,7 @@ EUCLID:56
     hence y in the carrier of ((TOP-REAL 2)|D)|K0;
    end;
   then rng (Sq_Circ|K0)c= the carrier of ((TOP-REAL 2)|D) by A11,XBOOLE_1:1;
-  then reconsider f=Sq_Circ|K0 as map of ((TOP-REAL 2)|D)|K0,
+  then reconsider f=Sq_Circ|K0 as Function of ((TOP-REAL 2)|D)|K0,
   (TOP-REAL 2)|D  by A10,A11,FUNCT_2:4;
    A27:K1 c= the carrier of TOP-REAL 2
    proof let z be set;assume z in K1;
@@ -1637,16 +1642,15 @@ EUCLID:56
      then A45:p`1/sqrt(1+(p`1/p`2)^2)<=p`2/sqrt(1+(p`1/p`2)^2)
      & -(p`2/sqrt(1+(p`1/p`2)^2))<=p`1/sqrt(1+(p`1/p`2)^2) or
      p`1/sqrt(1+(p`1/p`2)^2)>=p`2/sqrt(1+(p`1/p`2)^2) &
-     p`1/sqrt(1+(p`1/p`2)^2)<=-(p`2/sqrt(1+(p`1/p`2)^2))
-                       by XCMPLX_1:188;
+     p`1/sqrt(1+(p`1/p`2)^2)<=-(p`2/sqrt(1+(p`1/p`2)^2)) by XCMPLX_1:188;
           p9`2=p`2/sqrt(1+(p`1/p`2)^2) & p9`1=p`1/sqrt(1+(p`1/p`2)^2)
                                  by EUCLID:56;
       then y in K1 by A34,A43,A44,A45;
     hence y in the carrier of ((TOP-REAL 2)|D)|K1 by JORDAN1:1;
    end;
   then rng (Sq_Circ|K1)c= the carrier of ((TOP-REAL 2)|D) by A30,XBOOLE_1:1;
-  then reconsider g=Sq_Circ|K1 as map of ((TOP-REAL 2)|D)|K1,
-  ((TOP-REAL 2)|D)  by A29,A30,FUNCT_2:4;
+  then reconsider g=Sq_Circ|K1 as Function of ((TOP-REAL 2)|D)|K1,
+  ((TOP-REAL 2)|D) by A29,A30,FUNCT_2:4;
   A46:K0=[#](((TOP-REAL 2)|D)|K0) by PRE_TOPC:def 10;
   A47:K1=[#](((TOP-REAL 2)|D)|K1) by PRE_TOPC:def 10;
   A48:D= [#]((TOP-REAL 2)|D) by PRE_TOPC:def 10;
@@ -1699,7 +1703,7 @@ EUCLID:56
      then f.x=Sq_Circ.x by FUNCT_1:72;
     hence f.x = g.x by A59,FUNCT_1:72;
    end;
-  then consider h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+  then consider h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
   such that A60: h= f+*g & h is continuous
                           by A46,A47,A55,A56,A57,JGRAPH_2:9;
   A61:dom h=the carrier of ((TOP-REAL 2)|D) by FUNCT_2:def 1;
@@ -1763,9 +1767,9 @@ proof
 end;
 
 theorem Th31:
-ex h being map of TOP-REAL 2, TOP-REAL 2 st h=Sq_Circ & h is continuous
+ex h being Function of TOP-REAL 2, TOP-REAL 2 st h=Sq_Circ & h is continuous
 proof
- reconsider f=Sq_Circ as map of (TOP-REAL 2),(TOP-REAL 2);
+ reconsider f=Sq_Circ as Function of (TOP-REAL 2),(TOP-REAL 2);
  reconsider D=(the carrier of TOP-REAL 2) \{0.REAL 2}
    as non empty Subset of TOP-REAL 2 by JGRAPH_2:19,XBOOLE_1:36;
  A1: f.(0.REAL 2)=0.REAL 2 by Def1;
@@ -1819,7 +1823,7 @@ proof
      hence thesis by A16,Def1;
   end;
   end;
- A21:ex h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+ A21:ex h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
   st h=Sq_Circ|D & h is continuous by A2,Th29;
      for V being Subset of TOP-REAL 2 st f.(0.REAL 2) in V & V is open
  ex W being Subset of TOP-REAL 2 st 0.REAL 2 in W
@@ -1951,23 +1955,23 @@ proof
     set q=p1,p=p2;
     per cases;
     suppose A2:q=0.REAL 2;
-      then A3:Sq_Circ.q=0.REAL 2 by Def1;
-          now per cases;
+    then A3:Sq_Circ.q=0.REAL 2 by Def1;
+    now per cases;
       case p=0.REAL 2;
        hence x1=x2 by A2;
       end;
       case A4:p<>0.REAL 2 &
-          (p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1);
+        (p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1);
         then Sq_Circ.p=|[p`1/sqrt(1+(p`2/p`1)^2),p`2/sqrt(1+(p`2/p`1)^2)]|
                                  by Def1;
         then A5:p`1/sqrt(1+(p`2/p`1)^2)=0 & p`2/sqrt(1+(p`2/p`1)^2)=0
                   by A1,A3,EUCLID:56,JGRAPH_2:11;
-            (p`2/p`1)^2 >=0 by SQUARE_1:72;
+        (p`2/p`1)^2 >=0 by SQUARE_1:72;
         then 1+(p`2/p`1)^2>=1+0 by XREAL_1:9;
         then sqrt(1+(p`2/p`1)^2)>=1 by Th8;
         then A6:sqrt(1+(p`2/p`1)^2)>0;
         then A7:p`1= 0 *sqrt(1+(p`2/p`1)^2) by A5,XCMPLX_1:88 .=0;
-            p`2= 0 *sqrt(1+(p`2/p`1)^2) by A5,A6,XCMPLX_1:88 .=0;
+        p`2= 0 *sqrt(1+(p`2/p`1)^2) by A5,A6,XCMPLX_1:88 .=0;
        hence contradiction by A4,A7,EUCLID:57,58;
       end;
       case A8:p<>0.REAL 2 &
@@ -1988,7 +1992,7 @@ proof
      hence x1=x2;
     end;
     suppose A12:q<>0.REAL 2 &
-          (q`2<=q`1 & -q`1<=q`2 or q`2>=q`1 & q`2<=-q`1);
+       (q`2<=q`1 & -q`1<=q`2 or q`2>=q`1 & q`2<=-q`1);
         then A13:Sq_Circ.q=|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|
                                  by Def1;
         A14: (|[q`1/sqrt(1+(q`2/q`1)^2),q`2/sqrt(1+(q`2/q`1)^2)]|)`1
@@ -2192,10 +2196,10 @@ XCMPLX_1:48;
             hence 1<=a or -1>=a;
            end;
            case A58: p`2=(-a)*p`1;
-                 now per cases by A50;
+           now per cases by A50;
              case p`1>0;
                then p`1/p`1<= (-a)*p`1/p`1 & (-((-a)*p`1))/p`1<=p`1/p`1 or
-                  p`1/p`1>=((-a)*p`1)/p`1 & p`1/p`1<=(-((-a)*p`1))/p`1
+               p`1/p`1>=((-a)*p`1)/p`1 & p`1/p`1<=(-((-a)*p`1))/p`1
                                       by A38,A58,REAL_1:73;
                then A59:1<= (-a)*p`1/p`1 & (-((-a)*p`1))/p`1<=1 or
                1>=((-a)*p`1)/p`1 & 1<=(-((-a)*p`1))/p`1 by A50,XCMPLX_1:60;
@@ -2211,7 +2215,7 @@ XCMPLX_1:48;
                then A61:1>= (-a)*p`1/p`1 & (-((-a)*p`1))/p`1>=1 or
                1<=((-a)*p`1)/p`1 & 1>=(-((-a)*p`1))/p`1 by A50,XCMPLX_1:60;
                A62:((-a)*p`1)/p`1=(-a) by A50,XCMPLX_1:90;
-                   1>= (-a) & -(((-a)*p`1)/p`1)>=1 or
+               1>= (-a) & -(((-a)*p`1)/p`1)>=1 or
                1<=(-a) & 1>=-(((-a)*p`1)/p`1) by A50,A61,XCMPLX_1:90,188;
               hence 1<=a & -a<=1 or 1>=a & 1<=-a by A62;
              end;
@@ -2814,7 +2818,7 @@ XCMPLX_1:90
                             by A26,SQUARE_1:def 4;
          then 1 *(1+(px`2/px`1)^2)=
            (1+(px`2/px`1)^2)*((px`1)^2/(1+(px`2/px`1)^2)+
-           (px`2)^2/(1+(px`2/px`1)^2)) 
+           (px`2)^2/(1+(px`2/px`1)^2))
          .= (px`1)^2/(1+(px`2/px`1)^2)*(1+(px`2/px`1)^2)
            +(px`2)^2/(1+(px`2/px`1)^2)*(1+(px`2/px`1)^2);
     then (px`1)^2+(px`2)^2/(1+(px`2/px`1)^2)*(1+(px`2/px`1)^2)=1 *(1+(px`2/px
@@ -2929,13 +2933,13 @@ XCMPLX_1:90
     hence thesis by FUNCT_1:def 12;
  end;
 
-theorem Th34: for P,Kb being Subset of TOP-REAL 2,f being map of
+theorem Th34: for P,Kb being Subset of TOP-REAL 2,f being Function of
  (TOP-REAL 2)|Kb,(TOP-REAL 2)|P st
  Kb={q: -1=q`1 & -1<=q`2 & q`2<=1 or q`1=1 & -1<=q`2 & q`2<=1
       or -1=q`2 & -1<=q`1 & q`1<=1 or 1=q`2 & -1<=q`1 & q`1<=1}
  & f is_homeomorphism
  holds P is_simple_closed_curve
- proof let P,Kb be Subset of TOP-REAL 2,f be map of
+ proof let P,Kb be Subset of TOP-REAL 2,f be Function of
   (TOP-REAL 2)|Kb,(TOP-REAL 2)|P;
   assume A1: Kb={q: -1=q`1 & -1<=q`2 & q`2<=1 or q`1=1 & -1<=q`2 & q`2<=1
       or -1=q`2 & -1<=q`1 & q`1<=1 or 1=q`2 & -1<=q`1 & q`1<=1}
@@ -2951,7 +2955,7 @@ theorem Th34: for P,Kb being Subset of TOP-REAL 2,f being map of
   then reconsider PP=P as non empty Subset of TOP-REAL 2 by JORDAN1:1;
   reconsider Kbb=Kb as non empty Subset of TOP-REAL 2 by A1,A2;
   reconsider Kbd=Kbb as non empty Subset of TOP-REAL 2;
-  reconsider g=f as map of (TOP-REAL 2)|Kbb,(TOP-REAL 2)|PP;
+  reconsider g=f as Function of (TOP-REAL 2)|Kbb,(TOP-REAL 2)|PP;
   set b=1,a=0,d=1,c =0;
   set A=2/(b-a),B=1-2*b/(b-a),C=2/(d-c),D=1-2*d/(d-c);
    defpred P[set,set] means
@@ -2992,10 +2996,10 @@ theorem Th34: for P,Kb being Subset of TOP-REAL 2,f being map of
            ff.t=|[A*(t`1)+B,C*(t`2)+D]| by A6;
        hence ff.x in the carrier of TOP-REAL 2;
       end;
-   then reconsider ff as map of TOP-REAL 2,TOP-REAL 2  by A6,FUNCT_2:5;
+   then reconsider ff as Function of TOP-REAL 2,TOP-REAL 2  by A6,FUNCT_2:5;
    A8:ff is continuous by A7,JGRAPH_2:53;
    reconsider f11=ff|(R^2-unit_square)
-         as map of (TOP-REAL 2)|R^2-unit_square,(TOP-REAL 2) by Th12;
+         as Function of (TOP-REAL 2)|R^2-unit_square,(TOP-REAL 2) by Th12;
    A9:dom f11=(dom ff)/\ (R^2-unit_square) by FUNCT_1:68
    .= R^2-unit_square by A6,XBOOLE_1:28;
    A10: f11 is continuous by A8,TOPMETR:10;
@@ -3152,11 +3156,12 @@ then A26:     0/2 <= (py`1-B)/2 by REAL_1:73;
      hence y in Kbd by A1;
     end;
    then Kbd=rng f11 by A14,XBOOLE_0:def 10;
-   then consider f1 being map of X,((TOP-REAL 2)|Kbd) such that
+   then consider f1 being Function of X,((TOP-REAL 2)|Kbd) such that
    A43: f11=f1 & f1 is_homeomorphism by A10,A13,JGRAPH_1:64;
-   reconsider f22=f1 as map of X,((TOP-REAL 2)|Kbb);
-   reconsider g as map of (TOP-REAL 2)|Kbb,(TOP-REAL 2)|PP;
-   reconsider h=g*f22 as map of (TOP-REAL 2)|R^2-unit_square,(TOP-REAL 2)|PP;
+   reconsider f22=f1 as Function of X,((TOP-REAL 2)|Kbb);
+   reconsider g as Function of (TOP-REAL 2)|Kbb,(TOP-REAL 2)|PP;
+   reconsider h=g*f22 as Function
+ of (TOP-REAL 2)|R^2-unit_square,(TOP-REAL 2)|PP;
        h is_homeomorphism by A1,A43,TOPS_2:71;
   hence thesis by TOPREAL2:def 1;
  end;
@@ -3176,7 +3181,7 @@ theorem Th35: for Kb being Subset of TOP-REAL 2
        id ((TOP-REAL 2)|Kbd) is_homeomorphism by TOPGRP_1:20;
    hence A2:Kb is_simple_closed_curve by A1,Th34;
     set P=Kb;
-    consider f being map of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|P
+    consider f being Function of (TOP-REAL 2)|R^2-unit_square, (TOP-REAL 2)|P
      such that
 A3: f is_homeomorphism by A2,TOPREAL2:def 1;
     per cases;
@@ -3232,20 +3237,21 @@ then A3:  |[1,0]| in {q: -1=q`1 & -1<=q`2 & q`2<=1 or q`1=1 & -1<=q`2 & q`2<=1
         .= Cb by A1,Th33
         .=the carrier of (TOP-REAL 2)|Cbb by JORDAN1:1;
    then reconsider f0=Sq_Circ|Kb
-         as map of (TOP-REAL 2)|Kb, (TOP-REAL 2)|Cbb  by A6,A8,FUNCT_2:4;
+         as Function of (TOP-REAL 2)|Kb, (TOP-REAL 2)|Cbb  by A6,A8,FUNCT_2:4;
        rng (Sq_Circ|Kb) c= the carrier of (TOP-REAL 2) by A7,XBOOLE_1:1;
-   then reconsider f00=f0 as map of (TOP-REAL 2)|Kb,TOP-REAL 2 by A6,FUNCT_2:4;
+   then reconsider f00=f0 as Function
+ of (TOP-REAL 2)|Kb,TOP-REAL 2 by A6,FUNCT_2:4;
    A10:rng f0 = (Sq_Circ|Kb).:
           (the carrier of ((TOP-REAL 2)|Kb)) by FUNCT_2:45
         .= Sq_Circ.:Kb by A4,RFUNCT_2:5
         .= Cb by A1,Th33;
    A11:f0 is one-to-one by FUNCT_1:84;
-   consider h being map of (TOP-REAL 2),(TOP-REAL 2)
+   consider h being Function of (TOP-REAL 2),(TOP-REAL 2)
      such that A12: h=Sq_Circ & h is continuous by Th31;
    A13:f00 is continuous by A12,TOPMETR:10;
        Kb is compact by Th35;
    then (TOP-REAL 2)|Kb is compact by COMPTS_1:12;
-   then ex f1 being map of (TOP-REAL 2)|Kb,(TOP-REAL 2)|Cbb st
+   then ex f1 being Function of (TOP-REAL 2)|Kb,(TOP-REAL 2)|Cbb st
    f00=f1 & f1 is_homeomorphism by A10,A11,A13,JGRAPH_1:64;
   hence thesis by Th34;
  end;
@@ -3461,7 +3467,7 @@ A1:  dom Sq_Circ=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
      hence thesis by A22,FUNCT_1:56;
   end;
 
-theorem Th39: Sq_Circ" is map of TOP-REAL 2,TOP-REAL 2
+theorem Th39: Sq_Circ" is Function of TOP-REAL 2,TOP-REAL 2
 proof
     A1:dom (Sq_Circ")=rng (Sq_Circ) by FUNCT_1:55;
         the carrier of TOP-REAL 2 c= rng Sq_Circ
@@ -3638,18 +3644,18 @@ proof let p be Point of TOP-REAL 2;assume
 end;
 
 theorem Th41: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-holds ex g being map of X,R^1
+holds ex g being Function of X,R^1
 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=r1*sqrt(1+(r1/r2)^2)) & g is continuous
-proof let X be non empty TopSpace, f1,f2 be map of X,R^1;
+proof let X be non empty TopSpace, f1,f2 be Function of X,R^1;
 assume A1:f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A2: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=sqrt(1+(r1/r2)^2)) & g2 is continuous by Th18;
-consider g3 being map of X,R^1
+consider g3 being Function of X,R^1
   such that A3: (for p being Point of X,r1,r0 being real number st
  f1.p=r1 & g2.p=r0 holds g3.p=r1*r0) & g3 is continuous by A1,A2,JGRAPH_2:35;
     for p being Point of X,r1,r2 being real number st
@@ -3663,18 +3669,19 @@ hence thesis by A3;
 end;
 
 theorem Th42: for X being non empty TopSpace,
-f1,f2 being map of X,R^1 st f1 is continuous & f2 is continuous &
+f1,f2 being Function of X,R^1 st f1 is continuous & f2 is continuous &
 (for q being Point of X holds f2.q<>0)
-ex g being map of X,R^1 st (for p being Point of X,r1,r2 being real number st
+ex g being Function
+ of X,R^1 st (for p being Point of X,r1,r2 being real number st
 f1.p=r1 & f2.p=r2 holds g.p=r2*sqrt(1+(r1/r2)^2)) & g is continuous
 proof let X be non empty TopSpace,
-f1,f2 be map of X,R^1;
+f1,f2 be Function of X,R^1;
 assume A1:f1 is continuous & f2 is continuous
 & (for q being Point of X holds f2.q<>0);
-then consider g2 being map of X,R^1
+then consider g2 being Function of X,R^1
   such that A2: (for p being Point of X,r1,r2 being real number st
   f1.p=r1 & f2.p=r2 holds g2.p=sqrt(1+(r1/r2)^2)) & g2 is continuous by Th18;
-consider g3 being map of X,R^1
+consider g3 being Function of X,R^1
   such that A3: (for p being Point of X,r2,r0 being real number st
  f2.p=r2 & g2.p=r0 holds g3.p=r2*r0) & g3 is continuous by A1,A2,JGRAPH_2:35;
     for p being Point of X,r1,r2 being real number st
@@ -3688,21 +3695,21 @@ hence thesis by A3;
 end;
 
 theorem Th43: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1*sqrt(1+(p`2/p`1)^2)) & (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1*sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       for q being Point of (TOP-REAL 2)|K1 holds g1.q<>0
   proof let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
@@ -3710,7 +3717,7 @@ A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
         g1.q=proj1.q by Lm6 .=q2`1 by PSCOMP_1:def 28;
    hence g1.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g2.q=r1 & g1.q=r2
   holds g3.q=r2*sqrt(1+(r1/r2)^2)) & g3 is continuous by Th42;
@@ -3733,21 +3740,21 @@ hence thesis by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th44: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2*sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0) holds f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2*sqrt(1+(p`2/p`1)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       for q being Point of (TOP-REAL 2)|K1 holds g1.q<>0
   proof let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
@@ -3755,7 +3762,7 @@ A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
         g1.q=proj1.q by Lm6 .=q2`1 by PSCOMP_1:def 28;
    hence g1.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g2.q=r1 & g1.q=r2
   holds g3.q=r1*sqrt(1+(r1/r2)^2)) & g3 is continuous by Th41;
@@ -3778,21 +3785,21 @@ hence thesis by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th45: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2*sqrt(1+(p`1/p`2)^2)) & (for q being Point of TOP-REAL 2 st
 q in the carrier of (TOP-REAL 2)|K1 holds q`2<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`2*sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       for q being Point of (TOP-REAL 2)|K1 holds g2.q<>0
   proof let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
@@ -3800,7 +3807,7 @@ A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
         g2.q=proj2.q by Lm4 .=q2`2 by PSCOMP_1:def 29;
    hence g2.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g1.q=r1 & g2.q=r2
   holds g3.q=r2*sqrt(1+(r1/r2)^2)) & g3 is continuous by Th42;
@@ -3823,22 +3830,22 @@ hence thesis by A3,A4,FUNCT_1:9;
 end;
 
 theorem Th46: for K1 being non empty Subset of TOP-REAL 2,
-f being map of (TOP-REAL 2)|K1,R^1 st
+f being Function of (TOP-REAL 2)|K1,R^1 st
 (for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1*sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 ) holds
 f is continuous
 proof let K1 be non empty Subset of TOP-REAL 2,
-f be map of (TOP-REAL 2)|K1,R^1;
+f be Function of (TOP-REAL 2)|K1,R^1;
 assume
 A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f.p=p`1*sqrt(1+(p`1/p`2)^2)) &
   (for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0 );
   A2: the carrier of (TOP-REAL 2)|K1=K1 by JORDAN1:1;
-  reconsider g2=proj2|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm5;
-  reconsider g1=proj1|K1 as continuous map of (TOP-REAL 2)|K1,R^1 by Lm7;
+  reconsider g2=proj2|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm5;
+  reconsider g1=proj1|K1 as continuous Function of (TOP-REAL 2)|K1,R^1 by Lm7;
       for q being Point of (TOP-REAL 2)|K1 holds g2.q<>0
   proof let q be Point of (TOP-REAL 2)|K1;
         q in the carrier of (TOP-REAL 2)|K1;
@@ -3846,7 +3853,7 @@ A1:(for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
         g2.q=proj2.q by Lm4 .=q2`2 by PSCOMP_1:def 29;
    hence g2.q<>0 by A1;
   end;
-  then consider g3 being map of (TOP-REAL 2)|K1,R^1 such that
+  then consider g3 being Function of (TOP-REAL 2)|K1,R^1 such that
   A3: (for q being Point of
   (TOP-REAL 2)|K1,r1,r2 being real number st g1.q=r1 & g2.q=r2
   holds g3.q=r1*sqrt(1+(r1/r2)^2)) & g3 is continuous by Th41;
@@ -3869,7 +3876,7 @@ hence thesis by A3,A4,FUNCT_1:9;
 end;
 
 Lm13: for K1 being non empty Subset of TOP-REAL 2 holds
-  (proj2)*((Sq_Circ")|K1) is map of (TOP-REAL 2)|K1,R^1
+  (proj2)*((Sq_Circ")|K1) is Function of (TOP-REAL 2)|K1,R^1
 proof
  let K1 be non empty Subset of TOP-REAL 2;
 A1:dom ((proj2)*((Sq_Circ")|K1)) c= dom ((Sq_Circ")|K1) by RELAT_1:44;
@@ -3896,7 +3903,7 @@ A7:rng ((proj2)*((Sq_Circ")|K1)) c= rng (proj2) by RELAT_1:45;
 end;
 
 Lm14: for K1 being non empty Subset of TOP-REAL 2 holds
-  (proj1)*((Sq_Circ")|K1) is map of (TOP-REAL 2)|K1,R^1
+  (proj1)*((Sq_Circ")|K1) is Function of (TOP-REAL 2)|K1,R^1
 proof
  let K1 be non empty Subset of TOP-REAL 2;
 A1:dom ((proj1)*((Sq_Circ")|K1)) c= dom ((Sq_Circ")|K1) by RELAT_1:44;
@@ -3922,18 +3929,20 @@ hence thesis  by A6,FUNCT_2:4;
 end;
 
 theorem Th47: for K0,B0 being Subset of TOP-REAL 2,f being
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
 st f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2}
 holds f is continuous
 proof let K0,B0 be Subset of TOP-REAL 2,f be
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
 assume A1:f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2};
 then 1.REAL 2 in K0 by Lm8;
 then reconsider K1=K0 as non empty Subset of TOP-REAL 2;
-reconsider g2=(proj2)*((Sq_Circ")|K1) as map of (TOP-REAL 2)|K1,R^1 by Lm13;
-reconsider g1=(proj1)*((Sq_Circ")|K1) as map of (TOP-REAL 2)|K1,R^1 by Lm14;
+reconsider g2=(proj2)*((Sq_Circ")|K1) as Function
+ of (TOP-REAL 2)|K1,R^1 by Lm13;
+reconsider g1=(proj1)*((Sq_Circ")|K1) as Function
+ of (TOP-REAL 2)|K1,R^1 by Lm14;
 A2: for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`1<>0
    proof let q be Point of TOP-REAL 2;
@@ -3969,7 +3978,7 @@ A2: for q being Point of TOP-REAL 2 st q in
       .=p`2*sqrt(1+(p`2/p`1)^2) by EUCLID:56;
     hence thesis;
    end;
-then consider f2 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f2 being Function of (TOP-REAL 2)|K1,R^1 such that
   A11:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f2.p=p`2*sqrt(1+(p`2/p`1)^2);
 A12:f2 is continuous by A2,A11,Th44;
@@ -3995,7 +4004,7 @@ A12:f2 is continuous by A2,A11,Th44;
         .=p`1*sqrt(1+(p`2/p`1)^2) by EUCLID:56;
     hence thesis;
    end;
-then consider f1 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f1 being Function of (TOP-REAL 2)|K1,R^1 such that
   A18:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f1.p=p`1*sqrt(1+(p`2/p`1)^2);
 A19:f1 is continuous by A2,A18,Th43;
@@ -4017,18 +4026,20 @@ hence thesis by A1,A12,A19,Lm11,JGRAPH_2:45;
 end;
 
 theorem Th48: for K0,B0 being Subset of TOP-REAL 2,f being
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0
 st f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2}
 holds f is continuous
 proof let K0,B0 be Subset of TOP-REAL 2,f be
-map of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
+Function of (TOP-REAL 2)|K0,(TOP-REAL 2)|B0;
 assume A1:f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2} &
 K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2};
      then 1.REAL 2 in K0 by Lm12;
 then reconsider K1=K0 as non empty Subset of TOP-REAL 2;
-reconsider g2=(proj1)*((Sq_Circ")|K1) as map of (TOP-REAL 2)|K1,R^1 by Lm14;
-reconsider g1=(proj2)*((Sq_Circ")|K1) as map of (TOP-REAL 2)|K1,R^1 by Lm13;
+reconsider g2=(proj1)*((Sq_Circ")|K1) as Function
+ of (TOP-REAL 2)|K1,R^1 by Lm14;
+reconsider g1=(proj2)*((Sq_Circ")|K1) as Function
+ of (TOP-REAL 2)|K1,R^1 by Lm13;
 A2: for q being Point of TOP-REAL 2 st q in
   the carrier of (TOP-REAL 2)|K1 holds q`2<>0
    proof let q be Point of TOP-REAL 2;
@@ -4064,7 +4075,7 @@ A2: for q being Point of TOP-REAL 2 st q in
         .=p`1*sqrt(1+(p`1/p`2)^2) by EUCLID:56;
     hence g2.p=p`1*sqrt(1+(p`1/p`2)^2);
    end;
-then consider f2 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f2 being Function of (TOP-REAL 2)|K1,R^1 such that
   A11:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f2.p=p`1*sqrt(1+(p`1/p`2)^2);
 A12:f2 is continuous by A2,A11,Th46;
@@ -4089,7 +4100,7 @@ A12:f2 is continuous by A2,A11,Th46;
         .=p`2*sqrt(1+(p`1/p`2)^2) by EUCLID:56;
     hence g1.p=p`2*sqrt(1+(p`1/p`2)^2);
    end;
-then consider f1 being map of (TOP-REAL 2)|K1,R^1 such that
+then consider f1 being Function of (TOP-REAL 2)|K1,R^1 such that
   A18:for p being Point of TOP-REAL 2 st p in the carrier of (TOP-REAL 2)|K1
   holds f1.p=p`2*sqrt(1+(p`1/p`2)^2);
 A19:f1 is continuous by A2,A18,Th45;
@@ -4113,12 +4124,12 @@ hence thesis by A1,A12,A19,Lm11,JGRAPH_2:45;
 end;
 
 theorem Th49: for B0 being Subset of TOP-REAL 2,K0 being Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
 st f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
 & K0={p:(p`2<=p`1 & -p`1<=p`2 or p`2>=p`1 & p`2<=-p`1) & p<>0.REAL 2}
 holds f is continuous & K0 is closed
 proof let B0 be Subset of TOP-REAL 2,K0 be Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
 defpred P0[Point of TOP-REAL 2] means
 ($1`2<=$1`1 & -$1`1<=$1`2 or $1`2>=$1`1 & $1`2<=-$1`1);
 set k0 = {p:P0[p] & p<>0.REAL 2};
@@ -4180,12 +4191,12 @@ assume A1: f=(Sq_Circ")|K0 & B0=b0 & K0=k0;
 end;
 
 theorem Th50: for B0 being Subset of TOP-REAL 2,K0 being Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0)
 st f=(Sq_Circ")|K0 & B0=(the carrier of TOP-REAL 2) \ {0.REAL 2}
 & K0={p:(p`1<=p`2 & -p`2<=p`1 or p`1>=p`2 & p`1<=-p`2) & p<>0.REAL 2}
 holds f is continuous & K0 is closed
 proof let B0 be Subset of TOP-REAL 2,K0 be Subset of
-(TOP-REAL 2)|B0,f being map of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
+(TOP-REAL 2)|B0,f being Function of ((TOP-REAL 2)|B0)|K0,((TOP-REAL 2)|B0);
   defpred P0[Point of TOP-REAL 2] means
   ($1`1<=$1`2 & -$1`2<=$1`1 or $1`1>=$1`2 & $1`1<=-$1`2);
 set k0 = {p:P0[p] & p<>0.REAL 2},
@@ -4249,7 +4260,7 @@ end;
 
 theorem Th51:for D being non empty Subset of TOP-REAL 2
 st D`={0.REAL 2} holds
-ex h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+ex h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
 st h=(Sq_Circ")|D & h is continuous
 proof let D be non empty Subset of TOP-REAL 2;
 assume A1:D`={0.REAL 2};
@@ -4364,7 +4375,7 @@ assume A1:D`={0.REAL 2};
    end;
   then rng ((Sq_Circ")|K0)c= the carrier of ((TOP-REAL 2)|D) by A10,XBOOLE_1:1
 ;
-  then reconsider f=(Sq_Circ")|K0 as map of ((TOP-REAL 2)|D)|K0,
+  then reconsider f=(Sq_Circ")|K0 as Function of ((TOP-REAL 2)|D)|K0,
   (TOP-REAL 2)|D  by A9,A10,FUNCT_2:4;
    A26:K1 c= the carrier of TOP-REAL 2
    proof let z be set;assume z in K1;
@@ -4434,7 +4445,7 @@ assume A1:D`={0.REAL 2};
    end;
   then rng ((Sq_Circ")|K1)c= the carrier of ((TOP-REAL 2)|D) by A29,XBOOLE_1:1
 ;
-  then reconsider g=(Sq_Circ")|K1 as map of ((TOP-REAL 2)|D)|K1,
+  then reconsider g=(Sq_Circ")|K1 as Function of ((TOP-REAL 2)|D)|K1,
   ((TOP-REAL 2)|D)  by A28,A29,FUNCT_2:4;
   A45:K0=[#](((TOP-REAL 2)|D)|K0) by PRE_TOPC:def 10;
   A46:K1=[#](((TOP-REAL 2)|D)|K1) by PRE_TOPC:def 10;
@@ -4487,7 +4498,7 @@ assume A1:D`={0.REAL 2};
      then f.x=(Sq_Circ").x by FUNCT_1:72;
     hence f.x = g.x by A58,FUNCT_1:72;
    end;
-  then consider h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+  then consider h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
   such that A59: h= f+*g & h is continuous
                           by A45,A46,A54,A55,A56,JGRAPH_2:9;
   A60:dom h=the carrier of ((TOP-REAL 2)|D) by FUNCT_2:def 1;
@@ -4531,9 +4542,9 @@ then A70:   x in D`` by SUBSET_1:def 5;
 end;
 
 theorem Th52:
-ex h being map of TOP-REAL 2,TOP-REAL 2 st h=Sq_Circ" & h is continuous
+ex h being Function of TOP-REAL 2,TOP-REAL 2 st h=Sq_Circ" & h is continuous
 proof
- reconsider f=(Sq_Circ") as map of (TOP-REAL 2),(TOP-REAL 2) by Th39;
+ reconsider f=(Sq_Circ") as Function of (TOP-REAL 2),(TOP-REAL 2) by Th39;
  reconsider D=(the carrier of TOP-REAL 2) \{0.REAL 2}
    as non empty Subset of TOP-REAL 2 by JGRAPH_2:19,XBOOLE_1:36;
  A1: f.(0.REAL 2)=0.REAL 2 by Th38;
@@ -4584,7 +4595,7 @@ proof
      hence thesis by A1,A7,A14,Th38;
   end;
   end;
- A19:ex h being map of (TOP-REAL 2)|D,(TOP-REAL 2)|D
+ A19:ex h being Function of (TOP-REAL 2)|D,(TOP-REAL 2)|D
   st h=(Sq_Circ")|D & h is continuous by A2,Th51;
      for V being Subset of TOP-REAL 2 st f.(0.REAL 2) in V & V is open
  ex W being Subset of TOP-REAL 2 st 0.REAL 2 in W
@@ -4797,20 +4808,20 @@ Lm15: Sq_Circ" is one-to-one by FUNCT_1:62;
 
 canceled;
 
-theorem Th54: Sq_Circ is map of TOP-REAL 2,TOP-REAL 2 &
+theorem Th54: Sq_Circ is Function of TOP-REAL 2,TOP-REAL 2 &
  rng Sq_Circ = the carrier of TOP-REAL 2 &
- for f being map of TOP-REAL 2,TOP-REAL 2 st f=Sq_Circ holds
+ for f being Function of TOP-REAL 2,TOP-REAL 2 st f=Sq_Circ holds
    f is_homeomorphism
-proof thus Sq_Circ is map of TOP-REAL 2,TOP-REAL 2;
-  A1:for f being map of TOP-REAL 2,TOP-REAL 2 st f=Sq_Circ holds
+proof thus Sq_Circ is Function of TOP-REAL 2,TOP-REAL 2;
+  A1:for f being Function of TOP-REAL 2,TOP-REAL 2 st f=Sq_Circ holds
     rng Sq_Circ=the carrier of TOP-REAL 2 & f is_homeomorphism
-  proof let f be map of TOP-REAL 2,TOP-REAL 2;
+  proof let f be Function of TOP-REAL 2,TOP-REAL 2;
     assume A2:f=Sq_Circ;
     A3:dom f=the carrier of TOP-REAL 2 by FUNCT_2:def 1;
     then A4:dom f=[#](TOP-REAL 2) by PRE_TOPC:12;
-    consider h being map of (TOP-REAL 2),(TOP-REAL 2) such that
+    consider h being Function of (TOP-REAL 2),(TOP-REAL 2) such that
     A5: h=Sq_Circ & h is continuous by Th31;
-    consider h2 being map of (TOP-REAL 2),(TOP-REAL 2) such that
+    consider h2 being Function of (TOP-REAL 2),(TOP-REAL 2) such that
     A6: h2=Sq_Circ" & h2 is continuous by Th52;
     A7: the carrier of TOP-REAL 2 c= rng f
     proof let y be set;assume y in the carrier of TOP-REAL 2;
@@ -4892,7 +4903,7 @@ proof thus Sq_Circ is map of TOP-REAL 2,TOP-REAL 2;
       .=dom (f/") by A2,A28,TOPS_2:def 4
       .=the carrier of TOP-REAL 2 by FUNCT_2:def 1
       .=[#](TOP-REAL 2) by PRE_TOPC:12;
-    reconsider g=f/" as map of TOP-REAL 2,TOP-REAL 2;
+    reconsider g=f/" as Function of TOP-REAL 2,TOP-REAL 2;
         g=Sq_Circ" by A2,A29,TOPS_2:def 4;
    hence rng Sq_Circ=the carrier of TOP-REAL 2 &
    f is_homeomorphism by A2,A4,A5,A6,A7,A29,TOPS_2:def 5,XBOOLE_0:def 10;
@@ -4925,7 +4936,7 @@ Lm18:now let px1 be real number;
  hence px1=1 or px1=-1;
 end;
 
-theorem   for f,g being map of I[01],TOP-REAL 2,
+theorem   for f,g being Function of I[01],TOP-REAL 2,
   C0,KXP,KXN,KYP,KYN being Subset of TOP-REAL 2,
   O,I being Point of I[01] st O=0 & I=1 &
   f is continuous one-to-one &
@@ -4943,7 +4954,7 @@ theorem   for f,g being map of I[01],TOP-REAL 2,
   g.O in KYN & g.I in KYP &
   rng f c= C0 & rng g c= C0
    holds rng f meets rng g
-proof let f,g be map of I[01],TOP-REAL 2,
+proof let f,g be Function of I[01],TOP-REAL 2,
   C0,KXP,KXN,KYP,KYN be Subset of TOP-REAL 2,
   O,I be Point of I[01];
   assume A1: O=0 & I=1 &
@@ -4960,9 +4971,11 @@ proof let f,g be map of I[01],TOP-REAL 2,
   f.O in KXN & f.I in KXP &
   g.O in KYN & g.I in KYP &
   rng f c= C0 & rng g c= C0;
-    reconsider ff=Sq_Circ"*f as map of I[01],TOP-REAL 2 by Th39,FUNCT_2:19;
-    reconsider gg=Sq_Circ"*g as map of I[01],TOP-REAL 2 by Th39,FUNCT_2:19;
-    consider h1 being map of (TOP-REAL 2),(TOP-REAL 2)
+    reconsider ff=Sq_Circ"*f as Function
+ of I[01],TOP-REAL 2 by Th39,FUNCT_2:19;
+    reconsider gg=Sq_Circ"*g as Function
+ of I[01],TOP-REAL 2 by Th39,FUNCT_2:19;
+    consider h1 being Function of (TOP-REAL 2),(TOP-REAL 2)
       such that A2:h1=(Sq_Circ") & h1 is continuous by Th52;
     A3:dom ff=the carrier of I[01] by FUNCT_2:def 1;
     A4:dom gg=the carrier of I[01] by FUNCT_2:def 1;

@@ -10,15 +10,21 @@ environ
       LATTICES, YELLOW_0, CAT_1, PRE_TOPC, FUNCT_1, RELAT_1, SEQM_3, FUNCOP_1,
       TARSKI, SETFAM_1, ORDINAL2, FILTER_2, FILTER_0, BHSP_3, REALSET1,
       WAYBEL_0;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELAT_2,
-      RELSET_1, FINSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, ORDERS_1, STRUCT_0,
-      REALSET2, PRE_TOPC, LATTICE3, YELLOW_0, ORDERS_2, ORDERS_3;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+ RELAT_1, RELAT_2, RELSET_1,
+      FINSET_1, FUNCT_1, FUNCT_2, FUNCOP_1, ORDERS_1, STRUCT_0, REALSET2,
+      PRE_TOPC, LATTICE3, YELLOW_0, ORDERS_2, ORDERS_3;
  constructors LATTICE3, YELLOW_0, ORDERS_3, MEMBERED, PRE_TOPC, REALSET2,
-      SETFAM_1;
+ SETFAM_1;
  registrations STRUCT_0, FINSET_1, RELSET_1, ORDERS_2, LATTICE3, YELLOW_0,
       FUNCOP_1, SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
-
+ definitions TARSKI, STRUCT_0, REALSET2, LATTICE3, YELLOW_0, ORDERS_3,
+      XBOOLE_0;
+ theorems TARSKI, ZFMISC_1, ORDERS_2, LATTICE3, FUNCT_2, FUNCOP_1, YELLOW_0,
+      RELAT_2, FUNCT_1, RELAT_1, PRE_TOPC, ORDERS_3, RELSET_1, XBOOLE_0,
+      XBOOLE_1;
+ schemes FINSET_1, XBOOLE_0;
 
 begin :: Directed subsets
 
@@ -144,14 +150,14 @@ begin :: Nets
 
 definition
  let L1,L2 be non empty 1-sorted;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  let x be Element of L1;
  redefine func f.x -> Element of L2;
 end;
 
 definition
  let L1,L2 be RelStr;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  attr f is antitone means
 :: WAYBEL_0:def 5
       for x,y being Element of L1 st x <= y
@@ -198,7 +204,7 @@ end;
 definition
  let L be non empty 1-sorted;
  let N be non empty NetStr over L;
- func netmap(N,L) -> map of N,L equals
+ func netmap(N,L) -> Function of N,L equals
 :: WAYBEL_0:def 7
    the mapping of N;
  let i be Element of N;
@@ -811,7 +817,7 @@ begin :: Maps
 
 definition
  let S,T be non empty RelStr;
- let f be map of S,T;
+ let f be Function of S,T;
  let X be Subset of S;
  pred f preserves_inf_of X means
 :: WAYBEL_0:def 30
@@ -824,14 +830,14 @@ end;
 theorem :: WAYBEL_0:65
      for S1,S2, T1,T2 being non empty RelStr st
   the RelStr of S1 = the RelStr of T1 & the RelStr of S2 = the RelStr of T2
- for f being map of S1,S2, g being map of T1,T2 st f = g
+ for f being Function of S1,S2, g being Function of T1,T2 st f = g
  for X being Subset of S1, Y being Subset of T1 st X = Y holds
    (f preserves_sup_of X implies g preserves_sup_of Y) &
    (f preserves_inf_of X implies g preserves_inf_of Y);
 
 definition
  let L1,L2 be non empty RelStr;
- let f be map of L1,L2;
+ let f be Function of L1,L2;
  attr f is infs-preserving means
 :: WAYBEL_0:def 32
       for X being Subset of L1 holds f preserves_inf_of X;
@@ -857,67 +863,71 @@ end;
 registration
  let L1,L2 be non empty RelStr;
  cluster infs-preserving ->
-    filtered-infs-preserving meet-preserving map of L1,L2;
+    filtered-infs-preserving meet-preserving Function of L1,L2;
  cluster sups-preserving ->
-    directed-sups-preserving join-preserving map of L1,L2;
+    directed-sups-preserving join-preserving Function of L1,L2;
 end;
 
 definition
  let S,T be RelStr;
- let f be map of S,T;
+ let f be Function of S,T;
  attr f is isomorphic means
 :: WAYBEL_0:def 38
-  f is one-to-one monotone & ex g being map of T,S st g = f" & g is monotone
+  f is one-to-one monotone & ex g being Function
+ of T,S st g = f" & g is monotone
   if S is non empty & T is non empty
   otherwise S is empty & T is empty;
 end;
 
 theorem :: WAYBEL_0:66
- for S,T being non empty RelStr, f being map of S,T holds f is isomorphic iff
+ for S,T being non empty RelStr, f being Function
+ of S,T holds f is isomorphic iff
   f is one-to-one & rng f = the carrier of T &
    for x,y being Element of S holds x <= y iff f.x <= f.y;
 
 registration
  let S,T be non empty RelStr;
- cluster isomorphic -> one-to-one monotone map of S,T;
+ cluster isomorphic -> one-to-one monotone Function of S,T;
 end;
 
 theorem :: WAYBEL_0:67
-     for S,T being non empty RelStr, f being map of S,T st f is isomorphic
-   holds f" is map of T,S & rng (f") = the carrier of S;
+     for S,T being non empty RelStr, f being Function of S,T st f is isomorphic
+   holds f" is Function of T,S & rng (f") = the carrier of S;
 
 theorem :: WAYBEL_0:68
-     for S,T being non empty RelStr, f being map of S,T st f is isomorphic
-  for g being map of T,S st g = f" holds g is isomorphic;
+     for S,T being non empty RelStr, f being Function of S,T st f is isomorphic
+  for g being Function of T,S st g = f" holds g is isomorphic;
 
 theorem :: WAYBEL_0:69
- for S,T being non empty Poset, f being map of S,T st
+ for S,T being non empty Poset, f being Function of S,T st
    for X being Filter of S holds f preserves_inf_of X
  holds f is monotone;
 
 theorem :: WAYBEL_0:70
-     for S,T being non empty Poset, f being map of S,T st
+     for S,T being non empty Poset, f being Function of S,T st
    for X being Filter of S holds f preserves_inf_of X
  holds f is filtered-infs-preserving;
 
 theorem :: WAYBEL_0:71
-     for S being Semilattice, T being non empty Poset, f being map of S,T st
+     for S being Semilattice, T being non empty Poset, f being Function
+ of S,T st
   (for X being finite Subset of S holds f preserves_inf_of X) &
   (for X being non empty filtered Subset of S holds f preserves_inf_of X)
  holds f is infs-preserving;
 
 theorem :: WAYBEL_0:72
- for S,T being non empty Poset, f being map of S,T st
+ for S,T being non empty Poset, f being Function of S,T st
    for X being Ideal of S holds f preserves_sup_of X
  holds f is monotone;
 
 theorem :: WAYBEL_0:73
-     for S,T being non empty Poset, f being map of S,T st
+     for S,T being non empty Poset, f being Function of S,T st
    for X being Ideal of S holds f preserves_sup_of X
  holds f is directed-sups-preserving;
 
 theorem :: WAYBEL_0:74
-     for S being sup-Semilattice, T being non empty Poset, f being map of S,T
+     for S being sup-Semilattice, T being non empty Poset, f being Function
+ of S,T
 st
   (for X being finite Subset of S holds f preserves_sup_of X) &
   (for X being non empty directed Subset of S holds f preserves_sup_of X)

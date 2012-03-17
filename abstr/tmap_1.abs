@@ -9,14 +9,17 @@ environ
  vocabularies PRE_TOPC, TARSKI, FUNCT_1, RELAT_1, BOOLE, FUNCT_4, SETFAM_1,
       SUBSET_1, CONNSP_2, ORDINAL2, FUNCOP_1, FUNCT_3, TSEP_1, CONNSP_1,
       TMAP_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, RELAT_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, FUNCT_4, PRE_TOPC, CONNSP_1, CONNSP_2, BORSUK_1,
-      GRCAT_1, TSEP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, FUNCT_4, STRUCT_0, PRE_TOPC, CONNSP_1, CONNSP_2,
+      BORSUK_1, GRCAT_1, TSEP_1;
  constructors CONNSP_1, BORSUK_1, TSEP_1, GRCAT_1, MEMBERED;
  registrations PRE_TOPC, BORSUK_1, TSEP_1, STRUCT_0, COMPLSP1, RELSET_1,
       SUBSET_1, XBOOLE_0, FUNCT_2, PARTFUN1;
  requirements BOOLE, SUBSET;
-
+ definitions PRE_TOPC, BORSUK_1, STRUCT_0, XBOOLE_0;
+ theorems TARSKI, SUBSET_1, FUNCT_1, FUNCT_2, FUNCT_4, ZFMISC_1, PRE_TOPC,
+      CONNSP_2, TOPS_1, TOPS_2, BORSUK_1, TSEP_1, RELAT_1, GRCAT_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, CONNSP_1, PARTFUN1;
 
 begin :: 1. Set-Theoretic Preliminaries.
 
@@ -283,7 +286,7 @@ theorem :: TMAP_1:46
 begin :: 3. Continuity of Mappings.
 
 definition
- let X, Y be non empty TopSpace, f be map of X,Y, x be Point of X;
+ let X, Y be non empty TopSpace, f be Function of X,Y, x be Point of X;
  pred f is_continuous_at x means
 :: TMAP_1:def 2
  for G being a_neighborhood of f.x
@@ -291,11 +294,11 @@ definition
  end;
 
 notation
- let X, Y be non empty TopSpace, f be map of X,Y, x be Point of X;
+ let X, Y be non empty TopSpace, f be Function of X,Y, x be Point of X;
  antonym f is_not_continuous_at x for f is_continuous_at x;
 end;
 
-reserve X, Y for non empty TopSpace; reserve f for map of X,Y;
+reserve X, Y for non empty TopSpace; reserve f for Function of X,Y;
 
 theorem :: TMAP_1:47
  for x being Point of X holds
@@ -314,19 +317,19 @@ theorem :: TMAP_1:49
 theorem :: TMAP_1:50
  for X,Y,Z being non empty TopSpace st
   the carrier of Y = the carrier of Z & the topology of Z c= the topology of Y
-   for f being map of X,Y, g being map of X,Z st f = g holds
+   for f being Function of X,Y, g being Function of X,Z st f = g holds
     for x being Point of X holds
      f is_continuous_at x implies g is_continuous_at x;
 
 theorem :: TMAP_1:51
  for X,Y,Z being non empty TopSpace st
   the carrier of X = the carrier of Y & the topology of Y c= the topology of X
-   for f being map of X,Z, g being map of Y,Z st f = g holds
+   for f being Function of X,Z, g being Function of Y,Z st f = g holds
     for x being Point of X, y being Point of Y st x = y holds
      g is_continuous_at y implies f is_continuous_at x;
 
 reserve X,Y,Z for non empty TopSpace;
-reserve f for map of X,Y, g for map of Y,Z;
+reserve f for Function of X,Y, g for Function of Y,Z;
 
 theorem :: TMAP_1:52
  for x being Point of X, y being Point of Y st y = f.x holds
@@ -342,36 +345,38 @@ theorem :: TMAP_1:54
   f is_continuous_at x & g is continuous implies g*f is_continuous_at x;
 
 theorem :: TMAP_1:55
-    f is continuous map of X,Y iff
+    f is continuous Function of X,Y iff
   for x being Point of X holds f is_continuous_at x;
 
 theorem :: TMAP_1:56
  for X,Y,Z being non empty TopSpace st
   the carrier of Y = the carrier of Z & the topology of Z c= the topology of Y
-   for f being continuous map of X,Y holds f is continuous map of X,Z;
+   for f being continuous Function of X,Y holds f is continuous Function of X,Z
+;
 
 theorem :: TMAP_1:57
      for X,Y,Z being non empty TopSpace st
   the carrier of X = the carrier of Y & the topology of Y c= the topology of X
-   for f being continuous map of Y,Z holds f is continuous map of X,Z;
+   for f being continuous Function of Y,Z holds f is continuous Function of X,Z
+;
 
 ::(Definition of the restriction mapping - general case.)
 
 definition
- let X, Y be non empty TopSpace, X0 be SubSpace of X, f be map of X,Y;
- func f|X0 -> map of X0,Y equals
+ let X, Y be non empty TopSpace, X0 be SubSpace of X, f be Function of X,Y;
+ func f|X0 -> Function of X0,Y equals
 :: TMAP_1:def 3
  f|(the carrier of X0);
 end;
 
 reserve X, Y for non empty TopSpace, X0 for non empty SubSpace of X;
-reserve f for map of X,Y;
+reserve f for Function of X,Y;
 
 theorem :: TMAP_1:58
  for x being Point of X st x in the carrier of X0 holds f.x = (f|X0).x;
 
 theorem :: TMAP_1:59
- for f0 being map of X0,Y st
+ for f0 being Function of X0,Y st
   for x being Point of X st x in the carrier of X0 holds f.x = f0.x
    holds f|X0 = f0;
 
@@ -387,9 +392,9 @@ theorem :: TMAP_1:62
  holds f"B = (f|X0)"B;
 
 theorem :: TMAP_1:63
- for g being map of X0,Y ex h being map of X,Y st h|X0 = g;
+ for g being Function of X0,Y ex h being Function of X,Y st h|X0 = g;
 
-reserve f for map of X,Y, X0 for non empty SubSpace of X;
+reserve f for Function of X,Y, X0 for non empty SubSpace of X;
 
 theorem :: TMAP_1:64
  for x being Point of X, x0 being Point of X0 st x = x0 holds
@@ -414,43 +419,43 @@ theorem :: TMAP_1:67
   x = x0 holds f is_continuous_at x iff f|X0 is_continuous_at x0;
 
 theorem :: TMAP_1:68
- for f being continuous map of X,Y, X0 being non empty SubSpace of X holds
-  f|X0 is continuous map of X0,Y;
+ for f being continuous Function of X,Y, X0 being non empty SubSpace of X holds
+  f|X0 is continuous Function of X0,Y;
 
 theorem :: TMAP_1:69
  for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
-  f being map of X,Y, g being map of Y,Z holds (g*f)|X0 = g*(f|X0);
+  f being Function of X,Y, g being Function of Y,Z holds (g*f)|X0 = g*(f|X0);
 
 theorem :: TMAP_1:70
  for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
-  g being map of Y,Z, f being map of X,Y st
+  g being Function of Y,Z, f being Function of X,Y st
    g is continuous & f|X0 is continuous holds (g*f)|X0 is continuous;
 
 theorem :: TMAP_1:71
      for X,Y,Z being non empty TopSpace, X0 being non empty SubSpace of X,
-  g being continuous map of Y,Z, f being map of X,Y st
-   f|X0 is continuous map of X0,Y holds
-    (g*f)|X0 is continuous map of X0,Z;
+  g being continuous Function of Y,Z, f being Function of X,Y st
+   f|X0 is continuous Function of X0,Y holds
+    (g*f)|X0 is continuous Function of X0,Z;
 
 ::(Definition of the restriction mapping - special case.)
 
 definition
- let X,Y be non empty TopSpace, X0, X1 be SubSpace of X, g be map of X0,Y;
+ let X,Y be non empty TopSpace, X0, X1 be SubSpace of X, g be Function of X0,Y;
   assume  X1 is SubSpace of X0;
- func g|X1 -> map of X1,Y equals
+ func g|X1 -> Function of X1,Y equals
 :: TMAP_1:def 4
  g|(the carrier of X1);
 end;
 
 reserve X, Y for non empty TopSpace, X0, X1 for non empty SubSpace of X;
-reserve f for map of X,Y, g for map of X0,Y;
+reserve f for Function of X,Y, g for Function of X0,Y;
 
 theorem :: TMAP_1:72
  X1 is SubSpace of X0 implies
   for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = (g|X1).x0;
 
 theorem :: TMAP_1:73
-     X1 is SubSpace of X0 implies for g1 being map of X1,Y st
+     X1 is SubSpace of X0 implies for g1 being Function of X1,Y st
   for x0 being Point of X0 st x0 in the carrier of X1 holds g.x0 = g1.x0
    holds g|X1 = g1;
 
@@ -468,7 +473,7 @@ theorem :: TMAP_1:76
   holds g"B = (g|X1)"B;
 
 theorem :: TMAP_1:77
- for g being map of X0,Y st g = f|X0 holds
+ for g being Function of X0,Y st g = f|X0 holds
   X1 is SubSpace of X0 implies g|X1 = f|X1;
 
 theorem :: TMAP_1:78
@@ -477,15 +482,15 @@ theorem :: TMAP_1:78
 theorem :: TMAP_1:79
  for X0, X1, X2 being non empty SubSpace of X st
   X1 is SubSpace of X0 & X2 is SubSpace of X1
-   for g being map of X0,Y holds (g|X1)|X2 = g|X2;
+   for g being Function of X0,Y holds (g|X1)|X2 = g|X2;
 
 theorem :: TMAP_1:80
- for f being map of X,Y, f0 being map of X1,Y,
-  g being map of X0,Y holds
+ for f being Function of X,Y, f0 being Function of X1,Y,
+  g being Function of X0,Y holds
    X0 = X & f = g implies (g|X1 = f0 iff f|X1 = f0);
 
 reserve X0, X1, X2 for non empty SubSpace of X;
-reserve f for map of X,Y, g for map of X0,Y;
+reserve f for Function of X,Y, g for Function of X0,Y;
 
 theorem :: TMAP_1:81
  for x0 being Point of X0, x1 being Point of X1 st x0 = x1 holds
@@ -535,20 +540,21 @@ theorem :: TMAP_1:88
    g|X1 is_continuous_at x1 implies g is_continuous_at x0;
 
 theorem :: TMAP_1:89
- for g being continuous map of X0,Y holds
-  X1 is SubSpace of X0 implies g|X1 is continuous map of X1,Y;
+ for g being continuous Function of X0,Y holds
+  X1 is SubSpace of X0 implies g|X1 is continuous Function of X1,Y;
 
 theorem :: TMAP_1:90
  X1 is SubSpace of X0 & X2 is SubSpace of X1 implies
-  for g being map of X0,Y holds
- g|X1 is continuous map of X1,Y implies g|X2 is continuous map of X2,Y;
+  for g being Function of X0,Y holds
+ g|X1 is continuous Function of X1,Y implies g|X2 is continuous Function
+ of X2,Y;
 
 theorem :: TMAP_1:91
  for X being non empty 1-sorted, x being Element of X
    holds (id X).x = x;
 
 theorem :: TMAP_1:92
-     for X being non empty 1-sorted, f being map of X,X
+     for X being non empty 1-sorted, f being Function of X,X
    st for x being Element of X holds f.x = x
   holds f = id X;
 
@@ -558,14 +564,14 @@ theorem :: TMAP_1:93
   holds f*(id X) = f & (id Y)*f = f;
 
 theorem :: TMAP_1:94
- id X is continuous map of X,X;
+ id X is continuous Function of X,X;
 
 ::(Definition of the inclusion mapping.)
 
 definition let X be non empty TopSpace, X0 be SubSpace of X;
  canceled;
 
- func incl X0 -> map of X0,X equals
+ func incl X0 -> Function of X0,X equals
 :: TMAP_1:def 6
  (id X)|X0;
  end;
@@ -580,17 +586,17 @@ theorem :: TMAP_1:95
   holds (incl X0).x = x;
 
 theorem :: TMAP_1:96
-     for X0 being non empty SubSpace of X, f0 being map of X0,X st
+     for X0 being non empty SubSpace of X, f0 being Function of X0,X st
   for x being Point of X st x in the carrier of X0 holds x = f0.x
    holds incl X0 = f0;
 
 theorem :: TMAP_1:97
-     for X0 being non empty SubSpace of X, f being map of X,Y
+     for X0 being non empty SubSpace of X, f being Function of X,Y
    holds f|X0 = f*(incl X0);
 
 theorem :: TMAP_1:98
   for X0 being non empty SubSpace of X
-   holds incl X0 is continuous map of X0,X;
+   holds incl X0 is continuous Function of X0,X;
 
 begin :: 4. A Modification of the Topology of Topological Spaces.
 
@@ -654,7 +660,7 @@ theorem :: TMAP_1:106
   A is open iff the TopStruct of X = X modified_with_respect_to A;
 
 definition let X be non empty TopSpace, A be Subset of X;
- func modid(X,A) -> map of X,X modified_with_respect_to A equals
+ func modid(X,A) -> Function of X,X modified_with_respect_to A equals
 :: TMAP_1:def 9
  id (the carrier of X);
 end;
@@ -675,16 +681,16 @@ theorem :: TMAP_1:110
 
 theorem :: TMAP_1:111
  for X0 being non empty SubSpace of X st the carrier of X0 misses A holds
-  (modid(X,A))|X0 is continuous map of X0,X modified_with_respect_to A;
+  (modid(X,A))|X0 is continuous Function of X0,X modified_with_respect_to A;
 
 theorem :: TMAP_1:112
  for X0 being non empty SubSpace of X st the carrier of X0 = A holds
-  (modid(X,A))|X0 is continuous map of X0,X modified_with_respect_to A;
+  (modid(X,A))|X0 is continuous Function of X0,X modified_with_respect_to A;
 
 theorem :: TMAP_1:113
  for A being Subset of X holds
   A is open iff
-   modid(X,A) is continuous map of X,X modified_with_respect_to A;
+   modid(X,A) is continuous Function of X,X modified_with_respect_to A;
 
 definition let X be non empty TopSpace, X0 be SubSpace of X;
  func X modified_with_respect_to X0 -> strict TopSpace means
@@ -715,7 +721,7 @@ theorem :: TMAP_1:116
   the TopStruct of X = X modified_with_respect_to X0;
 
 definition let X be non empty TopSpace, X0 be SubSpace of X;
- func modid(X,X0) -> map of X,X modified_with_respect_to X0 means
+ func modid(X,X0) -> Function of X,X modified_with_respect_to X0 means
 :: TMAP_1:def 11
  for A being Subset of X st A = the carrier of X0 holds
   it = modid(X,A);
@@ -734,16 +740,16 @@ theorem :: TMAP_1:119
 
 theorem :: TMAP_1:120
   for X0, X1 being non empty SubSpace of X st X0 misses X1 holds
-  (modid(X,X0))|X1 is continuous map of X1,X modified_with_respect_to X0;
+  (modid(X,X0))|X1 is continuous Function of X1,X modified_with_respect_to X0;
 
 theorem :: TMAP_1:121
   for X0 being non empty SubSpace of X holds
-  (modid(X,X0))|X0 is continuous map of X0,X modified_with_respect_to X0;
+  (modid(X,X0))|X0 is continuous Function of X0,X modified_with_respect_to X0;
 
 theorem :: TMAP_1:122
   for X0 being SubSpace of X holds
   X0 is open SubSpace of X iff
-   modid(X,X0) is continuous map of X,X modified_with_respect_to X0;
+   modid(X,X0) is continuous Function of X,X modified_with_respect_to X0;
 
 begin :: 5. Continuity of Mappings over the Union of Subspaces.
 
@@ -751,21 +757,21 @@ reserve X, Y for non empty TopSpace;
 
 ::Continuity at the Point of Mappings over the Union of Subspaces.
 theorem :: TMAP_1:123
- for X1, X2 being non empty SubSpace of X, g being map of X1 union X2,Y
+ for X1, X2 being non empty SubSpace of X, g being Function of X1 union X2,Y
   for x1 being Point of X1, x2 being Point of X2,
    x being Point of X1 union X2 st x = x1 & x = x2 holds
     g is_continuous_at x iff
      g|X1 is_continuous_at x1 & g|X2 is_continuous_at x2;
 
 theorem :: TMAP_1:124
-     for f being map of X,Y, X1, X2 being non empty SubSpace of X
+     for f being Function of X,Y, X1, X2 being non empty SubSpace of X
   for x being Point of X1 union X2,
    x1 being Point of X1, x2 being Point of X2 st x = x1 & x = x2 holds
     f|(X1 union X2) is_continuous_at x iff
      f|X1 is_continuous_at x1 & f|X2 is_continuous_at x2;
 
 theorem :: TMAP_1:125
-     for f being map of X,Y, X1, X2 being non empty SubSpace of X
+     for f being Function of X,Y, X1, X2 being non empty SubSpace of X
    st X = X1 union X2
   for x being Point of X, x1 being Point of X1, x2 being Point of X2 st
    x = x1 & x = x2 holds
@@ -777,82 +783,83 @@ reserve X1, X2 for non empty SubSpace of X;
 ::Continuity of Mappings over the Union of Subspaces.
 theorem :: TMAP_1:126
  X1,X2 are_weakly_separated implies
-  for g being map of X1 union X2,Y holds
-   g is continuous map of X1 union X2,Y iff
-    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y;
+  for g being Function of X1 union X2,Y holds
+   g is continuous Function of X1 union X2,Y iff
+    g|X1 is continuous Function of X1,Y & g|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:127
  for X1, X2 being closed non empty SubSpace of X
-  for g being map of X1 union X2,Y holds
-   g is continuous map of X1 union X2,Y iff
-    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y;
+  for g being Function of X1 union X2,Y holds
+   g is continuous Function of X1 union X2,Y iff
+    g|X1 is continuous Function of X1,Y & g|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:128
  for X1, X2 being open non empty SubSpace of X
-  for g being map of X1 union X2,Y holds
-   g is continuous map of X1 union X2,Y iff
-    g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y;
+  for g being Function of X1 union X2,Y holds
+   g is continuous Function of X1 union X2,Y iff
+    g|X1 is continuous Function of X1,Y & g|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:129
  X1,X2 are_weakly_separated implies
-  for f being map of X,Y holds
-   f|(X1 union X2) is continuous map of X1 union X2,Y iff
-    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+  for f being Function of X,Y holds
+   f|(X1 union X2) is continuous Function of X1 union X2,Y iff
+    f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:130
-  for f being map of X,Y, X1, X2 being closed non empty SubSpace of X holds
-  f|(X1 union X2) is continuous map of X1 union X2,Y iff
-   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+  for f being Function
+ of X,Y, X1, X2 being closed non empty SubSpace of X holds
+  f|(X1 union X2) is continuous Function of X1 union X2,Y iff
+   f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:131
-  for f being map of X,Y, X1, X2 being open non empty SubSpace of X holds
-  f|(X1 union X2) is continuous map of X1 union X2,Y iff
-   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+  for f being Function of X,Y, X1, X2 being open non empty SubSpace of X holds
+  f|(X1 union X2) is continuous Function of X1 union X2,Y iff
+   f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:132
- for f being map of X,Y, X1, X2 being non empty SubSpace of X st
+ for f being Function of X,Y, X1, X2 being non empty SubSpace of X st
   X = X1 union X2 & X1,X2 are_weakly_separated holds
-   f is continuous map of X,Y iff
-    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+   f is continuous Function of X,Y iff
+    f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:133
- for f being map of X,Y, X1, X2 being closed non empty SubSpace of X st
+ for f being Function of X,Y, X1, X2 being closed non empty SubSpace of X st
   X = X1 union X2 holds
-   f is continuous map of X,Y iff
-    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+   f is continuous Function of X,Y iff
+    f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 theorem :: TMAP_1:134
- for f being map of X,Y, X1, X2 being open non empty SubSpace of X st
+ for f being Function of X,Y, X1, X2 being open non empty SubSpace of X st
   X = X1 union X2 holds
-   f is continuous map of X,Y iff
-    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y;
+   f is continuous Function of X,Y iff
+    f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y;
 
 ::Some Characterizations of Separated Subspaces of Topological Spaces.
 theorem :: TMAP_1:135
  X1,X2 are_separated iff X1 misses X2 &
-  for Y being non empty TopSpace, g being map of X1 union X2,Y st
-   g|X1 is continuous map of X1,Y & g|X2 is continuous map of X2,Y
-    holds g is continuous map of X1 union X2,Y;
+  for Y being non empty TopSpace, g being Function of X1 union X2,Y st
+   g|X1 is continuous Function of X1,Y & g|X2 is continuous Function of X2,Y
+    holds g is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:136
  X1,X2 are_separated iff X1 misses X2 &
-  for Y being non empty TopSpace, f being map of X,Y st
-   f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
-    holds f|(X1 union X2) is continuous map of X1 union X2,Y;
+  for Y being non empty TopSpace, f being Function of X,Y st
+   f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y
+    holds f|(X1 union X2) is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:137
   for X1, X2 being non empty SubSpace of X st X = X1 union X2 holds
   X1,X2 are_separated iff X1 misses X2 &
-   for Y being non empty TopSpace, f being map of X,Y st
-    f|X1 is continuous map of X1,Y & f|X2 is continuous map of X2,Y
-     holds f is continuous map of X,Y;
+   for Y being non empty TopSpace, f being Function of X,Y st
+    f|X1 is continuous Function of X1,Y & f|X2 is continuous Function of X2,Y
+     holds f is continuous Function of X,Y;
 
 begin :: 6. The Union of Continuous Mappings.
 
 definition let X,Y be non empty TopSpace, X1, X2 be non empty SubSpace of X;
-            let f1 be map of X1,Y, f2 be map of X2,Y;
+            let f1 be Function of X1,Y, f2 be Function of X2,Y;
  assume X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2);
-   func f1 union f2 -> map of X1 union X2,Y means
+   func f1 union f2 -> Function of X1 union X2,Y means
 :: TMAP_1:def 12
  it|X1 = f1 & it|X2 = f2;
 end;
@@ -861,34 +868,35 @@ reserve X, Y for non empty TopSpace;
 
 theorem :: TMAP_1:138
   for X1, X2 being non empty SubSpace of X
-  for g being map of X1 union X2,Y holds g = (g|X1) union (g|X2);
+  for g being Function of X1 union X2,Y holds g = (g|X1) union (g|X2);
 
 theorem :: TMAP_1:139
   for X1, X2 being non empty SubSpace of X st X = X1 union X2
-  for g being map of X,Y holds g = (g|X1) union (g|X2);
+  for g being Function of X,Y holds g = (g|X1) union (g|X2);
 
 theorem :: TMAP_1:140
  for X1, X2 being non empty SubSpace of X st X1 meets X2
-  for f1 being map of X1,Y, f2 being map of X2,Y holds
+  for f1 being Function of X1,Y, f2 being Function of X2,Y holds
    (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 iff
      f1|(X1 meet X2) = f2|(X1 meet X2);
 
 theorem :: TMAP_1:141
   for X1, X2 being non empty SubSpace of X,
-  f1 being map of X1,Y, f2 being map of X2,Y st
+  f1 being Function of X1,Y, f2 being Function of X2,Y st
    f1|(X1 meet X2) = f2|(X1 meet X2) holds
     (X1 is SubSpace of X2 iff f1 union f2 = f2) &
      (X2 is SubSpace of X1 iff f1 union f2 = f1);
 
 theorem :: TMAP_1:142
   for X1, X2 being non empty SubSpace of X,
-  f1 being map of X1,Y, f2 being map of X2,Y st
+  f1 being Function of X1,Y, f2 being Function of X2,Y st
    X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2) holds
     f1 union f2 = f2 union f1;
 
 theorem :: TMAP_1:143
   for X1, X2, X3 being non empty SubSpace of X,
-  f1 being map of X1,Y, f2 being map of X2,Y, f3 being map of X3,Y
+  f1 being Function of X1,Y, f2 being Function of X2,Y, f3 being Function
+ of X3,Y
    st (X1 misses X2 or f1|(X1 meet X2) = f2|(X1 meet X2)) &
        (X1 misses X3 or f1|(X1 meet X3) = f3|(X1 meet X3)) &
         (X2 misses X3 or f2|(X2 meet X3) = f3|(X2 meet X3)) holds
@@ -898,63 +906,70 @@ theorem :: TMAP_1:143
 ::(Theorems presented below are suitable also in the case X = X1 union X2.)
 theorem :: TMAP_1:144
   for X1, X2 being non empty SubSpace of X st X1 meets X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
    st f1|(X1 meet X2) = f2|(X1 meet X2) holds
     X1,X2 are_weakly_separated implies
-     f1 union f2 is continuous map of X1 union X2,Y;
+     f1 union f2 is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:145
   for X1, X2 being non empty SubSpace of X st X1 misses X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
    holds X1,X2 are_weakly_separated implies
-    f1 union f2 is continuous map of X1 union X2,Y;
+    f1 union f2 is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:146
   for X1, X2 being closed non empty SubSpace of X st X1 meets X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
    st f1|(X1 meet X2) = f2|(X1 meet X2) holds
-    f1 union f2 is continuous map of X1 union X2,Y;
+    f1 union f2 is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:147
   for X1, X2 being open non empty SubSpace of X st X1 meets X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
    st f1|(X1 meet X2) = f2|(X1 meet X2) holds
-    f1 union f2 is continuous map of X1 union X2,Y;
+    f1 union f2 is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:148
   for X1, X2 being closed non empty SubSpace of X st X1 misses X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
-   holds f1 union f2 is continuous map of X1 union X2,Y;
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
+   holds f1 union f2 is continuous Function of X1 union X2,Y;
 
 theorem :: TMAP_1:149
   for X1, X2 being open non empty SubSpace of X st X1 misses X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
-   holds f1 union f2 is continuous map of X1 union X2,Y;
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
+   holds f1 union f2 is continuous Function of X1 union X2,Y;
 
 ::A Characterization of Separated Subspaces by means of Continuity of the Union
 ::of Continuous continuous mappings defined on the Subspaces.
 theorem :: TMAP_1:150
   for X1, X2 being non empty SubSpace of X holds X1,X2 are_separated iff
   X1 misses X2 & for Y being non empty TopSpace,
-   f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
-    holds f1 union f2 is continuous map of X1 union X2,Y;
+   f1 being continuous Function of X1,Y, f2 being continuous Function of X2,Y
+    holds f1 union f2 is continuous Function of X1 union X2,Y;
 
 ::Continuity of the Union of Continuous Mappings (a special case).
 theorem :: TMAP_1:151
   for X1, X2 being non empty SubSpace of X st X = X1 union X2
-  for f1 being continuous map of X1,Y, f2 being continuous map of X2,Y
+  for f1 being continuous Function of X1,Y, f2 being continuous Function
+ of X2,Y
    st (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
-  X1,X2 are_weakly_separated implies f1 union f2 is continuous map of X,Y;
+  X1,X2 are_weakly_separated implies f1 union f2 is continuous Function of X,Y;
 
 theorem :: TMAP_1:152
   for X1, X2 being closed non empty SubSpace of X,
-  f1 being continuous map of X1,Y, f2 being continuous map of X2,Y st
+  f1 being continuous Function of X1,Y, f2 being continuous Function of X2,Y st
    X = X1 union X2 & (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
-    f1 union f2 is continuous map of X,Y;
+    f1 union f2 is continuous Function of X,Y;
 
 theorem :: TMAP_1:153
   for X1, X2 being open non empty SubSpace of X,
-  f1 being continuous map of X1,Y, f2 being continuous map of X2,Y st
+  f1 being continuous Function of X1,Y, f2 being continuous Function of X2,Y st
    X = X1 union X2 & (f1 union f2)|X1 = f1 & (f1 union f2)|X2 = f2 holds
-    f1 union f2 is continuous map of X,Y;
+    f1 union f2 is continuous Function of X,Y;
 

@@ -32,6 +32,10 @@
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="AUTALG_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="GROUP_2"/>
+<ArticleID name="GROUP_3"/>
+<ArticleID name="GROUP_6"/>
 <ArticleID name="ENDALG"/>
 </Signature>
 <RCluster>
@@ -88,11 +92,11 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="84">
+<Adjective nr="89">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="85">
+<Adjective nr="93">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -109,7 +113,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="250">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -128,7 +132,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="250">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -157,7 +161,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -183,7 +187,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="206">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

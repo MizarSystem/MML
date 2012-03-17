@@ -611,6 +611,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72">
 <Func kind="K" nr="14">
@@ -696,6 +697,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72">
 <Func kind="K" nr="14">
@@ -791,6 +793,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72">
 <Func kind="K" nr="14">
@@ -838,6 +841,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72">
 <Func kind="K" nr="14">
@@ -980,6 +984,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1018,6 +1023,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1056,6 +1062,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1094,6 +1101,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1132,6 +1140,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1344,6 +1353,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1386,6 +1396,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1500,6 +1511,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">
@@ -1538,6 +1550,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="72" value="false">
 <Func kind="K" nr="14">

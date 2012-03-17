@@ -12,7 +12,7 @@ environ
       FINSET_1, RLSUB_1, PRE_TOPC, BINOP_1, LATTICES, QC_LANG1, SEQ_1,
       SQUARE_1, RVSUM_1, RLSUB_2, CAT_3, MATRLIN;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
-      MOD_2, STRUCT_0, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3,
+      MOD_2, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, STRUCT_0,
       MATRIX_1, MATRIX_2, MATRIX_3, FVSUM_1, RLVECT_1, GROUP_1, VECTSP_1,
       VECTSP_4, VECTSP_6, VECTSP_7, FINSET_1, FINSEQ_4, FUNCOP_1, FINSEQ_3,
       CARD_1, FINSEQ_2, FINSEQOP, BINOP_1, SQUARE_1, PRE_TOPC;
@@ -21,14 +21,20 @@ environ
  registrations FINSET_1, MATRIX_1, FUNCT_1, VECTSP_1, RELSET_1, STRUCT_0,
       FINSEQ_1, FUNCOP_1, XREAL_0, FUNCT_2, NAT_1, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
+ theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, VECTSP_1, VECTSP_3,
+      VECTSP_4, VECTSP_6, VECTSP_7, RLVECT_1, FUNCT_1, FUNCT_2, FUNCT_3,
+      MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
+      CARD_2, FINSEQOP, FUNCOP_1, GOBOARD1, RELAT_1, RELSET_1, PARTFUN2,
+      XBOOLE_0, XBOOLE_1, RLVECT_2, GROUP_1, XREAL_1;
+ definitions TARSKI;
+ schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, GOBOARD2, NAT_1, ZFREFLE1;
 
-
-begin :: PRELIMINARIES
+begin :: Preliminaries
 
 definition
-  let A be set;
-  let X be set, D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
- redefine func p/.i -> Element of D;
+  let A, X be set;
+  let D be FinSequence-DOMAIN of A, p be PartFunc of X,D, i be set;
+  redefine func p/.i -> Element of D;
 end;
 
   reserve k,t,i,j,m,n for Nat;
@@ -69,7 +75,7 @@ canceled;
     redefine func <*P*> -> Matrix of 1,len P,D;
   end;
 
-  begin :: MORE ON FINITE SEQUENCE
+  begin :: More on Finite Sequences
 
   theorem :: MATRLIN:7
     for A being set, F being FinSequence
@@ -100,7 +106,7 @@ canceled;
        holds it.i = f^g;
   end;
 
-  begin :: CIAGI I MACIERZE DOTYCZACE PRZESTRZENI LINIOWYCH
+  begin :: Sequences and Matrices Concerning Linear Transformations
 
   reserve K for Field;
   reserve V for VectSp of K;
@@ -149,25 +155,25 @@ canceled;
       it is one-to-one & rng it is Basis of V;
   end;
 
-  reserve s,p for FinSequence;
-  reserve V1,V2,V3 for finite-dimensional VectSp of K;
-  reserve f,f1,f2 for map of V1,V2;
-  reserve g for map of V2,V3;
-  reserve b1 for OrdBasis of V1;
-  reserve b2 for OrdBasis of V2;
-  reserve b3 for OrdBasis of V3;
-  reserve v1,v2 for Vector of V2;
-  reserve v,w for Element of V1;
-  reserve p2,F for FinSequence of the carrier of V1;
-  reserve p1,d for FinSequence of the carrier of K;
-  reserve KL for Linear_Combination of V1;
+ reserve s,p for FinSequence;
+ reserve V1,V2,V3 for finite-dimensional VectSp of K;
+ reserve f,f1,f2 for Function of V1,V2;
+ reserve g for Function of V2,V3;
+ reserve b1 for OrdBasis of V1;
+ reserve b2 for OrdBasis of V2;
+ reserve b3 for OrdBasis of V3;
+ reserve v1,v2 for Vector of V2;
+ reserve v,w for Element of V1;
+ reserve p2,F for FinSequence of the carrier of V1;
+ reserve p1,d for FinSequence of the carrier of K;
+ reserve KL for Linear_Combination of V1;
 
   definition
     let K be add-associative right_zeroed right_complementable
       Abelian associative left_unital distributive (non empty doubleLoopStr);
     let V1,V2 be VectSp of K;
-    let f1,f2 be map of V1, V2;
-    func f1+f2 -> map of V1,V2 means
+    let f1,f2 be Function of V1, V2;
+    func f1+f2 -> Function of V1,V2 means
 :: MATRLIN:def 5
       for v be Element of V1 holds it.v = f1.v + f2.v;
   end;
@@ -175,7 +181,7 @@ canceled;
   definition
     let K; let V1,V2; let f;
     let a be Element of K;
-    func a*f -> map of V1,V2 means
+    func a*f -> Function of V1,V2 means
 :: MATRLIN:def 6
       for v be Element of V1 holds it.v = a * (f.v);
   end;
@@ -239,8 +245,9 @@ canceled;
      f is linear implies f*lmlt(a,p) = lmlt(a,f*p);
 
   theorem :: MATRLIN:22
-    for a be FinSequence of the carrier of K st len a = len b2 holds
-     ( g is linear implies g.Sum(lmlt(a,b2)) = Sum(lmlt(a,g*b2)));
+    for a be FinSequence of the carrier of K st
+    len a = len b2 & g is linear holds
+    g.Sum(lmlt(a,b2)) = Sum(lmlt(a,g*b2));
 
   theorem :: MATRLIN:23
     for F, F1 being FinSequence of the carrier of V1,
@@ -281,7 +288,7 @@ canceled;
   end;
 
   theorem :: MATRLIN:27
-        for M1 be Matrix of n,k,D,
+    for M1 be Matrix of n,k,D,
         M2 be Matrix of m,k,D st i in dom M1 holds
      Line(M1^M2,i) = Line(M1,i);
 
@@ -291,7 +298,7 @@ canceled;
      width (M1^M2) = width M1;
 
   theorem :: MATRLIN:29
-        for M1 be Matrix of t,k,D,
+    for M1 be Matrix of t,k,D,
         M2 be Matrix of m,k,D st n in dom M2 & i = len M1 + n holds
      Line(M1^M2,i) = Line(M2,n);
 
@@ -318,7 +325,7 @@ canceled;
   definition
     let D be non empty set, F be BinOp of D,
         P1,P2 be FinSequence of D;
-   redefine func F.:(P1,P2) -> FinSequence of D;
+    redefine func F.:(P1,P2) -> FinSequence of D;
   end;
 
   theorem :: MATRLIN:34
@@ -329,9 +336,7 @@ canceled;
     for M1,M2 be Matrix of the carrier of V1 st len M1 = len M2 holds
      Sum Sum M1 + Sum Sum M2 = Sum Sum(M1 ^^ M2);
 
-  theorem :: MATRLIN:36
-    for P be FinSequence of the carrier of V1 holds
-     Sum Sum <*P*> = Sum Sum (<*P*>@);
+canceled;
 
   theorem :: MATRLIN:37
     for M be Matrix of the carrier of V1 holds Sum Sum M = Sum Sum (M@);
@@ -376,7 +381,7 @@ canceled;
       d.k = (g.((b2/.k))|--b3)/.j holds
         len b2 > 0 implies (Sum(lmlt(a,g*b2))|--b3)/.j = Sum(mlt(a,d));
 
-  begin :: MACIERZE PRZEKSZTALCEN LINIOWYCH
+  begin :: Matrices of Linear Transformations
 
   definition
     let K be Field;
@@ -397,17 +402,16 @@ canceled;
     len b1 > 0 implies width AutMt(f,b1,b2) = len b2;
 
   theorem :: MATRLIN:45
-        f1 is linear & f2 is linear &
+    f1 is linear & f2 is linear &
     AutMt(f1,b1,b2) = AutMt(f2,b1,b2) & len b1 > 0 implies f1 = f2;
 
   theorem :: MATRLIN:46
-        f is linear & g is linear & len b1 > 0 & len b2 > 0 & len b3 > 0
+    f is linear & g is linear & len b1 > 0 & len b2 > 0 & len b3 > 0
      implies
     AutMt(g*f,b1,b3) = AutMt(f,b1,b2) * AutMt(g,b2,b3);
 
   theorem :: MATRLIN:47
-        AutMt(f1+f2,b1,b2) = AutMt(f1,b1,b2) + AutMt(f2,b1,b2);
+    AutMt(f1+f2,b1,b2) = AutMt(f1,b1,b2) + AutMt(f2,b1,b2);
 
   theorem :: MATRLIN:48
-        a <> 0.K implies AutMt(a*f,b1,b2) = a * AutMt(f,b1,b2);
-
+    a <> 0.K implies AutMt(a*f,b1,b2) = a * AutMt(f,b1,b2);

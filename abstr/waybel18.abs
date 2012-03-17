@@ -14,7 +14,7 @@ environ
       YELLOW_0, FINSET_1, BHSP_3, WAYBEL_8, LATTICES, CAT_1, WAYBEL_9,
       COMPTS_1, WAYBEL18, RLVECT_3, MONOID_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1,
-      T_0TOPSP, STRUCT_0, FUNCT_1, FUNCT_2, PRE_TOPC, FUNCT_3, FUNCT_6,
+      FUNCT_1, FUNCT_2, STRUCT_0, PRE_TOPC, T_0TOPSP, FUNCT_3, FUNCT_6,
       FUNCT_7, PBOOLE, CARD_3, FUNCOP_1, MONOID_0, PRALG_1, ORDERS_2, LATTICE3,
       YELLOW_1, PRE_CIRC, CANTOR_1, FINSET_1, PRALG_3, TOPS_2, BORSUK_1,
       TMAP_1, GRCAT_1, YELLOW_0, YELLOW_2, YELLOW_9, WAYBEL_0, WAYBEL_3,
@@ -26,7 +26,16 @@ environ
       WAYBEL_3, WAYBEL_8, WAYBEL11, YELLOW_9, FUNCOP_1, RELSET_1, SUBSET_1,
       BORSUK_1, XBOOLE_0, CARD_3, MONOID_0;
  requirements SUBSET, BOOLE;
-
+ definitions STRUCT_0, TARSKI, PRE_TOPC, FUNCOP_1, WAYBEL_1, WAYBEL_3,
+      XBOOLE_0, PRALG_1;
+ theorems TARSKI, PRE_TOPC, ENUMSET1, ZFMISC_1, T_0TOPSP, TOPS_1, TOPS_2,
+      FINSET_1, FUNCT_2, FUNCT_3, RELAT_1, FUNCT_1, BORSUK_1, FUNCOP_1, PBOOLE,
+      CANTOR_1, LATTICE3, ORDERS_2, MSSUBFAM, PRALG_1, CARD_3, CARD_5,
+      STRUCT_0, WAYBEL_3, PRALG_3, FUNCT_6, FUNCT_7, TMAP_1, GRCAT_1, YELLOW_9,
+      YELLOW_0, YELLOW_1, WAYBEL_0, WAYBEL_1, WAYBEL_7, WAYBEL_8, WAYBEL11,
+      WAYBEL13, WAYBEL14, RELSET_1, SETFAM_1, XBOOLE_0, XBOOLE_1, ORDERS_1,
+      MONOID_0;
+ schemes SUBSET_1, ZFREFLE1, FUNCT_1, FRAENKEL;
 
 begin :: Preliminaries
 
@@ -114,7 +123,7 @@ end;
 definition let I be non empty set;
            let J be TopSpace-yielding non-Empty ManySortedSet of I;
            let i be Element of I;
- func proj(J,i) -> map of product J, J.i equals
+ func proj(J,i) -> Function of product J, J.i equals
 :: WAYBEL18:def 4
    proj(Carrier J,i);
 end;
@@ -133,7 +142,7 @@ for I being non empty set,
 theorem :: WAYBEL18:7
 for X being non empty TopSpace, I being non empty set,
  J being TopSpace-yielding non-Empty ManySortedSet of I,
- f being map of X, product J holds
+ f being Function of X, product J holds
     f is continuous iff
     for i being Element of I holds proj(J,i)*f is continuous;
 
@@ -143,9 +152,9 @@ definition let Z be TopStruct;
  attr Z is injective means
 :: WAYBEL18:def 5    ::p.121 definition 3.1.
  for X being non empty TopSpace
-  for f being map of X, Z st f is continuous holds
+  for f being Function of X, Z st f is continuous holds
   for Y being non empty TopSpace st X is SubSpace of Y
-   ex g being map of Y,Z st g is continuous & g|(the carrier of X) = f;
+   ex g being Function of Y,Z st g is continuous & g|(the carrier of X) = f;
 end;
 
 theorem :: WAYBEL18:8   ::p.121 lemma 3.2.(i)
@@ -158,7 +167,7 @@ theorem :: WAYBEL18:9       ::p.121 lemma 3.2.(ii)
   for S being non empty SubSpace of T st S is_a_retract_of T holds
    S is injective;
 
-definition let X be 1-sorted, Y be TopStruct, f be map of X,Y;
+definition let X be 1-sorted, Y be TopStruct, f be Function of X,Y;
  func Image f -> SubSpace of Y equals
 :: WAYBEL18:def 6
   Y|(rng f);
@@ -166,41 +175,42 @@ end;
 
 registration let X be non empty 1-sorted,
                Y be non empty TopStruct,
-               f be map of X,Y;
+               f be Function of X,Y;
  cluster Image f -> non empty;
 end;
 
 theorem :: WAYBEL18:10
  for X being 1-sorted, Y being TopStruct,
-     f being map of X,Y holds
+     f being Function of X,Y holds
  the carrier of Image f = rng f;
 
 definition let X be 1-sorted, Y be non empty TopStruct,
-               f be map of X,Y;
- func corestr(f) -> map of X,Image f equals
+               f be Function of X,Y;
+ func corestr(f) -> Function of X,Image f equals
 :: WAYBEL18:def 7
    f;
 end;
 
 theorem :: WAYBEL18:11
-for X, Y being non empty TopSpace, f being map of X,Y st
+for X, Y being non empty TopSpace, f being Function of X,Y st
   f is continuous holds
  corestr f is continuous;
 
-registration let X be 1-sorted,Y be non empty TopStruct; let f be map of X,Y;
+registration let X be 1-sorted,Y be non empty TopStruct; let f be Function
+ of X,Y;
  cluster corestr f -> onto;
 end;
 
 definition let X,Y be TopStruct;
  pred X is_Retract_of Y means
 :: WAYBEL18:def 8
-      ex f being map of Y,Y st f is continuous & f*f = f &
+      ex f being Function of Y,Y st f is continuous & f*f = f &
   Image f, X are_homeomorphic;
 end;
 
 theorem :: WAYBEL18:12   ::p.121 lemma 3.2.(iii)
 for T,S being non empty TopSpace st T is injective
- for f being map of T,S st corestr(f) is_homeomorphism holds
+ for f being Function of T,S st corestr(f) is_homeomorphism holds
   T is_Retract_of S;
 
 definition
@@ -262,7 +272,7 @@ end;
 
 theorem :: WAYBEL18:15
  for X being non empty set
-  ex f being map of BoolePoset X, product (X --> BoolePoset 1) st
+  ex f being Function of BoolePoset X, product (X --> BoolePoset 1) st
   f is isomorphic & for Y being Subset of X holds f.Y = chi(Y,X);
 
 theorem :: WAYBEL18:16   ::p.122 lemma 3.4.(i)
@@ -281,7 +291,7 @@ theorem :: WAYBEL18:18       ::p.122 lemma 3.4.(i) part II
 
 theorem :: WAYBEL18:19   ::p.122 lemma 3.4.(ii)
 for T being T_0-TopSpace ex M being non empty set,
- f being map of T, product (M --> Sierpinski_Space) st
+ f being Function of T, product (M --> Sierpinski_Space) st
   corestr(f) is_homeomorphism;
 
 theorem :: WAYBEL18:20       ::p.122 lemma 3.4.(iii)

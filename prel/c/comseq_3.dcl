@@ -41,24 +41,6 @@
 <Func kind="K" nr="52"/>
 </Adjective>
 <Adjective nr="28"/>
-<Adjective nr="41"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="M" nr="5">
-<Cluster/>
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="52"/>
-</Typ>
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-<Adjective nr="20">
-<Func kind="K" nr="56"/>
-<Func kind="K" nr="52"/>
-</Adjective>
-<Adjective nr="28"/>
 <Adjective nr="32"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>

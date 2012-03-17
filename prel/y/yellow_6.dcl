@@ -65,17 +65,6 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="3">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="31" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="39"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>

@@ -11,16 +11,23 @@ environ
       PRE_TOPC, FUNCT_1, FILTER_2, SEQM_3, PARTFUN1, CAT_1, GROUP_1, FUNCOP_1,
       FUNCT_2, CARD_3, RLVECT_2, WELLORD1, YELLOW_2, FILTER_0, WELLORD2,
       ORDINAL2, WAYBEL_2, SUBSET_1, ORDERS_2, WAYBEL_4;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, STRUCT_0, ORDERS_2,
-      PRE_TOPC, PARTFUN1, LATTICE3, RELAT_1, RELAT_2, RELSET_1, FUNCT_1,
-      FUNCT_2, WELLORD1, YELLOW_0, PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+      RELAT_1, RELAT_2, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      STRUCT_0, ORDERS_2, PRE_TOPC, LATTICE3, WELLORD1, YELLOW_0,
+      PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
       YELLOW_2, YELLOW_4, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3;
  constructors ORDERS_3, PRE_CIRC, TOLER_1, WAYBEL_1, WAYBEL_2, WAYBEL_3,
       YELLOW_4, REALSET2, PRALG_1, SETFAM_1;
  registrations LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, WAYBEL_2, WAYBEL_3,
       YELLOW_1, YELLOW_2, SUBSET_1, PARTFUN1, XBOOLE_0;
  requirements SUBSET, BOOLE;
-
+ definitions LATTICE3, XBOOLE_0, TARSKI, YELLOW_0, WAYBEL_0, RELAT_1, YELLOW_2,
+      ORDERS_3;
+ theorems FUNCOP_1, FUNCT_1, FUNCT_2, LATTICE3, ORDERS_2, ORDERS_3, PARTFUN1,
+      PRE_TOPC, RELAT_1, RELAT_2, RELSET_1, SETFAM_1, STRUCT_0, TARSKI,
+      WAYBEL_0, WAYBEL_3, WAYBEL_2, WELLORD1, WELLORD2, YELLOW_0, YELLOW_1,
+      YELLOW_2, YELLOW_4, ZFMISC_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, PARTFUN1, RELSET_1, XBOOLE_0;
 
 begin :: Auxiliary Relations
 
@@ -225,7 +232,7 @@ end;
 
 definition let L be lower-bounded sup-Semilattice;
  let AR be auxiliary(ii) auxiliary(iii) auxiliary(iv) Relation of L;
- func AR-below -> map of L, InclPoset Ids L means
+ func AR-below -> Function of L, InclPoset Ids L means
 :: WAYBEL_4:def 13
   for x be Element of L holds
    it.x = AR-below x;
@@ -251,10 +258,10 @@ definition let L be non empty Poset;
   func MonSet L -> strict RelStr means
 :: WAYBEL_4:def 14
    ( a in the carrier of it iff
-    ex s be map of L, InclPoset Ids L st a = s & s is monotone &
+    ex s be Function of L, InclPoset Ids L st a = s & s is monotone &
      for x be Element of L holds s.x c= downarrow x ) &
     for c, d be set holds [c,d] in the InternalRel of it iff
-    ex f,g be map of L, InclPoset Ids L st c = f & d = g &
+    ex f,g be Function of L, InclPoset Ids L st c = f & d = g &
      c in the carrier of it & d in the carrier of it & f <= g;
 end;
 
@@ -311,7 +318,7 @@ reserve L for lower-bounded sup-Semilattice;
 reserve x for Element of L;
 
 theorem :: WAYBEL_4:25
- (the carrier of L) --> {Bottom L} is map of L, InclPoset Ids L;
+ (the carrier of L) --> {Bottom L} is Function of L, InclPoset Ids L;
 
 theorem :: WAYBEL_4:26
  (the carrier of L) --> {Bottom L} in the carrier of MonSet L;
@@ -326,7 +333,7 @@ registration let L;
 end;
 
 definition let L;
- func Rel2Map L -> map of InclPoset Aux L, MonSet L means
+ func Rel2Map L -> Function of InclPoset Aux L, MonSet L means
 :: WAYBEL_4:def 15
   for AR being auxiliary Relation of L holds it.AR = AR-below;
 end;
@@ -344,13 +351,13 @@ registration let L;
 end;
 
 definition let L;
-  func Map2Rel L -> map of MonSet L, InclPoset Aux L means
+  func Map2Rel L -> Function of MonSet L, InclPoset Aux L means
 :: WAYBEL_4:def 16
    for s be set st s in the carrier of MonSet L
     ex AR be auxiliary Relation of L st AR = it.s &
       for x,y be set holds
        [x,y] in AR iff ex x',y' be Element of L,
-        s' be map of L, InclPoset Ids L st
+        s' be Function of L, InclPoset Ids L st
      x' = x & y' = y & s' = s & x' in s'.y';
 end;
 
@@ -387,7 +394,7 @@ scheme :: WAYBEL_4:sch 1
    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x));
 
 definition let L be Semilattice, I be Ideal of L;
-  func DownMap I -> map of L, InclPoset Ids L means
+  func DownMap I -> Function of L, InclPoset Ids L means
 :: WAYBEL_4:def 17
   for x be Element of L holds
    ( x <= sup I implies it.x = ( downarrow x ) /\ I ) &
@@ -413,7 +420,7 @@ definition let L be non empty RelStr, AR be Relation of L;
    for x be Element of L holds x = sup (AR-below x);
 end;
 
-definition let L be non empty Poset; let mp be map of L, InclPoset Ids L;
+definition let L be non empty Poset; let mp be Function of L, InclPoset Ids L;
   attr mp is approximating means
 :: WAYBEL_4:def 19
   for x be Element of L
@@ -485,7 +492,7 @@ end;
 
 theorem :: WAYBEL_4:42
  for L being complete LATTICE
-  for mp being map of L, InclPoset Ids L st
+  for mp being Function of L, InclPoset Ids L st
    mp is approximating & mp in the carrier of MonSet L
     ex AR being approximating auxiliary Relation of L st AR = (Map2Rel L).mp;
 

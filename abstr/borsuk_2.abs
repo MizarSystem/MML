@@ -21,9 +21,15 @@ environ
       MEMBERED, SETFAM_1;
  registrations SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
       YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2,
-      XREAL_0;
+      XREAL_0, TOPREAL1, PCOMPS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
-
+ definitions TARSKI, PRE_TOPC, COMPTS_1, URYSOHN1, T_0TOPSP, XBOOLE_0;
+ theorems BORSUK_1, FUNCOP_1, TOPS_2, TREAL_1, FUNCT_2, FUNCT_1, PRE_TOPC,
+      RCOMP_1, TARSKI, RELAT_1, JORDAN1, REAL_1, TOPS_1, REAL_2, URYSOHN1,
+      TOPMETR, FUNCT_4, TOPMETR2, HEINE, PCOMPS_1, SEQM_3, MCART_1, ZFMISC_1,
+      BINOP_1, CONNSP_2, FUNCT_3, COMPTS_1, T_0TOPSP, GRCAT_1, CARD_1, SPPOL_1,
+      WEIERSTR, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_0, XREAL_1;
+ schemes FUNCT_2, FUNCT_1;
 
 begin :: Preliminaries
 
@@ -35,18 +41,13 @@ scheme :: BORSUK_2:sch 1
  Card { F(w) where w is Element of A(): w in X() & P[w] } <=` Card X();
 
 theorem :: BORSUK_2:1
-  for f being map of T1,S, g being map of T2,S st
+  for f being Function of T1,S, g being Function of T2,S st
   T1 is SubSpace of T & T2 is SubSpace of T &
    ([#] T1) \/ ([#] T2) = [#] T &
     T1 is compact & T2 is compact & T is_T2 &
      f is continuous & g is continuous &
   ( for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p )
-  ex h being map of T,S st h = f+*g & h is continuous;
-
-registration
-  let S, T be non empty TopSpace;
-  cluster continuous map of S, T;
-end;
+  ex h being Function of T,S st h = f+*g & h is continuous;
 
 registration let T be non empty TopStruct;
   cluster id T -> open continuous;
@@ -54,14 +55,14 @@ end;
 
 registration
   let T be non empty TopStruct;
-  cluster continuous one-to-one map of T, T;
+  cluster continuous one-to-one Function of T, T;
 end;
 
 canceled;
 
 theorem :: BORSUK_2:3
   for S, T being non empty TopSpace,
-      f being map of S, T st f is_homeomorphism holds
+      f being Function of S, T st f is_homeomorphism holds
    f" is open;
 
 begin :: Paths and arcwise connected spaces
@@ -72,13 +73,13 @@ end;
 
 theorem :: BORSUK_2:4
  for T be non empty TopSpace, a be Point of T
-  ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a;
+  ex f be Function of I[01], T st f is continuous & f.0 = a & f.1 = a;
 
 definition
   let T be TopStruct, a,b be Point of T;
   pred a,b are_connected means
 :: BORSUK_2:def 1
-  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+  ex f being Function of I[01], T st f is continuous & f.0 = a & f.1 = b;
 end;
 
 definition
@@ -89,7 +90,7 @@ end;
 
 definition let T be TopStruct; let a, b be Point of T;
 assume  a, b are_connected;
- mode Path of a, b -> map of I[01], T means
+ mode Path of a, b -> Function of I[01], T means
 :: BORSUK_2:def 2
    it is continuous & it.0 = a & it.1 = b;
 end;
@@ -192,32 +193,32 @@ begin :: The product of two topological spaces
 theorem :: BORSUK_2:9
  for X, Y being non empty TopSpace
   for A being Subset-Family of Y
-   for f being map of X, Y holds
+   for f being Function of X, Y holds
     f"(union A) = union (f"A);
 
 definition let S1, S2, T1, T2 be non empty TopSpace;
- let f be map of S1, S2, g be map of T1, T2;
- redefine func [:f, g:] -> map of [:S1, T1:], [:S2, T2:];
+ let f be Function of S1, S2, g be Function of T1, T2;
+ redefine func [:f, g:] -> Function of [:S1, T1:], [:S2, T2:];
 end;
 
 theorem :: BORSUK_2:10
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P1, P2 being Subset of [:T1, T2:] holds
        (P2 in Base-Appr P1 implies [:f,g:]"P2 is open);
 
 theorem :: BORSUK_2:11
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P2 being Subset of [:T1, T2:] holds
        (P2 is open implies [:f,g:]"P2 is open);
 
 theorem :: BORSUK_2:12
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2 holds
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2 holds
    [:f,g:] is continuous;
 
 registration
@@ -238,7 +239,7 @@ registration let T1, T2 be being_T1 (non empty TopSpace);
  cluster [:T1, T2:] -> being_T1;
 end;
 
-registration let T1, T2 be being_T2 (non empty TopSpace);
+registration let T1, T2 be being_T2 non empty TopSpace;
  cluster [:T1, T2:] -> being_T2;
 end;
 
@@ -246,16 +247,12 @@ registration
  cluster I[01] -> compact being_T2;
 end;
 
-registration let n be Nat;
- cluster TOP-REAL n -> being_T2;
-end;
-
 definition let T be non empty TopStruct;
   let a, b be Point of T;
   let P, Q be Path of a, b;
   pred P, Q are_homotopic means
 :: BORSUK_2:def 7
-    ex f being map of [:I[01],I[01]:], T st
+    ex f being Function of [:I[01],I[01]:], T st
     f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;

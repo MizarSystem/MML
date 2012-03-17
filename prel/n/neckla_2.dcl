@@ -100,6 +100,7 @@
 <Adjective nr="31"/>
 <Adjective nr="36"/>
 <Adjective nr="38"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

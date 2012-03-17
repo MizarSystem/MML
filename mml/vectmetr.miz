@@ -13,9 +13,10 @@ environ
       SUBSET_1, BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2,
       VECTMETR, FINSEQ_4, PARTFUN1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XREAL_0, MCART_1,
-      COMPLEX1, REAL_1, RELAT_2, NAT_1, INT_1, STRUCT_0, POWER, ABIAN,
+      COMPLEX1, REAL_1, RELAT_2, NAT_1, INT_1, POWER, ABIAN,
       SERIES_1, RELAT_1, RELSET_1, MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1,
-      PARTFUN1, FUNCT_2, PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      PARTFUN1, FUNCT_2, STRUCT_0,
+      PRE_TOPC, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       FINSEQOP, BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2,
       RVSUM_1, RLVECT_1, GROUP_1, GROUP_2, TOPS_2, GRCAT_1, METRIC_1, EUCLID;
  constructors REAL_1, ABIAN, SERIES_1, DOMAIN_1, TOPS_2, TREES_9, FINSEQ_4,
@@ -733,7 +734,7 @@ begin  :: Isometric Functions
 
   definition
    let V be non empty MetrStruct;
-   let f be map of V,V;
+   let f be Function of V,V;
    attr f is isometric means :Def3:
     rng f = the carrier of V &
     for x,y be Element of V holds dist(x,y) = dist(f.x,f.y);
@@ -743,21 +744,22 @@ begin  :: Isometric Functions
    let V be non empty MetrStruct;
    func ISOM(V) -> set means :Def4:
     for x be set holds
-     x in it iff ex f be map of V,V st f = x & f is isometric;
+     x in it iff ex f be Function of V,V st f = x & f is isometric;
    existence
    proof
      defpred Sep[set] means
-      ex f be map of V,V st f = $1 & f is isometric;
+      ex f be Function of V,V st f = $1 & f is isometric;
     consider X be set such that
      A1: for x be set holds x in X iff
       x in Funcs(the carrier of V,the carrier of V) & Sep[x] from
 XBOOLE_0:sch 1;
     take X;
     let x be set;
-    thus x in X implies ex f be map of V,V st f = x & f is isometric by A1;
-    thus (ex f be map of V,V st f = x & f is isometric) implies x in X
+    thus x in X implies ex f be Function
+ of V,V st f = x & f is isometric by A1;
+    thus (ex f be Function of V,V st f = x & f is isometric) implies x in X
     proof
-     given f be map of V,V such that
+     given f be Function of V,V such that
       A2: f = x and
       A3: f is isometric;
          f in Funcs(the carrier of V,the carrier of V) by FUNCT_2:11;
@@ -767,7 +769,7 @@ XBOOLE_0:sch 1;
    uniqueness
     proof
       defpred P[set] means
-       ex f be map of V,V st f = $1 & f is isometric;
+       ex f be Function of V,V st f = $1 & f is isometric;
       thus for X1,X2 being set st
       (for x being set holds x in X1 iff P[x]) &
       (for x being set holds x in X2 iff P[x]) holds X1 = X2 from
@@ -782,7 +784,7 @@ XBOOLE_0:sch 3;
    proof
         now let x be set;
      assume x in ISOM(V);
-     then consider f be map of V,V such that
+     then consider f be Function of V,V such that
       A1: f = x and
           f is isometric by Def4;
      thus x in Funcs(the carrier of V,the carrier of V) by A1,FUNCT_2:11;
@@ -794,11 +796,11 @@ XBOOLE_0:sch 3;
 
   theorem Th2:
    for V be discerning Reflexive (non empty MetrStruct)
-   for f be map of V,V st f is isometric holds
+   for f be Function of V,V st f is isometric holds
     f is one-to-one
    proof
     let V be discerning Reflexive (non empty MetrStruct);
-    let f be map of V,V;
+    let f be Function of V,V;
     assume A1: f is isometric;
         now let x,y be set;
      assume that
@@ -816,16 +818,16 @@ XBOOLE_0:sch 3;
 
   registration
    let V be discerning Reflexive (non empty MetrStruct);
-   cluster isometric -> one-to-one map of V,V;
+   cluster isometric -> one-to-one Function of V,V;
    coherence by Th2;
   end;
 
   registration
    let V be non empty MetrStruct;
-   cluster isometric map of V,V;
+   cluster isometric Function of V,V;
    existence
    proof
-    reconsider f = id (the carrier of V) as map of V,V;
+    reconsider f = id (the carrier of V) as Function of V,V;
     take f;
     thus rng f = the carrier of V by RELAT_1:71;
     let x,y be Element of V;
@@ -836,11 +838,11 @@ XBOOLE_0:sch 3;
 
   theorem Th3:
    for V be discerning Reflexive (non empty MetrStruct)
-   for f be isometric map of V,V holds
+   for f be isometric Function of V,V holds
     f" is isometric
    proof
     let V be discerning Reflexive (non empty MetrStruct);
-    let f be isometric map of V,V;
+    let f be isometric Function of V,V;
     A1: rng f = the carrier of V by Def3;
     then rng f = [#]V by PRE_TOPC:12;
     hence rng (f") = [#]V by TOPS_2:62
@@ -860,11 +862,11 @@ XBOOLE_0:sch 3;
 
   theorem Th4:
    for V be non empty MetrStruct
-   for f,g be isometric map of V,V holds
+   for f,g be isometric Function of V,V holds
     f*g is isometric
    proof
     let V be non empty MetrStruct;
-    let f,g be isometric map of V,V;
+    let f,g be isometric Function of V,V;
         rng g = the carrier of V by Def3
        .= dom f by FUNCT_2:def 1;
     hence rng (f*g) = rng f by RELAT_1:47
@@ -1417,11 +1419,11 @@ METRIC_1:1,2,3,4;
 
   theorem
        for n be Nat
-   for f be isometric map of RLMSpace n,RLMSpace n holds
+   for f be isometric Function of RLMSpace n,RLMSpace n holds
     rng f = REAL n
    proof
     let n be Nat;
-    let f be isometric map of RLMSpace n,RLMSpace n;
+    let f be isometric Function of RLMSpace n,RLMSpace n;
     thus rng f = the carrier of RLMSpace n by Def3
        .= REAL n by Def8;
    end;
@@ -1442,10 +1444,10 @@ begin  :: Groups of Isometric Functions
         ex z be Element of ISOM RLMSpace n st P[x,y,z]
     proof
      let x,y be Element of ISOM RLMSpace n;
-     consider x1 be map of RLMSpace n,RLMSpace n such that
+     consider x1 be Function of RLMSpace n,RLMSpace n such that
       A2: x1 = x and
       A3: x1 is isometric by Def4;
-     consider y1 be map of RLMSpace n,RLMSpace n such that
+     consider y1 be Function of RLMSpace n,RLMSpace n such that
       A4: y1 = y and
       A5: y1 is isometric by Def4;
          x1*y1 is isometric by A3,A5,Th4;
@@ -1484,10 +1486,10 @@ begin  :: Groups of Isometric Functions
      A15: for f,g be Function st f in ISOM V & g in ISOM V holds
           (the mult of G2).(f,g) = f*g;
         now let f,g be Element of G1;
-     consider f1 be map of RLMSpace n,RLMSpace n such that
+     consider f1 be Function of RLMSpace n,RLMSpace n such that
       A16: f1 = f and
           f1 is isometric by A12,Def4;
-     consider g1 be map of RLMSpace n,RLMSpace n such that
+     consider g1 be Function of RLMSpace n,RLMSpace n such that
       A17: g1 = g and
           g1 is isometric by A12,Def4;
      thus (the mult of G1).(f,g) = f1*g1 by A12,A13,A16,A17
@@ -1515,17 +1517,17 @@ begin  :: Groups of Isometric Functions
         now let x,y,z be Element of IsomGroup n;
          x in the carrier of IsomGroup n;
      then A1: x in ISOM RLMSpace n by Def9;
-     then consider x1 be map of RLMSpace n,RLMSpace n such that
+     then consider x1 be Function of RLMSpace n,RLMSpace n such that
       A2: x1 = x and
       A3: x1 is isometric by Def4;
          y in the carrier of IsomGroup n;
      then A4: y in ISOM RLMSpace n by Def9;
-     then consider y1 be map of RLMSpace n,RLMSpace n such that
+     then consider y1 be Function of RLMSpace n,RLMSpace n such that
       A5: y1 = y and
       A6: y1 is isometric by Def4;
          z in the carrier of IsomGroup n;
      then A7: z in ISOM RLMSpace n by Def9;
-     then consider z1 be map of RLMSpace n,RLMSpace n such that
+     then consider z1 be Function of RLMSpace n,RLMSpace n such that
       A8: z1 = z and
       A9: z1 is isometric by Def4;
          x1*y1 is isometric by A3,A6,Th4;
@@ -1558,7 +1560,7 @@ begin  :: Groups of Isometric Functions
      let h be Element of IsomGroup n;
          h in the carrier of IsomGroup n;
      then A13: h in ISOM RLMSpace n by Def9;
-     then consider h1 be map of RLMSpace n,RLMSpace n such that
+     then consider h1 be Function of RLMSpace n,RLMSpace n such that
       A14: h1 = h and
       A15: h1 is isometric by Def4;
      thus h * e = (the mult of IsomGroup n).(h,e) by GROUP_1:def 1
@@ -1605,7 +1607,7 @@ begin  :: Groups of Isometric Functions
         now let h be Element of IsomGroup n;
          h in the carrier of IsomGroup n;
      then A2: h in ISOM RLMSpace n by Def9;
-     then consider h1 be map of RLMSpace n,RLMSpace n such that
+     then consider h1 be Function of RLMSpace n,RLMSpace n such that
       A3: h1 = h and
           h1 is isometric by Def4;
      thus h * e = (the mult of IsomGroup n).(h,e) by GROUP_1:def 1
@@ -1623,16 +1625,16 @@ begin  :: Groups of Isometric Functions
   theorem Th11:
    for n be Nat
    for f be Element of IsomGroup n
-   for g be map of RLMSpace n,RLMSpace n st f = g holds
+   for g be Function of RLMSpace n,RLMSpace n st f = g holds
     f" = g"
    proof
     let n be Nat;
     let f be Element of IsomGroup n;
-    let g be map of RLMSpace n,RLMSpace n;
+    let g be Function of RLMSpace n,RLMSpace n;
     assume A1: f = g;
         f in the carrier of IsomGroup n;
     then A2: f in ISOM RLMSpace n by Def9;
-    then consider f1 be map of RLMSpace n,RLMSpace n such that
+    then consider f1 be Function of RLMSpace n,RLMSpace n such that
      A3: f1 = f and
      A4: f1 is isometric by Def4;
         g" is isometric by A1,A3,A4,Th3;
@@ -1738,7 +1740,7 @@ begin  :: Groups of Isometric Functions
      A8: the carrier of G c= the carrier of IsomGroup n by GROUP_2:def 5;
      then f in the carrier of IsomGroup n by A6;
      then f in ISOM RLMSpace n by Def9;
-     then consider f2 be map of RLMSpace n,RLMSpace n such that
+     then consider f2 be Function of RLMSpace n,RLMSpace n such that
       A9: f2 = f and
       A10: f2 is isometric by Def4;
      reconsider f1 = f as Element of G by A6;
@@ -1774,7 +1776,7 @@ begin  :: Groups of Isometric Functions
      A23: the carrier of G c= the carrier of IsomGroup n by GROUP_2:def 5;
      then f in the carrier of IsomGroup n by A19;
      then A24: f in ISOM RLMSpace n by Def9;
-     then consider f1 be map of RLMSpace n,RLMSpace n such that
+     then consider f1 be Function of RLMSpace n,RLMSpace n such that
       A25: f1 = f and
           f1 is isometric by Def4;
      reconsider f2 = f as Element of G by A19;

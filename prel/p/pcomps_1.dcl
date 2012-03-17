@@ -18,6 +18,7 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="COMPTS_1"/>
 <ArticleID name="PCOMPS_1"/>
 </Signature>
 <RCluster>
@@ -28,7 +29,7 @@
 <Cluster>
 <Adjective nr="25" value="false"/>
 <Adjective nr="39"/>
-<Adjective nr="44"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -41,6 +42,18 @@
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="45"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="25" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster>

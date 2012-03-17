@@ -147,6 +147,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="29"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="61"/>
 </Cluster>

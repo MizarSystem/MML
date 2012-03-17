@@ -21,7 +21,7 @@ environ
       MEMBERED, SETFAM_1;
  registrations SUBSET_1, STRUCT_0, TOPMETR, FUNCT_1, PRE_TOPC, BORSUK_1, TSP_1,
       YELLOW_6, YELLOW_8, WAYBEL10, METRIC_1, RELSET_1, MEMBERED, FUNCT_2,
-      XREAL_0;
+      XREAL_0, TOPREAL1, PCOMPS_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, PRE_TOPC, COMPTS_1, URYSOHN1, T_0TOPSP, XBOOLE_0;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, TREAL_1, FUNCT_2, FUNCT_1, PRE_TOPC,
@@ -68,15 +68,15 @@ A2:     x = F(w) & w in X() & P[w];
   end;
 
 theorem
-  for f being map of T1,S, g being map of T2,S st
+  for f being Function of T1,S, g being Function of T2,S st
   T1 is SubSpace of T & T2 is SubSpace of T &
    ([#] T1) \/ ([#] T2) = [#] T &
     T1 is compact & T2 is compact & T is_T2 &
      f is continuous & g is continuous &
   ( for p be set st p in ([#] T1) /\ ([#] T2) holds f.p = g.p )
-  ex h being map of T,S st h = f+*g & h is continuous
+  ex h being Function of T,S st h = f+*g & h is continuous
  proof
-  let f be map of T1,S, g be map of T2,S;
+  let f be Function of T1,S, g be Function of T2,S;
   assume that
  A1: T1 is SubSpace of T & T2 is SubSpace of T and
   A2: ([#] T1) \/ ([#] T2) = [#] T and
@@ -94,7 +94,7 @@ then A11: dom h = [#] T by A2,A9,FUNCT_4:def 1
       rng f c= the carrier of S & rng g c= the carrier of S by RELSET_1:12;
   then rng f \/ rng g c= the carrier of S & rng h c= rng f \/ rng g
    by FUNCT_4:18,XBOOLE_1:8;  then rng h c= the carrier of S by XBOOLE_1:1;
- then reconsider h as map of T,S  by A11,FUNCT_2:4;
+ then reconsider h as Function of T,S  by A11,FUNCT_2:4;
  take h;
  thus h = f+*g;
       for P being Subset of S st P is closed holds h"P is closed
@@ -170,17 +170,6 @@ then A11: dom h = [#] T by A2,A9,FUNCT_4:def 1
   hence h is continuous by PRE_TOPC:def 12;
  end;
 
-registration
-  let S, T be non empty TopSpace;
-  cluster continuous map of S, T;
-  existence
-  proof
-   consider a be Point of T;
-   S --> a is continuous;
-   hence thesis;
-  end;
-end;
-
 registration let T be non empty TopStruct;
   cluster id T -> open continuous;
   coherence
@@ -189,12 +178,12 @@ registration let T be non empty TopStruct;
    proof
     let A be Subset of T;
     assume A1: A is open;
-        (id the carrier of T).:A = A by FUNCT_1:162;
+    (id the carrier of T).:A = A by FUNCT_1:162;
     hence thesis by A1,GRCAT_1:def 11;
    end;
    let V be Subset of T such that
 A2:    V is closed;
-       (id T)"V = (id the carrier of T)"V by GRCAT_1:def 11
+   (id T)"V = (id the carrier of T)"V by GRCAT_1:def 11
            .= V by BORSUK_1:4;
    hence (id T)"V is closed by A2;
   end;
@@ -202,7 +191,7 @@ end;
 
 registration
   let T be non empty TopStruct;
-  cluster continuous one-to-one map of T, T;
+  cluster continuous one-to-one Function of T, T;
   existence
   proof
    take id T;
@@ -214,11 +203,11 @@ canceled;
 
 theorem
   for S, T being non empty TopSpace,
-      f being map of S, T st f is_homeomorphism holds
+      f being Function of S, T st f is_homeomorphism holds
    f" is open
 proof
   let S, T be non empty TopSpace,
-      f be map of S, T;
+      f be Function of S, T;
   assume f is_homeomorphism;
 then A1:dom f = [#]S & rng f = [#]
 T & f is one-to-one continuous by TOPS_2:def 5;
@@ -242,7 +231,7 @@ end;
 
 theorem Th4:
  for T be non empty TopSpace, a be Point of T
-  ex f be map of I[01], T st f is continuous & f.0 = a & f.1 = a
+  ex f be Function of I[01], T st f is continuous & f.0 = a & f.1 = a
 proof
  let T be non empty TopSpace, a be Point of T;
  take IT = I[01] --> a;
@@ -254,7 +243,7 @@ end;
 definition
   let T be TopStruct, a,b be Point of T;
   pred a,b are_connected means :Def1:
-  ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = b;
+  ex f being Function of I[01], T st f is continuous & f.0 = a & f.1 = b;
 end;
 
 definition
@@ -263,14 +252,14 @@ definition
 reflexivity
 proof
   let a be Point of T;
-  thus ex f being map of I[01], T st f is continuous & f.0 = a & f.1 = a
+  thus ex f being Function of I[01], T st f is continuous & f.0 = a & f.1 = a
     by Th4;
 end;
 end;
 
 definition let T be TopStruct; let a, b be Point of T;
 assume A1: a, b are_connected;
- mode Path of a, b -> map of I[01], T means :Def2:
+ mode Path of a, b -> Function of I[01], T means :Def2:
    it is continuous & it.0 = a & it.1 = b;
  existence by A1,Def1;
 end;
@@ -307,7 +296,7 @@ A1: the carrier of T = { 0[01] } by JORDAN1:1;
   proof
    let a, b be Point of T;
 A2: a = nl & b = nl by A1,TARSKI:def 1;
-   reconsider f = I[01] --> nl as map of I[01], T;
+   reconsider f = I[01] --> nl as Function of I[01], T;
    take f;
    thus f is continuous;
    f = (the carrier of I[01]) --> nl by BORSUK_1:def 3;
@@ -350,11 +339,11 @@ theorem Th5:
 proof let GX be non empty TopSpace;
  assume A1: for x,y being Point of GX holds x,y are_connected;
      for x, y being Point of GX ex GY st (GY is connected &
-       ex f being map of GY,GX st f is continuous
+       ex f being Function of GY,GX st f is continuous
                         & x in rng f & y in rng f )
  proof let x, y be Point of GX;
       now x,y are_connected by A1;
-        then consider h being map of I[01],GX such that
+        then consider h being Function of I[01],GX such that
      A2: h is continuous and A3: x=h.0 & y=h.1 by Def1;
          [#] I[01] = the carrier of I[01] by PRE_TOPC:12;
      then 0 in dom h & 1 in dom h by Lm2,BORSUK_1:83,TOPS_2:51;
@@ -434,18 +423,18 @@ A14: rng f c= rng E1 \/ rng E2 by FUNCT_4:18;
        rng E1 \/ rng E2 c= (the carrier of T) \/ the carrier of T
       by A13,XBOOLE_1:13;
    then rng f c= the carrier of T by A14,XBOOLE_1:1;
-   then reconsider f as map of I[01], T  by A8,FUNCT_2:def 1,RELSET_1:11;
+   then reconsider f as Function of I[01], T  by A8,FUNCT_2:def 1,RELSET_1:11;
    reconsider T1 = Closed-Interval-TSpace (0, 1/2),
               T2 = Closed-Interval-TSpace (1/2, 1) as SubSpace of I[01]
                 by TOPMETR:27,TREAL_1:6;
-   A15: e1 is continuous map of
+   A15: e1 is continuous Function of
      Closed-Interval-TSpace(0,1/2),Closed-Interval-TSpace(0,1)
        by TREAL_1:15;
 A16:e2 is continuous by TREAL_1:15;
-   reconsider ff = E1 as map of T1, T  by FUNCT_2:19,TOPMETR:27;
+   reconsider ff = E1 as Function of T1, T  by FUNCT_2:19,TOPMETR:27;
 A17:E2 is Function of the carrier of Closed-Interval-TSpace (1/2, 1),
                       the carrier of T by FUNCT_2:19,TOPMETR:27;
-   reconsider gg = E2 as map of T2, T  by FUNCT_2:19,TOPMETR:27;
+   reconsider gg = E2 as Function of T2, T  by FUNCT_2:19,TOPMETR:27;
        1/2 in { r : 0 <= r & r <= 1 };
    then reconsider pol = 1/2 as Point of I[01] by BORSUK_1:83,RCOMP_1:def 1;
      P is continuous & Q is continuous by A1,A2,Def2;
@@ -483,16 +472,16 @@ A26:([#] T1) /\ ([#] T2) = {pol} by A19,A20,TOPMETR2:1;
        R^1 is_T2 by PCOMPS_1:38,TOPMETR:def 7;
    then T1 is compact & T2 is compact & I[01] is_T2 & ff.pol = gg.pol
      by A25,HEINE:11,TOPMETR:3;
-  then consider h being map of I[01], T such that
-A27:   h = ff+*gg & h is continuous by A18,A21,A26,TOPMETR2:4;
+   then reconsider f as continuous Function
+ of I[01], T by A18,A21,A26,TOPMETR2:4;
        1 in { r : 1/2 <= r & r <= 1 };
    then 1 in dom E2 by A4,A7,RCOMP_1:def 1;
    then
 A28: f.1 = E2.1 by FUNCT_4:14
       .= Q.(2*1-1) by A22
       .= c by A2,Def2;
-   then a,c are_connected by A12,A27,Def1;
-   then reconsider f as Path of a, c by A12,A27,A28,Def2;
+   then a,c are_connected by A12,Def1;
+   then reconsider f as Path of a, c by A12,A28,Def2;
     for t being Point of I[01] holds
      ( t <= 1/2 implies f.t = P.(2*t) ) &
      ( 1/2 <= t implies f.t = Q.(2*t-1) )
@@ -695,7 +684,7 @@ A2: e.0 = e.(#)(0,1) by TREAL_1:def 1
 A3: e.1 = e.(0,1)(#) by TREAL_1:def 2
       .= (#)(0,1) by TREAL_1:12
       .= 0 by TREAL_1:def 1;
-   reconsider f = P * e as map of I[01], T by FUNCT_2:19,TOPMETR:27;
+   reconsider f = P * e as Function of I[01], T by FUNCT_2:19,TOPMETR:27;
 A4: for t being Point of I[01] holds f.t = P.(1-t)
    proof
     let t be Point of I[01];
@@ -721,7 +710,7 @@ then A6: f.0 = P.1 by A2,FUNCT_1:23
 then A7: f.1 = P.0 by A3,FUNCT_1:23
       .= a by A1,Def2;
 A8: P is continuous by A1,Def2;
-       e is continuous map of
+       e is continuous Function of
      Closed-Interval-TSpace(0,1),Closed-Interval-TSpace(0,1) by TREAL_1:11;
    then
 A9: f is continuous by A8,TOPMETR:27,TOPS_2:58;
@@ -802,12 +791,12 @@ begin :: The product of two topological spaces
 theorem Th9:
  for X, Y being non empty TopSpace
   for A being Subset-Family of Y
-   for f being map of X, Y holds
+   for f being Function of X, Y holds
     f"(union A) = union (f"A)
      proof
       let X, Y be non empty TopSpace;
       let A be Subset-Family of Y;
-      let f be map of X, Y;
+      let f be Function of X, Y;
       thus thesis
        proof
         thus f"(union A) c= union (f"A)
@@ -843,8 +832,8 @@ then A6:       f.x in union A by A5,TARSKI:def 4;
      end;
 
 definition let S1, S2, T1, T2 be non empty TopSpace;
- let f be map of S1, S2, g be map of T1, T2;
- redefine func [:f, g:] -> map of [:S1, T1:], [:S2, T2:];
+ let f be Function of S1, S2, g be Function of T1, T2;
+ redefine func [:f, g:] -> Function of [:S1, T1:], [:S2, T2:];
  coherence
 proof
  set h = [:f, g:];
@@ -859,14 +848,14 @@ end;
 
 theorem Th10:
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P1, P2 being Subset of [:T1, T2:] holds
        (P2 in Base-Appr P1 implies [:f,g:]"P2 is open)
 proof
  let S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P1, P2 be Subset of [:T1, T2:];
  assume P2 in Base-Appr P1;
  then P2 in { [:X1,Y1:] where X1 is Subset of T1,
@@ -882,14 +871,14 @@ end;
 
 theorem Th11:
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P2 being Subset of [:T1, T2:] holds
        (P2 is open implies [:f,g:]"P2 is open)
 proof
  let S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2,
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2,
      P2 be Subset of [:T1, T2:];
  assume P2 is open;
  then P2 = union Base-Appr P2 by BORSUK_1:54;
@@ -910,13 +899,13 @@ end;
 
 theorem Th12:
  for S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2 holds
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2 holds
    [:f,g:] is continuous
   proof
   let S1, S2, T1, T2 be non empty TopSpace,
-     f be continuous map of S1, T1,
-     g be continuous map of S2, T2;
+     f be continuous Function of S1, T1,
+     g be continuous Function of S2, T2;
        for P1 be Subset of [:T1, T2:] st P1 is open holds
     [:f,g:]"P1 is open by Th11;
    hence thesis by TOPS_2:55;
@@ -1103,7 +1092,7 @@ A14:  X is open & Z is open by A11,A12,BORSUK_1:46;
  hence thesis;
 end;
 
-registration let T1, T2 be being_T2 (non empty TopSpace);
+registration let T1, T2 be being_T2 non empty TopSpace;
  cluster [:T1, T2:] -> being_T2;
  coherence by Lm5;
 end;
@@ -1117,37 +1106,33 @@ registration
  end;
 end;
 
-registration let n be Nat;
- cluster TOP-REAL n -> being_T2;
- coherence by SPPOL_1:26;
-end;
-
 definition let T be non empty TopStruct;
   let a, b be Point of T;
   let P, Q be Path of a, b;
   pred P, Q are_homotopic means
-    ex f being map of [:I[01],I[01]:], T st
+    ex f being Function of [:I[01],I[01]:], T st
     f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
   symmetry
   proof
   let P, Q be Path of a, b;
-  given f being map of [:I[01],I[01]:], T such that
+  given f being Function of [:I[01],I[01]:], T such that
 A1: f is continuous &
     for s being Point of I[01] holds f.(s,0) = P.s & f.(s,1) = Q.s &
     for t being Point of I[01] holds f.(0,t) = a & f.(1,t) = b;
       id the carrier of I[01] = id I[01] by GRCAT_1:def 11;
-  then reconsider fA = id the carrier of I[01] as continuous map
+  then reconsider fA = id the carrier of I[01] as continuous Function
     of I[01], I[01];
-  reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous map of I[01], I[01]
+  reconsider fB = L[01]((0,1)(#),(#)(0,1)) as continuous Function
+ of I[01], I[01]
       by TOPMETR:27,TREAL_1:11;
   set F = [:fA, fB:];
 A2:  F is continuous by Th12;
 A3:dom L[01]((0,1)(#),(#)(0,1)) = the carrier of I[01] by FUNCT_2:def 1
 ,TOPMETR:27;
    set LL = L[01]((0,1)(#),(#)(0,1));
-  reconsider ff=f * F as map of [:I[01],I[01]:], T;
+  reconsider ff=f * F as Function of [:I[01],I[01]:], T;
 A4: ff is continuous by A1,A2,TOPS_2:58;
 A5:  for s being Point of I[01] holds ff.(s,0) = Q.s & ff.(s,1) = P.s
    proof
@@ -1267,7 +1252,7 @@ A3:    for x being set st x in [:the carrier of I[01], the carrier of I[01]:]
     = [:the carrier of I[01], the carrier of I[01]:] by BORSUK_1:def 5;
    then reconsider f as Function of the carrier of [:I[01],I[01]:],
       the carrier of T;
-   reconsider f as map of [:I[01],I[01]:], T;
+   reconsider f as Function of [:I[01],I[01]:], T;
    take f;
 A4: for W being Point of [:I[01], I[01]:],
         G being a_neighborhood of f.W

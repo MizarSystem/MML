@@ -55,6 +55,9 @@
 <ArticleID name="MATRLIN"/>
 <ArticleID name="POLYNOM3"/>
 <ArticleID name="ALGSTR_1"/>
+<ArticleID name="GROUP_2"/>
+<ArticleID name="GROUP_3"/>
+<ArticleID name="GROUP_6"/>
 <ArticleID name="POLYNOM4"/>
 </Signature>
 <RCluster>
@@ -81,12 +84,12 @@
 <Adjective nr="63" value="false"/>
 <Adjective nr="68"/>
 <Adjective nr="108" value="false"/>
+<Adjective nr="133"/>
 <Adjective nr="134"/>
 <Adjective nr="135"/>
 <Adjective nr="136"/>
 <Adjective nr="137"/>
 <Adjective nr="138"/>
-<Adjective nr="139"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -115,7 +118,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="470">
+<Func kind="K" nr="512">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -156,7 +159,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="514">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -173,7 +176,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="119">
+<Adjective nr="118">
 <Func kind="K" nr="461">
 <LocusVar nr="1"/>
 </Func>
@@ -201,7 +204,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="514">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -249,7 +252,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="514">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -272,7 +275,7 @@
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="118">
+<Adjective nr="145">
 <Func kind="K" nr="461">
 <LocusVar nr="1"/>
 </Func>
@@ -303,7 +306,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="514">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -338,7 +341,7 @@
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="119">
+<Adjective nr="145">
 <Func kind="K" nr="461">
 <LocusVar nr="1"/>
 </Func>
@@ -355,8 +358,8 @@
 <Adjective nr="57"/>
 <Adjective nr="61"/>
 <Adjective nr="62"/>
-<Adjective nr="134"/>
-<Adjective nr="136"/>
+<Adjective nr="133"/>
+<Adjective nr="135"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
@@ -370,8 +373,8 @@
 <Adjective nr="59"/>
 <Adjective nr="61"/>
 <Adjective nr="68"/>
-<Adjective nr="134"/>
-<Adjective nr="136"/>
+<Adjective nr="133"/>
+<Adjective nr="135"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -10,13 +10,13 @@ environ
       TOPALG_4, ALGSTR_1, EQREL_1, WAYBEL20, FUNCT_1, MCART_1, FUNCT_3,
       RELAT_1, BORSUK_1, ORDINAL2, BOOLE, SUBSET_1, RLVECT_2, BORSUK_6,
       SGRAPH1, PARTFUN1, GRAPH_1, GROUP_6, ARYTM_3, ARYTM_1, REALSET1,
-      VECTSP_1;
+      VECTSP_1, COHSP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, EQREL_1, MCART_1, XCMPLX_0, XREAL_0,
       RELAT_1, FUNCT_1, RELSET_1, FUNCT_2, FUNCT_3, BINOP_1, FINSEQ_1, CARD_3,
       STRUCT_0, PRALG_1, GROUP_1, GROUP_6, GROUP_7, PRE_TOPC, BORSUK_1,
       BORSUK_2, BORSUK_6, TOPALG_1;
  constructors GROUP_7, PRALG_1, PRALG_2, REAL_1, BORSUK_3, TOPALG_3, MONOID_0,
- SETFAM_1;
+      SETFAM_1;
  registrations STRUCT_0, BORSUK_1, BORSUK_2, GROUP_7, TOPALG_1, RELSET_1,
       TOPS_1, FINSEQ_1, ARYTM_3, XREAL_0, MONOID_0;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -61,9 +61,10 @@ end;
 
 definition
   let G1, G2, H1, H2 be non empty HGrStr,
-      f be map of G1,H1,
-      g be map of G2,H2;
-  func Gr2Iso(f,g) -> map of product <*G1,G2*>, product <*H1,H2*> means :Def1:
+      f be Function of G1,H1,
+      g be Function of G2,H2;
+  func Gr2Iso(f,g) -> Function
+ of product <*G1,G2*>, product <*H1,H2*> means :Def1:
    for x being Element of product <*G1,G2*>
     ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
       it.x = <*f.x1,g.x2*>;
@@ -81,14 +82,14 @@ A2:   x = <*a,h*> by Th1;
     take <*f.a,g.h*>, a, h;
     thus thesis by A2;
   end;
-  ex h being map of product <*G1,G2*>, product <*H1,H2*> st
+  ex h being Function of product <*G1,G2*>, product <*H1,H2*> st
    for x being Element of product <*G1,G2*> holds P[x,h.x]
      from FUNCT_2:sch 3(A1);
   hence thesis;
 end;
 uniqueness
 proof
-  let F, G be map of product <*G1,G2*>, product <*H1,H2*> such that
+  let F, G be Function of product <*G1,G2*>, product <*H1,H2*> such that
 A3: for x being Element of product <*G1,G2*>
     ex x1 being Element of G1, x2 being Element of G2 st x = <*x1,x2*> &
       F.x = <*f.x1,g.x2*> and
@@ -112,13 +113,13 @@ end;
 
 theorem
   for G1, G2, H1, H2 being non empty HGrStr,
-      f being map of G1,H1, g being map of G2,H2,
+      f being Function of G1,H1, g being Function of G2,H2,
       x1 being Element of G1, x2 being Element of G2
   holds Gr2Iso(f,g).<*x1,x2*> = <*f.x1,g.x2*>
 proof
   let G1, G2, H1, H2 be non empty HGrStr,
-      f be map of G1,H1,
-      g be map of G2,H2,
+      f be Function of G1,H1,
+      g be Function of G2,H2,
       x1 be Element of G1, x2 be Element of G2;
   consider y1 being Element of G1, y2 being Element of G2 such that
 A1:  <*y1,y2*> = <*x1,x2*> and
@@ -132,11 +133,11 @@ definition
       f be Homomorphism of G1,H1,
       g be Homomorphism of G2,H2;
   redefine func Gr2Iso(f,g) ->
-           Homomorphism of product <*G1,G2*>, product <*H1,H2*>;
+     Homomorphism of product <*G1,G2*>, product <*H1,H2*>;
 coherence
 proof
   set h = Gr2Iso(f,g);
-  let a, b be Element of product <*G1,G2*>;
+  now let a, b be Element of product <*G1,G2*>;
   consider a1 being Element of G1, a2 being Element of G2 such that
 A1: a = <*a1,a2*> and
 A2: h.a = <*f.a1,g.a2*> by Def1;
@@ -156,18 +157,20 @@ A7: f.r1 = f.(a1*b1) by FINSEQ_1:61
   then g.r2 = g.(a2*b2) by FINSEQ_1:61
      .= g.a2 * g.b2 by GROUP_6:def 7;
   hence h.(a*b) = h.a * h.b by A2,A4,A6,A7,GROUP_7:32;
+  end;
+  hence thesis by GROUP_6:def 7;
 end;
 end;
 
 theorem Th3:
   for G1, G2, H1, H2 being non empty HGrStr,
-      f being map of G1,H1,
-      g being map of G2,H2 st f is one-to-one & g is one-to-one
+      f being Function of G1,H1,
+      g being Function of G2,H2 st f is one-to-one & g is one-to-one
   holds Gr2Iso(f,g) is one-to-one
 proof
   let G1, G2, H1, H2 be non empty HGrStr;
-  let f be map of G1,H1,
-      g be map of G2,H2 such that
+  let f be Function of G1,H1,
+      g be Function of G2,H2 such that
 A1: f is one-to-one and
 A2: g is one-to-one;
   set h = Gr2Iso(f,g);
@@ -189,13 +192,13 @@ end;
 
 theorem Th4:
   for G1, G2, H1, H2 being non empty HGrStr,
-      f being map of G1,H1,
-      g being map of G2,H2 st f is onto & g is onto
+      f being Function of G1,H1,
+      g being Function of G2,H2 st f is onto & g is onto
   holds Gr2Iso(f,g) is onto
 proof
   let G1, G2, H1, H2 be non empty HGrStr;
-  let f be map of G1,H1,
-      g be map of G2,H2 such that
+  let f be Function of G1,H1,
+      g be Function of G2,H2 such that
 A1: rng f = the carrier of H1 and
 A2: rng g = the carrier of H2;
   set h = Gr2Iso(f,g);
@@ -309,9 +312,9 @@ end;
 
 definition
   let S, T, Y;
-  let f be map of Y, S;
-  let g be map of Y, T;
-  redefine func <:f,g:> -> map of Y,[:S,T:];
+  let f be Function of Y, S;
+  let g be Function of Y, T;
+  redefine func <:f,g:> -> Function of Y,[:S,T:];
 coherence
 proof
   dom f = the carrier of Y & dom g = the carrier of Y by FUNCT_2:def 1;
@@ -325,8 +328,8 @@ end;
 
 definition
   let S, T, Y;
-  let f be map of Y, [:S,T:];
-  redefine func pr1 f -> map of Y,S;
+  let f be Function of Y, [:S,T:];
+  redefine func pr1 f -> Function of Y,S;
 coherence
 proof
 A1: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
@@ -346,7 +349,7 @@ A6: (pr1 f).x = (f.x)`1 by A2,A4,MCART_1:def 12;
   end;
   hence thesis by A2,A3,FUNCT_2:4;
 end;
-  redefine func pr2 f -> map of Y,T;
+  redefine func pr2 f -> Function of Y,T;
 coherence
 proof
 A7: the carrier of [:S,T:] = [:the carrier of S,the carrier of T:]
@@ -369,9 +372,9 @@ end;
 end;
 
 theorem Th9:
-  for f being continuous map of Y,[:S,T:] holds pr1 f is continuous
+  for f being continuous Function of Y,[:S,T:] holds pr1 f is continuous
 proof
-  let f be continuous map of Y,[:S,T:];
+  let f be continuous Function of Y,[:S,T:];
   set g = pr1 f;
   for p being Point of Y, V being Subset of S
     st g.p in V & V is open holds
@@ -413,9 +416,9 @@ A13: g.x = (f.x)`1 by A6,MCART_1:def 12;
 end;
 
 theorem Th10:
-  for f being continuous map of Y,[:S,T:] holds pr2 f is continuous
+  for f being continuous Function of Y,[:S,T:] holds pr2 f is continuous
 proof
-  let f be continuous map of Y,[:S,T:];
+  let f be continuous Function of Y,[:S,T:];
   set g = pr2 f;
   for p being Point of Y, V being Subset of T
     st g.p in V & V is open holds
@@ -459,7 +462,7 @@ end;
 theorem Th11:
   [s1,t1],[s2,t2] are_connected implies s1,s2 are_connected
 proof
-  given L being map of I[01], [:S,T:] such that
+  given L being Function of I[01], [:S,T:] such that
 A1: L is continuous and
 A2: L.0 = [s1,t1] and
 A3: L.1 = [s2,t2];
@@ -478,7 +481,7 @@ end;
 theorem Th12:
   [s1,t1],[s2,t2] are_connected implies t1,t2 are_connected
 proof
-  given L being map of I[01], [:S,T:] such that
+  given L being Function of I[01], [:S,T:] such that
 A1: L is continuous and
 A2: L.0 = [s1,t1] and
 A3: L.1 = [s2,t2];
@@ -552,11 +555,11 @@ theorem Th15:
   s1,s2 are_connected & t1,t2 are_connected implies
   [s1,t1],[s2,t2] are_connected
 proof
-  given f being map of I[01], S such that
+  given f being Function of I[01], S such that
 A1:  f is continuous and
 A2:  f.0 = s1 and
 A3:  f.1 = s2;
-  given g being map of I[01], T such that
+  given g being Function of I[01], T such that
 A4:  g is continuous and
 A5:  g.0 = t1 and
 A6:  g.1 = t2;
@@ -774,7 +777,7 @@ proof
   let p, q be Path of s1,s2 such that
 A1: p = pr1 l1 & q = pr1 l2 and
 A2: l1,l2 are_homotopic;
-  consider f being map of [:I[01],I[01]:], [:S,T:] such that
+  consider f being Function of [:I[01],I[01]:], [:S,T:] such that
 A3: f is continuous &
     for a being Point of I[01] holds f.(a,0) = l1.a & f.(a,1) = l2.a &
     for b being Point of I[01] holds f.(0,b) = [s1,t1] & f.(1,b) = [s2,t2]
@@ -792,7 +795,7 @@ proof
   let p, q be Path of t1,t2 such that
 A1: p = pr2 l1 & q = pr2 l2 and
 A2: l1,l2 are_homotopic;
-  consider f being map of [:I[01],I[01]:], [:S,T:] such that
+  consider f being Function of [:I[01],I[01]:], [:S,T:] such that
 A3: f is continuous &
     for a being Point of I[01] holds f.(a,0) = l1.a & f.(a,1) = l2.a &
     for b being Point of I[01] holds f.(0,b) = [s1,t1] & f.(1,b) = [s2,t2]
@@ -902,12 +905,12 @@ A3: x = pr2 l1 and
 A4: y = pr2 l2 and
 A5: p,q are_homotopic and
 A6: x,y are_homotopic;
-  consider f being map of [:I[01],I[01]:], S such that
+  consider f being Function of [:I[01],I[01]:], S such that
 A7: f is continuous &
     for a being Point of I[01] holds f.(a,0) = pr1 l1.a & f.(a,1) = pr1 l2.a &
     for b being Point of I[01] holds f.(0,b) = s1 & f.(1,b) = s2
       by A1,A2,A5,BORSUK_2:def 7;
-  consider g being map of [:I[01],I[01]:], T such that
+  consider g being Function of [:I[01],I[01]:], T such that
 A8: g is continuous &
     for a being Point of I[01] holds g.(a,0) = pr2 l1.a & g.(a,1) = pr2 l2.a &
     for b being Point of I[01] holds g.(0,b) = t1 & g.(1,b) = t2
@@ -1056,7 +1059,8 @@ definition
   set G = <*pi_1(S,s),pi_1(T,t)*>;
   set pT = product G;
   func FGPrIso(s,t) ->
-     map of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> means :Def2:
+     Function
+ of pi_1([:S,T:],[s,t]), product <*pi_1(S,s),pi_1(T,t)*> means :Def2:
   for x being Point of pi_1([:S,T:],[s,t])
    ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
    it.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*>;
@@ -1090,13 +1094,13 @@ A9:   <*A,B*>.1 = A & <*A,B*>.2 = B by FINSEQ_1:61;
     take y, l;
     thus thesis by A2;
   end;
-  ex h being map of pS,pT st for x being Element of pS holds P[x,h.x]
+  ex h being Function of pS,pT st for x being Element of pS holds P[x,h.x]
     from FUNCT_2:sch 3(A1);
   hence thesis;
 end;
 uniqueness
 proof
-  let f, g be map of pS,pT such that
+  let f, g be Function of pS,pT such that
 A10: for x being Point of pi_1([:S,T:],[s,t])
     ex l being Loop of [s,t] st x = Class(EqRel([:S,T:],[s,t]),l) &
     f.x = <*Class(EqRel(S,s),pr1 l),Class(EqRel(T,t),pr2 l)*> and
@@ -1233,7 +1237,7 @@ definition
 coherence
 proof
   set F = FGPrIso(s,t);
-  let a, b be Element of pi_1([:S,T:],[s,t]);
+  now let a, b be Element of pi_1([:S,T:],[s,t]);
   consider la being Loop of [s,t] such that
 A1: a = Class(EqRel([:S,T:],[s,t]),la) and
 A2: F.a = <*Class(EqRel(S,s),pr1 la),Class(EqRel(T,t),pr2 la)*> by Def2;
@@ -1260,6 +1264,8 @@ A10: A1*A2 = Class(EqRel(S,s),pr1 la + pr1 lb) by TOPALG_3:31
     .= Class(EqRel(T,t),pr2 (la+lb)) by Th25
     .= Class(EqRel(T,t),pr2 lab) by A9,TOPALG_1:47;
   hence F.(a*b) = F.a * F.b by A2,A4,A6,A10,GROUP_7:32;
+  end;
+  hence thesis by GROUP_6:def 7;
 end;
 end;
 

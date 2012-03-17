@@ -17,7 +17,11 @@ environ
  registrations STRUCT_0, LATTICE3, RELSET_1, YELLOW_0, YELLOW_1, WAYBEL_0,
       SUBSET_1, XBOOLE_0;
  requirements SUBSET, BOOLE;
-
+ definitions TARSKI, LATTICE3, QUANTAL1, ORDERS_3, WAYBEL_0;
+ theorems TARSKI, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, LATTICE3,
+      WELLORD1, ORDERS_2, PRE_TOPC, TMAP_1, ORDERS_3, YELLOW_0, YELLOW_1,
+      WAYBEL_0, GRCAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
+ schemes FUNCT_2, DOMAIN_1;
 
 begin :: Basic Facts
 
@@ -83,7 +87,7 @@ begin :: Maps
 
 definition
   let S, T be 1-sorted;
-  let f be map of S, T;
+  let f be Function of S, T;
   redefine func rng f -> Subset of T;
 end;
 
@@ -106,14 +110,14 @@ end;
 canceled;
 
 theorem :: YELLOW_2:10
-      for L, M being non empty RelStr, f,g being map of L, M holds
+      for L, M being non empty RelStr, f,g being Function of L, M holds
     f <= g iff for x being Element of L holds f.x <= g.x;
 
 begin :: The Image of a Map
 
 definition
   let L, M be non empty RelStr;
-  let f be map of L, M;
+  let f be Function of L, M;
   func Image f -> strict full SubRelStr of M equals
 :: YELLOW_2:def 2
 
@@ -122,13 +126,13 @@ end;
 
 theorem :: YELLOW_2:11
   for L, M being non empty RelStr
-  for f being map of L, M
+  for f being Function of L, M
     holds
    rng f = the carrier of Image f;
 
 theorem :: YELLOW_2:12
       for L, M being non empty RelStr
-  for f being map of L, M
+  for f being Function of L, M
   for y being Element of Image f
     ex x being Element of L st f.x = y;
 
@@ -140,7 +144,7 @@ end;
 
 registration
   let L, M be non empty RelStr;
-  let f be map of L, M;
+  let f be Function of L, M;
   cluster Image f -> non empty;
 end;
 
@@ -151,40 +155,40 @@ theorem :: YELLOW_2:13
 
 theorem :: YELLOW_2:14
       for L, M, N being non empty RelStr
-  for f being map of L, M, g being map of M, N
+  for f being Function of L, M, g being Function of M, N
     holds
    f is monotone & g is monotone implies g*f is monotone;
 
 theorem :: YELLOW_2:15
       for L, M being non empty RelStr
-  for f being map of L, M
+  for f being Function of L, M
   for X being Subset of L, x being Element of L
     holds
    f is monotone & x is_<=_than X implies f.x is_<=_than f.:X;
 
 theorem :: YELLOW_2:16
       for L, M being non empty RelStr
-  for f being map of L, M
+  for f being Function of L, M
   for X being Subset of L, x being Element of L
     holds
    f is monotone & X is_<=_than x implies f.:X is_<=_than f.x;
 
 theorem :: YELLOW_2:17
       for S, T being non empty RelStr
-  for f being map of S, T
+  for f being Function of S, T
   for X being directed Subset of S
     holds
    f is monotone implies f.:X is directed;
 
 theorem :: YELLOW_2:18
   for L being with_suprema Poset
-  for f being map of L, L
+  for f being Function of L, L
     holds
    f is directed-sups-preserving implies f is monotone;
 
 theorem :: YELLOW_2:19
       for L being with_infima Poset
-  for f being map of L, L
+  for f being Function of L, L
     holds
    f is filtered-infs-preserving implies f is monotone;
 
@@ -192,19 +196,19 @@ begin :: Idempotent Maps
 
 theorem :: YELLOW_2:20
       for S being non empty 1-sorted
-  for f being map of S, S
+  for f being Function of S, S
     holds
    f is idempotent implies for x being Element of S holds f.(f.x) = f.x;
 
 theorem :: YELLOW_2:21
   for S being non empty 1-sorted
-  for f being map of S, S
+  for f being Function of S, S
     holds
    f is idempotent implies rng f = {x where x is Element of S: x = f.x};
 
 theorem :: YELLOW_2:22
   for S being non empty 1-sorted
-  for f being map of S, S st f is idempotent
+  for f being Function of S, S st f is idempotent
     holds
    X c= rng f implies f.:X = X;
 
@@ -256,7 +260,7 @@ registration
 end;
 
 theorem :: YELLOW_2:31   :: Theorem 2.3 (The Fixed-Point Theorem)
-  for f being map of L, L st f is monotone
+  for f being Function of L, L st f is monotone
   for M being Subset of L st M = {x where x is Element of L: x = f.x}
     holds
    subrelstr M is complete LATTICE;
@@ -273,24 +277,24 @@ theorem :: YELLOW_2:33
 
 theorem :: YELLOW_2:34   ::Remark 2.4 (Part I, variant 1)
   for M being non empty RelStr
-  for f being map of L, M st f is sups-preserving
+  for f being Function of L, M st f is sups-preserving
     holds
    Image f is sups-inheriting;
 
 theorem :: YELLOW_2:35   ::Remark 2.4  (Part I, variant 2)
   for M being non empty RelStr
-  for f being map of L, M st f is infs-preserving
+  for f being Function of L, M st f is infs-preserving
     holds
    Image f is infs-inheriting;
 
 theorem :: YELLOW_2:36   ::Remark 2.4  (Part II)
       for L, M being complete LATTICE
-  for f being map of L, M st f is sups-preserving or f is infs-preserving
+  for f being Function of L, M st f is sups-preserving or f is infs-preserving
     holds
    Image f is complete LATTICE;
 
 theorem :: YELLOW_2:37   ::Remark 2.5
-      for f being map of L, L st f is idempotent directed-sups-preserving
+      for f being Function of L, L st f is idempotent directed-sups-preserving
     holds
    Image f is directed-sups-inheriting & Image f is complete LATTICE;
 
@@ -398,7 +402,7 @@ begin :: Special Maps
 
 definition
   let L be non empty Poset;
-  func SupMap L -> map of InclPoset(Ids L), L means
+  func SupMap L -> Function of InclPoset(Ids L), L means
 :: YELLOW_2:def 3
 
   for I being Ideal of L holds it.I = sup I;
@@ -424,7 +428,7 @@ end;
 
 definition
   let L be non empty Poset;
-  func IdsMap L -> map of L, InclPoset(Ids L) means
+  func IdsMap L -> Function of L, InclPoset(Ids L) means
 :: YELLOW_2:def 4
 
   for x being Element of L holds it.x = downarrow x;

@@ -133,11 +133,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34">
-<Func kind="K" nr="155">
-<Num nr="2"/>
-</Func>
-</Adjective>
 <Adjective nr="56">
 <Func kind="K" nr="155">
 <Num nr="2"/>
@@ -164,11 +159,6 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34">
-<Func kind="K" nr="155">
-<Num nr="2"/>
-</Func>
-</Adjective>
 <Adjective nr="56">
 <Func kind="K" nr="155">
 <Num nr="2"/>

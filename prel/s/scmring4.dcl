@@ -176,6 +176,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="28"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="105"/>
 </Cluster>
 </FCluster>

@@ -184,4 +184,19 @@
 <Adjective nr="20" value="false"/>
 </Cluster>
 </CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="16"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="20" value="false"/>
+</Cluster>
+</CCluster>
 </Registrations>

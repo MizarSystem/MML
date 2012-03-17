@@ -12,13 +12,13 @@ environ
       CONNSP_2, TOPS_1, TOPMETR, COMPLEX1, ABSVALUE, ORDINAL2, COMPTS_1,
       TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, ORDINAL2, NUMBERS,
-      XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0,
+      XREAL_0, COMPLEX1, REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2,
       TOPS_1, TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4,
-      METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
+      STRUCT_0, METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
  constructors REAL_1, NAT_1, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1, EUCLID,
       TOPMETR, FINSEQ_4, INT_1, MEMBERED, COMPLEX1, SETFAM_1;
  registrations SUBSET_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
-      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED;
+      XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, PCOMPS_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0;
  theorems BORSUK_1, COMPTS_1, CONNSP_2, ENUMSET1, EUCLID, FINSEQ_1, FUNCT_1,
@@ -82,58 +82,63 @@ proof
 
  reserve D for set, p for FinSequence of D;
 
-definition let T be 1-sorted;
-  mode FinSequence of T is FinSequence of the carrier of T;
-end;
+:: Moved to STRUCT_0 on 2005.09.22
+:: definition let T be 1-sorted;
+::   mode FinSequence of T is FinSequence of the carrier of T;
+:: end;
 
 :: PROPER TEXT
 
  reserve p,p1,p2,q1,q2 for Point of TOP-REAL 2,
          P, P1 for Subset of TOP-REAL 2;
 
-definition let n;
-   let p1, p2 be Point of TOP-REAL n,
-       P be Subset of TOP-REAL n;
+reserve T for TopSpace;
+
+definition let T;
+   let p1, p2 be Point of T,
+       P be Subset of T;
  canceled;
 
   pred P is_an_arc_of p1,p2 means
-   :Def2: ex f being map of I[01], (TOP-REAL n)|P st
+   :Def2: ex f being Function of I[01], T|P st
                      f is_homeomorphism & f.0 = p1 & f.1 = p2;
 end;
 
 canceled 3;
 
 theorem Th4:
-  for P being Subset of TOP-REAL n,
-      p1,p2 being Point of TOP-REAL n
+  for P being Subset of T,
+      p1,p2 being Point of T
     st P is_an_arc_of p1,p2 holds p1 in P & p2 in P
- proof let P be Subset of TOP-REAL n,
- p1,p2 be Point of TOP-REAL n;
+ proof let P be Subset of T,
+ p1,p2 be Point of T;
   assume P is_an_arc_of p1,p2;
-  then consider f being map of I[01], (TOP-REAL n)|P such that
+  then consider f being Function of I[01], T|P such that
 A1: f is_homeomorphism and A2: f.0 = p1 & f.1 = p2 by Def2;
 A3:  dom f = [#]I[01] by A1,TOPS_2:def 5
   .= the carrier of I[01] by PRE_TOPC:12;
        1 in [.0,1.] & 0 in [.0,1.] by RCOMP_1:15;
   then A4: p1 in rng f & p2 in rng f by A2,A3,BORSUK_1:83,FUNCT_1:def 5;
-      rng f = [#]((TOP-REAL n)|P) by A1,TOPS_2:def 5;
+      rng f = [#](T|P) by A1,TOPS_2:def 5;
   hence thesis by A4,PRE_TOPC:def 10;
  end;
 
 theorem Th5:
-  for P,Q being Subset of TOP-REAL n,
-  p1,p2,q1 being Point of TOP-REAL n
+  for T being being_T2 TopSpace
+  for P,Q being Subset of T,
+  p1,p2,q1 being Point of T
    st P is_an_arc_of p1,p2 & Q is_an_arc_of p2,q1 & P /\ Q = {p2}
    holds P \/ Q is_an_arc_of p1,q1
- proof let P,Q be Subset of TOP-REAL n,
- p1,p2,q1 be Point of TOP-REAL n;
+ proof let T being being_T2 TopSpace;
+  let P,Q be Subset of T,
+ p1,p2,q1 be Point of T;
   assume that A1:P is_an_arc_of p1,p2 and A2:Q is_an_arc_of p2,q1
         and A3: P /\ Q = {p2};
-   consider f1 being map of I[01], (TOP-REAL n)|P such that
+   consider f1 being Function of I[01], T|P such that
 A4:  f1 is_homeomorphism & f1.0 = p1 & f1.1 = p2 by A1,Def2;
-   consider f2 being map of I[01], (TOP-REAL n)|Q such that
+   consider f2 being Function of I[01], T|Q such that
 A5:  f2 is_homeomorphism & f2.0 = p2 & f2.1 = q1 by A2,Def2;
-   consider h being map of I[01], (TOP-REAL n)|(P \/ Q) such that
+   consider h being Function of I[01], T|(P \/ Q) such that
 A6:  h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
    take h;
    thus thesis by A4,A5,A6;
@@ -594,7 +599,7 @@ A6:  rng f c= the carrier of (TOP-REAL n)|P
     then y in [#]((TOP-REAL n)|P) by PRE_TOPC:def 10;
     hence y in the carrier of (TOP-REAL n)|P;
    end;
-    then reconsider f as map of I[01], (TOP-REAL n)|P by A4,BORSUK_1:83
+    then reconsider f as Function of I[01], (TOP-REAL n)|P by A4,BORSUK_1:83
 ,FUNCT_2:def 1,RELSET_1:11;
 A9: rng f c= [#]((TOP-REAL n)|P) by A6,PRE_TOPC:12;
 A10: [#]((TOP-REAL n)|P) c= rng f
@@ -766,6 +771,14 @@ A35: I[01] is compact by HEINE:11,TOPMETR:27;
  0.REAL n + 1*p2 by EUCLID:33 .= 1*p2 by EUCLID:31
     .= p2 by EUCLID:33;
  end;
+
+registration let n;
+ cluster TOP-REAL n -> being_T2;
+ coherence
+  proof TopSpaceMetr Euclid n is_T2 by PCOMPS_1:38;
+   hence thesis by EUCLID:def 8;
+  end;
+end;
 
 theorem Th16:
   for P being Subset of TOP-REAL n,
@@ -1495,7 +1508,7 @@ theorem Th31:
   defpred ARC[Nat] means
    1 <= $1 + 2 & $1 + 2 <= len h implies
    ex NE be non empty Subset of TOP-REAL 2 st NE = Q($1) &
-    ex f being map of I[01], (TOP-REAL 2)|NE st
+    ex f being Function of I[01], (TOP-REAL 2)|NE st
       f is_homeomorphism & f.0 = p1 & f.1 = h/.($1+2);
   1 <= len h by A3,XREAL_1:2;
   then A4: 1 in Seg len h by FINSEQ_1:3;
@@ -1536,7 +1549,7 @@ then A9: 1 in Seg len (h|2) & 2 in Seg len (h|2) by FINSEQ_1:3;
    then A14: Q(0) = LSeg(h,1) by A6,ZFMISC_1:31
                 .= LSeg(p1,p2) by A3,Def5;
     1 <= 0 + 2 & 0 + 2 <= len h implies
-    ex f being map of I[01], (TOP-REAL 2)|(LSeg(p1,p2)) st
+    ex f being Function of I[01], (TOP-REAL 2)|(LSeg(p1,p2)) st
      f is_homeomorphism & f.0 = p1 & f.1 = h/.(0+2)
     proof assume 1 <= 0 + 2 & 0 + 2 <= len h;
       1 <> 2 & 1 in dom h & 2 in dom h by A4,A5,FINSEQ_1:def 3;
@@ -1557,9 +1570,9 @@ A18:    1 <= n + 1 + 2 & n + 1 + 2 <= len h;
 A21:  n + 1 + 1 = n + (1 + 1);
      consider NE being non empty Subset of TOP-REAL 2 such that
 A22:    NE = Q(n) &
-       ex f being map of I[01], (TOP-REAL 2)|NE st
+       ex f being Function of I[01], (TOP-REAL 2)|NE st
         f is_homeomorphism & f.0 = p1 & f.1 = h/.(n+2) by A17,A19,XREAL_1:2;
-     consider f being map of I[01], (TOP-REAL 2)|NE such that
+     consider f being Function of I[01], (TOP-REAL 2)|NE such that
    A23: f is_homeomorphism & f.0 = p1 & f.1 = h/.(n+2) by A22;
      set pn = h/.(n+2), pn1 = h/.(n+2+1);
          n + 1 <> n + 2 by XCMPLX_1:2;
@@ -1567,7 +1580,8 @@ then A24:    n + 1 +1 <> n + 2 + 1 by XCMPLX_1:2;
          n + 1 +1 in dom h & n + 2 + 1 in dom h by A18,A20,FINSEQ_3:27;
      then pn <> pn1 by A2,A24,PARTFUN2:17;
      then LSeg(pn,pn1) is_an_arc_of pn,pn1 by Th15;
-     then consider f1 being map of I[01], (TOP-REAL 2)|LSeg(pn,pn1) such that
+     then consider f1 being Function
+ of I[01], (TOP-REAL 2)|LSeg(pn,pn1) such that
    A25: f1 is_homeomorphism & f1.0 = pn & f1.1 = pn1 by Def2;
  A26: Q(n+1) = Q(n) \/ LSeg(h,n+2)
     proof
@@ -1788,7 +1802,7 @@ A95:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
 then A106:   Q(n) /\ LSeg(pn,pn1) = {pn} by TARSKI:def 1;
       reconsider NE1 = Q(n) \/ LSeg(pn,pn1) as
        non empty Subset of TOP-REAL 2;
-      consider hh being map of I[01], (TOP-REAL 2)|NE1 such that
+      consider hh being Function of I[01], (TOP-REAL 2)|NE1 such that
 A107:     hh is_homeomorphism & hh.0 = f.0 & hh.1 = f1.1
          by A22,A23,A25,A106,TOPMETR2:6;
      take NE1;
@@ -1802,14 +1816,14 @@ A108: for n holds ARC[n] from NAT_1:sch 1(A15,A16);
  1 <= h1 + 2 by NAT_1:37;
    then consider NE being non empty Subset of TOP-REAL 2 such that
 A109:  NE = Q(h1) &
-     ex f being map of I[01], (TOP-REAL 2)|NE st
+     ex f being Function of I[01], (TOP-REAL 2)|NE st
       f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A108;
-   consider f being map of I[01], (TOP-REAL 2)|NE such that
+   consider f being Function of I[01], (TOP-REAL 2)|NE such that
 A110: f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A109;
 A111: h|(len h) = h|(Seg len h) by FINSEQ_1:def 15
              .= h|(dom h) by FINSEQ_1:def 3
              .= h by RELAT_1:97;
-  then reconsider f as map of I[01], (TOP-REAL 2)|P by A109;
+  then reconsider f as Function of I[01], (TOP-REAL 2)|P by A109;
   take f;
   thus f is_homeomorphism by A109,A110,A111;
   thus thesis by A110;
@@ -1866,11 +1880,11 @@ theorem Th35:
 
 theorem
   P is_S-P_arc implies
-    ex f being map of I[01], (TOP-REAL 2)|P st f is_homeomorphism
+    ex f being Function of I[01], (TOP-REAL 2)|P st f is_homeomorphism
 proof
   assume P is_S-P_arc;
   then consider p1,p2 such that A1: P is_an_arc_of p1,p2 by Th35;
-  ex f being map of I[01], (TOP-REAL 2)|P st f is_homeomorphism &
+  ex f being Function of I[01], (TOP-REAL 2)|P st f is_homeomorphism &
   f.0 = p1 & f.1 = p2 by A1,Def2;
   hence thesis;
 end;
