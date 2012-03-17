@@ -355,15 +355,7 @@ theorem
 
 registration let A be set, B be finite set;
  cluster A /\ B -> finite;
- coherence
-  proof
-       A /\ B is finite
-   proof
-        A /\ B c= B by XBOOLE_1:17;
-    hence thesis by Th13;
-   end;
-   hence thesis;
-  end;
+ coherence by XBOOLE_1:17,Th13;
 end;
 
 registration let A be finite set, B be set;
@@ -373,12 +365,8 @@ registration let A be finite set, B be set;
  coherence;
 end;
 
-theorem Th15:
- A is finite implies A /\ B is finite
- proof
-      A /\ B c= A & B /\ A c= A by XBOOLE_1:17;
-  hence thesis by Th13;
- end;
+theorem
+ A is finite implies A /\ B is finite by XBOOLE_1:17,Th13;
 
 theorem
     A is finite implies A \ B is finite by Th13;
@@ -388,15 +376,14 @@ Th17: A is finite implies f.:A is finite
  proof
   set B = dom f /\ A;
   assume A is finite;
-  then B is finite by Th15;
+  then B is finite by XBOOLE_1:17,Th13;
   then consider p be Function such that
 A1: rng p=B and
 A2: dom p in omega by Def1;
   take f*p;
        rng (f*p) = f.:B by A1,RELAT_1:160;
   hence rng (f*p) = f.:A by RELAT_1:145;
-       B c= dom f by XBOOLE_1:17;
-  hence dom(f*p) in omega by A1,A2,RELAT_1:46;
+  thus dom(f*p) in omega by A1,A2,RELAT_1:46,XBOOLE_1:17;
  end;
 
 registration let f be Function, A be finite set;
@@ -571,12 +558,11 @@ A45:   P[O] from ORDINAL2:sch 1(A8,A10,A41);
       let B; assume A47: B in X;
       assume p.:g c= B;
       then A48: p"(p.:g) c= p"B by RELAT_1:178;
-          g c= p"(p.:g) by A46,FUNCT_1:146;
-      then A49: g c= p"B by A48,XBOOLE_1:1;
+B49:  g c= p"(p.:g) by A46,FUNCT_1:146;
       A50: p.:(p"B) = B by A3,A47,FUNCT_1:147;
           p"B c= dom p by RELAT_1:167;
       then p"B in GX by A5,A47,A50;
-      hence thesis by A46,A49,A50;
+      hence thesis by A46,B49,A50,A48,XBOOLE_1:1;
      end;
     hence thesis by A5,A46;
    end;
@@ -902,8 +888,7 @@ A22:     Z c= B by A19,XBOOLE_1:43;
         end;
        then rng f = bool(B \/ {x}) \ bool B by TARSKI:2;
        then A25: f.:(bool B) = bool(B \/ {x}) \ bool B by A11,RELAT_1:146;
-           B c= B \/ {x} by XBOOLE_1:7;
-       then A26: bool B c= bool(B \/ {x}) by ZFMISC_1:79;
+A26: bool B c= bool(B \/ {x}) by ZFMISC_1:79,XBOOLE_1:7;
            (bool(B \/ {x}) \ bool B) \/ bool B = bool(B \/ {x}) \/
  bool B by XBOOLE_1:39
                    .= bool(B \/ {x}) by A26,XBOOLE_1:12;
@@ -967,15 +952,9 @@ theorem
    A is finite & for X st X in A holds X is finite
     proof
      assume A1: union A is finite;
-     then A2: bool union A is finite by Th24;
-         A c= bool union A by ZFMISC_1:100;
-     hence A is finite by A2,Th13;
-     thus for X st X in A holds X is finite
-      proof
-       let X; assume X in A;
-       then X c= union A by ZFMISC_1:92;
-       hence thesis by A1,Th13;
-      end;
+      then bool union A is finite by Th24;
+     hence A is finite by Th13,ZFMISC_1:100;
+     thus for X st X in A holds X is finite by ZFMISC_1:92,A1,Th13;
     end;
  end;
 
@@ -1026,9 +1005,8 @@ theorem Th29:
    proof assume
 A1:    dom f is finite;
      then rng f is finite by Th26;
-     then A2:    [:dom f, rng f:] is finite by A1,Th19;
-         f c= [:dom f, rng f:] by RELAT_1:21;
-    hence f is finite by A2,Th13;
+     then [:dom f, rng f:] is finite by A1,Th19;
+    hence f is finite by Th13,RELAT_1:21;
    end;
     pr1(dom f,rng f).:f = dom f by FUNCT_3:100;
   hence thesis by Th17;
@@ -1281,6 +1259,6 @@ end;
 
 registration let x,y be set;
   cluster x .--> y -> finite;
-  coherence proof thus thesis; end;
+  coherence;
 end;
 

@@ -15,10 +15,11 @@ environ
       AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, SEQ_1, BINARITH,
-      SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B;
+      SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA_1, AMI_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1,
       FRAENKEL, NUMBERS, XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA_4,
-      SCMFSA6A, SF_MASTR, SCMFSA7B, FINSET_1;
+      SCMFSA6A, SF_MASTR, SCMFSA7B, FINSET_1, AMI_2, SCMFSA_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -30,8 +31,8 @@ canceled 2;
 
 theorem :: SCMFSA8A:3  ::T50
  for s being State of SCM+FSA holds
-     dom (s | the Instruction-Locations of SCM+FSA) =
-         the Instruction-Locations of SCM+FSA;
+     dom (s | NAT) =
+         NAT;
 
 theorem :: SCMFSA8A:4  ::PRE8'103
  for s being State of SCM+FSA st s is halting
@@ -45,7 +46,7 @@ theorem :: SCMFSA8A:5  ::TQ53
 
 theorem :: SCMFSA8A:6  ::T51(@BBB8)
  for s1,s2 being State of SCM+FSA holds
-     s1,s2 equal_outside the Instruction-Locations of SCM+FSA
+     s1,s2 equal_outside NAT
  iff IC s1 = IC s2 &
      s1 | (Int-Locations \/ FinSeq-Locations) =
      s2 | (Int-Locations \/ FinSeq-Locations);
@@ -75,7 +76,7 @@ theorem :: SCMFSA8A:11  ::T52'
 
 theorem :: SCMFSA8A:12  ::T53(@BBB8)
  for s being State of SCM+FSA, l being Instruction-Location of SCM+FSA holds
-     dom (s | the Instruction-Locations of SCM+FSA) misses dom Start-At l;
+     dom (s | NAT) misses dom Start-At l;
 
 theorem :: SCMFSA8A:13  ::TI2
  for s being State of SCM+FSA, I being Macro-Instruction holds
@@ -85,7 +86,7 @@ theorem :: SCMFSA8A:14  ::TG14 <> T23
  for s being State of SCM+FSA, I1,I2 being Macro-Instruction,
  l being Instruction-Location of SCM+FSA holds
      s +* (I1 +* Start-At l), s +* (I2 +* Start-At l)
-         equal_outside the Instruction-Locations of SCM+FSA;
+         equal_outside NAT;
 
 theorem :: SCMFSA8A:15  ::T40(@BBB8)
      dom SCM+FSA-Stop = {insloc 0};
@@ -259,7 +260,7 @@ theorem :: SCMFSA8A:32  ::BBBB'54'
      for k being Element of NAT st k <= pseudo-LifeSpan(s,I) holds
          (Computation (s +* (I +* Start-At insloc 0))).k,
          (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
-             equal_outside the Instruction-Locations of SCM+FSA;
+             equal_outside NAT;
 
 theorem :: SCMFSA8A:33  ::TT4
  for I being programmed FinPartState of SCM+FSA,
@@ -278,7 +279,7 @@ theorem :: SCMFSA8A:35  ::TQ21'
      holds
          ((Computation (s +* (I +* Start-At insloc 0))).k,
              (Computation (s +* (Directed I +* Start-At insloc 0))).k
-             equal_outside the Instruction-Locations of SCM+FSA &
+             equal_outside NAT &
          CurInstr (Computation (s +* (Directed I +* Start-At insloc 0))).k <>
              halt SCM+FSA);
 
@@ -363,7 +364,7 @@ theorem :: SCMFSA8A:44  ::TQ21
      for k being Element of NAT st k <= LifeSpan (s +* Initialized I) holds
          ((Computation (s +* Initialized I)).k,
              (Computation (s +* Initialized Directed I)).k
-             equal_outside the Instruction-Locations of SCM+FSA &
+             equal_outside NAT &
          CurInstr (Computation (s +* Initialized Directed I)).k <>
              halt SCM+FSA);
 
@@ -389,8 +390,8 @@ theorem :: SCMFSA8A:47  ::TB61'(TB61'@BBB8)
      insloc 0 in dom Goto l & (Goto l).insloc 0 = goto l;
 
 theorem :: SCMFSA8A:48  ::T70
-  for N being with_non-empty_elements set,
-      S being definite (non empty non void AMI-Struct over N),
+  for IL being non empty set, N being with_non-empty_elements set,
+      S being definite (non empty stored-program AMI-Struct over IL,N),
       I being programmed FinPartState of S, x being set holds
        x in dom I implies I.x is Instruction of S;
 

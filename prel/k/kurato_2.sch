@@ -14,6 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -62,7 +63,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="101">
+<Func kind="K" nr="104">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -80,8 +81,8 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="41"/>
+<Adjective nr="36" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="6">
@@ -106,7 +107,7 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="13">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -119,7 +120,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="159">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -151,7 +152,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="156">
+<Func kind="K" nr="159">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

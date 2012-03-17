@@ -17,7 +17,7 @@ environ
       MCART_1, WELLORD1, ORDERS_1, ORDERS_2, WELLFND1, CARD_1, NUMBERS,
       XXREAL_0,
       REAL_1, NAT_1, FUNCT_1, SEQ_1, SEQM_3, WAYBEL_0, PBOOLE, PRALG_1,
-      CARD_3, DICKSON, BINARITH, FINSEQ_1, WSIERP_1, POLYNOM1, RVSUM_1,
+      CARD_3, DICKSON, BINARITH, FINSEQ_1, RVSUM_1, WSIERP_1, POLYNOM1,
       PRE_CIRC, YELLOW_1, WAYBEL_4, FUNCT_2, FUNCT_4, TRIANG_1, POLYNOM2,
       SEQ_4, DOMAIN_1, FINSEQOP, RFINSEQ;
  constructors DOMAIN_1, REAL_1, NAT_1, FINSEQOP, RFINSEQ, BINARITH, PRE_CIRC,
@@ -25,7 +25,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FINSET_1, FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1,
       MEMBERED, FINSEQ_1, SEQ_1, CARD_5, STRUCT_0, ORDERS_2, WAYBEL_0,
-      YELLOW_1, POLYNOM1, DICKSON;
+      YELLOW_1, POLYNOM1, DICKSON, VALUED_0;
  requirements SUBSET, NUMERALS, REAL, BOOLE, ARITHM;
  definitions TARSKI, RELAT_2, WELLFND1, FINSEQ_2, FUNCOP_1;
  theorems WELLORD1, TARSKI, RELAT_2, RELSET_1, ZFMISC_1, ORDERS_2, NAT_1,
@@ -35,7 +35,7 @@ environ
       WAYBEL_4, ORDINAL1, FUNCT_2, CARD_2, MCART_1, FINSUB_1, ORDERS_1,
       FUNCT_7, FUNCT_4, CARD_4, TRIANG_1, WELLORD2, FINSEQ_3, FINSEQ_5, SEQ_4,
       FINSEQOP, RFINSEQ, EULER_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XREAL_1,
-      XXREAL_0, SEQ_1;
+      XXREAL_0, SEQ_1, VALUED_0;
  schemes NAT_1, RELSET_1, FUNCT_1, FINSET_1, RECDEF_1, FUNCT_2, ORDINAL1;
 
 begin :: Preliminaries
@@ -81,17 +81,6 @@ A1: Seg n = {x where x is Element of NAT : 1 <= x & x <= n} by FINSEQ_1:def 1;
     reconsider n1 = n-1 as Element of NAT by A3,NAT_1:20;
       k-1+1 <= n-1+1 by A3,NAT_1:13;
     hence k in Seg n by A1,A4;
-end;
-
-registration
-  let f be natural-yielding Function, X be set;
-  cluster f|X -> natural-yielding;
-  coherence proof
-  A1: rng f c= NAT by SEQM_3:def 8;
-    rng(f|X) c= rng f by RELAT_1:99;
-   then rng(f|X) c= NAT by A1,XBOOLE_1:1;
-   hence thesis by SEQM_3:def 8;
-  end;
 end;
 
 registration
@@ -234,7 +223,7 @@ coherence proof
         hence y in NAT;
     end;
     then rng (i,j)-cut b c= NAT by TARSKI:def 3;
-    hence (i,j)-cut b is natural-yielding by SEQM_3:def 8;
+    hence (i,j)-cut b is natural-yielding by VALUED_0:def 6;
 end;
 end;
 
@@ -706,10 +695,12 @@ ex f being FinSequence of NAT
 existence proof
     set f = b*SgmX(RelIncl n, support b);
 A1: dom b = n by PBOOLE:def 3;
-     rng b c= NAT by SEQM_3:def 8;
+     rng b c= NAT by VALUED_0:def 6;
    then reconsider bb = b as Function of n,NAT by A1,FUNCT_2:4;
         bb = b; then reconsider f as FinSequence of NAT by FINSEQ_2:36;
-   take Sum f; thus thesis;
+    reconsider x = Sum f as Element of NAT by ORDINAL1:def 13;
+   take x;
+   thus thesis;
 end;
 uniqueness;
 end;
@@ -814,7 +805,7 @@ then A9: rng s = sasb by TRIANG_1:def 2;
 A10: support (a+b) = sasb by POLYNOM1:42;
 A11: dom a = n & dom b = n by PBOOLE:def 3;
     then reconsider fa'b, fb'a as FinSequence by A9,FINSEQ_1:20;
-A12: rng a c= NAT & rng b c= NAT by SEQM_3:def 8;
+A12: rng a c= NAT & rng b c= NAT by VALUED_0:def 6;
         A13: rng fa'b c= rng a & rng fb'a c= rng b by RELAT_1:45;
 then A14: rng fa'b c= NAT & rng fb'a c= NAT by A12,XBOOLE_1:1;
  rng fa'b c= REAL & rng fb'a c= REAL by A13,XBOOLE_1:1;
@@ -833,7 +824,7 @@ A21: len fa'b = len fb'a by A17,A18,FINSEQ_3:31;
     then A22: len (fa'b+fb'a) = len fa'b by INTEGRA5:2;
 then A23: Seg ln = dom (fa'b+fb'a) by A17,FINSEQ_3:31;
     reconsider fa'b' = fa'b as natural-yielding
-      ManySortedSet of Seg ln by A14,A17,PBOOLE:def 3,SEQM_3:def 8;
+      ManySortedSet of Seg ln by A14,A17,PBOOLE:def 3,VALUED_0:def 6;
          now thus Seg ln = dom fab' by FINSEQ_1:def 3;
         thus Seg ln = dom (fa'b+fb'a) by A17,A22,FINSEQ_3:31;
         let k be Nat such that
@@ -926,7 +917,7 @@ A1: dom CUT1 = j-'i by PBOOLE:def 3;
             hence CUT1.k <= (EmptyBag (j-'i)).k;
         end;
         suppose not k in dom CUT1;
-            hence CUT1.k <= (EmptyBag (j-'i)).k by FUNCT_1:def 4,NAT_1:2;
+            hence CUT1.k <= (EmptyBag (j-'i)).k by FUNCT_1:def 4;
     end;
     end;
     then CUT1 divides EmptyBag (j-'i) by POLYNOM1:def 13;
@@ -1094,7 +1085,7 @@ A3: now let n be Element of NAT; set y = (o-->0)+*(n,1);
         then rng y c= {0} \/ rng (n .--> 1) by FUNCOP_1:14;
     then rng y c= {0} \/ {1} by FUNCOP_1:14;
         then rng y c= NAT by XBOOLE_1:1;
-    then A6: y is natural-yielding by SEQM_3:def 8;
+    then A6: y is natural-yielding by VALUED_0:def 6;
              now let x be set;
           hereby assume x in {n}; then x = n by TARSKI:def 1;
             hence y.x <> 0 by A4,A5,FUNCT_7:33;
@@ -2010,7 +2001,7 @@ A3: now let n be Element of NAT; set y = (o-->0)+*(n,1);
         then rng y c= {0} \/ rng (n .--> 1) by FUNCOP_1:14;
     then rng y c= {0} \/ {1} by FUNCOP_1:14;
         then rng y c= NAT by XBOOLE_1:1;
-    then A6: y is natural-yielding by SEQM_3:def 8;
+    then A6: y is natural-yielding by VALUED_0:def 6;
              now let x be set;
           hereby assume x in {n}; then x = n by TARSKI:def 1;
             hence y.x <> 0 by A4,A5,FUNCT_7:33;
@@ -2591,7 +2582,7 @@ A1: X = product Carrier(n-->OrderedNAT) by YELLOW_1:def 4;
                     thus z in NAT by A5,A7,A8,A9,A10,DICKSON:def 15,FUNCOP_1:13
 ;
                 end;
-                hence g is natural-yielding by SEQM_3:def 8;
+                hence g is natural-yielding by VALUED_0:def 6;
                      support g c= n by A5,POLYNOM1:41;
                 then support g is finite by FINSET_1:13;
                 hence g is finite-support by POLYNOM1:def 8;
@@ -2657,10 +2648,10 @@ then A1: CNOB = CP by Th33;
                 set yi = g.i;
                      dom f = n by A5,PBOOLE:def 3;
             then A8: f.i in rng f by A6,FUNCT_1:12;
-                 A9: rng f c= NAT by A5,SEQM_3:def 8;
+                 A9: rng f c= NAT by A5,VALUED_0:def 6;
                      dom g = n by A5,PBOOLE:def 3;
             then A10: g.i in rng g by A6,FUNCT_1:12;
-                     rng g c= NAT by A5,SEQM_3:def 8;
+                     rng g c= NAT by A5,VALUED_0:def 6;
                 then reconsider xi, yi as Element of R
                   by A6,A8,A9,A10,DICKSON:def 15,FUNCOP_1:13;
                 take xi, yi;

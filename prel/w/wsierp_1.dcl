@@ -14,6 +14,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_2"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -21,10 +23,9 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 </Signature>
 <FCluster>
@@ -72,7 +73,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="190">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -88,7 +89,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -99,7 +100,7 @@
 <Func kind="K" nr="57"/>
 </Typ>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 </Registrations>

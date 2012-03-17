@@ -14,7 +14,7 @@ environ
       FUNCT_4, FUNCOP_1, FUNCT_7, FINSEQ_1, FINSET_1, FINSEQ_2, FINSEQ_4,
       STRUCT_0, AMI_1, AMI_3, RELOC, SCMFSA_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, BINARITH, AMI_5,
-      PARTFUN1, RELOC, SCMFSA_2;
+      PARTFUN1, RELOC, SCMFSA_2, SCMFSA_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, TREES_2, AMI_1,
       AMI_3, SCMFSA_2;
@@ -398,7 +398,7 @@ A3:   m < n;
           insloc n = insloc 0 by A1,A2,TARSKI:def 1;
      hence insloc m in dom SCM+FSA-Stop by A3,NAT_1:2;
     end;
-   thus dom SCM+FSA-Stop c= the Instruction-Locations of SCM+FSA
+   thus dom SCM+FSA-Stop c= NAT
           by A1,ZFMISC_1:37;
   end;
 end;
@@ -467,7 +467,7 @@ definition
      let e be set;
      assume
 A2:         e in dom p;
-         dom p c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+         dom p c= NAT by AMI_1:def 40;
      then reconsider e as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
      consider m such that A3:e = insloc m by SCMFSA_2:21;
      take IncAddr(pi(p,insloc m),k);
@@ -476,13 +476,10 @@ A2:         e in dom p;
    consider f being Function such that
 A4:  dom f = dom p and
 A5:  for e being set st e in dom p holds P[e,f.e] from CLASSES1:sch 1(A1);
-A6: dom p c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A6: dom p c= NAT by AMI_1:def 40;
      then dom p c= the carrier of SCM+FSA by XBOOLE_1:1;
 then A7:  dom f c= dom the Object-Kind of SCM+FSA by A4,FUNCT_2:def 1;
-         for x being set st x in dom f holds f.x in (the Object-Kind of SCM+FSA
-)
-.
-x
+    for x being set st x in dom f holds f.x in (the Object-Kind of SCM+FSA).x
       proof
        let x be set;
        assume
@@ -499,12 +496,12 @@ A9:       f.x = IncAddr(pi(p,insloc m),k) by A4,A5;
    then reconsider f as Element of sproduct the Object-Kind of SCM+FSA
                                          by A7,CARD_3:def 9;
         f is finite by A4,FINSET_1:29;
-    then reconsider f as FinPartState of SCM+FSA by AMI_1:77;
+    then reconsider f as FinPartState of SCM+FSA;
         f is programmed
      proof
       let x be set;
       assume x in dom f;
-      hence x in the Instruction-Locations of SCM+FSA by A4,A6;
+      hence x in NAT by A4,A6;
      end;
    then reconsider IT = f as programmed FinPartState of SCM+FSA;
     take IT;
@@ -532,7 +529,7 @@ k);
        proof
         let x be set;
         assume A16: x in dom p;
-            dom p c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+            dom p c= NAT by AMI_1:def 40;
         then reconsider l = x as Instruction-Location of SCM+FSA
                    by A16,AMI_1:def 4;
         consider m such that A17:l = insloc m by SCMFSA_2:21;
@@ -727,9 +724,7 @@ A6: InsCode INS <= 10+1 implies InsCode INS <=
  10 or InsCode INS = 11 by NAT_1:8;
 A7: InsCode INS <= 9+1 implies InsCode INS <=
  8+1 or InsCode INS = 10 by NAT_1:8;
-A8: InsCode INS <= 8+1 implies InsCode INS <=
- 7+1 or InsCode INS = 9 by NAT_1:8;
-    per cases by A5,A6,A7,A8,NAT_1:8,33;
+    per cases by A5,A6,A7,NAT_1:8,33;
     suppose InsCode INS = 0;
 then A9: INS = halt SCM+FSA by SCMFSA_2:122;
 then A10: Following(s) = Exec(halt SCM+FSA, s)
@@ -932,23 +927,12 @@ A38:         da <> d;
 A39:   INS = Divide(da, db) by SCMFSA_2:58;
 A40:   IncAddr(INS,k) = INS by A39,Th13;
 
-A41:  now
-      thus IC Exec(INS, s) = Exec(INS, s).IC SCM+FSA
+A41:  IC Exec(INS, s) = Exec(INS, s).IC SCM+FSA
                            .= Next IC s by A39,SCMFSA_2:93;
-    end;
-A42:  now
-         IC Exec(INS, s +* Start-At (IC s + k))
-      = Exec(INS, s +* Start-At (IC s + k)).IC SCM+FSA
-     .= IC (Exec(INS, s) +*
-         Start-At (((Next IC s) qua Instruction-Location of SCM+FSA) + k))
-             by A3,A39,SCMFSA_2:93;
-
-     hence IC Exec(INS, s +* Start-At (IC s + k))
+A42:  IC Exec(INS, s +* Start-At (IC s + k))
        = IC (Exec(INS, s) +*
-         Start-At (((Next IC s) qua Instruction-Location of SCM+FSA) + k));
-
-    end;
-
+         Start-At (((Next IC s) qua Instruction-Location of SCM+FSA) + k))
+                 by A3,A39,SCMFSA_2:93;
 A43:  now let d be FinSeq-Location;
      thus Exec(IncAddr(INS, k), s +* Start-At (IC s + k)).d
           = (s +* Start-At (IC s + k)).d by A39,A40,SCMFSA_2:93
@@ -1496,9 +1480,7 @@ A5: InsCode INS <= 10+1 implies InsCode INS <=
  10 or InsCode INS = 11 by NAT_1:8;
 A6: InsCode INS <= 9+1 implies InsCode INS <=
  8+1 or InsCode INS = 10 by NAT_1:8;
-A7: InsCode INS <= 8+1 implies InsCode INS <=
- 7+1 or InsCode INS = 9 by NAT_1:8;
-    per cases by A4,A5,A6,A7,NAT_1:8,33;
+    per cases by A4,A5,A6,NAT_1:8,33;
 
  suppose InsCode INS = 0;
 then A8: INS = halt SCM+FSA by SCMFSA_2:122;
@@ -2185,12 +2167,12 @@ definition
 A3:  dom f = A and
 A4:  for e being set st e in A holds P[e,f.e] from CLASSES1:sch 1(A1);
 
-A5: A c= the Instruction-Locations of SCM+FSA
+A5: A c= NAT
       proof
        let x be set;
        assume x in A;
        then ex m st x = insloc(m+k) & insloc m in dom p;
-       hence x in the Instruction-Locations of SCM+FSA;
+       hence x in NAT;
       end;
          then A c= the carrier of SCM+FSA by XBOOLE_1:1;
 then A6:  dom f c= dom the Object-Kind of SCM+FSA by A3,FUNCT_2:def 1;
@@ -2223,13 +2205,13 @@ A14: dom p is finite;
 A15: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2;
         A is finite from FUNCT_7:sch 2(A14,A15);
     then f is finite by A3,FINSET_1:29;
-    then reconsider f as FinPartState of SCM+FSA by AMI_1:77;
+    then reconsider f as FinPartState of SCM+FSA;
         f is programmed
      proof
       let x be set;
       assume x in dom f;
       then ex m st x = insloc(m+k) & insloc m in dom p by A3;
-      hence x in the Instruction-Locations of SCM+FSA;
+      hence x in NAT;
      end;
     then reconsider IT = f as programmed FinPartState of SCM+FSA;
     take IT;
@@ -2415,11 +2397,8 @@ A9:  insloc m in dom J;
    end;
    suppose
 A10:  not insloc m in dom J;
-        now given l such that
-A11:  insloc(m+n) = insloc(l+n) and
-A12:  insloc l in dom J;
-     thus contradiction by A10,A11,A12;
-    end;
+    then not ex l st insloc(m+n) = insloc(l+n) & insloc l in dom J;
+
 then A13:  not insloc(m+n) in dom Shift(J,n) by A2;
         insloc m in dom I \/ dom J by A8,FUNCT_4:def 1;
 then A14:  insloc m in dom I by A10,XBOOLE_0:def 2;
@@ -2444,7 +2423,7 @@ A1: dom(IncAddr(Shift(p,j),i)) = dom (Shift(p,j)) by Def6;
    .= dom (Shift(IncAddr(p,i),j)) by Def7;
         now
      let x be set;
-A3:  dom (Shift(IncAddr(p,i),j)) c= the Instruction-Locations of SCM+FSA
+A3:  dom (Shift(IncAddr(p,i),j)) c= NAT
                                             by AMI_1:def 40;
      assume
 A4:   x in dom (Shift(IncAddr(p,i),j));

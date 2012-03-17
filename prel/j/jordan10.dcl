@@ -26,6 +26,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -62,13 +63,13 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="107">
+<Adjective nr="111">
 <Func kind="K" nr="209">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="108" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="112" value="false"/>
+<Adjective nr="113" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -80,13 +81,13 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="107">
+<Adjective nr="111">
 <Func kind="K" nr="209">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="108" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="112" value="false"/>
+<Adjective nr="113" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -113,7 +114,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="107">
+<Adjective nr="111">
 <Func kind="K" nr="209">
 <Num nr="2"/>
 </Func>
@@ -124,13 +125,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="107">
+<Adjective nr="111">
 <Func kind="K" nr="209">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="108" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="112" value="false"/>
+<Adjective nr="113" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -152,13 +153,13 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="107">
+<Adjective nr="111">
 <Func kind="K" nr="209">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="108" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="112" value="false"/>
+<Adjective nr="113" value="false"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">

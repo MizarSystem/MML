@@ -23,6 +23,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -37,7 +38,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -64,7 +65,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -91,7 +92,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -106,7 +107,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="67">
+<Adjective nr="71">
 <Func kind="K" nr="203">
 <Num nr="2"/>
 </Func>
@@ -117,7 +118,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -132,7 +133,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="67">
+<Adjective nr="71">
 <Func kind="K" nr="203">
 <Num nr="2"/>
 </Func>

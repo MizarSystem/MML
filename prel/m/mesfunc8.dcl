@@ -20,8 +20,9 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="RFUNCT_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="SEQFUNC"/>
 <ArticleID name="PARTFUN1"/>
@@ -46,7 +47,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="43">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -62,7 +63,7 @@
 </Typ>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="43">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -82,7 +83,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="43">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

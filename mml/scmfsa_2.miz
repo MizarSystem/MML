@@ -19,7 +19,7 @@ environ
       FINSEQ_4, FINSOP_1, CAT_2, AMI_5, SCMFSA_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
-      STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, SCMFSA_1;
+      STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, SCMFSA_1, ORDINAL2, ORDINAL3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, FUNCT_1, WELLORD2, XBOOLE_0, AMI_2, AMI_3,
       SCMFSA_1, FUNCOP_1, CARD_1;
@@ -32,15 +32,15 @@ environ
 begin :: The SCM+FSA Computer
 
 definition
- func SCM+FSA -> strict AMI-Struct over { INT,INT* } equals
+ func SCM+FSA -> strict AMI-Struct over NAT, { INT,INT* } equals
 
-    AMI-Struct(#SCM+FSA-Memory,In (NAT,SCM+FSA-Memory),SCM+FSA-Instr-Loc,
+    AMI-Struct(#SCM+FSA-Memory,In (NAT,SCM+FSA-Memory),:::SCM+FSA-Instr-Loc,
               SCM+FSA-Instr,SCM+FSA-OK,SCM+FSA-Exec#);
  coherence;
 end;
 
 registration
- cluster SCM+FSA -> standard-ins non empty non void;
+ cluster SCM+FSA -> standard-ins non empty stored-program;
  coherence
   proof
    thus the Instructions of SCM+FSA
@@ -73,7 +73,7 @@ end;
 theorem
       the carrier of SCM+FSA =
   Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA
+       NAT
     by Th7,SCMFSA_1:8,XBOOLE_1:4;
 
 definition
@@ -112,11 +112,11 @@ theorem
       x in FinSeq-Locations implies x is FinSeq-Location by Def5;
 
 theorem
-      Int-Locations misses the Instruction-Locations of SCM+FSA
+      Int-Locations misses NAT
   by AMI_2:29;
 
 theorem
- FinSeq-Locations misses the Instruction-Locations of SCM+FSA
+ FinSeq-Locations misses NAT
        by SCMFSA_1:33,XBOOLE_1:63;
 
 theorem Th15:
@@ -132,7 +132,12 @@ definition let k be natural number;
   end;
  func insloc k -> Instruction-Location of SCM+FSA equals
    il.k;
- coherence by AMI_1:def 4;
+:: coherence by AMI_1:def 4; !!!!
+ coherence
+  proof
+    il.k in NAT by AMI_1:def 4;
+   hence thesis by AMI_1:def 4;
+  end;
  func fsloc k -> FinSeq-Location equals
     -(k+1);
   coherence
@@ -191,7 +196,9 @@ theorem
   st il = insloc i
  proof
   let il be Instruction-Location of SCM+FSA;
-   reconsider D = il as Instruction-Location of SCM by AMI_1:def 4;
+   il in NAT by AMI_1:def 4;
+   then reconsider D = il as Instruction-Location of SCM by AMI_1:def 4;
+:::   reconsider D = il as Instruction-Location of SCM by AMI_1:def 4; !!!!
    consider i being Element of NAT such that
 A1:  D = il.i by AMI_5:19;
   take i;
@@ -244,11 +251,7 @@ A7:       y = fsloc i by Th20;
  end;
 
 theorem
-      the Instruction-Locations of SCM+FSA is infinite
- proof
-   the Instruction-Locations of SCM+FSA = the Instruction-Locations of SCM;
-  hence thesis;
- end;
+      NAT is infinite;
 
 theorem Th25:
   for I being Int-Location holds I is Data-Location
@@ -287,7 +290,7 @@ definition let loc be Instruction-Location of SCM+FSA;
  func Next loc -> Instruction-Location of SCM+FSA means
 :Def9: ex mj being Element of SCM+FSA-Instr-Loc st mj = loc & it = Next mj;
  existence
-  proof reconsider loc as Element of SCM+FSA-Instr-Loc;
+  proof reconsider loc as Element of SCM+FSA-Instr-Loc by AMI_1:def 4;
     Next loc is Instruction-Location of SCM+FSA by AMI_1:def 4;
    hence thesis;
   end;
@@ -479,14 +482,16 @@ definition let a,b;
 end;
 
 theorem
-   the Instruction-Locations of SCM = the Instruction-Locations of SCM+FSA;
+   NAT = NAT;
 
 definition let la;
  func goto la -> Instruction of SCM+FSA means
 :Def16: ex La st la = La & it = goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+    la in NAT by AMI_1:def 4;
+    then reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+::: reconsider L=la as Instruction-Location of SCM by AMI_1:def 4; !!!
     reconsider i = goto L as Instruction of SCM+FSA by Th38;
    take i,L;
    thus thesis;
@@ -497,7 +502,9 @@ definition let la;
 :Def17: ex A,La st a = A & la = La & it = A=0_goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+    la in NAT by AMI_1:def 4;
+    then reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+::: reconsider L=la as Instruction-Location of SCM by AMI_1:def 4; !!!!
  reconsider A = a as Data-Location by Th25;
     reconsider i = A=0_goto L as Instruction of SCM+FSA by Th38;
    take i,A,L;
@@ -508,7 +515,9 @@ definition let la;
 :Def18: ex A,La st a = A & la = La & it = A>0_goto La;
  existence
   proof
- reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+    la in NAT by AMI_1:def 4;
+    then reconsider L=la as Instruction-Location of SCM by AMI_1:def 4;
+::: reconsider L=la as Instruction-Location of SCM by AMI_1:def 4; !!!
  reconsider A = a as Data-Location by Th25;
     reconsider i = A>0_goto L as Instruction of SCM+FSA by Th38;
    take i,A,L;
@@ -725,7 +734,10 @@ A1: InsCode ins = 6;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La such that
 A2:    I = goto La by A1,AMI_5:52;
+     La in NAT by AMI_1:def 4;
+     then
      reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
+:::     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
     take loc;
     thus thesis by A2,Def16;
    end;
@@ -739,7 +751,10 @@ A1: InsCode ins = 7;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La,A such that
 A2:    I = A=0_goto La by A1,AMI_5:53;
+    La in NAT by AMI_1:def 4;
+    then
      reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
+:::     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4; !!!
           A in SCM-Data-Loc by AMI_3:def 2;
      then reconsider da = A as Int-Location by Def4;
     take loc,da;
@@ -755,7 +770,10 @@ A1: InsCode ins = 8;
     then reconsider I = ins as Instruction of SCM by Th34;
     consider La,A such that
 A2:    I = A>0_goto La by A1,AMI_5:54;
+     La in NAT by AMI_1:def 4;
+     then
      reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4;
+:::     reconsider loc = La as Instruction-Location of SCM+FSA by AMI_1:def 4; !!!
           A in SCM-Data-Loc by AMI_3:def 2;
      then reconsider da = A as Int-Location by Def4;
     take loc,da;
@@ -1046,7 +1064,7 @@ registration
     proof
 A1:  the Instruction-Counter of SCM+FSA = NAT by FUNCT_7:def 1,SCMFSA_1:5;
      assume the Instruction-Counter of SCM+FSA in
-              the Instruction-Locations of SCM+FSA;
+              NAT;
       then ex k st NAT = 2*k by A1;
       then NAT in NAT;
      hence contradiction;
@@ -1054,13 +1072,13 @@ A1:  the Instruction-Counter of SCM+FSA = NAT by FUNCT_7:def 1,SCMFSA_1:5;
    thus SCM+FSA is IC-Ins-separated
     proof
       ObjectKind IC SCM+FSA
-        = the Instruction-Locations of SCM+FSA by FUNCT_7:def 1,SCMFSA_1:5,9;
+        = NAT by FUNCT_7:def 1,SCMFSA_1:5,9;
      hence thesis by AMI_1:def 11;
     end;
    thus SCM+FSA is definite
     proof let l be Instruction-Location of SCM+FSA;
-      reconsider L = l as Element of SCM+FSA-Instr-Loc;
-     thus ObjectKind l = the Instructions of SCM+FSA by SCMFSA_1:11;
+      l in NAT by AMI_1:def 4;
+     hence ObjectKind l = the Instructions of SCM+FSA by SCMFSA_1:11;
     end;
    let s be State of SCM+FSA, i be Instruction of SCM+FSA,
       l be Instruction-Location of SCM+FSA;
@@ -1068,18 +1086,19 @@ A1:  the Instruction-Counter of SCM+FSA = NAT by FUNCT_7:def 1,SCMFSA_1:5;
            or i in { [K,<*dC,fB*>] : K in {11,12} } by XBOOLE_0:def 2;
    reconsider I = i as Element of SCM+FSA-Instr;
    reconsider S = s as Element of product SCM+FSA-OK;
-   reconsider l' = l as Element of SCM+FSA-Instr-Loc;
+   reconsider l' = l as Element of SCM+FSA-Instr-Loc by AMI_1:def 4;
      per cases by A2,XBOOLE_0:def 2;
      suppose i in SCM-Instr;
       then reconsider I = i as Instruction of SCM;
       reconsider S = s|SCM-Memory +* (SCM-Instr-Loc --> I) as State of SCM by
 SCMFSA_1:18;
 A3:   dom(s|SCM+FSA-Instr-Loc)=dom s /\ SCM+FSA-Instr-Loc by RELAT_1:90;
+X:   l in SCM+FSA-Instr-Loc by AMI_1:def 4;
           dom s = dom SCM+FSA-OK by CARD_3:18 .=
       {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc
                         by FUNCT_2:def 1,SCMFSA_1:8;
-     then l in dom s by XBOOLE_0:def 2;
-then A4:   l in dom(s|SCM+FSA-Instr-Loc) by A3,XBOOLE_0:def 3;
+     then l in dom s by XBOOLE_0:def 2,X;
+then A4:   l in dom(s|SCM+FSA-Instr-Loc) by A3,XBOOLE_0:def 3,X;
      thus Exec(i,s).l = (s +* Exec(I,S) +* s|SCM+FSA-Instr-Loc).l
                        by Th75
           .= (s|SCM+FSA-Instr-Loc).l by A4,FUNCT_4:14
@@ -1155,7 +1174,7 @@ theorem
   proof
    let dl be Int-Location;
          ObjectKind dl = INT &
-    ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
+    ObjectKind IC SCM+FSA = NAT
          by Th26,AMI_1:def 11;
    hence thesis by SCMFSA_1:13;
   end;
@@ -1166,7 +1185,7 @@ theorem
   proof
    let dl be FinSeq-Location;
          ObjectKind dl = INT* &
-    ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
+    ObjectKind IC SCM+FSA = NAT
          by Th27,AMI_1:def 11;
    hence thesis by SCMFSA_1:13;
   end;
@@ -1922,7 +1941,7 @@ theorem Th110:
   proof
     assume
 A1:   goto la is halting;
-    reconsider a3 = la as Element of SCM+FSA-Instr-Loc;
+    reconsider a3 = la as Element of SCM+FSA-Instr-Loc by AMI_1:def 4;
     consider s being SCM+FSA-State;
     set t = s +* (NAT.--> Next a3);
     set f = the Object-Kind of SCM+FSA;
@@ -1971,7 +1990,7 @@ then A9: (w +* (NAT .--> la)).NAT = (NAT .--> la).NAT by FUNCT_4:14
 theorem Th111:
  a=0_goto la is non halting
   proof
-    reconsider a3 = la as Element of SCM+FSA-Instr-Loc;
+    reconsider a3 = la as Element of SCM+FSA-Instr-Loc by AMI_1:def 4;
     consider mj being Element of SCM+FSA-Instr-Loc;
     consider L being Element of SCM-Instr-Loc;
     consider s being SCM+FSA-State;
@@ -2037,7 +2056,7 @@ A15:   t.a = 0;
 theorem Th112:
  a>0_goto la is non halting
   proof
-    reconsider a3 = la as Element of SCM+FSA-Instr-Loc;
+    reconsider a3 = la as Element of SCM+FSA-Instr-Loc by AMI_1:def 4;
     consider mj being Element of SCM+FSA-Instr-Loc;
     consider L being Element of SCM-Instr-Loc;
     consider s being SCM+FSA-State;

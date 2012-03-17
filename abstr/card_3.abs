@@ -9,7 +9,8 @@ environ
  vocabularies ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, FUNCT_2,
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
       CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
-      FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM;
+      FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM, SETFAM_1,
+      AMISTD_2, PRALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
       SETFAM_1, ORDINAL1, WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4,
@@ -422,4 +423,87 @@ theorem :: CARD_3:87
      for x1,x2,y1,y2 being set holds
   x1 in dom f & y1 in f.x1 & x2 in dom f & y2 in f.x2
    implies (x1,x2)-->(y1,y2) in sproduct f;
+
+begin  :: from PRALG_2, 2007.11.14, A.T.
+
+definition let IT be set;
+  attr IT is with_common_domain means
+:: CARD_3:def 10
+   for f,g be Function st f in IT & g in IT holds dom f = dom g;
+end;
+
+registration
+  cluster with_common_domain functional non empty set;
+end;
+
+theorem :: CARD_3:88
+      {{}} is functional with_common_domain set;
+
+definition
+ let X be with_common_domain functional set;
+ canceled;  :: miejsce na uogolnienie
+func DOM X -> set means
+:: CARD_3:def 12 :: overloading (dom) dozwolony
+ (for x be Function st x in X holds it = dom x) if X <> {}
+ otherwise it = {};
+end;
+
+theorem :: CARD_3:89
+      for X be with_common_domain functional set st X = {{}} holds DOM X = {};
+
+begin  :: Product like sets, from AMISTD_2, 2007.11.14, A.T.
+
+definition
+  let S be functional set;
+  func product" S -> Function means
+:: CARD_3:def 13  :: tu trzeba uzyc DOM
+                             :: uzywajac meet mamy definicje
+                             :: nie przez czesci
+ (for x being set holds x in dom it iff
+       for f being Function st f in S holds x in dom f) &
+  (for i being set st i in dom it holds it.i = pi(S,i)) if S is non empty
+  otherwise it = {};
+end;
+
+theorem :: CARD_3:90
+   for S being non empty functional set holds
+  dom product" S = meet {dom f where f is Element of S: not contradiction};
+
+theorem :: CARD_3:91
+      for S being non empty functional set,
+     i being set st i in dom product" S holds
+  (product" S).i = {f.i where f is Element of S: not contradiction};
+
+definition
+  let S be set;
+ attr S is product-like means
+:: CARD_3:def 14
+  ex f being Function st S = product f;
+end;
+
+registration
+  let f be Function;
+ cluster product f -> product-like;
+end;
+
+registration
+ cluster product-like -> functional with_common_domain set;
+end;
+
+registration
+ cluster product-like non empty set;
+end;
+
+theorem :: CARD_3:92
+ for S being functional with_common_domain set holds dom product" S = DOM S;
+
+theorem :: CARD_3:93
+     for S being functional set, i being set st i in dom product" S
+  holds (product" S).i = pi(S,i);
+
+theorem :: CARD_3:94
+ for S being functional with_common_domain set holds S c= product product" S;
+
+theorem :: CARD_3:95
+ for S being non empty product-like set holds S = product product" S;
 

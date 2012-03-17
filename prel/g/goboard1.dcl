@@ -29,6 +29,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -47,7 +48,9 @@
 <Adjective nr="16"/>
 <Adjective nr="20"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -63,6 +66,8 @@
 <Adjective nr="16"/>
 <Adjective nr="20"/>
 <Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -84,10 +89,10 @@
 <Adjective nr="16"/>
 <Adjective nr="20"/>
 <Adjective nr="65"/>
-<Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </RCluster>
 </Registrations>

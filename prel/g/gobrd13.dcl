@@ -26,6 +26,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -74,7 +75,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="100"/>
+<Adjective nr="104"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -82,7 +83,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="100"/>
+<Adjective nr="104"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

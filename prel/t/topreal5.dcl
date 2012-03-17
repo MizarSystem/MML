@@ -24,6 +24,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -33,7 +34,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -46,9 +47,9 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
-<Adjective nr="60" value="false"/>
-<Adjective nr="61" value="false"/>
+<Adjective nr="63"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="65" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

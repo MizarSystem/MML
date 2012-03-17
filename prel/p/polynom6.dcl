@@ -23,8 +23,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSEQ_3"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="INT_1"/>
@@ -35,7 +34,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="MATRIX_1"/>
@@ -97,27 +95,27 @@
 </Typ>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
-<Adjective nr="86"/>
+<Adjective nr="57"/>
+<Adjective nr="59"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="325">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="39" value="false"/>
-<Adjective nr="44" value="false"/>
-<Adjective nr="81"/>
-<Adjective nr="86"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="43" value="false"/>
+<Adjective nr="80"/>
+<Adjective nr="85"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -118,7 +118,7 @@ theorem Th11:
  proof assume b in rng p;
   then consider a such that
 A1: a in dom p & b = p.a by FUNCT_1:def 5;
-   reconsider a as Element of NAT by A1,ORDINAL1:def 13;
+   reconsider a as Element of NAT by A1;
  a in dom p & b = p.a by A1;
   hence thesis;
  end;
@@ -308,7 +308,7 @@ A3:  Seg i() = dom z by A1,FINSEQ_1:def 3;
    then reconsider z as FinSequence of D() by A3,Th14;
    take z; thus len z = i() by A1;
    let j be Nat;
-   thus thesis by A1,A2;
+   thus thesis by A2;
  end;
 
 scheme IndSeqD{D()->set, P[set]}:
@@ -331,8 +331,7 @@ A6:    len p = i + 1;
 that
 A7:     p = q^<*x*> by Th22;
            len p = len q + 1 by A7,Th19;
-     then P[q] by A5,A6;
-     hence thesis by A2,A7;
+     hence thesis by A2,A7,A5,A6;
     end;
 A8:  for i holds R[i] from NAT_1:sch 2(A3,A4);
    let p be FinSequence of D();
@@ -400,8 +399,7 @@ A1:  D = Seg i;
   assume i <= len p;
   then Seg i c= Seg len p by FINSEQ_1:7;
   then rng q c= Seg i & Seg i c= dom p by A1,FINSEQ_1:def 3,def 4;
-  then rng q c= dom p by XBOOLE_1:1;
-  then dom (p*q) = dom q by RELAT_1:46;
+  then dom (p*q) = dom q by RELAT_1:46,XBOOLE_1:1;
   then dom (p*q) = Seg len q by FINSEQ_1:def 3;
   hence thesis by FINSEQ_1:def 2;
  end;
@@ -448,11 +446,7 @@ theorem Th37:
  end;
 
 theorem
-   for f being Function of A,D' holds f*(<*>A) = <*>D'
- proof let f be Function of A,D';
-  reconsider q = f*(<*>A) as FinSequence of D' by Th36;
-  thus thesis;
- end;
+   for f being Function of A,D' holds f*(<*>A) = <*>D';
 
 theorem
    for p being FinSequence of D for f being Function of D,D'
@@ -504,27 +498,24 @@ theorem Th42:
  proof let f be Function of Seg i,Seg j; assume
         j = 0 implies i = 0;
 then A1:  Seg j = {} implies Seg i = {} by FINSEQ_1:5;
-A2: i is Element of NAT by ORDINAL1:def 13;
 
   assume j <= len p;
   then rng f c= Seg j & Seg j c= Seg len p by FINSEQ_1:7,RELSET_1:12;
   then rng f c= Seg len p by XBOOLE_1:1;
   then rng f c= dom p by FINSEQ_1:def 3;
   then dom(p*f) = dom f & dom f = Seg i by A1,FUNCT_2:def 1,RELAT_1:46;
-  hence thesis by A2,FINSEQ_1:def 2;
+  hence thesis by FINSEQ_1:def 2;
  end;
 
-theorem Th43:
+theorem
   for f being Function of Seg i,Seg i st i <= len p holds p*f is FinSequence
- proof let f be Function of Seg i,Seg i;
-    i = 0 implies i = 0; hence thesis by Th42;
- end;
+       by Th42;
 
 theorem
    for f being Function of dom p,dom p holds p*f is FinSequence
  proof
     dom p = Seg len p by FINSEQ_1:def 3;
-  hence thesis by Th43;
+  hence thesis by Th42;
  end;
 
 theorem Th45:
@@ -571,19 +562,16 @@ A1:  (j = 0 implies i = 0) & j <= len p;
   hence thesis by FINSEQ_1:def 4;
  end;
 
-theorem Th50:
+theorem
   for p being FinSequence of D for f being Function of Seg i,Seg i
-    st i <= len p holds p*f is FinSequence of D
- proof let p be FinSequence of D; let f be Function of Seg i,Seg i;
-        i = 0 implies i = 0; hence thesis by Th49;
- end;
+    st i <= len p holds p*f is FinSequence of D by Th49;
 
 theorem Th51:
   for p being FinSequence of D for f being Function of dom p,dom p
     holds p*f is FinSequence of D
  proof let p be FinSequence of D;
    Seg len p = dom p by FINSEQ_1:def 3;
-  hence thesis by Th50;
+  hence thesis by Th49;
  end;
 
 theorem Th52:
@@ -615,12 +603,7 @@ canceled;
 
 theorem
    i<>0 implies for k being Element of Seg i holds (idseq i).k = k
- proof assume
-A1: i<>0;
-  let k be Element of Seg i;
-   k in Seg i by A1,Lm1;
-  hence thesis by FUNCT_1:35;
- end;
+    by Lm1,FUNCT_1:35;
 
 theorem
    idseq 0 = {}
@@ -640,8 +623,7 @@ A1:  len p = i + 1 by Th55;
    then consider q being FinSequence , a being set such that
 A2:  p = q^<*a*> by Th21;
 A3:  len p = len q + 1 by A2,Th19;
-        i+1 in Seg(i + 1) by FINSEQ_1:6;
-  then p.(i+1) = i+1 by FUNCT_1:35;
+   p.(i+1) = i+1 by FUNCT_1:35,FINSEQ_1:6;
 then A4:  a = i+1 by A1,A2,A3,FINSEQ_1:59;
 A5:  dom q = Seg len q by FINSEQ_1:def 3;
         for a st a in Seg i holds q.a = a
@@ -711,12 +693,7 @@ canceled;
 
 theorem
    k<>0 implies for w being Element of Seg k holds (k |-> d).w = d
- proof assume
-A1:  k <> 0;
-  let w be Element of Seg k;
-   w in Seg k by A1,Lm1;
-  hence thesis by FUNCOP_1:13;
- end;
+        by Lm1,FUNCOP_1:13;
 
 theorem Th72:
   0 |-> a = {}
@@ -736,8 +713,7 @@ A1:  len p = i + 1 by Th69;
    then consider q being FinSequence , x being set such that
 A2:     p = q^<*x*> by Th21;
 A3:  len p = len q + 1 by A2,Th19;
-        i+1 in Seg(i + 1) by FINSEQ_1:6;
-  then A4: p.(i+1) = a by FUNCOP_1:13;
+  A4: p.(i+1) = a by FUNCOP_1:13,FINSEQ_1:6;
    now per cases;
    suppose i = 0;
     then q = {} & len (i |-> a) = 0 by A1,A3,Th69,FINSEQ_1:25;

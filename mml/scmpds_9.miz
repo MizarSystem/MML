@@ -122,14 +122,17 @@ reserve a, b for Int_position,
         k, k1, k2 for Integer;
 
 Lm1:
+  for IL being non empty set
   for N being with_non-empty_elements set,
-      S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      S being IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       s being State of S,
       i being Instruction of S
    holds Exec(s.IC s,s).IC S = IC Following s
-  proof
+  proof let IL be non empty set;
     let N be with_non-empty_elements set,
-        S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+        S be IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over IL,N),
         s be State of S,
         i be Instruction of S;
     thus Exec(s.IC s,s).IC S = Exec(CurInstr s,s).IC S by AMI_1:def 17
@@ -146,14 +149,6 @@ coherence
       a is Element of INT & b is Element of INT &
     ObjectKind la = INT & ObjectKind lb = INT by INT_1:def 2,SCMPDS_2:13;
     hence thesis by AMI_1:58;
-  end;
-end;
-
-registration
-  cluster SCMPDS -> with-non-trivial-Instruction-Locations;
-coherence
-  proof
-    thus the Instruction-Locations of SCMPDS is non trivial by SCMPDS_2:def 1;
   end;
 end;
 
@@ -219,14 +214,17 @@ A3:   m2 = l2 & Next l2 = Next m2 by SCMPDS_2:def 19;
   end;
 
 theorem Th11:
+  for IL being non empty set
   for N being with_non-empty_elements set,
-      S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      S being IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       i being Instruction of S,
       l being Instruction-Location of S holds
   JUMP(i) c= NIC(i,l)
-  proof
+  proof let IL be non empty set;
     let N be with_non-empty_elements set,
-        S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+        S be IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over IL,N),
         i be Instruction of S,
         l be Instruction-Location of S;
     set X = { NIC(i,k) where k is Instruction-Location of S:
@@ -260,6 +258,8 @@ A2:     x = IC Following s & IC s = l & s.l = i;
     assume x in {Next l};
     then A3: x = Next l by TARSKI:def 1;
     consider t being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = t+*((IC SCMPDS, l)-->(il1, I));
@@ -276,7 +276,7 @@ theorem Th13:
   proof
     assume
 A1:   for l being Instruction-Location of SCMPDS holds NIC(i,l)={Next l};
-    consider p, q being Element of the Instruction-Locations of SCMPDS
+    consider p, q being Element of NAT
      such that
 A2:   p <> q by YELLOW_8:def 1;
     reconsider p, q as Instruction-Location of SCMPDS by AMI_1:def 4;
@@ -318,6 +318,8 @@ A6:     ICplusConst(s,k) = abs(m1+k) by SCMPDS_2:def 20;
     assume
 A7:   x in {t};
     consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s+*((IC SCMPDS, l)-->(il1, I));
@@ -356,8 +358,10 @@ A2:     IC s = l and
 A3:     s.l = i;
 A4:   x = Exec(i,s).IC SCMPDS by A1,A2,A3,Lm1
        .= (abs(s.DataLoc(s.a,1)) )+2 by SCMPDS_1:def 23,SCMPDS_2:70;
+       x in NAT by A1,AMI_1:def 4;
+       then
         x in { k where k is Element of NAT: not contradiction }
-       by A1,AMI_2:def 2,SCMPDS_2:def 1;
+       by A1,SCMPDS_2:def 1;
       then consider k being Element of NAT such that
 A5:     x = k;
        (abs(s.DataLoc(s.a,1)) )+2 >= 0+2 by XREAL_1:8;
@@ -375,6 +379,8 @@ A7:   k > 1;
     then consider j being Element of NAT such that
 A8:   a = [1,j] by AMI_2:32;
     consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s +* ((IC SCMPDS, l)-->(il1, I));
@@ -528,6 +534,8 @@ A8:     s.DataLoc(s.a,k1) = 0;
     assume
 A9:   x in {Next l,t};
     consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s+*((IC SCMPDS, l)-->(il1, I));
@@ -637,6 +645,8 @@ A8:     s.DataLoc(s.a,k1) > 0;
     assume
 A9:   x in {Next l,t};
     consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s+*((IC SCMPDS, l)-->(il1, I));
@@ -746,6 +756,8 @@ A8:     s.DataLoc(s.a,k1) < 0;
     assume
 A9:   x in {Next l,t};
     consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = s+*((IC SCMPDS, l)-->(il1, I));
@@ -904,6 +916,8 @@ A2:     y = NIC(i,l);
       then consider j being Element of NAT such that
 A3:     a = [1,j] by AMI_2:32;
       consider s being State of SCMPDS;
+    l in NAT by AMI_1:def 4;
+    then
       reconsider il1 = l as Element of ObjectKind IC SCMPDS by AMI_1:def 11;
       reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
       set u = s+*((IC SCMPDS, l)-->(il1, I));
@@ -1885,11 +1899,11 @@ coherence
 end;
 
 theorem Th29:
-  SUCC(l) = the Instruction-Locations of SCMPDS
+  SUCC(l) = NAT
   proof
-    thus SUCC(l) c= the Instruction-Locations of SCMPDS;
+    thus SUCC(l) c= NAT;
     let x be set;
-    assume x in the Instruction-Locations of SCMPDS;
+    assume x in NAT;
     then reconsider x as Instruction-Location of SCMPDS by AMI_1:def 4;
     set X = { NIC(i,l) \ JUMP i where
      i is Element of the Instructions of SCMPDS: not contradiction };
@@ -1903,20 +1917,23 @@ theorem Th29:
   end;
 
 theorem Th30:
+  for IL being non empty set
   for N being with_non-empty_elements set,
-      S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      S being IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       l1, l2 being Instruction-Location of S
-    st SUCC(l1) = the Instruction-Locations of S
+    st SUCC(l1) = IL
    holds l1 <= l2
-  proof
+  proof let IL be non empty set;
     let N be with_non-empty_elements set,
-        S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+        S be IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over IL,N),
         l1, l2 be Instruction-Location of S such that
-A1:   SUCC(l1) = the Instruction-Locations of S;
+A1:   SUCC(l1) = IL;
     defpred P[set,set] means
       ($1 = 1 implies $2 = l1) & ($1 = 2 implies $2 = l2);
 A2: for n being Element of NAT st n in Seg 2
-     ex d being Element of the Instruction-Locations of S st P[n,d]
+     ex d being Element of IL st P[n,d]
     proof
       let n be Element of NAT;
       assume
@@ -1924,16 +1941,18 @@ A3:     n in Seg 2;
       per cases by A3,FINSEQ_1:4,TARSKI:def 2;
       suppose
 A4:     n = 1;
+       reconsider l1 as Element of IL by AMI_1:def 4;
       take l1;
       thus P[n,l1] by A4;
       end;
       suppose
 A5:     n = 2;
+       reconsider l2 as Element of IL by AMI_1:def 4;
       take l2;
       thus P[n,l2] by A5;
     end;
     end;
-    consider f being FinSequence of the Instruction-Locations of S such that
+    consider f being FinSequence of IL such that
 A6:   len f = 2 and
 A7:   for n being Element of NAT st n in Seg 2 holds P[n,f/.n]
 from FINSEQ_4:sch 1(A2);
@@ -1947,12 +1966,13 @@ then A9:  f/.1 = l1 & f/.len f = l2 by A6,A7;
     let n be Element of NAT;
     assume
 A10:   1 <= n;
+X:   f/.(n+1) in IL by AMI_1:def 4;
     assume n < len f;
     then n < 1+1 by A6;
     then n <= 1 by NAT_1:13;
     then n = 1 by A10,XXREAL_0:1;
     then f/.n = l1 by A9,AMI_1:def 35;
-    hence f/.(n+1) in SUCC f/.n by A1;
+    hence f/.(n+1) in SUCC f/.n by A1,X;
   end;
 
 registration
@@ -1961,8 +1981,8 @@ registration
   proof
     assume
 A1:   SCMPDS is InsLoc-antisymmetric;
-      SUCC(inspos(1)) = the Instruction-Locations of SCMPDS &
-    SUCC(inspos(2)) = the Instruction-Locations of SCMPDS by Th29;
+      SUCC(inspos(1)) = NAT &
+    SUCC(inspos(2)) = NAT by Th29;
     then inspos(1) <= inspos(2) & inspos(2) <= inspos(1) by Th30;
     then inspos(1) = inspos(2) by A1,AMISTD_1:def 9;
     hence thesis by SCMPDS_3:31;

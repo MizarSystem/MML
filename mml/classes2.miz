@@ -143,9 +143,9 @@ A1: for X,Y st X in W & Y c= X holds Y in W and
 A2:  Y in X implies Y c= X and
 A3:  X in W;
    let x;
-   assume x in X;
-    then x c= X by A2;
-   hence thesis by A1,A3;
+:::   assume x in X;
+:::    then x c= X by A2;
+   thus thesis by A1,A2,A3;
   end;
 
 theorem
@@ -530,9 +530,9 @@ A8:  On W = A
             X c= Rank Card W
         proof let x;
          assume
-A9:       x in X;
-          then the_rank_of x in A by A6,CLASSES1:76;
-          then x in W & not A c= the_rank_of x by A7,A9,ORDINAL1:7;
+       x in X;
+          then x in W & not A c= the_rank_of x
+           by A7,ORDINAL1:7,A6,CLASSES1:76;
           then the_rank_of x in W by A5;
           then the_rank_of x in Card W by A7,ORDINAL1:def 10;
           then x c= Rank the_rank_of x & Rank the_rank_of x in Rank Card W
@@ -573,11 +573,10 @@ A16:    Y in X & x = the_rank_of Y by A11;
  then not LL,W are_equipotent & LL c= W by A12,CARD_1:21,XBOOLE_1:1;
     then LL in W by A1,CLASSES1:def 2;
 then A17: Funcs(LL,W) c= W by A1,Th23;
-         ULL = Union (id LL qua Function)
+B18:   ULL = Union (id LL qua Function)
      proof Union id LL = union rng id LL by CARD_3:def 4 .= ULL by RELAT_1:71;
       hence thesis;
      end;
-then A18: Card ULL <=` Sum Card id LL by CARD_3:54;
    consider ff being Cardinal-Function such that
 A19: dom ff = LL & for x st x in LL holds ff.x = g(x) from CARD_3:sch 1;
 A20: dom id LL = LL & dom Card id LL = dom id LL by CARD_3:def 2,RELAT_1:71;
@@ -587,7 +586,7 @@ A20: dom id LL = LL & dom Card id LL = dom id LL by CARD_3:def 2,RELAT_1:71;
      hence (Card id LL).x in ff.x by CARD_1:30;
     end;
     then Sum Card id LL <` Product ff by A19,A20,CARD_3:56;
-then A21: Card ULL <` Product ff by A18,ORDINAL1:22;
+then A21: Card ULL <` Product ff by B18,ORDINAL1:22,CARD_3:54;
          product ff c= Funcs(LL,W)
      proof let x; assume x in product ff;
       then consider g such that
@@ -636,7 +635,7 @@ A28:    Y in X & not the_rank_of Y c= B;
       hence x in ULL;
      end;
     then Card On W <=` Card ULL & On W = Card W & Card W = Card Card W
-     by A1,Th10,CARD_1:27,def 5;
+     by A1,Th10,CARD_1:27;
    hence contradiction by A21,A25,CARD_1:14;
   end;
 
@@ -677,12 +676,10 @@ theorem
 theorem
  Th35: W is_Tarski-Class implies Card W = Card Rank Card W
   proof assume W is_Tarski-Class;
-    then Rank Card W c= W by Th28;
-then A1:  Card Rank Card W <=` Card W by CARD_1:27;
-          Card W = Card W & Card W c= Rank Card W
-     by CLASSES1:44;
-    then Card Card W = Card W & Card Card W <=` Card Rank Card W
-     by CARD_1:27,def 5;
+    then
+A1:  Card Rank Card W <=` Card W by CARD_1:27,Th28;
+    Card Card W = Card W & Card Card W <=` Card Rank Card W
+     by CARD_1:27,CLASSES1:44;
    hence thesis by A1,XBOOLE_0:def 10;
   end;
 
@@ -730,11 +727,10 @@ A10:    Y in X & x = the_rank_of Y by A5;
 then A11: not LL,W are_equipotent & LL c= W by A6,CARD_1:21,XBOOLE_1:1;
     then LL in W by A1,CLASSES1:def 2;
 then A12: Funcs(LL,W) c= W by A1,A11,Th23;
-         ULL = Union id LL
+B13:     ULL = Union id LL
      proof Union id LL = union rng id LL by CARD_3:def 4 .= ULL by RELAT_1:71;
       hence thesis;
      end;
-then A13: Card ULL <=` Sum Card id LL by CARD_3:54;
    consider ff being Cardinal-Function such that
 A14: dom ff = LL & for x st x in LL holds ff.x = g(x) from CARD_3:sch 1;
 A15: dom id LL = LL & dom Card id LL = dom id LL by CARD_3:def 2,RELAT_1:71;
@@ -766,14 +762,14 @@ A19:       y in ff.x & ff.x = ff.x & x = x & ff.x = Card bool x &
     then product ff c= W & Card product ff = Product ff
      by A12,CARD_3:def 8,XBOOLE_1:1;
     then Product ff <=` Card W by CARD_1:27;
-then A20: Card ULL <` Card W by A13,A16,ORDINAL1:22;
+then A20: Card ULL <` Card W by B13,A16,ORDINAL1:22,CARD_3:54;
          not W,{} are_equipotent by A3,CARD_1:46;
 then A21:   Card W = On W & Card W <> {} &
       Card W is_limit_ordinal by A1,Th10,Th20,CARD_1:21,47;
     then union Card W = Card W &
      Card ULL <> Card W &
       Card Card W = Card W
-       by A20,CARD_1:def 5,ORDINAL1:def 6;
+       by A20,ORDINAL1:def 6;
     then ULL c= On W & ULL <> On W by A6,A21,ZFMISC_1:95;
     then ULL c< On W by XBOOLE_0:def 8;
     then ULL in Card W by A21,ORDINAL1:21;
@@ -788,15 +784,13 @@ then A24:    f.x = the_rank_of x & f.x in rng f & x = x &
       consider A such that
 A25:    A in Card W & x in Rank A by A2,A21,A23,CLASSES1:35;
 defpred P[Ordinal] means $1 in Card W & x c= Rank $1;
-            x c= Rank A by A25,CLASSES1:38;
-then A26:    ex A st P[A] by A25;
+A26:    ex A st P[A] by A25,CLASSES1:38;
       consider A such that
 A27:    P[A] and
 A28:    for B st P[B] holds A c= B from ORDINAL1:sch 1(A26);
             now let B; assume x c= Rank B;
-         then not B in Card W or A c= B by A28;
          then A c= Card W & Card W c= B or A c= B
-          by A27,ORDINAL1:26;
+          by A27,A28,ORDINAL1:26;
         hence A c= B by XBOOLE_1:1;
        end;
        then A = the_rank_of x by A27,CLASSES1:def 8;
@@ -876,8 +870,7 @@ A8:  A in B & Y in X & the_rank_of Y = B by A6;
 A9:     x in Y;
        then A10: the_rank_of x in B & Y c= X
         by A1,A8,CLASSES1:76,ORDINAL1:def 2;
-then x in X & not B c= the_rank_of x by A9,ORDINAL1:7;
-       then not A in the_rank_of x by A7;
+       then not A in the_rank_of x by A7,A9,ORDINAL1:7;
        then the_rank_of x c= A & the_rank_of x <> A by A2,A9,A10,ORDINAL1:26;
        then the_rank_of x c< A by XBOOLE_0:def 8;
        then the_rank_of x in A by ORDINAL1:21;
@@ -910,12 +903,12 @@ theorem
    X in Rank Card W
   proof assume W is_Tarski-Class;
 then A1:  W is subset-closed by CLASSES1:def 2;
-   assume X is epsilon-transitive;
-then A2:  Card the_rank_of X <=` Card X by Th42;
+   assume
+B2:  X is epsilon-transitive;
    assume X in W;
     then Card X <` Card W by A1,Th1;
     then Card the_rank_of X <` Card W & Card Card W = Card W &
-     Card W = Card W by A2,CARD_1:def 5,ORDINAL1:22;
+     Card W = Card W by B2,ORDINAL1:22,Th42;
     then the_rank_of X in Card W by CARD_3:59;
     then Rank the_rank_of X in Rank Card W & X c= Rank the_rank_of X
      by CLASSES1:42,def 8;
@@ -964,10 +957,8 @@ A1:  W in Tarski-Class W by CLASSES1:5;
   cluster universal non empty set;
    existence
     proof consider X;
-     set Y = the_transitive-closure_of X;
-     take V = Tarski-Class Y;
-           Y is epsilon-transitive by CLASSES1:58;
-     hence V is epsilon-transitive by CLASSES1:27;
+     take V = Tarski-Class the_transitive-closure_of X;
+     thus V is epsilon-transitive by CLASSES1:27,58;
      thus thesis;
     end;
  end;
@@ -1236,7 +1227,7 @@ A2:     X c= Rank omega & not X,Rank omega are_equipotent &
       then consider n being Element of NAT such that
 A3:      n = Card X;
 A4:       Card X = Card n & omega c= Rank omega
-        by A3,CARD_1:def 5,CLASSES1:44;
+        by A3,CLASSES1:44;
        X,n are_equipotent & n is finite by A3,CARD_1:def 5;
       then reconsider X as finite set by CARD_1:68;
       defpred P[set,set] means the_rank_of $2 c= the_rank_of $1;

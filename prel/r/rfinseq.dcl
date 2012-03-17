@@ -11,15 +11,13 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -30,10 +28,12 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="22"/>
-<Adjective nr="25"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="27"/>
 <Adjective nr="29"/>
-<Adjective nr="37"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -46,7 +46,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="29"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +56,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="25"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

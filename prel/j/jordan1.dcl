@@ -25,6 +25,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -46,7 +47,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="70">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -66,7 +67,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="70">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -86,7 +87,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="70">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -106,7 +107,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="70">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -119,7 +120,7 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="70">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

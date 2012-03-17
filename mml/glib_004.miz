@@ -22,7 +22,7 @@ environ
       UPROOTS, GLIB_002, GLIB_003;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, GLIB_000,
-      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003;
+      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1;
  theorems BAGORDER, CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2,
@@ -30,7 +30,7 @@ environ
       GLIB_001, GLIB_002, GLIB_003, HEYTING3, INT_1, JORDAN12, NAT_1, PARTFUN1,
       PBOOLE, POLYNOM1, REAL_1, RELAT_1, RVSUM_1, SEQ_1, TARSKI, TREES_1,
       UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, XREAL_1, XXREAL_0,
-      ORDINAL1, FINSOP_1, FUNCT_7;
+      ORDINAL1, FINSOP_1, FUNCT_7, VALUED_0;
  schemes NAT_1, SUBSET_1, RECDEF_1, GRAPH_5, CQC_SIM1;
 
 begin :: Preliminaries on Sum of RBag
@@ -90,7 +90,7 @@ then A4: B c= A by PBOOLE:def 3;
         .= A \/ B by PBOOLE:def 3
         .= A by A4,XBOOLE_1:12;
    then reconsider B1 as Rbag of A by A2,A3,PBOOLE:def 3,POLYNOM1:def 8
-,SEQ_1:def 1;
+,VALUED_0:def 3;
  rng B2 c= rng (EmptyBag A) \/ rng b2 by FUNCT_4:18;
 then A5: rng B2 c= REAL by XBOOLE_1:1;
  support B2 c= (support EmptyBag A) \/ support b2 by Th1;
@@ -100,7 +100,7 @@ then A6: support B2 is finite by FINSET_1:13;
         .= A \/ (A\B) by PBOOLE:def 3
         .= A by XBOOLE_1:12;
    then reconsider B2 as Rbag of A by A5,A6,PBOOLE:def 3,POLYNOM1:def 8
-,SEQ_1:def 1;
+,VALUED_0:def 3;
    consider f1 being FinSequence of REAL such that
 A7: Sum b1 = Sum f1 and
 A8: f1 = b1*canFS(support b1) by UPROOTS:def 3;
@@ -338,7 +338,7 @@ then A7: support a is finite by FINSET_1:13;
         .= X \/ {x} by FUNCOP_1:19
         .= X by A3,ZFMISC_1:46;
    then reconsider a as Rbag of X by A6,A7,PBOOLE:def 3,POLYNOM1:def 8
-,SEQ_1:def 1;
+,VALUED_0:def 3;
     set b = (EmptyBag X) +* (x .--> b1.x);
 A8: rng b c= rng (EmptyBag X) \/ rng (x.-->b1.x) by FUNCT_4:18;
  rng (x.-->b1.x) = {b1.x} by FUNCOP_1:14;
@@ -351,7 +351,7 @@ then A10: support b is finite by FINSET_1:13;
         .= X \/ {x} by FUNCOP_1:19
         .= X by A3,ZFMISC_1:46;
    then reconsider b as Rbag of X by A9,A10,PBOOLE:def 3,POLYNOM1:def 8
-,SEQ_1:def 1
+,VALUED_0:def 3
 ;
    set c = (EmptyBag X) +* (x.-->y);
 A11: rng c c= rng (EmptyBag X) \/ rng (x.-->y) by FUNCT_4:18;
@@ -367,7 +367,7 @@ then A14: support c is finite by FINSET_1:13;
         .= X \/ {x} by FUNCOP_1:19
         .= X by A3,ZFMISC_1:46;
    then reconsider c as Rbag of X by A13,A14,PBOOLE:def 3,POLYNOM1:def 8
-,SEQ_1:def 1
+,VALUED_0:def 3
 ;
     now let i be set; assume i in X;
    A15: (EmptyBag X).i = 0 by POLYNOM1:56;
@@ -644,12 +644,7 @@ A10:  n in NAT by ORDINAL1:def 13;
 A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
     then for n being Nat holds IT.n is _Graph;
     then reconsider IT as GraphSeq by GLIB_000:def 55;
-A8: for n be Nat holds IT.n is real-WEV WEVGraph
-    proof
-      let n be Nat;
-       n in NAT by ORDINAL1:def 13;
-      hence thesis by A7;
-    end;
+A8: for n be Nat holds IT.n is real-WEV WEVGraph by A7,ORDINAL1:def 13;
     then for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled];
     then reconsider IT as WEVGraphSeq
@@ -744,10 +739,7 @@ end;
 
 registration let G be finite real-weighted WGraph, src be Vertex of G;
   cluster DIJK:SSSP(G,src) -> finite;
-  coherence proof
-    set DCS = DIJK:CompSeq(G,src);
-    thus thesis by GLIB_000:def 60;
-  end;
+  coherence by GLIB_000:def 60;
 end;
 
 begin  :: Dijkstra's Algorithm Theorems
@@ -2317,7 +2309,7 @@ A4: dom b2 = {e} & rng b2 = {(the_Weight_of G1).e} by FUNCOP_1:14,19;
      EG1 \ EG2 = EG1 /\ {e} by A2,XBOOLE_1:48
              .= {e} by A1,ZFMISC_1:52;
     then reconsider b2 as ManySortedSet of EG1 \ EG2 by A4,PBOOLE:def 3;
-    reconsider b2 as Rbag of EG1 \ EG2 by A4,SEQ_1:def 1;
+    reconsider b2 as Rbag of EG1 \ EG2 by A4,VALUED_0:def 3;
 A5: dom (the_Weight_of G2 +* b2) = dom the_Weight_of G2 \/ {e}
                                      by A4,FUNCT_4:def 1
                                 .= (EG1 \ {e}) \/ {e} by A2,PBOOLE:def 3
@@ -2383,7 +2375,7 @@ A5: dom W2 = {e} by FUNCOP_1:19;
     end;
     then rng W2 c= REAL by TARSKI:def 3;
     then reconsider W2 as Rbag of (the_Edges_of G2 \ the_Edges_of G1)
-      by SEQ_1:def 1;
+      by VALUED_0:def 3;
 A6: dom the_Weight_of G2 = E1 \/ {e} by A3,PBOOLE:def 3;
 A7: dom ((the_Weight_of G1) +* W2) = dom the_Weight_of G1 \/ dom W2
                                      by FUNCT_4:def 1
@@ -2545,17 +2537,10 @@ A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
     then reconsider IT as GraphSeq by GLIB_000:def 55;
      for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]
-    proof
-      let n be Nat;  n in NAT by ORDINAL1:def 13;
-      hence thesis by A7;
-    end;
+         by A7,ORDINAL1:def 13;
     then reconsider IT as WEVGraphSeq
       by GLIB_003:def 24,def 25,def 26;
-     for n being Nat holds IT.n is real-WEV
-    proof
-      let n be Nat;  n in NAT by ORDINAL1:def 13;
-      hence thesis by A7;
-    end;
+     for n being Nat holds IT.n is real-WEV by A7,ORDINAL1:def 13;
     then reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
     thus IT.0 = PRIM:Init(G) by A3;

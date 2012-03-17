@@ -20,7 +20,7 @@ environ
       TEX_2, AMI_1, AMI_3, AMI_5, SCMRING1, AMISTD_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, FUNCT_7, AMISTD_1, AMISTD_2, XBOOLE_0,
-      AMI_3, FUNCOP_1, AMI_2, AMI_1;
+      AMI_3, FUNCOP_1, AMI_2, AMI_1, CARD_3;
  theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, AMI_5, FUNCT_1, FUNCT_2,
       RELSET_1, FUNCOP_1, SETFAM_1, AMI_2, AMISTD_1, MCART_1, FINSEQ_1,
       FINSEQ_3, AMISTD_2, FUNCT_7, CARD_3, XBOOLE_0, XBOOLE_1, YELLOW_8, NAT_D,
@@ -37,24 +37,18 @@ reserve a, b, d1, d2 for Data-Location,
         k for natural number;
 
 theorem Th1:
- not a in the Instruction-Locations of SCM
+ not a in NAT
   proof
      a in SCM-Data-Loc by AMI_3:def 2;
     hence thesis by AMI_2:29,XBOOLE_0:3;
   end;
 
 theorem Th2:
- SCM-Data-Loc <> the Instruction-Locations of SCM
-  proof
-    assume
-A1:   not thesis;
-    consider a being Element of SCM-Instr-Loc;
-    thus thesis by A1,AMI_2:12;
-  end;
+ SCM-Data-Loc <> NAT by AMI_2:12;
 
 theorem Th3:
  for o being Object of SCM holds
-  o = IC SCM or o in the Instruction-Locations of SCM or
+  o = IC SCM or o in NAT or
   o is Data-Location
   proof
     let o be Object of SCM;
@@ -78,9 +72,9 @@ A3:   m2 = i2 & Next i2 = Next m2 by AMI_3:def 11;
   end;
 
 theorem Th5:
- s1,s2 equal_outside the Instruction-Locations of SCM implies s1.a = s2.a
+ s1,s2 equal_outside NAT implies s1.a = s2.a
   proof
-    set IL = the Instruction-Locations of SCM;
+    set IL = NAT;
     assume
 A1:   s1,s2 equal_outside IL;
 A2: dom s1 = the carrier of SCM by AMI_1:79;
@@ -96,9 +90,10 @@ then A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 3;
   end;
 
 theorem Th6:
+ for IL being non empty set
  for N being with_non-empty_elements set,
      S being realistic IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
      t, u being State of S,
      il being Instruction-Location of S,
      e being Element of ObjectKind IC S,
@@ -108,10 +103,10 @@ theorem Th6:
     u.il = I &
     IC u = il &
     IC Following u = Exec(u.IC u, u).IC S
-  proof
+  proof let IL be non empty set;
     let N be with_non-empty_elements set,
         S be realistic IC-Ins-separated definite
-          (non empty non void AMI-Struct over N),
+          (non empty stored-program AMI-Struct over IL,N),
         t, u be State of S,
         il be Instruction-Location of S,
         e be Element of ObjectKind IC S,
@@ -223,7 +218,7 @@ A2: AddressPart (a:=b) = <*a,b*> by MCART_1:def 2;
 A3:   x in dom product" AddressParts T;
        InsCode (a:=b) = 1 by MCART_1:7;
       then AddressPart (a:=b) in AddressParts T by A1;
-      then x in dom AddressPart (a:=b) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart (a:=b) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -241,7 +236,7 @@ A7:     I = d1:=d2 by A1,A6,AMI_5:47;
           f = <*d1,d2*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th18:
@@ -257,7 +252,7 @@ A2: AddressPart AddTo(a,b) = <*a,b*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode AddTo(a,b) = 2 by MCART_1:7;
       then AddressPart AddTo(a,b) in AddressParts T by A1;
-      then x in dom AddressPart AddTo(a,b) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart AddTo(a,b) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -275,7 +270,7 @@ A7:     I = AddTo(d1,d2) by A1,A6,AMI_5:48;
           f = <*d1,d2*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th19:
@@ -291,7 +286,7 @@ A2: AddressPart SubFrom(a,b) = <*a,b*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode SubFrom(a,b) = 3 by MCART_1:7;
       then AddressPart SubFrom(a,b) in AddressParts T by A1;
-      then x in dom AddressPart SubFrom(a,b) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart SubFrom(a,b) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -309,7 +304,7 @@ A7:     I = SubFrom(d1,d2) by A1,A6,AMI_5:49;
           f = <*d1,d2*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th20:
@@ -325,7 +320,7 @@ A2: AddressPart MultBy(a,b) = <*a,b*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode MultBy(a,b) = 4 by MCART_1:7;
       then AddressPart MultBy(a,b) in AddressParts T by A1;
-      then x in dom AddressPart MultBy(a,b) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart MultBy(a,b) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -343,7 +338,7 @@ A7:     I = MultBy(d1,d2) by A1,A6,AMI_5:50;
           f = <*d1,d2*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th21:
@@ -359,7 +354,7 @@ A2: AddressPart Divide(a,b) = <*a,b*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode Divide(a,b) = 5 by MCART_1:7;
       then AddressPart Divide(a,b) in AddressParts T by A1;
-      then x in dom AddressPart Divide(a,b) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart Divide(a,b) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -377,7 +372,7 @@ A7:     I = Divide(d1,d2) by A1,A6,AMI_5:51;
           f = <*d1,d2*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th22:
@@ -393,7 +388,7 @@ A2: AddressPart goto i1 = <*i1*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode goto i1 = 6 by MCART_1:7;
       then AddressPart goto i1 in AddressParts T by A1;
-      then x in dom AddressPart goto i1 by A3,AMISTD_2:def 1;
+      then x in dom AddressPart goto i1 by A3,CARD_3:def 13;
       hence x in {1} by A2,FINSEQ_1:4,def 8;
     end;
     let x be set;
@@ -411,7 +406,7 @@ A7:     I = goto i1 by A1,A6,AMI_5:52;
           f = <*i1*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,def 8;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th23:
@@ -427,7 +422,7 @@ A2: AddressPart (a =0_goto i1) = <*i1,a*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode (a =0_goto i1) = 7 by MCART_1:7;
       then AddressPart (a =0_goto i1) in AddressParts T by A1;
-      then x in dom AddressPart (a =0_goto i1) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart (a =0_goto i1) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -445,7 +440,7 @@ A7:     I = a =0_goto i1 by A1,A6,AMI_5:53;
           f = <*i1,a*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th24:
@@ -461,7 +456,7 @@ A2: AddressPart (a >0_goto i1) = <*i1,a*> by MCART_1:def 2;
 A3:     x in dom product" AddressParts T;
           InsCode (a >0_goto i1) = 8 by MCART_1:7;
       then AddressPart (a >0_goto i1) in AddressParts T by A1;
-      then x in dom AddressPart (a >0_goto i1) by A3,AMISTD_2:def 1;
+      then x in dom AddressPart (a >0_goto i1) by A3,CARD_3:def 13;
       hence x in {1,2} by A2,FINSEQ_1:4,FINSEQ_3:29;
     end;
     let x be set;
@@ -479,7 +474,7 @@ A7:     I = a >0_goto i1 by A1,A6,AMI_5:54;
           f = <*i1,a*> by A5,A7,MCART_1:def 2;
       hence x in dom f by A4,FINSEQ_1:4,FINSEQ_3:29;
     end;
-    hence thesis by AMISTD_2:def 1;
+    hence thesis by CARD_3:def 13;
   end;
 
 theorem Th25:
@@ -491,7 +486,7 @@ then A2: 1 in dom product" AddressParts InsCode (a:=b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a:=b)).1;
-      then x in pi(AddressParts InsCode (a:=b),1) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode (a:=b),1) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode (a:=b) and
 A4:     f.1 = x by CARD_3:def 6;
@@ -514,7 +509,7 @@ then A8: (AddressPart (x:=b)).1 in pi
 (AddressParts InsCode (a:=b),1) by CARD_3:def 6;
         (AddressPart (x:=b)).1 = <*x,b*>.1 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th26:
@@ -526,7 +521,7 @@ then A2: 2 in dom product" AddressParts InsCode (a:=b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a:=b)).2;
-      then x in pi(AddressParts InsCode (a:=b),2) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode (a:=b),2) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode (a:=b) and
 A4:     f.2 = x by CARD_3:def 6;
@@ -549,7 +544,7 @@ then A8: (AddressPart (a:=x)).2 in pi
 (AddressParts InsCode (a:=b),2) by CARD_3:def 6;
         (AddressPart (a:=x)).2 = <*a,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th27:
@@ -561,7 +556,7 @@ then A2: 1 in dom product" AddressParts InsCode AddTo(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode AddTo(a,b)).1;
-      then x in pi(AddressParts InsCode AddTo(a,b),1) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode AddTo(a,b),1) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode AddTo(a,b) and
 A4:     f.1 = x by CARD_3:def 6;
@@ -584,7 +579,7 @@ then A8: (AddressPart AddTo(x,b)).1 in pi(AddressParts InsCode AddTo(a,b),1)
       by CARD_3:def 6;
         (AddressPart AddTo(x,b)).1 = <*x,b*>.1 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th28:
@@ -596,7 +591,7 @@ then A2: 2 in dom product" AddressParts InsCode AddTo(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode AddTo(a,b)).2;
-      then x in pi(AddressParts InsCode AddTo(a,b),2) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode AddTo(a,b),2) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode AddTo(a,b) and
 A4:     f.2 = x by CARD_3:def 6;
@@ -619,7 +614,7 @@ then A8: (AddressPart AddTo(a,x)).2 in pi(AddressParts InsCode AddTo(a,b),2)
        by CARD_3:def 6;
         (AddressPart AddTo(a,x)).2 = <*a,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th29:
@@ -631,7 +626,7 @@ then A2: 1 in dom product" AddressParts InsCode SubFrom(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode SubFrom(a,b)).1;
-      then x in pi(AddressParts InsCode SubFrom(a,b),1) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode SubFrom(a,b),1) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode SubFrom(a,b) and
 A4:     f.1 = x by CARD_3:def 6;
@@ -655,7 +650,7 @@ a,b),1)
       by CARD_3:def 6;
         (AddressPart SubFrom(x,b)).1 = <*x,b*>.1 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th30:
@@ -667,7 +662,7 @@ then A2: 2 in dom product" AddressParts InsCode SubFrom(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode SubFrom(a,b)).2;
-      then x in pi(AddressParts InsCode SubFrom(a,b),2) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode SubFrom(a,b),2) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode SubFrom(a,b) and
 A4:     f.2 = x by CARD_3:def 6;
@@ -691,7 +686,7 @@ a,b),2)
        by CARD_3:def 6;
         (AddressPart SubFrom(a,x)).2 = <*a,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th31:
@@ -703,7 +698,7 @@ then A2: 1 in dom product" AddressParts InsCode MultBy(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode MultBy(a,b)).1;
-      then x in pi(AddressParts InsCode MultBy(a,b),1) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode MultBy(a,b),1) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode MultBy(a,b) and
 A4:     f.1 = x by CARD_3:def 6;
@@ -727,7 +722,7 @@ b),1)
       by CARD_3:def 6;
         (AddressPart MultBy(x,b)).1 = <*x,b*>.1 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th32:
@@ -739,7 +734,7 @@ then A2: 2 in dom product" AddressParts InsCode MultBy(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode MultBy(a,b)).2;
-      then x in pi(AddressParts InsCode MultBy(a,b),2) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode MultBy(a,b),2) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode MultBy(a,b) and
 A4:     f.2 = x by CARD_3:def 6;
@@ -763,7 +758,7 @@ b),2)
        by CARD_3:def 6;
         (AddressPart MultBy(a,x)).2 = <*a,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th33:
@@ -775,7 +770,7 @@ then A2: 1 in dom product" AddressParts InsCode Divide(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode Divide(a,b)).1;
-      then x in pi(AddressParts InsCode Divide(a,b),1) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode Divide(a,b),1) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode Divide(a,b) and
 A4:     f.1 = x by CARD_3:def 6;
@@ -799,7 +794,7 @@ b),1)
       by CARD_3:def 6;
         (AddressPart Divide(x,b)).1 = <*x,b*>.1 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th34:
@@ -811,7 +806,7 @@ then A2: 2 in dom product" AddressParts InsCode Divide(a,b) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode Divide(a,b)).2;
-      then x in pi(AddressParts InsCode Divide(a,b),2) by A2,AMISTD_2:def 1;
+      then x in pi(AddressParts InsCode Divide(a,b),2) by A2,CARD_3:def 13;
       then consider f being Function such that
 A3:     f in AddressParts InsCode Divide(a,b) and
 A4:     f.2 = x by CARD_3:def 6;
@@ -835,11 +830,11 @@ b),2)
        by CARD_3:def 6;
         (AddressPart Divide(a,x)).2 = <*a,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th35:
- (product" AddressParts InsCode goto i1).1 = the Instruction-Locations of SCM
+ (product" AddressParts InsCode goto i1).1 = NAT
   proof
         InsCode goto i1 = 6 by MCART_1:7;
     then dom product" AddressParts InsCode goto i1 = {1} by Th22;
@@ -848,7 +843,7 @@ A2: InsCode goto i1 = 6 by MCART_1:7;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode goto i1).1;
-      then x in pi(AddressParts InsCode goto i1,1) by A1,AMISTD_2:8;
+      then x in pi(AddressParts InsCode goto i1,1) by A1,CARD_3:93;
       then consider g being Function such that
 A3:     g in AddressParts InsCode goto i1 and
 A4:     x = g.1 by CARD_3:def 6;
@@ -859,22 +854,22 @@ A6:     InsCode I = InsCode goto i1 by A3;
 A7:     I = goto i2 by A2,A6,AMI_5:52;
           g = <*i2*> by A5,A7,MCART_1:def 2;
       then x = i2 by A4,FINSEQ_1:def 8;
-      hence x in the Instruction-Locations of SCM;
+      hence x in NAT by AMI_1:def 4;
     end;
     let x be set;
-    assume x in the Instruction-Locations of SCM;
+    assume x in NAT;
     then reconsider x as Instruction-Location of SCM by AMI_1:def 4;
 A8: AddressPart goto x = <*x*> by MCART_1:def 2;
         InsCode goto i1 = InsCode goto x by A2,MCART_1:7;
 then A9: <*x*> in AddressParts InsCode goto i1 by A8;
         <*x*>.1 = x by FINSEQ_1:def 8;
     then x in pi(AddressParts InsCode goto i1,1) by A9,CARD_3:def 6;
-    hence thesis by A1,AMISTD_2:8;
+    hence thesis by A1,CARD_3:93;
   end;
 
 theorem Th36:
  (product" AddressParts InsCode (a =0_goto i1)).1 =
-   the Instruction-Locations of SCM
+   NAT
   proof
         InsCode (a =0_goto i1) = 7 by MCART_1:7;
     then dom product" AddressParts InsCode (a =0_goto i1) = {1,2} by Th23;
@@ -883,7 +878,7 @@ A2: InsCode (a =0_goto i1) = 7 by MCART_1:7;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a =0_goto i1)).1;
-      then x in pi(AddressParts InsCode (a =0_goto i1),1) by A1,AMISTD_2:8;
+      then x in pi(AddressParts InsCode (a =0_goto i1),1) by A1,CARD_3:93;
       then consider g being Function such that
 A3:     g in AddressParts InsCode (a =0_goto i1) and
 A4:     x = g.1 by CARD_3:def 6;
@@ -894,17 +889,17 @@ A6:     InsCode I = InsCode (a =0_goto i1) by A3;
 A7:     I = b =0_goto i2 by A2,A6,AMI_5:53;
           g = <*i2,b*> by A5,A7,MCART_1:def 2;
       then x = i2 by A4,FINSEQ_1:61;
-      hence x in the Instruction-Locations of SCM;
+      hence x in NAT by AMI_1:def 4;
     end;
     let x be set;
-    assume x in the Instruction-Locations of SCM;
+    assume x in NAT;
     then reconsider x as Instruction-Location of SCM by AMI_1:def 4;
 A8: AddressPart (a =0_goto x) = <*x,a*> by MCART_1:def 2;
         InsCode (a =0_goto i1) = InsCode (a =0_goto x) by A2,MCART_1:7;
 then A9: <*x,a*> in AddressParts InsCode (a =0_goto i1) by A8;
         <*x,a*>.1 = x by FINSEQ_1:61;
     then x in pi(AddressParts InsCode (a =0_goto i1),1) by A9,CARD_3:def 6;
-    hence thesis by A1,AMISTD_2:8;
+    hence thesis by A1,CARD_3:93;
   end;
 
 theorem Th37:
@@ -916,7 +911,7 @@ then A2: 2 in dom product" AddressParts InsCode (a =0_goto i1) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a =0_goto i1)).2;
-      then x in pi(AddressParts InsCode (a =0_goto i1),2) by A2,AMISTD_2:def 1
+      then x in pi(AddressParts InsCode (a =0_goto i1),2) by A2,CARD_3:def 13
 ;
       then consider f being Function such that
 A3:     f in AddressParts InsCode (a =0_goto i1) and
@@ -942,12 +937,12 @@ A1;
        by CARD_3:def 6;
         (AddressPart (x =0_goto i1)).2 = <*i1,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 theorem Th38:
  (product" AddressParts InsCode (a >0_goto i1)).1 =
-   the Instruction-Locations of SCM
+   NAT
   proof
         InsCode (a >0_goto i1) = 8 by MCART_1:7;
     then dom product" AddressParts InsCode (a >0_goto i1) = {1,2} by Th24;
@@ -956,7 +951,7 @@ A2: InsCode (a >0_goto i1) = 8 by MCART_1:7;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a >0_goto i1)).1;
-      then x in pi(AddressParts InsCode (a >0_goto i1),1) by A1,AMISTD_2:8;
+      then x in pi(AddressParts InsCode (a >0_goto i1),1) by A1,CARD_3:93;
       then consider g being Function such that
 A3:     g in AddressParts InsCode (a >0_goto i1) and
 A4:     x = g.1 by CARD_3:def 6;
@@ -967,17 +962,17 @@ A6:     InsCode I = InsCode (a >0_goto i1) by A3;
 A7:     I = b >0_goto i2 by A2,A6,AMI_5:54;
           g = <*i2,b*> by A5,A7,MCART_1:def 2;
       then x = i2 by A4,FINSEQ_1:61;
-      hence x in the Instruction-Locations of SCM;
+      hence x in NAT by AMI_1:def 4;
     end;
     let x be set;
-    assume x in the Instruction-Locations of SCM;
+    assume x in NAT;
     then reconsider x as Instruction-Location of SCM by AMI_1:def 4;
 A8: AddressPart (a >0_goto x) = <*x,a*> by MCART_1:def 2;
         InsCode (a >0_goto i1) = InsCode (a >0_goto x) by A2,MCART_1:7;
 then A9: <*x,a*> in AddressParts InsCode (a >0_goto i1) by A8;
         <*x,a*>.1 = x by FINSEQ_1:61;
     then x in pi(AddressParts InsCode (a >0_goto i1),1) by A9,CARD_3:def 6;
-    hence thesis by A1,AMISTD_2:8;
+    hence thesis by A1,CARD_3:93;
   end;
 
 theorem Th39:
@@ -989,7 +984,7 @@ then A2: 2 in dom product" AddressParts InsCode (a >0_goto i1) by TARSKI:def 2;
     hereby
       let x be set;
       assume x in (product" AddressParts InsCode (a >0_goto i1)).2;
-      then x in pi(AddressParts InsCode (a >0_goto i1),2) by A2,AMISTD_2:def 1
+      then x in pi(AddressParts InsCode (a >0_goto i1),2) by A2,CARD_3:def 13
 ;
       then consider f being Function such that
 A3:     f in AddressParts InsCode (a >0_goto i1) and
@@ -1015,7 +1010,7 @@ A1;
        by CARD_3:def 6;
         (AddressPart (x >0_goto i1)).2 = <*i1,x*>.2 by MCART_1:def 2
       .= x by FINSEQ_1:61;
-    hence thesis by A2,A8,AMISTD_2:def 1;
+    hence thesis by A2,A8,CARD_3:def 13;
   end;
 
 Lm4:
@@ -1044,6 +1039,8 @@ A2:     x = IC Following s & IC s = l & s.l = i;
     assume x in {Next l};
     then A3: x = Next l by TARSKI:def 1;
     consider t being State of SCM;
+    l in NAT by AMI_1:def 4;
+    then
     reconsider il1 = l as Element of ObjectKind IC SCM by AMI_1:def 11;
     reconsider I = i as Element of ObjectKind l by AMI_1:def 14;
     set u = t+*((IC SCM, l)-->(il1, I));
@@ -1061,7 +1058,7 @@ Lm5:
     let i be Instruction of SCM;
     assume
 A1:   for l being Instruction-Location of SCM holds NIC(i,l)={Next l};
-    consider p, q being Element of the Instruction-Locations of SCM
+    consider p, q being Element of NAT
      such that
 A2:   p <> q by YELLOW_8:def 1;
     reconsider p, q as Instruction-Location of SCM by AMI_1:def 4;
@@ -1084,6 +1081,8 @@ proof
   A1: now assume
      A2: x = il;
        consider t being State of SCM;
+    il in NAT by AMI_1:def 4;
+    then
         reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
         reconsider I = halt SCM as Element of ObjectKind il by AMI_1:def 14;
         set u = t+*((IC SCM, il)-->(il1, I));
@@ -1111,19 +1110,7 @@ end;
 
 registration
  cluster JUMP halt SCM -> empty;
-coherence
-proof
- set X = { NIC(halt SCM, il) : not contradiction };
- assume not thesis;
-   then consider x being set such that
-A1:   x in meet X by XBOOLE_0:def 1;
-   set i1 = il.1, i2 = il.2;
-       NIC(halt SCM, i1) in X & NIC(halt SCM, i2) in X;
-   then {i1} in X & {i2} in X by Th40;
-   then x in {i1} & x in {i2} by A1,SETFAM_1:def 1;
-   then x = i1 & x = i2 by TARSKI:def 1;
- hence contradiction;
-end;
+coherence;
 end;
 
 theorem Th41:
@@ -1227,6 +1214,8 @@ proof
   A1: now assume
      A2: x = i1;
          consider t being State of SCM;
+    il in NAT by AMI_1:def 4;
+    then
          reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
          reconsider I = goto i1 as Element of ObjectKind il by AMI_1:def 14;
          set u = t+*((IC SCM, il)-->(il1, I));
@@ -1306,9 +1295,13 @@ A1:     x = IC Following s & IC s = il & s.il = a=0_goto i1;
     assume
 A2:   x in {i1,Next il};
     consider t being State of SCM;
+    il in NAT by AMI_1:def 4;
+    then
     reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
     reconsider I = a=0_goto i1 as Element of ObjectKind il by AMI_1:def 14;
     set u = t+*((IC SCM, il)-->(il1, I));
+    il in NAT by AMI_1:def 4;
+    then
 A3: a <> il by Th1;
 A4: IC SCM <> a by AMI_5:20;
     per cases by A2,TARSKI:def 2;
@@ -1409,9 +1402,13 @@ A1:     x = IC Following s & IC s = il & s.il = a>0_goto i1;
     assume
 A2:   x in {i1,Next il};
     consider t being State of SCM;
+    il in NAT by AMI_1:def 4;
+    then
     reconsider il1 = il as Element of ObjectKind IC SCM by AMI_1:def 11;
     reconsider I = a>0_goto i1 as Element of ObjectKind il by AMI_1:def 14;
     set u = t+*((IC SCM, il)-->(il1, I));
+    il in NAT by AMI_1:def 4;
+    then
 A3: a <> il by Th1;
 A4: IC SCM <> a by AMI_5:20;
     per cases by A2,TARSKI:def 2;
@@ -1600,9 +1597,9 @@ A2:   f is bijective
     end;
     thus f is onto
     proof
-     thus rng f c= the Instruction-Locations of SCM by RELSET_1:12;
-     thus the Instruction-Locations of SCM c= rng f proof
-     let x be set; assume x in the Instruction-Locations of SCM;
+     thus rng f c= NAT by RELSET_1:12;
+     thus NAT c= rng f proof
+     let x be set; assume x in NAT;
       then x is Instruction-Location of SCM by AMI_1:def 4;
       then consider i being Element of NAT such that
     A5: x = il.i by AMI_5:19;
@@ -1614,8 +1611,10 @@ A2:   f is bijective
   end;
  let k be Element of NAT;
    A6: SUCC (f.k) = {f.k, Next (f.k)} by Th52;
+X:  il.k in NAT & il.(k+1) in NAT by AMI_1:def 4;
+    then
    A7: f.(k+1) = il.(k+1) & f.k = il.k by A1;
-   A8: f.(k+1) = il.(k+1) by A1
+   A8: f.(k+1) = il.(k+1) by A1,X
               .= Next il.k by AMI_3:54;
     hence f.(k+1) in SUCC (f.k) by A6,A7,TARSKI:def 2;
     let j be Element of NAT;
@@ -1623,12 +1622,13 @@ A2:   f is bijective
  A9:  f.j in SUCC (f.k);
    A10: f is one-to-one by A2,FUNCT_2:def 4;
    A11: dom f = NAT by FUNCT_2:def 1;
+X:  Next (f.k) in NAT by AMI_1:def 4;
      per cases by A6,A9,TARSKI:def 2;
      suppose f.j = f.k;
       hence k <= j by A10,A11,FUNCT_1:def 8;
      end;
      suppose f.j = Next (f.k);
-         then j = k+1 by A7,A8,A10,A11,FUNCT_1:def 8;
+         then j = k+1 by A7,A8,A10,A11,FUNCT_1:def 8,X;
       hence k <= j by NAT_1:11;
    end;
    end;
@@ -1637,9 +1637,10 @@ registration
  cluster SCM -> standard;
 coherence
   proof deffunc F(Element of NAT) = il.$1;
-    consider f being Function of NAT, the Instruction-Locations of SCM
+X:  for k being Element of NAT holds F(k) is Element of NAT by AMI_1:def 4;
+    consider f being Function of NAT, NAT
        such that
-A1:   for k being Element of NAT holds f.k = F(k) from FUNCT_2:sch 4;
+A1:   for k being Element of NAT holds f.k = F(k) from FUNCT_2:sch 9(X);
     reconsider f as IL-Function of NAT, SCM by AMI_1:def 36;
         f is bijective &
      for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
@@ -1651,9 +1652,10 @@ end;
 theorem Th54:
  il.(SCM,k) = il.k
   proof deffunc F(Element of NAT) = il.$1;
-    consider f being Function of NAT, the Instruction-Locations of SCM
+X:  for k being Element of NAT holds F(k) is Element of NAT by AMI_1:def 4;
+    consider f being Function of NAT, NAT
       such that
-A1:   for k being Element of NAT holds f.k = F(k) from FUNCT_2:sch 4;
+A1:   for k being Element of NAT holds f.k = F(k) from FUNCT_2:sch 9(X);
     reconsider f as IL-Function of NAT, SCM by AMI_1:def 36;
 A2:  f is bijective by A1,Th53;
 A3:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
@@ -1667,7 +1669,8 @@ A3:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
       thus f is bijective by A1,Th53;
       thus for m, n being Element of NAT holds m <= n iff f.m <= f.n
       by A2,A3,AMISTD_1:18;
-      thus thesis by A1;
+       il.k in NAT by AMI_1:def 4;
+      hence thesis by A1;
     end;
     hence thesis by AMISTD_1:def 12;
   end;
@@ -1726,7 +1729,7 @@ A2:    o <> IC S;
     then consider i2 such that
 A3:    I = goto i2 by A1,AMI_5:52;
     per cases by A2,Th3;
-    suppose o in the Instruction-Locations of S;
+    suppose o in NAT;
      then reconsider l=o as Instruction-Location of S by AMI_1:def 4;
       l=o;
     hence Exec(I, s).o = s.o by AMI_1:def 13;
@@ -1770,7 +1773,7 @@ A2:    o <> IC S;
     then consider i2, b such that
 A3:    I = (b =0_goto i2) by A1,AMI_5:53;
     per cases by A2,Th3;
-    suppose o in the Instruction-Locations of S;
+    suppose o in NAT;
      then reconsider l=o as Instruction-Location of S by AMI_1:def 4;
       l=o;
     hence Exec(I, s).o = s.o by AMI_1:def 13;
@@ -1794,7 +1797,7 @@ A5:    o <> IC S;
     then consider i2, b such that
 A6:    I = (b >0_goto i2) by A4,AMI_5:54;
     per cases by A5,Th3;
-    suppose o in the Instruction-Locations of S;
+    suppose o in NAT;
      then reconsider l=o as Instruction-Location of S by AMI_1:def 4;
       l=o;
     hence Exec(I, s).o = s.o by AMI_1:def 13;
@@ -2310,7 +2313,7 @@ A36:   AddressPart goto i1 = <*i1*> by MCART_1:def 2;
           dom <*i1*> = Seg 1 by FINSEQ_1:def 8;
       hence 1 in dom AddressPart I by A34,A36,FINSEQ_1:4,TARSKI:def 1;
       thus f = (AddressPart I).1 &
-       (product" AddressParts InsCode I).1 = the Instruction-Locations of SCM
+       (product" AddressParts InsCode I).1 = NAT
         by A34,A35,A36,Th35,FINSEQ_1:def 8;
       end;
       suppose ex a,i1 st I = a=0_goto i1;
@@ -2323,7 +2326,7 @@ A39:   AddressPart (a=0_goto i1) = <*i1,a*> by MCART_1:def 2;
           dom <*i1,a*> = Seg 2 by FINSEQ_3:29;
       hence 1 in dom AddressPart I by A37,A39,FINSEQ_1:4,TARSKI:def 2;
       thus f = (AddressPart I).1 &
-       (product" AddressParts InsCode I).1 = the Instruction-Locations of SCM
+       (product" AddressParts InsCode I).1 = NAT
         by A37,A38,A39,Th36,FINSEQ_1:61;
       end;
       suppose ex a,i1 st I = a>0_goto i1;
@@ -2336,7 +2339,7 @@ A42:   AddressPart (a>0_goto i1) = <*i1,a*> by MCART_1:def 2;
           dom <*i1,a*> = Seg 2 by FINSEQ_3:29;
       hence 1 in dom AddressPart I by A40,A42,FINSEQ_1:4,TARSKI:def 2;
       thus f = (AddressPart I).1 &
-       (product" AddressParts InsCode I).1 = the Instruction-Locations of SCM
+       (product" AddressParts InsCode I).1 = NAT
         by A40,A41,A42,Th38,FINSEQ_1:61;
     end;
     end;
@@ -2346,7 +2349,7 @@ A42:   AddressPart (a>0_goto i1) = <*i1,a*> by MCART_1:def 2;
     given k being set such that
 A43:   k in dom AddressPart I and
 A44:   f = (AddressPart I).k and
-A45:   (product" AddressParts InsCode I).k = the Instruction-Locations of SCM;
+A45:   (product" AddressParts InsCode I).k = NAT;
     per cases by AMI_3:69;
     suppose I = [0,{}];
     then dom AddressPart I = dom {} by MCART_1:def 2;
@@ -2433,7 +2436,7 @@ A1:   T = 0;
     suppose
 A2:   T = 1;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2444,13 +2447,13 @@ A5:   for k being set st k in dom product" AddressParts T holds
 A6: dom product" AddressParts T = {1,2} by A2,Th17;
 then A7: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A5;
-    then f.1 in pi(AddressParts T,1) by A7,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A7,CARD_3:def 13;
     then consider g being Function such that
 A8:   g in AddressParts T and
 A9:   g.1 = f.1 by CARD_3:def 6;
 A10: 2 in dom product" AddressParts T by A6,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A5;
-    then f.2 in pi(AddressParts T,2) by A10,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A10,CARD_3:def 13;
     then consider h being Function such that
 A11:   h in AddressParts T and
 A12:   h.2 = f.2 by CARD_3:def 6;
@@ -2494,7 +2497,7 @@ then A25: <*d1,d2*> = f by A4,A6,A21,FUNCT_1:9;
     suppose
 A26:   T = 2;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2505,13 +2508,13 @@ A29:   for k being set st k in dom product" AddressParts T holds
 A30: dom product" AddressParts T = {1,2} by A26,Th18;
 then A31: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A29;
-    then f.1 in pi(AddressParts T,1) by A31,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A31,CARD_3:def 13;
     then consider g being Function such that
 A32:   g in AddressParts T and
 A33:   g.1 = f.1 by CARD_3:def 6;
 A34: 2 in dom product" AddressParts T by A30,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A29;
-    then f.2 in pi(AddressParts T,2) by A34,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A34,CARD_3:def 13;
     then consider h being Function such that
 A35:   h in AddressParts T and
 A36:   h.2 = f.2 by CARD_3:def 6;
@@ -2556,7 +2559,7 @@ then A49: <*d1,d2*> = f by A28,A30,A45,FUNCT_1:9;
     suppose
 A50:   T = 3;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2567,13 +2570,13 @@ A53:   for k being set st k in dom product" AddressParts T holds
 A54: dom product" AddressParts T = {1,2} by A50,Th19;
 then A55: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A53;
-    then f.1 in pi(AddressParts T,1) by A55,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A55,CARD_3:def 13;
     then consider g being Function such that
 A56:   g in AddressParts T and
 A57:   g.1 = f.1 by CARD_3:def 6;
 A58: 2 in dom product" AddressParts T by A54,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A53;
-    then f.2 in pi(AddressParts T,2) by A58,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A58,CARD_3:def 13;
     then consider h being Function such that
 A59:   h in AddressParts T and
 A60:   h.2 = f.2 by CARD_3:def 6;
@@ -2618,7 +2621,7 @@ then A73: <*d1,d2*> = f by A52,A54,A69,FUNCT_1:9;
     suppose
 A74:   T = 4;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2629,13 +2632,13 @@ A77:   for k being set st k in dom product" AddressParts T holds
 A78: dom product" AddressParts T = {1,2} by A74,Th20;
 then A79: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A77;
-    then f.1 in pi(AddressParts T,1) by A79,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A79,CARD_3:def 13;
     then consider g being Function such that
 A80:   g in AddressParts T and
 A81:   g.1 = f.1 by CARD_3:def 6;
 A82: 2 in dom product" AddressParts T by A78,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A77;
-    then f.2 in pi(AddressParts T,2) by A82,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A82,CARD_3:def 13;
     then consider h being Function such that
 A83:   h in AddressParts T and
 A84:   h.2 = f.2 by CARD_3:def 6;
@@ -2679,7 +2682,7 @@ then A97: <*d1,d2*> = f by A76,A78,A93,FUNCT_1:9;
     suppose
 A98:   T = 5;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2690,13 +2693,13 @@ A101:   for k being set st k in dom product" AddressParts T holds
 A102: dom product" AddressParts T = {1,2} by A98,Th21;
 then A103: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A101;
-    then f.1 in pi(AddressParts T,1) by A103,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A103,CARD_3:def 13;
     then consider g being Function such that
 A104:   g in AddressParts T and
 A105:   g.1 = f.1 by CARD_3:def 6;
 A106: 2 in dom product" AddressParts T by A102,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A101;
-    then f.2 in pi(AddressParts T,2) by A106,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A106,CARD_3:def 13;
     then consider h being Function such that
 A107:   h in AddressParts T and
 A108:   h.2 = f.2 by CARD_3:def 6;
@@ -2740,7 +2743,7 @@ then A121: <*d1,d2*> = f by A100,A102,A117,FUNCT_1:9;
     suppose
 A122:   T = 6;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2751,7 +2754,7 @@ A125:   for k being set st k in dom product" AddressParts T holds
 A126: dom product" AddressParts T = {1} by A122,Th22;
 then A127: 1 in dom product" AddressParts T by TARSKI:def 1;
     then f.1 in (product" AddressParts T).1 by A125;
-    then f.1 in pi(AddressParts T,1) by A127,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A127,CARD_3:def 13;
     then consider g being Function such that
 A128:   g in AddressParts T and
 A129:   g.1 = f.1 by CARD_3:def 6;
@@ -2775,7 +2778,7 @@ then A134: <*i1*> = f by A124,A126,A133,FUNCT_1:9;
     suppose
 A135:   T = 7;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2786,13 +2789,13 @@ A138:   for k being set st k in dom product" AddressParts T holds
 A139: dom product" AddressParts T = {1,2} by A135,Th23;
 then A140: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A138;
-    then f.1 in pi(AddressParts T,1) by A140,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A140,CARD_3:def 13;
     then consider g being Function such that
 A141:   g in AddressParts T and
 A142:   g.1 = f.1 by CARD_3:def 6;
 A143: 2 in dom product" AddressParts T by A139,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A138;
-    then f.2 in pi(AddressParts T,2) by A143,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A143,CARD_3:def 13;
     then consider h being Function such that
 A144:   h in AddressParts T and
 A145:   h.2 = f.2 by CARD_3:def 6;
@@ -2836,7 +2839,7 @@ then A158: <*i1,d2*> = f by A137,A139,A154,FUNCT_1:9;
     suppose
 A159:   T = 8;
     take product" AddressParts T;
-    thus AddressParts T c= product product" AddressParts T by AMISTD_2:9;
+    thus AddressParts T c= product product" AddressParts T by CARD_3:94;
     let x be set;
     assume x in product product" AddressParts T;
     then consider f being Function such that
@@ -2847,13 +2850,13 @@ A162:   for k being set st k in dom product" AddressParts T holds
 A163: dom product" AddressParts T = {1,2} by A159,Th24;
 then A164: 1 in dom product" AddressParts T by TARSKI:def 2;
     then f.1 in (product" AddressParts T).1 by A162;
-    then f.1 in pi(AddressParts T,1) by A164,AMISTD_2:def 1;
+    then f.1 in pi(AddressParts T,1) by A164,CARD_3:def 13;
     then consider g being Function such that
 A165:   g in AddressParts T and
 A166:   g.1 = f.1 by CARD_3:def 6;
 A167: 2 in dom product" AddressParts T by A163,TARSKI:def 2;
     then f.2 in (product" AddressParts T).2 by A162;
-    then f.2 in pi(AddressParts T,2) by A167,AMISTD_2:def 1;
+    then f.2 in pi(AddressParts T,2) by A167,CARD_3:def 13;
     then consider h being Function such that
 A168:   h in AddressParts T and
 A169:   h.2 = f.2 by CARD_3:def 6;
@@ -2920,7 +2923,7 @@ A4:     x in dom AddressPart goto i1;
       then x in dom <*i1*> by MCART_1:def 2;
 then A5:   x = 1 by Lm1;
       then (product" AddressParts InsCode goto i1).x =
-        the Instruction-Locations of SCM by Th35;
+        NAT by Th35;
       then consider f being Instruction-Location of SCM such that
 A6:     f = (AddressPart goto i1).x and
 A7:     (AddressPart IncAddr(goto i1,k)).x = il.(SCM,k + locnum f)
@@ -2962,7 +2965,7 @@ then A5:   x in dom <*i1,a*> by MCART_1:def 2;
       suppose
 A6:     x = 1;
       then (product" AddressParts InsCode (a=0_goto i1)).x =
-        the Instruction-Locations of SCM by Th36;
+        NAT by Th36;
       then consider f being Instruction-Location of SCM such that
 A7:     f = (AddressPart (a=0_goto i1)).x and
 A8:     (AddressPart IncAddr(a=0_goto i1,k)).x = il.(SCM,k + locnum f)
@@ -2976,7 +2979,7 @@ A8:     (AddressPart IncAddr(a=0_goto i1,k)).x = il.(SCM,k + locnum f)
       suppose
 A9:     x = 2;
       then (product" AddressParts InsCode (a=0_goto i1)).x <>
-        the Instruction-Locations of SCM by Th2,Th37;
+        NAT by Th2,Th37;
       hence (AddressPart IncAddr(a=0_goto i1,k)).x
         = (AddressPart (a=0_goto i1)).x by A4,AMISTD_2:def 14
        .= <*i1,a*>.x by MCART_1:def 2
@@ -3016,7 +3019,7 @@ then A5:   x in dom <*i1,a*> by MCART_1:def 2;
       suppose
 A6:     x = 1;
       then (product" AddressParts InsCode (a>0_goto i1)).x =
-        the Instruction-Locations of SCM by Th38;
+        NAT by Th38;
       then consider f being Instruction-Location of SCM such that
 A7:     f = (AddressPart (a>0_goto i1)).x and
 A8:     (AddressPart IncAddr(a>0_goto i1,k)).x = il.(SCM,k + locnum f)
@@ -3030,7 +3033,7 @@ A8:     (AddressPart IncAddr(a>0_goto i1,k)).x = il.(SCM,k + locnum f)
       suppose
 A9:     x = 2;
       then (product" AddressParts InsCode (a>0_goto i1)).x <>
-        the Instruction-Locations of SCM by Th2,Th39;
+        NAT by Th2,Th39;
       hence (AddressPart IncAddr(a>0_goto i1,k)).x
         = (AddressPart (a>0_goto i1)).x by A4,AMISTD_2:def 14
        .= <*i1,a*>.x by MCART_1:def 2
@@ -3173,7 +3176,7 @@ A22:     IC Exec(I, s2) = Next IC s2 by A15,A18,A20,AMI_3:15
     end;
     let I be Instruction of SCM;
     let s1, s2 be State of SCM such that
-A23:   s1, s2 equal_outside the Instruction-Locations of SCM;
+A23:   s1, s2 equal_outside NAT;
 A24: dom Exec(I,s1) = dom the Object-Kind of SCM by CARD_3:18;
 then A25: dom Exec(I,s1) = dom Exec(I,s2) by CARD_3:18;
 A26: dom the Object-Kind of SCM = the carrier of SCM by FUNCT_2:def 1;
@@ -3185,14 +3188,13 @@ A27: IC s1 = IC s2 by A23,AMI_1:121;
     suppose ex a,b st I = a:=b;
     then consider a, b such that
 A28:   I = a:=b;
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A29:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A30:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A29:     x in dom Exec(I,s1) \ NAT;
+then A30:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A29,A30,Th3;
       suppose
 A31:     x = IC SCM;
@@ -3213,21 +3215,20 @@ A34:     x <> a;
         .= Exec(I,s2).x by A28,A33,A34,AMI_3:8;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,b st I = AddTo(a,b);
     then consider a, b such that
 A35:   I = AddTo(a,b);
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A36:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A37:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A36:     x in dom Exec(I,s1) \ NAT;
+then A37:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A36,A37,Th3;
       suppose
 A38:     x = IC SCM;
@@ -3249,21 +3250,20 @@ A41:     x <> a;
         .= Exec(I,s2).x by A35,A40,A41,AMI_3:9;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,b st I = SubFrom(a,b);
     then consider a, b such that
 A42:   I = SubFrom(a,b);
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A43:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A44:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A43:     x in dom Exec(I,s1) \ NAT;
+then A44:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A43,A44,Th3;
       suppose
 A45:     x = IC SCM;
@@ -3285,21 +3285,20 @@ A48:     x <> a;
         .= Exec(I,s2).x by A42,A47,A48,AMI_3:10;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,b st I = MultBy(a,b);
     then consider a, b such that
 A49:   I = MultBy(a,b);
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A50:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A51:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A50:     x in dom Exec(I,s1) \ NAT;
+then A51:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A50,A51,Th3;
       suppose
 A52:     x = IC SCM;
@@ -3321,21 +3320,20 @@ A55:     x <> a;
         .= Exec(I,s2).x by A49,A54,A55,AMI_3:11;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,b st I = Divide(a,b);
     then consider a, b such that
 A56:   I = Divide(a,b);
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A57:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A58:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A57:     x in dom Exec(I,s1) \ NAT;
+then A58:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A57,A58,Th3;
       suppose
 A59:     x = IC SCM;
@@ -3367,21 +3365,20 @@ A64:     c <> a & c <> b;
       hence thesis by A60;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex i1 st I = goto i1;
     then consider i1 such that
 A65:   I = goto i1;
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A66:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A67:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A66:     x in dom Exec(I,s1) \ NAT;
+then A67:   not x in NAT by XBOOLE_0:def 4;
       per cases by A24,A26,A66,A67,Th3;
       suppose
 A68:     x = IC SCM;
@@ -3395,21 +3392,20 @@ A69:     x is Data-Location;
         .= Exec(I,s2).x by A65,A69,AMI_3:13;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,i1 st I = a=0_goto i1;
     then consider a, i1 such that
 A70:   I = a=0_goto i1;
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A71:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A72:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A71:     x in dom Exec(I,s1) \ NAT;
+then A72:   not x in NAT by XBOOLE_0:def 4;
 A73:   s1.a = s2.a by A23,Th5;
       per cases by A24,A26,A71,A72,Th3;
       suppose that
@@ -3431,21 +3427,20 @@ A78:     x is Data-Location;
         .= Exec(I,s2).x by A70,A78,AMI_3:14;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
     end;
     suppose ex a,i1 st I = a>0_goto i1;
     then consider a, i1 such that
 A79:   I = a>0_goto i1;
-        for x being set st x in dom Exec(I,s1) \ the Instruction-Locations of
-SCM
+        for x being set st x in dom Exec(I,s1) \ NAT
       holds Exec(I,s1).x = Exec(I,s2).x
     proof
       let x be set;
       assume
-A80:     x in dom Exec(I,s1) \ the Instruction-Locations of SCM;
-then A81:   not x in the Instruction-Locations of SCM by XBOOLE_0:def 4;
+A80:     x in dom Exec(I,s1) \ NAT;
+then A81:   not x in NAT by XBOOLE_0:def 4;
 A82:   s1.a = s2.a by A23,Th5;
       per cases by A24,A26,A80,A81,Th3;
       suppose that
@@ -3467,8 +3462,8 @@ A87:     x is Data-Location;
         .= Exec(I,s2).x by A79,A87,AMI_3:15;
     end;
     end;
-    hence Exec(I,s1)|(dom Exec(I,s1) \ the Instruction-Locations of SCM) =
-      Exec(I,s2)|(dom Exec(I,s2) \ the Instruction-Locations of SCM)
+    hence Exec(I,s1)|(dom Exec(I,s1) \ NAT) =
+      Exec(I,s2)|(dom Exec(I,s2) \ NAT)
         by A25,FUNCT_1:165;
   end;
   end;

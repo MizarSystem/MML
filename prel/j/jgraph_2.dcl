@@ -21,6 +21,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="ENUMSET1"/>
@@ -74,7 +75,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="46">
+<Adjective nr="50">
 <Func kind="K" nr="227">
 <Num nr="2"/>
 </Func>

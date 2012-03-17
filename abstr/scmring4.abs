@@ -10,11 +10,11 @@ environ
       AMI_2, BOOLE, FUNCT_1, FUNCOP_1, CAT_1, ARYTM, GOBOARD5, RELAT_1, AMI_5,
       FUNCT_4, SGRAPH1, TARSKI, FUNCT_7, AMISTD_2, REALSET1, RLVECT_1, ARYTM_1,
       AMISTD_1, CARD_3, RELOC, PARTFUN1;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, FINSET_1,
-      RELAT_1, NUMBERS, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, FUNCSDOM,
-      FUNCOP_1, XCMPLX_0, NAT_1, RLVECT_1, FUNCT_4, CARD_3, FUNCT_7, GROUP_1,
-      BINARITH, AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, AMISTD_1, AMISTD_2,
-      SCMRING3, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, WELLORD2, DOMAIN_1, ORDINAL1,
+      FINSET_1, RELAT_1, NUMBERS, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0,
+      FUNCSDOM, FUNCOP_1, XCMPLX_0, NAT_1, RLVECT_1, FUNCT_4, CARD_3, FUNCT_7,
+      GROUP_1, BINARITH, AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, AMISTD_1,
+      AMISTD_2, SCMRING3, XXREAL_0;
  constructors WELLORD2, XXREAL_0, NAT_1, SEQ_1, BINARITH, REALSET2, AMI_5,
       AMISTD_2, SCMRING3;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1,
@@ -29,19 +29,15 @@ begin :: On the standard computers
 reserve
   i, j, k for natural number,
   n for Element of NAT,
+  IL for non empty set,
   N for with_non-empty_elements set,
   S for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N)),
+        (non empty stored-program AMI-Struct over NAT,N)),
   l for Instruction-Location of S,
   f for FinPartState of S;
 
 theorem :: SCMRING4:1
-  NAT,the Instruction-Locations of S are_equipotent;
-
-registration
-   let N,S;
- cluster the Instruction-Locations of S -> infinite;
-end;
+  NAT,NAT are_equipotent;
 
 theorem :: SCMRING4:2
   il.(S,i) + j = il.(S,i+j);
@@ -49,7 +45,7 @@ theorem :: SCMRING4:2
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
+           (non empty stored-program AMI-Struct over NAT,N)),
       loc be Instruction-Location of S,
       k be natural number;
  func loc -' k -> Instruction-Location of S equals
@@ -68,17 +64,18 @@ theorem :: SCMRING4:5
 canceled;
 
 theorem :: SCMRING4:7
-  for S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+  for S being IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over IL,N),
       p being FinPartState of S holds
   dom DataPart p c=
-    (the carrier of S) \ ({IC S} \/ the Instruction-Locations of S);
+    (the carrier of S) \ ({IC S} \/ IL);
 
 theorem :: SCMRING4:8
   for S being IC-Ins-separated definite realistic
-              (non empty non void AMI-Struct over N),
+              (non empty stored-program AMI-Struct over IL,N),
       p being FinPartState of S holds
   p is data-only iff
-   dom p c= (the carrier of S) \ ({IC S} \/ the Instruction-Locations of S);
+   dom p c= (the carrier of S) \ ({IC S} \/ IL);
 
 theorem :: SCMRING4:9
   for l1, l2 being Instruction-Location of S holds
@@ -98,7 +95,8 @@ theorem :: SCMRING4:12
 
 theorem :: SCMRING4:13
   for S being Exec-preserving IC-Ins-separated definite realistic
-              steady-programmed (non empty non void AMI-Struct over N),
+              steady-programmed
+               (non empty stored-program AMI-Struct over NAT,N),
       s being State of S,
       i being Instruction of S,
       p being programmed FinPartState of S
@@ -270,7 +268,7 @@ begin :: Relocability
 definition
   let N be with_non-empty_elements set,
       S be regular standard (IC-Ins-separated definite
-           (standard-ins non empty non void AMI-Struct over N)),
+           (standard-ins non empty stored-program AMI-Struct over NAT,N)),
       k be natural number,
       p be FinPartState of S;
  func Relocated (p,k) -> FinPartState of S equals
@@ -280,7 +278,7 @@ end;
 
 reserve
   S for regular standard (IC-Ins-separated definite
-              (standard-ins non empty non void AMI-Struct over N)),
+              (standard-ins non empty stored-program AMI-Struct over NAT,N)),
   g for FinPartState of S,
   il for Instruction-Location of S;
 

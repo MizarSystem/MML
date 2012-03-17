@@ -39,9 +39,8 @@ A4:for A st for B st B in A holds P[B] holds P[A]
 A5:     for B st B in A holds P[B];
 A6:     now given B such that
 A7:      A = succ B;
-              B in A by A7,ORDINAL1:10;
-         then P[B] by A5;
-        hence thesis by A2,A7;
+         B in A by A7,ORDINAL1:10;
+        hence thesis by A2,A7,A5;
        end;
             now assume
 A8:      A <> {} & for B holds A <> succ B;
@@ -64,7 +63,6 @@ theorem
 theorem
  Th2: union succ A = A
   proof
-A1:    A in succ A by ORDINAL1:10;
    thus union succ A c= A
      proof let x; assume x in union succ A;
       then consider X such that
@@ -73,7 +71,7 @@ A2:     x in X & X in succ A by TARSKI:def 4;
             X c= A by A2,ORDINAL1:34;
       hence x in A by A2;
      end;
-   thus thesis by A1,ZFMISC_1:92;
+   thus thesis by ORDINAL1:10,ZFMISC_1:92;
   end;
 
 theorem
@@ -327,10 +325,7 @@ theorem
        A in sup X implies ex B st B in X & A c= B
    proof assume
 A1:   A in sup X & for B st B in X holds not A c= B;
-          now let B; assume B in X;
-       then not A c= B by A1;
-      hence B in A by ORDINAL1:26;
-     end;
+     then for B st B in X holds B in A by ORDINAL1:26;
      then sup X c= A by Th28;
     hence contradiction by A1,ORDINAL1:7;
    end;
@@ -512,8 +507,7 @@ A13: B in A() & L1().B <> L2().B by A10,A12;
 then A14:  B c= A() by ORDINAL1:def 2;
 A15:  now let C; assume
 A16:   C in B;
-      then not B c= C by ORDINAL1:7;
-   then not C in X by A12;
+   then not C in X by A12,ORDINAL1:7;
       hence L1().C = L2().C by A10,A14,A16;
     end;
 A17:  dom(L1()|B) = B & dom(L2()|B) = B by A1,A5,A14,RELAT_1:91;
@@ -712,12 +706,12 @@ A46:               D = x' & L3 = L1|x';
                  thus succ C in D implies L3.(succ C) = C(C,L3.C)
                    proof assume
 A47:                  succ C in D;
-                          C in succ C by ORDINAL1:10;
-                     then A48: C in D by A47,ORDINAL1:19;
+B48:                      C in succ C by ORDINAL1:10;
+                     then  C in D by A47,ORDINAL1:19;
 then A49:                  succ C in A & succ C in x' & C in A & C in x'
                        by A41,A46,A47,ORDINAL1:19;
                           L1|x'.succ C = L1.succ C & L1|x'.C = L1.C
-                       by A46,A47,A48,FUNCT_1:72;
+                       by A46,A47,B48,FUNCT_1:72,ORDINAL1:19;
                     hence L3.(succ C) = C(C,L3.C) by A13,A38,A46,A49;
                    end;
                  let C; assume
@@ -733,13 +727,11 @@ FUNCT_1:72;
 then A51:            L1|x' = L2 by A43,FUNCT_1:8;
                  now given D such that
 A52:              x' = succ D;
-A53:              D in x' by A52,ORDINAL1:10;
                 consider C such that
 A54:              A1 = succ C & L.x' = C(C,L2.C) by A43,A44,A52,ORDINAL1:42;
                    C = D & L1.x = C(D,L1.D) by A13,A38,A41,A43,A52,A54,
-ORDINAL1:12
-;
-                 hence L1.x = L|A.x by A45,A51,A53,A54,FUNCT_1:72;
+ORDINAL1:12;
+                 hence L1.x = L|A.x by A45,A51,A52,ORDINAL1:10,A54,FUNCT_1:72;
                end;
               hence L1.x = L|A.x by A13,A38,A41,A43,A44,A45,A51;
              end;
@@ -804,8 +796,7 @@ A10:  for C st succ C in succ A holds L.succ C = C(C,L.C)
      proof let C such that
 A11:    succ C in succ A;
             C in succ C by ORDINAL1:10;
-    then C in succ A by A11,ORDINAL1:19;
-       then L.C = L().C & L.succ C = L().succ C by A11,FUNCT_1:72;
+       then L.C = L().C & L.succ C = L().succ C by A11,FUNCT_1:72,ORDINAL1:19;
       hence L.succ C = C(C,L.C) by A2,A4,A6,A11;
      end;
          for C st C in succ A & C <> {} & C is_limit_ordinal
@@ -917,11 +908,10 @@ A4: {} in succ succ A implies L.{} = B() and
 A5: for C st succ C in succ succ A holds L.(succ C) = C(C,L.C) and
 A6: for C st C in succ succ A & C <> {} & C is_limit_ordinal
       holds L.C = D(C,L|C) from TSExist1;
-A7:  for B st B in dom L holds L.B = F(B) from TSResult(A2,A3,A4,A5,A6);
-A8:  A in succ A & succ A in succ succ A by ORDINAL1:10;
-    then A in succ succ A by ORDINAL1:19;
-    then L.A = F(A) & L.succ A = F(succ A) by A3,A7,A8;
-   hence thesis by A5,A8;
+A7: for B st B in dom L holds L.B = F(B) from TSResult(A2,A3,A4,A5,A6);
+    A in succ A & succ A in succ succ A by ORDINAL1:10;
+    then L.A = F(A) & L.succ A = F(succ A) by A3,A7,ORDINAL1:19;
+   hence thesis by A5,ORDINAL1:10;
   end;
 
   scheme TSResultL
@@ -957,13 +947,14 @@ then A12:  dom L1 = A() by RELAT_1:91;
          now let x; assume
 A13:    x in A();
      then reconsider x' = x as Ordinal by ORDINAL1:23;
-A14:    x' in succ A() by A11,A13,ORDINAL1:19;
-     thus L1.x = L.x' by A13,FUNCT_1:72 .= F(x') by A6,A10,A14 .= L().x by A4
+     thus L1.x = L.x' by A13,FUNCT_1:72
+              .= F(x') by A6,A10,A11,A13,ORDINAL1:19
+              .= L().x by A4
 ,A13;
     end;
     then L1 = L() by A3,A12,FUNCT_1:9;
-    then L.A() = D(A(),L()) by A2,A9,A11;
-   hence thesis by A6,A10,A11;
+    then L.A() = D(A(),L()) by A2,A9,ORDINAL1:10;
+   hence thesis by A6,A10,ORDINAL1:10;
   end;
 
  scheme OSExist { A()->Ordinal, B()->Ordinal, C(Ordinal,Ordinal)->Ordinal,
@@ -1049,8 +1040,8 @@ A11:  for C st succ C in succ A holds fi.succ C = C(C,fi.C)
      proof let C such that
 A12:    succ C in succ A;
             C in succ C by ORDINAL1:10;
-    then C in succ A by A12,ORDINAL1:19;
-       then fi.C = fi().C & fi.succ C = fi().succ C by A12,FUNCT_1:72;
+       then fi.C = fi().C & fi.succ C = fi().succ C
+        by A12,FUNCT_1:72,ORDINAL1:19;
       hence fi.succ C = C(C,fi.C) by A2,A4,A6,A12;
      end;
          for C st C in succ A & C <> {} & C is_limit_ordinal
@@ -1181,12 +1172,10 @@ A4: {} in succ succ A implies fi.{} = B() and
 A5: for C st succ C in succ succ A holds fi.(succ C) = C(C,fi.C) and
 A6: for C st C in succ succ A & C <> {} & C is_limit_ordinal
       holds fi.C = D(C,fi|C) from OSExist;
-A7:  for B st B in dom fi holds fi.B = F(B)
-       from OSResult(A2,A3,A4,A5,A6);
-A8:  A in succ A & succ A in succ succ A by ORDINAL1:10;
-    then A in succ succ A by ORDINAL1:19;
-    then fi.A = F(A) & fi.succ A = F(succ A) by A3,A7,A8;
-   hence thesis by A5,A8;
+A7: for B st B in dom fi holds fi.B = F(B) from OSResult(A2,A3,A4,A5,A6);
+    A in succ A & succ A in succ succ A by ORDINAL1:10;
+    then fi.A = F(A) & fi.succ A = F(succ A) by A3,A7,ORDINAL1:19;
+   hence thesis by A5,ORDINAL1:10;
   end;
 
   scheme OSResultL
@@ -1222,13 +1211,13 @@ then A12:  dom psi = A() by RELAT_1:91;
          now let x; assume
 A13:    x in A();
      then reconsider x' = x as Ordinal by ORDINAL1:23;
-A14:    x' in succ A() by A11,A13,ORDINAL1:19;
-     thus psi.x = fi.x' by A13,FUNCT_1:72 .= F(x') by A6,A10,A14
-                .= fi().x by A4,A13;
+     thus psi.x = fi.x' by A13,FUNCT_1:72
+               .= F(x') by A6,A10,A11,A13,ORDINAL1:19
+               .= fi().x by A4,A13;
     end;
     then psi = fi() by A3,A12,FUNCT_1:9;
-    then fi.A() = D(A(),fi()) by A2,A9,A11;
-   hence thesis by A6,A10,A11;
+    then fi.A() = D(A(),fi()) by A2,A9,ORDINAL1:10;
+   hence thesis by A6,A10,ORDINAL1:10;
   end;
 
 definition let L;
@@ -1473,11 +1462,7 @@ end;
 
 registration let O be Ordinal;
  cluster -> ordinal Element of O;
- coherence
-   proof
-    let x be Element of O;
-    thus thesis;
-   end;
+ coherence;
 end;
 
 definition let A,B;
@@ -1652,8 +1637,7 @@ theorem
 A1:  A c= B;
        now assume A <> B;
       then A c< B by A1,XBOOLE_0:def 8;
-      then A in B by ORDINAL1:21;
-      then C +^ A in C +^ B by Th49;
+      then C +^ A in C +^ B by Th49,ORDINAL1:21;
      hence thesis by ORDINAL1:def 2;
     end;
    hence thesis;
@@ -1673,8 +1657,7 @@ A4:     now assume C = {};
        end;
 A5:     now given D such that
 A6:      C = succ D;
-              D in C by A6,ORDINAL1:10;
-then A7:      A +^ D c= B +^ D by A3;
+A7:      A +^ D c= B +^ D by A3,A6,ORDINAL1:10;
               A +^ C = succ(A +^ D) & B +^ C = succ(B +^ D) by A6,Th45;
         hence thesis by A7,Th1;
        end;
@@ -1772,7 +1755,8 @@ A7:     A*^{} = union sup fi by A4,A6,Th54 .= union sup rng fi;
             rng fi = succ {}
         proof
                {} c= A by XBOOLE_1:2;
-          then {} c< A by A4,XBOOLE_0:def 8;
+          then
+B8:       {} c< A by A4,XBOOLE_0:def 8;
 then A8:       {} in A by ORDINAL1:21;
          thus x in rng fi implies x in succ {}
            proof assume x in rng fi;
@@ -1784,7 +1768,7 @@ A9:          y in dom fi & x = fi.y by FUNCT_1:def 5;
            end;
          let x; assume x in succ {};
 then A10:       x = {} & {} *^ {} = {} by Th52,TARSKI:def 1;
-          then fi.x = x by A6,A8;
+          then fi.x = x by A6,B8,ORDINAL1:21;
          hence x in rng fi by A6,A8,A10,FUNCT_1:def 5;
         end;
        then sup rng fi = succ {} by Th26;
@@ -1805,9 +1789,9 @@ A1:for A st for B st B in A holds P[B] holds P[A]
 A2:     for B st B in A holds B*^(succ {}) = B;
 A3:     now given B such that
 A4:      A = succ B;
-A5:         B in A by A4,ORDINAL1:10;
         thus A*^(succ {}) = B*^(succ {}) +^ succ {} by A4,Th53
-                .= B +^ succ {} by A2,A5 .= succ(B +^ {}) by Th45
+                .= B +^ succ {} by A2,A4,ORDINAL1:10
+                .= succ(B +^ {}) by Th45
                 .= A by A4,Th44;
        end;
             now assume
@@ -1880,8 +1864,8 @@ A13:      B*^C = union sup fi by A5,A11,A12,Th54 .= union sup rng fi;
 A14:      succ A in B by A5,A11,ORDINAL1:41;
          then fi.(succ A) = (succ A)*^C by A12;
          then (succ A)*^C in rng fi by A12,A14,FUNCT_1:def 5;
-         then (succ A)*^C in sup rng fi by Th27;
-then A15:      (succ A)*^C c= union sup rng fi by ZFMISC_1:92;
+         then
+A15:      (succ A)*^C c= union sup rng fi by ZFMISC_1:92,Th27;
               A*^C +^ {} = A*^C & A*^C +^ {} in A*^C +^ C &
          (succ A)*^C = A*^C +^ C
            by A2,Th44,Th49,Th53;
@@ -1904,8 +1888,7 @@ A2:  now assume C = {}; then A*^C = {} & B*^C = {} by Th55;
 A3:    C <> {};
          now assume A <> B;
         then A c< B by A1,XBOOLE_0:def 8;
-        then A in B by ORDINAL1:21;
-        then A*^C in B*^C by A3,Th57;
+        then A*^C in B*^C by A3,Th57,ORDINAL1:21;
        hence thesis by ORDINAL1:def 2;
       end;
      hence thesis;
@@ -1929,8 +1912,7 @@ A5:       now assume C = {};
          end;
 A6:       now given D such that
 A7:        C = succ D;
-                D in C by A7,ORDINAL1:10;
-           then D*^A c= D*^B by A4;
+           D*^A c= D*^B by A4,A7,ORDINAL1:10;
            then D*^A +^ A c= D*^B +^ A & D*^B +^ A c= D*^B +^ B & C*^A = D*^A
 +^ A &
             C*^B = D*^B +^ B by A1,A7,Th50,Th51,Th53;

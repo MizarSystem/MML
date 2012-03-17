@@ -8,42 +8,44 @@ environ
 
  vocabularies AMI_3, AMI_1, BOOLE, CAT_1, FUNCT_1, RELAT_1, FUNCT_4, GOBOARD5,
       FRECHET, AMISTD_1, REALSET1, FUNCOP_1, AMISTD_2, CARD_5, NET_1, AMI_5,
-      AMI_2, INT_1, FINSEQ_1, ARYTM_1, SQUARE_1, ARYTM_3, NAT_1, AMI_7, ARYTM;
+      AMI_2, INT_1, FINSEQ_1, ARYTM_1, SQUARE_1, ARYTM_3, NAT_1, AMI_7, ARYTM,
+      ORDINAL1;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      REALSET1, NUMBERS, XCMPLX_0, SQUARE_1, FINSEQ_1, FUNCOP_1, INT_1,
-      FUNCT_4, STRUCT_0, AMI_1, AMI_2, AMI_3, FUNCT_7, AMISTD_1, AMISTD_2,
-      XXREAL_0;
+      ORDINAL1, REALSET1, NUMBERS, XCMPLX_0, SQUARE_1, FINSEQ_1, FUNCOP_1,
+      INT_1, FUNCT_4, STRUCT_0, AMI_1, FUNCT_7, AMISTD_1, AMISTD_2, XXREAL_0;
  constructors PARTFUN1, SQUARE_1, REAL_1, NAT_1, NAT_D, REALSET1, PRE_CIRC,
-      AMI_5, AMISTD_2;
+      AMISTD_2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1, FUNCOP_1,
       FRAENKEL, NUMBERS, XREAL_0, SQUARE_1, INT_1, CARD_3, CARD_4, STRUCT_0,
-      AMI_1, AMI_2, AMI_3, SCMRING1, AMISTD_1, AMISTD_2, AMI_6;
+      AMI_1, AMISTD_1, AMISTD_2, REALSET1;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
 
 
 begin :: Preliminaries
 
-reserve N for with_non-empty_elements set;
+reserve N for with_non-empty_elements set,
+        IL for non empty set;
 
 canceled;
 
 theorem :: AMI_7:2
-  for A being non empty non void AMI-Struct over N,
+  for A being non empty stored-program AMI-Struct over IL,N,
       s being State of A,
       o being Object of A holds
    s.o in ObjectKind o;
 
 theorem :: AMI_7:3
      for A being realistic IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
      s being State of A,
      f being Instruction-Location of A,
      w being Element of ObjectKind IC A
   holds (s+*(IC A,w)).f = s.f;
 
-definition
+definition let IL;
   let N be with_non-empty_elements set,
-      A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      A be IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       s be State of A,
       o be Object of A,
       a be Element of ObjectKind o;
@@ -52,7 +54,7 @@ end;
 
 theorem :: AMI_7:4
  for A being steady-programmed IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
      s being State of A,
      o being Object of A,
      f being Instruction-Location of A,
@@ -65,7 +67,7 @@ canceled;
 
 theorem :: AMI_7:6
  for A being standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A,
      s being State of A,
      o being Object of A,
@@ -75,7 +77,7 @@ theorem :: AMI_7:6
 
 theorem :: AMI_7:7
  for A being standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A,
      s being State of A,
      o being Object of A,
@@ -85,7 +87,8 @@ theorem :: AMI_7:7
 
 theorem :: AMI_7:8
  for A being standard steady-programmed
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A,
      s being State of A,
      o being Object of A,
@@ -96,8 +99,8 @@ theorem :: AMI_7:8
 begin :: Input and Output of Instructions
 
 definition
-   let N be set,
-       A be AMI-Struct over N;
+   let IL,N be set,
+       A be AMI-Struct over IL,N;
  attr A is with_non_trivial_Instructions means
 :: AMI_7:def 1
 
@@ -105,8 +108,8 @@ definition
 end;
 
 definition
-   let N be set,
-       A be non empty AMI-Struct over N;
+   let IL,N be set,
+       A be non empty AMI-Struct over IL,N;
  attr A is with_non_trivial_ObjectKinds means
 :: AMI_7:def 2
 
@@ -125,45 +128,44 @@ registration
          IC-good Exec-preserving
          with_non_trivial_ObjectKinds with_non_trivial_Instructions
          (regular standard (standard-ins IC-Ins-separated definite
-         (non empty non void AMI-Struct over N)));
+         (non empty stored-program AMI-Struct over NAT,N)));
 end;
 
-registration
+registration let IL;
    let N be with_non-empty_elements set;
  cluster with_non_trivial_ObjectKinds -> with_non_trivial_Instructions
-         (definite (non empty non void AMI-Struct over N));
+         (definite (non empty stored-program AMI-Struct over IL,N));
 end;
 
 registration
-   let N be with_non-empty_elements set;
- cluster with_non_trivial_ObjectKinds ->
-         with-non-trivial-Instruction-Locations
-         (IC-Ins-separated (non empty AMI-Struct over N));
+ let N be with_non-empty_elements set;
+ cluster with_non_trivial_ObjectKinds with_non_trivial_Instructions
+    IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over NAT,N);
 end;
 
 registration
    let N be with_non-empty_elements set,
-       A be with_non_trivial_ObjectKinds (non empty AMI-Struct over N),
+       A be with_non_trivial_ObjectKinds (non empty AMI-Struct over NAT,N),
        o be Object of A;
  cluster ObjectKind o -> non trivial;
 end;
 
 registration
    let N be with_non-empty_elements set,
-       A be with_non_trivial_Instructions AMI-Struct over N;
+       A be with_non_trivial_Instructions AMI-Struct over NAT,N;
  cluster the Instructions of A -> non trivial;
 end;
 
-registration
+registration let IL be non trivial set;
    let N be with_non-empty_elements set,
-       A be with-non-trivial-Instruction-Locations
-            IC-Ins-separated (non empty AMI-Struct over N);
+       A be IC-Ins-separated (non empty AMI-Struct over IL,N);
  cluster ObjectKind IC A -> non trivial;
 end;
 
-definition
+definition let IL;
   let N be with_non-empty_elements set,
-      A be non empty non void AMI-Struct over N,
+      A be non empty stored-program AMI-Struct over IL,N,
       I be Instruction of A;
  func Output I -> Subset of A means
 :: AMI_7:def 3
@@ -172,9 +174,10 @@ definition
    ex s being State of A st s.o <> Exec(I,s).o;
 end;
 
-definition
+definition let IL;
   let N be with_non-empty_elements set,
-      A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      A be IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       I be Instruction of A;
  func Out_\_Inp I -> Subset of A means
 :: AMI_7:def 4
@@ -191,9 +194,10 @@ definition
     st Exec(I,s+*(o,a)) <> Exec(I,s) +* (o,a);
 end;
 
-definition
+definition let IL;
   let N be with_non-empty_elements set,
-      A be IC-Ins-separated definite (non empty non void AMI-Struct over N),
+      A be IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N),
       I be Instruction of A;
  func Input I -> Subset of A equals
 :: AMI_7:def 6
@@ -205,12 +209,13 @@ canceled;
 
 theorem :: AMI_7:10
  for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over NAT,N),
      I being Instruction of A holds
   Out_\_Inp I c= Output I;
 
 theorem :: AMI_7:11
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A holds
   Output I c= Out_U_Inp I;
 
@@ -218,65 +223,67 @@ canceled;
 
 theorem :: AMI_7:13
      for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over NAT,N),
      I being Instruction of A holds
   Out_\_Inp I = Output I \ Input I;
 
 theorem :: AMI_7:14
      for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over NAT,N),
      I being Instruction of A holds
   Out_U_Inp I = Output I \/ Input I;
 
 theorem :: AMI_7:15
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A,
      o being Object of A st ObjectKind o is trivial
   holds not o in Out_U_Inp I;
 
 theorem :: AMI_7:16
-     for A being IC-Ins-separated definite (non empty non void AMI-Struct over
-N
-)
+     for A being IC-Ins-separated definite
+      (non empty stored-program AMI-Struct over IL,N)
 ,
      I being Instruction of A,
      o being Object of A st ObjectKind o is trivial
   holds not o in Input I;
 
 theorem :: AMI_7:17
-     for A being IC-Ins-separated definite (non empty non void AMI-Struct over
-N
-)
+     for A being IC-Ins-separated definite
+      (non empty stored-program AMI-Struct over IL,N)
 ,
      I being Instruction of A,
      o being Object of A st ObjectKind o is trivial
   holds not o in Output I;
 
 theorem :: AMI_7:18
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A holds
    I is halting iff Output I is empty;
 
 theorem :: AMI_7:19
  for A being with_non_trivial_ObjectKinds IC-Ins-separated definite
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over NAT,N),
      I being Instruction of A st I is halting
   holds Out_\_Inp I is empty;
 
 theorem :: AMI_7:20
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A st I is halting
   holds Out_U_Inp I is empty;
 
 theorem :: AMI_7:21
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A st I is halting
   holds Input I is empty;
 
-registration
+registration let IL;
    let N be with_non-empty_elements set,
        A be halting IC-Ins-separated definite
-         (non empty non void AMI-Struct over N),
+         (non empty stored-program AMI-Struct over IL,N),
        I be halting Instruction of A;
  cluster Input I -> empty;
  cluster Output I -> empty;
@@ -284,52 +291,71 @@ registration
 end;
 
 registration
+ let N be with_non-empty_elements set;
+  cluster halting with_non_trivial_ObjectKinds IC-Ins-separated definite
+            (non empty stored-program AMI-Struct over NAT,N);
+end;
+
+registration
    let N be with_non-empty_elements set,
        A be halting with_non_trivial_ObjectKinds IC-Ins-separated definite
-            (non empty non void AMI-Struct over N),
+            (non empty stored-program AMI-Struct over NAT,N),
        I be halting Instruction of A;
  cluster Out_\_Inp I -> empty;
 end;
 
+registration  let N;
+ cluster with_non_trivial_Instructions steady-programmed IC-Ins-separated
+             definite (non empty stored-program AMI-Struct over NAT,N);
+end;
+
 theorem :: AMI_7:22
  for A being with_non_trivial_Instructions steady-programmed IC-Ins-separated
-             definite (non empty non void AMI-Struct over N),
+             definite (non empty stored-program AMI-Struct over NAT,N),
      f being Instruction-Location of A,
      I being Instruction of A
   holds not f in Out_\_Inp I;
 
 theorem :: AMI_7:23
  for A being standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A st I is sequential
   holds not IC A in Out_\_Inp I;
 
 theorem :: AMI_7:24
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A st
    ex s being State of A st Exec(I,s).IC A <> IC s
   holds IC A in Output I;
 
+registration let N;
+ cluster standard (IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over NAT,N));
+end;
+
 theorem :: AMI_7:25
  for A being standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A st I is sequential
   holds IC A in Output I;
 
 theorem :: AMI_7:26
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A st
    ex s being State of A st Exec(I,s).IC A <> IC s
   holds IC A in Out_U_Inp I;
 
 theorem :: AMI_7:27
  for A being standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      I being Instruction of A st I is sequential
   holds IC A in Out_U_Inp I;
 
 theorem :: AMI_7:28
- for A being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+ for A being IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N),
      f being Instruction-Location of A,
      I being Instruction of A
   st for s being State of A, p being programmed FinPartState of A
@@ -338,152 +364,8 @@ theorem :: AMI_7:28
 
 theorem :: AMI_7:29
    for A being IC-Ins-separated definite
-   (standard-ins non empty non void AMI-Struct over N),
+   (standard-ins non empty stored-program AMI-Struct over IL,N),
      I being Instruction of A,
      o being Object of A st I is jump-only
   holds o in Output I implies o = IC A;
 
-begin  :: SCM
-
-reserve a, b for Data-Location,
-        f for Instruction-Location of SCM,
-        I for Instruction of SCM;
-
-theorem :: AMI_7:30
- for s being State of SCM, w being Element of ObjectKind IC SCM
-  holds (s+*(IC SCM,w)).a = s.a;
-
-theorem :: AMI_7:31
- f <> Next f;
-
-definition
-  let s be State of SCM, dl be Data-Location, k be Integer;
- redefine func s+*(dl,k) -> State of SCM;
-end;
-
-registration
- cluster SCM -> with_non_trivial_ObjectKinds;
-end;
-
-theorem :: AMI_7:32
- Out_\_Inp (a:=a) = {};
-
-theorem :: AMI_7:33
- a <> b implies Out_\_Inp (a:=b) = { a };
-
-theorem :: AMI_7:34
- Out_\_Inp AddTo(a,b) = {};
-
-theorem :: AMI_7:35
- Out_\_Inp SubFrom(a,a) = { a };
-
-theorem :: AMI_7:36
- a <> b implies Out_\_Inp SubFrom(a,b) = {};
-
-theorem :: AMI_7:37
- Out_\_Inp MultBy(a,b) = {};
-
-theorem :: AMI_7:38
- Out_\_Inp Divide(a,a) = { a };
-
-theorem :: AMI_7:39
- a <> b implies Out_\_Inp Divide(a,b) = {};
-
-theorem :: AMI_7:40
- Out_\_Inp goto f = { IC SCM };
-
-theorem :: AMI_7:41
- Out_\_Inp (a =0_goto f) = {};
-
-theorem :: AMI_7:42
-  Out_\_Inp (a >0_goto f) = {};
-
-theorem :: AMI_7:43
-     Output (a:=a) = { IC SCM };
-
-theorem :: AMI_7:44
- a <> b implies Output (a:=b) = { a, IC SCM };
-
-theorem :: AMI_7:45
- Output AddTo(a,b) = { a, IC SCM };
-
-theorem :: AMI_7:46
- Output SubFrom(a,b) = { a, IC SCM };
-
-theorem :: AMI_7:47
- Output MultBy(a,b) = { a, IC SCM };
-
-theorem :: AMI_7:48
- Output Divide(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:49
- Output goto f = { IC SCM };
-
-theorem :: AMI_7:50
- Output (a =0_goto f) = { IC SCM };
-
-theorem :: AMI_7:51
- Output (a >0_goto f) = { IC SCM };
-
-theorem :: AMI_7:52
- not f in Out_U_Inp I;
-
-theorem :: AMI_7:53
- Out_U_Inp (a:=a) = { IC SCM };
-
-theorem :: AMI_7:54
- a <> b implies Out_U_Inp (a:=b) = { a, b, IC SCM };
-
-theorem :: AMI_7:55
- Out_U_Inp AddTo(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:56
- Out_U_Inp SubFrom(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:57
- Out_U_Inp MultBy(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:58
- Out_U_Inp Divide(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:59
- Out_U_Inp (goto f) = { IC SCM };
-
-theorem :: AMI_7:60
- Out_U_Inp (a =0_goto f) = { a, IC SCM };
-
-theorem :: AMI_7:61
- Out_U_Inp (a >0_goto f) = { a, IC SCM };
-
-theorem :: AMI_7:62
-     Input (a:=a) = { IC SCM };
-
-theorem :: AMI_7:63
-     a <> b implies Input (a:=b) = { b, IC SCM };
-
-theorem :: AMI_7:64
-     Input AddTo(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:65
-     Input SubFrom(a,a) = { IC SCM };
-
-theorem :: AMI_7:66
-     a <> b implies Input SubFrom(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:67
-     Input MultBy(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:68
-     Input Divide(a,a) = { IC SCM };
-
-theorem :: AMI_7:69
-     a <> b implies Input Divide(a,b) = { a, b, IC SCM };
-
-theorem :: AMI_7:70
-     Input goto f = {};
-
-theorem :: AMI_7:71
-     Input (a =0_goto f) = { a, IC SCM };
-
-theorem :: AMI_7:72
-     Input (a >0_goto f) = { a, IC SCM };

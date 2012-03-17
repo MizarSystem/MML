@@ -17,7 +17,7 @@ environ
  constructors ENUMSET1, REAL_1, NAT_1, INT_1, COMPLEX1, EQREL_1, LIMFUNC1,
       BINARITH, FIN_TOPO, FINTOPO3, FINTOPO4;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      INT_1, STRUCT_0, FIN_TOPO, ORDINAL1;
+      INT_1, STRUCT_0, FIN_TOPO, ORDINAL1, CHAIN_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSEQ_1, FIN_TOPO, RELAT_1;
  theorems NAT_1, NAT_2, ZFMISC_1, REAL_1, INT_1, FUNCT_1, FUNCT_2, FINSEQ_1,
@@ -54,7 +54,7 @@ theorem
   end;
 
 definition let FT1,FT2 be RelStr, h be Function of FT1, FT2;
-  pred h is_homeomorphism means
+  attr h is being_homeomorphism means
     :Def1: h is one-to-one onto &
     for x being Element of FT1 holds
       h.:U_FT x = Im(the InternalRel of FT2,h.x);
@@ -62,12 +62,12 @@ end;
 
 theorem Th3:
   for FT1,FT2 being non empty RelStr,
-      h being Function of FT1, FT2 st h is_homeomorphism
-  ex g being Function of FT2, FT1 st g=h" & g is_homeomorphism
+      h being Function of FT1, FT2 st h is being_homeomorphism
+  ex g being Function of FT2, FT1 st g=h" & g is being_homeomorphism
   proof let FT1,FT2 be non empty RelStr,
     h be Function of FT1, FT2;
     assume
-A1:   h is_homeomorphism;
+A1:   h is being_homeomorphism;
 then A2: h is one-to-one onto &
     for x being Element of FT1 holds
       h.:U_FT(x)=Im(the InternalRel of FT2,h.x) by Def1;
@@ -86,7 +86,7 @@ A6:    y=h.x by A2,A3,FUNCT_1:57;
       hence g2.:U_FT(y)=Im(the InternalRel of FT1,g2.y)
        by A2,A6,Th1;
     end;
-    then g2 is_homeomorphism by A4,A5,Def1;
+    then g2 is being_homeomorphism by A4,A5,Def1;
     hence thesis;
   end;
 
@@ -94,12 +94,12 @@ theorem Th4:
   for FT1,FT2 being non empty RelStr,
       h being Function of FT1, FT2,
       n being Element of NAT, x being Element of FT1, y being Element of FT2
-    st h is_homeomorphism & y=h.x holds
+    st h is being_homeomorphism & y=h.x holds
     (for z being Element of FT1 holds z in U_FT(x,n) iff h.z in U_FT(y,n))
   proof let FT1,FT2 be non empty RelStr,
     h be Function of FT1, FT2,
     n be Element of NAT,x be Element of FT1,y be Element of FT2;
-    assume A1: h is_homeomorphism & y=h.x;
+    assume A1: h is being_homeomorphism & y=h.x;
      x in the carrier of FT1;
 then A2: x in dom h by FUNCT_2:def 1;
 A3: h is one-to-one onto & for x2 being Element of FT1 holds
@@ -170,8 +170,8 @@ A16:   h.:U_FT(y2)=Class(the InternalRel of FT2,h.y2)
         for w being Element of FT2
           holds w in U_FT(y,$1) implies h".w in U_FT(x,$1);
         consider g being Function of FT2, FT1 such that
-A20:    g=h" & g is_homeomorphism by A1,Th3;
-A21:    g is_homeomorphism & g.y=x by A1,A2,A3,A20,FUNCT_1:56;
+A20:    g=h" & g is being_homeomorphism by A1,Th3;
+A21:    g is being_homeomorphism & g.y=x by A1,A2,A3,A20,FUNCT_1:56;
          for w being Element of FT2 holds
           w in U_FT(y,0) implies h".w in U_FT(x,0)
         proof let w be Element of FT2;
@@ -233,15 +233,15 @@ theorem
    for FT1,FT2 being non empty RelStr,
       h being Function of FT1, FT2,
       n being Element of NAT,x being Element of FT1,y being Element of FT2
-    st h is_homeomorphism & y=h.x holds
+    st h is being_homeomorphism & y=h.x holds
     (for v being Element of FT2 holds
     h".v in U_FT(x,n) iff v in U_FT(y,n))
   proof let FT1,FT2 be non empty RelStr,
             h be Function of FT1, FT2,
             n be Element of NAT,x be Element of FT1,y be Element of FT2;
-    assume A1: h is_homeomorphism & y=h.x;
+    assume A1: h is being_homeomorphism & y=h.x;
     then consider g being Function of FT2, FT1 such that
-A2: g=h" & g is_homeomorphism by Th3;
+A2: g=h" & g is being_homeomorphism by Th3;
      x in the carrier of FT1;
     then A3: x in dom h by FUNCT_2:def 1;
      h is one-to-one onto & for x2 being Element of FT1 holds
@@ -814,14 +814,7 @@ end;
 
 registration let n,m be non zero Element of NAT;
   cluster FTSL2(n,m) -> non empty;
-  coherence
-  proof
-A1: 0+1<=m by NAT_1:13;
-     0+1<=n by NAT_1:13;
-    then n in Seg n & m in Seg m by A1;
-    then [n,m] in [:Seg n, Seg m:] by ZFMISC_1:def 2;
-    hence thesis by STRUCT_0:def 1;
-  end;
+  coherence by STRUCT_0:def 1;
 end;
 
 theorem
@@ -885,7 +878,7 @@ ZFMISC_1:def 2;
 
 theorem
    for n being non zero Element of NAT
-  ex h being Function of FTSL2(n,1), FTSL1 n st h is_homeomorphism
+  ex h being Function of FTSL2(n,1), FTSL1 n st h is being_homeomorphism
   proof let n be non zero Element of NAT;
     defpred P[set,set] means [$2,1]=$1;
 A1: FTSL1 n = RelStr(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
@@ -975,7 +968,7 @@ A20:    x3=[f.x3,1] by A5,A19;
       hence f.:U_FT(x)=Im(the InternalRel of FT2,f.x)
                         by A14,XBOOLE_0:def 10;
     end;
-    then f is_homeomorphism by A7,A12,Def1;
+    then f is being_homeomorphism by A7,A12,Def1;
     hence thesis;
   end;
 
@@ -1070,14 +1063,7 @@ end;
 
 registration let n,m be non zero Element of NAT;
   cluster FTSS2(n,m) -> non empty;
-  coherence
-  proof
-A1: 0+1<=m by NAT_1:13;
-     0+1<=n by NAT_1:13;
-    then n in Seg n & m in Seg m by A1;
-    then [n,m] in [:Seg n, Seg m:] by ZFMISC_1:def 2;
-    hence thesis by STRUCT_0:def 1;
-  end;
+  coherence by STRUCT_0:def 1;
 end;
 
 theorem
@@ -1156,7 +1142,7 @@ then A14:      pi in U_FT pi2 by A13,FIN_TOPO:def 15;
 
 theorem
    for n being non zero Element of NAT
-   ex h being Function of FTSS2(n,1), FTSL1 n st h is_homeomorphism
+   ex h being Function of FTSS2(n,1), FTSL1 n st h is being_homeomorphism
   proof let n be non zero Element of NAT;
     defpred P[set,set] means [$2,1]=$1;
 A1: FTSL1 n = RelStr(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
@@ -1262,6 +1248,6 @@ A23:    x3=[f.x3,1] by A5,A22;
       hence f.:U_FT(x)=Im(the InternalRel of FT2,f.x)
                         by A14,XBOOLE_0:def 10;
     end;
-    then f is_homeomorphism by A7,A12,Def1;
+    then f is being_homeomorphism by A7,A12,Def1;
     hence thesis;
   end;

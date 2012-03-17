@@ -29,6 +29,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="GR_CY_1"/>
@@ -70,7 +71,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="77"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 <FCluster>

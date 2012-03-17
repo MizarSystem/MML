@@ -36,16 +36,17 @@ reserve x for set,
         k1,k2 for Integer,
         loc,l1 for Instruction-Location of SCMPDS,
         I,J for Program-block,
-        N for with_non-empty_elements set;
+        N for with_non-empty_elements set,
+        IL for non empty set;
 
 theorem Th1:  :: S6B15
 for S being halting IC-Ins-separated definite
-   (non empty non void AMI-Struct over N),
+   (non empty stored-program AMI-Struct over IL,N),
     s being State of S st s = Following s
     holds for n holds (Computation s).n = s
 proof
     let S be halting IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
     s be State of S;
     assume
 A1: s = Following s;
@@ -133,7 +134,7 @@ theorem Th11:   ::SCMFSA6B_32
   x in dom stop Load i iff x=inspos 0 or x=inspos 1
 proof
      set pi=stop Load i,
-         A = the Instruction-Locations of SCMPDS;
+         A = NAT;
 A1:  card pi = 2 by Th8;
      hereby assume A2:x in dom pi;
            dom pi c= A by AMI_1:def 40;
@@ -212,7 +213,7 @@ A1: card sI=card I +1 by SCMPDS_4:45,74;
     .=card I + 1 + card J;
 then A2: card sI <= card sIJ by A1,NAT_1:11;
         now let x be set;
-      set A = the Instruction-Locations of SCMPDS;
+      set A = NAT;
        assume
     A3: x in dom sI;
            dom sI c= A by AMI_1:def 40;
@@ -262,10 +263,10 @@ end;
 theorem Th20: ::T13
  for I being parahalting Program-block st
      Initialized stop I c= s1 & Initialized stop I c= s2 &
-     s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
+     s1,s2 equal_outside NAT holds
  for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
-         equal_outside the Instruction-Locations of SCMPDS &
+         equal_outside NAT &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k
  proof
    let I be parahalting Program-block;
@@ -273,7 +274,7 @@ theorem Th20: ::T13
    assume that
 A1: Initialized SI c= s1 and
 A2: Initialized SI c= s2 and
-A3: s1,s2 equal_outside the Instruction-Locations of SCMPDS;
+A3: s1,s2 equal_outside NAT;
 A4: SI c= s1 by A1,SCMPDS_4:57;
 A5: SI c= s2 by A2,SCMPDS_4:57;
    hereby let k be Element of NAT;
@@ -281,7 +282,7 @@ A5: SI c= s2 by A2,SCMPDS_4:57;
          holds IC((Computation s2).m) in dom SI
           by A2,SCMPDS_4:def 9;
       hence (Computation s1).k, (Computation s2).k equal_outside
-          the Instruction-Locations of SCMPDS by A3,A4,A5,SCMPDS_4:67;
+          NAT by A3,A4,A5,SCMPDS_4:67;
   then A6: IC (Computation s1).k = IC (Computation s2).k by AMI_1:121;
   A7: IC (Computation s1).k in dom SI by A1,SCMPDS_4:def 9;
   A8: IC (Computation s2).k in dom SI by A2,SCMPDS_4:def 9;
@@ -296,16 +297,16 @@ end;
 theorem Th21: ::T14
  for I being parahalting Program-block st
      Initialized stop I c= s1 & Initialized stop I c= s2 &
-     s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
+     s1,s2 equal_outside NAT holds
  LifeSpan s1 = LifeSpan s2 &
-     Result s1, Result s2 equal_outside the Instruction-Locations of SCMPDS
+     Result s1, Result s2 equal_outside NAT
 proof
    let I be parahalting Program-block;
    set SI=stop I;
    assume that
 A1: Initialized SI c= s1 and
 A2: Initialized SI c= s2 and
-A3: s1,s2 equal_outside the Instruction-Locations of SCMPDS;
+A3: s1,s2 equal_outside NAT;
 A4: s1 is halting by A1,SCMPDS_4:63;
 A5: now let l be Element of NAT; assume
    A6: CurInstr (Computation s2).l = halt SCMPDS;
@@ -322,7 +323,7 @@ A8: s2 is halting by A2,SCMPDS_4:63;
 then A9: Result s2 = (Computation s2).LifeSpan s1 by A8,AMI_1:122;
        Result s1 = (Computation s1).LifeSpan s1 by A4,AMI_1:122;
    hence Result s1, Result s2 equal_outside
-       the Instruction-Locations of SCMPDS by A1,A2,A3,A9,Th20;
+       NAT by A1,A2,A3,A9,Th20;
 end;
 
 theorem Th22: ::T27
@@ -331,7 +332,7 @@ theorem Th22: ::T27
 proof
    let I be Program-block;
    set SI=stop I,
-       IL=the Instruction-Locations of SCMPDS;
+       IL=NAT;
 A1: dom s = {IC SCMPDS} \/ SCM-Data-Loc \/ IL by SCMPDS_4:19;
 A2:  dom (s | IL)
     = dom s /\ IL by RELAT_1:90
@@ -350,10 +351,10 @@ theorem Th23:
    st Initialized stop I c= s
  for m st m <= LifeSpan s
   holds (Computation s).m,(Computation(s+*(I ';' J))).m
-    equal_outside the Instruction-Locations of SCMPDS
+    equal_outside NAT
 proof let I be parahalting Program-block, J be Program-block;
  set SI=stop I,
-     IL=the Instruction-Locations of SCMPDS;
+     IL=NAT;
  assume
 A1: Initialized SI c= s;
 then A2: s is halting by SCMPDS_4:63;
@@ -403,7 +404,7 @@ theorem Th24:
    st Initialized stop I c= s
  for m st m <= LifeSpan s
   holds (Computation s).m,(Computation(s+*Initialized stop (I ';' J))).m
-    equal_outside the Instruction-Locations of SCMPDS
+    equal_outside NAT
 proof
    let I be parahalting Program-block, J be Program-block;
    assume A1: Initialized stop I c= s;
@@ -936,12 +937,12 @@ theorem Th29:
     k <= LifeSpan (s +* Initialized stop(I))
  holds
     (Computation s).k,(Computation (s +* Initialized stop(I))).k
-    equal_outside the Instruction-Locations of SCMPDS
+    equal_outside NAT
 proof
  let I be parahalting Program-block,k be Element of NAT;
   set II=Initialized I,
       IsI=Initialized stop(I),
-      IL=the Instruction-Locations of SCMPDS,
+      IL=NAT,
       m=LifeSpan (s +* IsI);
   assume that
 A1: II c= s and
@@ -1003,7 +1004,7 @@ proof
 A1: Initialized I c= s;
 A2: IsI c= ss by FUNCT_4:26;
         (Computation s).m,(Computation ss).m equal_outside
-    the Instruction-Locations of SCMPDS by A1,Th29;
+    NAT by A1,Th29;
     hence IC (Computation s).m = IC (Computation ss).m by AMI_1:121
           .=IC (Computation ss).LifeSpan (ss +* IsI) by A2,FUNCT_4:79
           .=inspos card I by A2,Th27;
@@ -1027,7 +1028,7 @@ A3: I c= s by A1,SCMPDS_4:57;
         s2=(Computation ss).LifeSpan (ss +* IsI),
         Ik = IC s2;
         s1,(Computation ss).m equal_outside
-    the Instruction-Locations of SCMPDS by A1,Th29;
+    NAT by A1,Th29;
 then A4: IC s1 = IC (Computation ss).m by AMI_1:121
     .=Ik by A2,FUNCT_4:79;
 A5: Ik in dom stop(I) by A2,SCMPDS_4:def 9;
@@ -1069,7 +1070,7 @@ proof
       s2=(Computation sI).k;
   assume
 A1: Initialized I c= s & k < LifeSpan sI;
-then A2: s1,s2 equal_outside the Instruction-Locations of SCMPDS by Th29;
+then A2: s1,s2 equal_outside NAT by Th29;
         I c= s by A1,SCMPDS_4:57;
 then A3: I c= s1 by AMI_1:81;
 A4: IC s2 in dom I by A1,Th28;
@@ -1083,7 +1084,7 @@ theorem Th33: ::Th40
   k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* ((I ';' J) +* Start-At inspos 0))).k
-        equal_outside the Instruction-Locations of SCMPDS
+        equal_outside NAT
 proof
     let I be parahalting Program-block,J be Program-block,k be Element of NAT;
     set SA0=Start-At inspos 0,
@@ -1098,7 +1099,7 @@ A3: s1 =s +* spI +* SA0 by FUNCT_4:15
     .=s+*SA0+* spI by SCMPDS_4:62;
 A4: s2 = s +* (I ';' J) +* SA0 by FUNCT_4:15
        .= s+*SA0+*(I ';' J) by SCMPDS_4:62;
-     set IL=the Instruction-Locations of SCMPDS;
+     set IL=NAT;
      set Cs1 = Computation s1, Cs2 = Computation s2;
          s +* SA0, s +* SA0 +* spI equal_outside IL by AMI_1:120;
 then A5:  s +* SA0 +* spI, s +* SA0 equal_outside IL by FUNCT_7:28;
@@ -1141,7 +1142,7 @@ theorem Th34:    ::Th41B
   k being Element of NAT st k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* Initialized stop (I ';' J))).k
-        equal_outside the Instruction-Locations of SCMPDS
+        equal_outside NAT
 proof
     let I be parahalting Program-block,J be Program-block,k be Element of NAT;
     assume A1: k <= LifeSpan (s +* Initialized stop I);
@@ -1169,7 +1170,7 @@ A3: sIJ c= s by A1,SCMPDS_4:57;
        m1 = LifeSpan s1,
        s3 = (Computation s1).m1 +* IsJ,
        m3 = LifeSpan s3,
-       A = the Instruction-Locations of SCMPDS,
+       A = NAT,
        D = SCM-Data-Loc;
 A4:  s3 | D = ((Computation s1).m1 | D) +* IsJ | D by FUNCT_4:75;
 A5:  now let x be set;
@@ -1672,7 +1673,7 @@ theorem    ::Th42
  + card I),
  (Computation (s +* Initialized stop (I ';' J))).
                           (LifeSpan (s +* Initialized stop I)+k)
-            equal_outside the Instruction-Locations of SCMPDS
+            equal_outside NAT
 proof
  let I be parahalting No-StopCode Program-block,J be parahalting
  shiftable Program-block,k be Element of NAT;
@@ -1695,7 +1696,7 @@ A4: s = sIsIJ by A1,FUNCT_4:79;
 then A5: Initialized I c= s by A1,XBOOLE_1:1;
     set SA0=Start-At inspos 0;
 A6: sIsI is halting by A2,SCMPDS_4:63;
-   set IL=the Instruction-Locations of SCMPDS,
+   set IL=NAT,
         m1 = LifeSpan sIsI;
    set s1 = RIJ +* Start-At (IC RIJ + card I);
    set s2 = (Computation sIsIJ).(LifeSpan sIsI+0);
@@ -1804,7 +1805,7 @@ proof
        m1 = LifeSpan s1,
        s3 = (Computation s1).m1 +* IsJ;
    set m3 = LifeSpan s3;
-   set A = the Instruction-Locations of SCMPDS;
+   set A = NAT;
    set D = SCM-Data-Loc;
    assume
 A1:  IsIJ c= s & s1=s +* IsI;
@@ -1910,7 +1911,7 @@ proof
         s1=s +* IsIJ,
         s2=s +* IsI;
 A1: IsIJ c= s1 by FUNCT_4:26;
-    set IL=the Instruction-Locations of SCMPDS,
+    set IL=NAT,
         SA0= Start-At inspos 0;
 A2: s1 =s +* sIJ +* SA0 by FUNCT_4:15
     .=s+*SA0+* sIJ by SCMPDS_4:62;
@@ -1946,7 +1947,7 @@ theorem Th38:
 proof
  let I be parahalting No-StopCode Program-block,J be parahalting
       shiftable Program-block;
-   set A = the Instruction-Locations of SCMPDS,
+   set A = NAT,
        D = SCM-Data-Loc,
        ps = s | A,
        sI = stop I,
@@ -2129,12 +2130,12 @@ then (Start-At inspos 0).IC SCMPDS = inspos 0 &
 end;
 
 theorem Th41:  ::Th4c
- s1, s2 equal_outside the Instruction-Locations of SCMPDS
+ s1, s2 equal_outside NAT
 iff
    s1 | (SCM-Data-Loc \/ {IC SCMPDS}) = s2 | (SCM-Data-Loc \/ {IC SCMPDS})
 proof
     set X = SCM-Data-Loc \/ {IC SCMPDS};
-    set Y = the Instruction-Locations of SCMPDS;
+    set Y = NAT;
     A1: dom s1 = the carrier of SCMPDS by AMI_1:79;
     A2: dom s2 = the carrier of SCMPDS by AMI_1:79;
 A3: (X \/ Y) \ Y \/ Y = X \/ Y \/ Y by XBOOLE_1:39
@@ -2453,7 +2454,7 @@ then A4: sI is halting by SCMPDS_4:63;
 A5: now assume
 A6:  Result sI = Exec(i, sI);
      set X = SCM-Data-Loc \/ {IC SCMPDS};
-     set Y = the Instruction-Locations of SCMPDS;
+     set Y = NAT;
      A7: dom Exec(i, Is) = the carrier of SCMPDS by AMI_1:79;
      A8: dom IExec(Li, s) = the carrier of SCMPDS by AMI_1:79;
 A9: sI = s +*Mi +* SA0 by FUNCT_4:15;
@@ -2491,7 +2492,7 @@ A19: IExec(Li, s) | Y = s | Y by A6,A15,A16,A17,FUNCT_4:93,SCMPDS_3:5;
             x in dom (Exec(i, Is) | Y);
         then A20: x in Y /\ (X \/ Y) by A7,RELAT_1:90,SCMPDS_3:5;
 then A21:    x in Y by XBOOLE_1:21;
-         x is Element of the Instruction-Locations of SCMPDS by A20,XBOOLE_1:21
+         x is Element of NAT by A20,XBOOLE_1:21
 ;
         then reconsider x' = x as Instruction-Location of SCMPDS
                           by AMI_1:def 4;

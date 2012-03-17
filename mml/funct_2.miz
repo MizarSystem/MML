@@ -276,13 +276,7 @@ provided
 A1: for x st x in X() holds F(x) in Y()
 proof
    defpred P[set,set] means $2 = F($1);
-A2: for x st x in X() ex y st y in Y() & P[x,y]
-     proof let x;
-      assume
-A3:     x in X();
-      take F(x);
-      thus thesis by A1,A3;
-     end;
+A2: for x st x in X() ex y st y in Y() & P[x,y] by A1;
    thus ex f being Function of X(),Y() st for x st x in X() holds P[x,f.x]
      from FuncEx1(A2);
   end;
@@ -344,9 +338,8 @@ theorem Th11:
   hence thesis by Def2;
  end;
 
-theorem Th12:
-  for f being Function of X,X holds f in Funcs(X,X)
- proof X = {} implies X = {}; hence thesis by Th11; end;
+theorem
+  for f being Function of X,X holds f in Funcs(X,X) by Th11;
 
 registration let X be set, Y be non empty set;
   cluster Funcs(X,Y) -> non empty;
@@ -355,7 +348,7 @@ end;
 
 registration let X be set;
   cluster Funcs(X,X) -> non empty;
-  coherence by Th12;
+  coherence by Th11;
 end;
 
 canceled;
@@ -989,16 +982,12 @@ theorem Th77:
 canceled;
 
 theorem
-   for f being Function of X,X holds f.:X = rng f
- proof let f be Function of X,X;   X <> {} or X = {}; hence thesis by Th45;
-end;
+   for f being Function of X,X holds f.:X = rng f by Th45;
 
 canceled 2;
 
 theorem
-   for f being Function of X,X holds f"(f.:X) = X
- proof let f be Function of X,X;   X <> {} or X = {}; hence thesis by Th51;
-end;
+   for f being Function of X,X holds f"(f.:X) = X by Th51;
 
 ::::::::::::::::::::::::::
 :: Permutation of a set ::
@@ -1295,9 +1284,7 @@ A6:  A() <> {};
 A7:  x in dom f and
 A8:  y = f.x by FUNCT_1:def 5;
       (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x)) by A2,A3,A7;
-    then (C[ x] implies f.x in B()) & (not C[ x] implies f.x in B())
-       by A1,A2,A7;
-    hence y in B() by A8;
+    hence y in B() by A8,A1,A2,A7;
    end;
    then f is Function of A(),B() by A2,A4,Def1,RELSET_1:11;
   hence thesis by A3;
@@ -1338,10 +1325,7 @@ A1:  Y = {} implies X = {};
  end;
 
 theorem
-   for f being Function of X,X holds <:f,X,X:> is total
- proof let f be Function of X,X;
-   X = {} implies X = {}; hence thesis by Th133;
- end;
+   for f being Function of X,X holds <:f,X,X:> is total by Th133;
 
 canceled;
 
@@ -1399,10 +1383,7 @@ theorem Th142:
  end;
 
 theorem
-   for f,g being Function of X,X st f tolerates g holds f = g
- proof let f,g be Function of X,X;
-      X = {} implies X = {}; hence thesis by Th142;
- end;
+   for f,g being Function of X,X st f tolerates g holds f = g by Th142;
 
 canceled;
 
@@ -1485,10 +1466,7 @@ theorem Th155:
 
 theorem
    for f being PartFunc of X,X for g being Function of X,X
-     st f tolerates g holds g in TotFuncs f
- proof let f be PartFunc of X,X; let g be Function of X,X;
-    X = {} implies X = {}; hence thesis by Th155;
- end;
+     st f tolerates g holds g in TotFuncs f by Th155;
 
 canceled;
 
@@ -1557,10 +1535,7 @@ theorem Th161:
  end;
 
 theorem
-   for f being Function of X,X holds TotFuncs <:f,X,X:> = {f}
-proof let f be Function of X,X;
-   X = {} implies X = {}; hence thesis by Th161;
-end;
+   for f being Function of X,X holds TotFuncs <:f,X,X:> = {f} by Th161;
 
 canceled;
 
@@ -1591,8 +1566,7 @@ A1: g c= f;
 A2:   h in TotFuncs f;
    then reconsider h'=h as PartFunc of X,Y by PARTFUN1:168;
 A3:   h' is total by A2,PARTFUN1:169;
-      f tolerates h' by A2,PARTFUN1:171;
-  then g tolerates h' by A1,PARTFUN1:140;
+   g tolerates h' by A1,A2,PARTFUN1:140,171;
   hence h in TotFuncs g by A3,PARTFUN1:def 7;
  end;
 
@@ -1772,14 +1746,7 @@ scheme FunctRealEx{X()->non empty set,Y()->set,F(set)->set}:
    provided
 A1:for x being Element of X() holds F(x) in Y()
 proof defpred P[set,set] means $2 = F($1);
-A2:for x being set st x in X() ex y being set st y in Y() & P[x,y]
-   proof
-      let x be set;
-      assume x in X();
-      then reconsider x as Element of X();
-      take F(x);
-      thus thesis by A1;
-     end;
+A2:for x being set st x in X() ex y being set st y in Y() & P[x,y] by A1;
     ex f being Function of X(),Y() st
    for x being set st x in X() holds P[x,f.x] from FuncEx1(A2);
    then consider f being Function of X(),Y() such that

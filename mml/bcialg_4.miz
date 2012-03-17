@@ -1,0 +1,1970 @@
+:: BCI-Algebras with Condition (S) and Their Properties
+::  by Tao Sun , Junjie Zhao and Xiquan Liang
+:: 
+:: Received November 24, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BINOP_1, BCIALG_4, BCIALG_1, BCIALG_2, BOOLE, FILTER_0, MIDSP_1,
+      RLVECT_1, POWER, FINSEQ_1, FINSOP_1, SUBSET_1, VECTSP_2, FUNCT_1,
+      RELAT_1, STRUCT_0, INT_1, VECTSP_1, GROUP_1, SETWISEO, ARYTM;
+ notations TARSKI, ZFMISC_1, XBOOLE_0, SUBSET_1, BINOP_1, STRUCT_0, MIDSP_1,
+      VECTSP_2, BCIALG_1, RELAT_1, CARD_3, FINSEQ_2, NUMBERS, XXREAL_0,
+      FINSEQ_1, FINSOP_1, SETWISEO, FUNCT_1, REAL_1, FUNCT_2, RLVECT_1, INT_1,
+      NAT_1, FINSEQOP, BCIALG_2, GROUP_1, VECTSP_1, XCMPLX_0, BINOP_2, INT_2,
+      ORDINAL1, PARTFUN1, FINSEQ_4, FUNCOP_1, SETWOP_2, ALGSTR_1, FINSUB_1,
+      RELSET_1, EQREL_1;
+ constructors BINOP_1, BCIALG_1, REALSET1, MIDSP_1, VECTSP_2, TARSKI, REAL_1,
+      BINOP_2, RLVECT_1, MEMBERED, FINSOP_1, SETWISEO, XBOOLE_0, GROUP_1,
+      VECTSP_1, FUNCT_1, FINSEQ_1, CARD_3, FINSEQ_2, STRUCT_0, SUBSET_1,
+      ENUMSET1, ZFMISC_1, RELAT_1, LATTICES, NAT_D, XXREAL_0, FINSEQOP, NAT_1,
+      INT_2, PARTFUN1, FINSEQ_4, BCIALG_2, SETWOP_2, ALGSTR_1, DOMAIN_1,
+      FUNCOP_1, PRE_TOPC, BINARITH, EQREL_1, REALSET2;
+ registrations XBOOLE_0, BCIALG_1, SUBSET_1, RELAT_1, STRUCT_0, ORDINAL1,
+      RELSET_1, FINSET_1, NUMBERS, CARD_3, XXREAL_0, XREAL_0, NAT_1, INT_1,
+      FUNCT_1, FINSEQ_1, FINSEQ_2, GROUP_1, VECTSP_1, BCIALG_2, FUNCT_2,
+      FINSUB_1, ALGSTR_1, ORDINAL2, PARTFUN1, XCMPLX_0, REAL_1;
+ requirements SUBSET, BOOLE, NUMERALS, REAL, ARITHM;
+ definitions STRUCT_0, TARSKI, XBOOLE_0, BINOP_1, BCIALG_1, REALSET1, FINSEQ_1,
+      RLVECT_1, GROUP_1, FINSOP_1, CARD_3, SETWISEO, FINSEQ_2, SUBSET_1,
+      ALGSTR_1, BCIALG_2, FUNCT_1, VECTSP_1, NAT_1, RELAT_1;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, SUBSET_1, STRUCT_0, FUNCT_2, BCIALG_1,
+      FINSEQ_1, FINSOP_1, SETWISEO, NAT_1, BINOP_1, BCIALG_2;
+ schemes BINOP_1, FUNCT_1, RECDEF_1, NAT_1;
+
+begin :: Definition and Elementary Properties of BCI-Algebras with Condition(S)
+
+definition
+  struct (BCIStr_0,ZeroStr) BCIStr_1 (# carrier -> set,
+                      ExternalDiff,InternalDiff -> BinOp of the carrier,
+                      ZeroF -> Element of the carrier #);
+end;
+
+registration
+  cluster non empty strict BCIStr_1;
+  existence
+  proof
+    consider A being non empty set, m,n being BinOp of A, u being Element of A;
+    take BCIStr_1(#A,m,n,u#);
+    thus the carrier of BCIStr_1(#A,m,n,u#) is non empty;
+    thus thesis;
+  end;
+end;
+
+definition let A be BCIStr_1; let x,y be Element of A;
+  func x * y -> Element of A equals 
+    (the ExternalDiff of A).(x,y);
+  coherence
+  proof per cases;
+   suppose A is empty;
+then A1:   the carrier of A = {} by STRUCT_0:def 1;
+then A2:   [:the carrier of A,the carrier of A:] = {} by ZFMISC_1:113;
+     then [:the carrier of A,the carrier of A:] =
+       dom the ExternalDiff of A by FUNCT_2:def 1;
+     then (the ExternalDiff of A).(x,y) = {} by A2,FUNCT_1:def 4;
+    hence thesis by SUBSET_1:def 2,A1;
+   end;
+   suppose A is non empty;
+    then reconsider A as non empty BCIStr_1;
+    reconsider x,y as Element of A;
+    (the ExternalDiff of A).(x,y) is Element of A;
+    hence thesis;
+   end;
+  end;
+end;
+
+definition let IT be non empty BCIStr_1;
+  attr IT is with_condition_S means :Def1:
+    for x,y,z being Element of IT holds (x\y)\z = x\(y*z);
+end;
+
+definition
+  func BCI_S-EXAMPLE -> BCIStr_1 equals
+    BCIStr_1 (# {{}}, op2, op2, op0 #);
+  coherence;
+end;
+
+registration
+  cluster BCI_S-EXAMPLE -> strict non empty;
+  coherence
+  proof
+    thus BCI_S-EXAMPLE is strict & the carrier of BCI_S-EXAMPLE is non empty;
+  end;
+end;
+
+Lm1: BCI_S-EXAMPLE is_B & BCI_S-EXAMPLE is_C & BCI_S-EXAMPLE is_I &
+     BCI_S-EXAMPLE is_BCI-4 & BCI_S-EXAMPLE is being_BCK-5 & 
+     BCI_S-EXAMPLE is with_condition_S
+proof
+  thus BCI_S-EXAMPLE is_B
+  proof
+    let x,y,z be Element of BCI_S-EXAMPLE;
+    ((x\y)\(z\y))\(x\z)={} & 0.BCI_S-EXAMPLE={} by TARSKI:def 1;
+    hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is_C
+  proof
+   let x,y,z be Element of BCI_S-EXAMPLE;
+   ((x\y)\z)\((x\z)\y)={} & 0.BCI_S-EXAMPLE={} by TARSKI:def 1;
+   hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is_I
+  proof
+    let x be Element of BCI_S-EXAMPLE;
+    x\x={} & 0.BCI_S-EXAMPLE={} by TARSKI:def 1;
+    hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is_BCI-4
+  proof
+   let x,y be Element of BCI_S-EXAMPLE;
+   x = {} & y = {} & 0.BCI_S-EXAMPLE = {} by TARSKI:def 1;
+   hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is being_BCK-5
+  proof
+   let x be Element of BCI_S-EXAMPLE;
+   x` = {} & 0.BCI_S-EXAMPLE = {} by TARSKI:def 1;
+   hence thesis;
+  end;
+  let x,y,z be Element of BCI_S-EXAMPLE;
+  (x\y)\z = {} & x\(y*z) = {} by TARSKI:def 1;
+  hence thesis;
+end;
+
+registration
+  cluster BCI_S-EXAMPLE -> being_B being_C being_I being_BCI-4 being_BCK-5
+    with_condition_S;
+  coherence by Lm1;
+end;
+
+registration
+  cluster strict being_B being_C being_I being_BCI-4 with_condition_S
+    (non empty BCIStr_1);
+  existence by Lm1;
+end;
+
+definition
+  mode BCI-Algebra_with_Condition(S) is being_B being_C being_I being_BCI-4
+     with_condition_S (non empty BCIStr_1);
+end;
+
+ reserve X for non empty BCIStr_1;
+ reserve x,y,z,u,v,a,b,t,d for Element of X;
+ reserve n,m,i,j,k for Element of NAT;
+ reserve f,f',g for Function of NAT, the carrier of X; 
+ reserve F,G,H for FinSequence of the carrier of X;
+
+definition let X be BCI-Algebra_with_Condition(S);
+           let x,y be Element of X;
+  func Condition_S(x,y) -> non empty Subset of X equals 
+     {t where t is Element of X: t\x <= y};
+  coherence
+proof
+   set Y={t where t is Element of X: t\x <= y};
+   set a = 0.X\((0.X\x)\y);
+   (a\x)\y = ((0.X\x)\((0.X\x)\y))\y by BCIALG_1:7
+          .= (((0.X\x)\0.X)\((0.X\x)\y))\y by BCIALG_1:2
+          .= (((0.X\x)\0.X)\((0.X\x)\y))\(y\0.X) by BCIALG_1:2
+          .= 0.X by BCIALG_1:1;
+   then a\x <= y by BCIALG_1:def 11;
+   then A1:a in Y;
+   now let y1 be set;
+   assume y1 in Y;
+   then ex x1 being Element of X st y1=x1 & x1\x <= y;
+   hence y1 in the carrier of X;
+   end;
+   hence thesis by TARSKI:def 3,A1;
+ end;
+end;
+
+theorem
+ for X be BCI-Algebra_with_Condition(S),x,y,u,v being Element of X st
+     u in Condition_S(x,y) & v <= u holds v in Condition_S(x,y)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,y,u,v be Element of X;
+ assume A1:u in Condition_S(x,y) & v <= u;
+ then consider u1 being Element of X such that
+    A2a:u=u1 & u1\x <= y;
+ A2:(u\x)\y = 0.X by A2a,BCIALG_1:def 11;
+ v\x <= u\x by A1,BCIALG_1:5;
+ then (v\x)\(u\x) = 0.X by BCIALG_1:def 11;
+ then (v\x)\y = 0.X by A2,BCIALG_1:3;
+ then v\x <= y by BCIALG_1:def 11;
+ hence thesis;
+end;
+
+theorem
+ for X being BCI-Algebra_with_Condition(S) holds 
+  (for x,y being Element of X holds (ex a be Element of Condition_S(x,y) 
+    st (for z being Element of Condition_S(x,y) holds z <= a)))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,y be Element of X;
+ ((x*y)\x)\y = (x*y)\(x*y) by Def1
+            .= 0.X by BCIALG_1:def 5;
+ then (x*y)\x <= y by BCIALG_1:def 11;
+ then (x*y) in {t where t is Element of X: t\x <= y};
+ then consider u being Element of Condition_S(x,y) such that A1:u =x * y;
+ B1:for z being Element of Condition_S(x,y) holds z <= u
+  proof
+   let z be Element of Condition_S(x,y);
+   z in {t where t is Element of X: t\x <= y};
+   then consider z1 being Element of X such that
+   A2a:z=z1 & z1\x <= y;
+   z\u = (z1\x)\y by Def1,A2a,A1
+      .= 0.X by A2a,BCIALG_1:def 11;
+   hence thesis by BCIALG_1:def 11;
+  end;
+ take u;
+ thus thesis by B1;
+end;
+
+lmxx1:
+ for X being BCI-Algebra_with_Condition(S) holds 
+  (for x,y being Element of X holds ((x*y)\x <= y & 
+   for t being Element of X st t\x <= y holds t <= (x*y)))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,y be Element of X;
+ B1:((x*y)\x)\y = (x*y)\(x*y) by Def1
+            .= 0.X by BCIALG_1:def 5;
+ for t being Element of X holds (t\x <= y implies t <= (x*y))
+  proof
+   let t be Element of X;
+   assume A2:t\x <= y;
+   t\(x*y) = (t\x)\y by Def1
+          .= 0.X by A2,BCIALG_1:def 11;
+   hence thesis by BCIALG_1:def 11;
+  end;
+ hence thesis by B1,BCIALG_1:def 11;
+end;
+
+lmxx2:
+ (X is BCI-algebra & (for x,y being Element of X holds
+  ((x*y)\x <= y & for t being Element of X st
+   t\x <= y holds t <= (x*y))))
+     implies X is BCI-Algebra_with_Condition(S)
+proof
+ assume that A1:X is BCI-algebra and
+   A2a:for x,y being Element of X holds ((x*y)\x <= y & 
+       for t being Element of X st t\x <= y holds t <= (x*y));
+ for x,y,z being Element of X holds (x\y)\z = x\(y*z)
+  proof
+   let x,y,z be Element of X;
+   (x\((x\y)\z))\y = (x\y)\((x\y)\z) by A1,BCIALG_1:7
+                  .= ((x\y)\0.X)\((x\y)\z) by A1,BCIALG_1:2;
+   then ((x\((x\y)\z))\y)\(z\0.X) = 0.X by A1,BCIALG_1:11;
+   then (x\((x\y)\z))\y <= z\0.X by BCIALG_1:def 11; 
+   then A2:(x\((x\y)\z))\y <= z by A1,BCIALG_1:2;
+   x\((x\y)\z) <= y*z by A2,A2a;
+   then (x\((x\y)\z))\(y*z) = 0.X by BCIALG_1:def 11;
+   then A3:(x\(y*z))\((x\y)\z) = 0.X by A1,BCIALG_1:7;
+   A4:((x\y)\(x\(y*z)))\((y*z)\y) = 0.X by A1,BCIALG_1:11;
+   (y*z)\y <= z by A2a;
+   then ((y*z)\y)\z = 0.X by BCIALG_1:def 11;
+   then ((x\y)\(x\(y*z)))\z = 0.X by A1,A4,BCIALG_1:3;
+   then ((x\y)\z)\(x\(y*z)) = 0.X by A1,BCIALG_1:7;
+   hence thesis by A1,A3,BCIALG_1:def 7;
+  end;
+ hence thesis by A1,Def1;
+end;
+
+theorem
+ (X is BCI-algebra & (for x,y being Element of X holds
+  ((x*y)\x <= y & for t being Element of X st
+   t\x <= y holds t <= (x*y))))
+     iff X is BCI-Algebra_with_Condition(S) by lmxx1,lmxx2;
+
+theorem 
+ for X being BCI-Algebra_with_Condition(S) holds (for x,y being Element of X
+   holds (ex a be Element of Condition_S(x,y) st
+     (for z being Element of Condition_S(x,y) holds z <= a)))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,y be Element of X;
+  ex a be Element of Condition_S(x,y) st 
+     (for z being Element of Condition_S(x,y) holds z <= a)
+  proof
+   (x*y)\x <= y & 
+   for t being Element of X holds (t\x <= y implies t <= (x*y)) by lmxx1;
+   then x*y in Condition_S(x,y);
+   then consider a being Element of Condition_S(x,y) such that A1a:a =x * y;
+    B1:for t1 being Element of Condition_S(x,y) holds t1 <= a
+    proof
+     let t1 be Element of Condition_S(x,y);
+     t1 in {t where t is Element of X: t\x <= y};
+     then consider t2 being Element of X such that
+      A2a:t2=t1 & t2\x <= y;
+     thus thesis by A2a,lmxx1,A1a;
+    end;
+   take a;
+   thus thesis by B1;
+  end;
+hence thesis;
+end;
+
+definition let X be p-Semisimple BCI-algebra;
+  func Adjoint_pGroup X -> strict AbGroup means
+    the carrier of it = the carrier of X &
+   (for x,y being Element of X
+     holds (the add of it).(x,y) = x\(0.X\y)) &
+   0.it = 0.X;
+    existence
+    proof
+      defpred P[Element of X, Element of X, Element of X] means
+      ex x,y being Element of X st $1=x & $2=y & $3 = x\(0.X\y);
+A1:   for a,b being Element of X
+        ex c being Element of X st P[a,b,c]
+        proof
+         let a,b be Element of X;
+         reconsider x=a,y=b as Element of X;
+         reconsider c = x\(0.X\y) as Element of X;
+         take c;
+         thus thesis;
+        end;
+     consider h being BinOp of the carrier of X such that
+  A2:for a,b being Element of X holds P[a,b,h.(a,b)]
+       from BINOP_1:sch 3(A1);
+  A3:for x,y being Element of X holds h.(x,y)=x\(0.X\y)
+     proof
+      let x,y be Element of X;
+      ex x',y' being Element of X st x=x' & y=y'
+        & h.(x,y)= x'\(0.X\y') by A2;
+      hence thesis;
+     end;
+  A4:for a being Element of X
+      ex b being Element of X st
+        ex x being Element of X st a=x & x\(0.X\b) = 0.X & b\(0.X\x) = 0.X
+     proof
+       let a be Element of X;
+       reconsider x=a as Element of X;
+       reconsider b=0.X\x as Element of X;
+       D1:x\(0.X\b) = x\x``
+                   .= x\x by BCIALG_1:54
+                   .= 0.X by BCIALG_1:def 5;
+       D2:b\(0.X\x) = 0.X by BCIALG_1:def 5;
+       take b;
+       thus thesis by D1,D2;
+     end;
+     reconsider A0=0.X as Element of X;
+     set G=LoopStr (# the carrier of X,h,A0 #);
+     G is Abelian add-associative right_zeroed right_complementable
+     proof
+       thus G is Abelian
+       proof
+         let a,b be Element of G;
+         reconsider x=a,y=b as Element of X;
+         thus a+b=x\(0.X\y) by A3 .=y\(0.X\x) by BCIALG_1:57
+                .=b+a by A3;
+       end;
+     hereby let a,b,c be Element of G;
+     reconsider x=a,y=b,z=c as Element of X;
+     thus (a+b)+c =h.(x\(0.X\y),z) by A3 .=(x\(0.X\y))\(0.X\z) by A3
+                .= (y\(0.X\x))\(0.X\z) by BCIALG_1:57
+                .= (y\(0.X\z))\(0.X\x) by BCIALG_1:7
+                .= x\(0.X\(y\(0.X\z))) by BCIALG_1:57
+                .= h.(x,y\(0.X\z)) by A3
+                .=a+(b+c) by A3;
+     end;
+     hereby let a be Element of G;
+     reconsider x=a as Element of X;
+     thus a+0.G = x\(0.X\0.X) by A3 
+               .= x\0.X by BCIALG_1:2
+               .= a by BCIALG_1:2;
+     end;
+     let a be Element of G;
+     consider b being Element of X such that
+A5:  ex x being Element of X st a=x & x\(0.X\b) = 0.X & b\(0.X\x) = 0.X by A4;
+     consider x being Element of X 
+       such that A6:a=x & x\(0.X\b) = 0.X & b\(0.X\x) = 0.X by A5;
+     reconsider b as Element of G;   
+     take b;
+     thus a+b =0.G by A3,A6;
+    end;
+    then reconsider G as strict AbGroup;
+    take G;
+    thus thesis by A3;
+    end;
+  uniqueness
+    proof thus for G1,G2 being strict AbGroup st
+    (the carrier of G1 = the carrier of X &
+     (for x,y being Element of X holds (the add of G1).(x,y) = x\(0.X\y)) &
+     0.G1 = 0.X) &
+     (the carrier of G2 = the carrier of X &
+     (for x,y being Element of X holds (the add of G2).(x,y) = x\(0.X\y)) &
+     0.G2 = 0.X) holds G1=G2
+     proof let G1,G2 be strict AbGroup;
+     assume that
+A7:  the carrier of G1 = the carrier of X and
+A8:  (for x,y being Element of X holds (the add of G1).(x,y) = x\(0.X\y)) and
+A9:  0.G1 = 0.X and
+A10: the carrier of G2 = the carrier of X and
+A11: (for x,y being Element of X holds (the add of G2).(x,y) = x\(0.X\y)) and
+A12: 0.G2 = 0.X;
+      now let a,b be Element of G1;
+       reconsider x = a, y = b as Element of X by A7;
+       thus (the add of G1).(a,b) = x\(0.X\y) by A8 
+                                 .= (the add of G2).(a,b) by A11;
+      end;
+    hence G1 = G2 by A7,A9,A10,A12,BINOP_1:2;
+    end;
+ end;
+end;
+
+theorem Th3:
+ for X being BCI-algebra holds X is p-Semisimple 
+   iff (for x,y being Element of X st x\y = 0.X holds x=y)
+proof
+ let X be BCI-algebra;
+ thus X is p-Semisimple implies
+     (for x,y being Element of X st x\y = 0.X holds x=y)
+  proof
+   assume A1:X is p-Semisimple;
+   for x,y being Element of X st x\y = 0.X holds x=y
+    proof
+     let x,y be Element of X;
+     assume A2:x\y = 0.X;
+     0.X\(x\y) = (y\x)\(0.X)` by A1,BCIALG_1:66
+              .= (y\x)\0.X by BCIALG_1:def 5
+              .= y\x by BCIALG_1:2;
+     then y\x = 0.X by A2,BCIALG_1:def 5;
+     hence thesis by A2,BCIALG_1:def 7;
+    end;
+    hence thesis;
+   end;
+   assume B2:for x,y being Element of X st x\y = 0.X holds x=y;
+   for x,y being Element of X holds x\(x\y) = y
+    proof
+     let x,y be Element of X;
+     (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+                .= 0.X by BCIALG_1:def 5;
+     hence thesis by B2;
+    end;
+    hence thesis by BCIALG_1:def 26;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) st X is p-Semisimple 
+  holds (for x,y being Element of X holds x*y = x\(0.X\y))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ assume A1:X is p-Semisimple;
+ for x,y being Element of X holds x*y = x\(0.X\y)
+  proof
+   let x,y be Element of X;
+   ((x\(0.X\y))\x)\y = ((x\x)\(0.X\y))\y by BCIALG_1:7
+                    .= (0.X\(0.X\y))\y by BCIALG_1:def 5
+                    .= (0.X\y)\(0.X\y) by BCIALG_1:7
+                    .= 0.X by BCIALG_1:def 5;
+   then B1:(x\(0.X\y))\x <= y by BCIALG_1:def 11;
+   B2:for t being Element of X st t\x <= y holds t <= (x\(0.X\y))
+    proof
+     let t be Element of X;
+     assume t\x <= y;
+     then A3:(t\x)\y = 0.X by BCIALG_1:def 11;
+     t\(x\(0.X\y)) = t\(x\(0.X\(t\x))) by A3,A1,Th3
+                  .= t\(x\(x\(t\0.X))) by A1,BCIALG_1:57
+                  .= t\(t\0.X) by A1,BCIALG_1:61
+                  .= t\t by BCIALG_1:2
+                  .= 0.X by BCIALG_1:def 5;
+     hence thesis by BCIALG_1:def 11;
+    end;
+ set z1 = x\(0.X\y);
+ set z2 = x * y;
+ (x*y)\x <= y by lmxx1;
+ then z2 <= z1 by B2; 
+ then A4: z2\z1 = 0.X by BCIALG_1:def 11;
+ z1 <= z2 by B1,lmxx1;
+ then z1\z2 = 0.X by BCIALG_1:def 11;
+ hence thesis by A4,BCIALG_1:def 7;
+   end;
+hence thesis;
+end;
+
+theorem Th10: :: Commutativity
+for X being BCI-Algebra_with_Condition(S)
+  holds (for x,y being Element of X holds x*y = y*x)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y be Element of X;
+   (x*y)\x <= y by lmxx1;
+   then ((x*y)\x)\y = 0.X by BCIALG_1:def 11;
+   then ((x*y)\y)\x = 0.X by BCIALG_1:7;
+   then A3:(x*y)\y <= x by BCIALG_1:def 11;
+   (y*x)\y <= x by lmxx1;
+   then ((y*x)\y)\x = 0.X by BCIALG_1:def 11;
+   then ((y*x)\x)\y = 0.X by BCIALG_1:7;
+   then (y*x)\x <= y by BCIALG_1:def 11;
+   then (y*x) <= (x*y) by lmxx1;
+   then A5:(y*x)\(x*y) = 0.X by BCIALG_1:def 11;
+   (x*y) <= (y*x) by A3,lmxx1;
+   then (x*y)\(y*x) = 0.X by BCIALG_1:def 11;
+   hence thesis by A5,BCIALG_1:def 7;
+end;
+
+theorem Th10x: :: Isotonic Property
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds x <= y implies
+    x*z <= y*z & z*x <= z*y)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   assume x <= y;
+   then (x*z)\y <= (x*z)\x by BCIALG_1:5;
+   then A2:((x*z)\y)\((x*z)\x) = 0.X by BCIALG_1:def 11;
+   (x*z)\x <= z by lmxx1;
+   then ((x*z)\x)\z = 0.X by BCIALG_1:def 11;
+   then ((x*z)\y)\z = 0.X by A2,BCIALG_1:3;
+   then A3:(x*z)\y <= z by BCIALG_1:def 11;
+   x*z = z*x & y*z = z*y by Th10;
+   hence thesis by A3,lmxx1;
+end;
+
+theorem Th11: :: Unit Element
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x being Element of X holds 0.X*x = x & x*0.X = x)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x be Element of X;
+   (x\0.X)\x = (x\x)\0.X by BCIALG_1:7
+            .= 0.X\0.X by BCIALG_1:def 5
+            .= 0.X by BCIALG_1:def 5;
+   then x\0.X <= x by BCIALG_1:def 11;
+   then x <= 0.X*x by lmxx1;
+   then A2:x\(0.X*x) = 0.X by BCIALG_1:def 11;
+   (0.X*x)\0.X <= x by lmxx1;
+   then (0.X*x) <= x by BCIALG_1:2;
+   then (0.X*x)\x = 0.X by BCIALG_1:def 11;
+   then 0.X*x = x by A2,BCIALG_1:def 7;
+   hence thesis by Th10; 
+end;
+
+theorem Th12: :: Associativity
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds (x*y)*z = x*(y*z))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   A2:(((x*y)*z)\x)\z = (((x*y)*z)\z)\x by BCIALG_1:7
+                     .= ((z*(x*y))\z)\x by Th10;
+   (z*(x*y))\z <= (x*y) by lmxx1;
+   then (((x*y)*z)\x)\z <= (x*y)\x by A2,BCIALG_1:5;
+   then A3:((((x*y)*z)\x)\z)\((x*y)\x) = 0.X by BCIALG_1:def 11;
+   (x*y)\x <= y by lmxx1;
+   then ((x*y)\x)\y = 0.X by BCIALG_1:def 11;
+   then ((((x*y)*z)\x)\z)\y = 0.X by A3,BCIALG_1:3;
+   then (((x*y)*z)\x)\z <= y by BCIALG_1:def 11;
+   then ((x*y)*z)\x <= z*y by lmxx1;
+   then (x*y)*z <= x*(z*y) by lmxx1;
+   then (x*y)*z <= x*(y*z) by Th10;
+   then A4:((x*y)*z)\(x*(y*z)) = 0.X by BCIALG_1:def 11;  
+   A5:(((z*y)*x)\z)\x = (((z*y)*x)\x)\z by BCIALG_1:7
+                     .= ((x*(z*y))\x)\z by Th10;
+   (x*(z*y))\x <= (z*y) by lmxx1;
+   then (((z*y)*x)\z)\x <= (z*y)\z by A5,BCIALG_1:5;
+   then A6:((((z*y)*x)\z)\x)\((z*y)\z) = 0.X by BCIALG_1:def 11;
+   (z*y)\z <= y by lmxx1;
+   then ((z*y)\z)\y = 0.X by BCIALG_1:def 11;
+   then ((((z*y)*x)\z)\x)\y = 0.X by A6,BCIALG_1:3;
+   then (((z*y)*x)\z)\x <= y by BCIALG_1:def 11;
+   then ((z*y)*x)\z <= x*y by lmxx1;
+   then (z*y)*x <= z*(x*y) by lmxx1;
+   then (y*z)*x <= z*(x*y) by Th10;
+   then x*(y*z) <= z*(x*y) by Th10;
+   then x*(y*z) <= (x*y)*z by Th10;
+   then (x*(y*z))\((x*y)*z) = 0.X by BCIALG_1:def 11;
+   hence thesis by A4,BCIALG_1:def 7;
+end;
+
+theorem Th12b:
+for X being BCI-Algebra_with_Condition(S)
+  holds (for x,y,z being Element of X holds (x*y)*z = (x*z)*y)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   (x*y)*z = x*(y*z) by Th12
+          .= (y*z)*x by Th10
+          .= y*(z*x) by Th12
+          .= (z*x)*y by Th10;
+   hence thesis by Th10;
+end;
+
+theorem Th13:
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds (x\y)\z = x\(y*z))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   (x\((x\y)\z))\y = (x\y)\((x\y)\z) by BCIALG_1:7
+                  .= ((x\y)\0.X)\((x\y)\z) by BCIALG_1:2;
+   then ((x\((x\y)\z))\y)\(z\0.X) = 0.X by BCIALG_1:11;
+   then (x\((x\y)\z))\y <= z\0.X by BCIALG_1:def 11; 
+   then A2:(x\((x\y)\z))\y <= z by BCIALG_1:2;
+   x\((x\y)\z) <= y*z by A2,lmxx1;
+   then (x\((x\y)\z))\(y*z) = 0.X by BCIALG_1:def 11; 
+   then A3:(x\(y*z))\((x\y)\z) = 0.X by BCIALG_1:7;
+   A4:((x\y)\(x\(y*z)))\((y*z)\y) = 0.X by BCIALG_1:11;
+   (y*z)\y <= z by lmxx1;
+   then ((y*z)\y)\z = 0.X by BCIALG_1:def 11;
+   then ((x\y)\(x\(y*z)))\z = 0.X by A4,BCIALG_1:3;
+   then ((x\y)\z)\(x\(y*z)) = 0.X by BCIALG_1:7;
+   hence thesis by A3,BCIALG_1:def 7;
+end;
+
+theorem Th13b:
+for X being BCI-Algebra_with_Condition(S)
+  holds (for x,y being Element of X holds y <= x*(y\x))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y be Element of X;
+   (y\x)\(y\x) = 0.X by BCIALG_1:def 5;
+   then y\x <= (y\x) by BCIALG_1:def 11;
+   hence thesis by lmxx1;
+end;
+
+theorem 
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds (x*z)\(y*z) <= x\y)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   x <= y*(x\y) by Th13b;
+   then x*z <= (y*(x\y))*z by Th10x;
+   then x*z <= (y*z)*(x\y) by Th12b;
+   then (x*z)\(y*z) <= ((y*z)*(x\y))\(y*z) by BCIALG_1:5;
+   then A1:((x*z)\(y*z)) \ (((y*z)*(x\y))\(y*z)) = 0.X by BCIALG_1:def 11;
+   (((y*z)*(x\y))\(y*z)) <= x\y by lmxx1;
+   then (((y*z)*(x\y))\(y*z)) \ (x\y) = 0.X by BCIALG_1:def 11;
+   then ((x*z)\(y*z)) \ (x\y) = 0.X by A1,BCIALG_1:3;
+   hence thesis by BCIALG_1:def 11;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds x\y <= z iff x <= y*z)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+B1: for x,y,z being Element of X st x\y <= z holds x <= y*z
+  proof
+   let x,y,z be Element of X;
+   assume x\y <= z;
+   then (x\y)\z = 0.X by BCIALG_1:def 11;
+   then x\(y*z) = 0.X by Th13;
+   hence thesis by BCIALG_1:def 11;
+  end;
+   for x,y,z being Element of X st x <= y*z holds x\y <= z
+  proof
+   let x,y,z be Element of X;
+   assume x <= y*z;
+   then x\(y*z) = 0.X by BCIALG_1:def 11;
+   then (x\y)\z = 0.X by Th13;
+   hence thesis by BCIALG_1:def 11;
+  end;
+hence thesis by B1;
+end;
+
+theorem  
+for X being BCI-Algebra_with_Condition(S) 
+  holds (for x,y,z being Element of X holds x\y <= (x\z)*(z\y))
+proof
+   let X be BCI-Algebra_with_Condition(S);
+   let x,y,z be Element of X;
+   ((x\y)\(x\z))\(z\y) = 0.X by BCIALG_1:11;
+   then (x\y)\((x\z)*(z\y)) = 0.X by Th13;
+   hence thesis by BCIALG_1:def 11;
+end;
+
+Th14: for X being BCI-Algebra_with_Condition(S) holds
+    the ExternalDiff of X is commutative
+  proof
+    let X be BCI-Algebra_with_Condition(S);
+    now let a,b be Element of X;
+      thus (the ExternalDiff of X).(a,b)=a*b
+                         .= b*a by Th10
+                         .=(the ExternalDiff of X).(b,a);
+    end;
+    hence thesis by BINOP_1:def 2;
+ end;
+
+Th15: for X being BCI-Algebra_with_Condition(S) holds
+    the ExternalDiff of X is associative
+  proof
+    let X be BCI-Algebra_with_Condition(S);
+    now let a,b,c be Element of X;
+      thus (the ExternalDiff of X).(a,(the ExternalDiff of X).(b,c))=a*(b*c)
+                  .=(a*b)*c by Th12
+                  .=(the ExternalDiff of X).((the ExternalDiff of X).(a,b),c);
+    end;
+    hence thesis by BINOP_1:def 3;
+  end;
+
+registration let X be BCI-Algebra_with_Condition(S);
+  cluster the ExternalDiff of X -> commutative associative;
+  coherence by Th14,Th15;
+end;
+
+theorem Th16:
+  for X being BCI-Algebra_with_Condition(S) holds 
+    0.X is_a_unity_wrt the ExternalDiff of X
+proof
+   let X be BCI-Algebra_with_Condition(S);
+   now let a be Element of X;
+     thus (the ExternalDiff of X).(0.X,a) = 0.X * a
+                               .= a by Th11;
+     thus (the ExternalDiff of X).(a,0.X) = a * 0.X
+                             .= a by Th11;
+   end;
+   hence thesis by BINOP_1:11;
+end;
+
+theorem 
+  for X being BCI-Algebra_with_Condition(S) holds 
+    the_unity_wrt the ExternalDiff of X = 0.X
+   proof 
+    let X be BCI-Algebra_with_Condition(S);
+    reconsider e=0.X as Element of X;
+    e is_a_unity_wrt the ExternalDiff of X by Th16;
+    hence thesis by BINOP_1:def 8;
+   end;
+
+theorem Th18:
+  for X being BCI-Algebra_with_Condition(S) holds 
+    the ExternalDiff of X has_a_unity
+ proof 
+  let X be BCI-Algebra_with_Condition(S);
+  reconsider e=0.X as Element of X;
+  e is_a_unity_wrt the ExternalDiff of X by Th16;
+  hence thesis by SETWISEO:def 2;
+ end;
+
+definition let X be BCI-Algebra_with_Condition(S);
+ func power X -> Function of [:the carrier of X,NAT:], the carrier of X  
+    means
+  :Def4: for h being Element of X
+   holds it.(h,0) = 0.X & for n holds it.(h,n + 1) = it.(h,n) * h;
+ existence
+  proof
+    defpred P[set,set] means
+     ex g0 being Function of NAT, the carrier of X,
+            h being Element of X st $1 = h & g0 = $2 &
+          g0.0 = 0.X & for n holds g0.(n + 1) = (g0.n) * h;
+     A1: for x,y1,y2 be set st x in the carrier of X & P[x,y1] & P[x,y2]
+           holds y1 = y2
+      proof let x,y1,y2 be set;
+        assume x in the carrier of X;
+        given g1 being Function of NAT, the carrier of X,
+              h being Element of X such that
+           A2: x = h and
+           A3: g1 = y1 and A4: g1.0 = 0.X and
+                             A5: for n holds g1.(n + 1) = (g1.n) * h;
+        given g2 being Function of NAT, the carrier of X,
+              f being Element of X such that
+        A6: x = f and A7: g2 = y2 and A8: g2.0 = 0.X and
+                             A9: for n holds g2.(n + 1) = (g2.n) * f;
+         defpred P[set] means g1.$1 = g2.$1;
+         A10: P[0] by A4,A8;
+         A11: now let n;
+           assume P[n];
+          then g1.(n + 1) = (g2.n) * f by A2,A5,A6
+                          .= g2.(n + 1) by A9;
+           hence P[n+1];
+         end;
+          for n holds P[n] from NAT_1:sch 1(A10,A11);
+       hence thesis by A3,A7,FUNCT_2:113;
+      end;
+     A12: for x be set st x in the carrier of X
+          ex y be set st P[x,y]
+      proof let x be set;
+        assume x in the carrier of X;
+         then reconsider b = x as Element of X;
+         deffunc F(Element of NAT,Element of X) = $2 * b;
+         consider g0 being Function of NAT, the carrier of X such that
+         A13: g0.0 = 0.X and
+          A14: for n being Element of NAT holds g0.(n + 1) = F(n,g0.n)
+           from RECDEF_1:sch 4;
+         reconsider y = g0 as set;
+       take y;
+       take g0;
+       take b;
+       thus x = b & g0 = y & g0.0 = 0.X by A13;
+       let n;
+       thus g0.(n + 1) = (g0.n) * b by A14;
+      end;
+    consider f being Function such that dom f = the carrier of X and
+     A15: for x be set st x in the carrier of X holds P[x,f.x]
+          from FUNCT_1:sch 2(A1,A12);
+    defpred P[Element of X,Element of NAT,set] means
+          ex g0 being Function of NAT, the carrier of X
+            st g0 = f.$1 & $3 = g0.$2;
+     A16: for a being Element of X, n being Element of NAT
+          ex b being Element of X st P[a,n,b]
+      proof let a be Element of X, n be Element of NAT;
+        consider g0 being Function of NAT, the carrier of X,
+                 h being Element of X such that a = h and
+        A17: g0 = f.a and g0.0 = 0.X &
+         for n holds g0.(n + 1) = (g0.n) * h by A15;
+       take g0.n, g0;
+       thus thesis by A17;
+      end;
+    consider F being Function of [:the carrier of X,NAT:], the carrier of X
+     such that
+      A18: for a being Element of X,
+             n being Element of NAT holds P[a,n,F.(a,n)] from BINOP_1:sch 3
+(A16);
+   take F;
+   let h be Element of X;
+ A19:    ex g1 being Function of NAT, the carrier of X
+       st g1 = f.h & F.(h,0) = g1.0 by A18;
+        ex g2 being Function of NAT, the carrier of X,
+                  b being Element of X
+                  st h = b & g2 = f.h & g2.0 = 0.X &
+     for n holds g2.(n + 1) = (g2.n) * b by A15;
+   hence F.(h,0) = 0.X by A19;
+   let n;
+ A20:    ex g0 being Function of NAT, the carrier of X
+       st g0 = f.h & F.(h,n) = g0.n by A18;
+ A21:    ex g1 being Function of NAT, the carrier of X
+            st g1 = f.h & F.(h,n + 1) = g1.(n + 1) by A18;
+    consider g2 being Function of NAT, the carrier of X,
+                  b being Element of X such that
+     A22: h = b & g2 = f.h & g2.0 = 0.X and
+     A23: for n holds g2.(n + 1) = (g2.n) * b by A15;
+   thus F.(h,n + 1) = (F.(h,n)) * h by A21,A22,A23,A20;
+  end;
+ uniqueness
+  proof let f,g be Function of [:the carrier of X,NAT:], the carrier of X;
+    assume that
+    A24: for h being Element of X holds f.(h,0) = 0.X &
+                    for n holds f.(h,n + 1) = (f.(h,n)) * h and
+    A25: for h being Element of X holds g.(h,0) = 0.X &
+                    for n holds g.(h,n + 1) = (g.(h,n)) * h;
+        now let h be Element of X,
+             n be Element of NAT;
+        defpred P[Element of NAT] means f.[h,$1] = g.[h,$1];
+         f.[h,0] = f.(h,0)
+                   .= 0.X by A24
+                   .= g.(h,0) by A25
+                   .= g.[h,0];
+        then A26: P[0];
+        A27: now let n;
+          assume A28: P[n];
+           A29: f.[h,n] = f.(h,n) & g.[h,n] = g.(h,n);
+          f.[h,n + 1] = f.(h,n + 1)
+                         .= (f.(h,n)) * h by A24
+                         .= g.(h,n + 1) by A25,A28,A29
+                         .= g.[h,n + 1];
+          hence P[n+1];
+        end;
+         for n holds P[n] from NAT_1:sch 1(A26,A27);
+      hence f.(h,n) = g.(h,n);
+     end;
+   hence thesis by BINOP_1:2;
+  end;
+end;
+
+definition let X be BCI-Algebra_with_Condition(S);
+           let x be Element of X;
+           let n;
+  func x |^ n -> Element of X equals
+    power(X).(x,n);
+  correctness;
+end;
+
+theorem 
+for X being BCI-Algebra_with_Condition(S) holds (for x being Element of X
+  holds x |^ 0 = 0.X) by Def4;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds (for x being Element of X
+  holds x |^ (n + 1) = (x|^n) * x) by Def4;
+
+theorem Th22:
+for X being BCI-Algebra_with_Condition(S) holds (for x being Element of X
+  holds x |^ 1 = x)
+proof 
+ let X be BCI-Algebra_with_Condition(S);
+ let x be Element of X;
+   thus x|^1 = x|^(0 + 1)
+                  .=(x|^0) * x by Def4
+                  .=0.X * x by Def4
+                  .= x by Th11;
+end;
+
+theorem Th23:
+for X being BCI-Algebra_with_Condition(S) holds (for x being Element of X 
+  holds x |^ 2 = x * x)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x be Element of X;
+   thus x |^ 2 = x |^ (1 + 1)
+             .=(x |^ 1) * x by Def4
+             .= x*x by Th22;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds (for x being Element of X
+  holds x |^ 3 = x * x * x)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x be Element of X;
+   thus x|^3 = x|^(2 + 1)
+             .=(x|^2) * x by Def4
+             .= x * x * x by Th23;
+end;
+
+theorem Th25a:
+for X being BCI-Algebra_with_Condition(S) holds (0.X) |^ 2 = 0.X
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ 0.X <= 0.X*(0.X\0.X) by Th13b;
+ then 0.X <= 0.X*0.X by BCIALG_1:def 5;
+ then A1:0.X \ (0.X*0.X) = 0.X by BCIALG_1:def 11;
+ 0.X*0.X = (0.X*0.X) \ 0.X by BCIALG_1:2;
+ then 0.X*0.X <= 0.X by lmxx1;
+ then (0.X*0.X) \ 0.X = 0.X by BCIALG_1:def 11;
+ then 0.X*0.X = 0.X by A1,BCIALG_1:def 7;
+ hence thesis by Th23;
+end;
+     
+Lm25b:
+for X being BCI-Algebra_with_Condition(S) holds (0.X) |^ (n+1) = 0.X
+proof
+ let X be BCI-Algebra_with_Condition(S);
+  defpred P[set] means
+    for m holds m=$1 & m<= n implies (0.X) |^ (m+1) = 0.X;
+A1:P[0] by Th22;
+A4: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+        assume
+    A5: for m st m=k & m<= n holds (0.X) |^ (m+1) = 0.X;
+        let m;
+        assume A7:m=k+1 & m<=n;
+        A9:(0.X) |^ (m+1) = ((0.X) |^ (k+1)) * 0.X by Def4,A7;
+        A10:(0.X)|^2 = 0.X by Th25a;
+        k<=n by NAT_1:13,A7;
+        then (0.X) |^ (k+1) = 0.X by A5;
+        hence (0.X) |^ (m+1) = 0.X by A9,A10,Th23;
+      end;
+      hence thesis;
+    end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem 
+ for X being BCI-Algebra_with_Condition(S) holds (0.X)|^n = 0.X
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   defpred P[set] means
+   for m holds m=$1 & m<= n implies (0.X)|^m = 0.X;
+A1:P[0] by Def4;
+A4:for k st P[k] holds P[k+1] by Lm25b;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds (for x,a being Element of X 
+  holds ((x\a)\a)\a = x\(a|^3))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+   let x,a be Element of X;
+   (x\a)\a = x\(a*a) by Th13;
+   then ((x\a)\a)\a = x\((a*a)*a) by Th13
+                   .= x\((a|^2)*a) by Th23
+                   .= x\(a|^(2+1)) by Def4;
+   hence thesis;
+end;
+
+Lm10:
+ for X being BCI-Algebra_with_Condition(S) holds (for x,a being Element of X
+  holds (x,a) to_power 0 = x\(a|^0))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,a be Element of X;
+
+ x\(a|^0) = x\0.X by Def4
+        .= x by BCIALG_1:2;
+ hence thesis by BCIALG_2:1;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds (for x,a being Element of X 
+  holds (x,a) to_power n = x\(a|^n))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,a be Element of X;
+  defpred P[set] means
+    for m holds m=$1 & m<= n implies (x,a) to_power m = x\(a|^m);
+A1:P[0] by Lm10;
+A4: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+        assume
+    A5: for m st m=k & m<= n holds (x,a) to_power m = x\(a|^m);
+        let m;
+        assume A7:m=k+1 & m<=n;
+        then A9:(x,a) to_power m = (x,a) to_power k \ a by BCIALG_2:4;
+        A10:x\(a|^m) = x\((a|^k)*a) by A7,Def4
+                   .= (x\(a|^k))\a by Th13;
+        k<=n by NAT_1:13,A7;
+        hence (x,a) to_power m = x\(a|^m) by A5,A9,A10;
+      end;
+      hence thesis;
+    end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+definition let X be non empty BCIStr_1;
+  let F be FinSequence of the carrier of X;
+  func Product_S F -> Element of X equals
+    (the ExternalDiff of X) "**" F;
+  correctness;
+end;
+
+theorem 
+ (the ExternalDiff of X) "**" <* d *> = d
+ proof A1: len<* d *> = 1 by FINSEQ_1:56;
+   then ex f st f.1 = <* d *>.1 &
+    (for n st 0 <> n & n < len<* d *> holds
+     f.(n + 1) = (the ExternalDiff of X).(f.n,<* d *>.(n + 1))) &
+ (the ExternalDiff of X) "**" <* d *> = f.len<* d *> by FINSOP_1:def 1;
+  hence thesis by A1,FINSEQ_1:def 8;
+ end;
+
+theorem 
+ for X being BCI-Algebra_with_Condition(S),
+     F1,F2 being FinSequence of the carrier of X
+ holds Product_S(F1 ^ F2) = Product_S(F1) * Product_S(F2)
+  proof let X be BCI-Algebra_with_Condition(S),
+            F1,F2 be FinSequence of the carrier of X;
+   set g = the ExternalDiff of X;
+   g is associative & g has_a_unity by Th18;
+   hence Product_S(F1 ^ F2) = Product_S F1 * Product_S F2 by FINSOP_1:6;
+  end;
+
+theorem Th32:
+ for X being BCI-Algebra_with_Condition(S),
+     F being FinSequence of the carrier of X,
+     a being Element of X
+ holds Product_S(F ^ <* a *>) = Product_S(F) * a
+  proof let X be BCI-Algebra_with_Condition(S),
+            F be FinSequence of the carrier of X,
+            a be Element of X;
+   set g = the ExternalDiff of X;
+   g has_a_unity by Th18;
+   hence Product_S(F ^ <* a *>) = Product_S F * a by FINSOP_1:5;
+  end;
+
+theorem
+  for X being BCI-Algebra_with_Condition(S),
+     F being FinSequence of the carrier of X,
+     a being Element of X
+ holds Product_S(<* a *> ^ F) = a * Product_S(F)
+  proof let X be BCI-Algebra_with_Condition(S),
+            F be FinSequence of the carrier of X,
+            a be Element of X;
+   set g = the ExternalDiff of X;
+   g is associative & g has_a_unity by Th18;
+   hence Product_S(<* a *> ^ F) = a * Product_S F by FINSOP_1:7;
+  end;
+
+theorem Th34a:
+for X being BCI-Algebra_with_Condition(S) holds 
+ (for a1,a2 being Element of X 
+   holds Product_S<*a1,a2*> = a1 * a2)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let a1,a2 be Element of X;
+  thus Product_S<*a1,a2*> = Product_S<*a1*> * a2 by Th32
+                     .= a1 * a2 by FINSOP_1:12;
+ end;
+
+theorem Th34b:
+for X being BCI-Algebra_with_Condition(S) holds 
+ (for a1,a2,a3 being Element of X 
+   holds Product_S<*a1,a2,a3*> = a1 * a2 * a3)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let a1,a2,a3 be Element of X;
+  thus Product_S<*a1,a2,a3*> = Product_S<*a1,a2*> * a3 by Th32
+                     .= a1 * a2 * a3 by FINSOP_1:13;
+ end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds 
+(for x,a1,a2 being Element of X 
+  holds (x\a1)\a2 = x\Product_S<*a1,a2*>)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,a1,a2 be Element of X;
+ (x\a1)\a2 = x\(a1 * a2) by Th13;
+ hence thesis by Th34a;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S) holds 
+(for x,a1,a2,a3 being Element of X 
+  holds ((x\a1)\a2)\a3 = x\Product_S<*a1,a2,a3*>)
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let x,a1,a2,a3 be Element of X;
+ ((x\a1)\a2)\a3 = (x\(a1 * a2))\a3 by Th13
+               .= x\(a1 * a2 * a3) by Th13;
+ 
+ hence thesis by Th34b;
+end;
+
+theorem
+for X being BCI-Algebra_with_Condition(S),
+ a,b being Element of AtomSet(X) holds (for ma being Element of X 
+  st (for x being Element of BranchV(a) holds x <= ma) holds 
+   (ex mb being Element of X st 
+    (for y being Element of BranchV(b) holds y <= mb)))
+proof
+ let X be BCI-Algebra_with_Condition(S);
+ let a,b be Element of AtomSet(X);
+ let ma be Element of X;
+ assume A1:(for x being Element of BranchV(a) holds x <= ma);
+  ex mb being Element of X st 
+    (for y being Element of BranchV(b) holds y <= mb)
+  proof
+   set mb = (b * (0.X\a)) * ma;
+   for y being Element of BranchV(b) holds y <= mb
+    proof
+     let y be Element of BranchV(b);
+     y in {yy where yy is Element of X:b<=yy};
+     then consider yy being Element of X such that
+      A2: y=yy & b<= yy;
+     b\b <= y\b by A2,BCIALG_1:5;
+     then y\b in {yy1 where yy1 is Element of X:b\b <= yy1};
+     then A3:y\b is Element of BranchV(b\b);
+     a\a = 0.X by BCIALG_1:def 5;
+     then a <= a by BCIALG_1:def 11;
+     then a in {yy2 where yy2 is Element of X:a <= yy2};   
+     then A4:a is Element of BranchV(a);
+     0.X in AtomSet(X);
+     then consider x0 being Element of AtomSet(X) such that A5:x0 = 0.X;
+     x0\x0 = 0.X by BCIALG_1:def 5;
+     then x0 <= x0 by BCIALG_1:def 11;
+     then x0 in {yy2 where yy2 is Element of X:x0 <= yy2};   
+     then x0 is Element of BranchV(x0);
+     then A6:x0\a is Element of BranchV(x0\a) by A4,BCIALG_1:39;
+     (b\b)\(x0\a) = x0\(x0\a) by A5,BCIALG_1:def 5
+                 .= a by BCIALG_1:24;
+     then (y\b)\(x0\a) is Element of BranchV(a) by A6,A3,BCIALG_1:39;
+     then A7:(y\b)\(x0\a) <= ma by A1;
+     y\mb = (y\(b * (0.X\a))) \ ma by Th13
+              .= ((y\b)\(x0\a))\ma by A5,Th13
+              .= 0.X by A7,BCIALG_1:def 11;
+     hence thesis by BCIALG_1:def 11;
+    end;
+  hence thesis;
+  end;
+hence thesis;
+end;
+
+:: Commutative BCK-Algebras with Condition(S)
+
+registration
+  cluster strict being_BCK-5 BCI-Algebra_with_Condition(S);
+  existence by Lm1;
+end;
+
+definition
+  mode BCK-Algebra_with_Condition(S) is 
+    being_BCK-5 BCI-Algebra_with_Condition(S);
+end;
+
+theorem ThBCK1:
+for X being BCK-Algebra_with_Condition(S) holds 
+(for x,y being Element of X holds x <= x*y & y <= x*y)
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ for x,y being Element of X holds x <= x*y & y <= x*y
+  proof
+   let x,y be Element of X;
+   A1:(x\x)\y = x\(x*y) by Th13;
+   A2:(x\x)\y = y` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8;
+   A3:(y\y)\x = y\(y*x) by Th13
+             .= y\(x*y) by Th10;
+   (y\y)\x = x` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8;
+   hence thesis by A1,A2,A3,BCIALG_1:def 11;
+  end;
+hence thesis;
+end;
+
+theorem
+for X being BCK-Algebra_with_Condition(S) holds 
+(for x,y,z being Element of X holds ((x*y)\(y*z))\(z*x) = 0.X)
+proof
+  let X be BCK-Algebra_with_Condition(S);
+  for x,y,z being Element of X holds ((x*y)\(y*z))\(z*x) = 0.X
+  proof
+   let x,y,z be Element of X;
+   A1: (x*y) = y*x by Th10;
+   (y*x) \ y <= x by lmxx1;
+   then ((y*x) \ y) \ z <= x\z by BCIALG_1:5;
+   then (x*y)\(y*z) <= x\z by A1,Th13;
+   then A2:((x*y)\(y*z))\(z*x) <= (x\z)\(z*x) by BCIALG_1:5;
+   (x\z)\(z*x) = ((x\z)\z)\x by Th13
+              .= ((x\z)\x)\z by BCIALG_1:7
+              .= ((x\x)\z)\z by BCIALG_1:7
+              .= z`\z by BCIALG_1:def 5
+              .= z` by BCIALG_1:def 8
+              .= 0.X by BCIALG_1:def 8;
+   then (((x*y)\(y*z))\(z*x)) \ 0.X = 0.X by A2,BCIALG_1:def 11;
+   hence thesis by BCIALG_1:2;
+  end;
+hence thesis; 
+end;
+
+theorem
+for X being BCK-Algebra_with_Condition(S) holds 
+(for x,y being Element of X holds (x\y)*(y\x) <= x*y )
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ for x,y being Element of X holds (x\y)*(y\x) <= x*y
+  proof
+   let x,y be Element of X;
+   ((x\y)*(y\x))\(x\y) <= (y\x) by lmxx1;
+   then A1:(((x\y)*(y\x))\(x\y))\y <= (y\x)\y by BCIALG_1:5;
+   A2: (y\x)\y = (y\y)\x by BCIALG_1:7
+              .= x` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   ((x\y)*(y\x))\((x\y)*y) <= 0.X by Th13,A1,A2;
+   then ((x\y)*(y\x))\((x\y)*y) \ 0.X = 0.X by BCIALG_1:def 11;
+   then A3:((x\y)*(y\x))\((x\y)*y) = 0.X by BCIALG_1:2;
+   A4: (x\y)*y = y*(x\y) by Th10;
+       (y*(x\y))\y <= x\y by lmxx1;
+   then A5:((y*(x\y))\y)\x <= (x\y)\x by BCIALG_1:5;
+   A6: (x\y)\x = (x\x)\y by BCIALG_1:7
+              .= y` by BCIALG_1:def 5
+              .= 0.X by BCIALG_1:def 8;
+   (y*(x\y))\(y*x) <= 0.X by Th13,A5,A6;
+   then ((y*(x\y))\(y*x)) \ 0.X = 0.X by BCIALG_1:def 11;
+   then (y*(x\y))\(y*x) = 0.X by BCIALG_1:2;
+   then ((x\y)*(y\x))\(y*x) = 0.X by A3,A4,BCIALG_1:3;
+   then (x\y)*(y\x) <= (y*x) by BCIALG_1:def 11;
+   hence thesis by Th10;
+  end;
+hence thesis;
+end;
+
+theorem
+for X being BCK-Algebra_with_Condition(S) holds 
+(for x being Element of X holds (x\0.X)*(0.X\x) = x)
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ for x being Element of X holds (x\0.X)*(0.X\x) = x
+  proof
+   let x be Element of X;
+   A1:(x\0.X) = x by BCIALG_1:2;
+   (0.X\x) = x`
+             .= 0.X by BCIALG_1:def 8;
+   hence thesis by A1,Th11;
+  end;
+hence thesis;
+end;
+
+definition let IT be BCK-Algebra_with_Condition(S);
+  attr IT is commutative means :Def20:
+    for x,y being Element of IT holds x\(x\y) = y\(y\x);
+end;
+
+registration
+  cluster commutative BCK-Algebra_with_Condition(S);
+  existence
+  proof
+    reconsider IT = BCI_S-EXAMPLE as BCK-Algebra_with_Condition(S);
+    IT is commutative
+    proof
+      let x,y be Element of IT;
+      x\(x\y)={} & y\(y\x)={} by TARSKI:def 1;
+      hence x\(x\y) = y\(y\x);
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem 
+ for X being non empty BCIStr_1 holds 
+  (X is commutative BCK-Algebra_with_Condition(S) iff 
+(for x,y,z being Element of X holds x\(0.X\y) = x & (x\z)\(x\y) = (y\z)\(y\x)
+ & (x\y)\z = x\(y*z) ))
+proof
+   let X be non empty BCIStr_1;
+   thus X is commutative BCK-Algebra_with_Condition(S) implies 
+      (for x,y,z being Element of X 
+   holds x\(0.X\y) = x & (x\z)\(x\y) = (y\z)\(y\x) & (x\y)\z = x\(y*z) )
+    proof
+     assume A1:X is commutative BCK-Algebra_with_Condition(S);
+      let x,y,z be Element of X;
+      A1a:0.X\y = y` .= 0.X by A1,BCIALG_1:def 8;
+      A3: (x\(x\y))\z = (y\(y\x))\z by A1,Def20;
+      (x\z)\(x\y) = (y\(y\x))\z by A3,A1,BCIALG_1:7
+                 .= (y\z)\(y\x) by A1,BCIALG_1:7;
+      hence thesis by A1a,A1,BCIALG_1:2,Th13;
+     end;
+  thus (for x,y,z being Element of X holds x\(0.X\y) = x 
+          & (x\z)\(x\y) = (y\z)\(y\x) & (x\y)\z = x\(y*z) ) implies
+            X is commutative BCK-Algebra_with_Condition(S)
+   proof
+    assume A4:for x,y,z being Element of X holds x\(0.X\y) = x 
+          & (x\z)\(x\y) = (y\z)\(y\x) & (x\y)\z = x\(y*z);
+      B1:for x,y being Element of X holds x\0.X = x
+           proof
+            let x,y be Element of X;
+            0.X\(0.X\0.X) = 0.X & x\(0.X\(0.X\0.X)) = x by A4;
+            hence thesis;
+           end;
+      B2:for x being Element of X holds x\x = 0.X
+           proof
+            let x be Element of X;
+            x = (x\0.X) by B1;
+            then x\x = (0.X\0.X)\(0.X\x) by A4
+                         .= 0.X\(0.X\x) by B1
+                         .= 0.X by A4;
+            hence thesis;
+           end;
+      B3:for x,y being Element of X 
+           holds (x\y=0.X & y\x=0.X implies x = y)
+          proof
+            let x,y be Element of X;
+            assume x\y=0.X & y\x=0.X;
+            then B3a:(x\0.X)\0.X = (y\0.X)\0.X by A4;
+            B3b:(x\0.X) = (y\0.X)\0.X by B3a,B1
+                        .= (y\0.X) by B1;
+            thus x = (y\0.X) by B3b,B1
+                  .= y by B1;
+           end;
+       B4:for x,y being Element of X holds x\(x\y) = y\(y\x)
+          proof
+            let x,y be Element of X;
+            x\(x\y) = (x\(0.X\y))\(x\y) by A4
+                   .= (y\(0.X\y))\(y\x) by A4
+                   .= y\(y\x) by A4;
+           hence thesis;
+           end;
+       B5:for x being Element of X holds 0.X\x = 0.X
+           proof
+             let x be Element of X;
+             0.X = (0.X\x)\(0.X\x) by B2
+                       .= 0.X\x by A4;
+             hence thesis;
+          end;
+       B6:for x,y,z being Element of X holds ((x\y)\(x\z))\(z\y)=0.X   
+         proof
+           let x,y,z be Element of X;
+           ((x\y)\(x\z))\(z\y) = ((z\y)\(z\x))\(z\y) by A4
+              .= ((z\y)\(z\x))\((z\y)\0.X) by B1
+              .= (0.X\(z\x))\(0.X\(z\y)) by A4
+              .= 0.X\(0.X\(z\y)) by B5
+              .= 0.X by B5;
+           hence thesis;
+          end;
+        B8:for x being Element of X holds x`=0.X by B5;
+  B11: for x,y,z being Element of X st x\y=0.X & y\z=0.X holds
+        x\z=0.X
+        proof
+          let x,y,z be Element of X;
+          assume A10: x\y=0.X & y\z=0.X;
+           ((x\z)\(x\y))\(y\z)=0.X by B6;
+          then (x\z)\(x\y)=0.X by A10,B1;
+          hence thesis by A10,B1;
+        end;
+  B12:for x,y,z being Element of X holds ((x\y)\z)\((x\z)\y) = 0.X
+    proof
+      let x,y,z be Element of X;
+       (((x\y)\z)\((x\y)\(x\(x\z))))\((x\(x\z))\z)=0.X by B6;
+      then (((x\y)\z)\((x\y)\(x\(x\z))))\((x\(x\z))\(z\0.X))=0.X by B1;
+      then (((x\y)\z)\((x\y)\(x\(x\z))))\(((x\0.X)\(x\z))\(z\0.X))=0.X by B1;
+      then (((x\y)\z)\((x\y)\(x\(x\z))))\0.X=0.X by B6;
+      then A15:((x\y)\z)\((x\y)\(x\(x\z)))=0.X by B1;
+       ((x\y)\(x\(x\z)))\((x\z)\y) = 0.X by B6;
+      hence thesis by A15,B11;
+    end;
+  A11:for x,y,z being Element of X st
+      x\y=0.X holds (x\z)\(y\z)=0.X&(z\y)\(z\x)=0.X
+      proof let x,y,z be Element of X;
+      assume A12: x\y=0.X;
+      A13:((z\y)\(z\x))\(x\y)=0.X by B6;
+       ((x\z)\(x\y))\(y\z)=0.X by B6;
+      hence thesis by A12,B1,A13;
+      end;
+  for x,y,z being Element of X holds ((x\y)\(z\y))\(x\z) = 0.X
+    proof
+      let x,y,z be Element of X;
+       ((x\y)\(x\z))\(z\y) = 0.X by B6;
+  then ((x\y)\(z\y))\((x\y)\((x\y)\(x\z))) = 0.X by A11;
+  then (((x\y)\(z\y))\(x\z))\(((x\y)\((x\y)\(x\z)))\(x\z)) = 0.X by A11;
+  then (((x\y)\(z\y))\(x\z))\((((x\y)\0.X)\((x\y)\(x\z)))\(x\z)) = 0.X by B1;
+  then (((x\y)\(z\y))\(x\z))\((((x\y)\0.X)\((x\y)\(x\z)))\((x\z)\0.X)) 
+       = 0.X by B1;
+  then (((x\y)\(z\y))\(x\z))\ 0.X = 0.X by B6;
+  hence thesis by B1;
+    end;
+  hence thesis 
+by B2,BCIALG_1:def 5,B3,BCIALG_1:def 7,B12,BCIALG_1:def 4,BCIALG_1:def 3,
+A4,Def1,B8,BCIALG_1:def 8,B4,Def20;
+   end;
+end;  
+
+theorem
+for X being commutative BCK-Algebra_with_Condition(S),
+a being Element of X st a is greatest holds 
+(for x,y being Element of X holds x*y = a\((a\x)\y) )
+proof
+ let X be commutative BCK-Algebra_with_Condition(S);
+ let a be Element of X;
+ assume A1: a is greatest;
+ for x,y being Element of X holds x*y = a\((a\x)\y)
+  proof
+   let x,y be Element of X;
+   A2:(x*y)<=a by A1,BCIALG_2:def 5;
+   a\((a\x)\y) = a\(a\(x*y)) by Th13
+              .= (x*y)\((x*y)\a) by Def20
+              .= (x*y)\0.X by A2,BCIALG_1:def 11;
+   hence thesis by BCIALG_1:2;
+  end;
+hence thesis;
+end;
+
+definition let X be BCI-algebra;
+           let a be Element of X;
+  func Initial_section(a) -> non empty Subset of X equals 
+     {t where t is Element of X: t <= a};
+  coherence
+proof
+   set Y={t where t is Element of X: t <= a};
+   a\a = 0.X by BCIALG_1:def 5;
+   then a <= a by BCIALG_1:def 11;
+   then A1:a in Y;
+   now let y1 be set;
+   assume y1 in Y;
+   then ex x1 being Element of X st y1=x1 & x1 <= a;
+   hence y1 in the carrier of X;
+   end;
+   hence thesis by TARSKI:def 3,A1;
+ end;
+end;
+
+theorem
+for X being commutative BCK-Algebra_with_Condition(S),
+a,b,c being Element of X st Condition_S(a,b) c= Initial_section(c) holds 
+(for x being Element of Condition_S(a,b) holds x <= c\((c\a)\b) )
+proof
+ let X be commutative BCK-Algebra_with_Condition(S);
+ let a,b,c be Element of X;
+ assume A1:Condition_S(a,b) c= Initial_section(c);
+ for x being Element of Condition_S(a,b) holds x <= c\((c\a)\b)
+  proof
+   let x be Element of Condition_S(a,b);
+   set u = c\((c\a)\b);
+   x in {t1 where t1 is Element of X: t1\a <= b};
+   then consider x1 being Element of X such that
+    A2a:x=x1 & x1\a <= b;
+   x in {t2 where t2 is Element of X: t2 <= c} by A1,TARSKI:def 3;
+   then consider x2 being Element of X such that
+    A2b:x=x2 & x2 <= c;
+   B1:x \ (c\(c\x)) = x\(x\(x\c)) by Def20
+                .= x2\c by A2b,BCIALG_1:8
+                .= 0.X by A2b,BCIALG_1:def 11;
+   B2:(c\(c\x)) \ x = (c\x)\(c\x) by BCIALG_1:7
+                .= 0.X by BCIALG_1:def 5;
+   B3:((c\(c\x)) \ (c\((c\a)\b))) \ (((c\a)\b)\(c\x)) = 0.X by BCIALG_1:1;
+   B4:(((c\a)\b)\(c\x)) = ((c\a)\(c\x))\b by BCIALG_1:7
+                    .= ((c\(c\x))\a)\b by BCIALG_1:7
+                    .= (x\a)\b by B2,B1,BCIALG_1:def 7
+                    .= 0.X by A2a,BCIALG_1:def 11;
+   x\u = (c\(c\x)) \ (c\((c\a)\b)) by B2,B1,BCIALG_1:def 7;
+   then x\u = 0.X by B3,B4,BCIALG_1:2;
+   hence thesis by BCIALG_1:def 11;
+  end;     
+  hence thesis;  
+end;
+
+:: Positive-Implicative BCK-Algebras with Condition(S)
+
+definition let IT be BCK-Algebra_with_Condition(S);
+  attr IT is positive-implicative means :Def21:
+    for x,y being Element of IT holds (x\y)\y = x\y;
+end;
+
+registration
+  cluster positive-implicative BCK-Algebra_with_Condition(S);
+ existence
+  proof
+reconsider IT = BCI_S-EXAMPLE as BCK-Algebra_with_Condition(S);
+ IT is positive-implicative  
+proof
+    let x,y be Element of IT;
+    (x\y)\y={} & x\y={} by TARSKI:def 1;
+    hence (x\y)\y = x\y;
+  end;
+hence thesis;
+end;
+end;
+
+theorem Th21a:
+for X being BCK-Algebra_with_Condition(S) holds 
+( X is positive-implicative iff (for x being Element of X holds x*x = x ))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ B1: X is positive-implicative implies (for x being Element of X holds x*x = x)
+ proof
+  assume A1:X is positive-implicative;
+  let x be Element of X;
+  A2:x\x = 0.X by BCIALG_1:def 5;
+  A3:(x*x)\x = ((x*x)\x)\x by A1,Def21;
+  (x*x)\x <= x by lmxx1;
+  then (x*x)\x <= x\x by A3,BCIALG_1:5;
+  then A4:((x*x)\x) \ (x\x) = 0.X by BCIALG_1:def 11;
+  A5:(x*x)\x = 0.X by A2,A4,BCIALG_1:2;
+  x\(x*x) = (x\x)\x by Th13
+         .= x` by BCIALG_1:def 5
+         .= 0.X by BCIALG_1:def 8;
+  hence thesis by A5,BCIALG_1:def 7;
+ end;
+(for x being Element of X holds x*x = x) implies 
+ X is positive-implicative
+ proof
+  assume C1:for x being Element of X holds x*x = x;
+  for x,y being Element of X holds (x\y)\y = x\y
+  proof
+   let x,y be Element of X;
+   x\(y*y) = x\y by C1;
+   hence thesis by Th13;
+  end;
+  hence thesis by Def21;
+ end;
+hence thesis by B1;
+end;
+ 
+theorem Th21b:
+for X being BCK-Algebra_with_Condition(S) holds 
+( X is positive-implicative iff (for x,y being Element of X holds 
+ (x <= y implies x*y = y) ))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ B1: X is positive-implicative implies (for x,y being Element of X holds 
+ (x <= y implies x*y = y))
+ proof
+  assume A1:X is positive-implicative;
+  let x,y be Element of X;
+  assume A2:x <= y;
+  A3:(x*y)\y = (y*x)\y by Th10
+            .= ((y*x)\y)\y by A1,Def21;
+  (y*x)\y <= x by lmxx1;
+  then (x*y)\y <= x\y by A3,BCIALG_1:5;
+  then A4:((x*y)\y) \ (x\y) = 0.X by BCIALG_1:def 11;
+  (x\y) = 0.X by A2,BCIALG_1:def 11;
+  then A5:(x*y)\y = 0.X by A4,BCIALG_1:2;
+  y\(x*y) = y\(y*x) by Th10
+         .= (y\y)\x by Th13
+         .= x` by BCIALG_1:def 5
+         .= 0.X by BCIALG_1:def 8;
+  hence thesis by A5,BCIALG_1:def 7;
+ end;
+(for x,y being Element of X holds (x <= y implies x*y = y)) implies 
+ X is positive-implicative
+ proof
+  assume C1:for x,y being Element of X holds (x <= y implies x*y = y);
+  for x being Element of X holds x*x = x
+   proof
+    let x be Element of X;
+    x\x = 0.X by BCIALG_1:def 5;
+    then x <= x by BCIALG_1:def 11;
+    hence thesis by C1; 
+   end;
+ hence thesis by Th21a;
+ end;
+hence thesis by B1;
+end;
+
+theorem Th21c:
+for X being BCK-Algebra_with_Condition(S) holds 
+( X is positive-implicative iff 
+(for x,y,z being Element of X holds (x*y)\z = (x\z)*(y\z) ))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ B1: X is positive-implicative implies 
+  (for x,y,z being Element of X holds (x*y)\z = (x\z)*(y\z))
+ proof
+  assume A1:X is positive-implicative;
+  let x,y,z be Element of X;
+  x <= x*y & y <= x*y by ThBCK1;
+  then x\z <= (x*y)\z & y\z <= (x*y)\z by BCIALG_1:5;
+  then (x\z)*(y\z) <= ((x*y)\z)*(y\z) & 
+       ((x*y)\z)*(y\z) <= ((x*y)\z)*((x*y)\z) by Th10x;
+  then ((x\z)*(y\z)) \ (((x*y)\z)*(y\z)) = 0.X &
+       (((x*y)\z)*(y\z)) \ (((x*y)\z)*((x*y)\z)) = 0.X by BCIALG_1:def 11;
+  then ((x\z)*(y\z)) \ (((x*y)\z)*((x*y)\z)) = 0.X by BCIALG_1:3;
+  then A2a:((x\z)*(y\z))\((x*y)\z) = 0.X by A1,Th21a;
+  A3:(x*y)\z = (x*y)\(z*z) by A1,Th21a
+            .= ((x*y)\z)\z by Th13;
+  (((x*y)\z)\(x\z))\((x*y)\x) = 0.X by BCIALG_1:def 3;
+  then (((x*y)\z)\(x\z)) <= ((x*y)\x) by BCIALG_1:def 11;
+  then (((x*y)\z)\(x\z))\z <= ((x*y)\x)\z by BCIALG_1:5;
+  then A4:((((x*y)\z)\(x\z))\z) \ (((x*y)\x)\z) = 0.X by BCIALG_1:def 11;
+  (x*y)\x <= y by lmxx1;
+  then ((x*y)\x)\z <= y\z by BCIALG_1:5;
+  then A5:(((x*y)\x)\z)\(y\z) = 0.X by BCIALG_1:def 11;
+  ((x*y)\z) \ (x\z) = (((x*y)\z)\(x\z))\z by A3,BCIALG_1:7;
+  then (((x*y)\z)\(x\z))\(y\z) = 0.X by A5,A4,BCIALG_1:3;
+  then ((x*y)\z)\((x\z)*(y\z)) = 0.X by Th13;
+  hence thesis by A2a,BCIALG_1:def 7;
+ end;
+(for x,y,z being Element of X holds (x*y)\z = (x\z)*(y\z)) implies 
+ X is positive-implicative
+ proof
+  assume C1:for x,y,z being Element of X holds (x*y)\z = (x\z)*(y\z);
+  for x being Element of X holds x*x = x
+  proof
+   let x be Element of X;
+   (x*x)\x = (x\x)*(x\x) by C1;
+   then (x*x)\x = 0.X*(x\x) by BCIALG_1:def 5;
+   then (x*x)\x = 0.X*0.X by BCIALG_1:def 5;
+   then D1:(x*x)\x = 0.X by Th11;
+   x\(x*x) = (x\x)\x by Th13
+          .= x` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8; 
+   hence thesis by D1,BCIALG_1:def 7;
+  end;
+  hence thesis by Th21a;
+ end;
+hence thesis by B1;
+end;
+
+theorem Th21d:
+for X being BCK-Algebra_with_Condition(S) holds 
+( X is positive-implicative iff 
+(for x,y being Element of X holds x*y = x*(y\x) ))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ B1: X is positive-implicative implies 
+(for x,y being Element of X holds x*y = x*(y\x))
+ proof
+  assume A1:X is positive-implicative;
+  let x,y be Element of X;
+   (y\x)\y = (y\y)\x by BCIALG_1:7  
+          .= x` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8; 
+  then y\x <= y by BCIALG_1:def 11;
+  then x*(y\x) <= x*y by Th10x;
+  then A2:(x*(y\x))\(x*y) = 0.X by BCIALG_1:def 11;
+  (x*y)\x = (x\x)*(y\x) by A1,Th21c
+         .= 0.X*(y\x) by BCIALG_1:def 5
+         .= y\x by Th11;
+  then ((x*y)\x)\(y\x) = 0.X by BCIALG_1:def 5;
+  then (x*y)\(x*(y\x)) = 0.X by Th13; 
+  hence thesis by A2,BCIALG_1:def 7;
+ end;
+(for x,y being Element of X holds x*y = x*(y\x)) implies 
+ X is positive-implicative
+ proof
+  assume C1:for x,y being Element of X holds x*y = x*(y\x);
+  for x,y being Element of X holds (x\y)\y = x\y
+  proof
+   let x,y be Element of X;
+   (y*y) = y*(y\y) by C1
+        .= y*0.X by BCIALG_1:def 5
+        .= y by Th11;  
+   hence thesis by Th13;
+  end;
+  hence thesis by Def21;
+ end;
+hence thesis by B1;
+end;
+
+theorem Th21e:
+for X being positive-implicative BCK-Algebra_with_Condition(S) holds 
+(for x,y being Element of X holds x = (x\y)*(x\(x\y)) )
+proof
+ let X be positive-implicative BCK-Algebra_with_Condition(S);
+ for x,y being Element of X holds x = (x\y)*(x\(x\y))
+  proof
+   let x,y be Element of X;
+   (x\y)\x = (x\x)\y by BCIALG_1:7  
+          .= y` by BCIALG_1:def 5
+          .= 0.X by BCIALG_1:def 8; 
+   then x\y <= x by BCIALG_1:def 11;
+   then x = (x\y)*x by Th21b;
+   hence thesis by Th21d;
+  end;
+hence thesis;
+end;
+
+definition let IT be non empty BCIStr_1;
+  attr IT is being_SB-1 means :DefSB1:
+    for x being Element of IT holds x * x = x;
+  attr IT is being_SB-2 means :DefSB2:
+    for x,y being Element of IT holds x * y = y * x;
+  attr IT is being_SB-4 means :DefSB4:
+    for x,y being Element of IT holds (x\y) * y = x * y;
+end;
+
+LmSB: BCI_S-EXAMPLE is being_SB-1 & BCI_S-EXAMPLE is being_SB-2 & 
+      BCI_S-EXAMPLE is being_SB-4 & BCI_S-EXAMPLE is_I  & 
+      BCI_S-EXAMPLE is with_condition_S
+proof
+  thus BCI_S-EXAMPLE is being_SB-1
+  proof
+    let x be Element of BCI_S-EXAMPLE;
+     x*x={} & x={} by TARSKI:def 1;
+    hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is being_SB-2
+  proof
+  let x,y be Element of BCI_S-EXAMPLE;
+    x*y={} & y*x={} by TARSKI:def 1;
+   hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is being_SB-4
+  proof
+   let x,y be Element of BCI_S-EXAMPLE;
+    (x\y) * y = {} & x * y = {} by TARSKI:def 1;
+   hence thesis;
+  end;
+  thus BCI_S-EXAMPLE is_I;
+   let x,y,z be Element of BCI_S-EXAMPLE;
+   (x\y)\z = {} & x\(y*z) = {} by TARSKI:def 1;
+    hence thesis;
+end;
+
+registration
+  cluster BCI_S-EXAMPLE -> being_SB-1 being_SB-2 being_SB-4 being_I 
+    with_condition_S;
+  coherence by LmSB;
+end;
+
+registration
+  cluster strict being_SB-1 being_SB-2 being_SB-4 being_I 
+    with_condition_S (non empty BCIStr_1);
+  existence by LmSB;
+end;
+
+definition
+  mode semi-Brouwerian-algebra is being_SB-1 being_SB-2 being_SB-4 being_I 
+    with_condition_S (non empty BCIStr_1);
+end;
+
+theorem
+for X being non empty BCIStr_1 holds 
+ (X is positive-implicative BCK-Algebra_with_Condition(S) iff  
+  X is semi-Brouwerian-algebra)
+proof
+ let X be non empty BCIStr_1;
+B1:X is positive-implicative BCK-Algebra_with_Condition(S) implies  
+  X is semi-Brouwerian-algebra
+ proof
+  assume A1:X is positive-implicative BCK-Algebra_with_Condition(S);
+  then A2:for x being Element of X holds x*x = x by Th21a;
+       A3:for x,y being Element of X holds x * y = y * x by A1,Th10;
+       for x,y being Element of X holds (x\y) * y = x * y
+         proof
+          let x,y be Element of X;
+          y*x = y*(x\y) by A1,Th21d;
+          then x*y = y*(x\y) by A1,Th10;
+          hence thesis by A1,Th10;
+         end;
+  hence thesis by DefSB4,A1,A2,DefSB1,A3,DefSB2;
+ end;
+   X is semi-Brouwerian-algebra implies
+  X is positive-implicative BCK-Algebra_with_Condition(S)
+ proof
+  assume C1:X is semi-Brouwerian-algebra;
+  C1a:for x being Element of X holds x`=0.X
+   proof
+    let x be Element of X;
+    0.X \ x = (x\x)\x by C1,BCIALG_1:def 5
+           .= x\(x*x) by C1,Def1
+           .= x\x by C1,DefSB1
+           .= 0.X by C1,BCIALG_1:def 5;
+    hence thesis;
+   end;
+  C4:for x,y being Element of X holds (x\y=0.X & y\x=0.X implies x = y)
+   proof
+    let x,y be Element of X;
+    assume D1:x\y=0.X & y\x=0.X;
+    D2:x = x*x by C1,DefSB1
+        .= (x\x)*x by C1,DefSB4
+        .= 0.X * x by C1,BCIALG_1:def 5
+        .= y*x by D1,C1,DefSB4;
+    y = y*y by C1,DefSB1
+        .= (y\y)*y by C1,DefSB4
+        .= y*(y\y) by C1,DefSB2
+        .= y*0.X by C1,BCIALG_1:def 5
+        .= (x\y)*y by D1,C1,DefSB2
+        .= x*y by C1,DefSB4;
+    hence thesis by D2,C1,DefSB2;
+   end;
+   C5:for x,y,z being Element of X holds (x\y)\z = (x\z)\y
+    proof
+     let x,y,z be Element of X;
+     (x\y)\z = x\(y*z) by C1,Def1
+            .= x\(z*y) by C1,DefSB2;
+     hence thesis by C1,Def1;
+   end;
+   C6:for x,y,z being Element of X holds ((x\y)\z)\((x\z)\y)=0.X
+    proof
+     let x,y,z be Element of X;
+     ((x\y)\z)\((x\z)\y) = ((x\y)\z)\((x\y)\z) by C5;
+     hence thesis by C1,BCIALG_1:def 5;
+    end;
+   C7:for x,y,z being Element of X holds ((x\y)\(z\y))\(x\z)=0.X
+    proof
+     let x,y,z be Element of X;
+      ((x\y)\(z\y))\(x\z) = (x\(y*(z\y)))\(x\z) by C1,Def1
+                         .= (x\((z\y)*y))\(x\z) by C1,DefSB2
+                         .= (x\(z*y))\(x\z) by C1,DefSB4
+                         .= ((x\z)\y)\(x\z) by C1,Def1
+                         .= ((x\z)\(x\z))\y by C5
+                         .= y` by C1,BCIALG_1:def 5;
+    hence thesis by C1a;
+   end;
+   for x,y being Element of X holds x*y = x*(y\x)
+    proof
+     let x,y be Element of X;
+     x*(y\x) = (y\x)*x by C1,DefSB2
+            .= y*x by C1,DefSB4;
+     hence thesis by C1,DefSB2;
+    end;
+   hence thesis by Th21d,C7,C1,BCIALG_1:def 3,C1a,BCIALG_1:def 8,C4,
+BCIALG_1:def 7,C6,BCIALG_1:def 4;                    
+ end;  
+hence thesis by B1;
+end; 
+
+:: Implicative BCK-Algebras with Condition(S)
+
+definition let IT be BCK-Algebra_with_Condition(S);
+  attr IT is implicative means :Def61:
+    for x,y being Element of IT holds x\(y\x) = x;
+end;
+
+registration
+  cluster implicative BCK-Algebra_with_Condition(S);
+ existence
+  proof
+reconsider IT = BCI_S-EXAMPLE as BCK-Algebra_with_Condition(S);
+ IT is implicative  
+proof
+    let x,y be Element of IT;
+    x\(y\x)={} & x={} by TARSKI:def 1;
+    hence x\(y\x) = x;
+  end;
+hence thesis;
+end;
+end;
+
+theorem Th61a:
+for X being BCK-Algebra_with_Condition(S) holds 
+ (X is implicative iff (X is commutative & X is positive-implicative))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ thus X is implicative implies (X is commutative & X is positive-implicative)
+ proof
+  assume A1:X is implicative;
+  A2:X is commutative 
+  proof
+   D1:for x,y being Element of X holds x\(x\y) <= y\(y\x)
+   proof   
+    let x,y be Element of X;
+    (x\(x\y))\y = (x\y)\(x\y) by BCIALG_1:7
+              .= 0.X by BCIALG_1:def 5;
+    then (x\(x\y)) <= y by BCIALG_1:def 11;
+    then (x\(x\y))\(y\x) <= y\(y\x) by BCIALG_1:5;
+    then (x\(y\x))\(x\y) <= y\(y\x) by BCIALG_1:7; 
+    hence thesis by A1,Def61;
+   end;
+   for x,y being Element of X holds x\(x\y) = y\(y\x)
+   proof  
+    let x,y be Element of X;
+    x\(x\y) <= y\(y\x) & y\(y\x) <= x\(x\y) by D1;
+    then (x\(x\y))\(y\(y\x)) = 0.X & (y\(y\x))\(x\(x\y)) = 0.X
+      by BCIALG_1:def 11;
+    hence thesis by BCIALG_1:def 7;
+  end;
+   hence thesis by Def20;
+  end;
+  X is positive-implicative 
+  proof
+   for x,y being Element of X holds x\y = (x\y)\y
+   proof
+    let x,y be Element of X;
+    (x\y)\(y\(x\y))=(x\y) by A1,Def61;
+    hence thesis by A1,Def61;
+   end;
+   hence thesis by Def21;
+  end;
+  hence thesis by A2;
+ end;
+  assume B2:X is commutative & X is positive-implicative;
+  for x,y being Element of X holds x\(y\x)=x
+  proof
+   let x,y be Element of X;
+   x\(x\(x\(y\x))) = x\(y\x) by BCIALG_1:8;
+   then B3:x\(y\x) = x\((y\x)\((y\x)\x)) by B2,Def20;
+   (y\x)\((y\x)\x) = (y\x)\(y\x) by B2,Def21
+                  .= 0.X by BCIALG_1:def 5;
+   hence thesis by B3,BCIALG_1:2;
+  end;
+  hence thesis by Def61;
+end;
+
+theorem 
+for X being BCK-Algebra_with_Condition(S) holds 
+( X is implicative iff 
+(for x,y,z being Element of X holds x\(y\z) = ((x\y)\z)*(z\(z\x)) ))
+proof
+ let X be BCK-Algebra_with_Condition(S);
+ B1: X is implicative implies 
+    (for x,y,z being Element of X holds x\(y\z) = ((x\y)\z)*(z\(z\x)))
+ proof
+  assume A1:X is implicative;
+  let x,y,z be Element of X;
+  A2a:X is positive-implicative by A1,Th61a;
+  then A2:x = (x\z)*(x\(x\z)) by Th21e;
+  X is commutative by A1,Th61a;
+  then A2ba:x\(y\z) = ((x\z)*(z\(z\x)))\(y\z) by A2,Def20;
+ B3:((x\z)\(y\z))\((x\y)\z) = (((x\z)\z)\(y\z))\((x\y)\z) by A2a,Def21
+                           .= (((x\z)\z)\(y\z))\((x\z)\y) by BCIALG_1:7
+                           .= 0.X by BCIALG_1:def 3;
+    (y\z)\y = (y\y)\z by BCIALG_1:7
+           .= z` by BCIALG_1:def 5
+           .= 0.X by BCIALG_1:def 8;
+    then y\z <= y by BCIALG_1:def 11;
+    then (x\z)\y <= (x\z)\(y\z) by BCIALG_1:5;
+    then ((x\z)\y)\((x\z)\(y\z)) = 0.X by BCIALG_1:def 11;
+    then ((x\y)\z)\((x\z)\(y\z)) = 0.X by BCIALG_1:7;
+    then A3a:(x\y)\z=(x\z)\(y\z) by B3,BCIALG_1:def 7;
+    (z\(z\x))\(y\z) = (z\(y\z))\(z\x) by BCIALG_1:7
+                   .= z\(z\x) by Def61,A1;
+  hence thesis by A3a,A2ba,A2a,Th21c; 
+ end;
+(for x,y,z being Element of X holds x\(y\z) = ((x\y)\z)*(z\(z\x))) implies 
+ X is implicative
+ proof
+  assume C1:for x,y,z being Element of X holds x\(y\z) = ((x\y)\z)*(z\(z\x));
+  for x,y being Element of X holds x\(y\x) = x
+  proof
+   let x,y be Element of X;
+   x\(y\x) = ((x\y)\x)*(x\(x\x)) by C1
+          .= ((x\y)\x)*(x\0.X) by BCIALG_1:def 5
+          .= ((x\y)\x)*x by BCIALG_1:2
+          .= ((x\x)\y)*x by BCIALG_1:7
+          .= (y`)*x by BCIALG_1:def 5
+          .= 0.X*x by BCIALG_1:def 8; 
+   hence thesis by Th11;
+  end;
+  hence thesis by Def61;
+ end;
+hence thesis by B1;
+end;

@@ -26,6 +26,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -63,9 +64,9 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="96"/>
 <Adjective nr="100"/>
-<Adjective nr="101"/>
+<Adjective nr="104"/>
+<Adjective nr="105"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -78,8 +79,8 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="104" value="false"/>
-<Adjective nr="105" value="false"/>
+<Adjective nr="108" value="false"/>
+<Adjective nr="109" value="false"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
@@ -100,9 +101,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="96"/>
-<Adjective nr="102"/>
-<Adjective nr="103"/>
+<Adjective nr="100"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
 </Cluster>
 </FCluster>
 </Registrations>

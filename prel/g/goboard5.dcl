@@ -30,6 +30,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -60,10 +61,14 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="93"/>
-<Adjective nr="94"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
+<Adjective nr="97"/>
+<Adjective nr="98">
+<Num nr="2"/>
+</Adjective>
+<Adjective nr="102">
+<Num nr="2"/>
+</Adjective>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 </Registrations>

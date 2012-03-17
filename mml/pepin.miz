@@ -114,11 +114,10 @@ theorem
    for i being Nat holds i,i+1 are_relative_prime
 proof
   let k be Nat;
-A1: k in NAT by ORDINAL1:def 13;
       k hcf (k+1) = (1+k*1) hcf k
              .= 1 hcf k by EULER_1:9
-             .= 1 by A1,NEWTON:64;
-  hence thesis by INT_2:def 6;
+             .= 1 by NEWTON:64;
+  hence thesis by INT_2:def 4;
 end;
 
 theorem Th2:
@@ -129,7 +128,7 @@ theorem Th2:
   assume A1:p is prime;
       m hcf p divides p by NAT_D:def 5;
   then m hcf p = 1 or m hcf p = p by A1,INT_2:def 5;
-  hence thesis by INT_2:def 6;
+  hence thesis by INT_2:def 4;
 end;
 
 theorem Th3:
@@ -139,7 +138,7 @@ proof
   let k,m,n be Nat;
   assume A1:k divides n*m & n,k are_relative_prime;
   reconsider k,m,n as Element of NAT by ORDINAL1:def 13;
-  n hcf k = 1 by A1,INT_2:def 6;
+  n hcf k = 1 by A1,INT_2:def 4;
   then A2:(n*m hcf k*m) = m by EULER_1:6;
   k divides k*m by NAT_D:9;
   hence thesis by A1,A2,NEWTON:63;
@@ -151,8 +150,7 @@ proof
   assume A1: n divides m & k divides m & n,k are_relative_prime;
   then consider t1 be Nat such that
     A2:m = n*t1 by NAT_D:def 3;
-     t1 in NAT by ORDINAL1:def 13;
-    then k divides t1 by A1,A2,Th3;
+    k divides t1 by A1,A2,Th3;
   then consider t2 be Nat such that
     A3:t1 = k*t2 by NAT_D:def 3;
       m = (n*k)*t2 by A2,A3;
@@ -161,19 +159,7 @@ end;
 
 registration let n be Nat;
   cluster n^2 -> natural;
-coherence
-proof
-  defpred P[Nat] means $1^2 is natural;
-    A1:P[0];
-A2: for k st P[k] holds P[k+1]
-    proof
-      let kk be Nat;
-      (kk+1)^2 = kk^2 + 2*kk + 1;
-      hence thesis;
-    end;
-    for k holds P[k] from NAT_1:sch 2(A1,A2);
-    hence thesis;
-  end;
+coherence;
 end;
 
 definition let n be Element of NAT;
@@ -430,10 +416,9 @@ theorem
   p > 2 & p is prime implies p is odd
 proof
   let p be Nat;
-A1: p in NAT by ORDINAL1:def 13;
   assume A2:p > 2 & p is prime;
   assume p is even;
-  then p mod 2 = 0 by A1,NAT_2:23;
+  then p mod 2 = 0 by NAT_2:23;
   then consider k being Nat such that
     A3:p = 2*k + 0 & 0 < 2 by NAT_D:def 2;
       2 divides p by A3,NAT_D:def 3;
@@ -824,14 +809,13 @@ proof
           A5:n = p*i;
         consider u being Nat such that
           A6:p |^ (k+1) = (p*i)*u by A4,A5,NAT_D:def 3;
-A7:    u in NAT by ORDINAL1:def 13;
             p*(p |^ k) = p*(i*u) by A6,NEWTON:11;
         then A8:p |^ k = p*(i*u) div p by A2,NAT_D:18;
         then A9:p |^ k = i*u by A2,NAT_D:18;
         then A10:u divides p |^ k by NAT_D:def 3;
             u <> 1 by A1,A5,A9,NEWTON:11;
         then consider j being Element of NAT such that
-          A11:u = p*j by A1,A7,A10,Th33;
+          A11:u = p*j by A1,A10,Th33;
             p |^ k = n*j by A2,A5,A8,A11,NAT_D:18;
       hence thesis by NAT_D:def 3;
     end;
@@ -948,21 +932,20 @@ theorem Th38:
     implies (n |^ (p -'1)) mod p = 1
 proof
   let p be Nat;
-A1: p in NAT by ORDINAL1:def 13;
   assume A2:p is prime & n,p are_relative_prime;
   then A3:p > 1 by INT_2:def 5;
   A4:p <> 0 by A2,INT_2:def 5;
   A5:n <> 0
   proof
     assume n = 0;
-    then n hcf p = p by A1,NEWTON:65;
+    then n hcf p = p by NEWTON:65;
     then n hcf p > 1 by A2,INT_2:def 5;
-    hence contradiction by A2,INT_2:def 6;
+    hence contradiction by A2,INT_2:def 4;
   end;
-  then (n |^ p) mod p = n mod p by A1,A2,EULER_2:34;
-  then A6:(n |^ (p -' 1))*n mod p = n mod p by A1,A4,A5,Th27;
+  then (n |^ p) mod p = n mod p by A2,EULER_2:34;
+  then A6:(n |^ (p -' 1))*n mod p = n mod p by A4,A5,Th27;
       (n |^ (p -'1)) <> 0 by A5,PREPOWER:12;
-  hence thesis by A1,A2,A3,A5,A6,EULER_2:27;
+  hence thesis by A2,A3,A5,A6,EULER_2:27;
 end;
 
 theorem Th39:
@@ -996,11 +979,7 @@ end;
 
 definition let a be Integer;
   redefine func a^2 -> Element of NAT;
-coherence
-  proof
-        a*a >= 0 by XREAL_1:65;
-    hence thesis by INT_1:16;
-  end;
+coherence by XREAL_1:65,INT_1:16;
 end;
 
 theorem Th40:
@@ -1111,7 +1090,7 @@ A3: Card X = 0 by A2,EULER_1:def 1;
     A6:1 in X
     proof
           n hcf 1 = 1 by NEWTON:64;
-      then A7:n,1 are_relative_prime by INT_2:def 6;
+      then A7:n,1 are_relative_prime by INT_2:def 4;
           1 <= n by A1,NAT_1:14;
       hence thesis by A7;
     end;
@@ -1171,7 +1150,7 @@ proof
   proof
     assume k1 = 0;
     then k1 hcf Euler n = Euler n by NEWTON:65;
-    hence contradiction by A1,A9,A10,INT_2:def 6;
+    hence contradiction by A1,A9,A10,INT_2:def 4;
   end;
       k2 <> 0 by A1,NAT_D:26;
   then A12:k1 >= 1 & k2 >= 1 by A11,NAT_1:14;
@@ -1202,7 +1181,7 @@ proof
              proof
                    now per cases;
                  suppose m hcf q = 1;
-                   then m,q are_relative_prime by INT_2:def 6;
+                   then m,q are_relative_prime by INT_2:def 4;
                    then A19:(m |^ (t*p1)),q are_relative_prime
                                            by A3,A16,EULER_2:32;
                        m |^ (t*p1) <> 0 by A16,PREPOWER:12;
@@ -1219,7 +1198,7 @@ proof
                  hence thesis by NAT_D:9;
                  end;
                  suppose m hcf q <> 1;
-                   then not m,q are_relative_prime by INT_2:def 6;
+                   then not m,q are_relative_prime by INT_2:def 4;
                    then m hcf q = q by A1,Th2;
                    then q divides m by NAT_D:def 5;
                  hence thesis by NAT_D:9;
@@ -1231,7 +1210,7 @@ proof
              proof
                    now per cases;
                  suppose m hcf p = 1;
-                   then m,p are_relative_prime by INT_2:def 6;
+                   then m,p are_relative_prime by INT_2:def 4;
                    then A21:(m |^ (t*q1)),p are_relative_prime
                                            by A3,A16,EULER_2:32;
                        m |^ (t*q1) <> 0 by A16,PREPOWER:12;
@@ -1248,7 +1227,7 @@ proof
                  hence thesis by NAT_D:9;
                  end;
                  suppose m hcf p <> 1;
-                   then not m,p are_relative_prime by INT_2:def 6;
+                   then not m,p are_relative_prime by INT_2:def 4;
                    then m hcf p = p by A1,Th2;
                    then p divides m by NAT_D:def 5;
                  hence thesis by NAT_D:9;
@@ -1296,7 +1275,7 @@ definition
     proof
       assume i = 0;
       then i hcf p = p by NEWTON:65;
-      hence contradiction by A1,INT_2:def 6;
+      hence contradiction by A1,INT_2:def 4;
     end;
     A3:A is non empty set
     proof
@@ -1353,7 +1332,7 @@ proof
   assume A1:p > 1;
   assume A2:order(1,p) <> 1;
       p hcf 1 = 1 by NEWTON:64;
-  then A3:1,p are_relative_prime by INT_2:def 6;
+  then A3:1,p are_relative_prime by INT_2:def 4;
       (1 |^ 1) mod p = 1 mod p by NEWTON:10
                 .= 1 by A1,NAT_D:24;
   then order(1,p) <= 1 by A1,A3,Def2;
@@ -1625,7 +1604,7 @@ A2: (3 |^ ((Fermat(n)-'1) div 2)),(-1) are_congruent_mod Fermat(n);
     assume A8:p = 3;
         1 hcf i = 1 by NEWTON:64;
     then 3*1 hcf 3*i = 3 by EULER_1:6;
-    then not 3,Fermat(n) are_relative_prime by A6,A8,INT_2:def 6;
+    then not 3,Fermat(n) are_relative_prime by A6,A8,INT_2:def 4;
     hence contradiction by A1,Th62;
   end;
   then A9:3,p are_relative_prime by A4,Th44,INT_2:47;

@@ -29,7 +29,7 @@ environ
 
 begin
 
-set A = the Instruction-Locations of SCM+FSA;
+set A = NAT;
 set D = Int-Locations \/ FinSeq-Locations;
 
 Lm1:
@@ -62,7 +62,7 @@ theorem Th2: ::TA8(@BBB8)
    let l be Instruction-Location of SCM+FSA;
        dom s = D \/ {IC SCM+FSA} \/ A by SCMFSA6A:34;
 then A1: A c= dom s by XBOOLE_1:7;
-       l in A;
+       l in A by AMI_1:def 4;
    hence l in dom s by A1;
  end;
 
@@ -211,7 +211,7 @@ theorem Th7: ::TQ40'
      s1 | (Int-Locations \/ FinSeq-Locations) =
          s2 | (Int-Locations \/ FinSeq-Locations) implies
      s1 +* (I +* Start-At insloc 0),s2 +* (J +* Start-At insloc 0)
-         equal_outside the Instruction-Locations of SCM+FSA
+         equal_outside NAT
  proof
    let s1,s2 be State of SCM+FSA;
    let I,J be Macro-Instruction;
@@ -393,12 +393,13 @@ then A9: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
   then A13: insloc (0 + n) in dom ProgramPart Relocated(I,n) by SCMFSA_4:def 1;
           ProgramPart I = I by AMI_1:105;
   then A14: insloc 0 in dom ProgramPart I by A2,Th3;
+X:  insloc n in NAT by AMI_1:def 4;
       thus IncAddr(CurInstr (C1.0),n)
        = IncAddr(CurInstr s1,n) by AMI_1:def 19
       .= IncAddr(s1.IC s1,n)
       .= Relocated(I,n).(insloc 0 + n) by A12,A14,SCMFSA_5:7
       .= Relocated(I,n).insloc (0 + n) by SCMFSA_4:def 1
-      .= (ProgramPart Relocated(I,n)).insloc n by FUNCT_1:72
+      .= (ProgramPart Relocated(I,n)).insloc n by FUNCT_1:72,X
       .= s2.IC s2 by A3,A4,A13,GRFUNC_1:8
       .= CurInstr s2
       .= CurInstr (C2.0) by AMI_1:def 19;
@@ -422,21 +423,23 @@ A20:  I c= I +* Start-At insloc 0 by SCMFSA8A:9;
 then A21: dom I c= dom (I +* Start-At insloc 0) by GRFUNC_1:8;
           s1 +* (I +* Start-At insloc 0) = s1 by A1,FUNCT_4:79;
    then A22: IC C1.(k + 1) in dom I by A2,SCMFSA7B:def 7;
-      dom ProgramPart I = dom I /\ the Instruction-Locations of SCM+FSA
+X1: l in NAT by AMI_1:def 4;
+X2: IC C2.(k + 1) in NAT by AMI_1:def 4;
+      dom ProgramPart I = dom I /\ NAT
           by FUNCT_1:68;
-  then A23: l in dom ProgramPart I by A22,XBOOLE_0:def 3;
+  then A23: l in dom ProgramPart I by A22,XBOOLE_0:def 3,X1;
    A24: j = C1.(k + 1).IC C1.(k + 1)
       .= s1.IC C1.(k + 1) by AMI_1:54
       .= (I +* Start-At insloc 0).IC C1.(k + 1) by A1,A21,A22,GRFUNC_1:8
       .= I.l by A20,A22,GRFUNC_1:8;
           IC C2.(k + 1) in dom Relocated(I,n) by A19,A22,SCMFSA_5:4;
       then IC C2.(k + 1) in
- dom Relocated(I,n) /\ the Instruction-Locations of SCM+FSA
-          by XBOOLE_0:def 3;
+ dom Relocated(I,n) /\ NAT
+          by XBOOLE_0:def 3,X2;
    then A25: IC C2.(k + 1) in dom ProgramPart Relocated(I,n) by FUNCT_1:68;
       thus IncAddr(CurInstr C1.(k + 1),n)
        = Relocated(I,n).(l + n) by A23,A24,SCMFSA_5:7
-      .= (ProgramPart Relocated(I,n)).(IC C2.(k + 1)) by A19,FUNCT_1:72
+      .= (ProgramPart Relocated(I,n)).(IC C2.(k + 1)) by A19,FUNCT_1:72,X2
       .= s2.IC C2.(k + 1) by A3,A25,GRFUNC_1:8
       .= C2.(k + 1).IC C2.(k + 1) by AMI_1:54
       .= CurInstr C2.(k + 1);
@@ -910,8 +913,9 @@ CQC_LANG:6
     then A45: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A35,A44,Th2,TARSKI:def 1;
-       thus IExec(if=0(a,I,J),s).x = (s | A).x by A14,A33,A44,FUNCT_4:14
-       .= IExec(I1,s).x by A14,A32,A44,FUNCT_4:14
+X3:   x in NAT by A44,AMI_1:def 4;
+       hence IExec(if=0(a,I,J),s).x = (s | A).x by A14,A33,A44,FUNCT_4:14
+       .= IExec(I1,s).x by A14,A32,A44,FUNCT_4:14,X3
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A45,FUNCT_4:12;
      end;
@@ -1243,8 +1247,9 @@ A38: now assume x in dom (s | A);
     then A51: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A42,A50,Th2,TARSKI:def 1;
-       thus IExec(if=0(a,I,J),s).x = (s | A).x by A13,A40,A50,FUNCT_4:14
-       .= IExec(JI2,s).x by A13,A39,A50,FUNCT_4:14
+X3:   x in NAT by A50,AMI_1:def 4;
+       hence IExec(if=0(a,I,J),s).x = (s | A).x by A13,A40,A50,FUNCT_4:14
+       .= IExec(JI2,s).x by A13,A39,A50,FUNCT_4:14,X3
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A51,FUNCT_4:12;
      end;
@@ -1626,8 +1631,9 @@ CQC_LANG:6
     then A45: x in dom IExec(I1,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A36,A44,Th2,TARSKI:def 1;
-       thus IExec(if>0(a,I,J),s).x = (s | A).x by A14,A34,A44,FUNCT_4:14
-       .= IExec(I1,s).x by A14,A33,A44,FUNCT_4:14
+X3:   x in NAT by A44,AMI_1:def 4;
+       hence IExec(if>0(a,I,J),s).x = (s | A).x by A14,A34,A44,FUNCT_4:14
+       .= IExec(I1,s).x by A14,A33,A44,FUNCT_4:14,X3
        .= (IExec(I1,s) +* Start-At insloc (card I + card J + 3)).x
            by A45,FUNCT_4:12;
      end;
@@ -1958,8 +1964,9 @@ A38: now assume x in dom (s | A);
     then A51: x in dom IExec(JI2,s) &
            not x in dom Start-At insloc (card I + card J + 3)
            by A42,A50,Th2,TARSKI:def 1;
-       thus IExec(if>0(a,I,J),s).x = (s | A).x by A13,A40,A50,FUNCT_4:14
-       .= IExec(JI2,s).x by A13,A39,A50,FUNCT_4:14
+X3:   x in NAT by A50,AMI_1:def 4;
+       hence IExec(if>0(a,I,J),s).x = (s | A).x by A13,A40,A50,FUNCT_4:14
+       .= IExec(JI2,s).x by A13,A39,A50,FUNCT_4:14,X3
        .= (IExec(JI2,s) +* Start-At insloc (card I + card J + 3)).x
            by A51,FUNCT_4:12;
      end;
@@ -2278,7 +2285,7 @@ theorem Th36: ::PRE8'91(@AAAA)
  for s being State of SCM+FSA, I being Macro-Instruction,
  a being Int-Location holds
      Result (s +* Initialized I),IExec(I,s) equal_outside
-         the Instruction-Locations of SCM+FSA
+         NAT
  proof
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
@@ -2314,10 +2321,9 @@ theorem Th37: ::T81'
    A4: InsCode i <= 11+1 by SCMFSA_2:35;
 A5: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A6: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A7: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
 A8: now let b be Int-Location;
       assume A9: a <> b;
-      per cases by A4,A5,A6,A7,NAT_1:8,33;
+      per cases by A4,A5,A6,NAT_1:8,33;
       suppose InsCode i = 0;
    then A10:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).b = s1.b by AMI_1:def 8
@@ -2498,7 +2504,7 @@ that
       end;
       end;
        now let f be FinSeq-Location;
-      per cases by A4,A5,A6,A7,NAT_1:8,33;
+      per cases by A4,A5,A6,NAT_1:8,33;
       suppose InsCode i = 0;
    then A48:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).f = s1.f by AMI_1:def 8
@@ -2625,7 +2631,7 @@ that
      end;
      end;
    hence S[Exec(i,s1),Exec(i,s2)] by A8;
-A76: now per cases by A4,A5,A6,A7,NAT_1:8,33;
+A76: now per cases by A4,A5,A6,NAT_1:8,33;
       suppose InsCode i = 0;
    then A77:  i = halt SCM+FSA by SCMFSA_2:122;
        hence Exec(i,s1).IC SCM+FSA = s1.IC SCM+FSA by AMI_1:def 8

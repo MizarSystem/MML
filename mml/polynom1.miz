@@ -23,15 +23,15 @@ environ
       RFUNCT_3, RFINSEQ, FVSUM_1, SEQ_1;
  constructors WELLORD2, BINOP_1, SETWISEO, NAT_1, CARD_3, FINSEQOP, FINSOP_1,
       FINSEQ_4, RFINSEQ, RFUNCT_3, BINARITH, WSIERP_1, FUNCT_7, ALGSTR_1,
-      FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1;
+      FVSUM_1, DTCONSTR, MATRLIN, TRIANG_1, RAT_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       ORDINAL3, FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, BINOP_2,
       CARD_1, MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, CARD_3, STRUCT_0, VECTSP_1,
-      ALGSTR_1, CIRCCOMB, HEYTING2, GOBRD13, SEQM_3;
+      ALGSTR_1, CIRCCOMB, HEYTING2, GOBRD13, SEQM_3, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, RLVECT_1, FUNCT_1, VECTSP_1, MATRLIN, CARD_3,
       RELAT_2, PBOOLE, RELSET_1, WELLORD2, FRAENKEL, RELAT_1, SEQM_3, GROUP_1,
-      SEQ_1, BINOP_1, FINSEQ_2, STRUCT_0, ANPROJ_1;
+      SEQ_1, BINOP_1, FINSEQ_2, STRUCT_0, ANPROJ_1, VALUED_0;
  theorems FUNCT_1, FINSET_1, FINSEQ_3, FINSEQ_4, ZFMISC_1, FINSEQ_1, FUNCT_2,
       RLVECT_1, VECTSP_1, FUNCOP_1, STRUCT_0, TARSKI, FUNCT_7, BINOP_1,
       RELAT_1, MATRLIN, FINSEQ_2, CARD_3, RFINSEQ, DTCONSTR, GROUP_7, CQC_LANG,
@@ -40,7 +40,7 @@ environ
       FVSUM_1, FUNCT_3, TRIANG_1, PRE_CIRC, ORDINAL3, CARD_4, SETWISEO,
       SETWOP_2, CARD_2, FUNCT_5, FINSUB_1, SEQM_3, GROUP_1, ANPROJ_1, PARTFUN2,
       XBOOLE_0, XBOOLE_1, RLVECT_2, PARTFUN1, BINOP_2, SEQ_1, XREAL_1,
-      XXREAL_0;
+      XXREAL_0, VALUED_0;
  schemes FRAENKEL, SETWISEO, FUNCT_2, FINSEQ_2, FINSEQ_5, GOBOARD2, PBOOLE,
       RELSET_1, FINSEQ_4, ORDINAL1, FUNCT_7, SUBSET_1, XBOOLE_0, BINOP_1;
 
@@ -1182,21 +1182,6 @@ end;
 
 begin :: Functions yielding natural and real numbers -------------------------
 
-registration
- cluster natural-yielding -> real-yielding Function;
- correctness proof let b being Function; assume
-   b is natural-yielding;
-  then rng b c= NAT by SEQM_3:def 8;
-  then rng b c= REAL by XBOOLE_1:1;
-  hence thesis by SEQ_1:def 1;
- end;
-end;
-
-registration
- cluster {} -> natural-yielding;
- coherence proof thus rng {} c= NAT by XBOOLE_1:2; end;
-end;
-
 definition
  let f be natural-yielding Function;
  let x be set;
@@ -1209,18 +1194,17 @@ registration
  cluster f+*(x,n) -> natural-yielding;
  coherence proof
   set F = f+*(x,n);
-  let y be set; assume y in rng F;
-     then consider a being set such that
-A1: a in dom F & y = F.a by FUNCT_1:def 5;
+  let a be set such that
+A1: a in dom F;
    per cases;
    suppose x in dom f & x = a; then F.a = n by FUNCT_7:33;
-    hence y in NAT by A1;
+    hence thesis by A1;
    end;
    suppose x in dom f & x <> a; then F.a = f.a by FUNCT_7:34;
-    hence y in NAT by A1;
+    hence thesis by A1;
    end;
    suppose not x in dom f; then F.a = f.a by FUNCT_7:def 3;
-    hence y in NAT by A1;
+    hence thesis by A1;
  end;
  end;
 end;
@@ -1230,18 +1214,17 @@ registration
  cluster f+*(x,n) -> real-yielding;
  coherence proof
   set F = f+*(x,n);
-  let y be set; assume y in rng F;
-     then consider a being set such that
-A1: a in dom F & y = F.a by FUNCT_1:def 5;
+  let a be set such that
+A1: a in dom F;
    per cases;
    suppose x in dom f & x = a; then F.a = n by FUNCT_7:33;
-    hence y in REAL by A1;
+    hence thesis by A1;
    end;
    suppose x in dom f & x <> a; then F.a = f.a by FUNCT_7:34;
-    hence y in REAL by A1;
+    hence thesis by A1;
    end;
    suppose not x in dom f; then F.a = f.a by FUNCT_7:def 3;
-    hence y in REAL by A1;
+    hence thesis by A1;
  end;
  end;
 end;
@@ -1257,7 +1240,7 @@ registration
 A1: rng f c= {0} by FUNCOP_1:19;
          {0} c= NAT by ZFMISC_1:37;
    then rng f c= NAT by A1,XBOOLE_1:1;
-  hence f is natural-yielding by SEQM_3:def 8;
+  hence f is natural-yielding by VALUED_0:def 6;
  end;
 end;
 
@@ -1410,7 +1393,7 @@ registration
           f.x = b1.x+b2.x by Def5;
     hence y in REAL by A1;
    end;
-  hence f is real-yielding by SEQ_1:def 1;
+  hence f is real-yielding by VALUED_0:def 3;
  end;
 end;
 
@@ -1424,7 +1407,7 @@ registration
            f.x = b1.x+b2.x by Def5;
     hence y in NAT by A1;
    end;
-  hence f is natural-yielding by SEQM_3:def 8;
+  hence f is natural-yielding by VALUED_0:def 6;
  end;
  cluster b1-'b2 -> natural-yielding;
  coherence proof set f = b1 -' b2;
@@ -1434,7 +1417,7 @@ registration
            f.x = b1.x -' b2.x by Def6;
     hence y in NAT by A2;
    end;
-  hence f is natural-yielding by SEQM_3:def 8;
+  hence f is natural-yielding by VALUED_0:def 6;
  end;
 end;
 
@@ -1541,7 +1524,7 @@ registration
   take f = 0 .--> 1;
         rng f = {1} by CQC_LANG:5;
      then rng f c= NAT by ZFMISC_1:37;
-  hence f is natural-yielding by SEQM_3:def 8;
+  hence f is natural-yielding by VALUED_0:def 6;
           dom f = {0} by CQC_LANG:5;
      then support f c= {0} by Th41;
      then support f is finite by FINSET_1:13;
@@ -1613,7 +1596,7 @@ A1: dom f = X by FUNCOP_1:19;
 A2: rng f c= {0} by FUNCOP_1:19;
          {0} c= NAT by ZFMISC_1:37;
    then rng f c= NAT by A2,XBOOLE_1:1;
-  hence f is natural-yielding by SEQM_3:def 8;
+  hence f is natural-yielding by VALUED_0:def 6;
         support f = {} proof assume not thesis; then consider x being set such
 that
 A3:  x in support f by XBOOLE_0:def 1;
@@ -1742,7 +1725,7 @@ A4:  x in support f by XBOOLE_0:def 1;
     then f.x = 0 by A1,A4,FUNCOP_1:13;
     hence contradiction by A4,Def7;
    end;
-   hence X --> 0 is bag of X by A1,A3,Def8,PBOOLE:def 3,SEQM_3:def 8;
+   hence X --> 0 is bag of X by A1,A3,Def8,PBOOLE:def 3,VALUED_0:def 6;
   end;
 
 definition
@@ -1853,18 +1836,13 @@ then A5: ex i being Ordinal st P[i] by A4;
    consider m being Ordinal such that
 A6: P[m] and
 A7: for n being Ordinal st P[n] holds m c= n from ORDINAL1:sch 1(A5);
+X:  for l being Ordinal st l in m holds q.l = p.l by A7,ORDINAL1:7;
    per cases by A6,XXREAL_0:1;
-   suppose A8: p.m < q.m;
-          now let l be Ordinal; assume l in m; then not m c= l by ORDINAL1:7;
-      hence q.l = p.l by A7;
-     end;
-    hence q <=' p by A2,A8,Def11;
+   suppose p.m < q.m;
+    hence q <=' p by A2,X,Def11;
    end;
-   suppose A9: p.m > q.m;
-         now let l be Ordinal; assume l in m; then not m c= l by ORDINAL1:7;
-     hence p.l = q.l by A7;
-    end;
-    then q < p by A9,Def11;
+   suppose p.m > q.m;
+    then q < p by X,Def11;
     hence q <=' p by Def12;
 end;
 end;
@@ -1975,7 +1953,7 @@ XBOOLE_0:sch 1;
    assume
 A2:  x is bag of X;
     then reconsider b = x as bag of X;
-          dom b = X & rng b c= NAT by PBOOLE:def 3,SEQM_3:def 8;
+          dom b = X & rng b c= NAT by PBOOLE:def 3,VALUED_0:def 6;
     then x in Funcs(X,NAT) by FUNCT_2:def 2;
    hence x in A by A1,A2;
   end;
@@ -2154,11 +2132,7 @@ proof let n be set, b be bag of n;
 end;
 
 theorem Th64:
- for n being Ordinal, b being bag of n holds EmptyBag n <=' b
-proof let n be Ordinal, b be bag of n;
-       EmptyBag n divides b by Th63;
- hence EmptyBag n <=' b by Th53;
-end;
+ for n being Ordinal, b being bag of n holds EmptyBag n <=' b by Th53,Th63;
 
 definition
  let n be Ordinal;
@@ -2319,7 +2293,7 @@ SUBSET_1:sch 1;
   end;
   assume
   A3: for x being set st x in X holds g.x <= f.x;
-           dom g = X & rng g c= NAT by PBOOLE:def 3,SEQM_3:def 8;
+           dom g = X & rng g c= NAT by PBOOLE:def 3,VALUED_0:def 6;
       then g is Function of X, NAT by FUNCT_2:def 1,RELSET_1:11;
       then g in Funcs(X, NAT) by FUNCT_2:11;
   hence g in IT by A1,A3;
@@ -2369,7 +2343,7 @@ registration let X be set, f be Function of X, NAT;
  cluster -> natural-yielding Element of NatMinor f;
  coherence proof let x be Element of NatMinor f;
         rng x c= NAT by FUNCT_2:169;
-  hence x is natural-yielding by SEQM_3:def 8;
+  hence x is natural-yielding by VALUED_0:def 6;
  end;
 end;
 
@@ -2485,11 +2459,12 @@ A16:    for p being Element of ng, l being Element of fb1
 A17:         fb1 c= NAT by ORDINAL1:def 2;
                 l in fb1;
           then reconsider k = l as Element of NAT by A17;
+X:        q+*(b,k qua Nat) is natural-yielding;
                p in NatMinor g;
           then A18:         dom p = X by FUNCT_2:169;
           then dom(p+*(b,l)) = X by FUNCT_7:32;
           then reconsider pbl = q+*(b,k)
-           as natural-yielding ManySortedSet of X by PBOOLE:def 3;
+           as natural-yielding ManySortedSet of X by PBOOLE:def 3,X;
                for x being set st x in X holds pbl.x <= f.x
            proof let x be set;
             assume
@@ -2624,7 +2599,7 @@ definition
   st it = SgmX(BagOrder n, S) &
      for p being bag of n holds p in S iff p divides b;
  existence proof
-        dom b = n & rng b c= NAT by PBOOLE:def 3,SEQM_3:def 8;
+        dom b = n & rng b c= NAT by PBOOLE:def 3,VALUED_0:def 6;
    then reconsider f = b as finite-support Function of n, NAT
    by FUNCT_2:def 1,RELSET_1:11;
    reconsider S = NatMinor f as non empty finite Subset of Bags n by Th66;
@@ -4733,16 +4708,7 @@ theorem
      L being right_zeroed Abelian add-associative right_complementable
           unital distributive associative
           non trivial (non empty doubleLoopStr) holds
-  1_Polynom-Ring (n, L) = 1_(n,L)
-proof
- let n be Ordinal,
-     L be right_zeroed Abelian add-associative right_complementable
-          unital distributive associative
-          non trivial (non empty doubleLoopStr);
-  set Pm = Polynom-Ring (n, L);
-  reconsider e = 1_(n,L) as Element of Pm by Def27;
-  thus 1_Polynom-Ring (n, L) = 1_(n,L) by Def27;
-end;
+  1_Polynom-Ring (n, L) = 1_(n,L) by Def27;
 
 theorem
   for X being set, b1, b2 being real-yielding ManySortedSet of X

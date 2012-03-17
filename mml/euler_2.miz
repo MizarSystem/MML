@@ -15,7 +15,7 @@ environ
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, NEWTON, RFINSEQ, WSIERP_1,
       EULER_1, SEQM_3;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, FINSEQ_1, RVSUM_1, WSIERP_1, SEQM_3, NEWTON, XBOOLE_0;
+      INT_1, FINSEQ_1, RVSUM_1, WSIERP_1, SEQM_3, NEWTON, XBOOLE_0, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0;
  theorems INT_2, FINSEQ_1, NAT_1, ABSVALUE, REAL_1, INT_1, FUNCT_1, REAL_2,
@@ -29,12 +29,6 @@ begin :: Preliminary
 reserve a,b,m,x,n,l,xi,xj for Nat,
         t,z for Integer,
         f,F for FinSequence of NAT;
-
-Lm1:a gcd b = a hcf b
-proof
-   abs(a) = a & abs(b) = b by ABSVALUE:def 1;
-  hence thesis by INT_2:def 3;
-end;
 
 Lm2:t < 1 iff t <= 0
 proof
@@ -59,7 +53,7 @@ end;
 
 Lm4:1 gcd z = 1
 proof
-  thus 1 gcd z = abs 1 hcf abs(z) by INT_2:def 3
+  thus 1 gcd z = abs 1 hcf abs(z) by INT_2:51
          .= 1 hcf abs z by ABSVALUE:def 1
          .= 1 by NEWTON:64;
 end;
@@ -67,23 +61,7 @@ end;
 ::  Very useful theorem
 
 theorem
-  Th1:a,(b qua Integer) are_relative_prime iff a,b are_relative_prime
-proof
-  thus a,(b qua Integer) are_relative_prime implies
-                                    a,b are_relative_prime
-  proof
-    assume a,(b qua Integer) are_relative_prime;
-    then A1:a gcd b = 1 by INT_2:def 4;
-     abs(a) = a & abs(b) = b by ABSVALUE:def 1;
-    then a hcf b = 1 by A1,INT_2:def 3;
-    hence thesis by INT_2:def 6;
-  end;
-  assume a,b are_relative_prime;
-  then A2:a hcf b = 1 by INT_2:def 6;
-   abs(a) = a & abs(b) = b by ABSVALUE:def 1;
-  then a gcd b = 1 by A2,INT_2:def 3;
-  hence thesis by INT_2:def 4;
-end;
+      a,(b qua Integer) are_relative_prime iff a,b are_relative_prime;
 
 theorem
   Th2:m > 1 & m*t >= 1 implies t >= 1
@@ -131,16 +109,15 @@ proof
   assume A1:a <> 0 & b <> 0 & m <> 0 &
                      a,m are_relative_prime & b,m are_relative_prime;
   then a*b,m are_relative_prime by EULER_1:15;
-  then A2:a*b hcf m = 1 by INT_2:def 6;
+  then A2:a*b hcf m = 1 by INT_2:def 4;
   consider t being Nat such that
 A3:a*b = m*t+(a*b mod m) and
    (a*b mod m) < m by A1,NAT_D:def 2;
    a*b <> a*0 by A1,XCMPLX_1:5;
   then A4:a*b+(-t)*m gcd m = a*b gcd m by A1,EULER_1:17;
-  A5: a*b gcd m = 1 by A2,Lm1;
-   abs(a*b mod m) = a*b mod m & abs(m) = m by ABSVALUE:def 1;
-  then (a*b mod m) hcf m = 1 by A3,A4,A5,INT_2:def 3;
-  hence thesis by INT_2:def 6;
+  A5: a*b gcd m = 1 by A2;
+   (a*b mod m) hcf m = 1 by A3,A4,A5;
+  hence thesis by INT_2:def 4;
 end;
 
 theorem
@@ -151,7 +128,7 @@ proof
   assume A1:m > 1 & b <> 0 & m,n are_relative_prime
          & a,m are_relative_prime & n = a*b mod m;
   assume not m,b are_relative_prime;
-  then A2:m hcf b <> 1 by INT_2:def 6;
+  then A2:m hcf b <> 1 by INT_2:def 4;
   set k = m hcf b;
   A3:k > 0 by A1,NEWTON:71;
   A4:k divides m & k divides b by NAT_D:def 5;
@@ -166,26 +143,15 @@ A8:a*(k*kb) = (k*km)*p+(a*(k*kb) mod (k*km)) &
           (a*(k*kb) mod (k*km)) < k*km by A1,A5,NAT_D:def 2;
 A9:(a*(k*kb) mod (k*km)) = k*((a*kb)-(km*p)) by A8;
   set tm = (a*kb)-(km*p);
-A10:tm = 0 implies m gcd n <> 1
-  proof
-    assume A11: tm = 0;
-    A12:0 = abs(0) by ABSVALUE:7;
-     k*km = abs(k*km) by ABSVALUE:def 1;
-    then k*km gcd 0 = k*km hcf 0 by A12,INT_2:def 3
-              .= k*km by NEWTON:65;
-    hence thesis by A1,A5,A7,A9,A11;
-  end;
+A10:tm = 0 implies m gcd n <> 1 by A1,A5,A7,A9,NEWTON:65;
+A16:k <> -1 by NAT_1:2;
 A13:tm <> 0 implies m gcd n <> 1
   proof
-    assume A14:tm <> 0;
-    assume A15:m gcd n = 1;
-    A16:k <> -1 by NAT_1:2;
-     m gcd n = k*(km gcd tm) by A1,A3,A5,A6,A7,A9,A14,EULER_1:16;
-    hence contradiction by A2,A15,A16,INT_1:22;
+    assume tm <> 0;
+     then m gcd n = k*(km gcd tm) by A1,A3,A5,A6,A7,A9,EULER_1:16;
+    hence m gcd n <> 1 by A2,A16,INT_1:22;
   end;
-  A17:m gcd n = abs(m) hcf abs(n) by INT_2:def 3;
-   m = abs(m) & n = abs(n) by ABSVALUE:def 1;
-  hence contradiction by A1,A10,A13,A17,INT_2:def 6;
+ hence contradiction by A1,A10,A13,INT_2:def 4;
 end;
 
 theorem
@@ -486,7 +452,7 @@ proof
    (a-1)*n = m*(k1-k2) by A1,A2,A3;
   then A4:m divides (a-1)*n by INT_1:def 9;
   reconsider t = (a-1),m,n as Integer;
-      m,n are_relative_prime by A1,Th1;
+      m,n are_relative_prime by A1;
   then m divides t by A4,INT_2:40;
   then consider tt be Integer such that
     A5:(a-1) = m*tt by INT_1:def 9;
@@ -701,7 +667,7 @@ proof
   A2:(a |^ 0) hcf m = 1 hcf m by NEWTON:9;
   defpred P[Nat] means (a |^ $1),m are_relative_prime;
     m hcf 1 = 1 by NEWTON:64;
-  then A3:P[0] by A2,INT_2:def 6;
+  then A3:P[0] by A2,INT_2:def 4;
   A4:for b holds P[b] implies P[b+1]
   proof
     let b;
@@ -747,10 +713,9 @@ proof
       then consider s being Nat such that
         A8:a*t = m*s+0 and
               0 < m by A1,NAT_D:def 2;
-A9:          s in NAT by ORDINAL1:def 13;
-        then s hcf 1 = 1 by NEWTON:64;
-      then m*s hcf m*1 = m by A9,EULER_1:6;
-      hence contradiction by A1,A6,A8,INT_2:def 6;
+        s hcf 1 = 1 by NEWTON:64;
+      then m*s hcf m*1 = m by EULER_1:6;
+      hence contradiction by A1,A6,A8,INT_2:def 4;
     end;
     then A10:a*t mod m >= 1 by NAT_1:14;
      a*t mod m <= m by A1,NAT_D:1;
@@ -777,7 +742,7 @@ A9:          s in NAT by ORDINAL1:def 13;
     then 0 = a*(t-s)-m*(((a*t) div m)-((a*s) div m)) by A13,A16;
     then A19:m divides a*(t-s) by INT_1:def 9;
     reconsider m,a,c = (t-s) as Integer;
-        a,m are_relative_prime by A1,Th1;
+        a,m are_relative_prime by A1;
     then A20:m divides c by A19,INT_2:40;
         1-m <= c & c <= m-1 by A15,A18,REAL_1:92;
     then t-s = 0 by A1,A20,Lm5;
@@ -812,8 +777,8 @@ A9:          s in NAT by ORDINAL1:def 13;
                     .= m*(1 gcd ((i div m)*a+j)) by A1,A30,EULER_1:16
                     .= m*1 by Lm4
                     .= m;
-        then m hcf xx = m by Lm1;
-        hence contradiction by A1,A23,INT_2:def 6;
+        then m hcf xx = m;
+        hence contradiction by A1,A23,INT_2:def 4;
       end;
           i mod m >= 0 by NEWTON:78;
       then reconsider im = i mod m as Element of NAT by INT_1:16;
@@ -1045,7 +1010,7 @@ RVSUM_1:126;
     A96: P[0]
     proof
        (Product (FX|0)) hcf m = 1 by NEWTON:64,RVSUM_1:124;
-      hence thesis by INT_2:def 6;
+      hence thesis by INT_2:def 4;
     end;
     A97: for n st P[n] holds P[n+1]
     proof
@@ -1070,12 +1035,12 @@ RVSUM_1:126;
             A106:m,p are_relative_prime and
               p >= 1 & p <= m by A103;
           reconsider a = (Product (FF|n)),b = ff,m' = m as Integer;
-          A107:a,m' are_relative_prime by A98,A99,A100,A102,Th1,XXREAL_0:2;
-              b,m' are_relative_prime by A105,A106,Th1;
+          A107:a,m' are_relative_prime by A98,A99,A100,A102,XXREAL_0:2;
+              b,m' are_relative_prime by A105,A106;
           then a*b,m' are_relative_prime by A107,INT_2:41;
           then (Product ((FF|n) ^ <*ff*>)),m' are_relative_prime by RVSUM_1:126
 ;
-        hence P[n+1] by A101,Th1;
+        hence P[n+1] by A101;
         end;
         suppose len FX < n+1;
         hence thesis;

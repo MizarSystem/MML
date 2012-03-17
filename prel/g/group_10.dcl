@@ -13,6 +13,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="PARTFUN1"/>
@@ -25,16 +27,14 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
 <ArticleID name="GROUP_10"/>
 </Signature>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -46,7 +46,7 @@
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="112">
+<Func kind="K" nr="133">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
@@ -55,20 +55,20 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="26">
+<Adjective nr="27">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="112">
+<Func kind="K" nr="133">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="28">
+<Adjective nr="29">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="112">
+<Func kind="K" nr="133">
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
 </Func>
@@ -83,7 +83,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -95,23 +95,23 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="36" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="45"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="43"/>
 <Adjective nr="46"/>
+<Adjective nr="47"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="51"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -121,7 +121,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 </Registrations>

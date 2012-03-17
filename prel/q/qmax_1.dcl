@@ -18,6 +18,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -34,7 +35,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="81"/>
+<Adjective nr="84"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -43,8 +44,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -53,7 +54,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="83"/>
+<Adjective nr="86"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -66,10 +67,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
+<Adjective nr="40">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -80,7 +81,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -94,7 +95,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -107,7 +108,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="173">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -118,11 +119,11 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="172">
+<Func kind="K" nr="175">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

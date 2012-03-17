@@ -212,8 +212,7 @@ then A2: not aa in UsedIntLoc i by A1;
    A3: InsCode i <= 11+1 by SCMFSA_2:35;
 A4: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A5: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A6: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
-  per cases by A3,A4,A5,A6,NAT_1:8,33;
+  per cases by A3,A4,A5,NAT_1:8,33;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
    hence i does_not_destroy aa by SCMFSA7B:11;
   end;
@@ -308,7 +307,7 @@ theorem Th2:
 proof
   set SAt = Start-At insloc 0;
    set IAt = I +* SAt;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
          now let x be set;
          assume x in dom ((IAt) | D);
          then A1: x in dom (IAt) /\ D by FUNCT_1:68;
@@ -356,7 +355,7 @@ A6: IS.intloc 0 = 1 by SCMFSA6C:3;
    set s1 = s +*(I+*SAt);
    set s3 = (Computation s1).(LifeSpan s1) +* JAt;
    set m1 = LifeSpan s1;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
    set D = Int-Locations \/ FinSeq-Locations;
          s.intloc 0 = 1 by A4,A6,SCMFSA6A:38;
 then A7: s1 = s +* Initialized I by SCMFSA8C:18;
@@ -455,7 +454,7 @@ A7: (Initialize S).intloc 0 = 1 by SCMFSA6C:3;
    set s3 = (Computation s1).(LifeSpan s1) +* JAt;
    set m1 = LifeSpan s1;
    set m3 = LifeSpan s3;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
    set D = Int-Locations \/ FinSeq-Locations;
          s.intloc 0 = 1 by A5,A7,SCMFSA6A:38;
 then A8: s1 = s +* Initialized I by SCMFSA8C:18;
@@ -520,14 +519,14 @@ theorem Th5:
  I is_closed_on s & I +* Start-At insloc 0 c= s & s is halting
  implies for m being Element of NAT st m <= LifeSpan s
           holds (Computation s).m, (Computation(s+*(I ';' J))).m
-                  equal_outside the Instruction-Locations of SCM+FSA
+                  equal_outside NAT
 proof assume that
 A1: I is_closed_on s and
 A2: I +* Start-At insloc 0 c= s and
 A3: s is halting;
    defpred X[Element of NAT] means
     $1 <= LifeSpan s implies (Computation s).$1,(Computation(s+*(I ';' J))).$1
-    equal_outside the Instruction-Locations of SCM+FSA;
+    equal_outside NAT;
        (Computation s).0 = s &
    (Computation(s+*(I ';' J))).0 = s+*(I ';' J) by AMI_1:def 19;
 then A4: X[0] by AMI_1:120;
@@ -536,7 +535,7 @@ A5: for m being Element of NAT st X[m] holds X[m+1]
     assume
 A6:  m <= LifeSpan s
      implies (Computation s).m,(Computation(s+*(I ';' J))).m
-      equal_outside the Instruction-Locations of SCM+FSA;
+      equal_outside NAT;
     assume A7: m+1 <= LifeSpan s;
 
 then A8:    m < LifeSpan s by NAT_1:13;
@@ -564,7 +563,7 @@ A16:   CurInstr(Cs.m) = I.IC(Cs.m) by A12,A13,GRFUNC_1:8;
      then CurInstr(Cs.m) = (I ';' J).IC(Cs.m) by A12,A16,SCMFSA6A:54
         .= CurInstr(CsIJ.m) by A11,A12,A14,A15,GRFUNC_1:8;
     hence (Computation s).(m+1),(Computation(s+*(I ';' J))).(m+1)
-     equal_outside the Instruction-Locations of SCM+FSA by A6,A7,A9,A10,
+     equal_outside NAT by A6,A7,A9,A10,
 NAT_1:13,SCMFSA6A:32;
    end;
  thus for n being Element of NAT holds X[n] from NAT_1:sch 1(A4,A5);
@@ -607,7 +606,7 @@ A5: J is_closed_on IExec(I, s);
    set D = Int-Locations \/ FinSeq-Locations;
    set SAt = Start-At insloc 0;
    set JAt = J +* SAt;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
 
    assume
 A6: Initialized (I ';' J) c= s;
@@ -766,7 +765,7 @@ A5: (Initialize s).intloc 0 = 1 by SCMFSA6C:3;
    set C1 = Computation s1;
    set m1 = LifeSpan s1;
    set s3 = C1.m1 +* Initialized J;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
    set D = (Int-Locations \/ FinSeq-Locations);
   set SAt = Start-At insloc 0;
   set JAt = J +* SAt;
@@ -840,7 +839,7 @@ A2: J is_halting_on IExec(I, s) and
 A3: I is_closed_on Initialize s and
 A4: J is_closed_on IExec(I, s);
 
-   set ps = s | the Instruction-Locations of SCM+FSA;
+   set ps = s | NAT;
    set s1 = s +* Initialized I;
    set s2 = s +* Initialized (I ';' J);
    set C1 = Computation s1;
@@ -848,7 +847,7 @@ A4: J is_closed_on IExec(I, s);
    set m1 = LifeSpan s1;
    set s3 = C1.m1 +* Initialized J;
    set m3 = LifeSpan s3;
-   set Ins = the Instruction-Locations of SCM+FSA;
+   set Ins = NAT;
    set D = (Int-Locations \/ FinSeq-Locations);
    set C3 = Computation s3;
 
@@ -1105,7 +1104,7 @@ A1: I is parahalting or
 then A2: I is_closed_on Initialize s & I is_halting_on Initialize s
     by A1,SCMFSA7B:24,25;
  set IE = IExec(I,s);
- set Ins = the Instruction-Locations of SCM+FSA;
+ set Ins = NAT;
       now
   A3: dom (Initialize IE) = the carrier of SCM+FSA &
       dom IE = the carrier of SCM+FSA by AMI_1:79;

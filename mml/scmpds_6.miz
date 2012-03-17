@@ -37,13 +37,13 @@ reserve m,n for Element of NAT,
         loc for Instruction-Location of SCMPDS,
         I,J,K for Program-block;
 
-set A = the Instruction-Locations of SCMPDS;
+set A = NAT;
 set D = SCM-Data-Loc;
 
 theorem Th1: :: S8A_Th3
  for s being State of SCMPDS holds
-     dom (s | the Instruction-Locations of SCMPDS) =
-         the Instruction-Locations of SCMPDS
+     dom (s | NAT) =
+         NAT
 proof
    let s be State of SCMPDS;
    thus dom (s | A) = dom s /\ A by RELAT_1:90
@@ -101,16 +101,16 @@ end;
 
 theorem Th4: ::S8A_Th6
  for s1,s2 being State of SCMPDS holds
-     s1,s2 equal_outside the Instruction-Locations of SCMPDS
+     s1,s2 equal_outside NAT
  iff IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
 proof
    let s1,s2 be State of SCMPDS;
-   thus s1,s2 equal_outside the Instruction-Locations of SCMPDS
+   thus s1,s2 equal_outside NAT
       implies IC s1 = IC s2 &
       s1 | D = s2 | D by AMI_1:121,SCMPDS_4:24;
    assume A1: IC s1 = IC s2 & s1 | D = s2 | D;
    then for a being Int_position holds s1.a = s2.a by SCMPDS_4:23;
-   hence s1,s2 equal_outside the Instruction-Locations of SCMPDS
+   hence s1,s2 equal_outside NAT
        by A1,SCMPDS_4:11;
 end;
 
@@ -173,7 +173,7 @@ proof
       then A1: x in dom I or x in {IC SCMPDS} by FUNCOP_1:19;
       per cases by A1,TARSKI:def 1;
       suppose A2: x in dom I;
-         dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
+         dom I c= NAT by AMI_1:def 40;
        hence not x in D by A2,AMI_2:29,XBOOLE_0:3;
       end;
       suppose x = IC SCMPDS;
@@ -195,12 +195,12 @@ end;
 
 theorem Th10: :: S8A_Th12
  for s being State of SCMPDS, l being Instruction-Location of SCMPDS holds
-     dom (s | the Instruction-Locations of SCMPDS) misses dom Start-At l
+     dom (s | NAT) misses dom Start-At l
 proof
    let s be State of SCMPDS,l be Instruction-Location of SCMPDS;
        now let x be set;
       assume x in dom (s | A);
-      then x is Element of the Instruction-Locations of SCMPDS by Th1;
+      then x is Element of NAT by Th1;
       then x is Instruction-Location of SCMPDS by AMI_1:def 4;
       then x <> IC SCMPDS by AMI_1:48;
       then not x in {IC SCMPDS} by TARSKI:def 1;
@@ -213,7 +213,7 @@ theorem  ::S8A_Th14
      for s being State of SCMPDS, I,J being Program-block,
  l being Instruction-Location of SCMPDS holds
      s +* (I +* Start-At l), s +* (J +* Start-At l)
-         equal_outside the Instruction-Locations of SCMPDS
+         equal_outside NAT
 proof
    let s be State of SCMPDS,I,J be Program-block;
    let l be Instruction-Location of SCMPDS;
@@ -235,7 +235,7 @@ theorem Th12: ::S8B_7
  for s1,s2 be State of SCMPDS,I,J be Program-block holds
      s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
      s1 +* Initialized I, s2 +* Initialized J
-       equal_outside the Instruction-Locations of SCMPDS
+       equal_outside NAT
 proof
    let s1,s2 be State of SCMPDS,I,J be Program-block;
    assume A1: s1 | D = s2 | D;
@@ -322,11 +322,7 @@ A1: loc in dom I;
 end;
 
 theorem Th21:
-     IC (s+* Initialized I)=inspos 0
-proof
-         Initialized I c= s+*Initialized I by FUNCT_4:26;
-     hence thesis by SCMPDS_5:18;
-end;
+     IC (s+* Initialized I)=inspos 0 by SCMPDS_5:18,FUNCT_4:26;
 
 theorem Th22:
      CurInstr (s+* Initialized stop(i ';' I)) = i
@@ -396,10 +392,11 @@ A1: dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
         x <> IC SCMPDS by AMI_1:48;
 then A2: not x in dom Start-At l by A1,TARSKI:def 1;
 A3: dom (s | A) = A by Th1;
+X:  x in NAT by AMI_1:def 4;
    thus IExec(J,s).x
     = (Result(s+*Initialized stop J) +* s | A).x by SCMPDS_4:def 8
-   .=(s | A).x by A3,FUNCT_4:14
-   .= (Result(s+*Initialized stop I) +* s | A).x by A3,FUNCT_4:14
+   .=(s | A).x by A3,FUNCT_4:14,X
+   .= (Result(s+*Initialized stop I) +* s | A).x by A3,FUNCT_4:14,X
    .= IExec(I,s).x by SCMPDS_4:def 8
    .= (IExec(I,s) +* Start-At l).x by A2,FUNCT_4:12;
 end;
@@ -413,10 +410,11 @@ A1: dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
         x <> IC SCMPDS by AMI_1:48;
 then A2: not x in dom Start-At l by A1,TARSKI:def 1;
 A3: dom (s | A) = A by Th1;
+X:  x in NAT by AMI_1:def 4;
    thus IExec(I,s).x
     = (Result(s+*Initialized stop I) +* s | A).x by SCMPDS_4:def 8
-   .=(s | A).x by A3,FUNCT_4:14
-   .= s.x by FUNCT_1:72
+   .=(s | A).x by A3,FUNCT_4:14,X
+   .= s.x by FUNCT_1:72,X
    .= (s+* Start-At l).x by A2,FUNCT_4:12;
 end;
 
@@ -746,7 +744,7 @@ proof
      pIJ=stop (I ';' J),
      IsJ=Initialized pIJ,
      s1=s +* IsI,
-     IL=the Instruction-Locations of SCMPDS;
+     IL=NAT;
 A3: s1 is halting by A2,Def3;
 A4: IsI=pI +* Start-At inspos 0 by SCMPDS_4:def 2;
 A5: IsI c= s1 by FUNCT_4:26;
@@ -798,14 +796,10 @@ A20:   pIJ =I ';' J ';' SCMPDS-Stop by SCMPDS_4:def 7
 A22: s1+*IsJ=s +* (IsI +* IsJ) by FUNCT_4:15
      .=s+*IsJ by SCMPDS_5:17;
 A23: for m holds X[m] from NAT_1:sch 1(A7,A8);
-     hereby
-        let k be Element of NAT;
-        assume k <= LifeSpan s1;
-         then (Computation s1).k,(Computation (s1 +* IsJ)).k
-         equal_outside IL by A23;
-         hence IC (Computation s1).k =IC (Computation (s +* IsJ)).k by A22,
-AMI_1:121;
-     end;
+     thus for k be Element of NAT st k <= LifeSpan s1
+      holds IC (Computation s1).k =IC (Computation (s +* IsJ)).k
+         by A22,A23,AMI_1:121;
+
      set m=LifeSpan s1;
          (Computation s1).m,(Computation (s1 +* IsJ)).m equal_outside IL by A23
 ;

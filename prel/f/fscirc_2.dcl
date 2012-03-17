@@ -65,13 +65,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="399">
+<Func kind="K" nr="401">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="87"/>
+<Adjective nr="89"/>
 </Cluster>
 </FCluster>
 </Registrations>

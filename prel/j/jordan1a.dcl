@@ -22,6 +22,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -45,14 +46,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="59"/>
-<Adjective nr="65">
+<Adjective nr="63"/>
+<Adjective nr="69">
 <Func kind="K" nr="202">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="66" value="false"/>
-<Adjective nr="67" value="false"/>
+<Adjective nr="70" value="false"/>
+<Adjective nr="71" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

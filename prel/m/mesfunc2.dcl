@@ -17,6 +17,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
@@ -29,10 +30,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="26">
+<Adjective nr="29">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="29">
+<Adjective nr="32">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -52,7 +53,7 @@
 <Adjective nr="4"/>
 <Adjective nr="19"/>
 <Adjective nr="23"/>
-<Adjective nr="30"/>
+<Adjective nr="33"/>
 </Cluster>
 </RCluster>
 </Registrations>

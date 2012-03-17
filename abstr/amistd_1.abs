@@ -10,17 +10,17 @@ environ
       RELAT_1, AMI_1, BOOLE, FUNCT_1, SGRAPH1, FUNCOP_1, CAT_1, GRAPH_2,
       FINSEQ_4, FUNCT_4, CARD_3, AMI_5, SETFAM_1, TARSKI, GOBOARD5, ARYTM_1,
       ORDINAL1, FUNCT_2, FRECHET, PRE_TOPC, WAYBEL_0, CARD_1, AMISTD_1,
-      MEMBERED;
+      MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
-      CARD_1, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
-      FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, XXREAL_0, AMI_1;
+      CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1,
+      RELSET_1, PARTFUN1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
+      FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, FUNCT_2, AMI_1;
  constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, SEQ_1,
-      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, AMI_5;
+      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, STRUCT_0, GRAPH_2, AMI_1, INT_2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, CARD_3, REALSET1, FINSEQ_5, PRE_CIRC, FUNCT_7,
-      STRUCT_0, AMI_1, JORDAN1J;
+      STRUCT_0, AMI_1, CARD_4, JORDAN1J;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
 
 
@@ -33,7 +33,9 @@ reserve x for set,
 
 reserve
   N for with_non-empty_elements set,
-  S for IC-Ins-separated definite (non empty non void AMI-Struct over N),
+  IL for non empty set,
+  S for IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over IL,N),
   i for Element of the Instructions of S,
   l, l1, l2, l3 for Instruction-Location of S,
   s for State of S;
@@ -41,29 +43,33 @@ reserve
 canceled 10;
 
 theorem :: AMISTD_1:11
- for S being definite (non empty non void AMI-Struct over N),
+ for S being definite (non empty stored-program AMI-Struct over IL,N),
      I being Element of the Instructions of S,
      s being State of S
-  holds s +* ((the Instruction-Locations of S) --> I) is State of S;
+  holds s +* ((IL) --> I) is State of S;
 
 registration
-  let N be set, S be AMI-Struct over N;
+  let IL,N be set, S be AMI-Struct over IL,N;
  cluster empty -> programmed FinPartState of S;
 end;
 
 registration
-  let N be set, S be AMI-Struct over N;
+  let IL,N be set, S be AMI-Struct over IL,N;
  cluster empty FinPartState of S;
 end;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set,
-     S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+     S be IC-Ins-separated definite
+      (non empty stored-program AMI-Struct over IL,N);
  cluster non empty trivial programmed FinPartState of S;
 end;
 
-registration let N be with_non-empty_elements set,
-               S be non void AMI-Struct over N,
+registration
+ let IL be non empty set;
+ let N be with_non-empty_elements set,
+               S be stored-program AMI-Struct over IL,N,
                i be Element of the Instructions of S,
                s be State of S;
  cluster ((the Execution of S).i).s -> Function-like Relation-like;
@@ -71,34 +77,54 @@ registration let N be with_non-empty_elements set,
 end;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set;
  let S be steady-programmed IC-Ins-separated definite
-          (non empty non void AMI-Struct over N);
+          (non empty stored-program AMI-Struct over IL,N);
   cluster non empty trivial autonomic programmed FinPartState of S;
 end;
 
 theorem :: AMISTD_1:12
       for S being steady-programmed IC-Ins-separated definite
-        (non empty non void AMI-Struct over N),
+        (non empty stored-program AMI-Struct over IL,N),
      il being Instruction-Location of S,
      I being Element of the Instructions of S
   holds il .--> I is autonomic;
 
 theorem :: AMISTD_1:13
  for S being steady-programmed IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)
+       (non empty stored-program AMI-Struct over IL,N)
   holds S is programmable;
 
-registration let N be with_non-empty_elements set;
+registration
+ let IL be non empty set;
+ let N be with_non-empty_elements set;
  cluster steady-programmed -> programmable
-         (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+         (IC-Ins-separated definite
+          (non empty stored-program AMI-Struct over IL,N));
+end;
+
+definition let IL,N be set, S be AMI-Struct over IL,N;
+ mode IL-Subset of S -> Subset of IL means
+:: AMISTD_1:def 1
+  not contradiction;
+end;
+
+registration let IL,N be set, S be AMI-Struct over IL,N;
+ cluster empty IL-Subset of S;
+end;
+
+registration
+ let IL be non empty set,N be set, S be non empty AMI-Struct over IL,N;
+ cluster non empty IL-Subset of S;
 end;
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be non empty non void standard-ins AMI-Struct over N;
+ let S be non empty stored-program standard-ins AMI-Struct over IL,N;
  let T be InsType of S;
- canceled 2;
+ canceled;
 
  attr T is jump-only means
 :: AMISTD_1:def 3
@@ -107,8 +133,9 @@ definition
 end;
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be non empty non void standard-ins AMI-Struct over N;
+ let S be non empty stored-program standard-ins AMI-Struct over IL,N;
  let I be Instruction of S;
  attr I is jump-only means
 :: AMISTD_1:def 4
@@ -116,50 +143,51 @@ definition
 end;
 
 definition
-  let N,S,l;
+  let IL,N,S,l;
   let i be Element of the Instructions of S;
- func NIC(i,l) -> Subset of the Instruction-Locations of S equals
+ func NIC(i,l) -> IL-Subset of S equals
 :: AMISTD_1:def 5
    { IC Following s : IC s = l & s.l = i };
 end;
 
 registration
+ let IL be non empty set;
   let N be with_non-empty_elements set,
       S be realistic IC-Ins-separated definite
-        (non empty non void AMI-Struct over N),
+        (non empty stored-program AMI-Struct over IL,N),
       i be Element of the Instructions of S,
       l be Instruction-Location of S;
   cluster NIC(i,l) -> non empty;
 end;
 
-definition let N,S,i;
- func JUMP i -> Subset of the Instruction-Locations of S equals
+definition let IL,N,S,i;
+ func JUMP i -> Subset of IL equals
 :: AMISTD_1:def 6
   meet { NIC(i,l) : not contradiction };
 end;
 
-definition let N,S,l;
- func SUCC l -> Subset of the Instruction-Locations of S equals
+definition let IL,N,S,l;
+ func SUCC l -> Subset of IL equals
 :: AMISTD_1:def 7
   union { NIC(i,l) \ JUMP i : not contradiction };
 end;
 
 theorem :: AMISTD_1:14
  for i being Element of the Instructions of S
-  st the Instruction-Locations of S is non trivial &
+  st IL is non trivial &
   (for l being Instruction-Location of S holds NIC(i,l)={l})
   holds JUMP i is empty;
 
 theorem :: AMISTD_1:15
  for S being realistic IC-Ins-separated definite
-     (non empty non void AMI-Struct over N),
+     (non empty stored-program AMI-Struct over IL,N),
      il being Instruction-Location of S,
      i being Instruction of S st i is halting
   holds NIC(i,il) = {il};
 
 begin :: Ordering of Instruction Locations
 
-definition let N,S,l1,l2;
+definition let IL,N,S,l1,l2;
  pred l1 <= l2 means
 :: AMISTD_1:def 8
 
@@ -173,14 +201,14 @@ theorem :: AMISTD_1:16
       l1 <= l2 & l2 <= l3 implies l1 <= l3;
 
 definition
- let N, S;
+ let IL, N, S;
  attr S is InsLoc-antisymmetric means
 :: AMISTD_1:def 9
        for l1, l2 st l1 <= l2 & l2 <= l1 holds l1 = l2;
 end;
 
 definition
- let N, S;
+ let IL, N, S;
  attr S is standard means
 :: AMISTD_1:def 10
 
@@ -214,11 +242,10 @@ begin :: Standard trivial computer
 
 definition
  let N be with_non-empty_elements set;
- func STC N -> strict AMI-Struct over N means
+ func STC N -> strict AMI-Struct over NAT,N means
 :: AMISTD_1:def 11
  the carrier of it = NAT \/ {NAT} &
  the Instruction-Counter of it = NAT &
- the Instruction-Locations of it = NAT &
  the Instructions of it = {[0,0],[1,0]} &
  the Object-Kind of it =
               (NAT --> {[1,0],[0,0]}) +* (NAT .-->NAT) &
@@ -232,12 +259,12 @@ end;
 
 registration
  let N be with_non-empty_elements set;
- cluster the Instruction-Locations of STC N -> infinite;
+ cluster STC N -> infinite;
 end;
 
 registration
  let N be with_non-empty_elements set;
- cluster STC N -> non empty non void standard-ins;
+ cluster STC N -> non empty stored-program standard-ins;
 end;
 
 registration
@@ -278,17 +305,17 @@ registration
  cluster standard halting realistic steady-programmed programmable
          standard-ins
          (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N));
+          (non empty stored-program AMI-Struct over NAT,N));
 end;
 
 reserve
   T for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
 
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      k be natural number;
  func il.(S,k) -> Instruction-Location of S means
 :: AMISTD_1:def 12
@@ -308,7 +335,7 @@ theorem :: AMISTD_1:26
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      l be Instruction-Location of S;
  func locnum l -> natural number means
 :: AMISTD_1:def 13
@@ -318,7 +345,7 @@ end;
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      l be Instruction-Location of S;
  redefine func locnum l -> Element of NAT;
 end;
@@ -335,17 +362,18 @@ theorem :: AMISTD_1:29
   holds locnum l1 <= locnum l2 iff l1 <= l2;
 
 theorem :: AMISTD_1:30
- S is standard implies S is InsLoc-antisymmetric;
+ T is InsLoc-antisymmetric;
 
 registration let N;
  cluster standard -> InsLoc-antisymmetric
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
 end;
 
 definition
    let N be with_non-empty_elements set,
        S be standard (IC-Ins-separated definite
-            (non empty non void AMI-Struct over N)),
+            (non empty stored-program AMI-Struct over NAT,N)),
        f be Instruction-Location of S,
        k be natural number;
  func f + k -> Instruction-Location of S equals
@@ -367,7 +395,7 @@ theorem :: AMISTD_1:33
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      f be Instruction-Location of S;
  func NextLoc f -> Instruction-Location of S equals
 :: AMISTD_1:def 15
@@ -405,7 +433,7 @@ theorem :: AMISTD_1:40
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
       i be Instruction of S;
  attr i is sequential means
 :: AMISTD_1:def 16
@@ -414,21 +442,24 @@ end;
 
 theorem :: AMISTD_1:41
  for S being standard realistic
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      il being Instruction-Location of S,
      i being Instruction of S st i is sequential
   holds NIC(i,il) = {NextLoc il};
 
 theorem :: AMISTD_1:42
  for S being realistic standard
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      i being Instruction of S st i is sequential
   holds i is non halting;
 
 registration
  let N;
  let S be realistic standard
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N));
  cluster sequential -> non halting Instruction of S;
  cluster halting -> non sequential Instruction of S;
 end;
@@ -440,8 +471,10 @@ sequential;
 begin :: Closedness of finite partial states
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N);
  let F be FinPartState of S;
  attr F is closed means
 :: AMISTD_1:def 17
@@ -457,7 +490,7 @@ end;
 definition
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N));
+       (non empty stored-program AMI-Struct over NAT,N));
  let F be FinPartState of S;
  attr F is para-closed means
 :: AMISTD_1:def 19
@@ -467,31 +500,36 @@ end;
 
 theorem :: AMISTD_1:44
  for S being standard steady-programmed
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      F being FinPartState of S
  st F is really-closed & il.(S,0) in dom F holds F is para-closed;
 
 theorem :: AMISTD_1:45
  for S being IC-Ins-separated definite steady-programmed
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over IL,N),
      F being FinPartState of S
  st F is closed holds F is really-closed;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set,
      S be IC-Ins-separated definite steady-programmed
-          (non empty non void AMI-Struct over N);
+          (non empty stored-program AMI-Struct over IL,N);
  cluster closed -> really-closed FinPartState of S;
 end;
 
 theorem :: AMISTD_1:46
  for S being standard realistic halting
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N))
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N))
   holds il.(S,0) .--> halt S is closed;
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N);
  let F be FinPartState of S;
  attr F is lower means
 :: AMISTD_1:def 20
@@ -503,8 +541,10 @@ theorem :: AMISTD_1:47
  for F being empty FinPartState of S holds F is lower;
 
 registration
+ let IL be non empty set;
   let N be with_non-empty_elements set,
-      S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+      S be IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N);
  cluster empty -> lower FinPartState of S;
 end;
 
@@ -514,7 +554,7 @@ theorem :: AMISTD_1:48
 registration
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
  cluster lower non empty trivial programmed FinPartState of S;
 end;
 
@@ -529,7 +569,7 @@ theorem :: AMISTD_1:50
 definition
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
  let F be non empty programmed FinPartState of S;
  func LastLoc F -> Instruction-Location of S means
 :: AMISTD_1:def 21
@@ -564,7 +604,7 @@ theorem :: AMISTD_1:55
 registration
  let N be with_non-empty_elements set,
      S be standard steady-programmed (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster really-closed lower non empty programmed -> para-closed
                                                      FinPartState of S;
 end;
@@ -572,7 +612,7 @@ end;
 definition
  let N be with_non-empty_elements set,
      S be standard halting (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      F be non empty programmed FinPartState of S;
  attr F is halt-ending means
 :: AMISTD_1:def 22
@@ -586,7 +626,7 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N));
+       (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt trivial (lower non empty programmed
          FinPartState of S);
 end;
@@ -594,14 +634,14 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster trivial closed lower non empty programmed FinPartState of S;
 end;
 
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt trivial closed (lower non empty programmed
          FinPartState of S);
 end;
@@ -609,7 +649,8 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic steady-programmed
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt autonomic trivial closed
          (lower non empty programmed FinPartState of S);
 end;
@@ -617,7 +658,7 @@ end;
 definition
  let N be with_non-empty_elements set;
  let S be standard halting (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N));
+          (non empty stored-program AMI-Struct over NAT,N));
  mode pre-Macro of S is halt-ending unique-halt (lower non empty programmed
                         FinPartState of S);
 end;
@@ -625,7 +666,15 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard realistic halting
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
  cluster closed pre-Macro of S;
 end;
+
+theorem :: AMISTD_1:56
+ for i being Instruction of Trivial-AMI(IL,N) holds i is halting;
+
+theorem :: AMISTD_1:57
+ for i being Element of the Instructions of Trivial-AMI(IL,N) holds
+   InsCode i = 0;
 

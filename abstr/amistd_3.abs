@@ -16,10 +16,11 @@ environ
       FUNCOP_1, FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1,
       AMISTD_1, AMISTD_2;
  constructors WELLORD1, PARTFUN1, WELLORD2, BINOP_1, ORDINAL2, XXREAL_0, NAT_1,
-      SEQM_3, ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, AMISTD_2;
+      SEQM_3, ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, AMISTD_2, SEQ_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCOP_1, FINSET_1, FRAENKEL,
       XXREAL_0, NAT_1, CARD_1, MEMBERED, FINSEQ_1, SEQ_4, REALSET1, CARD_4,
-      TREES_2, CARD_5, FINSEQ_6, NECKLACE, AMI_1, AMISTD_1, SETFAM_1, SEQM_3;
+      TREES_2, CARD_5, FINSEQ_6, NECKLACE, AMI_1, AMISTD_1, SETFAM_1, SEQM_3,
+      CARD_3, VALUED_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
 
 
@@ -175,17 +176,18 @@ theorem :: AMISTD_3:20
 :: First Location
 
 reserve
+  IL for non empty set,
   N for with_non-empty_elements set,
   S for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N)),
+        (non empty stored-program AMI-Struct over NAT,N)),
   L, l1 for Instruction-Location of S,
   J for Instruction of S,
-  F for Subset of the Instruction-Locations of S;
+  F for IL-Subset of S;
 
 definition
   let N be with_non-empty_elements set;
   let S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N));
+           (non empty stored-program AMI-Struct over NAT,N));
   let F be FinPartState of S such that
    F is non empty and
    F is programmed;
@@ -218,8 +220,8 @@ theorem :: AMISTD_3:24
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-    F be Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+    F be IL-Subset of S;
  func LocNums F -> Subset of NAT equals
 :: AMISTD_3:def 3
    {locnum l where l is Instruction-Location of S : l in F};
@@ -231,16 +233,16 @@ theorem :: AMISTD_3:25
 registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-     F be empty Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+     F be empty IL-Subset of S;
  cluster LocNums F -> empty;
 end;
 
 registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-     F be non empty Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+     F be non empty IL-Subset of S;
  cluster LocNums F -> non empty;
 end;
 
@@ -265,9 +267,9 @@ theorem :: AMISTD_3:30
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
-      M be Subset of the Instruction-Locations of S;
-  func LocSeq M -> T-Sequence of the Instruction-Locations of S means
+           (non empty stored-program AMI-Struct over NAT,N)),
+      M be IL-Subset of S;
+  func LocSeq M -> T-Sequence of NAT means
 :: AMISTD_3:def 4
    dom it = Card M &
    for m being set st m in Card M holds
@@ -282,8 +284,8 @@ theorem :: AMISTD_3:31
 registration
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
-      M be Subset of the Instruction-Locations of S;
+           (non empty stored-program AMI-Struct over NAT,N)),
+      M be IL-Subset of S;
   cluster LocSeq M -> one-to-one;
 end;
 
@@ -292,7 +294,7 @@ end;
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
+           (non empty stored-program AMI-Struct over NAT,N)),
       M be FinPartState of S;
   func ExecTree(M) -> IL-DecoratedTree of S means
 :: AMISTD_3:def 5
@@ -307,6 +309,7 @@ end;
 
 theorem :: AMISTD_3:32
     for S being standard halting realistic
-        (IC-Ins-separated definite (non empty non void AMI-Struct over N))
+        (IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over NAT,N))
   holds
   ExecTree Stop S = TrivialInfiniteTree --> il.(S,0);

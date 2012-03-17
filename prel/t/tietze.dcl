@@ -13,6 +13,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POWER"/>
 <ArticleID name="SERIES_1"/>
@@ -29,8 +30,6 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="BORSUK_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
 <RCluster>
@@ -49,13 +48,15 @@
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
+<Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="43">
+<Adjective nr="20"/>
+<Adjective nr="25"/>
+<Adjective nr="49">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="71"/>
-<Adjective nr="75"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -109,12 +110,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="32">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -130,8 +131,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="62">
+<Adjective nr="35"/>
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

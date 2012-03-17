@@ -26,6 +26,7 @@
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -52,7 +53,7 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="66"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -74,14 +75,14 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="67"/>
+<Adjective nr="71"/>
 </Cluster>
 </RCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="51" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="70"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -94,14 +95,14 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="67" value="false"/>
+<Adjective nr="71" value="false"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="51" value="false"/>
-<Adjective nr="67"/>
+<Adjective nr="71"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -114,7 +115,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="66" value="false"/>
+<Adjective nr="70" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

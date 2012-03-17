@@ -664,8 +664,7 @@ A2:  P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
    take A;
    thus Tarski-Class(X,A) = Tarski-Class X by A2;
    let B; assume B in A;
-    then not A c= B by ORDINAL1:7;
-   hence thesis by A2;
+   hence thesis by A2,ORDINAL1:7;
   end;
 
 theorem
@@ -680,16 +679,13 @@ then A2:  ex A st P[A] by A1;
 A3:  P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A2);
 A4:    not Y in { X } & Tarski-Class(X,{}) = { X } by A1,Lm1,TARSKI:def 1;
         now assume A is_limit_ordinal;
-     then consider B such that
-A5:    B in A & Y in Tarski-Class(X,B) by A3,A4,Th16;
-          A c= B by A3,A5;
-     hence contradiction by A5,ORDINAL1:7;
+     then ex B st B in A & Y in Tarski-Class(X,B) by A3,A4,Th16;
+     hence contradiction by ORDINAL1:7,A3;
     end;
    then consider B such that
 A6:  A = succ B by ORDINAL1:42;
    take B;
-        B in A by A6,ORDINAL1:10;
-    then not A c= B by ORDINAL1:7;
+    not A c= B by A6,ORDINAL1:7,10;
    hence thesis by A3,A6;
   end;
 
@@ -850,10 +846,8 @@ A5:       dom f = {{},{x}} & for z st z in {{},{x}} holds
         thus dom f = {{},{x}} by A5;
         thus rng f c= {x,y}
           proof let z; assume z in rng f;
-           then consider u being set such that
-A6:          u in dom f & z = f.u by FUNCT_1:def 5;
-                u = {} or u <> {};
-            then z = x or z = y by A5,A6;
+            then ex u being set st u in dom f & z = f.u by FUNCT_1:def 5;
+            then z = x or z = y by A5;
            hence thesis by TARSKI:def 2;
           end;
         let z; assume z in {x,y};
@@ -1081,8 +1075,7 @@ A3:       for C st C in B holds OnP[A,C] and
 A4:       A in B;
 A5:       now given C such that
 A6:        B = succ C;
-               C in B by A6,ORDINAL1:10;
-then A7:        A in C implies Rank A in Rank C by A3;
+A7:        A in C implies Rank A in Rank C by A3,A6,ORDINAL1:10;
                now assume A8: not A in C;
                 A c= C & A <> C iff A c< C by XBOOLE_0:def 8;
             hence Rank A = Rank C by A4,A6,A8,ORDINAL1:21,34;
@@ -1312,10 +1305,6 @@ theorem
 A1:  X is epsilon-transitive;
    assume
 A2: not Tarski-Class X c= Rank A;
-A3:  Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X
-     proof not Tarski-Class X c= Rank A by A2;
-      hence thesis by A1,Th52;
-     end;
      defpred P[set] means ex A st $1 in Rank A;
    consider Power being set such that
 A4:  x in Power iff x in Tarski-Class X & P[x] from XBOOLE_0:sch 1;
@@ -1340,7 +1329,8 @@ then A8:    succ A1 c= A2 or succ A2 c= A1 by ORDINAL1:33;
    consider Y such that
 A9:  x in Y iff ex y st y in Power & P[y,x] from TARSKI:sch 1(A5);
         now let A;
-          Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X by A3;
+          Rank A /\ Tarski-Class X <> Rank succ A /\ Tarski-Class X
+            by A1,A2,Th52;
      then consider y such that
 A10:    not (y in Rank A /\ Tarski-Class X iff y in
  Rank succ A /\ Tarski-Class X)
@@ -1528,11 +1518,7 @@ A1:  X c= Y;
 
 theorem
      the_transitive-closure_of the_transitive-closure_of X =
-   the_transitive-closure_of X
-  proof
-        the_transitive-closure_of X is epsilon-transitive by Th58;
-   hence thesis by Th62;
-  end;
+   the_transitive-closure_of X by Th58,Th62;
 
 theorem
      the_transitive-closure_of (X \/ Y) =
@@ -1552,9 +1538,9 @@ theorem
        is epsilon-transitive by Th55,Th65;
    hence the_transitive-closure_of (X \/ Y) c=
       the_transitive-closure_of X \/ the_transitive-closure_of Y by Th62;
-        X c= X \/ Y & Y c= X \/ Y by XBOOLE_1:7;
-    then the_transitive-closure_of X c= the_transitive-closure_of (X \/ Y) &
-     the_transitive-closure_of Y c= the_transitive-closure_of (X \/ Y) by Th65;
+    the_transitive-closure_of X c= the_transitive-closure_of (X \/ Y) &
+     the_transitive-closure_of Y c= the_transitive-closure_of (X \/ Y)
+          by Th65,XBOOLE_1:7;
    hence thesis by XBOOLE_1:8;
   end;
 
@@ -1562,9 +1548,9 @@ theorem
      the_transitive-closure_of (X /\ Y) c=
    the_transitive-closure_of X /\ the_transitive-closure_of Y
   proof
-        X /\ Y c= X & X /\ Y c= Y by XBOOLE_1:17;
-    then the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of X &
-     the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of Y by Th65;
+    the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of X &
+     the_transitive-closure_of (X /\ Y) c= the_transitive-closure_of Y
+           by Th65,XBOOLE_1:17;
    hence thesis by XBOOLE_1:19;
   end;
 
@@ -1625,8 +1611,8 @@ A6:     P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A5);
          then B is_limit_ordinal by ORDINAL1:42;
         then consider C such that
 A7:       C in B & X in Rank C by A6,Lm2,Th35;
-             B c= C by A6,A7;
-        hence contradiction by A7,ORDINAL1:7;
+::             B c= C by A6,A7;
+        thus contradiction by A7,ORDINAL1:7,A6;
        end;
       then consider C such that
 A8:     B = succ C;

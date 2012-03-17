@@ -13,6 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -24,7 +25,6 @@
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
 <ArticleID name="CIRCCOMB"/>
@@ -39,14 +39,14 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <LocusVar nr="1"/>
 <Func kind="K" nr="213"/>
 </Func>
 <Func kind="K" nr="213"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="128">
+<Func kind="K" nr="129">
 <LocusVar nr="1"/>
 <Func kind="K" nr="213"/>
 </Func>
@@ -64,13 +64,13 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="47">
+<Adjective nr="48">
 <Func kind="K" nr="210">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="49">
 <Func kind="K" nr="210">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

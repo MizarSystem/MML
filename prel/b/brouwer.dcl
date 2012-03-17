@@ -29,6 +29,7 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
@@ -55,13 +56,13 @@
 <Cluster>
 <Adjective nr="40" value="false"/>
 <Adjective nr="45" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -78,14 +79,14 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="40" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="40" value="false"/>
 <Adjective nr="45" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="63"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -153,7 +154,7 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="90">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

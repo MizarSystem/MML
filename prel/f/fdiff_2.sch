@@ -15,9 +15,10 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="SEQM_3"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -42,8 +43,8 @@
 <Func kind="K" nr="57"/>
 <Func kind="K" nr="53"/>
 </Adjective>
-<Adjective nr="29"/>
-<Adjective nr="34"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 <Func kind="K" nr="57"/>
 <Func kind="K" nr="53"/>
@@ -57,9 +58,9 @@
 <Func kind="K" nr="57"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="116">
 <Func kind="K" nr="53"/>
-<Func kind="K" nr="115">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Func kind="F" nr="1"/>
 </Func>
@@ -84,7 +85,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="116">
 <Func kind="K" nr="53"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
@@ -107,7 +108,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="114">
+<Func kind="K" nr="91">
 <Var nr="1"/>
 <Var nr="3"/>
 </Func>
@@ -141,7 +142,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="116">
 <Func kind="K" nr="53"/>
 <Func kind="F" nr="1"/>
 <Var nr="2"/>

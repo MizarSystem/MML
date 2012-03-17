@@ -25,9 +25,9 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="NORMSP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="NORMSP_2"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="LOPBAN_1"/>
 </Signature>
 <FCluster>
@@ -45,7 +45,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="170">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -20,11 +20,12 @@ environ
       BINARITH, SCM_HALT, XXREAL_0;
  constructors PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, INT_2, SEQM_3,
       FINSEQ_4, RVSUM_1, RFINSEQ, BINARITH, AMI_5, SCMFSA_1, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT;
+      SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCM_HALT,
+      AMI_2;
  registrations XBOOLE_0, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1, FINSUB_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
       RFINSEQ, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C, SCMFSA7B,
-      SCMFSA8A, SCMFSA8B, SCMFSA_9, SCM_HALT, STRUCT_0;
+      SCMFSA8A, SCMFSA8B, SCMFSA_9, SCM_HALT, STRUCT_0, AMI_2, SCMFSA_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCOP_1, AMI_1, XBOOLE_0, SCMFSA_2, SCMFSA8C;
  theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, FUNCT_2,
@@ -995,8 +996,7 @@ A1: t,u are_fiberwise_equipotent by RFINSEQ:35;
     take u;
     thus t,u are_fiberwise_equipotent by A1;
 A2: rng t = rng u by A1,RFINSEQ:1;
-     rng t c= INT by FINSEQ_1:def 4;
-    hence u is FinSequence of INT by A2,FINSEQ_1:def 4;
+    thus u is FinSequence of INT by A2,FINSEQ_1:def 4;
     thus u is non-increasing;
 end;
 
@@ -1040,7 +1040,7 @@ theorem
 proof
    let l be Instruction-Location of SCM+FSA;
        ObjectKind l = the Instructions of SCM+FSA &
-    ObjectKind IC SCM+FSA = the Instruction-Locations of SCM+FSA
+    ObjectKind IC SCM+FSA = NAT
      by AMI_1:def 11,def 14;
    hence thesis by SCMFSA_1:13;
 end;
@@ -1097,7 +1097,7 @@ A2: DI=DB \/ { intloc 0,IC SCM+FSA } by Th41;
 A3: y in DI /\ dom x by XBOOLE_0:def 1;
 A4: y in DI & y in dom x by A3,XBOOLE_0:def 3;
 then A5: y=f by A1,TARSKI:def 1;
-A6: DB c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A6: DB c= NAT by AMI_1:def 40;
     now assume y in DB;
      then reconsider y as Instruction-Location of SCM+FSA by A6,AMI_1:def 4;
       y=y;
@@ -1687,7 +1687,8 @@ A7:    t,u are_fiberwise_equipotent & u is FinSequence of INT &
 A8:   t,u are_fiberwise_equipotent & u is FinSequence of INT &
       u is non-increasing &
       p = fsloc 0 .--> t & q = fsloc 0 .--> u;
-      thus [p,q] in f by A4,A8;
+      p in FinPartSt SCM+FSA;
+     hence [p,q] in f by A4,A8;
  end;
 
  uniqueness
@@ -1708,10 +1709,18 @@ A10:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT2
     st t,u are_fiberwise_equipotent & u is FinSequence of INT &
        u is non-increasing &
       $1 = fsloc 0 .--> t & $2 = fsloc 0 .--> u;
-A11:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT1 iff X[p,q] by A9
-;
-A12:  for p,q being FinPartState of SCM+FSA holds [p,q] in IT2 iff X[p,q] by
-A10;
+A11:  for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT1 iff X[p,q]
+       proof let p,q be Element of FinPartSt SCM+FSA;
+         reconsider p,q as FinPartState of SCM+FSA by AMI_1:125;
+         [p,q] in IT1 iff X[p,q] by A9;
+        hence thesis;
+       end;
+A12:  for p,q being Element of FinPartSt SCM+FSA holds [p,q] in IT2 iff X[p,q]
+       proof let p,q be Element of FinPartSt SCM+FSA;
+         reconsider p,q as FinPartState of SCM+FSA by AMI_1:125;
+         [p,q] in IT2 iff X[p,q] by A10;
+        hence thesis;
+       end;
     thus IT1 = IT2 from RELSET_1:sch 4(A11,A12);
   end;
 end;
@@ -1727,8 +1736,10 @@ proof
        set q=f.p;
        assume A1:p in dom f;
        then A2: [p,f.p] in f by FUNCT_1:8;
-          A3: dom f c=FinPartSt SCM+FSA by RELSET_1:12;
+          dom f c=FinPartSt SCM+FSA by RELSET_1:12;
+       then A3: p is FinPartState of SCM+FSA by A1,AMI_1:125;
            q in FinPartSt SCM+FSA by A1,PARTFUN1:27;
+        then q is FinPartState of SCM+FSA by AMI_1:125;
     then consider t be FinSequence of INT,u being FinSequence of REAL such that
     A4: t,u are_fiberwise_equipotent & u is FinSequence of INT &
        u is non-increasing & p = fsloc 0 .--> t & q = fsloc 0 .--> u

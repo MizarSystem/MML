@@ -16,10 +16,11 @@ environ
       FUNCOP_1, FINSEQ_1, FINSEQ_2, TREES_1, TREES_2, STRUCT_0, AMI_1,
       AMISTD_1, AMISTD_2;
  constructors WELLORD1, PARTFUN1, WELLORD2, BINOP_1, ORDINAL2, XXREAL_0, NAT_1,
-      SEQM_3, ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, AMISTD_2;
+      SEQM_3, ORDERS_1, FINSEQ_2, SEQ_4, REALSET1, AMISTD_2, SEQ_2;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FUNCOP_1, FINSET_1, FRAENKEL,
       XXREAL_0, NAT_1, CARD_1, MEMBERED, FINSEQ_1, SEQ_4, REALSET1, CARD_4,
-      TREES_2, CARD_5, FINSEQ_6, NECKLACE, AMI_1, AMISTD_1, SETFAM_1, SEQM_3;
+      TREES_2, CARD_5, FINSEQ_6, NECKLACE, AMI_1, AMISTD_1, SETFAM_1, SEQM_3,
+      CARD_3, VALUED_0;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, ORDINAL1, WELLORD1, WELLORD2, FUNCT_1, TREES_1,
       FINSEQ_2;
@@ -400,12 +401,7 @@ end;
 
 theorem Th17:
   for T being Tree, t being Element of T holds t|Seg n in T
-proof
-  let T be Tree,
-      t be Element of T;
-    t|Seg n is_a_prefix_of t by RELAT_1:88;
-  hence thesis by TREES_1:45;
-end;
+   by TREES_1:45,RELAT_1:88;
 
 theorem Th18:
   for T1, T2 being Tree st
@@ -607,17 +603,18 @@ end;
 :: First Location
 
 reserve
+  IL for non empty set,
   N for with_non-empty_elements set,
   S for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N)),
+        (non empty stored-program AMI-Struct over NAT,N)),
   L, l1 for Instruction-Location of S,
   J for Instruction of S,
-  F for Subset of the Instruction-Locations of S;
+  F for IL-Subset of S;
 
 definition
   let N be with_non-empty_elements set;
   let S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N));
+           (non empty stored-program AMI-Struct over NAT,N));
   let F be FinPartState of S such that
 A1:   F is non empty and
 A2:   F is programmed;
@@ -635,7 +632,7 @@ proof
 A3: dom F is finite;
 A4: M is finite from AMI_1:sch 1(A3);
     consider l being Element of dom F;
-      l in dom F & dom F c= the Instruction-Locations of S by AMI_1:def 40;
+      l in dom F & dom F c= NAT by AMI_1:def 40;
     then reconsider l as Instruction-Location of S by AMI_1:def 4;
 A5: locnum l in M;
       M c= NAT
@@ -732,8 +729,8 @@ A2: FirstLoc F in dom F by Th21;
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-    F be Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+    F be IL-Subset of S;
  func LocNums F -> Subset of NAT equals
    {locnum l where l is Instruction-Location of S : l in F};
 coherence
@@ -765,8 +762,8 @@ end;
 registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-     F be empty Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+     F be empty IL-Subset of S;
  cluster LocNums F -> empty;
 coherence
 proof
@@ -781,12 +778,12 @@ end;
 registration
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
-     F be non empty Subset of the Instruction-Locations of S;
+          (non empty stored-program AMI-Struct over NAT,N)),
+     F be non empty IL-Subset of S;
  cluster LocNums F -> non empty;
 coherence
 proof
-   consider l being Element of the Instruction-Locations of S such that
+   consider l being Element of NAT such that
 A1:  l in F by SUBSET_1:10;
    reconsider l as Instruction-Location of S by AMI_1:def 4;
     l in F by A1;
@@ -822,7 +819,7 @@ theorem Th27:
 proof
   per cases;
   suppose F is empty;
-  then reconsider F as empty Subset of the Instruction-Locations of S;
+   then reconsider F as empty IL-Subset of S;
     LocNums F is empty;
   hence thesis;
   end;
@@ -907,12 +904,12 @@ end;
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
-      M be Subset of the Instruction-Locations of S;
+           (non empty stored-program AMI-Struct over NAT,N)),
+      M be IL-Subset of S;
   deffunc F(set) = il.(S, canonical_isomorphism_of
         (RelIncl order_type_of RelIncl LocNums M,RelIncl LocNums M).$1);
-  set Z = the Instruction-Locations of S;
-  func LocSeq M -> T-Sequence of the Instruction-Locations of S means :Def4:
+  set Z = NAT;
+  func LocSeq M -> T-Sequence of NAT means :Def4:
    dom it = Card M &
    for m being set st m in Card M holds
     it.m = il.(S, canonical_isomorphism_of
@@ -931,9 +928,10 @@ A2:  for A being Ordinal st A in Card M holds f.A = F(A) from ORDINAL2:sch 2;
     then consider x being set such that
 A3:  x in dom f and
 A4:  y = f.x by FUNCT_1:def 5;
+X:  F(x) in NAT by AMI_1:def 4;
       x is Ordinal by A3,ORDINAL1:23;
     then f.x = F(x) by A1,A2,A3;
-    hence y in Z by A4;
+    hence y in Z by A4,X;
   end;
   thus dom f = Card M by A1;
   let m be set;
@@ -999,8 +997,8 @@ end;
 registration
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
-      M be Subset of the Instruction-Locations of S;
+           (non empty stored-program AMI-Struct over NAT,N)),
+      M be IL-Subset of S;
   cluster LocSeq M -> one-to-one;
 coherence
 proof
@@ -1031,7 +1029,7 @@ end;
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
+           (non empty stored-program AMI-Struct over NAT,N)),
       M be FinPartState of S;
   func ExecTree(M) -> IL-DecoratedTree of S means
 :Def5:
@@ -1043,17 +1041,17 @@ definition
       it.(t^<*m*>) = (LocSeq NIC(pi(M,it.t),it.t)).m;
 existence
 proof
-  set D = the Instruction-Locations of S;
+  set D = NAT;
   defpred P[set,Element of NAT,set] means
    ex l being Instruction-Location of S st l = $1 &
   ($2 in dom LocSeq NIC(pi(M,l),l) implies
    $3 = (LocSeq NIC(pi(M,l),l)).$2) &
   (not $2 in dom LocSeq NIC(pi(M,l),l) implies $3 = il.(S,0));
-A1: for x being Element of the Instruction-Locations of S,
+A1: for x being Element of NAT,
         y being Element of NAT
-      ex z being Element of the Instruction-Locations of S st P[x,y,z]
+      ex z being Element of NAT st P[x,y,z]
     proof
-      let x be Element of the Instruction-Locations of S, y be Element of NAT;
+      let x be Element of NAT, y be Element of NAT;
        reconsider x as Instruction-Location of S by AMI_1:def 4;
       set z = (LocSeq NIC(pi(M,x),x)).y;
       per cases;
@@ -1066,21 +1064,22 @@ A2:     y in dom LocSeq NIC(pi(M,x),x);
       end;
       suppose
 A4:     not y in dom LocSeq NIC(pi(M,x),x);
-      take il.(S,0);
+       reconsider il = il.(S,0) as Element of NAT by AMI_1:def 4;
+      take il;
       thus thesis by A4;
     end;
     end;
   consider f be Function of [:D,NAT:],D such that
-A5: for l being Element of the Instruction-Locations of S,
+A5: for l being Element of NAT,
         n being Element of NAT holds
      P[l,n,f.(l,n)] from BINOP_1:sch 3(A1);
   defpred F[set,set] means
     ex l being Instruction-Location of S st l = $2 &
                   $1 in Card NIC(pi(M,l),l);
-A6: for d being Element of the Instruction-Locations of S,
+A6: for d being Element of NAT,
         k1, k2 being Element of NAT st k1 <= k2 & F[k2,d] holds F[k1,d]
    proof
-     let d be Element of the Instruction-Locations of S,
+     let d be Element of NAT,
          k1, k2 be Element of NAT such that
 A7:    k1 <= k2 and
 A8:    F[k2,d];
@@ -1089,8 +1088,9 @@ A8:    F[k2,d];
        k1 c= k2 by A7,NAT_1:40;
      hence thesis by A8,ORDINAL1:22;
    end;
-  consider T being DecoratedTree of the Instruction-Locations of S such that
-A9:T.{} = FirstLoc(M) and
+  reconsider n = FirstLoc(M) as Element of NAT by AMI_1:def 4;
+  consider T being DecoratedTree of NAT such that
+A9:T.{} = n and
 A10:for t being Element of dom T holds
     succ t = { t^<*k*> where k is Element of NAT: F[k,T.t]} &
      for n being Element of NAT st F[n,T.t]
@@ -1100,29 +1100,31 @@ A10:for t being Element of dom T holds
     {} in dom T by TREES_1:47;
   hence T.{} = FirstLoc(M) by A9,AMI_1:def 38;
   let t be Element of dom T;
-   A11:  (T qua DecoratedTree of the Instruction-Locations of S).t = T.t
+   A11:  (T qua DecoratedTree of NAT).t = T.t
         by AMI_1:def 38;
    deffunc G(Element of NAT) = t^<*$1*>;
    defpred S[Element of NAT,Instruction-Location of S] means
                $1 in Card NIC(pi(M,$2),$2);
    set X = {G(k) where k is Element of NAT:
               ex l being Instruction-Location of S st l = T.t & S[k,l] },
-       Y = {G(k) where k is Element of NAT: S[k,T.t]};
+       Y = {G(k) where k is Element of NAT:
+                 S[k,T.t qua Instruction-Location of S]};
     X = Y from AMI_1:sch 2;
   hence A12: succ t = Y by A10,A11;
   let m be Element of NAT;
   assume
 A13: m in Card NIC(pi(M,T.t),T.t);
+   reconsider n = T.t as Element of NAT by AMI_1:def 4;
    consider l being Instruction-Location of S such that
-A14:  l = T.t and
+A14:  l = n and
 A15: (m in dom LocSeq NIC(pi(M,l),l) implies
-               f.(T.t,m)= (LocSeq NIC(pi(M,l),l)).m) and
- not m in dom LocSeq NIC(pi(M,l),l) implies f.(T.t,m) = il.(S,0) by A5;
-    t^<*m*> in {G(k) where k is Element of NAT: S[k,T.t]} by A13;
-   then (T qua DecoratedTree of the Instruction-Locations of S).(t^<*m*>)
-                 = T.(t^<*m*>) by A12,AMI_1:def 38;
-  hence T.(t^<*m*>) = (LocSeq NIC(pi(M,T.t),T.t)).m by A10,A11,A13,A14,A15,Def4
-;
+               f.(n,m)= (LocSeq NIC(pi(M,l),l)).m) and
+ not m in dom LocSeq NIC(pi(M,l),l) implies f.(n,m) = il.(S,0) by A5;
+    t^<*m*> in {G(k) where k is Element of NAT: S[k,l]} by A13,A14;
+   then (T qua DecoratedTree of NAT).(t^<*m*>)
+                 = T.(t^<*m*>) by A12,AMI_1:def 38,A14;
+  hence T.(t^<*m*>) = (LocSeq NIC(pi(M,T.t),T.t)).m
+    by A10,A11,A13,A14,A15,Def4;
 end;
 uniqueness
 proof
@@ -1380,12 +1382,14 @@ end;
 
 theorem
     for S being standard halting realistic
-        (IC-Ins-separated definite (non empty non void AMI-Struct over N))
+        (IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over NAT,N))
   holds
   ExecTree Stop S = TrivialInfiniteTree --> il.(S,0)
 proof
   let S be standard halting realistic
-        (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+        (IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over NAT,N));
   set D = TrivialInfiniteTree;
   set M = Stop S;
   set E = ExecTree M;

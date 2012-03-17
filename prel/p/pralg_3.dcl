@@ -20,13 +20,13 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="MSUALG_1"/>
 <ArticleID name="PRALG_2"/>
@@ -39,8 +39,8 @@
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="60" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="20">
@@ -49,13 +49,13 @@
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="61">
+<Adjective nr="63">
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
@@ -80,8 +80,8 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="60" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -101,9 +101,9 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="226">
+<Func kind="K" nr="227">
 <LocusVar nr="1"/>
-<Func kind="K" nr="224">
+<Func kind="K" nr="225">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 <LocusVar nr="4"/>

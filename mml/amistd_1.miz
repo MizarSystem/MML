@@ -10,26 +10,26 @@ environ
       RELAT_1, AMI_1, BOOLE, FUNCT_1, SGRAPH1, FUNCOP_1, CAT_1, GRAPH_2,
       FINSEQ_4, FUNCT_4, CARD_3, AMI_5, SETFAM_1, TARSKI, GOBOARD5, ARYTM_1,
       ORDINAL1, FUNCT_2, FRECHET, PRE_TOPC, WAYBEL_0, CARD_1, AMISTD_1,
-      MEMBERED;
+      MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
-      CARD_1,
+      CARD_1, XXREAL_0,
       NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1, RELSET_1,
-      PARTFUN1, FUNCT_2, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4,
-      FUNCOP_1, FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, XXREAL_0,
+      PARTFUN1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4,
+      FUNCOP_1, FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, FUNCT_2,
       AMI_1;
  constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, SEQ_1,
-      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, AMI_5;
+      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, STRUCT_0, GRAPH_2, AMI_1, INT_2;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, CARD_3, REALSET1, FINSEQ_5, PRE_CIRC, FUNCT_7,
-      STRUCT_0, AMI_1, JORDAN1J;
+      STRUCT_0, AMI_1, CARD_4, JORDAN1J;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, AMI_1, YELLOW_8, XBOOLE_0, FUNCOP_1;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, GRAPH_2, REAL_1, NAT_1, AMI_1, FUNCT_4,
       CARD_2, FUNCT_1, FUNCT_2, RELAT_1, ENUMSET1, ZFMISC_1, CARD_1, FUNCOP_1,
       CARD_3, ORDINAL1, MCART_1, GRFUNC_1, FINSEQ_3, BINARITH, INT_1, SETFAM_1,
       REVROT_1, PRE_CIRC, INTEGRA2, CARD_4, FUNCT_7, RELSET_1, XBOOLE_0,
-      XBOOLE_1, MEMBERED, XREAL_1, XXREAL_0, FINSEQ_6, PARTFUN1;
+      XBOOLE_1, MEMBERED, XREAL_1, XXREAL_0, FINSEQ_6, PARTFUN1, FINSET_1;
  schemes NAT_1, FUNCT_7, FINSEQ_2, AMI_1, DOMAIN_1, FUNCT_2;
 
 begin :: Ami-Struct
@@ -41,7 +41,9 @@ reserve x for set,
 
 reserve
   N for with_non-empty_elements set,
-  S for IC-Ins-separated definite (non empty non void AMI-Struct over N),
+  IL for non empty set,
+  S for IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over IL,N),
   i for Element of the Instructions of S,
   l, l1, l2, l3 for Instruction-Location of S,
   s for State of S;
@@ -49,17 +51,18 @@ reserve
 canceled 10;
 
 theorem Th11:
- for S being definite (non empty non void AMI-Struct over N),
+ for S being definite (non empty stored-program AMI-Struct over IL,N),
      I being Element of the Instructions of S,
      s being State of S
-  holds s +* ((the Instruction-Locations of S) --> I) is State of S
+  holds s +* ((IL) --> I) is State of S
   proof
-    let S be definite (non empty non void AMI-Struct over N),
+    let S be definite (non empty stored-program AMI-Struct over IL,N),
         I be Element of the Instructions of S,
         s be State of S;
-    set f = (the Instruction-Locations of S) --> I;
+    set f = (IL) --> I;
     set Ok = the Object-Kind of S;
-A1: dom f = the Instruction-Locations of S by FUNCOP_1:19;
+A1: dom f = IL by FUNCOP_1:19;
+X:  IL c= the carrier of S by AMI_1:def 3;
 A2: dom s = the carrier of S by AMI_1:79;
 then A3: dom Ok = dom s by FUNCT_2:def 1;
          for x st x in dom f holds f.x in Ok.x
@@ -73,38 +76,39 @@ then A5:   f.x = I by A1,FUNCOP_1:13;
           .= the Instructions of S by AMI_1:def 14;
       hence thesis by A5;
     end;
-    then f in sproduct Ok by A1,A2,A3,CARD_3:def 9;
+    then f in sproduct Ok by A1,A2,A3,CARD_3:def 9,X;
     hence thesis by CARD_3:69;
   end;
 
 registration
-  let N be set, S be AMI-Struct over N;
+  let IL,N be set, S be AMI-Struct over IL,N;
  cluster empty -> programmed FinPartState of S;
 coherence
   proof
     let F be FinPartState of S;
     assume F is empty;
     then reconsider G = F as empty Function;
-         dom G c= the Instruction-Locations of S by XBOOLE_1:2;
-    hence dom F c= the Instruction-Locations of S;
+         dom G c= IL by XBOOLE_1:2;
+    hence dom F c= IL;
   end;
 end;
 
 registration
-  let N be set, S be AMI-Struct over N;
+  let IL,N be set, S be AMI-Struct over IL,N;
  cluster empty FinPartState of S;
 existence
   proof
-     {} is Element of sproduct the Object-Kind of S  by CARD_3:66;
-    then reconsider a = {} as FinPartState of S by AMI_1:77;
+    reconsider a = {} as FinPartState of S by CARD_3:66;
    take a;
    thus a is empty;
   end;
 end;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set,
-     S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+     S be IC-Ins-separated definite
+      (non empty stored-program AMI-Struct over IL,N);
  cluster non empty trivial programmed FinPartState of S;
  existence proof
     consider l being Instruction-Location of S, I being Instruction of S;
@@ -113,8 +117,10 @@ registration
  end;
 end;
 
-registration let N be with_non-empty_elements set,
-               S be non void AMI-Struct over N,
+registration
+ let IL be non empty set;
+ let N be with_non-empty_elements set,
+               S be stored-program AMI-Struct over IL,N,
                i be Element of the Instructions of S,
                s be State of S;
  cluster ((the Execution of S).i).s -> Function-like Relation-like;
@@ -131,14 +137,14 @@ end;
 
 Lm1:
  for S being steady-programmed IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
      il being Instruction-Location of S,
      I being Element of the Instructions of S,
      f being FinPartState of S st f = il .--> I
    holds f is autonomic
  proof
   let S be steady-programmed IC-Ins-separated definite
-      (non empty non void AMI-Struct over N);
+      (non empty stored-program AMI-Struct over IL,N);
   let il be Instruction-Location of S;
   let I be Element of the Instructions of S;
   let f be FinPartState of S such that
@@ -158,7 +164,7 @@ A6:     f c= s;
     end;
     set a = ((Computation s1).i|dom f),
         b = ((Computation s2).i|dom f);
-A7: {il} c= the carrier of S by ZFMISC_1:37;
+A7: {il} c= the carrier of S;
     then {il} c= dom ((Computation s1).i) by AMI_1:79;
 then A8: dom a = {il} by A4,RELAT_1:91;
          {il} c= dom ((Computation s2).i) by A7,AMI_1:79;
@@ -169,11 +175,9 @@ then A9: dom b = {il} by A4,RELAT_1:91;
       assume
 A10:     x in {il};
 then A11:   x = il by TARSKI:def 1;
-A12:   f c= (Computation s1).i by A1,A2,AMI_1:81;
-A13:   f c= (Computation s2).i by A1,A3,AMI_1:81;
       thus a.x = (Computation s1).i.x by A4,A10,FUNCT_1:72
-              .= I by A5,A11,A12
-              .= (Computation s2).i.x by A5,A11,A13
+              .= I by A5,A11,A1,A2,AMI_1:81
+              .= (Computation s2).i.x by A5,A11,A1,A3,AMI_1:81
               .= b.x by A4,A10,FUNCT_1:72;
     end;
     hence (Computation s1).i|dom f = (Computation s2).i|dom f
@@ -181,9 +185,10 @@ A13:   f c= (Computation s2).i by A1,A3,AMI_1:81;
 end;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set;
  let S be steady-programmed IC-Ins-separated definite
-          (non empty non void AMI-Struct over N);
+          (non empty stored-program AMI-Struct over IL,N);
   cluster non empty trivial autonomic programmed FinPartState of S;
 existence
   proof
@@ -196,35 +201,64 @@ end;
 
 theorem
       for S being steady-programmed IC-Ins-separated definite
-        (non empty non void AMI-Struct over N),
+        (non empty stored-program AMI-Struct over IL,N),
      il being Instruction-Location of S,
      I being Element of the Instructions of S
   holds il .--> I is autonomic by Lm1;
 
 theorem Th13:
  for S being steady-programmed IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)
+       (non empty stored-program AMI-Struct over IL,N)
   holds S is programmable
   proof
     let S be steady-programmed IC-Ins-separated definite
-        (non empty non void AMI-Struct over N);
+        (non empty stored-program AMI-Struct over IL,N);
     consider l being Instruction-Location of S;
     consider I being Instruction of S;
     take l.-->I;
     thus thesis by Lm1;
   end;
 
-registration let N be with_non-empty_elements set;
+registration
+ let IL be non empty set;
+ let N be with_non-empty_elements set;
  cluster steady-programmed -> programmable
-         (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+         (IC-Ins-separated definite
+          (non empty stored-program AMI-Struct over IL,N));
 coherence by Th13;
 end;
 
+definition let IL,N be set, S be AMI-Struct over IL,N;
+ mode IL-Subset of S -> Subset of IL means
+:Defx:  not contradiction;
+ existence;
+end;
+
+registration let IL,N be set, S be AMI-Struct over IL,N;
+ cluster empty IL-Subset of S;
+ existence
+  proof
+    {}IL is IL-Subset of S by Defx;
+   hence thesis;
+  end;
+end;
+
+registration
+ let IL be non empty set,N be set, S be non empty AMI-Struct over IL,N;
+ cluster non empty IL-Subset of S;
+ existence
+  proof consider x being Element of IL;
+    {x} is IL-Subset of S by Defx;
+   hence thesis;
+  end;
+end;
+
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be non empty non void standard-ins AMI-Struct over N;
+ let S be non empty stored-program standard-ins AMI-Struct over IL,N;
  let T be InsType of S;
- canceled 2;
+ canceled;
 
  attr T is jump-only means
        for s being State of S, o being Object of S, I being Instruction of S
@@ -232,35 +266,35 @@ definition
 end;
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be non empty non void standard-ins AMI-Struct over N;
+ let S be non empty stored-program standard-ins AMI-Struct over IL,N;
  let I be Instruction of S;
  attr I is jump-only means
        InsCode I is jump-only;
 end;
 
 definition
-  let N,S,l;
+  let IL,N,S,l;
   let i be Element of the Instructions of S;
- func NIC(i,l) -> Subset of the Instruction-Locations of S equals
+ func NIC(i,l) -> IL-Subset of S equals
    { IC Following s : IC s = l & s.l = i };
  coherence
   proof
-       { IC Following s : IC s = l & s.l = i } c= the Instruction-Locations of
-S
+       { IC Following s : IC s = l & s.l = i } c= IL
      proof let e be set;
       assume e in { IC Following s : IC s = l & s.l = i };
        then ex s st e = IC Following s & IC s = l & s.l = i;
-      hence e in the Instruction-Locations of S;
+      hence e in IL by AMI_1:def 4;
      end;
-   hence thesis;
+   hence thesis by Defx;
   end;
 end;
 
 Lm2: now
-  let N;
+  let IL,N;
   let S be realistic IC-Ins-separated definite
-      (non empty non void AMI-Struct over N),
+      (non empty stored-program AMI-Struct over IL,N),
       i be Element of the Instructions of S,
       l be Instruction-Location of S,
       s be State of S,
@@ -279,67 +313,69 @@ then A4: IC t = f.IC S by FUNCT_4:14
 end;
 
 registration
+ let IL be non empty set;
   let N be with_non-empty_elements set,
       S be realistic IC-Ins-separated definite
-        (non empty non void AMI-Struct over N),
+        (non empty stored-program AMI-Struct over IL,N),
       i be Element of the Instructions of S,
       l be Instruction-Location of S;
   cluster NIC(i,l) -> non empty;
 coherence
   proof
     consider s being State of S;
-         ObjectKind IC S = the Instruction-Locations of S &
+X:  l in IL by AMI_1:def 4;
+         ObjectKind IC S = IL &
       ObjectKind l = the Instructions of S by AMI_1:def 11,def 14;
-    then reconsider f = (IC S,l) --> (l,i) as FinPartState of S by AMI_1:58;
+    then reconsider f = (IC S,l) --> (l,i) as FinPartState of S by AMI_1:58,X;
          IC Following (s +* f) in NIC(i,l) by Lm2;
     hence thesis;
   end;
 end;
 
-definition let N,S,i;
- func JUMP i -> Subset of the Instruction-Locations of S equals
+definition let IL,N,S,i;
+ func JUMP i -> Subset of IL equals
   meet { NIC(i,l) : not contradiction };
  coherence
   proof
     set X = { NIC(i,l) : not contradiction };
-         X c= bool the Instruction-Locations of S
+         X c= bool IL
      proof let x be set;
       assume x in X;
        then ex l st x = NIC(i,l);
       hence thesis;
      end;
-    then reconsider X as Subset-Family of the Instruction-Locations of S;
-         meet X c= the Instruction-Locations of S;
+    then reconsider X as Subset-Family of IL;
+         meet X c= IL;
    hence thesis;
   end;
 end;
 
-definition let N,S,l;
- func SUCC l -> Subset of the Instruction-Locations of S equals
+definition let IL,N,S,l;
+ func SUCC l -> Subset of IL equals
   union { NIC(i,l) \ JUMP i : not contradiction };
  coherence
   proof
    set X = { NIC(i,l) \ JUMP i : not contradiction };
-         X c= bool the Instruction-Locations of S
+         X c= bool IL
      proof let x be set;
       assume x in X;
        then ex i st x = NIC(i,l) \ JUMP i;
       hence thesis;
      end;
-    then reconsider X as Subset-Family of the Instruction-Locations of S;
-         union X c= the Instruction-Locations of S;
+    then reconsider X as Subset-Family of IL;
+         union X c= IL;
    hence thesis;
   end;
 end;
 
 theorem Th14:
  for i being Element of the Instructions of S
-  st the Instruction-Locations of S is non trivial &
+  st IL is non trivial &
   (for l being Instruction-Location of S holds NIC(i,l)={l})
   holds JUMP i is empty
 proof
  let i be Element of the Instructions of S;
-  given p, q being Element of the Instruction-Locations of S such that
+  given p, q being Element of IL such that
 A1:  p <> q;
    reconsider p,q as Instruction-Location of S by AMI_1:def 4;
   assume
@@ -357,13 +393,13 @@ end;
 
 theorem Th15:
  for S being realistic IC-Ins-separated definite
-     (non empty non void AMI-Struct over N),
+     (non empty stored-program AMI-Struct over IL,N),
      il being Instruction-Location of S,
      i being Instruction of S st i is halting
   holds NIC(i,il) = {il}
   proof
    let S be realistic IC-Ins-separated definite
-       (non empty non void AMI-Struct over N),
+       (non empty stored-program AMI-Struct over IL,N),
        il be Instruction-Location of S,
        i be Instruction of S such that
 A1:   for s being State of S holds Exec(i,s) = s;
@@ -378,10 +414,12 @@ A2:    n = IC Following s & IC s = il & s.il = i;
     let n be set;
     assume
 A3:   n in {il};
+X:  il in IL by AMI_1:def 4;
     consider s being State of S;
-         ObjectKind IC S = the Instruction-Locations of S &
+         ObjectKind IC S = IL &
       ObjectKind il = the Instructions of S by AMI_1:def 11,def 14;
-    then reconsider f = (IC S,il) --> (il,i) as FinPartState of S by AMI_1:58;
+    then reconsider f = (IC S,il) --> (il,i) as FinPartState of S
+       by AMI_1:58,X;
     set a = s+*f;
 A4: dom f = {IC S,il} by FUNCT_4:65;
 then A5: IC S in dom f by TARSKI:def 2;
@@ -398,7 +436,7 @@ then a.IC a = f.il by A6,FUNCT_4:14
 
 begin :: Ordering of Instruction Locations
 
-definition let N,S,l1,l2;
+definition let IL,N,S,l1,l2;
  pred l1 <= l2 means
 :Def8:
   ex f being non empty IL-FinSequence of S st
@@ -407,8 +445,9 @@ definition let N,S,l1,l2;
  reflexivity
   proof
    let l;
+X:  l in IL by AMI_1:def 4;
    take <*l*>;
-   thus <*l*>/.1 = l by FINSEQ_4:25;
+   thus <*l*>/.1 = l by FINSEQ_4:25,X;
    hence thesis by FINSEQ_1:56;
   end;
 end;
@@ -430,7 +469,7 @@ A6: for n st 1 <= n & n < len f2 holds f2/.(n+1) in SUCC f2/.n;
   thus (f1^'f2)/.1 = l1 by A1,GRAPH_2:57;
         now per cases;
     suppose f2 is trivial;
-     then consider x being Element of the Instruction-Locations of S such that
+     then consider x being Element of IL such that
 A7:     f2 = <*x*> by FINSEQ_6:113;
      reconsider x as Instruction-Location of S by AMI_1:def 4;
           f1^'f2 = f1 by A7,GRAPH_2:60;
@@ -444,13 +483,12 @@ A7:     f2 = <*x*> by FINSEQ_6:113;
   let n such that
 A8: 1 <= n and
 A9: n < len(f1^'f2);
-A10: 1 <= n+1 by NAT_1:11;
 A11: len (f1^'f2) +1 = len f1 + len f2 by GRAPH_2:13;
   per cases by XXREAL_0:1;
   suppose
 A12:  n < len f1;
     then n+1 <= len f1 by NAT_1:13;
-then A13:  (f1^'f2)/.(n+1) = f1/.(n+1) by A10,GRAPH_2:61;
+then A13:  (f1^'f2)/.(n+1) = f1/.(n+1) by NAT_1:11,GRAPH_2:61;
         (f1^'f2)/.n = f1/.n by A8,A12,GRAPH_2:61;
   hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A3,A8,A12,A13;
   end;
@@ -467,29 +505,27 @@ A17:  n > len f1;
    then consider m being Nat such that
 A18:  len f1 + m = n by NAT_1:10;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-         len f1 + m > len f1 + 0 by A17,A18;
-then A19:  1 <= m by NAT_1:14;
-A20:  1 <= m+1 by NAT_1:11;
+B19:     len f1 + m > len f1 + 0 by A17,A18;
          len f1 + m+1 < len f1 + len f2 by A9,A11,A18,XREAL_1:8;
     then len f1 + (m+1) < len f1 + len f2;
 then A21:  m+1 < len f2 by XREAL_1:8;
          m <= m+1 by NAT_1:11;
     then m < len f2 by A21,XXREAL_0:2;
-then A22:  (f1^'f2)/.n = f2/.(m+1) by A18,A19,GRAPH_2:62;
+then A22:  (f1^'f2)/.n = f2/.(m+1) by A18,B19,GRAPH_2:62,NAT_1:14;
         (f1^'f2)/.(n+1) = (f1^'f2)/.(len f1 + (m+1)) by A18
-          .= f2/.(m+1+1) by A20,A21,GRAPH_2:62;
-  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A20,A21,A22;
+          .= f2/.(m+1+1) by NAT_1:11,A21,GRAPH_2:62;
+  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,NAT_1:11,A21,A22;
  end;
  end;
 
 definition
- let N, S;
+ let IL, N, S;
  attr S is InsLoc-antisymmetric means
        for l1, l2 st l1 <= l2 & l2 <= l1 holds l1 = l2;
 end;
 
 definition
- let N, S;
+ let IL, N, S;
  attr S is standard means
 :Def10:
  ex f being IL-Function of NAT, S st
@@ -511,20 +547,24 @@ A3: f2 is bijective and
 A4: for m, n being Element of NAT holds m <= n iff f2.m <= f2.n;
   defpred P[Nat] means f1.$1 <> f2.$1;
   assume f1 <> f2;
-  then A5: ex c being Element of NAT st P[c] by FUNCT_2:113;
-  then a5: ex c being Nat st P[c] by ORDINAL1:def 13;
+  then  ex c being Element of NAT st P[c] by FUNCT_2:113;
+  then a5: ex c being Nat st P[c];
       consider d being Nat such that
   A6: P[d] and
   A7: for n being Nat st P[n] holds d <= n from NAT_1:sch 5(a5);
+  dom f1 = NAT & dom f2 = NAT by FUNCT_2: def 1;
+  then d in dom f1 & d in dom f2 by ORDINAL1:def 13;
+  then
+Y:  f1.d in rng f1 & f2.d in rng f2 by FUNCT_1:12;
       reconsider d as Element of NAT by ORDINAL1:def 13;
       f1 is onto & f2 is onto by A1,A3,FUNCT_2:def 4;
-  then A8: rng f1 = the Instruction-Locations of S &
-      rng f2 = the Instruction-Locations of S by FUNCT_2:def 3;
+  then A8: rng f1 = IL &
+      rng f2 = IL by FUNCT_2:def 3;
       then consider d2 being set such that
-  A9: d2 in dom f2 & f1.d = f2.d2 by FUNCT_1:def 5;
+  A9: d2 in dom f2 & f1.d = f2.d2 by FUNCT_1:def 5,Y;
       reconsider d2 as Element of NAT by A9;
       consider d1 being set such that
-  A10: d1 in dom f1 & f2.d = f1.d1 by A8,FUNCT_1:def 5;
+  A10: d1 in dom f1 & f2.d = f1.d1 by A8,FUNCT_1:def 5,Y;
       reconsider d1 as Element of NAT by A10;
   A11: f1 is one-to-one & f2 is one-to-one by A1,A3,FUNCT_2:def 4;
   A12: dom f1 = NAT & dom f2 = NAT by FUNCT_2:def 1;
@@ -593,10 +633,10 @@ A1: f is bijective;
   A17: F/.(len F1+1) = F.x by A11,A15,PARTFUN1:def 8
                    .= f.(k+1) by A9,FINSEQ_4:29;
            len F1 <> 0 by A3,A8,A10,A13,A15,PARTFUN1:def 8;
-      then F1 is non empty FinSequence of the Instruction-Locations of S
+      then F1 is non empty FinSequence of IL
                    by A9,FINSEQ_1:25,FINSEQ_4:53;
       then reconsider F1 as non empty IL-FinSequence of S by AMI_1:def 34;
-           rng f = the Instruction-Locations of S by A6,FUNCT_2:def 3;
+           rng f = IL by A6,FUNCT_2:def 3;
       then consider m being set such that
   A18: m in dom f & f.m = F/.len F1 by FUNCT_1:def 5;
       reconsider m as Element of NAT by A18;
@@ -694,11 +734,13 @@ A50:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
    suppose A52: m < n;
     thus f.m <= f.n proof
        set mn = n -' m;
-       deffunc F(Nat) = f.(m+$1-'1);
-       consider F being FinSequence of the Instruction-Locations of S such that
+       reconsider mn1 = mn+1 as Element of NAT;
+       reconsider f'=f as Function of NAT,IL;
+       deffunc F(Nat) = f'.(m+$1-'1);
+       consider F being FinSequence of IL such that
     A53: len F = mn+1 and
-    A54: for j being Nat st j in Seg (mn+1) holds F.j = F(j) from
-FINSEQ_2:sch 1;
+    A54: for j being Nat st j in Seg (mn+1) holds F.j = F(j)
+         from FINSEQ_2:sch 1;
      reconsider F as non empty IL-FinSequence of S by A53,AMI_1:def 34
 ,FINSEQ_1:25;
      take F;
@@ -721,12 +763,11 @@ FINSEQ_2:sch 1;
         then 1 <= p+1 & p+1 <= len F by NAT_1:13;
     then A59: p in dom F & p+1 in dom F by A58,FINSEQ_3:27;
     then A60: p in Seg (mn+1) & p+1 in Seg (mn+1) by A53,FINSEQ_1:def 3;
-             p <= m+p by NAT_1:11;
-    then A61: 1 <= m+p by A58,XXREAL_0:2;
+B61:         p <= m+p by NAT_1:11;
     A62: F/.(p+1) = F.(p+1) by A59,PARTFUN1:def 8
          .= f.(m+(p+1)-'1) by A54,A60
          .= f.(m+p+1-'1)
-         .= f.(m+p-'1+1) by A61,BINARITH:56;
+         .= f.(m+p-'1+1) by B61,BINARITH:56,A58,XXREAL_0:2;
          F/.p = F.p by A59,PARTFUN1:def 8
          .= f.(m+p-'1) by A54,A60;
      hence F/.(p+1) in SUCC F/.p by A50,A62;
@@ -755,18 +796,17 @@ A65: dom f = NAT by FUNCT_2:def 1;
        end;
        suppose
 A72:       k > 0;
-       then A73: 1 <= k by NAT_1:14;
              k < len F by A71,NAT_1:13;
-       then A74: F/.(k+1) in SUCC F/.k by A67,A73;
+       then A74: F/.(k+1) in SUCC F/.k by A67,A72,NAT_1:14;
            consider l being Element of NAT such that
        A75: F/.k = f.l & m <= l by A70,A71,A72,NAT_1:13,14;
-                rng f = the Instruction-Locations of S by A64,FUNCT_2:def 3;
+                rng f = IL by A64,FUNCT_2:def 3;
            then consider l1 being set such that
        A76: l1 in dom f & f.l1 = F/.(k+1) by FUNCT_1:def 5;
            reconsider l1 as Element of NAT by A76;
                 l <= l1 by A50,A74,A75,A76;
-           then m <= l1 by A75,XXREAL_0:2;
-        hence ex l being Element of NAT st F/.(k+1) = f.l & m <= l by A76;
+        hence ex l being Element of NAT st F/.(k+1) = f.l & m <= l
+                 by A76,A75,XXREAL_0:2;
       end;
       end; hence P[k+1];
      end;
@@ -824,10 +864,9 @@ begin :: Standard trivial computer
 
 definition
  let N be with_non-empty_elements set;
- func STC N -> strict AMI-Struct over N means :Def11:
+ func STC N -> strict AMI-Struct over NAT,N means :Def11:
  the carrier of it = NAT \/ {NAT} &
  the Instruction-Counter of it = NAT &
- the Instruction-Locations of it = NAT &
  the Instructions of it = {[0,0],[1,0]} &
  the Object-Kind of it =
               (NAT --> {[1,0],[0,0]}) +* (NAT .-->NAT) &
@@ -842,7 +881,7 @@ definition
    set O = NAT \/ {NAT};
         NAT in {NAT} by TARSKI:def 1;
    then reconsider IC1 = NAT as Element of O by XBOOLE_0:def 2;
-   reconsider IL = NAT as non empty Subset of O by XBOOLE_1:7;
+   set IL = NAT;
         0 in {0,1} & 1 in {0,1} & 0 in ((union N) \/ O)* by FINSEQ_1:66
 ,TARSKI:def 2;
    then [1,0] in [:NAT, ((union N) \/ O)*:] &
@@ -862,13 +901,12 @@ then A3: rng ((NAT --> ins)+*(NAT .-->IL)) c= {ins}\/{NAT} by A2,FUNCT_4:18;
     deffunc F(Element of product Ok) = $1+*(NAT .-->succ($1.NAT));
 A4: now let s be Element of product Ok;
            now
-      A5: {NAT} c= dom Ok by A1,XBOOLE_1:7;
        thus
             dom (s+*(NAT .-->succ(s.NAT)))
           = dom s \/ dom (NAT .-->succ(s.NAT)) by FUNCT_4:def 1
          .= dom s \/ {NAT} by FUNCOP_1:19
          .= dom Ok \/ {NAT} by CARD_3:18
-         .= dom Ok by A5,XBOOLE_1:12;
+         .= dom Ok by A1,XBOOLE_1:7,12;
        let o be set; assume
       A6: o in dom Ok;
       then A7: o in NAT or o in {NAT} by XBOOLE_0:def 2;
@@ -925,11 +963,10 @@ A19:rng ([1,0] .--> f) c= {f} &
    end;
    then reconsider E as Function of ins, Funcs(product Ok, product Ok)
      by A17,FUNCT_2:def 1,RELSET_1:11;
-   set M = AMI-Struct(# O, IC1, IL, ins, Ok, E#);
-  take M;
+   set M = AMI-Struct(# O, IC1, ins, Ok, E#);
+  take M qua  strict AMI-Struct over NAT,N;
   thus the carrier of M = NAT \/ {NAT};
   thus the Instruction-Counter of M = NAT;
-  thus the Instruction-Locations of M = NAT;
   thus the Instructions of M = {[0,0],[1,0]};
   thus the Object-Kind of M =
     (NAT-->III)+*(NAT .-->NAT);
@@ -942,10 +979,9 @@ A19:rng ([1,0] .--> f) c= {f} &
  end;
  uniqueness
  proof
-  let it1, it2 be strict AMI-Struct over N such that
+  let it1, it2 be strict AMI-Struct over NAT,N such that
 A20: the carrier of it1 = NAT \/ {NAT} &
  the Instruction-Counter of it1 = NAT &
- the Instruction-Locations of it1 = NAT &
  the Instructions of it1 = {[0,0],[1,0]} &
  the Object-Kind of it1 =
      (NAT --> III)+*(NAT .-->NAT);
@@ -958,7 +994,6 @@ A21: (for s being Element of product the Object-Kind of it1
   assume
 A22:  the carrier of it2 = NAT \/ {NAT} &
  the Instruction-Counter of it2 = NAT &
- the Instruction-Locations of it2 = NAT &
  the Instructions of it2 = {[0,0],[1,0]} &
  the Object-Kind of it2 =
      (NAT --> III)+*(NAT .-->NAT);
@@ -978,17 +1013,22 @@ end;
 
 registration
  let N be with_non-empty_elements set;
- cluster the Instruction-Locations of STC N -> infinite;
- coherence by Def11,CARD_4:15;
+ cluster STC N -> infinite;
+ coherence
+  proof :: gdzie sa rejestracje 'infinite' ???
+    NAT \/ {NAT} is not finite by FINSET_1:13,XBOOLE_1:7;
+   hence the carrier of STC N is infinite by Def11;
+  end;
 end;
 
 registration
  let N be with_non-empty_elements set;
- cluster STC N -> non empty non void standard-ins;
+ cluster STC N -> non empty stored-program standard-ins;
  coherence
    proof
-     thus the carrier of STC N is non empty by Def11;
-     thus the Instruction-Locations of STC N is non empty;
+     thus the carrier of STC N is non empty;
+      the carrier of STC N = NAT \/ {NAT} by Def11;
+     hence NAT c= the carrier of STC N by XBOOLE_1:7;
        0 in ((union N) \/ the carrier of STC N)* by FINSEQ_1:66;
       then A1:    {0} c= ((union N) \/ the carrier of STC N)* by ZFMISC_1:37;
        the Instructions of STC N =  {[0,0],[1,0]} by Def11
@@ -1007,7 +1047,6 @@ registration
    set IT = STC N;
 A1:  the carrier of IT = NAT \/ {NAT} &
     the Instruction-Counter of IT = NAT &
-    the Instruction-Locations of IT = NAT &
     the Instructions of IT = III &
     the Object-Kind of IT =
      (NAT --> III)+*(NAT .-->NAT) by Def11;
@@ -1021,26 +1060,23 @@ A1:  the carrier of IT = NAT \/ {NAT} &
   thus
    STC N is IC-Ins-separated
   proof
-   thus ObjectKind IC IT
-     = the Instruction-Locations of IT by A1,A4;
+   thus ObjectKind IC IT = NAT by Def11,A4;
   end;
   thus STC N is definite
   proof
   let l be Instruction-Location of IT;
-       l in NAT by A1;
+X:     l in NAT by AMI_1:def 4;
       then l <> NAT & dom (NAT .-->NAT) = {NAT} by FUNCOP_1:19;
   then A5: not l in dom (NAT .-->NAT) by TARSKI:def 1;
     thus ObjectKind l = ((NAT --> III)+*(NAT .-->NAT)).l by Def11
      .= (NAT --> III).l by A5,FUNCT_4:12
-     .= the Instructions of IT by A1,FUNCOP_1:13;
+     .= the Instructions of IT by A1,FUNCOP_1:13,X;
   end;
   thus IT is realistic
   proof
 A6:  the Instruction-Counter of IT = NAT by Def11;
-A7:  the Instruction-Locations of IT = NAT by Def11;
-   assume the Instruction-Counter of IT in
-            the Instruction-Locations of IT;
-   hence contradiction by A6,A7;
+   assume the Instruction-Counter of IT in NAT;
+   hence contradiction by A6;
   end;
   thus IT is steady-programmed
   proof
@@ -1054,7 +1090,7 @@ A9:  the Execution of IT
      let s be State of IT,
          i be Instruction of IT,
          l be Instruction-Location of IT;
-          l in NAT by A1;
+          l in NAT by AMI_1:def 4;
      then l <> NAT;
      then not l in {NAT} by TARSKI:def 1;
 then A10:  not l in dom (NAT .-->succ(s.NAT)) by FUNCOP_1:19;
@@ -1180,7 +1216,7 @@ theorem
 A1:
  the carrier of M = NAT \/ {NAT} &
  the Instruction-Counter of M = NAT &
- the Instruction-Locations of M = NAT by Def11;
+ NAT = NAT by Def11;
     let s be State of M,
         o be Object of M,
         I be Instruction of M such that
@@ -1200,7 +1236,6 @@ Lm5:
 proof
  let l be Instruction-Location of STC N,
      i be Element of the Instructions of STC N;
-A1: z is Element of NAT by ORDINAL1:def 13;
  assume that
 A2: l = z and
 A3: InsCode i = 1;
@@ -1210,17 +1245,18 @@ A3: InsCode i = 1;
     hereby assume y in F; then consider s being State of M such that
     A4: y = IC Following s & IC s = l & s.l = i;
              y = succ z by A2,A3,A4,Lm4
-         .= z+1 by A1,NAT_1:39;
+         .= z+1 by NAT_1:39;
      hence y in {z+1} by TARSKI:def 1;
     end;
     assume y in {z+1};
     then A5: y = z+1 by TARSKI:def 1
-         .= succ z by A1,NAT_1:39;
+         .= succ z by NAT_1:39;
         consider w being State of M;
-        set f = (the Instruction-Locations of M) --> i;
-A6:     dom f = the Instruction-Locations of M by FUNCOP_1:19;
+        set f = (NAT) --> i;
+A6:     dom f = NAT by FUNCOP_1:19;
+X:  l in NAT by AMI_1:def 4;
         reconsider s = w +* f as State of M by Th11;
-        reconsider l' = l as Element of ObjectKind IC M by AMI_1:def 11;
+        reconsider l' = l as Element of ObjectKind IC M by AMI_1:def 11,X;
         set u = (IC M).-->l';
         set t = s+*u;
 A7:     dom u = {IC M} by FUNCOP_1:19;
@@ -1230,8 +1266,8 @@ A7:     dom u = {IC M} by FUNCOP_1:19;
              l <> IC M by AMI_1:48;
         then not l in dom u by A7,TARSKI:def 1;
     then A9: t.l = s.l by FUNCT_4:12
-           .= f.l by A6,FUNCT_4:14
-           .= i by FUNCOP_1:13;
+           .= f.l by A6,FUNCT_4:14,X
+           .= i by FUNCOP_1:13,X;
             then IC Following t = succ z by A2,A3,A8,Lm4;
     hence y in F by A2,A5,A8,A9;
    end;
@@ -1249,11 +1285,7 @@ A1: InsCode i = 1;
              : not contradiction };
    assume not thesis; then consider x being set such that
 A2: x in meet X by XBOOLE_0:def 1;
-    0 in NAT & 1 in NAT;
-   then 0 in the Instruction-Locations of STC N &
-   1 in the Instruction-Locations of STC N by Def11;
-   then reconsider l1 = 0, l2 = 1 as Instruction-Location of STC N
-              by AMI_1:def 4;
+   reconsider l1 = 0, l2 = 1 as Instruction-Location of STC N by AMI_1:def 4;
         NIC(i, l1) in X & NIC(i, l2) in X;
    then {0+1} in X & {1+1} in X by A1,Lm5;
    then x in {1} & x in {2} by A2,SETFAM_1:def 1;
@@ -1263,8 +1295,7 @@ A2: x in meet X by XBOOLE_0:def 1;
  suppose
  A3: InsCode i = 0;
  reconsider i as Instruction of STC N;
-    i is halting by A3,Th20;
- then for l being Instruction-Location of STC N holds NIC(i,l)={l} by Th15;
+  for l being Instruction-Location of STC N holds NIC(i,l)={l} by Th15,A3,Th20;
  hence thesis by Th14;
 end;
 end;
@@ -1290,10 +1321,10 @@ A3:   InsCode ii = 1;
         then y = {z+1} by A1,A2,A3,Lm5;
      hence y in {{z},{z+1}} by TARSKI:def 2;
      end;
-     suppose InsCode ii = 0;
-then A4:  ii is halting by Th20;
+     suppose
+S:     InsCode ii = 0;
          JUMP ii = {} by Lm6;
-        then y = {z} by A1,A2,A4,Th15;
+        then y = {z} by A1,A2,S,Th15,Th20;
      hence y in {{z},{z+1}} by TARSKI:def 2;
     end;
     end;
@@ -1309,8 +1340,7 @@ A6:  y = {z};
    then reconsider i as Instruction of M by Def11;
 A7: JUMP i = {} by Lm6;
         InsCode i = 0 by MCART_1:def 1;
-    then i is halting by Th20;
-     then NIC(i,l) \ JUMP i = y by A1,A6,A7,Th15;
+     then NIC(i,l) \ JUMP i = y by A1,A6,A7,Th15,Th20;
     hence y in K;
     end;
     suppose
@@ -1334,19 +1364,16 @@ registration
  coherence
  proof
    set M = STC N;
-A1: the Instruction-Locations of M = NAT by Def11;
-   then reconsider f = id NAT as IL-Function of NAT, STC N
-              by AMI_1:def 36;
+   reconsider f = id NAT as IL-Function of NAT, STC N by AMI_1:def 36;
         now let k be Element of NAT;
-           f.k = k by FUNCT_1:35;
-   then A2: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
+   A2: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
     hence f.(k+1) in SUCC (f.k) by TARSKI:def 2;
     let j be Element of NAT; assume f.j in SUCC (f.k);
     then f.j = k or f.j = k+1 by A2,TARSKI:def 2;
     then j = k+1 or j = k by FUNCT_1:35;
     hence k <= j by NAT_1:11;
    end;
-  hence M is standard by A1,Th19;
+  hence M is standard by Th19;
  end;
 end;
 
@@ -1369,7 +1396,7 @@ registration
  cluster standard halting realistic steady-programmed programmable
          standard-ins
          (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N));
+          (non empty stored-program AMI-Struct over NAT,N));
  existence proof
    take STC N;
    thus thesis;
@@ -1378,12 +1405,12 @@ end;
 
 reserve
   T for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
 
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N)),
+       (non empty stored-program AMI-Struct over NAT,N)),
      k be natural number;
  func il.(S,k) -> Instruction-Location of S means :Def12:
  ex f being IL-Function of NAT, S st
@@ -1430,10 +1457,11 @@ proof
 A1: f1 is bijective & (for m, n being Element of NAT holds m <= n
 iff f1.m <= f1.n) &
     il.(T,k1) = f1.k1 by Def12;
+X:  l in NAT by AMI_1:def 4;
            f1 is onto by A1,FUNCT_2:def 4;
-     then rng f1 = the Instruction-Locations of T by FUNCT_2:def 3;
+     then rng f1 = NAT by FUNCT_2:def 3;
       then consider k being set such that
-  A2: k in dom f1 & f1.k = l by FUNCT_1:def 5;
+  A2: k in dom f1 & f1.k = l by FUNCT_1:def 5,X;
       reconsider k as Element of NAT by A2;
   take k;
   thus l = il.(T,k) by A1,A2,Def12;
@@ -1442,7 +1470,7 @@ end;
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      l be Instruction-Location of S;
  func locnum l -> natural number means :Def13:
   il.(S,it) = l;
@@ -1453,7 +1481,7 @@ end;
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      l be Instruction-Location of S;
  redefine func locnum l -> Element of NAT;
 coherence by ORDINAL1:def 13;
@@ -1497,31 +1525,29 @@ theorem Th29:
   end;
 
 theorem Th30:
- S is standard implies S is InsLoc-antisymmetric
+ T is InsLoc-antisymmetric
   proof
-    assume
-A1:   S is standard;
-    let l1, l2 be Instruction-Location of S;
+    let l1, l2 be Instruction-Location of T;
     assume
 A2:   l1 <= l2 & l2 <= l1;
-    reconsider S as standard (IC-Ins-separated
- definite (non empty non void AMI-Struct over N)) by A1;
-    reconsider l1, l2 as Instruction-Location of S;
+    reconsider T as standard (IC-Ins-separated
+     definite (non empty stored-program AMI-Struct over NAT,N));
+    reconsider l1, l2 as Instruction-Location of T;
          locnum l1 <= locnum l2 & locnum l2 <= locnum l1 by A2,Th29;
-    then locnum l1 = locnum l2 by XXREAL_0:1;
-    hence thesis by Th27;
+    hence thesis by Th27,XXREAL_0:1;
   end;
 
 registration let N;
  cluster standard -> InsLoc-antisymmetric
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
 coherence by Th30;
 end;
 
 definition
    let N be with_non-empty_elements set,
        S be standard (IC-Ins-separated definite
-            (non empty non void AMI-Struct over N)),
+            (non empty stored-program AMI-Struct over NAT,N)),
        f be Instruction-Location of S,
        k be natural number;
  func f + k -> Instruction-Location of S equals
@@ -1549,7 +1575,7 @@ theorem
 definition
  let N be with_non-empty_elements set,
      S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      f be Instruction-Location of S;
  func NextLoc f -> Instruction-Location of S equals
    f + 1;
@@ -1592,12 +1618,10 @@ A1: z is Element of NAT by ORDINAL1:def 13;
 A2: f is bijective & (for m, n being Element of NAT holds m <= n
 iff f.m <= f.n) &
    il.(M,z) = f.z by Def12;
-A3: the Instruction-Locations of M = NAT by Def11;
-   then reconsider f2 = id NAT as IL-Function of NAT, STC N
-              by AMI_1:def 36;
+   reconsider f2 = id NAT as IL-Function of NAT, STC N by AMI_1:def 36;
         now let k be Element of NAT;
    A4: f2.(k+1) = k+1 & f2.k = k by FUNCT_1:35;
-   then A5: SUCC f2.k = {k,k+1} by Th24;
+   A5: SUCC f2.k = {k,k+1} by Th24,FUNCT_1:35;
     hence f2.(k+1) in SUCC (f2.k) by A4,TARSKI:def 2;
     let j be Element of NAT; assume
    A6: f2.j in SUCC (f2.k);
@@ -1606,8 +1630,8 @@ A3: the Instruction-Locations of M = NAT by Def11;
     hence k <= j by NAT_1:11;
    end;
    then for m, n being Element of NAT holds m <= n iff f2.m <= f2.n
-                   by A3,Th18;
-   then f = f2 by A2,A3,Th17;
+                   by Th18;
+   then f = f2 by A2,Th17;
  hence il.(STC N, z) = z by A1,A2,FUNCT_1:35;
 end;
 
@@ -1622,7 +1646,7 @@ A1: InsCode i = 1;
    set M = STC N;
    set k = locnum IC s;
 A2: il.(M,k) = k & il.(M,k+1) = k+1 by Th37;
-   reconsider K = IC s as Element of NAT by Def11;
+   reconsider K = IC s as Element of NAT by AMI_1:def 4;
         Exec(i,s).IC STC N = succ IC s by A1,Lm4
                      .= K+1 by NAT_1:39;
  hence Exec(i,s).IC STC N = NextLoc IC s by A2,Def13;
@@ -1640,10 +1664,9 @@ A1:   InsCode i = 1;
    set M = STC N;
    consider k being natural number such that
 A2:   l = il.(M,k) by Th26;
-A3: il.(M,k) = k by Th37;
         k = locnum l by A2,Def13;
    then NextLoc l = k+1 by Th37;
- hence NIC(i, l) = {NextLoc l} by A1,A2,A3,Lm5;
+ hence NIC(i, l) = {NextLoc l} by A1,A2,Th37,Lm5;
 end;
 
 theorem
@@ -1654,9 +1677,8 @@ proof
    set M = STC N;
    consider k being natural number such that
 A1: l = il.(M,k) by Th26;
-A2: l = k by A1,Th37;
 A3: k = locnum l by A1,Def13;
- thus SUCC l = {k,k+1} by A2,Th24
+ thus SUCC l = {k,k+1} by A1,Th37,Th24
    .= {k,il.(M,k+1)} by Th37
    .= {l, NextLoc l} by A1,A3,Th37;
 end;
@@ -1664,7 +1686,7 @@ end;
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
       i be Instruction of S;
  attr i is sequential means
        for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
@@ -1672,13 +1694,15 @@ end;
 
 theorem Th41:
  for S being standard realistic
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      il being Instruction-Location of S,
      i being Instruction of S st i is sequential
   holds NIC(i,il) = {NextLoc il}
   proof
     let S be standard realistic
-         (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+         (IC-Ins-separated definite
+          (non empty stored-program AMI-Struct over NAT,N)),
         il be Instruction-Location of S,
         i be Instruction of S such that
 A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
@@ -1686,6 +1710,8 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
   A2: now assume
      A3: x = NextLoc il;
          consider t being State of S;
+         il in NAT by AMI_1:def 4;
+         then
          reconsider il1 = il as Element of ObjectKind IC S by AMI_1:def 11;
          reconsider I = i as Element of ObjectKind il by AMI_1:def 14;
          reconsider u = t+*((IC S, il)-->(il1, I) qua FinPartState of S)
@@ -1717,25 +1743,26 @@ A1:  for s being State of S holds Exec(i, s).IC S = NextLoc IC s;
 
 theorem Th42:
  for S being realistic standard
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      i being Instruction of S st i is sequential
   holds i is non halting
   proof
     let S be realistic standard (IC-Ins-separated definite
-     (non empty non void AMI-Struct over N)),
+     (non empty stored-program AMI-Struct over NAT,N)),
         i be Instruction of S such that
 A1:   i is sequential;
     consider s being State of S;
-A2: NIC(i,IC s) = {NextLoc IC s} by A1,Th41;
-         IC s <> NextLoc IC s by Th35;
-    then NIC(i,IC s) <> {IC s} by A2,ZFMISC_1:6;
-    hence thesis by Th15;
+    NIC(i,IC s) = {NextLoc IC s} by A1,Th41;
+    then NIC(i,IC s) <> {IC s} by ZFMISC_1:6,Th35;
+   hence thesis by Th15;
   end;
 
 registration
  let N;
  let S be realistic standard
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N));
  cluster sequential -> non halting Instruction of S;
 coherence by Th42;
  cluster halting -> non sequential Instruction of S;
@@ -1765,8 +1792,10 @@ A3:   IC s = l & s.l = i;
 begin :: Closedness of finite partial states
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N);
  let F be FinPartState of S;
  attr F is closed means :Def17:
   for l being Instruction-Location of S st l in dom F
@@ -1780,7 +1809,7 @@ end;
 definition
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N));
+       (non empty stored-program AMI-Struct over NAT,N));
  let F be FinPartState of S;
  attr F is para-closed means
        for s being State of S st F c= s & IC s = il.(S,0)
@@ -1789,12 +1818,14 @@ end;
 
 theorem Th44:
  for S being standard steady-programmed
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N)),
      F being FinPartState of S
  st F is really-closed & il.(S,0) in dom F holds F is para-closed
   proof
     let S be standard steady-programmed
-         (IC-Ins-separated definite (non empty non void AMI-Struct over N)),
+         (IC-Ins-separated definite
+          (non empty stored-program AMI-Struct over NAT,N)),
         F be FinPartState of S such that
 A1:    for s being State of S st F c= s & IC s in dom F
        for k being Element of NAT holds IC (Computation s).k in dom F and
@@ -1806,12 +1837,12 @@ A2:    il.(S,0) in dom F;
 
 theorem Th45:
  for S being IC-Ins-separated definite steady-programmed
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over IL,N),
      F being FinPartState of S
  st F is closed holds F is really-closed
 proof
   let S be IC-Ins-separated definite steady-programmed
-      (non empty non void AMI-Struct over N),
+      (non empty stored-program AMI-Struct over IL,N),
       F be FinPartState of S such that
 A1: F is closed;
  let s be State of S such that
@@ -1834,20 +1865,23 @@ A4: now let k be Element of NAT such that
 end;
 
 registration
+ let IL be non empty set;
  let N be with_non-empty_elements set,
      S be IC-Ins-separated definite steady-programmed
-          (non empty non void AMI-Struct over N);
+          (non empty stored-program AMI-Struct over IL,N);
  cluster closed -> really-closed FinPartState of S;
 coherence by Th45;
 end;
 
 theorem Th46:
  for S being standard realistic halting
-       (IC-Ins-separated definite (non empty non void AMI-Struct over N))
+       (IC-Ins-separated definite
+        (non empty stored-program AMI-Struct over NAT,N))
   holds il.(S,0) .--> halt S is closed
   proof
     let S be standard realistic halting
-        (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+        (IC-Ins-separated definite
+         (non empty stored-program AMI-Struct over NAT,N));
     set F = il.(S,0) .--> halt S;
 A1: dom F = {il.(S,0)} by FUNCOP_1:19;
     let l be Instruction-Location of S;
@@ -1860,8 +1894,10 @@ then A3: l = il.(S,0) by A1,TARSKI:def 1;
 end;
 
 definition
+ let IL be non empty set;
  let N be with_non-empty_elements set;
- let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+ let S be IC-Ins-separated definite
+  (non empty stored-program AMI-Struct over IL,N);
  let F be FinPartState of S;
  attr F is lower means :Def20:
  for l being Instruction-Location of S st l in dom F
@@ -1878,8 +1914,10 @@ theorem Th47:
   end;
 
 registration
+ let IL be non empty set;
   let N be with_non-empty_elements set,
-      S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
+      S be IC-Ins-separated definite
+       (non empty stored-program AMI-Struct over IL,N);
  cluster empty -> lower FinPartState of S;
 coherence by Th47;
 end;
@@ -1904,7 +1942,7 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
  cluster lower non empty trivial programmed FinPartState of S;
  existence proof
   consider i being Instruction of S;
@@ -1920,17 +1958,17 @@ theorem Th49:
     let F be lower non empty programmed FinPartState of T;
     consider l being set such that
 A1:   l in dom F by XBOOLE_0:def 1;
-         dom F c= the Instruction-Locations of T by AMI_1:def 40;
+X:  dom F c= NAT by AMI_1:def 40;
     then reconsider l as Instruction-Location of T by A1,AMI_1:def 4;
     consider f being IL-Function of NAT, T such that
 A2:   f is bijective and
 A3:   for m, n being Element of NAT holds m <= n iff f.m <= f.n and
 A4:   il.(T,0) = f.0 by Def12;
          f is onto by A2,FUNCT_2:def 4;
-    then rng f = the Instruction-Locations of T by FUNCT_2:def 3;
+    then rng f = NAT by FUNCT_2:def 3;
     then consider x being set such that
 A5:   x in dom f and
-A6:   l = f.x by FUNCT_1:def 5;
+A6:   l = f.x by FUNCT_1:def 5,A1,X;
     reconsider x as Element of NAT by A5;
          0 <= x by NAT_1:2;
     then f.0 <= f.x by A3;
@@ -1950,7 +1988,7 @@ A1: now
       let x be set;
       assume
 A2:     x in dom P;
-           dom P c= the Instruction-Locations of T by AMI_1:def 40;
+      dom P c= NAT by AMI_1:def 40;
       then reconsider l=x as Instruction-Location of T by A2,AMI_1:def 4;
       consider n being natural number such that
 A3:     l = il.(T,n) by Th26;
@@ -1972,11 +2010,11 @@ then A8:   il.(T,b) <= il.(T,a) by Th28;
     end;
     then reconsider A as Cardinal by A6,FUNCT_7:22;
 A9: z is Element of NAT by ORDINAL1:def 13;
-then A10: Card z = z & Card card P = card P by CARD_1:66;
+A10: Card z = z & Card card P = card P by CARD_1:66;
 A11:Card A = A by CARD_1:def 5;
     hereby
       assume z < card P;
-      then Card z in Card card P by A9,NAT_1:42;
+      then Card z in Card card P by NAT_1:42;
       then z in card dom P by A10,PRE_CIRC:21;
       then z in Card A by A5,CARD_1:21;
       then ex d being Element of NAT st d = z & il.(T,d) in dom P by A11;
@@ -1986,13 +2024,13 @@ A11:Card A = A by CARD_1:def 5;
     then z in Card A by A9,A11;
     then z in card dom P by A5,CARD_1:21;
     then Card z in Card card P by A10,PRE_CIRC:21;
-    hence z < card P by A9,NAT_1:42;
+    hence z < card P by NAT_1:42;
   end;
 
 definition
  let N be with_non-empty_elements set;
  let S be standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N));
+        (non empty stored-program AMI-Struct over NAT,N));
  let F be non empty programmed FinPartState of S;
  func LastLoc F -> Instruction-Location of S means :Def21:
   ex M being finite non empty natural-membered set st
@@ -2007,7 +2045,7 @@ definition
  A1: dom F is finite;
  A2: M is finite from AMI_1:sch 1(A1);
     consider l being Element of dom F;
-         l in dom F & dom F c= the Instruction-Locations of S by AMI_1:def 40;
+         l in dom F & dom F c= NAT by AMI_1:def 40;
     then reconsider l as Instruction-Location of S by AMI_1:def 4;
 A3:  locnum l in M;
          M c= NAT proof let k be set; assume k in M;
@@ -2097,7 +2135,7 @@ A2:   LastLoc F = LastLoc G;
       let x be set;
       assume
 A3:     x in dom G;
-           dom G c= the Instruction-Locations of T by AMI_1:def 40;
+           dom G c= NAT by AMI_1:def 40;
       then reconsider x as Instruction-Location of T by A3,AMI_1:def 4;
 A4:   x <= LastLoc F by A2,A3,Th53;
            LastLoc F in dom F by Th51;
@@ -2120,8 +2158,7 @@ then A3: k <= card F -' 1 by BINARITH:67;
     per cases by A3,REAL_1:def 5;
     suppose k < card F -' 1;
 then A4: k+1 < card F -' 1 + 1 by XREAL_1:8;
-         card F <> 0 by CARD_2:59;
-    then card F >= 1 by NAT_1:14;
+    card F >= 1 by NAT_1:14,CARD_2:59;
     then k+1 < card F by A4,BINARITH:53;
     then il.(T,k+1) in dom F by Th50;
     then il.(T,k+1) <= LastLoc F by Th53;
@@ -2138,7 +2175,7 @@ then A5: k+1 <= k by A2,Th28;
 registration
  let N be with_non-empty_elements set,
      S be standard steady-programmed (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster really-closed lower non empty programmed -> para-closed
                                                      FinPartState of S;
 coherence
@@ -2153,9 +2190,9 @@ A1:   F is really-closed;
 end;
 
 Lm7: now
- let N;
+ let IL,N;
  let S be standard halting (IC-Ins-separated definite
-  (non empty non void AMI-Struct over N));
+  (non empty stored-program AMI-Struct over NAT,N));
   set F = il.(S,0) .--> halt S;
 A1: dom F = {il.(S,0)} by FUNCOP_1:19;
 then A2: card dom F = 1 by CARD_1:79;
@@ -2172,7 +2209,7 @@ end;
 definition
  let N be with_non-empty_elements set,
      S be standard halting (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N)),
+          (non empty stored-program AMI-Struct over NAT,N)),
      F be non empty programmed FinPartState of S;
  attr F is halt-ending means
        F.(LastLoc F) = halt S;
@@ -2184,7 +2221,7 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting (IC-Ins-separated definite
-       (non empty non void AMI-Struct over N));
+       (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt trivial (lower non empty programmed
          FinPartState of S);
 existence
@@ -2202,7 +2239,7 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster trivial closed lower non empty programmed FinPartState of S;
 existence
   proof
@@ -2216,7 +2253,7 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic (IC-Ins-separated
-       definite (non empty non void AMI-Struct over N));
+       definite (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt trivial closed (lower non empty programmed
          FinPartState of S);
 existence
@@ -2234,7 +2271,8 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard halting realistic steady-programmed
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
  cluster halt-ending unique-halt autonomic trivial closed
          (lower non empty programmed FinPartState of S);
 existence
@@ -2252,7 +2290,7 @@ end;
 definition
  let N be with_non-empty_elements set;
  let S be standard halting (IC-Ins-separated definite
-          (non empty non void AMI-Struct over N));
+          (non empty stored-program AMI-Struct over NAT,N));
  mode pre-Macro of S is halt-ending unique-halt (lower non empty programmed
                         FinPartState of S);
 end;
@@ -2260,7 +2298,8 @@ end;
 registration
  let N be with_non-empty_elements set;
  let S be standard realistic halting
-          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
+          (IC-Ins-separated definite
+           (non empty stored-program AMI-Struct over NAT,N));
  cluster closed pre-Macro of S;
 existence
   proof
@@ -2276,5 +2315,29 @@ existence
     take F;
     thus F is closed by Th46;
   end;
+end;
+
+theorem
+ for i being Instruction of Trivial-AMI(IL,N) holds i is halting
+proof
+ let i be Instruction of Trivial-AMI(IL,N);
+   set M = Trivial-AMI(IL,N);
+A2: the Instructions of M = {[0,{}]} by AMI_1:def 2;
+ let s be State of M;
+   the Object-Kind of M = (IL --> {[0,{}]}) +* (IL .--> IL) by AMI_1:def 2;
+  then (the Execution of M).i =
+  ([0,{}] .--> id product the Object-Kind of M).i by AMI_1:def 2
+     .= id product the Object-Kind of M by A2,FUNCOP_1:13;
+ hence Exec(i,s) = s by FUNCT_1:35;
+end;
+
+theorem
+ for i being Element of the Instructions of Trivial-AMI(IL,N) holds
+   InsCode i = 0
+proof
+ let i be Element of the Instructions of Trivial-AMI(IL,N);
+      the Instructions of Trivial-AMI(IL,N) = {[0,{}]} by AMI_1:def 2;
+ then i = [0,{}] by TARSKI:def 1;
+ hence thesis by MCART_1:def 1;
 end;
 

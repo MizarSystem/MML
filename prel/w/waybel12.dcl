@@ -36,6 +36,7 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="FUNCT_7"/>
@@ -148,7 +149,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="27">
+<Typ kind="M" nr="29">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -176,7 +177,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="135">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -205,7 +206,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="18"/>
 <Adjective nr="41"/>
-<Adjective nr="136">
+<Adjective nr="139">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -218,7 +219,7 @@
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="115"/>
-<Adjective nr="123"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -238,7 +239,7 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="128">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -259,7 +260,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="135">
+<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -312,7 +313,7 @@
 <Adjective nr="78">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="128">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -337,7 +338,7 @@
 <Adjective nr="20" value="false"/>
 <Adjective nr="52"/>
 <Adjective nr="54"/>
-<Adjective nr="123"/>
+<Adjective nr="126"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -355,7 +356,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="128">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

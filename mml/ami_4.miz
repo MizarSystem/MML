@@ -12,9 +12,11 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, FUNCT_2, INT_1, NAT_1, NAT_D, FUNCOP_1, INT_2, STRUCT_0,
       PARTFUN1, AMI_1, AMI_3, XXREAL_0;
- constructors ENUMSET1, FRAENKEL, XXREAL_0, NAT_1, NAT_D, INT_2, SEQ_1, AMI_3;
+ constructors ENUMSET1, FRAENKEL, XXREAL_0, NAT_1, NAT_D, INT_2, SEQ_1, AMI_3,
+      PARTFUN1, DOMAIN_1;
  registrations SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_3, AMI_1, XBOOLE_0;
+      XREAL_0, NAT_1, INT_1, CARD_3, STRUCT_0, AMI_3, AMI_1, XBOOLE_0,
+      PARTFUN1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCOP_1, AMI_1, TARSKI, AMI_3;
  theorems AMI_1, INT_1, ABSVALUE, INT_2, TARSKI, ENUMSET1, NAT_1, FUNCOP_1,
@@ -132,12 +134,7 @@ definition
    ((il.2 .--> (dl.0 := dl.2)) +*
     ((il.3 .--> (dl.1 >0_goto il.0)) +*
      (il.4 .--> halt SCM))));
- coherence
-  proof
-    set EA3 = (il.3 .--> (b >0_goto il.0)) +* (il.4 .--> halt SCM);
-    set EA2 = (il.2 .--> (a := dl.2)) +* EA3;
-    thus thesis;
-  end;
+ coherence;
  correctness;
 end;
 
@@ -494,6 +491,7 @@ A3: s.a = x and
 A4: s.b = y and
 A5: x > 0 and
 A6: y > 0;
+B6: abs y = y by A6,ABSVALUE:def 1;
       now per cases by XXREAL_0:1;
    case x > y;
     hence (Result s).a = x gcd y by A1,A2,A3,A4,A6,Lm5;
@@ -511,8 +509,8 @@ A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
      then IC s' = il.4 by A1,A2,A3,A4,A5,A6,A9,Lm3;
      then s halts_at IC s' by A2,Lm2;
     hence (Result s).a = s'.a by AMI_1:87 .= y by A1,A2,A3,A4,A5,A6,A9,Lm4
-       .= abs(x) hcf abs(y) by A6,A7,ABSVALUE:def 1
-       .= x gcd y by INT_2:def 3;
+       .= abs(x) hcf abs(y) by A6,B6,A7,NAT_D:32
+       .= x gcd y by INT_2:51;
    end;
    case
 A10:  y > x;
@@ -553,9 +551,9 @@ A1: for p,q1,q2 being set st P[p,q1] & P[p,q2] holds q1=q2
 A2:    x1 > 0 & y1 > 0 &  p = (a,b) --> (x1,y1) & q1 = a .--> (x1 gcd y1);
      given x2,y2 being Integer such that
 A3:    x2 > 0 & y2 > 0 &  p = (a,b) --> (x2,y2) & q2 = a .--> (x2 gcd y2);
-A4:    x1 = ((a,b) --> (x1,y1)).a by Lm1,FUNCT_4:66
-        .= x2 by A2,A3,Lm1,FUNCT_4:66;
-        y1 = ((a,b) --> (x1,y1)).b by FUNCT_4:66 .= y2 by A2,A3,FUNCT_4:66
+A4:    x1 = ((a,b) --> (x1,y1)).a by FUNCT_4:66,Lm1
+        .= x2 by A2,A3,FUNCT_4:66,Lm1;
+       y1 = ((a,b) --> (x1,y1)).b by FUNCT_4:66 .= y2 by A2,A3,FUNCT_4:66
 ;
      hence q1 = q2 by A2,A3,A4;
     end;
@@ -568,12 +566,12 @@ A6:  dom f c= FinPartSt SCM
        then [e,f.e] in f by FUNCT_1:8;
       hence e in FinPartSt SCM by A5;
      end;
-        rng f c= FinPartSt SCM
+       rng f c= FinPartSt SCM
      proof let q be set;
       assume q in rng f;
        then consider p being set such that
 A7:     [p,q] in f by RELAT_1:def 5;
-           ex x,y being Integer st
+          ex x,y being Integer st
         x > 0 & y > 0 &p = (a,b) --> (x,y) & q = a .--> (x gcd y) by A5,A7;
       hence q in FinPartSt SCM;
      end;
@@ -587,7 +585,8 @@ A7:     [p,q] in f by RELAT_1:def 5;
    given x,y being Integer such that
 A8:   x > 0 & y > 0 &
      p = (a,b) --> (x,y) & q = a .--> (x gcd y);
-   thus [p,q] in f by A5,A8;
+       p in FinPartSt SCM;
+   hence [p,q] in f by A5,A8;
   end;
  uniqueness
   proof
@@ -596,7 +595,29 @@ A8:   x > 0 & y > 0 &
    let IT1,IT2 be PartFunc of FinPartSt SCM, FinPartSt SCM such that
 A9: for p,q being FinPartState of SCM holds [p,q] in IT1 iff P[p,q] and
 A10: for p,q being FinPartState of SCM holds [p,q] in IT2 iff P[p,q];
-   thus IT1 = IT2 from RELSET_1:sch 4(A9,A10);
+B9: for p,q being Element of FinPartSt SCM holds [p,q] in IT1 iff P[p,q]
+     proof let p,q being Element of FinPartSt SCM;
+      thus [p,q] in IT1 implies P[p,q]
+       proof assume
+Z:       [p,q] in IT1;
+         reconsider p,q as FinPartState of SCM by AMI_1:125;
+         P[p,q] by Z,A9;
+        hence thesis;
+       end;
+      thus thesis by A9;
+     end;
+B10: for p,q being Element of FinPartSt SCM holds [p,q] in IT2 iff P[p,q]
+     proof let p,q being Element of FinPartSt SCM;
+      thus [p,q] in IT2 implies P[p,q]
+       proof assume
+Z:       [p,q] in IT2;
+         reconsider p,q as FinPartState of SCM by AMI_1:125;
+         P[p,q] by Z,A10;
+        hence thesis;
+       end;
+      thus thesis by A10;
+     end;
+   thus IT1 = IT2 from RELSET_1:sch 4(B9,B10);
   end;
 end;
 
@@ -611,7 +632,10 @@ A2: dom Euclide-Function c= FinPartSt SCM by RELSET_1:12;
 A3:  p in dom Euclide-Function;
    then p in FinPartSt SCM & Euclide-Function.p in FinPartSt SCM
       by A2,PARTFUN1:27;
-   then ex x,y being Integer st x > 0 & y > 0 &
+   then p is FinPartState of SCM & Euclide-Function.p is FinPartState of SCM
+                   by AMI_1:125;
+  then
+   ex x,y being Integer st x > 0 & y > 0 &
     p = (a,b) --> (x,y) & Euclide-Function.p = a .--> (x gcd y)
      by A1,A3,Def2;
    hence ex x,y being Integer st x > 0 & y > 0 & p = (a,b) --> (x,y);
@@ -727,14 +751,16 @@ A33:   Cs.0 = s1 & Cs2.0 = s2 by AMI_1:def 19;
      thus (Cs.0).a = (Cs2.0).a &
           (Cs.0).b = (Cs2.0).b by A17,A21,A27,A33;
     end;
-A34: for i,j st P[4*i] & j<>0 & j<=4 holds P[4*i+j] proof let i,j;
+A34: for i,j being Nat st P[4*i] & j<>0 & j<=4 holds P[4*i+j]
+    proof let i,j be Nat;
      assume that
 A35:   (Cs.(4*i)).IC SCM = (Cs2.(4*i)).IC SCM and
 A36:   (Cs.(4*i)).a = (Cs2.(4*i)).a and
 A37:   (Cs.(4*i)).b = (Cs2.(4*i)).b;
      assume j <> 0 & j <= 4;
 then A38:   j = 1 or j = 2 or j = 3 or j = 4 by NAT_1:29;
-     per cases by A1,A25,A26,A27,Lm3;
+X:   i in NAT & j in NAT by ORDINAL1:def 13;
+     per cases by A1,A25,A26,A27,Lm3,X;
      suppose
 A39:   IC Cs2.(4*i) = il.0;
 A40:   4*i + 1 + 1 = 4*i + (1 + 1);

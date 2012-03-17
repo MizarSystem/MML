@@ -6,12 +6,14 @@
 
 environ
 
- vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM;
- notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1;
- constructors XXREAL_0, NAT_1, INT_1;
+ vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM, INT_2, ABSVALUE;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, INT_2;
+ constructors XXREAL_0, NAT_1, INT_1, INT_2, REAL_1;
  registrations XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, XBOOLE_0;
+ definitions INT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- theorems REAL_1, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_1, INT_1;
+ theorems REAL_1, ORDINAL1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_1, INT_1, INT_2,
+    ABSVALUE;
  schemes NAT_1;
 
 begin
@@ -21,14 +23,12 @@ reserve p,k,l,m,n,s,h,i,j,t for Nat;
 :: Exact division and rest of division
 
 Lm1: now let k,l;
-   0 <= k div l by INT_1:82;
-  then k div l in NAT by INT_1:16;
+   k div l in NAT by INT_1:16,82;
   hence k div l is Nat by ORDINAL1:def 13;
 end;
 
 Lm2: now let k,l;
-     0 <= k mod l by INT_1:84;
-    then k mod l in NAT by INT_1:16;
+     k mod l in NAT by INT_1:16,84;
     hence k mod l is Nat by ORDINAL1:def 13;
   end;
 
@@ -48,11 +48,12 @@ proof
 A1: l > 0;
 then A2: k = l * (k div l) + (k mod l) by INT_1:86;
 A3: k mod l is Nat by Lm2;
-A4: k mod l < l by A1,INT_1:85;
     hence r = k div l implies
-    ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0 by A2,A3;
+    (ex t being Nat st k = l * r + t & t < l) or r = 0 & l = 0
+       by A2,A1,INT_1:85;
     assume
 A5: ( ex t being Nat st k = l * r + t & t < l ) or r = 0 & l = 0;
+A4: k mod l < l by A1,INT_1:85;
      k div l is Nat by Lm1;
     hence r = k div l by A2,A3,A4,A5,NAT_1:18;
   end;
@@ -75,11 +76,12 @@ proof
   suppose
 A1: l > 0;
 then A2: k = l * (k div l) + (k mod l) by INT_1:86;
-A3: k mod l < l by A1,INT_1:85;
     hence r = k mod l implies
-    ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0 by A2;
+    ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0
+              by A1,INT_1:85;
     assume
 A4: ( ex t being Nat st k = l * t + r & r < l ) or r = 0 & l = 0;
+A3: k mod l < l by A1,INT_1:85;
      k mod l is Nat by Lm2;
     hence r = k mod l by A2,A3,A4,NAT_1:18;
   end;
@@ -272,63 +274,29 @@ then A3:    j = h * (j div h) + (j mod h) by INT_1:86;
 :: The least common multiple and the greatest common divisor
 
 definition let k,n be Nat;
-  func k lcm n -> Nat means
+  redefine func k lcm n means
 :Def4:  k divides it & n divides it &
   for m being Nat st k divides m & n divides m holds it divides m;
-   existence
-    proof
-A1:    now assume
-A2:      k = 0 or n = 0;
-       take w = 0;
-       thus k divides w & n divides w by Th6;
-       let m be Nat; assume k divides m & n divides m;
-       hence w divides m by A2;
+  compatibility
+   proof let IT be Nat;
+    thus IT = k lcm n implies k divides IT & n divides IT &
+      for m being Nat st k divides m & n divides m holds IT divides m
+         by INT_2:def 2;
+    assume that
+Z1:  k divides IT & n divides IT and
+Z2:  for m being Nat st k divides m & n divides m holds IT divides m;
+     for m being Integer st k divides m & n divides m holds IT divides m
+      proof let m be Integer;
+        m in INT by INT_1:def 2;
+        then consider i being Element of NAT such that
+W:       m = i or m = -i by INT_1:def 1;
+       assume k divides m & n divides m;
+        then k divides i & n divides i by W,INT_2:14;
+        then IT divides i by Z2;
+       hence IT divides m by W,INT_2:14;
       end;
-          now assume
-A3:      k <> 0 & n <> 0;
-      reconsider k1=k, n1=n as Element of NAT by ORDINAL1:def 13;
-      A4:      k1 divides k1 * n1 & n1 divides k1 * n1 by Def3;
-      defpred P[Nat] means k divides $1 & n divides $1 & k <= $1;
-            0 <= n; then 0 + 1 <= n by A3,NAT_1:13;
-        then k * 1 <= k * n by NAT_1:4;
-then A5:  ex m being Nat st P[m] by A4;
-       consider l being Nat such that
-A6:      P[l] & for m being Nat st P[m] holds l <= m
-          from NAT_1:sch 5(A5);
-       take l;
-       thus k divides l & n divides l by A6;
-       let m be Nat such that
-A7:      k divides m & n divides m;
-            now A8: 0 <= k;
-then A9:        m = l * (m div l) + (m mod l) by A3,A6,INT_1:86;
-              l = k * (l div k) & l = n * (l div n) by A6,Th3;
-          then l * (m div l) = k * ((l div k) * (m div l)) &
-           l * (m div l) = n * ((l div n) * (m div l)) by XCMPLX_1:4;
-          then k divides l * (m div l) & n divides l * (m div l) by Def3;
-then A10:        k divides m mod l & n divides m mod l by A7,A9,Th10;
-              now assume
-A11:          m mod l <> 0;
-                0 <= m mod l;
-            then k <= m mod l by A10,A11,Th7;
-           then l <= m mod l by A6,A10;
-           hence contradiction by A3,A6,A8,Th1;
-          end; hence l divides m by A9,Th3;
-        end;
-       hence l divides m;
-      end;
-     hence thesis by A1;
-    end;
-   uniqueness
-    proof let m1,m2 be Nat such that
-A12:  k divides m1 & n divides m1 & for m being Nat st k divides m & n divides
- m holds m1 divides m and
-A13: k divides m2 & n divides m2 & for m being Nat st k divides m & n divides
- m holds m2 divides m;
-   m1 divides m2 & m2 divides m1 by A12,A13;
-     hence m1 = m2 by Th5;
-    end;
-    idempotence;
-    commutativity;
+    hence IT = k lcm n by Z1,INT_2:def 2;
+   end;
 end;
 
 definition let k,n be Nat;
@@ -336,61 +304,34 @@ definition let k,n be Nat;
   coherence by ORDINAL1:def 13;
 end;
 
+notation let k,n be Nat;
+ synonym k hcf n for k gcd n;
+end;
+
 definition let k,n be Nat;
-  func k hcf n -> Nat means
+  redefine func k hcf n means
 :Def5:  it divides k & it divides n &
     for m being Nat st m divides k & m divides n holds m divides it;
-   existence
-    proof
-       defpred P[Nat] means $1 divides k & $1 divides n;
-          1 divides k & 1 divides n by Th6;
-then A1:    ex m being Nat st P[m];
-A2:    now assume
-A3:     k = 0;
-       take m = n;
-       thus m divides k & m divides n by A3,Th6;
-       let l be Nat; assume l divides k & l divides n;
-       hence l divides m;
+  compatibility
+   proof let IT be Nat;
+    thus IT = k gcd n implies IT divides k & IT divides n &
+      for m being Nat st m divides k & m divides n holds m divides IT
+         by INT_2:def 3;
+    assume that
+Z1:  IT divides k & IT divides n and
+Z2:  for m being Nat st m divides k & m divides n holds m divides IT;
+     for m being Integer st m divides k & m divides n holds m divides IT
+      proof let m be Integer;
+        m in INT by INT_1:def 2;
+        then consider i being Element of NAT such that
+W:       m = i or m = -i by INT_1:def 1;
+       assume m divides k & m divides n;
+        then i divides k & i divides n by W,INT_2:14;
+        then i divides IT by Z2;
+       hence m divides IT by W,INT_2:14;
       end;
-       now assume
-A4:     k <> 0;
-         0 <= k;
-        then A5: for m being Nat st P[m] holds m <= k by A4,Th7;
-       consider m being Nat such that
-A6:    P[m] & for l being Nat st P[l] holds l <= m
-       from NAT_1:sch 6(A5,A1);
-       take m;
-       thus m divides k & m divides n by A6;
-       let l be Nat;
-       assume l divides k & l divides n;
-then A7:      l lcm m divides k & l lcm m divides n by A6,Def4;
-then A8:      l lcm m <= m by A6;
-            m <= l lcm m
-         proof
-A9:        m divides l lcm m by Def4;
-A10:        now assume l lcm m = 0;
-             then k = 0 * (k div 0) by A7,Th3;
-            hence contradiction by A4;
-           end;
-               0 <= l lcm m;
-          hence thesis by A9,A10,Th7;
-         end;
-       then l lcm m = m by A8,XXREAL_0:1;
-       hence l divides m by Def4;
-      end;
-     hence thesis by A2;
-    end;
-   uniqueness
-    proof let m1,m2 be Nat such that
-A11:  m1 divides k & m1 divides n & for m being Nat st m divides k & m divides
- n holds m divides m1 and
-A12: m2 divides k & m2 divides n & for m being Nat st m divides k & m divides
- n holds m divides m2;
-   m1 divides m2 & m2 divides m1 by A11,A12;
-     hence m1 = m2 by Th5;
-    end;
-    idempotence;
-    commutativity;
+    hence IT = k gcd n by Z1,INT_2:def 3;
+   end;
 end;
 
 definition let k,n be Nat;
@@ -406,8 +347,7 @@ A2:   Q(0) = a() & Q(1) = b() and
 A3:   for n being Element of NAT holds Q(n + 2) = Q(n) mod Q(n + 1)
   proof
      defpred P[Nat] means ex n being Element of NAT st $1 = Q(n);
-      a() in NAT by ORDINAL1:def 13;
-     then A4:  ex k being Nat st P[k] by A2;
+     A4:  ex k being Nat st P[k] by A2;
 A5:  for k being Nat st k <> 0 & P[k]
      ex n being Nat st n < k & P[n]
      proof let k be Nat; assume
@@ -736,7 +676,7 @@ end;
 
 :: Moved from SCMP_GCD by AK on 28.12.2006
 
-theorem
+theorem Th28:
    m > 0 implies n hcf m = m hcf (n mod m)
 proof
    set r=n mod m,
@@ -758,8 +698,6 @@ end;
 
 :: from AMI_3, 2007.06.14, A.T.
 
-reserve i,j for Element of NAT;
-
 scheme INDI{ k,n() -> Element of NAT, P[set] }:
      P[n()]
 provided
@@ -768,15 +706,14 @@ provided
  A3: for i,j st P[k()*i] & j <> 0 & j <= k() holds
      P[k()*i+j]
 proof
-   defpred R[Element of NAT] means P[k()*$1];
+   defpred R[Nat] means P[k()*$1];
 A4: R[0] by A1;
 A5: now let i; assume
 A6:  R[i];
          k()*(i+1) = k()*i + k();
     hence R[i+1] by A2,A3,A6;
    end;
-  A7: for i holds R[i] from NAT_1:sch 1(A4,A5);
-then A8: P[k()*(n() div k())];
+  A7: for i holds R[i] from NAT_1:sch 2(A4,A5);
   per cases;
   suppose n() mod k() = 0;
    then n() = k() * (n() div k()) + 0 by A2,INT_1:86;
@@ -786,7 +723,97 @@ then A8: P[k()*(n() div k())];
 A9: n() mod k() <> 0;
 A10: n() = k() * (n() div k()) + (n() mod k()) by A2,INT_1:86;
        n() mod k() <= k() by A2,Th1;
-  hence thesis by A3,A8,A9,A10;
+  hence thesis by A3,A7,A9,A10;
  end;
  end;
+
+:: moved from INT_2, 2007.11.7, A.T,
+
+theorem
+   i*j = (i lcm j)*(i hcf j)
+   proof
+     A1: i<>0 & j<>0 implies i*j = (i lcm j)*(i hcf j)
+     proof
+      assume A2: i<>0 & j<>0;
+A3:   i divides i implies i divides i*j by Th9;
+          j divides j implies j divides j*i by Th9;
+      then (i lcm j) divides i*j by A3,Def4;
+      then consider c being Nat such that
+      A4: i*j = (i lcm j)*c by Def3;
+      A5: i divides (i lcm j) & j divides (i lcm j) by Def4;
+      then consider d being Nat such that
+      A6: (i lcm j) = i*d by Def3;
+      consider e being Nat such that
+      A7: (i lcm j) = j*e by A5,Def3;
+       i*j = i*(c*d) by A4,A6;
+      then A8: j = c*d by A2,XCMPLX_1:5;
+       i*j = j*(c*e) by A4,A7;
+      then i = c*e by A2,XCMPLX_1:5;
+      then A9:c divides i & c divides j by A8,Def3;
+       for f being Nat holds
+      f divides i & f divides j implies f divides c
+       proof
+         let f be Nat;
+        assume A10: f divides i & f divides j;
+        then consider g being Nat such that
+        A11: i = f*g by Def3;
+        consider h being Nat such that
+        A12: j = f*h by A10,Def3;
+        A13: j*g = g*h*f by A12;
+            i*h = g*h*f by A11;
+        then i divides g*h*f & j divides g*h*f by A13,Def3;
+        then (i lcm j) divides g*h*f by Def4;
+        then consider z being Nat such that A14: g*h*f = (i lcm j)*z
+        by Def3;
+        A15: c*(i lcm j) = (g*(h*f))*f by A4,A11,A12
+                     .= (i lcm j)*z*f by A14
+                     .= (z*f)*(i lcm j);
+         (i lcm j) <> 0 by A2,INT_2:4;
+        then c = f*z by A15,XCMPLX_1:5;
+        hence thesis by Def3;
+       end;
+      hence thesis by A4,A9,Def5;
+     end;
+      i = 0 or j = 0 implies i*j = (i lcm j)*(i hcf j)
+     proof
+      assume A16: i = 0 or j = 0;
+      then i*j = 0*(i hcf j)
+      .= (i lcm j)*(i hcf j) by A16,INT_2:4;
+      hence thesis;
+     end;
+    hence thesis by A1;
+   end;
+
+:: from from SCMP_GCD, 2007.07.26, A.T.
+
+theorem
+  for i,j being Integer st i>=0 & j>0 holds
+      i gcd j= j gcd (i mod j)
+proof
+   let i,j be Integer;
+   assume A1: i>=0 & j>0;
+then A2: abs(j)> 0 by ABSVALUE:def 1;
+A3: abs(i) mod abs(j) >= 0 by NAT_1:2;
+    thus i gcd j = abs(i) hcf abs(j) by A1,INT_2:51
+         .=abs(j) hcf (abs(i) mod abs(j)) by A2,Th28
+         .=abs(j) hcf abs(abs(i) mod abs(j)) by A3,ABSVALUE:def 1
+         .=j gcd (abs(i) mod abs(j)) by A1,INT_2:51
+         .=j gcd (i mod j) by A1,INT_2:49;
+end;
+
+:: ???, 2007.07.26, A.T.
+
+theorem
+ i lcm i = i
+  proof
+    for m being Nat st i divides m & i divides m holds i divides m;
+   hence thesis by Def4;
+  end;
+
+theorem
+ i gcd i = i
+  proof
+    for m being Nat st m divides i & m divides i holds m divides i;
+   hence thesis by Def5;
+  end;
 

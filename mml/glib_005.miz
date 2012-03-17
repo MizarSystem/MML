@@ -17,60 +17,19 @@ environ
       FINSET_1, NAT_1, NAT_D, FUNCOP_1, FUNCT_4, PRE_CIRC, SEQM_3, GLIB_000,
       GLIB_001, ABIAN, GLIB_002, GLIB_003, GLIB_004;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, REAL_1, NAT_D, BINOP_2, PRE_CIRC,
-      GRAPH_2, GRAPH_5, UPROOTS, GLIB_004;
+      GRAPH_2, GRAPH_5, UPROOTS, GLIB_004, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, FINSEQ_1, RFINSEQ,
       GLIB_000, ABIAN, POLYNOM1, BAGORDER, GLIB_001, GLIB_002, GLIB_003,
-      GLIB_004, SEQM_3;
+      GLIB_004, SEQM_3, VALUED_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions GLIB_000, GLIB_003, FUNCOP_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCT_1,
       FUNCT_2, FUNCT_4, GLIB_000, GLIB_001, GLIB_003, GLIB_004, GRAPH_5,
       HEYTING3, INT_1, NAT_1, PBOOLE, PEPIN, POLYNOM1, REAL_1, RELAT_1, SEQ_1,
       SEQM_3, TARSKI, UPROOTS, XBOOLE_0, XBOOLE_1, XREAL_0, ZFMISC_1, XREAL_1,
-      XXREAL_0, ORDINAL1, NAT_D;
+      XXREAL_0, ORDINAL1, NAT_D, VALUED_0;
  schemes BINARITH, NAT_1, SUBSET_1, FINSEQ_1, FUNCT_1, RECDEF_1, GRAPH_5;
-
-begin ::Preliminary theorems
-
-registration let x be set, y be real number;
-  cluster x.-->y -> real-yielding;
-  coherence proof
-A1: rng (x.-->y) = {y} by FUNCOP_1:14;
-     y in REAL by XREAL_0:def 1;
-    then rng (x.-->y) c= REAL by A1,ZFMISC_1:37;
-    hence thesis by SEQ_1:def 1;
-  end;
-end;
-
-registration let x be set, y be natural number;
-  cluster x --> y -> natural-yielding;
-  coherence proof
-     now per cases;
-      suppose x = {};
-        then rng (x --> y) = {} by FUNCOP_1:16;
-        hence rng (x-->y) c= NAT by XBOOLE_1:2;
-      end;
-      suppose x <> {};
-    then A1: rng (x --> y) = {y} by FUNCOP_1:14;
-         y in NAT by ORDINAL1:def 13;
-        hence rng (x-->y) c= NAT by A1,ZFMISC_1:37;
-      end;
-    end;
-    hence thesis by SEQM_3:def 8;
-  end;
-end;
-
-registration let f,g be real-yielding Function;
-  cluster f +* g -> real-yielding;
-  coherence proof
-A1: rng (f +* g) c= rng f \/ rng g by FUNCT_4:18;
-     rng f c= REAL & rng g c= REAL by SEQ_1:def 1;
-    then rng f \/ rng g c= REAL by XBOOLE_1:8;
-    then rng (f +* g) c= REAL by A1,XBOOLE_1:1;
-    hence thesis by SEQ_1:def 1;
-  end;
-end;
 
 begin ::Preliminaries definitions for Maximum Flow Algorithm
 
@@ -136,7 +95,7 @@ registration
 then A1: the_Weight_of G is natural-yielding by Def3;
      now let y be set; assume
     A2: y in rng the_Weight_of G;
-         rng the_Weight_of G c= NAT by A1,SEQM_3:def 8;
+         rng the_Weight_of G c= NAT by A1,VALUED_0:def 6;
         then reconsider y'=y as Element of NAT by A2;
          y' is Real & y' >= 0;
         hence y in Real>=0 by GRAPH_5:def 12;
@@ -608,19 +567,11 @@ A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
     then for n being Nat holds IT.n is _Graph;
     then reconsider IT as GraphSeq by GLIB_000:def 55;
      for n being Nat holds
-      IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]
-    proof
-      let n be Nat;  n in NAT by ORDINAL1:def 13;
-      hence thesis by A7;
-    end;
+      IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled] by A7;
     then reconsider IT as WEVGraphSeq
       by GLIB_003:def 24,def 25,def 26;
      for n being Nat holds IT.n is real-weighted &
-      IT.n is real-elabeled
-    proof
-      let n be Nat;  n in NAT by ORDINAL1:def 13;
-      hence thesis by A7;
-    end;
+      IT.n is real-elabeled by A7;
     then reconsider IT as real-weighted real-elabeled WEVGraphSeq
       by GLIB_003:def 27,def 29;
     take IT;
@@ -2342,7 +2293,7 @@ Def20;
        hence y in REAL;
     end;
     then rng F c= REAL by TARSKI:def 3;
-    hence F is real-yielding by SEQ_1:def 1;
+    hence F is real-yielding by VALUED_0:def 3;
   end;
 end;
 
@@ -2396,7 +2347,7 @@ Def20;
        hence y in NAT;
     end;
     then rng F c= NAT by TARSKI:def 3;
-    hence F is natural-yielding by SEQM_3:def 8;
+    hence F is natural-yielding by VALUED_0:def 6;
   end;
 end;
 
@@ -2590,7 +2541,7 @@ A9: for n being Nat holds P2[n] from NAT_1:sch 2(A5,A6);
     end; then reconsider IT as GraphSeq by GLIB_000:def 55;
 A11: now let n be Nat;
         n in NAT by ORDINAL1:def 13;
-       then consider Gn being finite real-weighted real-elabeled
+       consider Gn being finite real-weighted real-elabeled
           complete-elabeled WEGraph such that
     A12: IT.n = Gn & Gn == G by A9;
         thus IT.n is finite real-weighted real-elabeled

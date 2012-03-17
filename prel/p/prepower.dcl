@@ -16,10 +16,9 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="RAT_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="COMPLEX1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
 <RCluster>
@@ -36,8 +35,10 @@
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="79"/>
 </Adjective>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
 <Adjective nr="28"/>
-<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -48,7 +49,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="139">
+<Func kind="K" nr="114">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -69,7 +70,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="145">
+<Func kind="K" nr="122">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -90,7 +91,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="147">
+<Func kind="K" nr="124">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

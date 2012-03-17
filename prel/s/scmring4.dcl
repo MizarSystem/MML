@@ -34,7 +34,6 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="AMISTD_1"/>
 <ArticleID name="SCMRING1"/>
 <ArticleID name="SCMRING2"/>
 </Signature>
@@ -50,20 +49,23 @@
 <Adjective nr="49"/>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="116"/>
+<Adjective nr="107"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="256">
+<Func kind="K" nr="168">
+<Func kind="U" nr="14">
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="306">
+<Func kind="K" nr="298">
 <LocusVar nr="1"/>
+</Func>
 </Func>
 </Func>
 </Typ>
@@ -71,60 +73,28 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="21"/>
-<Adjective nr="97">
+<Adjective nr="99">
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="306">
+<Func kind="K" nr="298">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="102" value="false">
+<Adjective nr="104" value="false">
+<Func kind="K" nr="46"/>
 <Func kind="K" nr="12">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="306">
+<Func kind="K" nr="298">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="67"/>
-</Cluster>
-</Typ>
-<Typ kind="G" nr="13">
-<Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="89" value="false">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="92">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="94">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="108">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<LocusVar nr="1"/>
-</Typ>
-</ArgTypes>
-<Func kind="U" nr="13">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="21" value="false"/>
-</Cluster>
-</FCluster>
 </Registrations>

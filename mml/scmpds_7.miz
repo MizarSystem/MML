@@ -41,7 +41,7 @@ reserve x for set,
         loc,l for Instruction-Location of SCMPDS,
         I,J,K for Program-block;
 
-set A = the Instruction-Locations of SCMPDS;
+set A = NAT;
 set D = SCM-Data-Loc;
 
 theorem Th1:  ::SCMPDS_6:23
@@ -135,8 +135,8 @@ proof
 end;
 
 theorem Th6:
-   (Computation s).n | the Instruction-Locations of SCMPDS
-   = s | the Instruction-Locations of SCMPDS
+   (Computation s).n | NAT
+   = s | NAT
 proof
        for x be Instruction-Location of SCMPDS holds
      (Computation s).n.x=s.x by AMI_1:54;
@@ -146,8 +146,8 @@ end;
 theorem Th7:
   for s1,s2 being State of SCMPDS st
   IC s1= IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc &
-  s1 | the Instruction-Locations of SCMPDS =
-  s2 | the Instruction-Locations of SCMPDS
+  s1 | NAT =
+  s2 | NAT
   holds s1=s2
 proof
   let s1,s2 be State of SCMPDS;
@@ -168,19 +168,20 @@ theorem Th8: ::S8C_Th20
      l in dom I iff l in dom Initialized I
 proof
 A1: (Initialized I) | A = I by SCMPDS_4:16;
-A2: dom ((Initialized I) | the Instruction-Locations of SCMPDS) c=
+A2: dom ((Initialized I) | NAT) c=
        dom Initialized I by RELAT_1:89;
 A3: dom ((Initialized I) | A) = dom Initialized I /\ A by RELAT_1:90;
    thus l in dom I implies l in dom Initialized I by A1,A2;
+X:  l in SCM-Instr-Loc by AMI_1:def 4;
    assume l in dom Initialized I;
-   hence l in dom I by A1,A3,XBOOLE_0:def 3;
+   hence l in dom I by A1,A3,XBOOLE_0:def 3,X;
 end;
 
 theorem  :: S8C_Th26
        x in dom I implies I.x = (s +* (I +* Start-At l)).x
 proof
    assume A1: x in dom I;
-       dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
+       dom I c= NAT by AMI_1:def 40;
    then reconsider y = x as Instruction-Location of SCMPDS by A1,AMI_1:def 4;
 A2: not y in dom Start-At l by SCMPDS_4:60;
        x in dom (I +* Start-At l) by A1,FUNCT_4:13;
@@ -217,10 +218,7 @@ end;
 canceled;
 
 theorem Th14:
-   (I ';' i ';' j).inspos card I =i
-proof
-    thus thesis by SCMP_GCD:11;
-end;
+   (I ';' i ';' j).inspos card I =i by SCMP_GCD:11;
 
 theorem Th15:
    i ';' I ';' j ';' k = i ';' (I ';' j ';' k)
@@ -301,7 +299,7 @@ end;
 
 theorem
      for s,ss being State of SCMPDS holds
-     (s +* ss | the Instruction-Locations of SCMPDS) |
+     (s +* ss | NAT) |
          SCM-Data-Loc = s | SCM-Data-Loc
 proof
    let s,ss be State of SCMPDS;
@@ -311,11 +309,7 @@ end;
 
 theorem  ::S8C_Th41
      for i being Instruction of SCMPDS holds
-     rng Load i = {i}
-proof
-    let i be Instruction of SCMPDS;
-    thus rng Load i = {i} by FUNCOP_1:14;
-end;
+     rng Load i = {i} by FUNCOP_1:14;
 
 theorem Th23:   ::SCMPDS_4:15
    IC s1 = IC s2 & s1 | SCM-Data-Loc = s2 | SCM-Data-Loc implies
@@ -405,7 +399,7 @@ theorem Th25: ::S8C:100
  for k being Element of NAT holds
      (Computation (s1 +* Initialized stop I)).k,
          (Computation (s2 +* Initialized stop I)).k
-         equal_outside the Instruction-Locations of SCMPDS &
+         equal_outside NAT &
      CurInstr (Computation (s1 +* Initialized stop I)).k =
          CurInstr (Computation (s2 +* Initialized stop I)).k
 proof
@@ -444,10 +438,10 @@ end;
 theorem Th26: ::SCMPDS_5:20
  for I being Program-block st I is_closed_on s1 &
      Initialized stop I c= s1 & Initialized stop I c= s2 &
-     s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
+     s1,s2 equal_outside NAT holds
  for k being Element of NAT holds
      (Computation s1).k, (Computation s2).k
-         equal_outside the Instruction-Locations of SCMPDS &
+         equal_outside NAT &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k
 proof
    let I be Program-block;
@@ -494,9 +488,9 @@ end;
 theorem Th28: ::SCMPDS_5:21
  for I being Program-block st I is_closed_on s1 & I is_halting_on s1 &
      Initialized stop I c= s1 & Initialized stop I c= s2 &
-     s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
+     s1,s2 equal_outside NAT holds
  LifeSpan s1 = LifeSpan s2 &
-     Result s1, Result s2 equal_outside the Instruction-Locations of SCMPDS
+     Result s1, Result s2 equal_outside NAT
 proof
    let I be Program-block;
    set iI=Initialized stop I;
@@ -532,7 +526,7 @@ theorem Th29: ::S8C_: 101
      s1 | SCM-Data-Loc = s2 | SCM-Data-Loc holds
  LifeSpan (s1 +* Initialized stop I) = LifeSpan (s2 +* Initialized stop I) &
   Result (s1 +* Initialized stop I),Result (s2 +* Initialized stop I)
-  equal_outside the Instruction-Locations of SCMPDS
+  equal_outside NAT
 proof
     let s1,s2 be State of SCMPDS,I be Program-block;
     assume A1: I is_closed_on s1;
@@ -558,7 +552,7 @@ then A8: ss2 is halting by SCMPDS_6:def 3;
 then A9: Result ss2 = (Computation ss2).LifeSpan ss1 by A8,AMI_1:122;
         Result ss1 = (Computation ss1).LifeSpan ss1 by A4,AMI_1:122;
     hence Result ss1, Result ss2 equal_outside
-       the Instruction-Locations of SCMPDS by A1,A3,A9,Th25;
+       NAT by A1,A3,A9,Th25;
 end;
 
 theorem  ::S8C:103
@@ -566,8 +560,8 @@ theorem  ::S8C:103
      st I is_closed_on s1 & I is_halting_on s1 &
      Initialized stop I c= s1 & Initialized stop I c= s2 &
  ex k being Element of NAT st (Computation s1).k,s2
-     equal_outside the Instruction-Locations of SCMPDS holds
- Result s1,Result s2 equal_outside the Instruction-Locations of SCMPDS
+     equal_outside NAT holds
+ Result s1,Result s2 equal_outside NAT
 proof
    let s1,s2 be State of SCMPDS,I be Program-block;
    set pI =stop I,
@@ -916,7 +910,7 @@ theorem Th38:  ::SCMPDS_5:33
   & k <= LifeSpan (s +* Initialized stop(I))
  holds (Computation (s +* Initialized stop I )).k,
        (Computation (s +* ((I ';' J) +* Start-At inspos 0))).k
-        equal_outside the Instruction-Locations of SCMPDS
+        equal_outside NAT
 proof
     let I be Program-block,J be Program-block,k be Element of NAT;
     set SA0=Start-At inspos 0,
@@ -929,7 +923,7 @@ A2: s1 =s +* spI +* SA0 by FUNCT_4:15
     .=s+*SA0+* spI by SCMPDS_4:62;
 A3: s2 = s +* (I ';' J) +* SA0 by FUNCT_4:15
        .= s+*SA0+*(I ';' J) by SCMPDS_4:62;
-     set IL=the Instruction-Locations of SCMPDS;
+     set IL=NAT;
      set Cs1 = Computation s1, Cs2 = Computation s2;
          s +* SA0, s +* SA0 +* spI equal_outside IL by AMI_1:120;
 then A4:  s +* SA0 +* spI, s +* SA0 equal_outside IL by FUNCT_7:28;
@@ -976,11 +970,11 @@ theorem Th39:  ::SCMPDS_5:29
  holds
  (Computation (s +* Initialized J)).k,
    (Computation (s +* Initialized stop(I))).k
-    equal_outside the Instruction-Locations of SCMPDS
+    equal_outside NAT
 proof
  let I,J be Program-block,k be Element of NAT;
   set IsI=Initialized stop(I),
-      IL=the Instruction-Locations of SCMPDS,
+      IL=NAT,
       m=LifeSpan (s +* IsI);
   assume that
 A1: I c= J and
@@ -1045,7 +1039,7 @@ proof
   assume
 A1: k <= LifeSpan ss & I c= J & I is_closed_on s & I is_halting_on s;
     then s1,s2 equal_outside
-    the Instruction-Locations of SCMPDS by Th39;
+    NAT by Th39;
     then IC s1 = IC s2 by AMI_1:121;
     hence IC s1 in dom stop(I) by A1,SCMPDS_6:def 2;
 end;
@@ -1072,7 +1066,7 @@ A1: I c= J & I is_closed_on s & I is_halting_on s;
 then A2: dom I c= dom J by GRFUNC_1:8;
 A3: IsI c= ss by FUNCT_4:26;
     A4: s1,(Computation ss).m equal_outside
-    the Instruction-Locations of SCMPDS by A1,Th39;
+    NAT by A1,Th39;
 then A5: IC s1 = Ik by AMI_1:121;
 A6: Ik in dom stop(I) by A1,SCMPDS_6:def 2;
 A7: ss is halting by A1,SCMPDS_6:def 3;

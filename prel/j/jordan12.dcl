@@ -24,6 +24,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -39,7 +40,9 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="99">
+<Num nr="2"/>
+</Adjective>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -50,7 +53,9 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="98"/>
+<Adjective nr="102">
+<Num nr="2"/>
+</Adjective>
 </Cluster>
 </CCluster>
 </Registrations>

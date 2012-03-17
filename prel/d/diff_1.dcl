@@ -15,8 +15,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SEQFUNC"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="DIFF_1"/>
 </Signature>
 <RCluster>
@@ -29,7 +28,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="26"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 </Registrations>

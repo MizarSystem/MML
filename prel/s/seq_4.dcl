@@ -14,9 +14,9 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 </Signature>
 <CCluster>
@@ -40,20 +40,20 @@
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="79"/>
 </Adjective>
-<Adjective nr="29"/>
+<Adjective nr="28"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="31"/>
+<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 </CCluster>
 </Registrations>

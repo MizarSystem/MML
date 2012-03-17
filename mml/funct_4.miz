@@ -384,14 +384,15 @@ then A5:     x in X by A2,XBOOLE_0:def 2;
 theorem
        (f +* g)|(dom g) = g
  proof dom f \/ dom g = dom(f +* g) by Def1;
-  then dom g c= dom(f +* g) by XBOOLE_1:7;
-then A1:  dom((f +* g)|(dom g)) = dom g by RELAT_1:91;
+  then
+A1:  dom((f +* g)|(dom g)) = dom g by RELAT_1:91,XBOOLE_1:7;
       for x st x in dom g holds ((f +* g)|(dom g)).x = g.x
    proof let x;
         x in dom g implies (f +* g).x = g.x by Th14;
     hence thesis by A1,FUNCT_1:70;
    end;
-  hence thesis by A1,FUNCT_1:9; end;
+  hence thesis by A1,FUNCT_1:9;
+ end;
 
 theorem Th25:
    ((f +* g)|(dom f \ dom g)) c= f
@@ -454,9 +455,8 @@ A1: f tolerates g;
       by A1,Th16,XBOOLE_1:7;
     hence thesis by GRFUNC_1:8;
    end;
-  assume f c= (f +* g);
-  then f tolerates f +* g by PARTFUN1:135;
-  hence thesis by Th28; end;
+   thus thesis by Th28,PARTFUN1:135;
+  end;
 
 theorem Th30:
    f +* g c= f \/ g
@@ -498,11 +498,11 @@ theorem
        dom f misses dom g implies (f +* g)|(dom f) = f
  proof assume dom f misses dom g;
 then A1:   dom f \ dom g = dom f by XBOOLE_1:83;
-A2:   dom((f +* g)|(dom f)) = dom(f +* g) /\ dom f by RELAT_1:90
+   dom((f +* g)|(dom f)) = dom(f +* g) /\ dom f by RELAT_1:90
                            .= (dom f \/ dom g) /\ dom f by Def1
                            .= dom f by XBOOLE_1:21;
-       ((f +* g)|(dom f \ dom g)) c= f by Th25;
-   hence (f +* g)|(dom f) = f by A1,A2,GRFUNC_1:9; end;
+   hence (f +* g)|(dom f) = f by A1,Th25,GRFUNC_1:9;
+ end;
 
 theorem Th35:
    f tolerates g iff f +* g = g +* f
@@ -562,9 +562,7 @@ theorem Th38:
   hence thesis by Th20; end;
 
 theorem
-       for f,g being Function of X,X holds f +* g = g
- proof let f,g be Function of X,X;
-      X = {} implies X = {}; hence thesis by Th38; end;
+       for f,g being Function of X,X holds f +* g = g by Th38;
 
 theorem
        for f,g being Function of X,D holds f +* g = g by Th38;
@@ -819,7 +817,7 @@ A4:   z = [x,y] by A1,ZFMISC_1:103;
         [y,x] in dom ~f by A3,A4,Th43;
     hence thesis by A4,Th43;
    end;
-  hence thesis by A2,GRFUNC_1:9; end;
+  hence thesis by Th52,GRFUNC_1:9; end;
 
 theorem
   for f being PartFunc of [:X,Y:],Z holds ~~f = f
@@ -1175,11 +1173,7 @@ A5: x in dom f \/ dom g;
   hence h = (a,b) --> (c,d) by A4,Def1;
  end;
 
-theorem Th70:
- for x,y being set holds {x} --> y = {[x,y]}
-  proof let x,y be set;
-   thus {x} --> y = {[x,y]} by ZFMISC_1:35;
-  end;
+canceled;
 
 theorem Th71:
     for a,b,c,d being set st a <> c
@@ -1187,10 +1181,9 @@ theorem Th71:
  proof let a,b,c,d be set such that
 A1: a <> c;
     set f = {a} --> b, g = {c} --> d;
-A2: {a} --> b = {[a,b]} & {c} --> d = {[c,d]} by Th70;
-A3: {a} misses {c} by A1,ZFMISC_1:17;
+A2: {a} --> b = {[a,b]} & {c} --> d = {[c,d]} by ZFMISC_1:35;
  dom f = {a} & dom g = {c} by FUNCOP_1:19;
-  hence (a,c) --> (b,d) = {[a,b]} \/ {[c,d]} by A2,A3,Th32
+  hence (a,c) --> (b,d) = {[a,b]} \/ {[c,d]} by A2,A1,ZFMISC_1:17,Th32
     .= { [a,b], [c,d] } by ENUMSET1:41;
  end;
 
@@ -1220,8 +1213,8 @@ A1:  rng g1 c= dom f1 & rng g2 c= dom f2 & f1 tolerates f2;
     then rng (g1+*g2) c= (rng g1) \/ rng g2 & dom (f1+*f2) = (dom f1) \/ dom
 f2 &
     (rng g1) \/ rng g2 c= (dom f1) \/ dom f2 by Def1,Th18,XBOOLE_1:13;
-    then rng (g1+*g2) c= dom (f1+*f2) by XBOOLE_1:1;
-then A2:  dom ((f1+*f2)*(g1+*g2)) = dom (g1+*g2) by RELAT_1:46
+    then
+A2:  dom ((f1+*f2)*(g1+*g2)) = dom (g1+*g2) by RELAT_1:46,XBOOLE_1:1
               .= (dom g1) \/ dom g2 by Def1;
 A3:  dom (f1*g1) = dom g1 & dom (f2*g2) = dom g2 by A1,RELAT_1:46;
 then A4:  dom ((f1*g1)+*(f2*g2)) = (dom g1) \/ dom g2 by Def1;
@@ -1455,11 +1448,8 @@ theorem Th86:
   hence (a,a) --> (b,c) = a .--> c by Th20;
  end;
 
-theorem Th87:
- for x,y holds x .--> y = {[x,y]}
-  proof let x,y;
-   thus x .--> y = {[x,y]} by ZFMISC_1:35;
-  end;
+theorem
+ for x,y holds x .--> y = {[x,y]} by ZFMISC_1:35;
 
 :: from SCMPDS_9, 2006.03.26, A.T.
 
@@ -1503,7 +1493,7 @@ theorem Th90:
   assume a in dom f & f.a = b;
    then [a,b] in f by FUNCT_1:8;
    then {[a,b]} c= f by ZFMISC_1:37;
-  hence a .--> b c= f by Th87;
+  hence a .--> b c= f by ZFMISC_1:35;
  end;
 
 theorem
@@ -1632,7 +1622,7 @@ end;
 
 :: from KNASTER, 2007.010.28, A.T.
 
-theorem Th1:
+theorem
  f is one-to-one & g is one-to-one & rng f misses rng g
   implies f+*g is one-to-one
 proof assume

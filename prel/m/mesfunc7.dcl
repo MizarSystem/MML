@@ -21,6 +21,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="XXREAL_0"/>
@@ -28,6 +29,7 @@
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
 <ArticleID name="MESFUNC1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="SETWISEO"/>
@@ -49,7 +51,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="59"/>
+<Adjective nr="57"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -62,12 +65,12 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="27"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="229"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -87,7 +90,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="229"/>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="16">
@@ -97,7 +100,7 @@
 </Func>
 <Func kind="K" nr="48"/>
 </Adjective>
-<Adjective nr="61">
+<Adjective nr="70">
 <Func kind="K" nr="48"/>
 </Adjective>
 </Cluster>
@@ -122,7 +125,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -132,7 +135,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -146,7 +149,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -156,7 +159,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -164,7 +167,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -176,7 +179,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="62"/>
+<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 </Registrations>

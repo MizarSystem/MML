@@ -17,6 +17,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="STRUCT_0"/>
@@ -41,7 +42,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -66,7 +67,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="49">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -74,7 +75,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="102">
+<Adjective nr="105">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

@@ -12,7 +12,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CLASSES1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="CARD_4"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="CARD_5"/>
 </Signature>
@@ -29,8 +33,8 @@
 <Adjective nr="14" value="false"/>
 <Adjective nr="15" value="false"/>
 <Adjective nr="17"/>
-<Adjective nr="21" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -39,7 +43,7 @@
 <Cluster>
 <Adjective nr="15" value="false"/>
 <Adjective nr="17"/>
-<Adjective nr="21" value="false"/>
+<Adjective nr="24" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -114,7 +118,7 @@
 <Cluster>
 <Adjective nr="15" value="false"/>
 <Adjective nr="17"/>
-<Adjective nr="21" value="false"/>
+<Adjective nr="24" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

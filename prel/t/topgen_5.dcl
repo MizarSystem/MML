@@ -29,6 +29,7 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="SEQ_4"/>
@@ -133,27 +134,6 @@
 </Cluster>
 </FCluster>
 <CCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="62"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="5">
-<Cluster/>
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Typ>
-<Cluster>
-<Adjective nr="66"/>
-</Cluster>
-</CCluster>
-<CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="23"/>
@@ -166,14 +146,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="23"/>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37"/>
-<Adjective nr="93"/>
+<Adjective nr="97"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>
@@ -198,7 +178,7 @@
 <Cluster>
 <Adjective nr="29" value="false"/>
 <Adjective nr="37"/>
-<Adjective nr="93"/>
+<Adjective nr="97"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -220,7 +200,7 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="66"/>
+<Adjective nr="68"/>
 </Cluster>
 </CCluster>
 </Registrations>

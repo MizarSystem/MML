@@ -16,6 +16,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -28,7 +29,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="148"/>
+<Func kind="K" nr="151"/>
 <Cluster>
 <Adjective nr="14" value="false"/>
 </Cluster>
@@ -40,7 +41,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="150">
+<Func kind="K" nr="153">
 <Func kind="K" nr="57">
 <LocusVar nr="1"/>
 <Num nr="1"/>

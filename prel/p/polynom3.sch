@@ -24,8 +24,7 @@
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSEQ_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -34,7 +33,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
@@ -100,7 +98,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="120">
-<Func kind="K" nr="301">
+<Func kind="K" nr="276">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="138">
@@ -125,7 +123,7 @@
 <Pred kind="R" nr="2">
 <Var nr="3"/>
 <Func kind="K" nr="121">
-<Func kind="K" nr="301">
+<Func kind="K" nr="276">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="138">
@@ -139,7 +137,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
-<Func kind="K" nr="301">
+<Func kind="K" nr="276">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="138">
@@ -173,7 +171,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="42" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -199,7 +197,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="50">
+<Adjective nr="49">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -211,7 +209,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="20">
-<Func kind="K" nr="176">
+<Func kind="K" nr="153">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -233,7 +231,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="188">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>

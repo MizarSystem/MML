@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -62,7 +63,7 @@
 <Func kind="K" nr="83"/>
 <Func kind="K" nr="80"/>
 </Adjective>
-<Adjective nr="35"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>

@@ -28,6 +28,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -74,7 +75,9 @@
 <Func kind="K" nr="42"/>
 </Adjective>
 <Adjective nr="59"/>
+<Adjective nr="60"/>
 <Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -100,7 +103,7 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="61"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 </Registrations>

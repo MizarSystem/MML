@@ -19,7 +19,8 @@ environ
       PRE_CIRC, GRAPH_2, GLIB_001, GLIB_002;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
-      PRE_CIRC, GLIB_000, ABIAN, GRAPH_2, HEYTING3, GLIB_001, GLIB_002;
+      PRE_CIRC, GLIB_000, ABIAN, GRAPH_2, HEYTING3, GLIB_001, GLIB_002,
+      VALUED_0;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions TARSKI, XBOOLE_0, GLIB_000, GLIB_001, GLIB_002, FUNCOP_1;
  theorems FINSEQ_1, FUNCT_1, GLIB_000, GLIB_001, GLIB_002, GRAPH_2, GRAPH_5,
@@ -1304,13 +1305,7 @@ begin :: Adjacency and complete graphs
 definition let G be _Graph, a,b be Vertex of G;
   pred a,b are_adjacent means               :Def3: :: DefAdjacent
     ex e being set st e Joins a,b,G;
-  symmetry proof
-     let a,b be Vertex of G;
-     assume ex e being set st e Joins a,b,G;
-     then consider e being set such that A1: e Joins a,b,G;
-      e Joins b,a,G by A1,GLIB_000:17;
-     hence ex e being set st e Joins b,a,G;
-  end;
+  symmetry by GLIB_000:17;
 end;
 
 theorem Th44: :: VAdjacent00
@@ -2286,10 +2281,8 @@ proof let G1,G2 be _Graph such that A1: G1 == G2;
     suppose A4: G1.AdjacentSet({u1}) <> {};
         consider H1 being AdjGraph of G1,{u1};
     A5: H1 is complete by A3,A4,Def7;
-     now let H2 be AdjGraph of G2,{u2};
-             H1 == H2 by A1,A2,Th59;
-            hence H2 is complete by A5,Th62;
-        end;
+     for H2 being AdjGraph of G2,{u2} holds H2 is complete
+      by A5,Th62,A1,A2,Th59;
        hence u2 is simplicial by Def7;
      end;
     end;
@@ -3328,11 +3321,8 @@ A8: un + 2 < um by A1,Lm1;
 then A9: um <= len U by GLIB_001:22;
 A10: W.edges() = U.edges() by GLIB_001:108;
 A11: W.m = U.um & W.n = U.un & un in dom U & um in dom U by A7,GLIB_001:25;
-A12: now let f be set such that A13: f in U.edges();
-      assume f Joins U.un,U.um,G;
-        then f Joins W.m,W.n,G by A11,GLIB_000:17;
-      hence contradiction by A3,A10,A13;
-    end;
+A12: for f being set st f in U.edges()
+         holds not f Joins U.un,U.um,G by A3,A10,A11,GLIB_000:17;
      e Joins U.un,U.um,G by A5,A11,GLIB_000:17;
   hence U is chordal by A1,A8,A9,A11,A12,Def10;
 end;
@@ -3867,16 +3857,7 @@ A10: for k being Nat st for a being Nat st a < k holds P[a] holds P[k] proof
     end;
 
 A65: for k being Nat st
-        for a being Nat st a < k holds P[a] holds P[k] proof
-        let k be Nat such that
-    A66: for a being Nat st a < k holds P[a];
-         for a being Nat st a < k holds P[a] proof
-           let a be Nat such that A67: a < k;
-            a in NAT by ORDINAL1:def 13;
-         hence P[a] by A66,A67;
-        end;
-      hence P[k] by A10;
-    end;
+      for a being Nat st a < k holds P[a] holds P[k] by A10,ORDINAL1:def 13;
  A68: for k being Nat holds P[k] from NAT_1:sch 4(A65);
 
 A69: now let n be odd Nat such that A70: n <= len P-2;

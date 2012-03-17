@@ -33,14 +33,14 @@ reserve x for set,
         k for Element of NAT;
 
 definition
- func SCMPDS -> strict AMI-Struct over { INT } equals
-   AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr-Loc,SCMPDS-Instr,
+ func SCMPDS -> strict AMI-Struct over NAT, { INT } equals
+   AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCMPDS-Instr,
                SCMPDS-OK,SCMPDS-Exec#);
  correctness;
 end;
 
 registration
- cluster SCMPDS -> standard-ins non empty non void;
+ cluster SCMPDS -> standard-ins non empty stored-program;
  coherence
   proof
    thus the Instructions of SCMPDS
@@ -50,27 +50,15 @@ registration
 end;
 
 theorem
-  (ex k being Element of NAT st x = k) iff x in SCM-Instr-Loc
-proof
-  thus (ex k being Element of NAT st x = k) implies x in SCM-Instr-Loc
-  proof given k be Element of NAT such that
-A1: x=k;
-   thus thesis by A1;
-  end;
-  assume x in SCM-Instr-Loc;
-    then consider k being Element of NAT such that
-    A2:x = k;
-    take k;
-    thus thesis by A2;
-end;
+  (ex k being Element of NAT st x = k) iff x in SCM-Instr-Loc;
 
 canceled;
 
 theorem Th3:
  SCMPDS is definite
 proof let l be Instruction-Location of SCMPDS;
-  reconsider L = l as Element of SCM-Instr-Loc;
- thus ObjectKind l = the Instructions of SCMPDS by SCMPDS_1:22;
+  l is Element of SCM-Instr-Loc by AMI_1:def 4;
+ hence ObjectKind l = the Instructions of SCMPDS by SCMPDS_1:22;
 end;
 
 registration
@@ -81,7 +69,7 @@ registration
    proof
      IC SCMPDS = In(NAT,SCM-Memory) .= NAT by AMI_2:30,FUNCT_7:def 1;
      then ObjectKind IC SCMPDS =
-            the Instruction-Locations of SCMPDS by SCMPDS_1:def 4;
+            NAT by SCMPDS_1:def 4;
   hence thesis by AMI_1:def 11;
  end;
    hence thesis by Th3;
@@ -89,9 +77,9 @@ registration
 end;
 
 theorem
-   the Instruction-Locations of SCMPDS <> INT &
+   NAT <> INT &
    the Instructions of SCMPDS <> INT &
-   the Instruction-Locations of SCMPDS <> the Instructions of SCMPDS
+   NAT <> the Instructions of SCMPDS
    by AMI_2:6,SCMPDS_1:17;
 
 canceled;
@@ -99,11 +87,7 @@ canceled;
 reserve s for State of SCMPDS;
 
 theorem Th6:
-  IC SCMPDS = NAT
- proof
-  thus IC SCMPDS = In(NAT,SCM-Memory)
-      .= NAT by AMI_2:30,FUNCT_7:def 1;
- end;
+  IC SCMPDS = NAT by AMI_2:30,FUNCT_7:def 1;
 
 begin :: The Memory Structure
 
@@ -126,7 +110,7 @@ theorem
 canceled;
 
 theorem
-   the Instruction-Locations of SCMPDS is infinite by AMI_3:def 1,AMI_5:32;
+   NAT is infinite by AMI_3:def 1,AMI_5:32;
 
 theorem
    for I being Int_position holds I is Data-Location
@@ -459,88 +443,46 @@ definition let a,b,k1,k2;
 end;
 
 theorem
-       InsCode (goto k1) = 0
-proof
- thus InsCode(goto k1) = 0 by MCART_1:7;
-end;
+       InsCode (goto k1) = 0 by MCART_1:7;
 
 theorem
-       InsCode (return a) = 1
-proof
- thus InsCode(return a) = 1 by MCART_1:7;
-end;
+       InsCode (return a) = 1 by MCART_1:7;
 
 theorem
-       InsCode (a := k1) = 2
-proof
- thus InsCode(a := k1) = 2 by MCART_1:7;
-end;
+       InsCode (a := k1) = 2 by MCART_1:7;
 
 theorem
-       InsCode (saveIC(a,k1)) = 3
-proof
- thus InsCode(saveIC(a,k1)) = 3 by MCART_1:7;
-end;
+       InsCode (saveIC(a,k1)) = 3 by MCART_1:7;
 
 theorem
-       InsCode ((a,k1)<>0_goto k2) = 4
-proof
- thus InsCode((a,k1)<>0_goto k2) = 4 by MCART_1:7;
-end;
+       InsCode ((a,k1)<>0_goto k2) = 4 by MCART_1:7;
 
 theorem
-       InsCode ((a,k1)<=0_goto k2) = 5
-proof
- thus InsCode((a,k1)<=0_goto k2) = 5 by MCART_1:7;
-end;
+       InsCode ((a,k1)<=0_goto k2) = 5 by MCART_1:7;
 
 theorem
-       InsCode ((a,k1)>=0_goto k2) = 6
-proof
- thus InsCode((a,k1)>=0_goto k2) = 6 by MCART_1:7;
-end;
+       InsCode ((a,k1)>=0_goto k2) = 6 by MCART_1:7;
 
 theorem
-       InsCode ((a,k1) := k2) = 7
-proof
- thus InsCode((a,k1) := k2) = 7 by MCART_1:7;
-end;
+       InsCode ((a,k1) := k2) = 7 by MCART_1:7;
 
 theorem
-       InsCode (AddTo(a,k1,k2)) = 8
-proof
- thus InsCode(AddTo(a,k1,k2)) = 8 by MCART_1:7;
-end;
+       InsCode (AddTo(a,k1,k2)) = 8 by MCART_1:7;
 
 theorem
-       InsCode (AddTo(a,k1,b,k2)) = 9
-proof
- thus InsCode(AddTo(a,k1,b,k2)) = 9 by MCART_1:7;
-end;
+       InsCode (AddTo(a,k1,b,k2)) = 9 by MCART_1:7;
 
 theorem
-       InsCode (SubFrom(a,k1,b,k2)) = 10
-proof
- thus InsCode(SubFrom(a,k1,b,k2)) = 10 by MCART_1:7;
-end;
+       InsCode (SubFrom(a,k1,b,k2)) = 10 by MCART_1:7;
 
 theorem
-       InsCode (MultBy(a,k1,b,k2)) = 11
-proof
- thus InsCode(MultBy(a,k1,b,k2)) = 11 by MCART_1:7;
-end;
+       InsCode (MultBy(a,k1,b,k2)) = 11 by MCART_1:7;
 
 theorem
-       InsCode (Divide(a,k1,b,k2)) = 12
-proof
- thus InsCode(Divide(a,k1,b,k2)) = 12 by MCART_1:7;
-end;
+       InsCode (Divide(a,k1,b,k2)) = 12 by MCART_1:7;
 
 theorem
-       InsCode ((a,k1) := (b,k2)) = 13
-proof
- thus InsCode((a,k1) := (b,k2)) = 13 by MCART_1:7;
-end;
+       InsCode ((a,k1) := (b,k2)) = 13 by MCART_1:7;
 
 Lm2:
    I in { [0,<*k1*>] where k1 is Element of INT: not contradiction } implies
@@ -649,8 +591,7 @@ A1: InsCode I = 2;
                k1 being Element of INT such that
 A2: I=[I1,<*d1,k1*>] & I1 in {2,3} by A1,Lm2,Lm3,Lm5,Lm6;
 A3: I1=2 or I1=3 by A2,TARSKI:def 2;
-         now assume I1=3; hence contradiction by A1,A2,MCART_1:7;
-    end;
+    I1 <> 3 by A1,A2,MCART_1:7;
     then consider d1,k1 such that
 A4: I=[ 2, <*d1,k1*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -669,8 +610,7 @@ A1: InsCode I = 3;
                k1 being Element of INT such that
 A2: I=[I1,<*d1,k1*>] & I1 in {2,3} by A1,Lm2,Lm3,Lm5,Lm6;
 A3: I1=2 or I1=3 by A2,TARSKI:def 2;
-         now assume I1=2; hence contradiction by A1,A2,MCART_1:7;
-    end;
+    I1 <> 2 by A1,A2,MCART_1:7;
     then consider d1,k1 such that
 A4: I=[ 3, <*d1,k1*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -706,9 +646,7 @@ A1: InsCode I = 4;
              k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A1,Lm7;
 A3: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A2,ENUMSET1:def 3;
-         now assume I1=5 or I1=6 or I1=7 or I1=8;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=5 or I1=6 or I1=7 or I1=8) by A1,A2,MCART_1:7;
     then consider d1,k1,k2 such that
 A4: I=[ 4, <*d1,k1,k2*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -727,9 +665,7 @@ A1: InsCode I = 5;
              k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A1,Lm7;
 A3: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A2,ENUMSET1:def 3;
-         now assume I1=4 or I1=6 or I1=7 or I1=8;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=4 or I1=6 or I1=7 or I1=8) by A1,A2,MCART_1:7;
     then consider d1,k1,k2 such that
 A4: I=[ 5, <*d1,k1,k2*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -748,9 +684,7 @@ A1: InsCode I = 6;
              k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A1,Lm7;
 A3: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A2,ENUMSET1:def 3;
-         now assume I1=4 or I1=5 or I1=7 or I1=8;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=4 or I1=5 or I1=7 or I1=8) by A1,A2,MCART_1:7;
     then consider d1,k1,k2 such that
 A4: I=[ 6, <*d1,k1,k2*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -769,9 +703,7 @@ A1: InsCode I = 7;
              k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A1,Lm7;
 A3: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A2,ENUMSET1:def 3;
-         now assume I1=4 or I1=5 or I1=6 or I1=8;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+     not(I1=4 or I1=5 or I1=6 or I1=8) by A1,A2,MCART_1:7;
     then consider d1,k1,k2 such that
 A4: I=[ 7, <*d1,k1,k2*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -790,9 +722,7 @@ A1: InsCode I = 8;
              k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,k1,k2*>] & I1 in {4,5,6,7,8} by A1,Lm7;
 A3: I1=4 or I1=5 or I1=6 or I1=7 or I1=8 by A2,ENUMSET1:def 3;
-         now assume I1=4 or I1=5 or I1=6 or I1=7;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=4 or I1=5 or I1=6 or I1=7) by A1,A2,MCART_1:7;
     then consider d1,k1,k2 such that
 A4: I=[ 8, <*d1,k1,k2*>] by A2,A3;
     reconsider a=d1 as Int_position by Def2;
@@ -828,9 +758,7 @@ A1: InsCode I = 9;
                k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A1,Lm8;
 A3: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A2,ENUMSET1:def 3;
-         now assume I1=10 or I1=11 or I1=12 or I1=13;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=10 or I1=11 or I1=12 or I1=13) by A1,A2,MCART_1:7;
     then consider d1,d2,k1,k2 such that
 A4: I=[ 9, <*d1,d2,k1,k2*>] by A2,A3;
     reconsider a=d1,b=d2 as Int_position by Def2;
@@ -849,9 +777,7 @@ A1: InsCode I = 10;
                k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A1,Lm8;
 A3: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A2,ENUMSET1:def 3;
-         now assume I1=9 or I1=11 or I1=12 or I1=13;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=9 or I1=11 or I1=12 or I1=13) by A1,A2,MCART_1:7;
     then consider d1,d2,k1,k2 such that
 A4: I=[ 10, <*d1,d2,k1,k2*>] by A2,A3;
     reconsider a=d1,b=d2 as Int_position by Def2;
@@ -870,9 +796,7 @@ A1: InsCode I = 11;
                k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A1,Lm8;
 A3: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A2,ENUMSET1:def 3;
-         now assume I1=9 or I1=10 or I1=12 or I1=13;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=9 or I1=10 or I1=12 or I1=13) by A1,A2,MCART_1:7;
     then consider d1,d2,k1,k2 such that
 A4: I=[ 11, <*d1,d2,k1,k2*>] by A2,A3;
     reconsider a=d1,b=d2 as Int_position by Def2;
@@ -891,9 +815,7 @@ A1: InsCode I = 12;
                k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A1,Lm8;
 A3: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A2,ENUMSET1:def 3;
-         now assume I1=9 or I1=10 or I1=11 or I1=13;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+     not(I1=9 or I1=10 or I1=11 or I1=13) by A1,A2,MCART_1:7;
     then consider d1,d2,k1,k2 such that
 A4: I=[ 12, <*d1,d2,k1,k2*>] by A2,A3;
     reconsider a=d1,b=d2 as Int_position by Def2;
@@ -912,9 +834,7 @@ A1: InsCode I = 13;
                k1,k2 being Element of INT such that
 A2: I=[I1,<*d1,d2,k1,k2*>] & I1 in {9,10,11,12,13} by A1,Lm8;
 A3: I1=9 or I1=10 or I1=11 or I1=12 or I1=13 by A2,ENUMSET1:def 3;
-         now assume I1=9 or I1=10 or I1=11 or I1=12;
-hence contradiction by A1,A2,MCART_1:7;
-    end;
+    not(I1=9 or I1=10 or I1=11 or I1=12) by A1,A2,MCART_1:7;
     then consider d1,d2,k1,k2 such that
 A4: I=[ 13, <*d1,d2,k1,k2*>] by A2,A3;
     reconsider a=d1,b=d2 as Int_position by Def2;
@@ -953,7 +873,7 @@ theorem
 proof
    let dl be Int_position;
          ObjectKind dl = INT &
-    ObjectKind IC SCMPDS = the Instruction-Locations of SCMPDS
+    ObjectKind IC SCMPDS = NAT
          by Th13,AMI_1:def 11;
    hence thesis by AMI_2:6;
 end;
@@ -1018,8 +938,8 @@ definition let loc be Instruction-Location of SCMPDS;
  func Next loc -> Instruction-Location of SCMPDS means
 :Def19: ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
  existence
-  proof reconsider loc as Element of SCM-Instr-Loc;
-         Next loc is Instruction-Location of SCMPDS by AMI_1:def 4;
+  proof reconsider loc as Element of SCM-Instr-Loc by AMI_1:def 4;
+        Next loc is Instruction-Location of SCMPDS by AMI_1:def 4;
    hence thesis;
   end;
  correctness;
@@ -1305,7 +1225,7 @@ definition let s be State of SCMPDS,c be Integer;
  func ICplusConst(s,c) -> Instruction-Location of SCMPDS means
 :Def20: ex m be Element of NAT st m = IC s & it = abs(m+c);
  existence
-  proof reconsider m1=IC s as Element of SCM-Instr-Loc;
+  proof reconsider m1=IC s as Element of SCM-Instr-Loc by AMI_1:def 4;
     consider k being Element of NAT such that
 A1: m1 = k;
    reconsider m=abs(k+c) as Nat;
@@ -1587,6 +1507,8 @@ A2: dom(NAT .--> loc) = {NAT} by FUNCOP_1:19;
     then NAT in dom (NAT.--> loc) by TARSKI:def 1;
 then A3: t.NAT = (NAT.--> loc).NAT by FUNCT_4:14
        .= loc by FUNCOP_1:87;
+then
+X:   t.NAT in NAT by AMI_1:def 4;
 A4: {NAT} c= SCM-Memory by AMI_2:30,ZFMISC_1:37;
 A5: dom S = dom SCMPDS-OK by CARD_3:18;
 A6: dom t = dom S \/ dom (NAT.--> loc) by FUNCT_4:def 1
@@ -1601,9 +1523,9 @@ A8:     x in dom f;
       per cases;
       suppose
 A9:     x = NAT;
-      reconsider loc as Element of SCM-Instr-Loc;
+      reconsider loc as Element of SCM-Instr-Loc by AMI_1:def 4;
            f.x = SCM-Instr-Loc by A9,AMI_2:30,SCMPDS_1:18;
-      hence t.x in f.x by A3,A9;
+      hence t.x in f.x by A3,A9,X;
       end;
       suppose x <> NAT;
       then not x in dom (NAT.--> loc) by A2,TARSKI:def 1;
@@ -1645,7 +1567,7 @@ A2: now let x be set;
      suppose A4:m=NAT;
        consider m be Element of NAT such that
      A5: m=IC s & ICplusConst(s,0)=abs(m+2*0) by Def20;
-       reconsider n=IC s as Element of SCM-Instr-Loc;
+       reconsider n=IC s as Element of SCM-Instr-Loc by AMI_1:def 4;
         consider k being Element of NAT such that
      A6: n=k;
 A7:      n >= 0 by NAT_1:2;
@@ -2009,7 +1931,7 @@ proof let s be State of SCMPDS, i be Instruction of SCMPDS,
     l be Instruction-Location of SCMPDS;
     reconsider c = i as Element of SCMPDS-Instr;
     reconsider S = s as Element of product SCMPDS-OK;
-    reconsider l' = l as Element of SCM-Instr-Loc;
+    reconsider l' = l as Element of SCM-Instr-Loc by AMI_1:def 4;
      now per cases by Lm1;
     case c in S1;
      then consider k1 being Element of INT such that
@@ -2163,7 +2085,7 @@ theorem Th97:
   SCMPDS is realistic
   proof
    assume the Instruction-Counter of SCMPDS in
-            the Instruction-Locations of SCMPDS;
+            NAT;
     then ex k st NAT = 2*k by Th6;
     then NAT in NAT;
    hence contradiction;

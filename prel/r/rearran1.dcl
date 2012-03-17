@@ -19,6 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="SEQM_3"/>
@@ -48,9 +49,9 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="24"/>
-<Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="45">
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="49">
 <Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>

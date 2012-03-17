@@ -21,14 +21,16 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="SEQFUNC"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
@@ -47,7 +49,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="65"/>
+<Adjective nr="72"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -56,7 +58,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="71"/>
+<Adjective nr="78"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -69,7 +71,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="70"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -78,7 +80,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="72"/>
+<Adjective nr="79"/>
 </Cluster>
 </CCluster>
 </Registrations>

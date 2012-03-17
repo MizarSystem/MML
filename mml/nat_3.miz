@@ -20,16 +20,16 @@ environ
       REALSET1, BINARITH, PRE_CIRC, WSIERP_1, FACIRC_1, POLYNOM2, UPROOTS;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1,
       NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, MEMBERED,
-      SEQ_1, RVSUM_1, NEWTON, PRE_CIRC, TEX_2, POLYNOM1, SEQM_3;
+      SEQ_1, RVSUM_1, NEWTON, PRE_CIRC, TEX_2, POLYNOM1, SEQM_3, VALUED_0;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
  definitions TARSKI, XBOOLE_0, INT_2, NAT_D, FINSEQ_1, SEQ_1, SEQM_3, POLYNOM1,
-      FINSEQ_2;
+      FINSEQ_2, VALUED_0;
  theorems ORDINAL1, REAL_1, NEWTON, NAT_1, XCMPLX_1, INT_1, CARD_4, XREAL_0,
       RVSUM_1, INT_2, PEPIN, PBOOLE, FUNCT_1, CARD_2, PREPOWER, POLYNOM1,
       FINSET_1, FINSEQ_1, TARSKI, XBOOLE_1, FUNCOP_1, CARD_1, WSIERP_1,
-      XBOOLE_0, RADIX_1, BINARITH, BAGORDER, FINSEQ_2, SEQM_3, FINSEQ_3,
+      XBOOLE_0, RADIX_1, BINARITH, BAGORDER, FINSEQ_2, FINSEQ_3,
       FINSEQ_4, RELAT_1, UPROOTS, PRE_CIRC, CIRCCMB3, FINSOP_1, FUNCT_2,
-      XREAL_1, NUMBERS, XXREAL_0, NAT_D;
+      XREAL_1, NUMBERS, XXREAL_0, NAT_D, VALUED_0;
  schemes NAT_1, PRE_CIRC, FINSEQ_1, FINSEQ_2, PBOOLE, FUNCT_1, CLASSES1;
 
 begin :: Preliminaries
@@ -45,16 +45,6 @@ coherence by CARD_1:47;
 end;
 
 registration
-  cluster natural-yielding -> real-yielding Relation;
-coherence
-proof
-  let R be Relation;
-  assume rng R c= NAT;
-  hence rng R c= REAL by XBOOLE_1:1;
-end;
-end;
-
-registration 
   cluster natural-yielding FinSequence;
  existence
  proof
@@ -77,11 +67,7 @@ end;
 
 registration
   cluster -> non empty Prime;
-coherence
-proof
-  let a be Prime;
-  thus thesis by INT_2:def 5;
-end;
+coherence by INT_2:def 5;
 end;
 
 reserve p for Prime;
@@ -137,9 +123,8 @@ proof
   then consider b being Nat such that
   A1:  a = b+1 by NAT_1:6;
   reconsider b as Element of NAT by ORDINAL1:def 13;
-A2: n in NAT by ORDINAL1:def 13;
     1 <= b+1 by NAT_1:12;
-  then n |^ 1 divides n |^ (b+1) by A2,RADIX_1:7;
+  then n |^ 1 divides n |^ (b+1) by RADIX_1:7;
   hence thesis by A1,NEWTON:10;
 end;
 
@@ -325,12 +310,10 @@ registration
 coherence
 proof
   set g = f|^a;
-  let y be set;
-  assume y in rng g;
-  then consider x being set such that
-A1:  x in dom g & g.x = y by FUNCT_1:def 5;
-    y = f.x |^ a by A1,Def1;
-  hence y in REAL;
+  let x be set;
+  assume x in dom g;
+    then (f |^ a).x = f.x |^ a by Def1;
+  hence thesis;
 end;
 end;
 
@@ -341,12 +324,10 @@ registration
 coherence
 proof
   set g = f|^a;
-  let y be set;
-  assume y in rng g;
-  then consider x being set such that
-A1:  x in dom g & g.x = y by FUNCT_1:def 5;
-    y = f.x |^ a by A1,Def1;
-  hence y in NAT by ORDINAL1:def 13;
+  let x be set;
+  assume x in dom g;
+    then (f |^ a).x = f.x |^ a by Def1;
+  hence thesis by ORDINAL1:def 13;
 end;
 end;
 
@@ -366,7 +347,7 @@ definition
   redefine func f |^ a -> FinSequence of NAT;
 coherence
 proof
-  thus rng (f|^a) c= NAT by SEQM_3:def 8;
+  thus rng (f|^a) c= NAT by VALUED_0:def 6;
 end;
 end;
 
@@ -567,11 +548,9 @@ registration
   cluster a * b -> real-yielding;
 coherence
 proof
-  let y be set;
-  assume y in rng (a*b);
-  then consider i being set such that
-A1:  i in dom (a*b) & (a*b).i = y by FUNCT_1:def 5;
-    y = a * b.i by A1,Def2;
+  let x be set;
+  assume x in dom (a*b);
+    (a*b).x = a * b.x by Def2;
   hence thesis by XREAL_0:def 1;
 end;
 end;
@@ -581,12 +560,10 @@ registration
   cluster a * b -> natural-yielding;
 coherence
 proof
-  let y be set;
-  assume y in rng (a*b);
-  then consider i being set such that
-A1:  i in dom (a*b) & (a*b).i = y by FUNCT_1:def 5;
-    y = a * b.i by A1,Def2;
-  hence thesis by ORDINAL1:def 13;
+  let x be set;
+  assume x in dom (a*b);
+    (a*b).x = a * b.x by Def2;
+  hence thesis;
 end;
 end;
 
@@ -702,14 +679,11 @@ registration
 coherence
 proof
   set f = min(b1,b2);
-  let y be set;
-  assume y in rng f;
-  then consider x being set such that
-      x in dom f and
-A1: f.x = y by FUNCT_1:def 5;
-    b1.x <= b2.x or b1.x > b2.x;
+  let x be set;
+  assume x in dom f;
+   then b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def3;
-  hence thesis by A1;
+  hence thesis;
 end;
 end;
 
@@ -719,14 +693,11 @@ registration
 coherence
 proof
   set f = min(b1,b2);
-  let y be set;
-  assume y in rng f;
-  then consider x being set such that
-      x in dom f and
-A1: f.x = y by FUNCT_1:def 5;
-    b1.x <= b2.x or b1.x > b2.x;
+  let x be set;
+  assume x in dom f;
+   then b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def3;
-  hence thesis by A1;
+  hence thesis;
 end;
 end;
 
@@ -813,14 +784,11 @@ registration
 coherence
 proof
   set f = max(b1,b2);
-  let y be set;
-  assume y in rng f;
-  then consider x being set such that
-      x in dom f and
-A1: f.x = y by FUNCT_1:def 5;
-    b1.x <= b2.x or b1.x > b2.x;
+  let x be set;
+  assume x in dom f;
+    then b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def4;
-  hence thesis by A1;
+  hence thesis;
 end;
 end;
 
@@ -830,14 +798,11 @@ registration
 coherence
 proof
   set f = max(b1,b2);
-  let y be set;
-  assume y in rng f;
-  then consider x being set such that
-      x in dom f and
-A1: f.x = y by FUNCT_1:def 5;
-    b1.x <= b2.x or b1.x > b2.x;
+  let x be set;
+  assume x in dom f;
+   b1.x <= b2.x or b1.x > b2.x;
   then f.x = b1.x or f.x = b2.x by Def4;
-  hence thesis by A1;
+  hence thesis;
 end;
 end;
 
@@ -872,9 +837,9 @@ registration
   proof
     let f be Relation;
     assume f is natural-yielding;
-    then rng f c= NAT by SEQM_3:def 8;
+    then rng f c= NAT by VALUED_0:def 6;
     then rng f c= COMPLEX by NUMBERS:20,XBOOLE_1:1;
-    hence thesis by RVSUM_1:def 10;
+    hence thesis by VALUED_0:def 1;
   end;
 end;
 
@@ -895,7 +860,7 @@ definition let A be set,
     it = Product f & f = b*canFS(support b);
   existence proof set cS = canFS(support b);
    set f = b*cS;
-A1: rng b c= COMPLEX by RVSUM_1:def 10;
+A1: rng b c= COMPLEX by VALUED_0:def 1;
 A2: support b c= dom b by POLYNOM1:41;
       rng cS = support b by UPROOTS:5;
      then dom f = dom cS by A2,RELAT_1:46;
@@ -914,7 +879,7 @@ definition let A be set, b be bag of A;
   proof
     consider f being FinSequence of COMPLEX such that
 A1: Product b = Product f & f = b*canFS support b by Def5;
-A2: rng b c= NAT by SEQM_3:def 8;
+A2: rng b c= NAT by VALUED_0:def 6;
      rng f c= rng b by A1,RELAT_1:45;
     then rng f c= NAT by A2,XBOOLE_1:1;
     then reconsider g = f as FinSequence of NAT by FINSEQ_1:def 4;
@@ -1139,12 +1104,10 @@ registration
 coherence
 proof
   set f = b |^ n;
-  let y be set; assume y in rng f;
-  then consider x being set such that
-      x in dom f and
-A1: f.x = y by FUNCT_1:def 5;
+  let x be set;
+  assume x in dom f;
     f.x = b.x |^ n by Def6;
-  hence thesis by A1,ORDINAL1:def 13;
+  hence thesis by ORDINAL1:def 13;
 end;
 end;
 
@@ -1516,7 +1479,7 @@ for x being set st x in dom pfexp n holds x is Prime
 proof let x be set; assume x in dom pfexp n;
   then x in SetPrimes by PBOOLE:def 3;
   then x is prime Element of NAT by NEWTON:def 6;
-  hence x is Prime by ORDINAL1:def 13;
+  hence x is Prime;
 end;
 
 theorem Th34:
@@ -1546,13 +1509,12 @@ end;
 registration
   let n be natural number;
   cluster pfexp n -> natural-yielding;
-coherence proof set f = pfexp n; let y be set; assume y in rng f;
-  then consider x being set such that
-A1: x in dom f and
-A2: f.x = y by FUNCT_1:def 5;
-  reconsider x as Prime by A1,Th33;
-    y = x |-count n by A2,Def8;
-  hence y in NAT;
+coherence proof set f = pfexp n;
+  let x be set;
+  assume x in dom f;
+  then reconsider x as Prime by Th33;
+    f.x = x |-count n by Def8;
+  hence thesis;
 end;
 end;
 
@@ -1686,7 +1648,7 @@ theorem Th44:
 for a, b being non empty Nat
  st a,b are_relative_prime holds support pfexp a misses support pfexp b
 proof let a, b be non empty Nat; assume a,b are_relative_prime;
-  then A1: a hcf b = 1 by INT_2:def 6;
+  then A1: a hcf b = 1 by INT_2:def 4;
   set f = pfexp a;  set g = pfexp b;
   assume support f meets support g; then consider x being set such that
 A2: x in support f and
@@ -1772,8 +1734,7 @@ theorem
  holds support pfexp a = support pfexp (a|^b)
 proof let a, b be non empty natural number;
   set f = pfexp a;  set g = pfexp (a|^b);
-   a in NAT & b in NAT by ORDINAL1:def 13;
-  then a|^b = a|^(b-'1) * a by PEPIN:27;
+  a|^b = a|^(b-'1) * a by PEPIN:27;
   hence support f c= support g by Th45;
   let x be set;  assume
 A1: x in support g;
@@ -1781,11 +1742,8 @@ A1: x in support g;
 A2: g.x <> 0 by A1,POLYNOM1:def 7;
 A3: g.x = x |-count (a|^b) by Def8;
     x <> 1 by INT_2:def 5;
-then A4: x divides a|^b by A2,A3,Th27;
-    now
-    assume f.x = 0; then not x divides a by Th38;
-    hence contradiction by A4,Th5;
-  end;
+   then x divides a|^b by A2,A3,Th27;
+   then f.x <> 0 by Th5,Th38;
   hence thesis by POLYNOM1:def 7;
 end;
 
@@ -2170,7 +2128,7 @@ registration
   cluster ppf n -> natural-yielding finite-support;
 coherence
 proof
-  thus rng ppf n c= NAT
+   rng ppf n c= NAT
   proof
     let y be set;
     assume y in rng ppf n;
@@ -2190,6 +2148,7 @@ A2:   (ppf n).x = y by FUNCT_1:def 5;
     hence thesis by A2;
     end;
   end;
+  hence ppf n is natural-yielding by VALUED_0:def 6;
     support ppf n = support pfexp n by Def9;
   hence support ppf n is finite;
 end;
@@ -2229,7 +2188,7 @@ A1: a, b are_relative_prime;
       reconsider p = i as prime Element of NAT by A2,NEWTON:def 6;
   A3: p |-count (an*bn) = (p |-count a) + (p |-count b) by Th28;
   A4: p > 1 by INT_2:def 5;
-  A5: a hcf b = 1 by A1,INT_2:def 6;
+  A5: a hcf b = 1 by A1,INT_2:def 4;
    per cases;
    suppose A6: p |-count (a*b) = 0;
    then A7: (p |-count a) = 0 & (p |-count b) = 0 by A3,NAT_1:7;

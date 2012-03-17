@@ -26,6 +26,7 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
@@ -53,7 +54,9 @@
 <Adjective nr="4"/>
 <Adjective nr="25"/>
 <Adjective nr="73"/>
-<Adjective nr="121"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
+<Adjective nr="125"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -75,7 +78,7 @@
 <Adjective nr="4"/>
 <Adjective nr="25"/>
 <Adjective nr="65"/>
-<Adjective nr="122">
+<Adjective nr="126">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -83,7 +86,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -91,14 +94,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="121"/>
+<Adjective nr="125"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="65"/>
-<Adjective nr="94"/>
+<Adjective nr="98"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -115,7 +118,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="65"/>
-<Adjective nr="95"/>
+<Adjective nr="99"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

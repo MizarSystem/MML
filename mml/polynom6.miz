@@ -22,16 +22,17 @@ environ
       GROUP_6, DTCONSTR, TRIANG_1, QUOFIELD, POLYNOM1, POLYNOM3;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1,
       XREAL_0, MEMBERED, FINSEQ_1, SEQ_1, FINSEQ_2, STRUCT_0, VECTSP_1,
-      QUOFIELD, GOBRD13, POLYNOM1, POLYNOM2;
+      QUOFIELD, GOBRD13, POLYNOM1, POLYNOM2, VALUED_0;
  requirements BOOLE, SUBSET, NUMERALS, REAL;
  definitions VECTSP_1, QUOFIELD, GRCAT_1, FUNCT_1, SEQM_3, TARSKI, XBOOLE_0,
-      STRUCT_0, ANPROJ_1;
+      STRUCT_0, ANPROJ_1, VALUED_0;
  theorems POLYNOM1, QUOFIELD, TOPGRP_1, FUNCT_2, PBOOLE, FUNCT_1, ORDINAL3,
       ORDINAL1, ORDINAL2, FINSEQ_3, FINSEQ_2, FVSUM_1, GROUP_7, FINSEQ_1,
       RELAT_1, FUNCOP_1, POLYALG1, DTCONSTR, FINSEQ_5, VECTSP_1, FINSEQ_4,
       SEQM_3, FINSET_1, TARSKI, POLYNOM2, RELSET_1, MATRLIN, RLVECT_1, NAT_1,
       SUBSET_1, CARD_3, POLYNOM3, TRIANG_1, ORDERS_1, RVSUM_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, BINARITH, GROUP_6, XXREAL_0, GROUP_1, PARTFUN1;
+      XBOOLE_1, XREAL_1, BINARITH, GROUP_6, XXREAL_0, GROUP_1, PARTFUN1,
+      VALUED_0;
  schemes PBOOLE, FUNCT_2, FRAENKEL, POLYNOM2, FUNCT_1;
 
 begin :: Preliminaries
@@ -189,21 +190,20 @@ A5:    o in o1 iff not o in (o1+^ o2)\o1 by A4,XBOOLE_0:def 4;
 A8:    for i be set st i in o1+^o2 holds P[i,f.i] from PBOOLE:sch 3(A3);
 A9:    f is natural-yielding
   proof
-   let s be set;
-   assume s in rng f;
-   then consider x be set such that A10: x in dom f
-              and A11: s = f.x by FUNCT_1:def 5;
-A12: x in o1+^o2 by A10,PBOOLE:def 3;
+   let x be set;
+   assume x in dom f;
+    then
+A12: x in o1+^o2 by PBOOLE:def 3;
        then reconsider o = x as Ordinal by ORDINAL1:23;
        consider o' be Ordinal such that A13: o'=x &
        (o' in o1 implies f.x = a.o') &
        (o' in (o1+^o2) \ o1 implies f.x=b.(o'-^o1)) by A8,A12;
    per cases by A12,XBOOLE_0:def 4;
        suppose o in o1;
-       hence thesis by A11,A13;
+       hence thesis by A13;
        end;
        suppose o in (o1 +^o2)\o1;
-       hence thesis by A11,A13;
+       hence thesis by A13;
   end;
   end;
    deffunc F(Element of o2') = o1 +^ $1;
@@ -427,15 +427,7 @@ for c be Element of Bags (o1+^o2)
  suppose
 A2:    o2 is non empty;
   then reconsider o2' = o2 as non empty Ordinal;
-A3:  c|o1 is natural-yielding
-  proof
-   let y be set;
-   assume A4: y in rng (c|o1);
-         rng(c|o1) c= rng c by RELAT_1:99;
-then A5:  y in rng c by A4;
-     rng c c= NAT by SEQM_3:def 8;
-     hence y in NAT by A5;
-  end;
+A3:  c|o1 is natural-yielding;
      support c|o1 c= support c
    proof
      let x be set;
@@ -451,7 +443,7 @@ then [x,(c|o1.x)] in c|o1 by FUNCT_1:8;
     dom c = o1+^o2 by PBOOLE:def 3;
   then o1 c= dom c by ORDINAL3:27;
   then dom (c|o1) = o1 by RELAT_1:91;
-  then c|o1 is bag of o1 by A3,A7,PBOOLE:def 3,POLYNOM1:def 8;
+  then c|o1 is bag of o1 by A7,PBOOLE:def 3,POLYNOM1:def 8;
  then reconsider c1=c|o1 as Element of Bags o1 by POLYNOM1:def 14;
  take c1;
  defpred P[set,set] means for x1 be Element of o2 st x1=$1 holds $2=c.(o1+^x1);
@@ -467,14 +459,13 @@ A8:  for i be set st i in o2 ex j be set st P[i,j]
 A9: for i be set st i in o2 holds P[i,f.i] from PBOOLE:sch 3(A8);
 A10: f is natural-yielding
 proof
-   let s be set;
-   assume s in rng f;
-   then consider x be set such that A11: x in dom f
-              and A12: s = f.x by FUNCT_1:def 5;
+   let x be set;
+   assume
+A11: x in dom f;
 A13: x in o2 by A11,PBOOLE:def 3;
    reconsider o = x as Element of o2 by A11,PBOOLE:def 3;
      f.x = c.(o1+^o) by A9,A13;
- hence s in NAT by A12;
+ hence thesis;
 end;
   deffunc F(Element of o1+^o2') = $1-^ o1;
   set B = { o'-^ o1 where o' is Element of o1+^o2':o1 c= o'&

@@ -6,9 +6,9 @@
 
 environ
 
- vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM;
- notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1;
- constructors XXREAL_0, NAT_1, INT_1;
+ vocabularies ARYTM_1, ARYTM_3, NAT_1, INT_1, ARYTM, INT_2, ABSVALUE;
+ notations SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, INT_1, INT_2;
+ constructors XXREAL_0, NAT_1, INT_1, INT_2, REAL_1;
  registrations XXREAL_0, XREAL_0, NAT_1, INT_1, ORDINAL1, XBOOLE_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
@@ -79,25 +79,25 @@ theorem :: NAT_D:11
 :: The least common multiple and the greatest common divisor
 
 definition let k,n be Nat;
-  func k lcm n -> Nat means
+  redefine func k lcm n means
 :: NAT_D:def 4
   k divides it & n divides it &
   for m being Nat st k divides m & n divides m holds it divides m;
-    idempotence;
-    commutativity;
 end;
 
 definition let k,n be Nat;
   redefine func k lcm n -> Element of NAT;
 end;
 
+notation let k,n be Nat;
+ synonym k hcf n for k gcd n;
+end;
+
 definition let k,n be Nat;
-  func k hcf n -> Nat means
+  redefine func k hcf n means
 :: NAT_D:def 5
   it divides k & it divides n &
     for m being Nat st m divides k & m divides n holds m divides it;
-    idempotence;
-    commutativity;
 end;
 
 definition let k,n be Nat;
@@ -175,8 +175,6 @@ theorem :: NAT_D:28
 
 :: from AMI_3, 2007.06.14, A.T.
 
-reserve i,j for Element of NAT;
-
 scheme :: NAT_D:sch 2
  INDI{ k,n() -> Element of NAT, P[set] }:
      P[n()]
@@ -185,4 +183,23 @@ provided
   k() > 0 and
   for i,j st P[k()*i] & j <> 0 & j <= k() holds
      P[k()*i+j];
+
+:: moved from INT_2, 2007.11.7, A.T,
+
+theorem :: NAT_D:29
+   i*j = (i lcm j)*(i hcf j);
+
+:: from from SCMP_GCD, 2007.07.26, A.T.
+
+theorem :: NAT_D:30
+  for i,j being Integer st i>=0 & j>0 holds
+      i gcd j= j gcd (i mod j);
+
+:: ???, 2007.07.26, A.T.
+
+theorem :: NAT_D:31
+ i lcm i = i;
+
+theorem :: NAT_D:32
+ i gcd i = i;
 

@@ -10,27 +10,31 @@ environ
       ORDINAL2, LATTICES, FINSEQ_2, FINSEQ_4, CARD_3, BINOP_1, SETWISEO,
       COMPLEX1, SEQ_1, SEQ_2, MEASURE6, BOOLE, ARYTM, ARYTM_1, POWER, MESFUNC1,
       TARSKI, ARYTM_3, SQUARE_1, RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2,
-      MESFUNC5, SUPINF_1, SUPINF_2, MESFUNC7, FUNCT_3, RFUNCT_3, FINSET_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
+      MESFUNC5, SUPINF_1, SUPINF_2, MESFUNC7, FUNCT_3, RFUNCT_3, FINSET_1,
+      VALUED_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, VALUED_0, XREAL_0,
+      REAL_1,
       XXREAL_0, MEASURE1, NAT_1, COMPLEX1, SUPINF_1, RELAT_1, RELSET_1,
       SETWISEO, PARTFUN1, FINSEQ_1, FINSEQ_2, SETWOP_2, BINOP_1, FUNCT_2,
       NEWTON, SQUARE_1, PROB_1, SUPINF_2, EXTREAL1, POWER, MESFUNC5, MESFUNC1,
       MESFUNC2, MEASURE6;
  constructors REAL_1, NAT_1, DOMAIN_1, FINSOP_1, EXTREAL1, BINOP_1, NEWTON,
       POWER, MESFUNC1, MEASURE6, MESFUNC2, MEASURE3, SETWISEO, EXTREAL2,
-      SQUARE_1, MESFUNC5;
+      SQUARE_1, MESFUNC5, VALUED_0;
  registrations SUBSET_1, NAT_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1,
-      FINSEQ_1, MEASURE1, NUMBERS, XXREAL_0, XCMPLX_0, XBOOLE_0;
+      FINSEQ_1, MEASURE1, NUMBERS, XXREAL_0, XCMPLX_0, XBOOLE_0, VALUED_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, SUPINF_2, MESFUNC1, MEASURE6, MESFUNC5, XCMPLX_0, NUMBERS;
+ definitions TARSKI, SUPINF_2, MESFUNC1, MEASURE6, MESFUNC5, XCMPLX_0, NUMBERS,
+      VALUED_0;
  theorems ABSVALUE, SETWISEO, POWER, HOLDER_1, TARSKI, SUPINF_1, PARTFUN1,
       FUNCT_1, SUPINF_2, EXTREAL1, EXTREAL2, BINOP_1, MESFUNC1, FINSEQ_1,
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, MESFUNC2, NEWTON, XREAL_1,
       SQUARE_1, COMPLEX1, XXREAL_0, REAL_2, FINSEQ_2, MESFUNC5, FINSOP_1,
-      NAT_1, RELAT_1, FUNCT_3, MEASURE1, MESFUNC6, MEASURE6, ORDINAL1;
+      NAT_1, RELAT_1, FUNCT_3, MEASURE1, MESFUNC6, MEASURE6, ORDINAL1,
+      VALUED_0;
  schemes FUNCT_2, NAT_1, PARTFUN2, BINOP_1, BINOP_2;
 
-begin  ::  Lemmas for extended real valued functions  
+begin  ::  Lemmas for extended real valued functions
 
 reserve X for non empty set,
         S for SigmaField of X,
@@ -293,12 +297,11 @@ end;
 
 begin  ::  The first mean value theorem for integrals
 
-definition let F be Relation;
-  attr F is extreal-yielding means :Def11:
-    rng F c= ExtREAL;
+notation let F be Relation;
+ synonym F is extreal-yielding for F is ext-real-valued;
 end;
 
-definition let k be natural number; let x be Element of ExtREAL; 
+definition let k be natural number; let x be Element of ExtREAL;
   redefine func k |-> x -> FinSequence of ExtREAL;
   coherence by FINSEQ_2:77;
 end;
@@ -309,12 +312,13 @@ existence
 proof 
   consider f being FinSequence of ExtREAL;
   rng f c= ExtREAL; then
-  f is extreal-yielding by Def11;
+  f is extreal-yielding by VALUED_0:def 2;
   hence thesis;
 end;
 end;
 
 definition
+ canceled;
   func multextreal -> BinOp of ExtREAL means :Def14:
     for x,y be Element of ExtREAL holds it.(x,y) = x*y;
 existence from BINOP_1:sch 4;
@@ -377,7 +381,7 @@ definition let F be extreal-yielding FinSequence;
     ex f being FinSequence of ExtREAL st f = F & it = multextreal $$ f;
 existence
 proof
-   rng F c= ExtREAL by Def11; then
+   rng F c= ExtREAL by VALUED_0:def 2; then
    reconsider f = F as FinSequence of ExtREAL by FINSEQ_1:def 4;
    take multextreal $$ f;
    thus thesis;
@@ -387,11 +391,7 @@ end;
 
 registration let x be Element of ExtREAL, n be natural number;
   cluster n |-> x -> extreal-yielding;
-  coherence
-proof
-  rng (n |-> x) c= ExtREAL;
-  hence thesis by Def11;
-end;
+  coherence by VALUED_0:def 2;
 end;
 
 definition let x be Element of ExtREAL;
@@ -408,21 +408,12 @@ end;
 
 registration
   cluster <*>ExtREAL -> extreal-yielding;
-coherence
-proof
-  rng (<*>ExtREAL) c= ExtREAL;
-  hence thesis by Def11;
-end;
+coherence by VALUED_0:def 2;
 end;
 
 registration let r be Element of ExtREAL;
   cluster <*r*> -> extreal-yielding;
-coherence
-proof
-  reconsider f = <*r*> as FinSequence of ExtREAL;
-  rng <*r*> c= ExtREAL;
-  hence thesis by Def11;
-end;
+coherence by VALUED_0:def 2;
 end;
 
 theorem Th24:
@@ -447,10 +438,10 @@ registration let f,g be extreal-yielding FinSequence;
   cluster f^g -> extreal-yielding;
 coherence
 proof
-  A1: rng f c= ExtREAL & rng g c= ExtREAL by Def11;
+  A1: rng f c= ExtREAL & rng g c= ExtREAL by VALUED_0:def 2;
   rng (f^g) = rng f \/ rng g by FINSEQ_1:44; then
   rng (f^g) c= ExtREAL by A1,XBOOLE_1:8;
-  hence thesis by Def11;
+  hence thesis by VALUED_0:def 2;
 end;
 end;
 
@@ -459,7 +450,7 @@ for F being extreal-yielding FinSequence, r be Element of ExtREAL holds
 Product (F^<*r*>) = Product F * r
 proof
   let F be extreal-yielding FinSequence, r be Element of ExtREAL;
-  rng F c= ExtREAL & rng (F^<*r*>) c= ExtREAL by Def11; then
+  rng F c= ExtREAL & rng (F^<*r*>) c= ExtREAL by VALUED_0:def 2; then
   reconsider Fr = F^<*r*>, Ff = F as FinSequence of ExtREAL by FINSEQ_1:def 4;
   reconsider Ff1=Ff as extreal-yielding FinSequence;
   Product (F^<*r*>) = multextreal $$ Fr by Def12; then

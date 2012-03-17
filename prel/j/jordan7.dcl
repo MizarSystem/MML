@@ -24,6 +24,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -37,7 +38,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

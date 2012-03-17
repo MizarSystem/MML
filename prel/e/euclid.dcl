@@ -30,6 +30,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="GR_CY_1"/>
@@ -43,7 +44,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="92"/>
+<Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -130,7 +131,7 @@
 <Cluster>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="96"/>
+<Adjective nr="100"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -151,7 +152,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="92"/>
+<Adjective nr="94"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -16,7 +16,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -26,6 +25,7 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RELAT_2"/>
@@ -34,11 +34,9 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="DICKSON"/>
-<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_3"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="MATRIX_1"/>
@@ -54,16 +52,16 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="12">
-<Func kind="K" nr="325">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="345">
+<Func kind="K" nr="320">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="86"/>
-<Adjective nr="97"/>
+<Adjective nr="83"/>
+<Adjective nr="94"/>
 </Cluster>
 </FCluster>
 </Registrations>

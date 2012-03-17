@@ -33,16 +33,15 @@ reserve
         k for Element of NAT;
 
 definition let R be good Ring;
- func SCM R -> strict AMI-Struct over { the carrier of R } means :Def1:
+ func SCM R -> strict AMI-Struct over NAT, { the carrier of R } means :Def1:
   the carrier of it = SCM-Memory &
   the Instruction-Counter of it = NAT &
-  the Instruction-Locations of it = SCM-Instr-Loc &
   the Instructions of it = SCM-Instr R &
   the Object-Kind of it = SCM-OK R &
   the Execution of it = SCM-Exec R;
 existence
  proof
-  take AMI-Struct (#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr-Loc,
+  take AMI-Struct (#SCM-Memory,In(NAT,SCM-Memory),
               SCM-Instr R,SCM-OK R,SCM-Exec R#);
    In(NAT,SCM-Memory) = NAT by AMI_2:30,FUNCT_7:def 1;
   hence thesis;
@@ -51,17 +50,17 @@ uniqueness;
 end;
 
 registration let R be good Ring;
- cluster SCM R -> non empty non void standard-ins;
+ cluster SCM R -> non empty standard-ins stored-program;
 coherence
   proof
    thus the carrier of SCM R is non empty by Def1;
-   thus the Instruction-Locations of SCM R is non empty by Def1;
 A1:  the Instructions of SCM R = SCM-Instr R by Def1;
      SCM-Instr R c= [: NAT, (union {the carrier of R} \/ SCM-Memory)* :];
    hence the Instructions of SCM R
        c= [: NAT, ((union {the carrier of R}) \/ the carrier of SCM R)* :]
                        by A1,Def1;
-
+    SCM-Instr-Loc c= the carrier of SCM;
+   hence SCM-Instr-Loc c= the carrier of SCM R by Def1;
   end;
 end;
 
@@ -82,12 +81,7 @@ definition let R be good Ring;
   it in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {NAT});
 existence
   proof
-A1: now
-     assume [1,1] in SCM-Instr-Loc;
-     then consider k being Element of NAT such that
-A2:  [1,1] = k;
-     thus contradiction by A2,ARYTM_3:38;
-    end;
+A1: not [1,1] in SCM-Instr-Loc by ARYTM_3:38;
     [1,1] in SCM-Data-Loc by AMI_2:33;
     then reconsider a = [1,1] as Object of SCM R by Def1;
     take a;
@@ -210,7 +204,8 @@ theorem Th5:
 theorem Th6:
  [6,<*i1*>] in SCM-Instr S
   proof
-   reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
+   i1 in NAT by AMI_1:def 4;
+   then reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
         [6,<*I1*>] in {[6,<*i*>] where i is Element of SCM-Instr-Loc:
      not contradiction};
    then [6,<*I1*>] in { [0,{}] } \/
@@ -229,7 +224,8 @@ theorem Th6:
 theorem Th7:
  [7,<*i1,d1*>] in SCM-Instr S
   proof
-   reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
+   i1 in NAT by AMI_1:def 4;
+   then reconsider I1 = i1 as Element of SCM-Instr-Loc by Def1;
    reconsider D1 = d1 as Element of SCM-Data-Loc by Th1;
         [7,<*I1,D1*>] in { [7,<*i,a*>] where i is Element of SCM-Instr-Loc,
                       a is Element of SCM-Data-Loc: not contradiction };
@@ -368,7 +364,7 @@ then A2:   J in { [0,{}] } \/
         not contradiction };
       then consider i being Element of SCM-Instr-Loc such that
 A3:     J = [6,<*i*>] and not contradiction;
-       i is Element of the Instruction-Locations of SCM R by Def1;
+       i is Element of NAT by Def1;
       then reconsider i as Instruction-Location of SCM R by AMI_1:def 4;
            J = goto i by A3;
       hence thesis;
@@ -378,7 +374,7 @@ A3:     J = [6,<*i*>] and not contradiction;
       then consider i being Element of SCM-Instr-Loc,
                a being Element of SCM-Data-Loc such that
 A4:     J = [7,<*i,a*>] and not contradiction;
-       i is Element of the Instruction-Locations of SCM R by Def1;
+       i is Element of NAT by Def1;
       then reconsider I = i as Instruction-Location of SCM R by AMI_1:def 4;
       reconsider A = a as Data-Location of R by Th1;
            J = A=0_goto I by A4;
@@ -417,7 +413,7 @@ coherence
      = (SCM-OK R).IC SCM R by Def1
     .= (SCM-OK R).NAT by Def1
     .= SCM-Instr-Loc by AMI_2:30,SCMRING1:def 3
-    .= the Instruction-Locations of SCM R by Def1;
+    .= NAT by Def1;
  end;
 end;
 
@@ -425,20 +421,16 @@ theorem
  IC SCM R = NAT by Def1;
 
 theorem Th10:
- for S being SCM-State of R st S = s holds IC s = IC S
- proof
-  let S be SCM-State of R such that
-A1: S = s;
-  thus IC s = IC S by A1,Def1;
- end;
+ for S being SCM-State of R st S = s holds IC s = IC S by Def1;
 
 definition let R be good Ring, i1 be Instruction-Location of SCM R;
  func Next i1 -> Instruction-Location of SCM R means :Def10:
   ex mj being Element of SCM-Instr-Loc st mj = i1 & it = Next mj;
 existence
   proof
-   reconsider i1 as Element of SCM-Instr-Loc by Def1;
-     Next i1 is Element of the Instruction-Locations of SCM R by Def1;
+      i1 in NAT by AMI_1:def 4;
+   then reconsider i1 as Element of SCM-Instr-Loc by Def1;
+     Next i1 is Element of NAT by Def1;
     then Next i1 is Instruction-Location of SCM R by AMI_1:def 4;
    hence thesis;
   end;
@@ -601,6 +593,8 @@ theorem
   reconsider S = s as SCM-State of R by Def1;
   reconsider i = 6 as Element of Segm 8 by GR_CY_1:10;
 A1:  I = [ i, <*i1*>];
+   i1 in NAT by AMI_1:def 4;
+   then
 A2: i1 is Element of SCM-Instr-Loc by Def1;
 A3: Exec(goto i1, s) = SCM-Exec-Res(I,S) by Th12
    .= (SCM-Chg(S,I jump_address)) by A2,SCMRING1:def 14;
@@ -622,6 +616,8 @@ theorem Th18:
   reconsider i = 7 as Element of Segm 8 by GR_CY_1:10;
 A1:  I = [ i, <*i1,a*>];
 A2:  IC s = IC S by Th10;
+   i1 in NAT by AMI_1:def 4;
+   then
 A3: a is Element of SCM-Data-Loc & i1 is Element of SCM-Instr-Loc by Def1,Th1;
 A4: Exec(a =0_goto i1, s) = SCM-Exec-Res(I,S) by Th12
      .= SCM-Chg(S,IFEQ(S.(I cond_address),0.R,I cjump_address,Next IC S))
@@ -695,7 +691,7 @@ A2:   I is halting;
 A3: IC t = IC s by Th10;
 A4: IC t = t.NAT;
 A5: Exec(I,s).IC SCM R = t.NAT by A2,A3,AMI_1:def 8;
-     t.NAT is Element of the Instruction-Locations of SCM R by A4,Def1;
+     t.NAT is Element of NAT by A4,Def1;
     then reconsider w = t.NAT as Instruction-Location of SCM R by AMI_1:def 4;
     consider mj being Element of SCM-Instr-Loc such that
 A6:   mj = w & Next w = Next mj by Def10;
@@ -764,7 +760,8 @@ Lm5:
     assume
 A1:   goto i1 is halting;
     reconsider V = goto i1 as Element of SCM-Instr R by Def1;
-    reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
+   i1 in NAT by AMI_1:def 4;
+   then reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
     consider s being SCM-State of R;
     set t = s +* (NAT .--> Next i1);
     set f = the Object-Kind of SCM R;
@@ -804,11 +801,12 @@ A10:     x = NAT;
 then A11: (w +* (NAT .--> i1)).NAT = (NAT .--> i1).NAT by FUNCT_4:14
        .= i1 by FUNCOP_1:87;
 A12: 6 is Element of Segm 8 by GR_CY_1:10;
-A13: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
+A13: NAT = SCM-Instr-Loc by Def1;
+X:  i1 in NAT by AMI_1:def 4;
          w +* (NAT .--> i1)
       = SCM-Chg(w,i5)
      .= SCM-Chg(w,V jump_address) by A12,SCMRING1:18
-     .= SCM-Exec-Res(V,w) by A13,SCMRING1:def 14
+     .= SCM-Exec-Res(V,w) by A13,SCMRING1:def 14,X
      .= Exec(goto i1,t) by Th12
      .= t by A1,AMI_1:def 8;
     hence contradiction by A4,A11;
@@ -818,7 +816,8 @@ Lm6:
  a =0_goto i1 is non halting
   proof
     reconsider V = a =0_goto i1 as Element of SCM-Instr R by Def1;
-    reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
+   i1 in NAT by AMI_1:def 4;
+   then reconsider i5 = i1 as Element of SCM-Instr-Loc by Def1;
     consider s being SCM-State of R;
     set t = s +* (NAT .--> Next i1);
     set f = the Object-Kind of SCM R;
@@ -859,19 +858,20 @@ then A10: (w +* (NAT .--> i1)).NAT = (NAT .--> i1).NAT by FUNCT_4:14
        .= i1 by FUNCOP_1:87;
 A11: 7 is Element of Segm 8 by GR_CY_1:10;
 A12: a is Element of SCM-Data-Loc by Th1;
-A13: the Instruction-Locations of SCM R = SCM-Instr-Loc by Def1;
+A13: NAT = SCM-Instr-Loc by Def1;
     assume
 A14:   a =0_goto i1 is halting;
+X:  i1 in NAT by AMI_1:def 4;
     per cases;
     suppose
 A15:   w.(V cond_address) <> 0.R;
 A16: IC t = IC w by Th10;
 A17: IC w = w.NAT;
 A18: Exec(a =0_goto i1,t).IC SCM R = w.NAT by A14,A16,AMI_1:def 8;
-     w.NAT is Element of the Instruction-Locations of SCM R by A17,Def1;
+     w.NAT is Element of NAT by A17,Def1;
     then reconsider e = w.NAT as Instruction-Location of SCM R by AMI_1:def 4;
          a is Element of SCM-Data-Loc by Th1;
-    then t.a <> 0.R by A11,A13,A15,SCMRING1:19;
+    then t.a <> 0.R by A11,A13,A15,SCMRING1:19,X;
 then A19: Exec(a =0_goto i1,t).IC SCM R = Next e by A16,Th18;
        ex mj being Element of SCM-Instr-Loc st mj = e & Next e = Next mj
               by Def10;
@@ -884,7 +884,7 @@ A20:   w.(V cond_address) = 0.R;
      .= SCM-Chg(w,V cjump_address) by A11,A12,SCMRING1:19
      .= SCM-Chg(w,IFEQ(w.(V cond_address),0.R,V cjump_address,Next IC w))
         by A20,FUNCOP_1:def 8
-     .= SCM-Exec-Res(V,w) by A12,A13,SCMRING1:def 14
+     .= SCM-Exec-Res(V,w) by A12,A13,SCMRING1:def 14,X
      .= Exec(a =0_goto i1,t) by Th12
      .= t by A14,AMI_1:def 8;
     hence contradiction by A3,A10;
@@ -973,7 +973,8 @@ coherence
     thus SCM R is definite
     proof
       let l be Instruction-Location of SCM R;
-      reconsider L = l as Element of SCM-Instr-Loc by Def1;
+       l in NAT by AMI_1:def 4;
+       then reconsider L = l as Element of SCM-Instr-Loc by Def1;
       thus ObjectKind l
         = (SCM-OK R).L by Def1
        .= SCM-Instr R by SCMRING1:6
@@ -1011,7 +1012,8 @@ then A1:  c in { [0,{}] } \/
                         r is Element of R: not contradiction }
       by XBOOLE_0:def 2;
      reconsider S = s as SCM-State of R by Def1;
-     reconsider l' = l as Element of SCM-Instr-Loc by Def1;
+     l in NAT by AMI_1:def 4;
+     then reconsider l' = l as Element of SCM-Instr-Loc by Def1;
 A2:   Exec(j,s) = (SCM-Exec R).c.S by Def1
       .= SCM-Exec-Res(c,S) by SCMRING1:def 15;
           now per cases by A1,XBOOLE_0:def 2;
@@ -1109,9 +1111,9 @@ A6:    c = [5,<*a,r*>] and not contradiction;
     hence s.l = Exec(j,s).l by A2;
    end;
 A7:  the Instruction-Counter of SCM R = NAT by Def1;
-A8:  the Instruction-Locations of SCM R = NAT by Def1;
+A8:  NAT = NAT by Def1;
      assume the Instruction-Counter of SCM R in
-            the Instruction-Locations of SCM R;
+            NAT;
      then ex k st NAT = k by A7,A8;
      then NAT in NAT;
     hence contradiction;

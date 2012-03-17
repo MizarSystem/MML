@@ -9,11 +9,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="CLASSES1"/>
@@ -63,7 +63,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -74,14 +74,14 @@
 <Func kind="K" nr="99"/>
 </Typ>
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="10"/>
-<Adjective nr="15"/>
+<Adjective nr="18"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

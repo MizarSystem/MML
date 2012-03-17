@@ -29,12 +29,13 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
-<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="WELLFND1"/>
 <ArticleID name="LATTICE6"/>
@@ -73,7 +74,7 @@
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="76"/>
-<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -93,7 +94,7 @@
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="76"/>
-<Adjective nr="99"/>
+<Adjective nr="103"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -129,7 +130,7 @@
 <Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="76"/>
-<Adjective nr="104"/>
+<Adjective nr="108"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -150,7 +151,7 @@
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="95"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -160,7 +161,7 @@
 <Adjective nr="26" value="false"/>
 <Adjective nr="42"/>
 <Adjective nr="76"/>
-<Adjective nr="99"/>
+<Adjective nr="103"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -168,7 +169,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="106">
+<Adjective nr="110">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -180,7 +181,7 @@
 <Adjective nr="26" value="false"/>
 <Adjective nr="42"/>
 <Adjective nr="76"/>
-<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -188,7 +189,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="105">
+<Adjective nr="109">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -222,7 +223,7 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="42"/>
-<Adjective nr="98"/>
+<Adjective nr="102"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -238,7 +239,7 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="42"/>
-<Adjective nr="99"/>
+<Adjective nr="103"/>
 </Cluster>
 </CCluster>
 </Registrations>

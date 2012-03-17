@@ -26,20 +26,18 @@ begin :: A small concrete machine
  reserve i,j,k for Element of NAT;
 
 definition
- func SCM -> strict AMI-Struct over { INT } equals
+ func SCM -> strict AMI-Struct over NAT, { INT } equals
 
-    AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr-Loc,
-                 SCM-Instr,SCM-OK,SCM-Exec#);
+    AMI-Struct(#SCM-Memory,In(NAT,SCM-Memory),SCM-Instr,SCM-OK,SCM-Exec#);
  coherence;
 end;
 
 registration
- cluster SCM -> standard-ins non empty non void;
+ cluster SCM -> standard-ins non empty stored-program;
  coherence
   proof
    thus the Instructions of SCM
     c= [: NAT, ((union {INT}) \/ the carrier of SCM)* :];
-
    thus thesis by AMI_1:def 3,STRUCT_0:def 1;
   end;
 end;
@@ -49,8 +47,8 @@ canceled;
 theorem Th2:
  SCM is definite
 proof let l be Instruction-Location of SCM;
-  reconsider L = l as Element of SCM-Instr-Loc;
- thus ObjectKind l = the Instructions of SCM by AMI_2:11;
+  l in NAT by AMI_1:def 4;
+ hence ObjectKind l = the Instructions of SCM by AMI_2:11;
 end;
 
 registration
@@ -61,7 +59,7 @@ registration
  proof
   IC SCM = In(NAT,SCM-Memory) .= NAT by AMI_2:30,FUNCT_7:def 1;
   then ObjectKind IC SCM = SCM-OK.NAT
-     .= the Instruction-Locations of SCM by AMI_2:30,def 5;
+     .= NAT by AMI_2:30,def 5;
   hence thesis by AMI_1:def 11;
  end;
   hence thesis by Th2;
@@ -145,13 +143,16 @@ end;
 definition let loc;
  func goto loc -> Instruction of SCM equals
   [ 6, <*loc*>];
- correctness by AMI_2:3;
+ correctness
+  proof loc in NAT by AMI_1:def 4;
+   hence thesis by AMI_2:3;
+  end;
  let a;
  func a=0_goto loc -> Instruction of SCM equals
   [ 7, <*loc,a*>];
  correctness
   proof
-    reconsider loc as Element of SCM-Instr-Loc;
+    reconsider loc as Element of NAT by AMI_1:def 4;
     reconsider a as Element of SCM-Data-Loc by Def2;
          7 in { 7,8 } by TARSKI:def 2;
      then [ 7, <*loc,a*>] in SCM-Instr by AMI_2:4;
@@ -161,7 +162,7 @@ definition let loc;
   [ 8, <*loc,a*>];
  correctness
   proof
-    reconsider loc as Element of SCM-Instr-Loc;
+    reconsider loc as Element of NAT by AMI_1:def 4;
     reconsider a as Element of SCM-Data-Loc by Def2;
          8 in { 7,8 } by TARSKI:def 2;
      then [ 8, <*loc,a*>] in SCM-Instr by AMI_2:4;
@@ -178,9 +179,9 @@ theorem Th4:
 
 definition let loc be Instruction-Location of SCM;
  func Next loc -> Instruction-Location of SCM means
-:Def11: ex mj being Element of SCM-Instr-Loc st mj = loc & it = Next mj;
+:Def11: ex mj being Element of NAT st mj = loc & it = Next mj;
  existence
-  proof reconsider loc as Element of SCM-Instr-Loc;
+  proof reconsider loc as Element of NAT by AMI_1:def 4;
      Next loc is Instruction-Location of SCM by AMI_1:def 4;
    hence thesis;
   end;
@@ -191,12 +192,12 @@ canceled;
 
 theorem
   for loc being Instruction-Location of SCM,
-     mj being Element of SCM-Instr-Loc st mj = loc
+     mj being Element of NAT st mj = loc
  holds Next mj = Next loc
   proof let loc be Instruction-Location of SCM,
-     mj being Element of SCM-Instr-Loc such that
+     mj being Element of NAT such that
 A1:  mj = loc;
-     ex m being Element of SCM-Instr-Loc st m = loc & Next loc = Next m
+     ex m being Element of NAT st m = loc & Next loc = Next m
            by Def11;
    hence thesis by A1;
   end;
@@ -219,7 +220,7 @@ A1:  I = [ i, <*mk, ml*>];
 A2: Exec(a:=b, s) = SCM-Exec-Res(I,S) by AMI_2:def 17
                  .= (SCM-Chg(S1, Next IC S)) by A1,AMI_2:def 16;
 A3: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
- ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+ ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
   hence Exec(a:=b, s).IC SCM = Next IC s by A2,Th4,AMI_2:16;
   thus Exec(a:=b, s).a = S1.mk by A2,AMI_2:17
@@ -246,7 +247,7 @@ A1:  I = [ i, <*mk, ml*>];
 A2: Exec(AddTo(a,b), s) = SCM-Exec-Res(I,S) by AMI_2:def 17
                        .= (SCM-Chg(S1, Next IC S)) by A1,AMI_2:def 16;
 A3: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
- ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+ ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
   hence Exec(AddTo(a,b), s).IC SCM = Next IC s by A2,Th4,AMI_2:16;
   thus Exec(AddTo(a,b), s).a = S1.mk by A2,AMI_2:17
@@ -274,7 +275,7 @@ A2: Exec(SubFrom(a,b), s) = SCM-Exec-Res(I,S) by AMI_2:def 17
  .= (SCM-Chg(S1, Next IC S))
  by A1,AMI_2:def 16;
 A3: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
- ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+ ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
   hence Exec(SubFrom(a,b), s).IC SCM = Next IC s by A2,Th4,AMI_2:16;
   thus Exec(SubFrom(a,b), s).a = S1.mk by A2,AMI_2:17
@@ -301,7 +302,7 @@ A1:  I = [ i, <*mk, ml*>];
 A2: Exec(MultBy(a,b), s) = SCM-Exec-Res(I,S) by AMI_2:def 17
                         .= (SCM-Chg(S1, Next IC S)) by A1,AMI_2:def 16;
 A3: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
- ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+ ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
   hence Exec(MultBy(a,b), s).IC SCM = Next IC s by A2,Th4,AMI_2:16;
   thus Exec(MultBy(a,b), s).a = S1.mk by A2,AMI_2:17
@@ -331,7 +332,7 @@ A2: Exec(Divide(a,b), s) = SCM-Exec-Res(I,S) by AMI_2:def 17
  .= (SCM-Chg(S1', Next IC S))
  by A1,AMI_2:def 16;
 A3: I address_1 = mk & I address_2 = ml by A1,AMI_2:23;
- ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+ ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
   hence Exec(Divide(a,b), s).IC SCM = Next IC s by A2,Th4,AMI_2:16;
   hereby
@@ -355,13 +356,13 @@ theorem
      Exec(goto loc, s).IC SCM = loc &
  Exec(goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc;
+  reconsider mj = loc as Element of NAT by AMI_1:def 4;
   reconsider I = goto loc as Element of SCM-Instr;
   reconsider S = s as SCM-State;
   reconsider i = 6 as Element of Segm 9 by GR_CY_1:10;
 A1:  I = [ i, <*mj*>];
 A2: Exec(goto loc, s) = SCM-Exec-Res(I,S) by AMI_2:def 17
-                     .= (SCM-Chg(S,I jump_address)) by AMI_2:def 16;
+                     .= (SCM-Chg(S,I jump_address)) by A1,AMI_2:def 16;
      I jump_address = mj by A1,AMI_2:24;
   hence Exec(goto loc, s).IC SCM = loc by A2,Th4,AMI_2:16;
    reconsider mn = c as Element of SCM-Data-Loc by Def2;
@@ -373,7 +374,7 @@ theorem Th14:
  (s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s) &
  Exec(a=0_goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc;
+  reconsider mj = loc as Element of NAT by AMI_1:def 4;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
   reconsider I = a=0_goto loc as Element of SCM-Instr;
   reconsider S = s as SCM-State;
@@ -393,7 +394,7 @@ IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A2,Th4,AMI_2:16
   thus s.a <> 0 implies Exec(a=0_goto loc, s).IC SCM = Next IC s
    proof assume s.a <> 0;
 then A4:   S.(I cond_address) <> 0 by A1,AMI_2:25;
-A5: ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+A5: ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
     thus Exec(a=0_goto loc, s).IC SCM =
 IFEQ(S.(I cond_address),0,I cjump_address,Next IC S) by A2,Th4,AMI_2:16
@@ -408,7 +409,7 @@ theorem Th15:
  (s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s) &
  Exec(a>0_goto loc, s).c = s.c
  proof
-  reconsider mj = loc as Element of SCM-Instr-Loc;
+  reconsider mj = loc as Element of NAT by AMI_1:def 4;
   reconsider a' = a as Element of SCM-Data-Loc by Def2;
   reconsider I = a>0_goto loc as Element of SCM-Instr;
   reconsider S = s as SCM-State;
@@ -428,7 +429,7 @@ IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A2,Th4,AMI_2:16
   thus s.a <= 0 implies Exec(a>0_goto loc, s).IC SCM = Next IC s
    proof assume s.a <= 0;
 then A4:   S.(I cond_address) <= 0 by A1,AMI_2:25;
-A5: ex mj being Element of SCM-Instr-Loc st mj = IC s & Next IC s = Next mj
+A5: ex mj being Element of NAT st mj = IC s & Next IC s = Next mj
            by Def11;
     thus Exec(a>0_goto loc, s).IC SCM =
 IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A2,Th4,AMI_2:16
@@ -439,7 +440,7 @@ IFGT(S.(I cond_address),0,I cjump_address,Next IC S) by A2,Th4,AMI_2:16
  end;
 
 reserve Y,K,T for Element of Segm 9,
-        a1,a2,a3 for Element of SCM-Instr-Loc,
+        a1,a2,a3 for Element of NAT,
         b1,b2,c1,c2,c3 for Element of SCM-Data-Loc;
 
 Lm1:
@@ -455,7 +456,7 @@ A2:   I is halting;
 A3: IC s = s.NAT by Th4;
 A4: Exec(I,s).IC SCM = s.NAT by A2,Th4,AMI_1:def 8;
     reconsider w = s.NAT as Instruction-Location of SCM by A3;
-    consider mj being Element of SCM-Instr-Loc such that
+    consider mj being Element of NAT such that
 A5:   mj = w & Next w = Next mj by Def11; :: nie mozna zastapic na 'ex'
     thus contradiction by A1,A3,A4,A5;
   end;
@@ -473,13 +474,13 @@ A3: now let i; let mk, ml be Element of SCM-Data-Loc;
      then I`2 = <*mk, ml*> by MCART_1:7;
     hence contradiction by A2,FINSEQ_3:38;
    end;
-A4: now let i; let mk be Element of SCM-Instr-Loc;
+A4: now let i; let mk be Element of NAT;
     assume I = [ i, <*mk*>];
      then I`2 = <*mk*> by MCART_1:7;
     hence contradiction by A2,TREES_1:4;
    end;
      now let i;
-    let mk be Element of SCM-Instr-Loc, ml be Element of SCM-Data-Loc;
+    let mk be Element of NAT, ml be Element of SCM-Data-Loc;
     assume I = [ i, <*mk, ml*>];
      then I`2 = <*mk, ml*> by MCART_1:7;
     hence contradiction by A2,FINSEQ_3:38;
@@ -490,10 +491,10 @@ then A5:
    not (ex mk, ml being Element of SCM-Data-Loc st I = [ 3, <*mk, ml*>]) &
    not (ex mk, ml being Element of SCM-Data-Loc st I = [ 4, <*mk, ml*>]) &
    not (ex mk, ml being Element of SCM-Data-Loc st I = [ 5, <*mk, ml*>]) &
-   not (ex mk being Element of SCM-Instr-Loc st I = [ 6, <*mk*>]) &
-   not (ex mk being Element of SCM-Instr-Loc,
+   not (ex mk being Element of NAT st I = [ 6, <*mk*>]) &
+   not (ex mk being Element of NAT,
            ml being Element of SCM-Data-Loc st I = [ 7, <*mk,ml*>]) &
-   not (ex mk being Element of SCM-Instr-Loc,
+   not (ex mk being Element of NAT,
            ml being Element of SCM-Data-Loc st I = [ 8, <*mk,ml*>]) by A3,A4;
     reconsider t = s as SCM-State;
     thus Exec(I,s) = SCM-Exec-Res(L,t) by AMI_2:def 17
@@ -546,7 +547,7 @@ Lm8:
     assume
 A1:   goto loc is halting;
     reconsider V = goto loc as Element of SCM-Instr;
-    reconsider a3 = loc as Element of SCM-Instr-Loc;
+    reconsider a3 = loc as Element of NAT by AMI_1:def 4;
     consider s being SCM-State;
     set t = s +* (NAT.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -568,7 +569,7 @@ A8:     x in dom f;
       per cases;
       suppose
 A9:     x = NAT;
-      then f.x = SCM-Instr-Loc by AMI_2:7,30;
+      then f.x = NAT by AMI_2:7,30;
       hence t.x in f.x by A3,A9;
       end;
       suppose x <> NAT;
@@ -596,7 +597,7 @@ Lm9:
  a=0_goto loc is non halting
   proof
     reconsider V = a=0_goto loc as Element of SCM-Instr;
-    reconsider a3 = loc as Element of SCM-Instr-Loc;
+    reconsider a3 = loc as Element of NAT by AMI_1:def 4;
     consider s being SCM-State;
     set t = s +* (NAT.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -618,7 +619,7 @@ A7:     x in dom f;
       per cases;
       suppose
 A8:     x = NAT;
-      then f.x = SCM-Instr-Loc by AMI_2:7,30;
+      then f.x = NAT by AMI_2:7,30;
       hence t.x in f.x by A2,A8;
       end;
       suppose x <> NAT;
@@ -647,7 +648,7 @@ A16: Exec(a=0_goto loc,t).IC SCM = w.NAT by A12,Th4,AMI_1:def 8;
     t.a <> 0 by A10,A11,A13,AMI_2:25;
     then
 A17: Exec(a=0_goto loc,t).IC SCM = Next e by A14,Th14;
-    consider mj being Element of SCM-Instr-Loc such that
+    consider mj being Element of NAT such that
 A18:   mj = e & Next e = Next mj by Def11;
     thus contradiction by A16,A17,A18;
     end;
@@ -669,7 +670,7 @@ Lm10:
  a>0_goto loc is non halting
   proof
     reconsider V = a>0_goto loc as Element of SCM-Instr;
-    reconsider a3 = loc as Element of SCM-Instr-Loc;
+    reconsider a3 = loc as Element of NAT by AMI_1:def 4;
     consider s being SCM-State;
     set t = s +* (NAT.--> Next a3);
     set f = the Object-Kind of SCM;
@@ -691,7 +692,7 @@ A7:     x in dom f;
       per cases;
       suppose
 A8:     x = NAT;
-      then f.x = SCM-Instr-Loc by AMI_2:7,30;
+      then f.x = NAT by AMI_2:7,30;
       hence t.x in f.x by A2,A8;
       end;
       suppose x <> NAT;
@@ -719,7 +720,7 @@ A16: Exec(a>0_goto loc,t).IC SCM = w.NAT by A12,Th4,AMI_1:def 8;
     reconsider e = w.NAT as Instruction-Location of SCM by A15,AMI_1:def 4;
         t.a <= 0 by A10,A11,A13,AMI_2:25;
 then A17: Exec(a>0_goto loc,t).IC SCM = Next e by A14,Th15;
-    consider mj being Element of SCM-Instr-Loc such that
+    consider mj being Element of NAT such that
 A18:   mj = e & Next e = Next mj by Def11;
     thus contradiction by A16,A17,A18;
     end;
@@ -869,7 +870,7 @@ Lm14:
     c in { [K,<*a1,b1*>] : K in { 7,8 } } or
     c in { [T,<*b2,c1*>] : T in { 1,2,3,4,5} } by XBOOLE_0:def 2;
    reconsider S = s as Element of product SCM-OK;
-   reconsider l' = l as Element of SCM-Instr-Loc;
+   reconsider l' = l as Element of NAT by AMI_1:def 4;
        now per cases by A1,XBOOLE_0:def 2;
     case c in { [SCM-Halt,{}] };
    then c = [SCM-Halt,{}] by TARSKI:def 1;
@@ -879,13 +880,13 @@ A3: now let l be Element of NAT; let mk, ml be Element of SCM-Data-Loc;
      then c`2 = <*mk, ml*> by MCART_1:7;
     hence contradiction by A2,FINSEQ_3:38;
    end;
-A4: now let l be Element of NAT; let mk be Element of SCM-Instr-Loc;
+A4: now let l be Element of NAT; let mk be Element of NAT;
     assume c = [ l, <*mk*>];
      then c`2 = <*mk*> by MCART_1:7;
     hence contradiction by A2,TREES_1:4;
    end;
     now let l be Element of NAT;
-    let mk be Element of SCM-Instr-Loc, ml be Element of SCM-Data-Loc;
+    let mk be Element of NAT, ml be Element of SCM-Data-Loc;
     assume c = [ l, <*mk, ml*>];
      then c`2 = <*mk, ml*> by MCART_1:7;
     hence contradiction by A2,FINSEQ_3:38;
@@ -896,10 +897,10 @@ A4: now let l be Element of NAT; let mk be Element of SCM-Instr-Loc;
    not (ex mk, ml being Element of SCM-Data-Loc st c = [ 3, <*mk, ml*>]) &
    not (ex mk, ml being Element of SCM-Data-Loc st c = [ 4, <*mk, ml*>]) &
    not (ex mk, ml being Element of SCM-Data-Loc st c = [ 5, <*mk, ml*>]) &
-   not (ex mk being Element of SCM-Instr-Loc st c = [ 6, <*mk*>]) &
-   not (ex mk being Element of SCM-Instr-Loc,
+   not (ex mk being Element of NAT st c = [ 6, <*mk*>]) &
+   not (ex mk being Element of NAT,
            ml being Element of SCM-Data-Loc st c = [ 7, <*mk,ml*>]) &
-   not (ex mk being Element of SCM-Instr-Loc,
+   not (ex mk being Element of NAT,
     ml being Element of SCM-Data-Loc st c = [ 8, <*mk,ml*>]) by A3,A4;
      hence SCM-Exec-Res(c,S).l' = S.l' by AMI_2:def 16;
     end;
@@ -989,8 +990,7 @@ canceled 35;
 theorem Th51:
   SCM is realistic
   proof
-   assume the Instruction-Counter of SCM in
-            the Instruction-Locations of SCM;
+   assume the Instruction-Counter of SCM in NAT;
     then ex k st NAT = 2*k by Th4;
     then NAT in NAT;
    hence contradiction;
@@ -1025,7 +1025,7 @@ definition let k be natural number;
  coherence
   proof
     reconsider k as Element of NAT by ORDINAL1:def 13;
-    k in SCM-Instr-Loc;
+    k in NAT;
    hence thesis by AMI_1:def 4;
   end;
 end;
@@ -1041,8 +1041,8 @@ theorem
 theorem
      Next il.k = il.(k+1)
  proof
-   reconsider loc = il.k as Element of SCM-Instr-Loc;
- ex mj being Element of SCM-Instr-Loc st mj = il.k & Next il.k = Next mj
+   reconsider loc = il.k as Element of NAT by AMI_1:def 4;
+ ex mj being Element of NAT st mj = il.k & Next il.k = Next mj
            by Def11;
   hence Next il.k = il.(k+1);
  end;
@@ -1078,21 +1078,17 @@ definition
 end;
 
 theorem
-     dl.i <> il.j
- proof
-  assume dl.i = il.j;
-   then
-A1:  [1,i] = j;
-   j in NAT by ORDINAL1:def 13;
-  hence contradiction by A1,ARYTM_3:38;
- end;
+  dl.i <> il.j
+  proof il.j in NAT by AMI_1:def 4;
+   hence thesis by ARYTM_3:38;
+  end;
 
 theorem
  IC SCM <> dl.i & IC SCM <> il.i
  proof
   thus IC SCM <> dl.i by Th4,ARYTM_3:36;
   assume IC SCM = il.i;
-   then IC SCM in SCM-Instr-Loc;
+   then IC SCM in NAT by AMI_1:def 4;
    then ex k being Element of NAT st IC SCM = k;
    then IC SCM in NAT;
    hence contradiction by Th4;

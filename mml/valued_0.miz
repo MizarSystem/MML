@@ -1,0 +1,1221 @@
+:: Number-valued Functions 
+::  by Library Committee
+::
+:: Received November 22, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies VALUED_0, RELAT_1, COMPLEX1, RAT_1, INT_1, FUNCT_1, ORDINAL2,
+   XCMPLX_0, XREAL_0, ARYTM, MEMBERED, BOOLE, FUNCOP_1, FUNCT_4, CAT_1,
+   SUPINF_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1,
+   RELAT_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1, FUNCT_4,
+   NUMBERS, MEMBERED, XCMPLX_0, XREAL_0, XXREAL_0, RAT_1, INT_1;
+ constructors RELAT_1, NUMBERS, XCMPLX_0, XREAL_0, RAT_1, INT_1, MEMBERED,
+   FUNCT_2, FUNCOP_1, FUNCT_4, XXREAL_0;
+ definitions TARSKI,RELAT_1, XBOOLE_0, FUNCOP_1;
+ registrations MEMBERED, RELSET_1, RELAT_1, XCMPLX_0, FUNCOP_1, XREAL_0, RAT_1,
+   ORDINAL1, INT_1, FUNCT_4, FUNCT_1, XBOOLE_0;
+ theorems NUMBERS, XBOOLE_1, RELAT_1, MEMBERED, FUNCT_1, XCMPLX_0, XXREAL_0,
+   XREAL_0, RAT_1, INT_1, ORDINAL1, RELSET_1, FUNCOP_1, FUNCT_4;
+ requirements BOOLE, SUBSET;
+
+begin
+
+definition let f be Relation;
+ attr f is complex-valued means
+:Def1: rng f c= COMPLEX;
+ attr f is ext-real-valued means
+:Def2': rng f c= ExtREAL;
+ attr f is real-valued means
+:Def2: rng f c= REAL;
+ attr f is rational-valued means
+:Def3: rng f c= RAT;
+ attr f is integer-valued means
+:Def4: rng f c= INT;
+ attr f is natural-valued means
+:Def5: rng f c= NAT;
+end;
+
+registration
+ cluster natural-valued -> integer-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume rng R c= NAT;
+   hence rng R c= INT by NUMBERS:17,XBOOLE_1:1;
+  end;
+ cluster integer-valued -> rational-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume rng R c= INT;
+   hence rng R c= RAT by NUMBERS:14,XBOOLE_1:1;
+  end;
+ cluster rational-valued -> real-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume rng R c= RAT;
+   hence rng R c= REAL by NUMBERS:12,XBOOLE_1:1;
+  end;
+ cluster real-valued -> ext-real-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume rng R c= REAL;
+   hence rng R c= ExtREAL by NUMBERS:31,XBOOLE_1:1;
+  end;
+ cluster real-valued -> complex-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume rng R c= REAL;
+   hence rng R c= COMPLEX by NUMBERS:11,XBOOLE_1:1;
+  end;
+end;
+
+registration
+ cluster empty -> natural-valued Relation;
+ coherence
+  proof let R be Relation;
+   assume R = {};
+   hence rng R c= NAT by XBOOLE_1:2,RELAT_1:60;
+  end;
+end;
+
+registration
+ cluster {} -> natural-valued;
+ coherence;
+end;
+
+registration
+ cluster natural-valued Function;
+ existence
+  proof
+   take {};
+   thus thesis;
+  end;
+end;
+
+registration let R be complex-valued Relation;
+ cluster rng R -> complex-membered;
+ coherence
+  proof rng R c= COMPLEX by Def1;
+   hence thesis by MEMBERED:19;
+  end;
+end;
+
+registration let R be ext-real-valued Relation;
+ cluster rng R -> ext-real-membered;
+ coherence
+  proof rng R c= ExtREAL by Def2';
+   hence thesis by MEMBERED:20;
+  end;
+end;
+
+registration let R be real-valued Relation;
+ cluster rng R -> real-membered;
+ coherence
+  proof rng R c= REAL by Def2;
+   hence thesis by MEMBERED:21;
+  end;
+end;
+
+registration let R be rational-valued Relation;
+ cluster rng R -> rational-membered;
+ coherence
+  proof rng R c= RAT by Def3;
+   hence thesis by MEMBERED:22;
+  end;
+end;
+
+registration let R be integer-valued Relation;
+ cluster rng R -> integer-membered;
+ coherence
+  proof rng R c= INT by Def4;
+   hence thesis by MEMBERED:23;
+  end;
+end;
+
+registration let R be natural-valued Relation;
+ cluster rng R -> natural-membered;
+ coherence
+  proof rng R c= NAT by Def5;
+   hence thesis by MEMBERED:24;
+  end;
+end;
+
+reserve x,y,X for set,
+        f for Function,
+        R,S for Relation;
+
+theorem Th1:
+ for S being complex-valued Relation st R c= S
+  holds R is complex-valued
+  proof let S be complex-valued Relation;
+A:  rng S c= COMPLEX by Def1;
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= COMPLEX by A,XBOOLE_1:1;
+  end;
+
+theorem Th2:
+ for S being ext-real-valued Relation st R c= S
+  holds R is ext-real-valued
+  proof let S be ext-real-valued Relation;
+A:  rng S c= ExtREAL by Def2';
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= ExtREAL by A,XBOOLE_1:1;
+  end;
+
+theorem Th3:
+ for S being real-valued Relation st R c= S
+  holds R is real-valued
+  proof let S be real-valued Relation;
+A:  rng S c= REAL by Def2;
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= REAL by A,XBOOLE_1:1;
+  end;
+
+theorem Th4:
+ for S being rational-valued Relation st R c= S
+  holds R is rational-valued
+  proof let S be rational-valued Relation;
+A:  rng S c= RAT by Def3;
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= RAT by A,XBOOLE_1:1;
+  end;
+
+theorem Th5:
+ for S being integer-valued Relation st R c= S
+  holds R is integer-valued
+  proof let S be integer-valued Relation;
+A:  rng S c= INT by Def4;
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= INT by A,XBOOLE_1:1;
+  end;
+
+theorem Th6:
+ for S being natural-valued Relation st R c= S
+  holds R is natural-valued
+  proof let S be natural-valued Relation;
+A:  rng S c= NAT by Def5;
+   assume R c= S;
+    then rng R c= rng S by RELAT_1:25;
+   hence rng R c= NAT by A,XBOOLE_1:1;
+  end;
+
+registration let R be complex-valued Relation;
+ cluster -> complex-valued Subset of R;
+ coherence by Th1;
+end;
+
+registration let R be ext-real-valued Relation;
+ cluster -> ext-real-valued Subset of R;
+ coherence by Th2;
+end;
+
+registration let R be real-valued Relation;
+ cluster -> real-valued Subset of R;
+ coherence by Th3;
+end;
+
+registration let R be rational-valued Relation;
+ cluster -> rational-valued Subset of R;
+ coherence by Th4;
+end;
+
+registration let R be integer-valued Relation;
+ cluster -> integer-valued Subset of R;
+ coherence by Th5;
+end;
+
+registration let R be natural-valued Relation;
+ cluster -> natural-valued Subset of R;
+ coherence by Th6;
+end;
+
+registration let R,S be complex-valued Relation;
+ cluster R \/ S -> complex-valued;
+ coherence
+  proof
+A:  rng R c= COMPLEX & rng S c= COMPLEX by Def1;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= COMPLEX by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R,S be ext-real-valued Relation;
+ cluster R \/ S -> ext-real-valued;
+ coherence
+  proof
+A:  rng R c= ExtREAL & rng S c= ExtREAL by Def2';
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= ExtREAL by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R,S be real-valued Relation;
+ cluster R \/ S -> real-valued;
+ coherence
+  proof
+A:  rng R c= REAL & rng S c= REAL by Def2;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= REAL by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R,S be rational-valued Relation;
+ cluster R \/ S -> rational-valued;
+ coherence
+  proof
+A:  rng R c= RAT & rng S c= RAT by Def3;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= RAT by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R,S be integer-valued Relation;
+ cluster R \/ S -> integer-valued;
+ coherence
+  proof
+A:  rng R c= INT & rng S c= INT by Def4;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= INT by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R,S be natural-valued Relation;
+ cluster R \/ S -> natural-valued;
+ coherence
+  proof
+A:  rng R c= NAT & rng S c= NAT by Def5;
+    rng(R \/ S) = rng R \/ rng S by RELAT_1:26;
+   hence rng(R \/ S) c= NAT by A,XBOOLE_1:8;
+  end;
+end;
+
+registration let R be complex-valued Relation; let S;
+ cluster R /\ S -> complex-valued;
+ coherence
+  proof
+A:  rng R c= COMPLEX by Def1;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= COMPLEX by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> complex-valued;
+ coherence;
+end;
+
+registration let R be ext-real-valued Relation; let S;
+ cluster R /\ S -> ext-real-valued;
+ coherence
+  proof
+A:  rng R c= ExtREAL by Def2';
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= ExtREAL by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> ext-real-valued;
+ coherence;
+end;
+
+registration let R be real-valued Relation; let S;
+ cluster R /\ S -> real-valued;
+ coherence
+  proof
+A:  rng R c= REAL by Def2;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= REAL by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> real-valued;
+ coherence;
+end;
+
+registration let R be rational-valued Relation; let S;
+ cluster R /\ S -> rational-valued;
+ coherence
+  proof
+A:  rng R c= RAT by Def3;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= RAT by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> rational-valued;
+ coherence;
+end;
+
+registration let R be integer-valued Relation; let S;
+ cluster R /\ S -> integer-valued;
+ coherence
+  proof
+A:  rng R c= INT by Def4;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= INT by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> integer-valued;
+ coherence;
+end;
+
+registration let R be natural-valued Relation; let S;
+ cluster R /\ S -> natural-valued;
+ coherence
+  proof
+A:  rng R c= NAT by Def5;
+    R /\ S c= R by XBOOLE_1:17;
+    then rng(R /\ S) c= rng R by RELAT_1:25;
+   hence rng(R /\ S) c= NAT by A,XBOOLE_1:1;
+  end;
+ cluster R \ S -> natural-valued;
+ coherence;
+end;
+
+registration let R,S be complex-valued Relation;
+ cluster R \+\ S -> complex-valued;
+ coherence;
+end;
+
+registration let R,S be ext-real-valued Relation;
+ cluster R \+\ S -> ext-real-valued;
+ coherence;
+end;
+
+registration let R,S be real-valued Relation;
+ cluster R \+\ S -> real-valued;
+ coherence;
+end;
+
+registration let R,S be rational-valued Relation;
+ cluster R \+\ S -> rational-valued;
+ coherence;
+end;
+
+registration let R,S be integer-valued Relation;
+ cluster R \+\ S -> integer-valued;
+ coherence;
+end;
+
+registration let R,S be natural-valued Relation;
+ cluster R \+\ S -> natural-valued;
+ coherence;
+end;
+
+registration let R be complex-valued Relation; let X;
+ cluster R.:X -> complex-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:19;
+  end;
+end;
+
+registration let R be ext-real-valued Relation; let X;
+ cluster R.:X -> ext-real-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:20;
+  end;
+end;
+
+registration let R be real-valued Relation; let X;
+ cluster R.:X -> real-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:21;
+  end;
+end;
+
+registration let R be rational-valued Relation; let X;
+ cluster R.:X -> rational-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:22;
+  end;
+end;
+
+registration let R be integer-valued Relation; let X;
+ cluster R.:X -> integer-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:23;
+  end;
+end;
+
+registration let R be natural-valued Relation; let X;
+ cluster R.:X -> natural-membered;
+ coherence
+  proof
+    R.:X c= rng R by RELAT_1:144;
+   hence thesis by MEMBERED:24;
+  end;
+end;
+
+registration let R be complex-valued Relation; let x;
+ cluster Im(R,x) -> complex-membered;
+ coherence;
+end;
+
+registration let R be ext-real-valued Relation; let x;
+ cluster Im(R,x) -> ext-real-membered;
+ coherence;
+end;
+
+registration let R be real-valued Relation; let x;
+ cluster Im(R,x) -> real-membered;
+ coherence;
+end;
+
+registration let R be rational-valued Relation; let x;
+ cluster Im(R,x) -> rational-membered;
+ coherence;
+end;
+
+registration let R be integer-valued Relation; let x;
+ cluster Im(R,x) -> integer-membered;
+ coherence;
+end;
+
+registration let R be natural-valued Relation; let x;
+ cluster Im(R,x) -> natural-membered;
+ coherence;
+end;
+
+registration let R be complex-valued Relation; let X;
+ cluster R|X -> complex-valued;
+ coherence
+  proof
+A:  rng R c= COMPLEX by Def1;
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= COMPLEX by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R be ext-real-valued Relation; let X;
+ cluster R|X -> ext-real-valued;
+ coherence
+  proof
+A:  rng R c= ExtREAL by Def2';
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= ExtREAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R be real-valued Relation; let X;
+ cluster R|X -> real-valued;
+ coherence
+  proof
+A:  rng R c= REAL by Def2;
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= REAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R be rational-valued Relation; let X;
+ cluster R|X -> rational-valued;
+ coherence
+  proof
+A:  rng R c= RAT by Def3;
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= RAT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R be integer-valued Relation; let X;
+ cluster R|X -> integer-valued;
+ coherence
+  proof
+A:  rng R c= INT by Def4;
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= INT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R be natural-valued Relation; let X;
+ cluster R|X -> natural-valued;
+ coherence
+  proof
+A:  rng R c= NAT by Def5;
+    rng(R|X) c= rng R by RELAT_1:99;
+   hence rng(R|X) c= NAT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X be complex-membered set;
+ cluster id X -> complex-valued;
+ coherence
+  proof X c= COMPLEX by MEMBERED:1;
+   hence rng id X c= COMPLEX by RELAT_1:71;
+  end;
+end;
+
+registration let X be ext-real-membered set;
+ cluster id X -> ext-real-valued;
+ coherence
+  proof X c= ExtREAL by MEMBERED:2;
+   hence rng id X c= ExtREAL by RELAT_1:71;
+  end;
+end;
+
+registration let X be real-membered set;
+ cluster id X -> real-valued;
+ coherence
+  proof X c= REAL by MEMBERED:3;
+   hence rng id X c= REAL by RELAT_1:71;
+  end;
+end;
+
+registration let X be rational-membered set;
+ cluster id X -> rational-valued;
+ coherence
+  proof X c= RAT by MEMBERED:4;
+   hence rng id X c= RAT by RELAT_1:71;
+  end;
+end;
+
+registration let X be integer-membered set;
+ cluster id X -> integer-valued;
+ coherence
+  proof X c= INT by MEMBERED:5;
+   hence rng id X c= INT by RELAT_1:71;
+  end;
+end;
+
+registration let X be natural-membered set;
+ cluster id X -> natural-valued;
+ coherence
+  proof X c= NAT by MEMBERED:6;
+   hence rng id X c= NAT by RELAT_1:71;
+  end;
+end;
+
+registration let R; let S be complex-valued Relation;
+ cluster R*S -> complex-valued;
+ coherence
+  proof
+A:  rng S c= COMPLEX by Def1;
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= COMPLEX by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R; let S be ext-real-valued Relation;
+ cluster R*S -> ext-real-valued;
+ coherence
+  proof
+A:  rng S c= ExtREAL by Def2';
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= ExtREAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R; let S be real-valued Relation;
+ cluster R*S -> real-valued;
+ coherence
+  proof
+A:  rng S c= REAL by Def2;
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= REAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R; let S be rational-valued Relation;
+ cluster R*S -> rational-valued;
+ coherence
+  proof
+A:  rng S c= RAT by Def3;
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= RAT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R; let S be integer-valued Relation;
+ cluster R*S -> integer-valued;
+ coherence
+  proof
+A:  rng S c= INT by Def4;
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= INT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let R; let S be natural-valued Relation;
+ cluster R*S -> natural-valued;
+ coherence
+  proof
+A:  rng S c= NAT by Def5;
+    rng(R*S) c= rng S by RELAT_1:45;
+   hence rng(R*S) c= NAT by A,XBOOLE_1:1;
+  end;
+end;
+
+definition let f be Function;
+ redefine
+ attr f is complex-valued means
+:Def6: for x st x in dom f holds f.x is complex;
+ compatibility
+  proof
+   thus f is complex-valued implies for x st x in dom f holds f.x is complex
+    proof assume
+Z1:   f is complex-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as complex-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 1;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is complex;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is complex by W1,W2,Z;
+   hence y in COMPLEX by XCMPLX_0:def 2;
+  end;
+ attr f is ext-real-valued means
+:Def7: for x st x in dom f holds f.x is ext-real;
+ compatibility
+  proof
+   thus f is ext-real-valued implies for x st x in dom f holds f.x is ext-real
+    proof assume
+Z1:   f is ext-real-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as ext-real-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 2;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is ext-real;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is ext-real by W1,W2,Z;
+   hence y in ExtREAL by XXREAL_0:def 1;
+  end;
+ attr f is real-valued means
+:Def8: for x st x in dom f holds f.x is real;
+ compatibility
+  proof
+   thus f is real-valued implies for x st x in dom f holds f.x is real
+    proof assume
+Z1:   f is real-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as real-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 3;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is real;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is real by W1,W2,Z;
+   hence y in REAL by XREAL_0:def 1;
+  end;
+ attr f is rational-valued means
+:Def9: for x st x in dom f holds f.x is rational;
+ compatibility
+  proof
+   thus f is rational-valued implies for x st x in dom f holds f.x is rational
+    proof assume
+Z1:   f is rational-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as rational-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 4;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is rational;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is rational by W1,W2,Z;
+   hence y in RAT by RAT_1:def 2;
+  end;
+ attr f is integer-valued means
+:Def10: for x st x in dom f holds f.x is integer;
+ compatibility
+  proof
+   thus f is integer-valued implies for x st x in dom f holds f.x is integer
+    proof assume
+Z1:   f is integer-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as integer-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 5;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is integer;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is integer by W1,W2,Z;
+   hence y in INT by INT_1:def 2;
+  end;
+ attr f is natural-valued means
+:Def11: for x st x in dom f holds f.x is natural;
+ compatibility
+  proof
+   thus f is natural-valued implies for x st x in dom f holds f.x is natural
+    proof assume
+Z1:   f is natural-valued;
+     let x;
+     assume
+Z2:   x in dom f;
+      reconsider f as natural-valued Function by Z1;
+      f.x in rng f by FUNCT_1:12,Z2;
+     hence thesis by MEMBERED:def 6;
+    end;
+   assume
+Z:   for x st x in dom f holds f.x is natural;
+   let y;
+   assume y in rng f;
+    then consider x such that
+W1:  x in dom f and
+W2:  y = f.x by FUNCT_1:def 5;
+    y is natural by W1,W2,Z;
+   hence y in NAT by ORDINAL1:def 13;
+  end;
+end;
+
+theorem Th7:
+ f is complex-valued iff for x holds f.x is complex
+  proof
+   hereby assume
+Z:   f is complex-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is complex by Z,Def6;
+    end;
+    suppose not x in dom f;
+     hence f.x is complex by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is complex;
+    then for x st x in dom f holds f.x is complex;
+   hence f is complex-valued by Def6;
+  end;
+
+theorem Th8:
+ f is ext-real-valued iff for x holds f.x is ext-real
+  proof
+   hereby assume
+Z:   f is ext-real-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is ext-real by Z,Def7;
+    end;
+    suppose not x in dom f;
+     hence f.x is ext-real by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is ext-real;
+    then for x st x in dom f holds f.x is ext-real;
+   hence f is ext-real-valued by Def7;
+  end;
+
+theorem Th9:
+ f is real-valued iff for x holds f.x is real
+  proof
+   hereby assume
+Z:   f is real-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is real by Z,Def8;
+    end;
+    suppose not x in dom f;
+     hence f.x is real by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is real;
+    then for x st x in dom f holds f.x is real;
+   hence f is real-valued by Def8;
+  end;
+
+theorem Th10:
+ f is rational-valued iff for x holds f.x is rational
+  proof
+   hereby assume
+Z:   f is rational-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is rational by Z,Def9;
+    end;
+    suppose not x in dom f;
+     hence f.x is rational by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is rational;
+    then for x st x in dom f holds f.x is rational;
+   hence f is rational-valued by Def9;
+  end;
+
+theorem Th11:
+ f is integer-valued iff for x holds f.x is integer
+  proof
+   hereby assume
+Z:   f is integer-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is integer by Z,Def10;
+    end;
+    suppose not x in dom f;
+     hence f.x is integer by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is integer;
+    then for x st x in dom f holds f.x is integer;
+   hence f is integer-valued by Def10;
+  end;
+
+theorem Th12:
+ f is natural-valued iff for x holds f.x is natural
+  proof
+   hereby assume
+Z:   f is natural-valued;
+    let x;
+    per cases;
+    suppose x in dom f;
+     hence f.x is natural by Z,Def11;
+    end;
+    suppose not x in dom f;
+     hence f.x is natural by FUNCT_1:def 4;
+    end;
+   end;
+   assume for x holds f.x is natural;
+    then for x st x in dom f holds f.x is natural;
+   hence f is natural-valued by Def11;
+  end;
+
+
+registration let f be complex-valued Function; let x;
+ cluster f.x -> complex;
+ coherence by Th7;
+end;
+
+registration let f be ext-real-valued Function; let x;
+ cluster f.x -> ext-real;
+ coherence by Th8;
+end;
+
+registration let f be real-valued Function; let x;
+ cluster f.x -> real;
+ coherence by Th9;
+end;
+
+registration let f be rational-valued Function; let x;
+ cluster f.x -> rational;
+ coherence by Th10;
+end;
+
+registration let f be integer-valued Function; let x;
+ cluster f.x -> integer;
+ coherence by Th11;
+end;
+
+registration let f be natural-valued Function; let x;
+ cluster f.x -> natural;
+ coherence by Th12;
+end;
+
+registration let X; let x be complex number;
+ cluster X --> x -> complex-valued;
+ coherence
+  proof
+A:  {x} c= COMPLEX by MEMBERED:1;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= COMPLEX by A,XBOOLE_1:1;
+   hence thesis by Def1;
+  end;
+end;
+
+registration let X; let x be ext-real number;
+ cluster X --> x -> ext-real-valued;
+ coherence
+  proof
+A:  {x} c= ExtREAL by MEMBERED:2;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= ExtREAL by A,XBOOLE_1:1;
+   hence thesis by Def2';
+  end;
+end;
+
+registration let X; let x be real number;
+ cluster X --> x -> real-valued;
+ coherence
+  proof
+A:  {x} c= REAL by MEMBERED:3;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= REAL by A,XBOOLE_1:1;
+   hence thesis by Def2;
+  end;
+end;
+
+registration let X; let x be rational number;
+ cluster X --> x -> rational-valued;
+ coherence
+  proof
+A:  {x} c= RAT by MEMBERED:4;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= RAT by A,XBOOLE_1:1;
+   hence thesis by Def3;
+  end;
+end;
+
+registration let X; let x be integer number;
+ cluster X --> x -> integer-valued;
+ coherence
+  proof
+A:  {x} c= INT by MEMBERED:5;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= INT by A,XBOOLE_1:1;
+   hence thesis by Def4;
+  end;
+end;
+
+registration let X; let x be natural number;
+ cluster X --> x -> natural-valued;
+ coherence
+  proof
+A:  {x} c= NAT by MEMBERED:6;
+    rng(X --> x) c= {x} by FUNCOP_1:19;
+    then rng(X --> x) c= NAT by A,XBOOLE_1:1;
+   hence thesis by Def5;
+  end;
+end;
+
+registration let f,g be complex-valued Function;
+ cluster f +* g -> complex-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is complex-membered by MEMBERED:19;
+    then rng(f +* g) c= COMPLEX by MEMBERED:1;
+   hence thesis by Def1;
+  end;
+end;
+
+registration let f,g be ext-real-valued Function;
+ cluster f +* g -> ext-real-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is ext-real-membered by MEMBERED:20;
+    then rng(f +* g) c= ExtREAL by MEMBERED:2;
+   hence thesis by Def2';
+  end;
+end;
+
+registration let f,g be real-valued Function;
+ cluster f +* g -> real-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is real-membered by MEMBERED:21;
+    then rng(f +* g) c= REAL by MEMBERED:3;
+   hence thesis by Def2;
+  end;
+end;
+
+registration let f,g be rational-valued Function;
+ cluster f +* g -> rational-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is rational-membered by MEMBERED:22;
+    then rng(f +* g) c= RAT by MEMBERED:4;
+   hence thesis by Def3;
+  end;
+end;
+
+registration let f,g be integer-valued Function;
+ cluster f +* g -> integer-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is integer-membered by MEMBERED:23;
+    then rng(f +* g) c= INT by MEMBERED:5;
+   hence thesis by Def4;
+  end;
+end;
+
+registration let f,g be natural-valued Function;
+ cluster f +* g -> natural-valued;
+ coherence
+  proof
+    rng(f +* g) c= rng f \/ rng g by FUNCT_4:18;
+    then rng(f +* g) is natural-membered by MEMBERED:24;
+    then rng(f +* g) c= NAT by MEMBERED:6;
+   hence thesis by Def5;
+  end;
+end;
+
+registration let x; let y be complex number;
+ cluster x .--> y -> complex-valued;
+ coherence;
+end;
+
+registration let x; let y be ext-real number;
+ cluster x .--> y -> ext-real-valued;
+ coherence;
+end;
+
+registration let x; let y be real number;
+ cluster x .--> y -> real-valued;
+ coherence;
+end;
+
+registration let x; let y be rational number;
+ cluster x .--> y -> rational-valued;
+ coherence;
+end;
+
+registration let x; let y be integer number;
+ cluster x .--> y -> integer-valued;
+ coherence;
+end;
+
+registration let x; let y be natural number;
+ cluster x .--> y -> natural-valued;
+ coherence;
+end;
+
+registration let X; let Y be complex-membered set;
+ cluster -> complex-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= COMPLEX by MEMBERED:1;
+  end;
+end;
+
+registration let X; let Y be ext-real-membered set;
+ cluster -> ext-real-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= ExtREAL by MEMBERED:2;
+  end;
+end;
+
+registration let X; let Y be real-membered set;
+ cluster -> real-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= REAL by MEMBERED:3;
+  end;
+end;
+
+registration let X; let Y be rational-membered set;
+ cluster -> rational-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= RAT by MEMBERED:4;
+  end;
+end;
+
+registration let X; let Y be integer-membered set;
+ cluster -> integer-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= INT by MEMBERED:5;
+  end;
+end;
+
+registration let X; let Y be natural-membered set;
+ cluster -> natural-valued Relation of X,Y;
+ coherence
+  proof let R be Relation of X,Y;
+   thus rng R c= NAT by MEMBERED:6;
+  end;
+end;
+
+registration let X; let Y be complex-membered set;
+ cluster [:X,Y:] -> complex-valued;
+ coherence
+  proof
+A:  Y c= COMPLEX by MEMBERED:1;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= COMPLEX by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let Y be ext-real-membered set;
+ cluster [:X,Y:] -> ext-real-valued;
+ coherence
+  proof
+A:  Y c= ExtREAL by MEMBERED:2;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= ExtREAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let Y be real-membered set;
+ cluster [:X,Y:] -> real-valued;
+ coherence
+  proof
+A:  Y c= REAL by MEMBERED:3;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= REAL by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let Y be rational-membered set;
+ cluster [:X,Y:] -> rational-valued;
+ coherence
+  proof
+A:  Y c= RAT by MEMBERED:4;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= RAT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let Y be integer-membered set;
+ cluster [:X,Y:] -> integer-valued;
+ coherence
+  proof
+A:  Y c= INT by MEMBERED:5;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= INT by A,XBOOLE_1:1;
+  end;
+end;
+
+registration let X; let Y be natural-membered set;
+ cluster [:X,Y:] -> natural-valued;
+ coherence
+  proof
+A:  Y c= NAT by MEMBERED:6;
+    rng [:X,Y:] c= Y by RELAT_1:194;
+   hence rng [:X,Y:] c= NAT by A,XBOOLE_1:1;
+  end;
+end;
+

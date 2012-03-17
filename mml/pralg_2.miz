@@ -33,113 +33,13 @@ reserve I,J,i,j,x for set,
 :: Preliminaries
 ::
 
-definition let IT be set;
-  attr IT is with_common_domain means :Def1:
-   for f,g be Function st f in IT & g in IT holds dom f = dom g;
-end;
-
-registration
-  cluster with_common_domain functional non empty set;
-existence
- proof
-  consider h be Function;
-  take A = {h};
-      for f,g be Function st f in A & g in A holds dom f = dom g
-   proof
-    let f,g be Function; assume f in A & g in A;
-    then f = h & g = h by TARSKI:def 1;
-    hence thesis;
-   end;
-  hence A is with_common_domain by Def1;
-      for x be set st x in A holds x is Function by TARSKI:def 1;
-  hence A is functional by FRAENKEL:def 1;
-  thus A is non empty;
- end;
-end;
-
-theorem
-      {{}} is functional with_common_domain set
- proof
-  A1: for x st x in {{}} holds x is Function by TARSKI:def 1;
-      for f,g be Function st f in {{}} & g in {{}} holds dom f = dom g
-   proof
-    let f,g be Function; assume f in {{}} & g in {{}};
-    then f = {} & g = {} by TARSKI:def 1;
-    hence thesis;
-   end;
-  hence thesis by A1,Def1,FRAENKEL:def 1;
- end;
-
-definition
- let X be with_common_domain functional set;
-func DOM X -> set means :Def2:
- (for x be Function st x in X holds it = dom x) if X <> {}
- otherwise it = {};
-existence
- proof
- thus X <> {} implies ex Y be set st for x be Function st x in X
- holds Y = dom x
-  proof
-   assume X <> {};
-   then consider x be set such that A1: x in X by XBOOLE_0:def 1;
-   reconsider x as Function by A1,FRAENKEL:def 1;
-   take dom x;
-   let y be Function; assume y in X;
-   hence thesis by A1,Def1;
-  end;
- thus X = {} implies ex Y be set st Y = {};
- end;
-uniqueness
- proof
-  let A,B be set;
-  thus X <> {} implies
-  ((for x be Function st x in X holds A = dom x) &
-  (for x be Function st x in X holds B = dom x) implies A = B)
-   proof
-    assume A2: X <> {};
-    assume that
-    A3: for x be Function st x in X holds A = dom x and
-    A4: for x be Function st x in X holds B = dom x;
-    consider x be set such that A5: x in X by A2,XBOOLE_0:def 1;
-    reconsider x as Function by A5,FRAENKEL:def 1;
-        A = dom x & B = dom x by A3,A4,A5;
-    hence thesis;
-   end;
-  thus X = {} implies (A = {} & B = {} implies A = B);
- end;
-consistency;
-end;
-
 definition let X be with_common_domain functional non empty set;
   redefine mode Element of X -> ManySortedSet of (DOM X);
 coherence
  proof
   let x be Element of X;
-      DOM X = dom x by Def2;
+      DOM X = dom x by CARD_3:def 12;
   hence x is ManySortedSet of (DOM X) by PBOOLE:def 3;
- end;
-end;
-
-theorem
-      for X be with_common_domain functional set st X = {{}} holds DOM X = {}
- proof
-  let X be with_common_domain functional set; assume A1: X = {{}};
-      {} in {{}} by TARSKI:def 1;
-  hence thesis by A1,Def2,RELAT_1:60;
- end;
-
-registration
- let I be set,
-     M be non-empty ManySortedSet of I;
- cluster product M -> with_common_domain functional non empty;
-coherence
- proof
-  set m = product M;
-   now let f,g be Function; assume f in m & g in m;
-   then dom f = dom M & dom g = dom M by CARD_3:18;
-   hence dom f = dom g;
-  end;
-  hence thesis by Def1;
  end;
 end;
 
@@ -148,7 +48,7 @@ begin
 
 definition
  let F be Function;
- canceled 3;
+ canceled 5;
 
 func Commute F -> Function means :Def6:
  (for x holds x in dom it iff ex f being Function st f in dom F &
@@ -216,7 +116,7 @@ A13:    x = commute g by A9,A11;
   end;
 end;
 
-canceled 5;
+canceled 7;
 
 theorem
     for F be Function st dom F = {{}} holds Commute F = F

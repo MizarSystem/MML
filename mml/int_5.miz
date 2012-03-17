@@ -22,7 +22,8 @@ environ
       FINSEQ_7, REAL_1, WELLORD2, CALCUL_2, SETFAM_1, PROB_3;
  registrations XXREAL_0, MEMBERED, RELAT_1, FINSEQ_1, ORDINAL1, WSIERP_1,
       NUMBERS, XBOOLE_0, XREAL_0, NAT_1, INT_1, SEQ_1, FINSET_1, NAT_3,
-      RVSUM_1, FUNCOP_1, CALCUL_2, FUNCT_1, CARD_1, NEWTON, SUBSET_1, POLYNOM1;
+      RVSUM_1, FUNCOP_1, CALCUL_2, FUNCT_1, CARD_1, NEWTON, SUBSET_1, POLYNOM1,
+      VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions INT_1, FUNCT_1, XCMPLX_0, INT_2, SQUARE_1, FINSEQ_2, TARSKI,
       CALCUL_2, CARD_3, CARD_1;
@@ -64,11 +65,7 @@ A2:i divides -(a-b) by INT_2:14;
    hence thesis by A1,A2,WSIERP_1:9;
 end;
 
-Lm1:n1 gcd n2 = n1 hcf n2
-proof
-  abs n1 = n1 & abs n2 = n2 by ABSVALUE:def 1;
-  hence thesis;
-end;
+Lm1:n1 gcd n2 = n1 hcf n2 by ABSVALUE:def 1;
 
 Lm2:
  (x divides y implies y mod x = 0) & (x<>0 & y mod x = 0 implies x divides y)
@@ -151,11 +148,7 @@ end;
 
 registration let fp be FinSequence of INT,x be Integer;
   cluster (Poly-INT fp).x -> integer;
-  coherence
-  proof x in INT by INT_1:def 2;then
-    (Poly-INT fp).x in INT by FUNCT_2:7;
-    hence thesis by INT_1:def 2;
-  end;
+  coherence by FUNCT_2:7,INT_1:def 2;
 end;
 
 theorem Th3:
@@ -711,9 +704,10 @@ A1:  p in NAT by ORDINAL1:def 13;
 A3: m,p are_relative_prime or (m hcf p) = p by PEPIN:2;
    per cases by A3,NAT_D:def 5;
     suppose A4:m,p are_relative_prime;
-      i gcd p = m hcf abs(p) by A2,ABSVALUE:def 1
+      m = abs i by A2,ABSVALUE:def 1;
+      then i gcd p = m hcf abs(p) by INT_2:51
              .= m hcf p by ABSVALUE:def 1
-             .= 1 by A4,INT_2:def 6;
+             .= 1 by A4,INT_2:def 4;
      hence thesis by INT_2:def 4;
     end;
     suppose p divides m;
@@ -728,7 +722,8 @@ theorem Th12:
   i divides j implies i gcd j = abs(i)
 proof assume i divides j;
   then abs(i) divides abs(j) by INT_2:21;
-  hence thesis by NEWTON:62;
+  then abs i gcd abs j = abs(i) by NEWTON:62;
+  hence thesis by INT_2:51;
 end;
 
 registration let k be Integer, a be Nat;
@@ -789,7 +784,7 @@ A3:not x,(-x) are_congruent_mod p
     then p divides (x - (-x)) by INT_2:19;
     then A4:p divides 2*x;
     2,p are_relative_prime by A1,INT_2:44,47;
-    then 2 hcf p = 1 by INT_2:def 6;
+    then 2 hcf p = 1 by INT_2:def 4;
     then 2 gcd p = 1 by Lm1;
     then p divides x by A4,WSIERP_1:36;
     then consider i being Integer such that A5:x = p * i by INT_1:def 9;
@@ -816,11 +811,7 @@ end;
 
 registration let fp be FinSequence of NAT, d;
  cluster fp.d -> natural;
- coherence
-   proof reconsider d as Element of NAT by ORDINAL1:def 13;
-     fp.d is natural;
-    hence thesis;
-   end;
+ coherence by ORDINAL1:def 13;
 end;
 
 theorem Th16:
@@ -858,7 +849,7 @@ A10:   d in NAT by ORDINAL1:def 13;
      then d <= p-'1 by A9,XXREAL_0:2;
      then d < p by A4,XREAL_1:149;
      then d,p are_relative_prime by A2,A8,A10,EULER_1:3;
-    hence thesis by INT_2:def 6;
+    hence thesis by INT_2:def 4;
   end;
 A11:for d st d in dom fp holds fp.d hcf p = 1
   proof let d; assume A12:d in dom fp;
@@ -884,7 +875,7 @@ A18: d+e in NAT by ORDINAL1:def 13;
    then d+e >= 1+1 & d+e <= (p-'1) div 2 + ((p-'1) div 2) by XREAL_1:9;
    then d+e <> 0 & d+e < p by A4,A5,XREAL_1:149;
    then (d+e),p are_relative_prime by A2,A18,EULER_1:3;
-   then (d+e) hcf p = 1 by INT_2:def 6;
+   then (d+e) hcf p = 1 by INT_2:def 4;
    then A20:(d+e) gcd p = 1 by Lm1;
    assume fp.d,fp.e are_congruent_mod p;
    then p divides (fp.d - fp.e) by INT_2:19;
@@ -932,17 +923,18 @@ A5:s,p are_relative_prime by A1,A2,Th14;
     suppose s>=0;
      then reconsider s as Element of NAT by INT_1:16;
      s hcf p = s gcd p by Lm1   .= 1 by A5,INT_2:def 4;
-     then s,p are_relative_prime by INT_2:def 6;
+     then s,p are_relative_prime by INT_2:def 4;
      hence thesis by A6,PEPIN:38;
     end;
     suppose A7:s<0;
      then -s > 0 by XREAL_1:60;
      then reconsider s' = -s as Element of NAT by INT_1:16;
+X:   abs p = p by ABSVALUE:def 1;
      s' hcf p = s' gcd p by Lm1
              .= abs(s) gcd p by A7,ABSVALUE:def 1
-             .= s gcd p
+             .= s gcd p by INT_2:51,X
              .= 1 by A5,INT_2:def 4;
-     then s',p are_relative_prime by INT_2:def 6;
+     then s',p are_relative_prime by INT_2:def 4;
      then A8:s'|^(p-'1) mod p = 1 by PEPIN:38;
      s|^(p-'1) mod p = (s|^2)|^((p-'1) div 2) mod p by A4,NEWTON:14
                     .= ((-s)|^2)|^((p-'1) div 2) mod p by WSIERP_1:2
@@ -957,7 +949,7 @@ theorem Th18:
 proof assume A1:p>2 & b gcd p = 1 & not b is_quadratic_residue_mod p;
   reconsider b as Element of NAT by ORDINAL1:def 13;
   b hcf p = 1 by A1,Lm1;
-  then b,p are_relative_prime by INT_2:def 6;
+  then b,p are_relative_prime by INT_2:def 4;
   then A2:(b|^(p-'1)) mod p = 1 by PEPIN:38;
 A3:p>1 by INT_2:def 5;then
 A4:1 mod p = 1 by NAT_D:14;
@@ -1635,7 +1627,8 @@ end;
 
 theorem Th36: p>2 implies Lege (-1,p) = (-1)|^((p-'1) div 2)
 proof assume A1:p>2;
-  (-1) gcd p = abs((-1)|^1) hcf abs(p) by NEWTON:10
+  (-1) gcd p = (-1)|^1 gcd p by NEWTON:10
+        .= abs((-1)|^1) hcf abs(p) by  INT_2:51
         .= 1 hcf abs(p) by SERIES_2:1
         .= 1 by NEWTON:64;
   then A2:Lege (-1,p),(-1)|^((p-'1) div 2) are_congruent_mod p by A1,Th28;
@@ -1890,7 +1883,7 @@ A19:p' = ((p-'1)+1) div 2 by A13,NAT_2:28
        d >= 1 & d <= p' by A20,FINSEQ_1:3;
        then d >= 1 & d < p by A18,XXREAL_0:2;
        then d,p are_relative_prime by A5,EULER_1:3;
-      hence thesis by A21,INT_2:def 6;
+      hence thesis by A21,INT_2:def 4;
      end;
     then (Product I) hcf p = 1 by A5,WSIERP_1:43;
     then A22:Product I gcd p = 1 by Lm1;
@@ -2199,7 +2192,7 @@ by A9,A102,INT_1:36;
 theorem Th42:p>2 implies Lege(2,p) = (-1)|^((p^2 -'1) div 8)
 proof assume A1:p>2;
   then 2,p are_relative_prime by EULER_1:3;
-  then A2:2 hcf p = 1 by INT_2:def 6;
+  then A2:2 hcf p = 1 by INT_2:def 4;
   set p' = (p-'1) div 2;
   set I = idseq p';
   set fp = 2 * I;
@@ -2795,7 +2788,7 @@ theorem Th49:p>2 & q>2 & p<>q
   implies Lege(p,q)*Lege(q,p)=(-1)|^(((p-'1) div 2)*((q-'1) div 2))
 proof assume A1:p>2 & q>2 & p<>q;
    then A2:q,p are_relative_prime by INT_2:47;
-   then A3:q hcf p = 1 by INT_2:def 6;
+   then A3:q hcf p = 1 by INT_2:def 4;
    reconsider p,q as prime Element of NAT by ORDINAL1:def 13;
 A4:2,p are_relative_prime & 2,q are_relative_prime by A1,EULER_1:3;
     set p' = (p-'1) div 2;

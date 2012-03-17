@@ -24,6 +24,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="TOPGEN_2"/>
 </Signature>
@@ -70,7 +71,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="31"/>
-<Adjective nr="47" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -82,7 +83,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -102,7 +103,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="168">
+<Func kind="K" nr="171">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -120,13 +121,13 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="50"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="47" value="false"/>
+<Adjective nr="50" value="false"/>
 </Cluster>
 <Typ kind="G" nr="5">
 <Cluster/>

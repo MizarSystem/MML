@@ -16,10 +16,11 @@ environ
       AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR,
       SCMFSA6B, SCMFSA6C, SCMFSA7B, XXREAL_0;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, NAT_1, MEMBERED, SEQ_1, BINARITH,
-      SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B;
+      SCMFSA_5, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
+      SCMFSA_1, AMI_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1,
       FRAENKEL, NUMBERS, XXREAL_0, MEMBERED, CARD_3, AMI_1, SCMFSA_2, SCMFSA_4,
-      SCMFSA6A, SF_MASTR, SCMFSA7B, FINSET_1;
+      SCMFSA6A, SF_MASTR, SCMFSA7B, FINSET_1, AMI_2, SCMFSA_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FUNCOP_1, AMI_1;
  theorems TARSKI, FUNCOP_1, SCMFSA_7, NAT_1, PRE_CIRC, FUNCT_1, FUNCT_4,
@@ -31,15 +32,15 @@ environ
 begin
 
 reserve m for Element of NAT;
-set A = the Instruction-Locations of SCM+FSA;
+set A = NAT;
 set D = Int-Locations \/ FinSeq-Locations;
 
 canceled 2;
 
 theorem Th3: ::T50
  for s being State of SCM+FSA holds
-     dom (s | the Instruction-Locations of SCM+FSA) =
-         the Instruction-Locations of SCM+FSA
+     dom (s | NAT) =
+         NAT
  proof
    let s be State of SCM+FSA;
    thus dom (s | A) = dom s /\ A by RELAT_1:90
@@ -102,13 +103,13 @@ A5: now let k be Element of NAT;
 
 theorem Th6: ::T51(@BBB8)
  for s1,s2 being State of SCM+FSA holds
-     s1,s2 equal_outside the Instruction-Locations of SCM+FSA
+     s1,s2 equal_outside NAT
  iff IC s1 = IC s2 &
      s1 | (Int-Locations \/ FinSeq-Locations) =
      s2 | (Int-Locations \/ FinSeq-Locations)
  proof
    let s1,s2 be State of SCM+FSA;
-   hereby assume A1: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
+   hereby assume A1: s1,s2 equal_outside NAT;
       hence IC s1 = IC s2 by AMI_1:121;
    A2: for a being Int-Location holds s1.a = s2.a by A1,SCMFSA6A:30;
           for f being FinSeq-Location holds s1.f = s2.f by A1,SCMFSA6A:31;
@@ -117,7 +118,7 @@ theorem Th6: ::T51(@BBB8)
    assume A3: IC s1 = IC s2 & s1 | D = s2 | D;
    then (for a being Int-Location holds s1.a = s2.a) &
        for f being FinSeq-Location holds s1.f = s2.f by SCMFSA6A:38;
-   hence s1,s2 equal_outside the Instruction-Locations of SCM+FSA
+   hence s1,s2 equal_outside NAT
        by A3,SCMFSA6A:28;
  end;
 
@@ -128,14 +129,14 @@ theorem Th7: ::T27'
    let s be State of SCM+FSA;
    let I be Macro-Instruction;
 A1: dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA by SCMFSA6A:34;
+       NAT by SCMFSA6A:34;
 A2: IExec(I,s) = Result (s +* Initialized I)
-       +* s | the Instruction-Locations of SCM+FSA by SCMFSA6B:def 1;
-A3:    dom (s | the Instruction-Locations of SCM+FSA)
-    = dom s /\ the Instruction-Locations of SCM+FSA by RELAT_1:90
-   .= the Instruction-Locations of SCM+FSA by A1,XBOOLE_1:21;
+       +* s | NAT by SCMFSA6B:def 1;
+A3:    dom (s | NAT)
+    = dom s /\ NAT by RELAT_1:90
+   .= NAT by A1,XBOOLE_1:21;
 A4:
-   now assume IC SCM+FSA in dom (s | the Instruction-Locations of SCM+FSA);
+   now assume IC SCM+FSA in dom (s | NAT);
      then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
       by A3,AMI_1:def 4;
       l = IC SCM+FSA;
@@ -234,8 +235,8 @@ theorem  ::T52'
       then A1: x in dom I or x in {IC SCM+FSA} by FUNCOP_1:19;
       per cases by A1,TARSKI:def 1;
       suppose A2: x in dom I;
-       A3: dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
-           D misses the Instruction-Locations of SCM+FSA by SCMFSA_2:13,14
+       A3: dom I c= NAT by AMI_1:def 40;
+           D misses NAT by SCMFSA_2:13,14
 ,XBOOLE_1:70;
        hence not x in D by A2,A3,XBOOLE_0:3;
       end;
@@ -249,13 +250,13 @@ theorem  ::T52'
 
 theorem Th12: ::T53(@BBB8)
  for s being State of SCM+FSA, l being Instruction-Location of SCM+FSA holds
-     dom (s | the Instruction-Locations of SCM+FSA) misses dom Start-At l
+     dom (s | NAT) misses dom Start-At l
  proof
    let s be State of SCM+FSA;
    let l be Instruction-Location of SCM+FSA;
        now let x be set;
       assume x in dom (s | A);
-      then x in the Instruction-Locations of SCM+FSA by Th3;
+      then x in NAT by Th3;
       then x is Instruction-Location of SCM+FSA by AMI_1:def 4;
       then x <> IC SCM+FSA by AMI_1:48;
       then not x in {IC SCM+FSA} by TARSKI:def 1;
@@ -345,7 +346,7 @@ theorem Th14: ::TG14 <> T23
  for s being State of SCM+FSA, I1,I2 being Macro-Instruction,
  l being Instruction-Location of SCM+FSA holds
      s +* (I1 +* Start-At l), s +* (I2 +* Start-At l)
-         equal_outside the Instruction-Locations of SCM+FSA
+         equal_outside NAT
  proof
    let s be State of SCM+FSA;
    let I1,I2 be Macro-Instruction;
@@ -524,8 +525,7 @@ theorem Th22: ::TQ60 <> T4
    A2: InsCode i <= 11+1 by SCMFSA_2:35;
 A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
-   per cases by A2,A3,A4,A5,NAT_1:8,33;
+   per cases by A2,A3,A4,NAT_1:8,33;
    suppose InsCode i = 0;
   then i = halt SCM+FSA by SCMFSA_2:122;
     then IncAddr(i,n) = halt SCM+FSA by SCMFSA_4:8;
@@ -958,7 +958,7 @@ theorem Th32: ::BBBB'54'
      for k being Element of NAT st k <= pseudo-LifeSpan(s,I) holds
          (Computation (s +* (I +* Start-At insloc 0))).k,
          (Computation (s +* ((I ';' J) +* Start-At insloc 0))).k
-             equal_outside the Instruction-Locations of SCM+FSA
+             equal_outside NAT
  proof
    let s be State of SCM+FSA;
    let I,J be Macro-Instruction;
@@ -1041,7 +1041,7 @@ theorem Th35: ::TQ21'
      holds
          ((Computation (s +* (I +* Start-At insloc 0))).k,
              (Computation (s +* (Directed I +* Start-At insloc 0))).k
-             equal_outside the Instruction-Locations of SCM+FSA &
+             equal_outside NAT &
          CurInstr (Computation (s +* (Directed I +* Start-At insloc 0))).k <>
              halt SCM+FSA)
  proof
@@ -1449,7 +1449,7 @@ theorem Th44: ::TQ21
      for k being Element of NAT st k <= LifeSpan (s +* Initialized I) holds
          ((Computation (s +* Initialized I)).k,
              (Computation (s +* Initialized Directed I)).k
-             equal_outside the Instruction-Locations of SCM+FSA &
+             equal_outside NAT &
          CurInstr (Computation (s +* Initialized Directed I)).k <>
              halt SCM+FSA)
  proof
@@ -1719,17 +1719,17 @@ theorem  ::TB61'(TB61'@BBB8)
      insloc 0 in dom Goto l & (Goto l).insloc 0 = goto l by Lm1;
 
 theorem Th48: ::T70
-  for N being with_non-empty_elements set,
-      S being definite (non empty non void AMI-Struct over N),
+  for IL being non empty set, N being with_non-empty_elements set,
+      S being definite (non empty stored-program AMI-Struct over IL,N),
       I being programmed FinPartState of S, x being set holds
        x in dom I implies I.x is Instruction of S
- proof
+ proof let IL be non empty set;
    let N be with_non-empty_elements set,
-       S be definite (non empty non void AMI-Struct over N);
+       S be definite (non empty stored-program AMI-Struct over IL,N);
    let I be programmed FinPartState of S;
    let x be set;
    assume A1: x in dom I;
-       dom I c= the Instruction-Locations of S by AMI_1:def 40;
+       dom I c= IL by AMI_1:def 40;
    then reconsider ll = x as Instruction-Location of S by A1,AMI_1:def 4;
    consider s being State of S;
        (s +* I).ll = I.x by A1,FUNCT_4:14;

@@ -30,6 +30,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -69,7 +70,7 @@
 </Func>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="80">
+<Adjective nr="84">
 <Func kind="K" nr="326">
 <Func kind="K" nr="258">
 <LocusVar nr="1"/>
@@ -85,7 +86,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="86"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -111,7 +112,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="88">
+<Adjective nr="92">
 <Func kind="K" nr="258">
 <Num nr="2"/>
 </Func>
@@ -122,7 +123,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="82"/>
+<Adjective nr="86"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">

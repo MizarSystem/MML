@@ -25,6 +25,7 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -74,7 +75,7 @@
 <Cluster>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="86"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 </Registrations>

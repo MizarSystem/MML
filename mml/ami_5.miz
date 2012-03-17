@@ -54,10 +54,9 @@ theorem Th19:
   st il = il.i
  proof
   let il be Instruction-Location of SCM;
-  consider k being Element of NAT such that
-  A1:  il = k;
+  reconsider k = il as Element of NAT by AMI_1:def 4;
   take k;
-  thus il = il.k by A1;
+  thus il = il.k;
  end;
 
 theorem Th20:
@@ -103,7 +102,8 @@ theorem
     then d in {IC SCM} \/ SCM-Data-Loc by XBOOLE_0:def 2;
     then d in {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_0:def 2;
    hence d in dom s by Th23,AMI_1:79;
-       l in {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_0:def 2;
+    l in SCM-Instr-Loc by AMI_1:def 4;
+    then l in {IC SCM} \/ SCM-Data-Loc \/ SCM-Instr-Loc by XBOOLE_0:def 2;
   hence l in dom s by Th23,AMI_1:79;
  end;
 
@@ -237,17 +237,12 @@ A3: dom f = NAT by FUNCT_2:def 1;
  end;
 
 theorem Th32:
- the Instruction-Locations of SCM is not finite
- proof
- deffunc F(Element of NAT) = $1;
- consider f being Function of NAT, NAT;
-    thus the Instruction-Locations of SCM is not finite by CARD_4:15;
- end;
+ NAT is not finite by CARD_4:15;
 
 registration
   cluster SCM-Data-Loc -> infinite;
 coherence by Th31;
-  cluster the Instruction-Locations of SCM -> infinite;
+  cluster NAT -> infinite;
 coherence by Th32;
 end;
 
@@ -638,7 +633,7 @@ theorem
   proof
    let loc be Instruction-Location of SCM;
    reconsider roku=6 as Element of Segm 9 by GR_CY_1:10;
-   reconsider mk=loc as Element of SCM-Instr-Loc;
+   reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
        @(goto loc) = [ roku, <*mk*>];
    hence (@(goto loc)) jump_address = loc by AMI_2:24;
   end;
@@ -652,7 +647,7 @@ theorem
    let loc be Instruction-Location of SCM,
          a be Data-Location;
    reconsider nana=7 as Element of Segm 9 by GR_CY_1:10;
-   reconsider mk=loc as Element of SCM-Instr-Loc;
+   reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
    reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
        @(a=0_goto loc) = [ nana, <*mk,aa*>];
    hence (@(a=0_goto loc)) cjump_address = loc &
@@ -668,7 +663,7 @@ theorem
    let loc be Instruction-Location of SCM,
          a be Data-Location;
    reconsider hachi=8 as Element of Segm 9 by GR_CY_1:10;
-   reconsider mk=loc as Element of SCM-Instr-Loc;
+   reconsider mk=loc as Element of SCM-Instr-Loc by AMI_1:def 4;
    reconsider aa=a as Element of SCM-Data-Loc by AMI_3:def 2;
        @(a>0_goto loc) = [ hachi, <*mk,aa*>];
    hence (@(a>0_goto loc)) cjump_address = loc &
@@ -1151,10 +1146,11 @@ then A2: dom (s | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
        let x be set;
        assume  x in SCM-Instr-Loc;
        then reconsider l = x as Instruction-Location of SCM by AMI_1:def 4;
+X:     l in SCM-Instr-Loc by AMI_1:def 4;
        thus (Exec (i, s) | SCM-Instr-Loc).x
-              = (Exec (i, s)).l by FUNCT_1:72
+              = (Exec (i, s)).l by FUNCT_1:72,X
              .= s.l by AMI_1:def 13
-             .= (s | SCM-Instr-Loc).x by FUNCT_1:72;
+             .= (s | SCM-Instr-Loc).x by FUNCT_1:72,X;
       end;
     hence Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc by A1,A2,FUNCT_1:9;
    end;
@@ -1173,10 +1169,10 @@ Lm1:
  then A1: SCM-Data-Loc misses {IC SCM} \/ SCM-Instr-Loc
   by AMI_2:29,XBOOLE_1:70;
      the carrier of SCM =
- {IC SCM} \/ (the Instruction-Locations of SCM) \/ SCM-Data-Loc
+ {IC SCM} \/ (NAT) \/ SCM-Data-Loc
           by Th23,XBOOLE_1:4;
- then (the carrier of SCM) \ ({IC SCM} \/ the Instruction-Locations of SCM)
-    = SCM-Data-Loc \ ({IC SCM} \/ the Instruction-Locations of SCM) by
+ then (the carrier of SCM) \ ({IC SCM} \/ NAT)
+    = SCM-Data-Loc \ ({IC SCM} \/ NAT) by
 XBOOLE_1:40
    .= SCM-Data-Loc by A1,XBOOLE_1:83;
   hence thesis;
@@ -1223,7 +1219,7 @@ theorem
      let i be Instruction of SCM,
          s be State of SCM,
          p be programmed FinPartState of SCM;
-      A1: dom p c= the Instruction-Locations of SCM by AMI_1:def 40;
+      A1: dom p c= NAT by AMI_1:def 40;
           now assume {IC SCM} meets SCM-Instr-Loc;
       then consider x being set such that
 A2:    x in {IC SCM} and
@@ -1301,10 +1297,10 @@ A3:  d1 in dom DataPart p by A1;
      then A4: SCM-Data-Loc \ dom p <> {} by XBOOLE_1:37;
  then d2 in SCM-Data-Loc by XBOOLE_0:def 4;
      then reconsider d2 as Data-Location by AMI_3:def 2;
-     consider il being Element of (the Instruction-Locations of SCM) \ dom p;
-      not the Instruction-Locations of SCM c= dom p by FINSET_1:13;
- then A5: (the Instruction-Locations of SCM) \ dom p <> {} by XBOOLE_1:37;
-     then il is Element of the Instruction-Locations of SCM by XBOOLE_0:def 4;
+     consider il being Element of (NAT) \ dom p;
+      not NAT c= dom p by FINSET_1:13;
+ then A5: (NAT) \ dom p <> {} by XBOOLE_1:37;
+     then il is Element of NAT by XBOOLE_0:def 4;
      then reconsider il as Instruction-Location of SCM by AMI_1:def 4;
      set p1 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 0) +* Start-At il);
      set p2 = p +* ((il .--> (d1:=d2)) +* ( d2.--> 1) +* Start-At il);
@@ -1495,9 +1491,9 @@ A4: dom ((Start-At il.0) +* Euclide-Algorithm)
 XBOOLE_0:def 2;
    hence IC SCM in dom p by A3,XBOOLE_0:def 2;
    assume
-  IC SCM in the Instruction-Locations of SCM;
+  IC SCM in NAT;
     then reconsider il = IC SCM as Instruction-Location of SCM by AMI_1:def 4;
-     il in the Instruction-Locations of SCM;
+     il in NAT by AMI_1:def 4;
    hence contradiction by Th19,SCM_1:7;
   end;
 end;
@@ -1599,8 +1595,9 @@ A2:   loc = il.ll by Th19;
    set loc1 = il.(ll+1);
   assume
 A3: not IC (Computation s).i in dom ProgramPart(p);
+X:     loc in SCM-Instr-Loc by AMI_1:def 4;
      loc in dom ProgramPart p iff loc in dom p /\ SCM-Instr-Loc by FUNCT_1:68;
-then A4:not loc in dom p by A3,XBOOLE_0:def 3;
+then A4:not loc in dom p by A3,XBOOLE_0:def 3,X;
 
     set p1 = p +* (loc .--> goto loc);
     set p2 = p +* (loc .--> goto loc1);

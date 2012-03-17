@@ -16,16 +16,15 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="COMPLEX1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="COMPLEX1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
@@ -44,7 +43,6 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="VECTSP_2"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="SEQM_3"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="FVSUM_1"/>
 <ArticleID name="POLYNOM1"/>
@@ -57,25 +55,25 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="44" value="false"/>
 <Adjective nr="45" value="false"/>
-<Adjective nr="46" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
-<Adjective nr="51"/>
-<Adjective nr="53"/>
+<Adjective nr="46"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="52"/>
+<Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
-<Adjective nr="60"/>
+<Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
 <Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="98"/>
+<Adjective nr="97"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -84,52 +82,52 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="44" value="false"/>
 <Adjective nr="45" value="false"/>
-<Adjective nr="46" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
-<Adjective nr="51"/>
+<Adjective nr="46"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
+<Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
-<Adjective nr="60"/>
+<Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
 <Adjective nr="73"/>
-<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="45" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="51"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="46"/>
+<Adjective nr="50"/>
+<Adjective nr="56"/>
 <Adjective nr="57"/>
 <Adjective nr="58"/>
 <Adjective nr="59"/>
-<Adjective nr="60"/>
+<Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="74"/>
+<Adjective nr="73"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="384">
+<Func kind="K" nr="359">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 <Adjective nr="50"/>
-<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -141,7 +139,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="385">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -157,7 +155,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="385">
+<Func kind="K" nr="360">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -168,9 +166,9 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="41" value="false"/>
-<Adjective nr="45" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="40" value="false"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="70"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -180,7 +178,7 @@
 <Func kind="K" nr="83"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="387">
+<Func kind="K" nr="362">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -192,10 +190,10 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="80">
+<Adjective nr="79">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="113">
+<Adjective nr="108">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

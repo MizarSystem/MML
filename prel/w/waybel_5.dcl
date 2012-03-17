@@ -36,6 +36,7 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FUNCT_5"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="YELLOW_0"/>
@@ -60,7 +61,7 @@
 <Adjective nr="68"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="148"/>
+<Adjective nr="151"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -96,7 +97,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="298">
+<Func kind="K" nr="301">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -118,7 +119,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="246">
+<Func kind="K" nr="249">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -156,7 +157,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="301">
+<Func kind="K" nr="304">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -194,7 +195,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="25">
-<Func kind="K" nr="302">
+<Func kind="K" nr="305">
 <LocusVar nr="3"/>
 <LocusVar nr="4"/>
 </Func>
@@ -251,7 +252,7 @@
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="148"/>
+<Adjective nr="151"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -262,7 +263,7 @@
 <Adjective nr="68"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="148"/>
+<Adjective nr="151"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -274,7 +275,7 @@
 <Adjective nr="90"/>
 <Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="144"/>
+<Adjective nr="147"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -285,7 +286,7 @@
 <Adjective nr="68"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="148"/>
+<Adjective nr="151"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
@@ -296,7 +297,7 @@
 <Adjective nr="68"/>
 <Adjective nr="90"/>
 <Adjective nr="91"/>
-<Adjective nr="139"/>
+<Adjective nr="142"/>
 </Cluster>
 </CCluster>
 </Registrations>

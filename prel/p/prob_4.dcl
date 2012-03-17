@@ -15,6 +15,7 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="CARD_3"/>
@@ -50,7 +51,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="29"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -61,10 +62,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="25">
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="28">
+<Adjective nr="31">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -75,7 +76,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="9">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -96,7 +97,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="29"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 </Registrations>

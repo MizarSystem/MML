@@ -21,11 +21,11 @@ environ
  constructors DOMAIN_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, PARTFUN1, SEQ_1,
       INT_2, SEQM_3, FINSEQ_4, RFINSEQ, AMI_5, SCMFSA_5, SCMFSA6A, SCMFSA6B,
       SCMFSA6C, SCMFSA8A, SCMFSA8B, SCMFSA8C, SCMFSA_9, SFMASTR1, SCM_HALT,
-      SCMBSORT;
+      SCMBSORT, SCMFSA_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, RELSET_1, FUNCOP_1,
       FINSUB_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED,
       CARD_3, STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6C,
-      SCMFSA8A, SCMFSA_9, SCM_HALT;
+      SCMFSA8A, SCMFSA_9, SCM_HALT, AMI_2, SCMFSA_1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
  definitions AMI_1, SCMFSA_2, FUNCOP_1;
  theorems SF_MASTR, FUNCT_1, FUNCT_7, FUNCOP_1, RELAT_1, AMI_1, FUNCT_2,
@@ -290,7 +290,7 @@ proof
    let s be State of SCM+FSA,I be Macro-Instruction;
    set s0 = Initialize s,
        s1 = s0 +* (I +* Start-At insloc 0),
-       A = the Instruction-Locations of SCM+FSA;
+       A = NAT;
    assume I is_halting_on s0;
 then A1: s1 is halting by SCMFSA7B:def 8;
    hereby let a be Int-Location;
@@ -311,17 +311,17 @@ end;
 theorem Th11:  ::SCMFSA6B_28
  for s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction st
      Initialized I c= s1 & Initialized I c= s2 &
- s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
+ s1,s2 equal_outside NAT holds
  for k be Element of NAT holds
      (Computation s1).k, (Computation s2).k
-         equal_outside the Instruction-Locations of SCM+FSA &
+         equal_outside NAT &
      CurInstr (Computation s1).k = CurInstr (Computation s2).k
 proof
    let s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction;
    assume that
 A1: Initialized I c= s1 and
 A2: Initialized I c= s2 and
-A3: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
+A3: s1,s2 equal_outside NAT;
 A4:  I c= s1 by A1,SCM_HALT:13;
 A5:  I c= s2 by A2,SCM_HALT:13;
    hereby let k be Element of NAT;
@@ -329,7 +329,7 @@ A5:  I c= s2 by A2,SCM_HALT:13;
           holds IC((Computation s2).m) in dom I
           by A2,SCM_HALT:def 1;
       hence (Computation s1).k, (Computation s2).k equal_outside
-          the Instruction-Locations of SCM+FSA by A3,A4,A5,SCMFSA6B:21;
+          NAT by A3,A4,A5,SCMFSA6B:21;
    then A6: IC (Computation s1).k = IC (Computation s2).k by AMI_1:121;
   A7: IC (Computation s1).k in dom I by A1,SCM_HALT:def 1;
   A8: IC (Computation s2).k in dom I by A2,SCM_HALT:def 1;
@@ -344,15 +344,15 @@ end;
 theorem Th12:   ::SCMFSA6B_29
  for s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction st
      Initialized I c= s1 & Initialized I c= s2 &
- s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
+ s1,s2 equal_outside NAT holds
  LifeSpan s1 = LifeSpan s2 &
- Result s1, Result s2 equal_outside the Instruction-Locations of SCM+FSA
+ Result s1, Result s2 equal_outside NAT
 proof
    let s1,s2 be State of SCM+FSA,I be InitHalting Macro-Instruction;
    assume that
 A1: Initialized I c= s1 and
 A2: Initialized I c= s2 and
-A3: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
+A3: s1,s2 equal_outside NAT;
 A4: s1 is halting by A1,SCM_HALT:5;
 A5: now let l be Element of NAT; assume
    A6: CurInstr (Computation s2).l = halt SCM+FSA;
@@ -368,7 +368,7 @@ A8: s2 is halting by A2,SCM_HALT:5;
 then A9: Result s2 = (Computation s2).LifeSpan s1 by A8,AMI_1:122;
         Result s1 = (Computation s1).LifeSpan s1 by A4,AMI_1:122;
    hence Result s1, Result s2 equal_outside
-       the Instruction-Locations of SCM+FSA by A1,A2,A3,A9,Th11;
+       NAT by A1,A2,A3,A9,Th11;
 end;
 
 theorem Th13:  ::SCMFSA6A_49
@@ -377,7 +377,7 @@ theorem Th13:  ::SCMFSA6A_49
 proof
    let I be Macro-Instruction,f be FinSeq-Location;
    assume A1: f in dom I;
-         dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+         dom I c= NAT by AMI_1:def 40;
       then reconsider f as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
        f=f;
     hence contradiction by SCMFSA_2:85;
@@ -389,22 +389,23 @@ theorem Th14:   ::SCMFSA6A_48
 proof
    let I be Macro-Instruction,a be Int-Location;
    assume A1: a in dom I;
-         dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+         dom I c= NAT by AMI_1:def 40;
       then reconsider a as Instruction-Location of SCM+FSA by A1,AMI_1:def 4;
        a=a;
     hence contradiction by SCMFSA_2:84;
 end;
 
 theorem Th15:  ::AMI_1_46
+  for IL being non empty set
   for N being non empty with_non-empty_elements set
   for S being halting IC-Ins-separated definite
-      (non empty non void AMI-Struct over N)
+      (non empty stored-program AMI-Struct over IL,N)
   for s being State of S st (LifeSpan s) <= j & s is halting holds
    (Computation s).j = (Computation s).(LifeSpan s)
-proof
+proof let IL be non empty set;
   let N be non empty with_non-empty_elements set,
       S be halting IC-Ins-separated definite
-      (non empty non void AMI-Struct over N),
+      (non empty stored-program AMI-Struct over IL,N),
      s be State of S;
      assume A1: (LifeSpan s) <= j & s is halting;
      then CurInstr((Computation s).(LifeSpan s)) = halt S by AMI_1:def 46;
@@ -626,7 +627,7 @@ A11:  (Computation s1).(0 + 1) = Following (Computation s1).0 by AMI_1:def 19
 then A13:  s2 | D = s1 | D by SCMFSA6A:38
      .= s0 | D by SCMFSA8A:11
      .= sI | D by SCMFSA8A:11;
-    defpred P[Element of NAT] means
+    defpred P[Nat] means
        $1 <= LifeSpan sI implies
        IC (Computation s1).(1 + $1) = IC (Computation sI).$1 + 4 &
        (Computation s1).(1 + $1) | D = (Computation sI).$1 | D;
@@ -803,7 +804,7 @@ for I be Macro-Instruction,a be read-write Int-Location,
   (n +(LifeSpan (StepWhile>0(a,s,I).k +* Initialized I) + 3))
 proof
   set D = Int-Locations \/ FinSeq-Locations;
-  set IL = the Instruction-Locations of SCM+FSA;
+  set IL = NAT;
     let I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA,k,n be Element of NAT;
     set s1 = s +* Initialized while>0(a,I);
@@ -843,7 +844,7 @@ theorem
      while>0(a,I) is_halting_onInit s & while>0(a,I) is_closed_onInit s
 proof
   set D = Int-Locations \/ FinSeq-Locations;
-  set IL = the Instruction-Locations of SCM+FSA;
+  set IL = NAT;
     let I be Macro-Instruction,a be read-write Int-Location,s be State
     of SCM+FSA;
     given f be Function of product the Object-Kind of SCM+FSA,NAT
@@ -1071,7 +1072,7 @@ A3: now let k be Element of NAT;
                  tW0=t +* Iwhile,
                  t1=t +* Initialized I,
                  Wt=(Computation tW0).((LifeSpan t1)+ 3),
-                 A = the Instruction-Locations of SCM+FSA,
+                 A = NAT,
                 It=(Computation t1).(LifeSpan t1);
          A9: IC Wt=insloc 0 &
              Wt | D = It | D by A6,A7,A8,Th21;
@@ -1178,7 +1179,7 @@ definition let D be set,
      end;
      suppose D is empty;
      then f = 0 by PARTFUN1:57;
-     hence f.d is Integer by CARD_1:51,FUNCT_1:def 4,RELAT_1:60;
+     hence f.d is Integer by FUNCT_1:def 4,RELAT_1:60;
   end;
   end;
 end;
@@ -1226,7 +1227,7 @@ A3: now let k be Element of NAT;
                  tW0=t +* Iwhile,
                  t1=t +* Initialized I,
                  Wt=(Computation tW0).((LifeSpan t1)+ 3),
-                 A = the Instruction-Locations of SCM+FSA,
+                 A = NAT,
                 It=(Computation t1).(LifeSpan t1);
          A10: IC Wt=insloc 0 &
              Wt | D = It | D by A7,A8,A9,Th21;
@@ -1301,7 +1302,7 @@ proof
    set Is=Initialize s;
    assume s.a <= 0;
 then A1: Is.a <= 0 by SCMFSA6C:3;
-    set A = the Instruction-Locations of SCM+FSA;
+    set A = NAT;
     set s1 = Is +* (while>0(a,I) +* Start-At insloc 0);
     set s2 = (Computation s1).1;
     set s3 = (Computation s1).2;
@@ -1410,7 +1411,7 @@ proof
    let s be State of SCM+FSA,I be good InitHalting Macro-Instruction,
    a be read-write Int-Location;
    assume A1:s.a > 0 & while>0(a,I) is InitHalting;
-   set ps = s | the Instruction-Locations of SCM+FSA,
+   set ps = s | NAT,
        sI = s +* Initialized I,
        Iwhile= Initialized while>0(a,I),
        sW = s +* Iwhile,
@@ -1420,7 +1421,7 @@ proof
        CI = Computation sI,
        CW = Computation sW,
        C3 = Computation s3;
-      set A = the Instruction-Locations of SCM+FSA;
+      set A = NAT;
       Initialized I c= sI by FUNCT_4:26;
 then A2: sI is halting by AMI_1:def 26;
 A3: Iwhile c= sW by FUNCT_4:26;

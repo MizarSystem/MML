@@ -24,6 +24,7 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -96,9 +97,9 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="94"/>
-<Adjective nr="95"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -106,14 +107,14 @@
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 <Func kind="K" nr="53"/>
 </Typ>
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 <Func kind="K" nr="53"/>
 </Typ>
@@ -123,9 +124,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="90"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="94"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -142,7 +143,7 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="92"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -163,11 +164,11 @@
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="90"/>
 <Adjective nr="94"/>
-<Adjective nr="95"/>
-<Adjective nr="96"/>
-<Adjective nr="97"/>
+<Adjective nr="98"/>
+<Adjective nr="99"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
 </Cluster>
 </FCluster>
 </Registrations>

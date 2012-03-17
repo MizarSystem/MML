@@ -19,7 +19,7 @@ environ
       FUNCT_7, GR_CY_1, EUCLID, GCD_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
       XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1, NEWTON, STRUCT_0, VECTSP_1,
-      GR_CY_1, GCD_1;
+      GR_CY_1, GCD_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1, VECTSP_2, CARD_1;
  theorems TARSKI, BINOP_1, FUNCT_1, FUNCT_2, VECTSP_1, INT_1, RELAT_1, GCD_1,
@@ -216,14 +216,7 @@ definition
      abs(a) in INT by INT_1:def 2;
     hence thesis;
   end;
-  compatibility
-  proof
-    let x be Element of M;
-    thus a >= 0.M implies (x = abs(a) iff x = a) by Lm3,ABSVALUE:def 1;
-    reconsider b = a as Integer;
-    assume a < 0.M;
-    hence thesis by Lm3,COMPLEX1:156;
-  end;
+  compatibility by Lm3,ABSVALUE:def 1;
   consistency;
 end;
 
@@ -1097,7 +1090,7 @@ let a be Integer;
   then (a div n) * n <= a * (n" * n);
   then (a div n) * n <= a * 1 by A1,XCMPLX_0:def 7;
   then (a div n) * n - (a div n) * n <= a - (a div n) * n by XREAL_1:11;
-  hence 0 <= a mod n by A1,INT_1:def 8;
+  hence 0 <= a mod n by INT_1:def 8;
   assume a mod n >= n;
   then a - (a div n) * n >= n by A1,INT_1:def 8;
   then (a + -(a div n) * n) + (a div n) * n >= n + (a div n) * n
@@ -1303,7 +1296,7 @@ A14:         r in NAT by ORDINAL1:def 13;
                by A7,A11,A12
              .= a * (u + -(s * (x' div g))) + b * (v + -(t * (x' div g)));
             then r in M by A14;
-            then r = 0 by A5,A13,A14;
+            then r = 0 by A5,A13;
             hence thesis by A11,A13;
             end;
              for x being set holds x in G implies x in M
@@ -1350,7 +1343,7 @@ A14:         r in NAT by ORDINAL1:def 13;
         hence thesis by A26,NAT_D:def 3;
         end;
      then g = abs(a) hcf abs(b) by A20,NAT_D:def 5
-                .= a gcd b by INT_2:def 3;
+                .= a gcd b by INT_2:51;
      hence thesis by A7;
      end;
     now per cases;
@@ -1359,7 +1352,7 @@ A29:for a,b being Integer holds a = 0 implies a gcd b = abs(b)
     proof
     let a,b be Integer; assume a = 0;
     then A30: abs(a) = 0 by ABSVALUE:def 1;
-    A31: a gcd b = abs(a) hcf abs(b) by INT_2:def 3;
+    A31: a gcd b = abs(a) hcf abs(b) by INT_2:51;
     A32: abs(b) divides abs(a) by A30,NAT_D:6;
      for m being Nat st
     m divides abs(a) & m divides abs(b) holds m
@@ -1405,9 +1398,9 @@ case a < 0 & b >= 0;
   then consider s,t being Integer such that A36: -a gcd b = s * -a + t * b by
 A1;
   A37: s * -a + t * b = (-s) * a + t * b;
-      a gcd b = abs(a) hcf abs(b) by INT_2:def 3
+      a gcd b = abs(a) hcf abs(b) by INT_2:51
          .= abs((-a)) hcf abs(b) by COMPLEX1:138
-         .= -a gcd b by INT_2:def 3;
+         .= -a gcd b by INT_2:51;
   hence thesis by A36,A37;
 end;
 case a >= 0 & b < 0;
@@ -1415,9 +1408,9 @@ case a >= 0 & b < 0;
   then consider s,t being Integer such that A38: a gcd -b = s * a + t * -b by
 A1;
   A39: s * a + t * -b = s * a + (-t) * b;
-      a gcd b = abs(a) hcf abs(b) by INT_2:def 3
+      a gcd b = abs(a) hcf abs(b) by INT_2:51
          .= abs(a) hcf abs((-b)) by COMPLEX1:138
-         .= a gcd -b by INT_2:def 3;
+         .= a gcd -b by INT_2:51;
   hence thesis by A38,A39;
 end;
 case a < 0 & b < 0;
@@ -1425,10 +1418,10 @@ case a < 0 & b < 0;
   then consider s,t being Integer such that A40: -a gcd -b = s * -a + t * -b
 by A1;
   A41: s * -a + t * -b = (-s) * a + (-t) * b;
-      a gcd b = abs(a) hcf abs(b) by INT_2:def 3
+      a gcd b = abs(a) hcf abs(b) by INT_2:51
          .= abs(a) hcf abs((-b)) by COMPLEX1:138
          .= abs((-a)) hcf abs((-b)) by COMPLEX1:138
-         .= -a gcd -b by INT_2:def 3;
+         .= -a gcd -b by INT_2:51;
   hence thesis by A40,A41;
 end;
 end;
@@ -2204,11 +2197,7 @@ GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,VECTSP_1:def 18;
 end;
 
 Lm13: for p being natural number st p > 0 holds 0.(INT.Ring(p)) = 0
-proof
-let p be natural number; assume p > 0;
-then 0 in Segm(p) by GR_CY_1:12;
-hence 0.(INT.Ring(p)) = 0 by FUNCT_7:def 1;
-end;
+    by GR_CY_1:12,FUNCT_7:def 1;
 
 theorem
 Th22:for p being natural number st p > 1 holds
@@ -2256,7 +2245,7 @@ A2: now assume A3: p is Prime;
       hence thesis by A3,A7,INT_2:def 5;
       end;
     then a' hcf p = 1 by A6,NAT_D:def 5;
-    then a' gcd p = 1 by A5,INT_2:def 3;
+    then a' gcd p = 1 by A5,INT_2:51;
     then consider s,t being Integer such that
     A12: 1 = s * a' + t * p by Th16;
     A13: s mod p >= 0 & s mod p < p by Th9;

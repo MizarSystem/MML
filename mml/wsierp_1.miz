@@ -17,7 +17,7 @@ environ
       FINSEQ_4, FINSOP_1, RVSUM_1, NEWTON, PREPOWER, TREES_4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XXREAL_0, XREAL_0, SQUARE_1, NAT_1, INT_1, RAT_1, MEMBERED, FINSEQ_1,
-      SEQ_1, RVSUM_1, NEWTON;
+      SEQ_1, RVSUM_1, NEWTON, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSEQ_1, TARSKI, SQUARE_1, RVSUM_1;
  theorems TARSKI, ABSVALUE, INT_1, NAT_1, INT_2, RAT_1, REAL_1, REAL_2, NEWTON,
@@ -156,23 +156,6 @@ proof
  hence thesis by Th9;
 end;
 
-Lm5:
-    for a,b be Nat holds a gcd b = a hcf b
-proof
-  let a,b be Nat;
-     a gcd b = abs(a) hcf abs(b) by INT_2:def 3
-        .= a hcf abs(b) by ABSVALUE:def 1;
- hence thesis by ABSVALUE:def 1;
-end;
-
-Lm6:
- a,b are_relative_prime iff a,(b qua Integer) are_relative_prime
-proof
-     a,b are_relative_prime iff (a hcf b)=1 by INT_2:def 6;
- then a,b are_relative_prime iff (a gcd b)=1 by Lm5;
- hence thesis by INT_2:def 4;
-end;
-
 theorem Th11:
  m gcd n = 1 & k gcd n = 1 implies m*k gcd n = 1
 proof
@@ -183,21 +166,15 @@ proof
 end;
 
 theorem Th12:
- a hcf b=1 & c hcf b=1 implies a*c hcf b=1
-proof
- assume a hcf b=1 & c hcf b=1;
- then a gcd b=1 & c gcd b=1 by Lm5;
- then a*c gcd b=1 by Th11;
- hence thesis by Lm5;
-end;
+ a hcf b=1 & c hcf b=1 implies a*c hcf b=1 by Th11;
 
 theorem Th13:
  0 gcd m = abs m & 1 gcd m = 1
 proof
- A1: m gcd 0=abs(m) hcf abs(0) by INT_2:def 3
+ A1: m gcd 0=abs(m) hcf abs(0 qua Nat) by INT_2:51
             .=abs(m) hcf 0 by ABSVALUE:7
             .=abs(m) by NEWTON:65;
-     m gcd 1=abs(m) hcf abs(1) by INT_2:def 3
+     m gcd 1=abs(m) hcf abs(1) by INT_2:51
          .=abs(m) hcf 1 by ABSVALUE:def 1
          .=1 by NEWTON:64;
  hence thesis by A1;
@@ -247,13 +224,7 @@ proof
 end;
 
 Lm7:
- a hcf b = 1 implies a hcf b|^d = 1 & a|^c hcf b|^d = 1
-proof
- assume a hcf b=1;
- then a gcd b=1 by Lm5;
- then a gcd b|^d=1 & a|^c gcd b|^d=1 by Th17;
- hence thesis by Lm5;
-end;
+ a hcf b = 1 implies a hcf b|^d = 1 & a|^c hcf b|^d = 1 by Th17;
 
 theorem
      abs m divides k iff m divides k
@@ -309,12 +280,7 @@ proof
 end;
 
 theorem Th21:
- d divides a & a hcf b = 1 implies d hcf b = 1
-proof
- assume d divides a & a hcf b = 1;
- then (b hcf d) divides 1 by NEWTON:70;
- hence thesis by Th20;
-end;
+ d divides a & a hcf b = 1 implies d hcf b = 1 by Th20,NEWTON:70;
 
 Lm8:
  a<>0 implies (a divides b iff b/a is Element of NAT)
@@ -426,18 +392,7 @@ end;
 
 registration let f be FinSequence of INT; let a be set;
  cluster f.a -> integer;
- coherence
-  proof
-A1:rng f c= INT by FINSEQ_1:def 4;
-   per cases;
-   suppose a in dom f;
-   then f.a in rng f by FUNCT_1:def 5;
-   hence thesis by A1,INT_1:def 2;
-   end;
-   suppose not a in dom f;
-   hence thesis by FUNCT_1:def 4;
-  end;
-  end;
+ coherence;
 end;
 
 definition let fp be FinSequence of NAT;
@@ -967,7 +922,7 @@ proof
  end;
  suppose A3:fp.a=0;
      Product(fp)/fp.a = Product(fp)*(fp.a)" by XCMPLX_0:def 9
-                 .= Product(fp)*0 by A3,XCMPLX_0:def 7
+                 .= Product(fp)*(0 qua Nat) by A3,XCMPLX_0:def 7
                  .= 0;
  hence thesis;
 end;
@@ -1094,7 +1049,7 @@ A4: f in NAT by ORDINAL1:def 13;
   hence thesis by A6,CARD_4:51;
  end;
  A7: now assume b=0;
-  then a*0=b;
+  then a*(0 qua Nat)=b;
   hence thesis by NAT_D:def 3;
  end;
      now assume a<>0 & b<>0;
@@ -1136,19 +1091,17 @@ A6: P[d] & for c being Nat st P[c] holds d<=c from NAT_1:sch 5(A5);
    A7: d>0 by A6;
    consider m,n such that A8: d=a*m+b*n by A6;
     consider e,f be Nat such that A9: a=d*e+f & f<d by A7,NAT_1:17;
-A10:  e in NAT & f in NAT by ORDINAL1:def 13;
      now assume A11: f<>0;
        f=a-d*e by A9
      .=a*(1-m*e)+b*(-(n*e)) by A8;
-     hence contradiction by A6,A9,A10,A11;
+     hence contradiction by A6,A9,A11;
     end;
    then A12: d divides a by A9,NAT_D:def 3;
     consider e,f be Nat such that A13: b=d*e+f & f<d by A7,NAT_1:17;
-A14:  e in NAT & f in NAT by ORDINAL1:def 13;
      now assume A15:f<>0;
          f=b-d*e by A13
         .=b*(1-n*e)+a*(-(m*e)) by A8;
-     hence contradiction by A6,A13,A14,A15;
+     hence contradiction by A6,A13,A15;
     end;
    then d divides b by A13,NAT_D:def 3;
    then A16: d divides (a hcf b) by A12,NAT_D:def 5;
@@ -1164,7 +1117,7 @@ end;
 theorem Th35:
  ex m1,n1 st m gcd n = m*m1+n*n1
 proof
-     m gcd n=abs(m) hcf abs(n) by INT_2:def 3;
+     m gcd n=abs(m) hcf abs(n) by INT_2:51;
  then consider m1,n1 such that A1: abs(m)*m1+abs(n)*n1=(m gcd n) by Th34;
       now per cases;
    suppose m>=0 & n>=0;
@@ -1202,13 +1155,7 @@ end;
 
 theorem Th37:
   for a,b,c being Nat holds
-  a hcf b=1 & a divides b*c implies a divides c
-proof
-  let a,b,c be Nat;
- assume A1: a hcf b=1 & a divides b*c;
- then a gcd b=1 by Lm5;
- hence thesis by A1,Th36;
-end;
+  a hcf b=1 & a divides b*c implies a divides c by Th36;
 
 theorem Th38:
  a<>0 & b<>0 implies ex c,d st a hcf b=a*c-b*d
@@ -1316,7 +1263,6 @@ theorem
 proof
  assume A1: (a hcf b)=1 & a*b=c|^d;
  set e=a hcf c;
- A2: e=a gcd c by Lm5;
  A3: e divides c & e divides a by NAT_D:def 5;
  then A4: e|^d divides c|^d by Th19;
      e hcf b=1 by A1,A3,Th21;
@@ -1343,7 +1289,7 @@ proof
    hence thesis by A12;
   end;
       now assume A13: e<>0;
-   then A14: a<>0 or c <>0;
+   then A14: a<>0 or c <>0 by INT_2:5;
    then A15: a <> 0 by A1,CARD_4:51;
    A16: now assume A17: 0=c;
     then a*b=0 by A1,A8,NEWTON:16;
@@ -1358,11 +1304,11 @@ proof
     A21: e1|^d<>0 by A13,CARD_4:51;
     consider a1,c1 being Integer such that
       A22: a=e*a1 & e*c1=c & a1,(c1 qua Integer) are_relative_prime
-         by A2,A20,INT_2:38;
+         by A20,INT_2:38;
     reconsider a1,c1 as Element of NAT by A15,A20,A22,Lm9;
     A23: a1=a/e & c1=c/e by A13,A22,XCMPLX_1:90;
-        a1,c1 are_relative_prime by A22,Lm6;
-    then A24: (a1 hcf c1)=1 by INT_2:def 6;
+        a1,c1 are_relative_prime by A22;
+    then A24: (a1 hcf c1)=1 by INT_2:def 4;
         a1=(e|^(d1+1))*g/e by A5,A9,A13,A22,XCMPLX_1:90
      .=(e*(e|^d1)*g)/e by NEWTON:11
      .=e*((e|^d1)*g)/e
@@ -1449,7 +1395,7 @@ proof
         hence thesis by A4;
        end;
       then (fp1.1 hcf fp1.2) divides (fr.1 - fr.2) by INT_2:16;
-      then (fp1.1 gcd fp1.2) divides (fr.1 - fr.2) by Lm5;
+      then (fp1.1 gcd fp1.2) divides (fr.1 - fr.2);
       then consider m,n such that A7:(fp1.1)*m+(fp1.2)*n=fr.1-fr.2 by Th40;
       reconsider x=-m,y=n as Element of INT by INT_1:def 2;
       take fr1=<*x,y*>;
@@ -1502,7 +1448,7 @@ A21:   len fr1=k & for b st b in dom fp holds
         hence thesis by A4,A22,A23,A24,A25,A26;
        end;
       then Product(fp) hcf d=1 by Th43;
-      then Product(fp) gcd d=1 by Lm5;
+      then Product(fp) gcd d=1;
       then (Product(fp) gcd d) divides (fr2.(k+1)-(fp.1)*(fr1.1)-fr2.1)
         by INT_2:16;
       then consider m1,n1 such that
@@ -1601,10 +1547,7 @@ end;
 end;
 
 Lm24:
- a divides m iff a divides abs(m)
-proof
- thus thesis by Lm23;
-end;
+ a divides m iff a divides abs(m) by Lm23;
 
 Lm25:
  m*n mod n=0

@@ -22,6 +22,7 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="UNIALG_1"/>
@@ -43,10 +44,10 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="14">
 <Cluster>
-<Adjective nr="83"/>
 <Adjective nr="86"/>
+<Adjective nr="89"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -56,7 +57,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="230">
+<Func kind="K" nr="233">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -69,7 +70,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="235">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -91,7 +92,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="231">
+<Func kind="K" nr="234">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

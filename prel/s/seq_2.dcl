@@ -14,8 +14,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
 <CCluster>
@@ -23,8 +22,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="25"/>
-<Adjective nr="28"/>
+<Adjective nr="21"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -32,9 +31,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="21"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -42,9 +41,9 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="21"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -52,8 +51,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="25"/>
-<Adjective nr="28"/>
+<Adjective nr="21"/>
+<Adjective nr="27"/>
 </Cluster>
 </CCluster>
 </Registrations>

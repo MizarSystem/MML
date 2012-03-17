@@ -25,6 +25,7 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -45,20 +46,20 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="213"/>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>

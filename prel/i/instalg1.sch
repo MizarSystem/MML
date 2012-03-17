@@ -19,6 +19,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="STRUCT_0"/>
@@ -41,13 +42,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="46" value="false"/>
+<Adjective nr="32" value="false"/>
+<Adjective nr="49" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="49">
+<Adjective nr="52">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -74,7 +75,7 @@
 </Func>
 <Func kind="U" nr="8">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="332">
+<Func kind="K" nr="335">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -88,7 +89,7 @@
 <And>
 <Pred kind="R" nr="33">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="332">
+<Func kind="K" nr="335">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -112,13 +113,13 @@
 </Typ>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
-<Func kind="K" nr="213">
+<Func kind="K" nr="216">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 <Func kind="U" nr="8">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="332">
+<Func kind="K" nr="335">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 </Func>
@@ -130,7 +131,7 @@
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
-<Func kind="K" nr="269">
+<Func kind="K" nr="272">
 <Func kind="K" nr="17">
 <Var nr="3"/>
 <Var nr="2"/>

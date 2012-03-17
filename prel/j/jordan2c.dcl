@@ -28,6 +28,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -276,7 +277,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="84">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

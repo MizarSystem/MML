@@ -202,6 +202,11 @@ registration let P,R;
  end;
 end;
 
+registration let R,S be Relation;
+ cluster R \+\ S -> Relation-like;
+ coherence;
+end;
+
 definition let P,A;
  redefine pred P c= A means
 :Def3: for a,b holds [a,b] in P implies [a,b] in A;
@@ -222,10 +227,7 @@ end;
 canceled 2;
 
 theorem
-   X /\ R is Relation
- proof X /\ R c= R by XBOOLE_1:17;
-   hence thesis by Th3;
- end;
+   X /\ R is Relation by Th3,XBOOLE_1:17;
 
 theorem
    R \ X is Relation by Th3;
@@ -376,11 +378,7 @@ theorem Th21:
  end;
 
 theorem
-   R /\ [:dom R, rng R:] = R
- proof
-     R c= [:dom R, rng R:] by Th21;
-    hence thesis by XBOOLE_1:28;
- end;
+   R /\ [:dom R, rng R:] = R by Th21,XBOOLE_1:28;
 
 theorem Th23:
   R = {[x,y]} implies dom R = {x} & rng R = {y}
@@ -1385,12 +1383,10 @@ theorem
  end;
 
 theorem
-   (R|X)*P c= R*P
- proof (R|X) c= R by Th88; hence thesis by Th49; end;
+   (R|X)*P c= R*P by Th49,Th88;
 
 theorem
-   P*(R|X) c= P*R
- proof (R|X) c= R by Th88; hence thesis by Th48; end;
+   P*(R|X) c= P*R by Th48,Th88;
 
 theorem
    R|X = (id X)*R
@@ -1721,12 +1717,10 @@ theorem
  end;
 
 theorem
-   (Y|R)*P c= R*P
- proof (Y|R) c= R by Th117; hence thesis by Th49; end;
+   (Y|R)*P c= R*P by Th49,Th117;
 
 theorem
-   P*(Y|R) c= P*R
- proof (Y|R) c= R by Th117; hence thesis by Th48; end;
+   P*(Y|R) c= P*R by Th48,Th117;
 
 theorem
    Y|R = R*(id Y)
@@ -2237,8 +2231,7 @@ A5:     [x,y] in P by A4,Def5;
  end;
 
 theorem Th161:
-  (R|X).:Y c= R.:Y
- proof (R|X) c= R by Th88; hence thesis by Th157; end;
+  (R|X).:Y c= R.:Y by Th88,Th157;
 
 theorem
    for R be Relation, X, Y be set st X c= Y holds (R|Y).:X = R.:X
@@ -2731,4 +2724,22 @@ theorem
    thus R | D = (R | dom R) | D by Th97
    .= R | (dom R /\ D) by Th100;
  end;
+
+:: missing, 2007.11.07, A.T.
+
+theorem
+ dom [:X,Y:] c= X
+  proof let x;
+   assume x in dom [:X,Y:];
+    then ex y st [x,y] in [:X,Y:] by Def4;
+   hence x in X by ZFMISC_1:106;
+  end;
+
+theorem
+ rng [:X,Y:] c= Y
+  proof let x;
+   assume x in rng [:X,Y:];
+    then ex y st [y,x] in [:X,Y:] by Def5;
+   hence x in Y by ZFMISC_1:106;
+  end;
 

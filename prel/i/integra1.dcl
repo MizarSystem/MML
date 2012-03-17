@@ -23,7 +23,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="INT_1"/>
@@ -33,6 +33,7 @@
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GOBOARD1"/>
@@ -51,7 +52,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -66,7 +67,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -111,7 +112,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -127,7 +128,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="107"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -136,7 +137,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="106"/>
+<Adjective nr="110"/>
 </Cluster>
 </CCluster>
 </Registrations>

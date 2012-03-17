@@ -12,7 +12,7 @@ environ
       NAT_1, NAT_LAT, CARD_1, SQUARE_1, UPROOTS, NAT_3, MATRIX_2, RLVECT_1,
       COMPLEX1, XREAL_0, MEMBERED, MSUALG_3, FUZZY_2;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, MEMBERED, ORDINAL1,
-      XXREAL_0, XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, REAL_1, INT_2, NEWTON,
+      XXREAL_0, XCMPLX_0, XREAL_0, INT_1, NAT_1, REAL_1, INT_2, NAT_D, NEWTON,
       SQUARE_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, RVSUM_1, BINARITH,
       EULER_1, EQREL_1, RELAT_2, PARTFUN1, FINSET_1, POLYNOM1, POLYNOM2, NAT_3,
       UPROOTS, TREES_4, WSIERP_1, MEASURE6, INTEGRA2;
@@ -20,7 +20,10 @@ environ
       POLYNOM2, UPROOTS, NAT_3, NAT_D, MEASURE6, INTEGRA2;
  registrations RELAT_1, FINSEQ_1, CARD_1, PARTFUN1, SQUARE_1, WSIERP_1, NAT_1,
       INT_1, MEMBERED, FINSET_1, SEQM_3, NEWTON, NAT_3, XXREAL_0, NUMBERS,
-      XBOOLE_0, XREAL_0, ORDINAL1, SUBSET_1, FUNCT_1;
+      XBOOLE_0, XREAL_0, ORDINAL1, SUBSET_1, FUNCT_1, PREPOWER;
+registrations
+      XCMPLX_0,
+      BINOP_2, SEQ_1, RVSUM_1, PRE_CIRC, TEX_2, POLYNOM1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, INT_1, FINSEQ_1, XCMPLX_0, INT_2, EULER_1, SQUARE_1,
       RELAT_2, PARTFUN1, CARD_1, TARSKI, XBOOLE_0, WELLORD2;
@@ -30,7 +33,7 @@ environ
       WSIERP_1, CARD_1, PEPIN, NAT_1, XCMPLX_1, XREAL_1, ORDINAL1, EULER_1,
       FINSEQ_1, XBOOLE_1, TARSKI, ZFMISC_1, RVSUM_1, INT_1, FUNCT_1, UPROOTS,
       REAL_1, RADIX_1, SEQM_3, XXREAL_0, NAT_D, MEASURE6, XREAL_0, MEMBERED,
-      INTEGRA2;
+      INTEGRA2, VALUED_0;
  schemes NAT_1, FINSEQ_1, FINSEQ_2, RELSET_1, GRAPH_5;
 
 begin
@@ -87,20 +90,12 @@ end;
 
 registration let X be finite real-membered set, a be real number;
   cluster a ++ X -> finite;
-  coherence
-  proof X, a ++ X are_equipotent by Th1;
-    hence thesis by CARD_1:68;
-  end;
+  coherence by Th1,CARD_1:68;
 end;
 
 theorem Th2:
   for X being finite real-membered set, a being real number holds
-    card X = card (a ++ X)
-proof
-   let X be finite real-membered set, a be real number;
-   X,(a ++ X) are_equipotent by Th1;
-   hence thesis by CARD_1:81;
-end;
+    card X = card (a ++ X) by Th1,CARD_1:81;
 
 Lm1:
   for a being Integer, X being Subset of INT holds a ++ X c= INT
@@ -251,12 +246,7 @@ end;
 
 theorem Th5:
   for X being finite real-membered set, a being real number st a <> 0 holds
-    card X = card (a ** X)
-proof let X be finite real-membered set, a be real number;
-   assume a <> 0;then
-   X,a ** X are_equipotent by Th3;
-   hence thesis by CARD_1:81;
-end;
+    card X = card (a ** X) by Th3,CARD_1:81;
 
 begin
 
@@ -283,7 +273,7 @@ proof
  assume p divides n;
  then n hcf p = p by A2,NEWTON:62;
  then n hcf p >1 by A1,INT_2:def 5;
- hence contradiction by A1,INT_2:def 6;
+ hence contradiction by A1,INT_2:def 4;
 end;
 
 Lm8:p>0 implies p >= 1+0 by NAT_1:13;
@@ -384,7 +374,7 @@ proof let i be Integer;
     end;
     suppose A1:i<>0;
       0 div i = 0 by INT_1:47;
-      then 0 mod i = 0-i*0 by A1,INT_1:def 8;
+      then 0 mod i = 0-i*(0 qua Nat) by A1,INT_1:def 8;
       hence thesis;
     end;
 end;
@@ -406,7 +396,7 @@ A3:b is Nat by ORDINAL1:def 13;
     thus thesis by A4;
     end;
    suppose a<0;
-    then a<=-0;
+    then a<=-(0 qua Nat);
     then -a>=0 by REAL_2:109;
     then -a in NAT by INT_1:16;then
 A5: -a is Nat by ORDINAL1:def 13;
@@ -439,9 +429,11 @@ A2:i1=i3*i+i2 by A1;
 A3:i2=i1-i3*i by A1;
    set d=i2 gcd i3;
    reconsider d as Nat;
+X: d = abs i2 gcd abs i3 by  INT_2:51;
+   then
 A4: d divides abs(i2) & d divides abs(i3) & (for n being Nat
               st n divides abs(i2) & n divides abs(i3) holds n divides d)
-                                                              by NAT_D:def 5;
+                                                 by NAT_D:def 5;
    abs(i1) hcf abs(i3) = d
     proof
 A5:   abs(d)=d by ABSVALUE:def 1;
@@ -460,11 +452,11 @@ A5:   abs(d)=d by ABSVALUE:def 1;
          then n divides i2 by A3,A9,Lm5;
          then abs n divides abs i2 by INT_2:21;
          then n divides abs(i2) by ABSVALUE:def 1;
-         hence thesis by A8,NAT_D:def 5;
+         hence thesis by A8,NAT_D:def 5,X;
        end;
        hence thesis by A4,A7,NAT_D:def 5;
      end;
-    hence thesis;
+    hence thesis by X,INT_2:51;
 end;
 
 theorem Th15:
@@ -523,7 +515,8 @@ proof assume A1:m<>0 & (a gcd m) divides b;
    consider y being Integer such that A5:(a1*y-b1) mod m1 = 0 by A2,Th15;
    (a1*y-b1) mod m1 = 0 mod m1 by A5,Th12;
    then a1*y-b1,0 are_congruent_mod m1 by A4,INT_3:12;
-   then (a1*y-b1)*(a gcd m),(a gcd m)*0 are_congruent_mod m1*(a gcd m) by Th10;
+   then (a1*y-b1)*(a gcd m),
+   (a gcd m)*(0 qua Nat) are_congruent_mod m1*(a gcd m) by Th10;
    then A6:(a*y-b) mod m = 0 mod m by A2,A3,INT_3:12;
    take x=y;
    thus thesis by A6,Th12;
@@ -704,7 +697,7 @@ proof assume A1:n>0 & p is prime & p,q are_relative_prime;
      then A8:p divides q by A7,NAT_D:10;
      reconsider p,q as Element of NAT by ORDINAL1:def 13;
      p hcf q > 1 by A2,A8,NEWTON:62;
-    hence contradiction by A1,INT_2:def 6;
+    hence contradiction by A1,INT_2:def 4;
    end;
 end;
 
@@ -862,7 +855,8 @@ proof let a,m be Element of NAT;
    then m divides ((a*x-b)-0) by A1,INT_1:89;
    then a*x-b,0 are_congruent_mod m by INT_2:19;
    then 0,a*x-b are_congruent_mod m by INT_1:35;
-   then (a|^(Euler m -'1))*0,(a|^(Euler m -'1))*(a*x-b) are_congruent_mod m
+   then (a|^(Euler m -'1))*(0 qua Nat),
+   (a|^(Euler m -'1))*(a*x-b) are_congruent_mod m
                                                            by Th11;
    then 0,(a|^(Euler m -'1))*a*x-(a|^(Euler m -'1))*b are_congruent_mod m;
    then A2:0,(a|^(Euler m -'1+1))*x-(a|^(Euler m -'1))*b are_congruent_mod m
@@ -872,7 +866,7 @@ proof let a,m be Element of NAT;
      set X = {k where k is Element of NAT:m,k are_relative_prime
                                                    & k >= 1 & k <= m};
      1 hcf m = 1 by NEWTON:64;
-     then m,1 are_relative_prime by INT_2:def 6;
+     then m,1 are_relative_prime by INT_2:def 4;
      then 1 in X by A1;
      hence contradiction by A3,CARD_2:59;
    end;
@@ -898,7 +892,7 @@ theorem :: Theorem 6.1, from Chapter 2 of Hua Loo Keng
   holds not fp.c1,fp.c2 are_congruent_mod m)
 proof assume A1: m<>0 & (a gcd m) divides b;
   set l = a gcd m;
-    reconsider l as Element of NAT;
+    reconsider l as Element of NAT by ORDINAL1:def 13;
     consider a1,m1 being Integer such that
 A2: a = l*a1 & m = l*m1 & a1,m1 are_relative_prime by A1,INT_2:38;
      consider b1 being Integer such that A3:b=l*b1 by A1,INT_1:def 9;
@@ -961,17 +955,9 @@ begin
          fr for FinSequence of INT,
          a,b,c,d,k,n for Element of NAT;
 
-Lm10:a gcd b = a hcf b
-proof
-  abs a = a & abs b = b by ABSVALUE:def 1;
-  hence thesis;
-end;
+Lm10:a gcd b = a hcf b by ABSVALUE:def 1;
 
-Lm11:a lcm' b = a lcm b
-proof
-  abs(a) = a & abs(b) = b by ABSVALUE:def 1;
-  hence thesis;
-end;
+Lm11:a lcm' b = a lcm b by ABSVALUE:def 1;
 
 theorem Th30:
   for b,n st b in dom fp & len fp = n+1
@@ -1409,7 +1395,7 @@ A8:    for b,c st b in dom fp & c in dom fp & b<>c holds (fp.b hcf fp.c)=1
       hence thesis by A13,FINSEQ_1:59;
     end;
     then Product(fp) hcf d = 1 by WSIERP_1:43;
-    then Product(fp),d are_relative_prime by INT_2:def 6;
+    then Product(fp),d are_relative_prime by INT_2:def 4;
     then (Product(fp) * d) divides a by A3,A6,A11,PEPIN:4;
    hence CC[fp1] by RVSUM_1:126;
   end;
@@ -1674,7 +1660,8 @@ A10:a = (a div d1)*d1 & b = (b div d2)*d2 by Lm14;
 A11:  (m1 div d1),(m2 div d2) are_relative_prime
    proof assume not (m1 div d1),(m2 div d2) are_relative_prime;
      then A12:(m1 div d1) gcd (m2 div d2) <> 1 by INT_2:def 4;
-     set e = (m1 div d1) gcd (m2 div d2);
+     reconsider e = (m1 div d1) gcd (m2 div d2) as Element of NAT
+                       by ORDINAL1:def 13;
      e divides (m1 div d1) & e divides (m2 div d2) by INT_2:31;
      then e divides m1 & e divides m2 by A8,INT_2:13;
      then e divides (m1 gcd m2) by INT_2:33;
@@ -1823,7 +1810,7 @@ A19:    rng (g*K) c= rng g
        assume z in rng (g*K);
       hence thesis by FUNCT_1:25;
      end;
-    rng g c= NAT by SEQM_3:def 8;
+    rng g c= NAT by VALUED_0:def 6;
     then rng f c= NAT by A17,A19,XBOOLE_1:1;
     then reconsider f as FinSequence of NAT by FINSEQ_1:def 4;
 A20:for m,n being Element of NAT st m in dom f & n in dom f & m<>n holds
@@ -1846,7 +1833,7 @@ A20:for m,n being Element of NAT st m in dom f & n in dom f & m<>n holds
          are_relative_prime by A26,A27,EULER_2:32;
     f.m = (K.m)|^((K.m) |-count d) & f.n = (K.n)|^((K.n) |-count d)
                                                        by A22,A24,NAT_3:def 9;
-   hence thesis by A28,INT_2:def 6;
+   hence thesis by A28,INT_2:def 4;
   end;
    for m being Element of NAT st m in dom f holds f.m divides (d1 lcm d2)
   proof let m be Element of NAT;

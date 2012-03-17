@@ -13,9 +13,9 @@ environ
       COMPLEX1,
       NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_2,
       FINSEQ_4, FUNCOP_1, FINSET_1, FUNCT_4, DOMAIN_1, STRUCT_0, AMI_1,
-      FUNCT_7, SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
+      FUNCT_7, SCMFSA_1, SCMFSA_2, SCMFSA_4, SCMFSA_5, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4,
-      AMI_5, RELOC, SCMFSA_4, SCMFSA_5;
+      AMI_5, RELOC, SCMFSA_4, SCMFSA_5, SCMFSA_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, FUNCT_7,
       STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4;
@@ -61,7 +61,7 @@ A2:  dom(id the Instructions of SCM+FSA) = the Instructions of SCM+FSA
     then A3:  dom P = dom I by RELAT_1:46;
 then A4:  dom P c= dom the Object-Kind of SCM+FSA by CARD_3:65;
         now let x be set;
-A5:    dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A5:    dom I c= NAT by AMI_1:def 40;
      assume
 A6:      x in dom P;
       then reconsider l = x as Instruction-Location of SCM+FSA
@@ -90,7 +90,7 @@ then A12:   rng((id the Instructions of SCM+FSA) +*
     end;
     then P in sproduct the Object-Kind of SCM+FSA by A4,CARD_3:def 9;
     then reconsider P as FinPartState of SCM+FSA by AMI_1:77;
-        dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+        dom I c= NAT by AMI_1:def 40;
     then P is programmed FinPartState of SCM+FSA by A3,AMI_1:def 40;
    hence thesis;
   end;
@@ -134,6 +134,7 @@ definition let i;
  coherence
   proof set I = (insloc 0,insloc 1) --> (i,halt SCM+FSA);
 A1:  dom I = {insloc 0,insloc 1} by FUNCT_4:65;
+X:  insloc 0 in NAT & insloc 1 in NAT by AMI_1:def 4;
     reconsider I as finite Function;
     A2: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by
 FUNCT_2:def 1;
@@ -141,6 +142,8 @@ A3:  dom I c= the carrier of SCM+FSA by A1,ZFMISC_1:38;
         now let x be set;
      assume
 A4:      x in dom I;
+      dom I c= NAT by A1,X,ZFMISC_1:38;
+      then x in NAT by A4;
       then reconsider l = x as Instruction-Location of SCM+FSA
                     by A1,AMI_1:def 4;
 A5:    (the Object-Kind of SCM+FSA).l = ObjectKind l
@@ -164,7 +167,7 @@ A8:      m < n;
          then m = 0 by NAT_1:3;
         hence insloc m in dom I by A1,TARSKI:def 2;
        end;
-      thus dom I c= the Instruction-Locations of SCM+FSA by A1;
+      thus dom I c= NAT by A1,X,ZFMISC_1:38;
      end;
    hence thesis;
   end;
@@ -185,7 +188,7 @@ theorem Th15:
 A1:now let x be set;
     assume
 A2:   x in dom P;
-      dom P c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+      dom P c= NAT by AMI_1:def 40;
      then reconsider l = x as Instruction-Location of SCM+FSA
               by A2,AMI_1:def 4;
      consider n such that
@@ -206,7 +209,7 @@ A8: m < n;
     hence m in A;
    end;
    then reconsider A as Cardinal by A6,FUNCT_7:22;
-A9: Card n = n & Card card P = card P by CARD_1:66,FINSEQ_1:78;
+A9: Card n = n & Card card P = card P by CARD_1:66;
 A10: Card A = A by CARD_1:def 5;
   hereby assume n < card P;
     then Card n in Card card P by NAT_1:42;
@@ -261,7 +264,7 @@ proof let I be programmed FinPartState of SCM+FSA;
   set B = { l : U(l) in dom I};
 A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
      proof let x be set;
-A2:   dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A2:   dom I c= NAT by AMI_1:def 40;
      assume x in dom I;
       then reconsider l = x as Instruction-Location of SCM+FSA
                   by A2,AMI_1:def 4;
@@ -276,10 +279,7 @@ A4: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A3);
 then A5: B c= NAT;
    deffunc V(Element of NAT) = insloc($1+m);
    set C = { V(l): l in B };
-A6: now let d1,d2 be Element of NAT;
-     assume V(d1) = V(d2);
-     hence d1 = d2;
-    end;
+A6: for d1,d2 be Element of NAT st V(d1) = V(d2) holds d1 = d2;
 A7: B,C are_equipotent from FUNCT_7:sch 4(A5,A6);
    defpred X[set] means not contradiction;
    defpred Z[Element of NAT] means insloc $1 in dom I;
@@ -379,10 +379,7 @@ end;
 
 theorem Th20:
 for I,J being FinPartState of SCM+FSA holds
- ProgramPart(I +* J) = ProgramPart I +* ProgramPart J
-proof let I,J be FinPartState of SCM+FSA;
- thus ProgramPart(I +* J) = ProgramPart I +* ProgramPart J by FUNCT_4:75;
-end;
+ ProgramPart(I +* J) = ProgramPart I +* ProgramPart J by FUNCT_4:75;
 
 theorem Th21:
 for I,J being FinPartState of SCM+FSA holds
@@ -460,8 +457,7 @@ proof
  A2: InsCode i <= 11+1 by SCMFSA_2:35;
 A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
- per cases by A1,A2,A3,A4,A5,NAT_1:8,33;
+ per cases by A1,A2,A3,A4,NAT_1:8,33;
  suppose InsCode i = 1;
   then ex a,b st i = a:=b by SCMFSA_2:54;
  hence Exec(i,s).IC SCM+FSA = Next IC s by SCMFSA_2:89;
@@ -525,13 +521,13 @@ then A1: IC SCM+FSA in dom Start-At(insloc 0) by TARSKI:def 1;
     .= insloc 0 by FUNCOP_1:87;
 end;
 
-Lm1: now assume intloc 0 in the Instruction-Locations of SCM+FSA;
+Lm1: now assume intloc 0 in NAT;
     then reconsider l = intloc 0 as Instruction-Location of SCM+FSA
                          by AMI_1:def 4;
       l = intloc 0;
     hence contradiction by SCMFSA_2:84;
    end;
-Lm2:  now assume IC SCM+FSA in the Instruction-Locations of SCM+FSA;
+Lm2:  now assume IC SCM+FSA in NAT;
        then reconsider l = IC SCM+FSA as Instruction-Location of SCM+FSA
                       by AMI_1:def 4;
          l = IC SCM+FSA;
@@ -540,7 +536,7 @@ Lm2:  now assume IC SCM+FSA in the Instruction-Locations of SCM+FSA;
 
 theorem Th26:
  I c= Initialized I
-proof set A = the Instruction-Locations of SCM+FSA;
+proof set A = NAT;
 A1:Initialized I =
  I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
 A2: dom I c= A by AMI_1:def 40;
@@ -573,8 +569,8 @@ theorem Th28:
        st IC s1 = IC s2 &
       (for a being Int-Location holds s1.a = s2.a) &
        for f being FinSeq-Location holds s1.f = s2.f
-  holds s1,s2 equal_outside the Instruction-Locations of SCM+FSA
-proof set A = the Instruction-Locations of SCM+FSA;
+  holds s1,s2 equal_outside NAT
+proof set A = NAT;
  let s1,s2 be State of SCM+FSA such that
 A1: IC s1 = IC s2 and
 A2: for a being Int-Location holds s1.a = s2.a and
@@ -631,9 +627,9 @@ end;
 canceled;
 
 theorem Th30:
- s1,s2 equal_outside the Instruction-Locations of SCM+FSA implies
+ s1,s2 equal_outside NAT implies
   for a being Int-Location holds s1.a = s2.a
-proof set IL = the Instruction-Locations of SCM+FSA;
+proof set IL = NAT;
  assume
 A1: s1,s2 equal_outside IL;
   let a be Int-Location;
@@ -651,9 +647,9 @@ then A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 3;
 end;
 
 theorem Th31:
- s1,s2 equal_outside the Instruction-Locations of SCM+FSA implies
+ s1,s2 equal_outside NAT implies
   for f being FinSeq-Location holds s1.f = s2.f
-proof set IL = the Instruction-Locations of SCM+FSA;
+proof set IL = NAT;
  assume
 A1: s1,s2 equal_outside IL;
   let a be FinSeq-Location;
@@ -671,20 +667,19 @@ then A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 3;
 end;
 
 theorem
-     s1,s2 equal_outside the Instruction-Locations of SCM+FSA implies
-  Exec(i,s1),Exec(i,s2) equal_outside the Instruction-Locations of SCM+FSA
+     s1,s2 equal_outside NAT implies
+  Exec(i,s1),Exec(i,s2) equal_outside NAT
 proof assume
-A1: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
+A1: s1,s2 equal_outside NAT;
    A2: InsCode i <= 11+1 by SCMFSA_2:35;
 A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A5: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
-    per cases by A2,A3,A4,A5,NAT_1:8,33;
+    per cases by A2,A3,A4,NAT_1:8,33;
     suppose InsCode i = 0;
      then i = halt SCM+FSA by SCMFSA_2:122;
      then Exec(i,s1) = s1 & Exec(i,s2) = s2 by AMI_1:def 8;
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A1;
+      equal_outside NAT by A1;
     end;
     suppose InsCode i = 1;
      then consider da, db being Int-Location such that
@@ -712,7 +707,7 @@ A10:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A6,SCMFSA_2:89
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A7,A10,Th28;
+      equal_outside NAT by A7,A10,Th28;
     end;
     suppose InsCode i = 2;
      then consider da, db being Int-Location such that
@@ -741,7 +736,7 @@ A15:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A11,SCMFSA_2:90
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A12,A15,Th28;
+      equal_outside NAT by A12,A15,Th28;
     end;
     suppose InsCode i = 3;
      then consider da, db being Int-Location such that
@@ -770,7 +765,7 @@ A20:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A16,SCMFSA_2:91
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A17,A20,Th28;
+      equal_outside NAT by A17,A20,Th28;
     end;
     suppose InsCode i = 4;
      then consider da, db being Int-Location such that
@@ -799,7 +794,7 @@ A25:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A21,SCMFSA_2:92
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A22,A25,Th28;
+      equal_outside NAT by A22,A25,Th28;
     end;
     suppose InsCode i = 5;
      then consider da, db being Int-Location such that
@@ -834,7 +829,7 @@ A31:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A26,SCMFSA_2:93
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A27,A31,Th28;
+      equal_outside NAT by A27,A31,Th28;
     end;
     suppose InsCode i = 6;
      then consider loc being Instruction-Location of SCM+FSA such that
@@ -852,7 +847,7 @@ A34:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A32,SCMFSA_2:95
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A33,A34,Th28;
+      equal_outside NAT by A33,A34,Th28;
     end;
     suppose InsCode i = 7;
      then consider loc being Instruction-Location of SCM+FSA,
@@ -886,7 +881,7 @@ then A41:    s2.da <> 0 by A1,Th30;
     end;
     end;
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A36,A37,Th28;
+      equal_outside NAT by A36,A37,Th28;
     end;
     suppose InsCode i = 8;
      then consider loc being Instruction-Location of SCM+FSA,
@@ -920,7 +915,7 @@ then A48:    s2.da <= 0 by A1,Th30;
     end;
     end;
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A43,A44,Th28;
+      equal_outside NAT by A43,A44,Th28;
     end;
     suppose InsCode i = 9;
      then consider db, da being Int-Location, f being FinSeq-Location such that
@@ -954,7 +949,7 @@ A57:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A49,SCMFSA_2:98
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A50,A57,Th28;
+      equal_outside NAT by A50,A57,Th28;
     end;
     suppose InsCode i = 10;
      then consider db, da being Int-Location, f being FinSeq-Location such that
@@ -988,7 +983,7 @@ A66:    g<>f;
         .= Exec(i,s2).IC SCM+FSA by A58,SCMFSA_2:99
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A59,A60,Th28;
+      equal_outside NAT by A59,A60,Th28;
     end;
     suppose InsCode i = 11;
      then consider da being Int-Location, f being FinSeq-Location such that
@@ -1016,7 +1011,7 @@ A71:  now let f be FinSeq-Location;
         .= Exec(i,s2).IC SCM+FSA by A67,SCMFSA_2:100
         .= IC Exec(i,s2);
      hence Exec(i,s1),Exec(i,s2)
-      equal_outside the Instruction-Locations of SCM+FSA by A68,A71,Th28;
+      equal_outside NAT by A68,A71,Th28;
     end;
     suppose InsCode i = 12;
      then consider da being Int-Location, f being FinSeq-Location such that
@@ -1049,27 +1044,27 @@ A80:    g <> f;
         .= Exec(i,s2).IC SCM+FSA by A72,SCMFSA_2:101
         .= IC Exec(i,s2);
  hence Exec(i,s1),Exec(i,s2)
-    equal_outside the Instruction-Locations of SCM+FSA by A73,A74,Th28;
+    equal_outside NAT by A73,A74,Th28;
 end;
 end;
 
 theorem
-     (Initialized I)|the Instruction-Locations of SCM+FSA = I
+     (Initialized I)|NAT = I
 proof
 A1: Initialized I =
  I +* (((intloc 0) .--> 1) +* Start-At(insloc 0)) by FUNCT_4:15;
-A2: dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A2: dom I c= NAT by AMI_1:def 40;
        dom((intloc 0) .--> 1) = { intloc 0 } by FUNCOP_1:19;
-then A3: dom((intloc 0) .--> 1) misses the Instruction-Locations of SCM+FSA
+then A3: dom((intloc 0) .--> 1) misses NAT
        by Lm1,ZFMISC_1:56;
        dom Start-At(insloc 0) = { IC SCM+FSA } by FUNCOP_1:19;
-then A4: dom Start-At(insloc 0) misses the Instruction-Locations of SCM+FSA
+then A4: dom Start-At(insloc 0) misses NAT
        by Lm2,ZFMISC_1:56;
       dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) =
     dom((intloc 0) .--> 1) \/ dom Start-At(insloc 0) by FUNCT_4:def 1;
   then dom (((intloc 0) .--> 1) +* Start-At(insloc 0)) misses
-       the Instruction-Locations of SCM+FSA by A3,A4,XBOOLE_1:70;
- hence (Initialized I)|the Instruction-Locations of SCM+FSA = I
+       NAT by A3,A4,XBOOLE_1:70;
+ hence (Initialized I)|NAT = I
       by A1,A2,FUNCT_4:82;
 end;
 
@@ -1090,9 +1085,9 @@ A1: for e being set st e in the carrier of SCM+FSA
    proof let e be set;
     assume e in the carrier of SCM+FSA;
      then e in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-     e in the Instruction-Locations of SCM+FSA by SCMFSA_2:8,XBOOLE_0:def 2;
+     e in NAT by SCMFSA_2:8,XBOOLE_0:def 2;
      then A2:    e in Int-Locations \/ FinSeq-Locations or e in {IC SCM+FSA} or
-      e in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 2;
+      e in NAT by XBOOLE_0:def 2;
          now per cases by A2,XBOOLE_0:def 2;
       case e in {IC SCM+FSA};
        hence e = IC SCM+FSA by TARSKI:def 1;
@@ -1106,10 +1101,10 @@ A1: for e being set st e in the carrier of SCM+FSA
        hence ex m being Element of NAT st e = fsloc m by SCMFSA_2:20;
       end;
       case
-     e in the Instruction-Locations of SCM+FSA;
+     e in NAT;
         then reconsider l = e as Instruction-Location of SCM+FSA
                 by AMI_1:def 4;
-         l in the Instruction-Locations of SCM+FSA;
+         l in NAT by AMI_1:def 4;
        hence ex m st e = insloc m by SCMFSA_2:21;
      end;
      end;
@@ -1142,9 +1137,9 @@ A10: dom the Object-Kind of SCM+FSA = the carrier of SCM+FSA by FUNCT_2:def 1;
    assume
 A11: x in dom the Object-Kind of SCM+FSA;
     then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-    x in the Instruction-Locations of SCM+FSA by A10,SCMFSA_2:8,XBOOLE_0:def 2;
+    x in NAT by A10,SCMFSA_2:8,XBOOLE_0:def 2;
     then A12:   x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or
-     x in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 2;
+     x in NAT by XBOOLE_0:def 2;
    consider m such that
 A13: x = IC SCM+FSA & f.x = I() or
     x = insloc m & f.x = F(m) or
@@ -1169,12 +1164,16 @@ SCMFSA_2:81,83,84
     end;
     suppose x in {IC SCM+FSA};
      then A16:    x = IC SCM+FSA by TARSKI:def 1;
-    then (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA
-       .= the Instruction-Locations of SCM+FSA by AMI_1:def 11;
-   hence f.x in (the Object-Kind of SCM+FSA).x by A13,A16,AMI_1:48,SCMFSA_2:81
-,82;
+    then
+X:   (the Object-Kind of SCM+FSA).x = ObjectKind IC SCM+FSA by AMI_1:def 6
+       .= NAT by AMI_1:def 11;
+    x <> insloc m & x <> intloc m & x <> fsloc m
+            by A13,A16,AMI_1:48,SCMFSA_2:81,82;
+    then f.x in NAT by A13,AMI_1:def 4;
+   hence f.x in (the Object-Kind of SCM+FSA).x
+    by A13,A16,AMI_1:48,SCMFSA_2:81,82,X;
     end;
-    suppose x in the Instruction-Locations of SCM+FSA;
+    suppose x in NAT;
      then reconsider l = x as Instruction-Location of SCM+FSA by AMI_1:def 4;
       (the Object-Kind of SCM+FSA).l = ObjectKind insloc m
              by A13,AMI_1:48,SCMFSA_2:84,85
@@ -1215,7 +1214,7 @@ end;
 theorem  ::T12
     for s being State of SCM+FSA holds
      dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-         the Instruction-Locations of SCM+FSA by AMI_1:79,SCMFSA_2:8;
+         NAT by AMI_1:79,SCMFSA_2:8;
 
 theorem  ::T12'
      for s being State of SCM+FSA, x being set st x in dom s holds
@@ -1225,14 +1224,14 @@ theorem  ::T12'
    let s be State of SCM+FSA;
    let x be set;
 A1:  dom s = Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA by AMI_1:79,SCMFSA_2:8;
+       NAT by AMI_1:79,SCMFSA_2:8;
    assume x in dom s;
    then x in Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} or
-       x in the Instruction-Locations of SCM+FSA by A1,XBOOLE_0:def 2;
+       x in NAT by A1,XBOOLE_0:def 2;
    then x in Int-Locations \/ FinSeq-Locations or x in {IC SCM+FSA} or
-       x in the Instruction-Locations of SCM+FSA by XBOOLE_0:def 2;
+       x in NAT by XBOOLE_0:def 2;
 then x in Int-Locations or x in FinSeq-Locations or x = IC SCM+FSA or
-    x is Element of the Instruction-Locations of SCM+FSA
+    x is Element of NAT
                         by TARSKI:def 1,XBOOLE_0:def 2;
    hence thesis by AMI_1:def 4,SCMFSA_2:11,12;
  end;
@@ -1240,24 +1239,34 @@ then x in Int-Locations or x in FinSeq-Locations or x = IC SCM+FSA or
 theorem  ::T29
      for s1,s2 being State of SCM+FSA holds
      (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
- iff s1 | the Instruction-Locations of SCM+FSA =
-     s2 | the Instruction-Locations of SCM+FSA
+ iff s1 | NAT =
+     s2 | NAT
  proof
    let s1,s2 be State of SCM+FSA;
-A1: the Instruction-Locations of SCM+FSA c= dom s1 by AMI_1:114;
-A2: the Instruction-Locations of SCM+FSA c= dom s2 by AMI_1:114;
-   (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l) implies
-   (for l being set st l in the Instruction-Locations of SCM+FSA
+A1: NAT c= dom s1 by AMI_1:114;
+A2: NAT c= dom s2 by AMI_1:114;
+X:   (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l) implies
+   (for l being set st l in NAT
        holds s1.l = s2.l)
     proof assume
-A3:    for l being Instruction-Location of SCM+FSA holds s1.l = s2.l;
+Z:    for l being Instruction-Location of SCM+FSA holds s1.l = s2.l;
      let l being set;
-     assume l in the Instruction-Locations of SCM+FSA;
+     assume l in NAT;
       then reconsider l as Instruction-Location of SCM+FSA by AMI_1:def 4;
-       s1.l = s2.l by A3;
-     hence thesis;
+      s1.l = s2.l by Z;
+     hence thesis by AMI_1:def 4;
     end;
-   hence thesis by A1,A2,FUNCT_1:165;
+   (for l being set st l in NAT
+       holds s1.l = s2.l) implies
+      (for l being Instruction-Location of SCM+FSA holds s1.l = s2.l)
+   proof assume
+Z:   for l being set st l in NAT
+       holds s1.l = s2.l;
+    let l be Instruction-Location of SCM+FSA;
+     l in NAT by AMI_1:def 4;
+    hence thesis by AMI_1:def 4,Z;
+   end;
+   hence thesis by A1,A2,FUNCT_1:165,X;
  end;
 
 theorem  ::T32
@@ -1266,8 +1275,9 @@ theorem  ::T32
      not IC SCM+FSA in Int-Locations \/ FinSeq-Locations
  proof
    let i be Instruction-Location of SCM+FSA;
-A1: not i in Int-Locations by SCMFSA_2:13,XBOOLE_0:3;
-       not i in FinSeq-Locations by SCMFSA_2:14,XBOOLE_0:3;
+X:  i in NAT by AMI_1:def 4;
+A1: not i in Int-Locations by SCMFSA_2:13,XBOOLE_0:3,X;
+       not i in FinSeq-Locations by SCMFSA_2:14,XBOOLE_0:3,X;
    hence not i in Int-Locations \/ FinSeq-Locations by A1,XBOOLE_0:def 2;
 A2: now assume IC SCM+FSA in Int-Locations;
       then IC SCM+FSA is Int-Location by SCMFSA_2:11;
@@ -1290,14 +1300,14 @@ theorem Th38: ::T28
  proof
    let s1,s2 be State of SCM+FSA;
 A1: Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA
+       NAT
    = (Int-Locations \/ FinSeq-Locations) \/ ({IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA) by XBOOLE_1:4;
+       NAT) by XBOOLE_1:4;
        dom s1 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA) by AMI_1:79,SCMFSA_2:8;
+       NAT) by AMI_1:79,SCMFSA_2:8;
 then A2: Int-Locations \/ FinSeq-Locations c= dom s1 by A1,XBOOLE_1:7;
        dom s2 = (Int-Locations \/ FinSeq-Locations \/ {IC SCM+FSA} \/
-       the Instruction-Locations of SCM+FSA) by AMI_1:79,SCMFSA_2:8;
+       NAT) by AMI_1:79,SCMFSA_2:8;
 then A3: Int-Locations \/ FinSeq-Locations c= dom s2 by A1,XBOOLE_1:7;
 A4: now assume A5: (for a being Int-Location holds s1.a = s2.a) &
        for f being FinSeq-Location holds s1.f = s2.f;
@@ -1333,12 +1343,12 @@ A4: now assume A5: (for a being Int-Location holds s1.a = s2.a) &
 
 theorem  ::T19
      for s1,s2 being State of SCM+FSA st
-     s1,s2 equal_outside the Instruction-Locations of SCM+FSA holds
+     s1,s2 equal_outside NAT holds
      s1 | (Int-Locations \/ FinSeq-Locations) =
      s2 | (Int-Locations \/ FinSeq-Locations)
  proof
    let s1,s2 be State of SCM+FSA;
-   assume A1: s1,s2 equal_outside the Instruction-Locations of SCM+FSA;
+   assume A1: s1,s2 equal_outside NAT;
 then A2: for a being Int-Location holds s1.a = s2.a by Th30;
        for f being FinSeq-Location holds s1.f = s2.f by A1,Th31;
    hence s1 | (Int-Locations \/ FinSeq-Locations) =
@@ -1442,8 +1452,7 @@ Th23
    A12: InsCode i <= 11+1 by SCMFSA_2:35;
 A13: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A14: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
-A15: InsCode i <= 8+1 implies InsCode i <= 7+1 or InsCode i = 9 by NAT_1:8;
-   per cases by A12,A13,A14,A15,NAT_1:8,33;
+   per cases by A12,A13,A14,NAT_1:8,33;
    suppose InsCode i = 0;
 then A16:  i = halt SCM+FSA by SCMFSA_2:122;
     then Exec(i,s1) = s1 & Exec(i,s2) = s2 by AMI_1:def 8;
@@ -1791,25 +1800,25 @@ A101:   Exec(f:=<0,...,0>da, s2).f = m2 |-> 0 by SCMFSA_2:101;
 
 theorem  ::T18
      for I,J being Macro-Instruction holds
-     I,J equal_outside the Instruction-Locations of SCM+FSA
+     I,J equal_outside NAT
  proof
    let I,J be Macro-Instruction;
-       dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
-   then dom I \ the Instruction-Locations of SCM+FSA = {} by XBOOLE_1:37;
+       dom I c= NAT by AMI_1:def 40;
+   then dom I \ NAT = {} by XBOOLE_1:37;
 then
-A1: dom (I | (dom I \ the Instruction-Locations of SCM+FSA)) = {}
+A1: dom (I | (dom I \ NAT)) = {}
             by RELAT_1:191;
-       dom J c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
-   then dom J \ the Instruction-Locations of SCM+FSA = {} by XBOOLE_1:37;
+       dom J c= NAT by AMI_1:def 40;
+   then dom J \ NAT = {} by XBOOLE_1:37;
 then
-A2: dom (J | (dom J \ the Instruction-Locations of SCM+FSA)) = {}
+A2: dom (J | (dom J \ NAT)) = {}
                by RELAT_1:191;
        for x be set st x in {} holds
-      (I | (dom I \ the Instruction-Locations of SCM+FSA)).x =
-          (J | (dom J \ the Instruction-Locations of SCM+FSA)).x;
-   then I | (dom I \ the Instruction-Locations of SCM+FSA) =
-       J | (dom J \ the Instruction-Locations of SCM+FSA) by A1,A2,FUNCT_1:9;
-   hence I,J equal_outside the Instruction-Locations of SCM+FSA
+      (I | (dom I \ NAT)).x =
+          (J | (dom J \ NAT)).x;
+   then I | (dom I \ NAT) =
+       J | (dom J \ NAT) by A1,A2,FUNCT_1:9;
+   hence I,J equal_outside NAT
        by FUNCT_7:def 2;
  end;
 
@@ -1882,7 +1891,7 @@ theorem Th47: ::T7
      not intloc 0 in dom I & not IC SCM+FSA in dom I
  proof
    let I be Macro-Instruction;
-A1: dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+A1: dom I c= NAT by AMI_1:def 40;
    hence not intloc 0 in dom I by Lm1;
    thus not IC SCM+FSA in dom I by A1,Lm2;
  end;
@@ -1899,7 +1908,7 @@ theorem Th48: ::T36
    then A2: a in (dom I \/ {intloc 0}) or a in {IC SCM+FSA} by XBOOLE_0:def 2;
    per cases by A2,XBOOLE_0:def 2;
    suppose A3: a in dom I;
-        dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+        dom I c= NAT by AMI_1:def 40;
      then reconsider a as Instruction-Location of SCM+FSA by A3,AMI_1:def 4;
       a in dom I by A3;
     hence contradiction by SCMFSA_2:84;
@@ -1924,7 +1933,7 @@ theorem Th49: ::T37
    then A1: f in (dom I \/ {intloc 0}) or f in {IC SCM+FSA} by XBOOLE_0:def 2;
    per cases by A1,XBOOLE_0:def 2;
    suppose A2: f in dom I;
-        dom I c= the Instruction-Locations of SCM+FSA by AMI_1:def 40;
+        dom I c= NAT by AMI_1:def 40;
      then reconsider f as Instruction-Location of SCM+FSA by A2,AMI_1:def 4;
       f in dom I by A2;
     hence contradiction by SCMFSA_2:85;
@@ -2040,7 +2049,7 @@ theorem  ::T23
      for I,J being Macro-Instruction
  for s being State of SCM+FSA holds
      s +* Initialized I, s +* Initialized J
-         equal_outside the Instruction-Locations of SCM+FSA
+         equal_outside NAT
  proof
    let I,J be Macro-Instruction;
    let s be State of SCM+FSA;
@@ -2343,10 +2352,7 @@ theorem
      I ';' j ';' K = I ';' (j ';' K) by Th62;
 
 theorem
-     I ';' j ';' k = I ';' (j ';' k)
-proof
- thus I ';' j ';' k = I ';' (j ';' k) by Th62;
-end;
+     I ';' j ';' k = I ';' (j ';' k) by Th62;
 
 theorem
  i ';' J ';' K = i ';' (J ';' K) by Th62;
@@ -2355,10 +2361,7 @@ theorem
      i ';' J ';' k = i ';' (J ';' k) by Th62;
 
 theorem Th68:
- i ';' j ';' K = i ';' (j ';' K)
-proof
- thus i ';' j ';' K = i ';' (j ';' K) by Th62;
-end;
+ i ';' j ';' K = i ';' (j ';' K) by Th62;
 
 theorem
      i ';' j ';' k = i ';' (j ';' k)

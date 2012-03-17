@@ -26,6 +26,7 @@
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -75,7 +76,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="61">
+<Adjective nr="65">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -110,7 +111,7 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="83">
+<Adjective nr="87">
 <Num nr="2"/>
 </Adjective>
 </Cluster>

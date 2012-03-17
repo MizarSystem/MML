@@ -11,9 +11,9 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, SEQ_1, SEQ_2,
       PROB_1, NAT_1, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PROB_1;
+ constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PROB_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQ_1;
+      XREAL_0, MEMBERED, SEQ_1, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PROB_1, SUBSET_1;
  theorems FUNCT_1, REAL_1, FUNCT_2, SEQ_1, SEQ_2, SUBSET_1, PROB_1, NAT_1,
@@ -472,18 +472,10 @@ theorem
   end;
 
 theorem
-Th22: P.(A \ (A /\ B)) = P.A - P.(A /\ B)
-  proof A /\ B c= A by XBOOLE_1:17;
-  hence thesis by PROB_1:69;
-  end;
+ P.(A \ (A /\ B)) = P.A - P.(A /\ B) by XBOOLE_1:17,PROB_1:69;
 
 theorem
-Th23: P.(A /\ B) <= P.B & P.(A /\ B) <= P.A
-  proof
-A1:  A /\ B c= B by XBOOLE_1:17;
-      A /\ B c= A by XBOOLE_1:17;
-  hence thesis by A1,PROB_1:70;
-  end;
+ P.(A /\ B) <= P.B & P.(A /\ B) <= P.A by XBOOLE_1:17,PROB_1:70;
 
 theorem
 Th24: C = B` implies P.A = P.(A /\ B) + P.(A /\ C)
@@ -660,7 +652,7 @@ Th37: for A,B,P st A,B are_independent_respect_to P
       P.(A /\ ([#] Sigma \ B)) = P.(A /\ B`)
                        .= P.(A \ B) by SUBSET_1:32
                        .= P.(A \ (A /\ B)) by XBOOLE_1:47
-                       .= P.A * 1 - P.A * P.B by A1,Th22
+                       .= P.A * 1 - P.A * P.B by A1,XBOOLE_1:17,PROB_1:69
                        .= P.A * (1 - P.B)
                        .= P.A * P.([#] Sigma \ B) by PROB_1:68;
   hence thesis by Def5;
@@ -703,8 +695,7 @@ theorem
   A3: P.B < 1;
   A4: ([#] Sigma \ A),([#] Sigma \ B) are_independent_respect_to P by A1,Th38;
   A5: 0 < P.([#] Sigma \ A) by A2,Th27;
-       0 < P.([#] Sigma \ B) by A3,Th27;
-  then A6: 0 < P.([#] Sigma \ A) * P.([#] Sigma \ B) by A5,XREAL_1:131;
+B6:    0 < P.([#] Sigma \ B) by A3,Th27;
   A7: now let r,r1; assume 0 < r1;
       then - r1 < -0 by XREAL_1:26;
       then r + - r1 < r + 0 by XREAL_1:8;
@@ -713,7 +704,7 @@ theorem
        P.(A \/ B) = 1 - P.([#] Sigma \ (A \/ B)) by Th26
             .= 1 - P.(([#] Sigma \ A) /\ ([#] Sigma \ B)) by XBOOLE_1:53
             .= 1 - P.([#] Sigma \ A) * P.([#] Sigma \ B) by A4,Def5;
-   hence thesis by A6,A7;
+   hence thesis by B6,A7,A5,XREAL_1:131;
    end;
 
 ::
@@ -828,7 +819,7 @@ theorem
        P.(A /\ B /\ C) = P.A * P.|.A.B * P.|.(A /\ B).C
    proof let P,A,B,C;
    assume A1: 0 < P.(A /\ B);
-  then A2: 0 < P.A by Th23;
+  then A2: 0 < P.A by XBOOLE_1:17,PROB_1:70;
        P.(A /\ B /\ C) = P.(B /\ A) * P.|.(A /\ B).C by A1,Th42
                 .= P.A * P.|.A.B * P.|.(A /\ B).C by A2,Th42;
    hence thesis;
@@ -898,9 +889,9 @@ theorem
      for P,A,B st (0 < P.B & P.B < 1 & P.|.B.A = P.|.([#] Sigma \ B).A) holds
        A,B are_independent_respect_to P
   proof let P,A,B; assume that
- A1: 0 < P.B and
- A2: P.B < 1 and
- A3: P.|.B.A = P.|.([#] Sigma \B).A;
+A1:  0 < P.B and
+A2:  P.B < 1 and
+A3:  P.|.B.A = P.|.([#] Sigma \B).A;
  A4: 0 < P.([#] Sigma \ B) by A2,Th27;
  A5: P.([#] Sigma \ B) <> 0 by A2,Th27;
 A6: B`= ([#] Sigma \ B);

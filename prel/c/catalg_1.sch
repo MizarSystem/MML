@@ -30,6 +30,7 @@
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
+<ArticleID name="FRAENKEL"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="TREES_4"/>
 <ArticleID name="LANG1"/>
@@ -65,12 +66,12 @@
 <Typ kind="G" nr="9">
 <Cluster>
 <Adjective nr="57">
-<Func kind="K" nr="340">
+<Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="340">
+<Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -89,12 +90,12 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
 <Func kind="U" nr="14">
-<Func kind="K" nr="340">
+<Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="346">
+<Func kind="K" nr="349">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -115,10 +116,10 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
 <Func kind="K" nr="198">
-<Func kind="K" nr="340">
+<Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="345">
+<Func kind="K" nr="348">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -176,10 +177,10 @@
 <Pred kind="R" nr="1">
 <Func kind="K" nr="12">
 <Func kind="K" nr="198">
-<Func kind="K" nr="340">
+<Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="347">
+<Func kind="K" nr="350">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

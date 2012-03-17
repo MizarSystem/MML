@@ -104,7 +104,7 @@
 <Adjective nr="75">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="85"/>
+<Adjective nr="87"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -187,7 +187,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="307">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

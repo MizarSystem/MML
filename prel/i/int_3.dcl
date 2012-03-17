@@ -14,10 +14,10 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="RELSET_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -166,7 +166,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -255,7 +255,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -263,7 +263,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="14"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 </Cluster>
 </CCluster>
 </Registrations>

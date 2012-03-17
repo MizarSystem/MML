@@ -8,19 +8,20 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ORDINAL2, FUNCT_1, PROB_1, RELAT_1,
       ARYTM_1, SEQ_2, LATTICES, ABSVALUE, SEQM_3, FUNCOP_1, FUNCT_3, FRECHET2,
-      FINSEQ_1, MEMBERED;
- notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, XCMPLX_0, XREAL_0,
+      FINSEQ_1, MEMBERED, VALUED_0;
+ notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, MEMBERED, VALUED_0, XCMPLX_0,
+      XREAL_0,
       RELAT_1, PARTFUN1, FUNCT_1, FUNCT_3, FINSEQ_1, SEQ_1, SEQ_2, COMPLEX1,
       NAT_1, FUNCOP_1, XXREAL_0;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1,
-      SEQ_2, FINSEQ_1;
+      SEQ_2, FINSEQ_1, VALUED_0, MEMBERED, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
-      XXREAL_0, XREAL_0, MEMBERED, SEQ_1;
+      XXREAL_0, XREAL_0, MEMBERED, SEQ_1, VALUED_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_2, FUNCT_1;
+ definitions SEQ_2, FUNCT_1, VALUED_0;
  theorems FUNCT_1, SEQ_1, SEQ_2, ABSVALUE, NAT_1, TARSKI, FUNCT_2, RELAT_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      ORDINAL1, FINSEQ_1, MEMBERED;
+      ORDINAL1, FINSEQ_1, MEMBERED, VALUED_0;
  schemes NAT_1, SEQ_1;
 
 begin
@@ -694,9 +695,8 @@ theorem
 ::  DEFINITIONS OF INCREASING SEQUENCE OF NATURAL NUMBERS,
 ::  RESTRICTION OF SEQUENCE.
 
-definition let IT be Relation;
- attr IT is natural-yielding means :Def8:
-  rng IT c= NAT;
+notation let IT be Relation;
+ synonym IT is natural-yielding for IT is natural-valued;
 end;
 
 Lm11: incl NAT is increasing natural-yielding
@@ -712,7 +712,7 @@ Lm11: incl NAT is increasing natural-yielding
        seq.n=n & seq.(n+1)=n+1 by FUNCT_1:35;
    hence seq.n<seq.(n+1) by NAT_1:13;
   end;
-  hence thesis by A3,Def8,Lm6;
+  hence thesis by Lm6;
  end;
 
 registration
@@ -726,6 +726,7 @@ end;
 
 definition
  let seq,k;
+ canceled;
 func seq ^\k ->Real_Sequence means :Def9:
   for n holds it.n=seq.(n+k);
 existence
@@ -760,7 +761,7 @@ theorem
      assume A1:seq is increasing Seq_of_Nat;
      hence seq is increasing;
      let n;
-     A2:rng seq c= NAT by A1,Def8;
+     A2:rng seq c= NAT by A1,VALUED_0:def 6;
          n in NAT;
      then n in dom seq by FUNCT_2:def 1;
      then seq.n in rng seq by FUNCT_1:def 5;
@@ -769,15 +770,12 @@ theorem
    assume that A3:seq is increasing and
                A4:for n holds seq.n is Element of NAT;
        seq is natural-yielding
-     proof
-           now let y; assume y in rng seq;
-        then consider x such that A5:x in dom seq and
-                             A6:seq.x=y by FUNCT_1:def 5;
-            x in NAT by A5,FUNCT_2:def 1;
+     proof let x;
+       assume x in dom seq;
+        then  x in NAT by FUNCT_2:def 1;
         then seq.x is Element of NAT by A4;
-        hence y in NAT by A6;
-       end;
-      hence rng seq c= NAT by TARSKI:def 3;
+        then seq.x in NAT;
+        hence thesis by ORDINAL1:def 13;
      end;
     hence thesis by A3;
    end;
@@ -789,7 +787,7 @@ theorem
   proof
    let n;
     A1:dom Nseq=NAT by FUNCT_2:def 1;
-        rng Nseq c= NAT by Def8;
+        rng Nseq c= NAT by VALUED_0:def 6;
     then rng Nseq c= dom seq by FUNCT_2:def 1;
     then dom (seq*Nseq)=NAT by A1,RELAT_1:46;
     hence (seq*Nseq).n=seq.(Nseq.n) by FUNCT_1:22;
@@ -806,7 +804,7 @@ definition let Nseq,seq;
   proof
      A1:dom Nseq=NAT by FUNCT_2:def 1;
      A2:rng seq c= REAL by RELSET_1:12;
-         rng Nseq c= NAT by Def8;
+         rng Nseq c= NAT by VALUED_0:def 6;
      then rng Nseq c= dom seq by FUNCT_2:def 1;
      then A3:   dom (seq*Nseq)=NAT by A1,RELAT_1:46;
          rng (seq*Nseq) c= rng seq by RELAT_1:45;
@@ -819,7 +817,7 @@ definition let Nseq,Nseq1;
   redefine func Nseq1*Nseq -> increasing Seq_of_Nat;
  coherence
   proof
-   A1:rng Nseq1 c= NAT by Def8;
+   A1:rng Nseq1 c= NAT by VALUED_0:def 6;
        rng (Nseq1*Nseq) c= rng Nseq1 by RELAT_1:45;
    then A2:rng (Nseq1*Nseq) c= NAT by A1,XBOOLE_1:1;
         now let n;
@@ -828,7 +826,7 @@ definition let Nseq,Nseq1;
      then (Nseq1*Nseq).n<Nseq1.(Nseq.(n+1)) by Th31;
      hence (Nseq1*Nseq).n<(Nseq1*Nseq).(n+1) by Th31;
     end;
-   hence thesis by A2,Def8,Lm6;
+   hence thesis by Lm6;
   end;
 end;
 
@@ -1042,7 +1040,7 @@ theorem
     end;
    then A1:seq1 is increasing by Lm6;
         for n holds seq1.n is Element of NAT by FUNCT_1:35;
-   then reconsider seq1 as increasing Seq_of_Nat by A1,Th29;
+   reconsider seq1 as increasing Seq_of_Nat by A1;
    take Nseq=seq1;
         now let n;
      thus (seq*Nseq).n=seq.(Nseq.n) by Th31
@@ -1520,9 +1518,8 @@ theorem
     A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
     take p=r*abs r1;
     let n be Element of NAT;
-    A4:r1<=abs r1 by ABSVALUE:11;
-        seq.n<r1 by A3;
-    then seq.n<abs r1 by A4,XXREAL_0:2;
+    r1<=abs r1 by ABSVALUE:11;
+    then seq.n<abs r1 by A3,XXREAL_0:2;
     then r*seq.n<r*abs r1 by A2,XREAL_1:70;
     hence (r(#)seq).n<p by SEQ_1:13;
    end;
@@ -1546,9 +1543,8 @@ theorem
   A9:for n holds seq.n<r1 by A7,SEQ_2:def 3;
   take p=r*abs r1;
   let n be Element of NAT;
-  A10:r1<=abs r1 by ABSVALUE:11;
-      seq.n<r1 by A9;
-  then seq.n<abs r1 by A10,XXREAL_0:2;
+  r1<=abs r1 by ABSVALUE:11;
+  then seq.n<abs r1 by A9,XXREAL_0:2;
   then r*abs r1<r*seq.n by A8,XREAL_1:71;
   hence p<(r(#)seq).n by SEQ_1:13;
  end;
@@ -1565,8 +1561,7 @@ theorem
     A3:for n holds r1<seq.n by A1,SEQ_2:def 4;
     take p=r*r1;
     let n be Element of NAT;
-        r1<seq.n by A3;
-    then r*r1<r*seq.n by A2,XREAL_1:70;
+    r*r1<r*seq.n by A2,A3,XREAL_1:70;
     hence p<(r(#)seq).n by SEQ_1:13;
    end;
   assume that A4:seq is bounded_below and
@@ -1575,9 +1570,8 @@ theorem
   A6:for n holds r1<seq.n by A4,SEQ_2:def 4;
   take p=r*(-abs r1);
   let n be Element of NAT;
-  A7:-abs r1<=r1 by ABSVALUE:11;
-      r1<seq.n by A6;
-  then -abs r1<seq.n by A7,XXREAL_0:2;
+  -abs r1<=r1 by ABSVALUE:11;
+  then -abs r1<seq.n by A6,XXREAL_0:2;
   then r*seq.n<r*(-abs r1) by A5,XREAL_1:71;
   hence (r(#)seq).n<p by SEQ_1:13;
  end;
@@ -1653,9 +1647,8 @@ theorem
      A5:for n holds seq1.n<r2 by A3,SEQ_2:def 3;
      take r=r1+r2;
      let n be Element of NAT;
-     A6:seq.n<r1 by A4;
-         seq1.n<r2 by A5;
-     then seq.n+seq1.n<r1+r2 by A6,XREAL_1:10;
+     seq.n<r1 by A4;
+     then seq.n+seq1.n<r1+r2 by A5,XREAL_1:10;
      hence (seq+seq1).n<r by SEQ_1:11;
     end;
    thus A7:seq is bounded_below & seq1 is bounded_below implies
@@ -1669,9 +1662,8 @@ theorem
      A11:for n holds r2<seq1.n by A9,SEQ_2:def 4;
      take r=r1+r2;
      let n be Element of NAT;
-     A12:r1<seq.n by A10;
-         r2<seq1.n by A11;
-     then r1+r2<seq.n+seq1.n by A12,XREAL_1:10;
+     r1<seq.n by A10;
+     then r1+r2<seq.n+seq1.n by A11,XREAL_1:10;
      hence r<(seq+seq1).n by SEQ_1:11;
     end;
   assume that A13:seq is bounded and
@@ -1717,8 +1709,7 @@ theorem
    assume seq is constant;
    then consider r1 such that A1:for n holds seq.n=r1 by Def6;
         now take p=abs r1+1;
-         0<=abs r1 by COMPLEX1:132;
-     then 0+0<abs r1+1 by XREAL_1:10;
+     0+0<abs r1+1 by XREAL_1:10,COMPLEX1:132;
      hence 0<p;
      let n;
          abs r1=abs (seq.n) by A1;
@@ -1825,9 +1816,8 @@ theorem
    A3:for n holds seq.n<r1 by A1,SEQ_2:def 3;
    take r=r1+seq1.0;
    let n be Element of NAT;
-   A4:seq1.n<=seq1.0 by A2,Th22;
-       seq.n<r1 by A3;
-   then seq.n+seq1.n<r1+seq1.0 by A4,XREAL_1:10;
+   seq1.n<=seq1.0 by A2,Th22;
+   then seq.n+seq1.n<r1+seq1.0 by A3,XREAL_1:10;
    hence (seq+seq1).n<r by SEQ_1:11;
   end;
 
@@ -1842,8 +1832,7 @@ theorem
    take r=r1+seq1.0;
    let n be Element of NAT;
    A4:seq1.0<=seq1.n by A2,Th21;
-       r1<seq.n by A3;
-   then r1+seq1.0<seq.n+seq1.n by A4,XREAL_1:10;
+   r1+seq1.0<seq.n+seq1.n by A3,A4,XREAL_1:10;
    hence r<(seq+seq1).n by SEQ_1:11;
   end;
 
@@ -1864,45 +1853,6 @@ end;
 
 theorem
   incl NAT is increasing natural-yielding by Lm11;
-
-
-registration
-  cluster natural-yielding Function;
-  existence
-  proof
-    take incl NAT;
-    thus thesis by Lm11;
-  end;
-end;
-
-registration
-  let f be natural-yielding Function, n be set;
-  cluster f.n -> natural;
-coherence
-proof
-  per cases;
-  suppose n in dom f;
-  then A1: f.n in rng f by FUNCT_1:def 5;
-   rng f c= NAT by Def8;
-  hence thesis by A1,ORDINAL1:def 13;
-  end;
-  suppose not n in dom f;
-  hence thesis by FUNCT_1:def 4;
-  end;
-end;
-end;
-
-registration
-  let X be set; let Y be natural-membered set;
-  cluster -> natural-yielding PartFunc of X,Y;
-  coherence
-  proof
-    let f be PartFunc of X,Y;
-A1: rng f c= Y by RELSET_1:12;
-    Y c= NAT by MEMBERED:6;
-    hence rng f c= NAT by A1,XBOOLE_1:1;
-  end;
-end;
 
 registration
  cluster -> natural-yielding FinSequence of NAT;

@@ -26,6 +26,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
@@ -63,17 +64,17 @@
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="67" value="false"/>
-<Adjective nr="68" value="false"/>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
+<Adjective nr="71" value="false"/>
+<Adjective nr="72" value="false"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -89,14 +90,14 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
@@ -112,13 +113,13 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="75"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="71"/>
+<Adjective nr="75"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -137,7 +138,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="70"/>
+<Adjective nr="74"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -150,8 +151,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="70"/>
-<Adjective nr="71"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -15,8 +15,7 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -32,21 +31,23 @@
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="LOPBAN_2"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="39" value="false"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="57"/>
-<Adjective nr="66"/>
-<Adjective nr="84"/>
-<Adjective nr="93"/>
+<Adjective nr="56"/>
+<Adjective nr="65"/>
+<Adjective nr="83"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -93,7 +94,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="237">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -118,14 +119,14 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="112">
+<Func kind="K" nr="237">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="162">
+<Func kind="K" nr="139">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

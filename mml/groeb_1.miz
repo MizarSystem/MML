@@ -22,7 +22,7 @@ environ
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FINSET_1, XREAL_0, NAT_1,
       INT_1, CARD_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2, ALGSTR_1,
       YELLOW_1, GCD_1, POLYNOM1, POLYNOM2, POLYNOM4, BINOM, IDEAL_1, POLYNOM7,
-      DICKSON, TERMORD, POLYRED;
+      DICKSON, TERMORD, POLYRED, VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions RELAT_2, RELAT_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, RELAT_1, ZFMISC_1, VECTSP_1, POLYNOM1,
@@ -30,7 +30,7 @@ environ
       IDEAL_1, TERMORD, INT_1, FUNCT_1, ORDERS_2, FINSET_1, WELLORD2, XBOOLE_1,
       CARD_3, DICKSON, FUNCOP_1, PBOOLE, PRALG_1, SEQM_3, YELLOW_1, FUNCT_7,
       FUNCT_2, CARD_1, CARD_2, BAGORDER, ORDINAL1, VECTSP_2, POLYRED, RELAT_2,
-      PARTFUN1, ORDERS_1, GROUP_1, XREAL_1, XXREAL_0;
+      PARTFUN1, ORDERS_1, GROUP_1, XREAL_1, XXREAL_0, VALUED_0;
  schemes RELSET_1, NAT_1, FUNCT_1;
 
 begin :: Preliminaries
@@ -399,10 +399,7 @@ A3: now let k be Element of NAT;
       assume A5: Support f c= Support g & Card(Support f) = k+1;
       set rf = Red(f,T), rg = Red(g,T);
       set R = RelStr(# Bags n, T#);
-          now assume Support f = {};
-          then Card(Support f) = 0 by CARD_1:def 5;
-          hence contradiction by A5;
-          end;
+      Support f <> {} by A5,CARD_1:def 5;
       then A6: HT(f,T) in Support f by TERMORD:def 6;
       then g <> 0_(n,L) & f <> 0_(n,L) by A5,POLYNOM7:1;
       then A7: g is non-zero & f is non-zero by POLYNOM7:def 2;
@@ -1652,10 +1649,9 @@ assume G is_Groebner_basis_wrt T;
 then PolyRedRel(G,T) is locally-confluent by Def3;
 then PolyRedRel(G,T) is confluent by Th12;
 then A1: PolyRedRel(G,T) is with_UN_property by Th13;
-A2: now assume p,q are_congruent_mod G-Ideal;
-   then p,q are_convertible_wrt PolyRedRel(G,T) by POLYRED:58;
-   hence nf(p,PolyRedRel(G,T)) = nf(q,PolyRedRel(G,T)) by A1,REWRITE1:56;
-   end;
+A2: p,q are_congruent_mod G-Ideal implies
+     nf(p,PolyRedRel(G,T)) = nf(q,PolyRedRel(G,T))
+      by A1,REWRITE1:56,POLYRED:58;
     now assume A3: nf(p,PolyRedRel(G,T)) = nf(q,PolyRedRel(G,T));
        nf(p,R) is_a_normal_form_of p,R & nf(q,R) is_a_normal_form_of q,R
      by A1,REWRITE1:55;
@@ -2716,7 +2712,7 @@ A9: for x being set st x in S ex y being set st Q[x,y]
      hence u in NAT by A1,A10,A11,A17;
      end;
    then rng b c= NAT by TARSKI:def 3;
-   then reconsider b as bag of n by SEQM_3:def 8;
+   then reconsider b as bag of n by VALUED_0:def 6;
    take b;
    thus x in S by A10;
    take b;

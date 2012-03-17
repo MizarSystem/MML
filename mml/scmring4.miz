@@ -10,7 +10,8 @@ environ
       AMI_2, BOOLE, FUNCT_1, FUNCOP_1, CAT_1, ARYTM, GOBOARD5, RELAT_1, AMI_5,
       FUNCT_4, SGRAPH1, TARSKI, FUNCT_7, AMISTD_2, REALSET1, RLVECT_1, ARYTM_1,
       AMISTD_1, CARD_3, RELOC, PARTFUN1;
- notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, FINSET_1,
+ notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, WELLORD2,
+      DOMAIN_1, ORDINAL1, FINSET_1,
       RELAT_1, NUMBERS, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, FUNCSDOM,
       FUNCOP_1, XCMPLX_0, NAT_1, RLVECT_1, FUNCT_4, CARD_3, FUNCT_7, GROUP_1,
       BINARITH, AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, AMISTD_1, AMISTD_2,
@@ -35,9 +36,10 @@ begin :: On the standard computers
 reserve
   i, j, k for natural number,
   n for Element of NAT,
+  IL for non empty set,
   N for with_non-empty_elements set,
   S for standard (IC-Ins-separated definite
-        (non empty non void AMI-Struct over N)),
+        (non empty stored-program AMI-Struct over NAT,N)),
   l for Instruction-Location of S,
   f for FinPartState of S;
 
@@ -60,27 +62,8 @@ Lm2:
     hence thesis by TARSKI:def 1;
   end;
 
-theorem Th1:
-  NAT,the Instruction-Locations of S are_equipotent
-  proof
-    consider f being IL-Function of NAT, S such that
-A1:   f is bijective and for m, n being Element of NAT holds m <= n
-iff f.m <= f.n
-      by AMISTD_1:def 10;
-    take f;
-      f is onto by A1,FUNCT_2:def 4;
-    hence thesis by A1,FUNCT_2:def 1,def 3,def 4;
-  end;
-
-registration
-   let N,S;
- cluster the Instruction-Locations of S -> infinite;
-coherence
-  proof
-      NAT,the Instruction-Locations of S are_equipotent by Th1;
-    hence thesis by CARD_1:68;
-  end;
-end;
+theorem
+  NAT,NAT are_equipotent;
 
 theorem Th2:
   il.(S,i) + j = il.(S,i+j)
@@ -92,7 +75,7 @@ theorem Th2:
 definition
   let N be with_non-empty_elements set,
       S be standard (IC-Ins-separated definite
-           (non empty non void AMI-Struct over N)),
+           (non empty stored-program AMI-Struct over NAT,N)),
       loc be Instruction-Location of S,
       k be natural number;
  func loc -' k -> Instruction-Location of S equals
@@ -119,25 +102,20 @@ theorem Th5:
 
 canceled;
 
-theorem Th7:
-  for S being IC-Ins-separated definite (non empty non void AMI-Struct over N),
+theorem
+  for S being IC-Ins-separated definite
+   (non empty stored-program AMI-Struct over IL,N),
       p being FinPartState of S holds
   dom DataPart p c=
-    (the carrier of S) \ ({IC S} \/ the Instruction-Locations of S)
-  proof
-    let S be IC-Ins-separated definite (non empty non void AMI-Struct over N),
-        p be FinPartState of S;
-    set I = the Instruction-Locations of S;
-    thus dom DataPart p c= ((the carrier of S) \ ({IC S} \/ I))
+    (the carrier of S) \ ({IC S} \/ IL)
       by RELAT_1:87;
-  end;
 
 Lm3:
   now
-    let N;
-    let S be non empty AMI-Struct over N;
+    let IL,N;
+    let S be non empty AMI-Struct over IL,N;
     set C = the carrier of S;
-    set I = the Instruction-Locations of S;
+    set I = IL;
     set B = C \ ({IC S} \/ I);
     thus I misses B
     proof
@@ -166,49 +144,50 @@ A2:   b c= c \ a;
 
 Lm5:
   for S being IC-Ins-separated definite realistic
-              (non empty non void AMI-Struct over N) holds
-    the Instruction-Locations of S c= (the carrier of S) \ {IC S}
+              (non empty stored-program AMI-Struct over IL,N) holds
+    IL c= (the carrier of S) \ {IC S}
   proof
     let S be IC-Ins-separated definite realistic
-             (non empty non void AMI-Struct over N);
+             (non empty stored-program AMI-Struct over IL,N);
     let i be set;
+X:   IL c= the carrier of S by AMI_1:def 3;
     assume
-A1:   i in the Instruction-Locations of S;
+A1:   i in IL;
     then i is Instruction-Location of S by AMI_1:def 4;
     then i <> IC S by AMI_1:48;
     then not i in {IC S} by TARSKI:def 1;
-    hence thesis by A1,XBOOLE_0:def 4;
+    hence thesis by A1,XBOOLE_0:def 4,X;
   end;
 
 theorem Th8:
   for S being IC-Ins-separated definite realistic
-              (non empty non void AMI-Struct over N),
+              (non empty stored-program AMI-Struct over IL,N),
       p being FinPartState of S holds
   p is data-only iff
-   dom p c= (the carrier of S) \ ({IC S} \/ the Instruction-Locations of S)
+   dom p c= (the carrier of S) \ ({IC S} \/ IL)
   proof
     let S be IC-Ins-separated definite realistic
-             (non empty non void AMI-Struct over N),
+             (non empty stored-program AMI-Struct over IL,N),
         p be FinPartState of S;
     set C = the carrier of S;
-    set I = the Instruction-Locations of S;
+    set I = IL;
     set B = C \ ({IC S} \/ I);
 A1: B misses I by Lm3;
       I c= C \ {IC S}
     proof
       let i be set;
+X:   IL c= the carrier of S by AMI_1:def 3;
       assume
 A2:     i in I;
       then i is Instruction-Location of S by AMI_1:def 4;
       then i <> IC S by AMI_1:48;
       then not i in {IC S} by TARSKI:def 1;
-      hence thesis by A2,XBOOLE_0:def 4;
+      hence thesis by A2,XBOOLE_0:def 4,X;
     end;
     then A3: C = {IC S} \/ B \/ I by Lm4;
       dom p c= C by AMI_1:80;
     then A4: dom p c= {IC S} \/ I \/ B by A3,XBOOLE_1:4;
-      not IC S in B by Lm2;
-    then B misses {IC S} by ZFMISC_1:56;
+    B misses {IC S} by ZFMISC_1:56,Lm2;
     then B misses {IC S} \/ I by A1,XBOOLE_1:70;
     then dom p misses {IC S} \/ I iff dom p c= B by A4,XBOOLE_1:63,73;
     hence thesis by AMI_1:def 50;
@@ -294,19 +273,20 @@ A5:   il in dom f;
 
 theorem Th13:
   for S being Exec-preserving IC-Ins-separated definite realistic
-              steady-programmed (non empty non void AMI-Struct over N),
+              steady-programmed
+               (non empty stored-program AMI-Struct over NAT,N),
       s being State of S,
       i being Instruction of S,
       p being programmed FinPartState of S
    holds Exec (i, s +* p) = Exec (i,s) +* p
   proof
     let S be Exec-preserving IC-Ins-separated definite realistic
-             steady-programmed (non empty non void AMI-Struct over N),
+          steady-programmed (non empty stored-program AMI-Struct over NAT,N),
         s be State of S,
         i be Instruction of S,
         p be programmed FinPartState of S;
     set C = the carrier of S;
-    set I = the Instruction-Locations of S;
+    set I = NAT;
     set D = C \ ({IC S} \/ I);
 A1: dom p c= I by AMI_1:def 40;
 A2: dom s = C by AMI_1:79;
@@ -321,7 +301,6 @@ A5: dom Exec(i,s+*p) = C by AMI_1:79;
       assume
 A7:     x in {IC S};
       then A8:     x = IC S by TARSKI:def 1;
-:::      then not x in I by AMI_1:48;
      now assume x in I;
       then reconsider l=x as Instruction-Location of S by AMI_1:def 4;
        l=x;
@@ -387,16 +366,16 @@ reserve
 theorem Th14:
   the carrier of SCM R = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc
   proof
-      IC SCM R = NAT by SCMRING2:9 .= IC SCM by AMI_3:4;
-    hence thesis by AMI_5:23,SCMRING2:def 1;
+    IC SCM R = IC SCM by AMI_3:4,SCMRING2:9;
+   hence thesis by AMI_5:23,SCMRING2:def 1;
   end;
 
 theorem
     ObjectKind loc = SCM-Instr R
    proof
- the Instruction-Locations of SCM R = SCM-Instr-Loc &
-    the Object-Kind of SCM R = SCM-OK R by SCMRING2:def 1;
-    hence ObjectKind loc = SCM-Instr R by SCMRING1:6;
+    reconsider i = loc as Element of SCM-Instr-Loc by AMI_1:def 4;
+    thus ObjectKind loc = (SCM-OK R).i by SCMRING2:def 1
+      .= SCM-Instr R by SCMRING1:6;
   end;
 
 theorem Th16:
@@ -436,12 +415,12 @@ A1: dl.(R,j) = [1,j] & dl.(R,i) = [1,i] by Th16;
 theorem Th20:
   a <> loc
   proof
-A1: the Instruction-Locations of SCM R = SCM-Instr-Loc by SCMRING2:def 1;
     assume a = loc;
     then loc in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {NAT})
       by SCMRING2:def 2;
     then not loc in SCM-Instr-Loc \/ {NAT} by XBOOLE_0:def 4;
-    hence thesis by A1,XBOOLE_0:def 2;
+    then not loc in SCM-Instr-Loc by XBOOLE_0:def 2;
+   hence thesis by AMI_1:def 4;
   end;
 
 Lm6:
@@ -482,17 +461,14 @@ theorem
     assume
    p = q;
     hence DataPart p = q | ((the carrier of SCM) \
-        ({IC SCM R} \/ the Instruction-Locations of SCM R)) by Lm6
-    .= q | ((the carrier of SCM) \
-        ({IC SCM} \/ the Instruction-Locations of SCM R))
-           by AMI_3:4,SCMRING2:9
-    .= DataPart q by SCMRING2:def 1;
+        ({IC SCM R} \/ NAT)) by Lm6
+    .= DataPart q by AMI_3:4,SCMRING2:9;
   end;
 
 theorem Th24:
   DataPart p = p | SCM-Data-Loc
   proof
-A1: SCM-Data-Loc misses {IC SCM R} \/ the Instruction-Locations of SCM R
+A1: SCM-Data-Loc misses {IC SCM R} \/ NAT
     proof
         now
         assume IC SCM R in SCM-Data-Loc;
@@ -502,19 +478,14 @@ A1: SCM-Data-Loc misses {IC SCM R} \/ the Instruction-Locations of SCM R
       then SCM-Data-Loc misses {IC SCM R} by ZFMISC_1:56;
       then SCM-Data-Loc misses {IC SCM R} \/ SCM-Instr-Loc
         by AMI_2:29,XBOOLE_1:70;
-      then SCM-Data-Loc /\ ({IC SCM R} \/ SCM-Instr-Loc) = {}
-       by XBOOLE_0:def 7;
-      hence SCM-Data-Loc /\ ({IC SCM R} \/ the Instruction-Locations of SCM R)
-        = {} by SCMRING2:def 1;
+      hence SCM-Data-Loc /\ ({IC SCM R} \/ NAT) = {} by XBOOLE_0:def 7;
     end;
       the carrier of SCM R = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc
       by Th14
-       .= {IC SCM R} \/ SCM-Instr-Loc \/ SCM-Data-Loc by XBOOLE_1:4
-       .= {IC SCM R} \/ (the Instruction-Locations of SCM R) \/ SCM-Data-Loc
-           by SCMRING2:def 1;
+       .= {IC SCM R} \/ (NAT) \/ SCM-Data-Loc by XBOOLE_1:4;
     then (the carrier of SCM R) \
-        ({IC SCM R} \/ the Instruction-Locations of SCM R)
-     = SCM-Data-Loc \ ({IC SCM R} \/ the Instruction-Locations of SCM R)
+        ({IC SCM R} \/ NAT)
+     = SCM-Data-Loc \ ({IC SCM R} \/ NAT)
        by XBOOLE_1:40
     .= SCM-Data-Loc by A1,XBOOLE_1:83;
     hence thesis;
@@ -538,8 +509,6 @@ A1: the carrier of SCM R = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc
       by AMI_2:29,XBOOLE_1:70;
     then dom p misses {IC SCM R} \/ SCM-Instr-Loc
      iff dom p c= SCM-Data-Loc by A2,XBOOLE_1:63,73;
-    then dom p misses {IC SCM R} \/ the Instruction-Locations of SCM R
-     iff dom p c= SCM-Data-Loc by SCMRING2:def 1;
     hence thesis by AMI_1:def 50;
   end;
 
@@ -561,19 +530,10 @@ XBOOLE_1:7
   end;
 
 theorem
-    p = q implies ProgramPart p = ProgramPart q
-  proof
-    assume
-   p = q;
-    hence ProgramPart p = ProgramPart q by SCMRING2:def 1;
-  end;
+    p = q implies ProgramPart p = ProgramPart q;
 
-theorem Th29:
-  dom ProgramPart p c= SCM-Instr-Loc
-  proof
-     ProgramPart p = p|SCM-Instr-Loc by SCMRING2:def 1;
-    hence dom ProgramPart p c= SCM-Instr-Loc by RELAT_1:87;
-  end;
+theorem
+  dom ProgramPart p c= SCM-Instr-Loc by RELAT_1:87;
 
 theorem
   InsCode(I) <= 7 by SCMRING3:71;
@@ -631,8 +591,8 @@ A6: SCM-Memory = dom g1 & SCM-Memory = dom g2 by A4,A5,FUNCT_2:def 1;
        now
       let x be set such that
 A7:     x in SCM-Memory;
-         SCM-Memory = the carrier of SCM R by SCMRING2:def 1
-         .= {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc by Th14;
+         SCM-Memory = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc
+          by SCMRING2:def 1;
 then A8:   x in {IC SCM R} \/ SCM-Data-Loc or x in SCM-Instr-Loc
        by A7,XBOOLE_0:def 2;
       per cases by A8,XBOOLE_0:def 2;
@@ -646,9 +606,7 @@ then   x = IC SCM R by TARSKI:def 1;
       end;
       suppose
 A9:     x in SCM-Instr-Loc;
-         the Instruction-Locations of SCM R = SCM-Instr-Loc by SCMRING2:def 1;
-       then reconsider l = x as Instruction-Location of SCM R
-       by A9,AMI_1:def 4;
+       reconsider l = x as Instruction-Location of SCM R by A9,AMI_1:def 4;
         l = x;
       hence g1.x = g2.x by A3,A4,A5;
       end;
@@ -679,8 +637,7 @@ A4: now
          .= Exec(INS, s).d by AMI_1:def 13
          .= (Exec(INS, s) +* Start-At ((Next IC s) + k)).d by AMI_1:112;
     end;
-A5: InsCode INS <= 7 by SCMRING3:71;
-    per cases by A5,NAT_1:32;
+    per cases by SCMRING3:71,NAT_1:32;
     suppose InsCode INS = 0;
 then A6:   INS = halt SCM R by SCMRING3:16;
 then A7: Following(s) = s by AMI_1:def 8;
@@ -962,8 +919,7 @@ A3: now let d be Instruction-Location of SCM R;
         .= (Exec(IncAddr(I, k), s)
            +* Start-At (IC Exec(IncAddr(I,k), s) -' k)).d by AMI_1:112;
      end;
-A4: InsCode I <= 7 by SCMRING3:71;
-    per cases by A4,NAT_1:32;
+    per cases by SCMRING3:71,NAT_1:32;
 
  suppose InsCode I = 0;
 then A5: I = halt SCM R by SCMRING3:16;
@@ -1228,19 +1184,21 @@ registration let R;
  cluster autonomic non programmed FinPartState of SCM R;
  existence
   proof
-    set P = (IC SCM R, il.(SCM R,0)) --> (il.(SCM R,0), halt SCM R);
+    reconsider il = il.(SCM R,0) as Instruction-Location of SCM R;
+    set P = (IC SCM R,  il.(SCM R,0)) --> (il, halt SCM R);
        P = Start-At(il.(SCM R,0))+*((il.(SCM R,0)) .--> halt SCM R)
      by FUNCT_4:def 4;
     then reconsider P as FinPartState of SCM R;
     take P;
-A1: ObjectKind il.(SCM R,0) = the Instructions of SCM R by AMI_1:def 14;
-       ObjectKind IC SCM R = the Instruction-Locations of SCM R by AMI_1:def 11
-;
-    hence P is autonomic by A1,AMI_1:67;
+    reconsider h = halt SCM R as Element of ObjectKind il by AMI_1:def 14;
+    ObjectKind IC SCM R = NAT by AMI_1:def 11;
+    then reconsider l = il as Element of ObjectKind IC SCM R by AMI_1:def 4;
+     (IC SCM R,il) --> (l, h) is autonomic by AMI_1:67;
+    hence P is autonomic;
        now
          dom P = { IC SCM R, il.(SCM R,0) } by FUNCT_4:65;
 then A2:   IC SCM R in dom P by TARSKI:def 2;
-      assume dom P c= the Instruction-Locations of SCM R;
+      assume dom P c= NAT;
        then reconsider l = IC SCM R as Instruction-Location of SCM R
                          by A2,AMI_1:def 4;
         l = IC SCM R;
@@ -1273,8 +1231,7 @@ then A5:   k.x = r by FUNCOP_1:87;
          .= the carrier of R by SCMRING3:1;
       hence k.x in f.x by A5;
     end;
-    then k in sproduct the Object-Kind of SCM R by A1,A2,A3,CARD_3:def 9;
-    hence thesis by AMI_1:77;
+    hence thesis by A1,A2,A3,CARD_3:def 9;
   end;
 end;
 
@@ -1303,11 +1260,11 @@ A4:   d1 in dom DataPart p by A2;
 then A5:   SCM-Data-Loc \ dom p <> {} by XBOOLE_1:37;
       then d2 in SCM-Data-Loc by XBOOLE_0:def 4;
       then reconsider d2 as Data-Location of R by SCMRING2:1;
-     consider il being Element of (the Instruction-Locations of SCM R) \ dom p;
-         not the Instruction-Locations of SCM R c= dom p
+     consider il being Element of (NAT) \ dom p;
+         not NAT c= dom p
         by FINSET_1:13;
-then A6:   (the Instruction-Locations of SCM R) \ dom p <> {} by XBOOLE_1:37;
-      then il is Element of the Instruction-Locations of SCM R
+then A6:   (NAT) \ dom p <> {} by XBOOLE_1:37;
+      then il is Element of NAT
               by XBOOLE_0:def 4;
       then reconsider il as Instruction-Location of SCM R by AMI_1:def 4;
       consider e being Element of R such that
@@ -1363,8 +1320,8 @@ A11:  not il in dom p by A6,XBOOLE_0:def 4;
          DataPart p c= p by RELAT_1:88;
 then A12:   dom DataPart p c= dom p by RELAT_1:25;
          dom ((Computation s1).1) = the carrier of SCM R by AMI_1:79;
-      then dom p c= dom ((Computation s1).1) by AMI_1:80;
-then A13:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91;
+then
+A13:  dom ((Computation s1).1|dom p) = dom p by RELAT_1:91,AMI_1:80;
 A14:  dom(Start-At il) = {IC SCM R} by FUNCOP_1:19;
 then A15:  IC SCM R in dom (Start-At il) by TARSKI:def 1;
 A16:  dom ((il .--> (d1:=d2)) +* ( d2.--> 0.R) +* Start-At il)
@@ -1418,8 +1375,8 @@ then A35:s1.d2 = p1.d2 by A8,GRFUNC_1:8
                            .= 0.R by A19,A29,A35,SCMRING2:13;
 then A36:((Computation s1).1|dom p).d1 = 0.R by A4,A12,A13,FUNCT_1:70;
        dom ((Computation s2).1) = the carrier of SCM R by AMI_1:79;
-    then dom p c= dom ((Computation s2).1) by AMI_1:80;
-then A37:dom ((Computation s2).1|dom p) = dom p by RELAT_1:91;
+then
+A37:dom ((Computation s2).1|dom p) = dom p by RELAT_1:91,AMI_1:80;
 A38:dom(Start-At il) = {IC SCM R} by FUNCOP_1:19;
 then A39:IC SCM R in dom (Start-At il) by TARSKI:def 1;
 A40:dom ((il .--> (d1:=d2)) +* ( d2.--> e) +* Start-At il)
@@ -1482,10 +1439,8 @@ theorem Th38:
    assume
 A1:  R is non trivial;
    let p be autonomic non programmed FinPartState of SCM R;
-      the Instruction-Locations of SCM R = SCM-Instr-Loc by SCMRING2:def 1;
-then A2:not dom p c= SCM-Instr-Loc by AMI_1:def 40;
-      dom p c= the carrier of SCM R by AMI_1:80;
-   then dom p = dom p /\ the carrier of SCM R by XBOOLE_1:28
+A2:not dom p c= SCM-Instr-Loc by AMI_1:def 40;
+   dom p = dom p /\ the carrier of SCM R by XBOOLE_1:28,AMI_1:80
         .= dom p /\ ({IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc) by Th14
         .= dom p /\ ({IC SCM R} \/ SCM-Data-Loc) \/ dom p /\ SCM-Instr-Loc
                                       by XBOOLE_1:23;
@@ -1521,12 +1476,13 @@ A2:    not IC p in dom p;
 A5:    dom (il .--> (goto il.(SCM R,1))) = {il} by FUNCOP_1:19;
 A6:    dom (il .--> (goto il.(SCM R,0))) = {il} by FUNCOP_1:19;
        take s1,s2;
-          dom p misses {il}
+       dom p misses {il}
        proof
          thus dom p /\ {il} = {} by A2,Lm1;
        end;
-    then p c= p1 & p c= p2 by A5,A6,FUNCT_4:33;
-       hence A7: p c= s1 & p c= s2 by A3,A4,XBOOLE_1:1;
+    then
+B7:     p c= p1 & p c= p2 by A5,A6,FUNCT_4:33;
+       hence     p c= s1 & p c= s2 by A3,A4,XBOOLE_1:1;
        take 1;
 A8:     il in dom (il .--> (goto il.(SCM R,1))) by A5,TARSKI:def 1;
 A9:     il in dom (il .--> (goto il.(SCM R,0))) by A6,TARSKI:def 1;
@@ -1543,11 +1499,13 @@ then A11:     s2.il = p2.il by A4,GRFUNC_1:8
              .= ((il .--> goto il.(SCM R,1))).il by A8,FUNCT_4:14
              .= goto il.(SCM R,1) by FUNCOP_1:87;
 A12:    (Following s1).IC SCM R
-        = Exec (goto il.(SCM R,0),s1).IC SCM R by A1,A7,A10,AMI_1:97
+        = Exec (goto il.(SCM R,0),s1).IC SCM R
+         by A1,B7,A10,AMI_1:97,A3,XBOOLE_1:1
        .= il.(SCM R,0) by SCMRING2:17;
 
 A13:    (Following s2).IC SCM R
-        = Exec (goto il.(SCM R,1),s2).IC SCM R by A1,A7,A11,AMI_1:97
+        = Exec (goto il.(SCM R,1),s2).IC SCM R
+         by A1,B7,A11,AMI_1:97,A4,XBOOLE_1:1
        .= il.(SCM R,1) by SCMRING2:17;
 
        assume A14: (Computation s1).1|dom p = (Computation s2).1|dom p;
@@ -1587,10 +1545,9 @@ A4:  loc <> loc1
        end;
   assume
 A5: not IC (Computation s).n in dom ProgramPart(p);
-A6: the Instruction-Locations of SCM R = SCM-Instr-Loc by SCMRING2:def 1;
-    then loc in dom ProgramPart p iff loc in dom p /\ SCM-Instr-Loc by
-FUNCT_1:68;
-    then A7:not loc in dom p by A5,A6,XBOOLE_0:def 3;
+X:  loc in NAT by AMI_1:def 4;
+    loc in dom ProgramPart p iff loc in dom p /\ SCM-Instr-Loc by FUNCT_1:68;
+    then A7:not loc in dom p by A5,XBOOLE_0:def 3,X;
     set p1 = p +* (loc .--> goto loc);
     set p2 = p +* (loc .--> goto loc1);
 
@@ -1609,8 +1566,6 @@ A13: p2 c= s2 by AMI_1:82;
 
  set Cs1i = (Computation s1).n;
  set Cs2i = (Computation s2).n;
-
-A14:  IC SCM R in dom p by A1,Th38;
      p is not autonomic
    proof
      take s1, s2;
@@ -1656,13 +1611,14 @@ A24: Cs2k = Following Cs2i by AMI_1:def 19
       A25:   Cs1i.loc = goto loc & Cs2i.loc = goto loc1 by A22,AMI_1:54;
 A26:  (Cs1i|dom p) = (Csi|dom p) by A2,A18,AMI_1:def 25;
 A27: Cs1i.IC SCM R = (Cs1i|dom p).IC SCM R &
-     Csi.IC SCM R = (Csi|dom p).IC SCM R by A14,FUNCT_1:72;
+     Csi.IC SCM R = (Csi|dom p).IC SCM R by A1,Th38,FUNCT_1:72;
      (Cs1i|dom p) = (Cs2i|dom p) by A18,A21,AMI_1:def 25;
- then   Cs1i.IC SCM R = loc & Cs2i.IC SCM R = loc by A14,A26,A27,FUNCT_1:72;
+ then   Cs1i.IC SCM R = loc & Cs2i.IC SCM R = loc
+               by A1,Th38,A26,A27,FUNCT_1:72;
 then A28:   Cs1k.IC SCM R = loc & Cs2k.IC SCM R = loc1 by A23,A24,A25,
 SCMRING2:17;
         (Cs1k|dom p).IC SCM R = Cs1k.IC SCM R &
-     (Cs2k|dom p).IC SCM R = Cs2k.IC SCM R by A14,FUNCT_1:72;
+     (Cs2k|dom p).IC SCM R = Cs2k.IC SCM R by A1,Th38,FUNCT_1:72;
    hence Cs1k|dom p <> Cs2k|dom p by A4,A28;
   end;
  hence contradiction;
@@ -1681,14 +1637,13 @@ A1:   R is non trivial;
 A2:   p c= s1 & p c= s2;
     set Cs1i = (Computation s1).n;
     set Cs2i = (Computation s2).n;
-A3: IC SCM R in dom p by A1,Th38;
     thus
 A4:   IC Cs1i = IC Cs2i
     proof
       assume
 A5:     IC Cs1i <> IC Cs2i;
         (Cs1i|dom p).IC SCM R = Cs1i.IC SCM R &
-      (Cs2i|dom p).IC SCM R = Cs2i.IC SCM R by A3,FUNCT_1:72;
+      (Cs2i|dom p).IC SCM R = Cs2i.IC SCM R by A1,Th38,FUNCT_1:72;
       hence contradiction by A2,A5,AMI_1:def 25;
     end;
     assume
@@ -1843,7 +1798,6 @@ A2:   p c= s1 & p c= s2;
     set I = CurInstr ((Computation s1).n);
     set Cs1i = (Computation s1).n;
     set Cs2i = (Computation s2).n;
-A3: IC SCM R in dom p by A1,Th38;
 A4: IC Cs1i = IC Cs2i by A1,A2,Th41;
 A5: I = CurInstr ((Computation s2).n) by A1,A2,Th41;
     set Cs1i1 = (Computation s1).(n+1);
@@ -1853,7 +1807,7 @@ A6: Cs1i1 = Following Cs1i by AMI_1:def 19
 A7: Cs2i1 = Following Cs2i by AMI_1:def 19
          .= Exec (CurInstr Cs2i, Cs2i);
 A8: (Cs1i1|dom p).IC SCM R = Cs1i1.IC SCM R &
-     (Cs2i1|dom p).IC SCM R = Cs2i1.IC SCM R by A3,FUNCT_1:72;
+     (Cs2i1|dom p).IC SCM R = Cs2i1.IC SCM R by A1,Th38,FUNCT_1:72;
     assume
 A9: I = a=0_goto loc & loc <> Next (IC (Computation s1).n);
     hereby
@@ -1873,7 +1827,7 @@ begin :: Relocability
 definition
   let N be with_non-empty_elements set,
       S be regular standard (IC-Ins-separated definite
-           (standard-ins non empty non void AMI-Struct over N)),
+           (standard-ins non empty stored-program AMI-Struct over NAT,N)),
       k be natural number,
       p be FinPartState of S;
  func Relocated (p,k) -> FinPartState of S equals
@@ -1883,14 +1837,14 @@ end;
 
 reserve
   S for regular standard (IC-Ins-separated definite
-              (standard-ins non empty non void AMI-Struct over N)),
+              (standard-ins non empty stored-program AMI-Struct over NAT,N)),
   g for FinPartState of S,
   il for Instruction-Location of S;
 
 theorem Th47:
   DataPart(Relocated(g,k)) = DataPart(g)
   proof
-    set I = the Instruction-Locations of S;
+    set I = NAT;
     set B = (the carrier of S) \ ({IC S} \/ I);
     set X = (Start-At ((IC g)+k)) | B;
     consider x being Element of dom X;
@@ -1907,8 +1861,8 @@ theorem Th47:
     then (Start-At ((IC g)+k)) | B is Function of {},{} by FUNCT_2:55;
     then A3: (Start-At ((IC g)+k)) | B = {} by PARTFUN1:57;
 A4: dom IncAddr(Shift(ProgramPart(g),k),k)
-      c= the Instruction-Locations of S by AMI_1:def 40;
-A5: dom DataPart g c= B by Th7;
+      c= NAT by AMI_1:def 40;
+A5: dom DataPart g c= B by RELAT_1:87;
 A6: B misses I by Lm3;
     thus DataPart(Relocated(g,k))
       =(Start-At ((IC g)+k)+* (IncAddr(Shift(ProgramPart(g),k),k)+*DataPart g))
@@ -1926,7 +1880,7 @@ theorem Th48:
   proof
     assume
 A1:   S is realistic;
-    set I = the Instruction-Locations of S;
+    set I = NAT;
     set B = (the carrier of S) \ ({IC S} \/ I);
     set X = (Start-At ((IC g)+k)) | I;
     set f = IncAddr(Shift(ProgramPart(g),k),k);
@@ -1945,7 +1899,7 @@ A1:   S is realistic;
     then X is Function of {},{} by FUNCT_2:55;
     then A3: X = {} by PARTFUN1:57;
 A4: dom f c= I by AMI_1:def 40;
-A5: dom DataPart g c= B by Th7;
+A5: dom DataPart g c= B by RELAT_1:87;
 A6: I misses B by Lm3;
     thus ProgramPart(Relocated(g,k))
      = (Start-At ((IC g)+k)+* (f+*DataPart g)) | I by FUNCT_4:15
@@ -2060,7 +2014,7 @@ theorem Th54:
     then A1: dom f = dom g by AMISTD_2:def 15;
       now
       let x be set;
-A2:   dom f c= the Instruction-Locations of S by AMI_1:def 40;
+A2:   dom f c= NAT by AMI_1:def 40;
       assume
 A3:     x in dom f;
       then reconsider x'=x as Instruction-Location of S by A2,AMI_1:def 4;
@@ -2142,7 +2096,7 @@ A1:   S is realistic;
     assume
 A2:   IC S in dom g;
     then A3: IC S in dom g \/ dom q by XBOOLE_0:def 2;
-    set I = the Instruction-Locations of S;
+    set I = NAT;
     set B = (the carrier of S) \ ({IC S} \/ I);
 A4: dom q c= B by A1,Th8;
     then A5: not IC S in dom q by Lm2;
@@ -2251,10 +2205,8 @@ A4:   Relocated (p,k) c= s2 and
 A5:   s = s1 +* s2|SCM-Data-Loc;
 A6:   IC SCM R in dom Relocated(p,k) by Th51;
 A7:   DataPart p = DataPart (Relocated (p,k)) by Th47;
-         DataPart p c= p by RELAT_1:88;
-then A8:   DataPart p c= s1 by A3,XBOOLE_1:1;
-         DataPart (Relocated(p,k)) c= Relocated(p,k) by RELAT_1:88;
-then A9:   DataPart (Relocated(p,k)) c= s2 by A4,XBOOLE_1:1;
+B8:      DataPart p c= p by RELAT_1:88;
+B9:      DataPart (Relocated(p,k)) c= Relocated(p,k) by RELAT_1:88;
 A10:   p is non programmed by A2,AMI_1:109;
 A11:   p c= s by A3,A4,A5,Th58;
 defpred P[Element of NAT] means
@@ -2293,8 +2245,8 @@ A19: (IC p) + k in dom Relocated(p,k) by A14,A15,Th50;
        = CurInstr((Computation s2).0) by A14,A16,A17,Th55;
     thus (Computation s1).0|dom (DataPart p)
          = s1 | dom (DataPart p) by AMI_1:def 19
-        .= DataPart p by A8,GRFUNC_1:64
-        .= s2 | dom (DataPart p) by A7,A9,GRFUNC_1:64
+        .= DataPart p by B8,GRFUNC_1:64,A3,XBOOLE_1:1
+        .= s2 | dom (DataPart p) by A7,B9,GRFUNC_1:64,A4,XBOOLE_1:1
         .= (Computation s2).0|dom (DataPart (Relocated (p,k)))
         by A7,AMI_1:def 19;
 A20: dom (s2|SCM-Data-Loc) = SCM-Data-Loc by Th22;
@@ -2330,22 +2282,17 @@ then A29: dom Cs1i = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc by Th14;
 then A30:dom Cs2i = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc by Th14;
         DPp = p | SCM-Data-Loc by Th24;
      then dom DPp = dom p /\ SCM-Data-Loc by FUNCT_1:68;
-     then dom DPp c= SCM-Data-Loc by XBOOLE_1:17;
-then A31:  dom DPp c= {IC SCM R} \/ SCM-Data-Loc by XBOOLE_1:10;
-then A32:  dom DPp c= dom Cs1i1 by A27,XBOOLE_1:10;
-A33: dom DPp c= dom Cs2i1 by A28,A31,XBOOLE_1:10;
+then A31:  dom DPp c= {IC SCM R} \/ SCM-Data-Loc by XBOOLE_1:10,17;
 A34: dom (Cs1i1|dom DPp) = dom Cs1i1 /\ dom DPp by FUNCT_1:68
-                          .= dom DPp by A32,XBOOLE_1:28;
+                          .= dom DPp by A31,A27,XBOOLE_1:10,28;
 A35: dom (Cs2i1|dom DataPart(Relocated(p, k)))
              = dom Cs2i1 /\ dom DPp by A26,FUNCT_1:68
-            .= dom DPp by A33,XBOOLE_1:28;
-A36: dom DPp c= dom Cs1i by A29,A31,XBOOLE_1:10;
-A37: dom DPp c= dom Cs2i by A30,A31,XBOOLE_1:10;
+            .= dom DPp by A28,A31,XBOOLE_1:10,28;
 A38: dom (Cs1i|dom DPp) = dom Cs1i /\ dom DPp by FUNCT_1:68
-                       .= dom DPp by A36,XBOOLE_1:28;
+                       .= dom DPp by A29,A31,XBOOLE_1:10,28;
 A39: dom (Cs2i|dom DataPart(Relocated(p, k)))
              = dom Cs2i /\ dom DPp by A26,FUNCT_1:68
-            .= dom DPp by A37,XBOOLE_1:28;
+            .= dom DPp by A30,A31,XBOOLE_1:10,28;
 A40: dom (Cs3i|SCM-Data-Loc) = SCM-Data-Loc by Th22;
 A41: dom (Cs2i|SCM-Data-Loc) = SCM-Data-Loc by Th22;
 A42: dom (Cs3i1|SCM-Data-Loc) = SCM-Data-Loc by Th22;
@@ -2426,8 +2373,7 @@ A69: Next (IC Cs1i + k) = Next (il.(SCM R,j + k)) by A68,Th2
       .= (Next IC Cs1i) + k by A68,SCMRING3:67;
 
   set I = CurInstr(Cs1i);
-A70: InsCode(I) <= 7 by SCMRING3:71;
-    per cases by A70,NAT_1:32;
+    per cases by SCMRING3:71,NAT_1:32;
     suppose InsCode I = 0;
 then A71:  I = halt SCM R by SCMRING3:16;
 then A72:  CurInstr(Cs2i) = halt SCM R by A23,AMISTD_2:29;
@@ -2464,10 +2410,9 @@ then A79:  dom DPp c= dom p by GRFUNC_1:8;
    suppose
 A80: da = d;
 then A81:  Cs1i1.d = Cs1i.db by A65,A74,SCMRING2:13;
-A82: Cs2i1.d = Cs2i.db by A23,A66,A75,A80,SCMRING2:13;
-     Cs3i.db = Cs1i.db by A1,A3,A10,A11,A34,A74,A78,A79,A80,Th42;
+     Cs2i1.d = Cs2i.db by A23,A66,A75,A80,SCMRING2:13;
     hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x
-      by A34,A53,A77,A78,A81,A82;
+      by A53,A77,A78,A81,A1,A3,A10,A11,A34,A74,A79,A80,Th42;
       end;
    suppose da <> d;
    then Cs1i1.d = Cs1i.d & Cs2i1.d = Cs2i.d by A23,A65,A66,A74,A75,SCMRING2:13
@@ -2486,7 +2431,7 @@ A83: x in dom (Cs3i1|SCM-Data-Loc);
    suppose da = d;
    then Cs2i1.d = Cs2i.db & Cs3i1.d=Cs3i.db by A23,A66,A67,A74,A75,SCMRING2:13
 ;
-    hence (Cs3i1|SCM-Data-Loc).x = (Cs2i1|SCM-Data-Loc).x by A56,A77,A83;
+    hence (Cs3i1|SCM-Data-Loc).x = (Cs2i1|SCM-Data-Loc).x by A56,A47,A83;
       end;
    suppose
 A84: da <> d;
@@ -2525,9 +2470,8 @@ then A92:  dom DPp c= dom p by GRFUNC_1:8;
 A93: da = d;
 then A94:  Cs1i1.d = Cs1i.da + Cs1i.db by A65,A86,SCMRING2:14;
      Cs2i1.d = Cs2i.da + Cs2i.db by A23,A66,A87,A93,SCMRING2:14;
-  then Cs1i1.d = Cs2i1.d by A1,A3,A10,A11,A34,A86,A89,A90,A91,A92,A93,A94,Th43
-;
-    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A34,A53,A91;
+    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x
+     by A53,A91,A1,A3,A10,A11,A34,A86,A89,A90,A92,A93,A94,Th43;
       end;
    suppose da <> d;
    then Cs1i1.d=Cs1i.d & Cs2i1.d = Cs2i.d by A23,A65,A66,A86,A87,SCMRING2:14;
@@ -2585,9 +2529,8 @@ then A106: dom DPp c= dom p by GRFUNC_1:8;
 A107: da = d;
 then A108:  Cs1i1.d = Cs1i.da - Cs1i.db by A65,A100,SCMRING2:15;
      Cs2i1.d = Cs2i.da - Cs2i.db by A23,A66,A101,A107,SCMRING2:15;
- then Cs1i1.d = Cs2i1.d by A1,A3,A10,A11,A34,A100,A103,A104,A105,A106,A107,A108
-,Th44;
-    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A34,A53,A105;
+    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x
+     by A53,A1,A3,A10,A11,A34,A100,A103,A104,A105,A106,A107,A108,Th44;
       end;
    suppose
     da <> d;
@@ -2647,9 +2590,8 @@ then A120:  dom DPp c= dom p by GRFUNC_1:8;
 A121: da = d;
 then A122:  Cs1i1.d = Cs1i.da * Cs1i.db by A65,A114,SCMRING2:16;
      Cs2i1.d = Cs2i.da * Cs2i.db by A23,A66,A115,A121,SCMRING2:16;
-  then Cs1i1.d = Cs2i1.d by A1,A3,A10,A11,A34,A114,A117,A118,A119,A120,A121
-,A122,Th45;
-    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x by A34,A53,A119;
+    hence (Cs1i1|dom DPp).x = (Cs2i1|dom DPp).x
+     by A53,A1,A3,A10,A11,A34,A114,A117,A118,A119,A120,A121,A122,Th45;
       end;
    suppose
     da <> d;
@@ -2902,16 +2844,13 @@ theorem
     let p being autonomic FinPartState of SCM R such that
         A2: IC SCM R in dom p and
          A3: p c= s;
-       not IC SCM R in dom DataPart p by AMI_1:100;
-then A4: dom DataPart p /\ {IC SCM R} = {} by Lm1;
-A5: dom DataPart p c= SCM-Data-Loc by Th26;
-A6: dom ProgramPart(Relocated(p,k)) c= SCM-Instr-Loc by Th29;
+A4: dom DataPart p /\ {IC SCM R} = {} by Lm1,AMI_1:100;
 A7:dom DataPart p misses dom (Start-At ((IC p) + k)
         +* ProgramPart (Relocated (p,k)))
     proof
-       SCM-Instr-Loc misses dom DataPart p by A5,AMI_2:29,XBOOLE_1:63;
+       SCM-Instr-Loc misses dom DataPart p by Th26,AMI_2:29,XBOOLE_1:63;
  then dom DataPart p misses dom (ProgramPart (Relocated (p,k)))
-   by A6,XBOOLE_1:63;
+   by RELAT_1:87,XBOOLE_1:63;
  then dom DataPart p /\ dom (ProgramPart (Relocated (p,k))) = {}
  by XBOOLE_0:def 7;
        then dom DataPart p /\ dom (Start-At ((IC p) + k))
@@ -3032,7 +2971,6 @@ A9:IC(Computation (s +* p)).0 = (s +* p).IC SCM R by AMI_1:def 19
                                 .= IC p by A2,AMI_1:def 43;
         Start-At (IC p + k ) c= Relocated (p,k) by Th56;
 then A10: Start-At (IC(Computation (s +* p)).0 + k) c= s by A3,A9,XBOOLE_1:1;
-A11: {IC SCM R} misses dom ProgramPart p by AMI_1:103;
         DataPart (Relocated (p,k)) c= Relocated (p,k) by RELAT_1:88;
      then DataPart (Relocated (p,k)) c= s by A3,XBOOLE_1:1;
 then A12: DataPart p c= s by Th47;
@@ -3040,7 +2978,6 @@ A13: dom DataPart p misses dom ProgramPart p by AMI_1:104;
 A14: dom Start-At(IC p) = dom Start-At (IC(Computation (s +* p)).0 + k)
  by A4,FUNCOP_1:19;
 A15: {IC SCM R} misses dom DataPart p by AMI_1:102;
-A16: {IC SCM R} misses dom ProgramPart p by AMI_1:103;
 
  set IS = Start-At (IC(Computation (s +* p)).0 + k);
  set IP = Start-At (IC p);
@@ -3058,7 +2995,7 @@ defpred P[Element of NAT] means (Computation s).$1
   .= s +* PP +* SD +* PR by A8,FUNCT_4:78
   .= s +* IS +* PP +* SD +* PR by A10,FUNCT_4:79
   .= s +*(IS +* PP) +* SD +* PR by FUNCT_4:15
-  .= s +*(PP +* IS) +* SD +* PR by A4,A11,FUNCT_4:36
+  .= s +*(PP +* IS) +* SD +* PR by A4,AMI_1:103,FUNCT_4:36
   .= s +* PP +* IS +* SD +* PR by FUNCT_4:15
   .= s +* DP +* PP +* IS +* SD +* PR by A12,FUNCT_4:79
   .= s +*(DP +* PP) +* IS +* SD +* PR by FUNCT_4:15
@@ -3070,7 +3007,7 @@ defpred P[Element of NAT] means (Computation s).$1
   .= s +*(PP +*(DP +* IP))+* IS +* SD +* PR by FUNCT_4:15
   .= s +*(PP +*(IP +* DP))+* IS +* SD +* PR by A5,A15,FUNCT_4:36
   .= s +*(PP +* IP +* DP) +* IS +* SD +* PR by FUNCT_4:15
-  .= s +*(IP +* PP +* DP) +* IS +* SD +* PR by A5,A16,FUNCT_4:36
+  .= s +*(IP +* PP +* DP) +* IS +* SD +* PR by A5,AMI_1:103,FUNCT_4:36
   .= s +* p +* IS +* SD +* PR by A2,AMI_1:108
   .= (Computation (s +* p)).0 +* Start-At (IC(Computation (s +* p)).0 + k)
        +* s|dom ProgramPart p +* ProgramPart (Relocated (p,k)) by AMI_1:def 19;
@@ -3090,11 +3027,8 @@ A19: (Computation s).i
        dom ProgramPart p c= the carrier of SCM R by AMI_1:80;
     then dom ProgramPart p c= dom s by AMI_1:79;
 then A20: dom ProgramPart p = dom (s|dom ProgramPart p) by RELAT_1:91;
-    then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM R by AMI_1:77;
-       dom (s|dom ProgramPart p) c= SCM-Instr-Loc by A20,Th29;
-    then dom (s|dom ProgramPart p) c= the Instruction-Locations of SCM R
- by SCMRING2:def 1;
+    then reconsider sdom as FinPartState of SCM R by FINSET_1:29;
+    dom (s|dom ProgramPart p) c= NAT by A20,RELAT_1:87;
     then reconsider sdom as programmed FinPartState of SCM R by AMI_1:def 40;
 
 A21: (Computation (s +* p)).(i+1) = Following((Computation (s +* p)).i)
@@ -3120,12 +3054,12 @@ A26: IC ((Computation (s +* p)).i
      .= (Start-At (IC (Computation (s +* p)).i + k)).IC SCM R
  by A22,FUNCT_4:14
      .= IC (Computation (s +* p)).i + k by FUNCOP_1:87;
-A27:  p c= s +* p by FUNCT_4:26;
         p is not programmed by A2,AMI_1:109;
-then A28:  IC (Computation (s +* p)).i in dom ProgramPart(p) by A1,A27,Th40;
+then A28:  IC (Computation (s +* p)).i in dom ProgramPart(p)
+         by A1,FUNCT_4:26,Th40;
      then A29:  IC (Computation (s +* p)).i in dom IncAddr(ProgramPart(p),k)
  by AMISTD_2:def 15;
-A30: ProgramPart(p) c= (Computation (s +* p)).i by A27,AMI_1:99;
+A30: ProgramPart(p) c= (Computation (s +* p)).i by FUNCT_4:26,AMI_1:99;
 A31: pi(ProgramPart(p),IC (Computation (s +* p)).i)
     = (ProgramPart(p)).IC (Computation (s +* p)).i by A28,AMI_1:def 47
    .= ((Computation (s +* p)).i).IC (Computation (s +* p)).i
@@ -3240,7 +3174,7 @@ defpred P[Element of NAT] means (Computation s).$1
   .= s +*(PR +* (DP +* IP))+* IS +* SD +* PP by FUNCT_4:15
   .= s +*(PR +* (IP +* DP))+* IS +* SD +* PP by A6,A15,FUNCT_4:36
   .= s +*(PR +* IP +* DP) +* IS +* SD +* PP by FUNCT_4:15
-  .= s +*(IP +* PR +* DP) +* IS +* SD +* PP by A6,A16,FUNCT_4:36
+  .= s +*(IP +* PR +* DP) +* IS +* SD +* PP by A6,AMI_1:103,FUNCT_4:36
   .= s +* Relocated(p,k) +* IS +* SD +* PP by Th48
   .= (Computation (s +* Relocated(p,k))).0
      +* Start-At (IC(Computation (s +* Relocated(p,k))).0 -' k)
@@ -3261,11 +3195,8 @@ A21: P[i];
     then dom ProgramPart Relocated(p,k) c= dom s by AMI_1:79;
 then A22: dom ProgramPart Relocated(p,k) =
        dom (s|(dom ProgramPart Relocated(p,k))) by RELAT_1:91;
-    then sdom is finite by FINSET_1:29;
-    then reconsider sdom as FinPartState of SCM R by AMI_1:77;
-       dom (s|(dom ProgramPart Relocated(p,k))) c= SCM-Instr-Loc by A22,Th29;
-    then dom (s|(dom ProgramPart Relocated(p,k)))
-       c= the Instruction-Locations of SCM R by SCMRING2:def 1;
+    then reconsider sdom as FinPartState of SCM R by FINSET_1:29;
+    dom (s|(dom ProgramPart Relocated(p,k))) c= NAT by A22,RELAT_1:87;
     then reconsider sdom as programmed FinPartState of SCM R by AMI_1:def 40;
 A23: (Computation (s +* Relocated(p,k))).(i+1)
      = Following((Computation (s +* Relocated(p,k))).i) by AMI_1:def 19;
@@ -3293,13 +3224,12 @@ A28: IC ((Computation (s +* Relocated(p,k))).i
      .= (Start-At (IC (Computation (s +* Relocated(p,k))).i -' k)).IC SCM R
  by A24,FUNCT_4:14
      .= IC (Computation (s +* Relocated(p,k))).i -' k by FUNCOP_1:87;
-A29:  Relocated(p,k) c= s +* Relocated(p,k) by FUNCT_4:26;
         IC SCM R in dom Relocated(p,k) by Th51;
      then Relocated(p,k) is not programmed by AMI_1:109;
 then A30:  IC (Computation (s +* Relocated(p,k))).i
-       in dom ProgramPart(Relocated(p,k)) by A1,A4,A29,Th40;
+       in dom ProgramPart(Relocated(p,k)) by A1,A4,FUNCT_4:26,Th40;
 A31:  ProgramPart(Relocated(p,k)) c= (Computation (s +* Relocated(p,k))).i
- by A29,AMI_1:99;
+ by FUNCT_4:26,AMI_1:99;
    consider jk being natural number such that
 A32: IC (Computation (s +* Relocated(p,k))).i = il.(SCM R,jk) by AMISTD_1:26;
        il.(SCM R,jk) in { il.(SCM R,j+k) where j is Element of NAT:
@@ -3394,26 +3324,22 @@ A13:dom (Start-At ((IC p) + k))
        dom ProgramPart p c= the carrier of SCM R by AMI_1:80;
     then dom ProgramPart p c= dom s1 by AMI_1:79;
 then A14:dom(s1|dom ProgramPart p) = dom ProgramPart p by RELAT_1:91;
-then A15:dom (Start-At ((IC p) + k))
-    misses dom (s1| dom ProgramPart p) by A8,AMI_1:103;
        dom ProgramPart p c= the carrier of SCM R by AMI_1:80;
     then dom ProgramPart p c= dom s2 by AMI_1:79;
 then A16:dom(s2|dom ProgramPart p) = dom ProgramPart p by RELAT_1:91;
-then A17:dom (Start-At ((IC p) + k))
-    misses dom (s2| dom ProgramPart p) by A8,AMI_1:103;
 A18: (Computation s1).i|dom (Start-At ((IC p)+k))
     = ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k)
         +* s1|dom ProgramPart p)
        |dom (Start-At ((IC p)+k)) by A5,A13,FUNCT_4:76
    .= ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k))
-       |dom (Start-At ((IC p)+k)) by A15,FUNCT_4:76
+       |dom (Start-At ((IC p)+k)) by A14,FUNCT_4:76,A8,AMI_1:103
    .= Start-At (IC(Computation(s1 +* p)).i + k) by A8,A9,FUNCT_4:24
    .= Start-At (IC(Computation(s2 +* p)).i + k) by A12,Th9
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k))
       |dom (Start-At ((IC p)+k)) by A8,A10,FUNCT_4:24
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k)
         +* s2|dom ProgramPart p)
-       |dom (Start-At ((IC p)+k)) by A17,FUNCT_4:76
+       |dom (Start-At ((IC p)+k)) by A16,FUNCT_4:76,A8,AMI_1:103
    .= (Computation s2).i|dom (Start-At ((IC p)+k)) by A6,A13,FUNCT_4:76;
 A19:  (Computation s1).i|dom (IncAddr(Shift(ProgramPart(p),k),k))
     = (Computation s1).i|dom (ProgramPart (Relocated (p,k)))
@@ -3426,8 +3352,6 @@ A19:  (Computation s1).i|dom (IncAddr(Shift(ProgramPart(p),k),k))
           DataPart p c= p by RELAT_1:88;
 then A20:  dom DataPart p c= dom p by GRFUNC_1:8;
 A21:  dom(DataPart p) misses dom(ProgramPart(Relocated (p,k)))by AMI_1:104;
-A22: dom(DataPart p) misses dom(s1|dom ProgramPart p) by A14,AMI_1:104;
-A23: dom(DataPart p) misses dom(s2|dom ProgramPart p) by A16,AMI_1:104;
 A24: dom(DataPart p) misses dom (Start-At (IC(Computation(s1 +* p)).i + k))
  by A9,AMI_1:102;
 A25: dom(DataPart p) misses dom (Start-At (IC(Computation(s2 +* p)).i + k))
@@ -3437,14 +3361,14 @@ A26:    (Computation s1).i|dom (DataPart p)
       +* s1|dom ProgramPart p)
       | dom(DataPart p) by A5,A21,FUNCT_4:76
    .= ((Computation(s1 +* p)).i +* Start-At (IC(Computation(s1 +* p)).i + k))
-      | dom(DataPart p) by A22,FUNCT_4:76
+      | dom(DataPart p) by A14,AMI_1:104,FUNCT_4:76
    .= ((Computation(s1 +* p)).i) | dom (DataPart p) by A24,FUNCT_4:76
    .= ((Computation(s2 +* p)).i) | dom (DataPart p) by A7,A20,RELAT_1:188
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k))
       | dom(DataPart p) by A25,FUNCT_4:76
    .= ((Computation(s2 +* p)).i +* Start-At (IC(Computation(s2 +* p)).i + k)
       +* s2|dom ProgramPart p)
-      | dom(DataPart p) by A23,FUNCT_4:76
+      | dom(DataPart p) by A16,AMI_1:104,FUNCT_4:76
    .= (Computation s2).i|dom (DataPart p) by A6,A21,FUNCT_4:76;
 A27:    (Computation s1).i|dom (Start-At ((IC p)+k) +*
        IncAddr(Shift(ProgramPart(p),k),k))
@@ -3507,15 +3431,10 @@ A38: dom (Start-At (IC p)) misses dom (ProgramPart p) by A33,AMI_1:103;
     then dom ProgramPart Relocated(p,k) c= dom s1 by AMI_1:79;
 then A39:dom(s1|dom ProgramPart Relocated(p,k))
          = dom ProgramPart Relocated(p,k) by RELAT_1:91;
-then A40:dom (Start-At (IC p)) misses dom (s1|dom ProgramPart Relocated(p,k))
- by A33,AMI_1:103;
        dom ProgramPart Relocated(p,k) c= the carrier of SCM R by AMI_1:80;
     then dom ProgramPart Relocated(p,k) c= dom s2 by AMI_1:79;
 then A41:dom(s2|dom ProgramPart Relocated(p,k))
          = dom ProgramPart Relocated(p,k) by RELAT_1:91;
-then A42:dom (Start-At (IC p)) misses dom (s2|dom ProgramPart Relocated(p,k))
- by A33,AMI_1:103;
-
 A43:  (Computation s1).i|dom (Start-At (IC p))
     = ((Computation(s1 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
@@ -3523,7 +3442,7 @@ A43:  (Computation s1).i|dom (Start-At (IC p))
        |dom (Start-At (IC p)) by A30,A38,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k))
-       |dom (Start-At (IC p)) by A40,FUNCT_4:76
+       |dom (Start-At (IC p)) by A39,FUNCT_4:76,A33,AMI_1:103
    .= Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k)
  by A33,A34,FUNCT_4:24
    .= Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
@@ -3534,7 +3453,7 @@ A43:  (Computation s1).i|dom (Start-At (IC p))
    .= ((Computation(s2 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
       +* s2|dom ProgramPart Relocated(p,k))
-       |dom (Start-At (IC p)) by A42,FUNCT_4:76
+       |dom (Start-At (IC p)) by A41,FUNCT_4:76,A33,AMI_1:103
    .= (Computation s2).i|dom (Start-At (IC p)) by A31,A38,FUNCT_4:76;
 A44:  (Computation s1).i|dom (ProgramPart p)
     = ProgramPart (p) by A30,FUNCT_4:24
@@ -3543,10 +3462,6 @@ A44:  (Computation s1).i|dom (ProgramPart p)
       then DataPart p c= Relocated(p,k) by Th47;
 then A45: dom (DataPart p) c= dom (Relocated(p,k)) by GRFUNC_1:8;
 A46:  dom (DataPart p) misses dom (ProgramPart p) by AMI_1:104;
-A47: dom (DataPart p) misses dom (s1|dom ProgramPart Relocated(p,k))
- by A39,AMI_1:104;
-A48: dom (DataPart p) misses dom (s2|dom ProgramPart Relocated(p,k))
- by A41,AMI_1:104;
 A49: dom(DataPart p) misses
       dom(Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k))
  by A34,AMI_1:102;
@@ -3560,7 +3475,7 @@ A51: (Computation s1).i|dom (DataPart p)
       | dom(DataPart p) by A30,A46,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i +*
        Start-At (IC(Computation(s1 +* Relocated (p,k))).i -' k))
-      | dom(DataPart p) by A47,FUNCT_4:76
+      | dom(DataPart p) by A39,AMI_1:104,FUNCT_4:76
    .= ((Computation(s1 +* Relocated (p,k))).i) | dom (DataPart p)
  by A49,FUNCT_4:76
    .= ((Computation(s2 +* Relocated (p,k))).i) | dom (DataPart p)
@@ -3571,7 +3486,7 @@ A51: (Computation s1).i|dom (DataPart p)
    .= ((Computation(s2 +* Relocated (p,k))).i
       +* Start-At (IC(Computation(s2 +* Relocated (p,k))).i -' k)
       +* s2|dom ProgramPart Relocated(p,k))
-      | dom(DataPart p) by A48,FUNCT_4:76
+      | dom(DataPart p) by A41,AMI_1:104,FUNCT_4:76
    .= (Computation s2).i|dom (DataPart p) by A31,A46,FUNCT_4:76;
 
 A52:    (Computation s1).i|dom (Start-At (IC p) +* ProgramPart p)
@@ -3656,7 +3571,8 @@ A4:  p computes F;
     assume
 A5: x in dom F;
        dom F c= FinPartSt SCM R by RELSET_1:12;
-    then reconsider s = x as data-only FinPartState of SCM R
+    then reconsider s = x as FinPartState of SCM R by A5,AMI_1:125;
+    reconsider s as data-only FinPartState of SCM R
       by A3,A5,AMI_1:def 51;
     take s;
     thus x=s;
@@ -3683,7 +3599,8 @@ A11:  Relocated (p,k) computes F;
     assume
 A12: x in dom F;
        dom F c= FinPartSt SCM R by RELSET_1:12;
-    then reconsider s = x as data-only FinPartState of SCM R
+    then reconsider s = x as FinPartState of SCM R by A12,AMI_1:125;
+    reconsider s as data-only FinPartState of SCM R
       by A3,A12,AMI_1:def 51;
     take s;
     thus x=s;

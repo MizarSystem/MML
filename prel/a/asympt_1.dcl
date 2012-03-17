@@ -15,11 +15,12 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="ASYMPT_0"/>
@@ -53,7 +54,7 @@
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="39"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -65,7 +66,7 @@
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="39"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -84,7 +85,7 @@
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="39"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -98,7 +99,7 @@
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="37"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -117,7 +118,7 @@
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="73"/>
 </Adjective>
-<Adjective nr="39"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 </Registrations>

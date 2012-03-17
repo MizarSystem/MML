@@ -159,14 +159,7 @@ proof
 end;
 
 theorem
-  Seg c = Seg c /\ Seg a implies c <= a
-proof
- assume A1: Seg c = Seg c /\ Seg a;
- assume
-A2:  not c <= a;
-          then Seg a = Seg c by A1,Th9;
- hence contradiction by A2,Th8;
-end;
+  Seg c = Seg c /\ Seg a implies c <= a by Th8,Th9;
 
 theorem Th11:
     Seg a \/ { a+1 } = Seg (a+1)
@@ -264,11 +257,10 @@ A7:       x = f.y by FUNCT_1:def 5;
          consider k such that
 A8:       y = k and
 A9:       x = k+1 by A4,A5,A6,A7;
-A10:       x in NAT by A9,ORDINAL1:def 13;
 A11:       1 <= k+1 by NAT_1:11;
            ex m being Element of NAT st m = y & m < n by A1,A4,A6;
          then k+1 <= n by A8,NAT_1:13;
-        hence x in Seg n by A9,A10,A11;
+        hence x in Seg n by A9,A11;
        end;
       let x;
       assume x in Seg n;
@@ -297,9 +289,8 @@ registration
    given n such that
 A1: dom f = Seg n;
          rng f is finite by A1,FINSET_1:26;
-     then A2:    [:dom f, rng f:] is finite by A1,FINSET_1:19;
-         f c= [:dom f, rng f:] by RELAT_1:21;
-    hence f is finite by A2,FINSET_1:13;
+     then     [:dom f, rng f:] is finite by A1,FINSET_1:19;
+    hence f is finite by FINSET_1:13,RELAT_1:21;
   end;
 end;
 
@@ -451,7 +442,7 @@ A4:  x in Seg A();
    proof
      let x; assume
 A6:  x in Seg A();
-     then x in NAT; then x is Nat by ORDINAL1:def 13;
+     then x is Nat by ORDINAL1:def 13;
      hence thesis by A2,A6;
    end;
     consider f being Function such that A7: dom f = Seg A() &
@@ -499,8 +490,8 @@ A2: x in dom p;
 end;
 
 theorem Th18:
-  len p = len q & (for k st 1 <=k & k <= len p holds p.k=q.k)
-      implies p=q
+  len p = len q & (for k st 1 <= k & k <= len p holds p.k = q.k)
+  implies p=q
 proof
    assume
 A1: len p = len q & for k st 1<=k & k<=len p holds p.k = q.k;
@@ -1465,7 +1456,6 @@ proof let p;
               then P[r] by A3,A5,A6;
              hence P[q] by A2,A7;
             end;
-            then R[n1+1];
            hence n+1 in X by A3;
           end;
     then A8:   for n st S[n] holds S[n+1];
@@ -2178,11 +2168,7 @@ then A59:                                   len q in dom q by Def3;
           end;
           q' = p
            proof
-              A60: ex m st X\{x} c= Seg m
-                     proof
-                       take k;
-                       thus thesis by A30,XBOOLE_1:1;
-                     end;
+              A60: ex m st X\{x} c= Seg m by A30,XBOOLE_1:1;
 
               A61: (p is FinSequence of NAT & rng p = X\{x} &
                     for l,m,k1,k2 being Nat
@@ -2468,10 +2454,9 @@ A29:      x = f.y by FUNCT_1:def 5;
         consider k such that
 A30:      y = k and
 A31:      x = k+1 by A25,A26,A28,A29;
-A32:       x in NAT by A31,ORDINAL1:def 13;
           ex m being Element of NAT st k = m & m < n by A22,A25,A28,A30;
         then 1 <= k+1 & k+1 <= n by NAT_1:11,13;
-       hence x in dom p by A21,A31,A32;
+       hence x in dom p by A21,A31;
       end;
      let x;
      assume
@@ -2537,13 +2522,7 @@ theorem
     ex n st Seg n,Seg $1 are_equipotent & n <> $1;
    assume
 A1: Seg n,Seg m are_equipotent & n <> m;
-A2: ex m being Nat st P[m]
-    proof
-      consider m such that
-A3:   P[m] by A1;
-      m in NAT by ORDINAL1:def 13;
-      hence thesis by A3;
-    end;
+A2: ex m being Nat st P[m] by A1;
    consider m being Nat such that
 A4:  P[m] and
 A5:  for k being Nat st P[k] holds m <= k from NAT_1:sch 5(A2);
@@ -2564,7 +2543,7 @@ A10: now assume n = 0;
    then consider n1 being Nat such that
 A11: n = n1+1 by NAT_1:6;
     reconsider m1,n1 as Element of NAT by ORDINAL1:def 13;
-     n in Seg n & m in Seg m by A8,A10,Th5;
+B12: n in Seg n & m in Seg m by A8,A10,Th5;
 then A12:  (Seg n) \ { n },(Seg m) \ { m } are_equipotent by A6,CARD_1:61;
 A13: not n1+1 <= n1 & not m1+1 <= m1 by NAT_1:13;
 then A14: not n in Seg n1 & not m in Seg m1 by A9,A11,Th3;
@@ -2585,7 +2564,7 @@ then A16:  Seg n = (Seg n1) \/ { n } & Seg m = (Seg m1) \/ { m } &
         by A9,A11,A15,Th11,XBOOLE_1:3,40;
   then (Seg n1) misses { n } & (Seg m1) misses { m } by XBOOLE_0:def 7;
   then (Seg n) \ { n } = Seg n1 & (Seg m) \ { m } = Seg m1 by A16,XBOOLE_1:83;
-   hence contradiction by A5,A6,A9,A11,A12,A13;
+   hence contradiction by A5,A6,A9,A11,B12,A13,CARD_1:61;
   end;
 
 theorem
@@ -3172,3 +3151,11 @@ theorem
   for D being set, p,q being FinSequence of D holds
      p ^ q is FinSequence of D;
 
+:: Added by AK, 2007.11.07
+
+definition
+  let p,q be FinSequence;
+  redefine pred p = q means
+  len p = len q & for k st 1 <= k & k <= len p holds p.k = q.k;
+  compatibility by Th18;
+end;

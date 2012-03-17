@@ -11,11 +11,11 @@
 <ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -34,7 +34,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 <Adjective nr="40"/>
 <Adjective nr="52"/>
 </Cluster>
@@ -54,7 +54,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -63,7 +63,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 </Cluster>
@@ -83,7 +83,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 </Cluster>
@@ -146,7 +146,7 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="9"/>
-<Adjective nr="23">
+<Adjective nr="19">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -231,7 +231,7 @@
 <Cluster>
 <Adjective nr="6"/>
 <Adjective nr="9"/>
-<Adjective nr="23">
+<Adjective nr="19">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>

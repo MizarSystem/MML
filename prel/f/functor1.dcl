@@ -23,8 +23,8 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="CAT_1"/>
 <ArticleID name="FUNCT_4"/>
-<ArticleID name="BINOP_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="BINOP_1"/>
 <ArticleID name="MULTOP_1"/>
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="ALTCAT_2"/>

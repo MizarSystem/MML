@@ -9,7 +9,8 @@ environ
  vocabularies ORDINAL1, CARD_1, FUNCT_1, RELAT_1, BOOLE, FUNCOP_1, FUNCT_2,
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
       CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
-      FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM;
+      FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM, SETFAM_1,
+      AMISTD_2, PRALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1,
       RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
@@ -26,7 +27,8 @@ environ
       RELAT_1, RELAT_2, WELLORD1, WELLORD2, CARD_1, FUNCOP_1, FUNCT_5, CARD_2,
       CLASSES1, GRFUNC_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, SETFAM_1, FUNCT_4,
       PARTFUN1, FRAENKEL, RELSET_1, NAT_1;
- schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0;
+ schemes NAT_1, FUNCT_1, PARTFUN1, ORDINAL1, FUNCT_5, RELAT_1, XBOOLE_0,
+      CLASSES1;
 
 begin
 
@@ -780,9 +782,7 @@ theorem
       F <= G implies Sum F <=` Sum G
   proof assume F <= G;
     then disjoin F <= disjoin G by Th34;
-    then Union disjoin F c= Union disjoin G & Sum F = Card Union disjoin F &
-     Sum G = Card Union disjoin G by Th35;
-   hence Sum F <=` Sum G by CARD_1:27;
+   hence Sum F <=` Sum G by CARD_1:27,Th35;
   end;
 
 theorem
@@ -1099,8 +1099,7 @@ A27:     Card pi(f.:((disjoin F).x),x) <=` Card (f.:((disjoin F).x)) &
              Card ((disjoin F).x) = Fx & Fx in Gx by A1,A25,Th40;
         then Card pi(f.:((disjoin F).x),x) <=` Fx & Fx <` Gx & Card Gx = Gx
          by A27,CARD_1:def 5,XBOOLE_1:1;
-        then Card pi(f.:((disjoin F).x),x) <` Card Gx by ORDINAL1:22;
-       hence contradiction by A25,A26,CARD_2:4;
+       hence contradiction by A25,A26,CARD_2:4,ORDINAL1:22;
       end;
 then A28:    product K <> {} by Th37;
      consider t being Element of product K;
@@ -1607,8 +1606,7 @@ A54:       y in dom g & x = g.y by A42,FUNCT_1:def 5;
          then B c= A & B <> A by A42,A48,A52,A54,WELLORD1:def 1,WELLORD2:def 1
 ;
           then B c< A by XBOOLE_0:def 8;
-          then B in A by ORDINAL1:21;
-         hence thesis by A54,FUNCT_1:73;
+         hence thesis by A54,FUNCT_1:73,ORDINAL1:21;
         end;
       hence thesis by CARD_1:21;
      end;
@@ -2008,8 +2006,7 @@ A6:   dom g c= dom(f|X)
      end;
     hence x in sproduct(f|X) by A1,A6,Def9;
    end;
-       f|X c= f by RELAT_1:88;
-  hence thesis by Th72;
+  thus thesis by Th72,RELAT_1:88;
  end;
 
 theorem Th76:
@@ -2132,11 +2129,7 @@ A5:     x in dom g;
   end;
 
 theorem
-  g in sproduct f implies g|A in sproduct f
- proof
-       g|A c= g by RELAT_1:88;
-  hence thesis by Th80;
- end;
+  g in sproduct f implies g|A in sproduct f by Th80, RELAT_1:88;
 
 theorem Th82:
  g in sproduct f implies g|A in sproduct f|A
@@ -2164,8 +2157,7 @@ proof
 A1: h in sproduct(f+*g);
  take h|(dom f \ dom g), h|dom g;
 A2:  h|(dom f \ dom g) in sproduct (f +* g)|(dom f \ dom g) by A1,Th82;
-      (f +* g)|(dom f \ dom g) c= f by FUNCT_4:25;
-  then sproduct (f +* g)|(dom f \ dom g) c= sproduct f by Th72;
+  sproduct (f +* g)|(dom f \ dom g) c= sproduct f by Th72,FUNCT_4:25;
  hence h|(dom f \ dom g) in sproduct f by A2;
       (f +* g)|dom g = g by FUNCT_4:24;
  hence h|dom g in sproduct g by A1,Th82;
@@ -2266,4 +2258,372 @@ theorem
        (x1,x2)-->(y1,y2) = (x1 .--> y1) +* (x2 .--> y2) by FUNCT_4:def 4;
   hence (x1,x2)-->(y1,y2) in sproduct f by A1,A2,Th86;
  end;
+
+begin  :: from PRALG_2, 2007.11.14, A.T.
+
+definition let IT be set;
+  attr IT is with_common_domain means
+:Def1:   for f,g be Function st f in IT & g in IT holds dom f = dom g;
+end;
+
+registration
+  cluster with_common_domain functional non empty set;
+existence
+ proof
+  consider h be Function;
+  take A = {h};
+      for f,g be Function st f in A & g in A holds dom f = dom g
+   proof
+    let f,g be Function; assume f in A & g in A;
+    then f = h & g = h by TARSKI:def 1;
+    hence thesis;
+   end;
+  hence A is with_common_domain by Def1;
+      for x be set st x in A holds x is Function by TARSKI:def 1;
+  hence A is functional by FRAENKEL:def 1;
+  thus A is non empty;
+ end;
+end;
+
+theorem
+      {{}} is functional with_common_domain set
+ proof
+  A1: for x st x in {{}} holds x is Function by TARSKI:def 1;
+      for f,g be Function st f in {{}} & g in {{}} holds dom f = dom g
+   proof
+    let f,g be Function; assume f in {{}} & g in {{}};
+    then f = {} & g = {} by TARSKI:def 1;
+    hence thesis;
+   end;
+  hence thesis by A1,Def1,FRAENKEL:def 1;
+ end;
+
+definition
+ let X be with_common_domain functional set;
+ canceled;  :: miejsce na uogolnienie
+func DOM X -> set means :: overloading (dom) dozwolony
+:Def11: (for x be Function st x in X holds it = dom x) if X <> {}
+ otherwise it = {};
+existence
+ proof
+ thus X <> {} implies ex Y be set st for x be Function st x in X
+ holds Y = dom x
+  proof
+   assume X <> {};
+   then consider x be set such that A1: x in X by XBOOLE_0:def 1;
+   reconsider x as Function by A1,FRAENKEL:def 1;
+   take dom x;
+   let y be Function; assume y in X;
+   hence thesis by A1,Def1;
+  end;
+ thus X = {} implies ex Y be set st Y = {};
+ end;
+uniqueness
+ proof
+  let A,B be set;
+  thus X <> {} implies
+  ((for x be Function st x in X holds A = dom x) &
+  (for x be Function st x in X holds B = dom x) implies A = B)
+   proof
+    assume A2: X <> {};
+    assume that
+    A3: for x be Function st x in X holds A = dom x and
+    A4: for x be Function st x in X holds B = dom x;
+    consider x be set such that A5: x in X by A2,XBOOLE_0:def 1;
+    reconsider x as Function by A5,FRAENKEL:def 1;
+        A = dom x & B = dom x by A3,A4,A5;
+    hence thesis;
+   end;
+  thus X = {} implies (A = {} & B = {} implies A = B);
+ end;
+consistency;
+end;
+
+theorem
+      for X be with_common_domain functional set st X = {{}} holds DOM X = {}
+ proof
+  let X be with_common_domain functional set; assume A1: X = {{}};
+      {} in {{}} by TARSKI:def 1;
+  hence thesis by A1,Def11,RELAT_1:60;
+ end;
+
+begin  :: Product like sets, from AMISTD_2, 2007.11.14, A.T.
+
+definition
+  let S be functional set;
+  func product" S -> Function means  :: tu trzeba uzyc DOM
+                             :: uzywajac meet mamy definicje
+                             :: nie przez czesci
+:Def1: (for x being set holds x in dom it iff
+       for f being Function st f in S holds x in dom f) &
+  (for i being set st i in dom it holds it.i = pi(S,i)) if S is non empty
+  otherwise it = {};
+existence
+  proof
+    thus S is non empty implies ex g being Function st
+     (for x being set holds x in dom g iff
+          for f being Function st f in S holds x in dom f) &
+     (for i being set st i in dom g holds g.i = pi(S,i))
+    proof
+      assume S is non empty;
+      then reconsider S1 = S as non empty functional set;
+      set D = {dom f where f is Element of S1: not contradiction};
+      defpred P[set,set] means $2 = pi(S,$1);
+A1:   for e being set st e in meet D ex u being set st P[e,u];
+      consider g being Function such that
+A2:     dom g = meet D and
+A3:     for e being set st e in meet D holds P[e,g.e] from CLASSES1:sch 1(A1);
+      take g;
+      hereby
+        let x be set;
+        hereby
+          assume
+A4:         x in dom g;
+          let f be Function;
+          assume f in S;
+          then dom f in D;
+          hence x in dom f by A2,A4,SETFAM_1:def 1;
+        end;
+        assume
+A5:       for f being Function st f in S holds x in dom f;
+        consider f being Element of S1;
+A6:     dom f in D;
+             for Y being set holds Y in D implies x in Y
+        proof
+          let Y be set;
+          assume Y in D;
+          then ex f being Element of S1 st Y = dom f & not contradiction;
+          hence x in Y by A5;
+        end;
+        hence x in dom g by A2,A6,SETFAM_1:def 1;
+      end;
+      thus thesis by A2,A3;
+    end;
+    thus thesis;
+  end;
+uniqueness
+  proof
+    let A, B be Function;
+    thus S is non empty &
+     (for x being set holds x in dom A iff
+       for f being Function st f in S holds x in dom f) &
+     (for i being set st i in dom A holds A.i = pi(S,i)) &
+     (for x being set holds x in dom B iff
+       for f being Function st f in S holds x in dom f) &
+     (for i being set st i in dom B holds B.i = pi(S,i))
+     implies A = B
+    proof
+      defpred P[set] means for f being Function st f in S holds $1 in dom f;
+      assume that
+          S is non empty and
+A7:  for x being set holds x in dom A iff P[x] and
+A8:  for i being set st i in dom A holds A.i = pi(S,i) and
+A9:  for x being set holds x in dom B iff P[x] and
+A10:  for i being set st i in dom B holds B.i = pi(S,i);
+A11:   dom A = dom B from XBOOLE_0:sch 2(A7,A9);
+           now
+        let i be set;
+        assume
+A12:       i in dom A;
+        hence A.i = pi(S,i) by A8
+                 .= B.i by A10,A11,A12;
+      end;
+      hence A = B by A11,FUNCT_1:9;
+    end;
+    thus thesis;
+  end;
+consistency;
+end;
+
+theorem
+   for S being non empty functional set holds
+  dom product" S = meet {dom f where f is Element of S: not contradiction}
+  proof
+    let S be non empty functional set;
+    set D = {dom f where f is Element of S: not contradiction};
+    hereby
+      let x be set;
+      assume
+A1:     x in dom product" S;
+      consider f being Element of S;
+A2:   dom f in D;
+       for Y being set holds Y in D implies x in Y
+      proof
+        let Y be set;
+        assume Y in D;
+        then ex f being Element of S st Y = dom f & not contradiction;
+        hence x in Y by A1,Def1;
+      end;
+      hence x in meet D by A2,SETFAM_1:def 1;
+    end;
+    let x be set;
+    assume
+A3:   x in meet D;
+         for f being Function st f in S holds x in dom f
+    proof
+      let f be Function;
+      assume f in S;
+      then dom f in D;
+      hence x in dom f by A3,SETFAM_1:def 1;
+    end;
+    hence thesis by Def1;
+  end;
+
+theorem
+      for S being non empty functional set,
+     i being set st i in dom product" S holds
+  (product" S).i = {f.i where f is Element of S: not contradiction}
+  proof
+    let S be non empty functional set,
+        i be set;
+    assume
+A1:   i in dom product" S;
+    hereby
+      let x be set;
+      assume x in (product" S).i;
+      then x in pi(S,i) by A1,Def1;
+      then ex f being Function st f in S & x = f.i by Def6;
+      hence x in {f.i where f is Element of S: not contradiction};
+    end;
+    let x be set;
+    assume x in {f.i where f is Element of S: not contradiction};
+    then ex f being Element of S st x = f.i & not contradiction;
+    then x in pi(S,i) by Def6;
+    hence thesis by A1,Def1;
+  end;
+
+definition
+  let S be set;
+ attr S is product-like means :Def2:
+  ex f being Function st S = product f;
+end;
+
+registration
+  let f be Function;
+ cluster product f -> product-like;
+coherence by Def2;
+end;
+
+registration
+ cluster product-like -> functional with_common_domain set;
+coherence
+  proof
+    let S be set;
+    given f being Function such that
+A1:   S = product f;
+    thus S is functional by A1;
+    let h, g be Function such that
+A2:   h in S and
+A3:   g in S;
+    thus dom h = dom f by A1,A2,Th18
+      .= dom g by A1,A3,Th18;
+  end;
+end;
+
+registration
+ cluster product-like non empty set;
+existence
+  proof
+    consider B being with_non-empty_elements set,
+             f being Function of 0,B;
+    take product f;
+    thus thesis;
+  end;
+end;
+
+theorem Th7:
+ for S being functional with_common_domain set holds dom product" S = DOM S
+  proof
+    let S be functional with_common_domain set;
+    per cases;
+    suppose
+A1:   S is empty;
+    hence dom product" S = {} by Def1,RELAT_1:60
+     .= DOM S by A1,Def11;
+    end;
+    suppose
+A2:   S is non empty;
+    consider f being Element of S;
+    hereby
+      let x be set;
+      assume x in dom product" S;
+      then x in dom f by A2,Def1;
+      hence x in DOM S by A2,Def11;
+    end;
+    let x be set;
+    assume
+       x in DOM S;
+    then for f being Function st f in S holds x in dom f by Def11;
+    hence thesis by A2,Def1;
+  end;
+  end;
+
+theorem Th8:
+     for S being functional set, i being set st i in dom product" S
+  holds (product" S).i = pi(S,i)
+  proof
+    let S be functional set,
+        i be set;
+    per cases;
+    suppose S = {};
+    then dom product" S = dom {} by Def1;
+    hence thesis;
+    end;
+    suppose
+A1:   S <> {};
+    assume i in dom product" S;
+    hence thesis by A1,Def1;
+  end;
+  end;
+
+theorem Th9:
+ for S being functional with_common_domain set holds S c= product product" S
+  proof
+    let S be functional with_common_domain set;
+    let f be set;
+    assume
+A1:   f in S;
+    then reconsider f as Element of S;
+A2: dom f = DOM S by A1,Def11
+         .= dom product" S by Th7;
+         for i being set st i in dom product" S holds f.i in (product" S).i
+    proof
+      let i be set;
+      assume i in dom product" S;
+      then (product" S).i = pi(S,i) by A1,Def1;
+      hence f.i in (product" S).i by A1,Def6;
+    end;
+    hence thesis by A2,Th18;
+  end;
+
+theorem Th10:
+ for S being non empty product-like set holds S = product product" S
+  proof
+    let S be non empty product-like set;
+    thus S c= product product" S by Th9;
+    let x be set;
+    assume x in product product" S;
+    then consider g being Function such that
+A1:   x = g and
+A2:   dom g = dom product" S and
+A3:   for z being set st z in dom product" S holds g.z in (product" S).z
+         by Def5;
+    consider p being Function such that
+A4:   S = product p by Def2;
+    consider s being Element of S;
+A5: dom g = DOM S by A2,Th7
+         .= dom s by Def11
+         .= dom p by A4,Th18;
+         for z being set st z in dom p holds g.z in p.z
+    proof
+      let z be set;
+      assume
+A6:     z in dom p;
+      then g.z in (product" S).z by A2,A3,A5;
+      then g.z in pi(S,z) by A2,A5,A6,Def1;
+      then ex f being Function st f in S & g.z = f.z by Def6;
+      hence g.z in p.z by A4,A6,Th18;
+    end;
+    hence x in S by A1,A4,A5,Th18;
+  end;
 

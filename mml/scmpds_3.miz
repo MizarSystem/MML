@@ -73,7 +73,7 @@ end;
 
 theorem
    the carrier of SCMPDS = {IC SCMPDS } \/ SCM-Data-Loc \/
-         the Instruction-Locations of SCMPDS
+         NAT
     by AMI_3:4;
 
 theorem Th6:
@@ -676,12 +676,13 @@ then A2: dom (s | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
       holds (Exec (i, s) | SCM-Instr-Loc).x = (s | SCM-Instr-Loc).x
     proof
        let x be set;
-       assume  x in SCM-Instr-Loc;
+       assume
+X:      x in SCM-Instr-Loc;
        then reconsider l = x as Instruction-Location of SCMPDS by AMI_1:def 4;
        thus (Exec (i, s) | SCM-Instr-Loc).x
-              = (Exec (i, s)).l by FUNCT_1:72
+              = (Exec (i, s)).l by FUNCT_1:72,X
              .= s.l by AMI_1:def 13
-             .= (s | SCM-Instr-Loc).x by FUNCT_1:72;
+             .= (s | SCM-Instr-Loc).x by FUNCT_1:72,X;
     end;
     hence Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc by A1,A2,FUNCT_1:9;
 end;
@@ -694,14 +695,14 @@ theorem Th9:
 proof let p be FinPartState of SCMPDS;
     SCM-Data-Loc misses {IC SCMPDS } by Th6,ZFMISC_1:56;
    then A1:SCM-Data-Loc
-      misses ({IC SCMPDS } \/ the Instruction-Locations of SCMPDS )
+      misses ({IC SCMPDS } \/ NAT )
         by AMI_2:29,XBOOLE_1:70;
        the carrier of SCMPDS = SCM-Data-Loc \/ ({IC SCMPDS } \/
-        the Instruction-Locations of SCMPDS ) by AMI_3:4,XBOOLE_1:4;
+        NAT ) by AMI_3:4,XBOOLE_1:4;
   then (the carrier of SCMPDS )
-      \ ({IC SCMPDS } \/ the Instruction-Locations of SCMPDS )
+      \ ({IC SCMPDS } \/ NAT )
     = (SCM-Data-Loc )
-      \ ({IC SCMPDS } \/ the Instruction-Locations of SCMPDS ) by XBOOLE_1:40
+      \ ({IC SCMPDS } \/ NAT ) by XBOOLE_1:40
    .= SCM-Data-Loc by A1,XBOOLE_1:83;
   hence thesis;
 end;
@@ -711,9 +712,9 @@ theorem
   p is data-only iff dom p c= SCM-Data-Loc
 proof let p be FinPartState of SCMPDS;
 A1: the carrier of SCMPDS = SCM-Data-Loc \/ ({IC SCMPDS } \/
-        the Instruction-Locations of SCMPDS ) by AMI_3:4,XBOOLE_1:4;
+        NAT ) by AMI_3:4,XBOOLE_1:4;
  hereby assume p is data-only;
-   then A2:dom p misses {IC SCMPDS } \/ the Instruction-Locations of SCMPDS
+   then A2:dom p misses {IC SCMPDS } \/ NAT
        by AMI_1:def 50;
        dom p c= the carrier of SCMPDS by AMI_1:80;
   hence dom p c= SCM-Data-Loc by A1,A2,XBOOLE_1:73;
@@ -722,8 +723,8 @@ A1: the carrier of SCMPDS = SCM-Data-Loc \/ ({IC SCMPDS } \/
 A3: dom p c= SCM-Data-Loc;
     SCM-Data-Loc misses {IC SCMPDS } by Th6,ZFMISC_1:56;
    then SCM-Data-Loc misses {IC SCMPDS }
-     \/ the Instruction-Locations of SCMPDS by AMI_2:29,XBOOLE_1:70;
- hence dom p misses {IC SCMPDS } \/ the Instruction-Locations of SCMPDS
+     \/ NAT by AMI_2:29,XBOOLE_1:70;
+ hence dom p misses {IC SCMPDS } \/ NAT
          by A3,XBOOLE_1:63;
 end;
 
@@ -747,17 +748,17 @@ proof
      let i be Instruction of SCMPDS,
          s be State of SCMPDS,
          p be programmed FinPartState of SCMPDS;
-      A1: dom p c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
-          now assume {IC SCMPDS } meets the Instruction-Locations of SCMPDS;
+      A1: dom p c= NAT by AMI_1:def 40;
+          now assume {IC SCMPDS } meets NAT;
       then consider x being set such that
 A2:    x in {IC SCMPDS } and
-A3:    x in the Instruction-Locations of SCMPDS by XBOOLE_0:3;
+A3:    x in NAT by XBOOLE_0:3;
       reconsider x as Instruction-Location of SCMPDS by A3,AMI_1:def 4;
            x = IC SCMPDS by A2,TARSKI:def 1;
        hence contradiction by AMI_1:48;
       end;
       then SCM-Data-Loc \/ {IC SCMPDS } misses
-           the Instruction-Locations of SCMPDS
+           NAT
                 by AMI_2:29,XBOOLE_1:70;
 then A4:        SCM-Data-Loc \/ {IC SCMPDS } misses dom p
           by A1,XBOOLE_1:63;
@@ -767,22 +768,22 @@ A6:    (Exec(i,s) +* p)|(SCM-Data-Loc \/ {IC SCMPDS })
            = Exec(i,s)|(SCM-Data-Loc \/ {IC SCMPDS }) by A4,FUNCT_4:76
           .= Exec(i,s +* p) |
                (SCM-Data-Loc \/ {IC SCMPDS }) by A5,Th7;
-A7:     Exec (i, s +* p)|the Instruction-Locations of SCMPDS
-            = (s +* p)|the Instruction-Locations of SCMPDS by AMI_1:117
-           .= s |(the Instruction-Locations of SCMPDS ) +*
-                  p|the Instruction-Locations of SCMPDS by FUNCT_4:75
-           .= Exec (i,s) |(the Instruction-Locations of SCMPDS ) +*
-                  p|the Instruction-Locations of SCMPDS by AMI_1:117
-           .= (Exec (i, s) +* p)|the Instruction-Locations of SCMPDS
+A7:     Exec (i, s +* p)|NAT
+            = (s +* p)|NAT by AMI_1:117
+           .= s |(NAT ) +*
+                  p|NAT by FUNCT_4:75
+           .= Exec (i,s) |(NAT ) +*
+                  p|NAT by AMI_1:117
+           .= (Exec (i, s) +* p)|NAT
                     by FUNCT_4:75;
      thus Exec (i, s +* p)
              = Exec (i, s +* p)| dom(Exec (i, s +* p)) by RELAT_1:97
             .= Exec (i, s +* p)| (SCM-Data-Loc \/ {IC SCMPDS } \/
-                  the Instruction-Locations of SCMPDS )
+                  NAT )
                            by AMI_1:79,AMI_3:4
             .= (Exec (i, s) +* p)|
                  (SCM-Data-Loc \/ {IC SCMPDS })
-                 +* (Exec (i, s) +* p)|the Instruction-Locations of SCMPDS
+                 +* (Exec (i, s) +* p)|NAT
                         by A6,A7,FUNCT_4:83
             .= (Exec (i,s) +* p)| the carrier of SCMPDS
                      by AMI_3:4,FUNCT_4:83
@@ -852,12 +853,12 @@ A3:  d1 in dom DataPart p by A1;
      then dom DataPart p c= SCM-Data-Loc by RELAT_1:87;
      then reconsider d1 as Int_position by A3,SCMPDS_2:9;
      consider il being Element of
-       (the Instruction-Locations of SCMPDS) \ dom p;
-         not the Instruction-Locations of SCMPDS c= dom p
+       (NAT) \ dom p;
+         not NAT c= dom p
      by FINSET_1:13,SCMPDS_2:11;
-     then A4: (the Instruction-Locations of SCMPDS) \ dom p <> {} by
+     then A4: (NAT) \ dom p <> {} by
 XBOOLE_1:37;
-     then il is Element of the Instruction-Locations of SCMPDS
+     then il is Element of NAT
                by XBOOLE_0:def 4;
      then reconsider il as Instruction-Location of SCMPDS by AMI_1:def 4;
      set p1 = p +* ((il .--> (d1:=0)) +* Start-At il);
@@ -974,13 +975,13 @@ registration
    then reconsider P as FinPartState of SCMPDS;
    take P;
    A1: ObjectKind il = the Instructions of SCMPDS by AMI_1:def 14;
-        ObjectKind IC SCMPDS = the Instruction-Locations of SCMPDS
+        ObjectKind IC SCMPDS = NAT
               by AMI_1:def 11;
    hence P is autonomic by A1,AMI_1:67;
         now
          dom P = { IC SCMPDS, il } by FUNCT_4:65;
 then A2:  IC SCMPDS in dom P by TARSKI:def 2;
-     assume dom P c= the Instruction-Locations of SCMPDS;
+     assume dom P c= NAT;
       then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
                  by A2,AMI_1:def 4;
        l=IC SCMPDS;
@@ -995,12 +996,12 @@ theorem Th17:
  holds IC SCMPDS in dom p
 proof
    let p be autonomic non programmed FinPartState of SCMPDS;
-   A1: not dom p c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
+   A1: not dom p c= NAT by AMI_1:def 40;
        dom p c= the carrier of SCMPDS by AMI_1:80;
    then dom p = dom p /\ the carrier of SCMPDS by XBOOLE_1:28
         .= dom p /\
              (SCM-Data-Loc \/ {IC SCMPDS }) \/
-              dom p /\ the Instruction-Locations of SCMPDS
+              dom p /\ NAT
                                       by AMI_3:4,XBOOLE_1:23;
     then dom p /\ (SCM-Data-Loc \/ {IC SCMPDS }) <> {} by A1,XBOOLE_1:17;
     then A2: dom p /\ {IC SCMPDS } \/
@@ -1045,14 +1046,13 @@ theorem Th19:
 proof
     let s1,s2 be State of SCMPDS,k1,k2 be Element of NAT;
     assume A1:IC s1 = IC s2 & k1<>k2;
-    consider m be Element of NAT such that
-A2: IC s1=m;
+    reconsider m=IC s1 as Element of NAT by AMI_1:def 4;
     set mm=m+2;
         mm-2+k1=m+k1;
 then A3: mm-2+k1>=0 by NAT_1:2;
         mm-2+k2=m+k2;
  then mm-2+k2>=0 by NAT_1:2;
-    hence thesis by A1,A2,A3,Th18;
+    hence thesis by A1,A3,Th18;
 end;
 
 theorem Th20:
@@ -1146,9 +1146,10 @@ A1:  p c= s;
    set loc = IC Csi;
   assume
 A2: not IC (Computation s).i in dom ProgramPart(p);
+X:  loc in NAT by AMI_1:def 4;
      loc in dom ProgramPart p iff
-         loc in dom p /\ the Instruction-Locations of SCMPDS by FUNCT_1:68;
- then A3:not loc in dom p by A2,XBOOLE_0:def 3;
+         loc in dom p /\ NAT by FUNCT_1:68;
+ then A3:not loc in dom p by A2,XBOOLE_0:def 3,X;
     set p1 = p +* (loc .--> goto 0 );
     set p2 = p +* (loc .--> goto 1 );
 
@@ -1607,7 +1608,8 @@ theorem Th32:  ::SF2_21
   st il = inspos i
 proof
   let il be Instruction-Location of SCMPDS;
-   reconsider D = il as Instruction-Location of SCM by AMI_1:def 4;
+   il in NAT by AMI_1:def 4;
+   then reconsider D = il as Instruction-Location of SCM by AMI_1:def 4;
    consider i being Element of NAT such that
 A1:  D = il.i by AMI_5:19;
    take i;
@@ -1726,7 +1728,7 @@ A3:   m < n;
           inspos n = inspos 0 by A1,A2,TARSKI:def 1;
      hence inspos m in dom SCMPDS-Stop by A3,NAT_1:2;
     end;
-   thus dom SCMPDS-Stop c= the Instruction-Locations of SCMPDS
+   thus dom SCMPDS-Stop c= NAT
           by A1,ZFMISC_1:37;
   end;
 end;
@@ -1761,12 +1763,12 @@ definition
    consider f being Function such that
 A3:  dom f = A and
 A4:  for e being set st e in A holds P[e,f.e] from CLASSES1:sch 1(A1);
- A5: A c= the Instruction-Locations of SCMPDS
+ A5: A c= NAT
       proof
        let x be set;
        assume x in A;
        then ex m st x = inspos(m+k) & inspos m in dom p;
-       hence x in the Instruction-Locations of SCMPDS;
+       hence x in NAT;
       end;
          then A c= the carrier of SCMPDS by XBOOLE_1:1;
 then A6:  dom f c= dom the Object-Kind of SCMPDS by A3,FUNCT_2:def 1
@@ -1806,7 +1808,7 @@ A15: for m1,m2 being Element of NAT st U(m1) = U(m2) holds m1 = m2;
       let x be set;
       assume x in dom f;
       then ex m st x = inspos(m+k) & inspos m in dom p by A3;
-      hence x in the Instruction-Locations of SCMPDS;
+      hence x in NAT;
      end;
     then reconsider IT = f as programmed FinPartState of SCMPDS;
     take IT;
@@ -1996,11 +1998,8 @@ A9:  inspos m in dom J;
    end;
    suppose
 A10:  not inspos m in dom J;
-        now given l such that
-A11:  inspos(m+n) = inspos(l+n) and
-A12:  inspos l in dom J;
-     thus contradiction by A10,A11,A12;
-    end;
+   then not ex l st inspos(m+n) = inspos(l+n) & inspos l in dom J;
+
 then A13:  not inspos(m+n) in dom Shift(J,n) by A2;
         inspos m in dom I \/ dom J by A8,FUNCT_4:def 1;
 then A14:  inspos m in dom I by A10,XBOOLE_0:def 2;

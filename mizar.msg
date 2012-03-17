@@ -318,7 +318,7 @@ Accessible structure format has empty list of arguments
 # 185
 Unknown structured mode format
 # 189
-Not equal argument(s) on the left or right pattern
+Left and right pattern must have the same number of arguments
 # 190
 Inaccessible theorem
 # 191

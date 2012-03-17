@@ -53,8 +53,7 @@ A2:   P[B] & for C st P[C] holds B c= C from ORDINAL1:sch 1(A1);
     take IT,B;
     thus IT = B;
     let C; assume C,B are_equipotent;
-    then C,A are_equipotent by A2,WELLORD2:22;
-    hence B c= C by A2;
+    hence B c= C by A2,WELLORD2:22;
    end;
 end;
 
@@ -143,8 +142,7 @@ A2:   P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A1);
       proof
        take A; thus A = A;
        let B; assume B,A are_equipotent;
-        then X,B are_equipotent by A2,WELLORD2:22;
-       hence A c= B by A2;
+       hence A c= B by A2,WELLORD2:22;
       end;
     then reconsider M = A as Cardinal;
     take M;
@@ -195,18 +193,18 @@ theorem
    assume X c= M;
 then A1:  order_type_of RelIncl X c= m & RelIncl X is well-ordering &
      field RelIncl X = X by WELLORD2:9,17,def 1;
-    then X,order_type_of RelIncl X are_equipotent by Th22;
-then A2:  ex A st P[A] by A1;
+then A2:  ex A st P[A] by A1,Th22;
    consider A such that
 A3:  P[A] & for B st P[B] holds A c= B from ORDINAL1:sch 1(A2);
         A is cardinal
      proof
       take A; thus A = A;
-      let B; assume B,A are_equipotent;
+      let B; assume
+B4:     B,A are_equipotent;
 then A4:     X,B are_equipotent by A3,WELLORD2:22;
       assume
 A5:     not A c= B;
-       then m c= B by A3,A4;
+       then m c= B by A3,B4,WELLORD2:22;
       hence contradiction by A3,A5,XBOOLE_1:1;
      end;
    then reconsider A as Cardinal;
@@ -261,8 +259,7 @@ A7:  X,rng(g*f) are_equipotent
       thus dom(g*f) = X by A5,A6,RELAT_1:46;
       thus thesis;
      end;
-        rng(g*f) c= Card Y by A6,RELAT_1:45;
-then A8:  Card rng(g*f) <=` Card Y by Th23;
+A8:  Card rng(g*f) <=` Card Y by Th23,A6,RELAT_1:45;
         X,Card X are_equipotent &
     rng(g*f),Card rng(g*f) are_equipotent by Def5;
     then Card X,X are_equipotent &
@@ -311,10 +308,6 @@ A6:  dom f = Y & X c= rng f;
    deffunc f(set) = f"{$1};
    consider g such that
 A7:  dom g = X & for x st x in X holds g.x = f(x) from FUNCT_1:sch 3;
-A8:  X = {} implies thesis
-     proof assume X = {}; then X c= Y by XBOOLE_1:2;
-      hence thesis by Th27;
-     end;
         X <> {} implies thesis
      proof assume X <> {};
       then reconsider M = rng g as non empty set by A7,RELAT_1:65;
@@ -355,7 +348,7 @@ A18:       g.y = f"{y} & x = F.(g.y) by A7,A13,A17,FUNCT_1:23;
         end;
       hence thesis by A13,A14,Th26;
      end;
-   hence thesis by A8;
+   hence thesis by XBOOLE_1:2,Th27;
   end;
 
 theorem
@@ -732,8 +725,8 @@ theorem
    hence thesis;
   end;
 
-theorem
-      Card { x } = 1
+theorem Th50:
+  Card { x } = 1
   proof
    A1: 1 = succ 0;
         1 is cardinal
@@ -749,7 +742,7 @@ theorem
   end;
 
 theorem
-   0 = {};
+  0 = {};
 
 canceled 6;
 
@@ -948,10 +941,8 @@ ZZ:    n,succ a are_equipotent;
        hence n = succ a by ZZ,Th46;
       end;
       suppose n <> {};
-        then consider m such that
-W:       n = succ m by Th63;
-        m,a are_equipotent by Th62,W,ZZ;
-       hence n = succ a by W,Z;
+        then ex m st n = succ m by Th63;
+       hence n = succ a by Z,Th62,ZZ;
       end;
      end;
     P[m] from ORDINAL2:sch 17(A,B);
@@ -1116,26 +1107,15 @@ A1:   X,n are_equipotent by Th74;
 canceled;
 
 theorem
-      card {} = 0 by Def5;
+  card {} = 0 by Def5;
 
 theorem
-      card { x } = 1
-  proof
-    {x},1 are_equipotent
-     proof
-      take f = x .--> 0;
-      thus f is one-to-one;
-      thus dom f = {x} by FUNCOP_1:19;
-       1 = succ 0 .= { 0 };
-      hence rng f = 1 by FUNCOP_1:14;
-     end;
-   hence thesis by Def5;
-  end;
+  card { x } = 1 by Th50;
 
 canceled;
 
 theorem
-           for X,Y being finite set holds
+  for X,Y being finite set holds
     X,Y are_equipotent implies card X = card Y by Th21;
 
 theorem
@@ -1167,8 +1147,7 @@ A7:    now assume not M is_limit_cardinal;
         then consider N such that
 A8:      M = nextcard N by Def7;
              N in M & N = N by A8,Th32;
-         then Sigma[ N] by A5;
-        hence Sigma[M] by A2,A8;
+        hence Sigma[M] by A2,A5,A8;
        end;
            now assume
 A9:      M <> {} & M is_limit_cardinal;
