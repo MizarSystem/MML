@@ -9,10 +9,11 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, ARYTM_3, NAT_1, INT_1, INT_2,
       ABSVALUE, SCMPDS_3, AMI_2, ARYTM_1, CARD_1, SCMFSA6A, SCMFSA_7, FUNCT_1,
       RELAT_1, SCMPDS_1, FUNCOP_1, FUNCT_4, BOOLE, SCMP_GCD;
- notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, INT_1,
-      NAT_1, NAT_D, DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1,
-      SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, INT_2, SCMPDS_1, SCMPDS_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1,
+      INT_1, NAT_1, NAT_D, DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3,
+      SCMPDS_1, SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, INT_2, SCMPDS_1, SCMPDS_4,
+      AMI_3;
  registrations SETFAM_1, RELSET_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, INT_1,
       CARD_3, STRUCT_0, SCMPDS_2, AMI_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM;
@@ -26,20 +27,16 @@ reserve m,n for Element of NAT,
         s,s1,s2 for State of SCMPDS,
         I,J for Program-block;
 
-canceled;
-
-theorem :: SCMP_GCD:2
-  for i,j being Integer st i>=0 & j>0 holds
-      i gcd j= j gcd (i mod j);
+canceled 2;
 
 theorem :: SCMP_GCD:3
   for m being Element of NAT,j being Integer st inspos m=j holds
-     inspos(m+2) = 2*(abs(j) div 2)+4;
+     inspos(m+2) = (abs(j))+2;
 
 definition let k be Element of NAT;
  func intpos k -> Int_position equals
 :: SCMP_GCD:def 1
-  dl.k;
+   dl.k;
 end;
 
 canceled;
@@ -56,12 +53,12 @@ theorem :: SCMP_GCD:6
 definition
  func GBP -> Int_position equals
 :: SCMP_GCD:def 2
-  intpos 0;
+   intpos 0;
 
 :: SBP:Stack Base(bottom) Pointer
  func SBP -> Int_position equals
 :: SCMP_GCD:def 3
-  intpos 1;
+   intpos 1;
 end;
 
 theorem :: SCMP_GCD:7
@@ -91,7 +88,7 @@ definition
  func GCD-Algorithm -> Program-block equals
 :: SCMP_GCD:def 4
   ::Def04
-     (((GBP:=0) ';' (SBP := 7) ';' saveIC(SBP,RetIC) ';'
+      (((GBP:=0) ';' (SBP := 7) ';' saveIC(SBP,RetIC) ';'
      goto 2 ';' halt SCMPDS ) ';' (SBP,3)<=0_goto 9 ';'
      ((SBP,6):=(SBP,3)) ';' Divide(SBP,2,SBP,3) ';'
      ((SBP,7):=(SBP,3)) ';' ((SBP,4+RetSP):=(GBP,1))) ';'
@@ -105,7 +102,7 @@ theorem :: SCMP_GCD:12
   card GCD-Algorithm = 15;
 
 theorem :: SCMP_GCD:13
-     n < 15 iff inspos n in dom GCD-Algorithm;
+      n < 15 iff inspos n in dom GCD-Algorithm;
 
 theorem :: SCMP_GCD:14
     GCD-Algorithm.inspos 0=GBP:=0 &
@@ -158,13 +155,13 @@ theorem :: SCMP_GCD:17
 begin :: The Correctness of Recursive Euclide Algorithm
 
 theorem :: SCMP_GCD:18
-     for s being State of SCMPDS st Initialized GCD-Algorithm c= s
+      for s being State of SCMPDS st Initialized GCD-Algorithm c= s
   for x, y being Integer st s.intpos 9 = x & s.intpos 10 = y
   & x >= 0 & y >= 0 holds (Result s).intpos 9 = x gcd y;
 
 begin :: The Autonomy of Recursive Euclide Algorithm
 
 theorem :: SCMP_GCD:19
-     for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
+      for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
   & p=(intpos 9,intpos 10) --> (x,y)
   holds Initialized GCD-Algorithm +* p is autonomic;

@@ -42,12 +42,8 @@ A2: x is Real & y is Real by XREAL_0:def 1;
             .= abs( x - y ) by A2,METRIC_1:def 13;
   end;
 
-theorem Th2: x <= y & y <= z implies [. x,y .] \/ [. y,z .] = [. x,z .]
+theorem  x <= y & y <= z implies [. x,y .] \/ [. y,z .] = [. x,z .]
                  by XXREAL_1:165;
-
- Lm1: x >= 0 & a + x <= b implies a <= b by XREAL_1:42;
-
- Lm2: x >= 0 & a - x >= b implies a >= b by XREAL_1:53;
 
 reserve seq for Real_Sequence;
 
@@ -58,7 +54,7 @@ theorem Th6:
  proof
   defpred P[Element of NAT] means $1 <= seq.$1;
   assume that A1: seq is increasing and A2: rng seq c= NAT;
-       0 in NAT;
+        0 in NAT;
    then 0 in dom seq by FUNCT_2:def 1;
    then seq.0 in rng seq by FUNCT_1:def 5;
    then seq.0 is natural by A2,ORDINAL1:def 13;
@@ -66,15 +62,15 @@ then A3: P[0] by NAT_1:2;
 A4: for k st P[k] holds P[k+1]
     proof
      let k such that A5: k <= seq.k;
-          k+1 in NAT;
+           k+1 in NAT;
       then k+1 in dom seq by FUNCT_2:def 1;
       then seq.(k+1) in rng seq by FUNCT_1:def 5;
       then reconsider k' = seq.(k+1) as Element of NAT by A2;
-          seq.k < seq.(k+1) by A1,SEQM_3:def 11;
+           seq.k < seq.(k+1) by A1,SEQM_3:def 11;
       then k < k' by A5,XXREAL_0:2;
       hence k+1 <= seq.(k+1) by NAT_1:13;
     end;
-       for n holds P[n] from NAT_1:sch 1(A3,A4);
+        for n holds P[n] from NAT_1:sch 1(A3,A4);
    hence thesis;
  end;
 
@@ -92,36 +88,12 @@ definition let seq,k;
    let s1,s2 be Real_Sequence;
    assume that A1: for n holds s1.n = k to_power (seq.n) and
                A2: for n holds s2.n = k to_power (seq.n);
-        now let n; thus s1.n = k to_power (seq.n) by A1 .= s2.n by A2; end;
+         now let n; thus s1.n = k to_power (seq.n) by A1 .= s2.n by A2; end;
     hence thesis by FUNCT_2:113;
   end;
 end;
 
-  defpred P[Element of NAT] means 2|^$1 >= $1 + 1;
-  Lm3: P[0] by NEWTON:9;
-  Lm4: for n st P[n] holds P[n+1]
-      proof
-       let n; assume 2|^n >= n+1;
-        then 2|^n - n >= 1 & 2 >= 0 by XREAL_1:21;
-        then A1: 2*(2|^n - n) >= 2*1 by XREAL_1:66;
-             2|^(n+1) - (n + 1 + 1) = 2*2|^n - (2*n - n + 2) by NEWTON:11
-             .= 2*(2|^n - n) + (n - 2);
-         then 2|^(n+1) - (n + 1 + 1) >= 2 + (n - 2) by A1,XREAL_1:8;
-         then 2|^(n+1) - (n + 1 + 1) >= n & n >= 0 by NAT_1:2;
-         then 2|^(n+1) >= 0 + (n + 1 + 1) by XREAL_1:21;
-        hence 2|^(n+1) >= n + 1 + 1;
-      end;
-
-theorem Th7:
-  2|^n >= n + 1
-   proof for n holds P[n] from NAT_1:sch 1(Lm3,Lm4); hence thesis; end;
-
-theorem Th8:
-  2|^n > n
- proof
-      2|^n >= n + 1 & n+1 > n by Th7,NAT_1:13;
-  hence thesis by XXREAL_0:2;
- end;
+canceled 2;
 
 theorem
 Th9: seq is divergent_to+infty implies 2 to_power seq is divergent_to+infty
@@ -134,38 +106,33 @@ LIMFUNC1:def 4;
     take n; let m; assume m >= n;
      then p < seq.m & 2 > 1 & 2<>0 by A3;
      then 2 to_power p < 2 to_power (seq.m) & 2 to_power p = 2|^p & 2|^p > p
-      by Th8,POWER:44,48;
+      by NEWTON:105,POWER:44,48;
      then p < 2 to_power (seq.m) by XXREAL_0:2;
      then r < 2 to_power (seq.m) by A2,XXREAL_0:2;
     hence r < (2 to_power seq).m by Def1;
  end;
-
- Lm5:
- for T being TopSpace st the carrier of T is finite holds T is compact
-   by COMPTS_1:27;
 
 :: HEINE - BOREL THEOREM
 
 canceled;
 
 theorem
-     a <= b implies Closed-Interval-TSpace(a,b) is compact
+      a <= b implies Closed-Interval-TSpace(a,b) is compact
   proof
    set M = Closed-Interval-MSpace(a,b);
    assume A1: a <= b;
    reconsider a, b as Real by XREAL_0:def 1;
    set r = b-a;
-      now per cases by A1,XREAL_1:50;
+       now per cases by A1,XREAL_1:50;
    suppose r = 0;
-    then a = b;
     then [. a,b .] = {a} & {a} is finite & the carrier of
      Closed-Interval-TSpace(a,b) = [. a,b .]
       by RCOMP_1:14,TOPMETR:25;
-    hence Closed-Interval-TSpace(a,b) is compact by Lm5;
+    hence Closed-Interval-TSpace(a,b) is compact by COMPTS_1:27;
    end;
    suppose A2: r > 0;
    assume A3: not Closed-Interval-TSpace(a,b) is compact;
-        TopSpaceMetr M = Closed-Interval-TSpace(a,b) by TOPMETR:def 8;
+         TopSpaceMetr M = Closed-Interval-TSpace(a,b) by TOPMETR:def 8;
     then not M is compact by A3,TOPMETR:def 6;
     then consider F being Subset-Family of M such that
    A4: F is_ball-family and
@@ -182,7 +149,7 @@ theorem
    A7: for n,p ex w st P[n,p,w]
         proof
          let n,p;
-             now per cases;
+              now per cases;
           suppose A8: not ex G being Subset-Family of M st G c= F &
            [. p-(r/2|^(n+1)), p .] c= union G & G is finite;
            take y = p - r/2|^(n+2);
@@ -201,7 +168,7 @@ theorem
    A11: for n holds P[n,f.n,f.(n+1)] from RECDEF_1:sch 2(A7);
    A12: for n holds f.(n+1) = f.n + r/2|^(n+2) or f.(n+1) = f.n - r/2|^(n+2)
         proof
-         let n;   P[n,f.n,f.(n+1)] by A11;
+         let n;    P[n,f.n,f.(n+1)] by A11;
          hence thesis;
         end;
         defpred Q[Element of NAT] means
@@ -221,26 +188,26 @@ theorem
           A19: r/2|^(k+1) - r/2|^(k+(1+1))
                = r/2|^(k+1) - r/2|^((k+1)+1)
               .= r/2|^(k+1) - r/(2*2|^(k+1)) by NEWTON:11
-              .= r/2|^(k+1+1) by  A18,NEWTON:11
+              .= r/2|^(k+1+1) by A18,NEWTON:11
               .= r/2|^(k+(1+1));
-              now per cases by A12;
+               now per cases by A12;
            suppose A20: f.(k+1) = f.k + r/2|^(k+2);
-                2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
+                 2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
            then A21: r/2|^(k+1) >= 0 by REAL_2:125;
-                f.(k+1) - a = f.k - a + r/2|^(k+2) by A20;
+                 f.(k+1) - a = f.k - a + r/2|^(k+2) by A20;
             then f.(k+1) - a >= r/2|^(k+2) by A17,A21,REAL_2:173;
            hence a <= f.(k+1) - r/2|^(k+1+1) by REAL_2:165;
-                b - f.(k+1) = b - f.k - r/2|^(k+2) by A20;
+                 b - f.(k+1) = b - f.k - r/2|^(k+2) by A20;
             then b - f.(k+1) >= r/2|^(k+2) by A17,A19,XREAL_1:11;
            hence f.(k+1) + r/2|^(k+1+1) <= b by XREAL_1:21;
            end;
            suppose A22: f.(k+1) = f.k - r/2|^(k+2);
-                2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
+                 2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
            then A23: r/2|^(k+1) >= 0 by REAL_2:125;
-                f.(k+1) - a = f.k - a - r/2|^(k+2) by A22;
+                 f.(k+1) - a = f.k - a - r/2|^(k+2) by A22;
             then f.(k+1) - a >= r/2|^(k+2) by A17,A19,XREAL_1:11;
            hence a <= f.(k+1) - r/2|^(k+1+1) by REAL_2:165;
-                b - f.(k+1) = b - f.k + r/2|^(k+2) by A22;
+                 b - f.(k+1) = b - f.k + r/2|^(k+2) by A22;
             then b - f.(k+1) >= r/2|^(k+2) by A17,A23,REAL_2:173;
            hence f.(k+1) + r/2|^(k+1+1) <= b by XREAL_1:21;
          end;
@@ -254,10 +221,10 @@ theorem
       then consider x being set such that
      A26: x in dom f & y = f.x by FUNCT_1:def 5;
       reconsider n = x as Element of NAT by A26,FUNCT_2:def 1;
-          2|^(n+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
+           2|^(n+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
       then r/2|^(n+1) >= 0 & a <= f.n - r/2|^(n+1) & f.n + r/2|^(n+1) <= b
        by A24,REAL_2:125;
-      then a <= f.n & f.n <= b by Lm1,Lm2;
+      then a <= f.n & f.n <= b by XREAL_1:42,53;
       then y in { y1 where y1 is Real: a <= y1 & y1 <= b} by A26;
       hence y in [. a,b .] by RCOMP_1:def 1;
      end;
@@ -270,7 +237,7 @@ theorem
       A28: G c= F and
       A29: [. f.0 - r/2|^(0+1), f.0 + r/2|^(0+1) .] c= union G and
       A30: G is finite;
-           the carrier of M c= union G by A1,A13,A14,A29,TOPMETR:14;
+            the carrier of M c= union G by A1,A13,A14,A29,TOPMETR:14;
        then G is_a_cover_of M by TOPMETR:def 5;
        hence contradiction by A6,A28,A30;
       end;
@@ -284,7 +251,7 @@ A33:       r/2|^(k+(1+1)) = r/2|^(k+1+1)
       A34: G c= F and
       A35: [. f.(k+1) - r/2|^(k+1+1), f.(k+1) + r/2|^(k+1+1) .] c= union G and
       A36: G is finite;
-              now per cases;
+               now per cases;
            suppose A37: ex G being Subset-Family of M st G c= F &
             [. f.k - r/2|^(k+1), f.k .] c= union G & G is finite;
            then consider G1 being Subset-Family of M such that
@@ -298,18 +265,19 @@ A42:           f.(k+1) + r/2|^(k+1+1)
              = f.k + r/2|^(k+2) + r/2|^(k+(1+1)) by A11,A37
             .= f.k + r/2|^(k+1) by A33;
            reconsider G3 = G1 \/ G as Subset-Family of M;
-               2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
+                2|^(k+1) > 0 & r >= 0 by A1,NEWTON:102,XREAL_1:50;
            then r/2|^(k+1) >= 0 by REAL_2:125;
            then f.k - r/2|^(k+1) <= f.k & f.k <=
  f.k + r/2|^(k+1) by REAL_2:173;
           then [. f.k - r/2|^(k+1), f.k + r/2|^(k+1).] =
-           [. f.k - r/2|^(k+1), f.k .] \/ [. f.k, f.k + r/2|^(k+1).] by Th2;
+           [. f.k - r/2|^(k+1), f.k .] \/ [. f.k, f.k + r/2|^(k+1).] by
+XXREAL_1:165;
           then [. f.k - r/2|^(k+1), f.k + r/2|^(k+1).] c= union G1 \/ union G
            by A35,A39,A41,A42,XBOOLE_1:13;
           then A43: [. f.k - r/2|^(k+1), f.k + r/2|^(k+1).] c= union G3
            by ZFMISC_1:96;
            A44: G3 is finite by A36,A40,FINSET_1:14;
-               G3 c= F by A34,A38,XBOOLE_1:8;
+                G3 c= F by A34,A38,XBOOLE_1:8;
           hence contradiction by A32,A43,A44;
           end;
           suppose A45: not (ex G being Subset-Family of M st G c= F &
@@ -317,7 +285,7 @@ A42:           f.(k+1) + r/2|^(k+1+1)
            then A46: f.(k+1) - r/2|^(k+1+1)
              = f.k - r/2|^(k+2) - r/2|^(k+(1+1)) by A11
             .= f.k - r/2|^(k+1) by A33;
-              f.(k+1) + r/2|^(k+1+1)
+               f.(k+1) + r/2|^(k+1+1)
              = f.k - r/2|^(k+2) + r/2|^(k+(1+1)) by A11,A45
             .= f.k;
           hence contradiction by A34,A35,A36,A45,A46;
@@ -333,7 +301,7 @@ A42:           f.(k+1) + r/2|^(k+1+1)
    A50: s is convergent and
    A51: lim s in [. a,b .] by A25,A48,RCOMP_1:def 3;
      reconsider ls = lim s as Point of M by A1,A51,TOPMETR:14;
-         the carrier of M c= union F & the carrier of M = [. a,b .]
+          the carrier of M c= union F & the carrier of M = [. a,b .]
       by A1,A5,TOPMETR:14,def 5;
      then consider Z being set such that A52: lim s in Z & Z in F by A51,
 TARSKI:def 4;
@@ -355,7 +323,7 @@ TARSKI:def 4;
           assume A59: s.m = q & m >= n;
          then abs( s.m - lim s ) < r1/2 by A57;
          then A60: abs( -(s.m - lim s) ) < r1/2 by COMPLEX1:138;
-             dist(ls, q)
+              dist(ls, q)
              = (the distance of M).(lim s, s.m) by A59,METRIC_1:def 1
             .= (the distance of RealSpace).(ls, q) by A59,TOPMETR:def 1
             .= abs( lim s - s.m ) by A59,METRIC_1:def 13,def 14;
@@ -366,17 +334,17 @@ TARSKI:def 4;
         proof
           let m be Element of NAT such that A62: m >= n;
 A63:           dom f = NAT by FUNCT_2:def 1;
-               s.m = f.(Nseq.m) by A55,SEQM_3:31;
+                s.m = f.(Nseq.m) by A55,SEQM_3:31;
            then s.m in rng f by A63,FUNCT_1:def 5;
            then reconsider q = s.m as Point of M by A1,A25,TOPMETR:14;
-               dist(ls, q) < r1/2 by A58,A62;
+                dist(ls, q) < r1/2 by A58,A62;
            hence (f*Nseq).m in Ball(ls, r1/2) by A55,METRIC_1:12;
         end;
-         not Nseq is bounded_above
+          not Nseq is bounded_above
       proof
        let r be real number;
        consider n being Element of NAT such that A64: n > r by SEQ_4:10;
-            rng Nseq c= NAT by SEQM_3:def 8;
+             rng Nseq c= NAT by SEQM_3:def 8;
         then n <= Nseq.n by Th6;
         then r <= Nseq.n by A64,XXREAL_0:2;
         hence thesis;
@@ -386,14 +354,14 @@ A63:           dom f = NAT by FUNCT_2:def 1;
     then A65: (2 to_power Nseq)" is convergent & lim (2 to_power Nseq)" = 0
        by LIMFUNC1:61;
       then A66: lim (r(#)((2 to_power Nseq)")) = r*0 by SEQ_2:22 .= 0;
-          r(#)((2 to_power Nseq)") is convergent by A65,SEQ_2:21;
+           r(#)((2 to_power Nseq)") is convergent by A65,SEQ_2:21;
       then consider i such that
     A67: for m st i <= m holds abs( (r(#)((2 to_power Nseq)")).m - 0 ) < r1/2
         by A56,A66,SEQ_2:def 7;
        set l = i + 1 + n;
-            l = n + 1 + i;
+             l = n + 1 + i;
        then A68: l >= n & l >= i by NAT_1:11;
-         [. s.l - r*(2|^(Nseq.l+1))", s.l + r*(2|^(Nseq.l+1))" .] c=
+          [. s.l - r*(2|^(Nseq.l+1))", s.l + r*(2|^(Nseq.l+1))" .] c=
           Ball(ls,r1)
        proof
         let z be set;
@@ -405,7 +373,7 @@ A63:           dom f = NAT by FUNCT_2:def 1;
          then consider x be Real such that
          A69: x = z & s.l - r*(2|^(Nseq.l+1))" <= x &
           x <= s.l + r*(2|^(Nseq.l+1))";
-             f.(Nseq.l) - r/(2|^(Nseq.l+1)) >= a &
+              f.(Nseq.l) - r/(2|^(Nseq.l+1)) >= a &
           f.(Nseq.l) + r/(2|^(Nseq.l+1)) <= b & 2|^(Nseq.l+1) <> 0
            by A24,NEWTON:102;
          then f.(Nseq.l) - r*(2|^(Nseq.l+1))" >= a &
@@ -417,29 +385,29 @@ A63:           dom f = NAT by FUNCT_2:def 1;
          then the carrier of M = [. a,b .] & x in [. a,b .]
           by A1,RCOMP_1:def 1,TOPMETR:14;
          then reconsider x' = x as Point of M;
-             s.l <= r*(2|^(Nseq.l+1))" + x & x - s.l <= r*(2|^(Nseq.l+1))"
+              s.l <= r*(2|^(Nseq.l+1))" + x & x - s.l <= r*(2|^(Nseq.l+1))"
            by A69,XREAL_1:22;
          then s.l - x <= r*(2|^(Nseq.l+1))" & -(x - s.l)>=-r*(2|^(Nseq.l+1))"
           by XREAL_1:26,22;
          then A70: abs( s.l - x ) <= r*(2|^(Nseq.l+1))" by ABSVALUE:12;
-             abs( lim s - x ) = abs( (lim s - s.l) + (s.l - x) );
+              abs( lim s - x ) = abs( (lim s - s.l) + (s.l - x) );
          then A71: abs( lim s - x ) <= abs( lim s - s.l ) + abs( s.l - x )
            by COMPLEX1:142;
        A72: s.l in Ball(ls, r1/2) by A55,A61,A68;
          then reconsider sl = s.l as Point of M;
-             dist(ls,sl) < r1/2 by A72,METRIC_1:12;
+              dist(ls,sl) < r1/2 by A72,METRIC_1:12;
          then A73: abs( lim s - s.l ) < r1/2 by Th1;
-            abs( (r(#)(2 to_power Nseq)").l - 0 ) < r1/2 by A67,A68;
+             abs( (r(#)(2 to_power Nseq)").l - 0 ) < r1/2 by A67,A68;
         then abs( r*((2 to_power Nseq)").l ) < r1/2 by SEQ_1:13;
         then abs( r*((2 to_power Nseq).l)" ) < r1/2 by SEQ_1:def 8;
         then abs( r*(2 to_power (Nseq.l))" ) < r1/2 by Def1;
         then A74: abs( r*(2|^(Nseq.l))" ) < r1/2 by POWER:48;
-            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,NEWTON:102,XREAL_1:50;
+             r >= 0 & 2|^(Nseq.l+1) > 0 by A1,NEWTON:102,XREAL_1:50;
         then r >= 0 & (2|^(Nseq.l+1))" > 0 by XREAL_1:124;
         then r*(2|^(Nseq.l+1))" >= 0 by REAL_2:121;
         then A75: abs( r*(2|^(Nseq.l+1))" ) = r*(2|^(Nseq.l+1))" by
 ABSVALUE:def 1;
-            2|^(Nseq.l+1) = 2*2|^Nseq.l & 2 > 1 & 2|^Nseq.l > 0
+             2|^(Nseq.l+1) = 2*2|^Nseq.l & 2 > 1 & 2|^Nseq.l > 0
           by NEWTON:102,11;
         then 2|^(Nseq.l+1) > 2|^Nseq.l & 2|^Nseq.l > 0 by REAL_2:144;
         then 1/(2|^(Nseq.l+1)) < 1/(2|^Nseq.l) & 2|^Nseq.l <> 0 & 2 > 0
@@ -451,7 +419,7 @@ ABSVALUE:def 1;
         then abs( r*(2|^(Nseq.l+1))" ) < abs( r*(2|^Nseq.l)" )
           by A75,ABSVALUE:12;
         then A76: abs( r*(2|^(Nseq.l+1))" ) < r1/2 by A74,XXREAL_0:2;
-            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,NEWTON:102,XREAL_1:50;
+             r >= 0 & 2|^(Nseq.l+1) > 0 by A1,NEWTON:102,XREAL_1:50;
         then r >= 0 & (2|^(Nseq.l+1))" > 0 by XREAL_1:124;
         then r*(2|^(Nseq.l+1))" >= 0 by REAL_2:121;
         then r*(2|^(Nseq.l+1))" < r1/2 by A76,ABSVALUE:def 1;
@@ -474,7 +442,7 @@ ABSVALUE:def 1;
       [. f.(Nseq.l) - r/(2|^(Nseq.l+1)), f.(Nseq.l) + r/2|^(Nseq.l+1) .]
        c= Ball(p,r0) by A55,SEQM_3:31;
     set G = {Ball(p,r0)};
-        G c= bool the carrier of M
+         G c= bool the carrier of M
      proof
       let a be set; assume a in G;
       then a = Ball(p,r0) by TARSKI:def 1;
@@ -482,7 +450,7 @@ ABSVALUE:def 1;
      end;
     then reconsider G as Subset-Family of M;
      A78: G c= F by A52,A53,ZFMISC_1:37;
-          [. f.(Nseq.l) - r/2|^(Nseq.l+1), f.(Nseq.l) + r/2|^(Nseq.l+1) .]
+           [. f.(Nseq.l) - r/2|^(Nseq.l+1), f.(Nseq.l) + r/2|^(Nseq.l+1) .]
       c= union G by A77,ZFMISC_1:31;
     hence contradiction by A47,A78;
    end;

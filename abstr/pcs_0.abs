@@ -1,0 +1,1372 @@
+:: Basic Operations on Preordered Coherent Spaces
+::  by Klaus E. Grue and Artur Korni{\l}owicz
+:: 
+:: Received August 28, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies ORDERS_1, PCS_0, RELAT_1, PARTFUN1, RELAT_2, TARSKI, YELLOW_3,
+      EQREL_1, BOOLE, PBOOLE, PRALG_1, FUNCT_1, FUNCOP_1, WAYBEL_3, MCART_1,
+      RLVECT_2, PROB_1, YELLOW_1, MSUALG_4, YELLOW16, SUBSET_1, SETFAM_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, MCART_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, PARTFUN1, RELSET_1, RELAT_2, EQREL_1, CARD_3, OPOSET_1, FUNCT_4,
+      PBOOLE, STRUCT_0, PRE_CIRC, TSEP_1, ORDERS_2, MSUALG_4, PRALG_1,
+      YELLOW_1, WAYBEL_3, YELLOW16, YELLOW_3;
+ constructors EQREL_1, PRALG_1, PRE_CIRC, MSUALG_4, OPOSET_1, TSEP_1, YELLOW16,
+      YELLOW_3, DOMAIN_1;
+ registrations EQREL_1, PARTFUN1, SUBSET_1, XBOOLE_0, WAYBEL_3, YELLOW14,
+      RELAT_1, TOLER_1, ORDERS_2, PRALG_1, STRUCT_0, FUNCT_4, YELLOW16,
+      YELLOW_3;
+ requirements BOOLE, SUBSET;
+
+
+begin
+
+definition
+  let R1, R2 be set, R be Relation of R1,R2;
+  redefine func field R -> Subset of R1 \/ R2;
+end;
+
+definition
+  let R1, R2, S1, S2 be set;
+  let R be Relation of R1,R2;
+  let S be Relation of S1,S2;
+  redefine func R \/ S -> Relation of R1 \/ S1, R2 \/ S2;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being total Relation of R1;
+  let S being total Relation of S1;
+  cluster R \/ S -> total Relation of R1 \/ S1;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being reflexive Relation of R1;
+  let S being reflexive Relation of S1;
+  cluster R \/ S -> reflexive Relation of R1 \/ S1;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being symmetric Relation of R1;
+  let S being symmetric Relation of S1;
+  cluster R \/ S -> symmetric Relation of R1 \/ S1;
+end;
+
+theorem :: PCS_0:1
+  for R1, S1 being set,
+      R being transitive (Relation of R1),
+      S being transitive Relation of S1
+  st R1 misses S1 holds R \/ S is transitive;
+
+registration
+  let A be empty set, B be set;
+  cluster {}(A,B) -> total;
+end;
+
+definition
+  let I be non empty set, C be 1-sorted-yielding ManySortedSet of I;
+  redefine func Carrier C means
+:: PCS_0:def 1
+  for i being Element of I holds it.i = the carrier of C.i;
+end;
+
+definition
+  let R1, R2, S1, S2 be set;
+  let R be Relation of R1,R2, S be Relation of S1,S2;
+  func [^R,S^] -> Relation of [:R1,S1:],[:R2,S2:] means
+:: PCS_0:def 2
+  for x, y being set holds [x,y] in it iff
+  ex r1, s1, r2, s2 being set st x = [r1,s1] & y = [r2,s2] &
+  r1 in R1 & s1 in S1 & r2 in R2 & s2 in S2 & ([r1,r2] in R or [s1,s2] in S);
+end;
+
+definition
+  let R1, R2, S1, S2 be non empty set;
+  let R be Relation of R1,R2, S be Relation of S1,S2;
+  redefine func [^R,S^] means
+:: PCS_0:def 3
+  for r1 being Element of R1, r2 being Element of R2
+  for s1 being Element of S1, s2 being Element of S2 holds
+  [[r1,s1],[r2,s2]] in it iff [r1,r2] in R or [s1,s2] in S;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be total Relation of R1;
+  let S be total Relation of S1;
+  cluster [^R,S^] -> total;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be reflexive Relation of R1;
+  let S be reflexive Relation of S1;
+  cluster [^R,S^] -> reflexive;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be Relation of R1;
+  let S be total reflexive Relation of S1;
+  cluster [^R,S^] -> reflexive;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be total reflexive Relation of R1;
+  let S be Relation of S1;
+  cluster [^R,S^] -> reflexive;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be symmetric Relation of R1;
+  let S be symmetric Relation of S1;
+  cluster [^R,S^] -> symmetric;
+end;
+
+begin :: Relational Structures
+
+registration
+  cluster empty -> total RelStr;
+end;
+
+definition
+  let R be Relation;
+  attr R is transitive-yielding means
+:: PCS_0:def 4
+  for S being RelStr st S in rng R holds S is transitive;
+end;
+
+registration
+  cluster Poset-yielding -> transitive-yielding Relation;
+end;
+
+registration
+  cluster Poset-yielding Function;
+end;
+
+registration
+ let I be set;
+ cluster Poset-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be set, C be RelStr-yielding ManySortedSet of I;
+  func pcs-InternalRels C -> ManySortedSet of I means
+:: PCS_0:def 5
+  for i being set st i in I
+  ex P being RelStr st P = C.i & it.i = the InternalRel of P;
+end;
+
+definition
+  let I be non empty set, C be RelStr-yielding ManySortedSet of I;
+  redefine func pcs-InternalRels C means
+:: PCS_0:def 6
+  for i being Element of I holds it.i = the InternalRel of C.i;
+end;
+
+registration
+  let I be set, C be RelStr-yielding ManySortedSet of I;
+  cluster pcs-InternalRels C -> Relation-yielding;
+end;
+
+registration
+  let I be non empty set;
+  let C be transitive-yielding RelStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> transitive RelStr;
+end;
+
+begin :: Tolerance Structures
+
+definition
+  struct (1-sorted) TolStr (#
+  carrier -> set,
+  ToleranceRel -> Relation of the carrier #);
+end;
+
+definition
+  let P be TolStr;
+  let p, q be Element of P;
+  pred p (--) q means
+:: PCS_0:def 7
+  [p,q] in the ToleranceRel of P;
+end;
+
+definition
+  let P be TolStr;
+  attr P is pcs-tol-total means
+:: PCS_0:def 8
+  the ToleranceRel of P is total;
+
+  attr P is pcs-tol-reflexive means
+:: PCS_0:def 9
+  the ToleranceRel of P is_reflexive_in the carrier of P;
+
+  attr P is pcs-tol-irreflexive means
+:: PCS_0:def 10
+  the ToleranceRel of P is_irreflexive_in the carrier of P;
+
+  attr P is pcs-tol-symmetric means
+:: PCS_0:def 11
+  the ToleranceRel of P is_symmetric_in the carrier of P;
+end;
+
+definition
+  func emptyTolStr -> TolStr equals
+:: PCS_0:def 12
+  TolStr (# {}, {}({},{}) #);
+end;
+
+registration
+  cluster emptyTolStr -> empty strict;
+end;
+
+theorem :: PCS_0:2
+  for P being TolStr st P is empty holds the TolStr of P = emptyTolStr;
+
+registration
+  cluster pcs-tol-reflexive -> pcs-tol-total TolStr;
+end;
+
+registration
+  cluster empty -> pcs-tol-reflexive pcs-tol-irreflexive pcs-tol-symmetric
+          TolStr;
+end;
+
+registration
+  cluster empty TolStr;
+end;
+
+registration
+  let P be pcs-tol-total TolStr;
+  cluster the ToleranceRel of P -> total;
+end;
+
+registration
+  let P be pcs-tol-reflexive TolStr;
+  cluster the ToleranceRel of P -> reflexive;
+end;
+
+registration
+  let P be pcs-tol-irreflexive TolStr;
+  cluster the ToleranceRel of P -> irreflexive;
+end;
+
+registration
+  let P be pcs-tol-symmetric TolStr;
+  cluster the ToleranceRel of P -> symmetric;
+end;
+
+registration
+  let L be pcs-tol-total TolStr;
+  cluster the TolStr of L -> pcs-tol-total;
+end;
+
+definition
+  let P be pcs-tol-symmetric TolStr;
+  let p, q be Element of P;
+  redefine pred p (--) q;
+  symmetry;
+end;
+
+registration
+  let D be set;
+  cluster TolStr(#D,nabla D#) -> pcs-tol-reflexive pcs-tol-symmetric;
+end;
+
+registration
+  let D be set;
+  cluster TolStr(#D,{}(D,D)#) -> pcs-tol-irreflexive pcs-tol-symmetric;
+end;
+
+registration
+  cluster strict non empty pcs-tol-reflexive pcs-tol-symmetric TolStr;
+end;
+
+registration
+  cluster strict non empty pcs-tol-irreflexive pcs-tol-symmetric TolStr;
+end;
+
+definition
+  let R be Relation;
+  attr R is TolStr-yielding means
+:: PCS_0:def 13
+  for P being set st P in rng R holds P is TolStr;
+end;
+
+definition
+  let f be Function;
+  redefine attr f is TolStr-yielding means
+:: PCS_0:def 14
+  for x being set st x in dom f holds f.x is TolStr;
+end;
+
+definition
+  let I be set, f be ManySortedSet of I;
+  redefine attr f is TolStr-yielding means
+:: PCS_0:def 15
+  for x being set st x in I holds f.x is TolStr;
+end;
+
+definition
+  let R be Relation;
+  attr R is pcs-tol-reflexive-yielding means
+:: PCS_0:def 16
+  for S being TolStr st S in rng R holds S is pcs-tol-reflexive;
+  attr R is pcs-tol-irreflexive-yielding means
+:: PCS_0:def 17
+  for S being TolStr st S in rng R holds S is pcs-tol-irreflexive;
+  attr R is pcs-tol-symmetric-yielding means
+:: PCS_0:def 18
+  for S being TolStr st S in rng R holds S is pcs-tol-symmetric;
+end;
+
+registration
+  cluster empty -> pcs-tol-reflexive-yielding pcs-tol-irreflexive-yielding
+          pcs-tol-symmetric-yielding Relation;
+end;
+
+registration
+  let I be set, P be TolStr;
+  cluster I --> P -> TolStr-yielding ManySortedSet of I;
+end;
+
+registration
+  let I be set, P be pcs-tol-reflexive TolStr;
+  cluster I --> P -> pcs-tol-reflexive-yielding ManySortedSet of I;
+end;
+
+registration
+  let I be set, P be pcs-tol-irreflexive TolStr;
+  cluster I --> P -> pcs-tol-irreflexive-yielding ManySortedSet of I;
+end;
+
+registration
+  let I be set, P be pcs-tol-symmetric TolStr;
+  cluster I --> P -> pcs-tol-symmetric-yielding ManySortedSet of I;
+end;
+
+registration
+  cluster TolStr-yielding -> 1-sorted-yielding Function;
+end;
+
+registration
+  let I be set;
+  cluster pcs-tol-reflexive-yielding pcs-tol-symmetric-yielding TolStr-yielding
+          ManySortedSet of I;
+end;
+
+registration
+  let I be set;
+  cluster pcs-tol-irreflexive-yielding pcs-tol-symmetric-yielding
+          TolStr-yielding ManySortedSet of I;
+end;
+
+registration
+  let I be set;
+  cluster TolStr-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be non empty set,
+      C be TolStr-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> TolStr;
+end;
+
+definition
+  let I be set, C be TolStr-yielding ManySortedSet of I;
+  func pcs-ToleranceRels C -> ManySortedSet of I means
+:: PCS_0:def 19
+  for i being set st i in I
+  ex P being TolStr st P = C.i & it.i = the ToleranceRel of P;
+end;
+
+definition
+  let I be non empty set, C be TolStr-yielding ManySortedSet of I;
+  redefine func pcs-ToleranceRels C means
+:: PCS_0:def 20
+  for i being Element of I holds it.i = the ToleranceRel of C.i;
+end;
+
+registration
+  let I be set, C be TolStr-yielding ManySortedSet of I;
+  cluster pcs-ToleranceRels C -> Relation-yielding;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-reflexive-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-reflexive TolStr;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-irreflexive-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-irreflexive TolStr;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-symmetric-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-symmetric TolStr;
+end;
+
+theorem :: PCS_0:3
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-reflexive holds Q is pcs-tol-reflexive;
+
+theorem :: PCS_0:4
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-irreflexive holds Q is pcs-tol-irreflexive;
+
+theorem :: PCS_0:5
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-symmetric holds Q is pcs-tol-symmetric;
+
+definition
+  let P, Q be TolStr;
+  func [^P,Q^] -> TolStr equals
+:: PCS_0:def 21
+  TolStr (# [: the carrier of P, the carrier of Q :],
+            [^ the ToleranceRel of P, the ToleranceRel of Q ^] #);
+end;
+
+notation
+  let P, Q be TolStr, p be Element of P, q be Element of Q;
+  synonym [^p,q^] for [p,q];
+end;
+
+definition
+  let P, Q be non empty TolStr, p be Element of P, q be Element of Q;
+  redefine func [^p,q^] -> Element of [^P,Q^];
+end;
+
+notation
+  let P, Q be TolStr, p be Element of [^P,Q^];
+  synonym p^`1 for p`1;
+  synonym p^`2 for p`2;
+end;
+
+definition
+  let P, Q be non empty TolStr,
+      p be Element of [^P,Q^];
+  redefine func p^`1 -> Element of P;
+  redefine func p^`2 -> Element of Q;
+end;
+
+theorem :: PCS_0:6
+  for S1, S2 being non empty TolStr
+  for a, c being Element of S1, b, d being Element of S2 holds
+  [^a,b^] (--) [^c,d^] iff a (--) c or b (--) d;
+
+theorem :: PCS_0:7
+  for S1, S2 being non empty TolStr, x, y being Element of [^S1,S2^] holds
+  x (--) y iff x^`1 (--) y^`1 or x^`2 (--) y^`2;
+
+registration
+  let P be TolStr, Q be pcs-tol-reflexive TolStr;
+  cluster [^P,Q^] -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-reflexive TolStr, Q be TolStr;
+  cluster [^P,Q^] -> pcs-tol-reflexive;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric TolStr;
+  cluster [^P,Q^] -> pcs-tol-symmetric;
+end;
+
+begin :: PCS's
+
+definition
+  struct (RelStr,TolStr) pcs-Str (#
+  carrier -> set,
+  InternalRel -> (Relation of the carrier),
+  ToleranceRel -> Relation of the carrier #);
+end;
+
+definition
+  let P be pcs-Str;
+  attr P is pcs-compatible means
+:: PCS_0:def 22
+  for p, p', q, q' being Element of P st
+  p (--) q & p' <= p & q' <= q holds p' (--) q';
+end;
+
+definition
+  let P be pcs-Str;
+  attr P is pcs-like means
+:: PCS_0:def 23
+  P is reflexive transitive pcs-tol-reflexive pcs-tol-symmetric pcs-compatible;
+  attr P is anti-pcs-like means
+:: PCS_0:def 24
+  P is reflexive transitive pcs-tol-irreflexive pcs-tol-symmetric
+       pcs-compatible;
+end;
+
+registration
+  cluster pcs-like -> reflexive transitive pcs-tol-reflexive pcs-tol-symmetric
+          pcs-compatible pcs-Str;
+  cluster reflexive transitive pcs-tol-reflexive pcs-tol-symmetric
+          pcs-compatible -> pcs-like pcs-Str;
+  cluster anti-pcs-like -> reflexive transitive pcs-tol-irreflexive
+          pcs-tol-symmetric pcs-compatible pcs-Str;
+  cluster reflexive transitive pcs-tol-irreflexive pcs-tol-symmetric
+          pcs-compatible -> anti-pcs-like pcs-Str;
+end;
+
+definition
+  let D be set;
+  func pcs-total D -> pcs-Str equals
+:: PCS_0:def 25
+  pcs-Str (# D,nabla D,nabla D #);
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> strict;
+end;
+
+registration
+  let D be non empty set;
+  cluster pcs-total D -> non empty;
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> reflexive transitive
+                         pcs-tol-reflexive pcs-tol-symmetric;
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> pcs-like;
+end;
+
+registration
+  let D be set;
+  cluster pcs-Str(#D,nabla D,{}(D,D)#) -> anti-pcs-like;
+end;
+
+registration
+  cluster strict non empty pcs-like pcs-Str;
+  cluster strict non empty anti-pcs-like pcs-Str;
+end;
+
+definition
+  mode pcs is pcs-like pcs-Str;
+  mode anti-pcs is anti-pcs-like pcs-Str;
+end;
+
+definition
+  func pcs-empty -> pcs-Str equals
+:: PCS_0:def 26
+  pcs-total 0;
+end;
+
+registration
+  cluster pcs-empty -> strict empty pcs-like;
+end;
+
+definition
+  let p be set;
+  func pcs-singleton p -> pcs-Str equals
+:: PCS_0:def 27
+  pcs-total {p};
+end;
+
+registration
+  let p be set;
+  cluster pcs-singleton p -> strict non empty pcs-like;
+end;
+
+definition
+  let R be Relation;
+  attr R is pcs-Str-yielding means
+:: PCS_0:def 28
+  for P being set st P in rng R holds P is pcs-Str;
+  attr R is pcs-yielding means
+:: PCS_0:def 29
+  for P being set st P in rng R holds P is pcs;
+end;
+
+definition
+  let f be Function;
+  redefine attr f is pcs-Str-yielding means
+:: PCS_0:def 30
+  for x being set st x in dom f holds f.x is pcs-Str;
+  redefine attr f is pcs-yielding means
+:: PCS_0:def 31
+  for x being set st x in dom f holds f.x is pcs;
+end;
+
+definition
+  let I be set, f be ManySortedSet of I;
+  redefine attr f is pcs-Str-yielding means
+:: PCS_0:def 32
+  for x being set st x in I holds f.x is pcs-Str;
+  redefine attr f is pcs-yielding means
+:: PCS_0:def 33
+  for x being set st x in I holds f.x is pcs;
+end;
+
+registration
+  cluster pcs-Str-yielding -> TolStr-yielding RelStr-yielding Relation;
+  cluster pcs-yielding -> pcs-Str-yielding Relation;
+  cluster pcs-yielding -> reflexive-yielding transitive-yielding
+          pcs-tol-reflexive-yielding pcs-tol-symmetric-yielding Relation;
+end;
+
+registration
+  let I be set, P be pcs;
+  cluster I --> P -> pcs-yielding ManySortedSet of I;
+end;
+
+registration
+  let I be set;
+  cluster pcs-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be non empty set,
+      C be pcs-Str-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> pcs-Str;
+end;
+
+definition
+  let I be non empty set,
+      C be pcs-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> pcs;
+end;
+
+:: Union of PCS's
+
+definition
+  let P, Q be pcs-Str;
+  pred P c= Q means
+:: PCS_0:def 34
+  the carrier of P c= the carrier of Q &
+  the InternalRel of P c= the InternalRel of Q &
+  the ToleranceRel of P c= the ToleranceRel of Q;
+  reflexivity;
+end;
+
+theorem :: PCS_0:8
+  for P, Q being RelStr
+  for p, q being Element of P, p1, q1 being Element of Q st
+  the InternalRel of P c= the InternalRel of Q & p = p1 & q = q1 & p <= q
+  holds p1 <= q1;
+
+theorem :: PCS_0:9
+  for P, Q being pcs-Str
+  for p, q being Element of P, p1, q1 being Element of Q st
+  the ToleranceRel of P c= the ToleranceRel of Q & p = p1 & q = q1 & p (--) q
+  holds p1 (--) q1;
+
+definition
+  let C be Relation;
+  attr C is pcs-chain-like means
+:: PCS_0:def 35
+  for P, Q being pcs-Str st P in rng C & Q in rng C holds P c= Q or Q c= P;
+end;
+
+registration
+  let I be set, P be pcs-Str;
+  cluster I --> P -> pcs-chain-like ManySortedSet of I;
+end;
+
+registration
+  cluster pcs-chain-like pcs-yielding Function;
+end;
+
+registration
+  let I be set;
+  cluster pcs-chain-like pcs-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be set;
+  mode pcs-Chain of I is pcs-chain-like pcs-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be set, C be pcs-Str-yielding ManySortedSet of I;
+  func pcs-union C -> strict pcs-Str means
+:: PCS_0:def 36
+  the carrier of it = Union Carrier C &
+  the InternalRel of it = Union pcs-InternalRels C &
+  the ToleranceRel of it = Union pcs-ToleranceRels C;
+end;
+
+theorem :: PCS_0:10
+  for I being set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p <= q iff
+  ex i being set, P being pcs-Str, p', q' being Element of P st
+  i in I & P = C.i & p' = p & q' = q & p' <= q';
+
+theorem :: PCS_0:11
+  for I being non empty set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p <= q iff
+  ex i being Element of I, p', q' being Element of C.i st
+  p' = p & q' = q & p' <= q';
+
+theorem :: PCS_0:12
+  for I being set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p (--) q iff
+  ex i being set, P being pcs-Str, p', q' being Element of P st
+  i in I & P = C.i & p' = p & q' = q & p' (--) q';
+
+theorem :: PCS_0:13
+  for I being non empty set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p (--) q iff
+  ex i being Element of I, p', q' being Element of C.i st
+  p' = p & q' = q & p' (--) q';
+
+registration
+  let I be set, C be reflexive-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> reflexive;
+end;
+
+registration
+  let I be set,
+      C be pcs-tol-reflexive-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> pcs-tol-reflexive;
+end;
+
+registration
+  let I be set,
+      C be pcs-tol-symmetric-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> pcs-tol-symmetric;
+end;
+
+registration
+  let I be set, C be pcs-Chain of I;
+  cluster pcs-union C -> transitive pcs-compatible;
+end;
+
+:: Direct Sum of PCS's
+
+definition
+  let p, q be set;
+  func MSSet(p,q) -> ManySortedSet of {0,1} equals
+:: PCS_0:def 37
+  (0,1) --> (p,q);
+end;
+
+registration
+  let P, Q be 1-sorted;
+  cluster MSSet(P,Q) -> 1-sorted-yielding;
+end;
+
+registration
+  let P, Q be RelStr;
+  cluster MSSet(P,Q) -> RelStr-yielding;
+end;
+
+registration
+  let P, Q be TolStr;
+  cluster MSSet(P,Q) -> TolStr-yielding;
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster MSSet(P,Q) -> pcs-Str-yielding;
+end;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster MSSet(P,Q) -> reflexive-yielding;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster MSSet(P,Q) -> transitive-yielding;
+end;
+
+registration
+  let P, Q be pcs-tol-reflexive pcs-Str;
+  cluster MSSet(P,Q) -> pcs-tol-reflexive-yielding;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster MSSet(P,Q) -> pcs-tol-symmetric-yielding;
+end;
+
+registration
+  let P, Q be pcs;
+  cluster MSSet(P,Q) -> pcs-yielding;
+end;
+
+definition
+  let P, Q be pcs-Str;
+  func pcs-sum(P,Q) -> pcs-Str equals
+:: PCS_0:def 38
+  pcs-union MSSet(P,Q);
+end;
+
+theorem :: PCS_0:14
+  for P, Q being pcs-Str holds
+  the carrier of pcs-sum(P,Q) = (the carrier of P) \/ the carrier of Q &
+  the InternalRel of pcs-sum(P,Q) =
+      (the InternalRel of P) \/ the InternalRel of Q &
+  the ToleranceRel of pcs-sum(P,Q) =
+      (the ToleranceRel of P) \/ the ToleranceRel of Q;
+
+theorem :: PCS_0:15
+  for P, Q being pcs-Str holds
+  pcs-sum(P,Q) = pcs-Str (#
+    (the carrier of P) \/ the carrier of Q,
+    (the InternalRel of P) \/ the InternalRel of Q,
+    (the ToleranceRel of P) \/ the ToleranceRel of Q #);
+
+theorem :: PCS_0:16
+  for P, Q being pcs-Str, p, q being Element of pcs-sum(P,Q) holds
+  p <= q iff
+  (ex p', q' being Element of P st p' = p & q' = q & p' <= q') or
+  (ex p', q' being Element of Q st p' = p & q' = q & p' <= q');
+
+theorem :: PCS_0:17
+  for P, Q being pcs-Str, p, q being Element of pcs-sum(P,Q) holds
+  p (--) q iff
+  (ex p', q' being Element of P st p' = p & q' = q & p' (--) q') or
+  (ex p', q' being Element of Q st p' = p & q' = q & p' (--) q');
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster pcs-sum(P,Q) -> reflexive;
+end;
+
+registration
+  let P, Q be pcs-tol-reflexive pcs-Str;
+  cluster pcs-sum(P,Q) -> pcs-tol-reflexive;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster pcs-sum(P,Q) -> pcs-tol-symmetric;
+end;
+
+theorem :: PCS_0:18
+  for P, Q being pcs holds
+  P misses Q implies the InternalRel of pcs-sum(P,Q) is transitive;
+
+theorem :: PCS_0:19
+  for P, Q being pcs holds
+  P misses Q implies pcs-sum(P,Q) is pcs-compatible;
+
+theorem :: PCS_0:20
+  for P, Q being pcs holds P misses Q implies pcs-sum(P,Q) is pcs;
+
+:: Extension
+
+definition
+  let P be pcs-Str, a be set;
+  func pcs-extension(P,a) -> strict pcs-Str means
+:: PCS_0:def 39
+  the carrier of it = {a} \/ the carrier of P &
+  the InternalRel of it =
+      [:{a},the carrier of it:] \/ the InternalRel of P &
+  the ToleranceRel of it = [:{a},the carrier of it:] \/
+      [:the carrier of it,{a}:] \/ the ToleranceRel of P;
+end;
+
+registration
+  let P be pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> non empty;
+end;
+
+theorem :: PCS_0:21
+  for P being pcs-Str, a being set holds
+  the carrier of P c= the carrier of pcs-extension(P,a) &
+  the InternalRel of P c= the InternalRel of pcs-extension(P,a) &
+  the ToleranceRel of P c= the ToleranceRel of pcs-extension(P,a);
+
+theorem :: PCS_0:22
+  for P being pcs-Str, a being set,
+      p, q being Element of pcs-extension(P,a) st p = a holds
+  p <= q;
+
+theorem :: PCS_0:23
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <= q holds p1 <= q1;
+
+theorem :: PCS_0:24
+  for P being pcs-Str, a being set,
+      p being Element of P,
+      p1, q1 being Element of pcs-extension(P,a)
+  st p = p1 & p <> a & p1 <= q1 & not a in the carrier of P holds
+  q1 in the carrier of P & q1 <> a;
+
+theorem :: PCS_0:25
+  for P being pcs-Str, a being set,
+      p being Element of pcs-extension(P,a) st p <> a
+  holds p in the carrier of P;
+
+theorem :: PCS_0:26
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <> a & p1 <= q1 holds p <= q;
+
+theorem :: PCS_0:27
+  for P being pcs-Str, a being set,
+      p, q being Element of pcs-extension(P,a) st p = a holds
+  p (--) q & q (--) p;
+
+theorem :: PCS_0:28
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p (--) q holds p1 (--) q1;
+
+theorem :: PCS_0:29
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <> a & q <> a & p1 (--) q1 holds p (--) q;
+
+registration
+  let P be reflexive pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> reflexive;
+end;
+
+theorem :: PCS_0:30
+  for P being transitive pcs-Str, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is transitive;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> pcs-tol-symmetric;
+end;
+
+theorem :: PCS_0:31
+  for P being pcs-compatible pcs-Str, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is pcs-compatible;
+
+theorem :: PCS_0:32
+  for P being pcs, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is pcs;
+
+:: Reverse
+
+definition
+  let P be pcs-Str;
+  func pcs-reverse(P) -> strict pcs-Str means
+:: PCS_0:def 40
+  the carrier of it = the carrier of P &
+  the InternalRel of it = (the InternalRel of P)~ &
+  the ToleranceRel of it = (the ToleranceRel of P)`;
+end;
+
+registration
+  let P be non empty pcs-Str;
+  cluster pcs-reverse(P) -> non empty;
+end;
+
+theorem :: PCS_0:33
+  for P being pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  p <= q iff q' <= p';
+
+theorem :: PCS_0:34
+  for P being pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  p (--) q implies not p' (--) q';
+
+theorem :: PCS_0:35
+  for P being non empty pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  not p' (--) q' implies p (--) q;
+
+registration
+  let P be reflexive pcs-Str;
+  cluster pcs-reverse(P) -> reflexive;
+end;
+
+registration
+  let P be transitive pcs-Str;
+  cluster pcs-reverse(P) -> transitive;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-irreflexive;
+end;
+
+registration
+  let P be pcs-tol-irreflexive pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-symmetric;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str;
+  cluster pcs-reverse(P) -> pcs-compatible;
+end;
+
+:: Times
+
+definition
+  let P, Q be pcs-Str;
+  func P pcs-times Q -> pcs-Str equals
+:: PCS_0:def 41
+  pcs-Str (# [: the carrier of P, the carrier of Q :],
+             [" the InternalRel of P, the InternalRel of Q "],
+             [^ the ToleranceRel of P, the ToleranceRel of Q ^] #);
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster P pcs-times Q -> strict;
+end;
+
+registration
+  let P, Q be non empty pcs-Str;
+  cluster P pcs-times Q -> non empty;
+end;
+
+theorem :: PCS_0:36
+  for P, Q being pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p <= q iff p1 <= p2 & q1 <= q2;
+
+theorem :: PCS_0:37
+  for P, Q being pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p (--) q implies p1 (--) p2 or q1 (--) q2;
+
+theorem :: PCS_0:38
+  for P, Q being non empty pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p1 (--) p2 or q1 (--) q2 implies p (--) q;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster P pcs-times Q -> reflexive;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster P pcs-times Q -> transitive;
+end;
+
+registration
+  let P be pcs-Str;
+  let Q be pcs-tol-reflexive pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  let Q be pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-reflexive;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-symmetric;
+end;
+
+registration
+  let P, Q be pcs-compatible pcs-Str;
+  cluster P pcs-times Q -> pcs-compatible;
+end;
+
+definition
+  let P, Q be pcs-Str;
+  func P --> Q -> pcs-Str equals
+:: PCS_0:def 42
+  (pcs-reverse P) pcs-times Q;
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster P --> Q -> strict;
+end;
+
+registration
+  let P, Q be non empty pcs-Str;
+  cluster P --> Q -> non empty;
+end;
+
+theorem :: PCS_0:39
+  for P, Q being pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p <= q iff p2 <= p1 & q1 <= q2;
+
+theorem :: PCS_0:40
+  for P, Q being pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p (--) q implies not p1 (--) p2 or q1 (--) q2
+;
+
+theorem :: PCS_0:41
+  for P, Q being non empty pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds not p1 (--) p2 or q1 (--) q2 implies p (--) q
+;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster P --> Q -> reflexive;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster P --> Q -> transitive;
+end;
+
+registration
+  let P be pcs-Str, Q be pcs-tol-reflexive pcs-Str;
+  cluster P --> Q -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-irreflexive pcs-Str, Q be pcs-Str;
+  cluster P --> Q -> pcs-tol-reflexive;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster P --> Q -> pcs-tol-symmetric;
+end;
+
+registration
+  let P, Q be pcs-compatible pcs-Str;
+  cluster P --> Q -> pcs-compatible;
+end;
+
+registration
+  let P, Q be pcs;
+  cluster P --> Q -> pcs-like;
+end;
+
+:: Self-coherence
+
+definition
+  let P be pcs-Str, S be Subset of P;
+  attr S is pcs-self-coherent means
+:: PCS_0:def 43
+  for x, y being Element of P st x in S & y in S holds x (--) y;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster empty -> pcs-self-coherent Subset of P;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster empty Subset of P;
+end;
+
+definition
+  let P be pcs-Str, F be Subset-Family of P;
+  attr F is pcs-self-coherent-membered means
+:: PCS_0:def 44
+  for S being Subset of P st S in F holds S is pcs-self-coherent;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster non empty pcs-self-coherent-membered Subset-Family of P;
+end;
+
+definition
+  let P be pcs-Str, D be set;
+  func pcs-general-power-IR(P,D) -> Relation of D means
+:: PCS_0:def 45
+  for A, B being set holds [A,B] in it iff A in D & B in D &
+  for a being set st a in A ex b being set st b in B &
+  [a,b] in the InternalRel of P;
+  func pcs-general-power-TR(P,D) -> Relation of D means
+:: PCS_0:def 46
+  for A, B being set holds [A,B] in it iff A in D & B in D &
+  for a, b being set st a in A & b in B holds [a,b] in the ToleranceRel of P;
+end;
+
+theorem :: PCS_0:42
+  for P being pcs-Str, D being Subset-Family of P
+  for A, B being set holds [A,B] in pcs-general-power-IR(P,D) iff
+  A in D & B in D &
+  for a being Element of P st a in A ex b being Element of P st b in B & a <= b
+;
+
+theorem :: PCS_0:43
+  for P being pcs-Str, D being Subset-Family of P
+  for A, B being set holds [A,B] in pcs-general-power-TR(P,D) iff
+  A in D & B in D &
+  for a, b being Element of P st a in A & b in B holds a (--) b;
+
+definition
+  let P be pcs-Str, D be set;
+  func pcs-general-power(P,D) -> pcs-Str equals
+:: PCS_0:def 47
+  pcs-Str (# D, pcs-general-power-IR(P,D), pcs-general-power-TR(P,D) #);
+end;
+
+notation
+  let P be pcs-Str, D be Subset-Family of P;
+  synonym pcs-general-power(D) for pcs-general-power(P,D);
+end;
+
+registration
+  let P be pcs-Str, D be non empty set;
+  cluster pcs-general-power(P,D) -> non empty;
+end;
+
+theorem :: PCS_0:44
+  for P being pcs-Str, D be set
+  for p, q being Element of pcs-general-power(P,D) holds p <= q
+  implies for p' being Element of P st p' in p
+  ex q' being Element of P st q' in q & p' <= q';
+
+theorem :: PCS_0:45
+  for P being pcs-Str, D being non empty Subset-Family of P
+  for p, q being Element of pcs-general-power(D) st
+  for p' being Element of P st p' in p
+  ex q' being Element of P st q' in q & p' <= q'
+  holds p <= q;
+
+theorem :: PCS_0:46
+  for P being pcs-Str, D being set
+  for p, q being Element of pcs-general-power(P,D) holds
+  p (--) q implies
+  for p', q' being Element of P st p' in p & q' in q holds p' (--) q';
+
+theorem :: PCS_0:47
+  for P being pcs-Str, D being non empty Subset-Family of P
+  for p, q being Element of pcs-general-power(D) st
+  for p', q' being Element of P st p' in p & q' in q holds p' (--) q'
+  holds p (--) q;
+
+registration
+  let P be pcs-Str, D be set;
+  cluster pcs-general-power(P,D) -> strict;
+end;
+
+registration
+  let P be reflexive pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> reflexive;
+end;
+
+registration
+  let P be transitive pcs-Str, D be set;
+  cluster pcs-general-power(P,D) -> transitive;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str,
+      D be pcs-self-coherent-membered Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-tol-symmetric;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-compatible;
+end;
+
+definition
+  let P be pcs-Str;
+  func pcs-coherent-power(P) -> set equals
+:: PCS_0:def 48
+  {X where X is Subset of P: X is pcs-self-coherent};
+end;
+
+theorem :: PCS_0:48
+  for P being pcs-Str, X being set holds X in pcs-coherent-power(P)
+  implies X is pcs-self-coherent Subset of P;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-coherent-power(P) -> non empty;
+end;
+
+definition
+  let P be pcs-Str;
+  redefine func pcs-coherent-power(P) -> Subset-Family of P;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-coherent-power(P) -> pcs-self-coherent-membered
+          Subset-Family of P;
+end;
+
+definition
+  let P be pcs-Str;
+  func pcs-power(P) -> pcs-Str equals
+:: PCS_0:def 49
+  pcs-general-power(pcs-coherent-power(P));
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-power(P) -> strict;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-power(P) -> non empty;
+end;
+
+registration
+  let P be reflexive pcs-Str;
+  cluster pcs-power(P) -> reflexive;
+end;
+
+registration
+  let P be transitive pcs-Str;
+  cluster pcs-power(P) -> transitive;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  cluster pcs-power(P) -> pcs-tol-reflexive;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str;
+  cluster pcs-power(P) -> pcs-tol-symmetric;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str;
+  cluster pcs-power(P) -> pcs-compatible;
+end;
+
+registration
+  let P be pcs;
+  cluster pcs-power(P) -> pcs-like;
+end;

@@ -1,0 +1,688 @@
+:: Basic Properties of the Rank of Matrices over a Field
+::  by Karol P\c{a}k
+:: 
+:: Received August 28, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies TARSKI, BOOLE, ARYTM_1, ARYTM_3, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FINSEQ_5, FINSEQ_7, TREES_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_4,
+      FINSOP_1, FUNCOP_1, INCSP_1, CAT_1, CAT_3, RVSUM_1, RLSUB_1, GROUP_1,
+      BINOP_1, SETWISEO, FINSUB_1, FINSET_1, SGRAPH1, CARD_1, CARD_3, NAT_1,
+      INT_1, ABSVALUE, QC_LANG1, ROUGHS_1, NEWTON, CARD_FIN, GR_CY_1, FREEALG,
+      FSM_1, XREAL_0, SEQ_1, MATRLIN, MATRIX_1, MATRIX_2, MATRIX_3, MATRIX11,
+      LAPLACE, MATRIX13, VECTSP_1, VECTSP_9, PRVECT_1, RLVECT_1, RLVECT_2,
+      RLVECT_3, LMOD_7, COMPLEX1, CLASSES1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, CARD_1, XCMPLX_0,
+      XXREAL_0, NAT_1, NAT_D, FINSET_1, RELAT_1, RELSET_1, FUNCT_1, FUNCT_2,
+      SETWOP_2, FINSEQ_1, BINOP_1, STRUCT_0, FUNCT_3, FUNCOP_1, RLVECT_1,
+      GROUP_1, VECTSP_1, SETWISEO, FINSEQ_2, MATRIX_1, FINSUB_1, MATRIX_2,
+      FVSUM_1, FINSOP_1, BINARITH, GROUP_4, FINSEQ_4, MATRIX_3, FINSEQ_7,
+      FUNCT_4, SGRAPH1, NEWTON, FINSEQ_5, DOMAIN_1, MATRIX_6, MATRIX_7,
+      MATRIX11, CARD_FIN, FRAENKEL, FINSEQ_3, LAPLACE, PSCOMP_1, PRVECT_1,
+      VECTSP_4, VECTSP_6, VECTSP_7, VECTSP_9, FINSEQOP;
+ constructors PARTFUN1, SETWISEO, FINSOP_1, SETWOP_2, CAT_2, ALGSTR_1, FVSUM_1,
+      DOMAIN_1, XXREAL_0, FINSEQ_5, GROUP_4, FINSEQ_7, WELLORD2, NEWTON,
+      STIRL2_1, CARD_FIN, MATRIX_6, MATRIX_7, MATRIX11, LAPLACE, PRVECT_1,
+      VECTSP_5, VECTSP_6, VECTSP_7, VECTSP_9, NAT_D, RELAT_1, FINSEQOP, NAT_1,
+      FINSEQ_4;
+ registrations SUBSET_1, FUNCT_1, FINSUB_1, FINSET_1, RELSET_1, STRUCT_0,
+      FVSUM_1, MATRIX_2, VECTSP_1, FUNCT_2, ORDINAL1, XXREAL_0, NAT_1,
+      FINSEQ_1, INT_1, RELAT_1, CARD_1, SGRAPH1, MATRIX_1, FUNCOP_1, MATRIX11,
+      POLYNOM1, SETFAM_1, AMISTD_3, FINSEQ_2, PRVECT_1, MATRLIN, ARYTM_3,
+      NUMBERS, XREAL_0, REAL_1, XBOOLE_0, FRAENKEL;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin :: Triangular Matrices
+
+ reserve x,y,X,Y for set,
+      D for non empty set,
+      i,j,k,l,m,n,m',n' for Element of NAT,
+      i0,j0,n0,m0 for non zero Element of NAT,
+      K for Field,
+      a,b for Element of K,
+      p for FinSequence of K,
+      M for (Matrix of n,K);
+
+theorem :: MATRIX13:1
+  for A be Matrix of n,m,D holds
+    (n=0 implies m=0) iff len A = n & width A = m;
+
+theorem :: MATRIX13:2
+  M is Lower_Triangular_Matrix of n,K iff M@ is Upper_Triangular_Matrix of n,K;
+
+theorem :: MATRIX13:3
+  diagonal_of_Matrix M = diagonal_of_Matrix M@;
+
+theorem :: MATRIX13:4
+  for perm being Element of Permutations n st perm <> idseq n holds
+    (ex i st i in Seg n & perm.i > i) & (ex j st j in Seg n & perm.j < j);
+
+theorem :: MATRIX13:5
+  for M be (Matrix of n,K),perm being Element of Permutations n st
+    perm <> idseq n &
+         ( M is Lower_Triangular_Matrix of n,K or
+           M is Upper_Triangular_Matrix of n,K )
+    holds (Path_product(M)).perm = 0.K;
+
+theorem :: MATRIX13:6
+  for M be (Matrix of n,K), I be Element of Permutations n st I = idseq n
+    holds diagonal_of_Matrix M = Path_matrix(I,M);
+
+theorem :: MATRIX13:7
+  for M be Upper_Triangular_Matrix of n,K
+    holds Det M = (the mult of K) $$ diagonal_of_Matrix M;
+
+theorem :: MATRIX13:8
+  for M be Lower_Triangular_Matrix of n,K
+    holds Det M=(the mult of K) $$ diagonal_of_Matrix M;
+
+theorem :: MATRIX13:9
+  for X be finite set, n holds
+    Card {Y where Y is Subset of X: card Y = n} = card X choose n;
+
+theorem :: MATRIX13:10
+  Card 2Set Seg n = n choose 2;
+
+theorem :: MATRIX13:11
+  for R be Element of Permutations(n) st R=Rev idseq n holds
+    R is even iff (n choose 2) mod 2 = 0;
+
+theorem :: MATRIX13:12
+  for M be (Matrix of n,K),R be Permutation of Seg n st
+    R=Rev idseq n &
+    for i,j st i in Seg n & j in Seg n & i+j <= n holds M*(i,j) = 0.K
+  holds M*R is Upper_Triangular_Matrix of n,K;
+
+theorem :: MATRIX13:13
+  for M be (Matrix of n,K),R be Permutation of Seg n st
+    R=Rev idseq n &
+    for i,j st i in Seg n & j in Seg n & i+j > n+1 holds M*(i,j) = 0.K
+  holds M*R is Lower_Triangular_Matrix of n,K;
+
+theorem :: MATRIX13:14
+  for M be (Matrix of n,K),R be Element of Permutations(n) st
+     R = Rev idseq n &
+     ((for i,j st i in Seg n & j in Seg n & i+j <= n holds M*(i,j) = 0.K)or
+      (for i,j st i in Seg n & j in Seg n & i+j > n+1 holds M*(i,j) = 0.K))
+  holds Det M = -((the mult of K) "**" Path_matrix(R,M), R);
+
+theorem :: MATRIX13:15
+  for M be Matrix of n,K
+    for M1,M2 be Upper_Triangular_Matrix of n,K st M = M1*M2 holds
+      M is Upper_Triangular_Matrix of n,K &
+      diagonal_of_Matrix M = mlt(diagonal_of_Matrix M1,diagonal_of_Matrix M2);
+
+theorem :: MATRIX13:16
+  for M be Matrix of n,K
+    for M1,M2 be Lower_Triangular_Matrix of n,K st M = M1*M2 holds
+      M is Lower_Triangular_Matrix of n,K &
+      diagonal_of_Matrix M = mlt(diagonal_of_Matrix M1,diagonal_of_Matrix M2);
+
+begin :: The Rank of Matrices
+
+definition
+  let D be non empty set; let M be Matrix of D; let n,m be Nat;
+  let nt be Element of n-tuples_on NAT;
+  let mt be Element of m-tuples_on NAT;
+  func Segm(M,nt,mt) -> Matrix of n,m,D means
+:: MATRIX13:def 1
+    for i,j being Nat st [i,j] in Indices it holds it*(i,j)=M*(nt.i,mt.j);
+end;
+
+ reserve A,B for (Matrix of D),
+      A' for Matrix of n',m',D,
+      M' for Matrix of n',m',K,
+      nt,nt1,nt2 for Element of n-tuples_on NAT,
+      mt,mt1 for Element of m-tuples_on NAT,
+      M for Matrix of K;
+
+theorem :: MATRIX13:17
+  [:rng nt,rng mt:] c= Indices A implies
+   ( [i,j] in Indices Segm(A,nt,mt) iff [nt.i,mt.j] in Indices A );
+
+theorem :: MATRIX13:18
+  [:rng nt,rng mt:] c= Indices A & (n = 0 iff m = 0) implies
+    Segm(A,nt,mt)@ = Segm(A@,mt,nt);
+
+theorem :: MATRIX13:19
+  [:rng nt,rng mt:] c= Indices A & (m=0 implies n=0) implies
+    Segm(A,nt,mt) = Segm(A@,mt,nt)@;
+
+theorem :: MATRIX13:20
+  for A be Matrix of 1,D holds A = <*<* A*(1,1) *>*>;
+
+theorem :: MATRIX13:21
+  n = 1 & m = 1 implies Segm(A,nt,mt) = <*<* A*(nt.1,mt.1) *>*>;
+
+theorem :: MATRIX13:22
+  for A be Matrix of 2,D holds A = ( A*(1,1),A*(1,2) )][( A*(2,1),A*(2,2) );
+
+theorem :: MATRIX13:23
+  n = 2 & m = 2 implies Segm(A,nt,mt) =
+     ( A*(nt.1,mt.1),A*(nt.1,mt.2) )][( A*(nt.2,mt.1),A*(nt.2,mt.2) );
+
+theorem :: MATRIX13:24
+  i in Seg n & rng mt c= Seg width A implies
+    Line(Segm(A,nt,mt),i) = Line(A,nt.i) * mt;
+
+theorem :: MATRIX13:25
+  i in Seg n & j in Seg n & nt.i = nt.j implies
+    Line(Segm(A,nt,mt),i) = Line(Segm(A,nt,mt),j);
+
+theorem :: MATRIX13:26
+   i in Seg n & j in Seg n & nt.i = nt.j & i<>j implies
+     Det Segm(M,nt,nt1) = 0.K;
+
+theorem :: MATRIX13:27
+  not nt is one-to-one implies Det Segm(M,nt,nt1) = 0.K;
+
+theorem :: MATRIX13:28
+  j in Seg m & rng nt c= Seg len A implies
+    Col(Segm(A,nt,mt),j) = Col(A,mt.j) * nt;
+
+theorem :: MATRIX13:29
+  i in Seg m & j in Seg m & mt.i = mt.j implies
+    Col(Segm(A,nt,mt),i) = Col(Segm(A,nt,mt),j);
+
+theorem :: MATRIX13:30
+   i in Seg m & j in Seg m & mt.i = mt.j & i<>j implies
+     Det Segm(M,mt1,mt) = 0.K;
+
+theorem :: MATRIX13:31
+  not mt is one-to-one implies Det Segm(M,mt1,mt) = 0.K;
+
+theorem :: MATRIX13:32
+  for nt,nt1 be Element of n-tuples_on NAT st
+      nt is one-to-one & nt1 is one-to-one & rng nt = rng nt1
+    ex perm be Permutation of Seg n st nt1 = nt * perm;
+
+theorem :: MATRIX13:33
+  for f be Function of Seg n,Seg n st nt1 = nt * f
+    holds Segm(A,nt1,mt) = Segm(A,nt,mt) * f;
+
+theorem :: MATRIX13:34
+  for f be Function of Seg m,Seg m st mt1 = mt * f holds
+    Segm(A,nt,mt1)@ = Segm(A,nt,mt)@ * f;
+
+theorem :: MATRIX13:35
+  for perm be Element of Permutations n st nt1 = nt2 * perm holds
+    Det Segm(M,nt1,nt) = -(Det Segm(M,nt2,nt),perm) &
+    Det Segm(M,nt,nt1) = -(Det Segm(M,nt,nt2),perm);
+
+theorem :: MATRIX13:36
+  for nt,nt1,nt',nt1' be Element of n-tuples_on NAT st
+      rng nt = rng nt' & rng nt1 = rng nt1' holds
+    Det Segm(M,nt,nt1) =  Det Segm(M,nt',nt1') or
+    Det Segm(M,nt,nt1) = -Det Segm(M,nt',nt1');
+
+theorem :: MATRIX13:37
+  for F,Fmt be FinSequence of D,nt,mt st
+       len F = width A' & Fmt = F * mt & [:rng nt,rng mt:] c= Indices A'
+    for i,j st nt"{j} = {i} holds
+      RLine(Segm(A',nt,mt),i,Fmt) = Segm(RLine(A',j,F),nt,mt);
+
+theorem :: MATRIX13:38
+  for F be FinSequence of D,i,nt st not i in rng nt &
+                                   [:rng nt,rng mt:] c= Indices A'
+    holds Segm(A',nt,mt) = Segm(RLine(A',i,F),nt,mt);
+
+theorem :: MATRIX13:39
+  i in Seg n' & i in rng nt & [:rng nt,rng mt:] c= Indices A' implies
+    ex nt1 st rng nt1 = rng nt\{i} \/ {j} &
+              Segm(RLine(A',i,Line(A',j)),nt,mt) = Segm(A',nt1,mt);
+
+theorem :: MATRIX13:40
+  for F be FinSequence of D holds
+    not i in Seg len A' implies RLine(A',i,F) = A';
+
+definition let n,m be Nat,K be Field;
+  let M be Matrix of n,m,K, a be Element of K;
+  redefine func a*M -> Matrix of n,m,K;
+end;
+
+theorem :: MATRIX13:41
+  [:rng nt,rng mt:] c= Indices M implies a * Segm(M,nt,mt) = Segm(a * M,nt,mt);
+
+theorem :: MATRIX13:42
+  nt = idseq len A & mt = idseq width A implies Segm(A,nt,mt) = A;
+
+registration
+  cluster empty without_zero finite Subset of NAT;
+  cluster non empty without_zero finite Subset of NAT;
+end;
+
+registration let n;
+  cluster Seg n -> without_zero;
+end;
+
+registration
+  let X be without_zero set, Y be set;
+  cluster X \ Y -> without_zero;
+  cluster X /\ Y -> without_zero;
+end;
+
+theorem :: MATRIX13:43
+  for N be finite without_zero Subset of NAT
+    ex k st N c= Seg k;
+
+definition let N be finite without_zero Subset of NAT;
+  redefine func Sgm N -> Element of (card N)-tuples_on NAT;
+end;
+
+definition
+  let D be non empty set,A be Matrix of D;
+  let P,Q be without_zero finite Subset of NAT;
+  func Segm(A,P,Q) -> Matrix of card P,card Q,D equals
+:: MATRIX13:def 2
+    Segm(A,Sgm P,Sgm Q);
+end;
+
+theorem :: MATRIX13:44
+  Segm(A,{i0},{j0}) = <*<* A*(i0,j0) *>*>;
+
+theorem :: MATRIX13:45
+  i0 < j0 & n0 < m0 implies
+    Segm(A,{i0,j0},{n0,m0}) = ( A*(i0,n0),A*(i0,m0) )][( A*(j0,n0),A*(j0,m0) );
+
+ reserve P,P1,P2,Q,Q1,Q2 for without_zero finite Subset of NAT;
+
+theorem :: MATRIX13:46
+  Segm(A,Seg len A,Seg width A) = A;
+
+theorem :: MATRIX13:47
+  i in Seg card P & Q c= Seg width A implies
+     Line(Segm(A,P,Q),i) = Line(A,Sgm P.i) * Sgm Q;
+
+theorem :: MATRIX13:48
+  i in Seg card P implies Line(Segm(A,P,Seg width A),i) = Line(A,Sgm P.i);
+
+theorem :: MATRIX13:49
+  j in Seg card Q & P c= Seg len A implies
+     Col(Segm(A,P,Q),j) = Col(A,Sgm Q.j) * Sgm P;
+
+theorem :: MATRIX13:50
+  j in Seg card Q implies Col(Segm(A,Seg len A,Q),j) = Col(A,Sgm Q.j);
+
+theorem :: MATRIX13:51
+  Segm(A,Seg len A \ {i},Seg width A) = Del(A,i);
+
+theorem :: MATRIX13:52
+  Segm(M,Seg len M,Seg width M\{i}) = DelCol(M,i);
+
+theorem :: MATRIX13:53
+  Sgm P " X is without_zero finite Subset of NAT;
+
+theorem :: MATRIX13:54
+  X c= P implies Sgm X = Sgm P * Sgm (Sgm P " X);
+
+theorem :: MATRIX13:55
+  [:Sgm P " X,Sgm Q " Y:] c= Indices Segm(A,P,Q);
+
+theorem :: MATRIX13:56
+  P c= P1 & Q c= Q1 & P2 = Sgm P1 " P & Q2 = Sgm Q1 " Q implies
+     [:rng Sgm P2,rng Sgm Q2:] c= Indices Segm(A,P1,Q1) &
+     Segm(Segm(A,P1,Q1),P2,Q2) = Segm(A,P,Q);
+
+theorem :: MATRIX13:57
+  (P = {} iff Q={}) & [:P,Q:] c= Indices Segm(A,P1,Q1) implies
+    ex P2,Q2 st P2 c= P1 & Q2 c= Q1 & P2 = Sgm P1.:P & Q2=Sgm Q1.:Q &
+       card P2=card P & card Q2=card Q &
+       Segm(Segm(A,P1,Q1),P,Q) = Segm(A,P2,Q2);
+
+theorem :: MATRIX13:58
+  for M be Matrix of n,K holds
+    Segm(M,Seg n\{i},Seg n\{j}) = Deleting(M,i,j);
+
+theorem :: MATRIX13:59
+  for F,FQ be FinSequence of D st
+       len F = width A' & FQ = F * Sgm Q & [:P,Q:] c= Indices A' holds
+    RLine(Segm(A',P,Q),i,FQ) = Segm(RLine(A',Sgm P.i,F),P,Q);
+
+theorem :: MATRIX13:60
+  for F be FinSequence of D,i,P st not i in P & [:P,Q:] c= Indices A' holds
+    Segm(A',P,Q) = Segm(RLine(A',i,F),P,Q);
+
+theorem :: MATRIX13:61
+  [:P,Q:] c= Indices A & (card P=0 iff card Q=0) implies
+    Segm(A,P,Q)@ = Segm(A@,Q,P);
+
+theorem :: MATRIX13:62
+  [:P,Q:] c= Indices A & (card Q=0 implies card P = 0) implies
+    Segm(A,P,Q) = Segm(A@,Q,P)@;
+
+theorem :: MATRIX13:63
+  [:P,Q:] c= Indices M implies a * Segm(M,P,Q) = Segm(a * M,P,Q);
+
+definition
+  let D be non empty set,A be Matrix of D;
+  let P,Q be without_zero finite Subset of NAT;
+  assume card P = card Q;
+  func EqSegm(A,P,Q) -> Matrix of card P,D equals
+:: MATRIX13:def 3
+    Segm(A,P,Q);
+end;
+
+theorem :: MATRIX13:64
+  for P,Q,i,j st i in Seg card P & j in Seg card P & card P = card Q holds
+    Delete(EqSegm(M,P,Q),i,j) = EqSegm(M,P\{Sgm P.i},Q\{Sgm Q.j}) &
+      card (P\{Sgm P.i}) = card (Q\{Sgm Q.j});
+
+theorem :: MATRIX13:65
+  for M,P,P1,Q1 st card P1 = card Q1 & P c= P1 & Det EqSegm(M,P1,Q1) <> 0.K
+    ex Q st Q c= Q1 & card P = card Q & Det EqSegm(M,P,Q) <> 0.K;
+
+theorem :: MATRIX13:66
+  for M,P1,Q,Q1 st card P1 = card Q1 & Q c= Q1 & Det EqSegm(M,P1,Q1) <> 0.K
+    ex P st P c= P1 & card P = card Q & Det EqSegm(M,P,Q) <> 0.K;
+
+theorem :: MATRIX13:67
+  card P=card Q implies
+    ([:P,Q:] c= Indices A iff P c= Seg len A & Q c= Seg width A);
+
+theorem :: MATRIX13:68
+  for P,Q,i,j0 st i in Seg n' & j0 in Seg n' & i in P & not j0 in P &
+                  card P = card Q & [:P,Q:] c= Indices M' holds
+    card P = card (P\{i}\/{j0}) & [:P\{i}\/{j0},Q:] c= Indices M' &
+    (Det EqSegm(RLine(M',i,Line(M',j0)),P,Q) =  Det EqSegm(M',P\{i}\/{j0},Q) or
+     Det EqSegm(RLine(M',i,Line(M',j0)),P,Q) = -Det EqSegm(M',P\{i}\/{j0},Q));
+
+theorem :: MATRIX13:69
+  card P = card Q implies ([:P,Q:] c= Indices A iff [:Q,P:] c= Indices A@);
+
+theorem :: MATRIX13:70
+  [:P,Q:] c= Indices M & card P = card Q implies
+    Det EqSegm(M,P,Q) = Det EqSegm(M@,Q,P);
+
+theorem :: MATRIX13:71
+  for M be Matrix of n,K holds Det (a*M) = power(K).(a,n) * Det M;
+
+theorem :: MATRIX13:72
+  [:P,Q:] c= Indices M & card P = card Q implies
+    Det EqSegm(a*M,P,Q) = power(K).(a,card P) * Det EqSegm(M,P,Q);
+
+definition
+  let K be Field;let M be Matrix of K;
+  func the_rank_of M -> Element of NAT means
+:: MATRIX13:def 4
+    (ex P,Q st [:P,Q:] c= Indices M & card P = card Q & card P = it &
+         Det EqSegm(M,P,Q)<>0.K)
+    & for P1,Q1 st [:P1,Q1:] c= Indices M & card P1 = card Q1 &
+         Det EqSegm(M,P1,Q1) <> 0.K holds card P1 <= it;
+end;
+
+theorem :: MATRIX13:73
+  for P,Q st [:P,Q:] c= Indices M & card P = card Q holds
+    card P <= len M & card Q <= width M;
+
+theorem :: MATRIX13:74
+  the_rank_of M <= len M & the_rank_of M <= width M;
+
+theorem :: MATRIX13:75
+  [:rng nt1,rng nt2:] c= Indices M & Det Segm(M,nt1,nt2)<>0.K implies
+    ex P1,P2 st P1 = rng nt1 & P2 = rng nt2 & card P1 = card P2 &
+                card P1 = n & Det EqSegm(M,P1,P2) <>0.K;
+
+theorem :: MATRIX13:76
+  for RANK be Element of NAT holds the_rank_of M = RANK iff
+          (ex rt1,rt2 be Element of RANK-tuples_on NAT st
+              [:rng rt1,rng rt2:] c= Indices M & Det Segm(M,rt1,rt2)<>0.K) &
+          for n,nt1,nt2 st [:rng nt1,rng nt2:] c= Indices M &
+                         Det Segm(M,nt1,nt2)<>0.K holds n <= RANK;
+
+theorem :: MATRIX13:77
+  n = 0 or m = 0 implies the_rank_of Segm(M,nt,mt) = 0;
+
+theorem :: MATRIX13:78
+  [:rng nt,rng mt:] c= Indices M implies
+    the_rank_of M >= the_rank_of Segm(M,nt,mt);
+
+theorem :: MATRIX13:79
+  [:P,Q:] c= Indices M implies the_rank_of M >= the_rank_of Segm(M,P,Q);
+
+theorem :: MATRIX13:80
+   P c= P1 & Q c= Q1 implies
+    the_rank_of Segm(M,P,Q) <= the_rank_of Segm(M,P1,Q1);
+
+theorem :: MATRIX13:81
+  for f,g be Function st rng f c= rng g
+    ex h be Function st dom h = dom f & rng h c= dom g & f = g*h;
+
+theorem :: MATRIX13:82
+  [:rng nt,rng mt:] = Indices M implies
+     the_rank_of M = the_rank_of Segm(M,nt,mt);
+
+theorem :: MATRIX13:83
+  for M be Matrix of n,K holds
+    the_rank_of M = n iff Det M <> 0.K;
+
+theorem :: MATRIX13:84
+  the_rank_of M = the_rank_of (M@);
+
+theorem :: MATRIX13:85
+  for M be Matrix of n,m,K,F be Permutation of Seg n holds
+    the_rank_of M = the_rank_of (M*F);
+
+theorem :: MATRIX13:86
+  a <> 0.K implies the_rank_of M = the_rank_of (a*M);
+
+theorem :: MATRIX13:87
+  for p,pf be FinSequence of K, f be Function st pf = p * f & rng f c= dom p
+    holds (a*p) * f = a * pf;
+
+theorem :: MATRIX13:88
+  for p,pf,q,qf be FinSequence of K, f be Function st
+       pf = p * f & rng f c= dom p & qf = q * f & rng f c= dom q
+    holds (p+q) * f = pf + qf;
+
+theorem :: MATRIX13:89
+  a<>0.K implies the_rank_of M' = the_rank_of RLine(M',i,a*Line(M',i));
+
+theorem :: MATRIX13:90
+  Line(M,i)=(width M) |-> 0.K implies
+    the_rank_of DelLine(M,i) = the_rank_of M;
+
+theorem :: MATRIX13:91
+  for p st len p = width M' holds
+    the_rank_of DelLine(M',i) = the_rank_of RLine(M',i,0.K*p);
+
+theorem :: MATRIX13:92
+  j in Seg len M' & (i=j implies a <> - 1_K) implies
+     the_rank_of M' = the_rank_of RLine(M',i,Line(M',i)+a*Line(M',j));
+
+theorem :: MATRIX13:93
+  j in Seg len M' & j<>i implies
+    the_rank_of DelLine(M',i) = the_rank_of RLine(M',i,a*Line(M',j));
+
+theorem :: MATRIX13:94
+  the_rank_of M > 0 iff ex i,j st [i,j] in Indices M & M*(i,j) <> 0.K;
+
+theorem :: MATRIX13:95
+  the_rank_of M = 0 iff M = 0.(K,len M,width M);
+
+theorem :: MATRIX13:96
+  the_rank_of M = 1 iff (ex i,j st [i,j] in Indices M & M*(i,j) <> 0.K) &
+                         for i0,j0,n0,m0 st i0<>j0 & n0<>m0 &
+                                            [:{i0,j0},{n0,m0}:] c= Indices M
+                           holds Det EqSegm(M,{i0,j0},{n0,m0}) = 0.K;
+
+theorem :: MATRIX13:97
+  the_rank_of M = 1 iff (ex i,j st [i,j] in Indices M & M*(i,j) <> 0.K) &
+                         for i,j,n,m st [:{i,j},{n,m}:] c= Indices M holds
+                           M*(i,n) * (M*(j,m)) = M*(i,m) * (M*(j,n));
+
+theorem :: MATRIX13:98
+  the_rank_of M = 1 iff ex i st i in Seg len M &
+                        (ex j st j in Seg width M & M*(i,j) <> 0.K) &
+                        for k st k in Seg len M ex a st Line(M,k) =a*Line(M,i);
+
+registration let K;
+  cluster diagonal Matrix of K;
+end;
+
+theorem :: MATRIX13:99
+  for M be diagonal Matrix of K
+    for NonZero be set st NonZero ={i:[i,i] in Indices M & M*(i,i)<>0.K}
+      for P,Q st [:P,Q:] c= Indices M & card P = card Q &
+                 Det EqSegm(M,P,Q)<>0.K
+       holds P c= NonZero & Q c= NonZero;
+
+theorem :: MATRIX13:100
+  for M be diagonal Matrix of K
+    for P st [:P,P:] c= Indices M holds Segm(M,P,P) is diagonal;
+
+theorem :: MATRIX13:101
+  for M be diagonal Matrix of K
+    for NonZero be set st NonZero={i:[i,i] in Indices M & M*(i,i)<>0.K}
+      holds the_rank_of M = Card NonZero;
+
+ reserve v,v1,v2,u,w for Vector of n-VectSp_over K,
+        t,t1,t2 for Element of n-tuples_on the carrier of K,
+        F for FinSequence of n-VectSp_over K,
+        f for Function of the carrier of n-VectSp_over K, the carrier of K,
+        L for Linear_Combination of n-VectSp_over K,
+        M,M1 for Matrix of m,n,K;
+
+theorem :: MATRIX13:102
+  the carrier of n -VectSp_over K = n-tuples_on the carrier of K &
+           0.(n -VectSp_over K) = n |-> 0.K &
+        ( t1 = v1 & t2 = v2 implies t1 + t2 = v1 + v2 ) &
+                ( t = v implies a * t = a * v );
+
+definition let K,n;
+  redefine func n -VectSp_over K -> strict VectSp of K;
+end;
+
+registration let K,n;
+  cluster -> Function-like Relation-like Vector of n-VectSp_over K;
+end;
+
+notation let K,m,n;let M be Matrix of m,n,K;
+  synonym lines M for rng M;
+  synonym M is without_repeated_line for M is one-to-one;
+end;
+
+definition
+  let K be Field,m,n;
+  let M be Matrix of m,n,K;
+  redefine func lines M -> Subset of n-VectSp_over K;
+end;
+
+theorem :: MATRIX13:103
+  x in lines M iff ex i st i in Seg m & x = Line(M,i);
+
+theorem :: MATRIX13:104
+  for V be finite Subset of n-VectSp_over K
+    ex M be Matrix of card V,n,K st M is without_repeated_line &
+                                    lines M = V;
+
+definition let K,n;
+  let F be FinSequence of n-VectSp_over K;
+  func FinS2MX F -> Matrix of len F,n,K equals
+:: MATRIX13:def 5
+     F;
+end;
+
+definition let K,m,n;
+  let M be Matrix of m,n,K;
+  func MX2FinS M -> FinSequence of n-VectSp_over K equals
+:: MATRIX13:def 6
+    M;
+end;
+
+theorem :: MATRIX13:105
+  the_rank_of M = m implies M is without_repeated_line;
+
+theorem :: MATRIX13:106
+  i in Seg len M & a = L.(M.i) implies
+    Line(FinS2MX(L (#) MX2FinS M),i) = a * Line(M,i);
+
+theorem :: MATRIX13:107
+  M is without_repeated_line & Carrier L c= lines M & i in Seg n implies
+    (Sum L).i = Sum Col(FinS2MX(L (#) MX2FinS M),i);
+
+theorem :: MATRIX13:108
+  for M,M1 st M is without_repeated_line &
+              for i st i in Seg m holds ex a st Line(M1,i) = a * Line(M,i)
+    holds
+      ex L be Linear_Combination of lines M st L (#) MX2FinS M = M1;
+
+theorem :: MATRIX13:109
+  for M st M is without_repeated_line holds
+    ( for i st i in Seg m holds Line(M,i) <> n |-> 0.K ) &
+    ( for M1 st (for i st i in Seg m ex a st Line(M1,i) = a * Line(M,i))&
+                 for j st j in Seg n holds Sum Col(M1,j) = 0.K holds
+       M1 = 0.(K,m,n) )
+     iff lines M is linearly-independent;
+
+theorem :: MATRIX13:110
+  the_rank_of M = m implies lines M is linearly-independent;
+
+theorem :: MATRIX13:111
+  for M be Diagonal of n,K st the_rank_of M = n holds
+    lines M is Basis of n-VectSp_over K;
+
+definition let K,n;
+  redefine func n -VectSp_over K -> strict finite-dimensional VectSp of K;
+end;
+
+theorem :: MATRIX13:112
+  dim (n-VectSp_over K) = n;
+
+theorem :: MATRIX13:113
+  for M,i,a st for j st j in Seg m holds M*(j,i) = a
+    holds M is without_repeated_line iff
+          Segm(M,Seg len M,Seg width M\{i}) is without_repeated_line;
+
+theorem :: MATRIX13:114
+  for M,i st M is without_repeated_line &
+    lines M is linearly-independent &
+    for j st j in Seg m holds M*(j,i) = 0.K holds
+     lines Segm(M,Seg len M,Seg width M\{i}) is linearly-independent;
+
+theorem :: MATRIX13:115
+  for V be VectSp of K
+    for U be finite Subset of V st U is linearly-independent
+      for u, v be Vector of V st u in U & v in U & u <> v
+        holds U\{u} \/ {u+a*v} is linearly-independent;
+
+theorem :: MATRIX13:116
+  for V be VectSp of K
+    for u, v be Vector of V holds
+      x in Lin {u,v} iff ex a,b st x = a * u + b * v;
+
+theorem :: MATRIX13:117
+  for M st lines M is linearly-independent & M is without_repeated_line
+    for i,j st j in Seg len M & i <> j holds
+      RLine(M,i,Line(M,i) + a*Line(M,j)) is without_repeated_line &
+      lines RLine(M,i,Line(M,i) + a*Line(M,j)) is linearly-independent;
+
+theorem :: MATRIX13:118
+  P c= Seg m implies lines Segm(M,P,Seg n) c= lines M;
+
+theorem :: MATRIX13:119
+  P c= Seg m & lines M is linearly-independent implies
+    lines Segm(M,P,Seg n) is linearly-independent;
+
+theorem :: MATRIX13:120
+  P c= Seg m & M is without_repeated_line implies
+    Segm(M,P,Seg n) is without_repeated_line;
+
+theorem :: MATRIX13:121
+  for M be Matrix of m,n,K holds
+    lines M is linearly-independent &
+          M is without_repeated_line iff the_rank_of M = m;
+
+theorem :: MATRIX13:122
+  for U be Subset of n-VectSp_over K st U c= lines M
+    ex P st P c= Seg m & lines Segm(M,P,Seg n) = U &
+            Segm(M,P,Seg n) is without_repeated_line;
+
+theorem :: MATRIX13:123
+  for RANK be Element of NAT holds the_rank_of M = RANK iff
+         (ex U be finite Subset of n-VectSp_over K st
+              U is linearly-independent & U c= lines M & card U = RANK) &
+          for W be finite Subset of n-VectSp_over K st
+              W is linearly-independent & W c= lines M holds card W <= RANK;

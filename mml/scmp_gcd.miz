@@ -9,10 +9,12 @@ environ
  vocabularies AMI_3, SCMPDS_2, AMI_1, SCMPDS_4, ARYTM_3, NAT_1, INT_1, INT_2,
       ABSVALUE, SCMPDS_3, AMI_2, ARYTM_1, CARD_1, SCMFSA6A, SCMFSA_7, FUNCT_1,
       RELAT_1, SCMPDS_1, FUNCOP_1, FUNCT_4, BOOLE, SCMP_GCD;
- notations XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, INT_1,
+ notations TARSKI,
+      XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1, FUNCT_1, INT_1,
       NAT_1, NAT_D, DOMAIN_1, STRUCT_0, FUNCT_4, AMI_1, AMI_2, AMI_3, SCMPDS_1,
       SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, INT_2, XXREAL_0;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, INT_2, SCMPDS_1, SCMPDS_4;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, INT_2, SCMPDS_1, SCMPDS_4,
+      AMI_3;
  registrations SETFAM_1, RELSET_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, INT_1,
       CARD_3, STRUCT_0, SCMPDS_2, AMI_1;
  requirements NUMERALS, REAL, SUBSET, ARITHM;
@@ -31,56 +33,33 @@ reserve m,n for Element of NAT,
         s,s1,s2 for State of SCMPDS,
         I,J for Program-block;
 
- Lm1:
-  m>0 implies n hcf m = m hcf (n mod m) by NAT_D:28;
-
-canceled;
-
-theorem Th2:
-  for i,j being Integer st i>=0 & j>0 holds
-      i gcd j= j gcd (i mod j)
-proof
-   let i,j be Integer;
-   assume A1: i>=0 & j>0;
-then A2: abs(j)> 0 by ABSVALUE:def 1;
-A3: abs(i) mod abs(j) >= 0 by NAT_1:2;
-    thus i gcd j = abs(i) hcf abs(j) by INT_2:def 3
-         .=abs(j) hcf (abs(i) mod abs(j)) by A2,Lm1
-         .=abs(j) hcf abs(abs(i) mod abs(j)) by A3,ABSVALUE:def 1
-         .=j gcd (abs(i) mod abs(j)) by INT_2:def 3
-         .=j gcd (i mod j) by A1,INT_2:49;
-end;
+canceled 2;
 
 theorem Th3:
   for m being Element of NAT,j being Integer st inspos m=j holds
-     inspos(m+2) = 2*(abs(j) div 2)+4
+     inspos(m+2) = (abs(j))+2
 proof
       let m be Element of NAT,j be Integer;
       assume inspos m=j;
 then A1:   j=il.m by SCMPDS_3:def 2
-       .=2*m+2*1 by AMI_3:def 20
-       .=2*(m+1);
+       .=m by AMI_3:def 20;
 then j >= 0 by NAT_1:2;
-    hence 2*(abs(j) div 2)+4 = 2*((2*(m+1)) div 2)+4 by A1,ABSVALUE:def 1
-     .= 2*m+2*1+4 by NAT_D:20
-     .= 2*(m+2)+2
+    hence (abs(j))+2 = (((m)))+2 by A1,ABSVALUE:def 1
+     .= m+2
+     .= (m+2)
      .= il.(m+2) by AMI_3:def 20
     .= inspos(m+2) by SCMPDS_3:def 2;
 end;
 
 definition let k be Element of NAT;
  func intpos k -> Int_position equals
-  dl.k;
+   dl.k;
  coherence
   proof
-   dl.k in SCM-Data-Loc by AMI_3:def 2;
+    dl.k in SCM-Data-Loc by AMI_3:def 2;
     hence dl.k is Int_position by SCMPDS_2:def 1,def 2;
   end;
 end;
-
- Lm2:
- for n1,n2 be Element of NAT st n1 <> n2 holds intpos n1 <> intpos n2
- by AMI_3:52;
 
 canceled;
 
@@ -88,8 +67,8 @@ theorem Th5:
  for n1,n2 be Element of NAT holds DataLoc(n1,n2) = intpos(n1+n2)
 proof let n1,n2 be Element of NAT;
 A1:   n1+n2 >= 0 by NAT_1:2;
-      thus DataLoc(n1,n2)=2*abs(n1+n2)+1 by SCMPDS_2:def 4
-      .=2*(n1+n2)+1 by A1,ABSVALUE:def 1
+      thus DataLoc(n1,n2)=[1,abs(n1+n2)] by SCMPDS_2:def 4
+      .=[1,n1+n2] by A1,ABSVALUE:def 1
       .=intpos(n1+n2) by AMI_3:def 19;
 end;
 
@@ -100,11 +79,11 @@ proof
     let s be State of SCMPDS,m1,m2 be Element of NAT;
     assume A1: IC s=inspos (m1+m2);
      consider m being Element of NAT such that
-A2:  m = IC s & ICplusConst(s,-m2) = abs(m-2+2*(-m2))+2 by SCMPDS_2:def 20;
+A2:  m = IC s & ICplusConst(s,-m2) = abs(m+(-m2)) by SCMPDS_2:def 20;
 A3:  m=il.(m1+m2) by A1,A2,SCMPDS_3:def 2
-     .=2*(m1+m2) +2 by AMI_3:def 20;
-     2*m1 >= 0 by NAT_1:2;
-     hence ICplusConst(s,-m2) =2*m1+2 by A2,A3,ABSVALUE:def 1
+     .=(m1+m2) by AMI_3:def 20;
+      m1 >= 0 by NAT_1:2;
+     hence ICplusConst(s,-m2) =m1 by A2,A3,ABSVALUE:def 1
      .=il.m1 by AMI_3:def 20
      .=inspos m1 by SCMPDS_3:def 2;
 end;
@@ -113,17 +92,17 @@ end;
 
 definition
  func GBP -> Int_position equals
-  intpos 0;
+   intpos 0;
  coherence;
 
 :: SBP:Stack Base(bottom) Pointer
  func SBP -> Int_position equals
-  intpos 1;
+   intpos 1;
  coherence;
 end;
 
 theorem Th7:
-  GBP <> SBP by Lm2;
+  GBP <> SBP by AMI_3:52;
 
 theorem Th8:
    card (I ';' i)= card I + 1
@@ -152,7 +131,7 @@ A1: inspos 0 in dom Load i by SCMPDS_5:2;
      .=(I ';' Load i).(inspos 0 + card I) by SCMPDS_4:def 5
      .=(Load i).inspos 0 by A1,SCMPDS_4:38
      .=i by SCMPDS_5:4;
-       card (I ';' i) = card I+1 by Th8;
+        card (I ';' i) = card I+1 by Th8;
     then card I < card (I ';' i) by XREAL_1:31;
     hence thesis by SCMPDS_4:1;
 end;
@@ -160,7 +139,7 @@ end;
 theorem Th11:
    (I ';' i ';' J).inspos card I =i
 proof
-      inspos card I in dom (I ';' i) by Th10;
+       inspos card I in dom (I ';' i) by Th10;
    hence (I ';' i ';' J ).inspos card I
       =(I ';' i).inspos card I by SCMPDS_4:37
       .=i by Th10;
@@ -177,7 +156,7 @@ begin :: The Construction of Recursive Euclide Algorithm
 definition
  func GCD-Algorithm -> Program-block equals
   ::Def04
-     (((GBP:=0) ';' (SBP := 7) ';' saveIC(SBP,RetIC) ';'
+      (((GBP:=0) ';' (SBP := 7) ';' saveIC(SBP,RetIC) ';'
      goto 2 ';' halt SCMPDS ) ';' (SBP,3)<=0_goto 9 ';'
      ((SBP,6):=(SBP,3)) ';' Divide(SBP,2,SBP,3) ';'
      ((SBP,7):=(SBP,3)) ';' ((SBP,4+RetSP):=(GBP,1))) ';'
@@ -232,7 +211,7 @@ A2: card GCD2=card (GCD1 ';' i05 ';' i06 ';' i07 ';' i08 )+ 1 by Th8
 end;
 
 theorem
-     n < 15 iff inspos n in dom GCD-Algorithm by Th12,SCMPDS_4:1;
+      n < 15 iff inspos n in dom GCD-Algorithm by Th12,SCMPDS_4:1;
 
 theorem Th14:
     GCD-Algorithm.inspos 0=GBP:=0 &
@@ -308,7 +287,7 @@ then GCD-Algorithm=i00 ';' J2 by SCMPDS_4:52;
 
     hence GCD-Algorithm.inspos 0=i00 by SCMPDS_6:16;
 A26: card Load i00=1 by SCMPDS_5:6;
-       GCD-Algorithm=Load i00 ';' i01 ';' J3 by A25,SCMPDS_4:43;
+        GCD-Algorithm=Load i00 ';' i01 ';' J3 by A25,SCMPDS_4:43;
    hence GCD-Algorithm.inspos 1=i01 by A26,Th11;
     thus GCD-Algorithm.inspos 2=i02 by A1,A24,Th11;
     thus GCD-Algorithm.inspos 3=i03 by A2,A23,Th11;
@@ -321,12 +300,12 @@ A26: card Load i00=1 by SCMPDS_5:6;
     thus GCD-Algorithm.inspos 10=i10 by A9,A16,Th11;
     thus GCD-Algorithm.inspos 11=i11 by A10,A15,Th11;
     thus GCD-Algorithm.inspos 12=i12 by A11,A14,Th11;
-       GCD-Algorithm=I14 ';' Load i14 by SCMPDS_4:def 5;
+        GCD-Algorithm=I14 ';' Load i14 by SCMPDS_4:def 5;
     hence GCD-Algorithm.inspos 13=i13 by A12,Th11;
     thus GCD-Algorithm.inspos 14=i14 by A13,Th10;
 end;
 
-Lm3:
+Lm1:
    GCD-Algorithm c= s implies
     s.inspos 0=i00 & s.inspos 1=i01 &
     s.inspos 2=i02 & s.inspos 3=i03 &
@@ -339,35 +318,35 @@ Lm3:
 proof
   set GA=GCD-Algorithm;
   assume A1: GA c= s;
-       inspos 0 in dom GA by Th12,SCMPDS_4:1;
+        inspos 0 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 0=i00 by A1,Th14,GRFUNC_1:8;
-       inspos 1 in dom GA by Th12,SCMPDS_4:1;
+        inspos 1 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 1=i01 by A1,Th14,GRFUNC_1:8;
-       inspos 2 in dom GA by Th12,SCMPDS_4:1;
+        inspos 2 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 2=i02 by A1,Th14,GRFUNC_1:8;
-       inspos 3 in dom GA by Th12,SCMPDS_4:1;
+        inspos 3 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 3=i03 by A1,Th14,GRFUNC_1:8;
-       inspos 4 in dom GA by Th12,SCMPDS_4:1;
+        inspos 4 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 4=i04 by A1,Th14,GRFUNC_1:8;
-       inspos 5 in dom GA by Th12,SCMPDS_4:1;
+        inspos 5 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 5=i05 by A1,Th14,GRFUNC_1:8;
-       inspos 6 in dom GA by Th12,SCMPDS_4:1;
+        inspos 6 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 6=i06 by A1,Th14,GRFUNC_1:8;
-       inspos 7 in dom GA by Th12,SCMPDS_4:1;
+        inspos 7 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 7=i07 by A1,Th14,GRFUNC_1:8;
-       inspos 8 in dom GA by Th12,SCMPDS_4:1;
+        inspos 8 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 8=i08 by A1,Th14,GRFUNC_1:8;
-       inspos 9 in dom GA by Th12,SCMPDS_4:1;
+        inspos 9 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 9=i09 by A1,Th14,GRFUNC_1:8;
-       inspos 10 in dom GA by Th12,SCMPDS_4:1;
+        inspos 10 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 10=i10 by A1,Th14,GRFUNC_1:8;
-       inspos 11 in dom GA by Th12,SCMPDS_4:1;
+        inspos 11 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 11=i11 by A1,Th14,GRFUNC_1:8;
-       inspos 12 in dom GA by Th12,SCMPDS_4:1;
+        inspos 12 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 12=i12 by A1,Th14,GRFUNC_1:8;
-       inspos 13 in dom GA by Th12,SCMPDS_4:1;
+        inspos 13 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 13=i13 by A1,Th14,GRFUNC_1:8;
-       inspos 14 in dom GA by Th12,SCMPDS_4:1;
+        inspos 14 in dom GA by Th12,SCMPDS_4:1;
   hence s.inspos 14=i14 by A1,Th14,GRFUNC_1:8;
 end;
 
@@ -387,82 +366,80 @@ proof
 A1:  Initialized GA c= s;
 then A2:  GA c= s by SCMPDS_4:57;
 A3:  IC s=inspos 0 by A1,SCMPDS_5:18;
-
-then A4:  CurInstr s =i00 by A2,Lm3;
-A5:  Cs.(0 + 1) = Following Cs.0 by AMI_1:def 19
+A4:  Cs.(0 + 1) = Following Cs.0 by AMI_1:def 19
      .= Following s by AMI_1:def 19
-     .= Exec(i00,s) by A4;
+     .= Exec(i00,s) by A2,A3,Lm1;
 
-A6:  IC Cs.1= Next IC s by A5,SCMPDS_2:57
+then A5:  IC Cs.1= Next IC s by SCMPDS_2:57
      .= inspos (0+1) by A3,SCMPDS_4:70;
-then A7:  CurInstr Cs.1=s.inspos 1 by AMI_1:54
-     .=i01 by A2,Lm3;
-A8:  Cs.(1 + 1) = Following Cs.1 by AMI_1:def 19
-     .= Exec(i01,Cs.1) by A7;
-A9:  Cs.1.GBP=0 by A5,SCMPDS_2:57;
-        intpos 9 <> GBP by Lm2;
-then A10:  Cs.1.intpos 9=s.intpos 9 by A5,SCMPDS_2:57;
-        intpos 10 <> GBP by Lm2;
-then A11:  Cs.1.intpos 10 =s.intpos 10 by A5,SCMPDS_2:57;
+then A6:  CurInstr Cs.1=s.inspos 1 by AMI_1:54
+     .=i01 by A2,Lm1;
+A7:  Cs.(1 + 1) = Following Cs.1 by AMI_1:def 19
+     .= Exec(i01,Cs.1) by A6;
+A8:  Cs.1.GBP=0 by A4,SCMPDS_2:57;
+         intpos 9 <> GBP by AMI_3:52;
+then A9:  Cs.1.intpos 9=s.intpos 9 by A4,SCMPDS_2:57;
+         intpos 10 <> GBP by AMI_3:52;
+then A10:  Cs.1.intpos 10 =s.intpos 10 by A4,SCMPDS_2:57;
 
-A12:  IC Cs.2= Next IC Cs.1 by A8,SCMPDS_2:57
-     .= inspos (1+1) by A6,SCMPDS_4:70;
-then A13:  CurInstr Cs.2=s.inspos 2 by AMI_1:54
-     .=i02 by A2,Lm3;
-A14:  Cs.(2 + 1) = Following Cs.2 by AMI_1:def 19
-     .= Exec(i02,Cs.2) by A13;
-A15:  Cs.2.GBP=0 by A8,A9,Th7,SCMPDS_2:57;
-A16:  Cs.2.SBP=7 by A8,SCMPDS_2:57;
-        intpos 9 <> SBP by Lm2;
-then A17:  Cs.2.intpos 9=s.intpos 9 by A8,A10,SCMPDS_2:57;
-        intpos 10 <> SBP by Lm2;
-then A18:  Cs.2.intpos 10 =s.intpos 10 by A8,A11,SCMPDS_2:57;
+A11:  IC Cs.2= Next IC Cs.1 by A7,SCMPDS_2:57
+     .= inspos (1+1) by A5,SCMPDS_4:70;
+then A12:  CurInstr Cs.2=s.inspos 2 by AMI_1:54
+     .=i02 by A2,Lm1;
+A13:  Cs.(2 + 1) = Following Cs.2 by AMI_1:def 19
+     .= Exec(i02,Cs.2) by A12;
+A14:  Cs.2.GBP=0 by A7,A8,Th7,SCMPDS_2:57;
+A15:  Cs.2.SBP=7 by A7,SCMPDS_2:57;
+         intpos 9 <> SBP by AMI_3:52;
+then A16:  Cs.2.intpos 9=s.intpos 9 by A7,A9,SCMPDS_2:57;
+         intpos 10 <> SBP by AMI_3:52;
+then A17:  Cs.2.intpos 10 =s.intpos 10 by A7,A10,SCMPDS_2:57;
 
-A19:  IC Cs.3= Next IC Cs.2 by A14,SCMPDS_2:71
-     .= inspos (2+1) by A12,SCMPDS_4:70;
-then A20:  CurInstr Cs.3=s.inspos 3 by AMI_1:54
-     .=i03 by A2,Lm3;
-A21:  Cs.(3 + 1) = Following Cs.3 by AMI_1:def 19
-     .= Exec(i03,Cs.3) by A20;
-A22:  DataLoc(Cs.2.SBP,RetIC)=intpos(7+1) by A16,Th5,SCMPDS_1:def 23;
-        intpos 0 <> intpos 8 by Lm2;
-then A23:  Cs.3.GBP=0 by A14,A15,A22,SCMPDS_2:71;
-        intpos 1 <> intpos 8 by Lm2;
-then A24:  Cs.3.SBP=7 by A14,A16,A22,SCMPDS_2:71;
-A25:  Cs.3.intpos 8=inspos 2 by A12,A14,A22,SCMPDS_2:71;
-        intpos 9 <> DataLoc(Cs.2.SBP,RetIC) by A22,Lm2;
-then A26:  Cs.3.intpos 9=s.intpos 9 by A14,A17,SCMPDS_2:71;
-        intpos 10 <> DataLoc(Cs.2.SBP,RetIC) by A22,Lm2;
-then A27:  Cs.3.intpos 10 =s.intpos 10 by A14,A18,SCMPDS_2:71;
+A18:  IC Cs.3= Next IC Cs.2 by A13,SCMPDS_2:71
+     .= inspos (2+1) by A11,SCMPDS_4:70;
+then A19:  CurInstr Cs.3=s.inspos 3 by AMI_1:54
+     .=i03 by A2,Lm1;
+A20:  Cs.(3 + 1) = Following Cs.3 by AMI_1:def 19
+     .= Exec(i03,Cs.3) by A19;
+A21:  DataLoc(Cs.2.SBP,RetIC)=intpos(7+1) by A15,Th5,SCMPDS_1:def 23;
+         intpos 0 <> intpos 8 by AMI_3:52;
+then A22:  Cs.3.GBP=0 by A13,A14,A21,SCMPDS_2:71;
+         intpos 1 <> intpos 8 by AMI_3:52;
+then A23:  Cs.3.SBP=7 by A13,A15,A21,SCMPDS_2:71;
+A24:  Cs.3.intpos 8=inspos 2 by A11,A13,A21,SCMPDS_2:71;
+         intpos 9 <> DataLoc(Cs.2.SBP,RetIC) by A21,AMI_3:52;
+then A25:  Cs.3.intpos 9=s.intpos 9 by A13,A16,SCMPDS_2:71;
+         intpos 10 <> DataLoc(Cs.2.SBP,RetIC) by A21,AMI_3:52;
+then A26:  Cs.3.intpos 10 =s.intpos 10 by A13,A17,SCMPDS_2:71;
 
    thus
-           IC Cs.4= ICplusConst(Cs.3,2) by A21,SCMPDS_2:66
-        .= inspos (3+2) by A19,SCMPDS_6:23
+            IC Cs.4= ICplusConst(Cs.3,2) by A20,SCMPDS_2:66
+        .= inspos (3+2) by A18,SCMPDS_6:23
         .= inspos 5;
-   thus Cs.4.GBP=0 by A21,A23,SCMPDS_2:66;
-   thus Cs.4.SBP = 7 by A21,A24,SCMPDS_2:66;
-  thus Cs.4.intpos(7+RetIC) = inspos 2 by A21,A25,SCMPDS_1:def 23,SCMPDS_2:66;
-   thus Cs.4.intpos 9=s.intpos 9 by A21,A26,SCMPDS_2:66;
-   thus Cs.4.intpos 10=s.intpos 10 by A21,A27,SCMPDS_2:66;
+   thus Cs.4.GBP=0 by A20,A22,SCMPDS_2:66;
+   thus Cs.4.SBP = 7 by A20,A23,SCMPDS_2:66;
+  thus Cs.4.intpos(7+RetIC) = inspos 2 by A20,A24,SCMPDS_1:def 23,SCMPDS_2:66;
+   thus Cs.4.intpos 9=s.intpos 9 by A20,A25,SCMPDS_2:66;
+   thus Cs.4.intpos 10=s.intpos 10 by A20,A26,SCMPDS_2:66;
 end;
 
-Lm4:
+Lm2:
      n>0 implies GBP <> intpos(m+n)
 proof
      assume A1: n>0;
-         n<=m+n by NAT_1:11;
-    hence GBP <> intpos(m+n) by A1,Lm2;
+          n<=m+n by NAT_1:11;
+    hence GBP <> intpos(m+n) by A1,AMI_3:52;
 end;
 
-Lm5:
+Lm3:
      n>1 implies SBP <> intpos(m+n)
 proof
      assume A1: n>1;
-         n<=m+n by NAT_1:11;
-    hence SBP <> intpos(m+n) by A1,Lm2;
+          n<=m+n by NAT_1:11;
+    hence SBP <> intpos(m+n) by A1,AMI_3:52;
 end;
 
-Lm6:
+Lm4:
   GCD-Algorithm c= s & IC s = inspos 5 &
    n=s.SBP & s.GBP=0 & s.DataLoc(s.SBP,3) > 0
   implies
@@ -484,152 +461,150 @@ proof
      assume A3: n=s.SBP;
      assume A4: s.GBP=0;
      assume A5: y > 0;
-
-A6:  CurInstr s =i05 by  A2,A1,Lm3;
-A7:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
+A6:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
     .= Following s by AMI_1:def 19
-    .= Exec(i05,s) by A6;
+    .= Exec(i05,s) by A1,A2,Lm1;
 
-A8:  IC Cs.1= Next IC s by A5,A7,SCMPDS_2:68
+then A7:  IC Cs.1= Next IC s by A5,SCMPDS_2:68
      .= inspos (5+1) by A2,SCMPDS_4:70;
-then A9:  CurInstr Cs.1 =s.inspos 6 by AMI_1:54
-     .=i06 by A1,Lm3;
-A10:  Cs.(1+1) = Following Cs.1 by AMI_1:def 19
-     .= Exec(i06,Cs.1) by A9;
-A11:  Cs.1.SBP=n by A3,A7,SCMPDS_2:68;
-A12:  Cs.1.GBP=0 by A4,A7,SCMPDS_2:68;
-A13:  Cs.1.intpos(n+3) = Cs.1.DataLoc(n,3) by Th5
-     .=y by A3,A7,SCMPDS_2:68;
-A14:  Cs.1.intpos(n+2) = Cs.1.DataLoc(n,2) by Th5
-     .=x by A3,A7,SCMPDS_2:68;
+then A8:  CurInstr Cs.1 =s.inspos 6 by AMI_1:54
+     .=i06 by A1,Lm1;
+A9:  Cs.(1+1) = Following Cs.1 by AMI_1:def 19
+     .= Exec(i06,Cs.1) by A8;
+A10:  Cs.1.SBP=n by A3,A6,SCMPDS_2:68;
+A11:  Cs.1.GBP=0 by A4,A6,SCMPDS_2:68;
+A12:  Cs.1.intpos(n+3) = Cs.1.DataLoc(n,3) by Th5
+     .=y by A3,A6,SCMPDS_2:68;
+A13:  Cs.1.intpos(n+2) = Cs.1.DataLoc(n,2) by Th5
+     .=x by A3,A6,SCMPDS_2:68;
 
-A15:  IC Cs.2= Next IC Cs.1 by A10,SCMPDS_2:59
-     .= inspos (6+1) by A8,SCMPDS_4:70;
-then A16:  CurInstr Cs.2 =s.inspos 7 by AMI_1:54
-     .=i07 by A1,Lm3;
-A17:  Cs.(2+1) = Following Cs.2 by AMI_1:def 19
-     .= Exec(i07,Cs.2) by A16;
-A18:  DataLoc(Cs.1.SBP,6)=intpos(n+6) by A11,Th5;
-     then SBP <> DataLoc(Cs.1.SBP,6) by Lm5;
-then A19:  Cs.2.SBP=n by A10,A11,SCMPDS_2:59;
-        GBP <> DataLoc(Cs.1.SBP,6) by A18,Lm4;
-then A20:  Cs.2.GBP=0 by A10,A12,SCMPDS_2:59;
-A21:  Cs.2.intpos(n+6)=Cs.1.DataLoc(n,3) by A10,A11,A18,SCMPDS_2:59
-     .= y by A13,Th5;
-        n+3<>n+6;
-     then intpos(n+3) <> DataLoc(Cs.1.SBP,6) by A18,Lm2;
-then A22:  Cs.2.intpos(n+3)=y by A10,A13,SCMPDS_2:59;
-        n+2<>n+6;
-     then intpos(n+2) <> DataLoc(Cs.1.SBP,6) by A18,Lm2;
-then A23:  Cs.2.intpos(n+2)=x by A10,A14,SCMPDS_2:59;
+A14:  IC Cs.2= Next IC Cs.1 by A9,SCMPDS_2:59
+     .= inspos (6+1) by A7,SCMPDS_4:70;
+then A15:  CurInstr Cs.2 =s.inspos 7 by AMI_1:54
+     .=i07 by A1,Lm1;
+A16:  Cs.(2+1) = Following Cs.2 by AMI_1:def 19
+     .= Exec(i07,Cs.2) by A15;
+A17:  DataLoc(Cs.1.SBP,6)=intpos(n+6) by A10,Th5;
+     then SBP <> DataLoc(Cs.1.SBP,6) by Lm3;
+then A18:  Cs.2.SBP=n by A9,A10,SCMPDS_2:59;
+         GBP <> DataLoc(Cs.1.SBP,6) by A17,Lm2;
+then A19:  Cs.2.GBP=0 by A9,A11,SCMPDS_2:59;
+A20:  Cs.2.intpos(n+6)=Cs.1.DataLoc(n,3) by A9,A10,A17,SCMPDS_2:59
+     .= y by A12,Th5;
+         n+3<>n+6;
+     then intpos(n+3) <> DataLoc(Cs.1.SBP,6) by A17,AMI_3:52;
+then A21:  Cs.2.intpos(n+3)=y by A9,A12,SCMPDS_2:59;
+         n+2<>n+6;
+     then intpos(n+2) <> DataLoc(Cs.1.SBP,6) by A17,AMI_3:52;
+then A22:  Cs.2.intpos(n+2)=x by A9,A13,SCMPDS_2:59;
 
-A24:  IC Cs.3= Next IC Cs.2 by A17,SCMPDS_2:64
-     .= inspos (7+1) by A15,SCMPDS_4:70;
-then A25:  CurInstr Cs.3 =s.inspos 8 by AMI_1:54
-     .=i08 by A1,Lm3;
+A23:  IC Cs.3= Next IC Cs.2 by A16,SCMPDS_2:64
+     .= inspos (7+1) by A14,SCMPDS_4:70;
+then A24:  CurInstr Cs.3 =s.inspos 8 by AMI_1:54
+     .=i08 by A1,Lm1;
 
-A26:  Cs.(3+1) = Following Cs.3 by AMI_1:def 19
-     .= Exec(i08,Cs.3) by A25;
-A27:  DataLoc(Cs.2.SBP,2)=intpos(n+2) by A19,Th5;
-then A28:  SBP <> DataLoc(Cs.2.SBP,2) by Lm5;
-A29:  DataLoc(Cs.2.SBP,3)=intpos(n+3) by A19,Th5;
-     then SBP <> DataLoc(Cs.2.SBP,3) by Lm5;
-then A30:  Cs.3.SBP=n by A17,A19,A28,SCMPDS_2:64;
-A31:  GBP <> DataLoc(Cs.2.SBP,2) by A27,Lm4;
-        GBP <> DataLoc(Cs.2.SBP,3) by A29,Lm4;
-then A32:  Cs.3.GBP=0 by A17,A20,A31,SCMPDS_2:64;
-A33:  Cs.3.intpos(n+3) = x mod y by A17,A22,A23,A27,A29,SCMPDS_2:64;
-         n+6<>n+2;
-then A34:   intpos(n+6) <> DataLoc(Cs.2.SBP,2) by A27,Lm2;
-         n+6<>n+3;
-      then intpos(n+6) <> DataLoc(Cs.2.SBP,3) by A29,Lm2;
-then A35:   Cs.3.intpos(n+6) =y by A17,A21,A34,SCMPDS_2:64;
+A25:  Cs.(3+1) = Following Cs.3 by AMI_1:def 19
+     .= Exec(i08,Cs.3) by A24;
+A26:  DataLoc(Cs.2.SBP,2)=intpos(n+2) by A18,Th5;
+then A27:  SBP <> DataLoc(Cs.2.SBP,2) by Lm3;
+A28:  DataLoc(Cs.2.SBP,3)=intpos(n+3) by A18,Th5;
+     then SBP <> DataLoc(Cs.2.SBP,3) by Lm3;
+then A29:  Cs.3.SBP=n by A16,A18,A27,SCMPDS_2:64;
+A30:  GBP <> DataLoc(Cs.2.SBP,2) by A26,Lm2;
+         GBP <> DataLoc(Cs.2.SBP,3) by A28,Lm2;
+then A31:  Cs.3.GBP=0 by A16,A19,A30,SCMPDS_2:64;
+A32:  Cs.3.intpos(n+3) = x mod y by A16,A21,A22,A26,A28,SCMPDS_2:64;
+          n+6<>n+2;
+then A33:   intpos(n+6) <> DataLoc(Cs.2.SBP,2) by A26,AMI_3:52;
+          n+6<>n+3;
+      then intpos(n+6) <> DataLoc(Cs.2.SBP,3) by A28,AMI_3:52;
+then A34:   Cs.3.intpos(n+6) =y by A16,A20,A33,SCMPDS_2:64;
 
-A36:   IC Cs.4= Next IC Cs.3 by A26,SCMPDS_2:59
-      .= inspos (8+1) by A24,SCMPDS_4:70;
-then A37:   CurInstr Cs.4 =s.inspos 9 by AMI_1:54
-     .=i09 by A1,Lm3;
-A38:   Cs.(4+1) = Following Cs.4 by AMI_1:def 19
-        .= Exec(i09,Cs.4) by A37;
-A39:   DataLoc(Cs.3.SBP,7)=intpos(n+7) by A30,Th5;
-      then A40: SBP <> DataLoc(Cs.3.SBP,7) by Lm5;
-then A41:   Cs.4.SBP=n by A26,A30,SCMPDS_2:59;
-         GBP <> DataLoc(Cs.3.SBP,7) by A39,Lm4;
-then A42:   Cs.4.GBP=0 by A26,A32,SCMPDS_2:59;
-A43:   Cs.4.intpos(n+7)=Cs.3.DataLoc(n,3) by A26,A30,A39,SCMPDS_2:59
-      .= x mod y by A33,Th5;
-         n+6<>n+7;
-      then intpos(n+6) <> DataLoc(Cs.3.SBP,7) by A39,Lm2;
-then A44:   Cs.4.intpos(n+6) =y by A26,A35,SCMPDS_2:59;
+A35:   IC Cs.4= Next IC Cs.3 by A25,SCMPDS_2:59
+      .= inspos (8+1) by A23,SCMPDS_4:70;
+then A36:   CurInstr Cs.4 =s.inspos 9 by AMI_1:54
+     .=i09 by A1,Lm1;
+A37:   Cs.(4+1) = Following Cs.4 by AMI_1:def 19
+        .= Exec(i09,Cs.4) by A36;
+A38:   DataLoc(Cs.3.SBP,7)=intpos(n+7) by A29,Th5;
+      then A39: SBP <> DataLoc(Cs.3.SBP,7) by Lm3;
+then A40:   Cs.4.SBP=n by A25,A29,SCMPDS_2:59;
+          GBP <> DataLoc(Cs.3.SBP,7) by A38,Lm2;
+then A41:   Cs.4.GBP=0 by A25,A31,SCMPDS_2:59;
+A42:   Cs.4.intpos(n+7)=Cs.3.DataLoc(n,3) by A25,A29,A38,SCMPDS_2:59
+      .= x mod y by A32,Th5;
+          n+6<>n+7;
+      then intpos(n+6) <> DataLoc(Cs.3.SBP,7) by A38,AMI_3:52;
+then A43:   Cs.4.intpos(n+6) =y by A25,A34,SCMPDS_2:59;
 
-A45:   IC Cs.5= Next IC Cs.4 by A38,SCMPDS_2:59
-      .= inspos (9+1) by A36,SCMPDS_4:70;
-then A46:   CurInstr Cs.5 =s.inspos 10 by AMI_1:54
-      .=i10 by A1,Lm3;
-A47:   Cs.(5+1) = Following Cs.5 by AMI_1:def 19
-      .= Exec(i10,Cs.5) by A46;
-A48:   DataLoc(Cs.4.SBP,4+RetSP)=intpos(n+(4+0)) by A41,Th5,SCMPDS_1:def 22;
-      then SBP <> DataLoc(Cs.4.SBP,4+RetSP) by Lm5;
-then A49:   Cs.5.SBP=n by A38,A41,SCMPDS_2:59;
-         GBP <> DataLoc(Cs.4.SBP,4+RetSP) by A48,Lm4;
-then A50:   Cs.5.GBP=0 by A38,A42,SCMPDS_2:59;
-         n+7<>n+4;
-      then intpos(n+7) <> DataLoc(Cs.4.SBP,4+RetSP) by A48,Lm2;
-then A51:   Cs.5.intpos(n+7) =x mod y by A38,A43,SCMPDS_2:59;
-         n+6<>n+4;
-      then intpos(n+6) <> DataLoc(Cs.4.SBP,4+RetSP) by A48,Lm2;
-then A52:   Cs.5.intpos(n+6) =y by A38,A44,SCMPDS_2:59;
-A53:   Cs.5.intpos(n+4) =Cs.4.DataLoc(0,1) by A38,A42,A48,SCMPDS_2:59
+A44:   IC Cs.5= Next IC Cs.4 by A37,SCMPDS_2:59
+      .= inspos (9+1) by A35,SCMPDS_4:70;
+then A45:   CurInstr Cs.5 =s.inspos 10 by AMI_1:54
+      .=i10 by A1,Lm1;
+A46:   Cs.(5+1) = Following Cs.5 by AMI_1:def 19
+      .= Exec(i10,Cs.5) by A45;
+A47:   DataLoc(Cs.4.SBP,4+RetSP)=intpos(n+(4+0)) by A40,Th5,SCMPDS_1:def 22;
+      then SBP <> DataLoc(Cs.4.SBP,4+RetSP) by Lm3;
+then A48:   Cs.5.SBP=n by A37,A40,SCMPDS_2:59;
+          GBP <> DataLoc(Cs.4.SBP,4+RetSP) by A47,Lm2;
+then A49:   Cs.5.GBP=0 by A37,A41,SCMPDS_2:59;
+          n+7<>n+4;
+      then intpos(n+7) <> DataLoc(Cs.4.SBP,4+RetSP) by A47,AMI_3:52;
+then A50:   Cs.5.intpos(n+7) =x mod y by A37,A42,SCMPDS_2:59;
+          n+6<>n+4;
+      then intpos(n+6) <> DataLoc(Cs.4.SBP,4+RetSP) by A47,AMI_3:52;
+then A51:   Cs.5.intpos(n+6) =y by A37,A43,SCMPDS_2:59;
+A52:   Cs.5.intpos(n+4) =Cs.4.DataLoc(0,1) by A37,A41,A47,SCMPDS_2:59
       .=Cs.4.intpos(0+1) by Th5
-      .=n by A26,A30,A40,SCMPDS_2:59;
+      .=n by A25,A29,A39,SCMPDS_2:59;
 
-A54:   IC Cs.6= Next IC Cs.5 by A47,SCMPDS_2:60
-      .= inspos (10+1) by A45,SCMPDS_4:70;
-then A55:   CurInstr Cs.6 =s.inspos 11 by AMI_1:54
-     .=i11 by A1,Lm3;
-A56:   Cs.(6+1) = Following Cs.6 by AMI_1:def 19
-      .= Exec(i11,Cs.6) by A55;
-A57:   DataLoc(Cs.5.GBP,1)=intpos(0+1) by A50,Th5;
-then A58:   Cs.6.SBP=n+4 by A47,A49,SCMPDS_2:60;
-A59:   Cs.6.GBP=0 by A47,A50,A57,Th7,SCMPDS_2:60;
-         n+7 <> 1 by NAT_1:11;
-      then intpos(n+7) <> DataLoc(Cs.5.GBP,1) by A57,Lm2;
-then A60:   Cs.6.intpos(n+7) =x mod y by A47,A51,SCMPDS_2:60;
-         n+6 <> 1 by NAT_1:11;
-      then intpos(n+6) <> DataLoc(Cs.5.GBP,1) by A57,Lm2;
-then A61:   Cs.6.intpos(n+6) =y by A47,A52,SCMPDS_2:60;
-         n+4 <> 1 by NAT_1:11;
-      then intpos(n+4) <> DataLoc(Cs.5.GBP,1) by A57,Lm2;
-then A62:   Cs.6.intpos(n+4) =n by A47,A53,SCMPDS_2:60;
+A53:   IC Cs.6= Next IC Cs.5 by A46,SCMPDS_2:60
+      .= inspos (10+1) by A44,SCMPDS_4:70;
+then A54:   CurInstr Cs.6 =s.inspos 11 by AMI_1:54
+     .=i11 by A1,Lm1;
+A55:   Cs.(6+1) = Following Cs.6 by AMI_1:def 19
+      .= Exec(i11,Cs.6) by A54;
+A56:   DataLoc(Cs.5.GBP,1)=intpos(0+1) by A49,Th5;
+then A57:   Cs.6.SBP=n+4 by A46,A48,SCMPDS_2:60;
+A58:   Cs.6.GBP=0 by A46,A49,A56,Th7,SCMPDS_2:60;
+          n+7 <> 1 by NAT_1:11;
+      then intpos(n+7) <> DataLoc(Cs.5.GBP,1) by A56,AMI_3:52;
+then A59:   Cs.6.intpos(n+7) =x mod y by A46,A50,SCMPDS_2:60;
+          n+6 <> 1 by NAT_1:11;
+      then intpos(n+6) <> DataLoc(Cs.5.GBP,1) by A56,AMI_3:52;
+then A60:   Cs.6.intpos(n+6) =y by A46,A51,SCMPDS_2:60;
+          n+4 <> 1 by NAT_1:11;
+      then intpos(n+4) <> DataLoc(Cs.5.GBP,1) by A56,AMI_3:52;
+then A61:   Cs.6.intpos(n+4) =n by A46,A52,SCMPDS_2:60;
 
       thus
-      IC Cs.7= Next IC Cs.6 by A56,SCMPDS_2:71
-      .= inspos (11+1) by A54,SCMPDS_4:70
+       IC Cs.7= Next IC Cs.6 by A55,SCMPDS_2:71
+      .= inspos (11+1) by A53,SCMPDS_4:70
       .= inspos (5+7);
-then A63:   CurInstr Cs.7 =s.inspos 12 by AMI_1:54
-      .=i12 by A1,Lm3;
+then A62:   CurInstr Cs.7 =s.inspos 12 by AMI_1:54
+      .=i12 by A1,Lm1;
   thus Cs.8=Cs.(7+1)
        .= Following Cs.7 by AMI_1:def 19
-      .= Exec(i12,Cs.7) by A63;
-A64:   DataLoc(Cs.6.SBP,RetIC)=intpos(n+4+1) by A58,Th5,SCMPDS_1:def 23
+      .= Exec(i12,Cs.7) by A62;
+A63:   DataLoc(Cs.6.SBP,RetIC)=intpos(n+4+1) by A57,Th5,SCMPDS_1:def 23
       .=intpos(n+(4+1));
-      then SBP <> DataLoc(Cs.6.SBP,RetIC) by Lm5;
-   hence Cs.7.SBP=n+4 by A56,A58,SCMPDS_2:71;
-         GBP <> DataLoc(Cs.6.SBP,RetIC) by A64,Lm4;
-   hence Cs.7.GBP=0 by A56,A59,SCMPDS_2:71;
-         n+7<>n+5;
-      then intpos(n+7) <> DataLoc(Cs.6.SBP,RetIC) by A64,Lm2;
-   hence Cs.7.intpos(n+7) =x mod y by A56,A60,SCMPDS_2:71;
-         n+6<>n+5;
-      then intpos(n+6) <> DataLoc(Cs.6.SBP,RetIC) by A64,Lm2;
-   hence Cs.7.intpos(n+6) =y by A56,A61,SCMPDS_2:71;
-         n+4<>n+5;
-      then intpos(n+4) <> DataLoc(Cs.6.SBP,RetIC) by A64,Lm2;
-   hence Cs.7.intpos(n+4)=n by A56,A62,SCMPDS_2:71;
-   thus Cs.7.intpos(n+5)=inspos 11 by A54,A56,A64,SCMPDS_2:71;
+      then SBP <> DataLoc(Cs.6.SBP,RetIC) by Lm3;
+   hence Cs.7.SBP=n+4 by A55,A57,SCMPDS_2:71;
+          GBP <> DataLoc(Cs.6.SBP,RetIC) by A63,Lm2;
+   hence Cs.7.GBP=0 by A55,A58,SCMPDS_2:71;
+          n+7<>n+5;
+      then intpos(n+7) <> DataLoc(Cs.6.SBP,RetIC) by A63,AMI_3:52;
+   hence Cs.7.intpos(n+7) =x mod y by A55,A59,SCMPDS_2:71;
+          n+6<>n+5;
+      then intpos(n+6) <> DataLoc(Cs.6.SBP,RetIC) by A63,AMI_3:52;
+   hence Cs.7.intpos(n+6) =y by A55,A60,SCMPDS_2:71;
+          n+4<>n+5;
+      then intpos(n+4) <> DataLoc(Cs.6.SBP,RetIC) by A63,AMI_3:52;
+   hence Cs.7.intpos(n+4)=n by A55,A61,SCMPDS_2:71;
+   thus Cs.7.intpos(n+5)=inspos 11 by A53,A55,A63,SCMPDS_2:71;
 end;
 
-Lm7:
+Lm5:
   GCD-Algorithm c= s & IC s = inspos 5 &
    n=s.SBP & s.GBP=0 & s.DataLoc(s.SBP,3) > 0 & 1<m & m <=n+1
   implies
@@ -643,103 +618,101 @@ proof
      assume A5: s.DataLoc(s.SBP,3) > 0;
      assume A6: 1 < m;
      assume A7: m <= n+1;
-
-A8:  CurInstr s =i05 by  A2,A1,Lm3;
-A9:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
+A8:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
     .= Following s by AMI_1:def 19
-    .= Exec(i05,s) by A8;
+    .= Exec(i05,s) by A1,A2,Lm1;
 
-A10:  IC Cs.1= Next IC s by A5,A9,SCMPDS_2:68
+then A9:  IC Cs.1= Next IC s by A5,SCMPDS_2:68
      .= inspos (5+1) by A2,SCMPDS_4:70;
-then A11:  CurInstr Cs.1 =s.inspos 6 by AMI_1:54
-     .=i06 by A1,Lm3;
-A12:  Cs.(1+1) = Following Cs.1 by AMI_1:def 19
-     .= Exec(i06,Cs.1) by A11;
-A13:  Cs.1.SBP=n by A3,A9,SCMPDS_2:68;
-A14:  Cs.1.GBP=0 by A4,A9,SCMPDS_2:68;
-A15:  Cs.1.intpos m = s.intpos m by A9,SCMPDS_2:68;
+then A10:  CurInstr Cs.1 =s.inspos 6 by AMI_1:54
+     .=i06 by A1,Lm1;
+A11:  Cs.(1+1) = Following Cs.1 by AMI_1:def 19
+     .= Exec(i06,Cs.1) by A10;
+A12:  Cs.1.SBP=n by A3,A8,SCMPDS_2:68;
+A13:  Cs.1.GBP=0 by A4,A8,SCMPDS_2:68;
+A14:  Cs.1.intpos m = s.intpos m by A8,SCMPDS_2:68;
 
-A16:  IC Cs.2= Next IC Cs.1 by A12,SCMPDS_2:59
-     .= inspos (6+1) by A10,SCMPDS_4:70;
-then A17:  CurInstr Cs.2 =s.inspos 7 by AMI_1:54
-     .=i07 by A1,Lm3;
-A18:  Cs.(2+1) = Following Cs.2 by AMI_1:def 19
-     .= Exec(i07,Cs.2) by A17;
-A19:  DataLoc(Cs.1.SBP,6)=intpos(n+6) by A13,Th5;
-     then SBP <> DataLoc(Cs.1.SBP,6) by Lm5;
-then A20:  Cs.2.SBP=n by A12,A13,SCMPDS_2:59;
-        GBP <> DataLoc(Cs.1.SBP,6) by A19,Lm4;
-then A21:  Cs.2.GBP=0 by A12,A14,SCMPDS_2:59;
-        n+1 < n+6 by XREAL_1:8;
-     then intpos m <> DataLoc(Cs.1.SBP,6) by A7,A19,Lm2;
-then A22:  Cs.2.intpos m= s.intpos m by A12,A15,SCMPDS_2:59;
+A15:  IC Cs.2= Next IC Cs.1 by A11,SCMPDS_2:59
+     .= inspos (6+1) by A9,SCMPDS_4:70;
+then A16:  CurInstr Cs.2 =s.inspos 7 by AMI_1:54
+     .=i07 by A1,Lm1;
+A17:  Cs.(2+1) = Following Cs.2 by AMI_1:def 19
+     .= Exec(i07,Cs.2) by A16;
+A18:  DataLoc(Cs.1.SBP,6)=intpos(n+6) by A12,Th5;
+     then SBP <> DataLoc(Cs.1.SBP,6) by Lm3;
+then A19:  Cs.2.SBP=n by A11,A12,SCMPDS_2:59;
+         GBP <> DataLoc(Cs.1.SBP,6) by A18,Lm2;
+then A20:  Cs.2.GBP=0 by A11,A13,SCMPDS_2:59;
+         n+1 < n+6 by XREAL_1:8;
+     then intpos m <> DataLoc(Cs.1.SBP,6) by A7,A18,AMI_3:52;
+then A21:  Cs.2.intpos m= s.intpos m by A11,A14,SCMPDS_2:59;
 
-A23:  IC Cs.3= Next IC Cs.2 by A18,SCMPDS_2:64
-     .= inspos (7+1) by A16,SCMPDS_4:70;
-then A24:  CurInstr Cs.3 =s.inspos 8 by AMI_1:54
-     .=i08 by A1,Lm3;
-A25:  Cs.(3+1) = Following Cs.3 by AMI_1:def 19
-     .= Exec(i08,Cs.3) by A24;
-A26:  DataLoc(Cs.2.SBP,2)=intpos(n+2) by A20,Th5;
-then A27:  SBP <> DataLoc(Cs.2.SBP,2) by Lm5;
-A28:  DataLoc(Cs.2.SBP,3)=intpos(n+3) by A20,Th5;
-     then SBP <> DataLoc(Cs.2.SBP,3) by Lm5;
-then A29:  Cs.3.SBP=n by A18,A20,A27,SCMPDS_2:64;
-A30:  GBP <> DataLoc(Cs.2.SBP,2) by A26,Lm4;
-        GBP <> DataLoc(Cs.2.SBP,3) by A28,Lm4;
-then A31:  Cs.3.GBP=0 by A18,A21,A30,SCMPDS_2:64;
-        n+1 < n+2 by XREAL_1:8;
-then A32:  intpos m <> DataLoc(Cs.2.SBP,2) by A7,A26,Lm2;
-        n+1 < n+3 by XREAL_1:8;
-     then intpos m <> DataLoc(Cs.2.SBP,3) by A7,A28,Lm2;
-then A33:  Cs.3.intpos m =s.intpos m by A18,A22,A32,SCMPDS_2:64;
+A22:  IC Cs.3= Next IC Cs.2 by A17,SCMPDS_2:64
+     .= inspos (7+1) by A15,SCMPDS_4:70;
+then A23:  CurInstr Cs.3 =s.inspos 8 by AMI_1:54
+     .=i08 by A1,Lm1;
+A24:  Cs.(3+1) = Following Cs.3 by AMI_1:def 19
+     .= Exec(i08,Cs.3) by A23;
+A25:  DataLoc(Cs.2.SBP,2)=intpos(n+2) by A19,Th5;
+then A26:  SBP <> DataLoc(Cs.2.SBP,2) by Lm3;
+A27:  DataLoc(Cs.2.SBP,3)=intpos(n+3) by A19,Th5;
+     then SBP <> DataLoc(Cs.2.SBP,3) by Lm3;
+then A28:  Cs.3.SBP=n by A17,A19,A26,SCMPDS_2:64;
+A29:  GBP <> DataLoc(Cs.2.SBP,2) by A25,Lm2;
+         GBP <> DataLoc(Cs.2.SBP,3) by A27,Lm2;
+then A30:  Cs.3.GBP=0 by A17,A20,A29,SCMPDS_2:64;
+         n+1 < n+2 by XREAL_1:8;
+then A31:  intpos m <> DataLoc(Cs.2.SBP,2) by A7,A25,AMI_3:52;
+         n+1 < n+3 by XREAL_1:8;
+     then intpos m <> DataLoc(Cs.2.SBP,3) by A7,A27,AMI_3:52;
+then A32:  Cs.3.intpos m =s.intpos m by A17,A21,A31,SCMPDS_2:64;
 
-A34:   IC Cs.4= Next IC Cs.3 by A25,SCMPDS_2:59
-      .= inspos (8+1) by A23,SCMPDS_4:70;
-then A35:   CurInstr Cs.4 =s.inspos 9 by AMI_1:54
-      .=i09 by A1,Lm3;
-A36:   Cs.(4+1) = Following Cs.4 by AMI_1:def 19
-        .= Exec(i09,Cs.4) by A35;
-A37:   DataLoc(Cs.3.SBP,7)=intpos(n+7) by A29,Th5;
-      then SBP <> DataLoc(Cs.3.SBP,7) by Lm5;
-then A38:   Cs.4.SBP=n by A25,A29,SCMPDS_2:59;
-         GBP <> DataLoc(Cs.3.SBP,7) by A37,Lm4;
-then A39:   Cs.4.GBP=0 by A25,A31,SCMPDS_2:59;
-         n+1 < n+7 by XREAL_1:8;
-      then intpos m <> DataLoc(Cs.3.SBP,7) by A7,A37,Lm2;
-then A40:   Cs.4.intpos m =s.intpos m by A25,A33,SCMPDS_2:59;
+A33:   IC Cs.4= Next IC Cs.3 by A24,SCMPDS_2:59
+      .= inspos (8+1) by A22,SCMPDS_4:70;
+then A34:   CurInstr Cs.4 =s.inspos 9 by AMI_1:54
+      .=i09 by A1,Lm1;
+A35:   Cs.(4+1) = Following Cs.4 by AMI_1:def 19
+        .= Exec(i09,Cs.4) by A34;
+A36:   DataLoc(Cs.3.SBP,7)=intpos(n+7) by A28,Th5;
+      then SBP <> DataLoc(Cs.3.SBP,7) by Lm3;
+then A37:   Cs.4.SBP=n by A24,A28,SCMPDS_2:59;
+          GBP <> DataLoc(Cs.3.SBP,7) by A36,Lm2;
+then A38:   Cs.4.GBP=0 by A24,A30,SCMPDS_2:59;
+          n+1 < n+7 by XREAL_1:8;
+      then intpos m <> DataLoc(Cs.3.SBP,7) by A7,A36,AMI_3:52;
+then A39:   Cs.4.intpos m =s.intpos m by A24,A32,SCMPDS_2:59;
 
-A41:   IC Cs.5= Next IC Cs.4 by A36,SCMPDS_2:59
-      .= inspos (9+1) by A34,SCMPDS_4:70;
-then A42:   CurInstr Cs.5 =s.inspos 10 by AMI_1:54
-      .=i10 by A1,Lm3;
-A43:   Cs.(5+1) = Following Cs.5 by AMI_1:def 19
-      .= Exec(i10,Cs.5) by A42;
-A44:   DataLoc(Cs.4.SBP,4+RetSP)=intpos(n+(4+0)) by A38,Th5,SCMPDS_1:def 22;
-      then SBP <> DataLoc(Cs.4.SBP,4+RetSP) by Lm5;
-then A45:   Cs.5.SBP=n by A36,A38,SCMPDS_2:59;
-         GBP <> DataLoc(Cs.4.SBP,4+RetSP) by A44,Lm4;
-then A46:   Cs.5.GBP=0 by A36,A39,SCMPDS_2:59;
-         n+1 < n+4 by XREAL_1:8;
-      then intpos m <> DataLoc(Cs.4.SBP,4+RetSP) by A7,A44,Lm2;
-then A47:   Cs.5.intpos m = s.intpos m by A36,A40,SCMPDS_2:59;
+A40:   IC Cs.5= Next IC Cs.4 by A35,SCMPDS_2:59
+      .= inspos (9+1) by A33,SCMPDS_4:70;
+then A41:   CurInstr Cs.5 =s.inspos 10 by AMI_1:54
+      .=i10 by A1,Lm1;
+A42:   Cs.(5+1) = Following Cs.5 by AMI_1:def 19
+      .= Exec(i10,Cs.5) by A41;
+A43:   DataLoc(Cs.4.SBP,4+RetSP)=intpos(n+(4+0)) by A37,Th5,SCMPDS_1:def 22;
+      then SBP <> DataLoc(Cs.4.SBP,4+RetSP) by Lm3;
+then A44:   Cs.5.SBP=n by A35,A37,SCMPDS_2:59;
+          GBP <> DataLoc(Cs.4.SBP,4+RetSP) by A43,Lm2;
+then A45:   Cs.5.GBP=0 by A35,A38,SCMPDS_2:59;
+          n+1 < n+4 by XREAL_1:8;
+      then intpos m <> DataLoc(Cs.4.SBP,4+RetSP) by A7,A43,AMI_3:52;
+then A46:   Cs.5.intpos m = s.intpos m by A35,A39,SCMPDS_2:59;
 
-      IC Cs.6= Next IC Cs.5 by A43,SCMPDS_2:60
-      .= inspos (10+1) by A41,SCMPDS_4:70;
-then A48:   CurInstr Cs.6 =s.inspos 11 by AMI_1:54
-      .=i11 by A1,Lm3;
-A49:   Cs.(6+1) = Following Cs.6 by AMI_1:def 19
-      .= Exec(i11,Cs.6) by A48;
-A50:   DataLoc(Cs.5.GBP,1)=intpos(0+1) by A46,Th5;
-then A51:   Cs.6.SBP=n+4 by A43,A45,SCMPDS_2:60;
-         intpos m <> DataLoc(Cs.5.GBP,1) by A6,A50,Lm2;
-then A52:   Cs.6.intpos m =s.intpos m by A43,A47,SCMPDS_2:60;
+       IC Cs.6= Next IC Cs.5 by A42,SCMPDS_2:60
+      .= inspos (10+1) by A40,SCMPDS_4:70;
+then A47:   CurInstr Cs.6 =s.inspos 11 by AMI_1:54
+      .=i11 by A1,Lm1;
+A48:   Cs.(6+1) = Following Cs.6 by AMI_1:def 19
+      .= Exec(i11,Cs.6) by A47;
+A49:   DataLoc(Cs.5.GBP,1)=intpos(0+1) by A45,Th5;
+then A50:   Cs.6.SBP=n+4 by A42,A44,SCMPDS_2:60;
+          intpos m <> DataLoc(Cs.5.GBP,1) by A6,A49,AMI_3:52;
+then A51:   Cs.6.intpos m =s.intpos m by A42,A46,SCMPDS_2:60;
 
-A53:   DataLoc(Cs.6.SBP,RetIC)=intpos(n+4+1) by A51,Th5,SCMPDS_1:def 23
+A52:   DataLoc(Cs.6.SBP,RetIC)=intpos(n+4+1) by A50,Th5,SCMPDS_1:def 23
       .=intpos(n+(4+1));
-         n+1 < n+5 by XREAL_1:8;
-      then intpos m <> DataLoc(Cs.6.SBP,RetIC) by A7,A53,Lm2;
-   hence Cs.7.intpos m=s.intpos m by A49,A52,SCMPDS_2:71;
+          n+1 < n+5 by XREAL_1:8;
+      then intpos m <> DataLoc(Cs.6.SBP,RetIC) by A7,A52,AMI_3:52;
+   hence Cs.7.intpos m=s.intpos m by A48,A51,SCMPDS_2:71;
 end;
 
 theorem Th16:
@@ -766,7 +739,7 @@ proof
       (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
          s.intpos j=(Computation s).n.intpos j);
 
-      now
+       now
       let s be State of SCMPDS;
       set x=s.DataLoc(s.SBP,2),
          y=s.DataLoc(s.SBP,3),
@@ -778,163 +751,160 @@ proof
      assume A3: y <= 0;
      assume A4: y >= 0;
      assume A5: x >= y;
-A6:  CurInstr s =i05 by  A2,A1,Lm3;
-A7:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
+A6:  Cs.(1+0) = Following Cs.0 by AMI_1:def 19
      .= Following s by AMI_1:def 19
-     .= Exec(i05,s) by A6;
-A8:  IC Cs.1= ICplusConst(s,9) by A3,A7,SCMPDS_2:68
+     .= Exec(i05,s) by A1,A2,Lm1;
+then A7:  IC Cs.1= ICplusConst(s,9) by A3,SCMPDS_2:68
      .= inspos (5+9) by A2,SCMPDS_6:23;
      take n=1;
-     thus CurInstr Cs.n=s.inspos 14 by  A8,AMI_1:54
-     .=i14 by A1,Lm3;
-     thus Cs.n.SBP=s.SBP by A7,SCMPDS_2:68;
-A9:  y = 0 by A3,A4,XXREAL_0:1;
-then A10:  abs(y)= 0 by ABSVALUE:def 1;
-     thus Cs.n.DataLoc(s.SBP,2)=x by A7,SCMPDS_2:68
-     .=abs(x) by A5,A9,ABSVALUE:def 1
-     .=abs(x) hcf abs(y) by A10,NEWTON:65
+     thus CurInstr Cs.n=s.inspos 14 by A7,AMI_1:54
+     .=i14 by A1,Lm1;
+     thus Cs.n.SBP=s.SBP by A6,SCMPDS_2:68;
+A8:  y = 0 by A3,A4,XXREAL_0:1;
+then A9:  abs(y)= 0 by ABSVALUE:def 1;
+     thus Cs.n.DataLoc(s.SBP,2)=x by A6,SCMPDS_2:68
+     .=abs(x) by A5,A8,ABSVALUE:def 1
+     .=abs(x) hcf abs(y) by A9,NEWTON:65
      .=x gcd y by INT_2:def 3;
      thus for j be Element of NAT st 1<j & j <= s.SBP+1 holds
-        s.intpos j=(Computation s).n.intpos j by A7,SCMPDS_2:68;
+        s.intpos j=(Computation s).n.intpos j by A6,SCMPDS_2:68;
    end;
-then A11: P[0];
-A12: now let k be Element of NAT;
-      assume A13:P[k];
-         now let s be State of SCMPDS;
+then A10: P[0];
+A11: now let k be Element of NAT;
+      assume A12:P[k];
+          now let s be State of SCMPDS;
        set x=s.DataLoc(s.SBP,2),
            y=s.DataLoc(s.SBP,3),
            yy=y,
           Cs=Computation s;
-        assume A14: GA c= s;
-        assume A15: IC s = inspos 5;
-        assume A16: s.SBP >0;
-        assume A17: s.GBP=0;
-        assume A18: y <= k+1;
-        assume A19: y >= 0;
-        assume A20: x >= y;
-then A21:     x >= 0 by A19,XXREAL_0:2;
-        reconsider y as Element of NAT by A19,INT_1:16;
-        per cases by A18,NAT_1:8;
+        assume A13: GA c= s;
+        assume A14: IC s = inspos 5;
+        assume A15: s.SBP >0;
+        assume A16: s.GBP=0;
+        assume A17: y <= k+1;
+        assume A18: y >= 0;
+        assume A19: x >= y;
+then A20:     x >= 0 by A18,XXREAL_0:2;
+        reconsider y as Element of NAT by A18,INT_1:16;
+        per cases by A17,NAT_1:8;
         suppose y <= k;
           hence ex n st CurInstr Cs.n = return SBP &
            s.SBP=Cs.n.SBP &
            Cs.n.DataLoc(s.SBP,2)= x gcd yy &
             (for j be Element of NAT st 1<j & j <= s.SBP+1 holds
          s.intpos j=Cs.n.intpos j)
-           by A13,A14,A15,A16,A17,A19,A20;
+           by A12,A13,A14,A15,A16,A18,A19;
         end;
-        suppose A22: y = k+1;
-           then y<>0 by NAT_1:5;
-then A23:        y>0 by NAT_1:3;
-           reconsider pn=s.SBP as Element of NAT by A16,INT_1:16;
-A24:        pn=s.SBP;
-then A25:        IC Cs.7 = inspos (5+7) &
+        suppose A21: y = k+1;
+then A22:        y>0 by NAT_1:5;
+           reconsider pn=s.SBP as Element of NAT by A15,INT_1:16;
+A23:        pn=s.SBP;
+then A24:        IC Cs.7 = inspos (5+7) &
            Cs.8 = Exec(i12,Cs.7) & Cs.7.SBP=pn+4 &
            Cs.7.GBP=0 & Cs.7.intpos(pn+7) = x mod y &
            Cs.7.intpos(pn+6) = y &
            Cs.7.intpos(pn+4) = pn &
-           Cs.7.intpos(pn+5) = inspos 11 by A14,A15,A17,A23,Lm6;
+           Cs.7.intpos(pn+5) = inspos 11 by A13,A14,A16,A22,Lm4;
           set s8=Cs.8;
-A26:       IC s8= ICplusConst(Cs.7,-7) by A25,SCMPDS_2:66
-          .= inspos 5 by A25,Th6;
-A27:       GA c= s8 by A14,AMI_3:38;
-A28:       s8.SBP=pn+4 by A25,SCMPDS_2:66;
-A29:       4<=pn+4 by NAT_1:11;
-then A30:       s8.SBP > 0 by A28,XXREAL_0:2;
-A31:       s8.GBP=0 by A25,SCMPDS_2:66;
+A25:       IC s8= ICplusConst(Cs.7,-7) by A24,SCMPDS_2:66
+          .= inspos 5 by A24,Th6;
+A26:       GA c= s8 by A13,AMI_1:81;
+A27:       s8.SBP=pn+4 by A24,SCMPDS_2:66;
+A28:       4<=pn+4 by NAT_1:11;
+then A29:       s8.SBP > 0 by A27,XXREAL_0:2;
+A30:       s8.GBP=0 by A24,SCMPDS_2:66;
           set x1=s8.DataLoc(s8.SBP,2),
               y1=s8.DataLoc(s8.SBP,3);
-A32:       x1=s8.intpos(pn+4+2) by A28,Th5
-          .=y by A25,SCMPDS_2:66;
-A33:       y1=s8.intpos(pn+4+3) by A28,Th5
-          .=x mod y by A25,SCMPDS_2:66;
-then A34:       y1<y by A23,NEWTON:79;
-then A35:       y1 <= k by A22,INT_1:20;
-         y1 >= 0 by A23,A33,NEWTON:78;
+A31:       x1=s8.intpos(pn+4+2) by A27,Th5
+          .=y by A24,SCMPDS_2:66;
+A32:       y1=s8.intpos(pn+4+3) by A27,Th5
+          .=x mod y by A24,SCMPDS_2:66;
+then A33:       y1<y by A22,NEWTON:79;
+then A34:       y1 <= k by A21,INT_1:20;
+          y1 >= 0 by A22,A32,NEWTON:78;
           then consider m such that
-A36:       CurInstr (Computation s8).m = return SBP &
+A35:       CurInstr (Computation s8).m = return SBP &
           s8.SBP=(Computation s8).m.SBP &
           (Computation s8).m.DataLoc(s8.SBP,2)= x1 gcd y1 &
          (for j be Element of NAT st 1<j & j <= s8.SBP+1 holds
           s8.intpos j=(Computation s8).m.intpos j)
-            by A13,A26,A27,A30,A31,A32,A34,A35;
+            by A12,A25,A26,A29,A30,A31,A33,A34;
           set s9=Cs.(m+8);
-A37:       CurInstr s9 = return SBP by A36,AMI_1:51;
-A38:       s8.SBP=s9.SBP by A36,AMI_1:51;
-A39:       Cs.(m+(8+1))=Cs.(m+8+1)
+A36:       s8.SBP=s9.SBP by A35,AMI_1:51;
+A37:       Cs.(m+(8+1))=Cs.(m+8+1)
           .= Following s9 by AMI_1:def 19
-          .= Exec(return SBP,s9) by A37;
-A40:       1 < pn+4 by A29,XXREAL_0:2;
-             pn+4 < s8.SBP+1 by A28,XREAL_1:31;
-then A41:       s8.intpos(pn+4)=(Computation s8).m.intpos (pn+4) by A36,A40
+          .= Exec(return SBP,s9) by A35,AMI_1:51;
+A38:       1 < pn+4 by A28,XXREAL_0:2;
+              pn+4 < s8.SBP+1 by A27,XREAL_1:31;
+then A39:       s8.intpos(pn+4)=(Computation s8).m.intpos (pn+4) by A35,A38
           .=s9.intpos(pn+4) by AMI_1:51;
-          5<=pn+5 by NAT_1:11;
-then A42:       1 <pn+5 by XXREAL_0:2;
-A43:       inspos 11=s8.intpos(pn+5) by A25,SCMPDS_2:66
-          .=(Computation s8).m.intpos (pn+5) by A36,A42,A28
+           5<=pn+5 by NAT_1:11;
+then A40:       1 <pn+5 by XXREAL_0:2;
+A41:       inspos 11=s8.intpos(pn+5) by A24,SCMPDS_2:66
+          .=(Computation s8).m.intpos (pn+5) by A35,A40,A27
           .=s9.intpos(pn+4+1) by AMI_1:51
-          .=s9.DataLoc(s9.SBP,RetIC) by A28,A38,Th5,SCMPDS_1:def 23;
+          .=s9.DataLoc(s9.SBP,RetIC) by A27,A36,Th5,SCMPDS_1:def 23;
 
-A44:       IC Cs.(m+9)=
- 2*(abs(s9.DataLoc(s9.SBP,RetIC)) div 2)+4 by A39,SCMPDS_2:70
-          .= inspos (11+2) by A43,Th3;
-then A45:       CurInstr Cs.(m+9) =s.inspos 13 by AMI_1:54
-           .=i13 by A14,Lm3;
-A46:       Cs.(m+(9+1))=Cs.(m+9+1)
+A42:       IC Cs.(m+9)=
+ (abs(s9.DataLoc(s9.SBP,RetIC)))+2 by A37,SCMPDS_2:70
+          .= inspos (11+2) by A41,Th3;
+then A43:       CurInstr Cs.(m+9) =s.inspos 13 by AMI_1:54
+           .=i13 by A13,Lm1;
+A44:       Cs.(m+(9+1))=Cs.(m+9+1)
           .= Following Cs.(m+9) by AMI_1:def 19
-          .= Exec(i13,Cs.(m+9)) by A45;
-A47:      Cs.(m+9).SBP=s9.DataLoc(pn+4,RetSP) by A28,A38,A39,SCMPDS_2:70
+          .= Exec(i13,Cs.(m+9)) by A43;
+A45:      Cs.(m+9).SBP=s9.DataLoc(pn+4,RetSP) by A27,A36,A37,SCMPDS_2:70
          .=s9.intpos(pn+4+0) by Th5,SCMPDS_1:def 22
-         .=pn by A25,A41,SCMPDS_2:66;
-            SBP <> intpos(pn+6) by Lm5;
-then A48:      Cs.(m+9).intpos(pn+6)=s9.intpos(pn+4+2) by A39,SCMPDS_2:70
-         .=s9.DataLoc(s8.SBP,2) by A28,Th5
-         .=x1 gcd y1 by A36,AMI_1:51;
+         .=pn by A24,A39,SCMPDS_2:66;
+             SBP <> intpos(pn+6) by Lm3;
+then A46:      Cs.(m+9).intpos(pn+6)=s9.intpos(pn+4+2) by A37,SCMPDS_2:70
+         .=s9.DataLoc(s8.SBP,2) by A27,Th5
+         .=x1 gcd y1 by A35,AMI_1:51;
 
-          IC Cs.(m+10)= Next IC Cs.(m+9) by A46,SCMPDS_2:59
-          .= inspos (13+1) by A44,SCMPDS_4:70;
-then A49:       CurInstr Cs.(m+10)=s.inspos 14 by AMI_1:54
-         .=i14 by A14,Lm3;
+           IC Cs.(m+10)= Next IC Cs.(m+9) by A44,SCMPDS_2:59
+          .= inspos (13+1) by A42,SCMPDS_4:70;
+then A47:       CurInstr Cs.(m+10)=s.inspos 14 by AMI_1:54
+         .=i14 by A13,Lm1;
 
           hereby
              take n=m+10;
-             thus CurInstr (Computation s).n = return SBP by A49;
-A50:          DataLoc(Cs.(m+9).SBP,2)=intpos(pn+2) by A47,Th5;
-             then SBP <> DataLoc(Cs.(m+9).SBP,2) by Lm5;
-           hence Cs.n.SBP=s.SBP by A46,A47,SCMPDS_2:59;
+             thus CurInstr (Computation s).n = return SBP by A47;
+A48:          DataLoc(Cs.(m+9).SBP,2)=intpos(pn+2) by A45,Th5;
+             then SBP <> DataLoc(Cs.(m+9).SBP,2) by Lm3;
+           hence Cs.n.SBP=s.SBP by A44,A45,SCMPDS_2:59;
 
-           thus Cs.n.DataLoc(s.SBP,2)=Cs.(m+9).DataLoc(pn,6) by A46,A47,
+           thus Cs.n.DataLoc(s.SBP,2)=Cs.(m+9).DataLoc(pn,6) by A44,A45,
 SCMPDS_2:59
-             .=yy gcd (x mod yy) by A32,A33,A48,Th5
-             .=x gcd yy by A21,A23,Th2;
+             .=yy gcd (x mod yy) by A31,A32,A46,Th5
+             .=x gcd yy by A20,A22,INT_2:50;
            hereby let j be Element of NAT;
-               assume A51: 1<j & j <= s.SBP+1;
-                  s.SBP <= s8.SBP by A28,NAT_1:11;
+               assume A49: 1<j & j <= s.SBP+1;
+                   s.SBP <= s8.SBP by A27,NAT_1:11;
                then s.SBP +1 <= s8.SBP+1 by XREAL_1:8;
-then A52:            j <= s8.SBP+1 by A51,XXREAL_0:2;
-                  intpos j <> SBP by A51,Lm2;
-then A53:            Cs.(m+9).intpos j=s9.intpos j by A39,SCMPDS_2:70
+then A50:            j <= s8.SBP+1 by A49,XXREAL_0:2;
+                   intpos j <> SBP by A49,AMI_3:52;
+then A51:            Cs.(m+9).intpos j=s9.intpos j by A37,SCMPDS_2:70
                .=(Computation s8).m.intpos j by AMI_1:51
-               .=s8.intpos j by A36,A51,A52;
-                  pn+1<pn+2 by XREAL_1:8;
-then A54:            intpos j <> DataLoc(Cs.(m+9).SBP,2) by A50,A51,Lm2;
-                  Cs.7.intpos j = s.intpos j by A14,A15,A17,A23,A24,A51,Lm7;
-             hence s.intpos j=s8.intpos j by A25,SCMPDS_2:66
-                   .=Cs.n.intpos j by A46,A53,A54,SCMPDS_2:59;
+               .=s8.intpos j by A35,A49,A50;
+                   pn+1<pn+2 by XREAL_1:8;
+then A52:            intpos j <> DataLoc(Cs.(m+9).SBP,2) by A48,A49,AMI_3:52;
+                   Cs.7.intpos j = s.intpos j by A13,A14,A16,A22,A23,A49,Lm5;
+             hence s.intpos j=s8.intpos j by A24,SCMPDS_2:66
+                   .=Cs.n.intpos j by A44,A51,A52,SCMPDS_2:59;
            end;
          end;
         end;
         end;
         hence P[k+1];
     end;
-A55: for n holds P[n] from NAT_1:sch 1(A11,A12);
+A53: for n holds P[n] from NAT_1:sch 1(A10,A11);
     let s be State of SCMPDS;
-    assume A56: GA c= s & IC s = inspos 5 &
+    assume A54: GA c= s & IC s = inspos 5 &
     s.SBP >0 & s.GBP=0 & s.DataLoc(s.SBP,3) >= 0 &
     s.DataLoc(s.SBP,2) >= s.DataLoc(s.SBP,3);
     then reconsider m=s.DataLoc(s.SBP,3) as Element of NAT by INT_1:16;
-       P[m] by A55;
-    hence thesis by A56;
+        P[m] by A53;
+    hence thesis by A54;
 end;
 
 theorem Th17:
@@ -971,11 +941,11 @@ then A4:    IC Cs.7 = inspos (5+7) &
        Cs.7.GBP=0 & Cs.7.intpos(pn+7) = x mod y &
        Cs.7.intpos(pn+6) = y &
        Cs.7.intpos(pn+4) = pn &
-       Cs.7.intpos(pn+5) = inspos 11 by A1,A2,Lm6;
+       Cs.7.intpos(pn+5) = inspos 11 by A1,A2,Lm4;
        set s8=Cs.8;
 A5:    IC s8= ICplusConst(Cs.7,-7) by A4,SCMPDS_2:66
        .= inspos 5 by A4,Th6;
-A6:    GA c= s8 by A1,AMI_3:38;
+A6:    GA c= s8 by A1,AMI_1:81;
 A7:    s8.SBP=pn+4 by A4,SCMPDS_2:66;
 A8:    4<=pn+4 by NAT_1:11;
 then A9:    s8.SBP > 0 by A7,XXREAL_0:2;
@@ -987,7 +957,7 @@ A11:    x1=s8.intpos(pn+4+2) by A7,Th5
 A12:    y1=s8.intpos(pn+4+3) by A7,Th5
        .=x mod y by A4,SCMPDS_2:66;
 then A13:    y1<y by A2,NEWTON:79;
-      y1 >= 0 by A1,A12,NEWTON:78;
+       y1 >= 0 by A1,A12,NEWTON:78;
        then consider m such that
 A14:    CurInstr (Computation s8).m = return SBP &
        s8.SBP=(Computation s8).m.SBP &
@@ -996,68 +966,67 @@ A14:    CurInstr (Computation s8).m = return SBP &
         s8.intpos j=(Computation s8).m.intpos j)
             by A5,A6,A9,A10,A11,A13,Th16;
        set s9=Cs.(m+8);
-A15:    CurInstr s9 = return SBP by A14,AMI_1:51;
-A16:    s8.SBP=s9.SBP by A14,AMI_1:51;
-A17:    Cs.(m+(8+1))=Cs.(m+8+1)
+A15:    s8.SBP=s9.SBP by A14,AMI_1:51;
+A16:    Cs.(m+(8+1))=Cs.(m+8+1)
        .= Following s9 by AMI_1:def 19
-       .= Exec(return SBP,s9) by A15;
-A18:     1 < pn+4 by A8,XXREAL_0:2;
-           pn+4 < s8.SBP+1 by A7,XREAL_1:31;
-then A19:     s8.intpos(pn+4)=(Computation s8).m.intpos (pn+4) by A14,A18
+       .= Exec(return SBP,s9) by A14,AMI_1:51;
+A17:     1 < pn+4 by A8,XXREAL_0:2;
+            pn+4 < s8.SBP+1 by A7,XREAL_1:31;
+then A18:     s8.intpos(pn+4)=(Computation s8).m.intpos (pn+4) by A14,A17
         .=s9.intpos(pn+4) by AMI_1:51;
-        5<=pn+5 by NAT_1:11;
-then A20:     1 <pn+5 by XXREAL_0:2;
-A21:     inspos 11=s8.intpos(pn+5) by A4,SCMPDS_2:66
-        .=(Computation s8).m.intpos (pn+5) by A14,A20,A7
+         5<=pn+5 by NAT_1:11;
+then A19:     1 <pn+5 by XXREAL_0:2;
+A20:     inspos 11=s8.intpos(pn+5) by A4,SCMPDS_2:66
+        .=(Computation s8).m.intpos (pn+5) by A14,A19,A7
         .=s9.intpos(pn+4+1) by AMI_1:51
-        .=s9.DataLoc(s9.SBP,RetIC) by A7,A16,Th5,SCMPDS_1:def 23;
+        .=s9.DataLoc(s9.SBP,RetIC) by A7,A15,Th5,SCMPDS_1:def 23;
 
-A22:     IC Cs.(m+9)=
- 2*(abs(s9.DataLoc(s9.SBP,RetIC)) div 2)+4 by A17,SCMPDS_2:70
-        .= inspos (11+2) by A21,Th3;
-then A23:     CurInstr Cs.(m+9) =s.inspos 13 by AMI_1:54
-        .=i13 by A1,Lm3;
-A24:     Cs.(m+(9+1))=Cs.(m+9+1)
+A21:     IC Cs.(m+9)=
+ (abs(s9.DataLoc(s9.SBP,RetIC)))+2 by A16,SCMPDS_2:70
+        .= inspos (11+2) by A20,Th3;
+then A22:     CurInstr Cs.(m+9) =s.inspos 13 by AMI_1:54
+        .=i13 by A1,Lm1;
+A23:     Cs.(m+(9+1))=Cs.(m+9+1)
         .= Following Cs.(m+9) by AMI_1:def 19
-        .= Exec(i13,Cs.(m+9)) by A23;
-A25:     Cs.(m+9).SBP=s9.DataLoc(pn+4,RetSP) by A7,A16,A17,SCMPDS_2:70
+        .= Exec(i13,Cs.(m+9)) by A22;
+A24:     Cs.(m+9).SBP=s9.DataLoc(pn+4,RetSP) by A7,A15,A16,SCMPDS_2:70
         .=s9.intpos(pn+4+0) by Th5,SCMPDS_1:def 22
-        .=pn by A4,A19,SCMPDS_2:66;
-           SBP <> intpos(pn+6) by Lm5;
-then A26:     Cs.(m+9).intpos(pn+6)=s9.intpos(pn+4+2) by A17,SCMPDS_2:70
+        .=pn by A4,A18,SCMPDS_2:66;
+            SBP <> intpos(pn+6) by Lm3;
+then A25:     Cs.(m+9).intpos(pn+6)=s9.intpos(pn+4+2) by A16,SCMPDS_2:70
         .=s9.DataLoc(s8.SBP,2) by A7,Th5
         .=x1 gcd y1 by A14,AMI_1:51;
 
-        IC Cs.(m+10)= Next IC Cs.(m+9) by A24,SCMPDS_2:59
-        .= inspos (13+1) by A22,SCMPDS_4:70;
-then A27:     CurInstr Cs.(m+10)=s.inspos 14 by AMI_1:54
-        .=i14 by A1,Lm3;
+         IC Cs.(m+10)= Next IC Cs.(m+9) by A23,SCMPDS_2:59
+        .= inspos (13+1) by A21,SCMPDS_4:70;
+then A26:     CurInstr Cs.(m+10)=s.inspos 14 by AMI_1:54
+        .=i14 by A1,Lm1;
 
         hereby
            take n=m+10;
-           thus CurInstr (Computation s).n = return SBP by A27;
-A28:        DataLoc(Cs.(m+9).SBP,2)=intpos(pn+2) by A25,Th5;
-           then SBP <> DataLoc(Cs.(m+9).SBP,2) by Lm5;
-           hence Cs.n.SBP=s.SBP by A24,A25,SCMPDS_2:59;
-           thus Cs.n.DataLoc(s.SBP,2)=Cs.(m+9).DataLoc(pn,6) by A24,A25,
+           thus CurInstr (Computation s).n = return SBP by A26;
+A27:        DataLoc(Cs.(m+9).SBP,2)=intpos(pn+2) by A24,Th5;
+           then SBP <> DataLoc(Cs.(m+9).SBP,2) by Lm3;
+           hence Cs.n.SBP=s.SBP by A23,A24,SCMPDS_2:59;
+           thus Cs.n.DataLoc(s.SBP,2)=Cs.(m+9).DataLoc(pn,6) by A23,A24,
 SCMPDS_2:59
-             .=yy gcd (x mod yy) by A11,A12,A26,Th5
-             .=x gcd yy by A1,A2,Th2;
+             .=yy gcd (x mod yy) by A11,A12,A25,Th5
+             .=x gcd yy by A1,A2,INT_2:50;
 
            hereby let j be Element of NAT;
-               assume A29: 1<j & j <= s.SBP+1;
-                  s.SBP <= s8.SBP by A7,NAT_1:11;
+               assume A28: 1<j & j <= s.SBP+1;
+                   s.SBP <= s8.SBP by A7,NAT_1:11;
                then s.SBP +1 <= s8.SBP+1 by XREAL_1:8;
-then A30:            j <= s8.SBP+1 by A29,XXREAL_0:2;
-                  intpos j <> SBP by A29,Lm2;
-then A31:            Cs.(m+9).intpos j=s9.intpos j by A17,SCMPDS_2:70
+then A29:            j <= s8.SBP+1 by A28,XXREAL_0:2;
+                   intpos j <> SBP by A28,AMI_3:52;
+then A30:            Cs.(m+9).intpos j=s9.intpos j by A16,SCMPDS_2:70
                .=(Computation s8).m.intpos j by AMI_1:51
-               .=s8.intpos j by A14,A29,A30;
-                  pn+1<pn+2 by XREAL_1:8;
-then A32:            intpos j <> DataLoc(Cs.(m+9).SBP,2) by A28,A29,Lm2;
-                  Cs.7.intpos j = s.intpos j by A1,A2,A3,A29,Lm7;
+               .=s8.intpos j by A14,A28,A29;
+                   pn+1<pn+2 by XREAL_1:8;
+then A31:            intpos j <> DataLoc(Cs.(m+9).SBP,2) by A27,A28,AMI_3:52;
+                   Cs.7.intpos j = s.intpos j by A1,A2,A3,A28,Lm5;
              hence s.intpos j=s8.intpos j by A4,SCMPDS_2:66
-                   .=Cs.n.intpos j by A24,A31,A32,SCMPDS_2:59;
+                   .=Cs.n.intpos j by A23,A30,A31,SCMPDS_2:59;
            end;
         end;
 end;
@@ -1066,7 +1035,7 @@ end;
 begin :: The Correctness of Recursive Euclide Algorithm
 
 theorem
-     for s being State of SCMPDS st Initialized GCD-Algorithm c= s
+      for s being State of SCMPDS st Initialized GCD-Algorithm c= s
   for x, y being Integer st s.intpos 9 = x & s.intpos 10 = y
   & x >= 0 & y >= 0 holds (Result s).intpos 9 = x gcd y
 proof
@@ -1078,7 +1047,7 @@ proof
      & x >= 0 & y >= 0;
      set s4=(Computation s).4;
 A3:  GA c= s by A1,SCMPDS_4:57;
-then A4:  GA c= s4 by AMI_3:38;
+then A4:  GA c= s4 by AMI_1:81;
 A5:  IC s4 = inspos 5 & s4.GBP = 0 &
      s4.SBP = 7 & s4.intpos(7+RetIC) = inspos 2 &
      s4.intpos 9 = s.intpos 9 & s4.intpos 10 = s.intpos 10 by A1,Th15;
@@ -1099,18 +1068,18 @@ A10:  Cs4.n.intpos 8=inspos 2 by A5,A9,SCMPDS_1:def 23;
 
 A12:  Cs4.(n+1)= Following Cs4.n by AMI_1:def 19
      .= Exec(i14,Cs4.n) by A9;
-     IC (Computation s).(4+(n+1)) =Cs4.(n+1).IC SCMPDS by AMI_1:51
-     .= 2*(abs(Cs4.n.DataLoc(Cs4.n.SBP,RetIC)) div 2)+4 by A12,SCMPDS_2:70
+      IC (Computation s).(4+(n+1)) =Cs4.(n+1).IC SCMPDS by AMI_1:51
+     .= (abs(Cs4.n.DataLoc(Cs4.n.SBP,RetIC)))+2 by A12,SCMPDS_2:70
      .= inspos (2+2) by A10,A11,Th3;
-then A13:  s.IC (Computation s).(4+(n+1)) =i04 by A3,Lm3;
-     A14: intpos 9 <> SBP by Lm2;
-        Result s=(Computation s).(4+(n+1)) by A13,AMI_1:56
+then A13:  s.IC (Computation s).(4+(n+1)) =i04 by A3,Lm1;
+     A14: intpos 9 <> SBP by AMI_3:52;
+         Result s=(Computation s).(4+(n+1)) by A13,AMI_1:56
              .=Cs4.(n+1) by AMI_1:51;
      hence (Result s).intpos 9=x gcd y by A6,A7,A8,A9,A12,A14,SCMPDS_2:70;
 end;
 
 ::--------------------------
-Lm8:
+Lm6:
    GCD-Algorithm c= s1 & GCD-Algorithm c= s2 &
    IC s1 = inspos 5 &
    n=s1.SBP & s1.GBP=0 &
@@ -1156,22 +1125,22 @@ proof
 A8:    DataLoc(s1.SBP,2)=intpos(n+2) by A3,Th5;
 A9:    DataLoc(s1.SBP,3)=intpos(n+3) by A3,Th5;
   thus IC Cs1.7 = inspos (5+7) & Cs1.8 = Exec(i12,Cs1.7) &
-        Cs1.7.SBP=n+4 & Cs1.7.GBP=0 by A1,A2,A3,A4,A5,Lm6;
+        Cs1.7.SBP=n+4 & Cs1.7.GBP=0 by A1,A2,A3,A4,A5,Lm4;
   thus Cs1.7.intpos(n+7)
-       = s1.intpos(n+2) mod s1.intpos(n+3) by A1,A2,A3,A4,A5,A8,A9,Lm6;
-  thus Cs1.7.intpos(n+6) =s1.intpos(n+3) by A1,A2,A3,A4,A5,A9,Lm6;
+       = s1.intpos(n+2) mod s1.intpos(n+3) by A1,A2,A3,A4,A5,A8,A9,Lm4;
+  thus Cs1.7.intpos(n+6) =s1.intpos(n+3) by A1,A2,A3,A4,A5,A9,Lm4;
   thus IC Cs2.7 = inspos (5+7) & Cs2.8 = Exec(i12,Cs2.7) &
-        Cs2.7.SBP=n+4 & Cs2.7.GBP=0 by A1,A2,A3,A5,A6,A7,Lm6;
+        Cs2.7.SBP=n+4 & Cs2.7.GBP=0 by A1,A2,A3,A5,A6,A7,Lm4;
   thus Cs2.7.intpos(n+7)
-       = s1.intpos(n+2) mod s1.intpos(n+3) by A1,A2,A3,A5,A6,A7,A8,A9,Lm6;
-  thus Cs2.7.intpos(n+6) =s1.intpos(n+3) by A1,A2,A3,A5,A6,A7,A9,Lm6;
+       = s1.intpos(n+2) mod s1.intpos(n+3) by A1,A2,A3,A5,A6,A7,A8,A9,Lm4;
+  thus Cs2.7.intpos(n+6) =s1.intpos(n+3) by A1,A2,A3,A5,A6,A7,A9,Lm4;
   thus Cs1.7.intpos(n+4) = n & Cs1.7.intpos(n+5) = inspos 11
-       by A1,A2,A3,A4,A5,Lm6;
+       by A1,A2,A3,A4,A5,Lm4;
   thus Cs2.7.intpos(n+4) = n & Cs2.7.intpos(n+5) = inspos 11
-       by A1,A2,A3,A5,A6,A7,Lm6;
+       by A1,A2,A3,A5,A6,A7,Lm4;
 end;
 
-Lm9:
+Lm7:
    GCD-Algorithm c= s1 & GCD-Algorithm c= s2 &
    IC s1 = inspos 5 &
    n=s1.SBP & s1.GBP=0 &
@@ -1196,288 +1165,285 @@ proof
    assume A6: IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0;
    assume A7: s2.DataLoc(s1.SBP,2) = s1.DataLoc(s1.SBP,2) &
               s2.DataLoc(s1.SBP,3) = s1.DataLoc(s1.SBP,3);
-
-A8:  CurInstr s1 =i05 by  A2,A1,Lm3;
-A9:  Cs1.(1+0) = Following Cs1.0 by AMI_1:def 19
+A8:  Cs1.(1+0) = Following Cs1.0 by AMI_1:def 19
      .= Following s1 by AMI_1:def 19
-     .= Exec(i05,s1) by A8;
-
-A10:  CurInstr s2 =i05 by  A2,A6,A1,Lm3;
-A11:  Cs2.(1+0) = Following Cs2.0 by AMI_1:def 19
+     .= Exec(i05,s1) by A1,A2,Lm1;
+A9:  Cs2.(1+0) = Following Cs2.0 by AMI_1:def 19
      .= Following s2 by AMI_1:def 19
-     .= Exec(i05,s2) by A10;
+     .= Exec(i05,s2) by A1,A2,A6,Lm1;
 
-A12:  IC Cs1.1= Next IC s1 by A5,A9,SCMPDS_2:68
+A10:  IC Cs1.1= Next IC s1 by A5,A8,SCMPDS_2:68
      .= inspos (5+1) by A2,SCMPDS_4:70;
-then A13:  CurInstr Cs1.1 =s1.inspos 6 by AMI_1:54
-     .=i06 by A1,Lm3;
-A14:  Cs1.(1+1) = Following Cs1.1 by AMI_1:def 19
-     .= Exec(i06,Cs1.1) by A13;
-A15:  Cs1.1.SBP=n by A3,A9,SCMPDS_2:68;
-A16:  Cs1.1.GBP=0 by A4,A9,SCMPDS_2:68;
-A17:  IC Cs2.1= Next IC s2 by A5,A6,A7,A11,SCMPDS_2:68
+then A11:  CurInstr Cs1.1 =s1.inspos 6 by AMI_1:54
+     .=i06 by A1,Lm1;
+A12:  Cs1.(1+1) = Following Cs1.1 by AMI_1:def 19
+     .= Exec(i06,Cs1.1) by A11;
+A13:  Cs1.1.SBP=n by A3,A8,SCMPDS_2:68;
+A14:  Cs1.1.GBP=0 by A4,A8,SCMPDS_2:68;
+A15:  IC Cs2.1= Next IC s2 by A5,A6,A7,A9,SCMPDS_2:68
      .= inspos (5+1) by A2,A6,SCMPDS_4:70;
-then A18:  CurInstr Cs2.1 =s2.inspos 6 by AMI_1:54
-     .=i06 by A1,Lm3;
-A19:  Cs2.(1+1) = Following Cs2.1 by AMI_1:def 19
-     .= Exec(i06,Cs2.1) by A18;
+then A16:  CurInstr Cs2.1 =s2.inspos 6 by AMI_1:54
+     .=i06 by A1,Lm1;
+A17:  Cs2.(1+1) = Following Cs2.1 by AMI_1:def 19
+     .= Exec(i06,Cs2.1) by A16;
 
-A20:  IC Cs1.2= Next IC Cs1.1 by A14,SCMPDS_2:59
-     .= inspos (6+1) by A12,SCMPDS_4:70;
-then A21:  CurInstr Cs1.2 =s1.inspos 7 by AMI_1:54
-     .=i07 by A1,Lm3;
-A22:  Cs1.(2+1) = Following Cs1.2 by AMI_1:def 19
-     .= Exec(i07,Cs1.2) by A21;
-A23:  DataLoc(Cs1.1.SBP,6)=intpos(n+6) by A15,Th5;
-     then SBP <> DataLoc(Cs1.1.SBP,6) by Lm5;
-then A24:  Cs1.2.SBP=n by A14,A15,SCMPDS_2:59;
-        GBP <> DataLoc(Cs1.1.SBP,6) by A23,Lm4;
-then A25:  Cs1.2.GBP=0 by A14,A16,SCMPDS_2:59;
+A18:  IC Cs1.2= Next IC Cs1.1 by A12,SCMPDS_2:59
+     .= inspos (6+1) by A10,SCMPDS_4:70;
+then A19:  CurInstr Cs1.2 =s1.inspos 7 by AMI_1:54
+     .=i07 by A1,Lm1;
+A20:  Cs1.(2+1) = Following Cs1.2 by AMI_1:def 19
+     .= Exec(i07,Cs1.2) by A19;
+A21:  DataLoc(Cs1.1.SBP,6)=intpos(n+6) by A13,Th5;
+     then SBP <> DataLoc(Cs1.1.SBP,6) by Lm3;
+then A22:  Cs1.2.SBP=n by A12,A13,SCMPDS_2:59;
+         GBP <> DataLoc(Cs1.1.SBP,6) by A21,Lm2;
+then A23:  Cs1.2.GBP=0 by A12,A14,SCMPDS_2:59;
 
-A26:  IC Cs2.2= Next IC Cs2.1 by A19,SCMPDS_2:59
-     .= inspos (6+1) by A17,SCMPDS_4:70;
-then A27:  CurInstr Cs2.2 =s2.inspos 7 by AMI_1:54
-     .=i07 by A1,Lm3;
-A28:  Cs2.(2+1) = Following Cs2.2 by AMI_1:def 19
-     .= Exec(i07,Cs2.2) by A27;
+A24:  IC Cs2.2= Next IC Cs2.1 by A17,SCMPDS_2:59
+     .= inspos (6+1) by A15,SCMPDS_4:70;
+then A25:  CurInstr Cs2.2 =s2.inspos 7 by AMI_1:54
+     .=i07 by A1,Lm1;
+A26:  Cs2.(2+1) = Following Cs2.2 by AMI_1:def 19
+     .= Exec(i07,Cs2.2) by A25;
 
-A29:  IC Cs1.3= Next IC Cs1.2 by A22,SCMPDS_2:64
-     .= inspos (7+1) by A20,SCMPDS_4:70;
-then A30:  CurInstr Cs1.3 =s1.inspos 8 by AMI_1:54
-     .=i08 by A1,Lm3;
-A31:  Cs1.(3+1) = Following Cs1.3 by AMI_1:def 19
-     .= Exec(i08,Cs1.3) by A30;
-A32:  DataLoc(Cs1.2.SBP,2)=intpos(n+2) by A24,Th5;
-then A33:  SBP <> DataLoc(Cs1.2.SBP,2) by Lm5;
-A34:  DataLoc(Cs1.2.SBP,3)=intpos(n+3) by A24,Th5;
-     then SBP <> DataLoc(Cs1.2.SBP,3) by Lm5;
-then A35:  Cs1.3.SBP=n by A22,A24,A33,SCMPDS_2:64;
-A36:  GBP <> DataLoc(Cs1.2.SBP,2) by A32,Lm4;
-        GBP <> DataLoc(Cs1.2.SBP,3) by A34,Lm4;
-then A37:  Cs1.3.GBP=0 by A22,A25,A36,SCMPDS_2:64;
+A27:  IC Cs1.3= Next IC Cs1.2 by A20,SCMPDS_2:64
+     .= inspos (7+1) by A18,SCMPDS_4:70;
+then A28:  CurInstr Cs1.3 =s1.inspos 8 by AMI_1:54
+     .=i08 by A1,Lm1;
+A29:  Cs1.(3+1) = Following Cs1.3 by AMI_1:def 19
+     .= Exec(i08,Cs1.3) by A28;
+A30:  DataLoc(Cs1.2.SBP,2)=intpos(n+2) by A22,Th5;
+then A31:  SBP <> DataLoc(Cs1.2.SBP,2) by Lm3;
+A32:  DataLoc(Cs1.2.SBP,3)=intpos(n+3) by A22,Th5;
+     then SBP <> DataLoc(Cs1.2.SBP,3) by Lm3;
+then A33:  Cs1.3.SBP=n by A20,A22,A31,SCMPDS_2:64;
+A34:  GBP <> DataLoc(Cs1.2.SBP,2) by A30,Lm2;
+         GBP <> DataLoc(Cs1.2.SBP,3) by A32,Lm2;
+then A35:  Cs1.3.GBP=0 by A20,A23,A34,SCMPDS_2:64;
 
-A38:  IC Cs2.3= Next IC Cs2.2 by A28,SCMPDS_2:64
-     .= inspos (7+1) by A26,SCMPDS_4:70;
-then A39:  CurInstr Cs2.3 =s2.inspos 8 by AMI_1:54
-     .=i08 by A1,Lm3;
-A40:  Cs2.(3+1) = Following Cs2.3 by AMI_1:def 19
-     .= Exec(i08,Cs2.3) by A39;
+A36:  IC Cs2.3= Next IC Cs2.2 by A26,SCMPDS_2:64
+     .= inspos (7+1) by A24,SCMPDS_4:70;
+then A37:  CurInstr Cs2.3 =s2.inspos 8 by AMI_1:54
+     .=i08 by A1,Lm1;
+A38:  Cs2.(3+1) = Following Cs2.3 by AMI_1:def 19
+     .= Exec(i08,Cs2.3) by A37;
 
-A41:   IC Cs1.4= Next IC Cs1.3 by A31,SCMPDS_2:59
-      .= inspos (8+1) by A29,SCMPDS_4:70;
-then A42:   CurInstr Cs1.4 =s1.inspos 9 by AMI_1:54
-     .=i09 by A1,Lm3;
-A43:   Cs1.(4+1) = Following Cs1.4 by AMI_1:def 19
-        .= Exec(i09,Cs1.4) by A42;
-A44:   DataLoc(Cs1.3.SBP,7)=intpos(n+7) by A35,Th5;
-      then SBP <> DataLoc(Cs1.3.SBP,7) by Lm5;
-then A45:   Cs1.4.SBP=n by A31,A35,SCMPDS_2:59;
-         GBP <> DataLoc(Cs1.3.SBP,7) by A44,Lm4;
-then A46:   Cs1.4.GBP=0 by A31,A37,SCMPDS_2:59;
+A39:   IC Cs1.4= Next IC Cs1.3 by A29,SCMPDS_2:59
+      .= inspos (8+1) by A27,SCMPDS_4:70;
+then A40:   CurInstr Cs1.4 =s1.inspos 9 by AMI_1:54
+     .=i09 by A1,Lm1;
+A41:   Cs1.(4+1) = Following Cs1.4 by AMI_1:def 19
+        .= Exec(i09,Cs1.4) by A40;
+A42:   DataLoc(Cs1.3.SBP,7)=intpos(n+7) by A33,Th5;
+      then SBP <> DataLoc(Cs1.3.SBP,7) by Lm3;
+then A43:   Cs1.4.SBP=n by A29,A33,SCMPDS_2:59;
+          GBP <> DataLoc(Cs1.3.SBP,7) by A42,Lm2;
+then A44:   Cs1.4.GBP=0 by A29,A35,SCMPDS_2:59;
 
-A47:   IC Cs2.4= Next IC Cs2.3 by A40,SCMPDS_2:59
-      .= inspos (8+1) by A38,SCMPDS_4:70;
-then A48:   CurInstr Cs2.4 =s2.inspos 9 by AMI_1:54
-     .=i09 by A1,Lm3;
-A49:   Cs2.(4+1) = Following Cs2.4 by AMI_1:def 19
-        .= Exec(i09,Cs2.4) by A48;
+A45:   IC Cs2.4= Next IC Cs2.3 by A38,SCMPDS_2:59
+      .= inspos (8+1) by A36,SCMPDS_4:70;
+then A46:   CurInstr Cs2.4 =s2.inspos 9 by AMI_1:54
+     .=i09 by A1,Lm1;
+A47:   Cs2.(4+1) = Following Cs2.4 by AMI_1:def 19
+        .= Exec(i09,Cs2.4) by A46;
 
-A50:   IC Cs1.5= Next IC Cs1.4 by A43,SCMPDS_2:59
-      .= inspos (9+1) by A41,SCMPDS_4:70;
-then A51:   CurInstr Cs1.5 =s1.inspos 10 by AMI_1:54
-      .=i10 by A1,Lm3;
-A52:   Cs1.(5+1) = Following Cs1.5 by AMI_1:def 19
-      .= Exec(i10,Cs1.5) by A51;
-         DataLoc(Cs1.4.SBP,4+RetSP)=intpos(n+(4+0)) by A45,Th5,SCMPDS_1:def 22;
-      then GBP <> DataLoc(Cs1.4.SBP,4+RetSP) by Lm4;
-then A53:   Cs1.5.GBP=0 by A43,A46,SCMPDS_2:59;
+A48:   IC Cs1.5= Next IC Cs1.4 by A41,SCMPDS_2:59
+      .= inspos (9+1) by A39,SCMPDS_4:70;
+then A49:   CurInstr Cs1.5 =s1.inspos 10 by AMI_1:54
+      .=i10 by A1,Lm1;
+A50:   Cs1.(5+1) = Following Cs1.5 by AMI_1:def 19
+      .= Exec(i10,Cs1.5) by A49;
+          DataLoc(Cs1.4.SBP,4+RetSP)=intpos(n+(4+0)) by A43,Th5,SCMPDS_1:def 22
+;
+      then GBP <> DataLoc(Cs1.4.SBP,4+RetSP) by Lm2;
+then A51:   Cs1.5.GBP=0 by A41,A44,SCMPDS_2:59;
 
-A54:   IC Cs2.5= Next IC Cs2.4 by A49,SCMPDS_2:59
-      .= inspos (9+1) by A47,SCMPDS_4:70;
-then A55:   CurInstr Cs2.5 =s2.inspos 10 by AMI_1:54
-      .=i10 by A1,Lm3;
-A56:   Cs2.(5+1) = Following Cs2.5 by AMI_1:def 19
-      .= Exec(i10,Cs2.5) by A55;
+A52:   IC Cs2.5= Next IC Cs2.4 by A47,SCMPDS_2:59
+      .= inspos (9+1) by A45,SCMPDS_4:70;
+then A53:   CurInstr Cs2.5 =s2.inspos 10 by AMI_1:54
+      .=i10 by A1,Lm1;
+A54:   Cs2.(5+1) = Following Cs2.5 by AMI_1:def 19
+      .= Exec(i10,Cs2.5) by A53;
 
-A57:   IC Cs1.6= Next IC Cs1.5 by A52,SCMPDS_2:60
-      .= inspos (10+1) by A50,SCMPDS_4:70;
-then A58:   CurInstr Cs1.6 =s1.inspos 11 by AMI_1:54
-     .=i11 by A1,Lm3;
-A59:   Cs1.(6+1) = Following Cs1.6 by AMI_1:def 19
-      .= Exec(i11,Cs1.6) by A58;
+A55:   IC Cs1.6= Next IC Cs1.5 by A50,SCMPDS_2:60
+      .= inspos (10+1) by A48,SCMPDS_4:70;
+then A56:   CurInstr Cs1.6 =s1.inspos 11 by AMI_1:54
+     .=i11 by A1,Lm1;
+A57:   Cs1.(6+1) = Following Cs1.6 by AMI_1:def 19
+      .= Exec(i11,Cs1.6) by A56;
 
-A60:   IC Cs2.6= Next IC Cs2.5 by A56,SCMPDS_2:60
-      .= inspos (10+1) by A54,SCMPDS_4:70;
-then A61:   CurInstr Cs2.6 =s2.inspos 11 by AMI_1:54
-     .=i11 by A1,Lm3;
-A62:   Cs2.(6+1) = Following Cs2.6 by AMI_1:def 19
-      .= Exec(i11,Cs2.6) by A61;
+A58:   IC Cs2.6= Next IC Cs2.5 by A54,SCMPDS_2:60
+      .= inspos (10+1) by A52,SCMPDS_4:70;
+then A59:   CurInstr Cs2.6 =s2.inspos 11 by AMI_1:54
+     .=i11 by A1,Lm1;
+A60:   Cs2.(6+1) = Following Cs2.6 by AMI_1:def 19
+      .= Exec(i11,Cs2.6) by A59;
 
-A63:    now let b;
+A61:    now let b;
           assume s1.b=s2.b;
-           hence Cs1.1.b=s2.b by A9,SCMPDS_2:68
-           .=Cs2.1.b by A11,SCMPDS_2:68;
+           hence Cs1.1.b=s2.b by A8,SCMPDS_2:68
+           .=Cs2.1.b by A9,SCMPDS_2:68;
        end;
-A64:    s1.b=s2.b implies Cs1.2.b=Cs2.2.b
+A62:    s1.b=s2.b implies Cs1.2.b=Cs2.2.b
        proof
-         assume A65:s1.b=s2.b;
+         assume A63:s1.b=s2.b;
          per cases;
-         suppose A66: b=DataLoc(Cs1.1.SBP,6);
-then A67:        b=DataLoc(Cs2.1.SBP,6) by A6,A63;
-          thus Cs1.2.b=Cs1.1.DataLoc(s1.SBP,3) by A3,A14,A15,A66,SCMPDS_2:59
-            .=Cs2.1.DataLoc(Cs1.1.SBP,3) by A3,A7,A15,A63
-            .=Cs2.1.DataLoc(Cs2.1.SBP,3) by A6,A63
-            .=Cs2.2.b by A19,A67,SCMPDS_2:59;
+         suppose A64: b=DataLoc(Cs1.1.SBP,6);
+then A65:        b=DataLoc(Cs2.1.SBP,6) by A6,A61;
+          thus Cs1.2.b=Cs1.1.DataLoc(s1.SBP,3) by A3,A12,A13,A64,SCMPDS_2:59
+            .=Cs2.1.DataLoc(Cs1.1.SBP,3) by A3,A7,A13,A61
+            .=Cs2.1.DataLoc(Cs2.1.SBP,3) by A6,A61
+            .=Cs2.2.b by A17,A65,SCMPDS_2:59;
          end;
-         suppose A68: b<>DataLoc(Cs1.1.SBP,6);
-then A69:        b<>DataLoc(Cs2.1.SBP,6) by A6,A63;
-          thus Cs1.2.b=Cs1.1.b by A14,A68,SCMPDS_2:59
-           .=Cs2.1.b by A63,A65
-           .=Cs2.2.b by A19,A69,SCMPDS_2:59;
+         suppose A66: b<>DataLoc(Cs1.1.SBP,6);
+then A67:        b<>DataLoc(Cs2.1.SBP,6) by A6,A61;
+          thus Cs1.2.b=Cs1.1.b by A12,A66,SCMPDS_2:59
+           .=Cs2.1.b by A61,A63
+           .=Cs2.2.b by A17,A67,SCMPDS_2:59;
       end;
       end;
-A70:    now let b;
-         assume A71:s1.b=s2.b;
+A68:    now let b;
+         assume A69:s1.b=s2.b;
          set x1=DataLoc(Cs1.2.SBP,2),
              x2=DataLoc(Cs1.2.SBP,3),
              y1=DataLoc(Cs2.2.SBP,2),
              y2=DataLoc(Cs2.2.SBP,3);
-A72:      x1=y1 by A6,A64;
-A73:      x2=y2 by A6,A64;
+A70:      x1=y1 by A6,A62;
+A71:      x2=y2 by A6,A62;
          per cases;
-         suppose A74:b<>x1 & b<>x2;
-          hence Cs1.3.b=Cs1.2.b by A22,SCMPDS_2:64
-           .=Cs2.2.b by A64,A71
-           .=Cs2.3.b by A28,A72,A73,A74,SCMPDS_2:64;
+         suppose A72:b<>x1 & b<>x2;
+          hence Cs1.3.b=Cs1.2.b by A20,SCMPDS_2:64
+           .=Cs2.2.b by A62,A69
+           .=Cs2.3.b by A26,A70,A71,A72,SCMPDS_2:64;
          end;
-         suppose A75: b=x1;
-          A76: n+2<>n+3;
-then A77:       x1<>x2 by A32,A34,Lm2;
-A78:       y1<>y2 by A32,A34,A72,A73,A76,Lm2;
-         thus Cs1.3.b=Cs1.2.x1 div Cs1.2.x2 by A22,A75,A77,SCMPDS_2:64
-            .=Cs2.2.x1 div Cs1.2.x2 by A3,A7,A24,A64
-            .=Cs2.2.x1 div Cs2.2.x2 by A3,A7,A24,A64
-            .=Cs2.3.b by A28,A72,A73,A75,A78,SCMPDS_2:64;
+         suppose A73: b=x1;
+          A74: n+2<>n+3;
+then A75:       x1<>x2 by A30,A32,AMI_3:52;
+A76:       y1<>y2 by A30,A32,A70,A71,A74,AMI_3:52;
+         thus Cs1.3.b=Cs1.2.x1 div Cs1.2.x2 by A20,A73,A75,SCMPDS_2:64
+            .=Cs2.2.x1 div Cs1.2.x2 by A3,A7,A22,A62
+            .=Cs2.2.x1 div Cs2.2.x2 by A3,A7,A22,A62
+            .=Cs2.3.b by A26,A70,A71,A73,A76,SCMPDS_2:64;
          end;
-         suppose A79: b=x2;
-         hence Cs1.3.b=Cs1.2.x1 mod Cs1.2.x2 by A22,SCMPDS_2:64
-            .=Cs2.2.x1 mod Cs1.2.x2 by A3,A7,A24,A64
-            .=Cs2.2.x1 mod Cs2.2.x2 by A3,A7,A24,A64
-            .=Cs2.3.b by A28,A72,A73,A79,SCMPDS_2:64;
+         suppose A77: b=x2;
+         hence Cs1.3.b=Cs1.2.x1 mod Cs1.2.x2 by A20,SCMPDS_2:64
+            .=Cs2.2.x1 mod Cs1.2.x2 by A3,A7,A22,A62
+            .=Cs2.2.x1 mod Cs2.2.x2 by A3,A7,A22,A62
+            .=Cs2.3.b by A26,A70,A71,A77,SCMPDS_2:64;
       end;
       end;
-A80:    now let b;
-         assume A81:s1.b=s2.b;
+A78:    now let b;
+         assume A79:s1.b=s2.b;
          per cases;
-         suppose A82:b=DataLoc(Cs1.3.SBP,7);
-then A83:        b=DataLoc(Cs2.3.SBP,7) by A6,A70;
-           thus Cs1.4.b=Cs1.3.DataLoc(Cs1.3.SBP,3) by A31,A82,SCMPDS_2:59
-           .=Cs2.3.DataLoc(Cs1.3.SBP,3) by A3,A7,A35,A70
-           .=Cs2.3.DataLoc(Cs2.3.SBP,3) by A6,A70
-           .=Cs2.4.b by A40,A83,SCMPDS_2:59;
+         suppose A80:b=DataLoc(Cs1.3.SBP,7);
+then A81:        b=DataLoc(Cs2.3.SBP,7) by A6,A68;
+           thus Cs1.4.b=Cs1.3.DataLoc(Cs1.3.SBP,3) by A29,A80,SCMPDS_2:59
+           .=Cs2.3.DataLoc(Cs1.3.SBP,3) by A3,A7,A33,A68
+           .=Cs2.3.DataLoc(Cs2.3.SBP,3) by A6,A68
+           .=Cs2.4.b by A38,A81,SCMPDS_2:59;
          end;
-         suppose A84:b<>DataLoc(Cs1.3.SBP,7);
-then A85:        b<>DataLoc(Cs2.3.SBP,7) by A6,A70;
-           thus Cs1.4.b=Cs1.3.b by A31,A84,SCMPDS_2:59
-           .=Cs2.3.b by A70,A81
-           .=Cs2.4.b by A40,A85,SCMPDS_2:59;
+         suppose A82:b<>DataLoc(Cs1.3.SBP,7);
+then A83:        b<>DataLoc(Cs2.3.SBP,7) by A6,A68;
+           thus Cs1.4.b=Cs1.3.b by A29,A82,SCMPDS_2:59
+           .=Cs2.3.b by A68,A79
+           .=Cs2.4.b by A38,A83,SCMPDS_2:59;
        end;
        end;
-A86:    now let b;
-         assume A87:s1.b=s2.b;
-A88:      s1.DataLoc(Cs1.4.GBP,1)=s2.intpos(0+1) by A6,A46,Th5
-         .=s2.DataLoc(Cs1.4.GBP,1) by A46,Th5;
+A84:    now let b;
+         assume A85:s1.b=s2.b;
+A86:      s1.DataLoc(Cs1.4.GBP,1)=s2.intpos(0+1) by A6,A44,Th5
+         .=s2.DataLoc(Cs1.4.GBP,1) by A44,Th5;
          per cases;
-         suppose A89:b=DataLoc(Cs1.4.SBP,4+RetSP);
-then A90:        b=DataLoc(Cs2.4.SBP,4+RetSP) by A6,A80;
-           thus Cs1.5.b=Cs1.4.DataLoc(Cs1.4.GBP,1) by A43,A89,SCMPDS_2:59
-           .=Cs2.4.DataLoc(Cs1.4.GBP,1) by A80,A88
-           .=Cs2.4.DataLoc(Cs2.4.GBP,1) by A4,A6,A80
-           .=Cs2.5.b by A49,A90,SCMPDS_2:59;
+         suppose A87:b=DataLoc(Cs1.4.SBP,4+RetSP);
+then A88:        b=DataLoc(Cs2.4.SBP,4+RetSP) by A6,A78;
+           thus Cs1.5.b=Cs1.4.DataLoc(Cs1.4.GBP,1) by A41,A87,SCMPDS_2:59
+           .=Cs2.4.DataLoc(Cs1.4.GBP,1) by A78,A86
+           .=Cs2.4.DataLoc(Cs2.4.GBP,1) by A4,A6,A78
+           .=Cs2.5.b by A47,A88,SCMPDS_2:59;
          end;
-         suppose A91:b<>DataLoc(Cs1.4.SBP,4+RetSP);
-then A92:        b<>DataLoc(Cs2.4.SBP,4+RetSP) by A6,A80;
-           thus Cs1.5.b=Cs1.4.b by A43,A91,SCMPDS_2:59
-           .=Cs2.4.b by A80,A87
-           .=Cs2.5.b by A49,A92,SCMPDS_2:59;
+         suppose A89:b<>DataLoc(Cs1.4.SBP,4+RetSP);
+then A90:        b<>DataLoc(Cs2.4.SBP,4+RetSP) by A6,A78;
+           thus Cs1.5.b=Cs1.4.b by A41,A89,SCMPDS_2:59
+           .=Cs2.4.b by A78,A85
+           .=Cs2.5.b by A47,A90,SCMPDS_2:59;
        end;
        end;
-A93:    now let b;
-         assume A94:s1.b=s2.b;
-A95:      s1.DataLoc(Cs1.5.GBP,1)=s2.intpos(0+1) by A6,A53,Th5
-         .=s2.DataLoc(Cs1.5.GBP,1) by A53,Th5;
+A91:    now let b;
+         assume A92:s1.b=s2.b;
+A93:      s1.DataLoc(Cs1.5.GBP,1)=s2.intpos(0+1) by A6,A51,Th5
+         .=s2.DataLoc(Cs1.5.GBP,1) by A51,Th5;
          per cases;
-         suppose A96:b=DataLoc(Cs1.5.GBP,1);
-then A97:        b=DataLoc(Cs2.5.GBP,1) by A4,A6,A86;
-           thus Cs1.6.b=Cs1.5.DataLoc(Cs1.5.GBP,1)+4 by A52,A96,SCMPDS_2:60
-           .=Cs2.5.DataLoc(Cs1.5.GBP,1)+4 by A86,A95
-           .=Cs2.5.DataLoc(Cs2.5.GBP,1)+4 by A4,A6,A86
-           .=Cs2.6.b by A56,A97,SCMPDS_2:60;
+         suppose A94:b=DataLoc(Cs1.5.GBP,1);
+then A95:        b=DataLoc(Cs2.5.GBP,1) by A4,A6,A84;
+           thus Cs1.6.b=Cs1.5.DataLoc(Cs1.5.GBP,1)+4 by A50,A94,SCMPDS_2:60
+           .=Cs2.5.DataLoc(Cs1.5.GBP,1)+4 by A84,A93
+           .=Cs2.5.DataLoc(Cs2.5.GBP,1)+4 by A4,A6,A84
+           .=Cs2.6.b by A54,A95,SCMPDS_2:60;
          end;
-         suppose A98:b<>DataLoc(Cs1.5.GBP,1);
-then A99:        b<>DataLoc(Cs2.5.GBP,1) by A4,A6,A86;
-           thus Cs1.6.b=Cs1.5.b by A52,A98,SCMPDS_2:60
-           .=Cs2.5.b by A86,A94
-           .=Cs2.6.b by A56,A99,SCMPDS_2:60;
+         suppose A96:b<>DataLoc(Cs1.5.GBP,1);
+then A97:        b<>DataLoc(Cs2.5.GBP,1) by A4,A6,A84;
+           thus Cs1.6.b=Cs1.5.b by A50,A96,SCMPDS_2:60
+           .=Cs2.5.b by A84,A92
+           .=Cs2.6.b by A54,A97,SCMPDS_2:60;
        end;
        end;
-A100:    now let b;
-         assume A101:s1.b=s2.b;
+A98:    now let b;
+         assume A99:s1.b=s2.b;
          per cases;
-         suppose A102:b=DataLoc(Cs1.6.SBP,RetIC);
-then A103:        b=DataLoc(Cs2.6.SBP,RetIC) by A6,A93;
-           thus Cs1.7.b=IC Cs1.6 by A59,A102,SCMPDS_2:71
-           .=Cs2.7.b by A57,A60,A62,A103,SCMPDS_2:71;
+         suppose A100:b=DataLoc(Cs1.6.SBP,RetIC);
+then A101:        b=DataLoc(Cs2.6.SBP,RetIC) by A6,A91;
+           thus Cs1.7.b=IC Cs1.6 by A57,A100,SCMPDS_2:71
+           .=Cs2.7.b by A55,A58,A60,A101,SCMPDS_2:71;
          end;
-         suppose A104:b<>DataLoc(Cs1.6.SBP,RetIC);
-then A105:        b<>DataLoc(Cs2.6.SBP,RetIC) by A6,A93;
-           thus Cs1.7.b=Cs1.6.b by A59,A104,SCMPDS_2:71
-           .=Cs2.6.b by A93,A101
-           .=Cs2.7.b by A62,A105,SCMPDS_2:71;
+         suppose A102:b<>DataLoc(Cs1.6.SBP,RetIC);
+then A103:        b<>DataLoc(Cs2.6.SBP,RetIC) by A6,A91;
+           thus Cs1.7.b=Cs1.6.b by A57,A102,SCMPDS_2:71
+           .=Cs2.6.b by A91,A99
+           .=Cs2.7.b by A60,A103,SCMPDS_2:71;
        end;
        end;
      hereby let k be Element of NAT,a be Int_position;
-       assume A106:k <= 7 & s1.a=s2.a;
-       per cases by A106,NAT_1:32;
-       suppose A107:k=0;
+       assume A104:k <= 7 & s1.a=s2.a;
+       per cases by A104,NAT_1:32;
+       suppose A105:k=0;
          hence IC Cs1.k = IC s1 by AMI_1:def 19
-              .=IC Cs2.k by A6,A107,AMI_1:def 19;
-         thus Cs1.k.a = s1.a by A107,AMI_1:def 19
-              .=Cs2.k.a by A106,A107,AMI_1:def 19;
+              .=IC Cs2.k by A6,A105,AMI_1:def 19;
+         thus Cs1.k.a = s1.a by A105,AMI_1:def 19
+              .=Cs2.k.a by A104,A105,AMI_1:def 19;
        end;
-       suppose A108:k=1;
-         hence IC Cs1.k=IC Cs2.k by A12,A17;
-         thus Cs1.k.a = Cs2.k.a by A63,A106,A108;
+       suppose A106:k=1;
+         hence IC Cs1.k=IC Cs2.k by A10,A15;
+         thus Cs1.k.a = Cs2.k.a by A61,A104,A106;
        end;
-       suppose A109:k=2;
-         hence IC Cs1.k=IC Cs2.k by A20,A26;
-         thus Cs1.k.a = Cs2.k.a by A64,A106,A109;
+       suppose A107:k=2;
+         hence IC Cs1.k=IC Cs2.k by A18,A24;
+         thus Cs1.k.a = Cs2.k.a by A62,A104,A107;
        end;
-       suppose A110:k=3;
-         hence IC Cs1.k=IC Cs2.k by A29,A38;
-         thus Cs1.k.a = Cs2.k.a by A70,A106,A110;
+       suppose A108:k=3;
+         hence IC Cs1.k=IC Cs2.k by A27,A36;
+         thus Cs1.k.a = Cs2.k.a by A68,A104,A108;
        end;
-       suppose A111:k=4;
-         hence IC Cs1.k=IC Cs2.k by A41,A47;
-         thus Cs1.k.a = Cs2.k.a by A80,A106,A111;
+       suppose A109:k=4;
+         hence IC Cs1.k=IC Cs2.k by A39,A45;
+         thus Cs1.k.a = Cs2.k.a by A78,A104,A109;
        end;
-       suppose A112:k=5;
-         hence IC Cs1.k=IC Cs2.k by A50,A54;
-         thus Cs1.k.a = Cs2.k.a by A86,A106,A112;
+       suppose A110:k=5;
+         hence IC Cs1.k=IC Cs2.k by A48,A52;
+         thus Cs1.k.a = Cs2.k.a by A84,A104,A110;
        end;
-       suppose A113:k=6;
-         hence IC Cs1.k=IC Cs2.k by A57,A60;
-         thus Cs1.k.a = Cs2.k.a by A93,A106,A113;
+       suppose A111:k=6;
+         hence IC Cs1.k=IC Cs2.k by A55,A58;
+         thus Cs1.k.a = Cs2.k.a by A91,A104,A111;
        end;
-       suppose A114:k=7;
-         thus IC Cs1.k= Next IC Cs2.6 by A57,A59,A60,A114,SCMPDS_2:71
-          .= IC Cs2.k by A62,A114,SCMPDS_2:71;
-        thus Cs1.k.a = Cs2.k.a by A100,A106,A114;
+       suppose A112:k=7;
+         hence IC Cs1.k= Next IC Cs2.6 by A55,A57,A58,SCMPDS_2:71
+          .= IC Cs2.k by A60,A112,SCMPDS_2:71;
+        thus Cs1.k.a = Cs2.k.a by A98,A104,A112;
      end;
      end;
 end;
 
-Lm10:
+Lm8:
   for s1,s2 being State of SCMPDS st
   GCD-Algorithm c= s1 & GCD-Algorithm c= s2 &
    IC s1 = inspos 5 &
@@ -1537,62 +1503,60 @@ A1: P[0]
      assume x >= y;
      assume A5: IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0;
      assume A6: s2.DataLoc(s1.SBP,2) = x & y2 = y;
-A7:  CurInstr s1 =i05 by  A3,A2,Lm3;
-A8:  Cs1.(1+0) = Following Cs1.0 by AMI_1:def 19
+A7:  Cs1.(1+0) = Following Cs1.0 by AMI_1:def 19
      .= Following s1 by AMI_1:def 19
-     .= Exec(i05,s1) by A7;
-A9:  CurInstr s2 =i05 by  A3,A5,A2,Lm3;
-A10:  Cs2.(1+0) = Following Cs2.0 by AMI_1:def 19
+     .= Exec(i05,s1) by A2,A3,Lm1;
+A8:  Cs2.(1+0) = Following Cs2.0 by AMI_1:def 19
      .= Following s2 by AMI_1:def 19
-     .= Exec(i05,s2) by A9;
-A11:  IC Cs1.1= ICplusConst(s1,9) by A4,A8,SCMPDS_2:68
+     .= Exec(i05,s2) by A2,A3,A5,Lm1;
+A9:  IC Cs1.1= ICplusConst(s1,9) by A4,A7,SCMPDS_2:68
      .= inspos (5+9) by A3,SCMPDS_6:23;
-A12:  IC Cs2.1= ICplusConst(s2,9) by A4,A5,A6,A10,SCMPDS_2:68
+A10:  IC Cs2.1= ICplusConst(s2,9) by A4,A5,A6,A8,SCMPDS_2:68
      .= inspos (5+9) by A3,A5,SCMPDS_6:23;
 
      take n=1;
-     thus CurInstr Cs1.n=s1.inspos 14 by  A11,AMI_1:54
-     .=i14 by A2,Lm3;
-     thus Cs1.n.SBP=s1.SBP by A8,SCMPDS_2:68;
-     thus CurInstr Cs2.n=s2.inspos 14 by  A12,AMI_1:54
-     .=i14 by A2,Lm3;
-     thus Cs2.n.SBP=s2.SBP by A10,SCMPDS_2:68;
+     thus CurInstr Cs1.n=s1.inspos 14 by A9,AMI_1:54
+     .=i14 by A2,Lm1;
+     thus Cs1.n.SBP=s1.SBP by A7,SCMPDS_2:68;
+     thus CurInstr Cs2.n=s2.inspos 14 by A10,AMI_1:54
+     .=i14 by A2,Lm1;
+     thus Cs2.n.SBP=s2.SBP by A8,SCMPDS_2:68;
     thus for j be Element of NAT st 1<j & j <= s1.SBP+1 holds
         s1.intpos j=Cs1.n.intpos j &
-        s2.intpos j=Cs2.n.intpos j by A8,A10,SCMPDS_2:68;
+        s2.intpos j=Cs2.n.intpos j by A7,A8,SCMPDS_2:68;
      hereby let k be Element of NAT,a;
-       assume A13: k <= n & s1.a=s2.a;
-       per cases by A13,NAT_1:26;
-       suppose A14:k=0;
+       assume A11: k <= n & s1.a=s2.a;
+       per cases by A11,NAT_1:26;
+       suppose A12:k=0;
          hence IC Cs1.k = IC s2 by A5,AMI_1:def 19
-         .=IC Cs2.k by A14,AMI_1:def 19;
-        thus Cs1.k.a =s1.a by A14,AMI_1:def 19
-         .=Cs2.k.a by A13,A14,AMI_1:def 19;
+         .=IC Cs2.k by A12,AMI_1:def 19;
+        thus Cs1.k.a =s1.a by A12,AMI_1:def 19
+         .=Cs2.k.a by A11,A12,AMI_1:def 19;
        end;
-       suppose A15:k=1;
-        hence IC Cs1.k =IC Cs2.k by A11,A12;
-        thus Cs1.k.a=s1.a by A8,A15,SCMPDS_2:68
-            .=Cs2.k.a by A10,A13,A15,SCMPDS_2:68;
+       suppose A13:k=1;
+        hence IC Cs1.k =IC Cs2.k by A9,A10;
+        thus Cs1.k.a=s1.a by A7,A13,SCMPDS_2:68
+            .=Cs2.k.a by A8,A11,A13,SCMPDS_2:68;
      end;
      end;
     end;
-A16: now let k be Element of NAT;
-      assume A17:P[k];
-         now let s1,s2 be State of SCMPDS;
+A14: now let k be Element of NAT;
+      assume A15:P[k];
+          now let s1,s2 be State of SCMPDS;
       set x =s1.DataLoc(s1.SBP,2),
           y =s1.DataLoc(s1.SBP,3),
           Cs1=Computation s1,
           Cs2=Computation s2;
-        assume A18: GA c= s1 & GA c= s2;
-        assume A19: IC s1 = inspos 5;
-        assume A20: s1.SBP >0 & s1.GBP=0;
-        assume A21: y <= k+1;
-        assume A22: y >= 0;
-        assume A23: x >= y;
-        assume A24: IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0;
-        assume A25: s2.DataLoc(s1.SBP,2) = x & s2.DataLoc(s1.SBP,3) = y;
-        reconsider y as Element of NAT by A22,INT_1:16;
-        per cases by A21,NAT_1:8;
+        assume A16: GA c= s1 & GA c= s2;
+        assume A17: IC s1 = inspos 5;
+        assume A18: s1.SBP >0 & s1.GBP=0;
+        assume A19: y <= k+1;
+        assume A20: y >= 0;
+        assume A21: x >= y;
+        assume A22: IC s2 = IC s1 & s2.SBP = s1.SBP & s2.GBP=0;
+        assume A23: s2.DataLoc(s1.SBP,2) = x & s2.DataLoc(s1.SBP,3) = y;
+        reconsider y as Element of NAT by A20,INT_1:16;
+        per cases by A19,NAT_1:8;
         suppose y <= k;
         hence ex n st CurInstr Cs1.n = return SBP & s1.SBP=Cs1.n.SBP &
           CurInstr Cs2.n = return SBP & s2.SBP=Cs2.n.SBP &
@@ -1601,17 +1565,16 @@ A16: now let k be Element of NAT;
             s2.intpos j=Cs2.n.intpos j) &
           (for k be Element of NAT,a st k <= n & s1.a=s2.a holds
            IC Cs1.k = IC Cs2.k & Cs1.k.a = Cs2.k.a)
-           by A17,A18,A19,A20,A22,A23,A24,A25;
+           by A15,A16,A17,A18,A20,A21,A22,A23;
 
         end;
-        suppose A26: y = k+1;
-           then A27: y<>0 by NAT_1:5;
-then A28:        y>0 by NAT_1:3;
-           reconsider n=s1.SBP as Element of NAT by A20,INT_1:16;
-A29:        n=s1.SBP;
+        suppose A24: y = k+1;
+then A25:        y>0 by NAT_1:5;
+           reconsider n=s1.SBP as Element of NAT by A18,INT_1:16;
+A26:        n=s1.SBP;
            set s8=Cs1.8,
                t8=Cs2.8;
-A30:        IC Cs1.7 = inspos (5+7) & s8 = Exec(i12,Cs1.7) &
+A27:        IC Cs1.7 = inspos (5+7) & s8 = Exec(i12,Cs1.7) &
            Cs1.7.SBP=n+4 & Cs1.7.GBP=0 &
            Cs1.7.intpos(n+7) = s1.intpos(n+2) mod s1.intpos(n+3) &
            Cs1.7.intpos(n+6) = s1.intpos(n+3) &
@@ -1623,39 +1586,40 @@ A30:        IC Cs1.7 = inspos (5+7) & s8 = Exec(i12,Cs1.7) &
 
            Cs1.7.intpos(n+4) = n & Cs1.7.intpos(n+5) = inspos 11 &
            Cs2.7.intpos(n+4) = n & Cs2.7.intpos(n+5) = inspos 11
-            by A18,A19,A20,A24,A25,A28,A29,Lm8;
-A31:      DataLoc(n+4,2)=intpos(n+4+2) by Th5
+            by A16,A17,A18,A22,A23,A25,A26,Lm6;
+A28:      DataLoc(n+4,2)=intpos(n+4+2) by Th5
           .=intpos(n+(4+2));
-A32:      DataLoc(n+4,3)=intpos(n+4+3) by Th5
+A29:      DataLoc(n+4,3)=intpos(n+4+3) by Th5
           .=intpos(n+(4+3));
-A33:       GA c= s8 & GA c= t8 by A18,AMI_3:38;
-A34:       IC s8= ICplusConst(Cs1.7,-7) by A30,SCMPDS_2:66
-          .= inspos 5 by A30,Th6;
-A35:       s8.SBP=n+4 by A30,SCMPDS_2:66;
-A36:       4<=n+4 by NAT_1:11;
-then A37:       s8.SBP > 0 by A35,XXREAL_0:2;
-A38:       s8.GBP=0 by A30,SCMPDS_2:66;
+A30:       GA c= s8 & GA c= t8 by A16,AMI_1:81;
+A31:       IC s8= ICplusConst(Cs1.7,-7) by A27,SCMPDS_2:66
+          .= inspos 5 by A27,Th6;
+A32:       s8.SBP=n+4 by A27,SCMPDS_2:66;
+A33:       4<=n+4 by NAT_1:11;
+then A34:       s8.SBP > 0 by A32,XXREAL_0:2;
+A35:       s8.GBP=0 by A27,SCMPDS_2:66;
           set x1=s8.DataLoc(s8.SBP,2),
               y1=s8.DataLoc(s8.SBP,3);
-A39:       x1=s1.intpos(n+3) by A30,A31,A35,SCMPDS_2:66
+A36:       x1=s1.intpos(n+3) by A27,A28,A32,SCMPDS_2:66
           .=y by Th5;
-A40:       y1= s1.intpos(n+2) mod s1.intpos(n+3) by A30,A32,A35,SCMPDS_2:66
+A37:       y1= s1.intpos(n+2) mod s1.intpos(n+3) by A27,A29,A32,SCMPDS_2:66
           .= s1.intpos(n+2) mod y by Th5;
-then A41:       y1<y by A28,NEWTON:79;
-then A42:       y1 <= k by A26,INT_1:20;
-A43:       y1 >= 0 by A28,A40,NEWTON:78;
-A44:      IC t8= ICplusConst(Cs2.7,-7) by A30,SCMPDS_2:66
-          .= IC s8 by A30,A34,Th6;
-A45:      t8.SBP=s8.SBP by A30,A35,SCMPDS_2:66;
-A46:      t8.GBP=0 by A30,SCMPDS_2:66;
+then A38:       y1<y by A25,NEWTON:79;
+then A39:       y1 <= k by A24,INT_1:20;
+A40:       y1 >= 0 by A25,A37,NEWTON:78;
+A41:      IC t8= ICplusConst(Cs2.7,-7) by A27,SCMPDS_2:66
+          .= IC s8 by A27,A31,Th6;
+A42:      t8.SBP=s8.SBP by A27,A32,SCMPDS_2:66;
+A43:      t8.GBP=0 by A27,SCMPDS_2:66;
           set x3=t8.DataLoc(s8.SBP,2);
-A47:       x3=s1.intpos(n+3) by A30,A31,A35,SCMPDS_2:66
-          .=x1 by A39,Th5;
-          t8.DataLoc(s8.SBP,3)=s1.intpos(n+2) mod s1.intpos(n+3) by A30,A32,A35
+A44:       x3=s1.intpos(n+3) by A27,A28,A32,SCMPDS_2:66
+          .=x1 by A36,Th5;
+           t8.DataLoc(s8.SBP,3)=s1.intpos(n+2) mod s1.intpos(n+3) by A27,A29,
+A32
 ,SCMPDS_2:66
-          .=y1 by A40,Th5;
+          .=y1 by A37,Th5;
          then consider m such that
-A48:      CurInstr (Computation s8).m = return SBP &
+A45:      CurInstr (Computation s8).m = return SBP &
          s8.SBP=(Computation s8).m.SBP &
          CurInstr (Computation t8).m = return SBP &
          t8.SBP=(Computation t8).m.SBP &
@@ -1666,177 +1630,174 @@ A48:      CurInstr (Computation s8).m = return SBP &
           holds
            IC (Computation s8).k = IC (Computation t8).k &
            (Computation s8).k.a =(Computation t8).k.a)
-            by A17,A33,A34,A37,A38,A39,A41,A42,A43,A44,A45,A46,A47;
+            by A15,A30,A31,A34,A35,A36,A38,A39,A40,A41,A42,A43,A44;
 
           set s9=Cs1.(m+8),
               t9=Cs2.(m+8);
-A49:       CurInstr s9 = return SBP by A48,AMI_1:51;
-A50:       s8.SBP=s9.SBP by A48,AMI_1:51;
-A51:       Cs1.(m+(8+1))=Cs1.(m+8+1)
+A46:       s8.SBP=s9.SBP by A45,AMI_1:51;
+A47:       Cs1.(m+(8+1))=Cs1.(m+8+1)
           .= Following s9 by AMI_1:def 19
-          .= Exec(return SBP,s9) by A49;
-A52:       1 < n+4 by A36,XXREAL_0:2;
-A53:       n+4 < s8.SBP+1 by A35,XREAL_1:31;
-then A54:       s8.intpos(n+4)=(Computation s8).m.intpos (n+4) by A48,A52
+          .= Exec(return SBP,s9) by A45,AMI_1:51;
+A48:       1 < n+4 by A33,XXREAL_0:2;
+A49:       n+4 < s8.SBP+1 by A32,XREAL_1:31;
+then A50:       s8.intpos(n+4)=(Computation s8).m.intpos (n+4) by A45,A48
           .=s9.intpos(n+4) by AMI_1:51;
-          5<=n+5 by NAT_1:11;
-then A55:       1 <n+5 by XXREAL_0:2;
-A56:      intpos(n+(4+1))=intpos(n+4+1)
+           5<=n+5 by NAT_1:11;
+then A51:       1 <n+5 by XXREAL_0:2;
+A52:      intpos(n+(4+1))=intpos(n+4+1)
           .=DataLoc(n+4,1) by Th5;
-A57:       inspos 11=s8.intpos(n+5) by A30,SCMPDS_2:66
-          .=(Computation s8).m.intpos (n+5) by A48,A55,A35
-          .=s9.DataLoc(s9.SBP,RetIC) by A35,A50,A56,AMI_1:51,SCMPDS_1:def 23;
-
-A58:       CurInstr t9 = return SBP by A48,AMI_1:51;
-A59:       t9.SBP=n+4 by A35,A45,A48,AMI_1:51;
-A60:       Cs2.(m+(8+1))=Cs2.(m+8+1)
+A53:       inspos 11=s8.intpos(n+5) by A27,SCMPDS_2:66
+          .=(Computation s8).m.intpos (n+5) by A45,A51,A32
+          .=s9.DataLoc(s9.SBP,RetIC) by A32,A46,A52,AMI_1:51,SCMPDS_1:def 23;
+A54:       t9.SBP=n+4 by A32,A42,A45,AMI_1:51;
+A55:       Cs2.(m+(8+1))=Cs2.(m+8+1)
           .= Following t9 by AMI_1:def 19
-          .= Exec(return SBP,t9) by A58;
-A61:       t8.intpos(n+4)=(Computation t8).m.intpos (n+4) by A48,A52,A53
+          .= Exec(return SBP,t9) by A45,AMI_1:51;
+A56:       t8.intpos(n+4)=(Computation t8).m.intpos (n+4) by A45,A48,A49
           .=t9.intpos(n+4) by AMI_1:51;
-A62:       inspos 11=t8.intpos(n+5) by A30,SCMPDS_2:66
-          .=(Computation t8).m.intpos (n+5) by A48,A55,A35
-          .=t9.DataLoc(t9.SBP,RetIC) by A56,A59,AMI_1:51,SCMPDS_1:def 23;
+A57:       inspos 11=t8.intpos(n+5) by A27,SCMPDS_2:66
+          .=(Computation t8).m.intpos (n+5) by A45,A51,A32
+          .=t9.DataLoc(t9.SBP,RetIC) by A52,A54,AMI_1:51,SCMPDS_1:def 23;
 
-A63:       IC Cs1.(m+9)=
- 2*(abs(s9.DataLoc(s9.SBP,RetIC)) div 2)+4 by A51,SCMPDS_2:70
-          .= inspos (11+2) by A57,Th3;
-then A64:       CurInstr Cs1.(m+9) =s1.inspos 13 by AMI_1:54
-           .=i13 by A18,Lm3;
-A65:       Cs1.(m+(9+1))=Cs1.(m+9+1)
+A58:       IC Cs1.(m+9)=
+ (abs(s9.DataLoc(s9.SBP,RetIC)))+2 by A47,SCMPDS_2:70
+          .= inspos (11+2) by A53,Th3;
+then A59:       CurInstr Cs1.(m+9) =s1.inspos 13 by AMI_1:54
+           .=i13 by A16,Lm1;
+A60:       Cs1.(m+(9+1))=Cs1.(m+9+1)
           .= Following Cs1.(m+9) by AMI_1:def 19
-          .= Exec(i13,Cs1.(m+9)) by A64;
-A66:       Cs1.(m+9).SBP=s9.DataLoc(n+4,RetSP) by A35,A50,A51,SCMPDS_2:70
+          .= Exec(i13,Cs1.(m+9)) by A59;
+A61:       Cs1.(m+9).SBP=s9.DataLoc(n+4,RetSP) by A32,A46,A47,SCMPDS_2:70
          .=s9.intpos(n+4+0) by Th5,SCMPDS_1:def 22
-         .=n by A30,A54,SCMPDS_2:66;
+         .=n by A27,A50,SCMPDS_2:66;
 
-A67:      IC Cs2.(m+9)=
- 2*(abs(t9.DataLoc(t9.SBP,RetIC)) div 2)+4 by A60,SCMPDS_2:70
-          .= inspos (11+2) by A62,Th3;
-then A68:      CurInstr Cs2.(m+9) =s2.inspos 13 by AMI_1:54
-           .=i13 by A18,Lm3;
-A69:       Cs2.(m+(9+1))=Cs2.(m+9+1)
+A62:      IC Cs2.(m+9)=
+ (abs(t9.DataLoc(t9.SBP,RetIC)))+2 by A55,SCMPDS_2:70
+          .= inspos (11+2) by A57,Th3;
+then A63:      CurInstr Cs2.(m+9) =s2.inspos 13 by AMI_1:54
+           .=i13 by A16,Lm1;
+A64:       Cs2.(m+(9+1))=Cs2.(m+9+1)
           .= Following Cs2.(m+9) by AMI_1:def 19
-          .= Exec(i13,Cs2.(m+9)) by A68;
-A70:       Cs2.(m+9).SBP=t9.DataLoc(n+4,RetSP) by A59,A60,SCMPDS_2:70
+          .= Exec(i13,Cs2.(m+9)) by A63;
+A65:       Cs2.(m+9).SBP=t9.DataLoc(n+4,RetSP) by A54,A55,SCMPDS_2:70
          .=t9.intpos(n+4+0) by Th5,SCMPDS_1:def 22
-         .=n by A30,A61,SCMPDS_2:66;
+         .=n by A27,A56,SCMPDS_2:66;
 
-A71:       IC Cs1.(m+10)= Next IC Cs1.(m+9) by A65,SCMPDS_2:59
-          .= inspos (13+1) by A63,SCMPDS_4:70;
+A66:       IC Cs1.(m+10)= Next IC Cs1.(m+9) by A60,SCMPDS_2:59
+          .= inspos (13+1) by A58,SCMPDS_4:70;
 
-A72:       IC Cs2.(m+10)= Next IC Cs2.(m+9) by A69,SCMPDS_2:59
-          .= inspos (13+1) by A67,SCMPDS_4:70;
+A67:       IC Cs2.(m+10)= Next IC Cs2.(m+9) by A64,SCMPDS_2:59
+          .= inspos (13+1) by A62,SCMPDS_4:70;
 
           hereby
              take nn=m+10;
-             thus CurInstr Cs1.nn =s1.inspos 14 by  A71,AMI_1:54
-             .=return SBP by A18,Lm3;
-A73:          DataLoc(Cs1.(m+9).SBP,2)=intpos(n+2) by A66,Th5;
-             then SBP <> DataLoc(Cs1.(m+9).SBP,2) by Lm5;
-             hence Cs1.nn.SBP=s1.SBP by A65,A66,SCMPDS_2:59;
-             thus CurInstr Cs2.nn =s2.inspos 14 by  A72,AMI_1:54
-             .=return SBP by A18,Lm3;
-A74:          DataLoc(Cs2.(m+9).SBP,2)=intpos(n+2) by A70,Th5;
-             then SBP <> DataLoc(Cs2.(m+9).SBP,2) by Lm5;
-             hence Cs2.nn.SBP=s2.SBP by A24,A69,A70,SCMPDS_2:59;
+             thus CurInstr Cs1.nn =s1.inspos 14 by A66,AMI_1:54
+             .=return SBP by A16,Lm1;
+A68:          DataLoc(Cs1.(m+9).SBP,2)=intpos(n+2) by A61,Th5;
+             then SBP <> DataLoc(Cs1.(m+9).SBP,2) by Lm3;
+             hence Cs1.nn.SBP=s1.SBP by A60,A61,SCMPDS_2:59;
+             thus CurInstr Cs2.nn =s2.inspos 14 by A67,AMI_1:54
+             .=return SBP by A16,Lm1;
+A69:          DataLoc(Cs2.(m+9).SBP,2)=intpos(n+2) by A65,Th5;
+             then SBP <> DataLoc(Cs2.(m+9).SBP,2) by Lm3;
+             hence Cs2.nn.SBP=s2.SBP by A22,A64,A65,SCMPDS_2:59;
 
            hereby let j be Element of NAT;
                assume
-A75:            1<j & j <= s1.SBP+1;
-                  s1.SBP <= s8.SBP by A35,NAT_1:11;
+A70:            1<j & j <= s1.SBP+1;
+                   s1.SBP <= s8.SBP by A32,NAT_1:11;
                then s1.SBP +1 <= s8.SBP+1 by XREAL_1:8;
-then A76:            j <= s8.SBP+1 by A75,XXREAL_0:2;
-A77:            intpos j <> SBP by A75,Lm2;
-then A78:            Cs1.(m+9).intpos j=s9.intpos j by A51,SCMPDS_2:70
+then A71:            j <= s8.SBP+1 by A70,XXREAL_0:2;
+A72:            intpos j <> SBP by A70,AMI_3:52;
+then A73:            Cs1.(m+9).intpos j=s9.intpos j by A47,SCMPDS_2:70
                .=(Computation s8).m.intpos j by AMI_1:51
-               .=s8.intpos j by A48,A75,A76;
-               A79: n+1<n+2 by XREAL_1:8;
-then A80:            intpos j <> DataLoc(Cs1.(m+9).SBP,2) by A73,A75,Lm2;
-                  Cs1.7.intpos j = s1.intpos j by A18,A19,A20,A28,A29,A75,Lm7;
-               hence s1.intpos j=s8.intpos j by A30,SCMPDS_2:66
-                   .=Cs1.nn.intpos j by A65,A78,A80,SCMPDS_2:59;
-A81:            Cs2.(m+9).intpos j=t9.intpos j by A60,A77,SCMPDS_2:70
+               .=s8.intpos j by A45,A70,A71;
+               A74: n+1<n+2 by XREAL_1:8;
+then A75:            intpos j <> DataLoc(Cs1.(m+9).SBP,2) by A68,A70,AMI_3:52;
+                   Cs1.7.intpos j = s1.intpos j by A16,A17,A18,A25,A26,A70,Lm5;
+               hence s1.intpos j=s8.intpos j by A27,SCMPDS_2:66
+                   .=Cs1.nn.intpos j by A60,A73,A75,SCMPDS_2:59;
+A76:            Cs2.(m+9).intpos j=t9.intpos j by A55,A72,SCMPDS_2:70
                .=(Computation t8).m.intpos j by AMI_1:51
-               .=t8.intpos j by A48,A75,A76;
-A82:            intpos j <> DataLoc(Cs2.(m+9).SBP,2) by A74,A75,A79,Lm2;
-A83:            s2.DataLoc(s2.SBP,3)>0 by A24,A25,A27,NAT_1:3;
-                  j <= n+1 by A75;
-               then Cs2.7.intpos j = s2.intpos j by A18,A19,A24,A75,A83,Lm7;
-               hence s2.intpos j=t8.intpos j by A30,SCMPDS_2:66
-                   .=Cs2.nn.intpos j by A69,A81,A82,SCMPDS_2:59;
+               .=t8.intpos j by A45,A70,A71;
+A77:            intpos j <> DataLoc(Cs2.(m+9).SBP,2) by A69,A70,A74,AMI_3:52;
+A78:            s2.DataLoc(s2.SBP,3)>0 by A22,A23,A24,NAT_1:5;
+                   j <= n+1 by A70;
+               then Cs2.7.intpos j = s2.intpos j by A16,A17,A22,A70,A78,Lm5;
+               hence s2.intpos j=t8.intpos j by A27,SCMPDS_2:66
+                   .=Cs2.nn.intpos j by A64,A76,A77,SCMPDS_2:59;
            end;
            hereby let j be Element of NAT,a;
-             assume A84: j <= nn & s1.a=s2.a;
-                nn=m+9+1;
-then A85:          j <= m+9 or j=nn by A84,NAT_1:8;
-             A86: m+(8+1)=m+8+1;
-             A87: now assume A88:j <= m+8;
+             assume A79: j <= nn & s1.a=s2.a;
+                 nn=m+9+1;
+then A80:          j <= m+9 or j=nn by A79,NAT_1:8;
+             A81: m+(8+1)=m+8+1;
+             A82: now assume A83:j <= m+8;
                per cases;
                suppose j<7+1;
                 hence j <=7 or (j>=8 & j <= m+8) by NAT_1:13;
                end;
                suppose j>=8;
-                hence j <=7 or (j>=8 & j <= m+8) by A88;
+                hence j <=7 or (j>=8 & j <= m+8) by A83;
              end;
              end;
-A89:        s8.a=Cs1.7.a by A30,SCMPDS_2:66
-               .=Cs2.7.a by A18,A19,A20,A24,A25,A28,A29,A84,Lm9
-               .=t8.a by A30,SCMPDS_2:66;
-A90:      now let b;
-            assume A91: s8.b=t8.b;
+A84:        s8.a=Cs1.7.a by A27,SCMPDS_2:66
+               .=Cs2.7.a by A16,A17,A18,A22,A23,A25,A26,A79,Lm7
+               .=t8.a by A27,SCMPDS_2:66;
+A85:      now let b;
+            assume A86: s8.b=t8.b;
             per cases;
             suppose b=SBP;
-              hence Cs1.(m+9).b=Cs2.(m+9).b by A66,A70;
+              hence Cs1.(m+9).b=Cs2.(m+9).b by A61,A65;
             end;
-            suppose A92: b<>SBP;
-              hence Cs1.(m+9).b=s9.b by A51,SCMPDS_2:70
+            suppose A87: b<>SBP;
+              hence Cs1.(m+9).b=s9.b by A47,SCMPDS_2:70
               .=(Computation s8).m.b by AMI_1:51
-              .=(Computation t8).m.b by A48,A91
+              .=(Computation t8).m.b by A45,A86
               .=t9.b by AMI_1:51
-              .=Cs2.(m+9).b by A60,A92,SCMPDS_2:70;
+              .=Cs2.(m+9).b by A55,A87,SCMPDS_2:70;
           end;
           end;
-A93:     s8.DataLoc(Cs1.(m+9).SBP,6)=x1 by A31,A35,A66,Th5
-         .=t8.DataLoc(Cs1.(m+9).SBP,6) by A31,A35,A47,A66,Th5;
-A94:      now
+A88:     s8.DataLoc(Cs1.(m+9).SBP,6)=x1 by A28,A32,A61,Th5
+         .=t8.DataLoc(Cs1.(m+9).SBP,6) by A28,A32,A44,A61,Th5;
+A89:      now
             per cases;
-            suppose A95: a<>DataLoc(Cs2.(m+9).SBP,2);
-               hence Cs1.nn.a=Cs1.(m+9).a by A65,A66,A70,SCMPDS_2:59
-                  .=Cs2.(m+9).a by A89,A90
-                  .=Cs2.nn.a by A69,A95,SCMPDS_2:59;
+            suppose A90: a<>DataLoc(Cs2.(m+9).SBP,2);
+               hence Cs1.nn.a=Cs1.(m+9).a by A60,A61,A65,SCMPDS_2:59
+                  .=Cs2.(m+9).a by A84,A85
+                  .=Cs2.nn.a by A64,A90,SCMPDS_2:59;
             end;
-            suppose A96: a=DataLoc(Cs2.(m+9).SBP,2);
+            suppose A91: a=DataLoc(Cs2.(m+9).SBP,2);
                hence Cs1.nn.a=Cs1.(m+9).DataLoc(Cs1.(m+9).SBP,6)
-                          by A65,A66,A70,SCMPDS_2:59
-                  .=Cs2.(m+9).DataLoc(Cs2.(m+9).SBP,6) by A66,A70,A90,A93
-                  .=Cs2.nn.a by A69,A96,SCMPDS_2:59;
+                          by A60,A61,A65,SCMPDS_2:59
+                  .=Cs2.(m+9).DataLoc(Cs2.(m+9).SBP,6) by A61,A65,A85,A88
+                  .=Cs2.nn.a by A64,A91,SCMPDS_2:59;
           end;
           end;
-          per cases by A85,A86,A87,NAT_1:8;
+          per cases by A80,A81,A82,NAT_1:8;
              suppose j <=7;
               hence IC Cs1.j = IC Cs2.j &
-               Cs1.j.a=Cs2.j.a by A18,A19,A20,A24,A25,A28,A29,A84,Lm9;
+               Cs1.j.a=Cs2.j.a by A16,A17,A18,A22,A23,A25,A26,A79,Lm7;
            end;
-           suppose A97: j>=8 & j <= m+8;
+           suppose A92: j>=8 & j <= m+8;
               then consider j1 be Nat such that
-A98:           j=8+j1 by NAT_1:10;
+A93:           j=8+j1 by NAT_1:10;
               reconsider j1 as Element of NAT by ORDINAL1:def 13;
-A99:           j1 <= m by A97,A98,XREAL_1:8;
-              thus IC Cs1.j = IC (Computation s8).j1 by A98,AMI_1:51
-              .=IC (Computation t8).j1 by A48,A89,A99
-              .=IC Cs2.j by A98,AMI_1:51;
-              thus Cs1.j.a = (Computation s8).j1.a by A98,AMI_1:51
-              .=(Computation t8).j1.a by A48,A89,A99
-              .=Cs2.j.a by A98,AMI_1:51;
+A94:           j1 <= m by A92,A93,XREAL_1:8;
+              thus IC Cs1.j = IC (Computation s8).j1 by A93,AMI_1:51
+              .=IC (Computation t8).j1 by A45,A84,A94
+              .=IC Cs2.j by A93,AMI_1:51;
+              thus Cs1.j.a = (Computation s8).j1.a by A93,AMI_1:51
+              .=(Computation t8).j1.a by A45,A84,A94
+              .=Cs2.j.a by A93,AMI_1:51;
              end;
-             suppose A100: j = m+9;
-               hence IC Cs1.j = IC Cs2.j by A63,A67;
-               thus Cs1.j.a=Cs2.j.a by A89,A90,A100;
+             suppose A95: j = m+9;
+               hence IC Cs1.j = IC Cs2.j by A58,A62;
+               thus Cs1.j.a=Cs2.j.a by A84,A85,A95;
              end;
-             suppose A101:j = nn;
-               hence IC Cs1.j = IC Cs2.j by A71,A72;
-               thus Cs1.j.a=Cs2.j.a by A94,A101;
+             suppose A96:j = nn;
+               hence IC Cs1.j = IC Cs2.j by A66,A67;
+               thus Cs1.j.a=Cs2.j.a by A89,A96;
           end;
           end;
         end;
@@ -1844,9 +1805,9 @@ A99:           j1 <= m by A97,A98,XREAL_1:8;
        end;
        hence P[k+1];
     end;
-A102: for n holds P[n] from NAT_1:sch 1(A1,A16);
+A97: for n holds P[n] from NAT_1:sch 1(A1,A14);
      let s1,s2 be State of SCMPDS;
-     assume A103: GA c= s1 & GA c= s2 &
+     assume A98: GA c= s1 & GA c= s2 &
      IC s1 = inspos 5 &
      s1.SBP >0 & s1.GBP=0 &
      s1.DataLoc(s1.SBP,3) >= 0 &
@@ -1855,11 +1816,11 @@ A102: for n holds P[n] from NAT_1:sch 1(A1,A16);
      s2.DataLoc(s1.SBP,2) = s1.DataLoc(s1.SBP,2) &
      s2.DataLoc(s1.SBP,3) = s1.DataLoc(s1.SBP,3);
      then reconsider m=s1.DataLoc(s1.SBP,3) as Element of NAT by INT_1:16;
-        P[m] by A102;
-     hence thesis by A103;
+         P[m] by A97;
+     hence thesis by A98;
 end;
 
-Lm11:
+Lm9:
   for s1,s2 being State of SCMPDS,a be Int_position,k be Element of NAT
   st Initialized GCD-Algorithm c= s1 & Initialized GCD-Algorithm c= s2
   & s1.a=s2.a & k <= 4 holds
@@ -1877,133 +1838,131 @@ A2:  s1.a=s2.a & k <= 4;
 A3:  GA c= s1 & GA c= s2 by A1,SCMPDS_4:57;
 
 A4:  IC s1=inspos 0 by A1,SCMPDS_5:18;
-then A5:  CurInstr s1 =i00 by A3,Lm3;
-A6:  Cs1.(0 + 1) = Following Cs1.0 by AMI_1:def 19
+A5:  Cs1.(0 + 1) = Following Cs1.0 by AMI_1:def 19
      .= Following s1 by AMI_1:def 19
-     .= Exec(i00,s1) by A5;
+     .= Exec(i00,s1) by A3,A4,Lm1;
 
-A7:  IC s2=inspos 0 by A1,SCMPDS_5:18;
-then A8:  CurInstr s2 =i00 by A3,Lm3;
-A9:  Cs2.(0 + 1) = Following Cs2.0 by AMI_1:def 19
+A6:  IC s2=inspos 0 by A1,SCMPDS_5:18;
+A7:  Cs2.(0 + 1) = Following Cs2.0 by AMI_1:def 19
      .= Following s2 by AMI_1:def 19
-     .= Exec(i00,s2) by A8;
+     .= Exec(i00,s2) by A3,A6,Lm1;
 
-A10:  IC Cs1.1= Next IC s1 by A6,SCMPDS_2:57
+A8:  IC Cs1.1= Next IC s1 by A5,SCMPDS_2:57
      .= inspos (0+1) by A4,SCMPDS_4:70;
-then A11:  CurInstr Cs1.1=s1.inspos 1 by AMI_1:54
-     .=i01 by A3,Lm3;
-A12:  Cs1.(1 + 1) = Following Cs1.1 by AMI_1:def 19
-     .= Exec(i01,Cs1.1) by A11;
+then A9:  CurInstr Cs1.1=s1.inspos 1 by AMI_1:54
+     .=i01 by A3,Lm1;
+A10:  Cs1.(1 + 1) = Following Cs1.1 by AMI_1:def 19
+     .= Exec(i01,Cs1.1) by A9;
 
-A13:  IC Cs2.1= Next IC s2 by A9,SCMPDS_2:57
-     .= inspos (0+1) by A7,SCMPDS_4:70;
-then A14:  CurInstr Cs2.1=s2.inspos 1 by AMI_1:54
-     .=i01 by A3,Lm3;
-A15:  Cs2.(1 + 1) = Following Cs2.1 by AMI_1:def 19
-     .= Exec(i01,Cs2.1) by A14;
+A11:  IC Cs2.1= Next IC s2 by A7,SCMPDS_2:57
+     .= inspos (0+1) by A6,SCMPDS_4:70;
+then A12:  CurInstr Cs2.1=s2.inspos 1 by AMI_1:54
+     .=i01 by A3,Lm1;
+A13:  Cs2.(1 + 1) = Following Cs2.1 by AMI_1:def 19
+     .= Exec(i01,Cs2.1) by A12;
 
-A16:  IC Cs1.2= Next IC Cs1.1 by A12,SCMPDS_2:57
-     .= inspos (1+1) by A10,SCMPDS_4:70;
-then A17:  CurInstr Cs1.2=s1.inspos 2 by AMI_1:54
-     .=i02 by A3,Lm3;
-A18:  Cs1.(2 + 1) = Following Cs1.2 by AMI_1:def 19
-     .= Exec(i02,Cs1.2) by A17;
-A19:  Cs1.2.SBP=7 by A12,SCMPDS_2:57;
+A14:  IC Cs1.2= Next IC Cs1.1 by A10,SCMPDS_2:57
+     .= inspos (1+1) by A8,SCMPDS_4:70;
+then A15:  CurInstr Cs1.2=s1.inspos 2 by AMI_1:54
+     .=i02 by A3,Lm1;
+A16:  Cs1.(2 + 1) = Following Cs1.2 by AMI_1:def 19
+     .= Exec(i02,Cs1.2) by A15;
+A17:  Cs1.2.SBP=7 by A10,SCMPDS_2:57;
 
-A20:  IC Cs2.2= Next IC Cs2.1 by A15,SCMPDS_2:57
-     .= inspos (1+1) by A13,SCMPDS_4:70;
-then A21:  CurInstr Cs2.2=s2.inspos 2 by AMI_1:54
-     .=i02 by A3,Lm3;
-A22:  Cs2.(2 + 1) = Following Cs2.2 by AMI_1:def 19
-     .= Exec(i02,Cs2.2) by A21;
-A23:  Cs2.2.SBP=7 by A15,SCMPDS_2:57;
+A18:  IC Cs2.2= Next IC Cs2.1 by A13,SCMPDS_2:57
+     .= inspos (1+1) by A11,SCMPDS_4:70;
+then A19:  CurInstr Cs2.2=s2.inspos 2 by AMI_1:54
+     .=i02 by A3,Lm1;
+A20:  Cs2.(2 + 1) = Following Cs2.2 by AMI_1:def 19
+     .= Exec(i02,Cs2.2) by A19;
+A21:  Cs2.2.SBP=7 by A13,SCMPDS_2:57;
 
-A24:  IC Cs1.3= Next IC Cs1.2 by A18,SCMPDS_2:71
-     .= inspos (2+1) by A16,SCMPDS_4:70;
-then A25:  CurInstr Cs1.3=s1.inspos 3 by AMI_1:54
-     .=i03 by A3,Lm3;
-A26:  Cs1.(3 + 1) = Following Cs1.3 by AMI_1:def 19
-     .= Exec(i03,Cs1.3) by A25;
+A22:  IC Cs1.3= Next IC Cs1.2 by A16,SCMPDS_2:71
+     .= inspos (2+1) by A14,SCMPDS_4:70;
+then A23:  CurInstr Cs1.3=s1.inspos 3 by AMI_1:54
+     .=i03 by A3,Lm1;
+A24:  Cs1.(3 + 1) = Following Cs1.3 by AMI_1:def 19
+     .= Exec(i03,Cs1.3) by A23;
 
-A27:  IC Cs2.3= Next IC Cs2.2 by A22,SCMPDS_2:71
-     .= inspos (2+1) by A20,SCMPDS_4:70;
-then A28:  CurInstr Cs2.3=s2.inspos 3 by AMI_1:54
-     .=i03 by A3,Lm3;
-A29:  Cs2.(3 + 1) = Following Cs2.3 by AMI_1:def 19
-     .= Exec(i03,Cs2.3) by A28;
+A25:  IC Cs2.3= Next IC Cs2.2 by A20,SCMPDS_2:71
+     .= inspos (2+1) by A18,SCMPDS_4:70;
+then A26:  CurInstr Cs2.3=s2.inspos 3 by AMI_1:54
+     .=i03 by A3,Lm1;
+A27:  Cs2.(3 + 1) = Following Cs2.3 by AMI_1:def 19
+     .= Exec(i03,Cs2.3) by A26;
 
-A30:    now let b;
-          assume A31:s1.b=s2.b;
+A28:    now let b;
+          assume A29:s1.b=s2.b;
           per cases;
-          suppose A32: b=GBP;
-           hence Cs1.1.b=0 by A6,SCMPDS_2:57
-             .=Cs2.1.b by A9,A32,SCMPDS_2:57;
+          suppose A30: b=GBP;
+           hence Cs1.1.b=0 by A5,SCMPDS_2:57
+             .=Cs2.1.b by A7,A30,SCMPDS_2:57;
           end;
-          suppose A33: b<>GBP;
-           hence Cs1.1.b=s1.b by A6,SCMPDS_2:57
-             .=Cs2.1.b by A9,A31,A33,SCMPDS_2:57;
+          suppose A31: b<>GBP;
+           hence Cs1.1.b=s1.b by A5,SCMPDS_2:57
+             .=Cs2.1.b by A7,A29,A31,SCMPDS_2:57;
        end;
        end;
-A34:    now let b;
-          assume A35:s1.b=s2.b;
+A32:    now let b;
+          assume A33:s1.b=s2.b;
           per cases;
-          suppose A36: b=SBP;
-           hence Cs1.2.b=7 by A12,SCMPDS_2:57
-             .=Cs2.2.b by A15,A36,SCMPDS_2:57;
+          suppose A34: b=SBP;
+           hence Cs1.2.b=7 by A10,SCMPDS_2:57
+             .=Cs2.2.b by A13,A34,SCMPDS_2:57;
           end;
-          suppose A37: b<>SBP;
-           hence Cs1.2.b=Cs1.1.b by A12,SCMPDS_2:57
-              .=Cs2.1.b by A30,A35
-              .=Cs2.2.b by A15,A37,SCMPDS_2:57;
+          suppose A35: b<>SBP;
+           hence Cs1.2.b=Cs1.1.b by A10,SCMPDS_2:57
+              .=Cs2.1.b by A28,A33
+              .=Cs2.2.b by A13,A35,SCMPDS_2:57;
        end;
        end;
-A38:    now let b;
-         assume A39:s1.b=s2.b;
+A36:    now let b;
+         assume A37:s1.b=s2.b;
          per cases;
-         suppose A40:b=DataLoc(Cs1.2.SBP,RetIC);
-           hence Cs1.3.b=IC Cs1.2 by A18,SCMPDS_2:71
-           .=Cs2.3.b by A16,A19,A20,A22,A23,A40,SCMPDS_2:71;
+         suppose A38:b=DataLoc(Cs1.2.SBP,RetIC);
+           hence Cs1.3.b=IC Cs1.2 by A16,SCMPDS_2:71
+           .=Cs2.3.b by A14,A17,A18,A20,A21,A38,SCMPDS_2:71;
          end;
-         suppose A41:b<>DataLoc(Cs1.2.SBP,RetIC);
-           hence Cs1.3.b=Cs1.2.b by A18,SCMPDS_2:71
-           .=Cs2.2.b by A34,A39
-           .=Cs2.3.b by A19,A22,A23,A41,SCMPDS_2:71;
+         suppose A39:b<>DataLoc(Cs1.2.SBP,RetIC);
+           hence Cs1.3.b=Cs1.2.b by A16,SCMPDS_2:71
+           .=Cs2.2.b by A32,A37
+           .=Cs2.3.b by A17,A20,A21,A39,SCMPDS_2:71;
        end;
        end;
        per cases by A2,NAT_1:29;
-       suppose A42:k=0;
+       suppose A40:k=0;
          hence IC Cs1.k = IC s1 by AMI_1:def 19
-               .=IC Cs2.k by A4,A7,A42,AMI_1:def 19;
-         thus Cs1.k.a = s1.a by A42,AMI_1:def 19
-              .=Cs2.k.a by A2,A42,AMI_1:def 19;
+               .=IC Cs2.k by A4,A6,A40,AMI_1:def 19;
+         thus Cs1.k.a = s1.a by A40,AMI_1:def 19
+              .=Cs2.k.a by A2,A40,AMI_1:def 19;
        end;
-       suppose A43:k=1;
-         hence IC Cs1.k=IC Cs2.k by A10,A13;
-         thus Cs1.k.a = Cs2.k.a by A2,A30,A43;
+       suppose A41:k=1;
+         hence IC Cs1.k=IC Cs2.k by A8,A11;
+         thus Cs1.k.a = Cs2.k.a by A2,A28,A41;
        end;
-       suppose A44:k=2;
-         hence IC Cs1.k=IC Cs2.k by A16,A20;
-         thus Cs1.k.a = Cs2.k.a by A2,A34,A44;
+       suppose A42:k=2;
+         hence IC Cs1.k=IC Cs2.k by A14,A18;
+         thus Cs1.k.a = Cs2.k.a by A2,A32,A42;
        end;
-       suppose A45:k=3;
-         hence IC Cs1.k=IC Cs2.k by A24,A27;
-         thus Cs1.k.a = Cs2.k.a by A2,A38,A45;
+       suppose A43:k=3;
+         hence IC Cs1.k=IC Cs2.k by A22,A25;
+         thus Cs1.k.a = Cs2.k.a by A2,A36,A43;
        end;
-       suppose A46:k=4;
-         thus IC Cs1.k= ICplusConst(Cs1.3,2) by A26,A46,SCMPDS_2:66
-          .= inspos (3+2) by A24,SCMPDS_6:23
-          .= ICplusConst(Cs2.3,2) by A27,SCMPDS_6:23
-          .= IC Cs2.k by A29,A46,SCMPDS_2:66;
-        thus Cs1.k.a = Cs1.3.a by A26,A46,SCMPDS_2:66
-          .=Cs2.3.a by A2,A38
-          .=Cs2.k.a by A29,A46,SCMPDS_2:66;
+       suppose A44:k=4;
+         hence IC Cs1.k= ICplusConst(Cs1.3,2) by A24,SCMPDS_2:66
+          .= inspos (3+2) by A22,SCMPDS_6:23
+          .= ICplusConst(Cs2.3,2) by A25,SCMPDS_6:23
+          .= IC Cs2.k by A27,A44,SCMPDS_2:66;
+        thus Cs1.k.a = Cs1.3.a by A24,A44,SCMPDS_2:66
+          .=Cs2.3.a by A2,A36
+          .=Cs2.k.a by A27,A44,SCMPDS_2:66;
 end;
 end;
 
 begin :: The Autonomy of Recursive Euclide Algorithm
 
 theorem
-     for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
+      for p being FinPartState of SCMPDS,x,y being Integer st y >= 0 & x >= y
   & p=(intpos 9,intpos 10) --> (x,y)
   holds Initialized GCD-Algorithm +* p is autonomic
 proof
@@ -2015,11 +1974,11 @@ proof
   assume A1:y >= 0 & x >= y & p=(a,b) --> (x,y);
 then A2: dom p = { a,b } by FUNCT_4:65;
 A3: dom IA= {IC SCMPDS} \/ dom GA by SCMPDS_4:27;
-       now assume
-     dom IA meets dom p;
+        now assume
+      dom IA meets dom p;
       then consider z being set such that
 A4:    z in dom IA & z in dom p by XBOOLE_0:3;
-          z = a or z = b by A2,A4,TARSKI:def 2;
+           z = a or z = b by A2,A4,TARSKI:def 2;
       hence contradiction by A4,SCMPDS_4:31;
     end;
 then A5: IA c= IA +* p by FUNCT_4:33;
@@ -2027,13 +1986,13 @@ A6: a in dom p & b in dom p by A2,TARSKI:def 2;
 A7: for t being State of SCMPDS st IA +* p c= t holds t.a = x & t.b = y
     proof let t be State of SCMPDS such that
 A8:  IA +* p c= t;
-        p c= IA +* p by FUNCT_4:26;
+         p c= IA +* p by FUNCT_4:26;
 then A9:  p c= t by A8,XBOOLE_1:1;
-A10:  a <> b by Lm2;
+A10:  a <> b by AMI_3:52;
     thus t.a = p.a by A6,A9,GRFUNC_1:8
       .= x by A1,A10,FUNCT_4:66;
     thus t.b = p.b by A6,A9,GRFUNC_1:8
-      .= y by A1,A10,FUNCT_4:66;
+      .= y by A1,FUNCT_4:66;
    end;
    thus IA +* p is autonomic
    proof let s1,s2 be State of SCMPDS such that
@@ -2049,7 +2008,7 @@ A18:  s2.a=x & s2.b=y by A7,A12;
      set s4=Cs1.4,
          t4=Cs2.4;
 
-A19:  GA c= s4 by A14,AMI_3:38;
+A19:  GA c= s4 by A14,AMI_1:81;
 A20:  IC s4 = inspos 5 & s4.GBP = 0 &
      s4.SBP = 7 & s4.intpos(7+RetIC) = inspos 2 &
      s4.intpos 9 = s1.intpos 9 & s4.intpos 10 = s1.intpos 10 by A13,Th15;
@@ -2058,13 +2017,13 @@ then A21:  s4.DataLoc(s4.SBP,3)=s4.intpos (7+3) by Th5
   A22: DataLoc(s4.SBP,2)=intpos(7+2) by A20,Th5;
 then A23:  s4.DataLoc(s4.SBP,2)=x by A7,A11,A20;
 
-A24:  GA c= t4 by A16,AMI_3:38;
+A24:  GA c= t4 by A16,AMI_1:81;
 A25:  IC t4 = inspos 5 & t4.GBP = 0 &
      t4.SBP = 7 & t4.intpos(7+RetIC) = inspos 2 &
      t4.intpos 9 = s2.intpos 9 & t4.intpos 10 = s2.intpos 10 by A15,Th15;
 then A26:  t4.DataLoc(t4.SBP,3)=t4.intpos (7+3) by Th5
      .=s4.DataLoc(s4.SBP,3) by A7,A12,A21,A25;
-     DataLoc(t4.SBP,2)=intpos(7+2) by A25,Th5;
+      DataLoc(t4.SBP,2)=intpos(7+2) by A25,Th5;
 then A27:  t4.DataLoc(t4.SBP,2)=s4.DataLoc(s4.SBP,2) by A7,A12,A23,A25;
    set Cs4=Computation s4,
        Ct4=Computation t4;
@@ -2077,7 +2036,7 @@ A28:  CurInstr Cs4.n = return SBP & s4.SBP=Cs4.n.SBP &
    (for k be Element of NAT,c be Int_position st k <= n & s4.c = t4.c holds
       IC (Computation s4).k = IC (Computation t4).k &
       (Computation s4).k.c =(Computation t4).k.c)
-      by A1,A17,A19,A20,A21,A22,A24,A25,A26,A27,Lm10;
+      by A1,A17,A19,A20,A21,A22,A24,A25,A26,A27,Lm8;
 A29:  Cs4.n.DataLoc(Cs4.n.SBP,RetIC)
       =Cs4.n.intpos(7+1) by A20,A28,Th5,SCMPDS_1:def 23
      .=inspos 2 by A20,A28,SCMPDS_1:def 23;
@@ -2088,28 +2047,28 @@ A30:  Ct4.n.DataLoc(Ct4.n.SBP,RetIC)
 
 A31:  Cs4.(n+1)= Following Cs4.n by AMI_1:def 19
      .= Exec(i14,Cs4.n) by A28;
-A32:  IC Cs4.(n+1)=
- 2*(abs(Cs4.n.DataLoc(Cs4.n.SBP,RetIC)) div 2)+4 by A31,SCMPDS_2:70
+then A32:  IC Cs4.(n+1)=
+ (abs(Cs4.n.DataLoc(Cs4.n.SBP,RetIC)))+2 by SCMPDS_2:70
      .= inspos (2+2) by A29,Th3;
 then A33:  CurInstr Cs4.(n+1) =s4.inspos 4 by AMI_1:54
      .=s1.inspos 4 by AMI_1:54
-     .=i04 by A14,Lm3;
+     .=i04 by A14,Lm1;
 
 A34:  Ct4.(n+1)= Following Ct4.n by AMI_1:def 19
      .= Exec(i14,Ct4.n) by A28;
-A35:  IC Ct4.(n+1)=
- 2*(abs(Ct4.n.DataLoc(Ct4.n.SBP,RetIC)) div 2)+4 by A34,SCMPDS_2:70
+then A35:  IC Ct4.(n+1)=
+ (abs(Ct4.n.DataLoc(Ct4.n.SBP,RetIC)))+2 by SCMPDS_2:70
      .= inspos (2+2) by A30,Th3;
 then A36:  CurInstr Ct4.(n+1) =t4.inspos 4 by AMI_1:54
      .=s2.inspos 4 by AMI_1:54
-     .=i04 by A16,Lm3;
-A37:   s4.a=t4.a by A13,A15,A17,A18,Lm11;
-A38:   s4.b=t4.b by A13,A15,A17,A18,Lm11;
-A39:   a <> SBP by Lm2;
+     .=i04 by A16,Lm1;
+A37:   s4.a=t4.a by A13,A15,A17,A18,Lm9;
+A38:   s4.b=t4.b by A13,A15,A17,A18,Lm9;
+A39:   a <> SBP by AMI_3:52;
 then A40:  Cs4.(n+1).a=Cs4.n.a by A31,SCMPDS_2:70
       .=Ct4.n.a by A28,A37
       .=Ct4.(n+1).a by A34,A39,SCMPDS_2:70;
-A41:   b <> SBP by Lm2;
+A41:   b <> SBP by AMI_3:52;
 then A42:  Cs4.(n+1).b=Cs4.n.b by A31,SCMPDS_2:70
       .=Ct4.n.b by A28,A38
       .=Ct4.(n+1).b by A34,A41,SCMPDS_2:70;
@@ -2129,9 +2088,9 @@ A43:  now let j be Element of NAT;
       per cases by A44,A45,NAT_1:13;
       suppose j<=3;
        then A48:  j<=4 by XXREAL_0:2;
-       hence IC Cs1.j=IC Cs2.j by A13,A15,A17,A18,Lm11;
-       thus Cs1.j.a=Cs2.j.a by A13,A15,A17,A18,A48,Lm11;
-       thus Cs1.j.b=Cs2.j.b by A13,A15,A17,A18,A48,Lm11;
+       hence IC Cs1.j=IC Cs2.j by A13,A15,A17,A18,Lm9;
+       thus Cs1.j.a=Cs2.j.a by A13,A15,A17,A18,A48,Lm9;
+       thus Cs1.j.b=Cs2.j.b by A13,A15,A17,A18,A48,Lm9;
       end;
       suppose A49: j>=4 & j<=n+4;
        then consider j1 be Nat such that
@@ -2174,16 +2133,16 @@ A55:  dom(IA +* p) = { IC SCMPDS } \/ dom GA \/ { a, b } by A2,A3,FUNCT_4:def 1
       .= { IC SCMPDS } \/ { a,b } \/ dom GA by XBOOLE_1:4
       .= A \/ dom GA by ENUMSET1:42;
     let k be Element of NAT;
-A56:  GA c= Cs2.k by A16,AMI_3:43;
-        GA c= Cs1.k by A14,AMI_3:43;
+A56:  GA c= Cs2.k by A16,AMI_1:86;
+         GA c= Cs1.k by A14,AMI_1:86;
 then A57:  Cs1.k | dom GA = GA by GRFUNC_1:64
       .= (Cs2.k)| dom GA by A56,GRFUNC_1:64;
 A58:  (Cs1.k).IC SCMPDS = IC Cs1.k
     .=IC Cs2.k by A43
     .=(Cs2.k).IC SCMPDS;
 A59: Cs1.k.a = Cs2.k.a & Cs1.k.b = Cs2.k.b by A43;
-       dom(Cs1.k) = the carrier of SCMPDS by AMI_3:36
-     .= dom(Cs2.k) by AMI_3:36;
+        dom(Cs1.k) = the carrier of SCMPDS by AMI_1:79
+     .= dom(Cs2.k) by AMI_1:79;
     then (Cs1.k)|A = (Cs2.k)|A by A58,A59,GRFUNC_1:92;
      hence (Computation s1).k|dom(IA +* p) = (Computation s2).k|dom(IA +* p)
      by A55,A57,RELAT_1:185;

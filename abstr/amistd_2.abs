@@ -14,8 +14,8 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ZFMISC_1, MCART_1, SETFAM_1,
       MEMBERED, FINSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, FRAENKEL,
       REALSET1, FUNCT_4, NUMBERS, XCMPLX_0, NAT_1, CARD_3, CARD_1, FINSEQ_1,
-      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, STRUCT_0, AMI_1, AMI_3, AMI_5,
-      SCMFSA_4, PRE_CIRC, PRALG_2, AMISTD_1, XXREAL_0;
+      FINSEQ_2, FUNCOP_1, BINARITH, FUNCT_7, STRUCT_0, AMI_1, AMI_3, SCMFSA_4,
+      PRE_CIRC, PRALG_2, AMISTD_1, XXREAL_0;
  constructors WELLORD2, XXREAL_0, NAT_1, REALSET1, BINARITH, PRE_CIRC, FUNCT_7,
       PRALG_2, AMI_5, SCMFSA_4, AMISTD_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1,
@@ -31,22 +31,13 @@ reserve k, m for natural number,
         x, X for set,
         N for with_non-empty_elements set;
 
-registration
-   let f be Function,
-       A be set;
- cluster f \ A -> Function-like Relation-like;
-end;
-
-canceled 2;
-
-theorem :: AMISTD_2:3
- for f, g being Function st x in dom f \ dom g holds (f \ g).x = f.x;
+canceled 3;
 
 begin  :: Product like sets
 
 definition
   let S be functional set;
-  func PA S -> Function means
+  func product" S -> Function means
 :: AMISTD_2:def 1
   (for x being set holds x in dom it iff
        for f being Function st f in S holds x in dom f) &
@@ -57,13 +48,13 @@ end;
 canceled;
 
 theorem :: AMISTD_2:5
-  for S being non empty functional set holds
-  dom PA S = meet {dom f where f is Element of S: not contradiction};
+   for S being non empty functional set holds
+  dom product" S = meet {dom f where f is Element of S: not contradiction};
 
 theorem :: AMISTD_2:6
-     for S being non empty functional set,
-     i being set st i in dom PA S holds
-  (PA S).i = {f.i where f is Element of S: not contradiction};
+      for S being non empty functional set,
+     i being set st i in dom product" S holds
+  (product" S).i = {f.i where f is Element of S: not contradiction};
 
 definition
   let S be set;
@@ -86,17 +77,17 @@ registration
 end;
 
 theorem :: AMISTD_2:7
- for S being functional with_common_domain set holds dom PA S = DOM S;
+ for S being functional with_common_domain set holds dom product" S = DOM S;
 
 theorem :: AMISTD_2:8
-     for S being functional set, i being set st i in dom PA S
-  holds (PA S).i = pi(S,i);
+     for S being functional set, i being set st i in dom product" S
+  holds (product" S).i = pi(S,i);
 
 theorem :: AMISTD_2:9
- for S being functional with_common_domain set holds S c= product PA S;
+ for S being functional with_common_domain set holds S c= product product" S;
 
 theorem :: AMISTD_2:10
- for S being non empty product-like set holds S = product PA S;
+ for S being non empty product-like set holds S = product product" S;
 
 registration
   let D be set;
@@ -164,7 +155,7 @@ definition
    let I be Element of the Instructions of S;
  func AddressPart I equals
 :: AMISTD_2:def 3
-  I`2;
+   I`2;
 end;
 
 definition
@@ -198,7 +189,7 @@ definition
    let T be InsType of S;
  func AddressParts T equals
 :: AMISTD_2:def 5
-  { AddressPart I where I is Instruction of S: InsCode I = T };
+   { AddressPart I where I is Instruction of S: InsCode I = T };
 end;
 
 registration
@@ -217,13 +208,13 @@ definition
 :: AMISTD_2:def 6
   for f being set st f in JUMP I holds
     ex k being set st k in dom AddressPart I & f = (AddressPart I).k &
-     (PA AddressParts InsCode I).k = the Instruction-Locations of S;
+     (product" AddressParts InsCode I).k = the Instruction-Locations of S;
 
  attr I is without_implicit_jumps means
 :: AMISTD_2:def 7
   for f being set st
     ex k being set st k in dom AddressPart I & f = (AddressPart I).k &
-     (PA AddressParts InsCode I).k = the Instruction-Locations of S
+     (product" AddressParts InsCode I).k = the Instruction-Locations of S
     holds f in JUMP I;
 end;
 
@@ -325,7 +316,7 @@ theorem :: AMISTD_2:20
  for S being homogeneous (non empty non void standard-ins AMI-Struct over N),
      I being Instruction of S,
      x being set st x in dom AddressPart I holds
-  (PA AddressParts InsCode I).x = the Instruction-Locations of S implies
+  (product" AddressParts InsCode I).x = the Instruction-Locations of S implies
    (AddressPart I).x is Instruction-Location of S;
 
 registration
@@ -379,11 +370,11 @@ definition
  attr I is ins-loc-free means
 :: AMISTD_2:def 12
   for x being set st x in dom AddressPart I
-   holds (PA AddressParts InsCode I).x <> the Instruction-Locations of S;
+   holds (product" AddressParts InsCode I).x <> the Instruction-Locations of S;
 end;
 
 theorem :: AMISTD_2:22
-     for S being halting with_explicit_jumps
+      for S being halting with_explicit_jumps
              with-non-trivial-Instruction-Locations
              realistic (IC-Ins-separated definite
              (standard-ins non empty non void AMI-Struct over N)),
@@ -427,7 +418,7 @@ definition
          (IC-Ins-separated definite (non empty non void AMI-Struct over N));
  func Stop S -> FinPartState of S equals
 :: AMISTD_2:def 13
-  il.(S,0) .--> halt S;
+   il.(S,0) .--> halt S;
 end;
 
 registration
@@ -493,10 +484,12 @@ definition
   InsCode it = InsCode I &
   dom AddressPart it = dom AddressPart I &
   for n being set st n in dom AddressPart I holds
-    ((PA AddressParts InsCode I).n = the Instruction-Locations of S implies
+    ((product" AddressParts InsCode I).n = the Instruction-Locations of S
+     implies
       ex f being Instruction-Location of S st
          f = (AddressPart I).n & (AddressPart it).n = il.(S,k + locnum f)) &
-    ((PA AddressParts InsCode I).n <> the Instruction-Locations of S implies
+    ((product" AddressParts InsCode I).n <> the Instruction-Locations of S
+    implies
      (AddressPart it).n = (AddressPart I).n);
 end;
 
@@ -513,7 +506,7 @@ theorem :: AMISTD_2:29
   holds IncAddr(I, k) = I;
 
 theorem :: AMISTD_2:30
- for S being halting standard without_implicit_jumps realistic
+  for S being halting standard without_implicit_jumps realistic
        regular (standard-ins IC-Ins-separated definite
        (non empty non void AMI-Struct over N))
   holds IncAddr(halt S, k) = halt S;
@@ -540,8 +533,8 @@ theorem :: AMISTD_2:32
      I, J being Instruction of S st
    (ex k being natural number st IncAddr(I,k) = IncAddr(J,k))
   holds
-   (PA AddressParts InsCode I).x = the Instruction-Locations of S implies
-   (PA AddressParts InsCode J).x = the Instruction-Locations of S;
+   (product" AddressParts InsCode I).x = the Instruction-Locations of S implies
+   (product" AddressParts InsCode J).x = the Instruction-Locations of S;
 
 theorem :: AMISTD_2:33
  for S being regular standard (standard-ins IC-Ins-separated definite
@@ -549,8 +542,9 @@ theorem :: AMISTD_2:33
      I, J being Instruction of S st
    (ex k being natural number st IncAddr(I,k) = IncAddr(J,k))
   holds
-   (PA AddressParts InsCode I).x <> the Instruction-Locations of S implies
-   (PA AddressParts InsCode J).x <> the Instruction-Locations of S;
+   (product" AddressParts InsCode I).x <> the Instruction-Locations of S
+   implies
+   (product" AddressParts InsCode J).x <> the Instruction-Locations of S;
 
 theorem :: AMISTD_2:34
  for S being regular standard (standard-ins IC-Ins-separated definite
@@ -567,7 +561,7 @@ theorem :: AMISTD_2:35
   holds I = halt S;
 
 theorem :: AMISTD_2:36
-  for S being regular standard halting without_implicit_jumps
+   for S being regular standard halting without_implicit_jumps
              realistic (standard-ins IC-Ins-separated definite
              (non empty non void AMI-Struct over N)),
      I being Instruction of S st I is sequential
@@ -635,7 +629,7 @@ theorem :: AMISTD_2:38
   holds IncAddr(F,0) = F;
 
 theorem :: AMISTD_2:39
-     for S being regular standard (standard-ins IC-Ins-separated definite
+      for S being regular standard (standard-ins IC-Ins-separated definite
        (non empty non void AMI-Struct over N)),
      F being lower programmed FinPartState of S
   holds IncAddr(IncAddr(F,k),m) = IncAddr(F,k+m);
@@ -694,7 +688,7 @@ theorem :: AMISTD_2:41
   holds not il.(S,0) in dom Shift(F,k);
 
 theorem :: AMISTD_2:42
-     for S being standard (IC-Ins-separated definite
+      for S being standard (IC-Ins-separated definite
      (non empty non void AMI-Struct over N)),
      F being FinPartState of S
   holds Shift(Shift(F,m),k) = Shift(F,m+k);
@@ -823,7 +817,7 @@ definition
    let F be non empty programmed FinPartState of S;
  func CutLastLoc F -> FinPartState of S equals
 :: AMISTD_2:def 21
-  F \ ( LastLoc F .--> F.LastLoc F );
+   F \ ( LastLoc F .--> F.LastLoc F );
 end;
 
 theorem :: AMISTD_2:47
@@ -889,7 +883,7 @@ definition
        F, G be non empty programmed FinPartState of S;
  func F ';' G -> FinPartState of S equals
 :: AMISTD_2:def 22
-  CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
+   CutLastLoc F +* Shift(IncAddr(G,card F -' 1),card F -' 1);
 end;
 
 registration
@@ -935,7 +929,7 @@ theorem :: AMISTD_2:55
   holds (F ';' G).LastLoc F = IncAddr(G,card F -' 1).il.(S,0);
 
 theorem :: AMISTD_2:56
-     for S being regular standard (standard-ins IC-Ins-separated definite
+      for S being regular standard (standard-ins IC-Ins-separated definite
        (non empty non void AMI-Struct over N)),
      F, G being lower non empty programmed FinPartState of S,
      f being Instruction-Location of S st locnum f < card F - 1
@@ -1005,15 +999,15 @@ theorem :: AMISTD_2:60
   holds Stop S ';' F = F;
 
 theorem :: AMISTD_2:61
-     for S being regular standard realistic halting steady-programmed
+      for S being regular standard realistic halting steady-programmed
              without_implicit_jumps (standard-ins IC-Ins-separated
              definite (non empty non void AMI-Struct over N)),
      F, G, H being pre-Macro of S
   holds F ';' G ';' H = F ';' (G ';' H);
 
 theorem :: AMISTD_2:62
- for S being regular (standard-ins non empty non void AMI-Struct over N),
+  for S being regular (standard-ins non empty non void AMI-Struct over N),
      I being Instruction of S,
      x being set st x in dom AddressPart I holds
-  (AddressPart I).x in (PA AddressParts InsCode I).x;
+  (AddressPart I).x in (product" AddressParts InsCode I).x;
 

@@ -1,0 +1,252 @@
+:: Some Properties of Line and Column Operations on Matrices
+::  by Xiquan Liang , Tao Sun and Dahai Hu
+:: 
+:: Received August 13, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies MATRIX12, MATRIX_1, MATRIX_6, MATRIX11, VECTSP_1, RLVECT_1,
+      FINSEQ_2, ARYTM_1, FINSEQ_1, TREES_1, FUNCT_1, RELAT_1, INCSP_1, CAT_3,
+      RVSUM_1, QC_LANG1, GROUP_1, CAT_1;
+ notations MATRIX_1, XXREAL_0, MATRIX11, TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+      ORDINAL1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      XCMPLX_0, REAL_1, ZFMISC_1, GROUP_1, BINOP_1, STRUCT_0, RLVECT_1,
+      BINOP_2, VECTSP_1, VECTSP_2, RVSUM_1, FVSUM_1, FINSEQ_2, FINSEQOP,
+      MATRIX_3, FUNCOP_1, SETWISEO, FINSOP_1, MATRIX_6;
+ constructors MATRIX_6, MATRIX11, RELAT_2, PARTFUN1, SETWISEO, NAT_1, FINSOP_1,
+      SETWOP_2, CAT_2, MATRIX_1, ALGSTR_1, MATRIX_2, FVSUM_1, DOMAIN_1,
+      BINOP_1, XXREAL_0, FINSEQ_4, BINARITH, FINSEQ_5, GROUP_4, MATRIX_7,
+      VECTSP_1, FINSEQ_7, WELLORD2, STRUCT_0, ORDINAL2, SGRAPH1, NAT_D,
+      FINSEQOP, XCMPLX_0, MATRIX_3, MATRIX_4, VECTSP_2;
+ registrations MATRIX_6, MATRIX11, SUBSET_1, FUNCT_1, FINSUB_1, FINSET_1,
+      RELSET_1, STRUCT_0, FVSUM_1, MATRIX_2, ARYTM_3, VECTSP_1, FUNCT_2,
+      PARTFUN1, XBOOLE_0, ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, INT_1, RELAT_1,
+      FINSEQ_2, GROUP_1, XREAL_0, NUMBERS, VECTSP_2;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin
+
+ reserve x, y, X for set,
+         i, j, k, l, n, m, t,i,j1,l1,k1 for Nat,
+         K for Field,
+         a,b,a1,a2,g for Element of K,
+         M,M1,M2,M3 for Matrix of n,m,K,
+         N,N1,N2 for Matrix of m,n,K,
+         pK,qK for FinSequence of K,
+         A,B for Matrix of n,K;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  func InterchangeLine(M,l,k) -> Matrix of n,m,K means
+:: MATRIX12:def 1
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M
+     holds (i = l implies it*(i,j) = M*(k,j)) &
+           (i = k implies it*(i,j) = M*(l,j)) &
+           (i <> l & i <> k implies it*(i,j) = M*(i,j));
+end;
+
+theorem :: MATRIX12:1
+  for M1,M2 being Matrix of n,m,K holds width M1 = width M2;
+
+theorem :: MATRIX12:2
+  for M,M1,i st l in dom M & k in dom M & i in dom M &
+    M1 = InterchangeLine(M,l,k) holds
+      (i = l implies Line(M1,i) = Line(M,k)) &
+         (i = k implies Line(M1,i) = Line(M,l)) &
+         (i <> l & i <> k implies Line(M1,i) = Line(M,i));
+
+theorem :: MATRIX12:3
+  for a,i,j,M st i in dom M & j in Seg width M holds
+      (a*Line(M,i)).j = a*(M*(i,j));
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l be Nat;
+           let a be Element of K;
+  func ScalarXLine(M,l,a) -> Matrix of n,m,K means
+:: MATRIX12:def 2
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+           (i = l implies it*(i,j) = a*(M*(l,j))) &
+           (i <> l implies it*(i,j) = M*(i,j));
+end;
+
+theorem :: MATRIX12:4
+  l in dom M & i in dom M & a<>0.K &
+    M1 = ScalarXLine(M,l,a) implies
+      (i = l implies Line(M1,i) = a*Line(M,l)) &
+      (i <> l implies Line(M1,i) = Line(M,i));
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  assume  l in dom M & k in dom M;
+  func RlineXScalar(M,l,k,a) -> Matrix of n,m,K means
+:: MATRIX12:def 3
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M
+     holds (i = l implies it*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies it*(i,j) = M*(i,j));
+end;
+
+theorem :: MATRIX12:5
+  l in dom M & k in dom M & i in dom M &
+    M1 = RlineXScalar(M,l,k,a) implies
+     (i = l implies Line(M1,i) = a*Line(M,k) + Line(M,l)) &
+     (i <> l implies Line(M1,i) = Line(M,i));
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  synonym ILine(M,l,k) for InterchangeLine(M,l,k);
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l be Nat;
+         let a be Element of K;
+  synonym SXLine(M,l,a) for ScalarXLine(M,l,a);
+end;
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  synonym RLineXS(M,l,k,a) for RlineXScalar(M,l,k,a);
+end;
+
+theorem :: MATRIX12:6
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies ILine((1.(K,n)),l,k) * A = ILine(A,l,k);
+
+theorem :: MATRIX12:7
+  for l,a,A st l in dom (1.(K,n)) & a <> 0.K
+     holds SXLine((1.(K,n)),l,a) * A = SXLine(A,l,a);
+
+theorem :: MATRIX12:8
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies RLineXS((1.(K,n)),l,k,a) * A = RLineXS(A,l,k,a);
+
+theorem :: MATRIX12:9
+  ILine(M,k,k) = M;
+
+theorem :: MATRIX12:10
+  ILine(M,l,k) = ILine(M,k,l);
+
+theorem :: MATRIX12:11
+  l in dom M & k in dom M implies ILine(ILine(M,l,k),l,k) = M;
+
+theorem :: MATRIX12:12
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies ILine((1.(K,n)),l,k) is invertible &
+       (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k);
+
+theorem :: MATRIX12:13
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l
+    implies RLineXS((1.(K,n)),l,k,a) is invertible &
+      (RLineXS((1.(K,n)),l,k,a))~ = RLineXS((1.(K,n)),l,k,-a);
+
+theorem :: MATRIX12:14
+  l in dom (1.(K,n)) & a <> 0.K
+    implies SXLine((1.(K,n)),l,a) is invertible &
+      (SXLine((1.(K,n)),l,a))~ = SXLine((1.(K,n)),l,a");
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  assume  l in Seg width M & k in Seg width M & n>0 & m>0;
+  func InterchangeCol(M,l,k) -> Matrix of n,m,K means
+:: MATRIX12:def 4
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = M*(i,k)) &
+         (j = k implies it*(i,j) = M*(i,l)) &
+         (j <> l & j <> k implies it*(i,j) = M*(i,j));
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l be Nat;
+           let a be Element of K;
+  assume  l in Seg width M & n>0 & m>0;
+  func ScalarXCol(M,l,a) -> Matrix of n,m,K means
+:: MATRIX12:def 5
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = a*(M*(i,l))) &
+         (j <> l implies it*(i,j) = M*(i,j));
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  assume  l in Seg width M & k in Seg width M & n>0 & m>0;
+  func RcolXScalar(M,l,k,a) -> Matrix of n,m,K means
+:: MATRIX12:def 6
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies it*(i,j) = M*(i,j));
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l,k be Nat;
+  synonym ICol(M,l,k) for InterchangeCol(M,l,k);
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l be Nat;
+         let a be Element of K;
+  synonym SXCol(M,l,a) for ScalarXCol(M,l,a);
+end;
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  synonym RColXS(M,l,k,a) for RcolXScalar(M,l,k,a);
+end;
+
+theorem :: MATRIX12:15
+  l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
+    implies (ILine(M1,l,k))@ = ICol(M,l,k);
+
+theorem :: MATRIX12:16
+  l in Seg width M & a <> 0.K & n>0 & m>0 & M1 = M@ implies
+    (SXLine(M1,l,a))@ = SXCol(M,l,a);
+
+theorem :: MATRIX12:17
+  l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
+    implies (RLineXS(M1,l,k,a))@ = RColXS(M,l,k,a);
+
+theorem :: MATRIX12:18
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+    implies A * ICol((1.(K,n)),l,k) = ICol(A,l,k);
+
+theorem :: MATRIX12:19
+  l in dom (1.(K,n)) & a <> 0.K & n>0
+    implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l,a);
+
+theorem :: MATRIX12:20
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+    implies A * RColXS((1.(K,n)),l,k,a) = RColXS(A,l,k,a);
+
+theorem :: MATRIX12:21
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+     implies (ICol((1.(K,n)),l,k))~ = ICol((1.(K,n)),l,k);
+
+theorem :: MATRIX12:22
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l & n>0 implies
+     (RColXS((1.(K,n)),l,k,a))~ = RColXS((1.(K,n)),l,k,-a);
+
+theorem :: MATRIX12:23
+  l in dom (1.(K,n)) & a <> 0.K & n>0 implies
+     (SXCol((1.(K,n)),l,a))~ = SXCol((1.(K,n)),l,a");

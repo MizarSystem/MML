@@ -1,6 +1,6 @@
 :: The Product Space of Real Normed Spaces and Its Properties
 ::  by Noboru Endou , Yasunari Shidama and Keiichi Miyajima
-:: 
+::
 :: Received July 9, 2007
 :: Copyright (c) 2007 Association of Mizar Users
 
@@ -32,7 +32,7 @@ environ
 begin :: The Product Space of Real Linear Spaces
 
 theorem
-for s,t be Real_Sequence, g be real number st
+ for s,t be Real_Sequence, g be real number st
  for n be Element of NAT holds t.n = abs(s.n-g) holds
   (s is convergent & lim s = g) iff (t is convergent & lim t = 0)
 proof
@@ -42,13 +42,13 @@ proof
    hereby assume
 A2: s is convergent & lim s = g;
 A3: now let r be real number;
-     assume 0 < r; then
-     consider n be Element of NAT such that
+     assume 0 < r;
+     then consider n be Element of NAT such that
  A4:  for m be Element of NAT st n<=m holds abs(s.m-g) < r by SEQ_2:def 7,A2;
      take n;
-     now let m be Element of NAT;
-      assume n<=m; then
-      abs (abs(s.m-g)) < r by A4;
+      now let m be Element of NAT;
+      assume n<=m;
+      then abs (abs(s.m-g)) < r by A4;
       hence abs(t.m-0) < r by A1;
      end;
      hence for m be Element of NAT st n<=m holds abs(t.m-0)< r;
@@ -58,15 +58,15 @@ A3: now let r be real number;
    end;
    assume A5:t is convergent & lim t = 0;
 A6:now let r be real number;
-    assume A7: 0 < r;
-    consider n be Element of NAT such that
-A8: for m be Element of NAT st n<=m holds abs(t.m-0) < r
-       by A5,A7,SEQ_2:def 7;
+    assume 0 < r;
+    then consider n be Element of NAT such that
+A7: for m be Element of NAT st n<=m holds abs(t.m-0) < r
+       by A5,SEQ_2:def 7;
     take n;
-    now let m be Element of NAT;
-     assume n<=m; then
-     abs(t.m-0) < r by A8; then
-     abs(abs(s.m-g)) < r by A1;
+     now let m be Element of NAT;
+     assume n<=m;
+     then abs(t.m-0) < r by A7;
+     then abs(abs(s.m-g)) < r by A1;
      hence abs(s.m-g) < r;
     end;
     hence for m be Element of NAT st n <= m holds abs(s.m-g) < r;
@@ -75,7 +75,7 @@ A8: for m be Element of NAT st n<=m holds abs(t.m-0) < r
    hence lim s = g by A6,SEQ_2:def 7;
 end;
 
-theorem Th5:
+theorem Th2:
 for x,y be FinSequence of REAL st
  len x = len y &
  for i be Element of NAT st i in Seg len x holds 0 <= x.i & x.i <= y.i
@@ -87,25 +87,25 @@ A1: len x = len y &
 A2:for i be Element of NAT st i in Seg len x holds (sqr x).i <= (sqr y).i
    proof
     let i be Element of NAT;
-    assume i in Seg len x; then
-A4: 0 <= x.i & x.i <= y.i by A1;
-    (x.i)^2=(sqr x).i & (y.i)^2=(sqr y).i by RVSUM_1:78;
-    hence thesis by A4,SQUARE_1:77;
+    assume i in Seg len x;
+then A3: 0 <= x.i & x.i <= y.i by A1;
+     (x.i)^2=(sqr x).i & (y.i)^2=(sqr y).i by RVSUM_1:78;
+    hence thesis by A3,SQUARE_1:77;
    end;
-A5:Seg len sqr x = dom sqr x & Seg len sqr y = dom sqr y
+A4:Seg len sqr x = dom sqr x & Seg len sqr y = dom sqr y
     by FINSEQ_1:def 3;
-   dom sqr x = dom x & dom sqr y = dom y by RVSUM_1:77; then
-A6:len sqr x = len x & len sqr y = len y by A5,FINSEQ_1:def 3;
-   sqr x is Element of (len sqr x)-tuples_on REAL &
-   sqr y is Element of (len sqr y)-tuples_on REAL by FINSEQ_2:110; then
-A7:Sum sqr x <= Sum sqr y by A1,A2,A6,RVSUM_1:112;
-   0 <= Sum sqr x by RVSUM_1:116;
-   hence |.x.| <= |.y.| by A7,SQUARE_1:94;
+    dom sqr x = dom x & dom sqr y = dom y by RVSUM_1:77;
+then A5:len sqr x = len x & len sqr y = len y by A4,FINSEQ_1:def 3;
+    sqr x is Element of (len sqr x)-tuples_on REAL &
+   sqr y is Element of (len sqr y)-tuples_on REAL by FINSEQ_2:110;
+then A6:Sum sqr x <= Sum sqr y by A1,A2,A5,RVSUM_1:112;
+    0 <= Sum sqr x by RVSUM_1:116;
+   hence |.x.| <= |.y.| by A6,SQUARE_1:94;
 end;
 
-theorem Th8:
+theorem Th3:
 for F be FinSequence of REAL st
- for i be Element of NAT st i in dom F holds F.i = 0 
+ for i be Element of NAT st i in dom F holds F.i = 0
 holds Sum F = 0
 proof
    let F be FinSequence of REAL;
@@ -115,14 +115,14 @@ A1:for i be Element of NAT st i in dom F holds 0 = F.i;
    set R1 = i|-> 0;
    reconsider R2 = F as Element of i-tuples_on REAL by FINSEQ_2:110;
 A2:Seg len F = dom F by FINSEQ_1:def 3;
-   len R1 = i by FINSEQ_2:69; then
-A4:dom R1 = dom R2 by FINSEQ_3:31;
-   now let j be Element of NAT;
-    assume A3: j in Seg i; then 
-    R1.j = 0 by FUNCOP_1:13;
-    hence R1.j = R2.j by A1,A2,A3;
-   end; then 
-   R1 = R2 by A4,A2,FINSEQ_1:17;
+    len R1 = i by FINSEQ_2:69;
+then A3:dom R1 = dom R2 by FINSEQ_3:31;
+    now let j be Element of NAT;
+    assume A4: j in Seg i;
+    then R1.j = 0 by FUNCOP_1:13;
+    hence R1.j = R2.j by A1,A2,A4;
+   end;
+   then R1 = R2 by A3,A2,FINSEQ_1:17;
    hence thesis by RVSUM_1:111;
 end;
 
@@ -135,13 +135,13 @@ existence
 proof
    deffunc F(set) = pr2(X,f.$1);
    consider g being Function such that
-A1: dom g = dom f & 
+A1: dom g = dom f &
     for x be set st x in dom f holds g.x = F(x) from FUNCT_1:sch 3;
    take g;
    thus dom g = dom f by A1;
    let i be set;
-   assume i in dom f; then
-   g.i = pr2(X,f.i) by A1;
+   assume i in dom f;
+   then g.i = pr2(X,f.i) by A1;
    hence thesis;
 end;
 end;
@@ -152,21 +152,21 @@ registration let F be Domain-Sequence;
   coherence
   proof
    let f be MultOps of X,F;
-   dom F = dom f & dom F = Seg len F by Def1,FINSEQ_1:def 3;
+    dom F = dom f & dom F = Seg len F by Def1,FINSEQ_1:def 3;
    hence thesis by FINSEQ_1:def 2;
   end;
 end;
 
-theorem Th1:
+theorem Th4:
 for X be set, F be Domain-Sequence, p be FinSequence holds
  (p is MultOps of X,F iff
-   len p = len F & 
+   len p = len F &
    for i be set st i in dom F holds p.i is Function of [:X,F.i:],F.i)
 proof
    let X be set;
    let F be Domain-Sequence;
    let p be FinSequence;
-   dom p = dom F iff len p = len F by FINSEQ_3:31;
+    dom p = dom F iff len p = len F by FINSEQ_3:31;
    hence thesis by Def1;
 end;
 
@@ -175,14 +175,14 @@ definition let F be Domain-Sequence;
            let p be MultOps of X,F;
            let i be Element of dom F;
   redefine func p.i -> Function of [:X,F.i:],F.i;
-  coherence by Th1;
+  coherence by Th4;
 end;
 
-theorem Th2:
+theorem Th5:
 for X be non empty set, F be Domain-Sequence,
     f,g being Function of [:X,product F:],product F st
- for x be Element of X, d being Element of product F, 
-     i being Element of dom F holds (f.(x,d)).i = (g.(x,d)).i 
+ for x be Element of X, d being Element of product F,
+     i being Element of dom F holds (f.(x,d)).i = (g.(x,d)).i
 holds f = g
 proof
    let X be non empty set;
@@ -190,9 +190,9 @@ proof
    let f,g being Function of [:X,product F:],product F such that
 A1:for x be Element of X, d being Element of product F,
       i being Element of dom F holds (f.(x,d)).i = (g.(x,d)).i;
-   now let x be Element of X,d being Element of product F;
-    dom(f.(x,d)) = dom F & dom(g.(x,d)) = dom F &
-    for v be set st v in dom F holds (f.(x,d)).v = (g.(x,d)).v 
+    now let x be Element of X,d being Element of product F;
+     dom(f.(x,d)) = dom F & dom(g.(x,d)) = dom F &
+    for v be set st v in dom F holds (f.(x,d)).v = (g.(x,d)).v
      by A1,CARD_3:18;
     hence f.(x,d) = g.(x,d) by FUNCT_1:9;
    end;
@@ -216,29 +216,29 @@ A1:for x be Element of X,d being Element of product F
    proof
     let x be Element of X,
         d be Element of product F;
-    defpred P[set,set] means 
+    defpred P[set,set] means
      ex i be Element of dom F st $1 =i & $2 = (p.i).(x,d.i);
 A2: for x,z1,z2 being set st x in dom F & P[x,z1] & P[x,z2] holds z1 = z2;
 A3: for w be set st w in dom F ex z be set st P[w,z]
-    proof 
+    proof
      let w be set;
-     assume w in dom F; then 
-     reconsider i = w as Element of dom F;
+     assume w in dom F;
+     then reconsider i = w as Element of dom F;
      take (p.i).(x,d.i);
      thus thesis;
     end;
     consider z being Function such that
 A4:  dom z = dom F &
      for w being set st w in dom F holds P[w,z.w] from FUNCT_1:sch 2(A2,A3);
-    now let w be set;
-     assume w in dom F; then 
-     ex i be Element of dom F st w = i & z.w = (p.i).(x,d.i) by A4;
+     now let w be set;
+     assume w in dom F;
+     then ex i be Element of dom F st w = i & z.w = (p.i).(x,d.i) by A4;
      hence z.w in F.w;
-    end; then 
-    reconsider z' = z as Element of product F by A4,CARD_3:18;
+    end;
+    then reconsider z' = z as Element of product F by A4,CARD_3:18;
     take z';
     let i be Element of dom F;
-    ex j being Element of dom F st j = i & z.i = (p.j).(x,d.j) by A4;
+     ex j being Element of dom F st j = i & z.i = (p.j).(x,d.j) by A4;
     hence thesis;
    end;
    thus ex P being Function of [:X,product F:],product F st
@@ -248,18 +248,18 @@ end;
 uniqueness
 proof
    let P,Q be Function of [:X,product F:],product F such that
-A6: for x be Element of X, f being Element of product F,
+A5: for x be Element of X, f being Element of product F,
         i being Element of dom F holds
      (P.(x,f)).i = (p.i).(x,f.i) and
-A7: for x be Element of X, f being Element of product F,
+A6: for x be Element of X, f being Element of product F,
         i being Element of dom F holds
      (Q.(x,f)).i = (p.i).(x,f.i);
-    now let x be Element of X, f being Element of product F;
+     now let x be Element of X, f being Element of product F;
         let i be Element of dom F;
-     (P.(x,f)).i = (p.i).(x,f.i) by A6;
-     hence (P.(x,f)).i = (Q.(x,f)).i by A7;
+      (P.(x,f)).i = (p.i).(x,f.i) by A5;
+     hence (P.(x,f)).i = (Q.(x,f)).i by A6;
     end;
-    hence thesis by Th2;
+    hence thesis by Th5;
 end;
 end;
 
@@ -276,8 +276,8 @@ proof
    take <*S*>;
    thus <*S*> is non empty;
    let x be set;
-   assume A1:x in rng <*S*> & not x is RealLinearSpace; then 
-   x in {S} by FINSEQ_1:55;
+   assume A1:x in rng <*S*> & not x is RealLinearSpace;
+   then x in {S} by FINSEQ_1:55;
    hence contradiction by A1,TARSKI:def 1;
 end;
 end;
@@ -293,14 +293,14 @@ definition
 redefine func G.j -> RealLinearSpace;
 coherence
 proof
-   G.j in rng G by FUNCT_1:def 5;
+    G.j in rng G by FUNCT_1:def 5;
    hence thesis by Def3;
 end;
 end;
 
 definition let G be RealLinearSpace-Sequence;
  func carr G -> Domain-Sequence means :Def4:
-  len it = len G & 
+  len it = len G &
   for j be Element of dom G holds it.j = the carrier of G.j;
 existence
 proof
@@ -311,8 +311,8 @@ A1:for j be Element of NAT, y1,y2 be set st
 A2:for j being Element of NAT st j in Seg len G ex x be set st P[j,x]
    proof
     let j be Element of NAT;
-    assume j in Seg len G; then
-    reconsider j' = j as Element of dom G by FINSEQ_1:def 3;
+    assume j in Seg len G;
+    then reconsider j' = j as Element of dom G by FINSEQ_1:def 3;
     take the carrier of G.j';
     thus thesis;
    end;
@@ -322,39 +322,39 @@ A3: dom p = Seg len G &
        from FINSEQ_1:sch 1(A1,A2);
 A4:dom G = Seg len G by FINSEQ_1:def 3;
    consider i being Element of dom G;
-   dom p = dom G by A3,FINSEQ_1:def 3; then
-A5:[i,p.i] in p & p = p by FUNCT_1:def 4;
-   now assume {} in rng p; then 
-    consider x be set such that
+    dom p = dom G by A3,FINSEQ_1:def 3;
+then A5:[i,p.i] in p & p = p by FUNCT_1:def 4;
+    now assume {} in rng p;
+    then consider x be set such that
 A6:  x in dom p & {} = p.x by FUNCT_1:def 5;
     reconsider x as Element of NAT by A6;
-    ex x' being Element of dom G st x' = x & p.x = the carrier of G.x' 
+     ex x' being Element of dom G st x' = x & p.x = the carrier of G.x'
       by A3,A6;
     hence contradiction by A6;
-   end; then
-   reconsider q = p as Domain-Sequence by A5,RELAT_1:def 9;
+   end;
+   then reconsider q = p as Domain-Sequence by A5,RELAT_1:def 9;
    take q;
    thus len q = len G by A3,FINSEQ_1:def 3;
    let j be Element of dom G;
    reconsider k = j as Element of NAT;
-   ex n being Element of dom G st n = k & q.k = the carrier of G.n by A3,A4;
+    ex n being Element of dom G st n = k & q.k = the carrier of G.n by A3,A4;
    hence thesis;
 end;
 uniqueness
 proof
    let f,h be Domain-Sequence such that
-A8: len f = len G & for j be Element of dom G holds f.j = the carrier of G.j
+A7: len f = len G & for j be Element of dom G holds f.j = the carrier of G.j
    and
-A9: len h = len G & for j be Element of dom G holds h.j = the carrier of G.j;
+A8: len h = len G & for j be Element of dom G holds h.j = the carrier of G.j;
    reconsider f' = f,h' = h as FinSequence;
-A10:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-   now let j be Element of NAT;
-    assume j in dom f'; then
-    reconsider j' = j as Element of dom G by A8,FINSEQ_3:31;
-    f'.j = the carrier of G.j' by A8;
-    hence f'.j = h'.j by A9;
+A9:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
+    now let j be Element of NAT;
+    assume j in dom f';
+    then reconsider j' = j as Element of dom G by A7,FINSEQ_3:31;
+     f'.j = the carrier of G.j' by A7;
+    hence f'.j = h'.j by A8;
    end;
-   hence f = h by A8,A9,A10,FINSEQ_1:17;
+   hence f = h by A7,A8,A9,FINSEQ_1:17;
 end;
 end;
 
@@ -362,9 +362,9 @@ definition let G be RealLinearSpace-Sequence, j be Element of dom carr G;
   redefine func G.j -> RealLinearSpace;
 coherence
 proof
-   dom G = Seg len G & Seg len(carr G) = dom carr G by FINSEQ_1:def 3; then
-   reconsider j' = j as Element of dom G by Def4;
-   G.j' is RealLinearSpace;
+    dom G = Seg len G & Seg len(carr G) = dom carr G by FINSEQ_1:def 3;
+   then reconsider j' = j as Element of dom G by Def4;
+    G.j' is RealLinearSpace;
    hence thesis;
 end;
 end;
@@ -377,15 +377,15 @@ existence
 proof
    deffunc F(Element of dom carr G) = the add of G.$1;
    consider p being non empty FinSequence such that
-A1: len p = len carr G & 
+A1: len p = len carr G &
     for j be Element of dom carr G holds p.j = F(j) from PRVECT_1:sch 1;
-   now let j be Element of dom carr G;
-    len G = len carr G by Def4; then
-    reconsider k = j as Element of dom G by FINSEQ_3:31;
-    p.j = the add of G.j & the carrier of G.k = (carr G).k by A1,Def4;
+    now let j be Element of dom carr G;
+     len G = len carr G by Def4;
+    then reconsider k = j as Element of dom G by FINSEQ_3:31;
+     p.j = the add of G.j & the carrier of G.k = (carr G).k by A1,Def4;
     hence p.j is BinOp of (carr G).j;
-   end; then 
-   reconsider p' = p as BinOps of carr G by A1,PRVECT_1:19;
+   end;
+   then reconsider p' = p as BinOps of carr G by A1,PRVECT_1:19;
    take p';
    thus thesis by A1;
 end;
@@ -394,15 +394,15 @@ proof
    let f,h be BinOps of carr G;
    assume that
 A2: len f = len carr G &
-     for j be Element of dom carr G holds f.j = the add of G.j and 
-A3: len h = len carr G & 
+     for j be Element of dom carr G holds f.j = the add of G.j and
+A3: len h = len carr G &
      for j be Element of dom carr G holds h.j = the add of G.j;
    reconsider f' = f,h' = h as FinSequence;
 A4:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-   now let i be Element of NAT;
-    assume i in dom f'; then
-    reconsider i' = i as Element of dom carr G by A2,FINSEQ_3:31;
-    f'.i = the add of G.i' by A2;
+    now let i be Element of NAT;
+    assume i in dom f';
+    then reconsider i' = i as Element of dom carr G by A2,FINSEQ_3:31;
+     f'.i = the add of G.i' by A2;
     hence f'.i = h'.i by A3;
    end;
    hence f = h by A2,A3,A4,FINSEQ_1:17;
@@ -414,32 +414,32 @@ existence
 proof
    deffunc F(Element of dom carr G) = comp G.$1;
    consider p being non empty FinSequence such that
-A5: len p = len carr G & 
+A5: len p = len carr G &
     for j be Element of dom carr G holds p.j = F(j) from PRVECT_1:sch 1;
-   now let j be Element of dom carr G;
-    len G = len (carr G) by Def4; then
-    reconsider k = j as Element of dom G by FINSEQ_3:31;
-    p.j = comp G.j & the carrier of G.k = (carr G).k by A5,Def4;
+    now let j be Element of dom carr G;
+     len G = len (carr G) by Def4;
+    then reconsider k = j as Element of dom G by FINSEQ_3:31;
+     p.j = comp G.j & the carrier of G.k = (carr G).k by A5,Def4;
     hence p.j is UnOp of (carr G).j;
-   end; then
-   reconsider p' = p as UnOps of carr G by A5,PRVECT_1:20;
+   end;
+   then reconsider p' = p as UnOps of carr G by A5,PRVECT_1:20;
    take p';
    thus thesis by A5;
 end;
 uniqueness
 proof
    let f,h be UnOps of carr G;
-   assume that 
-A6: len f = len carr G & 
-    for j be Element of dom carr G holds f.j = comp G.j and 
+   assume that
+A6: len f = len carr G &
+    for j be Element of dom carr G holds f.j = comp G.j and
 A7: len h = len carr G &
     for j be Element of dom carr G holds h.j = comp G.j;
    reconsider f' = f,h' = h as FinSequence;
 A8:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-   now let i be Element of NAT;
-    assume i in dom f'; then
-    reconsider i' = i as Element of dom carr G by A6,FINSEQ_3:31;
-    f.i = comp G.i' by A6;
+    now let i be Element of NAT;
+    assume i in dom f';
+    then reconsider i' = i as Element of dom carr G by A6,FINSEQ_3:31;
+     f.i = comp G.i' by A6;
     hence f.i = h.i by A7;
    end;
    hence f = h by A6,A7,A8,FINSEQ_1:17;
@@ -451,35 +451,35 @@ existence
 proof
    deffunc F(Element of dom carr G) = the ZeroF of G.$1;
    consider p being non empty FinSequence such that
-A9: len p = len carr G & 
+A9: len p = len carr G &
     for j be Element of dom carr G holds p.j = F(j) from PRVECT_1:sch 1;
-A1:dom G = Seg len G & dom (carr G) = Seg len (carr G) & len G = len carr G &
+A10:dom G = Seg len G & dom (carr G) = Seg len (carr G) & len G = len carr G &
    dom p = Seg len p by Def4,FINSEQ_1:def 3;
-   now let i be set;
-    assume i in dom (carr G); then
-    reconsider x = i as Element of dom carr G;
-    reconsider x' = x as Element of dom G by A1;
-    p.x = the ZeroF of G.x & (carr G).x' = the carrier of G.x' by A9,Def4;
+    now let i be set;
+    assume i in dom (carr G);
+    then reconsider x = i as Element of dom carr G;
+    reconsider x' = x as Element of dom G by A10;
+     p.x = the ZeroF of G.x & (carr G).x' = the carrier of G.x' by A9,Def4;
     hence p.i in (carr G).i;
-   end; then
-   reconsider t = p as Element of product (carr G) by A9,A1,CARD_3:18;
+   end;
+   then reconsider t = p as Element of product (carr G) by A9,A10,CARD_3:18;
    take t;
    thus thesis by A9;
 end;
 uniqueness
 proof
    let f,h be Element of product carr G;
-   assume that 
-A1:for j be Element of dom carr G holds f.j = the ZeroF of G.j and
-A2:for j be Element of dom carr G holds h.j = the ZeroF of G.j;
+   assume that
+A11:for j be Element of dom carr G holds f.j = the ZeroF of G.j and
+A12:for j be Element of dom carr G holds h.j = the ZeroF of G.j;
    reconsider f' = f, h' = h as Function;
-A3:dom f' = dom carr G & dom h' = dom carr G by CARD_3:18;
-   now let x be set;
-    assume x in dom carr G; then
-    reconsider i = x as Element of dom carr G;
-    thus f'.x = the ZeroF of G.i by A1 .= h'.x by A2;
+A13:dom f' = dom carr G & dom h' = dom carr G by CARD_3:18;
+    now let x be set;
+    assume x in dom carr G;
+    then reconsider i = x as Element of dom carr G;
+    thus f'.x = the ZeroF of G.i by A11 .= h'.x by A12;
    end;
-   hence thesis by A3,FUNCT_1:9;
+   hence thesis by A13,FUNCT_1:9;
 end;
 
  func multop G -> MultOps of REAL,carr G means :Def8:
@@ -489,46 +489,46 @@ existence
 proof
    deffunc F(Element of dom carr G) = the Mult of G.$1;
    consider p being non empty FinSequence such that
-A1: len p = len carr G & 
+A14: len p = len carr G &
     for j be Element of dom carr G holds p.j = F(j) from PRVECT_1:sch 1;
-   now let ai be set; assume ai in dom carr G; then
-     reconsider i=ai as Element of dom carr G;
-    len G = len(carr G) by Def4; then
-    reconsider j = i as Element of dom G by FINSEQ_3:31;
-    p.i = the Mult of G.i & the carrier of G.j = (carr G).j by A1,Def4;
+    now let ai be set; assume ai in dom carr G;
+     then reconsider i=ai as Element of dom carr G;
+     len G = len(carr G) by Def4;
+    then reconsider j = i as Element of dom G by FINSEQ_3:31;
+     p.i = the Mult of G.i & the carrier of G.j = (carr G).j by A14,Def4;
     hence p.ai is Function of [:REAL,(carr G).ai:],(carr G).ai;
-   end; then
-   reconsider p' = p as MultOps of REAL, carr G by A1,Th1;
+   end;
+   then reconsider p' = p as MultOps of REAL, carr G by A14,Th4;
    take p';
-   thus thesis by A1;
+   thus thesis by A14;
 end;
 uniqueness
 proof
    let f,h be MultOps of REAL, carr G;
-   assume that 
-A2: len f = len carr G & 
+   assume that
+A15: len f = len carr G &
     for j be Element of dom carr G holds f.j = the Mult of G.j and
-A3: len h = len carr G & 
+A16: len h = len carr G &
     for j be Element of dom carr G holds h.j = the Mult of G.j;
    reconsider f' = f,h' = h as FinSequence;
-A4:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
-   now let i be Element of NAT;
-    assume i in dom f'; then
-    reconsider i' = i as Element of dom carr G by A2,FINSEQ_3:31;
-    f'.i = the Mult of G.i' by A2;
-    hence f'.i = h'.i by A3;
+A17:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
+    now let i be Element of NAT;
+    assume i in dom f';
+    then reconsider i' = i as Element of dom carr G by A15,FINSEQ_3:31;
+     f'.i = the Mult of G.i' by A15;
+    hence f'.i = h'.i by A16;
    end;
-   hence f = h by A2,A3,A4,FINSEQ_1:17;
+   hence f = h by A15,A16,A17,FINSEQ_1:17;
 end;
 end;
 
 definition let G be RealLinearSpace-Sequence;
   func product G -> strict non empty RLSStruct equals
-    RLSStruct(# product carr G,zeros G,[:addop G :],[:multop G:] #);
+     RLSStruct(# product carr G,zeros G,[:addop G :],[:multop G:] #);
   coherence;
 end;
 
-Lm2:
+Lm1:
 for LS be non empty LoopStr st
 the add of LS is commutative associative holds LS is Abelian add-associative
 proof
@@ -537,13 +537,13 @@ proof
    assume that
 A1: ad(LS) is commutative and
 A2: ad(LS) is associative;
-   for x,y be Element of LS holds x+y = y+x by A1,BINOP_1:def 2;
+    for x,y be Element of LS holds x+y = y+x by A1,BINOP_1:def 2;
    hence LS is Abelian by RLVECT_1:def 5;
-   for x,y,z be Element of LS holds x+y+z = x+(y+z) by A2,BINOP_1:def 3;
+    for x,y,z be Element of LS holds x+y+z = x+(y+z) by A2,BINOP_1:def 3;
    hence thesis by RLVECT_1:def 6;
 end;
 
-Lm3:
+Lm2:
 for LS be non empty LoopStr st
  the ZeroF of LS is_a_unity_wrt the add of LS holds LS is right_zeroed
 proof
@@ -553,7 +553,7 @@ proof
    thus x + 0.LS = x by A1,BINOP_1:11;
 end;
 
-Lm41:
+Lm3:
 for G be RealLinearSpace-Sequence holds
  for v1,w1 be Element of product carr G, i be Element of dom carr G holds
    ([:addop G:].(v1,w1)).i = (the add of G.i).(v1.i,w1.i) &
@@ -563,11 +563,11 @@ proof
    let G be RealLinearSpace-Sequence;
    let v1,w1 be Element of product carr G;
    let i be Element of dom carr G;
-   ([:addop G:].(v1,w1)).i = ((addop G).i).(v1.i,w1.i) by PRVECT_1:def 10;
+    ([:addop G:].(v1,w1)).i = ((addop G).i).(v1.i,w1.i) by PRVECT_1:def 10;
    hence thesis by Def5;
 end;
 
-Lm42:
+Lm4:
 for G be RealLinearSpace-Sequence, r be Real,
   v be Element of product carr G, i be Element of dom carr G holds
    ([:multop G:].(r,v)).i = (the Mult of G.i).(r,v.i) &
@@ -576,22 +576,22 @@ proof
    let G be RealLinearSpace-Sequence;
    let r be Real,v be Element of product carr G;
    let i be Element of dom carr G;
-   ([:multop G:].(r,v)).i = ((multop G).i).(r,v.i) by Def2;
+    ([:multop G:].(r,v)).i = ((multop G).i).(r,v.i) by Def2;
    hence thesis by Def8;
 end;
 
-Lm4:
+Lm5:
 for G be RealLinearSpace-Sequence holds product G is RealLinearSpace-like
 proof
    let G be RealLinearSpace-Sequence;
    deffunc ad(LoopStr) = the add of $1;
-   reconsider GS = 
+   reconsider GS =
     RLSStruct(# product carr G,zeros G,[:addop G:],[:multop G:] #)
      as non empty RLSStruct;
-   dom G = Seg len G by FINSEQ_1:def 3; then
-   dom G = Seg len carr G by Def4; then
-K: dom G = dom carr G by FINSEQ_1:def 3;
-   now let a,b be Real;
+    dom G = Seg len G by FINSEQ_1:def 3;
+   then dom G = Seg len carr G by Def4;
+then A1: dom G = dom carr G by FINSEQ_1:def 3;
+    now let a,b be Real;
     let v,w be VECTOR of GS;
     reconsider v1=v, w1=w as Element of product carr G;
 A2: dom([:multop G:].(a,[:addop G:].(v1,w1))) = dom carr G &
@@ -601,50 +601,48 @@ A2: dom([:multop G:].(a,[:addop G:].(v1,w1))) = dom carr G &
     dom([:multop G:].(a*b,v1)) = dom carr G &
     dom([:multop G:].(a,[:multop G:].(b,v1))) = dom carr G &
     dom([:multop G:].(1,v1)) = dom carr G & dom v1 = dom carr G by CARD_3:18;
-    now let x be set;
-     assume x in dom carr G; then 
-     reconsider i = x as Element of dom carr G;
-     reconsider vi=v1.i, wi=w1.i as VECTOR of G.i by Def4,K;
-     ([:multop G:].(a,[:addop G:].(v1,w1))).i
-       = (the Mult of G.i).(a,([:addop G:].(v1,w1)).i) by Lm42
-      .= a*(vi+wi) by Lm41
+     now let x be set;
+     assume x in dom carr G;
+     then reconsider i = x as Element of dom carr G;
+     reconsider vi=v1.i, wi=w1.i as VECTOR of G.i by Def4,A1;
+      ([:multop G:].(a,[:addop G:].(v1,w1))).i
+       = (the Mult of G.i).(a,([:addop G:].(v1,w1)).i) by Lm4
+      .= a*(vi+wi) by Lm3
       .= a*vi+a*wi by RLVECT_1:def 9
-      .= ad(G.i).(([:multop G:].(a,v1)).i,a*wi) by Lm42
-      .= ad(G.i).(([:multop G:].(a,v1)).i,([:multop G:].(a,w1)).i) by Lm42;
-     hence
-      ([:multop G:].(a,[:addop G:].(v1,w1))).x
-        =([:addop G:].([:multop G:].(a,v1),[:multop G:].(a,w1))).x by Lm41;
+      .= ad(G.i).(([:multop G:].(a,v1)).i,a*wi) by Lm4
+      .= ad(G.i).(([:multop G:].(a,v1)).i,([:multop G:].(a,w1)).i) by Lm4;
+     hence ([:multop G:].(a,[:addop G:].(v1,w1))).x
+        =([:addop G:].([:multop G:].(a,v1),[:multop G:].(a,w1))).x by Lm3;
     end;
     hence a * (v + w) = a * v + a * w by A2,FUNCT_1:9;
-    now let x be set;
-     assume x in dom carr G; then 
-     reconsider i = x as Element of dom carr G;
-     reconsider vi=v1.i as VECTOR of G.i by Def4,K;
-     ([:multop G:].(a+b,v1)).i = (a+b)*vi by Lm42
+     now let x be set;
+     assume x in dom carr G;
+     then reconsider i = x as Element of dom carr G;
+     reconsider vi=v1.i as VECTOR of G.i by Def4,A1;
+      ([:multop G:].(a+b,v1)).i = (a+b)*vi by Lm4
      .= a*vi+b*vi by RLVECT_1:def 9
-     .= ad(G.i).(([:multop G:].(a,v1)).i,b*vi) by Lm42
-     .= ad(G.i).(([:multop G:].(a,v1)).i,([:multop G:].(b,v1)).i) by Lm42;
+     .= ad(G.i).(([:multop G:].(a,v1)).i,b*vi) by Lm4
+     .= ad(G.i).(([:multop G:].(a,v1)).i,([:multop G:].(b,v1)).i) by Lm4;
      hence ([:multop G:].((a+b),v1)).x
-       =([:addop G:].([:multop G:].(a,v1),[:multop G:].(b,v1))).x by Lm41;
+       =([:addop G:].([:multop G:].(a,v1),[:multop G:].(b,v1))).x by Lm3;
     end;
     hence (a + b) * v = a * v + b * v by A2,FUNCT_1:9;
-    now let x be set;
-     assume x in dom carr G; then 
-     reconsider i = x as Element of dom carr G;
-     reconsider vi=v1.i as VECTOR of G.i by Def4,K;
-     ([:multop G:].(a*b,v1)).i = (a*b)*vi by Lm42
+     now let x be set;
+     assume x in dom carr G;
+     then reconsider i = x as Element of dom carr G;
+     reconsider vi=v1.i as VECTOR of G.i by Def4,A1;
+      ([:multop G:].(a*b,v1)).i = (a*b)*vi by Lm4
       .=a*(b*vi) by RLVECT_1:def 9
-      .=(the Mult of G.i).(a,([:multop G:].(b,v1)).i) by Lm42;
-     hence
-      ([:multop G:].((a*b),v1)).x 
-       = ([:multop G:].(a,[:multop G:].(b,v1))).x by Lm42;
+      .=(the Mult of G.i).(a,([:multop G:].(b,v1)).i) by Lm4;
+     hence ([:multop G:].((a*b),v1)).x
+       = ([:multop G:].(a,[:multop G:].(b,v1))).x by Lm4;
     end;
     hence a * b * v = a * (b * v) by A2,FUNCT_1:9;
-    now let x be set;
-     assume x in dom carr G; then
-     reconsider i = x as Element of dom carr G;
-     reconsider vi=v1.i as VECTOR of G.i by Def4,K;
-     ( [:multop G:].(1,v1)).x = 1*vi by Lm42;
+     now let x be set;
+     assume x in dom carr G;
+     then reconsider i = x as Element of dom carr G;
+     reconsider vi=v1.i as VECTOR of G.i by Def4,A1;
+      ( [:multop G:].(1,v1)).x = 1*vi by Lm4;
      hence ([:multop G:].(1,v1)).x =v1.x by RLVECT_1:def 9;
     end;
     hence 1 * v = v by A2,FUNCT_1:9;
@@ -662,47 +660,47 @@ proof
    reconsider GS = RLSStruct(# product carr G,zeros G,
         [:addop G:],[:multop G:] #) as non empty RLSStruct;
 A1:now let i be Element of dom carr G;
-    dom G = Seg len G by FINSEQ_1:def 3
+     dom G = Seg len G by FINSEQ_1:def 3
          .= Seg len carr G by Def4
          .= dom carr G by FINSEQ_1:def 3;
     hence (carr G).i = car(G.i) by Def4;
    end;
-   now let i be Element of dom carr G;
-    (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def5;
+    now let i be Element of dom carr G;
+     (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def5;
     hence (addop G).i is commutative by FVSUM_1:2;
-   end; then
-A2:[:addop G:] is commutative by PRVECT_1:25;
-   now let i be Element of dom carr G;
-    (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def5;
+   end;
+then A2:[:addop G:] is commutative by PRVECT_1:25;
+    now let i be Element of dom carr G;
+     (addop G).i = ad(G.i) & (carr G).i = car(G.i) by A1,Def5;
     hence (addop G).i is associative by FVSUM_1:3;
-   end; then
-A3:[:addop G:] is associative by PRVECT_1:26;
+   end;
+then A3:[:addop G:] is associative by PRVECT_1:26;
    deffunc zr(LoopStr) = the ZeroF of $1;
-   now let i be Element of dom carr G;
-P:  (addop G).i = ad(G.i) & (zeros G).i = zr(G.i) & (carr G).i = car(G.i)
+    now let i be Element of dom carr G;
+A4:  (addop G).i = ad(G.i) & (zeros G).i = zr(G.i) & (carr G).i = car(G.i)
       by A1,Def5,Def7;
-    (zeros G).i = 0.(G.i) by Def7;
-    hence (zeros G).i is_a_unity_wrt (addop G).i by P,PRVECT_1:3;
-   end; then 
-A4:zeros G is_a_unity_wrt [:addop G:] by PRVECT_1:27;
-   GS is right_complementable
+     (zeros G).i = 0.(G.i) by Def7;
+    hence (zeros G).i is_a_unity_wrt (addop G).i by A4,PRVECT_1:3;
+   end;
+then A5:zeros G is_a_unity_wrt [:addop G:] by PRVECT_1:27;
+    GS is right_complementable
    proof
     let x be Element of GS;
     reconsider y = (Frege complop G).x as Element of GS by FUNCT_2:7;
     take y;
-    now let i be Element of dom carr G;
-     0.(G.i) = zr(G.i); then
-     zr(G.i) is_a_unity_wrt ad(G.i) & (carr G).i = car(G.i) &
-     (addop G).i = ad(G.i) & (complop G).i = comp G.i 
+     now let i be Element of dom carr G;
+      0.(G.i) = zr(G.i);
+     then zr(G.i) is_a_unity_wrt ad(G.i) & (carr G).i = car(G.i) &
+     (addop G).i = ad(G.i) & (complop G).i = comp G.i
        by A1,Def5,Def6,PRVECT_1:3;
      hence (complop G).i is_an_inverseOp_wrt (addop G).i &
            (addop G).i has_a_unity by PRVECT_1:4,SETWISEO:def 2;
-    end; then 
-    Frege complop G is_an_inverseOp_wrt [:addop G:] by PRVECT_1:28; then
-    [:addop G:].(x,y) = the_unity_wrt [:addop G:] by FINSEQOP:def 1;
-    hence thesis by A4,BINOP_1:def 8;
+    end;
+    then Frege complop G is_an_inverseOp_wrt [:addop G:] by PRVECT_1:28;
+    then [:addop G:].(x,y) = the_unity_wrt [:addop G:] by FINSEQOP:def 1;
+    hence thesis by A5,BINOP_1:def 8;
    end;
-   hence thesis by A2,A3,A4,Lm2,Lm3,Lm4;
+   hence thesis by A2,A3,A5,Lm1,Lm2,Lm5;
 end;
 end;
 
@@ -721,8 +719,8 @@ proof
    take <*A*>;
    thus <*A*> is non empty;
    let x be set;
-   assume A1:x in rng <*A*> & not x is RealNormSpace; then
-   x in {A} by FINSEQ_1:55;
+   assume A1:x in rng <*A*> & not x is RealNormSpace;
+   then x in {A} by FINSEQ_1:55;
    hence contradiction by A1,TARSKI:def 1;
 end;
 end;
@@ -737,23 +735,23 @@ definition
   redefine func G.j -> RealNormSpace;
 coherence
 proof
-   G.j in rng G by FUNCT_1:def 5;
+    G.j in rng G by FUNCT_1:def 5;
    hence thesis by Def10;
 end;
 end;
 
-Lm50:
+Lm6:
 for g be RealNormSpace-yielding FinSequence holds
   g is RealLinearSpace-yielding
 proof
    let g be RealNormSpace-yielding FinSequence;
-   for x be set st x in rng g holds x is RealLinearSpace by Def10;
+    for x be set st x in rng g holds x is RealLinearSpace by Def10;
    hence g is RealLinearSpace-yielding by Def3;
 end;
 
 registration
   cluster RealNormSpace-yielding -> RealLinearSpace-yielding FinSequence;
-  coherence by Lm50;
+  coherence by Lm6;
 end;
 
 definition let G be RealNormSpace-Sequence;
@@ -766,15 +764,15 @@ proof
    deffunc F(Element of dom G) = (the norm of G.$1).(x.$1);
    consider f being Function of dom G,REAL such that
 A1: for j being Element of dom G holds f.j = F(j) from FUNCT_2:sch 4;
-   dom f = dom G by FUNCT_2:def 1; then
-A3:dom f = Seg len G by FINSEQ_1:def 3; then
-A4:f is FinSequence by FINSEQ_1:def 2;
-   rng f c= REAL; then
-   reconsider f as FinSequence of REAL by FINSEQ_1:def 4,A4;
-A5:len f = len G by A3,FINSEQ_1:def 3;
-   f in REAL* by FINSEQ_1:def 11; then
-   f in (len G)-tuples_on REAL by A5; then
-   reconsider f as Element of REAL (len G);
+    dom f = dom G by FUNCT_2:def 1;
+then A2:dom f = Seg len G by FINSEQ_1:def 3;
+then A3:f is FinSequence by FINSEQ_1:def 2;
+    rng f c= REAL;
+   then reconsider f as FinSequence of REAL by FINSEQ_1:def 4,A3;
+A4:len f = len G by A2,FINSEQ_1:def 3;
+    f in REAL* by FINSEQ_1:def 11;
+   then f in (len G)-tuples_on REAL by A4;
+   then reconsider f as Element of REAL (len G);
    take f;
    thus len f = len G by FINSEQ_2:109;
    let j be Element of dom G;
@@ -784,15 +782,15 @@ uniqueness
 proof
    let f,g be Element of REAL len G;
    assume that
-A2: len f = len G &
+A5: len f = len G &
     for j being Element of dom G holds f.j = (the norm of G.j).(x.j) and
-A3: len g = len G &
+A6: len g = len G &
     for j being Element of dom G holds g.j = (the norm of G.j).(x.j);
-   now let j be Element of NAT;
-    assume j in Seg len G; then
-    reconsider j1=j as Element of dom G by FINSEQ_1:def 3;
-    f.j = (the norm of G.j1).(x.j1) by A2;
-    hence f.j = g.j by A3;
+    now let j be Element of NAT;
+    assume j in Seg len G;
+    then reconsider j1=j as Element of dom G by FINSEQ_1:def 3;
+     f.j = (the norm of G.j1).(x.j1) by A5;
+    hence f.j = g.j by A6;
    end;
    hence thesis by FINSEQ_2:139;
 end;
@@ -817,8 +815,8 @@ proof
    assume that
 A2: for x being Element of product carr G holds f.x = |.normsequence(G,x).| and
 A3: for x being Element of product carr G holds g.x = |.normsequence(G,x).|;
-   now let x be Element of product carr G;
-    f.x = |.normsequence(G,x).| by A2;
+    now let x be Element of product carr G;
+     f.x = |.normsequence(G,x).| by A2;
     hence f.x = g.x by A3;
    end;
    hence thesis by FUNCT_2:113;
@@ -841,28 +839,28 @@ end;
 
 reserve G for RealNormSpace-Sequence;
 
-theorem Th3:
+theorem Th6:
   product G = NORMSTR(# product carr G,zeros G,[:addop G:],[:multop G:],
     productnorm G #)
 proof
-   the RLSStruct of product G 
+    the RLSStruct of product G
     = product(G qua RealLinearSpace-Sequence) by Def13;
    hence thesis by Def13;
 end;
 
-theorem Th4:
-for x be VECTOR of product G, y be Element of product carr G st 
+theorem Th7:
+for x be VECTOR of product G, y be Element of product carr G st
  x = y holds ||.x.|| = |.normsequence(G,y).|
 proof
    let x be VECTOR of product G;
    let y be Element of product carr G;
    assume A1: x=y;
-   product G = NORMSTR(# product carr G,zeros G,[:addop G:],
-     [:multop G:],productnorm G #) by Th3;
+    product G = NORMSTR(# product carr G,zeros G,[:addop G:],
+     [:multop G:],productnorm G #) by Th6;
    hence ||.x.|| = |.normsequence(G,y).| by A1,Def12;
 end;
 
-theorem Th6:
+theorem Th8:
 for x,y,z be Element of product carr G, i be Element of NAT st
  i in dom x & z = [:addop G :].(x,y) holds
    normsequence(G,z).i <= (normsequence(G,x) + normsequence(G,y)).i
@@ -871,143 +869,145 @@ proof
        i be Element of NAT such that
 A1:i in dom x & z = [: addop G :].(x,y);
    reconsider i0=i as Element of dom (carr G) by A1,CARD_3:18;
-A3:z.i0 = ((addop G).i0).(x.i0,y.i0) by A1,PRVECT_1:def 10;
-   dom G = Seg len G by FINSEQ_1:def 3
+A2:z.i0 = ((addop G).i0).(x.i0,y.i0) by A1,PRVECT_1:def 10;
+    dom G = Seg len G by FINSEQ_1:def 3
         .= Seg len carr G by Def4
-        .= dom carr G by FINSEQ_1:def 3; then
-   reconsider i0=i as Element of dom G by A1,CARD_3:18;
-A2:dom x = dom(carr G) by CARD_3:18;
-   (carr G).i0 = the carrier of G.i0 by Def4; then
-   reconsider xi0=x.i0,yi0=y.i0,zi0=z.i0 as Element of G.i0 by A2,A1,CARD_3:18;
-   ||.zi0.|| = ||.xi0+yi0.|| by A3,Def5; then
-A4:||.zi0.|| <= ||.xi0.|| + ||.yi0.|| by NORMSP_1:def 2;
+        .= dom carr G by FINSEQ_1:def 3;
+   then reconsider i0=i as Element of dom G by A1,CARD_3:18;
+A3:dom x = dom(carr G) by CARD_3:18;
+    (carr G).i0 = the carrier of G.i0 by Def4;
+   then reconsider xi0=x.i0,yi0=y.i0,zi0=z.i0 as Element of G.i0 by A3,A1,
+CARD_3:18;
+    ||.zi0.|| = ||.xi0+yi0.|| by A2,Def5;
+then A4:||.zi0.|| <= ||.xi0.|| + ||.yi0.|| by NORMSP_1:def 2;
 A5:(the norm of G.i0).yi0 = normsequence(G,y).i0 &
    (the norm of G.i0).zi0 = normsequence(G,z).i0 by Def11;
-   normsequence(G,x).i0 + normsequence(G,y).i0
+    normsequence(G,x).i0 + normsequence(G,y).i0
      = (normsequence(G,x) + normsequence(G,y)).i0 by RVSUM_1:27;
    hence thesis by A4,A5,Def11;
 end;
 
-theorem Th7:
-for x be Element of product carr G, i be Element of NAT st 
+theorem Th9:
+for x be Element of product carr G, i be Element of NAT st
  i in dom x holds 0 <= normsequence(G,x).i
 proof
-   let x be Element of product carr G, 
+   let x be Element of product carr G,
        i be Element of NAT such that
 A1:i in dom x;
 A2:dom x = dom carr G by CARD_3:18;
-   dom G = Seg len G by FINSEQ_1:def 3
+    dom G = Seg len G by FINSEQ_1:def 3
         .= Seg len carr G by Def4
-        .= dom carr G by FINSEQ_1:def 3; then
-   reconsider i0=i as Element of dom G by A1,CARD_3:18;
-   (carr G).i0 = the carrier of G.i0 by Def4; then
-   reconsider xi0=x.i0 as Element of G.i0 by A1,A2,CARD_3:18;
-   0<= ||.xi0.|| by NORMSP_1:8;
+        .= dom carr G by FINSEQ_1:def 3;
+   then reconsider i0=i as Element of dom G by A1,CARD_3:18;
+    (carr G).i0 = the carrier of G.i0 by Def4;
+   then reconsider xi0=x.i0 as Element of G.i0 by A1,A2,CARD_3:18;
+    0<= ||.xi0.|| by NORMSP_1:8;
    hence 0 <= normsequence(G,x).i by Def11;
 end;
 
-Th9:product G is RealNormSpace-like
+Lm7:product G is RealNormSpace-like
 proof
    let x,y being Point of product G, a be Real;
    reconsider n = len G as Element of NAT;
 A1:product G = NORMSTR(# product carr G,zeros G,[:addop G:],
-                     [:multop G:],productnorm G #) by Th3;
-B1:len G = len carr G by Def4;
+                     [:multop G:],productnorm G #) by Th6;
+A2:len G = len carr G by Def4;
 A3:||.x.|| = 0 implies x = 0.(product G)
    proof
     assume A4:||.x.|| = 0;
     reconsider z=x as Element of product carr G by A1;
-    now let i be Element of dom carr G;
-     ||.x.|| = |.normsequence(G,z).| by Th4; then
-A5:  normsequence(G,z) = 0*n by A4,EUCLID:11;
-     dom carr G = Seg len carr G by FINSEQ_1:def 3; then
-     dom carr G = Seg len G by Def4; then
-A6:  normsequence(G,z).i = 0 by A5,FUNCOP_1:13;
-     reconsider i0 = i as Element of dom G by B1,FINSEQ_3:31;
-     (carr G).i0 = the carrier of G.i0 by Def4; then
-     reconsider zzi0=z.i0 as Element of G.i0 by CARD_3:18;
-     ||.(zzi0).|| = 0 by A6,Def11; then
-     z.i = 0.(G.i) by NORMSP_1:def 2;
+     now let i be Element of dom carr G;
+      ||.x.|| = |.normsequence(G,z).| by Th7;
+then A5:  normsequence(G,z) = 0*n by A4,EUCLID:11;
+      dom carr G = Seg len carr G by FINSEQ_1:def 3;
+     then dom carr G = Seg len G by Def4;
+then A6:  normsequence(G,z).i = 0 by A5,FUNCOP_1:13;
+     reconsider i0 = i as Element of dom G by A2,FINSEQ_3:31;
+      (carr G).i0 = the carrier of G.i0 by Def4;
+     then reconsider zzi0=z.i0 as Element of G.i0 by CARD_3:18;
+      ||.(zzi0).|| = 0 by A6,Def11;
+     then z.i = 0.(G.i) by NORMSP_1:def 2;
      hence z.i = the ZeroF of (G.i);
     end;
     hence x = 0.(product G) by A1,Def7;
    end;
-A2:x = 0.(product G) implies ||.x.|| = 0
+A7:x = 0.(product G) implies ||.x.|| = 0
    proof
-    assume A7:x = 0.(product G);
+    assume A8:x = 0.(product G);
     reconsider z=x as Element of product carr G by A1;
-A8: for i be Element of dom carr G holds normsequence(G,z).i = 0
+A9: for i be Element of dom carr G holds normsequence(G,z).i = 0
     proof
      let i be Element of dom carr G;
-     reconsider i0 = i as Element of dom G by B1,FINSEQ_3:31;
-     (carr G).i0 = the carrier of G.i0 by Def4; then
-     reconsider zi0=z.i0 as Element of G.i0 by CARD_3:18;
-     z.i = 0.(G.i) by A7,A1,Def7; then
-     ||.zi0.|| = 0 by NORMSP_1:def 2;
+     reconsider i0 = i as Element of dom G by A2,FINSEQ_3:31;
+      (carr G).i0 = the carrier of G.i0 by Def4;
+     then reconsider zi0=z.i0 as Element of G.i0 by CARD_3:18;
+      z.i = 0.(G.i) by A8,A1,Def7;
+     then ||.zi0.|| = 0 by NORMSP_1:def 2;
      hence normsequence(G,z).i = 0 by Def11;
     end;
-    for i be Element of NAT st i in dom (sqr normsequence(G,z))
+     for i be Element of NAT st i in dom (sqr normsequence(G,z))
      holds (sqr normsequence(G,z)).i = 0
     proof
      let i be Element of NAT;
-     assume A9:i in dom sqr normsequence(G,z);
-     len normsequence(G,z) = len G by Def11; then
-A10: dom normsequence(G,z) = dom G by FINSEQ_3:31;
-     dom carr G = dom G by B1,FINSEQ_3:31; then
-     dom sqr normsequence(G,z) = dom carr G by A10,RVSUM_1:77; then
-     (normsequence(G,z).i)^2 = 0 by A8,A9,SQUARE_1:60;
+     assume A10:i in dom sqr normsequence(G,z);
+      len normsequence(G,z) = len G by Def11;
+then A11: dom normsequence(G,z) = dom G by FINSEQ_3:31;
+      dom carr G = dom G by A2,FINSEQ_3:31;
+     then dom sqr normsequence(G,z) = dom carr G by A11,RVSUM_1:77;
+     then (normsequence(G,z).i)^2 = 0 by A9,A10,SQUARE_1:60;
      hence (sqr normsequence(G,z)).i = 0 by RVSUM_1:78;
-    end; then
-    |.normsequence(G,z).| = 0 by Th8,SQUARE_1:82;
-    hence ||.x.|| = 0 by Th4;
+    end;
+    then |.normsequence(G,z).| = 0 by Th3,SQUARE_1:82;
+    hence ||.x.|| = 0 by Th7;
    end;
    reconsider z=x as Element of product carr G by A1;
    reconsider ax=a * x as Element of product carr G by A1;
-A13:len normsequence(G,ax) = n & len (abs(a) * normsequence(G,z)) = n
+A12:len normsequence(G,ax) = n & len (abs(a) * normsequence(G,z)) = n
       by FINSEQ_2:109;
-   for i be Element of NAT st i in Seg n holds
+    for i be Element of NAT st i in Seg n holds
     normsequence(G,ax).i = (abs(a) * normsequence(G,z)).i
    proof
-    let i be Element of NAT; 
-    assume i in Seg n; then
-    reconsider i0 = i as Element of dom G by FINSEQ_1:def 3;
-    (carr G).i0 = the carrier of G.i0 & dom carr G = dom G
-      by Def4,B1,FINSEQ_3:31; then
-    reconsider axi0=ax.i0, zi0 = z.i0 as Element of G.i0 by CARD_3:18;
-    reconsider i1 = i0 as Element of dom carr G by B1,FINSEQ_3:31;
-    ( [:multop G:].(a,z)).i1 = ((multop G).i1).(a,zi0) by Def2; then
-    axi0 = a * zi0 by A1,Def8; then
-    ||.axi0.|| = abs(a) * ||. zi0 .|| by NORMSP_1:def 2; then
-    ||.axi0.|| = abs(a) * normsequence(G,z).i0 by Def11; then
-    ||.axi0.|| = (abs(a) * normsequence(G,z)).i0 by RVSUM_1:66;
+    let i be Element of NAT;
+    assume i in Seg n;
+    then reconsider i0 = i as Element of dom G by FINSEQ_1:def 3;
+     (carr G).i0 = the carrier of G.i0 & dom carr G = dom G
+      by Def4,A2,FINSEQ_3:31;
+    then reconsider axi0=ax.i0, zi0 = z.i0 as Element of G.i0 by CARD_3:18;
+    reconsider i1 = i0 as Element of dom carr G by A2,FINSEQ_3:31;
+     ( [:multop G:].(a,z)).i1 = ((multop G).i1).(a,zi0) by Def2;
+    then axi0 = a * zi0 by A1,Def8;
+    then ||.axi0.|| = abs(a) * ||. zi0 .|| by NORMSP_1:def 2;
+    then ||.axi0.|| = abs(a) * normsequence(G,z).i0 by Def11;
+    then ||.axi0.|| = (abs(a) * normsequence(G,z)).i0 by RVSUM_1:66;
     hence thesis by Def11;
-   end; then
-   |.normsequence(G,ax).| = |.abs(a)*normsequence(G,z).|
-      by A13,FINSEQ_2:10; then
-A11:|.normsequence(G,ax).| = abs(abs a) * |.normsequence(G,z).| by EUCLID:14;
+   end;
+   then |.normsequence(G,ax).| = |.abs(a)*normsequence(G,z).|
+      by A12,FINSEQ_2:10;
+then A13:|.normsequence(G,ax).| = abs(abs a) * |.normsequence(G,z).| by EUCLID:
+14;
    reconsider z = x + y as Element of product carr G by A1;
    reconsider xx = x, yy = y as Element of product carr G by A1;
 A14:||.x + y.|| = |.normsequence(G,z).| & ||.x.|| = |.normsequence(G,xx).| &
-    ||.y.|| = |.normsequence(G,yy).| by Th4;
-A16:len normsequence(G,z) = n by Def11; then
-A17:len normsequence(G,z)
+    ||.y.|| = |.normsequence(G,yy).| by Th7;
+A15:len normsequence(G,z) = n by Def11;
+then A16:len normsequence(G,z)
      = len (normsequence(G,xx)+ normsequence(G,yy)) by FINSEQ_2:109;
-   for i be Element of NAT st i in Seg n holds
+    for i be Element of NAT st i in Seg n holds
     0 <= normsequence(G,z).i &
     normsequence(G,z).i <= (normsequence(G,xx)+ normsequence(G,yy)).i
    proof
-    let i be Element of NAT such that A18:i in Seg n;
-A19:Seg n = dom G by FINSEQ_1:def 3;
-A20:dom carr G = dom G by B1,FINSEQ_3:31; then
-A21:i in dom z by A18,A19,CARD_3:18;
-    dom xx = dom carr G by CARD_3:18;
-    hence thesis by A21,A18,A19,A20,A1,Th6,Th7;
-   end; then
-A22:|.normsequence(G,z).| <= |.normsequence(G,xx)+ normsequence(G,yy).|
-                                              by A17,A16,Th5;
-   |.normsequence(G,xx)+ normsequence(G,yy).|
+    let i be Element of NAT such that A17:i in Seg n;
+A18:Seg n = dom G by FINSEQ_1:def 3;
+A19:dom carr G = dom G by A2,FINSEQ_3:31;
+then A20:i in dom z by A17,A18,CARD_3:18;
+     dom xx = dom carr G by CARD_3:18;
+    hence thesis by A20,A17,A18,A19,A1,Th8,Th9;
+   end;
+then A21:|.normsequence(G,z).| <= |.normsequence(G,xx)+ normsequence(G,yy).|
+                                              by A16,A15,Th2;
+    |.normsequence(G,xx)+ normsequence(G,yy).|
       <= |.normsequence(G,xx).| + |.normsequence(G,yy).| by EUCLID:15;
-   hence thesis by A2,A3,A11,Th4,A14,A22,XXREAL_0:2;
+   hence thesis by A7,A3,A13,Th7,A14,A21,XXREAL_0:2;
 end;
 
 registration let G be RealNormSpace-Sequence;
@@ -1016,70 +1016,70 @@ registration let G be RealNormSpace-Sequence;
 coherence
 proof
    reconsider G1=G as RealLinearSpace-Sequence;
-Q0:the RLSStruct of product G = product (G qua RealLinearSpace-Sequence)
+A1:the RLSStruct of product G = product (G qua RealLinearSpace-Sequence)
       by Def13;
-A1:product G is Abelian
+A2:product G is Abelian
    proof
     let v,w be VECTOR of product G;
-    reconsider v1=v,w1=w as VECTOR of product G1 by Q0;
-    v+w =v1+w1 by Q0; then
-    v+w =w1+v1;
-    hence thesis by Q0;
+    reconsider v1=v,w1=w as VECTOR of product G1 by A1;
+     v+w =v1+w1 by A1;
+    then v+w =w1+v1;
+    hence thesis by A1;
    end;
-A2:product G is add-associative
+A3:product G is add-associative
    proof
     let v,w,x be VECTOR of product G;
-    reconsider v1=v,w1=w,x1=x as VECTOR of product G1 by Q0;
-    (v+w)+x = (v1+w1)+x1 by Q0; then
-    (v+w)+x =v1+(w1+x1) by RLVECT_1:def 6;
-    hence thesis by Q0;
+    reconsider v1=v,w1=w,x1=x as VECTOR of product G1 by A1;
+     (v+w)+x = (v1+w1)+x1 by A1;
+    then (v+w)+x =v1+(w1+x1) by RLVECT_1:def 6;
+    hence thesis by A1;
    end;
-A3:product G is right_zeroed
+A4:product G is right_zeroed
    proof
     let v be VECTOR of product G;
-    reconsider v1=v as VECTOR of product G1 by Q0;
-    v+0.product G = v1+0.product G1 by Q0;
+    reconsider v1=v as VECTOR of product G1 by A1;
+     v+0.product G = v1+0.product G1 by A1;
     hence v+0.product G = v by RLVECT_1:def 7;
    end;
-A4:product G is right_complementable
+A5:product G is right_complementable
    proof
     let v be VECTOR of product G;
-    reconsider v1=v as VECTOR of product G1 by Q0;
-    reconsider w=-v1 as VECTOR of product G by Q0;
+    reconsider v1=v as VECTOR of product G1 by A1;
+    reconsider w=-v1 as VECTOR of product G by A1;
     take w;
-    v+w = v1-v1 by Q0; then
-    v+w = 0.product G1 by RLVECT_1:28;
-    hence v+w = 0.product G by Q0;
+     v+w = v1-v1 by A1;
+    then v+w = 0.product G1 by RLVECT_1:28;
+    hence v+w = 0.product G by A1;
    end;
-   product G is RealLinearSpace-like
+    product G is RealLinearSpace-like
    proof
-A5: now let a be Real;
+A6: now let a be Real;
      let v,w be VECTOR of product G;
-     reconsider v1=v,w1=w as VECTOR of product G1 by Q0;
-     a * (v + w) = a * (v1 + w1) by Q0; then
-     a * (v + w) =a * v1 + a * w1 by RLVECT_1:def 9;
-     hence a * (v + w) = a*v +a*w by Q0;
-    end;
-A6: now let a,b be Real, v be VECTOR of product G;
-     reconsider v1=v as VECTOR of product G1 by Q0;
-     (a+b) * v = (a+b) * v1 by Q0; then
-     (a+b) * v = a * v1 + b * v1 by RLVECT_1:def 9;
-     hence (a+b) * v =a*v +b*v by Q0;
+     reconsider v1=v,w1=w as VECTOR of product G1 by A1;
+      a * (v + w) = a * (v1 + w1) by A1;
+     then a * (v + w) =a * v1 + a * w1 by RLVECT_1:def 9;
+     hence a * (v + w) = a*v +a*w by A1;
     end;
 A7: now let a,b be Real, v be VECTOR of product G;
-     reconsider v1=v as VECTOR of product G1 by Q0;
-     (a*b) * v = (a*b) * v1 by Q0; then
-     (a*b) * v = a * (b * v1) by RLVECT_1:def 9;
-     hence (a*b) * v = a*(b*v) by Q0;
+     reconsider v1=v as VECTOR of product G1 by A1;
+      (a+b) * v = (a+b) * v1 by A1;
+     then (a+b) * v = a * v1 + b * v1 by RLVECT_1:def 9;
+     hence (a+b) * v =a*v +b*v by A1;
     end;
-    now let v be VECTOR of product G;
-     reconsider v1=v as VECTOR of product G1 by Q0;
-     1 * v = 1 * v1 by Q0;
+A8: now let a,b be Real, v be VECTOR of product G;
+     reconsider v1=v as VECTOR of product G1 by A1;
+      (a*b) * v = (a*b) * v1 by A1;
+     then (a*b) * v = a * (b * v1) by RLVECT_1:def 9;
+     hence (a*b) * v = a*(b*v) by A1;
+    end;
+     now let v be VECTOR of product G;
+     reconsider v1=v as VECTOR of product G1 by A1;
+      1 * v = 1 * v1 by A1;
      hence 1 * v = v by RLVECT_1:def 9;
     end;
-    hence thesis by A5,A6,A7,RLVECT_1:def 9;
+    hence thesis by A6,A7,A8,RLVECT_1:def 9;
    end;
-   hence thesis by A1,A2,A3,A4,Th9;
+   hence thesis by A2,A3,A4,A5,Lm7;
 end;
 end;
 
@@ -1095,27 +1095,28 @@ proof
        y be Element of product carr G,
        xi be Point of G.i;
    reconsider n = len G as Element of NAT;
-   assume A1:y=x & xi=y.i; then
-A2:||.x.|| = |.normsequence(G,y).| by Th4;
-A4:(normsequence(G,y).i)^2 = (sqr normsequence(G,y)).i by RVSUM_1:78;
-A5:0 <= (normsequence(G,y).i)^2 by XREAL_1:65;
-A6:dom G = Seg n by FINSEQ_1:def 3;
-   for i be Element of NAT st i in Seg n holds 0 <= (sqr normsequence(G,y)).i
+   assume A1:y=x & xi=y.i;
+then A2:||.x.|| = |.normsequence(G,y).| by Th7;
+A3:(normsequence(G,y).i)^2 = (sqr normsequence(G,y)).i by RVSUM_1:78;
+A4:0 <= (normsequence(G,y).i)^2 by XREAL_1:65;
+A5:dom G = Seg n by FINSEQ_1:def 3;
+    for i be Element of NAT st i in Seg n holds 0 <= (sqr normsequence(G,y)).i
    proof
     let i be Element of NAT such that i in Seg n;
-    (normsequence(G,y).i)^2 >= 0 by XREAL_1:65;
+     (normsequence(G,y).i)^2 >= 0 by XREAL_1:65;
     hence thesis by RVSUM_1:78;
-   end; then
-A7:(sqr normsequence(G,y)).i <= Sum sqr normsequence(G,y) by A6,REAL_NS1:7;
-   ||.xi.|| = normsequence(G,y).i by A1,Def11; then
-   normsequence(G,y).i >= 0 by NORMSP_1:8; then
-   sqrt ((sqr normsequence(G,y)).i) = normsequence(G,y).i
-     by A4,SQUARE_1:89; then
-   ||.xi.|| = sqrt ((sqr normsequence(G,y)).i) by A1,Def11;
-   hence ||.xi.|| <= ||.x.|| by A7,A2,A4,A5,SQUARE_1:94;
+   end;
+then A6:(sqr normsequence(G,y)).i <= Sum sqr normsequence(G,y) by A5,REAL_NS1:7
+;
+    ||.xi.|| = normsequence(G,y).i by A1,Def11;
+   then normsequence(G,y).i >= 0 by NORMSP_1:8;
+   then sqrt ((sqr normsequence(G,y)).i) = normsequence(G,y).i
+     by A3,SQUARE_1:89;
+   then ||.xi.|| = sqrt ((sqr normsequence(G,y)).i) by A1,Def11;
+   hence ||.xi.|| <= ||.x.|| by A6,A2,A3,A4,SQUARE_1:94;
 end;
 
-LmSEQ1:
+Lm8:
 for RNS be RealNormSpace, S be sequence of RNS, g be Point of RNS holds
  (S is convergent & lim S = g) iff
  (||.S - g.|| is convergent & lim ||.S - g.|| = 0)
@@ -1123,21 +1124,21 @@ proof
    let RNS be RealNormSpace,
        S be sequence of RNS,
        g be Point of RNS;
-   now assume
+    now assume
 A1: ||.S - g.|| is convergent & lim ||.S - g.|| = 0;
 A2: now let r be Real;
      reconsider p=r as real number;
-     assume 0 < r; then
-     consider n be Element of NAT such that
+     assume 0 < r;
+     then consider n be Element of NAT such that
 A3:   for m be Element of NAT st n<=m holds abs (||.S - g.||.m-0) < p
        by SEQ_2:def 7,A1;
      take n;
-     now let m be Element of NAT;
-      assume n<=m; then
-      abs (||.S - g.||.m-0) < p by A3; then
-      abs ||.(S - g).m.|| < p by NORMSP_1:def 10; then
- A4:  abs ||.S.m - g.|| < p by NORMSP_1:def 7;
-      0 <= ||.S.m - g.|| by NORMSP_1:8;
+      now let m be Element of NAT;
+      assume n<=m;
+      then abs (||.S - g.||.m-0) < p by A3;
+      then abs ||.(S - g).m.|| < p by NORMSP_1:def 10;
+ then A4:  abs ||.S.m - g.|| < p by NORMSP_1:def 7;
+       0 <= ||.S.m - g.|| by NORMSP_1:8;
       hence ||.S.m - g.|| < p by A4,ABSVALUE:def 1;
      end;
      hence for m be Element of NAT st n<=m holds ||.S.m - g.|| < r;
@@ -1148,7 +1149,7 @@ A3:   for m be Element of NAT st n<=m holds abs (||.S - g.||.m-0) < p
    hence thesis by NORMSP_1:41;
 end;
 
-theorem Th12:
+theorem Th11:
 for G be RealNormSpace-Sequence,
     i be Element of dom G,
     x,y be Point of product G,
@@ -1161,28 +1162,28 @@ proof
        x,y be Point of product G,
        xi,yi be Point of G.i,
        zx,zy be Element of product carr G;
-   assume 
+   assume
 A1: xi=zx.i & zx=x & yi=zy.i & zy=y;
    reconsider I = len G as Element of NAT;
 A2:product G =
     NORMSTR(# product carr G,zeros G,[:addop G:],[:multop G:],productnorm G #)
-      by Th3; then
-   reconsider mzx =-x as Element of product carr G;
+      by Th6;
+   then reconsider mzx =-x as Element of product carr G;
    reconsider zyPG = zy, zxPG = zx as Element of product G by A2;
    reconsider zyi = zy.i, zxi = zx.i as Element of G.i by A1;
-   len G = len carr G by Def4; then
-A3:dom G = dom carr G by FINSEQ_3:31;
-   -x = (-1) * x by RLVECT_1:29; then
-A4:mzx.i = (-1) * zxi by A1,A2,A3,Lm42; then
-   reconsider mzxi = mzx.i as Element of G.i;
+    len G = len carr G by Def4;
+then A3:dom G = dom carr G by FINSEQ_3:31;
+    -x = (-1) * x by RLVECT_1:29;
+then A4:mzx.i = (-1) * zxi by A1,A2,A3,Lm4;
+   then reconsider mzxi = mzx.i as Element of G.i;
    reconsider zyMm = y-x as Element of product carr G by A2;
-   zyMm.i =zyi+mzxi by A1,A2,A3,Lm41; then
-   zyMm.i =zyi+-zxi by A4,RLVECT_1:29;
+    zyMm.i =zyi+mzxi by A1,A2,A3,Lm3;
+   then zyMm.i =zyi+-zxi by A4,RLVECT_1:29;
    hence ||.yi - xi.|| <= ||.y - x.|| by A1,Th10;
 end;
 
 theorem
-for G be RealNormSpace-Sequence,
+ for G be RealNormSpace-Sequence,
     seq be sequence of (product G),
     x0 be Point of product G,
     y0 be Element of product carr G st
@@ -1202,52 +1203,52 @@ proof
     let i be Element of dom G;
     defpred P1[Element of NAT,Element of G.i] means
      ex seqm be Element of product carr G st seqm = seq.$1 & $2 = seqm.i;
-    len G = len carr G by Def4; then
-A4: dom G = dom carr G by FINSEQ_3:31;
-A2: for x being Element of NAT
+     len G = len carr G by Def4;
+then A2: dom G = dom carr G by FINSEQ_3:31;
+A3: for x being Element of NAT
      ex y being Element of G.i st P1[x,y]
     proof
      let x be Element of NAT;
-     product G = NORMSTR(# product carr G,zeros G,[:addop G:],
-                  [:multop G:],productnorm G #) by Th3; then
-     consider seqm be Element of product carr G such that
-A3:   seqm =seq.x;
+      product G = NORMSTR(# product carr G,zeros G,[:addop G:],
+                  [:multop G:],productnorm G #) by Th6;
+     then consider seqm be Element of product carr G such that
+A4:   seqm =seq.x;
      take y = seqm.i;
-     (carr G).i = the carrier of G.i by Def4;
-     hence thesis by A3,A4,CARD_3:18;
+      (carr G).i = the carrier of G.i by Def4;
+     hence thesis by A4,A2,CARD_3:18;
     end;
-    ex f be Function of NAT,the carrier of G.i st
-     for x being Element of NAT holds P1[x,f.x] from FUNCT_2:sch 3(A2); then
-    consider seqi be sequence of G.i such that
+     ex f be Function of NAT,the carrier of G.i st
+     for x being Element of NAT holds P1[x,f.x] from FUNCT_2:sch 3(A3);
+    then consider seqi be sequence of G.i such that
 A5:  for m be Element of NAT holds
       ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i;
     take seqi;
-    y0.i in (carr G).i by A4,CARD_3:18; then
-    reconsider x0i=y0.i as Point of G.i by Def4;
+     y0.i in (carr G).i by A2,CARD_3:18;
+    then reconsider x0i=y0.i as Point of G.i by Def4;
 A6: for r be Real st 0 < r
-     ex m be Element of NAT st 
+     ex m be Element of NAT st
       for n be Element of NAT st m <= n holds ||.seqi.n - x0i.|| < r
     proof
      let r be Real;
-     assume r > 0; then
-     consider k be Element of NAT such that
-A7:   for n be Element of NAT st k <= n holds ||.seq.n - x0.|| < r 
+     assume r > 0;
+     then consider k be Element of NAT such that
+A7:   for n be Element of NAT st k <= n holds ||.seq.n - x0.|| < r
        by A1,NORMSP_1:def 11;
-     now let n be Element of NAT;
-      assume n >= k; then
-A8:   ||.(seq.n) - x0.|| < r by A7;
-      ex seqn be Element of product carr G st
-       seqn = seq.n & seqi.n = seqn.i by A5; then
-      ||. seqi.n - x0i.|| <= ||. seq.n - x0.|| by A1,Th12;
+      now let n be Element of NAT;
+      assume n >= k;
+then A8:   ||.(seq.n) - x0.|| < r by A7;
+       ex seqn be Element of product carr G st
+       seqn = seq.n & seqi.n = seqn.i by A5;
+      then ||. seqi.n - x0i.|| <= ||. seq.n - x0.|| by A1,Th11;
       hence ||.(seqi.n) - x0i.|| < r by A8,XXREAL_0:2;
      end;
      hence thesis;
-    end; then
-    seqi is convergent by NORMSP_1:def 9;
+    end;
+    then seqi is convergent by NORMSP_1:def 9;
     hence thesis by A5,A6,NORMSP_1:def 11;
 end;
 
-theorem Th14:
+theorem Th13:
 for G be RealNormSpace-Sequence, seq be sequence of (product G),
  x0 be Point of product G, y0 be Element of product carr G st
   x0=y0 &
@@ -1257,13 +1258,13 @@ for G be RealNormSpace-Sequence, seq be sequence of (product G),
     for m be Element of NAT holds
      ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i
 holds
-  seq is convergent & lim seq=x0  
+  seq is convergent & lim seq=x0
 proof
    let G be RealNormSpace-Sequence,
        seq be sequence of (product G),
        x0 be Point of product G,
        y0 be Element of product carr G;
-   assume 
+   assume
 A1: x0=y0 &
     for i be Element of dom G
      ex seqi be sequence of G.i st
@@ -1272,7 +1273,7 @@ A1: x0=y0 &
        ex seqm be Element of product carr G st seqm= seq.m & seqi.m=seqm.i;
    reconsider I = len G as Element of NAT;
 A2:product G = NORMSTR(# product carr G,zeros G,
-                      [:addop G:],[:multop G:],productnorm G #) by Th3;
+                      [:addop G:],[:multop G:],productnorm G #) by Th6;
    defpred PP[Element of dom G, set] means
     ex rseqi be Real_Sequence, seqi be sequence of G.$1 st
      rseqi=$2 & seqi is convergent & rseqi is convergent &
@@ -1288,8 +1289,8 @@ A4:  seqi is convergent & y0.i = lim seqi &
      for m be Element of NAT holds
       ex Sm be Element of product carr G st Sm= seq.m & seqi.m=Sm.i by A1;
     set rseqi=||.seqi-lim seqi.||;
-A5: rseqi is convergent & lim rseqi=0 by A4,LmSEQ1;
-    rseqi is Element of Funcs(NAT,REAL) by FUNCT_2:11;
+A5: rseqi is convergent & lim rseqi=0 by A4,Lm8;
+     rseqi is Element of Funcs(NAT,REAL) by FUNCT_2:11;
     hence thesis by A4,A5;
    end;
    consider yyseq be Function of (dom G),Funcs(NAT,REAL) such that
@@ -1302,12 +1303,12 @@ A7:for k be Element of NAT ex yseqk be Element of (REAL I) st PQ[k,yseqk]
     defpred PPF[set,set] means
      ex i be Element of dom G st i=$1 & $2 = (yyseq.i).k;
 A8: for j be Element of NAT, y1,y2 be set st
-     j in Seg I & PPF[j,y1] & PPF[j,y2] holds y1=y2; 
+     j in Seg I & PPF[j,y1] & PPF[j,y2] holds y1=y2;
 A9: for k be Element of NAT st k in Seg I ex x be set st PPF[k,x]
     proof
      let j be Element of NAT;
-     assume j in Seg I; then
-     reconsider i=j as Element of dom G by FINSEQ_1:def 3;
+     assume j in Seg I;
+     then reconsider i=j as Element of dom G by FINSEQ_1:def 3;
      take (yyseq.i).k;
      thus thesis;
     end;
@@ -1315,35 +1316,35 @@ A9: for k be Element of NAT st k in Seg I ex x be set st PPF[k,x]
 A10: dom yseqk = Seg I &
      for j be Element of NAT st j in Seg I holds
       PPF[j,yseqk.j] from FINSEQ_1:sch 1(A8,A9);
-    now let j be Element of NAT;
-     assume j in dom yseqk; then
-     consider i be Element of dom G such that
+     now let j be Element of NAT;
+     assume j in dom yseqk;
+     then consider i be Element of dom G such that
 A11:  i=j & yseqk.j= (yyseq.i).k by A10;
-     yyseq.i is Function of NAT,REAL by FUNCT_2:121;
+      yyseq.i is Function of NAT,REAL by FUNCT_2:121;
      hence yseqk.j in REAL by A11,FUNCT_2:7;
-    end; then
-    reconsider yyy=yseqk as FinSequence of REAL by FINSEQ_2:14;
-    yyy is Element of (len yyy)-tuples_on REAL by FINSEQ_2:110; then
-    reconsider yseqk as Element of (REAL I) by FINSEQ_1:def 3,A10;
-    now let j be Element of dom G;
-     j in dom G; then
-     j in Seg I by FINSEQ_1:def 3; then
-     ex i be Element of dom G st i=j & yseqk.j= (yyseq.i).k by A10;
+    end;
+    then reconsider yyy=yseqk as FinSequence of REAL by FINSEQ_2:14;
+     yyy is Element of (len yyy)-tuples_on REAL by FINSEQ_2:110;
+    then reconsider yseqk as Element of (REAL I) by FINSEQ_1:def 3,A10;
+     now let j be Element of dom G;
+      j in dom G;
+     then j in Seg I by FINSEQ_1:def 3;
+     then ex i be Element of dom G st i=j & yseqk.j= (yyseq.i).k by A10;
      hence yseqk.j= (yyseq.j).k;
     end;
     hence thesis;
    end;
    consider yseq be Function of NAT,REAL I such that
 A12:for k be Element of NAT holds PQ[k,yseq.k] from FUNCT_2:sch 3(A7);
-   the carrier of REAL-NS I = REAL I by REAL_NS1:def 4; then
-   reconsider xseq=yseq as sequence of REAL-NS I;
-B13:xseq = yseq;
-   now let i0  be Element of NAT;
-    assume A13:i0 in Seg I; then
-    reconsider i=i0 as Element of dom G by FINSEQ_1:def 3;
+    the carrier of REAL-NS I = REAL I by REAL_NS1:def 4;
+   then reconsider xseq=yseq as sequence of REAL-NS I;
+A13:xseq = yseq;
+    now let i0  be Element of NAT;
+    assume A14:i0 in Seg I;
+    then reconsider i=i0 as Element of dom G by FINSEQ_1:def 3;
     take i;
     consider rseqi be Real_Sequence, seqi be sequence of G.i such that
-A14: rseqi=yyseq.i & seqi is convergent & rseqi is convergent &
+A15: rseqi=yyseq.i & seqi is convergent & rseqi is convergent &
      lim rseqi=0 & rseqi=||.seqi-lim seqi.|| &
      for m be Element of NAT holds
       ex seqm be Element of product carr G st
@@ -1353,12 +1354,12 @@ A14: rseqi=yyseq.i & seqi is convergent & rseqi is convergent &
      i=i0 & seqi is convergent & rseqi is convergent &
      lim rseqi=(0*I).i & rseqi=||.seqi-lim seqi.|| &
      for m be Element of NAT holds
-      ex seqm be Element of product carr G st 
-       seqm= seq.m & seqi.m=seqm.i by A12,A13,A14,FUNCOP_1:13;
-   end; then
-   consider xseq be sequence of REAL-NS I, 
+      ex seqm be Element of product carr G st
+       seqm= seq.m & seqi.m=seqm.i by A12,A14,A15,FUNCOP_1:13;
+   end;
+   then consider xseq be sequence of REAL-NS I,
             yseq be Function of NAT,REAL I such that
-A15:xseq=yseq &
+A16:xseq=yseq &
     for i0 be Element of NAT st i0 in Seg I
      ex i be Element of dom G, rseqi be Real_Sequence,
         seqi be sequence of G.i st
@@ -1367,79 +1368,79 @@ A15:xseq=yseq &
       lim rseqi=(0*I).i & rseqi=||.seqi-lim seqi.|| &
       for m be Element of NAT holds
        ex seqm be Element of product carr G st
-        seqm= seq.m & seqi.m=seqm.i by B13;
-A16:for i be Element of NAT st i in Seg I
+        seqm= seq.m & seqi.m=seqm.i by A13;
+A17:for i be Element of NAT st i in Seg I
     ex rseqi be Real_Sequence st
      (for k be Element of NAT holds rseqi.k = (yseq.k).i) &
      rseqi is convergent & (0*I).i = lim rseqi
    proof
     let i0 be Element of NAT;
-    assume i0 in Seg I; then
-    ex i be Element of dom G, rseqi be Real_Sequence,
+    assume i0 in Seg I;
+    then ex i be Element of dom G, rseqi be Real_Sequence,
       seqi be sequence of G.i st
     (for k be Element of NAT holds rseqi.k = (yseq.k).i0) &
      i=i0 & seqi is convergent & rseqi is convergent &
      lim rseqi=(0*I).i & rseqi=||.seqi-lim seqi.|| &
      for m be Element of NAT holds
       ex seqm be Element of product carr G st
-       seqm= seq.m & seqi.m=seqm.i by A15;
+       seqm= seq.m & seqi.m=seqm.i by A16;
     hence thesis;
    end;
-   (0*I) = 0.(REAL-NS I) by REAL_NS1:def 4; then
-A18:xseq is convergent & lim xseq = 0.(REAL-NS I)
-      by REAL_NS1:11,A15,A16;
-   ||.xseq-0.(REAL-NS I).|| =||.seq-x0.||
+    (0*I) = 0.(REAL-NS I) by REAL_NS1:def 4;
+then A18:xseq is convergent & lim xseq = 0.(REAL-NS I)
+      by REAL_NS1:11,A16,A17;
+    ||.xseq-0.(REAL-NS I).|| =||.seq-x0.||
    proof
-    now let x be set;
-     assume x in NAT; then
-     reconsider i=x as Element of NAT;
+     now let x be set;
+     assume x in NAT;
+     then reconsider i=x as Element of NAT;
      reconsider seqimx0 = seq.i-x0 as Element of product carr G by A2;
 A19: yseq.i = normsequence(G,seqimx0)
      proof
-      len (yseq.i)= I by EUCLID:2; then
-      len (yseq.i) = len normsequence(G,seqimx0) by Def11; then
-A20:  dom (yseq.i) = dom normsequence(G,seqimx0) by FINSEQ_3:31;
-      now let k be Element of NAT;
+       len (yseq.i)= I by EUCLID:2;
+      then len (yseq.i) = len normsequence(G,seqimx0) by Def11;
+then A20:  dom (yseq.i) = dom normsequence(G,seqimx0) by FINSEQ_3:31;
+       now let k be Element of NAT;
        assume A21: k in dom normsequence(G,seqimx0);
-A22:   len G= len normsequence(G,seqimx0) by Def11; then
-       reconsider k0=k as Element of dom G by A21,FINSEQ_3:31;
+A22:   len G= len normsequence(G,seqimx0) by Def11;
+       then reconsider k0=k as Element of dom G by A21,FINSEQ_3:31;
        consider seqk0 be sequence of G.k0 such that
-A23:    seqk0 is convergent & y0.k0 = lim seqk0 & 
+A23:    seqk0 is convergent & y0.k0 = lim seqk0 &
         for m be Element of NAT holds
          ex seqm0 be Element of product carr G st
           seqm0= seq.m & seqk0.m=seqm0.k0 by A1;
-       k in Seg I by FINSEQ_1:def 3,A22,A21; then
-       consider k1 be Element of dom G, rseqk1i be Real_Sequence,
+        k in Seg I by FINSEQ_1:def 3,A22,A21;
+       then consider k1 be Element of dom G, rseqk1i be Real_Sequence,
          seqk1i be sequence of G.k1 such that
 A24:    (for j be Element of NAT holds rseqk1i.j = (yseq.j).k) &
         k1=k & seqk1i is convergent & rseqk1i is convergent &
         lim rseqk1i=(0*I).k1 & rseqk1i=||.seqk1i-lim seqk1i.|| &
         for m be Element of NAT holds
          ex seqk1m be Element of product carr G st
-          seqk1m= seq.m & seqk1i.m=seqk1m.k1 by A15;
-       now
+          seqk1m= seq.m & seqk1i.m=seqk1m.k1 by A16;
+        now
         let x be set;
-        assume x in NAT; then
-        reconsider m = x as Element of NAT;
+        assume x in NAT;
+        then reconsider m = x as Element of NAT;
 A25:    ex seqk1m be Element of product carr G st
          seqk1m= seq.m & seqk1i.m=seqk1m.k1 by A24;
-        ex seqm0 be Element of product carr G st
+         ex seqm0 be Element of product carr G st
          seqm0= seq.m & seqk0.m = seqm0.k0 by A23;
         hence seqk1i.x = seqk0.x by A25,A24;
-       end; then
-A26:   seqk1i=seqk0 by FUNCT_2:18,A24;
+       end;
+then A26:   seqk1i=seqk0 by FUNCT_2:18,A24;
        consider seqm0 be Element of product carr G such that
 A27:    seqm0= seq.i & seqk0.i=seqm0.k0 by A23;
        reconsider mx0=-x0 as Element of product carr G by A2;
-       len G = len carr G by Def4; then
-A28:   dom G = dom carr G by FINSEQ_3:31;
-       -x0 = (-1) * x0 by RLVECT_1:29; then
-       mx0.k0 = (-1)*(lim seqk0) by A2,A23,Lm42,A28,A1; then
-       -(lim seqk0) = mx0.k0  by RLVECT_1:29; then
-A30:   seqimx0.k0 = seqk0.i - lim seqk0 by A2,A27,A28,Lm41;
+        len G = len carr G by Def4;
+then A28:   dom G = dom carr G by FINSEQ_3:31;
+        -x0 = (-1) * x0 by RLVECT_1:29;
+       then mx0.k0 = (-1)*(lim seqk0) by A2,A23,Lm4,A28,A1;
+       then -(lim seqk0) = mx0.k0  by RLVECT_1:29;
+then A29:   seqimx0.k0 = seqk0.i - lim seqk0 by A2,A27,A28,Lm3;
        thus (normsequence(G,seqimx0)).k
         = (the norm of G.k0).(seqimx0.k0) by Def11
-       .= ||.(seqk0 -lim seqk0).i .|| by A30,NORMSP_1:def 7
+       .= ||.(seqk0 -lim seqk0).i .|| by A29,NORMSP_1:def 7
        .= (||.seqk1i - (lim seqk1i).||).i by A26,A24,NORMSP_1:def 10
        .= (yseq.i).k by A24;
       end;
@@ -1449,19 +1450,19 @@ A30:   seqimx0.k0 = seqk0.i - lim seqk0 by A2,A27,A28,Lm41;
       =||.(xseq-0.(REAL-NS I)).i .|| by NORMSP_1:def 10
      .=||.xseq.i-0.(REAL-NS I).|| by NORMSP_1:def 7
      .=||.xseq.i.|| by RLVECT_1:26
-     .=|.yseq.i.| by A15,REAL_NS1:1
-     .=||.seq.i -x0.|| by Th4,A19
+     .=|.yseq.i.| by A16,REAL_NS1:1
+     .=||.seq.i -x0.|| by Th7,A19
      .=||.(seq -x0).i.|| by NORMSP_1:def 7
      .=||.seq-x0.||.x by NORMSP_1:def 10;
     end;
     hence thesis by SEQ_1:8;
-   end; then
-   ||.seq-x0.|| is convergent & lim ||.seq-x0.|| =0 by A18,LmSEQ1;
-   hence thesis by LmSEQ1;
+   end;
+   then ||.seq-x0.|| is convergent & lim ||.seq-x0.|| =0 by A18,Lm8;
+   hence thesis by Lm8;
 end;
 
 theorem
-  for G be RealNormSpace-Sequence st
+   for G be RealNormSpace-Sequence st
   for i be Element of dom G holds G.i is complete holds
     product G is complete
 proof
@@ -1469,15 +1470,15 @@ proof
 A1: for i be Element of dom G holds G.i is complete;
    reconsider I = len G as Element of NAT;
 A2:product G = NORMSTR(# product carr G,zeros G,[:addop G:],
-         [:multop G:],productnorm(G) #) by Th3;
-   for seq be sequence of (product G) holds
+         [:multop G:],productnorm(G) #) by Th6;
+    for seq be sequence of (product G) holds
     seq is Cauchy_sequence_by_Norm implies seq is convergent
    proof
     let seq be sequence of product G;
     assume A3:seq is Cauchy_sequence_by_Norm;
     defpred PPG[Element of NAT,set] means
-     ex i be Element of dom G st 
-      i=$1 & 
+     ex i be Element of dom G st
+      i=$1 &
       ex seqi be sequence of G.i st
        seqi is convergent & $2 = lim seqi &
        for m be Element of NAT holds
@@ -1486,15 +1487,15 @@ A4: for k be Element of NAT, y1,y2 be set st
      k in Seg I & PPG[k,y1] & PPG[k,y2] holds y1=y2
     proof
      let k be Element of NAT, y1,y2 be set;
-     assume A5: k in Seg I & PPG[k,y1] & PPG[k,y2]; then
-     consider i1 be Element of dom G such that
+     assume A5: k in Seg I & PPG[k,y1] & PPG[k,y2];
+     then consider i1 be Element of dom G such that
 A6:   i1=k &
       ex seqi1 be sequence of G.i1 st
        seqi1 is convergent & y1 = lim seqi1 &
        for m be Element of NAT holds
         ex Sm be Element of product carr G st Sm= seq.m & seqi1.m=Sm.i1;
      consider i2 be Element of dom G such that
-A7:   i2=k & 
+A7:   i2=k &
       ex seqi2 be sequence of G.i2 st
        seqi2 is convergent & y2 = lim seqi2 &
        for m be Element of NAT holds
@@ -1507,10 +1508,10 @@ A8:   seqi1 is convergent & y1 = lim seqi1 &
 A9:   seqi2 is convergent & y2 = lim seqi2 &
       for m be Element of NAT holds
        ex Sm be Element of product carr G st Sm= seq.m & seqi2.m=Sm.i2 by A7;
-     now let m be Element of NAT;
+      now let m be Element of NAT;
 A10:  ex seqm1 be Element of product carr G st
        seqm1= seq.m & seqi1.m=seqm1.i1 by A8;
-      ex seqm2 be Element of product carr G st
+       ex seqm2 be Element of product carr G st
        seqm2= seq.m & seqi2.m=seqm2.i2 by A9;
       hence seqi1.m =seqi2.m by A6,A7,A10;
      end;
@@ -1519,8 +1520,8 @@ A10:  ex seqm1 be Element of product carr G st
 A11:for k be Element of NAT st k in Seg I ex x be set st PPG[k,x]
     proof
      let k be Element of NAT;
-     assume k in Seg I; then
-     reconsider i=k as Element of dom G by FINSEQ_1:def 3;
+     assume k in Seg I;
+     then reconsider i=k as Element of dom G by FINSEQ_1:def 3;
      defpred P1[Element of NAT,Element of G.i] means
       ex seqm be Element of product carr G st seqm = seq.$1 & $2 = seqm.i;
 A12: for x being Element of NAT
@@ -1530,100 +1531,100 @@ A12: for x being Element of NAT
       consider seqm be Element of product carr G such that
 A13:   seqm =seq.x by A2;
       take y = seqm.i;
-      len G = len carr G by Def4; then
-A14:  dom G = dom carr G by FINSEQ_3:31;
+       len G = len carr G by Def4;
+then A14:  dom G = dom carr G by FINSEQ_3:31;
 
-      (carr G).i = the carrier of G.i by Def4;
+       (carr G).i = the carrier of G.i by Def4;
       hence thesis by A13,A14,CARD_3:18;
      end;
-     ex f be Function of NAT,the carrier of G.i st
-      for x being Element of NAT holds P1[x,f.x] from FUNCT_2:sch 3(A12); then
-     consider seqi be sequence of G.i such that
+      ex f be Function of NAT,the carrier of G.i st
+      for x being Element of NAT holds P1[x,f.x] from FUNCT_2:sch 3(A12);
+     then consider seqi be sequence of G.i such that
 A15:  for m be Element of NAT holds
-       ex seqm be Element of product carr G st 
+       ex seqm be Element of product carr G st
         seqm= seq.m & seqi.m=seqm.i;
 A16: G.i is complete by A1;
      take x = lim seqi;
-     now let r1 be Real such that AK1: r1 > 0;
+      now let r1 be Real such that A17: r1 > 0;
       reconsider r=r1 as Element of REAL;
       consider k be Element of NAT such that
-A17:   for n,m be Element of NAT st n >= k & m >= k holds
-        ||. seq.n - seq.m .|| < r by A3,AK1,RSSPACE3:10;
-      now let n,m be Element of NAT;
-       assume n >= k & m >= k; then
-A18:   ||. seq.n - seq.m .|| < r by A17;
-A19:   ex seqm be Element of product carr G st
+A18:   for n,m be Element of NAT st n >= k & m >= k holds
+        ||. seq.n - seq.m .|| < r by A3,A17,RSSPACE3:10;
+       now let n,m be Element of NAT;
+       assume n >= k & m >= k;
+then A19:   ||. seq.n - seq.m .|| < r by A18;
+A20:   ex seqm be Element of product carr G st
         seqm = seq.m & seqi.m = seqm.i by A15;
-       ex seqn be Element of product carr G st
-        seqn = seq.n & seqi.n = seqn.i by A15; then
-       ||. seqi.n - seqi.m .||<= ||. seq.n - seq.m .|| by A19,Th12;
-       hence ||. seqi.n - seqi.m .|| < r1 by A18,XXREAL_0:2;
+        ex seqn be Element of product carr G st
+        seqn = seq.n & seqi.n = seqn.i by A15;
+       then ||. seqi.n - seqi.m .||<= ||. seq.n - seq.m .|| by A20,Th11;
+       hence ||. seqi.n - seqi.m .|| < r1 by A19,XXREAL_0:2;
       end;
       hence ex k be Element of NAT st
        for n, m be Element of NAT st
         n >= k & m >= k holds ||. seqi.n - seqi.m .|| < r1;
-     end; then
-     seqi is Cauchy_sequence_by_Norm by RSSPACE3:10; then
-     seqi is convergent &
+     end;
+     then seqi is Cauchy_sequence_by_Norm by RSSPACE3:10;
+     then seqi is convergent &
      for m be Element of NAT holds
       ex seqm be Element of product carr G st
        seqm= seq.m & seqi.m=seqm.i by A15,A16,LOPBAN_1:def 16;
      hence thesis;
     end;
     consider yy0 be FinSequence such that
-A20: dom yy0 = Seg I &
+A21: dom yy0 = Seg I &
      for j be Element of NAT st j in Seg I holds PPG[j,yy0.j]
        from FINSEQ_1:sch 1(A4,A11);
-    yy0 is Element of product carr G
+     yy0 is Element of product carr G
     proof
-     len yy0 = I by A20,FINSEQ_1:def 3; then
-A21: len yy0 = len carr G & len yy0 = len G by Def4;
-A22: dom yy0 = Seg len G & dom carr G = Seg len carr G &
-     len G = len carr G by A20,Def4,FINSEQ_1:def 3;
-     now let i be set;
-      assume i in dom carr G; then
-      reconsider x = i as Element of dom carr G;
-      reconsider x as Element of dom G by A21,FINSEQ_3:31;
+      len yy0 = I by A21,FINSEQ_1:def 3;
+then A22: len yy0 = len carr G & len yy0 = len G by Def4;
+A23: dom yy0 = Seg len G & dom carr G = Seg len carr G &
+     len G = len carr G by A21,Def4,FINSEQ_1:def 3;
+      now let i be set;
+      assume i in dom carr G;
+      then reconsider x = i as Element of dom carr G;
+      reconsider x as Element of dom G by A22,FINSEQ_3:31;
       reconsider j =x as Element of NAT;
-      j in dom G; then
-      j in Seg I by FINSEQ_1:def 3; then
-      ex i0 be Element of dom G st
+       j in dom G;
+      then j in Seg I by FINSEQ_1:def 3;
+      then ex i0 be Element of dom G st
        i0=j & ex seqi be sequence of G.i0 st
         seqi is convergent & yy0.j = lim seqi &
         for m be Element of NAT holds
          ex seqm be Element of product carr G st
-          seqm= seq.m & seqi.m=seqm.i0 by A20; then
-      yy0.x in the carrier of G.x;
+          seqm= seq.m & seqi.m=seqm.i0 by A21;
+      then yy0.x in the carrier of G.x;
       hence yy0.i in (carr G).i by Def4;
      end;
-     hence thesis by A22,CARD_3:18;
-    end; then
-    reconsider y0=yy0 as Element of product carr G;
+     hence thesis by A23,CARD_3:18;
+    end;
+    then reconsider y0=yy0 as Element of product carr G;
     reconsider x0 =y0 as Point of product G by A2;
-A23:x0 = y0;
-    now let i be Element of dom G;
-     i in dom G; then
-A24: i in Seg I by FINSEQ_1:def 3;
+A24:x0 = y0;
+     now let i be Element of dom G;
+      i in dom G;
+then A25: i in Seg I by FINSEQ_1:def 3;
      reconsider j=i as Element of NAT;
      consider i0 be Element of dom G such that
-A25:  i0=j & ex seqi be sequence of G.i0 st
+A26:  i0=j & ex seqi be sequence of G.i0 st
        seqi is convergent & yy0.j = lim seqi &
        for m be Element of NAT holds
         ex seqm be Element of product carr G
-         st seqm= seq.m & seqi.m=seqm.i0 by A20,A24;
+         st seqm= seq.m & seqi.m=seqm.i0 by A21,A25;
      consider seqi be sequence of G.i0 such that
-A26:  seqi is convergent & yy0.j = lim seqi &
+A27:  seqi is convergent & yy0.j = lim seqi &
       for m be Element of NAT holds
        ex seqm be Element of product carr G
-        st seqm = seq.m & seqi.m=seqm.i0 by A25;
-     reconsider seqi as sequence of G.i by A25;
+        st seqm = seq.m & seqi.m=seqm.i0 by A26;
+     reconsider seqi as sequence of G.i by A26;
      take seqi;
      thus seqi is convergent & y0.i = lim seqi &
      for m be Element of NAT holds
       ex seqm be Element of product carr G st
-       seqm= seq.m & seqi.m=seqm.i by A25,A26;
+       seqm= seq.m & seqi.m=seqm.i by A26,A27;
     end;
-    hence thesis by A23,Th14;
+    hence thesis by A24,Th13;
    end;
    hence thesis by LOPBAN_1:def 16;
 end;

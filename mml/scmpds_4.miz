@@ -12,16 +12,16 @@ environ
       FUNCOP_1, SCMPDS_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, RELAT_1,
       FUNCT_1, FUNCT_4, INT_1, NAT_1, FINSET_1, STRUCT_0, AMI_1, AMI_2, AMI_3,
-      AMI_5, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMFSA_4, SCMPDS_3, CARD_1, INT_2,
+      FUNCT_7, SCMPDS_1, SCMPDS_2, SCMFSA_4, SCMPDS_3, CARD_1, INT_2,
       XXREAL_0;
  constructors ENUMSET1, WELLORD2, XXREAL_0, NAT_1, NAT_D, MEMBERED, INT_2,
-      FUNCT_7, AMI_5, SCMFSA_4, SCMPDS_1, SCMPDS_3;
+      FUNCT_7, AMI_5, SCMFSA_4, SCMPDS_1, SCMPDS_3, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3,
-      TREES_2, FUNCT_7, AMI_1, SCMPDS_2, SCMPDS_3;
+      TREES_2, FUNCT_7, AMI_1, SCMPDS_2, SCMPDS_3, AMI_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, AMI_3, SCMPDS_3, FUNCT_7, XBOOLE_0, AMI_5,
-      SCMPDS_2, FUNCOP_1;
+      SCMPDS_2, FUNCOP_1, AMI_2;
  theorems AMI_1, AMI_3, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1, ZFMISC_1,
       INT_1, RELAT_1, AMI_5, SCMPDS_2, AMI_2, FUNCT_2, FUNCT_7, SCMPDS_3,
       CARD_1, PRE_CIRC, WELLORD2, ENUMSET1, SCMFSA_2, CARD_3, ABSVALUE,
@@ -41,20 +41,19 @@ reserve l, m, n for Element of NAT,
 
 definition let i;
  func Load i -> Program-block equals
- (inspos 0).--> i;
+  (inspos 0).--> i;
  coherence
   proof set I = (inspos 0).--> i;
 A1:  dom I = {inspos 0} by CQC_LANG:5;
     reconsider I as finite Function;
     reconsider I as FinPartState of SCMPDS;
-       I is initial programmed
+        I is initial programmed
      proof
       thus I is initial
        proof let m,n such that
 A2:      inspos n in dom I and
 A3:      m < n;
-            inspos n = inspos 0 by A1,A2,TARSKI:def 1;
-         then n = 0;
+             inspos n = inspos 0 by A1,A2,TARSKI:def 1;
          hence inspos m in dom I by A3;
        end;
       thus dom I c= the Instruction-Locations of SCMPDS
@@ -79,10 +78,10 @@ theorem Th1:  ::SCMFSA6A=SCMPDS_4,Th15
 A1: now let x be set;
     assume
 A2:   x in dom P;
-        dom P c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+         dom P c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
      then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
      consider n such that
-A3:    l = inspos n by A2,SCMPDS_3:32;
+A3:    l = inspos n by SCMPDS_3:32;
     take n;
     thus x = U(n) by A3;
    end;
@@ -91,10 +90,10 @@ A5:  dom P,A are_equipotent from FUNCT_7:sch 3(A1,A4);
    defpred X[Element of NAT] means U($1) in dom P;
    set A = { m : X[m] };
 A6: A is Subset of NAT from DOMAIN_1:sch 7;
-      now let n,m such that
+       now let n,m such that
 A7: n in A and
 A8: m < n;
-        ex l st l = n & inspos l in dom P by A7;
+         ex l st l = n & inspos l in dom P by A7;
      then inspos m in dom P by A8,SCMPDS_3:def 5;
     hence m in A;
    end;
@@ -121,10 +120,10 @@ registration let I be initial FinPartState of SCMPDS;
   proof let m,n such that
 A1: inspos n in dom ProgramPart I and
 A2: m < n;
-       ProgramPart I c= I by RELAT_1:88;
+        ProgramPart I c= I by RELAT_1:88;
     then dom ProgramPart I c= dom I by RELAT_1:25;
     then inspos m in dom I by A1,A2,SCMPDS_3:def 5;
-   hence inspos m in dom ProgramPart I by AMI_5:73;
+   hence inspos m in dom ProgramPart I by AMI_1:106;
   end;
 end;
 
@@ -139,7 +138,7 @@ A2: x in dom I and
 A3: x in { inspos(l+card I):inspos l in dom J } by A1,XBOOLE_0:3;
    consider l such that
 A4: x = inspos(l+card I) and inspos l in dom J by A3;
-     l+card I < card I by A2,A4,Th1;
+      l+card I < card I by A2,A4,Th1;
  hence contradiction by NAT_1:11;
 end;
 
@@ -151,11 +150,11 @@ proof let I be programmed FinPartState of SCMPDS;
   deffunc U(Element of NAT) = inspos $1;
 A1: for x being set st x in dom I ex d being Element of NAT st x = U(d)
      proof let x be set;
-A2:     dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+A2:     dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
       assume x in dom I;
       then reconsider l=x as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
-       l=x;
-      hence thesis by A2,SCMPDS_3:32;
+        l=x;
+      hence thesis by SCMPDS_3:32;
      end;
 A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1=d2;
   deffunc V(Element of NAT) = inspos($1+m);
@@ -167,12 +166,11 @@ A3: for d1,d2 being Element of NAT st U(d1) = U(d2) holds d1=d2;
       E = { inspos(l+m):inspos l in dom I };
 A4: dom I,B are_equipotent from FUNCT_7:sch 3(A1,A3);
   set B = { l: X[l] };
-       B is Subset of NAT from DOMAIN_1:sch 7;
+        B is Subset of NAT from DOMAIN_1:sch 7;
 then A5: B c= NAT;
   set B = { l:inspos l in dom I };
 A6: now let d1,d2 be Element of NAT;
      assume V(d1) = V(d2);
-      then d1+m = d2+m;
      hence d1 = d2;
     end;
 A7: C c= E
@@ -181,7 +179,7 @@ A7: C c= E
        then consider l such that
 A8:     e =V(l) and
 A9:     l in { n: X[n] } & NC[l];
-        ex n st n=l & X[n] by A9;
+         ex n st n=l & X[n] by A9;
       hence e in E by A8;
      end;
 A10: E c= D
@@ -190,7 +188,7 @@ A10: E c= D
        then consider l such that
 A11:     e = inspos(l+m) and
 A12:     inspos l in dom I;
-        l in B by A12;
+         l in B by A12;
       hence e in D by A11;
      end;
 A13: D c= C
@@ -203,7 +201,7 @@ A13: D c= C
    then A14:  C = E by A7,XBOOLE_0:def 10;
    then A15:  C = D by A10,A13,XBOOLE_0:def 10;
 A16: B,D are_equipotent from FUNCT_7:sch 4(A5,A6);
-     dom Shift(I,m) = E by SCMPDS_3:def 7;
+      dom Shift(I,m) = E by SCMPDS_3:def 7;
   then A17: dom Shift(I,m),dom I are_equipotent by A4,A14,A15,A16,WELLORD2:22;
  thus card Shift(I,m) = card dom Shift(I,m) by PRE_CIRC:21
       .= card dom I by A17,CARD_1:21
@@ -218,12 +216,12 @@ proof let I,J be FinPartState of SCMPDS;
 end;
 
 theorem    ::Th21
-   for I,J being FinPartState of SCMPDS holds
+    for I,J being FinPartState of SCMPDS holds
  Shift(ProgramPart(I +* J),n) =
     Shift(ProgramPart I,n) +* Shift(ProgramPart J,n)
 proof let I,J be FinPartState of SCMPDS;
  thus
-        Shift(ProgramPart(I +* J),n) = Shift(ProgramPart I +* ProgramPart J,n)
+         Shift(ProgramPart(I +* J),n) = Shift(ProgramPart I +* ProgramPart J,n)
      by Th4
     .= Shift(ProgramPart I,n) +* Shift(ProgramPart J,n) by SCMPDS_3:41;
 end;
@@ -234,7 +232,7 @@ reserve a,b,c for Int_position,
 
 definition let I;
  func Initialized I -> FinPartState of SCMPDS equals
- I +* Start-At(inspos 0);
+  I +* Start-At(inspos 0);
  coherence;
  correctness;
 end;
@@ -246,7 +244,7 @@ proof
   then A1: InsCode i <> 0 & InsCode i <> 1 & InsCode i <> 4 & InsCode i <> 5
     & InsCode i <> 6 by ENUMSET1:def 3;
 A2: InsCode i <= 13 by SCMPDS_2:15;
- per cases by A1,A2,SCMPDS_3:1;
+ per cases by A1,A2,NAT_1:38;
  suppose InsCode i = 2;
   then ex a,k1 st i = a:=k1 by SCMPDS_2:37;
  hence Exec(i,s).IC SCMPDS = Next IC s by SCMPDS_2:57;
@@ -291,18 +289,18 @@ proof
 A1: dom Initialized I
       = dom I \/ dom Start-At(inspos 0)
             by FUNCT_4:def 1;
-     dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
+      dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
   then IC SCMPDS in dom Start-At(inspos 0) by TARSKI:def 1;
  hence thesis by A1,XBOOLE_0:def 2;
 end;
 
 theorem    :: S6A08
-    IC Initialized I = inspos 0
+     IC Initialized I = inspos 0
 proof
-     dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
+      dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
 then A1: IC SCMPDS in dom Start-At(inspos 0) by TARSKI:def 1;
-    IC SCMPDS in dom Initialized I by Th7;
- hence IC Initialized I = (I +* Start-At(inspos 0)).IC SCMPDS by AMI_3:def 16
+     IC SCMPDS in dom Initialized I by Th7;
+ hence IC Initialized I = (I +* Start-At(inspos 0)).IC SCMPDS by AMI_1:def 43
     .= (Start-At inspos 0).IC SCMPDS by A1,FUNCT_4:14
     .= inspos 0 by CQC_LANG:6;
 end;
@@ -310,15 +308,15 @@ end;
 theorem Th9:   :: Th26
  I c= Initialized I
 proof set A = the Instruction-Locations of SCMPDS;
-X:  dom I c= A by AMI_3:def 13;
-A1:   now assume IC SCMPDS in dom I;
+A1:  dom I c= A by AMI_1:def 40;
+A2:   now assume IC SCMPDS in dom I;
         then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
-                    by X,AMI_1:def 4;
-        l=IC SCMPDS;
+                    by A1,AMI_1:def 4;
+         l=IC SCMPDS;
        hence contradiction by AMI_1:48;
       end;
-       dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
-    then dom I misses dom (Start-At (inspos 0)) by A1,ZFMISC_1:56;
+        dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
+    then dom I misses dom (Start-At (inspos 0)) by A2,ZFMISC_1:56;
  hence thesis by FUNCT_4:33;
 end;
 
@@ -332,31 +330,31 @@ proof set A = the Instruction-Locations of SCMPDS;
  let s1,s2 be State of SCMPDS such that
 A1: IC s1 = IC s2 and
 A2: for a being Int_position holds s1.a = s2.a;
-      now assume IC SCMPDS in A;
+       now assume IC SCMPDS in A;
         then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
                       by AMI_1:def 4;
-        l=IC SCMPDS;
+         l=IC SCMPDS;
        hence contradiction by AMI_1:48;
       end;
    then {IC SCMPDS} misses A by ZFMISC_1:56;
-then A3: {IC SCMPDS } \/ SCM-Data-Loc misses A by AMI_5:33,XBOOLE_1:70;
+then A3: {IC SCMPDS } \/ SCM-Data-Loc misses A by AMI_2:29,XBOOLE_1:70;
 A4: (the carrier of SCMPDS) \ A
         = {IC SCMPDS } \/ SCM-Data-Loc \ A by SCMPDS_3:5,XBOOLE_1:40
        .= {IC SCMPDS } \/ SCM-Data-Loc by A3,XBOOLE_1:83;
 A5: dom(s1|(dom s1 \ A)) = dom s1 /\ (dom s1 \ A) by RELAT_1:90
        .= dom s1 \ A by XBOOLE_1:28
-       .= {IC SCMPDS } \/ SCM-Data-Loc by A4,AMI_3:36;
+       .= {IC SCMPDS } \/ SCM-Data-Loc by A4,AMI_1:79;
 A6: dom(s2|(dom s2 \ A)) = dom s2 /\ (dom s2 \ A) by RELAT_1:90
        .= dom s2 \ A by XBOOLE_1:28
-       .= {IC SCMPDS } \/ SCM-Data-Loc by A4,AMI_3:36;
-     now let x be set;
+       .= {IC SCMPDS } \/ SCM-Data-Loc by A4,AMI_1:79;
+      now let x be set;
    assume
 A7:  x in {IC SCMPDS } \/ SCM-Data-Loc;
    per cases by A7,XBOOLE_0:def 2;
    suppose x in {IC SCMPDS};
 then A8:  x = IC SCMPDS by TARSKI:def 1;
-   thus (s1|(dom s1 \ A)).x = IC s1 by  A5,A7,FUNCT_1:70,A8
-        .= (s2|(dom s2 \ A)).x by  A1,A8,A6,A7,FUNCT_1:70;
+   hence (s1|(dom s1 \ A)).x = IC s1 by A5,A7,FUNCT_1:70
+        .= (s2|(dom s2 \ A)).x by A1,A8,A6,A7,FUNCT_1:70;
    end;
    suppose x in SCM-Data-Loc;
 then A9: x is Int_position by SCMPDS_2:9;
@@ -379,11 +377,11 @@ A1: s1,s2 equal_outside IL;
   let a be Int_position;
 A2: a in dom s1 by SCMPDS_2:49;
 A3: a in dom s2 by SCMPDS_2:49;
-       a in SCM-Data-Loc by SCMPDS_2:def 2;
-then A4:  not a in IL by AMI_5:33,XBOOLE_0:3;
+        a in SCM-Data-Loc by SCMPDS_2:def 2;
+then A4:  not a in IL by AMI_2:29,XBOOLE_0:3;
     then a in dom s1 \ IL by A2,XBOOLE_0:def 4;
 then A5: a in dom s1 /\ (dom s1 \ IL) by XBOOLE_0:def 3;
-       a in dom s2 \ IL by A3,A4,XBOOLE_0:def 4;
+        a in dom s2 \ IL by A3,A4,XBOOLE_0:def 4;
 then A6: a in dom s2 /\ (dom s2 \ IL) by XBOOLE_0:def 3;
  thus s1.a = (s1|(dom s1 \ IL)).a by A5,FUNCT_1:71
          .= (s2|(dom s2 \ IL)).a by A1,FUNCT_7:def 2
@@ -405,8 +403,8 @@ theorem Th15:   ::Th32
 proof assume
 A1: s1,s2 equal_outside the Instruction-Locations of SCMPDS;
 A2: InsCode i <= 13 by SCMPDS_2:15;
-A3: IC s1 = IC s2 by A1,SCMFSA6A:29;
-    per cases by A2,SCMPDS_3:1;
+A3: IC s1 = IC s2 by A1,AMI_1:121;
+    per cases by A2,NAT_1:38;
     suppose InsCode i = 0;
     then consider k1 such that
 A4:  i = goto k1 by SCMPDS_2:35;
@@ -415,7 +413,7 @@ A5:  now let a;
         .=s2.a by A1,Th13
         .=Exec(i, s2).a by A4,SCMPDS_2:66;
      end;
-        IC Exec(i,s1) = ICplusConst(s1,k1) by A4,SCMPDS_2:66
+         IC Exec(i,s1) = ICplusConst(s1,k1) by A4,SCMPDS_2:66
         .= ICplusConst(s2,k1) by A3,SCMPDS_3:2
         .= IC Exec(i,s2) by A4,SCMPDS_2:66;
       hence Exec(i,s1),Exec(i,s2)
@@ -438,10 +436,10 @@ A7: now let b;
           .=Exec(i,s2).b by A6,A9,SCMPDS_2:70;
       end;
       end;
-         IC Exec(i,s1) =
- 2*(abs(s1.DataLoc(s1.a,RetIC)) div 2)+4 by A6,SCMPDS_2:70
-        .= 2*(abs(s1.DataLoc(s2.a,RetIC)) div 2)+4 by A1,Th13
-        .= 2*(abs(s2.DataLoc(s2.a,RetIC)) div 2)+4 by A1,Th13
+          IC Exec(i,s1) =
+ (abs(s1.DataLoc(s1.a,RetIC)))+2 by A6,SCMPDS_2:70
+        .= (abs(s1.DataLoc(s2.a,RetIC)))+2 by A1,Th13
+        .= (abs(s2.DataLoc(s2.a,RetIC)))+2 by A1,Th13
         .= IC Exec(i,s2) by A6,SCMPDS_2:70;
          hence thesis by A7,Th11;
 
@@ -461,7 +459,7 @@ A11:  now let b;
           .=Exec(i,s2).b by A10,A13,SCMPDS_2:57;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A10,SCMPDS_2:57
+          IC Exec(i,s1) = Next IC s2 by A3,A10,SCMPDS_2:57
         .= IC Exec(i,s2) by A10,SCMPDS_2:57;
       hence thesis by A11,Th11;
 
@@ -483,7 +481,7 @@ A15:  now let b;
           .=Exec(i,s2).b by A14,A19,SCMPDS_2:71;
        end;
        end;
-         IC Exec(i,s1) = Next IC s2 by A3,A14,SCMPDS_2:71
+          IC Exec(i,s1) = Next IC s2 by A3,A14,SCMPDS_2:71
         .= IC Exec(i,s2) by A14,SCMPDS_2:71;
       hence thesis by A15,Th11;
 
@@ -496,7 +494,7 @@ A21:  now let a;
         .=s2.a by A1,Th13
         .=Exec(i, s2).a by A20,SCMPDS_2:67;
      end;
-        now
+         now
         per cases;
         suppose A22: s1.DataLoc(s1.a,k1) <> 0;
          then A23: s2.DataLoc(s2.a,k1) <> 0 by A1,Th14;
@@ -521,7 +519,7 @@ A27:  now let a;
         .=s2.a by A1,Th13
         .=Exec(i, s2).a by A26,SCMPDS_2:68;
      end;
-        now
+         now
         per cases;
         suppose A28: s1.DataLoc(s1.a,k1) <= 0;
          then A29: s2.DataLoc(s2.a,k1) <= 0 by A1,Th14;
@@ -546,7 +544,7 @@ A33:  now let a;
         .=s2.a by A1,Th13
         .=Exec(i, s2).a by A32,SCMPDS_2:69;
      end;
-        now
+         now
         per cases;
         suppose A34: s1.DataLoc(s1.a,k1) >= 0;
          then A35: s2.DataLoc(s2.a,k1) >= 0 by A1,Th14;
@@ -580,7 +578,7 @@ A39:  now let b;
           .=Exec(i,s2).b by A38,A43,SCMPDS_2:58;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A38,SCMPDS_2:58
+          IC Exec(i,s1) = Next IC s2 by A3,A38,SCMPDS_2:58
         .= IC Exec(i,s2) by A38,SCMPDS_2:58;
       hence thesis by A39,Th11;
 
@@ -603,7 +601,7 @@ A45:  now let b;
           .=Exec(i,s2).b by A44,A49,SCMPDS_2:60;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A44,SCMPDS_2:60
+          IC Exec(i,s1) = Next IC s2 by A3,A44,SCMPDS_2:60
         .= IC Exec(i,s2) by A44,SCMPDS_2:60;
       hence thesis by A45,Th11;
 
@@ -628,7 +626,7 @@ A51:  now let c;
           .=Exec(i,s2).c by A50,A55,SCMPDS_2:61;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A50,SCMPDS_2:61
+          IC Exec(i,s1) = Next IC s2 by A3,A50,SCMPDS_2:61
         .= IC Exec(i,s2) by A50,SCMPDS_2:61;
       hence thesis by A51,Th11;
 
@@ -653,7 +651,7 @@ A57:  now let c;
           .=Exec(i,s2).c by A56,A61,SCMPDS_2:62;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A56,SCMPDS_2:62
+          IC Exec(i,s1) = Next IC s2 by A3,A56,SCMPDS_2:62
         .= IC Exec(i,s2) by A56,SCMPDS_2:62;
       hence thesis by A57,Th11;
 
@@ -678,7 +676,7 @@ A63:  now let c;
           .=Exec(i,s2).c by A62,A67,SCMPDS_2:63;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A62,SCMPDS_2:63
+          IC Exec(i,s1) = Next IC s2 by A3,A62,SCMPDS_2:63
         .= IC Exec(i,s2) by A62,SCMPDS_2:63;
       hence thesis by A63,Th11;
 
@@ -717,7 +715,7 @@ A69:  now let c;
            end;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A68,SCMPDS_2:64
+          IC Exec(i,s1) = Next IC s2 by A3,A68,SCMPDS_2:64
         .= IC Exec(i,s2) by A68,SCMPDS_2:64;
       hence thesis by A69,Th11;
 
@@ -740,23 +738,23 @@ A79:  now let c;
           .=Exec(i,s2).c by A78,A83,SCMPDS_2:59;
      end;
      end;
-         IC Exec(i,s1) = Next IC s2 by A3,A78,SCMPDS_2:59
+          IC Exec(i,s1) = Next IC s2 by A3,A78,SCMPDS_2:59
         .= IC Exec(i,s2) by A78,SCMPDS_2:59;
       hence thesis by A79,Th11;
 end;
 end;
 
 theorem
-    (Initialized I)|the Instruction-Locations of SCMPDS = I
+     (Initialized I)|the Instruction-Locations of SCMPDS = I
 proof
-A1: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+A1: dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
 A2: now assume IC SCMPDS in the Instruction-Locations of SCMPDS;
       then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
              by AMI_1:def 4;
-      l=IC SCMPDS;
+       l=IC SCMPDS;
      hence contradiction by AMI_1:48;
     end;
-      dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
+       dom Start-At(inspos 0) = { IC SCMPDS } by FUNCOP_1:19;
  then dom Start-At(inspos 0) misses the Instruction-Locations of SCMPDS
        by A2,ZFMISC_1:56;
  hence (Initialized I)|the Instruction-Locations of SCMPDS = I
@@ -767,9 +765,8 @@ theorem Th17:   :: SF2_16
  for k1,k2 be Element of NAT st k1 <> k2 holds DataLoc(k1,0) <> DataLoc(k2,0)
  proof let k1,k2 be Element of NAT;
    assume A1:k1<>k2;
-   assume A2:DataLoc(k1,0) = DataLoc(k2,0);
-   2*abs(k1)=2*abs(k2) by A2;
-   then abs(k1)=abs(k2);
+   assume DataLoc(k1,0) = DataLoc(k2,0);
+   then abs(k1+0) =abs(k2+0) by ZFMISC_1:33;
    then k1=abs(k2) by ABSVALUE:def 1;
    hence contradiction by A1,ABSVALUE:def 1;
  end;
@@ -779,9 +776,9 @@ theorem Th18:  :: SF2_19:
   st dl = DataLoc(i,0)
  proof
   let dl be Int_position;
-       dl in SCM-Data-Loc by SCMPDS_2:def 2;
+        dl in SCM-Data-Loc by SCMPDS_2:def 2;
    then consider i being Element of NAT such that
-A1: dl = 2*i+1 by AMI_2:def 2;
+A1: dl = [1,i] by AMI_2:32;
    take i;
    thus dl =DataLoc(i,0) by A1,ABSVALUE:def 1;
 end;
@@ -805,7 +802,7 @@ A1: for e being set st e in the carrier of SCMPDS
    proof let e be set;
     assume e in the carrier of SCMPDS;
     then A2: e in S1 \/ S2 or e in S3 by SCMPDS_3:5,XBOOLE_0:def 2;
-        now per cases by A2,XBOOLE_0:def 2;
+         now per cases by A2,XBOOLE_0:def 2;
       case e in S1;
        hence e = IC SCMPDS by TARSKI:def 1;
       end;
@@ -814,9 +811,9 @@ A1: for e being set st e in the carrier of SCMPDS
         hence ex m st e = DataLoc(m,0) by Th18;
       end;
       case
-C:     e in S3;
+     e in S3;
         then reconsider l=e as Instruction-Location of SCMPDS by AMI_1:def 4;
-        l=l;
+         l=l;
        hence ex m st e = inspos m by SCMPDS_3:32;
      end;
      end;
@@ -841,7 +838,7 @@ A7: dom f = the carrier of SCMPDS and
 A8: for e being set st e in the carrier of SCMPDS holds P[e,f.e]
                          from CLASSES1:sch 1(A1);
 A9: dom the Object-Kind of SCMPDS = the carrier of SCMPDS by FUNCT_2:def 1;
-     now let x be set;
+      now let x be set;
    assume
 A10: x in dom the Object-Kind of SCMPDS;
      then A11: x in S1 \/ S2 or x in S3 by A9,SCMPDS_3:5,XBOOLE_0:def 2;
@@ -858,47 +855,50 @@ SCMPDS_2:52,53
    hence f.x in (the Object-Kind of SCMPDS).x
      by A12,A13,INT_1:def 2,SCMPDS_2:52,53;
     end;
-    suppose x in S1;
-then A14:    x = IC SCMPDS by TARSKI:def 1;
-    then (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS
+    suppose A14: x in S1;
+     then
+Y:   x = IC SCMPDS by TARSKI:def 1;
+   (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS by A14,TARSKI:def 1
        .= the Instruction-Locations of SCMPDS by AMI_1:def 11;
-   hence f.x in (the Object-Kind of SCMPDS).x by A12,A14;
+   hence f.x in (the Object-Kind of SCMPDS).x
+              by A12,SCMPDS_2:52,98,Y;
     end;
-    suppose A15: x in the Instruction-Locations of SCMPDS;
+    suppose x in the Instruction-Locations of SCMPDS;
      then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
-    (the Object-Kind of SCMPDS).l = ObjectKind inspos m by A12,AMI_1:48
-,SCMPDS_2:53,A15
+     (the Object-Kind of SCMPDS).l = ObjectKind inspos m by A12,AMI_1:48
+,SCMPDS_2:53
         .= the Instructions of SCMPDS by AMI_1:def 14;
-   hence f.x in (the Object-Kind of SCMPDS).x by A12,A15,AMI_1:48,SCMPDS_2:53;
+   hence f.x in (the Object-Kind of SCMPDS).x by A12,AMI_1:48,SCMPDS_2:53;
   end;
   end;
   then reconsider f as State of SCMPDS by A7,A9,CARD_3:18;
  take f;
   consider m such that
-A16: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
+A15: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
     IC SCMPDS = inspos m & f.IC SCMPDS = F(m) or
     IC SCMPDS = DataLoc(m,0) & f.IC SCMPDS = G(m) by A8;
- thus IC f = I() by A16;
+ thus IC f = I() by A15,SCMPDS_2:52,SCMPDS_2:98;
  let i be Element of NAT;
   consider m such that
-A17: inspos i = IC SCMPDS & f.inspos i = I() or
+A16: inspos i = IC SCMPDS & f.inspos i = I() or
     inspos i = inspos m & f.inspos i = F(m) or
     inspos i = DataLoc(m,0) & f.inspos i = G(m) by A8;
-  thus f.inspos i = F(i) by A17,SCMPDS_2:53;
+  thus f.inspos i = F(i) by A16,SCMPDS_2:53,SCMPDS_2:98;
   consider m such that
-A18: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
+A17: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
     DataLoc(i,0) = inspos m & f.DataLoc(i,0) = F(m) or
     DataLoc(i,0) = DataLoc(m,0) & f.DataLoc(i,0) = G(m) by A8;
- thus f.DataLoc(i,0) = G(i) by A18,Th17,SCMPDS_2:53;
+ thus f.DataLoc(i,0) = G(i) by A17,Th17,SCMPDS_2:53,
+               SCMPDS_2:52;
 end;
 
 theorem    :: Th34
-   for s being State of SCMPDS holds
+    for s being State of SCMPDS holds
      dom s = {IC SCMPDS} \/ SCM-Data-Loc \/
-         the Instruction-Locations of SCMPDS by AMI_3:36,SCMPDS_3:5;
+         the Instruction-Locations of SCMPDS by AMI_1:79,SCMPDS_3:5;
 
 theorem    :: T12'
-    for s being State of SCMPDS, x being set st x in dom s holds
+     for s being State of SCMPDS, x being set st x in dom s holds
      x is Int_position or x = IC SCMPDS or
      x is Instruction-Location of SCMPDS
  proof
@@ -907,48 +907,41 @@ theorem    :: T12'
    set S1={IC SCMPDS},
        S2=SCM-Data-Loc,
        S3=the Instruction-Locations of SCMPDS;
-A1:dom s = S1 \/ S2 \/ S3 by AMI_3:36,SCMPDS_3:5;
+A1:dom s = S1 \/ S2 \/ S3 by AMI_1:79,SCMPDS_3:5;
    assume x in dom s;
    then x in S1 \/ S2 or x in S3 by A1,XBOOLE_0:def 2;
    then x in S1 or x in S2 or x in S3 by XBOOLE_0:def 2;
-   then x in S1 or x in S2 or
-      x is Instruction-Location of SCMPDS by AMI_1:def 4;
-   hence thesis by SCMPDS_2:9,TARSKI:def 1;
+   hence thesis by AMI_1:def 4,SCMPDS_2:9,TARSKI:def 1;
 end;
 
 theorem     :: T29
-    for s1,s2 being State of SCMPDS holds
+     for s1,s2 being State of SCMPDS holds
      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l)
  iff s1 | the Instruction-Locations of SCMPDS =
      s2 | the Instruction-Locations of SCMPDS
  proof
    let s1,s2 be State of SCMPDS;
-A1: the Instruction-Locations of SCMPDS c= dom s1 by SCMFSA_2:3;
-A2: the Instruction-Locations of SCMPDS c= dom s2 by SCMFSA_2:3;
-X:      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
+A1: the Instruction-Locations of SCMPDS c= dom s1 by AMI_1:114;
+A2: the Instruction-Locations of SCMPDS c= dom s2 by AMI_1:114;
+      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
  (for l being set st l in the Instruction-Locations of SCMPDS
        holds s1.l = s2.l)
     proof assume
-Z:    for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
+A3:    for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
      let x be set;
      assume x in the Instruction-Locations of SCMPDS;
       then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
-      s1.l = s2.l by Z;
+       s1.l = s2.l by A3;
      hence thesis;
     end;
-   (for l being set st l in the Instruction-Locations of SCMPDS
-       holds s1.l = s2.l) implies
-      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l);
-   hence thesis by A1,A2,SCMFSA6A:9,X;
+   hence thesis by A1,A2,FUNCT_1:165;
 end;
 
 theorem  :: T32
-    for i being Instruction-Location of SCMPDS holds
+     for i being Instruction-Location of SCMPDS holds
      not i in SCM-Data-Loc
 proof let i be Instruction-Location of SCMPDS;
- i in the Instruction-Locations of SCMPDS;
- then i in SCM-Instr-Loc;
- hence thesis by AMI_5:33,XBOOLE_0:3,AMI_1:def 4;
+ thus thesis by AMI_2:29,XBOOLE_0:3;
 end;
 
 theorem Th23:    :: Th38
@@ -961,9 +954,9 @@ theorem Th23:    :: Th38
        T2=SCM-Data-Loc,
        T3=the Instruction-Locations of SCMPDS;
 A1: T1 \/ T2 \/ T3=T2 \/ (T1 \/ T3) by XBOOLE_1:4;
-      dom s1 = T1 \/ T2 \/ T3 by AMI_3:36,SCMPDS_3:5;
+       dom s1 = T1 \/ T2 \/ T3 by AMI_1:79,SCMPDS_3:5;
 then A2: T2 c= dom s1 by A1,XBOOLE_1:7;
-      dom s2 = T1 \/ T2 \/ T3 by AMI_3:36,SCMPDS_3:5;
+       dom s2 = T1 \/ T2 \/ T3 by AMI_1:79,SCMPDS_3:5;
 then A3: T2 c= dom s2 by A1,XBOOLE_1:7;
 A4: now
       assume A5:for a being Int_position holds s1.a = s2.a;
@@ -973,18 +966,18 @@ A4: now
        hence s1.x=s2.x by A5;
      end;
     end;
-      now
+       now
       assume A6:for x be set st x in SCM-Data-Loc holds s1.x = s2.x;
       hereby let a be Int_position;
-          a in SCM-Data-Loc by SCMPDS_2:def 2;
+           a in SCM-Data-Loc by SCMPDS_2:def 2;
        hence s1.a=s2.a by A6;
       end;
    end;
-   hence thesis by A2,A3,A4,SCMFSA6A:9;
+   hence thesis by A2,A3,A4,FUNCT_1:165;
 end;
 
 theorem     :: T19
-    for s1,s2 being State of SCMPDS st
+     for s1,s2 being State of SCMPDS st
      s1,s2 equal_outside the Instruction-Locations of SCMPDS holds
      s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
  proof
@@ -995,15 +988,15 @@ theorem     :: T19
 end;
 
 theorem     :: T21
-    for s,ss being State of SCMPDS, A being set holds
+     for s,ss being State of SCMPDS, A being set holds
      (ss +* s | A) | A = s | A
  proof
    let s,ss be State of SCMPDS;
    let A be set;
-A1: dom s = the carrier of SCMPDS by AMI_3:36;
+A1: dom s = the carrier of SCMPDS by AMI_1:79;
 A2: dom (ss +* s | A) = dom ss \/ dom (s | A) by FUNCT_4:def 1
    .= dom ss \/ (dom s /\ A) by RELAT_1:90
-   .= (the carrier of SCMPDS) \/ (the carrier of SCMPDS) /\ A by A1,AMI_3:36
+   .= (the carrier of SCMPDS) \/ (the carrier of SCMPDS) /\ A by A1,AMI_1:79
    .= the carrier of SCMPDS by XBOOLE_1:22;
 A3: dom s /\ A c= dom s by XBOOLE_1:17;
 A4: now let x be set;
@@ -1013,25 +1006,25 @@ A4: now let x be set;
       .= s.x by A5,FUNCT_1:71;
      end;
    thus (ss +* s | A) | A
-    = (ss +* s | A) | (dom s /\ A) by A1,A2,SCMFSA6A:10
-   .= s | (dom s /\ A) by A1,A2,A3,A4,SCMFSA6A:9
-   .= s | A by SCMFSA6A:10;
+    = (ss +* s | A) | (dom s /\ A) by A1,A2,RELAT_1:192
+   .= s | (dom s /\ A) by A1,A2,A3,A4,FUNCT_1:165
+   .= s | A by RELAT_1:192;
  end;
 
 theorem    :: T18
-    for I,J being Program-block holds
+     for I,J being Program-block holds
      I,J equal_outside the Instruction-Locations of SCMPDS
  proof
    let I,J be Program-block;
-      dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+       dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
    then dom I \ the Instruction-Locations of SCMPDS = {} by XBOOLE_1:37;
 then A1: dom (I | (dom I \ the Instruction-Locations of SCMPDS)) = {} by
-SCMFSA6A:8;
-      dom J c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+RELAT_1:191;
+       dom J c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
    then dom J \ the Instruction-Locations of SCMPDS = {} by XBOOLE_1:37;
 then A2: dom (J | (dom J \ the Instruction-Locations of SCMPDS)) = {} by
-SCMFSA6A:8;
-      for x be set st x in {} holds
+RELAT_1:191;
+       for x be set st x in {} holds
       (I | (dom I \ the Instruction-Locations of SCMPDS)).x =
           (J | (dom J \ the Instruction-Locations of SCMPDS)).x;
    then I | (dom I \ the Instruction-Locations of SCMPDS) =
@@ -1067,10 +1060,10 @@ theorem Th29:    :: Th46
      (Initialized I).IC SCMPDS = inspos 0
 proof
    let I be Program-block;
-       IC SCMPDS in {IC SCMPDS} by TARSKI:def 1;
-then A1: IC SCMPDS in dom Start-At inspos 0 by FUNCOP_1:19;
-   thus (Initialized I).IC SCMPDS
-    = (Start-At (inspos 0)).IC SCMPDS by A1,FUNCT_4:14
+        IC SCMPDS in {IC SCMPDS} by TARSKI:def 1;
+then IC SCMPDS in dom Start-At inspos 0 by FUNCOP_1:19;
+   hence (Initialized I).IC SCMPDS
+    = (Start-At (inspos 0)).IC SCMPDS by FUNCT_4:14
    .= inspos 0 by CQC_LANG:6;
 end;
 
@@ -1078,11 +1071,11 @@ theorem Th30:  :: Th47
   for I being Program-block holds not IC SCMPDS in dom I
 proof
    let I be Program-block;
-X:  dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+A1:  dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
    assume IC SCMPDS in dom I;
     then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
-        by AMI_1:def 4,X;
-    l = IC SCMPDS;
+        by AMI_1:def 4,A1;
+     l = IC SCMPDS;
   hence contradiction by AMI_1:48;
 end;
 
@@ -1096,10 +1089,10 @@ proof
    then A1: a in dom I \/ {IC SCMPDS} by Th27;
    per cases by A1,XBOOLE_0:def 2;
    suppose A2: a in dom I;
-       dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+        dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
      then reconsider l=a as Instruction-Location of SCMPDS by A2,AMI_1:def 4;
-     l=a;
-    hence contradiction by A2,SCMPDS_2:53;
+      l=a;
+    hence contradiction by SCMPDS_2:53;
    end;
    suppose a in {IC SCMPDS};
     then a = IC SCMPDS by TARSKI:def 1;
@@ -1113,15 +1106,15 @@ theorem Th32:   ::TN32
  x in dom I implies I.x = (I +* Start-At inspos n).x
 proof assume
 A1: x in dom I;
-   A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+    dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
     then reconsider l=x as Instruction-Location of SCMPDS by A1,AMI_1:def 4;
-A3: dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
-      l <> IC SCMPDS by A1,A2,AMI_1:48;
-   then not x in dom Start-At inspos n by A3,TARSKI:def 1;
+A2: dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
+       l <> IC SCMPDS by AMI_1:48;
+   then not x in dom Start-At inspos n by A2,TARSKI:def 1;
  hence thesis by FUNCT_4:12;
 end;
 
-theorem Th33:  :: Th50
+theorem   :: Th50
  for I being Program-block, x being set st x in dom I holds
      I.x = (Initialized I).x by Th32;
 
@@ -1135,7 +1128,7 @@ theorem Th34:   :: Th51
    set s1 = s +* I;
    assume A1: Initialized J c= s;
 then A2: dom Initialized J c= dom s by GRFUNC_1:8;
-      dom J \/ dom Initialized I
+       dom J \/ dom Initialized I
     = dom J \/ (dom I \/ {IC SCMPDS}) by Th27
    .= dom J \/ {IC SCMPDS} \/ dom I by XBOOLE_1:4
    .= dom Initialized J \/ dom I by Th27;
@@ -1146,7 +1139,7 @@ then A3: dom Initialized I c= dom s1 by XBOOLE_1:11;
       assume A5: x in dom Initialized I;
       per cases by A5,Th28;
       suppose A6: x in dom I;
-       hence (Initialized I).x = I.x by Th33
+       hence (Initialized I).x = I.x by Th32
          .= s1.x by A6,FUNCT_4:14;
   end;
   suppose A7: x = IC SCMPDS;
@@ -1160,14 +1153,14 @@ then A3: dom Initialized I c= dom s1 by XBOOLE_1:11;
      end;
 A10: dom (s +* I) = dom s \/ dom I by FUNCT_4:def 1;
 A11: dom (s +* Initialized I) = dom s \/ dom Initialized I by FUNCT_4:def 1;
-      I c= Initialized I by Th9;
+       I c= Initialized I by Th9;
 then A12: dom I c= dom Initialized I by GRFUNC_1:8;
 then A13: dom (s +* I) c= dom (s +* Initialized I) by A10,A11,XBOOLE_1:9;
-      dom (s +* Initialized I) c= dom s \/ (dom s \/ dom I)
+       dom (s +* Initialized I) c= dom s \/ (dom s \/ dom I)
        by A3,A10,A11,XBOOLE_1:9;
    then dom (s +* Initialized I) c= dom s \/ dom s \/ dom I by XBOOLE_1:4;
 then A14: dom (s +* Initialized I) = dom (s +* I) by A10,A13,XBOOLE_0:def 10;
-      now let x be set;
+       now let x be set;
       assume x in dom (s +* Initialized I);
       per cases;
       suppose A15: x in dom Initialized I;
@@ -1184,7 +1177,7 @@ then A14: dom (s +* Initialized I) = dom (s +* I) by A10,A13,XBOOLE_0:def 10;
 end;
 
 theorem
-    for I,J being Program-block
+     for I,J being Program-block
  for s being State of SCMPDS st Initialized J c= s holds
      Initialized I c= s +* I
  proof
@@ -1196,7 +1189,7 @@ theorem
  end;
 
 theorem
-    for I,J being Program-block
+     for I,J being Program-block
  for s being State of SCMPDS holds
      s +* Initialized I, s +* Initialized J
          equal_outside the Instruction-Locations of SCMPDS
@@ -1205,13 +1198,13 @@ proof
    let s be State of SCMPDS;
 A1: IC SCMPDS in dom Initialized I & IC SCMPDS in dom Initialized J
         by Th7;
-A2: IC (s +* Initialized J) = (Initialized J).IC SCMPDS by A1,FUNCT_4:14
+then A2: IC (s +* Initialized J) = (Initialized J).IC SCMPDS by FUNCT_4:14
    .= inspos 0 by Th29
    .= (Initialized I).IC SCMPDS by Th29
    .= IC (s +* Initialized I) by A1,FUNCT_4:14;
-    now let a be Int_position;
+     now let a be Int_position;
    A3: not a in dom Initialized I by Th31;
-          not a in dom Initialized J by Th31;
+           not a in dom Initialized J by Th31;
        hence (s +* Initialized J).a = s.a by FUNCT_4:12
        .= (s +* Initialized I).a by A3,FUNCT_4:12;
      end;
@@ -1222,15 +1215,15 @@ begin :: Combining two consecutive blocks into one program block
 
 definition let I,J be Program-block;
  func I ';' J -> Program-block equals
-  I +* Shift(J, card I);
+   I +* Shift(J, card I);
  coherence
   proof set P = I +* Shift(J,card I);
-        P is initial
+         P is initial
      proof let m,n such that
 A1:     inspos n in dom P and
 A2:     m < n;
         set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A3:    dom P = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 2;
        suppose inspos n in dom I;
@@ -1241,19 +1234,18 @@ then A3:    dom P = dom I \/ D by FUNCT_4:def 1;
         then consider l such that
 A4:      inspos n = inspos(l+card I) and
 A5:      inspos l in dom J;
-A6:      n = l+card I by A4;
-           now per cases;
+            now per cases;
          case m < card I;
           then inspos m in dom I by Th1;
          hence inspos m in dom P by A3,XBOOLE_0:def 2;
          end;
          case m >= card I;
          then consider l1 being Nat such that
-A7:      m = card I + l1 by NAT_1:10;
+A6:      m = card I + l1 by NAT_1:10;
          reconsider l1 as Element of NAT by ORDINAL1:def 13;
-         l1 < l by A2,A6,A7,XREAL_1:8;
+          l1 < l by A2,A4,A6,XREAL_1:8;
          then inspos l1 in dom J by A5,SCMPDS_3:def 5;
-        hence inspos m in D by A7;
+        hence inspos m in D by A6;
        end;
        end;
       hence inspos m in dom P by A3,XBOOLE_0:def 2;
@@ -1270,14 +1262,14 @@ theorem Th37:
 proof let I,J be Program-block, l be Instruction-Location of SCMPDS such
  that
 A1: l in dom I;
-A2: now assume l in dom Shift(J,card I);
+ now assume l in dom Shift(J,card I);
        then l in { inspos(m+card I):inspos m in dom J } by SCMPDS_3:def 7;
       then consider m such that
-A3:   l = inspos(m+card I) and inspos m in dom J;
-          m + card I < card I by A1,A3,Th1;
+A2:   l = inspos(m+card I) and inspos m in dom J;
+           m + card I < card I by A1,A2,Th1;
        hence contradiction by NAT_1:11;
    end;
-   thus (I ';' J).l = I.l by A2,FUNCT_4:12;
+   hence (I ';' J).l = I.l by FUNCT_4:12;
 end;
 
 theorem Th38:
@@ -1288,10 +1280,10 @@ proof let I,J be Program-block, l be Instruction-Location of SCMPDS such
 A1: l in dom J;
     consider n such that
 A2: l=inspos n by SCMPDS_3:32;
-       inspos(n+card I) in { inspos(m+card I):inspos m in dom J } by A1,A2;
+        inspos(n+card I) in { inspos(m+card I):inspos m in dom J } by A1,A2;
     then inspos(n+card I) in dom Shift(J,card I) by SCMPDS_3:def 7;
-then A3: l+card I in dom Shift(J,card I) by A2,SCMPDS_3:def 3;
-    thus (I ';' J).(l+card I) = Shift(J, card I).(l+card I) by A3,FUNCT_4:14
+then l+card I in dom Shift(J,card I) by A2,SCMPDS_3:def 3;
+    hence (I ';' J).(l+card I) = Shift(J, card I).(l+card I) by FUNCT_4:14
     .=J.l by A1,SCMPDS_3:37;
 end;
 
@@ -1300,20 +1292,20 @@ theorem Th39:   :: Th56
      dom I c= dom (I ';' J)
 proof
    let I,J be Program-block;
-    dom (I ';' J) = dom I \/ dom Shift(J,card I)
+     dom (I ';' J) = dom I \/ dom Shift(J,card I)
        by FUNCT_4:def 1;
    hence dom I c= dom (I ';' J) by XBOOLE_1:7;
 end;
 
 theorem
-    for I,J being Program-block holds
+     for I,J being Program-block holds
      I c= I ';' J
 proof
    let I,J be Program-block;
 A1: dom I c= dom (I ';' J) by Th39;
-      now let x be set;
+       now let x be set;
       assume A2: x in dom I;
-         dom I misses dom Shift(J,card I) by Th2;
+          dom I misses dom Shift(J,card I) by Th2;
       then not x in dom Shift(J,card I) by A2,XBOOLE_0:3;
       hence I.x = (I ';' J).x by FUNCT_4:12;
     end;
@@ -1321,31 +1313,31 @@ A1: dom I c= dom (I ';' J) by Th39;
 end;
 
 theorem
-    for I,J being Program-block holds
+     for I,J being Program-block holds
      I +* (I ';' J) = (I ';' J)
 proof
    let I,J be Program-block;
 A1: dom I c= dom (I ';' J) by Th39;
 A2: dom (I +* (I ';' J)) = dom I \/ dom (I ';' J) by FUNCT_4:def 1
     .= dom (I ';' J) by A1,XBOOLE_1:12;
-      for x be set st x in dom (I ';' J) holds
+       for x be set st x in dom (I ';' J) holds
       (I +* (I ';' J)).x = (I ';' J).x by FUNCT_4:14;
    hence I +* (I ';' J) = (I ';' J) by A2,FUNCT_1:9;
 end;
 
 theorem
-    for I,J being Program-block holds
+     for I,J being Program-block holds
      Initialized I +* (I ';' J) = Initialized (I ';' J)
  proof
    let I,J be Program-block;
-      dom I c= dom (I ';' J) by Th39;
+       dom I c= dom (I ';' J) by Th39;
 then A1: dom I \/ dom (I ';' J) = dom (I ';' J) by XBOOLE_1:12;
 A2: dom (Initialized I+*(I ';' J))
     = dom Initialized I \/ dom (I ';' J) by FUNCT_4:def 1
    .= dom I \/ {IC SCMPDS} \/ dom (I ';' J) by Th27
    .= dom I \/ dom (I ';' J) \/ {IC SCMPDS} by XBOOLE_1:4
    .= dom Initialized (I ';' J) by A1,Th27;
-      now let x be set;
+       now let x be set;
       assume A3: x in dom Initialized (I ';' J);
       per cases by A3,Th28;
       suppose A4: x in dom (I ';' J);
@@ -1371,27 +1363,27 @@ begin :: Combining a block and a instruction into one program block
 
 definition let i, J;
  func i ';' J -> Program-block equals
-  Load i ';' J;
+   Load i ';' J;
  correctness;
 end;
 
 definition let I, j;
  func I ';' j -> Program-block equals
-  I ';' Load j;
+   I ';' Load j;
  correctness;
 end;
 
 definition let i,j;
  func i ';' j -> Program-block equals
-  Load i ';' Load j;
+   Load i ';' Load j;
  correctness;
 end;
 
 theorem   :: Th59
- i ';' j = Load i ';' j;
+  i ';' j = Load i ';' j;
 
 theorem    :: Th60
-  i ';' j = i ';' Load j;
+   i ';' j = i ';' Load j;
 
 theorem Th45:   :: Th61
  card(I ';' J) = card I + card J
@@ -1404,49 +1396,47 @@ A2: card dom Shift(J, card I)
       .= card dom J by PRE_CIRC:21;
 A3: dom(I ';' J)
       = dom I \/ dom Shift(J, card I) by FUNCT_4:def 1;
-     dom I misses dom Shift(J,card I) by Th2;
+      dom I misses dom Shift(J,card I) by Th2;
   hence card(I ';' J) = card I + card J by A1,A2,A3,CARD_2:53;
 end;
 
 theorem Th46:  :: Th62
  I ';' J ';' K = I ';' (J ';' K)
 proof
-A1: Shift(J ';' K, card I)
+ Shift(J ';' K, card I)
      = Shift(J,card I) +* Shift(Shift(K, card J), card I) by SCMPDS_3:41
     .= Shift(J,card I) +* Shift(K, card J+card I) by SCMPDS_3:39
     .= Shift(J,card I) +* Shift(K, card ( I ';'J)) by Th45;
-  thus I ';' J ';' K
-       = I ';' (J ';' K) by A1,FUNCT_4:15;
+  hence I ';' J ';' K
+       = I ';' (J ';' K) by FUNCT_4:15;
 end;
 
-theorem Th47:  :: Th63
+theorem   :: Th63
  I ';' J ';' k = I ';' (J ';' k) by Th46;
 
 theorem
-    I ';' j ';' K = I ';' (j ';' K) by Th46;
+     I ';' j ';' K = I ';' (j ';' K) by Th46;
 
 theorem
-    I ';' j ';' k = I ';' (j ';' k)
+     I ';' j ';' k = I ';' (j ';' k)
 proof
- thus I ';' j ';' k = I ';' (Load j ';' k) by Th47
-         .= I ';' (j ';' k);
+ thus I ';' j ';' k = I ';' (j ';' k) by Th46;
 end;
 
-theorem Th50:  :: Th66
+theorem   :: Th66
  i ';' J ';' K = i ';' (J ';' K) by Th46;
 
 theorem
-    i ';' J ';' k = i ';' (J ';' k) by Th47;
+     i ';' J ';' k = i ';' (J ';' k) by Th46;
 
 theorem Th52:   :: Th68
  i ';' j ';' K = i ';' (j ';' K)
 proof
- thus i ';' j ';' K = i ';' Load j ';' K
-       .= i ';' (j ';' K) by Th50;
+ thus i ';' j ';' K = i ';' (j ';' K) by Th46;
 end;
 
 theorem
-    i ';' j ';' k = i ';' (j ';' k)
+     i ';' j ';' k = i ';' (j ';' k)
 proof
  thus i ';' j ';' k = i ';' (j ';' Load k) by Th52
        .= i ';' (j ';' k);
@@ -1456,16 +1446,16 @@ theorem Th54:   :: SFM Th64:
   dom I misses dom Start-At inspos n
 proof
 A1: dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
-A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
+A2: dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
   assume dom I /\ dom (Start-At inspos n) <> {};
        then consider x being set such that
    A3: x in dom I /\ dom (Start-At inspos n) by XBOOLE_0:def 1;
-X:        x in dom I & x in dom (Start-At inspos n) by A3,XBOOLE_0:def 3;
+        x in dom I & x in dom (Start-At inspos n) by A3,XBOOLE_0:def 3;
        then IC SCMPDS in dom I by A1,TARSKI:def 1;
      then reconsider l=IC SCMPDS as Instruction-Location of SCMPDS
        by AMI_1:def 4,A2;
-     l=IC SCMPDS;
-    hence contradiction by A2,AMI_1:48;
+      l=IC SCMPDS;
+    hence contradiction by AMI_1:48;
 end;
 
 canceled;
@@ -1474,27 +1464,27 @@ theorem Th56:  ::TN56
  I +* Start-At inspos n c= s implies I c= s
 proof assume
 A1: I +* Start-At inspos n c= s;
-     dom I misses dom Start-At inspos n by Th54;
+      dom I misses dom Start-At inspos n by Th54;
   then I +* Start-At inspos n = I \/ Start-At inspos n by FUNCT_4:32;
  hence thesis by A1,XBOOLE_1:11;
 end;
 
 theorem    ::S6B_5
-    Initialized I c= s implies I c= s by Th56;
+     Initialized I c= s implies I c= s by Th56;
 
 theorem Th58:  ::TN58
  (I +* Start-At inspos n)|the Instruction-Locations of SCMPDS = I
 proof
-A1: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-    the Instruction-Locations of SCMPDS misses dom Start-At inspos n
+A1: dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
+     the Instruction-Locations of SCMPDS misses dom Start-At inspos n
  proof
   assume not thesis; then consider x being set such that
 A2:  x in the Instruction-Locations of SCMPDS & x in dom Start-At inspos n
        by XBOOLE_0:3;
-B2: x is Instruction-Location of SCMPDS by A2,AMI_1:def 4;
-      dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
+A3: x is Instruction-Location of SCMPDS by A2,AMI_1:def 4;
+       dom Start-At inspos n = {IC SCMPDS} by FUNCOP_1:19;
    then x = IC SCMPDS by A2,TARSKI:def 1;
-  hence contradiction by A2,AMI_1:48,B2;
+  hence contradiction by AMI_1:48,A3;
  end;
  then (I +* Start-At inspos n)|the Instruction-Locations of SCMPDS
   = I | the Instruction-Locations of SCMPDS by FUNCT_4:76;
@@ -1507,33 +1497,33 @@ theorem Th59:   ::TN59
  not a in dom Start-At l
 proof assume
 A1: a in dom Start-At l;
-     dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
+      dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
   then a = IC SCMPDS by A1,TARSKI:def 1;
  hence contradiction by SCMPDS_2:52;
 end;
 
 theorem
-    not l1 in dom Start-At l
+     not l1 in dom Start-At l
 proof assume
 A1: l1 in dom Start-At l;
-     dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
+      dom Start-At l = {IC SCMPDS} by FUNCOP_1:19;
   then l1 = IC SCMPDS by A1,TARSKI:def 1;
  hence contradiction by AMI_1:48;
 end;
 
 theorem     ::TN61
-    not a in dom (I+*Start-At l)
+     not a in dom (I+*Start-At l)
 proof assume
-      a in dom (I+*Start-At l);
+       a in dom (I+*Start-At l);
    then a in dom I \/ dom Start-At l by FUNCT_4:def 1;
    then A1: a in dom I or a in dom Start-At l by XBOOLE_0:def 2;
-   A2: dom I c= the Instruction-Locations of SCMPDS by AMI_3:def 13;
-      a in SCM-Data-Loc by SCMPDS_2:def 2;
- hence contradiction by A1,A2,Th59,AMI_5:33,XBOOLE_0:3;
+   A2: dom I c= the Instruction-Locations of SCMPDS by AMI_1:def 40;
+       a in SCM-Data-Loc by SCMPDS_2:def 2;
+ hence contradiction by A1,A2,Th59,AMI_2:29,XBOOLE_0:3;
 end;
 
 theorem    ::TN62
-    s+*I+*Start-At inspos 0 = s+*Start-At inspos 0+*I
+     s+*I+*Start-At inspos 0 = s+*Start-At inspos 0+*I
 proof
 A1:  dom I misses dom Start-At inspos 0 by Th54;
 then I+*Start-At inspos 0 = I \/ Start-At inspos 0 by FUNCT_4:32
@@ -1549,14 +1539,14 @@ definition
  coherence proof
 A1:  dom(s+*(li,k)) = dom s by FUNCT_7:32;
 A2:  dom s = dom the Object-Kind of SCMPDS by CARD_3:18;
-       now let x be set;
+        now let x be set;
      assume
 A3:    x in dom the Object-Kind of SCMPDS;
      per cases;
      suppose
 A4:    x = li;
       then A5:     (s+*(li,k)).x = k by A2,A3,FUNCT_7:33;
-          (the Object-Kind of SCMPDS).x
+           (the Object-Kind of SCMPDS).x
            = ObjectKind li by A4
           .= INT by SCMPDS_2:13;
      hence (s+*(li,k)).x in (the Object-Kind of SCMPDS).x by A5,INT_1:def 2;
@@ -1574,15 +1564,15 @@ begin :: The notions of paraclosed,parahalting and their basic properties
 
 definition let I be Program-block;
  func stop(I) -> Program-block equals
-  I ';' SCMPDS-Stop;
+   I ';' SCMPDS-Stop;
  coherence;
 end;
 
 definition let I be Program-block, s be State of SCMPDS;
  func IExec(I,s) -> State of SCMPDS equals
-       Result(s+*Initialized stop(I))
+        Result(s+*Initialized stop(I))
     +* s|the Instruction-Locations of SCMPDS;
- coherence by AMI_5:82;
+ coherence by AMI_1:113;
 end;
 
 definition let I be Program-block;
@@ -1604,22 +1594,22 @@ proof
   let s;
   assume
 A1: m1 c= s;
-    dom(Start-At inspos 0) = {IC SCMPDS} by FUNCOP_1:19;
+     dom(Start-At inspos 0) = {IC SCMPDS} by FUNCOP_1:19;
 then A2: IC SCMPDS in dom (Start-At inspos 0) by TARSKI:def 1;
 then A3: IC SCMPDS in dom m1 by FUNCT_4:13;
 A4: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
-    dom m={inspos 0} by CQC_LANG:5;
+     dom m={inspos 0} by CQC_LANG:5;
 then A5: inspos 0 in dom m by TARSKI:def 1;
-       dom m0 misses dom (Start-At inspos 0) by Th54;
+        dom m0 misses dom (Start-At inspos 0) by Th54;
 then A6: m0 c= m1 by FUNCT_4:33;
 A7: inspos 0 in dom m0 by A5,FUNCT_4:13;
 then A8: inspos 0 in dom m1 by FUNCT_4:13;
-A9: IC m1 = m1.IC SCMPDS by A3,AMI_3:def 16
+A9: IC m1 = m1.IC SCMPDS by A3,AMI_1:def 43
         .= (Start-At inspos 0).IC SCMPDS by A2,FUNCT_4:14
         .= inspos 0 by CQC_LANG:6;
   take 0;
   thus CurInstr((Computation s).0) = CurInstr s by AMI_1:def 19
-     .= s.IC m1 by A1,A3,AMI_5:60
+     .= s.IC m1 by A1,A3,AMI_1:97
      .= m1.inspos 0 by A1,A8,A9,GRFUNC_1:8
      .= m0.inspos 0 by A6,A7,GRFUNC_1:8
      .= halt SCMPDS by A4,A5,Th37;
@@ -1636,7 +1626,7 @@ theorem Th63:    ::TN63
 proof
  let I be parahalting Program-block; assume
 A1: Initialized stop I c= s;
-       Initialized stop I is halting by Def10;
+        Initialized stop I is halting by Def10;
     hence s is halting by A1,AMI_1:def 26;
 end;
 
@@ -1656,7 +1646,7 @@ definition
  redefine func (la,lb) --> (a,b) -> FinPartState of SCMPDS;
  coherence
 proof
-        ObjectKind la = the Instructions of SCMPDS &
+         ObjectKind la = the Instructions of SCMPDS &
      ObjectKind lb = the Instructions of SCMPDS by AMI_1:def 14;
     hence thesis by AMI_1:58;
   end;
@@ -1670,7 +1660,7 @@ proof
    assume A1: IC s = Next IC s;
    consider mj be Element of SCM-Instr-Loc such that
 A2: mj = IC s & Next mj = Next IC s by SCMPDS_2:def 19;
-       mj+0=mj+2 by A1,A2,AMI_2:def 15;
+        mj+0=mj+2 by A1,A2;
     hence contradiction;
 end;
 
@@ -1680,46 +1670,45 @@ proof set m=(IC s2,Next IC s2) --> (goto 1, goto -1),
           s1 = s2 +* m;
 A1: dom m = {IC s2,Next IC s2} by FUNCT_4:65;
 then A2: IC s2 in dom m & Next IC s2 in dom m by TARSKI:def 2;
-    IC s2<>Next IC s2 by Th65;
+     IC s2<>Next IC s2 by Th65;
 then A3: m.(IC s2) = goto 1 & m.(Next IC s2)=goto -1 by FUNCT_4:66;
 A4: IC SCMPDS <> IC s2 by AMI_1:48;
-    IC SCMPDS <> Next IC s2 by AMI_1:48;
+     IC SCMPDS <> Next IC s2 by AMI_1:48;
 then A5: not IC SCMPDS in dom m by A1,A4,TARSKI:def 2;
    defpred X[Element of NAT] means
     IC((Computation s1).$1) = IC s1 or IC((Computation s1).$1) = Next IC s1;
 A6: X[0] by AMI_1:def 19;
 A7: IC s1 = IC s2 by A5,FUNCT_4:12;
 
-    now let n;
+     now let n;
     set Cn=(Computation s1).n;
     assume
 A8:   IC Cn = IC s1 or IC Cn = Next IC s1;
       per cases by A8;
       case A9:IC Cn = IC s1;
-A10:   CurInstr( Cn )
-          = s1.IC s1 by A9,AMI_1:54
+then A10:   CurInstr( Cn )
+          = s1.IC s1 by AMI_1:54
          .= goto 1 by A2,A3,A7,FUNCT_4:14;
     thus IC ((Computation s1).(n+1))
             = IC Following Cn by AMI_1:def 19
-           .= ICplusConst(Cn,1) by  A10,SCMPDS_2:66
+           .= ICplusConst(Cn,1) by A10,SCMPDS_2:66
            .= Next IC s1 by A9,SCMPDS_3:20;
       end;
       case A11:IC Cn = Next IC s1;
-A12:   CurInstr((Computation s1).n)
-          = s1.(Next IC s1) by A11,AMI_1:54
+then A12:   CurInstr((Computation s1).n)
+          = s1.(Next IC s1) by AMI_1:54
          .= goto -1 by A2,A3,A7,FUNCT_4:14;
         consider j be Element of NAT such that
-A13:     j = IC Cn & ICplusConst(Cn,-1)=abs(j-2+2*(-1))+2
+A13:     j = IC Cn & ICplusConst(Cn,-1)=abs(j+(-1))
              by SCMPDS_2:def 20;
         consider mj be Element of SCM-Instr-Loc such that
 A14:      mj = IC s1 & Next mj = Next IC s1 by SCMPDS_2:def 19;
         consider i be Element of NAT such that
-A15:     IC s1=2*i+2 by SCMPDS_2:1;
-A16:     j=2*i+2+2 by A11,A13,A14,A15,AMI_2:def 15
-        .=2*i+(2+2);
+A15:     IC s1=i;
+A16:     j=i+1 by A11,A13,A14,A15;
     thus IC((Computation s1).(n+1))
             = IC Following Cn by AMI_1:def 19
-           .=abs(2*i+4 + -4 )+2 by  A12,A13,A16,SCMPDS_2:66
+           .=abs(i+4 + -4 ) by A12,A13,A16,SCMPDS_2:66
            .=IC s1 by A15,ABSVALUE:def 1;
    end;
    end;
@@ -1757,7 +1746,7 @@ A4: for m st m < n holds IC((Computation s2).m) in dom I;
    defpred X[Element of NAT] means $1 <= n implies
   (Computation s1).$1, (Computation s2 ).$1 equal_outside
      the Instruction-Locations of SCMPDS;
-      (Computation s1).0 = s1 & (Computation s2 ).0 = s2 by AMI_1:def 19;
+       (Computation s1).0 = s1 & (Computation s2 ).0 = s2 by AMI_1:def 19;
 then A5: X[0] by A1;
 A6: for m st X[m] holds X[m+1]
     proof let m such that
@@ -1772,8 +1761,8 @@ A9:   (Computation s2).(m+1) = Following((Computation s2).m) by AMI_1:def 19
 then m < n by NAT_1:13;
 then A11:   IC((Computation s2).m) in dom I by A4;
 A12:   IC ((Computation s1).m) = IC ((Computation s2).m)
-     by A7,A10,NAT_1:13,SCMFSA6A:29;
-        CurInstr((Computation s1).m)
+     by A7,A10,NAT_1:13,AMI_1:121;
+         CurInstr((Computation s1).m)
           = s1.IC((Computation s1).m) by AMI_1:54
          .= I.IC((Computation s1).m) by A2,A11,A12,GRFUNC_1:8
          .= s2.IC((Computation s2).m) by A3,A11,A12,GRFUNC_1:8
@@ -1789,9 +1778,9 @@ theorem Th68:
   holds l in dom s
 proof
     let s be State of SCMPDS,l be Instruction-Location of SCMPDS;
-      l in {IC SCMPDS} \/ SCM-Data-Loc \/ the Instruction-Locations of SCMPDS
+       l in {IC SCMPDS} \/ SCM-Data-Loc \/ the Instruction-Locations of SCMPDS
    by XBOOLE_0:def 2;
-   hence l in dom s by AMI_3:36,SCMPDS_3:5;
+   hence l in dom s by AMI_1:79,SCMPDS_3:5;
 end;
 
 reserve l1,l2 for Instruction-Location of SCMPDS,
@@ -1801,7 +1790,7 @@ theorem Th69:
     s +*((l1,l2) --> (i1, i2)) = s +* (l1,i1) +* (l2,i2)
 proof
     A1: l1 in dom s by Th68;
-           l2 in dom s by Th68;
+            l2 in dom s by Th68;
     then A2: l2 in dom (s +* (l1,i1)) by FUNCT_7:32;
     thus s +*((l1,l2) --> (i1, i2))
        =s +* ((l1 .--> i1) +* (l2 .--> i2)) by FUNCT_4:def 4
@@ -1828,7 +1817,7 @@ proof
 A2: IC s=inspos m by SCMPDS_3:32;
 A3: m >= card I by A1,A2,Th1;
 A4: Next IC s=inspos(m+1) by A2,Th70;
-       m+1 >= m by NAT_1:11;
+        m+1 >= m by NAT_1:11;
     then m+1 >= card I by A3,XXREAL_0:2;
     hence thesis by A4,Th1;
 end;
@@ -1858,42 +1847,42 @@ A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
        t4= t3 +* (Next IC s2,goto -1),
        IL=the Instruction-Locations of SCMPDS;
    set IAt = stop(I) +* Start-At inspos 0;
-      dom stop(I) misses dom Start-At inspos 0 by Th54;
+       dom stop(I) misses dom Start-At inspos 0 by Th54;
 then A7: stop I c= IAt by FUNCT_4:33;
- Initialized stop(I) = IAt;
+  Initialized stop(I) = IAt;
 then A8: IAt is halting by A1,Def10;
-      (IAt) | IL = stop I by Th58;
+       (IAt) | IL = stop I by Th58;
 then A9:  dom stop (I) = dom(IAt) /\ IL
         by RELAT_1:90;
 then A10: not IC s2 in dom IAt by A4,XBOOLE_0:def 3;
 A11: not Next IC s2 in dom IAt by A6,A9,XBOOLE_0:def 3;
-       IAt c= t1 by A2,A10,FUNCT_7:91;
+        IAt c= t1 by A2,A10,FUNCT_7:91;
     then IAt c= t2 by A11,FUNCT_7:91;
 then A12: IAt c= s0 by Th69;
 then A13: s0 is halting by A8,AMI_1:def 26;
 A14: s,t1 equal_outside IL by FUNCT_7:93;
-     t1,t2 equal_outside IL by FUNCT_7:93;
+      t1,t2 equal_outside IL by FUNCT_7:93;
   then s,t2 equal_outside IL by A14,FUNCT_7:29;
   then s,s0 equal_outside IL by Th69;
 then A15: s0,s equal_outside IL by FUNCT_7:28;
 A16: stop I c= s0 by A7,A12,XBOOLE_1:1;
 A17: stop I c= s by A2,A7,XBOOLE_1:1;
-    for m st m < n holds IC((Computation s).m) in dom stop I by A5;
+     for m st m < n holds IC((Computation s).m) in dom stop I by A5;
 then A18: (Computation s0).n,s2 equal_outside IL by A15,A16,A17,Th67;
 A19: s2,t3 equal_outside IL by FUNCT_7:93;
-      t3,t4 equal_outside IL by FUNCT_7:93;
+       t3,t4 equal_outside IL by FUNCT_7:93;
    then s2,t4 equal_outside IL by A19,FUNCT_7:29;
    then s2,s1 equal_outside IL by Th69;
 then A20: (Computation s0).n, s1 equal_outside IL by A18,FUNCT_7:29;
-         s| IL = s2 | IL by SCMFSA6B:17;
+          s| IL = s2 | IL by AMI_1:123;
       then t1 | IL = t3 | IL by FUNCT_7:95;
       then t2 | IL = t4 | IL by FUNCT_7:95;
       then s0 | IL = t4 | IL by Th69;
   then s0 | IL = s1 | IL by Th69;
-    then (Computation s0).n | IL = s1 | IL by SCMFSA6B:17;
+    then (Computation s0).n | IL = s1 | IL by AMI_1:123;
 then A21: (Computation s0).n = s1 by A20,FUNCT_7:92;
-     s1 is not halting by Th66;
- hence contradiction by A13,A21,SCM_1:27;
+      s1 is not halting by Th66;
+ hence contradiction by A13,A21,AMI_1:93;
  end;
 end;
 
@@ -1903,7 +1892,7 @@ end;
 canceled;
 
 theorem    ::S8A_16
-     inspos 0 in dom SCMPDS-Stop & SCMPDS-Stop.inspos 0 = halt SCMPDS
+      inspos 0 in dom SCMPDS-Stop & SCMPDS-Stop.inspos 0 = halt SCMPDS
    by Lm2,CQC_LANG:6,TARSKI:def 1;
 
 theorem Th74:
@@ -1916,9 +1905,7 @@ end;
 theorem Th75: ::Th26 T9
  inspos 0 in dom stop (I)
 proof
-      card stop I =card I + 1 by Th45,Th74;
-   then 1 <= card stop I by NAT_1:11;
-   then 0 < card stop I;
+       card stop I =card I + 1 by Th45,Th74;
    hence thesis by Th1;
 end;
 
@@ -1930,7 +1917,7 @@ proof
   let p be programmed FinPartState of SCMPDS,k be Element of NAT,
   il be Instruction-Location of SCMPDS;
   assume A1: il in dom p;
-    dom Shift(p,k) = { loc+k : loc in dom p} by SCMPDS_3:38;
+     dom Shift(p,k) = { loc+k : loc in dom p} by SCMPDS_3:38;
   hence thesis by A1;
 end;
 
@@ -1978,7 +1965,7 @@ A6: now
     thus i = (a,k1)<=0_goto k2 by A7;
     thus n+k2 >= 0 by A1,A7,XREAL_1:8;
   end;
-   now
+    now
      assume InsCode i= 6;
        then consider a,k1,k2 such that
     A8: i = (a,k1)>=0_goto k2 & m+k2 >= 0 by A1,Def11;
@@ -2002,13 +1989,13 @@ proof
   set m = Load halt SCMPDS;
 A1: m.inspos 0 = halt SCMPDS by CQC_LANG:6;
 A2: dom m={inspos 0} by CQC_LANG:5;
-       now let n,i;
+        now let n,i;
        assume A3:inspos n in dom m & i=m.(inspos n);
        then A4: inspos n= inspos 0 by A2,TARSKI:def 1;
 then A5:    InsCode i =0 by A1,A3,SCMPDS_2:21,93;
        thus InsCode i <> 1 by A1,A3,A4,SCMPDS_2:21,93;
        thus InsCode i <> 3 by A1,A3,A4,SCMPDS_2:21,93;
-          ex k1 st i = goto k1 & n+k1 >= 0
+           ex k1 st i = goto k1 & n+k1 >= 0
        proof
           take 0;
           thus i=goto 0 by A3,A4,CQC_LANG:6,SCMPDS_2:93;
@@ -2034,7 +2021,7 @@ registration
  existence
   proof
    take i=DataLoc(0,0):=1;
-    InsCode i=2 by SCMPDS_2:23;
+     InsCode i=2 by SCMPDS_2:23;
     hence thesis by Def13;
   end;
 end;
@@ -2044,7 +2031,7 @@ registration
  cluster a := k1 -> shiftable;
  coherence
  proof
-        InsCode (a:=k1)=2 by SCMPDS_2:23;
+         InsCode (a:=k1)=2 by SCMPDS_2:23;
      hence thesis by Def13;
  end;
 end;
@@ -2054,7 +2041,7 @@ registration
  cluster (a,k1) := k2 -> shiftable;
  coherence
  proof
-        InsCode ((a,k1) := k2)=7 by SCMPDS_2:28;
+         InsCode ((a,k1) := k2)=7 by SCMPDS_2:28;
      hence thesis by Def13;
  end;
 end;
@@ -2064,7 +2051,7 @@ registration
  cluster AddTo(a,k1,k2) -> shiftable;
  coherence
  proof
-        InsCode AddTo(a,k1,k2)=8 by SCMPDS_2:29;
+         InsCode AddTo(a,k1,k2)=8 by SCMPDS_2:29;
      hence thesis by Def13;
  end;
 end;
@@ -2074,35 +2061,35 @@ registration
  cluster AddTo(a,k1,b,k2) -> shiftable;
  coherence
  proof
-        InsCode AddTo(a,k1,b,k2)=9 by SCMPDS_2:30;
+         InsCode AddTo(a,k1,b,k2)=9 by SCMPDS_2:30;
      hence thesis by Def13;
  end;
 
 cluster SubFrom(a,k1,b,k2) -> shiftable;
  coherence
  proof
-        InsCode SubFrom(a,k1,b,k2)=10 by SCMPDS_2:31;
+         InsCode SubFrom(a,k1,b,k2)=10 by SCMPDS_2:31;
      hence thesis by Def13;
  end;
 
 cluster MultBy(a,k1,b,k2) -> shiftable;
  coherence
  proof
-        InsCode MultBy(a,k1,b,k2)=11 by SCMPDS_2:32;
+         InsCode MultBy(a,k1,b,k2)=11 by SCMPDS_2:32;
      hence thesis by Def13;
  end;
 
 cluster Divide(a,k1,b,k2) -> shiftable;
  coherence
  proof
-        InsCode Divide(a,k1,b,k2)=12 by SCMPDS_2:33;
+         InsCode Divide(a,k1,b,k2)=12 by SCMPDS_2:33;
      hence thesis by Def13;
  end;
 
 cluster (a,k1) := (b,k2) -> shiftable;
  coherence
  proof
-        InsCode (a,k1) := (b,k2)=13 by SCMPDS_2:34;
+         InsCode (a,k1) := (b,k2)=13 by SCMPDS_2:34;
      hence thesis by Def13;
  end;
 end;
@@ -2113,11 +2100,11 @@ registration
  coherence
  proof
      set IJ=I ';' J;
-      now let n,i such that
+       now let n,i such that
 A1:    inspos n in dom IJ and
 A2:    i=IJ.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A3:    dom IJ = dom I \/ D by FUNCT_4:def 1;
       per cases by A1,A3,XBOOLE_0:def 2;
        suppose A4:inspos n in dom I;
@@ -2131,10 +2118,9 @@ A6:      inspos l in dom J;
 A7:      J.inspos l=IJ.(inspos l+card I) by A6,Th38
          .=i by A2,A5,SCMPDS_3:def 3;
          hence InsCode i <> 1 & InsCode i <> 3 by A6,Def12;
-            l <= l+card I by NAT_1:11;
-then A8:      l <= n by A5;
-            i valid_at l by A6,A7,Def12;
-         hence i valid_at n by A8,Th77;
+            A8: l <= l+card I by NAT_1:11;
+             i valid_at l by A6,A7,Def12;
+         hence i valid_at n by A5,A8,Th77;
    end;
    end;
    hence thesis by Def12;
@@ -2147,17 +2133,17 @@ registration
  coherence
  proof
     set p=Load i;
-      now let n,j such that
+       now let n,j such that
 A1:    inspos n in dom p and
 A2:    j=p.inspos n;
-       dom p = { inspos 0 } by CQC_LANG:5;
+        dom p = { inspos 0 } by CQC_LANG:5;
        then inspos n = inspos 0 by A1,TARSKI:def 1;
        then A3: j=i by A2,CQC_LANG:6;
 then A4:    InsCode j=2 or InsCode j > 6 by Def13;
        thus InsCode j <> 1 by A3,Def13;
        thus InsCode j <> 3 by A3,Def13;
 A5:    InsCode j <> 4 by A3,Def13;
-      InsCode j <> 0 & InsCode j <> 5 by A3,Def13;
+       InsCode j <> 0 & InsCode j <> 5 by A3,Def13;
        hence j valid_at n by A4,A5,Def11;
      end;
      hence thesis by Def12;
@@ -2196,18 +2182,18 @@ registration
 end;
 
 theorem
-     for I being shiftable Program-block,k1 be Integer st
+      for I being shiftable Program-block,k1 be Integer st
   card I + k1 >= 0 holds I ';' goto k1 is shiftable
 proof
   let I be shiftable Program-block,k1 be Integer;
   assume A1: card I + k1 >= 0;
    set J= Load goto k1;
    set Ig=I ';' goto k1;
-      now let n,i such that
+       now let n,i such that
 A2:    inspos n in dom Ig and
 A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
       per cases by A2,A4,XBOOLE_0:def 2;
        suppose A5:inspos n in dom I;
@@ -2218,16 +2204,14 @@ then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
         then consider l such that
 A6:      inspos n = inspos(l+card I) and
 A7:      inspos l in dom J;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
 then A9:    goto k1 =J.inspos l by CQC_LANG:6
        .=Ig.(inspos l+card I) by A7,Th38
        .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
-          inspos n= inspos(0+card I) by A6,A8;
-then A10:    n+k1 >=0 by A1;
-      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:21;
-       hence i valid_at n by A9,A10,Def11;
+       InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:21;
+       hence i valid_at n by A1,A6,A8,A9,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2240,15 +2224,15 @@ registration
  proof
    set k1=n;
    set J= Load goto k1;
-      now let n,i such that
+       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
 then A3:    goto k1 =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:21;
 A4:    n+k1 >=0;
-      InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:21;
+       InsCode i <> 4 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:21;
        hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
@@ -2256,7 +2240,7 @@ A4:    n+k1 >=0;
 end;
 
 theorem
-     for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+      for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
   card I + k2 >= 0 holds I ';' (a,k1)<>0_goto k2 is shiftable
 proof
   let I be shiftable Program-block,k1,k2 be Integer,a be Int_position;
@@ -2264,11 +2248,11 @@ proof
    set ii= (a,k1)<>0_goto k2,
        J= Load ii;
    set Ig=I ';' ii;
-      now let n,i such that
+       now let n,i such that
 A2:    inspos n in dom Ig and
 A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
       per cases by A2,A4,XBOOLE_0:def 2;
        suppose A5:inspos n in dom I;
@@ -2279,16 +2263,14 @@ then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
         then consider l such that
 A6:      inspos n = inspos(l+card I) and
 A7:      inspos l in dom J;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
 then A9:    ii=J.inspos l by CQC_LANG:6
        .=Ig.(inspos l+card I) by A7,Th38
        .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
-          inspos n= inspos(0+card I) by A6,A8;
-then A10:    n+k2 >=0 by A1;
-      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:25;
-       hence i valid_at n by A9,A10,Def11;
+       InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A9,SCMPDS_2:25;
+       hence i valid_at n by A1,A6,A8,A9,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2302,15 +2284,15 @@ registration
    set k2=n;
    set ii= (a,k1)<>0_goto k2,
        J= Load ii;
-      now let n,i such that
+       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
 then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:25;
 A4:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:25;
+       InsCode i <> 0 & InsCode i <> 5 & InsCode i <> 6 by A3,SCMPDS_2:25;
        hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
@@ -2318,7 +2300,7 @@ A4:    n+k2 >=0;
 end;
 
 theorem
-     for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+      for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
   card I + k2 >= 0 holds I ';' (a,k1)<=0_goto k2 is shiftable
 proof
   let I be shiftable Program-block,k1,k2 be Integer,a be Int_position;
@@ -2326,11 +2308,11 @@ proof
    set ii= (a,k1)<=0_goto k2,
        J= Load ii;
    set Ig=I ';' ii;
-      now let n,i such that
+       now let n,i such that
 A2:    inspos n in dom Ig and
 A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
       per cases by A2,A4,XBOOLE_0:def 2;
        suppose A5:inspos n in dom I;
@@ -2341,16 +2323,14 @@ then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
         then consider l such that
 A6:      inspos n = inspos(l+card I) and
 A7:      inspos l in dom J;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
 then A9:    ii =J.inspos l by CQC_LANG:6
        .=Ig.(inspos l+card I) by A7,Th38
        .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
-          inspos n= inspos(0+card I) by A6,A8;
-then A10:    n+k2 >=0 by A1;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A9,SCMPDS_2:26;
-       hence i valid_at n by A9,A10,Def11;
+       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A9,SCMPDS_2:26;
+       hence i valid_at n by A1,A6,A8,A9,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2364,15 +2344,15 @@ registration
    set k2=n;
    set ii= (a,k1)<=0_goto k2,
        J= Load ii;
-      now let n,i such that
+       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
 then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:26;
 A4:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A3,SCMPDS_2:26;
+       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 6 by A3,SCMPDS_2:26;
        hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
@@ -2380,7 +2360,7 @@ A4:    n+k2 >=0;
 end;
 
 theorem
-     for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
+      for I being shiftable Program-block,k1,k2 be Integer,a be Int_position st
   card I + k2 >= 0 holds I ';' (a,k1)>=0_goto k2 is shiftable
 proof
   let I be shiftable Program-block,k1,k2 be Integer,a be Int_position;
@@ -2388,11 +2368,11 @@ proof
    set ii= (a,k1)>=0_goto k2,
        J= Load ii;
    set Ig=I ';' ii;
-      now let n,i such that
+       now let n,i such that
 A2:    inspos n in dom Ig and
 A3:    i=Ig.(inspos n);
        set D = {inspos(l+card I): inspos l in dom J };
-          dom Shift(J,card I) = D by SCMPDS_3:def 7;
+           dom Shift(J,card I) = D by SCMPDS_3:def 7;
 then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
       per cases by A2,A4,XBOOLE_0:def 2;
        suppose A5:inspos n in dom I;
@@ -2403,16 +2383,14 @@ then A4:    dom Ig = dom I \/ D by FUNCT_4:def 1;
         then consider l such that
 A6:      inspos n = inspos(l+card I) and
 A7:      inspos l in dom J;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then A8:    inspos l = inspos 0 by A7,TARSKI:def 1;
 then A9:    ii =J.inspos l by CQC_LANG:6
        .=Ig.(inspos l+card I) by A7,Th38
        .=i by A3,A6,SCMPDS_3:def 3;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
-          inspos n= inspos(0+card I) by A6,A8;
-then A10:    n+k2 >=0 by A1;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A9,SCMPDS_2:27;
-       hence i valid_at n by A9,A10,Def11;
+       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A9,SCMPDS_2:27;
+       hence i valid_at n by A1,A6,A8,A9,Def11;
     end;
     end;
    hence thesis by Def12;
@@ -2426,15 +2404,15 @@ registration
    set k2=n;
    set ii= (a,k1)>=0_goto k2,
        J= Load ii;
-      now let n,i such that
+       now let n,i such that
 A1:    inspos n in dom J and
 A2:    i=J.inspos n;
-       dom J = { inspos 0 } by CQC_LANG:5;
+        dom J = { inspos 0 } by CQC_LANG:5;
 then inspos n = inspos 0 by A1,TARSKI:def 1;
 then A3:    ii =i by A2,CQC_LANG:6;
        hence InsCode i <> 1 & InsCode i <> 3 by SCMPDS_2:27;
 A4:    n+k2 >=0;
-      InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A3,SCMPDS_2:27;
+       InsCode i <> 0 & InsCode i <> 4 & InsCode i <> 5 by A3,SCMPDS_2:27;
        hence i valid_at n by A3,A4,Def11;
     end;
    hence thesis by Def12;
@@ -2452,19 +2430,17 @@ A1: IC s1=inspos m and
 A2: m+k1>=0 and
 A3: IC s1 + n = IC s2;
     consider n1 be Element of NAT such that
-A4: n1 = IC s1 & ICplusConst(s1,k1) = abs(n1-2+2*k1)+2 by SCMPDS_2:def 20;
+A4: n1 = IC s1 & ICplusConst(s1,k1) = abs(n1+k1) by SCMPDS_2:def 20;
     consider n2 be Element of NAT such that
-A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2-2+2*k1)+2 by SCMPDS_2:def 20;
+A5: n2 = IC s2 & ICplusConst(s2,k1) = abs(n2+k1) by SCMPDS_2:def 20;
     reconsider mk=m+k1 as Element of NAT by A2,INT_1:16;
 A6: n2=inspos ( m + n) by A1,A3,A5,SCMPDS_3:def 3
-    .=2*(m+n)+2;
+    .=(m+n);
     consider nk be Element of NAT such that
 A7: inspos nk=ICplusConst(s1,k1) by SCMPDS_3:32;
-A8: n1=2*m+2 by A1,A4;
-       2*nk+2=abs(n1-2+2*k1)+2 by A4,A7;
-then A9: 2*nk=2*mk by  A8,ABSVALUE:def 1;
+A8: nk=mk by A1,A4,A7,ABSVALUE:def 1;
     thus ICplusConst(s1,k1) +n=inspos(nk +n) by A7,SCMPDS_3:def 3
-    .=ICplusConst(s2,k1) by  A9,A5,A6,ABSVALUE:def 1;
+    .=ICplusConst(s2,k1) by A8,A5,A6,ABSVALUE:def 1;
 end;
 
 theorem Th83:  ::S6A_41
@@ -2498,9 +2474,9 @@ A8: Next IC s1 + n = Next IC s2
     end;
     set Ci=InsCode i;
 A9:now assume
-          Ci <> 0 & Ci<>1 & Ci<>4 & Ci<>5 & Ci<> 6;
+           Ci <> 0 & Ci<>1 & Ci<>4 & Ci<>5 & Ci<> 6;
       then A10: not Ci in {0,1,4,5,6} by ENUMSET1:def 3;
-         IC Exec(i,s1) = Next IC s1 by A10,Th6;
+         then IC Exec(i,s1) = Next IC s1 by Th6;
       hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A10,Th6;
     end;
 A11: now let a,k1;
@@ -2508,7 +2484,7 @@ A11: now let a,k1;
         .=s2.DataLoc(s2.a,k1) by A6,Th23;
     end;
 A12: Ci <= 13 by SCMPDS_2:15;
-   per cases by A3,A4,A12,SCMPDS_3:1;
+   per cases by A3,A4,A12,NAT_1:38;
    suppose Ci = 0;
     then consider k1 such that
 A13:  i = goto k1 & m+k1 >= 0 by A2,Def11;
@@ -2517,7 +2493,7 @@ A14: now let a;
         .=s2.a by A6,Th23
         .=Exec(i, s2).a by A13,SCMPDS_2:66;
      end;
-        IC Exec(i,s1) = ICplusConst(s1,k1) by A13,SCMPDS_2:66;
+         IC Exec(i,s1) = ICplusConst(s1,k1) by A13,SCMPDS_2:66;
      hence IC Exec(i,s1) + n = ICplusConst(s2,k1) by A1,A5,A13,Th82
         .= IC Exec(i,s2) by A13,SCMPDS_2:66;
      thus Exec(i,s1) | D = Exec(i,s2) | D by A14,Th23;
@@ -2554,13 +2530,13 @@ A21: now let a;
        per cases;
        suppose A22:s1.DataLoc(s1.a,k1) <> 0;
          then A23:s2.DataLoc(s2.a,k1) <> 0 by A11;
-           IC Exec(i,s1) = ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67;
+            IC Exec(i,s1) = ICplusConst(s1,k2) by A20,A22,SCMPDS_2:67;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A20,Th82
         .= IC Exec(i,s2) by A20,A23,SCMPDS_2:67;
        end;
        suppose A24:s1.DataLoc(s1.a,k1) = 0;
          then A25:s2.DataLoc(s2.a,k1) = 0 by A11;
-           IC Exec(i,s1) = Next IC s1 by A20,A24,SCMPDS_2:67;
+            IC Exec(i,s1) = Next IC s1 by A20,A24,SCMPDS_2:67;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A20,A25,SCMPDS_2:67;
      end;
      end;
@@ -2579,13 +2555,13 @@ A27: now let a;
        per cases;
        suppose A28:s1.DataLoc(s1.a,k1) <= 0;
          then A29:s2.DataLoc(s2.a,k1) <= 0 by A11;
-           IC Exec(i,s1) = ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68;
+            IC Exec(i,s1) = ICplusConst(s1,k2) by A26,A28,SCMPDS_2:68;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A26,Th82
         .= IC Exec(i,s2) by A26,A29,SCMPDS_2:68;
        end;
        suppose A30:s1.DataLoc(s1.a,k1) > 0;
          then A31:s2.DataLoc(s2.a,k1) > 0 by A11;
-           IC Exec(i,s1) = Next IC s1 by A26,A30,SCMPDS_2:68;
+            IC Exec(i,s1) = Next IC s1 by A26,A30,SCMPDS_2:68;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A26,A31,SCMPDS_2:68;
      end;
      end;
@@ -2604,13 +2580,13 @@ A33: now let a;
        per cases;
        suppose A34:s1.DataLoc(s1.a,k1) >= 0;
          then A35:s2.DataLoc(s2.a,k1) >= 0 by A11;
-           IC Exec(i,s1) = ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69;
+            IC Exec(i,s1) = ICplusConst(s1,k2) by A32,A34,SCMPDS_2:69;
         hence IC Exec(i,s1) + n = ICplusConst(s2,k2) by A1,A5,A32,Th82
         .= IC Exec(i,s2) by A32,A35,SCMPDS_2:69;
        end;
        suppose A36:s1.DataLoc(s1.a,k1) < 0;
          then A37:s2.DataLoc(s2.a,k1) < 0 by A11;
-           IC Exec(i,s1) = Next IC s1 by A32,A36,SCMPDS_2:69;
+            IC Exec(i,s1) = Next IC s1 by A32,A36,SCMPDS_2:69;
         hence IC Exec(i,s1) + n = IC Exec(i,s2) by A8,A32,A37,SCMPDS_2:69;
      end;
      end;
@@ -2794,7 +2770,8 @@ end;
 end;
 
 theorem  ::Th27 T0
-    for J being parahalting shiftable Program-block st Initialized stop J c= s1
+     for J being parahalting shiftable Program-block st Initialized stop J c=
+s1
  for n being Element of NAT st Shift(stop J,n) c= s2 &
    IC s2 = inspos n &
    s1 | SCM-Data-Loc = s2 | SCM-Data-Loc
@@ -2819,16 +2796,16 @@ A4: s1 | SCM-Data-Loc = s2 | SCM-Data-Loc;
        IC C1.$1 + n = IC C2.$1 &
        CurInstr (C1.$1) = CurInstr (C2.$1) &
        C1.$1 | SCM-Data-Loc = C2.$1 | SCM-Data-Loc;
-        dom SI misses dom Start-At inspos 0 by Th54;
+         dom SI misses dom Start-At inspos 0 by Th54;
 then A5:  SI c= II by FUNCT_4:33;
 then A6: dom SI c= dom II by GRFUNC_1:8;
 A7: inspos 0 in dom SI by Th75;
 A8: P[0]
     proof
 A9:  IC SCMPDS in dom II by Th7;
-        inspos 0 + n in dom Shift(SI,n) by A7,Th76;
+         inspos 0 + n in dom Shift(SI,n) by A7,Th76;
 then A10:  inspos (0 + n) in dom Shift(SI,n) by SCMPDS_3:def 3;
-        IC C1.0 = s1.IC SCMPDS by AMI_1:def 19
+         IC C1.0 = s1.IC SCMPDS by AMI_1:def 19
     .= II.IC SCMPDS by A1,A9,GRFUNC_1:8
     .= inspos 0 by Th29;
    hence IC C1.0 + n = inspos (0 + n) by SCMPDS_3:def 3
@@ -2879,7 +2856,7 @@ A12: for k being Element of NAT st P[k] holds P[k + 1]
       thus C1.(k + 1) | SCM-Data-Loc
        = C2.(k + 1) | SCM-Data-Loc by A13,A14,A15,A18,A19,Th83;
      end;
-      for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A12);
+       for k being Element of NAT holds P[k] from NAT_1:sch 1(A8,A12);
    hence thesis;
 end;
 

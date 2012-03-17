@@ -28,6 +28,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="INT_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -176,6 +177,24 @@
 <Adjective nr="4"/>
 <Adjective nr="18"/>
 <Adjective nr="41"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="14" value="false"/>
+<Adjective nr="18"/>
+<Adjective nr="28"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="93">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="22"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <CCluster>

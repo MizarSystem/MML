@@ -1,0 +1,354 @@
+:: Laplace Expansion
+::  by Karol Pak and Andrzej Trybulec
+:: 
+:: Received August 13, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies VECTSP_1, RLVECT_1, MATRIX_1, FINSEQ_2, ARYTM_1, FINSEQ_1,
+      TREES_1, FUNCT_1, RELAT_1, BOOLE, INCSP_1, GROUP_1, BINOP_1, SETWISEO,
+      MATRIX_2, FINSUB_1, FINSET_1, SUBSET_1, MATRIX_3, FUNCT_2, SGRAPH1,
+      NAT_1, ABSVALUE, CARD_1, FINSEQ_7, TARSKI, MATRIX11, QC_LANG1, INT_1,
+      ARYTM_3, CAT_1, CAT_3, RVSUM_1, FSM_1, MATRIX_6, COMPLEX1, LAPLACE;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
+      FINSET_1, RELAT_1, RELSET_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      BINOP_1, STRUCT_0, FUNCT_3, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1,
+      SETWISEO, SETWOP_2, FINSEQ_2, MATRIX_1, FINSUB_1, MATRIX_2, NAT_1,
+      FVSUM_1, FINSOP_1, BINARITH, GROUP_4, FINSEQ_4, MATRIX_3, CARD_1,
+      FINSEQ_7, FUNCT_4, ORDINAL1, NEWTON, MATRIX_7, FINSEQ_3, MATRIX11,
+      MATRIX_6, NAT_D;
+ constructors RELAT_2, PARTFUN1, SETWISEO, NAT_1, FINSOP_1, SETWOP_2, FUNCT_3,
+      ALGSTR_1, MATRIX_2, FVSUM_1, DOMAIN_1, BINOP_1, XXREAL_0, FINSEQ_4,
+      BINARITH, FINSEQ_5, GROUP_4, VECTSP_1, FINSEQ_7, STRUCT_0, WELLORD2,
+      NEWTON, MATRIX_3, MATRIX_6, MATRIX_7, MATRIX11, NAT_D, RELAT_1;
+ registrations SUBSET_1, FUNCT_1, FINSUB_1, FINSET_1, RELSET_1, STRUCT_0,
+      FVSUM_1, MATRIX_2, ARYTM_3, VECTSP_1, FUNCT_2, PARTFUN1, XBOOLE_0,
+      ORDINAL1, XXREAL_0, NAT_1, INT_1, RELAT_1, CARD_1, MATRIX_9, MATRIX11,
+      NUMBERS, XCMPLX_0;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+ reserve x,y for set,
+      N for Element of NAT,
+      c,i,j,k,l,m,n for Nat,
+      D for non empty set,
+      s for Element of 2Set Seg (n+2),
+      p, q for Element of Permutations(n),
+      p1, q1 for Element of Permutations(n+1),
+      p2, q2 for Element of Permutations(n+2),
+      K for Field,
+      a, b for Element of K,
+      f for FinSequence of K,
+      A for (Matrix of K),
+      AD for Matrix of n,m,D,
+      pD for FinSequence of D,
+      M for Matrix of n,K;
+
+theorem :: LAPLACE:1
+  for f be FinSequence, i be Nat st i in dom f holds
+    len Del(f,i) = len f -' 1;
+
+theorem :: LAPLACE:2
+  for i,j,n being Nat, M being Matrix of n,K st i in dom M holds
+    len Deleting(M,i,j) = n-'1;
+
+theorem :: LAPLACE:3
+  j in Seg width A implies width DelCol(A,j) = width A-'1;
+
+theorem :: LAPLACE:4
+  for i be Nat st len A > 1 holds width A = width DelLine(A,i);
+
+theorem :: LAPLACE:5
+  for i being Nat st j in Seg width M holds width Deleting(M,i,j) = n-' 1;
+
+definition let G be non empty HGrStr;
+ let B be Function of [:the carrier of G,NAT:], the carrier of G;
+ let g be Element of G, i be Nat;
+ redefine func B.(g,i) -> Element of G;
+end;
+
+theorem :: LAPLACE:6
+  Card Permutations n = n!;
+
+theorem :: LAPLACE:7
+  for i,j st i in Seg (n+1) & j in Seg (n+1) holds
+    Card {p1: p1.i = j} = n!;
+
+theorem :: LAPLACE:8
+  for K be Fanoian Field
+    for p2 for X,Y be Element of Fin 2Set Seg (n+2)
+       st Y={s:s in X & Part_sgn(p2,K).s = -1_K} holds
+    (the mult of K) $$ (X,Part_sgn(p2,K)) = power(K).(-1_K,card Y);
+
+theorem :: LAPLACE:9
+  for K be Fanoian Field
+    for p2,i,j st i in Seg (n+2) & p2.i=j
+      ex X be Element of Fin 2Set Seg (n+2) st
+         X = {{N,i} : {N,i} in 2Set Seg (n+2)} &
+         (the mult of K) $$ (X,Part_sgn(p2,K)) = power(K).(-1_K,i+j);
+
+theorem :: LAPLACE:10
+  for i,j st i in Seg (n+1) & j in Seg (n+1) & n >= 2
+    ex Proj be Function of 2Set Seg n, 2Set Seg(n+1) st
+       rng Proj = 2Set Seg(n+1)\{{N,i}:{N,i} in 2Set Seg(n+1)} &
+       Proj is one-to-one &
+       for k,m st  k<m & {k,m} in 2Set Seg n holds
+          (m <  i & k <  i implies Proj.{k,m} = {k,m}   ) &
+          (m >= i & k <  i implies Proj.{k,m} = {k,m+1} ) &
+          (m >= i & k >= i implies Proj.{k,m} = {k+1,m+1});
+
+theorem :: LAPLACE:11
+  n < 2 implies for p be Element of Permutations n holds p is even & p=idseq n;
+
+theorem :: LAPLACE:12
+  for X,Y,D be non empty set
+    for f be Function of X,Fin Y, g be Function of Fin Y,D, F be BinOp of D st
+        (for A,B be Element of Fin Y st A misses B
+           holds F.(g.A,g.B) = g.(A \/ B)) &
+         F is commutative associative & F has_a_unity & g.{} = the_unity_wrt F
+      for I be Element of Fin X st
+           for x,y st x in I & y in I & f.x meets f.y holds x = y
+         holds
+           F $$ (I,g*f) = F $$ (f.:I,g) & F $$ (f.:I,g) = g.union (f.:I) &
+           union (f.:I) is Element of Fin Y;
+
+begin :: Auxiliary notions
+
+definition let i,j,n be Nat; let K;
+           let M be Matrix of n,K;
+  assume that
+    i in Seg n and
+    j in Seg n;
+  func Delete(M,i,j) -> Matrix of n-'1,K equals
+:: LAPLACE:def 1
+    Deleting(M,i,j);
+end;
+
+theorem :: LAPLACE:13
+  for i,j st i in Seg n & j in Seg n
+    for k,m st k in Seg (n-'1) & m in Seg (n-'1) holds
+     (k  < i & m  < j implies Delete(M,i,j)*(k,m) = M*(k,m)   )&
+     (k  < i & m >= j implies Delete(M,i,j)*(k,m) = M*(k,m+1) )&
+     (k >= i & m  < j implies Delete(M,i,j)*(k,m) = M*(k+1,m) )&
+     (k >= i & m >= j implies Delete(M,i,j)*(k,m) = M*(k+1,m+1));
+
+theorem :: LAPLACE:14
+  for i,j st i in Seg n & j in Seg n holds
+    Delete(M,i,j)@ = Delete(M@,j,i);
+
+theorem :: LAPLACE:15
+  for f be FinSequence of K, i,j st i in Seg n & j in Seg n holds
+    Delete(M,i,j) = Delete(RLine(M,i,f),i,j);
+
+definition let c, n, m, D;
+           let M be Matrix of n,m,D;
+           let pD be FinSequence of D;
+  func ReplaceCol(M,c,pD) -> Matrix of n,m,D means
+:: LAPLACE:def 2
+      len it = len M & width it = width M &
+      for i,j st [i,j] in Indices M holds
+        (j <> c implies it*(i,j) = M*(i,j)) & (j = c implies it*(i,c) = pD.i)
+    if len pD = len M otherwise it = M;
+end;
+
+notation let c, n, m, D;
+  let M be Matrix of n,m,D;
+  let pD be FinSequence of D;
+  synonym RCol(M,c,pD) for ReplaceCol(M,c,pD);
+end;
+
+theorem :: LAPLACE:16
+  for i st i in Seg width AD holds
+     (i = c & len pD = len AD implies Col(RCol(AD,c,pD),i) = pD) &
+     (i <> c implies Col(RCol(AD,c,pD),i) = Col(AD,i));
+
+theorem :: LAPLACE:17
+  not c in Seg width AD implies RCol(AD,c,pD) = AD;
+
+theorem :: LAPLACE:18
+  RCol(AD,c,Col(AD,c)) = AD;
+
+theorem :: LAPLACE:19
+  for A be Matrix of n,m,D, A' be Matrix of m,n,D
+      st A' = A@ & (m=0 implies n=0) holds
+    ReplaceCol(A,c,pD) = ReplaceLine(A',c,pD)@;
+
+begin :: Permutations
+
+definition let i,n;
+  let perm be Element of Permutations(n+1);
+  assume i in Seg (n+1);
+  func Rem(perm,i) -> Element of Permutations n means
+:: LAPLACE:def 3
+  for k st k in Seg n holds
+      (k<i implies
+           (perm.k   <    perm.i implies it.k = perm.k      )&
+           (perm.k   >=   perm.i implies it.k = perm.k-1)   )&
+      (k>=i implies
+           (perm.(k+1) <  perm.i implies it.k = perm.(k+1)  )&
+           (perm.(k+1) >= perm.i implies it.k = perm.(k+1)-1));
+end;
+
+theorem :: LAPLACE:20
+  for i,j st i in Seg (n+1) & j in Seg(n+1)
+    for P be set st P = {p1:p1.i = j}
+      ex Proj be Function of P,Permutations n st
+        Proj is bijective &
+        for q1 st q1.i = j holds Proj.q1 = Rem(q1,i);
+
+theorem :: LAPLACE:21
+  for i,j st i in Seg (n+1) & p1.i = j holds
+    -(a,p1) = power(K).(-1_K,i+j) * -(a,Rem(p1,i));
+
+theorem :: LAPLACE:22
+  for i,j st i in Seg (n+1) & p1.i = j
+    for M be Matrix of n+1,K
+      for DM be Matrix of n,K st DM = Delete(M,i,j)
+  holds
+   (Path_product M).p1 =
+                   power(K).(-1_K,i+j)*(M*(i,j))*(Path_product(DM)).Rem(p1,i);
+
+begin :: Minors & cofactors
+
+definition let i,j,n be Nat;let K;let M be Matrix of n,K;
+  func Minor(M,i,j) -> Element of K equals
+:: LAPLACE:def 4
+    Det Delete(M,i,j);
+end;
+
+definition let i,j,n be Nat;let K;let M be Matrix of n,K;
+  func Cofactor(M,i,j) -> Element of K equals
+:: LAPLACE:def 5
+  power(K).(-1_K,i+j)*Minor(M,i,j);
+end;
+
+theorem :: LAPLACE:23
+  for i,j st i in Seg n & j in Seg n
+    for P be Element of Fin Permutations n st P = {p:p.i = j}
+      for M be Matrix of n,K
+    holds
+      (the add of K) $$ (P,Path_product(M)) = M*(i,j)*Cofactor(M,i,j);
+
+theorem :: LAPLACE:24
+  for i,j st i in Seg n & j in Seg n holds
+    Minor(M,i,j) = Minor(M@,j,i);
+
+definition
+  let n,K;let M be Matrix of n,K;
+  func Matrix_of_Cofactor(M) -> Matrix of n,K means
+:: LAPLACE:def 6
+  for i,j being Nat st [i,j] in Indices it holds
+    it*(i,j) = Cofactor(M,i,j);
+end;
+
+begin :: Laplace expansion
+
+definition let n,i,K;
+  let M be Matrix of n,K;
+  func LaplaceExpL(M,i) -> FinSequence of K means
+:: LAPLACE:def 7
+  len it = n & for j st j in dom it holds it.j = M*(i,j)*Cofactor(M,i,j);
+end;
+
+definition let n; let j be Nat,K;
+  let M be Matrix of n,K;
+  func LaplaceExpC(M,j) -> FinSequence of K means
+:: LAPLACE:def 8
+  len it = n & for i st i in dom it holds it.i = M*(i,j)*Cofactor(M,i,j);
+end;
+
+theorem :: LAPLACE:25
+  for i be Nat, M be Matrix of n,K st i in Seg n
+    holds Det M = Sum LaplaceExpL(M,i);
+
+theorem :: LAPLACE:26
+  for i st i in Seg n holds
+    LaplaceExpC(M,i) = LaplaceExpL(M@,i);
+
+theorem :: LAPLACE:27
+  for j be Nat, M be Matrix of n,K st j in Seg n
+    holds Det M = Sum LaplaceExpC(M,j);
+
+theorem :: LAPLACE:28
+  for p,i st len f=n & i in Seg n holds
+    mlt(Line(Matrix_of_Cofactor M,i),f) = LaplaceExpL(RLine(M,i,f),i);
+
+theorem :: LAPLACE:29
+  i in Seg n implies
+    Line(M,j) "*" Col((Matrix_of_Cofactor M)@,i) = Det RLine(M,i,Line(M,j));
+
+theorem :: LAPLACE:30
+  Det M <> 0.K implies M * ((Det M)" * (Matrix_of_Cofactor M)@) = 1.(K,n);
+
+theorem :: LAPLACE:31
+  for f,i st len f=n & i in Seg n holds
+    mlt(Col(Matrix_of_Cofactor M,i),f) = LaplaceExpL(RLine(M@,i,f),i);
+
+theorem :: LAPLACE:32
+  i in Seg n & j in Seg n implies
+    Line((Matrix_of_Cofactor M)@,i) "*" Col(M,j) = Det RLine(M@,i,Line(M@,j));
+
+theorem :: LAPLACE:33
+  Det M <> 0.K implies ((Det M)" * (Matrix_of_Cofactor M)@) * M = 1.(K,n);
+
+theorem :: LAPLACE:34
+  M is invertible iff Det M <> 0.K;
+
+theorem :: LAPLACE:35
+  Det M <> 0.K implies M~ = (Det M)" * (Matrix_of_Cofactor M)@;
+
+theorem :: LAPLACE:36
+  for M be Matrix of n,K st M is invertible
+    for i,j st [i,j] in Indices (M~) holds
+      M~*(i,j) = (Det M)" * power(K).(-1_K,i+j) * Minor(M,j,i);
+
+theorem :: LAPLACE:37
+  for A be Matrix of n,K st Det A <> 0.K
+    for x,b be Matrix of K st len x = n & A * x = b holds
+      x = A~ * b &
+      for i,j st [i,j] in Indices x holds
+        x*(i,j) = (Det A)" * Det ReplaceCol(A,i,Col(b,j));
+
+theorem :: LAPLACE:38
+  for A be Matrix of n,K st Det A <> 0.K
+    for x,b be Matrix of K st width x = n & x * A = b holds
+      x = b * A~ &
+      for i,j st [i,j] in Indices x holds
+        x*(i,j) = (Det A)" * Det ReplaceLine(A,j,Line(b,i));
+
+begin :: Product by a vector
+
+definition
+  let D be non empty set;
+  let f be FinSequence of D;
+  redefine func <*f*> -> Matrix of 1,len f,D;
+end;
+
+definition
+  let K;
+  let M be Matrix of K;
+  let f be FinSequence of K;
+  func M * f -> Matrix of K equals
+:: LAPLACE:def 9
+    M * (<*f*>@);
+  func f * M -> Matrix of K equals
+:: LAPLACE:def 10
+    <*f*> * M;
+end;
+
+theorem :: LAPLACE:39
+  for A be Matrix of n,K st Det A <> 0.K
+    for x,b be FinSequence of K st len x = n & A * x = <*b*>@ holds
+      <*x*>@ = A~ * b &
+      for i st i in Seg n holds
+        x.i = (Det A)" * Det ReplaceCol(A,i,b);
+
+theorem :: LAPLACE:40
+  for A be Matrix of n,K st Det A <> 0.K
+    for x,b be FinSequence of K st len x = n & x * A = <*b*> holds
+      <*x*> = b * A~ &
+      for i st i in Seg n holds
+        x.i = (Det A)" * Det ReplaceLine(A,i,b);

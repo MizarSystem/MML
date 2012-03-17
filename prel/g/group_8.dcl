@@ -26,15 +26,12 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="32"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
-<Cluster>
-<Adjective nr="32"/>
-</Cluster>
+<Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>

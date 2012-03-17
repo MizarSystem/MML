@@ -22,13 +22,13 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GRAPH_1"/>
 <ArticleID name="GRAPH_2"/>
 <ArticleID name="TREES_1"/>
 <ArticleID name="TREES_2"/>
 <ArticleID name="AMI_1"/>
-<ArticleID name="AMI_3"/>
 <ArticleID name="SCMPDS_2"/>
 <ArticleID name="SCMPDS_3"/>
 </Signature>
@@ -36,28 +36,28 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="198">
+<Func kind="K" nr="209">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="21"/>
-<Adjective nr="65">
+<Adjective nr="66">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="70" value="false">
+<Adjective nr="71" value="false">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Adjective>
 </Cluster>
 </RCluster>
@@ -65,11 +65,11 @@
 <ArgTypes/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="198">
+<Func kind="K" nr="209">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Func>
 </Typ>
 <Cluster>
@@ -77,27 +77,27 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="21"/>
-<Adjective nr="70">
+<Adjective nr="71">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="71"/>
+<Adjective nr="74"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="252"/>
+<Func kind="K" nr="256"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="70">
+<Adjective nr="71">
 <Func kind="K" nr="1">
 <Func kind="K" nr="65"/>
 </Func>
-<Func kind="K" nr="229"/>
+<Func kind="K" nr="233"/>
 </Adjective>
-<Adjective nr="71"/>
+<Adjective nr="74"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -9,16 +9,16 @@ environ
  vocabularies INT_1, AMI_2, BOOLE, GR_CY_1, TARSKI, FINSEQ_1, AMI_5, MCART_1,
       FUNCT_1, FUNCOP_1, FUNCT_4, CAT_1, RELAT_1, AMI_3, AMI_1, ORDINAL2,
       CARD_3, ZF_REFLE, PBOOLE, ABSVALUE, FINSEQ_2, FUNCT_2, FUNCT_5, SCMFSA_1,
-      FINSEQ_4, ARYTM, NAT_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, NAT_1,
-      MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FRAENKEL,
-      INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSOP_1, CARD_1, CARD_3, FUNCOP_1,
-      FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7, XXREAL_0;
+      FINSEQ_4, ARYTM, NAT_1, ARYTM_1, CARD_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      NAT_1, MCART_1, INT_2, PBOOLE, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
+      FRAENKEL, INT_1, FINSEQ_1, FUNCT_4, CAT_2, FINSOP_1, CARD_1, CARD_3,
+      FUNCOP_1, FINSEQ_4, AMI_1, AMI_2, AMI_3, FUNCT_7, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, FINSEQ_4, FINSOP_1, PBOOLE,
-      FUNCT_7, CAT_2, AMI_2, AMI_3;
+      FUNCT_7, CAT_2, AMI_2, AMI_3, INT_1, REAL_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FUNCOP_1, ARYTM_3, FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3,
-      PBOOLE, GR_CY_1, AMI_2, AMI_3, AFINSQ_1;
+      PBOOLE, GR_CY_1, AMI_2, AMI_3, AFINSQ_1, RELAT_1, FINSET_1, CARD_4;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -33,19 +33,35 @@ notation
 end;
 
 definition
-  redefine func SCM+FSA-Data-Loc -> Subset of INT;
+  func SCM+FSA-Data*-Loc equals
+:: SCMFSA_1:def 1
+   INT \ NAT;
 end;
 
 definition
-  canceled;
-  func SCM+FSA-Data*-Loc -> Subset of INT equals
+ func SCM+FSA-Memory equals
 :: SCMFSA_1:def 2
-  INT \ NAT;
+  SCM-Memory \/ SCM+FSA-Data*-Loc;
+end;
+
+registration
+ cluster SCM+FSA-Memory -> non empty;
+end;
+
+theorem :: SCMFSA_1:1
+ SCM-Memory c= SCM+FSA-Memory;
+
+definition
+  redefine func SCM+FSA-Data-Loc -> Subset of SCM+FSA-Memory;
+end;
+
+definition
+ redefine func SCM+FSA-Data*-Loc -> Subset of SCM+FSA-Memory;
   canceled;
 end;
 
 definition
-  redefine func SCM+FSA-Instr-Loc -> Subset of INT;
+  redefine func SCM+FSA-Instr-Loc -> Subset of SCM+FSA-Memory;
 end;
 
 registration
@@ -58,14 +74,13 @@ reserve J,K for Element of Segm 13,
         f,f1,f2 for Element of SCM+FSA-Data*-Loc;
 
 definition
- func SCM+FSA-Instr -> Subset of [: NAT, (union {INT,INT*} \/ INT)* :]
+ func SCM+FSA-Instr
+   -> Subset of [: NAT, (union {INT,INT*} \/ SCM+FSA-Memory)* :]
  equals
 :: SCMFSA_1:def 4
- SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } \/
+  SCM-Instr \/ { [J,<*c,f,b*>] : J in {9,10} } \/
                 { [K,<*c1,f1*>] : K in {11,12} };
 end;
-
-canceled;
 
 theorem :: SCMFSA_1:2
  SCM-Instr c= SCM+FSA-Instr;
@@ -84,30 +99,33 @@ theorem :: SCMFSA_1:3
   holds I in SCM-Instr;
 
 theorem :: SCMFSA_1:4
-    [0,{}] in SCM+FSA-Instr;
+     [0,{}] in SCM+FSA-Instr;
 
 definition
  canceled;
  func SCM+FSA-OK ->
-  Function of INT, {INT,INT*} \/ { SCM+FSA-Instr, SCM+FSA-Instr-Loc } equals
+  Function of SCM+FSA-Memory,
+         {INT,INT*} \/ { SCM+FSA-Instr, SCM+FSA-Instr-Loc } equals
 :: SCMFSA_1:def 6
- (INT --> INT*) +* SCM-OK +*
-              ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
+    (SCM+FSA-Memory --> INT*) +* SCM-OK +*
+       ((SCM-Instr.-->SCM+FSA-Instr)*(SCM-OK|SCM-Instr-Loc));
 end;
 
-canceled;
+theorem :: SCMFSA_1:5
+ NAT in SCM+FSA-Memory;
 
 theorem :: SCMFSA_1:6
-    x in {9,10} implies [x,<*c,f,b*>] in SCM+FSA-Instr;
+     x in {9,10} implies [x,<*c,f,b*>] in SCM+FSA-Instr;
 
 theorem :: SCMFSA_1:7
-    x in {11,12} implies [x,<*c,f*>] in SCM+FSA-Instr;
+     x in {11,12} implies [x,<*c,f*>] in SCM+FSA-Instr;
 
 theorem :: SCMFSA_1:8
- INT = {0} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc;
+ SCM+FSA-Memory
+  = {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc;
 
 theorem :: SCMFSA_1:9
- SCM+FSA-OK.0 = SCM+FSA-Instr-Loc;
+ SCM+FSA-OK.NAT = SCM+FSA-Instr-Loc;
 
 theorem :: SCMFSA_1:10
  SCM+FSA-OK.b = INT;
@@ -124,19 +142,19 @@ theorem :: SCMFSA_1:13
    SCM+FSA-Instr-Loc <> INT* & SCM+FSA-Instr <> INT*;
 
 theorem :: SCMFSA_1:14
-    for i being Integer st SCM+FSA-OK.i = SCM+FSA-Instr-Loc
-  holds i = 0;
+ for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = SCM+FSA-Instr-Loc
+  holds i = NAT;
 
 theorem :: SCMFSA_1:15
-    for i being Integer st SCM+FSA-OK.i = INT
+  for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = INT
   holds i in SCM+FSA-Data-Loc;
 
 theorem :: SCMFSA_1:16
-    for i being Integer st SCM+FSA-OK.i = SCM+FSA-Instr
+ for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = SCM+FSA-Instr
   holds i in SCM+FSA-Instr-Loc;
 
 theorem :: SCMFSA_1:17
-    for i being Integer st SCM+FSA-OK.i = INT*
+ for i being Element of SCM+FSA-Memory st SCM+FSA-OK.i = INT*
   holds i in SCM+FSA-Data*-Loc;
 
 definition
@@ -145,7 +163,7 @@ end;
 
 theorem :: SCMFSA_1:18
  for s being SCM+FSA-State, I being Element of SCM-Instr
-  holds s|NAT +* (SCM-Instr-Loc --> I) is SCM-State;
+  holds s|SCM-Memory +* (SCM-Instr-Loc --> I) is SCM-State;
 
 theorem :: SCMFSA_1:19
  for s being SCM+FSA-State, s' being SCM-State
@@ -154,14 +172,14 @@ theorem :: SCMFSA_1:19
 definition let s be SCM+FSA-State, u be Element of SCM+FSA-Instr-Loc;
  func SCM+FSA-Chg(s,u) -> SCM+FSA-State equals
 :: SCMFSA_1:def 7
-  s +* (0 .--> u);
+   s +* (NAT .--> u);
 end;
 
 definition
  let s be SCM+FSA-State, t be Element of SCM+FSA-Data-Loc, u be Integer;
  func SCM+FSA-Chg(s,t,u) -> SCM+FSA-State equals
 :: SCMFSA_1:def 8
-  s +* (t .--> u);
+   s +* (t .--> u);
 end;
 
 definition
@@ -169,7 +187,7 @@ definition
      u be FinSequence of INT;
  func SCM+FSA-Chg(s,t,u) -> SCM+FSA-State equals
 :: SCMFSA_1:def 9
-  s +* (t .--> u);
+   s +* (t .--> u);
 end;
 
 definition let s be SCM+FSA-State, a be Element of SCM+FSA-Data-Loc;
@@ -186,13 +204,13 @@ definition let x be Element of SCM+FSA-Instr;
  x = [ J, <*c,f,b*>];
  func x int_addr1 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 10
-      ex c,f,b st <*c,f,b*> = x`2 & it = c;
+       ex c,f,b st <*c,f,b*> = x`2 & it = c;
  func x int_addr2 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 11
-      ex c,f,b st <*c,f,b*> = x`2 & it = b;
+       ex c,f,b st <*c,f,b*> = x`2 & it = b;
  func x coll_addr1 -> Element of SCM+FSA-Data*-Loc means
 :: SCMFSA_1:def 12
-      ex c,f,b st <*c,f,b*> = x`2 & it = f;
+       ex c,f,b st <*c,f,b*> = x`2 & it = f;
 end;
 
 definition let x be Element of SCM+FSA-Instr;
@@ -200,24 +218,24 @@ definition let x be Element of SCM+FSA-Instr;
  x = [ J, <*c,f*>];
  func x int_addr3 -> Element of SCM+FSA-Data-Loc means
 :: SCMFSA_1:def 13
-      ex c,f st <*c,f*> = x`2 & it = c;
+       ex c,f st <*c,f*> = x`2 & it = c;
  func x coll_addr2 -> Element of SCM+FSA-Data*-Loc means
 :: SCMFSA_1:def 14
-     ex c,f st <*c,f*> = x`2 & it = f;
+      ex c,f st <*c,f*> = x`2 & it = f;
 canceled;
 end;
 
 definition let s be SCM+FSA-State;
  func IC(s) -> Element of SCM+FSA-Instr-Loc equals
 :: SCMFSA_1:def 16
-      s.0;
+       s.NAT;
 end;
 
 definition let x be Element of SCM+FSA-Instr, s be SCM+FSA-State;
  func SCM+FSA-Exec-Res(x,s) -> SCM+FSA-State means
 :: SCMFSA_1:def 17
-      ex x' being Element of SCM-Instr, s' being SCM-State st
-    x = x' & s' = s|NAT +* (SCM-Instr-Loc --> x')
+       ex x' being Element of SCM-Instr, s' being SCM-State st
+    x = x' & s' = s|SCM-Memory +* (SCM-Instr-Loc --> x')
            & it = s +* SCM-Exec-Res(x',s') +* s|SCM+FSA-Instr-Loc
       if InsCode x <= 8,
  ex i being Integer, k st k = abs(s.(x int_addr2)) & i = (s.(x coll_addr1))/.k
@@ -240,76 +258,79 @@ definition
   Function of SCM+FSA-Instr, Funcs(product SCM+FSA-OK, product SCM+FSA-OK)
          means
 :: SCMFSA_1:def 18
-     for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
+      for x being Element of SCM+FSA-Instr, y being SCM+FSA-State holds
     (it.x qua Element of Funcs(product SCM+FSA-OK, product SCM+FSA-OK)).y =
     SCM+FSA-Exec-Res(x,y);
 end;
 
 theorem :: SCMFSA_1:20
-    for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc
-  holds SCM+FSA-Chg(s,u).0 = u;
+     for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc
+  holds SCM+FSA-Chg(s,u).NAT = u;
 
 theorem :: SCMFSA_1:21
-    for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
+     for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
      mk being Element of SCM+FSA-Data-Loc
   holds SCM+FSA-Chg(s,u).mk = s.mk;
 
 theorem :: SCMFSA_1:22
-    for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
+     for s being SCM+FSA-State, u being Element of SCM+FSA-Instr-Loc,
      p being Element of SCM+FSA-Data*-Loc
   holds SCM+FSA-Chg(s,u).p = s.p;
 
 theorem :: SCMFSA_1:23
-    for s being SCM+FSA-State, u,v being Element of SCM+FSA-Instr-Loc
+     for s being SCM+FSA-State, u,v being Element of SCM+FSA-Instr-Loc
   holds SCM+FSA-Chg(s,u).v = s.v;
 
 theorem :: SCMFSA_1:24
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data-Loc, u being Integer
-  holds SCM+FSA-Chg(s,t,u).0 = s.0;
+  holds SCM+FSA-Chg(s,t,u).NAT = s.NAT;
 
 theorem :: SCMFSA_1:25
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data-Loc, u being Integer
   holds SCM+FSA-Chg(s,t,u).t = u;
 
 theorem :: SCMFSA_1:26
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data-Loc, u being Integer,
      mk being Element of SCM+FSA-Data-Loc st mk <> t
   holds SCM+FSA-Chg(s,t,u).mk = s.mk;
 
 theorem :: SCMFSA_1:27
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data-Loc, u being Integer,
      f being Element of SCM+FSA-Data*-Loc
   holds SCM+FSA-Chg(s,t,u).f = s.f;
 
 theorem :: SCMFSA_1:28
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data-Loc, u being Integer,
      v being Element of SCM+FSA-Instr-Loc
   holds SCM+FSA-Chg(s,t,u).v = s.v;
 
 theorem :: SCMFSA_1:29
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT
   holds SCM+FSA-Chg(s,t,u).t = u;
 
 theorem :: SCMFSA_1:30
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
      mk being Element of SCM+FSA-Data*-Loc st mk <> t
   holds SCM+FSA-Chg(s,t,u).mk = s.mk;
 
 theorem :: SCMFSA_1:31
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
      a being Element of SCM+FSA-Data-Loc
   holds SCM+FSA-Chg(s,t,u).a = s.a;
 
 theorem :: SCMFSA_1:32
-    for s being SCM+FSA-State,
+     for s being SCM+FSA-State,
      t being Element of SCM+FSA-Data*-Loc, u being FinSequence of INT,
      v being Element of SCM+FSA-Instr-Loc
   holds SCM+FSA-Chg(s,t,u).v = s.v;
+
+theorem :: SCMFSA_1:33
+ SCM+FSA-Data*-Loc misses SCM-Memory;

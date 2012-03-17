@@ -14,13 +14,14 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, DOMAIN_1, ORDINAL1, FINSET_1,
       RELAT_1, NUMBERS, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0, FUNCSDOM,
       FUNCOP_1, XCMPLX_0, NAT_1, RLVECT_1, FUNCT_4, CARD_3, FUNCT_7, GROUP_1,
-      BINARITH, AMI_1, AMI_2, AMI_3, AMI_5, SCMRING1, SCMRING2, AMISTD_1,
-      AMISTD_2, SCMRING3, XXREAL_0;
+      BINARITH, AMI_1, AMI_2, AMI_3, SCMRING1, SCMRING2, AMISTD_1, AMISTD_2,
+      SCMRING3, XXREAL_0;
  constructors WELLORD2, XXREAL_0, NAT_1, BINARITH, FUNCT_7, REALSET2, AMI_5,
       AMISTD_2, SCMRING3;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1,
       ARYTM_3, FRAENKEL, XREAL_0, NAT_1, FINSEQ_1, CARD_3, REALSET1, CARD_4,
-      STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING1, SCMRING2, AMISTD_2, SCMRING3;
+      STRUCT_0, AMI_1, AMI_3, AMI_5, SCMRING1, SCMRING2, AMISTD_2, SCMRING3,
+      FINSET_1, AMI_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -54,11 +55,11 @@ definition
       k be natural number;
  func loc -' k -> Instruction-Location of S equals
 :: SCMRING4:def 1
-  il.(S, (locnum loc) -' k);
+   il.(S, (locnum loc) -' k);
 end;
 
 theorem :: SCMRING4:3
-   l -' 0 = l;
+    l -' 0 = l;
 
 canceled;
 
@@ -93,7 +94,7 @@ theorem :: SCMRING4:11
   l in dom f implies Shift(f,k).(l + k) = f.l;
 
 theorem :: SCMRING4:12
-   dom Shift(f,k) =
+    dom Shift(f,k) =
     { il+k where il is Instruction-Location of S: il in dom f};
 
 theorem :: SCMRING4:13
@@ -120,19 +121,19 @@ theorem :: SCMRING4:14
   the carrier of SCM R = {IC SCM R} \/ SCM-Data-Loc \/ SCM-Instr-Loc;
 
 theorem :: SCMRING4:15
-   ObjectKind loc = SCM-Instr R;
+    ObjectKind loc = SCM-Instr R;
 
 theorem :: SCMRING4:16
-  dl.(R,n) = 2*n + 1;
+  dl.(R,n) = [1,n];
 
 theorem :: SCMRING4:17
-   il.(SCM R,k) = 2*k + 2;
+    il.(SCM R,k) = k;
 
 theorem :: SCMRING4:18
-   for dl being Data-Location of R ex i being Element of NAT st dl = dl.(R,i);
+    for dl being Data-Location of R ex i being Element of NAT st dl = dl.(R,i);
 
 theorem :: SCMRING4:19
-   for i,j being Element of NAT holds i <> j implies dl.(R,i) <> dl.(R,j);
+    for i,j being Element of NAT holds i <> j implies dl.(R,i) <> dl.(R,j);
 
 theorem :: SCMRING4:20
   a <> loc;
@@ -144,22 +145,22 @@ theorem :: SCMRING4:22
   dom (s|SCM-Data-Loc) = SCM-Data-Loc;
 
 theorem :: SCMRING4:23
-   p = q implies DataPart p = DataPart q;
+    p = q implies DataPart p = DataPart q;
 
 theorem :: SCMRING4:24
   DataPart p = p | SCM-Data-Loc;
 
 theorem :: SCMRING4:25
-   p is data-only iff dom p c= SCM-Data-Loc;
+    p is data-only iff dom p c= SCM-Data-Loc;
 
 theorem :: SCMRING4:26
   dom DataPart p c= SCM-Data-Loc;
 
 theorem :: SCMRING4:27
-   SCM-Instr-Loc c= dom s;
+    SCM-Instr-Loc c= dom s;
 
 theorem :: SCMRING4:28
-   p = q implies ProgramPart p = ProgramPart q;
+    p = q implies ProgramPart p = ProgramPart q;
 
 theorem :: SCMRING4:29
   dom ProgramPart p c= SCM-Instr-Loc;
@@ -212,7 +213,7 @@ theorem :: SCMRING4:38
    IC SCM R in dom p;
 
 theorem :: SCMRING4:39
-   for p being autonomic FinPartState of SCM R st IC SCM R in dom p holds
+    for p being autonomic FinPartState of SCM R st IC SCM R in dom p holds
    IC p in dom p;
 
 theorem :: SCMRING4:40
@@ -275,7 +276,7 @@ definition
       p be FinPartState of S;
  func Relocated (p,k) -> FinPartState of S equals
 :: SCMRING4:def 2
-  Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p;
+   Start-At ((IC p)+k) +* IncAddr(Shift(ProgramPart(p),k),k) +* DataPart p;
 end;
 
 reserve
@@ -355,7 +356,7 @@ theorem :: SCMRING4:60
    p is halting iff Relocated (p,k) is halting;
 
 theorem :: SCMRING4:61
-   R is non trivial implies
+    R is non trivial implies
   for p being autonomic FinPartState of SCM R st IC SCM R in dom p & p c= s
   for i being Element of NAT holds
     (Computation (s +* Relocated (p,k))).i
@@ -392,7 +393,7 @@ theorem :: SCMRING4:65
   DataPart Result p = DataPart Result Relocated(p,k);
 
 theorem :: SCMRING4:66
-   R is non trivial implies
+    R is non trivial implies
   for F being PartFunc of FinPartSt SCM R, FinPartSt SCM R
    st IC SCM R in dom p & F is data-only holds
   p computes F iff Relocated (p,k) computes F;

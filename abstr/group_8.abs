@@ -26,7 +26,6 @@ begin
  reserve G for strict Group,
          a,b,x,y,z for Element of G,
          H,K for strict Subgroup of G,
-
          p for Element of NAT,
          A for Subset of G;
 
@@ -35,36 +34,41 @@ theorem :: GROUP_8:1
   ex a st ord a = p;
 
 theorem :: GROUP_8:2
-for a1,a2 being Element of H
+for G being Group, H being Subgroup of G, a1,a2 being Element of H
 for b1,b2 being Element of G st a1 = b1 & a2 = b2
  holds a1*a2 = b1*b2;
 
 theorem :: GROUP_8:3
-for a being Element of H
+for G being Group, H being Subgroup of G,
+    a being Element of H
 for b being Element of G st a = b
 for n being Element of NAT
  holds a|^n = b|^n;
 
 theorem :: GROUP_8:4
-for a being Element of H
+for G being Group, H being Subgroup of G,
+    a being Element of H
 for b being Element of G st a = b
 for i being Integer
  holds a|^i = b|^i;
 
 theorem :: GROUP_8:5
-for a being Element of H
-for b being Element of G st a = b & G is finite
+ for G being Group, H being Subgroup of G,
+     a being Element of H
+ for b being Element of G st a = b & G is finite
  holds ord a = ord b;
 
 theorem :: GROUP_8:6
-for h being Element of G st
-    h in H holds   H  * h c= the carrier of H;
+ for G being Group, H being Subgroup of G,
+     h being Element of G st
+   h in H holds H * h c= the carrier of H;
 
 theorem :: GROUP_8:7
-  for a st a <> 1_G holds gr {a} <> (1).G;
+  for G being Group
+  for a being Element of G st a <> 1_G holds gr {a} <> (1).G;
 
 theorem :: GROUP_8:8
-for m being Integer holds (1_G) |^ m = 1_G;
+  for G being Group, m being Integer holds (1_G) |^ m = 1_G;
 
 theorem :: GROUP_8:9
 for m being Integer holds a |^ (m * ord a) = 1_G;
@@ -81,29 +85,29 @@ b is_of_order_0 implies b" is_of_order_0;
 
 theorem :: GROUP_8:13
 b is_of_order_0 iff
-for n being Integer holds b |^n = 1_G implies n = 0;
+for n being Integer st b |^n = 1_G holds n = 0;
 
 theorem :: GROUP_8:14
-for G st ex a st a <> 1_G holds
+ for G st ex a st a <> 1_G holds
 (for H holds H = G or H = (1).G) iff
 G is cyclic Group & G is finite & ex p being Element of NAT
 st ord G = p & p is prime;
 
 theorem :: GROUP_8:15
-  for x,y,z being Element of G
+  for G being Group, x,y,z being Element of G
   for A being Subset of G holds
   z in x * A * y iff ex a being Element of G st
     z = x * a * y & a in A;
 
 theorem :: GROUP_8:16
-  for A being non empty Subset of G holds
+  for G being Group, A being non empty Subset of G holds
   for x being Element of G holds
   Card A = Card (x" * A * x);
 
 definition let G, H, K;
   func Double_Cosets (H, K) -> Subset-Family of G means
 :: GROUP_8:def 1
-    A in it iff ex a st A = H * a * K;
+     A in it iff ex a st A = H * a * K;
 end;
 
 theorem :: GROUP_8:17
@@ -114,15 +118,15 @@ theorem :: GROUP_8:18
   for H, K holds H * x * K = H * y * K or
     not ex z st z in H * x * K & z in H * y * K;
 
- reserve
-         B, A for strict Subgroup of G,
-         D for strict Subgroup of A;
+ reserve G for Group;
+ reserve H, B, A for Subgroup of G,
+         D for Subgroup of A;
 
 registration let G,A;
   cluster Left_Cosets A -> non empty;
 end;
 
-notation let G;
+notation let G be Group;
   let H be Subgroup of G;
   synonym index (G,H) for index H;
 end;
@@ -135,22 +139,19 @@ theorem :: GROUP_8:20
 G is finite implies index (G,H) > 0;
 
 theorem :: GROUP_8:21
-for G being strict Group st G is finite
-for C being strict Subgroup of G
-for A,B being strict Subgroup of C st C = A "\/" B
-for D being strict Subgroup of A st D = A /\ B
-for E being strict Subgroup of B st E = A /\ B
-for F being strict Subgroup of C st F = A /\ B
-holds
+ for G being Group st G is finite
+for C being Subgroup of G
+for A,B being Subgroup of C st C = A "\/" B
+for D being Subgroup of A st D = A /\ B
+for E being Subgroup of B st E = A /\ B
+for F being Subgroup of C st F = A /\ B holds
   Left_Cosets(B) is finite & Left_Cosets(A) is finite &
   index (C,A), index (C,B) are_relative_prime
 implies index (C,B) = index (A,D) & index (C,A) = index (B,E);
 
 theorem :: GROUP_8:22
-for a being Element of G holds a in H implies
+for a being Element of G st a in H holds
 for j being Integer holds a |^ j in H;
-
-
 
 theorem :: GROUP_8:23
   for G being strict Group st G <> (1).G
@@ -158,11 +159,11 @@ theorem :: GROUP_8:23
 
 theorem :: GROUP_8:24
 for G being strict Group
-for a being Element of G st G = gr{a} & G <> (1).G
+for a being Element of G st G = gr{a}
 for H being strict Subgroup of G st H <> (1).G holds
 ex k being Element of NAT st 0 < k & a |^k in H;
 
 theorem :: GROUP_8:25
-  for G being strict cyclic Group st G <> (1).G
-  for H being strict Subgroup of G st H <> (1).G holds
-  H is cyclic Group;
+  for G being strict cyclic Group
+  for H being strict Subgroup of G holds
+    H is cyclic Group;

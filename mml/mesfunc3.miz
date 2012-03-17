@@ -22,7 +22,7 @@ environ
       MESFUNC2, CONVFUN1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQ_1, SEQ_1, SUPINF_2,
-      MEASURE1;
+      MEASURE1, FINSET_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, BINOP_1, SUPINF_2;
  theorems MEASURE1, TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1, REAL_1,
@@ -68,11 +68,11 @@ proof
    holds Sum(p)=Sum(q);
  A1: P[0]
  proof
- now
+  now
  let m be Nat, a be Function of [: Seg 0, Seg m :],REAL;
  let p,q be FinSequence of REAL such that
         A2:  dom p=Seg 0 and
-           for i be Nat st i in dom p
+            for i be Nat st i in dom p
                 holds ex r be FinSequence of REAL st
                      (dom(r) = Seg m & p.i=Sum(r)
                      & for j be Nat st j in dom(r) holds r.j=a.[i,j]) and
@@ -84,89 +84,88 @@ proof
 reconsider m as Element of NAT by ORDINAL1:def 13;
 thus Sum(p)=Sum(q)
 proof
- len p = 0 by A2,FINSEQ_1:def 3; then
- A5: Sum(p)=0 by FINSEQ_1:32,RVSUM_1:102;
- A6: q = dom q --> 0
+  len p = 0 by A2,FINSEQ_1:def 3;
+ then A5: Sum(p)=0 by FINSEQ_1:32,RVSUM_1:102;
+  q = dom q --> 0
     proof
-     now let z be set;
+      now let z be set;
      assume
-     A7: z in dom q;
-        z in { k where k is Element of NAT : 1 <= k & k <= m }
-        by A3,A7,FINSEQ_1:def 1; then
-        consider k be Element of NAT such that
-            A8:z=k & 1 <= k & k <= m;
-          reconsider j=z as Nat by A8;
+     A6: z in dom q;
+        then z in { k where k is Element of NAT : 1 <= k & k <= m }
+        by A3,FINSEQ_1:def 1;
+        then consider k be Element of NAT such that
+            A7:z=k & 1 <= k & k <= m;
+          reconsider j=z as Nat by A7;
         consider s be FinSequence of REAL such that
-           A9: dom(s) = Seg 0 and
-           A10: q.j=Sum(s) and
-            for i be Nat st i in dom(s) holds s.i=a.[i,j] by A4,A7;
-          len s = 0 by A9,FINSEQ_1:def 3;
-          hence q.z=0 by A10,FINSEQ_1:32,RVSUM_1:102;
+           A8: dom(s) = Seg 0 and
+           A9: q.j=Sum(s) and
+             for i be Nat st i in dom(s) holds s.i=a.[i,j] by A4,A6;
+           len s = 0 by A8,FINSEQ_1:def 3;
+          hence q.z=0 by A9,FINSEQ_1:32,RVSUM_1:102;
          end;
     hence q = dom q --> 0 by FUNCOP_1:17;
     end;
-    q= m |-> 0 by A3,A6,FINSEQ_2:def 2;
+    then q= m |-> 0 by A3,FINSEQ_2:def 2;
  hence Sum(p)=Sum(q) by A5,RVSUM_1:111;
  end;
 end;
  hence thesis;
   end;
- A11: for n be Nat st P[n] holds P[n+1]
+ A10: for n be Nat st P[n] holds P[n+1]
  proof
  let n be Nat such that
-A12:P[n];
+A11:P[n];
     reconsider n as Element of NAT by ORDINAL1:def 13;
-  now
+   now
    let m be Nat, a be Function of [:Seg (n+1),Seg m :],REAL;
    let p,q be FinSequence of REAL such that
-        A13: (dom p=Seg (n+1) & for i be Nat st i in dom p
+        A12: (dom p=Seg (n+1) & for i be Nat st i in dom p
                  holds ex r be FinSequence of REAL st
                      (dom(r) = Seg m & p.i=Sum(r)
                      & for j be Nat st j in dom(r) holds r.j=a.[i,j])) and
-        A14: (dom q=Seg m
+        A13: (dom q=Seg m
                  & for j be Nat st j in dom q
                  holds ex s be FinSequence of REAL st
                      (dom s = Seg (n+1) & q.j=Sum s
                      & for i be Nat st i in dom s holds s.i=a.[i,j] ) );
        set a0=a| [:Seg n, Seg m :];
-        n <= n+1 by NAT_1:11; then
-        Seg n c= Seg (n+1) by FINSEQ_1:7; then
-        [:Seg n,Seg m:] c= [:Seg (n+1),Seg m:] by ZFMISC_1:118; then
-    reconsider a0 as Function of [:Seg n,Seg m :],REAL by FUNCT_2:38;
+         n <= n+1 by NAT_1:11;
+        then Seg n c= Seg (n+1) by FINSEQ_1:7;
+        then [:Seg n,Seg m:] c= [:Seg (n+1),Seg m:] by ZFMISC_1:118;
+    then reconsider a0 as Function of [:Seg n,Seg m :],REAL by FUNCT_2:38;
     reconsider p0= p | (Seg n) as FinSequence of REAL by FINSEQ_1:23;
-      A15: ( dom p0=Seg n & for i be Nat st i in dom p0
+      A14: ( dom p0=Seg n & for i be Nat st i in dom p0
                     holds ex r be FinSequence of REAL st
                         (dom r = Seg m & p0.i=Sum r
                         & for j be Nat st j in dom(r) holds r.j=a0.[i,j]))
       proof
-       len p=n+1 by A13,FINSEQ_1:def 3;
+        len p=n+1 by A12,FINSEQ_1:def 3;
        then n <= len p by NAT_1:11;
-       hence
-       A16: dom p0=Seg n by FINSEQ_1:21;
-       now let i be Nat such that
-         A17: i in dom p0;
-         i in dom p by A13,A16,A17,FINSEQ_2:9;
+       hence A15: dom p0=Seg n by FINSEQ_1:21;
+        now let i be Nat such that
+         A16: i in dom p0;
+          i in dom p by A12,A15,A16,FINSEQ_2:9;
          then consider r be FinSequence of REAL such that
-               A18: dom(r) = Seg m and
-               A19: p.i=Sum(r) and
-               A20: for j be Nat st j in dom(r) holds r.j=a.[i,j] by A13;
+               A17: dom(r) = Seg m and
+               A18: p.i=Sum(r) and
+               A19: for j be Nat st j in dom(r) holds r.j=a.[i,j] by A12;
             take r;
-            thus dom(r) = Seg m by A18;
-            thus p0.i = Sum(r) by A17,A19,FUNCT_1:70;
+            thus dom(r) = Seg m by A17;
+            thus p0.i = Sum(r) by A16,A18,FUNCT_1:70;
             thus for j be Nat st j in dom(r) holds r.j=a0.[i,j]
             proof
             let j be Nat such that
-               A21: j in dom(r);
-               A22: [i,j] in [:Seg n,Seg m:]
-               by A16,A17,A18,A21,ZFMISC_1:106;
-               n <= n+1 by NAT_1:11; then
-               A23: Seg n c= Seg (n+1) by FINSEQ_1:7;
-               dom a= [:Seg (n+1),Seg m:] by FUNCT_2:def 1; then
-               A24: dom a0 = [:Seg (n+1),Seg m:]
+               A20: j in dom(r);
+               A21: [i,j] in [:Seg n,Seg m:]
+               by A15,A16,A17,A20,ZFMISC_1:106;
+                n <= n+1 by NAT_1:11;
+               then A22: Seg n c= Seg (n+1) by FINSEQ_1:7;
+                dom a= [:Seg (n+1),Seg m:] by FUNCT_2:def 1;
+               then A23: dom a0 = [:Seg (n+1),Seg m:]
                            /\ [:Seg n,Seg m:] by FUNCT_1:68
-                          .= [:Seg n,Seg m:] by A23,ZFMISC_1:124;
-               thus r.j=a.[i,j] by A20,A21
-                     .=a0.[i,j] by A22,A24,FUNCT_1:70;
+                          .= [:Seg n,Seg m:] by A22,ZFMISC_1:124;
+               thus r.j=a.[i,j] by A19,A20
+                     .=a0.[i,j] by A21,A23,FUNCT_1:70;
             end;
        end;
        hence thesis;
@@ -174,106 +173,104 @@ A12:P[n];
  deffunc F(Nat)=a.[n+1,$1];
 reconsider m as Element of NAT by ORDINAL1:def 13;
  consider an be FinSequence such that
-A25: len an=m &
+A24: len an=m &
      for j be Element of NAT st j in Seg(m) holds an.j=F(j)
      from FINSEQ_1:sch 2;
- an is FinSequence of REAL
+  an is FinSequence of REAL
  proof
- now let i be Element of NAT;
-   assume i in dom an; then
-   i in Seg m by A25,FINSEQ_1:def 3; then
-   an.i = a.[n+1,i] by A25;
+  now let i be Element of NAT;
+   assume i in dom an;
+   then i in Seg m by A24,FINSEQ_1:def 3;
+   then an.i = a.[n+1,i] by A24;
    hence an.i in REAL;
 end;
 hence thesis by FINSEQ_2:14;
  end;
  then reconsider an as FinSequence of REAL;
-   A26:  dom an=Seg m by A25,FINSEQ_1:def 3;
-   A27:  Sum(an) = p.(n+1)
+   A25:  dom an=Seg m by A24,FINSEQ_1:def 3;
+   A26:  Sum(an) = p.(n+1)
    proof
-    n+1 in dom p by A13,FINSEQ_1:6;
+     n+1 in dom p by A12,FINSEQ_1:6;
     then consider r be FinSequence of REAL such that
-     A28: dom(r) = Seg m and
-     A29: p.(n+1)=Sum(r) and
-     A30: for j be Nat st j in dom(r) holds r.j=a.[n+1,j] by A13;
-     now let j be Element of NAT;
-     assume A31:j in dom r;
-     hence r.j=a.[n+1,j] by A30
-        .=an.j by A25,A28,A31;
+     A27: dom(r) = Seg m and
+     A28: p.(n+1)=Sum(r) and
+     A29: for j be Nat st j in dom(r) holds r.j=a.[n+1,j] by A12;
+      now let j be Element of NAT;
+     assume A30:j in dom r;
+     hence r.j=a.[n+1,j] by A29
+        .=an.j by A24,A27,A30;
       end;
-     hence thesis by A26,A28,A29,FINSEQ_1:17;
+     hence thesis by A25,A27,A28,FINSEQ_1:17;
     end;
      reconsider q0=q-an as FinSequence of REAL;
-     A32: dom q0=Seg m & for j be Nat st j in dom q0
+     A31: dom q0=Seg m & for j be Nat st j in dom q0
                      holds ex s be FinSequence of REAL st
                          (dom s = Seg n
                          & q0.j=Sum(s)
                          & for i be Nat st i in dom(s) holds s.i=a0.[i,j] )
     proof
-A33: dom diffreal = [:REAL,REAL:] by FUNCT_2:def 1;
-A34: [:rng q, rng an:] c= dom diffreal by A33,ZFMISC_1:119;
-    rng <:q,an:> c= [:rng q, rng an:] by FUNCT_3:71; then
-A35: rng <:q,an:> c= dom diffreal by A34,XBOOLE_1:1;
-A36: dom (diffreal.:(q,an)) = dom(diffreal*<:q,an:>) by FUNCOP_1:def 3
-     .= dom <:q,an:> by A35,RELAT_1:46
+ dom diffreal = [:REAL,REAL:] by FUNCT_2:def 1;
+then A32: [:rng q, rng an:] c= dom diffreal by ZFMISC_1:119;
+     rng <:q,an:> c= [:rng q, rng an:] by FUNCT_3:71;
+then A33: rng <:q,an:> c= dom diffreal by A32,XBOOLE_1:1;
+ dom (diffreal.:(q,an)) = dom(diffreal*<:q,an:>) by FUNCOP_1:def 3
+     .= dom <:q,an:> by A33,RELAT_1:46
      .= dom q /\ dom an by FUNCT_3:def 8;
-    thus
-      A37: dom q0= dom q /\ dom an by A36,RVSUM_1:def 6
-                      .= Seg m  /\ Seg m by A14,A25,FINSEQ_1:def 3
+    hence A34: dom q0= dom q /\ dom an by RVSUM_1:def 6
+                      .= Seg m  /\ Seg m by A13,A24,FINSEQ_1:def 3
                       .= Seg m;
-     now let j be Nat such that
-            A38: j in dom q0;
+      now let j be Nat such that
+            A35: j in dom q0;
             consider s be FinSequence of REAL such that
-        A39: dom(s) = Seg (n+1) and
-        A40: q.j=Sum(s) and
-        A41: for i be Nat st i in dom(s) holds s.i=a.[i,j] by A14,A37,A38;
+        A36: dom(s) = Seg (n+1) and
+        A37: q.j=Sum(s) and
+        A38: for i be Nat st i in dom(s) holds s.i=a.[i,j] by A13,A34,A35;
             reconsider sn=s|Seg (n) as FinSequence of REAL by FINSEQ_1:23;
             take sn;
-            A42:len s = n+1 by A39,FINSEQ_1:def 3; then
-            n <= len s by NAT_1:11;
-            hence
-            A43: dom sn =Seg n by FINSEQ_1:21;
-              A44:  sn^<*(s.(n+1))*> = s by A42,FINSEQ_3:61;
-                n+1 in Seg (n+1) by FINSEQ_1:6; then
-                s.(n+1)=a.[n+1,j] by A39,A41; then
-            A45: s.(n+1)=an.j by A25,A37,A38;
-            A46: q.j-an.j=Sum(sn) +an.j-an.j by A40,A44,A45,RVSUM_1:104
+            A39:len s = n+1 by A36,FINSEQ_1:def 3;
+            then n <= len s by NAT_1:11;
+            hence A40: dom sn =Seg n by FINSEQ_1:21;
+              A41:  sn^<*(s.(n+1))*> = s by A39,FINSEQ_3:61;
+                 n+1 in Seg (n+1) by FINSEQ_1:6;
+                then s.(n+1)=a.[n+1,j] by A36,A38;
+            then s.(n+1)=an.j by A24,A34,A35;
+            then q.j-an.j=Sum(sn) +an.j-an.j by A37,A41,RVSUM_1:104
             .=Sum(sn);
-            thus q0.j = Sum(sn) by A38,A46,SEQ_1:def 4;
+            hence q0.j = Sum(sn) by A35,SEQ_1:def 4;
             thus for i be Nat st i in dom(sn) holds sn.i=a0.[i,j]
            proof
             let i be Nat such that
-               A47: i in dom(sn);
-               A48: [i,j] in [:Seg n,Seg m:]
-               by A37,A38,A43,A47,ZFMISC_1:106;
-               n <= n+1 by NAT_1:11; then
-               A49: Seg n c= Seg (n+1) by FINSEQ_1:7;
-               dom a= [:Seg (n+1),Seg m:] by FUNCT_2:def 1; then
-               A50: dom a0 = [:Seg (n+1),Seg m:]
+               A42: i in dom(sn);
+               A43: [i,j] in [:Seg n,Seg m:]
+               by A34,A35,A40,A42,ZFMISC_1:106;
+                n <= n+1 by NAT_1:11;
+               then A44: Seg n c= Seg (n+1) by FINSEQ_1:7;
+                dom a= [:Seg (n+1),Seg m:] by FUNCT_2:def 1;
+               then A45: dom a0 = [:Seg (n+1),Seg m:]
                            /\ [:Seg n,Seg m:] by FUNCT_1:68
-                          .= [:Seg n,Seg m:] by A49,ZFMISC_1:124;
-                thus sn.i=s.i by A47,FUNCT_1:70
-                     .=a.[i,j] by A39,A41,A43,A47,A49
-                     .=a0.[i,j] by A48,A50,FUNCT_1:70;
+                          .= [:Seg n,Seg m:] by A44,ZFMISC_1:124;
+                thus sn.i=s.i by A42,FUNCT_1:70
+                     .=a.[i,j] by A36,A38,A40,A42,A44
+                     .=a0.[i,j] by A43,A45,FUNCT_1:70;
             end;
         end;
        hence thesis;
     end;
-    len p=n+1 by A13,FINSEQ_1:def 3; then
-A51: p0^<*Sum(an)*> = p by A27,FINSEQ_3:61;
-    len q0=m by A32,FINSEQ_1:def 3; then
-A52: q0 is Element of m-tuples_on REAL by FINSEQ_2:110;
-A53: an is Element of m-tuples_on REAL by A25,FINSEQ_2:110;
-   len q=m by A14,FINSEQ_1:def 3; then
-A54: q is Element of m-tuples_on REAL by FINSEQ_2:110;
-A55:  q0+an=q by A53,A54,RVSUM_1:64;
-   thus Sum(p) = Sum(p0)+Sum(an) by A51,RVSUM_1:104
-   .=Sum(q0)+Sum(an) by A12,A15,A32
-   .=Sum(q) by A52,A53,A55,RVSUM_1:119;
+     len p=n+1 by A12,FINSEQ_1:def 3;
+then A46: p0^<*Sum(an)*> = p by A26,FINSEQ_3:61;
+     len q0=m by A31,FINSEQ_1:def 3;
+then A47: q0 is Element of m-tuples_on REAL by FINSEQ_2:110;
+A48: an is Element of m-tuples_on REAL by A24,FINSEQ_2:110;
+    len q=m by A13,FINSEQ_1:def 3;
+then q is Element of m-tuples_on REAL by FINSEQ_2:110;
+then A49:  q0+an=q by A48,RVSUM_1:64;
+   thus Sum(p) = Sum(p0)+Sum(an) by A46,RVSUM_1:104
+   .=Sum(q0)+Sum(an) by A11,A14,A31
+   .=Sum(q) by A47,A48,A49,RVSUM_1:119;
    end;
    hence thesis;
   end;
- thus for n be Nat holds P[n] from NAT_1:sch 2(A1,A11);
+ thus for n be Nat holds P[n] from NAT_1:sch 2(A1,A10);
 end;
 
 theorem Th2:
@@ -292,9 +289,9 @@ A2:P[0]
      let G be FinSequence of ExtREAL, g be FinSequence of REAL;
      assume
 A3: G=F|(Seg 0) & g = f|(Seg 0) & 0 <= len F;
-     0 <= len F & 0 <= len f; then
-     len G = 0 & len g = 0 by A3,FINSEQ_1:21; then
-     G = <*>ExtREAL & g=<*>REAL by FINSEQ_1:32;
+      0 <= len F & 0 <= len f;
+     then len G = 0 & len g = 0 by A3,FINSEQ_1:21;
+     then G = <*>ExtREAL & g=<*>REAL by FINSEQ_1:32;
      hence thesis by CONVFUN1:4,RVSUM_1:102;
    end;
 A4:for k be Nat st P[k] holds P[k+1]
@@ -302,14 +299,14 @@ A4:for k be Nat st P[k] holds P[k+1]
      let k be Nat;
      assume
 A5:  P[k];
-     for G be FinSequence of ExtREAL, g be FinSequence of REAL st
+      for G be FinSequence of ExtREAL, g be FinSequence of REAL st
       G = F|(Seg (k+1)) & g = f|(Seg (k+1)) & k+1 <= len F holds
        Sum(G) = Sum(g)
      proof
        let G be FinSequence of ExtREAL, g be FinSequence of REAL;
        assume
-A6:    G = F|(Seg (k+1)) & g = f|(Seg (k+1)) & k+1 <= len F; then
-A7:   len G = k+1 & dom G = Seg (k+1) by FINSEQ_1:21;
+A6:    G = F|(Seg (k+1)) & g = f|(Seg (k+1)) & k+1 <= len F;
+then A7:   len G = k+1 & dom G = Seg (k+1) by FINSEQ_1:21;
        reconsider G1 = G|(Seg k) as FinSequence of ExtREAL by FINSEQ_1:23;
 A8:   G = G1^<*G.(k+1)*> by A7,FINSEQ_3:61;
        reconsider G2=<*G.(k+1)*> as FinSequence of ExtREAL;
@@ -317,31 +314,31 @@ A9:   len g = k+1 & dom g = Seg (k+1) by A1,A6,FINSEQ_1:21;
        reconsider g1 = g|(Seg k) as FinSequence of REAL by FINSEQ_1:23;
 A10:   g = g1^<*g.(k+1)*> by A9,FINSEQ_3:61;
        reconsider g2=<*g.(k+1)*> as FinSequence of REAL;
-       k <= k+1 by NAT_1:11; then
-       Seg k c= Seg (k+1) by FINSEQ_1:7; then
-A11:   G1 = F|(Seg k) & g1 = f|(Seg k) by A6,FUNCT_1:82;
-       k <= k+1 by NAT_1:11; then
-       k <= len F by A6,XXREAL_0:2; then
-A12:   Sum G1 = Sum g1 by A5,A11;
-       not -infty in rng G1 & not -infty in rng <*G.(k+1)*>
+        k <= k+1 by NAT_1:11;
+       then Seg k c= Seg (k+1) by FINSEQ_1:7;
+then A11:   G1 = F|(Seg k) & g1 = f|(Seg k) by A6,FUNCT_1:82;
+        k <= k+1 by NAT_1:11;
+       then k <= len F by A6,XXREAL_0:2;
+then A12:   Sum G1 = Sum g1 by A5,A11;
+        not -infty in rng G1 & not -infty in rng <*G.(k+1)*>
        proof
-         now assume A13: -infty in rng G1 or -infty in rng <*G.(k+1)*>;
-           rng g1 c= REAL & rng g2 c= REAL;
+          now assume A13: -infty in rng G1 or -infty in rng <*G.(k+1)*>;
+            rng g1 c= REAL & rng g2 c= REAL;
            hence contradiction by A1,A6,A13,XREAL_0:def 1;
          end;
          hence thesis;
-       end; then
-A14:  Sum G = Sum G1 + Sum (<*G.(k+1)*>) by A8,CONVFUN1:7
+       end;
+then A14:  Sum G = Sum G1 + Sum (<*G.(k+1)*>) by A8,CONVFUN1:7
             .= Sum G1 + G.(k+1) by CONVFUN1:5;
-       Sum g = Sum g1 + g.(k+1) by A10,RVSUM_1:104;
+        Sum g = Sum g1 + g.(k+1) by A10,RVSUM_1:104;
        hence Sum G = Sum g by A1,A6,A12,A14,SUPINF_2:1;
      end;
      hence thesis;
    end;
 A15:for k be Nat holds P[k] from NAT_1:sch 2(A2,A4);
-   F|(Seg len F) = F|(len F) & f|(len f) = f|(Seg len f)
-     by FINSEQ_1:def 15; then
-   F|(Seg len F) = F & f|(Seg len f) = f by FINSEQ_1:79;
+    F|(Seg len F) = F|(len F) & f|(len f) = f|(Seg len f)
+     by FINSEQ_1:def 15;
+   then F|(Seg len F) = F & f|(Seg len f) = f by FINSEQ_1:79;
    hence thesis by A1,A15;
 end;
 
@@ -362,38 +359,38 @@ proof
    let S be SigmaField of X;
    let f be PartFunc of X,ExtREAL;
    assume
-A1: f is_simple_func_in S;
-   consider F be Finite_Sep_Sequence of S such that
-A2: dom f = union rng F and
-A3: for n being Nat,x,y being Element of X st
-     n in dom F & x in F.n & y in F.n holds f.x = f.y by A1,MESFUNC2:def 5;
+ f is_simple_func_in S;
+   then consider F be Finite_Sep_Sequence of S such that
+A1: dom f = union rng F and
+A2: for n being Nat,x,y being Element of X st
+     n in dom F & x in F.n & y in F.n holds f.x = f.y by MESFUNC2:def 5;
    defpred P[Nat,Element of ExtREAL] means
    for x be set st x in F.$1 holds $2 = f.x;
-A4: for k be Element of NAT st k in Seg len F
+A3: for k be Element of NAT st k in Seg len F
     ex y be Element of ExtREAL st P[k,y]
    proof
      let k be Element of NAT;
-     assume k in Seg len F; then
-A5: k in dom F by FINSEQ_1:def 3; then
-A6: F.k in rng F by FUNCT_1:12;
-     now per cases;
-       case A7:F.k = {};
+     assume k in Seg len F;
+then A4: k in dom F by FINSEQ_1:def 3;
+then A5: F.k in rng F by FUNCT_1:12;
+      now per cases;
+       case A6:F.k = {};
          take y = 0.;
-         for x be set st x in F.k holds y = f.x by A7;
+          for x be set st x in F.k holds y = f.x by A6;
          hence thesis;
        end;
-       case F.k <> {}; then
-         consider x1 be set such that
-A8:      x1 in F.k by XBOOLE_0:def 1;
+       case F.k <> {};
+         then consider x1 be set such that
+A7:      x1 in F.k by XBOOLE_0:def 1;
          take y = f.x1;
-         for x be set st x in F.k holds y = f.x
+          for x be set st x in F.k holds y = f.x
          proof
            let x be set;
-           assume A9:x in F.k;
-A10:       rng F c= bool X by XBOOLE_1:1; then
-           reconsider x1 as Element of X by A6,A8;
-           reconsider x as Element of X by A6,A9,A10;
-           f.x = f.x1 by A3,A5,A8,A9;
+           assume A8:x in F.k;
+A9:       rng F c= bool X by XBOOLE_1:1;
+           then reconsider x1 as Element of X by A5,A7;
+           reconsider x as Element of X by A5,A8,A9;
+            f.x = f.x1 by A2,A4,A7,A8;
            hence thesis;
          end;
          hence thesis;
@@ -402,18 +399,18 @@ A10:       rng F c= bool X by XBOOLE_1:1; then
      hence thesis;
    end;
    consider a be FinSequence of ExtREAL such that
-A11: dom a = Seg len F &
+A10: dom a = Seg len F &
     for k be Element of NAT st k in Seg len F holds P[k,a.k]
-    from FINSEQ_1:sch 5(A4);
-A12:for n be Nat st n in dom F
+    from FINSEQ_1:sch 5(A3);
+A11:for n be Nat st n in dom F
     for x be set st x in F.n holds a.n = f.x
    proof
      let n be Nat;
-     assume n in dom F; then
-     n in Seg len F by FINSEQ_1:def 3;
-     hence thesis by A11;
+     assume n in dom F;
+     then n in Seg len F by FINSEQ_1:def 3;
+     hence thesis by A10;
    end;
-A13:for x be set st x in dom f holds ex ax be FinSequence of ExtREAL st
+A12:for x be set st x in dom f holds ex ax be FinSequence of ExtREAL st
      dom ax = dom a &
      (for n be Nat st n in dom ax holds ax.n = a.n*(chi(F.n,X)).x)
    proof
@@ -421,21 +418,21 @@ A13:for x be set st x in dom f holds ex ax be FinSequence of ExtREAL st
      assume x in dom f;
      deffunc Q(Nat) = a.$1 * (chi(F.$1,X)).x;
      consider ax be FinSequence of ExtREAL such that
-A14:   len ax = len F &
+A13:   len ax = len F &
       for k be Element of NAT st k in Seg len F holds ax.k=Q(k)
       from FINSEQ_2:sch 1;
      take ax;
-     for n be Nat st n in dom ax holds ax.n = a.n*(chi(F.n,X)).x
+      for n be Nat st n in dom ax holds ax.n = a.n*(chi(F.n,X)).x
      proof
        let n be Nat;
-       assume n in dom ax; then
-       n in Seg len ax by FINSEQ_1:def 3;
-       hence thesis by A14;
+       assume n in dom ax;
+       then n in Seg len ax by FINSEQ_1:def 3;
+       hence thesis by A13;
      end;
-     hence thesis by A11,A14,FINSEQ_1:def 3;
+     hence thesis by A10,A13,FINSEQ_1:def 3;
    end;
    take F,a;
-   thus thesis by A2,A11,A12,A13,FINSEQ_1:def 3;
+   thus thesis by A1,A10,A11,A12,FINSEQ_1:def 3;
 end;
 
 theorem Th4:
@@ -445,28 +442,28 @@ for X be set, F be FinSequence of X holds
 proof
    let X be set;
    let F be FinSequence of X;
-   now assume
+    now assume
 A1:  for i,j be Nat st i in dom F & j in dom F & i <> j holds F.i misses F.j;
      thus F is disjoint_valued
      proof
-       for x,y be set st x <> y holds F.x misses F.y
+        for x,y be set st x <> y holds F.x misses F.y
        proof
          let x,y be set;
          assume
 A2:      x <> y;
          per cases;
            suppose A3:x in dom F & y in dom F;
-             dom F c= NAT by RELSET_1:12; then
-             reconsider x,y as Element of NAT by A3;
-             F.x misses F.y by A1,A2,A3;
+              dom F c= NAT by RELSET_1:12;
+             then reconsider x,y as Element of NAT by A3;
+              F.x misses F.y by A1,A2,A3;
              hence thesis;
            end;
-           suppose not x in dom F; then
-             F.x = {} by FUNCT_1:def 4;
+           suppose not x in dom F;
+             then F.x = {} by FUNCT_1:def 4;
              hence thesis by XBOOLE_1:65;
            end;
-           suppose not y in dom F; then
-             F.y = {} by FUNCT_1:def 4;
+           suppose not y in dom F;
+             then F.y = {} by FUNCT_1:def 4;
              hence thesis by XBOOLE_1:65;
            end;
        end;
@@ -489,16 +486,16 @@ proof
       G be FinSequence of S such that
  A1: dom G = dom F and
  A2: for i be Nat st i in dom G holds G.i= A /\ F.i;
-       now let i,j be Nat;
+        now let i,j be Nat;
        assume A3: i in dom G & j in dom G & i <> j;
-  A4: F.i misses F.j by A1,A3,Th4;
-                   (A /\ F.i) /\ (A /\ F.j)
+  then A4: F.i misses F.j by A1,Th4;
+                    (A /\ F.i) /\ (A /\ F.j)
                   =A /\ (F.i /\ (A /\ F.j)) by XBOOLE_1:16
                  .=A /\ ((F.i /\ F.j) /\ A) by XBOOLE_1:16
                  .=A /\ ({} /\ A) by A4,XBOOLE_0:def 7
-                 .={}; then
-                 A /\ F.i misses A /\ F.j by XBOOLE_0:def 7; then
-                 G.i misses A /\ F.j by A2,A3;
+                 .={};
+                 then A /\ F.i misses A /\ F.j by XBOOLE_0:def 7;
+                 then G.i misses A /\ F.j by A2,A3;
                 hence G.i misses G.j by A2,A3;
         end;
         hence thesis by Th4;
@@ -518,31 +515,31 @@ A2:for i be Nat st i in dom G holds G.i = A /\ F.i;
    thus union rng G c= A /\ union rng F
    proof
       let r be set;
-      assume r in union rng G; then
-      consider E being set such that
+      assume r in union rng G;
+      then consider E being set such that
 A3:   r in E & E in rng G by TARSKI:def 4;
       consider s being set such that
 A4:   s in dom G & E = G.s by A3,FUNCT_1:def 5;
-      dom G c= NAT by RELSET_1:12; then
-      reconsider s as Element of NAT by A4;
-      r in A /\ F.s by A2,A3,A4; then
-A5:   r in A & r in F.s by XBOOLE_0:def 3;
-      F.s in rng F by A1,A4,FUNCT_1:12; then
-      r in union rng F by A5,TARSKI:def 4;
+       dom G c= NAT by RELSET_1:12;
+      then reconsider s as Element of NAT by A4;
+       r in A /\ F.s by A2,A3,A4;
+then A5:   r in A & r in F.s by XBOOLE_0:def 3;
+       F.s in rng F by A1,A4,FUNCT_1:12;
+      then r in union rng F by A5,TARSKI:def 4;
       hence thesis by A5,XBOOLE_0:def 3;
    end;
    let r be set;
-   assume r in A /\ union rng F; then
-A6:r in A & r in union rng F by XBOOLE_0:def 3; then
-   consider E being set such that
+   assume r in A /\ union rng F;
+then A6:r in A & r in union rng F by XBOOLE_0:def 3;
+   then consider E being set such that
 A7: r in E & E in rng F by TARSKI:def 4;
    consider s being set such that
 A8: s in dom F & E = F.s by A7,FUNCT_1:def 5;
-   dom F c= NAT by RELSET_1:12; then
-   reconsider s as Element of NAT by A8;
-   A /\ E = G.s by A1,A2,A8; then
-A9:r in G.s by A6,A7,XBOOLE_0:def 3;
-   G.s in rng G by A1,A8,FUNCT_1:12;
+    dom F c= NAT by RELSET_1:12;
+   then reconsider s as Element of NAT by A8;
+    A /\ E = G.s by A1,A2,A8;
+then A9:r in G.s by A6,A7,XBOOLE_0:def 3;
+    G.s in rng G by A1,A8,FUNCT_1:12;
    hence thesis by A9,TARSKI:def 4;
 end;
 
@@ -552,8 +549,8 @@ for X be set, F be FinSequence of X, i be Nat st i in dom F holds
 proof
    let X be set, F be FinSequence of X, i be Nat;
    assume
-A1: i in dom F;
-   F.i in rng F by A1,FUNCT_1:12;
+ i in dom F;
+   then F.i in rng F by FUNCT_1:12;
    hence F.i c= union rng F by ZFMISC_1:92;
    hence F.i /\ union rng F = F.i by XBOOLE_1:28;
  end;
@@ -567,8 +564,8 @@ proof
    let S be SigmaField of X;
    let M be sigma_Measure of S;
    let F be Finite_Sep_Sequence of S;
-   dom M = S by FUNCT_2:def 1; then
-   rng F c= dom M;
+    dom M = S by FUNCT_2:def 1;
+   then rng F c= dom M;
    hence thesis by RELAT_1:46;
 end;
 
@@ -596,24 +593,24 @@ A3:M.(union rng F) = SUM(M*G) by A2,MEASURE1:def 11
                   .= sup(rng Ser(M*G));
    reconsider G1 = M*G as Num of (rng(M*G) qua
        denumerable non empty Subset of ExtREAL) by SUPINF_2:def 16;
-A4:   Ser(M*G) = Ser(rng (M*G),G1) by SUPINF_2:def 21; then
-A5:Ser(M*G).0 = G1.0 &
+A4:   Ser(M*G) = Ser(rng (M*G),G1) by SUPINF_2:def 21;
+then A5:Ser(M*G).0 = G1.0 &
    for n be Element of NAT, y be R_eal st y = Ser(M*G).n holds
     Ser(M*G).(n+1) = y + G1.(n+1) by SUPINF_2:def 17;
-   not 0 in Seg len F by FINSEQ_1:3; then
-   not 0 in dom F by FINSEQ_1:def 3; then
-A6:G.0 = {} by A2;
-A7:dom G = NAT by FUNCT_2:def 1; then
-A8:Ser(M*G).0 = M.(G.0) by A5,FUNCT_1:23 .= 0. by A6,MEASURE1:def 11;
+    not 0 in Seg len F by FINSEQ_1:3;
+   then not 0 in dom F by FINSEQ_1:def 3;
+then A6:G.0 = {} by A2;
+A7:dom G = NAT by FUNCT_2:def 1;
+then A8:Ser(M*G).0 = M.(G.0) by A5,FUNCT_1:23 .= 0. by A6,MEASURE1:def 11;
 A9:for i be Nat st i < len F1 holds Ser(M*G).(i+1) = Ser(M*G).i + F1.(i+1)
    proof
      let i be Nat;
-     assume i < len F1; then
-     1 <= i+1 & i+1 <= len F1 by NAT_1:11,13; then
-     i+1 in dom F1 by FINSEQ_3:27; then
-A10:  i+1 in dom F by Th8;
+     assume i < len F1;
+     then 1 <= i+1 & i+1 <= len F1 by NAT_1:11,13;
+     then i+1 in dom F1 by FINSEQ_3:27;
+then A10:  i+1 in dom F by Th8;
       reconsider i as Element of NAT by ORDINAL1:def 13;
-     Ser(M*G).(i+1) = Ser(M*G).i + G1.(i+1) by A4,SUPINF_2:def 17
+      Ser(M*G).(i+1) = Ser(M*G).i + G1.(i+1) by A4,SUPINF_2:def 17
      .= Ser(M*G).i + M.(G.(i+1)) by A7,FUNCT_1:23
      .= Ser(M*G).i + M.(F.(i+1)) by A2,A10;
      hence thesis by A10,FUNCT_1:23;
@@ -629,12 +626,12 @@ A13:  Q[k];
 A14:   for i be Nat st i < len F1 holds f.(i+1) = f.i + F1.(i+1)
       proof
         let i be Nat;
-        i in NAT by ORDINAL1:def 13;
+         i in NAT by ORDINAL1:def 13;
         hence thesis by A1;
       end;
-     assume k+1 <= len F1; then
-A15: k < len F1 by NAT_1:13; then
-     Ser(M*G).(k+1) = f.k + F1.(k+1) by A9,A13;
+     assume k+1 <= len F1;
+then A15: k < len F1 by NAT_1:13;
+     then Ser(M*G).(k+1) = f.k + F1.(k+1) by A9,A13;
      hence thesis by A15,A14;
    end;
 A16:for k be Nat holds Q[k] from NAT_1:sch 2(A11,A12);
@@ -643,8 +640,8 @@ A16:for k be Nat holds Q[k] from NAT_1:sch 2(A11,A12);
 A17:P[0]
    proof
      assume
-     0 >= len F1; then
-     0 = len F1;
+      0 >= len F1;
+     then 0 = len F1;
      hence thesis;
    end;
 A18:M*G is nonnegative by MEASURE2:1;
@@ -656,21 +653,21 @@ A20:  P[k];
      assume
 A21:  k+1 >= len F1;
       reconsider k as Element of NAT by ORDINAL1:def 13;
-      now per cases;
+       now per cases;
        case
-A22:    k >= len F1; then
-A23:    Ser(M*G).(k+1) = Ser(M*G).(len F1) + G1.(k+1)
+A22:    k >= len F1;
+then A23:    Ser(M*G).(k+1) = Ser(M*G).(len F1) + G1.(k+1)
            by A4,A20,SUPINF_2:def 17;
-        k+1 > len F1 by A22,NAT_1:13; then
-        not k+1 in Seg len F1 by FINSEQ_1:3; then
-        not k+1 in dom F1 by FINSEQ_1:def 3; then
-A24:    not k+1 in dom F by Th8;
-        G1.(k+1) = M.(G.(k+1)) by A7,FUNCT_1:23
+         k+1 > len F1 by A22,NAT_1:13;
+        then not k+1 in Seg len F1 by FINSEQ_1:3;
+        then not k+1 in dom F1 by FINSEQ_1:def 3;
+then A24:    not k+1 in dom F by Th8;
+         G1.(k+1) = M.(G.(k+1)) by A7,FUNCT_1:23
          .= M.{} by A2,A24 .= 0. by MEASURE1:def 11;
         hence thesis by A23,SUPINF_2:18;
        end;
-       case k < len F1; then
-        k+1 <= len F1 by NAT_1:13;
+       case k < len F1;
+        then k+1 <= len F1 by NAT_1:13;
         hence thesis by A21,XXREAL_0:1;
        end;
      end;
@@ -686,28 +683,28 @@ A27:for k be Nat st P1[k] holds P1[k+1]
      assume
 A28:   P1[k];
      assume
-A29:   k+1 < len F1; then
-     consider k' being Nat such that
+A29:   k+1 < len F1;
+     then consider k' being Nat such that
      A30:   len F1 = k+1 + k' by NAT_1:10;
      reconsider k' as Element of NAT by ORDINAL1:def 13;
 A31:  k <= k+1 by NAT_1:11;
-     Ser(M*G).(k') <= Ser(M*G).(k' + 1) by A18,SUPINF_2:59;
+      Ser(M*G).(k') <= Ser(M*G).(k' + 1) by A18,SUPINF_2:59;
      hence thesis by A28,A29,A30,A31,XXREAL_0:2;
    end;
 A32:for i be Nat holds P1[i] from NAT_1:sch 2(A26,A27);
 A33:for i be Nat st i < len F1 holds Ser(M*G).i <= Ser(M*G).(len F1)
    proof
      let i be Nat;
-     assume i < len F1; then
-     consider k be Nat such that
+     assume i < len F1;
+     then consider k be Nat such that
      A34:  len F1 = i + k by NAT_1:10;
      reconsider k as Element of NAT by ORDINAL1:def 13;
 A35: k = len F1 - i & i = len F1 - k by A34;
-     len F1 <= len F1 + i by NAT_1:11; then
-A36: k <= len F1 by A35,XREAL_1:22;
-     Ser(M*G).(len F1 - k) <= Ser(M*G).(len F1)
+      len F1 <= len F1 + i by NAT_1:11;
+then A36: k <= len F1 by A35,XREAL_1:22;
+      Ser(M*G).(len F1 - k) <= Ser(M*G).(len F1)
      proof
-       now per cases by A36,REAL_1:def 5;
+        now per cases by A36,REAL_1:def 5;
          case k = len F1;
            hence thesis by A8,A18,SUPINF_2:59;
          end;
@@ -719,14 +716,14 @@ A36: k <= len F1 by A35,XREAL_1:22;
      end;
      hence thesis by A34;
    end;
-   for z be ext-real number st z in rng Ser(M*G) holds z <= Ser(M*G).(len F1)
+    for z be ext-real number st z in rng Ser(M*G) holds z <= Ser(M*G).(len F1)
    proof
      let z be ext-real number;
-     assume z in rng Ser(M*G); then
-     consider n be set such that
+     assume z in rng Ser(M*G);
+     then consider n be set such that
 A37:   n in dom Ser(M*G) & z = Ser(M*G).n by FUNCT_1:def 5;
      reconsider n as Element of NAT by A37;
-     now per cases;
+      now per cases;
        case n < len F1;
          hence thesis by A33,A37;
        end;
@@ -735,14 +732,14 @@ A37:   n in dom Ser(M*G) & z = Ser(M*G).n by FUNCT_1:def 5;
        end;
      end;
      hence thesis;
-   end; then
-A38:Ser(M*G).(len F1) is majorant of rng Ser(M*G) by SUPINF_1:def 9;
-   Ser(M*G).(len F1) in rng Ser(M*G)
+   end;
+then A38:Ser(M*G).(len F1) is majorant of rng Ser(M*G) by SUPINF_1:def 9;
+    Ser(M*G).(len F1) in rng Ser(M*G)
    proof
-     dom (Ser(M*G)) = NAT by FUNCT_2:def 1;
+      dom (Ser(M*G)) = NAT by FUNCT_2:def 1;
      hence thesis by FUNCT_1:12;
-   end; then
-   Ser(M*G).(len F1) = sup(rng Ser(M*G)) by A38,SUPINF_1:80;
+   end;
+   then Ser(M*G).(len F1) = sup(rng Ser(M*G)) by A38,SUPINF_1:80;
    hence thesis by A1,A3,A16;
 end;
 
@@ -782,16 +779,16 @@ A8:   P[i];
        assume A9:i+1 <= len G;
        reconsider i as Element of NAT by ORDINAL1:def 13;
 A10:   i < len G by NAT_1:13,A9;
-       1 <= i+1 by NAT_1:11; then
-A11:   i+1 in dom G by A9,FINSEQ_3:27; then
-       i+1 in Seg len F by A2,FINSEQ_1:def 3; then
-       i+1 <= len F by FINSEQ_1:3; then
-A12:   i < len F by NAT_1:13;
+        1 <= i+1 by NAT_1:11;
+then A11:   i+1 in dom G by A9,FINSEQ_3:27;
+       then i+1 in Seg len F by A2,FINSEQ_1:def 3;
+       then i+1 <= len F by FINSEQ_1:3;
+then A12:   i < len F by NAT_1:13;
 A13:   g.(i+1) = g.i + G.(i+1) by A5,A10 .= a*f.i + a*F.(i+1)
          by A3,A8,A9,A11,NAT_1:13;
-       now per cases by A1;
-        case a <> +infty & a <> -infty; then
-         g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
+        now per cases by A1;
+        case a <> +infty & a <> -infty;
+         then g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
          hence thesis by A4,A12;
         end;
         case
@@ -806,17 +803,16 @@ A17:       P1[i];
            assume
 A18:       i+1 < len F;
            reconsider i as Element of NAT by ORDINAL1:def 13;
-           i < len F by A18,NAT_1:13; then
-A19:       f.(i+1) = f.i + F.(i+1) by A4;
-           1 <= i+1 & i+1 <= len F by A18,NAT_1:12; then
-           i+1 in dom F by FINSEQ_3:27; then
-           F.(i+1) < 0. by A14;
+            i < len F by A18,NAT_1:13;
+then A19:       f.(i+1) = f.i + F.(i+1) by A4;
+            1 <= i+1 & i+1 <= len F by A18,NAT_1:12;
+           then i+1 in dom F by FINSEQ_3:27;
+           then F.(i+1) < 0. by A14;
            hence thesis by A17,A18,A19,EXTREAL1:15,NAT_1:13;
          end;
-         for i be Nat holds P1[i] from NAT_1:sch 2(A15,A16); then
-         f.i <= 0. & F.(i+1) < 0. by A2,A11,A12,A14; then
-         (f.i < 0. or f.i = 0.) & F.(i+1) < 0.; then
-         g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
+          for i be Nat holds P1[i] from NAT_1:sch 2(A15,A16);
+         then (f.i < 0. or f.i = 0.) & F.(i+1) < 0. by A2,A11,A12,A14;
+         then g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
          hence thesis by A4,A12;
         end;
         case
@@ -832,26 +828,25 @@ A23:        P2[i];
            assume
 A24:        i+1 < len F;
             reconsider i as Element of NAT by ORDINAL1:def 13;
-            i < len F by A24,NAT_1:13; then
-A25:       f.(i+1) = f.i + F.(i+1) by A4;
-           1 <= i+1 & i+1 <= len F by A24,NAT_1:12; then
-           i+1 in dom F by FINSEQ_3:27; then
-           0. < F.(i+1) by A20;
+             i < len F by A24,NAT_1:13;
+then A25:       f.(i+1) = f.i + F.(i+1) by A4;
+            1 <= i+1 & i+1 <= len F by A24,NAT_1:12;
+           then i+1 in dom F by FINSEQ_3:27;
+           then 0. < F.(i+1) by A20;
            hence thesis by A23,A24,A25,EXTREAL1:14,NAT_1:13;
          end;
-         for i be Nat holds P2[i] from NAT_1:sch 2(A21,A22); then
-         0. <= f.i & 0. < F.(i+1) by A2,A11,A12,A20; then
-         (0. < f.i or f.i = 0.) & 0. < F.(i+1); then
-         g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
+          for i be Nat holds P2[i] from NAT_1:sch 2(A21,A22);
+         then (0. < f.i or f.i = 0.) & 0. < F.(i+1) by A2,A11,A12,A20;
+         then g.(i+1) = a*(f.i + F.(i+1)) by A13,EXTREAL1:29;
          hence thesis by A4,A12;
         end;
        end;
        hence thesis;
      end;
 A26:  for i be Nat holds P[i] from NAT_1:sch 2(A6,A7);
-     Seg len F = dom G by A2,FINSEQ_1:def 3
-       .= Seg len G by FINSEQ_1:def 3; then
-     a*Sum(F) = a*f.(len G) by A4,FINSEQ_1:8 .= g.(len G) by A26;
+      Seg len F = dom G by A2,FINSEQ_1:def 3
+       .= Seg len G by FINSEQ_1:def 3;
+     then a*Sum(F) = a*f.(len G) by A4,FINSEQ_1:8 .= g.(len G) by A26;
      hence thesis by A5;
 end;
 
@@ -859,7 +854,7 @@ theorem Th11:
 for F be FinSequence of REAL holds F is FinSequence of ExtREAL
  proof
    let F be FinSequence of REAL;
-   rng F c= ExtREAL by XBOOLE_1:1,NUMBERS:31;
+    rng F c= ExtREAL by XBOOLE_1:1,NUMBERS:31;
    hence thesis by FINSEQ_1:def 4;
  end;
 
@@ -876,7 +871,7 @@ definition
 end;
 
 theorem
-  for X be non empty set,
+   for X be non empty set,
       S be SigmaField of X,
       f be PartFunc of X,ExtREAL st
     f is_simple_func_in S holds
@@ -925,12 +920,12 @@ A1:P[0]
      assume
 A2:   len F = 0;
      take G = F;
-     for n be Nat st n in dom G holds
+      for n be Nat st n in dom G holds
       (G.n <> {} & ex m be Nat st m in dom F & F.m = G.n)
      proof
        let n be Nat;
        assume A3:n in dom G;
-       G = {} by A2,FINSEQ_1:25;
+        G = {} by A2,FINSEQ_1:25;
        hence thesis by A3,FINSEQ_1:26;
      end;
      hence thesis;
@@ -944,9 +939,9 @@ A4:for n be Nat st P[n] holds P[n+1]
 A6:  len F = n+1;
      reconsider n as Element of NAT by ORDINAL1:def 13;
      reconsider F1 = F|(Seg n) as Finite_Sep_Sequence of S by MESFUNC2:36;
-A7:     n <= len F by A6,NAT_1:11; then
-A8:  len F1 = n by FINSEQ_1:21; then
-     consider G1 be Finite_Sep_Sequence of S such that
+A7:     n <= len F by A6,NAT_1:11;
+then A8:  len F1 = n by FINSEQ_1:21;
+     then consider G1 be Finite_Sep_Sequence of S such that
 A9:   (union rng F1 = union rng G1 &
        (for n be Nat st n in dom G1 holds
         (G1.n <> {} & ex m be Nat st m in dom F1 & F1.m = G1.n))) by A5;
@@ -954,29 +949,29 @@ A10: dom F = dom (F1^<*F.(n+1)*>) &
      for k be Element of NAT st k in dom F holds F.k = (F1^<*F.(n+1)*>).k
      proof
        thus
-    dom (F1^<*F.(n+1)*>) = Seg (len F1 + len <*F.(n+1)*>) by FINSEQ_1:def 7
+     dom (F1^<*F.(n+1)*>) = Seg (len F1 + len <*F.(n+1)*>) by FINSEQ_1:def 7
         .= Seg (n + 1) by A8,FINSEQ_1:56
         .= dom F by A6,FINSEQ_1:def 3;
          let k be Element of NAT;
          assume
 A11:       k in dom F;
-         now per cases;
+          now per cases;
            case
-A12:          k in dom F1; then
-A13:          (F1^<*F.(n+1)*>).k = F1.k by FINSEQ_1:def 7;
-             k in Seg n by A7,A12,FINSEQ_1:21; then
-             k <= n by FINSEQ_1:3; then
-             (F|n).k = F.k by FINSEQ_3:121;
+A12:          k in dom F1;
+then A13:          (F1^<*F.(n+1)*>).k = F1.k by FINSEQ_1:def 7;
+              k in Seg n by A7,A12,FINSEQ_1:21;
+             then k <= n by FINSEQ_1:3;
+             then (F|n).k = F.k by FINSEQ_3:121;
              hence thesis by A13,FINSEQ_1:def 15;
            end;
-           case not k in dom F1; then
-             not (k in Seg n) by A7,FINSEQ_1:21; then
-A14:          not (1 <= k & k <= n) by FINSEQ_1:3;
-             k in Seg (n+1) by A6,A11,FINSEQ_1:def 3; then
-A15:          not (k < n + 1) & k <= n+1 by A14,FINSEQ_1:3,NAT_1:13;
-             dom <*F.(n+1)*> = Seg 1 by FINSEQ_1:def 8; then
-A16:          1 in dom <*F.(n+1)*> by FINSEQ_1:4,TARSKI:def 1;
-             (F1^<*F.(n+1)*>).k = (F1^<*F.(n+1)*>).(len F1 + 1)
+           case not k in dom F1;
+             then not (k in Seg n) by A7,FINSEQ_1:21;
+then A14:          not (1 <= k & k <= n) by FINSEQ_1:3;
+              k in Seg (n+1) by A6,A11,FINSEQ_1:def 3;
+then A15:          not (k < n + 1) & k <= n+1 by A14,FINSEQ_1:3,NAT_1:13;
+              dom <*F.(n+1)*> = Seg 1 by FINSEQ_1:def 8;
+then A16:          1 in dom <*F.(n+1)*> by FINSEQ_1:4,TARSKI:def 1;
+              (F1^<*F.(n+1)*>).k = (F1^<*F.(n+1)*>).(len F1 + 1)
                by A8,A15,REAL_1:def 5
              .= <*F.(n+1)*>.1 by A16,FINSEQ_1:def 7
              .= F.(n+1) by FINSEQ_1:def 8;
@@ -984,129 +979,129 @@ A16:          1 in dom <*F.(n+1)*> by FINSEQ_1:4,TARSKI:def 1;
            end;
        end;
        hence thesis;
-     end; then
-A17:  F = F1^<*F.(n+1)*> by FINSEQ_1:17;
-     ex G be Finite_Sep_Sequence of S st
+     end;
+then A17:  F = F1^<*F.(n+1)*> by FINSEQ_1:17;
+      ex G be Finite_Sep_Sequence of S st
       (union rng F = union rng G &
        (for k be Nat st k in dom G holds
         (G.k <> {} & ex m be Nat st m in dom F & F.m = G.k)))
      proof
-       now per cases;
-         case A18:F.(n+1) = {};
-A19:        rng <*F.(n+1)*> = {{}} by A18,FINSEQ_1:55;
+        now per cases;
+         case F.(n+1) = {};
+then A18:        rng <*F.(n+1)*> = {{}} by FINSEQ_1:55;
            take G = G1;
-           union rng F = union rng G &
+            union rng F = union rng G &
            (for k be Nat st k in dom G holds
             (G.k <> {} & ex m be Nat st m in dom F & F.m = G.k))
            proof
-             rng F = rng F1 \/ rng <*F.(n+1)*> by A17,FINSEQ_1:44;
+              rng F = rng F1 \/ rng <*F.(n+1)*> by A17,FINSEQ_1:44;
              hence union rng F
               = union rng F1 \/ union rng <*F.(n+1)*> by ZFMISC_1:96
-             .= union rng F1 \/ {} by A19,ZFMISC_1:31
+             .= union rng F1 \/ {} by A18,ZFMISC_1:31
              .= union rng G by A9;
-             for k be Nat st k in dom G holds
+              for k be Nat st k in dom G holds
               (G.k <> {} & ex m be Nat st m in dom F & F.m = G.k)
              proof
                let k be Nat;
                assume
-A20:             k in dom G; then
-               consider m be Nat such that
-A21:             m in dom F1 & F1.m = G.k by A9;
-                 m in NAT by ORDINAL1:def 13;
+A19:             k in dom G;
+               then consider m be Nat such that
+A20:             m in dom F1 & F1.m = G.k by A9;
+                  m in NAT by ORDINAL1:def 13;
                  then dom F1 c= dom F & F1.m = F.m
-                 by A17,A21,FINSEQ_1:39,def 7;
-               hence thesis by A9,A20,A21;
+                 by A17,A20,FINSEQ_1:39,def 7;
+               hence thesis by A9,A19,A20;
              end;
              hence thesis;
            end;
            hence thesis;
          end;
          case
-A22:        F.(n+1) <> {};
-           1 <= n+1 by NAT_1:11; then
-           n+1 in Seg (n+1) by FINSEQ_1:3; then
-           n+1 in dom F by A6,FINSEQ_1:def 3; then
-           F.(n+1) in rng F & rng F c= S by FUNCT_1:12; then
-A23:           <*F.(n+1)*> is FinSequence of S by FINSEQ_1:95; then
-A24:        G1^<*F.(n+1)*> is FinSequence of S by FINSEQ_1:96;
-           for k,m be set st k <> m holds
+A21:        F.(n+1) <> {};
+            1 <= n+1 by NAT_1:11;
+           then n+1 in Seg (n+1) by FINSEQ_1:3;
+           then n+1 in dom F by A6,FINSEQ_1:def 3;
+           then F.(n+1) in rng F & rng F c= S by FUNCT_1:12;
+then A22:           <*F.(n+1)*> is FinSequence of S by FINSEQ_1:95;
+then A23:        G1^<*F.(n+1)*> is FinSequence of S by FINSEQ_1:96;
+            for k,m be set st k <> m holds
             (G1^<*F.(n+1)*>).k misses (G1^<*F.(n+1)*>).m
            proof
              let k,m be set;
              assume
-A25:           k <> m;
-             now per cases;
+A24:           k <> m;
+              now per cases;
                case
-A26:              k in dom (G1^<*F.(n+1)*>) & m in dom (G1^<*F.(n+1)*>);
-                 dom (G1^<*F.(n+1)*>) c= NAT by A24,RELSET_1:12; then
-                 reconsider k,m as Element of NAT by A26;
-                 now per cases;
-                 case k = len (G1^<*F.(n+1)*>); then
-                   k = len G1 + len <*F.(n+1)*> by FINSEQ_1:35; then
-A27:                k = len G1 + 1 by FINSEQ_1:56;
-                   1 <= len <*F.(n+1)*> by FINSEQ_1:56; then
-A28:                (G1^<*F.(n+1)*>).k = <*F.(n+1)*>.1 by A27,FINSEQ_1:86
+A25:              k in dom (G1^<*F.(n+1)*>) & m in dom (G1^<*F.(n+1)*>);
+                  dom (G1^<*F.(n+1)*>) c= NAT by A23,RELSET_1:12;
+                 then reconsider k,m as Element of NAT by A25;
+                  now per cases;
+                 case k = len (G1^<*F.(n+1)*>);
+                   then k = len G1 + len <*F.(n+1)*> by FINSEQ_1:35;
+then A26:                k = len G1 + 1 by FINSEQ_1:56;
+                    1 <= len <*F.(n+1)*> by FINSEQ_1:56;
+then A27:                (G1^<*F.(n+1)*>).k = <*F.(n+1)*>.1 by A26,FINSEQ_1:86
                     .= F.(n+1) by FINSEQ_1:def 8;
-                   m in Seg (len (G1^<*F.(n+1)*>)) by A26,FINSEQ_1:def 3; then
-                   m in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35; then
-                   m in Seg (len G1 + 1) by FINSEQ_1:56; then
-                   1 <= m & m <= len G1 + 1 by FINSEQ_1:3; then
-                   1 <= m & m < len G1 + 1 by A25,A27,REAL_1:def 5; then
-                   1 <= m & m <= len G1 by NAT_1:13; then
-A29:                m in dom G1 by FINSEQ_3:27; then
-A30:               (G1^<*F.(n+1)*>).m = G1.m by FINSEQ_1:def 7;
+                    m in Seg (len (G1^<*F.(n+1)*>)) by A25,FINSEQ_1:def 3;
+                   then m in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35;
+                   then m in Seg (len G1 + 1) by FINSEQ_1:56;
+                   then 1 <= m & m <= len G1 + 1 by FINSEQ_1:3;
+                   then 1 <= m & m < len G1 + 1 by A24,A26,REAL_1:def 5;
+                   then 1 <= m & m <= len G1 by NAT_1:13;
+then A28:                m in dom G1 by FINSEQ_3:27;
+then A29:               (G1^<*F.(n+1)*>).m = G1.m by FINSEQ_1:def 7;
                    consider m1 be Nat such that
-A31:                m1 in dom F1 & F1.m1 = G1.m by A9,A29;
-A32:                 m1 in NAT by ORDINAL1:def 13;
-                   dom F1 c= dom F by A10,FINSEQ_1:39; then
-A33:               m1 in dom F &
-                   (G1^<*F.(n+1)*>).m = F.m1 by A17,A30,A31,FINSEQ_1:def 7,A32;
-                   m1 in Seg len F1 by A31,FINSEQ_1:def 3; then
-                   m1 <= n by A8,FINSEQ_1:3; then
-                   m1 <> n+1 by NAT_1:13;
-                   hence thesis by A28,A33,PROB_2:def 3;
+A30:                m1 in dom F1 & F1.m1 = G1.m by A9,A28;
+A31:                 m1 in NAT by ORDINAL1:def 13;
+                    dom F1 c= dom F by A10,FINSEQ_1:39;
+then A32:               m1 in dom F &
+                   (G1^<*F.(n+1)*>).m = F.m1 by A17,A29,A30,FINSEQ_1:def 7,A31;
+                    m1 in Seg len F1 by A30,FINSEQ_1:def 3;
+                   then m1 <= n by A8,FINSEQ_1:3;
+                   then m1 <> n+1 by NAT_1:13;
+                   hence thesis by A27,A32,PROB_2:def 3;
                    end;
-                   case k <> len (G1^<*F.(n+1)*>); then
-                     k <> len G1 + len <*F.(n+1)*> by FINSEQ_1:35; then
-A34:                 k <> len G1 + 1 by FINSEQ_1:56;
-                   k in Seg (len (G1^<*F.(n+1)*>)) by A26,FINSEQ_1:def 3; then
-                   k in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35; then
-                   k in Seg (len G1 + 1) by FINSEQ_1:56; then
-                   1 <= k & k <= len G1 + 1 by FINSEQ_1:3; then
-                   1 <= k & k < len G1 + 1 by A34,REAL_1:def 5; then
-                   1 <= k & k <= len G1 by NAT_1:13; then
-A35:                k in dom G1 by FINSEQ_3:27; then
-A36:               (G1^<*F.(n+1)*>).k = G1.k by FINSEQ_1:def 7;
-                     now per cases;
-                       case m = len (G1^<*F.(n+1)*>); then
-                   m = len G1 + len <*F.(n+1)*> by FINSEQ_1:35; then
-A37:                m = len G1 + 1 by FINSEQ_1:56;
-                   1 <= len <*F.(n+1)*> by FINSEQ_1:56; then
-A38:                (G1^<*F.(n+1)*>).m = <*F.(n+1)*>.1 by A37,FINSEQ_1:86
+                   case k <> len (G1^<*F.(n+1)*>);
+                     then k <> len G1 + len <*F.(n+1)*> by FINSEQ_1:35;
+then A33:                 k <> len G1 + 1 by FINSEQ_1:56;
+                    k in Seg (len (G1^<*F.(n+1)*>)) by A25,FINSEQ_1:def 3;
+                   then k in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35;
+                   then k in Seg (len G1 + 1) by FINSEQ_1:56;
+                   then 1 <= k & k <= len G1 + 1 by FINSEQ_1:3;
+                   then 1 <= k & k < len G1 + 1 by A33,REAL_1:def 5;
+                   then 1 <= k & k <= len G1 by NAT_1:13;
+then A34:                k in dom G1 by FINSEQ_3:27;
+then A35:               (G1^<*F.(n+1)*>).k = G1.k by FINSEQ_1:def 7;
+                      now per cases;
+                       case m = len (G1^<*F.(n+1)*>);
+                   then m = len G1 + len <*F.(n+1)*> by FINSEQ_1:35;
+then A36:                m = len G1 + 1 by FINSEQ_1:56;
+                    1 <= len <*F.(n+1)*> by FINSEQ_1:56;
+then A37:                (G1^<*F.(n+1)*>).m = <*F.(n+1)*>.1 by A36,FINSEQ_1:86
                     .= F.(n+1) by FINSEQ_1:def 8;
                    consider k1 be Nat such that
-A39:                k1 in dom F1 & F1.k1 = G1.k by A9,A35;
-A40:                 k1 in NAT by ORDINAL1:def 13;
-                   dom F1 c= dom F by A10,FINSEQ_1:39; then
-A41:               k1 in dom F &
-                   (G1^<*F.(n+1)*>).k = F.k1 by A17,A36,A39,FINSEQ_1:def 7,A40;
-                   k1 in Seg len F1 by A39,FINSEQ_1:def 3; then
-                   k1 <= n by A8,FINSEQ_1:3; then
-                   k1 <> n+1 by NAT_1:13;
-                   hence thesis by A38,A41,PROB_2:def 3;
+A38:                k1 in dom F1 & F1.k1 = G1.k by A9,A34;
+A39:                 k1 in NAT by ORDINAL1:def 13;
+                    dom F1 c= dom F by A10,FINSEQ_1:39;
+then A40:               k1 in dom F &
+                   (G1^<*F.(n+1)*>).k = F.k1 by A17,A35,A38,FINSEQ_1:def 7,A39;
+                    k1 in Seg len F1 by A38,FINSEQ_1:def 3;
+                   then k1 <= n by A8,FINSEQ_1:3;
+                   then k1 <> n+1 by NAT_1:13;
+                   hence thesis by A37,A40,PROB_2:def 3;
                        end;
-                       case m <> len (G1^<*F.(n+1)*>); then
-                        m <> len G1 + len <*F.(n+1)*> by FINSEQ_1:35; then
-A42:                     m <> len G1 + 1 by FINSEQ_1:56;
-                   m in Seg (len (G1^<*F.(n+1)*>)) by A26,FINSEQ_1:def 3; then
-                   m in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35; then
-                   m in Seg (len G1 + 1) by FINSEQ_1:56; then
-                   1 <= m & m <= len G1 + 1 by FINSEQ_1:3; then
-                   1 <= m & m < len G1 + 1 by A42,REAL_1:def 5; then
-                   1 <= m & m <= len G1 by NAT_1:13; then
-                   m in dom G1 by FINSEQ_3:27; then
-               (G1^<*F.(n+1)*>).m = G1.m by FINSEQ_1:def 7;
-                   hence thesis by A25,A36,PROB_2:def 3;
+                       case m <> len (G1^<*F.(n+1)*>);
+                        then m <> len G1 + len <*F.(n+1)*> by FINSEQ_1:35;
+then A41:                     m <> len G1 + 1 by FINSEQ_1:56;
+                    m in Seg (len (G1^<*F.(n+1)*>)) by A25,FINSEQ_1:def 3;
+                   then m in Seg (len G1 + len <*F.(n+1)*>) by FINSEQ_1:35;
+                   then m in Seg (len G1 + 1) by FINSEQ_1:56;
+                   then 1 <= m & m <= len G1 + 1 by FINSEQ_1:3;
+                   then 1 <= m & m < len G1 + 1 by A41,REAL_1:def 5;
+                   then 1 <= m & m <= len G1 by NAT_1:13;
+                   then m in dom G1 by FINSEQ_3:27;
+               then (G1^<*F.(n+1)*>).m = G1.m by FINSEQ_1:def 7;
+                   hence thesis by A24,A35,PROB_2:def 3;
                        end;
                      end;
                      hence thesis;
@@ -1115,64 +1110,64 @@ A42:                     m <> len G1 + 1 by FINSEQ_1:56;
                  hence thesis;
                end;
                case not(k in dom (G1^<*F.(n+1)*>) &
-                        m in dom (G1^<*F.(n+1)*>)); then
-                 (G1^<*F.(n+1)*>).k = {} or (G1^<*F.(n+1)*>).m = {}
+                        m in dom (G1^<*F.(n+1)*>));
+                 then (G1^<*F.(n+1)*>).k = {} or (G1^<*F.(n+1)*>).m = {}
                    by FUNCT_1:def 4;
                  hence thesis by XBOOLE_1:65;
                end;
              end;
              hence thesis;
-           end; then
-           reconsider G = G1^<*F.(n+1)*> as Finite_Sep_Sequence of S
-            by A23,PROB_2:def 3,FINSEQ_1:96;
+           end;
+           then reconsider G = G1^<*F.(n+1)*> as Finite_Sep_Sequence of S
+            by A22,PROB_2:def 3,FINSEQ_1:96;
            take G;
-           union rng F = union rng G &
+            union rng F = union rng G &
            for n be Nat st n in dom G holds
             (G.n <> {} & ex m be Nat st m in dom F & F.m = G.n)
            proof
-             rng F = rng F1 \/ rng <*F.(n+1)*> by A17,FINSEQ_1:44;
+              rng F = rng F1 \/ rng <*F.(n+1)*> by A17,FINSEQ_1:44;
              hence union rng F
               = union rng F1 \/ union rng <*F.(n+1)*> by ZFMISC_1:96
              .= union (rng G1 \/ rng <*F.(n+1)*>) by A9,ZFMISC_1:96
              .= union rng G by FINSEQ_1:44;
-A43:          len G = len G1 + len <*F.(n+1)*> by FINSEQ_1:35
+A42:          len G = len G1 + len <*F.(n+1)*> by FINSEQ_1:35
               .= len G1 + 1 by FINSEQ_1:56;
-             for k be Nat st k in dom G holds
+              for k be Nat st k in dom G holds
              (G.k <> {} & ex m be Nat st m in dom F & F.m = G.k)
              proof
                let k be Nat;
                assume
-A44:             k in dom G;
+A43:             k in dom G;
                 reconsider k as Element of NAT by ORDINAL1:def 13;
-               now per cases;
+                now per cases;
                  case
-A45:                k = len G;
-                   dom <*F.(n+1)*> = Seg 1 by FINSEQ_1:55; then
-                   1 in dom <*F.(n+1)*> by FINSEQ_1:4,TARSKI:def 1; then
-A46:                G.k = <*F.(n+1)*>.1 by A43,A45,FINSEQ_1:def 7
+A44:                k = len G;
+                    dom <*F.(n+1)*> = Seg 1 by FINSEQ_1:55;
+                   then 1 in dom <*F.(n+1)*> by FINSEQ_1:4,TARSKI:def 1;
+then A45:                G.k = <*F.(n+1)*>.1 by A42,A44,FINSEQ_1:def 7
                       .= F.(n+1) by FINSEQ_1:def 8;
-                   1 <= n+1 by NAT_1:11; then
-                   n+1 in Seg (n+1) by FINSEQ_1:3; then
-                   n+1 in dom F by A6,FINSEQ_1:def 3;
-                   hence thesis by A22,A46;
+                    1 <= n+1 by NAT_1:11;
+                   then n+1 in Seg (n+1) by FINSEQ_1:3;
+                   then n+1 in dom F by A6,FINSEQ_1:def 3;
+                   hence thesis by A21,A45;
                  end;
                  case
-A47:                k <> len G;
-                   1 <= k & k <= len G by A44,FINSEQ_3:27; then
-                   1 <= k & k < len G by A47,REAL_1:def 5; then
-                   1 <= k & k <= len G1 by A43,NAT_1:13; then
-A48:                k in dom G1 by FINSEQ_3:27; then
-A49:                G.k = G1.k by FINSEQ_1:def 7;
-                   ex m be Nat st m in dom F & F.m = G.k
+A46:                k <> len G;
+                    1 <= k & k <= len G by A43,FINSEQ_3:27;
+                   then 1 <= k & k < len G by A46,REAL_1:def 5;
+                   then 1 <= k & k <= len G1 by A42,NAT_1:13;
+then A47:                k in dom G1 by FINSEQ_3:27;
+then A48:                G.k = G1.k by FINSEQ_1:def 7;
+                    ex m be Nat st m in dom F & F.m = G.k
                    proof
                      consider m be Nat such that
-A50:                  m in dom F1 & F1.m = G1.k by A9,A48;
-A51:                 dom F1 c= dom F by A10,FINSEQ_1:39;
+A49:                  m in dom F1 & F1.m = G1.k by A9,A47;
+A50:                 dom F1 c= dom F by A10,FINSEQ_1:39;
                      take m;
-                     m in NAT by ORDINAL1:def 13;
-                     hence thesis by A17,A49,A50,A51,FINSEQ_1:def 7;
+                      m in NAT by ORDINAL1:def 13;
+                     hence thesis by A17,A48,A49,A50,FINSEQ_1:def 7;
                    end;
-                   hence thesis by A9,A48,A49;
+                   hence thesis by A9,A47,A48;
                  end;
                end;
                hence thesis;
@@ -1186,9 +1181,9 @@ A51:                 dom F1 c= dom F by A10,FINSEQ_1:39;
      end;
      hence thesis;
    end;
-A52:len F = len F;
-   for n be Nat holds P[n] from NAT_1:sch 2(A1,A4);
-   hence thesis by A52;
+A51:len F = len F;
+    for n be Nat holds P[n] from NAT_1:sch 2(A1,A4);
+   hence thesis by A51;
 end;
 
 Lm1:
@@ -1209,7 +1204,7 @@ A2: for n be Nat st n in dom a holds a.n = p;
       ex N be Element of ExtREAL st N = $1 & Sum(F) = N * p;
 A3:P[0]
    proof
-     for F be FinSequence of ExtREAL, p be Element of ExtREAL st
+      for F be FinSequence of ExtREAL, p be Element of ExtREAL st
       0 = len F &
       (for n be Nat st n in dom F holds F.n = p) holds
         ex N be Element of ExtREAL st N = 0 & Sum(F) = N * p
@@ -1218,7 +1213,7 @@ A3:P[0]
        let p be Element of ExtREAL;
        assume that
 A4:     0 = len F and
-        for n be Nat st n in dom F holds F.n = p;
+         for n be Nat st n in dom F holds F.n = p;
        take N = 0.;
        consider f be Function of NAT,ExtREAL such that
 A5:     Sum(F) = f.(len F) & f.0 = 0. &
@@ -1234,7 +1229,7 @@ A6:for k be Nat st P[k] holds P[k+1]
      assume
 A7:   P[k];
       reconsider k as Element of NAT by ORDINAL1:def 13;
-     for F be FinSequence of ExtREAL, p be Element of ExtREAL st
+      for F be FinSequence of ExtREAL, p be Element of ExtREAL st
       k+1 = len F &
       (for n be Nat st n in dom F holds F.n = p) holds
        ex N be Element of ExtREAL st N = k+1 & Sum(F) = N * p
@@ -1244,90 +1239,87 @@ A7:   P[k];
        assume that
 A8:     k+1 = len F and
 A9:     (for n be Nat st n in dom F holds F.n = p);
-       F <> {} by A8,FINSEQ_1:25; then
-       consider G be FinSequence, v be set such that
+        F <> {} by A8,FINSEQ_1:25;
+       then consider G be FinSequence, v be set such that
 A10:     F = G^<*v*> by FINSEQ_1:63;
        reconsider G as FinSequence of ExtREAL by A10,FINSEQ_1:50;
        reconsider H = <*v*> as FinSequence of ExtREAL by A10,FINSEQ_1:50;
 A11:    k + 1 = len G + len <*v*> by A8,A10,FINSEQ_1:35
-        .= len G + 1 by FINSEQ_1:56; then
-A12:    k = len G;
-       dom <*v*> = Seg 1 by FINSEQ_1:55; then
-A13:    1 in dom <*v*> by FINSEQ_1:4,TARSKI:def 1;
-       1 <= k + 1 by NAT_1:11; then
-A14:    k + 1 in dom F by A8,FINSEQ_3:27;
-    v = <*v*>.1 by FINSEQ_1:57 .= F.(k + 1) by A10,A11,A13,FINSEQ_1:def 7
-        .= p by A9,A14; then
-       reconsider v as Element of ExtREAL;
-       for n be Nat st n in dom G holds G.n = p
+        .= len G + 1 by FINSEQ_1:56;
+        dom <*v*> = Seg 1 by FINSEQ_1:55;
+then A12:    1 in dom <*v*> by FINSEQ_1:4,TARSKI:def 1;
+        1 <= k + 1 by NAT_1:11;
+then A13:    k + 1 in dom F by A8,FINSEQ_3:27;
+     v = <*v*>.1 by FINSEQ_1:57 .= F.(k + 1) by A10,A11,A12,FINSEQ_1:def 7
+        .= p by A9,A13;
+       then reconsider v as Element of ExtREAL;
+        for n be Nat st n in dom G holds G.n = p
        proof
          let n be Nat;
-         assume A15:n in dom G; then
-A16:      1 <= n & n <= len G by FINSEQ_3:27;
-A17:       n in NAT by ORDINAL1:def 13;
-         len G <= len G + 1 by NAT_1:11; then
-A18:      1 <= n & n <= len G + 1 by A16,XXREAL_0:2;
-         len F = len G + len <*v*> by A10,FINSEQ_1:35
-          .= len G + 1 by FINSEQ_1:56; then
-         n in dom F by A18,FINSEQ_3:27; then
-         F.n = p by A9;
-         hence thesis by A10,A15,FINSEQ_1:def 7,A17;
+         assume A14:n in dom G;
+then A15:      1 <= n & n <= len G by FINSEQ_3:27;
+A16:       n in NAT by ORDINAL1:def 13;
+          len G <= len G + 1 by NAT_1:11;
+then A17:      1 <= n & n <= len G + 1 by A15,XXREAL_0:2;
+          len F = len G + len <*v*> by A10,FINSEQ_1:35
+          .= len G + 1 by FINSEQ_1:56;
+         then n in dom F by A17,FINSEQ_3:27;
+         then F.n = p by A9;
+         hence thesis by A10,A14,FINSEQ_1:def 7,A16;
        end;
        then consider N1 be Element of ExtREAL such that
-A19:    N1 = k & Sum(G) = N1 * p by A7,A12;
+A18:    N1 = k & Sum(G) = N1 * p by A7,A11;
        consider f be Function of NAT,ExtREAL such that
-A20:    Sum(F) = f.(len F) & f.0 = 0. &
+A19:    Sum(F) = f.(len F) & f.0 = 0. &
         for i being Element of NAT st i < len F holds f.(i+1) = f.i + F.(i+1)
          by CONVFUN1:def 5;
        consider g be Function of NAT,ExtREAL such that
-A21:    Sum(G) = g.(len G) & g.0 = 0. &
+A20:    Sum(G) = g.(len G) & g.0 = 0. &
         for i being Element of NAT st i < len G holds g.(i+1) = g.i + G.(i+1)
          by CONVFUN1:def 5;
-A22:   for k1 be Nat st k1 <= len G holds f.k1 = g.k1
+A21:   for k1 be Nat st k1 <= len G holds f.k1 = g.k1
        proof
          defpred P2[Nat] means
          $1 <= len G implies f.$1 = g.$1;
-A23:      P2[0] by A20,A21;
-A24:      for k1 be Nat st P2[k1] holds P2[k1+1]
+A22:      P2[0] by A19,A20;
+A23:      for k1 be Nat st P2[k1] holds P2[k1+1]
          proof
            let k1 be Nat;
            assume
-A25:        P2[k1];
+A24:        P2[k1];
             reconsider k1 as Element of NAT by ORDINAL1:def 13;
-           now assume
-A26:          k1+1 <= len G;
-A27:          k1 <= k1+1 by NAT_1:11;
-A28:          k1 < len G by A26,NAT_1:13; then
-A29:          g.(k1+1) = g.k1 + G.(k1+1) by A21;
-             len F = len G + len <*v*> by A10,FINSEQ_1:35
-             .= len G + 1 by FINSEQ_1:56; then
-             k1 < len F by A28,NAT_1:13; then
-A30:          f.(k1+1) = f.k1 + F.(k1+1) by A20;
-             1 <= k1 + 1 by NAT_1:11; then
-             k1 + 1 in dom G by A26,FINSEQ_3:27;
-             hence thesis by A10,A25,A27,A29,A30,XXREAL_0:2,FINSEQ_1:def 7;
+            now assume
+A25:          k1+1 <= len G;
+A26:          k1 <= k1+1 by NAT_1:11;
+A27:          k1 < len G by A25,NAT_1:13;
+then A28:          g.(k1+1) = g.k1 + G.(k1+1) by A20;
+              len F = len G + len <*v*> by A10,FINSEQ_1:35
+             .= len G + 1 by FINSEQ_1:56;
+             then k1 < len F by A27,NAT_1:13;
+then A29:          f.(k1+1) = f.k1 + F.(k1+1) by A19;
+              1 <= k1 + 1 by NAT_1:11;
+             then k1 + 1 in dom G by A25,FINSEQ_3:27;
+             hence thesis by A10,A24,A26,A28,A29,XXREAL_0:2,FINSEQ_1:def 7;
            end;
            hence thesis;
          end;
-         for k1 be Nat holds P2[k1] from NAT_1:sch 2(A23,A24);
+          for k1 be Nat holds P2[k1] from NAT_1:sch 2(A22,A23);
          hence thesis;
        end;
-       k < len F by A8,NAT_1:13; then
-   Sum(F) = f.k + F.(k+1) by A8,A20 .= g.k + F.(k+1) by A12,A22; then
-A31:   Sum(F) = Sum(G) + p by  A9,A14,A11,A21
-        .= N1 * p + 1. * p by A19,EXTREAL2:4;
+        k < len F by A8,NAT_1:13;
+   then Sum(F) = f.k + F.(k+1) by A8,A19 .= g.k + F.(k+1) by A11,A21;
+then A30:   Sum(F) = Sum(G) + p by A9,A13,A11,A20
+        .= N1 * p + 1. * p by A18,EXTREAL2:4;
        take N = N1+1.;
-       N = k+1 & Sum(F) = N * p
+        N = k+1 & Sum(F) = N * p
        proof
-        thus N = k+1 by A19,MESFUNC1:def 8,SUPINF_2:1;
-        now per cases;
+        thus N = k+1 by A18,MESFUNC1:def 8,SUPINF_2:1;
+         now per cases;
          case k = 0;
-          hence Sum F = N * p by A19,A31,EXTREAL1:29;
+          hence Sum F = N * p by A18,A30,EXTREAL1:29;
          end;
-         case 0 < k; then
-A32:       0. < N1 by A19;
-          0. < 1. by MESFUNC1:def 8;
-          hence Sum(F) = N * p by A31,A32,EXTREAL1:29;
+         case 0 < k;
+          hence Sum(F) = N * p by A18,A30,EXTREAL1:29,MESFUNC1:def 8;
          end;
         end;
         hence Sum(F) = N * p;
@@ -1336,10 +1328,10 @@ A32:       0. < N1 by A19;
      end;
      hence thesis;
    end;
-   for k be Nat holds P[k] from NAT_1:sch 2(A3,A6); then
-   consider N' be Element of ExtREAL such that
-A33: N' = len a & Sum(a) = N' * p by A2;
-   thus thesis by A1,A33;
+    for k be Nat holds P[k] from NAT_1:sch 2(A3,A6);
+   then consider N' be Element of ExtREAL such that
+A31: N' = len a & Sum(a) = N' * p by A2;
+   thus thesis by A1,A31;
 end;
 
 Lm2:
@@ -1373,66 +1365,66 @@ A6: union rng F1 = union rng G and
 A7: for n be Nat st n in dom G holds
      (G.n <> {} & ex m be Nat st m in dom F1 & F1.m = G.n) by Th13;
    set F = <*{}*>^G;
-   rng <*{}*> = {{}} & {} in S by FINSEQ_1:55,MEASURE1:21; then
-   rng <*{}*> c= S & rng G c= S by ZFMISC_1:37; then
-   rng <*{}*> \/ rng G c= S by XBOOLE_1:8; then
-   rng F c= S by FINSEQ_1:44; then
-   reconsider F as FinSequence of S by FINSEQ_1:def 4;
-   for x,y be set st x <> y holds F.x misses F.y
+    rng <*{}*> = {{}} & {} in S by FINSEQ_1:55,MEASURE1:21;
+   then rng <*{}*> c= S & rng G c= S by ZFMISC_1:37;
+   then rng <*{}*> \/ rng G c= S by XBOOLE_1:8;
+   then rng F c= S by FINSEQ_1:44;
+   then reconsider F as FinSequence of S by FINSEQ_1:def 4;
+    for x,y be set st x <> y holds F.x misses F.y
    proof
      let x,y be set;
      assume
 A8:   x<>y;
-     now per cases;
+      now per cases;
        case
 A9:      x in dom F & y in dom F;
-         dom F c= NAT by RELSET_1:12; then
-         reconsider x,y as Element of NAT by A9;
-         x in Seg (len (<*{}*>^G)) & y in Seg (len (<*{}*>^G))
-           by A9,FINSEQ_1:def 3; then
-A10:      1 <= x & x <= len (<*{}*>^G) &
+          dom F c= NAT by RELSET_1:12;
+         then reconsider x,y as Element of NAT by A9;
+          x in Seg (len (<*{}*>^G)) & y in Seg (len (<*{}*>^G))
+           by A9,FINSEQ_1:def 3;
+then A10:      1 <= x & x <= len (<*{}*>^G) &
          1 <= y & y <= len (<*{}*>^G) by FINSEQ_1:3;
-         now per cases;
+          now per cases;
            case
 A11:          x = 1 or y = 1;
 A12:          dom <*{}*> = Seg 1 by FINSEQ_1:55;
-             now per cases by A11;
+              now per cases by A11;
                case
-A13:            x = 1; then
-               x in dom <*{}*> by A12,FINSEQ_1:4,TARSKI:def 1; then
-               F.x = <*{}*>.x by FINSEQ_1:def 7; then
-               F.x = {} by A13,FINSEQ_1:def 8;
+A13:            x = 1;
+               then x in dom <*{}*> by A12,FINSEQ_1:4,TARSKI:def 1;
+               then F.x = <*{}*>.x by FINSEQ_1:def 7;
+               then F.x = {} by A13,FINSEQ_1:def 8;
                hence thesis by XBOOLE_1:65;
                end;
                case
-A14:            y = 1; then
-               y in dom <*{}*> by A12,FINSEQ_1:4,TARSKI:def 1; then
-               F.y = <*{}*>.y by FINSEQ_1:def 7; then
-               F.y = {} by A14,FINSEQ_1:def 8;
+A14:            y = 1;
+               then y in dom <*{}*> by A12,FINSEQ_1:4,TARSKI:def 1;
+               then F.y = <*{}*>.y by FINSEQ_1:def 7;
+               then F.y = {} by A14,FINSEQ_1:def 8;
                hence thesis by XBOOLE_1:65;
                end;
              end;
              hence thesis;
            end;
-           case x <> 1 & y <> 1; then
-             1 < x & 1 < y by A10,REAL_1:def 5; then
-             len <*{}*> < x & len <*{}*> < y by FINSEQ_1:57; then
-A15:          F.x = G.(x - len <*{}*>) & F.y = G.(y - len <*{}*>)
+           case x <> 1 & y <> 1;
+             then 1 < x & 1 < y by A10,REAL_1:def 5;
+             then len <*{}*> < x & len <*{}*> < y by FINSEQ_1:57;
+then A15:          F.x = G.(x - len <*{}*>) & F.y = G.(y - len <*{}*>)
                by A10,FINSEQ_1:37;
-             x - (len <*{}*>) <> y - (len <*{}*>) by A8;
+              x - (len <*{}*>) <> y - (len <*{}*>) by A8;
              hence thesis by A15,PROB_2:def 3;
            end;
          end;
          hence thesis;
        end;
-       case not (x in dom F) or not (y in dom F); then
-         F.x = {} or F.y = {} by FUNCT_1:def 4;
+       case not (x in dom F) or not (y in dom F);
+         then F.x = {} or F.y = {} by FUNCT_1:def 4;
          hence thesis by XBOOLE_1:65;
        end;
      end;
      hence thesis;
-   end; then
-   reconsider F as Finite_Sep_Sequence of S by PROB_2:def 3;
+   end;
+   then reconsider F as Finite_Sep_Sequence of S by PROB_2:def 3;
 A16:union rng F = union (rng <*{}*> \/ rng G) by FINSEQ_1:44
    .= union ({{}} \/ rng G) by FINSEQ_1:55
    .= union {{}} \/ union rng G by ZFMISC_1:96
@@ -1447,48 +1439,48 @@ A17:for k be Element of NAT st k in Seg len F
    proof
      let k be Element of NAT;
      assume A18:k in Seg len F;
-     ex y be Element of ExtREAL st P[k,y]
+      ex y be Element of ExtREAL st P[k,y]
      proof
-       now per cases;
+        now per cases;
          case A19:k = 1;
            take y = 0.;
 A20:        for x be Element of X st k in dom F & k = 1 holds y = 0.;
-           for x be Element of X st k in dom F & k >= 2 & x in F.k holds
+            for x be Element of X st k in dom F & k >= 2 & x in F.k holds
             y = f.x by A19;
            hence thesis by A20;
          end;
          case A21:k <> 1;
-           1 <= k & k <= len F by A18,FINSEQ_1:3; then
-A22:       1 < k & k <= len <*{}*> + len G by A21,FINSEQ_1:35,REAL_1:def 5
-; then
-        1+1 <= k & k <= len <*{}*> + len G by NAT_1:13; then
-A23:        len <*{}*> + 1 <= k & k <= len <*{}*> + len G by FINSEQ_1:56; then
-           consider k2 being Nat such that
+            1 <= k & k <= len F by A18,FINSEQ_1:3;
+then A22:       1 < k & k <= len <*{}*> + len G by A21,FINSEQ_1:35,REAL_1:def 5
+;
+        then 1+1 <= k & k <= len <*{}*> + len G by NAT_1:13;
+then A23:        len <*{}*> + 1 <= k & k <= len <*{}*> + len G by FINSEQ_1:56;
+           then consider k2 being Nat such that
            A24:         len <*{}*> + 1 + k2 = k by NAT_1:10;
            reconsider k2 as Element of NAT by ORDINAL1:def 13;
-       1 + k2 = k - len <*{}*> by A24; then
-A25:       1 <= 1 + k2 by A23,XREAL_1:21;
-           k - len <*{}*> <= len G by A22,XREAL_1:22; then
-           1 + k2 in Seg len G by A24,A25,FINSEQ_1:3; then
-A26:       1 + k2 in dom G by FINSEQ_1:def 3;
-A27:       F.k = G.(k - len <*{}*>) by A23,FINSEQ_1:36 .= G.(1+k2) by A24; then
-           F.k <> {} by A7,A26; then
-           consider z be set such that
+        1 + k2 = k - len <*{}*> by A24;
+then A25:       1 <= 1 + k2 by A23,XREAL_1:21;
+            k - len <*{}*> <= len G by A22,XREAL_1:22;
+           then 1 + k2 in Seg len G by A24,A25,FINSEQ_1:3;
+then A26:       1 + k2 in dom G by FINSEQ_1:def 3;
+A27:       F.k = G.(k - len <*{}*>) by A23,FINSEQ_1:36 .= G.(1+k2) by A24;
+           then F.k <> {} by A7,A26;
+           then consider z be set such that
 A28:        z in F.k by XBOOLE_0:def 1;
            take y = f.z;
            consider m1 be Nat such that
 A29:        m1 in dom F1 & F1.m1 = G.(1+k2) by A7,A26;
-           F.k in rng F1 & rng F1 c= S
-            by A27,A29,FUNCT_1:12; then
-           F.k in S & S c= bool X; then
-           reconsider z as Element of X by A28;
+            F.k in rng F1 & rng F1 c= S
+            by A27,A29,FUNCT_1:12;
+           then F.k in S & S c= bool X;
+           then reconsider z as Element of X by A28;
 A30:       for x be Element of X st k in dom F & k = 1 holds y = 0. by A21;
-           for x be Element of X st k in dom F & k >= 2 & x in F.k holds
+            for x be Element of X st k in dom F & k >= 2 & x in F.k holds
             y = f.x
            proof
              let x be Element of X;
-             assume k in dom F & k >= 2 & x in F.k; then
-             z in F1.m1 & x in F1.m1 by A27,A28,A29;
+             assume k in dom F & k >= 2 & x in F.k;
+             then z in F1.m1 & x in F1.m1 by A27,A28,A29;
              hence thesis  by A5,A29;
            end;
            hence thesis by A30;
@@ -1508,19 +1500,19 @@ A32:dom F = dom a &
     a.n = f.x)
    proof
      thus dom a = dom F by A31,FINSEQ_1:def 3;
-     len F = len <*{}*> + len G by FINSEQ_1:35 .= 1 + len G by FINSEQ_1:56;then
-     1 <= len F by NAT_1:11; then
-A33:  1 in Seg len F by FINSEQ_1:3; then
-  1 in dom F by FINSEQ_1:def 3;
+      len F = len <*{}*> + len G by FINSEQ_1:35 .= 1 + len G by FINSEQ_1:56;
+     then 1 <= len F by NAT_1:11;
+then A33:  1 in Seg len F by FINSEQ_1:3;
+  then 1 in dom F by FINSEQ_1:def 3;
      hence a.1 = 0. by A31,A33;
-     for n be Nat, x be Element of X st n in dom F & n >= 2 & x in F.n holds
+      for n be Nat, x be Element of X st n in dom F & n >= 2 & x in F.n holds
       a.n = f.x
      proof
        let n be Nat;
        let x be Element of X;
        assume
-A34:     n in dom F & n >= 2 & x in F.n; then
-       n in Seg len F by FINSEQ_1:def 3;
+A34:     n in dom F & n >= 2 & x in F.n;
+       then n in Seg len F by FINSEQ_1:def 3;
        hence thesis by A31,A34;
      end;
      hence thesis;
@@ -1531,32 +1523,32 @@ A35:for n' be Nat st n' in dom F
       let n' be Nat;
       assume
 A36:    n' in dom F;
-      now per cases;
+       now per cases;
        case A37:n' = 1;
         thus for x be set st x in F.n' holds f.x = a.n'
         proof
           let x be set;
           assume A38:x in F.n';
-          dom <*{}*> = {1} by FINSEQ_1:4,55; then
-          1 in dom <*{}*> by TARSKI:def 1; then
-          F.1 = <*{}*>.1 by FINSEQ_1:def 7 .= {} by FINSEQ_1:57;
+           dom <*{}*> = {1} by FINSEQ_1:4,55;
+          then 1 in dom <*{}*> by TARSKI:def 1;
+          then F.1 = <*{}*>.1 by FINSEQ_1:def 7 .= {} by FINSEQ_1:57;
           hence thesis by A37,A38;
         end;
        end;
        case
 A39:     n' <> 1;
-        n' in Seg len F by A36,FINSEQ_1:def 3; then
-        1 <= n' & n' <= len F by FINSEQ_1:3; then
-        1 < n' by A39,REAL_1:def 5; then
-A40:     1+1 <= n' by NAT_1:13;
+         n' in Seg len F by A36,FINSEQ_1:def 3;
+        then 1 <= n' & n' <= len F by FINSEQ_1:3;
+        then 1 < n' by A39,REAL_1:def 5;
+then A40:     1+1 <= n' by NAT_1:13;
         thus for x be set st x in F.n' holds f.x = a.n'
         proof
           let x be set;
           assume A41:x in F.n';
-          F.n' in rng F & rng F c= S by A36,FUNCT_1:12; then
-          F.n' in S & S c= bool X; then
-          reconsider x as Element of X by A41;
-          a.n' = f.x by A32,A36,A40,A41;
+           F.n' in rng F & rng F c= S by A36,FUNCT_1:12;
+          then F.n' in S & S c= bool X;
+          then reconsider x as Element of X by A41;
+           a.n' = f.x by A32,A36,A40,A41;
           hence thesis;
         end;
        end;
@@ -1569,31 +1561,31 @@ A42:for n be Nat st 2 <= n & n in dom a holds  0. < a.n &  a.n < +infty
      assume that
 A43:   2 <= n and
 A44:   n in dom a;
-     n in Seg len F by A32,A44,FINSEQ_1:def 3; then
-     n <= len F by FINSEQ_1:3; then
-A45:  n <= len <*{}*> + len G by FINSEQ_1:35;
-     1+1 <= n by A43; then
-     len <*{}*> + 1 <= n by FINSEQ_1:56; then
-A46:  F.n = G.(n - len <*{}*>) by A45,FINSEQ_1:36 .= G.(n-1) by FINSEQ_1:56;
+      n in Seg len F by A32,A44,FINSEQ_1:def 3;
+     then n <= len F by FINSEQ_1:3;
+then A45:  n <= len <*{}*> + len G by FINSEQ_1:35;
+      1+1 <= n by A43;
+     then len <*{}*> + 1 <= n by FINSEQ_1:56;
+then A46:  F.n = G.(n - len <*{}*>) by A45,FINSEQ_1:36 .= G.(n-1) by FINSEQ_1:
+56;
 A47:  dom <*{}*> = {1} by FINSEQ_1:4,55;
 A48:   n in NAT by ORDINAL1:def 13;
-     1 <> n by A43; then
-     not n in dom <*{}*> by A47,TARSKI:def 1; then
-     consider k be Element of NAT such that
+      1 <> n by A43;
+     then not n in dom <*{}*> by A47,TARSKI:def 1;
+     then consider k be Element of NAT such that
 A49:   k in dom G & n = len <*{}*> + k by A48,A32,A44,FINSEQ_1:38;
-     n = 1 + k by A49,FINSEQ_1:56; then
-     k = n - 1; then
-     F.n <> {} by A7,A46,A49; then
-     consider x1 be set such that
+      n = 1 + k by A49,FINSEQ_1:56;
+     then F.n <> {} by A7,A46,A49;
+     then consider x1 be set such that
 A50:   x1 in F.n by XBOOLE_0:def 1;
-     F.n in rng F by A32,A44,FUNCT_1:12; then
-A51: F.n c= union rng F by ZFMISC_1:92; then
- x1 in dom f & dom f c= X by A16,A50; then
-     reconsider x1 as Element of X;
+      F.n in rng F by A32,A44,FUNCT_1:12;
+then A51: F.n c= union rng F by ZFMISC_1:92;
+ then x1 in dom f & dom f c= X by A16,A50;
+     then reconsider x1 as Element of X;
 A52: a.n = f.x1 by A32,A43,A44,A50;
-     f is_finite by A1,MESFUNC2:def 5; then
-A53: |.f.x1.| < +infty by A16,A50,A51,MESFUNC2:def 1;
-     0. <= f.x1 & 0. <> f.x1 by A2,A3,A16,A50,A51;
+      f is finite by A1,MESFUNC2:def 5;
+then A53: |.f.x1.| < +infty by A16,A50,A51,MESFUNC2:def 1;
+      0. <= f.x1 & 0. <> f.x1 by A2,A3,A16,A50,A51;
      hence thesis by A52,A53,EXTREAL2:58;
    end;
    take F,a;
@@ -1635,62 +1627,61 @@ A5:dom f = union rng F1 &
 A6:x0 in V & V in rng F1 by A4,A5,TARSKI:def 4;
    consider n0 be set such that
 A7:n0 in dom F1 & V = F1.n0 by A6,FUNCT_1:def 5;
-   dom F1 c= NAT by RELSET_1:12; then
-   reconsider n0 as Element of NAT by A7;
+    dom F1 c= NAT by RELSET_1:12;
+   then reconsider n0 as Element of NAT by A7;
    set N={n where n is Element of NAT:
            n in dom F1 &
            for x be Element of X st x in F1.n holds f.x = 0.};
 A8:for x be Element of X st x in F1.n0 holds f.x = 0. by A4,A5,A6,A7;
-   for z be set st z in N holds z in dom F1
+    for z be set st z in N holds z in dom F1
    proof
      let z be set;
-     assume z in N; then
-     consider n' be Element of NAT such that
+     assume z in N;
+     then consider n' be Element of NAT such that
 A9:  z = n' & n' in dom F1 &
       for x be Element of X st x in F1.n' holds f.x = 0.;
      thus thesis by A9;
-   end; then
-A10:N c= dom F1 by TARSKI:def 3; then
-   reconsider N as finite set by FINSET_1:13;
+   end;
+then A10:N c= dom F1 by TARSKI:def 3;
+   then reconsider N as finite set by FINSET_1:13;
    consider P1 be FinSequence such that
 A11: rng P1 = N & P1 is one-to-one by FINSEQ_4:73;
    set M = dom F1 \ N;
-   reconsider M as finite set by FINSET_1:13;
+   reconsider M as finite set;
    consider P2 be FinSequence such that
 A12: rng P2 = M & P2 is one-to-one by FINSEQ_4:73;
    set F0 = {Fn where Fn is Element of S :
                     Fn in rng F1 &
                     for x be Element of X st x in Fn holds f.x = 0.};
    set G1 = union F0;
-   for F' be set st F' in F0 holds F' in bool X
+    for F' be set st F' in F0 holds F' in bool X
    proof
      let F' be set;
-     assume F' in F0; then
-     consider Fn be Element of S such that
+     assume F' in F0;
+     then consider Fn be Element of S such that
 A13:  F'=Fn & Fn in rng F1 &
       for x be Element of X st x in Fn holds f.x = 0.;
       thus thesis by A13;
-   end; then
-   F0 c= bool X by TARSKI:def 3; then
-   reconsider F0 as Subset-Family of X;
+   end;
+   then reconsider F0 as Subset-Family of X by TARSKI:def 3;
    defpred P[set,set] means
     ($1 in dom F1 implies $2 = F1.$1) &
     (not ($1 in dom F1) implies $2 = {});
 A14:for x be set st x in NAT ex y be set st y in S & P[x,y]
    proof
      let x be set;
-     assume x in NAT; then
-     reconsider x as Element of NAT;
-     now per cases;
-      case A15:x in dom F1; then
-A16:   F1.x in rng F1 & rng F1 c= S by FUNCT_1:12;
+     assume x in NAT;
+     then reconsider x as Element of NAT;
+      now per cases;
+      case A15:x in dom F1;
+then A16:   F1.x in rng F1 & rng F1 c= S by FUNCT_1:12;
        reconsider y = F1.x as set;
        take y;
        thus thesis by A15,A16;
       end;
       case A17:not (x in dom F1);
        take y = {};
-       y in S by PROB_1:10;
+        y in S by PROB_1:10;
        hence thesis by A17;
       end;
      end;
@@ -1698,172 +1689,170 @@ A16:   F1.x in rng F1 & rng F1 c= S by FUNCT_1:12;
    end;
    consider F2 be Function of NAT,S such that
 A18:for x be set st x in NAT holds P[x,F2.x] from FUNCT_2:sch 1(A14);
-   for z be set st z in rng F1 holds z in rng F2
+    for z be set st z in rng F1 holds z in rng F2
    proof
      let z be set;
-     assume z in rng F1; then
-     consider n' be set such that
+     assume z in rng F1;
+     then consider n' be set such that
 A19:  n' in dom F1 & z = F1.n' by FUNCT_1:def 5;
-     dom F1 c= NAT by RELSET_1:12; then
-A20: F2.n' = F1.n' by A18,A19;
-     dom F1 c= NAT & dom F2 = NAT by FUNCT_2:def 1,RELSET_1:12;
+      dom F1 c= NAT by RELSET_1:12;
+then A20: F2.n' = F1.n' by A18,A19;
+      dom F1 c= NAT & dom F2 = NAT by FUNCT_2:def 1,RELSET_1:12;
      hence thesis by A19,A20,FUNCT_1:12;
-   end; then
-   rng F1 c= rng F2 by TARSKI:def 3; then
-A21:rng F1 is countable by CARD_4:46;
-   for z be set st z in F0 holds z in rng F1
+   end;
+   then rng F1 c= rng F2 by TARSKI:def 3;
+then A21:rng F1 is countable by CARD_4:46;
+    for z be set st z in F0 holds z in rng F1
    proof
      let z be set;
-     assume z in F0; then
-     consider Fn' be Element of S such that
+     assume z in F0;
+     then consider Fn' be Element of S such that
 A22:  z = Fn' & Fn' in rng F1 &
       for x be Element of X st x in Fn' holds f.x = 0.;
      thus thesis by A22;
-   end; then
-A23:F0 c= rng F1 by TARSKI:def 3;
-   F1.n0 is Element of S & F1.n0 in rng F1 &
+   end;
+then A23:F0 c= rng F1 by TARSKI:def 3;
+    F1.n0 is Element of S & F1.n0 in rng F1 &
    for x be Element of X st x in F1.n0 holds f.x = 0.
    proof
     consider n0' be Nat such that
 A24: n0 = n0' & n0' in dom F1 &
      for x be Element of X st x in F1.n0' holds f.x = 0. by A7,A8;
-    F1.n0 in rng F1 & rng F1 c= S by A24,FUNCT_1:12;
+     F1.n0 in rng F1 & rng F1 c= S by A24,FUNCT_1:12;
     hence F1.n0 is Element of S;
     thus F1.n0 in rng F1 by A24,FUNCT_1:12;
     let x be Element of X;
     assume x in F1.n0;
     hence thesis by A24;
-   end; then
-A25:F1.n0 in F0; then
-   reconsider F0 as N_Sub_set_fam of X by A21,A23,CARD_4:46;
-   for F' be set st F' in F0 holds F' in S
+   end;
+then A25:F1.n0 in F0;
+   then reconsider F0 as N_Sub_set_fam of X by A21,A23,CARD_4:46;
+    for F' be set st F' in F0 holds F' in S
    proof
      let F' be set;
-     assume F' in F0; then
-     consider Fn be Element of S such that
+     assume F' in F0;
+     then consider Fn be Element of S such that
 A26:  F'=Fn & Fn in rng F1 &
       for x be Element of X st x in Fn holds f.x = 0.;
      thus thesis by A26;
-   end; then
-   F0 c= S by TARSKI:def 3; then
-   reconsider G1 as Element of S by MEASURE1:def 9;
+   end;
+   then F0 c= S by TARSKI:def 3;
+   then reconsider G1 as Element of S by MEASURE1:def 9;
 A27:len P1 = card N & len P2 = card M by A11,A12,FINSEQ_4:77;
    reconsider L = Seg len F1 as finite set;
-A28:N c= Seg len F1 by A10,FINSEQ_1:def 3; then
-   card N <= card L by CARD_1:80; then
-   len P1 <= len F1 & len F1 <= len F1 + 1 by A27,FINSEQ_1:78,NAT_1:11; then
-   len P1 <= len F1 + 1 by XXREAL_0:2; then
-   consider lenF being Nat such that
+A28:N c= Seg len F1 by A10,FINSEQ_1:def 3;
+   then card N <= card L by CARD_1:80;
+   then len P1 <= len F1 & len F1 <= len F1 + 1 by A27,FINSEQ_1:78,NAT_1:11;
+   then len P1 <= len F1 + 1 by XXREAL_0:2;
+   then consider lenF being Nat such that
    A29:len F1 + 1 = len P1 + lenF by NAT_1:10;
    reconsider lenF as Element of NAT by ORDINAL1:def 13;
-A30:lenF = len F1 + 1 - len P1 by A29;
-   M = (Seg len F1) \ N by FINSEQ_1:def 3; then
-   card M = card (Seg len F1) - card N by A28,CARD_2:63; then
-A31:len P2 = len F1 - len P1 + 1 - 1 by A27,FINSEQ_1:78;
+    M = (Seg len F1) \ N by FINSEQ_1:def 3;
+   then card M = card (Seg len F1) - card N by A28,CARD_2:63;
+then A30:len P2 = len F1 - len P1 + 1 - 1 by A27,FINSEQ_1:78;
    defpred P[Nat,set] means
     ($1 = 1 implies $2 = G1) &
     ($1 >=2 implies ex k' be Nat st k'=$1-1 & $2 = F1.(P2.k'));
-A32:for k be Element of NAT st k in Seg lenF ex U be Element of S st P[k,U]
+A31:for k be Element of NAT st k in Seg lenF ex U be Element of S st P[k,U]
    proof
      let k be Element of NAT;
-     assume A33:k in Seg lenF;
+     assume A32:k in Seg lenF;
      per cases;
-      suppose A34:k = 1;
+      suppose A33:k = 1;
        take U = G1;
-       thus thesis by A34;
+       thus thesis by A33;
       end;
-      suppose A35:k <> 1;
-A36:   k >= 1 & k <= lenF by A33,FINSEQ_1:3; then
-       k > 1 by A35,REAL_1:def 5; then
-A37:   k >= 1+1 by NAT_1:13;
+      suppose A34:k <> 1;
+A35:   k >= 1 & k <= lenF by A32,FINSEQ_1:3;
+       then k > 1 by A34,REAL_1:def 5;
+then A36:   k >= 1+1 by NAT_1:13;
        consider k' being Nat such that
-       A38:    k = 1 + k' by A36,NAT_1:10;
+       A37:    k = 1 + k' by A35,NAT_1:10;
        reconsider k as Element of NAT;
-       k-1>=1 & k-1<=lenF -1 by A36,A37,XREAL_1:11,21; then
-       k' in Seg len P2 by A30,A31,A38,FINSEQ_1:3; then
-       k' in dom P2 by FINSEQ_1:def 3; then
-       P2.k' in M by A12,FUNCT_1:12; then
-       F1.(P2.k') in rng F1 & rng F1 c= S by FUNCT_1:12; then
-       reconsider U = F1.(P2.k') as Element of S;
+        k-1>=1 & k-1<=lenF -1 by A35,A36,XREAL_1:11,21;
+       then k' in Seg len P2 by A29,A30,A37,FINSEQ_1:3;
+       then k' in dom P2 by FINSEQ_1:def 3;
+       then P2.k' in M by A12,FUNCT_1:12;
+       then F1.(P2.k') in rng F1 & rng F1 c= S by FUNCT_1:12;
+       then reconsider U = F1.(P2.k') as Element of S;
        take U;
-       thus thesis by A35,A38;
+       thus thesis by A34,A37;
       end;
    end;
    consider F be FinSequence of S such that
-A39: dom F = Seg lenF &
+A38: dom F = Seg lenF &
     for k be Element of NAT st k in Seg lenF holds
-     P[k,F.k] from FINSEQ_1:sch 5(A32);
+     P[k,F.k] from FINSEQ_1:sch 5(A31);
    defpred A[Nat,Element of ExtREAL] means
    for y be Element of X holds
     (y in F.$1 implies $2 = f.y) & (F.$1 = {} implies $2 = 1.);
-A40:for k be Element of NAT st k in Seg len F
+A39:for k be Element of NAT st k in Seg len F
     ex x be Element of ExtREAL st A[k,x]
    proof
      let k be Element of NAT;
-     assume k in Seg len F; then
-A41: k in dom F by FINSEQ_1:def 3;
-     now per cases;
-      case k = 1; then
-A42:   F.k = G1 by A39,A41;
-A43:   for y be Element of X holds
+     assume k in Seg len F;
+then A40: k in dom F by FINSEQ_1:def 3;
+      now per cases;
+      case k = 1;
+then A41:   F.k = G1 by A38,A40;
+A42:   for y be Element of X holds
         (y in F.k implies 0. = f.y) & (F.k = {} implies 0.=1.)
        proof
         let y be Element of X;
-A44:   y in F.k implies 0. = f.y
+   y in F.k implies 0. = f.y
         proof
-         assume y in F.k; then
-         consider Y be set such that
-A45:      y in Y & Y in F0 by A42,TARSKI:def 4;
+         assume y in F.k;
+         then consider Y be set such that
+A43:      y in Y & Y in F0 by A41,TARSKI:def 4;
          consider Fn be Element of S such that
-A46:      Y = Fn & Fn in rng F1 &
-          for x be Element of X st x in Fn holds f.x = 0. by A45;
-         thus f.y = 0. by A45,A46;
+A44:      Y = Fn & Fn in rng F1 &
+          for x be Element of X st x in Fn holds f.x = 0. by A43;
+         thus f.y = 0. by A43,A44;
         end;
-        thus thesis by A6,A7,A25,A42,A44,TARSKI:def 4;
+        hence thesis by A6,A7,A25,A41,TARSKI:def 4;
        end;
        take x = 0.;
-       thus thesis by A43;
+       thus thesis by A42;
       end;
-      case A47:k <> 1;
-A48:   1 <= k & k <= lenF by A39,A41,FINSEQ_1:3; then
-       1 < k by A47,REAL_1:def 5; then
-A49:   1+1 <= k by NAT_1:13; then
-       consider k1 be Nat such that
-A50:    k1 = k-1 & F.k = F1.(P2.k1) by A39,A41;
-       1 <= k1 & k1 <= len P2 by A30,A31,A48,A49,A50,XREAL_1:11,
-21; then
-       k1 in Seg len P2 by FINSEQ_1:3; then
-       k1 in dom P2 by FINSEQ_1:def 3; then
-       P2.k1 in M by A12,FUNCT_1:12; then
-       consider k' be set such that
-A51:    k' in dom F1 & F.k = F1.k' by A50;
-       dom F1 c= NAT by RELSET_1:12; then
-       reconsider k' as Element of NAT by A51;
-       now per cases;
-        case A52:F.k = {};
-A53:     for y be Element of X holds
-          (y in F.k implies 1. = f.y) & (F.k = {} implies 1.=1.) by A52;
+      case A45:k <> 1;
+A46:   1 <= k & k <= lenF by A38,A40,FINSEQ_1:3;
+       then 1 < k by A45,REAL_1:def 5;
+then A47:   1+1 <= k by NAT_1:13;
+       then consider k1 be Nat such that
+A48:    k1 = k-1 & F.k = F1.(P2.k1) by A38,A40;
+        1 <= k1 & k1 <= len P2 by A29,A30,A46,A47,A48,XREAL_1:11,21;
+       then k1 in Seg len P2 by FINSEQ_1:3;
+       then k1 in dom P2 by FINSEQ_1:def 3;
+       then P2.k1 in M by A12,FUNCT_1:12;
+       then consider k' be set such that
+A49:    k' in dom F1 & F.k = F1.k' by A48;
+        dom F1 c= NAT by RELSET_1:12;
+       then reconsider k' as Element of NAT by A49;
+        now per cases;
+        case F.k = {};
+then A50:     for y be Element of X holds
+          (y in F.k implies 1. = f.y) & (F.k = {} implies 1.=1.);
          take x = 1.;
-         thus thesis by A53;
+         thus thesis by A50;
         end;
-        case F.k <> {}; then
-         consider y1 be set such that
-A54:      y1 in F.k by XBOOLE_0:def 1;
-         F.k in rng F & rng F c= S by A41,FUNCT_1:12; then
-         F.k in S & S c= bool X; then
-         reconsider y1 as Element of X by A54;
+        case F.k <> {};
+         then consider y1 be set such that
+A51:      y1 in F.k by XBOOLE_0:def 1;
+          F.k in rng F & rng F c= S by A40,FUNCT_1:12;
+         then F.k in S & S c= bool X;
+         then reconsider y1 as Element of X by A51;
          take x = f.y1;
-         for y be Element of X holds
+          for y be Element of X holds
           (y in F.k implies x = f.y) & (F.k = {} implies x=1.)
          proof
           let y be Element of X;
-          y in F.k implies x = f.y
+           y in F.k implies x = f.y
           proof
-           assume y in F.k; then
-           y in F1.k' & y1 in F1.k' by A51,A54;
-           hence thesis by A5,A51;
+           assume y in F.k;
+           then y in F1.k' & y1 in F1.k' by A49,A51;
+           hence thesis by A5,A49;
           end;
-          hence thesis by A54;
+          hence thesis by A51;
          end;
          hence thesis;
         end;
@@ -1874,230 +1863,227 @@ A54:      y1 in F.k by XBOOLE_0:def 1;
      hence thesis;
    end;
    consider a be FinSequence of ExtREAL such that
-A55: dom a = Seg len F &
+A52: dom a = Seg len F &
     for n be Element of NAT st n in Seg (len F) holds A[n,a.n]
-    from FINSEQ_1:sch 5(A40);
-A56:for n be Nat, x be Element of X st n in dom F & x in F.n holds a.n = f.x
+    from FINSEQ_1:sch 5(A39);
+A53:for n be Nat, x be Element of X st n in dom F & x in F.n holds a.n = f.x
    proof
     let n be Nat;
     let x be Element of X;
-    assume A57:n in dom F & x in F.n; then
-    n in Seg len F by FINSEQ_1:def 3;
-    hence thesis by A55,A57;
+    assume A54:n in dom F & x in F.n;
+    then n in Seg len F by FINSEQ_1:def 3;
+    hence thesis by A52,A54;
    end;
 
-   for z be set st z in union rng F holds z in union rng F1
+    for z be set st z in union rng F holds z in union rng F1
    proof
     let z be set;
-    assume z in union rng F; then
-    consider Y be set such that
-A58:  z in Y & Y in rng F by TARSKI:def 4;
+    assume z in union rng F;
+    then consider Y be set such that
+A55:  z in Y & Y in rng F by TARSKI:def 4;
     consider k be set such that
-A59:  k in dom F & Y = F.k by A58,FUNCT_1:def 5;
-    dom F c= NAT by RELSET_1:12; then
-    reconsider k as Element of NAT by A59;
-    now per cases;
-     case k = 1; then
-      z in G1 by A39,A58,A59; then
-      consider Y' be set such that
-A60:    z in Y' & Y' in F0 by TARSKI:def 4;
+A56:  k in dom F & Y = F.k by A55,FUNCT_1:def 5;
+     dom F c= NAT by RELSET_1:12;
+    then reconsider k as Element of NAT by A56;
+     now per cases;
+     case k = 1;
+      then z in G1 by A38,A55,A56;
+      then consider Y' be set such that
+A57:    z in Y' & Y' in F0 by TARSKI:def 4;
       consider Fn' be Element of S such that
-A61:    Y' = Fn' &
+A58:    Y' = Fn' &
        Fn' in rng F1 &
-       for x be Element of X st x in Fn' holds f.x = 0. by A60;
-      thus thesis by A60,A61,TARSKI:def 4;
+       for x be Element of X st x in Fn' holds f.x = 0. by A57;
+      thus thesis by A57,A58,TARSKI:def 4;
      end;
-     case A62:k <> 1;
-A63:   1 <= k & k <= lenF by A39,A59,FINSEQ_1:3; then
-      1 < k by A62,REAL_1:def 5; then
-A64:   1 + 1 <= k by NAT_1:13; then
-      consider k' be Nat such that
-A65:    k' = k-1 & F.k = F1.(P2.k') by A39,A59;
-      1 <= k' & k' <= len P2 by A30,A31,A63,A64,A65,XREAL_1:11,
-21; then
-      k' in dom P2 by FINSEQ_3:27; then
-      P2.k' in M by A12,FUNCT_1:12; then
-      F1.(P2.k') in rng F1 by FUNCT_1:12;
-      hence thesis by A58,A59,A65,TARSKI:def 4;
+     case A59:k <> 1;
+A60:   1 <= k & k <= lenF by A38,A56,FINSEQ_1:3;
+      then 1 < k by A59,REAL_1:def 5;
+then A61:   1 + 1 <= k by NAT_1:13;
+      then consider k' be Nat such that
+A62:    k' = k-1 & F.k = F1.(P2.k') by A38,A56;
+       1 <= k' & k' <= len P2 by A29,A30,A60,A61,A62,XREAL_1:11,21;
+      then k' in dom P2 by FINSEQ_3:27;
+      then P2.k' in M by A12,FUNCT_1:12;
+      then F1.(P2.k') in rng F1 by FUNCT_1:12;
+      hence thesis by A55,A56,A62,TARSKI:def 4;
      end;
     end;
     hence thesis;
-   end; then
-A66:union rng F c= union rng F1 by TARSKI:def 3;
-   for z be set st z in union rng F1 holds z in union rng F
+   end;
+then A63:union rng F c= union rng F1 by TARSKI:def 3;
+    for z be set st z in union rng F1 holds z in union rng F
    proof
     let z be set;
-    assume z in union rng F1; then
-    consider Y be set such that
-A67:  z in Y & Y in rng F1 by TARSKI:def 4;
+    assume z in union rng F1;
+    then consider Y be set such that
+A64:  z in Y & Y in rng F1 by TARSKI:def 4;
     consider m1 be set such that
-A68:  m1 in dom F1 & Y = F1.m1 by A67,FUNCT_1:def 5;
-    dom F1 c= NAT by RELSET_1:12; then
-    reconsider m1 as Element of NAT by A68;
-    now per cases;
-     case m1 in N; then
-      consider m1' be Element of NAT such that
-A69:    m1 = m1' & m1' in dom F1 &
+A65:  m1 in dom F1 & Y = F1.m1 by A64,FUNCT_1:def 5;
+     dom F1 c= NAT by RELSET_1:12;
+    then reconsider m1 as Element of NAT by A65;
+     now per cases;
+     case m1 in N;
+      then consider m1' be Element of NAT such that
+A66:    m1 = m1' & m1' in dom F1 &
        for x be Element of X st x in F1.m1' holds f.x = 0.;
-   F1.m1' in rng F1 & rng F1 c= S by A69,FUNCT_1:12; then
-      reconsider F1m1' = F1.m1' as Element of S;
-A70:   z in Y & Y in F0 by A67,A68,A69;
-      lenF - 1 >= 0 by A30,A31; then
-      lenF >= 1+0 by XREAL_1:21; then
-      1 in Seg lenF by FINSEQ_1:3; then
-      F.1 in rng F & F.1 = G1 by A39,FUNCT_1:12; then
-      z in union F0 & union F0 in rng F by A70,TARSKI:def 4;
+    F1.m1' in rng F1 & rng F1 c= S by A66,FUNCT_1:12;
+      then reconsider F1m1' = F1.m1' as Element of S;
+A67:   z in Y & Y in F0 by A64,A65,A66;
+       lenF >= 1+0 by A29,A30,XREAL_1:21;
+      then 1 in Seg lenF by FINSEQ_1:3;
+      then F.1 in rng F & F.1 = G1 by A38,FUNCT_1:12;
+      then z in union F0 & union F0 in rng F by A67,TARSKI:def 4;
       hence thesis by TARSKI:def 4;
      end;
-     case not (m1 in N); then
-      m1 in M by A68,XBOOLE_0:def 4; then
-      consider m1' be set such that
-A71:    m1' in dom P2 & m1 = P2.m1' by A12,FUNCT_1:def 5;
-      m1' in Seg (len P2) & Seg (len P2) c= NAT by A71,FINSEQ_1:def 3; then
-      reconsider m1' as Element of NAT;
-      m1' in Seg len P2 by A71,FINSEQ_1:def 3; then
-      1 <= m1' & m1' <= len P2 by FINSEQ_1:3; then
-A72:   1+1 <= m1' + 1 &  m1'+1 <= lenF by A30,A31,XREAL_1:8;
+     case not (m1 in N);
+      then m1 in M by A65,XBOOLE_0:def 4;
+      then consider m1' be set such that
+A68:    m1' in dom P2 & m1 = P2.m1' by A12,FUNCT_1:def 5;
+       m1' in Seg (len P2) & Seg (len P2) c= NAT by A68,FINSEQ_1:def 3;
+      then reconsider m1' as Element of NAT;
+       m1' in Seg len P2 by A68,FINSEQ_1:def 3;
+      then 1 <= m1' & m1' <= len P2 by FINSEQ_1:3;
+then A69:   1+1 <= m1' + 1 &  m1'+1 <= lenF by A29,A30,XREAL_1:8;
       reconsider m2 = m1'+1 as Nat;
-      1 <= m2 by A72,XXREAL_0:2; then
-A73:  m2 in Seg lenF by A72,FINSEQ_1:3; then
-      consider k' be Nat such that
-A74:   k' = m2 -1 & F.m2 = F1.(P2.k') by A39,A72;
-A75:  F.m2 in rng F by A39,A73,FUNCT_1:12;
-      thus thesis by A67,A68,A71,A74,A75,TARSKI:def 4;
+       1 <= m2 by A69,XXREAL_0:2;
+then A70:  m2 in Seg lenF by A69,FINSEQ_1:3;
+      then consider k' be Nat such that
+A71:   k' = m2 -1 & F.m2 = F1.(P2.k') by A38,A69;
+  F.m2 in rng F by A38,A70,FUNCT_1:12;
+      hence thesis by A64,A65,A68,A71,TARSKI:def 4;
      end;
     end;
     hence thesis;
-   end; then
-   union rng F1 c= union rng F by TARSKI:def 3; then
-A76:union rng F = dom f by A5,A66,XBOOLE_0:def 10;
-A77:a.1 = 0. &
+   end;
+   then union rng F1 c= union rng F by TARSKI:def 3;
+then A72:union rng F = dom f by A5,A63,XBOOLE_0:def 10;
+A73:a.1 = 0. &
     dom F = dom a &
     (for n be Nat,x be Element of X st n in dom F & x in F.n holds
       a.n = f.x)
    proof
-     0 <= lenF - 1 by A30,A31; then
-     0+1 <= lenF by XREAL_1:21; then
-A78:1 in Seg lenF by FINSEQ_1:3; then
-A79:1 in Seg len F by A39,FINSEQ_1:def 3;
-A80:F.1 = G1 by A39,A78;
+      0+1 <= lenF by A29,A30,XREAL_1:21;
+then A74:1 in Seg lenF by FINSEQ_1:3;
+then A75:1 in Seg len F by A38,FINSEQ_1:def 3;
+A76:F.1 = G1 by A38,A74;
      reconsider F1n0 = F1.n0 as Element of S by A6,A7;
-     F1n0 in F0 by A6,A7,A8; then
-     x0 in F.1 by A6,A7,A80,TARSKI:def 4;
-     hence a.1 = 0. by A4,A55,A79;
-     thus dom F = dom a by A55,FINSEQ_1:def 3;
-     thus thesis by A56;
+      F1n0 in F0 by A6,A7,A8;
+     then x0 in F.1 by A6,A7,A76,TARSKI:def 4;
+     hence a.1 = 0. by A4,A52,A75;
+     thus dom F = dom a by A52,FINSEQ_1:def 3;
+     thus thesis by A53;
    end;
-A81:for n be Nat st n in dom F
+A77:for n be Nat st n in dom F
      for x be set st x in F.n holds f.x=a.n
     proof
      let n be Nat;
-     assume A82:n in dom F; then
-     F.n in rng F & rng F c= S by FUNCT_1:12; then
-A83:F.n in S & S c= bool X;
+     assume A78:n in dom F;
+     then F.n in rng F & rng F c= S by FUNCT_1:12;
+then A79:F.n in S & S c= bool X;
      let x be set;
-     assume A84:x in F.n; then
-     reconsider x as Element of X by A83;
-     a.n = f.x by A56,A82,A84;
+     assume A80:x in F.n;
+     then reconsider x as Element of X by A79;
+      a.n = f.x by A53,A78,A80;
      hence thesis;
     end;
-A85:for n,m be Nat st n in dom F & m in dom F & n = 1 & m <> 1 holds
+A81:for n,m be Nat st n in dom F & m in dom F & n = 1 & m <> 1 holds
      F.n misses F.m
     proof
      let n,m be Nat;
      assume
-A86:   n in dom F & m in dom F & n = 1 & m <> 1;
-A87:  F.n = G1 by A39,A86;
-     1 <= m & m <= len F by A86,FINSEQ_3:27; then
-     1 < m by A86,REAL_1:def 5; then
-A88:  1+1 <= m & m in Seg lenF by A39,A86,NAT_1:13; then
-     consider k' be Nat such that
-A89:   k' = m-1 & F.m = F1.(P2.k') by A39;
-     m-1>=1 & m <= lenF by A88,FINSEQ_1:3,XREAL_1:21; then
-     m-1>=1 & m-1<=lenF -1 by XREAL_1:11; then
-     k' in Seg len P2 by A30,A31,A89,FINSEQ_1:3; then
-     k' in dom P2 by FINSEQ_1:def 3; then
-     P2.k' in M by A12,FUNCT_1:12; then
-A90: P2.k' in dom F1 & not (P2.k' in N) by XBOOLE_0:def 4;
-     F.n /\ F.m = {}
+A82:   n in dom F & m in dom F & n = 1 & m <> 1;
+then A83:  F.n = G1 by A38;
+      1 <= m & m <= len F by A82,FINSEQ_3:27;
+     then 1 < m by A82,REAL_1:def 5;
+then A84:  1+1 <= m & m in Seg lenF by A38,A82,NAT_1:13;
+     then consider k' be Nat such that
+A85:   k' = m-1 & F.m = F1.(P2.k') by A38;
+      m-1>=1 & m <= lenF by A84,FINSEQ_1:3,XREAL_1:21;
+     then m-1>=1 & m-1<=lenF -1 by XREAL_1:11;
+     then k' in Seg len P2 by A29,A30,A85,FINSEQ_1:3;
+     then k' in dom P2 by FINSEQ_1:def 3;
+     then P2.k' in M by A12,FUNCT_1:12;
+then A86: P2.k' in dom F1 & not (P2.k' in N) by XBOOLE_0:def 4;
+      F.n /\ F.m = {}
      proof
-       assume F.n /\ F.m <> {}; then
-       consider v be set such that
-A91:     v in F.n /\ F.m by XBOOLE_0:def 1;
-A92:    v in F.n & v in F.m by A91,XBOOLE_0:def 3; then
-       consider Y be set such that
-A93:     v in Y & Y in F0 by A87,TARSKI:def 4;
+       assume F.n /\ F.m <> {};
+       then consider v be set such that
+A87:     v in F.n /\ F.m by XBOOLE_0:def 1;
+A88:    v in F.n & v in F.m by A87,XBOOLE_0:def 3;
+       then consider Y be set such that
+A89:     v in Y & Y in F0 by A83,TARSKI:def 4;
        consider Fv be Element of S such that
-A94:     Y = Fv & Fv in rng F1 &
-        for x be Element of X st x in Fv holds f.x = 0. by A93;
+A90:     Y = Fv & Fv in rng F1 &
+        for x be Element of X st x in Fv holds f.x = 0. by A89;
        consider n' be set such that
-A95:     n' in dom F1 & Fv = F1.n' by A94,FUNCT_1:def 5;
-       dom F1 c= NAT by RELSET_1:12; then
-       reconsider n' as Element of NAT by A95;
-A96:   n' <> P2.k' by A90,A94,A95;
-       F1.(n') misses F1.(P2.k') by A96,PROB_2:def 3; then
-   F1.(n') /\ F1.(P2.k') = {} by XBOOLE_0:def 7;
-       hence contradiction by A89,A92,A93,A94,A95,XBOOLE_0:def 3;
+A91:     n' in dom F1 & Fv = F1.n' by A90,FUNCT_1:def 5;
+        dom F1 c= NAT by RELSET_1:12;
+       then reconsider n' as Element of NAT by A91;
+   n' <> P2.k' by A86,A90,A91;
+       then F1.(n') misses F1.(P2.k') by PROB_2:def 3;
+   then F1.(n') /\ F1.(P2.k') = {} by XBOOLE_0:def 7;
+       hence contradiction by A85,A88,A89,A90,A91,XBOOLE_0:def 3;
      end;
      hence thesis by XBOOLE_0:def 7;
     end;
-A97:for n,m be Nat st n in dom F & m in dom F & n <> 1 & m <> 1 & n <> m holds
+A92:for n,m be Nat st n in dom F & m in dom F & n <> 1 & m <> 1 & n <> m holds
      F.n misses F.m
     proof
      let n,m be Nat;
      assume
-A98:   n in dom F & m in dom F & n <> 1 & m <> 1 & n <> m; then
-A99: 1 <= n & n <= lenF & 1 <= m & m <= lenF by A39,FINSEQ_1:3; then
-     1 < n & 1 < m by A98,REAL_1:def 5; then
-A100:  1+1 <= n & 1+1 <= m by NAT_1:13; then
-     consider k1 be Nat such that
-A101:   k1 = n-1 & F.n = F1.(P2.k1) by A39,A98;
+A93:   n in dom F & m in dom F & n <> 1 & m <> 1 & n <> m;
+then A94: 1 <= n & n <= lenF & 1 <= m & m <= lenF by A38,FINSEQ_1:3;
+     then 1 < n & 1 < m by A93,REAL_1:def 5;
+then A95:  1+1 <= n & 1+1 <= m by NAT_1:13;
+     then consider k1 be Nat such that
+A96:   k1 = n-1 & F.n = F1.(P2.k1) by A38,A93;
      consider k2 be Nat such that
-A102:   k2 = m-1 & F.m = F1.(P2.k2) by A39,A98,A100;
-     1 <= n-1 & n-1 <= lenF -1 & 1<=m-1 & m-1<=lenF -1
-      by A99,A100,XREAL_1:11,21; then
-     k1 in Seg len P2 & k2 in Seg len P2 by A30,A31,A101,A102,FINSEQ_1:3; then
-A103:  k1 in dom P2 & k2 in dom P2 by FINSEQ_1:def 3;
-     k1 <> k2 by A98,A101,A102; then
-     P2.k1 <> P2.k2 by A12,A103,FUNCT_1:def 8;
-     hence thesis by A101,A102,PROB_2:def 3;
+A97:   k2 = m-1 & F.m = F1.(P2.k2) by A38,A93,A95;
+      1 <= n-1 & n-1 <= lenF -1 & 1<=m-1 & m-1<=lenF -1
+      by A94,A95,XREAL_1:11,21;
+     then k1 in Seg len P2 & k2 in Seg len P2 by A29,A30,A96,A97,FINSEQ_1:3;
+then A98:  k1 in dom P2 & k2 in dom P2 by FINSEQ_1:def 3;
+      k1 <> k2 by A93,A96,A97;
+     then P2.k1 <> P2.k2 by A12,A98,FUNCT_1:def 8;
+     hence thesis by A96,A97,PROB_2:def 3;
     end;
-    for x,y be set st x <> y holds F.x misses F.y
+     for x,y be set st x <> y holds F.x misses F.y
     proof
      let x,y be set;
-     assume A104:x<>y;
-     now per cases;
-      case A105:x in dom F & y in dom F;
-       dom F c= NAT by RELSET_1:12; then
-       reconsider x,y as Element of NAT by A105;
-       now per cases;
-        case A106:x = 1 or y = 1;
-         now per cases by A106;
-          case A107:x = 1; then
-           y <> 1 by A104;
-           hence thesis by A85,A105,A107;
+     assume A99:x<>y;
+      now per cases;
+      case A100:x in dom F & y in dom F;
+        dom F c= NAT by RELSET_1:12;
+       then reconsider x,y as Element of NAT by A100;
+        now per cases;
+        case A101:x = 1 or y = 1;
+          now per cases by A101;
+          case A102:x = 1;
+           then y <> 1 by A99;
+           hence thesis by A81,A100,A102;
           end;
-          case A108:y = 1; then
-           x <> 1 by A104;
-           hence thesis by A85,A105,A108;
+          case A103:y = 1;
+           then x <> 1 by A99;
+           hence thesis by A81,A100,A103;
           end;
          end;
          hence thesis;
         end;
         case x <> 1 & y <> 1;
-         hence thesis by A97,A104,A105;
+         hence thesis by A92,A99,A100;
         end;
        end;
        hence thesis;
       end;
-      case A109:not (x in dom F) or not (y in dom F);
-       now per cases by A109;
-        case not (x in dom F); then
-         F.x = {} by FUNCT_1:def 4;
+      case A104:not (x in dom F) or not (y in dom F);
+        now per cases by A104;
+        case not (x in dom F);
+         then F.x = {} by FUNCT_1:def 4;
          hence thesis by XBOOLE_1:65;
         end;
-        case not (y in dom F); then
-         F.y = {} by FUNCT_1:def 4;
+        case not (y in dom F);
+         then F.y = {} by FUNCT_1:def 4;
          hence thesis by XBOOLE_1:65;
         end;
        end;
@@ -2105,54 +2091,52 @@ A103:  k1 in dom P2 & k2 in dom P2 by FINSEQ_1:def 3;
       end;
      end;
      hence thesis;
-    end; then
-    reconsider F as Finite_Sep_Sequence of S by PROB_2:def 3;
-A110:for n be Nat st 2 <= n & n in dom a holds 0. < a.n & a.n < +infty
+    end;
+    then reconsider F as Finite_Sep_Sequence of S by PROB_2:def 3;
+A105:for n be Nat st 2 <= n & n in dom a holds 0. < a.n & a.n < +infty
    proof
     let n be Nat;
-    assume A111:2 <= n & n in dom a;
-A112:f is_finite by A1,MESFUNC2:def 5;
-    0 <= lenF - 1 by A30,A31; then
-    0+1 <= lenF by XREAL_1:21; then
-A113: 1 in dom F & n <> 1 by A39,A111,FINSEQ_1:3; then
-    F.1 misses F.n by A77,A85,A111; then
-A114: G1 misses F.n by A39,A113;
-A115:1 <= n & n <= lenF by A39,A77,A111,FINSEQ_1:3;
+    assume A106:2 <= n & n in dom a;
+A107:f is finite by A1,MESFUNC2:def 5;
+     0+1 <= lenF by A29,A30,XREAL_1:21;
+then A108: 1 in dom F & n <> 1 by A38,A106,FINSEQ_1:3;
+    then F.1 misses F.n by A73,A81,A106;
+then A109: G1 misses F.n by A38,A108;
+A110:1 <= n & n <= lenF by A38,A73,A106,FINSEQ_1:3;
     consider k1 be Nat such that
-A116:  k1 = n-1 & F.n = F1.(P2.k1) by A39,A77,A111;
-    1 + 1 <= n by A111; then
-    1 <= n-1 & n-1 <= lenF -1 by A115,XREAL_1:11,21; then
-    k1 in Seg len P2 by A30,A31,A116,FINSEQ_1:3; then
-    k1 in dom P2 by FINSEQ_1:def 3; then
-    P2.k1 in M by A12,FUNCT_1:12; then
-A117: F.n in rng F1 by A116,FUNCT_1:12;
-    a.n <> 0. & 0. <= a.n & a.n < +infty
+A111:  k1 = n-1 & F.n = F1.(P2.k1) by A38,A73,A106;
+     1 + 1 <= n by A106;
+    then 1 <= n-1 & n-1 <= lenF -1 by A110,XREAL_1:11,21;
+    then k1 in Seg len P2 by A29,A30,A111,FINSEQ_1:3;
+    then k1 in dom P2 by FINSEQ_1:def 3;
+    then P2.k1 in M by A12,FUNCT_1:12;
+then A112: F.n in rng F1 by A111,FUNCT_1:12;
+     a.n <> 0. & 0. <= a.n & a.n < +infty
     proof
-     now per cases;
-      case F.n <> {}; then
-       consider y be set such that
-A118:     y in F.n by XBOOLE_0:def 1;
-A119:    F.n in rng F & rng F c= S by A77,A111,FUNCT_1:12; then
-       F.n in S & S c= bool X; then
-       reconsider y as Element of X by A118;
-       reconsider Fn = F.n as Element of S by A119;
-A120:    a.n = f.y by A55,A111,A118;
-       G1 /\ F.n = {} by A114,XBOOLE_0:def 7; then
-A121:    not y in G1 by A118,XBOOLE_0:def 3;
+      now per cases;
+      case F.n <> {};
+       then consider y be set such that
+A113:     y in F.n by XBOOLE_0:def 1;
+A114:    F.n in rng F & rng F c= S by A73,A106,FUNCT_1:12;
+       then F.n in S & S c= bool X;
+       then reconsider y as Element of X by A113;
+       reconsider Fn = F.n as Element of S by A114;
+A115:    a.n = f.y by A52,A106,A113;
+        G1 /\ F.n = {} by A109,XBOOLE_0:def 7;
+then A116:    not y in G1 by A113,XBOOLE_0:def 3;
        thus a.n <> 0.
        proof
-        assume a.n = 0.; then
-        for x be Element of X st x in F.n holds f.x = 0. by A77,A111; then
-        Fn in F0 by A117;
-        hence contradiction by A118,A121,TARSKI:def 4;
+        assume a.n = 0.;
+        then for x be Element of X st x in F.n holds f.x = 0. by A73,A106;
+        then Fn in F0 by A112;
+        hence contradiction by A113,A116,TARSKI:def 4;
        end;
-       y in union rng F by A118,A119,TARSKI:def 4; then
-       0. <= f.y & |. f.y .| < +infty by A2,A76,A112,MESFUNC2:def 1;
-       hence 0. <= a.n & a.n < +infty by A120,EXTREAL2:58;
+        y in union rng F by A113,A114,TARSKI:def 4;
+       then 0. <= f.y & |. f.y .| < +infty by A2,A5,A63,A107,MESFUNC2:def 1;
+       hence 0. <= a.n & a.n < +infty by A115,EXTREAL2:58;
       end;
-      case F.n = {}; then
-       a.n = 1. by A55,A111;
-       hence thesis by EXTREAL2:20,MESFUNC1:def 8;
+      case F.n = {};
+       hence thesis by A52,A106,EXTREAL2:20,MESFUNC1:def 8;
       end;
      end;
      hence thesis;
@@ -2160,7 +2144,7 @@ A121:    not y in G1 by A118,XBOOLE_0:def 3;
     hence thesis;
    end;
    take F,a;
-   thus thesis by A76,A77,A81,A110,Def1;
+   thus thesis by A72,A73,A77,A105,Def1;
 end;
 
 theorem Th14:
@@ -2192,7 +2176,7 @@ A2:for x be set st x in dom f holds 0. <= f.x;
 end;
 
 theorem
-  for X be non empty set,
+   for X be non empty set,
       S be SigmaField of X,
       f be PartFunc of X,ExtREAL,
       F be Finite_Sep_Sequence of S,
@@ -2222,14 +2206,14 @@ A4:len ax = len a &
     ax.j = F(j) from FINSEQ_2:sch 1;
    take ax;
 A5:dom ax = Seg len a by A4,FINSEQ_1:def 3;
-   f.x = Sum(ax)
+    f.x = Sum(ax)
    proof
     consider Y be set such that
 A6:  x in Y & Y in rng F by A2,A3,TARSKI:def 4;
     consider k be set such that
 A7:  k in dom F & Y = F.k by A6,FUNCT_1:def 5;
-    dom F c= NAT by RELSET_1:12; then
-    reconsider k as Element of NAT by A7;
+     dom F c= NAT by RELSET_1:12;
+    then reconsider k as Element of NAT by A7;
 A8: k in Seg len a by A3,A7,FINSEQ_1:def 3;
     consider SA be Function of NAT,ExtREAL such that
 A9:  Sum(ax) = SA.(len ax) & SA.0 = 0. &
@@ -2238,19 +2222,19 @@ A9:  Sum(ax) = SA.(len ax) & SA.0 = 0. &
 A10: for i be Nat st i in Seg len ax & i <> k holds ax.i = 0.
     proof
      let i be Nat;
-     assume A11:i in Seg len ax & i <> k; then
-A12:  ax.i = a.i * (chi(F.i,X)).x by A4;
-     F.i misses F.k by A11,PROB_2:def 3; then
-     F.i /\ F.k = {} by XBOOLE_0:def 7; then
-     not (x in F.i) by A6,A7,XBOOLE_0:def 3; then
-     chi(F.i,X).x = 0. by FUNCT_3:def 3;
+     assume A11:i in Seg len ax & i <> k;
+then A12:  ax.i = a.i * (chi(F.i,X)).x by A4;
+      F.i misses F.k by A11,PROB_2:def 3;
+     then F.i /\ F.k = {} by XBOOLE_0:def 7;
+     then not (x in F.i) by A6,A7,XBOOLE_0:def 3;
+     then chi(F.i,X).x = 0. by FUNCT_3:def 3;
      hence thesis by A12,EXTREAL1:def 1;
     end;
 A13: for i be Nat st i in Seg len ax & i = k holds ax.i = f.x
     proof
      let i be Nat;
      assume A14:i in Seg len ax & i = k;
-     chi(F.i,X).x = 1. by A6,A7,A14,FUNCT_3:def 3,MESFUNC1:def 8;
+     then chi(F.i,X).x = 1. by A6,A7,FUNCT_3:def 3,MESFUNC1:def 8;
      then ax.i = a.i * 1. by A4,A14 .= a.i by EXTREAL2:4;
      hence thesis by A1,A6,A7,A14,Def1;
     end;
@@ -2264,33 +2248,33 @@ A16: for i be Nat st P[i] holds P[i+1]
      assume A17:P[i];
      assume A18:i+1 <= len ax;
      reconsider i as Element of NAT by ORDINAL1:def 13;
-     now per cases;
+      now per cases;
       case A19:i+1 < k;
-A20:    i <= i+1 by NAT_1:11; then
-A21:   i < k & i <= len ax by A18,A19,XXREAL_0:2;
-       k <= len a by A8,FINSEQ_1:3; then
-A22:    i < len ax by A4,A21,XXREAL_0:2; then
-       1 <= i+1 & i+1 <= len ax by NAT_1:11,13; then
-A23:    i+1 in Seg len ax by FINSEQ_1:3;
-       SA.(i+1) = 0. + ax.(i+1) by A9,A17,A19,A20,A22,XXREAL_0:2
+A20:    i <= i+1 by NAT_1:11;
+then A21:   i < k & i <= len ax by A18,A19,XXREAL_0:2;
+        k <= len a by A8,FINSEQ_1:3;
+then A22:    i < len ax by A4,A21,XXREAL_0:2;
+       then 1 <= i+1 & i+1 <= len ax by NAT_1:11,13;
+then A23:    i+1 in Seg len ax by FINSEQ_1:3;
+        SA.(i+1) = 0. + ax.(i+1) by A9,A17,A19,A20,A22,XXREAL_0:2
                .= ax.(i+1) by SUPINF_2:18
                .= 0. by A10,A19,A23;
        hence thesis by A19;
       end;
       case A24:i+1 >= k;
-       now per cases;
+        now per cases;
         case A25:k = i+1;
-A26:     k <= len a by A8,FINSEQ_1:3; then
-         i < len ax by A4,A25,NAT_1:13;
+A26:     k <= len a by A8,FINSEQ_1:3;
+         then i < len ax by A4,A25,NAT_1:13;
          hence SA.(i+1) = SA.i + ax.(i+1) by A9
                  .= ax.k by A4,A17,A25,A26,NAT_1:13,SUPINF_2:18
                  .= f.x by A4,A8,A13;
         end;
-        case k <> i+1; then
-A27:    k < i+1 by A24,REAL_1:def 5; then
-A28:    k <= i & i < len ax by A18,NAT_1:13;
-         1 <= i+1 by NAT_1:11; then
-A29:     i+1 in Seg len ax by A18,FINSEQ_1:3;
+        case k <> i+1;
+then A27:    k < i+1 by A24,REAL_1:def 5;
+then A28:    k <= i & i < len ax by A18,NAT_1:13;
+          1 <= i+1 by NAT_1:11;
+then A29:     i+1 in Seg len ax by A18,FINSEQ_1:3;
          thus SA.(i+1) = SA.i + ax.(i+1) by A9,A28
                  .= f.x + 0. by A10,A17,A18,A27,A29,NAT_1:13
                  .= f.x by SUPINF_2:18;
@@ -2302,14 +2286,14 @@ A29:     i+1 in Seg len ax by A18,FINSEQ_1:3;
      hence thesis;
     end;
 A30: for i be Nat holds P[i] from NAT_1:sch 2(A15,A16);
-    len ax >= k by A4,A8,FINSEQ_1:3;
+     len ax >= k by A4,A8,FINSEQ_1:3;
     hence thesis by A9,A30;
    end;
    hence thesis by A4,A5,FINSEQ_1:def 3;
 end;
 
 theorem
-  for p be FinSequence of ExtREAL,
+   for p be FinSequence of ExtREAL,
       q be FinSequence of REAL st p=q holds Sum(p)=Sum(q)
 proof
    let p be FinSequence of ExtREAL;
@@ -2321,16 +2305,16 @@ A2: Sum(p) = P.(len p) &
     P.0 = 0. &
     for i be Element of NAT st
      i < len p holds P.(i+1) = P.i + p.(i+1) by CONVFUN1:def 5;
-   now per cases;
+    now per cases;
      case
 A3:   len q = 0;
-      Sum(q) = addreal "**" q by RVSUM_1:def 13;
+       Sum(q) = addreal "**" q by RVSUM_1:def 13;
       hence thesis by A1,A2,A3,BINOP_2:2,FINSOP_1:def 1;
      end;
      case
 A4:   len q <> 0;
-      Sum(q) = addreal $$ q by RVSUM_1:def 13; then
-      consider Q be Function of NAT,REAL such that
+       Sum(q) = addreal $$ q by RVSUM_1:def 13;
+      then consider Q be Function of NAT,REAL such that
 A5:    Q.1 = q.1 &
        (for n be Element of NAT st 0 <> n & n < len q holds
          Q.(n+1) = addreal.(Q.n,q.(n+1))) & Sum(q) = Q.(len q)
@@ -2349,21 +2333,21 @@ A9:     0 <> k+1 & k+1 <= len q;
         per cases;
           suppose
 A10:        k = 0;
-            k < len q by A9,NAT_1:13; then
-            P.(k+1) = P.k + p.(k+1) by A1,A2
+             k < len q by A9,NAT_1:13;
+            then P.(k+1) = P.k + p.(k+1) by A1,A2
                    .= p.(k+1) by A2,A10,SUPINF_2:18;
             hence thesis by A1,A5,A10;
           end;
           suppose
 A11:        k <> 0;
-A12:        k < len q by A9,NAT_1:13; then
-A13:        P.(k+1) = P.k + p.(k+1) by A1,A2;
-            Q.(k+1) = addreal.(Q.k,q.(k+1)) by A5,A11,A12
+A12:        k < len q by A9,NAT_1:13;
+then A13:        P.(k+1) = P.k + p.(k+1) by A1,A2;
+             Q.(k+1) = addreal.(Q.k,q.(k+1)) by A5,A11,A12
                    .= Q.k + q.(k+1) by BINOP_2:def 9;
             hence thesis by A1,A8,A9,A11,A13,NAT_1:13,SUPINF_2:1;
           end;
       end;
-      for n be Nat holds P1[n] from NAT_1:sch 2(A6,A7);
+       for n be Nat holds P1[n] from NAT_1:sch 2(A6,A7);
       hence thesis by A1,A2,A4,A5;
      end;
    end;
@@ -2396,33 +2380,33 @@ A6:for i be Nat st P[i] holds P[i+1]
     assume A7:P[i];
     assume A8:i+1 <= len p;
     reconsider i as Element of NAT by ORDINAL1:def 13;
-    now per cases;
+     now per cases;
      case A9:i+1 < m;
 A10:   i <= i+1 by NAT_1:11;
-      i < len p by A8,NAT_1:13; then
-A11:   f.(i+1) = f.i + p.(i+1) by A4;
-      1 <= i+1 by NAT_1:11; then
-      i+1 in Seg len p by A8,FINSEQ_1:3; then
-      i+1 in dom p by FINSEQ_1:def 3; then
-      0. <= p.(i+1) by A1;
+       i < len p by A8,NAT_1:13;
+then A11:   f.(i+1) = f.i + p.(i+1) by A4;
+       1 <= i+1 by NAT_1:11;
+      then i+1 in Seg len p by A8,FINSEQ_1:3;
+      then i+1 in dom p by FINSEQ_1:def 3;
+      then 0. <= p.(i+1) by A1;
       hence thesis by A7,A8,A9,A10,A11,XXREAL_0:2,EXTREAL2:7;
      end;
      case A12:i+1 >= m;
-      now per cases;
+       now per cases;
        case A13:i+1 = m;
-        i < len p by A8,NAT_1:13; then
-        f.(i+1) = f.i + p.(i+1) by A4;
+         i < len p by A8,NAT_1:13;
+        then f.(i+1) = f.i + p.(i+1) by A4;
         hence f.(i+1) = +infty
          by A3,A7,A8,A13,NAT_1:13,SUPINF_2:def 2;
        end;
-       case i+1 <> m; then
-A14:    i+1 > m by A12,REAL_1:def 5;
-        1 <= i+1 by NAT_1:11; then
-        i+1 in Seg len p by A8,FINSEQ_1:3; then
-        i+1 in dom p by FINSEQ_1:def 3; then
-A15:    p.(i+1) <> -infty by A1;
-        i < len p by A8,NAT_1:13; then
-        f.(i+1) = f.i + p.(i+1) by A4;
+       case i+1 <> m;
+then A14:    i+1 > m by A12,REAL_1:def 5;
+         1 <= i+1 by NAT_1:11;
+        then i+1 in Seg len p by A8,FINSEQ_1:3;
+        then i+1 in dom p by FINSEQ_1:def 3;
+then A15:    p.(i+1) <> -infty by A1;
+         i < len p by A8,NAT_1:13;
+        then f.(i+1) = f.i + p.(i+1) by A4;
         hence f.(i+1) = +infty by A7,A8,A14,A15,NAT_1:13,SUPINF_2:def 2;
        end;
       end;
@@ -2432,8 +2416,8 @@ A15:    p.(i+1) <> -infty by A1;
     hence thesis;
    end;
 A16:for i be Nat holds P[i] from NAT_1:sch 2(A5,A6);
-   m in Seg len p by A3,FINSEQ_1:def 3; then
-   len p >= m by FINSEQ_1:3;
+    m in Seg len p by A3,FINSEQ_1:def 3;
+   then len p >= m by FINSEQ_1:3;
    hence thesis by A4,A16;
 end;
 
@@ -2446,7 +2430,7 @@ let f be PartFunc of X,ExtREAL;
                 & dom f <> {}
                 & for x be set st x in dom f holds 0. <= f.x;
 func integral(X,S,M,f) -> Element of ExtREAL means
-  ex F be Finite_Sep_Sequence of S,
+   ex F be Finite_Sep_Sequence of S,
       a, x be FinSequence of ExtREAL st F,a are_Re-presentation_of f
          & a.1 =0.
          & (for n be Nat st 2 <= n & n in dom a holds
@@ -2469,21 +2453,20 @@ consider p be PartFunc of NAT,ExtREAL such that
  A6: (for x be set holds x in dom p iff x in NAT & P[x]) &
        (for x be set st x in dom p holds p.x = G(x))
            from PARTFUN1:sch 3(A5);
-  for x be set st x in dom p holds x in dom F by A6; then
-  A7: dom p c= dom F by TARSKI:def 3;
-      for x be set st x in dom F holds x in dom p
+   for x be set st x in dom p holds x in dom F by A6;
+  then A7: dom p c= dom F by TARSKI:def 3;
+       for x be set st x in dom F holds x in dom p
       proof
         let x be set;
         assume A8:x in dom F;
-        dom F c= NAT by RELSET_1:12;
+         dom F c= NAT by RELSET_1:12;
         hence thesis by A6,A8;
-      end; then
-      dom F c= dom p by TARSKI:def 3; then
-        A9: dom p = dom F by A7,XBOOLE_0:def 10;
+      end;
+      then dom F c= dom p by TARSKI:def 3;
+        then A9: dom p = dom F by A7,XBOOLE_0:def 10;
   then dom p = Seg len F by FINSEQ_1:def 3;
   then p is FinSequence & rng p c= ExtREAL by FINSEQ_1:def 2;
-  then
-  reconsider p as FinSequence of ExtREAL by FINSEQ_1:def 4;
+  then reconsider p as FinSequence of ExtREAL by FINSEQ_1:def 4;
   A10: for n be Nat st n in dom p holds p.n=a.n*(M*F).n by A6;
 take Sum(p);
 thus thesis by A2,A3,A4,A9,A10;
@@ -2539,29 +2522,29 @@ let s1,s2 be Element of ExtREAL such that
       A28:for n be Nat st n in dom F1 holds 0. <= (M*F1).n
           proof
           let n be Nat;
-            assume A29: n in dom F1; then
-            A30: (M*F1).n=M.(F1.n) by FUNCT_1:23;
-            F1.n in rng F1 by A29,FUNCT_1:12;
+            assume A29: n in dom F1;
+            then A30: (M*F1).n=M.(F1.n) by FUNCT_1:23;
+             F1.n in rng F1 by A29,FUNCT_1:12;
             hence thesis by A27,A30,SUPINF_2:58;
           end;
       A31:for n be Nat st n in dom F2 holds 0. <= (M*F2).n
           proof
           let n be Nat;
-            assume A32: n in dom F2; then
-            A33: (M*F2).n=M.(F2.n) by FUNCT_1:23;
-            F2.n in rng F2 by A32,FUNCT_1:12;
+            assume A32: n in dom F2;
+            then A33: (M*F2).n=M.(F2.n) by FUNCT_1:23;
+             F2.n in rng F2 by A32,FUNCT_1:12;
             hence thesis by A27,A33,SUPINF_2:58;
           end;
         A34:for n be Nat st n in dom a1 holds 0. <= a1.n
           proof
           let n be Nat;
             assume A35: n in dom a1;
-            now per cases;
+             now per cases;
              case n=1;
              thus a1.1=0. by A14;
              end;
              case A36:n<>1;
-             n in Seg len a1 by A35,FINSEQ_1:def 3;
+              n in Seg len a1 by A35,FINSEQ_1:def 3;
              then 1 <= n by FINSEQ_1:3;
              then 1 < n by A36,REAL_1:def 5;
              then 1+1 < n+1 by XREAL_1:10;
@@ -2575,12 +2558,12 @@ let s1,s2 be Element of ExtREAL such that
           proof
           let n be Nat;
             assume A38: n in dom a2;
-            now per cases;
+             now per cases;
              case n=1;
              thus a2.1=0. by A21;
              end;
              case A39:n<>1;
-             n in Seg len a2 by A38,FINSEQ_1:def 3;
+              n in Seg len a2 by A38,FINSEQ_1:def 3;
              then 1 <=n by FINSEQ_1:3;
              then 1 < n by A39,REAL_1:def 5;
              then 1+1 < n+1 by XREAL_1:10;
@@ -2593,107 +2576,107 @@ let s1,s2 be Element of ExtREAL such that
         A40:for n be Nat st n in dom x1 holds 0. <= x1.n
           proof
           let n be Nat;
-            assume A41: n in dom x1; then
-            A42: 0. <= a1.n by A16,A19,A34;
-            A43: 0. <= (M*F1).n by A16,A28,A41;
-            0. <= (a1.n)*( (M*F1).n) by A42,A43,EXTREAL2:45;
+            assume A41: n in dom x1;
+            then A42: 0. <= a1.n by A16,A19,A34;
+             0. <= (M*F1).n by A16,A28,A41;
+            then 0. <= (a1.n)*( (M*F1).n) by A42,EXTREAL2:45;
             hence thesis by A17,A41;
           end;
-      A44:for n be Nat st n in dom x2 holds 0. <= x2.n
+      A43:for n be Nat st n in dom x2 holds 0. <= x2.n
           proof
           let n be Nat;
-            assume A45: n in dom x2; then
-            A46: 0. <= a2.n by A23,A26,A37;
-            A47: 0. <= (M*F2).n by A23,A31,A45;
-            0. <= (a2.n)*( (M*F2).n) by A46,A47,EXTREAL2:45;
-            hence thesis by A24,A45;
+            assume A44: n in dom x2;
+            then A45: 0. <= a2.n by A23,A26,A37;
+             0. <= (M*F2).n by A23,A31,A44;
+            then 0. <= (a2.n)*( (M*F2).n) by A45,EXTREAL2:45;
+            hence thesis by A24,A44;
           end;
-   now per cases;
-      case A48: ex i,j be Nat st
+    now per cases;
+      case ex i,j be Nat st
                      i in dom F1 & j in dom F2
                      &2<= i & 2<=j  & M.(F1.i /\ F2.j)=+infty;
-            consider i,j be Nat such that
-            A49: i in dom F1 & j in dom F2
-                   &2<= i & 2<=j & M.(F1.i /\ F2.j)=+infty by A48;
-             A50:F1.i in rng F1 by A49,FUNCT_1:12; then
-              A51:  F1.i is_measurable M by MEASURE1:def 12;
-              A52:   F2.j in rng F2 by A49,FUNCT_1:12; then
-              A53:  F2.j is_measurable M by MEASURE1:def 12;
-               F1.i /\ F2.j is_measurable M by A51,A53,MEASURE1:66; then
-              A54:  F1.i /\ F2.j in S by MEASURE1:def 12;
-              A55:  F1.i /\ F2.j c= F1.i by XBOOLE_1:17;
-              A56:  F1.i /\ F2.j c= F2.j by XBOOLE_1:17;
-               +infty <= M.(F1.i) by A49,A50,A54,A55,MEASURE1:62; then
-              A57:M.(F1.i)= +infty by XXREAL_0:4;
-               +infty <= M.(F2.j) by A49,A52,A54,A56,MEASURE1:62; then
-              A58:M.(F2.j)= +infty by XXREAL_0:4;
-              A59: (M*F1).i = +infty by A49,A57,FUNCT_1:23;
-                0. < a1.i by A15,A19,A49; then
-              +infty = ( a1.i)*((M*F1).i) by A59,EXTREAL1:def 1; then
-               x1.i=+infty by A16,A17,A49; then
-             A60:  Sum(x1)=+infty by A16,A40,A49,Th17;
-              A61: (M*F2).j = +infty by A49,A58,FUNCT_1:23;
-                0. < a2.j by A22,A26,A49; then
-              +infty = (a2.j)*((M*F2).j) by A61,EXTREAL1:def 1; then
-               x2.j=+infty by A23,A24,A49;
-           hence s1=s2 by A18,A23,A25,A44,A49,A60,Th17;
+            then consider i,j be Nat such that
+            A46: i in dom F1 & j in dom F2
+                   &2<= i & 2<=j & M.(F1.i /\ F2.j)=+infty;
+             A47:F1.i in rng F1 by A46,FUNCT_1:12;
+              then A48:  F1.i is_measurable M by MEASURE1:def 12;
+              A49:   F2.j in rng F2 by A46,FUNCT_1:12;
+              then  F2.j is_measurable M by MEASURE1:def 12;
+               then F1.i /\ F2.j is_measurable M by A48,MEASURE1:66;
+              then A50:  F1.i /\ F2.j in S by MEASURE1:def 12;
+              A51:  F1.i /\ F2.j c= F1.i by XBOOLE_1:17;
+              A52:  F1.i /\ F2.j c= F2.j by XBOOLE_1:17;
+                +infty <= M.(F1.i) by A46,A47,A50,A51,MEASURE1:62;
+              then A53:M.(F1.i)= +infty by XXREAL_0:4;
+                +infty <= M.(F2.j) by A46,A49,A50,A52,MEASURE1:62;
+              then A54:M.(F2.j)= +infty by XXREAL_0:4;
+              A55: (M*F1).i = +infty by A46,A53,FUNCT_1:23;
+                 0. < a1.i by A15,A19,A46;
+              then +infty = ( a1.i)*((M*F1).i) by A55,EXTREAL1:def 1;
+               then x1.i=+infty by A16,A17,A46;
+             then A56:  Sum(x1)=+infty by A16,A40,A46,Th17;
+              A57: (M*F2).j = +infty by A46,A54,FUNCT_1:23;
+                 0. < a2.j by A22,A26,A46;
+              then +infty = (a2.j)*((M*F2).j) by A57,EXTREAL1:def 1;
+               then x2.j=+infty by A23,A24,A46;
+           hence s1=s2 by A18,A23,A25,A43,A46,A56,Th17;
       end;
-     case A62: for i,j be Nat
+     case A58: for i,j be Nat
       st  i in dom F1 & j in dom F2 & 2<= i & 2<=j  holds
       M.(F1.i /\ F2.j) <> +infty;
         set n= len x1;
         set m= len x2;
-        ex a be Function of [:(Seg n),(Seg m) :],REAL
+         ex a be Function of [:(Seg n),(Seg m) :],REAL
          st for i,j be Nat st i in Seg n & j in Seg m
          holds a.(i,j) = a1.i * (M.(F1.i /\ F2.j))
          proof
          deffunc F(set,set) = a1.$1 * (M.(F1.$1 /\ F2.$2));
-         A63: for x,y be set st x in Seg n & y in Seg m
+         A59: for x,y be set st x in Seg n & y in Seg m
           holds F(x,y) in REAL
   proof
   let x,y be set such that
-  A64: x in (Seg n)  & y in (Seg m);
-     x in { k where k is Element of NAT : 1 <= k & k <= n }
-     by A64,FINSEQ_1:def 1;
+  A60: x in (Seg n)  & y in (Seg m);
+      x in { k where k is Element of NAT : 1 <= k & k <= n }
+     by A60,FINSEQ_1:def 1;
      then consider kx be Element of NAT such that
-    A65: x=kx &  ( 1 <= kx & kx <= n );
-    y in { k where k is Element of NAT : 1 <= k & k <= m }
-    by A64,FINSEQ_1:def 1;
+    A61: x=kx &  ( 1 <= kx & kx <= n );
+     y in { k where k is Element of NAT : 1 <= k & k <= m }
+    by A60,FINSEQ_1:def 1;
     then consider ky be Element of NAT such that
-    A66: y=ky & ( 1 <= ky & ky <= m );
-    A67: kx in dom F1 by A16,A64,A65,FINSEQ_1:def 3;
-    A68: ky in dom F2 by A23,A64,A66,FINSEQ_1:def 3;
-    F1.kx in rng F1 by A67,FUNCT_1:12; then
-    A69:  F1.kx is_measurable M by MEASURE1:def 12;
-    F2.ky in rng F2 by A68,FUNCT_1:12; then
-    A70:  F2.ky is_measurable M by MEASURE1:def 12;
-      F1.kx /\ F2.ky is_measurable M by A69,A70,MEASURE1:66; then
-    A71:  F1.kx /\ F2.ky in S by MEASURE1:def 12;
-    now per cases;
-        case A72:  not (2 <= kx & 2 <= ky);
-            now per cases by A72;
-              case A73: kx < 2;
-               kx <=1+1 by A73; then
-               A74:kx <= 1 by A73,NAT_1:8;
-               F(kx,ky) = 0. * (M.(F1.kx /\ F2.ky)) by A14,A65,A74,XXREAL_0:1
+    A62: y=ky & ( 1 <= ky & ky <= m );
+    A63: kx in dom F1 by A16,A60,A61,FINSEQ_1:def 3;
+    A64: ky in dom F2 by A23,A60,A62,FINSEQ_1:def 3;
+     F1.kx in rng F1 by A63,FUNCT_1:12;
+    then A65:  F1.kx is_measurable M by MEASURE1:def 12;
+     F2.ky in rng F2 by A64,FUNCT_1:12;
+    then  F2.ky is_measurable M by MEASURE1:def 12;
+      then F1.kx /\ F2.ky is_measurable M by A65,MEASURE1:66;
+    then A66:  F1.kx /\ F2.ky in S by MEASURE1:def 12;
+     now per cases;
+        case A67:  not (2 <= kx & 2 <= ky);
+             now per cases by A67;
+              case A68: kx < 2;
+               then kx <=1+1;
+               then kx <= 1 by A68,NAT_1:8;
+               then F(kx,ky) = 0. * (M.(F1.kx /\ F2.ky)) by A14,A61,XXREAL_0:1
                .=0. by EXTREAL1:def 1;
                hence F(kx,ky) in REAL;
                end;
-              case A75: ky < 2;
-               ky <=1+1 by A75; then
-               A76:ky <= 1 by A75,NAT_1:8;
-               now per cases;
+              case A69: ky < 2;
+               then ky <=1+1;
+               then A70:ky <= 1 by A69,NAT_1:8;
+                now per cases;
                  case F1.kx /\ F2.ky = {};
                     hence F(kx,ky) = a1.kx * 0. by MEASURE1:def 11
                                    .=0. by EXTREAL1:def 1;
                  end;
-                 case A77:  F1.kx /\ F2.ky <> {};
-                   consider x be set such that
-                     A78: x in F1.kx /\ F2.ky by A77,XBOOLE_0:def 1;
-                     A79: x in F1.kx & x in F2.ky by A78,XBOOLE_0:def 3;
-                     a1.kx=f.x by A13,A67,A79,Def1
-                            .=a2.ky by A20,A68,A79,Def1
-                            .=0. by A21,A66,A76,XXREAL_0:1;
+                 case  F1.kx /\ F2.ky <> {};
+                   then consider x be set such that
+                     A71: x in F1.kx /\ F2.ky by XBOOLE_0:def 1;
+                     A72: x in F1.kx & x in F2.ky by A71,XBOOLE_0:def 3;
+                     then a1.kx=f.x by A13,A63,Def1
+                            .=a2.ky by A20,A64,A72,Def1
+                            .=0. by A21,A62,A70,XXREAL_0:1;
                     hence F(kx,ky) = 0. by EXTREAL1:def 1;
                  end;
                end;
@@ -2702,35 +2685,35 @@ let s1,s2 be Element of ExtREAL such that
             end;
            hence F(kx,ky) in REAL;
         end;
-        case A80: 2 <= kx & 2 <= ky;
-           A81: M.(F1.kx /\ F2.ky) <> +infty by A62,A67,A68,A80;
-           M  is nonnegative by MEASURE1:def 11;
-           then 0. <= M.(F1.kx /\ F2.ky)  by A71,SUPINF_2:58; then
-            reconsider r3=M.(F1.kx /\ F2.ky) as Real
-              by A81,XXREAL_0:14;
-            a1.kx is Real
+        case A73: 2 <= kx & 2 <= ky;
+           then A74: M.(F1.kx /\ F2.ky) <> +infty by A58,A63,A64;
+            M  is nonnegative by MEASURE1:def 11;
+           then 0. <= M.(F1.kx /\ F2.ky)  by A66,SUPINF_2:58;
+            then reconsider r3=M.(F1.kx /\ F2.ky) as Real
+              by A74,XXREAL_0:14;
+             a1.kx is Real
             proof
-              A82: a1.kx <> +infty by A15,A19,A67,A80;
-               0. <= a1.kx by A19,A34,A67;
-           hence a1.kx is Real by A82,XXREAL_0:14;
+              A75: a1.kx <> +infty by A15,A19,A63,A73;
+                0. <= a1.kx by A19,A34,A63;
+           hence a1.kx is Real by A75,XXREAL_0:14;
             end;
             then reconsider r2=a1.kx as Real;
-            a1.kx*M.(F1.kx /\ F2.ky) = r2*r3 by EXTREAL1:13;
+             a1.kx*M.(F1.kx /\ F2.ky) = r2*r3 by EXTREAL1:13;
            hence F(kx,ky) in REAL;
            end;
       end;
-   hence thesis by A65,A66;
+   hence thesis by A61,A62;
  end;
          consider f being Function of [:(Seg n),(Seg m) :],REAL such that
-         A83: for x,y be set st x in Seg n & y in Seg m
-           holds f.(x,y)=F(x,y) from BINOP_1:sch 2(A63);
+         A76: for x,y be set st x in Seg n & y in Seg m
+           holds f.(x,y)=F(x,y) from BINOP_1:sch 2(A59);
            take f;
-           thus thesis by A83;
+           thus thesis by A76;
          end;
     then consider a be Function of [:(Seg n),(Seg m) :],REAL such that
-    A84: for i,j be Nat st i in Seg n & j in Seg m
+    A77: for i,j be Nat st i in Seg n & j in Seg m
          holds a.(i,j) = a1.i * (M.(F1.i /\ F2.j));
-     ex p be FinSequence of REAL st dom p=Seg n
+      ex p be FinSequence of REAL st dom p=Seg n
             & for i be Nat st i in dom p
                   holds ex r be FinSequence of REAL st
                         (dom r = Seg m
@@ -2741,75 +2724,75 @@ let s1,s2 be Element of ExtREAL such that
      ex r be FinSequence of REAL st
                dom(r) = Seg m & $2=Sum(r)
              & for j be Nat st j in dom(r) holds r.j=a.[$1,j];
-     A85: for k be Element of NAT,y1,y2 be set st
+     A78: for k be Element of NAT,y1,y2 be set st
           k in Seg n & P[k,y1] & P[k,y2] holds y1=y2
           proof
           let k be Element of NAT,y1,y2 be set such that k in Seg n and
-             A86:   P[k,y1] and
-             A87:   P[k,y2];
+             A79:   P[k,y1] and
+             A80:   P[k,y2];
              consider r1 be FinSequence of REAL such that
-                     A88: dom(r1) = Seg m and
-                     A89: y1=Sum(r1) and
-                     A90: for j be Nat st j in dom(r1)
-                       holds r1.j=a.[k,j]  by A86;
+                     A81: dom(r1) = Seg m and
+                     A82: y1=Sum(r1) and
+                     A83: for j be Nat st j in dom(r1)
+                       holds r1.j=a.[k,j]  by A79;
              consider r2 be FinSequence of REAL such that
-                     A91: dom(r2) = Seg m and
-                     A92: y2=Sum(r2) and
-                     A93: for j be Nat st j in dom(r2)
-                       holds r2.j=a.[k,j] by A87;
-             now let j be Element of NAT;
-                 assume A94: j in dom (r1);
-                 hence r1.j = a.[k,j] by A90
-                             .= r2.j by A88,A91,A93,A94;
+                     A84: dom(r2) = Seg m and
+                     A85: y2=Sum(r2) and
+                     A86: for j be Nat st j in dom(r2)
+                       holds r2.j=a.[k,j] by A80;
+              now let j be Element of NAT;
+                 assume A87: j in dom (r1);
+                 hence r1.j = a.[k,j] by A83
+                             .= r2.j by A81,A84,A86,A87;
                  end;
-               hence thesis by A88,A89,A91,A92,FINSEQ_1:17;
+               hence thesis by A81,A82,A84,A85,FINSEQ_1:17;
           end;
-     A95: for k be Element of NAT st k in Seg n ex x be set st P[k,x]
+     A88: for k be Element of NAT st k in Seg n ex x be set st P[k,x]
      proof
      let k be Element of NAT;
       assume k in Seg n;
        deffunc G(set)= a.[k,$1];
         consider r being FinSequence such that
-          A96: len r = m and
-          A97:  for i be Element of NAT st i in Seg m holds r.i=G(i)
+          A89: len r = m and
+          A90:  for i be Element of NAT st i in Seg m holds r.i=G(i)
           from FINSEQ_1:sch 2;
-          A98: dom(r) = Seg m by A96,FINSEQ_1:def 3;
-          for i be Element of NAT st i in dom r holds r.i in REAL
+          A91: dom(r) = Seg m by A89,FINSEQ_1:def 3;
+           for i be Element of NAT st i in dom r holds r.i in REAL
           proof
             let i be Element of NAT;
-            assume i in dom r; then
-            A99: i in Seg m by A96,FINSEQ_1:def 3;
-            a.[k,i] in REAL;
-            hence r.i in REAL by A97,A99;
+            assume i in dom r;
+            then A92: i in Seg m by A89,FINSEQ_1:def 3;
+             a.[k,i] in REAL;
+            hence r.i in REAL by A90,A92;
           end;
           then reconsider r as FinSequence of REAL by FINSEQ_2:14;
           take x=Sum(r);
-          for i be Nat st i in Seg m holds r.i=G(i) by A97;
-          hence thesis by A98;
+           for i be Nat st i in Seg m holds r.i=G(i) by A90;
+          hence thesis by A91;
      end;
      consider p be FinSequence such that
-     A100: dom p = Seg n &
+     A93: dom p = Seg n &
      for k be Element of NAT st k in Seg n holds P[k,p.k]
-     from FINSEQ_1:sch 1(A85,A95);
-     for i be Element of NAT st i in dom p holds p.i in REAL
+     from FINSEQ_1:sch 1(A78,A88);
+      for i be Element of NAT st i in dom p holds p.i in REAL
      proof
      let i be Element of NAT;
-     assume i in dom p; then
-     consider r be FinSequence of REAL such that
-     A101:   dom(r) = Seg m & p.i=Sum(r)
-                  & for j be Nat st j in dom(r) holds r.j=a.[i,j] by A100;
-      thus p.i in REAL by A101;
+     assume i in dom p;
+     then consider r be FinSequence of REAL such that
+     A94:   dom(r) = Seg m & p.i=Sum(r)
+                  & for j be Nat st j in dom(r) holds r.j=a.[i,j] by A93;
+      thus p.i in REAL by A94;
      end;
      then reconsider p as FinSequence of REAL by FINSEQ_2:14;
      take p;
-     thus thesis by A100;
+     thus thesis by A93;
    end;
     then consider p be FinSequence of REAL such that
-      A102:    dom p=Seg n & for i be Nat st i in dom p
+      A95:    dom p=Seg n & for i be Nat st i in dom p
                   holds ex r be FinSequence of REAL st
                         (dom r = Seg m & p.i=Sum r
                          & for j be Nat st j in dom r holds r.j=a.[i,j]);
-     ex   q be FinSequence of REAL st dom q=Seg m
+      ex   q be FinSequence of REAL st dom q=Seg m
            & for j be Nat st j in dom q
                  holds ex s be FinSequence of REAL st
                        (dom s = Seg n & q.j=Sum s
@@ -2819,305 +2802,304 @@ let s1,s2 be Element of ExtREAL such that
                  ex s be FinSequence of REAL st
                        dom(s) = Seg n & $2=Sum(s)
                        & for i be Nat st i in dom(s) holds s.i=a.[i,$1];
-     A103: for k be Element of NAT,y1,y2 be set st
+     A96: for k be Element of NAT,y1,y2 be set st
           k in Seg m & P[k,y1] & P[k,y2] holds y1=y2
                proof
           let k be Element of NAT,y1,y2 be set such that k in Seg m and
-             A104:   P[k,y1] and
-             A105:   P[k,y2];
+             A97:   P[k,y1] and
+             A98:   P[k,y2];
              consider s1 be FinSequence of REAL such that
-                     A106: dom(s1) = Seg n and
-                     A107: y1=Sum(s1) and
-                     A108: for j be Nat st j in dom s1
-                       holds s1.j=a.[j,k]  by A104;
+                     A99: dom(s1) = Seg n and
+                     A100: y1=Sum(s1) and
+                     A101: for j be Nat st j in dom s1
+                       holds s1.j=a.[j,k]  by A97;
              consider s2 be FinSequence of REAL such that
-                     A109: dom(s2) = Seg n and
-                     A110: y2=Sum(s2) and
-                     A111: for j be Nat st j in dom(s2)
-                       holds s2.j=a.[j,k] by A105;
-             now let j be Element of NAT;
-                 assume A112: j in dom (s1);
-                 hence s1.j = a.[j,k] by A108
-                             .= s2.j by A106,A109,A111,A112;
+                     A102: dom(s2) = Seg n and
+                     A103: y2=Sum(s2) and
+                     A104: for j be Nat st j in dom(s2)
+                       holds s2.j=a.[j,k] by A98;
+              now let j be Element of NAT;
+                 assume A105: j in dom (s1);
+                 hence s1.j = a.[j,k] by A101
+                             .= s2.j by A99,A102,A104,A105;
                  end;
-               hence thesis by A106,A107,A109,A110,FINSEQ_1:17;
+               hence thesis by A99,A100,A102,A103,FINSEQ_1:17;
           end;
-     A113: for k be Element of NAT st k in Seg m ex x be set st P[k,x]
+     A106: for k be Element of NAT st k in Seg m ex x be set st P[k,x]
       proof
           let k be Element of NAT;
            assume  k in Seg m;
             deffunc G(set)= a.[$1,k];
              consider s being FinSequence such that
-               A114: len s = n and
-               A115:  for i be Element of NAT st i in Seg n holds s.i=G(i)
+               A107: len s = n and
+               A108:  for i be Element of NAT st i in Seg n holds s.i=G(i)
                        from FINSEQ_1:sch 2;
-               A116: dom(s) = Seg n by A114,FINSEQ_1:def 3;
-               for i be Element of NAT st i in dom s holds s.i in REAL
+               A109: dom(s) = Seg n by A107,FINSEQ_1:def 3;
+                for i be Element of NAT st i in dom s holds s.i in REAL
                proof
                  let i be Element of NAT;
-                 assume i in dom s; then
-                 A117: i in Seg n by A114,FINSEQ_1:def 3;
-                 a.[i,k] in REAL;
-                 hence s.i in REAL by A115,A117;
+                 assume i in dom s;
+                 then A110: i in Seg n by A107,FINSEQ_1:def 3;
+                  a.[i,k] in REAL;
+                 hence s.i in REAL by A108,A110;
                end;
                then reconsider s as FinSequence of REAL by FINSEQ_2:14;
                take x=Sum(s);
-               for i be Nat st i in Seg n holds s.i=G(i) by A115;
-               hence thesis by A116;
+                for i be Nat st i in Seg n holds s.i=G(i) by A108;
+               hence thesis by A109;
           end;
      consider p be FinSequence such that
-     A118: dom p = Seg m &
+     A111: dom p = Seg m &
      for k be Element of NAT st k in Seg m holds P[k,p.k]
-     from FINSEQ_1:sch 1(A103,A113);
-     for i be Element of NAT st i in dom p holds p.i in REAL
+     from FINSEQ_1:sch 1(A96,A106);
+      for i be Element of NAT st i in dom p holds p.i in REAL
           proof
           let i be Element of NAT;
-          assume i in dom p; then
-          consider s be FinSequence of REAL such that
-          A119: dom(s) = Seg n & p.i=Sum(s)
+          assume i in dom p;
+          then consider s be FinSequence of REAL such that
+          A112: dom(s) = Seg n & p.i=Sum(s)
                        & for j be Nat st j in dom(s)
-                       holds s.j=a.[j,i] by A118;
-           thus p.i in REAL by A119;
+                       holds s.j=a.[j,i] by A111;
+           thus p.i in REAL by A112;
           end;
      then reconsider p as FinSequence of REAL by FINSEQ_2:14;
      take p;
-     thus thesis by A118;
+     thus thesis by A111;
    end;
     then consider q be FinSequence of REAL such that
-     A120:  dom q=Seg m & for j be Nat st j in dom q
+     A113:  dom q=Seg m & for j be Nat st j in dom q
                  holds ex s be FinSequence of REAL st (dom(s) = Seg n
                         & q.j=Sum(s)
                         & for i be Nat st i in dom(s) holds s.i=a.[i,j]);
-     A121: Sum(p)=Sum(q) by A102,A120,Th1;
-     p=x1
+     A114: Sum(p)=Sum(q) by A95,A113,Th1;
+      p=x1
      proof
-       A122: dom p = dom x1 by A102,FINSEQ_1:def 3;
-       A123: for k be Element of NAT st k in dom p holds p.k = x1.k
+       A115: dom p = dom x1 by A95,FINSEQ_1:def 3;
+        for k be Element of NAT st k in dom p holds p.k = x1.k
        proof
        let k be Element of NAT;
-         assume A124: k in dom p;
-         consider r be FinSequence of REAL such that
-          A125:dom r = Seg m and
-          A126:p.k=Sum r and
-          A127:for j be Nat st j in dom r holds r.j=a.[k,j] by A102,A124;
-          A128: for j be Nat st j in dom r holds
+         assume A116: k in dom p;
+         then consider r be FinSequence of REAL such that
+          A117:dom r = Seg m and
+          A118:p.k=Sum r and
+          A119:for j be Nat st j in dom r holds r.j=a.[k,j] by A95;
+          A120: for j be Nat st j in dom r holds
                r.j=a1.k * (M.(F1.k /\ F2.j))
                proof
                  let j be Nat;
                   assume
-                  A129: j in dom r;
-                  hence r.j=a.(k,j) by A127
-                     .=a1.k * (M.(F1.k /\ F2.j)) by A84,A102,A124,A125,A129;
+                  A121: j in dom r;
+                  hence r.j=a.(k,j) by A119
+                     .=a1.k * (M.(F1.k /\ F2.j)) by A77,A95,A116,A117,A121;
                end;
-           ex F11 be Finite_Sep_Sequence of S st union rng F11 = F1.k &
+            ex F11 be Finite_Sep_Sequence of S st union rng F11 = F1.k &
                   dom F11=dom r &
                   for j be Nat st j in dom r holds F11.j=F1.k /\ F2.j
            proof
            deffunc G(set)=F1.k /\ F2.$1;
            consider F being FinSequence such that
-             A130: len F = m and
-             A131: for i be Element of NAT st i in Seg m holds F.i=G(i)
+             A122: len F = m and
+             A123: for i be Element of NAT st i in Seg m holds F.i=G(i)
              from FINSEQ_1:sch 2;
-A132:          now let i be Nat;
-               thus i in Seg m implies F.i=G(i) by A131;
+A124:          now let i be Nat;
+               thus i in Seg m implies F.i=G(i) by A123;
              end;
-             A133: dom F = Seg m by A130,FINSEQ_1:def 3;
-             for i be Element of NAT st i in dom F holds F.i in S
+             A125: dom F = Seg m by A122,FINSEQ_1:def 3;
+              for i be Element of NAT st i in dom F holds F.i in S
              proof
                 let i be Element of NAT;
-                assume A134: i in dom F;
-                A135: i in Seg m by A130,A134,FINSEQ_1:def 3;
-                 A136: i in dom F2 by A23,A135,FINSEQ_1:def 3;
-                  F1.k in rng F1 by A16,A122,A124,FUNCT_1:12; then
-                  A137: F1.k is_measurable M by MEASURE1:def 12;
-                  F2.i in rng F2 by A136,FUNCT_1:12; then
-                  A138: F2.i is_measurable M by MEASURE1:def 12;
-                    F1.k /\ F2.i is_measurable M by A137,A138,MEASURE1:66;
+                assume A126: i in dom F;
+                then i in Seg m by A122,FINSEQ_1:def 3;
+                 then A127: i in dom F2 by A23,FINSEQ_1:def 3;
+                   F1.k in rng F1 by A16,A115,A116,FUNCT_1:12;
+                  then A128: F1.k is_measurable M by MEASURE1:def 12;
+                   F2.i in rng F2 by A127,FUNCT_1:12;
+                  then F2.i is_measurable M by MEASURE1:def 12;
+                    then F1.k /\ F2.i is_measurable M by A128,MEASURE1:66;
                   then F1.k /\ F2.i in S by MEASURE1:def 12;
-                  hence F.i in S by A131,A133,A134;
+                  hence F.i in S by A123,A125,A126;
              end;
              then reconsider F as FinSequence of S by FINSEQ_2:14;
-             A139: dom F = dom F2 by A23,A133,FINSEQ_1:def 3;
-             then reconsider F as Finite_Sep_Sequence of S by A132,A133,
+             A129: dom F = dom F2 by A23,A125,FINSEQ_1:def 3;
+             then reconsider F as Finite_Sep_Sequence of S by A124,A125,
 Th5;
              take F;
-             union rng F = F1.k
+              union rng F = F1.k
              proof
                 thus union rng F = F1.k /\ union rng F2
-                   by A133,A139,Th6,A132
+                   by A125,A129,Th6,A124
                                 .= F1.k /\ dom f by A20,Def1
                                 .= F1.k /\ union rng F1 by A13,Def1
-                                .= F1.k by A16,A122,A124,Th7;
+                                .= F1.k by A16,A115,A116,Th7;
              end;
-             hence thesis by A125,A130,A131,FINSEQ_1:def 3;
+             hence thesis by A117,A122,A123,FINSEQ_1:def 3;
             end;
            then consider F11 be Finite_Sep_Sequence of S such that
-           A140: union rng F11 = F1.k & dom F11=dom r &
+           A130: union rng F11 = F1.k & dom F11=dom r &
                for j be Nat st j in dom r holds F11.j=F1.k /\ F2.j;
-           A141: Sum(M*F11) = M.((F1.k)) by A140,Th9;
+           A131: Sum(M*F11) = M.((F1.k)) by A130,Th9;
            reconsider rr=r as FinSequence of ExtREAL by Th11;
-           A142: for j be Nat st j in dom rr holds rr.j=a1.k * (M*F11).j
+           A132: for j be Nat st j in dom rr holds rr.j=a1.k * (M*F11).j
            proof
              let j be Nat;
               assume
-              A143:j in dom rr;
-              thus rr.j = a1.k * (M.(F1.k /\ F2.j)) by A128,A143
-                   .=a1.k *(M.(F11.j)) by A140,A143
-                   .=a1.k *(M*F11).j  by A140,A143,FUNCT_1:23;
+              A133:j in dom rr;
+              hence rr.j = a1.k * (M.(F1.k /\ F2.j)) by A120
+                   .=a1.k *(M.(F11.j)) by A130,A133
+                   .=a1.k *(M*F11).j  by A130,A133,FUNCT_1:23;
           end;
-          k in Seg len a1 by A16,A19,A122,A124,FINSEQ_1:def 3; then
-A144:      1 <= k by FINSEQ_1:3;
-A145:       a1.k <> -infty & a1.k <> +infty
+           k in Seg len a1 by A16,A19,A115,A116,FINSEQ_1:def 3;
+then A134:      1 <= k by FINSEQ_1:3;
+A135:       a1.k <> -infty & a1.k <> +infty
           proof
-           now per cases;
+            now per cases;
             case k = 1;
               hence thesis by A14;
             end;
-            case k <> 1; then
-              1 < k by A144,REAL_1:def 5; then
-              1+1 <= k by NAT_1:13;
-              hence thesis by A15,A16,A19,A122,A124;
+            case k <> 1;
+              then 1 < k by A134,REAL_1:def 5;
+              then 1+1 <= k by NAT_1:13;
+              hence thesis by A15,A16,A19,A115,A116;
             end;
            end;
            hence thesis;
           end;
-          dom rr = dom (M*F11) by A140,Th8;
-           then Sum rr=(a1.k)*Sum(M*F11) by A142,A145,Th10; then
-            Sum r=(a1.k)*M.((F1.k)) by A141,Th2
-                         .=a1.k*((M*F1).k) by A16,A122,A124,FUNCT_1:23;
-           hence thesis by A17,A122,A124,A126;
+           dom rr = dom (M*F11) by A130,Th8;
+           then Sum rr=(a1.k)*Sum(M*F11) by A132,A135,Th10;
+            then Sum r=(a1.k)*M.((F1.k)) by A131,Th2
+                         .=a1.k*((M*F1).k) by A16,A115,A116,FUNCT_1:23;
+           hence thesis by A17,A115,A116,A118;
        end;
-       thus thesis by A122,A123,FINSEQ_1:17;
-     end; then
-     A146: Sum p = Sum x1 by Th2;
-     q=x2
+       hence thesis by A115,FINSEQ_1:17;
+     end;
+     then A136: Sum p = Sum x1 by Th2;
+      q=x2
      proof
-       A147: dom q = dom x2 by A120,FINSEQ_1:def 3;
-       A148: for k be Element of NAT st k in dom q holds q.k = x2.k
+       A137: dom q = dom x2 by A113,FINSEQ_1:def 3;
+        for k be Element of NAT st k in dom q holds q.k = x2.k
        proof
        let k be Element of NAT;
-         assume A149: k in dom q;
-         consider s be FinSequence of REAL such that
-          A150:dom s = Seg n and
-          A151:q.k=Sum s and
-          A152:for i be Nat st i in dom s holds s.i=a.[i,k] by A120,A149;
-          A153: for i be Nat st i in dom s holds
+         assume A138: k in dom q;
+         then consider s be FinSequence of REAL such that
+          A139:dom s = Seg n and
+          A140:q.k=Sum s and
+          A141:for i be Nat st i in dom s holds s.i=a.[i,k] by A113;
+          A142: for i be Nat st i in dom s holds
                s.i=a1.i * (M.(F1.i /\ F2.k))
                proof
                  let i be Nat;
                   assume
-                  A154: i in dom s;
-                  thus s.i=a.(i,k) by A152,A154
-                     .=a1.i * (M.(F1.i /\ F2.k)) by A84,A120,A149,A150,A154;
+                  A143: i in dom s;
+                  hence s.i=a.(i,k) by A141
+                     .=a1.i * (M.(F1.i /\ F2.k)) by A77,A113,A138,A139,A143;
                end;
-          A155: for i be Nat st i in dom s holds
+          A144: for i be Nat st i in dom s holds
                s.i=a2.k * (M.(F1.i /\ F2.k))
                proof
                  let i be Nat;
                   assume
-                  A156: i in dom s;
-                   now per cases;
-                      case A157: F1.i /\ F2.k = {};
-                         M.(F1.i /\ F2.k)=0. by A157,MEASURE1:def 11;
-                         hence s.i = a1.i * 0. by A153,A156
+                  A145: i in dom s;
+                    now per cases;
+                      case A146: F1.i /\ F2.k = {};
+                         then M.(F1.i /\ F2.k)=0. by MEASURE1:def 11;
+                         hence s.i = a1.i * 0. by A142,A145
                                 .=0. by EXTREAL1:def 1
                                 .=a2.k *0. by EXTREAL1:def 1
-                                .=a2.k *M.(F1.i /\ F2.k) by A157,
+                                .=a2.k *M.(F1.i /\ F2.k) by A146,
 MEASURE1:def 11;
                       end;
-                      case A158: F1.i /\ F2.k <> {};
-                        consider x be set such that
-                          A159: x in F1.i /\ F2.k by A158,XBOOLE_0:def 1;
-                          A160: x in F1.i & x in F2.k by A159,XBOOLE_0:def 3;
-                          dom p = dom x1 by A102,FINSEQ_1:def 3; then
-                          a1.i=f.x by A13,A16,A102,A150,A156,A160,Def1
-                             .=a2.k by A20,A23,A147,A149,A160,Def1;
-                         hence s.i = a2.k*M.(F1.i /\ F2.k) by A153,A156;
+                      case F1.i /\ F2.k <> {};
+                        then consider x be set such that
+                          A147: x in F1.i /\ F2.k by XBOOLE_0:def 1;
+                          A148: x in F1.i & x in F2.k by A147,XBOOLE_0:def 3;
+                           dom p = dom x1 by A95,FINSEQ_1:def 3;
+                          then a1.i=f.x by A13,A16,A95,A139,A145,A148,Def1
+                             .=a2.k by A20,A23,A137,A138,A148,Def1;
+                         hence s.i = a2.k*M.(F1.i /\ F2.k) by A142,A145;
                       end;
                     end;
                  hence thesis;
                end;
-           ex F21 be Finite_Sep_Sequence of S st union rng F21 = F2.k &
+            ex F21 be Finite_Sep_Sequence of S st union rng F21 = F2.k &
                   dom F21=dom(s) &
                   for j be Nat st j in dom(s) holds F21.j=F1.j /\ F2.k
            proof
            deffunc G(set)= F2.k /\ F1.$1;
            consider F being FinSequence such that
-             A161: len F = n and
-             A162: for i be Element of NAT st i in Seg n holds F.i=G(i)
+             A149: len F = n and
+             A150: for i be Element of NAT st i in Seg n holds F.i=G(i)
              from FINSEQ_1:sch 2;
-A163:          now let i be Nat;
-               thus i in Seg n implies F.i=G(i) by A162;
+A151:          now let i be Nat;
+               thus i in Seg n implies F.i=G(i) by A150;
              end;
-             A164: dom F = Seg n by A161,FINSEQ_1:def 3;
-             for i be Element of NAT st i in dom F holds F.i in S
+             A152: dom F = Seg n by A149,FINSEQ_1:def 3;
+              for i be Element of NAT st i in dom F holds F.i in S
              proof
                 let i be Element of NAT;
-                assume A165: i in dom F; then
-                A166: i in Seg n by A161,FINSEQ_1:def 3;
-                 A167: i in dom F1 by A16,A166,FINSEQ_1:def 3;
-                  F1.i in rng F1 by A167,FUNCT_1:12; then
-                  A168: F1.i is_measurable M by MEASURE1:def 12;
-                  F2.k in rng F2 by A23,A147,A149,FUNCT_1:12; then
-                  A169: F2.k is_measurable M by MEASURE1:def 12;
-                    F1.i /\ F2.k is_measurable M by A168,A169,MEASURE1:66; then
-                    F1.i /\ F2.k in S by MEASURE1:def 12;
-                  hence F.i in S by A162,A164,A165;
+                assume A153: i in dom F;
+                then i in Seg n by A149,FINSEQ_1:def 3;
+                 then i in dom F1 by A16,FINSEQ_1:def 3;
+                  then F1.i in rng F1 by FUNCT_1:12;
+                  then A154: F1.i is_measurable M by MEASURE1:def 12;
+                   F2.k in rng F2 by A23,A137,A138,FUNCT_1:12;
+                  then F2.k is_measurable M by MEASURE1:def 12;
+                    then F1.i /\ F2.k is_measurable M by A154,MEASURE1:66;
+                    then F1.i /\ F2.k in S by MEASURE1:def 12;
+                  hence F.i in S by A150,A152,A153;
              end;
              then reconsider F as FinSequence of S by FINSEQ_2:14;
-             A170: dom F = dom F1 by A16,A164,FINSEQ_1:def 3;
-             then reconsider F as Finite_Sep_Sequence of S by A163,A164,
+             A155: dom F = dom F1 by A16,A152,FINSEQ_1:def 3;
+             then reconsider F as Finite_Sep_Sequence of S by A151,A152,
 Th5;
              take F;
-             union rng F = F2.k
+              union rng F = F2.k
              proof
                thus union rng F = F2.k /\ union rng F1
-                 by A164,A170,Th6,A163
+                 by A152,A155,Th6,A151
                                .= F2.k /\ dom f by A13,Def1
                                .= F2.k /\ union rng F2 by A20,Def1
-                               .= F2.k by A23,A147,A149,Th7;
+                               .= F2.k by A23,A137,A138,Th7;
              end;
-             hence thesis by A150,A161,A162,FINSEQ_1:def 3;
+             hence thesis by A139,A149,A150,FINSEQ_1:def 3;
             end;
-           then
-           consider F21 be Finite_Sep_Sequence of S such that
-       A171: union rng F21 = F2.k & dom F21 = dom s &
+           then consider F21 be Finite_Sep_Sequence of S such that
+       A156: union rng F21 = F2.k & dom F21 = dom s &
                   for i be Nat st i in dom s holds F21.i=F1.i /\ F2.k;
-            A172: Sum(M*F21) = M.((F2.k)) by A171,Th9;
+            A157: Sum(M*F21) = M.((F2.k)) by A156,Th9;
             reconsider ss=s as FinSequence of ExtREAL by Th11;
-            A173: for j be Nat st j in dom ss holds ss.j=a2.k * (M*F21).j
+            A158: for j be Nat st j in dom ss holds ss.j=a2.k * (M*F21).j
             proof
               let j be Nat;
               assume
-          A174:j in dom ss;
-              thus ss.j = a2.k * (M.(F1.j /\ F2.k)) by A155,A174
-                      .=a2.k *(M.(F21.j)) by A171,A174
-                      .=a2.k *(M*F21).j by A171,A174,FUNCT_1:23;
+          A159:j in dom ss;
+              hence ss.j = a2.k * (M.(F1.j /\ F2.k)) by A144
+                      .=a2.k *(M.(F21.j)) by A156,A159
+                      .=a2.k *(M*F21).j by A156,A159,FUNCT_1:23;
            end;
-           k in Seg len a2 by A23,A26,A147,A149,FINSEQ_1:def 3; then
-A175:       1 <= k by FINSEQ_1:3;
-A176:        a2.k <> -infty & a2.k <> +infty
+            k in Seg len a2 by A23,A26,A137,A138,FINSEQ_1:def 3;
+then A160:       1 <= k by FINSEQ_1:3;
+A161:        a2.k <> -infty & a2.k <> +infty
            proof
             per cases;
              suppose k = 1;
                hence thesis by A21;
              end;
-             suppose k <> 1; then
-               1 < k by A175,REAL_1:def 5; then
-               1+1 <= k by NAT_1:13;
-               hence thesis by A22,A23,A26,A147,A149;
+             suppose k <> 1;
+               then 1 < k by A160,REAL_1:def 5;
+               then 1+1 <= k by NAT_1:13;
+               hence thesis by A22,A23,A26,A137,A138;
              end;
            end;
-           dom ss=dom (M*F21) by A171,Th8;
-           then Sum(ss)=(a2.k)*Sum(M*F21) by A173,A176,Th10;
-           then Sum(s)=(a2.k)*M.((F2.k)) by A172,Th2
+            dom ss=dom (M*F21) by A156,Th8;
+           then Sum(ss)=(a2.k)*Sum(M*F21) by A158,A161,Th10;
+           then Sum(s)=(a2.k)*M.((F2.k)) by A157,Th2
                          .=a2.k*((M*F2).k)
-                         by A23,A147,A149,FUNCT_1:23;
-           hence thesis by A24,A147,A149,A151;
+                         by A23,A137,A138,FUNCT_1:23;
+           hence thesis by A24,A137,A138,A140;
        end;
-       thus thesis by A147,A148,FINSEQ_1:17;
+       hence thesis by A137,FINSEQ_1:17;
       end;
-     hence s1=s2 by A18,A25,A121,A146,Th2;
+     hence s1=s2 by A18,A25,A114,A136,Th2;
       end;
     end;
   hence thesis;
@@ -3128,7 +3110,7 @@ end;
 begin :: Additional Lemmas
 
 theorem :: RVSUM_1:110
-for a be FinSequence of ExtREAL, p,N be Element of ExtREAL st
+ for a be FinSequence of ExtREAL, p,N be Element of ExtREAL st
  N = len a &
  (for n be Nat st n in dom a holds a.n = p) holds
    Sum(a) = N * p by Lm1;

@@ -1,0 +1,1747 @@
+:: Some Properties of Line and Column Operations on Matrices
+::  by Xiquan Liang , Tao Sun and Dahai Hu
+:: 
+:: Received August 13, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies MATRIX12, MATRIX_1, MATRIX_6, MATRIX11, VECTSP_1, RLVECT_1,
+      FINSEQ_2, ARYTM_1, FINSEQ_1, TREES_1, FUNCT_1, RELAT_1, INCSP_1, CAT_3,
+      RVSUM_1, QC_LANG1, GROUP_1, CAT_1;
+ notations MATRIX_1, XXREAL_0, MATRIX11, TARSKI, XBOOLE_0, SUBSET_1, NUMBERS,
+      ORDINAL1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1, FINSEQ_4,
+      XCMPLX_0, REAL_1, ZFMISC_1, GROUP_1, BINOP_1, STRUCT_0, RLVECT_1,
+      BINOP_2, VECTSP_1, VECTSP_2, RVSUM_1, FVSUM_1, FINSEQ_2, FINSEQOP,
+      MATRIX_3, FUNCOP_1, SETWISEO, FINSOP_1, MATRIX_6;
+ constructors MATRIX_6, MATRIX11, RELAT_2, PARTFUN1, SETWISEO, NAT_1, FINSOP_1,
+      SETWOP_2, CAT_2, MATRIX_1, ALGSTR_1, MATRIX_2, FVSUM_1, DOMAIN_1,
+      BINOP_1, XXREAL_0, FINSEQ_4, BINARITH, FINSEQ_5, GROUP_4, MATRIX_7,
+      VECTSP_1, FINSEQ_7, WELLORD2, STRUCT_0, ORDINAL2, SGRAPH1, NAT_D,
+      FINSEQOP, XCMPLX_0, MATRIX_3, MATRIX_4, VECTSP_2;
+ registrations MATRIX_6, MATRIX11, SUBSET_1, FUNCT_1, FINSUB_1, FINSET_1,
+      RELSET_1, STRUCT_0, FVSUM_1, MATRIX_2, ARYTM_3, VECTSP_1, FUNCT_2,
+      PARTFUN1, XBOOLE_0, ORDINAL1, XXREAL_0, NAT_1, FINSEQ_1, INT_1, RELAT_1,
+      FINSEQ_2, GROUP_1, XREAL_0, NUMBERS, VECTSP_2;
+ requirements ARITHM, NUMERALS, REAL, BOOLE, SUBSET;
+ definitions MATRIX_6, MATRIX11, BINOP_1, RLVECT_1, FINSEQ_2, FINSEQ_1, TARSKI,
+      XBOOLE_0, MATRIX_1, FINSEQOP, MATRIX_3, FVSUM_1, RELAT_1, STRUCT_0,
+      MATRIX_4;
+ theorems MATRIX_6, MATRIX11, FINSEQ_1, FINSEQ_2, FVSUM_1, MATRIX_1, FINSEQOP,
+      ZFMISC_1, MATRIX_2, FUNCOP_1, RLVECT_1, GROUP_1, MATRIX_3, MATRIX_4,
+      MATRIXR1, VECTSP_2;
+
+begin
+
+ reserve x, y, X for set,
+         i, j, k, l, n, m, t,i,j1,l1,k1 for Nat,
+         K for Field,
+         a,b,a1,a2,g for Element of K,
+         M,M1,M2,M3 for Matrix of n,m,K,
+         N,N1,N2 for Matrix of m,n,K,
+         pK,qK for FinSequence of K,
+         A,B for Matrix of n,K;
+
+lm1a:
+  for k,l,M,M1,M2,pK,qK,i,j st i in Seg n & j in Seg width M
+& pK=Line(M,l) & qK=Line(M,k) & M1=RLine(M,k,pK) & M2=RLine(M1,l,qK)
+    holds (i = l implies M2*(i,j) = M*(k,j)) &
+          (i = k implies M2*(i,j) = M*(l,j)) &
+          (i <> l & i <> k implies M2*(i,j) = M*(i,j))
+proof
+let k,l,M,M1,M2,pK,qK,i,j;
+assume A1: i in Seg n & j in Seg width M &  
+pK=Line(M,l) & qK=Line(M,k) & M1=RLine(M,k,pK) & M2=RLine(M1,l,qK);
+  thus i = l implies M2*(i,j) = M*(k,j)
+    proof
+      assume A2:i = l;
+      A3:len pK = width M & len qK = width M by A1,MATRIX_1:def 8;
+      then A4:width M1 = width M by A1,MATRIX11:def 3;
+      then A4a:width M1 = width M2 by A1,A3,MATRIX11:def 3;
+      thus M2*(i,j) = Line(M2,i).j by A1,A4,A4a,MATRIX_1:def 8
+                   .= qK.j by A1,A2,A3,A4,MATRIX11:28
+                   .= M*(k,j) by A1,MATRIX_1:def 8;
+     end;
+  thus i = k implies M2*(i,j) = M*(l,j)
+    proof
+      assume A2:i = k;
+      A3:len pK = width M & len qK = width M by A1,MATRIX_1:def 8;
+      then A4:width M1 = width M by A1,MATRIX11:def 3;
+      then A4a:width M1 = width M2 by A1,A3,MATRIX11:def 3;
+      A5: i=k implies Line(M2,i) = Line(M1,i)
+      proof
+        assume A5aa:i=k;
+        per cases;
+         suppose l<>k;
+           hence thesis by A1,A5aa,MATRIX11:28;
+         end;
+         suppose l=k;
+           then Line(M2,i) = pK by A1,A2,A3,A4,MATRIX11:28;
+           hence thesis by A1,A2,A3,MATRIX11:28;
+         end;
+      end;
+      thus M2*(i,j) = Line(M2,i).j by A1,A4,A4a,MATRIX_1:def 8
+                   .= pK.j by A5,A1,A2,A3,MATRIX11:28
+                   .= M*(l,j) by A1,MATRIX_1:def 8;
+     end;
+  thus i <> l & i <> k implies M2*(i,j) = M*(i,j)
+    proof
+      assume A2:i <> l & i <> k;
+      A3:len pK = width M & len qK = width M by A1,MATRIX_1:def 8;
+      then A4:width M1 = width M by A1,MATRIX11:def 3;
+      then A4a:width M1 = width M2 by A1,A3,MATRIX11:def 3;
+      A6: Line(M1,i) = Line(M,i) by A1,A2,MATRIX11:28;
+      thus M2*(i,j) = Line(M2,i).j by A1,A4,A4a,MATRIX_1:def 8
+                   .= Line(M,i).j by A1,A2,MATRIX11:28,A6
+                   .= M*(i,j) by A1,MATRIX_1:def 8;
+    end;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  func InterchangeLine(M,l,k) -> Matrix of n,m,K means :Def1:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M
+     holds (i = l implies it*(i,j) = M*(k,j)) &
+           (i = k implies it*(i,j) = M*(l,j)) &
+           (i <> l & i <> k implies it*(i,j) = M*(i,j));
+existence
+proof
+set M1=RLine(M,k,Line(M,l));
+set M2=RLine(M1,l,Line(M,k));
+A2: len Line(M,l) = width M & len Line(M,k) = width M by MATRIX_1:def 8;
+then A3:len M1 = len M & width M1 = width M by MATRIX11:def 3;
+len M = n by MATRIX_1:26;
+then A6: dom M = Seg n by FINSEQ_1:def 3;
+take M2;
+thus thesis by A2,A3,MATRIX11:def 3,A6,lm1a;  
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+assume that len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M holds
+     (i = l implies M1*(i,j) = M*(k,j)) &
+     (i = k implies M1*(i,j) = M*(l,j)) &
+     (i <> l & i <> k implies M1*(i,j) = M*(i,j))) and
+len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M holds
+     (i = l implies M2*(i,j) = M*(k,j)) &
+     (i = k implies M2*(i,j) = M*(l,j)) &
+     (i <> l & i <> k implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+      A7:Indices M1 = Indices M2 & Indices M = Indices M1 by MATRIX_1:27;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+      then (i = l implies M1*(i,j) = M*(k,j)) &
+           (i = k implies M1*(i,j) = M*(l,j)) &
+           (i <> l & i <> k implies M1*(i,j) = M*(i,j)) &
+           (i = l implies M2*(i,j) = M*(k,j)) &
+           (i = k implies M2*(i,j) = M*(l,j)) &
+       (i <> l & i <> k implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+hence thesis by MATRIX_1:28;
+end;
+end;
+
+theorem Th1:
+  for M1,M2 being Matrix of n,m,K holds width M1 = width M2
+proof
+let M1,M2 be Matrix of n,m,K;
+per cases;
+  suppose n > 0;
+  then width M1 = m & width M2 = m by MATRIX_1:24;
+  hence thesis;
+  end;
+  suppose n=0;
+  then width M1 = 0 & width M2 = 0 by MATRIX_1:23;
+  hence thesis;
+  end;
+end;
+
+theorem Th3:
+  for M,M1,i st l in dom M & k in dom M & i in dom M &
+    M1 = InterchangeLine(M,l,k) holds
+      (i = l implies Line(M1,i) = Line(M,k)) &
+         (i = k implies Line(M1,i) = Line(M,l)) &
+         (i <> l & i <> k implies Line(M1,i) = Line(M,i))
+proof
+let M,M1,i;
+   assume A1:l in dom M & k in dom M & i in dom M &
+     M1 = InterchangeLine(M,l,k);
+   thus i = l implies Line(M1,i) = Line(M,k)
+     proof 
+      assume A2:i=l;
+      A2a: width M1 = width M by Th1;
+      A2d: len Line(M1,i) = width M1 & len Line(M,k) = width M
+      by MATRIX_1:def 8;
+        now let j be Element of NAT such that
+            A2bb: 1 <=j & j <= len Line(M1,i); 
+            A2b:j in Seg width M1 by A2bb,A2d;
+         thus Line(M1,i).j = M1*(i,j) by A2b,MATRIX_1:def 8
+                          .= M*(k,j) by A1,A2,A2a,A2b,Def1
+                     .= Line(M,k).j by A2a,A2b,MATRIX_1:def 8;
+        end;
+     hence thesis by A2a,A2d,FINSEQ_1:18;
+     end;
+   thus i = k implies Line(M1,i) = Line(M,l)
+     proof
+      assume A2:i = k;
+      A2a: width M1 = width M by Th1;
+      A2d: len Line(M1,i) = width M1 & len Line(M,l) = width M
+       by MATRIX_1:def 8;
+         now let j be Element of NAT such that
+          A2bb: 1 <=j & j <= len Line(M1,i);
+          A2b:j in Seg width M1 by A2bb,A2d;
+          thus Line(M1,i).j = M1*(i,j) by A2b,MATRIX_1:def 8
+                           .= M*(l,j) by A1,A2,A2a,A2b,Def1
+                      .= Line(M,l).j by A2a,A2b,MATRIX_1:def 8;
+         end;
+         hence thesis by A2a,A2d,FINSEQ_1:18;
+      end;
+    thus i <> l & i <> k implies Line(M1,i) = Line(M,i)
+      proof
+       assume A2:i <> l & i <> k;
+       A2a: width M1 = width M by Th1;
+       A2d: len Line(M1,i) = width M1 & len Line(M,i) = width M
+        by MATRIX_1:def 8;
+          now let j be Element of NAT such that
+                  A2bb: 1 <=j & j <= len Line(M1,i);
+                 A2b:j in Seg width M1 by A2bb,A2d;
+              thus Line(M1,i).j = M1*(i,j) by A2b,MATRIX_1:def 8
+                               .= M*(i,j) by A1,A2,A2a,A2b,Def1
+                       .= Line(M,i).j by A2a,A2b,MATRIX_1:def 8;
+          end;
+          hence thesis by A2a,A2d,FINSEQ_1:18;
+      end;
+end;
+
+theorem Th4:
+  for a,i,j,M st i in dom M & j in Seg width M holds
+      (a*Line(M,i)).j = a*(M*(i,j)) 
+proof                                               
+  let a,i,j,M;
+  assume A1:i in dom M & j in Seg width M;
+  dom M = Seg len M by FINSEQ_1:def 3;
+  then A4: 1<=i & i<=len M by A1,FINSEQ_1:3;
+  A5: [i,j] in Indices M by A1,ZFMISC_1:106;
+  A6:j in Seg width (a*M) by A1,MATRIX_3:def 5;
+  (a*Line(M,i)).j = (Line(a*M,i)).j by A4,MATRIXR1:20
+               .= (a*M)*(i,j) by A6,MATRIX_1:def 8
+               .= a*(M*(i,j)) by A5,MATRIX_3:def 5;
+  hence thesis;
+end;
+
+lm2a:
+  for a,l,M,M1,pK,i,j st i in Seg n & j in Seg width M 
+& pK= Line(M,l) & M1=RLine(M,l,a*pK)
+    holds (i = l implies M1*(i,j) = a*(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j))
+proof
+let a,l,M,M1,pK,i,j;
+assume A1:i in Seg n & j in Seg width M &
+pK= Line(M,l) & M1=RLine(M,l,a*pK);
+   thus i = l implies M1*(i,j) = a*(M*(l,j))
+     proof
+      assume A2:i = l;
+      len M = n by MATRIX_1:def 3;
+      then A2bb: l in dom M by FINSEQ_1:def 3,A1,A2;  
+      A3a: len (a*Line(M,l)) = width M by FINSEQ_2:109;
+      then A4:width M1 = width M by A1,MATRIX11:def 3;
+      M1*(i,j) = (Line(M1,i)).j by A1,A4,MATRIX_1:def 8
+              .= (a*Line(M,l)).j by A1,A2,A3a,MATRIX11:28
+              .= a*(M*(l,j)) by A1,Th4,A2bb;
+      hence thesis;
+     end;
+     assume A2:i <> l;
+     len (a*Line(M,l)) = width M by FINSEQ_2:109;
+     then width M1 = width M by A1,MATRIX11:def 3;
+     hence M1*(i,j) = Line(M1,i).j by A1,MATRIX_1:def 8
+                    .= Line(M,i).j by A1,A2,MATRIX11:28
+                    .= M*(i,j) by A1,MATRIX_1:def 8;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l be Nat;
+           let a be Element of K;
+  func ScalarXLine(M,l,a) -> Matrix of n,m,K means :Def2:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+           (i = l implies it*(i,j) = a*(M*(l,j))) &
+           (i <> l implies it*(i,j) = M*(i,j));
+existence
+proof 
+set pK= Line(M,l);
+set M1=RLine(M,l,a*pK);
+ A2: len pK = width M by MATRIX_1:def 8;
+ A3:len (a*pK) = len pK by MATRIXR1:16;
+ len M = n by MATRIX_1:26;
+ then A6: dom M = Seg n by FINSEQ_1:def 3;
+take M1;
+thus thesis by A3,A2,MATRIX11:def 3,A6,lm2a;
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+  assume that len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M holds
+           (i = l implies M1*(i,j) = a*(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j))) and
+  len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M holds
+           (i = l implies M2*(i,j) = a*(M*(l,j))) &
+           (i <> l implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+A7:   Indices M1 = Indices M2 & Indices M = Indices M1 by MATRIX_1:27;
+       i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+      then (i = l implies M1*(i,j) = a*(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j)) &
+           (i = l implies M2*(i,j) = a*(M*(l,j))) &
+           (i <> l implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+hence thesis by MATRIX_1:28;
+end;
+end;
+
+theorem Th6:
+  l in dom M & i in dom M & a<>0.K &
+    M1 = ScalarXLine(M,l,a) implies
+      (i = l implies Line(M1,i) = a*Line(M,l)) &
+      (i <> l implies Line(M1,i) = Line(M,i))
+proof
+  assume A1:l in dom M & i in dom M & a<>0.K & M1 = ScalarXLine(M,l,a);
+  thus i = l implies Line(M1,i) = a*Line(M,l)
+  proof
+    assume A2:i=l;
+A2a:width M1 = width M by Th1;
+A2b:len (a*Line(M,l)) = len Line(M,l) by MATRIXR1:16;
+A2d:len Line(M1,i) = width M1 & len Line(M,l) = width M by MATRIX_1:def 8;
+    now let j be Element of NAT such that
+A2bb: 1 <=j & j <= len Line(M1,i);
+A2b:  j in Seg width M1 by A2bb,A2d;
+      hence Line(M1,i).j = M1*(i,j) by MATRIX_1:def 8
+                        .= a*(M*(l,j)) by A1,A2,A2a,A2b,Def2
+                        .= (a*Line(M,l)).j by A1,A2b,A2a,Th4;
+     end;
+     hence thesis by A2a,A2b,A2d,FINSEQ_1:18;
+   end;
+   assume A2:i <> l;
+A2a:width M1 = width M by Th1;
+A2d:len Line(M1,i) = width M1 & len Line(M,i) = width M by MATRIX_1:def 8;
+    now let j be Element of NAT such that
+       A2bb: 1 <=j & j <= len Line(M1,i);
+       A2b:j in Seg width M1 by A2bb,A2d;
+       hence Line(M1,i).j = M1*(i,j) by MATRIX_1:def 8
+                         .= M*(i,j) by A1,A2,A2a,A2b,Def2
+                         .= Line(M,i).j by A2a,A2b,MATRIX_1:def 8;
+     end;
+     hence thesis by A2a,A2d,FINSEQ_1:18;
+end;
+
+lm3a:
+  i in Seg n & j in Seg width M & k in dom M & l in dom M &
+  pK= Line(M,l) & qK=Line(M,k) & M1=RLine(M,l,a*qK+pK)
+    implies (i = l implies M1*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j))
+proof
+  assume A1:i in Seg n & j in Seg width M & k in dom M & l in dom M &
+pK= Line(M,l) & qK=Line(M,k) & M1=RLine(M,l,a*qK+pK);
+   thus i = l implies M1*(i,j) = a*(M*(k,j))+(M*(l,j))
+     proof
+       assume A2:i = l;
+        a*qK is Element of (width M)-tuples_on the carrier of K 
+         by A1,FINSEQ_2:133;
+       then a*qK+pK is Element of (width M)-tuples_on 
+         the carrier of K by A1,FINSEQ_2:140; 
+       then A3a: len (a*qK+pK) = width M by FINSEQ_2:109;
+       then A4:width M1 = width M by A1,MATRIX11:def 3;
+        A20a:(a*Line(M,k)).j = a*(M*(k,j)) by Th4,A1;
+        A20b:(Line(M,l)).j = M*(l,j) by A1,MATRIX_1:def 8;
+       consider a1 being Element of K such that 
+        A20aa: a1 = (a*Line(M,k)).j by A20a;
+       consider a2 being Element of K such that 
+        A20bb: a2 = (Line(M,l)).j by A20b;
+       j in dom (a*qK + pK) by A1,A3a,FINSEQ_1:def 3;
+       then A30:((a*qK) + pK).j = (the add of K).(a1,a2) 
+        by A20aa,A20bb,A1,FUNCOP_1:28
+         .= a*(M*(k,j)) + M*(l,j) by Th4,A1,A20b,A20aa,A20bb;
+       M1*(i,j) = (Line(M1,i)).j by A1,A4,MATRIX_1:def 8
+       .= a*(M*(k,j)) + M*(l,j) by A30,A1,A2,A3a,MATRIX11:28;
+      hence thesis;
+     end;
+      assume A3:i <> l;
+       a*qK is Element of (width M)-tuples_on the carrier of K 
+        by A1,FINSEQ_2:133;
+       then a*qK+pK is Element of (width M)-tuples_on
+        the carrier of K by A1,FINSEQ_2:140; 
+       then len (a*qK+pK) = width M by FINSEQ_2:109;
+       then width M1 = width M by A1,MATRIX11:def 3;
+      hence M1*(i,j) = Line(M1,i).j by A1,MATRIX_1:def 8
+                    .= Line(M,i).j by A1,A3,MATRIX11:28
+                    .= M*(i,j) by A1,MATRIX_1:def 8;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  assume A1: l in dom M & k in dom M;
+  func RlineXScalar(M,l,k,a) -> Matrix of n,m,K means :Def3:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M
+     holds (i = l implies it*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies it*(i,j) = M*(i,j));
+existence
+proof
+  set pK= Line(M,l);
+  set qK=Line(M,k);
+  set M1=RLine(M,l,a*qK+pK);
+ A3:len (a*qK+pK) = width M by FINSEQ_2:109;
+ len M = n by MATRIX_1:26;
+ then A6: dom M = Seg n by FINSEQ_1:def 3;
+ take M1;
+ thus thesis by A1,A3,MATRIX11:def 3,A6,lm3a;
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+assume that len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M holds
+           (i = l implies M1*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j))) and
+len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M holds
+           (i = l implies M2*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+       A7:Indices M1 = Indices M2 & Indices M = Indices M1 
+         by MATRIX_1:27;
+       i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+      then (i = l implies M1*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies M1*(i,j) = M*(i,j)) &
+           (i = l implies M2*(i,j) = a*(M*(k,j))+(M*(l,j))) &
+           (i <> l implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+hence thesis by MATRIX_1:28;
+end;
+end;
+
+theorem Th8:
+  l in dom M & k in dom M & i in dom M &
+    M1 = RlineXScalar(M,l,k,a) implies
+     (i = l implies Line(M1,i) = a*Line(M,k) + Line(M,l)) &
+     (i <> l implies Line(M1,i) = Line(M,i))
+proof
+  assume A1:l in dom M & k in dom M & i in dom M &
+               M1 = RlineXScalar(M,l,k,a);
+  thus i = l implies Line(M1,i) = a*Line(M,k) + Line(M,l)  
+    proof
+     assume A2:i=l;
+     A2a: width M1 = width M by Th1;
+     A2d: len Line(M1,i) = width M1 & len Line(M,l) = width M 
+       by MATRIX_1:def 8; 
+     A4a: len (a*Line(M,k)+Line(M,l)) = width M by FINSEQ_2:109;        
+        now let j be Element of NAT such that
+           A2bb: 1 <=j & j <= len Line(M1,i); 
+           A2b:j in Seg width M1 by A2bb,A2d;
+           A20a:(a*Line(M,k)).j = a*(M*(k,j)) by Th4,A1,A2b,A2a;
+           A20b:(Line(M,l)).j = M*(l,j) by MATRIX_1:def 8,A2b,A2a;
+          consider a1 being Element of K such that 
+           A20aa: a1 = (a*Line(M,k)).j by A20a;
+          consider a2 being Element of K such that 
+           A20bb: a2 = (Line(M,l)).j by A20b;
+          j in dom (a*Line(M,k) + Line(M,l)) by A4a,A2a,A2b,FINSEQ_1:def 3;
+          then A30:((a*Line(M,k)) + Line(M,l)).j 
+             = (the add of K).(a1,a2) by FUNCOP_1:28,A20aa,A20bb
+            .= a*(M*(k,j)) + M*(l,j) 
+           by Th4,A1,A2b,A2a,A20b,A20aa,A20bb;
+        thus Line(M1,i).j = M1*(i,j) by A2b,MATRIX_1:def 8
+            .= ((a*Line(M,k)) + Line(M,l)).j by A30,A1,A2,A2a,A2b,Def3;
+        end;
+    hence thesis by A2a,A4a,A2d,FINSEQ_1:18;
+    end;
+  thus i <> l implies Line(M1,i) = Line(M,i)
+    proof
+     assume A2:i <> l;
+      A2a: width M1 = width M by Th1;
+      A2d: len Line(M1,i) = width M1 & len Line(M,i) = width M 
+        by MATRIX_1:def 8;
+       now let j be Element of NAT such that
+         A2bb: 1 <=j & j <= len Line(M1,i); 
+         A2b:j in Seg width M1 by A2bb,A2d;
+        hence Line(M1,i).j = M1*(i,j) by MATRIX_1:def 8
+                         .= M*(i,j) by A1,A2,A2a,A2b,Def3
+                      .= Line(M,i).j by A2a,A2b,MATRIX_1:def 8;
+       end;
+   hence thesis by A2a,A2d,FINSEQ_1:18;
+   end;
+end;
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  synonym ILine(M,l,k) for InterchangeLine(M,l,k);
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l be Nat;
+         let a be Element of K;
+  synonym SXLine(M,l,a) for ScalarXLine(M,l,a);
+end;
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  synonym RLineXS(M,l,k,a) for RlineXScalar(M,l,k,a);
+end;
+
+theorem Th9:
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies ILine((1.(K,n)),l,k) * A = ILine(A,l,k)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n));
+set B = ILine((1.(K,n)),l,k);
+A2:len B = len (1.(K,n)) & width B = width (1.(K,n)) by Def1,Th1;
+A3: len B=n & width B=n & len A=n & width A=n by MATRIX_1:25;
+A4: l in Seg n & k in Seg n by A1,A2,A3,FINSEQ_1:def 3;
+A5: len (B*A) = n & width(B*A) = n by MATRIX_1:25;
+A7:Indices (B*A)=[:Seg n,Seg n:] by MATRIX_1:25;
+A8:k in dom (1.(K,n)) & l in dom (1.(K,n)) & 
+l in Seg width (1.(K,n)) & k in Seg width (1.(K,n))
+  by A1,A2,A3,FINSEQ_1:def 3;
+then A9:[k,k] in Indices (1.(K,n)) & [l,l] in Indices (1.(K,n)) 
+by ZFMISC_1:106;
+A20:len ILine(A,l,k) = len A &width ILine(A,l,k)= width A by Def1,Th1;
+  A20a:for j st j in Seg n & i in dom (1.(K,n)) holds
+         (i = l implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j))
+    proof
+     let j;
+      assume A1a:j in Seg n & i in dom (1.(K,n));
+        thus i = l implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j)
+         proof
+          assume A1b: i = l;
+          A1c: [i,j] in Indices (B*A) by A7,A1a,A1b,A4,ZFMISC_1:106;
+          A1d: len Col(A,j) = len A & 
+               len Line((1.(K,n)),k) = width (1.(K,n)) 
+            by MATRIX_1:def 9,MATRIX_1:def 8; 
+          A1eee: k in Seg n by FINSEQ_1:def 3,A1,A2,A3;
+          A1e: k in dom (Line((1.(K,n)),k)) 
+            by FINSEQ_1:def 3,A1d,A8;
+          A1ee: k in dom (Col(A,j)) by A1eee,A1d,A3,FINSEQ_1:def 3; 
+             A1g: (Line((1.(K,n)),k)).k=1_K &  
+                    for t st t in dom (Line ((1.(K,n)),k)) & t<>k 
+                      holds (Line((1.(K,n)),k)).t=0.K
+              proof
+                thus (Line((1.(K,n)),k)).k=1_K by A9,MATRIX_3:17;
+                 let t;
+                  assume A10:t in dom (Line ((1.(K,n)),k)) & t<>k;
+                    then t in Seg len (Line ((1.(K,n)),k)) 
+                      by FINSEQ_1:def 3;
+                    then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+                    then [k,t] in Indices (1.(K,n))
+                      by A1,ZFMISC_1:106;
+                 hence (Line((1.(K,n)),k)).t=0.K by A10,MATRIX_3:17;
+               end;
+          A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                            .=Seg len A by Def1,A3
+                           .=dom A by FINSEQ_1:def 3;
+         (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+                 .=Sum(mlt(Line((1.(K,n)),k),Col(A,j))) by Th3,A1b,A1
+                 .=Col(A,j).k by A1e,A1ee,A1g,MATRIX_3:19
+                 .=A*(k,j) by A1,A1h,MATRIX_1:def 9
+                 .=(ILine(A,l,k))*(i,j) by A1b,Def1,A1h,A1a,A3;
+        hence thesis;
+        end;
+     end;
+   A20b:for j st j in Seg n & i in dom (1.(K,n)) holds
+          (i = k implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j))
+    proof
+     let j;
+     assume A1a:j in Seg n & i in dom (1.(K,n));
+       thus i = k implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j)
+         proof
+         assume A1b: i = k; then
+         A1c: [i,j] in Indices (B*A) by A7,A1a,A4,ZFMISC_1:106;
+         A1d: len Col(A,j) = len A & 
+              len Line((1.(K,n)),l) = width (1.(K,n)) 
+          by MATRIX_1:def 9,MATRIX_1:def 8;
+         A1eee: l in Seg n by FINSEQ_1:def 3,A1,A2,A3;
+         A1e: l in dom (Line((1.(K,n)),l)) by FINSEQ_1:def 3,A1d,A8;
+         A1ee: l in dom (Col(A,j)) by A1eee,A1d,A3,FINSEQ_1:def 3;
+            A1g: (Line((1.(K,n)),l)).l=1_K &
+                   for t st t in dom (Line ((1.(K,n)),l)) & t<>l
+                     holds (Line((1.(K,n)),l)).t=0.K
+              proof
+                thus (Line((1.(K,n)),l)).l=1_K by A9,MATRIX_3:17;
+                 let t;
+                 assume A10:t in dom (Line ((1.(K,n)),l)) & t<>l;
+           then t in Seg len (Line ((1.(K,n)),l)) by FINSEQ_1:def 3;
+                then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+                then [l,t] in Indices (1.(K,n)) by A1,ZFMISC_1:106;
+                hence (Line((1.(K,n)),l)).t=0.K by A10,MATRIX_3:17;
+              end;
+      A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                        .=Seg len A by Def1,A3
+                        .=dom A by FINSEQ_1:def 3;
+      (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+               .=Sum(mlt(Line((1.(K,n)),l),Col(A,j))) by Th3,A1b,A1
+               .=Col(A,j).l by A1e,A1ee,A1g,MATRIX_3:19
+               .=A*(l,j) by A1,A1h,MATRIX_1:def 9
+               .=(ILine(A,l,k))*(i,j) by A1b,Def1,A1h,A1a,A3;
+      hence thesis;
+       end;
+    end;
+     A20c:for j st j in Seg n & i in dom (1.(K,n)) holds
+            (i <> l & i <> k implies
+              (B*A)*(i,j) = (ILine(A,l,k))*(i,j))
+       proof
+        let j;
+        assume A1a:j in Seg n & i in dom (1.(K,n));
+        then A1eee: i in Seg n & width (1.(K,n)) = n
+         by A2,A3,FINSEQ_1:def 3;
+        then A9a:[i,i] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+          thus i <> l & i <> k implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j)
+            proof
+              assume A1b: i <> l & i <> k;
+              A1c: [i,j] in Indices (B*A) by A7,A1a,A1eee,ZFMISC_1:106;
+              A1d: len Col(A,j) = len A
+                 & len Line((1.(K,n)),i) = width (1.(K,n)) 
+                by MATRIX_1:def 9,MATRIX_1:def 8; 
+        then A1e: i in dom (Line((1.(K,n)),i)) by FINSEQ_1:def 3,A1eee;
+             A1ee: i in dom (Col(A,j)) by A1eee,A1d,A3,FINSEQ_1:def 3;
+             A1g: (Line((1.(K,n)),i)).i=1_K &  
+                    for t st t in dom (Line ((1.(K,n)),i)) & t<>i
+                      holds (Line((1.(K,n)),i)).t=0.K
+               proof
+                 thus (Line((1.(K,n)),i)).i=1_K by A9a,MATRIX_3:17;
+                 let t;
+                   assume A10:t in dom (Line ((1.(K,n)),i)) & t<>i;
+           then t in Seg len (Line ((1.(K,n)),i)) by FINSEQ_1:def 3;
+                    then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+                    then [i,t] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+                 hence (Line((1.(K,n)),i)).t=0.K by A10,MATRIX_3:17;
+               end;
+         A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                           .=Seg len A by Def1,A3
+                           .=dom A by FINSEQ_1:def 3;
+         (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+             .=Sum(mlt(Line((1.(K,n)),i),Col(A,j))) by Th3,A1b,A1,A1a
+             .=Col(A,j).i by A1e,A1ee,A1g,MATRIX_3:19
+             .=A*(i,j) by A1a,A1h,MATRIX_1:def 9
+             .=(ILine(A,l,k))*(i,j) by A1b,Def1,A1h,A1a,A3;
+         hence thesis;
+          end;
+      end;
+   for i,j st [i,j] in Indices (B*A) holds
+                  (B*A)*(i,j) = (ILine(A,l,k))*(i,j)
+     proof
+      let i,j;
+      assume A32:[i,j] in Indices (B*A);
+      dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                   .= Seg n by MATRIX_1:25;
+      then i in dom (1.(K,n)) & j in Seg n by A32,A7,ZFMISC_1:106;
+      then (i = l implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j)) &
+            (i = k implies (B*A)*(i,j) = (ILine(A,l,k))*(i,j)) &
+            (i <> l & i <> k implies 
+                 (B*A)*(i,j) = (ILine(A,l,k))*(i,j)) by A20a,A20b,A20c;
+       hence thesis;
+     end;
+hence thesis by A5,A3,A20,MATRIX_1:21;
+end;
+
+theorem Th10:
+  for l,a,A st l in dom (1.(K,n)) & a <> 0.K 
+     holds SXLine((1.(K,n)),l,a) * A = SXLine(A,l,a)
+proof
+let l,a,A;
+assume A1:l in dom (1.(K,n)) & a <> 0.K;
+set B = SXLine((1.(K,n)),l,a);
+A2:len B = len (1.(K,n)) & width B = width (1.(K,n)) by Def2,Th1;
+A3: len B=n & width B=n & len A=n & width A=n by MATRIX_1:25;
+A4: l in Seg n by A1,A2,A3,FINSEQ_1:def 3;
+A5: len (B*A) = n & width(B*A) = n by MATRIX_1:25;
+A7:Indices (B*A)=[:Seg n,Seg n:] by MATRIX_1:25;
+A8: l in dom (1.(K,n)) & l in Seg width (1.(K,n))
+by A1,A2,A3,FINSEQ_1:def 3;
+then A9: [l,l] in Indices (1.(K,n)) by ZFMISC_1:106;
+A20:len SXLine(A,l,a) = len A & width SXLine(A,l,a) = width A by Def2,Th1;
+  A20a:for j st j in Seg n & i in dom (1.(K,n)) holds
+         (i = l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j))
+   proof
+    let j;
+    assume A1a:j in Seg n & i in dom (1.(K,n)); 
+     thus i = l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j)
+       proof
+       assume A1b: i = l;
+        A1c: [i,j] in Indices (B*A) by A7,A1a,A1b,A4,ZFMISC_1:106;
+        A1d: len Col(A,j) = len A & len Line((1.(K,n)),l) = width (1.(K,n))
+         by MATRIX_1:def 9,MATRIX_1:def 8; 
+        A1eee: l in Seg n by FINSEQ_1:def 3,A1,A2,A3;
+        A1e: l in dom (Line((1.(K,n)),l)) by FINSEQ_1:def 3,A1d,A8;
+        A1ee: l in dom (Col(A,j)) by A1eee,A1d,A3,FINSEQ_1:def 3;
+        A1g: (Line((1.(K,n)),l)).l=1_K &
+               for t st t in dom (Line ((1.(K,n)),l)) & t<>l 
+               holds (Line((1.(K,n)),l)).t=0.K
+     proof
+      thus (Line((1.(K,n)),l)).l=1_K by A9,MATRIX_3:17;
+       let t;
+         assume A10:t in dom (Line ((1.(K,n)),l)) & t<>l;
+         then t in Seg len (Line ((1.(K,n)),l)) by FINSEQ_1:def 3;
+         then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+         then [l,t] in Indices (1.(K,n)) by A1,ZFMISC_1:106;
+         hence (Line((1.(K,n)),l)).t=0.K by A10,MATRIX_3:17;
+       end;
+       A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                         .=Seg len A by Def2,A3
+                         .=dom A by FINSEQ_1:def 3;
+       reconsider q=Col(A,j) as Element of (width A)-tuples_on 
+                    the carrier of K by A3; 
+       reconsider p=Line((1.(K,n)),l) as Element of 
+            (width A)-tuples_on the carrier of K by Th1;
+       A1j1: Col(A,j).l = A*(l,j) by A1,A1h,MATRIX_1:def 9;
+       consider a1 being Element of K such that
+         A1j:a1 = Col(A,j).l by A1j1;
+   (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+               .=Sum(mlt(a*p,q)) by Th6,A1b,A1
+               .=Sum(a*mlt(p,q)) by FVSUM_1:83
+               .=a*Sum(mlt(Line((1.(K,n)),l),Col(A,j))) by FVSUM_1:92
+               .=a*a1 by A1e,A1ee,A1g,A1j,MATRIX_3:19
+               .=a*(A*(l,j)) by A1,A1h,MATRIX_1:def 9,A1j
+               .=(SXLine(A,l,a))*(i,j) by A1b,Def2,A1h,A1a,A3;
+       hence thesis;
+      end;
+    end;
+    A20b:for j st j in Seg n & i in dom (1.(K,n)) holds
+           (i <> l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j))
+     proof
+      let j;
+      assume A1a:j in Seg n & i in dom (1.(K,n));
+      then A1eee: i in Seg n & width (1.(K,n)) = n
+       by A2,A3,FINSEQ_1:def 3;
+      then A9a:[i,i] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+        thus i <> l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j)
+          proof
+           assume A1b: i <> l;
+          A1c: [i,j] in Indices (B*A) by A1eee,A7,A1a,ZFMISC_1:106;
+          A1d: len Col(A,j) = len A & len Line((1.(K,n)),i) = width (1.(K,n))
+           by MATRIX_1:def 9,MATRIX_1:def 8; 
+          A1e: i in dom Line((1.(K,n)),i) by FINSEQ_1:def 3,A1eee,A1d;
+         A1ee: i in dom Col(A,j) by A1eee,A1d,A3,FINSEQ_1:def 3;
+          A1g: (Line((1.(K,n)),i)).i=1_K &  
+                 for t st t in dom Line ((1.(K,n)),i) & t<>i
+                   holds (Line((1.(K,n)),i)).t=0.K
+           proof
+             thus (Line((1.(K,n)),i)).i=1_K by A9a,MATRIX_3:17;
+              let t;
+              assume A10:t in dom (Line ((1.(K,n)),i)) & t<>i;
+            then t in Seg len (Line ((1.(K,n)),i)) by FINSEQ_1:def 3;
+            then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+            then [i,t] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+              hence (Line((1.(K,n)),i)).t=0.K by A10,MATRIX_3:17;
+           end;
+          A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                            .=Seg len A by Def2,A3
+                            .=dom A by FINSEQ_1:def 3;
+          (B*A)*(i,j) = Line(B,i) "*" Col(A,j) 
+                 by A3,A1c,MATRIX_3:def 4
+            .=Sum(mlt(Line((1.(K,n)),i),Col(A,j))) by Th6,A1b,A1,A1a
+            .=Col(A,j).i by A1e,A1ee,A1g,MATRIX_3:19
+            .=A*(i,j) by A1a,A1h,MATRIX_1:def 9
+            .=(SXLine(A,l,a))*(i,j) by A1b,Def2,A1h,A1a,A3;
+          hence thesis;
+         end;
+       end;
+  for i,j st [i,j] in Indices (B*A) holds (B*A)*(i,j) = (SXLine(A,l,a))*(i,j)
+    proof
+     let i,j;
+     assume [i,j] in Indices (B*A);
+     then A32: i in Seg n & j in Seg n by A7,ZFMISC_1:106;
+      dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                   .= Seg n by MATRIX_1:25;
+     then (i = l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j)) &
+       (i <> l implies (B*A)*(i,j) = (SXLine(A,l,a))*(i,j)) by A32,A20a,A20b;
+    hence thesis;
+    end;
+hence thesis by A5,A3,A20,MATRIX_1:21;
+end;
+
+theorem Th11:
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies RLineXS((1.(K,n)),l,k,a) * A = RLineXS(A,l,k,a)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n));
+set B = RLineXS((1.(K,n)),l,k,a);
+A2:len B = len (1.(K,n)) & width B = width (1.(K,n)) by A1,Def3,Th1;
+A3: len B=n & width B=n & len A=n & width A=n by MATRIX_1:25;
+A4: l in Seg n & k in Seg n by A1,A2,A3,FINSEQ_1:def 3;
+A5: len (B*A) = n & width(B*A) = n by MATRIX_1:25;
+A7:Indices (B*A)=[:Seg n,Seg n:] by MATRIX_1:25;
+A8: l in dom (1.(K,n)) & l in Seg width (1.(K,n)) 
+& k in dom (1.(K,n)) & k in Seg width (1.(K,n))
+  by A1,A2,A3,FINSEQ_1:def 3;
+then A9: [k,k] in Indices (1.(K,n)) &
+         [l,l] in Indices (1.(K,n)) by ZFMISC_1:106;
+  dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+               .=Seg len A by A1,Def3,A3
+               .=dom A by FINSEQ_1:def 3;
+then A20:len RLineXS(A,l,k,a) = len A & 
+         width RLineXS(A,l,k,a) = width A by Th1,A1,Def3;
+  A20a:for j st j in Seg n & i in dom (1.(K,n)) holds
+        (i = l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j))
+   proof
+    let j;
+    assume A1a:j in Seg n & i in dom (1.(K,n)); 
+    thus i = l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j)
+      proof
+       assume A1b: i = l;
+     A1c: [i,j] in Indices (B*A) by A7,A1a,A1b,A4,ZFMISC_1:106;
+     A1d: len Col(A,j) = len A 
+        & len Line((1.(K,n)),l) = width (1.(K,n)) & 
+          len Line((1.(K,n)),k) = width (1.(K,n)) 
+      by MATRIX_1:def 9,MATRIX_1:def 8; 
+     A1eee: l in Seg n & k in Seg n by FINSEQ_1:def 3,A1,A2,A3;
+     A1e: l in dom Line((1.(K,n)),l) &
+          k in dom Line((1.(K,n)),k) by FINSEQ_1:def 3,A1d,A8;
+     A1ee: l in dom (Col(A,j)) & k in dom Col(A,j)
+      by A1eee,A1d,A3,FINSEQ_1:def 3;
+     A1g: (Line((1.(K,n)),l)).l=1_K &
+            for t st t in dom (Line ((1.(K,n)),l)) & t<>l 
+              holds (Line((1.(K,n)),l)).t=0.K
+       proof
+        thus (Line((1.(K,n)),l)).l=1_K by A9,MATRIX_3:17;
+         let t;
+         assume A10:t in dom (Line ((1.(K,n)),l)) & t<>l;
+       then t in Seg len (Line ((1.(K,n)),l)) by FINSEQ_1:def 3;
+       then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+       then [l,t] in Indices (1.(K,n)) by A1,ZFMISC_1:106;
+       hence (Line((1.(K,n)),l)).t=0.K by A10,MATRIX_3:17;
+       end;
+     A1g1:(Line((1.(K,n)),k)).k=1_K &  
+            for t st t in dom (Line ((1.(K,n)),k)) & t<>k
+              holds (Line((1.(K,n)),k)).t=0.K
+     proof
+      thus (Line((1.(K,n)),k)).k=1_K by A9,MATRIX_3:17;
+       let t;
+       assume A10:t in dom Line ((1.(K,n)),k) & t<>k;
+       then t in Seg len Line ((1.(K,n)),k) by FINSEQ_1:def 3;
+       then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+       then [k,t] in Indices (1.(K,n)) by A1,ZFMISC_1:106;
+       hence (Line((1.(K,n)),k)).t=0.K by A10,MATRIX_3:17;
+       end;
+     A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                       .=Seg len A by A1,Def3,A3
+                       .=dom A by FINSEQ_1:def 3;
+     reconsider q=Col(A,j) as Element of (width A)-tuples_on 
+        the carrier of K by A3;
+     reconsider p1=Line((1.(K,n)),k) as Element of 
+        (width A)-tuples_on the carrier of K by Th1;
+     reconsider p2=Line((1.(K,n)),l) as Element of
+        (width A)-tuples_on the carrier of K by Th1;
+     A1j1: Col(A,j).k = A*(k,j) by A1,A1h,MATRIX_1:def 9;
+     consider a1 being Element of K such that 
+      A1j: a1 = Col(A,j).k by A1j1;
+     A1j2: Col(A,j).l = A*(l,j) by A1,A1h,MATRIX_1:def 9;
+     consider a2 being Element of K such that
+      A1j3: a2 = Col(A,j).l by A1j2;
+      A1k:len (a*p1) = width A & len p2 = (width A) 
+        & len q = (width A) by FINSEQ_2:109;
+  (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+             .=Sum(mlt(a*p1+p2,q)) by Th8,A1b,A1
+             .=Sum(mlt(a*p1,q)+mlt(p2,q)) by A1k,MATRIX_4:56
+             .=Sum(a*mlt(p1,q)+mlt(p2,q)) by FVSUM_1:83
+             .=Sum(a*mlt(p1,q))+Sum(mlt(p2,q)) by FVSUM_1:95
+             .=a*Sum(mlt(Line((1.(K,n)),k),Col(A,j))) + 
+          Sum(mlt(Line((1.(K,n)),l),Col(A,j))) by FVSUM_1:92   
+             .=a*a1 + Sum(mlt(Line((1.(K,n)),l),Col(A,j))) 
+          by A1e,A1ee,A1g1,A1j,MATRIX_3:19
+            .=a*a1 + a2 by A1e,A1ee,A1g,A1j3,MATRIX_3:19
+            .=a*(A*(k,j))+A*(l,j)
+          by A1,A1h,MATRIX_1:def 9,A1j,A1j2,A1j3
+            .=(RLineXS(A,l,k,a))*(i,j) by A1,A1b,Def3,A1h,A1a,A3;
+      hence thesis;
+       end;
+    end;
+   A20b:for j st j in Seg n & i in dom (1.(K,n)) holds
+         (i <> l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j))
+     proof
+      let j;
+      assume A1a:j in Seg n & i in dom (1.(K,n));
+      then A1eee: i in Seg n & width (1.(K,n)) = n
+       by A2,A3,FINSEQ_1:def 3;
+      then A9a:[i,i] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+       thus i <> l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j)
+        proof
+        assume A1b: i <> l;
+        A1c: [i,j] in Indices (B*A) by A7,A1a,A1eee,ZFMISC_1:106;
+        A1d: len Col(A,j) = len A 
+            & len Line((1.(K,n)),i) = width (1.(K,n)) 
+         by MATRIX_1:def 9,MATRIX_1:def 8; 
+        A1e: i in dom Line((1.(K,n)),i) by FINSEQ_1:def 3,A1eee,A1d;
+        A1ee: i in dom (Col(A,j)) by A1eee,A1d,A3,FINSEQ_1:def 3;
+        A1g: (Line((1.(K,n)),i)).i=1_K &  
+               for t st t in dom (Line ((1.(K,n)),i)) & t<>i
+                 holds (Line((1.(K,n)),i)).t=0.K
+          proof
+            thus (Line((1.(K,n)),i)).i=1_K by A9a,MATRIX_3:17;
+            let t;
+             assume A10:t in dom (Line ((1.(K,n)),i)) & t<>i;
+        then t in Seg len (Line ((1.(K,n)),i)) by FINSEQ_1:def 3;
+        then t in Seg width (1.(K,n)) by MATRIX_1:def 8;
+        then [i,t] in Indices (1.(K,n)) by A1a,ZFMISC_1:106;
+         hence (Line((1.(K,n)),i)).t=0.K by A10,MATRIX_3:17;
+       end;
+      A1h: dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                        .=Seg len A by A1,Def3,A3
+                        .=dom A by FINSEQ_1:def 3;
+    (B*A)*(i,j) = Line(B,i) "*" Col(A,j) by A3,A1c,MATRIX_3:def 4
+         .=Sum(mlt(Line((1.(K,n)),i),Col(A,j))) by Th8,A1b,A1,A1a
+         .=Col(A,j).i by A1e,A1ee,A1g,MATRIX_3:19
+         .=A*(i,j) by A1a,A1h,MATRIX_1:def 9
+         .=(RLineXS(A,l,k,a))*(i,j) by A1,A1b,Def3,A1h,A1a,A3;
+    hence thesis;
+     end;
+    end;
+  for i,j st [i,j] in Indices (B*A) holds 
+                  (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j)
+    proof
+     let i,j;
+     assume [i,j] in Indices (B*A);
+     then A32: i in Seg n & j in Seg n by A7,ZFMISC_1:106;
+     dom (1.(K,n)) = Seg len (1.(K,n)) by FINSEQ_1:def 3
+                  .= Seg n by MATRIX_1:25;
+   then (i = l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j)) 
+     & (i <> l implies (B*A)*(i,j) = (RLineXS(A,l,k,a))*(i,j)) 
+    by A32,A20a,A20b;
+     hence thesis;
+    end;
+hence thesis by A5,A3,A20,MATRIX_1:21;
+end;
+
+theorem
+  ILine(M,k,k) = M
+proof
+A1a: len ILine(M,k,k) = len M & width ILine(M,k,k) = width M by Def1,Th1;
+ for i,j st [i,j] in Indices M holds ILine(M,k,k)*(i,j) = M*(i,j)
+   proof
+    let i,j;
+    assume [i,j] in Indices M;
+     then i in dom M & j in Seg width M by ZFMISC_1:106;
+     then A4:(i = k implies ILine(M,k,k)*(i,j) = M*(k,j)) &
+      (i <> k implies ILine(M,k,k)*(i,j) = M*(i,j)) by Def1;
+  thus thesis by A4;
+  end;
+hence thesis by A1a,MATRIX_1:21; 
+end;
+
+theorem
+  ILine(M,l,k) = ILine(M,k,l)
+proof
+A1a: len ILine(M,l,k) = len M &
+  width ILine(M,l,k) = width M & len ILine(M,k,l) = len M & 
+  width ILine(M,k,l) = width M by Def1,Th1;
+ for i,j st [i,j] in Indices (ILine(M,l,k)) 
+    holds ILine(M,l,k)*(i,j) = ILine(M,k,l)*(i,j) 
+  proof
+   let i,j;
+    assume A2:[i,j] in Indices (ILine(M,l,k));
+     Indices (ILine(M,l,k)) = Indices M by MATRIX_1:27;
+     then A3:i in dom M & j in Seg width M by A2,ZFMISC_1:106;
+     then A4:(i = l implies ILine(M,l,k)*(i,j) = M*(k,j)) &
+             (i = k implies ILine(M,l,k)*(i,j) = M*(l,j)) &
+      (i <> l & i <> k implies ILine(M,l,k)*(i,j) = M*(i,j)) by Def1;
+          (i = l implies ILine(M,k,l)*(i,j) = M*(k,j)) &
+             (i = k implies ILine(M,k,l)*(i,j) = M*(l,j)) &
+      (i <> l & i <> k implies ILine(M,k,l)*(i,j) = M*(i,j)) by A3,Def1;
+  hence thesis by A4;
+  end;
+hence thesis by A1a,MATRIX_1:21; 
+end;
+
+theorem Th14:
+  l in dom M & k in dom M implies ILine(ILine(M,l,k),l,k) = M
+proof
+assume A1:l in dom M & k in dom M;
+set M1 = ILine(M,l,k);
+A2:len M1 =len M & width M1 = width M by Def1,Th1;
+A3:dom M1 = Seg len ILine(M,l,k) by FINSEQ_1:def 3
+         .= Seg len M by Def1
+         .= dom M by FINSEQ_1:def 3;
+A5:len ILine(M1,l,k) =len M1 & width ILine(M1,l,k) =width M1 by Def1,Th1;
+  for i,j st [i,j] in Indices M holds ILine(M1,l,k)*(i,j) = M*(i,j)
+   proof
+    let i,j;
+    assume [i,j] in Indices M;
+    then A7:i in dom M & j in Seg width M by ZFMISC_1:106;
+    then A9:(ILine(M1,l,k)*(l,j) = M1*(k,j)) &
+            (ILine(M1,l,k)*(k,j) = M1*(l,j)) &
+         (i <> l & i <> k implies ILine(M1,l,k)*(i,j) = M1*(i,j)) 
+     by A1,A3,A2,Def1;
+        (ILine(M1,l,k)*(l,j) = M*(l,j)) &
+            (ILine(M1,l,k)*(k,j) = M*(k,j)) &
+         (i <> l & i <> k implies ILine(M1,l,k)*(i,j) = M*(i,j))
+     by A1,A7,Def1,A9;
+    hence thesis;
+   end;
+hence thesis by A2,A5,MATRIX_1:21;
+end;
+
+theorem Th15:
+  l in dom (1.(K,n)) & k in dom (1.(K,n))
+    implies ILine((1.(K,n)),l,k) is invertible &
+       (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n));
+A2: ILine((1.(K,n)),l,k) * ILine((1.(K,n)),l,k)
+                         = ILine(ILine((1.(K,n)),l,k),l,k) &
+    ILine((1.(K,n)),l,k) * ILine((1.(K,n)),l,k)
+                         = ILine(ILine((1.(K,n)),l,k),l,k) by A1,Th9;
+ ILine(ILine((1.(K,n)),l,k),l,k) = 1.(K,n) by A1,Th14;
+then A4:ILine((1.(K,n)),l,k) is_reverse_of ILine((1.(K,n)),l,k)
+  by A2,MATRIX_6:def 2;
+then ILine((1.(K,n)),l,k) is invertible by MATRIX_6:def 3;
+hence thesis by A4,MATRIX_6:def 4;
+end;
+
+lm1: for i,j,l,k,a st [i,j] in Indices (1.(K,n)) &
+       l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l
+         holds
+ (1.(K,n))*(i,j) = (RLineXS(RLineXS((1.(K,n)),l,k,-a),l,k,a))*(i,j)
+proof
+ let i,j,l,k,a;
+ assume A1:[i,j] in Indices (1.(K,n)) &
+ l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l;
+then A2: i in dom (1.(K,n)) & j in Seg width (1.(K,n)) by ZFMISC_1:106;
+set B= RLineXS((1.(K,n)),l,k,-a);
+A3:  len B = len (1.(K,n)) & width B = width (1.(K,n)) by A1,Def3,Th1;
+A5: dom B = Seg len B by FINSEQ_1:def 3
+.= Seg len (1.(K,n)) by A1,Def3
+.= dom (1.(K,n)) by FINSEQ_1:def 3;
+then A7:len RLineXS(B,l,k,a) = len B &
+width RLineXS(B,l,k,a) = width B by A1,Def3,Th1;
+A1b: i in dom B by A1,ZFMISC_1:106,A5;
+now per cases;
+  case A1c:i = l;
+   A1e:Line(RLineXS(B,l,k,a),i) = a*Line(B,k) + Line(B,i) by A1,Th8,A1c,A5;
+       A1f:Line(B,k) = Line((1.(K,n)),k) by A1,Th8;
+       reconsider p1=Line((1.(K,n)),k) as Element of
+       (width B)-tuples_on the carrier of K by Th1;
+       reconsider p2=Line((1.(K,n)),i) as Element of
+       (width B)-tuples_on the carrier of K by Th1;
+     A1h:Line(RLineXS(B,l,k,a),i) = a*p1 + ((-a)*p1 + p2) 
+       by A1c,A1,Th8,A1e,A1f
+          .= a*p1 + (-a)*p1 + p2 by FINSEQOP:29
+          .= (a+(-a))*p1 + p2 by FVSUM_1:68
+          .= (0.K)*p1 + p2 by RLVECT_1:16
+          .= (width B)|->0.K + p2 by FVSUM_1:71
+          .= Line((1.(K,n)),i) by FVSUM_1:28;
+   thus (RLineXS(B,l,k,a))*(i,j) = Line((1.(K,n)),i).j
+     by A1h,A2,A3,A7,MATRIX_1:def 8
+               .= (1.(K,n))*(i,j) by A2,MATRIX_1:def 8;
+    end;
+   case A1i:i <> l;
+    A1k:Line(RLineXS(B,l,k,a),i) = Line(B,i) by A1,Th8,A1b,A1i,A5;
+    thus (RLineXS(B,l,k,a))*(i,j) = Line(RLineXS(B,l,k,a),i).j
+     by A2,A3,A7,MATRIX_1:def 8
+         .= Line((1.(K,n)),i).j by A1i,A2,Th8,A1,A1k
+         .= (1.(K,n))*(i,j) by A2,MATRIX_1:def 8;
+    end;
+end;
+hence thesis;
+end;
+
+theorem Th17:
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l
+    implies RLineXS((1.(K,n)),l,k,a) is invertible &
+      (RLineXS((1.(K,n)),l,k,a))~ = RLineXS((1.(K,n)),l,k,-a)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l;
+set A = RLineXS((1.(K,n)),l,k,a);
+set B = RLineXS((1.(K,n)),l,k,-a);
+A2: A * B = RLineXS(B,l,k,a) & B * A = RLineXS(A,l,k,-a) by A1,Th11;
+A9:for i,j st [i,j] in Indices (1.(K,n)) holds
+ (1.(K,n))*(i,j) = RLineXS(B,l,k,a)*(i,j) by A1,lm1;
+A10:1.(K,n) = RLineXS(B,l,k,a) by A9,MATRIX_1:28;
+set b = -a;
+a+b = 0.K by RLVECT_1:def 10;
+then A11:a = -b by RLVECT_1:19;
+  for i,j st [i,j] in Indices (1.(K,n)) holds
+    (1.(K,n))*(i,j) = RLineXS(A,l,k,-a)*(i,j) by A1,lm1,A11;
+then 1.(K,n) = RLineXS(A,l,k,-a) by MATRIX_1:28;
+then A15:B is_reverse_of A by A2,A10,MATRIX_6:def 2;
+then A is invertible by MATRIX_6:def 3;
+hence thesis by A15,MATRIX_6:def 4;
+end;
+
+theorem Th19:
+  l in dom (1.(K,n)) & a <> 0.K
+    implies SXLine((1.(K,n)),l,a) is invertible &
+      (SXLine((1.(K,n)),l,a))~ = SXLine((1.(K,n)),l,a")
+proof
+assume A1:l in dom (1.(K,n)) & a <> 0.K;
+then A1a: a" <> 0.K by VECTSP_2:48;
+set A = SXLine((1.(K,n)),l,a);
+set B = SXLine((1.(K,n)),l,a");
+A2: A * B = SXLine(B,l,a) by A1,Th10;
+A2a:B * A = SXLine(A,l,a") by A1,A1a,Th10;
+A3: len A = len (1.(K,n)) & width A = width (1.(K,n)) by Def2,Th1;
+A3a:len B = len (1.(K,n)) & width B = width (1.(K,n)) by Def2,Th1;
+A4: dom A = Seg len A by FINSEQ_1:def 3
+.= Seg len (1.(K,n)) by Def2
+.= dom (1.(K,n)) by FINSEQ_1:def 3;
+A5: dom B = Seg len B by FINSEQ_1:def 3
+.= Seg len (1.(K,n)) by Def2
+.= dom (1.(K,n)) by FINSEQ_1:def 3;
+    for i,j st [i,j] in Indices (1.(K,n)) 
+      holds (1.(K,n))*(i,j) = SXLine(B,l,a)*(i,j) 
+        proof
+         let i,j;
+         assume [i,j] in Indices (1.(K,n));
+         then A9b:i in dom (1.(K,n)) & j in Seg width (1.(K,n)) 
+          by ZFMISC_1:106;
+         then A9d:(SXLine(B,l,a)*(l,j) = a*(B*(l,j))) &
+           (i <> l implies SXLine(B,l,a)*(i,j) = B*(i,j)) 
+          by A1,Def2,A5,A3a;
+         A9e:(B*(l,j) = a"*((1.(K,n))*(l,j))) &
+           (i <> l implies B*(i,j) = (1.(K,n))*(i,j)) by A1,A9b,Def2;
+         then SXLine(B,l,a)*(l,j) = a*(a"*((1.(K,n))*(l,j)))
+          by A9b,A1,Def2,A5,A3a
+                     .= (a*a")*((1.(K,n))*(l,j)) by GROUP_1:def 4
+                     .= (1_K)*((1.(K,n))*(l,j)) by A1,VECTSP_2:def 7
+                     .= (1.(K,n))*(l,j) by GROUP_1:def 5;
+
+       hence thesis by A9d,A9e;
+       end;
+then A10:1.(K,n) = SXLine(B,l,a) by MATRIX_1:28;
+    for i,j st [i,j] in Indices (1.(K,n)) holds 
+                 (1.(K,n))*(i,j) = SXLine(A,l,a")*(i,j) 
+       proof
+         let i,j;
+         assume [i,j] in Indices (1.(K,n));
+         then A10b:i in dom (1.(K,n)) & j in Seg width (1.(K,n)) 
+          by ZFMISC_1:106;
+         then A10d:(SXLine(A,l,a")*(l,j) = (a")*(A*(l,j))) &
+           (i <> l implies SXLine(A,l,a")*(i,j) = A*(i,j)) by A4,A1,Def2,A3;
+         A10e:(A*(l,j) = a*((1.(K,n))*(l,j))) &
+           (i <> l implies A*(i,j) = (1.(K,n))*(i,j)) by A1,A10b,Def2;
+        then SXLine(A,l,a")*(l,j) = (a")*(a*((1.(K,n))*(l,j)))
+          by A10b,A4,A1,Def2,A3
+                     .= (a"*a)*((1.(K,n))*(l,j)) by GROUP_1:def 4
+                     .= (1_K)*((1.(K,n))*(l,j)) by A1,VECTSP_2:def 7
+                     .= (1.(K,n))*(l,j) by GROUP_1:def 5;
+       hence thesis by A10d,A10e;
+      end;
+then A12:1.(K,n) = SXLine(A,l,a") by MATRIX_1:28;
+A15:B is_reverse_of A by A2,A2a,A12,A10,MATRIX_6:def 2;
+then A is invertible by MATRIX_6:def 3;
+hence thesis by A15,MATRIX_6:def 4;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+  assume A1: l in Seg width M & k in Seg width M & n>0 & m>0;
+  func InterchangeCol(M,l,k) -> Matrix of n,m,K means :Def4:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = M*(i,k)) &
+         (j = k implies it*(i,j) = M*(i,l)) &
+         (j <> l & j <> k implies it*(i,j) = M*(i,j));
+existence
+proof
+A2:len M = n & width M = m by A1,MATRIX_1:24;
+then len (M@) = m & width (M@) = n by A1,MATRIX_2:12;
+then (M@) is Matrix of m,n,K by A1,MATRIX_1:20; 
+then consider M1 being Matrix of m,n,K such that A4:M1 = M@;
+len ILine(M1,l,k) = m & width ILine(M1,l,k) = n by A1,MATRIX_1:24;
+then len (ILine(M1,l,k)@) = n & width (ILine(M1,l,k)@) = m
+by A1,MATRIX_2:12;
+then (ILine(M1,l,k)@) is Matrix of n,m,K by A1,MATRIX_1:20; 
+then consider M2 being Matrix of n,m,K such that 
+A10:M2 = (ILine(M1,l,k))@;
+A13: for i,j st i in dom M & j in Seg width M 
+       holds (j = l implies M2*(i,j) = M*(i,k)) &
+             (j = k implies M2*(i,j) = M*(i,l)) &
+             (j <> l & j <> k implies M2*(i,j) = M*(i,j))
+    proof 
+     let i,j;
+     assume A14:i in dom M & j in Seg width M;
+     A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+     then A6:[j,i] in Indices M1 by A4,MATRIX_1:def 7;
+     then A7:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+     dom (ILine(M1,l,k)) = Seg len ILine(M1,l,k) by FINSEQ_1:def 3
+                        .= Seg len M1 by Def1
+                        .= dom M1 by FINSEQ_1:def 3;
+then A11:[j,i] in Indices (ILine(M1,l,k)) by A6,Th1;
+      thus j = l implies M2*(i,j) = M*(i,k)
+        proof
+        assume A1a:j = l;
+       A1b:[i,k] in Indices M by A14,A1,ZFMISC_1:106;
+        M2*(i,j) = (ILine(M1,l,k))*(j,i) 
+          by A10,A11,MATRIX_1:def 7
+                .= M1*(k,i) by A1a,A7,Def1
+                .= M*(i,k) by A4,A1b,MATRIX_1:def 7;
+         hence thesis;
+        end;
+      thus j = k implies M2*(i,j) = M*(i,l)
+        proof
+        assume A1a:j = k;
+       A1b:[i,l] in Indices M by A1,A14,ZFMISC_1:106;
+        M2*(i,j) = (ILine(M1,l,k))*(j,i) by A10,A11,MATRIX_1:def 7
+                .= M1*(l,i) by A1a,A7,Def1
+                .= M*(i,l) by A4,A1b,MATRIX_1:def 7;
+         hence thesis;
+        end;
+       thus j <> l & j <> k implies M2*(i,j) = M*(i,j)
+         proof
+         assume A1a:j <> l & j <> k;
+          M2*(i,j) = (ILine(M1,l,k))*(j,i) by A10,A11,MATRIX_1:def 7
+                  .= M1*(j,i) by A1a,A7,Def1
+                  .= M*(i,j) by A4,A5,MATRIX_1:def 7;
+         hence thesis;
+        end;
+     end;
+take M2;
+thus thesis by A2,A1,MATRIX_1:24,A13;
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+  assume that len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M holds
+     (j = l implies M1*(i,j) = M*(i,k)) &
+         (j = k implies M1*(i,j) = M*(i,l)) &
+         (j <> l & j <> k implies M1*(i,j) = M*(i,j))) and
+  len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M
+   holds (j = l implies M2*(i,j) = M*(i,k)) &
+         (j = k implies M2*(i,j) = M*(i,l)) &
+         (j <> l & j <> k implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+      A7:Indices M1 = Indices M2 & Indices M = Indices M1 by MATRIX_1:27;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+     then (j = l implies M1*(i,j) = M*(i,k)) &
+          (j = k implies M1*(i,j) = M*(i,l)) &
+          (j <> l & j <> k implies M1*(i,j) = M*(i,j)) &
+          (j = l implies M2*(i,j) = M*(i,k)) &
+          (j = k implies M2*(i,j) = M*(i,l)) &
+      (j <> l & j <> k implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_1:28;
+end;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l be Nat;
+           let a be Element of K;
+  assume A1: l in Seg width M & n>0 & m>0;
+  func ScalarXCol(M,l,a) -> Matrix of n,m,K means :Def5:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = a*(M*(i,l))) &
+         (j <> l implies it*(i,j) = M*(i,j));
+existence
+proof
+A2:len M = n & width M = m by A1,MATRIX_1:24;
+then len (M@) = m & width (M@) = n by A1,MATRIX_2:12;
+then (M@) is Matrix of m,n,K by A1,MATRIX_1:20;
+then consider M1 being Matrix of m,n,K such that A4:M1 = M@;
+len ScalarXLine(M1,l,a) = m & width ScalarXLine(M1,l,a) = n
+ by A1,MATRIX_1:24;
+then len ((ScalarXLine(M1,l,a))@) = n
+& width ((ScalarXLine(M1,l,a))@) = m by A1,MATRIX_2:12;
+then ((ScalarXLine(M1,l,a))@) is Matrix of n,m,K by A1,MATRIX_1:20; 
+then consider M2 being Matrix of n,m,K such that 
+A10:M2 = (ScalarXLine(M1,l,a))@;
+  A13:for i,j st i in dom M & j in Seg width M  
+        holds (j = l implies M2*(i,j) = a*(M*(i,l))) &
+              (j <> l implies M2*(i,j) = M*(i,j))
+    proof 
+    let i,j;
+    assume A14:i in dom M & j in Seg width M;
+    A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+    then A6:[j,i] in Indices M1 by A4,MATRIX_1:def 7;
+    then A7:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+     dom (ScalarXLine(M1,l,a)) = Seg len (ScalarXLine(M1,l,a))
+       by FINSEQ_1:def 3
+                              .= Seg len M1 by Def2
+                              .= dom M1 by FINSEQ_1:def 3;
+    then A11:[j,i] in Indices (ScalarXLine(M1,l,a)) by A6,Th1;
+      thus j = l implies M2*(i,j) = a*(M*(i,l))
+       proof
+        assume A1a:j = l;
+        A1b:[i,l] in Indices M by A14,A1,ZFMISC_1:106;
+        M2*(i,j) = (ScalarXLine(M1,l,a))*(j,i) by A11,A10,MATRIX_1:def 7
+                .= a*(M1*(l,i)) by A1a,A7,Def2
+                .= a*(M*(i,l)) by A4,A1b,MATRIX_1:def 7;
+         hence thesis;
+        end;
+       thus j <> l implies M2*(i,j) = M*(i,j)
+        proof
+         assume A1a:j <> l;
+         M2*(i,j) = (ScalarXLine(M1,l,a))*(j,i) by A10,A11,MATRIX_1:def 7
+                 .= M1*(j,i) by A1a,A7,Def2
+                 .= M*(i,j) by A4,A5,MATRIX_1:def 7;
+        hence thesis;
+         end;
+     end;
+take M2;
+thus thesis by A2,A1,MATRIX_1:24,A13;
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+assume that
+len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M holds
+     (j = l implies M1*(i,j) = a*(M*(i,l))) &
+              (j <> l implies M1*(i,j) = M*(i,j))) and
+len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M holds
+     (j = l implies M2*(i,j) = a*(M*(i,l))) &
+              (j <> l implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+      A7:Indices M1 = Indices M2 & Indices M = Indices M1 by MATRIX_1:27;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+      then (j = l implies M1*(i,j) = a*(M*(i,l))) &
+           (j <> l implies M1*(i,j) = M*(i,j)) &
+           (j = l implies M2*(i,j) = a*(M*(i,l))) &
+           (j <> l implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_1:28;
+end;
+end;
+
+definition let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  assume A1: l in Seg width M & k in Seg width M & n>0 & m>0;
+  func RcolXScalar(M,l,k,a) -> Matrix of n,m,K means :Def6:
+         len it = len M &
+         for i,j st i in dom M & j in Seg width M holds
+         (j = l implies it*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies it*(i,j) = M*(i,j));
+existence
+proof
+A2:len M = n & width M = m by A1,MATRIX_1:24;
+then len (M@) = m & width (M@) = n by A1,MATRIX_2:12;
+then (M@) is Matrix of m,n,K by A1,MATRIX_1:20; 
+then consider M1 being Matrix of m,n,K such that A4:M1 = M@;
+len RlineXScalar(M1,l,k,a) = m & width RlineXScalar(M1,l,k,a) = n
+ by A1,MATRIX_1:24; 
+then len ((RlineXScalar(M1,l,k,a))@) = n
+& width ((RlineXScalar(M1,l,k,a))@) = m by A1,MATRIX_2:12;
+then ((RlineXScalar(M1,l,k,a))@) is Matrix of n,m,K by A1,MATRIX_1:20; 
+then consider M2 being Matrix of n,m,K such that 
+A10:M2 = (RlineXScalar(M1,l,k,a))@;
+A13:for i,j st i in dom M & j in Seg width M
+   holds (j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies M2*(i,j) = M*(i,j))
+    proof 
+    let i,j;
+    assume A14:i in dom M & j in Seg width M;
+    A2:len M1 = width M by A4,MATRIX_1:def 7;
+    A4t:l in dom M1 & k in dom M1 by A1,A2,FINSEQ_1:def 3;
+    A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+    then A6:[j,i] in Indices M1 by A4,MATRIX_1:def 7;
+    then A7:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+    dom (RlineXScalar(M1,l,k,a)) = Seg len (RlineXScalar(M1,l,k,a)) 
+     by FINSEQ_1:def 3
+                                .= Seg len M1 by A4t,Def3
+                                .= dom M1 by FINSEQ_1:def 3;
+then A11:[j,i] in Indices (RlineXScalar(M1,l,k,a)) by A6,Th1;
+    thus j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))
+     proof
+     assume A1a:j = l;
+   A1b:[i,l] in Indices M by A14,A1,ZFMISC_1:106;
+   A1bb:[i,k] in Indices M by A14,A1,ZFMISC_1:106;
+M2*(i,j) = (RlineXScalar(M1,l,k,a))*(j,i) by A11,A10,MATRIX_1:def 7
+.= a*(M1*(k,i))+(M1*(l,i)) by A1a,A4t,A7,Def3
+.= a*(M*(i,k))+(M1*(l,i)) by A4,A1bb,MATRIX_1:def 7
+.= a*(M*(i,k))+(M*(i,l)) by A4,A1b,MATRIX_1:def 7;
+   hence thesis;
+   end;
+   thus j <> l implies M2*(i,j) = M*(i,j)
+    proof
+    assume A1a:j <> l;
+    M2*(i,j) = (RlineXScalar(M1,l,k,a))*(j,i) by A10,A11,MATRIX_1:def 7
+            .= M1*(j,i) by A1a,A4t,A7,Def3
+            .= M*(i,j) by A4,A5,MATRIX_1:def 7;
+   hence thesis;
+   end;
+ end;
+take M2;
+thus thesis by A2,A1,MATRIX_1:24,A13;
+end;
+uniqueness
+proof
+  let M1,M2 be Matrix of n,m,K;
+  assume that len M1 = len M and
+A3:(for i,j st i in dom M & j in Seg width M
+ holds (j = l implies M1*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+       (j <> l implies M1*(i,j) = M*(i,j))) and
+       len M2 = len M and
+A5:(for i,j st i in dom M & j in Seg width M
+ holds (j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+        (j <> l implies M2*(i,j) = M*(i,j)));
+  for i,j st [i,j] in Indices M1 holds M1*(i,j)=M2*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices M1;
+      A7:Indices M1 = Indices M2 & Indices M = Indices M1 by MATRIX_1:27;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+    then (j = l implies M1*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies M1*(i,j) = M*(i,j)) &
+         (j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies M2*(i,j) = M*(i,j)) by A3,A5;
+      hence thesis;
+    end;
+    hence thesis by MATRIX_1:28;
+end;
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l,k be Nat;
+  synonym ICol(M,l,k) for InterchangeCol(M,l,k);
+end;
+
+notation let n,m;let K;
+         let M be Matrix of n,m,K;
+         let l be Nat;
+         let a be Element of K;
+  synonym SXCol(M,l,a) for ScalarXCol(M,l,a);
+end;
+
+notation let n,m;let K;
+           let M be Matrix of n,m,K;
+           let l,k be Nat;
+           let a be Element of K;
+  synonym RColXS(M,l,k,a) for RcolXScalar(M,l,k,a);
+end;
+
+theorem Th20:
+  l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
+    implies (ILine(M1,l,k))@ = ICol(M,l,k)
+proof
+assume A1:l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@;
+len M = n & width M = m by A1,MATRIX_1:24;
+then A3: len (M1) = m & width (M1) = n by A1,MATRIX_2:12;
+len ILine(M1,l,k) = len M1 & width ILine(M1,l,k) = width M1 by Def1,Th1;
+then len (ILine(M1,l,k)@) = n & width (ILine(M1,l,k)@) = m
+  by A1,A3,MATRIX_2:12;
+then A9: (ILine(M1,l,k)@) is Matrix of n,m,K by A1,MATRIX_1:20;
+then consider M2 being Matrix of n,m,K such that
+A10:M2 = (ILine(M1,l,k))@;
+A13:for i,j st i in dom M & j in Seg width M holds 
+              (j = l implies M2*(i,j) = M*(i,k)) &
+              (j = k implies M2*(i,j) = M*(i,l)) &
+              (j <> l & j <> k implies M2*(i,j) = M*(i,j))
+    proof 
+     let i,j;
+     assume A14:i in dom M & j in Seg width M;
+    A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+    then A6:[j,i] in Indices M1 by A1,MATRIX_1:def 7;
+    then A7a:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+   dom (ILine(M1,l,k)) = Seg len (ILine(M1,l,k)) by FINSEQ_1:def 3
+                      .= Seg len M1 by Def1
+                      .= dom M1 by FINSEQ_1:def 3;
+    then A11:[j,i] in Indices (ILine(M1,l,k)) by A6,Th1;
+    thus j = l implies M2*(i,j) = M*(i,k)
+  proof
+   assume A1a:j = l;
+A1b:[i,k] in Indices M by A14,A1,ZFMISC_1:106;
+   M2*(i,j) = (ILine(M1,l,k))*(j,i) by A10,A11,MATRIX_1:def 7
+   .= M1*(k,i) by A1a,A7a,Def1
+   .= M*(i,k) by A1,A1b,MATRIX_1:def 7;
+   hence thesis;
+   end;
+   thus j = k implies M2*(i,j) = M*(i,l)
+    proof
+    assume A1a:j = k;
+    A1b:[i,l] in Indices M by A1,A14,ZFMISC_1:106;
+    M2*(i,j) = (ILine(M1,l,k))*(j,i) by A10,A11,MATRIX_1:def 7
+            .= M1*(l,i) by A1a,A7a,Def1
+            .= M*(i,l) by A1,A1b,MATRIX_1:def 7;
+   hence thesis;
+   end;
+   assume A1a:j <> l & j <> k;
+   M2*(i,j) = (ILine(M1,l,k))*(j,i) by A10,A11,MATRIX_1:def 7
+           .= M1*(j,i) by A1a,A7a,Def1
+           .= M*(i,j) by A1,A5,MATRIX_1:def 7;
+   hence thesis;
+  end;
+  for i,j st [i,j] in Indices ICol(M,l,k)
+       holds ICol(M,l,k)*(i,j) = ((ILine(M1,l,k))@)*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices ICol(M,l,k);
+      A7:Indices ICol(M,l,k) = Indices ((ILine(M1,l,k))@) & 
+      Indices M = Indices ICol(M,l,k) by MATRIX_1:27,A10;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+      then (j = l implies ((ILine(M1,l,k))@)*(i,j) = M*(i,k)) &
+           (j = k implies ((ILine(M1,l,k))@)*(i,j) = M*(i,l)) &
+           (j <> l & j <> k implies ((ILine(M1,l,k))@)*(i,j) = M*(i,j)) &
+           (j = l implies ICol(M,l,k)*(i,j) = M*(i,k)) &
+           (j = k implies ICol(M,l,k)*(i,j) = M*(i,l)) &
+           (j <> l & j <> k implies ICol(M,l,k)*(i,j) = M*(i,j))
+       by A13,A1,Def4,A10;
+     hence thesis;
+    end;
+  hence thesis by A9,MATRIX_1:28;
+end;
+
+theorem Th21:
+  l in Seg width M & a <> 0.K & n>0 & m>0 & M1 = M@ implies
+    (SXLine(M1,l,a))@ = SXCol(M,l,a)
+proof
+assume A1:l in Seg width M & a <> 0.K & n>0 & m>0 & M1 = M@;
+len M = n & width M = m by A1,MATRIX_1:24;
+then A3: len (M1) = m & width (M1) = n by A1,MATRIX_2:12;
+len SXLine(M1,l,a) = len M1 & width SXLine(M1,l,a) = width M1 by Def2,Th1;
+then len (SXLine(M1,l,a)@) = n & width (SXLine(M1,l,a)@) = m
+by A1,A3,MATRIX_2:12;
+then A9: (SXLine(M1,l,a)@) is Matrix of n,m,K by A1,MATRIX_1:20; 
+then consider M2 being Matrix of n,m,K such that
+A10:M2 = (SXLine(M1,l,a))@;
+A13:for i,j st i in dom M & j in Seg width M 
+      holds (j = l implies M2*(i,j) = a*(M*(i,l))) &
+            (j <> l implies M2*(i,j) = M*(i,j))
+    proof
+     let i,j;
+     assume A14:i in dom M & j in Seg width M;
+     A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+     then A6:[j,i] in Indices M1 by A1,MATRIX_1:def 7;
+     then A7a:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+     dom (SXLine(M1,l,a)) = Seg len SXLine(M1,l,a) by FINSEQ_1:def 3
+                         .= Seg len M1 by Def2
+                         .= dom M1 by FINSEQ_1:def 3;
+then A11:[j,i] in Indices (SXLine(M1,l,a)) by A6,Th1;
+    thus j = l implies M2*(i,j) = a*(M*(i,l))
+     proof
+     assume A1a:j = l;
+    M2*(i,j) = (SXLine(M1,l,a))*(j,i) by A10,A11,MATRIX_1:def 7
+            .= a*(M1*(l,i)) by A1a,A7a,Def2
+            .= a*(M*(i,l)) by A1a,A5,A1,MATRIX_1:def 7;
+     hence thesis;
+    end;
+     assume A1a:j <> l;
+     M2*(i,j) = (SXLine(M1,l,a))*(j,i) by A10,A11,MATRIX_1:def 7
+             .= M1*(j,i) by A1a,A7a,Def2
+             .= M*(i,j) by A1,A5,MATRIX_1:def 7;
+     hence thesis;
+   end;
+  for i,j st [i,j] in Indices SXCol(M,l,a)
+       holds SXCol(M,l,a)*(i,j) = ((SXLine(M1,l,a))@)*(i,j)
+    proof
+      let i,j such that A6:[i,j] in Indices SXCol(M,l,a);
+      A7:Indices SXCol(M,l,a) = Indices ((SXLine(M1,l,a))@) & 
+      Indices M = Indices SXCol(M,l,a) by MATRIX_1:27,A10;
+      i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+ then (j = l implies ((SXLine(M1,l,a))@)*(i,j) = a*(M*(i,l))) &
+      (j <> l implies ((SXLine(M1,l,a))@)*(i,j) = M*(i,j)) &
+      (j = l implies SXCol(M,l,a)*(i,j) = a*(M*(i,l))) &
+      (j <> l implies SXCol(M,l,a)*(i,j) = M*(i,j))
+       by A13,A1,Def5,A10;
+      hence thesis;
+    end;
+  hence thesis by A9,MATRIX_1:28;
+end;
+
+theorem Th22:
+  l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@
+    implies (RLineXS(M1,l,k,a))@ = RColXS(M,l,k,a)
+proof
+    assume
+A1: l in Seg width M & k in Seg width M & n>0 & m>0 & M1 = M@;
+A2: len M = n & width M = m by A1,MATRIX_1:24; then
+A3: len M1 = m & width M1 = n by A1,MATRIX_2:12;
+A71:dom M1 = Seg len M1 by FINSEQ_1:def 3
+      .= Seg width M by A1,A2,MATRIX_2:12;
+    then len RLineXS(M1,l,k,a) = len M1 &
+      width RLineXS(M1,l,k,a) = width M1 by A1,Def3,Th1;
+    then len (RLineXS(M1,l,k,a)@) = n & width (RLineXS(M1,l,k,a)@) = m
+      by A1,A3,MATRIX_2:12; then
+A9: (RLineXS(M1,l,k,a)@) is Matrix of n,m,K by A1,MATRIX_1:20;
+    then consider M2 being Matrix of n,m,K such that
+A10:M2 = (RLineXS(M1,l,k,a))@;
+A13:for i,j st i in dom M & j in Seg width M holds
+       (j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies M2*(i,j) = M*(i,j))
+    proof
+    let i,j;
+    assume A14:i in dom M & j in Seg width M;
+    A2:len M1 = width M by A1,MATRIX_1:def 7;
+    A4t:l in dom M1 & k in dom M1 by FINSEQ_1:def 3,A1,A2;
+    A5:[i,j] in Indices M by A14,ZFMISC_1:106;
+    then A6:[j,i] in Indices M1 by A1,MATRIX_1:def 7;
+    then A7a:j in dom M1 & i in Seg width M1 by ZFMISC_1:106;
+    dom (RLineXS(M1,l,k,a)) = Seg len (RLineXS(M1,l,k,a)) by FINSEQ_1:def 3
+                           .= Seg len M1 by A71,A1,Def3
+                           .= dom M1 by FINSEQ_1:def 3;then
+A11:[j,i] in Indices (RLineXS(M1,l,k,a)) by A6,Th1;
+    thus j = l implies M2*(i,j) = a*(M*(i,k))+(M*(i,l))
+     proof
+      assume A1a:j = l;
+      A1b:[i,k] in Indices M by A14,A1,ZFMISC_1:106;
+      M2*(i,j) = (RLineXS(M1,l,k,a))*(j,i) 
+        by A10,A11,MATRIX_1:def 7
+         .= a*(M1*(k,i))+(M1*(l,i)) by A1a,A4t,A7a,Def3
+         .= a*(M*(i,k))+(M1*(l,i)) by A1,A1b,MATRIX_1:def 7
+         .= a*(M*(i,k))+(M*(i,l)) by A1,A1a,A5,MATRIX_1:def 7;
+   hence thesis;
+   end;
+    thus j <> l implies M2*(i,j) = M*(i,j)
+     proof
+      assume A1a:j <> l;
+      M2*(i,j) = (RLineXS(M1,l,k,a))*(j,i) by A10,A11,MATRIX_1:def 7
+             .= M1*(j,i) by A1a,A4t,A7a,Def3
+             .= M*(i,j) by A1,A5,MATRIX_1:def 7;
+      hence thesis;
+    end;
+   end;
+  for i,j st [i,j] in Indices RColXS(M,l,k,a)
+        holds RColXS(M,l,k,a)*(i,j) = ((RLineXS(M1,l,k,a))@)*(i,j)
+        proof
+         let i,j such that A6:[i,j] in Indices RColXS(M,l,k,a);
+     A7:Indices RColXS(M,l,k,a) = Indices ((RLineXS(M1,l,k,a))@) &
+        Indices M = Indices RColXS(M,l,k,a) by MATRIX_1:27,A10;
+        i in dom M & j in Seg width M by A7,A6,ZFMISC_1:106;
+        then (j = l implies ((RLineXS(M1,l,k,a))@)*(i,j)
+                     = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies ((RLineXS(M1,l,k,a))@)*(i,j) = M*(i,j)) &
+         (j = l implies RColXS(M,l,k,a)*(i,j) = a*(M*(i,k))+(M*(i,l))) &
+         (j <> l implies RColXS(M,l,k,a)*(i,j) = M*(i,j)) by A13,A1,Def6,A10;
+      hence thesis;
+    end;
+  hence thesis by A9,MATRIX_1:28;
+end;
+
+theorem
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+    implies A * ICol((1.(K,n)),l,k) = ICol(A,l,k)
+proof
+    assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0;
+A3: len (1.(K,n)) = n & width (1.(K,n)) = n &
+    len A=n & width A=n by MATRIX_1:25;
+A6a:Seg width A = dom (1.(K,n)) by FINSEQ_1:def 3,A3;
+A8:len (ILine((1.(K,n)),l,k)) = len (1.(K,n)) & 
+   width (ILine((1.(K,n)),l,k)) = width (1.(K,n)) by Def1,Th1;
+A9:len (A@)=n & width (A@)=n by MATRIX_1:25;
+A10:dom (1.(K,n)) = Seg width (1.(K,n)) by A3,FINSEQ_1:def 3;
+  (ILine(A@,l,k))@ = (ILine((1.(K,n)),l,k) * (A@))@ by A1,Th9
+.= (A@)@ * (ILine((1.(K,n)),l,k))@ by A8,A9,A1,A3,MATRIX_3:24
+.= A* (ILine((1.(K,n)),l,k))@ by A1,A3,MATRIX_2:15
+.= A* (ILine((1.(K,n))@,l,k))@ by MATRIX_6:10
+.= A* ICol((1.(K,n)),l,k) by A1,A10,Th20;
+hence thesis by A6a,A1,Th20; 
+end;
+
+theorem
+  l in dom (1.(K,n)) & a <> 0.K & n>0
+    implies A * SXCol((1.(K,n)),l,a) = SXCol(A,l,a)
+proof
+assume A1:l in dom (1.(K,n)) & a <> 0.K & n>0;
+A3: len (1.(K,n)) = n & width (1.(K,n)) = n &
+    len A=n & width A=n by MATRIX_1:25;
+A6a:Seg width A = dom (1.(K,n)) by FINSEQ_1:def 3,A3;
+A8:len (SXLine((1.(K,n)),l,a)) = len (1.(K,n)) &
+   width (SXLine((1.(K,n)),l,a)) = width (1.(K,n)) by Def2,Th1;
+A9:len (A@)=n & width (A@)=n by MATRIX_1:25;
+A10:dom (1.(K,n)) = Seg width (1.(K,n)) by A3,FINSEQ_1:def 3;
+  (SXLine(A@,l,a))@ = (SXLine((1.(K,n)),l,a) * (A@))@ by A1,Th10
+.= (A@)@ * (SXLine((1.(K,n)),l,a))@ by A8,A9,A1,A3,MATRIX_3:24
+.= A* (SXLine((1.(K,n)),l,a))@ by A1,A3,MATRIX_2:15
+.= A* (SXLine((1.(K,n))@,l,a))@ by MATRIX_6:10
+.= A* SXCol((1.(K,n)),l,a) by A1,A10,Th21;
+hence thesis by A6a,A1,Th21;
+end;
+
+theorem
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+    implies A * RColXS((1.(K,n)),l,k,a) = RColXS(A,l,k,a)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0;
+A3: len (1.(K,n)) = n & width (1.(K,n)) = n &
+    len A=n & width A=n by MATRIX_1:25;
+A6a:Seg width A = dom (1.(K,n)) by A3,FINSEQ_1:def 3;
+A8:len (RLineXS((1.(K,n)),l,k,a)) = len (1.(K,n)) &
+   width (RLineXS((1.(K,n)),l,k,a)) = width (1.(K,n)) by A1,Def3,Th1;
+A9:len (A@)=n & width (A@)=n by MATRIX_1:25;
+A10:dom (1.(K,n)) = Seg width (1.(K,n)) by A3,FINSEQ_1:def 3;
+  (RLineXS(A@,l,k,a))@ = (RLineXS((1.(K,n)),l,k,a) * (A@))@ by A1,Th11
+.= (A@)@ * (RLineXS((1.(K,n)),l,k,a))@ by A8,A9,A1,A3,MATRIX_3:24
+.= A* (RLineXS((1.(K,n)),l,k,a))@ by A1,A3,MATRIX_2:15
+.= A* (RLineXS((1.(K,n))@,l,k,a))@ by MATRIX_6:10
+.= A* RColXS((1.(K,n)),l,k,a) by A1,A10,Th22;
+hence thesis by A6a,A1,Th22; 
+end;
+
+theorem
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0
+     implies (ICol((1.(K,n)),l,k))~ = ICol((1.(K,n)),l,k)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n)) & n>0;
+A2: (1.(K,n))@ = (1.(K,n)) by MATRIX_6:10;
+A3: len (1.(K,n)) = n & width (1.(K,n)) = n by MATRIX_1:25;
+A4: dom (1.(K,n)) = Seg width (1.(K,n)) by A3,FINSEQ_1:def 3;
+A5: ILine((1.(K,n)),l,k) is invertible
+& (ILine((1.(K,n)),l,k))~ = ILine((1.(K,n)),l,k) by A1,Th15;
+ICol((1.(K,n)),l,k) = (ILine((1.(K,n)),l,k))@ by A2,A1,A4,Th20
+.= (ILine((1.(K,n)),l,k)@)~ by A1,A5,MATRIX_6:13
+.= (ILine((1.(K,n))@,l,k)@)~ by MATRIX_6:10
+.= (ICol((1.(K,n)),l,k))~ by A1,A4,Th20;
+hence thesis;
+end;
+
+theorem 
+  l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l & n>0 implies
+     (RColXS((1.(K,n)),l,k,a))~ = RColXS((1.(K,n)),l,k,-a)
+proof
+assume A1:l in dom (1.(K,n)) & k in dom (1.(K,n)) & k<>l & n>0;
+A2: (1.(K,n))@ = (1.(K,n)) by MATRIX_6:10;
+A3: len (1.(K,n)) = n & width (1.(K,n)) = n by MATRIX_1:25;
+A4: dom (1.(K,n)) = Seg width (1.(K,n)) by FINSEQ_1:def 3,A3;
+A5: RLineXS((1.(K,n)),l,k,a) is invertible
+& (RLineXS((1.(K,n)),l,k,a))~ = RLineXS((1.(K,n)),l,k,-a) by A1,Th17;
+RColXS((1.(K,n)),l,k,-a) = (RLineXS((1.(K,n)),l,k,-a))@  by A2,A1,A4,Th22
+.= (RLineXS((1.(K,n)),l,k,a)@)~ by A1,A5,MATRIX_6:13
+.= (RLineXS((1.(K,n))@,l,k,a)@)~ by MATRIX_6:10
+.= (RColXS((1.(K,n)),l,k,a))~ by A1,A4,Th22;
+hence thesis;
+end;
+
+theorem
+  l in dom (1.(K,n)) & a <> 0.K & n>0 implies
+     (SXCol((1.(K,n)),l,a))~ = SXCol((1.(K,n)),l,a")
+proof
+    assume A1:l in dom (1.(K,n)) & a <> 0.K & n>0;
+    then A1a: a" <> 0.K by VECTSP_2:48;
+A2: (1.(K,n))@ = (1.(K,n)) by MATRIX_6:10;
+    len (1.(K,n)) = n & width (1.(K,n)) = n by MATRIX_1:25; then
+A4: dom (1.(K,n)) = Seg width (1.(K,n)) by FINSEQ_1:def 3;
+A5: SXLine((1.(K,n)),l,a) is invertible &
+      (SXLine((1.(K,n)),l,a))~ = SXLine((1.(K,n)),l,a") by A1,Th19;
+    SXCol((1.(K,n)),l,a") = (SXLine((1.(K,n)),l,a"))@ by A1a,A2,A1,A4,Th21
+     .= (SXLine((1.(K,n)),l,a)@)~ by A1,A5,MATRIX_6:13
+     .= (SXLine((1.(K,n))@,l,a)@)~ by MATRIX_6:10
+     .= (SXCol((1.(K,n)),l,a))~ by A1,A4,Th21;
+    hence thesis;
+end;

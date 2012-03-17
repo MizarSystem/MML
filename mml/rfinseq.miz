@@ -7,20 +7,21 @@
 environ
 
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
-      FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, NAT_1;
+      FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, NAT_1,
+      CAT_1, FUNCT_4, INT_1, FINSEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1, RELSET_1,
-      FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, NAT_1, REAL_1, SEQ_1, SEQM_3,
-      FINSEQ_4, FINSET_1, RVSUM_1, XXREAL_0;
+      FUNCT_2, FINSEQ_1, CARD_1, XCMPLX_0, INT_1, NAT_1, REAL_1, SEQ_1, SEQM_3,
+      FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQM_3,
       FINSEQ_4, FINSOP_1, RVSUM_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, SEQ_1;
+      NAT_1, MEMBERED, FINSEQ_1, SEQ_1, FUNCOP_1, SUBSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1;
+ definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1, FUNCOP_1;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
       XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, FINSOP_1,
-      RELSET_1, SEQM_3;
+      RELSET_1, SEQM_3, FUNCOP_1, FUNCT_4;
  schemes NAT_1, FINSEQ_1, CLASSES1, WELLORD2;
 
 begin
@@ -40,8 +41,8 @@ Lm1:
 for F be Function, x be set st not x in rng F holds F"{x} = {}
  proof let F be Function,x; assume
   A1: not x in rng F;
-      now assume
-   rng F meets {x};
+       now assume
+    rng F meets {x};
     then consider y being set such that
 A2:  y in rng F & y in {x} by XBOOLE_0:3;
     thus contradiction by A1,A2,TARSKI:def 1;
@@ -57,30 +58,30 @@ for F,G be Function st F,G are_fiberwise_equipotent holds rng F = rng G
    proof let x; assume that
     A2: x in rng F and
     A3: not x in rng G;
-       Card (F"{x}) = Card (G"{x}) by A1,Def1;
+        Card (F"{x}) = Card (G"{x}) by A1,Def1;
     then A4: F"{x},G"{x} are_equipotent by CARD_1:21;
     consider y such that
     A5: y in dom F & F.y = x by A2,FUNCT_1:def 5;
     A6: x in {x} by TARSKI:def 1;
-       G"{x} = {} by A3,Lm1;
+        G"{x} = {} by A3,Lm1;
     then F"{x} = {} by A4,CARD_1:46;
     hence contradiction by A5,A6,FUNCT_1:def 13;
    end;
   let x; assume that
   A7: x in rng G and
   A8: not x in rng F;
-     Card (G"{x}) = Card (F"{x}) by A1,Def1;
+      Card (G"{x}) = Card (F"{x}) by A1,Def1;
   then A9: G"{x},F"{x} are_equipotent by CARD_1:21;
   consider y such that
   A10: y in dom G & G.y = x by A7,FUNCT_1:def 5;
   A11: x in {x} by TARSKI:def 1;
-     F"{x} = {} by A8,Lm1;
+      F"{x} = {} by A8,Lm1;
   then G"{x} = {} by A9,CARD_1:46;
   hence contradiction by A10,A11,FUNCT_1:def 13;
  end;
 
 theorem
-   for F,G,H be Function
+    for F,G,H be Function
   st F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent holds
      G,H are_fiberwise_equipotent
   proof let F,G,H be Function; assume
@@ -105,7 +106,7 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
                                      f is one-to-one;
     A2: for x st x in rng F ex y st P[x,y]
      proof let x; assume x in rng F;
-         Card(F"{x}) = Card(G"{x}) by A1,Def1;
+          Card(F"{x}) = Card(G"{x}) by A1,Def1;
       then F"{x},G"{x} are_equipotent by CARD_1:21;
       then consider H be Function such that
       A3: H is one-to-one & dom H = F"{x} & rng H = G"{x} by WELLORD2:def 4;
@@ -127,7 +128,7 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
       then reconsider f = W.(F.x) as Function by A4;
       A8: dom f = F"{F.x} & rng f = G"{F.x} & f is one-to-one by A4,A7;
       take y = f.x;
-         F.x in {F.x} by TARSKI:def 1;
+          F.x in {F.x} by TARSKI:def 1;
       then x in F"{F.x} by A6,FUNCT_1:def 13;
       then f.x in G"{F.x} by A8,FUNCT_1:def 5;
       hence y in dg by FUNCT_1:def 13;
@@ -140,13 +141,13 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
        from WELLORD2:sch 1(A5);
     take IT;
     thus dom IT = df by A9;
-       dom G c= rng IT
+        dom G c= rng IT
      proof let x; assume
       A10: x in dg;
       then A11: G.x in rng G & rng F = rng G by A1,Th1,FUNCT_1:def 5;
       then reconsider f = W.(G.x) as Function by A4;
       A12: f is one-to-one & dom f = F"{G.x} & rng f = G"{G.x} by A4,A11;
-         G.x in {G.x} by TARSKI:def 1;
+          G.x in {G.x} by TARSKI:def 1;
       then x in rng f by A10,A12,FUNCT_1:def 13;
       then consider z be set such that
       A13: z in dom f & f.z = x by FUNCT_1:def 5;
@@ -156,14 +157,14 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
       hence thesis by A9,A14,FUNCT_1:def 5;
      end;
     hence rng IT = dg by A9,XBOOLE_0:def 10;
-        now let x,y; assume
+         now let x,y; assume
       A15: x in dom IT & y in dom IT & IT.x = IT.y;
       then A16: F.x in rng F & F.y in rng F by A9,FUNCT_1:def 5;
       then reconsider f1 = W.(F.x), f2 = W.(F.y) as Function by A4;
       A17: IT.x = f1.x & IT.y = f2.y by A9,A15;
       A18: dom f1 = F"{F.x} & rng f1 = G"{F.x} & f1 is one-to-one &
           dom f2 = F"{F.y} & rng f2 = G"{F.y} & f2 is one-to-one by A4,A16;
-         F.x in {F.x} & F.y in {F.y} by TARSKI:def 1;
+          F.x in {F.x} & F.y in {F.y} by TARSKI:def 1;
       then A19: x in F"{F.x} & y in F"{F.y} by A9,A15,FUNCT_1:def 13;
       then f1.x in rng f1 & f2.y in rng f2 by A18,FUNCT_1:def 5;
       then f1.x in G"{F.x} /\ G"{F.y} by A15,A17,A18,XBOOLE_0:def 3;
@@ -175,17 +176,17 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
      end;
     hence IT is one-to-one by FUNCT_1:def 8;
     A20: dom(G*IT) = df by A9,RELAT_1:46;
-        now let x; assume
+         now let x; assume
       A21: x in df;
       then A22: F.x in rng F by FUNCT_1:def 5;
       then reconsider f = W.(F.x) as Function by A4;
       A23: f is one-to-one & dom f = F"{F.x} & rng f = G"{F.x} by A4,A22;
-         F.x in {F.x} by TARSKI:def 1;
+          F.x in {F.x} by TARSKI:def 1;
       then x in F"{F.x} by A21,FUNCT_1:def 13;
       then f.x in G"{F.x} by A23,FUNCT_1:def 5;
       then G.(f.x) in {F.x} by FUNCT_1:def 13;
       then A24: G.(f.x) = F.x by TARSKI:def 1;
-         IT.x = f.x by A9,A21;
+          IT.x = f.x by A9,A21;
       hence F.x = (G*IT).x by A9,A21,A24,FUNCT_1:23;
      end;
     hence F = G*IT by A20,FUNCT_1:9;
@@ -195,32 +196,32 @@ ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
   let x;
   set t = H|(F"{x});
   A26: t is one-to-one by A25,FUNCT_1:84;
-     F"{x} c= dom F by RELAT_1:167;
+      F"{x} c= dom F by RELAT_1:167;
   then A27: dom t = F"{x} by A25,RELAT_1:91;
-     rng t = G"{x}
+      rng t = G"{x}
    proof
     thus rng t c= G"{x}
      proof let z be set; assume
-         z in rng t;
+          z in rng t;
       then consider y such that
       A28: y in dom t & t.y = z by FUNCT_1:def 5;
-         F.y in {x} by A27,A28,FUNCT_1:def 13;
+          F.y in {x} by A27,A28,FUNCT_1:def 13;
       then A29: F.y = x by TARSKI:def 1;
       A30: z = H.y by A28,FUNCT_1:68;
-         dom t = dom H /\ F"{x} by FUNCT_1:68;
+          dom t = dom H /\ F"{x} by FUNCT_1:68;
       then A31: y in dom H by A28,XBOOLE_0:def 3;
       then A32: z in dom G by A25,A30,FUNCT_1:def 5;
-         x = G.z by A25,A29,A30,A31,FUNCT_1:23;
+          x = G.z by A25,A29,A30,A31,FUNCT_1:23;
       then G.z in {x} by TARSKI:def 1;
       hence thesis by A32,FUNCT_1:def 13;
      end;
     let z be set; assume
-       z in G"{x};
+        z in G"{x};
     then A33: z in dom G & G.z in {x} by FUNCT_1:def 13;
     then A34: G.z = x by TARSKI:def 1;
     consider y such that
     A35: y in dom H & H.y = z by A25,A33,FUNCT_1:def 5;
-       F.y = x by A25,A34,A35,FUNCT_1:23;
+        F.y = x by A25,A34,A35,FUNCT_1:23;
     then F.y in {x} by TARSKI:def 1;
     then A36: y in dom t by A25,A27,A35,FUNCT_1:def 13;
     then t.y in rng t by FUNCT_1:def 5;
@@ -237,35 +238,35 @@ for F,G be Function holds
  thus F,G are_fiberwise_equipotent implies
        for X be set holds Card(F"X) = Card(G"X)
    proof assume
-       F,G are_fiberwise_equipotent;
+        F,G are_fiberwise_equipotent;
     then consider H be Function such that
     A1: dom H = dom F & rng H = dom G & H is one-to-one & F = G*H by Th3;
     let X be set;
     set t = H|(F"X);
     A2: t is one-to-one by A1,FUNCT_1:84;
-       F"X c= dom F by RELAT_1:167;
+        F"X c= dom F by RELAT_1:167;
     then A3: dom t = F"X by A1,RELAT_1:91;
-       rng t = G"X
+        rng t = G"X
      proof
       thus rng t c= G"X
        proof let z be set; assume
-           z in rng t;
+            z in rng t;
         then consider y such that
         A4: y in dom t & t.y = z by FUNCT_1:def 5;
         A5: F.y in X by A3,A4,FUNCT_1:def 13;
         A6: z = H.y by A4,FUNCT_1:68;
-           dom t = dom H /\ F"X by FUNCT_1:68;
+            dom t = dom H /\ F"X by FUNCT_1:68;
         then A7: y in dom H by A4,XBOOLE_0:def 3;
         then A8: z in dom G by A1,A6,FUNCT_1:def 5;
-           G.z in X by A1,A5,A6,A7,FUNCT_1:23;
+            G.z in X by A1,A5,A6,A7,FUNCT_1:23;
         hence thesis by A8,FUNCT_1:def 13;
        end;
       let z be set; assume
-         z in G"X;
+          z in G"X;
       then A9: z in dom G & G.z in X by FUNCT_1:def 13;
       then consider y such that
       A10: y in dom H & H.y = z by A1,FUNCT_1:def 5;
-         F.y in X by A1,A9,A10,FUNCT_1:23;
+          F.y in X by A1,A9,A10,FUNCT_1:23;
       then A11: y in dom t by A1,A3,A10,FUNCT_1:def 13;
       then t.y in rng t by FUNCT_1:def 5;
       hence thesis by A10,A11,FUNCT_1:68;
@@ -288,24 +289,24 @@ for D be non empty set, F,G be Function st rng F c= D & rng G c= D holds
    for d be Element of D holds Card(F"{d}) = Card(G"{d}) by Def1;
   assume A2: for d be Element of D holds Card(F"{d}) = Card(G"{d});
   let x;
-      now per cases;
+       now per cases;
    case not x in rng F;
     then A3: F"{x} = {} by Lm1;
-        now assume A4: x in rng G;
+         now assume A4: x in rng G;
       then reconsider d = x as Element of D by A1;
-         Card(G"{d}) = Card(F"{d}) by A2;
+          Card(G"{d}) = Card(F"{d}) by A2;
       then G"{d},F"{d} are_equipotent by CARD_1:21;
       then A5: G"{x} = {} by A3,CARD_1:46;
       consider y such that
       A6: y in dom G & G.y = x by A4,FUNCT_1:def 5;
-         G.y in {x} by A6,TARSKI:def 1;
+          G.y in {x} by A6,TARSKI:def 1;
       hence contradiction by A5,A6,FUNCT_1:def 13;
      end;
     hence thesis by A3,Lm1;
    end;
    case x in rng F;
     then reconsider d = x as Element of D by A1;
-       Card(F"{d}) = Card(G"{d}) by A2;
+        Card(F"{d}) = Card(G"{d}) by A2;
     hence Card(F"{x}) = Card(G"{x});
    end;
    end;
@@ -320,7 +321,7 @@ for F,G be Function st dom F = dom G holds
   thus F,G are_fiberwise_equipotent implies
     ex P be Permutation of dom F st F = G*P
    proof assume
-       F,G are_fiberwise_equipotent;
+        F,G are_fiberwise_equipotent;
     then consider I be Function such that
     A2: dom I = dom F & rng I = dom G & I is one-to-one & F = G*I by Th3;
     reconsider I as Function of dom F,dom F by A1,A2,FUNCT_2:4;
@@ -330,16 +331,16 @@ for F,G be Function st dom F = dom G holds
    end; given P be Permutation of dom F such that
   A3: F = G*P;
   A4: rng P = dom F & P is one-to-one by FUNCT_2:def 3;
-     P is Function of dom F,dom F & dom F = {} implies dom F ={};
+      P is Function of dom F,dom F & dom F = {} implies dom F ={};
   then dom P = dom F by FUNCT_2:def 1;
   hence thesis by A1,A3,A4,Th3;
  end;
 
 theorem
-   for F,G be Function
+    for F,G be Function
   st F,G are_fiberwise_equipotent holds Card (dom F) = Card (dom G)
  proof let F,G be Function; assume
-     F,G are_fiberwise_equipotent;
+      F,G are_fiberwise_equipotent;
   then Card(F"(rng F)) = Card(G"(rng F)) & rng F = rng G by Th1,Th4;
   hence Card(dom F) = Card(G"(rng G)) by RELAT_1:169
   .= Card(dom G) by RELAT_1:169;
@@ -348,12 +349,12 @@ theorem
 canceled;
 
 theorem
-   for F,G be finite Function holds
+    for F,G be finite Function holds
  F,G are_fiberwise_equipotent iff for X be set holds card (F"X) = card (G"X)
  by Th4;
 
 theorem
-   for F,G be finite Function st
+    for F,G be finite Function st
   F,G are_fiberwise_equipotent holds card (dom F) = card (dom G)
  proof let F,G be finite Function;
   assume F,G are_fiberwise_equipotent;
@@ -363,7 +364,7 @@ theorem
  end;
 
 theorem
-   for D be non empty set, F,G be finite Function st rng F c= D & rng G c= D
+    for D be non empty set, F,G be finite Function st rng F c= D & rng G c= D
  holds F,G are_fiberwise_equipotent
                                    iff
           for d be Element of D holds card (F"{d}) = card (G"{d}) by Th5;
@@ -371,7 +372,7 @@ theorem
 canceled;
 
 theorem
-   for f,g be FinSequence holds
+    for f,g be FinSequence holds
   f,g are_fiberwise_equipotent iff for X be set holds card (f"X) = card (g"X)
  by Th4;
 
@@ -382,16 +383,16 @@ f,g are_fiberwise_equipotent iff f^h, g^h are_fiberwise_equipotent
   thus f,g are_fiberwise_equipotent implies f^h, g^h are_fiberwise_equipotent
    proof assume
     A1: f,g are_fiberwise_equipotent;
-        now let y;
-         card (f"{y}) = card (g"{y}) by A1,Def1;
+         now let y;
+          card (f"{y}) = card (g"{y}) by A1,Def1;
       hence card ((f^h)"{y}) = card(g"{y}) + card(h"{y}) by FINSEQ_3:63
       .= card((g^h)"{y}) by FINSEQ_3:63;
      end;
     hence thesis by Def1;
    end; assume
   A2: f^h,g^h are_fiberwise_equipotent;
-      now let x;
-       card((f^h)"{x}) = card(f"{x})+card(h"{x}) &
+       now let x;
+        card((f^h)"{x}) = card(f"{x})+card(h"{x}) &
     card((g^h)"{x}) = card(g"{x})+card(h"{x}) &
     card((f^h)"{x}) = card((g^h)"{x}) by A2,Def1,FINSEQ_3:63;
     hence card(f"{x}) = card(g"{x});
@@ -400,7 +401,7 @@ f,g are_fiberwise_equipotent iff f^h, g^h are_fiberwise_equipotent
  end;
 
 theorem
-   for f,g be FinSequence holds f^g, g^f are_fiberwise_equipotent
+    for f,g be FinSequence holds f^g, g^f are_fiberwise_equipotent
  proof let f,g be FinSequence;
    let y;
     thus card((f^g)"{y}) = card(g"{y})+ card(f"{y}) by FINSEQ_3:63
@@ -422,7 +423,7 @@ for f,g be FinSequence st
  end;
 
 theorem
-   for f,g be FinSequence holds
+    for f,g be FinSequence holds
   f,g are_fiberwise_equipotent iff ex P be Permutation of dom g st f = g*P
  proof let f,g be FinSequence;
   thus f,g are_fiberwise_equipotent implies
@@ -434,7 +435,7 @@ theorem
   given P be Permutation of dom g such that
   A2: f = g*P;
 A3: rng P c= dom g by RELSET_1:12;
-  dom g = {} implies dom g = {};
+   dom g = {} implies dom g = {};
   then dom P = dom g by FUNCT_2:def 1;
   then dom f = dom g by A2,A3,RELAT_1:46;
   hence thesis by A2,Th6;
@@ -444,7 +445,7 @@ registration let F be Function, X be finite set;
  cluster F|X -> finite;
  coherence
   proof
-    dom(F|X) c= X by RELAT_1:87;
+     dom(F|X) c= X by RELAT_1:87;
     then dom(F|X) is finite by FINSET_1:13;
    hence thesis by FINSET_1:29;
   end;
@@ -456,11 +457,11 @@ for X be finite set,F be Function st card(dom(F|X)) = $1
 
 Lm2: P[0]
  proof let X be finite set, F be Function; assume
-      card(dom(F|X)) = 0;
+       card(dom(F|X)) = 0;
   then A1: dom(F|X) = {} by CARD_2:59;
   take A = {};
   let x;
-     (F|X)"{x} c= dom(F|X) & A"{x} c= dom A by RELAT_1:167;
+      (F|X)"{x} c= dom(F|X) & A"{x} c= dom A by RELAT_1:167;
   then (F|X)"{x} = {} & A"{x} = {} by A1,XBOOLE_1:3;
   hence Card((F|X)"{x}) = Card(A"{x});
  end;
@@ -478,101 +479,101 @@ then A3: dx <> {} by CARD_1:78;
      dy = dom(F|Y);
   A4: {x} c= dx & dy = dom F /\ Y & dx = dom F /\ X
      by A2,CARD_1:78,FUNCT_1:68,ZFMISC_1:37;
-      dy = dx \ {x}
+       dy = dx \ {x}
    proof
     thus dy c= dx \ {x}
      proof let y; assume y in dy;
       then A5: y in dom F & y in X \ {x} by A4,XBOOLE_0:def 3;
       then A6: y in X & not y in {x} by XBOOLE_0:def 4;
-      y in dx by A4,A5,XBOOLE_0:def 3;
+       y in dx by A4,A5,XBOOLE_0:def 3;
       hence thesis by A6,XBOOLE_0:def 4;
      end;
-    let y; assume y in dx \{x};
-    then A7: y in dx & not y in {x} by XBOOLE_0:def 4;
-    then A8: y in dom F & y in X by A4,XBOOLE_0:def 3;
-    then y in Y by A7,XBOOLE_0:def 4;
-    hence thesis by A4,A8,XBOOLE_0:def 3;
+    let y; assume A7: y in dx \{x};
+    then A8: y in dx & not y in {x} by XBOOLE_0:def 4;
+    A9: y in dom F & y in X by A4,A7,XBOOLE_0:def 3;
+    then y in Y by A8,XBOOLE_0:def 4;
+    hence thesis by A4,A9,XBOOLE_0:def 3;
    end;
    then card(dom(F|Y)) = card dx - card {x} by A4,CARD_2:63
    .= n+1-1 by A2,CARD_1:79
    .= n;
   then consider a be FinSequence such that
-  A9: F|Y, a are_fiberwise_equipotent by A1;
+  A10: F|Y, a are_fiberwise_equipotent by A1;
   take A = a^<* F.x *>;
-     x in dx by A3;
+      x in dx by A3;
   then x in dom F /\ X by FUNCT_1:68;
   then x in X & x in dom F by XBOOLE_0:def 3;
-  then A10: {x} c= X & {x} c= dom F by ZFMISC_1:37;
-      now let y;
-    A11: card((F|Y)"{y}) = card(a"{y}) by A9,Def1;
-A12:  Y misses {x} by XBOOLE_1:79;
-    A13: (F|Y)"{y} /\ (F|{x})"{y} = Y /\ (F"{y}) /\ (F|{x})"{y} by FUNCT_1:139
+  then A11: {x} c= X & {x} c= dom F by ZFMISC_1:37;
+       now let y;
+    A12: card((F|Y)"{y}) = card(a"{y}) by A10,Def1;
+A13:  Y misses {x} by XBOOLE_1:79;
+    A14: (F|Y)"{y} /\ (F|{x})"{y} = Y /\ (F"{y}) /\ (F|{x})"{y} by FUNCT_1:139
     .= Y /\ F"{y} /\ ({x} /\ F"{y}) by FUNCT_1:139
     .= F"{y} /\ Y /\ {x} /\ F"{y} by XBOOLE_1:16
     .= F"{y} /\ (Y /\ {x}) /\ F"{y} by XBOOLE_1:16
-    .= {} /\ F"{y} by A12,XBOOLE_0:def 7
+    .= {} /\ F"{y} by A13,XBOOLE_0:def 7
     .= {};
-    A14: (F|Y)"{y} \/ (F|{x})"{y} = (Y /\ F"{y}) \/ (F|{x})"{y} by FUNCT_1:139
+    A15: (F|Y)"{y} \/ (F|{x})"{y} = (Y /\ F"{y}) \/ (F|{x})"{y} by FUNCT_1:139
     .= (Y /\ F"{y}) \/ ({x} /\ F"{y}) by FUNCT_1:139
     .= (Y \/ {x}) /\ F"{y} by XBOOLE_1:23
     .= (X \/ {x}) /\ F"{y} by XBOOLE_1:39
-    .= X /\ F"{y} by A10,XBOOLE_1:12
+    .= X /\ F"{y} by A11,XBOOLE_1:12
     .= (F|X)"{y} by FUNCT_1:139;
-    A15: dom(F|{x}) = {x} by A10,RELAT_1:91;
-    A16: dom<*F.x*> = {1} by FINSEQ_1:4,55;
+    A16: dom(F|{x}) = {x} by A11,RELAT_1:91;
+    A17: dom<*F.x*> = {1} by FINSEQ_1:4,55;
     reconsider FF = <*F.x*>"{y} as finite set;
-        now per cases;
-     case A17: y = F.x;
-      A18: (F|{x})"{y} c= {x} by A15,RELAT_1:167;
-         {x} c= (F|{x})"{y}
-       proof let z be set; assume A19: z in {x};
+         now per cases;
+     case A18: y = F.x;
+      A19: (F|{x})"{y} c= {x} by A16,RELAT_1:167;
+          {x} c= (F|{x})"{y}
+       proof let z be set; assume A20: z in {x};
         then z = x by TARSKI:def 1;
-        then y = (F|{x}).z & y in {y} by A15,A17,A19,FUNCT_1:68,TARSKI:def 1;
-        hence z in (F|{x})"{y} by A15,A19,FUNCT_1:def 13;
+        then y = (F|{x}).z & y in {y} by A16,A18,A20,FUNCT_1:68,TARSKI:def 1;
+        hence z in (F|{x})"{y} by A16,A20,FUNCT_1:def 13;
        end;
-      then (F|{x})"{y} = {x} by A18,XBOOLE_0:def 10;
-      then A20: card((F|{x})"{y}) = 1 by CARD_1:79;
-      A21: <*F.x*>"{y} c= {1} by A16,RELAT_1:167;
-         {1} c= <*F.x*>"{y}
-       proof let z be set; assume A22: z in {1};
+      then (F|{x})"{y} = {x} by A19,XBOOLE_0:def 10;
+      then A21: card((F|{x})"{y}) = 1 by CARD_1:79;
+      A22: <*F.x*>"{y} c= {1} by A17,RELAT_1:167;
+          {1} c= <*F.x*>"{y}
+       proof let z be set; assume A23: z in {1};
         then z = 1 by TARSKI:def 1;
-        then y = <*F.x*>.z & y in {y} by A17,FINSEQ_1:57,TARSKI:def 1;
-        hence z in <*F.x*>"{y} by A16,A22,FUNCT_1:def 13;
+        then y = <*F.x*>.z & y in {y} by A18,FINSEQ_1:57,TARSKI:def 1;
+        hence z in <*F.x*>"{y} by A17,A23,FUNCT_1:def 13;
        end;
-      then <*F.x*>"{y} = {1} by A21,XBOOLE_0:def 10;
-      hence card((F|{x})"{y}) = card FF by A20,CARD_1:79;
+      then <*F.x*>"{y} = {1} by A22,XBOOLE_0:def 10;
+      hence card((F|{x})"{y}) = card FF by A21,CARD_1:79;
      end;
-     case A23: y <> F.x;
-       A24: now assume
-A25:     (F|{x})"{y} <> {};
+     case A24: y <> F.x;
+       A25: now assume
+A26:     (F|{x})"{y} <> {};
         consider z being Element of (F|{x})"{y};
-        A26: z in {x} & (F|{x}).z in {y} by A15,A25,FUNCT_1:def 13;
+        A27: z in {x} & (F|{x}).z in {y} by A16,A26,FUNCT_1:def 13;
         then z = x & (F|{x}).z = y by TARSKI:def 1;
-        hence contradiction by A15,A23,A26,FUNCT_1:68;
+        hence contradiction by A16,A24,A27,FUNCT_1:68;
        end;
-          now assume
-A27:     <*F.x*>"{y} <> {};
+           now assume
+A28:     <*F.x*>"{y} <> {};
         consider z being Element of <*F.x*>"{y};
-           z in {1} & <*F.x*>.z in {y} by A16,A27,FUNCT_1:def 13;
+            z in {1} & <*F.x*>.z in {y} by A17,A28,FUNCT_1:def 13;
         then z = 1 & <*F.x*>.z = y by TARSKI:def 1;
-        hence contradiction by A23,FINSEQ_1:57;
+        hence contradiction by A24,FINSEQ_1:57;
        end;
-      hence card((F|{x})"{y}) = card FF by A24;
+      hence card((F|{x})"{y}) = card FF by A25;
      end;
      end;
     hence card((F|X)"{y}) = card((F|Y)"{y}) + card FF - card {}
-      by A13,A14,CARD_2:64
-    .= card(A"{y}) by A11,CARD_1:78,FINSEQ_3:63;
+      by A14,A15,CARD_2:64
+    .= card(A"{y}) by A12,CARD_1:78,FINSEQ_3:63;
    end;
   hence thesis by Def1;
  end;
 
 theorem
-   for F be Function, X be finite set
+    for F be Function, X be finite set
   ex f be FinSequence st F|X, f are_fiberwise_equipotent
  proof let F be Function, X be finite set;
   A1: for n holds P[n] from NAT_1:sch 1(Lm2,Lm3);
-     card(dom(F|X)) = card(dom(F|X));
+      card(dom(F|X)) = card(dom(F|X));
   hence thesis by A1;
  end;
 
@@ -607,13 +608,13 @@ func f /^ n -> FinSequence means :Def2:
    (len p2 = len f - n & for m be Nat st m in dom p2 holds p2.m = f.(m+n))
    implies p1 = p2
      proof assume that
-         n<=len f and
+          n<=len f and
       A2: len p1 = len f - n & for m be Nat st m in dom p1 holds
       p1.m = f.(m+n) and
       A3: len p2 = len f - n & for m be Nat st m in dom p2 holds
       p2.m = f.(m+n);
       A4: dom p1 = Seg len p1 & Seg len p2 = dom p2 by FINSEQ_1:def 3;
-          now let m; assume m in Seg len p1;
+           now let m; assume m in Seg len p1;
         then p1.m = f.(m+n) & p2.m = f.(m+n) by A2,A3,A4;
         hence p1.m = p2.m;
        end;
@@ -636,12 +637,12 @@ redefine func f /^ n -> FinSequence of D;
 A1:  n<=len f;
      then reconsider k = len f - n as Element of NAT by NAT_1:21;
 A2: len p = k & for m st m in dom p holds p.m = F(m) by Def2,A1;
-         rng p c= rng f
+          rng p c= rng f
        proof let x; assume x in rng p;
         then consider m such that
         A3: m in dom p & p.m = x by FINSEQ_2:11;
         A4: p.m = f.(m+n) by Def2,A1,A3;
-           1<=m & m<=len p & m<=m+n by A3,FINSEQ_3:27,NAT_1:11;
+            1<=m & m<=len p & m<=m+n by A3,FINSEQ_3:27,NAT_1:11;
         then 1<=m+n & m+n<=len f by A2,XXREAL_0:2,XREAL_1:21;
         then m+n in dom f by FINSEQ_3:27;
         hence x in rng f by A3,A4,FUNCT_1:def 5;
@@ -671,7 +672,7 @@ for D be non empty set, f be FinSequence of D, n,m be Element of NAT holds
  proof let D be non empty set,f be FinSequence of D, n,m; assume
   A1: n in dom f & m in Seg n;
   A2: dom f = Seg len f & f|n = f|Seg n by FINSEQ_1:def 3,def 15;
-     n<=len f by A1,FINSEQ_3:27;
+      n<=len f by A1,FINSEQ_3:27;
   then A3: Seg n c= dom f by A2,FINSEQ_1:7;
   then Seg n = dom f /\ Seg n by XBOOLE_1:28
    .= dom(f|n) by A2,FUNCT_1:68;
@@ -688,9 +689,9 @@ for D be non empty set, f be FinSequence of D, n be Element of NAT, x be set st
   then A3: len fn = n by A1,FINSEQ_1:80;
   then A4: len (fn^<*x*>) = n + len <*x*> by FINSEQ_1:35
   .= len f by A1,FINSEQ_1:57;
-      now let m; assume m in Seg len f;
+       now let m; assume m in Seg len f;
     then A5: 1<=m & m<=len f by FINSEQ_1:3;
-        now per cases;
+         now per cases;
      case m = len f;
       hence f.m = (fn^<*x*>).m by A1,A3,FINSEQ_1:59;
      end;
@@ -698,7 +699,7 @@ for D be non empty set, f be FinSequence of D, n be Element of NAT, x be set st
       then m<n+1 by A1,A5,REAL_1:def 5;
       then A6: m<=n by NAT_1:13;
       then A7: m in dom fn by A3,A5,FINSEQ_3:27;
-         1<=n by A5,A6,XXREAL_0:2;
+          1<=n by A5,A6,XXREAL_0:2;
       then A8:n in dom f by A1,A2,FINSEQ_3:27;
 A9:   Seg len fn = dom fn by FINSEQ_1:def 3;
       thus (fn^<*x*>).m = fn.m by A7,FINSEQ_1:def 7
@@ -715,10 +716,10 @@ for D be non empty set, f be FinSequence of D, n be Element of NAT
  holds (f|n)^(f/^n) = f
  proof let D be non empty set, f be FinSequence of D,n;
   set fn = f/^n;
-      now per cases;
+       now per cases;
    case A1: len f<n;
     then A2: f/^n = <*>D by Def2;
-       f|n = f by A1,Lm4;
+        f|n = f by A1,Lm4;
     hence (f|n) ^ (f/^n) = f by A2,FINSEQ_1:47;
    end;
    case A3: n<=len f;
@@ -729,9 +730,9 @@ Def2;
     .= len f;
     A7: dom(f|n) = Seg n & dom f = dom f & dom fn = dom fn
        by A5,FINSEQ_1:def 3;
-        now let m; assume m in Seg len f;
+         now let m; assume m in Seg len f;
       then A8: 1<=m & m<=len f by FINSEQ_1:3;
-          now per cases;
+           now per cases;
        case m<=n;
         then A9: m in Seg n & 1<=n by A8,XXREAL_0:2,FINSEQ_1:3;
         then A10: n in dom f by A3,FINSEQ_3:27;
@@ -741,9 +742,9 @@ Def2;
        case A11: n<m;
         then max(0,m-n) = m-n by FINSEQ_2:4;
         then reconsider k = m-n as Element of NAT by FINSEQ_2:5;
-           n+1<=m by A11,NAT_1:13;
+            n+1<=m by A11,NAT_1:13;
         then A12: 1<=k by XREAL_1:21;
-           k<=len fn by A4,A8,XREAL_1:11;
+            k<=len fn by A4,A8,XREAL_1:11;
         then A13: k in dom fn by A12,FINSEQ_3:27;
         thus ((f|n) ^ (f/^n)).m = fn.k by A5,A6,A8,A11,FINSEQ_1:37
         .= f.(k+n) by A3,A13,Def2
@@ -759,7 +760,7 @@ Def2;
  end;
 
 theorem
-   for R1,R2 be FinSequence of REAL
+    for R1,R2 be FinSequence of REAL
    st R1,R2 are_fiberwise_equipotent holds Sum R1 = Sum R2
  proof
   defpred P[Element of NAT] means
@@ -767,7 +768,7 @@ theorem
     holds Sum f = Sum g;
   A1: P[0]
    proof let f,g be FinSequence of REAL; assume
-       f,g are_fiberwise_equipotent & len f = 0;
+        f,g are_fiberwise_equipotent & len f = 0;
     then len g = 0 & f = <*>REAL by Th16,FINSEQ_1:32;
     hence thesis by FINSEQ_1:32;
    end;
@@ -777,11 +778,11 @@ theorem
     let f,g be FinSequence of REAL; assume
     A4: f,g are_fiberwise_equipotent & len f = n+1;
     then A5: rng f = rng g & len f = len g by Th1,Th16;
-       0<n+1 by NAT_1:3;
+        0<n+1 by NAT_1:3;
     then 0+1<=n+1 by NAT_1:13;
     then A6: n+1 in dom f by A4,FINSEQ_3:27;
     set a = f.(n+1);
-       a in rng g by A5,A6,FUNCT_1:def 5;
+        a in rng g by A5,A6,FUNCT_1:def 5;
     then consider m such that
     A7: m in dom g & g.m = a by FINSEQ_2:11;
     A8: g = (g|m)^(g/^m) by Th21;
@@ -792,10 +793,10 @@ theorem
         gm = g|m;
     A10: len gm = m by A9,FINSEQ_1:80;
     A11: m = m1+1;
-       m in Seg m by A9,FINSEQ_1:3;
+        m in Seg m by A9,FINSEQ_1:3;
     then gm.m = a & m in dom g by A7,Th19;
     then A12: gm = (gm|m1)^<*a*> by A10,A11,Th20;
-       m1<=m by A11,NAT_1:11;
+        m1<=m by A11,NAT_1:11;
     then A13: Seg m1 c= Seg m by FINSEQ_1:7;
     A14: gm|m1 = gm|(Seg m1) by FINSEQ_1:def 15
     .= (g|(Seg m))|(Seg m1) by FINSEQ_1:def 15
@@ -803,11 +804,11 @@ theorem
     .= g|(Seg m1) by A13,XBOOLE_1:28
     .= g|m1 by FINSEQ_1:def 15;
     set fn = f|n;
-       n<=n+1 by NAT_1:11;
+        n<=n+1 by NAT_1:11;
     then A15: len fn = n by A4,FINSEQ_1:80;
     A16: f = fn ^ <*a*> by A4,Th20;
-        now let x;
-         card(f"{x}) = card(g"{x}) by A4,Def1;
+         now let x;
+          card(f"{x}) = card(g"{x}) by A4,Def1;
       then card(fn"{x}) + card(<*a*>"{x}) = card(((g|m1)^<*a*>^(g/^m))"{x})
         by A8,A12,A14,A16,FINSEQ_3:63
       .= card(((g|m1)^<*a*>)"{x}) + card((g/^m)"{x}) by FINSEQ_3:63
@@ -827,7 +828,7 @@ theorem
   A17: for n holds P[n] from NAT_1:sch 1(A1,A2);
   let R1,R2 be FinSequence of REAL; assume
   A18: R1,R2 are_fiberwise_equipotent;
-     len R1 = len R1;
+      len R1 = len R1;
   hence thesis by A17,A18;
  end;
 
@@ -866,7 +867,7 @@ func MIM(R) -> FinSequence of REAL means :Def3:
      .= a.(len p +1) by A3,FINSEQ_1:def 3
      .= R.(len R) by FINSEQ_1:59;
      let n; assume
-        1<=n & n<=len a - 1;
+         1<=n & n<=len a - 1;
      then A5: n in Seg l by A4,FINSEQ_1:3;
      then p.n = R.n - R.(n+1) by A3;
      hence thesis by A3,A5,FINSEQ_1:def 7;
@@ -878,17 +879,17 @@ func MIM(R) -> FinSequence of REAL means :Def3:
    A7: for n st 1<=n & n<=len p1 - 1 holds p1.n = R.n - R.(n+1) and
    A8: len p2 = len R & p2.(len p2) = R.(len R) and
    A9: for n st 1<=n & n<=len p2 - 1 holds p2.n = R.n - R.(n+1);
-       now let n;
+        now let n;
      assume n in Seg len R;
      then A10: 1<=n & n<=len R by FINSEQ_1:3;
      set r = R.n;
-         now per cases;
+          now per cases;
       case n = len R; hence p1.n = p2.n by A6,A8;
       end;
       case n <> len R; then n<len R & n<=n+1 by A10,NAT_1:11,REAL_1:def 5;
        then A11: 1<=n+1 & n+1<=len R by A10,NAT_1:13;
        set s = R.(n+1);
-          n<=len R - 1 by A11,XREAL_1:21;
+           n<=len R - 1 by A11,XREAL_1:21;
        then p1.n = r-s & p2.n = r-s by A6,A7,A8,A9,A10;
        hence p1.n = p2.n;
       end;
@@ -918,15 +919,15 @@ for R be FinSequence of REAL, r be Real, n be Element of NAT
   .= n+1 by FINSEQ_1:57;
   A9: dom m1 = Seg len m1 & Seg len f1 = dom f1 & Seg len mf = dom mf &
       Seg len fn = dom fn & Seg len R = dom R by FINSEQ_1:def 3;
-     0<n+1 by NAT_1:3;
+      0<n+1 by NAT_1:3;
   then 0+1<=n+1 by NAT_1:13;
   then A10: n+1 in Seg(n+2) & n+1 in Seg(n+1) by A3,FINSEQ_1:3;
   then f1.(n+1) = s by A1,A9,Th19;
   then A11: m1.(n+1) = s by A4,A5,Def3;
-      now let m; assume
+       now let m; assume
     A12: m in Seg (n+1);
     then A13: 1<=m & m<=n+1 by FINSEQ_1:3;
-        now per cases;
+         now per cases;
      case m = n+1;
       hence m1.m = (fn^<*s*>).m by A7,A11,FINSEQ_1:59;
      end;
@@ -934,7 +935,7 @@ for R be FinSequence of REAL, r be Real, n be Element of NAT
       then A14: m<n+1 by A13,REAL_1:def 5;
       then A15: m<=n by NAT_1:13;
       then A16: m in Seg n by A13,FINSEQ_1:3;
-         1<=n by A13,A15,XXREAL_0:2;
+          1<=n by A13,A15,XXREAL_0:2;
       then n in Seg(n+2) by A6,FINSEQ_1:3;
       then A17: fn.m = mf.m & m in dom mf by A5,A9,A16,Th19;
       A18: len mf -1 = n+1 by A5;
@@ -945,7 +946,7 @@ for R be FinSequence of REAL, r be Real, n be Element of NAT
       .= (fn^<*s*>).m by A7,A9,A16,FINSEQ_1:def 7;
       A21: len m1 -1 = n by A5;
       A22: f1.m = r1 by A1,A9,A10,A12,Th19;
-         m+1<=n+1 by A14,NAT_1:13;
+          m+1<=n+1 by A14,NAT_1:13;
       then m+1 in Seg(n+1) by A19,FINSEQ_1:3;
       then f1.(m+1) = r2 by A1,A9,A10,Th19;
       hence m1.m = (fn^<*s*>).m by A13,A15,A20,A21,A22,Def3;
@@ -971,10 +972,10 @@ len R = n+2 & R.(n+1) = r & R.(n+2) = s holds MIM(R) = MIM(R)|n ^ <* r-s,s *>
   then A6: len(nf^<* r-s,s *>) = n+2 & <*r-s,s*>.1 = r-s & <*r-s,s*>.2 = s
      by FINSEQ_1:61;
   A7: n<n+2 by A4,NAT_1:13;
-      now let m; assume
-       m in Seg(n+2);
+       now let m; assume
+        m in Seg(n+2);
     then A8: 1<=m & m<=n+2 by FINSEQ_1:3;
-        now per cases;
+         now per cases;
      case A9: m = n+2;
       hence mf.m = s by A1,A2,Def3
       .= <* r-s,s *>.(n+2-n) by FINSEQ_1:61
@@ -984,7 +985,7 @@ len R = n+2 & R.(n+1) = r & R.(n+2) = s holds MIM(R) = MIM(R)|n ^ <* r-s,s *>
       then m<n+2 by A8,REAL_1:def 5;
       then A10: m<=n+1 by A3,NAT_1:13;
       A11: len mf - 1 = n+1 by A2;
-          now per cases;
+           now per cases;
        case A12: m = n+1;
         then A13: n<m by NAT_1:13;
         thus mf.m = r - s by A1,A3,A8,A11,A12,Def3
@@ -1015,7 +1016,7 @@ MIM( <*>REAL ) = <*>REAL
   set o = <*>REAL,
      mo = MIM(o);
   A1: len mo = len o & len o = 0 by Def3,FINSEQ_1:32;
-     for n st n in Seg 0 holds mo.n = o.n by FINSEQ_1:4;
+      for n st n in Seg 0 holds mo.n = o.n by FINSEQ_1:4;
   hence thesis by A1,FINSEQ_2:10;
  end;
 
@@ -1025,7 +1026,7 @@ for r be Real holds MIM(<*r*>) = <*r*>
   set f = <*r*>;
   A1: len f = 1 & f.1 = r by FINSEQ_1:57;
   then A2: len MIM(f) = 1 by Def3;
-      now let n; assume n in Seg 1;
+       now let n; assume n in Seg 1;
     then n = 1 by FINSEQ_1:4,TARSKI:def 1;
     hence MIM(f).n = f.n by A1,A2,Def3;
    end;
@@ -1033,23 +1034,23 @@ for r be Real holds MIM(<*r*>) = <*r*>
  end;
 
 theorem
-   for r,s be Real holds MIM(<*r,s*>) = <*r-s,s*>
+    for r,s be Real holds MIM(<*r,s*>) = <*r-s,s*>
  proof let r,s be Real;
   set f = <*r,s*>;
-     0+2 = 2 & 0+1 = 1 & len f = 2 & f.1 = r & f.2 = s by FINSEQ_1:61;
+      0+2 = 2 & 0+1 = 1 & len f = 2 & f.1 = r & f.2 = s by FINSEQ_1:61;
   then MIM(f) = MIM(f)|0 ^ <*r-s,s*> by Th24;
   hence thesis by FINSEQ_1:47;
  end;
 
 theorem
-   for R be FinSequence of REAL, n be Element of NAT
+    for R be FinSequence of REAL, n be Element of NAT
     holds MIM(R) /^ n = MIM(R/^n)
  proof let R be FinSequence of REAL,n;
   set mf = MIM(R),
       fn = R/^n,
       mn = MIM(fn);
   A1: len mf = len R & len mn = len fn by Def3;
-      now per cases;
+       now per cases;
    case len R<n;
     then mf /^ n = <*>REAL & fn = <*>REAL by A1,Def2;
     hence mf /^ n = mn by Th25;
@@ -1061,14 +1062,14 @@ theorem
     for m st m in dom fn holds fn.m = R.(m+n) by A2,Def2;
     A5: len mn = len fn by Def3;
     A6: Seg len fn = dom fn & Seg len(mf/^n) = dom(mf/^n) by FINSEQ_1:def 3;
-        now let m; assume
+         now let m; assume
       A7: m in Seg len fn;
       then A8: 1<=m & m<=len fn by FINSEQ_1:3;
-         m<=m+n by NAT_1:11;
+          m<=m+n by NAT_1:11;
       then A9: 1<=m+n & m+n<=len R by A4,A8,XXREAL_0:2,XREAL_1:21;
       set r1 = R.(m+n);
       A10: fn.m = r1 by A2,A6,A7,Def2;
-          now per cases;
+           now per cases;
        case A11: m = len fn;
         thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7
         .= r1 by A1,A4,A11,Def3
@@ -1081,7 +1082,7 @@ theorem
         set r2 = R.(m+1+n);
         A14: m+1+n = m+n+1;
         then A15: m+n<=len R - 1 & m<=len fn - 1 by A12,A13,XREAL_1:21;
-           1<=m+1 by NAT_1:11;
+            1<=m+1 by NAT_1:11;
         then m+1 in dom fn by A12,FINSEQ_3:27;
         then A16: fn.(m+1) = r2 by A2,Def2;
         thus (mf/^n).m = mf.(m+n) by A3,A4,A6,A7
@@ -1109,7 +1110,7 @@ for R be FinSequence of REAL st len R <> 0 holds Sum MIM(R) = R.1
     A3: P[n];
     let R be FinSequence of REAL; assume
     A4: len R <> 0 & len R = n+1;
-    now per cases;
+     now per cases;
      case n = 0;
       then A5: R = <*R.1*> by A4,FINSEQ_1:57;
       then MIM(R) = R by Th26;
@@ -1146,13 +1147,13 @@ for R be FinSequence of REAL st len R <> 0 holds Sum MIM(R) = R.1
  end;
 
 theorem
-   for R be FinSequence of REAL, n be Element of NAT
+    for R be FinSequence of REAL, n be Element of NAT
   st 1<=n & n<len R holds Sum MIM(R/^n) = R.(n+1)
  proof let R be FinSequence of REAL,n; assume
   A1: 1<=n & n<len R;
   then n+1<=len R & n<=len R & n <> len R by NAT_1:13;
   then A2: 1<=len R - n by XREAL_1:21;
-     len(R/^n) = len R - n &
+      len(R/^n) = len R - n &
   for m st m in dom(R/^n) holds (R/^n).m = R.(m+n) by A1,Def2;
   then A3: 1 in dom(R/^n) & Seg len(R/^n) = dom(R/^n) & len(R/^n) <> 0
      by A2,FINSEQ_1:def 3,FINSEQ_3:27;
@@ -1174,7 +1175,7 @@ definition let IT be FinSequence of REAL;
 A1:   IT is non-increasing;
       let n be Element of NAT such that
 A2:   n in dom IT & n+1 in dom IT;
-      n+0 <= n+1 by XREAL_1:8;
+       n+0 <= n+1 by XREAL_1:8;
       hence IT.n >= IT.(n+1) by A1,A2,SEQM_3:def 4;
     end;
     assume
@@ -1193,18 +1194,15 @@ A8: for k being Element of NAT st P[k] holds P[k+1]
 A9:   P[k] and
 A10:   k+1 in dom IT;
       assume m <= k+1;
-      then
-A11:  m < k+1 or m = k+1 by REAL_1:def 5;
+      then A11:  m < k+1 or m = k+1 by REAL_1:def 5;
       per cases by A11,NAT_1:13;
       suppose
 A12:    m <= k;
-        1 <= m by A4,FINSEQ_3:27;
-        then
-A13:    1 <= k by XXREAL_0:2,A12;
+         1 <= m by A4,FINSEQ_3:27;
+        then A13:    1 <= k by XXREAL_0:2,A12;
 A14:    k+0 <= k+1 by XREAL_1:8;
-        k+1 <= len IT by A10,FINSEQ_3:27;
-        then
-A15:    k <= len IT by XXREAL_0:2,A14;
+         k+1 <= len IT by A10,FINSEQ_3:27;
+        then A15:    k <= len IT by XXREAL_0:2,A14;
         then k in dom IT by A13,FINSEQ_3:27;
         then IT.k >= IT.(k+1) by A3,A10;
         hence IT.m >= IT.(k+1) by A9,A15,A12,A13,FINSEQ_3:27,XXREAL_0:2;
@@ -1213,7 +1211,7 @@ A15:    k <= len IT by XXREAL_0:2,A14;
         hence thesis;
       end;
     end;
-    for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A8);
+     for k being Element of NAT holds P[k] from NAT_1:sch 1(A7,A8);
     hence IT.m >= IT.n by A5,A6;
   end;
 end;
@@ -1233,7 +1231,7 @@ for R be FinSequence of REAL
   st len R = 0 or len R = 1 holds R is non-increasing
  proof let R be FinSequence of REAL; assume
   A1: len R = 0 or len R = 1;
-      now per cases by A1;
+       now per cases by A1;
    case len R = 0;
     then R = <*>REAL by FINSEQ_1:32;
     then for n st n in dom R & n+1 in dom R holds R.n>=R.(n+1) by FINSEQ_1:26;
@@ -1241,7 +1239,7 @@ for R be FinSequence of REAL
    end;
    case len R = 1;
     then A2: dom R = {1} by FINSEQ_1:4,def 3;
-        now let n; assume n in dom R & n+1 in dom R;
+         now let n; assume n in dom R & n+1 in dom R;
       then n = 1 & n+1 = 1 by A2,TARSKI:def 1;
       hence R.n>=R.(n+1);
      end;
@@ -1264,7 +1262,7 @@ for R be FinSequence of REAL holds
     A1: R is non-increasing;
     defpred P[Element of NAT] means $1 in dom R implies
       for n st n in dom R & n<$1 holds R.n>=R.$1;
-        Seg len R = dom R by FINSEQ_1:def 3;
+         Seg len R = dom R by FINSEQ_1:def 3;
     then A2: P[0] by FINSEQ_1:3;
     A3: for m st P[m] holds P[m+1]
      proof let m; assume
@@ -1277,25 +1275,25 @@ for R be FinSequence of REAL holds
       then A8: 1<=m & m<=len R by XXREAL_0:2;
       then A9: m in dom R by FINSEQ_3:27;
       set t = R.m, r = R.n, s = R.(m+1);
-          now per cases;
+           now per cases;
        case n = m; hence r>=s by A1,A5,A6,Def4;
        end;
        case n <> m;
         then n<m by A7,REAL_1:def 5;
         then A10: r>=t by A4,A6,A8,FINSEQ_3:27;
-           t>=s by A1,A5,A9,Def4;
+            t>=s by A1,A5,A9,Def4;
         hence r>=s by A10,XXREAL_0:2;
        end;
        end;
       hence r>=s;
      end;
-       for m holds P[m] from NAT_1:sch 1(A2,A3);
+        for m holds P[m] from NAT_1:sch 1(A2,A3);
     hence thesis;
    end; assume
   A11: for n,m st n in dom R & m in dom R & n<m holds R.n>=R.m;
   let n; assume
   A12: n in dom R & n+1 in dom R;
-     n<n+1 by NAT_1:13;
+      n<n+1 by NAT_1:13;
   hence thesis by A11,A12;
  end;
 
@@ -1304,7 +1302,7 @@ for R be non-increasing FinSequence of REAL, n be Element of NAT holds
   R|n is non-increasing FinSequence of REAL
  proof let f be non-increasing FinSequence of REAL, n;
   set fn = f|n;
-       now per cases;
+        now per cases;
     case A1: n = 0; then n<=len f by NAT_1:2;
      then len fn = 0 by A1,FINSEQ_1:80;
      hence thesis by Th31;
@@ -1312,14 +1310,14 @@ for R be non-increasing FinSequence of REAL, n be Element of NAT holds
     case n <> 0;
      then 0<n by NAT_1:3;
      then A2: 0+1<=n by NAT_1:13;
-         now per cases;
+          now per cases;
       case len f<=n; hence thesis by Lm4;
       end;
       case n<len f;
        then A3: n in dom f & len fn = n by A2,FINSEQ_1:80,FINSEQ_3:27;
-           now let m; assume
+            now let m; assume
          A4: m in dom fn & m+1 in dom fn;
-        dom f = Seg len f & dom fn = Seg len fn by FINSEQ_1:def 3;
+         dom f = Seg len f & dom fn = Seg len fn by FINSEQ_1:def 3;
          then f.m = fn.m & f.(m+1) = fn.(m+1) & m in dom f & m+1 in dom f
            by A3,A4,Th19;
          hence fn.m>=fn.(m+1) by Def4;
@@ -1334,17 +1332,17 @@ for R be non-increasing FinSequence of REAL, n be Element of NAT holds
  end;
 
 theorem
-   for R be non-increasing FinSequence of REAL, n be Element of NAT holds
+    for R be non-increasing FinSequence of REAL, n be Element of NAT holds
    R /^ n is non-increasing FinSequence of REAL
  proof let f be non-increasing FinSequence of REAL, n;
   set fn = f /^ n;
-      now let m; assume
+       now let m; assume
     A1: m in dom fn & m+1 in dom fn;
     then A2: 1<=m & m<=len fn & 1<=m+1 & m+1<=len fn by FINSEQ_3:27;
     A3: m+1+n = m+n+1 & m<=m+n & m+1<=m+1+n by NAT_1:11;
     then A4: 1<=m+n & 1<=m+n+1 & 1<=len fn by A2,XXREAL_0:2;
     set r = fn.m, s = fn.(m+1);
-        now per cases;
+         now per cases;
      case n<=len f;
      then A5: len fn = len f - n & r = f.(m+n) & s = f.(m+n+1) by A1,A3,Def2;
       then m+n<=len f & m+n+1<=len f by A2,A3,XREAL_1:21;
@@ -1367,19 +1365,19 @@ for f,g be non-increasing FinSequence of REAL, n st
   f.(len f) = g.(len g) & f|n, g|n are_fiberwise_equipotent
  proof let f,g be non-increasing FinSequence of REAL, n; assume
    A1: len f = n+1 & len f = len g & f,g are_fiberwise_equipotent;
-      0<n+1 by NAT_1:3;
+       0<n+1 by NAT_1:3;
    then 0+1<=n+1 by NAT_1:13;
    then A2: n+1 in dom f & n+1 in dom g by A1,FINSEQ_3:27;
    set r = f.(n+1), s = g.(n+1);
    A3: now assume A4: r <> s;
      A5: rng f = rng g by A1,Th1;
-         now per cases by A4,REAL_1:def 5;
+          now per cases by A4,REAL_1:def 5;
       case A6: r>s;
-          s in rng f by A2,A5,FUNCT_1:def 5;
+           s in rng f by A2,A5,FUNCT_1:def 5;
        then consider m such that
        A7: m in dom f & f.m = s by FINSEQ_2:11;
        A8: 1<=m & m<=len f by A7,FINSEQ_3:27;
-           now per cases;
+            now per cases;
         case m = len f;
          hence contradiction by A1,A6,A7;
         end;
@@ -1391,11 +1389,11 @@ for f,g be non-increasing FinSequence of REAL, n st
        hence contradiction;
       end;
       case A9: r<s;
-          r in rng g by A2,A5,FUNCT_1:def 5;
+           r in rng g by A2,A5,FUNCT_1:def 5;
        then consider m such that
        A10: m in dom g & g.m = r by FINSEQ_2:11;
        A11: 1<=m & m<=len g by A10,FINSEQ_3:27;
-           now per cases;
+            now per cases;
         case m = len g;
          hence contradiction by A1,A9,A10;
         end;
@@ -1411,8 +1409,8 @@ for f,g be non-increasing FinSequence of REAL, n st
     end;
    hence f.(len f) = g.(len g) by A1;
    A12: f = (f|n)^<*r*> & g = (g|n)^<*r*> by A1,A3,Th20;
-       now let x;
-        card((f|n)"{x}) + card(<*r*>"{x}) = card (f"{x}) by A12,FINSEQ_3:63
+        now let x;
+         card((f|n)"{x}) + card(<*r*>"{x}) = card (f"{x}) by A12,FINSEQ_3:63
      .= card(g"{x}) by A1,Def1
      .= card((g|n)"{x}) + card(<*r*>"{x}) by A12,FINSEQ_3:63;
     hence card((f|n)"{x}) = card((g|n)"{x});
@@ -1426,7 +1424,7 @@ for R be FinSequence of REAL st $1 = len R
 
 Lm6: P[0]
  proof let R  be FinSequence of REAL; assume
-     len R = 0;
+      len R = 0;
   then reconsider a = R as non-increasing FinSequence of REAL by Th31;
   take a;
   thus thesis;
@@ -1442,34 +1440,34 @@ Lm7: for n st P[n] holds P[n+1]
   A4: fn = R|n by FINSEQ_1:def 15;
   A5: dom fn = dom R /\ Seg n by FUNCT_1:68;
   reconsider fn as FinSequence by FINSEQ_1:19;
-     rng fn c= rng R & rng R c= REAL by RELAT_1:99;
+      rng fn c= rng R & rng R c= REAL by RELAT_1:99;
   then rng fn c= REAL by XBOOLE_1:1;
   then reconsider fn as FinSequence of REAL by FINSEQ_1:def 4;
-     n<=n+1 by NAT_1:11;
+      n<=n+1 by NAT_1:11;
   then Seg n c= Seg(n+1) by FINSEQ_1:7;
   then dom fn = Seg n by A3,A5,XBOOLE_1:28;
   then A6: len fn = n by FINSEQ_1:def 3;
   then consider a be non-increasing FinSequence of REAL such that
   A7: fn,a are_fiberwise_equipotent by A1;
   A8: rng fn = rng a & len fn = len a by A7,Th1,Th16;
-     0<=n by NAT_1:2;
+      0<=n by NAT_1:2;
   then 0+1<=n+1 by XREAL_1:9;
   then A9: n+1 in Seg(n+1) & Seg len a = dom a by FINSEQ_1:3,def 3;
   set q = R.(n+1);
-      now per cases;
+       now per cases;
    case A10: for t be Real st t in rng a holds q<=t;
     set b = a^<*q*>;
     A11: len b = n + len <*q*> by A6,A8,FINSEQ_1:35
     .= n+1 by FINSEQ_1:56;
-        now let m; assume
-         m in dom b & m+1 in dom b;
+         now let m; assume
+          m in dom b & m+1 in dom b;
       then A12: 1<=m & m<=len b & 1<=m+1 & m+1<=len b by FINSEQ_3:27;
       then m<=n+1-1 by A11,XREAL_1:21;
       then m in Seg n by A12,FINSEQ_1:3;
       then A13: m in dom a by A6,A8,FINSEQ_1:def 3;
       set r = b.m, s = b.(m+1);
       A14: r = a.m & a.m in rng a by A13,FINSEQ_1:def 7,FUNCT_1:def 5;
-          now per cases;
+           now per cases;
        case m+1 = len b;
         then s = q by A6,A8,A11,FINSEQ_1:59;
         hence r>=s by A10,A14;
@@ -1487,7 +1485,7 @@ Lm7: for n st P[n] holds P[n+1]
      end;
     then reconsider b as non-increasing FinSequence of REAL by Def4;
     take b;
-       fn^<*q*> = R by A2,A4,Th20;
+        fn^<*q*> = R by A2,A4,Th20;
     hence R,b are_fiberwise_equipotent by A7,Th14;
    end;
    case A16: ex t be Real st t in rng a & not q<=t;
@@ -1504,12 +1502,12 @@ Lm7: for n st P[n] holds P[n+1]
      end;
     consider mi be Element of NAT such that
     A20: Q[mi] & for m st Q[m] holds mi <= m from NAT_1:sch 5(A17);
-       1<=mi by A20,FINSEQ_3:27;
+        1<=mi by A20,FINSEQ_3:27;
     then max(0,mi-1) = mi-1 by FINSEQ_2:4;
     then reconsider k = mi-1 as Element of NAT by FINSEQ_2:5;
     set ak = a/^k,
          b = (a|k)^<*q*>^ak;
-       mi<=mi+1 & mi<mi+1 by NAT_1:13;
+        mi<=mi+1 & mi<mi+1 by NAT_1:13;
     then mi<=len a & k<=mi & k<mi by A20,FINSEQ_3:27,XREAL_1:21;
     then A21: k<=len a & k<len a by XXREAL_0:2;
     then A22: len(a|k) = k & len(a/^k) = len a - k & k+1<=len a
@@ -1521,14 +1519,14 @@ Lm7: for n st P[n] holds P[n+1]
     A25: dom (a|k) c= dom((a|k)^<*q*>) by FINSEQ_1:39;
     A26: 1<=len(a/^k) by A22,XREAL_1:21;
     A27: len b = k+1 + len(a/^k) by A23,FINSEQ_1:35;
-        now let m; assume
-         m in dom b & m+1 in dom b;
+         now let m; assume
+          m in dom b & m+1 in dom b;
       then A28: 1<=m & m<=len b & 1<=m+1 & m+1<=len b by FINSEQ_3:27;
       set r = b.m, s = b.(m+1);
-          now per cases;
+           now per cases;
        case A29: m+1<=k;
 then A30:      1<=k & m<=k by A28,XXREAL_0:2,NAT_1:13;
-           dom a = Seg len a by FINSEQ_1:def 3;
+            dom a = Seg len a by FINSEQ_1:def 3;
 then A31:     k in dom a & m in Seg k & m+1 in
  Seg k by A21,A28,A29,A30,FINSEQ_1:3;
         then A32: a.m = (a|k).m & a.(m+1) = (a|k).(m+1) & m in dom a & m+1 in
@@ -1538,23 +1536,23 @@ dom a
         .= a.m by A22,A24,A31,A32,FINSEQ_1:def 7;
         A34: b.(m+1) = ((a|k)^<*q*>).(m+1) by A22,A24,A25,A31,FINSEQ_1:def 7
         .= a.(m+1) by A22,A24,A31,A32,FINSEQ_1:def 7;
-           dom(a|k) c= dom((a|k)^(a/^k)) by FINSEQ_1:39;
+            dom(a|k) c= dom((a|k)^(a/^k)) by FINSEQ_1:39;
         then dom(a|k) c= dom a by Th21; hence r>=s by A22,A24,A31,A33,A34,Def4
 ;
        end;
        case k<m+1;
         then A35: k<=m by NAT_1:13;
-            now per cases;
+             now per cases;
          case A36: k = m;
           then A37: m in Seg k by A28,FINSEQ_1:3;
           A38: k in dom a by A9,A21,A28,A36,FINSEQ_1:3;
           then A39: a.m = (a|k).m & m in dom a by A37,Th19;
           A40: b.m = ((a|k)^<*q*>).m by A22,A24,A25,A37,FINSEQ_1:def 7
           .= a.m by A22,A24,A37,A39,FINSEQ_1:def 7;
-             m+1 in dom((a|k)^<*q*>) by A23,A24,A36,FINSEQ_1:6;
+              m+1 in dom((a|k)^<*q*>) by A23,A24,A36,FINSEQ_1:6;
           then A41: b.(m+1) = ((a|k)^<*q*>).(k+1) by A36,FINSEQ_1:def 7
           .= q by A22,FINSEQ_1:59;
-              now assume s>r;
+               now assume s>r;
             then for t be Real st t = a.k holds t<q by A36,A40,A41;
             then mi<=k by A20,A38;
             hence contradiction by XREAL_1:46;
@@ -1565,7 +1563,7 @@ dom a
           then k<m by A35,REAL_1:def 5;
           then A42: k+1<=m by NAT_1:13;
           then A43: k+1<m+1 by NAT_1:13;
-             max(0,m-(k+1)) = m-(k+1) by A42,FINSEQ_2:4;
+              max(0,m-(k+1)) = m-(k+1) by A42,FINSEQ_2:4;
           then reconsider l = m-(k+1) as Element of NAT by FINSEQ_2:5;
           A44: l+1 = m+1-(k+1);
           A45: 1<=l+1 & l+1<=l+1+k by NAT_1:11;
@@ -1574,15 +1572,15 @@ dom a
            by A27,NAT_1:11;
           then A47: l+1 in dom(a/^k) & l<=len(a/^k) & k+(l+1)<=len a
             by A22,A45,XXREAL_0:2,FINSEQ_3:27,XREAL_1:21;
-           k+l+1<=len a & k+l<=k+l+1 by A22,A27,A46,NAT_1:11,XREAL_1:21;
+            k+l+1<=len a & k+l<=k+l+1 by A22,A27,A46,NAT_1:11,XREAL_1:21;
           then A48: k+l+1 in dom a & k+l<=len a by A28,XXREAL_0:2,FINSEQ_3:27;
-              now per cases;
+               now per cases;
            case A49: k+1 = m;
             then m in Seg (k+1) by A28,FINSEQ_1:3;
             then A50: b.m = ((a|k)^<*q*>).(k+1) by A23,A24,A49,FINSEQ_1:def 7
             .= q by A22,FINSEQ_1:59;
             A51: 1 in dom(a/^k) by A26,FINSEQ_3:27;
-               b.(m+1) = (a/^k).(k+1+1 - (k+1)) by A23,A28,A43,A49,FINSEQ_1:37
+                b.(m+1) = (a/^k).(k+1+1 - (k+1)) by A23,A28,A43,A49,FINSEQ_1:37
             .= a.mi by A21,A51,Def2;
             hence r>=s by A20,A50;
            end;
@@ -1595,7 +1593,7 @@ dom a
             .= a.(k+l) by A21,A54,Def2;
             A56: b.(m+1) = (a/^k).(l+1) by A23,A28,A43,A44,FINSEQ_1:37
             .= a.(k+l+1) by A21,A47,Def2;
-               1<=k+l by A53,XXREAL_0:2;
+                1<=k+l by A53,XXREAL_0:2;
             then k+l in dom a by A48,FINSEQ_3:27;
             hence r>=s by A48,A55,A56,Def4;
            end;
@@ -1610,7 +1608,7 @@ dom a
      end;
     then reconsider b as non-increasing FinSequence of REAL by Def4;
     take b;
-        now let x;
+         now let x;
       A57: card(fn"{x}) = card(a"{x}) by A7,Def1;
       thus card (b"{x}) = card (((a|k)^<*q*>)"{x}) + card(ak"{x})
          by FINSEQ_3:63
@@ -1628,11 +1626,11 @@ dom a
  end;
 
 theorem
-   for R be FinSequence of REAL
+    for R be FinSequence of REAL
  ex R1 be non-increasing FinSequence of REAL st R,R1 are_fiberwise_equipotent
  proof let R be FinSequence of REAL;
   A1: for n holds P[n] from NAT_1:sch 1(Lm6,Lm7);
-     len R = len R;
+      len R = len R;
   hence thesis by A1;
  end;
 
@@ -1648,7 +1646,7 @@ for n holds for g1,g2 be non-increasing FinSequence of REAL st
      let g1,g2 be non-increasing FinSequence of REAL; assume that
      A2: len g1 = 0 and
      A3: g1,g2 are_fiberwise_equipotent;
-        len g2 = len g1 by A3,Th16;
+         len g2 = len g1 by A3,Th16;
      then g1 = <*>REAL & g2 = <*>REAL by A2,FINSEQ_1:32;
      hence thesis;
     end;
@@ -1661,29 +1659,30 @@ for n holds for g1,g2 be non-increasing FinSequence of REAL st
      A8: len g2 = len g1 by A7,Th16;
      then A9: g1.(len g1) = g2.(len g2) & g1|n, g2|n are_fiberwise_equipotent
       by A6,A7,Lm5;
-        n<=len g1 by A6,NAT_1:11;
+         n<=len g1 by A6,NAT_1:11;
      then A10: len(g1|n) = n & len(g2|n) = n by A8,FINSEQ_1:80;
      reconsider g1n = g1|n, g2n = g2|n as non-increasing FinSequence of REAL
        by Th33;
      set r = g1.(n+1);
      A11: g1n = g2n by A5,A9,A10;
-        (g1|n)^<*r*> = g1 & (g2|n)^<*r*> = g2 by A6,A8,A9,Th20;
+         (g1|n)^<*r*> = g1 & (g2|n)^<*r*> = g2 by A6,A8,A9,Th20;
      hence thesis by A11;
     end;
    thus for n holds P[n] from NAT_1:sch 1(A1,A4);
  end;
 
 theorem
-   for R1,R2 be non-increasing FinSequence of REAL st
+    for R1,R2 be non-increasing FinSequence of REAL st
   R1,R2 are_fiberwise_equipotent holds R1 = R2
  proof let g1,g2 be non-increasing FinSequence of REAL; assume
   A1: g1,g2 are_fiberwise_equipotent;
-     len g1 = len g1;
+      len g1 = len g1;
   hence thesis by A1,Lm8;
  end;
 
 theorem
-  for R be FinSequence of REAL, r,s be Real st r <> 0 holds R"{s/r} = (r*R)"{s}
+   for R be FinSequence of REAL, r,s be Real st r <> 0 holds R"{s/r} = (r*R)"{s
+}
  proof let R be FinSequence of REAL, r,s; assume
   A1: r <> 0;
   A2: Seg len R = dom R & dom(r*R) = Seg len(r*R) by FINSEQ_1:def 3;
@@ -1694,14 +1693,14 @@ theorem
     then A5: i in
  Seg len(r*R) & R.i = s/r by A2,FINSEQ_2:37,TARSKI:def 1;
 A6:i in dom (r*R) by A2,A4,FINSEQ_2:37;
-       r*(R.i) = s by A1,A5,XCMPLX_1:88;
+        r*(R.i) = s by A1,A5,XCMPLX_1:88;
     then (r*R).i = s by RVSUM_1:66;
     then (r*R).i in {s} by TARSKI:def 1;
     hence thesis by A6,FUNCT_1:def 13;
    end;
   let x; assume A7: x in (r*R)"{s};
   then reconsider i = x as Element of NAT;
-      i in dom(r*R) & (r*R).i in {s} by A7,FUNCT_1:def 13;
+       i in dom(r*R) & (r*R).i in {s} by A7,FUNCT_1:def 13;
   then A8: i in dom R & (r*R).i = s by A2,FINSEQ_2:37,TARSKI:def 1;
   then r*R.i = s by RVSUM_1:66;
   then R.i = s/r by A1,XCMPLX_1:90;
@@ -1710,14 +1709,14 @@ A6:i in dom (r*R) by A2,A4,FINSEQ_2:37;
  end;
 
 theorem
-   for R be FinSequence of REAL holds (0*R)"{0} = dom R
+    for R be FinSequence of REAL holds (0*R)"{0} = dom R
  proof let R be FinSequence of REAL;
   A1: len(0*R) = len R by FINSEQ_2:37;
   A2: dom R = Seg len R & Seg len(0*R) = dom(0*R) by FINSEQ_1:def 3;
   hence (0*R)"{0} c= dom R by A1,RELAT_1:167;
   let x; assume A3: x in dom R;
   then reconsider i = x as Element of NAT;
-     (0*R).i = 0*R.i by RVSUM_1:66
+      (0*R).i = 0*R.i by RVSUM_1:66
   .= 0;
   then (0*R).i in {0} by TARSKI:def 1;
   hence thesis by A1,A2,A3,FUNCT_1:def 13;
@@ -1730,7 +1729,7 @@ begin :: Addenda
 reserve f, g for Function;
 
 theorem
-  for f, g st rng f = rng g & f is one-to-one & g is one-to-one
+   for f, g st rng f = rng g & f is one-to-one & g is one-to-one
     holds
    f, g are_fiberwise_equipotent
 proof
@@ -1753,11 +1752,105 @@ end;
 :: from REVROT_1, 2007.03.18, A.T.
 
 theorem
- for D being non empty set, f being FinSequence of D
+  for D being non empty set, f being FinSequence of D
  holds f /^ len f = {}
 proof let D be non empty set, f be FinSequence of D;
-    len (f /^ len f) = len f - len f by Def2
+     len (f /^ len f) = len f - len f by Def2
        .= 0;
  hence thesis by FINSEQ_1:25;
+end;
+
+:: from SCMBSORT, 2007.07.26, A.T.
+
+theorem
+for f,g be Function,m,n be set st f.m=g.n & f.n=g.m & m in dom f
+& n in dom f & dom f = dom g &
+   (for k be set st k<>m & k<>n & k in dom f holds f.k=g.k) holds
+    f,g are_fiberwise_equipotent
+proof
+    let f,g be Function,m,n be set;
+    assume that
+A1: f.m=g.n and
+A2: f.n=g.m and
+A3: m in dom f and
+A4: n in dom f and
+A5: dom f = dom g and
+A6: for k be set st k<>m & k<>n & k in dom f holds f.k=g.k;
+    set t=id dom f, nm=n .--> m,mn=m .--> n,
+         p=t +* nm +* mn;
+A7: dom mn ={ m } by FUNCOP_1:19;
+A8: dom nm ={ n } by FUNCOP_1:19;
+A9: dom p = dom (t +* nm) \/ {m} by A7,FUNCT_4:def 1
+    .= dom t \/ {n} \/ {m} by A8,FUNCT_4:def 1
+    .= dom f \/ {n} \/ {m} by FUNCT_1:34
+    .= dom f \/ {m} by A4,ZFMISC_1:46
+    .= dom f by A3,ZFMISC_1:46;
+A10: dom t = dom f by FUNCT_1:34;
+A11: rng nm ={m} by FUNCOP_1:14;
+A12: rng t = dom (t") by FUNCT_1:55
+    .= dom f by A10,FUNCT_1:67;
+    then rng t \/ rng nm =dom f by A3,A11,ZFMISC_1:46;
+    then rng(t +* nm) c= dom f by FUNCT_4:18;
+then A13: rng(t +* nm) \/ rng mn c= dom f \/ rng mn by XBOOLE_1:9;
+        rng p c= rng(t +* nm) \/ rng mn by FUNCT_4:18;
+then A14: rng p c= dom f \/ rng mn by A13,XBOOLE_1:1;
+    A15: rng mn ={n} by FUNCOP_1:14;
+    then A16: dom f \/ rng mn =dom p by A4,A9,ZFMISC_1:46;
+A17: rng p c= dom p by A4,A9,A14,A15,ZFMISC_1:46;
+A18: dom (p*p) =dom f by A9,A14,A16,RELAT_1:46;
+    A19: now let x be set;
+      assume A20:x in dom f;
+then A21:   (p*p).x=p.(p.x) by A9,FUNCT_1:23;
+      per cases;
+      suppose A22:x=m;
+        hence (p*p).x=p.n by A21,FUNCT_4:95
+              .=x by A22,FUNCT_4:96;
+      end;
+      suppose A23:x<>m;
+       now per cases;
+            suppose A24:x=n;
+            hence (p*p).x=p.m by A21,FUNCT_4:96
+              .=x by A24,FUNCT_4:95;
+            end;
+            suppose A25:x<>n;
+             hence (p*p).x=p.(t.x) by A21,A23,FUNCT_4:97
+                 .=p.x by A20,FUNCT_1:34
+                 .=t.x by A23,A25,FUNCT_4:97
+                 .=x by A20,FUNCT_1:34;
+          end;
+          end;
+          hence (p*p).x=x;
+   end;
+   end;
+then A26: p*p=t by A18,FUNCT_1:34;
+A27: rng(p*p)=dom f by A12,A18,A19,FUNCT_1:34;
+A28: p is one-to-one by A9,A26,FUNCT_1:53;
+        for z be set st z in rng(p*p) holds z in rng p by FUNCT_1:25;
+    then rng(p*p) c= rng p by TARSKI:def 3;
+then A29: rng p = dom g by A5,A9,A17,A27,XBOOLE_0:def 10;
+A30: dom (g*p) =dom f by A5,A9,A17,RELAT_1:46;
+        now let x be set;
+       assume A31:x in dom f;
+then A32:    (g*p).x=g.(p.x) by A30,FUNCT_1:22;
+       per cases;
+       suppose x=m;
+        hence (g*p).x=f.x by A1,A32,FUNCT_4:95;
+       end;
+       suppose A33:x<>m;
+        now per cases;
+          suppose x=n;
+            hence (g*p).x=f.x by A2,A32,FUNCT_4:96;
+         end;
+         suppose A34:x<>n;
+             hence (g*p).x=g.(t.x) by A32,A33,FUNCT_4:97
+                 .=g.x by A31,FUNCT_1:34
+                 .=f.x by A6,A31,A33,A34;
+        end;
+        end;
+        hence (g*p).x=f.x;
+   end;
+   end;
+   then f=g*p by A30,FUNCT_1:9;
+   hence thesis by A9,A28,A29,Th3;
 end;
 

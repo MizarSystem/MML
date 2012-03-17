@@ -9,7 +9,7 @@ stylesheet 1.0;
 output method=html;
 
 
-// $Revision: 1.89 $
+// $Revision: 1.91 $
 //
 // File: miz.xsltxt - html-ization of Mizar XML, main file
 //
@@ -73,7 +73,7 @@ output method=html;
 
 // needed for local linking, document("") gives the sylesheet as a document
 #mizfiles = { `string(/*/@mizfiles)`; }
-#mizhtml  = { `concat($mizfiles,"html/")`; }
+#mizhtml  = { `concat("file://",$mizfiles,"html/")`; }
 
 // extension for linking to other articles - either xml or html
 #ext = { "html"; }
@@ -136,7 +136,7 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 #ajax_proofs = { "0"; }
 
 // tells to display thesis after skeleton items
-#display_thesis = { "0"; }
+#display_thesis = { "1"; }
 
 // tells if only selected items are generated to subdirs; default is off
 #generate_items = { "0"; }
@@ -145,6 +145,8 @@ $lbydlicgipref= { `concat($lbydlicgi,"?url=",$lbydliurl)`; }
 // tells if proofs of selected items are generated to subdirs; default is off
 #generate_items_proofs = { "0"; }
 
+// add IDV links and icons
+#idv =  { "0"; }
 
 $lcletters= { "abcdefghijklmnopqrstuvwxyz"; }
 $ucletters= { "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; } 
@@ -2276,7 +2278,7 @@ tpl [Let](#fst,#beg) {
        }
        else // or ends here - print the type, deal with following
        { 
-          " be "; apply[Typ]; ";"; <br;
+          " be "; apply[Typ]; ";"; try_th_exps(); <br;
 	  apply[following-sibling::*[position()=$it_step][name()="Let"]](#fst="1"); 
        }
    }
@@ -2791,6 +2793,11 @@ tpl jt
        { 
           " interestingness: "; `@interesting`;
        }
+       if [$idv > 0] 
+       { 
+          idv_for_item(#k="t", #nr=$nr1);
+       }
+
        <br;
     }
 
@@ -2820,6 +2827,46 @@ tpl jt
        } 
     } 
 }
+
+tpl idv_for_item(#k,#nr)
+{
+  $idv_html = "http://www.cs.miami.edu/~tptp/MizarTPTP/";
+// "http://lipa.ms.mff.cuni.cz/~urban/idvtest/";
+
+//  $idv_html = "file:///home/urban/mptp0.2/idvhtml/";
+  $tptp_file = `concat($idv_html,"problems/",$anamelc,"/",$anamelc, "__",$k, $nr, "_", $anamelc)`;
+  " ";
+  <img 
+  {
+    add_hs2_attrs();
+    @src="PalmTree.jpg";
+    @title="Show IDV graph";
+    @alt="Show IDV graph";
+  }
+
+//   <a 
+//   { 
+// //    add_ajax_attrs(#u = $th);
+//     add_hs2_attrs();
+//     @title="Show IDV graph";
+//     <b { " IDV graph "; } 
+//   }
+
+  <span 
+  { 
+      @style = "display:none"; 
+      ":: Showing IDV graph ... (Click the Palm Tree again to close it)"; 
+      <APPLET 
+      { 
+         @CODE = "IDVApplet.class";
+	 @ARCHIVE = "http://www.cs.miami.edu/students/strac/test/IDV/IDV.jar,http://www.cs.miami.edu/students/strac/test/IDV/TptpParser.jar,http://www.cs.miami.edu/students/strac/test/IDV/antlr-2.7.5.jar";
+	 @WIDTH = "0";
+	 @HEIGHT = "0";
+	 <PARAM { @NAME="URL"; @VALUE=$tptp_file; }
+      }
+  }
+}
+
 
 tpl [DefTheorem] 
 { 
@@ -3330,6 +3377,46 @@ tpl now_body
 }
 
 
+tpl idv_for_top()
+{
+  $idv_html = "http://lipa.ms.mff.cuni.cz/~urban/idvtest/";
+
+//  $idv_html = "file:///home/urban/mptp0.2/idvhtml/";
+  $tptp_file = `concat($idv_html,"top/",$anamelc,".top.rated")`;
+  " ";
+  <img 
+  {
+    add_hs2_attrs();
+    @src="hammock.jpg";
+    @title="Show IDV graph for whole article";
+    @alt="Show IDV graph for whole article";
+  }
+
+//   <a 
+//   { 
+// //    add_ajax_attrs(#u = $th);
+//     add_hs2_attrs();
+//     @title="Show IDV graph";
+//     <b { " IDV graph "; } 
+//   }
+
+  <span 
+  { 
+      @style = "display:none"; 
+      ":: Showing IDV graph ... (Click the Palm Trees again to close it)"; 
+      <APPLET 
+      { 
+         @CODE = "IDVApplet.class";
+	 @ARCHIVE = "IDV.jar,TptpParser.jar,antlr-2.7.5.jar";
+	 @WIDTH = "0";
+	 @HEIGHT = "0";
+	 <PARAM { @NAME="URL"; @VALUE=$tptp_file; }
+      }
+  }
+}
+
+
+
 // tpl [Now](#nkw) {
 //     <div { <b { if [not($nkw="1")] { "now ";} }
 //     <div { @class="add"; apply[BlockThesis];
@@ -3339,7 +3426,15 @@ tpl now_body
 // separate top-level items by additional newline
 tpl [Article] 
 { 
-    pcomment(#str=`concat($aname, "  semantic presentation")`); 
+  <div
+  {
+    pcomment0(#str=`concat($aname, "  semantic presentation")`); 
+
+    if [$idv > 0] 
+    { 
+       idv_for_top();
+    }
+  }
     <br;
 
     for-each [*] 
@@ -3622,6 +3717,23 @@ function insertRequest(obj,http_request) {
 	    }}
 // End -->
 "; }
+if [$idv>0]
+{
+<script { @type="text/javascript";
+"
+<!--
+var tstp_dump;
+function openSoTSTP (dump) {
+var tstp_url = 'http://www.cs.miami.edu/~tptp/cgi-bin/SystemOnTSTP';
+var tstp_browser = window.open(tstp_url, '_blank');
+tstp_dump = dump;
+}
+function getTSTPDump () {
+return tstp_dump;
+}
+// End -->
+";
+}}
 <base { 
 if [$linking = "s"] { @target="_self"; } else { @target="mmlquery";} } 
 // <!-- 

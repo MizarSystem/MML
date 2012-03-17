@@ -1,0 +1,4191 @@
+:: Basic Operations on Preordered Coherent Spaces
+::  by Klaus E. Grue and Artur Korni{\l}owicz
+:: 
+:: Received August 28, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies ORDERS_1, PCS_0, RELAT_1, PARTFUN1, RELAT_2, TARSKI, YELLOW_3,
+      EQREL_1, BOOLE, PBOOLE, PRALG_1, FUNCT_1, FUNCOP_1, WAYBEL_3, MCART_1,
+      RLVECT_2, PROB_1, YELLOW_1, MSUALG_4, YELLOW16, SUBSET_1, SETFAM_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, MCART_1, DOMAIN_1, RELAT_1,
+      FUNCT_1, PARTFUN1, RELSET_1, RELAT_2, EQREL_1, CARD_3, OPOSET_1, FUNCT_4,
+      PBOOLE, STRUCT_0, PRE_CIRC, TSEP_1, ORDERS_2, MSUALG_4, PRALG_1,
+      YELLOW_1, WAYBEL_3, YELLOW16, YELLOW_3;
+ constructors EQREL_1, PRALG_1, PRE_CIRC, MSUALG_4, OPOSET_1, TSEP_1, YELLOW16,
+      YELLOW_3, DOMAIN_1;
+ registrations EQREL_1, PARTFUN1, SUBSET_1, XBOOLE_0, WAYBEL_3, YELLOW14,
+      RELAT_1, TOLER_1, ORDERS_2, PRALG_1, STRUCT_0, FUNCT_4, YELLOW16,
+      YELLOW_3;
+ requirements BOOLE, SUBSET;
+ definitions SUBSET_1, RELAT_1, PARTFUN1, RELSET_1, RELAT_2, EQREL_1, CARD_3,
+      ORDERS_2, OPOSET_1, STRUCT_0, TSEP_1, MSUALG_4, PRALG_1, YELLOW_1,
+      WAYBEL_3, TARSKI, XBOOLE_0;
+ theorems ZFMISC_1, ORDERS_2, RELSET_1, PARTFUN1, RELAT_1, RELAT_2, XBOOLE_0,
+      TARSKI, FUNCT_1, PBOOLE, FUNCOP_1, STRUCT_0, PRALG_1, XBOOLE_1, ORDERS_1,
+      FUNCT_4, YELLOW16, YELLOW_0, WAYBEL_8, YELLOW_3, MCART_1, MEASURE1;
+ schemes RELSET_1, CLASSES1, RELAT_1;
+
+begin :: Preliminaries
+  
+  reconsider z = 0, j = 1 as Element of {0,1} by TARSKI:def 2;
+
+definition
+  let R1, R2 be set, R be Relation of R1,R2;
+  redefine func field R -> Subset of R1 \/ R2;
+  coherence by RELSET_1:19;
+end;
+
+definition
+  let R1, R2, S1, S2 be set;
+  let R be Relation of R1,R2;
+  let S be Relation of S1,S2;
+  redefine func R \/ S -> Relation of R1 \/ S1, R2 \/ S2;
+  coherence
+  proof
+    thus R \/ S c= [:R1 \/ S1,R2 \/ S2:] by ZFMISC_1:143;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being total Relation of R1;
+  let S being total Relation of S1;
+  cluster R \/ S -> total Relation of R1 \/ S1;
+  coherence
+  proof
+    R \/ S is total
+    proof
+      thus dom (R \/ S) = (dom R) \/ dom S by RELAT_1:13
+      .= R1 \/ dom S by PARTFUN1:def 4
+      .= R1 \/ S1 by PARTFUN1:def 4;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being reflexive Relation of R1;
+  let S being reflexive Relation of S1;
+  cluster R \/ S -> reflexive Relation of R1 \/ S1;
+  coherence by RELAT_2:31;
+end;
+
+registration
+  let R1, S1 be set;
+  let R being symmetric Relation of R1;
+  let S being symmetric Relation of S1;
+  cluster R \/ S -> symmetric Relation of R1 \/ S1;
+  coherence by RELAT_2:35;
+end;
+
+Lm0: now
+    let R1, S1 be set;
+    let R be Relation of R1;
+    let S be Relation of S1 such that
+a1: R1 misses S1;
+    let q1, q2 be set such that
+a9: [q1,q2] in R \/ S and
+a2: q2 in S1;
+a3: [q1,q2] in R or [q1,q2] in S by a9,XBOOLE_0:def 2;
+    now
+      assume [q1,q2] in R;
+      then q2 in R1 by ZFMISC_1:106;
+      hence contradiction by a1,a2,XBOOLE_0:3;
+    end;
+    hence [q1,q2] in S & q1 in S1 by a3,ZFMISC_1:106;
+  end;
+  
+theorem Th1:
+  for R1, S1 being set,
+      R being transitive (Relation of R1),
+      S being transitive Relation of S1
+  st R1 misses S1 holds R \/ S is transitive
+  proof
+    let R1, S1 be set,
+        R be transitive (Relation of R1),
+        S be transitive Relation of S1 such that
+a1: R1 misses S1;
+    let p1, p2, p3 be set;
+    set RS = R \/ S;
+    set D = field RS;
+    assume that
+a2: p1 in D & p2 in D & p3 in D and
+a5: [p1,p2] in RS and
+a6: [p2,p3] in RS;    
+    per cases by a2,XBOOLE_0:def 2;
+    suppose
+b1:   p3 in R1;
+      then p2 in R1 by a6,a1,Lm0;
+      then [p1,p2] in R & [p2,p3] in R by a5,a6,a1,b1,Lm0;
+      then [p1,p3] in R by RELAT_2:48;
+      hence [p1,p3] in RS by XBOOLE_0:def 2;
+    end;
+    suppose
+b1:   p3 in S1;
+      then p2 in S1 by a6,a1,Lm0;
+      then [p1,p2] in S & [p2,p3] in S by a5,a6,a1,b1,Lm0;
+      then [p1,p3] in S by RELAT_2:48;
+      hence [p1,p3] in RS by XBOOLE_0:def 2;
+    end;      
+  end;
+
+registration
+  let A be empty set, B be set;
+  cluster {}(A,B) -> total;
+  coherence
+  proof
+    thus dom {}(A,B) = dom {}
+    .= A;
+  end;
+end;
+
+definition
+  let I be non empty set, C be 1-sorted-yielding ManySortedSet of I;
+  redefine func Carrier C means :Def90:
+  for i being Element of I holds it.i = the carrier of C.i;
+  compatibility
+  proof
+    let X be ManySortedSet of I;
+    thus X = Carrier C implies
+    for i being Element of I holds X.i = the carrier of C.i
+    proof
+      assume
+a1:   X = Carrier C;
+      let i be Element of I;
+      ex P being 1-sorted st P = C.i & X.i = the carrier of P
+      by a1,PRALG_1:def 13;
+      hence thesis;
+    end;
+    assume
+a1: for i being Element of I holds X.i = the carrier of C.i;
+    for i being set st i in I
+    ex P being 1-sorted st P = C.i & X.i = the carrier of P
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider i as Element of I;
+      take C.i;
+      thus thesis by a1;
+    end;
+    hence thesis by PRALG_1:def 13;
+  end;
+end;
+
+definition
+  let R1, R2, S1, S2 be set;
+  let R be Relation of R1,R2, S be Relation of S1,S2;
+  defpred P[set,set] means
+  ex r1, s1, r2, s2 being set st $1 = [r1,s1] & $2 = [r2,s2] &
+  r1 in R1 & s1 in S1 & r2 in R2 & s2 in S2 & ([r1,r2] in R or [s1,s2] in S);
+  func [^R,S^] -> Relation of [:R1,S1:],[:R2,S2:] means :Def1a:
+  for x, y being set holds [x,y] in it iff
+  ex r1, s1, r2, s2 being set st x = [r1,s1] & y = [r2,s2] &
+  r1 in R1 & s1 in S1 & r2 in R2 & s2 in S2 & ([r1,r2] in R or [s1,s2] in S);
+  existence
+  proof
+    consider Q being Relation of [:R1,S1:],[:R2,S2:] such that
+A1: for x, y being set holds [x,y] in Q iff x in [:R1,S1:] &
+    y in [:R2,S2:] & P[x,y] from RELSET_1:sch 1;
+    take Q;
+    let x, y be set;
+    thus [x,y] in Q implies P[x,y] by A1;
+    given r1, s1, r2, s2 being set such that
+A3: x = [r1,s1] & y = [r2,s2] and
+a2: r1 in R1 & s1 in S1 & r2 in R2 & s2 in S2 and
+a1: [r1,r2] in R or [s1,s2] in S;
+    x in [:R1,S1:] & y in [:R2,S2:] by A3,a2,ZFMISC_1:106;
+    hence [x,y] in Q by A1,A3,a1,a2;
+  end;
+  uniqueness
+  proof
+    let A, B be Relation of [:R1,S1:],[:R2,S2:] such that
+A4: for x, y being set holds [x,y] in A iff P[x,y]and
+A5: for x, y being set holds [x,y] in B iff P[x,y];
+    thus A = B from RELAT_1:sch 2(A4,A5);
+  end;
+end;
+
+definition
+  let R1, R2, S1, S2 be non empty set;
+  let R be Relation of R1,R2, S be Relation of S1,S2;
+  redefine func [^R,S^] means :Def1b:
+  for r1 being Element of R1, r2 being Element of R2
+  for s1 being Element of S1, s2 being Element of S2 holds
+  [[r1,s1],[r2,s2]] in it iff [r1,r2] in R or [s1,s2] in S;
+  compatibility
+  proof
+    let f be Relation of [:R1,S1:],[:R2,S2:];
+    thus f = [^R,S^] implies
+    for r1 being Element of R1, r2 being Element of R2
+    for s1 being Element of S1, s2 being Element of S2 holds
+    [[r1,s1],[r2,s2]] in f iff [r1,r2] in R or [s1,s2] in S
+    proof
+      assume
+a1:   f = [^R,S^];
+      let r1 be Element of R1, r2 be Element of R2;
+      let s1 be Element of S1, s2 be Element of S2;
+      hereby
+        assume [[r1,s1],[r2,s2]] in f;
+        then consider r1', s1', r2', s2' being set such that
+a2:     [r1,s1] = [r1',s1'] & [r2,s2] = [r2',s2'] and
+a3:     r1' in R1 & s1' in S1 & r2' in R2 & s2' in S2 &
+        ([r1',r2'] in R or [s1',s2'] in S) by a1,Def1a;
+        r1 = r1' & r2 = r2' & s1 = s1' & s2 = s2' by a2,ZFMISC_1:33;
+        hence [r1,r2] in R or [s1,s2] in S by a3;
+      end;
+      thus thesis by a1,Def1a;
+    end;
+    assume
+b1: for r1 being Element of R1, r2 being Element of R2
+    for s1 being Element of S1, s2 being Element of S2 holds
+    [[r1,s1],[r2,s2]] in f iff [r1,r2] in R or [s1,s2] in S;
+    for x, y being set holds [x,y] in f iff [x,y] in [^R,S^]
+    proof
+      let x, y be set;
+      thus [x,y] in f implies [x,y] in [^R,S^]
+      proof
+        assume
+b2:     [x,y] in f;
+        then x in dom f by RELAT_1:20;
+        then consider x1, x2 being set such that
+b3:     x1 in R1 & x2 in S1 & x = [x1,x2] by ZFMISC_1:def 2;
+        y in rng f by b2,RELAT_1:20;
+        then consider y1, y2 being set such that
+b4:     y1 in R2 & y2 in S2 & y = [y1,y2] by ZFMISC_1:def 2;
+        [x1,y1] in R or [x2,y2] in S by b1,b2,b3,b4;
+        hence [x,y] in [^R,S^] by b3,b4,Def1a;
+      end;
+      assume [x,y] in [^R,S^];
+      then ex r1, s1, r2, s2 being set st x = [r1,s1] & y = [r2,s2] &
+      r1 in R1 & s1 in S1 & r2 in R2 & s2 in S2 &
+      ([r1,r2] in R or [s1,s2] in S) by Def1a;
+      hence thesis by b1;
+    end;
+    hence thesis by RELAT_1:def 2;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be total Relation of R1;
+  let S be total Relation of S1;
+  cluster [^R,S^] -> total;
+  coherence
+  proof
+    thus dom [^R,S^] c= [:R1,S1:];
+    let z be set;
+    assume z in [:R1,S1:];
+    then consider x, y being set such that
+a1: x in R1 and
+a2: y in S1 and
+a3: z = [x,y] by ZFMISC_1:def 2;
+    dom R = R1 by PARTFUN1:def 4;
+    then consider a being set such that
+a4: [x,a] in R by a1,RELAT_1:def 4;
+    dom S = S1 by PARTFUN1:def 4;
+    then consider b being set such that
+a5: [y,b] in S by a2,RELAT_1:def 4;
+    a in R1 & b in S1 by a4,a5,ZFMISC_1:106;
+    then [[x,y],[a,b]] in [^R,S^] by a1,a2,a4,Def1a;
+    hence thesis by a3,RELAT_1:def 4;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be reflexive Relation of R1;
+  let S be reflexive Relation of S1;
+  cluster [^R,S^] -> reflexive;
+  coherence
+  proof
+    let x be set;
+    assume
+a1: x in field [^R,S^];
+a5: R is_reflexive_in field R & S is_reflexive_in field S
+    by RELAT_2:def 9;
+    per cases by a1,XBOOLE_0:def 2;
+    suppose x in dom [^R,S^];
+      then consider y being set such that
+a0:   [x,y] in [^R,S^] by RELAT_1:def 4;
+      consider p, q, s, t being set such that
+a2:   x = [p,q] & y = [s,t] and
+a3:   p in R1 & q in S1 & s in R1 & t in S1 and
+a4:   [p,s] in R or [q,t] in S by a0,Def1a;
+      per cases by a4;
+      suppose [p,s] in R;
+        then p in field R by RELAT_1:30;
+        then [p,p] in R by a5,RELAT_2:def 1;
+        hence [x,x] in [^R,S^] by a2,a3,Def1a;
+      end;
+      suppose [q,t] in S;
+        then q in field S by RELAT_1:30;
+        then [q,q] in S by a5,RELAT_2:def 1;
+        hence [x,x] in [^R,S^] by a2,a3,Def1a;
+      end;
+    end;
+    suppose x in rng [^R,S^];
+      then consider y being set such that
+a0:   [y,x] in [^R,S^] by RELAT_1:def 5;
+      consider p, q, s, t being set such that
+a2:   y = [p,q] & x = [s,t] and
+a3:   p in R1 & q in S1 & s in R1 & t in S1 and
+a4:   [p,s] in R or [q,t] in S by a0,Def1a;
+      per cases by a4;
+      suppose [p,s] in R;
+        then s in field R by RELAT_1:30;
+        then [s,s] in R by a5,RELAT_2:def 1;
+        hence [x,x] in [^R,S^] by a2,a3,Def1a;
+      end;
+      suppose [q,t] in S;
+        then t in field S by RELAT_1:30;
+        then [t,t] in S by a5,RELAT_2:def 1;
+        hence [x,x] in [^R,S^] by a2,a3,Def1a;
+      end;
+    end;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be Relation of R1;
+  let S be total reflexive Relation of S1;
+  cluster [^R,S^] -> reflexive;
+  coherence
+  proof
+    let x be set;
+    assume x in field [^R,S^];
+    then consider x1, x2 being set such that
+a1: x1 in R1 and
+a3: x2 in S1 and
+a2: x = [x1,x2] by ZFMISC_1:def 2;
+    S1 = field S by ORDERS_1:97;
+    then S is_reflexive_in S1 by RELAT_2:def 9;
+    then [x2,x2] in S by a3,RELAT_2:def 1;
+    hence [x,x] in [^R,S^] by a1,a2,a3,Def1b;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be total reflexive Relation of R1;
+  let S be Relation of S1;
+  cluster [^R,S^] -> reflexive;
+  coherence
+  proof
+    let x be set;
+    assume x in field [^R,S^];
+    then consider x1, x2 being set such that
+a1: x1 in R1 and
+a3: x2 in S1 and
+a2: x = [x1,x2] by ZFMISC_1:def 2;
+    R1 = field R by ORDERS_1:97;
+    then R is_reflexive_in R1 by RELAT_2:def 9;
+    then [x1,x1] in R by a1,RELAT_2:def 1;
+    hence [x,x] in [^R,S^] by a1,a2,a3,Def1b;
+  end;
+end;
+
+registration
+  let R1, S1 be set;
+  let R be symmetric Relation of R1;
+  let S be symmetric Relation of S1;
+  cluster [^R,S^] -> symmetric;
+  coherence
+  proof
+    let x, y be set;
+    assume x in field [^R,S^] & y in field [^R,S^];
+    assume [x,y] in [^R,S^];
+    then consider p, q, s, t being set such that
+a2: x = [p,q] & y = [s,t] and
+a3: p in R1 & q in S1 & s in R1 & t in S1 and
+a4: [p,s] in R or [q,t] in S by Def1a;
+a5: R is_symmetric_in field R & S is_symmetric_in field S
+    by RELAT_2:def 11;
+    per cases by a4;
+    suppose
+s1:   [p,s] in R;
+      then p in field R & s in field R by RELAT_1:30;
+      then [s,p] in R by a5,s1,RELAT_2:def 3;      
+      hence [y,x] in [^R,S^] by a2,a3,Def1a;
+    end;
+    suppose
+s2:   [q,t] in S;
+      then q in field S & t in field S by RELAT_1:30;
+      then [t,q] in S by a5,s2,RELAT_2:def 3;
+      hence [y,x] in [^R,S^] by a2,a3,Def1a;
+    end;
+  end;
+end;
+  
+begin :: Relational Structures
+
+registration
+  cluster empty -> total RelStr;
+  coherence
+  proof
+    let P be RelStr;
+    assume
+a1: the carrier of P is empty;
+    hence dom the InternalRel of P = dom {} by RELSET_1:26
+    .= the carrier of P by a1;
+  end;
+end;
+
+definition
+  let R be Relation;
+  attr R is transitive-yielding means :Def87:
+  for S being RelStr st S in rng R holds S is transitive;
+end;
+
+registration
+  cluster Poset-yielding -> transitive-yielding Relation;
+  coherence
+  proof
+    let R be Relation;
+    assume
+a1: R is Poset-yielding;
+    let S be RelStr;
+    thus thesis by a1,YELLOW16:def 5;
+  end;
+end;
+
+registration
+  cluster Poset-yielding Function;
+  existence
+  proof
+    consider f being Poset-yielding ManySortedSet of 0;
+    take f;
+    thus thesis;
+  end;
+end;
+
+registration
+ let I be set;
+ cluster Poset-yielding ManySortedSet of I;
+ existence
+  proof
+    consider f being Poset-yielding ManySortedSet of I;
+    take f;
+    thus thesis;
+  end;
+end;
+
+definition
+  let I be set, C be RelStr-yielding ManySortedSet of I;
+  func pcs-InternalRels C -> ManySortedSet of I means :Def10:
+  for i being set st i in I
+  ex P being RelStr st P = C.i & it.i = the InternalRel of P;
+  existence
+  proof
+    defpred P[set,set] means
+    ex R being RelStr st R = C.$1 & $2 = the InternalRel of R;
+A1: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume
+A2:   i in I;
+      then reconsider I as non empty set;
+      reconsider B = C as RelStr-yielding ManySortedSet of I;
+      reconsider i' = i as Element of I by A2;
+      take j = the InternalRel of B.i', R = B.i';
+      thus thesis;
+    end;
+    consider M being Function such that
+A3: dom M = I and
+A4: for i being set st i in I holds P[i,M.i] from CLASSES1:sch 1(A1);
+    M is ManySortedSet of I by A3,PBOOLE:def 3;
+    hence thesis by A4;
+  end;
+  uniqueness
+  proof
+    let X, Y be ManySortedSet of I such that
+A5: for j being set st j in I
+    ex R being RelStr st R = C.j & X.j = the InternalRel of R and
+A6: for j being set st j in I
+    ex R being RelStr st R = C.j & Y.j = the InternalRel of R;
+    for i being set st i in I holds X.i = Y.i
+    proof
+      let i be set;
+      assume i in I;
+      then (ex R being RelStr st R = C.i & X.i = the InternalRel of R) &
+      ex R being RelStr st R = C.i & Y.i = the InternalRel of R by A5,A6;
+      hence thesis;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+end;
+
+definition
+  let I be non empty set, C be RelStr-yielding ManySortedSet of I;
+  redefine func pcs-InternalRels C means :Def10a:
+  for i being Element of I holds it.i = the InternalRel of C.i;
+  compatibility
+  proof
+    let X be ManySortedSet of I;
+    thus X = pcs-InternalRels C implies
+    for i being Element of I holds X.i = the InternalRel of C.i
+    proof
+      assume
+a1:   X = pcs-InternalRels C;
+      let i be Element of I;
+      ex P being RelStr st P = C.i & X.i = the InternalRel of P by a1,Def10;
+      hence thesis;
+    end;
+    assume
+a1: for i being Element of I holds X.i = the InternalRel of C.i;
+    for i being set st i in I
+    ex P being RelStr st P = C.i & X.i = the InternalRel of P
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider i as Element of I;
+      take C.i;
+      thus thesis by a1;
+    end;
+    hence thesis by Def10;
+  end;
+end;
+
+registration
+  let I be set, C be RelStr-yielding ManySortedSet of I;
+  cluster pcs-InternalRels C -> Relation-yielding;
+  coherence
+  proof
+    set IR = pcs-InternalRels C;
+    let i be set;
+    assume
+a1: i in dom IR;
+    dom IR = I by PBOOLE:def 3;
+    then ex P being RelStr st P = C.i & IR.i = the InternalRel of P
+    by a1,Def10;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be non empty set;
+  let C be transitive-yielding RelStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> transitive RelStr;
+  coherence
+  proof
+    dom C = I by PBOOLE:def 3;
+    then C.i in rng C by FUNCT_1:12;
+    hence thesis by Def87;
+  end;
+end;
+
+begin :: Tolerance Structures
+
+definition
+  struct (1-sorted) TolStr (#
+  carrier -> set,
+  ToleranceRel -> Relation of the carrier #);
+end;
+
+definition
+  let P be TolStr;
+  let p, q be Element of P;
+  pred p (--) q means :Def3:
+  [p,q] in the ToleranceRel of P;
+end;
+
+definition
+  let P be TolStr;
+  attr P is pcs-tol-total means :Def21:
+  the ToleranceRel of P is total;
+
+  attr P is pcs-tol-reflexive means :Def22:
+  the ToleranceRel of P is_reflexive_in the carrier of P;
+
+  attr P is pcs-tol-irreflexive means :Def22a:
+  the ToleranceRel of P is_irreflexive_in the carrier of P;
+
+  attr P is pcs-tol-symmetric means :Def23:
+  the ToleranceRel of P is_symmetric_in the carrier of P;
+end;
+
+definition
+  func emptyTolStr -> TolStr equals
+  TolStr (# {}, {}({},{}) #);
+  coherence;
+end;
+
+registration
+  cluster emptyTolStr -> empty strict;
+  coherence by STRUCT_0:def 1;
+end;
+
+theorem Th0:
+  for P being TolStr st P is empty holds the TolStr of P = emptyTolStr
+  proof
+    let  P be TolStr;
+    assume P is empty;
+    then the carrier of P = {} by STRUCT_0:def 1;
+    hence thesis by RELSET_1:26;
+  end;
+
+registration
+  cluster pcs-tol-reflexive -> pcs-tol-total TolStr;
+  coherence
+  proof
+    let P be TolStr;
+    assume P is pcs-tol-reflexive;
+    then the ToleranceRel of P is_reflexive_in the carrier of P by Def22;
+    then dom the ToleranceRel of P = the carrier of P by ORDERS_1:98;
+    hence the ToleranceRel of P is total by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  cluster empty -> pcs-tol-reflexive pcs-tol-irreflexive pcs-tol-symmetric
+          TolStr;
+  coherence
+  proof
+    let P be TolStr;
+    assume P is empty;
+    then
+a1: the TolStr of P = emptyTolStr by Th0;
+    then
+a2: the carrier of P = field the ToleranceRel of P by ORDERS_1:97;
+    hence the ToleranceRel of P is_reflexive_in the carrier of P
+    by a1,RELAT_2:def 9;
+    thus the ToleranceRel of P is_irreflexive_in the carrier of P
+    by a1,a2,RELAT_2:def 10;
+    thus the ToleranceRel of P is_symmetric_in the carrier of P
+    by a1,a2,RELAT_2:def 11;
+  end;
+end;
+
+registration
+  cluster empty TolStr;
+  existence
+  proof
+    take emptyTolStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  let P be pcs-tol-total TolStr;
+  cluster the ToleranceRel of P -> total;
+  coherence by Def21;
+end;
+
+registration
+  let P be pcs-tol-reflexive TolStr;
+  cluster the ToleranceRel of P -> reflexive;
+  coherence
+   proof
+    set TR = the ToleranceRel of P;
+a1: field TR = the carrier of P by ORDERS_1:97;
+    TR is_reflexive_in the carrier of P by Def22;
+    hence TR is reflexive by a1,RELAT_2:def 9;
+  end;
+end;
+
+registration
+  let P be pcs-tol-irreflexive TolStr;
+  cluster the ToleranceRel of P -> irreflexive;
+  coherence
+   proof
+    set TR = the ToleranceRel of P;
+a1: TR is_irreflexive_in the carrier of P by Def22a;
+    let x be set;
+    assume x in field TR;
+    assume
+a2: [x,x] in TR;
+    then x in dom TR & x in rng TR by RELAT_1:20;
+    hence thesis by a1,a2,RELAT_2:def 2;
+  end;
+end;
+
+registration
+  let P be pcs-tol-symmetric TolStr;
+  cluster the ToleranceRel of P -> symmetric;
+  coherence
+  proof
+    set TR = the ToleranceRel of P;
+a1: TR is_symmetric_in the carrier of P by Def23;
+    let x, y be set;
+    assume x in field TR & y in field TR;
+    assume
+a2: [x,y] in TR;
+    then x in dom TR & y in rng TR by RELAT_1:20;
+    hence [y,x] in TR by a1,a2,RELAT_2:def 3;
+  end;
+end;
+
+registration
+  let L be pcs-tol-total TolStr;
+  cluster the TolStr of L -> pcs-tol-total;
+  coherence by Def21;
+end;
+
+definition
+  let P be pcs-tol-symmetric TolStr;
+  let p, q be Element of P;
+  redefine pred p (--) q;
+  symmetry
+  proof
+    let x, y be Element of P;
+    assume
+a1: [x,y] in the ToleranceRel of P;
+    then
+a2: x in the carrier of P & y in the carrier of P by ZFMISC_1:106;
+    the ToleranceRel of P is_symmetric_in the carrier of P by Def23;
+    hence [y,x] in the ToleranceRel of P by a1,a2,RELAT_2:def 3;
+  end;
+end;
+
+registration
+  let D be set;
+  cluster TolStr(#D,nabla D#) -> pcs-tol-reflexive pcs-tol-symmetric;
+  coherence
+  proof
+    set P = TolStr(#D,nabla D#);
+    set TR = the ToleranceRel of P;
+a1: field TR = the carrier of P by ORDERS_1:97;
+    hence TR is_reflexive_in the carrier of P by RELAT_2:def 9;
+    thus TR is_symmetric_in the carrier of P by a1,RELAT_2:def 11;
+  end;
+end;
+
+registration
+  let D be set;
+  cluster TolStr(#D,{}(D,D)#) -> pcs-tol-irreflexive pcs-tol-symmetric;
+  coherence
+  proof
+    set P = TolStr(#D,{}(D,D)#);
+    thus the ToleranceRel of P is_irreflexive_in the carrier of P
+    proof
+      let x be set;
+      thus thesis;
+    end;
+    let x be set;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster strict non empty pcs-tol-reflexive pcs-tol-symmetric TolStr;
+  existence
+  proof
+    consider D being non empty set;
+    take P = TolStr(#D,nabla D#);
+    thus P is strict;
+    thus the carrier of P is non empty;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster strict non empty pcs-tol-irreflexive pcs-tol-symmetric TolStr;
+  existence
+  proof
+    consider D being non empty set;
+    take P = TolStr(#D,{}(D,D)#);
+    thus P is strict;
+    thus the carrier of P is non empty;
+    thus thesis;
+  end;
+end;
+
+definition
+  let R be Relation;
+  attr R is TolStr-yielding means :Def7:
+  for P being set st P in rng R holds P is TolStr;
+end;
+
+definition
+  let f be Function;
+  redefine attr f is TolStr-yielding means :Def7a:
+  for x being set st x in dom f holds f.x is TolStr;
+  compatibility
+  proof
+    hereby
+      assume
+a1:   f is TolStr-yielding;
+      let x be set;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:12;
+      hence f.x is TolStr by a1,Def7;
+    end;
+    assume
+a1: for x being set st x in dom f holds f.x is TolStr;
+    let P be set;
+    assume P in rng f;
+    then ex x being set st x in dom f & f.x = P by FUNCT_1:def 5;
+    hence thesis by a1;
+  end;
+end;
+
+definition
+  let I be set, f be ManySortedSet of I;
+a1: dom f = I by PBOOLE:def 3;
+  redefine attr f is TolStr-yielding means
+  for x being set st x in I holds f.x is TolStr;
+  compatibility by a1,Def7a;
+end;
+
+definition
+  let R be Relation;
+  attr R is pcs-tol-reflexive-yielding means :Def88:
+  for S being TolStr st S in rng R holds S is pcs-tol-reflexive;
+  attr R is pcs-tol-irreflexive-yielding means :Def88i:
+  for S being TolStr st S in rng R holds S is pcs-tol-irreflexive;
+  attr R is pcs-tol-symmetric-yielding means :Def89:
+  for S being TolStr st S in rng R holds S is pcs-tol-symmetric;
+end;
+
+registration
+  cluster empty -> pcs-tol-reflexive-yielding pcs-tol-irreflexive-yielding
+          pcs-tol-symmetric-yielding Relation;
+  coherence
+  proof
+    let f be Relation;
+    assume
+a1: f is empty;
+    thus f is pcs-tol-reflexive-yielding
+    proof
+      let i be set;
+      thus thesis by a1,RELAT_1:60;
+    end;
+    thus f is pcs-tol-irreflexive-yielding
+    proof
+      let i be set;
+      thus thesis by a1,RELAT_1:60;
+    end;
+    let i be set;
+    thus thesis by a1,RELAT_1:60;
+  end;
+end;
+
+registration
+  let I be set, P be TolStr;
+  cluster I --> P -> TolStr-yielding ManySortedSet of I;
+  coherence
+  proof
+    I --> P is TolStr-yielding
+    proof
+      let i be set;
+      thus thesis by FUNCOP_1:13;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be set, P be pcs-tol-reflexive TolStr;
+  cluster I --> P -> pcs-tol-reflexive-yielding ManySortedSet of I;
+  coherence
+  proof
+    set f = I --> P;
+    f is pcs-tol-reflexive-yielding
+    proof
+      let S be TolStr;
+      assume
+a1:   S in rng f;
+      I = {} or I <> {};
+      then rng f = {P} or rng f = {} by FUNCOP_1:14,16;
+      hence thesis by a1,TARSKI:def 1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be set, P be pcs-tol-irreflexive TolStr;
+  cluster I --> P -> pcs-tol-irreflexive-yielding ManySortedSet of I;
+  coherence
+  proof
+    set f = I --> P;
+    f is pcs-tol-irreflexive-yielding
+    proof
+      let S be TolStr;
+      assume
+a1:   S in rng f;
+      I = {} or I <> {};
+      then rng f = {P} or rng f = {} by FUNCOP_1:14,16;
+      hence thesis by a1,TARSKI:def 1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be set, P be pcs-tol-symmetric TolStr;
+  cluster I --> P -> pcs-tol-symmetric-yielding ManySortedSet of I;
+  coherence
+  proof
+    set f = I --> P;
+    f is pcs-tol-symmetric-yielding
+    proof
+      let S be TolStr;
+      assume
+a1:   S in rng f;
+      I = {} or I <> {};
+      then rng f = {P} or rng f = {} by FUNCOP_1:14,16;
+      hence thesis by a1,TARSKI:def 1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster TolStr-yielding -> 1-sorted-yielding Function;
+  coherence
+  proof
+    let f be Function;
+    assume
+a0: f is TolStr-yielding;
+    let x be set;
+    thus thesis by a0,Def7a;
+  end;
+end;
+
+registration
+  let I be set;
+  cluster pcs-tol-reflexive-yielding pcs-tol-symmetric-yielding TolStr-yielding
+          ManySortedSet of I;
+  existence
+  proof
+    take I --> TolStr(#0,nabla 0#);
+    thus thesis;
+  end;
+end;
+
+registration
+  let I be set;
+  cluster pcs-tol-irreflexive-yielding pcs-tol-symmetric-yielding
+          TolStr-yielding ManySortedSet of I;
+  existence
+  proof
+    take I --> TolStr(#0,{}(0,0)#);
+    thus thesis;
+  end;
+end;
+
+registration
+  let I be set;
+  cluster TolStr-yielding ManySortedSet of I;
+  existence
+  proof
+    consider R being TolStr;
+    take I --> R;
+    thus thesis;
+  end;
+end;
+
+definition
+  let I be non empty set,
+      C be TolStr-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> TolStr;
+  coherence
+  proof
+    dom C = I by PBOOLE:def 3;
+    hence thesis by Def7a;
+  end;
+end;
+
+definition
+  let I be set, C be TolStr-yielding ManySortedSet of I;
+  func pcs-ToleranceRels C -> ManySortedSet of I means :Def11:
+  for i being set st i in I
+  ex P being TolStr st P = C.i & it.i = the ToleranceRel of P;
+  existence
+  proof
+    defpred P[set,set] means
+    ex R being TolStr st R = C.$1 & $2 = the ToleranceRel of R;
+A1: for i being set st i in I ex j being set st P[i,j]
+    proof
+      let i be set;
+      assume
+A2:   i in I;
+      then reconsider I as non empty set;
+      reconsider B = C as TolStr-yielding ManySortedSet of I;
+      reconsider i' = i as Element of I by A2;
+      take j = the ToleranceRel of B.i', R = B.i';
+      thus thesis;
+    end;
+    consider M being Function such that
+A3: dom M = I and
+A4: for i being set st i in I holds P[i,M.i] from CLASSES1:sch 1(A1);
+    M is ManySortedSet of I by A3,PBOOLE:def 3;
+    hence thesis by A4;
+  end;
+  uniqueness
+  proof
+    let X, Y be ManySortedSet of I such that
+A5: for j being set st j in I
+    ex R being TolStr st R = C.j & X.j = the ToleranceRel of R and
+A6: for j being set st j in I
+    ex R being TolStr st R = C.j & Y.j = the ToleranceRel of R;
+    for i being set st i in I holds X.i = Y.i
+    proof
+      let i be set;
+      assume i in I;
+      then (ex R being TolStr st R = C.i & X.i = the ToleranceRel of R) &
+      ex R being TolStr st R = C.i & Y.i = the ToleranceRel of R by A5,A6;
+      hence thesis;
+    end;
+    hence thesis by PBOOLE:3;
+  end;
+end;
+
+definition
+  let I be non empty set, C be TolStr-yielding ManySortedSet of I;
+  redefine func pcs-ToleranceRels C means :Def11a:
+  for i being Element of I holds it.i = the ToleranceRel of C.i;
+  compatibility
+  proof
+    let X be ManySortedSet of I;
+    thus X = pcs-ToleranceRels C implies
+    for i being Element of I holds X.i = the ToleranceRel of C.i
+    proof
+      assume
+a1:   X = pcs-ToleranceRels C;
+      let i be Element of I;
+      ex P being TolStr st P = C.i & X.i = the ToleranceRel of P by a1,Def11;
+      hence thesis;
+    end;
+    assume
+a1: for i being Element of I holds X.i = the ToleranceRel of C.i;
+    for i being set st i in I
+    ex P being TolStr st P = C.i & X.i = the ToleranceRel of P
+    proof
+      let i be set;
+      assume i in I;
+      then reconsider i as Element of I;
+      take C.i;
+      thus thesis by a1;
+    end;
+    hence thesis by Def11;
+  end;
+end;
+
+registration
+  let I be set, C be TolStr-yielding ManySortedSet of I;
+  cluster pcs-ToleranceRels C -> Relation-yielding;
+  coherence
+  proof
+    set TR = pcs-ToleranceRels C;
+    let i be set;
+    assume
+a1: i in dom TR;
+    dom TR = I by PBOOLE:def 3;
+    then ex P being TolStr st P = C.i & TR.i = the ToleranceRel of P
+    by a1,Def11;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-reflexive-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-reflexive TolStr;
+  coherence
+  proof
+    dom C = I by PBOOLE:def 3;
+    then C.i in rng C by FUNCT_1:12;
+    hence thesis by Def88;
+  end;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-irreflexive-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-irreflexive TolStr;
+  coherence
+  proof
+    dom C = I by PBOOLE:def 3;
+    then C.i in rng C by FUNCT_1:12;
+    hence thesis by Def88i;
+  end;
+end;
+
+registration
+  let I be non empty set;
+  let C be pcs-tol-symmetric-yielding TolStr-yielding ManySortedSet of I;
+  let i be Element of I;
+  cluster C.i -> pcs-tol-symmetric TolStr;
+  coherence
+  proof
+    dom C = I by PBOOLE:def 3;
+    then C.i in rng C by FUNCT_1:12;
+    hence thesis by Def89;
+  end;
+end;
+
+theorem Th22:
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-reflexive holds Q is pcs-tol-reflexive
+  proof
+    let P, Q be TolStr;
+    assume that
+A1: the TolStr of P = the TolStr of Q and
+A2: the ToleranceRel of P is_reflexive_in the carrier of P;
+    let x be set;
+    assume x in the carrier of Q;
+    hence thesis by A1,A2,RELAT_2:def 1;
+  end;   
+
+theorem Th29:
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-irreflexive holds Q is pcs-tol-irreflexive
+  proof
+    let P, Q be TolStr;
+    assume that
+A1: the TolStr of P = the TolStr of Q and
+A2: the ToleranceRel of P is_irreflexive_in the carrier of P;
+    let x be set;
+    assume x in the carrier of Q;
+    hence thesis by A1,A2,RELAT_2:def 2;
+  end;   
+
+theorem Th23:
+  for P, Q being TolStr st the TolStr of P = the TolStr of Q &
+  P is pcs-tol-symmetric holds Q is pcs-tol-symmetric
+  proof
+    let P, Q be TolStr;
+    assume that
+A1: the TolStr of P = the TolStr of Q and
+A2: the ToleranceRel of P is_symmetric_in the carrier of P;
+    let x, y be set;
+    assume x in the carrier of Q;
+    hence thesis by A1,A2,RELAT_2:def 3;
+  end;   
+
+definition
+  let P, Q be TolStr;
+  func [^P,Q^] -> TolStr equals
+  TolStr (# [: the carrier of P, the carrier of Q :],
+            [^ the ToleranceRel of P, the ToleranceRel of Q ^] #);
+  coherence;
+end;
+
+notation
+  let P, Q be TolStr, p be Element of P, q be Element of Q;
+  synonym [^p,q^] for [p,q];
+end;
+
+definition
+  let P, Q be non empty TolStr, p be Element of P, q be Element of Q;
+  redefine func [^p,q^] -> Element of [^P,Q^];
+  coherence
+  proof
+    [p,q] is Element of [^P,Q^];
+    hence thesis;
+  end;
+end;
+
+notation
+  let P, Q be TolStr, p be Element of [^P,Q^];
+  synonym p^`1 for p`1;
+  synonym p^`2 for p`2;
+end;
+
+definition
+  let P, Q be non empty TolStr,
+      p be Element of [^P,Q^];
+  redefine func p^`1 -> Element of P;
+  coherence by MCART_1:10;
+  redefine func p^`2 -> Element of Q;
+  coherence by MCART_1:10;
+end;
+
+Lm1:
+for x, a1, a2, b1, b2 being set st x = [[a1,a2],[b1,b2]] holds
+ x`1`1 = a1 & x`1`2 = a2 & x`2`1 = b1 & x`2`2 = b2
+  proof
+    let x, a1, a2, b1, b2 be set;
+    assume x = [[a1,a2],[b1,b2]];
+    then x`1 = [a1,a2] & x`2 = [b1,b2] by MCART_1:7;
+    hence thesis by MCART_1:7;
+  end;
+
+theorem Th11a:
+  for S1, S2 being non empty TolStr
+  for a, c being Element of S1, b, d being Element of S2 holds
+  [^a,b^] (--) [^c,d^] iff a (--) c or b (--) d
+  proof
+    let S1, S2 be non empty TolStr,
+        a, c be Element of S1,
+        b, d be Element of S2;
+    set I1 = the ToleranceRel of S1,
+        I2 = the ToleranceRel of S2,
+        x = [[a,b],[c,d]];
+A1: x`1`1 = a & x`1`2 = b & x`2`1 = c & x`2`2 = d by Lm1;
+    thus [^a,b^] (--) [^c,d^] implies a (--) c or b (--) d
+    proof
+      assume [^a,b^] (--) [^c,d^];
+      then x in the ToleranceRel of [^S1,S2^] by Def3;
+      then [a,c] in I1 or [b,d] in I2 by Def1b;
+      hence thesis by Def3;
+    end;
+    assume a (--) c or b (--) d;
+    then [x`1`1,x`2`1] in I1 or [x`1`2,x`2`2] in I2 by A1,Def3;
+    hence [[a,b],[c,d]] in the ToleranceRel of [^S1,S2^] by A1,Def1b;
+  end;
+
+theorem
+  for S1, S2 being non empty TolStr, x, y being Element of [^S1,S2^] holds
+  x (--) y iff x^`1 (--) y^`1 or x^`2 (--) y^`2
+  proof
+    let S1, S2 be non empty TolStr,
+        x, y be Element of [^S1,S2^];
+A2: ex a, b being set st a in the carrier of S1 & b in the carrier of S2 &
+    x = [a,b] by ZFMISC_1:def 2;
+    ex c, d being set st c in the carrier of S1 & d in the carrier of S2 &
+    y = [c,d] by ZFMISC_1:def 2;
+    then x = [x^`1,x^`2] & y = [y^`1,y^`2] by A2,MCART_1:8;
+    hence thesis by Th11a;
+  end;
+  
+registration
+  let P be TolStr, Q be pcs-tol-reflexive TolStr;
+  cluster [^P,Q^] -> pcs-tol-reflexive;
+  coherence
+  proof
+    let x be set;
+    assume x in the carrier of [^P,Q^];
+    then consider x1, x2 being set such that
+a1: x1 in the carrier of P and
+a3: x2 in the carrier of Q and
+a2: x = [x1,x2] by ZFMISC_1:def 2;
+    reconsider D2 = the carrier of Q as non empty set by a3;
+    reconsider TQ = the ToleranceRel of Q as Relation of D2;
+    D2 = field TQ by ORDERS_1:97;
+    then TQ is_reflexive_in D2 by RELAT_2:def 9;
+    then [x2,x2] in TQ by a3,RELAT_2:def 1;
+    hence [x,x] in the ToleranceRel of [^P,Q^] by a1,a2,a3,Def1b;
+  end;
+end;
+
+registration
+  let P be pcs-tol-reflexive TolStr, Q be TolStr;
+  cluster [^P,Q^] -> pcs-tol-reflexive;
+  coherence
+  proof
+    let x be set;
+    assume x in the carrier of [^P,Q^];
+    then consider x1, x2 being set such that
+a1: x1 in the carrier of P and
+a3: x2 in the carrier of Q and
+a2: x = [x1,x2] by ZFMISC_1:def 2;
+    reconsider D1 = the carrier of P as non empty set by a1;
+    reconsider TP = the ToleranceRel of P as Relation of D1;
+    D1 = field TP by ORDERS_1:97;
+    then TP is_reflexive_in D1 by RELAT_2:def 9;
+    then [x1,x1] in TP by a1,RELAT_2:def 1;
+    hence [x,x] in the ToleranceRel of [^P,Q^] by a1,a2,a3,Def1b;
+  end;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric TolStr;
+  cluster [^P,Q^] -> pcs-tol-symmetric;
+  coherence
+  proof
+    set R = [^P,Q^];
+    set TR = the ToleranceRel of R;
+a1: TR is_symmetric_in field TR by RELAT_2:def 11;
+    let x, y be set;
+    assume x in the carrier of R & y in the carrier of R;
+    assume
+a2: [x,y] in TR;
+    then x in field TR & y in field TR by RELAT_1:30;
+    hence [y,x] in TR by a1,a2,RELAT_2:def 3;
+  end;
+end;
+
+begin :: PCS's
+
+definition
+  struct (RelStr,TolStr) pcs-Str (#
+  carrier -> set,
+  InternalRel -> (Relation of the carrier),
+  ToleranceRel -> Relation of the carrier #);
+end;
+
+definition
+  let P be pcs-Str;
+  attr P is pcs-compatible means :Def4:
+  for p, p', q, q' being Element of P st
+  p (--) q & p' <= p & q' <= q holds p' (--) q';
+end;
+
+definition
+  let P be pcs-Str;
+  attr P is pcs-like means :Def1:
+  P is reflexive transitive pcs-tol-reflexive pcs-tol-symmetric pcs-compatible;
+  attr P is anti-pcs-like means :Def1i:
+  P is reflexive transitive pcs-tol-irreflexive pcs-tol-symmetric
+       pcs-compatible;
+end;
+
+registration
+  cluster pcs-like -> reflexive transitive pcs-tol-reflexive pcs-tol-symmetric
+          pcs-compatible pcs-Str;
+  coherence by Def1;
+  cluster reflexive transitive pcs-tol-reflexive pcs-tol-symmetric
+          pcs-compatible -> pcs-like pcs-Str;
+  coherence by Def1;
+  cluster anti-pcs-like -> reflexive transitive pcs-tol-irreflexive
+          pcs-tol-symmetric pcs-compatible pcs-Str;
+  coherence by Def1i;
+  cluster reflexive transitive pcs-tol-irreflexive pcs-tol-symmetric
+          pcs-compatible -> anti-pcs-like pcs-Str;
+  coherence by Def1i;
+end;
+
+definition
+  let D be set;
+  func pcs-total D -> pcs-Str equals
+  pcs-Str (# D,nabla D,nabla D #);
+  coherence;
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> strict;
+  coherence;
+end;
+
+registration
+  let D be non empty set;
+  cluster pcs-total D -> non empty;
+  coherence by STRUCT_0:def 1;
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> reflexive transitive
+                         pcs-tol-reflexive pcs-tol-symmetric;
+  coherence
+  proof
+    set P = pcs-total D;
+    set IR = the InternalRel of P;
+    set TR = the ToleranceRel of P;
+a1: field IR = the carrier of P by ORDERS_1:97;
+    hence IR is_reflexive_in the carrier of P by RELAT_2:def 9;
+    thus IR is_transitive_in the carrier of P by a1,RELAT_2:def 16;
+    thus TR is_reflexive_in the carrier of P by a1,RELAT_2:def 9;
+    thus TR is_symmetric_in the carrier of P by a1,RELAT_2:def 11;
+  end;
+end;
+
+registration
+  let D be set;
+  cluster pcs-total D -> pcs-like;
+  coherence
+  proof
+    set P = pcs-total D;
+    thus P is reflexive transitive;
+    thus P is pcs-tol-reflexive pcs-tol-symmetric;
+    let p, p', q, q' be Element of P such that p (--) q;
+    assume p' <= p & q' <= q;
+    then [p',p] in [:D,D:] & [q',q] in [:D,D:] by ORDERS_2:def 9;
+    then p' in the carrier of P & q' in the carrier of P by ZFMISC_1:106;
+    hence [p',q'] in the ToleranceRel of P by ZFMISC_1:106;
+  end;
+end;
+
+registration
+  let D be set;
+  cluster pcs-Str(#D,nabla D,{}(D,D)#) -> anti-pcs-like;
+  coherence
+  proof
+    set P = pcs-Str(#D,nabla D,{}(D,D)#);
+a1: the RelStr of P = the RelStr of RelStr(#D,nabla D#);
+    hence P is reflexive by WAYBEL_8:12;
+    thus P is transitive by a1,WAYBEL_8:13;
+a2: the TolStr of P = the TolStr of TolStr(#D,{}(D,D)#);
+    hence P is pcs-tol-irreflexive by Th29;
+    thus P is pcs-tol-symmetric by a2,Th23;
+    let p be Element of P;
+    thus thesis by Def3;
+  end;
+end;
+
+registration
+  cluster strict non empty pcs-like pcs-Str;
+  existence
+  proof
+    consider D being non empty set;
+    take P = pcs-total D;
+    thus P is strict;
+    thus the carrier of P is non empty;
+    thus thesis;
+  end;
+  cluster strict non empty anti-pcs-like pcs-Str;
+  existence
+  proof
+    consider D being non empty set;
+    take P = pcs-Str(#D,nabla D,{}(D,D)#);
+    thus P is strict;
+    thus the carrier of P is non empty;
+    thus thesis;
+  end;
+end;
+
+definition
+  mode pcs is pcs-like pcs-Str;
+  mode anti-pcs is anti-pcs-like pcs-Str;
+end;
+
+definition
+  func pcs-empty -> pcs-Str equals
+  pcs-total 0;
+  coherence;
+end;
+
+registration
+  cluster pcs-empty -> strict empty pcs-like;
+  coherence by STRUCT_0:def 1;
+end;
+
+definition
+  let p be set;
+  func pcs-singleton p -> pcs-Str equals
+  pcs-total {p};
+  coherence;
+end;
+
+registration
+  let p be set;
+  cluster pcs-singleton p -> strict non empty pcs-like;
+  coherence;
+end;
+
+definition
+  let R be Relation;
+  attr R is pcs-Str-yielding means :Def6b:
+  for P being set st P in rng R holds P is pcs-Str;
+  attr R is pcs-yielding means :Def6:
+  for P being set st P in rng R holds P is pcs;
+end;
+
+definition
+  let f be Function;
+  redefine attr f is pcs-Str-yielding means :Def6c:
+  for x being set st x in dom f holds f.x is pcs-Str;
+  compatibility
+  proof
+    hereby
+      assume
+a1:   f is pcs-Str-yielding;
+      let x be set;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:12;
+      hence f.x is pcs-Str by a1,Def6b;
+    end;
+    assume
+a1: for x being set st x in dom f holds f.x is pcs-Str;
+    let P be set;
+    assume P in rng f;
+    then ex x being set st x in dom f & f.x = P by FUNCT_1:def 5;
+    hence thesis by a1;
+  end;
+  redefine attr f is pcs-yielding means :Def6a:
+  for x being set st x in dom f holds f.x is pcs;
+  compatibility
+  proof
+    hereby
+      assume
+a1:   f is pcs-yielding;
+      let x be set;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:12;
+      hence f.x is pcs by a1,Def6;
+    end;
+    assume
+a1: for x being set st x in dom f holds f.x is pcs;
+    let P be set;
+    assume P in rng f;
+    then ex x being set st x in dom f & f.x = P by FUNCT_1:def 5;
+    hence thesis by a1;
+  end;
+end;
+
+definition
+  let I be set, f be ManySortedSet of I;
+a1: dom f = I by PBOOLE:def 3;
+  redefine attr f is pcs-Str-yielding means :Def34:
+  for x being set st x in I holds f.x is pcs-Str;
+  compatibility by a1,Def6c;
+  redefine attr f is pcs-yielding means :Def35:
+  for x being set st x in I holds f.x is pcs;
+  compatibility by a1,Def6a;
+end;
+
+registration
+  cluster pcs-Str-yielding -> TolStr-yielding RelStr-yielding Relation;
+  coherence
+  proof
+    let f be Relation;
+    assume
+a0: f is pcs-Str-yielding;
+    thus f is TolStr-yielding
+    proof
+      let y be set;
+      thus thesis by a0,Def6b;
+    end;
+    let y be set;
+    thus thesis by a0,Def6b;
+  end;
+  cluster pcs-yielding -> pcs-Str-yielding Relation;
+  coherence
+  proof
+    let f be Relation;
+    assume
+a0: f is pcs-yielding;
+    let y be set;
+    thus thesis by a0,Def6;
+  end;
+  cluster pcs-yielding -> reflexive-yielding transitive-yielding
+          pcs-tol-reflexive-yielding pcs-tol-symmetric-yielding Relation;
+  coherence
+  proof
+    let f be Relation;
+    assume
+a0: f is pcs-yielding;
+    thus f is reflexive-yielding
+    proof
+      let y be RelStr;
+      thus thesis by a0,Def6;
+    end;
+    thus f is transitive-yielding
+    proof
+      let y be RelStr;
+      thus thesis by a0,Def6;
+    end;
+    thus f is pcs-tol-reflexive-yielding
+    proof
+      let y be TolStr;
+      thus thesis by a0,Def6;
+    end;
+    let y be TolStr;
+    thus thesis by a0,Def6;
+  end;
+end;
+
+registration
+  let I be set, P be pcs;
+  cluster I --> P -> pcs-yielding ManySortedSet of I;
+  coherence
+  proof
+    I --> P is pcs-yielding
+    proof
+      let i be set;
+      thus thesis by FUNCOP_1:13;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let I be set;
+  cluster pcs-yielding ManySortedSet of I;
+  existence
+  proof
+    take I --> pcs-empty;
+    thus thesis;
+  end;
+end;
+
+definition
+  let I be non empty set,
+      C be pcs-Str-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> pcs-Str;
+  coherence by Def34;
+end;
+
+definition
+  let I be non empty set,
+      C be pcs-yielding ManySortedSet of I,
+      i be Element of I;
+  redefine func C.i -> pcs;
+  coherence by Def35;
+end;
+
+:: Union of PCS's
+
+definition
+  let P, Q be pcs-Str;
+  pred P c= Q means :Def89:
+  the carrier of P c= the carrier of Q &
+  the InternalRel of P c= the InternalRel of Q &
+  the ToleranceRel of P c= the ToleranceRel of Q;
+  reflexivity;
+end;
+
+theorem Th2:
+  for P, Q being RelStr
+  for p, q being Element of P, p1, q1 being Element of Q st
+  the InternalRel of P c= the InternalRel of Q & p = p1 & q = q1 & p <= q
+  holds p1 <= q1
+  proof
+    let P, Q be RelStr;
+    let p, q be Element of P, p1, q1 be Element of Q;
+    assume the InternalRel of P c= the InternalRel of Q &
+    p = p1 & q = q1 & [p,q] in the InternalRel of P;
+    hence [p1,q1] in the InternalRel of Q;
+  end;
+  
+theorem Th3:
+  for P, Q being pcs-Str
+  for p, q being Element of P, p1, q1 being Element of Q st
+  the ToleranceRel of P c= the ToleranceRel of Q & p = p1 & q = q1 & p (--) q
+  holds p1 (--) q1
+  proof
+    let P, Q be pcs-Str;
+    let p, q be Element of P, p1, q1 be Element of Q;
+    assume the ToleranceRel of P c= the ToleranceRel of Q &
+    p = p1 & q = q1 & [p,q] in the ToleranceRel of P;
+    hence [p1,q1] in the ToleranceRel of Q;
+  end;
+
+Lm3:
+  for P, Q being pcs-Str
+  for p being set st p in the carrier of P & P c= Q holds p is Element of Q
+  proof
+    let P, Q be pcs-Str;
+    let p be set such that
+a1: p in the carrier of P;
+    assume P c= Q;
+    then the carrier of P c= the carrier of Q by Def89;
+    hence thesis by a1;
+  end;
+
+definition
+  let C be Relation;
+  attr C is pcs-chain-like means :Def61:
+  for P, Q being pcs-Str st P in rng C & Q in rng C holds P c= Q or Q c= P;
+end;
+
+registration
+  let I be set, P be pcs-Str;
+  cluster I --> P -> pcs-chain-like ManySortedSet of I;
+  coherence
+  proof
+    set f = I --> P;
+    f is pcs-chain-like
+    proof
+      let R, S be pcs-Str;
+      assume
+a1:   R in rng f & S in rng f;
+      I = {} or I <> {};
+      then rng f = {P} or rng f = {} by FUNCOP_1:14,16;
+      then P = R & P = S or rng f = {} by a1,TARSKI:def 1;
+      hence thesis by a1;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  cluster pcs-chain-like pcs-yielding Function;
+  existence
+  proof
+    consider P being pcs;
+    take 0 --> P;
+    thus thesis;
+  end;
+end;
+
+registration
+  let I be set;
+  cluster pcs-chain-like pcs-yielding ManySortedSet of I;
+  existence
+  proof
+    consider P being pcs;
+    take I --> P;
+    thus thesis;
+  end;
+end;
+
+definition
+  let I be set;
+  mode pcs-Chain of I is pcs-chain-like pcs-yielding ManySortedSet of I;
+end;
+
+definition
+  let I be set, C be pcs-Str-yielding ManySortedSet of I;
+  func pcs-union C -> strict pcs-Str means :Def30:
+  the carrier of it = Union Carrier C &
+  the InternalRel of it = Union pcs-InternalRels C & 
+  the ToleranceRel of it = Union pcs-ToleranceRels C;
+  existence
+  proof
+    set CA = Carrier C;
+    set IRA = pcs-InternalRels C;
+    set TRA = pcs-ToleranceRels C;
+    set D = Union CA;
+    set IR = Union IRA;
+    set TR = Union TRA;
+b1: dom CA = I by PBOOLE:def 3;
+    IR c= [:D,D:]
+    proof
+      let x be set;
+      assume x in IR;
+      then consider P being set such that
+a1:   x in P and
+a2:   P in rng IRA by TARSKI:def 4;
+      consider i being set such that
+a3:   i in dom IRA and
+a4:   IRA.i = P by a2,FUNCT_1:def 5;
+a8:   dom IRA = I by PBOOLE:def 3;
+      then consider R being RelStr such that
+a5:   R = C.i & IRA.i = the InternalRel of R by a3,Def10;
+      consider x1, x2 being set such that
+a6:   x = [x1,x2] and
+a7:   x1 in the carrier of R & x2 in the carrier of R by a1,a4,a5,RELSET_1:6;
+      ex S being 1-sorted st S = C.i & CA.i = the carrier of S
+      by a3,a8,PRALG_1:def 13;
+      then the carrier of R in rng CA by b1,a3,a8,a5,FUNCT_1:def 5;
+      then x1 in union rng CA & x2 in union rng CA by a7,TARSKI:def 4;
+      hence thesis by a6,ZFMISC_1:106;
+    end;
+    then reconsider IR as Relation of D by RELSET_1:def 1;
+    TR c= [:D,D:]
+    proof
+      let x be set;
+      assume x in TR;
+      then consider P being set such that
+a1:   x in P and
+a2:   P in rng TRA by TARSKI:def 4;
+      consider i being set such that
+a3:   i in dom TRA and
+a4:   TRA.i = P by a2,FUNCT_1:def 5;
+a8:   dom TRA = I by PBOOLE:def 3;
+      then consider R being TolStr such that
+a5:   R = C.i & TRA.i = the ToleranceRel of R by a3,Def11;
+      consider x1, x2 being set such that
+a6:   x = [x1,x2] and
+a7:   x1 in the carrier of R & x2 in the carrier of R by a1,a4,a5,RELSET_1:6;
+      ex S being 1-sorted st S = C.i & CA.i = the carrier of S
+      by a3,a8,PRALG_1:def 13;
+      then the carrier of R in rng CA by b1,a3,a8,a5,FUNCT_1:def 5;
+      then x1 in union rng CA & x2 in union rng CA by a7,TARSKI:def 4;
+      hence thesis by a6,ZFMISC_1:106;
+    end;
+    then reconsider TR as Relation of D by RELSET_1:def 1;
+    take pcs-Str(#D,IR,TR#);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+theorem Ta1:
+  for I being set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p <= q iff
+  ex i being set, P being pcs-Str, p', q' being Element of P st
+  i in I & P = C.i & p' = p & q' = q & p' <= q'
+  proof
+    let I be set, C be pcs-Str-yielding ManySortedSet of I;
+    set R = pcs-union C;
+    let p, q be Element of R;
+a5: dom pcs-InternalRels C = I by PBOOLE:def 3;
+    thus p <= q implies
+    ex i being set, P being pcs-Str, p', q' being Element of P st
+    i in I & P = C.i & p' = p & q' = q & p' <= q'
+    proof
+      assume p <= q;
+      then [p,q] in the InternalRel of R by ORDERS_2:def 9;
+      then [p,q] in Union pcs-InternalRels C by Def30;
+      then consider Z being set such that
+a1:   [p,q] in Z and
+a2:   Z in rng pcs-InternalRels C by TARSKI:def 4;
+      consider i being set such that
+a3:   i in dom pcs-InternalRels C and
+a4:   (pcs-InternalRels C).i = Z by a2,FUNCT_1:def 5;
+      reconsider I1 = I as non empty set by a3,PBOOLE:def 3;
+      reconsider A1 = C as pcs-Str-yielding ManySortedSet of I1;
+      reconsider i1 = i as Element of I1 by a3,PBOOLE:def 3;
+      reconsider P = A1.i1 as pcs-Str;
+      take i, P;
+      Z = the InternalRel of A1.i1 by a4,Def10a;
+      then reconsider p' = p, q' = q as Element of P by a1,ZFMISC_1:106;
+      take p', q';
+      thus i in I by a3,PBOOLE:def 3;
+      thus P = C.i & p' = p & q' = q;
+      thus [p',q'] in the InternalRel of P by a1,a4,Def10a;
+    end;
+    given i being set, P being pcs-Str, p', q' being Element of P such that
+b1: i in I and
+b2: P = C.i and
+b3: p' = p & q' = q and
+b4: p' <= q';
+c4: [p',q'] in the InternalRel of P by b4,ORDERS_2:def 9;
+    reconsider I1 = I as non empty set by b1;
+    reconsider i1 = i as Element of I1 by b1;
+    reconsider A1 = C as pcs-Str-yielding ManySortedSet of I1;
+    (pcs-InternalRels A1).i1 = the InternalRel of A1.i1 by Def10a;
+    then the InternalRel of A1.i1 in rng pcs-InternalRels C
+    by a5,FUNCT_1:12;
+    then [p,q] in Union pcs-InternalRels C by b2,c4,b3,TARSKI:def 4;
+    hence [p,q] in the InternalRel of R by Def30;
+  end;
+
+theorem
+  for I being non empty set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p <= q iff
+  ex i being Element of I, p', q' being Element of C.i st
+  p' = p & q' = q & p' <= q'
+  proof
+    let I be non empty set, C be pcs-Str-yielding ManySortedSet of I;
+    let p, q be Element of pcs-union C;
+    thus p <= q implies
+    ex i being Element of I, p', q' being Element of C.i st
+    p' = p & q' = q & p' <= q'
+    proof
+      assume p <= q;
+      then ex i being set, P being pcs-Str, p', q' being Element of P st
+      i in I & P = C.i & p' = p & q' = q & p' <= q' by Ta1;
+      hence thesis;
+    end;
+    thus thesis by Ta1;
+  end;
+
+theorem Ta2:
+  for I being set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p (--) q iff
+  ex i being set, P being pcs-Str, p', q' being Element of P st
+  i in I & P = C.i & p' = p & q' = q & p' (--) q'
+  proof
+    let I be set, C be pcs-Str-yielding ManySortedSet of I;
+    set R = pcs-union C;
+    let p, q be Element of R;
+a5: dom pcs-ToleranceRels C = I by PBOOLE:def 3;
+    thus p (--) q implies
+    ex i being set, P being pcs-Str, p', q' being Element of P st
+    i in I & P = C.i & p' = p & q' = q & p' (--) q'
+    proof
+      assume p (--) q;
+      then [p,q] in the ToleranceRel of R by Def3;
+      then [p,q] in Union pcs-ToleranceRels C by Def30;
+      then consider Z being set such that
+a1:   [p,q] in Z and
+a2:   Z in rng pcs-ToleranceRels C by TARSKI:def 4;
+      consider i being set such that
+a3:   i in dom pcs-ToleranceRels C and
+a4:   (pcs-ToleranceRels C).i = Z by a2,FUNCT_1:def 5;
+      reconsider I1 = I as non empty set by a3,PBOOLE:def 3;
+      reconsider A1 = C as pcs-Str-yielding ManySortedSet of I1;
+      reconsider i1 = i as Element of I1 by a3,PBOOLE:def 3;
+      reconsider P = A1.i1 as pcs-Str;
+      take i, P;
+      Z = the ToleranceRel of A1.i1 by a4,Def11a;
+      then reconsider p' = p, q' = q as Element of P by a1,ZFMISC_1:106;
+      take p', q';
+      thus i in I by a3,PBOOLE:def 3;
+      thus P = C.i & p' = p & q' = q;
+      thus [p',q'] in the ToleranceRel of P by a1,a4,Def11a;
+    end;
+    given i being set, P being pcs-Str, p', q' being Element of P such that
+b1: i in I and
+b2: P = C.i and
+b3: p' = p & q' = q and
+b4: p' (--) q';
+c4: [p',q'] in the ToleranceRel of P by b4,Def3;
+    reconsider I1 = I as non empty set by b1;
+    reconsider i1 = i as Element of I1 by b1;
+    reconsider A1 = C as pcs-Str-yielding ManySortedSet of I1;
+    (pcs-ToleranceRels A1).i1 = the ToleranceRel of A1.i1 by Def11a;
+    then the ToleranceRel of A1.i1 in rng pcs-ToleranceRels C
+    by a5,FUNCT_1:12;
+    then [p,q] in Union pcs-ToleranceRels C by b2,c4,b3,TARSKI:def 4;
+    hence [p,q] in the ToleranceRel of R by Def30;
+  end;
+
+theorem
+  for I being non empty set, C being pcs-Str-yielding ManySortedSet of I
+  for p, q being Element of pcs-union C holds p (--) q iff
+  ex i being Element of I, p', q' being Element of C.i st
+  p' = p & q' = q & p' (--) q'
+  proof
+    let I be non empty set, C be pcs-Str-yielding ManySortedSet of I;
+    let p, q be Element of pcs-union C;
+    thus p (--) q implies
+    ex i being Element of I, p', q' being Element of C.i st
+    p' = p & q' = q & p' (--) q'
+    proof
+      assume p (--) q;
+      then ex i being set, P being pcs-Str, p', q' being Element of P st
+      i in I & P = C.i & p' = p & q' = q & p' (--) q' by Ta2;
+      hence thesis;
+    end;
+    thus thesis by Ta2;
+  end;
+
+registration
+  let I be set, C be reflexive-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> reflexive;
+  coherence
+  proof
+    set P = pcs-union C;
+    set IR = the InternalRel of P;
+    set TR = the ToleranceRel of P;
+    set CP = the carrier of P;
+    set CA = Carrier C;
+c1: dom CA = I by PBOOLE:def 3;
+c2: CP = Union CA by Def30;
+c3: IR = Union pcs-InternalRels C by Def30;
+b1: dom pcs-InternalRels C = I by PBOOLE:def 3;
+    let x be set;
+    assume x in CP;
+    then consider P being set such that
+a1: x in P and
+a2: P in rng CA by c2,TARSKI:def 4;
+    consider i being set such that
+a3: i in dom CA and
+a4: CA.i = P by a2,FUNCT_1:def 5;
+    consider R being 1-sorted such that
+a5: R = C.i and
+a8: CA.i = the carrier of R by a3,c1,PRALG_1:def 13;
+    reconsider I as non empty set by a3,PBOOLE:def 3;
+    reconsider i as Element of I by a3,PBOOLE:def 3;
+    reconsider C as reflexive-yielding pcs-Str-yielding ManySortedSet of I;
+a9: (pcs-InternalRels C).i = the InternalRel of C.i by Def10a;
+    the InternalRel of C.i is_reflexive_in the carrier of C.i
+    by ORDERS_2:def 4;
+    then
+b2: [x,x] in the InternalRel of C.i by a1,a4,a5,a8,RELAT_2:def 1;
+    the InternalRel of C.i in rng pcs-InternalRels C
+    by a9,b1,FUNCT_1:12;
+    hence [x,x] in IR by c3,b2,TARSKI:def 4;
+  end;
+end;
+
+registration
+  let I be set,
+      C be pcs-tol-reflexive-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> pcs-tol-reflexive;
+  coherence
+  proof
+    set P = pcs-union C;
+    set IR = the InternalRel of P;
+    set TR = the ToleranceRel of P;
+    set CP = the carrier of P;
+    set CA = Carrier C;
+c1: dom CA = I by PBOOLE:def 3;
+c2: CP = Union CA by Def30;
+c4: TR = Union pcs-ToleranceRels C by Def30;
+B1: dom pcs-ToleranceRels C = I by PBOOLE:def 3;
+    let x be set;
+    assume x in CP;
+    then consider P being set such that
+a1: x in P and
+a2: P in rng CA by c2,TARSKI:def 4;
+    consider i being set such that
+a3: i in dom CA and
+a4: CA.i = P by a2,FUNCT_1:def 5;
+    consider R being 1-sorted such that
+a5: R = C.i and
+a8: CA.i = the carrier of R by a3,c1,PRALG_1:def 13;
+    reconsider I as non empty set by a3,PBOOLE:def 3;
+    reconsider i as Element of I by a3,PBOOLE:def 3;
+    reconsider C as pcs-tol-reflexive-yielding pcs-Str-yielding
+    ManySortedSet of I;
+a9: (pcs-ToleranceRels C).i = the ToleranceRel of C.i by Def11a;
+    the ToleranceRel of C.i is_reflexive_in the carrier of C.i
+    by Def22;
+    then
+b2: [x,x] in the ToleranceRel of C.i by a1,a4,a5,a8,RELAT_2:def 1;
+    the ToleranceRel of C.i in rng pcs-ToleranceRels C
+    by a9,B1,FUNCT_1:12;
+    hence [x,x] in TR by c4,b2,TARSKI:def 4;
+  end;
+end;
+
+registration
+  let I be set,
+      C be pcs-tol-symmetric-yielding pcs-Str-yielding ManySortedSet of I;
+  cluster pcs-union C -> pcs-tol-symmetric;
+  coherence
+  proof
+    set P = pcs-union C;
+    set IR = the InternalRel of P;
+    set TR = the ToleranceRel of P;
+    set CP = the carrier of P;
+    set CA = Carrier C;
+c4: TR = Union pcs-ToleranceRels C by Def30;
+    let x, y be set;
+    assume x in CP & y in CP;
+    assume [x,y] in TR;
+    then consider P being set such that
+f1: [x,y] in P and
+f2: P in rng pcs-ToleranceRels C by c4,TARSKI:def 4;
+    consider i being set such that
+f3: i in dom pcs-ToleranceRels C and
+f4: (pcs-ToleranceRels C).i = P by f2,FUNCT_1:def 5;
+    reconsider I as non empty set by f3,PBOOLE:def 3;
+    reconsider C as pcs-tol-symmetric-yielding pcs-Str-yielding
+    ManySortedSet of I;
+    reconsider i as Element of I by f3,PBOOLE:def 3;
+f6: (pcs-ToleranceRels C).i = the ToleranceRel of C.i by Def11a;
+d1: x in the carrier of C.i & y in the carrier of C.i by f1,f4,f6,ZFMISC_1:106;
+    the ToleranceRel of C.i is_symmetric_in the carrier of C.i by Def23;
+    then
+b2: [y,x] in the ToleranceRel of C.i by f1,f4,f6,d1,RELAT_2:def 3;
+    the ToleranceRel of C.i in rng pcs-ToleranceRels C
+    by f3,f6,FUNCT_1:12;
+    hence [y,x] in TR by c4,b2,TARSKI:def 4;
+  end;
+end;
+
+registration
+  let I be set, C be pcs-Chain of I;
+  cluster pcs-union C -> transitive pcs-compatible;
+  coherence
+  proof
+    set P = pcs-union C;
+    set IR = the InternalRel of P;
+    set TR = the ToleranceRel of P;
+    set CA = the carrier of P;
+    set f = Carrier C;
+c3: IR = Union pcs-InternalRels C by Def30;
+c4: TR = Union pcs-ToleranceRels C by Def30;
+m1: dom C = I by PBOOLE:def 3;
+    thus P is transitive
+    proof
+    let x, y, z be set;
+    assume x in CA & y in CA & z in CA;
+    assume [x,y] in IR;
+    then consider Z1 being set such that
+f1: [x,y] in Z1 and
+f2: Z1 in rng pcs-InternalRels C by c3,TARSKI:def 4;
+    consider i being set such that
+f3: i in dom pcs-InternalRels C and
+f4: (pcs-InternalRels C).i = Z1 by f2,FUNCT_1:def 5;
+    assume [y,z] in IR;
+    then consider Z2 being set such that
+F1: [y,z] in Z2 and
+F2: Z2 in rng pcs-InternalRels C by c3,TARSKI:def 4;
+    consider j being set such that
+F3: j in dom pcs-InternalRels C and
+F4: (pcs-InternalRels C).j = Z2 by F2,FUNCT_1:def 5;
+    reconsider I as non empty set by f3,PBOOLE:def 3;
+    reconsider C as pcs-Chain of I;
+    reconsider i, j as Element of I by f3,F3,PBOOLE:def 3;
+m3: (pcs-InternalRels C).i = the InternalRel of C.i by Def10a;
+    then
+f6: x in the carrier of C.i & y in the carrier of C.i by f1,f4,ZFMISC_1:106;
+m4: (pcs-InternalRels C).j = the InternalRel of C.j by Def10a;
+m2: C.i in rng C & C.j in rng C by m1,FUNCT_1:12;
+n3: the InternalRel of C.i is_transitive_in the carrier of C.i
+    by ORDERS_2:def 5;
+n2: the InternalRel of C.j is_transitive_in the carrier of C.j
+    by ORDERS_2:def 5;
+    per cases by m2,Def61;
+    suppose C.i c= C.j;
+      then
+n1:   the InternalRel of C.i c= the InternalRel of C.j by Def89;
+      then [x,y] in the InternalRel of C.j by f1,f4,m3;
+      then x in the carrier of C.j & y in the carrier of C.j
+      & z in the carrier of C.j by F1,F4,m4,ZFMISC_1:106;
+      then
+n3:   [x,z] in the InternalRel of C.j by n1,f1,f4,m3,F1,F4,m4,n2,RELAT_2:def 8;
+      the InternalRel of C.j c= IR by F2,F4,m4,c3,ZFMISC_1:92;
+      hence [x,z] in IR by n3;
+    end;
+    suppose C.j c= C.i;
+      then
+n1:   the InternalRel of C.j c= the InternalRel of C.i by Def89;
+      then [y,z] in the InternalRel of C.i by F1,F4,m4;
+      then z in the carrier of C.i by ZFMISC_1:106;
+      then
+n4:   [x,z] in the InternalRel of C.i by n1,f1,f4,F1,F4,m4,
+      m3,n3,f6,RELAT_2:def 8;
+      the InternalRel of C.i c= IR by f2,f4,m3,c3,ZFMISC_1:92;
+      hence [x,z] in IR by n4;
+    end;
+    end;
+    let p, p', q, q' be Element of P such that
+z1: p (--) q and
+z2: p' <= p and
+z3: q' <= q;
+    [p',p] in IR by z2,ORDERS_2:def 9;
+    then consider Z1 being set such that
+f1: [p',p] in Z1 and
+f2: Z1 in rng pcs-InternalRels C by c3,TARSKI:def 4;
+    consider i being set such that
+f3: i in dom pcs-InternalRels C and
+f4: (pcs-InternalRels C).i = Z1 by f2,FUNCT_1:def 5;
+    reconsider I as non empty set by f3,PBOOLE:def 3;
+    reconsider C as pcs-Chain of I;
+    reconsider i as Element of I by f3,PBOOLE:def 3;
+U5: (pcs-ToleranceRels C).i = the ToleranceRel of C.i by Def11a;
+m3: (pcs-InternalRels C).i = the InternalRel of C.i by Def10a;
+    reconsider pi = p, p'i = p' as Element of C.i by m3,f1,f4,ZFMISC_1:106;
+    [q',q] in IR by z3,ORDERS_2:def 9;
+    then consider Z2 being set such that
+F1: [q',q] in Z2 and
+F2: Z2 in rng pcs-InternalRels C by c3,TARSKI:def 4;
+    consider j being set such that
+F3: j in dom pcs-InternalRels C and
+F4: (pcs-InternalRels C).j = Z2 by F2,FUNCT_1:def 5;
+    reconsider j as Element of I by F3,PBOOLE:def 3;
+M4: (pcs-ToleranceRels C).j = the ToleranceRel of C.j by Def11a;
+m4: (pcs-InternalRels C).j = the InternalRel of C.j by Def10a;
+    then
+F6: q' in the carrier of C.j & q in the carrier of C.j by F1,F4,ZFMISC_1:106;
+    reconsider qj = q, q'j = q' as Element of C.j by F1,F4,m4,ZFMISC_1:106;
+    [p,q] in TR by z1,Def3;
+    then consider Z3 being set such that
+u1: [p,q] in Z3 and
+u2: Z3 in rng pcs-ToleranceRels C by c4,TARSKI:def 4;
+    consider k being set such that
+u3: k in dom pcs-ToleranceRels C and
+u4: (pcs-ToleranceRels C).k = Z3 by u2,FUNCT_1:def 5;
+    reconsider k as Element of I by u3,PBOOLE:def 3;
+u5: (pcs-ToleranceRels C).k = the ToleranceRel of C.k by Def11a;
+    then reconsider pk = p, qk = q as Element of C.k by u1,u4,ZFMISC_1:106;
+m2: C.i in rng C & C.j in rng C & C.k in rng C by m1,FUNCT_1:12;
+A6: dom pcs-ToleranceRels C = I by PBOOLE:def 3;
+    then the ToleranceRel of C.i in rng pcs-ToleranceRels C by U5,FUNCT_1:12;
+    then
+q4: the ToleranceRel of C.i c= TR by c4,ZFMISC_1:92;
+    the ToleranceRel of C.j in rng pcs-ToleranceRels C by M4,A6,FUNCT_1:12;
+    then
+q3: the ToleranceRel of C.j c= TR by c4,ZFMISC_1:92;
+q2: the ToleranceRel of C.k c= TR by c4,u2,u4,u5,ZFMISC_1:92;
+
+    per cases by m2,Def61;
+    suppose that
+s1:   C.i c= C.j and
+s2:   C.j c= C.k;
+N1:   the InternalRel of C.j c= the InternalRel of C.k by s2,Def89;
+      the InternalRel of C.i c= the InternalRel of C.j by s1,Def89;
+      then
+q1:   [p',p] in the InternalRel of C.j by f1,f4,m3;
+      then [p',p] in the InternalRel of C.k by N1;
+      then reconsider p'k = p' as Element of C.k by ZFMISC_1:106;
+      [q',q] in the InternalRel of C.k by N1,F1,F4,m4;
+      then reconsider q'k = q' as Element of C.k by ZFMISC_1:106;
+d5:   p'k <= pk & q'k <= qk by q1,N1,F1,F4,m4,ORDERS_2:def 9;
+      pk (--) qk by u1,u4,u5,Def3;
+      then p'k (--) q'k by d5,Def4;
+      then [p'k,q'k] in the ToleranceRel of C.k by Def3;
+      hence [p',q'] in TR by q2;
+    end;
+    suppose that
+s1:   C.j c= C.i and
+s2:   C.i c= C.k;
+N1:   the InternalRel of C.i c= the InternalRel of C.k by s2,Def89;
+N2:   the InternalRel of C.j c= the InternalRel of C.i by s1,Def89;
+      [p',p] in the InternalRel of C.k by N1,f1,f4,m3;
+      then reconsider p'k = p' as Element of C.k by ZFMISC_1:106;
+e1:   [q',q] in the InternalRel of C.i by N2,F1,F4,m4;
+      then [q',q] in the InternalRel of C.k by N1;
+      then reconsider q'k = q' as Element of C.k by ZFMISC_1:106;
+d5:   p'k <= pk & q'k <= qk by f1,f4,m3,N1,e1,ORDERS_2:def 9;
+      pk (--) qk by u1,u4,u5,Def3;
+      then p'k (--) q'k by d5,Def4;
+      then [p'k,q'k] in the ToleranceRel of C.k by Def3;
+      hence [p',q'] in TR by q2;
+    end;
+    suppose that
+s1:   C.i c= C.k and
+s2:   C.k c= C.j;
+N1:   the InternalRel of C.k c= the InternalRel of C.j by s2,Def89;
+T1:   the ToleranceRel of C.k c= the ToleranceRel of C.j by s2,Def89;
+      the InternalRel of C.i c= the InternalRel of C.k by s1,Def89;
+      then
+q1:   [p',p] in the InternalRel of C.k by f1,f4,m3;
+      then
+r1:   [p',p] in the InternalRel of C.j by N1;
+      then reconsider p'j = p' as Element of C.j by ZFMISC_1:106;
+      reconsider q'j = q' as Element of C.j by F1,F4,m4,ZFMISC_1:106;
+      reconsider pj = p as Element of C.j by r1,ZFMISC_1:106;
+d5:   p'j <= pj & q'j <= qj by q1,N1,F1,F4,m4,ORDERS_2:def 9;
+      pj (--) qj by u1,u4,u5,Def3,T1;
+      then p'j (--) q'j by d5,Def4;
+      then [p'j,q'j] in the ToleranceRel of C.j by Def3;
+      hence [p',q'] in TR by q3;
+    end;
+    suppose that
+s1:   C.k c= C.i and
+s2:   C.i c= C.j;
+N1:   the InternalRel of C.i c= the InternalRel of C.j by s2,Def89;
+T1:   the ToleranceRel of C.i c= the ToleranceRel of C.j by s2,Def89;
+T2:   the ToleranceRel of C.k c= the ToleranceRel of C.i by s1,Def89;
+r1:   [p',p] in the InternalRel of C.j by N1,f1,f4,m3;
+      then reconsider p'j = p' as Element of C.j by ZFMISC_1:106;
+      reconsider q'j = q' as Element of C.j by F1,F4,m4,ZFMISC_1:106;
+      reconsider pj = p as Element of C.j by r1,ZFMISC_1:106;
+      q in the carrier of C.k by u1,u4,u5,ZFMISC_1:106;
+      then reconsider qi = q as Element of C.i by s1,Lm3;
+d5:   p'j <= pj & q'j <= qj by N1,F1,F4,f1,f4,m3,m4,ORDERS_2:def 9;
+      pi (--) qi by u1,u4,u5,Def3,T2;
+      then pj (--) qj by T1,Th3;
+      then p'j (--) q'j by d5,Def4;
+      then [p'j,q'j] in the ToleranceRel of C.j by Def3;
+      hence [p',q'] in TR by q3;
+    end;
+    suppose that
+s1:   C.k c= C.j and
+s2:   C.j c= C.i;
+w1:   the ToleranceRel of C.j c= the ToleranceRel of C.i by s2,Def89;
+w2:   the ToleranceRel of C.k c= the ToleranceRel of C.j by s1,Def89;
+N1:   the InternalRel of C.j c= the InternalRel of C.i by s2,Def89;
+      reconsider q'i = q' as Element of C.i by F6,s2,Lm3;
+      reconsider qi = q as Element of C.i by F6,s2,Lm3;
+      p in the carrier of C.k by u1,u4,u5,ZFMISC_1:106;
+      then reconsider pj = p as Element of C.j by s1,Lm3;
+d5:   p'i <= pi & q'i <= qi by N1,F1,F4,m4,f1,f4,m3,ORDERS_2:def 9;
+      pj (--) qj by u1,u4,u5,Def3,w2;
+      then pi (--) qi by w1,Th3;
+      then p'i (--) q'i by d5,Def4;
+      then [p'i,q'i] in the ToleranceRel of C.i by Def3;
+      hence [p',q'] in TR by q4;
+    end;
+    suppose that
+s1:   C.j c= C.k and
+s2:   C.k c= C.i;
+w1:   the ToleranceRel of C.k c= the ToleranceRel of C.i by s2,Def89;
+N1:   the InternalRel of C.k c= the InternalRel of C.i by s2,Def89;
+N2:   the InternalRel of C.j c= the InternalRel of C.k by s1,Def89;
+      reconsider q'k = q' as Element of C.k by F6,s1,Lm3;
+N3:   the carrier of C.j c= the carrier of C.k by s1,Def89;
+      then reconsider q'i = q' as Element of C.i by s2,F6,Lm3;
+      reconsider qi = q as Element of C.i by s2,N3,F6,Lm3;
+      q'k <= qk by N2,F1,F4,m4,ORDERS_2:def 9;
+      then
+d5:   p'i <= pi & q'i <= qi by N1,f1,f4,m3,Th2,ORDERS_2:def 9;
+      pi (--) qi by w1,u1,u4,u5,Def3;
+      then p'i (--) q'i by d5,Def4;
+      then [p'i,q'i] in the ToleranceRel of C.i by Def3;
+      hence [p',q'] in TR by q4;
+    end;
+  end;    
+end;
+
+:: Direct Sum of PCS's
+
+definition
+  let p, q be set;
+  func MSSet(p,q) -> ManySortedSet of {0,1} equals
+  (0,1) --> (p,q);
+  coherence
+  proof
+    dom ((0,1) --> (p,q)) = {0,1} by FUNCT_4:65;
+    hence thesis by PBOOLE:def 3;
+  end;
+end;
+
+registration
+  let P, Q be 1-sorted;
+  cluster MSSet(P,Q) -> 1-sorted-yielding;
+  coherence
+  proof
+    let x be set;
+    assume x in dom MSSet(P,Q);
+    then x in {0,1} by FUNCT_4:65;
+    then x = 0 or x = 1 by TARSKI:def 2;
+    hence thesis by FUNCT_4:66;
+  end;
+end;
+
+registration
+  let P, Q be RelStr;
+  cluster MSSet(P,Q) -> RelStr-yielding;
+  coherence
+  proof
+    let x be set;
+    assume x in rng MSSet(P,Q);
+    then x in {P,Q} by FUNCT_4:67;
+    hence thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let P, Q be TolStr;
+  cluster MSSet(P,Q) -> TolStr-yielding;
+  coherence
+  proof
+    let x be set;
+    assume x in {0,1};
+    then x = 0 or x = 1 by TARSKI:def 2;
+    hence thesis by FUNCT_4:66;
+  end;
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster MSSet(P,Q) -> pcs-Str-yielding;
+  coherence
+  proof
+    let x be set;
+    assume x in {0,1};
+    then x = 0 or x = 1 by TARSKI:def 2;
+    hence thesis by FUNCT_4:66;
+  end;
+end;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster MSSet(P,Q) -> reflexive-yielding;
+  coherence
+  proof
+    let x be RelStr;
+    assume x in rng MSSet(P,Q);
+    then x in {P,Q} by FUNCT_4:67;
+    hence thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster MSSet(P,Q) -> transitive-yielding;
+  coherence
+  proof
+    let x be RelStr;
+    assume x in rng MSSet(P,Q);
+    then x in {P,Q} by FUNCT_4:67;
+    hence thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let P, Q be pcs-tol-reflexive pcs-Str;
+  cluster MSSet(P,Q) -> pcs-tol-reflexive-yielding;
+  coherence
+  proof
+    let x be TolStr;
+    assume x in rng MSSet(P,Q);
+    then x in {P,Q} by FUNCT_4:67;
+    hence thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster MSSet(P,Q) -> pcs-tol-symmetric-yielding;
+  coherence
+  proof
+    let x be TolStr;
+    assume x in rng MSSet(P,Q);
+    then x in {P,Q} by FUNCT_4:67;
+    hence thesis by TARSKI:def 2;
+  end;
+end;
+
+registration
+  let P, Q be pcs;
+  cluster MSSet(P,Q) -> pcs-yielding;
+  coherence
+  proof
+    let x be set;
+    assume x in {0,1};
+    then x = 0 or x = 1 by TARSKI:def 2;
+    hence thesis by FUNCT_4:66;
+  end;
+end;
+
+definition
+  let P, Q be pcs-Str;
+  func pcs-sum(P,Q) -> pcs-Str equals
+  pcs-union MSSet(P,Q);
+  coherence;
+end;
+
+deffunc pcsSUM(pcs-Str,pcs-Str) = pcs-Str (#
+    (the carrier of $1) \/ the carrier of $2,
+    (the InternalRel of $1) \/ the InternalRel of $2,
+    (the ToleranceRel of $1) \/ the ToleranceRel of $2 #);
+
+theorem Th4:
+  for P, Q being pcs-Str holds
+  the carrier of pcs-sum(P,Q) = (the carrier of P) \/ the carrier of Q &
+  the InternalRel of pcs-sum(P,Q) =
+      (the InternalRel of P) \/ the InternalRel of Q &
+  the ToleranceRel of pcs-sum(P,Q) =
+      (the ToleranceRel of P) \/ the ToleranceRel of Q
+  proof
+    let P, Q be pcs-Str;
+    set S = pcsSUM(P,Q);
+    set f = MSSet(P,Q);
+a5: dom Carrier f = {0,1} by PBOOLE:def 3;
+A5: dom pcs-InternalRels f = {0,1} by PBOOLE:def 3;
+A6: dom pcs-ToleranceRels f = {0,1} by PBOOLE:def 3;
+a4: f.0 = P & f.1 = Q by FUNCT_4:66;
+a1: the carrier of S = Union Carrier f
+    proof
+      thus the carrier of S c= Union Carrier f
+      proof
+        let x be set;
+        assume x in the carrier of S;
+        then
+a3:     x in the carrier of P or x in the carrier of Q
+        by XBOOLE_0:def 2;
+        (Carrier f).z = the carrier of f.z &
+        (Carrier f).j = the carrier of f.j by Def90;
+        then the carrier of P in rng Carrier f &
+        the carrier of Q in rng Carrier f by a4,a5,FUNCT_1:12;
+        hence thesis by a3,TARSKI:def 4;
+      end;
+      let x be set;
+      assume x in Union Carrier f;
+      then consider Z being set such that
+b1:   x in Z and
+b2:   Z in rng Carrier f by TARSKI:def 4;
+      consider i being set such that
+b3:   i in dom Carrier f and
+b4:   Carrier f.i = Z by b2,FUNCT_1:def 5;
+b5:   i = 0 or i = 1 by b3,a5,TARSKI:def 2;
+      Z = the carrier of f.z or Z = the carrier of f.j
+      by b4,b5,Def90;
+      hence thesis by a4,b1,XBOOLE_0:def 2;
+    end;
+a2: the InternalRel of S = Union pcs-InternalRels f
+    proof
+      thus the InternalRel of S c= Union pcs-InternalRels f
+      proof
+        let x be set;
+        assume x in the InternalRel of S;
+        then
+a3:     x in the InternalRel of P or x in the InternalRel of Q
+        by XBOOLE_0:def 2;
+        (pcs-InternalRels f).z = the InternalRel of f.z &
+        (pcs-InternalRels f).j = the InternalRel of f.j
+        by Def10a;
+        then the InternalRel of P in rng pcs-InternalRels f &
+        the InternalRel of Q in rng pcs-InternalRels f
+        by a4,A5,FUNCT_1:12;
+        hence thesis by a3,TARSKI:def 4;
+      end;
+      let x be set;
+      assume x in Union pcs-InternalRels f;
+      then consider Z being set such that
+b1:   x in Z and
+b2:   Z in rng pcs-InternalRels f by TARSKI:def 4;
+      consider i being set such that
+b3:   i in dom pcs-InternalRels f and
+b4:   (pcs-InternalRels f).i = Z by b2,FUNCT_1:def 5;
+b5:   i = 0 or i = 1 by b3,A5,TARSKI:def 2;
+      Z = the InternalRel of f.z or
+      Z = the InternalRel of f.j by b4,b5,Def10a;
+      hence thesis by a4,b1,XBOOLE_0:def 2;
+    end;
+    the ToleranceRel of S = Union pcs-ToleranceRels f
+    proof
+      thus the ToleranceRel of S c= Union pcs-ToleranceRels f
+      proof
+        let x be set;
+        assume x in the ToleranceRel of S;
+        then
+a3:     x in the ToleranceRel of P or x in the ToleranceRel of Q
+        by XBOOLE_0:def 2;
+        (pcs-ToleranceRels f).z = the ToleranceRel of f.z &
+        (pcs-ToleranceRels f).j = the ToleranceRel of f.j
+        by Def11a;
+        then the ToleranceRel of P in rng pcs-ToleranceRels f &
+        the ToleranceRel of Q in rng pcs-ToleranceRels f
+        by a4,A6,FUNCT_1:12;
+        hence thesis by a3,TARSKI:def 4;
+      end;
+      let x be set;
+      assume x in Union pcs-ToleranceRels f;
+      then consider Z being set such that
+b1:   x in Z and
+b2:   Z in rng pcs-ToleranceRels f by TARSKI:def 4;
+      consider i being set such that
+b3:   i in dom pcs-ToleranceRels f and
+b4:   (pcs-ToleranceRels f).i = Z by b2,FUNCT_1:def 5;
+b5:   i = 0 or i = 1 by b3,A6,TARSKI:def 2;
+      Z = the ToleranceRel of f.z or
+      Z = the ToleranceRel of f.j by b4,b5,Def11a;
+      hence thesis by a4,b1,XBOOLE_0:def 2;
+    end;
+    hence thesis by a1,a2,Def30;
+  end;
+
+theorem Th4a:
+  for P, Q being pcs-Str holds
+  pcs-sum(P,Q) = pcs-Str (#
+    (the carrier of P) \/ the carrier of Q,
+    (the InternalRel of P) \/ the InternalRel of Q,
+    (the ToleranceRel of P) \/ the ToleranceRel of Q #)
+  proof
+    let P, Q be pcs-Str;
+    the carrier of pcs-sum(P,Q) = (the carrier of P) \/ the carrier of Q &
+    the InternalRel of pcs-sum(P,Q) =
+    (the InternalRel of P) \/ the InternalRel of Q &
+    the ToleranceRel of pcs-sum(P,Q) =
+    (the ToleranceRel of P) \/ the ToleranceRel of Q by Th4;
+    hence thesis;
+  end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of pcs-sum(P,Q) holds
+  p <= q iff
+  (ex p', q' being Element of P st p' = p & q' = q & p' <= q') or
+  (ex p', q' being Element of Q st p' = p & q' = q & p' <= q')
+  proof
+    let P, Q be pcs-Str;
+    set R = pcs-sum(P,Q);
+    let p, q be Element of R;
+a3: the InternalRel of R =
+    (the InternalRel of P) \/ the InternalRel of Q by Th4;
+    thus p <= q implies
+    (ex p', q' being Element of P st p' = p & q' = q & p' <= q') or
+    (ex p', q' being Element of Q st p' = p & q' = q & p' <= q')
+    proof
+      assume
+a4:   [p,q] in the InternalRel of R;
+      per cases by a4,a3,XBOOLE_0:def 2;
+      suppose
+b1:     [p,q] in the InternalRel of P;
+        then reconsider p' = p, q' = q as Element of P by ZFMISC_1:106;
+        p' <= q' by b1,ORDERS_2:def 9;
+        hence thesis;
+      end;
+      suppose
+b1:     [p,q] in the InternalRel of Q;
+        then reconsider p' = p, q' = q as Element of Q by ZFMISC_1:106;
+        p' <= q' by b1,ORDERS_2:def 9;
+        hence thesis;
+      end;
+    end;
+    assume
+c1: (ex p', q' being Element of P st p' = p & q' = q & p' <= q') or
+    (ex p', q' being Element of Q st p' = p & q' = q & p' <= q');
+    per cases by c1;
+    suppose ex p', q' being Element of P st p' = p & q' = q & p' <= q';
+      then consider p', q' being Element of P such that
+c2:   p' = p & q' = q and
+c3:   p' <= q';
+      [p',q'] in the InternalRel of P by c3,ORDERS_2:def 9;
+      hence [p,q] in the InternalRel of R by a3,c2,XBOOLE_0:def 2;
+    end;
+    suppose ex p', q' being Element of Q st p' = p & q' = q & p' <= q';
+      then consider p', q' being Element of Q such that
+c2:   p' = p & q' = q and
+c3:   p' <= q';
+      [p',q'] in the InternalRel of Q by c3,ORDERS_2:def 9;
+      hence [p,q] in the InternalRel of R by a3,c2,XBOOLE_0:def 2;
+    end;
+  end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of pcs-sum(P,Q) holds
+  p (--) q iff
+  (ex p', q' being Element of P st p' = p & q' = q & p' (--) q') or
+  (ex p', q' being Element of Q st p' = p & q' = q & p' (--) q')
+  proof
+    let P, Q be pcs-Str;
+    set R = pcs-sum(P,Q);
+    let p, q be Element of R;
+a3: the ToleranceRel of R =
+    (the ToleranceRel of P) \/ the ToleranceRel of Q by Th4;
+    thus p (--) q implies
+    (ex p', q' being Element of P st p' = p & q' = q & p' (--) q') or
+    (ex p', q' being Element of Q st p' = p & q' = q & p' (--) q')
+    proof
+      assume
+a4:   [p,q] in the ToleranceRel of R;
+      per cases by a4,a3,XBOOLE_0:def 2;
+      suppose
+b1:     [p,q] in the ToleranceRel of P;
+        then reconsider p' = p, q' = q as Element of P by ZFMISC_1:106;
+        p' (--) q' by b1,Def3;
+        hence thesis;
+      end;
+      suppose
+b1:     [p,q] in the ToleranceRel of Q;
+        then reconsider p' = p, q' = q as Element of Q by ZFMISC_1:106;
+        p' (--) q' by b1,Def3;
+        hence thesis;
+      end;
+    end;
+    assume
+c1: (ex p', q' being Element of P st p' = p & q' = q & p' (--) q') or
+    (ex p', q' being Element of Q st p' = p & q' = q & p' (--) q');
+    per cases by c1;
+    suppose ex p', q' being Element of P st p' = p & q' = q & p' (--) q';
+      then consider p', q' being Element of P such that
+c2:   p' = p & q' = q and
+c3:   p' (--) q';
+      [p',q'] in the ToleranceRel of P by c3,Def3;
+      hence [p,q] in the ToleranceRel of R by a3,c2,XBOOLE_0:def 2;
+    end;
+    suppose ex p', q' being Element of Q st p' = p & q' = q & p' (--) q';
+      then consider p', q' being Element of Q such that
+c2:   p' = p & q' = q and
+c3:   p' (--) q';
+      [p',q'] in the ToleranceRel of Q by c3,Def3;
+      hence [p,q] in the ToleranceRel of R by a3,c2,XBOOLE_0:def 2;
+    end;
+  end;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster pcs-sum(P,Q) -> reflexive;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-tol-reflexive pcs-Str;
+  cluster pcs-sum(P,Q) -> pcs-tol-reflexive;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster pcs-sum(P,Q) -> pcs-tol-symmetric;
+  coherence;
+end;
+
+theorem Th3:
+  for P, Q being pcs holds
+  P misses Q implies the InternalRel of pcs-sum(P,Q) is transitive
+  proof
+    let P, Q be pcs;
+    assume
+a1: the carrier of P misses the carrier of Q;
+    pcs-sum(P,Q) = pcsSUM(P,Q) by Th4a;
+    hence the InternalRel of pcs-sum(P,Q) is transitive by a1,Th1;
+  end;
+
+theorem Th7:
+  for P, Q being pcs holds
+  P misses Q implies pcs-sum(P,Q) is pcs-compatible
+  proof
+    let P, Q be pcs;
+    set D1 = the carrier of P;
+    set D2 = the carrier of Q;
+    set R1 = the InternalRel of P;
+    set R2 = the InternalRel of Q;
+    set T1 = the ToleranceRel of P;
+    set T2 = the ToleranceRel of Q;
+    set R = R1 \/ R2;
+    set T = T1 \/ T2;
+    set D = field R;
+    assume
+a0: D1 misses D2;
+    let p, p', q, q' be Element of pcs-sum(P,Q) such that
+a1: p (--) q and
+a2: p' <= p and
+a3: q' <= q;
+UU: pcs-sum(P,Q) = pcsSUM(P,Q) by Th4a;
+    then
+b1: [p,q] in T by a1,Def3;
+    per cases by b1,XBOOLE_0:def 2;
+    suppose
+b3:   [p,q] in T1;
+      then
+b2:   p in D1 & q in D1 by ZFMISC_1:106;
+      reconsider p1 = p, q1 = q as Element of P by b3,ZFMISC_1:106;
+b4:   p1 (--) q1 by b3,Def3;
+b5:   [p',p] in R & [q',q] in R by UU,a2,a3,ORDERS_2:def 9;
+      then reconsider p'1 = p', q'1 = q' as Element of P by a0,b2,Lm0;
+      [p',p] in R1 & [q',q] in R1 by a0,b5,b2,Lm0;
+      then p'1 <= p1 & q'1 <= q1 by ORDERS_2:def 9;
+      then p'1 (--) q'1 by b4,Def4;
+      then [p'1,q'1] in T1 by Def3;
+      then [p'1,q'1] in T by XBOOLE_0:def 2;
+      hence p' (--) q' by UU,Def3;
+    end;
+    suppose
+b3:   [p,q] in T2;
+      then
+b2:   p in D2 & q in D2 by ZFMISC_1:106;
+      reconsider p1 = p, q1 = q as Element of Q by b3,ZFMISC_1:106;
+b4:   p1 (--) q1 by b3,Def3;
+b5:   [p',p] in R & [q',q] in R by UU,a2,a3,ORDERS_2:def 9;
+      then reconsider p'1 = p', q'1 = q' as Element of Q by a0,b2,Lm0;
+      [p',p] in R2 & [q',q] in R2 by a0,b2,b5,Lm0;
+      then p'1 <= p1 & q'1 <= q1 by ORDERS_2:def 9;
+      then p'1 (--) q'1 by b4,Def4;
+      then [p'1,q'1] in T2 by Def3;
+      then [p'1,q'1] in T by XBOOLE_0:def 2;
+      hence p' (--) q' by UU,Def3;
+    end;
+  end;
+
+theorem
+  for P, Q being pcs holds P misses Q implies pcs-sum(P,Q) is pcs
+  proof
+    let P, Q be pcs;
+    assume
+a1: P misses Q;
+    set R = pcs-sum(P,Q);
+    pcs-sum(P,Q) is pcs-like
+    proof
+a2:   field the InternalRel of R = the carrier of R by ORDERS_1:97;
+      thus R is reflexive;
+      thus R is transitive
+      proof
+        the InternalRel of R is transitive by a1,Th3;
+        hence the InternalRel of R is_transitive_in the carrier of R
+        by a2,RELAT_2:def 16;
+      end;
+      thus R is pcs-tol-reflexive pcs-tol-symmetric;
+      thus R is pcs-compatible by a1,Th7;
+    end;
+    hence thesis;
+  end;
+
+:: Extension
+
+definition
+  let P be pcs-Str, a be set;
+  func pcs-extension(P,a) -> strict pcs-Str means :Def91:
+  the carrier of it = {a} \/ the carrier of P &
+  the InternalRel of it =
+      [:{a},the carrier of it:] \/ the InternalRel of P &
+  the ToleranceRel of it = [:{a},the carrier of it:] \/
+      [:the carrier of it,{a}:] \/ the ToleranceRel of P;
+  existence
+  proof
+    set D = {a} \/ the carrier of P;
+    set IR = [:{a},D:] \/ the InternalRel of P;
+    set TR = [:D,{a}:] \/ [:{a},D:] \/ the ToleranceRel of P;
+a3: {a} c= D by XBOOLE_1:7;
+    then 
+a1: [:{a},D:] c= [:D,D:] by ZFMISC_1:118;
+    the carrier of P c= D by XBOOLE_1:7;
+    then
+a4: [:the carrier of P,the carrier of P:] c= [:D,D:] by ZFMISC_1:119;
+    then the InternalRel of P c= [:D,D:] by XBOOLE_1:1;
+    then IR c= [:D,D:] by a1,XBOOLE_1:8;
+    then reconsider IR as Relation of D by RELSET_1:def 1;
+    [:D,{a}:] c= [:D,D:] by a3,ZFMISC_1:118;
+    then
+a2: [:D,{a}:] \/ [:{a},D:] c= [:D,D:] by a1,XBOOLE_1:8;
+    the ToleranceRel of P c= [:D,D:] by a4,XBOOLE_1:1;
+    then TR c= [:D,D:] by a2,XBOOLE_1:8;
+    then reconsider TR as Relation of D by RELSET_1:def 1;
+    take pcs-Str(#D,IR,TR#);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let P be pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> non empty;
+  coherence
+  proof
+    the carrier of pcs-extension(P,a) = {a} \/ the carrier of P by Def91;
+    hence the carrier of pcs-extension(P,a) is non empty;
+  end;
+end;
+
+theorem Th14:
+  for P being pcs-Str, a being set holds
+  the carrier of P c= the carrier of pcs-extension(P,a) &
+  the InternalRel of P c= the InternalRel of pcs-extension(P,a) &
+  the ToleranceRel of P c= the ToleranceRel of pcs-extension(P,a)
+  proof
+    let P be pcs-Str, a be set;
+    set R = pcs-extension(P,a);
+    the carrier of R = {a} \/ the carrier of P &
+    the InternalRel of R = [:{a},the carrier of R:] \/ the InternalRel of P &
+    the ToleranceRel of R = [:{a},the carrier of R:] \/
+    [:the carrier of R,{a}:] \/ the ToleranceRel of P by Def91;
+    hence thesis by XBOOLE_1:7;
+  end;
+    
+theorem
+  for P being pcs-Str, a being set,
+      p, q being Element of pcs-extension(P,a) st p = a holds
+  p <= q
+  proof
+    let P be pcs-Str, a be set;
+    set R = pcs-extension(P,a);
+    let p, q be Element of R such that
+a0: p = a;
+a1: the InternalRel of R =
+    [:{a},the carrier of R:] \/ the InternalRel of P by Def91;
+    [a,q] in [:{a},the carrier of R:] by ZFMISC_1:128;
+    hence [p,q] in the InternalRel of R by a0,a1,XBOOLE_0:def 2;
+  end;
+
+theorem Th13:
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <= q holds p1 <= q1
+  proof
+    let P be pcs-Str, a be set,
+        p, q be Element of P,
+        p1, q1 be Element of pcs-extension(P,a) such that
+a0: p = p1 & q = q1 and
+a2: [p,q] in the InternalRel of P;
+    the InternalRel of P c= the InternalRel of pcs-extension(P,a) by Th14;
+    hence [p1,q1] in the InternalRel of pcs-extension(P,a) by a0,a2;
+  end;
+
+theorem Th11:
+  for P being pcs-Str, a being set,
+      p being Element of P,
+      p1, q1 being Element of pcs-extension(P,a)
+  st p = p1 & p <> a & p1 <= q1 & not a in the carrier of P holds
+  q1 in the carrier of P & q1 <> a
+  proof
+    let P be pcs-Str, a be set,
+        p be Element of P,
+        p1, q1 be Element of pcs-extension(P,a) such that
+a0: p = p1 and
+a1: p <> a and
+a2: p1 <= q1 and
+b1: not a in the carrier of P;
+    set R = pcs-extension(P,a);
+a3: the InternalRel of R = [:{a},the carrier of R:] \/ the InternalRel of P
+    by Def91;
+    [p1,q1] in the InternalRel of R by a2,ORDERS_2:def 9;
+    then [p1,q1] in [:{a},the carrier of R:] or [p1,q1] in the InternalRel of P
+    by a3,XBOOLE_0:def 2;
+    hence thesis by a0,a1,b1,ZFMISC_1:106,128;
+  end;
+
+theorem Th10:
+  for P being pcs-Str, a being set,
+      p being Element of pcs-extension(P,a) st p <> a
+  holds p in the carrier of P
+  proof
+    let P be pcs-Str, a be set,
+        p be Element of pcs-extension(P,a) such that
+a1: p <> a;
+    the carrier of pcs-extension(P,a) = {a} \/ the carrier of P by Def91;
+    then p in {a} or p in the carrier of P by XBOOLE_0:def 2;
+    hence thesis by a1,TARSKI:def 1;
+  end;
+  
+theorem Th12:
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <> a & p1 <= q1 holds p <= q
+  proof
+    let P be pcs-Str, a be set,
+        p, q be Element of P,
+        p1, q1 be Element of pcs-extension(P,a) such that
+a0: p = p1 & q = q1 and
+a1: p <> a and
+a2: p1 <= q1;
+    set R = pcs-extension(P,a);
+a3: the InternalRel of R = [:{a},the carrier of R:] \/ the InternalRel of P
+    by Def91;
+    [p1,q1] in the InternalRel of R by a2,ORDERS_2:def 9;
+    then [p1,q1] in [:{a},the carrier of R:] or [p1,q1] in the InternalRel of P
+    by a3,XBOOLE_0:def 2;
+    hence [p,q] in the InternalRel of P by a0,a1,ZFMISC_1:128;
+  end;
+
+theorem Th17:
+  for P being pcs-Str, a being set,
+      p, q being Element of pcs-extension(P,a) st p = a holds
+  p (--) q & q (--) p
+  proof
+    let P be pcs-Str, a be set;
+    set R = pcs-extension(P,a);
+    let p, q be Element of R such that
+a0: p = a;
+    the ToleranceRel of R = [:{a},the carrier of R:] \/
+    [:the carrier of R,{a}:] \/ the ToleranceRel of P by Def91;
+    then
+a2: the ToleranceRel of R = [:{a},the carrier of R:] \/
+    ([:the carrier of R,{a}:] \/ the ToleranceRel of P) by XBOOLE_1:4;
+a3: [a,q] in [:{a},the carrier of R:] by ZFMISC_1:128;
+    [q,a] in [:the carrier of R,{a}:]  by ZFMISC_1:129;
+    then [q,a] in [:the carrier of R,{a}:] \/ the ToleranceRel of P
+    by XBOOLE_0:def 2;
+    hence [p,q] in the ToleranceRel of R & [q,p] in the ToleranceRel of R
+    by a0,a2,a3,XBOOLE_0:def 2;
+  end;
+
+theorem Th15:
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p (--) q holds p1 (--) q1
+  proof
+    let P be pcs-Str, a be set,
+        p, q be Element of P,
+        p1, q1 be Element of pcs-extension(P,a) such that
+a0: p = p1 & q = q1 and
+a2: [p,q] in the ToleranceRel of P;
+    the ToleranceRel of P c= the ToleranceRel of pcs-extension(P,a) by Th14;
+    hence [p1,q1] in the ToleranceRel of pcs-extension(P,a) by a0,a2;
+  end;
+
+theorem Th12a:
+  for P being pcs-Str, a being set,
+      p, q being Element of P,
+      p1, q1 being Element of pcs-extension(P,a) st p = p1 & q = q1 &
+  p <> a & q <> a & p1 (--) q1 holds p (--) q
+  proof
+    let P be pcs-Str, a be set,
+        p, q be Element of P,
+        p1, q1 be Element of pcs-extension(P,a) such that
+a0: p = p1 & q = q1 and
+a1: p <> a & q <> a and
+a2: p1 (--) q1;
+    set R = pcs-extension(P,a);
+a3: the ToleranceRel of R = [:{a},the carrier of R:] \/
+    [:the carrier of R,{a}:] \/ the ToleranceRel of P by Def91;
+    [p1,q1] in the ToleranceRel of R by a2,Def3;
+    then [p1,q1] in [:{a},the carrier of R:] \/ [:the carrier of R,{a}:] or
+    [p1,q1] in the ToleranceRel of P by a3,XBOOLE_0:def 2;
+    then [p1,q1] in [:{a},the carrier of R:] or
+    [p1,q1] in [:the carrier of R,{a}:] or
+    [p1,q1] in the ToleranceRel of P by XBOOLE_0:def 2;
+    hence [p,q] in the ToleranceRel of P by a0,a1,ZFMISC_1:128,129;
+  end;
+
+registration
+  let P be reflexive pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> reflexive;
+  coherence
+  proof
+    set R = pcs-extension(P,a);
+a1: the carrier of R = {a} \/ the carrier of P by Def91;
+a3: the InternalRel of R = [:{a},the carrier of R:] \/ the InternalRel of P
+    by Def91;
+    let p be set;
+    assume
+a2: p in the carrier of R;
+    per cases by a1,a2,XBOOLE_0:def 2;
+    suppose p in {a};
+      then p = a by TARSKI:def 1;
+      then [p,p] in [:{a},the carrier of R:] by a2,ZFMISC_1:128;
+      hence thesis by a3,XBOOLE_0:def 2;
+    end;
+    suppose
+a4:   p in the carrier of P;
+      the InternalRel of P is_reflexive_in the carrier of P by ORDERS_2:def 4;
+      then [p,p] in the InternalRel of P by a4,RELAT_2:def 1;
+      hence thesis by a3,XBOOLE_0:def 2;
+    end;
+  end;
+end;
+
+theorem Th21:
+  for P being transitive pcs-Str, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is transitive
+  proof
+    let P be transitive pcs-Str, a be set such that
+a0: not a in the carrier of P;
+    set R = pcs-extension(P,a);
+a3: the InternalRel of R = [:{a},the carrier of R:] \/ the InternalRel of P
+    by Def91;
+    let x, y, z be set;
+    assume that
+a2: x in the carrier of R and
+a6: y in the carrier of R and
+a7: z in the carrier of R and
+a4: [x,y] in the InternalRel of R and
+a5: [y,z] in the InternalRel of R;
+a8: [a,z] in [:{a},the carrier of R:] by a7,ZFMISC_1:128;
+    reconsider x, y, z as Element of R by a2,a6,a7;
+b1: x <= y by a4,ORDERS_2:def 9;
+b4: y <= z by a5,ORDERS_2:def 9;
+    per cases;
+    suppose x = a;      
+      hence thesis by a3,a8,XBOOLE_0:def 2;
+    end;
+    suppose
+b2:   x <> a;
+      then reconsider x0 = x as Element of P by Th10;
+b3:   x0 <> a by b2;
+      reconsider y0 = y as Element of P by a0,b1,b3,Th11;
+      y0 <> a by b3,a0,b1,Th11;
+      then reconsider z0 = z as Element of P by a0,b4,Th11;
+      y <> a by a0,b1,b3,Th11; 
+      then x0 <= y0 & y0 <= z0 by b1,b4,b2,Th12;
+      then x0 <= z0 by YELLOW_0:def 2;
+      then x <= z by Th13;
+      hence thesis by ORDERS_2:def 9;
+    end;
+  end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> pcs-tol-reflexive;
+  coherence
+  proof
+    set R = pcs-extension(P,a);
+a1: the carrier of R = {a} \/ the carrier of P by Def91;
+a3: the ToleranceRel of R = [:{a},the carrier of R:] \/
+    [:the carrier of R,{a}:] \/ the ToleranceRel of P by Def91;
+    then
+A3: the ToleranceRel of R = [:{a},the carrier of R:] \/
+    ([:the carrier of R,{a}:] \/ the ToleranceRel of P) by XBOOLE_1:4;
+    let p be set;
+    assume
+a2: p in the carrier of R;
+    per cases by a1,a2,XBOOLE_0:def 2;
+    suppose p in {a};
+      then p = a by TARSKI:def 1;
+      then [p,p] in [:{a},the carrier of R:] by a2,ZFMISC_1:128;
+      hence thesis by A3,XBOOLE_0:def 2;
+    end;
+    suppose
+a4:   p in the carrier of P;
+      the ToleranceRel of P is_reflexive_in the carrier of P by Def22;
+      then [p,p] in the ToleranceRel of P by a4,RELAT_2:def 1;
+      hence thesis by a3,XBOOLE_0:def 2;
+    end;
+  end;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str, a be set;
+  cluster pcs-extension(P,a) -> pcs-tol-symmetric;
+  coherence
+  proof
+    set R = pcs-extension(P,a);
+a3: the ToleranceRel of R = [:{a},the carrier of R:] \/
+    [:the carrier of R,{a}:] \/ the ToleranceRel of P by Def91;
+    let p, q be set;
+    assume that
+    p in the carrier of R & q in the carrier of R and
+a7: [p,q] in the ToleranceRel of R;
+b2: the ToleranceRel of P is_symmetric_in the carrier of P by Def23;
+    per cases by a3,a7,XBOOLE_0:def 2;
+    suppose
+s1:   [p,q] in [:{a},the carrier of R:] \/ [:the carrier of R,{a}:];
+      per cases by s1,XBOOLE_0:def 2;
+      suppose [p,q] in [:{a},the carrier of R:];
+        then p = a & q in the carrier of R by ZFMISC_1:128;
+        then [q,p] in [:the carrier of R,{a}:] by ZFMISC_1:129;
+        then [q,p] in [:{a},the carrier of R:] \/ [:the carrier of R,{a}:]
+        by XBOOLE_0:def 2;
+        hence thesis by a3,XBOOLE_0:def 2;
+      end;
+      suppose [p,q] in [:the carrier of R,{a}:];
+        then q = a & p in the carrier of R by ZFMISC_1:129;
+        then [q,p] in [:{a},the carrier of R:] by ZFMISC_1:128;
+        then [q,p] in [:{a},the carrier of R:] \/ [:the carrier of R,{a}:]
+        by XBOOLE_0:def 2;
+        hence thesis by a3,XBOOLE_0:def 2;
+      end;
+    end;
+    suppose
+s1:   [p,q] in the ToleranceRel of P;
+      then p in the carrier of P & q in the carrier of P by ZFMISC_1:106;
+      then [q,p] in the ToleranceRel of P by b2,s1,RELAT_2:def 3;
+      hence thesis by a3,XBOOLE_0:def 2;
+    end;
+  end;
+end;
+
+theorem Th20:
+  for P being pcs-compatible pcs-Str, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is pcs-compatible
+  proof
+    let P be pcs-compatible pcs-Str, a be set such that
+a0: not a in the carrier of P;
+    set R = pcs-extension(P,a);
+    let p, p', q, q' be Element of R such that
+r1: p (--) q and
+r2: p' <= p and
+r3: q' <= q;
+    per cases;
+    suppose p' = a or q' = a;
+      hence p' (--) q' by Th17;
+    end;
+    suppose that
+s1:   p' <> a and
+s2:   q' <> a;
+      reconsider p'0 = p', q'0 = q' as Element of P by s1,s2,Th10;
+f2:   p'0 <> a & q'0 <> a by s1,s2;
+      then
+f1:   p <> a & q <> a by a0,r2,r3,Th11;
+      reconsider p0 = p, q0 = q as Element of P by f2,a0,r2,r3,Th11;
+f3:   p0 (--) q0 by f1,r1,Th12a;
+      p'0 <= p0 & q'0 <= q0 by r2,r3,s1,s2,Th12;
+      then p'0 (--) q'0 by f3,Def4;
+      hence thesis by Th15;
+    end;
+  end;
+
+theorem
+  for P being pcs, a being set st not a in the carrier of P
+  holds pcs-extension(P,a) is pcs
+  proof
+    let P be pcs, a be set such that
+a0: not a in the carrier of P;
+    set R = pcs-extension(P,a);
+    R is pcs-like
+    proof
+      thus R is reflexive transitive pcs-tol-reflexive pcs-tol-symmetric
+      pcs-compatible by a0,Th20,Th21;
+    end;
+    hence thesis;
+  end;
+
+:: Reverse
+
+definition
+  let P be pcs-Str;
+  func pcs-reverse(P) -> strict pcs-Str means :Defa1:
+  the carrier of it = the carrier of P &
+  the InternalRel of it = (the InternalRel of P)~ &
+  the ToleranceRel of it = (the ToleranceRel of P)`;
+  existence
+  proof
+    reconsider TR = (the ToleranceRel of P)` as Relation of the carrier of P
+    by RELSET_1:def 1;
+    take pcs-Str(#the carrier of P,(the InternalRel of P)~,TR#);
+    thus thesis;
+  end;
+  uniqueness;
+end;
+
+registration
+  let P be non empty pcs-Str;
+  cluster pcs-reverse(P) -> non empty;
+  coherence
+  proof
+    the carrier of pcs-reverse(P) = the carrier of P by Defa1;
+    hence the carrier of pcs-reverse(P) is non empty;
+  end;
+end;
+
+theorem Ta5:
+  for P being pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  p <= q iff q' <= p'
+  proof
+    let P be pcs-Str, p, q be Element of P;
+    set R = pcs-reverse(P);
+    let p', q' be Element of R such that
+a1: p = p' & q = q';
+a2: the carrier of R = the carrier of P &
+    the InternalRel of R = (the InternalRel of P)~ by Defa1;
+    thus p <= q implies q' <= p'
+    proof
+      assume [p,q] in the InternalRel of P;
+      hence [q',p'] in the InternalRel of R by a1,a2,RELAT_1:def 7;
+    end;
+    assume [q',p'] in the InternalRel of R;
+    hence [p,q] in the InternalRel of P by a1,a2,RELAT_1:def 7;
+  end;
+
+theorem Ta8:
+  for P being pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  p (--) q implies not p' (--) q'
+  proof
+    let P be pcs-Str, p, q be Element of P;
+    set R = pcs-reverse(P);
+    let p', q' be Element of R such that
+a1: p = p' & q = q';
+a2: the carrier of R = the carrier of P &
+    the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+    assume [p,q] in the ToleranceRel of P;
+    hence not [p',q'] in the ToleranceRel of R by a1,a2,XBOOLE_0:def 4;
+  end;
+
+theorem Ta8a:
+  for P being non empty pcs-Str, p, q being Element of P
+  for p', q' being Element of pcs-reverse(P) st p = p' & q = q' holds
+  not p' (--) q' implies p (--) q
+  proof
+    let P be non empty pcs-Str, p, q be Element of P;
+    set R = pcs-reverse(P);
+    let p', q' be Element of R such that
+a1: p = p' & q = q';
+a2: the carrier of R = the carrier of P &
+    the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+    assume
+a3: not [p',q'] in the ToleranceRel of R;
+    [p,q] in [:the carrier of P,the carrier of P:] by ZFMISC_1:106;
+    hence [p,q] in the ToleranceRel of P by a1,a2,a3,XBOOLE_0:def 4;
+  end;
+
+registration
+  let P be reflexive pcs-Str;
+  cluster pcs-reverse(P) -> reflexive;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P &
+    the InternalRel of R = (the InternalRel of P)~ by Defa1;
+    the InternalRel of P is_reflexive_in the carrier of P by ORDERS_2:def 4;
+    hence the InternalRel of R is_reflexive_in the carrier of R
+    by a1,ORDERS_1:189;
+  end;
+end;
+
+registration
+  let P be transitive pcs-Str;
+  cluster pcs-reverse(P) -> transitive;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P &
+    the InternalRel of R = (the InternalRel of P)~ by Defa1;
+    the InternalRel of P is_transitive_in the carrier of P by ORDERS_2:def 5;
+    hence the InternalRel of R is_transitive_in the carrier of R
+    by a1,ORDERS_1:190;
+  end;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-irreflexive;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P by Defa1;
+a2: the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+a3: the ToleranceRel of P is_reflexive_in the carrier of P by Def22;
+    let x be set;
+    assume x in the carrier of R;
+    then [x,x] in the ToleranceRel of P by a1,a3,RELAT_2:def 1;
+    hence not [x,x] in the ToleranceRel of R by a2,XBOOLE_0:def 4;
+  end;
+end;
+
+registration
+  let P be pcs-tol-irreflexive pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-reflexive;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P by Defa1;
+a2: the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+a3: the ToleranceRel of P is_irreflexive_in the carrier of P by Def22a;
+    let x be set;
+    assume
+a4: x in the carrier of R;
+    then
+a5: not [x,x] in the ToleranceRel of P by a1,a3,RELAT_2:def 2;
+    [x,x] in [:the carrier of R,the carrier of R:] by a4,ZFMISC_1:106;
+    hence [x,x] in the ToleranceRel of R by a1,a2,a5,XBOOLE_0:def 4;
+  end;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str;
+  cluster pcs-reverse(P) -> pcs-tol-symmetric;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P by Defa1;
+a2: the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+a5: the ToleranceRel of P is_symmetric_in the carrier of P by Def23;
+    let x, y be set;
+    assume
+a4: x in the carrier of R & y in the carrier of R;
+    assume [x,y] in the ToleranceRel of R;
+    then not [x,y] in the ToleranceRel of P by a2,XBOOLE_0:def 4;
+    then
+a3: not [y,x] in the ToleranceRel of P by a1,a5,a4,RELAT_2:def 3;
+    [y,x] in [:the carrier of P,the carrier of P:] by a1,a4,ZFMISC_1:106;
+    hence [y,x] in the ToleranceRel of R by a2,a3,XBOOLE_0:def 4;
+  end;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str;
+  cluster pcs-reverse(P) -> pcs-compatible;
+  coherence
+  proof
+    set R = pcs-reverse(P);
+a1: the carrier of R = the carrier of P by Defa1;
+a3: the InternalRel of R = (the InternalRel of P)~ by Defa1;
+a2: the ToleranceRel of R = (the ToleranceRel of P)` by Defa1;
+    let p, p', q, q' be Element of R such that
+b1: [p,q] in the ToleranceRel of R and
+b2: [p',p] in the InternalRel of R and
+b3: [q',q] in the InternalRel of R;
+a4: p' in the carrier of R & q' in the carrier of R by b2,b3,ZFMISC_1:106;
+    reconsider p'0 = p', q'0 = q', p0 = p, q0 = q as Element of P by Defa1;
+    not [p0,q0] in the ToleranceRel of P by a2,b1,XBOOLE_0:def 4;
+    then
+c1: not p0 (--) q0 by Def3;
+    [p0,p'0] in the InternalRel of P & [q0,q'0] in the InternalRel of P
+    by a3,b2,b3,RELAT_1:def 7;
+    then p0 <= p'0 & q0 <= q'0 by ORDERS_2:def 9;
+    then not p'0 (--) q'0 by c1,Def4;
+    then
+b4: not [p'0,q'0] in the ToleranceRel of P by Def3;
+    [p',q'] in [:the carrier of P,the carrier of P:] by a1,a4,ZFMISC_1:106;
+    hence [p',q'] in the ToleranceRel of R by a2,b4,XBOOLE_0:def 4;
+  end;
+end;
+
+:: Times
+
+definition
+  let P, Q be pcs-Str;
+  func P pcs-times Q -> pcs-Str equals
+  pcs-Str (# [: the carrier of P, the carrier of Q :],
+             [" the InternalRel of P, the InternalRel of Q "],
+             [^ the ToleranceRel of P, the ToleranceRel of Q ^] #);
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster P pcs-times Q -> strict;
+  coherence;
+end;
+
+registration
+  let P, Q be non empty pcs-Str;
+  cluster P pcs-times Q -> non empty;
+  coherence
+  proof
+    thus the carrier of P pcs-times Q is non empty;
+  end;
+end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p <= q iff p1 <= p2 & q1 <= q2
+  proof
+    let P, Q be pcs-Str, p, q be Element of P pcs-times Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    thus p <= q implies p1 <= p2 & q1 <= q2
+    proof
+      assume p <= q;
+      then [p,q] in [" the InternalRel of P, the InternalRel of Q "]
+      by ORDERS_2:def 9;
+      then consider a, b, s, t being set such that
+a2:   p = [a,b] & q = [s,t] and
+a3:   [a,s] in the InternalRel of P and
+a4:   [b,t] in the InternalRel of Q by YELLOW_3:def 1;
+a5:   a = p1 & b = q1 & s = p2 & t = q2 by a1,a2,ZFMISC_1:33;
+      thus [p1,p2] in the InternalRel of P by a3,a5;
+      thus [q1,q2] in the InternalRel of Q by a4,a5;
+    end;
+    assume p1 <= p2 & q1 <= q2;
+    then [p1,p2] in the InternalRel of P &
+    [q1,q2] in the InternalRel of Q by ORDERS_2:def 9;
+    hence [p,q] in the InternalRel of P pcs-times Q by a1,YELLOW_3:def 1;
+  end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p (--) q implies p1 (--) p2 or q1 (--) q2
+  proof
+    let P, Q be pcs-Str, p, q be Element of P pcs-times Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    assume p (--) q;
+    then [p,q] in [^ the ToleranceRel of P, the ToleranceRel of Q ^]
+    by Def3;
+    then consider a, b, c, d being set such that
+a2: p = [a,b] & q = [c,d] and
+    a in the carrier of P & b in the carrier of Q &
+    c in the carrier of P & d in the carrier of Q and
+a4: [a,c] in the ToleranceRel of P or [b,d] in the ToleranceRel of Q
+    by Def1a;
+    a = p1 & b = q1 & c = p2 & d = q2 by a1,a2,ZFMISC_1:33;
+    hence thesis by a4,Def3;
+  end;
+
+theorem Tb2a:
+  for P, Q being non empty pcs-Str, p, q being Element of P pcs-times Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p1 (--) p2 or q1 (--) q2 implies p (--) q
+  proof
+    let P, Q be non empty pcs-Str, p, q be Element of P pcs-times Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    assume p1 (--) p2 or q1 (--) q2;
+    then [p1,p2] in the ToleranceRel of P or
+    [q1,q2] in the ToleranceRel of Q by Def3;
+    hence [p,q] in the ToleranceRel of P pcs-times Q by a1,Def1a;
+  end;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster P pcs-times Q -> reflexive;  coherence
+  proof
+    the RelStr of P pcs-times Q = [:P,Q:] by YELLOW_3:def 2;
+    hence thesis by WAYBEL_8:12;
+  end;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster P pcs-times Q -> transitive;
+  coherence
+  proof
+    the RelStr of P pcs-times Q = [:P,Q:] by YELLOW_3:def 2;
+    hence thesis by WAYBEL_8:13;
+  end;
+end;
+
+registration
+  let P be pcs-Str;
+  let Q be pcs-tol-reflexive pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-reflexive;
+  coherence
+  proof
+    the TolStr of P pcs-times Q = [^P,Q^];
+    hence thesis by Th22;
+  end;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  let Q be pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-reflexive;
+  coherence
+  proof
+    the TolStr of P pcs-times Q = [^P,Q^];
+    hence thesis by Th22;
+  end;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster P pcs-times Q -> pcs-tol-symmetric;
+  coherence
+  proof
+    the TolStr of P pcs-times Q = [^P,Q^];
+    hence thesis by Th23;
+  end;
+end;
+
+registration
+  let P, Q be pcs-compatible pcs-Str;
+  cluster P pcs-times Q -> pcs-compatible;
+  coherence
+  proof
+    set R = P pcs-times Q;
+    set TR = the ToleranceRel of R;
+    set D1 = the carrier of P;
+    set D2 = the carrier of Q;
+    let p, p', q, q' be Element of R such that
+a1: p (--) q and
+a2: p' <= p and
+a3: q' <= q;
+d1: [p,q] in TR by a1,Def3;
+    then consider a, b, c, d being set such that
+a5: p = [a,b] & q = [c,d] and
+a6: a in D1 & b in D2 & c in D1 & d in D2 and
+    [a,c] in the ToleranceRel of P or [b,d] in the ToleranceRel of Q by Def1a;
+a8: [p',p] in the InternalRel of R by a2,ORDERS_2:def 9;
+    then p' in the carrier of R by ZFMISC_1:106;
+    then consider e, f being set such that
+a9: e in D1 & f in D2 and
+b1: p' = [e,f] by ZFMISC_1:def 2;
+g1: [q',q] in the InternalRel of R by a3,ORDERS_2:def 9;
+    then q' in the carrier of R by ZFMISC_1:106;
+    then consider g, h being set such that
+b3: g in D1 & h in D2 and
+b4: q' = [g,h] by ZFMISC_1:def 2;
+    reconsider P, Q as non empty pcs-compatible pcs-Str by a6,STRUCT_0:def 1;
+    reconsider p, q as Element of P pcs-times Q;
+    reconsider a, c, e, g as Element of P by a6,a9,b3;
+    reconsider b, d, f, h as Element of Q by a6,a9,b3;
+    [^a,b^] (--) [^c,d^] by a5,d1,Def3;
+    then
+c1: a (--) c or b (--) d by Th11a;
+f1: the RelStr of P pcs-times Q = [:P,Q:] by YELLOW_3:def 2;
+    then [e,f] <= [a,b] by b1,a5,a8,ORDERS_2:def 9;
+    then
+c2: e <= a & f <= b by YELLOW_3:11;
+    [g,h] <= [c,d] by f1,b4,a5,g1,ORDERS_2:def 9;
+    then
+    g <= c & h <= d by YELLOW_3:11;
+    then e (--) g or f (--) h  by c1,c2,Def4;
+    then
+z2: [e,g] in the ToleranceRel of P or [f,h] in the ToleranceRel of Q
+    by Def3;
+    p' = [e,f] & q' = [g,h] by b1,b4;
+    hence [p',q'] in TR by z2,Def1b;
+  end;
+end;
+
+definition
+  let P, Q be pcs-Str;
+  func P --> Q -> pcs-Str equals
+  (pcs-reverse P) pcs-times Q;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-Str;
+  cluster P --> Q -> strict;
+  coherence;
+end;
+
+registration
+  let P, Q be non empty pcs-Str;
+  cluster P --> Q -> non empty;
+  coherence;
+end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p <= q iff p2 <= p1 & q1 <= q2 
+  proof
+    let P, Q be pcs-Str, p, q be Element of P --> Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    reconsider r1 = p1, r2 = p2 as Element of pcs-reverse P by Defa1;
+    thus p <= q implies p2 <= p1 & q1 <= q2
+    proof
+      assume p <= q;
+      then [p,q] in ["the InternalRel of pcs-reverse P, the InternalRel of Q"]
+      by ORDERS_2:def 9;
+      then consider a, b, s, t being set such that
+a2:   p = [a,b] & q = [s,t] and
+a3:   [a,s] in the InternalRel of pcs-reverse P and
+a4:   [b,t] in the InternalRel of Q by YELLOW_3:def 1;
+a5:   a = p1 & b = q1 & s = p2 & t = q2 by a1,a2,ZFMISC_1:33;
+      then r1 <= r2 by a3,ORDERS_2:def 9;
+      hence p2 <= p1 by Ta5;
+      thus [q1,q2] in the InternalRel of Q by a4,a5;
+    end;
+    assume p2 <= p1 & q1 <= q2;
+    then r1 <= r2 & q1 <= q2 by Ta5;
+    then [r1,r2] in the InternalRel of pcs-reverse P &
+    [q1,q2] in the InternalRel of Q by ORDERS_2:def 9;
+    hence [p,q] in the InternalRel of P --> Q by a1,YELLOW_3:def 1;
+  end;
+
+theorem
+  for P, Q being pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds p (--) q implies not p1 (--) p2 or q1 (--) q2
+  proof
+    let P, Q be pcs-Str, p, q be Element of P --> Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    reconsider r1 = p1, r2 = p2 as Element of pcs-reverse P by Defa1;
+    assume [p,q] in the ToleranceRel of P --> Q;
+    then consider a, b, s, t being set such that
+a2: p = [a,b] & q = [s,t] and
+    a in the carrier of pcs-reverse P & b in the carrier of Q &
+    s in the carrier of pcs-reverse P & t in the carrier of Q  and
+a4: [a,s] in the ToleranceRel of pcs-reverse P or
+    [b,t] in the ToleranceRel of Q by Def1a;
+    a = p1 & b = q1 & s = p2 & t = q2 by a1,a2,ZFMISC_1:33;
+    then r1 (--) r2 or q1 (--) q2 by a4,Def3;
+    hence thesis by Ta8;
+  end;
+
+theorem
+  for P, Q being non empty pcs-Str, p, q being Element of P --> Q
+  for p1, p2 being Element of P, q1, q2 being Element of Q st
+  p = [p1,q1] & q = [p2,q2] holds not p1 (--) p2 or q1 (--) q2 implies p (--) q
+  proof
+    let P, Q be non empty pcs-Str, p, q be Element of P --> Q;
+    let p1, p2 be Element of P, q1, q2 be Element of Q such that
+a1: p = [p1,q1] & q = [p2,q2];
+    reconsider r1 = p1, r2 = p2 as Element of pcs-reverse P by Defa1;
+    reconsider w1 = [r1,q1], w2 = [r2,q2] as
+    Element of (pcs-reverse P) pcs-times Q by a1;
+    assume not p1 (--) p2 or q1 (--) q2;
+    then r1 (--) r2 or q1 (--) q2 by Ta8a;
+    then w1 (--) w2 by Tb2a;
+    hence p (--) q by a1;
+  end;
+
+registration
+  let P, Q be reflexive pcs-Str;
+  cluster P --> Q -> reflexive;
+  coherence;
+end;
+
+registration
+  let P, Q be transitive pcs-Str;
+  cluster P --> Q -> transitive;
+  coherence;
+end;
+
+registration
+  let P be pcs-Str, Q be pcs-tol-reflexive pcs-Str;
+  cluster P --> Q -> pcs-tol-reflexive;
+  coherence;
+end;
+
+registration
+  let P be pcs-tol-irreflexive pcs-Str, Q be pcs-Str;
+  cluster P --> Q -> pcs-tol-reflexive;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-tol-symmetric pcs-Str;
+  cluster P --> Q -> pcs-tol-symmetric;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs-compatible pcs-Str;
+  cluster P --> Q -> pcs-compatible;
+  coherence;
+end;
+
+registration
+  let P, Q be pcs;
+  cluster P --> Q -> pcs-like;
+  coherence;
+end;
+
+:: Self-coherence
+
+definition
+  let P be pcs-Str, S be Subset of P;
+  attr S is pcs-self-coherent means :Defp1:
+  for x, y being Element of P st x in S & y in S holds x (--) y;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster empty -> pcs-self-coherent Subset of P;
+  coherence
+  proof
+    let S be Subset of P;
+    assume
+a1: S is empty;
+    let x be Element of P;
+    thus thesis by a1;
+  end;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster empty Subset of P;
+  existence
+  proof
+    take {}P;
+    thus thesis;
+  end;
+end;
+
+definition
+  let P be pcs-Str, F be Subset-Family of P;
+  attr F is pcs-self-coherent-membered means :Defa:
+  for S being Subset of P st S in F holds S is pcs-self-coherent;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster non empty pcs-self-coherent-membered Subset-Family of P;
+  existence
+  proof
+    reconsider F = {{}} as Subset-Family of P by MEASURE1:9;
+    take F;
+    thus F is non empty;
+    let S be Subset of P;
+    assume S in F;
+    then S = {}P by TARSKI:def 1;
+    hence thesis;
+  end;
+end;
+
+definition
+  let P be pcs-Str, D be set;
+  defpred P[set,set] means $1 in D & $2 in D &
+  for a being set st a in $1 ex b being set st b in $2 &
+  [a,b] in the InternalRel of P;
+  defpred Q[set,set] means $1 in D & $2 in D &
+  for a, b being set st a in $1 & b in $2 holds [a,b] in the ToleranceRel of P;
+  func pcs-general-power-IR(P,D) -> Relation of D means :Defp5:
+  for A, B being set holds [A,B] in it iff A in D & B in D &
+  for a being set st a in A ex b being set st b in B &
+  [a,b] in the InternalRel of P;
+  existence 
+  proof
+    consider R being Relation of D such that
+a1: for x, y being set holds [x,y] in R iff x in D & y in D & P[x,y]
+    from RELSET_1:sch 1;
+    take R;
+    thus thesis by a1;
+  end;
+  uniqueness
+  proof
+    let R1, R2 be Relation of D such that
+a3: for A, B being set holds [A,B] in R1 iff A in D & B in D &
+    for a being set st a in A ex b being set st b in B &
+    [a,b] in the InternalRel of P and
+a4: for A, B being set holds [A,B] in R2 iff A in D & B in D &
+    for a being set st a in A ex b being set st b in B &
+    [a,b] in the InternalRel of P;
+a1: for a, b being set holds [a,b] in R1 iff P[a,b] by a3;
+a2: for a, b being set holds [a,b] in R2 iff P[a,b] by a4;
+    thus R1 = R2 from RELAT_1:sch 2(a1,a2);
+  end;
+  func pcs-general-power-TR(P,D) -> Relation of D means :Defp6:
+  for A, B being set holds [A,B] in it iff A in D & B in D &
+  for a, b being set st a in A & b in B holds [a,b] in the ToleranceRel of P;
+  existence
+  proof
+    consider R being Relation of D such that
+a1: for x, y being set holds [x,y] in R iff x in D & y in D & Q[x,y]
+    from RELSET_1:sch 1;
+    take R;
+    thus thesis by a1;
+  end;
+  uniqueness
+  proof
+    let R1, R2 be Relation of D such that
+a3: for A, B being set holds [A,B] in R1 iff A in D & B in D &
+    for a, b being set st a in A & b in B holds [a,b] in the ToleranceRel of P
+    and
+a4: for A, B being set holds [A,B] in R2 iff A in D & B in D &
+    for a, b being set st a in A & b in B holds [a,b] in the ToleranceRel of P;
+a1: for a, b being set holds [a,b] in R1 iff Q[a,b] by a3;
+a2: for a, b being set holds [a,b] in R2 iff Q[a,b] by a4;
+    thus R1 = R2 from RELAT_1:sch 2(a1,a2);
+  end;
+end;
+
+theorem
+  for P being pcs-Str, D being Subset-Family of P
+  for A, B being set holds [A,B] in pcs-general-power-IR(P,D) iff
+  A in D & B in D &
+  for a being Element of P st a in A ex b being Element of P st b in B & a <= b
+  proof
+    let P be pcs-Str, D be Subset-Family of P;
+    let A, B be set;
+    thus [A,B] in pcs-general-power-IR(P,D) implies A in D & B in D &
+    for a being Element of P st a in A ex b being Element of P st b in B &
+    a <= b
+    proof
+      assume
+b0:   [A,B] in pcs-general-power-IR(P,D);
+      hence
+b2:   A in D & B in D by Defp5;
+      let a be Element of P;
+      assume a in A;
+      then consider b being set such that
+b1:   b in B & [a,b] in the InternalRel of P by b0,Defp5;
+      reconsider b as Element of P by b1,b2;
+      take b;
+      thus thesis by b1,ORDERS_2:def 9;
+    end;
+    assume that
+a1: A in D & B in D and
+a2: for a being Element of P st a in A ex b being Element of P st b in B &
+    a <= b;
+    for a being set st a in A ex b being set st b in B &
+    [a,b] in the InternalRel of P
+    proof
+      let a be set;
+      assume
+a3:   a in A;
+      then reconsider a as Element of P by a1;
+      consider b being Element of P such that
+a4:   b in B & a <= b by a2,a3;
+      take b;
+      thus thesis by a4,ORDERS_2:def 9;
+    end;
+    hence thesis by a1,Defp5;
+  end;
+
+theorem
+  for P being pcs-Str, D being Subset-Family of P
+  for A, B being set holds [A,B] in pcs-general-power-TR(P,D) iff
+  A in D & B in D &
+  for a, b being Element of P st a in A & b in B holds a (--) b
+  proof
+    let P be pcs-Str, D be Subset-Family of P;
+    let A, B be set;
+    thus [A,B] in pcs-general-power-TR(P,D) implies A in D & B in D &
+    for a, b being Element of P st a in A & b in B holds a (--) b
+    proof
+      assume
+b0:   [A,B] in pcs-general-power-TR(P,D);
+      hence A in D & B in D by Defp6;
+      let a, b be Element of P;
+      assume a in A & b in B;
+      then [a,b] in the ToleranceRel of P by b0,Defp6;
+      hence thesis by Def3;
+    end;
+    assume that
+a1: A in D & B in D and
+a2: for a, b being Element of P st a in A & b in B holds a (--) b;
+    for a, b being set st a in A & b in B holds [a,b] in the ToleranceRel of P
+    proof
+      let a, b be set;
+      assume
+a3:   a in A & b in B;
+      then reconsider a, b as Element of P by a1;
+      a (--) b by a2,a3;
+      hence thesis by Def3;
+    end;
+    hence thesis by a1,Defp6;
+  end;
+
+definition
+  let P be pcs-Str, D be set;
+  func pcs-general-power(P,D) -> pcs-Str equals
+  pcs-Str (# D, pcs-general-power-IR(P,D), pcs-general-power-TR(P,D) #);
+  coherence;
+end;
+
+notation
+  let P be pcs-Str, D be Subset-Family of P;
+  synonym pcs-general-power(D) for pcs-general-power(P,D);
+end;
+
+registration
+  let P be pcs-Str, D be non empty set;
+  cluster pcs-general-power(P,D) -> non empty;
+  coherence by STRUCT_0:def 1;
+end;
+
+theorem Tp2:
+  for P being pcs-Str, D be set
+  for p, q being Element of pcs-general-power(P,D) holds p <= q
+  implies for p' being Element of P st p' in p
+  ex q' being Element of P st q' in q & p' <= q'
+  proof
+    let P be pcs-Str, D be set;
+    set R = pcs-general-power(P,D);
+    let p, q be Element of R;
+    assume
+a1: [p,q] in the InternalRel of R;
+    let p' be Element of P;
+    assume p' in p;
+    then consider b being set such that
+a2: b in q & [p',b] in the InternalRel of P by a1,Defp5;
+    reconsider b as Element of P by a2,ZFMISC_1:106;
+    take b;
+    thus b in q & [p',b] in the InternalRel of P by a2;
+  end;
+
+theorem
+  for P being pcs-Str, D being non empty Subset-Family of P
+  for p, q being Element of pcs-general-power(D) st
+  for p' being Element of P st p' in p
+  ex q' being Element of P st q' in q & p' <= q'
+  holds p <= q
+  proof
+    let P be pcs-Str, D be non empty Subset-Family of P;
+    set R = pcs-general-power(D);
+    let p, q be Element of R;
+    assume
+a1: for p' being Element of P st p' in p
+    ex q' being Element of P st q' in q & p' <= q';
+b1: p in D & q in D;
+    for a being set st a in p ex b being set st b in q &
+    [a,b] in the InternalRel of P
+    proof
+      let a be set;
+      assume
+g1:   a in p;
+      then reconsider a as Element of P by b1;
+      consider q' being Element of P such that
+g2:   q' in q & a <= q' by a1,g1;
+      take q';
+      thus thesis by g2,ORDERS_2:def 9;
+    end;
+    hence [p,q] in the InternalRel of R by Defp5;
+  end;
+
+theorem Tp3:
+  for P being pcs-Str, D being set
+  for p, q being Element of pcs-general-power(P,D) holds
+  p (--) q implies
+  for p', q' being Element of P st p' in p & q' in q holds p' (--) q'
+  proof
+    let P be pcs-Str, D be set;
+    set R = pcs-general-power(P,D);
+    let p, q be Element of R;
+    assume
+a1: [p,q] in the ToleranceRel of R;
+    let p', q' be Element of P;
+    assume p' in p & q' in q;
+    hence [p',q'] in the ToleranceRel of P by a1,Defp6;
+  end;
+
+theorem
+  for P being pcs-Str, D being non empty Subset-Family of P
+  for p, q being Element of pcs-general-power(D) st
+  for p', q' being Element of P st p' in p & q' in q holds p' (--) q'
+  holds p (--) q
+  proof
+    let P be pcs-Str, D be non empty Subset-Family of P;
+    set R = pcs-general-power(D);
+    let p, q be Element of R;
+    assume
+a1: for p', q' being Element of P st p' in p & q' in q holds p' (--) q';
+a2: p in D & q in D;
+    now
+      let a, b be set;
+      assume
+a3:   a in p & b in q;
+      then reconsider a1 = a, b1 = b as Element of P by a2;
+      a1 (--) b1 by a1,a3;
+      hence [a,b] in the ToleranceRel of P by Def3;
+    end;
+    hence [p,q] in the ToleranceRel of R by Defp6;
+  end;
+
+registration
+  let P be pcs-Str, D be set;
+  cluster pcs-general-power(P,D) -> strict;
+  coherence;
+end;
+
+registration
+  let P be reflexive pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> reflexive;
+  coherence
+  proof
+    set R = pcs-general-power(D);
+    let x be set;
+    assume
+a0: x in the carrier of R;
+    for a being set st a in x ex b being set st b in x &
+    [a,b] in the InternalRel of P
+    proof
+      let a be set such that
+b2:   a in x;
+      take a;
+      thus a in x by b2;
+      field the InternalRel of P = the carrier of P by ORDERS_1:97;
+      then
+      the InternalRel of P is_reflexive_in the carrier of P by RELAT_2:def 9;
+      hence [a,a] in the InternalRel of P by a0,b2,RELAT_2:def 1;
+    end;
+    hence [x,x] in the InternalRel of R by a0,Defp5;
+  end;
+end;
+
+registration
+  let P be transitive pcs-Str, D be set;
+  cluster pcs-general-power(P,D) -> transitive;
+  coherence
+  proof
+    set R = pcs-general-power(P,D);
+    set IR = the InternalRel of R;
+    let x, y, z be set;
+    assume that
+A1: x in the carrier of R and
+    y in the carrier of R and 
+A3: z in the carrier of R and
+a5: [x,y] in IR and
+a6: [y,z] in IR;
+    for a being set st a in x ex b being set st b in z &
+    [a,b] in the InternalRel of P
+    proof
+      let a be set;
+      assume a in x;
+      then consider b being set such that
+a4:   b in y and
+a7:   [a,b] in the InternalRel of P by a5,Defp5;
+      consider c being set such that
+a8:   c in z and
+a9:   [b,c] in the InternalRel of P by a4,a6,Defp5;
+      take c;
+      thus c in z by a8;
+b1:   the InternalRel of P is_transitive_in the carrier of P by ORDERS_2:def 5;
+      a in the carrier of P & b in the carrier of P & c in the carrier of P
+      by a7,a9,ZFMISC_1:106;
+      hence [a,c] in the InternalRel of P by a7,a9,b1,RELAT_2:def 8;
+    end;
+    hence [x,z] in IR by A1,A3,Defp5;
+  end;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str,
+      D be pcs-self-coherent-membered Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-tol-reflexive;
+  coherence
+  proof
+    let x be set;
+    assume
+a0: x in the carrier of pcs-general-power(D);
+    then reconsider x as Subset of P;
+c3: x is pcs-self-coherent by a0,Defa;
+    now
+      let a, b be set such that
+b2:   a in x & b in x;
+      reconsider a1 = a, b1 = b as Element of P by b2;
+      a1 (--) b1 by c3,b2,Defp1;
+      hence [a,b] in the ToleranceRel of P by Def3;
+    end;
+    hence thesis by a0,Defp6;
+  end;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-tol-symmetric;
+  coherence
+  proof
+    set R = pcs-general-power(D);
+    let x, y be set;
+    assume
+a0: x in the carrier of R;
+    assume
+A0: y in the carrier of R;
+    assume
+d1: [x,y] in the ToleranceRel of R;
+    now
+      let a, b be set such that
+b2:   a in y & b in x;
+      reconsider a1 = a, b1 = b as Element of P by a0,A0,b2;
+      [b,a] in the ToleranceRel of P by d1,b2,Defp6;
+      then b1 (--) a1 by Def3;
+      hence [a,b] in the ToleranceRel of P by Def3;
+    end;
+    hence thesis by a0,A0,Defp6;
+  end;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str, D be Subset-Family of P;
+  cluster pcs-general-power(D) -> pcs-compatible;
+  coherence
+  proof
+    set R = pcs-general-power(D);
+    let p, p', q, q' being Element of R such that
+a1: p (--) q and
+a2: p' <= p and
+a3: q' <= q;
+    [p',p] in the InternalRel of R & [q',q] in the InternalRel of R
+    by a2,a3,ORDERS_2:def 9;
+    then
+a0: p' in the carrier of R & q' in the carrier of R by ZFMISC_1:106;
+    now
+      let a, b be set such that
+b2:   a in p' and
+b3:   b in q';
+      reconsider a1 = a, b1 = b as Element of P by a0,b2,b3;
+      consider p1 being Element of P such that
+b4:   p1 in p and
+b5:   a1 <= p1 by a2,b2,Tp2;
+      consider q1 being Element of P such that
+b6:   q1 in q and
+b7:   b1 <= q1 by a3,b3,Tp2;
+      p1 (--) q1 by a1,b4,b6,Tp3;
+      then a1 (--) b1 by b5,b7,Def4;
+      hence [a,b] in the ToleranceRel of P by Def3;
+    end;
+    hence [p',q'] in the ToleranceRel of R by a0,Defp6;
+  end;
+end;
+
+definition
+  let P be pcs-Str;
+  func pcs-coherent-power(P) -> set equals
+  {X where X is Subset of P: X is pcs-self-coherent};
+  coherence;
+end;
+
+theorem Tu3:
+  for P being pcs-Str, X being set holds X in pcs-coherent-power(P)
+  implies X is pcs-self-coherent Subset of P
+  proof
+    let P be pcs-Str, X be set;
+    assume X in pcs-coherent-power(P);
+    then ex Y being Subset of P st X = Y & Y is pcs-self-coherent;
+    hence thesis;
+  end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-coherent-power(P) -> non empty;
+  coherence
+  proof
+    {}P in pcs-coherent-power(P);
+    hence thesis;
+  end;
+end;
+
+definition
+  let P be pcs-Str;
+  redefine func pcs-coherent-power(P) -> Subset-Family of P;
+  coherence
+  proof
+    pcs-coherent-power(P) c= bool the carrier of P
+    proof
+      let X be set;
+      assume X in pcs-coherent-power(P);
+      then X is Subset of P by Tu3;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-coherent-power(P) -> pcs-self-coherent-membered
+          Subset-Family of P;
+  coherence
+  proof
+    pcs-coherent-power(P) is pcs-self-coherent-membered
+    proof
+      let S be Subset of P;
+      thus thesis by Tu3;      
+    end;
+    hence thesis;
+  end;
+end;
+
+definition
+  let P be pcs-Str;
+  func pcs-power(P) -> pcs-Str equals
+  pcs-general-power(pcs-coherent-power(P));
+  coherence;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-power(P) -> strict;
+  coherence;
+end;
+
+registration
+  let P be pcs-Str;
+  cluster pcs-power(P) -> non empty;
+  coherence;
+end;
+
+registration
+  let P be reflexive pcs-Str;
+  cluster pcs-power(P) -> reflexive;
+  coherence;
+end;
+
+registration
+  let P be transitive pcs-Str;
+  cluster pcs-power(P) -> transitive;
+  coherence;
+end;
+
+registration
+  let P be pcs-tol-reflexive pcs-Str;
+  cluster pcs-power(P) -> pcs-tol-reflexive;
+  coherence;
+end;
+
+registration
+  let P be pcs-tol-symmetric pcs-Str;
+  cluster pcs-power(P) -> pcs-tol-symmetric;
+  coherence;
+end;
+
+registration
+  let P be pcs-compatible pcs-Str;
+  cluster pcs-power(P) -> pcs-compatible;
+  coherence;
+end;
+
+registration
+  let P be pcs;
+  cluster pcs-power(P) -> pcs-like;
+  coherence;
+end;

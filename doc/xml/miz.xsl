@@ -7,7 +7,7 @@
 <!-- provided the included .xsl files are available in the same directory -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
-  <!-- $Revision: 1.11 $ -->
+  <!-- $Revision: 1.41 $ -->
   <!--  -->
   <!-- File: miz.xsltxt - html-ization of Mizar XML, main file -->
   <!--  -->
@@ -62,7 +62,7 @@
     <xsl:value-of select="string(/*/@mizfiles)"/>
   </xsl:param>
   <xsl:param name="mizhtml">
-    <xsl:value-of select="concat($mizfiles,&quot;html/&quot;)"/>
+    <xsl:value-of select="concat(&quot;file://&quot;,$mizfiles,&quot;html/&quot;)"/>
   </xsl:param>
   <!-- extension for linking to other articles - either xml or html -->
   <xsl:param name="ext">
@@ -140,7 +140,7 @@
   </xsl:param>
   <!-- tells to display thesis after skeleton items -->
   <xsl:param name="display_thesis">
-    <xsl:text>0</xsl:text>
+    <xsl:text>1</xsl:text>
   </xsl:param>
   <!-- tells if only selected items are generated to subdirs; default is off -->
   <xsl:param name="generate_items">
@@ -149,6 +149,10 @@
   <!-- relevant only if $generate_items>0 -->
   <!-- tells if proofs of selected items are generated to subdirs; default is off -->
   <xsl:param name="generate_items_proofs">
+    <xsl:text>0</xsl:text>
+  </xsl:param>
+  <!-- add IDV links and icons -->
+  <xsl:param name="idv">
     <xsl:text>0</xsl:text>
   </xsl:param>
   <xsl:variable name="lcletters">
@@ -5170,6 +5174,7 @@
                 <xsl:text> be </xsl:text>
                 <xsl:apply-templates select="Typ"/>
                 <xsl:text>;</xsl:text>
+                <xsl:call-template name="try_th_exps"/>
                 <xsl:element name="br"/>
                 <xsl:apply-templates select="following-sibling::*[position()=$it_step][name()=&quot;Let&quot;]">
                   <xsl:with-param name="fst">
@@ -5498,8 +5503,9 @@
   <xsl:template match="Thesis"/>
 
   <xsl:template name="do_thesis">
+    <xsl:param name="nd"/>
     <xsl:apply-templates select="ThesisExpansions"/>
-    <xsl:if test="$display_thesis = 1">
+    <xsl:if test="($display_thesis = 1) and (not($nd = 1))">
       <xsl:text> </xsl:text>
       <xsl:element name="a">
         <xsl:call-template name="add_hs_attrs"/>
@@ -5523,21 +5529,29 @@
     <xsl:apply-templates select="./following-sibling::*[1][name()=&quot;Thesis&quot;]/ThesisExpansions"/>
   </xsl:template>
 
+  <!-- #nd overrides the $display_thesis parameter in do_thesis, -->
+  <!-- used to supress the incorrect PerCases thesis now -->
   <xsl:template name="try_th_exps">
+    <xsl:param name="nd"/>
     <xsl:choose>
       <xsl:when test="./following-sibling::*[1][name()=&quot;Thesis&quot;]">
         <xsl:for-each select="./following-sibling::*[1][name()=&quot;Thesis&quot;]">
-          <xsl:call-template name="do_thesis"/>
+          <xsl:call-template name="do_thesis">
+            <xsl:with-param name="nd" select="$nd"/>
+          </xsl:call-template>
         </xsl:for-each>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:if test="((name(..) = &quot;Now&quot;) or (name(..) = &quot;Case&quot;) or (name(..) = &quot;Suppose&quot;))
+        <xsl:if test="((name(..) = &quot;Now&quot;) or (name(..) = &quot;CaseBlock&quot;) or (name(..) = &quot;SupposeBlock&quot;))
               and (../BlockThesis/Thesis)">
           <xsl:variable name="prev_thesis_changes" select="count(./preceding-sibling::*[(name()=&quot;Let&quot;) or (name()=&quot;Take&quot;) 
-	                               or (name()=&quot;TakeAsVar&quot;) or (name()=&quot;Assume&quot;) 
+	                               or (name()=&quot;TakeAsVar&quot;) or (name()=&quot;Assume&quot;)
+	                               or (name()=&quot;Case&quot;) or (name()=&quot;Suppose&quot;)
 				       or (name()=&quot;Given&quot;) or (name()=&quot;Conclusion&quot;)])"/>
           <xsl:for-each select=" ../BlockThesis/Thesis[$prev_thesis_changes + 1]">
-            <xsl:call-template name="do_thesis"/>
+            <xsl:call-template name="do_thesis">
+              <xsl:with-param name="nd" select="$nd"/>
+            </xsl:call-template>
           </xsl:for-each>
         </xsl:if>
       </xsl:otherwise>
@@ -5610,6 +5624,11 @@
       <xsl:with-param name="elems" select="*"/>
     </xsl:call-template>
     <xsl:text>;</xsl:text>
+    <!-- this will break the thesis display in diffuse statements -->
+    <!-- for earlier kernel (analyzer v. < 1.94) - mea culpa, -->
+    <!-- the only reasonable backward-compatibility fix would be to -->
+    <!-- keep the kernel version as a parameter and check it here -->
+    <xsl:call-template name="try_th_exps"/>
     <xsl:element name="br"/>
   </xsl:template>
 
@@ -5628,6 +5647,14 @@
       <xsl:apply-templates select="*[1]"/>
     </xsl:element>
     <xsl:apply-templates select="*[position()&gt;1]"/>
+    <!-- thesis after per cases is broken yet and would have -->
+    <!-- to be reconstructed from subblocks' theses; -->
+    <!-- don't display it, only display the expansions -->
+    <xsl:call-template name="try_th_exps">
+      <xsl:with-param name="nd">
+        <xsl:text>1</xsl:text>
+      </xsl:with-param>
+    </xsl:call-template>
   </xsl:template>
 
   <!--  -->
@@ -6005,6 +6032,14 @@
         <xsl:text> interestingness: </xsl:text>
         <xsl:value-of select="@interesting"/>
       </xsl:if>
+      <xsl:if test="$idv &gt; 0">
+        <xsl:call-template name="idv_for_item">
+          <xsl:with-param name="k">
+            <xsl:text>t</xsl:text>
+          </xsl:with-param>
+          <xsl:with-param name="nr" select="$nr1"/>
+        </xsl:call-template>
+      </xsl:if>
       <xsl:element name="br"/>
     </xsl:element>
     <xsl:choose>
@@ -6039,6 +6074,65 @@
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="idv_for_item">
+    <xsl:param name="k"/>
+    <xsl:param name="nr"/>
+    <xsl:variable name="idv_html">
+      <xsl:text>http://www.cs.miami.edu/~tptp/MizarTPTP/</xsl:text>
+    </xsl:variable>
+    <!-- "http://lipa.ms.mff.cuni.cz/~urban/idvtest/"; -->
+    <!-- $idv_html = "file:///home/urban/mptp0.2/idvhtml/"; -->
+    <xsl:variable name="tptp_file" select="concat($idv_html,&quot;problems/&quot;,$anamelc,&quot;/&quot;,$anamelc, &quot;__&quot;,$k, $nr, &quot;_&quot;, $anamelc)"/>
+    <xsl:text> </xsl:text>
+    <xsl:element name="img">
+      <xsl:call-template name="add_hs2_attrs"/>
+      <xsl:attribute name="src">
+        <xsl:text>PalmTree.jpg</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>Show IDV graph</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="alt">
+        <xsl:text>Show IDV graph</xsl:text>
+      </xsl:attribute>
+    </xsl:element>
+    <!-- <a -->
+    <!-- { -->
+    <!-- //    add_ajax_attrs(#u = $th); -->
+    <!-- add_hs2_attrs(); -->
+    <!-- @title="Show IDV graph"; -->
+    <!-- <b { " IDV graph "; } -->
+    <!-- } -->
+    <xsl:element name="span">
+      <xsl:attribute name="style">
+        <xsl:text>display:none</xsl:text>
+      </xsl:attribute>
+      <xsl:text>:: Showing IDV graph ... (Click the Palm Tree again to close it)</xsl:text>
+      <xsl:element name="APPLET">
+        <xsl:attribute name="CODE">
+          <xsl:text>IDVApplet.class</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="ARCHIVE">
+          <xsl:text>http://www.cs.miami.edu/students/strac/test/IDV/IDV.jar,http://www.cs.miami.edu/students/strac/test/IDV/TptpParser.jar,http://www.cs.miami.edu/students/strac/test/IDV/antlr-2.7.5.jar</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="WIDTH">
+          <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="HEIGHT">
+          <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="PARAM">
+          <xsl:attribute name="NAME">
+            <xsl:text>URL</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="VALUE">
+            <xsl:value-of select="$tptp_file"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:element>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="DefTheorem">
@@ -6858,6 +6952,62 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template name="idv_for_top">
+    <xsl:variable name="idv_html">
+      <xsl:text>http://lipa.ms.mff.cuni.cz/~urban/idvtest/</xsl:text>
+    </xsl:variable>
+    <!-- $idv_html = "file:///home/urban/mptp0.2/idvhtml/"; -->
+    <xsl:variable name="tptp_file" select="concat($idv_html,&quot;top/&quot;,$anamelc,&quot;.top.rated&quot;)"/>
+    <xsl:text> </xsl:text>
+    <xsl:element name="img">
+      <xsl:call-template name="add_hs2_attrs"/>
+      <xsl:attribute name="src">
+        <xsl:text>hammock.jpg</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>Show IDV graph for whole article</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="alt">
+        <xsl:text>Show IDV graph for whole article</xsl:text>
+      </xsl:attribute>
+    </xsl:element>
+    <!-- <a -->
+    <!-- { -->
+    <!-- //    add_ajax_attrs(#u = $th); -->
+    <!-- add_hs2_attrs(); -->
+    <!-- @title="Show IDV graph"; -->
+    <!-- <b { " IDV graph "; } -->
+    <!-- } -->
+    <xsl:element name="span">
+      <xsl:attribute name="style">
+        <xsl:text>display:none</xsl:text>
+      </xsl:attribute>
+      <xsl:text>:: Showing IDV graph ... (Click the Palm Trees again to close it)</xsl:text>
+      <xsl:element name="APPLET">
+        <xsl:attribute name="CODE">
+          <xsl:text>IDVApplet.class</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="ARCHIVE">
+          <xsl:text>IDV.jar,TptpParser.jar,antlr-2.7.5.jar</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="WIDTH">
+          <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="HEIGHT">
+          <xsl:text>0</xsl:text>
+        </xsl:attribute>
+        <xsl:element name="PARAM">
+          <xsl:attribute name="NAME">
+            <xsl:text>URL</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="VALUE">
+            <xsl:value-of select="$tptp_file"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
   <!-- tpl [Now](#nkw) { -->
   <!-- <div { <b { if [not($nkw="1")] { "now ";} } -->
   <!-- <div { @class="add"; apply[BlockThesis]; -->
@@ -6865,9 +7015,14 @@
   <!-- <b { "end;"; } } } -->
   <!-- separate top-level items by additional newline -->
   <xsl:template match="Article">
-    <xsl:call-template name="pcomment">
-      <xsl:with-param name="str" select="concat($aname, &quot;  semantic presentation&quot;)"/>
-    </xsl:call-template>
+    <xsl:element name="div">
+      <xsl:call-template name="pcomment0">
+        <xsl:with-param name="str" select="concat($aname, &quot;  semantic presentation&quot;)"/>
+      </xsl:call-template>
+      <xsl:if test="$idv &gt; 0">
+        <xsl:call-template name="idv_for_top"/>
+      </xsl:if>
+    </xsl:element>
     <xsl:element name="br"/>
     <xsl:for-each select="*">
       <xsl:apply-templates select="."/>
@@ -7355,6 +7510,26 @@ function insertRequest(obj,http_request) {
 // End --&gt;
 </xsl:text>
             </xsl:element>
+            <xsl:if test="$idv&gt;0">
+              <xsl:element name="script">
+                <xsl:attribute name="type">
+                  <xsl:text>text/javascript</xsl:text>
+                </xsl:attribute>
+                <xsl:text>
+&lt;!--
+var tstp_dump;
+function openSoTSTP (dump) {
+var tstp_url = &apos;http://www.cs.miami.edu/~tptp/cgi-bin/SystemOnTSTP&apos;;
+var tstp_browser = window.open(tstp_url, &apos;_blank&apos;);
+tstp_dump = dump;
+}
+function getTSTPDump () {
+return tstp_dump;
+}
+// End --&gt;
+</xsl:text>
+              </xsl:element>
+            </xsl:if>
             <xsl:element name="base">
               <xsl:choose>
                 <xsl:when test="$linking = &quot;s&quot;">

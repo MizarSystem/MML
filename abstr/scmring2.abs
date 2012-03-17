@@ -8,10 +8,10 @@ environ
 
  vocabularies GR_CY_1, SCMFSA7B, FUNCSDOM, AMI_3, AMI_1, AMI_2, FUNCT_1, CAT_1,
       BOOLE, FINSEQ_1, FUNCT_2, CARD_3, ARYTM_1, RLVECT_1, CQC_LANG, SCMRING1,
-      MCART_1, FUNCT_4, RELAT_1, NAT_1, TARSKI;
+      MCART_1, FUNCT_4, RELAT_1, NAT_1, TARSKI, FUNCT_7;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       CARD_1, FUNCT_2, STRUCT_0, RLVECT_1, GROUP_1, FUNCSDOM, MCART_1, NUMBERS,
-      CARD_3, NAT_1, FINSEQ_1, FUNCOP_1, FUNCT_4, AMI_1, AMI_2, AMI_3,
+      CARD_3, NAT_1, FINSEQ_1, FUNCOP_1, FUNCT_4, FUNCT_7, AMI_1, AMI_2, AMI_3,
       SCMRING1, XXREAL_0;
  constructors XXREAL_0, NAT_1, FINSEQ_4, REALSET1, CAT_2, AMI_3, SCMRING1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FUNCOP_1,
@@ -32,8 +32,8 @@ reserve
 definition let R be good Ring;
  func SCM R -> strict AMI-Struct over { the carrier of R } means
 :: SCMRING2:def 1
-  the carrier of it = NAT &
-  the Instruction-Counter of it = 0 &
+  the carrier of it = SCM-Memory &
+  the Instruction-Counter of it = NAT &
   the Instruction-Locations of it = SCM-Instr-Loc &
   the Instructions of it = SCM-Instr R &
   the Object-Kind of it = SCM-OK R &
@@ -53,7 +53,7 @@ end;
 definition let R be good Ring;
  mode Data-Location of R -> Object of SCM R means
 :: SCMRING2:def 2
-  it in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {0});
+  it in (the carrier of SCM R) \ (SCM-Instr-Loc \/ {NAT});
 end;
 
 reserve R for good Ring,
@@ -91,36 +91,36 @@ theorem :: SCMRING2:7
 definition let R be good Ring, a, b be Data-Location of R;
  func a := b -> Instruction of SCM R equals
 :: SCMRING2:def 3
- [ 1, <*a, b*>];
+  [ 1, <*a, b*>];
  func AddTo(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 4
- [ 2, <*a, b*>];
+  [ 2, <*a, b*>];
  func SubFrom(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 5
- [ 3, <*a, b*>];
+  [ 3, <*a, b*>];
  func MultBy(a,b) -> Instruction of SCM R equals
 :: SCMRING2:def 6
- [ 4, <*a, b*>];
+  [ 4, <*a, b*>];
 end;
 
 definition let R be good Ring, a be Data-Location of R,
                r be Element of R;
  func a := r -> Instruction of SCM R equals
 :: SCMRING2:def 7
- [ 5, <*a,r*>];
+  [ 5, <*a,r*>];
 end;
 
 definition let R be good Ring, l be Instruction-Location of SCM R;
  func goto l -> Instruction of SCM R equals
 :: SCMRING2:def 8
- [ 6, <*l*>];
+  [ 6, <*l*>];
 end;
 
 definition let R be good Ring, l be Instruction-Location of SCM R,
                a be Data-Location of R;
  func a=0_goto l -> Instruction of SCM R equals
 :: SCMRING2:def 9
- [ 7, <*l,a*>];
+  [ 7, <*l,a*>];
 end;
 
 theorem :: SCMRING2:8
@@ -141,7 +141,7 @@ registration let R;
 end;
 
 theorem :: SCMRING2:9
- IC SCM R = 0;
+ IC SCM R = NAT;
 
 theorem :: SCMRING2:10
  for S being SCM-State of R st S = s holds IC s = IC S;
@@ -186,7 +186,7 @@ theorem :: SCMRING2:16
  for c st c <> a holds Exec(MultBy(a,b), s).c = s.c;
 
 theorem :: SCMRING2:17
-     Exec(goto i1, s).IC SCM R = i1 &
+      Exec(goto i1, s).IC SCM R = i1 &
  Exec(goto i1, s).c = s.c;
 
 theorem :: SCMRING2:18
@@ -239,5 +239,5 @@ theorem :: SCMRING2:29
  for I being Instruction of SCM R st I is halting holds I = halt SCM R;
 
 theorem :: SCMRING2:30
-     halt SCM R = [0,{}];
+      halt SCM R = [0,{}];
 

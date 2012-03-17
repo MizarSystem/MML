@@ -9,7 +9,7 @@ environ
  vocabularies ABSVALUE, PARTFUN1, SUPINF_1, MEASURE1, FINSEQ_1, RELAT_1,
       FUNCT_1, RAT_1, ORDINAL2, COMPLEX1, SEQ_1, NAT_1, MEASURE6, BOOLE, ARYTM,
       ARYTM_1, MESFUNC1, TARSKI, ARYTM_3, RFUNCT_3, SQUARE_1, RLVECT_1, PROB_1,
-      INTEGRA1, MESFUNC2, MESFUNC3, SETFAM_1, MESFUNC5, SUPINF_2;
+      INTEGRA1, MESFUNC2, MESFUNC3, SETFAM_1, MESFUNC5, SUPINF_2, FINSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       DOMAIN_1, XREAL_0, REAL_1, RAT_1, NAT_1, NAT_D, FUNCT_1, RELSET_1,
       PARTFUN1, FINSEQ_1, SEQ_1, COMPLEX1, XXREAL_0, RFUNCT_3, MEASURE6,
@@ -44,7 +44,7 @@ reserve X for non empty set,
 
 definition let X be non empty set, f be PartFunc of X,REAL, a be real number;
   func less_dom(f,a) -> Subset of X equals
-    less_dom(R_EAL f,R_EAL a);
+     less_dom(R_EAL f,R_EAL a);
   coherence;
 end;
 
@@ -53,10 +53,10 @@ theorem Th1:
 proof
 A1:dom |. R_EAL f .| = dom R_EAL f by MESFUNC1:def 10
                     .= dom abs f by SEQ_1:def 10;
-   now let x be Element of X;
-    assume A2:x in dom |. R_EAL f .|; then
-    (|. R_EAL f .|).x = |. (R_EAL f).x .| by MESFUNC1:def 10; then
-    (|. R_EAL f .|).x = abs(f.x) by EXTREAL2:49;
+    now let x be Element of X;
+    assume A2:x in dom |. R_EAL f .|;
+    then (|. R_EAL f .|).x = |. (R_EAL f).x .| by MESFUNC1:def 10;
+    then (|. R_EAL f .|).x = abs(f.x) by EXTREAL2:49;
     hence (|. R_EAL f .|).x = (R_EAL abs f).x by A1,A2,SEQ_1:def 10;
    end;
    hence thesis by A1,PARTFUN1:34;
@@ -79,15 +79,15 @@ proof
 A1:dom f in S and
 A2:for x be set st x in dom f holds f.x = r;
    reconsider Df = dom f as Element of S by A1;
-   now let x be Element of X;
-    assume x in dom f; then
-    f.x = r by A2; then
-    -infty < f.x & f.x < +infty by XXREAL_0:9,12; then
-    -(+infty) < f.x & f.x < +infty by SUPINF_2:def 3;
+    now let x be Element of X;
+    assume x in dom f;
+    then f.x = r by A2;
+    then -infty < f.x & f.x < +infty by XXREAL_0:9,12;
+    then -(+infty) < f.x & f.x < +infty by SUPINF_2:def 3;
     hence |. f.x .| < +infty by EXTREAL2:59;
-   end; then
-A3:f is_finite by MESFUNC2:def 1;
-   ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
+   end;
+then A3:f is finite by MESFUNC2:def 1;
+    ex F being Finite_Sep_Sequence of S st (dom f = union rng F &
     for n being Nat,x,y being Element of X st
      n in dom F & x in F.n & y in F.n holds f.x = f.y)
    proof
@@ -96,25 +96,25 @@ A3:f is_finite by MESFUNC2:def 1;
  A4: len F = 1 &
      for n be Element of NAT st n in Seg 1 holds F.n = F(n)
        from FINSEQ_2:sch 1;
-    now let i,j be Nat;
-     assume A5:i in dom F & j in dom F & i <> j; then
-     i in Seg len F & j in Seg len F by FINSEQ_1:def 3; then
-     i = 1 & j = 1 by A4,FINSEQ_1:4,TARSKI:def 1;
+     now let i,j be Nat;
+     assume A5:i in dom F & j in dom F & i <> j;
+     then i in Seg len F & j in Seg len F by FINSEQ_1:def 3;
+     then i = 1 & j = 1 by A4,FINSEQ_1:4,TARSKI:def 1;
      hence F.i misses F.j by A5;
-    end; then
-    reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
+    end;
+    then reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
     take F;
-    1 in Seg 1; then
- A6:F.1 = Df by A4;
-    F = <* F.1 *> by A4,FINSEQ_1:57; then
-    rng F = {F.1} by FINSEQ_1:55;
+     1 in Seg 1;
+ then A6:F.1 = Df by A4;
+     F = <* F.1 *> by A4,FINSEQ_1:57;
+    then rng F = {F.1} by FINSEQ_1:55;
     hence dom f = union rng F by A6,ZFMISC_1:31;
     hereby let n be Nat, x,y be Element of X;
      assume
-A7:  n in dom F & x in F.n & y in F.n; then
-     n in Seg 1 by A4,FINSEQ_1:def 3; then
-     F.n = Df by A4; then
-     f.x = r & f.y = r by A2,A7;
+A7:  n in dom F & x in F.n & y in F.n;
+     then n in Seg 1 by A4,FINSEQ_1:def 3;
+     then F.n = Df by A4;
+     then f.x = r & f.y = r by A2,A7;
      hence f.x = f.y;
     end;
    end;
@@ -122,18 +122,18 @@ A7:  n in dom F & x in F.n & y in F.n; then
 end;
 
 theorem
-for x be set holds
+ for x be set holds
  x in less_dom(f,a) iff
   x in dom f & ex y being Real st y=f.x & y < a
 proof
    let x be set;
-   (ex y being Real st y=f.x & y < a)
+    (ex y being Real st y=f.x & y < a)
      iff (ex y being R_eal st y=f.x & y < R_EAL a)
    proof
-    hereby assume ex y being Real st y=f.x & y < a; then
-     consider y be Real such that
+    hereby assume ex y being Real st y=f.x & y < a;
+     then consider y be Real such that
 A1:  y=f.x & y < a;
-     R_EAL y < R_EAL a by A1;
+      R_EAL y < R_EAL a by A1;
      hence ex y being R_eal st y=f.x & y < R_EAL a by A1;
     end;
     thus thesis;
@@ -143,23 +143,23 @@ end;
 
 definition let X,f,a;
   func less_eq_dom(f,a) -> Subset of X equals
-  less_eq_dom(R_EAL f,R_EAL a);
+   less_eq_dom(R_EAL f,R_EAL a);
   coherence;
 end;
 
 theorem
-for x be set holds
+ for x be set holds
  x in less_eq_dom(f,a) iff
    x in dom f & ex y being Real st y=f.x & y <= a
 proof
    let x be set;
-   (ex y being Real st y=f.x & y <= a) iff
+    (ex y being Real st y=f.x & y <= a) iff
      (ex y being R_eal st y=f.x & y <= R_EAL a)
    proof
-    hereby assume ex y being Real st y=f.x & y <= a; then
-     consider y be Real such that
+    hereby assume ex y being Real st y=f.x & y <= a;
+     then consider y be Real such that
 A1:   y=f.x & y <= a;
-     R_EAL y <= R_EAL a by A1;
+      R_EAL y <= R_EAL a by A1;
      hence ex y being R_eal st y=f.x & y <= R_EAL a by A1;
     end;
     thus thesis;
@@ -169,23 +169,23 @@ end;
 
 definition let X,f,a;
   func great_dom(f,a) -> Subset of X equals
-    great_dom(R_EAL f,R_EAL a);
+     great_dom(R_EAL f,R_EAL a);
   coherence;
 end;
 
 theorem
-for x be set holds
+ for x be set holds
 x in great_dom(f,r)
  iff x in dom f & ex y being Real st y=f.x & r < y
 proof
    let x be set;
-   (ex y being Real st y=f.x & r < y)
+    (ex y being Real st y=f.x & r < y)
      iff (ex y being R_eal st y=f.x & R_EAL r < y )
    proof
-    hereby assume ex y being Real st y=f.x & r < y; then
-     consider y be Real such that
+    hereby assume ex y being Real st y=f.x & r < y;
+     then consider y be Real such that
 A1:   y=f.x & r < y;
-     R_EAL r < R_EAL y by A1;
+      R_EAL r < R_EAL y by A1;
      hence ex y being R_eal st y=f.x & R_EAL r < y by A1;
     end;
     thus thesis;
@@ -195,23 +195,23 @@ end;
 
 definition let X,f,a;
   func great_eq_dom(f,a) -> Subset of X equals
-    great_eq_dom(R_EAL f,R_EAL a);
+     great_eq_dom(R_EAL f,R_EAL a);
   coherence;
 end;
 
 theorem
-for x be set holds
+ for x be set holds
  x in great_eq_dom(f,r) iff
    x in dom f & ex y being Real st y=f.x & r <= y
 proof
    let x be set;
-   (ex y being Real st y=f.x & r <= y)
+    (ex y being Real st y=f.x & r <= y)
     iff (ex y being R_eal st y=f.x & R_EAL r <= y )
    proof
-    hereby assume ex y being Real st y=f.x & r <= y; then
-     consider y be Real such that
+    hereby assume ex y being Real st y=f.x & r <= y;
+     then consider y be Real such that
 A1:   y=f.x & r <= y;
-     R_EAL r <= R_EAL y by A1;
+      R_EAL r <= R_EAL y by A1;
      hence ex y being R_eal st y=f.x & R_EAL r <= y by A1;
     end;
     thus thesis;
@@ -221,41 +221,41 @@ end;
 
 definition let X,f,a;
   func eq_dom(f,a) -> Subset of X equals
-    eq_dom(R_EAL f,R_EAL a);
+     eq_dom(R_EAL f,R_EAL a);
   coherence;
 end;
 
 theorem
-for x be set holds
+ for x be set holds
 x in eq_dom(f,r)
  iff x in dom f & ex y being Real st y=f.x & r= y
 proof
    let x be set;
-   (ex y being Real st y=f.x & r = y)
+    (ex y being Real st y=f.x & r = y)
      iff (ex y being R_eal st y=f.x & R_EAL r = y );
    hence thesis by MESFUNC1:def 16;
 end;
 
 theorem
- (for n holds F.n = Y /\ great_dom(f,r-1/(n+1))) implies
+  (for n holds F.n = Y /\ great_dom(f,r-1/(n+1))) implies
    Y /\ great_eq_dom(f,r) = meet rng F
 proof
    assume
 A1: for n holds F.n = Y /\ great_dom(f,r-1/(n+1));
-   now let n be Element of NAT;
-    F.n =Y /\ great_dom(f,r-1/(n+1)) by A1;
+    now let n be Element of NAT;
+     F.n =Y /\ great_dom(f,r-1/(n+1)) by A1;
     hence F.n = Y /\ great_dom(R_EAL f,R_EAL(r-1/(n+1)));
    end;
    hence Y /\ great_eq_dom(f,r) = meet rng F by MESFUNC1:23;
 end;
 
 theorem
- (for n holds F.n = Y /\ less_dom(f,(r+1/(n+1)))) implies
+  (for n holds F.n = Y /\ less_dom(f,(r+1/(n+1)))) implies
   Y /\ less_eq_dom(f,r) = meet rng F
 proof
    assume
 A1: for n holds F.n = Y /\ less_dom(f,r+1/(n+1));
-   now let n be Element of NAT;
+    now let n be Element of NAT;
     thus F.n =Y /\ less_dom(f,r+1/(n+1)) by A1
     .=Y /\ less_dom(R_EAL f,R_EAL(r+1/(n+1)));
    end;
@@ -263,12 +263,12 @@ A1: for n holds F.n = Y /\ less_dom(f,r+1/(n+1));
 end;
 
 theorem
- (for n holds F.n = Y /\ less_eq_dom(f,r-1/(n+1))) implies
+  (for n holds F.n = Y /\ less_eq_dom(f,r-1/(n+1))) implies
    Y /\ less_dom(f,r) = union rng F
 proof
    assume
 A1:for n holds F.n = Y /\ less_eq_dom(f,r-1/(n+1));
-   now let n be Element of NAT;
+    now let n be Element of NAT;
     thus F.n =Y /\ less_eq_dom(f,r-1/(n+1)) by A1
       .=Y /\ less_eq_dom(R_EAL f,R_EAL(r-1/(n+1)));
    end;
@@ -276,12 +276,12 @@ A1:for n holds F.n = Y /\ less_eq_dom(f,r-1/(n+1));
 end;
 
 theorem
- (for n holds F.n = Y /\ great_eq_dom(f,r+1/(n+1))) implies
+  (for n holds F.n = Y /\ great_eq_dom(f,r+1/(n+1))) implies
    Y /\ great_dom(f,r) = union rng F
 proof
    assume
 A1: for n holds F.n = Y /\ great_eq_dom(f,r+1/(n+1));
-   now let n be Element of NAT;
+    now let n be Element of NAT;
     thus F.n =Y /\ great_eq_dom(f,r+1/(n+1)) by A1
      .=Y /\ great_eq_dom(R_EAL f,R_EAL(r+1/(n+1)));
    end;
@@ -302,14 +302,14 @@ theorem Th12:
    for r being real number holds A /\ less_dom(f,r) is_measurable_on S
 proof
 A1:f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
-   (for r being real number holds A /\ less_dom(f,r) is_measurable_on S)
+    (for r being real number holds A /\ less_dom(f,r) is_measurable_on S)
     implies (for r being real number holds A /\ less_dom(R_EAL f,R_EAL r)
      is_measurable_on S)
    proof
     hereby assume
 A2:  for r being real number holds A /\ less_dom(f,r) is_measurable_on S;
      hereby let r being real number;
-      A /\ less_dom(R_EAL f,R_EAL r) = A /\ less_dom(f,r);
+       A /\ less_dom(R_EAL f,R_EAL r) = A /\ less_dom(f,r);
       hence A /\ less_dom(R_EAL f,R_EAL r) is_measurable_on S by A2;
      end;
     end;
@@ -325,7 +325,7 @@ A c= dom f implies
 proof
    assume A1:A c= dom f;
 A2:f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
-   (for r being real number holds A /\ great_eq_dom(f,r) is_measurable_on S)
+    (for r being real number holds A /\ great_eq_dom(f,r) is_measurable_on S)
     implies
    (for r being real number holds A /\ great_eq_dom(R_EAL f,R_EAL r)
     is_measurable_on S)
@@ -333,7 +333,7 @@ A2:f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
     hereby assume
 A3:  for r being real number holds A /\ great_eq_dom(f,r) is_measurable_on S;
      hereby let r being real number;
-      A /\ great_eq_dom(R_EAL f,R_EAL r) = A /\ great_eq_dom(f,r);
+       A /\ great_eq_dom(R_EAL f,R_EAL r) = A /\ great_eq_dom(f,r);
       hence A /\ great_eq_dom(R_EAL f,R_EAL r) is_measurable_on S by A3;
      end;
     end;
@@ -342,11 +342,11 @@ A3:  for r being real number holds A /\ great_eq_dom(f,r) is_measurable_on S;
 end;
 
 theorem
-f is_measurable_on A iff
+ f is_measurable_on A iff
   (for r being real number holds A /\ less_eq_dom(f,r) is_measurable_on S)
 proof
 A1:f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
-   (for r being real number holds A /\ less_eq_dom(f,r) is_measurable_on S)
+    (for r being real number holds A /\ less_eq_dom(f,r) is_measurable_on S)
    implies
    (for r being real number holds A /\ less_eq_dom(R_EAL f,R_EAL r)
      is_measurable_on S)
@@ -354,7 +354,7 @@ A1:f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
     hereby assume
 A2:  for r being real number holds A /\ less_eq_dom(f,r) is_measurable_on S;
      hereby let r being real number;
-      A /\ less_eq_dom(R_EAL f,R_EAL r) = A /\ less_eq_dom(f,r);
+       A /\ less_eq_dom(R_EAL f,R_EAL r) = A /\ less_eq_dom(f,r);
       hence A /\ less_eq_dom(R_EAL f,R_EAL r) is_measurable_on S by A2;
      end;
     end;
@@ -363,7 +363,7 @@ A2:  for r being real number holds A /\ less_eq_dom(f,r) is_measurable_on S;
 end;
 
 theorem
-A c= dom f implies
+ A c= dom f implies
 ( f is_measurable_on A iff
   (for r being real number holds A /\ great_dom(f,r) is_measurable_on S) )
 proof
@@ -377,68 +377,68 @@ A2:(for r being real number holds A /\ great_dom(f,r) is_measurable_on S)
     hereby assume
  A3: for r being real number holds A /\ great_dom(f,r) is_measurable_on S;
      hereby let r being real number;
-      A /\ great_dom(R_EAL f,R_EAL r) = A /\ great_dom(f,r);
+       A /\ great_dom(R_EAL f,R_EAL r) = A /\ great_dom(f,r);
       hence A /\ great_dom(R_EAL f,R_EAL r) is_measurable_on S by A3;
      end;
     end;
    end;
-   f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
+    f is_measurable_on A iff R_EAL f is_measurable_on A by Def6;
    hence thesis by MESFUNC1:33,A1,A2;
 end;
 
 theorem
-B c= A & f is_measurable_on A implies f is_measurable_on B
+ B c= A & f is_measurable_on A implies f is_measurable_on B
 proof
    assume that
 A1:B c= A and
 A2:f is_measurable_on A;
-   R_EAL f is_measurable_on A by A2,Def6; then
-   R_EAL f is_measurable_on B by A1,MESFUNC1:34;
+    R_EAL f is_measurable_on A by A2,Def6;
+   then R_EAL f is_measurable_on B by A1,MESFUNC1:34;
    hence f is_measurable_on B by Def6;
 end;
 
 theorem
-f is_measurable_on A & f is_measurable_on B
+ f is_measurable_on A & f is_measurable_on B
  implies f is_measurable_on (A \/ B)
 proof
    assume
-A1: f is_measurable_on A & f is_measurable_on B;
-   R_EAL f is_measurable_on A &
-   R_EAL f is_measurable_on B by Def6,A1; then
-   R_EAL f is_measurable_on (A \/ B) by MESFUNC1:35;
+ f is_measurable_on A & f is_measurable_on B;
+   then R_EAL f is_measurable_on A &
+   R_EAL f is_measurable_on B by Def6;
+   then R_EAL f is_measurable_on (A \/ B) by MESFUNC1:35;
    hence f is_measurable_on (A \/ B) by Def6;
 end;
 
 theorem
-f is_measurable_on A & A c= dom f implies
+ f is_measurable_on A & A c= dom f implies
   A /\ great_dom(f,r) /\ less_dom(f,s) is_measurable_on S
 proof
    assume
-A1: f is_measurable_on A & A c= dom f; then
-   R_EAL f is_measurable_on A by Def6;
+A1: f is_measurable_on A & A c= dom f;
+   then R_EAL f is_measurable_on A by Def6;
    hence thesis by MESFUNC1:36,A1;
 end;
 
 theorem
-f is_measurable_on A & g is_measurable_on A & A c= dom g implies
+ f is_measurable_on A & g is_measurable_on A & A c= dom g implies
  A /\ less_dom(f,r) /\ great_dom(g,r) is_measurable_on S
 proof
    assume
-A1: f is_measurable_on A & g is_measurable_on A & A c= dom g; then
-   R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6;
+A1: f is_measurable_on A & g is_measurable_on A & A c= dom g;
+   then R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6;
    hence thesis by MESFUNC1:40,A1;
 end;
 
 theorem Th20:
 R_EAL(r(#)f)=r(#)R_EAL f
 proof
-   dom(R_EAL(r(#)f)) = dom(R_EAL f) by SEQ_1:def 6; then
-A1:dom(R_EAL(r(#)f)) = dom(r(#)R_EAL f) by MESFUNC1:def 6;
-   now let x be set;
+    dom(R_EAL(r(#)f)) = dom(R_EAL f) by SEQ_1:def 6;
+then A1:dom(R_EAL(r(#)f)) = dom(r(#)R_EAL f) by MESFUNC1:def 6;
+    now let x be set;
     assume
-A2:  x in dom R_EAL(r(#)f); then
-    (R_EAL(r(#)f)).x = r*(f.x) by SEQ_1:def 6; then
-    (R_EAL(r(#)f)).x = R_EAL r * R_EAL(f.x) by EXTREAL1:13;
+A2:  x in dom R_EAL(r(#)f);
+    then (R_EAL(r(#)f)).x = r*(f.x) by SEQ_1:def 6;
+    then (R_EAL(r(#)f)).x = R_EAL r * R_EAL(f.x) by EXTREAL1:13;
     hence (R_EAL(r(#)f)).x = (r(#)R_EAL f).x by A1,A2,MESFUNC1:def 6;
    end;
    hence thesis by A1,FUNCT_1:9;
@@ -449,9 +449,9 @@ f is_measurable_on A & A c= dom f implies r(#)f is_measurable_on A
 proof
    assume
 A1: f is_measurable_on A & A c= dom f;
-   R_EAL f is_measurable_on A by Def6,A1; then
-   r(#)R_EAL f is_measurable_on A by MESFUNC1:41,A1; then
-   R_EAL(r(#)f) is_measurable_on A by Th20;
+   then R_EAL f is_measurable_on A by Def6;
+   then r(#)R_EAL f is_measurable_on A by MESFUNC1:41,A1;
+   then R_EAL(r(#)f) is_measurable_on A by Th20;
    hence r(#)f is_measurable_on A by Def6;
 end;
 
@@ -465,17 +465,7 @@ reserve X for non empty set,
         p for Rational;
 
 theorem Th22:
-R_EAL f is_finite
-proof
-   now let x be Element of X;
-    assume x in dom(R_EAL f);
-    (R_EAL f).x = f.x; then
-A1: -infty < (R_EAL f).x & (R_EAL f).x < +infty by XXREAL_0:9,12;
-    - +infty =-infty by SUPINF_2:def 3;
-    hence |. (R_EAL f).x .| < +infty by A1,EXTREAL2:59;
-   end;
-   hence thesis by MESFUNC2:def 1;
-end;
+R_EAL f is finite;
 
 theorem Th23:
 R_EAL(f+g)=R_EAL f + R_EAL g & R_EAL(f-g)=R_EAL f - R_EAL g &
@@ -483,77 +473,77 @@ dom(R_EAL(f+g))= dom(R_EAL f) /\ dom(R_EAL g) &
 dom(R_EAL(f-g))= dom(R_EAL f) /\ dom(R_EAL g) &
 dom(R_EAL(f+g))= dom f /\ dom g & dom(R_EAL(f-g))= dom f /\ dom g
 proof
-A1:R_EAL f is_finite & R_EAL g is_finite by Th22; then
-   dom(R_EAL f + R_EAL g) = dom(R_EAL f) /\ dom(R_EAL g) by MESFUNC2:2; then
-A2:dom(R_EAL f + R_EAL g) = dom(f+g) by SEQ_1:def 3;
+A1:R_EAL f is finite & R_EAL g is finite;
+   dom(R_EAL f + R_EAL g) = dom(R_EAL f) /\ dom(R_EAL g) by MESFUNC2:2;
+then A2:dom(R_EAL f + R_EAL g) = dom(f+g) by SEQ_1:def 3;
 A3:now let x be set;
     assume
-A4:  x in dom(R_EAL f + R_EAL g); then
-    (R_EAL f + R_EAL g).x =(R_EAL f).x + (R_EAL g).x by MESFUNC1:def 3
+A4:  x in dom(R_EAL f + R_EAL g);
+    then (R_EAL f + R_EAL g).x =(R_EAL f).x + (R_EAL g).x by MESFUNC1:def 3
      .=f.x + g.x by SUPINF_2:1;
     hence (R_EAL f + R_EAL g).x = (f+g).x by A2,A4,SEQ_1:def 3;
    end;
-   dom(R_EAL f - R_EAL g) = dom(R_EAL f) /\ dom(R_EAL g) by A1,MESFUNC2:2; then
-A5:dom(R_EAL f - R_EAL g) = dom(f-g) by SEQ_1:def 4;
-   now let x be set;
+    dom(R_EAL f - R_EAL g) = dom(R_EAL f) /\ dom(R_EAL g) by MESFUNC2:2;
+then A5:dom(R_EAL f - R_EAL g) = dom(f-g) by SEQ_1:def 4;
+    now let x be set;
     assume
-A6:  x in dom(R_EAL f - R_EAL g); then
-    (R_EAL f - R_EAL g).x =(R_EAL f).x - (R_EAL g).x by MESFUNC1:def 4
+A6:  x in dom(R_EAL f - R_EAL g);
+    then (R_EAL f - R_EAL g).x =(R_EAL f).x - (R_EAL g).x by MESFUNC1:def 4
       .=f.x - g.x by SUPINF_2:5;
     hence (R_EAL f - R_EAL g).x =(f-g).x by A5,A6,SEQ_1:def 4;
    end;
-   hence thesis by A1,A2,A3,A5,MESFUNC2:2,FUNCT_1:9;
+   hence thesis by A2,A3,A5,MESFUNC2:2,FUNCT_1:9;
 end;
 
 theorem
-for F be Function of RAT,S st
+ for F be Function of RAT,S st
  (for p holds F.p = (A/\less_dom(f,p)) /\ (A/\less_dom(g,r-p))) holds
    A /\ less_dom(f+g,r) = union rng F
 proof
    let F be Function of RAT,S;
    assume
 A1:for p holds F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p));
-A2:R_EAL f is_finite & R_EAL g is_finite by Th22;
-   now let p;
-    F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p)) by A1;
+A2:R_EAL f is finite & R_EAL g is finite;
+    now let p;
+     F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p)) by A1;
     hence F.p = (A /\ less_dom(R_EAL f,R_EAL p))
          /\ (A /\ less_dom(R_EAL g,R_EAL(r-p)));
-   end; then
-   A /\ less_dom(R_EAL f + R_EAL g,R_EAL r) = union rng F by A2,MESFUNC2:3;
+   end;
+   then A /\ less_dom(R_EAL f + R_EAL g,R_EAL r) = union rng F by MESFUNC2:
+3;
    hence A /\ less_dom(f+g,r) = union rng F by Th23;
 end;
 
 theorem
-f is_measurable_on A & g is_measurable_on A implies
+ f is_measurable_on A & g is_measurable_on A implies
  ex F being Function of RAT,S st
   (for p being Rational holds
     F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p)))
 proof
-   assume f is_measurable_on A & g is_measurable_on A; then
-   R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6; then
-   consider F being Function of RAT,S such that
+   assume f is_measurable_on A & g is_measurable_on A;
+   then R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6;
+   then consider F being Function of RAT,S such that
 A1: for p being Rational holds
      F.p = (A /\ less_dom(R_EAL(f),R_EAL p))
          /\ (A /\ less_dom(R_EAL(g), R_EAL (r-p))) by MESFUNC2:6;
-   for p holds F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p)) by A1;
+    for p holds F.p = (A /\ less_dom(f,p)) /\ (A /\ less_dom(g,r-p)) by A1;
    hence thesis;
 end;
 
 theorem Th26:
 f is_measurable_on A & g is_measurable_on A implies f+g is_measurable_on A
 proof
-   assume f is_measurable_on A & g is_measurable_on A; then
-A1:R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6;
-   R_EAL f is_finite & R_EAL g is_finite by Th22; then
-   R_EAL f + R_EAL g is_measurable_on A by A1,MESFUNC2:7; then
-   R_EAL(f+g) is_measurable_on A by Th23;
+   assume f is_measurable_on A & g is_measurable_on A;
+then A1:R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by Def6;
+   R_EAL f + R_EAL g is_measurable_on A by A1,MESFUNC2:7;
+   then R_EAL(f+g) is_measurable_on A by Th23;
    hence f+g is_measurable_on A by Def6;
 end;
 
 theorem Th27:
 R_EAL f - R_EAL g = R_EAL f + R_EAL -g
 proof
-   R_EAL f - R_EAL g = R_EAL(f-g) by Th23 .=R_EAL(f + -g) by RFUNCT_1:40;
+    R_EAL f - R_EAL g = R_EAL(f-g) by Th23 .=R_EAL(f + -g) by RFUNCT_1:40;
    hence thesis by Th23;
 end;
 
@@ -561,25 +551,25 @@ theorem  Th28:
 -R_EAL f = R_EAL((-1)(#)f) & -R_EAL f = R_EAL -f
 proof
 A1:-R_EAL f = (-1)(#)R_EAL f by MESFUNC2:11;
-   (-1)(#)R_EAL f = R_EAL((-1)(#)f) by Th20;
+    (-1)(#)R_EAL f = R_EAL((-1)(#)f) by Th20;
    hence thesis by A1,RFUNCT_1:38;
  end;
 
 theorem
-f is_measurable_on A & g is_measurable_on A & A c= dom g
+ f is_measurable_on A & g is_measurable_on A & A c= dom g
  implies f-g is_measurable_on A
 proof
    assume that
 A1: f is_measurable_on A & g is_measurable_on A and
 A2: A c= dom g;
-A3:R_EAL f is_finite & R_EAL -g is_finite by Th22;
-A4:R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by A1,Def6; then
-   (-1)(#)R_EAL g is_measurable_on A by A2,MESFUNC1:41; then
-   -R_EAL g is_measurable_on A by MESFUNC2:11; then
-   R_EAL -g is_measurable_on A by Th28; then
-   R_EAL f + R_EAL -g is_measurable_on A by A3,A4,MESFUNC2:7; then
-   R_EAL f - R_EAL g is_measurable_on A by Th27; then
-   R_EAL(f-g) is_measurable_on A by Th23;
+A3:R_EAL f is finite & R_EAL -g is finite;
+A4:R_EAL f is_measurable_on A & R_EAL g is_measurable_on A by A1,Def6;
+   then (-1)(#)R_EAL g is_measurable_on A by A2,MESFUNC1:41;
+   then -R_EAL g is_measurable_on A by MESFUNC2:11;
+   then R_EAL -g is_measurable_on A by Th28;
+   then R_EAL f + R_EAL -g is_measurable_on A by A4,MESFUNC2:7;
+   then R_EAL f - R_EAL g is_measurable_on A by Th27;
+   then R_EAL(f-g) is_measurable_on A by Th23;
    hence f-g is_measurable_on A by Def6;
 end;
 
@@ -594,148 +584,148 @@ max+(R_EAL f) = max+f & max-(R_EAL f) = max-f
 proof
 A1:dom max+(R_EAL f) = dom R_EAL f by MESFUNC2:def 2
         .= dom max+f by RFUNCT_3:def 10;
-   now let x be set;
+    now let x be set;
     assume
-A2: x in dom max+(R_EAL f); then
-    (max+(R_EAL f)).x = max+(f.x) by MESFUNC2:def 2;
+A2: x in dom max+(R_EAL f);
+    then (max+(R_EAL f)).x = max+(f.x) by MESFUNC2:def 2;
     hence (max+(R_EAL f)).x = (max+f).x by A1,A2,RFUNCT_3:def 10;
    end;
    hence max+(R_EAL f) = max+f by A1,FUNCT_1:9;
 A3:dom max-(R_EAL f) = dom R_EAL f by MESFUNC2:def 3
         .=dom max-f by RFUNCT_3:def 11;
-   now let x be set;
+    now let x be set;
     assume
-A4: x in dom max-(R_EAL f); then
-    (max-(R_EAL f)).x = max(-(R_EAL(f.x)),0.) by MESFUNC2:def 3; then
-    (max-(R_EAL f)).x = max( R_EAL(-f.x),0.) by SUPINF_2:3; then
-    (max-(R_EAL f)).x = max-(f.x);
+A4: x in dom max-(R_EAL f);
+    then (max-(R_EAL f)).x = max(-(R_EAL(f.x)),0.) by MESFUNC2:def 3;
+    then (max-(R_EAL f)).x = max-(f.x) by SUPINF_2:3;
     hence (max-(R_EAL f)).x = (max-f).x by A3,A4,RFUNCT_3:def 11;
    end;
    hence max-(R_EAL f) = max-f by A3,FUNCT_1:9;
 end;
 
 theorem
-for x being Element of X holds 0 <= (max+f).x
+ for x being Element of X holds 0 <= (max+f).x
 proof
    let x be Element of X;
-   0. <= (max+(R_EAL f)).x by MESFUNC2:14;
+    0. <= (max+(R_EAL f)).x by MESFUNC2:14;
    hence 0 <= (max+f).x by Th30;
 end;
 
 theorem
-for x being Element of X holds 0 <= (max-f).x
+ for x being Element of X holds 0 <= (max-f).x
 proof
    let x be Element of X;
-   0. <= (max-(R_EAL f)).x by MESFUNC2:15;
+    0. <= (max-(R_EAL f)).x by MESFUNC2:15;
    hence 0 <= (max-f).x by Th30;
 end;
 
 theorem
-max-f = max+(-f)
+ max-f = max+(-f)
 proof
-   max-f = max-(R_EAL f) by Th30; then
-   max-f = max+(-R_EAL f) by MESFUNC2:16; then
-   max-f = max+(R_EAL -f) by Th28;
+    max-f = max-(R_EAL f) by Th30;
+   then max-f = max+(-R_EAL f) by MESFUNC2:16;
+   then max-f = max+(R_EAL -f) by Th28;
    hence max-f = max+(-f) by Th30;
 end;
 
 theorem
-for x being set st x in dom f & 0 < max+f.x holds max-f.x = 0
+ for x being set st x in dom f & 0 < max+f.x holds max-f.x = 0
 proof
    let x be set;
-   assume A1: x in dom f & 0 < max+(f).x; then
-   0. < (max+(R_EAL(f))).x by Th30; then
-   max-(R_EAL(f)).x = 0. by A1,MESFUNC2:17;
+   assume A1: x in dom f & 0 < max+(f).x;
+   then 0. < (max+(R_EAL(f))).x by Th30;
+   then max-(R_EAL(f)).x = 0. by A1,MESFUNC2:17;
    hence (max-(f)).x =0 by Th30;
 end;
 
 theorem
-for x being set st x in dom f & 0 < max-f.x holds max+f.x = 0
+ for x being set st x in dom f & 0 < max-f.x holds max+f.x = 0
 proof
    let x be set;
-   assume A1: x in dom f & 0 < max-f.x; then
-   0. < (max-(R_EAL f)).x by Th30; then
-   max+(R_EAL f).x = 0. by A1,MESFUNC2:18;
+   assume A1: x in dom f & 0 < max-f.x;
+   then 0. < (max-(R_EAL f)).x by Th30;
+   then max+(R_EAL f).x = 0. by A1,MESFUNC2:18;
    hence (max+f).x =0 by Th30;
 end;
 
 theorem
-dom f = dom (max+f - max-f) & dom f = dom (max+f + max-f)
+ dom f = dom (max+f - max-f) & dom f = dom (max+f + max-f)
 proof
-   dom f = dom (max+(R_EAL f)-max-(R_EAL f)) by MESFUNC2:19; then
-   dom f = dom (R_EAL(max+f)-max-(R_EAL f)) by Th30; then
-   dom f = dom (R_EAL(max+f)-R_EAL(max-f)) by Th30; then
-   dom f = dom (R_EAL(max+f - max-f)) by Th23;
+    dom f = dom (max+(R_EAL f)-max-(R_EAL f)) by MESFUNC2:19;
+   then dom f = dom (R_EAL(max+f)-max-(R_EAL f)) by Th30;
+   then dom f = dom (R_EAL(max+f)-R_EAL(max-f)) by Th30;
+   then dom f = dom (R_EAL(max+f - max-f)) by Th23;
    hence dom f =dom (max+f - max-f);
-   dom f = dom (max+(R_EAL f)+max-(R_EAL f)) by MESFUNC2:19; then
-   dom f = dom (R_EAL(max+f)+max-(R_EAL f)) by Th30; then
-   dom f = dom (R_EAL(max+f)+R_EAL(max-f)) by Th30; then
-   dom f = dom (R_EAL(max+f + max-f)) by Th23;
+    dom f = dom (max+(R_EAL f)+max-(R_EAL f)) by MESFUNC2:19;
+   then dom f = dom (R_EAL(max+f)+max-(R_EAL f)) by Th30;
+   then dom f = dom (R_EAL(max+f)+R_EAL(max-f)) by Th30;
+   then dom f = dom (R_EAL(max+f + max-f)) by Th23;
    hence dom f =dom (max+f + max-f);
 end;
 
 theorem
-for x being set st x in dom f holds
+ for x being set st x in dom f holds
  (max+f.x = f.x or max+f.x = 0) & (max-f.x = -(f.x) or max-f.x = 0)
 proof
    let x be set;
-   assume A1:x in dom f; then
-   (max+(R_EAL f).x = (R_EAL f).x or max+(R_EAL f).x = 0.) by MESFUNC2:20;
+   assume A1:x in dom f;
+   then (max+(R_EAL f).x = (R_EAL f).x or max+(R_EAL f).x = 0.) by MESFUNC2:20
+;
    hence max+f.x = f.x or max+f.x = 0 by Th30;
 A2:-((R_EAL f).x) = -(f.x) by SUPINF_2:3;
-   max-(R_EAL f).x = -((R_EAL f).x) or max-(R_EAL f).x = 0. by A1,MESFUNC2:20;
+    max-(R_EAL f).x = -((R_EAL f).x) or max-(R_EAL f).x = 0. by A1,MESFUNC2:20;
    hence max-f.x =-(f.x) or max-f.x = 0 by A2,Th30;
 end;
 
 theorem
-for x being set st x in dom f & max+f.x = f.x holds max-f.x = 0
+ for x being set st x in dom f & max+f.x = f.x holds max-f.x = 0
 proof
    let x be set;
-   assume A1:x in dom f & max+f.x =f.x; then
-   R_EAL(f.x) = max+(R_EAL f).x by Th30; then
-   max-(R_EAL f).x = 0. by A1,MESFUNC2:21;
+   assume A1:x in dom f & max+f.x =f.x;
+   then R_EAL(f.x) = max+(R_EAL f).x by Th30;
+   then max-(R_EAL f).x = 0. by A1,MESFUNC2:21;
    hence max-f.x =0 by Th30;
 end;
 
 theorem
-for x being set st x in dom f & max+f.x = 0 holds max-f.x = -(f.x)
+ for x being set st x in dom f & max+f.x = 0 holds max-f.x = -(f.x)
 proof
    let x be set;
-   assume A1: x in dom f & max+f.x =0; then
-   R_EAL 0 = max+(R_EAL f).x by Th30; then
-   max-(R_EAL f).x =-((R_EAL f).x) by A1,MESFUNC2:22; then
-   max-f.x =-((R_EAL f).x) by Th30;
+   assume A1: x in dom f & max+f.x =0;
+   then R_EAL 0 = max+(R_EAL f).x by Th30;
+   then max-(R_EAL f).x =-((R_EAL f).x) by A1,MESFUNC2:22;
+   then max-f.x =-((R_EAL f).x) by Th30;
    hence max-f.x =-(f.x) by SUPINF_2:3;
 end;
 
 theorem
-for x being set st x in dom f & max-f.x = -(f.x) holds max+f.x = 0
+ for x being set st x in dom f & max-f.x = -(f.x) holds max+f.x = 0
 proof
    let x be set;
-   assume A1:x in dom f & max-f.x = -(f.x); then
-   -(f.x) = max-(R_EAL f).x by Th30; then
-   -((R_EAL f).x) = max-(R_EAL f).x by SUPINF_2:3; then
-   max+(R_EAL f).x =0. by A1,MESFUNC2:23;
+   assume A1:x in dom f & max-f.x = -(f.x);
+   then -(f.x) = max-(R_EAL f).x by Th30;
+   then -((R_EAL f).x) = max-(R_EAL f).x by SUPINF_2:3;
+   then max+(R_EAL f).x =0. by A1,MESFUNC2:23;
    hence max+f.x =0 by Th30;
 end;
 
 theorem
-for x being set st x in dom f & max-f.x = 0 holds max+f.x = f.x
+ for x being set st x in dom f & max-f.x = 0 holds max+f.x = f.x
 proof
    let x be set;
-   assume A1:x in dom f & max-f.x =0; then
-   R_EAL 0 = max-(R_EAL f).x by Th30; then
-   max+(R_EAL f).x = (R_EAL f).x by A1,MESFUNC2:24;
+   assume A1:x in dom f & max-f.x =0;
+   then R_EAL 0 = max-(R_EAL f).x by Th30;
+   then max+(R_EAL f).x = (R_EAL f).x by A1,MESFUNC2:24;
    hence max+f.x = f.x by Th30;
 end;
 
 theorem
-f = max+f - max-f
+ f = max+f - max-f
 proof
-   f = max+(R_EAL f)-max-(R_EAL f) by MESFUNC2:25; then
-   f = R_EAL(max+f)-max-(R_EAL f) by Th30; then
-   f = R_EAL(max+f)-R_EAL(max-f) by Th30; then
-   f = R_EAL(max+f - max-f) by Th23;
+    f = max+(R_EAL f)-max-(R_EAL f) by MESFUNC2:25;
+   then f = R_EAL(max+f)-max-(R_EAL f) by Th30;
+   then f = R_EAL(max+f)-R_EAL(max-f) by Th30;
+   then f = R_EAL(max+f - max-f) by Th23;
    hence thesis;
 end;
 
@@ -743,13 +733,13 @@ theorem Th43:
 |.r.| = |. R_EAL r .|
 proof
    per cases;
-   suppose A1: 0 <= r; then
-    |. R_EAL r .| = R_EAL r by EXTREAL1:def 3;
+   suppose A1: 0 <= r;
+    then |. R_EAL r .| = R_EAL r by EXTREAL1:def 3;
     hence |. R_EAL r .| = |.r.| by A1,ABSVALUE:def 1;
    end;
-   suppose A2: r < 0; then
-    |. R_EAL r .| =-R_EAL r by EXTREAL1:def 3; then
-    |. R_EAL r .| =R_EAL(-r) by SUPINF_2:3;
+   suppose A2: r < 0;
+    then |. R_EAL r .| =-R_EAL r by EXTREAL1:def 3;
+    then |. R_EAL r .| =R_EAL(-r) by SUPINF_2:3;
     hence |. R_EAL r .| = |.r.| by A2,ABSVALUE:def 1;
    end;
 end;
@@ -759,24 +749,24 @@ R_EAL(abs f) =|.R_EAL f.|
 proof
 A1:dom R_EAL(abs f) = dom f by SEQ_1:def 10
                      .= dom(|. R_EAL f .|) by MESFUNC1:def 10;
-   now let x be set;
+    now let x be set;
     assume A2:x in dom R_EAL(abs f);
-    (R_EAL(abs f)).x = |.f.x.| by A2,SEQ_1:def 10; then
-    (R_EAL(abs f)).x = |.R_EAL(f.x).| by Th43;
+    then (R_EAL(abs f)).x = |.f.x.| by SEQ_1:def 10;
+    then (R_EAL(abs f)).x = |.R_EAL(f.x).| by Th43;
     hence (R_EAL(abs f)).x =( |. R_EAL f .| ).x by A1,A2,MESFUNC1:def 10;
    end;
    hence thesis by FUNCT_1:9,A1;
 end;
 
 theorem
-abs f = max+f + max-f
+ abs f = max+f + max-f
 proof
-   abs f = R_EAL(abs f); then
-   abs f = |. R_EAL f .| by Th44; then
-   abs f = max+(R_EAL f) + max-(R_EAL f) by MESFUNC2:26; then
-   abs f = R_EAL(max+f)+max-(R_EAL f) by Th30; then
-   abs f = R_EAL(max+f)+R_EAL(max-f) by Th30; then
-   abs f = R_EAL(max+f + max-f) by Th23;
+    abs f = R_EAL(abs f);
+   then abs f = |. R_EAL f .| by Th44;
+   then abs f = max+(R_EAL f) + max-(R_EAL f) by MESFUNC2:26;
+   then abs f = R_EAL(max+f)+max-(R_EAL f) by Th30;
+   then abs f = R_EAL(max+f)+R_EAL(max-f) by Th30;
+   then abs f = R_EAL(max+f + max-f) by Th23;
    hence abs f =max+f + max-f;
 end;
 
@@ -790,10 +780,10 @@ reserve X for non empty set,
 theorem Th46:
 f is_measurable_on A implies max+f is_measurable_on A
 proof
-   assume f is_measurable_on A; then
-   R_EAL f is_measurable_on A by Def6; then
-   max+(R_EAL f) is_measurable_on A by MESFUNC2:27; then
-   R_EAL(max+f) is_measurable_on A by Th30;
+   assume f is_measurable_on A;
+   then R_EAL f is_measurable_on A by Def6;
+   then max+(R_EAL f) is_measurable_on A by MESFUNC2:27;
+   then R_EAL(max+f) is_measurable_on A by Th30;
    hence max+f is_measurable_on A by Def6;
 end;
 
@@ -801,21 +791,21 @@ theorem Th47:
 f is_measurable_on A & A c= dom f implies max-f is_measurable_on A
 proof
    assume
-A1: f is_measurable_on A & A c= dom f; then
-   R_EAL f is_measurable_on A by Def6; then
-   max-(R_EAL f) is_measurable_on A by A1,MESFUNC2:28; then
-   R_EAL(max-f) is_measurable_on A by Th30;
+A1: f is_measurable_on A & A c= dom f;
+   then R_EAL f is_measurable_on A by Def6;
+   then max-(R_EAL f) is_measurable_on A by A1,MESFUNC2:28;
+   then R_EAL(max-f) is_measurable_on A by Th30;
    hence max-f is_measurable_on A by Def6;
 end;
 
 theorem
-f is_measurable_on A & A c= dom f implies abs f is_measurable_on A
+ f is_measurable_on A & A c= dom f implies abs f is_measurable_on A
 proof
    assume
-A1: f is_measurable_on A & A c= dom f; then
-   R_EAL f is_measurable_on A by Def6; then
-   |.R_EAL f.| is_measurable_on A by A1,MESFUNC2:29; then
-   R_EAL(abs f) is_measurable_on A by Th44;
+A1: f is_measurable_on A & A c= dom f;
+   then R_EAL f is_measurable_on A by Def6;
+   then |.R_EAL f.| is_measurable_on A by A1,MESFUNC2:29;
+   then R_EAL(abs f) is_measurable_on A by Th44;
    hence abs f is_measurable_on A by Def6;
 end;
 
@@ -839,16 +829,15 @@ end;
 theorem Th49:
 f is_simple_func_in S iff R_EAL f is_simple_func_in S
 proof
-   hereby assume f is_simple_func_in S; then
-    consider F being Finite_Sep_Sequence of S such that
+   hereby assume f is_simple_func_in S;
+    then consider F being Finite_Sep_Sequence of S such that
 A1:  dom f = union rng F &
      for n being Nat,x,y being Element of X st
       n in dom F & x in F.n & y in F.n holds f.x = f.y by Def7;
-    R_EAL f is_finite by Th22;
-    hence R_EAL f is_simple_func_in S by A1,MESFUNC2:def 5;
+    thus R_EAL f is_simple_func_in S by A1,MESFUNC2:def 5;
    end;
-   assume R_EAL f is_simple_func_in S; then
-   consider F being Finite_Sep_Sequence of S such that
+   assume R_EAL f is_simple_func_in S;
+   then consider F being Finite_Sep_Sequence of S such that
 A2: dom R_EAL f = union rng F &
     for n being Nat,x,y being Element of X st
      n in dom F & x in F.n & y in F.n holds
@@ -857,11 +846,11 @@ A2: dom R_EAL f = union rng F &
 end;
 
 theorem
-f is_simple_func_in S implies f is_measurable_on A
+ f is_simple_func_in S implies f is_measurable_on A
 proof
-   assume f is_simple_func_in S; then
-   R_EAL f is_simple_func_in S by Th49; then
-   R_EAL f is_measurable_on A by MESFUNC2:37;
+   assume f is_simple_func_in S;
+   then R_EAL f is_simple_func_in S by Th49;
+   then R_EAL f is_measurable_on A by MESFUNC2:37;
    hence f is_measurable_on A by Def6;
 end;
 
@@ -870,14 +859,13 @@ for X being set, f being PartFunc of X,REAL holds
    f is nonnegative iff for x being set holds 0 <= f.x
 proof
    let X be set, f be PartFunc of X,REAL;
-   hereby assume f is nonnegative; then
-A1: rng f is nonnegative by SUPINF_2:def 22;
+   hereby assume f is nonnegative;
+then A1: rng f is nonnegative by SUPINF_2:def 22;
     hereby let x be set;
-     now assume x in dom f; then
-A2:   f.x in rng f by FUNCT_1:def 5;
-      f.x in REAL;
-      then f.x in ExtREAL by NUMBERS:31;
-      hence 0 <= f.x by A1,A2,SUPINF_2:def 15;
+      now assume x in dom f;
+then A2:   f.x in rng f by FUNCT_1:def 5;
+       f.x in REAL;
+      hence 0 <= f.x by A1,A2,NUMBERS:31,SUPINF_2:def 15;
      end;
      hence 0 <= f.x by FUNCT_1:def 4;
     end;
@@ -885,8 +873,8 @@ A2:   f.x in rng f by FUNCT_1:def 5;
    assume
 A3:for x being set holds 0 <= f.x;
    let y be R_eal;
-   assume y in rng f; then
-   ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+   assume y in rng f;
+   then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
    hence thesis by A3;
 end;
 
@@ -897,24 +885,23 @@ proof
    let X be set, f be PartFunc of X,REAL such that
 A1:for x being set st x in dom f holds 0 <= f.x;
    let y be R_eal;
-   assume y in rng f; then
-   ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+   assume y in rng f;
+   then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
    hence thesis by A1;
 end;
 
 theorem
-for X being set, f being PartFunc of X,REAL holds
+ for X being set, f being PartFunc of X,REAL holds
    f is nonpositive iff for x being set holds f.x <= 0
 proof
    let X be set, f be PartFunc of X,REAL;
-   hereby assume f is nonpositive; then
-A1: rng f is nonpositive by MESFUNC5:def 2;
+   hereby assume f is nonpositive;
+then A1: rng f is nonpositive by MESFUNC5:def 2;
     hereby let x be set;
-     now assume x in dom f; then
-A2:   f.x in rng f by FUNCT_1:def 5;
-      f.x in REAL;
-      then f.x in ExtREAL by NUMBERS:31;
-      hence f.x <= 0 by A1,A2,MESFUNC5:def 1;
+      now assume x in dom f;
+then A2:   f.x in rng f by FUNCT_1:def 5;
+       f.x in REAL;
+      hence f.x <= 0 by A1,A2,MESFUNC5:def 1,NUMBERS:31;
      end;
      hence f.x <= 0 by FUNCT_1:def 4;
     end;
@@ -922,8 +909,8 @@ A2:   f.x in rng f by FUNCT_1:def 5;
    assume
 A3:for x being set holds f.x <= 0;
    let y be R_eal;
-   assume y in rng f; then
-   ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+   assume y in rng f;
+   then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
    hence thesis by A3;
 end;
 
@@ -933,26 +920,26 @@ proof
    assume
 A1:for x being set st x in dom f holds f.x <= 0;
    let y be R_eal;
-   assume y in rng f; then
-   ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
+   assume y in rng f;
+   then ex x being set st x in dom f & y = f.x by FUNCT_1:def 5;
    hence thesis by A1;
 end;
 
 theorem
- f is nonnegative implies f|Y is nonnegative
+  f is nonnegative implies f|Y is nonnegative
 proof
-   assume f is nonnegative; then
-A1:rng f is nonnegative by SUPINF_2:def 22;
-   now let y be R_eal;
-    assume y in rng(f|Y); then
-    consider x be set such that
+   assume f is nonnegative;
+then A1:rng f is nonnegative by SUPINF_2:def 22;
+    now let y be R_eal;
+    assume y in rng(f|Y);
+    then consider x be set such that
 A2:  x in dom(f|Y) & (f|Y).x = y by FUNCT_1:def 5;
-    x in dom f /\ Y by A2,FUNCT_1:68; then
-    x in dom f & (f|Y).x = f.x by A2,FUNCT_1:70,XBOOLE_0:def 3; then
-    (f|Y).x in rng f by FUNCT_1:12;
+     x in dom f /\ Y by A2,FUNCT_1:68;
+    then x in dom f & (f|Y).x = f.x by A2,FUNCT_1:70,XBOOLE_0:def 3;
+    then (f|Y).x in rng f by FUNCT_1:12;
     hence 0. <= y by A1,A2,SUPINF_2:def 15;
-   end; then
-   rng(f|Y) is nonnegative by SUPINF_2:def 15;
+   end;
+   then rng(f|Y) is nonnegative by SUPINF_2:def 15;
    hence f|Y is nonnegative by SUPINF_2:def 22;
 end;
 
@@ -960,39 +947,39 @@ theorem Th56:
  f is nonnegative & g is nonnegative implies f+g is nonnegative
 proof
    assume A1:f is nonnegative & g is nonnegative;
-   for x be set st x in dom(f+g) holds 0 <= (f+g).x
+    for x be set st x in dom(f+g) holds 0 <= (f+g).x
    proof
     let x be set such that
 A2: x in dom(f+g);
-A3: 0 <= f.x & 0 <= g.x by A1,Th51; then
-    g.x <= f.x + g.x by XREAL_1:33;
+A3: 0 <= f.x & 0 <= g.x by A1,Th51;
+    then g.x <= f.x + g.x by XREAL_1:33;
     hence 0 <= (f+g).x by A2,A3,SEQ_1:def 3;
    end;
    hence f+g is nonnegative by Th52;
 end;
 
 theorem
-f is nonnegative implies
+ f is nonnegative implies
   (0 <= r implies r(#)f is nonnegative) &
   (r <= 0 implies r(#)f is nonpositive)
 proof
    assume A1:f is nonnegative;
    hereby assume
 A2: 0 <= r;
-    now let x be set such that
+     now let x be set such that
 A3:  x in dom(r(#)f);
-     0 <= f.x by A1,Th51; then
-     0*r <= r*f.x by A2,XREAL_1:66;
+      0 <= f.x by A1,Th51;
+     then 0*r <= r*f.x by A2,XREAL_1:66;
      hence 0 <= (r(#)f).x by A3,SEQ_1:def 6;
     end;
     hence r(#)f is nonnegative by Th52;
    end;
    assume
 A4: r <= 0;
-   now let x be set such that
+    now let x be set such that
 A5: x in dom(r(#)f);
-    0 <= f.x by A1,Th51; then
-    r*f.x <= r*0 by A4,XREAL_1:67;
+     0 <= f.x by A1,Th51;
+    then r*f.x <= r*0 by A4,XREAL_1:67;
     hence (r(#)f).x <= 0 by A5,SEQ_1:def 6;
    end;
    hence r(#)f is nonpositive by Th54;
@@ -1004,23 +991,23 @@ theorem Th58:
 proof
    assume
 A1:for x be set st x in dom f /\ dom g holds g.x <= f.x;
-   now let x be set such that
+    now let x be set such that
 A2: x in dom(f-g);
-    dom(f-g) = dom f /\ dom g by SEQ_1:def 4; then
-    g.x <= f.x by A1,A2; then
-    0 <= f.x - g.x by XREAL_1:50;
+     dom(f-g) = dom f /\ dom g by SEQ_1:def 4;
+    then g.x <= f.x by A1,A2;
+    then 0 <= f.x - g.x by XREAL_1:50;
     hence 0 <= (f-g).x by A2,SEQ_1:def 4;
    end;
    hence f-g is nonnegative by Th52;
 end;
 
 theorem
- f is nonnegative & g is nonnegative & h is nonnegative implies
+  f is nonnegative & g is nonnegative & h is nonnegative implies
    f+g+h is nonnegative
 proof
    assume
-A1: f is nonnegative & g is nonnegative & h is nonnegative; then
-   f+g is nonnegative by Th56;
+A1: f is nonnegative & g is nonnegative & h is nonnegative;
+   then f+g is nonnegative by Th56;
    hence f+g+h is nonnegative by A1,Th56;
 end;
 
@@ -1029,18 +1016,18 @@ theorem Th60:
 proof
 A1:dom(f+g+h) = dom(f+g) /\ dom h by SEQ_1:def 3;
    let x be set;
-   assume A2:x in dom(f+g+h); then
-   x in dom(f+g) by A1,XBOOLE_0:def 3; then
-   f.x + g.x + h.x = (f+g).x + h.x by SEQ_1:def 3;
+   assume A2:x in dom(f+g+h);
+   then x in dom(f+g) by A1,XBOOLE_0:def 3;
+   then f.x + g.x + h.x = (f+g).x + h.x by SEQ_1:def 3;
    hence (f+g+h).x = f.x + g.x + h.x by A2,SEQ_1:def 3;
 end;
 
 theorem
- max+f is nonnegative & max-f is nonnegative
+  max+f is nonnegative & max-f is nonnegative
 proof
-   for x be set st x in dom max+f holds 0 <= max+f.x by RFUNCT_3:40;
+    for x be set st x in dom max+f holds 0 <= max+f.x by RFUNCT_3:40;
    hence max+f is nonnegative by Th52;
-   for x be set st x in dom max-f holds 0 <= max-f.x by RFUNCT_3:43;
+    for x be set st x in dom max-f holds 0 <= max-f.x by RFUNCT_3:43;
    hence max-f is nonnegative by Th52;
 end;
 
@@ -1051,106 +1038,109 @@ theorem Th62:
    dom(max-(f+g) + max+f + max+g) = dom f /\ dom g &
    max+(f+g) + max-f is nonnegative & max-(f+g) + max+f is nonnegative
 proof
-   dom(f+g) = dom f /\ dom g by SEQ_1:def 3; then
-A1:dom(max+(f+g)) = dom f /\ dom g &
+    dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
+then A1:dom(max+(f+g)) = dom f /\ dom g &
    dom(max-(f+g)) = dom f /\ dom g by RFUNCT_3:def 10,def 11;
 A2:dom max+f = dom f & dom max-f = dom f &
    dom max+g = dom g & dom max-g = dom g by RFUNCT_3:def 10,def 11;
-   dom(max+(f+g) + max-f) = dom max+(f+g) /\ dom max-f &
-   dom(max-(f+g) + max+f) = dom max-(f+g) /\ dom max+f by SEQ_1:def 3; then
-A3:dom(max+(f+g) + max-f) = dom g /\ (dom f /\ dom f) &
+    dom(max+(f+g) + max-f) = dom max+(f+g) /\ dom max-f &
+   dom(max-(f+g) + max+f) = dom max-(f+g) /\ dom max+f by SEQ_1:def 3;
+then A3:dom(max+(f+g) + max-f) = dom g /\ (dom f /\ dom f) &
    dom(max-(f+g) + max+f) = dom g /\ (dom f /\ dom f) by A1,A2,XBOOLE_1:16;
    hence dom(max+(f+g) + max-f) = dom f /\ dom g &
          dom(max-(f+g) + max+f) = dom f /\ dom g;
-   dom(max+(f+g) + max-f + max-g)
+    dom(max+(f+g) + max-f + max-g)
     = dom f /\ dom g /\ dom g by A2,A3,SEQ_1:def 3
    .= dom f /\ (dom g /\ dom g) by XBOOLE_1:16;
    hence dom(max+(f+g) + max-f + max-g) = dom f /\ dom g;
-   dom(max-(f+g) + max+ f + max+ g)
-    = dom f /\ dom g /\ dom g by A2,A3,SEQ_1:def 3; then
-   dom(max-(f+g) + max+f + max+g) = dom f /\ (dom g /\ dom g) by XBOOLE_1:16;
+    dom(max-(f+g) + max+ f + max+ g)
+    = dom f /\ dom g /\ dom g by A2,A3,SEQ_1:def 3;
+   then dom(max-(f+g) + max+f + max+g) = dom f /\ (dom g /\ dom g) by XBOOLE_1
+:16;
    hence dom(max-(f+g) + max+f + max+g) = dom f /\ dom g;
-   now let x be set;
-    assume A4:x in dom(max+(f+g) + max-f); then
-    0 <= max+(f+g).x & 0 <= max-f.x by RFUNCT_3:40,43; then
-    0+0 <= max+(f+g).x + max-f.x by XREAL_1:9;
+    now let x be set;
+    assume A4:x in dom(max+(f+g) + max-f);
+    then 0 <= max+(f+g).x & 0 <= max-f.x by RFUNCT_3:40,43;
+    then 0+0 <= max+(f+g).x + max-f.x by XREAL_1:9;
     hence 0 <= (max+(f+g) + max-f).x by A4,SEQ_1:def 3;
    end;
    hence max+(f+g) + max-f is nonnegative by Th52;
-   now let x be set;
-    assume A5:x in dom(max-(f+g) + max+f); then
-    0 <= max-(f+g).x & 0 <= max+f.x by RFUNCT_3:40,43; then
-    0+0 <= max-(f+g).x + max+f.x by XREAL_1:9;
+    now let x be set;
+    assume A5:x in dom(max-(f+g) + max+f);
+    then 0 <= max-(f+g).x & 0 <= max+f.x by RFUNCT_3:40,43;
+    then 0+0 <= max-(f+g).x + max+f.x by XREAL_1:9;
     hence 0 <= (max-(f+g) + max+f).x by A5,SEQ_1:def 3;
    end;
    hence max-(f+g) + max+f is nonnegative by Th52;
 end;
 
 theorem
- max+(f+g) + max-f + max-g = max-(f+g) + max+f + max+g
+  max+(f+g) + max-f + max-g = max-(f+g) + max+f + max+g
 proof
-   dom(max+(f+g) + max-f + max-g) = dom f /\ dom g by Th62; then
-A1:dom(max+(f+g) + max-f + max-g) = dom(max-(f+g) + max+f + max+g) by Th62;
+    dom(max+(f+g) + max-f + max-g) = dom f /\ dom g by Th62;
+then A1:dom(max+(f+g) + max-f + max-g) = dom(max-(f+g) + max+f + max+g) by Th62
+;
 A2:dom(max+(f+g))= dom (f+g) & dom(max-(f+g))= dom (f+g) &
    dom max+f = dom f & dom max-f = dom f &
    dom max+g = dom g & dom max-g = dom g by RFUNCT_3:def 10,def 11;
-   dom(max+(f+g) + max-f + max-g)
+    dom(max+(f+g) + max-f + max-g)
     = dom(max+(f+g) + max-f) /\ dom max-g by SEQ_1:def 3
-   .= dom(f+g) /\ dom f /\ dom g by A2,SEQ_1:def 3; then
-A3:dom(max+(f+g) + max-f + max-g)
+   .= dom(f+g) /\ dom f /\ dom g by A2,SEQ_1:def 3;
+then A3:dom(max+(f+g) + max-f + max-g)
     = dom(f+g) /\ (dom f /\ dom g) by XBOOLE_1:16;
-   for x be set st x in dom(max+(f+g) + max-f + max-g) holds
+    for x be set st x in dom(max+(f+g) + max-f + max-g) holds
     (max+(f+g) + max-f + max-g).x = (max-(f+g) + max+f + max+g).x
    proof
     let x be set;
     assume
-A4: x in dom(max+(f+g) + max-f + max-g); then
-    x in dom f /\ dom g by Th62; then
-    x in dom(max-(f+g) + max+f + max+g) by Th62; then
-A5: (max-(f+g)+ max+f + max+g).x
+A4: x in dom(max+(f+g) + max-f + max-g);
+    then x in dom f /\ dom g by Th62;
+    then x in dom(max-(f+g) + max+f + max+g) by Th62;
+then A5: (max-(f+g)+ max+f + max+g).x
       =(max-(f+g)).x +(max+f).x +(max+g).x by Th60;
-A6: dom(f+g) = dom f /\ dom g by SEQ_1:def 3; then
-A7: max+(f+g).x = max+((f+g).x) by A2,A3,A4,RFUNCT_3:def 10
+A6: dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
+then A7: max+(f+g).x = max+((f+g).x) by A2,A3,A4,RFUNCT_3:def 10
                .= max((f.x+g.x),0) by A6,A3,A4,SEQ_1:def 3;
 A8: max-(f+g).x = max-((f+g).x) by A2,A6,A3,A4,RFUNCT_3:def 11
                .= max(-(f.x+g.x),0) by A6,A3,A4,SEQ_1:def 3;
-    x in dom f & x in dom g by A4,A3,A6,XBOOLE_0:def 3; then
-A9: (max+f).x = max+(f.x) & (max-f).x = max-(f.x) & (max+g).x = max+(g.x) &
+     x in dom f & x in dom g by A4,A3,A6,XBOOLE_0:def 3;
+then A9: (max+f).x = max+(f.x) & (max-f).x = max-(f.x) & (max+g).x = max+(g.x)
+&
     (max-g).x = max-(g.x) by A2,RFUNCT_3:def 10,def 11;
 A10: now assume
- A11: 0 <= f.x; then
-    -f.x <= 0 by XREAL_1:60; then
- A12:max-f.x =0 by A9,XXREAL_0:def 9;
+ A11: 0 <= f.x;
+    then -f.x <= 0 by XREAL_1:60;
+ then A12:max-f.x =0 by A9,XXREAL_0:def 9;
  A13:now assume
- A14: 0 <= g.x; then
- A15: 0+0 <= f.x + g.x by A11,XREAL_1:9; then
-     - g.x <= 0 & -(f.x + g.x) <= 0 by A14,XREAL_1:60; then
- A16: (max-g).x=0 & (max-(f+g)).x=0 by A8,A9,XXREAL_0:def 9; then
- A17: (max+(f+g)).x + (max-f).x + (max-g).x
+ A14: 0 <= g.x;
+ then A15: 0+0 <= f.x + g.x by A11,XREAL_1:9;
+     then - g.x <= 0 & -(f.x + g.x) <= 0 by A14,XREAL_1:60;
+ then A16: (max-g).x=0 & (max-(f+g)).x=0 by A8,A9,XXREAL_0:def 9;
+ then A17: (max+(f+g)).x + (max-f).x + (max-g).x
        = f.x + g.x by A12,A7,A15,XXREAL_0:def 9;
-     (max+g).x = g.x by A9,A14,XXREAL_0:def 9;
+      (max+g).x = g.x by A9,A14,XXREAL_0:def 9;
      hence (max+(f+g)).x + (max-f).x + (max-g).x
        =(max-(f+g)).x + (max+f).x + (max+g).x by A17,A16,A9,A11,XXREAL_0:def 9;
     end;
-    now assume
- A18: g.x < 0; then
-     0 <= -g.x by XREAL_1:60; then
- A19: (max-g).x= -g.x & (max+g).x = 0 by A9,A18,XXREAL_0:def 9;
- A20: now assume A21:0 <= f.x + g.x; then
-      -(f.x + g.x) <= 0 by XREAL_1:60; then
-  A22: (max-(f+g)).x=0 by A8,XXREAL_0:def 9;
-      (max+(f+g)).x + (max-f).x + (max-g).x
+     now assume
+ A18: g.x < 0;
+     then 0 <= -g.x by XREAL_1:60;
+ then A19: (max-g).x= -g.x & (max+g).x = 0 by A9,A18,XXREAL_0:def 9;
+ A20: now assume A21:0 <= f.x + g.x;
+      then -(f.x + g.x) <= 0 by XREAL_1:60;
+  then A22: (max-(f+g)).x=0 by A8,XXREAL_0:def 9;
+       (max+(f+g)).x + (max-f).x + (max-g).x
         =f.x+g.x + 0 + -g.x by A12,A19,A21,A7,XXREAL_0:def 9;
       hence (max+(f+g)).x+ (max-f).x + (max-g).x
         =(max-(f+g)).x + (max+f).x + (max+g).x by A22,A9,A11,A19
 ,XXREAL_0:def 9;
      end;
-     now assume
-  A23: f.x + g.x < 0; then
-      0 <= -(f.x + g.x) by XREAL_1:60; then
-  A24: (max-(f+g)).x = -(f.x + g.x) by A8,XXREAL_0:def 9;
-      (max-(f+g)).x + (max+f).x + (max+g).x
-        = -(f.x + g.x) +f.x + 0 by A24,A9,A11,A19,XXREAL_0:def 9;
+      now assume
+  A23: f.x + g.x < 0;
+      then 0 <= -(f.x + g.x) by XREAL_1:60;
+  then (max-(f+g)).x = -(f.x + g.x) by A8,XXREAL_0:def 9;
+      then (max-(f+g)).x + (max+f).x + (max+g).x
+        = -(f.x + g.x) +f.x + 0 by A9,A11,A19,XXREAL_0:def 9;
       hence (max+(f+g)).x + (max-f).x + (max-g).x
         =(max-(f+g)).x + (max+f).x + (max+g).x by A23,A12,A7,A19
 ,XXREAL_0:def 9;
@@ -1161,52 +1151,52 @@ A10: now assume
     hence (max+(f+g)).x + (max-f).x + (max-g).x
        =(max-(f+g)).x + (max+f).x + (max+g).x by A13;
    end;
-   now assume A25:f.x < 0; then
-    0 <= -f.x by XREAL_1:60; then
- A26:(max-f).x = -f.x by A9,XXREAL_0:def 9;
- A27:now assume
- A28: 0 <= g.x; then
-     -g.x <= 0 by XREAL_1:60; then
- A29: (max-g).x = 0 by A9,XXREAL_0:def 9;
- A30: (max+g).x = g.x by A9,A28,XXREAL_0:def 9;
- A31: now assume A32:0 <= f.x + g.x; then
-      -(f.x + g.x) <= 0 by XREAL_1:60; then
-  A33: (max-(f+g)).x = 0 by A8,XXREAL_0:def 9;
-      (max+(f+g)).x + (max-f).x + (max-g).x
-        =f.x + g.x+ -f.x + 0 by A32,A26,A29,A7,XXREAL_0:def 9;
+    now assume A24:f.x < 0;
+    then 0 <= -f.x by XREAL_1:60;
+ then A25:(max-f).x = -f.x by A9,XXREAL_0:def 9;
+ A26:now assume
+ A27: 0 <= g.x;
+     then -g.x <= 0 by XREAL_1:60;
+ then A28: (max-g).x = 0 by A9,XXREAL_0:def 9;
+ A29: (max+g).x = g.x by A9,A27,XXREAL_0:def 9;
+ A30: now assume A31:0 <= f.x + g.x;
+      then -(f.x + g.x) <= 0 by XREAL_1:60;
+  then A32: (max-(f+g)).x = 0 by A8,XXREAL_0:def 9;
+       (max+(f+g)).x + (max-f).x + (max-g).x
+        =f.x + g.x+ -f.x + 0 by A31,A25,A28,A7,XXREAL_0:def 9;
       hence (max+(f+g)).x + (max-f).x + (max-g).x
-        =(max-(f+g)).x + (max+f).x + (max+g).x by A33,A30,A9,A25
+        =(max-(f+g)).x + (max+f).x + (max+g).x by A32,A29,A9,A24
 ,XXREAL_0:def 9;
      end;
-     now assume A34:f.x + g.x < 0; then
-      0 <= -(f.x + g.x) by XREAL_1:60; then
-      (max-(f+g)).x = -(f.x + g.x) by A8,XXREAL_0:def 9; then
-      (max-(f+g)).x + (max+f).x + (max+g).x
-        = -(f.x + g.x) + 0 + g.x by A9,A25,XXREAL_0:def 9,A30
+      now assume A33:f.x + g.x < 0;
+      then 0 <= -(f.x + g.x) by XREAL_1:60;
+      then (max-(f+g)).x = -(f.x + g.x) by A8,XXREAL_0:def 9;
+      then (max-(f+g)).x + (max+f).x + (max+g).x
+        = -(f.x + g.x) + 0 + g.x by A9,A24,XXREAL_0:def 9,A29
        .=-f.x + (-g.x +g.x);
       hence (max+(f+g)).x + (max-f).x + (max-g).x
-        =(max-(f+g)).x + (max+f).x + (max+g).x by A34,A26,A29,A7
+        =(max-(f+g)).x + (max+f).x + (max+g).x by A33,A25,A28,A7
 ,XXREAL_0:def 9;
      end;
      hence (max+(f+g)).x + (max-f).x + (max-g).x
-       =(max-(f+g)).x + (max+f).x + (max+g).x by A31;
+       =(max-(f+g)).x + (max+f).x + (max+g).x by A30;
     end;
-    now assume A35:g.x < 0; then
-     0 <= -g.x by XREAL_1:60; then
-  A36:(max-g).x=-g.x by A9,XXREAL_0:def 9;
-  A37:f.x + g.x <= 0+0 by A35,A25,XREAL_1:9; then
-     -0 <= -(f.x + g.x) by XREAL_1:26; then
-  A38:(max-(f+g)).x=-(f.x + g.x) by A8,XXREAL_0:def 9;
-  A39:(max+g).x = 0 by A9,A35,XXREAL_0:def 9;
-  A40:(max+(f+g)).x+ (max-f).x + (max-g).x
-       = 0 + -f.x + -g.x by A37,A26,A36,A7,XXREAL_0:def 9;
-     (max-(f+g)).x + (max+f).x + (max+g).x
-       = -(f.x + g.x) + 0 + 0 by A38,A9,A25,XXREAL_0:def 9,A39;
+     now assume A34:g.x < 0;
+     then 0 <= -g.x by XREAL_1:60;
+  then A35:(max-g).x=-g.x by A9,XXREAL_0:def 9;
+  A36:f.x + g.x <= 0+0 by A34,A24,XREAL_1:9;
+     then -0 <= -(f.x + g.x) by XREAL_1:26;
+  then A37:(max-(f+g)).x=-(f.x + g.x) by A8,XXREAL_0:def 9;
+  A38:(max+g).x = 0 by A9,A34,XXREAL_0:def 9;
+  A39:(max+(f+g)).x+ (max-f).x + (max-g).x
+       = 0 + -f.x + -g.x by A36,A25,A35,A7,XXREAL_0:def 9;
+      (max-(f+g)).x + (max+f).x + (max+g).x
+       = -(f.x + g.x) + 0 + 0 by A37,A9,A24,XXREAL_0:def 9,A38;
      hence (max+(f+g)).x+ (max-f).x + (max-g).x
-       =(max-(f+g)).x + (max+f).x + (max+g).x by A40;
+       =(max-(f+g)).x + (max+f).x + (max+g).x by A39;
     end;
     hence (max+(f+g)).x + (max-f).x + (max-g).x
-       =(max-(f+g)).x + (max+f).x + (max+g).x by A27;
+       =(max-(f+g)).x + (max+f).x + (max+g).x by A26;
    end;
    hence thesis by A4,A5,A10,Th60;
   end;
@@ -1214,7 +1204,7 @@ A10: now assume
 end;
 
 theorem
- 0 <= r implies max+(r(#)f) = r(#)max+f & max-(r(#)f) = r(#)max-f
+  0 <= r implies max+(r(#)f) = r(#)max+f & max-(r(#)f) = r(#)max-f
 proof
    assume A1:0 <= r;
 A2:dom max+(r(#)f) = dom(r(#)f) by RFUNCT_3:def 10
@@ -1225,35 +1215,35 @@ A3:dom(max-(r(#)f)) = dom(r(#)f) by RFUNCT_3:def 11
                    .= dom f by SEQ_1:def 6
                    .= dom max-f by RFUNCT_3:def 11
                    .= dom(r(#)max-f) by SEQ_1:def 6;
-   for x be Element of X st x in dom max+(r(#)f) holds
+    for x be Element of X st x in dom max+(r(#)f) holds
     (max+(r(#)f)).x = (r(#)max+f).x
    proof
     let x be Element of X;
     assume
- A4: x in dom max+(r(#)f); then
- A5:x in dom(r(#)f) by RFUNCT_3:def 10; then
-    x in dom f by SEQ_1:def 6; then
- A6:x in dom max+ f by RFUNCT_3:def 10;
+ A4: x in dom max+(r(#)f);
+ then A5:x in dom(r(#)f) by RFUNCT_3:def 10;
+    then x in dom f by SEQ_1:def 6;
+ then A6:x in dom max+ f by RFUNCT_3:def 10;
  A7:(max+(r(#)f)).x = max+((r(#)f).x) by A4,RFUNCT_3:def 10
                    .= max(r*f.x,0) by A5,SEQ_1:def 6;
-    (r(#)max+f).x = r * max+f.x by A4,A2,SEQ_1:def 6
+     (r(#)max+f).x = r * max+f.x by A4,A2,SEQ_1:def 6
                    .= r * max+(f.x) by A6,RFUNCT_3:def 10
                    .= max(r * f.x,r * 0) by A1,FUZZY_2:46;
     hence thesis by A7;
    end;
    hence max+(r(#)f) = r(#)max+f by A2,PARTFUN1:34;
-   for x be Element of X st x in dom max-(r(#)f) holds
+    for x be Element of X st x in dom max-(r(#)f) holds
     (max-(r(#)f)).x = (r(#)max-f).x
    proof
     let x be Element of X;
     assume
- A8: x in dom max-(r(#)f); then
- A9:x in dom(r(#)f) by RFUNCT_3:def 11; then
-    x in dom f by SEQ_1:def 6; then
- A10:x in dom max- f by RFUNCT_3:def 11;
+ A8: x in dom max-(r(#)f);
+ then A9:x in dom(r(#)f) by RFUNCT_3:def 11;
+    then x in dom f by SEQ_1:def 6;
+ then A10:x in dom max- f by RFUNCT_3:def 11;
  A11:(max-(r(#)f)).x = max-((r(#)f).x) by A8,RFUNCT_3:def 11
                    .= max(-(r*f.x),0) by A9,SEQ_1:def 6;
-    (r(#)max-f).x = r * max-f.x by A8,A3,SEQ_1:def 6
+     (r(#)max-f).x = r * max-f.x by A8,A3,SEQ_1:def 6
                  .= r * max-(f.x) by A10,RFUNCT_3:def 11
                  .= max(r*(-f.x),r*0 ) by A1,FUZZY_2:46
                  .= max(-(r)*f.x,r*0);
@@ -1263,41 +1253,42 @@ A3:dom(max-(r(#)f)) = dom(r(#)f) by RFUNCT_3:def 11
 end;
 
 theorem
- 0 <= r implies max+((-r)(#)f) = r(#)max-f & max-((-r)(#)f) = r(#)max+f
+  0 <= r implies max+((-r)(#)f) = r(#)max-f & max-((-r)(#)f) = r(#)max+f
 proof
    assume
 A1: 0 <= r;
 A2:dom max+((-r)(#)f) = dom((-r)(#)f) & dom max-((-r)(#)f) = dom((-r)(#)f)
-     by RFUNCT_3:def 10,def 11; then
-   dom max+((-r)(#)f) = dom f & dom max-((-r)(#)f) = dom f
-     by SEQ_1:def 6; then
-A3:dom max+((-r)(#)f) = dom max-f & dom max-((-r)(#)f) = dom max+f
-     by RFUNCT_3:def 10,def 11; then
-A4:dom max+((-r)(#)f) = dom(r(#)max-f) & dom max-((-r)(#)f) = dom(r(#)max+f)
+     by RFUNCT_3:def 10,def 11;
+   then dom max+((-r)(#)f) = dom f & dom max-((-r)(#)f) = dom f
      by SEQ_1:def 6;
-   for x be Element of X st x in dom max+((-r)(#)f) holds
+then A3:dom max+((-r)(#)f) = dom max-f & dom max-((-r)(#)f) = dom max+f
+     by RFUNCT_3:def 10,def 11;
+then A4:dom max+((-r)(#)f) = dom(r(#)max-f) & dom max-((-r)(#)f) = dom(r(#)max+
+f)
+     by SEQ_1:def 6;
+    for x be Element of X st x in dom max+((-r)(#)f) holds
     max+((-r)(#)f).x = (r(#)max-f).x
    proof
     let x be Element of X;
     assume
- A5: x in dom max+((-r)(#)f); then
- A6:(max+((-r)(#)f)).x = max+(((-r)(#)f).x) by RFUNCT_3:def 10
+ A5: x in dom max+((-r)(#)f);
+ then A6:(max+((-r)(#)f)).x = max+(((-r)(#)f).x) by RFUNCT_3:def 10
                       .= max((-r)*f.x,0) by A5,A2,SEQ_1:def 6;
-    (r(#)max-f).x = r * max-f.x by A5,A4,SEQ_1:def 6
+     (r(#)max-f).x = r * max-f.x by A5,A4,SEQ_1:def 6
                    .= r * max-(f.x) by A5,A3,RFUNCT_3:def 11
                    .= max(r * (-f.x),r * 0) by A1,FUZZY_2:46;
     hence thesis by A6;
    end;
    hence max+((-r)(#)f) = r(#)max-f by A4,PARTFUN1:34;
-   for x be Element of X st x in dom max-((-r)(#)f) holds
+    for x be Element of X st x in dom max-((-r)(#)f) holds
      max-((-r)(#)f).x = (r(#)max+f).x
    proof
     let x be Element of X;
     assume
- A7: x in dom max-((-r)(#)f); then
- A8: max-((-r)(#)f).x = max-(((-r)(#)f).x) by RFUNCT_3:def 11
+ A7: x in dom max-((-r)(#)f);
+ then A8: max-((-r)(#)f).x = max-(((-r)(#)f).x) by RFUNCT_3:def 11
                      .= max(-((-r))*f.x,0) by A7,A2,SEQ_1:def 6;
-    (r(#)max+f).x = r * max+f.x by A7,A4,SEQ_1:def 6
+     (r(#)max+f).x = r * max+f.x by A7,A4,SEQ_1:def 6
                  .= r * max+(f.x) by A7,A3,RFUNCT_3:def 10
                    .= max(r*f.x,r*0) by A1,FUZZY_2:46;
     hence thesis by A8;
@@ -1306,23 +1297,23 @@ A4:dom max+((-r)(#)f) = dom(r(#)max-f) & dom max-((-r)(#)f) = dom(r(#)max+f)
 end;
 
 theorem
- max+(f|Y)=max+f|Y & max-(f|Y)=max-f|Y
+  max+(f|Y)=max+f|Y & max-(f|Y)=max-f|Y
 proof
 A1:dom max+(f|Y) = dom(f|Y) by RFUNCT_3:def 10
                 .= dom f /\ Y by FUNCT_1:68
                 .= dom max+f /\ Y by RFUNCT_3:def 10
                 .= dom(max+f|Y) by FUNCT_1:68;
-   for x being Element of X st x in dom max+(f|Y) holds
+    for x being Element of X st x in dom max+(f|Y) holds
      (max+(f|Y)).x = (max+f|Y).x
    proof
     let x be Element of X;
     assume
-A2:  x in dom max+(f|Y); then
-    x in dom max+f /\ Y by A1,FUNCT_1:68; then
-A3: x in dom max+f & x in Y by XBOOLE_0:def 3;
+A2:  x in dom max+(f|Y);
+    then x in dom max+f /\ Y by A1,FUNCT_1:68;
+then A3: x in dom max+f & x in Y by XBOOLE_0:def 3;
 A4: (max+(f|Y)).x = max+((f|Y).x) by A2,RFUNCT_3:def 10
                  .= max(f.x,0) by A3,FUNCT_1:72;
-    (max+f|Y).x = (max+f).x by A1,A2,FUNCT_1:70
+     (max+f|Y).x = (max+f).x by A1,A2,FUNCT_1:70
                .= max+(f.x) by A3,RFUNCT_3:def 10;
     hence thesis by A4;
    end;
@@ -1331,17 +1322,17 @@ A5:dom max-(f|Y) = dom(f|Y) by RFUNCT_3:def 11
                 .= dom f /\ Y by FUNCT_1:68
                 .= dom max-f /\ Y by RFUNCT_3:def 11
                 .= dom(max-f|Y) by FUNCT_1:68;
-   for x being Element of X st x in dom max-(f|Y) holds
+    for x being Element of X st x in dom max-(f|Y) holds
      (max-(f|Y)).x = (max-f|Y).x
    proof
     let x be Element of X;
     assume
-A6:  x in dom max-(f|Y); then
-    x in dom max-f /\ Y by A5,FUNCT_1:68; then
-A7: x in dom max-f & x in Y by XBOOLE_0:def 3;
+A6:  x in dom max-(f|Y);
+    then x in dom max-f /\ Y by A5,FUNCT_1:68;
+then A7: x in dom max-f & x in Y by XBOOLE_0:def 3;
 A8: (max-(f|Y)).x = max-((f|Y).x) by A6,RFUNCT_3:def 11
                  .= max(-f.x,0) by A7,FUNCT_1:72;
-    (max-f|Y).x = (max-f).x by A5,A6,FUNCT_1:70
+     (max-f|Y).x = (max-f).x by A5,A6,FUNCT_1:70
                .= max-(f.x) by A7,RFUNCT_3:def 11;
     hence thesis by A8;
    end;
@@ -1349,32 +1340,32 @@ A8: (max-(f|Y)).x = max-((f|Y).x) by A6,RFUNCT_3:def 11
 end;
 
 theorem
- Y c= dom(f+g) implies dom((f+g)|Y) =Y & dom(f|Y+g|Y)=Y & (f+g)|Y = f|Y+g|Y
+  Y c= dom(f+g) implies dom((f+g)|Y) =Y & dom(f|Y+g|Y)=Y & (f+g)|Y = f|Y+g|Y
 proof
    assume
 A1:Y c= dom(f+g);
-   dom(f+g) = dom f /\ dom g by SEQ_1:def 3; then
-A2:Y c= dom f & Y c= dom g by A1,XBOOLE_1:18;
-   for x be set st x in dom(f|Y) holds (f|Y).x in REAL; then
-   reconsider fb = f|Y as Function of dom(f|Y),REAL by FUNCT_2:5;
-   for x be set st x in dom f holds f.x in REAL; then
-   reconsider ff = f as Function of dom f,REAL by FUNCT_2:5;
-   for x be set st x in dom(g|Y) holds (g|Y).x in REAL; then
-   reconsider gb = g|Y as Function of dom (g|Y),REAL by FUNCT_2:5;
-   for x be set st x in dom g holds g.x in REAL; then
-   reconsider gg = g as Function of dom g,REAL by FUNCT_2:5;
-   dom((f+g)|Y) =dom(f+g) /\ Y & dom(f|Y) = dom f /\ Y & dom(g|Y) = dom g /\ Y
-     by FUNCT_1:68; then
-A3:dom((f+g)|Y) = Y & dom(f|Y) = Y & dom(g|Y) = Y by A2,A1,XBOOLE_1:28;
-   dom(f|Y) /\ dom(g|Y) = dom f /\ Y /\ dom(g|Y) by FUNCT_1:68
+    dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
+then A2:Y c= dom f & Y c= dom g by A1,XBOOLE_1:18;
+    for x be set st x in dom(f|Y) holds (f|Y).x in REAL;
+   then reconsider fb = f|Y as Function of dom(f|Y),REAL by FUNCT_2:5;
+    for x be set st x in dom f holds f.x in REAL;
+   then reconsider ff = f as Function of dom f,REAL by FUNCT_2:5;
+    for x be set st x in dom(g|Y) holds (g|Y).x in REAL;
+   then reconsider gb = g|Y as Function of dom (g|Y),REAL by FUNCT_2:5;
+    for x be set st x in dom g holds g.x in REAL;
+   then reconsider gg = g as Function of dom g,REAL by FUNCT_2:5;
+    dom((f+g)|Y) =dom(f+g) /\ Y & dom(f|Y) = dom f /\ Y & dom(g|Y) = dom g /\ Y
+     by FUNCT_1:68;
+then A3:dom((f+g)|Y) = Y & dom(f|Y) = Y & dom(g|Y) = Y by A2,A1,XBOOLE_1:28;
+    dom(f|Y) /\ dom(g|Y) = dom f /\ Y /\ dom(g|Y) by FUNCT_1:68
     .= dom f /\ Y /\ (dom g /\ Y) by FUNCT_1:68
     .= dom f /\ Y /\ dom g /\ Y by XBOOLE_1:16
     .= dom f /\ dom g /\ Y /\ Y by XBOOLE_1:16
-    .= dom f /\ dom g /\ (Y /\ Y) by XBOOLE_1:16; then
-A4:dom(f|Y+g|Y) = dom f /\ dom g /\ Y by SEQ_1:def 3
+    .= dom f /\ dom g /\ (Y /\ Y) by XBOOLE_1:16;
+then A4:dom(f|Y+g|Y) = dom f /\ dom g /\ Y by SEQ_1:def 3
                .= dom(f+g) /\ Y by SEQ_1:def 3
                .= Y by A1,XBOOLE_1:28;
-   now let x be set;
+    now let x be set;
     assume A5:x in dom((f+g)|Y);
     hence ((f+g)|Y).x = (f+g).x by FUNCT_1:68
                .=f.x+g.x by A5,A1,A3,SEQ_1:def 3
@@ -1386,23 +1377,23 @@ A4:dom(f|Y+g|Y) = dom f /\ dom g /\ Y by SEQ_1:def 3
 end;
 
 theorem
- eq_dom(f,r) = f"{r}
+  eq_dom(f,r) = f"{r}
 proof
-   now let x be set;
-    assume A1:x in eq_dom(f,r); then
-    ex y be R_eal st y = f.x & r = y by MESFUNC1:def 16; then
-A2: f.x in {r} by TARSKI:def 1;
-    x in dom f by A1,MESFUNC1:def 16;
+    now let x be set;
+    assume A1:x in eq_dom(f,r);
+    then ex y be R_eal st y = f.x & r = y by MESFUNC1:def 16;
+then A2: f.x in {r} by TARSKI:def 1;
+     x in dom f by A1,MESFUNC1:def 16;
     hence x in f"{r} by A2,FUNCT_1:def 13;
-   end; then
-A3:eq_dom(f,r) c= f"{r} by TARSKI:def 3;
-   now let x be set;
-    assume x in f"{r}; then
-A4: x in dom f & f.x in {r} by FUNCT_1:def 13; then
-    (R_EAL f).x = R_EAL r by TARSKI:def 1;
+   end;
+then A3:eq_dom(f,r) c= f"{r} by TARSKI:def 3;
+    now let x be set;
+    assume x in f"{r};
+then A4: x in dom f & f.x in {r} by FUNCT_1:def 13;
+    then (R_EAL f).x = R_EAL r by TARSKI:def 1;
     hence x in eq_dom(f,r) by A4,MESFUNC1:def 16;
-   end; then
-   f"{r} c= eq_dom(f,r) by TARSKI:def 3;
+   end;
+   then f"{r} c= eq_dom(f,r) by TARSKI:def 3;
    hence thesis by A3,XBOOLE_0:def 10;
 end;
 
@@ -1416,18 +1407,19 @@ reserve X for non empty set,
         r,s for Real;
 
 theorem
-f is_measurable_on A & A c= dom f implies
+ f is_measurable_on A & A c= dom f implies
  A /\ great_eq_dom(f,r) /\ less_dom(f,s) is_measurable_on S
 proof
    assume
-A1: f is_measurable_on A & A c= dom f; then
-   R_EAL f is_measurable_on A by Def6; then
-   A /\ less_dom(R_EAL f,R_EAL s) is_measurable_on S by MESFUNC1:def 17;then
-A2:A /\ less_dom(f,s) in S by MESFUNC1:def 11;
-   A /\ great_eq_dom(f,r) is_measurable_on S by A1,Th13; then
-   A /\ great_eq_dom(f,r) in S by MESFUNC1:def 11; then
-A3:A /\ great_eq_dom(f,r) /\ (A /\ less_dom(f,s)) in S by A2,FINSUB_1:def 2;
-   A /\ great_eq_dom(f,r) /\ (A /\ less_dom(f,s))
+A1: f is_measurable_on A & A c= dom f;
+   then R_EAL f is_measurable_on A by Def6;
+   then A /\ less_dom(R_EAL f,R_EAL s) is_measurable_on S by MESFUNC1:def 17;
+then A2:A /\ less_dom(f,s) in S by MESFUNC1:def 11;
+    A /\ great_eq_dom(f,r) is_measurable_on S by A1,Th13;
+   then A /\ great_eq_dom(f,r) in S by MESFUNC1:def 11;
+then A3:A /\ great_eq_dom(f,r) /\ (A /\ less_dom(f,s)) in S by A2,FINSUB_1:def
+2;
+    A /\ great_eq_dom(f,r) /\ (A /\ less_dom(f,s))
     = A /\ great_eq_dom(f,r) /\ A /\ less_dom(f,s) by XBOOLE_1:16
    .= great_eq_dom(f,r) /\ (A/\A) /\ less_dom(f,s) by XBOOLE_1:16;
    hence thesis by A3,MESFUNC1:def 11;
@@ -1437,8 +1429,8 @@ theorem Th70:
  f is_simple_func_in S implies f|A is_simple_func_in S
 proof
    assume
-   f is_simple_func_in S; then
-   consider F be Finite_Sep_Sequence of S such that
+    f is_simple_func_in S;
+   then consider F be Finite_Sep_Sequence of S such that
 A1: dom f = union rng F and
 A2: for n be Nat, x,y being Element of X st
      n in dom F & x in F.n & y in F.n holds f.x = f.y by Def7;
@@ -1447,89 +1439,89 @@ A2: for n be Nat, x,y being Element of X st
 A3: len G = len F &
     for n be Element of NAT st n in Seg len F holds G.n = FA(n)
      from FINSEQ_1:sch 2;
-   rng G c= S
+    rng G c= S
    proof
     let P be set;
-    assume P in rng G; then
-    consider k be set such that
+    assume P in rng G;
+    then consider k be set such that
 A4: k in dom G & P = G.k by FUNCT_1:def 5;
     reconsider k as Element of NAT by A4;
-A5:k in Seg len F by A3,A4,FINSEQ_1:def 3; then
-A6:G.k = F.k /\ A by A3;
-    k in dom F by A5,FINSEQ_1:def 3; then
-    F.k in rng F & rng F c= S by FUNCT_1:12;
+A5:k in Seg len F by A3,A4,FINSEQ_1:def 3;
+then A6:G.k = F.k /\ A by A3;
+     k in dom F by A5,FINSEQ_1:def 3;
+    then F.k in rng F & rng F c= S by FUNCT_1:12;
     hence thesis by A4,A6,FINSUB_1:def 2;
-   end; then
-   reconsider G as FinSequence of S by FINSEQ_1:def 4;
-   for i,j be Nat st i in dom G & j in dom G & i <> j holds G.i misses G.j
+   end;
+   then reconsider G as FinSequence of S by FINSEQ_1:def 4;
+    for i,j be Nat st i in dom G & j in dom G & i <> j holds G.i misses G.j
    proof
     let i,j be Nat;
     assume
-A7: i in dom G & j in dom G & i <> j; then
-A8:i in Seg len F & j in Seg len F by A3,FINSEQ_1:def 3; then
-    i in dom F & j in dom F by FINSEQ_1:def 3; then
-A9:F.i misses F.j by A7,MESFUNC3:4;
-    G.i = F.i /\ A & G.j = F.j /\ A by A8,A3; then
-    G.i /\ G.j = F.i /\ A /\ F.j /\ A by XBOOLE_1:16
+A7: i in dom G & j in dom G & i <> j;
+then A8:i in Seg len F & j in Seg len F by A3,FINSEQ_1:def 3;
+    then i in dom F & j in dom F by FINSEQ_1:def 3;
+then A9:F.i misses F.j by A7,MESFUNC3:4;
+     G.i = F.i /\ A & G.j = F.j /\ A by A8,A3;
+    then G.i /\ G.j = F.i /\ A /\ F.j /\ A by XBOOLE_1:16
               .= F.i /\ F.j /\ A /\ A by XBOOLE_1:16
               .= {} /\ A /\ A by A9,XBOOLE_0:def 7;
     hence thesis by XBOOLE_0:def 7;
-   end; then
-   reconsider G as Finite_Sep_Sequence of S by MESFUNC3:4;
-   for v be set st v in dom(f|A) holds v in union rng G
+   end;
+   then reconsider G as Finite_Sep_Sequence of S by MESFUNC3:4;
+    for v be set st v in dom(f|A) holds v in union rng G
    proof
     let v be set;
-    assume v in dom(f|A); then
-    v in dom f /\ A by FUNCT_1:68; then
-A10:v in dom f & v in A by XBOOLE_0:def 3; then
-    consider W be set such that
+    assume v in dom(f|A);
+    then v in dom f /\ A by FUNCT_1:68;
+then A10:v in dom f & v in A by XBOOLE_0:def 3;
+    then consider W be set such that
 A11: v in W & W in rng F by A1,TARSKI:def 4;
     consider k be set such that
 A12: k in dom F & W = F.k by A11,FUNCT_1:def 5;
     reconsider k as Element of NAT by A12;
-A13:k in Seg len F by A12,FINSEQ_1:def 3; then
-    G.k = F.k /\ A by A3; then
-A14:v in G.k by A10,A11,A12,XBOOLE_0:def 3;
-    k in dom G by A13,A3,FINSEQ_1:def 3; then
-    G.k in rng G by FUNCT_1:12;
+A13:k in Seg len F by A12,FINSEQ_1:def 3;
+    then G.k = F.k /\ A by A3;
+then A14:v in G.k by A10,A11,A12,XBOOLE_0:def 3;
+     k in dom G by A13,A3,FINSEQ_1:def 3;
+    then G.k in rng G by FUNCT_1:12;
     hence thesis by A14,TARSKI:def 4;
-   end; then
-A15:dom(f|A) c= union rng G by TARSKI:def 3;
-   for v be set st v in union rng G holds v in dom(f|A)
+   end;
+then A15:dom(f|A) c= union rng G by TARSKI:def 3;
+    for v be set st v in union rng G holds v in dom(f|A)
    proof
     let v be set;
-    assume v in union rng G; then
-    consider W be set such that
+    assume v in union rng G;
+    then consider W be set such that
 A16: v in W & W in rng G by TARSKI:def 4;
     consider k be set such that
 A17: k in dom G & W = G.k by A16,FUNCT_1:def 5;
     reconsider k as Element of NAT by A17;
-A18:k in Seg(len F) by A3,A17,FINSEQ_1:def 3; then
-    G.k = F.k /\ A by A3; then
-A19:v in F.k & v in A by A16,A17,XBOOLE_0:def 3;
-    k in dom F by A18,FINSEQ_1:def 3; then
-    F.k in rng F by FUNCT_1:12; then
-    v in union rng F by A19,TARSKI:def 4; then
-    v in dom f /\ A by A1,A19,XBOOLE_0:def 3;
+A18:k in Seg(len F) by A3,A17,FINSEQ_1:def 3;
+    then G.k = F.k /\ A by A3;
+then A19:v in F.k & v in A by A16,A17,XBOOLE_0:def 3;
+     k in dom F by A18,FINSEQ_1:def 3;
+    then F.k in rng F by FUNCT_1:12;
+    then v in union rng F by A19,TARSKI:def 4;
+    then v in dom f /\ A by A1,A19,XBOOLE_0:def 3;
     hence thesis by FUNCT_1:68;
-   end; then
-   union rng G c= dom(f|A) by TARSKI:def 3; then
-A20:dom(f|A) = union rng G by A15,XBOOLE_0:def 10;
-   for n be Nat, x,y be Element of X st
+   end;
+   then union rng G c= dom(f|A) by TARSKI:def 3;
+then A20:dom(f|A) = union rng G by A15,XBOOLE_0:def 10;
+    for n be Nat, x,y be Element of X st
     n in dom G & x in G.n & y in G.n holds (f|A).x = (f|A).y
    proof
     let n be Nat;
     let x,y be Element of X;
     assume
-A21: n in dom G & x in G.n & y in G.n; then
-    G.n in rng G by FUNCT_1:12; then
-A22:x in dom(f|A) & y in dom(f|A) by A20,A21,TARSKI:def 4;
-A23:n in Seg(len F) by A21,A3,FINSEQ_1:def 3; then
-    G.n = F.n /\ A by A3; then
-A24:x in F.n & y in F.n by A21,XBOOLE_0:def 3;
-    n in dom F by A23,FINSEQ_1:def 3; then
-    f.x = f.y by A24,A2; then
-    (f|A).x = f.y by A22,FUNCT_1:70;
+A21: n in dom G & x in G.n & y in G.n;
+    then G.n in rng G by FUNCT_1:12;
+then A22:x in dom(f|A) & y in dom(f|A) by A20,A21,TARSKI:def 4;
+A23:n in Seg(len F) by A21,A3,FINSEQ_1:def 3;
+    then G.n = F.n /\ A by A3;
+then A24:x in F.n & y in F.n by A21,XBOOLE_0:def 3;
+     n in dom F by A23,FINSEQ_1:def 3;
+    then f.x = f.y by A24,A2;
+    then (f|A).x = f.y by A22,FUNCT_1:70;
     hence thesis by A22,FUNCT_1:70;
    end;
    hence f|A is_simple_func_in S by A20,Def7;
@@ -1538,8 +1530,8 @@ end;
 theorem Th71:
 f is_simple_func_in S implies dom f is Element of S
 proof
-   assume f is_simple_func_in S; then
-   ex F be Finite_Sep_Sequence of S st
+   assume f is_simple_func_in S;
+   then ex F be Finite_Sep_Sequence of S st
     dom f = union rng F &
     for n being Nat,x,y being Element of X st
      n in dom F & x in F.n & y in F.n holds f.x = f.y by Def7;
@@ -1563,12 +1555,12 @@ A1:f is_simple_func_in S and
 A2:dom f <> {} and
 A3:g is_simple_func_in S and
 A4:dom g = dom f;
-   R_EAL f is_simple_func_in S by A1,Th49; then
-   consider F be Finite_Sep_Sequence of S,
+    R_EAL f is_simple_func_in S by A1,Th49;
+   then consider F be Finite_Sep_Sequence of S,
       a be FinSequence of ExtREAL such that
 A5: F,a are_Re-presentation_of R_EAL f by MESFUNC3:12;
-   R_EAL g is_simple_func_in S by A3,Th49; then
-   consider G be Finite_Sep_Sequence of S,
+    R_EAL g is_simple_func_in S by A3,Th49;
+   then consider G be Finite_Sep_Sequence of S,
       b be FinSequence of ExtREAL such that
 A6: G,b are_Re-presentation_of R_EAL g by MESFUNC3:12;
 A7:dom f = union rng F & dom g = union rng G by A5,A6,MESFUNC3:def 1;
@@ -1579,38 +1571,38 @@ A7:dom f = union rng F & dom g = union rng G by A5,A6,MESFUNC3:def 1;
 A8:len FG = la*lb and
 A9:for k be Element of NAT st k in Seg (la*lb) holds FG.k=FG1(k)
       from FINSEQ_1:sch 2;
-   now let k be Element of NAT;
-    assume k in dom FG; then
-A10:k in Seg(la*lb) by A8,FINSEQ_1:def 3; then
-A11:FG.k = F.((k-'1) div lb + 1) /\ G.((k-'1) mod lb + 1) by A9;
+    now let k be Element of NAT;
+    assume k in dom FG;
+then A10:k in Seg(la*lb) by A8,FINSEQ_1:def 3;
+then A11:FG.k = F.((k-'1) div lb + 1) /\ G.((k-'1) mod lb + 1) by A9;
     set i=(k-'1) div lb + 1;
     set j=(k-'1) mod lb + 1;
 A12:i >= 0+1 & j >= 0+1 by XREAL_1:8;
     reconsider la'=la,lb'=lb as natural number;
-A13:1 <= k & k <= la*lb by A10,FINSEQ_1:3; then
-A14:lb <> 0; then
-A15:lb > 0; then
-    lb >= 0+1 by NAT_1:13; then
-    lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
-      by A13,NAT_D:def 3,XXREAL_0:2; then
-A16:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
-    (k -' 1) <= (la*lb -' 1) by A13,BINARITH:60; then
-    (k -' 1) div lb <= (la*lb -' 1) div lb by NAT_2:26; then
-    (k -' 1) div lb + 1 <= la*lb div lb by A16,XREAL_1:21; then
-    i <= la by A14,NAT_D:18; then
-    i in Seg la by A12; then
-    i in dom F by FINSEQ_1:def 3; then
-A17:F.i in rng F by FUNCT_1:12;
-    (k -' 1) mod lb < lb by A15,NAT_D:1; then
-    j <= lb by NAT_1:13; then
-    j in dom G by A12,FINSEQ_3:27; then
-    G.j in rng G by FUNCT_1:12; then
-    F.i is_measurable M & G.j is_measurable M by A17,MEASURE1:def 12; then
-    F.i /\ G.j is_measurable M by MEASURE1:66;
+A13:1 <= k & k <= la*lb by A10,FINSEQ_1:3;
+then A14:lb <> 0;
+then A15:lb > 0;
+    then lb >= 0+1 by NAT_1:13;
+    then lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
+      by A13,NAT_D:def 3,XXREAL_0:2;
+then A16:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
+     (k -' 1) <= (la*lb -' 1) by A13,BINARITH:60;
+    then (k -' 1) div lb <= (la*lb -' 1) div lb by NAT_2:26;
+    then (k -' 1) div lb + 1 <= la*lb div lb by A16,XREAL_1:21;
+    then i <= la by A14,NAT_D:18;
+    then i in Seg la by A12;
+    then i in dom F by FINSEQ_1:def 3;
+then A17:F.i in rng F by FUNCT_1:12;
+     (k -' 1) mod lb < lb by A15,NAT_D:1;
+    then j <= lb by NAT_1:13;
+    then j in dom G by A12,FINSEQ_3:27;
+    then G.j in rng G by FUNCT_1:12;
+    then F.i is_measurable M & G.j is_measurable M by A17,MEASURE1:def 12;
+    then F.i /\ G.j is_measurable M by MEASURE1:66;
     hence FG.k in S by A11,MEASURE1:def 12;
-   end; then
-   reconsider FG as FinSequence of S by FINSEQ_2:14;
-   for k,l be Nat st k in dom FG & l in dom FG & k <> l holds FG.k misses FG.l
+   end;
+   then reconsider FG as FinSequence of S by FINSEQ_2:14;
+    for k,l be Nat st k in dom FG & l in dom FG & k <> l holds FG.k misses FG.l
    proof
     let k,l be Nat;
     assume
@@ -1619,130 +1611,131 @@ A18: k in dom FG & l in dom FG & k <> l;
     set j=(k-'1) mod lb + 1;
     set n=(l-'1) div lb + 1;
     set m=(l-'1) mod lb + 1;
-A19:k in Seg(la*lb) & l in Seg (la*lb) by A18,A8,FINSEQ_1:def 3; then
-A20:FG.k = F.i /\ G.j by A9;
+A19:k in Seg(la*lb) & l in Seg (la*lb) by A18,A8,FINSEQ_1:def 3;
+then A20:FG.k = F.i /\ G.j by A9;
 A21:i >= 0+1 & j >= 0+1 & n >= 0+1 & m >= 0+1 by XREAL_1:8;
     reconsider la'=la,lb'=lb as natural number;
-A22:1 <= k & k <= la*lb & 1 <= l & l <= la*lb by A19,FINSEQ_1:3; then
-A23:lb <> 0; then
-A24:lb > 0; then
-    lb >= 0+1 by NAT_1:13; then
-    lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
-       by A22,NAT_D:def 3,XXREAL_0:2; then
-A25:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
-    (k -' 1) <= (la*lb -' 1) & (l -' 1) <= (la*lb -' 1) by A22,BINARITH:60
-; then
-    (k -' 1) div lb <= (la*lb div lb) - 1 &
-    (l -' 1) div lb <= (la*lb div lb) - 1 by A25,NAT_2:26; then
-    (k -' 1) div lb + 1 <= la*lb div lb &
-    (l -' 1) div lb + 1 <= la*lb div lb by XREAL_1:21; then
-    i <= la & n <= la by A23,NAT_D:18; then
-    i in Seg la & n in Seg la by A21; then
-A26:i in dom F & n in dom F by FINSEQ_1:def 3;
-    (k -' 1) mod lb < lb & (l -' 1) mod lb < lb by A24,NAT_D:1; then
-    j <= lb & m <= lb by NAT_1:13; then
-A27:j in dom G & m in dom G by A21,FINSEQ_3:27;
+A22:1 <= k & k <= la*lb & 1 <= l & l <= la*lb by A19,FINSEQ_1:3;
+then A23:lb <> 0;
+then A24:lb > 0;
+    then lb >= 0+1 by NAT_1:13;
+    then lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
+       by A22,NAT_D:def 3,XXREAL_0:2;
+then A25:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
+     (k -' 1) <= (la*lb -' 1) & (l -' 1) <= (la*lb -' 1) by A22,BINARITH:60
+;
+    then (k -' 1) div lb <= (la*lb div lb) - 1 &
+    (l -' 1) div lb <= (la*lb div lb) - 1 by A25,NAT_2:26;
+    then (k -' 1) div lb + 1 <= la*lb div lb &
+    (l -' 1) div lb + 1 <= la*lb div lb by XREAL_1:21;
+    then i <= la & n <= la by A23,NAT_D:18;
+    then i in Seg la & n in Seg la by A21;
+then A26:i in dom F & n in dom F by FINSEQ_1:def 3;
+     (k -' 1) mod lb < lb & (l -' 1) mod lb < lb by A24,NAT_D:1;
+    then j <= lb & m <= lb by NAT_1:13;
+then A27:j in dom G & m in dom G by A21,FINSEQ_3:27;
 A28:now assume A29:i=n & j=m;
-     (k-'1)+1=(i-1)*lb+(j-1)+1 & (l-'1)+1=(n-1)*lb+(m-1)+1
-       by A24,NAT_D:2; then
-     k - 1 + 1 = (i-1)*lb + j & l - 1 + 1 = (n-1)*lb+m by A22,BINARITH:50;
+      (k-'1)+1=(i-1)*lb+(j-1)+1 & (l-'1)+1=(n-1)*lb+(m-1)+1
+       by A24,NAT_D:2;
+     then k - 1 + 1 = (i-1)*lb + j & l - 1 + 1 = (n-1)*lb+m by A22,BINARITH:50
+;
      hence contradiction by A18,A29;
     end;
     per cases by A28;
-    suppose i <> n; then
-A30: F.i misses F.n by A26,MESFUNC3:4;
-     FG.k /\ FG.l= F.i /\ G.j /\ (F.n /\ G.m) by A19,A20,A9; then
-     FG.k /\ FG.l= F.i /\ (G.j /\ (F.n /\ G.m)) by XBOOLE_1:16; then
-     FG.k /\ FG.l= F.i /\ (F.n /\ (G.j /\ G.m)) by XBOOLE_1:16; then
-     FG.k /\ FG.l= F.i /\ F.n /\ (G.j /\ G.m) by XBOOLE_1:16; then
-     FG.k /\ FG.l= {} /\ (G.j /\ G.m) by A30,XBOOLE_0:def 7;
+    suppose i <> n;
+then A30: F.i misses F.n by A26,MESFUNC3:4;
+      FG.k /\ FG.l= F.i /\ G.j /\ (F.n /\ G.m) by A19,A20,A9;
+     then FG.k /\ FG.l= F.i /\ (G.j /\ (F.n /\ G.m)) by XBOOLE_1:16;
+     then FG.k /\ FG.l= F.i /\ (F.n /\ (G.j /\ G.m)) by XBOOLE_1:16;
+     then FG.k /\ FG.l= F.i /\ F.n /\ (G.j /\ G.m) by XBOOLE_1:16;
+     then FG.k /\ FG.l= {} /\ (G.j /\ G.m) by A30,XBOOLE_0:def 7;
      hence FG.k misses FG.l by XBOOLE_0:def 7;
     end;
-    suppose j <> m; then
-A31: G.j misses G.m by A27,MESFUNC3:4;
-     FG.k /\ FG.l= F.i /\ G.j /\ (F.n /\ G.m) by A19,A20,A9; then
-     FG.k /\ FG.l= F.i /\ (G.j /\ (F.n /\ G.m)) by XBOOLE_1:16; then
-     FG.k /\ FG.l= F.i /\ (F.n /\ (G.j /\ G.m)) by XBOOLE_1:16; then
-     FG.k /\ FG.l= F.i /\ F.n /\ (G.j /\ G.m) by XBOOLE_1:16; then
-     FG.k /\ FG.l= F.i /\ F.n /\ {} by A31,XBOOLE_0:def 7;
+    suppose j <> m;
+then A31: G.j misses G.m by A27,MESFUNC3:4;
+      FG.k /\ FG.l= F.i /\ G.j /\ (F.n /\ G.m) by A19,A20,A9;
+     then FG.k /\ FG.l= F.i /\ (G.j /\ (F.n /\ G.m)) by XBOOLE_1:16;
+     then FG.k /\ FG.l= F.i /\ (F.n /\ (G.j /\ G.m)) by XBOOLE_1:16;
+     then FG.k /\ FG.l= F.i /\ F.n /\ (G.j /\ G.m) by XBOOLE_1:16;
+     then FG.k /\ FG.l= F.i /\ F.n /\ {} by A31,XBOOLE_0:def 7;
      hence FG.k misses FG.l by XBOOLE_0:def 7;
     end;
-   end; then
-   reconsider FG as Finite_Sep_Sequence of S by MESFUNC3:4;
+   end;
+   then reconsider FG as Finite_Sep_Sequence of S by MESFUNC3:4;
 A32:dom f = union rng FG
    proof
-    now let z be set;
-     assume A33:z in dom f; then
-     consider Y be set such that
+     now let z be set;
+     assume A33:z in dom f;
+     then consider Y be set such that
 A34:  z in Y & Y in rng F by A7,TARSKI:def 4;
      consider i be Element of NAT such that
 A35:  i in dom F & Y = F.i by A34,FINSEQ_2:11;
-     i in Seg len F by A35,FINSEQ_1:def 3; then
-A36: 1 <= i & i <= la by FINSEQ_1:3; then
-     consider i' be Nat such that
+      i in Seg len F by A35,FINSEQ_1:def 3;
+then A36: 1 <= i & i <= la by FINSEQ_1:3;
+     then consider i' be Nat such that
 A37:  i = 1 + i' by NAT_1:10;
      consider Z be set such that
 A38:  z in Z & Z in rng G by A7,A33,A4,TARSKI:def 4;
      consider j be Element of NAT such that
 A39:  j in dom G & Z = G.j by A38,FINSEQ_2:11;
-     i'*lb + j is Nat; then
-     reconsider k=(i-1)*lb+j as Nat by A37;
-     j in Seg len G by A39,FINSEQ_1:def 3; then
-A40: 1 <= j & j <= lb by FINSEQ_1:3; then
-     consider j' be Nat such that
+      i'*lb + j is Nat;
+     then reconsider k=(i-1)*lb+j as Nat by A37;
+      j in Seg len G by A39,FINSEQ_1:def 3;
+then A40: 1 <= j & j <= lb by FINSEQ_1:3;
+     then consider j' be Nat such that
 A41:  j = 1 + j' by NAT_1:10;
-     i'*lb >= 0; then
-     k >= 0 + j by A37,XREAL_1:8; then
-A42: k >= 1 by A40,XXREAL_0:2; then
-A43: k -' 1 = k - 1 by BINARITH:50 .= i'*lb + j' by A37,A41;
-     j' < lb by A40,A41,NAT_1:13; then
-A44: i = (k-'1) div lb +1 & j = (k-'1) mod lb +1
+      i'*lb >= 0;
+     then k >= 0 + j by A37,XREAL_1:8;
+then A42: k >= 1 by A40,XXREAL_0:2;
+then A43: k -' 1 = k - 1 by BINARITH:50 .= i'*lb + j' by A37,A41;
+      j' < lb by A40,A41,NAT_1:13;
+then A44: i = (k-'1) div lb +1 & j = (k-'1) mod lb +1
        by A37,A41,A43,NAT_D:def 1,NAT_D:def 2;
-     0 <= lb & i-1 <= la-1 by A36,XREAL_1:11; then
-     (i-1)*lb <= (la - 1)*lb by XREAL_1:66; then
-A45: k <= (la - 1) * lb + j by XREAL_1:8;
-     (la - 1) * lb + j <= (la - 1) * lb + lb by A40,XREAL_1:8; then
-     k <= la*lb by A45,XXREAL_0:2; then
-A46: k in Seg (la*lb) by A42,FINSEQ_1:3;
-     z in F.i /\ G.j by A34,A35,A38,A39,XBOOLE_0:def 3; then
-A47: z in FG.k by A46,A44,A9;
-     k in dom FG by A8,A46,FINSEQ_1:def 3; then
-     FG.k in rng FG by FUNCT_1:def 5;
+      0 <= lb & i-1 <= la-1 by A36,XREAL_1:11;
+     then (i-1)*lb <= (la - 1)*lb by XREAL_1:66;
+then A45: k <= (la - 1) * lb + j by XREAL_1:8;
+      (la - 1) * lb + j <= (la - 1) * lb + lb by A40,XREAL_1:8;
+     then k <= la*lb by A45,XXREAL_0:2;
+then A46: k in Seg (la*lb) by A42,FINSEQ_1:3;
+      z in F.i /\ G.j by A34,A35,A38,A39,XBOOLE_0:def 3;
+then A47: z in FG.k by A46,A44,A9;
+      k in dom FG by A8,A46,FINSEQ_1:def 3;
+     then FG.k in rng FG by FUNCT_1:def 5;
      hence z in union rng FG by A47,TARSKI:def 4;
     end;
     hence dom f c= union rng FG by TARSKI:def 3;
     let z be set;
-    assume z in union rng FG; then
-    consider Y be set such that
+    assume z in union rng FG;
+    then consider Y be set such that
 A48: z in Y & Y in rng FG by TARSKI:def 4;
     consider k be Element of NAT such that
 A49: k in dom FG & Y = FG.k by A48,FINSEQ_2:11;
     set i=(k-'1) div lb +1;
     set j=(k-'1) mod lb +1;
-    k in Seg (la*lb) by A8,A49,FINSEQ_1:def 3; then
-    FG.k=F.i /\ G.j by A9; then
-A50:z in F.i by A48,A49,XBOOLE_0:def 3;
+     k in Seg (la*lb) by A8,A49,FINSEQ_1:def 3;
+    then FG.k=F.i /\ G.j by A9;
+then A50:z in F.i by A48,A49,XBOOLE_0:def 3;
     reconsider la'=la,lb'=lb as natural number;
-    k in Seg len FG by A49,FINSEQ_1:def 3; then
-A51:1 <= k & k <= la*lb by A8,FINSEQ_1:3; then
-A52:lb <> 0; then
-    lb > 0; then
-    lb >= 0+1 by NAT_1:13; then
-    lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
-      by A51,NAT_D:def 3,XXREAL_0:2; then
-A53:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
-    (k -' 1) <= (la*lb -' 1) by A51,BINARITH:60; then
-    (k -' 1) div lb <= (la*lb div lb) - 1 by A53,NAT_2:26; then
-A54:i <= la*lb div lb by XREAL_1:21;
+     k in Seg len FG by A49,FINSEQ_1:def 3;
+then A51:1 <= k & k <= la*lb by A8,FINSEQ_1:3;
+then A52:lb <> 0;
+    then lb > 0;
+    then lb >= 0+1 by NAT_1:13;
+    then lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
+      by A51,NAT_D:def 3,XXREAL_0:2;
+then A53:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
+     (k -' 1) <= (la*lb -' 1) by A51,BINARITH:60;
+    then (k -' 1) div lb <= (la*lb div lb) - 1 by A53,NAT_2:26;
+then A54:i <= la*lb div lb by XREAL_1:21;
 A55:i >= 0+1 & j >= 0+1 by XREAL_1:8;
-    la*lb div lb = la by A52,NAT_D:18; then
-    i in Seg la by A55,A54; then
-    i in dom F by FINSEQ_1:def 3; then
-    F.i in rng F by FUNCT_1:def 5;
+     la*lb div lb = la by A52,NAT_D:18;
+    then i in Seg la by A55,A54;
+    then i in dom F by FINSEQ_1:def 3;
+    then F.i in rng F by FUNCT_1:def 5;
     hence thesis by A7,A50,TARSKI:def 4;
    end;
 A56:dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
-   for k being Nat,x,y being Element of X st
+    for k being Nat,x,y being Element of X st
      k in dom FG & x in FG.k & y in FG.k holds (f+g).x = (f+g).y
    proof
     let k be Nat;
@@ -1751,36 +1744,36 @@ A56:dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
 A57:k in dom FG & x in FG.k & y in FG.k;
     set i=(k-'1) div lb + 1;
     set j=(k-'1) mod lb + 1;
-    k in Seg (la*lb) by A8,A57,FINSEQ_1:def 3; then
-    FG.k = F.( (k-'1) div lb + 1 ) /\ G.( (k-'1) mod lb  + 1 ) by A9; then
-A58:x in F.i & x in G.j & y in F.i & y in G.j by A57,XBOOLE_0:def 3;
-    k in Seg len FG by A57,FINSEQ_1:def 3; then
-A59:1 <= k & k <= la*lb by A8,FINSEQ_1:3;
+     k in Seg (la*lb) by A8,A57,FINSEQ_1:def 3;
+    then FG.k = F.( (k-'1) div lb + 1 ) /\ G.( (k-'1) mod lb  + 1 ) by A9;
+then A58:x in F.i & x in G.j & y in F.i & y in G.j by A57,XBOOLE_0:def 3;
+     k in Seg len FG by A57,FINSEQ_1:def 3;
+then A59:1 <= k & k <= la*lb by A8,FINSEQ_1:3;
 A60:i >= 0+1 & j >= 0+1 by XREAL_1:8;
     reconsider la'=la,lb'=lb as natural number;
-A61:lb <> 0 by A59; then
-A62:lb > 0; then
-    lb >= 0+1 by NAT_1:13; then
-    lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
-       by A59,NAT_D:def 3,XXREAL_0:2; then
-A63:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
-    (k -' 1) <= (la*lb -' 1) by A59,BINARITH:60; then
-    (k -' 1) div lb <= (la*lb div lb) - 1 by A63,NAT_2:26; then
-    (k -' 1) div lb + 1 <= la*lb div lb by XREAL_1:21; then
-    i <= la by A61,NAT_D:18; then
-    i in Seg la by A60; then
-A64:i in dom F by FINSEQ_1:def 3;
-    (k -' 1) mod lb < lb by A62,NAT_D:1; then
-    j <= lb by NAT_1:13; then
-    j in Seg lb by A60; then
-A65:j in dom G by FINSEQ_1:def 3;
-    FG.k in rng FG by A57,FUNCT_1:def 5; then
-A66:x in dom (f+g) & y in dom(f+g) by A32,A56,A4,A57,TARSKI:def 4;
-    f.x = a.i & g.x = b.j by A5,A64,A58,A65,A6,MESFUNC3:def 1; then
-    f.x + g.x = a.i + b.j by SUPINF_2:1; then
-A67:(f+g).x= a.i+b.j by A66,SEQ_1:def 3;
-    f.y = a.i & g.y = b.j by A5,A64,A58,A65,A6,MESFUNC3:def 1; then
-    (f+g).x= f.y+g.y by A67,SUPINF_2:1;
+A61:lb <> 0 by A59;
+then A62:lb > 0;
+    then lb >= 0+1 by NAT_1:13;
+    then lb' divides (la'*lb') & 1 <= la*lb & 1 <= lb
+       by A59,NAT_D:def 3,XXREAL_0:2;
+then A63:((la'*lb') -' 1) div lb' = ((la'*lb') div lb') - 1 by NAT_2:17;
+     (k -' 1) <= (la*lb -' 1) by A59,BINARITH:60;
+    then (k -' 1) div lb <= (la*lb div lb) - 1 by A63,NAT_2:26;
+    then (k -' 1) div lb + 1 <= la*lb div lb by XREAL_1:21;
+    then i <= la by A61,NAT_D:18;
+    then i in Seg la by A60;
+then A64:i in dom F by FINSEQ_1:def 3;
+     (k -' 1) mod lb < lb by A62,NAT_D:1;
+    then j <= lb by NAT_1:13;
+    then j in Seg lb by A60;
+then A65:j in dom G by FINSEQ_1:def 3;
+     FG.k in rng FG by A57,FUNCT_1:def 5;
+then A66:x in dom (f+g) & y in dom(f+g) by A32,A56,A4,A57,TARSKI:def 4;
+     f.x = a.i & g.x = b.j by A5,A64,A58,A65,A6,MESFUNC3:def 1;
+    then f.x + g.x = a.i + b.j by SUPINF_2:1;
+then A67:(f+g).x= a.i+b.j by A66,SEQ_1:def 3;
+     f.y = a.i & g.y = b.j by A5,A64,A58,A65,A6,MESFUNC3:def 1;
+    then (f+g).x= f.y+g.y by A67,SUPINF_2:1;
     hence (f+g).x= (f+g).y by A66,SEQ_1:def 3;
    end;
    hence f+g is_simple_func_in S by A32,A56,A4,Def7;
@@ -1788,7 +1781,7 @@ A67:(f+g).x= a.i+b.j by A66,SEQ_1:def 3;
 end;
 
 theorem
- f is_simple_func_in S & g is_simple_func_in S implies
+  f is_simple_func_in S & g is_simple_func_in S implies
    f+g is_simple_func_in S
 proof
    assume
@@ -1796,7 +1789,7 @@ A1: f is_simple_func_in S & g is_simple_func_in S;
    per cases;
    suppose
 A2: dom(f+g) = {};
-    ex F being Finite_Sep_Sequence of S st
+     ex F being Finite_Sep_Sequence of S st
      (dom(f+g) = union rng F &
       for n being Nat,x,y being Element of X st
        n in dom F & x in F.n & y in F.n holds (f+g).x = (f+g).y)
@@ -1807,25 +1800,25 @@ A2: dom(f+g) = {};
   A3: len F = 1 &
       for n be Element of NAT st n in Seg 1 holds F.n = F(n)
         from FINSEQ_2:sch 1;
-     now let i,j be Nat;
+      now let i,j be Nat;
       assume
-   A4: i in dom F & j in dom F & i <> j; then
-      i in Seg len F & j in Seg len F by FINSEQ_1:def 3; then
-      i = 1 & j = 1 by A3,FINSEQ_1:4,TARSKI:def 1;
+   A4: i in dom F & j in dom F & i <> j;
+      then i in Seg len F & j in Seg len F by FINSEQ_1:def 3;
+      then i = 1 & j = 1 by A3,FINSEQ_1:4,TARSKI:def 1;
       hence F.i misses F.j by A4;
-     end; then
-     reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
+     end;
+     then reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
      take F;
-     F = <* F.1 *> by A3,FINSEQ_1:57; then
-  A5:rng F = {F.1} by FINSEQ_1:56;
-     1 in Seg 1; then
-     union rng F = union bool {} by A3,A5,ZFMISC_1:1;
+      F = <* F.1 *> by A3,FINSEQ_1:57;
+  then A5:rng F = {F.1} by FINSEQ_1:56;
+      1 in Seg 1;
+     then union rng F = union bool {} by A3,A5,ZFMISC_1:1;
      hence dom(f+g) = union rng F by A2,ZFMISC_1:99;
      hereby let n be Nat;
       let x,y be Element of X;
       assume
-   A6: n in dom F & x in F.n & y in F.n; then
-      n in Seg 1 by A3,FINSEQ_1:def 3;
+   A6: n in dom F & x in F.n & y in F.n;
+      then n in Seg 1 by A3,FINSEQ_1:def 3;
       hence (f+g).x = (f+g).y by A3,A6;
      end;
     end;
@@ -1836,27 +1829,27 @@ A7: dom(f+g) <> {};
     reconsider F = dom f as Element of S by A1,Th71;
     reconsider G = dom g as Element of S by A1,Th71;
 A8:dom(f+g) = dom f /\ dom g by SEQ_1:def 3;
-    dom f is Element of S & dom g is Element of S by A1,Th71; then
-    dom(f+g) in S by A8,FINSUB_1:def 2; then
-A9: f|dom(f+g) is_simple_func_in S & g|dom(f+g) is_simple_func_in S
+     dom f is Element of S & dom g is Element of S by A1,Th71;
+    then dom(f+g) in S by A8,FINSUB_1:def 2;
+then A9: f|dom(f+g) is_simple_func_in S & g|dom(f+g) is_simple_func_in S
       by A1,Th70;
-    dom(f|dom(f+g)) = dom f /\ dom(f+g) &
-    dom(g|dom(f+g)) = dom g /\ dom(f+g) by FUNCT_1:68; then
-A10: dom(f|dom(f+g)) = dom f /\ dom f /\ dom g &
-    dom(g|dom(f+g)) = dom g /\ dom g /\ dom f by A8,XBOOLE_1:16; then
-    dom(f|dom(f+g)) = dom(f+g) & dom(g|dom(f+g)) = dom(f+g)
-      by SEQ_1:def 3; then
-A11: f|dom(f+g) + g|dom(f+g) is_simple_func_in S by A9,A7,Lm1;
+     dom(f|dom(f+g)) = dom f /\ dom(f+g) &
+    dom(g|dom(f+g)) = dom g /\ dom(f+g) by FUNCT_1:68;
+then A10: dom(f|dom(f+g)) = dom f /\ dom f /\ dom g &
+    dom(g|dom(f+g)) = dom g /\ dom g /\ dom f by A8,XBOOLE_1:16;
+    then dom(f|dom(f+g)) = dom(f+g) & dom(g|dom(f+g)) = dom(f+g)
+      by SEQ_1:def 3;
+then A11: f|dom(f+g) + g|dom(f+g) is_simple_func_in S by A9,A7,Lm1;
 A12: dom(f|dom(f+g) + g|dom(f+g))
      = dom(f|dom(f+g)) /\ dom(g|dom(f+g)) by SEQ_1:def 3
     .= dom(f+g) by A10,SEQ_1:def 3;
-    for x be Element of X st x in dom(f|dom(f+g) + g|dom(f+g)) holds
+     for x be Element of X st x in dom(f|dom(f+g) + g|dom(f+g)) holds
       (f|dom(f+g) + g|dom(f+g)).x = (f+g).x
     proof
      let x be Element of X;
      assume
- A13: x in dom(f|dom(f+g) + g|dom(f+g)); then
-     (f|dom(f+g) + g|dom(f+g)).x
+ A13: x in dom(f|dom(f+g) + g|dom(f+g));
+     then (f|dom(f+g) + g|dom(f+g)).x
        = (f|dom(f+g)).x + (g|dom(f+g)).x by SEQ_1:def 3
       .= f.x + (g|dom(f+g)).x by A12,A13,FUNCT_1:72
       .= f.x + g.x by A12,A13,FUNCT_1:72;
@@ -1867,7 +1860,7 @@ A12: dom(f|dom(f+g) + g|dom(f+g))
 end;
 
 theorem
- f is_simple_func_in S implies r(#)f is_simple_func_in S
+  f is_simple_func_in S implies r(#)f is_simple_func_in S
 proof
    assume
 A1: f is_simple_func_in S;
@@ -1877,29 +1870,29 @@ A2:dom g = dom f by SEQ_1:def 6;
 A3:dom f = union rng G and
 A4:for n be Nat, x,y be Element of X st
      n in dom G & x in G.n & y in G.n holds f.x = f.y by A1,Def7;
-   now let n be Nat;
+    now let n be Nat;
     let x,y be Element of X; assume
-A5:n in dom G & x in G.n & y in G.n; then
-    G.n in rng G by FUNCT_1:12; then
-    x in dom g & y in dom g by A2,A3,A5,TARSKI:def 4; then
-    g.x = r*f.x & g.y = r*f.y by SEQ_1:def 6;
+A5:n in dom G & x in G.n & y in G.n;
+    then G.n in rng G by FUNCT_1:12;
+    then x in dom g & y in dom g by A2,A3,A5,TARSKI:def 4;
+    then g.x = r*f.x & g.y = r*f.y by SEQ_1:def 6;
     hence g.x = g.y by A5,A4;
    end;
    hence g is_simple_func_in S by Def7,A3,A2;
 end;
 
 theorem
- (for x be set st x in dom(f-g) holds g.x <= f.x) implies
+  (for x be set st x in dom(f-g) holds g.x <= f.x) implies
  f-g is nonnegative
 proof
    assume
 A1:for x be set st x in dom(f-g) holds g.x <= f.x;
-   dom (f-g) = dom f /\ dom g by SEQ_1:def 4;
+    dom (f-g) = dom f /\ dom g by SEQ_1:def 4;
    hence f-g is nonnegative by A1,Th58;
 end;
 
 theorem
-ex f be PartFunc of X,REAL st
+ ex f be PartFunc of X,REAL st
   f is_simple_func_in S & dom f = A & (for x be set st x in A holds f.x=r)
 proof
    defpred P[set] means $1 in A;
@@ -1921,32 +1914,32 @@ A4:A c= dom f
     assume x in A;
     hence thesis by A2;
    end;
-   ex F being Finite_Sep_Sequence of S st
+    ex F being Finite_Sep_Sequence of S st
     (dom f = union rng F &
      for n being Nat, x,y being Element of X st
       n in dom F & x in F.n & y in F.n holds f.x = f.y)
    proof
     set F = <* dom f *>;
-A5:rng F = {dom f} by FINSEQ_1:55; then
-    rng F = {A} by A4,A3,XBOOLE_0:def 10; then
-    reconsider F as FinSequence of S by FINSEQ_1:def 4;
-    now let i,j be Nat such that
+A5:rng F = {dom f} by FINSEQ_1:55;
+    then rng F = {A} by A4,A3,XBOOLE_0:def 10;
+    then reconsider F as FinSequence of S by FINSEQ_1:def 4;
+     now let i,j be Nat such that
 A6:  i in dom F & j in dom F & i <> j;
-     dom F = Seg 1 by FINSEQ_1:55; then
-     i = 1 & j = 1 by A6,TARSKI:def 1,FINSEQ_1:4;
+      dom F = Seg 1 by FINSEQ_1:55;
+     then i = 1 & j = 1 by A6,TARSKI:def 1,FINSEQ_1:4;
      hence F.i misses F.j by A6;
-    end; then
-    reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
+    end;
+    then reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
     take F;
     thus dom f = union rng F by A5,ZFMISC_1:31;
     hereby let n be Nat;
      let x,y be Element of X;
      assume
 A7:  n in dom F & x in F.n & y in F.n;
-     dom F = Seg 1 by FINSEQ_1:55; then
-     n = 1 by A7,FINSEQ_1:4,TARSKI:def 1; then
-A8: x in dom f & y in dom f by A7,FINSEQ_1:57; then
-     f.x = r by A2;
+      dom F = Seg 1 by FINSEQ_1:55;
+     then n = 1 by A7,FINSEQ_1:4,TARSKI:def 1;
+then A8: x in dom f & y in dom f by A7,FINSEQ_1:57;
+     then f.x = r by A2;
      hence f.x = f.y by A8,A2;
     end;
    end;
@@ -1956,81 +1949,81 @@ A8: x in dom f & y in dom f by A7,FINSEQ_1:57; then
 end;
 
 theorem
-f is_measurable_on B & A = dom f /\ B implies f|B is_measurable_on A
+ f is_measurable_on B & A = dom f /\ B implies f|B is_measurable_on A
 proof
    assume
-A1:f is_measurable_on B & A = dom f /\ B; then
-A2:R_EAL f is_measurable_on B by Def6;
-   now let r be real number;
-    now let x be set;
-     (x in dom(f|B) & ex y being R_eal st y=f|B.x & y < R_EAL r) iff
+A1:f is_measurable_on B & A = dom f /\ B;
+then A2:R_EAL f is_measurable_on B by Def6;
+    now let r be real number;
+     now let x be set;
+      (x in dom(f|B) & ex y being R_eal st y=f|B.x & y < R_EAL r) iff
      x in dom f /\ B & ex y being R_eal st y=f|B.x & y < R_EAL r
-            by FUNCT_1:68; then
- A3: x in A & x in less_dom(f|B,r) iff
+            by FUNCT_1:68;
+ then A3: x in A & x in less_dom(f|B,r) iff
      x in B & x in dom f & ex y being R_eal st y=(f|B).x & y < R_EAL r
         by A1,MESFUNC1:def 12,XBOOLE_0:def 3;
-     x in B & x in dom f implies
+      x in B & x in dom f implies
       ((ex y being R_eal st y=f.x & y < R_EAL r) iff
       (ex y being R_eal st y=(f|B).x & y < R_EAL r))
      proof
       assume
-A4:    x in B & x in dom f; then
-      (ex y being R_eal st y=f.x & y < R_EAL r) implies
+A4:    x in B & x in dom f;
+      then (ex y being R_eal st y=f.x & y < R_EAL r) implies
         f.x=(f|B).x by FUNCT_1:72;
       hence (ex y being R_eal st y=f.x & y < R_EAL r) implies
               ex y being R_eal st y=(f|B).x & y < R_EAL r;
       assume
 A5:    ex y being R_eal st y=(f|B).x & y < R_EAL r;
-      f.x=(f|B).x by A4,FUNCT_1:72;
+       f.x=(f|B).x by A4,FUNCT_1:72;
       hence ex y being R_eal st y=f.x & y < R_EAL r by A5;
-     end; then
-     x in A /\ less_dom(f|B,r) iff
+     end;
+     then x in A /\ less_dom(f|B,r) iff
      x in B & x in less_dom(f,r) by XBOOLE_0:def 3,A3,MESFUNC1:def 12;
      hence x in A /\ less_dom(f|B,r)
            iff x in B /\ less_dom(f,r) by XBOOLE_0:def 3;
-    end; then
-    A /\ less_dom(f|B,r) c= B /\ less_dom(f,r) &
-    B /\ less_dom(f,r) c= A /\ less_dom(f|B,r) by TARSKI:def 3; then
-    A /\ less_dom(f|B,r) = B /\ less_dom(f,r) by XBOOLE_0:def 10;
+    end;
+    then A /\ less_dom(f|B,r) c= B /\ less_dom(f,r) &
+    B /\ less_dom(f,r) c= A /\ less_dom(f|B,r) by TARSKI:def 3;
+    then A /\ less_dom(f|B,r) = B /\ less_dom(f,r) by XBOOLE_0:def 10;
     hence A /\ less_dom(f|B,r) is_measurable_on S by A2,MESFUNC1:def 17;
    end;
    hence thesis by Th12;
 end;
 
 theorem
- A c= dom f & f is_measurable_on A & g is_measurable_on A implies
+  A c= dom f & f is_measurable_on A & g is_measurable_on A implies
    max+(f+g) + max-f is_measurable_on A
 proof
    assume that
 A1:A c= dom f and
 A2:f is_measurable_on A & g is_measurable_on A;
-   f+g is_measurable_on A by A2,Th26; then
-A3:max+(f+g) is_measurable_on A by Th46;
-   max-f is_measurable_on A by A1,A2,Th47;
+    f+g is_measurable_on A by A2,Th26;
+then A3:max+(f+g) is_measurable_on A by Th46;
+    max-f is_measurable_on A by A1,A2,Th47;
    hence thesis by A3,Th26;
 end;
 
 theorem
- A c= dom f /\ dom g &
+  A c= dom f /\ dom g &
  f is_measurable_on A & g is_measurable_on A implies
    max-(f+g) + max+f is_measurable_on A
 proof
    assume that
 A1:A c= dom f /\ dom g and
 A2:f is_measurable_on A & g is_measurable_on A;
-   f+g is_measurable_on A & dom(f+g) = dom f /\ dom g
-     by A2,Th26,SEQ_1:def 3; then
-A3:max-(f+g) is_measurable_on A by A1,Th47;
-   max+ f is_measurable_on A by A2,Th46;
+    f+g is_measurable_on A & dom(f+g) = dom f /\ dom g
+     by A2,Th26,SEQ_1:def 3;
+then A3:max-(f+g) is_measurable_on A by A1,Th47;
+    max+ f is_measurable_on A by A2,Th46;
    hence thesis by A3,Th26;
 end;
 
 theorem
-dom f in S & dom g in S implies dom(f+g) in S
+ dom f in S & dom g in S implies dom(f+g) in S
 proof
-   assume dom f in S & dom g in S; then
-   reconsider E1 = dom f, E2 = dom g as Element of S;
-   dom(f+g) = E1 /\ E2 by SEQ_1:def 3;
+   assume dom f in S & dom g in S;
+   then reconsider E1 = dom f, E2 = dom g as Element of S;
+    dom(f+g) = E1 /\ E2 by SEQ_1:def 3;
    hence thesis;
 end;
 
@@ -2040,20 +2033,20 @@ proof
    assume
 A1:dom f = A;
 A2:now let r be real number;
-    now let x be set;
-     x in A /\ less_dom(f,r) iff x in A & x in less_dom(f,r)
+     now let x be set;
+      x in A /\ less_dom(f,r) iff x in A & x in less_dom(f,r)
        by XBOOLE_0:def 3;
      hence x in A /\ less_dom(f,r) iff x in less_dom(f,r)
        by A1,MESFUNC1:def 12;
-    end; then
-    A /\ less_dom(f,r) c= less_dom(f,r) &
+    end;
+    then A /\ less_dom(f,r) c= less_dom(f,r) &
     less_dom(f,r) c= A /\ less_dom(f,r) by TARSKI:def 3;
     hence A /\ less_dom(f,r) = less_dom(f,r) by XBOOLE_0:def 10;
    end;
    hereby assume
 A3: f is_measurable_on B;
-    now let r be real number;
-     A /\ B /\ less_dom(f,r)
+     now let r be real number;
+      A /\ B /\ less_dom(f,r)
        = B /\ (A /\ less_dom(f,r)) by XBOOLE_1:16
       .= B /\ less_dom(f,r) by A2;
      hence A/\B/\less_dom(f,r) is_measurable_on S by A3,Th12;
@@ -2062,8 +2055,8 @@ A3: f is_measurable_on B;
    end;
    assume
 A4:f is_measurable_on (A/\B);
-   now let r be real number;
-    A /\ B /\ less_dom(f,r) = B /\ (A /\ less_dom(f,r)) by XBOOLE_1:16
+    now let r be real number;
+     A /\ B /\ less_dom(f,r) = B /\ (A /\ less_dom(f,r)) by XBOOLE_1:16
       .=B /\ less_dom(f,r) by A2;
     hence B /\ less_dom(f,r) is_measurable_on S by A4,Th12;
    end;
@@ -2071,7 +2064,7 @@ A4:f is_measurable_on (A/\B);
 end;
 
 theorem
- ( ex A be Element of S st dom f = A ) implies
+  ( ex A be Element of S st dom f = A ) implies
  for c be Real, B be Element of S st f is_measurable_on B holds
    c(#)f is_measurable_on B
 proof
@@ -2082,9 +2075,9 @@ A2: f is_measurable_on B;
    consider A be Element of S such that
 A3: A = dom f by A1;
 A4:f is_measurable_on A /\ B by A3,A2,Th80;
-   A /\ B c= dom f by A3,XBOOLE_1:17; then
-A5:c(#)f is_measurable_on A /\ B by A4,Th21;
-   dom(c(#)f) = A by A3,SEQ_1:def 6;
+    A /\ B c= dom f by A3,XBOOLE_1:17;
+then A5:c(#)f is_measurable_on A /\ B by A4,Th21;
+    dom(c(#)f) = A by A3,SEQ_1:def 6;
    hence c(#)f is_measurable_on B by A5,Th80;
 end;
 
@@ -2103,7 +2096,7 @@ definition
   let M be sigma_Measure of S;
   let f be PartFunc of X,REAL;
   func Integral(M,f) -> Element of ExtREAL equals
-  Integral(M,R_EAL f);
+   Integral(M,R_EAL f);
   coherence;
 end;
 
@@ -2114,102 +2107,102 @@ theorem Th82:
 proof
    assume
 A1: (ex A be Element of S st A = dom f & f is_measurable_on A) &
-    f is nonnegative; then
-   consider A be Element of S such that
+    f is nonnegative;
+   then consider A be Element of S such that
 A2:A = dom f & f is_measurable_on A;
-   A = dom(R_EAL f) & R_EAL f is_measurable_on A by A2,Def6;
+    A = dom(R_EAL f) & R_EAL f is_measurable_on A by A2,Def6;
    hence thesis by A1,MESFUNC5:94;
 end;
 
 theorem
- f is_simple_func_in S & f is nonnegative implies
+  f is_simple_func_in S & f is nonnegative implies
   Integral(M,f) = integral+(M,R_EAL f) & Integral(M,f) = integral'(M,R_EAL f)
 proof
    assume
-A1:f is_simple_func_in S & f is nonnegative; then
-A2:R_EAL f is_simple_func_in S & R_EAL f is nonnegative by Th49; then
-   reconsider A=dom(R_EAL f) as Element of S by MESFUNC5:43;
-   R_EAL f is_measurable_on A by A2,MESFUNC2:37; then
-   f is_measurable_on A & A = dom f by Def6;
+A1:f is_simple_func_in S & f is nonnegative;
+then A2:R_EAL f is_simple_func_in S & R_EAL f is nonnegative by Th49;
+   then reconsider A=dom(R_EAL f) as Element of S by MESFUNC5:43;
+    R_EAL f is_measurable_on A by A2,MESFUNC2:37;
+   then f is_measurable_on A & A = dom f by Def6;
    hence Integral(M,f) = integral+(M,R_EAL f) by A1,Th82;
    hence thesis by A2,MESFUNC5:83;
 end;
 
 theorem
- (ex A be Element of S st A = dom f & f is_measurable_on A) &
+  (ex A be Element of S st A = dom f & f is_measurable_on A) &
  f is nonnegative implies
    0 <= Integral(M,f)
 proof
    assume
 A1:(ex A be Element of S st A = dom f & f is_measurable_on A) &
-   f is nonnegative; then
-   consider A be Element of S such that
+   f is nonnegative;
+   then consider A be Element of S such that
 A2: A = dom f & f is_measurable_on A;
-   A = dom(R_EAL f) & R_EAL f is_measurable_on A by A2,Def6;
+    A = dom(R_EAL f) & R_EAL f is_measurable_on A by A2,Def6;
    hence thesis by A1,MESFUNC5:96;
 end;
 
 theorem
- (ex E be Element of S st E = dom f & f is_measurable_on E) &
+  (ex E be Element of S st E = dom f & f is_measurable_on E) &
  f is nonnegative & A misses B implies
    Integral(M,f|(A\/B)) = Integral(M,f|A)+Integral(M,f|B)
 proof
    assume
 A1:(ex E be Element of S st E = dom f & f is_measurable_on E) &
-   f is nonnegative & A misses B; then
-   consider E be Element of S such that
+   f is nonnegative & A misses B;
+   then consider E be Element of S such that
 A2:E = dom f & f is_measurable_on E;
-   E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
+    E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
    hence thesis by A1,MESFUNC5:97;
 end;
 
 theorem
-(ex E be Element of S st E = dom f & f is_measurable_on E) & f is nonnegative
+ (ex E be Element of S st E = dom f & f is_measurable_on E) & f is nonnegative
  implies
   0<= Integral(M,f|A)
 proof
    assume
 A1:(ex E be Element of S st E = dom f & f is_measurable_on E) &
-   f is nonnegative; then
-   consider E be Element of S such that
+   f is nonnegative;
+   then consider E be Element of S such that
 A2: E = dom f & f is_measurable_on E;
-   E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
+    E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
    hence thesis by A1,MESFUNC5:98;
 end;
 
 theorem
- (ex E be Element of S st E = dom f & f is_measurable_on E ) &
+  (ex E be Element of S st E = dom f & f is_measurable_on E ) &
  f is nonnegative & A c= B
 implies
   Integral(M,f|A) <= Integral(M,f|B)
 proof
    assume
 A1:(ex E be Element of S st E = dom f & f is_measurable_on E ) &
-   f is nonnegative & A c= B; then
-   consider E be Element of S such that
+   f is nonnegative & A c= B;
+   then consider E be Element of S such that
 A2:E = dom f & f is_measurable_on E;
-   E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
+    E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
    hence thesis by A1,MESFUNC5:99;
 end;
 
 theorem
-(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 implies
+ (ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0 implies
   Integral(M,f|A)=0
 proof
    assume
-A1:(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0; then
-   consider E be Element of S such that
+A1:(ex E be Element of S st E = dom f & f is_measurable_on E) & M.A = 0;
+   then consider E be Element of S such that
 A2:E = dom f & f is_measurable_on E;
-   E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
+    E = dom(R_EAL f) & R_EAL f is_measurable_on E by A2,Def6;
    hence thesis by A1,MESFUNC5:100;
 end;
 
 theorem
-E = dom f & f is_measurable_on E & M.A =0 implies
+ E = dom f & f is_measurable_on E & M.A =0 implies
   Integral(M,f|(E\A)) = Integral(M,f)
 proof
-   assume A1:E = dom f & f is_measurable_on E & M.A =0; then
-   E = dom(R_EAL f) & R_EAL f is_measurable_on E by Def6;
+   assume A1:E = dom f & f is_measurable_on E & M.A =0;
+   then E = dom(R_EAL f) & R_EAL f is_measurable_on E by Def6;
    hence thesis by A1,MESFUNC5:101;
 end;
 
@@ -2222,38 +2215,38 @@ definition let X be non empty set;
 end;
 
 theorem
-f is_integrable_on M implies -infty < Integral(M,f) & Integral(M,f) < +infty
+ f is_integrable_on M implies -infty < Integral(M,f) & Integral(M,f) < +infty
 proof
-   assume f is_integrable_on M; then
-   R_EAL f is_integrable_on M by Def9;
+   assume f is_integrable_on M;
+   then R_EAL f is_integrable_on M by Def9;
    hence thesis by MESFUNC5:102;
 end;
 
 theorem
-f is_integrable_on M implies f|A is_integrable_on M
+ f is_integrable_on M implies f|A is_integrable_on M
 proof
-   assume f is_integrable_on M; then
-   R_EAL f is_integrable_on M by Def9; then
-   R_EAL(f|A) is_integrable_on M by MESFUNC5:103;
+   assume f is_integrable_on M;
+   then R_EAL f is_integrable_on M by Def9;
+   then R_EAL(f|A) is_integrable_on M by MESFUNC5:103;
    hence thesis by Def9;
 end;
 
 theorem
- f is_integrable_on M & A misses B implies
+  f is_integrable_on M & A misses B implies
   Integral(M,f|(A\/B)) = Integral(M,f|A) + Integral(M,f|B)
 proof
-   assume A1:f is_integrable_on M & A misses B; then
-   R_EAL f is_integrable_on M by Def9;
+   assume A1:f is_integrable_on M & A misses B;
+   then R_EAL f is_integrable_on M by Def9;
    hence thesis by A1,MESFUNC5:104;
 end;
 
 theorem
-f is_integrable_on M & B = (dom f)\A implies
+ f is_integrable_on M & B = (dom f)\A implies
    f|A is_integrable_on M & Integral(M,f) = Integral(M,f|A)+Integral(M,f|B)
 proof
-   assume A1:f is_integrable_on M & B = (dom f)\A; then
-A2:R_EAL f is_integrable_on M by Def9; then
-   R_EAL(f|A) is_integrable_on M &
+   assume A1:f is_integrable_on M & B = (dom f)\A;
+then A2:R_EAL f is_integrable_on M by Def9;
+   then R_EAL(f|A) is_integrable_on M &
    Integral(M,f)
     = Integral(M,R_EAL(f|A)) + Integral(M,R_EAL(f|B)) by A1,MESFUNC5:105;
    hence f|A is_integrable_on M by Def9;
@@ -2261,30 +2254,30 @@ A2:R_EAL f is_integrable_on M by Def9; then
 end;
 
 theorem
-(ex A be Element of S st A = dom f & f is_measurable_on A ) implies
+ (ex A be Element of S st A = dom f & f is_measurable_on A ) implies
   (f is_integrable_on M iff abs f is_integrable_on M)
 proof
-   assume ex A be Element of S st A = dom f & f is_measurable_on A; then
-   consider A be Element of S such that
+   assume ex A be Element of S st A = dom f & f is_measurable_on A;
+   then consider A be Element of S such that
 A1: A = dom f & f is_measurable_on A;
-   A = dom(R_EAL f) & R_EAL f is_measurable_on A by A1,Def6; then
-   R_EAL f is_integrable_on M iff |. R_EAL f .| is_integrable_on M
-     by MESFUNC5:106; then
-   f is_integrable_on M iff R_EAL abs f is_integrable_on M by Th1,Def9;
+    A = dom(R_EAL f) & R_EAL f is_measurable_on A by A1,Def6;
+   then R_EAL f is_integrable_on M iff |. R_EAL f .| is_integrable_on M
+     by MESFUNC5:106;
+   then f is_integrable_on M iff R_EAL abs f is_integrable_on M by Th1,Def9;
    hence thesis by Def9;
 end;
 
 theorem
-f is_integrable_on M implies |. Integral(M,f) .| <= Integral(M,abs f)
+ f is_integrable_on M implies |. Integral(M,f) .| <= Integral(M,abs f)
 proof
-   assume f is_integrable_on M; then
-   R_EAL f is_integrable_on M by Def9; then
-   |. Integral(M,f) .| <= Integral(M,|. R_EAL f .|) by MESFUNC5:107;
+   assume f is_integrable_on M;
+   then R_EAL f is_integrable_on M by Def9;
+   then |. Integral(M,f) .| <= Integral(M,|. R_EAL f .|) by MESFUNC5:107;
    hence thesis by Th1;
 end;
 
 theorem
- ( ex A be Element of S st A = dom f & f is_measurable_on A ) &
+  ( ex A be Element of S st A = dom f & f is_measurable_on A ) &
  dom f = dom g & g is_integrable_on M &
  ( for x be Element of X st x in dom f holds abs(f.x) <= g.x )
 implies
@@ -2293,82 +2286,82 @@ proof
    assume
 A1:( ex A be Element of S st A = dom f & f is_measurable_on A ) &
    dom f = dom g & g is_integrable_on M &
-   ( for x be Element of X st x in dom f holds abs(f.x) <= g.x ); then
-   consider A be Element of S such that
+   ( for x be Element of X st x in dom f holds abs(f.x) <= g.x );
+   then consider A be Element of S such that
 A2: A = dom f & f is_measurable_on A;
 A3:A = dom R_EAL f & R_EAL f is_measurable_on A by A2,Def6;
 A4:dom R_EAL f = dom R_EAL g & R_EAL g is_integrable_on M by A1,Def9;
-   now let x be Element of X;
+    now let x be Element of X;
     assume A5:x in dom R_EAL f;
-    abs(f.x) = |. (R_EAL f).x .| & g.x = (R_EAL g).x by EXTREAL2:49;
+     abs(f.x) = |. (R_EAL f).x .| & g.x = (R_EAL g).x by EXTREAL2:49;
     hence |. (R_EAL f).x .| <= (R_EAL g).x by A5,A1;
-   end; then
-   R_EAL f is_integrable_on M &
+   end;
+   then R_EAL f is_integrable_on M &
    Integral(M,|.(R_EAL f).|) <= Integral(M,R_EAL g) by A3,A4,MESFUNC5:108;
    hence thesis by Th1,Def9;
 end;
 
 theorem
- dom f in S & 0 <= r & (for x be set st x in dom f holds f.x = r) implies
+  dom f in S & 0 <= r & (for x be set st x in dom f holds f.x = r) implies
    Integral(M,f) = R_EAL(r) * M.(dom f)
 proof
    assume
-A1:dom f in S & 0 <= r & (for x be set st x in dom f holds f.x = r); then
-   reconsider A = dom R_EAL f as Element of S;
+A1:dom f in S & 0 <= r & (for x be set st x in dom f holds f.x = r);
+   then reconsider A = dom R_EAL f as Element of S;
 A2:R_EAL(r) * M.(dom R_EAL f) = integral'(M,R_EAL f) by A1,MESFUNC5:110;
 A3:R_EAL f is_simple_func_in S & R_EAL f is nonnegative
    proof
     thus R_EAL f is_simple_func_in S by A1,Th2;
-    for x be set st x in dom R_EAL f holds 0. <= (R_EAL f).x by A1;
+     for x be set st x in dom R_EAL f holds 0. <= (R_EAL f).x by A1;
     hence R_EAL f is nonnegative by SUPINF_2:71;
-   end; then
-A4:R_EAL f is_measurable_on A by MESFUNC2:37;
-   integral+(M,R_EAL f) = R_EAL(r) * M.(dom R_EAL f) by A2,A3,MESFUNC5:83;
+   end;
+then A4:R_EAL f is_measurable_on A by MESFUNC2:37;
+    integral+(M,R_EAL f) = R_EAL(r) * M.(dom R_EAL f) by A2,A3,MESFUNC5:83;
    hence Integral(M,f) = R_EAL(r) * M.(dom f) by A3,A4,MESFUNC5:94;
 end;
 
 theorem
-f is_integrable_on M & g is_integrable_on M &
+ f is_integrable_on M & g is_integrable_on M &
 f is nonnegative & g is nonnegative implies
    f+g is_integrable_on M
 proof
    assume f is_integrable_on M & g is_integrable_on M &
-   f is nonnegative & g is nonnegative; then
-   R_EAL f is_integrable_on M & R_EAL g is_integrable_on M &
-   R_EAL f is nonnegative & R_EAL g is nonnegative by Def9; then
-   R_EAL f + R_EAL g is_integrable_on M by MESFUNC5:112; then
-   R_EAL(f+g) is_integrable_on M by Th23;
+   f is nonnegative & g is nonnegative;
+   then R_EAL f is_integrable_on M & R_EAL g is_integrable_on M &
+   R_EAL f is nonnegative & R_EAL g is nonnegative by Def9;
+   then R_EAL f + R_EAL g is_integrable_on M by MESFUNC5:112;
+   then R_EAL(f+g) is_integrable_on M by Th23;
    hence thesis by Def9;
 end;
 
 theorem
-f is_integrable_on M & g is_integrable_on M implies dom (f+g) in S
+ f is_integrable_on M & g is_integrable_on M implies dom (f+g) in S
 proof
-   assume f is_integrable_on M & g is_integrable_on M; then
-   R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9; then
-   dom((R_EAL f)+(R_EAL g)) in S by MESFUNC5:113; then
-   dom(R_EAL(f+g)) in S by Th23;
+   assume f is_integrable_on M & g is_integrable_on M;
+   then R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9;
+   then dom((R_EAL f)+(R_EAL g)) in S by MESFUNC5:113;
+   then dom(R_EAL(f+g)) in S by Th23;
    hence thesis;
 end;
 
 theorem
-f is_integrable_on M & g is_integrable_on M implies f+g is_integrable_on M
+ f is_integrable_on M & g is_integrable_on M implies f+g is_integrable_on M
 proof
-   assume f is_integrable_on M & g is_integrable_on M; then
-   R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9; then
-   R_EAL f + R_EAL g is_integrable_on M by MESFUNC5:114; then
-   R_EAL(f+g) is_integrable_on M by Th23;
+   assume f is_integrable_on M & g is_integrable_on M;
+   then R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9;
+   then R_EAL f + R_EAL g is_integrable_on M by MESFUNC5:114;
+   then R_EAL(f+g) is_integrable_on M by Th23;
    hence thesis by Def9;
 end;
 
 theorem
-f is_integrable_on M & g is_integrable_on M implies
+ f is_integrable_on M & g is_integrable_on M implies
  ex E be Element of S st
    E = dom f /\ dom g & Integral(M,f+g)=Integral(M,f|E)+Integral(M,g|E)
 proof
-   assume f is_integrable_on M & g is_integrable_on M; then
-   R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9; then
-   consider E be Element of S such that
+   assume f is_integrable_on M & g is_integrable_on M;
+   then R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9;
+   then consider E be Element of S such that
 A1: E = dom(R_EAL f) /\ dom(R_EAL g) &
     Integral(M,R_EAL f + R_EAL g)
      = Integral(M,(R_EAL f)|E) + Integral(M,(R_EAL g)|E) by MESFUNC5:115;
@@ -2377,15 +2370,15 @@ A1: E = dom(R_EAL f) /\ dom(R_EAL g) &
 end;
 
 theorem
-f is_integrable_on M implies
+ f is_integrable_on M implies
  r(#)f is_integrable_on M & Integral(M,r(#)f) = R_EAL r * Integral(M,f)
 proof
-   assume f is_integrable_on M; then
-   R_EAL f is_integrable_on M by Def9; then
-   r(#)(R_EAL f) is_integrable_on M &
+   assume f is_integrable_on M;
+   then R_EAL f is_integrable_on M by Def9;
+   then r(#)(R_EAL f) is_integrable_on M &
    Integral(M,r(#)(R_EAL f)) = R_EAL r * Integral(M,R_EAL f)
-     by MESFUNC5:116; then
-   R_EAL(r(#)f) is_integrable_on M &
+     by MESFUNC5:116;
+   then R_EAL(r(#)f) is_integrable_on M &
    Integral(M,R_EAL(r(#)f)) = R_EAL r * Integral(M,R_EAL f) by Th20;
    hence thesis by Def9;
 end;
@@ -2397,42 +2390,42 @@ let M be sigma_Measure of S;
 let f be PartFunc of X,REAL;
 let B be Element of S;
 func Integral_on(M,B,f) -> Element of ExtREAL equals
- Integral(M,f|B);
+  Integral(M,f|B);
 coherence;
 end;
 
 theorem
-f is_integrable_on M & g is_integrable_on M & B c= dom(f+g) implies
+ f is_integrable_on M & g is_integrable_on M & B c= dom(f+g) implies
   f+g is_integrable_on M &
   Integral_on(M,B,f+g) = Integral_on(M,B,f) + Integral_on(M,B,g)
 proof
    assume
-A1:f is_integrable_on M & g is_integrable_on M & B c= dom(f+g); then
-A2:R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9;
-   dom(f+g) = dom(R_EAL(f+g))
-           .= dom(R_EAL f + R_EAL g) by Th23; then
-   R_EAL f + R_EAL g is_integrable_on M &
+A1:f is_integrable_on M & g is_integrable_on M & B c= dom(f+g);
+then A2:R_EAL f is_integrable_on M & R_EAL g is_integrable_on M by Def9;
+    dom(f+g) = dom(R_EAL(f+g))
+           .= dom(R_EAL f + R_EAL g) by Th23;
+   then R_EAL f + R_EAL g is_integrable_on M &
    Integral_on(M,B,R_EAL f + R_EAL g)
     = Integral_on(M,B,R_EAL f) + Integral_on(M,B,R_EAL g)
-      by A1,A2,MESFUNC5:117; then
-   R_EAL(f+g) is_integrable_on M &
+      by A1,A2,MESFUNC5:117;
+   then R_EAL(f+g) is_integrable_on M &
    Integral_on(M,B,R_EAL(f+g))
     = Integral_on(M,B,R_EAL f) + Integral_on(M,B,R_EAL g) by Th23;
    hence thesis by Def9;
 end;
 
 theorem
-f is_integrable_on M & f is_measurable_on B implies
+ f is_integrable_on M & f is_measurable_on B implies
   f|B is_integrable_on M &
   Integral_on(M,B,r(#)f) = R_EAL r * Integral_on(M,B,f)
 proof
-   assume f is_integrable_on M & f is_measurable_on B; then
-   R_EAL f is_integrable_on M & R_EAL f is_measurable_on B
-     by Def9,Def6; then
-   (R_EAL f)|B is_integrable_on M &
+   assume f is_integrable_on M & f is_measurable_on B;
+   then R_EAL f is_integrable_on M & R_EAL f is_measurable_on B
+     by Def9,Def6;
+   then (R_EAL f)|B is_integrable_on M &
    Integral_on(M,B,r(#)(R_EAL f)) = R_EAL r * Integral_on(M,B,R_EAL f)
-     by MESFUNC5:118; then
-   R_EAL(f|B) is_integrable_on M &
+     by MESFUNC5:118;
+   then R_EAL(f|B) is_integrable_on M &
    Integral_on(M,B,R_EAL(r(#)f)) = R_EAL r * Integral_on(M,B,R_EAL f) by Th20;
    hence thesis by Def9;
 end;

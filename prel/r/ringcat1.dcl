@@ -123,7 +123,6 @@
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="68"/>
 <Adjective nr="70"/>
 <Adjective nr="81"/>
 <Adjective nr="85"/>

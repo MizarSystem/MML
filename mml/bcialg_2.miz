@@ -1,0 +1,2025 @@
+:: Congruences and Quotient Algebras of {BCI}-algebras
+::  by Yuzhong Ding and Zhiyong Pang
+:: 
+:: Received August 28, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BCIALG_2, FUNCT_1, ASYMPT_0, RLVECT_1, FUNCOP_1, GROUP_4,
+      BINOP_1, POWER, BCIALG_1, RELAT_1, BOOLE, EQREL_1, ALG_1, GROUP_6,
+      FILTER_2, PRE_TOPC, RELAT_2, GROUP_1, WAYBEL15, SUBSET_1, CHORD,
+      PARTFUN1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
+      NAT_1, FUNCT_2, XCMPLX_0, XXREAL_0, REAL_1, FUNCOP_1, BINOP_1, STRUCT_0,
+      RLVECT_1, GROUP_1, BINOP_2, RELSET_1, BCIALG_1, RELAT_2, PARTFUN1,
+      EQREL_1, ALG_1;
+ constructors BCIALG_1, DOMAIN_1, BINOP_1, FUNCOP_1, XXREAL_0, PRE_TOPC, NAT_1,
+      VECTSP_1, BINARITH, EQREL_1, REALSET1, REALSET2, REAL_1, ALG_1;
+ registrations BCIALG_1, SUBSET_1, NAT_1, RELSET_1, STRUCT_0, ORDINAL2,
+      PARTFUN1, ORDINAL1, ARYTM_3, NUMBERS, XBOOLE_0, XXREAL_0, XCMPLX_0,
+      XREAL_0, REAL_1;
+ requirements NUMERALS, ARITHM, SUBSET, BOOLE;
+ definitions RLVECT_1, BINOP_1, FUNCT_1, XBOOLE_0, VECTSP_1, TARSKI, STRUCT_0,
+      GROUP_1, BCIALG_1, NAT_1, RELAT_1;
+ theorems BCIALG_1, FUNCOP_1, NAT_1, XREAL_1, REAL_1, TARSKI, XBOOLE_0,
+      RELAT_2, RELAT_1, XXREAL_0, ORDERS_1, XBOOLE_1, BINOP_1, EQREL_1,
+      RELSET_1, ZFMISC_1;
+ schemes FUNCT_2, NAT_1, RELSET_1, XBOOLE_0, BINOP_1;
+
+begin :: Basic Properties of The Element P16-P19
+
+ reserve X,Y for BCI-algebra;
+ reserve A,I,I1 for Ideal of X;
+ reserve a,x,y,z,u,v,h for Element of X;
+ reserve f,f',g for Function of NAT, the carrier of X;
+ reserve j,i,k,n,m for Element of NAT;
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+:: x*y to_power n  =  x*y|^n                    ::
+:: n=0: it=x;   n=1:it =x*y; n=2:it=(x*y)*y...  ::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+definition let X,x,y; let n be Element of NAT;
+  func (x,y) to_power n -> Element of X means :Def1:
+   ex f st it = f.n & f.0 = x &
+   for j being Element of NAT st j<n holds f.(j+1) = f.j\y;
+ existence
+ proof
+defpred P[set] means for x,y being Element of X,n being Element of NAT st n=$1
+ex u being Element of X st ex f being Function of NAT, the carrier of X st
+u = f.n & f.0 = x &for j being Element of NAT st j<n holds f.(j+1) = f.j\y;
+  A1: P[0]
+   proof
+     now let x,y be Element of X,n be Element of NAT;
+     assume A2: n = 0;
+ reconsider f = NAT-->x as Function of NAT, the carrier of X by FUNCOP_1:57;
+     take u = f.n;
+     take f' = f;
+     thus u = f'.n & f'.0 = x by FUNCOP_1:13;
+thus for j being Element of NAT st j<n holds f'.(j+1) = f'.j\y by A2,NAT_1:3;
+    end;
+    hence thesis;
+    end;
+  A4: for n be Element of NAT st P[n] holds P[n+1]
+  proof
+     now let n be Element of NAT;
+      assume A5: for x,y,k st k=n ex u st ex f st u = f.k & f.0 = x &
+                 for j st j<k holds f.(j+1) = f.j\y;
+      let x,y,k;
+      assume k = n + 1;
+      consider u,f such that u = f.n and A9: f.0= x and
+  A10: for j st j<n holds f.(j+1) = f.j\y by A5;
+  A7:n <n+1 by NAT_1:13;
+    defpred P[set,set] means for j st $1=j 
+      holds (j<n + 1 implies $2 = f.$1) &(n+1<=j implies $2=f.n\y);
+  A11: for k being Element of NAT ex v being Element of X st P[k,v]
+       proof
+         let k be Element of NAT;
+         reconsider i = k as Element of NAT;
+    A12: now assume A13: i < n + 1;
+           take v = f.k;
+           let j such that A14: k = j;
+           thus j < n + 1 implies v = f.k;
+           thus n + 1 <= j implies v = f.n \ y by A13,A14;
+         end;
+         now assume A15: n + 1 <= i;
+           take v = f.n \ y;
+           let j;
+           assume k = j;
+           hence j < n + 1 implies v = f.k by A15;
+           assume n + 1 <= j;
+           thus v = f.n \ y;
+         end;
+         hence thesis by A12;
+       end;
+    consider f' being Function of NAT, the carrier of X such that
+  A16:for k being Element of NAT holds P[k,f'.k] from FUNCT_2:sch 3(A11);
+     take z = f'.(n + 1);
+     take f'' = f';
+     thus z = f''.(n+1);
+     0<n+1 by NAT_1:5;
+     hence f''.0 = x by A9,A16;
+     let j;
+     assume that A17: j < n+1;
+   A19: now assume A20: j < n;
+         f.(j + 1) = f.j \ y & j < n + 1 by A10,NAT_1:13,A20;
+         then f.(j + 1) = f'.j \ y & j + 1 < n + 1 by A16,A20,XREAL_1:8;
+         hence f''.(j + 1) = f''.j \ y by A16;
+        end;
+   A22: now assume A23: j = n;
+         then f''.(j + 1) = f.j \ y by A16;
+         hence f''.(j + 1) = f''.j \ y by A7,A16,A23;
+        end;
+        j <= n by A17,NAT_1:13;
+      hence f''.(j + 1) = f''.j \ y by A19,A22,REAL_1:def 5;
+    end;
+    hence thesis;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A4);
+   then consider u such that
+A24:  ex f st u = f.n & f.0 = x &
+      for j st j < n holds f.(j + 1) = f.j \ y;
+   thus thesis by A24;
+  end;
+ uniqueness
+  proof
+   let v1,v2 be Element of X;
+    given f such that A25: v1 = f.n and A26: f.0 = x and
+     A27: for j st j < n holds f.(j + 1) = f.j \ y;
+    given f' such that A28: v2 = f'.n and A29: f'.0 = x and
+     A30: for j st j < n holds f'.(j + 1) = f'.j \ y;
+     defpred P[Nat] means $1 <= n implies f.$1 = f'.$1;
+      A31: P[0] by A26,A29;
+      A32: for k st P[k] holds P[k+1]
+      proof
+       now let k;
+        assume A33: k <= n implies f.k = f'.k;
+        assume A34: k + 1 <= n;
+        k < n by A34,NAT_1:13;
+        then f.(k + 1) = f.k \y & f'.(k + 1) = f'.k \ y & k <= n by A27,A30;
+       hence f.(k + 1) = f'.(k + 1) by A33;
+      end;
+      hence thesis;
+      end;
+      for k holds P[k] from NAT_1:sch 1(A31,A32);
+   hence v1 = v2 by A25,A28;
+  end;
+end;
+
+theorem TL000:
+  (x,y) to_power 0 = x
+proof
+  ex f st (x,y) to_power 0 = f.0 & f.0 = x &
+  for j st j < 0 holds f.(j + 1) = f.j \ y by Def1;
+  hence thesis;
+end;
+
+theorem TL001:
+  (x,y) to_power 1 = x\y
+proof
+   consider f such that
+A1:(x,y) to_power 1 = f.1 & f.0 = x &
+   for j st j < 1 holds f.(j + 1) = f.j \ y by Def1;
+   0<1 by NAT_1:3;
+   then f.(0+1) = x\y by A1;
+   hence thesis by A1;
+end;
+
+theorem  
+  (x,y) to_power 2 = x\y\y
+proof
+   consider f such that
+A1:(x,y) to_power 2 = f.2 & f.0 = x &
+   for j st j < 2 holds f.(j + 1) = f.j \ y by Def1;
+   1<1+1 by NAT_1:13; then
+A3:f.(1+1) = f.(0+1) \y by A1;
+   1<1+1 by NAT_1:13;
+   then 0<2 &1<2 by NAT_1:3;
+   hence thesis by A1,A3;
+end;
+
+theorem TL003:
+  (x,y) to_power (n+1) = (x,y) to_power n \ y
+proof
+   consider f such that B1:(x,y) to_power (n+1) = f.(n+1) & f.0 = x &
+     for j st j < n+1 holds f.(j + 1) = f.j \ y by Def1;
+   consider g such that B3: (x,y) to_power n = g.n & g.0 = x &
+     for j st j < n holds g.(j + 1) = g.j \ y by Def1;
+   defpred P[set] means for m holds m=$1 & m <= n implies f.m=g.m;
+A1:P[0] by B1,B3;
+A4:for k st P[k] holds P[k+1]
+   proof
+     now let k;
+       assume A5: for m st m=k & m<=n holds f.m=g.m;
+       let m;
+       assume A7:m=k+1 & m<=n;
+    A9:k<n+1 & k<n & k<=n
+       proof
+         k +1 <= n+1 by A7,NAT_1:13;
+         hence k<n+1 by NAT_1:13;
+         thus k< n &k<=n by A7,NAT_1:13;
+       end;
+       then f.(k + 1) = f.k \y & g.(k + 1) = g.k \y by B1,B3;
+       hence f.m=g.m by A5,A7,A9;
+     end;
+     hence thesis;
+   end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   then A23:f.n = g.n;
+   0<1 by NAT_1:3;then
+   n<n+1 by XREAL_1:31;
+   hence thesis by A23,B1,B3;
+end;
+
+theorem TL004:
+  (x,0.X) to_power (n+1) = x
+proof
+  defpred P[set] means
+    for m holds m=$1 & m<= n implies (x,0.X) to_power (m+1) = x;
+  now (x,0.X) to_power (0+1) = x \ 0.X by TL001;
+    hence (x,0.X) to_power (0+1) = x by BCIALG_1:2;
+  end;then
+A1: P[0];
+A4: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+        assume
+    A5: for m st m=k & m<= n holds (x,0.X) to_power (m+1) = x;
+        let m;
+        assume A7:m=k+1 & m<=n;
+        then (x,0.X) to_power (m+1)=((x,0.X) to_power (k+1))\0.X by TL003;
+        then A9:(x,0.X) to_power (m+1)=(x,0.X) to_power (k+1) by BCIALG_1:2;
+        k<=n by NAT_1:13,A7;
+        hence (x,0.X) to_power (m+1)= x by A9,A5;
+      end;
+      hence thesis;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem TL100:
+  (0.X,0.X) to_power n=0.X
+proof
+   defpred P[set] means
+   for m holds m=$1 & m<= n implies (0.X,0.X) to_power m = 0.X;
+A1:P[0] by TL000;
+A4:for k st P[k] holds P[k+1] by TL004;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem TL005:
+  (x,y) to_power n\z = (x\z,y) to_power n
+proof
+   defpred P[set] means for m holds
+    m=$1 & m<= n implies (x,y) to_power m\z = (x\z,y) to_power m;
+   now (x,y) to_power 0\z = x\z by TL000;
+     hence (x,y) to_power 0\z = (x\z,y) to_power 0 by TL000;
+   end;then
+A1:P[0];
+A4:for k st P[k] holds P[k+1]
+   proof
+     now let k;
+       assume
+   A5: for m st m=k & m<= n holds (x,y) to_power m\z = (x\z,y) to_power m;
+       let m;
+       assume A7:m=k+1 & m<=n;
+       then (x,y) to_power m\z=((x,y) to_power k\y)\z by TL003;
+       then A9:(x,y) to_power m\z=((x,y) to_power k\z)\y by BCIALG_1:7;
+       k<=n by NAT_1:13,A7;
+       then (x,y) to_power m\z= ((x\z,y) to_power k)\y by A9,A5;
+       hence (x,y) to_power m\z= (x\z,y) to_power (k+1) by TL003;
+     end;
+     hence thesis;
+   end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem
+  (x,x\(x\y)) to_power n = (x,y) to_power n
+proof
+   defpred P[set] means for m holds
+      m=$1 & m<= n implies (x,x\(x\y)) to_power m = (x,y) to_power m;
+   now (x,x\(x\y)) to_power 0 = x by TL000;
+     hence (x,x\(x\y)) to_power 0 = (x,y) to_power 0 by TL000;
+   end; then
+A1:P[0];
+A4:for k st P[k] holds P[k+1]
+   proof
+     now let k;
+       assume
+A5:for m holds m=k & m<= n implies (x,x\(x\y)) to_power m = (x,y) to_power m;
+       let m;
+       assume A7:m=k+1 & m<=n;
+       A9:(x,x\(x\y)) to_power (k+1)
+           =(x,x\(x\y)) to_power k\(x\(x\y)) by TL003;
+       k<=n by A7,NAT_1:13;
+       hence (x,x\(x\y)) to_power (k+1)=(x,y) to_power k \(x\(x\y)) by A5,A9
+                 .=(x\(x\(x\y)),y) to_power k by TL005
+                 .=(x\y,y) to_power k by BCIALG_1:8
+                 .=(x,y) to_power k\y by TL005
+                 .=(x,y) to_power (k+1) by TL003;
+     end;
+     hence thesis;
+   end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem TL1192:
+  ((0.X,x) to_power n)` = (0.X,x`) to_power n
+proof
+   defpred P[set] means for m holds m=$1 & m<= n implies
+     ((0.X,x) to_power m)` = (0.X,x`) to_power m;
+    now ((0.X,x) to_power 0)`= (0.X)` by TL000;
+      then ((0.X,x) to_power 0)`= 0.X by BCIALG_1:2;
+      hence ((0.X,x) to_power 0)`=(0.X,x`) to_power 0 by TL000;
+    end;then
+A1: P[0];
+ A4: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+      assume
+  A5:  for m holds m=k & m<= n
+       implies ((0.X,x) to_power m)` = (0.X,x`) to_power m;
+      let m;
+      assume A7:m=k+1 & m<=n;
+  A9: ((0.X,x) to_power (k+1))`=((0.X,x) to_power k\x)` by TL003
+          .=((0.X,x) to_power k)`\x` by BCIALG_1:9;
+      k<=n by A7,NAT_1:13;
+      hence ((0.X,x) to_power (k+1))` = ((0.X,x`) to_power k)\x` by A5,A9
+            .=(0.X,x`) to_power (k+1) by TL003;
+      end;
+    hence thesis;
+   end;
+  for n holds P[n] from NAT_1:sch 1(A1,A4);
+ hence thesis;
+end;
+
+theorem Thx1:
+  ((x,y) to_power n,y) to_power m =(x,y) to_power (n+m)
+proof
+   defpred P[set] means
+   for m1 being Element of NAT holds m1=$1 & m1<= n implies
+       ((x,y) to_power m1,y) to_power m =(x,y) to_power (m1+m);  
+  A1: P[0] by TL000;
+  A4: for k st P[k] holds P[k+1]
+        proof
+          now let k;
+          assume 
+  A5: for m1 being Element of NAT st m1=k & m1<=n 
+        holds((x,y) to_power m1,y) to_power m =(x,y) to_power (m1+m);
+      let m1 be Element of NAT;
+      assume A7:m1=k+1 & m1<=n;
+      k<=n by NAT_1:13,A7;
+   then((x,y) to_power k,y) to_power m =(x,y) to_power (k+m) by A5;
+   then(((x,y) to_power k,y) to_power m)\y=(x,y) to_power (k+m+1) by TL003;
+   then(((x,y) to_power k)\y,y) to_power m=(x,y) to_power (k+m+1) by TL005;
+   hence((x,y) to_power m1,y) to_power m=(x,y) to_power (m1+m) by A7,TL003;
+          end;
+          hence thesis;
+        end;
+       for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem
+  ((x,y) to_power n,z) to_power m =((x,z) to_power m,y)to_power n
+proof 
+   defpred P[set] means 
+   for m1 being Element of NAT holds m1=$1 & m1<= n implies
+  ((x,y) to_power m1,z) to_power m =((x,z) to_power m,y)to_power m1;
+    now 
+     ((x,y) to_power 0,z)to_power m =(x,z)to_power m by TL000;
+     hence ((x,y) to_power 0,z)to_power m
+           =((x,z)to_power m,y) to_power 0 by TL000;
+    end;
+  then A1: P[0];
+  A4: for k st P[k] holds P[k+1]
+        proof
+        now let k;
+          assume 
+  A5: for m1 being Element of NAT st m1=k & m1<=n holds
+  ((x,y) to_power m1,z) to_power m =((x,z) to_power m,y)to_power m1;
+          let m1 be Element of NAT;
+          assume A7:m1=k+1 & m1<=n;
+          k<=n by NAT_1:13,A7;
+         then (((x,y) to_power k,z) to_power m)\y
+              =((x,z) to_power m,y)to_power k \ y by A5
+              .=((x,z) to_power m,y)to_power (k+1) by TL003;
+         then ((x,z) to_power m,y)to_power (k+1)
+              =((x,y) to_power k\y,z) to_power m by TL005;
+          hence((x,y) to_power (k+1),z) to_power m 
+              =((x,z) to_power m,y)to_power (k+1) by TL003;
+          end;
+          hence thesis;
+        end;
+       for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem Thx3:
+  ((0.X,x) to_power n)``=(0.X,x) to_power n
+proof
+   defpred P[set] means
+     for m being Element of NAT holds m=$1 & m<=n implies
+     (((0.X,x)to_power m)`)`=(0.X,x)to_power m;
+   now (((0.X,x)to_power 0)`)`=((0.X)`)` by TL000
+      .=(0.X)` by BCIALG_1:def 5
+      .=0.X by BCIALG_1:def 5;
+     hence (((0.X,x)to_power 0)`)`=(0.X,x)to_power 0 by TL000;
+   end;
+  then A1: P[0];
+A4:for k st P[k] holds P[k+1]
+   proof
+     now let k;
+       assume
+  A5:  for m being Element of NAT st m=k & m<=n holds
+       (((0.X,x)to_power m)`)`=(0.X,x)to_power m;
+       let m be Element of NAT;
+       assume A7:m=k+1 & m<=n;
+       A9:k<=n by NAT_1:13,A7;
+       (((0.X,x)to_power (k+1))`)`
+           =(((0.X,x)to_power k\x)`)` by TL003
+          .=(((0.X,x) to_power k)`\x`)` by BCIALG_1:9
+          .=(((0.X,x)to_power k)`)`\((x`)`) by BCIALG_1:9
+          .=(0.X,x)to_power k\((x`)`) by A5,A9
+          .=(((x`)`)`,x)to_power k by TL005
+          .=(x`,x)to_power k by BCIALG_1:8
+          .=(0.X,x)to_power k\x by TL005;
+       hence (((0.X,x)to_power (k+1))`)` =(0.X,x)to_power (k+1) by TL003;
+     end;
+     hence thesis;
+   end;
+   for n holds P[n] from NAT_1:sch 1(A1,A4);
+   hence thesis;
+end;
+
+theorem Thx4:
+  (0.X,x)to_power (n+m)=((0.X,x)to_power n)\((0.X,x)to_power m)`
+proof 
+   defpred P[set] means
+   for j being Element of NAT holds j=$1 & j<=n implies
+   (0.X,x)to_power (j+m)=((0.X,x)to_power j)\((0.X,x)to_power m)`;
+    now (0.X,x)to_power (0+m)
+        =(((0.X,x)to_power m)`)` by Thx3;
+     hence (0.X,x)to_power (0+m)
+           =((0.X,x)to_power 0)\((0.X,x)to_power m)` by TL000;
+    end;
+  then A1: P[0];
+  A4: for k st P[k] holds P[k+1]
+        proof
+          now let k;
+          assume 
+  A5: for j being Element of NAT st j=k & j<=n holds
+   (0.X,x)to_power (j+m)=((0.X,x)to_power j)\((0.X,x)to_power m)`;
+          let j be Element of NAT;
+          assume A7:j=k+1 & j<=n;
+           A9:k<=n by NAT_1:13,A7;
+            (0.X,x)to_power (k+m+1)=((0.X,x)to_power (k+m))\x by TL003
+          .=(((0.X,x)to_power k)\((0.X,x)to_power m)`)\x by A9,A5
+          .=(((0.X,x)to_power k)\x)\((0.X,x)to_power m)` by BCIALG_1:7;
+          hence (0.X,x)to_power ((k+1)+m)
+                =((0.X,x)to_power (k+1))\((0.X,x)to_power m)` by TL003;
+          end;
+          hence thesis;
+        end;
+       for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem
+  ((0.X,x) to_power (m+n))` = ((0.X,x)to_power m)`\(0.X,x)to_power n
+proof
+   ((0.X,x)to_power (m+n))`
+    =(((0.X,x)to_power m)\((0.X,x)to_power n)`)` by Thx4
+   .=(((0.X,x)to_power m)`)\(((0.X,x)to_power n)`)` by BCIALG_1:9;
+   hence thesis by Thx3;
+end;
+
+theorem  
+  ((0.X,(0.X,x)to_power m)to_power n)`=(0.X,x)to_power (m*n)
+ proof 
+ defpred P[set] means for j being Element of NAT holds j=$1 & j<=n
+ implies ((0.X,(0.X,x)to_power m)to_power j)`=(0.X,x)to_power (m*j);
+    now ((0.X,(0.X,x)to_power m)to_power 0)`
+        =(0.X)` by TL000 .= 0.X by BCIALG_1:def 5;
+     hence ((0.X,(0.X,x)to_power m)to_power 0)`
+              =(0.X,x)to_power (m*0) by TL000;
+    end;
+  then A1: P[0];
+  A4: for k st P[k] holds P[k+1]
+        proof
+          now let k;
+          assume 
+  A5: for j being Element of NAT st j=k & j<=n holds
+((0.X,(0.X,x)to_power m)to_power j)`=(0.X,x)to_power (m*j);
+          let j be Element of NAT;
+          assume A7:j=k+1 & j<=n;
+           A9:k<=n by NAT_1:13,A7;
+          ((0.X,(0.X,x)to_power m)to_power (k+1))`
+         =(((0.X,(0.X,x)to_power m)to_power k)\((0.X,x)to_power m))`by TL003
+        .=((0.X,(0.X,x)to_power m)to_power k)`\((0.X,x)to_power m)`
+                                                 by BCIALG_1:9
+        .=((0.X,x)to_power (m*k))\((0.X,x)to_power m)`by A5,A9
+        .=(0.X,x)to_power (m*k+m)by Thx4;         
+          hence ((0.X,(0.X,x)to_power m)to_power (k+1))`
+                 =(0.X,x)to_power (m*(k+1));
+          end;
+          hence thesis;
+        end;
+       for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem
+  (0.X,x)to_power m=0.X implies(0.X,x)to_power (m*n)=0.X
+ proof 
+  assume A0:(0.X,x)to_power m=0.X;
+  defpred P[set] means for j being Element of NAT holds j=$1 & j<=n
+    implies (0.X,x)to_power (m*j)=0.X;
+       A1: P[0] by TL000;
+A4: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+        assume
+A5:     for j st j=k & j<=n holds (0.X,x)to_power (m*j)=0.X;
+        let j;
+        assume A7:j=k+1 & j<=n;
+        A9:k<=n by NAT_1:13,A7;
+        (0.X,x)to_power (m*(k+1)) = (0.X,x)to_power (m*k+m)
+        .= ((0.X,x)to_power (m*k),x)to_power m by Thx1
+        .= (0.X,x)to_power m by A9,A5;
+          hence (0.X,x)to_power (m*(k+1))=0.X by A0;
+       end;
+       hence thesis;
+     end;
+    for n holds P[n] from NAT_1:sch 1(A1,A4);
+    hence thesis;
+end;
+
+theorem
+  x\y=x implies (x,y) to_power n = x
+proof
+   assume A0:x\y=x;
+   defpred P[set] means   
+   for m holds m=$1 & m<=n implies (x,y) to_power m = x;
+   A1: P[0] by TL000;
+ A3: for k st P[k] holds P[k+1]
+    proof
+      now let k;
+      assume
+ A5:  for m holds m=k & m<= n implies (x,y) to_power m = x;
+      let m;
+      assume A7:m=k+1 & m<=n;
+      A9: (x,y) to_power (k+1)=(x,y) to_power k \ y by TL003;
+      k<=n by A7,NAT_1:13;
+      hence (x,y) to_power (k+1)=x by A0,A5,A9;
+      end;
+    hence thesis;
+   end;
+  for n holds P[n] from NAT_1:sch 1(A1,A3);
+ hence thesis;
+end;
+
+theorem   
+  (0.X,x\y) to_power n=((0.X,x) to_power n)\((0.X,y) to_power n)
+proof
+ defpred P[set] means for m holds m=$1 & m<=n implies
+(0.X,x\y) to_power m=((0.X,x) to_power m)\((0.X,y) to_power m);
+   now (0.X)`=0.X by BCIALG_1:def 5;
+      then (0.X,x\y) to_power 0=(0.X)` by TL000;
+      then (0.X,x\y) to_power 0=((0.X,x) to_power 0)\0.X by TL000;
+     hence (0.X,x\y) to_power 0
+           =((0.X,x) to_power 0)\((0.X,y) to_power 0)by TL000;
+   end; then 
+ A1: P[0];
+ A3: for k st P[k] holds P[k+1]
+    proof 
+     let k;
+     assume 
+ A5:  for m holds m=k & m<= n implies
+     (0.X,x\y) to_power m=((0.X,x) to_power m)\((0.X,y) to_power m);
+      let m;
+      assume A7:m=k+1 & m<=n;
+      then k<=n by NAT_1:13;
+      then (0.X,x\y) to_power k
+             =((0.X,x) to_power k)\((0.X,y) to_power k) by A5;
+      then (0.X,x\y) to_power (k+1)
+          =(((0.X,x) to_power k)\((0.X,y) to_power k))\(x\y)by TL003
+         .= ((0.X,x) to_power k)\(x\y)\((0.X,y) to_power k)by BCIALG_1:7
+         .= (((x\y)`,x) to_power k)\((0.X,y) to_power k)by TL005
+         .=((x`\y`,x) to_power k)\((0.X,y) to_power k)by BCIALG_1:9
+         .=((x`,x) to_power k)\y`\((0.X,y) to_power k)by TL005
+         .=((x`,x) to_power k)\((0.X,y) to_power k)\y` by BCIALG_1:7
+         .=((0.X,x) to_power k)\x\((0.X,y) to_power k)\y` by TL005;
+      then (0.X,x\y) to_power (k+1)
+          =((0.X,x) to_power (k+1))\((0.X,y) to_power k)\y` by TL003
+         .=((0.X,x) to_power (k+1))\y`\((0.X,y) to_power k)by BCIALG_1:7
+         .=(((y`)`,x) to_power (k+1))\((0.X,y) to_power k)by TL005
+         .=(((y`)`\((0.X,y) to_power k),x) to_power (k+1))by TL005
+         .=(((0.X,y) to_power k)`\y`,x) to_power (k+1)by BCIALG_1:7
+         .=((((0.X,y) to_power k)\y)`,x) to_power (k+1)by BCIALG_1:9
+         .=(((0.X,y) to_power (k+1))`,x) to_power (k+1)by TL003;
+    hence thesis by A7,TL005;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A3);
+    hence thesis;
+end;
+
+::P20-P22
+theorem 
+  x<=y implies (x,z) to_power n <= (y,z) to_power n
+proof 
+   assume A1:x<=y;
+   defpred P[set] means   
+   for m being Element of NAT holds m=$1 & m<=n
+           implies (x,z) to_power m <= (y,z) to_power m;
+   now (x,z) to_power 0 <= y by A1,TL000;
+       hence (x,z) to_power 0 <= (y,z) to_power 0 by TL000;
+   end; then 
+ A1: P[0];
+ A3: for k st P[k] holds P[k+1]
+    proof
+     let k;
+     assume
+ A5:  for m being Element of NAT holds m=k & m<= n implies
+        (x,z) to_power m <= (y,z) to_power m;
+      let m be Element of NAT;
+      assume A7:m=k+1 & m<=n;
+      then k<=n by NAT_1:13;
+      then (x,z) to_power k <= (y,z) to_power k by A5;
+      then (x,z) to_power k\z<=(y,z) to_power k \ z by BCIALG_1:5;
+      then (x,z) to_power (k+1)<=(y,z) to_power k\z by TL003;
+      hence thesis by TL003,A7;      
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A3);
+ hence thesis;
+end;
+
+theorem 
+  x<=y implies (z,y) to_power n <= (z,x) to_power n
+proof
+   assume A0:x<=y;
+   defpred P[set] means   
+   for m being Element of NAT holds m=$1 & m<=n
+     implies (z,y) to_power m <= (z,x) to_power m;
+   now z\z=0.X by BCIALG_1:def 5;
+       then z<=z by BCIALG_1:def 11;
+       then (z,y) to_power 0 <= z by TL000;
+       hence (z,y) to_power 0 <= (z,x) to_power 0 by TL000;
+   end; then 
+ A1: P[0];
+ A3: for k st P[k] holds P[k+1]
+    proof 
+     let k;
+     assume 
+ A5:  for m holds m=k & m<= n implies (z,y) to_power m <= (z,x) to_power m;
+      let m;
+      assume A7:m=k+1 & m<=n;
+      then k<=n by NAT_1:13;
+      then (z,y) to_power k <= (z,x) to_power k by A5;
+      then (z,y) to_power k\y <= (z,x) to_power k\y by BCIALG_1:5;
+      then (z,y) to_power (k+1)<= (z,x) to_power k\y by TL003;
+      then A9:((z,y) to_power (k+1))\((z,x) to_power k\y)=0.X 
+        by BCIALG_1:def 11;
+      ((z,x) to_power k)\y<=(z,x) to_power k\x by A0,BCIALG_1:5;
+      then (z,x) to_power k\y<=(z,x) to_power (k+1) by TL003;
+      then((z,x) to_power k\y)\((z,x) to_power (k+1))=0.X
+        by BCIALG_1:def 11;
+      then ((z,y) to_power (k+1))\((z,x) to_power (k+1))=0.X by BCIALG_1:3,A9;
+      hence thesis by A7,BCIALG_1:def 11;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A3);
+ hence thesis;
+end;
+
+theorem 
+  ((x,z) to_power n)\((y,z) to_power n) <= x\y
+proof 
+   defpred P[set] means   
+   for m being Element of NAT holds m=$1 & m<=n
+       implies ((x,z) to_power m)\((y,z) to_power m) <= x\y;
+   now (x\y)\(x\y)=0.X by BCIALG_1:def 5;
+     then x\y <= x\y by BCIALG_1:def 11;
+     then ((x,z) to_power 0)\y <= x\y by TL000;
+     hence ((x,z) to_power 0)\((y,z) to_power 0) <= x\y by TL000;
+   end; then 
+ A1: P[0];
+ A3: for k st P[k] holds P[k+1]
+    proof 
+     let k;
+     assume 
+ A5:  for m being Element of NAT holds m=k & m<= n 
+             implies((x,z) to_power m)\((y,z) to_power m) <= x\y;
+      let m be Element of NAT;
+      assume A7:m=k+1 & m<=n;
+      then k<=n by NAT_1:13;
+      then ((x,z) to_power k)\((y,z) to_power k) <= x\y by A5;
+   then (((x,z) to_power k)\((y,z) to_power k))\(x\y)=0.X by BCIALG_1:def 11;
+   then (((x,z) to_power k)\(x\y))\((y,z) to_power k)=0.X by BCIALG_1:7;
+   then (((x,z) to_power k)\(x\y))\z\(((y,z) to_power k)\z)=0.X by BCIALG_1:4;   
+   then (((x,z) to_power k)\z)\(x\y)\(((y,z) to_power k)\z)=0.X by BCIALG_1:7;   
+   then ((x,z) to_power (k+1))\(x\y)\(((y,z) to_power k)\z)=0.X by TL003;
+   then ((x,z) to_power (k+1))\(x\y)\((y,z) to_power (k+1))=0.X by TL003;
+   then ((x,z) to_power (k+1))\((y,z) to_power (k+1))\(x\y)=0.X by BCIALG_1:7;
+  hence thesis by A7,BCIALG_1:def 11;
+  end;
+    for n holds P[n] from NAT_1:sch 1(A1,A3);
+ hence thesis;
+end;
+
+theorem
+  (((x,x\y) to_power n),y\x) to_power n <= x
+proof 
+  defpred P[set] means
+  for m being Element of NAT holds m=$1 & m<=n
+    implies (((x,x\y) to_power m),y\x) to_power m <= x;
+  now x\x=0.X by BCIALG_1:def 5;
+    then x<=x by BCIALG_1:def 11;
+    then (x,y\x) to_power 0<=x by TL000;
+    hence (((x,x\y) to_power 0),y\x) to_power 0<=x by TL000;
+  end; then
+A1:P[0];
+A3:for k st P[k] holds P[k+1]
+    proof 
+     let k;
+     assume 
+ A5:  for m being Element of NAT holds m=k & m<= n 
+        implies (((x,x\y) to_power m),y\x) to_power m <= x;
+      let m be Element of NAT;
+      assume A7:m=k+1 & m<=n;
+      then k<=n by NAT_1:13;
+ then (((x,x\y) to_power k),y\x) to_power k <= x by A5;
+ then ((((x,x\y) to_power k),y\x) to_power k)\x=0.X by BCIALG_1:def 11;
+ then ((((x,x\y) to_power k)\x,y\x) to_power k)\(y\x)=(y\x)`by TL005;
+ then((((x,x\y) to_power k)\x,y\x)to_power (k+1))\(x\y)
+     =(y\x)`\(x\y)by TL003;
+ then(((x,x\y) to_power k)\x\(x\y),y\x) to_power (k+1)=(y\x)`\(x\y)by TL005;
+ then(((x,x\y) to_power k)\(x\y)\x,y\x) to_power (k+1)=(y\x)`\(x\y)
+by BCIALG_1:7;
+ then(((x,x\y) to_power (k+1))\x,y\x) to_power (k+1)=(y\x)`\(x\y)by TL003;
+ then(((x,x\y) to_power (k+1))\x,y\x) to_power (k+1)
+     =(y\y)\(y\x)\(x\y)by BCIALG_1:def 5;
+ then(((x,x\y) to_power (k+1))\x,y\x) to_power (k+1)=0.X by BCIALG_1:1;
+ then(((x,x\y) to_power (k+1),y\x) to_power (k+1))\x=0.X by TL005;
+     hence thesis by A7,BCIALG_1:def 11;
+    end;
+    for n holds P[n] from NAT_1:sch 1(A1,A3);
+    hence thesis;
+end;
+
+notation let X,a;
+  synonym a is minimal for a is atom;
+end;
+
+::P17   proposition 1.1.10
+definition let X,a;
+  attr a is positive means :Def2:
+    0.X <= a;
+  attr a is least means
+    for x holds a<=x;
+  attr a is maximal means :Def5:
+    for x holds a<=x implies x=a;
+  attr a is greatest means :Def6:
+    for x holds x<=a;
+end;
+
+LmDef3:a is minimal iff for x holds x<=a implies x=a
+proof 
+ thus a is minimal implies for x holds x<=a implies x=a
+ proof 
+    assume A1:a is minimal;
+    let x;
+    assume x<=a;
+    then x\a=0.X by BCIALG_1:def 11;
+    hence thesis by A1,BCIALG_1:def 14;
+ end;
+  assume A1:for x holds x<=a implies x=a;
+  now let y;
+  assume y\a=0.X;
+  then y<=a by BCIALG_1:def 11;
+  hence y=a by A1;
+  end;
+  hence thesis by BCIALG_1:def 14;
+end;
+
+The1: 0.X is positive
+proof
+  (0.X)`=0.X by BCIALG_1:2;
+  then 0.X <= 0.X by BCIALG_1:def 11;
+  hence thesis by Def2;
+end;
+
+registration let X;
+  cluster positive Element of X;
+existence
+proof
+  take x=0.X;
+  thus thesis by The1;
+end;
+end;
+
+X1: 0.X is minimal
+proof
+  for x st x\0.X=0.X holds x=0.X by BCIALG_1:2;
+  hence thesis by BCIALG_1:def 14;
+end;
+
+registration let X;
+  cluster 0.X -> positive minimal;
+  coherence by X1,The1;
+end;
+
+theorem
+  a is minimal iff for x holds a\x=x`\a`
+proof
+  thus a is minimal implies for x holds a\x=x`\a`
+  proof 
+    assume A1:a is minimal;
+    let x;
+    x\(x\a)\a=0.X by BCIALG_1:1;
+    then x\(x\a)<=a by BCIALG_1:def 11;
+    then A3:(a\x)\(x`\a`)=((x\(x\a))\x)\(x`\a`)by A1,LmDef3
+         .=((x\x)\(x\a))\(x`\a`) by BCIALG_1:7
+         .=((x\a)`)\(x`\a`) by BCIALG_1:def 5
+         .=((x\a)`)\((x\a)`) by BCIALG_1:9
+         .=0.X by BCIALG_1:def 5;
+    (x`\a`)\(a\x)=0.X by BCIALG_1:1;
+    hence thesis by A3,BCIALG_1:def 7;
+  end;
+  thus (for x holds a\x=x`\a`) implies a is minimal
+  proof 
+  assume A1:for x holds a\x=x`\a`;
+  now let x;
+  assume x<=a;
+  then A3:x\a=0.X by BCIALG_1:def 11;
+       a\x=x`\a` by A1;
+   then a\x=(0.X)` by A3,BCIALG_1:9;
+  then a\x=0.X by BCIALG_1:def 5;
+  hence a=x by A3,BCIALG_1:def 7;
+  end;
+  hence thesis by LmDef3;
+  end;
+end;
+
+theorem  
+  x` is minimal iff (for y holds y<=x implies x` = y`)
+proof 
+  thus x` is minimal implies (for y holds y<=x implies x` = y`)
+  proof 
+  assume A1:x` is minimal;
+  let y;
+  assume y<=x;
+  then y\x=0.X by BCIALG_1:def 11;
+  then (y\x)`=0.X by BCIALG_1:def 5;
+  then y`\x`=0.X by BCIALG_1:9;
+  then y`<=x` by BCIALG_1:def 11;
+  hence thesis by LmDef3,A1;
+  end;
+  thus(for y holds y<=x implies x` = y`)implies x` is minimal 
+  proof
+   assume A1:for y holds y<=x implies x` = y`;
+   now let xx be Element of X;
+   assume xx<=x`;
+   then A3:xx\x`=0.X by BCIALG_1:def 11;
+   then (xx\x`)`=0.X by BCIALG_1:def 5;
+   then xx`\((x`)`)=0.X by BCIALG_1:9;
+   then (xx`\((x`)`))`=0.X by BCIALG_1:def 5;
+   then ((xx`)`)\(((x`)`)`)=0.X by BCIALG_1:9;
+   then ((xx`)`)\x`=0.X by BCIALG_1:8;
+   then (xx`\x)`=0.X by BCIALG_1:9;
+   then (x`\xx)`=0.X by BCIALG_1:7;
+   then (xx\xx)\(x`\xx)=0.X by BCIALG_1:def 5;
+   then (xx\x`)`=0.X by BCIALG_1:def 3;
+   then xx`\((x`)`)=0.X by BCIALG_1:9;
+   then xx`\x\(((x`)`)\x)=0.X by BCIALG_1:4;
+   then xx`\x\0.X=0.X by BCIALG_1:1;
+   then xx`\x=0.X by BCIALG_1:2;
+   then xx`<=x by BCIALG_1:def 11;
+   then (xx`)`=x` by A1;
+   then 0.X = x`\xx by BCIALG_1:1;
+   hence xx=x` by A3,BCIALG_1:def 7;
+   end;
+   hence thesis by LmDef3;
+  end;
+end;
+
+theorem
+  x` is minimal iff
+    for y,z holds((((x\z)\(y\z))`)` = y`\x`)
+proof
+   thus x` is minimal implies for y,z holds((((x\z)\(y\z))`)` = y`\x`)
+   proof 
+    assume A1:x` is minimal;
+    let y,z;
+    A3: (((x\z)\(y\z))`)`
+     = ((x\z)`\(y\z)`)` by BCIALG_1:9
+    .= ((x`\z`)\((y\z)`))` by BCIALG_1:9;
+        y`\(x\y)\x`=0.X by BCIALG_1:def 3;
+   then y`\(x\y)<=x` by BCIALG_1:def 11;
+   then (((x\z)\(y\z))`)`
+     = ((y`\(x\y)\z`)\(y\z)`)` by A3,LmDef3,A1
+    .= ((y`\z`\(x\y))\(y\z)`)` by BCIALG_1:7
+    .= (((y\z)`\(x\y))\(y\z)`)` by BCIALG_1:9
+    .= (((y\z)`)\((y\z)`)\(x\y))` by BCIALG_1:7
+    .= ((x\y)`)` by BCIALG_1:def 5
+    .= (x`\y`)` by BCIALG_1:9
+    .= ((y`)`\x)` by BCIALG_1:7
+    .= ((y`)`)`\x` by BCIALG_1:9
+    .= y`\x` by BCIALG_1:8;
+    hence thesis;      
+   end;
+   thus (for y,z holds (((x\z)\(y\z))`)` = y`\x`) implies x` is minimal
+   proof
+    assume A1:for y,z holds (((x\z)\(y\z))`)` = y`\x`;
+    now let x1 be Element of X;
+    assume x1<=x`;
+    then A5:x1\x`=0.X by BCIALG_1:def 11;
+    then (x1`\x`)\(x1`\x1)=0.X by BCIALG_1:4;
+    then ((((x\0.X)\(x1\0.X))`)`)\(x1`\x1)=0.X by A1;
+    then ((x1`\x1)`)\(((x\0.X)\(x1\0.X))`)=0.X by BCIALG_1:7;
+    then ((x1`\x1)`)\((x\(x1\0.X))`)=0.X by BCIALG_1:2;
+    then ((x1`\x1)`)\((x\x1)`)=0.X by BCIALG_1:2;
+    then (((x1`)`)\x1`)\((x\x1)`)=0.X by BCIALG_1:9;
+    then (((x1`)`)\x1`)\(x`\x1`)=0.X by BCIALG_1:9;
+    then (((x1`)`)\x`)`=0.X by BCIALG_1:def 3;
+    then (((x1`)`)`)\((x`)`)=0.X by BCIALG_1:9;
+    then x1`\((x`)`)=0.X by BCIALG_1:8;
+    then (((x`)`)`)\x1=0.X by BCIALG_1:7;
+    then x`\x1=0.X by BCIALG_1:8; 
+    hence x1=x` by BCIALG_1:def 7,A5;
+    end;
+    hence thesis by LmDef3;
+   end;
+end;
+
+theorem
+  0.X is maximal implies for a holds a is minimal
+proof 
+   assume A1:0.X is maximal;
+   let a;
+   now let x;
+   assume x<=a;
+   then A5:x\a=0.X by BCIALG_1:def 11;
+   then (a\x)`=0.X by BCIALG_1:6;
+   then 0.X <= a\x by BCIALG_1:def 11;
+   then 0.X = a\x by A1,Def5;
+   hence x=a by A5,BCIALG_1:def 7;
+   end;
+   hence thesis by LmDef3;
+end;
+
+theorem
+  (ex x st x is greatest) implies for a holds a is positive
+proof
+  given x such that
+  A1:x is greatest;
+  0.X<=x by A1,Def6;
+  then A3:x`=0.X by BCIALG_1:def 11;
+  let a;
+  a<=x by A1,Def6;
+  then a\x=0.X by BCIALG_1:def 11;
+  then (a\x)`=0.X by BCIALG_1:def 5;
+  then a`\0.X=0.X by A3,BCIALG_1:9;
+  then a`=0.X by BCIALG_1:2;
+  then 0.X<=a by BCIALG_1:def 11;
+  hence thesis by Def2;
+end;
+
+theorem PR11a:
+  x\(x``) is positive Element of X
+proof
+  (x\((x`)`))` = x`\(((x`)`)`) by BCIALG_1:9
+   .=x`\x` by BCIALG_1:8
+   .=0.X by BCIALG_1:def 5;
+  then 0.X<=x\((x`)`) by BCIALG_1:def 11;
+  hence thesis by Def2;
+end;
+
+theorem  
+  a is minimal iff a`` = a
+proof 
+   thus a is minimal implies a`` = a 
+   proof 
+    assume A1:a is minimal;
+    (a`)`\a=0.X by BCIALG_1:1;
+    then (a`)` <= a by BCIALG_1:def 11;
+    hence thesis by A1,LmDef3;
+   end;
+   assume A1:a`` = a;
+   now let x;
+     assume x<=a;
+     then A3:x\a=0.X by BCIALG_1:def 11;
+     a\x=x`\a` by BCIALG_1:7,A1;
+     then a\x=(0.X)` by A3,BCIALG_1:9;
+     then a\x=0.X by BCIALG_1:def 5;
+     hence x=a by BCIALG_1:def 7,A3;
+   end;
+   hence thesis by LmDef3;
+end;
+
+theorem PR11b1:
+  a is minimal iff ex x st a=x`
+proof 
+   thus a is minimal implies ex x st a=x` 
+   proof 
+    assume A1:a is minimal;
+    take x=a`;
+       x`\a=0.X by BCIALG_1:1;
+    then x` <= a by BCIALG_1:def 11;
+    hence thesis by A1,LmDef3;
+   end;
+   given x such that
+   A3:a=x`;
+   now let y;
+     assume y<=a;
+     then A5:y\a=0.X by BCIALG_1:def 11;
+     then a\y=y\x`\y\x by BCIALG_1:7,A3;
+     then a\y=y\y\x`\x by BCIALG_1:7;
+     then a\y=(x`)`\x by BCIALG_1:def 5;
+     then a\y=0.X by BCIALG_1:1;
+     hence a=y by BCIALG_1:def 7,A5;
+   end;
+   hence thesis by LmDef3;
+end;
+
+:: p38
+definition let X,x;
+  attr x is nilpotent means :Def7:
+    ex k being non empty Element of NAT st (0.X,x) to_power k = 0.X;
+end;
+
+definition let X;
+  attr X is nilpotent means
+    for x being Element of X holds x is nilpotent;
+end;
+
+definition let X,x;
+  assume XX:x is nilpotent;
+  func ord x -> non empty Element of NAT means :Def9:
+    (0.X,x) to_power it = 0.X &
+    for m being Element of NAT st (0.X,x) to_power m=0.X & m <> 0 holds
+      it <= m;
+ existence
+  proof
+    defpred P[Element of NAT] means (0.X,x)to_power $1 = 0.X&$1<>0;
+           consider k being non empty Element of NAT such that
+    A0:(0.X,x) to_power k = 0.X by Def7,XX;
+    A1: ex n being Element of NAT st P[n] by A0;
+       consider k being Element of NAT such that A2:P[k] &
+       for n being Element of NAT st P[n] holds k <= n from NAT_1:sch 5(A1);
+    thus thesis by A2;
+  end;
+  uniqueness
+  proof let n1,n2 be non empty Element of NAT;
+    assume that
+  C1: (0.X,x) to_power n1 = 0.X &
+  for m being Element of NAT st (0.X,x)to_power m=0.X&m <> 0 holds n1<=m and
+C2: (0.X,x) to_power n2 = 0.X &
+    for m being Element of NAT st (0.X,x)to_power m=0.X&m <> 0 holds n2<=m;
+    n1 <= n2 & n2 <= n1 by C1,C2;
+    hence n1 = n2 by XXREAL_0:1;
+  end;
+ correctness;
+end;
+
+registration let X;
+  cluster 0.X -> nilpotent;
+  coherence
+  proof
+    (0.X,0.X) to_power 1 = 0.X by TL100;
+    hence thesis by Def7;
+  end;
+end;
+
+theorem :: P39
+  x is positive Element of X iff x is nilpotent & ord x=1
+proof
+   thus x is positive Element of X implies x is nilpotent&ord x=1
+   proof
+      assume A1:x is positive Element of X;
+      0.X<=x by Def2,A1;
+      then A3:x`=0.X by BCIALG_1:def 11;
+      thus AA:x is nilpotent
+      proof
+        set k=1;
+        take k;
+        thus thesis by A3,TL001;
+      end;
+      thus ord x=1
+      proof 
+       set k=1;
+       reconsider k as non empty Element of NAT;
+       A5:(0.X,x) to_power k=0.X by A3,TL001;
+       for m being Element of NAT st (0.X,x)to_power m=0.X&m <> 0
+       holds k<= m by NAT_1:14;
+       hence thesis by Def9,A5,AA;
+      end;
+   end;
+   assume x is nilpotent & ord x=1;
+   then (0.X,x) to_power 1 = 0.X by Def9;
+   then x`=0.X by TL001;
+   then 0.X<=x by BCIALG_1:def 11;
+   hence thesis by Def2;
+end;
+
+theorem  
+  X is BCK-algebra iff for x holds ord x=1 & x is nilpotent
+proof
+   thus X is BCK-algebra implies for x being Element of X
+     holds ord x=1&x is nilpotent
+   proof
+   assume A1:X is BCK-algebra;
+   let x be Element of X;
+   A3:x`=0.X by BCIALG_1:def 8,A1;
+   then (0.X,x)to_power 1=0.X by TL001;
+   then A5:x is nilpotent by Def7;
+   set k=1;
+     reconsider k as non empty Element of NAT;
+  A7:(0.X,x) to_power k=0.X by A3,TL001;
+     for m being Element of NAT st (0.X,x)to_power m=0.X&m <> 0
+     holds k<= m by NAT_1:14;
+     hence thesis by Def9,A5,A7;
+   end;
+    assume A1:for x holds ord x = 1&x is nilpotent;
+    now let x;
+      ord x =1&x is nilpotent by A1;
+      then (0.X,x) to_power 1 = 0.X by Def9;
+      hence x` =0.X by TL001;
+    end;
+    hence thesis by BCIALG_1:def 8;
+end;
+
+theorem 
+  (0.X,x`) to_power n is minimal
+proof
+  (0.X,x`) to_power n=((0.X,x) to_power n)` by TL1192;
+  hence thesis by PR11b1;
+end;
+
+theorem
+  x is nilpotent implies ord x = ord (x`)
+proof
+   assume A1:x is nilpotent;
+   then consider k being non empty Element of NAT such that
+   A3:(0.X,x) to_power k = 0.X by Def7;
+   A5:x` is nilpotent
+   proof 
+   take k;
+    (0.X,x`) to_power k = ((0.X,x) to_power k)` by TL1192
+     .=0.X by A3,BCIALG_1:def 5;
+    hence thesis;
+   end;
+   set k=ord x;
+   ord (x`)=k
+   proof 
+     C1:(0.X,x`) to_power k = ((0.X,x) to_power k)` by TL1192
+     .=(0.X)` by Def9,A1 .=0.X by BCIALG_1:def 5;
+     now let m be Element of NAT;
+     assume C3:(0.X,x`)to_power m=0.X&m <> 0;
+     then ((0.X,x)to_power m)`=0.X by TL1192;
+     then (((0.X,x)to_power m)`)`=0.X by BCIALG_1:def 5;
+     then (0.X,x)to_power m=0.X by Thx3;
+     hence k<=m by C3,A1,Def9;
+     end;
+     hence thesis by C1,Def9,A5; 
+   end;
+   hence thesis;
+end;
+
+begin :: Congruence and Quotient Algebras P58-65
+
+definition let X be BCI-algebra;
+  mode Congruence of X -> Equivalence_Relation of X means :Def9:
+    for x,y,u,v being Element of X st [x,y] in it & [u,v] in it holds
+       [x\u,y\v] in it;
+existence
+proof 
+   reconsider P = id the carrier of X as Equivalence_Relation of X;
+   take P; 
+   let x,y,u,v be Element of X;
+   assume [x,y] in P&[u,v]in P;
+   then x in the carrier of X & x=y & u in the carrier of X&u=v
+     by RELAT_1:def 10;
+   hence thesis by RELAT_1:def 10;
+end;
+end;
+
+:: Left Congruence
+definition let X be BCI-algebra;
+  mode L-congruence of X -> Equivalence_Relation of X means :Def10:
+    for x,y being Element of X st [x,y] in it holds
+       for u being Element of X holds [u\x,u\y] in it;
+existence
+proof 
+   reconsider P = id the carrier of X as Equivalence_Relation of X;
+   take P;
+   let x,y be Element of X;
+   assume A1: [x,y] in P;
+   let u be Element of X;   
+   u\x=u\y & u\x in the carrier of X by A1,RELAT_1:def 10;
+   hence thesis by RELAT_1:def 10;
+end;
+end;
+
+:: Right Congruence
+definition let X be BCI-algebra;
+  mode R-congruence of X -> Equivalence_Relation of X means :Def11:
+    for x,y being Element of X st [x,y] in it holds
+       for u being Element of X holds [x\u,y\u] in it;
+  existence
+  proof
+   reconsider P = id the carrier of X as Equivalence_Relation of X;
+   take P;
+   let x,y be Element of X;
+   assume A1: [x,y] in P;
+   let u be Element of X;
+   x\u=y\u & x\u in the carrier of X by A1,RELAT_1:def 10;
+   hence thesis by RELAT_1:def 10;
+  end;
+end;
+
+::Ideal Congruence
+definition let X be BCI-algebra,A be Ideal of X;
+  mode I-congruence of X,A -> Relation of X means :Def12:
+    for x,y being Element of X holds [x,y] in it iff
+       x\y in A & y\x in A;
+  existence
+  proof
+   defpred PP[set,set] means ex x,y being Element of X st x=$1&y=$2
+     &x\y in A & y\x in A;
+    consider P being Relation of X such that
+A1: for x2,y2 being set holds [x2,y2] in P iff x2 in the carrier of X&
+    y2 in the carrier of X&PP[x2,y2] from RELSET_1:sch 1;
+    take P;
+    let x2,y2 be Element of X;
+    thus [x2,y2] in P implies x2\y2 in A & y2\x2 in A
+    proof
+      [x2,y2] in P implies ex x1,y1 being Element of X
+      st x1=x2&y1=y2&x1\y1 in A & y1\x1 in A by A1;
+      hence thesis;
+    end;
+   thus x2\y2 in A & y2\x2 in A implies [x2,y2] in P by A1;
+  end;
+end;
+
+registration let X be BCI-algebra, A be Ideal of X;
+  cluster -> total symmetric transitive I-congruence of X,A;
+  coherence
+proof
+  for RI being I-congruence of X,A holds RI is Equivalence_Relation of X
+  proof
+    let RI be I-congruence of X,A;
+    reconsider RI as Relation of X;
+ C1:RI is_reflexive_in the carrier of X
+    proof
+      for x being set st x in the carrier of X holds [x,x] in RI
+      proof
+        let x be set;
+        assume x in the carrier of X;
+        then reconsider x as Element of X;
+        0.X in A by BCIALG_1:def 18;
+        then x\x in A by BCIALG_1:def 5;
+        hence thesis by Def12;
+      end;
+      hence thesis by RELAT_2:def 1;
+    end;
+    then C3:field RI = the carrier of X by ORDERS_1:98;
+    then C5:RI is reflexive by RELAT_2:def 9,C1;
+    C7:RI is symmetric
+    proof
+      for x,y being set st x in the carrier of X &
+        y in the carrier of X & [x,y] in RI holds [y,x] in RI
+      proof
+        let x,y be set;
+        assume
+     A1:x in the carrier of X & y in the carrier of X & [x,y] in RI;
+        then reconsider x,y as Element of X;
+        x\y in A & y\x in A by A1,Def12;
+        hence thesis by Def12;
+      end;
+      then RI is_symmetric_in the carrier of X by RELAT_2:def 3;
+      hence thesis by RELAT_2:def 11,C3;
+    end;
+    RI is transitive
+    proof
+      for x,y,z being set st [x,y] in RI&[y,z] in RI holds [x,z] in RI
+      proof
+        let x,y,z be set;
+        assume A1: [x,y] in RI& [y,z] in RI;
+        then reconsider x,y,z as Element of X by ZFMISC_1:106;
+     A3:x\y in A&y\x in A & y\z in A&z\y in A by A1,Def12;
+        (x\z\(x\y))\(y\z)=0.X by BCIALG_1:1;
+        then (x\z\(x\y))\(y\z) in A by BCIALG_1:def 18;
+        then x\z\(x\y) in A by BCIALG_1:def 18,A3;
+        then A5:x\z in A by BCIALG_1:def 18,A3;
+        (z\x\(y\x))\(z\y)=0.X by BCIALG_1:def 3;
+        then (z\x\(y\x))\(z\y) in A by BCIALG_1:def 18;
+        then z\x\(y\x) in A by BCIALG_1:def 18,A3;
+        then z\x in A by BCIALG_1:def 18,A3;
+        hence thesis by Def12,A5;
+      end;
+      hence thesis by RELAT_2:48;
+    end;
+    hence thesis by C3,C5,C7,EQREL_1:16;
+  end;
+  hence thesis;
+end;
+end;
+
+definition let X be BCI-algebra;
+  func IConSet(X) means :Def14:
+    for A1 being set holds
+    A1 in it iff ex I being Ideal of X st A1 is I-congruence of X,I;
+existence
+proof
+  defpred P[set] means ex I being Ideal of X st $1 is I-congruence of X,I;
+  consider Y being set such that
+C1:for x being set holds
+   x in Y iff x in bool [:the carrier of X,the carrier of X:] & P[x]
+     from XBOOLE_0:sch 1;
+   take Y;
+   let x be set;
+   thus x in Y implies
+   ex I being Ideal of X st x is I-congruence of X,I by C1;
+   given I being Ideal of X such that
+C3:x is I-congruence of X,I;
+   thus thesis by C1,C3;
+end;
+ uniqueness
+ proof 
+    let A1, A2 be set such that
+D4: for x being set holds x in A1 iff
+    ex I being Ideal of X st x is I-congruence of X,I and
+D5: for x being set holds x in A2 iff
+    ex I being Ideal of X st x is I-congruence of X,I;
+    defpred P[set] means ex I being Ideal of X st $1 is I-congruence of X,I;
+D6: for x being set holds x in A1 iff P[x] by D4;
+D7: for x being set holds x in A2 iff P[x] by D5;
+    A1 = A2 from XBOOLE_0:sch 2(D6,D7);
+    hence thesis;
+ end;
+end;
+
+definition let X be BCI-algebra;
+  func ConSet(X) equals
+    {R where R is Congruence of X:not contradiction};
+  coherence;
+  func LConSet(X) equals
+    {R where R is L-congruence of X:not contradiction};
+  coherence;
+  func RConSet(X) equals
+    {R where R is R-congruence of X:not contradiction};
+  coherence;
+end;
+
+ reserve R1,R2,R for Equivalence_Relation of X;
+ reserve RI for I-congruence of X,I;
+ reserve E for Congruence of X;
+ reserve RC for R-congruence of X;
+ reserve LC for L-congruence of X;
+
+:: huang-P58:P1.5.1
+theorem  
+  for X,E holds Class(E,0.X) is closed Ideal of X
+proof let X,E;
+  A3:[0.X,0.X] in E by EQREL_1:11;
+       Class(E,0.X) is Ideal of X
+     proof 
+       E1:0.X in Class(E,0.X) by EQREL_1:26,A3;
+       now let x,y be Element of X;
+       assume x\y in Class(E,0.X) & y in Class(E,0.X);
+       then E3:[0.X,x\y] in E & [0.X,y] in E by EQREL_1:26;
+       [x,x] in E by EQREL_1:11;
+       then [x\0.X,x\y] in E by E3,Def9;
+       then [x,x\y] in E by BCIALG_1:2;
+       then [x\y,x] in E by EQREL_1:12;
+       then [0.X,x] in E by E3,EQREL_1:13;
+       hence x in Class(E,0.X)by EQREL_1:26;
+       end;
+       hence thesis by E1,BCIALG_1:def 18;
+     end;   
+     then reconsider Rx=Class(E,0.X) as Ideal of X;
+     Rx is closed
+     proof 
+      now let x be Element of Rx;
+      [0.X,x] in E by EQREL_1:26;
+      then [(0.X)`,x`] in E by A3,Def9;
+      then [0.X,x`] in E by BCIALG_1:def 5;
+      hence x` in Class(E,0.X) by EQREL_1:26;
+      end;
+      hence thesis by BCIALG_1:def 19;
+     end;
+     hence thesis;
+end;
+
+theorem Def153:
+  R is Congruence of X iff R is R-congruence of X&R is L-congruence of X
+proof
+  R is reflexive symmetric transitive & field R = the carrier of X
+    by EQREL_1:16;
+ then A3:R is_reflexive_in the carrier of X &
+        R is_symmetric_in the carrier of X &
+        R is_transitive_in the carrier of X by RELAT_2:def 9,def 11,def 16;
+thus R is Congruence of X implies R is R-congruence of X&R is L-congruence of X
+proof 
+ assume A1:R is Congruence of X;
+ thus R is R-congruence of X
+ proof 
+   let x,y be Element of X;
+   assume B1:[x,y] in R;
+   let u be Element of X;
+   [u,u] in R by A3,RELAT_2:def 1;
+   hence thesis by B1,A1,Def9;   
+ end;
+   let x,y be Element of X;
+   assume B1:[x,y] in R;
+   let u be Element of X;
+   [u,u] in R by A3,RELAT_2:def 1;
+   hence thesis by B1,A1,Def9;
+end;
+  assume B1:R is R-congruence of X&R is L-congruence of X;
+  now let x,y,u,v be Element of X;
+  assume [x,y] in R & [u,v]in R;
+  then [x\u,y\u] in R & [y\u,y\v] in R by B1,Def10,Def11;
+  hence [x\u,y\v] in R by A3,RELAT_2:def 8; 
+  end;
+  hence thesis by Def9;  
+end;
+
+theorem TL154:
+  RI is Congruence of X
+proof
+  RI is reflexive symmetric transitive
+     & field RI = the carrier of X by EQREL_1:16;
+  then AA:RI is_transitive_in the carrier of X by RELAT_2:def 16;
+ now let x,y,u,v be Element of X;
+ assume [x,y] in RI&[u,v]in RI;
+ then A3:x\y in I&y\x in I&u\v in I&v\u in I by Def12;
+ (x\u\(y\u))\(x\y)=0.X & (y\u\(x\u))\(y\x)=0.X by BCIALG_1:def 3;
+ then (x\u\(y\u))\(x\y) in I &(y\u\(x\u))\(y\x) in I by BCIALG_1:def 18;
+ then x\u\(y\u) in I &y\u\(x\u) in I by A3,BCIALG_1:def 18;
+ then A5:[x\u,y\u] in RI by Def12;
+ (y\u\(y\v))\(v\u)=0.X & (y\v\(y\u))\(u\v)=0.X by BCIALG_1:1;
+ then (y\u\(y\v))\(v\u) in I &(y\v\(y\u))\(u\v) in I by BCIALG_1:def 18;
+ then y\u\(y\v) in I & y\v\(y\u) in I by A3,BCIALG_1:def 18;
+ then [y\u,y\v] in RI by Def12;
+ hence [x\u,y\v] in RI by RELAT_2:def 8,AA,A5;
+ end;
+ hence thesis by Def9;
+end;
+
+definition let X be BCI-algebra, I be Ideal of X;
+  redefine mode I-congruence of X,I -> Congruence of X;
+  coherence by TL154;
+end;
+
+theorem PR158:
+  Class(RI,0.X) c= I
+proof
+   let x be set;
+   assume AA:x in Class(RI,0.X);
+   then consider y being set such that
+   A1:[y,x] in RI & y in {0.X} by RELAT_1:def 13;
+     reconsider y as Element of X by A1,TARSKI:def 1;
+     reconsider x as Element of X by AA;
+     y=0.X by A1,TARSKI:def 1;
+     then x\0.X in I by A1,Def12;
+    hence thesis by BCIALG_1:2;
+end;
+
+theorem 
+  I is closed iff I = Class(RI,0.X)
+proof
+   thus I is closed implies I = Class(RI,0.X)
+   proof 
+    assume A1:I is closed;
+    thus I c= Class(RI,0.X)
+    proof 
+       let x be set;
+       assume B1:x in I;
+       then reconsider x as Element of I;
+       B3:x` in I by A1,BCIALG_1:def 19;
+       B5:0.X in {0.X} by TARSKI:def 1;
+       x\0.X in I by B1,BCIALG_1:2;
+       then [0.X,x] in RI by B3,Def12;
+       hence thesis by RELAT_1:def 13,B5;
+    end;
+    thus Class(RI,0.X) c= I by PR158;
+   end;
+   assume C1:I = Class(RI,0.X);
+   now let x be Element of I;
+     consider y being set such that
+     C3:[y,x] in RI & y in {0.X} by RELAT_1:def 13,C1;
+     [0.X,x] in RI by C3,TARSKI:def 1;
+     hence x` in I by Def12;
+   end;
+   hence thesis by BCIALG_1:def 19;
+end;
+
+theorem Lem15F1:
+  [x,y] in E implies x\y in Class(E,0.X) & y\x in Class(E,0.X)
+proof
+   assume A1:[x,y] in E;
+   B1:0.X in {0.X} by TARSKI:def 1;
+   E is reflexive symmetric transitive&field E = the carrier of X
+     by EQREL_1:16;
+   then E is_symmetric_in the carrier of X &
+     E is_reflexive_in the carrier of X by RELAT_2:def 11,def 9;
+   then [y,x] in E & [y,y] in E&[x,x] in E by A1,RELAT_2:def 3,def 1;
+   then [x\x,y\x] in E&[y\y,x\y] in E by Def9,A1;
+   then [0.X,y\x] in E &[0.X,x\y] in E by BCIALG_1:def 5;
+ hence thesis by RELAT_1:def 13,B1;
+end;
+
+theorem
+  for A,I being Ideal of X,IA being I-congruence of X,A,
+      II being I-congruence of X,I st Class(IA,0.X)=Class(II,0.X)
+   holds IA = II
+proof
+  let A,I be Ideal of X,IA be I-congruence of X,A,II be I-congruence of X,I;
+  assume A1:Class(IA,0.X) = Class(II,0.X);
+  let xx,yy be set;
+    thus [xx,yy] in IA implies [xx,yy] in II
+    proof
+      assume DD:[xx,yy] in IA;
+      then consider x,y being set such that
+      DE:[xx,yy]=[x,y] & x in the carrier of X &y in the carrier of X
+        by RELSET_1:6;
+      reconsider x,y as Element of X by DE;
+      B6:y\x in II.:{0.X}&x\y in II.:{0.X} by A1,Lem15F1,DD,DE;
+      then consider z being set such that
+      B7:[z,y\x] in II & z in {0.X}by RELAT_1:def 13;
+      [0.X,y\x] in II by TARSKI:def 1,B7;
+      then y\x\0.X in I by Def12;
+      then B9:y\x in I by BCIALG_1:2;
+      consider z being set such that
+      B11:[z,x\y] in II & z in {0.X}by RELAT_1:def 13,B6;
+      [0.X,x\y] in II by TARSKI:def 1,B11;
+      then x\y\0.X in I by Def12;
+      then x\y in I by BCIALG_1:2;
+      hence [xx,yy] in II by B9,Def12,DE;
+    end;
+    thus [xx,yy] in II implies [xx,yy] in IA
+    proof
+      assume DD:[xx,yy] in II;
+      then consider x,y being set such that
+      DE:[xx,yy]=[x,y] & x in the carrier of X &y in the carrier of X
+        by RELSET_1:6;
+      reconsider x,y as Element of X by DE;
+      B6:y\x in IA.:{0.X}&x\y in IA.:{0.X} by A1,Lem15F1,DE,DD;
+      then consider z being set such that
+      B7:[z,y\x] in IA & z in {0.X}by RELAT_1:def 13;
+      [0.X,y\x] in IA by TARSKI:def 1,B7;
+      then y\x\0.X in A by Def12;
+      then B9:y\x in A by BCIALG_1:2;
+      consider z being set such that
+      B11:[z,x\y] in IA & z in {0.X}by RELAT_1:def 13,B6;
+      [0.X,x\y] in IA by TARSKI:def 1,B11;
+      then x\y\0.X in A by Def12;
+      then x\y in A by BCIALG_1:2;
+      hence [xx,yy] in IA by B9,Def12,DE;
+    end;
+end;
+
+theorem Lem15F2:
+  [x,y] in E & u in Class(E,0.X) implies [x,(y,u)to_power k] in E
+proof
+  assume A1:[x,y] in E & u in Class(E,0.X);
+  then consider z being set such that
+  A3:[z,u] in E & z in {0.X} by RELAT_1:def 13;
+  A5:[0.X,u] in E by A3,TARSKI:def 1;
+  defpred P[Element of NAT] means  [x,(y,u)to_power $1] in E;
+A7:P[0] by TL000,A1;
+A9: for k be Element of NAT st P[k] holds P[k+1]
+    proof 
+     let k be Element of NAT;
+     assume [x,(y,u) to_power k] in E;
+     then [x\0.X,(y,u)to_power k\u] in E by A5,Def9;
+     then [x,(y,u)to_power k\u] in E by BCIALG_1:2;
+     hence [x,(y,u)to_power (k+1)] in E by TL003;
+     end;
+    for n holds P[n] from NAT_1:sch 1(A7,A9);
+ hence thesis;
+end;
+
+theorem  
+  (for X,x,y holds ex i,j,m,n st
+  ((x,x\y) to_power i,y\x) to_power j = ((y,y\x)to_power m,x\y) to_power n)
+    implies for E,I st I=Class(E,0.X) holds E is I-congruence of X,I
+proof
+   assume A1:for X,x,y holds ex i,j,m,n st 
+   ((x,x\y)to_power i,y\x)to_power j =((y,y\x)to_power m,x\y)to_power n;
+   let E,I;
+   assume A3:I=Class(E,0.X);
+   now let x,y be Element of X;
+      x\y in I & y\x in I implies[x,y] in E
+      proof 
+       assume C1:x\y in I & y\x in I;
+       then consider z being set such that
+      B7:[z,y\x] in E & z in {0.X}by RELAT_1:def 13,A3;
+      B8:[0.X,y\x] in E by TARSKI:def 1,B7;
+      consider z being set such that
+      B11:[z,x\y] in E & z in {0.X}by RELAT_1:def 13,A3,C1;
+      B13:[0.X,x\y] in E by TARSKI:def 1,B11;
+      consider i,j,m,n being Element of NAT such that
+      FF:((x,x\y)to_power i,y\x)to_power j
+          =((y,y\x)to_power m,x\y)to_power n by A1;
+      C3:E is reflexive symmetric transitive 
+         & field E = the carrier of X by EQREL_1:16;
+      C4:E is_reflexive_in field E & E is_symmetric_in field E
+        &E is_transitive_in field E by RELAT_2:def 9,def 11,def 16;
+      then [x,x] in E & [y,y] in E by RELAT_2:def 1,C3;
+      then C5:[x,(x,x\y) to_power i] in E 
+         & [y,(y,y\x) to_power m] in E by Lem15F2,C1,A3;
+      C7: [x,((x,(x\y))to_power i,y\x)to_power j] in E
+      proof 
+       defpred P[Element of NAT] means 
+       [x,((x,(x\y))to_power i,y\x)to_power $1] in E;
+        E7:P[0] by C5,TL000;
+        E9: for k be Element of NAT st P[k] holds P[k+1]
+        proof 
+        let k be Element of NAT;
+        assume [x,((x,(x\y))to_power i,y\x)to_power k] in E;
+       then [x\0.X,((x,(x\y))to_power i,y\x)to_power k\(y\x)] in E by B8,Def9;
+        then [x,((x,(x\y))to_power i,y\x)to_power k\(y\x)] in E by BCIALG_1:2;
+        hence [x,((x,(x\y))to_power i,y\x)to_power (k+1)] in E by TL003;
+        end;
+        for n holds P[n] from NAT_1:sch 1(E7,E9);
+       hence thesis;
+      end;
+      [y,((y,(y\x))to_power m,x\y)to_power n] in E
+      proof 
+        defpred P[Element of NAT] means
+        [y,((y,(y\x))to_power m,x\y)to_power $1] in E;
+        D7:P[0] by C5,TL000;
+        D9: for k be Element of NAT st P[k] holds P[k+1]
+        proof
+        let k be Element of NAT;
+        assume [y,((y,(y\x))to_power m,x\y)to_power k] in E;
+       then [y\0.X,((y,(y\x))to_power m,x\y)to_power k\(x\y)] in E by B13,Def9;
+        then [y,((y,(y\x))to_power m,x\y)to_power k\(x\y)] in E by BCIALG_1:2;
+        hence [y,((y,(y\x))to_power m,x\y)to_power (k+1)] in E by TL003;
+        end;
+          for n holds P[n] from NAT_1:sch 1(D7,D9);
+       hence thesis;
+      end;
+    then[((x,(x\y))to_power i,y\x)to_power j,y] in E by C4,C3,RELAT_2:def 3,FF;
+      hence [x,y] in E by RELAT_2:def 8,C7,C3,C4;
+      end;
+     hence [x,y] in E iff x\y in I & y\x in I by Lem15F1,A3;
+   end;
+   hence thesis by Def12;
+end;
+
+theorem  
+  IConSet(X) c= ConSet(X)
+proof
+   let x be set;
+   assume x in IConSet(X);
+   then consider I being Ideal of X such that
+   A3: x is I-congruence of X,I by Def14;
+   thus thesis by A3;
+end;
+
+theorem ThP652:
+  ConSet(X) c= LConSet(X)
+proof 
+   let x be set;
+   assume x in ConSet(X);
+   then consider R being Congruence of X such that
+   A3:x=R;
+   x is L-congruence of X by A3,Def153;
+   hence thesis; 
+end;
+
+theorem ThP653:
+  ConSet(X) c= RConSet(X)
+proof
+   let x be set;
+   assume x in ConSet(X);
+   then consider R being Congruence of X such that
+   A3:x=R;
+   x is R-congruence of X by A3,Def153;
+   hence thesis;
+end;
+
+theorem
+  ConSet(X) = LConSet(X)/\RConSet(X)
+proof
+  thus ConSet(X) c= LConSet(X)/\RConSet(X)
+  proof
+    ConSet(X) c= LConSet(X)&ConSet(X) c= RConSet(X) by ThP652,ThP653;
+    hence thesis by XBOOLE_1:19;
+  end;
+  thus LConSet(X)/\RConSet(X) c= ConSet(X)
+  proof
+    let x be set;
+    assume x in LConSet(X)/\RConSet(X);
+    then A3:x in LConSet(X) & x in RConSet(X) by XBOOLE_0:def 3;
+    then consider R being R-congruence of X such that
+    A5:x=R;
+    consider L being L-congruence of X such that
+A9: x=L by A3;
+    x is Congruence of X by A5,Def153,A9;
+    hence thesis;
+  end;
+end;
+
+theorem
+  (for LC holds LC is I-congruence of X,I) implies E = RI
+proof
+   assume A1:for LC holds LC is I-congruence of X,I;
+   E is L-congruence of X by Def153;
+   then A3:E is I-congruence of X,I by A1;
+   let x1,y1 be set;
+   thus [x1,y1] in E implies [x1,y1] in RI
+   proof
+    assume DD:[x1,y1] in E;
+     then consider x,y being set such that
+      DE:[x1,y1]=[x,y] & x in the carrier of X &y in the carrier of X
+        by RELSET_1:6;
+      reconsider x,y as Element of X by DE;
+      B3:x\y in Class(E,0.X)& y\x in Class(E,0.X) by Lem15F1,DD,DE;
+      then consider z being set such that
+      B7:[z,x\y] in E & z in {0.X}by RELAT_1:def 13;
+         [0.X,x\y] in E by TARSKI:def 1,B7;
+      then x\y\0.X in I by Def12,A3;
+      then B8:x\y in I by BCIALG_1:2;
+          consider z being set such that
+      B9:[z,y\x] in E & z in {0.X}by RELAT_1:def 13,B3;
+      [0.X,y\x] in E by TARSKI:def 1,B9;
+      then y\x\0.X in I by Def12,A3;
+      then y\x in I by BCIALG_1:2;
+      hence thesis by B8,Def12,DE;
+   end;
+   thus [x1,y1] in RI implies [x1,y1] in E
+   proof
+     assume DD:[x1,y1] in RI;
+     then consider x,y being set such that
+     DE:[x1,y1]=[x,y] & x in the carrier of X &y in the carrier of X
+       by RELSET_1:6;
+     reconsider x,y as Element of X by DE;
+     x\y in I & y\x in I by Def12,DD,DE;
+     hence thesis by Def12,A3,DE;
+   end;
+end;
+
+theorem
+  (for RC holds RC is I-congruence of X,I) implies E = RI
+proof
+   assume A1:for RC holds RC is I-congruence of X,I;
+   E is R-congruence of X by Def153;
+   then A3:E is I-congruence of X,I by A1;
+   let x1,y1 be set;
+   thus [x1,y1] in E implies [x1,y1] in RI
+   proof
+      assume DD:[x1,y1] in E;
+      then consider x,y being set such that
+      DE:[x1,y1]=[x,y] & x in the carrier of X &y in the carrier of X
+        by RELSET_1:6;
+      reconsider x,y as Element of X by DE;
+      B3:x\y in Class(E,0.X)& y\x in Class(E,0.X) by Lem15F1,DD,DE;
+      then consider z being set such that
+      B7:[z,x\y] in E & z in {0.X}by RELAT_1:def 13;
+      [0.X,x\y] in E by TARSKI:def 1,B7;
+      then x\y\0.X in I by Def12,A3;
+      then B8:x\y in I by BCIALG_1:2;
+      consider z being set such that
+      B9:[z,y\x] in E & z in {0.X}by RELAT_1:def 13,B3;
+      [0.X,y\x] in E by TARSKI:def 1,B9;
+      then y\x\0.X in I by Def12,A3;
+      then y\x in I by BCIALG_1:2;
+      hence thesis by B8,Def12,DE;
+   end;
+   thus [x1,y1] in RI implies [x1,y1] in E
+   proof assume DD:[x1,y1] in RI;
+      then consider x,y being set such that
+      DE:[x1,y1]=[x,y] & x in the carrier of X &y in the carrier of X
+        by RELSET_1:6;
+      reconsider x,y as Element of X by DE;
+     x\y in I & y\x in I by Def12,DD,DE;
+   hence thesis by Def12,A3,DE;
+   end;
+end;
+
+theorem  
+  Class(LC,0.X) is closed Ideal of X
+proof
+A3:[0.X,0.X] in LC by EQREL_1:11;
+   Class(LC,0.X) is Ideal of X
+   proof
+     E1:0.X in Class(LC,0.X) by EQREL_1:26,A3;
+     now let x,y be Element of X;
+       assume x\y in Class(LC,0.X) & y in Class(LC,0.X);
+       then E3:[0.X,x\y] in LC & [0.X,y] in LC by EQREL_1:26;
+       [x\0.X,x\y] in LC by E3,Def10;
+       then [x,x\y] in LC by BCIALG_1:2;
+       then [x\y,x] in LC by EQREL_1:12;
+       then [0.X,x] in LC by E3,EQREL_1:13;
+       hence x in Class(LC,0.X)by EQREL_1:26;
+     end;
+     hence thesis by E1,BCIALG_1:def 18;
+   end;
+   then reconsider Rx=Class(LC,0.X) as Ideal of X;
+   Rx is closed
+   proof
+     now let x be Element of Rx;
+       [0.X,x] in LC by EQREL_1:26;
+       then [(0.X)`,x`] in LC by Def10;
+       then [0.X,x`] in LC by BCIALG_1:def 5;
+       hence x` in Class(LC,0.X) by EQREL_1:26;
+     end;
+     hence thesis by BCIALG_1:def 19;
+   end;
+   hence thesis;
+end;
+
+::::::::::::::::::::::::::::  Quotient Algebras  :::::::::::
+ reserve E for Congruence of X;
+ reserve RI for I-congruence of X,I;
+
+registration let X,E;
+  cluster Class E -> non empty;
+  coherence 
+  proof
+    Class(E,0.X) in Class E by EQREL_1:def 5;
+    hence thesis;
+  end;
+end;
+
+definition let X,E;
+  func EqClaOp E -> BinOp of Class E means :Defx:
+    for W1,W2 being Element of Class(E)
+     for x,y st W1=Class(E,x) & W2=Class(E,y) holds it.(W1,W2)=Class(E,x\y);
+ existence
+ proof
+     defpred P[Element of Class E,Element of Class E,set] means
+    for x,y st $1 =Class(E,x) & $2 = Class(E,y) holds $3 = Class(E,x\y);
+    A1: for W1,W2 being Element of Class E
+         ex V being Element of Class E st P[W1,W2,V]
+     proof 
+       let W1,W2 be Element of Class E; 
+         consider x1 being set such that
+    A3:x1 in the carrier of X & W1 = Class(E,x1) by EQREL_1:def 5;
+        consider y1 being set such that
+    A5:y1 in the carrier of X & W2 = Class(E,y1) by EQREL_1:def 5;
+       reconsider x1,y1 as Element of X by A3,A5;
+       reconsider C = Class(E,x1\y1) as Element of Class E by EQREL_1:def 5;
+       take C;
+       now let x,y;
+       assume W1=Class(E,x)&W2=Class(E,y);
+       then x in Class(E,x1)&y in Class(E,y1) by EQREL_1:31,A3,A5;
+       then [x1,x] in E &[y1,y] in E by EQREL_1:26;
+       then [x1\y1,x\y] in E by Def9;
+       then x\y in Class(E,x1\y1) by EQREL_1:26;
+       hence C = Class(E,x\y) by EQREL_1:31;
+       end;              
+      hence thesis;
+     end;
+     thus ex B being BinOp of Class E st
+   for W1,W2 being Element of Class E holds
+   P[W1,W2,B.(W1,W2)] from BINOP_1:sch 3(A1); 
+  end;
+ uniqueness
+ proof 
+   let o1,o2 be BinOp of Class E;
+   assume A1:for W1,W2 being Element of Class E
+   for x,y st W1=Class(E,x)&W2=Class(E,y)holds o1.(W1,W2)=Class(E,x\y);
+   assume A3:for W1,W2 being Element of Class E
+   for x,y st W1=Class(E,x)&W2=Class(E,y)holds o2.(W1,W2)=Class(E,x\y);
+    now let W1,W2 be Element of Class(E);
+         consider x being set such that
+      A7:x in the carrier of X & W1 = Class(E,x) by EQREL_1:def 5;
+         consider y being set such that
+      A9:y in the carrier of X & W2 = Class(E,y) by EQREL_1:def 5;
+         reconsider x,y as Element of X by A7,A9;
+         o1.(W1,W2)=Class(E,x\y) by A1,A7,A9;
+       hence o1.(W1,W2) = o2.(W1,W2) by A3,A7,A9;
+      end;
+   hence thesis by BINOP_1:2;
+ end;
+ end;
+
+definition let X,E;
+  func zeroEqC(E) -> Element of Class E equals
+    Class(E,0.X);
+  coherence by EQREL_1:def 5;
+end;
+
+::Quotient Algebras
+definition let X,E;
+  func X./.E -> BCIStr_0 equals
+    BCIStr_0(#Class E,EqClaOp E,zeroEqC(E)#);
+  coherence;
+end;
+
+registration let X;let E be Congruence of X;
+  cluster X./.E -> non empty;
+  coherence
+  proof
+    thus the carrier of X./.E is non empty;
+  end;
+end;
+
+ reserve W1,W2,W3 for Element of Class E;
+
+definition let X,E,W1,W2;
+  func W1\W2 -> Element of Class E equals
+    (EqClaOp E).(W1,W2);
+  coherence;
+end;
+
+theorem Th155:
+  X./.RI is BCI-algebra
+proof 
+   reconsider IT = X./.RI as non empty BCIStr_0;
+   A1: IT is_B
+   proof
+   now let w1,w2,w3 be Element of IT;
+   B1:w1 in the carrier of IT&w2 in the carrier of IT&w3 in the carrier of IT;
+    then consider x1 being set such that
+    C1:x1 in the carrier of X & w1 = Class(RI,x1) by EQREL_1:def 5;
+    consider y1 being set such that
+    C3:y1 in the carrier of X & w2 = Class(RI,y1) by EQREL_1:def 5,B1;
+    consider z1 being set such that
+    C5:z1 in the carrier of X & w3 = Class(RI,z1) by EQREL_1:def 5,B1;
+    reconsider x1,y1,z1 as Element of X by C1,C3,C5;
+    C7:w1\w2=Class(RI,x1\y1)&w3\w2=Class(RI,z1\y1)&
+    w1\w3=Class(RI,x1\z1) by Defx,C1,C3,C5;
+    then (w1\w2)\(w3\w2)=Class(RI,(x1\y1)\(z1\y1)) by Defx;
+    then (w1\w2)\(w3\w2)\(w1\w3)=Class(RI,(x1\y1)\(z1\y1)\(x1\z1)) by Defx,C7;
+    hence ((w1\w2)\(w3\w2))\(w1\w3)=0.IT by BCIALG_1:def 3;
+   end;
+   hence thesis by BCIALG_1:def 3;
+   end;
+   A3: IT is_C
+   proof 
+   now let w1,w2,w3 be Element of IT;
+   B1:w1 in the carrier of IT&w2 in the carrier of IT&w3 in the carrier of IT;
+    then consider x1 being set such that
+    C1:x1 in the carrier of X & w1 = Class(RI,x1) by EQREL_1:def 5;
+    consider y1 being set such that
+    C3:y1 in the carrier of X & w2 = Class(RI,y1) by EQREL_1:def 5,B1;
+    consider z1 being set such that
+    C5:z1 in the carrier of X & w3 = Class(RI,z1) by EQREL_1:def 5,B1;
+    reconsider x1,y1,z1 as Element of X by C1,C3,C5;
+    w1\w2=Class(RI,x1\y1)& w1\w3=Class(RI,x1\z1) by Defx,C1,C3,C5;
+    then (w1\w2)\w3=Class(RI,(x1\y1)\z1)
+      &(w1\w3)\w2=Class(RI,x1\z1\y1) by Defx,C3,C5;
+    then ((w1\w2)\w3)\((w1\w3)\w2)=Class(RI,(x1\y1)\z1\(x1\z1\y1)) by Defx;
+    hence((w1\w2)\w3)\((w1\w3)\w2)=0.IT by BCIALG_1:def 4;
+   end;
+    hence thesis by BCIALG_1:def 4;
+   end;
+   A5: IT is_I
+   proof
+     now let w1 be Element of IT;
+     w1 in the carrier of IT;
+     then consider x1 being set such that
+     C1:x1 in the carrier of X & w1 = Class(RI,x1) by EQREL_1:def 5;
+     reconsider x1 as Element of X by C1;
+     w1\w1=Class(RI,x1\x1) by Defx,C1;
+     hence w1\w1 = 0.IT by BCIALG_1:def 5; 
+     end;
+    hence thesis by BCIALG_1:def 5;
+   end;
+   IT is_BCI-4
+   proof 
+    now let w1,w2 be Element of IT;
+     assume BB: w1\w2=0.IT & w2\w1=0.IT;
+  B1:w1 in the carrier of IT&w2 in the carrier of IT;
+     then consider x1 being set such that
+  C1:x1 in the carrier of X & w1 = Class(RI,x1) by EQREL_1:def 5;
+     consider y1 being set such that
+    C3:y1 in the carrier of X & w2 = Class(RI,y1) by EQREL_1:def 5,B1;
+    reconsider x1,y1 as Element of X by C1,C3;
+    w1\w2=Class(RI,x1\y1)& w2\w1=Class(RI,y1\x1) by Defx,C1,C3;
+    then 0.X in Class(RI,x1\y1) & 0.X in Class(RI,y1\x1) by EQREL_1:31,BB;
+    then [x1\y1,0.X] in RI & [y1\x1,0.X] in RI by EQREL_1:26;
+    then x1\y1\0.X in I & y1\x1\0.X in I by Def12;
+    then x1\y1 in I & y1\x1 in I by BCIALG_1:2;
+    then [x1,y1] in RI by Def12;
+    hence w1=w2 by C1,C3,EQREL_1:44;
+   end;
+    hence thesis by BCIALG_1:def 7;
+   end;
+   hence thesis by A1,A3,A5;
+end;
+
+registration let X,I,RI;
+  cluster X./.RI -> strict being_B being_C being_I being_BCI-4;
+  coherence by Th155;
+end;
+
+theorem
+  for X,I st I = BCK-part(X) holds for RI being I-congruence of X,I
+    holds X./.RI is p-Semisimple BCI-algebra
+proof
+   let X,I;assume
+   A1:I = BCK-part(X);
+   let RI be I-congruence of X,I;
+   set IT = X./.RI;
+   for w1 being Element of IT holds (w1`)` = w1
+   proof
+     let w1 be Element of IT;
+     w1 in the carrier of IT;
+     then consider x1 being set such that
+  C1:x1 in the carrier of X & w1 = Class(RI,x1) by EQREL_1:def 5;
+     reconsider x1 as Element of X by C1;
+     w1`= Class(RI,x1`) by Defx,C1;
+     then C9:w1``=Class(RI,x1``) by Defx;
+     0.X in I by BCIALG_1:def 18;
+     then C11:(x1`)`\x1 in I by BCIALG_1:1;
+     x1\((x1`)`) is positive Element of X by PR11a;
+     then 0.X <= x1\(x1``) by Def2;
+     then x1\(x1``) in I by A1;
+     then [x1``,x1] in RI by Def12,C11;
+     hence thesis by C9,C1,EQREL_1:44;
+   end;
+   hence thesis by BCIALG_1:54;
+end;

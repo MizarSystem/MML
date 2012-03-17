@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.139 $
+;; $Revision: 1.143 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -1209,9 +1209,11 @@ then, for pretty printing, by using `mizar-skeleton-string'."
 	   (mizar-skeleton-string 
 	    (funcall mizar-skeleton-items-func
 		     (cadr (mizar-parse-region-fla beg end))))))
-      ;; remove possible ';' and adjust end
-      (goto-char beg)
-      (while (search-forward ";" end t)
+      ;; remove possible final ';' and adjust end
+      (goto-char end)
+      (skip-chars-backward "\r\n \t" beg)
+      (backward-char)
+      (when (search-forward ";" end t)
 	(replace-match "")
 	(setq end (- end 1)))
       (goto-char end)
@@ -1252,7 +1254,9 @@ The variable `mizar-ref-table' might be modified by this function."
 		  (symb (intern ref mizar-ref-table))
 		  (res ""))
 	      (set-buffer buf)
-	      (setq res (if (looking-at "[^;]+;") (match-string 0)
+	      ;; following regexp has to take care of the MML symbols containing semicolon:
+	      ;; ';', [;], \;
+	      (setq res (if (looking-at "\\([\n]\\|.\\)+?[^\\];[\t\n\r ]") (match-string 0)
 			  ""))
 	      ;; previous line may contain e.g. "let z;"
 	      (if (string-match ":def " ref) 
@@ -1264,7 +1268,7 @@ The variable `mizar-ref-table' might be modified by this function."
 	      res))
       ;; local reference, no caching
       (if (re-search-backward (concat "\\([ \t\n\r:]" ref 
-				      "[ \t\n\r]*[{:][^;]*;\\)" )
+				      "[ \t\n\r]*[{:]\\)\\([\n]\\|.\\)+?[^\\];[\t\n\r ]" )
 			      (point-min) t)
 	  (let ((res1 (match-string 0)))
 	    ;; definition
@@ -5482,7 +5486,9 @@ if that value is non-nil."
 "Browse in a HTML browser the article or an environment file.
 A XSLT-capable browser like Mozilla or IE has to be default in
 Emacs - you may need to customize the variable
-`browse-url-browser-function' for this.  Argument SUFFIX is a
+`browse-url-browser-function' for this, and possibly (if 
+the previous is set to `browse-url-generic') also the variable 
+`browse-url-generic-program'.  Argument SUFFIX is a
 file suffix to use."
 (interactive)
 (let* ((name (file-name-sans-extension (buffer-file-name)))
@@ -5493,11 +5499,25 @@ file suffix to use."
        (equal last-verification-date (file-mtime (buffer-file-name))))
       (error "Run verifier before browsing HTML!"))
   (if (not suffix)
-      (browse-url xmlname)
+      (browse-url (concat "file://" xmlname))
     (let* ((oldname (concat name "." suffix))
 	   (newname (concat oldname ".xml")))
       (copy-file oldname newname t t)
-      (browse-url newname)))))
+      (browse-url (concat "file://" newname))))))
+
+(defun mizar-browser-customize ()
+"Set Mozilla (Firefox) as the default browser"
+(interactive)
+;; check that `browse-url-mozilla' exists
+(if (functionp 'browse-url-mozilla)
+    (customize-save-variable 'browse-url-browser-function 
+			     'browse-url-mozilla)
+  (customize-save-variable 'browse-url-browser-function 
+			   'browse-url-generic)
+  (customize-variable 'browse-url-generic-program)
+  )
+)
+
 
 ;; Menu for the mizar editing buffers
 (defvar mizar-menu
@@ -5525,8 +5545,7 @@ file suffix to use."
 	    ["Browse environmental constructors" (mizar-browse-as-html "atr") t]
 	    ["Browse environmental notations" (mizar-browse-as-html "eno") t]
 	    ["Set Mozilla (Firefox) as the default browser" 
-	    (customize-save-variable 'browse-url-browser-function 
-				     'browse-url-mozilla) t]
+	     (mizar-browser-customize) t]
 	    )
 	  '("MoMM"
 	    ["Use MoMM (needs to be installed)" mizar-toggle-momm :style toggle

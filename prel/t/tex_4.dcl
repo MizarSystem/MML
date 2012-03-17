@@ -106,7 +106,6 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="12" value="false"/>
 <Adjective nr="20"/>
 </Cluster>
 </Typ>

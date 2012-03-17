@@ -8,15 +8,17 @@ environ
 
  vocabularies FINSEQ_1, FINSET_1, FUNCT_1, ARYTM_1, RELAT_1, INT_1, CARD_1,
       BOOLE, FINSEQ_2, TARSKI, GRAPH_1, ORDERS_1, GRAPH_2, FINSEQ_4, ORDINAL2,
-      ARYTM, REALSET1, NAT_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, RELAT_1,
-      FUNCT_1, FUNCT_2, FINSEQ_1, REALSET1, FINSEQ_2, FINSEQ_4, CARD_1,
-      FINSET_1, NAT_1, INT_1, RECDEF_1, GRAPH_1, BINARITH, XXREAL_0;
+      ARYTM, REALSET1, NAT_1, SFMASTR3, SQUARE_1, RFUNCT_2, FUNCT_4;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
+      XXREAL_0, RELAT_1, RELSET_1, PRE_CIRC, FINSEQ_1, FUNCT_1, FUNCT_2,
+      REALSET1, FINSEQ_2, FINSEQ_4, FUNCT_7, CARD_1, FINSET_1, NAT_1, INT_1,
+      RECDEF_1, GRAPH_1, BINARITH;
  constructors PARTFUN1, WELLORD2, XXREAL_0, NAT_1, INT_1, RECDEF_1, FINSEQ_4,
-      REALSET1, BINARITH, FINSEQ_6, GRAPH_1;
+      REALSET1, BINARITH, FINSEQ_6, GRAPH_1, MEMBERED, PRE_CIRC, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, ARYTM_3,
       FINSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, REALSET1,
-      FINSEQ_6, GRAPH_1;
+      FINSEQ_6, GRAPH_1, NUMBERS, PRE_CIRC, MEMBERED, SETFAM_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FRAENKEL, CARD_3, WSIERP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -68,10 +70,10 @@ m<=n & n<=r & r<=len p implies
         (m+1, n)-cut p ^ (n+1, r)-cut p = (m+1, r)-cut p;
 
 theorem :: GRAPH_2:9
-     m<=len p implies (1, m)-cut p ^ (m+1, len p)-cut p = p;
+      m<=len p implies (1, m)-cut p ^ (m+1, len p)-cut p = p;
 
 theorem :: GRAPH_2:10
-     m<=n & n<=len p implies
+      m<=n & n<=len p implies
         (1, m)-cut p ^ (m+1, n)-cut p ^ (n+1, len p)-cut p = p;
 
 theorem :: GRAPH_2:11
@@ -90,7 +92,7 @@ begin  :: The glueing catenation
 definition let p, q be FinSequence;
  func p ^' q -> FinSequence equals
 :: GRAPH_2:def 2
-  p^(2, len q)-cut q;
+   p^(2, len q)-cut q;
 end;
 
 theorem :: GRAPH_2:13
@@ -113,7 +115,7 @@ definition let D be set, p, q be FinSequence of D;
 end;
 
 theorem :: GRAPH_2:18
-       p<>{} & q<>{} & p.len p = q.1 implies rng (p^'q) = rng p \/ rng q;
+        p<>{} & q<>{} & p.len p = q.1 implies rng (p^'q) = rng p \/ rng q;
 
 begin :: Two valued alternating finsequences
 
@@ -213,7 +215,7 @@ definition let G, X;
  canceled;
  func G-VSet X -> set equals
 :: GRAPH_2:def 6
-  { v: ex e being Element of the Edges of G st e in X &
+   { v: ex e being Element of the Edges of G st e in X &
                 (v = (the Source of G).e or v = (the Target of G).e) };
 end;
 
@@ -274,7 +276,7 @@ definition let G, c; assume
  Card the Vertices of G = 1 or c <>{} & not c alternates_vertices_in G;
  func vertex-seq c -> FinSequence of the Vertices of G means
 :: GRAPH_2:def 9
-    it is_vertex_seq_of c;
+     it is_vertex_seq_of c;
 end;
 
 theorem :: GRAPH_2:43
@@ -362,7 +364,7 @@ registration let G;
 end;
 
 theorem :: GRAPH_2:55
-     2<len sc implies sc is Path of G;
+      2<len sc implies sc is Path of G;
 
 theorem :: GRAPH_2:56
 sc is Path of G iff len sc = 0 or len sc = 1 or sc.1<>sc.2;
@@ -375,7 +377,7 @@ definition let G; let oc be oriented Chain of G; assume
  oc <> {};
  func vertex-seq oc -> FinSequence of the Vertices of G means
 :: GRAPH_2:def 11
-    it is_vertex_seq_of oc & it.1 = (the Source of G).(oc.1);
+     it is_vertex_seq_of oc & it.1 = (the Source of G).(oc.1);
 end;
 
 begin :: Addenda
@@ -383,24 +385,77 @@ begin :: Addenda
 :: from AMISTD_1, 2006.01.12, A.T.
 
 theorem :: GRAPH_2:57
- for f1 being non empty FinSequence of D, f2 being FinSequence of D
+  for f1 being non empty FinSequence of D, f2 being FinSequence of D
   holds (f1^'f2)/.1 = f1/.1;
 
 theorem :: GRAPH_2:58
- for f1 being FinSequence of D, f2 being non trivial FinSequence of D
+  for f1 being FinSequence of D, f2 being non trivial FinSequence of D
   holds (f1^'f2)/.len(f1^'f2) = f2/.len f2;
 
 theorem :: GRAPH_2:59
  for f being FinSequence holds f^'{} = f;
 
 theorem :: GRAPH_2:60
- for f being FinSequence holds f^'<*x*> = f;
+  for f being FinSequence holds f^'<*x*> = f;
 
 theorem :: GRAPH_2:61  :: GRAPH_2:14
- for f1, f2 being FinSequence of D holds
+  for f1, f2 being FinSequence of D holds
   1<=n & n<=len f1 implies (f1^'f2)/.n = f1/.n;
 
 theorem :: GRAPH_2:62  :: GRAPH_2:15
- for f1, f2 being FinSequence of D holds
+  for f1, f2 being FinSequence of D holds
   1<=n & n<len f2 implies (f1^'f2)/.(len f1 + n) = f2/.(n+1);
+
+:: from SFMATR3, 2007.07.26, A.T.
+
+definition
+ let F be FinSequence of INT, m, n be Element of NAT;
+ assume
+ 1 <= m & m <= n & n <= len F;
+ func min_at(F, m, n) -> Element of NAT means
+:: GRAPH_2:def 12
+
+  ex X being finite non empty Subset of INT
+   st X = rng ((m,n)-cut F) & it+1 = (min X)..(m,n)-cut F +m;
+end;
+
+reserve F, F1 for FinSequence of INT,
+        k, m, n, ma for Element of NAT;
+
+theorem :: GRAPH_2:63
+ 1 <= m & m <= n & n <= len F implies
+  (ma = min_at(F, m, n) iff
+    m <= ma & ma <= n &
+    (for i being Element of NAT st m <= i & i <= n holds F.ma <= F.i) &
+    for i being Element of NAT st m <= i & i < ma holds F.ma < F.i);
+
+theorem :: GRAPH_2:64
+ 1 <= m & m <= len F implies min_at(F, m, m) = m;
+
+definition
+ let F be FinSequence of INT, m, n be Element of NAT;
+ pred F is_non_decreasing_on m, n means
+:: GRAPH_2:def 13
+
+   for i, j being Element of NAT st m <= i & i <= j & j <= n holds F.i <= F.j;
+end;
+
+definition
+ let F be FinSequence of INT, n be Element of NAT;
+ pred F is_split_at n means
+:: GRAPH_2:def 14
+
+  for i, j being Element of NAT st 1 <= i & i <= n & n < j & j <= len F
+   holds F.i <= F.j;
+end;
+
+theorem :: GRAPH_2:65
+  k+1 <= len F & ma = min_at(F, k+1, len F) & F is_split_at k &
+  F is_non_decreasing_on 1, k & F1 = F+*(k+1, F.ma)+*(ma, F.(k+1))
+    implies F1 is_non_decreasing_on 1, k+1;
+
+theorem :: GRAPH_2:66
+ k+1 <= len F & ma = min_at(F, k+1, len F) & F is_split_at k &
+ F1 = F+*(k+1, F.ma)+*(ma, F.(k+1))
+   implies F1 is_split_at k+1;
 

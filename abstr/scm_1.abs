@@ -11,9 +11,10 @@ environ
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, NAT_1,
       INT_1, MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, STRUCT_0, AMI_1,
       AMI_2, AMI_3, XXREAL_0;
- constructors XXREAL_0, NAT_1, MEMBERED, AMI_2, AMI_3;
+ constructors XXREAL_0, NAT_1, MEMBERED, AMI_2, AMI_3, DOMAIN_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_1, AMI_3;
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, CARD_3, AMI_1, AMI_3,
+      AMI_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -29,7 +30,7 @@ canceled;
 theorem :: SCM_1:2
 for s being State of SCM, k being Element of NAT
      holds CurInstr (Computation s).k = s.(IC (Computation s).k) &
-       CurInstr (Computation s).k = s.((Computation s).k.0);
+       CurInstr (Computation s).k = s.((Computation s).k.NAT);
 
 theorem :: SCM_1:3
 for s being State of SCM
@@ -61,7 +62,7 @@ end;
 canceled 6;
 
 theorem :: SCM_1:14
-    for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
+     for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
     i1, i2, i3, i4 being Integer,
     il being Element of NAT,
     s being State-consisting of il, 0, 0,
@@ -81,38 +82,17 @@ for I1, I2 being Instruction of SCM,
        s.il.0 = I1 & s.il.1 = I2 &
        s.dl.0 = i1 & s.dl.1 = i2;
 
-definition
-let N be with_non-empty_elements set;
- let S be halting IC-Ins-separated definite
-    (non empty non void AMI-Struct over N);
- let s be State of S such that
- s is halting;
- func Complexity s -> Element of NAT means
-:: SCM_1:def 2
-  CurInstr((Computation s).it) = halt S &
-  for k being Element of NAT st CurInstr((Computation s).k) = halt S
-  holds it <= k;
- end;
-
-notation
-let N be with_non-empty_elements set;
- let S be halting IC-Ins-separated definite
-    (non empty non void AMI-Struct over N);
- let s be State of S;
- synonym LifeSpan s for Complexity s;
-end;
-
 theorem :: SCM_1:16
  for s being State of SCM, k being Element of NAT
   holds s.(IC (Computation s).k) <> halt SCM &
      s.(IC (Computation s).(k+1)) = halt SCM
-  iff Complexity s = k+1 & s is halting;
+  iff LifeSpan s = k+1 & s is halting;
 
 theorem :: SCM_1:17
  for s being State of SCM, k being Element of NAT
   st IC (Computation s).k <> IC (Computation s).(k+1) &
      s.(IC (Computation s).(k+1)) = halt SCM
-  holds Complexity s = k+1;
+  holds LifeSpan s = k+1;
 
 theorem :: SCM_1:18
 for k, n being Element of NAT, s being State of SCM, a, b being Data-Location
@@ -194,25 +174,20 @@ theorem :: SCM_1:26
  (for a being Data-Location, i being Instruction-Location of SCM
      holds (a >0_goto i)`1 = 8);
 
-theorem :: SCM_1:27
- for N being non empty with_non-empty_elements set,
-     S be IC-Ins-separated definite halting
-       (non empty non void AMI-Struct over N),
-     s being State of S, m being Element of NAT
- holds s is halting iff (Computation s).m is halting;
+canceled;
 
 theorem :: SCM_1:28
-     for s1, s2 being State of SCM, k, c being Element of NAT
-  st s2 = (Computation s1).k & Complexity s2 = c & s2 is halting & 0 < c
-   holds Complexity s1 = k+c;
+      for s1, s2 being State of SCM, k, c being Element of NAT
+  st s2 = (Computation s1).k & LifeSpan s2 = c & s2 is halting & 0 < c
+   holds LifeSpan s1 = k+c;
 
 theorem :: SCM_1:29
-     for s1, s2 being State of SCM, k being Element of NAT
+      for s1, s2 being State of SCM, k being Element of NAT
   st s2 = (Computation s1).k & s2 is halting
    holds Result s2 = Result s1;
 
 theorem :: SCM_1:30
-    for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
+     for I1, I2, I3, I4, I5, I6, I7, I8, I9 being Instruction of SCM,
     i1, i2, i3, i4 being Integer,
     il being Element of NAT,
     s being State of SCM
@@ -230,19 +205,19 @@ theorem :: SCM_1:30
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:31
-    for s being State-consisting of 0, 0, 0, <*halt SCM*>, <*>INT
-    holds s is halting & Complexity s = 0 & Result s = s;
+     for s being State-consisting of 0, 0, 0, <*halt SCM*>, <*>INT
+    holds s is halting & LifeSpan s = 0 & Result s = s;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Assignment
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:32
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*dl.0 := dl.1*>^<*halt SCM*>,
                                  <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           (Result s).dl.0 = i2 &
           for d being Data-Location st d<>dl.0 holds (Result s).d = s.d;
 
@@ -251,11 +226,11 @@ theorem :: SCM_1:32
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:33
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*AddTo(dl.0,dl.1)*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           (Result s).dl.0 = i1 + i2 &
           for d being Data-Location st d<>dl.0 holds (Result s).d = s.d;
 
@@ -264,11 +239,11 @@ theorem :: SCM_1:33
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:34
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*SubFrom(dl.0,dl.1)*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           (Result s).dl.0 = i1 - i2 &
           for d being Data-Location st d<>dl.0 holds (Result s).d = s.d;
 
@@ -277,11 +252,11 @@ theorem :: SCM_1:34
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:35
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*MultBy(dl.0,dl.1)*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           (Result s).dl.0 = i1 * i2 &
           for d being Data-Location st d<>dl.0 holds (Result s).d = s.d;
 
@@ -290,11 +265,11 @@ theorem :: SCM_1:35
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:36
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*Divide(dl.0,dl.1)*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           (Result s).dl.0 = i1 div i2 & (Result s).dl.1 = i1 mod i2 &
 ::            (i2 <> 0 implies abs((Result s).dl.1) < abs i2
           for d being Data-Location st d<>dl.0 & d<>dl.1
@@ -305,11 +280,11 @@ theorem :: SCM_1:36
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:37
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*goto il.1*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           for d being Data-Location holds (Result s).d = s.d;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -317,11 +292,11 @@ theorem :: SCM_1:37
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:38
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*dl.0 =0_goto il.1*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           for d being Data-Location holds (Result s).d = s.d;
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -329,10 +304,10 @@ theorem :: SCM_1:38
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: SCM_1:39
-    for i1, i2 being Integer,
+     for i1, i2 being Integer,
     s being State-consisting of 0, 0, 0, <*dl.0 >0_goto il.1*>^<*halt SCM*>,
                                 <*i1*>^<*i2*>
     holds s is halting &
-          Complexity s = 1 &
+          LifeSpan s = 1 &
           for d being Data-Location holds (Result s).d = s.d;
 

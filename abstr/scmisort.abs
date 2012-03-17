@@ -10,10 +10,10 @@ environ
       RELAT_1, FUNCT_4, CAT_1, FINSUB_1, PROB_1, SCMFSA8B, SCMFSA8A, SCMFSA_4,
       CARD_1, AMI_5, RELOC, BOOLE, SCMFSA_9, FINSEQ_1, INT_1, RFINSEQ,
       SCMFSA6C, SCMFSA6B, SCM_1, SCM_HALT, FUNCT_7, UNIALG_2, CARD_3, AMI_2,
-      SCMFSA8C, ARYTM_1, ABSVALUE, SCMBSORT, FINSEQ_4, SCMISORT, NAT_1;
+      SCMFSA8C, ARYTM_1, ABSVALUE, SCMBSORT, FINSEQ_4, SCMISORT;
  notations TARSKI, XBOOLE_0, SETFAM_1, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0,
       NAT_1, FUNCOP_1, RELAT_1, FUNCT_1, SEQ_1, FUNCT_2, FUNCT_4, FUNCT_7,
-      CARD_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_2,
+      CARD_1, FINSEQ_1, CARD_3, STRUCT_0, AMI_1, AMI_3, SCM_1, SCMFSA_2,
       SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA6C, SCMFSA7B,
       SCMFSA8A, SCMFSA_9, SCMFSA8B, INT_1, FINSEQ_4, SCMBSORT, FINSUB_1,
       SCMFSA8C, RFINSEQ, SCM_HALT, INT_2, XXREAL_0;
@@ -39,22 +39,21 @@ registration
  cluster AddTo(a,b) -> good;
 end;
 
-theorem :: SCMISORT:1
- for f be Function,d,r be set st d in dom f holds dom f=dom (f+*(d.-->r));
+canceled;
 
 theorem :: SCMISORT:2
-     for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
+      for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
   SCM+FSA, ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction
   of SCM+FSA st pc=p.l & UsedIntLoc pc=UsedIntLoc ic) holds UsedIntLoc p
   = UsedIntLoc (p+*(l.-->ic));
 
 theorem :: SCMISORT:3
-  for a being Int-Location,I being Macro-Instruction holds
+   for a being Int-Location,I being Macro-Instruction holds
   if>0(a, I ';' Goto insloc 0,SCM+FSA-Stop).insloc (card I +4)
   = goto insloc (card I +4);
 
 theorem :: SCMISORT:4
-     for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
+      for p be programmed FinPartState of SCM+FSA,l be Instruction-Location of
   SCM+FSA, ic be Instruction of SCM+FSA st l in dom p & (ex pc be Instruction
   of SCM+FSA st pc=p.l & UsedInt*Loc pc=UsedInt*Loc ic) holds UsedInt*Loc p
   = UsedInt*Loc (p+*(l.-->ic));
@@ -75,15 +74,7 @@ theorem :: SCMISORT:7
  for I being Macro-Instruction,a,b being Int-Location st
  I does_not_destroy b holds while>0(a,I) does_not_destroy b;
 
-theorem :: SCMISORT:8
-  n <= 11 implies n = 0 or n = 1 or n = 2 or n = 3 or n = 4 or n = 5
-  or n = 6 or n = 7 or n = 8 or n = 9 or n=10 or n=11;
-
-theorem :: SCMISORT:9
- for f,g be FinSequence of INT,m,n be Element of NAT st 1<=n & n <= len f &
- 1<=m & m <= len f & g=f+*(m,f/.n) +*(n,f/.m) holds
- f.m=g.n & f.n=g.m & (for k be set st k<>m & k<>n & k in dom f holds
- f.k=g.k) & f,g are_fiberwise_equipotent;
+canceled 2;
 
 theorem :: SCMISORT:10
  for s being State of SCM+FSA, I being Macro-Instruction
@@ -132,7 +123,7 @@ theorem :: SCMISORT:16
   while>0(a,I) is_closed_onInit s;
 
 theorem :: SCMISORT:17
-  for a being Int-Location, I being Macro-Instruction,
+   for a being Int-Location, I being Macro-Instruction,
  s being State of SCM+FSA,k being Element of NAT st
    I is_closed_onInit s & I is_halting_onInit s &
    k < LifeSpan (s +* Initialized I) &
@@ -150,7 +141,7 @@ theorem :: SCMISORT:17
      (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMISORT:18
-     for a being Int-Location, I being Macro-Instruction,
+      for a being Int-Location, I being Macro-Instruction,
   s being State of SCM+FSA st
    I is_closed_onInit s & I is_halting_onInit s &
    IC (Computation (s +* Initialized while>0(a,I))).(1 +
@@ -171,7 +162,7 @@ theorem :: SCMISORT:19
     dom while>0(a,I);
 
 theorem :: SCMISORT:20     ::SCM_9_36
-     for s being State of SCM+FSA, I being Macro-Instruction,a be read-write
+      for s being State of SCM+FSA, I being Macro-Instruction,a be read-write
  Int-Location st
     I is_closed_onInit s & I is_halting_onInit s & s.a >0 holds
     for k being Element of NAT st k <= LifeSpan (s +* Initialized I) + 3
@@ -190,7 +181,7 @@ theorem :: SCMISORT:21     ::SCM_9_37
    (Int-Locations \/ FinSeq-Locations);
 
 theorem :: SCMISORT:22
- for s be State of SCM+FSA, I be InitHalting Macro-Instruction,
+  for s be State of SCM+FSA, I be InitHalting Macro-Instruction,
      a be read-write Int-Location st s.a > 0 holds
  ex s2 be State of SCM+FSA, k be Element of NAT st
    s2 = s +* Initialized (while>0(a,I)) &
@@ -213,7 +204,7 @@ end;
 canceled 2;
 
 theorem :: SCMISORT:25
-  StepWhile>0(a,s,I).(k+1)=StepWhile>0(a,StepWhile>0(a,s,I).k,I).1;
+   StepWhile>0(a,s,I).(k+1)=StepWhile>0(a,StepWhile>0(a,s,I).k,I).1;
 
 theorem :: SCMISORT:26
   for I being Macro-Instruction,a being read-write Int-Location,
@@ -233,7 +224,7 @@ for I be Macro-Instruction,a be read-write Int-Location,
   (n +(LifeSpan (StepWhile>0(a,s,I).k +* Initialized I) + 3));
 
 theorem :: SCMISORT:28
-  for I be Macro-Instruction,a be read-write Int-Location,
+   for I be Macro-Instruction,a be read-write Int-Location,
     s be State of SCM+FSA st
      ex f being Function of product the Object-Kind of SCM+FSA,NAT st
       (for k being Element of NAT holds ( f.(StepWhile>0(a,s,I).k) <> 0 implies
@@ -263,7 +254,7 @@ definition let D be set,
 end;
 
 theorem :: SCMISORT:31
-  for I be good InitHalting Macro-Instruction,a be read-write Int-Location
+   for I be good InitHalting Macro-Instruction,a be read-write Int-Location
    st ex f being Function of (product the Object-Kind of SCM+FSA),INT st
     (for s,t be State of SCM+FSA
     holds (f.s > 0 implies f.IExec(I, s) < f.s ) &
@@ -313,7 +304,7 @@ definition
  let f be FinSeq-Location;
  func insert-sort f -> Macro-Instruction equals
 :: SCMISORT:def 2
-   (((intloc 2):= intloc 0) ';' ((intloc 3):= intloc 0) ';'
+    (((intloc 2):= intloc 0) ';' ((intloc 3):= intloc 0) ';'
    ((intloc 4):= intloc 0) ';' ((intloc 5):= intloc 0) ';'
    ((intloc 6):= intloc 0)) ';'
        ((intloc 1):=len f) ';'
@@ -341,7 +332,7 @@ end;
 definition
   func Insert-Sort-Algorithm -> Macro-Instruction equals
 :: SCMISORT:def 3
-    insert-sort fsloc 0;
+     insert-sort fsloc 0;
 end;
 
 theorem :: SCMISORT:38
@@ -397,4 +388,4 @@ theorem :: SCMISORT:48
   Initialized Insert-Sort-Algorithm +* ((fsloc 0) .--> w) is autonomic;
 
 theorem :: SCMISORT:49
-  Initialized Insert-Sort-Algorithm computes Sorting-Function;
+   Initialized Insert-Sort-Algorithm computes Sorting-Function;

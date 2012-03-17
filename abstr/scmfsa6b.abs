@@ -11,8 +11,8 @@ environ
       RELOC, CARD_1, SCMFSA6B, CARD_3, NAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0, XXREAL_0,
       NAT_1, FUNCT_7, INT_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_1,
-      FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, AMI_3, SCM_1, AMI_5, SCMFSA_2,
-      SCMFSA_4, SCMFSA_5, SCMFSA6A, SF_MASTR;
+      FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, AMI_3, SCM_1, SCMFSA_2, SCMFSA_4,
+      SCMFSA_5, SCMFSA6A, SF_MASTR;
  constructors DOMAIN_1, XXREAL_0, NAT_1, FUNCT_7, SCM_1, AMI_5, SCMFSA_1,
       SCMFSA_5, SCMFSA6A, SF_MASTR;
  registrations SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
@@ -23,14 +23,6 @@ environ
 
 begin
 
-canceled 2;
-
-theorem :: SCMFSA6B:3
-  for f, g being Function, A being set st A /\ dom f c= A /\ dom g
-  holds (f+*g|A)|A = g|A;
-
-begin
-
  reserve m, n for Element of NAT,
          x for set,
          i for Instruction of SCM+FSA,
@@ -38,6 +30,8 @@ begin
          a for Int-Location, f for FinSeq-Location,
          l, l1 for Instruction-Location of SCM+FSA,
          s,s1,s2 for State of SCM+FSA;
+
+canceled 3;
 
 theorem :: SCMFSA6B:4
   Start-At insloc 0 c= Initialized I;
@@ -61,7 +55,7 @@ theorem :: SCMFSA6B:10
   not f in dom Start-At l;
 
 theorem :: SCMFSA6B:11
-  not l1 in dom Start-At l;
+   not l1 in dom Start-At l;
 
 theorem :: SCMFSA6B:12
   not a in dom (I+*Start-At l);
@@ -77,38 +71,19 @@ begin ::  General theory
  reserve N for non empty with_non-empty_elements set;
 
 theorem :: SCMFSA6B:15
-     s = Following s implies for n holds (Computation s).n = s;
-
-theorem :: SCMFSA6B:16
-for S being halting IC-Ins-separated definite
-   (non empty non void AMI-Struct over N),
-    s being State of S st s is halting
- holds Result s = (Computation s).LifeSpan s;
-
-definition let N;
- let S be IC-Ins-separated definite (non empty non void AMI-Struct over N);
- let s be State of S, l be Instruction-Location of S, i be Instruction of S;
- redefine func s+*(l,i) -> State of S;
-end;
+      s = Following s implies for n holds (Computation s).n = s;
 
 definition
  let s be State of SCM+FSA, li be Int-Location, k be Integer;
  redefine func s+*(li,k) -> State of SCM+FSA;
 end;
 
-theorem :: SCMFSA6B:17
- for S being steady-programmed IC-Ins-separated definite
-    (non empty non void AMI-Struct over N)
- for s being State of S, n
-  holds s|the Instruction-Locations of S
-    = ((Computation s).n)|the Instruction-Locations of S;
-
 begin
 
 definition let I be Macro-Instruction, s be State of SCM+FSA;
  func IExec(I,s) -> State of SCM+FSA equals
 :: SCMFSA6B:def 1
-  Result(s+*Initialized I) +* s|the Instruction-Locations of SCM+FSA;
+   Result(s+*Initialized I) +* s|the Instruction-Locations of SCM+FSA;
 end;
 
 definition let I be Macro-Instruction;
@@ -131,6 +106,8 @@ end;
 registration
  cluster parahalting Macro-Instruction;
 end;
+
+canceled 2;
 
 theorem :: SCMFSA6B:18
  for I being parahalting Macro-Instruction
@@ -163,12 +140,12 @@ registration
 end;
 
 theorem :: SCMFSA6B:22
-     for I being parahalting Macro-Instruction,
+      for I being parahalting Macro-Instruction,
      a being read-write Int-Location
  holds not a in UsedIntLoc I implies (IExec(I, s)).a = s.a;
 
 theorem :: SCMFSA6B:23
-  for I being parahalting Macro-Instruction
+   for I being parahalting Macro-Instruction
   holds not f in UsedInt*Loc I implies (IExec(I, s)).f = s.f;
 
 theorem :: SCMFSA6B:24
@@ -179,7 +156,7 @@ registration
 end;
 
 theorem :: SCMFSA6B:25
- for I being parahalting Macro-Instruction holds dom I <> {};
+  for I being parahalting Macro-Instruction holds dom I <> {};
 
 theorem :: SCMFSA6B:26
  for I being parahalting Macro-Instruction holds insloc 0 in dom I;
@@ -232,14 +209,14 @@ theorem :: SCMFSA6B:33
         ((Macro i) +* Start-At insloc 0).insloc 0 = i;
 
 theorem :: SCMFSA6B:34
-  Initialized I c= s implies IC s = insloc 0;
+   Initialized I c= s implies IC s = insloc 0;
 
 registration
  cluster keeping_0 parahalting Macro-Instruction;
 end;
 
 theorem :: SCMFSA6B:35
-  for I being keeping_0 parahalting Macro-Instruction
+   for I being keeping_0 parahalting Macro-Instruction
   holds IExec(I, s).intloc 0 = 1;
 
 begin :: The composition of macroinstructions
@@ -322,7 +299,7 @@ theorem :: SCMFSA6B:43
          + LifeSpan (Result (s +* Initialized I) +* Initialized J);
 
 theorem :: SCMFSA6B:44
-  for I being keeping_0 parahalting Macro-Instruction,
+   for I being keeping_0 parahalting Macro-Instruction,
       J being parahalting Macro-Instruction
   holds
      IExec(I ';' J,s) =
