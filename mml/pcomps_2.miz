@@ -24,8 +24,7 @@ environ
       WELLORD1, RELAT_1, RELAT_2, SEQ_4, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1,
       CARD_1, FINSEQ_2, FINSEQ_4, TBSP_1, NEWTON, XREAL_0, XBOOLE_0, XBOOLE_1,
       XCMPLX_1;
- schemes NAT_1, FUNCT_2, SETFAM_1, PRE_TOPC, RECDEF_1, TREES_2, FRAENKEL,
-      XBOOLE_0;
+ schemes NAT_1, FUNCT_2, SUBSET_1, RECDEF_1, TREES_2, FRAENKEL, XBOOLE_0;
 
 begin :: 1. Selected properties of real numbers
 
@@ -168,9 +167,8 @@ scheme MinSet{A()->set,R()->Relation,P[set]}:
    A1: R() well_orders A() and
    A2: ex X be set st X in A() & P[X]
 proof
-     defpred Q[set] means P[$1];
      consider Y be set such that
-       A3: for x be set holds x in Y iff x in A() & Q[x] from XBOOLE_0:sch 1;
+       A3: for x be set holds x in Y iff x in A() & P[x] from XBOOLE_0:sch 1;
 A4:     ex x be set st x in Y
        proof
          consider x be set such that A5: x in A() & P[x] by A2;
@@ -257,8 +255,7 @@ proof
   defpred P[set] means ex V1 being Subset of PT st V1 = $1 &
    V1 is open & ex W st W in FX & Cl V1 c= W;
   consider HX such that
-A4: for V being Subset of PT holds V in HX iff P[V]
- from PRE_TOPC:sch 1;
+A4: for V being Subset of PT holds V in HX iff P[V] from SUBSET_1:sch 3;
   take HX;
       for V being Subset of PT st V in HX holds V is open
   proof
@@ -546,23 +543,22 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
           end;
       A26: for n holds T[n] from NAT_1:sch 1(A14,A16);
       let n;
-      defpred P2[set] means P[$1];
       deffunc F2(set) = union { F(c,n) where c is Element of PM():
        for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
         Q[c,$1,n,fq]};
       deffunc G2(set) = union { F(c,n) where c is Element of PM():
        for fq be Element of bool bool PM(),q st q <= n &
         fq = (g.n)/.(q+1) holds Q[c,$1,n,fq]};
-      set NF = { F2(V) where V is Element of bool PM(): P2[V] };
-      A27: for V be Element of bool PM() st P2[V] holds F2(V) = G2(V)
+      set NF = { F2(V) where V is Element of bool PM(): P[V] };
+      A27: for V be Element of bool PM() st P[V] holds F2(V) = G2(V)
           proof
             let V be Element of bool PM() such that P[V];
             deffunc F1(set) = F($1,n);
             defpred P1[set] means for fq be Element of bool bool PM(),q st
              q <= n & fq = f.q holds Q[$1,V,n,fq];
-            defpred P2[set] means for fq be Element of bool bool PM(),q st
+            defpred P[set] means for fq be Element of bool bool PM(),q st
              q <= n & fq = (g.n)/.(q+1) holds Q[$1,V,n,fq];
-                A28:for c be Element of PM() holds P1[c] iff P2[c]
+                A28:for c be Element of PM() holds P1[c] iff P[c]
                   proof
                   let c be Element of PM();
                   thus (for fq be Element of bool bool PM(),q
@@ -585,11 +581,11 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
                   hence Q[c,V,n,fq] by A31,A32;
                   end;
               { F1(c) where c is Element of PM(): P1[c] } =
-            { F1(c) where c is Element of PM(): P2[c] } from FRAENKEL:sch 3
+            { F1(c) where c is Element of PM(): P[c] } from FRAENKEL:sch 3
 (A28);
             hence thesis;
           end;
-      A33: NF = { G2(V) where V is Element of bool PM() : P2[V] }
+      A33: NF = { G2(V) where V is Element of bool PM() : P[V] }
        from FRAENKEL:sch 6(A27);
       then A34: len(g.(n+1))=len((g.n)^<*NF*>) by A8
       .= len(g.n)+1 by FINSEQ_2:19;
@@ -620,32 +616,29 @@ ex f being Function of NAT, bool bool PM() st
       where V is Element of bool PM()
       : P[V]}
 proof
-    defpred P1[set] means P[$1];
     defpred Q1[set,set,set,set] means Q[$1,$2,$3] & not $1 in union $4;
-    deffunc F1(set,set) = F($1,$2);
     consider f being Function of NAT, bool bool PM() such that
       A1: f.0 = UB() and
       A2: for n holds f.(n+1) =
-      { union { F1(c,n) where c is Element of PM():
+      { union { F(c,n) where c is Element of PM():
                   for fq be Element of bool bool PM(),q
                   st q <= n & fq = f.q holds Q1[c,V,n,fq] }
-        where V is Element of bool PM() : P1[V]} from XXX1;
+        where V is Element of bool PM() : P[V]} from XXX1;
     take f;
     thus f.0 = UB() by A1;
     let n;
-    defpred P2[set] means P[$1];
     deffunc F2(set) = union { F(c,n) where c is Element of PM():
      for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
       Q[c,$1,n] & not c in union(fq) };
     deffunc G2(set) = union { F(c,n) where c is Element of PM(): Q[c,$1,n] &
      not c in union{union(f.q): q <= n } };
-    set fxxx1 = { F2(V) where V is Element of bool PM() : P2[V] };
-    set fxxx = { G2(V) where V is Element of bool PM() : P2[V] };
+    set fxxx1 = { F2(V) where V is Element of bool PM() : P[V] };
+    set fxxx = { G2(V) where V is Element of bool PM() : P[V] };
     A3:now
         let V be Element of bool PM();
-        assume P2[V];
-        deffunc F1(set) = F($1,n);
-        defpred P1[set] means for fq be Element of bool bool PM(),q
+        assume P[V];
+        deffunc F(set) = F($1,n);
+        defpred P[set] means for fq be Element of bool bool PM(),q
          st q <= n & fq = f.q holds Q[$1,V,n] & not $1 in union(fq);
         defpred Q1[set] means Q[$1,V,n] & not $1 in union{union(f.q1):
          q1 <= n };
@@ -676,7 +669,7 @@ proof
                     union(fq) in {union(f.p): p <= n} by A12,A13;
                 hence contradiction by A11,A14,TARSKI:def 4;
                 end;
-              thus P1[c] iff Q1[c]
+              thus P[c] iff Q1[c]
                 proof
                   hereby assume A15:( for fq be Element of bool bool PM(),q
                     st q <= n & fq = f.q holds Q[c,V,n] & not c in union(fq));
@@ -690,8 +683,8 @@ proof
                   hence thesis by A5;
                 end;
             end;
-          { F1(c) where c is Element of PM(): P1[c] }
-         = { F1(c) where c is Element of PM(): Q1[c] } from FRAENKEL:sch 3(A4);
+          { F(c) where c is Element of PM(): P[c] }
+         = { F(c) where c is Element of PM(): Q1[c] } from FRAENKEL:sch 3(A4);
         hence F2(V) = G2(V);
       end;
         fxxx1 = fxxx from FRAENKEL:sch 6(A3);
@@ -770,7 +763,7 @@ theorem  :: Stone Theorem - general case
         defpred P2[set] means ex n st $1 in f.n;
         consider GX being Subset-Family of PM
           such that A15: for X being Subset of PM
-            holds X in GX iff P2[X] from SETFAM_1:sch 1;
+            holds X in GX iff P2[X] from SUBSET_1:sch 3;
         reconsider GX as Subset-Family of PT by A1,A3,Th8;
         take GX;
         thus A16: GX is open
@@ -803,8 +796,7 @@ theorem  :: Stone Theorem - general case
                               c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V;
                         thus a in bool the carrier of PM by A21;
                       end;
-                      then reconsider NF as Subset-Family of PM
-                        by SETFAM_1:def 7;
+                      then reconsider NF as Subset-Family of PM;
                           NF c= Family_open_set(PM)
                       proof
                         let a be set;
@@ -855,9 +847,7 @@ theorem  :: Stone Theorem - general case
                               not c in union { union(f.l): l <= k};
                           thus a in bool the carrier of PM by A25;
                         end;
-                        then reconsider NF as Subset-Family of
-PM
-                          by SETFAM_1:def 7;
+                        then reconsider NF as Subset-Family of PM;
                           NF c= Family_open_set(PM)
                         proof
                           let a be set;
@@ -1039,8 +1029,7 @@ by A31;
                                 c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V;
                           thus a in bool the carrier of PM by A65;
                         end;
-                      then reconsider NF as Subset-Family of PM
-                        by SETFAM_1:def 7;
+                      then reconsider NF as Subset-Family of PM;
                     A66: for W be set st W in NF holds W c= V
                       proof
                         let W be set;
@@ -1096,8 +1085,7 @@ by A31;
                                            where q is Nat: q <= k};
                         thus a in bool the carrier of PM by A72;
                       end;
-                      then reconsider NF as Subset-Family of PM
-                        by SETFAM_1:def 7;
+                      then reconsider NF as Subset-Family of PM;
                     A73: for W be set st W in NF holds W c= V
                       proof
                         let W be set;

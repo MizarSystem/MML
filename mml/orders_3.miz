@@ -14,7 +14,7 @@ environ
       MULTOP_1, RELSET_1, FUNCOP_1, PRE_TOPC, ORDERS_2, CAT_1, ENS_1, FRAENKEL,
       PBOOLE, GRCAT_1, FUNCT_2, ALTCAT_1;
  constructors RELAT_2, ORDERS_2, WELLORD1, ALTCAT_1, ENS_1, CAT_5, DOMAIN_1,
-      TOPS_2, GRCAT_1, PRALG_1, PARTFUN1;
+      TOPS_2, GRCAT_1, PARTFUN1;
  registrations SUBSET_1, RELSET_1, ORDERS_2, STRUCT_0, FUNCT_1, FRAENKEL,
       CAT_5, ALTCAT_1, ENS_1, PARTFUN1, XBOOLE_0;
  requirements BOOLE, SUBSET;
@@ -781,10 +781,9 @@ scheme AltCatEx
 A1: for i,j,k be Element of A() for f,g be Function st
      f in F(i,j) & g in F(j,k) holds g * f in F (i,k)
 proof
-    deffunc G(set,set) = F($1,$2);
     consider M be ManySortedSet of [:A(),A():] such that
-A2:   for i,j be Element of A() holds M.(i,j) = G(i,j) from ALTCAT_1:sch 2;
-    deffunc H(set,set,set) = FuncComp(G($1,$2),G($2,$3));
+A2:   for i,j be Element of A() holds M.(i,j) = F(i,j) from ALTCAT_1:sch 2;
+    deffunc H(set,set,set) = FuncComp(F($1,$2),F($2,$3));
     consider c be ManySortedSet of [:A(),A(),A():] such that
 A3:   for i,j,k be Element of A() holds
       c.(i,j,k) = H(i,j,k) from ALTCAT_1:sch 4;
@@ -899,28 +898,27 @@ definition let P be non empty POSet_set;
     (the Comp of it).(i,j,k) = FuncComp ( MonFuncs (i,j) , MonFuncs (j,k) );
   existence
   proof
-    deffunc F(Element of P,Element of P) = MonFuncs($1,$2);
-A1:for i,j,k be Element of P for f,g be Function st f in F(i,j) &
-   g in F(j,k) holds g * f in F(i,k) by Th6;
+A1:for i,j,k be Element of P for f,g be Function st f in MonFuncs(i,j) &
+   g in MonFuncs(j,k) holds g * f in MonFuncs(i,k) by Th6;
    thus ex C be strict AltCatStr st
    the carrier of C = P &
-   for i,j be Element of P holds (the Arrows of C).(i,j) = F (i,j) &
+   for i,j be Element of P holds (the Arrows of C).(i,j) = MonFuncs(i,j) &
    for i,j,k be Element of P holds
-    (the Comp of C).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) from AltCatEx(A1);
+    (the Comp of C).(i,j,k) = FuncComp ( MonFuncs(i,j) , MonFuncs(j,k) )
+                  from AltCatEx(A1);
   end;
   uniqueness
   proof
-   deffunc F(Element of P,Element of P) = MonFuncs ($1,$2);
    thus
      for C1,C2 be strict AltCatStr st
    ( the carrier of C1 = P &
-   for i,j be Element of P holds (the Arrows of C1).(i,j) = F (i,j) &
+   for i,j be Element of P holds (the Arrows of C1).(i,j) = MonFuncs(i,j) &
    for i,j,k be Element of P holds
-    (the Comp of C1).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) ) &
+    (the Comp of C1).(i,j,k) = FuncComp ( MonFuncs(i,j) , MonFuncs(j,k) ) ) &
    ( the carrier of C2 = P &
-   for i,j be Element of P holds (the Arrows of C2).(i,j) = F (i,j) &
+   for i,j be Element of P holds (the Arrows of C2).(i,j) = MonFuncs(i,j) &
    for i,j,k be Element of P holds
-    (the Comp of C2).(i,j,k) = FuncComp ( F(i,j) , F(j,k) ) )
+    (the Comp of C2).(i,j,k) = FuncComp ( MonFuncs(i,j) , MonFuncs(j,k) ) )
     holds C1 = C2 from AltCatUniq;
   end;
 end;

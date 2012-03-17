@@ -17,7 +17,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -28,28 +27,28 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="148"/>
+<Func kind="K" nr="132"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="147"/>
+<Func kind="K" nr="131"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="149"/>
+<Func kind="K" nr="133"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="150"/>
+<Func kind="K" nr="134"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>

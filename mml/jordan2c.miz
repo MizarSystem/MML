@@ -25,14 +25,13 @@ environ
       MATRIX_1, GOBOARD1, JORDAN1, GOBOARD2, GOBOARD5, GOBOARD9, JORDAN2B;
  constructors WEIERSTR, REAL_1, TOPS_1, TOPS_2, COMPTS_1, REALSET1, CONNSP_1,
       TBSP_1, CONNSP_3, FINSEQ_4, JORDAN1, RCOMP_1, GOBOARD2, GOBOARD9,
-      FINSEQOP, SQUARE_1, ABSVALUE, BORSUK_2, JORDAN3, TREAL_1, FUNCT_4,
-      SPPOL_1, SPRECT_1, TOPREAL2, SPRECT_2, PSCOMP_1, BINARITH, JORDAN2B,
-      PARTFUN1, TOPRNS_1, DOMAIN_1, MEMBERED, XCMPLX_0, BINOP_2, COMPLEX1,
-      NAT_1;
+      FINSEQOP, SQUARE_1, BORSUK_2, JORDAN3, TREAL_1, FUNCT_4, SPPOL_1,
+      SPRECT_1, TOPREAL2, SPRECT_2, PSCOMP_1, BINARITH, JORDAN2B, TOPRNS_1,
+      DOMAIN_1, COMPLEX1, NAT_1;
  registrations SUBSET_1, RELSET_1, STRUCT_0, PRE_TOPC, METRIC_1, PCOMPS_1,
       SPRECT_1, TOPMETR, TOPREAL1, BORSUK_1, FUNCT_1, FUNCOP_1, FINSEQ_1,
       XREAL_0, FINSET_1, SPRECT_3, EUCLID, GOBOARD1, GOBOARD2, ARYTM_3,
-      MEMBERED;
+      MEMBERED, TBSP_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, TBSP_1, JORDAN1;
  theorems PRE_TOPC, CONNSP_1, EUCLID, TBSP_1, TOPREAL3, REAL_1, REAL_2, AXIOMS,
@@ -44,9 +43,8 @@ environ
       JORDAN6, COMPTS_1, TSEP_1, CONNSP_2, TOPS_1, JORDAN5D, JORDAN2B,
       GOBOARD1, GOBOARD2, GOBOARD5, GOBOARD6, UNIFORM1, FINSEQ_6, MATRIX_1,
       GOBOARD9, GOBRD12, SPRECT_1, CARD_1, CARD_2, ENUMSET1, PSCOMP_1,
-      SPRECT_2, SPRECT_3, SEQ_2, RELSET_1, SCMFSA_7, SETFAM_1, XBOOLE_0,
-      XBOOLE_1, XREAL_0, TOPRNS_1, XCMPLX_0, XCMPLX_1, BINOP_2, COMPLEX1,
-      XREAL_1;
+      SPRECT_2, SPRECT_3, SEQ_2, RELSET_1, SCMFSA_7, XBOOLE_0, XBOOLE_1,
+      XREAL_0, TOPRNS_1, XCMPLX_0, XCMPLX_1, BINOP_2, COMPLEX1, XREAL_1;
  schemes FUNCT_1, NAT_1;
 
 begin :: Definitions of Bounded Domain and Unbounded Domain
@@ -276,7 +274,7 @@ end;
 definition let n;let A be Subset of TOP-REAL n;
   canceled;
 attr A is Bounded means
-:Def2:ex C being Subset of Euclid n st C=A & C is bounded;
+:Def2: A is bounded Subset of Euclid n;
 correctness;
 end;
 
@@ -284,10 +282,10 @@ theorem Th16:for A,B being Subset of TOP-REAL n st B is Bounded &
 A c= B holds A is Bounded
 proof let A,B be Subset of TOP-REAL n;
  assume A1:B is Bounded & A c= B;
-  then consider C being Subset of Euclid n
-   such that A2:C=B & C is bounded by Def2;
-  reconsider C2=A as Subset of Euclid n by A1,A2,XBOOLE_1:1;
-       C2 is bounded by A1,A2,TBSP_1:21;
+  then reconsider C=B as bounded Subset of Euclid n by Def2;
+X: A c= C by A1;
+  reconsider C2=A as Subset of Euclid n by TOPREAL3:13;
+  C2 is bounded by X,TBSP_1:21;
  hence A is Bounded by Def2;
 end;
 
@@ -322,9 +320,8 @@ A2:B is_inside_component_of A iff
    proof assume A3: B is_inside_component_of A;
      then consider C being Subset of ((TOP-REAL n)|(A`)) such that
      A4:C=B & C is_a_component_of ((TOP-REAL n)|(A`)) by A1,Def3;
-     consider D1 being Subset of Euclid n such that
-      A5: D1=B & D1 is bounded by A2,A3,Def2;
-    thus thesis by A4,A5;
+     B is bounded Subset of Euclid n by A2,A3,Def2;
+    hence thesis by A4;
    end;
      given C being Subset of ((TOP-REAL n)|(A`)) such that
      A6:C=B & C is_a_component_of ((TOP-REAL n)|(A`)) &
@@ -371,8 +368,7 @@ A2: B is_outside_component_of A iff
      given C being Subset of ((TOP-REAL n)|(A`)) such that
      A5:C=B & C is_a_component_of ((TOP-REAL n)|(A`)) &
        C is not bounded Subset of Euclid n;
-          for D4 being Subset of Euclid n
-      st D4=B holds not D4 is bounded by A5;
+     not B is bounded Subset of Euclid n by A5;
      then A6:not B is Bounded by Def2;
           B is_a_component_of A` by A5,CONNSP_1:def 6;
     hence thesis by A6,Def4;
@@ -487,7 +483,7 @@ proof let A be Subset of TOP-REAL n;
     end;
   then reconsider F0={B where B is Subset of TOP-REAL n:
     B is_inside_component_of A} as Subset-Family of
-      the carrier of ((TOP-REAL n)|A`) by SETFAM_1:def 7;
+      the carrier of ((TOP-REAL n)|A`);
   reconsider F0 as Subset-Family of (TOP-REAL n)|A`;
   A3: BDD A=union F0 by Def5;
         for B0 being Subset of ((TOP-REAL n)|A`) st B0 in F0
@@ -521,7 +517,7 @@ proof let A be Subset of TOP-REAL n;
     end;
   then reconsider F0={B where B is Subset of TOP-REAL n:
     B is_outside_component_of A} as Subset-Family of
-      the carrier of ((TOP-REAL n)|A`) by SETFAM_1:def 7;
+      the carrier of ((TOP-REAL n)|A`);
   reconsider F0 as Subset-Family of ((TOP-REAL n)|A`);
   A2: UBD A=union F0 by Def6;
         for B0 being Subset of ((TOP-REAL n)|A`) st B0 in F0
@@ -976,8 +972,7 @@ theorem Th40: for A being Subset of TOP-REAL n holds
  q in A holds |.q.|<r
 proof let A be Subset of TOP-REAL n;
  hereby assume A is Bounded;
-   then consider C being Subset of Euclid n such that
-    A1:C=A & C is bounded by Def2;
+   then reconsider C=A as bounded Subset of Euclid n by Def2;
   per cases;
   suppose A2:C<>{};
     consider x0 being Element of C;
@@ -985,7 +980,7 @@ proof let A be Subset of TOP-REAL n;
     then reconsider x0 as Point of Euclid n;
     consider r being Real such that
     A3: 0<r & for x,y being Point of (Euclid n) st x in C & y in C holds
-                               dist(x,y) <= r by A1,TBSP_1:def 9;
+                               dist(x,y) <= r by TBSP_1:def 9;
     reconsider o=0.REAL n as Point of Euclid n by TOPREAL3:13;
     set R0=r+dist(o,x0)+1;
         for q being Point of TOP-REAL n st q in A holds |.q.|<R0
@@ -994,7 +989,7 @@ proof let A be Subset of TOP-REAL n;
       reconsider z=q1 as Point of Euclid n by TOPREAL3:13;
            |.q1-(0.REAL n).|=dist(o,z) by JGRAPH_1:45;
       then A5: |.q1.|=dist(o,z) by Th13;
-      A6:dist(x0,z)<=r by A1,A3,A4;
+      A6:dist(x0,z)<=r by A3,A4;
       A7:dist(o,z)<=dist(o,x0)+dist(x0,z) by METRIC_1:4;
            dist(o,x0)+dist(x0,z)<=dist(o,x0)+r by A6,AXIOMS:24;
 then A8:   dist(o,z)<=dist(o,x0)+r by A7,AXIOMS:22;
@@ -1005,7 +1000,7 @@ then A8:   dist(o,z)<=dist(o,x0)+r by A7,AXIOMS:22;
  q in A holds |.q.|<r2;
  end;
  suppose C={};
-  then for q being Point of TOP-REAL n st q in A holds |.q.|<1 by A1;
+  then for q being Point of TOP-REAL n st q in A holds |.q.|<1;
   hence ex r2 being Real st for q being Point of TOP-REAL n st
  q in A holds |.q.|<r2;
 end;
@@ -1045,7 +1040,7 @@ R0
    end;
    suppose C={};
    then C = {}Euclid n;
-   hence C is bounded by TBSP_1:14;
+   hence C is bounded;
    end;
    end;
  hence A is Bounded by Def2;
@@ -1054,11 +1049,10 @@ end;
 theorem Th41: n>=1 implies not [#](TOP-REAL n) is Bounded
 proof assume A1:n>=1;
  assume [#](TOP-REAL n) is Bounded;
-   then consider C being Subset of Euclid n
-    such that A2:C=[#](TOP-REAL n) & C is bounded by Def2;
-        C=the carrier of TOP-REAL n by A2,PRE_TOPC:12;
+   then reconsider C=[#](TOP-REAL n) as bounded Subset of Euclid n by Def2;
+        C=the carrier of TOP-REAL n by PRE_TOPC:12;
    then C=REAL n by EUCLID:25;
-  hence contradiction by A1,A2,Th39;
+  hence contradiction by A1,Th39;
 end;
 
 theorem Th42: n>=1 implies UBD {}(TOP-REAL n)=REAL n
@@ -3117,7 +3111,7 @@ proof let P,P1 be Subset of TOP-REAL n,
   W be Subset of Euclid n;
   assume A1:P=W & P is connected
    & W is not bounded & P1=skl (Down(P,Q`)) & W misses Q;
-then A2:W <> {}Euclid n by TBSP_1:14;
+then A2:W <> {}Euclid n;
 A3: W /\ Q = {} by A1,XBOOLE_0:def 7;
         now assume Q`={};
      then Q=({}(the carrier of TOP-REAL n))`;
@@ -3197,9 +3191,14 @@ proof let A be Subset of TOP-REAL n;
  suppose A={};
 then A5: A = {}(Euclid n);
    reconsider A1=A as Subset of Euclid n by TOPREAL3:13;
-        A1 is bounded by A5,TBSP_1:14;
+        A1 is bounded by A5;
  hence thesis by Def2;
 end;
+end;
+
+registration let n be Nat;
+  cluster compact -> Bounded Subset of TOP-REAL n;
+  coherence by Th73;
 end;
 
 theorem Th74: for A being Subset of TOP-REAL n st 1<=n & A is Bounded holds
@@ -3246,7 +3245,7 @@ proof let r be Real;
         thus |.q.|<r by A4;
        end;
      then C is Bounded by Th40;
-     then ex A1 being Subset of Euclid n st A1=C & A1 is bounded by Def2;
+     then C is bounded Subset of Euclid n by Def2;
     hence A is bounded by A3;
 end;
 
@@ -3255,18 +3254,17 @@ for A being Subset of TOP-REAL n st n>=2 & A is Bounded
  ex B being Subset of TOP-REAL n st B is_outside_component_of A & B=UBD A
 proof let A be Subset of TOP-REAL n;
   assume A1: n>=2 & A is Bounded;
-  then consider C being Subset of Euclid n
-   such that A2:C=A & C is bounded by Def2;
+  then reconsider C=A as bounded Subset of Euclid n by Def2;
    A3:n>=1 by A1,AXIOMS:22;
   per cases;
   suppose A4: C<>{};
     consider x0 being Element of C;
     A5:x0 in C by A4;
-    then reconsider q1=x0 as Point of TOP-REAL n by A2;
+    then reconsider q1=x0 as Point of TOP-REAL n;
     reconsider x0 as Point of Euclid n by A5;
     consider r being Real such that
     A6: 0<r & for x,y being Point of (Euclid n) st x in C & y in C holds
-                               dist(x,y) <= r by A2,TBSP_1:def 9;
+                               dist(x,y) <= r by TBSP_1:def 9;
     reconsider o=0.REAL n as Point of Euclid n by TOPREAL3:13;
     set R0=r+dist(o,x0)+1;
          (REAL n)\{q where q is Point of TOP-REAL n:
@@ -3291,7 +3289,7 @@ A10:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
       A11:(|.q1.|) >= r+dist(o,x0)+1 by A10;
            |.q1-(0.REAL n).|=dist(o,z) by JGRAPH_1:45;
       then A12:dist(o,z)>=r+dist(o,x0)+1 by A11,Th13;
-      A13:dist(x0,z)<=r by A2,A6,A9;
+      A13:dist(x0,z)<=r by A6,A9;
       A14:dist(o,z)<=dist(o,x0)+dist(x0,z) by METRIC_1:4;
            dist(o,x0)+dist(x0,z)<=dist(o,x0)+r by A13,AXIOMS:24;
       then dist(o,z)<=dist(o,x0)+r by A14,AXIOMS:22;
@@ -3336,13 +3334,14 @@ A10:  not z in {q where q is Point of TOP-REAL n:(|.q.|) < R0 }
        hence contradiction by A20,A25,A28,TBSP_1:21;
       end;
       A29: A c= D2
-        proof let z be set;assume A30:z in A;
+        proof let z be set;
+         assume A30:z in A;
          then reconsider q2=z as Point of TOP-REAL n;
-         reconsider x1=z as Point of Euclid n by A2,A30;
+         reconsider x1=q2 as Point of Euclid n by TOPREAL3:13;
          A31: |.q2.|=|.q2-q1+q1.| by EUCLID:52;
          A32: |.q2-q1+q1.|<=|.q2-q1.|+|.q1.| by TOPRNS_1:30;
          A33: |.q2-q1.|=dist(x1,x0) by JGRAPH_1:45;
-         A34:dist(x1,x0)<=r by A2,A6,A30;
+         A34:dist(x1,x0)<=r by A6,A30;
               |.q1.|=|.q1-0.REAL n.| by Th13
          .=dist(x0,o) by JGRAPH_1:45;
          then |.q2-q1.|+|.q1.|<=r+dist(o,x0) by A33,A34,AXIOMS:24;
@@ -3381,7 +3380,7 @@ A42:   W /\ D2` /\ C2 <>{} by A23,A37,XBOOLE_1:28;
     B is_outside_component_of A & B=UBD A by A15;
   end;
   suppose A44:C={};
-    then A45:A={}(TOP-REAL n) by A2;
+    then A45:A={}(TOP-REAL n);
          REAL n = the carrier of TOP-REAL n by EUCLID:25;
     then REAL n c= the carrier of Euclid n by TOPREAL3:13;
     then reconsider W=REAL n as Subset of Euclid n;
@@ -3390,7 +3389,7 @@ A42:   W /\ D2` /\ C2 <>{} by A23,A37,XBOOLE_1:28;
     A46:P is connected by Th33;
          1<=n by A1,AXIOMS:22;
     then A47: W is not bounded by Th39;
-         W /\ A={} by A2,A44;
+         W /\ A={} by A44;
     then A48:W misses A by XBOOLE_0:def 7;
         the carrier of (TOP-REAL n)|A`=A` by JORDAN1:1;
     then reconsider P1=skl Down(P,A`) as Subset of TOP-REAL n by XBOOLE_1:1;
@@ -3402,7 +3401,7 @@ A42:   W /\ D2` /\ C2 <>{} by A23,A37,XBOOLE_1:28;
          (TOP-REAL n)| [#](TOP-REAL n)=TOP-REAL n by TSEP_1:3;
     then A53:[#]((TOP-REAL n)| [#](TOP-REAL n)) is_a_component_of
     (TOP-REAL n)| [#](TOP-REAL n) by Th23;
-         A`=(the carrier of TOP-REAL n) \ {} by A2,A44,SUBSET_1:def 5
+         A`=(the carrier of TOP-REAL n) \ {} by A44,SUBSET_1:def 5
     .=[#](TOP-REAL n) by PRE_TOPC:12;
     then P1=skl [#]((TOP-REAL n)| [#](TOP-REAL n)) by A51,A52,CONNSP_3:28
     .=[#]((TOP-REAL n)| [#](TOP-REAL n)) by A53,CONNSP_3:7
@@ -4319,7 +4318,7 @@ XBOOLE_0:def 3;
             then A meets A` by XBOOLE_0:def 7;
          hence contradiction by SUBSET_1:26;
         end;
-        then ex C being Subset of Euclid n st C=D2 & C is bounded by Def2;
+        then D2 is bounded Subset of Euclid n by Def2;
        hence skl Down(P,A`) is bounded Subset of Euclid n;
       end;
    then A27: P1 is_inside_component_of A by A13,Th17;
@@ -5243,8 +5242,7 @@ A3:not LeftComp f is Bounded by Th98;
   consider L1 being Subset of (TOP-REAL 2)|(L~f)` such that
   A5: L1 = LeftComp f & L1 is_a_component_of (TOP-REAL 2)|(L~f)`
                                by A2,CONNSP_1:def 6;
-     L~f is Bounded by Th73;
-  then consider r1 being Real such that
+  consider r1 being Real such that
   A6: for q being Point of TOP-REAL 2 st q in L~f holds |.q.|<r1 by Th40;
       (REAL 2)\ {q where q is Point of TOP-REAL 2: (|.q.|) < r1 }
   c= REAL 2 by XBOOLE_1:36;
@@ -5917,8 +5915,7 @@ proof let a be Real,p be Point of TOP-REAL 2;
    .=A2 by A2,XBOOLE_1:21;
    then A5:Down(A1,A`) is_a_component_of (TOP-REAL 2)|A` &
    Down(A2,A`) is_a_component_of (TOP-REAL 2)|A` by A2,A3;
-        A is Bounded by Th73;
-   then consider B being Subset of TOP-REAL 2 such that
+   consider B being Subset of TOP-REAL 2 such that
    A6:B is_outside_component_of A & B=UBD A by Th76;
         UBD (L~SpStSeq D) is_a_component_of A` by A6,Def4;
    then consider B1 being Subset of (TOP-REAL 2)|A` such that
@@ -6471,8 +6468,7 @@ proof let a be Real,p be Point of TOP-REAL 2;
    .=A2 by A2,XBOOLE_1:21;
    then A5:Down(A1,A`) is_a_component_of (TOP-REAL 2)|A` &
    Down(A2,A`) is_a_component_of (TOP-REAL 2)|A` by A2,A3;
-        A is Bounded by Th73;
-   then BDD A is_inside_component_of A by Th116;
+   BDD A is_inside_component_of A by Th116;
    then BDD (L~SpStSeq D) is_a_component_of A` by Def3;
    then consider B1 being Subset of (TOP-REAL 2)|A` such that
    A6: B1 = BDD (L~SpStSeq D) & B1 is_a_component_of (TOP-REAL 2)|A`

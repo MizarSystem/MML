@@ -26,7 +26,6 @@
 <ArticleID name="TREES_9"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="MARGREL1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_6"/>
@@ -44,8 +43,8 @@
 <Adjective nr="26"/>
 <Adjective nr="28"/>
 <Adjective nr="38"/>
-<Adjective nr="52"/>
-<Adjective nr="55"/>
+<Adjective nr="51"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -54,7 +53,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -64,7 +63,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="268">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -87,7 +86,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -109,7 +108,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -119,7 +118,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="269">
+<Func kind="K" nr="253">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -136,7 +135,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -146,7 +145,7 @@
 <Adjective nr="26"/>
 <Adjective nr="28"/>
 <Adjective nr="38"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -14,8 +14,7 @@ environ
       FUNCT_1, PARTFUN1, FUNCT_2, MCART_1, ZF_FUND1, BINOP_1, MULTOP_1, CARD_3,
       STRUCT_0, FUNCT_5, PBOOLE, FUNCOP_1, MSUALG_3, FUNCT_3, COMMACAT,
       ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3, FUNCTOR2, FUNCTOR3;
- constructors ZF_FUND1, WAYBEL_1, CAT_5, ALTCAT_3, FUNCTOR3, PROB_1, MEMBERED,
-      CARD_3, PRALG_1, REALSET2, MSUALG_1, MSUALG_3;
+ constructors ZF_FUND1, CAT_5, ALTCAT_3, FUNCTOR3, PRALG_1, MSUALG_3;
  registrations SUBSET_1, RELSET_1, RELAT_1, FUNCT_1, STRUCT_0, ALTCAT_1,
       ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4, ZFMISC_1, FUNCT_2, ORDINAL2,
       FUNCOP_1, PBOOLE;
@@ -45,9 +44,9 @@ scheme AltCatStrLambda
  provided
 A1:  for a,b,c being Element of A(), f,g being set
    st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c)
-proof deffunc b(set,set) = B($1,$2);
+proof
     consider B being ManySortedSet of [:A(), A():] such that
-A2: for a,b being Element of A() holds B.(a,b) = b(a,b)
+A2: for a,b being Element of A() holds B.(a,b) = B(a,b)
      from ALTCAT_1:sch 2;
    defpred P[set,set] means
      ex a,b,c being Element of A(),
@@ -261,19 +260,18 @@ A4:  for a being Element of A()
     for b being Element of A(), g being set st g in B(b,a)
      holds C(b,a,a,g,f) = g
 proof
-    deffunc b(set,set) = B($1,$2);
-    deffunc c(set,set,set,set,set) = C($1,$2,$3,$4,$5);
+    deffunc C(set,set,set,set,set) = C($1,$2,$3,$4,$5);
 A5:  for a,b,c being Element of A(), f,g being set
-   st f in b(a,b) & g in b(b,c) holds c(a,b,c,f,g) in b(a,c) by A1;
+   st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c) by A1;
     consider C being strict non empty transitive AltCatStr such that
 A6:  the carrier of C = A() and
-A7:  for a,b being object of C holds <^a,b^> = b(a,b) and
+A7:  for a,b being object of C holds <^a,b^> = B(a,b) and
 A8:  for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
      for f being Morphism of a,b, g being Morphism of b,c
-      holds g*f = c(a,b,c,f,g) from AltCatStrLambda(A5);
+      holds g*f = C(a,b,c,f,g) from AltCatStrLambda(A5);
 A9:  for a,b,c,d being object of C, f,g,h being set
      st f in <^a,b^> & g in <^b,c^> & h in <^c,d^>
-     holds c(a,c,d,c(a,b,c,f,g),h) = c(a,b,d,f,c(b,c,d,g,h))
+     holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
      proof let a,b,c,d be object of C, f,g,h be set such that
 A10:    f in <^a,b^> & g in <^b,c^> & h in <^c,d^>;
            <^a,b^> = B(a,b) & <^b,c^> = B(b,c) & <^c,d^> = B(c,d) by A7;
@@ -282,7 +280,7 @@ A10:    f in <^a,b^> & g in <^b,c^> & h in <^c,d^>;
 A11:  for a being object of C
      ex f being set st f in <^a,a^> &
       for b being object of C, g being set st g in <^a,b^>
-       holds c(a,a,b,f,g) = g
+       holds C(a,a,b,f,g) = g
      proof let a be object of C;
       consider f being set such that
 A12:    f in B(a,a) and
@@ -296,7 +294,7 @@ A13:    for b being Element of A(), g being set st g in B(a,b)
 A14:  for a being object of C
      ex f being set st f in <^a,a^> &
       for b being object of C, g being set st g in <^b,a^>
-       holds c(b,a,a,g,f) = g
+       holds C(b,a,a,g,f) = g
      proof let a be object of C;
       consider f being set such that
 A15:    f in B(a,a) and
@@ -426,7 +424,7 @@ A4:  for a being Element of A()
      holds C(b,a,a,g,f) = g
 proof deffunc F(set) = B($1`1,$1`2);
     defpred Q[set,set] means P[$1`1,$1`2,$2];
-    deffunc c(set,set,set,set,set) = C($1,$2,$3,$4,$5);
+    deffunc C(set,set,set,set,set) = C($1,$2,$3,$4,$5);
     consider P being Function such that
         dom P = [:A(),A():] and
 A5: for i being set st i in [:A(),A():]
@@ -441,14 +439,14 @@ A7: now let a,b,c be Element of A(), f,g be set;
      assume f in b(a,b) & g in b(b,c);
       then f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] by A6;
       then C(a,b,c,f,g) in B(a,c) & P[a,c, C(a,b,c,f,g)] by A1;
-     hence c(a,b,c,f,g) in b(a,c) by A6;
+     hence C(a,b,c,f,g) in b(a,c) by A6;
     end;
 A8: now let a,b,c,d be Element of A(), f,g,h be set;
      assume f in b(a,b) & g in b(b,c) & h in b(c,d);
       then f in B(a,b) & P[a,b,f] & g in B(b,c) & P[b,c,g] & h in B(c,d) & P[c
 ,d,h]
        by A6;
-     hence c(a,c,d,c(a,b,c,f,g),h) = c(a,b,d,f,c(b,c,d,g,h)) by A2;
+     hence C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h)) by A2;
     end;
 A9: now let a be Element of A();
      consider f being set such that
@@ -458,7 +456,7 @@ A11:   for b being Element of A(), g being set st g in B(a,b) & P[a,b,g]
      take f; thus f in b(a,a) by A6,A10;
      let b be Element of A(), g be set; assume g in b(a,b);
       then g in B(a,b) & P[a,b,g] by A6;
-     hence c(a,a,b,f,g) = g by A11;
+     hence C(a,a,b,f,g) = g by A11;
     end;
 A12: now let a be Element of A();
      consider f being set such that
@@ -468,14 +466,14 @@ A14:   for b being Element of A(), g being set st g in B(b,a) & P[b,a,g]
      take f; thus f in b(a,a) by A6,A13;
      let b be Element of A(), g be set; assume g in b(b,a);
       then g in B(b,a) & P[b,a,g] by A6;
-     hence c(b,a,a,g,f) = g by A14;
+     hence C(b,a,a,g,f) = g by A14;
     end;
    consider C being strict category such that
 A15: the carrier of C = A() and
 A16: for a,b being object of C holds <^a,b^> = b(a,b) and
 A17: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
      for f being Morphism of a,b, g being Morphism of b,c
-      holds g*f = c(a,b,c,f,g) from CategoryLambda(A7,A8,A9,A12);
+      holds g*f = C(a,b,c,f,g) from CategoryLambda(A7,A8,A9,A12);
    take C; thus the carrier of C = A() by A15;
    hereby let a,b be object of C, f be set;
          <^a,b^> = P.(a,b) by A16;
@@ -511,10 +509,9 @@ A2:  for a,b,c being object of A()
     holds Q[a,c,g*f]
  and
 A3:  for a being object of A() st P[a] holds Q[a,a, idm a]
-proof defpred p[set] means P[$1];
-    defpred q[set,set,set] means Q[$1,$2,$3];
+proof
     consider X being set such that
-A4: for x being set holds x in X iff x in the carrier of A() & p[x]
+A4: for x being set holds x in X iff x in the carrier of A() & P[x]
      from XBOOLE_0:sch 1;
    consider a0 being object of A() such that
 A5: P[a0] by A1;
@@ -523,8 +520,8 @@ A6: X c= the carrier of A() proof let x be set; thus thesis by A4; end;
    deffunc B(set,set) = (the Arrows of A()).($1,$2);
    deffunc C(set,set,set,set,set) = (the Comp of A()).($1,$2,$3).($5,$4);
 A7: now let a,b,c be Element of X, f,g be set such that
-A8:   f in B(a,b) & q[a,b,f] and
-A9:   g in B(b,c) & q[b,c,g];
+A8:   f in B(a,b) & Q[a,b,f] and
+A9:   g in B(b,c) & Q[b,c,g];
      reconsider a' = a, b' = b, c' = c as object of A() by A4;
 A10:   B(a,b) = <^a',b'^> by ALTCAT_1:def 2;
      reconsider f' = f as Morphism of a', b' by A8,ALTCAT_1:def 2;
@@ -534,12 +531,12 @@ A12:   C(a,b,c,f,g) = g'*f' & B(a,c) = <^a',c'^> & <^a',c'^> <> {}
        by A8,A9,A10,A11,ALTCAT_1:def 2,def 4,def 10;
      hence C(a,b,c,f,g) in B(a,c);
           P[a'] & P[b'] & P[c'] by A4;
-     hence q[a,c, C(a,b,c,f,g)] by A2,A8,A9,A10,A11,A12;
+     hence Q[a,c, C(a,b,c,f,g)] by A2,A8,A9,A10,A11,A12;
     end;
 A13: now let a,b,c,d be Element of X, f,g,h being set such that
-A14:   f in B(a,b) & q[a,b,f] and
-A15:   g in B(b,c) & q[b,c,g] and
-A16:   h in B(c,d) & q[c,d,h];
+A14:   f in B(a,b) & Q[a,b,f] and
+A15:   g in B(b,c) & Q[b,c,g] and
+A16:   h in B(c,d) & Q[c,d,h];
      reconsider a' = a, b' = b, c' = c, d' = d as object of A()
         by A4;
 A17:   B(a,b) = <^a',b'^> by ALTCAT_1:def 2;
@@ -562,9 +559,9 @@ A21: now let a be Element of X;
      reconsider f = idm b as set;
      take f;
        B(a,a) = <^b,b^> & P[b] by A4,ALTCAT_1:def 2;
-     hence f in B(a,a) & q[a,a,f] by A3;
+     hence f in B(a,a) & Q[a,a,f] by A3;
      let c be Element of X, g be set such that
-A22:   g in B(a,c) & q[a,c,g];
+A22:   g in B(a,c) & Q[a,c,g];
      reconsider d = c as object of A() by A4;
 A23:   B(a,c) = <^b,d^> by ALTCAT_1:def 2;
      reconsider g' = g as Morphism of b,d by A22,ALTCAT_1:def 2;
@@ -576,9 +573,9 @@ A24: now let a be Element of X;
      reconsider f = idm b as set;
      take f;
        B(a,a) = <^b,b^> & P[b] by A4,ALTCAT_1:def 2;
-     hence f in B(a,a) & q[a,a,f] by A3;
+     hence f in B(a,a) & Q[a,a,f] by A3;
      let c be Element of X, g be set such that
-A25:   g in B(c,a) & q[c,a,g];
+A25:   g in B(c,a) & Q[c,a,g];
      reconsider d = c as object of A() by A4;
 A26:   B(c,a) = <^d,b^> by ALTCAT_1:def 2;
      reconsider g' = g as Morphism of d,b by A25,ALTCAT_1:def 2;
@@ -589,7 +586,7 @@ A26:   B(c,a) = <^d,b^> by ALTCAT_1:def 2;
 A27: the carrier of C = X and
 A28: for a,b being object of C
      for f being set holds f in <^a,b^> iff
-        f in B(a,b) & q[a,b,f] and
+        f in B(a,b) & Q[a,b,f] and
 A29: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
      for f being Morphism of a,b, g being Morphism of b,c
       holds g*f =  C(a,b,c,f,g) from CategoryQuasiLambda(A7,A13,A21,A24);
@@ -700,10 +697,10 @@ A3:   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
   and
 A4:   for a being object of A(), a' being object of B() st a' = O(a)
      holds F(a,a,idm a) = idm a'
-proof deffunc o(set) = O($1);
+proof
    consider O being Function such that
 A5:  dom O = the carrier of A() and
-A6:  for x being set st x in the carrier of A() holds O.x = o(x) from
+A6:  for x being set st x in the carrier of A() holds O.x = O(x) from
 FUNCT_1:sch 3;
         rng O c= the carrier of B()
      proof let y be set; assume y in rng O;
@@ -925,10 +922,10 @@ A3:   for a,b,c being object of A() st <^a,b^> <> {} & <^b,c^> <> {}
   and
 A4:   for a being object of A(), a' being object of B() st a' = O(a)
      holds F(a,a,idm a) = idm a'
-proof deffunc o(set) = O($1);
+proof
    consider O being Function such that
 A5:  dom O = the carrier of A() and
-A6:  for x being set st x in the carrier of A() holds O.x = o(x) from
+A6:  for x being set st x in the carrier of A() holds O.x = O(x) from
 FUNCT_1:sch 3;
         rng O c= the carrier of B()
      proof let y be set; assume y in rng O;
@@ -1328,20 +1325,19 @@ A4:  for a,b being object of B() st <^a,b^> <> {}
     for f being Morphism of a,b
      ex c,d being object of A(), g being Morphism of c,d
       st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g)
-proof deffunc f(set,set,set) = F($1,$2,$3);
-    deffunc o(set) = O($1);
-A5: for a,b being object of A() st o(a) = o(b) holds a = b by A2;
+proof
+A5: for a,b being object of A() st O(a) = O(b) holds a = b by A2;
 A6: for a,b being object of A() st <^a,b^> <> {}
-    for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
      holds f = g by A3;
 A7:  for a,b being object of B() st <^a,b^> <> {}
     for f being Morphism of a,b
      ex c,d being object of A(), g being Morphism of c,d
-      st a = o(c) & b = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A4;
+      st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A4;
     consider F being covariant Functor of A(),B() such that
-A8:  for a being object of A() holds F.a = o(a) and
+A8:  for a being object of A() holds F.a = O(a) and
 A9:  for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a,b,f) by A1;
+     for f being Morphism of a,b holds F.f = F(a,b,f) by A1;
    take F; thus F is bijective from CoBijectiveSch(A8,A9,A5,A6,A7);
    thus thesis;
   end;
@@ -1484,20 +1480,18 @@ A4:  for a,b being object of B() st <^a,b^> <> {}
      ex c,d being object of A(), g being Morphism of c,d
       st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g)
 proof
-    deffunc f(set,set,set) = F($1,$2,$3);
-    deffunc o(set) = O($1);
     consider F being contravariant Functor of A(),B() such that
-A5:  for a being object of A() holds F.a = o(a) and
+A5:  for a being object of A() holds F.a = O(a) and
 A6:  for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a,b,f) by A1;
-A7:  for a,b being object of A() st o(a) = o(b) holds a = b by A2;
+     for f being Morphism of a,b holds F.f = F(a,b,f) by A1;
+A7:  for a,b being object of A() st O(a) = O(b) holds a = b by A2;
 A8:  for a,b being object of A() st <^a,b^> <> {}
-    for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+    for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
      holds f = g by A3;
 A9:  for a,b being object of B() st <^a,b^> <> {}
     for f being Morphism of a,b
      ex c,d being object of A(), g being Morphism of c,d
-      st b = o(c) & a = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A4;
+      st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A4;
    take F; thus F is bijective from ContraBijectiveSch(A5,A6,A7,A8,A9);
    thus thesis;
   end;
@@ -1601,9 +1595,8 @@ A2:   for a,b being object of A() st <^a,b^> <> {}
     for g2 being Morphism of F().b, G().b st g2 = T(b)
      holds g2*F().f = G().f*g1
 proof
-    deffunc t(set) =T($1);
     consider t being ManySortedSet of the carrier of A() such that
-A3: for a being Element of A() holds t.a = t(a)
+A3: for a being Element of A() holds t.a = T(a)
      from PBOOLE:sch 5;
 A4: F() is_transformable_to G()
      proof let a be object of A();
@@ -1651,16 +1644,16 @@ A2:   for a,b being object of A() st <^a,b^> <> {}
     for g1 being Morphism of F().a, G().a st g1 = T(a)
     for g2 being Morphism of F().b, G().b st g2 = T(b)
      holds g2*F().f = G().f*g1
-proof deffunc t(set) = T($1);
+proof
 A3:   for a,b being object of A() st <^a,b^> <> {}
     for f being Morphism of a,b
-    for g1 being Morphism of F().a, G().a st g1 = t(a)
-    for g2 being Morphism of F().b, G().b st g2 = t(b)
+    for g1 being Morphism of F().a, G().a st g1 = T(a)
+    for g2 being Morphism of F().b, G().b st g2 = T(b)
      holds g2*F().f = G().f*g1 by A2;
-A4: for a being object of A() holds t(a) in <^F().a, G().a^> by A1;
+A4: for a being object of A() holds T(a) in <^F().a, G().a^> by A1;
    consider t being natural_transformation of F(), G() such that
 A5: F() is_naturally_transformable_to G() and
-A6: for a being object of A() holds t!a = t(a) from NatTransLambda(A4,A3);
+A6: for a being object of A() holds t!a = T(a) from NatTransLambda(A4,A3);
 A7: G() is_transformable_to F()
      proof let a be object of A();
       thus thesis by A1;
@@ -2864,8 +2857,6 @@ A2:  for a,b being Element of A() holds B(a,b) c= Funcs(D(a), D(b))
  and
 A3:  for a being Element of A() holds id D(a) in B(a,a)
 proof
-    deffunc b(set,set) = B($1,$2);
-    deffunc O(set) = D($1);
     deffunc C(set,set,set,set,set) = $4(#)$5;
 A4: now let a,b be Element of A(), f be set such that
 A5:    f in B(a,b);
@@ -2875,7 +2866,7 @@ A5:    f in B(a,b);
      hence f is Function;
     end;
 A6: for a,b,c being Element of A(), f,g being set
-      st f in b(a,b) & g in b(b,c) holds C(a,b,c,f,g) in b(a,c)
+      st f in B(a,b) & g in B(b,c) holds C(a,b,c,f,g) in B(a,c)
      proof let a,b,c be Element of A(), f,g be set; assume
 A7:     f in B(a,b) & g in B(b,c);
       then reconsider f, g as Function by A4;
@@ -2883,7 +2874,7 @@ A7:     f in B(a,b) & g in B(b,c);
       hence thesis by A1,A7;
      end;
 A8: for a,b,c,d being Element of A(), f,g,h being set
-     st f in b(a,b) & g in b(b,c) & h in b(c,d)
+     st f in B(a,b) & g in B(b,c) & h in B(c,d)
      holds C(a,c,d,C(a,b,c,f,g),h) = C(a,b,d,f,C(b,c,d,g,h))
      proof let a,b,c,d be Element of A();
       let f,g,h be set; assume
@@ -2895,8 +2886,8 @@ A8: for a,b,c,d being Element of A(), f,g,h being set
       hence thesis by YELLOW16:1;
      end;
 A9: for a being Element of A()
-     ex f being set st f in b(a,a) &
-      for b being Element of A(), g being set st g in b(a,b)
+     ex f being set st f in B(a,a) &
+      for b being Element of A(), g being set st g in B(a,b)
        holds C(a,a,b,f,g) = g
      proof let a be Element of A();
       take f = id D(a); thus f in B(a,a) by A3;
@@ -2908,8 +2899,8 @@ A11:    g = h & dom h = D(a) & rng h c= D(b) by A10,FUNCT_2:def 2;
       thus f(#)g = h*f by A11,YELLOW16:1 .= g by A11,FUNCT_1:42;
      end;
 A12: for a being Element of A()
-     ex f being set st f in b(a,a) &
-      for b being Element of A(), g being set st g in b(b,a)
+     ex f being set st f in B(a,a) &
+      for b being Element of A(), g being set st g in B(b,a)
        holds C(b,a,a,g,f) = g
      proof let a be Element of A();
       take f = id D(a); thus f in B(a,a) by A3;
@@ -2922,12 +2913,12 @@ A14:    g = h & dom h = D(b) & rng h c= D(a) by A13,FUNCT_2:def 2;
      end;
    consider C being strict category such that
 A15: the carrier of C = A() and
-A16: for a,b being object of C holds <^a,b^> = b(a,b) and
+A16: for a,b being object of C holds <^a,b^> = B(a,b) and
 A17: for a,b,c being object of C st <^a,b^> <> {} & <^b,c^> <> {}
      for f being Morphism of a,b, g being Morphism of b,c
       holds g*f = C(a,b,c,f,g) from CategoryLambda(A6,A8,A9,A12);
    consider D being ManySortedSet of C such that
-A18:  for x being Element of C holds D.x = O(x) from PBOOLE:sch 5;
+A18:  for x being Element of C holds D.x = D(x) from PBOOLE:sch 5;
 A19: C is para-functional
      proof take D;
       let a1,a2 be object of C;
@@ -3021,7 +3012,6 @@ A10:   a = a' & b = b' by A8,ZFMISC_1:33;
      thus f in F.[a,b] iff P[a,b,f] & f in Funcs(D(a), D(b)) by A9,A10;
     end;
     deffunc B(set,set) = F.[$1,$2];
-    deffunc O(set) = D($1);
 A11: now let a,b,c be Element of A, f,g be Function;
      assume f in B(a,b) & g in B(b,c);
 then A12:   P[a,b,f] & f in Funcs(D(a), D(b)) & P[b,c,g] & g in Funcs(D(b), D(c
@@ -3036,11 +3026,11 @@ then A12:   P[a,b,f] & f in Funcs(D(a), D(b)) & P[b,c,g] & g in Funcs(D(b), D(c
      hence g*f in B(a,c) by A7;
     end;
 A13: now let a,b be Element of A;
-     thus B(a,b) c= Funcs(O(a), O(b))
+     thus B(a,b) c= Funcs(D(a), D(b))
        proof let x be set; thus thesis by A7;
        end;
     end;
-A14: for a being Element of A() holds id O(a) in B(a,a)
+A14: for a being Element of A() holds id D(a) in B(a,a)
      proof let a be Element of A();
            dom id D(a) = D(a) & rng id D(a) = D(a) by RELAT_1:71;
        then P[a,a, id D(a)] & id D(a) in Funcs(D(a), D(a)) by A2,FUNCT_2:def 2
@@ -3050,7 +3040,7 @@ A14: for a being Element of A() holds id O(a) in B(a,a)
    consider C being para-functional semi-functional set-id-inheriting
      strict category such that
 A15: the carrier of C = A() and
-A16: for a being object of C holds the_carrier_of a = O(a) and
+A16: for a being object of C holds the_carrier_of a = D(a) and
 A17: for a,b being object of C holds <^a,b^> = B(a,b)
      from ConcreteCategoryLambda(A11,A13,A14);
    take C; thus the carrier of C = A() by A15;
@@ -3079,19 +3069,17 @@ A1: for a,b,c being Element of A(), f,g being Function
 A2: for a being Element of A(), X being set
      st for x being set holds x in X iff x in B(a) & D[a,x]
      holds P[a,a,id X]
-proof deffunc b(set) = B($1);
-   defpred d[set,set] means D[$1,$2];
-   defpred p[set,set,set] means P[$1,$2,$3];
+proof
 A3: for a,b,c being Element of A(), f,g being Function
-      st p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A1;
+      st P[a,b,f] & P[b,c,g] holds P[a,c,g*f] by A1;
    consider D being Function such that
       dom D = A() and
 A4: for a being set st a in A()
-     for y being set holds y in D.a iff y in b(a) & d[a,y] from CARD_3:sch 4;
+     for y being set holds y in D.a iff y in B(a) & D[a,y] from CARD_3:sch 4;
    deffunc D(set) = D.$1;
 A5: now let a be Element of A();
         for y being set holds y in D.a iff y in B(a) & D[a,y] by A4;
-     hence p[a,a,id D(a)] by A2;
+     hence P[a,a,id D(a)] by A2;
     end;
    consider C being
       para-functional semi-functional set-id-inheriting strict category
@@ -3099,7 +3087,7 @@ A5: now let a be Element of A();
 A6:  the carrier of C = A() and
 A7:  for a being object of C holds the_carrier_of a = D(a) and
 A8:  for a,b being Element of A(), f being Function
-     holds f in (the Arrows of C).(a,b) iff f in Funcs(D(a), D(b)) & p[a,b,f]
+     holds f in (the Arrows of C).(a,b) iff f in Funcs(D(a), D(b)) & P[a,b,f]
       from ConcreteCategoryQuasiLambda(A3, A5);
    take C; thus the carrier of C = A() by A6;
    hereby let a be object of C;
@@ -3122,16 +3110,15 @@ scheme ConcreteCategoryUniq1
      (for a,b being object of C2 holds <^a,b^> = B(a,b))
   holds the AltCatStr of C1 = the AltCatStr of C2
 proof
-    deffunc b(set,set) = B($1,$2);
     deffunc C(set,set,set,set,set) = $4(#)$5;
 A1:  for C1,C2 being non empty transitive AltCatStr
      st the carrier of C1 = A() &
-      (for a,b being object of C1 holds <^a,b^> = b(a,b)) &
+      (for a,b being object of C1 holds <^a,b^> = B(a,b)) &
       (for a,b,c being object of C1 st <^a,b^> <> {} & <^b,c^> <> {}
         for f being Morphism of a,b, g being Morphism of b,c
          holds g*f = C(a,b,c,f,g)) &
       the carrier of C2 = A() &
-      (for a,b being object of C2 holds <^a,b^> = b(a,b)) &
+      (for a,b being object of C2 holds <^a,b^> = B(a,b)) &
       (for a,b,c being object of C2 st <^a,b^> <> {} & <^b,c^> <> {}
         for f being Morphism of a,b, g being Morphism of b,c
          holds g*f = C(a,b,c,f,g))
@@ -3236,16 +3223,15 @@ A6:  for a,b being Element of A(), f being Function
       holds f in (the Arrows of C2).(a,b) iff
           f in Funcs(C2-carrier_of a, C2-carrier_of b) & P[a,b,f];
     deffunc D(set) = C1-carrier_of $1;
-    defpred p[set,set,set] means P[$1,$2,$3];
 A7:  for C1,C2 being para-functional semi-functional category st
       the carrier of C1 = A() &
       (for a,b being Element of A(), f being Function
        holds f in (the Arrows of C1).(a,b) iff
-             f in Funcs(D(a), D(b)) & p[a,b,f]) &
+             f in Funcs(D(a), D(b)) & P[a,b,f]) &
       the carrier of C2 = A() &
       (for a,b being Element of A(), f being Function
        holds f in (the Arrows of C2).(a,b) iff
-             f in Funcs(D(a), D(b)) & p[a,b,f])
+             f in Funcs(D(a), D(b)) & P[a,b,f])
       holds the AltCatStr of C1 = the AltCatStr of C2
        from ConcreteCategoryUniq2;
 A8:  now let a be Element of A();
@@ -3407,10 +3393,9 @@ A9: for a being object of B() holds G.a = O2(a) and
 A10: for a,b being object of B() st <^a,b^> <> {}
      for f being Morphism of a,b holds G.f = F2(a,b,f) by A2;
    take F, G; set GF = G*F, I = id A();
-   deffunc a(set) = A($1);
 A11: for a being object of A() holds
-     a(a) in <^GF.a, I.a^> & <^I.a, GF.a^> <> {} &
-      for f being Morphism of GF.a, I.a st f = a(a) holds f is iso
+     A(a) in <^GF.a, I.a^> & <^I.a, GF.a^> <> {} &
+      for f being Morphism of GF.a, I.a st f = A(a) holds f is iso
      proof let a be object of A();
 A12:    GF.a = G.(F.a) by FUNCTOR0:34 .= O2(F.a) by A9 .= O2(O1(a)) by A7;
            I.a = a by FUNCTOR0:30;
@@ -3421,8 +3406,8 @@ one-to-one
      end;
 A13: for a,b being object of A() st <^a,b^> <> {}
     for f being Morphism of a,b
-    for g1 being Morphism of GF.a, I.a st g1 = a(a)
-    for g2 being Morphism of GF.b, I.b st g2 = a(b)
+    for g1 being Morphism of GF.a, I.a st g1 = A(a)
+    for g2 being Morphism of GF.b, I.b st g2 = A(b)
      holds g2*GF.f = I.f*g1
      proof let a,b be object of A() such that
 A14:    <^a,b^> <> {};
@@ -3442,14 +3427,13 @@ A18:    GF.f = G.(F.f) by A14,FUNCTOR3:6;
      end;
         ex t being natural_equivalence of G*F, id A() st
      G*F, id A() are_naturally_equivalent &
-     for a being object of A() holds t!a = a(a)
+     for a being object of A() holds t!a = A(a)
       from NatEquivalenceLambda(A11,A13);
    hence G*F, id A() are_naturally_equivalent;
    set I = id B(), FG = F*G;
-   deffunc b(set) = B($1);
 A19: for a being object of B() holds
-     b(a) in <^I.a, FG.a^> & <^FG.a, I.a^> <> {} &
-      for f being Morphism of I.a, FG.a st f = b(a) holds f is iso
+     B(a) in <^I.a, FG.a^> & <^FG.a, I.a^> <> {} &
+      for f being Morphism of I.a, FG.a st f = B(a) holds f is iso
      proof let a be object of B();
 A20:    FG.a = F.(G.a) by FUNCTOR0:34 .= O1(G.a) by A7 .= O1(O2(a)) by A9;
            I.a = a by FUNCTOR0:30;
@@ -3460,8 +3444,8 @@ one-to-one
      end;
 A21: for a,b being object of B() st <^a,b^> <> {}
     for f being Morphism of a,b
-    for g1 being Morphism of I.a, FG.a st g1 = b(a)
-    for g2 being Morphism of I.b, FG.b st g2 = b(b)
+    for g1 being Morphism of I.a, FG.a st g1 = B(a)
+    for g2 being Morphism of I.b, FG.b st g2 = B(b)
      holds g2*I.f = FG.f*g1
      proof let a,b be object of B() such that
 A22:    <^a,b^> <> {};
@@ -3481,7 +3465,7 @@ A26:    FG.f = F.(G.f) by A22,FUNCTOR3:6;
      end;
         ex t being natural_equivalence of I, FG st
      I, FG are_naturally_equivalent &
-     for a being object of B() holds t!a = b(a)
+     for a being object of B() holds t!a = B(a)
       from NatEquivalenceLambda(A19,A21);
    hence thesis;
   end;

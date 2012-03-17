@@ -16,7 +16,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SGRAPH1"/>
 </Signature>
@@ -34,7 +33,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -50,14 +49,14 @@
 <Func kind="G" nr="3">
 <Func kind="K" nr="1"/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="112">
+<Func kind="K" nr="96">
 <Func kind="K" nr="1"/>
 </Func>
 </Func>
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -69,7 +68,7 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="1"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="97">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -100,7 +99,7 @@
 </Func>
 </Func>
 <Func kind="K" nr="10">
-<Func kind="K" nr="112">
+<Func kind="K" nr="96">
 <Func kind="K" nr="2">
 <Func kind="U" nr="1">
 <Var nr="1"/>
@@ -119,7 +118,7 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="14">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -134,7 +133,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="112">
+<Func kind="K" nr="96">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
@@ -152,7 +151,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="6">
-<Func kind="K" nr="112">
+<Func kind="K" nr="96">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

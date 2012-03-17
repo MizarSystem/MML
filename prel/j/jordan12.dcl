@@ -16,16 +16,16 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -42,7 +42,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="178">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>

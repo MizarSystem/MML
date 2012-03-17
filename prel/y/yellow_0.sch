@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -27,8 +26,8 @@
 <For>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="16"/>
 </Cluster>
 </Typ>
 <Not>
@@ -56,7 +55,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="21">
+<Pred kind="R" nr="19">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>
@@ -76,7 +75,7 @@
 <Var nr="3"/>
 </Pred>
 <Not>
-<Pred kind="R" nr="21">
+<Pred kind="R" nr="19">
 <Var nr="1"/>
 <Var nr="2"/>
 <Var nr="3"/>

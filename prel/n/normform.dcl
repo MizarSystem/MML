@@ -12,7 +12,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="NORMFORM"/>
@@ -23,7 +22,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="75">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -95,7 +94,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="93">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,7 +108,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="94">
+<Func kind="K" nr="78">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -122,12 +121,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -136,11 +135,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -148,7 +148,6 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -157,11 +156,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="20" value="false"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -172,7 +172,6 @@
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
-<Adjective nr="33"/>
 </Cluster>
 </FCluster>
 </Registrations>

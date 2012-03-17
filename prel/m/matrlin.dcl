@@ -18,7 +18,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XREAL_0"/>
@@ -41,24 +40,24 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="71"/>
+<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="45"/>
-<Adjective nr="48"/>
+<Adjective nr="44"/>
+<Adjective nr="47"/>
+<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,18 +66,18 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="58">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="59">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="60">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="72">
+<Adjective nr="71">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,17 +91,17 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="67"/>
+<Adjective nr="66"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="178">
+<Func kind="K" nr="162">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="67"/>
-<Adjective nr="71"/>
+<Adjective nr="66"/>
+<Adjective nr="70"/>
 </Cluster>
 </CCluster>
 </Registrations>

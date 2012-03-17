@@ -30,7 +30,6 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="BINOP_2"/>
 <ArticleID name="BINARITH"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LANG1"/>
 <ArticleID name="FUNCT_6"/>
@@ -55,7 +54,7 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="31"/>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -167,7 +166,7 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="31"/>
-<Adjective nr="50"/>
+<Adjective nr="49"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

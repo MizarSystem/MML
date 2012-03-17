@@ -1268,11 +1268,10 @@ provided
 A1: for n,x ex y st P[n,x,y] and
 A2: for n,x,y1,y2 st P[n,x,y1] & P[n,x,y2] holds y1 = y2
 proof
-  defpred Q[set,set,set] means P[$1,$2,$3];
-  A3: for n,x ex y st Q[n,x,y] by A1;
-  A4: for n,x,y1,y2 st Q[n,x,y1] & Q[n,x,y2] holds y1 = y2 by A2;
+  A3: for n,x ex y st P[n,x,y] by A1;
+  A4: for n,x,y1,y2 st P[n,x,y1] & P[n,x,y2] holds y1 = y2 by A2;
   consider f being Function such that A5: dom f = NAT & f.0 = A() &
-    for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RecEx(A3,A4);
+    for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecEx(A3,A4);
  thus
       (ex y being set st ex f being Function st
      y = f.n() & dom f = NAT & f.0 = A() &
@@ -1284,11 +1283,11 @@ proof
  end;
   let y1,y2 be set;
   given f1 being Function such that A6: y1 = f1.n() & dom f1 = NAT &
-    f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)];
+    f1.0 = A() & for n holds P[n,f1.n,f1.(n+1)];
   given f2 being Function such that A7: y2 = f2.n() & dom f2 = NAT &
-    f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)];
-  A8: dom f1 = NAT & f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)] by A6;
-  A9: dom f2 = NAT & f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)] by A7;
+    f2.0 = A() & for n holds P[n,f2.n,f2.(n+1)];
+  A8: dom f1 = NAT & f1.0 = A() & for n holds P[n,f1.n,f1.(n+1)] by A6;
+  A9: dom f2 = NAT & f2.0 = A() & for n holds P[n,f2.n,f2.(n+1)] by A7;
       f1 = f2 from RecUn(A8,A9,A4);
   hence y1 = y2 by A6,A7;
 end;
@@ -1366,11 +1365,10 @@ A1: for n being Nat,x being Element of D()
 A2: for n being Nat, x,y1,y2 being Element of D()
       st P[n,x,y1] & P[n,x,y2] holds y1 = y2
 proof
-  defpred Q[set,set,set] means P[$1,$2,$3];
   A3: for n being Nat,x being Element of D()
-      ex y being Element of D() st Q[n,x,y] by A1;
+      ex y being Element of D() st P[n,x,y] by A1;
   consider f being Function of NAT,D() such that A4: f.0 = A() &
-    for n being Element of NAT holds Q[n,f.n,f.(n+1)] from RecExD(A3);
+    for n being Element of NAT holds P[n,f.n,f.(n+1)] from RecExD(A3);
 thus
       (ex y being Element of D() st ex f being Function of NAT,D() st
      y = f.n() & f.0 = A() &
@@ -1381,14 +1379,14 @@ thus
          for n holds P[n,f.n,f.(n+1)] by A4;
  end;
 A5: for n being Nat, x,y1,y2 being Element of D()
-      st Q[n,x,y1] & Q[n,x,y2] holds y1 = y2 by A2;
+      st P[n,x,y1] & P[n,x,y2] holds y1 = y2 by A2;
   let y1,y2 be Element of D();
   given f1 being Function of NAT,D() such that A6: y1 = f1.n() &
-    f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)];
+    f1.0 = A() & for n holds P[n,f1.n,f1.(n+1)];
   given f2 being Function of NAT,D() such that A7: y2 = f2.n() &
-    f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)];
-  A8: f1.0 = A() & for n holds Q[n,f1.n,f1.(n+1)] by A6;
-  A9: f2.0 = A() & for n holds Q[n,f2.n,f2.(n+1)] by A7;
+    f2.0 = A() & for n holds P[n,f2.n,f2.(n+1)];
+  A8: f1.0 = A() & for n holds P[n,f1.n,f1.(n+1)] by A6;
+  A9: f2.0 = A() & for n holds P[n,f2.n,f2.(n+1)] by A7;
       f1 = f2 from RecUnD(A8,A9,A5);
   hence y1 = y2 by A6,A7;
 end;
@@ -1474,21 +1472,20 @@ A1: for k,y st 1 <= k & k < len S() ex z st P[S().(k+1),y,z] and
 A2: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
           P[z,x,y1] & P[z,x,y2] holds y1 = y2
 proof
-  defpred Q[set,set,set] means P[$1,$2,$3];
-A3: for k,y st 1 <= k & k < len S() ex z st Q[S().(k+1),y,z] by A1;
+A3: for k,y st 1 <= k & k < len S() ex z st P[S().(k+1),y,z] by A1;
 A4: for k,x,y1,y2,z st 1 <= k & k < len S() & z = S().(k+1) &
-          Q[z,x,y1] & Q[z,x,y2] holds y1 = y2 by A2;
+          P[z,x,y1] & P[z,x,y2] holds y1 = y2 by A2;
   thus
      (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
      p.1 = S().1 & for k st 1 <= k & k < len S() holds
-        Q[S().(k+1),p.k,p.(k+1)]) from SeqBinOpEx(A3,A4);
+        P[S().(k+1),p.k,p.(k+1)]) from SeqBinOpEx(A3,A4);
   let x,y;
   assume A5: ex p being FinSequence st x = p.(len p) & len p = len S() &
      p.1 = S().1 & for k st 1 <= k & k < len S() holds
-        Q[S().(k+1),p.k,p.(k+1)];
+        P[S().(k+1),p.k,p.(k+1)];
   assume A6: ex p being FinSequence st y = p.(len p) & len p = len S() &
      p.1 = S().1 & for k st 1 <= k & k < len S() holds
-        Q[S().(k+1),p.k,p.(k+1)];
+        P[S().(k+1),p.k,p.(k+1)];
   thus x = y from SeqBinOpUn(A4,A5,A6);
 end;
 
@@ -1505,17 +1502,16 @@ scheme LambdaSeqBinOpDef{S() -> FinSequence,F(set,set) -> set}:
        holds p.(k+1) = F(S().(k+1),p.k))
    holds x = y
 proof
-  deffunc G(set,set)= F($1,$2);
   thus
       (ex x st ex p being FinSequence st x = p.(len p) & len p = len S() &
        p.1 = S().1 & for k st 1 <= k & k < len S()
-      holds p.(k+1) = G(S().(k+1),p.k)) from LambdaSeqBinOpEx;
+      holds p.(k+1) = F(S().(k+1),p.k)) from LambdaSeqBinOpEx;
   let x,y;
   assume A1: ex p being FinSequence st x = p.(len p) & len p = len S() &
     p.1 = S().1 & for k st 1 <= k & k < len S()
-       holds p.(k+1) = G(S().(k+1),p.k);
+       holds p.(k+1) = F(S().(k+1),p.k);
   assume A2: ex p being FinSequence st y = p.(len p) & len p = len S() &
     p.1 = S().1 & for k st 1 <= k & k < len S()
-      holds p.(k+1) = G(S().(k+1),p.k);
+      holds p.(k+1) = F(S().(k+1),p.k);
   thus x = y from LambdaSeqBinOpUn(A1,A2);
 end;

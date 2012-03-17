@@ -12,16 +12,15 @@ environ
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, PRE_TOPC, STRUCT_0, NUMBERS,
       XCMPLX_0, XREAL_0, FUNCT_1, CARD_1, NAT_1, REAL_1, FUNCT_2, FINSEQ_1,
       RLVECT_1, RLSUB_1, FINSEQ_4, RLVECT_2, RVSUM_1, BHSP_1, RUSUB_4, RUSUB_5;
- constructors REAL_1, EUCLID, SEQ_1, RUSUB_5, FINSEQ_4, RLVECT_2, MEMBERED,
-      BINOP_2;
+ constructors REAL_1, EUCLID, SEQ_1, RUSUB_5, FINSEQ_4, RLVECT_2, BINOP_2;
  registrations STRUCT_0, XREAL_0, RELSET_1, ARYTM_3, RLVECT_1, SEQ_1, RUSUB_4,
-      MEMBERED;
+      MEMBERED, SUBSET_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  theorems BHSP_1, SUBSET_1, RLVECT_1, RVSUM_1, FUNCT_1, FINSEQ_1, TARSKI,
       ZFMISC_1, REAL_1, XBOOLE_0, REAL_2, SETFAM_1, AXIOMS, RLSUB_1, RUSUB_4,
       RUSUB_5, XBOOLE_1, RLVECT_2, CARD_1, FINSEQ_3, FINSEQ_4, CARD_2,
       ENUMSET1, WAYBEL18, XCMPLX_1;
- schemes DOMAIN_1, SETFAM_1;
+ schemes DOMAIN_1, SUBSET_1;
 
 begin  :: Convex Sets
 
@@ -1794,44 +1793,6 @@ theorem
 
 begin  :: Convex Hull
 
-scheme SubFamExRLS {A() -> RLSStruct, P[Subset of A()]}:
-   ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B]
-proof
-  defpred R[Subset of A()] means P[$1];
-   consider F being Subset-Family of A() such that
-A1: for B being Subset of A() holds B in F iff R[B]
-     from SETFAM_1:sch 1;
-   thus thesis by A1;
-end;
-
-scheme SubFamExRLS2 {A() -> RLSStruct, P[Subset of A()]}:
-   ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B]
-proof
-   defpred R[Subset of A()] means
-    ex B be Subset of A() st B = $1 & P[B];
-   consider F being Subset-Family of A() such that
-A1: for B' being Subset of A() holds B' in F iff R[B']
-     from SETFAM_1:sch 1;
-   reconsider F as Subset-Family of A();
-   take F;
-       for B being Subset of A() holds B in F iff P[B]
-   proof
-     let B be Subset of A();
-         B in F implies P[B]
-     proof
-       assume
-A2:    B in F;
-       reconsider B as Subset of A();
-       ex B' be Subset of A() st B' = B & P[B'] by A1,A2;
-       hence thesis;
-     end;
-     hence thesis by A1;
-   end;
-   hence thesis;
-end;
-
 definition let V be non empty RLSStruct, M be Subset of V;
   func Convex-Family M -> Subset-Family of V means :Def4:
    for N being Subset of V holds N in it iff (N is convex & M c= N);
@@ -1839,7 +1800,7 @@ existence
 proof
    defpred P[Subset of V] means $1 is convex & M c= $1;
    thus ex F be Subset-Family of V st
-    for N being Subset of V holds N in F iff P[N] from SubFamExRLS2;
+    for N being Subset of V holds N in F iff P[N] from SUBSET_1:sch 3;
 end;
 uniqueness
 proof

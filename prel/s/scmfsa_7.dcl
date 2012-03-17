@@ -20,7 +20,6 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_7"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -29,6 +28,7 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="SCMFSA_2"/>
 </Signature>
@@ -63,7 +63,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="17">
+<Typ kind="M" nr="15">
 <Cluster/>
 <Func kind="K" nr="14">
 <Func kind="K" nr="55"/>
@@ -71,7 +71,7 @@
 <Func kind="K" nr="55"/>
 </Func>
 </Func>
-<Func kind="K" nr="249"/>
+<Func kind="K" nr="241"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>

@@ -12,12 +12,12 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="REALSET1"/>
 <ArticleID name="MEMBERED"/>
@@ -36,9 +36,9 @@
 <Adjective nr="9"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
+<Adjective nr="26"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="29"/>
 <Adjective nr="36"/>
 </Cluster>
@@ -50,7 +50,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 <Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
@@ -70,7 +70,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 <Adjective nr="30" value="false"/>
 </Cluster>
 </RCluster>
@@ -88,7 +88,7 @@
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 </FCluster>
 <FCluster>

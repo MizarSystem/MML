@@ -22,7 +22,6 @@
 <ArticleID name="MARGREL1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
@@ -32,14 +31,14 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="188"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="188"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="29"/>
@@ -61,14 +60,14 @@
 </Cluster>
 <Func kind="K" nr="67"/>
 </Typ>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="17">
 <Cluster/>
 <Func kind="K" nr="67"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="191">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -98,14 +97,14 @@
 </Cluster>
 <Func kind="K" nr="67"/>
 </Typ>
-<Typ kind="M" nr="19">
+<Typ kind="M" nr="17">
 <Cluster/>
 <Func kind="K" nr="67"/>
 <LocusVar nr="2"/>
 <Num nr="6"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="208">
+<Func kind="K" nr="192">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -124,7 +123,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="204"/>
+<Func kind="K" nr="188"/>
 </Typ>
 <Cluster>
 <Adjective nr="2"/>

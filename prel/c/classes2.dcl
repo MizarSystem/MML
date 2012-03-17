@@ -11,8 +11,8 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="CLASSES1"/>
 <ArticleID name="ORDINAL2"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CLASSES2"/>
 </Signature>
@@ -173,7 +173,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

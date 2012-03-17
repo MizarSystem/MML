@@ -19,11 +19,10 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="FIN_TOPO"/>
 </Signature>
@@ -33,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="51"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -42,8 +41,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -52,18 +51,18 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="48"/>
+<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="208"/>
+<Func kind="K" nr="192"/>
 <Cluster>
-<Adjective nr="43" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 </Registrations>

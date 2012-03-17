@@ -22,7 +22,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
@@ -38,16 +37,16 @@
 <ArgTypes>
 <Typ kind="G" nr="13">
 <Cluster>
-<Adjective nr="42" value="false"/>
+<Adjective nr="41" value="false"/>
+<Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="54"/>
-<Adjective nr="72"/>
-<Adjective nr="75"/>
-<Adjective nr="82"/>
-<Adjective nr="87"/>
+<Adjective nr="53"/>
+<Adjective nr="71"/>
+<Adjective nr="74"/>
+<Adjective nr="81"/>
+<Adjective nr="86"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -57,7 +56,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="222">
+<Func kind="K" nr="206">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -70,13 +69,13 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="76">
+<Adjective nr="75">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="87">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="88">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="89">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

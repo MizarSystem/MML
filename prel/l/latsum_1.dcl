@@ -10,7 +10,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -23,37 +22,37 @@
 </Typ>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="17"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="16"/>
 </Cluster>
 </FCluster>
 </Registrations>

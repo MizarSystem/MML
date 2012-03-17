@@ -18,12 +18,12 @@ environ
       FUNCT_2, METRIC_1, PCOMPS_1, EUCLID, NORMSP_1, BORSUK_1, CARD_3, PROB_1,
       PSCOMP_1, LIMFUNC1, CONNSP_2, TOPREAL1, TOPREAL2, JORDAN2C, SEQM_3,
       GOBOARD9, FRECHET, FRECHET2, TOPRNS_1, JORDAN9, FUNCT_6, YELLOW_6;
- constructors REAL_1, JORDAN2C, GROUP_1, TOPREAL2, CONNSP_1, PSCOMP_1, TOPS_1,
-      WEIERSTR, CARD_3, TOPRNS_1, FRECHET, NAT_1, JORDAN9, TBSP_1, CQC_SIM1,
-      LIMFUNC1, GOBOARD9, YELLOW_6, FUNCT_6, FRECHET2, NORMSP_1, PROB_1;
- registrations XREAL_0, RELSET_1, NAT_1, INT_1, JORDAN1B, SUBSET_1, STRUCT_0,
-      TOPS_1, BORSUK_1, EUCLID, FINSET_1, METRIC_1, TOPREAL6, GOBRD14,
-      HAUSDORF, SEQ_1, SEQM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2;
+ constructors REAL_1, JORDAN2C, TOPREAL2, CONNSP_1, PSCOMP_1, TOPS_1, WEIERSTR,
+      TOPRNS_1, FRECHET, NAT_1, JORDAN9, TBSP_1, CQC_SIM1, LIMFUNC1, GOBOARD9,
+      YELLOW_6, FUNCT_6, FRECHET2, PROB_1;
+ registrations XREAL_0, RELSET_1, INT_1, JORDAN1B, SUBSET_1, STRUCT_0, TOPS_1,
+      BORSUK_1, EUCLID, FINSET_1, METRIC_1, TOPREAL6, GOBRD14, HAUSDORF, SEQ_1,
+      SEQM_3, MEMBERED, FUNCT_2, PARTFUN1, ORDINAL2, JORDAN2C;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions XBOOLE_0, TARSKI;
  theorems SETFAM_1, FRECHET, EUCLID, METRIC_1, SEQ_2, REAL_1, TOPREAL3,
@@ -32,7 +32,7 @@ environ
       AXIOMS, SQUARE_1, XREAL_0, SPPOL_1, TOPS_1, TOPREAL6, JORDAN2C, TBSP_1,
       METRIC_6, FIN_TOPO, ZFMISC_1, RELAT_1, TARSKI, FUNCOP_1, GOBRD14,
       FUNCT_6, SEQM_3, XCMPLX_1, MCART_1, BORSUK_1, PROB_1, FRECHET2;
- schemes XBOOLE_0, WELLORD2, FUNCT_2, BINOP_2, NAT_1, LATTICE5;
+ schemes XBOOLE_0, WELLORD2, FUNCT_2, BINOP_2, NAT_1, LATTICE5, SUBSET_1;
 
 begin :: Preliminaries
 
@@ -135,10 +135,9 @@ scheme LambdaSSeq { X() -> set,
   ex f being SetSequence of X() st
     for n being Nat holds f.n = F(n)
 proof
-    deffunc G(set) = F($1);
     set Y = bool X();
-A1: for x be set st x in NAT holds G(x) in Y;
-      ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = G(x)
+A1: for x be set st x in NAT holds F(x) in Y;
+      ex f be Function of NAT, Y st for x be set st x in NAT holds f.x = F(x)
       from FUNCT_2:sch 2(A1);
     then consider f be Function of NAT, Y such that
 A2: for x be set st x in NAT holds f.x = F(x);
@@ -160,7 +159,7 @@ definition let X be set,
   redefine func meet F -> Subset of X;
   coherence
   proof
-    reconsider G = rng F as Subset-Family of X by SETFAM_1:def 7;
+    reconsider G = rng F as Subset-Family of X;
     meet G c= X;
     hence thesis by FUNCT_6:def 4;
   end;
@@ -1392,9 +1391,8 @@ A1: for r being Real st r > 0
       S is non Bounded
     proof
       assume S is Bounded;
-      then consider C being Subset of Euclid n such that
-A2:   C = S & C is bounded by JORDAN2C:def 2;
-      thus thesis by A1,A2,TBSP_1:def 9;
+      then S is bounded Subset of Euclid n by JORDAN2C:def 2;
+      hence thesis by A1,TBSP_1:def 9;
     end;
     hence thesis;
   end;
@@ -1459,48 +1457,6 @@ theorem Th41:
     assume V is a_neighborhood of [ x, y ];
     then V is a_neighborhood of { [ x, y ] } by CONNSP_2:10;
     hence thesis by ZFMISC_1:35;
-  end;
-
-scheme TSubsetEx { S() -> non empty TopStruct, P[set] } :
-  ex X being Subset of S() st
-   for x being Point of S() holds x in X iff P[x]
-proof
-    defpred G[set] means P[$1];
-    consider A being set such that
-A1:  for x being set holds x in A iff x in the carrier of S() & G[x]
-      from XBOOLE_0:sch 1;
-      A c= the carrier of S()
-    proof
-      let x be set;
-      assume x in A;
-      hence thesis by A1;
-    end;
-    then reconsider A as Subset of S();
-    take A;
-    thus thesis by A1;
-  end;
-
-scheme TSubsetUniq { S() -> TopStruct, P[set] } :
-  for A1, A2 being Subset of S() st
-  (for x being Point of S() holds x in A1 iff P[x]) &
-  (for x being Point of S() holds x in A2 iff P[x]) holds
-    A1 = A2
-proof
-    let A, B be Subset of S() such that
-A1:   for p being Point of S() holds p in A iff P[p] and
-A2:   for p being Point of S() holds p in B iff P[p];
-    hereby
-      let x be set;
-      assume
-A3:   x in A;
-      then P[x] by A1;
-      hence x in B by A2,A3;
-    end;
-    let x be set;
-    assume
-A4: x in B;
-    then P[x] by A2;
-    hence x in A by A1,A4;
   end;
 
 definition let T be non empty set;
@@ -1820,7 +1776,7 @@ definition let T be non empty TopSpace;
      thus ex IT being Subset of T st
     for p being Point of T holds
         p in IT iff P[p]
-     from TSubsetEx;
+     from SUBSET_1:sch 3;
    end;
   uniqueness
    proof
@@ -1830,7 +1786,7 @@ definition let T be non empty TopSpace;
      thus for a,b being Subset of T st
     (for p being Point of T holds p in a iff P[p]) &
     (for p being Point of T holds p in b iff P[p]) holds a=b
-     from TSubsetUniq;
+     from SUBSET_1:sch 2;
    end;
 end;
 
@@ -2284,11 +2240,10 @@ A1: P is Bounded and
 A2: for i being Nat holds S.i c= P;
     assume
 A3: Lim_inf S is non Bounded;
-    consider P' being Subset of Euclid n such that
-A4: P' = P & P' is bounded by A1,JORDAN2C:def 2;
+    reconsider P'= P as bounded Subset of Euclid n by A1,JORDAN2C:def 2;
     consider t being Real,
              z being Point of Euclid n such that
-A5: 0 < t & P' c= Ball (z,t) by A4,METRIC_6:def 10;
+A5: 0 < t & P' c= Ball (z,t) by METRIC_6:def 10;
     set r = 1, R = r + r + 3*t;
       3*t > 3*0 by A5,REAL_1:70;
     then R > 3*0 by JORDAN2C:6;
@@ -2299,7 +2254,7 @@ A7: for m being Nat st m > k1 holds S.m meets Ball (x, r) by A6,Th50;
     consider k2 being Nat such that
 A8: for m being Nat st m > k2 holds S.m meets Ball (y, r) by A6,Th50;
     set k = max (k1, k2) + 1;
-      S.k c= P' by A2,A4;
+      S.k c= P' by A2;
 then A9: S.k c= Ball (z,t) by A5,XBOOLE_1:1;
       max (k1,k2) >= k1 by SQUARE_1:46;
     then k > k1 by NAT_1:38;

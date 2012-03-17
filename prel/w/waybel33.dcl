@@ -16,9 +16,9 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -61,7 +61,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
@@ -92,12 +92,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
@@ -124,11 +124,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="372">
+<Func kind="K" nr="364">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
@@ -145,14 +145,14 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="176"/>
 </Cluster>
 <Typ kind="G" nr="16">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
 </Cluster>
 </CCluster>
@@ -171,7 +171,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="31"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
@@ -185,19 +185,19 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="94"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="52"/>
 <Adjective nr="94"/>
@@ -215,12 +215,12 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="33">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>

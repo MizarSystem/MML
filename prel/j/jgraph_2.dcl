@@ -11,10 +11,10 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_1"/>
@@ -50,7 +50,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="174">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -59,23 +59,23 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="21">
+<Adjective nr="20">
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
 <Adjective nr="28">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Adjective>

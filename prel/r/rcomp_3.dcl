@@ -6,12 +6,12 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="COMPTS_1"/>
@@ -83,7 +83,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="95"/>
 </Func>
 </Typ>
 <Cluster>
@@ -102,7 +102,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="95"/>
 </Func>
 </Typ>
 <Cluster>
@@ -147,7 +147,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="5" value="false"/>
+<Adjective nr="4" value="false"/>
 <Adjective nr="15"/>
 <Adjective nr="19"/>
 </Cluster>
@@ -182,10 +182,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Func>
 </Typ>
 <Cluster>
@@ -245,7 +249,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="437">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -270,7 +274,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="446">
+<Func kind="K" nr="438">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -295,7 +299,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="356">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -321,7 +325,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="363">
+<Func kind="K" nr="355">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -349,7 +353,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="445">
+<Func kind="K" nr="437">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -375,7 +379,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="446">
+<Func kind="K" nr="438">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -401,7 +405,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="364">
+<Func kind="K" nr="356">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -423,7 +427,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="448">
+<Func kind="K" nr="440">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -444,7 +448,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="471">
+<Func kind="K" nr="463">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -465,7 +469,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="449">
+<Func kind="K" nr="441">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -486,7 +490,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="450">
+<Func kind="K" nr="442">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -502,7 +506,7 @@
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="15">
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="95"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
@@ -523,13 +527,13 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="408"/>
+<Func kind="K" nr="400"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="76">
-<Func kind="K" nr="408"/>
+<Func kind="K" nr="68">
+<Func kind="K" nr="400"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -546,11 +550,11 @@
 <Adjective nr="147"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="103"/>
+<Func kind="K" nr="95"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="415">
+<Func kind="K" nr="407">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -567,12 +571,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="393">
+<Func kind="K" nr="385">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="5" value="false"/>
+<Adjective nr="4" value="false"/>
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="22"/>
@@ -585,9 +589,9 @@
 <CCluster>
 <ArgTypes/>
 <Cluster/>
-<Typ kind="M" nr="24">
+<Typ kind="M" nr="22">
 <Cluster/>
-<Func kind="K" nr="276"/>
+<Func kind="K" nr="268"/>
 </Typ>
 <Cluster>
 <Adjective nr="142"/>

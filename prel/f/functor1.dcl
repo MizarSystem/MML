@@ -19,10 +19,9 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="ALTCAT_1"/>
 <ArticleID name="CAT_1"/>
@@ -37,47 +36,47 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="47"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="36"/>
+<Adjective nr="46"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="22">
+<Typ kind="M" nr="20">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="70">
+<Adjective nr="69">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -85,22 +84,22 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Typ>
-<Typ kind="M" nr="22">
+<Typ kind="M" nr="20">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="59"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="218">
+<Func kind="K" nr="202">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="70">
+<Adjective nr="69">
 <LocusVar nr="4"/>
 <LocusVar nr="2"/>
 </Adjective>

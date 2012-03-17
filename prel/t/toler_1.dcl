@@ -3,9 +3,9 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="WELLORD1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
@@ -20,8 +20,8 @@
 </Typ>
 <Typ kind="M" nr="4">
 <Cluster>
-<Adjective nr="4"/>
-<Adjective nr="6"/>
+<Adjective nr="8"/>
+<Adjective nr="10"/>
 <Adjective nr="17">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -48,14 +48,14 @@
 <Func kind="K" nr="16"/>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="6"/>
-<Adjective nr="7"/>
 <Adjective nr="8"/>
 <Adjective nr="9"/>
 <Adjective nr="10"/>
 <Adjective nr="11"/>
+<Adjective nr="12"/>
+<Adjective nr="13"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
 <Adjective nr="16"/>
 </Cluster>
 </FCluster>

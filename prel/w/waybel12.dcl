@@ -24,9 +24,9 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -55,7 +55,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -104,7 +104,7 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -138,10 +138,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="40">
+<Func kind="K" nr="40">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Func>
 </Typ>
 <Cluster>
@@ -177,7 +181,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="29">
+<Typ kind="M" nr="27">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -243,7 +247,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -277,7 +281,7 @@
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="317">
+<Func kind="K" nr="309">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -303,7 +307,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="201">
+<Func kind="K" nr="193">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -316,7 +320,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -383,7 +387,7 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
 <Adjective nr="46"/>
 <Adjective nr="48"/>
 <Adjective nr="73"/>

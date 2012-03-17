@@ -22,8 +22,8 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -39,7 +39,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="11">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -55,9 +55,9 @@
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="41">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
@@ -72,9 +72,9 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="41">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
@@ -104,9 +104,9 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="41">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
@@ -149,7 +149,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="215">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -159,9 +159,9 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="226"/>
+<Func kind="K" nr="218"/>
 <Cluster>
-<Adjective nr="40" value="false"/>
+<Adjective nr="39" value="false"/>
 <Adjective nr="41">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>

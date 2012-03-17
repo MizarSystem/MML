@@ -14,8 +14,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -35,18 +35,18 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -59,18 +59,18 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="229">
+<Func kind="K" nr="221">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -83,14 +83,14 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="79"/>
 </Cluster>
 <Func kind="K" nr="52"/>
 </Typ>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="79"/>
@@ -98,7 +98,7 @@
 <Func kind="K" nr="52"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="231">
+<Func kind="K" nr="223">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -117,14 +117,14 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="K" nr="52"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="232">
+<Func kind="K" nr="224">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -138,18 +138,18 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="233">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

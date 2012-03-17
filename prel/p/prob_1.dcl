@@ -15,7 +15,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -28,14 +27,18 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="40">
+<Func kind="K" nr="40">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="30"/>
-<Adjective nr="37">
+<Adjective nr="29"/>
+<Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -45,12 +48,12 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -72,13 +75,13 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="30"/>
-<Adjective nr="37">
+<Adjective nr="29"/>
+<Adjective nr="36">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

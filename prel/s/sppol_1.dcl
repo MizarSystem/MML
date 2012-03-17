@@ -14,10 +14,9 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="FINSET_1"/>
@@ -26,19 +25,20 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
+<ArticleID name="REALSET1"/>
 <ArticleID name="SPPOL_1"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="49" value="false"/>
 <Adjective nr="50"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="176">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -51,14 +51,14 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="49" value="false"/>
 <Adjective nr="51"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="176">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>

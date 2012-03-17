@@ -17,14 +17,14 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="MARGREL1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
 <ArticleID name="SUBSTUT1"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="SUBLEMMA"/>
 </Signature>
@@ -33,8 +33,8 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="188"/>
+<Func kind="K" nr="210"/>
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="1"/>
@@ -43,14 +43,14 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="188"/>
+<Func kind="K" nr="210"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="212"/>
-<Func kind="K" nr="234"/>
+<Func kind="K" nr="188"/>
+<Func kind="K" nr="210"/>
 </Typ>
 <For>
 <Typ kind="M" nr="3">
@@ -59,7 +59,7 @@
 <Func kind="K" nr="106"/>
 </Typ>
 <For>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="12">
 <Cluster/>
 <Func kind="K" nr="260">
 <Var nr="1"/>
@@ -75,7 +75,7 @@
 <For>
 <Typ kind="M" nr="9">
 <Cluster>
-<Adjective nr="32">
+<Adjective nr="36">
 <Var nr="5"/>
 </Adjective>
 </Cluster>
@@ -92,7 +92,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="197"/>
+<Func kind="K" nr="173"/>
 </Typ>
 <And>
 <Pred kind="P" nr="1">
@@ -105,7 +105,7 @@
 </Pred>
 <Not>
 <And>
-<Pred kind="V" nr="41">
+<Pred kind="V" nr="38">
 <Var nr="1"/>
 </Pred>
 <Not>
@@ -132,10 +132,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="215">
+<Func kind="K" nr="191">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="215">
+<Func kind="K" nr="191">
 <Var nr="2"/>
 </Func>
 </Pred>
@@ -157,7 +157,7 @@
 </Not>
 <Not>
 <And>
-<Pred kind="V" nr="42">
+<Pred kind="V" nr="39">
 <Func kind="K" nr="260">
 <Var nr="1"/>
 <Var nr="3"/>

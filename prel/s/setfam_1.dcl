@@ -9,34 +9,6 @@
 <ArticleID name="SETFAM_1"/>
 </Signature>
 <RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="4">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="4">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -51,11 +23,15 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="4">
+<Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1"/>
 </Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="28">

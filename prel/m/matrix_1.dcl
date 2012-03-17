@@ -17,7 +17,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XREAL_0"/>
@@ -36,7 +35,7 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -56,7 +55,7 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -79,14 +78,14 @@
 <Adjective nr="4"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -94,7 +93,7 @@
 <Func kind="K" nr="76"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="144">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -130,7 +130,6 @@
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="30"/>
 <Adjective nr="34"/>
 <Adjective nr="35">
 <Func kind="K" nr="56"/>

@@ -16,13 +16,11 @@ environ
       MEMBERED, RELAT_1, FUNCT_1, FUNCT_2, SEQ_1, SEQ_2, SEQ_4, RCOMP_1,
       LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1,
       MEASURE6;
- constructors REAL_1, TOPS_2, NAT_1, INT_1, FINSOP_1, ABSVALUE, SEQ_2, SEQ_4,
-      AMI_1, RCOMP_1, COMPTS_1, LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1,
-      XCMPLX_0, XREAL_0, MEMBERED, RELSET_1, PARTFUN1, XBOOLE_0, COMPLEX1,
-      MEASURE6, SPPOL_2;
+ constructors REAL_1, TOPS_2, INT_1, FINSOP_1, SEQ_2, SEQ_4, RCOMP_1, COMPTS_1,
+      LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1, COMPLEX1, MEASURE6;
  registrations SUBSET_1, STRUCT_0, PRE_TOPC, RCOMP_1, SEQM_3, EUCLID, PCOMPS_1,
-      FUNCT_1, XREAL_0, RELSET_1, SEQ_1, SETFAM_1, INT_1, SEQ_2, NAT_1,
-      MEMBERED, RELAT_1, FUNCT_2, ORDINAL2, SPPOL_2;
+      FUNCT_1, XREAL_0, RELSET_1, SEQ_1, SETFAM_1, INT_1, SEQ_2, MEMBERED,
+      RELAT_1, FUNCT_2, ORDINAL2, SPPOL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQ_2, SEQ_4, TOPS_2, COMPTS_1, RCOMP_1, ORDINAL1,
       XBOOLE_0;
@@ -924,7 +922,7 @@ definition let X be Subset of REAL;
    defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
    reconsider Z = { A where A is Element of bool REAL : P[A] }
     as Subset of bool REAL from DOMAIN_1:sch 7;
-   reconsider Z as Subset-Family of REAL by SETFAM_1:def 7;
+   reconsider Z as Subset-Family of REAL;
       meet Z is Subset of REAL;
   hence thesis;
  end;
@@ -992,7 +990,7 @@ registration let X be Subset of REAL;
    defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
    reconsider Z = { A where A is Element of bool REAL : P[A] }
    as Subset of bool REAL from DOMAIN_1:sch 7;
-   reconsider Z as Subset-Family of REAL by SETFAM_1:def 7;
+   reconsider Z as Subset-Family of REAL;
 A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
      then ex A being Element of bool REAL st Y = A & X c= A & A is closed;
     hence Y is closed;
@@ -1510,30 +1508,19 @@ scheme NonUniqExRF{X() -> non empty TopStruct, P[set,set]}:
 provided
 A1: for x being set st x in the carrier of X() ex r3 st P[x, r3]
 proof
-  defpred Q[set,set] means P[$1,$2];
 A2: for x being set st x in the carrier of X()
-     ex y being set st y in REAL & Q[x,y]
+     ex y being set st y in REAL & P[x,y]
    proof let x be set;
     assume x in the carrier of X();
     then ex r3 st P[x, r3] by A1;
     hence thesis;
    end;
   consider f being Function of the carrier of X(),REAL such that
-A3: for x being set st x in the carrier of X() holds Q[x,f.x]
+A3: for x being set st x in the carrier of X() holds P[x,f.x]
    from FUNCT_2:sch 1(A2);
   reconsider f as RealMap of X();
   take f;
   thus thesis by A3;
- end;
-
-scheme LambdaRF{X() -> non empty TopStruct, F(set) -> Real}:
-ex f being RealMap of X() st
- for x being Element of X() holds f.x = F(x)
-proof
-  defpred P[set,set] means $2 = F($1);
-A1: for x being set st x in the carrier of X() ex r3 st P[x,r3];
-  thus ex f be RealMap of X() st for x be Element of X() holds
-   P[x,f.x] from NonUniqExRF(A1);
  end;
 
 definition let T be 1-sorted, f be RealMap of T, P be set;
@@ -1886,7 +1873,7 @@ definition let X, Y be set, f be Function of bool X, bool Y;
   coherence
   proof
        f.:R c= bool Y;
-    hence thesis by SETFAM_1:def 7;
+    hence thesis;
   end;
 end;
 
@@ -2105,11 +2092,10 @@ A3: for s be real number ex r be real number
        st r in f.:(the carrier of T) & r > s;
     consider p being Element of T;
     defpred P[Real] means $1 >= f.p;
-    deffunc F(Real) = right_closed_halfline($1);
-    set R = {F(r3) : P[r3]};
+    set R = {right_closed_halfline(r3) : P[r3]};
 A4: R is Subset of bool REAL from DOMAIN_1:sch 8;
 A5: right_closed_halfline(f.p) in R;
-    then reconsider R as non empty Subset-Family of REAL by A4,SETFAM_1:def 7;
+    then reconsider R as non empty Subset-Family of REAL by A4;
     reconsider F = ("f).:R as Subset-Family of T;
 A6: ("f).right_closed_halfline(f.p) in F by A5,FUNCT_2:43;
        now assume {} in F; then consider rchx being set such that
@@ -2187,11 +2173,10 @@ A36: for s be real number ex r3 be real number st
       r3 in f.:(the carrier of T) & r3 < s;
     consider p being Element of T;
     defpred P[Real] means $1 <= f.p;
-    deffunc F(Real) = left_closed_halfline($1);
-    set R = {F(r3): P[r3]};
+    set R = {left_closed_halfline(r3): P[r3]};
 A37: R is Subset of bool REAL from DOMAIN_1:sch 8;
 A38: left_closed_halfline(f.p) in R;
-    then reconsider R as non empty Subset-Family of REAL by A37,SETFAM_1:def 7;
+    then reconsider R as non empty Subset-Family of REAL by A37;
     reconsider F = ("f).:R as Subset-Family of T;
     A39: ("f).left_closed_halfline(f.p) in F by A38,FUNCT_2:43;
        now assume {} in F; then consider rchx being set such that
@@ -2354,7 +2339,7 @@ definition
  proof
   deffunc F(Point of TOP-REAL 2) = $1`1;
   thus ex f be RealMap of TOP-REAL 2 st
-   for p being Point of TOP-REAL 2 holds f.p = F(p) from LambdaRF;
+   for p being Point of TOP-REAL 2 holds f.p = F(p) from FUNCT_2:sch 4;
  end;
  uniqueness proof let it1, it2 be RealMap of TOP-REAL 2 such that
  A1:  for p being Point of TOP-REAL 2 holds it1.p = p`1 and
@@ -2370,7 +2355,7 @@ definition
  proof
   deffunc F(Point of TOP-REAL 2) = $1`2;
   thus ex f be RealMap of TOP-REAL 2 st
-   for p being Point of TOP-REAL 2 holds f.p = F(p) from LambdaRF;
+   for p being Point of TOP-REAL 2 holds f.p = F(p) from FUNCT_2:sch 4;
  end;
  uniqueness proof let it1, it2 be RealMap of TOP-REAL 2 such that
  A3:  for p being Point of TOP-REAL 2 holds it1.p = p`2 and

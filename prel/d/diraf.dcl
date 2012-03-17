@@ -14,13 +14,12 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -34,10 +33,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="64" value="false"/>
-<Adjective nr="66"/>
-<Adjective nr="69"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="63" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -46,27 +45,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="64" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="63" value="false"/>
+<Adjective nr="65"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="70"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="32" value="false"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="163">
+<Func kind="K" nr="147">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="66"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="65"/>
 </Cluster>
 </FCluster>
 </Registrations>

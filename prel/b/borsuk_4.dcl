@@ -17,7 +17,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XREAL_0"/>
@@ -25,6 +24,7 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -40,7 +40,7 @@
 <ArgTypes>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="28" value="false"/>
 <Adjective nr="67"/>
 </Cluster>
 </Typ>
@@ -67,7 +67,7 @@
 <ArgTypes>
 <Typ kind="G" nr="1">
 <Cluster>
-<Adjective nr="64" value="false"/>
+<Adjective nr="63" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -112,7 +112,7 @@
 <Cluster/>
 <Func kind="K" nr="22">
 <Func kind="U" nr="1">
-<Func kind="K" nr="216">
+<Func kind="K" nr="208">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -123,12 +123,12 @@
 <Adjective nr="10" value="false"/>
 <Adjective nr="83"/>
 <Adjective nr="85">
-<Func kind="K" nr="216">
+<Func kind="K" nr="208">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="91">
-<Func kind="K" nr="216">
+<Func kind="K" nr="208">
 <Num nr="2"/>
 </Func>
 </Adjective>

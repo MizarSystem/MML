@@ -13,8 +13,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
@@ -24,7 +24,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,7 +55,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="104">
+<Func kind="K" nr="96">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -95,60 +95,5 @@
 </And>
 </Not>
 </For>
-</Scheme>
-<Scheme>
-<ArgTypes>
-<Typ kind="G" nr="3">
-<Cluster>
-<Adjective nr="23" value="false"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="K" nr="52"/>
-</Typ>
-</ArgTypes>
-<Not>
-<For>
-<Typ kind="M" nr="6">
-<Cluster>
-<Adjective nr="5"/>
-<Adjective nr="17">
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-<Func kind="K" nr="52"/>
-</Adjective>
-</Cluster>
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-<Func kind="K" nr="52"/>
-</Typ>
-<Not>
-<For>
-<Typ kind="M" nr="3">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-</Typ>
-<Pred kind="R" nr="1">
-<Func kind="K" nr="104">
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-<Func kind="K" nr="52"/>
-<Var nr="1"/>
-<Var nr="2"/>
-</Func>
-<Func kind="F" nr="2">
-<Var nr="2"/>
-</Func>
-</Pred>
-</For>
-</Not>
-</For>
-</Not>
 </Scheme>
 </Schemes>

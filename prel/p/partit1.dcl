@@ -2,14 +2,12 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
@@ -21,7 +19,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="69">
+<Func kind="K" nr="56">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

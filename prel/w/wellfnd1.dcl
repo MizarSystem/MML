@@ -17,8 +17,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="CARD_5"/>
 <ArticleID name="XREAL_0"/>
@@ -31,6 +29,7 @@
 <ArticleID name="RFINSEQ"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_3"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="YELLOW_0"/>
@@ -50,7 +49,7 @@
 <Adjective nr="9"/>
 <Adjective nr="18" value="false"/>
 <Adjective nr="19"/>
-<Adjective nr="31"/>
+<Adjective nr="27"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -59,8 +58,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="86"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -78,7 +77,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="87">
+<Adjective nr="86">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -92,13 +91,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="181">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="85"/>
+<Adjective nr="84"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -124,14 +123,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="71">
+<Adjective nr="70">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="87">
+<Adjective nr="86">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

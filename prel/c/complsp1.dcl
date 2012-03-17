@@ -14,8 +14,8 @@
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -30,7 +30,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="134">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -44,9 +44,13 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="40">
+<Func kind="K" nr="40">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="3">
@@ -54,7 +58,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="24" value="false"/>
+<Adjective nr="23" value="false"/>
 <Adjective nr="25"/>
 </Cluster>
 </FCluster>
@@ -65,11 +69,11 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="157">
+<Func kind="K" nr="149">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="24" value="false"/>
+<Adjective nr="23" value="false"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 </Cluster>

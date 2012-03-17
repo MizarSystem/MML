@@ -3,16 +3,16 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="FUNCT_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="4" value="false"/>
+<Adjective nr="6" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -27,7 +27,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="5"/>
+<Adjective nr="4"/>
 </Cluster>
 </Typ>
 <Not>
@@ -51,7 +51,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="28">
+<Func kind="K" nr="11">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -71,7 +71,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="28">
+<Func kind="K" nr="11">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

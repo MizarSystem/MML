@@ -26,10 +26,10 @@
 <ArticleID name="CARD_4"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="MEASURE1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
 <ArticleID name="MEASURE5"/>
@@ -45,7 +45,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="246">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

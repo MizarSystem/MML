@@ -10,7 +10,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="LATTICES"/>
@@ -28,7 +27,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="94">
+<Func kind="K" nr="78">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -42,11 +41,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="98">
+<Func kind="K" nr="82">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
@@ -57,8 +57,7 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="49"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

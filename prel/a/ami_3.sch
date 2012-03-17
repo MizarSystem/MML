@@ -24,8 +24,8 @@
 <ArticleID name="QC_LANG1"/>
 <ArticleID name="QC_LANG2"/>
 <ArticleID name="CQC_LANG"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="AMI_1"/>
 <ArticleID name="XREAL_0"/>
 </Signature>
@@ -105,7 +105,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="41"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="3">
@@ -116,11 +116,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -129,11 +129,11 @@
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -144,13 +144,13 @@
 <Func kind="F" nr="4"/>
 </Pred>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="11">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Typ>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="11">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
@@ -194,13 +194,13 @@
 </For>
 </For>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="11">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Typ>
 <For>
-<Typ kind="M" nr="13">
+<Typ kind="M" nr="11">
 <Cluster/>
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>

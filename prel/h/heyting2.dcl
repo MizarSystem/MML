@@ -12,7 +12,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="PARTFUN1"/>
@@ -29,7 +28,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="14"/>
-<Adjective nr="19"/>
+<Adjective nr="18"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -64,12 +63,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="95">
+<Func kind="K" nr="79">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="18" value="false"/>
+<Adjective nr="17" value="false"/>
+<Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
@@ -82,8 +82,7 @@
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="48"/>
+<Adjective nr="47"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -11,13 +11,13 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="YELLOW_8"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PCOMPS_1"/>
@@ -32,11 +32,11 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="176"/>
+<Func kind="K" nr="168"/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
 <Adjective nr="67"/>
 </Cluster>
 </FCluster>
@@ -44,8 +44,8 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -56,7 +56,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="11">
+<Typ kind="M" nr="9">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
@@ -68,32 +68,32 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="25"/>
 <Adjective nr="67"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="25"/>
 <Adjective nr="69"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="25"/>
 <Adjective nr="69"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="25"/>
 <Adjective nr="70"/>
 </Cluster>
 </CCluster>

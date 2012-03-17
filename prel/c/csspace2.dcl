@@ -17,7 +17,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="CLVECT_1"/>
@@ -26,29 +25,29 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="159"/>
+<Func kind="K" nr="143"/>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
+<Adjective nr="44"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="159"/>
+<Func kind="K" nr="143"/>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
-<Adjective nr="56"/>
+<Adjective nr="44"/>
+<Adjective nr="50"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 </Registrations>

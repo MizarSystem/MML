@@ -16,29 +16,29 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -47,7 +47,7 @@
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="86">
+<Func kind="K" nr="133">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -60,9 +60,9 @@
 <Var nr="2"/>
 <Not>
 <For>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -89,9 +89,9 @@
 </Not>
 <Not>
 <For>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -107,9 +107,9 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="30" value="false"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,14 +122,14 @@
 <And>
 <Pred kind="R" nr="3">
 <Var nr="1"/>
-<Func kind="K" nr="138">
+<Func kind="K" nr="122">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="34"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

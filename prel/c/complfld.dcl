@@ -12,15 +12,14 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -29,43 +28,43 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="157"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="157"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="43"/>
-<Adjective nr="51"/>
-<Adjective nr="54"/>
-<Adjective nr="56"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="42"/>
+<Adjective nr="50"/>
+<Adjective nr="53"/>
+<Adjective nr="55"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="157"/>
 <Cluster>
-<Adjective nr="32" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="43"/>
-<Adjective nr="45"/>
-<Adjective nr="48"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="42"/>
+<Adjective nr="44"/>
+<Adjective nr="47"/>
+<Adjective nr="50"/>
 <Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="57"/>
-<Adjective nr="58" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -74,7 +73,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="173"/>
+<Func kind="K" nr="157"/>
 </Func>
 </Typ>
 <Cluster>

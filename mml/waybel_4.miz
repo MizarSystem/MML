@@ -16,7 +16,7 @@ environ
       FUNCT_2, WELLORD1, YELLOW_0, PRE_CIRC, CARD_3, PRALG_1, YELLOW_1, ALG_1,
       YELLOW_2, YELLOW_4, WAYBEL_0, WAYBEL_1, WAYBEL_2, WAYBEL_3;
  constructors ORDERS_3, PRE_CIRC, TOLER_1, WAYBEL_1, WAYBEL_2, WAYBEL_3,
-      YELLOW_4, ALG_1, REALSET2, PRALG_1;
+      YELLOW_4, REALSET2, PRALG_1;
  registrations LATTICE3, RELSET_1, STRUCT_0, WAYBEL_0, WAYBEL_2, WAYBEL_3,
       YELLOW_1, YELLOW_2, SUBSET_1, PARTFUN1, XBOOLE_0;
  requirements SUBSET, BOOLE;
@@ -2024,8 +2024,7 @@ proof
    then consider I be Ideal of L such that A1: a = I & x <= sup I;
    thus thesis by A1;
   end;
-  then reconsider X' = X as Subset-Family of L by SETFAM_1:def 7
-;
+  then reconsider X' = X as Subset-Family of L;
       sup downarrow x = x by WAYBEL_0:34;
 then A2:downarrow x in X;
  thus meet X c= waybelow x
@@ -2055,32 +2054,18 @@ then A2:downarrow x in X;
  end;
 end;
 
-scheme LambdaC'{ A() -> non empty set, C[set], F(set) -> set,
-  G(set) -> set } :
+scheme LambdaC'{ A() -> non empty set, C[set], F,G(set) -> set } :
  ex f being Function st dom f = A() &
   for x be Element of A() holds
    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
 proof
-  defpred c[set] means C[$1];
-  deffunc f(set) = F($1);
-  deffunc g(set) = G($1);
-A1:  ex f being Function st dom f = A() &
-  for x be set st x in A() holds
-   (c[x] implies f.x = f(x)) & (not c[x] implies f.x = g(x)) from
-PARTFUN1:sch 1;
- thus ex f being Function st dom f = A() &
-  for x be Element of A() holds
+  consider f being Function such that A2: dom f = A() &
+   for x be set st x in A() holds
    (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
-     proof
-      consider f being Function such that A2: dom f = A() &
-       for x be set st x in A() holds
-       (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) by A1;
-      take f;
-      thus dom f = A() by A2;
-      let x be Element of A();
-      thus (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x)) by A2;
-     end;
- end;
+            from PARTFUN1:sch 1;
+ take f;
+ thus thesis by A2;
+end;
 
 definition let L be Semilattice, I be Ideal of L;
   func DownMap I -> map of L, InclPoset Ids L means :Def17:

@@ -13,7 +13,7 @@ environ
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0;
  theorems TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ENUMSET1, XBOOLE_1;
- schemes XBOOLE_0;
+ schemes XBOOLE_0, SUBSET_1;
 
 begin
 
@@ -784,32 +784,8 @@ end;
 :: Family of subsets of a set
 
 definition let D be set;
-  mode Subset-Family of D means :Def7:
-    it c= bool D;
-  existence;
-end;
-
-definition let D be set;
-  redefine mode Subset-Family of D -> Subset of bool D;
-  coherence by Def7;
-end;
-
-registration let D be set;
-  cluster empty Subset-Family of D;
-  existence
-  proof
-    {} c= bool D by XBOOLE_1:2;
-    then {} is Subset-Family of D by Def7;
-    hence thesis;
-  end;
-  cluster non empty Subset-Family of D;
-  existence
-  proof
-    {} c= D by XBOOLE_1:2;
-    then bool {} c= bool D by ZFMISC_1:79;
-    then bool {} is Subset-Family of D by Def7;
-    hence thesis;
-  end;
+ canceled;
+ mode Subset-Family of D is Subset of bool D;
 end;
 
 reserve F,G for Subset-Family of D;
@@ -864,43 +840,13 @@ A1: for P holds P in F iff P in G;
   hence thesis by A1;
 end;
 
-scheme SubFamEx {A() -> set,P[Subset of A()]}:
-  ex F being Subset-Family of A() st
-  for B being Subset of A() holds B in F iff P[B]
-proof
-  defpred X[set] means ex Z being Subset of A() st $1 = Z & P[Z];
-   consider X being set such that
-A1: for x holds x in X iff x in bool A() & X[x] from XBOOLE_0:sch 1;
-       X c= bool A()
-    proof
-     let y;
-      assume y in X;
-     hence thesis by A1;
-    end;
-    then reconsider X as Subset-Family of A() by Def7;
-    take X;
-    for B being Subset of A() holds B in X iff P[B]
-    proof
-     let B be Subset of A();
-     thus B in X implies P[B]
-     proof
-      assume B in X;
-      then ex Z being Subset of A() st B = Z & P[Z] by A1;
-      hence P[B];
-      end;
-      assume P[B];
-     hence B in X by A1;
-   end;
-  hence thesis;
-end;
-
 definition let D,F;
   func COMPLEMENT(F) -> Subset-Family of D means :Def8:
    for P being Subset of D holds P in it iff P` in F;
     existence
      proof defpred X[Subset of D] means $1` in F;
       thus ex G being Subset-Family of D st
-       for P being Subset of D holds P in G iff X[P] from SubFamEx;
+       for P being Subset of D holds P in G iff X[P] from SUBSET_1:sch 3;
      end;
     uniqueness
      proof
@@ -1090,15 +1036,6 @@ then A2: F c= G by Th51;
  hence F = G by A2,XBOOLE_0:def 10;
 end;
 
-definition let X be set; let F,G be Subset of bool X;
-  redefine func F \/ G -> Subset-Family of X;
-  coherence
-  proof
-    F \/ G is Subset of bool X;
-    hence thesis by Def7;
-  end;
-end;
-
 theorem
   for X being set, F,G being Subset-Family of X holds
     COMPLEMENT(F \/ G) = COMPLEMENT F \/ COMPLEMENT G
@@ -1119,7 +1056,7 @@ proof let X be set, F be Subset-Family of X such that
 A1: F = {X};
    {} c= X by XBOOLE_1:2;
   then reconsider G = {{}} as Subset of bool X by ZFMISC_1:37;
-  reconsider G as Subset-Family of X by Def7;
+  reconsider G as Subset-Family of X;
   for P being Subset of X holds P in G iff P` in F
    proof let P be Subset of X;
     hereby assume P in G;
@@ -1283,20 +1220,3 @@ theorem
     hence x in Intersect H by A2,Th58;
   end;
 
-scheme SubsetSD{D() -> set, P[set]}:
-  {d where d is Subset of D() : P[d]} is Subset-Family of D()
-proof for D being set holds
-  {d where d is Subset of D : P[d]} is Subset-Family of D
-  proof
-    let D be set;
-    {d where d is Subset of D : P[d]} c= bool D
-    proof
-      let x be set; assume x in {d where d is Subset of D : P[d]};
-      then consider e being Subset of D such that
-A1:   e = x & P[e];
-      thus thesis by A1;
-    end;
-    hence thesis by Def7;
-  end;
-  hence thesis;
-end;

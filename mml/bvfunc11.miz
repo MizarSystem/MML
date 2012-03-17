@@ -11,7 +11,7 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MARGREL1, VALUAT_1, RELAT_1,
       SETFAM_1, FUNCT_1, FRAENKEL, EQREL_1, CQC_LANG, PARTIT1, BVFUNC_1,
       BVFUNC_2, FUNCT_4;
- constructors CANTOR_1, BVFUNC_2, PUA2MSS1, BVFUNC_1, FUNCT_4, MEMBERED;
+ constructors BVFUNC_2, PUA2MSS1, BVFUNC_1, FUNCT_4;
  registrations FUNCT_7, SUBSET_1, MARGREL1, VALUAT_1, FRAENKEL, EQREL_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, BVFUNC_1, XBOOLE_0;
@@ -19,11 +19,12 @@ environ
       PARTIT1, BVFUNC_1, BVFUNC_2, ENUMSET1, FUNCT_4, CQC_LANG, MSSUBFAM,
       PARTIT_2, BVFUNC_4, XBOOLE_0, XBOOLE_1, VALUAT_1;
 
-begin
+begin :: Chap. 1  Preliminaries
 
-::Chap. 1  Preliminaries
-
-reserve Y for non empty set;
+reserve Y for non empty set,
+        a, b for Element of Funcs(Y,BOOLEAN),
+        G for Subset of PARTITIONS(Y),
+        A, B for a_partition of Y;
 
 theorem Th1: for z being Element of Y, PA,PB being a_partition of Y
 st PA '<' PB holds EqClass(z,PA) c= EqClass(z,PB)
@@ -84,7 +85,7 @@ A2: G={A,B} & A<>B;
     then x = a or x = b by TARSKI:def 2;
     hence thesis by A3;
   end;
-  then reconsider SS = {a,b} as Subset-Family of Y by SETFAM_1:def 7;
+  then reconsider SS = {a,b} as Subset-Family of Y;
 A4: dom h2 = {A,B} & rng h2 = SS by A2,FUNCT_4:65,67;
    for d being set st d in G holds h2.d in d
     proof
@@ -123,7 +124,7 @@ A4:  X in A & Z in B & x = X /\ Z by SETFAM_1:def 5;
     then m = X or m = Z by TARSKI:def 2;
     hence thesis by A4;
   end;
-  then reconsider SS = {X,Z} as Subset-Family of Y by SETFAM_1:def 7;
+  then reconsider SS = {X,Z} as Subset-Family of Y;
 A5: dom h = {A,B} & rng h = SS by A2,FUNCT_4:65,67;
 A6: for d being set st d in G holds h.d in d
     proof
@@ -191,7 +192,7 @@ then A17:     m = h.A or m = h.B by TARSKI:def 2;
 end;
 
 theorem
-    for G being Subset of PARTITIONS(Y), A,B being a_partition of Y
+  for G being Subset of PARTITIONS(Y), A,B being a_partition of Y
    st G={A,B} & A<>B
   holds CompF(A,G) = B
 proof
@@ -232,17 +233,17 @@ A5:          dom h={B} & rng h = F &
       then d=B by TARSKI:def 1;
       hence thesis by A7,CQC_LANG:6;
     end;
-       rng h0 c= bool Y
+    rng h0 c= bool Y
     proof
       let m be set;
       assume m in rng h0;
-          then m=x by A8,TARSKI:def 1;
+      then m=x by A8,TARSKI:def 1;
       hence thesis by A7;
     end;
-    then reconsider F0 = rng h0 as Subset-Family of Y by SETFAM_1:def 7;
-           meet F0 = Intersect F0 by A8,SETFAM_1:def 10;
+    then reconsider F0 = rng h0 as Subset-Family of Y;
+    meet F0 = Intersect F0 by A8,SETFAM_1:def 10;
     then A10:x=Intersect F0 by A8,SETFAM_1:11;
-       x<>{} by A7,EQREL_1:def 6;
+    x<>{} by A7,EQREL_1:def 6;
     hence thesis by A8,A9,A10,BVFUNC_2:def 1;
   end;
   hence thesis by A3,A4,XBOOLE_0:def 10;
@@ -250,73 +251,48 @@ end;
 
 begin
 
-Lm1:
- for a,b being Element of Funcs(Y,BOOLEAN),
-     G being Subset of PARTITIONS(Y),
-     P being a_partition of Y st a '<' b holds
- All(a,P,G) '<' Ex(b,P,G)
+theorem Lm1:
+  a '<' b implies All(a,A,G) '<' Ex(b,A,G)
  proof
-  let a,b be Element of Funcs(Y,BOOLEAN),
-      G be Subset of PARTITIONS(Y),
-      P be a_partition of Y;
   assume a '<' b;
-then A1:All(a,P,G) '<' All(b,P,G) by PARTIT_2:13;
-     All(b,P,G) '<' Ex(b,P,G) by BVFUNC_4:18;
+then A1:All(a,A,G) '<' All(b,A,G) by PARTIT_2:13;
+     All(b,A,G) '<' Ex(b,A,G) by BVFUNC_4:18;
   hence thesis by A1,BVFUNC_1:18;
  end;
 
-canceled 3;
+canceled 2;
 
-theorem  for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-All(All(a,A,G),B,G) '<' Ex(All(a,B,G),A,G)
+theorem
+  G is independent implies
+    All(All(a,A,G),B,G) '<' Ex(All(a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume G is independent;
   then All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
   hence thesis by Lm1;
 end;
 
 theorem
-   for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y holds
-All(All(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
+  All(All(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
 A1:All(All(a,A,G),B,G) '<' All(a,A,G) by BVFUNC_2:11;
      a '<' Ex(a,B,G) by BVFUNC_2:12;
   then All(a,A,G) '<' Ex(Ex(a,B,G),A,G) by Lm1;
   hence thesis by A1,BVFUNC_1:18;
 end;
 
-theorem  for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-All(All(a,A,G),B,G) '<' All(Ex(a,B,G),A,G)
+theorem
+  G is independent implies
+    All(All(a,A,G),B,G) '<' All(Ex(a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
-  assume
-  G is independent;
+  assume G is independent;
 then A1:All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
      All(a,B,G) '<' Ex(a,B,G) by Lm1;
   hence thesis by A1,PARTIT_2:13;
 end;
 
 theorem
-   for a being Element of Funcs(Y,BOOLEAN),G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y holds All(Ex(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
+  All(Ex(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
  proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
 A1:Ex(a,B,G) = B_SUP(a,CompF(B,G)) by BVFUNC_2:def 10;
     let z be Element of Y;
     assume A2:Pj(All(Ex(a,A,G),B,G),z)=TRUE;
@@ -345,14 +321,8 @@ A5:  x1 in EqClass(z,CompF(A,G)) & Pj(a,x1)=TRUE;
  end;
 
 theorem
-   for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y holds
-'not' Ex(All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+  'not' Ex(All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
 A1:All(a,A,G) = B_INF(a,CompF(A,G)) by BVFUNC_2:def 9;
 A2:Ex('not' a,B,G) = B_SUP('not' a,CompF(B,G))
     by BVFUNC_2:def 10;
@@ -378,69 +348,103 @@ A5:  x1 in EqClass(z,CompF(A,G)) & Pj(a,x1)<>TRUE by A1,BVFUNC_1:def 19;
     hence thesis by BVFUNC_2:def 10;
 end;
 
-theorem Th16: for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-Ex('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+theorem Th16:
+  G is independent implies
+    Ex('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume G is independent;
   then Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
   hence thesis by BVFUNC_2:20;
 end;
 
-theorem Th17: for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-'not' All(All(a,A,G),B,G) = Ex('not' All(a,B,G),A,G)
+theorem Th17:
+  G is independent implies
+    'not' All(All(a,A,G),B,G) = Ex('not' All(a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume G is independent;
   then All(All(a,A,G),B,G) = All(All(a,B,G),A,G) by PARTIT_2:17;
   hence thesis by BVFUNC_2:20;
 end;
 
-theorem  for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-All('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
+theorem
+  G is independent implies
+    All('not' All(a,A,G),B,G) '<' Ex(Ex('not' a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume G is independent;
 then A1:Ex(Ex('not' a,B,G),A,G) = Ex(Ex('not' a,A,G),B,G) by PARTIT_2:18;
      'not' All(a,A,G) = Ex('not' a,A,G) by BVFUNC_2:20;
   hence thesis by A1,Lm1;
 end;
 
-theorem  for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,B,G),A,G)
+theorem
+  G is independent implies
+    'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,B,G),A,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume A1:G is independent;
-     Ex('not' a,B,G) = 'not' All(a,B,G) by BVFUNC_2:20;
+  Ex('not' a,B,G) = 'not' All(a,B,G) by BVFUNC_2:20;
   hence thesis by A1,Th17;
 end;
 
-theorem  for a being Element of Funcs(Y,BOOLEAN),
-G being Subset of PARTITIONS(Y),
-A,B being a_partition of Y st G is independent holds
-'not' All(All(a,A,G),B,G) '<' Ex(Ex('not' a,A,G),B,G)
+theorem
+  G is independent implies
+    'not' All(All(a,A,G),B,G) '<' Ex(Ex('not' a,A,G),B,G)
 proof
-  let a be Element of Funcs(Y,BOOLEAN);
-  let G be Subset of PARTITIONS(Y);
-  let A,B be a_partition of Y;
   assume A1:G is independent;
    then Ex('not' All(a,B,G),A,G) '<' Ex(Ex('not' a,A,G),B,G) by Th16;
   hence thesis by A1,Th17;
+end;
+
+:: from BVFUNC12
+
+theorem
+  'not' All(Ex(a,A,G),B,G) = Ex(All('not' a,A,G),B,G)
+proof
+  'not' All(Ex(a,A,G),B,G) = Ex('not' Ex(a,A,G),B,G) by BVFUNC_2:20;
+  hence thesis by BVFUNC_2:21;
+end;
+
+theorem
+  'not' Ex(All(a,A,G),B,G) = All(Ex('not' a,A,G),B,G)
+proof
+  'not' Ex(All(a,A,G),B,G) = All('not' All(a,A,G),B,G) by BVFUNC_2:21;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem
+  'not' All(All(a,A,G),B,G) = Ex(Ex('not' a,A,G),B,G)
+proof
+  Ex('not' All(a,A,G),B,G) = Ex(Ex('not' a,A,G),B,G) by BVFUNC_2:20;
+  hence thesis by BVFUNC_2:20;
+end;
+
+theorem
+  G is independent implies
+    Ex(All(a,A,G),B,G) '<' Ex(Ex(a,B,G),A,G)
+proof
+  assume G is independent;
+then A1:Ex(Ex(a,B,G),A,G) = Ex(Ex(a,A,G),B,G) by PARTIT_2:18;
+  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  hence thesis by A1,PARTIT_2:15;
+end;
+
+theorem
+  All(All(a,A,G),B,G) '<' All(Ex(a,A,G),B,G)
+proof
+  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  hence thesis by PARTIT_2:13;
+end;
+
+theorem
+  All(All(a,A,G),B,G) '<' Ex(Ex(a,A,G),B,G)
+proof
+  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  hence thesis by Lm1;
+end;
+
+theorem
+  Ex(All(a,A,G),B,G) '<' Ex(Ex(a,A,G),B,G)
+proof
+  All(a,A,G) '<' Ex(a,A,G) by Lm1;
+  hence thesis by PARTIT_2:15;
 end;
 

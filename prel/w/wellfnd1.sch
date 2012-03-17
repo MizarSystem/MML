@@ -17,8 +17,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -29,6 +27,7 @@
 <ArticleID name="RFINSEQ"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="RFUNCT_3"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="WELLFND1"/>
@@ -47,7 +46,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="196">
+<Func kind="K" nr="178">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -99,7 +98,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -159,7 +158,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="50">
+<Pred kind="V" nr="49">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -167,7 +166,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="40" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -231,7 +230,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="50">
+<Pred kind="V" nr="49">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

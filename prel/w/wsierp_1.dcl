@@ -13,15 +13,15 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="COMPLEX1"/>
-<ArticleID name="INT_2"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 </Signature>
 <FCluster>
@@ -44,7 +44,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -65,7 +65,7 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="21"/>
-<Adjective nr="23"/>
+<Adjective nr="22"/>
 </Cluster>
 </FCluster>
 </Registrations>

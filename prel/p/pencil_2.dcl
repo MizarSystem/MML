@@ -18,13 +18,12 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="UNIALG_1"/>
-<ArticleID name="PBOOLE"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="PBOOLE"/>
 <ArticleID name="CARD_3"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
@@ -35,13 +34,14 @@
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="WAYBEL_3"/>
+<ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="PENCIL_1"/>
 <ArticleID name="PENCIL_2"/>
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="29" value="false"/>
 </Cluster>
@@ -68,7 +68,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="30">
+<Adjective nr="26">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>

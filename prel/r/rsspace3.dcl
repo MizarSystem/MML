@@ -16,7 +16,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
@@ -28,46 +27,46 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="145"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="145"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="37">
-<Func kind="K" nr="154"/>
+<Adjective nr="36">
+<Func kind="K" nr="138"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="G" nr="4">
-<Func kind="K" nr="161"/>
-<Func kind="K" nr="157">
-<Func kind="K" nr="154"/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="145"/>
+<Func kind="K" nr="141">
+<Func kind="K" nr="138"/>
+<Func kind="K" nr="145"/>
 </Func>
-<Func kind="K" nr="155">
-<Func kind="K" nr="154"/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="139">
+<Func kind="K" nr="138"/>
+<Func kind="K" nr="145"/>
 </Func>
-<Func kind="K" nr="156">
-<Func kind="K" nr="154"/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="140">
+<Func kind="K" nr="138"/>
+<Func kind="K" nr="145"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -135,21 +134,21 @@
 <LocusVar nr="5"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="163"/>
+<Func kind="K" nr="147"/>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="30"/>
 <Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 </Registrations>

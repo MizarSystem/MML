@@ -23,8 +23,8 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="PRE_CIRC"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -35,13 +35,13 @@
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
-<ArticleID name="UNIALG_1"/>
-<ArticleID name="REALSET1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="REALSET1"/>
 <ArticleID name="PZFMISC1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
+<ArticleID name="UNIALG_1"/>
 <ArticleID name="PRALG_1"/>
 <ArticleID name="PENCIL_1"/>
 </Signature>
@@ -51,7 +51,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="44"/>
 <Adjective nr="98" value="false"/>
 <Adjective nr="99" value="false"/>
@@ -67,7 +67,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="43" value="false"/>
+<Adjective nr="42" value="false"/>
 <Adjective nr="44"/>
 <Adjective nr="98" value="false"/>
 <Adjective nr="99" value="false"/>
@@ -145,7 +145,7 @@
 <Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="247">
+<Func kind="K" nr="239">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -178,7 +178,7 @@
 <Typ kind="M" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
-<Func kind="K" nr="247">
+<Func kind="K" nr="239">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -239,7 +239,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -265,7 +265,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -299,13 +299,13 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="180">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="90" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="82"/>
+<Adjective nr="83" value="false"/>
 </Cluster>
 </FCluster>
 <CCluster>

@@ -113,7 +113,6 @@
 <Func kind="K" nr="56"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="34"/>
 <Adjective nr="36"/>
 </Cluster>
 </FCluster>

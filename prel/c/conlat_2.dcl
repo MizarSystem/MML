@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="LATTICES"/>
@@ -45,15 +44,16 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="127" value="false"/>
+<Adjective nr="126" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="274">
+<Func kind="K" nr="258">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
@@ -61,28 +61,28 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="27"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
 <Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="59"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="13" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="59"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="58"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
+<Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
@@ -90,8 +90,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="59"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 </Registrations>

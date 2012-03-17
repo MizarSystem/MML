@@ -19,7 +19,6 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MCART_1"/>
@@ -62,7 +61,7 @@
 </Func>
 </Pred>
 <For>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="13">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

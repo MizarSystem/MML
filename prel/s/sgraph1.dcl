@@ -16,7 +16,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="SGRAPH1"/>
 </Signature>
@@ -26,7 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -42,7 +41,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -56,7 +55,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="97">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

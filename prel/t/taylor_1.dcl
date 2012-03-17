@@ -19,12 +19,12 @@
 <ArticleID name="LIMFUNC1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
-<ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="SIN_COS"/>

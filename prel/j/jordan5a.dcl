@@ -12,10 +12,10 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -44,14 +44,14 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="50"/>
@@ -65,11 +65,11 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="51"/>

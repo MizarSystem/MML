@@ -10,8 +10,8 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_2"/>
 <ArticleID name="RELAT_2"/>
@@ -49,7 +49,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="32"/>
@@ -91,7 +91,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="4"/>
 <Adjective nr="6"/>
 </Cluster>
 </FCluster>
@@ -111,7 +110,6 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="4"/>
 <Adjective nr="6"/>
 </Cluster>
 </FCluster>
@@ -119,11 +117,11 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="264">
+<Func kind="K" nr="256">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -177,12 +175,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="76">
+<Func kind="K" nr="68">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 <Adjective nr="14"/>
 <Adjective nr="32"/>
 </Cluster>
@@ -196,17 +194,17 @@
 </Typ>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="316">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 <Adjective nr="14"/>
 <Adjective nr="15"/>
 <Adjective nr="32"/>
@@ -228,7 +226,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="316">
+<Func kind="K" nr="308">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -258,7 +256,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="76">
+<Func kind="K" nr="68">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -271,7 +269,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="13"/>
+<Adjective nr="12"/>
 <Adjective nr="15"/>
 </Cluster>
 <Typ kind="G" nr="3">

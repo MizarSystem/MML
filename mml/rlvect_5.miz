@@ -16,7 +16,7 @@ environ
  constructors REAL_1, NAT_1, FINSEQ_3, RFINSEQ, RLVECT_3, RLSUB_2, RLVECT_2,
       FINSEQ_4, PARTFUN1, XREAL_0, MEMBERED;
  registrations SUBSET_1, STRUCT_0, RELSET_1, FINSEQ_1, FINSET_1, FUNCT_2,
-      NAT_1, MEMBERED, ORDINAL2;
+      NAT_1, MEMBERED, ORDINAL2, RLVECT_3;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
  theorems AXIOMS, TARSKI, ENUMSET1, SUBSET_1, REAL_1, NAT_1, CARD_1, CARD_2,
@@ -714,15 +714,13 @@ end;
 
 theorem Th15:
   for A being Subset of W st A is linearly-independent
-    holds
-   ex B being Subset of V st B is linearly-independent & B = A
+    holds A is linearly-independent Subset of V
 proof
   let A be Subset of W;
   assume
 A1: A is linearly-independent;
      the carrier of W c= the carrier of V by RLSUB_1:def 2;
   then reconsider A'= A as Subset of V by XBOOLE_1:1;
-  take A';
       now
     assume A' is linearly-dependent;
     then consider L being Linear_Combination of A' such that
@@ -743,15 +741,13 @@ end;
 theorem Th16:
   for A being Subset of V st
    A is linearly-independent & A c= the carrier of W
-     holds
-    ex B being Subset of W st B is linearly-independent & B = A
+     holds A is linearly-independent Subset of W
 proof
   let A be Subset of V such that
 A1: A is linearly-independent and
 A2: A c= the carrier of W;
 
   reconsider A'= A as Subset of W by A2;
-  take A';
 
       now
     assume A' is linearly-dependent;
@@ -773,13 +769,12 @@ proof
   let A be Basis of W;
       A is Subset of W & A is linearly-independent
     by RLVECT_3:def 3;
-  then consider B being Subset of V such that
-A1: B is linearly-independent and
-A2: B = A by Th15;
+   then
+A1: A is linearly-independent Subset of V by Th15;
   consider I being Basis of V such that
-A3: B c= I by A1,Th2;
+A3: A c= I by A1,Th2;
   take I;
-  thus thesis by A2,A3;
+  thus thesis by A3;
 end;
 
 theorem Th18:
@@ -1520,8 +1515,8 @@ A1: Lin(I) = the RLSStruct of V' by RLVECT_3:def 3;
   consider A being Basis of W;
   reconsider A as Subset of W;
       A is linearly-independent by RLVECT_3:def 3;
-  then consider B being Subset of V such that
-A2: B is linearly-independent & B = A by Th15;
+  then
+A2: A is linearly-independent Subset of V by Th15;
   reconsider A'= A as finite Subset of V by A2,Th24;
 A3: dim W = Card A by Def3;
       card A' <= card I by A1,A2,Th23;
@@ -1543,12 +1538,11 @@ A1: A is linearly-independent;
     hence x in the carrier of W by RLVECT_1:def 1;
   end;
   then A c= the carrier of W by TARSKI:def 3;
-  then consider B being Subset of W such that
-A2: B is linearly-independent & B = A by A1,Th16;
-      W = Lin(B) by A2,Th21;
-  then reconsider B as Basis of W by A2,RLVECT_3:def 3;
+  then reconsider B = A as linearly-independent Subset of W by A1,Th16;
+      W = Lin B by Th21;
+  then reconsider B as Basis of W by RLVECT_3:def 3;
       Card B = dim W by Def3;
-  hence Card A = dim Lin(A) by A2;
+  hence Card A = dim Lin(A);
 end;
 
 theorem Th31:
@@ -1805,17 +1799,16 @@ V
 
         I1 is linearly-independent & I1 is Subset of W1
       by RLVECT_3:def 3;
-    then consider I1' being Subset of V such that
-  A17: I1' is linearly-independent & I1'= I1 by Th15;
+    then reconsider I1' = I1 as linearly-independent Subset of V by Th15;
         now
       let y be set;
       assume y in I \/ {x};
      then y in I or y in {x} by XBOOLE_0:def 2;
       then y in I1 or y = x by A4,TARSKI:def 1;
-      hence y in I1' by A11,A17,XBOOLE_0:def 3;
+      hence y in I1' by A11,XBOOLE_0:def 3;
     end;
     then Ix c= I1' by TARSKI:def 3;
-  then A18: Ix is linearly-independent by A17,RLVECT_3:6;
+  then A18: Ix is linearly-independent by RLVECT_3:6;
 
         x in {x} by TARSKI:def 1;
   then A19: x' in Ix by XBOOLE_0:def 2;
@@ -1964,11 +1957,11 @@ then A30: Lin(A) = W1 + W2 by A22,RLSUB_1:34;
 
         I1 is Subset of W1 & I1 is linearly-independent
       by RLVECT_3:def 3;
-    then consider I1' being Subset of W1 + W2 such that
-  A60: I1' is linearly-independent & I1'= I1 by A32,Th15;
+    then reconsider I1' = I1 as linearly-independent Subset of W1 + W2
+                     by A32,Th15;
         Carrier(LI) c= I by A53,RLVECT_2:def 8;
-  then Carrier(LI) c= I1' by A4,A60,XBOOLE_1:1;
-  then A61: LI = L1 by A43,A44,A52,A54,A60,Th1;
+  then Carrier(LI) c= I1' by A4,XBOOLE_1:1;
+  then A61: LI = L1 by A43,A44,A52,A54,Th1;
 
   A62: I2 is linearly-independent by RLVECT_3:def 3;
 
@@ -2097,13 +2090,11 @@ definition
     A7: A is Basis of W by Def2;
       reconsider A as Subset of W;
           A is linearly-independent by A7,RLVECT_3:def 3;
-      then consider B being Subset of V such that
-    A8: B is linearly-independent and
-    A9: B = A by Th15;
+      then reconsider B = A as linearly-independent Subset of V by Th15;
     A10: x = Lin(A) by A5,A7,RLVECT_3:def 3
-         .= Lin(B) by A9,Th21;
-      then Card B = n by A5,A6,A8,Th30;
-      hence x in S by A8,A10;
+         .= Lin(B) by Th21;
+      then Card B = n by A5,A6,Th30;
+      hence x in S by A10;
     end;
     take S;
     thus thesis by A1;

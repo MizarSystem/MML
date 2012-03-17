@@ -13,12 +13,12 @@ environ
       SUBSET_1, TOPS_1, PCOMPS_1, WAYBEL_3, MONOID_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, XREAL_0, NAT_1, RELAT_1, FINSET_1,
       DOMAIN_1, ORDERS_1, STRUCT_0, REALSET2, FUNCT_1, FUNCT_4, PBOOLE, CARD_3,
-      PRALG_1, FUNCT_7, MONOID_0,
-      GROUP_1, ORDERS_2, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1,
-      PCOMPS_1, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_4, WAYBEL_2;
- constructors NAT_1, REALSET2, FUNCT_7, GROUP_1, DOMAIN_1, TOPS_1, TOPS_2,
-      COMPTS_1, PCOMPS_1, YELLOW_4, WAYBEL_2, YELLOW_1, MEMBERED, CARD_3,
-      PRALG_1, MONOID_0, FRAENKEL;
+      PRALG_1, FUNCT_7, MONOID_0, GROUP_1, ORDERS_2, PRE_TOPC, TOPS_1, TOPS_2,
+      COMPTS_1, PCOMPS_1, LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_4,
+      WAYBEL_2;
+ constructors NAT_1, REALSET2, FUNCT_7, DOMAIN_1, TOPS_1, TOPS_2, COMPTS_1,
+      PCOMPS_1, YELLOW_4, WAYBEL_2, YELLOW_1, MEMBERED, PRALG_1, MONOID_0,
+      FRAENKEL;
  registrations SUBSET_1, STRUCT_0, FUNCT_1, FINSET_1, ORDERS_2, LATTICE3,
       PCOMPS_1, CANTOR_1, YELLOW_0, WAYBEL_0, YELLOW_1, ARYTM_3, TOPS_1,
       MEMBERED, CARD_3, MONOID_0;
@@ -28,9 +28,9 @@ environ
  theorems STRUCT_0, TARSKI, ORDERS_2, LATTICE3, ZFMISC_1, NAT_1, RELAT_1,
       FUNCT_1, FINSET_1, SUBSET_1, FUNCT_4, FUNCOP_1, PBOOLE, CARD_3, PRALG_1,
       FUNCT_7, PRE_TOPC, TOPS_1, TOPS_2, COMPTS_1, PCOMPS_1, URYSOHN1,
-      YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_2, WAYBEL_2, YELLOW_4, SETFAM_1,
-      XBOOLE_0, XBOOLE_1, MONOID_0;
- schemes NAT_1, FINSET_1, SETWISEO, ZFREFLE1, PBOOLE, WELLORD2;
+      YELLOW_0, YELLOW_1, WAYBEL_0, YELLOW_2, WAYBEL_2, YELLOW_4, XBOOLE_0,
+      XBOOLE_1, MONOID_0;
+ schemes NAT_1, FINSET_1, SUBSET_1, ZFREFLE1, PBOOLE, WELLORD2;
 
 begin :: 1. The "Way-Below" Relation
 
@@ -451,18 +451,6 @@ A2:  x <= sup D;
 
 begin :: The Way-Below Relation in Other Terms
 
-scheme SSubsetEx {S() -> non empty RelStr, P[set]}:
- ex X being Subset of S() st
-  for x being Element of S() holds x in X iff P[x]
-proof
-    defpred p[set] means P[$1];
-    consider X being Subset of S() such that
-A1:  for x being Element of S() holds x in X iff p[x]
-     from SETWISEO:sch 1;
-   take X;
-   thus thesis by A1;
-  end;
-
 theorem Th18:
  for L being complete LATTICE, x,y being Element of L st x << y
   for X being Subset of L st y <= sup X
@@ -475,7 +463,7 @@ A2:  y <= sup X;
      ex Y being finite Subset of X st ex_sup_of Y,L & $1 = "\/"(Y,L);
    consider F being Subset of L such that
 A3:  for a being Element of L holds a in F iff P[a]
-      from SSubsetEx;
+      from SUBSET_1:sch 3;
 A4: now let Y be finite Subset of X; assume Y <> {};
           ex_sup_of Y,L by YELLOW_0:17;
      hence "\/"(Y,L) in F by A3;
@@ -1620,7 +1608,7 @@ A2:  for F being Subset-Family of T st F is open & y c= union F
      ex G being finite Subset of F st x c= union G;
         now let I be Ideal of L;
          I is Subset of bool the carrier of T by A1,XBOOLE_1:1;
-     then reconsider F = I as Subset-Family of T by SETFAM_1:def 7;
+     then reconsider F = I as Subset-Family of T;
      assume y <= sup I;
       then y c= sup I by YELLOW_1:3;
       then y c= union F & F is open by YELLOW_1:22,25;
@@ -1653,7 +1641,7 @@ A4:     F is open;
       consider G being finite Subset of F such that
 A5:     x c= union G by A1,A2,A3,A4,Th34;
           G is Subset of bool the carrier of T by XBOOLE_1:1;
-      then reconsider G as Subset-Family of T by SETFAM_1:def 7;
+      then reconsider G as Subset-Family of T;
       take G; thus G c= F & X c= union G & G is finite by A1,A5;
      end;
    end;
@@ -1748,8 +1736,7 @@ A2:  L = RelStr(#the topology of T, RelIncl the topology of T#)
    let D be non empty directed Subset of L;
 A3:  sup D = union D by YELLOW_1:22;
         D c= bool the carrier of T by A2,XBOOLE_1:1;
-   then reconsider F = D as Subset-Family of T by SETFAM_1:def 7
-;
+   then reconsider F = D as Subset-Family of T;
    reconsider F as Subset-Family of T;
 A4:  F is open
      proof let a be Subset of T; assume a in F;
@@ -1802,7 +1789,7 @@ then A5:  e in VV;
        then ex Z being Subset of T st a = Int Z & Z c= Y & Z is compact;
       hence thesis;
      end;
-   then reconsider VV as non empty Subset-Family of T by A5,SETFAM_1:def 7;
+   then reconsider VV as non empty Subset-Family of T by A5;
    set V = union VV;
       VV is open
      proof let a be Subset of T; assume a in VV;
@@ -1836,7 +1823,7 @@ A11:   z = Int Z & Z c= Y & Z is compact;
 A12: dom f = B and
 A13: for z being set st z in B holds P[z, f.z] from ZFREFLE1:sch 1(A10);
        B is Subset of bool the carrier of T by A2,XBOOLE_1:1;
-   then reconsider W = B as Subset-Family of T by SETFAM_1:def 7;
+   then reconsider W = B as Subset-Family of T;
         sup B = union W by YELLOW_1:22;
 then A14:  X c= union W by A9,YELLOW_1:3;
         now let z be set; assume z in rng f;
@@ -1948,7 +1935,7 @@ A7:  x in W & Cl W c= Y by A2,A5,URYSOHN1:29;
    hence Z c= X by A7,XBOOLE_1:1;
    let F be Subset-Family of T such that
 A8:  F is_a_cover_of Z & F is open;
- reconsider ZZ = {Z`} as Subset-Family of T by SETFAM_1:def 7;
+ reconsider ZZ = {Z`} as Subset-Family of T;
    reconsider ZZ as Subset-Family of T;
    reconsider FZ = F \/ ZZ as Subset-Family of T;
         for x being Subset of T st x in ZZ holds x is open
@@ -1970,7 +1957,7 @@ A11:  sup A = union A by YELLOW_1:22;
         A \ ZZ c= A by XBOOLE_1:36;
     then A \ ZZ is Subset of L by XBOOLE_1:1;
    then A \ ZZ is Subset of bool the carrier of T by A1,XBOOLE_1:1;
-   then reconsider G = A \ ZZ as Subset-Family of T by SETFAM_1:def 7;
+   then reconsider G = A \ ZZ as Subset-Family of T;
    take G;
    thus G c= F by A10,XBOOLE_1:43;
    thus Z c= union G

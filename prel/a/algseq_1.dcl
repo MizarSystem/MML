@@ -13,7 +13,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSEQ_1"/>
 </Signature>
@@ -21,7 +20,7 @@
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -41,7 +40,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="24">
+<Adjective nr="23">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

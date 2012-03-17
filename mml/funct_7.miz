@@ -15,11 +15,9 @@ environ
       FINSEQ_1, FINSET_1, CQC_LANG, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_2,
       FUNCT_4, FUNCT_5, FINSEQ_4, REWRITE1;
  constructors CQC_LANG, WELLORD2, NAT_1, BINOP_1, DOMAIN_1, REWRITE1, FINSEQ_4,
-      FINSUB_1, PROB_1, MEMBERED, FUNCT_4, FUNCT_5, PBOOLE, PARTFUN1, FINSEQ_2,
-      INT_1;
+      FINSUB_1, PROB_1, FUNCT_4, FUNCT_5, PBOOLE, PARTFUN1, INT_1, SETFAM_1;
  registrations NUMBERS, SUBSET_1, RELAT_1, FUNCT_1, FINSEQ_1, RELSET_1, CARD_1,
-      FUNCOP_1, FUNCT_4, CQC_LANG, SETFAM_1, NAT_1, PARTFUN1, INT_1, ZFMISC_1,
-      FUNCT_2, ORDINAL2;
+      FUNCOP_1, FUNCT_4, CQC_LANG, NAT_1, PARTFUN1, INT_1, ZFMISC_1, ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1;
  theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
@@ -577,8 +575,6 @@ provided
  A1: A() is finite and
  A2: for d1,d2 being Element of D() st G(d1) = G(d2) holds d1 = d2
 proof
-  deffunc F'(set) = F($1);
-  deffunc G'(set) = G($1);
  per cases;
  suppose
 A3:  A() = {};
@@ -593,8 +589,8 @@ A3:  A() = {};
  end;
  suppose A() <> {};
   then reconsider D = A() as non empty set;
- defpred R[set] means ex d being Element of D() st $1 = G'(d);
- set B = { d where d is Element of D() : G'(d) in D},
+ defpred R[set] means ex d being Element of D() st $1 = G(d);
+ set B = { d where d is Element of D() : G(d) in D},
      C = { a where a is Element of D: R[a]};
       C is Subset of D from DOMAIN_1:sch 7;
 then A4: C is finite by A1,FINSET_1:13;
@@ -631,28 +627,27 @@ A10: x = G(d1) & y = d1 by A8,ZFMISC_1:33;
    hence thesis by A2,A10;
   end;
  then A11: B is finite by A4,CARD_1:68;
-A12: { F'(d) where d is Element of D(): d in B} is finite
+A12: { F(d) where d is Element of D(): d in B} is finite
    from FRAENKEL:sch 21(A11);
      { F(d) where d is Element of D() : G(d) in A() } =
-    { F'(d) where d is Element of D(): d in B}
+    { F(d) where d is Element of D(): d in B}
   proof
    thus { F(d) where d is Element of D() : G(d) in A() } c=
-    { F'(d) where d is Element of D(): d in B}
+    { F(d) where d is Element of D(): d in B}
    proof
      let x be set;
      assume x in { F(d) where d is Element of D() : G(d) in A() };
      then consider d' being Element of D() such that
 A13:  x = F(d') & G(d') in A();
-       x = F'(d') & d' in B by A13;
+       x = F(d') & d' in B by A13;
      hence thesis;
    end;
    let x be set;
-   assume x in { F'(d) where d is Element of D(): d in B};
+   assume x in { F(d) where d is Element of D(): d in B};
    then consider d1 being Element of D() such that
-A14: x = F'(d1) & d1 in B;
-   consider d3 being Element of D() such that
-A15:d3 = d1 & G'(d3) in D by A14;
-   thus thesis by A14,A15;
+A14: x = F(d1) & d1 in B;
+    ex d3 being Element of D() st d3 = d1 & G(d3) in D by A14;
+   hence thesis by A14;
   end;
  hence thesis by A12;
 end;

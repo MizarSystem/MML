@@ -14,10 +14,10 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SEQM_3"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
@@ -35,7 +35,7 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
@@ -56,7 +56,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="10">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -70,7 +70,7 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="K" nr="52"/>
 </Typ>
@@ -84,11 +84,11 @@
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="10">
 <Cluster/>
-<Func kind="K" nr="130">
+<Func kind="K" nr="122">
 <Func kind="U" nr="1">
-<Func kind="K" nr="176">
+<Func kind="K" nr="168">
 <Num nr="2"/>
 </Func>
 </Func>

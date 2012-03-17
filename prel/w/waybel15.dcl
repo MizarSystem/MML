@@ -3,12 +3,11 @@
 <Signature>
 <ArticleID name="HIDDEN"/>
 <ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -31,13 +30,14 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="PRE_TOPC"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
+<ArticleID name="PRE_TOPC"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="WAYBEL_3"/>
 <ArticleID name="FUNCT_7"/>
@@ -51,27 +51,27 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="244">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="9" value="false"/>
+<Adjective nr="16"/>
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
-<Adjective nr="71"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="82"/>
-<Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="115"/>
-<Adjective nr="122"/>
-<Adjective nr="123"/>
-<Adjective nr="124"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="106"/>
+<Adjective nr="107"/>
+<Adjective nr="110"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
+<Adjective nr="119"/>
 <Adjective nr="127"/>
 <Adjective nr="128"/>
 <Adjective nr="139"/>
@@ -83,12 +83,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="124"/>
+<Adjective nr="119"/>
 </Cluster>
 </Typ>
 </ArgTypes>

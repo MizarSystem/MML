@@ -14,17 +14,17 @@ environ
       RELAT_1, COMPLEX1, ORDINAL1, FUNCT_1, FINSEQ_1, DOMAIN_1, SETFAM_1,
       FUNCT_2, FINSET_1, STRUCT_0, PRE_TOPC, TOPS_2, SEQ_1, SEQ_2, COMPTS_1,
       METRIC_1, POWER, PCOMPS_1, ALI2, NORMSP_1;
- constructors REAL_1, NAT_1, DOMAIN_1, TOPS_2, ABSVALUE, SEQ_2, COMPTS_1,
-      POWER, PCOMPS_1, ALI2, NORMSP_1, MEMBERED, COMPLEX1, XBOOLE_0;
+ constructors REAL_1, NAT_1, DOMAIN_1, TOPS_2, SEQ_2, COMPTS_1, POWER,
+      PCOMPS_1, ALI2, NORMSP_1, COMPLEX1;
  registrations FINSET_1, PRE_TOPC, PCOMPS_1, STRUCT_0, XREAL_0, FINSEQ_1,
-      METRIC_1, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2;
+      METRIC_1, RELSET_1, ARYTM_3, MEMBERED, ORDINAL2, SUBSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions COMPTS_1, TARSKI, ORDINAL1, XBOOLE_0;
  theorems METRIC_1, SUBSET_1, REAL_1, SQUARE_1, REAL_2, FUNCT_1, PCOMPS_1,
       PRE_TOPC, TOPS_2, TARSKI, COMPTS_1, NAT_1, SEQ_2, ZFMISC_1, AXIOMS,
       POWER, SERIES_1, ABSVALUE, FUNCT_2, SETFAM_1, FINSEQ_1, ALI2, RELSET_1,
       XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, FINSET_1;
- schemes DOMAIN_1, SETFAM_1, NAT_1, SEQ_1, RECDEF_1, FINSET_1;
+ schemes DOMAIN_1, SUBSET_1, NAT_1, SEQ_1, RECDEF_1, FINSET_1;
 
 begin
 
@@ -288,7 +288,6 @@ A5: M is complete;
         for n being Nat holds h.(n+1) = U(n,h.n) from RECDEF_1:sch 4;
         then consider h being Function of NAT,the carrier of M such that
       A6: h.0 = z & for n being Nat holds h.(n + 1) = f.(h.n);
-:::        reconsider h as sequence of M by FUNCT_2:def 1, RELSET_1:12;
         take h;
         let n;
         thus h.(n+1)=f.(h.n) by A6;
@@ -514,7 +513,7 @@ theorem
       ex p st $1 = {x where x is Point of T : ex n st p<=n & x = S2.n};
     consider F being Subset-Family of TopSpaceMetr(T) such that
     A4: for B being Subset of TopSpaceMetr(T) holds
-        B in F iff X[B] from SETFAM_1:sch 1;
+        B in F iff X[B] from SUBSET_1:sch 3;
     A5: for p holds
        {x where x is Point of T : ex n st p<=n & x = S2.n} <> {}
        proof
@@ -659,7 +658,7 @@ theorem
    defpred X[Subset of N] means
      ex x being Element of N st $1 = Ball(x,r);
   consider G being Subset-Family of N such that
-  A6: for C holds C in G iff X[C] from SETFAM_1:sch 1;
+  A6: for C holds C in G iff X[C] from SUBSET_1:sch 3;
   reconsider G as Subset-Family of TopSpaceMetr(N) by A3;
       for C being Subset of TopSpaceMetr(N) st C in G holds C is open
    proof
@@ -736,6 +735,19 @@ Th14: {}N is bounded
 proof
   take 1;
   thus thesis;
+end;
+
+registration let N;
+ cluster {}N -> bounded;
+ coherence by Th14;
+end;
+
+registration let N;
+ cluster bounded Subset of N;
+ existence
+  proof take {}N;
+   thus thesis;
+  end;
 end;
 
 theorem Th15:
@@ -841,7 +853,7 @@ Th19: for r being real number holds Ball(t1,r) is bounded
     per cases;
     suppose r<=0;
      then Ball(t1,r) = {}T by Th17;
-     hence Ball(t1,r) is bounded by Th14;
+     hence Ball(t1,r) is bounded;
     end;
     suppose 0<r;
      hence Ball(t1,r) is bounded by Lm2;
@@ -942,7 +954,7 @@ theorem Th23: for P being Subset of T holds P is finite implies P is bounded
     ex X being Subset of T st X = $1 & X is bounded;
   A2: P[{}]
    proof
-       {}T is bounded by Th14;
+       {}T is bounded;
     hence thesis;
    end;
   A3: for x,B being set st x in P & B c= P & P[B] holds P[B \/ {x}]

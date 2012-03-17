@@ -18,9 +18,8 @@ environ
       FUNCT_5, WELLORD1, WELLORD2, YELLOW_0, WAYBEL_0, YELLOW_1, YELLOW_2,
       WAYBEL_3, WAYBEL_8, PRE_TOPC, ALTCAT_1, ALTCAT_2, FUNCTOR0, ALTCAT_3,
       YELLOW18;
- constructors GRCAT_1, TOPS_2, TRIANG_1, AMI_1, ORDERS_3, WAYBEL_1, WAYBEL_8,
-      YELLOW_9, QUANTAL1, WAYBEL18, ALTCAT_3, YELLOW18, CARD_3, REALSET1,
-      ORDERS_1, REALSET2;
+ constructors GRCAT_1, TRIANG_1, ORDERS_3, WAYBEL_1, WAYBEL_8, YELLOW_9,
+      QUANTAL1, WAYBEL18, ALTCAT_3, YELLOW18, REALSET2;
  registrations SUBSET_1, RELSET_1, FUNCT_1, ORDINAL1, CARD_1, REALSET1,
       STRUCT_0, ORDERS_2, LATTICE3, WAYBEL_0, WAYBEL_3, TRIANG_1, WAYBEL_8,
       YELLOW_9, WAYBEL10, WAYBEL17, ALTCAT_2, FUNCTOR0, FUNCTOR2, ALTCAT_4,
@@ -456,16 +455,16 @@ A2:  for a,b,c being LATTICE st a in A() & b in A() & c in A()
       P[a,b,f] & P[b,c,g] holds P[a,c,g*f]
  and
 A3:  for a being LATTICE st a in A() holds P[a,a,id a]
-proof defpred p[set, set, set] means P[$1,$2,$3];
+proof
 A4:  for a,b,c being LATTICE st a in A() & b in A() & c in A()
      for f being map of a,b, g being map of b,c st
-      p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A2;
-A5:  for a being LATTICE st a in A() holds p[a,a,id a] by A3;
+      P[a,b,f] & P[b,c,g] holds P[a,c,g*f] by A2;
+A5:  for a being LATTICE st a in A() holds P[a,a,id a] by A3;
    consider C being strict category such that
 A6: C is lattice-wise and
 A7: the carrier of C = A() and
 A8: for a,b being LATTICE, f being monotone map of a,b
-     holds f in (the Arrows of C).(a,b) iff a in A() & b in A() & p[a,b,f]
+     holds f in (the Arrows of C).(a,b) iff a in A() & b in A() & P[a,b,f]
       from localCLCatEx(A1,A4,A5);
    reconsider C as lattice-wise strict category by A6;
    take C; thus the carrier of C = A() by A7;
@@ -499,21 +498,20 @@ A5: L[x] & the carrier of x in A() by A1;
          x as_1-sorted = x by Def1;
     then x in POSETS A() by A5,Def2;
    then reconsider A as non empty set by A4,A5;
-   defpred p[set, set, set] means P[$1,$2,$3];
 A6: for a being Element of A holds a is LATTICE by A4;
 A7: now let a,b,c be LATTICE; assume a in A & b in A & c in A;
       then L[a] & L[b] & L[c] by A4;
      hence for f being map of a,b, g being map of b,c st
-       p[a,b,f] & p[b,c,g] holds p[a,c,g*f] by A2;
+       P[a,b,f] & P[b,c,g] holds P[a,c,g*f] by A2;
     end;
 A8: now let a be LATTICE; assume a in A;
       then L[a] by A4;
-     hence p[a,a,id a] by A3;
+     hence P[a,a,id a] by A3;
     end;
    consider C being lattice-wise strict category such that
 A9: the carrier of C = A and
 A10: for a,b being object of C, f being monotone map of latt a, latt b
-      holds f in <^a,b^> iff p[latt a, latt b, f]
+      holds f in <^a,b^> iff P[latt a, latt b, f]
        from CLCatEx1(A6,A7,A8);
    take C;
    hereby let x be LATTICE;
@@ -592,14 +590,13 @@ scheme CLCatUniq2
      holds f in <^a,b^> iff P[a,b,f])
  holds the AltCatStr of C1 = the AltCatStr of C2
 proof let A1, A2 be lattice-wise category;
-    defpred p[set, set, set] means P[$1,$2,$3];
 A1: for C1, C2 being lattice-wise category st
      the carrier of C1 = the carrier of A1 &
      (for a,b being object of C1, f being monotone map of latt a, latt b
-        holds f in <^a,b^> iff p[a,b,f]) &
+        holds f in <^a,b^> iff P[a,b,f]) &
      the carrier of C2 = the carrier of A1 &
      (for a,b being object of C2, f being monotone map of latt a, latt b
-        holds f in <^a,b^> iff p[a,b,f])
+        holds f in <^a,b^> iff P[a,b,f])
     holds the AltCatStr of C1 = the AltCatStr of C2 from CLCatUniq1;
    assume that
 A2: for x being LATTICE holds
@@ -659,16 +656,14 @@ A6:  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
     st P[a,b,f] & P[b,c,g]
     holds F(a,c,g*f) = F(b,c,g)*F(a,b,f)
 proof
-    deffunc o(set) = O($1);
-    deffunc f(set,set,set) = F($1,$2,$3);
-A7: for a being object of A() holds o(a) is object of B()
+A7: for a being object of A() holds O(a) is object of B()
      proof let a be object of A();
            a is LATTICE & a in the carrier of A() by Def4;
       hence thesis by A3;
      end;
 A8: for a,b being object of A() st <^a,b^> <> {}
      for f being Morphism of a,b
-      holds f(a,b,f) in (the Arrows of B()).(o(a), o(b))
+      holds F(a,b,f) in (the Arrows of B()).(O(a), O(b))
      proof let a,b be object of A() such that
 A9:    <^a,b^> <> {};
       let f be Morphism of a,b;
@@ -684,9 +679,9 @@ A11: now let a,b,c be object of A() such that
 A12:   <^a,b^> <> {} & <^b,c^> <> {};
      let f be Morphism of a,b, g be Morphism of b,c;
      let a',b',c' be object of B() such that
-A13:   a' = o(a) & b' = o(b) & c' = o(c);
+A13:   a' = O(a) & b' = O(b) & c' = O(c);
      let f' be Morphism of a',b', g' be Morphism of b',c' such that
-A14:   f' = f(a,b,f) & g' = f(b,c,g);
+A14:   f' = F(a,b,f) & g' = F(b,c,g);
 A15:   latt a = a & latt b = b & latt c = c by Def6;
 A16:   @f = f & @g = g by A12,Def7;
            latt a' = a' & latt b' = b' & latt c' = c' &
@@ -700,17 +695,17 @@ then A18:   @f' = f' & @g' = g' by Def7;
       then P[a,b,f] & P[b,c,g] by A1,A12,A15,A16;
       then F(a,c,@g*@f) = F(b,c,g)*F(a,b,f) by A6,A15,A16 .= g'*f' by A14,A17
 ,A18,Th3;
-     hence f(a,c,g*f) = g'*f' by A12,Th3;
+     hence F(a,c,g*f) = g'*f' by A12,Th3;
     end;
-A19: now let a be object of A(), a' be object of B(); assume a' = o(a);
+A19: now let a be object of A(), a' be object of B(); assume a' = O(a);
       then a in the carrier of A() &
       latt a' = O(a) & latt a = a & idm a = id latt a by Def6,Th2;
-     hence f(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
+     hence F(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
     end;
    consider F being covariant strict Functor of A(),B() such that
-A20: for a being object of A() holds F.a = o(a) and
+A20: for a being object of A() holds F.a = O(a) and
 A21: for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a, b, f)
+     for f being Morphism of a,b holds F.f = F(a, b, f)
       from YELLOW18:sch 8(A7,A8,A11,A19);
    take F;
    hereby let a be object of A();    a = latt a by Def6;
@@ -753,16 +748,14 @@ A6:  for a,b,c being LATTICE, f being map of a,b, g being map of b,c
     st P[a,b,f] & P[b,c,g]
     holds F(a,c,g*f) = F(a,b,f)*F(b,c,g)
 proof
-    deffunc o(set) = O($1);
-    deffunc f(set,set,set) = F($1,$2,$3);
-A7: for a being object of A() holds o(a) is object of B()
+A7: for a being object of A() holds O(a) is object of B()
      proof let a be object of A();
            a is LATTICE & a in the carrier of A() by Def4;
       hence thesis by A3;
      end;
 A8: for a,b being object of A() st <^a,b^> <> {}
      for f being Morphism of a,b
-      holds f(a,b,f) in (the Arrows of B()).(o(b), o(a))
+      holds F(a,b,f) in (the Arrows of B()).(O(b), O(a))
      proof let a,b be object of A() such that
 A9:    <^a,b^> <> {};
       let f be Morphism of a,b;
@@ -778,9 +771,9 @@ A11: now let a,b,c be object of A() such that
 A12:   <^a,b^> <> {} & <^b,c^> <> {};
      let f be Morphism of a,b, g be Morphism of b,c;
      let a',b',c' be object of B() such that
-A13:   a' = o(a) & b' = o(b) & c' = o(c);
+A13:   a' = O(a) & b' = O(b) & c' = O(c);
      let f' be Morphism of b',a', g' be Morphism of c',b' such that
-A14:   f' = f(a,b,f) & g' = f(b,c,g);
+A14:   f' = F(a,b,f) & g' = F(b,c,g);
 A15:   latt a = a & latt b = b & latt c = c by Def6;
 A16:   @f = f & @g = g by A12,Def7;
            latt a' = a' & latt b' = b' & latt c' = c' &
@@ -794,17 +787,17 @@ then A18:   @f' = f' & @g' = g' by Def7;
       then P[a,b,f] & P[b,c,g] by A1,A12,A15,A16;
       then F(a,c,@g*@f) = F(a,b,f)*F(b,c,g) by A6,A15,A16 .= f'*g' by A14,A17
 ,A18,Th3;
-     hence f(a,c,g*f) = f'*g' by A12,Th3;
+     hence F(a,c,g*f) = f'*g' by A12,Th3;
     end;
-A19: now let a be object of A(), a' be object of B(); assume a' = o(a);
+A19: now let a be object of A(), a' be object of B(); assume a' = O(a);
       then a in the carrier of A() &
       latt a' = O(a) & latt a = a & idm a = id latt a by Def6,Th2;
-     hence f(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
+     hence F(a,a,idm a) = id latt a' by A5 .= idm a' by Th2;
     end;
    consider F being contravariant strict Functor of A(),B() such that
-A20: for a being object of A() holds F.a = o(a) and
+A20: for a being object of A() holds F.a = O(a) and
 A21: for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a, b, f)
+     for f being Morphism of a,b holds F.f = F(a, b, f)
       from YELLOW18:sch 9(A7,A8,A11,A19);
    take F;
    hereby let a be object of A();    a = latt a by Def6;
@@ -849,19 +842,17 @@ A6:  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
      st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
         a = O(c) & b = O(d) & f = F(c,d,g)
 proof
-    deffunc o(set) = O($1);
-    deffunc f(set,set,set) = F($1,$2,$3);
 A7:  ex F being covariant Functor of A(),B() st
-    (for a being object of A() holds F.a = o(a)) &
+    (for a being object of A() holds F.a = O(a)) &
     for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a,b,f) by A3;
-A8: for a,b being object of A() st o(a) = o(b) holds a = b
+     for f being Morphism of a,b holds F.f = F(a,b,f) by A3;
+A8: for a,b being object of A() st O(a) = O(b) holds a = b
      proof let a,b be object of A();
             a in the carrier of A() & a = latt a & b = latt b by Def6;
       hence thesis by A4;
      end;
 A9: for a,b being object of A() st <^a,b^> <> {}
-     for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+     for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
       holds f = g
      proof let a, b be object of A() such that
 A10:    <^a,b^> <> {};
@@ -884,7 +875,7 @@ A15:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
            <^c',d'^> = (the Arrows of A()).(c,d) by ALTCAT_1:def 2;
      then g in <^c',d'^> by A1,A15;
      hence ex c,d being object of A(), g being Morphism of c,d
-        st a = o(c) & b = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A14,A15;
+        st a = O(c) & b = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A14,A15;
     end;
    thus thesis from YELLOW18:sch 11(A7,A8,A9,A12);
   end;
@@ -920,19 +911,17 @@ A6:  for a,b being LATTICE, f being map of a,b st Q[a,b,f]
      st c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
         b = O(c) & a = O(d) & f = F(c,d,g)
 proof
-    deffunc o(set) = O($1);
-    deffunc f(set,set,set) = F($1,$2,$3);
 A7:  ex F being contravariant Functor of A(),B() st
-    (for a being object of A() holds F.a = o(a)) &
+    (for a being object of A() holds F.a = O(a)) &
     for a,b being object of A() st <^a,b^> <> {}
-     for f being Morphism of a,b holds F.f = f(a,b,f) by A3;
-A8: for a,b being object of A() st o(a) = o(b) holds a = b
+     for f being Morphism of a,b holds F.f = F(a,b,f) by A3;
+A8: for a,b being object of A() st O(a) = O(b) holds a = b
      proof let a,b be object of A();
             a in the carrier of A() & a = latt a & b = latt b by Def6;
       hence thesis by A4;
      end;
 A9: for a,b being object of A() st <^a,b^> <> {}
-     for f,g being Morphism of a,b st f(a,b,f) = f(a,b,g)
+     for f,g being Morphism of a,b st F(a,b,f) = F(a,b,g)
       holds f = g
      proof let a, b be object of A() such that
 A10:    <^a,b^> <> {};
@@ -953,7 +942,7 @@ A14:   c in the carrier of A() & d in the carrier of A() & P[c,d,g] &
            <^c',d'^> = (the Arrows of A()).(c,d) by ALTCAT_1:def 2;
      then g in <^c',d'^> by A1,A14;
      hence ex c,d being object of A(), g being Morphism of c,d
-        st b = o(c) & a = o(d) & <^c,d^> <> {} & f = f(c,d,g) by A13,A14;
+        st b = O(c) & a = O(d) & <^c,d^> <> {} & f = F(c,d,g) by A13,A14;
     end;
    thus thesis from YELLOW18:sch 13(A7,A8,A9,A11);
   end;
@@ -1074,22 +1063,16 @@ A8:  for a,b being object of B() st <^a,b^> <> {}
    for f being Morphism of a,b
     holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*@f
 proof
-    deffunc o1(set) = O1($1);
-    deffunc f1(set,set,set) = F1($1,$2,$3);
-    deffunc o2(set) = O2($1);
-    deffunc f2(set,set,set) = F2($1,$2,$3);
-    deffunc a(set) = A($1);
-    deffunc b(set) = B($1);
 A9:  ex F being covariant Functor of A(),B() st
-    (for a being object of A() holds F.a = o1(a)) &
+    (for a being object of A() holds F.a = O1(a)) &
     for a,b being object of A() st <^a,b^> <> {}
-    for f being Morphism of a,b holds F.f = f1(a,b,f) by A3;
+    for f being Morphism of a,b holds F.f = F1(a,b,f) by A3;
 A10:  ex G being covariant Functor of B(),A() st
-    (for a being object of B() holds G.a = o2(a)) &
+    (for a being object of B() holds G.a = O2(a)) &
     for a,b being object of B() st <^a,b^> <> {}
-    for f being Morphism of a,b holds G.f = f2(a,b,f) by A4;
-A11: for a, b being object of A() st a = o2(o1(b))
-     holds a(b) in <^a, b^> & a(b)" in <^b,a^> & a(b) is one-to-one
+    for f being Morphism of a,b holds G.f = F2(a,b,f) by A4;
+A11: for a, b being object of A() st a = O2(O1(b))
+     holds A(b) in <^a, b^> & A(b)" in <^b,a^> & A(b) is one-to-one
      proof let a, b be object of A() such that
 A12:    a = O2(O1(b));
 A13:    latt a = a & latt b = b by Def6;
@@ -1102,8 +1085,8 @@ A14:    f = A(b) & f is isomorphic & P[O2(O1(b)), latt b, f] &
       hence A(b)" in <^b,a^> by A1,A12,A13,A14;
       thus thesis by A14,WAYBEL_0:66;
      end;
-A15: for a, b being object of B() st b = o1(o2(a))
-     holds b(a) in <^a, b^> & b(a)" in <^b,a^> & b(a) is one-to-one
+A15: for a, b being object of B() st b = O1(O2(a))
+     holds B(a) in <^a, b^> & B(a)" in <^b,a^> & B(a) is one-to-one
      proof let a, b be object of B() such that
 A16:    b = O1(O2(a));
 A17:    latt a = a & latt b = b by Def6;
@@ -1118,7 +1101,7 @@ A18:    f = B(a) & f is isomorphic & Q[latt a, O1(O2(a)), f] &
      end;
 A19: for a,b being object of A() st <^a,b^> <> {}
      for f being Morphism of a,b
-      holds a(b)*f2(o1(a),o1(b),f1(a,b,f)) = f*a(a)
+      holds A(b)*F2(O1(a),O1(b),F1(a,b,f)) = f*A(a)
      proof let a,b be object of A() such that
 A20:    <^a,b^> <> {};
       let f be Morphism of a,b;    @f = f by A20,Def7;
@@ -1126,7 +1109,7 @@ A20:    <^a,b^> <> {};
      end;
 A21: for a,b being object of B() st <^a,b^> <> {}
      for f being Morphism of a,b
-      holds f1(o2(a),o2(b),f2(a,b,f))*b(a) = b(b)*f
+      holds F1(O2(a),O2(b),F2(a,b,f))*B(a) = B(b)*f
      proof let a,b be object of B() such that
 A22:    <^a,b^> <> {};
       let f be Morphism of a,b;    @f = f by A22,Def7;

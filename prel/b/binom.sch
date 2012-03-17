@@ -14,8 +14,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
 </Signature>
 <Scheme>

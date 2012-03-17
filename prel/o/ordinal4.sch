@@ -10,8 +10,8 @@
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="SETFAM_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="ORDINAL4"/>
@@ -168,20 +168,20 @@
 <Adjective nr="21"/>
 </Cluster>
 </Typ>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="10">
+<Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="9">
+<Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>

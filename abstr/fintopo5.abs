@@ -1,0 +1,145 @@
+:: Homeomorphism between Finite Topological Spaces, Two-Dimensional Lattice 
+:: Spaces and a Fixed Point Theorem
+::  by Masami Tanaka , Hiroshi Imura and Yatsuka Nakamura
+:: 
+:: Received July 6, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
+      SQUARE_1, FINTOPO4, FINTOPO5, INT_1, ARYTM_3, ABSVALUE, TOPS_2, SGRAPH1,
+      XREAL_0, PRE_TOPC;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FIN_TOPO, FINTOPO3,
+      BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3, FINTOPO4, COMPLEX1, INT_1,
+      PRE_TOPC;
+ constructors FINTOPO3, FINTOPO4, BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3,
+      INT_1, REAL_1, NAT_1, COMPLEX1;
+ registrations SUBSET_1, INT_1, RELSET_1, STRUCT_0, NAT_1, XREAL_0, MEMBERED,
+      FIN_TOPO;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin
+
+theorem :: FINTOPO5:1
+  for X being set, Y being non empty set, f being Function of X,Y,
+      A being Subset of X st f is one-to-one holds
+   f".:(f.:A)=A;
+
+theorem :: FINTOPO5:2
+  for n being Nat holds n>0 iff Seg n<>{};
+
+definition let FT1,FT2 be FT_Space_Str, h be map of FT1, FT2;
+  pred h is_homeomorphism means
+:: FINTOPO5:def 1
+     h is one-to-one onto &
+    for x being Element of FT1 holds
+      h.:((the Nbd of FT1).x)=(the Nbd of FT2).(h.x);
+end;
+
+theorem :: FINTOPO5:3
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2 st h is_homeomorphism
+  ex g being map of FT2, FT1 st g=h" & g is_homeomorphism;
+
+theorem :: FINTOPO5:4
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2,
+      n being Nat, x being Element of FT1, y being Element of FT2
+    st h is_homeomorphism & y=h.x holds
+    (for z being Element of FT1 holds z in U_FT(x,n) iff h.z in U_FT(y,n));
+
+theorem :: FINTOPO5:5
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2,
+      n being Nat,x being Element of FT1,y being Element of FT2
+    st h is_homeomorphism & y=h.x holds
+    (for v being Element of FT2 holds
+    h".v in U_FT(x,n) iff v in U_FT(y,n));
+
+theorem :: FINTOPO5:6
+  for n being non zero Nat,
+      f being map of FTSL1 n, FTSL1 n st f is_continuous 0 holds
+   ex p being Element of FTSL1 n st f.p in U_FT(p,0);
+
+theorem :: FINTOPO5:7
+  for T being non empty FT_Space_Str,
+      p being Element of T, k being Nat st T is filled holds
+    U_FT(p,k) c= U_FT(p,k+1);
+
+theorem :: FINTOPO5:8
+  for T being non empty FT_Space_Str,
+      p being Element of T, k being Nat st T is filled holds
+    U_FT(p,0) c= U_FT(p,k);
+
+theorem :: FINTOPO5:9
+  for n being non zero Nat, jn,j,k being Nat,
+      p being Element of FTSL1 n st p=jn holds
+    j in U_FT(p,k) iff j in Seg n & abs(jn-j)<= k+1;
+
+:: Fixed Point Theorem
+theorem :: FINTOPO5:10
+  for kc,km being Nat, n being non zero Nat,
+      f being map of FTSL1 n, FTSL1 n st
+    f is_continuous kc & km=[/ (kc/2) \] holds
+    ex p being Element of FTSL1 n st f.p in U_FT(p,km);
+
+:: 2-dimensional linear FT_Str
+definition let n,m be Nat;
+  func Nbdl2(n,m) -> Function of [:Seg n, Seg m:], bool [:Seg n, Seg m:] means
+:: FINTOPO5:def 2
+   for x being set st x in [:Seg n, Seg m:] holds
+    for i,j being Nat st x=[i,j] holds
+      it.x = [:(Nbdl1 n).i, (Nbdl1 m).j:];
+end;
+
+definition let n,m be Nat;
+  func FTSL2(n,m) -> strict FT_Space_Str equals
+:: FINTOPO5:def 3
+  FT_Space_Str(# [:Seg n, Seg m:], Nbdl2(n,m) #);
+end;
+
+registration let n,m be non zero Nat;
+  cluster FTSL2(n,m) -> non empty;
+end;
+
+theorem :: FINTOPO5:11
+  for n,m being non zero Nat holds FTSL2(n,m) is filled;
+
+theorem :: FINTOPO5:12
+  for n,m being non zero Nat holds FTSL2(n,m) is symmetric;
+
+theorem :: FINTOPO5:13
+  for n being non zero Nat
+  ex h being map of FTSL2(n,1), FTSL1 n st h is_homeomorphism;
+
+:: 2-dimensional small FT_Str
+definition let n,m be Nat;
+  func Nbds2(n,m) -> Function of [:Seg n, Seg m:], bool [:Seg n, Seg m:] means
+:: FINTOPO5:def 4
+   for x being set st x in [:Seg n, Seg m:]
+    holds for i,j being Nat st x=[i,j] holds
+    it.x = [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:];
+end;
+
+definition let n,m be Nat;
+  func FTSS2(n,m) -> strict FT_Space_Str equals
+:: FINTOPO5:def 5
+  FT_Space_Str(# [:Seg n, Seg m:], Nbds2(n,m) #);
+end;
+
+registration let n,m be non zero Nat;
+  cluster FTSS2(n,m) -> non empty;
+end;
+
+theorem :: FINTOPO5:14
+  for n,m being non zero Nat holds FTSS2(n,m) is filled;
+
+theorem :: FINTOPO5:15
+  for n,m being non zero Nat holds FTSS2(n,m) is symmetric;
+
+theorem :: FINTOPO5:16
+  for n being non zero Nat
+   ex h being map of FTSS2(n,1), FTSL1 n st h is_homeomorphism;

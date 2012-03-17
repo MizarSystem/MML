@@ -8,7 +8,6 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="TARSKI"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -35,13 +34,13 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="10" value="false"/>
+<Adjective nr="9" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="9" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -56,8 +55,8 @@
 <For>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="10" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="9" value="false"/>
+<Adjective nr="53"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -89,7 +88,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="188">
+<Func kind="K" nr="172">
 <Func kind="U" nr="1">
 <Var nr="1"/>
 </Func>

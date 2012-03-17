@@ -24,12 +24,11 @@ environ
  constructors BINARITH, BORSUK_3, CARD_4, COMPTS_1, CONNSP_1, FINSEQOP,
       FINSEQ_4, GOBOARD9, JORDAN1, JORDAN2C, LIMFUNC1, PSCOMP_1, RCOMP_1,
       REAL_1, REALSET2, SPPOL_1, SPRECT_1, TBSP_1, TOPGRP_1, TOPREAL2,
-      TOPREAL4, TOPS_1, TOPS_2, WAYBEL_3, WEIERSTR, CQC_LANG, TOPRNS_1,
-      MEMBERED, PARTFUN1, BINOP_2, COMPLEX1, INT_2, NAT_1;
+      TOPREAL4, TOPS_1, TOPS_2, WAYBEL_3, WEIERSTR, CQC_LANG, TOPRNS_1, NAT_1;
  registrations SUBSET_1, XREAL_0, BORSUK_1, BORSUK_3, FUNCT_4, EUCLID,
       FINSET_1, GOBOARD9, METRIC_1, PCOMPS_1, PRE_TOPC, PSCOMP_1, RCOMP_1,
       RELSET_1, SPRECT_1, STRUCT_0, TEX_4, TOPGRP_1, TOPMETR, TOPS_1, WAYBEL_2,
-      WAYBEL12, YELLOW13, ARYTM_3, SQUARE_1, FINSEQ_5, MEMBERED;
+      WAYBEL12, YELLOW13, ARYTM_3, SQUARE_1, FINSEQ_5, MEMBERED, JORDAN2C;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, PRE_TOPC, TOPS_2, CONNSP_1, CONNSP_2, BORSUK_1,
       GROUP_1, JORDAN1, JORDAN2C, SEQ_4, METRIC_6, PSCOMP_1, SPPOL_1, T_0TOPSP,
@@ -42,8 +41,8 @@ environ
       PSCOMP_1, RCOMP_1, REAL_1, REAL_2, RELAT_1, RVSUM_1, SEQ_2, SEQ_4,
       SPPOL_1, SPRECT_1, SQUARE_1, SUBSET_1, TARSKI, TBSP_1, TOPMETR, TOPREAL1,
       TOPREAL3, TOPREAL4, TOPS_1, TOPS_2, WEIERSTR, YELLOW12, ZFMISC_1,
-      XREAL_0, AMI_1, CQC_LANG, TOPREAL5, SETFAM_1, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1, COMPLEX1;
+      XREAL_0, AMI_1, CQC_LANG, TOPREAL5, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      COMPLEX1;
  schemes FINSET_1, NAT_1, FUNCT_2;
 
 begin  :: Real numbers
@@ -543,7 +542,7 @@ A8:     A is compact;
         then b in F by A6;
         hence thesis;
       end;
-      then reconsider C = B as Subset-Family of T by SETFAM_1:def 7;
+      then reconsider C = B as Subset-Family of T;
       set K = union C \/ X;
       take K;
            union {x} = x by ZFMISC_1:31;
@@ -1754,23 +1753,21 @@ A1: Sphere(z,r) c= cl_Ball(z,r) by METRIC_1:16;
 theorem Th71:
  A is Bounded implies Cl A is Bounded
   proof
-    given C being Subset of Euclid n such that
-A1:   C = A and
-A2:   C is bounded;
+   assume
+A2:   A is bounded Subset of Euclid n;
     consider r being Real, x being Point of Euclid n such that
            0 < r and
-A3:   C c= Ball(x,r) by A2,METRIC_6:def 10;
+A3:   A c= Ball(x,r) by A2,METRIC_6:def 10;
 A4: Ball(x,r) c= cl_Ball(x,r) by METRIC_1:15;
     reconsider D = Cl A as Subset of Euclid n by TOPREAL3:13;
-    take D;
-    thus D = Cl A;
     reconsider B = cl_Ball(x,r) as Subset of TOP-REAL n by TOPREAL3:13;
 A5: B is closed by Th66;
 A6: cl_Ball(x,r) is bounded by Th67;
-         A c= B by A1,A3,A4,XBOOLE_1:1;
+         A c= B by A3,A4,XBOOLE_1:1;
     then Cl A c= Cl B by PRE_TOPC:49;
     then Cl A c= B by A5,PRE_TOPC:52;
-    hence D is bounded by A6,TBSP_1:21;
+    then D is bounded by A6,TBSP_1:21;
+   hence thesis by JORDAN2C:def 2;
   end;
 
 theorem
@@ -1817,10 +1814,9 @@ theorem
 A1:   n >= 1 and
 A2:   the carrier of M = X \/ Y;
     assume X is Bounded;
-    then consider C being Subset of Euclid n such that
-A3:   C = X & C is bounded by JORDAN2C:def 2;
+    then reconsider C = X as bounded Subset of Euclid n by JORDAN2C:def 2;
     reconsider D = Y as Subset of Euclid n by TOPREAL3:13;
-A4: the carrier of Euclid n = C \/ D by A2,A3,TOPREAL3:13;
+A4: the carrier of Euclid n = C \/ D by A2,TOPREAL3:13;
     reconsider E = [#]M as Subset of Euclid n by TOPREAL3:13;
 A5: E = the carrier of M by PRE_TOPC:def 3
      .= the carrier of Euclid n by TOPREAL3:13
@@ -1828,8 +1824,7 @@ A5: E = the carrier of M by PRE_TOPC:def 3
          [#](TOP-REAL n) is non Bounded by A1,JORDAN2C:41;
     then E is non bounded by JORDAN2C:def 2;
     then Euclid n is non bounded by A5,TBSP_1:25;
-    then for D being Subset of Euclid n holds
-     D <> Y or D is non bounded by A3,A4,Th73;
+    then D is non bounded by A4,Th73;
     hence thesis by JORDAN2C:def 2;
   end;
 
@@ -1838,13 +1833,15 @@ canceled;
 theorem
   A is Bounded & B is Bounded implies A \/ B is Bounded
   proof
-    given C being Subset of Euclid n such that
-A1:   C = A & C is bounded;
-    given D being Subset of Euclid n such that
-A2:   D = B & D is bounded;
-    reconsider E = C \/ D as Subset of Euclid n;
-    take E;
-    thus thesis by A1,A2,TBSP_1:20;
+    assume
+A1:   A is bounded Subset of Euclid n;
+     then reconsider A as Subset of Euclid n;
+    assume
+A2:   B is bounded Subset of Euclid n;
+     then reconsider B as Subset of Euclid n;
+     reconsider E = A \/ B as Subset of Euclid n;
+      E is bounded Subset of Euclid n by A1,A2,TBSP_1:20;
+    hence thesis by JORDAN2C:def 2;
   end;
 
 begin  :: Topological properties of real numbers subsets
@@ -2526,12 +2523,10 @@ theorem Th88:
   proof
     assume
 A1:   P is Bounded closed;
-    then consider C being Subset of Euclid 2 such that
-A2:   C = P and
-A3:   C is bounded by JORDAN2C:def 2;
+    then reconsider C = P as bounded Subset of Euclid 2 by JORDAN2C:def 2;
     consider r being Real, e such that
            0 < r and
-A4:   C c= Ball(e,r) by A3,METRIC_6:def 10;
+A4:   C c= Ball(e,r) by METRIC_6:def 10;
     reconsider p = e as Point of TOP-REAL 2 by TOPREAL3:13;
 A5: Ball(e,r) c= product ((1,2)-->(].p`1-r,p`1+r.[,].p`2-r,p`2+r.[)) by Th50;
        ].p`1-r,p`1+r.[ c= [.p`1-r,p`1+r.] & ].p`2-r,p`2+r.[ c= [.p`2-r,p`2+r.]
@@ -2541,7 +2536,7 @@ A5: Ball(e,r) c= product ((1,2)-->(].p`1-r,p`1+r.[,].p`2-r,p`2+r.[)) by Th50;
     then Ball(e,r) c= product ((1,2)-->([.p`1-r,p`1+r.],[.p`2-r,p`2+r.]))
       by A5,XBOOLE_1:1;
 then A6: P c= product ((1,2)-->([.p`1-r,p`1+r.],[.p`2-r,p`2+r.]))
-      by A2,A4,XBOOLE_1:1;
+      by A4,XBOOLE_1:1;
          product ((1,2)-->([.p`1-r,p`1+r.],[.p`2-r,p`2+r.])) is compact
       Subset of TOP-REAL 2 by Th87;
     hence P is compact by A1,A6,COMPTS_1:18;

@@ -17,7 +17,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
@@ -28,7 +27,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -37,7 +36,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -46,14 +45,14 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="37"/>
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 </Registrations>

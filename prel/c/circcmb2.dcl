@@ -21,15 +21,14 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="FUNCOP_1"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
+<ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
@@ -58,63 +57,63 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="7">
-<Func kind="K" nr="211">
+<Func kind="K" nr="195">
 <LocusVar nr="1"/>
-<Func kind="K" nr="401"/>
+<Func kind="K" nr="385"/>
 </Func>
-<Func kind="K" nr="401"/>
+<Func kind="K" nr="385"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="211">
+<Func kind="K" nr="195">
 <LocusVar nr="1"/>
-<Func kind="K" nr="401"/>
+<Func kind="K" nr="385"/>
 </Func>
-<Func kind="K" nr="401"/>
+<Func kind="K" nr="385"/>
 </Typ>
-<Typ kind="M" nr="48">
+<Typ kind="M" nr="46">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="400">
+<Func kind="K" nr="384">
 <LocusVar nr="1"/>
-<Func kind="K" nr="401"/>
+<Func kind="K" nr="385"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="82">
-<Func kind="K" nr="398">
+<Adjective nr="81">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="83">
-<Func kind="K" nr="398">
+<Adjective nr="82">
+<Func kind="K" nr="382">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="107">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
 <Adjective nr="108">
-<Func kind="K" nr="398">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="109">
-<Func kind="K" nr="398">
+<Adjective nr="115">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 </Adjective>
-<Adjective nr="116">
-<Func kind="K" nr="398">
-<LocusVar nr="2"/>
-<LocusVar nr="3"/>
-</Func>
-</Adjective>
-<Adjective nr="118">
-<Func kind="K" nr="398">
+<Adjective nr="117">
+<Func kind="K" nr="382">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

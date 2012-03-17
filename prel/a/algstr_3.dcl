@@ -13,7 +13,6 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_3"/>
 </Signature>
@@ -23,7 +22,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -32,7 +31,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -41,17 +40,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="23" value="false"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="98"/>
+<Func kind="K" nr="82"/>
 <Cluster>
-<Adjective nr="23" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="22" value="false"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

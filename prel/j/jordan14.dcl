@@ -19,8 +19,8 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
 <ArticleID name="RVSUM_1"/>
@@ -55,7 +55,7 @@
 <Adjective nr="89"/>
 <Adjective nr="93">
 <Func kind="U" nr="1">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -64,27 +64,27 @@
 <Adjective nr="95"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="243">
 <Num nr="2"/>
-<Func kind="K" nr="241">
+<Func kind="K" nr="233">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="35">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="39">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -99,7 +99,7 @@
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -110,12 +110,12 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
-<Func kind="K" nr="179">
+<Func kind="K" nr="125">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="250">
-<Func kind="K" nr="257">
+<Func kind="K" nr="242">
+<Func kind="K" nr="249">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -123,12 +123,12 @@
 </Func>
 <Cluster>
 <Adjective nr="36">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Adjective>
 <Adjective nr="102">
-<Func kind="K" nr="179">
+<Func kind="K" nr="171">
 <Num nr="2"/>
 </Func>
 </Adjective>

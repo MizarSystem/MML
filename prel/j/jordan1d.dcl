@@ -11,12 +11,12 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="XCMPLX_0"/>
@@ -43,7 +43,7 @@
 <Num nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="22"/>
 <Adjective nr="25"/>
 <Adjective nr="29"/>
 <Adjective nr="42"/>
@@ -63,7 +63,7 @@
 <Num nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="17"/>
+<Adjective nr="22"/>
 <Adjective nr="25"/>
 <Adjective nr="29"/>
 <Adjective nr="42" value="false"/>
@@ -84,7 +84,7 @@
 </Func>
 <Cluster>
 <Adjective nr="16"/>
-<Adjective nr="17"/>
+<Adjective nr="22"/>
 <Adjective nr="25"/>
 <Adjective nr="29"/>
 <Adjective nr="42"/>
@@ -111,7 +111,7 @@
 </Func>
 <Cluster>
 <Adjective nr="16"/>
-<Adjective nr="17"/>
+<Adjective nr="22"/>
 <Adjective nr="25"/>
 <Adjective nr="29"/>
 <Adjective nr="42"/>

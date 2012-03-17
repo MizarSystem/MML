@@ -6,12 +6,12 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="TOPS_1"/>
@@ -67,7 +67,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="5" value="false"/>
+<Adjective nr="4" value="false"/>
 <Adjective nr="15"/>
 </Cluster>
 </Typ>
@@ -161,7 +161,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="72">
+<Func kind="K" nr="64">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -192,7 +192,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="79">
+<Func kind="K" nr="71">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -272,9 +272,9 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="80">
-<LocusVar nr="1"/>
 <Func kind="K" nr="72">
+<LocusVar nr="1"/>
+<Func kind="K" nr="64">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -303,7 +303,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="80">
+<Func kind="K" nr="72">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -321,7 +321,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="72">
+<Func kind="K" nr="64">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -347,7 +347,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="73">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -365,7 +365,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="73">
+<Func kind="K" nr="65">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -392,7 +392,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="80">
+<Func kind="K" nr="72">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -460,7 +460,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -493,7 +493,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="81">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

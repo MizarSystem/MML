@@ -11,9 +11,9 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="CATALAN1"/>
 </Signature>
 <FCluster>
@@ -30,7 +30,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="20"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
@@ -50,7 +50,7 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="20"/>
+<Adjective nr="18"/>
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>

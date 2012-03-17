@@ -12,22 +12,21 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -40,6 +39,7 @@
 <ArticleID name="CAT_1"/>
 <ArticleID name="CAT_2"/>
 <ArticleID name="GRCAT_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="VECTSP_2"/>
@@ -96,7 +96,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="1"/>
@@ -119,7 +119,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="213">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -137,7 +137,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="F" nr="1"/>
@@ -167,7 +167,7 @@
 <Func kind="K" nr="47">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="213">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -188,7 +188,7 @@
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 <Adjective nr="120" value="false"/>
 </Cluster>
 <Func kind="K" nr="40">
@@ -227,7 +227,7 @@
 </Not>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="228">
+<Func kind="K" nr="214">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -246,7 +246,7 @@
 <For>
 <Typ kind="M" nr="3">
 <Cluster>
-<Adjective nr="24"/>
+<Adjective nr="21"/>
 <Adjective nr="120" value="false"/>
 </Cluster>
 <Func kind="K" nr="40">
@@ -277,7 +277,7 @@
 <Func kind="K" nr="47">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
-<Func kind="K" nr="227">
+<Func kind="K" nr="213">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -298,7 +298,7 @@
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="56"/>
 </Typ>
-<Typ kind="M" nr="35">
+<Typ kind="M" nr="33">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -310,7 +310,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="397">
+<Func kind="K" nr="389">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -322,7 +322,7 @@
 <Func kind="F" nr="4"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="398">
+<Func kind="K" nr="390">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -332,11 +332,11 @@
 <Typ kind="M" nr="4">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="165">
+<Func kind="K" nr="157">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
-<Func kind="K" nr="397">
+<Func kind="K" nr="389">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -350,8 +350,8 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="227">
-<Func kind="K" nr="397">
+<Func kind="K" nr="213">
+<Func kind="K" nr="389">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -367,7 +367,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="397">
+<Func kind="K" nr="389">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -378,7 +378,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
-<Func kind="K" nr="397">
+<Func kind="K" nr="389">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -403,7 +403,7 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="400">
+<Func kind="K" nr="392">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

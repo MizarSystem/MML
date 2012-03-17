@@ -25,11 +25,11 @@
 <ArticleID name="NEWTON"/>
 <ArticleID name="CARD_4"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="MEASURE1"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE2"/>
 <ArticleID name="MEASURE4"/>
 </Signature>
@@ -38,23 +38,23 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="25">
+<Typ kind="M" nr="23">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="211">
+<Func kind="K" nr="210">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="40">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
+<Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="47">
+<Adjective nr="46">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -17,7 +17,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -42,7 +41,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="164">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -71,7 +70,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="149">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -98,7 +97,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="164">
+<Func kind="K" nr="148">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -129,7 +128,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="165">
+<Func kind="K" nr="149">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -145,7 +144,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="168"/>
+<Func kind="K" nr="152"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
@@ -157,30 +156,30 @@
 <Cluster>
 <Adjective nr="5"/>
 <Adjective nr="23">
-<Func kind="K" nr="168"/>
-<Func kind="K" nr="146">
+<Func kind="K" nr="152"/>
+<Func kind="K" nr="130">
 <Func kind="K" nr="64">
-<Func kind="K" nr="169"/>
+<Func kind="K" nr="153"/>
 </Func>
 <Func kind="K" nr="64">
-<Func kind="K" nr="169"/>
+<Func kind="K" nr="153"/>
 </Func>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="168"/>
-<Func kind="K" nr="146">
+<Func kind="K" nr="152"/>
+<Func kind="K" nr="130">
 <Func kind="K" nr="64">
-<Func kind="K" nr="169"/>
+<Func kind="K" nr="153"/>
 </Func>
 <Func kind="K" nr="64">
-<Func kind="K" nr="169"/>
+<Func kind="K" nr="153"/>
 </Func>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="168"/>
+<Func kind="K" nr="152"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="20">

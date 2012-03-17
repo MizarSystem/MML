@@ -17,14 +17,14 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
-<ArticleID name="FUNCOP_1"/>
-<ArticleID name="MARGREL1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
 <ArticleID name="SUBSTUT1"/>
 <ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="MARGREL1"/>
 <ArticleID name="VALUAT_1"/>
 <ArticleID name="SUBLEMMA"/>
 </Signature>
@@ -33,7 +33,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="23">
-<Func kind="K" nr="212"/>
+<Func kind="K" nr="188"/>
 <Func kind="K" nr="106"/>
 </Func>
 </Typ>

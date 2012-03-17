@@ -14,9 +14,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="METRIC_1"/>
 </Signature>
 <FCluster>
@@ -49,8 +48,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="25" value="false"/>
+<Adjective nr="29"/>
 </Cluster>
 </FCluster>
 </Registrations>

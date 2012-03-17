@@ -16,7 +16,6 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MCART_1"/>
@@ -28,7 +27,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="37"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -37,7 +36,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -46,25 +45,25 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="143"/>
+<Func kind="K" nr="127"/>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="37"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="36"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -79,7 +78,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="148">
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -92,12 +91,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="154">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -108,17 +107,17 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="37"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 </Registrations>

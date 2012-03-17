@@ -10,12 +10,12 @@ environ
       PRE_TOPC;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, SETFAM_1,
       STRUCT_0;
- constructors STRUCT_0, FUNCT_2, MEMBERED;
+ constructors STRUCT_0, FUNCT_2, MEMBERED, SETFAM_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, MEMBERED;
  requirements BOOLE, SUBSET;
  definitions TARSKI, STRUCT_0;
  theorems TARSKI, SUBSET_1, ZFMISC_1, SETFAM_1, STRUCT_0, XBOOLE_0, XBOOLE_1;
- schemes SETFAM_1, XBOOLE_0;
+ schemes SUBSET_1;
 
 begin
 
@@ -55,7 +55,7 @@ registration
     then x c= X by XBOOLE_1:2;
     hence thesis;
    end;
-  then reconsider T as Subset-Family of X by SETFAM_1:def 7;
+  then reconsider T as Subset-Family of X;
   take T;
   set Y=TopStruct(#X,T#);
   thus the carrier of Y in the topology of Y by TARSKI:def 2;
@@ -103,7 +103,7 @@ theorem Th5:
   {} in the topology of GX
  proof
   {} c= bool the carrier of GX by XBOOLE_1:2;
-  then reconsider A = {} as Subset-Family of GX by SETFAM_1:def 7;
+  then reconsider A = {} as Subset-Family of GX;
   A c= the topology of GX & union A = {} by XBOOLE_1:2,ZFMISC_1:2;
   hence thesis by Def1;
  end;
@@ -329,13 +329,6 @@ A1:   the TopStruct of T is SubSpace of T by Lm1;
    end;
 end;
 
-scheme SubFamExS {A() -> set, P[Subset of A()]}:
-  ex F being Subset-Family of A() st
-  for B being Subset of A() holds B in F iff P[B]
-proof
-  thus thesis from SETFAM_1:sch 1;
-end;
-
 registration let T be TopSpace;
   cluster -> TopSpace-like SubSpace of T;
   coherence
@@ -359,7 +352,7 @@ A3:   [#]T = the carrier of T by Def3;
          $1 /\ the carrier of S in a & $1 in the topology of T;
         consider b being Subset-Family of T such that
         A6:for Z being Subset of T holds Z in b iff Q[Z]
-         from SubFamExS;
+         from SUBSET_1:sch 3;
              b c= the topology of T
         proof
           let y be set;
@@ -427,7 +420,7 @@ definition let T be TopStruct, P be Subset of T;
     defpred Q[set] means ex Q being Subset of T st
      Q in the topology of T & $1 = Q /\ P;
     consider top1 being Subset-Family of P such that
-    A2:for Z being Subset of P holds Z in top1 iff Q[Z] from SETFAM_1:sch 1;
+    A2:for Z being Subset of P holds Z in top1 iff Q[Z] from SUBSET_1:sch 3;
     reconsider top1 as Subset-Family of P;
     set Y = TopStruct(#P,top1#);
     A3:[#]Y c= [#]T by A1,Def3;
@@ -526,31 +519,6 @@ end;
 definition let S, T be TopStruct, f be map of S,T;
   attr f is continuous means
     for P1 being Subset of T st P1 is closed holds f" P1 is closed;
-end;
-
-scheme TopAbstr{A() -> set,P[set]}:
-  ex P being Subset of A() st
-  for x being set st x in A() holds x in P iff P[x]
-proof
-   defpred Q[set] means ex y being Element of A() st $1=y & P[y];
-   consider Z being set such that
-A1:for x being set holds x in Z iff x in A() & Q[x] from XBOOLE_0:sch 1;
-   for x being set holds x in Z implies x in A() by A1;
-   then reconsider Z as Subset of A() by TARSKI:def 3;
-   take Z;
-   for x being set st x in A() holds x in Z iff P[x]
-   proof
-    let x be set such that
-A2: x in A();
-    thus x in Z implies P[x]
-    proof
-     assume x in Z;
-      then ex y being Element of A() st x=y & P[y] by A1;
-     hence P[x];
-    end;
-    thus P[x] implies x in Z by A1,A2;
-   end;
- hence thesis;
 end;
 
 canceled 11;
@@ -664,7 +632,7 @@ proof
 A2:  F <> {};
   defpred Q[set] means [#]GX \ $1 in F;
   consider R1 being Subset-Family of GX such that
-  A3:for B being Subset of GX holds B in R1 iff Q[B] from SubFamExS;
+  A3:for B being Subset of GX holds B in R1 iff Q[B] from SUBSET_1:sch 3;
   now let B be set;
     assume A4:B in R1;
      then reconsider B1=B as Subset of GX;
@@ -756,9 +724,8 @@ definition let GX be TopStruct, A be Subset of GX;
 defpred P[set] means
   for G being Subset of GX st G is open holds $1 in G implies A meets G;
       consider P being Subset of GX such that
-A1:    for x being set st x in the carrier of GX holds x in P iff P[x]
-        from TopAbstr;
-      reconsider P as Subset of GX;
+A1:    for x being set holds x in P iff x in the carrier of GX & P[x]
+        from SUBSET_1:sch 1;
       take P;
       thus thesis by A1;
     end;
@@ -838,7 +805,7 @@ proof
     A c= $1;
    consider F' being Subset-Family of GX such that
    A1:for C being Subset of GX holds C in F' iff Q[C]
-    from SubFamExS;
+    from SUBSET_1:sch 3;
    take F=F';
    thus for C being Subset of GX holds C in F iff C is closed & A c= C
    proof

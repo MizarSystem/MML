@@ -16,9 +16,9 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
@@ -35,8 +35,8 @@
 <Adjective nr="9"/>
 <Adjective nr="16"/>
 <Adjective nr="22"/>
-<Adjective nr="24" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="23"/>
+<Adjective nr="25" value="false"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 </Cluster>
@@ -45,7 +45,7 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -60,7 +60,7 @@
 </Func>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="26"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -83,7 +83,7 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="22"/>
-<Adjective nr="25"/>
+<Adjective nr="23"/>
 <Adjective nr="26"/>
 </Cluster>
 </FCluster>
@@ -100,7 +100,7 @@
 </Func>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="26"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -122,7 +122,7 @@
 </Func>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="26"/>
+<Adjective nr="23"/>
 </Cluster>
 </FCluster>
 </Registrations>

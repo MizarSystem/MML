@@ -10,8 +10,8 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -25,10 +25,14 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="22">
+<Func kind="K" nr="22">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
+</Func>
 </Func>
 </Typ>
 <Not>
@@ -52,9 +56,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="94">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="74">
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -69,7 +73,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="94">
+<Func kind="K" nr="86">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -91,10 +95,14 @@
 </Typ>
 </ArgTypes>
 <For>
-<Typ kind="M" nr="7">
+<Typ kind="M" nr="2">
 <Cluster/>
+<Func kind="K" nr="22">
+<Func kind="K" nr="22">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
+</Func>
 </Func>
 </Typ>
 <Not>
@@ -118,9 +126,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="93">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="74">
+<Func kind="K" nr="66">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -135,7 +143,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="93">
+<Func kind="K" nr="85">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>

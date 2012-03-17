@@ -18,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="FUNCT_3"/>
@@ -60,8 +59,8 @@
 <ArgTypes>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="82"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -86,7 +85,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="74">
+<Adjective nr="73">
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -94,19 +93,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="126"/>
-<Adjective nr="164">
+<Adjective nr="125"/>
+<Adjective nr="163">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="194">
+<Adjective nr="193">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="204">
+<Adjective nr="203">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="206">
+<Adjective nr="205">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -6,7 +6,6 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -16,11 +15,15 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="5">
+<Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="1" value="false"/>
 </Cluster>
+<Func kind="K" nr="10">
+<Func kind="K" nr="10">
 <Func kind="F" nr="1"/>
+</Func>
+</Func>
 </Typ>
 <Not>
 <For>

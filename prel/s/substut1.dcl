@@ -17,10 +17,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="QC_LANG1"/>
-<ArticleID name="QC_LANG2"/>
-<ArticleID name="CQC_LANG"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
 <ArticleID name="SUBSTUT1"/>
 </Signature>
 <RCluster>
@@ -57,7 +57,7 @@
 <Func kind="K" nr="173"/>
 <Cluster>
 <Adjective nr="6" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>

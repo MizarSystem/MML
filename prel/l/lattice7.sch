@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -35,12 +34,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="79"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -73,7 +72,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="22">
+<Pred kind="R" nr="20">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 <Var nr="1"/>

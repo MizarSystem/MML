@@ -14,7 +14,7 @@ environ
       FINSET_1, MCART_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_1,
       TREES_2, TREES_3, TREES_4, FINSEQOP;
  constructors NAT_1, CARD_3, DOMAIN_1, BINOP_1, FINSOP_1, LANG1, TREES_4,
-      MEMBERED, PARTFUN1, XBOOLE_0, FINSEQOP, XREAL_0;
+      PARTFUN1, FINSEQOP, XREAL_0;
  registrations SUBSET_1, LANG1, TREES_1, TREES_2, TREES_3, TREES_4, RELSET_1,
       FINSEQ_1, STRUCT_0, XREAL_0, NAT_1, ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -208,10 +208,9 @@ scheme DTConstrStrEx { S() -> non empty set,
   for x being Symbol of G, p being FinSequence of the carrier of G
    holds x ==> p iff P[x, p]
 proof
-  defpred R[set,set] means P[$1,$2];
   consider PR being Relation of S(), S()* such that
 A1: for x, y being set
-    holds [x,y] in PR iff x in S() & y in S()* & R[x, y] from RELSET_1:sch 1;
+    holds [x,y] in PR iff x in S() & y in S()* & P[x, y] from RELSET_1:sch 1;
    take DT = DTConstrStr (# S(), PR #);
    thus the carrier of DT = S();
    let x be Symbol of DT,
@@ -552,31 +551,29 @@ set S = the carrier of G;
 set SxD = [:S, D:];
 deffunc
  NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
- deffunc F(set) = TermVal($1);
- deffunc G(set,set,set) = NTermVal($1,$2,$3);
 A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
-           t in Terminals G() & d = F(t) or
-           t ==> {} & d = G(t, {}, {}) } by A2;
+           t in Terminals G() & d = TermVal(t) or
+           t ==> {} & d = NTermVal(t, {}, {}) } by A2;
 A5:  for n being Nat
     holds f().(n+1) =
-     f().n \/ { [o, G(o, pr1 roots p, pr2 roots p)]-tree p
+     f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q } by A3;
  consider X being Subset of FinTrees [:the carrier of G, D:] such that
 A6: X = Union f &
     (for d being Symbol of G st d in Terminals G
-                               holds root-tree [d, F(d)] in X) &
+                               holds root-tree [d, TermVal(d)] in X) &
     (for o being Symbol of G,
          p being FinSequence of X st o ==> pr1 roots p
-            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
     (for F being Subset of FinTrees [:the carrier of G, D:] st
         (for d being Symbol of G st d in Terminals G
-                               holds root-tree [d, F(d)] in F ) &
+                               holds root-tree [d, TermVal(d)] in F ) &
         (for o being Symbol of G,
              p being FinSequence of F st o ==> pr1 roots p
-            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in F)
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in F)
        holds X c= F ) from DTCMin (A1, A4, A5);
  set X' = { t`1 where t is Element of FinTrees [:the carrier of G,D:]:
            t in Union f };
@@ -984,15 +981,13 @@ set S = the carrier of G;
 set SxD = [:S, D:];
 deffunc
  NTV(Symbol of G, FinSequence) =NTermVal($1, pr1 roots $2, pr2 roots $2);
- deffunc F(set) = TermVal($1);
- deffunc G(set,set,set) = NTermVal($1,$2,$3);
 A4:  f().0 = { root-tree [t, d] where t is Symbol of G(),
                                   d is Element of D() :
-           t in Terminals G() & d = F(t) or
-           t ==> {} & d = G(t, {}, {}) } by A2;
+           t in Terminals G() & d = TermVal(t) or
+           t ==> {} & d = NTermVal(t, {}, {}) } by A2;
 A5:  for n being Nat
     holds f().(n+1) =
-     f().n \/ { [o, G(o, pr1 roots p, pr2 roots p)]-tree p
+     f().n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G(), p is Element of (f().n)* :
             ex q being FinSequence of FinTrees [:the carrier of G(), D():] st
                                p = q & o ==> pr1 roots q } by A3;
@@ -1031,16 +1026,16 @@ A15: dt1 in Union f & dt2 in Union f by A1,A13,CARD_5:10;
    ex X being Subset of FinTrees [:the carrier of G(), D():]
  st X = Union f() &
     (for d being Symbol of G() st d in Terminals G()
-                               holds root-tree [d, F(d)] in X) &
+                               holds root-tree [d, TermVal(d)] in X) &
     (for o being Symbol of G(),
          p being FinSequence of X st o ==> pr1 roots p
-            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in X ) &
     (for F being Subset of FinTrees [:the carrier of G(), D():] st
         (for d being Symbol of G() st d in Terminals G()
-                               holds root-tree [d, F(d)] in F ) &
+                               holds root-tree [d, TermVal(d)] in F ) &
         (for o being Symbol of G(),
              p being FinSequence of F st o ==> pr1 roots p
-            holds [o, G(o, pr1 roots p, pr2 roots p)]-tree p in F)
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in F)
        holds X c= F ) from DTCMin(A1, A4, A5);
      then reconsider dt1' = dt1, dt2' = dt2 as Element of FinTrees SxD
              by A15;
@@ -1382,10 +1377,9 @@ scheme DTConstrIndDef{G()->non empty DTConstrStr, D()->non empty set,
        ts being FinSequence of TS(G()) st nt ==> roots ts
          holds f.(nt-tree ts) = NTermVal(nt, roots ts, f * ts))
 proof set G = G();
-deffunc TT(set) = TermVal($1);
-deffunc NN(set,set,set) = NTermVal($1,$2,$3);
-deffunc  NTV(Symbol of G, FinSequence) = NN($1, pr1 roots $2, pr2 roots $2);
-deffunc F(set,set) = $2 \/ { [o, NN(o, pr1 roots p, pr2 roots p)]-tree p
+deffunc
+ NTV(Symbol of G, FinSequence) = NTermVal($1, pr1 roots $2, pr2 roots $2);
+deffunc F(set,set) = $2 \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G, p is Element of $2* :
             ex q being FinSequence of FinTrees [:the carrier of G, D():] st
                                p = q & o ==> pr1 roots q };
@@ -1393,12 +1387,12 @@ consider f being Function such that
 A1: dom f = NAT and
 A2: f.0 = { root-tree [t, d] where t is Symbol of G,
                                   d is Element of D() :
-           t in Terminals G & d = TT(t) or
-           t ==> {} & d = NN(t, {}, {}) } and
+           t in Terminals G & d = TermVal(t) or
+           t ==> {} & d = NTermVal(t, {}, {}) } and
 A3: for n being Nat holds f.(n+1) = F(n,f.n) from RECDEF_1:sch 3;
 A4:  for n being Nat
     holds f.(n+1) =
-     f.n \/ { [o, NN(o, pr1 roots p, pr2 roots p)]-tree p
+     f.n \/ { [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p
            where o is Symbol of G, p is Element of (f.n)* :
             ex q being FinSequence of FinTrees [:the carrier of G, D():] st
                                p = q & o ==> pr1 roots q } by A3;
@@ -1447,16 +1441,16 @@ A10: for e being set st e in TS(G) holds P[e,ff.e]
  consider X be Subset of FinTrees [:the carrier of G, D():] such that
 A11: X = Union f and
 A12: for d being Symbol of G st d in Terminals G
-                               holds root-tree [d, TT(d)] in X and
+                               holds root-tree [d, TermVal(d)] in X and
 A13: for o being Symbol of G,
         p being FinSequence of X st o ==> pr1 roots p
-            holds [o, NN(o, pr1 roots p, pr2 roots p)]-tree p in X and
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in X and
        for F being Subset of FinTrees [:the carrier of G, D():] st
         (for d being Symbol of G st d in Terminals G
-                               holds root-tree [d, TT(d)] in F ) &
+                               holds root-tree [d, TermVal(d)] in F ) &
         (for o being Symbol of G,
              p being FinSequence of F st o ==> pr1 roots p
-            holds [o, NN(o, pr1 roots p, pr2 roots p)]-tree p in F)
+            holds [o, NTermVal(o, pr1 roots p, pr2 roots p)]-tree p in F)
        holds X c= F from DTCMin (A1, A2, A4);
  hereby let t be Symbol of G; assume
 A14: t in Terminals G;

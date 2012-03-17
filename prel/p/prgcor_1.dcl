@@ -2,17 +2,17 @@
 <Registrations>
 <Signature>
 <ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
-<ArticleID name="TARSKI"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="XBOOLE_0"/>
 <ArticleID name="ORDINAL2"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="RELSET_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 </Signature>
@@ -23,7 +23,7 @@
 </Typ>
 <Typ kind="M" nr="5">
 <Cluster>
-<Adjective nr="4"/>
+<Adjective nr="5"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="K" nr="55"/>
@@ -32,7 +32,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="11">
+<Func kind="K" nr="20">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>

@@ -15,14 +15,14 @@ environ
  constructors METRIC_1, REAL_1, TOPS_2, COMPTS_1, SQUARE_1, FINSEQ_1, NAT_1,
       MEMBERED;
  registrations SUBSET_1, METRIC_1, PRE_TOPC, FINSET_1, STRUCT_0, METRIC_3,
-      COMPLSP1, XREAL_0, RELSET_1, TOPS_1, ARYTM_3, SETFAM_1, MEMBERED;
+      COMPLSP1, XREAL_0, RELSET_1, TOPS_1, ARYTM_3, MEMBERED;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0;
  theorems COMPTS_1, PRE_TOPC, TOPS_1, AXIOMS, TOPS_2, NAT_1, REAL_1, FINSET_1,
       REAL_2, SUBSET_1, SETFAM_1, TARSKI, FINSEQ_1, ZFMISC_1, SQUARE_1,
       FUNCT_1, FUNCT_2, METRIC_1, RELAT_1, STRUCT_0, XBOOLE_0, XBOOLE_1,
       XREAL_0;
- schemes SETFAM_1, FUNCT_2, NAT_1, PRE_TOPC;
+ schemes SUBSET_1, FUNCT_2, NAT_1;
 
 begin
 
@@ -30,20 +30,21 @@ begin
  reserve x,y for Element of PM;
  reserve r,p,q,s,t for Real;
 
-theorem
-Th1: r <= p implies Ball(x,r) c= Ball(x,p)
+theorem Th1:
+  for r, p being real number st r <= p holds Ball(x,r) c= Ball(x,p)
      proof
+      let r, p be real number;
       assume A1: r <= p;
-          for y holds y in Ball(x,r) implies y in Ball(x,p)
+      for y holds y in Ball(x,r) implies y in Ball(x,p)
       proof
        let y;
        assume
-A2:      y in Ball(x,r);
+A2:    y in Ball(x,r);
 A3:    PM is non empty
        proof
-         thus the carrier of PM is non empty by A2;
+        thus the carrier of PM is non empty by A2;
        end;
-           dist(x,y) < r by A2,METRIC_1:12;
+       dist(x,y) < r by A2,METRIC_1:12;
        then dist(x,y) < p by A1,AXIOMS:22;
        hence thesis by A3,METRIC_1:12;
       end;
@@ -59,15 +60,15 @@ Th2:Cl(A) <> {} iff A <> {}
   A1: Cl(A) <> {} implies A <> {}
   proof
    assume that A2: Cl(A) <> {} and A3: A = {};
-       Cl(A) = {}(T) by A3,PRE_TOPC:52;
+   Cl(A) = {}(T) by A3,PRE_TOPC:52;
    hence thesis by A2;
   end;
-      A <> {} implies Cl(A) <> {}
+  A <> {} implies Cl(A) <> {}
   proof
    assume A4: A <> {};
    A5: A c= Cl A by PRE_TOPC:48;
    consider x being Element of A;
-       ex x be set st x in Cl A
+   ex x be set st x in Cl A
    proof
     take x;
     thus thesis by A4,A5,TARSKI:def 3;
@@ -77,10 +78,7 @@ Th2:Cl(A) <> {} iff A <> {}
   hence thesis by A1;
  end;
 
-theorem
-      Cl(A) = {} implies A = {} by Th2;
-
-canceled;
+canceled 2;
 
  reserve T for non empty TopSpace;
  reserve x,y for Point of T;
@@ -108,8 +106,12 @@ theorem
        end;
 
 definition let X be set;
-  redefine func bool X -> non empty Subset-Family of X;
-  coherence by SETFAM_1:def 7;
+  redefine func bool X -> Subset-Family of X;
+  coherence
+   proof
+     bool X in bool bool X by ZFMISC_1:def 1;
+    hence thesis;
+   end;
 end;
 
 definition let D be set;
@@ -302,7 +304,7 @@ definition let T be TopStruct, FX be Subset-Family of T;
   defpred P[set] means
    ex W being Subset of T st $1 = Cl W & W in FX;
   thus ex S be Subset-Family of T st
-   for Z be Subset of T holds Z in S iff P[Z] from PRE_TOPC:sch 1;
+   for Z be Subset of T holds Z in S iff P[Z] from SUBSET_1:sch 3;
  end;
  uniqueness
   proof
@@ -574,10 +576,9 @@ scheme Lambda1top{T()->TopSpace,
 provided
 A1: for Z being Subset of T() st Z in X() holds F(Z) in Y()
 proof
-deffunc G(set) = F($1);
-A2:for x be set st x in X() holds G(x) in Y() by A1;
+A2:for x be set st x in X() holds F(x) in Y() by A1;
 consider f being Function of X(),Y() such that
-      A3: for x be set st x in X() holds f.x = G(x) from FUNCT_2:sch 2(A2);
+      A3: for x be set st x in X() holds f.x = F(x) from FUNCT_2:sch 2(A2);
 take f;
 thus thesis by A3;
 end;
@@ -866,7 +867,7 @@ theorem
         x in B & $1 = W & V is open & W is open & A c= V & x in W & V misses W;
        consider GX such that
        A4: for X being Subset of T holds
-           X in GX iff P[X] from PRE_TOPC:sch 1;
+           X in GX iff P[X] from SUBSET_1:sch 3;
        A5: GX is_a_cover_of T
           proof
            [#](T) = union GX
@@ -1103,19 +1104,6 @@ theorem
  reserve x,y,z for Element of PM;
  reserve V,W,Y for Subset of PM;
 
-scheme SubFamExM {A() -> MetrStruct, P[Subset of A()]}:
-   ex F being Subset-Family of A() st
-   for B being Subset of A() holds B in F iff P[B]
-proof
-   defpred Q[Subset of A()] means P[$1];
-   consider F being Subset-Family of A() such that
-A1: for B being Subset of A() holds B in F iff Q[B]
-     from SETFAM_1:sch 1;
-   reconsider F as Subset-Family of A();
-   take F;
-   thus thesis by A1;
-end;
-
 definition let PM;
    func Family_open_set(PM) -> Subset-Family of PM means
 :Def5:   for V holds V in it iff for x st x in V holds
@@ -1124,7 +1112,7 @@ definition let PM;
  proof
   defpred P[set] means for x st x in $1 holds ex r st r>0 & Ball(x,r) c= $1;
   thus ex S be Subset-Family of PM st for V holds V in S iff P[V]
-   from SubFamExM;
+   from SUBSET_1:sch 3;
  end;
  uniqueness
   proof

@@ -10,7 +10,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -21,12 +20,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="13" value="false"/>
+<Adjective nr="12" value="false"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -34,7 +33,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="R" nr="26">
+<Pred kind="R" nr="24">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>
@@ -44,13 +43,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -75,14 +74,14 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="21">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -116,14 +115,14 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="21">
+<Pred kind="R" nr="19">
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="2"/>
@@ -137,7 +136,7 @@
 </For>
 </Not>
 <Not>
-<Pred kind="R" nr="26">
+<Pred kind="R" nr="24">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Fraenkel>
@@ -147,13 +146,13 @@
 <Func kind="F" nr="2"/>
 </Func>
 </Typ>
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
 </Func>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="84">
+<Func kind="K" nr="68">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -165,39 +164,5 @@
 </And>
 </Not>
 </And>
-<For>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="U" nr="1">
-<Func kind="F" nr="1"/>
-</Func>
-</Typ>
-<And>
-<Not>
-<And>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-<Not>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-</Not>
-</And>
-</Not>
-<Not>
-<And>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-<Not>
-<Pred kind="P" nr="1">
-<Var nr="1"/>
-</Pred>
-</Not>
-</And>
-</Not>
-</And>
-</For>
 </Scheme>
 </Schemes>

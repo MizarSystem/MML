@@ -16,18 +16,17 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XCMPLX_0"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
-<ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="REALSET1"/>
-<ArticleID name="ORDERS_1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
@@ -65,20 +64,20 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="10">
-<Func kind="K" nr="430">
+<Func kind="K" nr="414">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="450">
+<Func kind="K" nr="434">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="70"/>
-<Adjective nr="83"/>
+<Adjective nr="82"/>
 </Cluster>
 </FCluster>
 </Registrations>

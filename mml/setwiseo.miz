@@ -17,7 +17,7 @@ environ
  definitions BINOP_1, TARSKI;
  theorems FINSUB_1, ZFMISC_1, SUBSET_1, BINOP_1, TARSKI, FUNCT_1, FUNCT_2,
       FUNCOP_1, FINSET_1, ENUMSET1, RELAT_1, XBOOLE_0, XBOOLE_1;
- schemes FINSET_1, FUNCT_2, BINOP_1, XBOOLE_0;
+ schemes FINSET_1, FUNCT_2, BINOP_1, XBOOLE_0, SUBSET_1;
 
 begin ::  A u x i l i a r y   T h e o r e m s
 
@@ -123,18 +123,6 @@ theorem Th13:
    hence f.:{x} = {f.x} by TARSKI:def 1;
   end;
 
-scheme SubsetEx { A() -> non empty set, P[set] } :
-  ex B being Subset of A() st
-   for x being Element of A() holds x in B iff P[x]
-proof defpred X[set] means P[$1];
-   consider B being set such that
-A1: for x being set holds x in B iff x in A() & X[x] from XBOOLE_0:sch 1;
-     for x being set holds x in B implies x in A() by A1;
-  then reconsider B as Subset of A() by TARSKI:def 3;
-  take B; let x be Element of A();
-  thus x in B iff P[x] by A1;
- end;
-
 :: Theorems related to Fin ...
 
 theorem Th14:
@@ -229,7 +217,7 @@ proof
 A1:  now let x be Element of A();
       defpred X[set] means $1 in B() & P[$1,x];
       consider y being Subset of A() such that
-A2:    for a being Element of A() holds a in y iff X[a] from SubsetEx;
+A2:    for a being Element of A() holds a in y iff X[a] from SUBSET_1:sch 3;
      reconsider B = B() as Subset of A() by FINSUB_1:def 5;
         for x being Element of A() holds x in y implies x in B by A2;
   then y c= B() by SUBSET_1:7;
@@ -396,11 +384,10 @@ A1:  P[{}.X()] and
 A2:  for B' being (Element of Fin X()), b being Element of X()
       holds P[B'] implies P[B' \/ {b}]
 proof
- defpred X[set] means P[$1];
-A3:  X[{}.X()] by A1;
+A3:  P[{}.X()] by A1;
 A4:  for B' being (Element of Fin X()), b being Element of X()
-      holds X[B'] & not b in B' implies X[B' \/ {b}] by A2;
- thus for B being Element of Fin X() holds X[B] from FinSubInd1(A3,A4);
+      holds P[B'] & not b in B' implies P[B' \/ {b}] by A2;
+ thus for B being Element of Fin X() holds P[B] from FinSubInd1(A3,A4);
 end;
 
 definition let X, Y be non empty set;

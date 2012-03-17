@@ -12,8 +12,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
@@ -24,7 +22,9 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="SQUARE_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="PYTHTRIP"/>
 </Signature>
 <RCluster>
@@ -39,10 +39,10 @@
 <Adjective nr="9"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
+<Adjective nr="40"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>
@@ -58,10 +58,10 @@
 <Adjective nr="9"/>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="20" value="false"/>
-<Adjective nr="21"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="42" value="false"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>
@@ -73,9 +73,9 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>
@@ -87,9 +87,9 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </RCluster>
@@ -99,7 +99,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="21"/>
 <Adjective nr="45" value="false"/>
 <Adjective nr="46"/>
 </Cluster>
@@ -111,14 +111,14 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </FCluster>
@@ -142,8 +142,8 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
 </Cluster>
 </FCluster>
@@ -151,45 +151,45 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="21"/>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="136">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="44"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="41" value="false"/>
+<Adjective nr="37" value="false"/>
 <Adjective nr="44"/>
 </Cluster>
 </Typ>
@@ -199,11 +199,10 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
-<Adjective nr="41"/>
+<Adjective nr="37"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 <Adjective nr="44" value="false"/>
 </Cluster>
 </FCluster>
@@ -218,8 +217,8 @@
 <Cluster>
 <Adjective nr="16"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
-<Adjective nr="21"/>
+<Adjective nr="40"/>
+<Adjective nr="43"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -229,7 +228,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="21"/>
 </Cluster>
 </CCluster>
 </Registrations>

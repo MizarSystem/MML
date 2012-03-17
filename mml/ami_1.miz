@@ -12,7 +12,7 @@ environ
       CARD_3, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NAT_1, CQC_LANG, FRAENKEL,
       FUNCOP_1, FUNCT_4, FINSEQ_1, PARTFUN1, STRUCT_0;
  constructors CARD_3, NAT_1, CQC_LANG, CAT_2, INT_2, PARTFUN1, STRUCT_0,
-      MEMBERED, XBOOLE_0, FUNCOP_1;
+      FUNCOP_1, SETFAM_1;
  registrations SUBSET_1, FUNCT_1, INT_1, FRAENKEL, RELAT_1, FINSET_1, RELSET_1,
       FINSEQ_1, FUNCOP_1, FUNCT_4, CQC_LANG, STRUCT_0, XBOOLE_0, FUNCT_2,
       ORDINAL2, SETFAM_1;
@@ -284,9 +284,19 @@ existence
   end;
 end;
 
+registration let N; let S be halting (non void AMI-Struct over N);
+ cluster halting Instruction of S;
+ existence
+  proof
+    ex I being Instruction of S st I is halting &
+     for J being Instruction of S st J is halting holds I = J by Def9;
+   hence thesis;
+  end;
+end;
+
 definition let N; let S be halting (non void AMI-Struct over N);
  func halt S -> Instruction of S means
-:Def10:  ex I being Instruction of S st I is halting & it = I;
+:Def10: it is halting Instruction of S;
 existence
   proof
      consider I being Instruction of S such that
@@ -298,32 +308,19 @@ A1:   I is halting and
 uniqueness
   proof
     let I1, I2 be Instruction of S such that
-A2:  ex I being Instruction of S st I is halting & I1 = I and
-A3:  ex I being Instruction of S st I is halting & I2 = I;
-    consider Ia being Instruction of S such that
-A4:   Ia is halting & I1 = Ia by A2;
-    consider Ib being Instruction of S such that
-A5:   Ib is halting & I2 = Ib by A3;
+A2:  I1 is halting Instruction of S and
+A3:  I2 is halting Instruction of S;
     consider I being Instruction of S such that
 A6:   I is halting &
       for J being Instruction of S st J is halting holds I = J by Def9;
-       I = Ia by A4,A6;
-    hence thesis by A4,A5,A6;
+       I = I1 by A2,A6;
+    hence thesis by A3,A6;
    end;
-end;
-
-Lm1:
-now let N; let S be halting (non void AMI-Struct over N);
-  thus halt S is halting
-  proof
-       ex I being Instruction of S st I is halting & halt S = I by Def10;
-    hence thesis;
-  end;
 end;
 
 registration let N; let S be halting (non void AMI-Struct over N);
  cluster halt S -> halting;
-coherence by Lm1;
+coherence by Def10;
 end;
 
 definition let N be set; let IT be non empty AMI-Struct over N;

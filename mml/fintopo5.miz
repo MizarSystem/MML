@@ -1,0 +1,1344 @@
+:: Homeomorphism between Finite Topological Spaces, Two-Dimensional Lattice 
+:: Spaces and a Fixed Point Theorem
+::  by Masami Tanaka , Hiroshi Imura and Yatsuka Nakamura
+:: 
+:: Received July 6, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FINSEQ_1, BOOLE, FUNCT_1, RELAT_1, ARYTM_1, RELAT_2, FIN_TOPO,
+      SQUARE_1, FINTOPO4, FINTOPO5, INT_1, ARYTM_3, ABSVALUE, TOPS_2, SGRAPH1,
+      XREAL_0, PRE_TOPC;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
+      STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FIN_TOPO, FINTOPO3,
+      BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3, FINTOPO4, COMPLEX1, INT_1,
+      PRE_TOPC;
+ constructors FINTOPO3, FINTOPO4, BINARITH, ENUMSET1, LIMFUNC1, RFUNCT_3,
+      INT_1, REAL_1, NAT_1, COMPLEX1;
+ registrations SUBSET_1, INT_1, RELSET_1, STRUCT_0, NAT_1, XREAL_0, MEMBERED,
+      FIN_TOPO;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions TARSKI;
+ theorems NAT_1, NAT_2, AXIOMS, ZFMISC_1, REAL_1, INT_1, FUNCT_1, FUNCT_2,
+      FINSEQ_1, ABSVALUE, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, UNIFORM1,
+      FIN_TOPO, FINTOPO3, SQUARE_1, BINARITH, ENUMSET1, STRUCT_0, FINTOPO4,
+      JORDAN3, JORDAN4, TARSKI, JGRAPH_6;
+ schemes NAT_1, FUNCT_2;
+
+begin
+
+theorem AA12:
+  for X being set, Y being non empty set, f being Function of X,Y,
+      A being Subset of X st f is one-to-one holds
+   f".:(f.:A)=A
+  proof let X be set, Y be non empty set, f be Function of X,Y,
+        A be Subset of X;
+    assume A1: f is one-to-one;
+    dom f = X by FUNCT_2:def 1;
+    hence thesis by A1,JGRAPH_6:22;
+  end;
+
+theorem
+  for n being Nat holds n>0 iff Seg n<>{}
+  proof
+    let n be Nat;
+    hereby assume n>0;then
+      n>=0+1 by NAT_1:38;
+      hence Seg n <>{} by FINSEQ_1:3;
+    end;
+    assume A2: Seg n<>{};
+    assume n<=0;then
+    n=0;
+    hence contradiction by A2,FINSEQ_1:4;
+  end;
+
+definition let FT1,FT2 be FT_Space_Str, h be map of FT1, FT2;
+  pred h is_homeomorphism means
+    :AA25: h is one-to-one onto &
+    for x being Element of FT1 holds
+      h.:((the Nbd of FT1).x)=(the Nbd of FT2).(h.x);
+end;
+
+theorem AA22:
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2 st h is_homeomorphism
+  ex g being map of FT2, FT1 st g=h" & g is_homeomorphism
+  proof let FT1,FT2 be non empty FT_Space_Str,
+    h be map of FT1, FT2;
+    assume h is_homeomorphism;then
+A1: h is one-to-one onto &
+    for x being Element of FT1 holds
+      h.:((the Nbd of FT1).x)=(the Nbd of FT2).(h.x) by AA25;then
+A2: rng h = the carrier of FT2 by FUNCT_2:def 3;then
+    reconsider g2=h" as map of FT2, FT1 by A1,FUNCT_2:31;
+A3: g2 is one-to-one by FUNCT_1:62,A1;
+    rng g2=dom h by FUNCT_1:55,A1
+         .=the carrier of FT1 by FUNCT_2:def 1;then
+    A4: g2 is onto by FUNCT_2:def 3;
+    for y being Element of FT2 holds
+      g2.:((the Nbd of FT2).y)=(the Nbd of FT1).(g2.y)
+    proof let y be Element of FT2;
+      y=h.(g2.y) by A1,FUNCT_1:57,A2;then
+      h.: ((the Nbd of FT1).(g2.y))= (the Nbd of FT2).y by A1;
+      hence g2.:((the Nbd of FT2).y)=(the Nbd of FT1).(g2.y) by A1,AA12;
+    end;then
+    g2 is_homeomorphism by A3,A4,AA25;
+    hence thesis;
+  end;
+
+theorem AA95:
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2,
+      n being Nat, x being Element of FT1, y being Element of FT2
+    st h is_homeomorphism & y=h.x holds
+    (for z being Element of FT1 holds z in U_FT(x,n) iff h.z in U_FT(y,n))
+  proof let FT1,FT2 be non empty FT_Space_Str,
+    h be map of FT1, FT2,
+    n be Nat,x be Element of FT1,y be Element of FT2;
+    assume A1: h is_homeomorphism & y=h.x;
+    x in the carrier of FT1;then
+A2: x in dom h by FUNCT_2:def 1;
+A3: h is one-to-one onto & for x2 being Element of FT1 holds
+      h.:((the Nbd of FT1).x2)=(the Nbd of FT2).(h.x2) by AA25,A1;
+    let z be Element of FT1;
+    z in the carrier of FT1;then
+      A4: z in dom h by FUNCT_2:def 1;
+      A5: now assume A6: z in U_FT(x,n);
+        defpred P[Nat] means
+        for w being Element of FT1
+          holds w in U_FT(x,$1) implies h.w in U_FT(y,$1);
+        for w being Element of FT1
+          holds w in U_FT(x,0) implies h.w in U_FT(y,0)
+        proof let w be Element of FT1;
+          A7: h.:((the Nbd of FT1).x)=(the Nbd of FT2).(h.x) by A3;
+          w in the carrier of FT1;then
+          A8: w in dom h by FUNCT_2:def 1;
+          hereby assume w in U_FT(x,0);then
+            w in U_FT x by FINTOPO3:47;then
+            w in (the Nbd of FT1).x by FIN_TOPO:def 1;then
+            h.w in h.:((the Nbd of FT1).x) by FUNCT_1:def 12,A8;then
+            h.w in U_FT y by A1,FIN_TOPO:def 1,A7;
+            hence h.w in U_FT(y,0) by FINTOPO3:47;
+          end;
+        end;then
+    A9: P[0];
+   A10: for k being Nat st P[k] holds P[k+1]
+        proof let k be Nat;
+          assume A11:P[k];
+          for w being Element of FT1
+            holds w in U_FT(x,k+1) implies h.w in U_FT(y,k+1)
+          proof
+            let w be Element of FT1;
+            assume A12: w in U_FT(x,k+1);
+            U_FT(x,k+1)=(U_FT(x,k))^f by FINTOPO3:48;then
+            U_FT(x,k+1)= {x3 where x3 is Element of FT1:
+            ex y3 being Element of FT1
+              st y3 in U_FT(x,k) & x3 in U_FT y3} by FIN_TOPO:def 13;then
+            consider x3 being Element of FT1 such that
+       A13: x3=w & ex y3 being Element of FT1 st
+            y3 in U_FT(x,k) & x3 in U_FT y3 by A12;
+            consider y2 being Element of FT1 such that
+       A14: y2 in U_FT(x,k) & x3 in U_FT y2 by A13;
+            reconsider q=h.y2, p=h.x3 as Element of FT2;
+       A15: for w2 being Element of FT1
+              holds w2 in U_FT(y2,0) implies h.w2 in U_FT(q,0)
+            proof let w2 be Element of FT1;
+         A16: h.:((the Nbd of FT1).y2)=(the Nbd of FT2).(h.y2) by AA25,A1;
+              w2 in the carrier of FT1;then
+         A17: w2 in dom h by FUNCT_2:def 1;
+              hereby assume w2 in U_FT(y2,0);then
+                w2 in U_FT y2 by FINTOPO3:47;then
+                w2 in (the Nbd of FT1).y2 by FIN_TOPO:def 1;then
+                h.w2 in h.:((the Nbd of FT1).y2) by FUNCT_1:def 12,A17;then
+                h.w2 in U_FT q by FIN_TOPO:def 1,A16;
+                hence h.w2 in U_FT(q,0) by FINTOPO3:47;
+              end;
+            end;
+       A18: q in U_FT(y,k) by A11,A14;
+            x3 in U_FT(y2,0) by A14,FINTOPO3:47;then
+            p in U_FT(q,0) by A15;then
+            p in U_FT q by FINTOPO3:47;then
+            p in (U_FT(y,k))^f by FIN_TOPO:16,A18;
+            hence h.w in U_FT(y,k+1) by A13,FINTOPO3:48;
+          end;
+          hence P[k+1];
+        end;
+        for k being Nat holds P[k] from NAT_1:sch 1(A9,A10);
+        hence h.z in U_FT(y,n) by A6;
+      end;
+      now assume A19: h.z in U_FT(y,n);
+        defpred P[Nat] means
+        for w being Element of FT2
+          holds w in U_FT(y,$1) implies h".w in U_FT(x,$1);
+        consider g being map of FT2, FT1 such that
+A20:    g=h" & g is_homeomorphism by AA22,A1;
+A21:    g is_homeomorphism & g.y=x by A20,A1,FUNCT_1:56,A2,A3;
+        for w being Element of FT2 holds
+          w in U_FT(y,0) implies h".w in U_FT(x,0)
+        proof let w be Element of FT2;
+     A22: g.:((the Nbd of FT2).y)=(the Nbd of FT1).(g.y) by AA25,A21;
+          w in the carrier of FT2;then
+     A23: w in dom g by FUNCT_2:def 1;
+          hereby assume w in U_FT(y,0);then
+            w in U_FT y by FINTOPO3:47;then
+            w in (the Nbd of FT2).y by FIN_TOPO:def 1;then
+            g.w in g.:((the Nbd of FT2).y) by FUNCT_1:def 12,A23;then
+            g.w in U_FT x by FIN_TOPO:def 1,A21,A22;
+            hence h".w in U_FT(x,0) by A20,FINTOPO3:47;
+          end;
+        end;then
+   A24: P[0];
+   A25: for k being Nat st P[k] holds P[k+1]
+        proof let k be Nat;
+          assume A26: P[k];
+          for w being Element of FT2
+            holds w in U_FT(y,k+1) implies h".w in U_FT(x,k+1)
+          proof
+            let w be Element of FT2;
+            assume A27: w in U_FT(y,k+1);
+            U_FT(y,k+1)=(U_FT(y,k))^f by FINTOPO3:48;then
+            U_FT(y,k+1)= {x3 where x3 is Element of FT2:
+            ex y3 being Element of FT2
+              st y3 in U_FT(y,k) & x3 in U_FT y3} by FIN_TOPO:def 13;then
+            consider x3 being Element of FT2 such that
+       A28: x3=w & ex y3 being Element of FT2 st
+            y3 in U_FT(y,k) & x3 in U_FT y3 by A27;
+            consider y2 being Element of FT2 such that
+       A29: y2 in U_FT(y,k) & x3 in U_FT y2 by A28;
+            reconsider q=g.y2, p=g.x3 as Element of FT1;
+       A30: g is one-to-one onto &
+            for x4 being Element of FT2 holds
+              h".:((the Nbd of FT2).x4)=(the Nbd of FT1).(h".x4) by AA25,A20;
+       A31: for w2 being Element of FT2
+              holds w2 in U_FT(y2,0) implies h".w2 in U_FT(q,0)
+            proof let w2 be Element of FT2;
+         A32: h".:((the Nbd of FT2).y2)=(the Nbd of FT1).(h".y2) by A30;
+              w2 in the carrier of FT2;then
+         A33: w2 in dom g by FUNCT_2:def 1;
+              hereby assume w2 in U_FT(y2,0);then
+                w2 in U_FT y2 by FINTOPO3:47;then
+                w2 in (the Nbd of FT2).y2 by FIN_TOPO:def 1;then
+                h".w2 in h".:((the Nbd of FT2).y2) 
+                        by FUNCT_1:def 12,A20,A33;then
+                h".w2 in U_FT q by FIN_TOPO:def 1,A20,A32;
+                hence h".w2 in U_FT(q,0) by FINTOPO3:47;
+              end;
+            end;
+       A34: q in U_FT(x,k) by A20,A26,A29;
+            x3 in U_FT(y2,0) by A29,FINTOPO3:47;then
+            p in U_FT(q,0) by A20,A31;then
+            p in U_FT q by FINTOPO3:47;then
+            p in (U_FT(x,k))^f by FIN_TOPO:16,A34;
+            hence h".w in U_FT(x,k+1) by A20,A28,FINTOPO3:48;
+          end;
+          hence P[k+1];
+        end;
+        for k being Nat holds P[k] from NAT_1:sch 1(A24,A25);then
+        h".(h.z) in U_FT(x,n) by A19;
+        hence z in U_FT(x,n) by FUNCT_1:56,A3,A4;
+      end;
+      hence thesis by A5;
+  end;
+
+theorem
+  for FT1,FT2 being non empty FT_Space_Str,
+      h being map of FT1, FT2,
+      n being Nat,x being Element of FT1,y being Element of FT2
+    st h is_homeomorphism & y=h.x holds
+    (for v being Element of FT2 holds
+    h".v in U_FT(x,n) iff v in U_FT(y,n))
+  proof let FT1,FT2 be non empty FT_Space_Str,
+            h be map of FT1, FT2,
+            n be Nat,x be Element of FT1,y be Element of FT2;
+    assume A1: h is_homeomorphism & y=h.x;then
+    consider g being map of FT2, FT1 such that
+A2: g=h" & g is_homeomorphism by AA22;
+    x in the carrier of FT1;then
+    A3: x in dom h by FUNCT_2:def 1;
+    h is one-to-one onto & for x2 being Element of FT1 holds
+      h.:((the Nbd of FT1).x2)=(the Nbd of FT2).(h.x2) by AA25,A1;then
+    x=g.y by A1,A2,A3,FUNCT_1:56;
+    hence thesis by AA95,A2;
+  end;
+
+theorem
+  for n being non zero Nat,
+      f being map of FTSL1 n, FTSL1 n st f is_continuous 0 holds
+   ex p being Element of FTSL1 n st f.p in U_FT(p,0)
+    proof let n be non zero Nat,
+    f be map of FTSL1 n, FTSL1 n;
+    assume A1: f is_continuous 0;
+A2: n>=0+1 by NAT_1:38;
+    assume A3: for p being Element of FTSL1 n holds not f.p in U_FT(p,0);
+A4: FT_Space_Str(# Seg n,Nbdl1 n #)=FTSL1 n by FINTOPO4:def 4;
+A6: FTSL1 n is filled by FINTOPO4:18;
+    defpred P2[Nat] means $1>0 &
+      for j being Nat st $1<=n & j=f.$1 holds $1>j;
+    now given j being Nat such that
+  A7: j=f.n & n<=j;
+  A8: n in the carrier of FTSL1 n by A2,A4,FINSEQ_1:3;then
+      f.n in the carrier of FTSL1 n by FUNCT_2:7;then
+      1<=j & j<=n by A4,A7,FINSEQ_1:3;then
+  A9: n=j by A7,AXIOMS:21;
+      reconsider p2=n as Element of FTSL1 n by A8;
+      p2 in U_FT p2 by A6,FIN_TOPO:def 3;then
+      p2 in U_FT(p2,0) by FINTOPO3:47;
+      hence contradiction by A3,A7,A9;
+    end;then
+A10: for j being Nat st n<=n & j=f.n holds n>j;then
+A11: ex k being Nat st P2[k];
+    ex k being Nat st P2[k] & for m being Nat st P2[m] holds k <= m
+      from NAT_1:sch 5(A11);then
+    consider k being Nat such that
+A12: P2[k] & for m being Nat st P2[m] holds k <= m;
+A13: k<=n by A10,A12;
+A14: 0+1<=k by NAT_1:38,A12;then
+A15: k-1>=0 by SQUARE_1:12;then
+A16: k-1=k-'1 by BINARITH:def 3;
+    k<k+1 by NAT_1:38;then
+    k-1 < k+1-1 by REAL_1:54;then
+A17:k-'1<=0 or k-'1>0 & ex j being Nat st
+      k-'1<=n & j=f.(k-'1) & k-'1<=j by A12,A16;
+    reconsider pk=k as Element of FTSL1 n by A4,A13,A14,FINSEQ_1:3;
+    now per cases by A17;
+      case k-'1<=0;then
+a1:       k-1=0 by A15,BINARITH:def 3;
+        1 in the carrier of FTSL1 n by A2,A4,FINSEQ_1:3;then
+        A19: f.1 in Seg n by A4,FUNCT_2:7;then
+        reconsider j0=f.1 as Nat;
+        1>j0 by A2,a1,A12;
+        hence contradiction by A19,FINSEQ_1:3;
+      end;
+      case A20: k-'1>0 &
+        ex j being Nat st k-'1<=n & j=f.(k-'1) & k-'1<=j;then
+        consider j being Nat such that
+   A21: k-'1<=n & j=f.(k-'1) & k-'1<=j;
+   A22: k-'1>=0+1 by A20,NAT_1:38;then
+   A23: k-'1 in the carrier of FTSL1 n by A4,A21,FINSEQ_1:3;then
+        j in the carrier of FTSL1 n by FUNCT_2:7,A21;then
+   A24: 1<=j & j<=n by A4,FINSEQ_1:3;
+        now assume F0: k-'1=j; then
+          reconsider pj=j as Element of FTSL1 n by A23;
+          pj in U_FT pj by A6,FIN_TOPO:def 3;then
+          f.j in U_FT(pj,0) by F0,A21,FINTOPO3:47;
+          hence contradiction by A3;
+        end;then
+        k-'1<j by A21,REAL_1:def 5;then
+        k-'1+1<=j by NAT_1:38;then
+        A26: k<=j by A16,XCMPLX_1:27;
+        reconsider pkm=k-'1 as Element of FTSL1 n by A4,A21,A22,FINSEQ_1:3;
+        k-'1 in Seg n by A21,A22,FINSEQ_1:3;then
+        A27: (Nbdl1 n).pkm={k-'1,max(k-'1-'1,1),min(k-'1+1,n)}
+                            by FINTOPO4:def 3;
+        now assume E0: k=j;
+     A28: k-'1+1=k by A16,XCMPLX_1:27;then
+          min(k-'1+1,n)=k-'1+1 by E0,A24,SQUARE_1:def 1;then
+          k in (the Nbd of FTSL1 n).pkm
+            by A28,A4,A27,ENUMSET1:def 1;then
+          k in U_FT pkm by FIN_TOPO:def 1;then
+          f.(k-'1) in U_FT(pkm,0) by A21,E0,FINTOPO3:47;
+          hence contradiction by A3;
+        end;then
+        A29: k<j by A26,REAL_1:def 5;
+        A30: k in the carrier of FTSL1 n by A4,A13,A14,FINSEQ_1:3;then
+        A31: f.k in Seg n by FUNCT_2:7,A4;then
+        reconsider jn=f.k as Nat;
+        A32: (Nbdl1 n).jn={jn,max(jn-'1,1),min(jn+1,n)}
+                            by FINTOPO4:def 3,A31;
+        A33: (Nbdl1 n).k={k,max(k-'1,1),min(k+1,n)}
+                            by FINTOPO4:def 3,A4,A30;
+        A34: 1<=jn & jn<=n by A31,FINSEQ_1:3;
+        A35: jn <k by A12,A13;then
+        A36: jn+1<=k by NAT_1:38;
+        reconsider pfk=jn as Element of FTSL1 n by A4,A31;
+        A37: f.:( U_FT(pk,0)) c= U_FT(pfk,0) by A1,FINTOPO4:def 2;
+        A38: k-'1 in dom f by A23,FUNCT_2:def 1;
+        1<=k-'1 & k-'1<=n by FINSEQ_1:3,A4,A23;then
+        (k-'1=k or k-'1=max(k-'1,1) or k-'1=min(k+1,n))
+          by SQUARE_1:def 2;then
+        k-'1 in (Nbdl1 n).pk by A33,ENUMSET1:def 1;then
+        k-'1 in U_FT pk by FIN_TOPO:def 1,A4;then
+        k-'1 in U_FT(pk,0) by FINTOPO3:47;then
+        f.(k-'1) in f.:(U_FT(pk,0)) by FUNCT_1:def 12,A38;then
+   A39: j in U_FT(pfk,0) by A21,A37;
+   A40: jn<j by A29,A35,AXIOMS:22;
+        jn-1>=0 by A34,SQUARE_1:12;then
+        A41: jn-1=jn-'1 by BINARITH:def 3;
+        jn<jn+1 by NAT_1:38;then
+        jn-1<jn+1-1 by REAL_1:54;then
+   A42: jn-'1<j by A40,A41,AXIOMS:22;
+   A43: now per cases;
+          suppose jn-'1>=1;
+            hence j<> max(jn-'1,1) by A42,SQUARE_1:def 2;
+          end;
+          suppose jn-'1<1;
+            hence j<> max(jn-'1,1) by A34,A40,SQUARE_1:def 2;
+          end;
+        end;
+        now per cases;
+          case jn+1<=n;
+            hence j<> min(jn+1,n) by A29,A36,SQUARE_1:def 1;
+          end;
+          case A45: jn+1>n;then
+            jn>=n by NAT_1:38;
+            hence j<> min(jn+1,n) by A40,A45,SQUARE_1:def 1;
+          end;
+        end;then
+        not j in (Nbdl1 n).pfk by A32,ENUMSET1:def 1,A40,A43;then
+        not j in U_FT pfk by FIN_TOPO:def 1,A4;
+        hence contradiction by A39,FINTOPO3:47;
+      end;
+    end;
+    hence thesis;
+  end;
+
+theorem AA90:
+  for T being non empty FT_Space_Str,
+      p being Element of T, k being Nat st T is filled holds
+    U_FT(p,k) c= U_FT(p,k+1)
+  proof let T be non empty FT_Space_Str, p be Element of T, k be Nat;
+    assume A1: T is filled;
+    U_FT(p,k+1) = (U_FT(p,k))^f by FINTOPO3:48;
+    hence U_FT(p,k) c= U_FT(p,k+1) by FINTOPO3:1,A1;
+  end;
+
+theorem AA100:
+  for T being non empty FT_Space_Str,
+      p being Element of T, k being Nat st T is filled holds
+    U_FT(p,0) c= U_FT(p,k)
+  proof let T be non empty FT_Space_Str, p be Element of T, k be Nat;
+    assume A1: T is filled;
+    defpred P[Nat] means U_FT(p,0) c= U_FT(p,$1);
+A2: P[0];
+A3: for k being Nat st P[k] holds P[k+1]
+    proof let k be Nat;
+      assume A4:P[k];
+      U_FT(p,k) c= U_FT(p,k+1) by AA90,A1;
+      hence P[k+1] by A4,XBOOLE_1:1;
+    end;
+    for i being Nat holds P[i] from NAT_1:sch 1(A2,A3);
+    hence U_FT(p,0) c= U_FT(p,k);
+  end;
+
+theorem AA200:
+  for n being non zero Nat, jn,j,k being Nat,
+      p being Element of FTSL1 n st p=jn holds
+    j in U_FT(p,k) iff j in Seg n & abs(jn-j)<= k+1
+  proof let n be non zero Nat, jn,j,k be Nat,p be Element of FTSL1 n;
+    assume A1: p=jn;
+A2: FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+A3: now assume A4: j in U_FT(p,k);then
+  A5: j in Seg n by A2;
+      defpred P[Nat] means
+        for j2,jn2 being Nat,p2 being Element of FTSL1 n
+        st jn2=p2 & j2 in U_FT(p2,$1) holds abs(jn2-j2)<=$1+1;
+A18:  P[0]
+      proof let j2,jn2 be Nat,p2 being Element of FTSL1 n;
+        assume A6: jn2=p2 & j2 in U_FT(p2,0);
+    A7: 1<=jn2 & jn2<=n by FINSEQ_1:3,A2,A6;
+        j2 in U_FT p2 by FINTOPO3:47,A6;then
+    A8: j2 in (Nbdl1 n).jn2 by A2,A6,FIN_TOPO:def 1;
+        (Nbdl1 n).jn2={jn2,max(jn2-'1,1),min(jn2+1,n)}
+                           by A2,A6,FINTOPO4:def 3;then
+    A9: j2=jn2 or j2=max(jn2-'1,1) or j2=min(jn2+1,n) by A8,ENUMSET1:def 1;
+        per cases by A9;
+          suppose j2=jn2;
+            hence abs(jn2-j2)<=0+1 by ABSVALUE:7;
+          end;
+          suppose A10: j2=max(jn2-'1,1);
+            per cases;
+              suppose A11: jn2-'1>=1;then
+                j2=jn2-'1 by A10,SQUARE_1:def 2;then
+                j2=jn2-1 by JORDAN3:1,A11;
+                hence abs(jn2-j2)<=0+1 by ABSVALUE:def 1;
+              end;
+              suppose A12: jn2-'1<1;then
+                A13: j2=1 by A10,SQUARE_1:def 2;
+                jn2-'1<0+1 by A12;then
+                jn2-'1<=0 by NAT_1:38;then
+                jn2-'1=0;then
+                jn2<=1 by JORDAN4:1;then
+                1-jn2>=0 by SQUARE_1:12;then
+                A14: abs(j2-jn2)=1-jn2 by A13,ABSVALUE:def 1;
+                1<=1+jn2 by NAT_1:37;then
+                1-jn2<=1+jn2-jn2 by REAL_1:49;
+                hence abs(jn2-j2)<=0+1 by A14,UNIFORM1:13;
+              end;
+          end;
+          suppose A15: j2=min(jn2+1,n);
+            per cases;
+              suppose jn2+1<=n;then
+                j2=jn2+1 by A15,SQUARE_1:def 1;then
+                abs(j2-jn2)=1 by ABSVALUE:def 1;
+                hence abs(jn2-j2)<=0+1 by UNIFORM1:13;
+              end;
+              suppose A16: jn2+1>n;then
+                A17: j2=n by A15,SQUARE_1:def 1;
+                jn2>=n by A16,NAT_1:38;then
+                jn2=n by A7,AXIOMS:21;
+                hence abs(jn2-j2)<=0+1 by ABSVALUE:7,A17;
+              end;
+          end;
+      end;
+      A19: for i2 being Nat st P[i2] holds P[i2+1]
+      proof let i2 be Nat;
+        assume A20:P[i2];
+        let j3,jn3 be Nat,p2 being Element of FTSL1 n;
+        assume A21: jn3=p2 & j3 in U_FT(p2,i2+1);
+        U_FT(p2,i2+1)=(U_FT(p2,i2))^f by FINTOPO3:48
+                    .= {x where x is Element of FTSL1 n:
+        ex y being Element of FTSL1 n st
+          y in U_FT(p2,i2) & x in U_FT y} by FIN_TOPO:def 13;then
+        consider x being Element of FTSL1 n such that
+   A22: x=j3 & ex y being Element of FTSL1 n st
+        y in U_FT(p2,i2) & x in U_FT y by A21;
+        consider y being Element of FTSL1 n such that
+   A23: y in U_FT(p2,i2) & x in U_FT y by A22;
+        y in Seg n by A2;then
+        reconsider iy=y as Nat;
+        A24: abs(jn3-iy)<=i2+1 by A23,A20,A21;
+        x in U_FT(y,0) by A23,FINTOPO3:47;then
+        abs(iy-j3)<=1 by A18,A22;then
+        A25: abs(jn3-iy)+abs(iy-j3)<=i2+1+1 by A24,REAL_1:55;
+        abs(jn3-iy+(iy-j3))<=abs(jn3-iy)+abs(iy-j3) by ABSVALUE:13;
+        hence abs(jn3-j3)<=i2+1+1 by A25,AXIOMS:22;
+      end;
+      for i3 being Nat holds P[i3] from NAT_1:sch 1(A18,A19);
+      hence j in Seg n & abs(jn-j)<= k+1 by A1,A5,A4;
+    end;
+    now assume A26: j in Seg n & abs(jn-j)<= k+1;
+      defpred P[Nat] means
+        for j2,jn2 being Nat,p2 being Element of FTSL1 n st
+       jn2=p2 & j2 in Seg n & abs(jn2-j2)<= $1+1 holds j2 in U_FT(p2,$1);
+A41:  P[0]
+      proof let j2,jn2 be Nat,p2 be Element of FTSL1 n;
+        assume A27: jn2=p2 & j2 in Seg n & abs(jn2-j2)<= 0+1;
+        A28: jn2 in Seg n by A2,A27;
+        A29: 1<=j2 & j2<=n by A27,FINSEQ_1:3;
+        now per cases;
+          case A31: jn2-j2>=0;
+            A32: jn2-j2<= 1 by A27,ABSVALUE:def 1;
+            A33: jn2-j2=jn2-'j2 by A31,BINARITH:def 3;then
+            jn2-'j2>=0+1 or jn2-'j2=0 by NAT_1:38,A31;then
+            jn2-j2=1 or jn2-'j2=0 by A32,A33,AXIOMS:21;then
+A34:        jn2=j2+1 or jn2=0+j2 by XCMPLX_1:27,A33;
+            per cases by A34;
+              suppose A35: jn2-1=j2;
+                jn2-1=jn2-'1 by BINARITH:def 3,A35;
+                hence j2=jn2 or j2=max(jn2-'1,1) or j2=min(jn2+1,n)
+                        by A35,SQUARE_1:def 2,A29;
+              end;
+              suppose jn2=j2;
+                hence j2=jn2 or j2=max(jn2-'1,1) or j2=min(jn2+1,n);
+              end;
+          end;
+          case A36: jn2-j2<0;then
+            -(jn2-j2)<= 1 by A27,ABSVALUE:def 1;then
+A37:        j2-jn2+jn2<=1+jn2 by REAL_1:55;
+            jn2-j2+j2<0+j2 by REAL_1:67,A36;then
+            jn2+1<=j2 by NAT_1:38;then
+            jn2+1=j2 by A37,AXIOMS:21;
+            hence j2=jn2 or j2=max(jn2-'1,1) or j2=min(jn2+1,n)
+                            by A29,SQUARE_1:def 1;
+          end;
+        end;then
+        j2 in {jn2,max(jn2-'1,1),min(jn2+1,n)} by ENUMSET1:def 1;then
+        j2 in (the Nbd of FTSL1 n).jn2 by A2,A28,FINTOPO4:def 3;then
+        j2 in U_FT p2 by FIN_TOPO:def 1,A27;
+        hence j2 in U_FT(p2,0) by FINTOPO3:47;
+      end;
+      A42: for jj being Nat st P[jj] holds P[jj+1]
+      proof let jj be Nat;
+        assume A43:P[jj];
+        let j2,jn2 be Nat,p2 be Element of FTSL1 n;
+        assume A44: jn2=p2 & j2 in Seg n & abs(jn2-j2)<= jj+1+1;then
+        reconsider x0=j2 as Element of FTSL1 n by A2;
+        A45: 1<=j2 & j2<=n by A44,FINSEQ_1:3;
+        A46: 1<=jn2 & jn2<=n by FINSEQ_1:3,A2,A44;
+A74:    now per cases;
+          suppose H1:jn2-j2>=0;
+            per cases by H1;
+              suppose A47: jn2-j2=0;then
+                A48: jn2=0+j2;
+                abs(jn2-j2)<=jj+1 by A47,ABSVALUE:def 1;then
+                A51: j2 in U_FT(p2,jj) by A44,A43;
+                (FTSL1 n) is filled by FINTOPO4:18;then
+                p2 in U_FT(p2,jj) & x0 in U_FT p2
+                  by A51,A44,A48,FIN_TOPO:def 3;
+                hence ex y being Element of FTSL1 n st
+                  y in U_FT(p2,jj) & x0 in U_FT y;
+              end;
+              suppose A53: jn2-j2>0;then
+                jn2-j2=jn2-'j2 by BINARITH:def 3;then
+                A54: jn2-j2>=0+1 by A53,NAT_1:38;then
+A55:            jn2-j2+j2>=1+j2 by REAL_1:55;
+                A56: j2<j2+1 by NAT_1:38;then
+                A57: jn2-(j2+1)<jn2-j2 by REAL_1:92;
+                abs(jn2-j2)=jn2-j2 by A53,ABSVALUE:def 1;then
+                A58: jn2-(j2+1)<jj+1+1 by A57,A44,AXIOMS:22;
+                A59: jn2-j2-1>=1-1 by A54,REAL_1:49;then
+                jn2-'(j2+1)=jn2-(j2+1) by BINARITH:def 3;then
+                A60: jn2-(j2+1)<=jj+1 by A58,NAT_1:38;
+                A61: n>=j2+1 by A46,A55,AXIOMS:22;
+                1<=j2+1 by A56,A45,AXIOMS:22;then
+                A62: j2+1 in Seg n by A61,FINSEQ_1:3;then
+                reconsider yj2=j2+1 as Element of FTSL1 n by A2;
+                abs(jn2-(j2+1))<=jj+1 by A60,A59,ABSVALUE:def 1;then
+                A63: j2+1 in U_FT(p2,jj) by A43,A44,A62;
+                abs(j2+1-j2)=1 by ABSVALUE:def 1; then
+                x0 in U_FT(yj2,0) by A41,A44;then
+                yj2 in U_FT(p2,jj) & x0 in U_FT yj2 by A63,FINTOPO3:47;
+                hence ex y being Element of FTSL1 n st
+                  y in U_FT(p2,jj) & x0 in U_FT y;
+              end;
+          end;
+          suppose jn2-j2<0;then
+            A64: jn2-j2+j2<0+j2 by REAL_1:53;then
+            jn2+1<=j2 by NAT_1:38;then
+            A65: jn2+1-1<=j2-1 by REAL_1:49;then
+            A66: j2-1-jn2>=0 by SQUARE_1:12;
+            j2-1>=0 by SQUARE_1:12,A45;then
+            A67: j2-1=j2-'1 by BINARITH:def 3;then
+            A68: j2-'1>=1 by A65,A46,AXIOMS:22;
+            j2<j2+1 by NAT_1:38;then
+            j2-1<j2+1-1 by REAL_1:54;then
+            j2-'1<n by A45,AXIOMS:22,A67;then
+            A69: j2-'1 in Seg n by A68,FINSEQ_1:3;then
+            reconsider pj21=j2-'1 as Element of FTSL1 n by A2;
+            A70: abs((j2-'1)-jn2)=(j2-'1)-jn2 by A66,A67,ABSVALUE:def 1;
+            A71: j2-(j2-'1)=j2-(j2-1) by A67
+                            .= 1;
+            A72: j2-jn2>0 by A64,SQUARE_1:11;
+            abs(jn2-j2)=abs(j2-jn2) by UNIFORM1:13
+                      .=1+((j2-'1)-jn2) by A71,ABSVALUE:def 1,A72
+                      .=1+abs(jn2-(j2-'1)) by A70,UNIFORM1:13;then
+            abs(jn2-(j2-'1))<=jj+1 by A44,REAL_1:53;then
+            A73: j2-'1 in U_FT(p2,jj) by A43,A44,A69;
+            abs(j2-'1-j2)=abs(j2-(j2-'1)) by UNIFORM1:13
+                        .=1 by A71,ABSVALUE:def 1;then
+            x0 in U_FT(pj21,0) by A41,A44;then
+            pj21 in U_FT(p2,jj) & x0 in U_FT pj21 by A73,FINTOPO3:47;
+            hence ex y being Element of FTSL1 n st
+              y in U_FT(p2,jj) & x0 in U_FT y;
+          end;
+        end;
+        U_FT(p2,jj+1)=(U_FT(p2,jj))^f by FINTOPO3:48
+                    .= {x where x is Element of FTSL1 n:
+        ex y being Element of FTSL1 n st
+          y in U_FT(p2,jj) & x in U_FT y} by FIN_TOPO:def 13;
+        hence j2 in U_FT(p2,jj+1) by A74;
+      end;
+      for ii being Nat holds P[ii] from NAT_1:sch 1(A41,A42);
+      hence j in U_FT(p,k) by A26,A1;
+    end;
+    hence thesis by A3;
+  end;
+
+:: Fixed Point Theorem
+theorem
+  for kc,km being Nat, n being non zero Nat,
+      f being map of FTSL1 n, FTSL1 n st
+    f is_continuous kc & km=[/ (kc/2) \] holds
+    ex p being Element of FTSL1 n st f.p in U_FT(p,km)
+  proof let kc,km be Nat, n be non zero Nat,
+    f be map of FTSL1 n, FTSL1 n;
+    assume that A0:f is_continuous kc and A1: km=[/ (kc/2) \];
+A2: n>=0+1 by NAT_1:38;
+    assume A3: for p being Element of FTSL1 n holds
+      not f.p in U_FT(p,km);
+  A4: FT_Space_Str(# Seg n,Nbdl1 n #)=FTSL1 n by FINTOPO4:def 4;
+  A6: FTSL1 n is filled by FINTOPO4:18;
+      defpred P2[Nat] means $1>0 &
+        for j being Nat st $1<=n & j=f.$1 holds $1>j;
+      now given j being Nat such that
+    A7: j=f.n & n<=j;
+    A8: n in the carrier of FTSL1 n by A4,A2,FINSEQ_1:3;then
+        f.n in the carrier of FTSL1 n by FUNCT_2:7;then
+        1<=j & j<=n by A4,A7,FINSEQ_1:3;then
+    A9: n=j by A7,AXIOMS:21;
+        reconsider p2=n as Element of FTSL1 n by A8;
+        p2 in U_FT p2 by A6,FIN_TOPO:def 3;then
+   A10: p2 in U_FT(p2,0) by FINTOPO3:47;
+        U_FT(p2,0) c= U_FT(p2,km) by AA100,A6;
+        hence contradiction by A3,A10,A9,A7;
+      end;then
+      A11: for j being Nat st n<=n & j=f.n holds n>j;then
+      A12: ex k being Nat st P2[k];
+      ex k being Nat st P2[k] & for m being Nat st P2[m] holds k <= m
+                      from NAT_1:sch 5(A12);then
+      consider k being Nat such that
+ A13: P2[k] & for m being Nat st P2[m] holds k <= m;
+      A14: k<=n by A13,A11;
+      A15: 0+1<=k by A13,NAT_1:38;then
+      k-1>=0 by SQUARE_1:12;then
+      A17: k-1=k-'1 by BINARITH:def 3;
+      k<k+1 by NAT_1:38;then
+      k-1 < k+1-1 by REAL_1:54;then
+      A18: k-'1<=0 or k-'1>0 &
+        ex j being Nat st k-'1<=n & j=f.(k-'1) & k-'1<=j by A13,A17;
+      reconsider pk=k as Element of FTSL1 n by A14,A15,A4,FINSEQ_1:3;
+      per cases by A18;
+        suppose k-'1<=0;then
+          k-1=0 by A17;then
+          k=0+1;then
+          A19: for j being Nat st 1<=n & j=f.1 holds 1>j by A13;
+          1 in the carrier of FTSL1 n by A4,FINSEQ_1:3,A2;then
+          A20: f.1 in Seg n by A4,FUNCT_2:7;then
+          reconsider j0=f.1 as Nat;
+          1>j0 by A19,A2;
+          hence contradiction by A20,FINSEQ_1:3;
+        end;
+        suppose A21: k-'1>0 &
+          ex j being Nat st k-'1<=n & j=f.(k-'1) & k-'1<=j;then
+          consider j being Nat such that
+            C1: k-'1<=n & j=f.(k-'1) & k-'1<=j;
+          A22: k-'1>=0+1 by A21,NAT_1:38;then
+          reconsider pkm=k-'1 as Element of FTSL1 n by C1,A4,FINSEQ_1:3;
+          A23: k-'1 in the carrier of FTSL1 n by A22,A4,C1,FINSEQ_1:3;then
+          A24: j in the carrier of FTSL1 n by FUNCT_2:7,C1;then
+          A25: 1<=j & j<=n by A4,FINSEQ_1:3;
+          now assume A26: k-'1=j;then
+            reconsider pj=j as Element of FTSL1 n by A23;
+            pj in U_FT pj by A6,FIN_TOPO:def 3;then
+            A28: pj in U_FT(pj,0) by FINTOPO3:47;
+            U_FT(pj,0) c= U_FT(pj,km) by AA100,A6;
+            hence contradiction by A3,C1,A26,A28;
+          end;then
+          A29: k-'1<j by C1,REAL_1:def 5;then
+          k-'1+1<=j by NAT_1:38;then
+          A30: k<=j by A17,XCMPLX_1:27;then
+          j-k>=0 by SQUARE_1:12;then
+          A31: j-k=j-'k by BINARITH:def 3;
+          A32: j-(k-'1)>0 by A29,SQUARE_1:11;
+          k-'1 in Seg n by A22,C1,FINSEQ_1:3;then
+          A33: (Nbdl1 n).pkm={k-'1,max(k-'1-'1,1),min(k-'1+1,n)}
+                        by FINTOPO4:def 3;
+          now assume A34: k=j;
+            A35: k-'1+1=k by A17,XCMPLX_1:27;
+            min(k-'1+1,n)=k-'1+1 by A35,A34,A25,SQUARE_1:def 1;then
+            k-'1+1 in (Nbdl1 n).(k-'1) by A33,ENUMSET1:def 1;then  
+            k in U_FT pkm by FIN_TOPO:def 1,A35,A4;then
+            A36: k in U_FT(pkm,0) by FINTOPO3:47;
+            U_FT(pkm,0) c= U_FT(pkm,km) by AA100,A6;
+            hence contradiction by A3, C1,A34,A36;
+          end;then
+          A37: k<j by A30,REAL_1:def 5;
+          A38: k in the carrier of FTSL1 n by A4,A14,A15,FINSEQ_1:3;then
+          A39: f.k in Seg n by FUNCT_2:7,A4;then
+          reconsider jn=f.k as Nat;
+          A40: (Nbdl1 n).k={k,max(k-'1,1),min(k+1,n)}
+                        by FINTOPO4:def 3,A38,A4;
+          A41: 1<=jn & jn<=n by A39,FINSEQ_1:3;
+          A42: jn <k by A13,A14;then
+          A44: k-jn>0 by SQUARE_1:11;then
+          A45: k-jn=k-'jn by BINARITH:def 3;
+          not j in U_FT(pkm,km) by A3,C1;then
+          not abs((k-'1)-j)<=km+1 by AA200,A24,A4;then
+          abs(j-(k-'1))>km+1 by UNIFORM1:13;then
+          j-(k-1)>km+1 by A17,ABSVALUE:def 1,A32;then
+          j-k+1>km+1;then
+          j-'k+1>km+1 by A31;then
+          A46: j-k+1>=km+1+1 by NAT_1:38,A31;
+          A47: jn in Seg n by A39;
+          not jn in U_FT(pk,km) by A3;then
+          not abs(k-jn)<=km+1 by A47,AA200;then
+          k-jn>km+1 by A44,ABSVALUE:def 1;then
+          k-jn>=km+1+1 by NAT_1:38,A45;then
+          k-jn+(j-k+1)>= km+1+1+(km+1+1) by A46,REAL_1:55;then
+          j-jn+1>= km+1+1+(km+1)+1;then
+          j-jn>= km+1+1+(km+1) by REAL_1:53;then
+          j-jn-1>= km+1+1+km+1-1 by REAL_1:49;then
+          (j-jn-1)/2>= ((2*km)+2)/2 by REAL_1:73;then
+          A48: (j-jn-1)/2>= [/ (kc/2) \]+2/2 by A1;
+          [/ (kc/2) \] >= kc/2 by INT_1:def 5;then
+          [/ (kc/2) \]+2/2 >= kc/2 +2/2 by REAL_1:55;then
+          (j-jn-1)/2 >= kc/2+2/2 by A48,AXIOMS:22;then
+A49:      (j-jn-1)/2*2>=(kc/2+2/2)*2 by AXIOMS:25;
+          reconsider pfk=jn as Element of FTSL1 n by A41,A4,FINSEQ_1:3;
+          A50: f.:(U_FT(pk,0)) c= U_FT(pfk,kc) by A0,FINTOPO4:def 2;
+          A51: k-'1 in dom f by A23,FUNCT_2:def 1;
+          1<=k-'1 & k-'1<=n by FINSEQ_1:3,A4,A23;then
+          k-'1=max(k-'1,1) by SQUARE_1:def 2;then
+          k-'1 in (the Nbd of FTSL1 n).pk by A4,A40,ENUMSET1:def 1;then
+          k-'1 in U_FT pk by FIN_TOPO:def 1;then
+          k-'1 in U_FT(pk,0) by FINTOPO3:47;then
+          f.(k-'1) in f.:( U_FT(pk,0)) by FUNCT_1:def 12,A51;then
+          A52: j in U_FT(pfk,kc) by A50,C1;
+          jn<j by A37,A42,AXIOMS:22;then
+          j-jn>=0 by SQUARE_1:12;then
+          A62: abs(j-jn)=j-jn by ABSVALUE:def 1;
+          A63: abs(jn-j)=abs(j-jn) by UNIFORM1:13;
+          kc <kc+2 by REAL_1:69;then
+          j-jn-1> kc by A49,AXIOMS:22;then
+          j-jn-1+1>kc+1 by REAL_1:53;
+          hence contradiction by A52,AA200,A62,A63;
+        end;
+  end;
+
+:: 2-dimensional linear FT_Str
+definition let n,m be Nat;
+  func Nbdl2(n,m) -> Function of [:Seg n, Seg m:], bool [:Seg n, Seg m:] means
+  :AA2000: for x being set st x in [:Seg n, Seg m:] holds
+    for i,j being Nat st x=[i,j] holds
+      it.x = [:(Nbdl1 n).i, (Nbdl1 m).j:];
+  existence
+  proof
+    defpred P[set,set] means for i,j being Nat st $1=[i,j] holds
+    $2= [:(Nbdl1 n).i, (Nbdl1 m).j:];
+    A1: for x being set st x in [:Seg n, Seg m:] ex y being set
+      st y in bool [:Seg n, Seg m:] & P[x,y]
+    proof let x be set;
+      assume x in [:Seg n, Seg m:];then
+      consider u,y being set such that
+        A2: u in Seg n & y in Seg m & x = [u,y] by ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A2;
+      set y3= [:(Nbdl1 n).i, (Nbdl1 m).j:];
+A6:   y3 c= [:Seg n, Seg m:]
+      proof let z be set;assume z in y3;then
+        consider x4,y4 being set such that
+    A3: x4 in (Nbdl1 n).i & y4 in (Nbdl1 m).j
+          & z = [x4,y4] by ZFMISC_1:def 2;
+        (Nbdl1 n).i in bool Seg n by FUNCT_2:7,A2;then
+    A5: x4 in Seg n by A3;
+        (Nbdl1 m).j in bool Seg m by FUNCT_2:7,A2;
+        hence z in [:Seg n, Seg m:] by A3,ZFMISC_1:def 2,A5;
+      end;
+      for i4,j4 being Nat st x=[i4,j4] holds
+        y3= [:(Nbdl1 n).i4, (Nbdl1 m).j4:]
+      proof let i4,j4 be Nat;
+        assume x=[i4,j4];then i4=u & j4=y by A2,ZFMISC_1:33;
+        hence y3= [:(Nbdl1 n).i4, (Nbdl1 m).j4:];
+      end;
+      hence ex y2 being set st y2 in bool [:Seg n, Seg m:] & P[x,y2] by A6;
+    end;
+    ex f being Function of [:Seg n, Seg m:],bool [:Seg n, Seg m:]
+      st for x being set st x in [:Seg n, Seg m:] holds P[x,f.x]
+      from FUNCT_2:sch 1(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof let f1,f2 be Function of [:Seg n, Seg m:],bool [:Seg n, Seg m:];
+    assume
+A7: ( for x being set st x in [:Seg n, Seg m:]
+      holds for i,j being Nat st x=[i,j] holds
+      f1.x = [:(Nbdl1 n).i, (Nbdl1 m).j:]) &
+      ( for x being set st x in [:Seg n, Seg m:]
+      holds for i,j being Nat st x=[i,j] holds
+      f2.x = [:(Nbdl1 n).i, (Nbdl1 m).j:]);
+    A8: dom f1= [:Seg n, Seg m:] by FUNCT_2:def 1;
+    A9: dom f2= [:Seg n, Seg m:] by FUNCT_2:def 1;
+    for x being set st x in dom f1 holds f1.x=f2.x
+    proof let x be set;
+      assume A10: x in dom f1;then
+      consider u,y being set such that
+A11:  u in Seg n & y in Seg m & x=[u,y] by A8,ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A11;
+      f1.x= [:(Nbdl1 n).i, (Nbdl1 m).j:] by A7,A10,A8,A11;
+      hence f1.x=f2.x by A7,A8,A10,A11;
+    end;
+    hence f1=f2 by FUNCT_1:9,A8,A9;
+  end;
+end;
+
+definition let n,m be Nat;
+  func FTSL2(n,m) -> strict FT_Space_Str equals :AA2100:
+  FT_Space_Str(# [:Seg n, Seg m:], Nbdl2(n,m) #);
+  coherence;
+end;
+
+registration let n,m be non zero Nat;
+  cluster FTSL2(n,m) -> non empty;
+  coherence
+  proof
+A1: 0+1<=m by NAT_1:38;
+A2: FTSL2(n,m) = FT_Space_Str(# [:Seg n, Seg m:], Nbdl2(n,m) #) by AA2100;
+    0+1<=n by NAT_1:38;then
+    n in Seg n & m in Seg m by A1,FINSEQ_1:3;then
+    [n,m] in [:Seg n, Seg m:] by ZFMISC_1:def 2;
+    hence thesis by A2,STRUCT_0:def 1;
+  end;
+end;
+
+theorem
+  for n,m being non zero Nat holds FTSL2(n,m) is filled
+  proof let n,m be non zero Nat;
+    for x being Element of FTSL2(n,m) holds x in U_FT x
+    proof let x be Element of FTSL2(n,m);
+  A2: FTSL2(n,m) = FT_Space_Str(# [:Seg n, Seg m:],Nbdl2(n,m) #)
+        by AA2100;then
+      consider u,y being set such that
+      A4: u in Seg n & y in Seg m & x=[u,y] by ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A4;
+A5:   FTSL1 m = FT_Space_Str(# Seg m,Nbdl1 m #) by FINTOPO4:def 4;
+A6:   FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      reconsider pi=i as Element of FTSL1 n by A4,A6;
+      reconsider pj=j as Element of FTSL1 m by A4,A5;
+      FTSL1 n is filled by FINTOPO4:18;then
+      i in U_FT pi by FIN_TOPO:def 3;then
+      A8: i in (Nbdl1 n).i by A6,FIN_TOPO:def 1;
+      FTSL1 m is filled by FINTOPO4:18;then
+      j in U_FT pj by FIN_TOPO:def 3;then
+      j in (the Nbd of FTSL1 m).j by FIN_TOPO:def 1;then
+      x in [:(Nbdl1 n).i, (Nbdl1 m).j:] by ZFMISC_1:def 2,A8,A4,A5;then
+      x in Nbdl2(n,m).x by A2,AA2000,A4;
+      hence x in U_FT x by FIN_TOPO:def 1,A2;
+    end;
+    hence thesis by FIN_TOPO:def 3;
+  end;
+
+theorem
+  for n,m being non zero Nat holds FTSL2(n,m) is symmetric
+  proof let n,m be non zero Nat;
+    A2: FTSL2(n,m)=FT_Space_Str(# [:Seg n, Seg m:],Nbdl2(n,m) #) by AA2100;
+    for x, y being Element of FTSL2(n,m) holds
+      y in U_FT x implies x in U_FT y
+    proof let x, y be Element of FTSL2(n,m);
+      assume A3: y in U_FT x;
+      consider xu,xv being set such that
+  A4: xu in Seg n & xv in Seg m & x=[xu,xv] by ZFMISC_1:def 2,A2;
+      reconsider i=xu, j=xv as Nat by A4;
+  A5: FTSL1 m = FT_Space_Str(# Seg m,Nbdl1 m #) by FINTOPO4:def 4;
+  A6: FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      reconsider pi=i as Element of FTSL1 n by A4,A6;
+      reconsider pj=j as Element of FTSL1 m by A4,A5;
+      consider yu,yv being set such that
+      A9: yu in Seg n & yv in Seg m & y=[yu,yv] by ZFMISC_1:def 2,A2;
+      reconsider i2=yu, j2=yv as Nat by A9;
+      reconsider pi2=i2 as Element of FTSL1 n by A9,A6;
+      reconsider pj2=j2 as Element of FTSL1 m by A9,A5;
+      y in (the Nbd of FTSL2(n,m)).x by FIN_TOPO:def 1,A3;then
+      y in [:(Nbdl1 n).i, (Nbdl1 m).j:] by AA2000,A4,A2;then
+      consider y1,y2 being set such that
+ A10: y1 in (Nbdl1 n).i & y2 in (Nbdl1 m).j & y=[y1,y2]
+                                 by ZFMISC_1:def 2;
+ A11: y1=yu & y2=yv by A10,A9,ZFMISC_1:33;then
+ A12: pi2 in U_FT pi by FIN_TOPO:def 1,A6,A10;
+      FTSL1 n is symmetric by FINTOPO4:19;then
+      pi in U_FT pi2 by A12,FIN_TOPO:def 14;then
+ A13: i in (Nbdl1 n).i2 by A6,FIN_TOPO:def 1;
+ A14: j2 in U_FT pj by FIN_TOPO:def 1,A5,A10,A11;
+      FTSL1 m is symmetric by FINTOPO4:19;then
+      j in U_FT pj2 by A14,FIN_TOPO:def 14;then
+      j in (the Nbd of FTSL1 m).j2 by FIN_TOPO:def 1;then
+      x in [:(Nbdl1 n).i2, (Nbdl1 m).j2:] by A4,A13,ZFMISC_1:def 2,A5;then
+      x in (Nbdl2(n,m)).y by AA2000,A9,A2;
+      hence x in U_FT y by FIN_TOPO:def 1,A2;
+    end;
+    hence thesis by FIN_TOPO:def 14;
+  end;
+
+theorem
+  for n being non zero Nat
+  ex h being map of FTSL2(n,1), FTSL1 n st h is_homeomorphism
+  proof let n be non zero Nat;
+    defpred P[set,set] means [$2,1]=$1;
+A2: FTSL2(n,1)= FT_Space_Str(# [:Seg n, Seg 1:],Nbdl2(n,1) #) by AA2100;
+A3: FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+    A4: for x be set st x in the carrier of FTSL2(n,1)
+    ex y be set st y in the carrier of FTSL1 n & P[x,y]
+    proof let x be set;
+      assume x in the carrier of FTSL2(n,1);then
+      consider u,v being set such that
+        A6: u in Seg n & v in Seg 1 & x= [u,v] by ZFMISC_1:def 2,A2;
+      reconsider nu=u,nv=v as Nat by A6;
+      1<=nv & nv<=1 by A6,FINSEQ_1:3;then
+      A7: P[x,nu] by A6,AXIOMS:21;
+      FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      hence ex y be set st y in the carrier of FTSL1 n & P[x,y] by A6,A7;
+    end;
+    ex f being map of FTSL2(n,1), FTSL1 n
+       st for x be set st x in the carrier of FTSL2(n,1) holds P[x,f.x]
+               from FUNCT_2:sch 1(A4);then
+    consider f being map of FTSL2(n,1), FTSL1 n such that
+A8: for x be set st x in the carrier of FTSL2(n,1) holds P[x,f.x];
+    for x1,x2 being set st x1 in dom f & x2 in dom f & f.x1=f.x2
+      holds x1=x2
+    proof let x1,x2 be set;
+      assume A10: x1 in dom f & x2 in dom f & f.x1=f.x2;then
+A11:  x1 in [:Seg n,Seg 1:] by A2,FUNCT_2:def 1;
+A12:  x2 in [:Seg n,Seg 1:] by A10,A2,FUNCT_2:def 1;
+      [f.x1,1]=x1 by A8,A11,A2;
+      hence x1=x2 by A10,A8,A12,A2;
+    end;then
+A14: f is one-to-one by FUNCT_1:def 8;
+A15: the carrier of FTSL1 n c= rng f
+    proof let x be set;
+      assume x in the carrier of FTSL1 n;then
+ A16: x in Seg n by A3;
+      set z=[x,1];
+      1 in Seg 1 by FINSEQ_1:3;then
+ A17: z in the carrier of FTSL2(n,1) by A2,A16,ZFMISC_1:def 2;then
+ A18: z in dom f by FUNCT_2:def 1;
+      [f.z,1]=z by A8,A17;then
+      f.z=x by ZFMISC_1:33;
+      hence x in rng f by A18,FUNCT_1:def 5;
+    end;
+    rng f c= the carrier of FTSL1 n by RELSET_1:12;then
+    rng f= the carrier of FTSL1 n by A15,XBOOLE_0:def 10;then
+A19: f is onto by FUNCT_2:def 3;
+    set FT1=FTSL2(n,1),FT2= FTSL1 n;
+    for x being Element of FT1 holds
+      f.:((the Nbd of FT1).x)=(the Nbd of FT2).(f.x)
+    proof let x be Element of FT1;
+ A20: x in [:Seg n,Seg 1:] by A2;then
+      consider u,v being set such that
+ A21: u in Seg n & v in Seg 1 & x= [u,v] by ZFMISC_1:def 2;
+ A24: f.:((the Nbd of FT1).x) c= (the Nbd of FT2).(f.x)
+      proof let y be set;
+        assume y in f.:((the Nbd of FT1).x);then
+        consider x2 being set such that
+   A25: x2 in dom f & x2 in (Nbdl2(n,1)).x & y=f.x2 by FUNCT_1:def 12,A2;
+   A26: (Nbdl2(n,1)).x =[:(Nbdl1 n).u,(Nbdl1 1).v:] by A2,A21,AA2000;
+   A27: x2 in the carrier of FT1 by A25,FUNCT_2:def 1;
+        x=[f.x,1] by A8;then
+   A29: u=f.x & v=1 by ZFMISC_1:33,A21;
+        x2=[f.x2,1] by A8,A27;
+        hence y in (the Nbd of FT2).(f.x) by A3,A25,A29,ZFMISC_1:106,A26;
+      end;
+      (the Nbd of FT2).(f.x) c= f.:((the Nbd of FT1).x)
+      proof let y be set;
+        assume A32: y in (the Nbd of FT2).(f.x);
+        (Nbdl1 n).(f.x) in bool (Seg n) by FUNCT_2:7,A3;then
+        (Nbdl1 n).(f.x) c= rng f by XBOOLE_1:1,A15,A3;then
+        consider x3 being set such that
+   A35: x3 in dom f & y=f.x3 by FUNCT_1:def 5,A32,A3;
+   A36: f.x3 in (Nbdl1 n).(f.x) by A3,A32,A35;
+        set u2=f.x3,v2=1;
+   A37: x3 in the carrier of FT1 by A35,FUNCT_2:def 1;then
+        x3=[f.x3,1] by A8;then
+   A41: u2 in Seg n & v2 in Seg 1 & x3=[u2,v2] by ZFMISC_1:106,A2,A37;
+        reconsider nv=v as Nat by A21;
+        1 <= nv & nv <= 1 by FINSEQ_1:3,A21;then
+   A42: nv = 1 by AXIOMS:21;
+        (Nbdl1 1).v = {nv, max(nv-'1,1),min(nv+1,1)} by FINTOPO4:def 3,A21
+                   .= {1,max(0,1),min(2,1)} by NAT_2:10,A42
+                   .= {1,1,min(2,1)} by SQUARE_1:def 2
+                   .= {1, min(2,1)} by ENUMSET1:70
+                   .= {1, 1} by SQUARE_1:def 1
+                   .= {1} by ENUMSET1:69;then
+   A43: v2 in (Nbdl1 1).v by ZFMISC_1:37;
+        x=[f.x,1] by A8;then
+        u2 in (Nbdl1 n).u by A36,ZFMISC_1:33,A21;then
+   A46: [u2,v2] in [:(Nbdl1 n).u,(Nbdl1 1).v:]
+                     by A43,ZFMISC_1:def 2;
+        (Nbdl2(n,1)).x = [:(Nbdl1 n).u,(Nbdl1 1).v:]
+                     by A20,A21,AA2000;
+        hence y in f.:((the Nbd of FT1).x)
+                           by A2,FUNCT_1:def 12,A35,A46,A41;
+      end;
+      hence f.:((the Nbd of FT1).x)=(the Nbd of FT2).(f.x)
+                        by A24,XBOOLE_0:def 10;
+    end;then
+    f is_homeomorphism by AA25,A14,A19;
+    hence thesis;
+  end;
+
+:: 2-dimensional small FT_Str
+definition let n,m be Nat;
+  func Nbds2(n,m) -> Function of [:Seg n, Seg m:], bool [:Seg n, Seg m:] means
+  :AA2300: for x being set st x in [:Seg n, Seg m:]
+    holds for i,j being Nat st x=[i,j] holds
+    it.x = [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:];
+  existence
+  proof
+    defpred P[set,set] means for i,j being Nat st $1=[i,j] holds
+    $2= [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:];
+A1: for x being set st x in [:Seg n, Seg m:] ex y being set
+      st y in bool [:Seg n, Seg m:] & P[x,y]
+    proof let x be set;
+      assume x in [:Seg n, Seg m:];then
+      consider u,y being set such that
+  A2: u in Seg n & y in Seg m & x = [u,y] by ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A2;
+      set y3= [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:];
+      y3 c= [:Seg n, Seg m:]
+      proof let z be set;
+        assume z in y3;then
+    B1: z in [:{i}, (Nbdl1 m).j:] or z in [:(Nbdl1 n).i,{j}:]
+                                              by XBOOLE_0:def 2;
+        per cases by B1;
+          suppose z in [:{i}, (Nbdl1 m).j:];then
+            consider x4,y4 being set such that
+        B2: x4 in {i} & y4 in (Nbdl1 m).j & z=[x4,y4] by ZFMISC_1:def 2;
+       B22: x4 = i by TARSKI:def 1,B2;
+        B3: i in Seg n & j in Seg m by A2;then
+            (Nbdl1 m).j in bool Seg m by FUNCT_2:7;
+            hence z in [:Seg n, Seg m:] by B2,ZFMISC_1:def 2,B3,B22;
+          end;
+          suppose z in [:(Nbdl1 n).i,{j}:];then
+            consider x4,y4 being set such that
+            B5: x4 in (Nbdl1 n).i & y4 in {j} & z=[x4,y4] by ZFMISC_1:def 2;
+            (Nbdl1 n).i in bool Seg n by FUNCT_2:7,A2;then
+            B7: x4 in Seg n by B5;
+            y4 in Seg m by A2,TARSKI:def 1,B5;
+            hence z in [:Seg n, Seg m:] by B5,ZFMISC_1:def 2,B7;
+          end;
+       end;then
+  A6: y3 in bool [:Seg n, Seg m:];
+      for i4,j4 being Nat st x=[i4,j4] holds
+        y3= [:{i4}, (Nbdl1 m).j4:] \/ [:(Nbdl1 n).i4,{j4}:]
+      proof let i4,j4 be Nat;
+        assume x=[i4,j4];then
+        i4=u & j4=y by A2,ZFMISC_1:33;
+        hence y3= [:{i4}, (Nbdl1 m).j4:] \/ [:(Nbdl1 n).i4,{j4}:];
+      end;
+      hence ex y2 being set st y2 in bool [:Seg n, Seg m:] & P[x,y2] by A6;
+    end;
+    ex f being Function of [:Seg n, Seg m:],bool [:Seg n, Seg m:]
+      st for x being set st x in [:Seg n, Seg m:] holds P[x,f.x]
+      from FUNCT_2:sch 1(A1);
+    hence thesis;
+  end;
+  uniqueness
+  proof let f1,f2 be Function of [:Seg n, Seg m:],bool [:Seg n, Seg m:];
+    assume 
+  A7: ( for x being set st x in [:Seg n, Seg m:]
+      holds (for i,j being Nat st x=[i,j] holds
+      f1.x = [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:])) &
+      for x being set st x in [:Seg n, Seg m:]
+      holds (for i,j being Nat st x=[i,j] holds
+      f2.x = [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:]);
+A8: dom f1= [:Seg n, Seg m:] by FUNCT_2:def 1;
+A9: dom f2= [:Seg n, Seg m:] by FUNCT_2:def 1;
+    for x being set st x in dom f1 holds f1.x=f2.x
+    proof let x be set;
+      assume A10: x in dom f1;then
+      consider u,y being set such that
+A11:  u in Seg n & y in Seg m & x=[u,y] by A8,ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A11;
+      f1.x= [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:] by A7,A10,A8,A11;
+      hence f1.x=f2.x by A7,A8,A10,A11;
+    end;
+    hence f1=f2 by FUNCT_1:9,A8,A9;
+  end;
+end;
+
+definition let n,m be Nat;
+  func FTSS2(n,m) -> strict FT_Space_Str equals :AA2400:
+  FT_Space_Str(# [:Seg n, Seg m:], Nbds2(n,m) #);
+  coherence;
+end;
+
+registration let n,m be non zero Nat;
+  cluster FTSS2(n,m) -> non empty;
+  coherence
+  proof
+A1: 0+1<=m by NAT_1:38;
+A2: FTSS2(n,m) = FT_Space_Str(# [:Seg n, Seg m:], Nbds2(n,m) #) by AA2400;
+    0+1<=n by NAT_1:38;then
+    n in Seg n & m in Seg m by A1,FINSEQ_1:3;then
+    [n,m] in [:Seg n, Seg m:] by ZFMISC_1:def 2;
+    hence thesis by A2,STRUCT_0:def 1;
+  end;
+end;
+
+theorem 
+  for n,m being non zero Nat holds FTSS2(n,m) is filled
+  proof let n,m be non zero Nat; 
+    for x being Element of FTSS2(n,m) holds x in U_FT x
+    proof let x be Element of FTSS2(n,m);
+A2:   FTSS2(n,m) = FT_Space_Str(# [:Seg n, Seg m:],Nbds2(n,m) #)
+        by AA2400;then
+      consider u,y being set such that
+A4:   u in Seg n & y in Seg m & x=[u,y] by ZFMISC_1:def 2;
+      reconsider i=u, j=y as Nat by A4;
+A5:   FTSL1 m = FT_Space_Str(# Seg m,Nbdl1 m #) by FINTOPO4:def 4;
+A6:   FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      reconsider pi=i as Element of FTSL1 n by A4,A6;
+      reconsider pj=j as Element of FTSL1 m by A4,A5;
+      FTSL1 m is filled by FINTOPO4:18;then
+      j in U_FT pj by FIN_TOPO:def 3;then
+      A9: j in (Nbdl1 m).j by A5,FIN_TOPO:def 1;
+      i in {i} by ZFMISC_1:37;then
+      x in [:{i}, (Nbdl1 m).j:] by A4,A9,ZFMISC_1:def 2;then
+      x in [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i, {j}:] by XBOOLE_0:def 2;then 
+      x in Nbds2(n,m).x by A2,AA2300,A4;
+      hence x in U_FT x by FIN_TOPO:def 1,A2;
+    end;  
+    hence FTSS2(n,m) is filled by FIN_TOPO:def 3;
+  end;
+
+theorem 
+  for n,m being non zero Nat holds FTSS2(n,m) is symmetric
+  proof let n,m be non zero Nat;
+A2: FTSS2(n,m)=FT_Space_Str(# [:Seg n, Seg m:],Nbds2(n,m) #) by AA2400;
+    for x, y being Element of FTSS2(n,m) holds
+      y in U_FT x implies x in U_FT y
+    proof let x, y be Element of FTSS2(n,m);
+      assume A3: y in U_FT x;
+      consider xu,xv being set such that
+  A4: xu in Seg n & xv in Seg m & x=[xu,xv] by ZFMISC_1:def 2,A2;
+      reconsider i=xu, j=xv as Nat by A4;
+A5:   FTSL1 m = FT_Space_Str(# Seg m,Nbdl1 m #) by FINTOPO4:def 4;
+A6:   FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      reconsider pi=i as Element of FTSL1 n by A4,A6;
+      reconsider pj=j as Element of FTSL1 m by A4,A5;
+      consider yu,yv being set such that
+  A9: yu in Seg n & yv in Seg m & y=[yu,yv] by ZFMISC_1:def 2,A2;
+      reconsider i2=yu, j2=yv as Nat by A9;
+      reconsider pi2=i2 as Element of FTSL1 n by A9,A6;
+      reconsider pj2=j2 as Element of FTSL1 m by A9,A5;
+      y in (the Nbd of FTSS2(n,m)).x by FIN_TOPO:def 1,A3;then
+      y in [:{i}, (Nbdl1 m).j:] \/ [:(Nbdl1 n).i,{j}:]
+                                         by AA2300,A4,A2;then
+      C0: y in [:{i}, (Nbdl1 m).j:] or y in [:(Nbdl1 n).i,{j}:]
+                                           by XBOOLE_0:def 2;
+      now per cases by C0;
+        case y in [:{i}, (Nbdl1 m).j:];then
+          consider y1,y2 being set such that
+           C1: y1 in {i} & y2 in (Nbdl1 m).j & y=[y1,y2]
+                                          by ZFMISC_1:def 2;
+          C3: y1 = i by C1,TARSKI:def 1;
+          C2: y1=yu & y2=yv by C1,A9,ZFMISC_1:33;then
+          C4: pj2 in U_FT pj by FIN_TOPO:def 1,A5,C1;
+          FTSL1 m is symmetric by FINTOPO4:19;then
+          pj in U_FT pj2 by C4,FIN_TOPO:def 14;then
+          C5: j in (Nbdl1 m).j2 by A5,FIN_TOPO:def 1;
+          i in {i2} by TARSKI:def 1,C2,C3;
+          hence x in [:{i2}, (Nbdl1 m).j2:] by C5,ZFMISC_1:def 2,A4;
+        end;
+        case y in [:(Nbdl1 n).i,{j}:];then
+          consider y1,y2 being set such that
+      C1: y1 in (Nbdl1 n).i & y2 in {j} & y=[y1,y2] by ZFMISC_1:def 2;
+      C3: y2 = j by C1,TARSKI:def 1;
+      C2: y1=yu & y2=yv by C1,A9,ZFMISC_1:33;then
+      C4: pi2 in U_FT pi by FIN_TOPO:def 1,A6,C1;
+          FTSL1 n is symmetric by FINTOPO4:19;then
+          pi in U_FT pi2 by C4,FIN_TOPO:def 14;then
+      C5: i in (Nbdl1 n).i2 by A6,FIN_TOPO:def 1;
+          j in {j2} by TARSKI:def 1,C2,C3;
+          hence x in [:(Nbdl1 n).i2, {j2}:] by C5,ZFMISC_1:def 2,A4;
+        end;
+     end;then
+     x in [:{i2}, (Nbdl1 m).j2:] \/ [:(Nbdl1 n).i2, {j2}:]
+                              by XBOOLE_0:def 2;then
+     x in (the Nbd of FTSS2(n,m)).y by AA2300,A2,A9;
+     hence x in U_FT y by FIN_TOPO:def 1;
+   end;
+   hence thesis by FIN_TOPO:def 14;
+ end;
+
+theorem
+  for n being non zero Nat
+   ex h being map of FTSS2(n,1), FTSL1 n st h is_homeomorphism
+  proof let n be non zero Nat;
+    defpred P[set,set] means [$2,1]=$1;
+A2: FTSS2(n,1)= FT_Space_Str(# [:Seg n, Seg 1:],Nbds2(n,1) #) by AA2400;
+A3: FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+A4: for x be set st x in the carrier of FTSS2(n,1)
+    ex y be set st y in the carrier of FTSL1 n & P[x,y]
+    proof let x be set;
+      assume x in the carrier of FTSS2(n,1);then
+      consider u,v being set such that
+  A6: u in Seg n & v in Seg 1 & x= [u,v] by ZFMISC_1:def 2,A2;
+      reconsider nu=u,nv=v as Nat by A6;
+      1<=nv & nv<=1 by A6,FINSEQ_1:3;then
+  A7: P[x,nu] by A6,AXIOMS:21;
+      FTSL1 n = FT_Space_Str(# Seg n,Nbdl1 n #) by FINTOPO4:def 4;
+      hence thesis by A6,A7;
+    end;
+    ex f being map of FTSS2(n,1), FTSL1 n
+       st for x be set st x in the carrier of FTSS2(n,1) holds P[x,f.x]
+               from FUNCT_2:sch 1(A4);then
+    consider f being map of FTSS2(n,1), FTSL1 n such that
+A8: for x be set st x in the carrier of FTSS2(n,1) holds P[x,f.x];
+    for x1,x2 being set st x1 in dom f & x2 in dom f & f.x1=f.x2
+      holds x1=x2
+    proof let x1,x2 be set;
+      assume A10: x1 in dom f & x2 in dom f & f.x1=f.x2;then
+ A11: x1 in [:Seg n,Seg 1:] by A2,FUNCT_2:def 1;
+ A12: x2 in [:Seg n,Seg 1:] by A10,A2,FUNCT_2:def 1;
+      [f.x1,1]=x1 by A8,A11,A2;
+      hence x1=x2 by A10,A8,A12,A2;
+    end;then
+A14: f is one-to-one by FUNCT_1:def 8;
+A15: the carrier of FTSL1 n c= rng f
+    proof let x be set;
+      assume x in the carrier of FTSL1 n;then
+ A16: x in Seg n by A3;
+      set z=[x,1];
+      1 in Seg 1 by FINSEQ_1:3;then
+ A17: z in the carrier of FTSS2(n,1) by A2,A16,ZFMISC_1:def 2;then
+ A18: z in dom f by FUNCT_2:def 1;
+      [f.z,1]=z by A8,A17;then
+      f.z=x by ZFMISC_1:33;
+      hence x in rng f by A18,FUNCT_1:def 5;
+    end;
+    rng f c= the carrier of FTSL1 n by RELSET_1:12;then
+    rng f= the carrier of FTSL1 n by A15,XBOOLE_0:def 10;then
+A19: f is onto by FUNCT_2:def 3;
+    set FT1=FTSS2(n,1),FT2= FTSL1 n;
+    for x being Element of FT1 holds
+      f.:((the Nbd of FT1).x)=(the Nbd of FT2).(f.x)
+    proof let x be Element of FT1;
+ A20: x in [:Seg n,Seg 1:] by A2;
+      consider u,v being set such that
+ A21: u in Seg n & v in Seg 1 & x= [u,v] by A2,ZFMISC_1:def 2;
+ A24: f.:((the Nbd of FT1).x) c= (the Nbd of FT2).(f.x)
+      proof let y be set;
+        assume y in f.:((the Nbd of FT1).x);then
+        consider x2 being set such that
+A25:    x2 in dom f & x2 in ((Nbds2(n,1)).x) & y=f.x2
+             by FUNCT_1:def 12,A2;
+A26:    (Nbds2(n,1)).x = [:{u}, (Nbdl1 1).v:] \/ [:(Nbdl1 n).u,{v}:]
+                        by A2,A21,AA2300;
+A27:    x2 in the carrier of FT1 by A25,FUNCT_2:def 1;then
+        consider u2,v2 being set such that
+A28:    u2 in Seg n & v2 in Seg 1 & x2= [u2,v2] by ZFMISC_1:def 2,A2;
+        x=[f.x,1] by A8;then
+A29:    u=f.x & v=1 by ZFMISC_1:33,A21;
+A30:    x2=[f.x2,1] by A8,A27;then
+A31:    u2=f.x2 & v2=1 by A28,ZFMISC_1:33;then
+B1:     [u2,v2] in [:{u}, (Nbdl1 1).v:] or [u2,v2] in [:(Nbdl1 n).u,{v}:]
+                        by XBOOLE_0:def 2,A25,A26,A30;
+        now per cases by B1;
+          suppose [u2,v2] in [:{u}, (Nbdl1 1).v:];then
+            u2 in {u} by ZFMISC_1:106;then
+            C0: u2 = u by TARSKI:def 1;
+            reconsider pu=u as Element of FTSL1 n by A3,A21;
+            (FTSL1 n) is filled by FINTOPO4:18;then
+            u in U_FT pu by FIN_TOPO:def 3;
+            hence u2 in (Nbdl1 n).u by C0,A3,FIN_TOPO:def 1;
+          end;
+          suppose [u2,v2] in [:(Nbdl1 n).u,{v}:];
+           hence u2 in (Nbdl1 n).u by ZFMISC_1:106;
+          end;
+        end;
+        hence y in (the Nbd of FT2).(f.x) by A3,A25,A29,A31;
+      end;
+      (the Nbd of FT2).(f.x) c= f.:((the Nbd of FT1).x)
+      proof let y be set;
+        assume A32: y in (the Nbd of FT2).(f.x);
+        (Nbdl1 n).(f.x) in bool Seg n by FUNCT_2:7,A3;then
+        (Nbdl1 n).(f.x) c= rng f by XBOOLE_1:1,A15,A3;then
+        consider x3 being set such that
+   A35: x3 in dom f & y=f.x3 by FUNCT_1:def 5,A32,A3;
+        set u2=f.x3,v2=1;
+   A37: x3 in the carrier of FT1 by A35,FUNCT_2:def 1;then
+        x3=[f.x3,1] by A8;then
+   A41: u2 in Seg n & v2 in Seg 1 & x3=[u2,v2] by ZFMISC_1:106,A2,A37;
+        reconsider nv=v as Nat by A21;
+        1 <= nv & nv <= 1 by FINSEQ_1:3,A21;then
+   A42: nv = 1 by AXIOMS:21;
+  A422: (Nbdl1 1).v = {nv, max(nv-'1,1),min(nv+1,1)} by FINTOPO4:def 3,A21
+                   .= {1,max(0,1),min(2,1)} by NAT_2:10,A42
+                   .= {1,1,min(2,1)} by SQUARE_1:def 2
+                   .= {1, min(2,1)} by ENUMSET1:70
+                   .= {1, 1} by SQUARE_1:def 1
+                   .= {1} by ENUMSET1:69;then
+        A43: v2 in (Nbdl1 1).v by ZFMISC_1:37;
+        x=[f.x,1] by A8;then
+        u2 in (Nbdl1 n).u by A3,A32,A35,ZFMISC_1:33,A21;then
+   A46: [u2,v2] in [:(Nbdl1 n).u, (Nbdl1 1).v:] by A43,ZFMISC_1:def 2;
+        set X=(Nbdl1 n).u, Y=(Nbdl1 1).v;
+  A423: [u2,v2] in [:X,{v}:] \/ [:{u},Y:] by XBOOLE_0:def 2,A42,A422,A46;
+        (Nbds2(n,1)).x = [:{u}, Y:] \/ [:X,{v}:] by A20,A21,AA2300;
+       hence y in f.:((the Nbd of FT1).x) by A2,FUNCT_1:def 12,A35,A423,A41;
+      end;
+      hence f.:((the Nbd of FT1).x)=(the Nbd of FT2).(f.x)
+                        by A24,XBOOLE_0:def 10;
+    end;then
+    f is_homeomorphism by AA25,A14,A19;
+    hence thesis;
+  end;

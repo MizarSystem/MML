@@ -12,8 +12,8 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, XREAL_0, RELAT_1,
       MCART_1, FUNCT_1, REAL_1, NAT_1, NUMBERS, FINSEQ_1, FINSET_1, CARD_1,
       RELSET_1, FUNCT_2, FUNCOP_1, FUNCT_3, TREES_1;
- constructors WELLORD2, REAL_1, NAT_1, FUNCOP_1, TREES_1, XREAL_0, MEMBERED,
-      XBOOLE_0, FUNCT_3, MCART_1;
+ constructors WELLORD2, REAL_1, NAT_1, FUNCOP_1, TREES_1, XREAL_0, FUNCT_3,
+      MCART_1;
  registrations SUBSET_1, RELSET_1, FINSEQ_1, TREES_1, FINSET_1, FUNCOP_1,
       RELAT_1, NAT_1, XREAL_0, XBOOLE_0, NUMBERS, ORDINAL2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
@@ -460,9 +460,8 @@ A1:  L = { w: len w = n} by Def4;
 scheme FraenkelCard { A() ->non empty set, X() -> set, F(set) -> set }:
  Card { F(w) where w is Element of A(): w in X() } <=` Card X()
 proof
-   deffunc U(set) = F($1);
    consider f such that
-A1:  dom f = X() & for x st x in X() holds f.x = U(x) from FUNCT_1:sch 3;
+A1:  dom f = X() & for x st x in X() holds f.x = F(x) from FUNCT_1:sch 3;
        { F(w) where w is Element of A(): w in X() } c= rng f
      proof let x; assume x in { F(w) where w is Element of A(): w in
  X() };
@@ -480,8 +479,7 @@ scheme FraenkelFinCard { A() ->non empty set,
   provided
 A1: Y() = { F(w) where w is Element of A(): w in X() }
 proof
-    deffunc U(set) = F($1);
-       Card { U(w) where w is Element of A(): w in X() } <=` Card X()
+       Card { F(w) where w is Element of A(): w in X() } <=` Card X()
         from FraenkelCard;
    hence thesis by A1,CARD_2:57;
   end;
@@ -1012,18 +1010,17 @@ scheme InfiniteChain { X()->set, a()->set, Q[set], P[set,set] }:
 A1:  a() in X() & Q[a()] and
 A2:  for x st x in X() & Q[x] ex y st y in X() & P[x,y] & Q[y]
 proof
-    defpred X[set] means Q[$1];
     consider Y such that
-A3:   x in Y iff x in X() & X[x] from XBOOLE_0:sch 1;
-      defpred X[set,set] means $2 in Y & P[$1,$2];
-A4:   for x st x in Y ex y st X[x,y]
+A3:   x in Y iff x in X() & Q[x] from XBOOLE_0:sch 1;
+      defpred Q[set,set] means $2 in Y & P[$1,$2];
+A4:   for x st x in Y ex y st Q[x,y]
       proof let x; assume x in Y; then x in X() & Q[x] by A3;
        then consider y such that
 A5:      y in X() & P[x,y] & Q[y] by A2;
        take y; thus thesis by A3,A5;
       end;
     consider g be Function such that
-A6:   dom g = Y & for x st x in Y holds X[x,g.x] from ZFREFLE1:sch 1(A4);
+A6:   dom g = Y & for x st x in Y holds Q[x,g.x] from ZFREFLE1:sch 1(A4);
     deffunc U(set,set) = g.$2;
     consider f such that
 A7:   dom f = NAT & f.0 = a() & for n holds f.(n+1) = U(n,f.n)
@@ -1315,8 +1312,7 @@ scheme DTreeEx { T() -> Tree, P[set,set] }:
   provided
 A1: for p st p in T() ex x st P[p,x]
 proof
-    defpred X[set,set] means P[$1,$2];
-A2:  for x st x in T() ex y st X[x,y]
+A2:  for x st x in T() ex y st P[x,y]
      proof let x; assume
         x in T();
       then reconsider p = x as Element of T();
@@ -1324,7 +1320,7 @@ A2:  for x st x in T() ex y st X[x,y]
       hence thesis;
      end;
    consider f such that
-A3:  dom f = T() & for x st x in T() holds X[x,f.x] from ZFREFLE1:sch 1(A2);
+A3:  dom f = T() & for x st x in T() holds P[x,f.x] from ZFREFLE1:sch 1(A2);
    reconsider T = f as DecoratedTree by A3,Def8;
    take T; thus thesis by A3;
   end;
@@ -1332,9 +1328,8 @@ A3:  dom f = T() & for x st x in T() holds X[x,f.x] from ZFREFLE1:sch 1(A2);
 scheme DTreeLambda { T() -> Tree, f(set) -> set }:
  ex T st dom T = T() & for p st p in T() holds T.p = f(p)
 proof
-   deffunc U(set) = f($1);
    consider f such that
-A1:  dom f = T() & for x st x in T() holds f.x = U(x) from FUNCT_1:sch 3;
+A1:  dom f = T() & for x st x in T() holds f.x = f(x) from FUNCT_1:sch 3;
    reconsider T = f as DecoratedTree by A1,Def8;
    take T; thus thesis by A1;
   end;
@@ -1644,8 +1639,7 @@ proof defpred P[Nat] means
      for t being Element of dom T holds len t <= $1 &
       (len t < $1 implies succ t = { t^<*k*>: k in F(T.t)} &
        for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S().[x,n]);
-     defpred X[Nat] means P[$1];
-A2:  X[0]
+A2:  P[0]
      proof reconsider W = {{}} as Tree by TREES_1:48;
       take T = W --> d();  {} in W by TREES_1:47;
       hence T.{} = d() by FUNCOP_1:13;
@@ -1655,7 +1649,7 @@ A2:  X[0]
       hence len t <= 0 by FINSEQ_1:25; assume len t < 0;
       hence thesis;
      end;
-A3:  X[k] implies X[k+1]
+A3:  P[k] implies P[k+1]
      proof given T be DecoratedTree of D() such that
 A4:    T.{} = d() & for t being Element of dom T holds len t <= k &
         (len t < k implies succ t = { t^<*m*>: m in F(T.t)} &
@@ -1713,9 +1707,9 @@ A13:       p^<*m*> = t^<*l*> & l in F(T.t) by A11,A12,TREES_1:def 5;
          hence thesis by A12,XBOOLE_0:def 2;
         end;
       then reconsider M as Tree;
-      defpred X[FinSequence,set] means $1 in dom T & $2 = T.$1 or
+      defpred P[FinSequence,set] means $1 in dom T & $2 = T.$1 or
          not $1 in dom T & ex n,q st $1 = q^<*n*> & $2 = S().[T.q,n];
-A14:    for p st p in M ex x st X[p,x]
+A14:    for p st p in M ex x st P[p,x]
         proof let p; assume p in M;
 then A15:       p in { t^<*l*> where t is Element of dom T: l in F(T.t) } or
           p in dom T by XBOOLE_0:def 2;
@@ -1731,7 +1725,7 @@ A17:         p = t^<*l*> & l in F(T.t) by A15;
          hence thesis;
         end;
       consider T' be DecoratedTree such that
-A18:    dom T' = M & for p st p in M holds X[p,T'.p] from DTreeEx(A14);
+A18:    dom T' = M & for p st p in M holds P[p,T'.p] from DTreeEx(A14);
           rng T' c= D()
         proof let x; assume x in rng T';
          then consider y such that
@@ -1860,13 +1854,13 @@ A40:       t^<*n*> = q^<*l*> & T'.(t^<*n*>) = S().[T.q,l] by A18,A38;
        end;
       hence T'.(t^<*n*>) = S().[x,n];
      end;
-A41:  X[k] from NAT_1:sch 1(A2,A3);
-      defpred X[set,set] means ex T being DecoratedTree of D(), k st
+A41:  P[k] from NAT_1:sch 1(A2,A3);
+      defpred P[set,set] means ex T being DecoratedTree of D(), k st
         $1 = k & $2 = T & T.{} = d() &
       for t being Element of dom T holds len t <= k &
        (len t < k implies succ t = { t^<*i*>: i in F(T.t)} &
         for n,x st x = T.t & n in F(x) holds T.(t^<*n*>) = S().[x,n]);
-A42:  for x st x in NAT ex y st X[x,y]
+A42:  for x st x in NAT ex y st P[x,y]
      proof let x; assume x in NAT;
       then reconsider n = x as Nat;
       consider T being DecoratedTree of D() such that
@@ -1877,7 +1871,7 @@ A43:    T.{} = d() & for t being Element of dom T holds len t <= n &
       take y,T,n; thus thesis by A43;
      end;
    consider f such that
-A44:  dom f = NAT & for x st x in NAT holds X[x,f.x] from ZFREFLE1:sch 1(A42);
+A44:  dom f = NAT & for x st x in NAT holds P[x,f.x] from ZFREFLE1:sch 1(A42);
      reconsider E = rng f as non empty set by A44,RELAT_1:65;
 A45:  for x st x in E holds x is DecoratedTree of D()
      proof let x; assume x in E;

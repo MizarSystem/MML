@@ -18,8 +18,8 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -46,7 +46,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="31" value="false"/>
+<Adjective nr="30" value="false"/>
 <Adjective nr="33"/>
 </Cluster>
 </Typ>
@@ -73,7 +73,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="307">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -81,11 +81,11 @@
 <Adjective nr="5"/>
 <Adjective nr="25">
 <Func kind="U" nr="1">
-<Func kind="K" nr="288">
-<Func kind="K" nr="172">
+<Func kind="K" nr="280">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -93,11 +93,11 @@
 <Func kind="K" nr="63"/>
 </Adjective>
 <Adjective nr="81">
-<Func kind="K" nr="288">
-<Func kind="K" nr="172">
+<Func kind="K" nr="280">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -112,13 +112,13 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="23">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -127,7 +127,7 @@
 <Func kind="K" nr="67"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="308">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 <LocusVar nr="2"/>
@@ -135,7 +135,7 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="54">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -149,7 +149,7 @@
 </Cluster>
 <Func kind="K" nr="10">
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -157,7 +157,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="23">
+<Typ kind="M" nr="21">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>

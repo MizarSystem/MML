@@ -823,13 +823,12 @@ proof assume x in X;
  hence thesis by Def2;
 end;
 
- scheme SubsetEx { A()-> set, P[set] } :
+scheme SubsetEx { A()-> set, P[set] } :
    ex X being Subset of A() st for x holds x in X iff x in A() & P[x]
 proof
-     defpred X[set] means P[$1];
      consider X being set such that
 A1:   for x holds
-        x in X iff x in A() & X[x] from XBOOLE_0:sch 1;
+        x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
          X c= A()
        proof
         let x;
@@ -864,17 +863,13 @@ A2:for y being Element of X() holds y in X2 iff P[y];
   hence thesis by Th8;
 end;
 
-notation let X, Y be non empty set;
- antonym X meets Y for X misses Y;
- end;
-
 definition let X, Y be non empty set;
  redefine pred X misses Y;
  irreflexivity
   proof
-    let A be non empty set;
-    consider x being set such that A1: x in A by XBOOLE_0:def 1;
-    thus thesis by A1,XBOOLE_0:3;
+   let A be non empty set;
+    ex x being set st x in A by XBOOLE_0:def 1;
+   hence thesis by XBOOLE_0:3;
   end;
  end;
 
@@ -894,5 +889,60 @@ A1: contradiction;
  correctness by A1;
 end;
 
-      
+begin :: Addenda
+
+reserve Y for set;
+
+ 
+Lemat1: :: we unable to use the SUBSET requirements
+ (for x st x in X holds x in Y) implies X is Subset of Y
+ proof
+  assume for x st x in X holds x in Y;
+   then X c= Y by TARSKI:def 3;
+   then X in bool Y by ZFMISC_1:def 1;
+  hence thesis by Def2;
+ end;
+
+Lemat2:
+ x in A implies x is Element of E
+ proof assume x in A;
+   then x in E by Lm1;
+  hence thesis by Def2;
+ end;
+
+:: from SETWISEO, 2005.6.11 , A.T.
+
+scheme SubsetEx { A() -> non empty set, P[set] } :
+  ex B being Subset of A() st
+   for x being Element of A() holds x in B iff P[x]
+proof
+   consider B being set such that
+A1: for x being set holds x in B iff x in A() & P[x] from XBOOLE_0:sch 1;
+     for x being set holds x in B implies x in A() by A1;
+  then reconsider B as Subset of A() by Lemat1;
+  take B; let x be Element of A();
+   x in A() by Def2;
+  hence x in B iff P[x] by A1;
+ end;
+
+:: from GROUP_2, 2005.6.14 , A.T.
+
+scheme SubComp{A() -> set, F1,F2() -> Subset of A(), P[set]}:
+ F1() = F2() provided
+A1: for X being Element of A() holds X in F1() iff P[X] and
+A2: for X being Element of A() holds X in F2() iff P[X]
+proof
+  thus F1() c= F2()
+   proof let x;
+     assume A3: x in F1();
+      then reconsider X = x as Element of A() by Lemat2;
+      P[X] by A1, A3;
+    hence thesis by A2;
+   end;
+  let x;
+   assume A4: x in F2();
+    then reconsider X = x as Element of A() by Lemat2;
+    P[X] by A2,A4;
+  hence thesis by A1;
+ end;
 

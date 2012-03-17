@@ -10,7 +10,6 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -28,12 +27,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="58"/>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="61"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -54,14 +53,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="2"/>
 </Typ>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -82,7 +81,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -113,12 +112,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="58"/>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="61"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -139,14 +138,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="3"/>
 </Typ>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -167,7 +166,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -420,12 +419,12 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="20"/>
+<Adjective nr="58"/>
 <Adjective nr="59"/>
 <Adjective nr="60"/>
-<Adjective nr="61"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -452,14 +451,14 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="2"/>
 </Typ>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -480,14 +479,14 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="F" nr="3"/>
 </Typ>
-<Func kind="K" nr="77">
+<Func kind="K" nr="61">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

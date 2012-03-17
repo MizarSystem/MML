@@ -19,7 +19,6 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="MEASURE1"/>
@@ -30,17 +29,21 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="12">
+<Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="40">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="43">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
+<Func kind="K" nr="40">
+<Func kind="K" nr="40">
 <LocusVar nr="1"/>
+</Func>
+</Func>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="10">
@@ -52,7 +55,7 @@
 <Adjective nr="5"/>
 <Adjective nr="23"/>
 <Adjective nr="26"/>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 </Registrations>

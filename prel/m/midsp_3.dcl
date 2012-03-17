@@ -19,7 +19,6 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="NAT_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="MCART_1"/>
@@ -39,7 +38,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="43">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -56,7 +55,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
+<Adjective nr="28" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -74,8 +73,8 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="39"/>
+<Adjective nr="28" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -131,8 +130,8 @@
 <LocusVar nr="4"/>
 </Func>
 <Cluster>
-<Adjective nr="29" value="false"/>
-<Adjective nr="43">
+<Adjective nr="28" value="false"/>
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

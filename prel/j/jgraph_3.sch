@@ -17,9 +17,9 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -33,7 +33,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -46,7 +46,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="173">
+<Func kind="K" nr="165">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -55,15 +55,15 @@
 </Fraenkel>
 <Func kind="K" nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="115">
-<Func kind="K" nr="172">
+<Func kind="K" nr="102">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="173">
+<Func kind="K" nr="165">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -77,7 +77,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -90,7 +90,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="173">
+<Func kind="K" nr="165">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -102,7 +102,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -114,15 +114,15 @@
 </Fraenkel>
 <Func kind="K" nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="172">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="115">
-<Func kind="K" nr="172">
+<Func kind="K" nr="102">
+<Func kind="K" nr="164">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="173">
+<Func kind="K" nr="165">
 <Num nr="2"/>
 </Func>
 </Func>

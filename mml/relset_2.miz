@@ -10,14 +10,14 @@ environ
       PUA2MSS1, EQREL_1, FUNCT_5, SUBSET_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, RELSET_1,
       PARTFUN1, FUNCT_1, FUNCT_2, PUA2MSS1, EQREL_1, FUNCT_5;
- constructors PUA2MSS1, FUNCT_5;
- registrations SUBSET_1, RELSET_1, PARTFUN1, SYSREL, RELAT_1, SETFAM_1;
+ constructors PUA2MSS1, FUNCT_5, SETFAM_1;
+ registrations SUBSET_1, RELSET_1, PARTFUN1, SYSREL, RELAT_1;
  requirements SUBSET, BOOLE;
- definitions XBOOLE_0, TARSKI, SETFAM_1;
+ definitions XBOOLE_0, TARSKI;
  theorems RELAT_1, TARSKI, SETFAM_1, ZFMISC_1, XBOOLE_1, SUBSET_1, RELSET_1,
       XBOOLE_0, FUNCT_1, FUNCT_2, MSSUBFAM, PUA2MSS1, EQREL_1, FUNCT_5, SYSREL,
       ORDERS_1;
- schemes FUNCT_1;
+ schemes FUNCT_1, DOMAIN_1;
 
 begin :: Preliminaries
 
@@ -194,7 +194,7 @@ definition
   redefine func X /\ Y -> Subset-Family of M;
   coherence
   proof
-    thus X/\Y is Subset-Family of M by SETFAM_1:def 7;
+    thus X/\Y is Subset-Family of M;
   end;
 end;
 
@@ -404,7 +404,7 @@ A2:  a = {x} & x in X;
      a c= A by A2,ZFMISC_1:37;
      hence thesis;
    end;
-   hence thesis by SETFAM_1:def 7;
+   hence thesis;
  end;
 
 theorem :: R(X) - original counterpart. The First Order Cutting.
@@ -455,11 +455,10 @@ theorem
 proof
   let A be non empty set, B be set, X be Subset of A,
       R be Relation of A,B;
-  set Y = {R.:x where x is Element of A: x in X};
-  let a be set; assume a in Y;
-  then consider x being Element of A such that
-A2: a = R.:x & x in X;
-  thus thesis by A2;
+  deffunc F(Element of A) = R.:$1;
+  defpred P[set] means $1 in X;
+  set Y = { F(x) where x is Element of A: P[x]};
+  thus Y is Subset-Family of B from DOMAIN_1:sch 8;
 end;
 
 definition
@@ -471,7 +470,7 @@ definition
   proof
    reconsider R as Relation of A,bool B by RELSET_1:def 1;
    R.:X c= bool B;
-   hence thesis by SETFAM_1:def 7;
+   hence thesis;
   end;
 end;
 
@@ -758,11 +757,10 @@ theorem
 proof
   let A be non empty set, B be set, F be Subset-Family of A,
       R be Relation of A,B;
-  let x be set;
-  assume x in {R.:^X where X is Subset of A: X in F};
-  then consider X being Subset of A such that
-A1: x = R.:^X & X in F;
-  thus thesis by A1;
+  deffunc F(Subset of A) = R.:^$1;
+  defpred P[set] means $1 in F;
+  set Y = { F(X) where X is Subset of A: P[X]};
+  thus Y is Subset-Family of B from DOMAIN_1:sch 8;
 end;
 
 theorem TH40: :: (3.2.2)
@@ -1097,16 +1095,10 @@ theorem
   proof
     let FR be Subset-Family of [:A,B:], A,B be set,
         X be Subset of A;
-    set G = {R.:^X where R is Subset of [:A,B:]: R in FR};
-    G is Subset-Family of B
-    proof
-      let a be set;
-      assume a in G;
-      then consider R being Subset of [:A,B:] such that
-LB2:  a = R.:^X & R in FR;
-      thus thesis by LB2;
-    end;
-    hence thesis;
+    deffunc F(Subset of [:A,B:]) = $1.:^X;
+    defpred P[set] means $1 in FR;
+    set G = { F(R) where R is Subset of [:A,B:]: P[R]};
+ thus G is Subset-Family of B from DOMAIN_1:sch 8;
 end;
 
 :: (11.2) theorem TH40.

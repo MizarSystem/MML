@@ -18,9 +18,9 @@ environ
       SCMPDS_2, SCMPDS_3, CARD_1, SCMPDS_4, SCM_1, SCMPDS_6, SCMP_GCD,
       SCMPDS_5, SCMPDS_8, SQUARE_1, FUNCT_2, AMI_5, CARD_3, DOMAIN_1, FINSEQ_1,
       TREES_4, WSIERP_1, PRE_FF, SCPISORT;
- constructors REAL_1, DOMAIN_1, AMI_5, RECDEF_1, SCMPDS_4, SCM_1, SCMPDS_6,
-      SCMP_GCD, SCMPDS_8, SCMPDS_5, SQUARE_1, PRE_FF, SCPISORT, INT_2, NAT_1,
-      WSIERP_1, MEMBERED, RAT_1, BINOP_2, FRAENKEL;
+ constructors DOMAIN_1, AMI_5, RECDEF_1, SCMPDS_4, SCM_1, SCMPDS_6, SCMP_GCD,
+      SCMPDS_8, SCMPDS_5, SQUARE_1, PRE_FF, SCPISORT, NAT_1, WSIERP_1, RAT_1,
+      BINOP_2;
  registrations AMI_1, INT_1, FUNCT_1, SCMPDS_2, SCMFSA_4, SCMPDS_4, SCMPDS_6,
       SCMPDS_8, SCMPDS_5, RELSET_1, WSIERP_1, FRAENKEL, NUMBERS, ORDINAL2,
       SETFAM_1;
@@ -280,18 +280,17 @@ A8: now
          suppose A11: F(Dstate u) <> 0;
             then A12: u.b < 0 by A2,A10;
         A13: u.DataLoc(u.a(),i()) < 0 by A2,A10,A11;
-        defpred X[set] means P[$1];
-        deffunc U(State of SCMPDS) = F($1);
-        A14: for t be State of SCMPDS st X[Dstate t] & U(Dstate(t))=0 holds
+        deffunc F(State of SCMPDS) = F($1);
+        A14: for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
             t.DataLoc(u.a(),i()) >= 0 by A2,A10;
-        A15: X[Dstate u] by A10;
+        A15: P[Dstate u] by A10;
         A16: for t being State of SCMPDS st
-          X[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) < 0 holds
+          P[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) < 0 holds
             IExec(I(),t).a()=t.a() & I() is_closed_on t &
-            I() is_halting_on t & U(Dstate IExec(I(),t)) < U(Dstate t) &
-            X[Dstate(IExec(I(),t))] by A4,A10;
+            I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+            P[Dstate(IExec(I(),t))] by A4,A10;
            set Iu=IExec(I(),u);
-       A17:  (U(u)=U(u) or X[u]) &
+       A17:  (F(u)=F(u) or P[u]) &
             IExec(WHL,u) = IExec(WHL,Iu) from SCMPDS_8:sch 2
 (A1,A13,A14,A15,A16);
                  F(Dstate Iu) < F(Dstate u) by A4,A10,A12;
@@ -784,18 +783,17 @@ A8: now
          suppose A11: F(Dstate u) <> 0;
             then A12: u.b > 0 by A2,A10;
         A13: u.DataLoc(u.a(),i()) > 0 by A2,A10,A11;
-        defpred X[set] means P[$1];
-        deffunc U(State of SCMPDS) = F($1);
-        A14: for t be State of SCMPDS st X[Dstate t] & U(Dstate(t))=0 holds
+        deffunc F(State of SCMPDS) = F($1);
+        A14: for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
             t.DataLoc(u.a(),i()) <= 0 by A2,A10;
-        A15: X[Dstate u] by A10;
+        A15: P[Dstate u] by A10;
         A16: for t being State of SCMPDS st
-            X[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) > 0 holds
+            P[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) > 0 holds
             IExec(I(),t).a()=t.a() & I() is_closed_on t &
-            I() is_halting_on t & U(Dstate IExec(I(),t)) < U(Dstate t) &
-            X[Dstate(IExec(I(),t))] by A4,A10;
+            I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+            P[Dstate(IExec(I(),t))] by A4,A10;
            set Iu=IExec(I(),u);
-       A17:  (U(u)=U(u) or X[u]) &
+       A17:  (F(u)=F(u) or P[u]) &
             IExec(WHL,u) = IExec(WHL,Iu) from SCMPDS_8:sch 4
 (A1,A13,A14,A15,A16);
                  F(Dstate Iu) < F(Dstate u) by A4,A10,A12;
@@ -1703,16 +1701,15 @@ proof
        i2=goto (card I()+2),
        i3=goto -(card I()+2);
 
-        defpred X[set] means P[$1];
-        deffunc U(State of SCMPDS) = F($1);
-A6: (for t be State of SCMPDS st X[Dstate t] & U(Dstate(t))=0 holds
+        deffunc F(State of SCMPDS) = F($1);
+A6: (for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0 holds
     t.DataLoc(s().a(),i()) = 0) by A3;
-A7: X[Dstate s()] by A4;
+A7: P[Dstate s()] by A4;
 A8: for t be State of SCMPDS st
-       X[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) <> 0
+       P[Dstate t] & t.a()=s().a() & t.DataLoc(s().a(),i()) <> 0
     holds IExec(I(),t).a()=t.a() & I() is_closed_on t &
-        I() is_halting_on t & U(Dstate IExec(I(),t)) < U(Dstate t) &
-        X[Dstate(IExec(I(),t))] by A5;
+        I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+        P[Dstate(IExec(I(),t))] by A5;
          WHL is_closed_on s() &
     WHL is_halting_on s() from WhileNHalt(A1,A6,A7,A8);
 then A9: s1 is halting by SCMPDS_6:def 3;
@@ -1724,17 +1721,16 @@ then A9: s1 is halting by SCMPDS_6:def 3;
        set Es=IExec(I(),s()),
            bj=DataLoc(Es.a(),i());
 A10: I() is_closed_on s() & I() is_halting_on s() by A2,A4,A5;
-        defpred X[set] means P[$1];
-        deffunc U(State of SCMPDS) = F($1);
+        deffunc F(State of SCMPDS) = F($1);
 A11: IExec(I(), s()).a()=s().a() by A2,A4,A5;
-then A12: for t be State of SCMPDS st X[Dstate t] & U(Dstate(t))=0
+then A12: for t be State of SCMPDS st P[Dstate t] & F(Dstate(t))=0
     holds t.bj = 0 by A3;
-A13: X[Dstate Es] by A2,A4,A5;
+A13: P[Dstate Es] by A2,A4,A5;
 A14: for t being State of SCMPDS st
-      X[Dstate t] & t.a()=Es.a() & t.bj <> 0 holds
+      P[Dstate t] & t.a()=Es.a() & t.bj <> 0 holds
       IExec(I(),t).a()=t.a() & I() is_closed_on t &
-      I() is_halting_on t & U(Dstate IExec(I(),t)) < U(Dstate t)
-        & X[Dstate(IExec(I(),t))] by A5,A11;
+      I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t)
+        & P[Dstate(IExec(I(),t))] by A5,A11;
 A15:  WHL is_closed_on Es &
      WHL is_halting_on Es from WhileNHalt(A1,A12,A13,A14);
    set s4 = C1.1;
@@ -1889,16 +1885,15 @@ A8: now
             then A12: u.b <> 0 by A2,A10;
         A13: u.DataLoc(u.a(),i()) <> 0 by A2,A10,A11;
            set Iu=IExec(I(),u);
-        deffunc U(State of SCMPDS) = F($1);
-        defpred X[set] means P[$1];
-        A14: for t be State of SCMPDS st X[Dstate t] & U(Dstate t)=0
+        deffunc F(State of SCMPDS) = F($1);
+        A14: for t be State of SCMPDS st P[Dstate t] & F(Dstate t)=0
             holds t.DataLoc(u.a(),i()) = 0 by A2,A10;
-        A15: X[Dstate u] by A10;
+        A15: P[Dstate u] by A10;
         A16: for t being State of SCMPDS st
-            X[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) <> 0 holds
+            P[Dstate t] & t.a()=u.a() & t.DataLoc(u.a(),i()) <> 0 holds
             IExec(I(),t).a()=t.a() & I() is_closed_on t &
-            I() is_halting_on t & U(Dstate IExec(I(),t)) < U(Dstate t) &
-            X[Dstate(IExec(I(),t))] by A4,A10;
+            I() is_halting_on t & F(Dstate IExec(I(),t)) < F(Dstate t) &
+            P[Dstate(IExec(I(),t))] by A4,A10;
 
        A17: IExec(WHL,u) = IExec(WHL,Iu) from WhileNExec(A1,A13,A14,A15,A16);
                  F(Dstate Iu) < F(Dstate u) by A4,A10,A12;

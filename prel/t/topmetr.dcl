@@ -12,10 +12,10 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_1"/>
@@ -40,7 +40,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -56,7 +56,7 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
@@ -64,12 +64,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Typ kind="M" nr="15">
+<Typ kind="M" nr="13">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="36"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
@@ -81,7 +81,7 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
@@ -99,12 +99,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="172">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="36"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
@@ -114,9 +114,9 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="182"/>
+<Func kind="K" nr="174"/>
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="20" value="false"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 </Cluster>
@@ -126,13 +126,13 @@
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="5"/>
 </Cluster>
 <LocusVar nr="1"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="182"/>
+<Func kind="K" nr="174"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="1">

@@ -13,33 +13,31 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="STRUCT_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="NAT_1"/>
-<ArticleID name="FINSUB_1"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FINSOP_1"/>
 <ArticleID name="ALGSEQ_1"/>
-<ArticleID name="FVSUM_1"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRIX_2"/>
 <ArticleID name="FINSEQ_4"/>
@@ -51,6 +49,7 @@
 <ArticleID name="TREES_2"/>
 <ArticleID name="TREES_3"/>
 <ArticleID name="TREES_4"/>
+<ArticleID name="FVSUM_1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="POLYNOM1"/>
@@ -80,16 +79,16 @@
 </ArgTypes>
 <Not>
 <For>
-<Typ kind="M" nr="8">
+<Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="126">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="96">
+<Func kind="K" nr="109">
 <Var nr="1"/>
 </Func>
 <Func kind="F" nr="2"/>
@@ -104,18 +103,18 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="95">
+<Func kind="K" nr="108">
 <Func kind="F" nr="2"/>
 </Func>
 </Pred>
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="96">
-<Func kind="K" nr="409">
+<Func kind="K" nr="109">
+<Func kind="K" nr="393">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="126">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -136,11 +135,11 @@
 <And>
 <Pred kind="R" nr="2">
 <Var nr="3"/>
-<Func kind="K" nr="210">
-<Func kind="K" nr="409">
+<Func kind="K" nr="162">
+<Func kind="K" nr="393">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="126">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -151,10 +150,10 @@
 <Not>
 <Pred kind="R" nr="1">
 <Func kind="K" nr="20">
-<Func kind="K" nr="409">
+<Func kind="K" nr="393">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="56"/>
-<Func kind="K" nr="113">
+<Func kind="K" nr="126">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>
@@ -183,9 +182,9 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="33" value="false"/>
+<Adjective nr="39" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="4">
@@ -211,7 +210,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="79">
+<Adjective nr="49">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -223,7 +222,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="12">
-<Func kind="K" nr="213">
+<Func kind="K" nr="165">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -245,7 +244,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="438">
+<Func kind="K" nr="422">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
