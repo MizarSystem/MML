@@ -12,17 +12,18 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NAT_1, RELAT_1, RELAT_2,
       RELSET_1, ORDERS_1, STRUCT_0, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1,
       SETFAM_1, FUNCT_4, WELLORD1, ORDINAL1, ORDINAL2, CARD_1, COHSP_1,
-      LATTICES, LATTICE3, QUANTAL1, ORDERS_2, FUNCT_7;
+      LATTICES, LATTICE3, QUANTAL1, ORDERS_2, FUNCT_7, ABIAN;
  constructors NAT_1, BINOP_1, DOMAIN_1, WELLORD2, COHSP_1, BOOLEALG, QUANTAL1,
-      PROB_1, FUNCT_7, WELLORD1, SETFAM_1;
+      PROB_1, FUNCT_7, WELLORD1, SETFAM_1, ABIAN;
  registrations SUBSET_1, STRUCT_0, FUNCT_1, LATTICES, CARD_1, LATTICE3,
       RELSET_1, ORDINAL1, QUANTAL1;
  requirements NUMERALS, BOOLE, SUBSET;
- definitions TARSKI, FUNCT_1, COHSP_1, LATTICE3, QUANTAL1, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, COHSP_1, LATTICE3, QUANTAL1, XBOOLE_0, ABIAN;
  theorems TARSKI, SETFAM_1, ZFMISC_1, RELAT_1, FUNCT_1, FUNCOP_1, FUNCT_2,
       FUNCT_4, CARD_1, COHSP_1, LATTICES, LATTICE3, QUANTAL1, FILTER_0,
       FILTER_1, BOOLEALG, WELLORD1, RELSET_1, ORDERS_2, RELAT_2, ORDINAL1,
-      CARD_3, CARD_4, PROB_1, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1;
+      CARD_3, CARD_4, PROB_1, XBOOLE_0, XBOOLE_1, FUNCT_7, PARTFUN1, ORDERS_1,
+      ABIAN;
  schemes NAT_1, FUNCT_1, FUNCT_2, DOMAIN_1, ORDINAL2;
 
 begin :: Preliminaries
@@ -113,26 +114,6 @@ end;
 
 begin :: Fix points in general
 
-definition
-  let x be set, f be Function;
- pred x is_a_fixpoint_of f means
-:Def1: x in dom f & x = f.x;
-end;
-
-definition
-  let A be non empty set, a be Element of A, f be Function of A, A;
- redefine pred a is_a_fixpoint_of f means
-:Def2: a = f.a;
- compatibility proof
-  thus a is_a_fixpoint_of f implies a = f.a by Def1;
-  assume
-A1: a = f.a;
-        a in A;
-  hence a in dom f by FUNCT_2:67;
-  thus a = f.a by A1;
- end;
-end;
-
  reserve x, y, z, u, X for set,
          A for non empty set,
          n for Nat,
@@ -142,9 +123,8 @@ theorem Th4:
  x is_a_fixpoint_of iter(f,n) implies f.x is_a_fixpoint_of iter(f,n)
 proof
  assume x is_a_fixpoint_of iter(f,n);
-then A1: x in dom iter(f, n) & x = iter(f, n).x by Def1;
-        iter(f, n) is Function of X, X by FUNCT_7:85;
-then A2: dom f = X & rng f c= X & dom iter(f, n) = X by FUNCT_2:67;
+then A1: x in dom iter(f, n) & x = iter(f, n).x by ABIAN:def 3;
+A2: dom f = X & rng f c= X & dom iter(f, n) = X by FUNCT_2:67;
    then f.x in rng f by A1,FUNCT_1:def 5;
  hence f.x in dom iter(f, n) by A2;
  thus f.x = (f*iter(f, n)).x by A1,FUNCT_1:23
@@ -161,15 +141,17 @@ proof
  given n such that
 A1: x is_a_fixpoint_of iter(f, n) and
 A2: for y st y is_a_fixpoint_of iter(f,n) holds x = y;
-        iter(f, n) is Function of X, X by FUNCT_7:85;
-   then dom f = X & dom iter(f, n) = X by FUNCT_2:67;
- hence x in dom f by A1,Def1;
+   dom f = X & dom iter(f, n) = X by FUNCT_2:67;
+ hence x in dom f by A1,ABIAN:def 3;
        f.x is_a_fixpoint_of iter(f, n) by A1,Th4;
  hence x = f.x by A2;
 end;
 
-definition let A, B be non empty set, f be Function of A, B;
- redefine attr f is c=-monotone means
+definition
+ let A, B be non empty set, f be Function of A, B;
+ redefine  canceled 2;
+
+attr f is c=-monotone means
 :Def3: for x, y being Element of A st x c= y holds f.x c= f.y;
  compatibility proof
       dom f = A by FUNCT_2:def 1;
@@ -202,7 +184,7 @@ definition let X be set;
 :Def4:  meet {h where h is Subset of X : f.h c= h};
  coherence proof
  defpred P[set] means f.$1 c= $1;
-   reconsider H = {h where h is Subset of X : P[h] } as Subset of bool X
+   reconsider H = {h where h is Subset of X : P[h] } as Subset-Family of X
      from DOMAIN_1:sch 7;
    reconsider H as Subset-Family of X;
         meet H is Subset of X;
@@ -212,7 +194,7 @@ definition let X be set;
 :Def5:  union {h where h is Subset of X : h c= f.h };
  coherence proof
  defpred P[set] means $1 c= f.$1;
-   reconsider H = {h where h is Subset of X : P[h] } as Subset of bool X
+   reconsider H = {h where h is Subset of X : P[h] } as Subset-Family of X
      from DOMAIN_1:sch 7;
         union H is Subset of X;
   hence thesis;
@@ -226,13 +208,13 @@ theorem Th6:
  lfp(X, f) is_a_fixpoint_of f
 proof
   defpred P[set] means f.$1 c= $1;
-  reconsider H = { h where h is Subset of X : P[h] } as Subset of bool X
+  reconsider H = { h where h is Subset of X : P[h] } as Subset-Family of X
     from DOMAIN_1:sch 7;
   reconsider H as Subset-Family of X;
  set A = meet H;
 A1: lfp(X,f) = A by Def4;
       now X c= X;
-  then reconsider X' = X as Element of bool X;
+  then reconsider X' = X as Subset of X;
           f.X' c= X'; then X' in H;
   hence H <> {};
   let h be set; assume
@@ -251,7 +233,7 @@ theorem Th7:
 proof
   defpred P[set] means $1 c= f.$1;
   reconsider H = { h where h is Subset of X : P[h] }
-    as Subset of bool X from DOMAIN_1:sch 7;
+    as Subset-Family of X from DOMAIN_1:sch 7;
  set A = union H;
 A1: gfp(X,f) = A by Def5;
       now let x be set; assume
@@ -316,7 +298,7 @@ A3: dom f = bool A() & for x being set st x in bool A() holds f.x = F(x)
  then reconsider f as c=-monotone Function of bool A(), bool A() by
 COHSP_1:def 12;
  take d = lfp(A(), f);
-       d is_a_fixpoint_of f by Th6; then d = f.d by Def1;
+       d is_a_fixpoint_of f by Th6; then d = f.d by ABIAN:def 3;
  hence F(d) = d by A3;
  thus d c= A();
 end;
@@ -355,7 +337,7 @@ A3: x in dom h & y in dom h & x c= y;
 A4: Xa is_a_fixpoint_of h by Th6;
   thus g.:Yb = X/\g.:(Y\f.:Xa) by XBOOLE_1:28 .= X\(X\g.:(Y\f.:Xa)) by
 XBOOLE_1:48
-    .= X\h.Xa by A2 .= Xb by A4,Def1;
+    .= X\h.Xa by A2 .= Xb by A4,ABIAN:def 3;
 end;
 
 theorem Th12: :: Schroeder-Bernstein
@@ -1278,7 +1260,7 @@ then A3: (f, succ O1)+.a [= (f, O2)+.a by A1,Th27;
   then (f, O1)+.a [= (f, succ O1)+.a by A1,Th27;
   then (f, O1)+.a = (f, succ O1)+.a by A2,A3,LATTICES:26;
   then (f, O1)+.a = f.(f, O1)+.a by Th18;
- hence contradiction by A2,Def2;
+ hence contradiction by A2,ABIAN:def 4;
 end;
 
 theorem Th30:
@@ -1298,7 +1280,7 @@ then A3: (f, O2)-.a [= (f, succ O1)-.a by A1,Th28;
   then (f, succ O1)-.a [= (f, O1)-.a by A1,Th28;
   then (f, O1)-.a = (f, succ O1)-.a by A2,A3,LATTICES:26;
   then (f, O1)-.a = f.(f, O1)-.a by Th19;
- hence contradiction by A2,Def2;
+ hence contradiction by A2,ABIAN:def 4;
 end;
 
 theorem Th31:
@@ -1322,7 +1304,7 @@ A5:   O1 c= succ O2;
      suppose O1 <> succ O2;
       then O1 c< succ O2 by A5,XBOOLE_0:def 8;
 then O1 in succ O2 by ORDINAL1:21;
-     hence fa = f.(f, O2)+.a by A1,A4,Def1,ORDINAL1:34
+     hence fa = f.(f, O2)+.a by A1,A4,ABIAN:def 3,ORDINAL1:34
             .= (f, succ O2)+.a by Th18;
     end;
     end;
@@ -1380,7 +1362,7 @@ A5:  O1 c= succ O2;
      suppose O1 <> succ O2;
       then O1 c< succ O2 by A5,XBOOLE_0:def 8;
 then O1 in succ O2 by ORDINAL1:21;
-    hence fa = f.(f, O2)-.a by A1,A4,Def1,ORDINAL1:34
+    hence fa = f.(f, O2)-.a by A1,A4,ABIAN:def 3,ORDINAL1:34
             .= (f, succ O2)-.a by Th19;
     end;
     end;
@@ -1528,7 +1510,7 @@ theorem Th35:
       (f, O)+.(a"\/"b) is_a_fixpoint_of f &
       a [= (f, O)+.(a"\/"b) & b [= (f, O)+.(a"\/"b)
 proof let a, b; assume a is_a_fixpoint_of f & b is_a_fixpoint_of f;
-then A1: a = f.a & b = f.b by Def1;
+then A1: a = f.a & b = f.b by ABIAN:def 3;
    reconsider ab = a"\/"b as Element of L;
 A2: a [= ab & b [= ab by LATTICES:22;
    then f.a [= f.ab & f.b [= f.ab by QUANTAL1:def 12;
@@ -1550,7 +1532,7 @@ theorem Th36:
       (f, O)-.(a"/\"b) is_a_fixpoint_of f &
       (f, O)-.(a"/\"b) [= a & (f, O)-.(a"/\"b) [= b
 proof let a, b; assume a is_a_fixpoint_of f & b is_a_fixpoint_of f;
-then A1: a = f.a & b = f.b by Def1;
+then A1: a = f.a & b = f.b by ABIAN:def 3;
    reconsider ab = a"/\"b as Element of L;
 A2: ab [= a & ab [= b by LATTICES:23;
    then f.ab [= f.a & f.ab [= f.b by QUANTAL1:def 12;
@@ -1571,7 +1553,7 @@ theorem Th37:
   implies for O2 holds (f, O2)+.a [= b
 proof assume
 A1: a [= f.a & a [= b & b is_a_fixpoint_of f;
-then A2: f.b = b by Def1;
+then A2: f.b = b by ABIAN:def 3;
  defpred S[Ordinal] means (f, $1)+.a [= b;
 A3: S[{}] by A1,Th16;
 A4: now let O1; assume S[O1];
@@ -1604,7 +1586,7 @@ theorem Th38:
 proof
  assume
 A1: f.a [= a & b [= a & b is_a_fixpoint_of f;
-then A2: f.b = b by Def1;
+then A2: f.b = b by ABIAN:def 3;
  defpred S[Ordinal] means b [= (f, $1)-.a;
 A3: S[{}] by A1,Th17;
 A4: now let O1; assume S[O1];
@@ -1667,7 +1649,7 @@ A4: P is with_suprema proof
     A9: z' in P & x [= z' & y [= z';
       then consider zz being Element of L such that
     A10: zz = z' & zz is_a_fixpoint_of f;
-    A11: a = f.a & b = f.b by A6,A7,Def1;
+    A11: a = f.a & b = f.b by A6,A7,ABIAN:def 3;
              a [= ab & b [= ab by LATTICES:22;
         then f.a [= f.ab & f.b [= f.ab by A1,QUANTAL1:def 12;
     then A12: ab [= f.ab by A11,FILTER_0:6;
@@ -1694,7 +1676,7 @@ A4: P is with_suprema proof
     A17: z' in P & z' [= x & z' [= y;
       then consider zz being Element of L such that
     A18: zz = z' & zz is_a_fixpoint_of f;
-    A19: a = f.a & b = f.b by A14,A15,Def1;
+    A19: a = f.a & b = f.b by A14,A15,ABIAN:def 3;
              ab [= a & ab [= b by LATTICES:23;
         then f.ab [= f.a & f.ab [= f.b by A1,QUANTAL1:def 12;
     then A20: f.ab [= ab by A19,FILTER_0:7;
@@ -1775,7 +1757,7 @@ A2: Y c= X & Y c= cF by XBOOLE_1:17;
    then A4: f.q [= f.s by QUANTAL1:def 12;
        reconsider q' = q as Element of L;
             q' is_a_fixpoint_of f by A2,A3,Th41;
-    hence q [= f.s by A4,Def1;
+    hence q [= f.s by A4,ABIAN:def 3;
    end;
 then A5: s [= f.s by LATTICE3:def 21;
    then consider O such that
@@ -1870,7 +1852,7 @@ theorem Th46:
   a is_a_fixpoint_of f implies lfp f [= a & a [= gfp f
 proof assume
       a is_a_fixpoint_of f;
-then A1: f.a = a by Def1;
+then A1: f.a = a by ABIAN:def 3;
  defpred S[Ordinal] means (f, $1)+.Bottom L [= a;
          (f, {})+.Bottom L = Bottom L by Th16;
 then A2: S[{}] by LATTICES:41;

@@ -14,9 +14,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_1"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -28,8 +28,8 @@
 <For>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
@@ -52,7 +52,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="27">
+<Pred kind="V" nr="26">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -69,7 +69,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="V" nr="27">
+<Pred kind="V" nr="26">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -149,7 +149,7 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="94">
+<Func kind="K" nr="102">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>
@@ -172,8 +172,8 @@
 <For>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
@@ -194,7 +194,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="102">
+<Func kind="K" nr="92">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -300,8 +300,8 @@
 <For>
 <Typ kind="G" nr="3">
 <Cluster>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
 </Cluster>
 </Typ>
 <Not>
@@ -322,7 +322,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="103">
+<Func kind="K" nr="93">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

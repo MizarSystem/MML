@@ -47,64 +47,6 @@
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="G" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="10">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes>
-<Typ kind="G" nr="1">
 <Cluster>
 <Adjective nr="4" value="false"/>
 </Cluster>

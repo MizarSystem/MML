@@ -12,15 +12,15 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, MCART_1, DOMAIN_1, FINSET_1, SETFAM_1, REALSET1, CQC_SIM1,
       RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1, INT_1, NAT_1, EQREL_1, FUNCT_7;
- constructors DOMAIN_1, CQC_SIM1, REAL_1, KNASTER, NAT_1, FUNCT_7, MEMBERED,
-      REALSET1, SETFAM_1;
- registrations SUBSET_1, INT_1, FINSET_1, RELSET_1, EQREL_1, PUA2MSS1,
-      MEMBERED, PARTFUN1, ORDINAL2;
+ constructors DOMAIN_1, CQC_SIM1, REAL_1, NAT_1, FUNCT_7, MEMBERED, REALSET1,
+      SETFAM_1, EQREL_1, XREAL_0, INT_1;
+ registrations SUBSET_1, INT_1, FINSET_1, RELSET_1, EQREL_1, MEMBERED,
+      PARTFUN1, ORDINAL2, SETFAM_1, FUNCT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, REALSET1;
- theorems TARSKI, AXIOMS, ZFMISC_1, FUNCT_1, FUNCT_2, EQREL_1, NAT_1, INT_1,
-      SQUARE_1, MCART_1, SCHEME1, REAL_1, FUNCOP_1, CQC_SIM1, RELSET_1,
-      SETFAM_1, XBOOLE_0, XBOOLE_1, FUNCT_7, XCMPLX_1;
+ definitions TARSKI, XBOOLE_0, RELAT_1, FUNCT_1, REALSET1, SETFAM_1;
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, EQREL_1, NAT_1, INT_1, SQUARE_1,
+      MCART_1, SCHEME1, FUNCOP_1, CQC_SIM1, RELSET_1, SETFAM_1, XBOOLE_0,
+      XBOOLE_1, FUNCT_7, XCMPLX_1, XREAL_1;
  schemes EQREL_1, FUNCT_2, NAT_1, DOMAIN_1;
 
 begin
@@ -488,11 +488,6 @@ A3: c = Class(=_f, e) by A2,EQREL_1:31;
  hence iter(f,n).e in c by A3,EQREL_1:27;
 end;
 
-definition let E;
- attr E is empty-membered means
-:EV: for x st x in E holds x is empty;
-end;
-
 registration
  cluster empty-membered -> trivial set;
  coherence
@@ -502,12 +497,12 @@ Z:  E is empty-membered;
    assume E is non empty;
     then consider x such that
 W:   x in E by XBOOLE_0:def 1;
-A:  x is empty by W,EV,Z;
+A:  x is empty by W,SETFAM_1:def 11,Z;
    take x;
    thus E c= {x}
     proof let y;
      assume y in E;
-      then y is empty by Z,EV;
+      then y is empty by Z,SETFAM_1:def 11;
       then x = y by A;
      hence thesis by TARSKI:def 1;
     end;
@@ -515,43 +510,17 @@ A:  x is empty by W,EV,Z;
   end;
 end;
 
-notation let E;
- antonym E is with_non-empty_element for E is empty-membered;
-end;
-
-registration
-cluster with_non-empty_element set;
-existence
- proof
-  take {{{}}}, {{}};
-  thus {{}} in {{{}}} by TARSKI:def 1;
-  thus {{}} is non empty;
- end;
-end;
-
 registration
   let A be set, B be with_non-empty_element set;
  cluster non-empty Function of A, B;
  existence proof
-  consider X being set such that
-A1: X in B and
-A2: X is non empty by EV;
-  reconsider X as non empty set by A2;
+  consider X being non empty set such that
+A1: X in B by SETFAM_1:def 11;
   reconsider f = A --> X as Function of A, B by A1,FUNCOP_1:57;
   take f;
   let n be set; assume n in dom f;
    then n in A by FUNCOP_1:19;
   hence f.n is non empty by FUNCOP_1:13;
- end;
-end;
-
-registration
-cluster with_non-empty_element -> non empty set;
-coherence
- proof
-  let X be set; assume X is with_non-empty_element;
-  then ex x st x in X & x is non empty by EV;
-  hence thesis;
  end;
 end;
 
@@ -574,7 +543,6 @@ registration
  coherence proof
   take X;
   thus X in bool X by ZFMISC_1:def 1;
-  thus X is non empty;
  end;
 end;
 
@@ -759,7 +727,7 @@ A30:    i(l2+k1).x1 = (i(l2)*i(k1)).x1 by FUNCT_7:79
      reconsider k1, l1, l2 as even Nat by A26,A27;
      reconsider k2 as odd Nat by A27;
    A31: dom i(k1+l2) = E & dom i(k2+l1) = E by FUNCT_2:def 1;
-   per cases by AXIOMS:21;
+   per cases by XREAL_1:1;
    suppose A32: k1+l2 < k2+l1;
     take r = i(k1+l2).x1;
      reconsider k = k2+l1-(k1+l2) as Nat by A32,INT_1:18;
@@ -921,8 +889,8 @@ A61: for x being Element of c st x <> r holds odl.(f.x) = (odl.x qua Nat)-1
      then A69: ofx+1 in Odl.x by A36;
             ox = min (Odl.x) by A49;
          then ofx+1 >= ox by A69,CQC_SIM1:def 8;
-         then ofx >= ox-1 by REAL_1:86;
-      hence thesis by A67,AXIOMS:21;
+         then ofx >= ox-1 by XREAL_1:22;
+      hence thesis by A67,XREAL_1:1;
      end;
    thus f.:b`1 misses b`1 proof
         f.:d1 c= d2 proof let y be set; assume y in f.:d1;

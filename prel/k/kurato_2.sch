@@ -14,7 +14,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
@@ -63,7 +62,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="130">
+<Func kind="K" nr="120">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -82,7 +81,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
@@ -120,7 +119,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="150">
+<Func kind="K" nr="140">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -147,12 +146,12 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="R" nr="15">
+<Pred kind="R" nr="13">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="150">
+<Func kind="K" nr="140">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

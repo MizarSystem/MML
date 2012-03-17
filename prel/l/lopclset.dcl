@@ -27,7 +27,6 @@
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
 <ArticleID name="LATTICE4"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="LOPCLSET"/>
 </Signature>
@@ -79,7 +78,61 @@
 <Typ kind="G" nr="13">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="91"/>
+<Adjective nr="90"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="167">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="6" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="12" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="33"/>
+<Adjective nr="84" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="173">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="6" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="12" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="33"/>
+<Adjective nr="84" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="176">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="6" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="12" value="false"/>
+<Adjective nr="26"/>
+<Adjective nr="33"/>
+<Adjective nr="84" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -87,63 +140,9 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="6" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
-<Adjective nr="84" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="183">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="6" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
-<Adjective nr="84" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="186">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="6" value="false"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="G" nr="5">
-<Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="33"/>
-<Adjective nr="84" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="187">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="12" value="false"/>
+<Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="91"/>
 </Cluster>
 </FCluster>
 </Registrations>

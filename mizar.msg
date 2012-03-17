@@ -338,7 +338,7 @@ Only characters with decimal ASCII codes between 32 and 126 are allowed
 # 202
 Too large numeral
 # 203
-Unknown token
+Unknown token, maybe the forbidden underscore character used in an identifier
 # 210
 Wrong item in environment declaration
 # 211

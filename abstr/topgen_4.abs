@@ -1,0 +1,546 @@
+:: On the {B}orel Families of Subsets of Topological Spaces
+::  by Adam Grabowski
+:: 
+:: Received August 30, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies PRE_TOPC, SETFAM_1, SUBSET_1, BOOLE, TARSKI, FINSET_1, FUNCT_1,
+      RELAT_1, ORDINAL2, TOPS_1, CONNSP_1, NATTRA_1, RLVECT_3, CARD_1,
+      WAYBEL23, URYSOHN1, TOPMETR, RAT_1, CARD_4, PCOMPS_1, TOPGEN_1, TOPGEN_4,
+      PROB_1, TSP_1, MCART_1, OPENLATT, MEASURE1, CONNSP_2, WAYBEL30, REALSET1,
+      NEWTON;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, CARD_1, ORDINAL2,
+      NUMBERS, CARD_4, MCART_1, FUNCT_2, NAT_1, FINSET_1, SETFAM_1, STRUCT_0,
+      GROUP_1, CONNSP_2, REALSET1, OPENLATT, MEASURE1, PRE_TOPC, TOPS_1,
+      TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, PROB_1, URYSOHN1, TOPMETR, CANTOR_1,
+      ORDERS_4, TSP_1, TOPGEN_1, TOPGEN_3, PCOMPS_1;
+ constructors MEMBERED, TOPS_1, TOPS_2, CONNSP_1, TDLAT_3, WAYBEL23, URYSOHN1,
+      COMPTS_1, TSP_1, CARD_4, ORDERS_4, SETFAM_1, KURATO_2, MCART_1, TOPGEN_1,
+      TOPGEN_2, TOPGEN_3, MEASURE1, OPENLATT;
+ registrations STRUCT_0, RELSET_1, TOPS_1, YELLOW13, CARD_1, ORDINAL1,
+      TOPREAL6, TOPGEN_1, FINSET_1, WAYBEL12, SUBSET_1, BORSUK_3, TOPGEN_2,
+      TOPGEN_3, MEASURE1, ORDINAL2, PROB_1;
+ requirements NUMERALS, BOOLE, SUBSET;
+
+
+begin :: Preliminaries
+
+definition let T be 1-sorted;
+  func TotFam T -> Subset-Family of T equals
+:: TOPGEN_4:def 1
+    bool the carrier of T;
+end;
+
+theorem :: TOPGEN_4:1
+  for T being set, F being Subset-Family of T holds
+    F is countable iff COMPLEMENT F is countable;
+
+registration
+  cluster RAT -> countable;
+end;
+
+scheme :: TOPGEN_4:sch 1
+ FraenCoun11 { P[set] } :
+  { {n} where n is Element of RAT : P[n] } is countable;
+
+theorem :: TOPGEN_4:2
+  for T being non empty TopSpace,
+      A being Subset of T holds
+    Der A = { x where x is Point of T : x in Cl (A \ {x}) };
+
+registration
+  cluster finite -> second-countable TopStruct;
+end;
+
+registration
+  cluster REAL -> non countable;
+end;
+
+registration
+  cluster non countable -> non finite set;
+  cluster non finite -> non trivial set;
+  cluster non countable non empty set;
+end;
+
+ reserve T for non empty TopSpace,
+         A, B for Subset of T,
+         F, G for Subset-Family of T;
+
+theorem :: TOPGEN_4:3
+  A is closed iff Der A c= A;
+
+theorem :: TOPGEN_4:4
+  for T being non empty TopStruct,
+      B being Basis of T,
+      V being Subset of T st V is open & V <> {}
+   ex W being Subset of T st W in B & W c= V & W <> {};
+
+begin :: Regular Formalization: Separable Spaces
+
+:: 1.3.7. Theorem
+
+theorem :: TOPGEN_4:5
+  density T <=` weight T;
+
+theorem :: TOPGEN_4:6
+  T is separable iff
+    ex A being Subset of T st A is dense countable;
+
+:: 1.3.8. Corollary
+
+theorem :: TOPGEN_4:7
+  T is second-countable implies T is separable;
+
+registration
+  cluster second-countable -> separable (non empty TopSpace);
+end;
+
+:: Exercises
+
+theorem :: TOPGEN_4:8 :: Exercise 1.3.A.
+  for T being non empty TopSpace,
+      A, B being Subset of T st A, B are_separated holds
+    Fr (A \/ B) = Fr A \/ Fr B;
+
+:: Exercise 1.3.B.
+
+theorem :: TOPGEN_4:9 :: Ex. 1.3.B. a)
+  F is locally_finite implies
+    Fr union F c= union Fr F;
+
+theorem :: TOPGEN_4:10  :: also for empty TopSpaces
+  for T being discrete non empty TopSpace holds
+    T is separable iff Card [#]T <=` alef 0;
+
+theorem :: TOPGEN_4:11
+  for T being discrete non empty TopSpace holds
+    T is separable iff T is countable;
+
+begin :: Families of Subsets Closed for Countable Unions and Complement
+
+definition let T, F;
+  attr F is all-open-containing means
+:: TOPGEN_4:def 2
+    for A being Subset of T st A is open holds
+      A in F;
+end;
+
+definition let T, F;
+  attr F is all-closed-containing means
+:: TOPGEN_4:def 3
+    for A being Subset of T st A is closed holds
+      A in F;
+end;
+
+definition let T be set, F be Subset-Family of T;
+  attr F is closed_for_countable_unions means
+:: TOPGEN_4:def 4
+    for G being countable Subset-Family of T st
+      G c= F holds union G in F;
+end;
+
+registration let T be set;
+  cluster -> closed_for_countable_unions sigma_Field_Subset of T;
+end;
+
+theorem :: TOPGEN_4:12
+  for T being set, F being Subset-Family of T st
+    F is closed_for_countable_unions holds
+      {} in F;
+
+registration let T be set;
+  cluster closed_for_countable_unions -> non empty Subset-Family of T;
+end;
+
+theorem :: TOPGEN_4:13
+  for T being set, F being Subset-Family of T holds
+    F is sigma_Field_Subset of T iff
+      F is compl-closed closed_for_countable_unions;
+
+definition let T be set, F be Subset-Family of T;
+  attr F is closed_for_countable_meets means
+:: TOPGEN_4:def 5
+    for G being countable Subset-Family of T st
+      G c= F holds meet G in F;
+end;
+
+theorem :: TOPGEN_4:14
+  for F being Subset-Family of T holds
+    F is all-closed-containing compl-closed iff
+      F is all-open-containing compl-closed;
+
+theorem :: TOPGEN_4:15
+  for T being set, F being Subset-Family of T st F is compl-closed holds
+    F = COMPLEMENT F;
+
+theorem :: TOPGEN_4:16
+  for T being set, F, G being Subset-Family of T st
+    F c= G & G is compl-closed holds
+      COMPLEMENT F c= G;
+
+theorem :: TOPGEN_4:17
+  for T being set, F being Subset-Family of T holds
+    F is closed_for_countable_meets compl-closed iff
+      F is closed_for_countable_unions compl-closed;
+
+registration let T;
+  cluster all-open-containing compl-closed closed_for_countable_unions ->
+    all-closed-containing closed_for_countable_meets Subset-Family of T;
+  cluster all-closed-containing compl-closed closed_for_countable_meets ->
+      all-open-containing closed_for_countable_unions Subset-Family of T;
+end;
+
+begin :: On the Families of Subsets
+
+registration let T be set;
+             let F be countable Subset-Family of T;
+  cluster COMPLEMENT F -> countable;
+end;
+
+registration let T;
+  cluster empty -> open closed Subset-Family of T;
+end;
+
+registration let T;
+  cluster countable open closed Subset-Family of T;
+end;
+
+theorem :: TOPGEN_4:18
+  for T being set holds {} is empty Subset-Family of T;
+
+registration
+  cluster empty -> countable set;
+end;
+
+begin :: Collective Properties of Families
+
+theorem :: TOPGEN_4:19
+  F = { A } implies (A is open iff F is open);
+
+theorem :: TOPGEN_4:20
+  F = { A } implies (A is closed iff F is closed);
+
+definition let T be set, F, G be Subset-Family of T;
+  redefine func INTERSECTION (F,G) -> Subset-Family of T;
+  redefine func UNION (F,G) -> Subset-Family of T;
+end;
+
+theorem :: TOPGEN_4:21
+  F is closed & G is closed implies INTERSECTION (F,G) is closed;
+
+theorem :: TOPGEN_4:22
+  F is closed & G is closed implies UNION (F,G) is closed;
+
+theorem :: TOPGEN_4:23
+  F is open & G is open implies INTERSECTION (F,G) is open;
+
+theorem :: TOPGEN_4:24
+  F is open & G is open implies UNION (F,G) is open;
+
+theorem :: TOPGEN_4:25
+  for T being set,
+      F, G being Subset-Family of T holds
+    Card INTERSECTION (F,G) <=` Card [:F,G:];
+
+theorem :: TOPGEN_4:26
+  for T being set,
+      F, G being Subset-Family of T holds
+    Card UNION (F,G) <=` Card [:F,G:];
+
+theorem :: TOPGEN_4:27
+  for F, G being set holds
+    union UNION (F,G) c= union F \/ union G;
+
+theorem :: TOPGEN_4:28
+  for F, G being set st F <> {} & G <> {} holds
+    union F \/ union G = union UNION (F,G);
+
+theorem :: TOPGEN_4:29
+  for F being set holds UNION ({},F) = {};
+
+theorem :: TOPGEN_4:30
+  for F, G being set holds
+    UNION (F, G) = {} implies F = {} or G = {};
+
+theorem :: TOPGEN_4:31
+  for F, G being set st
+    INTERSECTION (F, G) = {} holds F = {} or G = {};
+
+theorem :: TOPGEN_4:32
+  for F, G being set holds
+    meet UNION (F,G) c= meet F \/ meet G;
+
+theorem :: TOPGEN_4:33
+  for F, G being set st F <> {} & G <> {} holds
+    meet UNION(F,G) = meet F \/ meet G;
+
+theorem :: TOPGEN_4:34
+  for F, G being set st
+    F <> {} & G <> {} holds
+      meet F /\ meet G = meet INTERSECTION(F,G);
+
+begin :: F_sigma and G_delta Types of Subsets
+
+definition let T, A;
+  attr A is F_sigma means
+:: TOPGEN_4:def 6
+    ex F being closed countable Subset-Family of T st
+       A = union F;
+end;
+
+definition let T, A;
+  attr A is G_delta means
+:: TOPGEN_4:def 7
+    ex F being open countable Subset-Family of T st
+       A = meet F;
+end;
+
+theorem :: TOPGEN_4:35
+  {}T is F_sigma;
+
+theorem :: TOPGEN_4:36
+  {}T is G_delta;
+
+registration let T;
+  cluster {}T -> F_sigma G_delta;
+end;
+
+theorem :: TOPGEN_4:37
+  [#]T is F_sigma;
+
+theorem :: TOPGEN_4:38
+  [#]T is G_delta;
+
+registration let T;
+  cluster [#]T -> F_sigma G_delta;
+end;
+
+theorem :: TOPGEN_4:39
+  A is F_sigma implies A` is G_delta;
+
+theorem :: TOPGEN_4:40
+  A is G_delta implies A` is F_sigma;
+
+theorem :: TOPGEN_4:41
+  A is F_sigma & B is F_sigma implies A /\ B is F_sigma;
+
+theorem :: TOPGEN_4:42
+  A is F_sigma & B is F_sigma implies A \/ B is F_sigma;
+
+theorem :: TOPGEN_4:43
+  A is G_delta & B is G_delta implies A \/ B is G_delta;
+
+theorem :: TOPGEN_4:44
+  A is G_delta & B is G_delta implies A /\ B is G_delta;
+
+theorem :: TOPGEN_4:45
+  for A being Subset of T st A is closed holds
+    A is F_sigma;
+
+theorem :: TOPGEN_4:46
+  for A being Subset of T st A is open holds
+    A is G_delta;
+
+theorem :: TOPGEN_4:47
+  for A being Subset of R^1 st A = RAT holds
+    A is F_sigma;
+
+begin :: T_1/2 Topological Spaces
+
+definition let T be TopSpace;
+  attr T is T_1/2 means
+:: TOPGEN_4:def 8
+    for A being Subset of T holds Der A is closed;
+end;
+
+theorem :: TOPGEN_4:48
+  for T being TopSpace st T is being_T1 holds T is T_1/2;
+
+theorem :: TOPGEN_4:49
+  for T being non empty TopSpace st T is T_1/2 holds T is T_0;
+
+theorem :: TOPGEN_4:50
+  for T being non empty TopSpace,
+      p being Point of T holds
+    p is_isolated_in [#]T or p is_an_accumulation_point_of [#]T;
+
+registration
+  cluster T_1/2 -> T_0 TopSpace;
+  cluster being_T1 -> T_1/2 TopSpace;
+end;
+
+begin :: Condensation Points
+      :: Page 77 - 1.7.11
+
+definition let T, A; let x be Point of T;
+  pred x is_a_condensation_point_of A means
+:: TOPGEN_4:def 9
+    for N being a_neighborhood of x holds
+      N /\ A is not countable;
+end;
+
+ reserve x for Point of T;
+
+theorem :: TOPGEN_4:51
+  x is_a_condensation_point_of A & A c= B implies
+    x is_a_condensation_point_of B;
+
+definition let T, A;
+  func A^0 -> Subset of T means
+:: TOPGEN_4:def 10
+    for x being Point of T holds x in it iff
+      x is_a_condensation_point_of A;
+end;
+
+theorem :: TOPGEN_4:52
+  for p being Point of T st
+    p is_a_condensation_point_of A holds
+      p is_an_accumulation_point_of A;
+
+theorem :: TOPGEN_4:53
+  A^0 c= Der A;
+
+theorem :: TOPGEN_4:54
+  A^0 = Cl (A^0);
+
+theorem :: TOPGEN_4:55
+  A c= B implies A^0 c= B^0;
+
+theorem :: TOPGEN_4:56
+  x is_a_condensation_point_of A \/ B implies
+    x is_a_condensation_point_of A or
+      x is_a_condensation_point_of B;
+
+theorem :: TOPGEN_4:57
+  (A \/ B)^0 = (A^0) \/ (B^0);
+
+theorem :: TOPGEN_4:58
+  A is countable implies
+    not ex x being Point of T st x is_a_condensation_point_of A;
+
+theorem :: TOPGEN_4:59
+  A is countable implies
+    A^0 = {};
+
+registration let T;
+             let A be countable Subset of T;
+  cluster A^0 -> empty;
+end;
+
+theorem :: TOPGEN_4:60
+  T is second-countable implies
+    ex B being Basis of T st B is countable;
+
+registration
+  cluster second-countable non empty TopSpace;
+end;
+
+begin :: Borel Families of Subsets
+
+registration let T;
+  cluster TotFam T -> non empty all-open-containing compl-closed
+            closed_for_countable_unions;
+end;
+
+theorem :: TOPGEN_4:61
+  for T being set, A being SetSequence of T holds
+    rng A is countable non empty Subset-Family of T;
+
+theorem :: TOPGEN_4:62
+  for T, F being set holds
+    F is SigmaField of T iff
+      F is sigma_Field_Subset of T;
+
+theorem :: TOPGEN_4:63
+  for F, G being Subset-Family of T st F is all-open-containing & F c= G
+    holds G is all-open-containing;
+
+theorem :: TOPGEN_4:64
+  for F, G being Subset-Family of T st F is all-closed-containing & F c= G
+    holds G is all-closed-containing;
+
+definition let T be 1-sorted;
+  mode SigmaField of T is SigmaField of the carrier of T;
+  mode sigma_Field_Subset of T is sigma_Field_Subset of the carrier of T;
+end;
+
+registration let T be non empty TopSpace;
+  cluster compl-closed closed_for_countable_unions closed_for_countable_meets
+    all-closed-containing all-open-containing Subset-Family of T;
+end;
+
+theorem :: TOPGEN_4:65
+  sigma TotFam T is all-open-containing compl-closed
+    closed_for_countable_unions;
+
+registration let T;
+  cluster sigma TotFam T -> all-open-containing compl-closed
+     closed_for_countable_unions;
+end;
+
+registration let T be non empty 1-sorted;
+  cluster sigma_Field_Subset-like compl-closed closed_for_countable_unions
+    non empty Subset-Family of T;
+end;
+
+registration let T be non empty TopSpace;
+  cluster -> closed_for_countable_unions SigmaField of T;
+end;
+
+theorem :: TOPGEN_4:66
+  for T being non empty TopSpace,
+      F being Subset-Family of T st
+    F is compl-closed closed_for_countable_unions holds
+      F is SigmaField of T;
+
+registration let T be non empty TopSpace;
+  cluster all-open-containing SigmaField of T;
+end;
+
+registration let T be non empty TopSpace;
+  cluster Topology_of T -> open all-open-containing;
+end;
+
+theorem :: TOPGEN_4:67
+  for X being Subset-Family of T
+   ex Y being all-open-containing compl-closed
+          closed_for_countable_unions Subset-Family of T st X c= Y &
+     for Z be all-open-containing compl-closed
+          closed_for_countable_unions Subset-Family of T st X c= Z holds
+        Y c= Z;
+
+definition let T;
+  func BorelSets T -> all-open-containing compl-closed
+      closed_for_countable_unions Subset-Family of T means
+:: TOPGEN_4:def 11
+    for G being all-open-containing compl-closed
+      closed_for_countable_unions Subset-Family of T holds
+      it c= G;
+end;
+
+theorem :: TOPGEN_4:68
+  for F being closed Subset-Family of T holds
+    F c= BorelSets T;
+
+theorem :: TOPGEN_4:69
+  for F being open Subset-Family of T holds
+    F c= BorelSets T;
+
+theorem :: TOPGEN_4:70
+  BorelSets T = sigma Topology_of T;
+
+definition let T, A;
+  attr A is Borel means
+:: TOPGEN_4:def 12
+    A in BorelSets T;
+end;
+
+registration let T;
+  cluster F_sigma -> Borel Subset of T;
+end;
+
+registration let T;
+  cluster G_delta -> Borel Subset of T;
+end;

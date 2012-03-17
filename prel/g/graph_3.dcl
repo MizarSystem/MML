@@ -35,8 +35,8 @@
 <ArticleID name="MSSCYC_1"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="RELAT_2"/>
 <ArticleID name="FUNCT_7"/>
+<ArticleID name="RELAT_2"/>
 <ArticleID name="ABIAN"/>
 <ArticleID name="GRAPH_3"/>
 </Signature>

@@ -11,10 +11,10 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -117,7 +117,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="73">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -193,7 +193,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="62">
+<Func kind="K" nr="73">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -243,7 +243,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

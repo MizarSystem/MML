@@ -25,7 +25,6 @@
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -40,7 +39,7 @@
 <Typ kind="M" nr="8">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="214">
+<Func kind="K" nr="204">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -52,17 +51,17 @@
 <Adjective nr="24" value="false"/>
 <Adjective nr="27"/>
 <Adjective nr="30"/>
+<Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="91">
+<Adjective nr="90">
 <Func kind="U" nr="1">
-<Func kind="K" nr="214">
+<Func kind="K" nr="204">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="93"/>
 </Cluster>
 </RCluster>
 </Registrations>

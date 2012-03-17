@@ -15,7 +15,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -35,12 +34,12 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="174"/>
+<Func kind="K" nr="164"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="17"/>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 </Cluster>
 </CCluster>
 </Registrations>

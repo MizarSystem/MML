@@ -11,7 +11,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TSEP_1"/>
 </Signature>
@@ -19,7 +18,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -28,9 +27,9 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
+<Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="15"/>
-<Adjective nr="19">
+<Adjective nr="18">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -40,7 +39,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -50,9 +49,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
+<Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="15"/>
-<Adjective nr="19">
+<Adjective nr="18">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

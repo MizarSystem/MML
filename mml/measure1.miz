@@ -96,9 +96,7 @@ A5:  (x in REAL & y in REAL) implies (y + z) - y = z
    hence thesis by A1;
 end;
 
-theorem
-      for A being Subset of X holds
-   {A} is Subset-Family of X by ZFMISC_1:37;
+canceled;
 
 theorem Th7:
    for A,B being Subset of X holds
@@ -172,57 +170,9 @@ A2:for x being set holds x in X iff x in bool A() & X[x] from XBOOLE_0:sch 1;
   hence thesis;
 end;
 
-definition let X be set;
+notation let X be set;
    let S be non empty Subset-Family of X;
- canceled;
-
-   func X\S -> Subset-Family of X means :Def2:
-     for A being set holds
-      A in it iff ex B being set st B in S & A = X \ B;
-existence
-proof
-   defpred P[set] means ex B being set st B in S & $1 = X \ B;
-A1:ex C being set st C c= X & P[C]
-   proof consider C0 being Element of S;
-      take X \ C0;
-      thus thesis by XBOOLE_1:36;
-   end;
-      ex R being non empty Subset-Family of X st
-   for A being set holds A in R iff A c= X & P[A] from DomsetFamEx(A1);
-   then consider R being Subset-Family of X such that
-A2:for A being set holds A in R iff (A c= X &
-   (ex B being set st B in S & A = X \ B));
-   take R;
-   let A be set;
-   thus A in R implies (ex B being set st B in S & A = X \ B) by A2;
-   given B being set such that A3: B in S & A = X \ B;
-      A c= X by A3,XBOOLE_1:36;
-   hence A in R by A2,A3;
-end;
-uniqueness
-proof
-   let R1,R2 be Subset-Family of X such that
-A4:for A being set holds A in R1 iff
-      (ex B being set st B in S & A = X \ B) and
-A5:for A being set holds A in R2 iff
-      (ex B being set st B in S & A = X \ B);
-      R1 = R2
-   proof
-         for A being set holds A in R1 iff A in R2
-      proof
-         let A be set;
-         hereby assume A in R1;
-            then ex B being set st B in S & A = X \ B by A4;
-            hence A in R2 by A5;
-         end;
-         assume A in R2;
-         then ex B being set st B in S & A = X \ B by A5;
-         hence thesis by A4;
-      end;
-      hence thesis by TARSKI:2;
-   end;
-   hence thesis;
-end;
+ synonym X\S for COMPLEMENT S;
 end;
 
 registration let X be set;
@@ -230,41 +180,15 @@ registration let X be set;
    cluster X\S -> non empty;
    coherence
    proof
-     consider x being set such that A1: x in S by XBOOLE_0:def 1;
-        X\x in X\S by A1,Def2;
+     consider x being Subset of X such that
+A1:   x in S by SUBSET_1:10;
+      x`` in S by A1;
+      then x` in X\S by SETFAM_1:def 8;
      hence thesis;
    end;
 end;
 
-canceled 4;
-
-theorem Th14:
-   for S being non empty Subset-Family of X holds
-   S = X \ (X \ S)
-proof
-   let S be non empty Subset-Family of X;
-A1:S c= X \ (X \ S)
-   proof
-      let A be set;
-      assume
-   A2:A in S;
-   then A3:X\A in X \ S by Def2;
-         X \ (X \ A) = X /\ A by XBOOLE_1:48;
-      then A = X \ (X\A) by A2,XBOOLE_1:28;
-      hence thesis by A3,Def2;
-   end;
-      X \ (X \ S) c= S
-   proof
-      let A be set;
-      assume A in X \ (X \ S);
-      then consider B being set such that
-   A4:B in X \ S & A = X \ B by Def2;
-      consider C being set such that
-   A5:C in S & B = X \ C by A4,Def2;
-     A = X /\ C by A4,A5,XBOOLE_1:48; hence thesis by A5,XBOOLE_1:28;
-   end;
-   hence thesis by A1,XBOOLE_0:def 10;
-end;
+canceled 5;
 
 theorem Th15:
    for S being non empty Subset-Family of X holds
@@ -283,9 +207,9 @@ A1:      x in meet S;
            assume x in union (X \ S);
            then consider Z being set such that
         A2:x in Z & Z in X \ S by TARSKI:def 4;
-           consider B being set such that
-        A3:B in S & Z = X \ B by A2,Def2;
-              not x in B by A2,A3,XBOOLE_0:def 4;
+           reconsider Z as Subset of X by A2;
+        A3: Z` in S by A2,SETFAM_1:def 8;
+              not x in Z` by A2,SUBSET_1:54;
            hence thesis by A1,A3,SETFAM_1:def 1;
          end;
          hence thesis by A1,XBOOLE_0:def 4;
@@ -301,9 +225,11 @@ A1:      x in meet S;
             assume that
          A5:Y in S and
          A6:not x in Y;
-         A7:x in X\Y by A4,A6,XBOOLE_0:def 4;
-               X\Y in X \ S by A5,Def2;
-            hence thesis by A4,A7,TARSKI:def 4;
+          reconsider Y as Subset of X by A5;
+         A7:x in Y` by A4,A6,SUBSET_1:50;
+             Y`` in S by A5;
+             then Y` in X \ S by SETFAM_1:def 8;
+            hence contradiction by A4,A7,TARSKI:def 4;
          end;
          hence thesis by SETFAM_1:def 1;
       end;
@@ -314,13 +240,15 @@ A1:      x in meet S;
       assume x in union S;
       then consider Y being set such that
    A8:x in Y & Y in S by TARSKI:def 4;
+       reconsider Y as Subset of X by A8;
          not x in meet (X \ S)
       proof
          assume
      A9:x in meet (X \ S);
-         set Z = X \ Y;
-     A10:Z in X \ S by A8,Def2;
-            not x in Z by A8,XBOOLE_0:def 4;
+      Y`` in S by A8;
+      then
+     A10: Y` in X \ S by SETFAM_1:def 8;
+            not x in Y` by A8,SUBSET_1:54;
          hence thesis by A9,A10,SETFAM_1:def 1;
       end;
       hence thesis by A8,XBOOLE_0:def 4;
@@ -330,12 +258,12 @@ A1:      x in meet S;
 then A11:x in X & not x in meet (X \ S) by XBOOLE_0:def 4;
    then consider Z being set such that
 A12:Z in X \ S & not x in Z by SETFAM_1:def 1;
+     reconsider Z as Subset of X by A12;
       ex Y being set st Y in S & x in Y
    proof
-      set Y = X \ Z;
-         Y in X \ (X \ S) by A12,Def2;
-  then A13:Y in S by Th14;
-         x in Y by A11,A12,XBOOLE_0:def 4;
+         Z` in X \ (X \ S) by A12,SETFAM_1:def 8;
+  then A13:Z` in S;
+         x in Z` by A11,A12,SUBSET_1:50;
       hence thesis by A13;
    end;
    hence thesis by TARSKI:def 4;
@@ -348,7 +276,9 @@ end;
 definition
    let X be set;
    let IT be Subset-Family of X;
-   redefine attr IT is compl-closed means :Def3:
+   redefine  canceled 2;
+
+attr IT is compl-closed means :Def3:
     for A being set holds A in IT implies X\A in IT;
    compatibility
    proof
@@ -418,27 +348,17 @@ proof
       let A be set;
       hereby assume
       A1:A in S;
-         then A2:X \ A in S by Def3;
-            A = X \ (X \ A)
-         proof
-               for x be set holds x in A iff x in X\(X\A)
-            proof
-               let x be set;
-               hereby assume x in A;
-                 then x in X & not x in X\A by A1,XBOOLE_0:def 4;
-                 hence x in X\(X\A) by XBOOLE_0:def 4;
-               end;
-               assume x in X\(X\A);
-               then x in X & not x in X\A by XBOOLE_0:def 4;
-               hence thesis by XBOOLE_0:def 4;
-            end;
-            hence thesis by TARSKI:2;
-         end;
-         hence A in X \ S by A2,Def2;
+       then reconsider B = A as Subset of X;
+       B` in S by A1,PROB_1:def 1;
+         hence A in X \ S by SETFAM_1:def 8;
       end;
-      assume A in X \ S;
-      then ex B being set st B in S & A = X \ B by Def2;
-      hence thesis by Def3;
+      assume
+Z:     A in X \ S;
+       then reconsider B = A as Subset of X;
+
+       B` in S by Z,SETFAM_1:def 8;
+       then B`` in S by PROB_1:def 1;
+      hence thesis;
    end;
    hence thesis by TARSKI:2;
 end;
@@ -1122,15 +1042,17 @@ A3:for n being set st n in NAT ex Y being set st Y in S & Y=F.n
       take F.n;
       thus thesis by A1,A4,FUNCT_2:6;
    end;
-   defpred P[set,set] means ex V being set st V = F.$1 & $2 = X \ V;
+   defpred P[set,set] means ex V being Subset of X st V = F.$1 & $2 = V`;
 A5:for n being set st n in NAT ex y being set st y in X\S & P[n,y]
    proof
       let n be set;
       assume n in NAT;
       then consider V being set such that
   A6: V in S & V=F.n by A3;
-      take X \ V;
-      thus thesis by A6,Def2;
+       reconsider V as Subset of X by A6;
+      take V`;
+       V`` in S by A6;
+    hence thesis by A6,SETFAM_1:def 8;
    end;
 A7:ex G being Function of NAT,X \ S st for n being set st n in NAT holds
     P[n,G.n] from FUNCT_2:sch 1(A5);
@@ -1138,18 +1060,19 @@ A7:ex G being Function of NAT,X \ S st for n being set st n in NAT holds
    proof
        consider G being Function of NAT,X \ S such that
    A8:for n being set st n in NAT holds
-       (ex V being set st V = F.n & G.n = X \ V) by A7;
+       ex V being Subset of X st V = F.n & G.n = V` by A7;
    A9:dom G = NAT & rng G c= X \ S by FUNCT_2:def 1,RELSET_1:12;
 A10:   X \ S c= rng G
        proof
          let x be set;
-         assume x in X \ S;
-         then consider B being set such that
-     A11:B in S & x = X \ B by Def2;
+         assume
+Z:        x in X \ S;
+          then reconsider B = x as Subset of X;
+     A11:   B` in S  by Z,SETFAM_1:def 8;
          consider n being set such that
-     A12:n in NAT & F.n = B by A1,A2,A11,FUNCT_1:def 5;
-            ex V being set st V = F.n & G.n = X \ V by A8,A12;
-         hence thesis by A9,A11,A12,FUNCT_1:def 5;
+     A12:n in NAT & F.n = B` by A1,A2,A11,FUNCT_1:def 5;
+            ex V being Subset of X st V = F.n & G.n = V` by A8,A12;
+         hence thesis by A9,A12,FUNCT_1:def 5;
        end;
        reconsider G as Function of NAT,bool X by FUNCT_2:9;
        take G;
@@ -1308,10 +1231,14 @@ A1:  (for A being set holds A in S implies X\A in S) &
              X \ M c= S
           proof
              let y be set;
-             assume y in X \ M;
-             then consider B being set such that
-          A4:B in M & y = X \ B by Def2;
-             thus thesis by A1,A2,A4;
+             assume
+Z:              y in X \ M;
+             then reconsider B = y as Subset of X;
+           B` in M  by Z,SETFAM_1:def 8;
+             then B` in S by A2;
+             then X\(B`) in S by A1;
+             then B`` in S by SUBSET_1:def 5;
+             hence thesis;
           end;
           then meet (X \ M) in S by A1,A3;
           then X \ meet (X \ M) in S by A1;
@@ -1329,10 +1256,13 @@ A1:  (for A being set holds A in S implies X\A in S) &
            X \ M c= S
         proof
            let y be set;
-           assume y in X \ M;
-           then consider B being set such that
-        A8:B in M & y = X \ B by Def2;
-           thus thesis by A5,A6,A8,Def3;
+           assume
+Z:           y in X \ M;
+           then reconsider B = y as Subset of X;
+         B` in M by Z,SETFAM_1:def 8;
+             then B` in S by A6;
+             then B`` in S by A5,PROB_1:def 1;
+             hence thesis;
         end;
         then union (X \ M) in S by A5,A7,Def9;
         then X \ union (X \ M) in S by A5,Def3;

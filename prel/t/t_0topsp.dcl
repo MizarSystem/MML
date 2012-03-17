@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -25,8 +24,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="29"/>
+<Adjective nr="14"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -34,16 +33,16 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="89">
+<Func kind="K" nr="79">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </FCluster>
 </Registrations>

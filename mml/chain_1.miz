@@ -9,11 +9,11 @@ environ
  vocabularies CHAIN_1, FINSEQ_1, RELAT_1, FUNCT_1, FINSET_1, CARD_1, ORDERS_1,
       BOOLE, MATRIX_2, RLVECT_1, WAYBEL25, SUBSET_1, FINSEQ_2, FUNCT_2,
       GRAPH_1, ARYTM_1, MCART_1, VECTSP_1, GROUP_6, CARD_3, GOBOARD5, BINOP_1,
-      PRE_TOPC, SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ORDINAL1, XCMPLX_0,
-      XREAL_0, FUNCT_1, REAL_1, REALSET1, EUCLID, FUNCT_2, ABIAN, CARD_1,
-      DOMAIN_1, MOD_4, CARD_3, BINOP_1, VECTSP_1, PRE_TOPC, SQUARE_1, NAT_1,
-      NUMBERS, FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
+      PRE_TOPC, SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, ORDINAL1,
+      XCMPLX_0, XREAL_0, FUNCT_1, REAL_1, REALSET1, EUCLID, FUNCT_2, ABIAN,
+      CARD_1, DOMAIN_1, MOD_4, CARD_3, BINOP_1, VECTSP_1, PRE_TOPC, SQUARE_1,
+      NAT_1, NUMBERS, FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
  constructors REAL_1, EUCLID, NAT_1, ABIAN, DOMAIN_1, MOD_4, SQUARE_1,
       REALSET2, MEMBERED, RAT_1, CARD_3;
  registrations FINSET_1, SUBSET_1, RELSET_1, ABIAN, FINSEQ_1, VECTSP_1,
@@ -21,9 +21,9 @@ environ
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions REALSET1, TARSKI, FUNCT_1, RLVECT_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, SUBSET_1, XBOOLE_0, CARD_1, FINSEQ_2,
-      FUNCT_2, EUCLID, NAT_1, XBOOLE_1, REAL_1, CARD_2, AXIOMS, SQUARE_1,
-      MCART_1, RLVECT_1, FUNCT_1, DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1,
-      FINSET_1, FRECHET2, CARD_4, MOD_4, XREAL_0, XCMPLX_1, REALSET1;
+      FUNCT_2, EUCLID, NAT_1, XBOOLE_1, CARD_2, SQUARE_1, MCART_1, RLVECT_1,
+      FUNCT_1, DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1, FINSET_1, FRECHET2,
+      CARD_4, MOD_4, XREAL_0, XCMPLX_1, REALSET1, XREAL_1;
  schemes ZFREFLE1, FRAENKEL, FUNCT_2, FINSET_1, LMOD_7, BINOP_1;
 
 begin :: stuff I could not find in MML
@@ -37,7 +37,7 @@ proof
  let x,y be real number;
  assume x < y;
  then consider z being real number such that
-A1: x < z & z < y by REAL_1:75;
+A1: x < z & z < y by XREAL_1:7;
  reconsider z as Real by XREAL_0:def 1;
  take z;
  thus thesis by A1;
@@ -50,7 +50,7 @@ proof
  reconsider x,y as Real by XREAL_0:def 1;
  take z = max(x,y) + 1;
     x <= max(x,y) & y <= max(x,y) by SQUARE_1:46;
- then x + 0 < z & y + 0 < z by REAL_1:67;
+ then x + 0 < z & y + 0 < z by XREAL_1:10;
  hence thesis;
 end;
 
@@ -68,12 +68,8 @@ end;
 
 definition let B be set;
            let A be Subset of B;
- redefine func bool A -> Subset of bool B;
+ redefine func bool A -> Subset-Family of B;
  coherence by ZFMISC_1:79;
-end;
-
-definition let X be set;
- mode Subset of X is Element of bool X;
 end;
 
 :: non-zero numbers
@@ -559,7 +555,7 @@ A6: ri < x;
    assume xi in B';
    then xi in B or xi = x by A4;
    then ri >= xi or xi = x by A3;
-   hence x >= xi by A6,AXIOMS:22;
+   hence x >= xi by A6,XREAL_1:2;
  end;
  end;
  thus P[X] from NonEmptyFinite(A1,A2);
@@ -612,7 +608,7 @@ A6: x < li;
    assume xi in B';
    then xi in B or xi = x by A4;
    then li <= xi or xi = x by A3;
-   hence x <= xi by A6,AXIOMS:22;
+   hence x <= xi by A6,XREAL_1:2;
  end;
  end;
  thus P[X] from NonEmptyFinite(A1,A2);
@@ -639,7 +635,7 @@ A4: li < ri;
     thus thesis by A4,TARSKI:def 2;
    end;
   end;
-     li < ri or ri < li by A2,AXIOMS:21;
+     li < ri or ri < li by A2,XREAL_1:1;
   hence P[{li,ri}] by A3;
  end;
 A5: for x being Real, B being non trivial finite Subset of REAL
@@ -652,7 +648,7 @@ A6: x in Gi & B c= Gi & not x in B & P[B];
   then consider li,ri such that
 A7: li in B & ri in B & li < ri &
     for xi st xi in B holds not (li < xi & xi < ri);
-  per cases by A6,A7,AXIOMS:21;
+  per cases by A6,A7,XREAL_1:1;
   suppose
 A8: x < li;
    take li,ri;
@@ -671,7 +667,7 @@ A9: li < x & x < ri;
    assume xi in B \/ {x};
    then xi in B or xi in {x} by XBOOLE_0:def 2;
    then not (li < xi & xi < ri) or xi = x by A7,TARSKI:def 1;
-   hence thesis by A9,AXIOMS:22;
+   hence thesis by A9,XREAL_1:2;
   end;
   suppose
 A10: ri < x;
@@ -707,10 +703,10 @@ A4: li = ri;
 A5: x1 in Gi & x2 in Gi & x1 <> x2 by Def3;
   reconsider x1,x2 as Real by A5;
      ri <= x1 & x1 <= li & ri <= x2 & x2 <= li by A1,A2,A5;
-  then x1 = li & x2 = li by A4,AXIOMS:21;
+  then x1 = li & x2 = li by A4,XREAL_1:1;
   hence contradiction by A5;
  end;
- hence thesis by A1,A2,A3,AXIOMS:21;
+ hence thesis by A1,A2,A3,XREAL_1:1;
 end;
 
 definition let Gi;
@@ -772,7 +768,7 @@ A2: Gi = {li,ri};
   take li,ri;
   thus [li,ri] = [li,ri] & li in Gi & ri in Gi by A2,TARSKI:def 2;
      li <> ri by A2,Th4;
-  hence thesis by A2,AXIOMS:21,TARSKI:def 2;
+  hence thesis by A2,XREAL_1:1,TARSKI:def 2;
  end;
  hence thesis by A1;
 end;
@@ -812,7 +808,7 @@ A7:  li = xi;
 A8:    xi' in Gi;
       then reconsider xi'' = xi' as Element of REAL;
          li <= xi'' & xi'' <= xi by A4,A5,A8;
-      hence xi' = xi by A7,AXIOMS:21;
+      hence xi' = xi by A7,XREAL_1:1;
      end;
      thus thesis by A1;
     end;
@@ -820,7 +816,7 @@ A8:    xi' in Gi;
     hence contradiction;
    end;
       li <= xi by A1,A5;
-   hence xi in Gi & li in Gi & li < xi by A1,A5,A6,AXIOMS:21;
+   hence xi in Gi & li in Gi & li < xi by A1,A5,A6,XREAL_1:1;
    thus for xi' st xi' in Gi holds not (xi < xi' or xi' < li) by A4,A5;
   end;
   hence thesis by Th17;
@@ -879,7 +875,7 @@ A7:  ri = xi;
 A8:    xi' in Gi;
       then reconsider xi'' = xi' as Element of REAL;
          ri >= xi'' & xi'' >= xi by A4,A5,A8;
-      hence xi' = xi by A7,AXIOMS:21;
+      hence xi' = xi by A7,XREAL_1:1;
      end;
      thus thesis by A1;
     end;
@@ -887,7 +883,7 @@ A8:    xi' in Gi;
     hence contradiction;
    end;
       ri >= xi by A1,A5;
-   hence xi in Gi & ri in Gi & ri > xi by A1,A5,A6,AXIOMS:21;
+   hence xi in Gi & ri in Gi & ri > xi by A1,A5,A6,XREAL_1:1;
    thus for xi' st xi' in Gi holds not (xi' > ri or xi > xi') by A4,A5;
   end;
   hence thesis by Th17;
@@ -916,7 +912,7 @@ end;
 theorem Th21:
  [li,ri] is Gap of Gi & [li,ri'] is Gap of Gi implies ri = ri'
 proof
-A1: ri <= ri' & ri' <= ri implies ri = ri' by AXIOMS:21;
+A1: ri <= ri' & ri' <= ri implies ri = ri' by XREAL_1:1;
  assume
 A2: [li,ri] is Gap of Gi & [li,ri'] is Gap of Gi;
  then A3: ri in Gi & ri' in Gi by Th17;
@@ -936,7 +932,7 @@ end;
 theorem Th22:
  [li,ri] is Gap of Gi & [li',ri] is Gap of Gi implies li = li'
 proof
-A1: li <= li' & li' <= li implies li = li' by AXIOMS:21;
+A1: li <= li' & li' <= li implies li = li' by XREAL_1:1;
  assume
 A2: [li,ri] is Gap of Gi & [li',ri] is Gap of Gi;
  then A3: li in Gi & li' in Gi by Th17;
@@ -962,12 +958,12 @@ A1: ri < li & [li,ri] is Gap of Gi & ri' < li' & [li',ri'] is Gap of Gi;
  then A2: li in Gi & ri in Gi & li' in Gi & ri' in Gi by Th17;
  hereby
   assume li <> li';
-  then li < li' or li' < li by AXIOMS:21;
+  then li < li' or li' < li by XREAL_1:1;
   hence contradiction by A1,A2,Th17;
  end;
  hereby
   assume ri <> ri';
-  then ri < ri' or ri' < ri by AXIOMS:21;
+  then ri < ri' or ri' < ri by XREAL_1:1;
   hence contradiction by A1,A2,Th17;
  end;
 end;
@@ -1023,7 +1019,7 @@ theorem Th26:
 proof
  given i0 such that
 A1: r.i0 < l.i0;
-   x.i0 < l.i0 or r.i0 < x.i0 by A1,AXIOMS:22;
+   x.i0 < l.i0 or r.i0 < x.i0 by A1,XREAL_1:2;
  hence x in cell(l,r) implies ex i st r.i < l.i & (x.i <= r.i or l.i <= x.i)
   by Th24;
  thus thesis by Th24;
@@ -1054,7 +1050,7 @@ A1: x' in cell(x,x);
     let i;
        for i holds x.i <= x.i;
     then x.i <= x'.i & x'.i <= x.i by A1,Th25;
-    hence x'.i = x.i by AXIOMS:21;
+    hence x'.i = x.i by XREAL_1:1;
    end;
    hence thesis by FUNCT_2:113;
   end;
@@ -1112,8 +1108,8 @@ A9: x in cell(l,r);
     now
   let i;
      l'.i <= l.i & l.i <= x.i & x.i <= r.i & r.i <= r'.i by A8,A9,Th25;
-  hence l'.i <= x.i & x.i <= r'.i by AXIOMS:22;
-  hence l'.i <= r'.i by AXIOMS:22;
+  hence l'.i <= x.i & x.i <= r'.i by XREAL_1:2;
+  hence l'.i <= r'.i by XREAL_1:2;
  end;
  hence thesis by Th25;
 end;
@@ -1185,14 +1181,14 @@ A12:  i = i0 & l'.i <= r.i;
         r'.i < l'.i by A3;
      then consider xi such that
 A13:  r'.i < xi & xi < l'.i by Th1;
-        xi < r.i by A12,A13,AXIOMS:22;
+        xi < r.i by A12,A13,XREAL_1:2;
      hence thesis by A13;
     end;
     suppose
 A14:  i = i0 & r.i <= l'.i;
      then consider xi such that
 A15:  r'.i < xi & xi < r.i by A10,Th1;
-        xi < l'.i by A14,A15,AXIOMS:22;
+        xi < l'.i by A14,A15,XREAL_1:2;
      hence thesis by A15;
     end;
     suppose
@@ -1209,7 +1205,7 @@ A18: for i holds P[i,x.i] from FUNCT_2:sch 3(A11);
       r.i0 < l.i0 & (x.i0 <= r.i0 or l.i0 <= x.i0) by A1,A18;
    then A19: x in cell(l,r) by Th24;
       not l'.i0 <= r'.i0 by A3;
-   then not (l'.i0 <= x.i0 & x.i0 <= r'.i0) by AXIOMS:22;
+   then not (l'.i0 <= x.i0 & x.i0 <= r'.i0) by XREAL_1:2;
    then ex i st r'.i < l'.i & (x.i <= r'.i or l'.i <= x.i) by A2,A19,Th24;
    hence contradiction by A18;
   end;
@@ -1228,14 +1224,14 @@ A22:  i = i0 & r'.i >= l.i;
         l'.i > r'.i by A3;
      then consider xi such that
 A23:  r'.i < xi & xi < l'.i by Th1;
-        xi > l.i by A22,A23,AXIOMS:22;
+        xi > l.i by A22,A23,XREAL_1:2;
      hence thesis by A23;
     end;
     suppose
 A24:  i = i0 & l.i >= r'.i;
      then consider xi such that
 A25:  l.i < xi & xi < l'.i by A20,Th1;
-        xi > r'.i by A24,A25,AXIOMS:22;
+        xi > r'.i by A24,A25,XREAL_1:2;
      hence thesis by A25;
     end;
     suppose
@@ -1253,7 +1249,7 @@ A28: for i holds R[i,x.i] from FUNCT_2:sch 3(A21);
       l.i0 > r.i0 & (x.i0 >= l.i0 or r.i0 >= x.i0) by A1,A28;
    then A29: x in cell(l,r) by Th24;
       not r'.i0 >= l'.i0 by A3;
-   then not (r'.i0 >= x.i0 & x.i0 >= l'.i0) by AXIOMS:22;
+   then not (r'.i0 >= x.i0 & x.i0 >= l'.i0) by XREAL_1:2;
    then ex i st l'.i > r'.i & (x.i <= r'.i or l'.i <= x.i) by A2,A29,Th24;
    hence contradiction by A28;
   end;
@@ -1266,13 +1262,13 @@ A31: x in cell(l,r);
  then reconsider x as Element of REAL d;
  consider i0;
     r.i0 <= r'.i0 & r'.i0 < l'.i0 & l'.i0 <= l.i0 by A30;
- then r.i0 < l'.i0 & l'.i0 <= l.i0 by AXIOMS:22;
- then r.i0 < l.i0 by AXIOMS:22;
- then x.i0 < l.i0 or r.i0 < x.i0 by AXIOMS:22;
+ then r.i0 < l'.i0 & l'.i0 <= l.i0 by XREAL_1:2;
+ then r.i0 < l.i0 by XREAL_1:2;
+ then x.i0 < l.i0 or r.i0 < x.i0 by XREAL_1:2;
  then consider i such that
 A32: r.i < l.i & (x.i <= r.i or l.i <= x.i) by A31,Th24;
     r.i <= r'.i & r'.i < l'.i & l'.i <= l.i by A30;
- then r'.i < l'.i & (x.i <= r'.i or l'.i <= x.i) by A32,AXIOMS:22;
+ then r'.i < l'.i & (x.i <= r'.i or l'.i <= x.i) by A32,XREAL_1:2;
  hence thesis by Th24;
 end;
 
@@ -1303,7 +1299,7 @@ A6:  l.i <= r'.i & l'.i <= r.i;
     then consider xi such that
 A7:  r'.i < xi & xi < l'.i by Th1;
     take xi;
-    thus thesis by A6,A7,AXIOMS:22;
+    thus thesis by A6,A7,XREAL_1:2;
    end;
    suppose
 A8:  r'.i < l.i & l'.i <= r.i;
@@ -1335,7 +1331,7 @@ A14: l.i0 <= x.i0 & x.i0 <= r.i0 by A1,A13,Th25;
     ex i st r'.i < l'.i & (x.i <= r'.i or l'.i <= x.i)
  proof
   take i0;
-  thus thesis by A2,A12,A14,AXIOMS:22;
+  thus thesis by A2,A12,A14,XREAL_1:2;
  end;
  hence thesis by Th24;
 end;
@@ -1357,12 +1353,12 @@ A2: cell(l,r) = cell(l',r');
 A4: now
     let i;
        l.i <= l'.i & l'.i <= l.i by A2,A3,Th29;
-    hence l.i = l'.i by AXIOMS:21;
+    hence l.i = l'.i by XREAL_1:1;
    end;
       now
     let i;
        r.i <= r'.i & r'.i <= r.i by A2,A3,Th29;
-    hence r.i = r'.i by AXIOMS:21;
+    hence r.i = r'.i by XREAL_1:1;
    end;
    hence thesis by A4,FUNCT_2:113;
   end;
@@ -1372,12 +1368,12 @@ A4: now
 A6: now
     let i;
        l.i <= l'.i & l'.i <= l.i by A2,A5,Th30;
-    hence l.i = l'.i by AXIOMS:21;
+    hence l.i = l'.i by XREAL_1:1;
    end;
       now
     let i;
        r.i <= r'.i & r'.i <= r.i by A2,A5,Th30;
-    hence r.i = r'.i by AXIOMS:21;
+    hence r.i = r'.i by XREAL_1:1;
    end;
    hence thesis by A6,FUNCT_2:113;
  end;
@@ -1389,7 +1385,7 @@ definition
  let d,G,k;
  assume
 A1:  k <= d;
- func cells(k,G) -> finite non empty Subset of bool(REAL d) equals :Def8:
+ func cells(k,G) -> finite non empty Subset-Family of REAL d equals :Def8:
   { cell(l,r) : ((ex X being Subset of Seg d st card X = k &
         for i holds (i in X & l.i < r.i & [l.i,r.i] is Gap of G.i) or
          (not i in X & l.i = r.i & l.i in G.i)) or
@@ -1941,7 +1937,7 @@ A6:  d = 1 & for i holds r.i < l.i & [l.i,r.i] is Gap of G.i;
      by A2,A6;
     let i;
        1 <= i & i <= d by FINSEQ_1:3;
-    hence thesis by A6,AXIOMS:21;
+    hence thesis by A6,XREAL_1:1;
   end;
   end;
  end;
@@ -1967,7 +1963,7 @@ A10: d = 1 & r.i0 < l.i0;
      now
    let i;
       1 <= i & i <= d & 1 <= i0 & i0 <= d by FINSEQ_1:3;
-   then i = 1 & i0 = 1 by A10,AXIOMS:21;
+   then i = 1 & i0 = 1 by A10,XREAL_1:1;
    hence r.i < l.i & [l.i,r.i] is Gap of G.i by A7,A10;
   end;
   hence thesis by A7,Th33;
@@ -2004,7 +2000,7 @@ A3:  d = 1 & r'.i0 < l'.i0;
        now
      let i;
         1 <= i & i <= d & 1 <= i0 & i0 <= d by FINSEQ_1:3;
-     then i = 1 & i0 = 1 by A3,AXIOMS:21;
+     then i = 1 & i0 = 1 by A3,XREAL_1:1;
      hence r'.i < l'.i by A3;
     end;
     hence thesis;
@@ -2036,7 +2032,7 @@ A3: for i holds (l'.i < r'.i & [l'.i,r'.i] is Gap of G.i) or
     (l'.i = r'.i & l'.i in G.i);
   then for i holds l'.i <= r'.i;
   then A4: l'.i <= l.i & l.i <= r.i & r.i <= r'.i by A2,Th29;
-  then A5: l'.i <= r.i & l.i <= r'.i by AXIOMS:22;
+  then A5: l'.i <= r.i & l.i <= r'.i by XREAL_1:2;
   thus thesis
   proof
    per cases by A3;
@@ -2044,20 +2040,20 @@ A3: for i holds (l'.i < r'.i & [l'.i,r'.i] is Gap of G.i) or
 A6:  [l'.i,r'.i] is Gap of G.i;
 A7: now
      assume l'.i <> l.i & l.i <> r'.i;
-     then A8:   l'.i < l.i & l.i < r'.i by A4,A5,AXIOMS:21;
+     then A8:   l'.i < l.i & l.i < r'.i by A4,A5,XREAL_1:1;
         l.i in G.i by A1,Th36;
      hence contradiction by A6,A8,Th17;
     end;
        now
      assume l'.i <> r.i & r.i <> r'.i;
-     then A9:   l'.i < r.i & r.i < r'.i by A4,A5,AXIOMS:21;
+     then A9:   l'.i < r.i & r.i < r'.i by A4,A5,XREAL_1:1;
         r.i in G.i by A1,Th36;
      hence contradiction by A6,A9,Th17;
     end;
-    hence thesis by A4,A7,AXIOMS:21;
+    hence thesis by A4,A7,XREAL_1:1;
    end;
    suppose l'.i = r'.i;
-    hence thesis by A4,A5,AXIOMS:21;
+    hence thesis by A4,A5,XREAL_1:1;
   end;
   end;
  end;
@@ -2070,13 +2066,13 @@ A7: now
     then A11: r.i <= r'.i & r'.i < l'.i & l'.i <= l.i by A2,Th30;
 A12: now
      assume l'.i <> l.i;
-     then A13:  l'.i < l.i by A11,AXIOMS:21;
+     then A13:  l'.i < l.i by A11,XREAL_1:1;
         l.i in G.i by A1,Th36;
      hence contradiction by A10,A13,Th17;
     end;
        now
      assume r.i <> r'.i;
-     then A14:  r.i < r'.i by A11,AXIOMS:21;
+     then A14:  r.i < r'.i by A11,XREAL_1:1;
         r.i in G.i by A1,Th36;
      hence contradiction by A10,A14,Th17;
     end;
@@ -2098,7 +2094,7 @@ theorem Th47:
 proof
  assume
 A1: k < k' & k' <= d & cell(l,r) in cells(k,G) & cell(l',r') in cells(k',G);
- then A2: k + 0 < d by AXIOMS:22;
+ then A2: k + 0 < d by XREAL_1:2;
  assume
 A3: cell(l,r) c= cell(l',r');
  consider X being Subset of Seg d such that
@@ -2143,19 +2139,19 @@ A11: r'.i < l.i & l.i < l'.i;
    suppose
 A12: l.i <= r'.i;
 A13: l.i >= r'.i by A10,Th17;
-    then A14: l.i = r'.i by A12,AXIOMS:21;
+    then A14: l.i = r'.i by A12,XREAL_1:1;
     then r.i <> r'.i by A8;
     then l.i < r.i by A4,A14;
     then consider xi such that
 A15: l.i < xi & xi < r.i by Th1;
     take xi;
        r.i <= l'.i by A10,Th17;
-    hence thesis by A13,A15,AXIOMS:22;
+    hence thesis by A13,A15,XREAL_1:2;
    end;
    suppose
 A16: l'.i <= l.i;
        l'.i >= l.i by A10,Th17;
-    then A17: l'.i = l.i by A16,AXIOMS:21;
+    then A17: l'.i = l.i by A16,XREAL_1:1;
        l'.i >= r.i by A10,Th17;
     then l'.i = r.i by A4,A17;
     hence thesis by A8,A17;
@@ -2202,7 +2198,7 @@ A6: i in X & not i in X';
   then reconsider i as Element of Seg d;
      l.i < r.i & l'.i = r'.i & l'.i <= l.i & r.i <= r'.i
    by A1,A2,A3,A4,A5,A6,Th25;
-  hence thesis by AXIOMS:22;
+  hence thesis by XREAL_1:2;
  end;
  set k = card X;
  set k' = card X';
@@ -2303,10 +2299,10 @@ A7:  l.i = r.i;
 A8:  x1 in G.i & x2 in G.i & x1 <> x2 by Def3;
     reconsider x1,x2 as Real by A8;
        r.i <= x1 & x1 <= l.i & r.i <= x2 & x2 <= l.i by A2,A4,A8;
-    then x1 = l.i & x2 = l.i by A7,AXIOMS:21;
+    then x1 = l.i & x2 = l.i by A7,XREAL_1:1;
     hence contradiction by A8;
    end;
-   hence r.i < l.i by A6,AXIOMS:21;
+   hence r.i < l.i by A6,XREAL_1:1;
   end;
 A9: now
    let i;
@@ -2855,11 +2851,11 @@ A11: now
     let i;
     assume i <> i0;
     then l.i = r.i & l.i <= x.i & x.i <= r.i by A2,A5,A7,A9,Th25;
-    hence x.i = l.i & x.i = r.i by AXIOMS:21;
+    hence x.i = l.i & x.i = r.i by XREAL_1:1;
    end;
    thus thesis
    proof
-    per cases by A10,AXIOMS:21;
+    per cases by A10,XREAL_1:1;
     suppose
 A12:  x.i0 = l.i0;
      reconsider x,l as Function of Seg d,REAL by Def4;
@@ -2890,7 +2886,7 @@ A15: for i holds i = i0
    proof
     let i;
        1 <= i & i <= d & 1 <= i0 & i0 <= d by FINSEQ_1:3;
-    then i = 1 & i0 = 1 by A14,AXIOMS:21;
+    then i = 1 & i0 = 1 by A14,XREAL_1:1;
     hence thesis;
    end;
    consider i1 such that
@@ -2900,7 +2896,7 @@ A17: i1 = i0 by A15;
    then A18: not (x.i0 < r.i0 or l.i0 < x.i0) by A2,A14,Th17;
    thus thesis
    proof
-    per cases by A16,A17,A18,AXIOMS:21;
+    per cases by A16,A17,A18,XREAL_1:1;
     suppose
 A19:  x.i0 = r.i0;
      reconsider x,r as Function of Seg d,REAL by Def4;
@@ -3691,10 +3687,10 @@ definition
    st A = A' holds it.A = del A';
  existence
  proof
-   deffunc f(Element of bool(cells(k + 1,G))) = del $1;
+   deffunc f(Subset of cells(k + 1,G)) = del $1;
   consider f being
     Function of bool(cells(k + 1,G)),bool(cells(k,G)) such that
-A1: for A being Element of bool(cells(k + 1,G)) holds f.A = f(A)
+A1: for A being Subset of cells(k + 1,G) holds f.A = f(A)
     from FUNCT_2:sch 4;
      the carrier of Chains(k + 1,G) = bool(cells(k + 1,G)) &
    the carrier of Chains(k,G) = bool(cells(k,G)) by Def17;

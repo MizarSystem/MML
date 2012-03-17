@@ -16,7 +16,7 @@ environ
       BINOP_1, REAL_1, EQREL_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_2,
       COMPTS_1, YELLOW13, URYSOHN1, YELLOW_6, RLVECT_1, RUSUB_4, CONVEX1;
  constructors COMPLEX1, REAL_1, TOPS_1, TOPS_2, SEQ_2, YELLOW13, URYSOHN1,
-      RUSUB_4, CONVEX1, DOMAIN_1;
+      RUSUB_4, CONVEX1, DOMAIN_1, SETFAM_1;
  registrations NUMBERS, SUBSET_1, STRUCT_0, XREAL_0, RELSET_1, PRE_TOPC,
       ASYMPT_0, XCMPLX_0, FILTER_1, ARYTM_3, REAL_1, TOPS_1, TOPGRP_1,
       BORSUK_3, RLVECT_1, CONVEX1, FINSEQ_1, PARTFUN1;
@@ -24,21 +24,29 @@ environ
  definitions TARSKI, XBOOLE_0, STRUCT_0, RLVECT_1, PRE_TOPC, COMPTS_1,
       CONNSP_2, TOPS_2, YELLOW13, CONVEX1;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, ZFMISC_1, SUBSET_1, SETFAM_1, XCMPLX_1,
-      XREAL_0, SQUARE_1, XCMPLX_0, RELSET_1, BINOP_1, RELAT_1, FUNCT_2,
-      FUNCT_1, ABSVALUE, FINSET_1, EQREL_1, WELLORD2, STRUCT_0, PRE_TOPC,
-      COMPTS_1, CONNSP_2, TOPS_1, URYSOHN1, BORSUK_1, YELLOW13, RLVECT_1,
-      RUSUB_4, CONVEX1, CONVEX2, TOPGRP_1, TOPS_2, FRECHET2, AXIOMS, REAL_1,
-      REAL_2, MEASURE1, XREAL_1, TSEP_1;
+      XREAL_0, XCMPLX_0, RELSET_1, BINOP_1, RELAT_1, FUNCT_2, FUNCT_1,
+      ABSVALUE, FINSET_1, EQREL_1, WELLORD2, STRUCT_0, PRE_TOPC, COMPTS_1,
+      CONNSP_2, TOPS_1, URYSOHN1, BORSUK_1, YELLOW13, RLVECT_1, RUSUB_4,
+      CONVEX1, CONVEX2, TOPGRP_1, TOPS_2, FRECHET2, REAL_1, REAL_2, XREAL_1,
+      TSEP_1, COMPLEX1;
  schemes BINOP_1, FUNCT_2, SUBSET_1, EQREL_1, FINSET_1;
 
-begin :: Preliminaires
+begin :: Preliminaries
 
  reserve X,Y for non empty RLSStruct,
          v,x,y,z for Point of X,
          f,f1,f2 for map of X,Y,
          a,e,r,s,t for Real;
 
-canceled;
+theorem Lm5:
+  for X being non empty RLSStruct, M being Subset of X,
+      x being Point of X, r being Real st x in M holds r*x in r*M
+proof
+  let X be non empty RLSStruct, M be Subset of X,
+      x be Point of X, r be Real;
+  r*M = {r * v where v is Point of X: v in M} by CONVEX1:def 1;
+  hence thesis;
+end;
 
 Th1:
   for l,r,r1,r2 being real number st r1<=r & r2<=r & 0 <= l & l <= 1
@@ -76,36 +84,34 @@ A4: W in FX by A2,TARSKI:def 4;
   thus thesis by A3,A4;
  end;
 
-canceled;
+theorem Lm2:
+  for X being non empty LoopStr, M,N being Subset of X, x,y being Point of X
+   st x in M & y in N holds x+y in M+N
+proof
+  let X be non empty LoopStr, M,N be Subset of X, x,y be Point of X;
+  M+N = {u + v where u,v is Point of X: u in M & v in N} by RUSUB_4:def 10;
+  hence thesis;
+end;
+
 Th3:
   for T being non empty TopSpace, X being open Subset of T,
       Y being Subset of T st X misses Y
   holds X misses Cl Y by TSEP_1:40;
 
 Lm1:
-   for X being non empty LoopStr, M being Subset of X, x,y being Point of X
+  for X being non empty LoopStr, M being Subset of X, x,y being Point of X
       st y in M
      holds x+y in x+M
 proof
   let X be non empty LoopStr, M be Subset of X, x,y be Point of X;
- x+M = {x + u where u is Point of X: u in M} by RUSUB_4:def 9;
- hence thesis;
-end;
-
-Lm2:
-   for X being non empty LoopStr, M,N being Subset of X, x,y being Point of X
-      st x in M & y in N
-     holds x+y in M+N
-proof
-  let X be non empty LoopStr, M,N be Subset of X, x,y be Point of X;
- M+N = {u + v where u,v is Point of X: u in M & v in N} by RUSUB_4:def 10;
- hence thesis;
+  x+M = {x + u where u is Point of X: u in M} by RUSUB_4:def 9;
+  hence thesis;
 end;
 
 Lm3:
-   for X being non empty LoopStr, M,N being Subset of X
-    holds {x+N where x is Point of X: x in M}is Subset-Family of X
- proof let X be non empty LoopStr, M,N being Subset of X;
+  for X being non empty LoopStr, M,N being Subset of X
+    holds {x+N where x is Point of X: x in M} is Subset-Family of X
+ proof let X be non empty LoopStr, M,N be Subset of X;
    set F = {u+N where u is Point of X: u in M};
    F c= bool the carrier of X
     proof let x be set;
@@ -114,17 +120,17 @@ Lm3:
       then x c= the carrier of X;
       hence thesis;
     end;
-   then F is Subset-Family of the carrier of X;
+   then F is Subset-Family of X;
    hence thesis;
  end;
 
 theorem Th4:
-   for X being non empty LoopStr, M,N being Subset of X,
-       F being Subset-Family of X
+  for X being non empty LoopStr, M,N being Subset of X,
+      F being Subset-Family of X
      st F = {x+N where x is Point of X: x in M}
     holds M+N = union F
  proof
-   let X be non empty LoopStr, M,N being Subset of X, F be Subset-Family of X;
+   let X be non empty LoopStr, M,N be Subset of X, F be Subset-Family of X;
    assume
 A1:   F = {x+N where x is Point of X: x in M};
   thus M+N c= union F
@@ -156,13 +162,13 @@ A9:  u in M by A1,A7;
  end;
 
 theorem Th5:
-  for X being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+  for X being add-associative right_zeroed right_complementable
+    (non empty LoopStr),
       M being Subset of X
    holds 0.X+M = M
 proof
-  let X be add-associative
-   right_zeroed right_complementable (non empty LoopStr), M be Subset of X;
+  let X be add-associative right_zeroed right_complementable
+    (non empty LoopStr), M be Subset of X;
 A1:  0.X+M = {0.X + u where u is Point of X: u in M}
     by RUSUB_4:def 9;
   thus 0.X+M c= M
@@ -258,7 +264,7 @@ A16:   x+w+v = z by A11,A13,RLVECT_1:def 6;
  end;
 
 theorem Th8:
-   for X being non empty LoopStr, M,N being Subset of X, x being Point of X
+  for X being non empty LoopStr, M,N being Subset of X, x being Point of X
        st M c= N
      holds x+M c= x+N
  proof
@@ -268,8 +274,7 @@ A1:   M c= N;
   assume
 A2:  z in x+M;
  then reconsider z as Point of X;
-  x+M = {x + u where u is Element of the carrier of X: u in M}
-  by RUSUB_4:def 9;
+  x+M = {x + u where u is Element of X: u in M} by RUSUB_4:def 9;
   then consider u being Point of X such that
 A3: x+u = z and
 A4: u in M by A2;
@@ -278,12 +283,14 @@ A4: u in M by A2;
  end;
 
 theorem Th9:
-   for X being non empty RealLinearSpace, M being Subset of X,
-       x being Point of X
+  for X being add-associative right_zeroed right_complementable
+    (non empty LoopStr), M being Subset of X,
+      x being Point of X
      st x in M
    holds 0.X in -x+M
  proof
-   let X be non empty RealLinearSpace, M be Subset of X,
+   let X be add-associative right_zeroed right_complementable
+     (non empty LoopStr), M be Subset of X,
        x be Point of X;
   assume x in M;
   then -x+x in -x+M by Lm1;
@@ -291,7 +298,7 @@ theorem Th9:
  end;
 
 theorem Th10:
-   for X being non empty LoopStr, M,N,V being Subset of X
+  for X being non empty LoopStr, M,N,V being Subset of X
        st M c= N
      holds M+V c= N+V
  proof let X be non empty LoopStr, M,N,V be Subset of X such that
@@ -299,7 +306,7 @@ A1:  M c= N;
   let x be set;
   assume x in M+V;
   then x in {u + v where u,v is Point of X: u in M & v in V}
- by RUSUB_4:def 10;
+    by RUSUB_4:def 10;
   then consider u,v being Point of X such that
 A2:  u+v = x and
 A3:  u in M and
@@ -310,7 +317,7 @@ A4:  v in V;
  end;
 
 Lm4:
-    for X being non empty LoopStr, M,N,V being Subset of X
+  for X being non empty LoopStr, M,N,V being Subset of X
        st M c= N
      holds V+M c= V+N
  proof let X be non empty LoopStr, M,N,V be Subset of X such that
@@ -329,7 +336,7 @@ A4:  v in M;
  end;
 
 theorem Th11:
-    for X being non empty LoopStr, V1,V2,W1,W2 being Subset of X
+  for X being non empty LoopStr, V1,V2,W1,W2 being Subset of X
        st V1 c= W1 & V2 c= W2
      holds V1+V2 c= W1+W2
  proof let X be non empty LoopStr, V1,V2,W1,W2 be Subset of X such that
@@ -350,10 +357,11 @@ A5:  v in V2;
  end;
 
 theorem Th12:
-    for X being non empty RealLinearSpace, V1,V2 being Subset of X
+  for X being right_zeroed (non empty LoopStr), V1,V2 being Subset of X
        st 0.X in V2
      holds V1 c= V1+V2
- proof let X be non empty RealLinearSpace, V1,V2 be Subset of X such that
+ proof let X be right_zeroed (non empty LoopStr),
+           V1,V2 be Subset of X such that
 A1: 0.X in V2;
   let x be set;
   assume
@@ -364,31 +372,18 @@ A2:  x in V1;
   hence thesis by RUSUB_4:def 10;
  end;
 
-Lm5:
-   for X being non empty RLSStruct, M being Subset of X,
-       x being Point of X, r being Real
-      st x in M
-     holds r*x in r*M
-proof
-  let X be non empty RLSStruct, M be Subset of X,
-      x be Point of X, r be Real;
-  r*M = {r * v where v is Point of X: v in M} by CONVEX1:def 1;
-  hence thesis;
-end;
-
 theorem Th13:
-   for X being non empty RealLinearSpace, r being Real
-    holds r*{0.X} = {0.X}
- proof let X be non empty RealLinearSpace, r be Real;
+  for X being RealLinearSpace, r being Real holds r*{0.X} = {0.X}
+ proof let X be RealLinearSpace, r be Real;
    thus r*{0.X} c= {0.X}
     proof let x be set;
-A1:     r*{0.X} = {r*v where v is Point of X: v in {0.X}} by CONVEX1:def 1;
+A1:   r*{0.X} = {r*v where v is Point of X: v in {0.X}} by CONVEX1:def 1;
       assume
-A2:     x in r*{0.X};
+A2:   x in r*{0.X};
       then reconsider x as Point of X;
       consider v being Point of X such that
-A3:    x = r*v and
-A4:    v in {0.X} by A1,A2;
+A3:   x = r*v and
+A4:   v in {0.X} by A1,A2;
       v = 0.X by A4,TARSKI:def 1;
       then r*v = 0.X by RLVECT_1:23;
       hence thesis by A3,TARSKI:def 1;
@@ -400,13 +395,11 @@ A4:    v in {0.X} by A1,A2;
  end;
 
 theorem
-   for X being non empty RealLinearSpace, M being Subset of X,
-       r being non zero Real
-      st 0.X in r*M
-     holds 0.X in M
+  for X being RealLinearSpace, M being Subset of X,
+      r being non zero Real st 0.X in r*M
+    holds 0.X in M
 proof
-  let X be non empty RealLinearSpace, M be Subset of X, r be non zero Real
-    such that
+  let X be RealLinearSpace, M be Subset of X, r be non zero Real such that
 A1:  0.X in r*M;
 A2:  r*M = {r * v where v is Point of X: v in M} by CONVEX1:def 1;
   consider v being Point of X such that
@@ -419,11 +412,11 @@ A4: v in M by A1,A2;
 end;
 
 theorem Th15:
-   for X being non empty RealLinearSpace, M,N being Subset of X,
-       r being non zero Real
+  for X being RealLinearSpace, M,N being Subset of X,
+      r being non zero Real
     holds (r * M) /\ (r * N) = r * (M /\ N)
 proof
-  let X be non empty RealLinearSpace, M,N be Subset of X, r be non zero Real;
+  let X be RealLinearSpace, M,N be Subset of X, r be non zero Real;
 A1:  r*M = {r * v where v is Point of X: v in M} by CONVEX1:def 1;
 A2:  r*N = {r * v where v is Point of X: v in N} by CONVEX1:def 1;
   thus for x being set st x in (r * M) /\ (r * N) holds x in r * (M /\ N)
@@ -432,13 +425,13 @@ A2:  r*N = {r * v where v is Point of X: v in N} by CONVEX1:def 1;
 A3:     x in (r * M) /\ (r * N);
      then x in r * M by XBOOLE_0:def 3;
      then consider v1 being Point of X such that
-A4:     r*v1 = x and
-A5:    v1 in M by A1;
+A4:  r*v1 = x and
+A5:  v1 in M by A1;
      x in (r * N) by A3,XBOOLE_0:def 3;
      then consider v2 being Point of X such that
-A6:     r*v2 = x and
-A7:   v2 in N by A2;
-      v1 = v2 by A4,A6,RLVECT_1:50;
+A6:  r*v2 = x and
+A7:  v2 in N by A2;
+     v1 = v2 by A4,A6,RLVECT_1:50;
      then v1 in M /\ N by A5,A7,XBOOLE_0:def 3;
      then x in {r * v where v is Point of X: v in M /\ N} by A4;
     hence thesis by CONVEX1:def 1;
@@ -460,8 +453,8 @@ A10: x in r*M by CONVEX1:def 1;
 end;
 
 theorem
-   for X being non empty TopSpace, x being Point of X,
-       A being a_neighborhood of x, B being Subset of X
+  for X being non empty TopSpace, x being Point of X,
+      A being a_neighborhood of x, B being Subset of X
      st A c= B
    holds B is a_neighborhood of x
  proof
@@ -474,10 +467,9 @@ A2:  x in Int A by CONNSP_2:def 1;
    hence thesis by CONNSP_2:def 1;
  end;
 
-definition
-let V be non empty RealLinearSpace, M be Subset of V;
+definition let V be RealLinearSpace, M be Subset of V;
   redefine attr M is convex means :Def1:
- for u,v being Point of V, r being Real
+  for u,v being Point of V, r being Real
     st 0 <= r & r <= 1 & u in M & v in M
   holds r*u + (1-r)*v in M;
  compatibility
@@ -495,23 +487,22 @@ A5:    v in M;
       hence r*u + (1-r)*v in M by A1,A4,A5,CONVEX1:def 2;
      end;
      suppose
-A6:     0 = r;
-      then
-A7:     r*u = 0.V by RLVECT_1:23;
+A6:   0 = r; then
+A7:   r*u = 0.V by RLVECT_1:23;
       (1-r)*v = v by A6,RLVECT_1:def 9;
       hence r*u + (1-r)*v in M by A5,A7,RLVECT_1:def 7;
      end;
      suppose
-A8:     r = 1;
+A8:    r = 1;
        then 1-r = 0;
        then
-A9:       (1-r)*v = 0.V by RLVECT_1:23;
+A9:    (1-r)*v = 0.V by RLVECT_1:23;
        r*u = u by A8,RLVECT_1:def 9;
       hence r*u + (1-r)*v in M by A4,A9,RLVECT_1:def 7;
      end;
     end;
     assume
-A10:    for u,v being Point of V, r being Real
+A10:for u,v being Point of V, r being Real
          st 0 <= r & r <= 1 & u in M & v in M
         holds r*u + (1-r)*v in M;
     let u,v be Point of V, r be Real;
@@ -521,31 +512,18 @@ A10:    for u,v being Point of V, r being Real
   end;
 end;
 
-theorem :: CONVEX1:13
-  for X being non empty RealLinearSpace, M being convex Subset of X,
-      r1,r2 being Real
-   st 0 <= r1 & 0<=r2
-  holds r1*M + r2*M = (r1 + r2)*M
-proof
- let X be non empty RealLinearSpace, M be convex Subset of X, r1,r2 be Real;
- assume 0 <= r1 & 0<=r2;
- hence r1*M + r2*M c= (r1 + r2)*M by CONVEX1:13;
- thus (r1 + r2)*M c= r1*M + r2*M by CONVEX1:12;
-end;
-
 Lm6:
-  for X being non empty RealLinearSpace holds conv({}X) = {}
+  for X being RealLinearSpace holds conv({}X) = {}
 proof
- let X be non empty RealLinearSpace;
- {}X is convex by CONVEX1:10;
- then
+ let X be RealLinearSpace;
+ {}X is convex by CONVEX1:10; then
 A1: {}X in Convex-Family {}X by CONVEX1:def 4;
  conv({}X) = meet Convex-Family {}X by CONVEX1:def 5;
  hence thesis by A1,SETFAM_1:5;
 end;
 
-registration let X be non empty RealLinearSpace, M be empty Subset of X;
- cluster conv(M) -> empty;
+registration let X be RealLinearSpace, M be empty Subset of X;
+  cluster conv(M) -> empty;
   coherence
  proof
    M = {}X;
@@ -553,25 +531,27 @@ registration let X be non empty RealLinearSpace, M be empty Subset of X;
  end;
 end;
 
+canceled;
+
 theorem
-  for X being non empty RealLinearSpace, M being convex Subset of X
+  for X being RealLinearSpace, M being convex Subset of X
    holds conv(M) = M
 proof
-  let X be non empty RealLinearSpace, M be convex Subset of X;
+  let X be RealLinearSpace, M be convex Subset of X;
   thus conv(M) c= M by CONVEX1:30;
   thus M c= conv(M) by CONVEX2:8;
 end;
 
 theorem Th19:
-  for X being non empty RealLinearSpace, M being Subset of X, r being Real
+  for X being RealLinearSpace, M being Subset of X, r being Real
     holds r*conv(M) = conv(r*M)
 proof
-  let X be non empty RealLinearSpace, M be Subset of X, r be Real;
+  let X be RealLinearSpace, M be Subset of X, r be Real;
   thus r*conv(M) c= conv(r*M)
    proof let x be set;
    per cases;
    suppose
-A1:     r = 0;
+A1:  r = 0;
      per cases;
      suppose M = {};
        then M = {}X;
@@ -580,19 +560,19 @@ A1:     r = 0;
        hence thesis;
      end;
      suppose
-A2:      M <> {};
+A2:    M <> {};
        M c= conv(M) by CONVEX2:8;
        then conv(M) <> {} by A2,XBOOLE_1:3;
        then
-A3:      r*conv(M) = {0.X} by A1,CONVEX1:34;
+A3:    r*conv(M) = {0.X} by A1,CONVEX1:34;
        r*M = {0.X} by A1,A2,CONVEX1:34;
        then {0.X} c= conv(r*M) by CONVEX2:8;
        hence thesis by A3;
      end;
     end;
     suppose
-A4:    r <> 0;
-A5:    r*conv(M) = {r*v where v is Point of X: v in conv(M)} by CONVEX1:def 1;
+A4:  r <> 0;
+A5:  r*conv(M) = {r*v where v is Point of X: v in conv(M)} by CONVEX1:def 1;
      assume x in r*conv(M);
      then consider v being Point of X such that
 A6:    x = r*v and
@@ -603,7 +583,7 @@ A8:    Y in Convex-Family M by XBOOLE_0:def 1;
      reconsider Y as Subset of X by A8;
 A9:    v in meet Convex-Family M by A7,CONVEX1:def 5;
 A10:    for V being set st V in Convex-Family(r*M) holds r*v in V
-      proof let V being set;
+      proof let V be set;
        assume
 A11:     V in Convex-Family(r*M);
        then reconsider V as Subset of X;
@@ -619,8 +599,8 @@ A14:     r"*V = {r"*w where w is Point of X: w in V} by CONVEX1:def 1;
        then r"*V in Convex-Family M by A13,CONVEX1:def 4;
        then v in r"*V by A9,SETFAM_1:def 1;
        then consider w being Point of X such that
-A15:     v = r"*w and
-A16:     w in V by A14;
+A15:   v = r"*w and
+A16:   w in V by A14;
        r*v = (r*r")*w by A15,RLVECT_1:def 9
           .= 1*w by A4,XCMPLX_0:def 7
           .= w by RLVECT_1:def 9;
@@ -631,37 +611,35 @@ A16:     w in V by A14;
       hence thesis by A6,CONVEX1:def 5;
     end;
    end;
-  M c= conv(M) by CONVEX2:8;
-  then
+  M c= conv(M) by CONVEX2:8; then
 A17:  r*M c= r*conv(M) by CONVEX1:39;
   r*conv(M) is convex by CONVEX1:1;
   hence conv(r*M) c= r*conv(M) by A17,CONVEX1:30;
 end;
 
 theorem Th20:
-  for X being non empty RealLinearSpace, M1,M2 being Subset of X
+  for X being RealLinearSpace, M1,M2 being Subset of X
    st M1 c= M2
   holds Convex-Family M2 c= Convex-Family M1
 proof
-  let X be non empty RealLinearSpace, M1,M2 be Subset of X such that
+  let X be RealLinearSpace, M1,M2 be Subset of X such that
 A1: M1 c= M2;
   let M be set;
   assume
 A2:  M in Convex-Family M2;
   then reconsider M as Subset of X;
-  M2 c= M by A2,CONVEX1:def 4;
-  then
+  M2 c= M by A2,CONVEX1:def 4; then
 A3:  M1 c= M by A1,XBOOLE_1:1;
   M is convex by A2,CONVEX1:def 4;
   hence thesis by A3,CONVEX1:def 4;
 end;
 
 theorem Th21:
-  for X being non empty RealLinearSpace, M1,M2 being Subset of X
+  for X being RealLinearSpace, M1,M2 being Subset of X
    st M1 c= M2
   holds conv(M1) c= conv(M2)
 proof
-  let X be non empty RealLinearSpace, M1,M2 be Subset of X such that
+  let X be RealLinearSpace, M1,M2 be Subset of X such that
 A1: M1 c= M2;
   let x be set;
   assume x in conv(M1);
@@ -675,11 +653,11 @@ A3: Convex-Family M2 <> {} by CONVEX2:7;
 end;
 
 theorem
-   for X being non empty RealLinearSpace, M being convex Subset of X,
-       r being Real st 0 <= r & r <= 1 & 0.X in M
-    holds r*M c= M
+  for X being RealLinearSpace, M being convex Subset of X,
+      r being Real st 0 <= r & r <= 1 & 0.X in M holds
+    r*M c= M
  proof
-   let X be non empty RealLinearSpace, M be convex Subset of X,
+   let X be RealLinearSpace, M be convex Subset of X,
        r be Real such that
 A1: 0 <= r and
 A2: r <= 1 and
@@ -696,7 +674,7 @@ A6: v in M by A4;
  end;
 
 definition
-  let X be non empty RealLinearSpace, v,w be Point of X;
+  let X be RealLinearSpace, v,w be Point of X;
    func LSeg(v,w) -> Subset of X equals
 :Def2: {(1-r)*v + r*w : 0 <= r & r <= 1 };
   coherence
@@ -711,8 +689,7 @@ definition
  end;
 end;
 
-registration
- let X be non empty RealLinearSpace, v,w be Point of X;
+registration let X be RealLinearSpace, v,w be Point of X;
   cluster LSeg(v,w) -> non empty convex;
    coherence
   proof
@@ -750,21 +727,21 @@ A10:  r*u + (1-r)*u'
       .= (r*(1-s) + (1-r)*(1-t))*v + (r*s*w + (1-r)*t*w) by RLVECT_1:def 9
       .= (r*(1-s) + (1-r)*(1-t))*v + (r*s + (1-r)*t)*w by RLVECT_1:def 9
       .= (1 - ((r*s + (1-r)*t)))*v + (r*s + (1-r)*t)*w;
-    0 <= 1-r by A2,SQUARE_1:12;
+    0 <= 1-r by A2,XREAL_1:50;
     then 0 <= r*s & 0 <= (1-r)*t by A2,A4,A7,REAL_2:121;
     then
-A11:  0+0 <= r*s + (1-r)*t by REAL_1:55;
+A11:  0+0 <= r*s + (1-r)*t by XREAL_1:9;
    (1-r)*t + r*s <= 1 by A2,A5,A8,Th1;
    hence r*u + (1-r)*u' in LSeg(v,w) by A1,A10,A11;
   end;
 end;
 
 theorem
-   for X being non empty RealLinearSpace, M being Subset of X
+  for X being RealLinearSpace, M being Subset of X
     holds M is convex iff
       for u,w being Point of X st u in M & w in M holds LSeg(u,w) c= M
 proof
-  let X be non empty RealLinearSpace, M be Subset of X;
+  let X be RealLinearSpace, M be Subset of X;
   hereby assume
 A1:  M is convex;
    let u,w be Point of X such that
@@ -791,18 +768,16 @@ A9:  r*u + (1-r)*w in LSeg(w,u) by A6;
   hence r*u + (1-r)*w in M by A9;
 end;
 
-definition
- let V be non empty RLSStruct, P be Subset-Family of V;
-  attr P is convex-membered means
-:Def3:
+definition let V be non empty RLSStruct, P be Subset-Family of V;
+  attr P is convex-membered means :Def3:
    for M being Subset of V st M in P holds M is convex;
 end;
 
-registration  let V be non empty RLSStruct;
- cluster non empty convex-membered Subset-Family of V;
+registration let V be non empty RLSStruct;
+  cluster non empty convex-membered Subset-Family of V;
   existence
  proof
-  reconsider F = {{}V} as Subset-Family of V by MEASURE1:6;
+  reconsider F = {{}V} as Subset-Family of V by ZFMISC_1:37;
   take F;
   thus F is non empty;
   let M be Subset of V;
@@ -828,10 +803,10 @@ definition let X be non empty RLSStruct, A be Subset of X;
 end;
 
 theorem Th25:
-   for X being non empty RealLinearSpace, M,N being Subset of X,
+   for X being RealLinearSpace, M,N being Subset of X,
        v being Point of X
-     holds v+M meets N  iff v in N+(-M)
- proof let X be non empty RealLinearSpace, M,N being Subset of X,
+     holds v+M meets N iff v in N+(-M)
+ proof let X be RealLinearSpace, M,N be Subset of X,
     v being Point of X;
    hereby assume v+M meets N;
      then consider z being set such that
@@ -878,9 +853,9 @@ definition let X be non empty RLSStruct, A be Subset of X;
   A = -A;
 end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster non empty symmetric Subset of X;
-   existence
+  existence
   proof
    take V = {0.X};
    thus V is non empty;
@@ -890,11 +865,11 @@ registration let X be non empty RealLinearSpace;
 end;
 
 theorem Th26:
- for X being non empty RealLinearSpace, A being symmetric Subset of X,
+ for X being RealLinearSpace, A being symmetric Subset of X,
      x being Point of X
    st x in A
   holds -x in A
- proof let X be non empty RealLinearSpace, A be symmetric Subset of X,
+ proof let X be RealLinearSpace, A be symmetric Subset of X,
            x be Point of X such that
 A1:   x in A;
 A2:   A = -A by Def5
@@ -915,29 +890,27 @@ definition let X be non empty RLSStruct, A be Subset of X;
 end;
 
 Lm7:
-  for X being non empty RealLinearSpace
-   holds {}X is circled
- proof let X be non empty RealLinearSpace;
+  for X being non empty RLSStruct holds {}X is circled
+ proof let X be non empty RLSStruct;
   let r be Real such that abs(r) <= 1;
   r*{}X = {} by CONVEX1:33;
   hence thesis;
  end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be non empty RLSStruct;
   cluster {}X -> circled;
-   coherence by Lm7;
+  coherence by Lm7;
 end;
 
 theorem Th27:
-  for X being non empty RealLinearSpace
-   holds {0.X} is circled
- proof let X be non empty RealLinearSpace;
+  for X being RealLinearSpace holds {0.X} is circled
+ proof let X be RealLinearSpace;
   let r be Real such that abs(r) <= 1;
   r*{0.X} = {0.X} by Th13;
   hence thesis;
  end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster non empty circled Subset of X;
    existence
  proof
@@ -947,9 +920,9 @@ registration let X be non empty RealLinearSpace;
 end;
 
 theorem Th28:
-  for X being non empty RealLinearSpace, B being non empty circled Subset of X
+  for X being RealLinearSpace, B being non empty circled Subset of X
    holds 0.X in B
-proof let X be non empty RealLinearSpace;
+proof let X be RealLinearSpace;
   let B be non empty circled Subset of X;
   abs(0) = 0 by ABSVALUE:7;
   then abs(0) < 1;
@@ -961,7 +934,7 @@ A1:  {0.X} c= B by CONVEX1:34;
 end;
 
 Lm8:
-  for X being non empty RealLinearSpace,A,B being circled Subset of X
+  for X being RealLinearSpace,A,B being circled Subset of X
    holds A+B is circled
  proof let X be non empty RealLinearSpace,A,B be circled Subset of X;
   let r be Real such that
@@ -986,15 +959,15 @@ A10:  r*u in A & r*v in B by A9;
  end;
 
 registration
-  let X be non empty RealLinearSpace,A,B be circled Subset of X;
+  let X be RealLinearSpace, A,B be circled Subset of X;
   cluster A+B -> circled;
-   coherence by Lm8;
+  coherence by Lm8;
 end;
 
 theorem Th29:
-  for X being non empty RealLinearSpace, A being circled Subset of X
+  for X being RealLinearSpace, A being circled Subset of X
     for r being Real st abs(r) = 1 holds r*A = A
- proof let X be non empty RealLinearSpace, A be circled Subset of X;
+ proof let X be RealLinearSpace, A be circled Subset of X;
   let r be Real;
   assume
 A1: abs(r) = 1;
@@ -1013,7 +986,7 @@ A4:  r*x in A by A2;
    then r*A = A by CONVEX1:32;
    hence thesis by A3;
   end;
-  suppose  r < 0;
+  suppose r < 0;
    then abs(r) = -r by ABSVALUE:def 1;
    then r = -1 by A1;
    then (-1)*((-1)*x) in r*A by A4,Lm5;
@@ -1024,34 +997,33 @@ A4:  r*x in A by A2;
  end;
 
 Lm9:
-  for X being non empty RealLinearSpace, A being circled Subset of X
+  for X being RealLinearSpace, A being circled Subset of X
     holds A is symmetric
- proof let X be non empty RealLinearSpace, A be circled Subset of X;
+ proof let X be RealLinearSpace, A be circled Subset of X;
   abs(-1) = --1 by ABSVALUE:def 1
          .= 1;
   hence A = (-1)*A by Th29
          .= -A by Def4;
  end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster circled -> symmetric Subset of X;
   coherence by Lm9;
 end;
 
 Lm10:
-  for X being non empty RealLinearSpace, M being circled Subset of X
+  for X being RealLinearSpace, M being circled Subset of X
    holds conv(M) is circled
 proof
-  let X be non empty RealLinearSpace, M be circled Subset of X;
+  let X be RealLinearSpace, M be circled Subset of X;
   let r be Real;
-  assume abs(r) <= 1;
-  then
-A1:   r*M c= M by Def6;
+  assume abs(r) <= 1; then
+A1: r*M c= M by Def6;
   r*conv(M) = conv(r*M) by Th19;
   hence r*conv(M) c= conv(M) by A1,Th21;
 end;
 
-registration let X be non empty RealLinearSpace, M be circled Subset of X;
+registration let X be RealLinearSpace, M be circled Subset of X;
   cluster conv(M) -> circled;
  coherence by Lm10;
 end;
@@ -1061,11 +1033,11 @@ definition let X be non empty RLSStruct, F be Subset-Family of X;
 :Def7: for V being Subset of X st V in F holds V is circled;
 end;
 
-registration  let V be non empty RealLinearSpace;
+registration let V be non empty RLSStruct;
  cluster non empty circled-membered Subset-Family of V;
   existence
  proof
-  reconsider F = {{}V} as Subset-Family of V by MEASURE1:6;
+  reconsider F = {{}V} as Subset-Family of V by ZFMISC_1:37;
   take F;
   thus F is non empty;
   let M be Subset of V;
@@ -1076,11 +1048,11 @@ registration  let V be non empty RealLinearSpace;
 end;
 
 theorem
-  for X being non empty RealLinearSpace,
+  for X being non empty RLSStruct,
       F being circled-membered Subset-Family of X
   holds union F is circled
  proof
-  let X be non empty RealLinearSpace,F be circled-membered Subset-Family of X;
+  let X be non empty RLSStruct, F be circled-membered Subset-Family of X;
   let r be Real such that
 A1:  abs(r) <= 1;
   let x be set;
@@ -1092,10 +1064,9 @@ A4:  x' in union F by A2;
   consider Y being set such that
 A5: x' in Y and
 A6: Y in F by A4,TARSKI:def 4;
-  Y is Subset of the carrier of X by A6;
+  Y is Subset of X by A6;
   then reconsider Y as Subset of X;
-  Y is circled by A6,Def7;
-  then
+  Y is circled by A6,Def7; then
 A7:  r*Y c= Y by A1,Def6;
   r*x' in r*Y by A5,Lm5;
   then x in Y by A3,A7;
@@ -1103,11 +1074,12 @@ A7:  r*Y c= Y by A1,Def6;
  end;
 
 theorem
-  for X being non empty RealLinearSpace,
+  for X being non empty RLSStruct,
       F being circled-membered Subset-Family of X
   holds meet F is circled
  proof
-  let X be non empty RealLinearSpace,F be circled-membered Subset-Family of X;
+  let X be non empty RLSStruct,
+      F be circled-membered Subset-Family of X;
   let r be Real such that
 A1:  abs(r) <= 1;
   let x be set;
@@ -1122,7 +1094,7 @@ A5: F <> {} by A4,SETFAM_1:def 1;
 A6:  Y in F;
    then
 A7:  x' in Y by A4,SETFAM_1:def 1;
-   Y is Subset of the carrier of X by A6;
+   Y is Subset of X by A6;
    then reconsider Y' = Y as Subset of X;
    Y' is circled by A6,Def7;
    then
@@ -1180,7 +1152,7 @@ definition let X be non empty RLTopStruct;
 end;
 
 registration
- cluster non empty strict add-continuous Mult-continuous
+ cluster strict add-continuous Mult-continuous
     TopSpace-like Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like (non empty RLTopStruct);
   existence
@@ -1205,7 +1177,7 @@ A2: for a being Element of REAL for x being Element of ZS
    end;
   then reconsider T as Subset-Family of ZS;
   take W = RLTopStruct (# ZS,O,F,G,T #);
-  thus W is non empty strict;
+  thus W is strict;
   thus W is add-continuous
    proof
     let x1,x2 be Point of W, V be Subset of W such that
@@ -1244,13 +1216,13 @@ A4:   x1+x2 in V;
    proof
     thus the carrier of W in the topology of W by TARSKI:def 2;
     hereby
-     let a be Subset-Family of the carrier of W;
+     let a be Subset-Family of W;
      assume a c= the topology of W;
       then a={} or a={{}} or a={ZS} or a={{},ZS} by ZFMISC_1:42;
       then union a={} or union a=ZS or union a = {} \/ ZS by ZFMISC_1:2,31,93;
      hence union a in the topology of W by TARSKI:def 2;
     end;
-    let a,b be Subset of the carrier of W such that
+    let a,b be Subset of W such that
 A7:  a in the topology of W and
 A8:  b in the topology of W;
     (a={} or a=ZS) & (b={} or b=ZS) by A7,A8,TARSKI:def 2;
@@ -1342,11 +1314,11 @@ definition
 end;
 
 theorem Th32:
- for X being non empty LinearTopSpace,
+ for X being LinearTopSpace,
      x1,x2 being Point of X, V being a_neighborhood of x1+x2
    ex V1 being a_neighborhood of x1, V2 being a_neighborhood of x2
     st V1+V2 c= V
- proof let X be non empty LinearTopSpace;
+ proof let X be LinearTopSpace;
   let x1,x2 be Point of X, V be a_neighborhood of x1+x2;
   x1+x2 in Int V by CONNSP_2:def 1;
   then consider V1,V2 being Subset of X such that
@@ -1365,12 +1337,12 @@ A5: V1+V2 c= Int V by Def8;
  end;
 
 theorem Th33:
- for X being non empty LinearTopSpace, a being Real, x being Point of X,
+ for X being LinearTopSpace, a being Real, x being Point of X,
      V being a_neighborhood of a*x
    ex r being positive Real, W being a_neighborhood of x
       st for s being Real st abs(s - a) < r holds s*W c= V
  proof
-   let X be non empty LinearTopSpace, a be Real, x be Point of X,
+   let X be LinearTopSpace, a be Real, x be Point of X,
        V be a_neighborhood of a*x;
    a*x in Int(V) by CONNSP_2:def 1;
    then consider r being positive Real, W being Subset of X such that
@@ -1382,16 +1354,14 @@ A3:    for s being Real st abs(s - a) < r holds s*W c= Int(V) by Def9;
    then reconsider W as a_neighborhood of x by A2,CONNSP_2:def 1;
    take W;
    let s be Real;
-   assume abs(s - a) < r;
-   then
+   assume abs(s - a) < r; then
 A4:   s*W c= Int(V) by A3;
    Int(V) c= V by TOPS_1:44;
    hence thesis by A4,XBOOLE_1:1;
  end;
 
 definition let X be non empty RLTopStruct, a be Point of X;
- func transl(a,X) -> map of X,X means
-:Def10:
+  func transl(a,X) -> map of X,X means :Def10:
   for x being Point of X holds it.x = a+x;
    existence
   proof
@@ -1441,9 +1411,9 @@ A4:  u in V;
 end;
 
 theorem Th35:
- for  X being non empty LinearTopSpace, a being Point of X
+  for X being LinearTopSpace, a being Point of X
   holds rng transl(a,X) = [#]X
- proof let  X be non empty LinearTopSpace, a be Point of X;
+ proof let X be LinearTopSpace, a be Point of X;
    rng transl(a,X) c= the carrier of X by RELSET_1:12;
    hence rng transl(a,X) c= [#]X by PRE_TOPC:def 3;
    let y be set;
@@ -1458,9 +1428,9 @@ theorem Th35:
  end;
 
 Lm11:
- for  X being non empty LinearTopSpace, a being Point of X
+ for X being LinearTopSpace, a being Point of X
   holds transl(a,X) is one-to-one
- proof let  X be non empty LinearTopSpace, a be Point of X;
+ proof let X be LinearTopSpace, a be Point of X;
     now
      let x1,x2 be set such that
 A1:   x1 in the carrier of X and
@@ -1474,9 +1444,9 @@ A3:   transl(a,X).x1 = transl(a,X).x2;
  end;
 
 theorem Th36:
- for  X being non empty LinearTopSpace, a being Point of X
+ for X being LinearTopSpace, a being Point of X
   holds transl(a,X)" = transl(-a,X)
- proof let  X be non empty LinearTopSpace, a be Point of X;
+ proof let X be LinearTopSpace, a be Point of X;
 A1: rng transl(a,X) = [#]X by Th35;
 A2: [#]X = the carrier of X by PRE_TOPC:def 3;
 A3: transl(a,X) is one-to-one by Lm11;
@@ -1499,9 +1469,9 @@ A6:    x = a+u by A5,Def10;
  end;
 
 Lm12:
- for X being non empty LinearTopSpace, a being Point of X
+ for X being LinearTopSpace, a being Point of X
   holds transl(a,X) is continuous
- proof let X be non empty LinearTopSpace, a being Point of X;
+ proof let X be LinearTopSpace, a be Point of X;
    now let P be Subset of X;
     assume
 A1:   P is open;
@@ -1513,15 +1483,15 @@ A1:   P is open;
      end;
     suppose P <> {};
      reconsider X' = X as TopStruct;
-     defpred P[Subset of the carrier of X'] means
+     defpred P[Subset of X'] means
         ex D being Subset of X st D = $1 & D is open & a+D c= P;
      consider F being Subset-Family of X' such that
-A2:    for A being Subset of the carrier of X' holds A in F iff P[A]
+A2:    for A being Subset of X' holds A in F iff P[A]
         from SUBSET_1:sch 3;
      reconsider F as Subset-Family of X;
 A3:    F is open
      proof
-      let A being Subset of X;
+      let A be Subset of X;
       assume A in F;
       then ex D being Subset of X st D=A & D is open & a+D c= P by A2;
       hence A is open;
@@ -1538,7 +1508,7 @@ A5:        A in F by TARSKI:def 4;
           consider D being Subset of X such that
 A6:         D = A and D is open and
 A7:         a+D c= P by A2,A5;
-           A is Subset of the carrier of X by A5;
+           A is Subset of X by A5;
            then reconsider x as Point of X by A4;
            a+D = {a + u where u is Point of X: u in D} by RUSUB_4:def 9;
            then a+x in a+D by A4,A6;
@@ -1571,7 +1541,7 @@ A14:      {a}+D = a+D by RUSUB_4:36;
    hence thesis by TOPS_2:55;
  end;
 
-registration let X be non empty LinearTopSpace, a being Point of X;
+registration let X be LinearTopSpace, a be Point of X;
  cluster transl(a,X) -> being_homeomorphism;
    coherence
   proof
@@ -1586,12 +1556,12 @@ A1:  dom transl(a,X) = the carrier of X by FUNCT_2:def 1;
 end;
 
 Lm13:
-  for X being non empty LinearTopSpace, E being Subset of X,
+  for X being LinearTopSpace, E being Subset of X,
       x being Point of X
     st E is open
    holds x+E is open
  proof
-  let X be non empty LinearTopSpace, E be Subset of X, x be Point of X;
+  let X be LinearTopSpace, E be Subset of X, x be Point of X;
   assume
 A1:  E is open;
    transl(x,X).:E = x+E by Th34;
@@ -1599,28 +1569,22 @@ A1:  E is open;
  end;
 
 registration
-  let X be non empty LinearTopSpace, E be open Subset of X, x be Point of X;
+  let X be LinearTopSpace, E be open Subset of X, x be Point of X;
   cluster x+E -> open;
    coherence by Lm13;
 end;
 
-registration
- let X be non empty LinearTopSpace, E be open Subset of X, x be Point of X;
-  cluster x+E -> open;
-   coherence;
-end;
-
 Lm14:
-  for X being non empty LinearTopSpace, E being open Subset of X,
+  for X being LinearTopSpace, E being open Subset of X,
       K being Subset of X
    holds K+E is open
- proof let X be non empty LinearTopSpace, E be open Subset of X,
+ proof let X be LinearTopSpace, E be open Subset of X,
            K be Subset of X;
   reconsider F = { a+E where a is Point of X: a in K} as Subset-Family of X
  by Lm3;
 A1: F is open
    proof
-    let P being Subset of X;
+    let P be Subset of X;
     assume P in F;
     then ex a being Point of X st P=a+E & a in K;
     hence P is open;
@@ -1630,34 +1594,33 @@ A1: F is open
  end;
 
 registration
- let X be non empty LinearTopSpace, E be open Subset of X, K be Subset of X;
+  let X be LinearTopSpace, E be open Subset of X, K be Subset of X;
   cluster K+E -> open;
    coherence by Lm14;
 end;
 
 Lm15:
-  for X being non empty LinearTopSpace, D being closed Subset of X,
+  for X being LinearTopSpace, D being closed Subset of X,
       x being Point of X
    holds x+D is closed
  proof
-  let X be non empty LinearTopSpace, D be closed Subset of X, x be Point of X;
+  let X be LinearTopSpace, D be closed Subset of X, x be Point of X;
    transl(x,X).:D = x+D by Th34;
   hence x+D is closed by TOPS_2:72;
  end;
 
 registration
-  let X be non empty LinearTopSpace, D be closed Subset of X, x be Point of X;
+  let X be LinearTopSpace, D be closed Subset of X, x be Point of X;
   cluster x+D -> closed;
    coherence by Lm15;
 end;
 
 theorem Th37:
-  for X being non empty LinearTopSpace, V1,V2,V being Subset of X
+  for X being LinearTopSpace, V1,V2,V being Subset of X
    st V1+V2 c= V
   holds Int V1 + Int V2 c= Int V
  proof
-  let X be non empty LinearTopSpace,  V1,V2,V be Subset of X
-   such that
+  let X be LinearTopSpace, V1,V2,V be Subset of X such that
 A1:  V1+V2 c= V;
   Int V1 c= V1 & Int V2 c= V2 by TOPS_1:44;
   then Int V1 + Int V2 c= V1+V2 by Th11;
@@ -1666,9 +1629,9 @@ A1:  V1+V2 c= V;
  end;
 
 theorem Th38:
-  for X being non empty LinearTopSpace, x being Point of X, V being Subset of X
+  for X being LinearTopSpace, x being Point of X, V being Subset of X
    holds x+Int(V) = Int(x+V)
- proof let X be non empty LinearTopSpace, x be Point of X, V be Subset of X;
+ proof let X be LinearTopSpace, x be Point of X, V be Subset of X;
   Int(V) c= V by TOPS_1:44;
   then x+Int(V) c= x+V by Th8;
   hence x+Int(V) c= Int(x+V) by TOPS_1:56;
@@ -1697,9 +1660,9 @@ A7:  x+Int(V) = {x + u where u is Point of X: u in Int V} by RUSUB_4:def 9;
  end;
 
 theorem
-  for X being non empty LinearTopSpace, x being Point of X, V being Subset of X
+  for X being LinearTopSpace, x being Point of X, V being Subset of X
    holds x+Cl(V) = Cl(x+V)
- proof let X be non empty LinearTopSpace, x be Point of X, V be Subset of X;
+ proof let X be LinearTopSpace, x be Point of X, V be Subset of X;
   thus x+Cl(V) c= Cl(x+V)
    proof let v be set;
      assume
@@ -1741,11 +1704,11 @@ A14:     x+z in x+V by A5,A10;
  end;
 
 theorem
-  for X being non empty LinearTopSpace, x,v being Point of X,
+  for X being LinearTopSpace, x,v being Point of X,
       V being a_neighborhood of x
    holds v+V is a_neighborhood of v+x
  proof
-  let X be non empty LinearTopSpace, x,v be Point of X,
+  let X be LinearTopSpace, x,v be Point of X,
       V be a_neighborhood of x;
 A1:   v+Int(V) = {v + u where u is Point of X: u in Int V} by RUSUB_4:def 9;
 A2:   v+Int(V) = Int(v+V) by Th38;
@@ -1755,11 +1718,11 @@ A2:   v+Int(V) = Int(v+V) by Th38;
  end;
 
 theorem
-  for X being non empty LinearTopSpace, x being Point of X,
+  for X being LinearTopSpace, x being Point of X,
       V being a_neighborhood of x
    holds -x+V is a_neighborhood of 0.X
  proof
-  let X be non empty LinearTopSpace, x be Point of X,
+  let X be LinearTopSpace, x be Point of X,
       V be a_neighborhood of x;
 A1:   -x+Int(V) = {-x + v where v is Point of X: v in Int V} by RUSUB_4:def 9;
 A2:   -x+Int(V) c= Int(-x+V) by Th38;
@@ -1775,19 +1738,17 @@ definition let X be non empty RLTopStruct;
 end;
 
 definition let X be non empty RLTopStruct;
-  attr X is locally-convex means
-:Def11:
+  attr X is locally-convex means :Def11:
   ex P being local_base of X st P is convex-membered;
 end;
 
-definition let X be non empty LinearTopSpace, E being Subset of X;
-  attr E is bounded means
-:Def12:
+definition let X be LinearTopSpace, E be Subset of X;
+  attr E is bounded means :Def12:
   for V being a_neighborhood of 0.X
    ex s st s > 0 & for t st t > s holds E c= t*V;
 end;
 
-registration let X be non empty LinearTopSpace;
+registration let X be LinearTopSpace;
  cluster {}X -> bounded;
   coherence
  proof
@@ -1797,7 +1758,7 @@ registration let X be non empty LinearTopSpace;
  end;
 end;
 
-registration let X be non empty LinearTopSpace;
+registration let X be LinearTopSpace;
  cluster bounded Subset of X;
   existence
  proof
@@ -1807,15 +1768,10 @@ registration let X be non empty LinearTopSpace;
 end;
 
 theorem Th42:
-  for X being non empty LinearTopSpace, V1,V2 being bounded Subset of X
+  for X being LinearTopSpace, V1,V2 being bounded Subset of X
    holds V1 \/ V2 is bounded
  proof
-   let X be non empty LinearTopSpace,  V1,V2 be bounded Subset of X;
-     now per cases;
-      suppose V2 = {};
-       hence thesis;
-      end;
-      suppose V2 <> {};
+   let X be non empty LinearTopSpace, V1,V2 be bounded Subset of X;
        thus thesis
         proof
          let V be a_neighborhood of 0.X;
@@ -1833,7 +1789,7 @@ A5:         r <= s;
           let t such that
 A6:        t > s;
 A7:        V1 c= t*V by A2,A6;
-          t > r by A5,A6,AXIOMS:22;
+          t > r by A5,A6,XREAL_1:2;
           then V2 c= t*V by A4;
           hence V1 \/ V2 c= t*V by A7,XBOOLE_1:8;
          end;
@@ -1844,23 +1800,20 @@ A8:         r > s;
           let t such that
 A9:        t > r;
 A10:        V2 c= t*V by A4,A9;
-          t > s by A8,A9,AXIOMS:22;
+          t > s by A8,A9,XREAL_1:2;
           then V1 c= t*V by A2;
           hence V1 \/ V2 c= t*V by A10,XBOOLE_1:8;
          end;
         end;
-      end;
      end;
-     hence thesis;
- end;
 
 theorem
-  for X being non empty LinearTopSpace, P being bounded Subset of X,
+  for X being LinearTopSpace, P being bounded Subset of X,
       Q being Subset of X
     st Q c= P
    holds Q is bounded
  proof
-   let X be non empty LinearTopSpace,  P be bounded Subset of X,
+   let X be LinearTopSpace, P be bounded Subset of X,
        Q being Subset of X such that
 A1:  Q c= P;
    let V be a_neighborhood of 0.X;
@@ -1876,11 +1829,11 @@ A3:  for t st t > s holds P c= t*V by Def12;
  end;
 
 theorem
-  for X being non empty LinearTopSpace, F being Subset-Family of X
+  for X being LinearTopSpace, F being Subset-Family of X
     st F is finite & F = {P where P is bounded Subset of X: not contradiction}
    holds union F is bounded
  proof
-  let X be non empty LinearTopSpace, F be Subset-Family of X such that
+  let X be LinearTopSpace, F be Subset-Family of X such that
 A1: F is finite and
 A2: F = {P where P is bounded Subset of X: not contradiction};
 A3:  now
@@ -1918,11 +1871,11 @@ A11:  x is bounded by A3,A6;
  end;
 
 theorem Th45:
-  for X being non empty LinearTopSpace, P being Subset-Family of X
+  for X being LinearTopSpace, P being Subset-Family of X
    st P = {U where U is a_neighborhood of 0.X: not contradiction}
   holds P is local_base of X
  proof
-  let  X be non empty LinearTopSpace, P be Subset-Family of X such that
+  let X be LinearTopSpace, P be Subset-Family of X such that
 A1: P = {U where U is a_neighborhood of 0.X: not contradiction};
   let A be a_neighborhood of 0.X;
   take A;
@@ -1931,12 +1884,12 @@ A1: P = {U where U is a_neighborhood of 0.X: not contradiction};
  end;
 
 theorem
-  for X being non empty LinearTopSpace, O being local_base of X,
+  for X being LinearTopSpace, O being local_base of X,
       P being Subset-Family of X
    st P = {a+U where a is Point of X, U is Subset of X: U in O}
   holds P is basis of X
  proof
-   let  X be non empty LinearTopSpace, O be basis of 0.X,
+   let X be LinearTopSpace, O be basis of 0.X,
       P be Subset-Family of X such that
 A1: P = {a+U where a is Point of X, U is Subset of X: U in O};
   let p be Point of X;
@@ -1964,8 +1917,7 @@ A7:  Int(A) c= A by TOPS_1:44;
  end;
 
 definition let X be non empty RLTopStruct, r be Real;
- func mlt(r,X) -> map of X,X means
-:Def13:
+ func mlt(r,X) -> map of X,X means :Def13:
   for x being Point of X holds it.x = r*x;
    existence
   proof
@@ -2015,9 +1967,9 @@ A4:  u in V;
  end;
 
 theorem Th48:
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
   holds rng mlt(r,X) = [#]X
- proof let  X be non empty LinearTopSpace, r be non zero Real;
+ proof let X be LinearTopSpace, r be non zero Real;
    rng mlt(r,X) c= the carrier of X by RELSET_1:12;
    hence rng mlt(r,X) c= [#]X by PRE_TOPC:def 3;
    let y be set;
@@ -2032,9 +1984,9 @@ theorem Th48:
  end;
 
 Lm16:
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
   holds mlt(r,X) is one-to-one
- proof let  X be non empty LinearTopSpace, r be non zero Real;
+ proof let X be LinearTopSpace, r be non zero Real;
     now
      let x1,x2 be set such that
 A1:   x1 in the carrier of X and
@@ -2048,9 +2000,9 @@ A3:   mlt(r,X).x1 = mlt(r,X).x2;
  end;
 
 theorem Th49:
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
   holds mlt(r,X)" = mlt(r",X)
- proof let  X be non empty LinearTopSpace, r be non zero Real;
+ proof let X be LinearTopSpace, r be non zero Real;
 A1: rng mlt(r,X) = [#]X by Th48;
 A2: [#]X = the carrier of X by PRE_TOPC:def 3;
 A3:  mlt(r,X) is one-to-one by Lm16;
@@ -2073,27 +2025,20 @@ A6:    x = r*u by A5,Def13;
  end;
 
 Lm17:
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
    holds mlt(r,X) is continuous
- proof let  X be non empty LinearTopSpace, r be non zero Real;
+ proof let X be LinearTopSpace, r be non zero Real;
    now let P be Subset of X;
     assume
-A1:   P is open;
-    per cases;
-    suppose P = {};
-     then mlt(r,X)"P = {} by RELAT_1:171
-                       .= {}X;
-     hence mlt(r,X)"P is open;
-    end;
-    suppose P <> {};
+A1: P is open;
      defpred P[Subset of X] means $1 is open & r*$1 c= P;
      consider F being Subset-Family of X such that
-A2:    for A being Subset of X holds A in F iff P[A]
-        from SUBSET_1:sch 3;
+A2:  for A being Subset of X holds A in F iff P[A]
+      from SUBSET_1:sch 3;
      reconsider F as Subset-Family of X;
-A3:    F is open
+A3:  F is open
      proof
-      let A being Subset of X;
+      let A be Subset of X;
       assume A in F;
       hence A is open by A2;
      end;
@@ -2104,80 +2049,79 @@ A3:    F is open
          let x be set;
          assume x in union F;
          then consider A being set such that
-A4:        x in A and
-A5:        A in F by TARSKI:def 4;
+A4:      x in A and
+A5:      A in F by TARSKI:def 4;
          reconsider A as Subset of X by A5;
-A6:        r*A c= P by A2,A5;
-          A is Subset of the carrier of X;
-          then reconsider x as Point of X by A4;
-          r*A = {r*u where u is Point of X: u in A} by CONVEX1:def 1;
-          then r*x in r*A by A4;
-          then
-A7:         r*x in P by A6;
-          mlt(r,X).x = r*x by Def13;
+A6:      r*A c= P by A2,A5;
+         A is Subset of X;
+         then reconsider x as Point of X by A4;
+         r*A = {r*u where u is Point of X: u in A} by CONVEX1:def 1;
+         then r*x in r*A by A4;
+         then
+A7:      r*x in P by A6;
+         mlt(r,X).x = r*x by Def13;
          hence thesis by A7,FUNCT_2:46;
         end;
        let x be set;
        assume
-A8:       x in mlt(r,X)"P;
+A8:    x in mlt(r,X)"P;
        then reconsider x as Point of X;
        mlt(r,X).x in P by A8,FUNCT_2:46;
        then r*x in P by Def13;
        then consider e being positive Real, W being Subset of X such that
-A9:       W is open and
-A10:       x in W and
-A11:       for s being Real st abs(s - r) < e holds s*W c= P by A1,Def9;
+A9:    W is open and
+A10:   x in W and
+A11:   for s being Real st abs(s - r) < e holds s*W c= P by A1,Def9;
        abs(r - r) < e by ABSVALUE:7;
        then r*W c= P by A11;
        then W in F by A2,A9;
        hence thesis by A10,TARSKI:def 4;
       end;
      hence mlt(r,X)"P is open by A3,TOPS_2:26;
-    end;
    end;
   hence thesis by TOPS_2:55;
  end;
 
-registration let X be non empty LinearTopSpace, r be non zero Real;
+registration let X be LinearTopSpace, r be non zero Real;
  cluster mlt(r,X) -> being_homeomorphism;
  coherence
   proof
 A1:  dom mlt(r,X) = the carrier of X by FUNCT_2:def 1;
     thus dom mlt(r,X) = [#]X by A1,PRE_TOPC:def 3;
-   thus rng mlt(r,X)  = [#]X by Th48;
+   thus rng mlt(r,X) = [#]X by Th48;
    thus mlt(r,X) is one-to-one by Lm16;
    thus mlt(r,X) is continuous by Lm17;
-    mlt(r,X)" = mlt(r",X) by Th49;
+   mlt(r,X)" = mlt(r",X) by Th49;
    hence mlt(r,X)" is continuous by Lm17;
   end;
 end;
 
 theorem Th50:
-  for X being non empty LinearTopSpace, V being open Subset of X,
+  for X being LinearTopSpace, V being open Subset of X,
       r being non zero Real
    holds r*V is open
-proof let X be non empty LinearTopSpace, V be open Subset of X,
-           r be non zero Real;
-   mlt(r,X).:V = r*V by Th47;
+proof let X be LinearTopSpace, V be open Subset of X,
+          r be non zero Real;
+  mlt(r,X).:V = r*V by Th47;
   hence thesis by TOPGRP_1:25;
 end;
 
 theorem Th51:
-  for X being non empty LinearTopSpace, V being closed Subset of X,
+  for X being LinearTopSpace, V being closed Subset of X,
       r being non zero Real
    holds r*V is closed
-proof let X be non empty LinearTopSpace, V be closed Subset of X,
-           r be non zero Real;
+proof let X be LinearTopSpace, V be closed Subset of X,
+          r be non zero Real;
    mlt(r,X).:V = r*V by Th47;
   hence thesis by TOPS_2:72;
 end;
 
 theorem Th52:
-  for X being non empty LinearTopSpace, V being Subset of X,
+  for X being LinearTopSpace, V being Subset of X,
       r be non zero Real
    holds r*Int(V) = Int(r*V)
 proof
-   let X be non empty LinearTopSpace, V be Subset of X, r being non zero Real;
+   let X be LinearTopSpace, V be Subset of X, r be non zero Real;
 A1:  r*Int(V) is open by Th50;
   Int(V) c= V by TOPS_1:44;
   then r*Int(V) c= r*V by CONVEX1:39;
@@ -2206,10 +2150,10 @@ A7:  r"*x in r"*Q by A5,Lm5;
 end;
 
 theorem Th53:
-  for X being non empty LinearTopSpace, A being Subset of X,
+  for X being LinearTopSpace, A being Subset of X,
       r being non zero Real
     holds r*Cl(A) = Cl(r*A)
- proof let X be non empty LinearTopSpace, A be Subset of X, r be non zero Real;
+ proof let X be LinearTopSpace, A be Subset of X, r be non zero Real;
     thus r*Cl(A) c= Cl(r*A)
      proof let z be set;
        assume
@@ -2254,10 +2198,10 @@ A14:  r*Cl(A) is closed by Th51;
  end;
 
 theorem
-  for X being non empty LinearTopSpace,A being Subset of X
+  for X being LinearTopSpace,A being Subset of X
      st X is_T1
     holds 0*Cl(A) = Cl(0*A)
- proof let X be non empty LinearTopSpace, A be Subset of X such that
+ proof let X be LinearTopSpace, A be Subset of X such that
 A1: X is_T1;
   per cases;
    suppose
@@ -2278,11 +2222,11 @@ A4:   A is non empty;
  end;
 
 theorem Th55:
-  for X being non empty LinearTopSpace, x being Point of X,
+  for X being LinearTopSpace, x being Point of X,
       V being a_neighborhood of x, r be non zero Real
    holds r*V is a_neighborhood of r*x
  proof
-  let X be non empty LinearTopSpace, x be Point of X,
+  let X be LinearTopSpace, x be Point of X,
      V be a_neighborhood of x, r be non zero Real;
 A1: r*Int(V) c= Int(r*V) by Th52;
   x in Int(V) by CONNSP_2:def 1;
@@ -2291,22 +2235,22 @@ A1: r*Int(V) c= Int(r*V) by Th52;
  end;
 
 theorem Th56:
-  for X being non empty LinearTopSpace, V being a_neighborhood of 0.X,
+  for X being LinearTopSpace, V being a_neighborhood of 0.X,
       r be non zero Real
    holds r*V is a_neighborhood of 0.X
  proof
-  let X be non empty LinearTopSpace, V be a_neighborhood of 0.X,
+  let X be LinearTopSpace, V be a_neighborhood of 0.X,
       r be non zero Real;
   r*V is a_neighborhood of r*0.X by Th55;
   hence thesis by RLVECT_1:23;
  end;
 
 Lm18:
-  for X being non empty LinearTopSpace, V being bounded Subset of X,
+  for X being LinearTopSpace, V being bounded Subset of X,
       r being Real
    holds r*V is bounded
  proof
-  let X be non empty LinearTopSpace,  V be bounded Subset of X;
+  let X be LinearTopSpace, V be bounded Subset of X;
   let r be Real;
   per cases;
   suppose
@@ -2318,7 +2262,7 @@ A1:    r = 0;
     end;
     suppose
 A2:     V is non empty;
-      let U being a_neighborhood of 0.X;
+      let U be a_neighborhood of 0.X;
       take s = 1;
       thus s > 0;
       let t;
@@ -2360,16 +2304,16 @@ A9:   x in r*V;
 end;
 
 registration
-  let X be non empty LinearTopSpace, V be bounded Subset of X, r be Real;
+  let X be LinearTopSpace, V be bounded Subset of X, r be Real;
   cluster r*V -> bounded;
   coherence by Lm18;
 end;
 
 theorem Th57:
-  for X being non empty LinearTopSpace, W being a_neighborhood of 0.X
+  for X being LinearTopSpace, W being a_neighborhood of 0.X
    ex U being open a_neighborhood of 0.X st U is symmetric & U+U c= W
  proof
-  let X be non empty LinearTopSpace, W be a_neighborhood of 0.X;
+  let X be LinearTopSpace, W be a_neighborhood of 0.X;
 A1:  0.X+0.X = 0.X by RLVECT_1:10;
   consider V1 being a_neighborhood of 0.X, V2 being a_neighborhood of 0.X
    such that
@@ -2404,8 +2348,7 @@ A6: (-1)*((-1)*Int(V1)) = Int(V1) & (-1)*((-1)*Int(V2)) = Int(V2)
   thus U = Int(V1) /\ Int(V2) /\ (((-1)*Int(V1)) /\ ((-1)*Int(V2)))
            by XBOOLE_1:16
         .= ((-1)*(Int(V1)) /\ ((-1)*Int(V2))) /\ (Int(V1) /\ Int(V2))
-        .= (-1)*(Int(V1) /\ Int(V2)) /\ (Int(V1) /\ Int(V2))
-           by Th15
+        .= (-1)*(Int(V1) /\ Int(V2)) /\ (Int(V1) /\ Int(V2)) by Th15
         .= (-1)*(Int(V1) /\ Int(V2)) /\ ((-1)*((-1)*Int(V1) /\ ((-1)*Int(V2))))
            by A6,Th15
         .= (-1)*(Int(V1) /\ Int(V2) /\ ((-1)*Int(V1) /\ ((-1)*Int(V2))))
@@ -2433,14 +2376,13 @@ A9:  u+v in Int(V1)+Int(V2) by RUSUB_4:def 10;
  end;
 
 theorem Th58:
-  for X being non empty LinearTopSpace,
+  for X being LinearTopSpace,
       K being compact Subset of X, C being closed Subset of X
     st K misses C
    ex V being a_neighborhood of 0.X st K+V misses C+V
  proof
-  let X be non empty LinearTopSpace,
-      K be compact Subset of X, C be closed Subset of X
-  such that
+  let X be LinearTopSpace,
+      K be compact Subset of X, C be closed Subset of X such that
 A1: K misses C;
   per cases;
   suppose
@@ -2452,8 +2394,7 @@ A2:  K = {};
   end;
   suppose
 A3:  K <> {};
-A4:
-   now let x be Point of X such that
+A4: now let x be Point of X such that
 A5:   x in K;
 A6:   -x+C` = {-x + u where u is Point of X: u in C`} by RUSUB_4:def 9;
     K c= C` by A1,SUBSET_1:43;
@@ -2560,7 +2501,7 @@ A27:       y in dom g & x = g.y by FUNCT_1:def 5;
       then A c= the carrier of X;
       hence thesis;
     end;
-   then F is Subset-Family of the carrier of X;
+   then F is Subset-Family of X;
    then reconsider F as Subset-Family of X;
 A28: F is_a_cover_of K
  proof let x be set;
@@ -2591,7 +2532,7 @@ A37:  x = v2 & Vx = V2 by A35,ZFMISC_1:33;
  end;
 A38:  F is open
   proof
-   let P being Subset of X;
+   let P be Subset of X;
    assume P in F;
    then ex x being Point of X, Vx being open a_neighborhood of 0.X
     st P = x+Vx & [x,Vx] in xVV;
@@ -2662,12 +2603,12 @@ A60:   Class(eqR,a) = Class(eqR,[x,Vx]) by A56,EQREL_1:31;
       then A c= the carrier of X;
       hence thesis;
     end;
-  then FVx is Subset-Family of the carrier of X;
+  then FVx is Subset-Family of X;
   then reconsider FVx as Subset-Family of X;
   take V = meet FVx;
 A61:  FVx is open
   proof
-   let P being Subset of X;
+   let P be Subset of X;
    assume P in FVx;
    then ex Vx being open a_neighborhood of 0.X
     st P = Vx & ex x being Point of X st x+Vx in G& [x,Vx] in xVV;
@@ -2691,7 +2632,7 @@ A65:  FVx is non empty;
   let A be set;
   assume
 A66:  A in FVx;
-  then reconsider A'=A as Subset of the carrier of X;
+  then reconsider A'=A as Subset of X;
 A67: Int A' c= A' by TOPS_1:44;
   ex Vx being open a_neighborhood of 0.X
     st A = Vx & ex x being Point of X st x+Vx in G & [x,Vx] in xVV by A66;
@@ -2706,12 +2647,12 @@ A68:  0.X in V by A65,SETFAM_1:def 1;
 A69: for x being set st x in G ex y being set st y in FVx & P[x,y]
      proof let x be set;
       assume
-A70:     x in G;
+A70:  x in G;
       then x in F by A39;
       then consider z being Point of X, Vz being open a_neighborhood of 0.X
        such that
-A71:     x = z+Vz and
-A72:     [z,Vz] in xVV;
+A71:  x = z+Vz and
+A72:  [z,Vz] in xVV;
       take Vz;
       thus thesis by A70,A71,A72;
      end;
@@ -2900,10 +2841,10 @@ A137:    z+-v in x+Vx+Vx+Vx by A128,A133,Lm2;
 end;
 
 theorem Th59:
-  for X being non empty LinearTopSpace, B being local_base of X,
+  for X being LinearTopSpace, B being local_base of X,
       V being a_neighborhood of 0.X
      ex W being a_neighborhood of 0.X st W in B & Cl W c= V
- proof let X be non empty LinearTopSpace, B be local_base of X;
+ proof let X be LinearTopSpace, B be local_base of X;
    let V be a_neighborhood of 0.X;
   set C = (Int V)`;
   set K = {0.X};
@@ -2938,9 +2879,9 @@ A9:  W c= P' by YELLOW13:def 2;
 end;
 
 theorem Th60:
-  for X being non empty LinearTopSpace, V being a_neighborhood of 0.X
+  for X being LinearTopSpace, V being a_neighborhood of 0.X
      ex W being a_neighborhood of 0.X st Cl W c= V
-proof let X be non empty LinearTopSpace, V be a_neighborhood of 0.X;
+proof let X be LinearTopSpace, V be a_neighborhood of 0.X;
   set B = {U where U is a_neighborhood of 0.X: not contradiction};
   B c= bool the carrier of X
    proof let A be set;
@@ -2949,7 +2890,7 @@ proof let X be non empty LinearTopSpace, V be a_neighborhood of 0.X;
      then A c= the carrier of X;
      hence thesis;
    end;
-  then B is Subset-Family of the carrier of X;
+  then B is Subset-Family of X;
   then B is Subset-Family of X;
   then B is local_base of X by Th45;
   then consider W being a_neighborhood of 0.X such that W in B and
@@ -2959,14 +2900,13 @@ A1: Cl W c= V by Th59;
 end;
 
 registration
-  cluster being_T1 -> Hausdorff (non empty LinearTopSpace);
+  cluster being_T1 -> Hausdorff LinearTopSpace;
  coherence
-  proof let X be non empty LinearTopSpace;
+  proof let X be LinearTopSpace;
    assume
 A1:  X is being_T1;
-    let p, q being Point of X;
-    assume p <> q;
-    then
+    let p, q be Point of X;
+    assume p <> q; then
 A2:   {p} misses {q} by ZFMISC_1:17;
 A3:   {p} is compact by BORSUK_1:41;
     {q} is closed by A1,URYSOHN1:27;
@@ -2985,9 +2925,9 @@ A5:   {p}+V = p+V & {q}+V = q+V by RUSUB_4:36;
 end;
 
 theorem
-  for X being non empty LinearTopSpace, A being Subset of X
+  for X being LinearTopSpace, A being Subset of X
    holds Cl A = meet {A+V where V is a_neighborhood of 0.X: not contradiction}
- proof let X be non empty LinearTopSpace, A be Subset of X;
+ proof let X be LinearTopSpace, A be Subset of X;
    set AV = {A+V where V is a_neighborhood of 0.X: not contradiction};
 A1:   for x being Point of X holds x in Cl A
     iff  for V being a_neighborhood of 0.X holds A meets x+Int(V)
@@ -3023,8 +2963,7 @@ A7:  for x being Point of X, V being a_neighborhood of 0.X
       hereby
         assume
 A8:       A meets x+Int(V);
-        x in A+-Int(V) by A8,Th25;
-        then
+        x in A+-Int(V) by A8,Th25; then
 A9:       x in A+(-1)*Int(V) by Def4;
         thus x in A+(-1)*Int(V) by A9;
       end;
@@ -3043,8 +2982,7 @@ A15: v' in Int(V) by A13;
      -v = (-1)*v by RLVECT_1:29
        .= (-1)*(-1)*v' by A14,RLVECT_1:def 9
        .= 1*v'
-       .= v' by RLVECT_1:def 9;
-    then
+       .= v' by RLVECT_1:def 9; then
 A16:  x+v' = a + (v + (-v)) by A11,RLVECT_1:def 6
           .= a+0.X by RLVECT_1:16
           .= a by RLVECT_1:10;
@@ -3057,16 +2995,16 @@ A17:   A+V in AV;
    thus Cl A c= meet AV
     proof let x be set;
       assume
-A18:     x in Cl A;
+A18:  x in Cl A;
       then reconsider x as Point of X;
       now let Y be set;
        assume Y in AV;
         then consider V being a_neighborhood of 0.X such that
-A19:       Y = A+V;
-A20:       A+(-1)*Int((-1)*V) =
+A19:    Y = A+V;
+A20:    A+(-1)*Int((-1)*V) =
             {a+v where a,v is Point of X: a in A & v in (-1)*Int((-1)*V)}
          by RUSUB_4:def 10;
-A21:      A+V = {a+v where a,v is Point of X: a in A & v in V}
+A21:     A+V = {a+v where a,v is Point of X: a in A & v in V}
          by RUSUB_4:def 10;
 A22:      (-1)*Int((-1)*V) = {(-1)*v where v is Point of X: v in Int((-1)*V)}
          by CONVEX1:def 1;
@@ -3075,17 +3013,17 @@ A24:      (-1)*V is a_neighborhood of 0.X by Th56;
         then A meets x+Int((-1)*V) by A1,A18;
         then x in A+(-1)*Int(((-1)*V)) by A7,A24;
         then consider a,v being Point of X such that
-A25:      x = a+v and
-A26:      a in A and
-A27:      v in (-1)*Int((-1)*V) by A20;
+A25:    x = a+v and
+A26:    a in A and
+A27:    v in (-1)*Int((-1)*V) by A20;
         consider v' being Point of X such that
-A28:      v=(-1)*v' and
-A29:      v' in Int((-1)*V) by A22,A27;
+A28:    v=(-1)*v' and
+A29:    v' in Int((-1)*V) by A22,A27;
         Int((-1)*V) c= (-1)*V by TOPS_1:44;
         then v' in (-1)*V by A29;
         then consider v'' being Point of X such that
-A30:      v' = (-1)*v'' and
-A31:      v'' in V by A23;
+A30:    v' = (-1)*v'' and
+A31:    v'' in V by A23;
         v = (-1)*(-1)*v'' by A28,A30,RLVECT_1:def 9
          .= 1*v''
          .= v'' by RLVECT_1:def 9;
@@ -3104,7 +3042,7 @@ A32:   x in meet AV;
      then ex V being a_neighborhood of 0.X st x = A+V;
      hence thesis;
    end;
-  then reconsider AV' = AV as Subset-Family of the carrier of X;
+  then reconsider AV' = AV as Subset-Family of X;
   meet AV' c= the carrier of X;
   then reconsider x as Point of X by A32;
   now let V be a_neighborhood of 0.X;
@@ -3120,18 +3058,18 @@ A33:   Int(V) is a_neighborhood of 0.X by CONNSP_2:5;
  end;
 
 theorem Th62:
-  for X being non empty LinearTopSpace, A,B being Subset of X
+  for X being LinearTopSpace, A,B being Subset of X
     holds Int A + Int B c= Int(A+B)
-proof let X be non empty LinearTopSpace, A,B be Subset of X;
+proof let X be LinearTopSpace, A,B be Subset of X;
   Int A c= A & Int B c= B by TOPS_1:44;
   then Int A + Int B c= A+B by Th11;
   hence thesis by TOPS_1:56;
 end;
 
 theorem Th63:
-  for X being non empty LinearTopSpace, A,B being Subset of X
+  for X being LinearTopSpace, A,B being Subset of X
     holds Cl A + Cl B c= Cl(A+B)
-proof let X be non empty LinearTopSpace, A,B be Subset of X;
+proof let X be LinearTopSpace, A,B be Subset of X;
   let z be set;
 A1:  {u + v where u,v is Point of X: u in Cl  A & v in Cl B} = Cl A + Cl B
      by RUSUB_4:def 10;
@@ -3142,7 +3080,7 @@ A2: z in Cl A + Cl B;
 A3:   z = a+b and
 A4:   a in Cl A and
 A5:   b in Cl B by A1,A2;
-  now let W being Subset of X such that
+  now let W be Subset of X such that
 A6:   W is open and
 A7:   z in W;
    W is a_neighborhood of z by A6,A7,CONNSP_2:5;
@@ -3172,20 +3110,19 @@ A14:  Int W1 + Int W2 c= Int W by A8,Th37;
 end;
 
 Lm19:
- for X being non empty LinearTopSpace, C being convex Subset of X
+ for X being LinearTopSpace, C being convex Subset of X
   holds Cl C is convex
-proof let X be non empty LinearTopSpace, C be convex Subset of X;
+proof let X be LinearTopSpace, C be convex Subset of X;
   now
    let r be Real such that
 A1:  0 < r and
 A2:  r < 1;
-   r*C + (1-r)*C c= C by A1,A2,CONVEX1:4;
-   then
+   r*C + (1-r)*C c= C by A1,A2,CONVEX1:4; then
 A3:  Cl(r*C + (1-r)*C) c= Cl(C) by PRE_TOPC:49;
 A4:  Cl(r*C) + Cl((1-r)*C) c= Cl(r*C + (1-r)*C) by Th63;
 A5:  Cl(r*C) = r*Cl(C) by A1,Th53;
    0+r < 1 by A2;
-   then 0 < 1-r by REAL_1:86;
+   then 0 < 1-r by XREAL_1:22;
    then (1-r)*Cl(C) = Cl((1-r)*C) by Th53;
    hence r*Cl(C) + (1-r)*Cl(C) c= Cl(C) by A3,A4,A5,XBOOLE_1:1;
   end;
@@ -3193,15 +3130,15 @@ A5:  Cl(r*C) = r*Cl(C) by A1,Th53;
 end;
 
 registration
-  let X be non empty LinearTopSpace, C be convex Subset of X;
+  let X be LinearTopSpace, C be convex Subset of X;
   cluster Cl C -> convex;
   coherence by Lm19;
 end;
 
 Lm20:
- for X being non empty LinearTopSpace, C being convex Subset of X
+ for X being LinearTopSpace, C being convex Subset of X
   holds Int C is convex
-proof let X be non empty LinearTopSpace, C be convex Subset of X;
+proof let X be LinearTopSpace, C be convex Subset of X;
   now
    let r be Real such that
 A1:  0 < r and
@@ -3212,7 +3149,7 @@ A3:  Int(r*C + (1-r)*C) c= Int(C) by TOPS_1:48;
 A4:  Int(r*C) + Int((1-r)*C) c= Int(r*C + (1-r)*C) by Th62;
 A5:  Int(r*C) = r*Int(C) by A1,Th52;
    0+r < 1 by A2;
-   then 0 < 1-r by REAL_1:86;
+   then 0 < 1-r by XREAL_1:22;
    then (1-r)*Int(C) = Int((1-r)*C) by Th52;
    hence r*Int(C) + (1-r)*Int(C) c= Int(C) by A3,A4,A5,XBOOLE_1:1;
   end;
@@ -3220,16 +3157,16 @@ A5:  Int(r*C) = r*Int(C) by A1,Th52;
 end;
 
 registration
-  let X be non empty LinearTopSpace, C be convex Subset of X;
+  let X be LinearTopSpace, C be convex Subset of X;
   cluster Int C -> convex;
   coherence by Lm20;
 end;
 
 Lm21:
- for X being non empty LinearTopSpace, B being circled Subset of X
+ for X being LinearTopSpace, B being circled Subset of X
   holds Cl B is circled
  proof
-   let X be non empty LinearTopSpace, B be circled Subset of X;
+   let X be LinearTopSpace, B be circled Subset of X;
   let r be Real such that
 A1:  abs(r) <= 1;
  per cases;
@@ -3261,17 +3198,17 @@ A5:   r <> 0;
 end;
 
 registration
- let X be non empty LinearTopSpace, B be circled Subset of X;
+ let X be LinearTopSpace, B be circled Subset of X;
  cluster Cl B -> circled;
  coherence by Lm21;
 end;
 
 theorem
- for X being non empty LinearTopSpace, B being circled Subset of X
+ for X being LinearTopSpace, B being circled Subset of X
    st 0.X in Int B
   holds Int B is circled
  proof
-   let X be non empty LinearTopSpace, B be circled Subset of X such that
+   let X be LinearTopSpace, B be circled Subset of X such that
 A1: 0.X in Int B;
   let r be Real such that
 A2:   abs(r) <= 1;
@@ -3289,9 +3226,9 @@ A3:  Int(r*B) c= Int(B) by TOPS_1:48;
  end;
 
 Lm22:
- for X being non empty LinearTopSpace, E being bounded Subset of X
+ for X being LinearTopSpace, E being bounded Subset of X
   holds Cl E is bounded
- proof let X be non empty LinearTopSpace, E be bounded Subset of X;
+ proof let X be LinearTopSpace, E be bounded Subset of X;
   let V be a_neighborhood of 0.X;
   consider W be a_neighborhood of 0.X such that
 A1:  Cl W c= V by Th60;
@@ -3314,19 +3251,19 @@ A6:  Cl(t*W) = t*Cl(W) by Th53;
  end;
 
 registration
- let X be non empty LinearTopSpace, E be bounded Subset of X;
+ let X be LinearTopSpace, E be bounded Subset of X;
  cluster Cl E -> bounded;
  coherence by Lm22;
 end;
 
 Lm23:
-  for X being non empty LinearTopSpace, U,V being a_neighborhood of 0.X,
+  for X being LinearTopSpace, U,V being a_neighborhood of 0.X,
       F being Subset-Family of X, r being positive Real
     st (for s being Real st abs(s) < r holds s*V c= U) &
      F = {a*V where a is Real: abs(a) < r}
    holds union F is a_neighborhood of 0.X & union F is circled &
     union F c= U
- proof let X be non empty LinearTopSpace, U,V be a_neighborhood of 0.X,
+ proof let X be LinearTopSpace, U,V be a_neighborhood of 0.X,
       F be Subset-Family of X, r be positive Real such that
 A1:    for s being Real st abs(s) < r holds s*V c= U and
 A2:    F = {a*V where a is Real: abs(a) < r};
@@ -3336,7 +3273,7 @@ A2:    F = {a*V where a is Real: abs(a) < r};
       set F' = {a*Int(V) where a is non zero Real: abs(a) < r};
       consider a being real number such that
 A3:    0 < a and
-A4:    a < r by REAL_1:75;
+A4:    a < r by XREAL_1:7;
       reconsider a as Real by XREAL_0:def 1;
 A5:    abs(a) < r by A3,A4,ABSVALUE:def 1;
 A6:     0.X in Int(V) by CONNSP_2:def 1;
@@ -3352,7 +3289,7 @@ A8:     0.X in union F' by A7,TARSKI:def 4;
          then A c= the carrier of X;
         hence thesis;
        end;
-      then F' is Subset-Family of the carrier of X;
+      then F' is Subset-Family of X;
       then reconsider F' as Subset-Family of X;
       F' is open
        proof
@@ -3415,10 +3352,10 @@ A29:      abs(s)*r <= r by A18,REAL_2:147;
       per cases;
        suppose 0 <> abs(s);
         then s <> 0 by ABSVALUE:7;
-        then 0 < abs(s) by ABSVALUE:6;
-        then abs(s)*abs(a) < abs(s) * r by A25,REAL_1:70;
-        then abs(s)*abs(a) < r by A29,AXIOMS:22;
-        then abs(s*a) < r by ABSVALUE:10;
+        then 0 < abs(s) by COMPLEX1:133;
+        then abs(s)*abs(a) < abs(s) * r by A25,XREAL_1:70;
+        then abs(s)*abs(a) < r by A29,XREAL_1:2;
+        then abs(s*a) < r by COMPLEX1:151;
         then s*a*V in F by A2;
         hence z in W by A28,TARSKI:def 4;
        end;
@@ -3446,9 +3383,9 @@ A34:    abs(a) < r by A2,A32;
  end;
 
 theorem Th65:
-  for X being non empty LinearTopSpace, U being a_neighborhood of 0.X
+  for X being LinearTopSpace, U being a_neighborhood of 0.X
    ex W being a_neighborhood of 0.X st W is circled & W c= U
- proof let X be non empty LinearTopSpace, U be a_neighborhood of 0.X;
+ proof let X be LinearTopSpace, U be a_neighborhood of 0.X;
    0.X = 0*0.X by RLVECT_1:23;
    then consider r being positive Real, V being a_neighborhood of 0.X such that
 A1: for s being Real st abs(s-0) < r holds s*V c= U by Th33;
@@ -3460,7 +3397,7 @@ A1: for s being Real st abs(s-0) < r holds s*V c= U by Th33;
       then A c= the carrier of X;
       hence thesis;
     end;
-    then F is Subset-Family of the carrier of X;
+    then F is Subset-Family of X;
     then reconsider F as Subset-Family of X;
     take W = union F;
     now
@@ -3473,10 +3410,10 @@ A1: for s being Real st abs(s-0) < r holds s*V c= U by Th33;
  end;
 
 theorem Th66:
-  for X being non empty LinearTopSpace, U being a_neighborhood of 0.X
+  for X being LinearTopSpace, U being a_neighborhood of 0.X
     st U is convex
    ex W being a_neighborhood of 0.X st W is circled convex & W c= U
- proof let X be non empty LinearTopSpace, U be a_neighborhood of 0.X such that
+ proof let X be LinearTopSpace, U be a_neighborhood of 0.X such that
 A1:  U is convex;
    set V = U /\ -U;
 A2:   -U = (-1)*U by Def4;
@@ -3506,7 +3443,7 @@ A12:   0.X in U by CONNSP_2:6;
      suppose
 A13:    r < 0;
 A14:    -r <= 1 by A4,A13,ABSVALUE:def 1;
-A15:    -0 <= -r by A13,REAL_1:50;
+A15:    -0 <= -r by A13,XREAL_1:26;
       then (-r)*v + (1--r)*0.X in -U by A3,A8,A11,A14,Def1;
       then (-r)*v + 0.X in -U by RLVECT_1:23;
       then (-r)*v in -U by RLVECT_1:def 7;
@@ -3544,9 +3481,9 @@ A21:    r*v in U by RLVECT_1:def 7;
  end;
 
 theorem
-  for X being non empty LinearTopSpace
+  for X being LinearTopSpace
    ex P being local_base of X st P is circled-membered
- proof let X be non empty LinearTopSpace;
+ proof let X be LinearTopSpace;
    defpred P[Subset of X] means $1 is circled;
    consider P being Subset-Family of X such that
 A1:   for V being Subset of X holds V in P iff P[V]
@@ -3569,10 +3506,10 @@ A3:      W c= V by Th65;
  end;
 
 theorem
-  for X being non empty LinearTopSpace
+  for X being LinearTopSpace
     st X is locally-convex
    ex P being local_base of X st P is convex-membered
- proof let X be non empty LinearTopSpace such that
+ proof let X be LinearTopSpace such that
 A1:   X is locally-convex;
    defpred P[Subset of X] means $1 is circled convex;
    consider P being Subset-Family of X such that
@@ -3600,4 +3537,3 @@ A7:      W c= U by Th66;
   assume V in P;
   hence V is convex by A2;
  end;
-  

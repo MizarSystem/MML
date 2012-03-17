@@ -1,0 +1,1366 @@
+:: A Theory of Sequential Files
+::  by Hirofumi Fukura and Yatsuka Nakamura
+::
+:: Received August 12, 2005
+:: Copyright (c) 2005 Association of Mizar Users
+
+environ
+
+ vocabularies FILEREC1, FINSEQ_8, ARYTM_1, RELAT_1, FINSEQ_1, FUNCT_1,
+      FINSEQ_4, FINSEQ_5, BOOLE, RFINSEQ, JORDAN3;
+ notations XREAL_0, TARSKI, XBOOLE_0, SUBSET_1, REAL_1, NAT_1, BINARITH,
+      RELAT_1, RFINSEQ, FINSEQ_1, FUNCT_1, FUNCT_2, FINSEQ_4, JORDAN3,
+      FINSEQ_5, FINSEQ_8;
+ constructors GOBOARD9, BINARITH, TOPREAL2, REAL_1, RFINSEQ, JORDAN3, FINSEQ_8,
+      POLYNOM1, CQC_LANG;
+ registrations ARYTM_3, XREAL_0, RELSET_1, FINSEQ_1, FINSEQ_5;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+ theorems REAL_1, NAT_1, NAT_2, REVROT_1, JORDAN3, JORDAN4, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, FINSEQ_5, FINSEQ_6, BINARITH, RFINSEQ, FUNCT_2, AMI_5,
+      XCMPLX_1, FINSEQ_8, SPRECT_3, GENEALG1, TOPREAL3, CALCUL_1, FINSEQ_3,
+      XREAL_1;
+
+begin
+
+ reserve a,b,c for set;
+
+theorem FU30conc:
+  for D be non empty set,p,q,r,s being FinSequence of D holds
+    p^q^r^s=p^(q^r)^s & p^q^r^s=(p^q)^(r^s) & p^(q^r)^s=(p^q)^(r^s)
+proof let D be non empty set,p,q,r,s be FinSequence of D;
+  p^q^r^s=(p^q)^(r^s) by FINSEQ_1:45;
+  hence thesis by FINSEQ_1:45;
+end;
+
+theorem S01:
+  for D being set, f being FinSequence of D holds
+    f|(len f) = f
+proof
+  let D be set, f be FinSequence of D;
+  f|len f = f|(Seg len f) by FINSEQ_1:def 15;
+  hence f = f|len f by FINSEQ_2:23;
+end;
+
+theorem FU30a:
+  for D being non empty set,p,q being FinSequence of D st
+    len p=0 holds q = p ^ q
+proof let D be non empty set,p,q be FinSequence of D;
+  assume len p = 0; then
+  p = <*>D by FINSEQ_1:32
+   .= {};
+  hence q = p ^ q by FINSEQ_1:47;
+end;
+
+theorem SR5:
+  for D being non empty set,f being FinSequence of D,n,m being Nat st
+    n<=m holds len (f/^m)<=len (f/^n)
+proof let D be non empty set,f be FinSequence of D,n,m be Nat;
+ assume A1: n<=m; then
+ A11a: n-n<=m-n by XREAL_1:11;
+B01: len (f/^m) = len f -' m by JORDAN3:19;
+B10: len (f/^n) - len (f/^m) = len f -' n - (len f -' m) by B01,JORDAN3:19;
+  now per cases;
+  suppose C01: len f <= n; then
+    C011: len f <= m by A1,XREAL_1:2;
+    len f -' n - (len f -' m) = len f -' n - 0 by C011,NAT_2:10
+                             .= 0 by C01,NAT_2:10;
+    hence len (f/^n) - len (f/^m) >= 0 by B01,JORDAN3:19;
+  end;
+  suppose C050a: len f > n; then
+    C051a: len f - n >= n-n by XREAL_1:11;
+    per cases;
+    suppose len f <= m; then
+      len f -' n - (len f -' m) = len f -' n - 0 by NAT_2:10
+                               .= len f -' n;
+      hence len (f/^n) - len (f/^m) >= 0 by C051a,BINARITH:def 3,B10;
+    end;
+    suppose len f > m;then
+      len f-'n-(len f-'m)= len f-'n-(len f-m) by BINARITH:50
+                        .= len f-n-(len f-m) by C050a,BINARITH:50
+                        .= m-n;
+      hence len (f/^n) - len (f/^m) >= 0 by B01,JORDAN3:19,A11a;
+    end;
+  end;
+  end;
+ then len (f/^n) - len (f/^m) + len (f/^m) >= 0 + len (f/^m) by XREAL_1:8;
+ hence len (f/^m)<=len (f/^n);
+end;
+
+theorem SR6:
+  for D being non empty set,f,g being FinSequence of D st
+    len g>=1 holds mid(f^g,len f+1,len f+len g)=g
+proof let D be non empty set,f,g be FinSequence of D;
+  assume A1: len g>=1;
+B01a: g|len g=g|(Seg len g) by FINSEQ_1:def 15;
+  per cases;
+  suppose C1: len f+1<=len f+len g;then
+C11: len f < len f+len g by NAT_1:38;then
+   len f-len f < len f+len g-len f by REAL_1:92;then
+C13: len f+len g-'len f=len g by BINARITH:def 3;
+  mid(f^g,len f+1,len f+len g)=((f^g)/^(len f+1-'1))|(len f+len g-'(len f+1)+1)
+     by C1,JORDAN3:def 1
+  .=((f^g)/^len f)|(len f+len g-'(len f+1)+1) by BINARITH:39
+  .=((f^g)/^len f)|(len f+len g-'len f) by C11,NAT_2:9
+  .=g|len g by C13,FINSEQ_5:40;
+ hence mid(f^g,len f+1,len f+len g)=g by B01a,FINSEQ_2:23;
+end;
+suppose len f+1>len f+len g;then
+  len f+1-len f>len f+len g-len f by REAL_1:92;
+  hence mid(f^g,len f+1,len f+len g)=g by A1;
+end;
+end;
+
+theorem SR6b:
+  for D being non empty set,f,g being FinSequence of D, i,j being Nat st
+    1<=i & i<=j & j<=len f holds mid(f^g,i,j)=mid(f,i,j)
+proof let D be non empty set,f,g be FinSequence of D,i,j be Nat;
+ assume A1: 1<=i & i<=j & j<=len f;then
+AA1a: j-i>=i-i by XREAL_1:11;
+ len f-i>=j-i by A1,XREAL_1:11;then
+AA21a: len f-i+1>=j-i+1 by XREAL_1:8;
+  len f>=i by A1,XREAL_1:2;then
+      len f-0 >=i-1 by REAL_1:92; then
+AA4:  len f >=i-'1 by A1,BINARITH:50;
+AA45: len (f/^(i-'1))+(i-1)-(i-1)=len (f/^(i-'1));
+ len (f/^(i-'1))+(i-'1)=len f-'(i-'1)+(i-'1) by JORDAN3:19
+                      .=len f by AA4,AMI_5:4;then
+ len (f/^(i-'1))=len f-(i-1) by AA45,A1,BINARITH:50
+               .=len f-i+1;then
+AA5: len (f/^(i-'1))>=j-'i+1 by AA21a,AA1a,BINARITH:def 3;
+ C01: i-'1<=i by BINARITH:52;
+     i<=len f by A1,XREAL_1:2; then
+ C1: i-'1<=len f by C01,XREAL_1:2;
+ mid(f^g,i,j) = ((f^g)/^(i-'1))|(j-'i+1) by A1,JORDAN3:def 1
+             .= ((f/^(i-'1))^g)|(j-'i+1) by C1,GENEALG1:1
+             .= (f/^(i-'1))|(j-'i+1) by AA5,FINSEQ_5:25;
+ hence mid(f^g,i,j)=mid(f,i,j) by A1,JORDAN3:def 1;
+end;
+
+theorem
+  for D being non empty set,f being FinSequence of D, i,j,n being Nat st
+    1<=i & i<=j & i<=len (f|n) & j<=len (f|n) holds
+      mid(f,i,j)=mid(f|n,i,j)
+proof let D be non empty set,f be FinSequence of D,i,j,n be Nat;
+  assume A1: 1<=i & i<=j & i<=len (f|n) & j<=len (f|n);
+B1: len (f|n) <= n by FINSEQ_5:19;
+C1: i-'1 = i-1 by A1,BINARITH:50;
+    n>=i by A1,B1,XREAL_1:2; then
+    n-0>=i-1 by REAL_1:92; then
+D1: n-'(i-'1) = n-(i-1) by C1,BINARITH:50
+                 .= n-i+1;
+D2: j-'i+1 = j-i+1 by A1,BINARITH:50;
+    j<=n by A1,B1,XREAL_1:2; then
+    j-i <= n-i by XREAL_1:11; then
+D3: j-i+1<=n-i+1 by XREAL_1:8;
+    mid(f|n,i,j)= ((f|n)/^(i-'1))|(j-'i+1) by A1,JORDAN3:def 1
+               .= ((f/^(i-'1))|(n-'(i-'1)))|(j-'i+1) by JORDAN3:21
+               .= (f/^(i-'1))|(j-'i+1) by D1,D2,D3,JORDAN4:15;
+    hence thesis by A1,JORDAN3:def 1;
+end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a*> holds a in D
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a*>;then
+A2: len f=1 & f.1=a by FINSEQ_1:57;
+    1<=len f by A1,FINSEQ_1:57;then
+A2b: 1 in dom f by FINSEQ_3:27;
+  f is Function of dom f,D by FINSEQ_2:30;
+  hence thesis by A2,A2b,FUNCT_2:7;
+end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b*> holds a in D & b in D
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a,b*>;then
+  A2: len f=2 & f.1=a & f.2=b by FINSEQ_1:61;
+  A2b: 1 in dom f & 2 in dom f by A1,CALCUL_1:14;
+  f is Function of dom f,D by FINSEQ_2:30;
+  hence thesis by A2,A2b,FUNCT_2:7;
+end;
+
+theorem F02b:
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b,c*> holds a in D & b in D & c in D
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a,b,c*>;then
+A2: len f=3 & f.1=a & f.2=b & f.3=c by FINSEQ_1:62;
+A2b: 1 in dom f & 2 in dom f & 3 in dom f by A1,TOPREAL3:6;
+  f is Function of dom f,D by FINSEQ_2:30;
+  hence thesis by A2,A2b,FUNCT_2:7;
+end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a*> holds f|1=<*a*>
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a*>;then
+  len f <=1 by FINSEQ_1:57;
+  hence f|1=<*a*> by FINSEQ_1:79,A1;
+end;
+
+theorem :: FINSEQ_6:50
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b*> holds f/^1=<*b*>
+  proof let D be non empty set,f be FinSequence of D;
+    assume A1: f = <*a,b*>;then
+A2: len f=2 & f.1=a & f.2=b by FINSEQ_1:61;
+A3b:1 in dom f & 2 in dom f by A1,CALCUL_1:14;
+    f is Function of (dom f),D by FINSEQ_2:30;then
+    reconsider a2=a, b2=b as Element of D by A2,FUNCT_2:7,A3b;
+    f/^1 = <*a2,b2*>/^1 by A1
+        .= <*b2*> by FINSEQ_6:50;
+    hence thesis;
+  end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b,c*> holds f|1=<*a*>
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a,b,c*>;
+  f|1 = f|Seg 1 by FINSEQ_1:def 15
+     .= <*a*> by A1,FINSEQ_6:6;
+  hence f|1=<*a*>;
+end;
+
+theorem F02d32:
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b,c*> holds f|2=<*a,b*>
+proof let D be non empty set,f be FinSequence of D;
+  assume A1: f=<*a,b,c*>;
+  f|2 = f|Seg 2 by FINSEQ_1:def 15
+     .= <*a,b*> by A1,FINSEQ_6:7;
+  hence f|2=<*a,b*>;
+end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b,c*> holds f/^1=<*b,c*>
+  proof let D be non empty set,f be FinSequence of D;
+    assume A1: f = <*a,b,c*>;then
+    reconsider a2=a,b2=b,c2=c as Element of D by F02b;
+    len f=3 & f.1=a2 & f.2=b2 & f.3=c2 by FINSEQ_1:62,A1;
+   hence thesis by A1,FINSEQ_6:51;
+  end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st
+    f=<*a,b,c*> holds f/^2=<*c*>
+  proof let D be non empty set,f be FinSequence of D;
+    assume A1: f = <*a,b,c*>;then
+    reconsider a2=a,b2=b,c2=c as Element of D by F02b;
+    f/^2 = (<*a2*>^<*b2,c2*>)/^(1+1) by A1,FINSEQ_1:60
+        .= (<*a2*>^<*b2,c2*>)/^(len <*a2*> +1) by FINSEQ_1:57
+        .= <*b2,c2*>/^1 by FINSEQ_5:39
+        .= <*c2*> by FINSEQ_6:50;
+   hence thesis;
+  end;
+
+theorem
+  for D being non empty set,f being FinSequence of D st len f=0 holds
+    Rev f=f
+proof let D be non empty set,f be FinSequence of D;
+  assume len f=0; then
+A2: f =<*>D by FINSEQ_1:32
+       .= {};
+  Rev (<*>D)=<*>D;
+  hence Rev f=f by A2;
+end;
+
+theorem FU199:
+  for D being non empty set, r being FinSequence of D,i being Nat st
+    i<=len r holds Rev(r/^i)=(Rev r)|(len r-'i)
+proof let D be non empty set,r be FinSequence of D,i be Nat;
+  assume A1:  i<=len r;then
+  len r -i>=0 by XREAL_1:50;then
+A3: len r-i=len r -'i by BINARITH:def 3;
+  set s=Rev r;
+  len r-'i<=len r by JORDAN3:13;then
+  len r-'i<=len s by FINSEQ_5:def 3; then
+A6: len s-'i <= len s by FINSEQ_5:def 3;
+A7: len (s|((len r)-'i)) = len (s|((len s)-'i)) by FINSEQ_5:def 3
+                      .= len s -'i by A6,FINSEQ_1:80;
+A2: len Rev(r/^i)= len (r/^i) by FINSEQ_5:def 3
+  .=len r-'i by JORDAN3:19
+  .=len (s|((len r)-'i)) by A7,FINSEQ_5:def 3;
+  for k being Nat st 1<=k & k<=len Rev(r/^i) holds
+   (Rev(r/^i)).k= (s|((len r)-'i)).k
+   proof let k be Nat;assume
+     B1: 1<=k & k<=len Rev(r/^i);then
+     k in dom Rev(r/^i) by FINSEQ_3:27;then
+     B3: (Rev(r/^i)).k = (r/^i).(len (r/^i) -k+1) by FINSEQ_5:def 3
+                  .=(r/^i).(len r -i-k+1) by RFINSEQ:def 2,A1;
+       1<=k & k<=len (r/^i) by B1,FINSEQ_5:def 3;then
+B4:   1<=k & k<=len r -i by RFINSEQ:def 2,A1;then
+B7:   len r-'i-k>=0 by A3,XREAL_1:50;then
+B6:   len r -'i-'k=len r-'i-k by BINARITH:def 3;then
+B8:   len r -'i-'k +1>=0+1 by B7,XREAL_1:9;
+      k-1>=0 by B1,XREAL_1:50;then
+      len r-i+0<=len r-i+(k-1) by XREAL_1:9;then
+      len r-i-(k-1)<=len r-i+(k-1)-(k-1) by XREAL_1:11;then
+      len r-'i-'k+1<=len (r/^i) by RFINSEQ:def 2,A1,B6,A3;then
+      len r -i-k+1 in Seg len (r/^i) by B8,B6,FINSEQ_1:3,A3;then
+B9:   len r -i-k+1 in dom (r/^i) by FINSEQ_1:def 3;
+B20:  i+(len r -'i-'k+1)=i+(len r-i-k+1) by B7,BINARITH:def 3,A3
+                       .=len r-i+i-k+1;
+      0<=i by NAT_1:18;then
+      len r+0<=len r +i by XREAL_1:9;then
+      len r-i<=len r+i-i by XREAL_1:11;then
+      len (r/^i)<=len r by A1,RFINSEQ:def 2;then
+      len (Rev(r/^i))<=len r by FINSEQ_5:def 3;then
+B11:  k<=len r by B1,XREAL_1:2;then
+B12a: len r-k>=0 by XREAL_1:50;then
+B12:  len r-k=len r-'k by BINARITH:def 3;
+      k<k+1 by NAT_1:38;then
+      k-1<k+1-1 by XREAL_1:11;then
+      k-1<len r by B11,XREAL_1:2;then
+      len r-(k-1)>0 by XREAL_1:52;then
+      len r-k+1>0;then
+      len r-'k+1>0 by B12a,BINARITH:def 3;then
+B13:  len r-k+1>=0+1 by B12,NAT_1:38;
+      k-1>=0 by B1,XREAL_1:50;then
+      len r+0<=len r+(k-1) by XREAL_1:9;then
+      len r-(k-1)<=len r+(k-1)-(k-1) by XREAL_1:11;then
+      len r-k+1<=len r;then
+      len r-'k+1<=len r by B12a,BINARITH:def 3;then
+B14:  len r-k+1 in dom r by B13,B12,FINSEQ_3:27;
+B18:  r=r/^0 by FINSEQ_8:2;
+B30:  (r/^i).(len r -i-k+1)
+         = (r/^i)/.(len r -'i-'k+1) by B9,B6,A3,FINSEQ_4:def 4
+        .=(r/^0) /. (i+(len r -'i-'k+1)) by B18,B9,B6,A3,FINSEQ_5:30
+        .=r.(len r-k+1) by B20,B18,FINSEQ_4:def 4,B14;
+        k in dom r by B1,B11,FINSEQ_3:27; then
+B15:    k in dom Rev r by FINSEQ_5:60;
+        k<=len r-'i by B4,BINARITH:def 3;then
+       (s|((len r)-'i)).k=(Rev r).k by JORDAN3:20
+                            .=r.(len r-k+1) by FINSEQ_5:def 3,B15;
+    hence (Rev(r/^i)).k= (s|((len r)-'i)).k by B30,B3;
+   end;
+  hence Rev(r/^i)=(Rev r)|(len r-'i) by A2,FINSEQ_1:18;
+end;
+
+theorem SS0:
+  for D being non empty set,f,CR being FinSequence of D st
+    not CR is_substring_of f,1 & CR separates_uniquely holds
+      instr(1,f^CR,CR)=len f +1
+proof let D be non empty set,f,CR be FinSequence of D;
+  assume A1: not (CR is_substring_of f,1) & CR separates_uniquely;then
+   A3: len CR>0 & not (ex i being Nat st 1<=i & i<=len f
+   & mid(f,i,(i-'1)+len CR)=CR) by FINSEQ_8:def 7;
+A4: len CR>=0+1 by NAT_1:38,A3;
+SS6: (f^CR)/^(len f)=CR by FINSEQ_5:40;
+SS7: CR is_preposition_of CR by FINSEQ_8:25;
+  for j being Nat st j >= 1 & j > 0
+   & CR is_preposition_of (f^CR)/^(j-'1) holds j >= len f+1
+   proof let j be Nat;
+     assume SA0: j >= 1 & j > 0 & (CR is_preposition_of (f^CR)/^(j-'1));then
+S3a:   len CR>0 implies 1<=len ((f^CR)/^(j-'1))
+       & mid((f^CR)/^(j-'1),1,len CR)=CR by FINSEQ_8:def 8;
+S39:   0+j<len CR +j by XREAL_1:10,A3;then
+       j+1<=len CR+j by NAT_1:38;then
+S38:   j<=len CR+j-1 by XREAL_1:21;
+       1<=len CR +j by S39,SA0,XREAL_1:2;then
+S40a:  len CR +j -1>=0 by XREAL_1:50;then
+S40:   len CR+j-'1=len CR+j-1 by BINARITH:def 3;
+       len CR-1>=0 by A4,XREAL_1:50;then
+       len CR-'1=len CR-1 by BINARITH:def 3;then
+       j<=len CR -1+j by NAT_1:37;then
+       len CR+j-'1-j>=0 by S40,XREAL_1:50;then
+       ((len CR+j-'1)-'j+1)=len CR+j-1-j+1 by BINARITH:def 3,S40
+       .=len CR;then
+D50a:  ((f^CR)/^(j-'1))|((len CR+j-'1)-'j+1)=CR by S3a,A4,JORDAN3:25;
+       set i0=len f+1,j0=i0+len CR -'1;
+S11:   i0+len CR-'1=len f+len CR+1-'1
+                  .=len f+len CR by BINARITH:39;
+S10:   i0<=i0+len CR -'1 by S11,A4,XREAL_1:9;
+       j0= len CR+len f +1-'1 .=len CR+len f by BINARITH:39;then
+       mid(f^CR,i0,i0+len CR-'1)=CR by A4,SR6;then
+S12:   smid(f^CR,i0,i0+len CR-'1)=CR by FINSEQ_8:6,S10;
+S8a:   j-1>=0 by SA0,XREAL_1:50;then
+S8:    j-'1=j-1 by BINARITH:def 3;
+       1<=j+len CR by SA0,NAT_1:37;then
+       j+len CR-1>=0 by XREAL_1:50;then
+S4:    j+len CR-'1=j+len CR-1 by BINARITH:def 3;
+S6:    len CR>0 implies len CR>=0+1 by NAT_1:38;then
+       j+len CR>=j+1 by XREAL_1:9,A1,FINSEQ_8:def 7;then
+S9a:   j+len CR-1>=j+1-1 by XREAL_1:11;
+       j+len CR>=j+1 by A1,FINSEQ_8:def 7,XREAL_1:9,S6;then
+S20a:  j+len CR-1>=j+1-1 by XREAL_1:11;
+       j-'1+len CR=j-1+len CR by S8a,BINARITH:def 3
+                 .=len CR+j-'1 by S40a,BINARITH:def 3;then
+S10:   mid(f^CR,j,j-'1+len CR)=CR by D50a,S40,S38,JORDAN3:def 1;
+       j-'1+len CR=j-1+len CR by S8a,BINARITH:def 3 .=j+len CR -1;then
+S13:   smid(f^CR,j,j+len CR-'1)=CR by FINSEQ_8:6,S10,S4,S20a;
+       now assume T0: j<i0;then
+T1a:     i0-j>0 by XREAL_1:52;
+         1<=j & j<i0 & i0+len CR-'1<=len (f^CR) by SA0,T0,S11,FINSEQ_1:35;then
+T3:      i0-'j>=len CR by FINSEQ_8:def 6,A1,S13,S12;
+         i0-'j =len f+1-j by BINARITH:def 3,T1a;then
+         len f+1-j+j>=len CR+j by T3,XREAL_1:9;then
+         len f+1-1>=j+len CR-1 by XREAL_1:11;then
+         mid(f,j,(j-'1)+len CR)=CR by S10,SR6b,SA0,S9a,S8;then
+         j>len f by A1,FINSEQ_8:def 7,SA0;
+         hence contradiction by T0,NAT_1:38;
+       end;
+      hence j >= len f+1;
+    end;then
+   (len f+1 <> 0 implies
+   1 <= len f+1 & CR is_preposition_of (f^CR)/^(len f+1-'1) &
+   for j being Nat st j >= 1 & j > 0 &
+   CR is_preposition_of (f^CR)/^(j-'1) holds j >= len f+1) &
+    (len f+1=0 implies not CR is_substring_of f^CR,1)
+     by NAT_1:29,BINARITH:39,SS6,SS7;
+  hence instr(1,f^CR,CR)=len f +1 by FINSEQ_8:def 10;
+end;
+
+theorem
+  for D being non empty set,f,g being FinSequence of D holds
+    g is_preposition_of (f^g)/^len f
+proof let D be non empty set,f,g be FinSequence of D;
+  (f^g)/^len f=g by FINSEQ_5:40;
+  hence g is_preposition_of (f^g)/^len f by FINSEQ_8:25;
+end;
+
+theorem
+  for D being non empty set,f,CR being FinSequence of D st
+    not (CR is_substring_of f,1) & CR separates_uniquely holds
+      f^CR is_terminated_by CR
+proof let D be non empty set,f,CR be FinSequence of D;
+  assume A1: not (CR is_substring_of f,1) & CR separates_uniquely;
+  len CR<=len f+len CR by NAT_1:37;then
+A2:len CR <=len (f^CR) by FINSEQ_1:35;
+  len (f^CR) + 1 -'len CR=len f+len CR +1-'len CR by FINSEQ_1:35
+                         .=len CR+(len f+1)-'len CR
+                         .=len f+1 by BINARITH:39;
+  then instr(1,f^CR,CR)=len (f^CR) + 1 -'len CR by SS0,A1;
+  hence f^CR is_terminated_by CR by A2,FINSEQ_8:def 12;
+end;
+
+::==========================================================================
+::  file and record
+::==========================================================================
+
+notation let D be set;
+  synonym File of D for FinSequence of D;
+end;
+
+definition let D be non empty set,
+               r,f,CR be File of D;
+  pred r is_a_record_of f,CR means :record:
+    (CR^r is_substring_of addcr(f,CR),1 or
+    r is_preposition_of addcr(f,CR)) &
+    r is_terminated_by CR;
+end;
+
+theorem SS80D:
+  for D being non empty set,r being FinSequence of D holds
+    ovlpart(<*>D,r)=<*>D & ovlpart(r,<*>D)=<*>D
+proof let D be non empty set,r be FinSequence of D;
+  <*>D^r=r & r^<*>D=r by FINSEQ_1:47;
+  hence ovlpart(<*>D,r)=<*>D & ovlpart(r,<*>D)=<*>D by FINSEQ_8:16;
+end;
+
+theorem SS80:
+  for D being non empty set,CR being FinSequence of D holds
+    CR is_a_record_of <*>D,CR
+proof let D be non empty set,CR be FinSequence of D;
+  addcr(<*>D,CR)=ovlcon(<*>D,CR) by FINSEQ_8:def 11
+             .=<*>D^(CR/^(len ovlpart(<*>D,CR))) by FINSEQ_8:def 3
+             .=<*>D^(CR/^(len <*>D)) by SS80D
+             .=<*>D^(CR/^0) by FINSEQ_1:32
+             .=(CR/^0) by FINSEQ_1:47
+             .=CR by FINSEQ_5:31;
+then AA2: CR is_preposition_of addcr(<*>D,CR) by FINSEQ_8:25;
+          CR is_terminated_by CR by FINSEQ_8:35;
+  hence CR is_a_record_of <*>D,CR by record,AA2;
+end;
+
+theorem
+  for D being non empty set,a,b be set,f,r,CR being File of D st
+    a <> b & D = {a,b} & CR = <*b*> & f = <*b,a,b*> & r = <*a,b*> holds
+      CR is_a_record_of f,CR & r is_a_record_of f,CR
+proof let D be non empty set,a,b be set,f,r,CR be File of D;
+  assume A1: a <> b & D = {a,b} & CR = <*b*> & f = <*b,a,b*> & r = <*a,b*>;
+  then reconsider b2=b,a2=a as Element of D by F02b;
+A2c: CR.1=b by A1,FINSEQ_1:def 8;
+A11: f=CR^r by A1,FINSEQ_1:60;
+L1: len CR = 1 by A1,FINSEQ_1:57;
+L2: len f = len CR + len r by A11,FINSEQ_1:35
+           .= 1 + len <*a,b*> by A1,FINSEQ_1:57
+           .= 1 + 2 by FINSEQ_1:61
+           .= 3;
+L3: len r = 2 by A1,FINSEQ_1:61;
+
+s030:
+  f =<*b,a*>^<*b*> by A1,FINSEQ_1:60
+   .=(f|2)^CR by F02d32,A1;
+  ovlpart(f,CR)=CR by s030,FINSEQ_8:16;
+  then CR/^(len ovlpart(f,CR))={} by REVROT_1:2;
+  then f^(CR/^(len ovlpart(f,CR)))=f by FINSEQ_1:47;
+  then ACR01a: ovlcon(f,CR)=f by FINSEQ_8:def 3;
+  mid(f,1,len CR) = (f/^(1-'1))|(1-'1+1) by L1,JORDAN3:def 1
+                     .= (f/^(1-'1))|(1+(0)) by NAT_2:10
+                     .= (f/^(0))|1 by BINARITH:39
+                     .= (f)|1 by FINSEQ_5:31
+                     .= (<*b2,a2,b2*>)|Seg 1 by A1,FINSEQ_1:def 15
+                     .= CR by A1,FINSEQ_6:6;
+  then 1<= len f & CR is_preposition_of f by L2,FINSEQ_8:def 8;
+  then CRPRE2: 1<= len f & CR is_preposition_of addcr(f,CR)
+                      by ACR01a,FINSEQ_8:def 11;
+  1<= len f & CR^r is_substring_of f,1 by A11,FINSEQ_8:22,L2;
+  then CRRSUB2: 1<= len f & CR^r is_substring_of addcr(f,CR),1
+    by ACR01a,FINSEQ_8:def 11;
+R01: r/^(2-'1) = r/^(1+1-'1)
+           .= <*a2,b2*>/^1 by A1,BINARITH:39
+           .= CR by A1,FINSEQ_6:50;
+R01c: r/^(1-'1)=r/^(0+1-'1) .=r/^0 by BINARITH:39 .=r by FINSEQ_8:2;
+T12: len CR=1 by A1,FINSEQ_1:57;
+   (r/^(1-'1)).1=a by R01c,A1,FINSEQ_1:61;then
+T10: not (CR is_preposition_of (r/^(1-'1))) by T12,A2c,A1,FINSEQ_8:27;
+  1<=len CR & mid(CR,1,len CR) = CR by L1,JORDAN3:29;
+  then TRM2: 2<=2 & CR is_preposition_of r/^(2-'1) by R01,FINSEQ_8:def 8;
+  for j being Nat st j >= 1 & j > 0
+   & (CR is_preposition_of r/^(j-'1)) holds j >= 2
+   proof let j be Nat;
+    assume W1: j >= 1 & j > 0 & CR is_preposition_of r/^(j-'1);
+    j>1 by T10,W1,XREAL_1:1; then
+    1+1<=j by NAT_1:38;
+    hence j >= 2;
+   end; then
+INST01: instr(1,r,CR) = 2 by FINSEQ_8:def 10,TRM2;
+rCR03: len r + 1 -' len CR = 2 by L1,L3,BINARITH:39;
+P01a: CR is_terminated_by CR by FINSEQ_8:35;
+  r is_terminated_by CR by INST01,L1,L3,rCR03,FINSEQ_8:def 12;
+  hence thesis by P01a,CRPRE2,CRRSUB2,record;
+end;
+
+theorem fCR:
+  for D being non empty set,f,CR being File of D holds
+    f is_preposition_of f^CR
+proof let D be non empty set,f,CR be File of D;
+  per cases;
+  suppose A1: len f>0;
+A2: len CR>=0 by NAT_1:18;
+A3: 0+1<= len f by A1,NAT_1:38; then
+A10a: 0+1<= len f + len CR by A2,XREAL_1:9;
+    1<= len (f^CR) & mid(f^CR,1,len f)=f by A10a,FINSEQ_1:35,A3,FINSEQ_8:3;
+    hence f is_preposition_of f^CR by FINSEQ_8:def 8;
+  end;
+  suppose len f<=0;
+    hence f is_preposition_of f^CR by FINSEQ_8:def 8;
+  end;
+end;
+
+theorem
+  for D being non empty set,f,CR being File of D holds
+    f is_preposition_of addcr(f,CR)
+proof let D be non empty set,f,CR be File of D;
+  addcr(f,CR)=ovlcon(f,CR) by FINSEQ_8:def 11
+            .=f^(CR/^(len ovlpart(f,CR))) by FINSEQ_8:def 3;
+  hence f is_preposition_of addcr(f,CR) by fCR;
+end;
+
+theorem FU201a:
+  for D being non empty set,r,CR being File of D st
+    CR is_postposition_of r holds 0<=len r-len CR
+proof
+  let D be non empty set,f,g be File of D;
+  assume g is_postposition_of f; then
+  len g <= len f by FINSEQ_8:29;then
+  len g - len g <= len f - len g by XREAL_1:11;
+  hence thesis;
+end;
+
+theorem FU201p:
+  for D being non empty set,CR,r being File of D st
+    CR is_postposition_of r holds r=addcr(r,CR)
+proof
+let D be non empty set,CR,r be File of D;
+assume A0: CR is_postposition_of r;
+AA01: len CR = len Rev CR by FINSEQ_5:def 3;
+AA02: len r = len Rev r by FINSEQ_5:def 3;
+    0<=len r - len CR by A0,FU201a;then
+AA16a: 0+len CR<=len r-len CR+len CR by XREAL_1:9;
+AA20: Rev CR is_preposition_of Rev r by A0,FINSEQ_8:def 9;
+  per cases;
+  suppose C1: len CR>0;
+Z01: len CR<=len r & mid(r,(len r+1) -' len CR,len r)=CR by C1,A0,FINSEQ_8:30;
+CRL01a: len CR >=0+1 by C1,NAT_1:38;
+AA06: len Rev r = len Rev r - len CR +len CR;
+      Rev mid(Rev r,1,len CR)=Rev Rev CR by C1,FINSEQ_8:def 8,AA20,AA01;then
+AA09: mid(Rev r,len CR,1)=Rev Rev CR by JORDAN4:30
+                     .=CR by FINSEQ_6:29;
+       now per cases;
+         case C001: len CR>1;
+           len CR>=1+1 by NAT_1:38,C001; then
+           len CR-1>=1+1-1 by XREAL_1:11; then
+C0011:     len CR-'1+1=len CR by JORDAN3:6;
+C33:       len Rev r -'len CR=len Rev r -len CR by AA16a,BINARITH:50,AA02;
+           mid(Rev r,len CR,1)=Rev (((Rev r)/^(1-'1))|(len CR-'1+1))
+                            by C001,JORDAN3:def 1
+              .=Rev (((Rev r)/^0)|len CR) by NAT_2:10,C0011
+              .=Rev (Rev r|len CR) by FINSEQ_5:31
+              .=Rev (Rev r)/^(len (Rev r)-'len CR) by AA06,C33,FINSEQ_6:91
+              .=r/^(len r-'len CR) by AA02,FINSEQ_6:29; then
+C40:       ovlpart(r,CR) = ovlpart((r|(len r-'len CR))^CR,CR)
+                                      by AA09,RFINSEQ:21
+                            .= CR by FINSEQ_8:16;
+           ovlcon(r,CR)=r^(CR/^(len ovlpart(r,CR))) by FINSEQ_8:def 3
+                      .=r^{} by C40,REVROT_1:2
+                      .=r by FINSEQ_1:47;
+           hence r=addcr(r,CR) by FINSEQ_8:def 11;
+         end;
+         case len CR<=1;then
+C0051:     CR=mid(r,(len r+1) -'1,len r) by Z01,CRL01a,XREAL_1:1
+            .=mid(r,len r,len r) by BINARITH:39
+            .=r/^(len r-'1) by JORDAN3:26;
+C0052:     CR/^len CR={} by REVROT_1:2;
+C0053a:    r=(r|(len r-'1))^CR by C0051,RFINSEQ:21;
+           ovlcon(r,CR)=r^(CR/^(len ovlpart(r,CR))) by FINSEQ_8:def 3
+                      .=r^(CR/^len CR) by C0053a,FINSEQ_8:16
+                      .=r by C0052,FINSEQ_1:47;
+           hence r=addcr(r,CR) by FINSEQ_8:def 11;
+         end;
+       end;
+       hence r=addcr(r,CR);
+     end;
+     suppose len CR<= 0; then
+       len CR=0 by NAT_1:18;then
+AAA10: CR={} by FINSEQ_1:25;then
+AAA20: len ovlpart(r,CR)=len <*>D by SS80D
+                       .=0 by FINSEQ_1:32;
+       thus addcr(r,CR)=ovlcon(r,CR) by FINSEQ_8:def 11
+                 .=r^(CR/^(len ovlpart(r,CR))) by FINSEQ_8:def 3
+                 .=r^CR by AAA20,FINSEQ_5:31
+                 .=r by AAA10,FINSEQ_1:47;
+     end;
+end;
+
+theorem FU201:
+  for D being non empty set,CR,r being File of D st
+    r is_terminated_by CR holds r=addcr(r,CR)
+proof
+  let D be non empty set,CR,r be File of D;
+  assume A0: r is_terminated_by CR;
+  per cases;
+  suppose len CR<=0; then
+    len CR=0 by NAT_1:18;then
+    len Rev CR=0 by FINSEQ_5:def 3;then
+    Rev CR is_preposition_of Rev r by FINSEQ_8:def 8;then
+    CR is_postposition_of r by FINSEQ_8:def 9;
+   hence r=addcr(r,CR) by FU201p;
+  end;
+  suppose A02: len CR>0;then
+A3a: 0+1<=len CR by NAT_1:38;
+     len CR -1>=0 by A3a,XREAL_1:50;then
+    A29: len CR -'1=len CR -1 by BINARITH:def 3;
+    A30: len r>=len CR by A0,FINSEQ_8:def 12,A02;
+    A31: 0<len r by A02,A0,FINSEQ_8:def 12;
+    A40a: len r-len CR>=0 by A30,XREAL_1:50;then
+    A40: len r-len CR=len r-'len CR by BINARITH:def 3;
+    len r +1>len CR by A30,NAT_1:38;then
+    A32: len r+1-len CR>0 by XREAL_1:52;then
+    A33: len r+1-'len CR=len r+1-len CR by BINARITH:def 3;then
+    len r+1-len CR>=0+1 by A32,NAT_1:38;then
+    len r+1-'len CR-1>=0 by A33,XREAL_1:50;then
+    A41: len r+1-'len CR-'1=len r-len CR by BINARITH:def 3,A33;
+    instr(1,r,CR) = len r + 1 -'len CR by A0,FINSEQ_8:def 12,A02;then
+     CR is_preposition_of r/^(len r + 1 -'len CR-'1)
+                                by FINSEQ_8:def 10,A32,A33;then
+     1<=len (r/^(len r + 1 -'len CR-'1)) &
+     mid(r/^(len r + 1 -'len CR-'1),1,len CR)=CR by FINSEQ_8:def 8,A02;then
+     ((r/^(len r + 1 -'len CR-'1))/^(1-'1))|(len CR-'1+1)=CR
+                                          by JORDAN3:def 1,A3a;then
+     ((r/^(len r + 1 -'len CR-'1))/^(0))|(len CR-'1+1)=CR
+                                          by NAT_2:10;then
+A69: ((r/^(len r -'len CR)))|(len CR)=CR by A40,A41,FINSEQ_8:2,A29;
+A68: len (r/^(len r -'len CR))=len r-'(len r -'len CR) by JORDAN3:19;
+A67: len r-(len r -'len CR)=len r-len r+len CR by A40,XCMPLX_1:37
+     .=len CR;then
+A70a: len r-(len r -'len CR)=len r-'(len r -'len CR)
+                                   by A02,BINARITH:def 3;
+A44: len r-'len CR <=len r by BINARITH:52;then
+     len r-(len r-'len CR)>=0 by XREAL_1:50;then
+A45: len r-'(len r-'len CR)=len r-(len r-'len CR) by BINARITH:def 3
+                         .=len r-(len r-len CR) by A40a,BINARITH:def 3
+                         .=len CR;
+A4:  mid(Rev r,1,len CR) =(Rev r/^(1-'1))|(len CR-'1+1)
+                                   by A3a,JORDAN3:def 1
+                    .=(Rev r/^(0))|(len CR) by A29,NAT_2:10
+                    .=(Rev r)|(len r-'(len r-'len CR)) by A45,FINSEQ_5:31
+                    .=Rev(r/^(len r-'len CR)) by FU199,A44
+                    .=Rev CR by A70a,A67,A68,A69,FINSEQ_1:79;
+A5:  0+1<=len r by A31,NAT_1:38;
+     len Rev CR >0 & 1<=len Rev r & mid(Rev r,1,len Rev CR)=Rev CR
+                    by FINSEQ_5:def 3,A02,A4,A5;
+     then Rev CR is_preposition_of Rev r by FINSEQ_8:def 8;
+     then CR is_postposition_of r by FINSEQ_8:def 9;
+   hence r=addcr(r,CR) by FU201p;
+  end;
+end;
+
+theorem
+  for D being non empty set,f,g being File of D st
+    f is_terminated_by g holds len g <=len f
+proof
+  let D be non empty set,f,g be File of D;
+  assume A1: f is_terminated_by g;
+  per cases;
+  suppose len g>0;
+    hence len g <=len f by FINSEQ_8:def 12,A1;
+  end;
+  suppose len g <=0;
+    hence len g <=len f by NAT_1:18;
+  end;
+end;
+
+theorem FU9e:
+  for D being non empty set,f,CR being File of D holds
+    len addcr(f,CR) >= len f & len addcr(f,CR) >= len CR
+proof let D be non empty set,f,CR be File of D;
+A4: addcr(f,CR)=ovlcon(f,CR) by FINSEQ_8:def 11;
+A5: len ovlcon(f,CR)=len f+(len CR -'len ovlpart(f,CR)) by FINSEQ_8:17;
+  thus len addcr(f,CR) >= len f by A4,A5,NAT_1:37;
+  ovlcon(f,CR)=(f|(len f-'len ovlpart(f,CR)))^CR by FINSEQ_8:13;then
+  len ovlcon(f,CR)= len (f|(len f-'len ovlpart(f,CR))) + len CR
+                         by FINSEQ_1:35;
+ hence len addcr(f,CR) >= len CR by A4,NAT_1:37;
+end;
+
+theorem FU40d:
+  for D being non empty set,f,g being FinSequence of D holds
+    g = ovlpart(f,g)^ovlrdiff(f,g)
+proof let D be non empty set,f,g be FinSequence of D;
+A01: ovlpart(f,g)=smid(g,1,len ovlpart(f,g)) by FINSEQ_8:def 2
+           .=g|len ovlpart(f,g) by FINSEQ_8:7;
+ovlpart(f,g)^ovlrdiff(f,g)=(g|len ovlpart(f,g))^(g/^(len ovlpart(f,g)))
+                                  by A01,FINSEQ_8:def 5
+                         .=g by RFINSEQ:21;
+hence ovlpart(f,g)^ovlrdiff(f,g)=g;
+end;
+
+theorem
+  for D being non empty set,f,g being FinSequence of D holds
+    ovlcon(f,g) = ovlldiff(f,g) ^ g
+proof
+  let D be non empty set,f,g be FinSequence of D;
+  ovlcon(f,g) = ovlldiff(f,g)^(ovlpart(f,g)^ovlrdiff(f,g)) by FINSEQ_8:14;
+  hence ovlcon(f,g) = ovlldiff(f,g) ^ g by FU40d;
+end;
+
+theorem
+  for D being non empty set,CR,r being File of D holds
+    addcr(r,CR)=ovlldiff(r,CR)^CR
+proof let D be non empty set,CR,r be File of D;
+  addcr(r,CR) = ovlcon(r,CR) by FINSEQ_8:def 11
+     .= ovlldiff(r,CR)^(ovlpart(r,CR)^ovlrdiff(r,CR)) by FINSEQ_8:14
+     .= ovlldiff(r,CR)^CR by FU40d;
+  hence addcr(r,CR)=ovlldiff(r,CR)^CR;
+end;
+
+theorem FU40b:
+  for D being non empty set,r1,r2,f being File of D st f = r1 ^ r2 holds
+    r1 is_substring_of f,1 & r2 is_substring_of f,1
+proof let D be non empty set,r1,r2,f be File of D;
+assume A1: f = r1 ^ r2;
+L0r1: len r1 >=0 by NAT_1:18;
+L0r2: len r2 >=0 by NAT_1:18;
+L0r1r2: len (r1^r2)=len r1+len r2 by FINSEQ_1:35;
+L10: len (r1^r2)=len r1+len r2 by FINSEQ_1:35;
+B1a: now per cases;
+suppose len r1>0;then
+  C15a: len r1>=0+1 by NAT_1:38;
+  Mid01: mid(r1^r2,1,len r1)=
+    ((r1^r2)/^(1-'1))|(len r1-'1+1) by C15a,JORDAN3:def 1
+   .= ((r1^r2)/^0)|(len r1-'1+1) by BINARITH:51
+   .= ((r1^r2)/^0)|len r1 by C15a,AMI_5:4
+   .= (r1^r2)|len r1 by FINSEQ_5:31
+   .= r1 by FINSEQ_5:26;
+  len r1>0 implies ex i being Nat st 1<=i & i<=len (r1^r2) &
+             mid(r1^r2,i,(i-'1)+len r1)=r1
+    proof set i = 1;
+LL01: (1-'1)+len r1=0+len r1 by BINARITH:51
+                      .=len r1;
+      1<=i & i<=len (r1^r2) & mid(r1^r2,i,(i-'1)+len r1)=r1
+                       by LL01,Mid01,C15a,L0r2,XREAL_1:9,L10;
+      hence thesis;
+    end;
+  hence r1 is_substring_of f,1 by A1,FINSEQ_8:def 7;
+end;
+suppose len r1<=0;then
+  len r1=0 by NAT_1:18;
+  hence r1 is_substring_of f,1 by FINSEQ_8:20;
+end;
+end;
+now per cases;
+suppose C1: len r2>0;then
+  C15a: len r2>=0+1 by NAT_1:38;then
+  C15: len r1+1<=len (r1^r2) by L0r1r2,XREAL_1:8;
+  CL01a:  len r1 + len r2 > len r1 + 0 by C1,XREAL_1:10;
+  CL03: len r1+len r2-'len r1=len r1+len r2-len r1 by C1,BINARITH:def 3
+                           .=len r2;
+  M01a: r2|len r2=r2|(Seg len r2) by FINSEQ_1:def 15;
+  Mid01: mid(r1^r2,len r1+1,len (r1^r2))=
+    ((r1^r2)/^(len r1+1-'1))|(len (r1^r2)-'(len r1+1)+1)
+          by C15,JORDAN3:def 1
+   .= ((r1^r2)/^len r1)|(len (r1^r2)-'(len r1+1)+1) by BINARITH:39
+   .= ((r1^r2)/^len r1)|(len r1 + len r2 -'(len r1+1)+1) by FINSEQ_1:35
+   .= ((r1^r2)/^len r1)|(len r1 + len r2 -'len r1) by CL01a,NAT_2:9
+   .= r2|len r2 by FINSEQ_5:40,CL03
+   .= r2 by M01a,FINSEQ_2:23;
+  len r2>0 implies
+    ex i being Nat st 1<=i & i<=len (r1^r2) &
+             mid(r1^r2,i,(i-'1)+len r2)=r2
+    proof consider i being Nat such that CC01: i=len r1+1;
+      LL01: (len r1+1)-'1+len r2=len r1+len r2 by BINARITH:39
+                               .=len (r1^r2) by FINSEQ_1:35;
+      1<=i & i<=len (r1^r2) & mid(r1^r2,i,(i-'1)+len r2)=r2
+                     by CC01,LL01,L0r1,XREAL_1:8,C15a,L0r1r2,Mid01;
+      hence thesis;
+    end;
+  hence r2 is_substring_of f,1 by A1,FINSEQ_8:def 7;
+end;
+suppose len r2<=0;then
+  len r2=0 by NAT_1:18;
+  hence r2 is_substring_of f,1 by FINSEQ_8:20;
+end;
+end;
+hence thesis by B1a;
+end;
+
+theorem FU40c:
+  for D being non empty set,r1,r2,r3,f being File of D st
+    f = r1 ^ r2 ^ r3 holds
+    r1 is_substring_of f,1 & r2 is_substring_of f,1 & r3 is_substring_of f,1
+proof let D be non empty set,r1,r2,r3,f be File of D;
+  assume A1: f = r1 ^ r2 ^ r3;
+A2:   f=r1^(r2^r3) by A1,FINSEQ_1:45;
+L011: len r3 >=0 by NAT_1:18;
+L02:  len (r1^r2)=len r1+len r2 by FINSEQ_1:35;
+now per cases;
+suppose C1: len r2>0;then
+       len r2>=0+1 by NAT_1:38;then
+C15:   len r1+1<=len (r1^r2) by L02,XREAL_1:8;then
+C17a:  len r1+1+0<=len r1+len r2+len r3 by L011,XREAL_1:9,L02;
+       len r1>=0 by NAT_1:18;then
+C19:   len r1 + 1>=0+1 by XREAL_1:8;
+CL01a: len r1 + len r2 > len r1 + 0 by C1,XREAL_1:10;
+CL03:  len r1+len r2-'len r1=len r1+len r2-len r1 by C1,BINARITH:def 3
+                           .=len r2;
+Mid02: mid(r1^r2^r3,len r1+1,len (r1^r2))=
+       ((r1^r2^r3)/^(len r1+1-'1))|(len (r1^r2)-'(len r1+1)+1)
+            by C15,JORDAN3:def 1
+   .= ((r1^r2^r3)/^len r1)|(len (r1^r2)-'(len r1+1)+1) by BINARITH:39
+   .= ((r1^r2^r3)/^len r1)|(len r1 + len r2 -'(len r1+1)+1) by FINSEQ_1:35
+   .= ((r1^r2^r3)/^len r1)|(len r1 + len r2 -'len r1) by CL01a,NAT_2:9
+   .= ((r1^(r2^r3))/^len r1)|len r2 by CL03,FINSEQ_1:45
+   .= (r2^r3)|len r2 by FINSEQ_5:40
+   .= r2 by FINSEQ_5:26;
+  len r2>0 implies
+    ex i being Nat st 1<=i & i<=len (r1^r2^r3) &
+             mid(r1^r2^r3,i,(i-'1)+len r2)=r2
+    proof consider i being Nat such that CC01: i=len r1+1;
+       (len r1+1)-'1+len r2=len r1+len r2 by BINARITH:39
+                               .=len (r1^r2) by FINSEQ_1:35;
+      then 1<=i & i<=len (r1^r2^r3) &
+             mid(r1^r2^r3,i,(i-'1)+len r2)=r2
+                  by CC01,Mid02,C19,C17a,L02,FINSEQ_1:35;
+      hence thesis;
+    end;
+  hence r2 is_substring_of f,1 by A1,FINSEQ_8:def 7;
+end;
+suppose len r2<=0;then
+  len r2=0 by NAT_1:18;
+  hence r2 is_substring_of f,1 by FINSEQ_8:20;
+end;
+end;
+hence thesis by A2,FU40b,A1;
+end;
+
+theorem FU30sub:
+  for D being non empty set,CR,r1,r2 being File of D st
+    r1 is_terminated_by CR & r2 is_terminated_by CR holds
+      CR^r2 is_substring_of addcr(r1^r2,CR),1
+proof let D be non empty set,CR,r1,r2 be File of D;
+  assume A1: r1 is_terminated_by CR & r2 is_terminated_by CR;
+  per cases;
+   suppose len CR >0;
+     r1 = addcr(r1,CR) by A1,FU201; then
+C32a:r1 = ovlcon(r1,CR) by FINSEQ_8:def 11;
+     r2 = addcr(r2,CR) by A1,FU201; then
+     r2 = ovlcon(r2,CR) by FINSEQ_8:def 11;then
+C42: r2 = r2^(CR/^len ovlpart(r2,CR)) by FINSEQ_8:def 3;
+Z01a:
+  r1^r2=((r1|(len r1-'len ovlpart(r1,CR)))^CR)^(r2^(CR/^len ovlpart(r2,CR)))
+                   by C32a,C42,FINSEQ_8:13;
+   addcr(r1^r2,CR) = ovlcon(r1^r2,CR) by FINSEQ_8:def 11
+                    .= r1^r2^(CR/^(len ovlpart(r1^r2,CR))) by FINSEQ_8:def 3
+         .=(r1|(len r1-'len ovlpart(r1,CR)))^(CR^r2)^(CR/^len ovlpart(r2,CR))
+                    ^(CR/^(len ovlpart(r1^r2,CR))) by Z01a,FU30conc
+         .=(r1|(len r1-'len ovlpart(r1,CR)))^(CR^r2)^
+                 ( (CR/^len ovlpart(r2,CR))^(CR/^(len ovlpart(r1^r2,CR))) )
+                       by FINSEQ_1:45;
+     hence CR^r2 is_substring_of addcr(r1^r2,CR),1 by FU40c;
+   end;
+   suppose C02: len CR<=0;
+     A01: len CR = 0 by C02,NAT_1:18; then
+CRnull: CR^r2 = {}^r2 by FINSEQ_1:25
+             .= r2 by FINSEQ_1:47;
+      len ovlpart(r1^r2,CR)<=0 by C02,FINSEQ_8:18; then
+LEN0: len ovlpart(r1^r2,CR)=0 by NAT_1:18;
+   addcr(r1^r2,CR) = ovlcon(r1^r2,CR) by FINSEQ_8:def 11
+                   .= (r1^r2)^(CR/^(len ovlpart(r1^r2,CR))) by FINSEQ_8:def 3
+                   .= (r1^r2)^CR by LEN0,FINSEQ_8:2
+                   .= (r1^r2)^{} by A01,FINSEQ_1:25
+                   .= r1^r2 by FINSEQ_1:47;
+      hence CR^r2 is_substring_of addcr(r1^r2,CR),1 by CRnull,FU40b;
+   end;
+end;
+
+theorem FU9g:
+  for D being non empty set,f,g being File of D,n being Nat st
+    0<n & g={} holds instr(n,f,g)=n
+proof let D be non empty set,f,g being File of D,n being Nat;
+  assume A0: 0<n & g={};then
+A2: len g=0 by FINSEQ_1:25;
+  instr(n,f,g) <> 0
+  proof assume instr(n,f,g)=0;then
+    not(g is_substring_of f,n) by FINSEQ_8:def 10;
+    hence contradiction by FINSEQ_8:def 7,A2;
+  end; then
+B1: n <= instr(n,f,g) & g is_preposition_of f/^(instr(n,f,g)-'1) &
+  for j being Nat st j >= n & j > 0
+    & (g is_preposition_of f/^(j-'1)) holds j >= instr(n,f,g)
+                        by FINSEQ_8:def 10;
+  g is_preposition_of f/^(n-'1) by FINSEQ_8:24,A2;then
+  n >= instr(n,f,g) by FINSEQ_8:def 10,A0;
+  hence instr(n,f,g)=n by B1,XREAL_1:1;
+end;
+
+theorem
+  for D being non empty set,f,g being File of D,n being Nat st
+    0<n & n<=len f holds instr(n,f,g)<=len f
+proof let D be non empty set,f,g be File of D,n be Nat;
+   assume A0: 0<n & n<=len f;
+A02: len g>=0 by NAT_1:18;
+    assume CC5: instr(n,f,g)>len f; then
+CD0:instr(n,f,g) >= len f + 1 by NAT_1:38;
+    instr(n,f,g)>0 by NAT_1:18,CC5;then
+CD1:n <= instr(n,f,g) & g is_preposition_of f/^(instr(n,f,g)-'1) &
+       for j being Nat st j >= n & j > 0
+         & (g is_preposition_of f/^(j-'1)) holds j >= instr(n,f,g)
+                                      by FINSEQ_8:def 10;
+CD2a:instr(n,f,g)-1 >= len f +1-1 by XREAL_1:11,CD0;then
+    instr(n,f,g)-1 >= 0 by NAT_1:18;then
+    instr(n,f,g)-'1>=len f by CD2a,BINARITH:def 3;then
+    f/^(instr(n,f,g)-'1)={} by FINSEQ_5:35;then
+    len (f/^(instr(n,f,g)-'1)) < 1 by FINSEQ_1:25;then
+    len g =0 by A02,FINSEQ_8:def 8,CD1;then
+    g={} by FINSEQ_1:25;
+    hence thesis by FU9g,A0,CC5;
+end;
+
+theorem FU9f:
+  for D being non empty set,f,CR being File of D holds
+    CR is_substring_of ovlcon(f,CR),1
+proof let D be non empty set,f,CR be File of D;
+  per cases;
+    suppose len CR >0;then
+C10: len CR>= 0+1 by NAT_1:38;
+    set i4= len f-'len ovlpart(f,CR)+1;
+A1a: ovlcon(f,CR)=f^(CR/^(len ovlpart(f,CR))) by FINSEQ_8:def 3;
+    len f>=len ovlpart(f,CR) by FINSEQ_8:12;then
+B88a: len f - len ovlpart(f,CR)>=0 by XREAL_1:50;
+    1-len ovlpart(f,CR)<=len CR - len ovlpart(f,CR) by C10,XREAL_1:11;then
+    1-len ovlpart(f,CR)+len f <=len CR - len ovlpart(f,CR) + len f
+                                  by XREAL_1:9;then
+B10a: len f -len ovlpart(f,CR)+1<= len f + (len CR - len ovlpart(f,CR));
+    len ovlpart(f,CR)<= len CR by FINSEQ_8:def 2;then
+B9: len CR - len ovlpart(f,CR) >=0 by XREAL_1:50;
+    len (CR/^(len ovlpart(f,CR)))= len CR -' len ovlpart(f,CR) by JORDAN3:19
+           .= len CR - len ovlpart(f,CR) by BINARITH:def 3,B9;then
+B5a:len f-'len ovlpart(f,CR)+1<= len f + len (CR/^(len ovlpart(f,CR)))
+                                           by B10a,B88a,BINARITH:def 3;
+    set i3=len f-'len ovlpart(f,CR);
+A2: i3 <= len f by BINARITH:52;
+CC50: i3+1 <= i3+ len CR by C10,XREAL_1:8;
+D10:i3+len CR-'(i3+1)+1=i3+len CR-(i3+1)+1 by CC50,BINARITH:50
+         .=len CR;
+D22:i3<=len (f|i3) by A2,FINSEQ_1:80;
+D30:(f|i3)/^i3=(f/^i3)|(i3-'i3) by JORDAN3:21
+                .=(f/^i3)|0 by BINARITH:51
+                .={};
+    mid((ovlcon(f,CR)),i4,(i4-'1)+len CR)
+           =mid(((f|i3)^CR),i4,(i4-'1)+len CR) by FINSEQ_8:13
+          .=mid(((f|i3)^CR),i3+1,i3+len CR) by BINARITH:39
+          .=(((f|i3)^CR)/^(i3+1-'1)) | (i3+len CR-'(i3+1)+1 )
+                                         by CC50,JORDAN3:def 1
+          .=(((f|i3)^CR)/^i3) |(len CR) by D10,BINARITH:39
+          .=(((f|i3)/^i3)^CR) | (len CR) by D22,GENEALG1:1
+          .= CR|(len CR) by D30,FINSEQ_1:47
+          .=CR by S01;then
+    1<=i4 & i4<=len ovlcon(f,CR) & mid(ovlcon(f,CR),i4,(i4-'1)+len CR)=CR
+      by NAT_1:29,B5a,A1a,FINSEQ_1:35;
+    hence CR is_substring_of ovlcon(f,CR),1 by FINSEQ_8:def 7;
+  end;
+  suppose len CR<=0;
+    hence CR is_substring_of ovlcon(f,CR),1 by FINSEQ_8:def 7;
+  end;
+end;
+
+theorem FU9g:
+  for D being non empty set,f,CR being File of D holds
+    CR is_substring_of addcr(f,CR),1
+proof let D be non empty set,f,CR be File of D;
+  addcr(f,CR)=ovlcon(f,CR) by FINSEQ_8:def 11;
+  hence CR is_substring_of addcr(f,CR),1 by FU9f;
+end;
+
+theorem SR20:
+  for D being non empty set,f,g being FinSequence of D,
+      n being Nat st g is_substring_of f|n,1 & len g>0 & len g <= n holds
+   g is_substring_of f,1
+proof let D be non empty set,f,g be FinSequence of D,n be Nat;
+    assume A1: g is_substring_of f|n,1 & len g>0 & len g <= n;then
+    len g>= 0+1 by NAT_1:38;then
+A2b:len g -1>=0 by XREAL_1:50;
+    consider i2 being Nat such that
+A2: 1<=i2 & i2<=len (f|n) & mid(f|n,i2,(i2-'1)+len g)=g
+      by A1,FINSEQ_8:def 7;
+A78a: len g-1+i2>=0+i2 by XREAL_1:9,A2b; then
+A78:i2-1+len g >=i2;
+    per cases;
+    suppose C01: len f>=n;
+C01c: i2-1>=0 by A2,XREAL_1:50;
+CC3:  i2<=(i2-'1)+len g by C01c,BINARITH:def 3,A78;
+CC4b: (i2-'1)+len g=(i2-1)+len g by A2,BINARITH:50;
+CC6:  (i2-'1)+len g-'i2+1 = (i2-1)+len g-i2+1 by CC4b,A78a,BINARITH:50
+              .= len g;
+B25:  g = ((f|n)/^(i2-'1))|((i2-'1)+len g-'i2+1) by A2,CC3,JORDAN3:def 1
+                 .=((f/^(i2-'1))|(n-'(i2-'1)))|len g by CC6,JORDAN3:21;
+      now assume C1: n-'(i2-'1)<len g;then
+        C2: g=((f/^(i2-'1))|(n-'(i2-'1))) by B25,JORDAN4:15;
+        C3: len (f/^(i2-'1))=len f -'(i2-'1) by JORDAN3:19;
+        n-'(i2-'1)<=len f -'(i2-'1) by C01,JORDAN3:5;
+       hence contradiction by C1,C2,C3,FINSEQ_1:80;
+      end;then
+B30:  g=(f/^(i2-'1))|len g by B25,JORDAN4:15
+       .= mid(f,i2,(i2-'1)+len g) by CC6,CC3,JORDAN3:def 1;
+      len (f|n)<=len f by FINSEQ_5:18;
+      then 1<=i2 & i2<=len f & mid(f,i2,(i2-'1)+len g)=g by A2,B30,XREAL_1:2;
+    hence g is_substring_of f,1 by FINSEQ_8:def 7;
+  end;
+  suppose len f<n;
+    hence g is_substring_of f,1 by A1,FINSEQ_1:79;
+  end;
+end;
+
+theorem
+  for D being non empty set, f,CR being File of D
+    ex r being File of D st r is_a_record_of f,CR
+proof let D be non empty set,f,CR be File of D;
+   set i0=instr(1,addcr(f,CR),CR);
+A61a:i0<>0
+   proof
+     assume i0=0; then
+     not CR is_substring_of addcr(f,CR),1 by FINSEQ_8:def 10;
+     hence contradiction by FU9g;
+   end;then
+   i0>0 by NAT_1:19;then
+A10: i0>=0+1 by NAT_1:38;then
+   i0-1>=0 by XREAL_1:50;then
+A10b: i0-'1=i0-1 by BINARITH:def 3;
+   per cases;
+   suppose len f = 0;then
+J2:  f= <*>D by FINSEQ_1:25;
+     CR is_a_record_of <*>D,CR by SS80;
+     hence ex r2 being File of D st r2 is_a_record_of f,CR by J2;
+   end;
+   suppose J0: len f<>0;
+   A11: ( 1 <= i0 & CR is_preposition_of (addcr(f,CR))/^(i0-'1) &
+    for j being Nat st j >= 1 & j > 0
+       & (CR is_preposition_of (addcr(f,CR))/^(j-'1)) holds j >= i0)
+                 by FINSEQ_8:def 10,A61a;
+   set r=addcr(f,CR)|(i0+len CR-'1);
+  A33: now per cases;
+  suppose B0: len CR<=0;
+A15: len CR=0 by B0,NAT_1:18;
+A11: r is_terminated_by CR by B0,FINSEQ_8:def 12;
+A44: CR=<*>D by A15,FINSEQ_1:32;then
+    CR/^(len ovlpart(f,CR))=CR by FINSEQ_6:86;then
+    f^(CR/^(len ovlpart(f,CR)))=f by A44,FINSEQ_1:47;then
+A17a: ovlcon(f,CR)=f by FINSEQ_8:def 3;then
+A17: addcr(f,CR)=f by FINSEQ_8:def 11;
+    len f> 0 by J0,NAT_1:19;then
+A18: len f>=0+1 by NAT_1:38;
+    len r>0 implies 1<=len f & mid(f,1,len r)=r
+    proof assume len r>0;then
+Y77:  len r>=0+1 by NAT_1:38;
+      per cases;
+      suppose Y0: len r < i0+len CR-'1;
+        r=(addcr(f,CR)|(i0+len CR-'1))|(len r) by FINSEQ_1:79
+         .= addcr(f,CR)|(len r) by JORDAN4:15,Y0
+         .=f|(len r) by A17a,FINSEQ_8:def 11
+         .=mid(f,1,len r) by Y77,JORDAN3:25;
+       hence 1<=len f & mid(f,1,len r)=r by A18;
+      end;
+      suppose Y0: len r>= i0+len CR-'1;
+Y1:     mid(f,1,len r)= f|(len r) by Y77,JORDAN3:25
+          .=addcr(f,CR)|(len r) by A17a,FINSEQ_8:def 11;
+        len r<= (i0+len CR-'1) by FINSEQ_5:19;
+        hence 1<=len f & mid(f,1,len r)=r by A18,Y1,Y0,XREAL_1:1;
+      end;
+    end;then
+    r is_preposition_of addcr(f,CR) by A17,FINSEQ_8:def 8;
+   hence r is_a_record_of f,CR by A11,record;
+  end;
+  suppose B1: len CR>0;then
+B10: 1<=len ((addcr(f,CR))/^(i0-'1))
+   & mid((addcr(f,CR))/^(i0-'1),1,len CR)=CR by A11,FINSEQ_8:def 8;
+B41: len CR>=0+1 by NAT_1:38,B1;then
+   ((addcr(f,CR))/^(i0-'1))|(len CR)=CR by B10,JORDAN3:25;then
+   B20: len CR <=len ((addcr(f,CR))/^(i0-'1)) by FINSEQ_5:18;
+   B21: len ((addcr(f,CR))/^(i0-'1)) <= len (addcr(f,CR)) by FINSEQ_5:28;
+   B2a: now per cases;
+   suppose i0+len CR-'1>=len addcr(f,CR);then
+     addcr(f,CR)|(i0+len CR-'1)=addcr(f,CR) by FINSEQ_1:79;
+     hence len (addcr(f,CR)|(i0+len CR-'1))>=len CR by B20,B21,XREAL_1:2;
+   end;
+   suppose C30a: i0+len CR-'1<len addcr(f,CR);
+     i0-1>=0 by A10,XREAL_1:50;then
+     C31a: len CR +(i0-1)>=len CR +0 by XREAL_1:9;
+     i0+ len CR -'1=len CR+i0 -1 by BINARITH:def 3,B1,C31a;
+    hence len (addcr(f,CR)|(i0+len CR-'1))>=len CR by C30a,FINSEQ_1:80,C31a;
+   end;
+   end;
+    1 <= i0 & CR is_preposition_of addcr(f,CR)/^(i0-'1)
+      by FINSEQ_8:def 10,A61a;then
+C2: len CR <=len (addcr(f,CR)/^(i0-'1)) by FINSEQ_8:26;
+    now assume i0-'1>len addcr(f,CR);then
+      addcr(f,CR)/^(i0-'1)=<*>D by RFINSEQ:def 2;
+      hence contradiction by B1,C2,FINSEQ_1:25;
+    end;then
+    len (addcr(f,CR)/^(i0-'1)) =len addcr(f,CR) -(i0-'1)
+                                  by RFINSEQ:def 2;then
+    C3a: len CR +(i0-'1)<=len addcr(f,CR) by XREAL_1:21,C2;
+    1<=i0+len CR by A10,NAT_1:37;then
+    i0+len CR -1>=0 by XREAL_1:50;then
+A19a: len CR+i0 -'1<= len addcr(f,CR) by C3a,A10b,BINARITH:def 3;then
+A19:  len r= i0+len CR-'1 by FINSEQ_1:80;
+    ((len r + 1 -'len CR) <> 0 implies 1 <= (len r + 1 -'len CR)
+    & CR is_preposition_of r/^((len r + 1 -'len CR)-'1) &
+    for j being Nat st j >= 1 & j > 0
+     & (CR is_preposition_of r/^(j-'1)) holds j >= len r + 1 -'len CR) &
+    ((len r + 1 -'len CR)=0 implies not(CR is_substring_of r,1))
+     proof
+       thus ((len r + 1 -'len CR) <> 0 implies 1 <= len r + 1 -'len CR
+        & CR is_preposition_of r/^((len r + 1 -'len CR)-'1) &
+        for j being Nat st j >= 1 & j > 0
+        & (CR is_preposition_of r/^(j-'1)) holds j >= len r + 1 -'len CR)
+        proof assume len r + 1 -'len CR <> 0;then
+         len r + 1 -'len CR>0 by NAT_1:19;then
+         0+1<= len r + 1 -'len CR by NAT_1:38;
+         hence 1 <= len r + 1 -'len CR;
+         1<= i0+len CR by B41,NAT_1:37;then
+D20:     i0+len CR -1>=0 by XREAL_1:50;then
+D3:      i0+len CR-'1+1=i0 +len CR -1+1 by BINARITH:def 3
+                          .=i0+len CR;
+         i0+len CR-len CR>=0 by NAT_1:18;then
+         i0+len CR-'len CR=i0 by BINARITH:def 3;then
+     D7: r/^((len r + 1 -'len CR)-'1)
+                 =(addcr(f,CR)|(i0+len CR-'1))/^(i0-'1) by D3,A19a,FINSEQ_1:80;
+         i0+len CR>=i0 by NAT_1:37;then
+         i0+len CR-'1>=i0-'1 by JORDAN3:5;then
+         i0+len CR -'1-(i0-'1)>=0 by XREAL_1:50;then
+    D57: i0+len CR-'1-'(i0-'1) = i0+len CR-'1-(i0-'1) by BINARITH:def 3
+             .=i0+len CR-1-(i0-1) by D20,BINARITH:def 3,A10b
+             .=len CR;
+    D55: ((addcr(f,CR))|(i0+len CR-'1))/^(i0-'1)
+          = ((addcr(f,CR))/^(i0-'1))|(len CR) by D57,JORDAN3:21;
+         set f2= (addcr(f,CR)|(i0+len CR-'1))/^(i0-'1);
+         1<= i0+len CR by B41,NAT_1:37;then
+D30a:    i0+len CR -1>=0 by XREAL_1:50;then
+D30:     i0+len CR-'1=i0 +len CR -1 by BINARITH:def 3;
+         i0<=i0+len CR by NAT_1:37;then
+D8:      i0-'1<=len r by A19,A10b,D30,XREAL_1:11;
+         i0-1>=0 by A10,XREAL_1:50;then
+D10:     i0-'1=i0-1 by BINARITH:def 3;
+D11a:    len f2= len r -(i0-'1) by D8,RFINSEQ:def 2
+         .=i0+len CR-'1-(i0-'1) by A19a,FINSEQ_1:80
+         .= i0+len CR-1-(i0-1) by D30a,BINARITH:def 3,D10
+         .=len CR;
+         mid((addcr(f,CR))/^(i0-'1),1,len CR)=CR by B1,A11,FINSEQ_8:def 8;then
+         f2=CR by D55,JORDAN3:25,B41;then
+         f2|(len CR)=CR by FINSEQ_1:79;then
+         1<=len f2 & mid(f2,1,len CR)=CR by JORDAN3:25,B41,D11a;
+        hence CR is_preposition_of r/^((len r + 1 -'len CR)-'1)
+                            by D7,FINSEQ_8:def 8;
+         1<=i0+len CR by A10,NAT_1:37;then
+         i0+len CR -1>=0 by XREAL_1:50;then
+         len r +1=i0+len CR-1+1 by A19,BINARITH:def 3;then
+A19b:    len r+1-'len CR=i0 by BINARITH:39;
+         1<= i0+len CR by B41,NAT_1:37;then
+         i0+len CR -1>=0 by XREAL_1:50;then
+     D3: i0+len CR-'1+1=i0 +len CR -1+1 by BINARITH:def 3
+                      .=i0+len CR;
+         i0+len CR-len CR>=0 by NAT_1:18;then
+D77:     i0+len CR-'len CR=i0 by BINARITH:def 3;
+         1<= i0+len CR by B41,NAT_1:37;then
+         i0+len CR -1>=0 by XREAL_1:50;then
+D30:     i0+len CR-'1=i0 +len CR -1 by BINARITH:def 3;
+        thus for j being Nat st j >= 1 & j > 0
+        & CR is_preposition_of r/^(j-'1) holds j >= len r + 1 -'len CR
+         proof let j be Nat;
+           assume F0: j >= 1 & j > 0 & CR is_preposition_of r/^(j-'1);
+F5:        mid(r/^(j-'1),1,len CR)
+               =(r/^(j-'1))|(len CR) by JORDAN3:25,B41;
+F5b:       (r/^(j-'1))|(len CR)=(r/^(j-'1))|((j-'1)+len CR -'(j-'1))
+                                    by BINARITH:39
+              .=(r|(len CR+(j-'1)))/^(j-'1) by JORDAN3:21;
+F3a:       j-1>=0 by F0,XREAL_1:50;
+           now assume H3: j < len r + 1 -'len CR;then
+H1:        j< i0+len CR-'1 +1-'len CR by A19a,FINSEQ_1:80;
+H22:       j<i0 by H3,A19a,FINSEQ_1:80,D3,D77;
+H51:       j-'1<i0-'1 by H22,F0,SPRECT_3:9;
+           1<=j+len CR by F0,NAT_1:37;then
+F87:       j+len CR -1>=0 by XREAL_1:50;then
+F88:       j+len CR -'1=len CR +(j-1) by BINARITH:def 3
+                      .=len CR +(j-'1) by F3a,BINARITH:def 3;
+           j+len CR<i0+len CR by H1,D3,D77,XREAL_1:10;then
+           j+len CR -1 < i0+len CR -1 by XREAL_1:11;then
+F54:       j+len CR-'1<i0+len CR-'1 by BINARITH:def 3,F87,D30;
+F55:       ((addcr(f,CR))/^(j-'1))|(len CR)
+           =((addcr(f,CR))/^(j-'1))|((j-'1)+len CR -'(j-'1)) by BINARITH:39
+           .=((addcr(f,CR))|(len CR+(j-'1)))/^(j-'1) by JORDAN3:21
+           .=((addcr(f,CR)|(i0+len CR-'1))|(j+len CR-'1))/^(j-'1)
+                                   by F88,F54,JORDAN4:15
+           .= CR by F88,F0,FINSEQ_8:def 8,B1,F5,F5b;
+F99:       1<=len ((addcr(f,CR))/^(i0-'1)) by A11,FINSEQ_8:def 8,B1;
+F100a:     len ((addcr(f,CR))/^(i0-'1))<=len ((addcr(f,CR))/^(j-'1))
+                            by H51,SR5;
+           1<=len ((addcr(f,CR))/^(j-'1))
+                  & mid(((addcr(f,CR))/^(j-'1)),1,len CR)=CR
+                        by F100a,F99,XREAL_1:2,F55,B41,JORDAN3:25;then
+           CR is_preposition_of ((addcr(f,CR))/^(j-'1)) by FINSEQ_8:def 8;
+           hence contradiction by H3,A19b,F0,FINSEQ_8:def 10;
+           end;
+           hence thesis;
+         end;
+        end;
+        assume D2a: len r + 1 -'len CR=0;
+         1<= i0+len CR by B41,NAT_1:37;then
+         i0+len CR -1>=0 by XREAL_1:50;then
+D3:      i0+len CR-'1+1=i0 +len CR -1+1 by BINARITH:def 3
+                      .=i0+len CR;
+         i0+len CR-len CR>=0 by NAT_1:18;then
+         i0+len CR-'len CR=i0 by BINARITH:def 3;then
+         instr(1,addcr(f,CR),CR)=0 by D2a,A19a,FINSEQ_1:80,D3;then
+D8:      not(CR is_substring_of addcr(f,CR),1) by FINSEQ_8:def 10;
+         1<=i0+len CR by A10,NAT_1:37;then
+Z05:     i0+len CR -1>=0 by XREAL_1:50;
+         len CR + i0 >= len CR +1 by A10,XREAL_1:9; then
+         i0 + len CR -1 >= len CR +1 -1 by XREAL_1:11; then
+         i0 + len CR -'1 >= len CR by Z05,BINARITH:def 3;
+        hence not(CR is_substring_of r,1) by D8,B1,SR20;
+     end;then
+A11a: len r>=len CR & instr(1,r,CR) = len r + 1 -'len CR
+                                   by B2a,FINSEQ_8:def 10;
+    per cases;
+    suppose F0: 1<=len r;
+F2:  addcr(f,CR)|(len r)=r by A19a,FINSEQ_1:80;
+     len (addcr(f,CR)|(i0+len CR-'1))<= len addcr(f,CR) by FINSEQ_5:18;then
+     len r>0 implies 1<=len (addcr(f,CR)) & mid(addcr(f,CR),1,len r)=r
+                      by F0,XREAL_1:2,F2,JORDAN3:25;then
+    (CR^r is_substring_of addcr(f,CR),1 or
+      r is_preposition_of addcr(f,CR)) &
+      r is_terminated_by CR by A11a,FINSEQ_8:def 12,FINSEQ_8:def 8;
+    hence r is_a_record_of f,CR by record;
+    end;
+    suppose 1>len r;then
+S2a:  0+1>=len r +1 by NAT_1:38;then
+S2:   0>=len r by XREAL_1:8;
+S4:   0=len r by S2,NAT_1:18;
+S3:   len CR<=0 by S2a,XREAL_1:8,B2a;
+S5:   r is_terminated_by CR by FINSEQ_8:def 12,S3;
+      r= {} by FINSEQ_1:25,S4;then
+      CR^r=CR by FINSEQ_1:47;then
+      CR^r is_substring_of addcr(f,CR),1 by S3,FINSEQ_8:def 7;
+     hence r is_a_record_of f,CR by record,S5;
+    end;
+  end;
+  end;
+  thus thesis by A33;
+ end;
+end;
+
+theorem
+  for D being non empty set,f,CR,r being File of D st
+    r is_a_record_of f,CR holds r is_a_record_of r,CR
+proof let D be non empty set,f,CR,r be File of D;
+  assume r is_a_record_of f,CR; then
+  r is_preposition_of r & r is_terminated_by CR by FINSEQ_8:25,record;
+  then r is_preposition_of addcr(r,CR) & r is_terminated_by CR by FU201;
+  hence r is_a_record_of r,CR by record;
+end;
+
+theorem
+  for D being non empty set,CR,r1,r2,f being File of D st
+    r1 is_terminated_by CR & r2 is_terminated_by CR &
+      f = r1 ^ r2 holds r1 is_a_record_of f,CR & r2 is_a_record_of f,CR
+proof
+  let D be non empty set,CR,r1,r2,f be File of D;
+  assume A1: r1 is_terminated_by CR & r2 is_terminated_by CR & f = r1 ^ r2;
+  per cases;
+  suppose B0: len r1<=0 & len r2 <=0; then
+B01a: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8;
+   r2 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8,B0;
+   hence r1 is_a_record_of f,CR & r2 is_a_record_of f,CR by B01a,A1,record;
+  end;
+  suppose B01: len r1<=0 & len r2 >0; then
+B010: len r1=0 by NAT_1:18;
+B011a: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8,B01;
+B01f: f = r2 by A1,B010,FU30a;
+   f is_preposition_of f by FINSEQ_8:25; then
+   f is_preposition_of addcr(f,CR) by B01f,A1,FU201;
+   hence r1 is_a_record_of f,CR & r2 is_a_record_of f,CR
+                   by B011a,B01f,A1,record;
+end;
+suppose B02: len r1>0 & len r2 <=0; then
+B11a:  0+1<=len r1 by NAT_1:38;
+  0<=len r2 by NAT_1:18; then
+  1+0<=len r1 + len r2 by B11a,XREAL_1:9; then
+B11f: 1 <=len f by A1,FINSEQ_1:35;
+B71a: len f<= len addcr(f,CR) by FU9e;
+  mid(addcr(f,CR),1,len r1)=addcr(f,CR)|len r1 by JORDAN3:25,B11a
+        .=ovlcon(f,CR)|len r1 by FINSEQ_8:def 11
+        .=(f^(CR/^(len ovlpart(f,CR))))|len r1 by FINSEQ_8:def 3
+        .=(r1^(r2^(CR/^(len ovlpart(f,CR)))))|len r1 by A1,FINSEQ_1:45
+        .= r1|len r1 by FINSEQ_5:25
+        .= r1 by FINSEQ_1:79;then
+  len r1>0 implies 1<=len addcr(f,CR) & mid(addcr(f,CR),1,len r1)=r1
+                             by B71a,B11f,XREAL_1:2;then
+B021a: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8;
+   r2 is_preposition_of addcr(f,CR) by B02,FINSEQ_8:def 8;
+   hence r1 is_a_record_of f,CR & r2 is_a_record_of f,CR by B021a,A1,record;
+end;
+suppose B1: len r1>0 & len r2>0;
+B11a: 0+1<=len r1 by NAT_1:38,B1;
+      0<=len r2 by NAT_1:18; then
+      1+0<=len r1 + len r2 by B11a,XREAL_1:9; then
+B11f: 1 <=len f by A1,FINSEQ_1:35;
+B71a: len f<= len addcr(f,CR) by FU9e;
+  mid(addcr(f,CR),1,len r1)=addcr(f,CR)|len r1 by JORDAN3:25,B11a
+     .=ovlcon(f,CR)|len r1 by FINSEQ_8:def 11
+     .=(f^(CR/^(len ovlpart(f,CR))))|len r1 by FINSEQ_8:def 3
+     .=(r1^(r2^(CR/^(len ovlpart(f,CR)))))|len r1 by A1,FINSEQ_1:45
+     .= r1|len r1 by FINSEQ_5:25
+     .= r1 by FINSEQ_1:79;then
+  len r1>0 implies 1<=len addcr(f,CR) & mid(addcr(f,CR),1,len r1)=r1
+                             by B71a,B11f,XREAL_1:2; then
+B21: r1 is_preposition_of addcr(f,CR) by FINSEQ_8:def 8;
+   CR^r2 is_substring_of addcr(r1^r2,CR),1 by A1,FU30sub;
+   hence r1 is_a_record_of f,CR & r2 is_a_record_of f,CR by B21,A1,record;
+end;
+end;

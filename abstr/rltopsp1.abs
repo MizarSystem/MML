@@ -16,21 +16,23 @@ environ
       BINOP_1, REAL_1, EQREL_1, STRUCT_0, PRE_TOPC, TOPS_1, TOPS_2, CONNSP_2,
       COMPTS_1, YELLOW13, URYSOHN1, YELLOW_6, RLVECT_1, RUSUB_4, CONVEX1;
  constructors COMPLEX1, REAL_1, TOPS_1, TOPS_2, SEQ_2, YELLOW13, URYSOHN1,
-      RUSUB_4, CONVEX1, DOMAIN_1;
+      RUSUB_4, CONVEX1, DOMAIN_1, SETFAM_1;
  registrations NUMBERS, SUBSET_1, STRUCT_0, XREAL_0, RELSET_1, PRE_TOPC,
       ASYMPT_0, XCMPLX_0, FILTER_1, ARYTM_3, REAL_1, TOPS_1, TOPGRP_1,
       BORSUK_3, RLVECT_1, CONVEX1, FINSEQ_1, PARTFUN1;
  requirements BOOLE, REAL, NUMERALS, SUBSET, ARITHM;
 
 
-begin :: Preliminaires
+begin :: Preliminaries
 
  reserve X,Y for non empty RLSStruct,
          v,x,y,z for Point of X,
          f,f1,f2 for map of X,Y,
          a,e,r,s,t for Real;
 
-canceled;
+theorem :: RLTOPSP1:1
+  for X being non empty RLSStruct, M being Subset of X,
+      x being Point of X, r being Real st x in M holds r*x in r*M;
 
 registration
   cluster non zero Real;
@@ -43,17 +45,19 @@ theorem :: RLTOPSP1:2
    for x being Point of T st x in X
     ex W being Subset of T st x in W & W in FX;
 
-canceled;
+theorem :: RLTOPSP1:3
+  for X being non empty LoopStr, M,N being Subset of X, x,y being Point of X
+   st x in M & y in N holds x+y in M+N;
 
 theorem :: RLTOPSP1:4
-   for X being non empty LoopStr, M,N being Subset of X,
-       F being Subset-Family of X
+  for X being non empty LoopStr, M,N being Subset of X,
+      F being Subset-Family of X
      st F = {x+N where x is Point of X: x in M}
     holds M+N = union F;
 
 theorem :: RLTOPSP1:5
-  for X being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+  for X being add-associative right_zeroed right_complementable
+    (non empty LoopStr),
       M being Subset of X
    holds 0.X+M = M;
 
@@ -68,121 +72,112 @@ theorem :: RLTOPSP1:7
    holds x+M+N = x+(M+N);
 
 theorem :: RLTOPSP1:8
-   for X being non empty LoopStr, M,N being Subset of X, x being Point of X
+  for X being non empty LoopStr, M,N being Subset of X, x being Point of X
        st M c= N
      holds x+M c= x+N;
 
 theorem :: RLTOPSP1:9
-   for X being non empty RealLinearSpace, M being Subset of X,
-       x being Point of X
+  for X being add-associative right_zeroed right_complementable
+    (non empty LoopStr), M being Subset of X,
+      x being Point of X
      st x in M
    holds 0.X in -x+M;
 
 theorem :: RLTOPSP1:10
-   for X being non empty LoopStr, M,N,V being Subset of X
+  for X being non empty LoopStr, M,N,V being Subset of X
        st M c= N
      holds M+V c= N+V;
 
 theorem :: RLTOPSP1:11
-    for X being non empty LoopStr, V1,V2,W1,W2 being Subset of X
+  for X being non empty LoopStr, V1,V2,W1,W2 being Subset of X
        st V1 c= W1 & V2 c= W2
      holds V1+V2 c= W1+W2;
 
 theorem :: RLTOPSP1:12
-    for X being non empty RealLinearSpace, V1,V2 being Subset of X
+  for X being right_zeroed (non empty LoopStr), V1,V2 being Subset of X
        st 0.X in V2
      holds V1 c= V1+V2;
 
 theorem :: RLTOPSP1:13
-   for X being non empty RealLinearSpace, r being Real
-    holds r*{0.X} = {0.X};
+  for X being RealLinearSpace, r being Real holds r*{0.X} = {0.X};
 
 theorem :: RLTOPSP1:14
-   for X being non empty RealLinearSpace, M being Subset of X,
-       r being non zero Real
-      st 0.X in r*M
-     holds 0.X in M;
+  for X being RealLinearSpace, M being Subset of X,
+      r being non zero Real st 0.X in r*M
+    holds 0.X in M;
 
 theorem :: RLTOPSP1:15
-   for X being non empty RealLinearSpace, M,N being Subset of X,
-       r being non zero Real
+  for X being RealLinearSpace, M,N being Subset of X,
+      r being non zero Real
     holds (r * M) /\ (r * N) = r * (M /\ N);
 
 theorem :: RLTOPSP1:16
-   for X being non empty TopSpace, x being Point of X,
-       A being a_neighborhood of x, B being Subset of X
+  for X being non empty TopSpace, x being Point of X,
+      A being a_neighborhood of x, B being Subset of X
      st A c= B
    holds B is a_neighborhood of x;
 
-definition
-let V be non empty RealLinearSpace, M be Subset of V;
+definition let V be RealLinearSpace, M be Subset of V;
   redefine attr M is convex means
 :: RLTOPSP1:def 1
- for u,v being Point of V, r being Real
+  for u,v being Point of V, r being Real
     st 0 <= r & r <= 1 & u in M & v in M
   holds r*u + (1-r)*v in M;
 end;
 
-theorem :: RLTOPSP1:17 :: CONVEX1:13
-  for X being non empty RealLinearSpace, M being convex Subset of X,
-      r1,r2 being Real
-   st 0 <= r1 & 0<=r2
-  holds r1*M + r2*M = (r1 + r2)*M;
-
-registration let X be non empty RealLinearSpace, M be empty Subset of X;
- cluster conv(M) -> empty;
+registration let X be RealLinearSpace, M be empty Subset of X;
+  cluster conv(M) -> empty;
 end;
 
+canceled;
+
 theorem :: RLTOPSP1:18
-  for X being non empty RealLinearSpace, M being convex Subset of X
+  for X being RealLinearSpace, M being convex Subset of X
    holds conv(M) = M;
 
 theorem :: RLTOPSP1:19
-  for X being non empty RealLinearSpace, M being Subset of X, r being Real
+  for X being RealLinearSpace, M being Subset of X, r being Real
     holds r*conv(M) = conv(r*M);
 
 theorem :: RLTOPSP1:20
-  for X being non empty RealLinearSpace, M1,M2 being Subset of X
+  for X being RealLinearSpace, M1,M2 being Subset of X
    st M1 c= M2
   holds Convex-Family M2 c= Convex-Family M1;
 
 theorem :: RLTOPSP1:21
-  for X being non empty RealLinearSpace, M1,M2 being Subset of X
+  for X being RealLinearSpace, M1,M2 being Subset of X
    st M1 c= M2
   holds conv(M1) c= conv(M2);
 
 theorem :: RLTOPSP1:22
-   for X being non empty RealLinearSpace, M being convex Subset of X,
-       r being Real st 0 <= r & r <= 1 & 0.X in M
-    holds r*M c= M;
+  for X being RealLinearSpace, M being convex Subset of X,
+      r being Real st 0 <= r & r <= 1 & 0.X in M holds
+    r*M c= M;
 
 definition
-  let X be non empty RealLinearSpace, v,w be Point of X;
+  let X be RealLinearSpace, v,w be Point of X;
    func LSeg(v,w) -> Subset of X equals
 :: RLTOPSP1:def 2
  {(1-r)*v + r*w : 0 <= r & r <= 1 };
 end;
 
-registration
- let X be non empty RealLinearSpace, v,w be Point of X;
+registration let X be RealLinearSpace, v,w be Point of X;
   cluster LSeg(v,w) -> non empty convex;
 end;
 
 theorem :: RLTOPSP1:23
-   for X being non empty RealLinearSpace, M being Subset of X
+  for X being RealLinearSpace, M being Subset of X
     holds M is convex iff
       for u,w being Point of X st u in M & w in M holds LSeg(u,w) c= M;
 
-definition
- let V be non empty RLSStruct, P be Subset-Family of V;
+definition let V be non empty RLSStruct, P be Subset-Family of V;
   attr P is convex-membered means
 :: RLTOPSP1:def 3
-
    for M being Subset of V st M in P holds M is convex;
 end;
 
-registration  let V be non empty RLSStruct;
- cluster non empty convex-membered Subset-Family of V;
+registration let V be non empty RLSStruct;
+  cluster non empty convex-membered Subset-Family of V;
 end;
 
 theorem :: RLTOPSP1:24
@@ -196,9 +191,9 @@ definition let X be non empty RLSStruct, A be Subset of X;
 end;
 
 theorem :: RLTOPSP1:25
-   for X being non empty RealLinearSpace, M,N being Subset of X,
+   for X being RealLinearSpace, M,N being Subset of X,
        v being Point of X
-     holds v+M meets N  iff v in N+(-M);
+     holds v+M meets N iff v in N+(-M);
 
 definition let X be non empty RLSStruct, A be Subset of X;
   attr A is symmetric means
@@ -206,12 +201,12 @@ definition let X be non empty RLSStruct, A be Subset of X;
   A = -A;
 end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster non empty symmetric Subset of X;
 end;
 
 theorem :: RLTOPSP1:26
- for X being non empty RealLinearSpace, A being symmetric Subset of X,
+ for X being RealLinearSpace, A being symmetric Subset of X,
      x being Point of X
    st x in A
   holds -x in A;
@@ -222,36 +217,35 @@ definition let X be non empty RLSStruct, A be Subset of X;
   for r being Real st abs(r) <= 1 holds r*A c= A;
 end;
 
-registration let X be non empty RealLinearSpace;
+registration let X be non empty RLSStruct;
   cluster {}X -> circled;
 end;
 
 theorem :: RLTOPSP1:27
-  for X being non empty RealLinearSpace
-   holds {0.X} is circled;
+  for X being RealLinearSpace holds {0.X} is circled;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster non empty circled Subset of X;
 end;
 
 theorem :: RLTOPSP1:28
-  for X being non empty RealLinearSpace, B being non empty circled Subset of X
+  for X being RealLinearSpace, B being non empty circled Subset of X
    holds 0.X in B;
 
 registration
-  let X be non empty RealLinearSpace,A,B be circled Subset of X;
+  let X be RealLinearSpace, A,B be circled Subset of X;
   cluster A+B -> circled;
 end;
 
 theorem :: RLTOPSP1:29
-  for X being non empty RealLinearSpace, A being circled Subset of X
+  for X being RealLinearSpace, A being circled Subset of X
     for r being Real st abs(r) = 1 holds r*A = A;
 
-registration let X be non empty RealLinearSpace;
+registration let X be RealLinearSpace;
   cluster circled -> symmetric Subset of X;
 end;
 
-registration let X be non empty RealLinearSpace, M be circled Subset of X;
+registration let X be RealLinearSpace, M be circled Subset of X;
   cluster conv(M) -> circled;
 end;
 
@@ -261,17 +255,17 @@ definition let X be non empty RLSStruct, F be Subset-Family of X;
  for V being Subset of X st V in F holds V is circled;
 end;
 
-registration  let V be non empty RealLinearSpace;
+registration let V be non empty RLSStruct;
  cluster non empty circled-membered Subset-Family of V;
 end;
 
 theorem :: RLTOPSP1:30
-  for X being non empty RealLinearSpace,
+  for X being non empty RLSStruct,
       F being circled-membered Subset-Family of X
   holds union F is circled;
 
 theorem :: RLTOPSP1:31
-  for X being non empty RealLinearSpace,
+  for X being non empty RLSStruct,
       F being circled-membered Subset-Family of X
   holds meet F is circled;
 
@@ -312,7 +306,7 @@ definition let X be non empty RLTopStruct;
 end;
 
 registration
- cluster non empty strict add-continuous Mult-continuous
+ cluster strict add-continuous Mult-continuous
     TopSpace-like Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like (non empty RLTopStruct);
 end;
@@ -324,21 +318,20 @@ definition
 end;
 
 theorem :: RLTOPSP1:32
- for X being non empty LinearTopSpace,
+ for X being LinearTopSpace,
      x1,x2 being Point of X, V being a_neighborhood of x1+x2
    ex V1 being a_neighborhood of x1, V2 being a_neighborhood of x2
     st V1+V2 c= V;
 
 theorem :: RLTOPSP1:33
- for X being non empty LinearTopSpace, a being Real, x being Point of X,
+ for X being LinearTopSpace, a being Real, x being Point of X,
      V being a_neighborhood of a*x
    ex r being positive Real, W being a_neighborhood of x
       st for s being Real st abs(s - a) < r holds s*W c= V;
 
 definition let X be non empty RLTopStruct, a be Point of X;
- func transl(a,X) -> map of X,X means
+  func transl(a,X) -> map of X,X means
 :: RLTOPSP1:def 10
-
   for x being Point of X holds it.x = a+x;
 end;
 
@@ -347,57 +340,52 @@ theorem :: RLTOPSP1:34
    holds transl(a,X).:V = a+V;
 
 theorem :: RLTOPSP1:35
- for  X being non empty LinearTopSpace, a being Point of X
+  for X being LinearTopSpace, a being Point of X
   holds rng transl(a,X) = [#]X;
 
 theorem :: RLTOPSP1:36
- for  X being non empty LinearTopSpace, a being Point of X
+ for X being LinearTopSpace, a being Point of X
   holds transl(a,X)" = transl(-a,X);
 
-registration let X be non empty LinearTopSpace, a being Point of X;
+registration let X be LinearTopSpace, a be Point of X;
  cluster transl(a,X) -> being_homeomorphism;
 end;
 
 registration
-  let X be non empty LinearTopSpace, E be open Subset of X, x be Point of X;
+  let X be LinearTopSpace, E be open Subset of X, x be Point of X;
   cluster x+E -> open;
 end;
 
 registration
- let X be non empty LinearTopSpace, E be open Subset of X, x be Point of X;
-  cluster x+E -> open;
-end;
-
-registration
- let X be non empty LinearTopSpace, E be open Subset of X, K be Subset of X;
+  let X be LinearTopSpace, E be open Subset of X, K be Subset of X;
   cluster K+E -> open;
 end;
 
 registration
-  let X be non empty LinearTopSpace, D be closed Subset of X, x be Point of X;
+  let X be LinearTopSpace, D be closed Subset of X, x be Point of X;
   cluster x+D -> closed;
 end;
 
 theorem :: RLTOPSP1:37
-  for X being non empty LinearTopSpace, V1,V2,V being Subset of X
+  for X being LinearTopSpace, V1,V2,V being Subset of X
    st V1+V2 c= V
   holds Int V1 + Int V2 c= Int V;
 
 theorem :: RLTOPSP1:38
-  for X being non empty LinearTopSpace, x being Point of X, V being Subset of X
+  for X being LinearTopSpace, x being Point of X, V being Subset of X
    holds x+Int(V) = Int(x+V);
 
 theorem :: RLTOPSP1:39
-  for X being non empty LinearTopSpace, x being Point of X, V being Subset of X
+  for X being LinearTopSpace, x being Point of X, V being Subset of X
    holds x+Cl(V) = Cl(x+V);
 
 theorem :: RLTOPSP1:40
-  for X being non empty LinearTopSpace, x,v being Point of X,
+  for X being LinearTopSpace, x,v being Point of X,
       V being a_neighborhood of x
    holds v+V is a_neighborhood of v+x;
 
 theorem :: RLTOPSP1:41
-  for X being non empty LinearTopSpace, x being Point of X,
+  for X being LinearTopSpace, x being Point of X,
       V being a_neighborhood of x
    holds -x+V is a_neighborhood of 0.X;
 
@@ -408,48 +396,46 @@ end;
 definition let X be non empty RLTopStruct;
   attr X is locally-convex means
 :: RLTOPSP1:def 11
-
   ex P being local_base of X st P is convex-membered;
 end;
 
-definition let X be non empty LinearTopSpace, E being Subset of X;
+definition let X be LinearTopSpace, E be Subset of X;
   attr E is bounded means
 :: RLTOPSP1:def 12
-
   for V being a_neighborhood of 0.X
    ex s st s > 0 & for t st t > s holds E c= t*V;
 end;
 
-registration let X be non empty LinearTopSpace;
+registration let X be LinearTopSpace;
  cluster {}X -> bounded;
 end;
 
-registration let X be non empty LinearTopSpace;
+registration let X be LinearTopSpace;
  cluster bounded Subset of X;
 end;
 
 theorem :: RLTOPSP1:42
-  for X being non empty LinearTopSpace, V1,V2 being bounded Subset of X
+  for X being LinearTopSpace, V1,V2 being bounded Subset of X
    holds V1 \/ V2 is bounded;
 
 theorem :: RLTOPSP1:43
-  for X being non empty LinearTopSpace, P being bounded Subset of X,
+  for X being LinearTopSpace, P being bounded Subset of X,
       Q being Subset of X
     st Q c= P
    holds Q is bounded;
 
 theorem :: RLTOPSP1:44
-  for X being non empty LinearTopSpace, F being Subset-Family of X
+  for X being LinearTopSpace, F being Subset-Family of X
     st F is finite & F = {P where P is bounded Subset of X: not contradiction}
    holds union F is bounded;
 
 theorem :: RLTOPSP1:45
-  for X being non empty LinearTopSpace, P being Subset-Family of X
+  for X being LinearTopSpace, P being Subset-Family of X
    st P = {U where U is a_neighborhood of 0.X: not contradiction}
   holds P is local_base of X;
 
 theorem :: RLTOPSP1:46
-  for X being non empty LinearTopSpace, O being local_base of X,
+  for X being LinearTopSpace, O being local_base of X,
       P being Subset-Family of X
    st P = {a+U where a is Point of X, U is Subset of X: U in O}
   holds P is basis of X;
@@ -457,7 +443,6 @@ theorem :: RLTOPSP1:46
 definition let X be non empty RLTopStruct, r be Real;
  func mlt(r,X) -> map of X,X means
 :: RLTOPSP1:def 13
-
   for x being Point of X holds it.x = r*x;
 end;
 
@@ -466,132 +451,131 @@ theorem :: RLTOPSP1:47
    holds mlt(r,X).:V = r*V;
 
 theorem :: RLTOPSP1:48
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
   holds rng mlt(r,X) = [#]X;
 
 theorem :: RLTOPSP1:49
- for X being non empty LinearTopSpace, r being non zero Real
+ for X being LinearTopSpace, r being non zero Real
   holds mlt(r,X)" = mlt(r",X);
 
-registration let X be non empty LinearTopSpace, r be non zero Real;
+registration let X be LinearTopSpace, r be non zero Real;
  cluster mlt(r,X) -> being_homeomorphism;
 end;
 
 theorem :: RLTOPSP1:50
-  for X being non empty LinearTopSpace, V being open Subset of X,
+  for X being LinearTopSpace, V being open Subset of X,
       r being non zero Real
    holds r*V is open;
 
 theorem :: RLTOPSP1:51
-  for X being non empty LinearTopSpace, V being closed Subset of X,
+  for X being LinearTopSpace, V being closed Subset of X,
       r being non zero Real
    holds r*V is closed;
 
 theorem :: RLTOPSP1:52
-  for X being non empty LinearTopSpace, V being Subset of X,
+  for X being LinearTopSpace, V being Subset of X,
       r be non zero Real
    holds r*Int(V) = Int(r*V);
 
 theorem :: RLTOPSP1:53
-  for X being non empty LinearTopSpace, A being Subset of X,
+  for X being LinearTopSpace, A being Subset of X,
       r being non zero Real
     holds r*Cl(A) = Cl(r*A);
 
 theorem :: RLTOPSP1:54
-  for X being non empty LinearTopSpace,A being Subset of X
+  for X being LinearTopSpace,A being Subset of X
      st X is_T1
     holds 0*Cl(A) = Cl(0*A);
 
 theorem :: RLTOPSP1:55
-  for X being non empty LinearTopSpace, x being Point of X,
+  for X being LinearTopSpace, x being Point of X,
       V being a_neighborhood of x, r be non zero Real
    holds r*V is a_neighborhood of r*x;
 
 theorem :: RLTOPSP1:56
-  for X being non empty LinearTopSpace, V being a_neighborhood of 0.X,
+  for X being LinearTopSpace, V being a_neighborhood of 0.X,
       r be non zero Real
    holds r*V is a_neighborhood of 0.X;
 
 registration
-  let X be non empty LinearTopSpace, V be bounded Subset of X, r be Real;
+  let X be LinearTopSpace, V be bounded Subset of X, r be Real;
   cluster r*V -> bounded;
 end;
 
 theorem :: RLTOPSP1:57
-  for X being non empty LinearTopSpace, W being a_neighborhood of 0.X
+  for X being LinearTopSpace, W being a_neighborhood of 0.X
    ex U being open a_neighborhood of 0.X st U is symmetric & U+U c= W;
 
 theorem :: RLTOPSP1:58
-  for X being non empty LinearTopSpace,
+  for X being LinearTopSpace,
       K being compact Subset of X, C being closed Subset of X
     st K misses C
    ex V being a_neighborhood of 0.X st K+V misses C+V;
 
 theorem :: RLTOPSP1:59
-  for X being non empty LinearTopSpace, B being local_base of X,
+  for X being LinearTopSpace, B being local_base of X,
       V being a_neighborhood of 0.X
      ex W being a_neighborhood of 0.X st W in B & Cl W c= V;
 
 theorem :: RLTOPSP1:60
-  for X being non empty LinearTopSpace, V being a_neighborhood of 0.X
+  for X being LinearTopSpace, V being a_neighborhood of 0.X
      ex W being a_neighborhood of 0.X st Cl W c= V;
 
 registration
-  cluster being_T1 -> Hausdorff (non empty LinearTopSpace);
+  cluster being_T1 -> Hausdorff LinearTopSpace;
 end;
 
 theorem :: RLTOPSP1:61
-  for X being non empty LinearTopSpace, A being Subset of X
+  for X being LinearTopSpace, A being Subset of X
    holds Cl A = meet {A+V where V is a_neighborhood of 0.X: not contradiction};
 
 theorem :: RLTOPSP1:62
-  for X being non empty LinearTopSpace, A,B being Subset of X
+  for X being LinearTopSpace, A,B being Subset of X
     holds Int A + Int B c= Int(A+B);
 
 theorem :: RLTOPSP1:63
-  for X being non empty LinearTopSpace, A,B being Subset of X
+  for X being LinearTopSpace, A,B being Subset of X
     holds Cl A + Cl B c= Cl(A+B);
 
 registration
-  let X be non empty LinearTopSpace, C be convex Subset of X;
+  let X be LinearTopSpace, C be convex Subset of X;
   cluster Cl C -> convex;
 end;
 
 registration
-  let X be non empty LinearTopSpace, C be convex Subset of X;
+  let X be LinearTopSpace, C be convex Subset of X;
   cluster Int C -> convex;
 end;
 
 registration
- let X be non empty LinearTopSpace, B be circled Subset of X;
+ let X be LinearTopSpace, B be circled Subset of X;
  cluster Cl B -> circled;
 end;
 
 theorem :: RLTOPSP1:64
- for X being non empty LinearTopSpace, B being circled Subset of X
+ for X being LinearTopSpace, B being circled Subset of X
    st 0.X in Int B
   holds Int B is circled;
 
 registration
- let X be non empty LinearTopSpace, E be bounded Subset of X;
+ let X be LinearTopSpace, E be bounded Subset of X;
  cluster Cl E -> bounded;
 end;
 
 theorem :: RLTOPSP1:65
-  for X being non empty LinearTopSpace, U being a_neighborhood of 0.X
+  for X being LinearTopSpace, U being a_neighborhood of 0.X
    ex W being a_neighborhood of 0.X st W is circled & W c= U;
 
 theorem :: RLTOPSP1:66
-  for X being non empty LinearTopSpace, U being a_neighborhood of 0.X
+  for X being LinearTopSpace, U being a_neighborhood of 0.X
     st U is convex
    ex W being a_neighborhood of 0.X st W is circled convex & W c= U;
 
 theorem :: RLTOPSP1:67
-  for X being non empty LinearTopSpace
+  for X being LinearTopSpace
    ex P being local_base of X st P is circled-membered;
 
 theorem :: RLTOPSP1:68
-  for X being non empty LinearTopSpace
+  for X being LinearTopSpace
     st X is locally-convex
    ex P being local_base of X st P is convex-membered;
-  

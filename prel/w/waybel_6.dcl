@@ -35,7 +35,6 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="YELLOW_2"/>
 <ArticleID name="WAYBEL_1"/>
@@ -62,9 +61,9 @@
 <Adjective nr="103"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
-<Adjective nr="116"/>
+<Adjective nr="115"/>
+<Adjective nr="126"/>
 <Adjective nr="127"/>
-<Adjective nr="128"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -154,7 +153,7 @@
 <Adjective nr="69">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="133">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -177,7 +176,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="134">
+<Adjective nr="133">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -199,7 +198,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="137">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

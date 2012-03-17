@@ -11,13 +11,13 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
       RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, PUA2MSS1, FINSEQ_1, FINSEQ_4,
       EQREL_1, T_1TOPSP;
- constructors NAT_1, FINSEQ_4, PUA2MSS1, T_1TOPSP, MEMBERED;
+ constructors NAT_1, FINSEQ_4, PUA2MSS1, T_1TOPSP, MEMBERED, SETFAM_1;
  registrations SUBSET_1, RELSET_1, ARYTM_3, MEMBERED, EQREL_1, PARTFUN1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RELAT_1;
- theorems TARSKI, FUNCT_1, SETFAM_1, EQREL_1, AXIOMS, LATTICE4, ZFMISC_1,
-      PUA2MSS1, RELAT_1, MSUALG_5, NAT_1, FINSEQ_1, FINSEQ_2, CQC_THE1,
-      FUNCT_2, T_1TOPSP, SUBSET_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1;
+ theorems TARSKI, FUNCT_1, SETFAM_1, EQREL_1, ZFMISC_1, PUA2MSS1, RELAT_1,
+      MSUALG_5, NAT_1, FINSEQ_1, FINSEQ_2, CQC_THE1, FUNCT_2, T_1TOPSP,
+      SUBSET_1, RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
  schemes EQREL_1, NAT_1, ZFREFLE1, DOMAIN_1, XBOOLE_0;
 
 begin
@@ -144,13 +144,13 @@ A3: PA is_coarser_than PB by A1,Th7;
   proof
     let b be set;
     assume A4:b in PA;
-    set B0={x8 where x8 is Element of bool Y: x8 in PB & x8 c= b};
+    set B0={x8 where x8 is Subset of Y: x8 in PB & x8 c= b};
     consider xb be set such that A5:xb in PB & xb c= b by A3,A4,SETFAM_1:def 3;
 A6: xb in B0 by A5;
        z in B0 implies z in PB
     proof
       assume z in B0;
-      then ex x8 being Element of bool Y st x8=z & x8 in PB & x8 c= b;
+      then ex x8 being Subset of Y st x8=z & x8 in PB & x8 c= b;
       hence thesis;
     end;
     then A7:B0 c= PB by TARSKI:def 3;
@@ -168,7 +168,7 @@ A6: xb in B0 by A5;
     proof
       assume z in union B0;
       then consider y such that A12:z in y & y in B0 by TARSKI:def 4;
-         ex x8 being Element of bool Y st x8=y & (x8 in PB & x8 c= b) by A12;
+         ex x8 being Subset of Y st x8=y & (x8 in PB & x8 c= b) by A12;
       hence z in b by A12;
     end;
     then union B0 c= b by TARSKI:def 3;
@@ -183,8 +183,7 @@ for PA being a_partition of Y holds
     Y is_a_dependent_set_of PA
 proof
   let PA be a_partition of Y;
-     {Y} c= bool Y by ZFMISC_1:80;
-  then A1:{Y} is Subset-Family of Y;
+  A1:{Y} is Subset-Family of Y by ZFMISC_1:80;
   A2:union {Y} = Y by ZFMISC_1:31;
      for A st A in {Y} holds A<>{} &
   for B st B in {Y} holds A = B or A misses B
@@ -259,7 +258,7 @@ proof
   defpred P[set] means $1 in F;
   deffunc S(Element of F') = f.$1;
   reconsider T={S(X) where X is Element of F':P[X]}
-    as Subset of bool bool Y from DOMAIN_1:sch 8;
+    as Subset-Family of bool Y from DOMAIN_1:sch 8;
   reconsider T as Subset-Family of bool Y;
   take B=Intersect(T);
   thus B c= PA
@@ -445,7 +444,7 @@ proof
   defpred P[set] means
    y in $1 & $1 is_a_dependent_set_of PA & $1 is_a_dependent_set_of PB;
   reconsider XX={X where X is Subset of Y:P[X]}
-      as Subset of bool Y from DOMAIN_1:sch 7;
+      as Subset-Family of Y from DOMAIN_1:sch 7;
   reconsider XX as Subset-Family of Y;
      Y c= Y;
 then A4: Y in XX by A2,A3;
@@ -587,14 +586,12 @@ proof
   per cases;
   suppose A1:Y={};
       {} c= bool {} by XBOOLE_1:2;
-   then {} is Subset-Family of {};
    then {} is a_partition of Y by A1,EQREL_1:def 6;
   hence thesis by Def3;
   end;
   suppose Y<>{};
    then reconsider Y as non empty set;
-      {Y} c= bool Y by ZFMISC_1:80;
-   then A2:{Y} is Subset-Family of Y;
+   A2:{Y} is Subset-Family of Y by ZFMISC_1:80;
    A3:union {Y} = Y by ZFMISC_1:31;
       for A being Subset of Y st A in {Y} holds A<>{} &
    for B being Subset of Y st B in {Y} holds A = B or A misses B
@@ -623,8 +620,7 @@ definition let Y;let PA,PB be a_partition of Y;
 correctness
 proof
       {} c= Y by XBOOLE_1:2;
-   then {{}} c= bool Y by ZFMISC_1:37;
-   then reconsider e = {{}} as Subset-Family of Y;
+   then reconsider e = {{}} as Subset-Family of Y by ZFMISC_1:37;
    set a = INTERSECTION(PA,PB);
       a c= bool Y
    proof
@@ -644,7 +640,7 @@ SETFAM_1:def 5;
    reconsider ia = a \ e as Subset-Family of Y;
    A1: union PA = Y & union PB = Y by EQREL_1:def 6;
    A2: union ia = union INTERSECTION(PA,PB) by Th3
-                .= union PA /\ union PB by LATTICE4:2
+                .= union PA /\ union PB by SETFAM_1:39
                 .= Y by A1;
       for A being Subset of Y st A in ia holds A<>{} &
       for B being Subset of Y st B in ia
@@ -1523,8 +1519,8 @@ proof
         reconsider f=fd^<*x1*> as FinSequence of Y;
            len f = len fd + len <*x1*> by FINSEQ_1:35;
         then A30:len f = len fd + 1 by FINSEQ_1:57;
-           1+1<=len fd + 1 by A29,AXIOMS:24;
-        then A31:1<=len f by A30,AXIOMS:22;
+           1+1<=len fd + 1 by A29,XREAL_1:8;
+        then A31:1<=len f by A30,XREAL_1:2;
         A32:(fd^<*x1*>).(len fd + 1)=x1 by FINSEQ_1:59;
         A33:f.(len fd + 1) in y1 by A24,FINSEQ_1:59;
            y1 meets q by A26,XBOOLE_0:def 7;
@@ -1559,7 +1555,7 @@ proof
           let i;
           assume 1<=i & i<len f;
           then A43:1<=i & i<= len fd by A30,NAT_1:38;
-             now per cases by A43,AXIOMS:21;
+             now per cases by A43,XREAL_1:1;
             case 1<=i & i<len fd;
             hence thesis by A40;
             end;
@@ -1615,8 +1611,8 @@ proof
           reconsider f=fd^<*x1*> as FinSequence of Y;
             len f = len fd + len <*x1*> by FINSEQ_1:35;
           then A52:len f = len fd + 1 by FINSEQ_1:57;
-             1+1<=len fd + 1 by A51,AXIOMS:24;
-          then A53:1<=len f by A52,AXIOMS:22;
+             1+1<=len fd + 1 by A51,XREAL_1:8;
+          then A53:1<=len f by A52,XREAL_1:2;
           A54:(fd^<*x1*>).(len fd + 1)=x1 by FINSEQ_1:59;
           A55:f.(len fd + 1) in y1 by A47,FINSEQ_1:59;
              y1 meets q by A49,XBOOLE_0:def 7;
@@ -1651,7 +1647,7 @@ proof
             let i;
             assume 1<=i & i<len f;
             then A66:1<=i & i<= len fd by A52,NAT_1:38;
-               now per cases by A66,AXIOMS:21;
+               now per cases by A66,XREAL_1:1;
               case 1<=i & i<len fd;
               hence thesis by A62;
               end;
@@ -1701,7 +1697,7 @@ proof
      reconsider f=fd^<*y'*> as FinSequence of Y;
         A74: len f = len fd + len <*y'*> by FINSEQ_1:35;
      then A75:len f = len fd + 1 by FINSEQ_1:57;
-        then A76: 1+1<=len f by A73,AXIOMS:24;
+        then A76: 1+1<=len f by A73,XREAL_1:8;
         A77:(fd^<*y'*>).(len fd + 1)=y by FINSEQ_1:59;
         A78:f.(len fd + 1) in y1 by A68,FINSEQ_1:59;
            y1 meets q by A70,XBOOLE_0:def 7;
@@ -1735,7 +1731,7 @@ proof
           let i;
           assume 1<=i & i<len f;
           then A88:1<=i & i<= len fd by A75,NAT_1:38;
-             now per cases by A88,AXIOMS:21;
+             now per cases by A88,XREAL_1:1;
             case 1<=i & i<len fd;
             hence thesis by A84;
             end;
@@ -1749,7 +1745,7 @@ proof
           for i st 1<=i & i<len f holds
            (ex p1,p2,x0 being set st p1 in PA & p2 in PB
             & f.i in p1 & x0 in (p1 /\ p2) & f.(i+1) in p2)
-            by A71,A73,A74,A76,A77,A82,AXIOMS:22,FINSEQ_1:57;
+            by A71,A73,A74,A76,A77,A82,XREAL_1:2,FINSEQ_1:57;
        for i st 1<=i & i<len f holds
          (ex u being set st u in Y & [f.i,u] in (ERl(PA) \/ ERl(PB))
           & [u,f.(i+1)] in (ERl(PA) \/ ERl(PB)))
@@ -1916,8 +1912,7 @@ func %O(Y) -> a_partition of Y equals
  :Def9: {Y};
 correctness
 proof
-     {Y} c= bool Y by ZFMISC_1:80;
-  then A1:{Y} is Subset-Family of Y;
+  A1:{Y} is Subset-Family of Y by ZFMISC_1:80;
   A2:union {Y} = Y by ZFMISC_1:31;
      for A st A in {Y} holds A<>{} &
   for B st B in {Y} holds A = B or A misses B

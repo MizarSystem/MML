@@ -14,7 +14,7 @@ environ
       NEWTON, METRIC_1, COMPTS_1, PRE_TOPC, PCOMPS_1, WELLORD1, RELAT_1,
       FINSEQ_1, FINSET_1, RELAT_2, FINSEQ_2, FINSEQ_4;
  constructors TOPS_2, NAT_1, COMPTS_1, PCOMPS_1, REAL_1, PREPOWER, WELLORD1,
-      WELLORD2, RELAT_2, FINSEQ_4, MEMBERED;
+      WELLORD2, RELAT_2, FINSEQ_4, MEMBERED, SETFAM_1;
  registrations SUBSET_1, PRE_TOPC, FINSET_1, RELSET_1, STRUCT_0, XREAL_0,
       FINSEQ_1, METRIC_1, NEWTON, MEMBERED, ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -23,7 +23,7 @@ environ
       TARSKI, WELLORD2, AXIOMS, ZFMISC_1, NAT_1, REAL_1, REAL_2, PREPOWER,
       WELLORD1, RELAT_1, RELAT_2, SEQ_4, FUNCT_1, FINSET_1, METRIC_1, FINSEQ_1,
       CARD_1, FINSEQ_2, FINSEQ_4, TBSP_1, NEWTON, XREAL_0, XBOOLE_0, XBOOLE_1,
-      XCMPLX_1;
+      XCMPLX_1, XREAL_1;
  schemes NAT_1, FUNCT_2, SUBSET_1, RECDEF_1, TREES_2, FRAENKEL, XBOOLE_0;
 
 begin :: 1. Selected properties of real numbers
@@ -40,7 +40,7 @@ canceled 2;
       consider t be real number such that
         A3: r * t = 1 by A1,AXIOMS:20;
         reconsider t as Real by XREAL_0:def 1;
-      A4: t > 0 by A1,A3,REAL_2:123;
+      A4: t > 0 by A1,A3,XREAL_1:133;
       A5: r = 1/t by A3,XCMPLX_1:74
         .= (u * 1) / (u * t) by A2,XCMPLX_1:92
         .= u/(u * t);
@@ -58,16 +58,16 @@ canceled 2;
                           .= (2 |^ k) * 2 by NEWTON:10
                           .= 2 |^ k + 2 |^ k;
               2 |^ k >= 1 by PREPOWER:19;
-          then A13: 2 |^ k + 2 |^ k >= 2 |^ k + 1 by REAL_1:55;
-              (2 |^ k) + 1 >= k + 1 by A11,REAL_1:55;
-          hence thesis by A12,A13,AXIOMS:22;
+          then A13: 2 |^ k + 2 |^ k >= 2 |^ k + 1 by XREAL_1:9;
+              (2 |^ k) + 1 >= k + 1 by A11,XREAL_1:9;
+          hence thesis by A12,A13,XREAL_1:2;
         end;
           for k be Nat holds P[k] from NAT_1:sch 1(A9,A10);
       then A14: n <= (2 |^ n);
           0 < n by A6,A7;
       then A15: u/n >= u/(2 |^ n) by A2,A14,REAL_2:201;
       take n;
-      thus thesis by A5,A8,A15,AXIOMS:22;
+      thus thesis by A5,A8,A15,XREAL_1:2;
     end;
 
 theorem Th4:
@@ -412,7 +412,7 @@ definition let PM be non empty set;
       end;
      end;
 
-scheme XXX1 { PM() -> non empty set, UB() -> Element of bool bool PM(),
+scheme XXX1 { PM() -> non empty set, UB() -> Subset-Family of PM(),
             F(set,set) -> Subset of PM(),
             P[set],
             Q[set,set,set,set]} :
@@ -420,15 +420,15 @@ ex f being Function of NAT, bool bool PM() st
   f.0 = UB() &
   for n holds f.(n+1) =
   {union { F(c,n) where c is Element of PM():
-              for fq be Element of bool bool PM(),q
+              for fq be Subset-Family of PM(),q
               st q <= n & fq = f.q holds Q[c,V,n,fq]
               }
-      where V is Element of bool PM() : P[V]}
+      where V is Subset of PM() : P[V]}
 proof
     defpred T[Nat,FinSequence of bool bool PM(),set] means
      $3 = $2^<*{union { F(c,$1) where c is Element of PM():
-      for fq be Element of bool bool PM(),q st q <= $1 & fq = $2/.(q+1) holds
-       Q[c,V,$1,fq] } where V is Element of bool PM() : P[V]}*>;
+      for fq be Subset-Family of PM(),q st q <= $1 & fq = $2/.(q+1) holds
+       Q[c,V,$1,fq] } where V is Subset of PM() : P[V]}*>;
     A1: for n being Element of NAT for x being Element of (bool bool PM())*
      ex y being Element of (bool bool PM())* st T[n,x,y]
         proof
@@ -436,27 +436,27 @@ proof
           let x be Element of (bool bool PM())*;
           set T = {
             union { F(c,n) where c is Element of PM():
-                    for fq be Element of bool bool PM(),q
+                    for fq be Subset-Family of PM(),q
                     st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]}
-            where V is Element of bool PM() : P[V]};
+            where V is Subset of PM() : P[V]};
               T in bool bool PM()
             proof
                   now
                 let X be set; assume X in T;
-                then consider V be Element of bool PM() such that
+                then consider V be Subset of PM() such that
                  A2:  X=union { F(c,n) where c is Element of PM():
-                    for fq be Element of bool bool PM(),q
+                    for fq be Subset-Family of PM(),q
                     st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]
                     } and P[V];
                     now let a be set; assume a in X;
                   then consider P be set such that A3: a in P and
                   A4: P in { F(c,n) where c is Element of PM():
-                    for fq be Element of bool bool PM(),q
+                    for fq be Subset-Family of PM(),q
                     st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq]}
                       by A2,TARSKI:def 4;
                   consider c be Element of PM() such that
                     A5: P = F(c,n) and
-                        for fq be Element of bool bool PM(),q
+                        for fq be Subset-Family of PM(),q
                     st q <= n & fq = x/.(q+1) holds Q[c,V,n,fq] by A4;
                   thus a in PM() by A3,A5;
                 end;
@@ -466,7 +466,7 @@ proof
               then T c= bool PM() by TARSKI:def 3;
               hence thesis;
             end;
-          then reconsider T as Element of bool bool PM();
+          then reconsider T as Subset-Family of PM();
           reconsider T1 = <*T*> as FinSequence of bool bool PM();
           consider y be FinSequence of bool bool PM() such that
             A6: y = x^T1;
@@ -493,10 +493,10 @@ proof
           let k such that A12: len(g.k) = k+1;
               len(g.(k+1))=len((g.k)^<*{
             union { F(c,k) where c is Element of PM():
-                    for fq be Element of bool bool PM(),q
+                    for fq be Subset-Family of PM(),q
                     st q <= k & fq = (g.k)/.(q+1) holds Q[c,V,k,fq]
                     }
-            where V is Element of bool PM() : P[V]}*>) by A8
+            where V is Subset of PM() : P[V]}*>) by A8
           .= len(g.k)+1 by FINSEQ_2:19;
           hence thesis by A12;
         end;
@@ -532,9 +532,9 @@ then A24:          q+1 in dom(g.(k+1)) by FINSEQ_1:def 3;
 then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
             thus (g.(k+1))/.(q+1) = (g.(k+1)).(q+1) by A24,FINSEQ_4:def 4
               .= ((g.k)^<*{ union { F(c,k) where c is Element of PM():
-                    for fq be Element of bool bool PM(),q
+                    for fq be Subset-Family of PM(),q
                     st q <= k & fq = (g.k)/.(q+1) holds Q[c,V,k,fq]}
-            where V is Element of bool PM()
+            where V is Subset of PM()
             : P[V]}*>).(q+1) by A8 .= (g.k).(q+1) by A25,FINSEQ_1:def 7
             .= (g.k)/.(q+1) by A25,FINSEQ_4:def 4 .= f.q by A17,A22;
             end;
@@ -544,38 +544,38 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
       A26: for n holds T[n] from NAT_1:sch 1(A14,A16);
       let n;
       deffunc F2(set) = union { F(c,n) where c is Element of PM():
-       for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
+       for fq be Subset-Family of PM(),q st q <= n & fq = f.q holds
         Q[c,$1,n,fq]};
       deffunc G2(set) = union { F(c,n) where c is Element of PM():
-       for fq be Element of bool bool PM(),q st q <= n &
+       for fq be Subset-Family of PM(),q st q <= n &
         fq = (g.n)/.(q+1) holds Q[c,$1,n,fq]};
-      set NF = { F2(V) where V is Element of bool PM(): P[V] };
-      A27: for V be Element of bool PM() st P[V] holds F2(V) = G2(V)
+      set NF = { F2(V) where V is Subset of PM(): P[V] };
+      A27: for V be Subset of PM() st P[V] holds F2(V) = G2(V)
           proof
-            let V be Element of bool PM() such that P[V];
+            let V be Subset of PM() such that P[V];
             deffunc F1(set) = F($1,n);
-            defpred P1[set] means for fq be Element of bool bool PM(),q st
+            defpred P1[set] means for fq be Subset-Family of PM(),q st
              q <= n & fq = f.q holds Q[$1,V,n,fq];
-            defpred P[set] means for fq be Element of bool bool PM(),q st
+            defpred P[set] means for fq be Subset-Family of PM(),q st
              q <= n & fq = (g.n)/.(q+1) holds Q[$1,V,n,fq];
                 A28:for c be Element of PM() holds P1[c] iff P[c]
                   proof
                   let c be Element of PM();
-                  thus (for fq be Element of bool bool PM(),q
+                  thus (for fq be Subset-Family of PM(),q
                   st q <= n & fq = f.q holds Q[c,V,n,fq]) implies
-                  for fq be Element of bool bool PM(),q
+                  for fq be Subset-Family of PM(),q
                   st q <= n & fq = (g.n)/.(q+1) holds Q[c,V,n,fq]
                     proof
-                      assume A29: for fq be Element of bool bool PM(),q
+                      assume A29: for fq be Subset-Family of PM(),q
                       st q <= n & fq = f.q holds Q[c,V,n,fq];
-                      let fq be Element of bool bool PM(),q;
+                      let fq be Subset-Family of PM(),q;
                       assume A30: q <= n & fq = (g.n)/.(q+1);
                       then fq = f.q by A26;
                       hence thesis by A29,A30;
                     end;
-                  assume A31: for fq be Element of bool bool PM(),q
+                  assume A31: for fq be Subset-Family of PM(),q
                   st q <= n & fq = (g.n)/.(q+1) holds Q[c,V,n,fq];
-                  let fq be Element of bool bool PM(),q; assume
+                  let fq be Subset-Family of PM(),q; assume
                     A32: q <= n & fq = f.q;
                   then f.q = (g.n)/.(q+1) by A26;
                   hence Q[c,V,n,fq] by A31,A32;
@@ -585,7 +585,7 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
 (A28);
             hence thesis;
           end;
-      A33: NF = { G2(V) where V is Element of bool PM() : P[V] }
+      A33: NF = { G2(V) where V is Subset of PM() : P[V] }
        from FRAENKEL:sch 6(A27);
       then A34: len(g.(n+1))=len((g.n)^<*NF*>) by A8
       .= len(g.n)+1 by FINSEQ_2:19;
@@ -602,7 +602,7 @@ then A25:          q+1 in dom (g.k) by FINSEQ_1:def 3;
       .= NF by FINSEQ_1:59;
   end;
 
-scheme XXX { PM() -> non empty set, UB() -> Element of bool bool PM(),
+scheme XXX { PM() -> non empty set, UB() -> Subset-Family of PM(),
             F(set,set) -> Subset of PM(),
             P[set],
             Q[set,set,set]} :
@@ -613,7 +613,7 @@ ex f being Function of NAT, bool bool PM() st
               Q[c,V,n] &
               not c in union{union(f.q): q <= n }
               }
-      where V is Element of bool PM()
+      where V is Subset of PM()
       : P[V]}
 proof
     defpred Q1[set,set,set,set] means Q[$1,$2,$3] & not $1 in union $4;
@@ -621,38 +621,38 @@ proof
       A1: f.0 = UB() and
       A2: for n holds f.(n+1) =
       { union { F(c,n) where c is Element of PM():
-                  for fq be Element of bool bool PM(),q
+                  for fq be Subset-Family of PM(),q
                   st q <= n & fq = f.q holds Q1[c,V,n,fq] }
-        where V is Element of bool PM() : P[V]} from XXX1;
+        where V is Subset of PM() : P[V]} from XXX1;
     take f;
     thus f.0 = UB() by A1;
     let n;
     deffunc F2(set) = union { F(c,n) where c is Element of PM():
-     for fq be Element of bool bool PM(),q st q <= n & fq = f.q holds
+     for fq be Subset-Family of PM(),q st q <= n & fq = f.q holds
       Q[c,$1,n] & not c in union(fq) };
     deffunc G2(set) = union { F(c,n) where c is Element of PM(): Q[c,$1,n] &
      not c in union{union(f.q): q <= n } };
-    set fxxx1 = { F2(V) where V is Element of bool PM() : P[V] };
-    set fxxx = { G2(V) where V is Element of bool PM() : P[V] };
+    set fxxx1 = { F2(V) where V is Subset of PM() : P[V] };
+    set fxxx = { G2(V) where V is Subset of PM() : P[V] };
     A3:now
-        let V be Element of bool PM();
+        let V be Subset of PM();
         assume P[V];
         deffunc F(set) = F($1,n);
-        defpred P[set] means for fq be Element of bool bool PM(),q
+        defpred P[set] means for fq be Subset-Family of PM(),q
          st q <= n & fq = f.q holds Q[$1,V,n] & not $1 in union(fq);
         defpred Q1[set] means Q[$1,V,n] & not $1 in union{union(f.q1):
          q1 <= n };
           A4:now
               let c be Element of PM();
-                A5: ( for fq be Element of bool bool PM(),q
+                A5: ( for fq be Subset-Family of PM(),q
                 st q <= n & fq = f.q holds not c in union(fq))
                 iff not c in union{union(f.q): q <= n }
                 proof
-                thus (for fq be Element of bool bool PM(),q
+                thus (for fq be Subset-Family of PM(),q
                 st q <= n & fq = f.q holds not c in union(fq))
                 implies not c in union{union(f.q): q <= n }
                   proof
-                    assume A6: for fq be Element of bool bool PM(),q
+                    assume A6: for fq be Subset-Family of PM(),q
                       st q <= n & fq = f.q holds not c in union(fq);
                     assume c in union{union(f.q): q <= n};
                     then consider C be set such that
@@ -663,7 +663,7 @@ proof
                     thus contradiction by A6,A7,A9,A10;
                   end;
                 assume A11: not c in union{union(f.q): q <= n };
-                let fq be Element of bool bool PM(),q;
+                let fq be Subset-Family of PM(),q;
                 assume that A12: q <= n and A13: fq = f.q;
                 assume A14: c in union(fq);
                     union(fq) in {union(f.p): p <= n} by A12,A13;
@@ -671,10 +671,10 @@ proof
                 end;
               thus P[c] iff Q1[c]
                 proof
-                  hereby assume A15:( for fq be Element of bool bool PM(),q
+                  hereby assume A15:( for fq be Subset-Family of PM(),q
                     st q <= n & fq = f.q holds Q[c,V,n] & not c in union(fq));
                     consider q such that A16: q <= n;
-                    consider fq be Element of bool bool PM() such that
+                    consider fq be Subset-Family of PM() such that
                       A17: fq = f.q;
                     thus Q[c,V,n] by A15,A16,A17;
                     thus not c in union{union(f.p): p <= n } by A5,A15;
@@ -716,7 +716,7 @@ theorem  :: Stone Theorem - general case
           where c is Element of PM:
           c in V\PartUnion(V,Mn) & Ball(c,3/2) c= V}
            where V is Subset of PM: V in FX};
-            UB is Element of bool bool the carrier of PM
+            UB is Subset-Family of PM
           proof
             reconsider UB as set;
                 UB c= bool the carrier of PM
@@ -745,10 +745,10 @@ theorem  :: Stone Theorem - general case
             end;
           hence thesis;
         end;
-        then reconsider UB as Element of bool bool the carrier of PM;
+        then reconsider UB as Subset-Family of PM;
         deffunc F1(Element of PM,Nat) = Ball($1,1/(2 |^($2+1)));
         defpred Q1[Element of PM,
-                   Element of bool the carrier of PM,Nat] means
+                   Subset of PM,Nat] means
          $1 in $2\PartUnion($2,Mn) & Ball($1,3/(2 |^ ($3+1))) c= $2;
         defpred P1[set] means $1 in FX;
         consider f being Function of NAT, bool bool the carrier of PM
@@ -758,7 +758,7 @@ theorem  :: Stone Theorem - general case
               where c is Element of PM:
               Q1[c,V,n] &
               not c in union{union (f.q): q <= n } }
-                where V is Element of bool the carrier of PM: P1[V]}
+                where V is Subset of PM: P1[V]}
                   from XXX;
         defpred P2[set] means ex n st $1 in f.n;
         consider GX being Subset-Family of PM
@@ -819,9 +819,9 @@ theorem  :: Stone Theorem - general case
                         Ball(c,3/(2 |^ (k+1))) c= V &
                         not c in union{union(f.q)
                                       where q is Nat: q <= k } }
-                        where V is Element of bool the carrier of PM:
+                        where V is Subset of PM:
                           V in FX} by A14,A18,A23;
-                      then consider V be Element of bool the carrier of PM
+                      then consider V be Subset of PM
                         such that
                         A24: X = union { Ball(c,1/(2 |^ (k+1)))
                         where c is Element of PM:
@@ -898,7 +898,7 @@ theorem  :: Stone Theorem - general case
                        2 |^ (k+1) = 2 |^ k * 2 by NEWTON:11;
                   then 2 |^ (k+1) >= 2 |^ k by A39,REAL_2:146;
                   then 3/2 |^ (k+1) <= 3/2 |^ k by A39,REAL_2:201;
-                  then A40: 3/2 |^ (k+1) <= r by A38,AXIOMS:22;
+                  then A40: 3/2 |^ (k+1) <= r by A38,XREAL_1:2;
                   assume A41: not x in union GX;
 
                   A42: for V be set,n st V in f.n holds not x in V
@@ -978,7 +978,7 @@ theorem  :: Stone Theorem - general case
                     y in V\PartUnion(V,Mn) &
                     Ball(y,3/(2 |^ (k+1))) c= V &
                       not y in union { union(f.q) where q is Nat: q <= k}}
-                    where V is Element of bool the carrier of PM: V in FX}
+                    where V is Subset of PM: V in FX}
 by A31;
                   then W in f.(k+1) by A14;
                   hence ex W be set,l be Nat st W in f.l & x in W by A45;
@@ -1056,9 +1056,9 @@ by A31;
                       c in V\PartUnion(V,Mn) &
                       Ball(c,3/(2 |^ (k+1))) c= V &
                       not c in union { union(f.q) where q is Nat: q <= k}}
-                      where V is Element of bool the carrier of PM: V in FX}
+                      where V is Subset of PM: V in FX}
                         by A14,A61,A69;
-                    then consider V be Element of bool the carrier of PM
+                    then consider V be Subset of PM
                       such that
                       A70: X = union { Ball(c,1/(2 |^ (k+1)))
                       where c is Element of PM:
@@ -1192,9 +1192,9 @@ by A31;
                           c in Y\PartUnion(Y,Mn) &
                           Ball(c,3/(2 |^ (l+1))) c= Y &
                           not c in union{union(f.q) where q is Nat: q <= l}}
-                          where Y is Element of bool the carrier of PM:
+                          where Y is Subset of PM:
                             Y in FX} by A14,A96,A97,A98,A100,A105;
-                          then consider Y be Element of bool the carrier of PM
+                          then consider Y be Subset of PM
                           such that A106: V = union { Ball(c,1/(2 |^ (l+1)))
                           where c is Element of PM:
                           c in Y\PartUnion(Y,Mn) &
@@ -1229,7 +1229,7 @@ then A113: 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ t) by A111,REAL_2:201;
   1/(2 |^ (m+1+k+1)) by NEWTON:11 .= (((2 |^ (1+k))*2)-1)/(2 |^ (m+1+k+1))
     by XCMPLX_1:121;
       (2 |^ (1+k)) >= 1 by PREPOWER:19; then (2 |^ (1+k))*2>=2
-  by REAL_2:146; then ((2 |^ (1+k))*2)-1>=2-1 by REAL_1:49;
+  by REAL_2:146; then ((2 |^ (1+k))*2)-1>=2-1 by XREAL_1:11;
 then A115: 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) >= 1/(2 |^ (m+1+k+1)) by A112,A114,
 REAL_1:73;
     A116: for t be Nat st t < l holds not c in union(f.t)
@@ -1241,13 +1241,13 @@ REAL_1:73;
         hence contradiction by A110,A118,TARSKI:def 4;
       end;
           dist(c,y) < 1/(2 |^ t) by A105,A107,A109,METRIC_1:12;
-      then dist(c,y) < 1/(2 |^ (m+1+k+1)) by A113,AXIOMS:22;
+      then dist(c,y) < 1/(2 |^ (m+1+k+1)) by A113,XREAL_1:2;
       then A119: dist(c,y) + dist(y,x') <
-        1/(2 |^ (m+1+k+1)) + dist(y,x') by REAL_1:53;
+        1/(2 |^ (m+1+k+1)) + dist(y,x') by XREAL_1:8;
       A120: dist(c,x') >= 1/(2 |^ m)
         proof
           assume not dist(c,x') >= 1/(2 |^ m);
-          then dist(x',c) < r by A83,AXIOMS:22;
+          then dist(x',c) < r by A83,XREAL_1:2;
           then c in Ball(x',r) by METRIC_1:12;
           then A121: c in union (f.k) by A79,A82,TARSKI:def 4;
           A122: k <> l
@@ -1255,19 +1255,19 @@ REAL_1:73;
             assume k=l;
             then union (f.k) in {union(f.q) where q is Nat: q <= l};
             hence contradiction by A110,A121,TARSKI:def 4;
-          end;A123:l >= k+(m+1) by A102,A105,REAL_1:53;   k+(m+1)>=k
+          end;A123:l >= k+(m+1) by A102,A105,XREAL_1:8;   k+(m+1)>=k
 by NAT_1:29;
-          then k <= l by A123,AXIOMS:22;
+          then k <= l by A123,XREAL_1:2;
           then k < l by A122,REAL_1:def 5;
           hence contradiction by A116,A121;
         end;
           dist(c,y) + dist(y,x') >= dist(c,x') by METRIC_1:4;
       then dist(c,y) + dist(y,x') >= 1/(2 |^ m)
-          by A120,AXIOMS:22;
+          by A120,XREAL_1:2;
       then 1/(2 |^ (m+1+k+1)) + dist(y,x') > 1/(2 |^ m)
-          by A119,AXIOMS:22;
-      then dist(y,x') >= 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) by REAL_1:84;
-      then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,AXIOMS:22;
+          by A119,XREAL_1:2;
+      then dist(y,x') >= 1/(2 |^ m) - 1/(2 |^ (m+1+k+1)) by XREAL_1:21;
+      then dist(y,x') >= 1/(2 |^ (m+1+k+1)) by A115,XREAL_1:2;
       hence contradiction by A85,A103,METRIC_1:12;
     end;
     end;
@@ -1341,7 +1341,7 @@ by NAT_1:29;
           by METRIC_1:4;
         then A156: dist(c1,x') + dist(x',c2) <=
           (dist(c1,w1) + dist(w1,x')) +
-          (dist(x',w2) + dist(w2,c2)) by A155,REAL_1:55;
+          (dist(x',w2) + dist(w2,c2)) by A155,XREAL_1:9;
            A157: dist(c1,c2) <= dist(c1,x') + dist(x',c2)
           by METRIC_1:4;
         A158: dist(c1,w1) < 1/2 by A143,A145,METRIC_1:12;
@@ -1351,44 +1351,44 @@ by NAT_1:29;
           by A85,A138,METRIC_1:12;
         A161: dist(c2,w2) < 1/2 by A150,A152,METRIC_1:12;
             dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
-            (dist(x',w2) + dist(w2,c2))) by A156,A157,AXIOMS:22;
+            (dist(x',w2) + dist(w2,c2))) by A156,A157,XREAL_1:2;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) <= dist(c1,w1) by REAL_1:86;
+          dist(w2,c2))) <= dist(c1,w1) by XREAL_1:22;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) < 1/2 by A158,AXIOMS:22;
+          dist(w2,c2))) < 1/2 by A158,XREAL_1:2;
         then dist(c1,c2) < 1/2 + (dist(w1,x') +
-          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+          (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(w1,x') + (1/2 +
           (dist(x',w2) + dist(w2,c2)));
         then dist(c1,c2) - (1/2 + (dist(x',w2) +
-          dist(w2,c2))) < dist(w1,x') by REAL_1:84;
+          dist(w2,c2))) < dist(w1,x') by XREAL_1:21;
         then dist(c1,c2) - (1/2 + (dist(x',w2) +
           dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
-            by A159,AXIOMS:22;
+            by A159,XREAL_1:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (1/2 +
-          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+          (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(x',w2) + (dist(w2,c2)
           + (1/(2 |^ (m+1+k+1)) + 1/2));
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < dist(x',w2)
-              by REAL_1:84;
+              by XREAL_1:21;
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/(2 |^ (m+1+k+1))
-              by A160,AXIOMS:22;
+              by A160,XREAL_1:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/2))
-              by REAL_1:84;
+              by XREAL_1:21;
         then dist(c1,c2) < dist(w2,c2) + (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2));
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < dist(w2,c2)
-              by REAL_1:84;
+              by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2)) < 1/2
-              by A161,AXIOMS:22;
+              by A161,XREAL_1:2;
         then A162: dist(c1,c2) < 1/2 + (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/2))
-              by REAL_1:84;
+              by XREAL_1:21;
             A163: (1/2 + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/2) =
             (1+1)/2 + (1/(2 |^ (m+1+k+1)) +
@@ -1406,8 +1406,8 @@ by NAT_1:29;
               2/2 = 1/(2 |^ (m+1+k)) by A163,A165;
             then (1/2 + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/2) <= 2/2 + 1/2
-                by A166,REAL_1:86;
-        then A167: dist(c1,c2) < 3/2 by A162,AXIOMS:22;
+                by A166,XREAL_1:22;
+        then A167: dist(c1,c2) < 3/2 by A162,XREAL_1:2;
         then A168: c2 in Ball(c1,3/2) by METRIC_1:12;
         A169: c1 in Ball(c2,3/2) by A167,METRIC_1:12;
         A170: Mn is_connected_in FX by A8,WELLORD1:def 5;
@@ -1437,10 +1437,10 @@ by NAT_1:29;
               Ball(c,3/(2 |^ (l+1))) c= M1 &
                 not c in union { union(f.q)
                 where q is Nat: q <= l}}
-          where M1 is Element of bool the carrier of PM:
+          where M1 is Subset of PM:
               M1 in FX} by A14,A129,A172;
         then consider
-        M1 be Element of bool the carrier of PM such that
+        M1 be Subset of PM such that
           A173: x1 = union {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
               c in M1\PartUnion(M1,Mn) &
@@ -1467,10 +1467,9 @@ by NAT_1:29;
               Ball(c,3/(2 |^ (l+1))) c= M2 &
               not c in union { union(f.q)
                 where q is Nat: q <= l}}
-            where M2 is Element of bool the carrier of PM:
+            where M2 is Subset of PM:
                   M2 in FX} by A14,A126,A128,A130,A131,A172;
-        then consider M2 be Element of bool the carrier of PM
-             such that
+        then consider M2 be Subset of PM such that
           A180: x2 = union {Ball(c,1/(2 |^ (l+1)))
           where c is Element of PM:
             c in M2\PartUnion(M2,Mn) &
@@ -1496,7 +1495,7 @@ by NAT_1:29;
           by METRIC_1:4;
         then A188: dist(c1,x') + dist(x',c2) <=
           (dist(c1,w1) + dist(w1,x')) +
-          (dist(x',w2) + dist(w2,c2)) by A187,REAL_1:55;
+          (dist(x',w2) + dist(w2,c2)) by A187,XREAL_1:9;
            A189: dist(c1,c2) <= dist(c1,x') + dist(x',c2)
           by METRIC_1:4;
         A190: dist(c1,w1) < 1/(2 |^ (l+1))
@@ -1508,45 +1507,45 @@ by NAT_1:29;
         A193: dist(c2,w2) < 1/(2 |^ (l+1))
           by A182,A184,METRIC_1:12;
             dist(c1,c2) <= dist(c1,w1) + (dist(w1,x') +
-            (dist(x',w2) + dist(w2,c2))) by A188,A189,AXIOMS:22;
+            (dist(x',w2) + dist(w2,c2))) by A188,A189,XREAL_1:2;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) <= dist(c1,w1) by REAL_1:86;
+          dist(w2,c2))) <= dist(c1,w1) by XREAL_1:22;
         then dist(c1,c2) - (dist(w1,x') + (dist(x',w2) +
-          dist(w2,c2))) < 1/(2 |^ (l+1)) by A190,AXIOMS:22;
+          dist(w2,c2))) < 1/(2 |^ (l+1)) by A190,XREAL_1:2;
         then dist(c1,c2) < 1/(2 |^ (l+1)) + (dist(w1,x') +
-          (dist(x',w2) + dist(w2,c2))) by REAL_1:84;
+          (dist(x',w2) + dist(w2,c2))) by XREAL_1:21;
         then dist(c1,c2) < dist(w1,x') + (1/(2 |^ (l+1)) +
           (dist(x',w2) + dist(w2,c2)));
         then dist(c1,c2) - (1/(2 |^ (l+1)) + (dist(x',w2) +
-          dist(w2,c2))) < dist(w1,x') by REAL_1:84;
+          dist(w2,c2))) < dist(w1,x') by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (l+1)) + (dist(x',w2) +
           dist(w2,c2))) < 1/(2 |^ (m+1+k+1))
-            by A191,AXIOMS:22;
+            by A191,XREAL_1:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (l+1)) + (dist(x',w2) + dist(w2,c2)))
-            by REAL_1:84;
+            by XREAL_1:21;
         then dist(c1,c2) < dist(x',w2) + (dist(w2,c2)
           + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))));
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-            dist(x',w2) by REAL_1:84;
+            dist(x',w2) by XREAL_1:21;
         then dist(c1,c2) - (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-            1/(2 |^ (m+1+k+1)) by A192,AXIOMS:22;
+            1/(2 |^ (m+1+k+1)) by A192,XREAL_1:2;
         then dist(c1,c2) < 1/(2 |^ (m+1+k+1)) + (dist(w2,c2) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))))
-              by REAL_1:84;
+              by XREAL_1:21;
         then dist(c1,c2) < dist(w2,c2) + (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))));
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-          dist(w2,c2) by REAL_1:84;
+          dist(w2,c2) by XREAL_1:21;
         then dist(c1,c2) - (1/(2 |^ (m+1+k+1)) +
           (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1)))) <
-            1/(2 |^ (l+1)) by A193,AXIOMS:22;
+            1/(2 |^ (l+1)) by A193,XREAL_1:2;
         then A194: dist(c1,c2) < 1/(2 |^ (l+1)) +
           (1/(2 |^ (m+1+k+1)) + (1/(2 |^ (m+1+k+1)) +
-            1/(2 |^ (l+1)))) by REAL_1:84;
+            1/(2 |^ (l+1)))) by XREAL_1:21;
             A195: (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) =
             (1/(2 |^ (l+1)) + 1/(2 |^ (l+1))) +
@@ -1579,12 +1578,12 @@ by NAT_1:29;
             then (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) <=
               2/(2 |^ (l+1)) + 1/(2 |^ (l+1))
-              by A201,REAL_1:86;
+              by A201,XREAL_1:22;
             then (1/(2 |^ (l+1)) + 1/(2 |^ (m+1+k+1)))
               + (1/(2 |^ (m+1+k+1)) + 1/(2 |^ (l+1))) <=
               (2+1)/(2 |^ (l+1)) by XCMPLX_1:63;
         then A202: dist(c1,c2) < 3/(2 |^ (l+1))
-          by A194,AXIOMS:22;
+          by A194,XREAL_1:2;
         then A203: c2 in Ball(c1,3/(2 |^ (l+1))) by METRIC_1:12;
         A204: c1 in Ball(c2,3/(2 |^ (l+1))) by A202,METRIC_1:12;
         A205: Mn is_connected_in FX by A8,WELLORD1:def 5;

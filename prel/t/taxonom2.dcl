@@ -34,12 +34,12 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
+<Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="49"/>
+<Adjective nr="50"/>
 <Adjective nr="51"/>
-<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -49,7 +49,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -67,7 +67,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -88,7 +88,7 @@
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="55">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -102,7 +102,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="53"/>
+<Adjective nr="52"/>
 </Cluster>
 </CCluster>
 </Registrations>

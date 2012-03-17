@@ -22,7 +22,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="MEASURE5"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -53,14 +52,14 @@
 <Func kind="K" nr="52"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="264">
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="39"/>
+<Adjective nr="100"/>
 <Adjective nr="101"/>
-<Adjective nr="102"/>
 </Cluster>
 </FCluster>
 </Registrations>

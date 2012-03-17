@@ -40,19 +40,19 @@
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Adjective>
-<Adjective nr="62"/>
-<Adjective nr="65"/>
+<Adjective nr="63"/>
+<Adjective nr="66"/>
 </Cluster>
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Typ>
 <Typ kind="M" nr="16">
 <Cluster/>
@@ -63,7 +63,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="291">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="1"/>
@@ -72,33 +72,33 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Adjective>
-<Adjective nr="62"/>
-<Adjective nr="65"/>
+<Adjective nr="63"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Adjective>
-<Adjective nr="62"/>
-<Adjective nr="69"/>
+<Adjective nr="63"/>
+<Adjective nr="70"/>
 </Cluster>
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Typ>
 <Typ kind="M" nr="16">
 <Cluster/>
@@ -109,7 +109,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="293">
+<Func kind="K" nr="291">
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
 <LocusVar nr="1"/>
@@ -118,14 +118,14 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="20"/>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="K" nr="1">
 <Func kind="K" nr="71"/>
 </Func>
-<Func kind="K" nr="255"/>
+<Func kind="K" nr="253"/>
 </Adjective>
-<Adjective nr="62"/>
-<Adjective nr="69"/>
+<Adjective nr="63"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 </Registrations>

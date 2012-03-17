@@ -1,6 +1,6 @@
 :: The {M}aclaurin Expansions
 ::  by Akira Nishino and Yasunari Shidama
-:: 
+::
 :: Received July 6, 2005
 :: Copyright (c) 2005 Association of Mizar Users
 
@@ -18,10 +18,10 @@ environ
  registrations RELSET_1, XREAL_0, MEMBERED, RCOMP_1, INT_1, SEQ_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TAYLOR_1;
- theorems XBOOLE_1, ABSVALUE, REAL_1, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1,
-      RCOMP_1, SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1,
-      NEWTON, POWER, FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1,
-      ABIAN, SCMFSA9A;
+ theorems XBOOLE_1, ABSVALUE, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
+      SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, NEWTON, POWER,
+      FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1, ABIAN, SCMFSA9A,
+      COMPLEX1;
  schemes NAT_1;
 
 begin
@@ -43,7 +43,7 @@ P2: for k be Nat st P[k] holds P[k+1]
     let k be Nat such that
 AS1: P[k];
     abs(x |^ (k+1)) = abs(x * x |^ k) by NEWTON:11
-                   .= abs(x) * abs(x |^ k) by ABSVALUE:10
+                   .= abs(x) * abs(x |^ k) by COMPLEX1:151
                    .= abs(x) |^ (k+1) by NEWTON:11,AS1;
   hence thesis;
   end;
@@ -163,7 +163,7 @@ proof
   P1: P[0] by TAYLOR_1:def 4;
   P2: for k be Nat st P[k] holds P[k+1]
    proof
-   let k be Nat such that 
+   let k be Nat such that
     AS2: P[k];
     P6: exp is_differentiable_on ].-r,r.[ by FDIFF_1:34,TAYLOR_1:16;
     diff(exp,].-r,r.[).(k+1)=(diff(exp,].-r,r.[).k) `| ].-r,r.[
@@ -219,9 +219,9 @@ AS1:x in ].-r,r.[ and
 A3: 0 < s & s < 1;
   x in ].0-r,0+r.[ by AS1; then
 P2: abs(x-0) < r by RCOMP_1:8;
-P3: abs(s*x-0) = abs(s) * abs(x) by ABSVALUE:10
+P3: abs(s*x-0) = abs(s) * abs(x) by COMPLEX1:151
                 .= s * abs(x) by A3,ABSVALUE:def 1;
-  abs(x)>=0 by ABSVALUE:5; then
+  abs(x)>=0 by COMPLEX1:132; then
   abs(x) * s < r * 1 by A3,XREAL_1:99,P2; then
   (s*x) in ].0-r,0+r.[ by RCOMP_1:8,P3; then
 P4: (s*x) in dom(exp | ].-r,r.[) by LM00;
@@ -230,8 +230,8 @@ P5: abs((n+1)!) = ((n+1)!) by ABSVALUE:def 1;
   abs( (diff(exp,].-r,r.[).(n+1)).(s*x) * x |^ (n+1) /((n+1)!) )
      = abs((exp | ].-r,r.[).(s*x) * x |^ (n+1) /((n+1)!) ) by LM01
     .= abs(exp.(s*x) * x |^ (n+1) /((n+1)!) ) by FUNCT_1:70,P4
-    .= abs(exp.(s*x) * x |^ (n+1)) /abs((n+1)!) by ABSVALUE:16
-    .= abs(exp.(s*x)) * abs(x |^ (n+1)) /((n+1)!) by ABSVALUE:10,P5;
+    .= abs(exp.(s*x) * x |^ (n+1)) /abs((n+1)!) by COMPLEX1:153
+    .= abs(exp.(s*x)) * abs(x |^ (n+1)) /((n+1)!) by COMPLEX1:151,P5;
   hence thesis by LM04;
 end;
 
@@ -273,13 +273,13 @@ theorem LM07:
       AS2: x in ].-r,r.[ & 0 < s & s < 1;
       x in ].0-r,0+r.[ by AS2; then
       P3: abs(x-0) < r by RCOMP_1:8;
-      abs(x) >= 0 by ABSVALUE:5; then
+      abs(x) >= 0 by COMPLEX1:132; then
       s * abs(x) < 1 * r by AS2,P3,XREAL_1:99; then
       abs(s) * abs(x) < r by ABSVALUE:def 1,AS2; then
-      abs(s*x - 0) < r by ABSVALUE:10; then
+      abs(s*x - 0) < r by COMPLEX1:151; then
       P4:(s*x) in ].0-r,0+r.[ by RCOMP_1:8;
-      P6: abs(exp.(s*x)) >= 0 by ABSVALUE:5;
-      P7: abs(x |^ n /(n!)) >= 0 by ABSVALUE:5;
+      P6: abs(exp.(s*x)) >= 0 by COMPLEX1:132;
+      P7: abs(x |^ n /(n!)) >= 0 by COMPLEX1:132;
       exp is_differentiable_on [#]REAL &
             (for x0 be Real holds 0 <= diff(exp,x0)) by TAYLOR_1:16; then
       P8: exp is_non_decreasing_on [#](REAL) by FDIFF_2:39;
@@ -290,7 +290,7 @@ theorem LM07:
       abs(exp.(s*x)) = exp.(s*x) by ABSVALUE:def 1; then
       P16: abs(exp.(s*x)) <= M by P8,P9,TAYLOR_1:16,RFUNCT_2:48,P14;
       P18: n! > 0 by NEWTON:23;
-      P20: abs(x |^ n /(n!)) =abs(x |^ n) / abs(n!) by ABSVALUE:16
+      P20: abs(x |^ n /(n!)) =abs(x |^ n) / abs(n!) by COMPLEX1:153
                            .=abs(x |^ n) / (n!) by P18,ABSVALUE:def 1
                            .=abs(x) |^ n /(n!) by LM04;
       TH1: for a,b be Real st 0 <=a & a<=b for n be Nat holds
@@ -318,7 +318,7 @@ theorem LM07:
         for n be Nat holds P[n] from NAT_1:sch 1(THP1,THP4);
         hence thesis;
       end;
-      abs(x) >= 0 by ABSVALUE:5; then
+      abs(x) >= 0 by COMPLEX1:132; then
       abs(x) |^ n <= L |^ n by TH1,P3; then
 P22:  abs(x |^ n /(n!)) <=L |^ n / (n!) by P20,XREAL_1:74,P18;
       abs((diff(exp,].-r,r.[).n).(s*x) * x |^ n / (n!))
@@ -327,10 +327,10 @@ P22:  abs(x |^ n /(n!)) <=L |^ n / (n!) by P20,XREAL_1:74,P18;
                          .=abs(exp.(s*x)* (x |^ n / (n!)))
                                    by XCMPLX_1:75
                          .=abs(exp.(s*x))*abs(x |^ n / (n!))
-                                   by ABSVALUE:10; then
+                                   by COMPLEX1:151; then
       abs((diff(exp,].-r,r.[).n).(s*x) * x |^ n / (n!))
                          <= M*(L |^ n / (n!))
-                                   by REAL_2:197,P6,P7,P16,P22;
+                                   by XREAL_1:68,P6,P7,P16,P22;
       hence abs((diff(exp,].-r,r.[).n).(s*x) * x |^ n /(n!))
                          <= M*L |^ n / (n!) by XCMPLX_1:75;
     end;
@@ -374,7 +374,7 @@ proof
       P7: L |^ m / (m!) >= 0 by P5,P6,REAL_2:125;
       abs((M(#)(L ExpSeq)).m - 0) = abs(M*(L |^ m /(m!))) by P1
                                   .=abs(M)*abs(L |^ m /(m!))
-                                             by ABSVALUE:10
+                                             by COMPLEX1:151
                                   .=M*abs(L |^ m /(m!))
                                              by AS1,ABSVALUE:def 1
                                   .=M*(L |^ m /(m!))
@@ -457,7 +457,7 @@ proof
     let n be Nat;
 P2: n! > 0 by NEWTON:23;
     abs(x ExpSeq.n) = abs(x |^ n / (n!)) by SIN_COS:def 9
-                   .= abs(x |^ n) / abs(n!) by ABSVALUE:16
+                   .= abs(x |^ n) / abs(n!) by COMPLEX1:153
                    .= abs(x |^ n) / (n!) by ABSVALUE:def 1,P2
                    .= abs(x) |^ n / (n!) by LM04
                    .= (abs(x) ExpSeq).n by SIN_COS:def 9;
@@ -857,32 +857,32 @@ proof
       AS2: x in ].-r,r.[ & s > 0 & s < 1;
       x in ].0-r,0+r.[ by AS2; then
       P3: abs(x-0) < r by RCOMP_1:8;
-      abs x >= 0 by ABSVALUE:5; then
+      abs x >= 0 by COMPLEX1:132; then
       s * abs(x) < 1 * r by AS2,P3,XREAL_1:99; then
       abs(s) * abs(x) < r by ABSVALUE:def 1,AS2; then
-      abs(s*x - 0) < r by ABSVALUE:10; then
+      abs(s*x - 0) < r by COMPLEX1:151; then
       P4: (s*x) in ].0-r,0+r.[ by RCOMP_1:8;
       P5: n! > 0 by NEWTON:23;
-      P6: abs(x |^ n / (n!)) = abs(x |^ n) / abs(n!) by ABSVALUE:16
+      P6: abs(x |^ n / (n!)) = abs(x |^ n) / abs(n!) by COMPLEX1:153
                              .= abs(x |^ n) / (n!) by P5,ABSVALUE:def 1
                              .= abs(x) |^ n / (n!) by LM04;
       P7: abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
                 = abs((diff(sin,].-r,r.[).n).(s*x) * (x |^ n / (n!)))
                               by XCMPLX_1:75
                .= abs((diff(sin,].-r,r.[).n).(s*x)) * abs(x |^ n / (n!))
-                              by ABSVALUE:10
+                              by COMPLEX1:151
                .= abs((diff(sin,].-r,r.[).n).(s*x)) * abs(x) |^ n / (n!)
                      by XCMPLX_1:75,P6;
       P7a: abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
                 = abs((diff(cos,].-r,r.[).n).(s*x) * (x |^ n / (n!)))
                               by XCMPLX_1:75
                .= abs((diff(cos,].-r,r.[).n).(s*x)) * abs(x |^ n / (n!))
-                              by ABSVALUE:10
+                              by COMPLEX1:151
                .= abs((diff(cos,].-r,r.[).n).(s*x)) * abs(x) |^ n / (n!)
                      by XCMPLX_1:75,P6;
-      P8: abs((diff(sin,].-r,r.[).n).(s*x)) >= 0 by ABSVALUE:5;
-      P8a: abs((diff(cos,].-r,r.[).n).(s*x)) >= 0 by ABSVALUE:5;
-      P9: abs(x) |^ n / (n!) >= 0 by P6,ABSVALUE:5;
+      P8: abs((diff(sin,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
+      P8a: abs((diff(cos,].-r,r.[).n).(s*x)) >= 0 by COMPLEX1:132;
+      P9: abs(x) |^ n / (n!) >= 0 by P6,COMPLEX1:132;
       P10: for k be Nat holds abs((-1) |^ k) = 1
       proof
         let k be Nat;
@@ -905,7 +905,7 @@ proof
                    .= abs(((-1) |^ 1 * (-1)) |^ j * (-1)) by NEWTON:11
                    .= abs(((-1) * (-1)) |^ j * (-1)) by NEWTON:10
                    .= abs(1 * (-1)) by NEWTON:15
-                   .= abs 1 by ABSVALUE:17
+                   .= abs 1 by COMPLEX1:138
                    .= 1 by ABSVALUE:def 1;
           end;
       end;
@@ -924,7 +924,7 @@ proof
                     .= abs(((-1) |^ k) * ((sin | ].-r,r.[).(s*x)))
                         by SEQ_1:def 6,P15,P4
                     .= abs((-1) |^ k) * abs((sin | ].-r,r.[).(s*x))
-                        by ABSVALUE:10
+                        by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by P10
                     .= abs(sin.(s*x)) by FUNCT_1:70,P16;
             abs(sin (s*x)) <= 1 by SIN_COS:30;
@@ -942,7 +942,7 @@ proof
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
                         by SEQ_1:def 6,P19,P4
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
-                        by ABSVALUE:10
+                        by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by P10
                     .= abs(cos.(s*x)) by FUNCT_1:70,P20;
             abs(cos (s*x)) <= 1 by SIN_COS:30;
@@ -964,7 +964,7 @@ proof
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
                         by SEQ_1:def 6,P15,P4
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
-                        by ABSVALUE:10
+                        by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by P10
                     .= abs(cos.(s*x)) by FUNCT_1:70,P16;
             abs(cos (s*x)) <= 1 by SIN_COS:30;
@@ -983,7 +983,7 @@ proof
                     .= abs(((-1) |^ (k+1)) * ((sin | ].-r,r.[).(s*x)))
                         by SEQ_1:def 6,P19,P4
                     .= abs((-1) |^ (k+1)) * abs((sin | ].-r,r.[).(s*x))
-                        by ABSVALUE:10
+                        by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by P10
                     .= abs(sin.(s*x)) by FUNCT_1:70,P20;
             abs(sin (s*x)) <= 1 by SIN_COS:30;
@@ -1032,9 +1032,9 @@ proof
           P27: k! > 0 by NEWTON:23;
           P28: abs(x) |^ k / (k!) = abs(x |^ k) / (k!) by LM04
                              .= abs(x |^ k) / abs(k!) by P27,ABSVALUE:def 1
-                             .= abs(x |^ k / (k!)) by ABSVALUE:16;
-          P29: abs(x) |^ k / (k!) >= 0 by P28,ABSVALUE:5;
-          abs x >= 0 by ABSVALUE:5; then
+                             .= abs(x |^ k / (k!)) by COMPLEX1:153;
+          P29: abs(x) |^ k / (k!) >= 0 by P28,COMPLEX1:132;
+          abs x >= 0 by COMPLEX1:132; then
           abs(x) |^ k / (k!) * abs(x) <= r2 |^ k / (k!) * r2
                           by AS3,P29,P3,XREAL_1:68;
           hence thesis by P25,P26,XREAL_1:74;
@@ -1045,7 +1045,7 @@ proof
       abs((diff(sin,].-r,r.[).n).(s*x)) * (abs(x) |^ n / (n!))
           <= r1*(r2 |^ n / (n!)) &
       abs((diff(cos,].-r,r.[).n).(s*x)) * (abs(x) |^ n / (n!))
-          <= r1*(r2 |^ n / (n!)) by REAL_2:197,P8,P8a,P9,P13,P13a,P22;
+          <= r1*(r2 |^ n / (n!)) by XREAL_1:68,P8,P8a,P9,P13,P13a,P22;
       hence abs((diff(sin,].-r,r.[).n).(s*x) * x |^ n / (n!))
           <= r1*r2 |^ n / (n!) &
             abs((diff(cos,].-r,r.[).n).(s*x) * x |^ n / (n!))
@@ -1332,7 +1332,7 @@ P4: for m being Nat st n<=m holds abs(Partial_Sums(x P_sin).m-g) < p
         consider j be Nat such that
    AS8: m1=2*j+1 by SCMFSA9A:1;
    P10: n*2+0 <= n*2+1 by XREAL_1:8;
-        (n*2+2)-1 <= (2*j+1)-1 by REAL_1:49,AS4,AS8; then
+        (n*2+2)-1 <= (2*j+1)-1 by XREAL_1:11,AS4,AS8; then
         n*2 <= j*2 by P10,XREAL_1:2; then
         (n*2)/2 <= (j*2)/2 by XREAL_1:74; then
         abs(Partial_Sums(x P_sin).j-g) < p by P4;
@@ -1369,7 +1369,7 @@ AS4: m1>=n1;
       suppose m1 is even; then
         consider j be Nat such that
    AS5: m1=2*j by ABIAN:def 2;
-    PE: (n*2)+1 >= n*2 by REAL_1:69;
+    PE: (n*2)+1 >= n*2 by XREAL_1:31;
         n*2 <= j*2 by PE,XREAL_1:2,AS4,AS5; then
         (n*2)/2 <= (j*2)/2 by XREAL_1:74; then
         abs(Partial_Sums(x P_cos).j-g) < p by P12;

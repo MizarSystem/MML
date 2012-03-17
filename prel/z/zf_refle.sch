@@ -122,7 +122,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -226,7 +226,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -316,7 +316,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">
@@ -421,7 +421,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 </ArgTypes>

@@ -23,7 +23,6 @@
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="CARD_3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
@@ -76,7 +75,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="98">
+<Adjective nr="97">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Adjective>

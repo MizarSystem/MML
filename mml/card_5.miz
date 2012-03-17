@@ -14,9 +14,10 @@ environ
       MCART_1, FUNCOP_1, ORDINAL2, CARD_1, FUNCT_4, ORDINAL3, CARD_2, CARD_3,
       ORDINAL4, ZFREFLE1;
  constructors ZF_REFLE, NAT_1, WELLORD1, WELLORD2, MCART_1, FUNCOP_1, ORDINAL3,
-      CARD_2, ZFREFLE1, XREAL_0;
+      CARD_2, ZFREFLE1, XREAL_0, FINSEQ_2, ORDINAL1, ORDINAL2;
  registrations SUBSET_1, FUNCT_1, ORDINAL1, ORDINAL2, CARD_1, CARD_3, ORDINAL3,
-      ARYTM_3, ORDINAL4, FINSET_1, XREAL_0;
+      ARYTM_3, ORDINAL4, FINSET_1, XREAL_0, CARD_4, NAT_1, FINSEQ_1, FINSEQ_2,
+      RELSET_1, MEMBERED;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FUNCT_1, ORDINAL2, CARD_1, CARD_3, ZFREFLE1, XBOOLE_0;
  theorems AXIOMS, TARSKI, FUNCT_1, FUNCT_2, FUNCOP_1, NAT_1, FINSEQ_1,
@@ -75,9 +76,7 @@ theorem Th9:
  nextcard Card X = nextcard X
   proof Card X = Card Card X by CARD_1:def 5;
     then Card Card X <` nextcard X & for M st Card Card X <` M holds nextcard
-X <=`
- M
-     by CARD_1:def 6;
+X <=` M by CARD_1:def 6;
    hence thesis by CARD_1:def 6;
   end;
 
@@ -101,9 +100,10 @@ A4:  x in dom f & y in f.x;
 
 theorem Th11:
  alef A is infinite
-  proof {} c= A by XBOOLE_1:2;
-    then alef 0 c= alef A by CARD_1:43;
-   hence thesis by CARD_4:16,FINSET_1:13;
+  proof
+   {} c= A by XBOOLE_1:2;
+   then alef 0 c= alef A by CARD_1:43;
+   hence thesis by CARD_4:11;
   end;
 
 theorem Th12:
@@ -115,8 +115,7 @@ A2:  P[K] implies P[nextcard K]
      proof assume that
 A3:    P[K] and
 A4:    not nextcard K is finite;
-          now assume
-           K is finite;
+          now assume K is finite;
         then reconsider K' = K as finite set;
             Card K = Card card K' & Card K = K by CARD_1:def 5;
          then nextcard K = Card (card K' + 1) by CARD_1:76;
@@ -541,21 +540,21 @@ A2:    x in dom phi; then x is Ordinal by ORDINAL1:23;
 
 theorem
     X <> {} implies
-   Card { Y where Y is Element of bool X: Card Y <` M } <=` M*`exp(Card X,M)
+   Card { Y where Y is Subset of X: Card Y <` M } <=` M*`exp(Card X,M)
   proof assume X <> {}; then not X,{} are_equipotent &
   Card 0 = 0 by CARD_1:46,def 5;
 then A1: Card X <> {} by CARD_1:21;
        X,Card X are_equipotent by CARD_1:def 5;
    then consider f such that
 A2:  f is one-to-one & dom f = X & rng f = Card X by WELLORD2:def 4;
-   set Z = { Y where Y is Element of bool X: Card Y <` M };
+   set Z = { Y where Y is Subset of X: Card Y <` M };
    defpred P[set,set] means
     ex A be Ordinal, phi be Ordinal-Sequence st
      $2 = [A,phi] & dom phi = M & phi|A is increasing &
       rng (phi|A) = f.:$1 & for B st A c= B & B in M holds phi.B = {};
 A3:  for x,x1,x2 being set st x in Z & P[x,x1] & P[x,x2] holds x1 = x2
      proof let x,x1,x2 be set; assume x in Z;
-then A4:       ex Y being Element of bool X st x = Y & Card Y <` M;
+then A4:       ex Y being Subset of X st x = Y & Card Y <` M;
       given A1 be Ordinal, phi1 be Ordinal-Sequence such that
 A5:    x1 = [A1,phi1] & dom phi1 = M & phi1|A1 is increasing &
        rng (phi1|A1) = f.:x & for B st A1 c= B & B in M holds phi1.B = {};
@@ -582,7 +581,7 @@ A9:      x in M; then reconsider A = x as Ordinal by ORDINAL1:23;
      end;
 A10:  for x st x in Z ex y st P[x,y]
      proof let x; assume x in Z;
-then A11:       ex Y being Element of bool X st x = Y & Card Y <` M;
+then A11:       ex Y being Subset of X st x = Y & Card Y <` M;
       set A = order_type_of RelIncl (f.:x);
 A12:    f.:x c= Card X by A2,RELAT_1:144;
        then Card (f.:x) = Card A & Card (f.:x) <=` Card x by Th16,CARD_2:3;
@@ -611,8 +610,8 @@ A16:  dom g = Z & for x st x in Z holds P[x,g.x] from FUNCT_1:sch 2(A3,A10);
        g is one-to-one
      proof let x,y; assume
 A17:    x in dom g & y in dom g & g.x = g.y;
-       then A18: (ex Y being Element of bool X st x = Y & Card Y <` M) &
-       (ex Y being Element of bool X st y = Y & Card Y <` M) by A16;
+       then A18: (ex Y being Subset of X st x = Y & Card Y <` M) &
+       (ex Y being Subset of X st y = Y & Card Y <` M) by A16;
       consider A1 be Ordinal, phi1 be Ordinal-Sequence such that
 A19:    g.x = [A1,phi1] & dom phi1 = M & phi1|A1 is increasing &
        rng (phi1|A1) = f.:x & for B st A1 c= B & B in M holds phi1.B = {}
@@ -646,7 +645,7 @@ A25:    y in dom g & x = g.y by FUNCT_1:def 5;
 A26:    x = [A,phi] & dom phi = M & phi|A is increasing &
         rng (phi|A) = f.:y & for B st A c= B & B in M holds phi.B = {}
          by A16,A25;
-A27:       ex Y being Element of bool X st y = Y & Card Y <` M by A16,A25;
+A27:       ex Y being Subset of X st y = Y & Card Y <` M by A16,A25;
           phi|A is one-to-one by A26,Th20;
        then dom (phi|A),f.:y are_equipotent by A26,WELLORD2:def 4;
        then Card dom (phi|A) = Card (f.:y) & Card (f.:y) <=` Card y
@@ -698,7 +697,7 @@ theorem Th23:
 
  registration
   cluster infinite -> non empty set;
-   coherence by CARD_1:51;
+   coherence;
  end;
 
  definition

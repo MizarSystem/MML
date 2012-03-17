@@ -22,7 +22,6 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="EUCLID_4"/>
@@ -35,18 +34,18 @@
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="150">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="150">
+<Func kind="K" nr="140">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="173">
+<Func kind="K" nr="163">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -64,7 +63,7 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -72,13 +71,13 @@
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="178">
+<Func kind="K" nr="168">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>

@@ -29,7 +29,6 @@
 <ArticleID name="GROUP_7"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="EQREL_1"/>
@@ -54,27 +53,27 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="53"/>
-<Adjective nr="91"/>
+<Adjective nr="52"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="53"/>
-<Adjective nr="91"/>
+<Adjective nr="52"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="349">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="51"/>
 <Adjective nr="52"/>
-<Adjective nr="53"/>
-<Adjective nr="91"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -82,13 +81,13 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="52"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -104,7 +103,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="402">
+<Func kind="K" nr="392">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -116,12 +115,12 @@
 <Adjective nr="5"/>
 <Adjective nr="7">
 <Func kind="U" nr="1">
-<Func kind="K" nr="386">
-<Func kind="K" nr="349">
+<Func kind="K" nr="376">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
-<Func kind="K" nr="351">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -136,11 +135,11 @@
 <Num nr="2"/>
 </Func>
 <Func kind="K" nr="187">
-<Func kind="K" nr="386">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Func>
-<Func kind="K" nr="386">
+<Func kind="K" nr="376">
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>
 </Func>
@@ -150,12 +149,12 @@
 </Adjective>
 <Adjective nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="386">
-<Func kind="K" nr="349">
+<Func kind="K" nr="376">
+<Func kind="K" nr="339">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
-<Func kind="K" nr="351">
+<Func kind="K" nr="341">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -170,11 +169,11 @@
 <Num nr="2"/>
 </Func>
 <Func kind="K" nr="187">
-<Func kind="K" nr="386">
+<Func kind="K" nr="376">
 <LocusVar nr="1"/>
 <LocusVar nr="3"/>
 </Func>
-<Func kind="K" nr="386">
+<Func kind="K" nr="376">
 <LocusVar nr="2"/>
 <LocusVar nr="4"/>
 </Func>

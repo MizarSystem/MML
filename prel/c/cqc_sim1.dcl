@@ -29,10 +29,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="167"/>
+<Func kind="K" nr="165"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="188">
+<Func kind="K" nr="186">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

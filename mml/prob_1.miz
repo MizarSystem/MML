@@ -17,7 +17,7 @@ environ
       ORDINAL2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FINSUB_1, TARSKI;
- theorems TARSKI, ZFMISC_1, FUNCT_1, REAL_1, FUNCT_2, ABSVALUE, SEQ_2,
+ theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, ABSVALUE, SEQ_2,
       SETFAM_1, SUBSET_1, RELAT_1, RELSET_1, FINSUB_1, FUNCOP_1, XBOOLE_0,
       XBOOLE_1, XCMPLX_1, XREAL_1, CARD_3;
  schemes FUNCT_2, PARTFUN1;
@@ -36,10 +36,9 @@ reserve seq for Real_Sequence;
 ::  corrolaries from other articles  ::
 :::::::::::::::::::::::::::::::::::::::
 
-canceled;
-
-theorem
 Th2: for r,r2 st 0 <= r holds r2 - r <= r2 by XREAL_1:45;
+
+canceled 2;
 
 theorem
 Th3: for r,seq st (ex n st for m st n <= m holds seq.m = r) holds
@@ -350,7 +349,6 @@ proof
 end;
 
 definition let X be set, A1 be SetSequence of X;
- canceled 2;
   redefine func Union A1 -> Subset of X;
   coherence
   proof
@@ -405,6 +403,8 @@ A1:  for x being Element of NAT holds f.x = (A1.x)`;
   end;
 
 definition let X be set, A1 be SetSequence of X;
+ canceled 2;
+
   func Complement A1 -> SetSequence of X means
     :Def4: for n holds it.n = (A1.n)`;
   existence by Th26;
@@ -421,6 +421,13 @@ definition let X be set, A1 be SetSequence of X;
           NAT = dom BSeq & NAT = dom CSeq by FUNCT_2:def 1;
        hence thesis by A3,FUNCT_1:9;
     end;
+ involutiveness
+  proof let IT,A1 be SetSequence of X;
+   assume
+Z:  for n holds IT.n = (A1.n)`;
+   let n;
+   thus A1.n = (A1.n)`` .= (IT.n)` by Z;
+  end;
 end;
 
 definition let X be set, A1 be SetSequence of X;
@@ -484,17 +491,6 @@ theorem Th30:
     end; hence thesis by XBOOLE_0:def 3;
   end;
 
-theorem
-Th31: Complement Complement A1 = A1
-  proof
-     for n holds ((Complement A1).n)` = A1.n
-    proof let n;
-       A1.n = (A1.n)``;
-    hence thesis by Def4;
-    end;
-  hence thesis by Def4;
-  end;
-
 definition let X,A1;
   attr A1 is non-increasing means
    :Def6: for n,m st n <= m holds A1.m c= A1.n;
@@ -515,26 +511,15 @@ definition let X be set;
   end;
 end;
 
+canceled;
+
 theorem Th32:
   for S being non empty set holds
    S is SigmaField of X iff
     (S c= bool X) &
     (for A1 being SetSequence of X st
       (for n holds A1.n in S) holds Intersection A1 in S) &
-    (for A being Subset of X st A in S holds A` in S)
-proof
-  let S be non empty set;
-  thus S is SigmaField of X implies
-    S c= bool X &
-    (for A1 being SetSequence of X st
-      (for n holds A1.n in S) holds Intersection A1 in S) &
     (for A being Subset of X st A in S holds A` in S) by Def8;
-  assume S c= bool X &
-  (for A1 being SetSequence of X st
-     (for n holds A1.n in S) holds Intersection A1 in S) &
-  (for A being Subset of X st A in S holds A` in S);
-  hence thesis by Def8;
-end;
 
 canceled 2;
 
@@ -656,7 +641,7 @@ A5: for A1 st (for n holds A1.n in Si) holds Union A1 in Si
     proof let A1;
      assume for n holds A1.n in Si;
      then Union Complement Complement A1 in Si by A4;
-     hence thesis by Th31;
+     hence thesis;
     end;
     for ASeq being SetSequence of Si holds Union ASeq in Si
     proof let ASeq be SetSequence of Si;
@@ -1053,7 +1038,7 @@ Th70: A c= B implies P.A <= P.B
   proof assume A c= B;
    then P.(B \ A) = P.B - P.A by Th69;
    then 0 <= P.B - P.A by Def13;
-   then 0 + P.A <= P.B by REAL_1:84;
+   then 0 + P.A <= P.B by XREAL_1:21;
    hence thesis;
   end;
 
@@ -1104,7 +1089,7 @@ theorem
 ::  of subsets of given set and family of Borel Sets
 
 reserve D for Subset of REAL;
-reserve S for Subset of bool Omega;
+reserve S for Subset-Family of Omega;
 
 theorem
 Th76: bool Omega is SigmaField of Omega
@@ -1115,15 +1100,15 @@ Th76: bool Omega is SigmaField of Omega
    hence thesis by Th32;
   end;
 
-Lm2: for X being Subset of bool Omega ex Y being SigmaField of Omega
+Lm2: for X being Subset-Family of Omega ex Y being SigmaField of Omega
     st X c= Y & for Z st (X c= Z & Z is SigmaField of Omega) holds Y c= Z
-   proof let X be Subset of bool Omega;
+   proof let X be Subset-Family of Omega;
     set V = { S : X c= S & S is SigmaField of Omega};
     set Y = meet V;
     A1: bool Omega in V
        proof
            bool Omega c= bool Omega;
-        then reconsider X1 = bool Omega as Subset of bool Omega;
+        then reconsider X1 = bool Omega as Subset-Family of Omega;
            X1 is SigmaField of Omega by Th76;
         hence thesis;
        end;
@@ -1161,14 +1146,14 @@ A11:       now let Z; assume Z in V;
        end;
        for Z st (X c= Z & Z is SigmaField of Omega) holds Y c= Z
     proof let Z; assume A12: X c= Z & Z is SigmaField of Omega;
-     then reconsider Z as Subset of bool Omega;
+     then reconsider Z as Subset-Family of Omega;
         Z in V by A12;
      hence thesis by SETFAM_1:4;
     end;
     hence thesis by A1,A11,SETFAM_1:6;
    end;
 
-definition let Omega; let X be Subset of bool Omega;
+definition let Omega; let X be Subset-Family of Omega;
   func sigma(X) -> SigmaField of Omega means
      X c= it &
   for Z st (X c= Z & Z is SigmaField of Omega) holds it c= Z;
@@ -1199,10 +1184,10 @@ definition let r;
 end;
 
 definition
-  func Family_of_halflines -> Subset of bool REAL equals
+  func Family_of_halflines -> Subset-Family of REAL equals
      {D: ex r st D = halfline(r)};
  coherence
-   proof {D: ex r st D = halfline(r)} is Subset of bool REAL
+   proof {D: ex r st D = halfline(r)} is Subset-Family of REAL
      proof now let p; assume p in {D: ex r st D = halfline(r)};
             then ex D st p = D & ex r st D = halfline(r);
             hence p in bool REAL;

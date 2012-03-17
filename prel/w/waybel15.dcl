@@ -30,7 +30,6 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
@@ -51,7 +50,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="228">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -63,20 +62,20 @@
 <Adjective nr="68"/>
 <Adjective nr="69"/>
 <Adjective nr="70"/>
+<Adjective nr="74"/>
 <Adjective nr="75"/>
 <Adjective nr="76"/>
-<Adjective nr="77"/>
+<Adjective nr="105"/>
 <Adjective nr="106"/>
-<Adjective nr="107"/>
-<Adjective nr="110"/>
+<Adjective nr="109"/>
+<Adjective nr="116"/>
 <Adjective nr="117"/>
 <Adjective nr="118"/>
-<Adjective nr="119"/>
+<Adjective nr="126"/>
 <Adjective nr="127"/>
-<Adjective nr="128"/>
+<Adjective nr="138"/>
 <Adjective nr="139"/>
 <Adjective nr="140"/>
-<Adjective nr="141"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -88,12 +87,12 @@
 <Adjective nr="19"/>
 <Adjective nr="68"/>
 <Adjective nr="69"/>
-<Adjective nr="119"/>
+<Adjective nr="118"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="142">
+<Adjective nr="141">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -104,7 +103,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="138">
+<Adjective nr="137">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

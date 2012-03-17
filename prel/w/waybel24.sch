@@ -25,7 +25,6 @@
 <ArticleID name="FUNCT_4"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="MCART_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -119,8 +118,8 @@
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
+<Adjective nr="124"/>
 <Adjective nr="125"/>
-<Adjective nr="126"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

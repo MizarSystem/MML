@@ -14,7 +14,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
@@ -30,11 +29,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="22" value="false"/>
+<Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -54,7 +53,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="55">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -64,9 +63,9 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="44"/>
+<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -80,8 +79,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="49"/>
-<Adjective nr="55">
+<Adjective nr="48"/>
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -94,17 +93,17 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="103">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="39"/>
+<Adjective nr="44"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -115,18 +114,18 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="87">
+<Func kind="K" nr="79">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1"/>
+<Adjective nr="31"/>
 <Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="49"/>
-<Adjective nr="55">
+<Adjective nr="48"/>
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -136,16 +135,16 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="53"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="80">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="55">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -155,8 +154,8 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="22" value="false"/>
+<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -168,7 +167,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="51">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -187,7 +186,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="52">
+<Adjective nr="51">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -197,14 +196,14 @@
 <Typ kind="G" nr="4">
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="44"/>
+<Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="49"/>
+<Adjective nr="48"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -215,7 +214,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="55">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

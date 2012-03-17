@@ -14,7 +14,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -116,20 +115,20 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
+<Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="124"/>
 <Adjective nr="125"/>
-<Adjective nr="126"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="4">
 <Cluster>
+<Adjective nr="32"/>
 <Adjective nr="33"/>
 <Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="124"/>
 <Adjective nr="125"/>
-<Adjective nr="126"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">

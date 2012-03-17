@@ -11,13 +11,13 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XREAL_0, RELAT_1, FUNCT_1,
       FUNCT_2, FUNCT_3, NAT_1, FINSEQ_1, FINSET_1, SETFAM_1, STRUCT_0,
       PRE_TOPC;
- constructors FUNCT_3, NAT_1, FINSEQ_1, PRE_TOPC, XREAL_0, MEMBERED;
+ constructors FUNCT_3, NAT_1, FINSEQ_1, PRE_TOPC, XREAL_0, MEMBERED, SETFAM_1;
  registrations PRE_TOPC, STRUCT_0, RELSET_1, ARYTM_3, MEMBERED, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, PRE_TOPC;
  theorems TARSKI, FINSET_1, SETFAM_1, FUNCT_1, FUNCT_2, FUNCT_3, NAT_1,
-      FINSEQ_1, ZFMISC_1, PRE_TOPC, TOPS_1, RELAT_1, REAL_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, SUBSET_1;
+      FINSEQ_1, ZFMISC_1, PRE_TOPC, TOPS_1, RELAT_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, SUBSET_1, XREAL_1;
  schemes FUNCT_1, NAT_1, SUBSET_1;
 
 begin
@@ -98,10 +98,10 @@ theorem
 canceled 3;
 
 theorem
-     for T being 1-sorted, F being Subset-Family of T holds
+  for T being set, F being Subset-Family of T holds
   F <> {} iff COMPLEMENT(F) <> {}
   proof
-   let T be 1-sorted, F be Subset-Family of T;
+   let T be set, F be Subset-Family of T;
    thus F <> {} implies COMPLEMENT(F) <> {} by SETFAM_1:46;
    assume COMPLEMENT(F) <> {};
     then COMPLEMENT(COMPLEMENT(F)) <> {} by SETFAM_1:46;
@@ -109,27 +109,25 @@ theorem
   end;
 
 theorem Th11:
- for T being 1-sorted, F being Subset-Family of T holds
+ for T being set, F being Subset-Family of T holds
   F <> {} implies meet COMPLEMENT(F) = (union F)`
   proof
-   let T be 1-sorted, F be Subset-Family of T;
+   let T be set, F be Subset-Family of T;
    assume F <> {};
-   then meet COMPLEMENT(F) = [#](the carrier of T) \ union F by SETFAM_1:47;
-   then meet COMPLEMENT(F) = (the carrier of T) \ union F by SUBSET_1:def 4;
-   then meet COMPLEMENT(F) = [#]T \ union F by PRE_TOPC:def 3;
-   hence thesis by PRE_TOPC:17;
+   then meet COMPLEMENT(F) = [#]T \ union F by SETFAM_1:47;
+   then meet COMPLEMENT(F) = T \ union F by SUBSET_1:def 4;
+   hence thesis by SUBSET_1:def 5;
   end;
 
 theorem Th12:
- for T being 1-sorted, F being Subset-Family of T holds
+ for T being set, F being Subset-Family of T holds
   F <> {} implies union COMPLEMENT(F) = (meet F)`
   proof
-   let T be 1-sorted, F be Subset-Family of T;
+   let T be set, F be Subset-Family of T;
    assume F <> {};
-   then union COMPLEMENT(F) = [#](the carrier of T) \ meet F by SETFAM_1:48
-   .= (the carrier of T) \ meet F by SUBSET_1:def 4;
-   then union COMPLEMENT(F) = [#]T \ meet F by PRE_TOPC:def 3;
-   hence thesis by PRE_TOPC:17;
+   then union COMPLEMENT(F) = [#]T \ meet F by SETFAM_1:48
+   .= T \ meet F by SUBSET_1:def 4;
+   hence thesis by SUBSET_1:def 5;
   end;
 
 theorem Th13:
@@ -398,7 +396,7 @@ A12:  now assume k=0;
      then 1 <= 1 & 1 <= k by A14,NAT_1:38;
      then A15: Seg k <> {} by FINSEQ_1:3;
          k+1 <= n+1 by A11,NAT_1:37;
-     then k <= n by REAL_1:53;
+     then k <= n by XREAL_1:8;
      then A16: Seg k c= dom p by A4,FINSEQ_1:7;
 A17:  p.:(Seg(k+1)) = p.:(Seg k \/ {k+1}) by FINSEQ_1:11
                  .= p.:(Seg k) \/ p.:{k+1} by RELAT_1:153;
@@ -408,7 +406,7 @@ A18:  G1 <> {} by A15,A16,RELAT_1:152;
          p.:{k+1} c= W by A3,RELAT_1:144;
      then reconsider G2 = p.:{k+1} as Subset-Family of GX by Th3;
          0 <= k & 0+1 = 1 by NAT_1:18;
-     then 1 <= k+1 & k+1 <= n by A11,REAL_1:55;
+     then 1 <= k+1 & k+1 <= n by A11,XREAL_1:9;
 then A19:  k+1 in dom p by A4,FINSEQ_1:3;
      then {k+1} <> {} & {k+1} c= dom p by ZFMISC_1:37;
      then G2 <> {} by RELAT_1:152;
@@ -418,7 +416,7 @@ then A20:  meet Z = meet G1 /\ meet G2 by A10,A17,A18,SETFAM_1:10;
  W by A3,A19,FUNCT_1:def 5,SETFAM_1:11
 ;
          k+1 <= n+1 by A11,NAT_1:37;
-     then k <= n by REAL_1:53;
+     then k <= n by XREAL_1:8;
      then meet G1 is open & meet G2 is open by A1,A9,A11,A21,Def1;
      hence meet Z is open by A20,TOPS_1:38;
     end;
@@ -963,7 +961,7 @@ theorem
   A1: ("f).:H c= rng "f by RELAT_1:144;
       rng "f c= bool dom f by FUNCT_3:25;
   then ("f).:H c= bool dom f by A1,XBOOLE_1:1;
-  then ("f).:H is Subset of bool [#]T & [#]T = the carrier of T
+  then ("f).:H is Subset-Family of [#]T & [#]T = the carrier of T
    by Th51,PRE_TOPC:12;
   hence thesis;
  end;

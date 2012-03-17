@@ -17,7 +17,6 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
@@ -37,18 +36,18 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="81"/>
+<Adjective nr="80"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="85"/>
+<Adjective nr="84"/>
 </Cluster>
 </CCluster>
 </Registrations>

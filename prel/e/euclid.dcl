@@ -22,7 +22,6 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EUCLID"/>
 </Signature>
@@ -33,7 +32,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="163">
+<Func kind="K" nr="153">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -52,13 +51,13 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="33" value="false"/>
+<Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="45"/>
 </Cluster>
 </FCluster>
 </Registrations>

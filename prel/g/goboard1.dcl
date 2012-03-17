@@ -15,7 +15,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
@@ -43,9 +42,9 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
-<Adjective nr="86"/>
+<Adjective nr="38"/>
+<Adjective nr="41"/>
+<Adjective nr="85"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -64,8 +63,8 @@
 <Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
+<Adjective nr="38"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -78,17 +77,17 @@
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="24"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
+<Adjective nr="38"/>
+<Adjective nr="41"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="10">
 <Cluster/>
-<Func kind="K" nr="122">
+<Func kind="K" nr="112">
 <Func kind="U" nr="1">
-<Func kind="K" nr="168">
+<Func kind="K" nr="158">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -98,13 +97,13 @@
 <Adjective nr="2"/>
 <Adjective nr="4" value="false"/>
 <Adjective nr="5"/>
-<Adjective nr="39"/>
-<Adjective nr="42"/>
-<Adjective nr="85"/>
+<Adjective nr="38"/>
+<Adjective nr="41"/>
+<Adjective nr="84"/>
+<Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
 <Adjective nr="90"/>
-<Adjective nr="91"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
 </Signature>
@@ -20,13 +19,13 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="21"/>
+<Adjective nr="14"/>
+<Adjective nr="20"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="24">
+<Adjective nr="23">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -39,7 +38,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="17">
+<Adjective nr="16">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

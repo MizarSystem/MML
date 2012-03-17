@@ -21,7 +21,6 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -54,7 +53,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="288">
+<Func kind="K" nr="278">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -75,7 +74,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="94"/>
+<Adjective nr="93"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -83,7 +82,7 @@
 <Cluster>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
-<Adjective nr="94"/>
+<Adjective nr="93"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

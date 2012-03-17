@@ -24,7 +24,6 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="PBOOLE"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -47,8 +46,8 @@
 </Typ>
 <Typ kind="M" nr="12">
 <Cluster>
-<Adjective nr="75"/>
-<Adjective nr="82"/>
+<Adjective nr="74"/>
+<Adjective nr="81"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -58,7 +57,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="240">
+<Func kind="K" nr="230">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -71,7 +70,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="242">
+<Func kind="K" nr="232">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>
@@ -93,7 +92,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="241">
+<Func kind="K" nr="231">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Var nr="1"/>

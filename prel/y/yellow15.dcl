@@ -20,7 +20,6 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -53,7 +52,7 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="344"/>
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="20"/>
@@ -75,7 +74,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="379">
+<Func kind="K" nr="367">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -91,15 +90,18 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="125">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="109">
+<LocusVar nr="1"/>
+</Adjective>
 <Adjective nr="110">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="111">
+<Adjective nr="131">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="132">
@@ -111,13 +113,10 @@
 <Adjective nr="134">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="135">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="137">
-<LocusVar nr="1"/>
-</Adjective>
-<Adjective nr="138">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -171,10 +170,10 @@
 <Cluster/>
 <Typ kind="M" nr="8">
 <Cluster/>
-<Func kind="K" nr="356"/>
+<Func kind="K" nr="344"/>
 </Typ>
 <Cluster>
-<Adjective nr="153"/>
+<Adjective nr="152"/>
 </Cluster>
 </CCluster>
 </Registrations>

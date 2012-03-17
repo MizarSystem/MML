@@ -17,14 +17,14 @@ environ
  constructors BINARITH, REAL_1, POLYNOM1, PZFMISC1, TOPS_2, T_0TOPSP, TOPGRP_1,
       RFINSEQ, PENCIL_1;
  registrations STRUCT_0, RELSET_1, SUBSET_1, FINSEQ_5, BORSUK_2, PENCIL_1,
-      XREAL_0, ARYTM_3, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0, REALSET1;
+      XREAL_0, ARYTM_3, TREES_9, FUNCT_2, PARTFUN1, XBOOLE_0, REALSET1, NAT_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, PBOOLE, PENCIL_1, XBOOLE_0;
  theorems TARSKI, FUNCT_1, PBOOLE, CARD_3, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1,
-      REAL_1, REAL_2, AXIOMS, FUNCT_7, YELLOW_6, REALSET2, PZFMISC1, PUA2MSS1,
+      REAL_1, REAL_2, FUNCT_7, YELLOW_6, REALSET2, PZFMISC1, PUA2MSS1,
       PRE_TOPC, FINSEQ_3, FUNCT_2, GRCAT_1, TOPGRP_1, TOPS_2, T_0TOPSP,
-      RELAT_1, PENCIL_1, RFINSEQ, GOBOARD9, BINARITH, FINSEQ_4, JORDAN3, AMI_5,
-      SCMFSA_7, FINSEQ_5, XBOOLE_0, XBOOLE_1, SQUARE_1, XCMPLX_1;
+      RELAT_1, PENCIL_1, RFINSEQ, BINARITH, FINSEQ_4, AMI_5, FINSEQ_5,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1;
  schemes FINSEQ_1, POLYNOM2, NAT_1;
 
 begin :: Preliminaries on finite sequences
@@ -52,10 +52,10 @@ A2: rng (p/^j) c= rng p
     then rng p c= {} by FINSEQ_1:def 4;
     then A3: rng p = {} by XBOOLE_1:3;
 then A4:  p = {} by RELAT_1:64;
-A5:  now assume A6: j<=len p;
+A5:  now assume j<=len p;
 then j <= 0 by A4,FINSEQ_1:25;
-     then j=0 by NAT_1:18;
-     then len (p/^j) = len p - 0 by A6,RFINSEQ:def 2;
+     then j=0;
+     then len (p/^j) = len p - 0 by RFINSEQ:def 2;
      then len (p/^j) = 0 - 0 by A4,FINSEQ_1:25;
      hence thesis by A4,FINSEQ_1:25;
     end;
@@ -89,9 +89,9 @@ i in dom p & j in dom p holds len Del(p,i,j) = len p - j + i - 1
   assume
 A1: i in dom p & j in dom p;
 then A2: 1 <= i & i <= len p by FINSEQ_3:27;
-then A3: i - 1 >= 1-1 by REAL_1:49;
-       i -' 1 <= i by GOBOARD9:2;
-then A4: i -' 1 <= len p by A2,AXIOMS:22;
+then A3: i - 1 >= 1-1 by XREAL_1:11;
+       i -' 1 <= i by BINARITH:52;
+then A4: i -' 1 <= len p by A2,XREAL_1:2;
 A5: j <= len p by A1,FINSEQ_3:27;
       Del(p,i,j) = (p|(i -' 1))^(p/^j) by Def1;
   hence len Del(p,i,j) = len (p|(i -' 1)) + len (p/^j) by FINSEQ_1:35
@@ -114,10 +114,10 @@ A1: i in dom p & j in dom p & len Del(p,i,j) = 0;
   then len p - j + i = 0+1;
 then A2: len p - j = 1 - i by XCMPLX_1:26;
       j <= len p by A1,FINSEQ_3:27;
-  then len p - j >= 0 by SQUARE_1:12;
+  then len p - j >= 0 by XREAL_1:50;
 then A3: 1 >= i by A2,REAL_2:105;
       1 <= i by A1,FINSEQ_3:27;
-  hence i=1 by A3,AXIOMS:21;
+  hence i=1 by A3,XREAL_1:1;
   hence j=len p by A2,XCMPLX_1:15;
  end;
 
@@ -131,13 +131,13 @@ i in dom p & 1 <= k & k <= i-1 holds Del(p,i,j).k = p.k
   assume
 A1: i in dom p & 1 <= k & k <= i-1;
 then A2: i <= len p by FINSEQ_3:27;
-       i -' 1 <= i by GOBOARD9:2;
-then A3: i -' 1 <= len p by A2,AXIOMS:22;
-       i-1 <= i -' 1 by JORDAN3:3;
-then A4: k <= i -' 1 by A1,AXIOMS:22;
+       i -' 1 <= i by BINARITH:52;
+then A3: i -' 1 <= len p by A2,XREAL_1:2;
+     i-1 <= i -' 1 by BINARITH:def 3;
+then A4: k <= i -' 1 by A1,XREAL_1:2;
        len (p|(i -' 1)) = i -' 1 by A3,FINSEQ_1:80;
 then A5: k in dom (p|(i -' 1)) by A1,A4,FINSEQ_3:27;
-       k <= len p by A3,A4,AXIOMS:22;
+       k <= len p by A3,A4,XREAL_1:2;
 then A6: k in dom p by A1,FINSEQ_3:27;
   thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k by Def1
   .= (p|(i -' 1)).k by A5,FINSEQ_1:def 7
@@ -161,7 +161,7 @@ len p + 1 <= k implies (p^q).k=q.(k-len p)
   then not k <= len (p^q) by FINSEQ_1:35;
 then A3: not k in dom (p^q) by FINSEQ_3:27;
 A5: for n being Nat holds n in dom q iff 1<=n & n<=len q by FINSEQ_3:27;
-      k-len p > len q by A2,REAL_1:86;
+      k-len p > len q by A2,XREAL_1:22;
 then A4: not k-len p in dom q by A5;
   thus (p^q).k= {} by A3,FUNCT_1:def 4
   .= q.(k-len p) by A4,FUNCT_1:def 4;
@@ -179,23 +179,23 @@ holds Del(p,i,j).k = p.(j -'i + k + 1)
   assume
 A1: i in dom p & j in dom p & i <= j & i <= k & k <= len p - j + i - 1;
 then A2: 1 <=i & i <= len p by FINSEQ_3:27;
-       i -' 1 <= i by GOBOARD9:2;
-then i -' 1 <= len p by A2,AXIOMS:22;
+       i -' 1 <= i by BINARITH:52;
+then i -' 1 <= len p by A2,XREAL_1:2;
 then A3: len (p|(i -' 1)) = i -' 1 by FINSEQ_1:80;
 A4: i -' 1 + 1 <= k by A1,A2,AMI_5:4;
-      i -' 1 <= i by GOBOARD9:2;
-  then k >= i -' 1 by A1,AXIOMS:22;
-  then k - (i -' 1) >= (i -' 1) - (i -' 1) by REAL_1:49;
+      i -' 1 <= i by BINARITH:52;
+  then k >= i -' 1 by A1,XREAL_1:2;
+  then k - (i -' 1) >= (i -' 1) - (i -' 1) by XREAL_1:11;
 then A5: k - (i -' 1) = k -' (i -' 1) by BINARITH:def 3;
-A6: 1 <= k - (i -' 1) by A4,REAL_1:84;
+A6: 1 <= k - (i -' 1) by A4,XREAL_1:21;
 A7: 1 <=j & j <= len p by A1,FINSEQ_3:27;
 then A8: len (p/^j) = len p - j by RFINSEQ:def 2;
-    i-1 >= 1-1 by A2,REAL_1:49;
+    i-1 >= 1-1 by A2,XREAL_1:11;
 then A9: i -' 1 = i-1 by BINARITH:def 3;
     k <= len p - j + (i - 1) by A1;
-then k - (i -' 1) <= len p - j by A9,REAL_1:86;
+then k - (i -' 1) <= len p - j by A9,XREAL_1:22;
 then A10: k - (i -' 1) in dom (p/^j) by A5,A6,A8,FINSEQ_3:27;
-    j-i >= i-i by A1,REAL_1:49;
+    j-i >= i-i by A1,XREAL_1:11;
 then A11: j -' i = j-i by BINARITH:def 3;
   thus Del(p,i,j).k = ((p|(i -' 1))^(p/^j)).k by Def1
   .= (p/^j).(k - (i -' 1)) by A3,A4,Th5
@@ -230,14 +230,14 @@ proof
         now assume not g is one-to-one; then consider x,y being set such that
    A6: x in dom g & y in dom g & g.x = g.y & x <> y by FUNCT_1:def 8;
     reconsider x,y as Nat by A6;
-    per cases by A6,AXIOMS:21;
+    per cases by A6,XREAL_1:1;
     suppose A7: x < y;
 then A8:  x+1 <= y by NAT_1:38;
-then A9: y - (x+1) >= 0 by SQUARE_1:12;
+then A9: y - (x+1) >= 0 by XREAL_1:50;
     set d = Del(g,x+1,y);
    A10: x+1 >= 1 by NAT_1:29;
 A11: 1 <= y & y <= len g by A6,FINSEQ_3:27;
-then A12: x < len g by A7,AXIOMS:22;
+then A12: x < len g by A7,XREAL_1:2;
     then x+1 <= len g by NAT_1:38;
 then A13: x+1 in dom g by A10,FINSEQ_3:27;
         1 <= x + (1-1) by A6,FINSEQ_3:27;
@@ -250,27 +250,28 @@ then A13: x+1 in dom g by A10,FINSEQ_3:27;
      then len g - y + (x+1) - 1 <= x by A6,A13,Th2;
      then len g - y + x + 1 - 1 <= x;
      then len g - y <= 0 by REAL_2:174;
-     then len g <= y by SQUARE_1:11;
-then A17: len g = y by A11,AXIOMS:21;
+     then len g <= y by XREAL_1:52;
+then A17: len g = y by A11,XREAL_1:1;
          now assume len d = 0;
       then x+1 = 0+1 by A6,A13,Th3;
       then x = 0 by XCMPLX_1:2;
       hence contradiction by A6,FINSEQ_3:26;
      end;
-     then 0 < len d by NAT_1:19;
+     then 0 < len d;
 then A18:  0+1 <= len d by NAT_1:38;
  len d <= (x+1)-1 by A16;
 then A19:  d.len d = g.len d by A13,A18,Th4;
       x <= len g - y + (x+1) - 1 by A17;
      then x <= len d by A6,A13,Th2;
-     hence thesis by A5,A6,A16,A17,A19,AXIOMS:21;
+     hence thesis by A5,A6,A16,A17,A19,XREAL_1:1;
      end;
      suppose A20: len d > x;
 A21: len d = len g - y + (x+1) - 1 by A6,A13,Th2;
          x+1 <= len d by A20,NAT_1:38;
      hence d.len d = g.(y -'(x+1) + (len g - y + (x+1) - 1) + 1)
                      by A6,A8,A13,A21,Th6
-            .= g.(y - (x+1) + ((x+1) + ((len g - y) - 1)) + 1) by A8,SCMFSA_7:3
+            .= g.(y - (x+1) + ((x+1) + ((len g - y) - 1)) + 1) by A8,
+BINARITH:50
             .= Y() by A5;
     end;
     end;
@@ -288,7 +289,7 @@ A24:  1<=i+1 by NAT_1:29;
 then A26:   d.i = g.i by A13,A23,Th4;
        i+1 <= (x+1)-1 by A25,NAT_1:38;
 then A27:  d.(i+1) = g.(i+1) by A13,A24,Th4;
-          i < len g by A12,A25,AXIOMS:22;
+          i < len g by A12,A25,XREAL_1:2;
       hence P[d.i,d.(i+1)] by A5,A23,A26,A27;
       end;
       suppose A28: i = x;
@@ -299,12 +300,12 @@ then A29:   d.i = g.y by A6,A13,A23,A28,Th4;
        hence contradiction;
       end;
 then A30:  y < len g by A11,REAL_1:def 5;
-then A31:   0 < len g - y by SQUARE_1:11;
+then A31:   0 < len g - y by XREAL_1:52;
       then 0 < len g -' y by BINARITH:def 3;
       then 0+1 <= len g -' y by NAT_1:38;
-      then 1-1 <= (len g -' y) - 1 by REAL_1:49;
+      then 1-1 <= (len g -' y) - 1 by XREAL_1:11;
       then 0 <= (len g - y) - 1 by A31,BINARITH:def 3;
-      then (i+1) + 0 <= (i+1) + ((len g - y) - 1) by REAL_1:55;
+      then (i+1) + 0 <= (i+1) + ((len g - y) - 1) by XREAL_1:9;
       then (i+1) + 0 <= (i+1) + (len g - y) - 1;
 then d.(i+1) = g.(y -'(x+1) + (i+1) + 1) by A6,A8,A13,A28,Th6
              .= g.(y+1) by A8,A28,AMI_5:4;
@@ -315,8 +316,8 @@ then A32:   x+1 <= i by NAT_1:38;
           i <= len g - y + (x+1) - 1 by A6,A13,A23,Th2;
 then A33:   d.i = g.(y -'(x+1) + i + 1) by A6,A8,A13,A32,Th6;
           i <= i+1 by NAT_1:29;
-then A34:  x+1 <= i+1 by A32,AXIOMS:22;
-A35:   len g - y >= 0 by A11,SQUARE_1:12;
+then A34:  x+1 <= i+1 by A32,XREAL_1:2;
+A35:   len g - y >= 0 by A11,XREAL_1:50;
           i < len g - y + (x+1) - 1 by A6,A13,A23,Th2;
       then A36: i < len g -' y + (x+1) - 1 by A35,BINARITH:def 3;
       then A37: i < len g -' y + x + 1 - 1;
@@ -327,27 +328,27 @@ then A38:   d.(i+1) = g.(y -'(x+1) + (i+1) + 1) by A6,A8,A13,A34,Th6
              .= g.(y -'(x+1) + i + 1 + 1);
 A39:   1 <= y -'(x+1) + i + 1 by NAT_1:29;
           i < len g - y + x by A35,A37,BINARITH:def 3;
-      then i - x < len g - y + x - x by REAL_1:54;
-      then i - x + y < len g - y + y by REAL_1:67;
+      then i - x < len g - y + x - x by XREAL_1:11;
+      then i - x + y < len g - y + y by XREAL_1:10;
       then y - x - 1 + i + 1 < len g;
       then y -'(x+1) + i + 1 < len g by A9,BINARITH:def 3;
       hence P[d.i,d.(i+1)] by A5,A33,A38,A39;
      end;
      end;
-        0 < --(y - x) by A7,SQUARE_1:11;
-    then -(y - x) < 0 by REAL_1:66;
-    then len g + - (y - x) < len g + 0 by REAL_1:67;
+        0 < --(y - x) by A7,XREAL_1:52;
+    then -(y - x) < 0 by XREAL_1:60;
+    then len g + - (y - x) < len g + 0 by XREAL_1:10;
     then len g - y + (x+1) - 1 < len g;
     then len d < len g by A6,A13,Th2;
     hence contradiction by A4,A5,A14,A15,A22;
     end;
     suppose A40: y < x;
 then A41:  y+1 <= x by NAT_1:38;
-then A42: x - (y+1) >= 0 by SQUARE_1:12;
+then A42: x - (y+1) >= 0 by XREAL_1:50;
     set d = Del(g,y+1,x);
    A43: y+1 >= 1 by NAT_1:29;
 A44: 1 <= x & x <= len g by A6,FINSEQ_3:27;
-then A45: y < len g by A40,AXIOMS:22;
+then A45: y < len g by A40,XREAL_1:2;
     then y+1 <= len g by NAT_1:38;
 then A46: y+1 in dom g by A43,FINSEQ_3:27;
         1 <= y + (1-1) by A6,FINSEQ_3:27;
@@ -360,20 +361,20 @@ then A46: y+1 in dom g by A43,FINSEQ_3:27;
      then len g - x + (y+1) - 1 <= y by A6,A46,Th2;
      then len g - x + y + 1 - 1 <= y;
      then len g - x <= 0 by REAL_2:174;
-     then len g <= x by SQUARE_1:11;
-then A50: len g = x by A44,AXIOMS:21;
+     then len g <= x by XREAL_1:52;
+then A50: len g = x by A44,XREAL_1:1;
          now assume len d = 0;
       then y+1 = 0+1 by A6,A46,Th3;
       then y = 0 by XCMPLX_1:2;
       hence contradiction by A6,FINSEQ_3:26;
      end;
-     then 0 < len d by NAT_1:19;
+     then 0 < len d;
 then A51:  0+1 <= len d by NAT_1:38;
  len d <= (y+1)-1 by A49;
 then A52:  d.len d = g.len d by A46,A51,Th4;
       y <= len g - x + (y+1) - 1 by A50;
      then y <= len d by A6,A46,Th2;
-     hence thesis by A5,A6,A49,A50,A52,AXIOMS:21;
+     hence thesis by A5,A6,A49,A50,A52,XREAL_1:1;
      end;
      suppose A53: len d > y;
 A54: len d = len g - x + (y+1) - 1 by A6,A46,Th2;
@@ -381,7 +382,7 @@ A54: len d = len g - x + (y+1) - 1 by A6,A46,Th2;
      hence d.len d = g.(x -'(y+1) + (len g - x + (y+1) - 1) + 1)
                  by A6,A41,A46,A54,Th6
             .= g.(x - (y+1) + ((y+1) + ((len g - x) - 1)) + 1) by A41,
-SCMFSA_7:3
+BINARITH:50
             .= Y() by A5;
     end;
     end;
@@ -399,7 +400,7 @@ A57:  1<=i+1 by NAT_1:29;
 then A59:   d.i = g.i by A46,A56,Th4;
        i+1 <= (y+1)-1 by A58,NAT_1:38;
 then A60:  d.(i+1) = g.(i+1) by A46,A57,Th4;
-          i < len g by A45,A58,AXIOMS:22;
+          i < len g by A45,A58,XREAL_1:2;
       hence P[d.i,d.(i+1)] by A5,A56,A59,A60;
       end;
       suppose A61: i = y;
@@ -410,12 +411,12 @@ then A62:   d.i = g.x by A6,A46,A56,A61,Th4;
        hence contradiction;
       end;
 then A63:  x < len g by A44,REAL_1:def 5;
-then A64:   0 < len g - x by SQUARE_1:11;
+then A64:   0 < len g - x by XREAL_1:52;
       then 0 < len g -' x by BINARITH:def 3;
       then 0+1 <= len g -' x by NAT_1:38;
-      then 1-1 <= (len g -' x) - 1 by REAL_1:49;
+      then 1-1 <= (len g -' x) - 1 by XREAL_1:11;
       then 0 <= (len g - x) - 1 by A64,BINARITH:def 3;
-      then (i+1) + 0 <= (i+1) + ((len g - x) - 1) by REAL_1:55;
+      then (i+1) + 0 <= (i+1) + ((len g - x) - 1) by XREAL_1:9;
       then (i+1) + 0 <= (i+1) + (len g - x) - 1;
 then d.(i+1) = g.(x -'(y+1) + (i+1) + 1) by A6,A41,A46,A61,Th6
              .= g.(x+1) by A41,A61,AMI_5:4;
@@ -426,8 +427,8 @@ then A65:   y+1 <= i by NAT_1:38;
           i <= len g - x + (y+1) - 1 by A6,A46,A56,Th2;
 then A66:   d.i = g.(x -'(y+1) + i + 1) by A6,A41,A46,A65,Th6;
           i <= i+1 by NAT_1:29;
-then A67:  y+1 <= i+1 by A65,AXIOMS:22;
-A68:   len g - x >= 0 by A44,SQUARE_1:12;
+then A67:  y+1 <= i+1 by A65,XREAL_1:2;
+A68:   len g - x >= 0 by A44,XREAL_1:50;
           i < len g - x + (y+1) - 1 by A6,A46,A56,Th2;
       then A69: i < len g -' x + (y+1) - 1 by A68,BINARITH:def 3;
       then A70: i < len g -' x + y + 1 - 1;
@@ -438,16 +439,16 @@ then A71:   d.(i+1) = g.(x -'(y+1) + (i+1) + 1) by A6,A41,A46,A67,Th6
              .= g.(x -'(y+1) + i + 1 + 1);
 A72:   1 <= x -'(y+1) + i + 1 by NAT_1:29;
           i < len g - x + y by A68,A70,BINARITH:def 3;
-      then i - y < len g - x + y - y by REAL_1:54;
-      then i - y + x < len g - x + x by REAL_1:67;
+      then i - y < len g - x + y - y by XREAL_1:11;
+      then i - y + x < len g - x + x by XREAL_1:10;
       then x - y - 1 + i + 1 < len g;
       then x -'(y+1) + i + 1 < len g by A42,BINARITH:def 3;
       hence P[d.i,d.(i+1)] by A5,A66,A71,A72;
      end;
      end;
-        0 < --(x - y) by A40,SQUARE_1:11;
-    then -(x - y) < 0 by REAL_1:66;
-    then len g + - (x - y) < len g + 0 by REAL_1:67;
+        0 < --(x - y) by A40,XREAL_1:52;
+    then -(x - y) < 0 by XREAL_1:60;
+    then len g + - (x - y) < len g + 0 by XREAL_1:10;
     then len g - x + (y+1) - 1 < len g;
     then len d < len g by A6,A46,Th2;
     hence contradiction by A4,A5,A47,A48,A55;
@@ -1258,12 +1259,12 @@ A46:    f.len f is non trivial
         proof
          A47: 1 <= len f by A23,FINSEQ_3:27;
          reconsider l1 = (len f) - 1 as Nat by A23,FINSEQ_3:28;
-         per cases by A47,AXIOMS:21; suppose len f = 1; hence thesis by A22,
+         per cases by A47,XREAL_1:1; suppose len f = 1; hence thesis by A22,
 PENCIL_1:def 21;
          end;
          suppose len f > 1;
          then 1+1 <= len f by NAT_1:38;
-then A48:      2-1 <= l1 by REAL_1:49;
+then A48:      2-1 <= l1 by XREAL_1:11;
              l1 < len f - 0 by REAL_1:92;
 then A49:     2 c= Card((f.l1) /\ (f.(l1+1))) by A22,A48;
              (f.l1) /\ (f.(l1+1)) c= f.(l1+1) by XBOOLE_1:17;
@@ -1292,7 +1293,7 @@ A55:      n in dom f by A53,FINSEQ_1:def 3;
              f.n is non trivial
           proof
            A56: 1 <= n & n <= len f by A55,FINSEQ_3:27;
-           per cases by A56,AXIOMS:21;
+           per cases by A56,XREAL_1:1;
            suppose 1<=n & n=len f; hence thesis by A46;
            end;
            suppose 1 <= n & n < len f;

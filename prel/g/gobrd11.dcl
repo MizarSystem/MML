@@ -19,7 +19,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -40,21 +39,21 @@
 <Typ kind="M" nr="7">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="83" value="false"/>
+<Adjective nr="82" value="false"/>
+<Adjective nr="85"/>
 <Adjective nr="86"/>
-<Adjective nr="87"/>
-<Adjective nr="91">
+<Adjective nr="90">
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
-<Adjective nr="93"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -62,11 +61,11 @@
 </ArgTypes>
 <Func kind="K" nr="46">
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="227">
+<Func kind="K" nr="217">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

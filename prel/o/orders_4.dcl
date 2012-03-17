@@ -34,7 +34,6 @@
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="WAYBEL_8"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="YELLOW_3"/>
@@ -75,12 +74,12 @@
 <Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
-<Adjective nr="95" value="false"/>
+<Adjective nr="94" value="false"/>
+<Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="117"/>
+<Adjective nr="123"/>
 <Adjective nr="124"/>
-<Adjective nr="125"/>
-<Adjective nr="134"/>
+<Adjective nr="133"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -92,7 +91,7 @@
 <Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="136"/>
+<Adjective nr="135"/>
 </Cluster>
 </RCluster>
 <CCluster>
@@ -135,8 +134,8 @@
 <Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="75"/>
+<Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="117"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -167,7 +166,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="134"/>
+<Adjective nr="133"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -177,7 +176,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="134"/>
+<Adjective nr="133"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -10,13 +10,13 @@ environ
       BOOLE, FUNCT_1, VALUAT_1, FINSET_1, FUNCT_2, ARYTM_1, HENMODEL, ORDINAL2,
       ORDINAL1, TARSKI, CARD_1, INT_1, WELLORD1, WELLORD2, MARGREL1, ARYTM_3,
       CQC_THE1, MCART_1, CALCUL_1, CALCUL_2, SUBLEMMA;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CALCUL_1, XREAL_0, RELAT_1,
-      FUNCT_1, ORDINAL1, REAL_1, NAT_1, FINSEQ_1, QC_LANG1, CQC_LANG, CQC_THE1,
-      VALUAT_1, FINSET_1, RELSET_1, FUNCT_2, FRAENKEL, CARD_1, MARGREL1,
-      CQC_SIM1, DOMAIN_1, MCART_1, NUMBERS, ORDINAL2, FINSEQ_3, CALCUL_2,
-      INT_1, WELLORD1, WELLORD2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, CALCUL_1, XREAL_0,
+      RELAT_1, FUNCT_1, ORDINAL1, REAL_1, NAT_1, FINSEQ_1, QC_LANG1, CQC_LANG,
+      CQC_THE1, VALUAT_1, FINSET_1, RELSET_1, FUNCT_2, FRAENKEL, CARD_1,
+      MARGREL1, CQC_SIM1, DOMAIN_1, MCART_1, NUMBERS, ORDINAL2, FINSEQ_3,
+      CALCUL_2, INT_1, WELLORD1, WELLORD2;
  constructors DOMAIN_1, REAL_1, CQC_SIM1, NAT_1, WELLORD2, CALCUL_1, FINSEQ_3,
-      CALCUL_2, INT_1, WELLORD1, SUBSTUT2;
+      CALCUL_2, INT_1, WELLORD1, SUBSTUT2, SETFAM_1;
  registrations FINSEQ_1, RELSET_1, CQC_LANG, ORDINAL2, SUBSET_1, QC_LANG1,
       FUNCT_1, FINSET_1, XREAL_0, INT_1, ORDINAL1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -24,8 +24,8 @@ environ
  theorems TARSKI, FINSEQ_1, FINSEQ_3, FUNCT_1, VALUAT_1, XBOOLE_0, FINSEQ_2,
       ZFMISC_1, RELAT_1, QC_LANG3, XBOOLE_1, NAT_1, MARGREL1, FUNCT_2,
       RELSET_1, FINSET_1, CALCUL_1, CQC_THE1, ORDINAL2, AXIOMS, XCMPLX_1,
-      REAL_1, CALCUL_2, CARD_2, INT_1, ORDINAL1, WELLORD1, WELLORD2, CARD_3,
-      QC_LANG1, CQC_LANG, MCART_1, SUBSTUT2;
+      CALCUL_2, CARD_2, INT_1, ORDINAL1, WELLORD1, WELLORD2, CARD_3, QC_LANG1,
+      CQC_LANG, MCART_1, SUBSTUT2, XREAL_1;
  schemes FUNCT_1, FINSEQ_1, NAT_1;
 
 begin :: Preliminaries and Equivalences of Inconsistency
@@ -38,18 +38,6 @@ begin :: Preliminaries and Equivalences of Inconsistency
          P for QC-pred_symbol of k,
          ll for CQC-variable_list of k,
          f,f1,f2,g,g1,g2 for FinSequence of CQC-WFF;
-
-definition let D be non empty set, X be Subset of bool D;
-  redefine func union X -> Subset of D;
-  coherence
-  proof
-    now let a such that A1: a in union X;
-      consider b such that A2: a in b & b in X by A1,TARSKI:def 4;
-      thus a in D by A2;
-    end;
-    hence thesis by TARSKI:def 3;
-  end;
-end;
 
  reserve A for non empty finite Subset of NAT;
 
@@ -239,7 +227,7 @@ A2:    ex k st P[k] by A1;
          (i in A & for k st k in A holds i <= k) &
          (n in A & for k st k in A holds n <= k); then
        i <= n & n <= i;
-       hence thesis by AXIOMS:21;
+       hence thesis by XREAL_1:1;
      end;
      hence thesis;
    end;
@@ -466,8 +454,8 @@ A20:  A c= Seg len f by FINSEQ_1:def 3;
 A21:  now let i; assume A22: i in seq(len g,n);
         reconsider j = i-len g as Integer;
 A23:    1+len g <= i & i <= n+len g by A22,CALCUL_2:1; then
-A24:    1 <= j & j <= n by REAL_1:84,86;
-        0 <= j by A23,REAL_1:84; then
+A24:    1 <= j & j <= n by XREAL_1:21,XREAL_1:22;
+        0 <= j by A23,XREAL_1:21; then
         reconsider j as Nat by INT_1:16;
         j in Seg n by A24,FINSEQ_1:3;
         hence i-len g in dom Sgm(A) by A20,FINSEQ_3:45;
@@ -502,11 +490,11 @@ A37:      i in dom Sgm(A) & Sgm(A).i = a by A36,FINSEQ_2:11;
           set m = i + len g;
           len Sgm(A) = n by A20,FINSEQ_3:44; then
 A38:      1 <= i & i <= n by A37,FINSEQ_3:27; then
-A39:      1+len g <= m & m <= n+len g by AXIOMS:24; then
+A39:      1+len g <= m & m <= n+len g by XREAL_1:8; then
 A40:      m in seq(len g,n) by CALCUL_2:1;
           i <= m by NAT_1:29; then
 A41:      1 <= m & m <= len g + len IdFinS(p,n)
-                                by A38,A39,AXIOMS:22,FINSEQ_2:69; then
+                                by A38,A39,XREAL_1:2,FINSEQ_2:69; then
           m <= len h by FINSEQ_1:35; then
           m in dom h by A41,FINSEQ_3:27; then
 A42:      m in Seg len h by FINSEQ_1:def 3;
@@ -529,7 +517,7 @@ A45:          i in dom Sgm(C) & Sgm(C).i = a by FINSEQ_2:11;
 A46:      1 <= i & i <= len g by A45,FINSEQ_3:27; then
 A47:      i in Seg len g by FINSEQ_1:3;
           len g <= len h by CALCUL_1:6; then
-          i <= len h by A46,AXIOMS:22; then
+          i <= len h by A46,XREAL_1:2; then
 A48:      i in Seg len h by A46,FINSEQ_1:3; then
           a = F.i by A13,A45,A47;
           hence thesis by A13,A48,FUNCT_1:12;
@@ -615,7 +603,7 @@ A79:        F.k = Sgm(C).k by A13,A75;
           now given i such that A80: i in dom IdFinS(p,n) & k = len g + i;
             len IdFinS(p,n) = n by FINSEQ_2:69; then
 A81:        1 <= i & i <= n by A80,FINSEQ_3:27; then
-            1+len g <= k & k <= n+len g by A80,AXIOMS:24; then
+            1+len g <= k & k <= n+len g by A80,XREAL_1:8; then
 A82:       k in seq(len g,n) by CALCUL_2:1; then
 A83:       k - len g in dom Sgm(A) by A21;
             F.k = Sgm(A).(k-len g) by A13,A75,A82; then
@@ -657,7 +645,7 @@ A93:   k in dom IdFinS(p,n) & j = len g + k by A90,FINSEQ_1:38;
         reconsider g as FinSequence of CQC-WFF by FINSEQ_3:93;
         take g;
         1 <= k & k <= len IdFinS(p,n) by A93,FINSEQ_3:27; then
-        1 <= len IdFinS(p,n) by AXIOMS:22; then
+        1 <= len IdFinS(p,n) by XREAL_1:2; then
         1 <= n by FINSEQ_2:69; then
 A94:   |- g^<*p*>^<*q*> by A86,CALCUL_2:32;
 A95:   rng g = rng f \ {p} by FINSEQ_3:72;
@@ -755,8 +743,8 @@ A25:  A c= Seg len f by FINSEQ_1:def 3;
 A26:  now let i; assume A27: i in seq(len g,n);
         reconsider j = i-len g as Integer;
 A28:    1+len g <= i & i <= n+len g by A27,CALCUL_2:1; then
-A29:    1 <= j & j <= n by REAL_1:84,86;
-        0 <= j by A28,REAL_1:84; then
+A29:    1 <= j & j <= n by XREAL_1:21,XREAL_1:22;
+        0 <= j by A28,XREAL_1:21; then
         reconsider j as Nat by INT_1:16;
         j in Seg n by A29,FINSEQ_1:3;
         hence i-len g in dom Sgm(A) by A25,FINSEQ_3:45;
@@ -791,11 +779,11 @@ A42:      i in dom Sgm(A) & Sgm(A).i = a by A41,FINSEQ_2:11;
           set m = i + len g;
           len Sgm(A) = n by A25,FINSEQ_3:44; then
 A43:      1 <= i & i <= n by A42,FINSEQ_3:27; then
-A44:      1+len g <= m & m <= n+len g by AXIOMS:24; then
+A44:      1+len g <= m & m <= n+len g by XREAL_1:8; then
 A45:      m in seq(len g,n) by CALCUL_2:1;
           i <= m by NAT_1:29; then
 A46:      1 <= m & m <= len g + len IdFinS('not' p,n)
-                                by A43,A44,AXIOMS:22,FINSEQ_2:69; then
+                                by A43,A44,XREAL_1:2,FINSEQ_2:69; then
           m <= len h by FINSEQ_1:35; then
           m in dom h by A46,FINSEQ_3:27; then
 A47:      m in Seg len h by FINSEQ_1:def 3;
@@ -818,7 +806,7 @@ A50:          i in dom Sgm(C) & Sgm(C).i = a by FINSEQ_2:11;
 A51:      1 <= i & i <= len g by A50,FINSEQ_3:27; then
 A52:      i in Seg len g by FINSEQ_1:3;
           len g <= len h by CALCUL_1:6; then
-          i <= len h by A51,AXIOMS:22; then
+          i <= len h by A51,XREAL_1:2; then
 A53:      i in Seg len h by A51,FINSEQ_1:3; then
           a = F.i by A18,A50,A52;
           hence thesis by A18,A53,FUNCT_1:12;
@@ -905,7 +893,7 @@ A84:        F.k = Sgm(C).k by A18,A80;
 A85:      i in dom IdFinS('not' p,n) & k = len g + i;
             len IdFinS('not' p,n) = n by FINSEQ_2:69; then
 A86:        1 <= i & i <= n by A85,FINSEQ_3:27; then
-            1+len g <= k & k <= n+len g by A85,AXIOMS:24; then
+            1+len g <= k & k <= n+len g by A85,XREAL_1:8; then
 A87:       k in seq(len g,n) by CALCUL_2:1; then
 A88:       k - len g in dom Sgm(A) by A26;
             F.k = Sgm(A).(k-len g) by A18,A80,A87; then
@@ -946,7 +934,7 @@ A97:     g.j in {'not' p} & g.j in rng g by A96,FUNCT_1:12,TARSKI:def 1;
 A98:      k in dom IdFinS('not' p,n) & j = len g + k by A95,FINSEQ_1:38;
         reconsider g as FinSequence of CQC-WFF by FINSEQ_3:93;
         1 <= k & k <= len IdFinS('not' p,n) by A98,FINSEQ_3:27; then
-        1 <= len IdFinS('not' p,n) by AXIOMS:22; then
+        1 <= len IdFinS('not' p,n) by XREAL_1:2; then
         1 <= n by FINSEQ_2:69; then
 A99:   |- g^<*'not' p*>^<*p*> by A91,CALCUL_2:32;
         |- g^<*p*>^<*p*> by CALCUL_2:21; then
@@ -1048,8 +1036,8 @@ A24:  A c= Seg len f by FINSEQ_1:def 3;
 A25:  now let i; assume A26: i in seq(len g,n);
         reconsider j = i-len g as Integer;
 A27:    1+len g <= i & i <= n+len g by A26,CALCUL_2:1; then
-A28:    1 <= j & j <= n by REAL_1:84,86;
-        0 <= j by A27,REAL_1:84; then
+A28:    1 <= j & j <= n by XREAL_1:21,XREAL_1:22;
+        0 <= j by A27,XREAL_1:21; then
         reconsider j as Nat by INT_1:16;
         j in Seg n by A28,FINSEQ_1:3;
         hence i-len g in dom Sgm(A) by A24,FINSEQ_3:45;
@@ -1084,11 +1072,11 @@ A41:      i in dom Sgm(A) & Sgm(A).i = a by A40,FINSEQ_2:11;
           set m = i + len g;
           len Sgm(A) = n by A24,FINSEQ_3:44; then
 A42:      1 <= i & i <= n by A41,FINSEQ_3:27; then
-A43:      1+len g <= m & m <= n+len g by AXIOMS:24; then
+A43:      1+len g <= m & m <= n+len g by XREAL_1:8; then
 A44:      m in seq(len g,n) by CALCUL_2:1;
           i <= m by NAT_1:29; then
 A45:      1 <= m & m <= len g + len IdFinS(p,n)
-                                by A42,A43,AXIOMS:22,FINSEQ_2:69; then
+                                by A42,A43,XREAL_1:2,FINSEQ_2:69; then
           m <= len h by FINSEQ_1:35; then
           m in dom h by A45,FINSEQ_3:27; then
 A46:      m in Seg len h by FINSEQ_1:def 3;
@@ -1111,7 +1099,7 @@ A49:          i in dom Sgm(C) & Sgm(C).i = a by FINSEQ_2:11;
 A50:      1 <= i & i <= len g by A49,FINSEQ_3:27; then
 A51:      i in Seg len g by FINSEQ_1:3;
           len g <= len h by CALCUL_1:6; then
-          i <= len h by A50,AXIOMS:22; then
+          i <= len h by A50,XREAL_1:2; then
 A52:      i in Seg len h by A50,FINSEQ_1:3; then
           a = F.i by A17,A49,A51;
           hence thesis by A17,A52,FUNCT_1:12;
@@ -1197,7 +1185,7 @@ A83:        F.k = Sgm(C).k by A17,A79;
           now given i such that A84: i in dom IdFinS(p,n) & k = len g + i;
             len IdFinS(p,n) = n by FINSEQ_2:69; then
 A85:        1 <= i & i <= n by A84,FINSEQ_3:27; then
-            1+len g <= k & k <= n+len g by A84,AXIOMS:24; then
+            1+len g <= k & k <= n+len g by A84,XREAL_1:8; then
 A86:       k in seq(len g,n) by CALCUL_2:1; then
 A87:       k - len g in dom Sgm(A) by A25;
             F.k = Sgm(A).(k-len g) by A17,A79,A86; then
@@ -1238,7 +1226,7 @@ A96:     g.j in {p} & g.j in rng g by A95,FUNCT_1:12,TARSKI:def 1;
 A97:   k in dom IdFinS(p,n) & j = len g + k by A94,FINSEQ_1:38;
         reconsider g as FinSequence of CQC-WFF by FINSEQ_3:93;
         1 <= k & k <= len IdFinS(p,n) by A97,FINSEQ_3:27; then
-        1 <= len IdFinS(p,n) by AXIOMS:22; then
+        1 <= len IdFinS(p,n) by XREAL_1:2; then
         1 <= n by FINSEQ_2:69; then
 A98:   |- g^<*p*>^<*'not' p*> by A90,CALCUL_2:32;
         |- g^<*'not' p*>^<*'not' p*> by CALCUL_2:21; then
@@ -1553,7 +1541,7 @@ A3:   a = [f^<*VERUM*>,1] by A1,A2,TARSKI:def 1;
                                                            by FINSEQ_1:def 4;
     now let n such that A4: 1 <= n & n <= len PR;
       1 <= n & n <= 1 by A4,FINSEQ_1:56; then
-      n = 1 by AXIOMS:21; then
+      n = 1 by XREAL_1:1; then
       PR.n =  [f^<*VERUM*>,1] by FINSEQ_1:57; then
       (PR.n)`1 = f^<*VERUM*> & (PR.n)`2 = 1 by MCART_1:7;
       hence PR,n is_a_correct_step by CALCUL_1:def 7;

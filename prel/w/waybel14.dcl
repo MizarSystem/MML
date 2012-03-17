@@ -15,7 +15,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
@@ -59,10 +58,10 @@
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
+<Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
-<Adjective nr="66"/>
+<Adjective nr="65"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -72,12 +71,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="279">
+<Func kind="K" nr="269">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="88">
+<Adjective nr="87">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -87,47 +86,47 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="251">
+<Func kind="K" nr="241">
 <Func kind="U" nr="3">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
 <Adjective nr="19" value="false"/>
+<Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
-<Adjective nr="68"/>
+<Adjective nr="79"/>
 <Adjective nr="80"/>
 <Adjective nr="81"/>
-<Adjective nr="82"/>
+<Adjective nr="110"/>
 <Adjective nr="111"/>
-<Adjective nr="112"/>
-<Adjective nr="115"/>
-<Adjective nr="185" value="false"/>
+<Adjective nr="114"/>
+<Adjective nr="184" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="4">
 <Cluster>
+<Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
-<Adjective nr="44"/>
+<Adjective nr="65"/>
 <Adjective nr="66"/>
 <Adjective nr="67"/>
-<Adjective nr="68"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="323">
+<Func kind="K" nr="313">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

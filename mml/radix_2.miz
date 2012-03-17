@@ -15,10 +15,10 @@ environ
  registrations INT_1, RELSET_1, XREAL_0, WSIERP_1, MEMBERED, ORDINAL2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
- theorems REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, AXIOMS, GOBOARD9, GR_CY_1,
-      BINARITH, PREPOWER, POWER, JORDAN3, JORDAN4, RVSUM_1, FINSEQ_2, FINSEQ_4,
-      TARSKI, FUNCT_1, PEPIN, SCMFSA_7, SPRECT_3, RADIX_1, EULER_2, INT_3,
-      NEWTON, INT_2, SCMFSA9A, SPPOL_1, AMI_5, XCMPLX_1;
+ theorems REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, GR_CY_1, BINARITH, PREPOWER,
+      POWER, JORDAN3, JORDAN4, RVSUM_1, FINSEQ_2, FINSEQ_4, TARSKI, FUNCT_1,
+      PEPIN, SPRECT_3, RADIX_1, EULER_2, INT_3, NEWTON, INT_2, SCMFSA9A,
+      SPPOL_1, AMI_5, XCMPLX_1, XREAL_1;
  schemes NAT_1, FINSEQ_2, INT_2, RECDEF_1;
 
 begin :: Some Useful Theorems
@@ -98,7 +98,7 @@ proof
   set j = i -' 1;
   set B0 = b |^ j;
   set B1 = b |^ (j+1);
-  A2: j + 1 = i - 1 + 1 by A1,SCMFSA_7:3
+  A2: j + 1 = i - 1 + 1 by A1,BINARITH:50
            .= i;
   A3: B1 > 0 by A1,PREPOWER:13;
   A4: B0 > 0 by A1,PREPOWER:13;
@@ -126,8 +126,8 @@ proof
   let i,n be Nat;
   assume i in Seg n;
   then 1 <= i & i <= n by FINSEQ_1:3;
-  then 1+1 <= i+1 & i+1 <= n+1 by AXIOMS:24;
-  then 1 <= i+1 & i+1 <= n+1 by AXIOMS:22;
+  then 1+1 <= i+1 & i+1 <= n+1 by XREAL_1:8;
+  then 1 <= i+1 & i+1 <= n+1 by XREAL_1:2;
   hence i+1 in Seg (n+1) by FINSEQ_1:3;
 end;
 
@@ -384,14 +384,14 @@ proof
            (x '+' y).i = (xn '+' yn).i
         proof
           A38: i >= 1 & i <= n+1 by A37,FINSEQ_1:3;
-             now per cases by A38,AXIOMS:21;
+             now per cases by A38,XREAL_1:1;
             suppose A39:i > 1;
               then i -'1 > 1 -'1 by SPRECT_3:10;
               then i -'1 > 0;
               then A40:i -'1 >= 1 by NAT_1:39;
-                 i - 1 > 1 - 1 by A39,REAL_1:54;
+                 i - 1 > 1 - 1 by A39,XREAL_1:11;
               then A41:i -'1 = i - 1 by BINARITH:def 3;
-                 i - 1 <= n + 1 - 1 by A38,REAL_1:49;
+                 i - 1 <= n + 1 - 1 by A38,XREAL_1:11;
               then A42:i -'1 in Seg n by A40,A41,FINSEQ_1:3;
                  (x '+' y).i
               = DigA(x '+' y,i) by A37,RADIX_1:def 3
@@ -419,9 +419,9 @@ proof
                 + SD_Add_Carry(DigA(x,1 -'1)+DigA(y,1 -'1)) by A12,A37,A43,
 RADIX_1:def 13
              .= SD_Add_Data(DigA(x,i)+DigA(y,i),k)
-                + SD_Add_Carry(DigA(x,0)+DigA(y,1 -'1)) by GOBOARD9:1
+                + SD_Add_Carry(DigA(x,0)+DigA(y,1 -'1)) by BINARITH:51
              .= SD_Add_Data(DigA(x,i)+DigA(y,i),k)
-                + SD_Add_Carry(DigA(x,0)+DigA(y,0)) by GOBOARD9:1
+                + SD_Add_Carry(DigA(x,0)+DigA(y,0)) by BINARITH:51
              .= SD_Add_Data(DigA(x,i)+DigA(y,i),k)
                 + SD_Add_Carry(0+DigA(y,0)) by RADIX_1:def 3
              .= SD_Add_Data(DigA(x,i)+DigA(y,i),k) + SD_Add_Carry(0+0)
@@ -435,10 +435,10 @@ RADIX_1:def 13
              .= SD_Add_Data(DigA(xn,i)+DigA(yn,i),k)
                      + SD_Add_Carry(DigA(xn,0)+DigA(yn,0)) by A33,A36
              .= SD_Add_Data(DigA(xn,i)+DigA(yn,i),k)
-                     + SD_Add_Carry(DigA(xn,1-'1)+DigA(yn,0)) by GOBOARD9:1
+                     + SD_Add_Carry(DigA(xn,1-'1)+DigA(yn,0)) by BINARITH:51
              .= SD_Add_Data(DigA(xn,i)+DigA(yn,i),k)
                      + SD_Add_Carry(DigA(xn,i-'1)+DigA(yn,i-'1)) by A43,
-GOBOARD9:1
+BINARITH:51
              .= Add(xn,yn,i,k) by A12,A36,RADIX_1:def 13
              .= DigA(xn '+' yn,i) by A36,RADIX_1:def 14;
              hence thesis by A36,RADIX_1:def 3;
@@ -757,19 +757,19 @@ uniqueness
           suppose
             A15: 1 <= kk;
             A16:kk <= kk + 1 by NAT_1:29;
-            then A17:1 <= kk & kk <= n - 1 by A13,A15,AXIOMS:22;
+            then A17:1 <= kk & kk <= n - 1 by A13,A15,XREAL_1:2;
             then A18:ex I1,I2 be Integer st I1 = s1.kk & I2 = s1.(kk+1) &
               I2 = (Radix(k)*I1+Table1(q,c,f,n -'kk)) mod f by A6;
             consider i1,i2 be Integer such that
               A19: i1 = s2.kk & i2 = s2.(kk+1) &
               i2 = (Radix(k)*i1+Table1(q,c,f,n -'kk)) mod f by A7,A17;
-      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,AXIOMS:22;
+      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XREAL_1:2;
     end;
     end;
     A20:for kk be Nat holds P[kk] from NAT_1:sch 1 (A10,A11);
     A21:s1.n = s2.n
     proof
-       n - 1 >= 1 - 1 by A1,REAL_1:49;
+       n - 1 >= 1 - 1 by A1,XREAL_1:11;
       then reconsider U1 = n - 1 as Nat by INT_1:16;
          now per cases;
         suppose U1 = 0;
@@ -793,9 +793,9 @@ uniqueness
     proof
       let kk be Nat;
       assume A28:1 <= kk & kk <= len s1;
-         now per cases by A28,AXIOMS:21;
+         now per cases by A28,XREAL_1:1;
         suppose A29:kk < len s1;
-           n - 1 >= 1 - 1 by A1,REAL_1:49;
+           n - 1 >= 1 - 1 by A1,XREAL_1:11;
         then reconsider U1 = len s1 - 1 as Nat by A8,INT_1:16;
            U1 + 1 = len s1;
         then kk <= U1 by A29,NAT_1:38;
@@ -912,9 +912,9 @@ proof
         assume A28: (i+1) in Seg n;
         A29: n in Seg n by A5,FINSEQ_1:3;
           A30: 1 <= (i+1) & (i+1) <= n by A28,FINSEQ_1:3;
-        then A31:(i+1)-1 <= n - 1 by REAL_1:49;
+        then A31:(i+1)-1 <= n - 1 by XREAL_1:11;
            (i=0 or i>0);
-        then A32:(i=0 or i+1>1+0) by REAL_1:53;
+        then A32:(i=0 or i+1>1+0) by XREAL_1:8;
            now per cases by A32,NAT_1:38;
           case A33: i=0;
             then Mul_mod(q,cn,f,k).(i+1)
@@ -936,9 +936,9 @@ proof
              I1=Mul_mod(q,c,f,k).i & I2=Mul_mod(q,c,f,k).(i+1) &
              I2 = (Radix(k)*I1+Table1(q,c,f,(n+1) -' i)) mod f
                                                           by A6,A36,Def7;
-             1 + i - i <= n - i by A30,REAL_1:49;
-            then A39: 1 <= n -' i by A35,SCMFSA_7:3;
-               n -' i <= n by GOBOARD9:2;
+             1 + i - i <= n - i by A30,XREAL_1:11;
+            then A39: 1 <= n -' i by A35,BINARITH:50;
+               n -' i <= n by BINARITH:52;
             then A40: (n -' i) in Seg n by A39,FINSEQ_1:3;
                Mul_mod(q,cn,f,k).(i+1)
              = (Radix(k)*Mul_mod(q,c,f,k).i
@@ -1007,12 +1007,12 @@ proof
           hence thesis by A59;
           end;
           suppose A60:i <> 1;
-               1 - 1 <= i - 1 by A55,REAL_1:49;
+               1 - 1 <= i - 1 by A55,XREAL_1:11;
             then reconsider i1 = i - 1 as Nat by INT_1:16;
                1 < i by A55,A60,REAL_1:def 5;
             then 1 + 1 <= i by INT_1:20;
-            then A61: 1 + 1 - 1 <= i - 1 by REAL_1:49;
-               i - 1 <= n + 1 - 1 by A56,REAL_1:49;
+            then A61: 1 + 1 - 1 <= i - 1 by XREAL_1:11;
+               i - 1 <= n + 1 - 1 by A56,XREAL_1:11;
             then A62: i1 in Seg n by A61,FINSEQ_1:3;
             then reconsider rs = rD.(i-1) as Real by A47,FINSEQ_2:13;
             reconsider rs2 = DigitSD2(cn2,k).(i-1) as Nat
@@ -1032,7 +1032,7 @@ FINSEQ_1:37
                  .=(Radix(k) |^ (i1-'1+1))*(cn2.i1) by NEWTON:11
                  .=(Radix(k) |^ i1)*(cn2.i1) by A61,AMI_5:4
                  .=(Radix(k) |^ i1)*(c2.(i1+1)) by A17,A62
-                 .=(Radix(k) |^ (i-'1))*(c2.i) by A55,SCMFSA_7:3
+                 .=(Radix(k) |^ (i-'1))*(c2.i) by A55,BINARITH:50
                  .=SubDigit2(c2,i,k) by Def1
                  .=(DigitSD2(c2,k))/.i by A57,Def2;
           hence thesis by A58,FINSEQ_4:def 4;
@@ -1057,9 +1057,9 @@ FINSEQ_1:37
     A63: ic >= Radix(k)*icn2 by A43,INT_1:19;
     A64: Radix(k) > 0 by Th6;
        ic < (Radix(k) |^ (n+1)) by A7,RADIX_1:def 12;
-    then icn2 * Radix(k) < (Radix(k) |^ (n+1)) by A63,AXIOMS:22;
+    then icn2 * Radix(k) < (Radix(k) |^ (n+1)) by A63,XREAL_1:2;
     then icn2 * Radix(k) < (Radix(k) |^ n)* Radix(k) by NEWTON:11;
-    then icn < (Radix(k) |^ n) by A42,AXIOMS:25;
+    then icn < (Radix(k) |^ n) by A42,XREAL_1:66;
     then A65: icn is_represented_by n,k by RADIX_1:def 12;
        cn = DecSD2(icn2,n,k)
     proof
@@ -1069,17 +1069,17 @@ FINSEQ_1:37
         let i be Nat;
         assume A67: 1 <= i & i <= len cn;
         then A68: i in Seg n by A10,FINSEQ_1:3;
-        A69: i <= i+1 by REAL_1:69;
-        then 1 <= (i+1) & (i+1) <= (n+1) by A10,A67,AXIOMS:22,24;
+        A69: i <= i+1 by XREAL_1:31;
+        then 1 <= (i+1) & (i+1) <= (n+1) by A10,A67,XREAL_1:2,XREAL_1:8;
         then A70: (i+1) in Seg (n+1) by FINSEQ_1:3;
            c2.1 = DigitDC2(ic,1,k) by A23,Def5
            .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1)) by Def4
-           .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by GOBOARD9:1
+           .= (ic mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by BINARITH:51
            .= (ic mod (Radix(k) |^ 1)) div 1 by NEWTON:9
            .= ic mod (Radix(k) |^ 1) by NAT_2:6
            .= ic mod Radix(k) by NEWTON:10;
         then A71: c2.1 < Radix(k) by A64,NAT_1:46;
-        A72:1 <= i+1 & 0 < Radix(k) by A67,A69,Th6,AXIOMS:22;
+        A72:1 <= i+1 & 0 < Radix(k) by A67,A69,Th6,XREAL_1:2;
         A73:Radix(k) <> 0 & i <> 0 by A67,Th6;
         reconsider a = c2.1 as Integer;
         reconsider b = icn2 as Integer;
@@ -1217,7 +1217,7 @@ uniqueness
           suppose
             A15: 1 <= kk;
             A16: kk <= kk + 1 by NAT_1:29;
-            then A17: 1 <= kk & kk <= n - 1 by A13,A15,AXIOMS:22;
+            then A17: 1 <= kk & kk <= n - 1 by A13,A15,XREAL_1:2;
             then consider i1,i2 be Nat such that
               A18: i1 = s1.kk & i2 = s1.(kk+1) &
               i2 = (((i1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'kk)) mod f by A6;
@@ -1225,13 +1225,13 @@ uniqueness
               A19: i1 = s2.kk & i2 = s2.(kk+1) &
               i2 = (((i1 |^ Radix(k)) mod f)*Table2(m,e,f,n-'kk)) mod f
                                                                   by A7,A17;
-      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,AXIOMS:22;
+      thus s1.(kk+1) = s2.(kk+1) by A12,A13,A15,A16,A18,A19,XREAL_1:2;
     end;
     end;
     A20:for kk be Nat holds P[kk] from NAT_1:sch 1 (A10,A11);
     A21:s1.n = s2.n
     proof
-       n - 1 >= 1 - 1 by A1,REAL_1:49;
+       n - 1 >= 1 - 1 by A1,XREAL_1:11;
       then reconsider U1 = n - 1 as Nat by INT_1:16;
          now per cases;
         suppose U1 = 0;
@@ -1257,9 +1257,9 @@ uniqueness
     proof
       let kk be Nat;
       assume A28:1 <= kk & kk <= len s1;
-         now per cases by A28,AXIOMS:21;
+         now per cases by A28,XREAL_1:1;
         suppose A29:kk < len s1;
-           n - 1 >= 1 - 1 by A1,REAL_1:49;
+           n - 1 >= 1 - 1 by A1,XREAL_1:11;
         then reconsider U1 = len s1 - 1 as Nat by A8,INT_1:16;
            U1 + 1 = len s1;
         then kk <= U1 by A29,NAT_1:38;
@@ -1338,9 +1338,9 @@ proof
           Pow_mod(m,en,f,k).i = Pow_mod(m,e,f,k).i;
         assume A21: (i+1) in Seg n;
         then A22: 1 <= (i+1) & (i+1) <= n by FINSEQ_1:3;
-        then A23:(i+1)-1 <= n - 1 by REAL_1:49;
+        then A23:(i+1)-1 <= n - 1 by XREAL_1:11;
            (i=0 or i>0);
-        then A24:(i=0 or i+1>1+0) by REAL_1:53;
+        then A24:(i=0 or i+1>1+0) by XREAL_1:8;
         A25: dom en = Seg n by A12,FINSEQ_1:def 3;
         A26:dom e = Seg (len e) by FINSEQ_1:def 3;
         then A27: dom e = Seg (n+1) by FINSEQ_2:109;
@@ -1368,19 +1368,19 @@ proof
              I1=Pow_mod(m,e,f,k).i & I2=Pow_mod(m,e,f,k).(i+1) &
              I2 = (((I1 |^ Radix(k)) mod f) * Table2(m,e,f,(n+1)-'i)) mod f
                                                          by A9,A31,Def9;
-             1 + i - i <= n - i by A22,REAL_1:49;
-            then A34: 1 <= n -' i by A30,SCMFSA_7:3;
-               n -' i <= n by GOBOARD9:2;
+             1 + i - i <= n - i by A22,XREAL_1:11;
+            then A34: 1 <= n -' i by A30,BINARITH:50;
+               n -' i <= n by BINARITH:52;
             then A35: (n -' i) in Seg n by A34,FINSEQ_1:3;
             then A36: (n -' i) in dom en by A12,FINSEQ_1:def 3;
-            A37: (n+1) -' i <= n+1 by GOBOARD9:2;
+            A37: (n+1) -' i <= n+1 by BINARITH:52;
                i+1 <= n by A21,FINSEQ_1:3;
-            then i+1-1 <= n-1 by REAL_1:49;
+            then i+1-1 <= n-1 by XREAL_1:11;
             then A38: (n+1)-'i >= (n+1)-'nn by JORDAN3:4;
-               (n+1)-'nn >= (n+1)-nn by JORDAN3:3;
-            then A39: (n+1)-'i >= (n+1)-(n-1) by A38,AXIOMS:22;
+               (n+1)-'nn >= (n+1)-nn by BINARITH:def 3;
+            then A39: (n+1)-'i >= (n+1)-(n-1) by A38,XREAL_1:2;
                (n+1)-(n-1) = 1+0+1;
-            then 1 <= (n+1)-'i by A39,AXIOMS:22;
+            then 1 <= (n+1)-'i by A39,XREAL_1:2;
             then ((n+1)-'i) in Seg (n+1) by A37,FINSEQ_1:3;
             then A40: ((n+1) -' i) in dom e by A26,FINSEQ_2:109;
                Pow_mod(m,en,f,k).(i+1)
@@ -1451,12 +1451,12 @@ proof
           hence thesis by A58;
           end;
           suppose A59:i<>1;
-               1-1 <= i-1 by A54,REAL_1:49;
+               1-1 <= i-1 by A54,XREAL_1:11;
             then reconsider i1 = i-1 as Nat by INT_1:16;
                1<i by A54,A59,REAL_1:def 5;
             then 1+1<=i by INT_1:20;
-            then A60: 1+1-1<=i-1 by REAL_1:49;
-              A61: i-1<=n+1-1 by A55,REAL_1:49;
+            then A60: 1+1-1<=i-1 by XREAL_1:11;
+              A61: i-1<=n+1-1 by A55,XREAL_1:11;
             then A62: i1 in Seg n by A60,FINSEQ_1:3;
             A63: i1 in dom rD by A46,A60,A61,FINSEQ_1:3;
             then reconsider rs = rD.(i-1) as Real by FINSEQ_2:13;
@@ -1476,7 +1476,7 @@ proof
                  .=(Radix(k) |^ (i1-'1+1))*(en.i1) by NEWTON:11
                  .=(Radix(k) |^ i1)*(en.i1) by A60,AMI_5:4
                  .=(Radix(k) |^ i1)*(e.(i1+1)) by A13,A62
-                 .=(Radix(k) |^ (i-'1))*(e.i) by A54,SCMFSA_7:3
+                 .=(Radix(k) |^ (i-'1))*(e.i) by A54,BINARITH:50
                  .=SubDigit2(e,i,k) by Def1
                  .=(DigitSD2(e,k))/.i by A56,Def2;
           hence thesis by A57,FINSEQ_4:def 4;
@@ -1502,9 +1502,9 @@ proof
     then A65: ie >= ien * Radix(k) by INT_1:19;
     A66: Radix(k) > 0 by Th6;
        ie < (Radix(k) |^ (n+1)) by A10,RADIX_1:def 12;
-    then ien * Radix(k) < (Radix(k) |^ (n+1)) by A65,AXIOMS:22;
+    then ien * Radix(k) < (Radix(k) |^ (n+1)) by A65,XREAL_1:2;
     then ien * Radix(k) < (Radix(k) |^ n)* Radix(k) by NEWTON:11;
-    then ien < (Radix(k) |^ n) by AXIOMS:25;
+    then ien < (Radix(k) |^ n) by XREAL_1:66;
     then A67: ien is_represented_by n,k by RADIX_1:def 12;
     A68: en = DecSD2(ien,n,k)
     proof
@@ -1514,19 +1514,19 @@ proof
         let i be Nat;
         assume A70: 1 <= i & i <= len en;
         then A71: i in Seg n by A12,FINSEQ_1:3;
-        A72:i <= i+1 by REAL_1:69;
-        then 1 <= (i+1) & (i+1) <= (n+1) by A12,A70,AXIOMS:22,24;
+        A72:i <= i+1 by XREAL_1:31;
+        then 1 <= (i+1) & (i+1) <= (n+1) by A12,A70,XREAL_1:2,XREAL_1:8;
         then A73: (i+1) in Seg (n+1) by FINSEQ_1:3;
            e.1 = DigitDC2(ie,1,k) by A11,A14,Def5
            .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ (1 -' 1)) by Def4
-           .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by GOBOARD9:1
+           .= (ie mod (Radix(k) |^ 1)) div (Radix(k) |^ 0) by BINARITH:51
            .= (ie mod (Radix(k) |^ 1)) div 1 by NEWTON:9
            .= ie mod (Radix(k) |^ 1) by NAT_2:6
            .= ie mod Radix(k) by NEWTON:10;
         then A74: e.1 < Radix(k) by A66,NAT_1:46;
            dom e = Seg (len e) by FINSEQ_1:def 3;
         then A75:dom e = Seg (n+1) by FINSEQ_2:109;
-        A76:1 <= i+1 & 0 < Radix(k) by A70,A72,Th6,AXIOMS:22;
+        A76:1 <= i+1 & 0 < Radix(k) by A70,A72,Th6,XREAL_1:2;
         A77:Radix(k) <> 0 & i <> 0 by A70,Th6;
         reconsider a = e.1 as Integer;
         reconsider b = ien as Integer;

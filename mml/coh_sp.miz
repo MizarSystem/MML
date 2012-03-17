@@ -7,8 +7,9 @@
 environ
 
  vocabularies BOOLE, TARSKI, CLASSES1, TOLER_1, FUNCT_2, FRAENKEL, FUNCT_1,
-      MCART_1, RELAT_1, CAT_1, ENS_1, PARTFUN1, COH_SP;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, MCART_1,
+      MCART_1, RELAT_1, CAT_1, ENS_1, PARTFUN1, COH_SP, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+ RELAT_1, RELSET_1, MCART_1,
       FUNCT_1, PARTFUN1, CLASSES1, FUNCT_2, FRAENKEL, EQREL_1, TOLER_1, CAT_1;
  constructors EQREL_1, MCART_1, CLASSES1, TOLER_1, FRAENKEL, CAT_1;
  registrations FUNCT_1, RELSET_1, SUBSET_1, FRAENKEL, PARTFUN1, FUNCT_2,
@@ -413,7 +414,7 @@ begin :: Category of Coherence Spaces
 
 definition let X;
   func CSp(X) -> set equals :Def5:
-    { x where x is Subset of bool X : x is Coherence_Space };
+    { x where x is Subset-Family of X : x is Coherence_Space };
 coherence;
 end;
 
@@ -421,8 +422,8 @@ registration let X;
   cluster CSp(X) -> non empty;
 coherence
  proof
-  set F = { x where x is Element of bool bool X: x is Coherence_Space };
-  reconsider b = bool X as Element of bool bool X by ZFMISC_1:def 1;
+  set F = { x where x is Subset-Family of X: x is Coherence_Space };
+  reconsider b = bool X as Subset-Family of X by ZFMISC_1:def 1;
       b is Coherence_Space by Th2;
   then b in F;
   hence thesis by Def5;
@@ -434,8 +435,8 @@ registration let X be set;
   coherence
   proof let C be Element of CSp(X);
        C in CSp(X);
-   then C in { x where x is Element of bool bool X : x is Coherence_Space }
-      by Def5; then consider x be Element of bool bool X such that
+   then C in { x where x is Subset-Family of X : x is Coherence_Space }
+      by Def5; then consider x be Subset-Family of X such that
    A1: C = x & x is Coherence_Space;
    thus thesis by A1;
   end;
@@ -467,9 +468,9 @@ registration let X;
   proof set F = { Funcs(union T,union TT) where T is Element of CSp(X),
              TT is Element of CSp(X): not contradiction };
 A1:  FuncsC X = union F by Def7;
-   reconsider A = bool X as Element of bool bool X by ZFMISC_1:def 1;
+   reconsider A = bool X as Subset-Family of X by ZFMISC_1:def 1;
        A is Coherence_Space by Th2;
-   then A in { x where x is Element of bool bool X: x is Coherence_Space};
+   then A in { x where x is Subset-Family of X: x is Coherence_Space};
    then reconsider A as Element of CSp(X) by Def5;
        id union A in Funcs(union A,union A) & Funcs(union A,union A) in F
      by FUNCT_2:12;
@@ -535,9 +536,9 @@ registration let X;
 ) & f is Function of union T,union TT &
         for x,y st {x,y} in T holds {f.x,f.y} in TT};
        now
-    reconsider A = bool X as Element of bool bool X by ZFMISC_1:def 1;
+    reconsider A = bool X as Subset-Family of X by ZFMISC_1:def 1;
         A is Coherence_Space by Th2;
-    then A in { xx where xx is Element of bool bool X: xx is Coherence_Space};
+    then A in { xx where xx is Subset-Family of X: xx is Coherence_Space};
     then reconsider A as Element of CSp(X) by Def5;
     set f = id union A;
     take m = [[A,A],f];
@@ -1011,7 +1012,7 @@ registration let X be set;
 cluster Toler_on_subsets(X) -> non empty;
  coherence
   proof
-   set F = {Toler(Y) where Y is Element of bool X: not contradiction};
+   set F = {Toler(Y) where Y is Subset of X: not contradiction};
 A1:union F = Toler_on_subsets(X) by Def20;
        {} c= X by XBOOLE_1:2;
    then {} in Toler({}) & Toler({}) in F by Def19,TOLER_1:39;
@@ -1022,20 +1023,20 @@ end;
 theorem
     x in Toler_on_subsets(X) iff ex A st A c= X & x is Tolerance of A
  proof
-  set f = {Toler(Y) where Y is Element of bool X: not contradiction};
+  set f = {Toler(Y) where Y is Subset of X: not contradiction};
   thus x in Toler_on_subsets(X) implies ex A st A c= X & x is Tolerance of A
    proof assume
         x in Toler_on_subsets(X); then x in union f by Def20;
     then consider a such that
     A1: x in a & a in f by TARSKI:def 4;
-    consider Y be Element of bool X such that
+    consider Y be Subset of X such that
     A2: a = Toler(Y) by A1;
     take Y;
     thus thesis by A1,A2,Def19;
    end;
   given A such that
   A3: A c= X & x is Tolerance of A;
-  reconsider A as Element of bool X by A3;
+  reconsider A as Subset of X by A3;
       x in Toler(A) & Toler(A) in f by A3,Def19;
   then x in union f by TARSKI:def 4;
   hence thesis by Def20;
@@ -1049,7 +1050,7 @@ canceled;
 theorem Th30:
 {} in Toler_on_subsets(X)
  proof
-  set F = {Toler(Y) where Y is Element of bool X: not contradiction};
+  set F = {Toler(Y) where Y is Subset of X: not contradiction};
       {} c= X by XBOOLE_1:2;
   then {} in Toler({}) & Toler({}) in F by Def19,TOLER_1:39;
   then {} in union F by TARSKI:def 4;
@@ -1059,7 +1060,7 @@ theorem Th30:
 theorem Th31:
 a c= X implies Total a in Toler_on_subsets(X)
  proof
-  set F = {Toler(Y) where Y is Element of bool X: not contradiction};
+  set F = {Toler(Y) where Y is Subset of X: not contradiction};
   assume a c= X;
   then Total a in Toler(a) & Toler(a) in F by Def19;
   then Total a in union F by TARSKI:def 4;
@@ -1069,7 +1070,7 @@ a c= X implies Total a in Toler_on_subsets(X)
 theorem Th32:
 a c= X implies id a in Toler_on_subsets(X)
  proof
-  set F = {Toler(Y) where Y is Element of bool X: not contradiction};
+  set F = {Toler(Y) where Y is Subset of X: not contradiction};
   assume a c= X;
   then id a in Toler(a) & Toler(a) in F by Def19;
   then id a in union F by TARSKI:def 4;
@@ -1085,7 +1086,7 @@ theorem
 definition let X;
 func TOL(X) -> set equals :Def21:
  { [t,Y] where t is Element of Toler_on_subsets(X),
-                   Y is Element of bool X : t is Tolerance of Y};
+                   Y is Subset of X : t is Tolerance of Y};
  coherence;
 end;
 
@@ -1094,10 +1095,10 @@ cluster TOL(X) -> non empty;
  coherence
   proof
    set FV = { [t,Y] where t is Element of Toler_on_subsets(X),
-       Y is Element of bool X : t is Tolerance of Y};
+       Y is Subset of X : t is Tolerance of Y};
        now
     reconsider e = {} as Element of Toler_on_subsets(X) by Th30;
-    reconsider o = {} as Element of bool X by XBOOLE_1:2;
+    reconsider o = {} as Subset of X by XBOOLE_1:2;
     take m = [e,o];
     thus m in FV by TOLER_1:39;
    end;
@@ -1113,7 +1114,7 @@ theorem
       {} in Toler_on_subsets(X) & {} c= X & {} is Tolerance of {}
    by Th30,TOLER_1:39,XBOOLE_1:2;
   then [{},{}] in{ [t,Y] where t is Element of Toler_on_subsets(X),
-       Y is Element of bool X : t is Tolerance of Y};
+       Y is Subset of X : t is Tolerance of Y};
   hence thesis by Def21;
  end;
 
@@ -1124,7 +1125,7 @@ a c= X implies [id a,a] in TOL(X)
   then id a in Toler_on_subsets(X) & a in bool X &
      id a is Tolerance of a by Th32;
   then [id a,a] in{ [t,Y] where t is Element of Toler_on_subsets(X),
-       Y is Element of bool X : t is Tolerance of Y};
+       Y is Subset of X : t is Tolerance of Y};
   hence thesis by Def21;
  end;
 
@@ -1135,7 +1136,7 @@ a c= X implies [Total a,a] in TOL(X)
   then Total a in Toler_on_subsets(X) & a in bool X &
      Total a is Tolerance of a by Th31;
   then [Total a,a] in{ [t,Y] where t is Element of Toler_on_subsets(X),
-       Y is Element of bool X : t is Tolerance of Y};
+       Y is Subset of X : t is Tolerance of Y};
   hence thesis by Def21;
  end;
 
@@ -1146,12 +1147,12 @@ theorem
     [Total X,X] in TOL(X) by Th37;
 
 definition let X,T;
-redefine func T`2 -> Element of bool X;
+redefine func T`2 -> Subset of X;
  coherence
   proof T in TOL(X);
    then T in { [t,Y] where t is Element of Toler_on_subsets(X),
-     Y is Element of bool X : t is Tolerance of Y} by Def21;
-   then consider t be Element of Toler_on_subsets(X),Y be Element of bool X
+     Y is Subset of X : t is Tolerance of Y} by Def21;
+   then consider t be Element of Toler_on_subsets(X),Y be Subset of X
    such that A1: T = [t,Y] & t is Tolerance of Y;
    thus thesis by A1,MCART_1:def 2;
   end;
@@ -1159,8 +1160,8 @@ func T`1 -> Tolerance of T`2;
  coherence
   proof T in TOL(X);
    then T in { [t,Y] where t is Element of Toler_on_subsets(X),
-     Y is Element of bool X : t is Tolerance of Y} by Def21;
-   then consider t be Element of Toler_on_subsets(X),Y be Element of bool X
+     Y is Subset of X : t is Tolerance of Y} by Def21;
+   then consider t be Element of Toler_on_subsets(X),Y be Subset of X
    such that A2: T = [t,Y] & t is Tolerance of Y;
        T`1 = t & T`2 = Y by A2,MCART_1:def 1,def 2;
    hence thesis by A2;
@@ -1180,7 +1181,7 @@ cluster FuncsT(X) -> non empty functional;
   proof set F = { Funcs(T`2,TT`2) where T is Element of TOL(X),
              TT is Element of TOL(X): not contradiction };
 A1: FuncsT X = union F by Def22;
-   consider A be Element of bool X;
+   consider A be Subset of X;
    reconsider T = [Total A,A] as Element of TOL(X) by Th37;
        T`2 = A by MCART_1:def 2;
    then id A in Funcs(T`2,T`2) & Funcs(T`2,T`2) in F by FUNCT_2:12;
@@ -1240,7 +1241,7 @@ cluster MapsT(X) -> non empty;
                          f is Element of FuncsT(X) :
         (TT`2 = {} implies T`2 = {}) & f is Function of T`2,TT`2 &
         for x,y st [x,y] in T`1 holds [f.x,f.y] in TT`1};
-       now consider A  be Element of bool X;
+       now consider A  be Subset of X;
     set a = [Total A,A],
         f = id a`2;
     take m = [[a,a],f];

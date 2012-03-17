@@ -24,9 +24,9 @@
 <ArticleID name="INT_2"/>
 <ArticleID name="NEWTON"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
 </Signature>
 <FCluster>

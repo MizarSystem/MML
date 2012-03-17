@@ -39,7 +39,6 @@
 <ArticleID name="ORDERS_3"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="YELLOW_3"/>
@@ -61,9 +60,9 @@
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
+<Adjective nr="161"/>
 <Adjective nr="162"/>
 <Adjective nr="163"/>
-<Adjective nr="164"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -96,9 +95,9 @@
 </Adjective>
 <Adjective nr="116"/>
 <Adjective nr="117"/>
+<Adjective nr="161"/>
 <Adjective nr="162"/>
 <Adjective nr="163"/>
-<Adjective nr="164"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -151,7 +150,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="362">
+<Func kind="K" nr="352">
 <LocusVar nr="1"/>
 <Func kind="K" nr="51">
 <LocusVar nr="1"/>
@@ -198,7 +197,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="362">
+<Func kind="K" nr="352">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -259,7 +258,7 @@
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="359">
+<Func kind="K" nr="349">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -282,7 +281,7 @@
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="163"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="3">
@@ -290,7 +289,7 @@
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="163"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -341,7 +340,7 @@
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="28"/>
-<Adjective nr="163"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="3">
@@ -350,7 +349,7 @@
 <Adjective nr="27"/>
 <Adjective nr="28"/>
 <Adjective nr="86"/>
-<Adjective nr="163"/>
+<Adjective nr="162"/>
 </Cluster>
 </Typ>
 </ArgTypes>

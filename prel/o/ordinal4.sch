@@ -165,7 +165,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="7">

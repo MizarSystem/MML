@@ -416,7 +416,7 @@ theorem
  definition let l; let V;
  canceled;
 
-  func variables_in(l,V) -> Element of bool V equals
+  func variables_in(l,V) -> Subset of V equals
 :Def2: { l.k : 1 <= k & k <= len l & l.k in V };
  coherence
   proof set A = { l.k : 1 <= k & k <= len l & l.k in V };
@@ -442,18 +442,18 @@ QC_LANG1:def 28
 
 deffunc F1(Element of QC-WFF) = still_not-bound_in $1;
 deffunc A1(Element of QC-WFF) = still_not-bound_in(the_arguments_of $1);
-deffunc N1(Element of bool bound_QC-variables) = $1;
-deffunc C1(Element of bool bound_QC-variables,
- Element of bool bound_QC-variables) = $1 \/ $2;
-deffunc Q1(Element of QC-WFF, Element of bool bound_QC-variables) =
+deffunc N1(Subset of bound_QC-variables) = $1;
+deffunc C1(Subset of bound_QC-variables,
+ Subset of bound_QC-variables) = $1 \/ $2;
+deffunc Q1(Element of QC-WFF, Subset of bound_QC-variables) =
  $2 \ {bound_in $1};
 Lm1:
  for p being QC-formula,
-     d being Element of (bool bound_QC-variables) holds d = F1(p) iff
+     d being Subset of bound_QC-variables holds d = F1(p) iff
    ex F being Function of QC-WFF, (bool bound_QC-variables) st
      d = F.p &
      for p being Element of QC-WFF
-     for d1,d2 being Element of (bool bound_QC-variables) holds
+     for d1,d2 being Subset of bound_QC-variables holds
      (p = VERUM implies F.p = ({} bound_QC-variables)) &
      (p is atomic implies F.p = A1(p)) &
      (p is negative & d1 = F.the_argument_of p implies F.p = N1(d1)) &
@@ -462,12 +462,12 @@ Lm1:
        F.p = C1(d1,d2)) &
      (p is universal & d1 = F.the_scope_of p implies F.p = Q1(p,d1))
   proof let p be QC-formula,
-            d be Element of (bool bound_QC-variables);
+            d be Subset of bound_QC-variables;
    thus d = still_not-bound_in p implies
       ex F being Function of QC-WFF, (bool bound_QC-variables) st
         d = F.p &
         for p being Element of QC-WFF
-        for d1,d2 being Element of (bool bound_QC-variables) holds
+        for d1,d2 being Subset of bound_QC-variables holds
         (p = VERUM implies F.p = ({} bound_QC-variables)) &
         (p is atomic implies F.p = still_not-bound_in(the_arguments_of p)) &
         (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
@@ -494,7 +494,7 @@ A1:     d = F.p &
 
       take F; thus d = F.p by A1;
       let p be Element of QC-WFF;
-      let d1,d2 be Element of (bool bound_QC-variables);
+      let d1,d2 be Subset of bound_QC-variables;
           {}(bound_QC-variables) = {} &
        still_not-bound_in (the_arguments_of p) =
             { (the_arguments_of p).k :
@@ -509,7 +509,7 @@ A1:     d = F.p &
    given F being Function of QC-WFF, (bool bound_QC-variables) such that
 A2:  d = F.p and
 A3:  for p being Element of QC-WFF
-     for d1,d2 being Element of (bool bound_QC-variables) holds
+     for d1,d2 being Subset of bound_QC-variables holds
       (p = VERUM implies F.p = ({} bound_QC-variables)) &
       (p is atomic implies F.p = still_not-bound_in(the_arguments_of p)) &
       (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
@@ -588,7 +588,7 @@ theorem Th13:
                            (still_not-bound_in the_right_argument_of p)
  proof let p be QC-formula such that
 A1: p is conjunctive;
-    for d1,d2 being Element of (bool bound_QC-variables) st
+    for d1,d2 being Subset of bound_QC-variables st
     d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
      F1(p) = C1(d1,d2) from QCDResult'conjunctive(Lm1,A1);
   hence still_not-bound_in p = (still_not-bound_in the_left_argument_of p) \/
@@ -918,18 +918,13 @@ A2:  a1 in {6} & a2 in NAT & a = [a1,a2] by QC_LANG1:def 4,ZFMISC_1:def 2;
   hence a <> x by A1,A2,ZFMISC_1:33;
  end;
 
-definition let V; let V1,V2 be Element of bool V;
- redefine func V1 \/ V2 -> Element of bool V;
-   coherence by XBOOLE_1:8;
-end;
-
  definition let V; let p;
-  func Vars(p,V) -> Element of bool V means:
+  func Vars(p,V) -> Subset of V means:
 Def5:
    ex F being Function of QC-WFF, bool V st
     it = F.p &
     for p being Element of QC-WFF
-     for d1,d2 being Element of bool V holds
+     for d1,d2 being Subset of V holds
       (p = VERUM implies F.p = {}(V)) &
       (p is atomic implies F.p = variables_in(the_arguments_of p,V)) &
       (p is negative & d1 = F.the_argument_of p implies F.p = d1) &
@@ -939,14 +934,14 @@ Def5:
    correctness
    proof
     deffunc A(Element of QC-WFF) = variables_in(the_arguments_of $1,V);
-    deffunc N(Element of bool V) = $1;
-    deffunc C(Element of bool V,Element of bool V) = $1 \/ $2;
-    deffunc Q(Element of QC-WFF,Element of bool V) = $2;
-    thus (ex d being (Element of bool V), F being Function of QC-WFF, bool V
+    deffunc N(Subset of V) = $1;
+    deffunc C(Subset of V,Subset of V) = $1 \/ $2;
+    deffunc Q(Element of QC-WFF,Subset of V) = $2;
+    thus (ex d being (Subset of V), F being Function of QC-WFF, bool V
 st
         d = F.p &
         for p being Element of QC-WFF
-        for d1,d2 being Element of bool V holds
+        for d1,d2 being Subset of V holds
         (p = VERUM implies F.p = {}V) &
         (p is atomic implies F.p = A(p)) &
         (p is negative & d1 = F.the_argument_of p
@@ -955,11 +950,11 @@ st
          d1 = F.the_left_argument_of p & d2 = F.the_right_argument_of p
             implies F.p = C(d1, d2)) &
         (p is universal & d1 = F.the_scope_of p implies F.p = Q(p, d1)) ) &
- for x1,x2 being Element of bool V st
+ for x1,x2 being Subset of V st
   (ex F being Function of QC-WFF, bool V st
         x1 = F.p &
         for p being Element of QC-WFF
-        for d1,d2 being Element of bool V holds
+        for d1,d2 being Subset of V holds
         (p = VERUM implies F.p = {}V) &
         (p is atomic implies F.p = A(p)) &
         (p is negative & d1 = F.the_argument_of p
@@ -971,7 +966,7 @@ st
   (ex F being Function of QC-WFF, bool V st
         x2 = F.p &
         for p being Element of QC-WFF
-        for d1,d2 being Element of bool V holds
+        for d1,d2 being Subset of V holds
         (p = VERUM implies F.p = {}V) &
         (p is atomic implies F.p = A(p)) &
         (p is negative & d1 = F.the_argument_of p
@@ -988,14 +983,14 @@ Lm2:
 now let V;
 deffunc F1(Element of QC-WFF) = Vars($1,V);
 deffunc A(Element of QC-WFF) = variables_in(the_arguments_of $1,V);
-deffunc N(Element of bool V) = $1;
-deffunc C(Element of bool V,Element of bool V) = $1 \/ $2;
-deffunc Q(Element of QC-WFF,Element of bool V) = $2;
-A1:for X being Element of bool V holds X = F1(p) iff
+deffunc N(Subset of V) = $1;
+deffunc C(Subset of V,Subset of V) = $1 \/ $2;
+deffunc Q(Element of QC-WFF,Subset of V) = $2;
+A1:for X being Subset of V holds X = F1(p) iff
    ex F being Function of QC-WFF, bool V st
     X = F.p &
     for p being Element of QC-WFF
-     for d1,d2 being Element of bool V holds
+     for d1,d2 being Subset of V holds
       (p = VERUM implies F.p = {}(V)) &
       (p is atomic implies F.p = A(p)) &
       (p is negative & d1 = F.the_argument_of p implies F.p = N(d1)) &
@@ -1017,7 +1012,7 @@ A3:   p is negative;
     Vars(the_left_argument_of p,V) \/ Vars(the_right_argument_of p,V)
    proof assume
 A4:   p is conjunctive;
-        for d1,d2 being Element of bool V st
+        for d1,d2 being Subset of V st
       d1 = F1(the_left_argument_of p) & d2 = F1(the_right_argument_of p) holds
        F1(p) = C(d1,d2) from QCDResult'conjunctive(A1,A4);
     hence thesis;
@@ -1188,7 +1183,7 @@ p, V) by Th55
   end;
 
  definition let p;
-  func Free p -> Element of bool free_QC-variables equals
+  func Free p -> Subset of free_QC-variables equals
 :Def6:  Vars(p,free_QC-variables);
    correctness;
  end;
@@ -1276,7 +1271,7 @@ p by Th70 .= Free p by Th67;
   end;
 
  definition let p;
-  func Fixed p -> Element of bool fixed_QC-variables equals
+  func Fixed p -> Subset of fixed_QC-variables equals
 :Def7:  Vars(p,fixed_QC-variables);
    correctness;
  end;

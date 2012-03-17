@@ -22,7 +22,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="FIN_TOPO"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
@@ -35,7 +34,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -45,7 +44,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="38" value="false"/>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -150,8 +150,6 @@ end;
 
 canceled;
 
-:: Some additional theorems about measures and functions
-
 theorem Th4:
    for S being non empty Subset-Family of X,
        F, G being Function of NAT,S,
@@ -308,16 +306,6 @@ proof
 end;
 end;
 
-definition let X be set;
-   let A be Subset-Family of X;
-   redefine func union A -> Element of bool X;
-coherence
-proof
-      union A c= union bool X by ZFMISC_1:95;
-   hence thesis;
-end;
-end;
-
 definition let Y be set; let X,Z be non empty set;
    let F be Function of Y,X;
    let M be Function of X,Z;
@@ -331,7 +319,7 @@ end;
 theorem Th7:
    for a,b being R_eal holds
    ex M being Function of bool X,ExtREAL st
-   for A being Element of bool X holds
+   for A being Subset of X holds
    ((A = {} implies M.A = a) & (A <> {} implies M.A = b))
 proof
    let a,b be R_eal;
@@ -353,14 +341,14 @@ end;
 
 theorem Th8:
    ex M being Function of bool X,ExtREAL st
-   for A being Element of bool X holds M.A = 0.
+   for A being Subset of X holds M.A = 0.
 proof
    consider M being Function of bool X,ExtREAL such that
-A1:for A being Element of bool X holds
+A1:for A being Subset of X holds
    (A = {} implies M.A = 0.) & (A <> {} implies M.A = 0.) by Th7;
-A2:for A being Element of bool X holds M.A = 0.
+A2:for A being Subset of X holds M.A = 0.
    proof
-      let A be Element of bool X;
+      let A be Subset of X;
          A = {} implies M.A = 0.by A1;
       hence thesis by A1;
    end;
@@ -373,13 +361,13 @@ canceled 2;
 theorem Th11:
    ex M being Function of bool X,ExtREAL st
    M is nonnegative & M.{} = 0. &
-   for A,B being Element of bool X st A c= B holds M.A <=' M.B &
+   for A,B being Subset of X st A c= B holds M.A <=' M.B &
    for F being Function of NAT,bool X holds
    M.(union rng F) <=' SUM(M*F)
 proof
    consider M being Function of bool X,ExtREAL such that
-A1:for A being Element of bool X holds M.A = 0.by Th8;
-A2:for A being Element of bool X holds 0.<=' M.A by A1;
+A1:for A being Subset of X holds M.A = 0.by Th8;
+A2:for A being Subset of X holds 0.<=' M.A by A1;
 then A3:M is nonnegative by MEASURE1:def 4;
 A4:{} c= X by XBOOLE_1:2;
 A5:for F being Function of NAT,bool X holds M.(union rng F) <=' SUM(M*F)
@@ -399,9 +387,9 @@ A5:for F being Function of NAT,bool X holds M.(union rng F) <=' SUM(M*F)
       hence thesis by A6,A8,A9;
    end;
    take M;
-      for A,B being Element of bool X holds M.A <=' M.B
+      for A,B being Subset of X holds M.A <=' M.B
    proof
-      let A,B be Element of bool X;
+      let A,B be Subset of X;
          M.A = 0. & M.B = 0. by A1;
       hence thesis;
    end;
@@ -414,7 +402,7 @@ definition let X be set;
   mode C_Measure of X -> Function of bool X,ExtREAL means
 :Def2:it is nonnegative &
        it.{} = 0. &
-       for A,B being Element of bool X st A c= B holds it.A <=' it.B &
+       for A,B being Subset of X st A c= B holds it.A <=' it.B &
        for F being Function of NAT,bool X holds
        it.(union rng F) <=' SUM(it*F);
 existence by Th11;
@@ -425,28 +413,28 @@ end;
 definition let X be set;
    let C be C_Measure of X;
   func sigma_Field(C) -> non empty Subset-Family of X means
-:Def3:for A being Element of bool X holds
-      (A in it iff for W,Z being Element of bool X holds
+:Def3:for A being Subset of X holds
+      (A in it iff for W,Z being Subset of X holds
       (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
 existence
 proof
    defpred P[set] means
    for A being set holds (A = $1 implies
-   for W,Z being Element of bool X holds
+   for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
    consider D being set such that
 A1:for y being set holds (y in D iff (y in bool X & P[y])) from XBOOLE_0:sch 1;
 A2:for A being set holds (A in D iff A in bool X &
-   for W,Z being Element of bool X holds
+   for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)))
    proof
       let A be set;
-         P[A] iff for W,Z being Element of bool X holds
+         P[A] iff for W,Z being Subset of X holds
       (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z));
       hence thesis by A1;
    end;
-   reconsider A = {} as Element of bool X by XBOOLE_1:2;
-A3: now let W,Z be Element of bool X;
+   reconsider A = {} as Subset of X by XBOOLE_1:2;
+A3: now let W,Z be Subset of X;
       assume W c= A & Z c= X \ A;
    then A4:W = {} by XBOOLE_1:3;
       then C.W = 0. by Def2;
@@ -461,26 +449,26 @@ end;
 uniqueness
 proof
    let D1,D2 be non empty Subset-Family of X such that
-A5:for A being Element of bool X holds
-   (A in D1 iff for W,Z being Element of bool X holds
+A5:for A being Subset of X holds
+   (A in D1 iff for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z))) and
-A6:for A being Element of bool X holds
-   (A in D2 iff for W,Z being Element of bool X holds
+A6:for A being Subset of X holds
+   (A in D2 iff for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)));
       for A being set holds A in D1 iff A in D2
    proof
       let A be set;
       hereby assume
       A7:A in D1;
-         then reconsider A' = A as Element of bool X;
-            for W,Z being Element of bool X holds
+         then reconsider A' = A as Subset of X;
+            for W,Z being Subset of X holds
          (W c= A & Z c= X \ A' implies C.W + C.Z <=' C.(W \/ Z)) by A5,A7;
          hence A in D2 by A6;
       end;
       assume
    A8:A in D2;
-      then reconsider A as Element of bool X;
-         for W,Z being Element of bool X holds
+      then reconsider A as Subset of X;
+         for W,Z being Subset of X holds
       (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z)) by A6,A8;
       hence thesis by A5;
    end;
@@ -489,10 +477,10 @@ end;
 end;
 
 theorem Th12:
-   for W,Z being Element of bool X holds
+   for W,Z being Subset of X holds
    C.(W \/ Z) <=' C.W + C.Z
 proof
-   let W,Z be Element of bool X;
+   let W,Z be Subset of X;
    reconsider P = {} as Subset of X by XBOOLE_1:2;
    consider F being Function of NAT,bool X such that
 A1:rng F = {W,Z,P} &
@@ -552,32 +540,32 @@ end;
 canceled;
 
 theorem Th14:
-   for A being Element of bool X holds
-   (A in sigma_Field(C) iff for W,Z being Element of bool X holds
+   for A being Subset of X holds
+   (A in sigma_Field(C) iff for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z)))
 proof
-   let A be Element of bool X;
+   let A be Subset of X;
    hereby assume
 A1:   A in sigma_Field(C);
-      let W,Z be Element of bool X;
+      let W,Z be Subset of X;
       assume W c= A & Z c= X \ A;
       then C.(W \/ Z) <=' C.W + C.Z & C.W + C.Z <=' C.(W \/ Z) by A1,Def3,Th12
 ;
       hence C.W + C.Z = C.(W \/ Z) by SUPINF_1:22;
    end;
-   assume for W,Z being Element of bool X holds
+   assume for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z = C.(W \/ Z));
-   then for W,Z being Element of bool X holds
+   then for W,Z being Subset of X holds
    (W c= A & Z c= X \ A implies C.W + C.Z <=' C.(W \/ Z));
    hence thesis by Def3;
 end;
 
 theorem Th15:
-   for W,Z being Element of bool X holds
+   for W,Z being Subset of X holds
    (W in sigma_Field(C) & Z in sigma_Field(C) & Z misses W) implies
    C.(W \/ Z) = C.W + C.Z
 proof
-   let W,Z be Element of bool X;
+   let W,Z be Subset of X;
    assume
 A1:W in sigma_Field(C) & Z in sigma_Field(C) & Z misses W;
       Z \ W c= X \ W by XBOOLE_1:33;
@@ -591,10 +579,10 @@ proof
    assume
 A1:A in sigma_Field(C);
 A2:X \ A c= X by XBOOLE_1:109;
-      for W,Z being Element of bool X holds
+      for W,Z being Subset of X holds
    W c= X \ A & Z c= X \ (X \ A) implies C.W + C.Z <=' C.(W \/ Z)
    proof
-      let W,Z be Element of bool X;
+      let W,Z be Subset of X;
       assume
    A3:W c= X \ A & Z c= X \ (X \ A);
          X \ (X \ A) = X /\ A by XBOOLE_1:48;
@@ -609,12 +597,12 @@ theorem Th17:
 proof
    assume
 A1:A in sigma_Field(C) & B in sigma_Field(C);
-   then reconsider A,B as Element of bool X;
+   then reconsider A,B as Subset of X;
    set D = A \/ B;
-      for W,Z being Element of bool X holds
+      for W,Z being Subset of X holds
    W c= D & Z c= X \ D implies C.W + C.Z = C.(W \/ Z)
    proof
-      let W,Z be Element of bool X;
+      let W,Z be Subset of X;
       assume
 A2:   W c= D & Z c= X \ D;
       set W1 = W /\ A;
@@ -732,10 +720,10 @@ A2:C is nonnegative by Def2;
       let M be N_Sub_set_fam of X;
       assume
    A3:M c= sigma_Field(C);
-         for W,Z being Element of bool X holds
+         for W,Z being Subset of X holds
       (W c= union M & Z c= X \ union M implies C.W + C.Z <=' C.(W \/ Z))
       proof
-         let W,Z be Element of bool X;
+         let W,Z be Subset of X;
          assume
       A4:W c= union M & Z c= X \ union M;
          reconsider S = bool X as sigma_Field_Subset of X by Th6;
@@ -998,11 +986,11 @@ end;
 definition let X be set;
    let C be C_Measure of X;
   func sigma_Meas(C) -> Function of sigma_Field(C),ExtREAL means
-:Def4:for A being Element of bool X st A in sigma_Field(C) holds it.A = C.A;
+:Def4:for A being Subset of X st A in sigma_Field(C) holds it.A = C.A;
 existence
 proof
       ex D being Function of sigma_Field(C),ExtREAL st
-   (for A being Element of bool X holds
+   (for A being Subset of X holds
    A in sigma_Field(C) implies D.A = C.A)
    proof
      deffunc F(set) = C.$1;
@@ -1015,16 +1003,16 @@ FUNCT_2:sch 2(A1);
       thus thesis by A2;
    end;
    then consider D being Function of sigma_Field(C),ExtREAL such that
-A3:for A being Element of bool X st A in sigma_Field(C) holds D.A = C.A;
+A3:for A being Subset of X st A in sigma_Field(C) holds D.A = C.A;
    take D;
    thus thesis by A3;
 end;
 uniqueness
 proof
    let D1,D2 be Function of sigma_Field(C),ExtREAL such that
-A4:for A being Element of bool X holds
+A4:for A being Subset of X holds
    A in sigma_Field(C) implies D1.A = C.A and
-A5:for A being Element of bool X holds
+A5:for A being Subset of X holds
    A in sigma_Field(C) implies D2.A = C.A;
    A6:(sigma_Field(C) = dom D1) & (sigma_Field(C) = dom D2) by FUNCT_2:def 1;
       for A being set st A in sigma_Field(C) holds D1.A = D2.A
@@ -1032,7 +1020,7 @@ A5:for A being Element of bool X holds
       let A be set;
       assume
    A7:A in sigma_Field(C);
-      then reconsider A as Element of bool X;
+      then reconsider A as Subset of X;
          D1.A = C.A by A4,A7
           .= D2.A by A5,A7;
       hence thesis;
@@ -1045,7 +1033,7 @@ theorem Th22:
    sigma_Meas(C) is Measure of sigma_Field(C)
 proof
 A1:now let A be Element of sigma_Field(C);
-      reconsider A' = A as Element of bool X;
+      reconsider A' = A as Subset of X;
 A2:   (sigma_Meas(C)).A' = C.A' by Def4;
          C is nonnegative by Def2;
       hence 0.<=' (sigma_Meas(C)).A by A2,MEASURE1:def 4;
@@ -1057,7 +1045,7 @@ then A3:sigma_Meas(C) is nonnegative & (sigma_Meas(C)).{} = 0.
       now let A,B be Element of sigma_Field(C);
       assume
 A4:   A misses B;
-      reconsider A' = A,B' = B as Element of bool X;
+      reconsider A' = A,B' = B as Subset of X;
    A5:(sigma_Meas(C)).A' = C.A' & (sigma_Meas(C)).B' = C.B' by Def4;
          C.(A' \/ B') = C.A' + C.B' by A4,Th15;
       hence (sigma_Meas(C)).(A \/ B) = (sigma_Meas(C)).A + (sigma_Meas(C)).B
@@ -1081,7 +1069,7 @@ proof
    M.(union rng F) <=' SUM(M*F)
    proof
       let F be Sep_Sequence of sigma_Field(C);
-      consider A being Element of bool X such that
+      consider A being Subset of X such that
    A1:A = union rng F;
          M.A in ExtREAL by A1,FUNCT_2:7;
       then consider a,b being R_eal such that
@@ -1114,13 +1102,13 @@ coherence by Th23;
 end;
 
 theorem Th24:
-   for A being Element of bool X holds
+   for A being Subset of X holds
    C.A = 0. implies A in sigma_Field(C)
 proof
-   let A be Element of bool X;
+   let A be Subset of X;
    assume
 A1:C.A = 0.;
-      now let W,Z be Element of bool X;
+      now let W,Z be Subset of X;
       assume
    A2:W c= A & Z c= X \ A;
          C is nonnegative by Def2;
@@ -1141,7 +1129,7 @@ proof
    assume that
 A1:B in sigma_Field(C) and
 A2:A c= B & (sigma_Meas(C)).B = 0.;
-   reconsider B as Element of bool X by A1;
+   reconsider B as Subset of X by A1;
 A3:C.B = 0. by A1,A2,Def4;
       C is nonnegative by Def2;
    then 0.<=' C.A & C.A <=' 0. by A2,A3,Def2,MEASURE1:def 4;

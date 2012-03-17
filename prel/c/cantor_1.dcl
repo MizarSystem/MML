@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="CANTOR_1"/>
@@ -27,7 +26,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="73">
+<Func kind="K" nr="63">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -42,7 +41,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,7 +66,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="83">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

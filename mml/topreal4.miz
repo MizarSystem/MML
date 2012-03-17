@@ -18,10 +18,10 @@ environ
       XREAL_0, TOPREAL1, INT_1, XBOOLE_0, MEMBERED;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, TOPREAL1, XBOOLE_0;
- theorems TARSKI, AXIOMS, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, PRE_TOPC,
-      CONNSP_1, SQUARE_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TOPREAL3,
-      FINSEQ_4, FINSEQ_3, TBSP_1, PARTFUN2, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1,
-      XREAL_0, XCMPLX_1;
+ theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, PRE_TOPC,
+      CONNSP_1, EUCLID, TOPMETR, TOPREAL1, TOPREAL2, TOPREAL3, FINSEQ_4,
+      FINSEQ_3, TBSP_1, PARTFUN2, RELAT_1, INT_1, XBOOLE_0, XBOOLE_1, XREAL_0,
+      XCMPLX_1, XREAL_1;
  schemes NAT_1;
 
 begin
@@ -34,8 +34,6 @@ begin
          u for Point of Euclid 2,
          n,m,i,j,k for Nat,
          x,y for set;
-
-canceled;
 
 definition let P,p,q;
  pred P is_S-P_arc_joining p,q means :Def1:
@@ -53,14 +51,16 @@ notation let P;
  synonym P is_special_polygon for P is being_special_polygon;
 end;
 
-definition let P be Subset of TOP-REAL 2;
+definition let T be TopStruct, P be Subset of T;
  attr P is being_Region means :Def3:
-  P is open & P is connected;
-  end;
+ P is open connected;
+end;
 
-notation let P be Subset of TOP-REAL 2;
+notation let T be TopStruct, P be Subset of T;
  synonym P is_Region for P is being_Region;
 end;
+
+canceled;
 
 theorem Th2:
 P is_S-P_arc_joining p,q implies P is_S-P_arc
@@ -71,17 +71,17 @@ P is_S-P_arc_joining p,q implies P is_S-P_arc
  end;
 
 theorem Th3:
-W is_S-P_arc_joining p,q implies W is_an_arc_of p,q
+P is_S-P_arc_joining p,q implies P is_an_arc_of p,q
  proof
-  assume W is_S-P_arc_joining p,q;
-  then ex h st h is_S-Seq & W = L~h & p=h/.1 & q=h/.len h by Def1;
-  hence W is_an_arc_of p,q by TOPREAL1:31;
+  assume P is_S-P_arc_joining p,q;
+  then ex h st h is_S-Seq & P= L~h & p=h/.1 & q=h/.len h by Def1;
+  hence P is_an_arc_of p,q by TOPREAL1:31;
  end;
 
 theorem Th4:
-W is_S-P_arc_joining p,q implies p in W & q in W
- proof assume W is_S-P_arc_joining p,q;
-  then W is_an_arc_of p,q by Th3;
+P is_S-P_arc_joining p,q implies p in P & q in P
+ proof assume P is_S-P_arc_joining p,q;
+  then P is_an_arc_of p,q by Th3;
   hence thesis by TOPREAL1:4;
  end;
 
@@ -91,22 +91,22 @@ theorem
   A2: f is_S-Seq & P = L~f & p=f/.1 & q=f/.len f by Def1;
   A3: Seg len f = dom f by FINSEQ_1:def 3;
   A4: f is one-to-one & len f >= 2 by A2,TOPREAL1:def 10;
-  then len f >= 1 by AXIOMS:22;
+  then len f >= 1 by XREAL_1:2;
   then A5: len f in dom f & 1 in dom f by A3,FINSEQ_1:3;
      1 <> len f by A2,TOPREAL1:def 10;
   hence contradiction by A1,A2,A4,A5,PARTFUN2:17;
  end;
 
 theorem
-   W is_special_polygon implies W is_simple_closed_curve
+  P is_special_polygon implies P is_simple_closed_curve
  proof
   given p1,p2,P1,P2 such that
-A1:  p1 <> p2 & p1 in W & p2 in W and
+A1:  p1 <> p2 & p1 in P & p2 in P and
 A2:  P1 is_S-P_arc_joining p1,p2 & P2 is_S-P_arc_joining p1,p2 and
-A3:  P1 /\ P2 = {p1,p2} & W = P1 \/ P2;
+A3:  P1 /\ P2 = {p1,p2} & P = P1 \/ P2;
    reconsider P1, P2 as non empty Subset of TOP-REAL 2 by A3;
       P1 is_an_arc_of p1,p2 & P2 is_an_arc_of p1,p2 by A2,Th3;
-   hence W is_simple_closed_curve by A1,A3,TOPREAL2:6;
+   hence P is_simple_closed_curve by A1,A3,TOPREAL2:6;
  end;
 
 theorem Th7:
@@ -256,7 +256,7 @@ L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p)
 (f/.1)`2]|,p *>;
   then A2: len f >= 2 by TOPREAL1:def 10;
   set p1 = f/.1, q = f/.(1+1);
-  A3: len f >= 1 by A2,AXIOMS:22;
+  A3: len f >= 1 by A2,XREAL_1:2;
   A4: LSeg(f,1) = LSeg(p1,q) &
       p1 in LSeg(p1,q) by A2,TOPREAL1:6,def 5;
   then A5: LSeg(p1,p) c= LSeg(p1,q) & p1`1 <> p`1 by A1,TOPREAL1:12,TOPREAL3:11
@@ -288,7 +288,7 @@ L~h c= L~f & L~h = L~(f|1) \/ LSeg(f/.1,p)
       p in LSeg(f,1) & h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
   then A2: len f >= 2 by TOPREAL1:def 10;
   set q = f/.(1+1);
-  A3: len f >= 1 by A2,AXIOMS:22;
+  A3: len f >= 1 by A2,XREAL_1:2;
   A4: LSeg(f,1) = LSeg(p1,q) &
       p1 in LSeg(p1,q) by A2,TOPREAL1:6,def 5;
   then A5: LSeg(p1,p) c= LSeg(p1,q) & p1`2 <> p`2 by A1,TOPREAL1:12,TOPREAL3:11
@@ -364,7 +364,7 @@ A23: h is_S-Seq
     then consider k2 be Nat such that
     A26: k2=y & 1<=k2 & k2<=len h;
 A27: h/.k1 = h.y by A24,A25,FINSEQ_4:def 4 .= h/.k2 by A24,A26,FINSEQ_4:def 4;
-        k1<=len f & k2<=len f by A9,A13,A25,A26,AXIOMS:22;
+        k1<=len f & k2<=len f by A9,A13,A25,A26,XREAL_1:2;
     then A28: k1 in dom f & k2 in dom f &
         k2+(1+1) = k2+1+1 & k1+(1+1) = k1+1+1 by A5,A25,A26,FINSEQ_1:3;
         now per cases by A9,A25,A26,REAL_1:def 5;
@@ -395,11 +395,11 @@ then A31:        k2+1<=i by A29,NAT_1:38;
          suppose A36: k2+1<i;
           then A37: LSeg(f,k2) misses LSeg(f,i) & k2<=k2+1
              by A2,NAT_1:29,TOPREAL1:def 9;
-           then k2<=i by A36,AXIOMS:22;
+           then k2<=i by A36,XREAL_1:2;
           then A38: k2 in dom v by A7,A26,FINSEQ_1:3;
           then A39: h/.k2 = v/.k2 by A1,FINSEQ_4:83
             .= f/.k2 by A38,FINSEQ_4:85;
-              k2+1<=len f by A6,A36,AXIOMS:22;
+              k2+1<=len f by A6,A36,XREAL_1:2;
           then p in LSeg(f,k2) by A9,A12,A26,A27,A29,A39,TOPREAL1:27;
           hence contradiction by A1,A37,XBOOLE_0:3;
          end;
@@ -434,11 +434,11 @@ then A42:        k1+1<=i by A40,NAT_1:38;
          suppose A47: k1+1<i;
           then A48: LSeg(f,k1) misses LSeg(f,i) & k1<=k1+1
              by A2,NAT_1:29,TOPREAL1:def 9;
-           then k1<=i by A47,AXIOMS:22;
+           then k1<=i by A47,XREAL_1:2;
           then A49: k1 in dom v by A7,A25,FINSEQ_1:3;
           then A50: h/.k1 = v/.k1 by A1,FINSEQ_4:83
             .= f/.k1 by A49,FINSEQ_4:85;
-              k1+1<=len f by A6,A47,AXIOMS:22;
+              k1+1<=len f by A6,A47,XREAL_1:2;
           then p in LSeg(f,k1) by A9,A12,A25,A27,A40,A50,TOPREAL1:27;
           hence contradiction by A1,A48,XBOOLE_0:3;
          end;
@@ -461,27 +461,27 @@ then A42:        k1+1<=i by A40,NAT_1:38;
     hence contradiction;
    end;
   hence h is one-to-one by FUNCT_1:def 8;
-  thus len h >= 2 by A1,A9,A22,AXIOMS:24;
+  thus len h >= 2 by A1,A9,A22,XREAL_1:8;
   thus h is unfolded
    proof let j such that
     A52: 1 <= j & j + 2 <= len h;
        i+1 in Seg len f by A1,FINSEQ_1:def 3;
     then len h <= len f by A9,FINSEQ_1:3;
-then A53:    j+2 <= len f by A52,AXIOMS:22;
+then A53:    j+2 <= len f by A52,XREAL_1:2;
     then A54: LSeg(f,j) /\ LSeg(f,j+1) = {f/.(j+1)} by A3,A52,TOPREAL1:def 8;
        i+1+1 = i+(1+1);
     then len h <= i+2 by A9,NAT_1:29;
-    then j+2 <= i+2 by A52,AXIOMS:22;
-    then A55: j<=i by REAL_1:53;
+    then j+2 <= i+2 by A52,XREAL_1:2;
+    then A55: j<=i by XREAL_1:8;
 A56: j+1+1 = j+(1+1);
-then A57:  1<=j+1 & j+1<=i by A9,A52,NAT_1:29,REAL_1:53;
+then A57:  1<=j+1 & j+1<=i by A9,A52,NAT_1:29,XREAL_1:8;
     then A58: j in dom v & j+1 in dom v by A7,A52,A55,FINSEQ_1:3;
     then A59: LSeg(h,j) = LSeg(v,j) by A1,TOPREAL3:25
       .= LSeg(f,j) by A1,A58,TOPREAL3:24;
     A60: h/.(j+1) = v/.(j+1) by A1,A58,FINSEQ_4:83
      .= f/.(j+1) by A58,FINSEQ_4:85;
         j<=j+2 by NAT_1:29;
-    then A61: 1<=j+(1+1) by A52,AXIOMS:22;
+    then A61: 1<=j+(1+1) by A52,XREAL_1:2;
     A62: j+(1+1) = j+1+1;
         now per cases by A52,REAL_1:def 5;
      suppose j+2 = len h;
@@ -489,7 +489,7 @@ then A57:  1<=j+1 & j+1<=i by A9,A52,NAT_1:29,REAL_1:53;
 then A63:   LSeg(h,j) /\ LSeg(h,j+1) c= {h/.(j+1)}
          by A21,A54,A59,A60,XBOOLE_1:26;
          j +1 <= j+1+1 by NAT_1:29;
-      then j+1 <= len h by A52,AXIOMS:22;
+      then j+1 <= len h by A52,XREAL_1:2;
 then A64:   h/.(j+1) in LSeg(h,j)
          by A52,TOPREAL1:27;
      h/.(j+1) in LSeg(h,j+1)
@@ -513,19 +513,19 @@ then A64:   h/.(j+1) in LSeg(h,j)
    proof let n,m; assume A66: m>n+1;
       then n+1<m & n<=n+1 by NAT_1:29;
       then A67: n<=m & n+1<=m & 1<=n+1 & LSeg(f,n) misses LSeg(f,m)
-         by A2,AXIOMS:22,NAT_1:29,TOPREAL1:def 9;
+         by A2,XREAL_1:2,NAT_1:29,TOPREAL1:def 9;
           now per cases by REAL_1:def 5;
        suppose m+1<len h;
-        then A68: m<=i & m+1<=i & m<=m+1 & 1<m by A9,A66,A67,AXIOMS:22,24
-,NAT_1:38;
-        then A69: m in dom v & 1<=m+1 by A7,AXIOMS:22,FINSEQ_1:3;
+        then A68: m<=i & m+1<=i & m<=m+1 & 1<m by A9,A66,A67,XREAL_1:2,
+XREAL_1:8,NAT_1:38;
+        then A69: m in dom v & 1<=m+1 by A7,XREAL_1:2,FINSEQ_1:3;
         then A70: m+1 in dom v by A7,A68,FINSEQ_1:3;
         then A71: LSeg(h,m)=LSeg(v,m) by A1,A69,TOPREAL3:25
            .= LSeg(f,m) by A1,A69,A70,TOPREAL3:24;
             now per cases;
          suppose 0<n;
           then A72: 0+1<=n by NAT_1:38;
-             n<=i & n+1<=i by A67,A68,AXIOMS:22;
+             n<=i & n+1<=i by A67,A68,XREAL_1:2;
           then A73:n in dom v & n+1 in dom v by A7,A67,A72,FINSEQ_1:3;
           then LSeg(h,n)=LSeg(v,n) by A1,TOPREAL3:25
            .= LSeg(f,n) by A1,A73,TOPREAL3:24;
@@ -612,10 +612,10 @@ A76:      LSeg(f,n) /\ LSeg(f,m) = {} by A67,XBOOLE_0:def 7;
       hence p3`1 = p4`1 or p3`2 = p4`2;
      end;
      suppose n+1 < len h;
-      then n<=i & n+1<=i & n<=n+1 by A9,AXIOMS:24,NAT_1:38;
-      then n in dom v & n+1<=i & 1<=n+1 by A7,A78,AXIOMS:22,FINSEQ_1:3;
+      then n<=i & n+1<=i & n<=n+1 by A9,XREAL_1:8,NAT_1:38;
+      then n in dom v & n+1<=i & 1<=n+1 by A7,A78,XREAL_1:2,FINSEQ_1:3;
       then A87: n in dom v & n+1 in dom v by A7,FINSEQ_1:3;
-A88:   n+1 <= len f by A9,A13,A78,AXIOMS:22;
+A88:   n+1 <= len f by A9,A13,A78,XREAL_1:2;
          h/.n=v/.n & h/.(n+1)=v/.(n+1) by A1,A87,FINSEQ_4:83;
       then p3=f/.n & p4=f/.(n+1) by A87,FINSEQ_4:85;
       hence p3`1 = p4`1 or p3`2 = p4`2 by A4,A78,A88,TOPREAL1:def 7;
@@ -634,7 +634,7 @@ A88:   n+1 <= len f by A9,A13,A78,AXIOMS:22;
     A90: x in X & X in Mh by TARSKI:def 4;
     consider k such that
     A91: X=LSeg(h,k) & 1<=k & k+1<=len h by A90;
-    A92: k+1<= len f by A9,A13,A91,AXIOMS:22;
+    A92: k+1<= len f by A9,A13,A91,XREAL_1:2;
         now per cases by A91,REAL_1:def 5;
      suppose
         k+1 = len h;
@@ -648,7 +648,7 @@ A88:   n+1 <= len f by A9,A13,A78,AXIOMS:22;
      suppose A94: k+1 < len h;
       then A95: k+1<i+1 & k<=k+1 by A9,NAT_1:29;
           k+1<=i & 1<=k+1 by A9,A91,A94,NAT_1:38;
-      then A96: k+1 in dom v & k<=i by A7,A95,AXIOMS:22,FINSEQ_1:3;
+      then A96: k+1 in dom v & k<=i by A7,A95,XREAL_1:2,FINSEQ_1:3;
       then A97: k in dom v by A7,A91,FINSEQ_1:3;
       then A98: X=LSeg(v,k) by A1,A91,A96,TOPREAL3:25
       .= LSeg(f,k) by A1,A96,A97,TOPREAL3:24;
@@ -677,9 +677,9 @@ A88:   n+1 <= len f by A9,A13,A78,AXIOMS:22;
     consider k such that
     A101: X=LSeg(v,k) & 1<=k & k+1<=len v by A100;
        k<=k+1 by NAT_1:29;
-   then 1<=k & k<=len v & 1<=k+1 & k+1<=len v by A101,AXIOMS:22;
+   then 1<=k & k<=len v & 1<=k+1 & k+1<=len v by A101,XREAL_1:2;
     then A102: k in Seg len v & k+1 in Seg len v by FINSEQ_1:3;
-A103:    k+1<=len h by A8,A9,A19,A101,AXIOMS:22;
+A103:    k+1<=len h by A8,A9,A19,A101,XREAL_1:2;
        X=LSeg(h,k) by A1,A5,A101,A102,TOPREAL3:25;
     then X in Mh by A101,A103;
     then x in union Mh by A100,TARSKI:def 4;
@@ -705,7 +705,7 @@ L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2)
   A1: p<>p1 & f is_S-Seq &
       p`2 = p1`2 & h = <* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
   then A2: len f >= 2 by TOPREAL1:def 10;
-  then A3: 1+1 in Seg len f & len f >= 1 by AXIOMS:22,FINSEQ_1:3;
+  then A3: 1+1 in Seg len f & len f >= 1 by XREAL_1:2,FINSEQ_1:3;
   then A4: LSeg(f,1) = LSeg(p1,p) & p1`1 <> p`1
      by A1,A2,TOPREAL1:def 5,TOPREAL3:11;
   hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:44;
@@ -746,12 +746,12 @@ A12:  1 in dom(f|2) & 2 in dom(f|2) by A10,FINSEQ_1:3;
       A17: X=LSeg(f|2,m) & 1<=m & m+1<=len(f|2) by A16;
          len(f|2) - 1 =1+1 - 1 by A10,FINSEQ_1:def 3
        .= 1;
-      then m+1-1 <= 1 by A17,REAL_1:49;
-      then m=1 by A17,AXIOMS:21;
+      then m+1-1 <= 1 by A17,XREAL_1:11;
+      then m=1 by A17,XREAL_1:1;
       hence thesis by A3,A4,A6,A7,A8,A12,A16,A17,TOPREAL3:24;
      end;
      suppose x in LSeg(p,p);
-     then x in {p} & p in L~h by A5,A6,Th4,TOPREAL1:7;
+     then x in {p} & p in L~h by A5,Th4,TOPREAL1:7;
       hence x in L~h by TARSKI:def 1;
      end;
      end;
@@ -771,7 +771,7 @@ L~h = L~(f|1) \/ LSeg(f/.1,f/.2) & L~h = L~(f|2) \/ LSeg(f/.2,f/.2)
   A1: p<>p1 & f is_S-Seq &
       p`1 = p1`1 & h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
   then A2: len f >= 1+1 by TOPREAL1:def 10;
-  then A3: 1+1 in Seg len f & len f >= 1 by AXIOMS:22,FINSEQ_1:3;
+  then A3: 1+1 in Seg len f & len f >= 1 by XREAL_1:2,FINSEQ_1:3;
   A4: LSeg(f,1) = LSeg(p1,p) & p1`2 <> p`2
        by A1,A2,TOPREAL1:def 5,TOPREAL3:11;
   hence h is_S-Seq & h/.1 = p1 & h/.len h = p by A1,TOPREAL3:43;
@@ -811,12 +811,12 @@ A12:  1 in dom(f|2) & 2 in dom(f|2) by A10,FINSEQ_1:3;
       A17: X=LSeg(f|2,m) & 1<=m & m+1<=len(f|2) by A16;
          len(f|2) - 1 =1+1 - 1 by A10,FINSEQ_1:def 3
        .= 1;
-      then m+1-1 <= 1 by A17,REAL_1:49;
-      then m=1 by A17,AXIOMS:21;
+      then m+1-1 <= 1 by A17,XREAL_1:11;
+      then m=1 by A17,XREAL_1:1;
       hence thesis by A3,A4,A6,A7,A8,A12,A16,A17,TOPREAL3:24;
      end;
      suppose x in LSeg(p,p);
-     then x in {p} & p in L~h by A5,A6,Th4,TOPREAL1:7;
+     then x in {p} & p in L~h by A5,Th4,TOPREAL1:7;
       hence x in L~h by TARSKI:def 1;
      end;
      end;
@@ -844,9 +844,7 @@ L~h c= L~f & L~h = L~(f|i) \/ LSeg(f/.i,f/.i)
   hence A3: L~h is_S-P_arc_joining f/.1,f/.i &
      L~h c= L~f by A1,Def1,TOPREAL3:27;
   A4: LSeg(f/.i,f/.i) = {f/.i} by TOPREAL1:7;
-     L~h is_S-P_arc by A3,Th2;
-  then L~(f|i) <> {} by A1,TOPREAL1:32;
-  then f/.i in L~(f|i) by A1,A3,Th4; then {f/.i} c= L~(f|i) by ZFMISC_1:37;
+  f/.i in L~(f|i) by A1,A3,Th4; then {f/.i} c= L~(f|i) by ZFMISC_1:37;
   hence thesis by A1,A4,XBOOLE_1:12;
  end;
 
@@ -865,7 +863,7 @@ A3:   n <= n+1 by NAT_1:29;
            now per cases by A5;
         suppose not n in dom f;
          then not(1 <= n & n <= len f) by FINSEQ_3:27;
-         then not(1 <= n & n+1 <= len f) by A3,AXIOMS:22;
+         then not(1 <= n & n+1 <= len f) by A3,XREAL_1:2;
          hence contradiction by A1,TOPREAL1:def 5;
         end;
         suppose not n+1 in dom f;
@@ -932,7 +930,7 @@ then A9:    1+1<=n by NAT_1:38;
       hence thesis;
      end;
      suppose 1<n;
-      then A18: 1+1<n+1 by REAL_1:53;
+      then A18: 1+1<n+1 by XREAL_1:8;
       take h=f|(n+1);
       thus h is_S-Seq & h/.1=p1 & h/.len h=p & L~h is_S-P_arc_joining p1,p
        & L~h c= L~f & L~h = L~(f|n) \/ LSeg(q,p)
@@ -951,7 +949,7 @@ then A9:    1+1<=n by NAT_1:38;
           now per cases by A2,A21,TOPREAL1:def 7;
        suppose A23: p1`1=q1`1;
         then p1`1 <= p`1 & p`1 <= q1`1 by A1,A22,TOPREAL1:9;
-        then A24: p1`1 = p`1 by A23,AXIOMS:21;
+        then A24: p1`1 = p`1 by A23,XREAL_1:1;
         take h = <* p1,|[p1`1,(p1`2+p`2)/2]|,p *>;
         thus h is_S-Seq & h/.1=p1 & h/.len h = p &
              L~h is_S-P_arc_joining p1,p & L~h c= L~f &
@@ -960,7 +958,7 @@ then A9:    1+1<=n by NAT_1:38;
        end;
        suppose A25: p1`2=q1`2;
         then p1`2 <= p`2 & p`2 <= q1`2 by A1,A22,TOPREAL1:10;
-        then A26: p1`2 = p`2 by A25,AXIOMS:21;
+        then A26: p1`2 = p`2 by A25,XREAL_1:1;
         take h = <* p1,|[(p1`1+p`1)/2,p1`2]|,p *>;
         thus h is_S-Seq & h/.1=p1 & h/.len h = p &
              L~h is_S-P_arc_joining p1,p & L~h c= L~f &
@@ -1021,7 +1019,7 @@ A5: f is unfolded by A2,TOPREAL1:def 10;
 A6: f is special by A2,TOPREAL1:def 10;
   A7: Seg len f = dom f & Seg len h = dom h by FINSEQ_1:def 3;
   A8: 2<=len f by A2,TOPREAL1:def 10;
-  then A9: 1<=len f & 2<=len f by AXIOMS:22;
+  then A9: 1<=len f & 2<=len f by XREAL_1:2;
   then 1 in dom f by A7,FINSEQ_1:3;
   then A10: h/.1 = p1 & h/.len h = p & f is one-to-one & p<>p2
      by A1,A2,A3,FINSEQ_4:82,83,TOPREAL1:def 10;
@@ -1055,7 +1053,7 @@ A18: h/.k1 = h.y by A15,A16,FINSEQ_4:def 4 .= h/.k2 by A15,A17,FINSEQ_4:def 4;
         hence contradiction by A3,A10,A12,A18,A19,XCMPLX_1:26;
        end;
        suppose k2 + 1 < k1;
-        then A21: k2<len f+1-1 by A19,REAL_1:86;
+        then A21: k2<len f+1-1 by A19,XREAL_1:22;
         then k2 in dom f by A7,A17,FINSEQ_1:3;
         then f/.k2 <> p & h/.k2 = f/.k2 & h/.k1 = p
           by A2,A8,A11,A17,A19,A21,FINSEQ_4:82,83,TOPREAL3:46;
@@ -1071,7 +1069,7 @@ A18: h/.k1 = h.y by A15,A16,FINSEQ_4:def 4 .= h/.k2 by A15,A17,FINSEQ_4:def 4;
         hence contradiction by A3,A10,A12,A18,A22,XCMPLX_1:26;
        end;
        suppose k1 + 1 < k2;
-        then A24: k1<len f+1-1 by A22,REAL_1:86;
+        then A24: k1<len f+1-1 by A22,XREAL_1:22;
         then k1 in dom f by A7,A16,FINSEQ_1:3;
         then f/.k1 <> p & h/.k1 = f/.k1 &
          h/.k2 = p by A2,A8,A11,A16,A22,A24,FINSEQ_4:82,83,TOPREAL3:46;
@@ -1091,14 +1089,14 @@ A18: h/.k1 = h.y by A15,A16,FINSEQ_4:def 4 .= h/.k2 by A15,A17,FINSEQ_4:def 4;
     hence contradiction;
    end;
    hence h is one-to-one by FUNCT_1:def 8;
-       2+1<=len f +1 by A8,AXIOMS:24;
-   hence len h >= 2 by A3,AXIOMS:22;
+       2+1<=len f +1 by A8,XREAL_1:8;
+   hence len h >= 2 by A3,XREAL_1:2;
    thus h is unfolded
     proof let j such that
     A26: 1 <= j & j + 2 <= len h;
     A27: j+(1+1) = j+1+1;
-       j+1 <= j+2 by AXIOMS:24;
-then A28:   j+1 <= len h by A26,AXIOMS:22;
+       j+1 <= j+2 by XREAL_1:8;
+then A28:   j+1 <= len h by A26,XREAL_1:2;
         now per cases by A26,REAL_1:def 5;
      suppose j+2 = len h;
       then j+2 - 1= len f by A3;
@@ -1121,8 +1119,8 @@ then A32:    j+(2+1)-1<=len f by A3,NAT_1:38;
       then A33: LSeg(f,j) /\
  LSeg(f,j+1) = {f/.(j+1)} by A5,A26,TOPREAL1:def 8;
          j<=j+1 & j+1<=j+2 by A27,NAT_1:29;
-      then 1<=j+1 & j<=j+1 & j+1<=j+2 & j+1<=len f by A26,A32,AXIOMS:22;
-      then 1<=j+1 & 1<=j+2 & j<=len f & j+1<=len f by AXIOMS:22;
+      then 1<=j+1 & j<=j+1 & j+1<=j+2 & j+1<=len f by A26,A32,XREAL_1:2;
+      then 1<=j+1 & 1<=j+2 & j<=len f & j+1<=len f by XREAL_1:2;
       then A34: j in dom f & j+1 in dom f & j+1+1 in dom f
       by A7,A26,A32,FINSEQ_1:3;
       then h/.(j+1) = f/.(j+1) & LSeg(h,j) = LSeg(f,j)
@@ -1140,18 +1138,18 @@ then A32:    j+(2+1)-1<=len f by A3,NAT_1:38;
 A37:   n+1<m & n<=n+1 by A35,NAT_1:29;
          LSeg(f,n) misses LSeg(f,m) by A4,A35,TOPREAL1:def 9;
       then A38: n<=m & n+1<=m & 1<=n+1 & LSeg(f,n) /\ LSeg(f,m) = {}
-        by A37,AXIOMS:22,NAT_1:29,XBOOLE_0:def 7;
+        by A37,XREAL_1:2,NAT_1:29,XBOOLE_0:def 7;
           now per cases by REAL_1:def 5;
        suppose m+1<len h;
         then A39: m<=len f & m+1<=len f & m<=m+1 & 1<m
-           by A3,A35,A38,AXIOMS:22,24,NAT_1:38;
-        then A40: m in dom f & 1<=m+1 by A7,AXIOMS:22,FINSEQ_1:3;
+           by A3,A35,A38,XREAL_1:2,XREAL_1:8,NAT_1:38;
+        then A40: m in dom f & 1<=m+1 by A7,XREAL_1:2,FINSEQ_1:3;
         then m+1 in dom f by A7,A39,FINSEQ_1:3;
         then A41: LSeg(h,m)=LSeg(f,m) by A2,A40,TOPREAL3:25;
             now per cases;
          suppose 0<n;
           then A42: 0+1<=n by NAT_1:38;
-             n<=len f & n+1<=len f by A38,A39,AXIOMS:22;
+             n<=len f & n+1<=len f by A38,A39,XREAL_1:2;
           then n in dom f & n+1 in dom f by A7,A38,A42,FINSEQ_1:3;
           hence LSeg(h,n) /\ LSeg(h,m) = {} by A2,A38,A41,TOPREAL3:25;
          end;
@@ -1190,7 +1188,7 @@ A47:         LSeg(h,n) /\ LSeg(h,m) <> {};
              end;
              suppose n+1+1<len f;
               then n+2+1<=len f by NAT_1:38;
-              then A52: n+2<=len f - 1 by REAL_1:84;
+              then A52: n+2<=len f - 1 by XREAL_1:21;
               reconsider j=len f - 1 as Nat by A9,INT_1:18;
                  n+1<j by A36,A52,NAT_1:38;
               then A53: LSeg(f,n) misses LSeg(f,j) & j+1 = len f
@@ -1230,8 +1228,8 @@ A47:         LSeg(h,n) /\ LSeg(h,m) <> {};
      end;
      suppose
 A56:   n+1 < len h;
-      then n<=len f & n+1<=len f & n<=n+1 by A3,AXIOMS:24,NAT_1:38;
-      then n in dom f & n+1<=len f & 1<=n+1 by A7,A55,AXIOMS:22,FINSEQ_1:3;
+      then n<=len f & n+1<=len f & n<=n+1 by A3,XREAL_1:8,NAT_1:38;
+      then n in dom f & n+1<=len f & 1<=n+1 by A7,A55,XREAL_1:2,FINSEQ_1:3;
       then n in dom f & n+1 in dom f by A7,FINSEQ_1:3;
        then p3=f/.n & p4=f/.(n+1) & n+1<= len f by A2,A3,A56,FINSEQ_4:83
 ,NAT_1:38;
@@ -1256,7 +1254,7 @@ A56:   n+1 < len h;
    suppose A59: k+1 < len h;
     then A60: k+1<len f+1 & k<=k+1 by A3,NAT_1:29;
     A61: k+1<=len f & 1<=k+1 by A3,A58,A59,NAT_1:38;
-    then A62: k+1 in dom f & k<=len f by A7,A60,AXIOMS:22,FINSEQ_1:3;
+    then A62: k+1 in dom f & k<=len f by A7,A60,XREAL_1:2,FINSEQ_1:3;
     then k in dom f by A7,A58,FINSEQ_1:3;
     then X=LSeg(f,k) by A2,A58,A62,TOPREAL3:25;
     then X in Mf by A58,A61;
@@ -1297,7 +1295,7 @@ then A4:  LSeg(p2,p3) /\ L~f = {p2} by A3,XBOOLE_0:def 10;
     by A1,A2,Th20;
   A6: Seg len f = dom f & len f>=2
     by A1,FINSEQ_1:def 3,TOPREAL1:def 10;
-  then A7: 1<=len f by AXIOMS:22;
+  then A7: 1<=len f by XREAL_1:2;
 then A8:  1 in dom f by A6,FINSEQ_1:3;
      L~f1 is_S-P_arc by A5,Th2;
   then reconsider Lf1 = L~f1 as non empty Subset of TOP-REAL 2
@@ -1334,7 +1332,7 @@ then A8:  1 in dom f by A6,FINSEQ_1:3;
      suppose A17: k+1 < len f1;
       then A18: k+1<len f+1 & k<=k+1 by A9,NAT_1:29;
       A19: k+1<=len f & 1<=k+1 by A9,A16,A17,NAT_1:38;
-      then A20: k+1 in dom f & k<=len f by A6,A18,AXIOMS:22,FINSEQ_1:3;
+      then A20: k+1 in dom f & k<=len f by A6,A18,XREAL_1:2,FINSEQ_1:3;
       then k in dom f by A6,A16,FINSEQ_1:3;
       then X=LSeg(f,k) by A16,A20,TOPREAL3:25;
       then X in Mf by A16,A19;
@@ -1392,7 +1390,7 @@ then A4:  LSeg(p2,p3) /\ L~f = {p2} by A3,XBOOLE_0:def 10;
   then A5: L~f1 is_S-P_arc_joining p1,p3 & L~f1 c= L~f \/ Ball(u,r)
 & Seg len f = dom f & len f>=2
         by A1,A2,Th20,FINSEQ_1:def 3,TOPREAL1:def 10;
-  then A6: 1<=len f by AXIOMS:22;
+  then A6: 1<=len f by XREAL_1:2;
 then A7:  1 in dom f by A5,FINSEQ_1:3;
      L~f1 is_S-P_arc by A5,Th2;
   then reconsider Lf1 = L~f1 as non empty Subset of TOP-REAL 2
@@ -1429,7 +1427,7 @@ then A7:  1 in dom f by A5,FINSEQ_1:3;
      suppose A16: k+1 < len f1;
       then A17: k+1<len f+1 & k<=k+1 by A8,NAT_1:29;
       A18: k+1<=len f & 1<=k+1 by A8,A15,A16,NAT_1:38;
-      then A19: k+1 in dom f & k<=len f by A5,A17,AXIOMS:22,FINSEQ_1:3;
+      then A19: k+1 in dom f & k<=len f by A5,A17,XREAL_1:2,FINSEQ_1:3;
       then k in dom f by A5,A15,FINSEQ_1:3;
        then X=LSeg(f,k) by A15,A19,TOPREAL3:25;
       then X in Mf by A15,A18;
@@ -1467,7 +1465,7 @@ ex h st L~h is_S-P_arc_joining f/.1,p & L~h c= L~f \/ Ball(u,r)
   A1: not p1 in Ball(u,r) & f/.len f in Ball(u,r) & p in Ball(u,r) &
       f is_S-Seq & not p in L~f;
   then len f>= 2 & 2=1+1 by TOPREAL1:def 10;
-  then A2: len f>=1 & 1<=len f - 1 by AXIOMS:22,REAL_1:84;
+  then A2: len f>=1 & 1<=len f - 1 by XREAL_1:2,XREAL_1:21;
   then reconsider n=len f - 1 as Nat by INT_1:18;
    defpred X[Nat] means 1<=$1 & $1<=len f - 1 & LSeg(f,$1) meets Ball(u,r);
 A3: f is special by A1,TOPREAL1:def 10;
@@ -1484,13 +1482,13 @@ A8: now let i; assume 1<=i & i<=len f - 1 & LSeg(f,i) /\ Ball(u,r) <> {};
        then 1<=i & i<=len f - 1 & LSeg(f,i) meets Ball(u,r) by XBOOLE_0:def 7;
      hence m<=i by A6;
    end;
-     m+1 <= n+1 by A5,AXIOMS:24;
+     m+1 <= n+1 by A5,XREAL_1:8;
   then LSeg(f,m) in Mf by A5;
   then LSeg(f,m) c= union Mf by ZFMISC_1:92;
   then A9: LSeg(f,m) c= L~f by TOPREAL1:def 6;
   set A=LSeg(f,m) /\ Ball(u,r);
-  A10: m+1<=len f & m<=m+1 by A5,NAT_1:29,REAL_1:84;
-  then A11: 1<=m & m<=len f & m+1<=len f by A5,AXIOMS:22;
+  A10: m+1<=len f & m<=m+1 by A5,NAT_1:29,XREAL_1:21;
+  then A11: 1<=m & m<=len f & m+1<=len f by A5,XREAL_1:2;
   then A12: m in Seg len f & Seg len f=dom f by FINSEQ_1:3,def 3;
   consider q1,q2 such that
   A13: f/.m = q1 & f/.(m+1) = q2;
@@ -1502,9 +1500,9 @@ A8: now let i; assume 1<=i & i<=len f - 1 & LSeg(f,i) /\ Ball(u,r) <> {};
        then x in union M by TOPREAL1:def 6; then consider X be set such that
        A18: x in X & X in M by TARSKI:def 4; consider k such that
        A19: X=LSeg(f|m,k) & 1<=k & k+1<=len(f|m) by A18;
-         A20: k+1-1 <= len(f|m)-1 by A19,REAL_1:49;
+         A20: k+1-1 <= len(f|m)-1 by A19,XREAL_1:11;
           k<=k+1 by NAT_1:29;
-       then 1<=k & k<=len(f|m) & 1<=k+1 & k+1<=len(f|m) by A19,AXIOMS:22;
+       then 1<=k & k<=len(f|m) & 1<=k+1 & k+1<=len(f|m) by A19,XREAL_1:2;
        then A21: k in Seg len(f|m) & k+1 in Seg len(f|m) & Seg len(f|m) = dom(f
 |m)
            by FINSEQ_1:3,def 3;
@@ -1515,11 +1513,11 @@ then A23:       Seg m = dom f /\ (Seg m) by A12,XBOOLE_1:28
        .= dom(f|(Seg m)) by FUNCT_1:68
        .= Seg len(f|m) by A21,FINSEQ_1:def 15;
         then m = len(f|m) by FINSEQ_1:8;
-       then len(f|m) -1<=len f - 1 by A11,REAL_1:49;
-       then k<=len f - 1 by A20,AXIOMS:22;
+       then len(f|m) -1<=len f - 1 by A11,XREAL_1:11;
+       then k<=len f - 1 by A20,XREAL_1:2;
        then m<=k & k<=m-1 by A6,A19,A20,A22,A23,FINSEQ_1:8;
-       then m<=m-1 by AXIOMS:22;
-       then 0<=m+-1-m by SQUARE_1:12; hence contradiction;
+       then m<=m-1 by XREAL_1:2;
+       then 0<=m+-1-m by XREAL_1:50; hence contradiction;
       end;
   A24: q1=|[q1`1,q1`2]| & q2=|[q2`1,q2`2]| by EUCLID:57;
   A25: LSeg(f,m) = LSeg(q1,q2) by A5,A10,A13,TOPREAL1:def 5;
@@ -1855,9 +1853,7 @@ P = {q: q=p or ex P1 being Subset of TOP-REAL 2 st
        then consider P2 being Subset of TOP-REAL 2 such that
        A7: P2 is_S-P_arc_joining p,q1 and
        A8: P2 c=R;
-          P2 is_S-P_arc by A7,Th2;
-       then P2 <> {} by TOPREAL1:32;
-       then p2 in P2 by A5,A7,Th4;
+       p2 in P2 by A5,A7,Th4;
        hence p2 in R by A8;
       end;
       end;
@@ -1918,9 +1914,7 @@ p in R & P={q: q=p or ex P1 being Subset of TOP-REAL 2 st
     then consider P1 being Subset of TOP-REAL 2 such that
     A5: P1 is_S-P_arc_joining p,q and
     A6: P1 c=R;
-        P1 is_S-P_arc by A5,Th2;
-     then P1 <> {} by TOPREAL1:32;
-    then q in P1 by A5,Th4;
+    q in P1 by A5,Th4;
     hence x in R by A3,A6;
    end;
    end;

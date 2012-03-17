@@ -14,10 +14,10 @@ environ
       CQC_LANG, FUNCT_4, NAT_1;
  registrations FINSEQ_1, FINSEQ_5, RELSET_1, INT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- theorems TARSKI, AXIOMS, REAL_1, NAT_1, BINARITH, FINSEQ_1, FINSEQ_3,
-      FINSEQ_4, FINSEQ_5, FINSEQ_6, RFINSEQ, JORDAN3, AMI_5, JORDAN8, INT_1,
-      GOBOARD9, GENEALG1, SPRECT_3, POLYNOM4, POLYNOM1, REVROT_1, JORDAN4,
-      SCMFSA_7, FUNCT_7, JORDAN2B, XBOOLE_0, XBOOLE_1;
+ theorems TARSKI, NAT_1, BINARITH, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSEQ_5,
+      FINSEQ_6, RFINSEQ, JORDAN3, AMI_5, JORDAN8, INT_1, GENEALG1, SPRECT_3,
+      POLYNOM4, POLYNOM1, REVROT_1, JORDAN4, FUNCT_7, JORDAN2B, XBOOLE_0,
+      XBOOLE_1, XREAL_1;
 
 begin :: Some Basic Theorems
 
@@ -35,14 +35,14 @@ proof
     A2:j <= len f and
     A3:i < j;
      i -'i < j -'i by A3,SPRECT_3:10;
-  then A4:0 < j -'i by GOBOARD9:1;
+  then A4:0 < j -'i by BINARITH:51;
   set I = j-'i-'1;
   A5:j -'i >= 1 by A4,NAT_1:39;
   then A6:I + 1 = j -'i by AMI_5:4;
      j -'i <= len f -'i by A2,JORDAN3:5;
   then A7:I+1 <= len (f/^i) by A6,JORDAN3:19;
-  A8:i <= len f by A2,A3,AXIOMS:22;
-     1 <= j by A1,A3,AXIOMS:22;
+  A8:i <= len f by A2,A3,XREAL_1:2;
+     1 <= j by A1,A3,XREAL_1:2;
   then A9:j in dom f by A2,FINSEQ_3:27;
   A10:(I+1)+i = j by A3,A6,AMI_5:4;
      1 <= I+1 by A5,AMI_5:4;
@@ -68,10 +68,10 @@ proof
   let f,g,h be FinSequence;
     assume
 A1:     len g = len h & len g < i & i <= len (g^f);
-      then A2: len g - len g < i - len g by REAL_1:54;
+      then A2: len g - len g < i - len g by XREAL_1:11;
 then A3:     0 + 1 <= i - len g by INT_1:20;
          i <= len g + len f by A1,FINSEQ_1:35;
-      then A4: i - len g <= len g + len f - len g by REAL_1:49;
+      then A4: i - len g <= len g + len f - len g by XREAL_1:11;
       set k = i - len g;
       reconsider k as Nat by A2,INT_1:16;
 A5:     k in dom f by A3,A4,FINSEQ_3:27;
@@ -242,9 +242,9 @@ theorem
 proof
     assume
 A1:   1 <= i & i <= len f;
-         i - 1 < i by INT_1:26;
-      then i -' 1 < i by A1,SCMFSA_7:3;
-then A2:   i -' 1 <= len f by A1,AXIOMS:22;
+         i - 1 < i by XREAL_1:148;
+      then i -' 1 < i by A1,BINARITH:50;
+then A2:   i -' 1 <= len f by A1,XREAL_1:2;
 A3:   len ((f|(i-'1))^<*p*>) = len (f|(i-'1)) + len <*p*> by FINSEQ_1:35
         .= (i -' 1) + len <*p*> by A2,FINSEQ_1:80
         .= i -' 1 + 1 by FINSEQ_1:56
@@ -277,15 +277,15 @@ theorem Th13:
       = (f|(i-'1))^<*p*>^(f/^i)|(j-'i-'1)^<*q*>^(f/^j)
 proof
   assume A1:1 <= i & i < j & j <= len f;
-  then A2:1 <= i & i <= len f & 1 <= j & j <= len f by AXIOMS:22;
+  then A2:1 <= i & i <= len f & 1 <= j & j <= len f by XREAL_1:2;
   set F = Replace(f,j,q);
   A3:i <= len F by A2,Th7;
   set fp = f|(j-'1);
   set fj = <*q*>;
   set P = fp^fj;
   set Q = f/^j;
-     j -'1 <= j by GOBOARD9:2;
-  then A4:j -'1 <= len f by A1,AXIOMS:22;
+     j -'1 <= j by BINARITH:52;
+  then A4:j -'1 <= len f by A1,XREAL_1:2;
   A5: len P = len fp + len fj by FINSEQ_1:35
             .= len fp + 1 by FINSEQ_1:56
             .= j -'1 + 1 by A4,FINSEQ_1:80
@@ -336,7 +336,7 @@ proof
   then A3:f/^1 = <*f/.2*> by FINSEQ_5:33
                .= <*f.2*> by A2,FINSEQ_4:def 4;
      Replace(f,1,q) = (f|(1-'1))^<*q*>^(f/^1) by A1,Def1
-                .= (f|0)^<*q*>^(f/^1) by GOBOARD9:1
+                .= (f|0)^<*q*>^(f/^1) by BINARITH:51
                 .= {}^<*q*>^<*p2*> by A3,FINSEQ_1:61
                 .= <*q*>^<*p2*> by FINSEQ_1:47;
   hence thesis by FINSEQ_1:def 9;
@@ -367,7 +367,7 @@ proof
   set f = <*p1,p2,p3*>;
     len f = 3 by FINSEQ_1:62;
   then Replace(f,1,q) = (f|(1-'1))^<*q*>^(f/^1) by Def1
-                .= (f|0)^<*q*>^(f/^1) by GOBOARD9:1
+                .= (f|0)^<*q*>^(f/^1) by BINARITH:51
                 .= <*q*>^(f/^1) by FINSEQ_1:47
                 .= <*q*>^<*p2,p3*> by FINSEQ_6:51
                 .= <*q*>^(<*p2*>^<*p3*>) by FINSEQ_1:def 9
@@ -630,7 +630,7 @@ proof
   suppose A1: 1 <= i & i <= len f & 1 <= j & j <= len f;
     then A2:i in dom f by FINSEQ_3:27;
     A3:j in dom f by A1,FINSEQ_3:27;
-       now per cases by AXIOMS:21;
+       now per cases by XREAL_1:1;
     suppose A4:j < i;
       set F = Replace(f,i,f/.j);
       A5:j <= len F by A1,Th7;
@@ -638,8 +638,8 @@ proof
       set fj = <*f/.j*>;
       set P = fp^fj;
       set Q = f/^i;
-         i -'1 <= i by GOBOARD9:2;
-      then A6:i -'1 <= len f by A1,AXIOMS:22;
+         i -'1 <= i by BINARITH:52;
+      then A6:i -'1 <= len f by A1,XREAL_1:2;
       A7: len P = len fp + len fj by FINSEQ_1:35
                 .= len fp + 1 by FINSEQ_1:56
                 .= i -'1 + 1 by A6,FINSEQ_1:80
@@ -720,8 +720,8 @@ proof
       set fj = <*f/.i*>;
       set P = fp^fj;
       set Q = f/^j;
-         j -'1 <= j by GOBOARD9:2;
-      then A14:j -'1 <= len f by A1,AXIOMS:22;
+         j -'1 <= j by BINARITH:52;
+      then A14:j -'1 <= len f by A1,XREAL_1:2;
       A15: len P = len fp + len fj by FINSEQ_1:35
                 .= len fp + 1 by FINSEQ_1:56
                 .= j -'1 + 1 by A14,FINSEQ_1:80
@@ -876,7 +876,7 @@ theorem Th29:
     Swap(f, i, j) = (f|(i-'1))^<*f/.j*>^(f/^i)|(j-'i-'1)^<*f/.i*>^(f/^j)
 proof
   assume A1:1 <= i & i < j & j <= len f;
-  then A2:1 <= i & i <= len f & 1 <= j & j <= len f by AXIOMS:22;
+  then A2:1 <= i & i <= len f & 1 <= j & j <= len f by XREAL_1:2;
      Swap(f,i,j) = Swap(f,j,i) by Th23
    .= Replace(Replace(f,j,f/.i),i,f/.j) by A2,Def2;
   hence thesis by A1,Th13;
@@ -889,7 +889,7 @@ proof
   assume 1 < i & i <= len f;
   then Swap(f,1,i)
     = (f|(1-'1))^<*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by Th29
-   .= (f|0)^<*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by GOBOARD9:1
+   .= (f|0)^<*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by BINARITH:51
    .= <*f/.i*>^(f/^1)|(i-'1-'1)^<*f/.1*>^(f/^i) by FINSEQ_1:47;
   hence thesis by JORDAN3:8;
 end;
@@ -963,7 +963,7 @@ theorem Th34:
 proof
   assume A1:1 <= i & i <= len f & 1 <= j & j <= len f;
   then A2:i in dom f by FINSEQ_3:27;
-  per cases by AXIOMS:21;
+  per cases by XREAL_1:1;
     suppose A3:i = j;
       then Replace(Swap(f,i,j),i,p) = Replace(f,i,p) by Th21;
       hence thesis by A3,Th21;
@@ -977,8 +977,8 @@ proof
       A5:F = P^(f/^i)|(j-'i-'1)^<*f/.i*>^(f/^j) by A1,A4,Th29
            .= P^(f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j)) by FINSEQ_1:45
            .= P^((f/^i)|(j-'i-'1)^(<*f/.i*>^(f/^j))) by FINSEQ_1:45;
-         i -'1 <= i by GOBOARD9:2;
-      then A6:i -'1 <= len f by A1,AXIOMS:22;
+         i -'1 <= i by BINARITH:52;
+      then A6:i -'1 <= len f by A1,XREAL_1:2;
       A7:len P = len M + len N by FINSEQ_1:35
                .= len M + 1 by FINSEQ_1:56
                .= i -'1 + 1 by A6,FINSEQ_1:80
@@ -993,8 +993,8 @@ proof
       set F1 = Replace(f,j,p);
       set G1 = (f|(j -'1));
       set H1 = <*p*>;
-         j -'1 <= j by GOBOARD9:2;
-      then A9:j -'1 <= len f by A1,AXIOMS:22;
+         j -'1 <= j by BINARITH:52;
+      then A9:j -'1 <= len f by A1,XREAL_1:2;
       A10:len (G1^H1) = len G1 + len H1 by FINSEQ_1:35
                .= len G1 + 1 by FINSEQ_1:56
                .= j -'1 + 1 by A9,FINSEQ_1:80
@@ -1036,7 +1036,7 @@ proof
     suppose A21:i > j;
       then consider k such that
         A22:i = j + k by NAT_1:28;
-        A23: i - j > j - j by A21,REAL_1:54;
+        A23: i - j > j - j by A21,XREAL_1:11;
       then A24:i - j > 0;
       A25:k = i -'j by A22,A23,BINARITH:def 3;
       i-'j <> 0 by A24,BINARITH:def 3;
@@ -1054,14 +1054,14 @@ proof
            .= P^V^(W^X) by FINSEQ_1:45
            .= P^(V^(W^X)) by FINSEQ_1:45
            .= P^(V^W^X) by FINSEQ_1:45;
-         j -'1 <= j by GOBOARD9:2;
-      then A29:j -'1 <= len f by A1,AXIOMS:22;
+         j -'1 <= j by BINARITH:52;
+      then A29:j -'1 <= len f by A1,XREAL_1:2;
       A30:len P = len M + len N by FINSEQ_1:35
                .= len M + 1 by FINSEQ_1:56
                .= j -'1 + 1 by A29,FINSEQ_1:80
                .= j by A1,AMI_5:4;
-         i -'1 <= i by GOBOARD9:2;
-      then i -'1 <= len f by A1,AXIOMS:22;
+         i -'1 <= i by BINARITH:52;
+      then i -'1 <= len f by A1,XREAL_1:2;
       then i -'1-'j <= len f -'j by JORDAN3:5;
       then i -'1-'j <= len (f/^j) by JORDAN3:19;
       then i -'(1+j) <= len (f/^j) by POLYNOM1:3;
@@ -1070,7 +1070,7 @@ proof
                .= len V + 1 by FINSEQ_1:56
                .= i-'j-'1 + 1 by A31,FINSEQ_1:80
                .= i-'j by A26,AMI_5:4;
-      A33:j - 1 >= 1 - 1 by A1,REAL_1:49;
+      A33:j - 1 >= 1 - 1 by A1,XREAL_1:11;
       A34:k+j-'1 = k+j-1 by A27,JORDAN4:2
             .= k+(j-1)
             .= k+(j-'1) by A33,BINARITH:def 3;
@@ -1092,8 +1092,8 @@ proof
       set F1 = Replace(f,j,p);
       set G1 = (f|(j -'1));
       set H1 = <*p*>;
-         j -'1 <= j by GOBOARD9:2;
-      then A39:j -'1 <= len f by A1,AXIOMS:22;
+         j -'1 <= j by BINARITH:52;
+      then A39:j -'1 <= len f by A1,XREAL_1:2;
       A40:len (G1^H1) = len G1 + len H1 by FINSEQ_1:35
                .= len G1 + 1 by FINSEQ_1:56
                .= j -'1 + 1 by A39,FINSEQ_1:80
@@ -1101,7 +1101,7 @@ proof
       then A41:F1/^i = ((G1^H1)^(f/^j))/^(len (G1^H1)+k) by A1,A22,Def1
              .= f/^j/^k by FINSEQ_5:39
              .= f/^i by A22,FINSEQ_6:87;
-      A42:k - 1 >= 1 - 1 by A27,REAL_1:49;
+      A42:k - 1 >= 1 - 1 by A27,XREAL_1:11;
       A43:j+k-'1 = j+k-1 by A1,JORDAN4:2
             .= j+(k-1)
             .= j+(k-'1) by A42,BINARITH:def 3;

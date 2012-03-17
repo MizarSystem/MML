@@ -14,7 +14,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="YELLOW_8"/>
 <ArticleID name="XREAL_0"/>
@@ -32,12 +31,12 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="168"/>
+<Func kind="K" nr="158"/>
 <Cluster>
 <Adjective nr="22" value="false"/>
+<Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="25"/>
-<Adjective nr="67"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -45,7 +44,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="3">
@@ -69,32 +68,32 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="67"/>
+<Adjective nr="24"/>
+<Adjective nr="66"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="69"/>
+<Adjective nr="24"/>
+<Adjective nr="68"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="69"/>
+<Adjective nr="24"/>
+<Adjective nr="68"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="22" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="70"/>
+<Adjective nr="24"/>
+<Adjective nr="69"/>
 </Cluster>
 </CCluster>
 </Registrations>

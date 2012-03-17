@@ -29,6 +29,7 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="PROB_2"/>
+<ArticleID name="SETFAM_1"/>
 <ArticleID name="MEASURE1"/>
 </Signature>
 <RCluster>
@@ -92,7 +93,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -108,7 +109,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -150,7 +151,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -217,7 +218,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -234,7 +235,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -250,7 +251,7 @@
 <Adjective nr="43">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="48">
+<Adjective nr="50">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

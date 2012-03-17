@@ -14,7 +14,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
@@ -55,7 +54,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="96">
+<Func kind="K" nr="86">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

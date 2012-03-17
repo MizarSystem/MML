@@ -15,7 +15,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -30,7 +29,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
+<Func kind="K" nr="124">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -59,7 +58,7 @@
 </Func>
 <Cluster>
 <Adjective nr="23" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -69,13 +68,13 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="149">
+<Func kind="K" nr="139">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="23" value="false"/>
+<Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

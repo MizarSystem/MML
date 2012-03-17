@@ -17,7 +17,6 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="PCOMPS_1"/>
 </Signature>
@@ -28,8 +27,8 @@
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="40"/>
-<Adjective nr="45"/>
+<Adjective nr="39"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -39,9 +38,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="46"/>
+<Adjective nr="45"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -50,12 +49,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="100">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -66,13 +65,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="100">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -81,12 +80,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="103">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -97,13 +96,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="113">
+<Func kind="K" nr="103">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="38"/>
 <Adjective nr="39"/>
-<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 </Registrations>

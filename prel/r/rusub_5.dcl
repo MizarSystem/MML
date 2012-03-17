@@ -23,7 +23,6 @@
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 <ArticleID name="RUSUB_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RUSUB_4"/>
 <ArticleID name="RUSUB_5"/>
@@ -42,11 +41,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="162">
+<Func kind="K" nr="152">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -63,12 +62,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="162">
+<Func kind="K" nr="152">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 </Registrations>

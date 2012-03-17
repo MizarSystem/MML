@@ -1,6 +1,6 @@
 :: Limit of Sequence of Subsets
 ::  by Bo Zhang , Hiroshi Yamazaki and Yatsuka Nakamura
-:: 
+::
 :: Received March 15, 2005
 :: Copyright (c) 2005 Association of Mizar Users
 
@@ -11,13 +11,13 @@ environ
  notations NUMBERS, XREAL_0, NAT_1, FUNCT_1, TARSKI, XBOOLE_0, SEQM_3,
       YELLOW_6, ZFMISC_1, SUBSET_1, RELSET_1, SETFAM_1, PROB_1, FUNCT_2,
       KURATO_2;
- constructors NAT_1, PROB_1, KURATO_2, YELLOW_6;
+ constructors NAT_1, PROB_1, KURATO_2, YELLOW_6, SETFAM_1;
  registrations SUBSET_1, XREAL_0, RELSET_1, ARYTM_3, XBOOLE_0, ORDINAL2;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions TARSKI;
  theorems FUNCT_1, FUNCT_2, SUBSET_1, PROB_1, NAT_1, TARSKI, XBOOLE_0,
-      XBOOLE_1, XCMPLX_1, RELAT_1, SETFAM_1, AXIOMS, ZFMISC_1, CARD_3,
-      KURATO_2, SEQM_3, YELLOW_6, PROB_2;
+      XBOOLE_1, XCMPLX_1, RELAT_1, SETFAM_1, ZFMISC_1, CARD_3, KURATO_2,
+      SEQM_3, YELLOW_6, PROB_2, XREAL_1;
  schemes FUNCT_2, NAT_1;
 
 begin
@@ -33,7 +33,7 @@ LM1:
 i <= j implies i = j or i + 1 <= j
 proof
  assume i<=j;
- then i + 1 <= j + 1 by AXIOMS:24;
+ then i + 1 <= j + 1 by XREAL_1:8;
  then i + 1 <= j or i + 1 = j + 1 by NAT_1:26;
  hence thesis by XCMPLX_1:2;
 end;
@@ -401,9 +401,9 @@ for X being set, A1 being SetSequence of X holds
   for n,Y st Y = {A1.k: n <= k} holds f.n = meet Y
  proof
   let X be set, A1 be SetSequence of X;
-  defpred P[Element of NAT, Element of bool X] means
+  defpred P[Element of NAT, Subset of X] means
     for Y st Y = {A1.k: $1 <= k} holds $2 = meet Y;
-  A1: for n being Element of NAT ex y being Element of bool X st P[n,y]
+  A1: for n being Element of NAT ex y being Subset of X st P[n,y]
     proof
      let n be Element of NAT;
      set Y = {A1.k: n <= k};
@@ -427,7 +427,7 @@ for X being set, A1 being SetSequence of X holds
        end;
       hence thesis by A00;
      end;
-   then reconsider y as Element of bool X;
+   then reconsider y as Subset of X;
    for Y st Y = {A1.k: n <= k} holds y = meet Y;
    hence thesis;
   end;
@@ -442,9 +442,9 @@ theorem Th18:
       for n,Y st Y = {A1.k: n <= k} holds f.n = union Y
  proof
   let X be set, A1 be SetSequence of X;
-  defpred P[Element of NAT, Element of bool X] means
+  defpred P[Element of NAT, Subset of X] means
     for Y st Y = {A1.k: $1 <= k} holds $2 = union Y;
-A1: for n being Element of NAT ex y being Element of bool X st P[n,y]
+A1: for n being Element of NAT ex y being Subset of X st P[n,y]
     proof
      let n be Element of NAT;
      set Y = {A1.k: n <= k};
@@ -462,7 +462,7 @@ A1: for n being Element of NAT ex y being Element of bool X st P[n,y]
       end;
       hence thesis by TARSKI:def 3;
      end;
-    then reconsider y as Element of bool X;
+    then reconsider y as Subset of X;
     for Y st Y = {A1.k: n <= k} holds y = union Y;
    hence thesis;
   end;
@@ -779,8 +779,7 @@ theorem
   Union A1 = (Intersection Complement A1)`
 proof
   (Intersection Complement A1)`
-  = ((Union Complement Complement A1)`)` by PROB_1:def 5
- .= ((Union A1)`)` by PROB_1:31
+  = (Union Complement Complement A1)`` by PROB_1:def 5
  .= Union A1;
  hence thesis;
 end;
@@ -849,7 +848,7 @@ theorem
 proof
   reconsider Y = (inferior_setsequence(Complement A1)).n as Subset of X;
   Y = ((superior_setsequence(Complement Complement A1)).n)` by Th101
-   .= ((superior_setsequence A1).n)` by PROB_1:31;
+   .= ((superior_setsequence A1).n)`;
   hence thesis;
 end;
 
@@ -870,8 +869,8 @@ Complement superior_setsequence A1 = inferior_setsequence Complement A1
 proof
  reconsider A2 = inferior_setsequence Complement A1 as SetSequence of X;
  Complement A2 = superior_setsequence Complement Complement A1 by Th103
-              .= superior_setsequence A1 by PROB_1:31;
- hence thesis by PROB_1:31;
+              .= superior_setsequence A1;
+ hence thesis;
 end;
 
 theorem
@@ -1399,7 +1398,7 @@ theorem
   lim_sup A1 = (lim_inf Complement A1)`
 proof
   lim_inf Complement A1 = (lim_sup Complement Complement A1)` by KURATO_2:12
-                      .= (lim_sup A1)` by PROB_1:31;
+                      .= (lim_sup A1)`;
   hence thesis;
 end;
 
@@ -1734,7 +1733,7 @@ Th204:
 proof
  @Complement @Complement S = Complement @Complement S by def14
                              .= Complement Complement S by def14
-                             .= S by PROB_1:31;
+                             .= S;
  hence thesis;
 end;
 

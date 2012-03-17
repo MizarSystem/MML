@@ -24,7 +24,6 @@
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="REALSET2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
@@ -41,7 +40,7 @@
 <Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="67"/>
+<Adjective nr="66"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,10 +54,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="6" value="false"/>
-<Adjective nr="85">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="91">
+<Adjective nr="90">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -106,13 +105,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="83"/>
+<Adjective nr="82"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="22">
 <Func kind="U" nr="1">
-<Func kind="K" nr="208">
+<Func kind="K" nr="198">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -121,19 +120,19 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="10" value="false"/>
-<Adjective nr="83"/>
-<Adjective nr="85">
-<Func kind="K" nr="208">
+<Adjective nr="82"/>
+<Adjective nr="84">
+<Func kind="K" nr="198">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="91">
-<Func kind="K" nr="208">
+<Adjective nr="90">
+<Func kind="K" nr="198">
 <Num nr="2"/>
 </Func>
 </Adjective>
+<Adjective nr="91" value="false"/>
 <Adjective nr="92" value="false"/>
-<Adjective nr="93" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

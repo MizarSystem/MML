@@ -20,7 +20,6 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -43,7 +42,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="170">
+<Func kind="K" nr="160">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -55,14 +54,14 @@
 <Adjective nr="6"/>
 <Adjective nr="17"/>
 <Adjective nr="20"/>
-<Adjective nr="79" value="false"/>
-<Adjective nr="84" value="false"/>
+<Adjective nr="78" value="false"/>
+<Adjective nr="83" value="false"/>
+<Adjective nr="86"/>
 <Adjective nr="87"/>
 <Adjective nr="88"/>
 <Adjective nr="89"/>
-<Adjective nr="90"/>
+<Adjective nr="92"/>
 <Adjective nr="93"/>
-<Adjective nr="94"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -83,7 +82,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="247">
+<Func kind="K" nr="237">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

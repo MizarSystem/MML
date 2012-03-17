@@ -42,7 +42,6 @@
 <ArticleID name="WAYBEL_0"/>
 <ArticleID name="WELLORD2"/>
 <ArticleID name="YELLOW_1"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="EQREL_1"/>
 <ArticleID name="LATTICES"/>
@@ -134,7 +133,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="193"/>
+<Adjective nr="192"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -151,10 +150,10 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="121"/>
+<Adjective nr="215"/>
 <Adjective nr="216"/>
-<Adjective nr="217"/>
-<Adjective nr="220"/>
-<Adjective nr="247"/>
+<Adjective nr="219"/>
+<Adjective nr="246"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -178,9 +177,9 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="121"/>
-<Adjective nr="217"/>
-<Adjective nr="220"/>
-<Adjective nr="247"/>
+<Adjective nr="216"/>
+<Adjective nr="219"/>
+<Adjective nr="246"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -192,8 +191,8 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="216"/>
-<Adjective nr="247"/>
+<Adjective nr="215"/>
+<Adjective nr="246"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -208,7 +207,7 @@
 <Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
-<Adjective nr="230"/>
+<Adjective nr="229"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -238,7 +237,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="421">
+<Func kind="K" nr="410">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -256,7 +255,7 @@
 <Typ kind="M" nr="11">
 <Cluster>
 <Adjective nr="121"/>
-<Adjective nr="216"/>
+<Adjective nr="215"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -277,7 +276,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="421">
+<Func kind="K" nr="410">
 <LocusVar nr="4"/>
 <LocusVar nr="3"/>
 </Func>
@@ -319,7 +318,7 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="124"/>
+<Adjective nr="123"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -334,7 +333,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="247"/>
+<Adjective nr="246"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -342,7 +341,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="121"/>
-<Adjective nr="217"/>
+<Adjective nr="216"/>
 </Cluster>
 </CCluster>
 </Registrations>

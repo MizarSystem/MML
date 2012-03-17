@@ -29,7 +29,6 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CANTOR_1"/>
 <ArticleID name="EQREL_1"/>
@@ -42,6 +41,7 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -50,9 +50,9 @@
 <Adjective nr="17"/>
 <Adjective nr="18"/>
 <Adjective nr="19"/>
-<Adjective nr="83"/>
+<Adjective nr="82"/>
+<Adjective nr="124"/>
 <Adjective nr="125"/>
-<Adjective nr="126"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -67,7 +67,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="84">
+<Pred kind="V" nr="83">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -81,7 +81,7 @@
 </For>
 <Not>
 <For>
-<Typ kind="M" nr="23">
+<Typ kind="M" nr="22">
 <Cluster/>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -150,8 +150,10 @@
 </For>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="194">
+<Func kind="K" nr="291">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -201,7 +203,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="193">
+<Func kind="K" nr="185">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

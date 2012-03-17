@@ -11,16 +11,15 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
-<ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="YELLOW_0"/>
 <ArticleID name="WAYBEL_0"/>
+<ArticleID name="SETFAM_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -56,10 +55,12 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="83">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="1"/>
 </Func>
 </Func>
@@ -73,7 +74,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="86">
+<Func kind="K" nr="70">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -90,7 +91,7 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="4">
+<Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 </ArgTypes>
@@ -126,10 +127,12 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="85">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="66">
+<Func kind="K" nr="83">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="1"/>
 </Func>
 </Func>
@@ -143,7 +146,7 @@
 </Func>
 </Func>
 </Typ>
-<Func kind="K" nr="85">
+<Func kind="K" nr="69">
 <Func kind="F" nr="1"/>
 <Var nr="2"/>
 </Func>

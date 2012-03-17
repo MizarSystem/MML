@@ -7,8 +7,9 @@
 environ
 
  vocabularies LATTICES, FUNCT_1, BOOLE, BINOP_1, SUBSET_1, FILTER_1, RELAT_1,
-      RELAT_2, BHSP_3, FILTER_0, TARSKI, ZF_LANG, LATTICE3, ORDERS_1;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, STRUCT_0, FUNCT_1,
+      RELAT_2, BHSP_3, FILTER_0, TARSKI, ZF_LANG, LATTICE3, ORDERS_1, SETFAM_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1,
+ DOMAIN_1, STRUCT_0, FUNCT_1,
       FUNCT_2, BINOP_1, LATTICES, FILTER_0, LATTICE2, FILTER_1, RELAT_1,
       RELAT_2, RELSET_1, ORDERS_1, ORDERS_2;
  constructors DOMAIN_1, BINOP_1, LATTICE2, FILTER_1, ORDERS_2;
@@ -30,17 +31,17 @@ begin :: Boolean Lattice of Subsets
 definition let X be set;
  func BooleLatt X -> strict LattStr means :Def1:
   the carrier of it = bool X &
-  for Y,Z being Element of bool X holds
+  for Y,Z being Subset of X holds
    (the L_join of it).(Y,Z) = Y \/ Z & (the L_meet of it).(Y,Z) = Y /\ Z;
  existence
   proof
-   deffunc U(Element of bool X,Element of bool X) =  $1 \/ $2;
+   deffunc U(Subset of X,Subset of X) =  $1 \/ $2;
    consider j being BinOp of bool X such that
-A1:  for x,y being Element of bool X holds j.(x,y) = U(x,y)
+A1:  for x,y being Subset of X holds j.(x,y) = U(x,y)
       from BINOP_1:sch 2;
-   deffunc U(Element of bool X,Element of bool X) =  $1 /\ $2;
+   deffunc U(Subset of X,Subset of X) =  $1 /\ $2;
    consider m being BinOp of bool X such that
-A2:  for x,y being Element of bool X holds m.(x,y) = U(x,y)
+A2:  for x,y being Subset of X holds m.(x,y) = U(x,y)
       from BINOP_1:sch 2;
    take LattStr(#bool X, j, m#);
    thus thesis by A1,A2;
@@ -48,18 +49,18 @@ A2:  for x,y being Element of bool X holds m.(x,y) = U(x,y)
  uniqueness
   proof let L1, L2 be strict LattStr such that
 A3: the carrier of L1 = bool X &
-    for Y,Z being Element of bool X holds
+    for Y,Z being Subset of X holds
      join(L1).(Y,Z) = Y \/ Z & met(L1).(Y,Z) = Y /\ Z and
 A4: the carrier of L2 = bool X &
-    for Y,Z being Element of bool X holds
+    for Y,Z being Subset of X holds
      join(L2).(Y,Z) = Y \/ Z & met(L2).(Y,Z) = Y /\ Z;
    reconsider j1 = join(L1), j2 = join(L2), m1 = met(L1), m2 = met(L2) as
       BinOp of bool X by A3,A4;
-         now let x,y be Element of bool X;
+         now let x,y be Subset of X;
      thus j1.(x,y) = x \/ y by A3 .= j2.(x,y) by A4;
     end;
 then A5:  j1 = j2 by BINOP_1:2;
-         now let x,y be Element of bool X;
+         now let x,y be Subset of X;
      thus m1.(x,y) = x /\ y by A3 .= m2.(x,y) by A4;
     end;
    hence thesis by A3,A4,A5,BINOP_1:2;
@@ -81,7 +82,7 @@ end;
 theorem Th1:
  x "\/" y = x \/ y & x "/\" y = x /\ y
   proof set B = BooleLatt X;
-   reconsider x' = x, y' = y as Element of bool X by Def1;
+   reconsider x' = x, y' = y as Subset of X by Def1;
    thus x "\/" y = join(B).(x',y') by LATTICES:def 1 .= x \/ y by Def1;
    thus x "/\" y = met(B).(x',y') by LATTICES:def 2 .= x /\ y by Def1;
   end;
@@ -1888,7 +1889,7 @@ A3:  y = f.A(x) & P[x];
   Lm3:
  now let D be non empty set, f be Function of bool D, D such that
 A1: for a being Element of D holds f.{a} = a and
-A2: for X being Subset of bool D holds f.(f.:X) = f.(union X);
+A2: for X being Subset-Family of D holds f.(f.:X) = f.(union X);
   defpred X[set,set] means f.{$1,$2} = $2;
   consider R being Relation of D such that
 A3: for x,y being set holds [x,y] in R iff x in D & y in D & X[x,y]
@@ -1930,7 +1931,7 @@ A10:      Z = {t,x} & t in X by A9;
          then s c= D by XBOOLE_1:1;
         hence thesis;
        end;
-     then reconsider Y as Subset of bool D;
+     then reconsider Y as Subset-Family of D;
      defpred X[set] means $1 in X;
      deffunc U(Element of D) = {$1,x};
 A11:   bool D c= dom f by FUNCT_2:def 1;
@@ -2081,7 +2082,7 @@ then A34:    ex t being Element of D st X[t];
 theorem
       for D being non empty set, f being Function of bool D, D st
    (for a being Element of D holds f.{a} = a) &
-   for X being Subset of bool D holds f.(f.:X) = f.(union X)
+   for X being Subset-Family of D holds f.(f.:X) = f.(union X)
   ex L being complete strict Lattice st the carrier of L = D &
    for X being Subset of L holds "\/" X = f.X by Lm3;
 

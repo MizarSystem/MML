@@ -23,9 +23,9 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_4"/>
 <ArticleID name="ENUMSET1"/>
+<ArticleID name="FUNCT_7"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="ABIAN"/>
 <ArticleID name="SETFAM_1"/>
 </Signature>
@@ -42,7 +42,7 @@
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -100,7 +100,7 @@
 <Cluster>
 <Adjective nr="25"/>
 <Adjective nr="35"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -145,7 +145,7 @@
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -163,7 +163,7 @@
 <Adjective nr="33"/>
 <Adjective nr="34"/>
 <Adjective nr="35"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -178,14 +178,14 @@
 </Func>
 <Cluster>
 <Adjective nr="25"/>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -197,14 +197,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -216,14 +216,14 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -235,7 +235,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="52"/>
+<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 </Registrations>

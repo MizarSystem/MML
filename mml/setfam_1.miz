@@ -6,7 +6,8 @@
 
 environ
 
- vocabularies BOOLE, TARSKI, SUBSET_1, SETFAM_1, AMI_1, CANTOR_1;
+ vocabularies BOOLE, TARSKI, SUBSET_1, SETFAM_1, AMI_1, CANTOR_1, ABIAN,
+     TRIANG_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1;
  constructors TARSKI, SUBSET_1, XBOOLE_0;
  registrations SUBSET_1, XBOOLE_0, ZFMISC_1;
@@ -784,7 +785,6 @@ end;
 :: Family of subsets of a set
 
 definition let D be set;
- canceled;
  mode Subset-Family of D is Subset of bool D;
 end;
 
@@ -841,6 +841,8 @@ A1: for P holds P in F iff P in G;
 end;
 
 definition let D,F;
+ canceled;
+
   func COMPLEMENT(F) -> Subset-Family of D means :Def8:
    for P being Subset of D holds P in it iff P` in F;
     existence
@@ -1055,7 +1057,7 @@ theorem
 proof let X be set, F be Subset-Family of X such that
 A1: F = {X};
    {} c= X by XBOOLE_1:2;
-  then reconsider G = {{}} as Subset of bool X by ZFMISC_1:37;
+  then reconsider G = {{}} as Subset-Family of X by ZFMISC_1:37;
   reconsider G as Subset-Family of X;
   for P being Subset of X holds P in G iff P` in F
    proof let P be Subset of X;
@@ -1220,3 +1222,54 @@ theorem
     hence x in Intersect H by A2,Th58;
   end;
 
+:: from PUA2MSS1, 2005.08.22, A.T
+
+registration
+ let X be non empty with_non-empty_elements set;
+ cluster -> non empty Element of X;
+ coherence by Def9;
+end;
+
+:: from ABIAN, 2005.08.22, A.T
+
+reserve E for set;
+
+definition let E;
+ attr E is empty-membered means
+:Def11: not ex x being non empty set st x in E;
+end;
+
+notation let E;
+ antonym E is with_non-empty_element for E is empty-membered;
+end;
+
+registration
+cluster with_non-empty_element set;
+existence
+ proof
+  take {{{}}}, {{}};
+  thus {{}} in {{{}}} by TARSKI:def 1;
+ end;
+end;
+
+registration
+cluster with_non-empty_element -> non empty set;
+coherence
+ proof
+  let X be set; assume X is with_non-empty_element;
+  then ex x being non empty set st x in X by Def11;
+  hence thesis;
+ end;
+end;
+
+:: from TRIANG_1, 2005.08.22
+
+registration
+let X be with_non-empty_element set;
+cluster non empty Element of X;
+existence
+ proof
+  ex x being non empty set st x in X by Def11;
+  hence thesis;
+ end;
+end;

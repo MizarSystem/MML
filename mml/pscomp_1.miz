@@ -17,19 +17,20 @@ environ
       LIMFUNC1, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, EUCLID, TOPREAL1,
       MEASURE6;
  constructors REAL_1, TOPS_2, INT_1, FINSOP_1, SEQ_2, SEQ_4, RCOMP_1, COMPTS_1,
-      LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1, COMPLEX1, MEASURE6;
+      LIMFUNC1, TOPREAL1, SEQM_3, TSP_1, PCOMPS_1, COMPLEX1, MEASURE6,
+      SETFAM_1;
  registrations SUBSET_1, STRUCT_0, PRE_TOPC, RCOMP_1, SEQM_3, EUCLID, PCOMPS_1,
       FUNCT_1, XREAL_0, RELSET_1, SEQ_1, SETFAM_1, INT_1, SEQ_2, MEMBERED,
       RELAT_1, FUNCT_2, ORDINAL2, SPPOL_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQ_2, SEQ_4, TOPS_2, COMPTS_1, RCOMP_1, ORDINAL1,
       XBOOLE_0;
- theorems TARSKI, AXIOMS, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, SEQ_4,
-      SUBSET_1, REAL_2, FCONT_3, RCOMP_1, FUNCOP_1, ABSVALUE, NAT_1, INT_1,
-      EUCLID, RFUNCT_2, SEQ_1, SEQ_2, BORSUK_1, TOPS_1, TSP_1, COMPTS_1,
-      LIMFUNC1, SETFAM_1, ZFMISC_1, PCOMPS_1, TOPREAL1, JORDAN1, GOBOARD7,
-      SPPOL_1, RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1,
-      XCMPLX_0, XCMPLX_1, MEASURE6;
+ theorems TARSKI, REAL_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, SEQ_4, SUBSET_1,
+      REAL_2, FCONT_3, RCOMP_1, FUNCOP_1, ABSVALUE, NAT_1, INT_1, EUCLID,
+      RFUNCT_2, SEQ_1, SEQ_2, BORSUK_1, TOPS_1, TSP_1, COMPTS_1, LIMFUNC1,
+      SETFAM_1, ZFMISC_1, PCOMPS_1, TOPREAL1, JORDAN1, GOBOARD7, SPPOL_1,
+      RELSET_1, XREAL_0, ORDINAL1, XBOOLE_0, XBOOLE_1, PARTFUN1, XCMPLX_0,
+      XCMPLX_1, MEASURE6, XREAL_1, COMPLEX1;
  schemes FINSET_1, FUNCT_2, DOMAIN_1, WELLORD2, BINOP_2;
 
 begin :: Preliminaries
@@ -203,9 +204,10 @@ BINOP_2:sch 1;
 end;
 
 theorem Th2:
-for X, Y, x being set, S being Subset of bool Y, f being Function of X, Y
+for X, Y, x being set, S being Subset-Family of Y, f being Function of X, Y
  st x in meet (("f).:S) holds f.x in meet S
-proof let X, Y, x be set, S be Subset of bool Y, f be Function of X, Y; assume
+proof let X, Y, x be set, S be Subset-Family of Y, f be Function of X, Y;
+   assume
 A1: x in meet (("f).:S);
    then ("f).:S is non empty by SETFAM_1:def 1;
 then A2: S is non empty by RELAT_1:149;
@@ -226,9 +228,9 @@ theorem Th3:
 proof assume
 A1: abs(r)+abs(s) = 0;
    set aa = abs(r), ab = abs(s);
-A2: 0 <= aa & 0 <= ab by ABSVALUE:5;
+A2: 0 <= aa & 0 <= ab by COMPLEX1:132;
       aa = -ab by A1,XCMPLX_0:def 6;
-  then aa = 0 by A2,REAL_1:66;
+  then aa = 0 by A2,XREAL_1:60;
  hence r = 0 by ABSVALUE:7;
 end;
 
@@ -239,24 +241,23 @@ A1: r < s & s < t;
  per cases;
  suppose s<0;
  then A3: -s = abs(s) & -r = abs(r) by A1,ABSVALUE:def 1;
- A4: -s < -r by A1,REAL_1:50;
-       0 <= abs(t) by ABSVALUE:5;
-    then -s+0 < -r+abs(t) by A4,REAL_1:67;
+ A4: -s < -r by A1,XREAL_1:26;
+       0 <= abs(t) by COMPLEX1:132;
+    then -s+0 < -r+abs(t) by A4,XREAL_1:10;
   hence abs(s) < abs(r)+abs(t) by A3;
  end;
  suppose 0<=s;
  then A6: s = abs(s) & t = abs(t) by A1,ABSVALUE:def 1;
-       0 <= abs(r) by ABSVALUE:5;
-    then s+0 < t+abs(r) by A1,REAL_1:67;
+       0 <= abs(r) by COMPLEX1:132;
+    then s+0 < t+abs(r) by A1,XREAL_1:10;
  hence abs(s) < abs(r)+abs(t) by A6;
 end;
 end;
 
-theorem
-  -s < r & r < s implies abs r < s by SEQ_2:9;
-
  reserve seq for Real_Sequence,
          X, Y for Subset of REAL;
+
+canceled;
 
 theorem Th6:
 seq is convergent & seq is_not_0 & lim seq = 0 implies seq" is non bounded
@@ -271,26 +272,26 @@ A5: for n being Nat holds b<(seq").n;
    set aa = abs(a), ab = abs(b);
    set rab = 1/(aa+ab);
 A6: b<(seq").1 & (seq").1<a by A4,A5;
-       0 <= aa & 0 <= ab by ABSVALUE:5;
-then A7: 0+0 <= aa+ab by REAL_1:55;
+       0 <= aa & 0 <= ab by COMPLEX1:132;
+then A7: 0+0 <= aa+ab by XREAL_1:9;
    now assume 0 >= aa+ab;
        then aa+ab = 0 by A7;
        then a = 0 & b = 0 by Th3;
      hence contradiction by A6;
     end;
-   then 0 < (aa+ab)" by REAL_1:72;
+   then 0 < (aa+ab)" by XREAL_1:124;
 then A8: 0 < rab by XCMPLX_1:217;
 A9: now let n be Nat;
        set s = seq.n, t = (seq").n;
        set At = abs(t);
          b<t & t<a by A4,A5;
    then A10: At < aa+ab by Th4;
-   A11: s <> 0 by A2,SEQ_1:7;
-   A12: t = s" by SEQ_1:def 8
-        .= 1/s by XCMPLX_1:217;
-       then t <> 0 by A11,XCMPLX_1:62;
-   then A13: 0 < At by ABSVALUE:6;
-   A14: At = 1/(abs(s)) by A12,ABSVALUE:15;
+   A12: t" = s"" by SEQ_1:def 8;
+       then t <> 0 by A2,SEQ_1:7,XCMPLX_1:203;
+   then A13: 0 < At by COMPLEX1:133;
+   t= 1/s by A12,XCMPLX_1:217;
+   then
+   A14: At = 1/(abs(s)) by ABSVALUE:15;
           1/At > rab by A10,A13,REAL_2:151;
     hence abs(seq.n) > rab by A14,XCMPLX_1:56;
    end;
@@ -313,16 +314,16 @@ A2: for r st r in rng seq holds r<=t;
   let n be Nat;
       seq.n in rng seq by FUNCT_2:6;
   then A3: seq.n <= t by A2;
-      t < t+1 by REAL_1:69;
-  hence seq.n < t+1 by A3,AXIOMS:22;
+      t < t+1 by XREAL_1:31;
+  hence seq.n < t+1 by A3,XREAL_1:2;
  end;
   take s-1;
   let n be Nat;
       seq.n in rng seq by FUNCT_2:6;
   then A4: seq.n >= s by A1;
-      s < s+1 by REAL_1:69;
-   then s-1 < s by REAL_1:84;
-  hence s-1 < seq.n by A4,AXIOMS:22;
+      s < s+1 by XREAL_1:31;
+   then s-1 < s by XREAL_1:21;
+  hence s-1 < seq.n by A4,XREAL_1:2;
  end;
  given t such that
 A5: for n being Nat holds seq.n<t;
@@ -353,8 +354,6 @@ coherence by XREAL_0:def 1;
  redefine func inf X -> Element of REAL;
 coherence by XREAL_0:def 1;
 end;
-
-canceled 6;
 
 definition let X be real-membered set;
  attr X is with_max means
@@ -415,6 +414,8 @@ A5:  r0 in IT;
   end;
 end;
 
+canceled 6;
+
 theorem Th14:
 r in X iff -r in -X
 proof
@@ -444,7 +445,7 @@ A1: for t st t in X holds t <= s;
    then consider r3 such that
 A2: t = -r3 & r3 in X;
    r3 <= s by A1,A2;
- hence t >= -s by A2,REAL_1:50;
+ hence t >= -s by A2,XREAL_1:26;
 end;
 
 Lm2:
@@ -457,7 +458,7 @@ A1: for t st t in X holds t >= s;
    then consider r3 such that
 A2: t = -r3 & r3 in X;
       r3 >= s by A1,A2;
- hence t <= -s by A2,REAL_1:50;
+ hence t <= -s by A2,XREAL_1:26;
 end;
 
 theorem Th15:
@@ -481,16 +482,16 @@ then A1: -X is bounded_above by Lm2;
    set r = - sup -X;
 A2: now let s; assume s in X; then -s in -X by Th14;
       then -s <= -r by A1,SEQ_4:def 4;
-     hence s >= r by REAL_1:50;
+     hence s >= r by XREAL_1:26;
    end;
       now let t; assume
    A3:  for s st s in X holds s >= t;
         now let s; assume s in -X; then -s in --X by Th14;
-       then -s >= t by A3; then --s <= -t by REAL_1:50;
+       then -s >= t by A3; then --s <= -t by XREAL_1:26;
       hence s <= -t;
      end;
      then -r <= -t by SEQ_4:62;
-    hence r >= t by REAL_1:50;
+    hence r >= t by XREAL_1:26;
    end;
  hence inf X = - sup -X by A2,SEQ_4:61;
 end;
@@ -504,16 +505,16 @@ then A1: -X is bounded_below by Lm1;
    set r = - inf -X;
 A2: now let t; assume t in X; then -t in -X by Th14;
       then -t >= -r by A1,SEQ_4:def 5;
-     hence t <= r by REAL_1:50;
+     hence t <= r by XREAL_1:26;
    end;
       now let s; assume
    A3:  for t st t in X holds t <= s;
         now let t; assume t in -X; then -t in --X by Th14;
-       then -t <= s by A3; then --t >= -s by REAL_1:50;
+       then -t <= s by A3; then --t >= -s by XREAL_1:26;
       hence t >= -s;
      end;
      then -r >= -s by SEQ_4:60;
-    hence r <= s by REAL_1:50;
+    hence r <= s by XREAL_1:26;
    end;
  hence sup X = - inf -X by A2,SEQ_4:63;
 end;
@@ -652,7 +653,7 @@ A1: for t st t in X holds t <= s;
    then consider r3 such that
 A2: t = p+r3 & r3 in X;
       r3 <= s by A1,A2;
- hence t <= p+s by A2,AXIOMS:24;
+ hence t <= p+s by A2,XREAL_1:8;
 end;
 
 theorem
@@ -671,7 +672,7 @@ A1: for t st t in X holds t >= s;
    then consider r3 such that
 A2: t = p+r3 & r3 in X;
       r3 >= s by A1,A2;
- hence t >= p+s by A2,AXIOMS:24;
+ hence t >= p+s by A2,XREAL_1:8;
 end;
 
 theorem
@@ -691,15 +692,15 @@ A2: q3+X = {q3+r3 : r3 in X} by Def8;
 A3: now let s; assume s in q3+X; then consider r3 such that
    A4: q3+r3 = s & r3 in X by A2;
           r3 >= inf X by A1,A4,SEQ_4:def 5;
-     hence s >= i by A4,AXIOMS:24;
+     hence s >= i by A4,XREAL_1:8;
    end;
       now let t; assume
    A5:  for s st s in q3+X holds s >= t;
         now let s; assume s in X; then q3+s in q3+X by A2;
         then t <= q3+s by A5;
-      hence t-q3 <= s by REAL_1:86;
+      hence t-q3 <= s by XREAL_1:22;
      end; then inf X >= t-q3 by SEQ_4:60;
-    hence t <= i by REAL_1:86;
+    hence t <= i by XREAL_1:22;
    end;
  hence inf (q3+X) = q3+ inf X by A3,SEQ_4:61;
 end;
@@ -714,15 +715,15 @@ A2: q3+X = {q3+r3 : r3 in X} by Def8;
 A3: now let s; assume s in q3+X; then consider r3 such that
    A4: q3+r3 = s & r3 in X by A2;
           r3 <= sup X by A1,A4,SEQ_4:def 4;
-     hence s <= i by A4,AXIOMS:24;
+     hence s <= i by A4,XREAL_1:8;
    end;
       now let t; assume
    A5:  for s st s in q3+X holds s <= t;
         now let s; assume s in X; then q3+s in q3+X by A2;
         then q3+s <= t by A5;
-      hence s <= t-q3 by REAL_1:84;
+      hence s <= t-q3 by XREAL_1:21;
      end; then sup X <= t-q3 by SEQ_4:62;
-    hence i <= t by REAL_1:84;
+    hence i <= t by XREAL_1:21;
    end;
  hence sup (q3+X) = q3+ sup X by A3,SEQ_4:63;
 end;
@@ -790,13 +791,15 @@ registration let X be non empty without_zero Subset of REAL;
  cluster Inv X -> non empty without_zero;
  coherence proof consider x being Real such that
  A1: x in X by SUBSET_1:10;
- A2: not 0 in X by Def1;
   thus Inv X is non empty by A1,Th28;
       now assume
  A3: 0 in Inv X;
        Inv X = {1/r3 : r3 in X} by Def9;
-    then ex r3 st 0 = 1/r3 & r3 in X by A3;
-    hence contradiction by A2,XCMPLX_1:62;
+    then consider r3 such that
+W1:  0 = 1/r3 and
+W2:  r3 in X by A3;
+     r3" = 0 by W1,XCMPLX_1:217;
+    hence contradiction by Def1,XCMPLX_1:203,W2;
    end;
   hence thesis by Def1;
  end;
@@ -805,12 +808,14 @@ end;
 registration let X be without_zero Subset of REAL;
  cluster Inv X -> without_zero;
  coherence proof
- A1: not 0 in X by Def1;
       now assume
  A2: 0 in Inv X;
        Inv X = {1/r3 : r3 in X} by Def9;
-    then ex r3 st 0 = 1/r3 & r3 in X by A2;
-    hence contradiction by A1,XCMPLX_1:62;
+    then consider r3 such that
+W1:  0 = 1/r3 and
+W2:  r3 in X by A2;
+     r3" = 0 by W1,XCMPLX_1:217;
+    hence contradiction by Def1,XCMPLX_1:203,W2;
    end;
   hence thesis by Def1;
  end;
@@ -917,22 +922,22 @@ end;
 
 definition let X be Subset of REAL;
  func Cl X -> Subset of REAL equals
-:Def10: meet { A where A is Element of bool REAL : X c= A & A is closed };
+:Def10: meet { A where A is Subset of REAL : X c= A & A is closed };
  coherence proof
-   defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
-   reconsider Z = { A where A is Element of bool REAL : P[A] }
-    as Subset of bool REAL from DOMAIN_1:sch 7;
+   defpred P[Subset of REAL] means X c= $1 & $1 is closed;
+   reconsider Z = { A where A is Subset of REAL : P[A] }
+    as Subset-Family of REAL from DOMAIN_1:sch 7;
    reconsider Z as Subset-Family of REAL;
       meet Z is Subset of REAL;
   hence thesis;
  end;
  projectivity
   proof let IT,X be Subset of REAL;
-    set ClX = { A where A is Element of bool REAL : X c= A & A is closed },
-        ClIT = { A where A is Element of bool REAL : IT c= A & A is closed };
+    set ClX = { A where A is Subset of REAL : X c= A & A is closed },
+        ClIT = { A where A is Subset of REAL : IT c= A & A is closed };
    assume
 A1:  IT= meet ClX;
-    reconsider W = [#]REAL as Element of bool REAL;
+    reconsider W = [#]REAL as Subset of REAL;
        X c= REAL;
     then X c= W by SUBSET_1:def 4;
     then A2:  W in ClX by FCONT_3:1;
@@ -940,21 +945,21 @@ A1:  IT= meet ClX;
     then IT c= W by SUBSET_1:def 4;
     then A3:  W in ClIT by FCONT_3:1;
    thus
-   IT c= meet { A where A is Element of bool REAL : IT c= A & A is closed }
+   IT c= meet { A where A is Subset of REAL : IT c= A & A is closed }
     proof let e be set;
      assume
 A4:   e in IT;
          for Y being set holds Y in ClIT implies e in Y
        proof let Y be set;
         assume Y in ClIT;
-         then consider A being Element of bool REAL such that
+         then consider A being Subset of REAL such that
 A5:       A = Y and
 A6:       IT c= A and
 A7:       A is closed;
             for Z being set st Z in ClX holds X c= Z
           proof let Z be set;
            assume Z in ClX;
-            then ex B being Element of bool REAL
+            then ex B being Subset of REAL
                      st Z = B & X c= B & B is closed;
            hence X c= Z;
           end;
@@ -972,7 +977,7 @@ A8:  e in meet ClIT;
        proof let Y be set;
         assume
 A9:      Y in ClX;
-         then consider A being Element of bool REAL such that
+         then consider A being Subset of REAL such that
 A10:       A = Y and
              X c= A and
 A11:       A is closed;
@@ -987,12 +992,12 @@ end;
 registration let X be Subset of REAL;
  cluster Cl X -> closed;
  coherence proof
-   defpred P[Element of bool REAL] means X c= $1 & $1 is closed;
-   reconsider Z = { A where A is Element of bool REAL : P[A] }
-   as Subset of bool REAL from DOMAIN_1:sch 7;
+   defpred P[Subset of REAL] means X c= $1 & $1 is closed;
+   reconsider Z = { A where A is Subset of REAL : P[A] }
+   as Subset-Family of REAL from DOMAIN_1:sch 7;
    reconsider Z as Subset-Family of REAL;
 A1: Z is closed proof let Y be Subset of REAL; assume Y in Z;
-     then ex A being Element of bool REAL st Y = A & X c= A & A is closed;
+     then ex A being Subset of REAL st Y = A & X c= A & A is closed;
     hence Y is closed;
    end;
       Cl X = meet Z by Def10;
@@ -1004,7 +1009,7 @@ theorem Th32:
   for Y being closed Subset of REAL st X c= Y holds Cl X c= Y
 proof let Y be closed Subset of REAL; assume
 A1: X c= Y;
-   set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
+   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
 A2: Cl X = meet ClX by Def10;
       Y in ClX by A1;
  hence Cl X c= Y by A2,SETFAM_1:4;
@@ -1014,7 +1019,7 @@ theorem Th33:
   X c= Cl X
 proof let x be set; assume
 A1: x in X;
-   set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
+   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
 A2: Cl X = meet ClX by Def10;
       REAL = [#]REAL by SUBSET_1:def 4;
 then A3: [#]REAL in ClX by FCONT_3:1;
@@ -1032,7 +1037,7 @@ proof
  hereby assume
  A1: X is closed;
  A2: X c= Cl X by Th33;
-    set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
+    set ClX = { A where A is Subset of REAL : X c= A & A is closed };
  A3: Cl X = meet ClX by Def10;
        X in ClX by A1;
     then Cl X c= X by A3,SETFAM_1:4;
@@ -1056,7 +1061,7 @@ proof assume
 A1: X c= Y;
     Y c= Cl Y by Th33;
 then A2: X c= Cl Y by A1,XBOOLE_1:1;
-   set ClX = { A where A is Element of bool REAL : X c= A & A is closed };
+   set ClX = { A where A is Subset of REAL : X c= A & A is closed };
 A3: Cl X = meet ClX by Def10;
       Cl Y in ClX by A2;
  hence Cl X c= Cl Y by A3,SETFAM_1:4;
@@ -1102,8 +1107,8 @@ A2: now let x be set; assume x in NAT;
         reconsider u = choose(X/\oi) as set;
      take u;
          1/n1 > 0 by REAL_2:127;
-     then A3: r3 < r3+1/n1 by REAL_1:69;
-         then r3-1/n1 < r3 by REAL_1:84;
+     then A3: r3 < r3+1/n1 by XREAL_1:31;
+         then r3-1/n1 < r3 by XREAL_1:21;
          then r3 in {p : r3-1/n1 < p & p < r3+1/n1 } by A3;
       then r3 in oi by RCOMP_1:def 2;
         then X/\oi is non empty by A1,Th38;
@@ -1125,8 +1130,8 @@ A6: for x being set st x in NAT holds P[x,seq.x] from WELLORD2:sch 1(A2);
         set n1 = n+1;
         set oi = ].r3-1/n1,r3+1/n1.[;
          1/n1 > 0 by REAL_2:127;
-     then A9: r3 < r3+1/n1 by REAL_1:69;
-         then r3-1/n1 < r3 by REAL_1:84;
+     then A9: r3 < r3+1/n1 by XREAL_1:31;
+         then r3-1/n1 < r3 by XREAL_1:21;
          then r3 in {p : r3-1/n1 < p & p < r3+1/n1 } by A9;
       then r3 in oi by RCOMP_1:def 2;
          then X/\oi is non empty by A1,Th38;
@@ -1147,8 +1152,8 @@ A10: now let p be real number; assume
         set m1 = m+1;
         set oi = ].r3-1/m1,r3+1/m1.[;
          1/m1 > 0 by REAL_2:127;
-     then A17: r3 < r3+1/m1 by REAL_1:69;
-         then r3-1/m1 < r3 by REAL_1:84;
+     then A17: r3 < r3+1/m1 by XREAL_1:31;
+         then r3-1/m1 < r3 by XREAL_1:21;
          then r3 in {q3 : r3-1/m1 < q3 & q3 < r3+1/m1 } by A17;
       then r3 in oi by RCOMP_1:def 2;
          then X/\oi is non empty by A1,Th38;
@@ -1157,17 +1162,17 @@ A10: now let p be real number; assume
          then consider s being Real such that
      A18: seq.m = s & r3-1/m1 < s & s < r3+1/m1;
             r3-1/m1 = r3+-1/m1;
-         then -1/m1 < s-r3 & s-r3 < 1/m1 by A18,REAL_1:84,86;
+         then -1/m1 < s-r3 & s-r3 < 1/m1 by A18,XREAL_1:21,XREAL_1:22;
      then A19: abs(s-r3) < 1/m1 by SEQ_2:9;
-            n+1 <= m+1 by A15,AXIOMS:24;
+            n+1 <= m+1 by A15,XREAL_1:8;
      then A21: 1/m1 <= 1/(n+1) by REAL_2:152;
             n < n+1 by NAT_1:38;
      then A22: 1/(n+1) < 1/n by A14,REAL_2:151;
              1/(1/p) >= 1/cp by A12,A13,REAL_2:152;
           then 1/n <= p by XCMPLX_1:56;
-         then 1/(n+1) < p by A22,AXIOMS:22;
-         then 1/m1 < p by A21,AXIOMS:22;
-    hence abs(seq.m-r3)<p by A18,A19,AXIOMS:22;
+         then 1/(n+1) < p by A22,XREAL_1:2;
+         then 1/m1 < p by A21,XREAL_1:2;
+    hence abs(seq.m-r3)<p by A18,A19,XREAL_1:2;
    end;
  hence seq is convergent by SEQ_2:def 6;
  hence lim seq = r3 by A10,SEQ_2:def 7;
@@ -1202,9 +1207,9 @@ A5:  for r being real number st r in f.:X holds p<=r;
      then f.y in rng f by FUNCT_1:12;
      then f.y in f.:X by PARTFUN1:51;
      then A6:    p <= f.y by A5;
-        f.y < f.y + 1 by REAL_1:69;
-     then p < f.y + 1 by A6,AXIOMS:22;
-    hence p-1 < f.y by REAL_1:84;
+        f.y < f.y + 1 by XREAL_1:31;
+     then p < f.y + 1 by A6,XREAL_1:2;
+    hence p-1 < f.y by XREAL_1:21;
    end;
  attr f is bounded_above means
 :Def12:  f.:X is bounded_above;
@@ -1232,14 +1237,15 @@ A11:  for r being real number st r in f.:X holds p>=r;
      then f.y in rng f by FUNCT_1:12;
      then f.y in f.:X by PARTFUN1:51;
      then p >= f.y by A11;
-     then A12:    p+1 >= f.y+1 by AXIOMS:24;
-        f.y < f.y + 1 by REAL_1:69;
-    hence p+1 > f.y by A12,AXIOMS:22;
+     then A12:    p+1 >= f.y+1 by XREAL_1:8;
+        f.y < f.y + 1 by XREAL_1:31;
+    hence p+1 > f.y by A12,XREAL_1:2;
    end;
 end;
 
 definition let X be set, f be Function of X, REAL;
  canceled;
+
  attr f is with_max means
 :Def14: f.:X is with_max;
  attr f is with_min means
@@ -1485,7 +1491,6 @@ begin :: Real maps
 
 definition let T be 1-sorted;
  mode RealMap of T is Function of the carrier of T, REAL;
- canceled;
 end;
 
 registration let T be non empty 1-sorted;
@@ -1531,6 +1536,8 @@ definition let T be 1-sorted, f be RealMap of T, P be set;
 end;
 
 definition let T be 1-sorted, f be RealMap of T;
+ canceled;
+
  func inf f -> Real equals
 :Def20: inf (f.:the carrier of T);
  coherence;
@@ -1670,6 +1677,7 @@ end;
 
 definition let T be TopStruct, f be RealMap of T;
  canceled 3;
+
  attr f is continuous means
 :Def25: for Y being Subset of REAL st Y is closed holds f"Y is closed;
 end;
@@ -1833,8 +1841,7 @@ then A18:            1/(1/seq.n) in X' by XCMPLX_1:56;
             end;
             then rng (seq") c= X0 by A5,XBOOLE_1:1;
         then A19: lim (seq") in X0 by A3,A15,RCOMP_1:def 4;
-               (lim seq)" = 1/(lim seq) by XCMPLX_1:217;
-            then lim (seq") <> 0 by A13,A16,XCMPLX_1:62;
+            lim (seq") <> 0 by A13,A16,XCMPLX_1:203;
             then not lim (seq") in {0} by TARSKI:def 1;
             then lim (seq") in X by A19,XBOOLE_0:def 4;
             then 1/(lim (seq")) in X' by Th28;
@@ -1854,9 +1861,8 @@ then A25:     x in the carrier of T & (Inv f).x in X0 by FUNCT_2:46;
           now assume not (Inv f).x in X;
          then (Inv f).x in {0} by A25,XBOOLE_0:def 4;
          then (Inv f).x = 0 by TARSKI:def 1;
-       then A26: 1/(f.x) = 0 by A24,Def18;
-              f.x in rng f by A24,FUNCT_2:6;
-        hence contradiction by A2,A26,XCMPLX_1:62;
+         then 0 = 1/(f.x) by A24,Def18 .= (f.x)" by XCMPLX_1:217;
+        hence contradiction by A2,XCMPLX_1:203,A24,FUNCT_2:6;
        end;
       hence x in (Inv f)"X by A24,FUNCT_2:46;
      end;
@@ -2047,7 +2053,7 @@ A19:  r = f.x by A16,FUNCT_2:115;
     reconsider x as Element of T by A18;
        f.x <= b & f.x <> b by A3,A4,A16,A19,Def3,SEQ_4:def 4;
     then f.x+0 < b by REAL_1:def 5;
-then A20: b-f.x > 0 by REAL_1:86;
+then A20: b-f.x > 0 by XREAL_1:22;
  A21: g.x = 1/(bf'.x) by Def18
        .= 1/(b+(-f').x) by Def17
        .= 1/(b+-(f.x)) by Def16
@@ -2056,8 +2062,8 @@ then A20: b-f.x > 0 by REAL_1:86;
     then 1/(b-f.x) <= p by A15,A21;
     then 1 <= p*(b-f.x) by A20,REAL_2:178;
     then 1/p <= b-f.x by A14,REAL_2:177;
-    then f.x+1/p <= b by REAL_1:84;
-  hence contradiction by A17,A19,REAL_1:84;
+    then f.x+1/p <= b by XREAL_1:21;
+  hence contradiction by A17,A19,XREAL_1:21;
  end; assume
 A22: for f being RealMap of T st f is continuous holds f is with_max;
  let f be RealMap of T; assume
@@ -2093,7 +2099,7 @@ A3: for s be real number ex r be real number
     consider p being Element of T;
     defpred P[Real] means $1 >= f.p;
     set R = {right_closed_halfline(r3) : P[r3]};
-A4: R is Subset of bool REAL from DOMAIN_1:sch 8;
+A4: R is Subset-Family of REAL from DOMAIN_1:sch 8;
 A5: right_closed_halfline(f.p) in R;
     then reconsider R as non empty Subset-Family of REAL by A4;
     reconsider F = ("f).:R as Subset-Family of T;
@@ -2157,11 +2163,11 @@ A31: eR = right_closed_halfline(er) & er >= f.p;
        right_closed_halfline(er) = {r3:r3>=er} by LIMFUNC1:def 2;
     then consider r1 being Real such that
 A32: f.x = r1 & r1 >= er by A30,A31;
-A33: f.x >= f.p by A31,A32,AXIOMS:22;
+A33: f.x >= f.p by A31,A32,XREAL_1:2;
     consider fx' being real number such that
-A34:  fx' > f.x by REAL_1:76;
+A34:  fx' > f.x by XREAL_1:3;
     reconsider fx' as Real by XREAL_0:def 1;
-       fx' >= f.p by A33,A34,AXIOMS:22;
+       fx' >= f.p by A33,A34,XREAL_1:2;
     then right_closed_halfline(fx') in R;
 then A35:  f.x in right_closed_halfline(fx') by A29,SETFAM_1:def 1;
        right_closed_halfline(fx') = {r3:r3>=fx'} by LIMFUNC1:def 2;
@@ -2174,7 +2180,7 @@ A36: for s be real number ex r3 be real number st
     consider p being Element of T;
     defpred P[Real] means $1 <= f.p;
     set R = {left_closed_halfline(r3): P[r3]};
-A37: R is Subset of bool REAL from DOMAIN_1:sch 8;
+A37: R is Subset-Family of REAL from DOMAIN_1:sch 8;
 A38: left_closed_halfline(f.p) in R;
     then reconsider R as non empty Subset-Family of REAL by A37;
     reconsider F = ("f).:R as Subset-Family of T;
@@ -2238,11 +2244,11 @@ A64: eR = left_closed_halfline(er) & er <= f.p;
        left_closed_halfline(er) = {r3 : r3 <= er} by LIMFUNC1:def 1;
     then consider r1 being Real such that
 A65: f.x = r1 & r1 <= er by A63,A64;
-A66: f.x <= f.p by A64,A65,AXIOMS:22;
+A66: f.x <= f.p by A64,A65,XREAL_1:2;
     consider fx' being real number such that
-A67:  fx' < f.x by REAL_1:77;
+A67:  fx' < f.x by XREAL_1:4;
     reconsider fx' as Real by XREAL_0:def 1;
-       fx' <= f.p by A66,A67,AXIOMS:22;
+       fx' <= f.p by A66,A67,XREAL_1:2;
     then left_closed_halfline(fx') in R;
 then A68:  f.x in left_closed_halfline(fx') by A62,SETFAM_1:def 1;
        left_closed_halfline(fx') = {r3 : r3 <= fx'} by LIMFUNC1:def 1;
@@ -2498,8 +2504,8 @@ registration
    A3: 0<g and
    A4: ].p1-g,p1+g.[ c= Y by A1,RCOMP_1:40;
        reconsider g as Real by XREAL_0:def 1;
-   A5: p1 < p1+g by A3,REAL_1:69;
-   then A6: p1-g < p1 by REAL_1:84;
+   A5: p1 < p1+g by A3,XREAL_1:31;
+   then A6: p1-g < p1 by XREAL_1:21;
           ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g} by RCOMP_1:def 2;
    then A7: p1 in ].p1-g,p1+g.[ by A5,A6;
      reconsider Q = proj1"].p1-g,p1+g.[
@@ -2530,8 +2536,8 @@ registration
    A10: 0<g and
    A11: ].p1-g,p1+g.[ c= Y by A8,RCOMP_1:40;
        reconsider g as Real by XREAL_0:def 1;
-   A12: p1 < p1+g by A10,REAL_1:69;
-   then A13: p1-g < p1 by REAL_1:84;
+   A12: p1 < p1+g by A10,XREAL_1:31;
+   then A13: p1-g < p1 by XREAL_1:21;
           ].p1-g,p1+g.[ = {r3 : p1-g<r3 & r3<p1+g} by RCOMP_1:def 2;
    then A14: p1 in ].p1-g,p1+g.[ by A12,A13;
      reconsider Q = proj2"].p1-g,p1+g.[
@@ -2894,10 +2900,10 @@ then A6: (SW-corner X)`2 <= (W-min X)`2 by A1,A2,Th62;
 A7: (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
 A8: (W-max X)`2 <= (NW-corner X)`2 by A3,A4,A5,Th63;
   thus (SW-corner X)`2 <= (W-min X)`2 by A1,A2,A5,Th62;
-  thus (SW-corner X)`2 <= (W-max X)`2 by A6,A7,AXIOMS:22;
-  hence (SW-corner X)`2 <= (NW-corner X)`2 by A8,AXIOMS:22;
+  thus (SW-corner X)`2 <= (W-max X)`2 by A6,A7,XREAL_1:2;
+  hence (SW-corner X)`2 <= (NW-corner X)`2 by A8,XREAL_1:2;
   thus (W-min X)`2 <= (W-max X)`2 by A2,A3,Th53;
-  thus (W-min X)`2 <= (NW-corner X)`2 by A7,A8,AXIOMS:22;
+  thus (W-min X)`2 <= (NW-corner X)`2 by A7,A8,XREAL_1:2;
   thus (W-max X)`2 <= (NW-corner X)`2 by A3,A4,A5,Th63;
 end;
 
@@ -2998,7 +3004,7 @@ A1: W-most X = LSeg(SW-corner X, NW-corner X)/\X by Def38;
        by A6,TOPREAL1:12;
      then p in W-most X by A1,A3,XBOOLE_0:def 3;
      then (W-min X)`2 <= p`2 by Th88;
-  then A7: p`2 = (W-min X)`2 by A5,AXIOMS:21;
+  then A7: p`2 = (W-min X)`2 by A5,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = W-min X by A4,A7,EUCLID:57;
   end;
@@ -3025,7 +3031,7 @@ A1: W-most X = LSeg(SW-corner X, NW-corner X)/\X by Def38;
        by A14,TOPREAL1:12;
      then p in W-most X by A1,A11,XBOOLE_0:def 3;
      then p`2 <= (W-max X)`2 by Th88;
-  then A15: p`2 = (W-max X)`2 by A13,AXIOMS:21;
+  then A15: p`2 = (W-max X)`2 by A13,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = W-max X by A12,A15,EUCLID:57;
   end;
@@ -3100,10 +3106,10 @@ then A6: (NW-corner X)`1 <= (N-min X)`1 by A1,A2,Th62;
 A7: (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
 A8: (N-max X)`1 <= (NE-corner X)`1 by A3,A4,A5,Th63;
   thus (NW-corner X)`1 <= (N-min X)`1 by A1,A2,A5,Th62;
-  thus (NW-corner X)`1 <= (N-max X)`1 by A6,A7,AXIOMS:22;
-  hence (NW-corner X)`1 <= (NE-corner X)`1 by A8,AXIOMS:22;
+  thus (NW-corner X)`1 <= (N-max X)`1 by A6,A7,XREAL_1:2;
+  hence (NW-corner X)`1 <= (NE-corner X)`1 by A8,XREAL_1:2;
   thus (N-min X)`1 <= (N-max X)`1 by A2,A3,Th53;
-  thus (N-min X)`1 <= (NE-corner X)`1 by A7,A8,AXIOMS:22;
+  thus (N-min X)`1 <= (NE-corner X)`1 by A7,A8,XREAL_1:2;
   thus (N-max X)`1 <= (NE-corner X)`1 by A3,A4,A5,Th63;
 end;
 
@@ -3204,7 +3210,7 @@ A1: N-most X = LSeg(NW-corner X, NE-corner X)/\X by Def39;
        by A6,TOPREAL1:12;
      then p in N-most X by A1,A3,XBOOLE_0:def 3;
      then (N-min X)`1 <= p`1 by Th98;
-  then A7: p`1 = (N-min X)`1 by A5,AXIOMS:21;
+  then A7: p`1 = (N-min X)`1 by A5,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = N-min X by A4,A7,EUCLID:57;
   end;
@@ -3231,7 +3237,7 @@ A1: N-most X = LSeg(NW-corner X, NE-corner X)/\X by Def39;
        by A14,TOPREAL1:12;
      then p in N-most X by A1,A11,XBOOLE_0:def 3;
      then p`1 <= (N-max X)`1 by Th98;
-  then A15: p`1 = (N-max X)`1 by A13,AXIOMS:21;
+  then A15: p`1 = (N-max X)`1 by A13,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = N-max X by A12,A15,EUCLID:57;
   end;
@@ -3306,10 +3312,10 @@ then A6: (SE-corner X)`2 <= (E-min X)`2 by A1,A2,Th62;
 A7: (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
 A8: (E-max X)`2 <= (NE-corner X)`2 by A3,A4,A5,Th63;
   thus (SE-corner X)`2 <= (E-min X)`2 by A1,A2,A5,Th62;
-  thus (SE-corner X)`2 <= (E-max X)`2 by A6,A7,AXIOMS:22;
-  hence (SE-corner X)`2 <= (NE-corner X)`2 by A8,AXIOMS:22;
+  thus (SE-corner X)`2 <= (E-max X)`2 by A6,A7,XREAL_1:2;
+  hence (SE-corner X)`2 <= (NE-corner X)`2 by A8,XREAL_1:2;
   thus (E-min X)`2 <= (E-max X)`2 by A2,A3,Th53;
-  thus (E-min X)`2 <= (NE-corner X)`2 by A7,A8,AXIOMS:22;
+  thus (E-min X)`2 <= (NE-corner X)`2 by A7,A8,XREAL_1:2;
   thus (E-max X)`2 <= (NE-corner X)`2 by A3,A4,A5,Th63;
 end;
 
@@ -3410,7 +3416,7 @@ A1: E-most X = LSeg(SE-corner X, NE-corner X)/\X by Def40;
        by A6,TOPREAL1:12;
      then p in E-most X by A1,A3,XBOOLE_0:def 3;
      then (E-min X)`2 <= p`2 by Th108;
-  then A7: p`2 = (E-min X)`2 by A5,AXIOMS:21;
+  then A7: p`2 = (E-min X)`2 by A5,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = E-min X by A4,A7,EUCLID:57;
   end;
@@ -3437,7 +3443,7 @@ A1: E-most X = LSeg(SE-corner X, NE-corner X)/\X by Def40;
        by A14,TOPREAL1:12;
      then p in E-most X by A1,A11,XBOOLE_0:def 3;
      then p`2 <= (E-max X)`2 by Th108;
-  then A15: p`2 = (E-max X)`2 by A13,AXIOMS:21;
+  then A15: p`2 = (E-max X)`2 by A13,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = E-max X by A12,A15,EUCLID:57;
   end;
@@ -3512,10 +3518,10 @@ then A6: (SW-corner X)`1 <= (S-min X)`1 by A1,A2,Th62;
 A7: (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
 A8: (S-max X)`1 <= (SE-corner X)`1 by A3,A4,A5,Th63;
   thus (SW-corner X)`1 <= (S-min X)`1 by A1,A2,A5,Th62;
-  thus (SW-corner X)`1 <= (S-max X)`1 by A6,A7,AXIOMS:22;
-  hence (SW-corner X)`1 <= (SE-corner X)`1 by A8,AXIOMS:22;
+  thus (SW-corner X)`1 <= (S-max X)`1 by A6,A7,XREAL_1:2;
+  hence (SW-corner X)`1 <= (SE-corner X)`1 by A8,XREAL_1:2;
   thus (S-min X)`1 <= (S-max X)`1 by A2,A3,Th53;
-  thus (S-min X)`1 <= (SE-corner X)`1 by A7,A8,AXIOMS:22;
+  thus (S-min X)`1 <= (SE-corner X)`1 by A7,A8,XREAL_1:2;
   thus (S-max X)`1 <= (SE-corner X)`1 by A3,A4,A5,Th63;
 end;
 
@@ -3616,7 +3622,7 @@ A1: S-most X = LSeg(SW-corner X, SE-corner X)/\X by Def41;
        by A6,TOPREAL1:12;
      then p in S-most X by A1,A3,XBOOLE_0:def 3;
      then (S-min X)`1 <= p`1 by Th118;
-  then A7: p`1 = (S-min X)`1 by A5,AXIOMS:21;
+  then A7: p`1 = (S-min X)`1 by A5,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = S-min X by A4,A7,EUCLID:57;
   end;
@@ -3643,7 +3649,7 @@ A1: S-most X = LSeg(SW-corner X, SE-corner X)/\X by Def41;
        by A14,TOPREAL1:12;
      then p in S-most X by A1,A11,XBOOLE_0:def 3;
      then p`1 <= (S-max X)`1 by Th118;
-  then A15: p`1 = (S-max X)`1 by A13,AXIOMS:21;
+  then A15: p`1 = (S-max X)`1 by A13,XREAL_1:1;
         p = |[p`1, p`2]| by EUCLID:57;
    hence x = S-max X by A12,A15,EUCLID:57;
   end;

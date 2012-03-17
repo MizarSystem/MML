@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="TDLAT_1"/>
@@ -20,11 +19,11 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="79">
+<Func kind="K" nr="69">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -35,11 +34,11 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="83">
+<Func kind="K" nr="73">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -50,11 +49,11 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="87">
+<Func kind="K" nr="77">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

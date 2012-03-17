@@ -19,7 +19,6 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="BINOP_1"/>
@@ -36,7 +35,7 @@
 <Typ kind="G" nr="3">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="32"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -51,13 +50,13 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="60"/>
+<Adjective nr="59"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -65,19 +64,19 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="50">
-<Func kind="K" nr="164">
+<Adjective nr="49">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="56">
-<Func kind="K" nr="164">
+<Adjective nr="55">
+<Func kind="K" nr="154">
 <Num nr="2"/>
 </Func>
 </Adjective>
+<Adjective nr="56" value="false"/>
 <Adjective nr="57" value="false"/>
-<Adjective nr="58" value="false"/>
-<Adjective nr="60"/>
+<Adjective nr="59"/>
 </Cluster>
 </CCluster>
 </Registrations>

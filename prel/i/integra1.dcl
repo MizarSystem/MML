@@ -18,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
@@ -45,9 +44,9 @@
 </Func>
 </Typ>
 <Cluster>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="96"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -60,11 +59,11 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="44"/>
-<Adjective nr="57"/>
-<Adjective nr="96"/>
+<Adjective nr="43"/>
+<Adjective nr="56"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -72,7 +71,7 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="K" nr="52"/>
@@ -92,14 +91,14 @@
 <Typ kind="M" nr="3">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 </Cluster>
 <Func kind="K" nr="40">
 <Func kind="K" nr="52"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="230">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -109,7 +108,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -119,15 +118,15 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="95"/>
 </Cluster>
 <Typ kind="M" nr="3">
 <Cluster/>
@@ -136,9 +135,9 @@
 </Func>
 </Typ>
 <Cluster>
+<Adjective nr="36"/>
 <Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="44"/>
+<Adjective nr="43"/>
 </Cluster>
 </CCluster>
 </Registrations>

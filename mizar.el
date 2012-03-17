@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.108 $
+;; $Revision: 1.111 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -388,13 +388,18 @@ MoMM should be installed for this."
 :type 'color
 :group 'mizar-faces)
 
-(defcustom mizar-main-keywords 
-(list "theorem" "scheme" "definition" "registration" 
-      "notation" "schemes" "constructors" "definitions" 
+(defcustom mizar-environment-keywords 
+(list "schemes" "constructors" "definitions" 
       "theorems" "vocabularies" "requirements" "registrations" 
       "notations")
-"*Keywords starting main mizar text items. 
-Now also the environmental declarations."
+"*Keywords starting mizar environmental items." 
+:type '(repeat string)
+:group 'mizar-faces)
+
+
+(defcustom mizar-main-keywords 
+(list "theorem" "scheme" "definition" "registration" "notation")
+"*Keywords starting main mizar text items." 
 :type '(repeat string)
 :group 'mizar-faces)
 
@@ -533,6 +538,7 @@ Now also the environmental declarations."
   (define-key mizar-mode-map "\C-cr" 'mizar-occur-refs)
   (define-key mizar-mode-map "\C-ce" 'mizar-show-environ)
   (define-key mizar-mode-map "\C-cs" 'mizar-insert-skeleton)
+  (define-key mizar-mode-map "\C-cu" 'mizar-run-all-irr-utils)
   (define-key mizar-mode-map "\M-;"     'mizar-symbol-def)
   (define-key mizar-mode-map "\M-\C-i"     'mizar-ref-complete)
   (define-key mizar-mode-map "\C-c\C-q" 'query-start-entry)
@@ -669,6 +675,13 @@ Used for exact completion.")
 (defun mizar-indent-to (indent)
   (insert-char 32 indent) )             ; 32 is space...cannot use tabs
 
+(defvar mizar-environment-kw-regexp
+  (concat "\\b" (regexp-opt mizar-environment-keywords t) "\\b")
+  "Regexp matching environmental keywords.")
+
+(defvar mizar-main-kw-regexp
+  (concat "\\b" (regexp-opt mizar-main-keywords t) "\\b")
+  "Regexp matching main keywords.")
 
 
 (defun mizar-indent-level ()
@@ -679,7 +692,9 @@ Used for exact completion.")
     (cond
      ((looking-at "::::::") 0)		;Large comment starts
      ((looking-at "::") (current-column)) ;Small comment starts
-     ((looking-at "\\b\\(theorem\\|scheme\\|definition\\|registration\\|registrations\\|environ\\|vocabularies\\|constructors\\|requirements\\|notation\\|notations\\|theorems\\|schemes\\|reserve\\|begin\\)\\b") 0)
+     ((looking-at mizar-main-kw-regexp) 0)
+     ((looking-at mizar-environment-kw-regexp) 1)
+     ((looking-at "\\b\\(environ\\|reserve\\|begin\\)\\b") 0)
      ((bobp) 0)				;Beginning of buffer
      (t
       (let ((empty t) ind more less res)
@@ -711,7 +726,9 @@ Used for exact completion.")
 	  ;; Real mizar code
 	  (cond ((looking-at "\\b\\(proof\\|now\\|hereby\\|case\\|suppose\\)\\b")
 		 (setq res (+ ind mizar-indent-width)))
-		((looking-at "\\b\\(definition\\|scheme\\|theorem\\|registration\\|registrations\\|vocabularies\\|constructors\\|requirements\\|notation\\|notations\\|theorems\\|schemes\\|reserve\\|begin\\)\\b")
+		((or (looking-at mizar-main-kw-regexp)
+		     (looking-at mizar-environment-kw-regexp)
+		     (looking-at "\\b\\(reserve\\|begin\\)\\b"))
 		 (setq res (+ ind 2)))
  		(t (setq res ind)))
 	  (if less (max (- ind mizar-indent-width) 0)
@@ -4429,6 +4446,72 @@ can be used instead, to make a summary of an article."
   (occur "[ \\n\\r]by[ \\n\\r].*:"))
 
 
+;;;;;;;;;;;;;;; Hiding items in abstracts ;;;;;;;;;;;;;;;;
+
+(defgroup mizar-abstracts nil
+  "Support for abstracts in the Mizar mode"
+  :group 'mizar)
+
+(defconst mizar-item-kinds
+  '(theorem definition scheme registration notation reserve canceled)
+"Top-level item kinds appearing in Mizar abstracts.
+They are used as symbols for values of the overlay property 
+'mizar-kind, and their names must correspond to the mizar keywords
+introducing these items (see `mizar-set-item-overlays-in-abstract'.")
+
+(defcustom mizar-abstracts-default-hidden-kinds nil
+"*List of item kinds that get hidden upon loading of Mizar abstracts.
+See `mizar-item-kinds' for possible values."
+:type '(repeat symbol)
+:group 'mizar-abstracts)
+
+(defun mizar-abstracts-invisibility ()
+(dolist (sym mizar-abstracts-default-hidden-kinds)
+  (add-to-invisibility-spec sym)))
+
+(defun mizar-set-item-overlays-in-abstract ()
+  "Set the overlays for invisibility of items in a Mizar abstract
+This is done for items from `mizar-item-kinds'."
+  (if (buffer-abstract-p (current-buffer))
+      (save-excursion
+	(let ((kinds mizar-item-kinds))
+	  (while kinds
+	    (let* ((kind (car kinds))
+		   (kw (symbol-name kind))
+		   (re (concat "^[ ]*" kw "[ \n\r]+" 
+			       (if (memq kind '(definition registration notation))
+				   "\\([\n\r]\\|.\\)*?\\bend\\b[; \n\r]+" 
+				 "[^;]+;[ \n\r]+"))))
+	      (goto-char (point-min))
+	      (while
+		  (re-search-forward re (point-max) t)
+		(let* ((from (match-beginning 0))
+		       (to (match-end 0)) 
+		       (overlay (make-overlay from to)))
+		  (overlay-put overlay 'invisible kind)
+		  (overlay-put overlay 'mizar-kind kind)
+		  (overlay-put overlay 
+			       'isearch-open-invisible-temporary t))))
+	    (setq kinds (cdr kinds)))))
+    (error "Not in Mizar abstract!")))
+
+(defun mizar-abs-toggle-hiding (sym)
+  (unless (buffer-abstract-p (current-buffer))
+    (error "Not in Mizar abstract!"))
+  (if (memq sym buffer-invisibility-spec)
+      (remove-from-invisibility-spec sym)
+    (add-to-invisibility-spec sym))
+  (redraw-frame (selected-frame))   ; Seems needed
+  )
+
+(defun mizar-abs-toggle-th () (interactive) (mizar-abs-toggle-hiding 'theorem))
+(defun mizar-abs-toggle-def () (interactive) (mizar-abs-toggle-hiding 'definition))
+(defun mizar-abs-toggle-sch () (interactive) (mizar-abs-toggle-hiding 'scheme))
+(defun mizar-abs-toggle-reg () (interactive) (mizar-abs-toggle-hiding 'registration))
+(defun mizar-abs-toggle-not () (interactive) (mizar-abs-toggle-hiding 'notation))
+(defun mizar-abs-toggle-res () (interactive) (mizar-abs-toggle-hiding 'reserve))
+(defun mizar-abs-toggle-can () (interactive) (mizar-abs-toggle-hiding 'canceled))
+
 ;;;;;;;;;;;;;;; Verifier mode lime ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar verifier-mode nil
   "True if verifier mode is in use.")
@@ -4776,7 +4859,6 @@ If FORCEACC, run makeenv with the -a option."
 
 
 
-
 (defun mizar-findvoc ()
   "Find vocabulary for a symbol."
   (interactive)
@@ -4784,6 +4866,23 @@ If FORCEACC, run makeenv with the -a option."
 			 (read-string  (concat "findvoc [-iswGKLMORUV] SearchString (Default: " (current-word) "): " )
 				       nil nil      (current-word))
 			 )))
+(defvar mizar-irr-utils 
+'("relprem" "relinfer" "reliters" "chklab" "inacc" "trivdemo")
+"Sequence of irrelevant utils used in `mizar-run-all-irr-utils'.")
+
+(defun mizar-run-all-irr-utils ()
+"Run all the irrelevant utilities, stopping on the first error.
+See the variable `mizar-irr-utils' for their list and order of execution."
+(interactive)
+(let ((utils mizar-irr-utils)
+      (name (file-name-sans-extension (buffer-file-name)))
+      err)
+  (while (and utils (null err))
+    (progn
+      (mizar-it (car utils) nil nil nil t)
+      (setq err (mizar-err-codes name)
+	    utils (cdr utils))))))
+
 
 ;;;;;;;;;;;; not done yet, seems quite complicated if we have e.g.
 ;;;;;;;;;;;; reserve A for set reserve F for Function of A,B
@@ -5075,7 +5174,8 @@ This is a flamewar-resolving hack."
   (let (
 	;; "Native" Mizar patterns
 	(head-predicates 
-	 (list (mizar-fnt-regexp mizar-main-keywords)
+	 (list (mizar-fnt-regexp 
+		(append mizar-main-keywords mizar-environment-keywords))
 	       0 'mizar-main-face))
 	(connectives
 	 (list (mizar-fnt-regexp mizar-formula-keywords)
@@ -5143,6 +5243,8 @@ if that value is non-nil."
   (mizar-mode-variables)
   (setq buffer-offer-save t)
   (mizar-setup-imenu-sb)
+  (if (buffer-abstract-p (current-buffer))
+      (mizar-set-item-overlays-in-abstract))
   (if (and mizar-abstracts-use-view
 	       (buffer-abstract-p (current-buffer)))
       (view-mode))
@@ -5289,6 +5391,8 @@ if that value is non-nil."
 		["Listvoc" mizar-listvoc t]
 		["Constr" mizar-constr t])
 	  (list "Irrelevant Utilities"	    
+	    ["Execute all irrelevant utils" mizar-run-all-irr-utils 
+	     (mizar-buf-verifiable-p)]
 	    ["Irrelevant Premises" mizar-relprem (mizar-buf-verifiable-p)]
 	    ["Irrelevant Inferences" mizar-relinfer (mizar-buf-verifiable-p)]
 	    ["Irrelevant Iterative Steps" mizar-reliters (mizar-buf-verifiable-p)]
@@ -5423,6 +5527,40 @@ move backward across N balanced expressions."
 (save-excursion
   (goto-char (point-min))
   (hs-hide-level level)))
+
+(setq mizar-abs-map (make-sparse-keymap))
+(easy-menu-define mizar-abs-menu
+  mizar-abs-map
+  "Submenu of hide/show used for items in Mizar abstracts."
+  '(""
+    ["Theorems" mizar-abs-toggle-th :style radio 
+     :selected (not (memq 'theorem buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of theorems" ]
+    
+    ["Definitions" mizar-abs-toggle-def :style radio 
+     :selected (not (memq 'definition buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of definitions" ]
+    ["Schemes" mizar-abs-toggle-sch :style radio 
+     :selected (not (memq 'scheme buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of schemes" ]
+    ["Registrations" mizar-abs-toggle-reg :style radio 
+     :selected (not (memq 'registration buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of registrations" ]
+    ["Notations" mizar-abs-toggle-not :style radio 
+     :selected (not (memq 'notation buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of notations" ]
+    ["Reservations" mizar-abs-toggle-res :style radio 
+     :selected (not (memq 'reserve buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of reservations" ]
+    ["Canceled" mizar-abs-toggle-can :style radio 
+     :selected (not (memq 'canceled buffer-invisibility-spec)) :active t
+     :help "Toggle hiding of canceled theorems" ]
+    ))
+
+(define-key-after hs-minor-mode-menu [mizar-hs-abstract-items]
+  `(menu-item  "Hide/Show items in abstracts" 
+	       ,mizar-abs-menu
+	       :enable (buffer-abstract-p (current-buffer))))
 
 (define-key-after hs-minor-mode-menu [pres-global]
   `(menu-item  "Global Proof Presentation Level" 

@@ -14,7 +14,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="BINOP_1"/>
@@ -42,14 +41,14 @@
 <Cluster/>
 <Func kind="K" nr="40">
 <Func kind="U" nr="1">
-<Func kind="K" nr="164">
+<Func kind="K" nr="154">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="55"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -67,28 +66,28 @@
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="54"/>
-<Adjective nr="56">
+<Adjective nr="53"/>
+<Adjective nr="55">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="205">
+<Func kind="K" nr="195">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,12 +99,12 @@
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="54"/>
-<Adjective nr="56">
+<Adjective nr="53"/>
+<Adjective nr="55">
 <Func kind="K" nr="52"/>
 <Func kind="K" nr="52"/>
 </Adjective>
-<Adjective nr="57"/>
+<Adjective nr="56"/>
 </Cluster>
 </FCluster>
 </Registrations>

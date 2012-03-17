@@ -15,15 +15,15 @@ environ
       STRUCT_0, PRE_TOPC, TOPS_2, COMPTS_1, PCOMPS_1, SEQ_1, SEQ_2, SEQM_3,
       LIMFUNC1, POWER, RCOMP_1, NEWTON, TOPMETR, COMPLEX1;
  constructors REAL_1, NAT_1, TOPS_2, COMPTS_1, SEQ_2, SEQM_3, LIMFUNC1, POWER,
-      RCOMP_1, NEWTON, TOPMETR, SEQ_4;
+      RCOMP_1, NEWTON, TOPMETR, SEQ_4, SETFAM_1;
  registrations PRE_TOPC, FINSET_1, XREAL_0, METRIC_1, RELSET_1, SEQM_3,
       ARYTM_3, NEWTON, MEMBERED, ORDINAL2, SUBSET_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQ_2, LIMFUNC1, COMPTS_1;
- theorems ABSVALUE, AXIOMS, FINSET_1, FUNCT_1, FUNCT_2, TOPMETR, LIMFUNC1,
-      METRIC_1, NAT_1, NEWTON, POWER, PCOMPS_1, RCOMP_1, REAL_1, REAL_2, SEQ_1,
-      SEQ_2, SEQ_4, SEQM_3, SQUARE_1, TARSKI, ZFMISC_1, XREAL_0, ORDINAL2,
-      XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1;
+ theorems ABSVALUE, FINSET_1, FUNCT_1, FUNCT_2, TOPMETR, LIMFUNC1, METRIC_1,
+      NAT_1, NEWTON, POWER, PCOMPS_1, RCOMP_1, REAL_2, SEQ_1, SEQ_2, SEQ_4,
+      SEQM_3, TARSKI, ZFMISC_1, XREAL_0, ORDINAL2, XBOOLE_0, XBOOLE_1,
+      XCMPLX_0, XCMPLX_1, XREAL_1, COMPLEX1;
  schemes RECDEF_1, NAT_1, SEQ_1;
 
 begin
@@ -52,12 +52,12 @@ theorem Th2: x <= y & y <= z implies [. x,y .] \/ [. y,z .] = [. x,z .]
            now per cases by A4,XBOOLE_0:def 2;
         suppose o in {p: x <= p & p <= y};
          then consider a be Real such that A5: o=a & x <= a & a <= y;
-               x <= a & a <= z by A1,A5,AXIOMS:22;
+               x <= a & a <= z by A1,A5,XREAL_1:2;
          hence o in {w: x <= w & w <= z} by A5;
         end;
         suppose o in {p: y <= p & p <= z};
          then consider a be Real such that A6: o=a & y <= a & a <= z;
-              x <= a & a <= z by A1,A6,AXIOMS:22;
+              x <= a & a <= z by A1,A6,XREAL_1:2;
          hence o in {w: x <= w & w <= z} by A6;
         end;
         end;
@@ -78,9 +78,11 @@ XBOOLE_0:def 2;
      hence thesis by A2,RCOMP_1:def 1;
   end;
 
-theorem Th3: x >= 0 & a + x <= b implies a <= b by XREAL_1:42;
+ Th3: x >= 0 & a + x <= b implies a <= b by XREAL_1:42;
 
-theorem Th4: x >= 0 & a - x >= b implies a >= b by XREAL_1:53;
+ Th4: x >= 0 & a - x >= b implies a >= b by XREAL_1:53;
+
+canceled 2;
 
 theorem Th5: x > 0 implies x|^k > 0
  proof
@@ -117,7 +119,7 @@ A4: for k st P[k] holds P[k+1]
       then seq.(k+1) in rng seq by FUNCT_1:def 5;
       then reconsider k' = seq.(k+1) as Nat by A2;
           seq.k < seq.(k+1) by A1,SEQM_3:def 11;
-      then k < k' by A5,AXIOMS:22;
+      then k < k' by A5,XREAL_1:2;
       hence k+1 <= seq.(k+1) by NAT_1:38;
     end;
        for n holds P[n] from NAT_1:sch 1(A3,A4);
@@ -148,13 +150,13 @@ end;
   Lm2: for n st P[n] holds P[n+1]
       proof
        let n; assume 2|^n >= n+1;
-        then 2|^n - n >= 1 & 2 >= 0 by REAL_1:84;
-        then A1: 2*(2|^n - n) >= 2*1 by AXIOMS:25;
+        then 2|^n - n >= 1 & 2 >= 0 by XREAL_1:21;
+        then A1: 2*(2|^n - n) >= 2*1 by XREAL_1:66;
              2|^(n+1) - (n + 1 + 1) = 2*2|^n - (2*n - n + 2) by NEWTON:11
              .= 2*(2|^n - n) + (n - 2);
-         then 2|^(n+1) - (n + 1 + 1) >= 2 + (n - 2) by A1,AXIOMS:24;
+         then 2|^(n+1) - (n + 1 + 1) >= 2 + (n - 2) by A1,XREAL_1:8;
          then 2|^(n+1) - (n + 1 + 1) >= n & n >= 0 by NAT_1:18;
-         then 2|^(n+1) >= 0 + (n + 1 + 1) by REAL_1:84;
+         then 2|^(n+1) >= 0 + (n + 1 + 1) by XREAL_1:21;
         hence 2|^(n+1) >= n + 1 + 1;
       end;
 
@@ -166,7 +168,7 @@ theorem Th8:
   2|^n > n
  proof
       2|^n >= n + 1 & n+1 > n by Th7,NAT_1:38;
-  hence thesis by AXIOMS:22;
+  hence thesis by XREAL_1:2;
  end;
 
 theorem
@@ -181,8 +183,8 @@ LIMFUNC1:def 4;
      then p < seq.m & 2 > 1 & 2<>0 by A3;
      then 2 to_power p < 2 to_power (seq.m) & 2 to_power p = 2|^p & 2|^p > p
       by Th8,POWER:44,48;
-     then p < 2 to_power (seq.m) by AXIOMS:22;
-     then r < 2 to_power (seq.m) by A2,AXIOMS:22;
+     then p < 2 to_power (seq.m) by XREAL_1:2;
+     then r < 2 to_power (seq.m) by A2,XREAL_1:2;
     hence r < (2 to_power seq).m by Def1;
  end;
 
@@ -210,7 +212,7 @@ theorem
    assume A1: a <= b;
    reconsider a, b as Real by XREAL_0:def 1;
    set r = b-a;
-      now per cases by A1,SQUARE_1:12;
+      now per cases by A1,XREAL_1:50;
    suppose r = 0;
     then a = b by XCMPLX_1:15;
     then [. a,b .] = {a} & {a} is finite & the carrier of
@@ -269,7 +271,7 @@ theorem
         proof
          let k; assume Q[k];
           then A17: f.k - a >= r/2|^(k+1) & b - f.k >= r/2|^(k+1)
-           by REAL_1:84,REAL_2:165;
+           by XREAL_1:21,REAL_2:165;
           A18: r/(2*(2|^(k+1))) + r/(2*(2|^(k+1))) = r/2|^(k+1)
            by XCMPLX_1:119;
           A19: r/2|^(k+1) - r/2|^(k+(1+1))
@@ -280,24 +282,24 @@ theorem
               .= r/2|^(k+(1+1));
               now per cases by A12;
            suppose A20: f.(k+1) = f.k + r/2|^(k+2);
-                2|^(k+1) > 0 & r >= 0 by A1,Th5,SQUARE_1:12;
+                2|^(k+1) > 0 & r >= 0 by A1,Th5,XREAL_1:50;
            then A21: r/2|^(k+1) >= 0 by REAL_2:125;
                 f.(k+1) - a = f.k - a + r/2|^(k+2) by A20;
             then f.(k+1) - a >= r/2|^(k+2) by A17,A21,REAL_2:173;
            hence a <= f.(k+1) - r/2|^(k+1+1) by REAL_2:165;
                 b - f.(k+1) = b - f.k - r/2|^(k+2) by A20;
-            then b - f.(k+1) >= r/2|^(k+2) by A17,A19,REAL_1:49;
-           hence f.(k+1) + r/2|^(k+1+1) <= b by REAL_1:84;
+            then b - f.(k+1) >= r/2|^(k+2) by A17,A19,XREAL_1:11;
+           hence f.(k+1) + r/2|^(k+1+1) <= b by XREAL_1:21;
            end;
            suppose A22: f.(k+1) = f.k - r/2|^(k+2);
-                2|^(k+1) > 0 & r >= 0 by A1,Th5,SQUARE_1:12;
+                2|^(k+1) > 0 & r >= 0 by A1,Th5,XREAL_1:50;
            then A23: r/2|^(k+1) >= 0 by REAL_2:125;
                 f.(k+1) - a = f.k - a - r/2|^(k+2) by A22;
-            then f.(k+1) - a >= r/2|^(k+2) by A17,A19,REAL_1:49;
+            then f.(k+1) - a >= r/2|^(k+2) by A17,A19,XREAL_1:11;
            hence a <= f.(k+1) - r/2|^(k+1+1) by REAL_2:165;
                 b - f.(k+1) = b - f.k + r/2|^(k+2) by A22;
             then b - f.(k+1) >= r/2|^(k+2) by A17,A23,REAL_2:173;
-           hence f.(k+1) + r/2|^(k+1+1) <= b by REAL_1:84;
+           hence f.(k+1) + r/2|^(k+1+1) <= b by XREAL_1:21;
          end;
          end;
          hence thesis;
@@ -309,7 +311,7 @@ theorem
       then consider x being set such that
      A26: x in dom f & y = f.x by FUNCT_1:def 5;
       reconsider n = x as Nat by A26,FUNCT_2:def 1;
-          2|^(n+1) > 0 & r >= 0 by A1,Th5,SQUARE_1:12;
+          2|^(n+1) > 0 & r >= 0 by A1,Th5,XREAL_1:50;
       then r/2|^(n+1) >= 0 & a <= f.n - r/2|^(n+1) & f.n + r/2|^(n+1) <= b
        by A24,REAL_2:125;
       then a <= f.n & f.n <= b by Th3,Th4;
@@ -354,7 +356,7 @@ A42:           f.(k+1) + r/2|^(k+1+1)
             .= f.k + (r/2|^(k+2) + r/2|^(k+2)) by XCMPLX_1:1
             .= f.k + r/2|^(k+1) by A33,XCMPLX_1:66;
            reconsider G3 = G1 \/ G as Subset-Family of M;
-               2|^(k+1) > 0 & r >= 0 by A1,Th5,SQUARE_1:12;
+               2|^(k+1) > 0 & r >= 0 by A1,Th5,XREAL_1:50;
            then r/2|^(k+1) >= 0 by REAL_2:125;
            then f.k - r/2|^(k+1) <= f.k & f.k <=
  f.k + r/2|^(k+1) by REAL_2:173;
@@ -409,7 +411,7 @@ TARSKI:def 4;
         proof
          let m be Nat, q be Point of M; assume A59: s.m = q & m >= n;
          then abs( s.m - lim s ) < r1/2 by A57;
-         then A60: abs( -(s.m - lim s) ) < r1/2 by ABSVALUE:17;
+         then A60: abs( -(s.m - lim s) ) < r1/2 by COMPLEX1:138;
              dist(ls, q)
              = (the distance of M).(lim s, s.m) by A59,METRIC_1:def 1
             .= (the distance of RealSpace).(ls, q) by A59,TOPMETR:def 1
@@ -432,7 +434,7 @@ A63:           dom f = NAT by FUNCT_2:def 1;
        consider n being Nat such that A64: n > r by SEQ_4:10;
             rng Nseq c= NAT by SEQM_3:def 8;
         then n <= Nseq.n by Th6;
-        then r <= Nseq.n by A64,AXIOMS:22;
+        then r <= Nseq.n by A64,XREAL_1:2;
         hence thesis;
       end;
      then Nseq is divergent_to+infty by LIMFUNC1:58;
@@ -465,20 +467,20 @@ A63:           dom f = NAT by FUNCT_2:def 1;
           f.(Nseq.l) + r*(2|^(Nseq.l+1))" <= b by XCMPLX_0:def 9;
          then s.l - r*(2|^(Nseq.l+1))" >= a & s.l + r*(2|^(Nseq.l+1))" <= b
           by A55,SEQM_3:31;
-         then x <= b & x >= a by A69,AXIOMS:22;
+         then x <= b & x >= a by A69,XREAL_1:2;
          then x in {m where m is Real : a <= m & m <= b};
          then the carrier of M = [. a,b .] & x in [. a,b .]
           by A1,RCOMP_1:def 1,TOPMETR:14;
          then reconsider x' = x as Point of M;
              s.l <= r*(2|^(Nseq.l+1))" + x & x - s.l <= r*(2|^(Nseq.l+1))"
-           by A69,REAL_1:86;
+           by A69,XREAL_1:22;
          then s.l - x <= r*(2|^(Nseq.l+1))" & -(x - s.l) >= -r*(2|^(Nseq.l+1))
 "
-          by REAL_1:50,86;
+          by XREAL_1:26,XREAL_1:22;
          then A70: abs( s.l - x ) <= r*(2|^(Nseq.l+1))" by ABSVALUE:12;
              abs( lim s - x ) = abs( (lim s - s.l) + (s.l - x) );
          then A71: abs( lim s - x ) <= abs( lim s - s.l ) + abs( s.l - x )
-           by ABSVALUE:13;
+           by COMPLEX1:142;
        A72: s.l in Ball(ls, r1/2) by A55,A61,A68;
          then reconsider sl = s.l as Point of M;
              dist(ls,sl) < r1/2 by A72,METRIC_1:12;
@@ -488,8 +490,8 @@ A63:           dom f = NAT by FUNCT_2:def 1;
         then abs( r*((2 to_power Nseq).l)" ) < r1/2 by SEQ_1:def 8;
         then abs( r*(2 to_power (Nseq.l))" ) < r1/2 by Def1;
         then A74: abs( r*(2|^(Nseq.l))" ) < r1/2 by POWER:48;
-            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,Th5,SQUARE_1:12;
-        then r >= 0 & (2|^(Nseq.l+1))" > 0 by REAL_1:72;
+            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,Th5,XREAL_1:50;
+        then r >= 0 & (2|^(Nseq.l+1))" > 0 by XREAL_1:124;
         then r*(2|^(Nseq.l+1))" >= 0 by REAL_2:121;
         then A75: abs( r*(2|^(Nseq.l+1))" ) = r*(2|^(Nseq.l+1))" by
 ABSVALUE:def 1;
@@ -501,18 +503,18 @@ ABSVALUE:def 1;
         then 1/(2|^(Nseq.l+1)) < (2|^Nseq.l)" & r > 0 & 2|^(Nseq.l+1) <> 0
          by A2,Th5,XCMPLX_1:217;
         then (2|^(Nseq.l+1))" < (2|^Nseq.l)" & r > 0 by XCMPLX_1:217;
-        then r*(2|^(Nseq.l+1))" < r*(2|^Nseq.l)" by REAL_1:70;
+        then r*(2|^(Nseq.l+1))" < r*(2|^Nseq.l)" by XREAL_1:70;
         then abs( r*(2|^(Nseq.l+1))" ) < abs( r*(2|^Nseq.l)" )
           by A75,ABSVALUE:12;
-        then A76: abs( r*(2|^(Nseq.l+1))" ) < r1/2 by A74,AXIOMS:22;
-            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,Th5,SQUARE_1:12;
-        then r >= 0 & (2|^(Nseq.l+1))" > 0 by REAL_1:72;
+        then A76: abs( r*(2|^(Nseq.l+1))" ) < r1/2 by A74,XREAL_1:2;
+            r >= 0 & 2|^(Nseq.l+1) > 0 by A1,Th5,XREAL_1:50;
+        then r >= 0 & (2|^(Nseq.l+1))" > 0 by XREAL_1:124;
         then r*(2|^(Nseq.l+1))" >= 0 by REAL_2:121;
         then r*(2|^(Nseq.l+1))" < r1/2 by A76,ABSVALUE:def 1;
-        then abs( s.l - x ) < r1/2 by A70,AXIOMS:22;
+        then abs( s.l - x ) < r1/2 by A70,XREAL_1:2;
         then abs( lim s - s.l ) + abs( s.l - x ) < r1/2 + r1/2
-        by A73,REAL_1:67;
-        then abs( lim s - x ) < r1/2 + r1/2 by A71,AXIOMS:22;
+        by A73,XREAL_1:10;
+        then abs( lim s - x ) < r1/2 + r1/2 by A71,XREAL_1:2;
         then dist(ls,x') < r1 by Th1;
         hence z in Ball(ls,r1) by A69,METRIC_1:12;
        end;

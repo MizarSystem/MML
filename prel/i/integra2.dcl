@@ -18,7 +18,6 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RVSUM_1"/>
@@ -48,8 +47,8 @@
 <Adjective nr="5"/>
 <Adjective nr="20"/>
 <Adjective nr="23"/>
+<Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 </Registrations>

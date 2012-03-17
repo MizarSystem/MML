@@ -26,7 +26,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -43,7 +43,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="25"/>
+<Adjective nr="26"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +56,7 @@
 <Adjective nr="3"/>
 <Adjective nr="5"/>
 <Adjective nr="11"/>
-<Adjective nr="26">
+<Adjective nr="27">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

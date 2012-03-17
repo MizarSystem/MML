@@ -17,9 +17,9 @@ environ
       ORDINAL2, NAT_1, XREAL_0;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI;
- theorems AXIOMS, TARSKI, ENUMSET1, ZFMISC_1, REAL_1, NAT_1, FINSEQ_1,
-      FINSEQ_3, FINSUB_1, REALSET1, MCART_1, CARD_1, CARD_2, FINSET_1, SCM_1,
-      XBOOLE_0, XBOOLE_1, ORDINAL2;
+ theorems TARSKI, ENUMSET1, ZFMISC_1, REAL_1, NAT_1, FINSEQ_1, FINSEQ_3,
+      FINSUB_1, REALSET1, MCART_1, CARD_1, CARD_2, FINSET_1, SCM_1, XBOOLE_0,
+      XBOOLE_1, ORDINAL2, XREAL_1;
  schemes SETWISEO, XBOOLE_0;
 
 begin
@@ -138,7 +138,7 @@ theorem Th5:
 proof let m,n be Nat; assume A1: 1<=m;
      now let e be set; assume e in nat_interval(m,n);
     then consider i being Nat such that A2: (e=i & m<=i & i<=n) by Th2;
-       1<=i by A1,A2,AXIOMS:22; hence e in Seg n by A2,FINSEQ_1:3;
+       1<=i by A1,A2,XREAL_1:2; hence e in Seg n by A2,FINSEQ_1:3;
   end;
   hence thesis by TARSKI:def 3;
 end;
@@ -150,7 +150,7 @@ proof let k,m,n be Nat; assume A1: k<m;
     then A2: e in (Seg k) & e in nat_interval(m,n) by XBOOLE_0:def 3;
     then consider i being Nat such that A3: (e=i & 1<=i & i<=k) by Lm1;
     consider j being Nat such that A4: (e=j & m<=j & j<=n) by A2,Th2;
-    thus e in {} by A1,A3,A4,AXIOMS:22;
+    thus e in {} by A1,A3,A4,XREAL_1:2;
   end;
   then ((Seg k) /\ nat_interval(m,n)) c= {} by TARSKI:def 3;
   then ((Seg k) /\ nat_interval(m,n)) = {} by XBOOLE_1:3;
@@ -162,16 +162,16 @@ theorem
 proof let m,n be Nat; assume A1: n<m;
      now let e be set; assume e in nat_interval(m,n);
       then consider i being Nat such that A2: e=i & m<=i & i<=n by Th2;
-      thus contradiction by A1,A2,AXIOMS:22;
+      thus contradiction by A1,A2,XREAL_1:2;
   end;
   hence thesis by XBOOLE_0:def 1;
 end;
 
 Lm2:
-for A being set, s being Element of bool A, n being set st n in A holds
-  s \/ {n} is Element of bool A
+for A being set, s being Subset of A, n being set st n in A holds
+  s \/ {n} is Subset of A
 proof
-  let A be set, s be Element of bool A, n be set; assume A1: n in A;
+  let A be set, s be Subset of A, n be set; assume A1: n in A;
      s \/ {n} c= A proof
       let m be set; assume A2: m in (s \/ {n});
          now per cases by A2,XBOOLE_0:def 2;
@@ -189,7 +189,7 @@ definition let A be set;
  canceled 2;
 
   func TWOELEMENTSETS(A) -> set equals :Def4:
-    {z where z is finite Element of bool A : card z = 2};
+    {z where z is finite Subset of A : card z = 2};
   coherence;
 end;
 
@@ -200,7 +200,7 @@ theorem Th9: for A be set, e be set holds
      ex z being finite Subset of A st (e = z & (card z)=2))
 proof let A be set;
      TWOELEMENTSETS(A) =
-    {z where z is finite Element of bool A : (card z)=2}
+    {z where z is finite Subset of A : (card z)=2}
            by Def4;
   hence thesis;
 end;
@@ -222,12 +222,12 @@ consider x,y being set such that A2:
     hence x in A & y in A;
     thus x<>y & e={x,y} by A2;
     end;
-  assume e is finite Element of bool A &
+  assume e is finite Subset of A &
       ex x,y being set st (x in A & y in A & x<>y & e={x,y});
     then consider x,y being Element of A such that
        A3: (x in A & y in A & not x=y & e={x,y});
-    reconsider xy = {x,y} as finite Element of bool A by A3,ZFMISC_1:38;
-       ex z being finite Element of bool A st (e=z & (card z)=2)
+    reconsider xy = {x,y} as finite Subset of A by A3,ZFMISC_1:38;
+       ex z being finite Subset of A st (e=z & (card z)=2)
       proof
           take xy; thus e=xy by A3; thus (card xy)=2 by A3,CARD_2:76;
       end;
@@ -237,7 +237,7 @@ end;
 theorem Th11: for A being set holds TWOELEMENTSETS(A) c= (bool A)
 proof let A be set;
      now let x be set; assume x in TWOELEMENTSETS(A);
-    then x is finite Element of (bool A) &
+    then x is finite Subset of  A &
       ex u,v being set st (u in A & v in A & u<>v & x={u,v}) by Th10;
     hence x in (bool A);
   end;
@@ -282,12 +282,12 @@ theorem
     for t,u being set st t c= u holds TWOELEMENTSETS(t) c= TWOELEMENTSETS(u)
 proof let t,u be set; assume A1: t c= u;
     let e be set; assume A2: e in TWOELEMENTSETS(t);
-    then A3: e is finite Element of bool t &
+    then A3: e is finite Subset of t &
         ex x,y being set st (x in t & y in t & (not x=y) & e={x,y})
             by Th10;
     consider x,y being set such that
         A4: (x in t & y in t & (not x=y) & e={x,y}) by A2,Th10;
-        e is finite Element of bool u by A1,A3,XBOOLE_1:1;
+        e is finite Subset of u by A1,A3,XBOOLE_1:1;
     hence thesis by A1,A4,Th10;
 end;
 
@@ -376,7 +376,7 @@ canceled;
 theorem Th19:
   SimpleGraphStruct (#{},{}TWOELEMENTSETS{}#) in SIMPLEGRAPHS(X)
 proof
-  reconsider phiv = {} as finite Element of bool X by XBOOLE_1:2;
+  reconsider phiv = {} as finite Subset of X by XBOOLE_1:2;
   reconsider phie = {}TWOELEMENTSETS{}
      as finite Subset of TWOELEMENTSETS(phiv);
      SimpleGraphStruct (#phiv,phie#) in {SimpleGraphStruct (# v,e #)
@@ -413,11 +413,11 @@ proof let g be set;
            v is finite Subset of X,
            e is finite Subset of TWOELEMENTSETS(v) : not contradiction}
                    by Def6;
-    hence ex v being finite Element of bool X,
+    hence ex v being finite Subset of X,
              e being finite Subset of TWOELEMENTSETS(v) st
             g = SimpleGraphStruct (#v,e#);
   end;
-  given v being finite Element of bool X,
+  given v being finite Subset of X,
         e being finite Subset of TWOELEMENTSETS(v) such that
      A1: g = SimpleGraphStruct (#v,e#);
         g in {SimpleGraphStruct (# v',e' #) where
@@ -437,7 +437,7 @@ theorem Th23:
   (the SEdges of g) c= TWOELEMENTSETS (the carrier of g)
 proof let g be SimpleGraph of X;
      g is Element of SIMPLEGRAPHS(X) by Def7;
-  then consider v being finite Element of bool X,
+  then consider v being finite Subset of X,
                 e being finite Subset of TWOELEMENTSETS(v) such that
                     A1: g = SimpleGraphStruct (#v,e#) by Th21;
    thus (the carrier of g) c= X by A1;
@@ -509,7 +509,7 @@ scheme IndSimpleGraphs0 { X()-> set, P[set] } :
         P[SimpleGraphStruct (#(the carrier of g),sege#)]
 proof let g be set; assume A4: g in SIMPLEGRAPHS(X());
   then consider
-    v being finite Element of bool X(),
+    v being finite Subset of X(),
     e being finite Subset of TWOELEMENTSETS(v) such that
      A5: g = SimpleGraphStruct (#v,e#) by Th21;
   reconsider G = g as SimpleGraph of X() by A4,A5,Def7;
@@ -621,7 +621,7 @@ proof
   then reconsider g as SimpleGraph of X by Def7;
      V = (the carrier of g);
   then V is finite Subset of X by Th27;
-  then (V \/ {n}) is finite Element of (bool X)
+  then (V \/ {n}) is finite Subset of X
             by A1,Lm2,FINSET_1:14;
   hence SimpleGraphStruct (#(V \/ {n}),Evn#) in SIMPLEGRAPHS(X)
       by Th21;
@@ -1037,7 +1037,7 @@ then reconsider X as non empty set by A1;
             then consider vv being Element of X such that A8:
               v=vv & vv in vg & {v,vv} in (the SEdges of g) by A4;
                 {v} in (the SEdges of g) by A8,ENUMSET1:69;
-            then consider z being finite Element of (bool vg) such that A9:
+            then consider z being finite Subset of vg such that A9:
               ({v}=z & (card z)=2) by A1,Th9;
             thus contradiction by A9,CARD_1:79;
           end;
@@ -1381,7 +1381,7 @@ TriangleGraph)
           suppose A8: i=1; then A9: pp.i = o by SCM_1:8;
                j=2 or (2<j & j<=3) by A6,A8,REAL_1:def 5;
             then A10: j=2 or ((2+1)<=j & j<=3) by NAT_1:38;
-               now per cases by A10,AXIOMS:21;
+               now per cases by A10,XREAL_1:1;
               suppose A11: j=2;
                 hence pp.i<>pp.j by A9,SCM_1:8;
                 thus {pp.i,pp.(i+1)}<>{pp.j,pp.(j+1)} by A1,A8,A11,ZFMISC_1:10
@@ -1396,7 +1396,7 @@ TriangleGraph)
             hence pp.i <> pp.j & {pp.i,pp.(i+1)}<>{pp.j,pp.(j+1)};
           end;
           suppose A13: i=2;
-            then j=3 by A6,AXIOMS:21;
+            then j=3 by A6,XREAL_1:1;
             hence pp.i <> pp.j & {pp.i,pp.(i+1)}<>{pp.j,pp.(j+1)}
               by A1,A13,ZFMISC_1:10;
           end;

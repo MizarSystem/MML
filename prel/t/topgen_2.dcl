@@ -11,7 +11,6 @@
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_2"/>
 <ArticleID name="CANTOR_1"/>
@@ -39,7 +38,7 @@
 <ArgTypes>
 <Typ kind="G" nr="3">
 <Cluster>
-<Adjective nr="15"/>
+<Adjective nr="14"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,7 +54,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="19">
+<Adjective nr="18">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -67,9 +66,9 @@
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="61"/>
-<Adjective nr="81"/>
+<Adjective nr="14"/>
+<Adjective nr="60"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -79,10 +78,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="15"/>
-<Adjective nr="61" value="false"/>
-<Adjective nr="79" value="false"/>
-<Adjective nr="81" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="60" value="false"/>
+<Adjective nr="78" value="false"/>
+<Adjective nr="80" value="false"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -94,13 +93,13 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
+<Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -114,40 +113,40 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="207">
+<Func kind="K" nr="196">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4" value="false"/>
+<Adjective nr="13"/>
 <Adjective nr="14"/>
-<Adjective nr="15"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="61"/>
+<Adjective nr="60"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="81"/>
+<Adjective nr="80"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="81" value="false"/>
+<Adjective nr="80" value="false"/>
 </Cluster>
 <Typ kind="G" nr="3">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="4" value="false"/>
-<Adjective nr="61" value="false"/>
-<Adjective nr="79" value="false"/>
+<Adjective nr="60" value="false"/>
+<Adjective nr="78" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

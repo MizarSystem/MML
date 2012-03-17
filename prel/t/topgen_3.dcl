@@ -17,7 +17,6 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="SETFAM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TEX_2"/>
 <ArticleID name="BINOP_1"/>
@@ -52,10 +51,10 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="17" value="false"/>
+<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
 <Adjective nr="57"/>
-<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -64,9 +63,9 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="17" value="false"/>
+<Adjective nr="54"/>
 <Adjective nr="55"/>
 <Adjective nr="56"/>
-<Adjective nr="57"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -75,8 +74,8 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="17" value="false"/>
+<Adjective nr="54"/>
 <Adjective nr="55"/>
-<Adjective nr="56"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -104,7 +103,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="122">
+<Func kind="K" nr="112">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
@@ -125,13 +124,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="127">
+<Func kind="K" nr="117">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -145,14 +144,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="118">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -164,7 +163,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="35">
+<Adjective nr="34">
 <Func kind="K" nr="6">
 <LocusVar nr="1"/>
 </Func>
@@ -194,14 +193,14 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
+<Adjective nr="29"/>
 <Adjective nr="30"/>
-<Adjective nr="31"/>
 </Cluster>
 </FCluster>
 </Registrations>
