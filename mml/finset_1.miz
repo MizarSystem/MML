@@ -7,16 +7,18 @@
 environ
 
  vocabulary FUNCT_1, RELAT_1, ORDINAL2, BOOLE, ORDINAL1, ORDINAL3, SETFAM_1,
-      TARSKI, MCART_1, FINSET_1;
- notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3;
- constructors ENUMSET1, MCART_1, ORDINAL3, SETFAM_1, XBOOLE_0;
+      TARSKI, MCART_1, FINSET_1, FUNCT_3;
+ notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, RELAT_1, FUNCT_1,
+      MCART_1, SETFAM_1, ORDINAL1, ORDINAL2, ORDINAL3, SUBSET_1, DOMAIN_1,
+      FUNCT_2, FUNCT_3;
+ constructors ENUMSET1, MCART_1, ORDINAL3, SETFAM_1, XBOOLE_0, DOMAIN_1,
+      FUNCT_3;
  clusters FUNCT_1, ORDINAL2, RELAT_1, ARYTM_3, ORDINAL1, SUBSET_1, ZFMISC_1,
-      XBOOLE_0;
+      XBOOLE_0, RELSET_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, XBOOLE_0;
  theorems FUNCT_1, ENUMSET1, MCART_1, ZFMISC_1, TARSKI, RELAT_1, ORDINAL3,
-      ORDINAL2, ORDINAL1, SETFAM_1, XBOOLE_0, XBOOLE_1;
+      ORDINAL2, ORDINAL1, SETFAM_1, XBOOLE_0, XBOOLE_1, FUNCT_3;
  schemes FUNCT_1, PARTFUN1, ORDINAL2, XBOOLE_0;
 
 begin
@@ -1014,7 +1016,7 @@ theorem
     end;
  end;
 
-theorem
+theorem Th26:
     dom f is finite implies rng f is finite
   proof
    assume dom f is finite;
@@ -1042,3 +1044,31 @@ registration let X, Y be finite set;
   cluster X \+\ Y -> finite;
   coherence by Th28;
 end;
+
+registration let X be non empty set;
+ cluster finite non empty Subset of X;
+ existence
+  proof consider x being Element of X;
+   take {x};
+   thus thesis;
+  end;
+end;
+
+begin :: Addenda
+:: from AMI_1
+
+theorem
+ for f being Function holds dom f is finite iff f is finite
+ proof let f be Function;
+  thus dom f is finite implies f is finite
+   proof assume
+A1:    dom f is finite;
+     then rng f is finite by Th26;
+     then A2:    [:dom f, rng f:] is finite by A1,Th19;
+        f c= [:dom f, rng f:] by RELAT_1:21;
+    hence f is finite by A2,Th13;
+   end;
+   pr1(dom f,rng f).:f = dom f by FUNCT_3:100;
+  hence thesis by Th17;
+ end;
+

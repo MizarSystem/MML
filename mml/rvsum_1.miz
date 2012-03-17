@@ -11,17 +11,17 @@ environ
       BOOLE;
  notation TARSKI, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, XREAL_0, REAL_1,
       NAT_1, SQUARE_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1,
-      VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP,
-      SETWOP_2;
- constructors REAL_1, NAT_1, SQUARE_1, BINOP_1, VECTSP_1, SETWISEO, FINSEQOP,
-      FINSOP_1, FINSEQ_4, SEQ_2, MEMBERED, PARTFUN1, XBOOLE_0;
+      SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQ_4, SEQ_1, FINSEQOP,
+      SETWOP_2, BINOP_2;
+ constructors REAL_1, NAT_1, SQUARE_1, BINOP_1, SETWISEO, FINSEQOP,
+      FINSOP_1, FINSEQ_4, SEQ_2, MEMBERED, PARTFUN1, XBOOLE_0, BINOP_2;
  clusters RELSET_1, FINSEQ_2, NAT_1, MEMBERED, ZFMISC_1, FUNCT_1, PARTFUN1,
       FUNCT_2, XBOOLE_0, ORDINAL2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions BINOP_1, SETWISEO, FINSEQOP;
  theorems REAL_1, SQUARE_1, FUNCT_1, FUNCT_2, BINOP_1, FINSEQ_1, FUNCOP_1,
-      FINSEQ_2, VECTSP_1, FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0,
-      ZFMISC_1, XCMPLX_0, XCMPLX_1;
+      FINSEQ_2, FINSEQOP, SETWOP_2, RELAT_1, FINSOP_1, XREAL_0,
+      ZFMISC_1, XCMPLX_0, XCMPLX_1, BINOP_2;
  schemes NAT_1, FUNCT_2;
 
 begin
@@ -40,10 +40,10 @@ theorem Th3:
  proof
   thus for x holds addreal.(0,x) = x
    proof let x;
-    thus addreal.(0,x) = 0 + x by VECTSP_1:def 4 .= x;
+    thus addreal.(0,x) = 0 + x by BINOP_2:def 9 .= x;
    end;
   let x;
-  thus addreal.(x,0) = x + 0 by VECTSP_1:def 4 .= x;
+  thus addreal.(x,0) = x + 0 by BINOP_2:def 9 .= x;
  end;
 
 theorem Th4:
@@ -58,37 +58,43 @@ theorem Th5:
 theorem Th6:
    addreal is commutative
  proof let x1,x2;
-  thus addreal.(x1,x2) = x2 + x1 by VECTSP_1:def 4
-                      .= addreal.(x2,x1) by VECTSP_1:def 4;
+  thus addreal.(x1,x2) = x2 + x1 by BINOP_2:def 9
+                      .= addreal.(x2,x1) by BINOP_2:def 9;
  end;
 
 theorem Th7:
    addreal is associative
  proof let x1,x2,x3;
   thus addreal.(x1,addreal.(x2,x3))
-      = addreal.(x1,x2+x3) by VECTSP_1:def 4
-     .= x1+(x2+x3) by VECTSP_1:def 4
+      = addreal.(x1,x2+x3) by BINOP_2:def 9
+     .= x1+(x2+x3) by BINOP_2:def 9
      .= x1+x2+x3
-     .= (addreal.(x1,x2))+x3 by VECTSP_1:def 4
-     .= addreal.(addreal.(x1,x2),x3) by VECTSP_1:def 4;
+     .= (addreal.(x1,x2))+x3 by BINOP_2:def 9
+     .= addreal.(addreal.(x1,x2),x3) by BINOP_2:def 9;
  end;
 
 definition
- func diffreal -> BinOp of REAL equals
+ redefine func diffreal equals
 :Def1:  addreal*(id REAL,compreal);
+  compatibility
+   proof let b be BinOp of REAL;
+     now let r1,r2 be Element of REAL;
+      thus diffreal.(r1,r2) = r1 - r2 by BINOP_2:def 10
+          .= r1 + - r2
+          .= addreal.(r1,- r2) by BINOP_2:def 9
+          .= addreal.(r1,compreal.r2) by BINOP_2:def 7
+          .= (addreal*(id REAL,compreal)).(r1,r2) by FINSEQOP:87;
+     end;
+     then diffreal = addreal*(id REAL,compreal) by BINOP_1:2;
+    hence thesis;
+   end;
   correctness;
 end;
 
 canceled;
 
 theorem Th9:
-   diffreal.(r1,r2) = r1 - r2
- proof
-  thus diffreal.(r1,r2) = addreal.(r1,compreal.r2) by Def1,FINSEQOP:87
-                       .= addreal.(r1,- r2) by VECTSP_1:def 5
-                       .= r1 + - r2 by VECTSP_1:def 4
-                       .= r1 - r2;
- end;
+   diffreal.(r1,r2) = r1 - r2 by BINOP_2:def 10;
 
 definition
  func sqrreal -> UnOp of REAL means
@@ -115,19 +121,19 @@ canceled;
 theorem Th11:
    multreal is commutative
  proof let x1,x2;
-  thus multreal.(x1,x2) = x2 * x1 by VECTSP_1:def 14
-                       .= multreal.(x2,x1) by VECTSP_1:def 14;
+  thus multreal.(x1,x2) = x2 * x1 by BINOP_2:def 11
+                       .= multreal.(x2,x1) by BINOP_2:def 11;
  end;
 
 theorem Th12:
    multreal is associative
  proof let x1,x2,x3;
   thus multreal.(x1,multreal.(x2,x3))
-      = multreal.(x1,x2*x3) by VECTSP_1:def 14
-     .= x1*(x2*x3) by VECTSP_1:def 14
+      = multreal.(x1,x2*x3) by BINOP_2:def 11
+     .= x1*(x2*x3) by BINOP_2:def 11
      .= x1*x2*x3
-     .= (multreal.(x1,x2))*x3 by VECTSP_1:def 14
-     .= multreal.(multreal.(x1,x2),x3) by VECTSP_1:def 14;
+     .= (multreal.(x1,x2))*x3 by BINOP_2:def 11
+     .= multreal.(multreal.(x1,x2),x3) by BINOP_2:def 11;
  end;
 
 theorem Th13:
@@ -135,10 +141,10 @@ theorem Th13:
  proof
   thus for x holds multreal.(1,x) = x
    proof let x;
-    thus multreal.(1,x) = 1 * x by VECTSP_1:def 14 .= x;
+    thus multreal.(1,x) = 1 * x by BINOP_2:def 11 .= x;
    end;
   let x;
-  thus multreal.(x,1) = x * 1 by VECTSP_1:def 14 .= x;
+  thus multreal.(x,1) = x * 1 by BINOP_2:def 11 .= x;
  end;
 
 theorem Th14:
@@ -153,19 +159,19 @@ theorem Th16:
  proof
      now let x1,x2,x3;
    thus multreal.(x1,addreal.(x2,x3))
-      = multreal.(x1,x2+x3) by VECTSP_1:def 4
-     .= x1*(x2+x3) by VECTSP_1:def 14
+      = multreal.(x1,x2+x3) by BINOP_2:def 9
+     .= x1*(x2+x3) by BINOP_2:def 11
      .= x1*x2+x1*x3
-     .= addreal.(x1*x2,x1*x3) by VECTSP_1:def 4
-     .= addreal.(multreal.(x1,x2),x1*x3) by VECTSP_1:def 14
-     .= addreal.(multreal.(x1,x2),multreal.(x1,x3)) by VECTSP_1:def 14;
+     .= addreal.(x1*x2,x1*x3) by BINOP_2:def 9
+     .= addreal.(multreal.(x1,x2),x1*x3) by BINOP_2:def 11
+     .= addreal.(multreal.(x1,x2),multreal.(x1,x3)) by BINOP_2:def 11;
    thus multreal.(addreal.(x1,x2),x3)
-      = multreal.(x1+x2,x3) by VECTSP_1:def 4
-     .= (x1+x2)*x3 by VECTSP_1:def 14
+      = multreal.(x1+x2,x3) by BINOP_2:def 9
+     .= (x1+x2)*x3 by BINOP_2:def 11
      .= x1*x3+x2*x3
-     .= addreal.(x1*x3,x2*x3) by VECTSP_1:def 4
-     .= addreal.(multreal.(x1,x3),x2*x3) by VECTSP_1:def 14
-     .= addreal.(multreal.(x1,x3),multreal.(x2,x3)) by VECTSP_1:def 14;
+     .= addreal.(x1*x3,x2*x3) by BINOP_2:def 9
+     .= addreal.(multreal.(x1,x3),x2*x3) by BINOP_2:def 11
+     .= addreal.(multreal.(x1,x3),multreal.(x2,x3)) by BINOP_2:def 11;
   end;
   hence thesis by BINOP_1:23;
  end;
@@ -174,10 +180,10 @@ theorem Th17:
    sqrreal is_distributive_wrt multreal
  proof let x1,x2;
    thus sqrreal.(multreal.(x1,x2))
-      = sqrreal.(x1*x2) by VECTSP_1:def 14
+      = sqrreal.(x1*x2) by BINOP_2:def 11
      .= (x1*x2)^2 by Def2
      .= x1^2*x2^2 by SQUARE_1:68
-     .= multreal.(x1^2,x2^2) by VECTSP_1:def 14
+     .= multreal.(x1^2,x2^2) by BINOP_2:def 11
      .= multreal.(sqrreal.x1,x2^2) by Def2
      .= multreal.(sqrreal.x1,sqrreal.x2) by Def2;
  end;
@@ -198,7 +204,7 @@ Lm1:
  proof
   thus (multreal[;](r,id REAL)).x = multreal.(r,(id REAL).x) by FUNCOP_1:66
                                .= multreal.(r,x) by FUNCT_1:35
-                               .= r*x by VECTSP_1:def 14;
+                               .= r*x by BINOP_2:def 11;
  end;
 
 canceled;
@@ -218,11 +224,11 @@ theorem Th20:
 theorem Th21:
    compreal is_an_inverseOp_wrt addreal
  proof let x;
-   thus addreal.(x,compreal.x) = x+compreal.x by VECTSP_1:def 4
-                              .= x+-x by VECTSP_1:def 5
+   thus addreal.(x,compreal.x) = x+compreal.x by BINOP_2:def 9
+                              .= x+-x by BINOP_2:def 7
                               .= the_unity_wrt addreal by Th3,BINOP_1:def 8;
-   thus addreal.(compreal.x,x) = compreal.x+x by VECTSP_1:def 4
-                              .= -x+x by VECTSP_1:def 5
+   thus addreal.(compreal.x,x) = compreal.x+x by BINOP_2:def 9
+                              .= -x+x by BINOP_2:def 7
                               .= the_unity_wrt addreal by Th3,BINOP_1:def 8;
  end;
 
@@ -259,8 +265,8 @@ A4:  rng F2 c= REAL by FINSEQ_1:def 4;
 A7:    z in dom(addreal.:(F2,F1));
        set F1z = F1.z, F2z =F2.z;
       thus F.z = addreal.(F1.z,F2.z) by A1,A6,A7,FUNCOP_1:28
-           .= F1z + F2z by VECTSP_1:def 4
-           .= addreal.(F2.z,F1.z) by VECTSP_1:def 4;
+           .= F1z + F2z by BINOP_2:def 9
+           .= addreal.(F2.z,F1.z) by BINOP_2:def 9;
      end;
    hence F = addreal.:(F2,F1) by A1,A6,FUNCOP_1:27;
   end;
@@ -275,7 +281,7 @@ A1: i in dom (F1+F2);
   set r1 = F1.i, r2 = F2.i;
      F1 + F2 = addreal.:(F1,F2) & i in dom(F1+F2) by A1,Def4;
   then (F1 + F2).i = addreal.(r1,r2) by FUNCOP_1:28;
-  hence thesis by VECTSP_1:def 4;
+  hence thesis by BINOP_2:def 9;
  end;
 
 definition let i,R1,R2;
@@ -314,7 +320,7 @@ theorem
  proof
    thus <*r1*> + <*r2*> = addreal.:(<*r1*>,<*r2*>) by Def4
                        .= <*addreal.(r1,r2)*> by FINSEQ_2:88
-                       .= <*r1+r2*> by VECTSP_1:def 4;
+                       .= <*r1+r2*> by BINOP_2:def 9;
  end;
 
 theorem
@@ -322,7 +328,7 @@ theorem
  proof
    thus (i|->r1) + (i|->r2) = addreal.:(i|->r1,i|->r2) by Def4
                            .= i|->(addreal.(r1,r2)) by FINSEQOP:18
-                           .= i|->(r1+r2) by VECTSP_1:def 4;
+                           .= i|->(r1+r2) by BINOP_2:def 9;
  end;
 
 canceled;
@@ -363,9 +369,9 @@ A4:  rng f c= dom compreal by A2,FUNCT_2:def 1;
 A7:    k in dom F;
       reconsider fk = f.k, Fk = F.k as Element of REAL;
       thus F.k = --Fk
-          .= -compreal.(F.k) by VECTSP_1:def 5
+          .= -compreal.(F.k) by BINOP_2:def 7
           .= -fk by A1,A7,FUNCT_1:23
-          .= compreal.(f.k) by VECTSP_1:def 5
+          .= compreal.(f.k) by BINOP_2:def 7
           .= (compreal*f).k by A5,A7,FUNCT_1:23;
      end;
    hence F = compreal*f by A6,FINSEQ_1:17;
@@ -395,7 +401,7 @@ A3:  i in dom -F;
   set r = F.i;
       -F = compreal*F by Def5;
   then (-F).i = compreal.r by A3,FUNCT_1:22;
-  hence thesis by VECTSP_1:def 5;
+  hence thesis by BINOP_2:def 7;
  end;
  end;
 
@@ -419,7 +425,7 @@ theorem
  proof
    thus -<*r*> = compreal*<*r*> by Def5
               .= <*compreal.r*> by FINSEQ_2:39
-              .= <*-r*> by VECTSP_1:def 5;
+              .= <*-r*> by BINOP_2:def 7;
  end;
 
 theorem Th39:
@@ -427,7 +433,7 @@ theorem Th39:
  proof
    thus -(i|->r) = compreal*(i|->r) by Def5
                 .= i|->(compreal.r) by FINSEQOP:17
-                .= i|->-r by VECTSP_1:def 5;
+                .= i|->-r by BINOP_2:def 7;
  end;
 
 theorem Th40:
@@ -673,7 +679,7 @@ then A5:  r' in dom(multreal[;](r,id REAL)) by FUNCT_1:21;
   thus (r*F).i = (multreal[;](r,id REAL)).r' by A4,FUNCT_1:22
               .= multreal.(r,(id REAL).r') by A5,FUNCOP_1:42
               .= multreal.(r,r') by FUNCT_1:35
-              .= r*(F.i) by VECTSP_1:def 14;
+              .= r*(F.i) by BINOP_2:def 11;
  end;
  end;
 
@@ -717,7 +723,7 @@ theorem Th71:
  proof
   thus (r1*r2)*R
       = (multreal[;](r1*r2,id REAL))*R by Lm2
-     .= multreal[;](multreal.(r1,r2),id REAL)*R by VECTSP_1:def 14
+     .= multreal[;](multreal.(r1,r2),id REAL)*R by BINOP_2:def 11
      .= multreal[;](r1,multreal[;](r2,id REAL))*R by Th12,FUNCOP_1:77
      .= (multreal[;](r1,id REAL)*(multreal [;] (r2,id REAL)))*R
      by FUNCOP_1:69
@@ -731,7 +737,7 @@ theorem
  proof
   thus (r1 + r2)*R
      = (multreal[;](r1 + r2,id REAL))*R by Lm2
-    .= multreal[;](addreal.(r1,r2),id REAL)*R by VECTSP_1:def 4
+    .= multreal[;](addreal.(r1,r2),id REAL)*R by BINOP_2:def 9
     .= addreal.:(multreal[;](r1,id REAL),multreal[;](r2,id REAL))*R
         by Th16,FINSEQOP:36
     .= addreal.:(multreal[;](r1,id REAL)*R,multreal[;]
@@ -776,7 +782,7 @@ A1:  rng R c= REAL by FINSEQ_1:def 4;
 theorem Th76:
    (-1)*R = -R
  proof
-A1:   compreal.1 = -1 by VECTSP_1:def 5;
+A1:   compreal.1 = -1 by BINOP_2:def 7;
    thus (-1)*R
       = multreal[;](-1,id REAL)*R by Lm2
      .= compreal*R by A1,Th5,Th7,Th14,Th15,Th16,Th22,Th23,FINSEQOP:72
@@ -901,8 +907,8 @@ A4:  rng F2 c= REAL by FINSEQ_1:def 4;
 A7:    z in dom(multreal.:(F2,F1));
        set F1z = F1.z, F2z =F2.z;
       thus F.z = multreal.(F1.z,F2.z) by A1,A6,A7,FUNCOP_1:28
-           .= F1z * F2z by VECTSP_1:def 14
-           .= multreal.(F2.z,F1.z) by VECTSP_1:def 14;
+           .= F1z * F2z by BINOP_2:def 11
+           .= multreal.(F2.z,F1.z) by BINOP_2:def 11;
      end;
    hence F = multreal.:(F2,F1) by A1,A6,FUNCOP_1:27;
   end;
@@ -917,7 +923,7 @@ A1: i in dom mlt(F1,F2);
   set r1 = F1.i, r2 = F2.i;
      mlt(F1,F2) = multreal.:(F1,F2) & i in dom mlt(F1,F2) by A1,Def9;
   then mlt(F1,F2).i = multreal.(r1,r2) by FUNCOP_1:28;
-  hence thesis by VECTSP_1:def 14;
+  hence thesis by BINOP_2:def 11;
  end;
 
 definition let i,R1,R2;
@@ -956,7 +962,7 @@ theorem
  proof
   thus mlt(<*r1*>,<*r2*>) = multreal.:(<*r1*>,<*r2*>) by Def9
                          .= <*multreal.(r1,r2)*> by FINSEQ_2:88
-                         .= <*r1*r2*> by VECTSP_1:def 14;
+                         .= <*r1*r2*> by BINOP_2:def 11;
  end;
 
 canceled;
@@ -1019,7 +1025,7 @@ A7:    j in dom(multreal.:(R,R)) by A3,A5,FINSEQ_1:def 3;
     thus (sqrreal*R).j = sqrreal.r by A6,FUNCT_1:22
                       .= r^2 by Def2
                       .= r*r by SQUARE_1:def 3
-                      .= multreal.(r,r) by VECTSP_1:def 14
+                      .= multreal.(r,r) by BINOP_2:def 11
                       .= (multreal.:(R,R)).j by A7,FUNCOP_1:28;
    end;
   thus sqr(R) = sqrreal*R by Def8
@@ -1101,7 +1107,7 @@ theorem Th104:
   thus Sum(F^<*r*>) = addreal $$ (F^<*r*>) by Def10
                  .= addreal.(addreal $$ F,r) by Th5,FINSOP_1:5
                  .= addreal.(Sum F,r) by Def10
-                 .= Sum F + r by VECTSP_1:def 4;
+                 .= Sum F + r by BINOP_2:def 9;
  end;
 
 theorem Th105:
@@ -1112,7 +1118,7 @@ theorem Th105:
     .= addreal.(addreal $$ F1,addreal $$ F2) by Th5,Th7,FINSOP_1:6
     .= addreal.(Sum F1,addreal $$ F2) by Def10
     .= addreal.(Sum F1,Sum F2) by Def10
-    .= Sum F1 + Sum F2 by VECTSP_1:def 4;
+    .= Sum F1 + Sum F2 by BINOP_2:def 9;
  end;
 
 theorem
@@ -1334,7 +1340,7 @@ theorem
             .= addreal $$(compreal*F) by Def5
             .= compreal.(addreal $$ F) by Th5,Th6,Th7,Th22,Th23,SETWOP_2:42
             .= compreal.(Sum F) by Def10
-            .= -(Sum F) by VECTSP_1:def 5;
+            .= -(Sum F) by BINOP_2:def 7;
  end;
 
 theorem Th119:
@@ -1346,7 +1352,7 @@ theorem Th119:
     .= addreal.(addreal$$R1,addreal$$R2) by Th5,Th6,Th7,SETWOP_2:46
     .= addreal.(Sum R1,addreal$$R2) by Def10
     .= addreal.(Sum R1,Sum R2) by Def10
-    .= Sum R1 + Sum R2 by VECTSP_1:def 4;
+    .= Sum R1 + Sum R2 by BINOP_2:def 9;
  end;
 
 theorem Th120:
@@ -1426,7 +1432,7 @@ A7:   (Sum sqr R1' + x1^2)*(Sum sqr R2' + x2^2)
        mlt(R1'^<*x1*>,R2'^<*x2*>)
       = multreal.:(R1'^<*x1*>,R2'^<*x2*>) by Def9
      .= (multreal.:(R1',R2'))^<*multreal.(x1,x2)*> by FINSEQOP:11
-     .= (multreal.:(R1',R2'))^<*x1*x2*> by VECTSP_1:def 14
+     .= (multreal.:(R1',R2'))^<*x1*x2*> by BINOP_2:def 11
      .= (mlt(R1',R2'))^<*x1*x2*> by Def9;
 then A8:  Sum mlt(R1'^<*x1*>,R2'^<*x2*>) = Sum mlt(R1',R2') + x1*x2 by Th104;
 A9:   2*(x1*x2)*Sum mlt(R1',R2')
@@ -1504,7 +1510,7 @@ theorem Th126:
   thus Product (F^<*r*>) = multreal $$ (F^<*r*>) by Def11
                  .= multreal.(multreal $$ F,r) by Th15,FINSOP_1:5
                  .= multreal.(Product F,r) by Def11
-                 .= Product F * r by VECTSP_1:def 14;
+                 .= Product F * r by BINOP_2:def 11;
  end;
 
 theorem Th127:
@@ -1515,7 +1521,7 @@ theorem Th127:
     .= multreal.(multreal $$ F1,multreal $$ F2) by Th12,Th15,FINSOP_1:6
     .= multreal.(Product F1,multreal $$ F2) by Def11
     .= multreal.(Product F1,Product F2) by Def11
-    .= Product F1 * Product F2 by VECTSP_1:def 14;
+    .= Product F1 * Product F2 by BINOP_2:def 11;
  end;
 
 theorem
@@ -1615,7 +1621,7 @@ theorem
       = multreal$$((i+j)|->r) by Def11
      .= multreal.(multreal$$(i|->r),multreal$$(j|->r))
        by Th12,Th15,SETWOP_2:37
-     .= (multreal$$(i|->r))*(multreal$$(j|->r)) by VECTSP_1:def 14
+     .= (multreal$$(i|->r))*(multreal$$(j|->r)) by BINOP_2:def 11
      .= (multreal$$(i|->r))*(Product (j|->r)) by Def11
      .= (Product (i|->r))*(Product (j|->r)) by Def11;
  end;
@@ -1635,10 +1641,10 @@ theorem
  proof
    thus Product (i|->(r1*r2))
       = multreal$$(i|->(r1*r2)) by Def11
-     .= multreal$$(i|->multreal.(r1,r2)) by VECTSP_1:def 14
+     .= multreal$$(i|->multreal.(r1,r2)) by BINOP_2:def 11
      .= multreal.(multreal$$(i|->r1),multreal$$(i|->r2))
         by Th11,Th12,Th15,SETWOP_2:47
-     .= (multreal$$(i|->r1))*(multreal$$(i|->r2)) by VECTSP_1:def 14
+     .= (multreal$$(i|->r1))*(multreal$$(i|->r2)) by BINOP_2:def 11
      .= (multreal$$(i|->r1))*(Product (i|->r2)) by Def11
      .= (Product (i|->r1))*(Product (i|->r2)) by Def11;
  end;
@@ -1652,7 +1658,7 @@ theorem Th137:
     .= multreal.(multreal$$R1,multreal$$R2) by Th11,Th12,Th15,SETWOP_2:46
     .= multreal.(Product R1,multreal$$R2) by Def11
     .= multreal.(Product R1,Product R2) by Def11
-    .= Product R1 * Product R2 by VECTSP_1:def 14;
+    .= Product R1 * Product R2 by BINOP_2:def 11;
  end;
 
 theorem

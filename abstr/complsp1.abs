@@ -12,12 +12,12 @@ environ
       ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, NAT_1, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, PARTFUN1,
-      FUNCT_2, BINOP_1, STRUCT_0, PRE_TOPC, COMPTS_1, FINSEQ_1, FUNCOP_1,
-      SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4;
+      FUNCT_2, BINOP_1, BINOP_2, STRUCT_0, PRE_TOPC, COMPTS_1, FINSEQ_1,
+      FUNCOP_1, SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4;
  constructors REAL_1, SQUARE_1, COMPLEX1, BINOP_1, COMPTS_1, SETWISEO,
-      FINSEQOP, RVSUM_1, SEQ_4, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+      FINSEQOP, RVSUM_1, SEQ_4, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0, BINOP_2;
  clusters SUBSET_1, PRE_TOPC, RELSET_1, FINSEQ_2, XREAL_0, COMPLEX1, ARYTM_3,
-      SEQ_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1, FUNCT_2, XBOOLE_0;
+      SEQ_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -25,28 +25,6 @@ begin
 
 reserve i,j,k,n for Nat, r,r',r1,r2 for Real;
 reserve c,c',c1,c2,c3 for Element of COMPLEX;
-
-scheme :: COMPLSP1:sch 1
- FuncDefUniq{C, D()->non empty set,
-                   F((Element of C()))->set}:
- for f1,f2 being Function of C(),D() st
-   (for x being Element of C() holds f1.x = F(x)) &
-   (for x being Element of C() holds f2.x = F(x))
-  holds f1 = f2;
-
-scheme :: COMPLSP1:sch 2
- BinOpDefuniq{A()->non empty set,
-                   O((Element of A()),Element of A())->set}:
-  for o1,o2 being BinOp of A() st
-    (for a,b being Element of A() holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A() holds o2.(a,b) = O(a,b))
-  holds o1 = o2;
-
-definition
- func addcomplex -> BinOp of COMPLEX means
-:: COMPLSP1:def 1
- for c1,c2 holds it.(c1,c2) = c1 + c2;
-end;
 
 theorem :: COMPLSP1:1
    addcomplex is commutative;
@@ -63,12 +41,6 @@ theorem :: COMPLSP1:4
 theorem :: COMPLSP1:5
    addcomplex has_a_unity;
 
-definition
- func compcomplex -> UnOp of COMPLEX means
-:: COMPLSP1:def 2
- for c holds it.c = -c;
-end;
-
 theorem :: COMPLSP1:6
    compcomplex is_an_inverseOp_wrt addcomplex;
 
@@ -79,7 +51,8 @@ theorem :: COMPLSP1:8
  the_inverseOp_wrt addcomplex = compcomplex;
 
 definition
- func diffcomplex -> BinOp of COMPLEX equals
+ canceled 2;
+ redefine func diffcomplex equals
 :: COMPLSP1:def 3
   addcomplex*(id COMPLEX,compcomplex);
 end;
@@ -87,14 +60,8 @@ end;
 theorem :: COMPLSP1:9
  diffcomplex.(c1,c2) = c1 - c2;
 
-definition
- func multcomplex -> BinOp of COMPLEX means
-:: COMPLSP1:def 4
- for c1,c2 holds it.(c1,c2) = c1 * c2;
-end;
-
 theorem :: COMPLSP1:10
-       multcomplex is commutative;
+   multcomplex is commutative;
 
 theorem :: COMPLSP1:11
    multcomplex is associative;
@@ -112,6 +79,7 @@ theorem :: COMPLSP1:15
    multcomplex is_distributive_wrt addcomplex;
 
 definition let c;
+ canceled;
  func c multcomplex -> UnOp of COMPLEX equals
 :: COMPLSP1:def 5
   multcomplex[;](c,id COMPLEX);
@@ -424,11 +392,11 @@ theorem :: COMPLSP1:81
 theorem :: COMPLSP1:82
  Ball(z1,r1) is open;
 
-scheme :: COMPLSP1:sch 3
+scheme :: COMPLSP1:sch 1
  SubsetFD { A, D() -> non empty set, F(set) -> Element of D(), P[set] }:
  { F(x) where x is Element of A(): P[x]} is Subset of D();
 
-scheme :: COMPLSP1:sch 4
+scheme :: COMPLSP1:sch 2
  SubsetFD2 { A, B, D() -> non empty set, F(set,set) -> Element of D(),
  P[set,set] }:
  { F(x,y) where x is Element of A(), y is Element of B():

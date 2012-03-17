@@ -23,6 +23,6 @@ FINSEQ_2
 NEWTON
 SIN_COS
 #
-fV2 ;V4 ;V5 ;V36 ;;;K168 ;
-fW1 ;V31 ;V32 ;;;K95 N0 ;
+fV2 ;V4 ;V5 ;V36 ;;;K170 ;
+fW1 ;V31 ;V32 ;;;K96 N0 ;
 !

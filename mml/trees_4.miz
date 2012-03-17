@@ -21,7 +21,7 @@ environ
  theorems TARSKI, AXIOMS, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
       FUNCOP_1, MODAL_1, FUNCT_6, FINSEQ_2, FINSEQ_3, TREES_1, TREES_2,
       TREES_3, REAL_1, RELAT_1, XBOOLE_0, XBOOLE_1;
- schemes FUNCT_1, ZFREFLE1, MATRIX_2, XBOOLE_0;
+ schemes FUNCT_1, ZFREFLE1, FINSEQ_1, XBOOLE_0;
 
 begin :: Joining of decorated trees
 
@@ -55,7 +55,7 @@ theorem Th1:
   proof let i,j be Nat; assume
 A1:  elementary_tree i c= elementary_tree j & i > j;
     then <*j*> in elementary_tree i by TREES_1:55;
-    then <*j*> in elementary_tree j & <*j*> <> {} by A1,TREES_1:4;
+    then <*j*> in elementary_tree j & <*j*> <> {} by A1;
    then consider n such that
 A2:  n < j & <*j*> = <*n*> by TREES_1:57;
        <*j*>.1 = j & <*n*>.1 = n by FINSEQ_1:57;
@@ -154,13 +154,13 @@ A4:     z = {} & y2 = x or ex n st z = <*n*> & y2 = p.(n+1);
            now given n such that
 A5:       z = <*n*> & n < len p;
          consider n1 being Nat such that
-A6:       z = <*n1*> & y1 = p.(n1+1) by A3,A5,TREES_1:4;
+A6:       z = <*n1*> & y1 = p.(n1+1) by A3,A5;
          consider n2 being Nat such that
-A7:       z = <*n2*> & y2 = p.(n2+1) by A4,A5,TREES_1:4;
+A7:       z = <*n2*> & y2 = p.(n2+1) by A4,A5;
              <*n1*>.1 = n1 & <*n2*>.1 = n2 by FINSEQ_1:57;
          hence thesis by A6,A7;
         end;
-       hence thesis by A2,A3,A4,TREES_1:4;
+       hence thesis by A2,A3,A4;
       end;
 A8:  for z st z in elementary_tree len p ex y st X[z,y]
       proof let z; assume
@@ -181,10 +181,10 @@ A11:   dom f = elementary_tree len p & for y st y in
     reconsider f as DecoratedTree by A11,TREES_2:def 8;
     take f; thus dom f = elementary_tree len p by A11;
         {} in dom f & for n st {} = <*n*> holds f.{} <> p.(n+1)
-      by TREES_1:4,47;
+      by TREES_1:47;
     hence f.{} = x by A11;
     let n; assume n < len p;
-     then <*n*> in dom f & <*n*> <> {} by A11,TREES_1:4,55;
+     then <*n*> in dom f & <*n*> <> {} by A11,TREES_1:55;
     then consider k being Nat such that
 A12:   <*n*> = <*k*> & f.<*n*> = p.(k+1) by A11;
         k = <*n*>.1 by A12,FINSEQ_1:57 .= n by FINSEQ_1:57;
@@ -272,13 +272,13 @@ A3:  for y st y in tree(q) ex z st X[y,z]
       proof let y; assume
            y in tree(q); then reconsider s = y as Element of tree(q);
            now assume
-A4:       y <> {};
+        y <> {};
          then consider w being (FinSequence of NAT), n such that
 A5:       s = <*n*>^w by MODAL_1:4;
          reconsider w as FinSequence;
          take z = p..(n+1,w);
          thus y = {} & z = x or y <> {} &
-           ex n,r st y = <*n*>^r & z = p..(n+1,r) by A4,A5;
+           ex n,r st y = <*n*>^r & z = p..(n+1,r) by A5;
         end;
        hence thesis;
       end;
@@ -297,14 +297,13 @@ then A9:  n+1 in dom p by Lm2;
     then reconsider t = p.(n+1) as DecoratedTree by A1,TREES_3:26;
 A10:  {} in dom t & dom t = q.(n+1) & <*n*>^{} = <*n*>
       by A9,FINSEQ_1:47,FUNCT_6:31,TREES_1:47;
-A11:  <*n*> <> {} by TREES_1:4;
 A12:   dom t = q.(n+1) by A9,FUNCT_6:31 .= (dom T)|<*n*> by A6,A7,A8,TREES_3:52
 ;
 A13:  (dom T)|<*n*> = dom (T|<*n*>) by TREES_2:def 11;
         now let r be FinSequence of NAT; assume
 A14:    r in dom t;
        then <*n*>^r in dom T & <*n*>^r <> {}
-        by A6,A7,A8,A10,A11,FINSEQ_1:48,TREES_3:def 15;
+        by A6,A7,A8,A10,TREES_3:def 15;
       then consider m being Nat, s being FinSequence such that
 A15:    <*n*>^r = <*m*>^s & T.(<*n*>^r) = p..(m+1,s) by A6;
           (<*n*>^r).1 = n & (<*m*>^s).1 = m by FINSEQ_1:58;
@@ -555,8 +554,7 @@ then A3:  dom T = elementary_tree 1 with-replacement (<*0*>, elementary_tree 0)
          z in elementary_tree 1;
 then A4:    (z = {} or z = <*0*>) & {} in elementary_tree 1 &
       <*0*> in elementary_tree 1 by MODAL_1:9,TARSKI:def 2;
-         {} <> <*0*> by TREES_1:4;
-then A5:    not <*0*> is_a_prefix_of {} & len <*y*> = 1 & 0 < 1 & <*y*>.1 = y
+A5:    not <*0*> is_a_prefix_of {} & len <*y*> = 1 & 0 < 1 & <*y*>.1 = y
        by FINSEQ_1:57,XBOOLE_1:3;
       then (x-flat_tree <*y*>).{} = x & T.{} = ((elementary_tree 1) --> x).{}
 &
@@ -589,8 +587,7 @@ A4:  {} in dom T & <*0*>^{} = <*0*> & not <*0*> is_a_proper_prefix_of {} &
        by TREES_1:def 12;
 then A5:   q = {} or q = t2 & t2 = t2^t1 or
       ex v st v in dom T & q = <*0*>^v by FINSEQ_1:47,MODAL_1:9,TARSKI:def 2;
-         t1 <> t2 by TREES_1:4;
-      then not t2 is_a_prefix_of t1 by XBOOLE_1:3;
+      not t2 is_a_prefix_of t1 by XBOOLE_1:3;
 then A6:   D.{} = ((elementary_tree 1)-->x).t1 by A2,TREES_3:48
            .= x by FUNCOP_1:13 .= (x-tree <*T*>).{} by Def4;
          now given r being FinSequence of NAT such that
@@ -1190,7 +1187,7 @@ A2: for i st i in Seg len p ex x being Element of Trees D1 st X[i,x]
     end;
    consider p1 being FinSequence of Trees D1 such that
 A3:  dom p1 = Seg len p & for i st i in Seg len p holds X[i,p1.i]
-     from MATRIX_2:sch 1(A2);
+     from FINSEQ_1:sch 5(A2);
    take p1; thus
 A4:  dom p1 = dom p by A3,FINSEQ_1:def 3;
    hence for i st i in dom p
@@ -1220,7 +1217,7 @@ A2: for i st i in Seg len p ex x being Element of Trees D2 st X[i,x]
     end;
    consider p2 being FinSequence of Trees D2 such that
 A3:  dom p2 = Seg len p & for i st i in Seg len p holds X[i,p2.i]
-     from MATRIX_2:sch 1(A2);
+     from FINSEQ_1:sch 5(A2);
    take p2; thus
 A4:  dom p2 = dom p by A3,FINSEQ_1:def 3;
    hence for i st i in dom p

@@ -11,19 +11,23 @@ environ
       GRAPH_1, ARYTM_1, MCART_1, VECTSP_1, GROUP_6, CARD_3, GOBOARD5, BINOP_1,
       PRE_TOPC, SQUARE_1, REALSET1, ARYTM, XREAL_0, POLYNOM1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, ORDINAL1, XCMPLX_0,
-      XREAL_0, FUNCT_1, REAL_1, EUCLID, FUNCT_2, ABIAN, CARD_1, DOMAIN_1,
-      MOD_4, CARD_3, BINOP_1, VECTSP_1, PRE_TOPC, SQUARE_1, NAT_1, NUMBERS,
-      FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1, REALSET1;
+      XREAL_0, FUNCT_1, REAL_1, REALSET1,
+      EUCLID, FUNCT_2, ABIAN, CARD_1, DOMAIN_1,
+      MOD_4, CARD_3, BINOP_1, REALSET2, VECTSP_1,
+      PRE_TOPC, SQUARE_1, NAT_1, NUMBERS,
+      FINSET_1, STRUCT_0, FINSEQ_1, FINSEQ_2, RLVECT_1;
  constructors REAL_1, EUCLID, NAT_1, ABIAN, INT_1, DOMAIN_1, MOD_4, SQUARE_1,
-      REALSET1, MEMBERED, ORDINAL2, RAT_1;
+      REALSET2, MEMBERED, ORDINAL2, RAT_1;
  clusters FINSET_1, SUBSET_1, RELSET_1, INT_1, ABIAN, FINSEQ_1, VECTSP_1,
-      STRUCT_0, AFINSQ_1, REALSET1, FINSEQ_5, TEX_2, NAT_1, MEMBERED;
+      STRUCT_0, AFINSQ_1, REALSET1, FINSEQ_5, TEX_2, NAT_1, MEMBERED,
+      REALSET2;
  requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
  definitions REALSET1, TARSKI, FUNCT_1, RLVECT_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, SUBSET_1, XBOOLE_0, CARD_1, FINSEQ_2,
       FUNCT_2, EUCLID, NAT_1, XBOOLE_1, REAL_1, CARD_2, AXIOMS, SQUARE_1,
-      MCART_1, RLVECT_1, FUNCT_1, DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1, AMI_1,
-      FINSET_1, FRECHET2, GROUP_3, CARD_4, MOD_4, XREAL_0, REALSET1, XCMPLX_1;
+      MCART_1, RLVECT_1, FUNCT_1, DOMAIN_1, ENUMSET1, CARD_3, MSSCYC_1,
+      FINSET_1, FRECHET2, GROUP_3, CARD_4, MOD_4, XREAL_0, REALSET2, XCMPLX_1,
+      REALSET1;
  schemes ZFREFLE1, FRAENKEL, FUNCT_2, FINSET_1, LMOD_7, BINOP_1;
 
 begin :: stuff I could not find in MML
@@ -128,7 +132,7 @@ A1: X is trivial;
    let x,y;
    assume
 A2: x in X & y in X;
-   per cases by A1,REALSET1:def 12;
+   per cases by A1,REALSET1:def 4;
    suppose X is empty;
     hence x = y by A2;
    end;
@@ -219,7 +223,7 @@ theorem Th5:
 proof
  assume
 A1: X is trivial & X \/ {y} is non trivial;
- then X is empty or ex x st X = {x} by REALSET1:def 12;
+ then X is empty or ex x st X = {x} by REALSET1:def 4;
  hence thesis by A1;
 end;
 
@@ -314,7 +318,7 @@ proof
 A1: Card X = 2;
   then reconsider X' = X as finite set by CARD_4:1;
   consider x,y such that
-A2: x <> y & X' = {x,y} by A1,GROUP_3:166;
+A2: x <> y & X' = {x,y} by A1,CARD_2:79;
   take x,y;
   thus x in X & y in X & x <> y &
    for z st z in X holds z = x or z = y by A2,TARSKI:def 2;
@@ -499,7 +503,7 @@ theorem Th11:
  product G is finite
 proof
     dom G = Seg d by FUNCT_2:def 1;
- then A1: G is finite by AMI_1:21;
+ then A1: G is finite by FINSET_1:29;
     now
   let i' be set;
   assume i' in dom G;
@@ -686,12 +690,16 @@ A10: ri < x;
  thus P[Gi] from NonTrivialFinite(A1,A5);
 end;
 
+theorem Th12':
+ for X being non empty finite Subset of REAL holds
+  ex ri st ri in X & for xi st xi in X holds ri >= xi by Th12;
+
 theorem
     ex li,ri st li in Gi & ri in Gi &
   ri < li & for xi st xi in Gi holds not (xi < ri or li < xi)
 proof
  consider li such that
-A1: li in Gi & for xi st xi in Gi holds li >= xi by Th12;
+A1: li in Gi & for xi st xi in Gi holds li >= xi by Th12';
  consider ri such that
 A2: ri in Gi & for xi st xi in Gi holds ri <= xi by Th13;
  take li,ri;

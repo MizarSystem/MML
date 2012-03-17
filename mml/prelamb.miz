@@ -14,13 +14,13 @@ environ
       MCART_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCT_3, FUNCOP_1, MIDSP_1, RVSUM_1,
       NAT_1, TREES_1, TREES_2;
  constructors BINOP_1, FUNCT_3, MIDSP_1, RVSUM_1, NAT_1, TREES_2, REAL_1,
-      MEMBERED, XBOOLE_0, ARYTM_3, INT_1, RAT_1;
+      MEMBERED, XBOOLE_0, ARYTM_3, INT_1, RAT_1, BINOP_2;
  clusters SUBSET_1, FINSEQ_1, TREES_1, RELSET_1, TREES_2, FINSET_1, STRUCT_0,
       FUNCOP_1, ARYTM_3, MEMBERED, ZFMISC_1, XBOOLE_0, ORDINAL2, NUMBERS;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, STRUCT_0, XBOOLE_0;
  theorems FINSEQ_1, ZFMISC_1, TREES_2, RELSET_1, FUNCOP_1, FUNCT_2, TARSKI,
-      FINSET_1, MCART_1, CARD_1, TREES_1, NAT_1, GROUP_3, FUNCT_1, RVSUM_1,
+      FINSET_1, MCART_1, CARD_1, TREES_1, NAT_1, CARD_2, FUNCT_1, RVSUM_1,
       FUNCT_3, RELAT_1, STRUCT_0, XBOOLE_1;
  schemes FUNCT_2, FINSEQ_2, FRAENKEL;
 
@@ -65,19 +65,6 @@ end;
        (the inner_product of s).(x,y);
   correctness;
  end;
-
-registration
- let Tr be finite Tree, v be Element of Tr;
- cluster succ v -> finite;
- coherence;
-end;
-
-definition
- let Tr be finite Tree, v be Element of Tr;
- func branchdeg v equals
-:Def4:  card succ v;
-correctness;
-end;
 
 Lm1:
  for f being Function holds pr1(dom f,rng f).:f = dom f
@@ -124,28 +111,6 @@ A1:    dom f is finite;
   hence thesis by FINSET_1:17;
  end;
 
-registration
- cluster finite DecoratedTree;
-  existence
-   proof consider d being set;
-     reconsider T = { {} } as Tree by TREES_1:48;
-    take T --> d;
-        dom(T --> d) is finite by FUNCOP_1:19;
-    hence thesis by Lm2;
-   end;
-end;
-
-registration let D be non empty set;
- cluster finite DecoratedTree of D;
-  existence
-   proof consider d being Element of D;
-     reconsider T = { {} } as Tree by TREES_1:48;
-    take T --> d;
-        dom(T --> d) is finite by FUNCOP_1:19;
-    hence thesis by Lm2;
-   end;
-end;
-
 definition let s;
  mode PreProof of s is
  finite DecoratedTree of [:[: (the carrier of s)*
@@ -154,43 +119,8 @@ end;
 
 reserve Tr for PreProof of s;
 
-registration let R be finite Relation;
- cluster dom R -> finite;
- coherence
-  proof per cases;
-   suppose R = {};
-    hence thesis by RELAT_1:60;
-   end;
-   suppose R <> {};
-    then reconsider R as finite non empty Relation;
-    set X = { x`1 where x is Element of R: x in R };
-A1:  dom R = X
-     proof
-      thus dom R c= X
-       proof let z be set;
-        assume z in dom R;
-         then consider y being set such that
-A2:       [z,y] in R by RELAT_1:def 4;
-          [z,y]`1 = z by MCART_1:7;
-        hence z in X by A2;
-       end;
-      let e be set;
-      assume e in X;
-       then consider x being Element of R such that
-A3:     e = x`1 and x in R;
-       consider z,y being set such that
-A4:     x = [z,y] by RELAT_1:def 1;
-        z = e by A3,A4,MCART_1:7;
-      hence e in dom R by A4,RELAT_1:def 4;
-     end;
-A5:  R is finite;
-     X is finite from FRAENKEL:sch 21(A5);
-   hence thesis by A1;
-  end;
-  end;
-end;
-
 definition
+ canceled;
 let s , Tr;
 let v be Element of dom Tr;
 attr v is correct means
@@ -322,7 +252,8 @@ A4:now consider x being Element of dom Tr-level 1;
     w = {} by A1,TARSKI:def 1;
  hence contradiction by A5,FINSEQ_1:25;
 end;
-A6:branchdeg v = card succ v by Def4 .= 0 by A3,A4,CARD_1:78,TREES_2:15;
+A6:branchdeg v = card succ v by TREES_2:def 13
+              .= 0 by A3,A4,CARD_1:78,TREES_2:15;
    Tr.v = [[<*x*>,x],0] by A1,FUNCOP_1:13;
 then (Tr.v)`1 = [<*x*>,x] & (Tr.v)`2 = 0 by MCART_1:7;
 hence v is correct by A6,Def5;
@@ -337,7 +268,7 @@ theorem
 Th1: branchdeg v = 1 implies v^<*0*> in dom p
      proof
      assume branchdeg v = 1;
-     then A1:    succ v <> {} by Def4,CARD_1:78;
+     then A1:    succ v <> {} by TREES_2:def 13,CARD_1:78;
      consider x being Element of succ v;
         x in succ v by A1;
      then x in {v^<*n*>: v^<*n*> in dom p} by TREES_2:def 5;
@@ -351,9 +282,9 @@ Th2: branchdeg v = 2 implies v^<*0*> in dom p & v^<*1*> in dom p
      proof
      A1: succ v = {v^<*n*>: v^<*n*> in dom p} by TREES_2:def 5;
      assume branchdeg v = 2;
-     then card succ v = 2 by Def4;
+     then card succ v = 2 by TREES_2:def 13;
      then consider x,y being set such that A2: x <> y & succ v = {x,y} by
-GROUP_3:166;
+CARD_2:79;
         x in succ v by A2,TARSKI:def 2;
      then consider n such that A3: x = v^<*n*> & v^<*n*> in dom p by A1;
         y in succ v by A2,TARSKI:def 2;
@@ -722,16 +653,6 @@ A3: {} is Element of A* by FINSEQ_1:66;
 end;
 
 ::AXIOMS, RULES, AND SOME OF THEIR CONSEQUENCES
-
- registration
- let a,b be non empty set;
- cluster non empty Relation of a,b;
- existence
- proof
-     [:a,b:] is Relation of a,b by RELSET_1:def 1;
-  hence thesis;
- end;
- end;
 
 definition
  struct(typealg) typestr (# carrier->set,

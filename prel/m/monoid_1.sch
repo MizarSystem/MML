@@ -1,4 +1,5 @@
 HIDDEN
+TARSKI
 XBOOLE_0
 RELAT_1
 FUNCT_1
@@ -8,6 +9,6 @@ RELSET_1
 FUNCT_2
 #
 M1 ;M1 W1 ;;;
-ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªP1 B2 K16 B1 B2 ;;;M1 ;ª&R2 B1 F1 ;;M2 F2 ;;ªP1 B1 B2 ;;;
+ªM5 V4 ;V6 F1 ;F2 ;;F1 ;F2 ;;ªM1 ;ª&R2 B2 F1 ;;ªP1 B2 K20 B1 B2 ;;;M1 ;ª&R2 B1 F1 ;;M2 F2 ;;ªP1 B1 B2 ;;;
 #
 !

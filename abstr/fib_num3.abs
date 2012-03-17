@@ -1,0 +1,256 @@
+:: Lucas Numbers and Generalized {F}ibonacci Numbers
+::  by Piotr Wojtecki and Adam Grabowski
+:: 
+:: Received May 24, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary MCART_1, FUNCT_1, ARYTM_3, ARYTM_1, POWER, GROUP_1, SQUARE_1,
+      PRE_FF, ARYTM, FIB_NUM3, FIB_NUM, MATRIX_2, ASYMPT_0, ZF_LANG, PREPOWER;
+ notation XBOOLE_0, SUBSET_1, SQUARE_1, NUMBERS, XCMPLX_0, XREAL_0, ORDINAL1,
+      NEWTON, NAT_1, MCART_1, DOMAIN_1, PREPOWER, POWER, FUNCT_2, BINARITH,
+      PRE_FF, FIB_NUM, ABIAN;
+ constructors SQUARE_1, DOMAIN_1, POWER, BINARITH, MEMBERED, PRE_FF, FIB_NUM,
+      ABIAN, PREPOWER;
+ clusters SUBSET_1, XREAL_0, MEMBERED, ORDINAL2, ASYMPT_1, SQUARE_1, BINARITH;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+
+
+begin :: Preliminaries
+
+ reserve a,b,c,d,i,j,k,m,n for Nat;
+
+theorem :: FIB_NUM3:1
+  for a being real number,
+      n being Nat holds
+    a to_power n = 0 implies a = 0;
+
+theorem :: FIB_NUM3:2
+  for a being non negative (real number) holds
+    (sqrt a) * (sqrt a) = a;
+
+theorem :: FIB_NUM3:3
+  for a being non empty real number holds
+    a to_power 2 = (-a) to_power 2;
+
+theorem :: FIB_NUM3:4
+  for k being non empty Nat holds k-'1+2 = k+2-'1;
+
+theorem :: FIB_NUM3:5
+  (a+b) |^ 2 = a*a + a*b + a*b + b*b;
+
+theorem :: FIB_NUM3:6
+  for a being non empty real number holds
+    (a to_power n) to_power 2 = a to_power (2*n);
+
+theorem :: FIB_NUM3:7
+  for a, b being real number holds
+    (a + b)*(a - b) = a to_power 2 - b to_power 2;
+
+theorem :: FIB_NUM3:8
+  for a, b be non empty real number holds
+    (a*b) to_power n = a to_power n * b to_power n;
+
+registration
+  cluster tau -> positive;
+  cluster tau_bar -> negative;
+end;
+
+theorem :: FIB_NUM3:9
+  for n being Nat holds
+    tau to_power n + tau to_power(n+1) = tau to_power(n+2);
+
+theorem :: FIB_NUM3:10
+  for n being Nat holds
+    tau_bar to_power n + tau_bar to_power(n+1) = tau_bar to_power(n+2);
+
+begin :: Lucas Numbers
+
+definition let n be Nat;
+  func Lucas (n) -> Nat means
+:: FIB_NUM3:def 1
+    ex L being Function of NAT, [:NAT, NAT:] st
+    it = (L.n)`1 & L.0 = [2,1] &
+    for n being Nat holds L.(n+1) = [ (L.n)`2, (L.n)`1 + (L.n)`2 ];
+end;
+
+theorem :: FIB_NUM3:11
+  Lucas(0) = 2 &
+    Lucas(1) = 1 &
+      for n being Nat holds Lucas((n+1)+1) = Lucas(n) + Lucas(n+1);
+
+theorem :: FIB_NUM3:12
+  for n being Nat holds Lucas(n + 2) = Lucas (n) + Lucas (n+1);
+
+theorem :: FIB_NUM3:13
+  for n being Nat holds Lucas(n+1) + Lucas(n+2) = Lucas(n+3);
+
+theorem :: FIB_NUM3:14
+  Lucas(2) = 3;
+
+theorem :: FIB_NUM3:15
+  Lucas(3) = 4;
+
+theorem :: FIB_NUM3:16
+  Lucas(4) = 7;
+
+theorem :: FIB_NUM3:17
+  for k being Nat holds Lucas(k) >= k;
+
+theorem :: FIB_NUM3:18
+  for m being non empty Nat holds Lucas(m+1) >= Lucas(m);
+
+registration let n be Nat;
+  cluster Lucas n -> positive;
+end;
+
+theorem :: FIB_NUM3:19
+  for n being Nat holds 2 * Lucas(n+2) = Lucas(n) + Lucas(n+3);
+
+theorem :: FIB_NUM3:20
+   for n being Nat holds Lucas(n+1) = Fib(n) + Fib(n+2);
+
+theorem :: FIB_NUM3:21  :: Binet Formula for Lucas Numbers
+  for n being Nat holds
+    Lucas(n) = tau to_power n + tau_bar to_power n;
+
+theorem :: FIB_NUM3:22
+   for n being Nat holds 2 * Lucas(n) + Lucas(n + 1) = 5 * Fib(n + 1);
+
+theorem :: FIB_NUM3:23
+  for n being Nat holds Lucas(n + 3) - 2 * Lucas(n) = 5 * Fib(n);
+
+theorem :: FIB_NUM3:24
+  for n being Nat holds Lucas(n) + Fib(n) = 2 * Fib(n+1);
+
+theorem :: FIB_NUM3:25
+  for n being Nat holds 3 * Fib(n) + Lucas(n) = 2 * Fib(n+2);
+
+theorem :: FIB_NUM3:26
+  for n,m being Nat holds
+    2 * Lucas(n + m) = Lucas(n) * Lucas(m) + 5 * Fib(n) * Fib(m);
+
+theorem :: FIB_NUM3:27
+  for n being Nat holds
+    Lucas(n + 3) * Lucas(n) = (Lucas(n + 2))|^2 - (Lucas(n+1))|^2;
+
+theorem :: FIB_NUM3:28
+  for n being Nat holds Fib(2*n) = Fib(n) * Lucas(n);
+
+theorem :: FIB_NUM3:29
+  for n being Nat holds
+    2 * Fib(2*n+1) = Lucas(n+1) * Fib(n) + Lucas(n) * Fib(n+1);
+
+theorem :: FIB_NUM3:30
+  for n being Nat holds
+    5 * (Fib(n)) |^ 2 - (Lucas(n)) |^ 2 = 4 * (-1) to_power (n+1);
+
+theorem :: FIB_NUM3:31
+  for n being Nat holds
+    Fib(2*n+1) = Fib(n+1) * Lucas(n+1) - Fib(n) * Lucas(n);
+
+begin :: Generalized Fibonacci Numbers
+
+definition let a,b,n be Nat;
+  func GenFib (a,b,n) -> Nat means
+:: FIB_NUM3:def 2
+    ex L being Function of NAT, [:NAT, NAT:] st
+      it = (L.n)`1 & L.0 = [a,b] &
+   for n being Nat holds L.(n+1) = [ (L.n)`2, (L.n)`1 + (L.n)`2 ];
+end;
+
+theorem :: FIB_NUM3:32
+  for a,b being Nat holds
+    GenFib(a,b,0) = a &
+      GenFib(a,b,1) = b &
+        for n being Nat holds
+          GenFib(a,b,(n+1)+1) = GenFib(a,b,n) + GenFib(a,b,n+1);
+
+theorem :: FIB_NUM3:33
+  (GenFib(a,b,k+1)+GenFib(a,b,(k+1)+1)) |^ 2 =
+    (GenFib(a,b,k+1)|^2+2*GenFib(a,b,k+1) *
+      GenFib(a,b,(k+1)+1)+GenFib(a,b,(k+1)+1)|^2);
+
+theorem :: FIB_NUM3:34
+  for a,b,n being Nat holds
+    GenFib(a,b,n) + GenFib(a,b,n+1) = GenFib(a,b,n+2);
+
+theorem :: FIB_NUM3:35
+  for a,b,n being Nat holds
+    GenFib(a,b,n+1) + GenFib(a,b,n+2) = GenFib(a,b,n + 3);
+
+theorem :: FIB_NUM3:36
+  for a,b,n being Nat holds
+    GenFib(a,b,n+2) + GenFib(a,b,n+3) = GenFib(a,b,n + 4);
+
+theorem :: FIB_NUM3:37
+   for n being Nat holds GenFib(0,1,n) = Fib(n);
+
+theorem :: FIB_NUM3:38
+  for n being Nat holds GenFib(2,1,n) = Lucas(n);
+
+theorem :: FIB_NUM3:39
+  for a,b,n being Nat holds
+    GenFib(a,b,n) + GenFib(a,b,n + 3) = 2*GenFib(a,b,n + 2);
+
+theorem :: FIB_NUM3:40
+  for a,b,n being Nat holds
+    GenFib(a,b,n) + GenFib(a,b,n + 4) = 3*GenFib(a,b,n + 2);
+
+theorem :: FIB_NUM3:41
+  for a,b,n being Nat holds
+    GenFib(a,b,n + 3) - GenFib(a,b,n) = 2*GenFib(a,b,n +1);
+
+theorem :: FIB_NUM3:42
+  for a,b,n being non empty Nat holds
+    GenFib(a,b,n) = GenFib(a,b,0)*Fib(n-'1) + GenFib(a,b,1)*Fib(n);
+
+theorem :: FIB_NUM3:43
+  for n,m being Nat holds
+     Fib(m) * Lucas(n) + Lucas(m) * Fib(n) = GenFib(Fib(0),Lucas(0),n+m);
+
+theorem :: FIB_NUM3:44
+  for n being Nat holds Lucas(n) + Lucas(n + 3) = 2*Lucas(n + 2);
+
+theorem :: FIB_NUM3:45
+  for a,n being Nat holds
+    GenFib(a,a,n) = ((GenFib(a,a,0)) / 2) * (Fib(n) + Lucas(n));
+
+theorem :: FIB_NUM3:46
+  for a,b,n being Nat holds GenFib(b,a+b,n) = GenFib(a,b,n+1);
+
+theorem :: FIB_NUM3:47
+  for a,b,n being Nat holds
+  GenFib(a,b,n+2) * GenFib(a,b,n) - GenFib(a,b,n+1)|^2
+    = ((-1)to_power n) * (GenFib(a,b,2)|^2 -
+      GenFib(a,b,1) * GenFib(a,b,3));
+
+theorem :: FIB_NUM3:48
+  for a,b,k,n being Nat holds
+  GenFib(GenFib(a,b,k),GenFib(a,b,k+1),n) = GenFib(a,b,n+k);
+
+theorem :: FIB_NUM3:49
+  for a,b,n being Nat holds GenFib(a,b,n+1) = a*Fib(n) + b*Fib(n+1);
+
+theorem :: FIB_NUM3:50
+  for a,b,n being Nat holds GenFib(0,b,n) = b * Fib(n);
+
+theorem :: FIB_NUM3:51
+  for a,b,n being Nat holds GenFib(a,0,n+1) = a * Fib(n);
+
+theorem :: FIB_NUM3:52
+  for a,b,c,d,n being Nat holds
+    GenFib(a,b,n) + GenFib(c,d,n) = GenFib(a+c,b+d,n);
+
+theorem :: FIB_NUM3:53
+  for a,b,k,n being Nat holds GenFib(k*a,k*b,n) = k * GenFib(a,b,n);
+
+theorem :: FIB_NUM3:54 :: Binet Formula for Generalized Fibonacci Numbers
+  for a,b,n being Nat holds
+    GenFib(a,b,n) = ((a*(-tau_bar)+b) * tau to_power n +
+                    (a*tau-b) * tau_bar to_power n) / sqrt(5);
+
+theorem :: FIB_NUM3:55
+  for a,n being Nat holds
+    GenFib(2*a+1,2*a+1,n+1) = (2*a+1) * Fib(n+2);

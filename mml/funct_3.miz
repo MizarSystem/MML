@@ -10,7 +10,7 @@ environ
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELSET_1, FUNCT_1,
       FUNCT_2;
  constructors TARSKI, FUNCT_2, XBOOLE_0;
- clusters FUNCT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1;
+ clusters FUNCT_1, RELSET_1, SUBSET_1, XBOOLE_0, ZFMISC_1, RELAT_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI;
  theorems TARSKI, ZFMISC_1, FUNCT_1, FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0,
@@ -1801,18 +1801,59 @@ theorem
 
 theorem
       for f1 being Function of X,Y1 for f2 being Function of X,Y2
-     st (Y1 = {} implies X = {}) & (Y2 = {} implies X = {})
     holds <:f1,f2:> = [:f1,f2:]*(delta X)
  proof let f1 be Function of X,Y1; let f2 be Function of X,Y2;
-  assume (Y1 = {} implies X = {}) & (Y2 = {} implies X = {});
+  per cases;
+  suppose Y1 = {} or Y2 = {};
+    then f1 = {} or f2 = {} by RELSET_1:27;
+    then
+A:   dom f1 = {} or dom f2 = {} by RELAT_1:60;
+     dom[:f1,f2:] = [:dom f1, dom f2:] by Def9
+                .= {} by A,ZFMISC_1:113;
+     then
+B:    [:f1,f2:] = {} by RELAT_1:64;
+     dom<:f1,f2:> = dom f1 /\ dom f2 by Def8
+                .= {} by A;
+   hence <:f1,f2:> = {} by RELAT_1:64
+                  .= {}*delta X
+                  .= [:f1,f2:]*delta X by B;
+  end;
+  suppose Y1 <> {} & Y2 <> {};
   then dom f1 = X & dom f2 = X by FUNCT_2:def 1;
   hence thesis by Th89;
+  end;
  end;
 
+begin :: Addenda
+
+:: from AMI_1
+
 theorem
-      for f1 being Function of X,D1 for f2 being Function of X,D2
-    holds <:f1,f2:> = [:f1,f2:]*(delta X)
- proof let f1 be Function of X,D1; let f2 be Function of X,D2;
-     dom f1 = X & dom f2 = X by FUNCT_2:def 1;
-  hence thesis by Th89;
+ for f being Function holds pr1(dom f,rng f).:f = dom f
+ proof let f be Function;
+      now let y be set;
+    thus y in dom f implies
+     ex x being set st x in dom pr1(dom f,rng f) & x in f &
+                       y = pr1(dom f,rng f).x
+     proof assume
+A1:      y in dom f;
+then A2:     f.y in rng f by FUNCT_1:def 5;
+      take [y,f.y];
+          [y,f.y] in [:dom f,rng f:] by A1,A2,ZFMISC_1:106;
+      hence [y,f.y] in dom pr1(dom f,rng f) by Def5;
+      thus [y,f.y] in f by A1,FUNCT_1:def 4;
+      thus y = pr1(dom f,rng f).[y,f.y] by A1,A2,Def5;
+     end;
+    given x being set such that
+A3:  x in dom pr1(dom f,rng f) and
+        x in f and
+A4:  y = pr1(dom f,rng f).x;
+     consider x1,x2 being set such that
+A5:   x1 in dom f and
+A6:   x2 in rng f and
+A7:   x = [x1,x2] by A3,ZFMISC_1:103;
+    thus y in dom f by A4,A5,A6,A7,Def5;
+   end;
+  hence pr1(dom f,rng f).:f = dom f by FUNCT_1:def 12;
  end;
+

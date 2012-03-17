@@ -13,10 +13,11 @@ environ
       TARSKI, SETFAM_1, TOPREAL1, FINSEQ_4, ARYTM;
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, XREAL_0,
       REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, ABSVALUE, STRUCT_0, TOPS_1,
-      TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4, METRIC_1,
-      TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
+      TOPS_2, CONNSP_2, COMPTS_1, RCOMP_1, FINSEQ_1, FINSEQ_4,
+      METRIC_1, TOPMETR, PCOMPS_1, EUCLID, PRE_TOPC;
  constructors REAL_1, NAT_1, ABSVALUE, TOPS_1, TOPS_2, COMPTS_1, RCOMP_1,
-      EUCLID, TOPMETR, FINSEQ_4, INT_1, MEMBERED, XBOOLE_0, PRE_TOPC;
+      EUCLID, TOPMETR, FINSEQ_4, INT_1, MEMBERED, XBOOLE_0, PRE_TOPC,
+      FINSEQ_1;
  clusters SUBSET_1, FUNCT_1, PRE_TOPC, RELSET_1, STRUCT_0, EUCLID, BORSUK_1,
       XREAL_0, METRIC_1, INT_1, TOPMETR, XBOOLE_0, NAT_1, MEMBERED, ZFMISC_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -88,53 +89,24 @@ proof
 reserve D for set, p for FinSequence of D;
 
 definition let D, p, m;
- func p|m -> FinSequence of D equals
-  :Def1: p|Seg m;
- coherence by FINSEQ_1:23;
-end;
-
-registration let D be set, f be FinSequence of D;
- cluster f|0 -> empty;
-  coherence
- proof f|0 = f|(Seg 0) by Def1;
-  hence f|0 is empty by FINSEQ_1:4,RELAT_1:110;
- end;
+ canceled;
 end;
 
 theorem Th1:
- a in dom(p|m) implies (p|m)/.a = p/.a
+ a in dom(p|m) implies (p|m qua FinSequence of D)/.a = p/.a
  proof
   assume
 A1: a in dom(p|m);
-then A2: a in dom(p|Seg m) by Def1;
+then A2: a in dom(p|Seg m) by FINSEQ_1:def 15;
    then a in dom p /\ (Seg m) by RELAT_1:90;
 then A3: a in dom p by XBOOLE_0:def 3;
   thus (p|m)/.a = (p|m).a by A1,FINSEQ_4:def 4
-   .= (p|Seg m).a by Def1
+   .= (p|Seg m).a by FINSEQ_1:def 15
    .= p.a by A2,FUNCT_1:70
    .= p/.a by A3,FINSEQ_4:def 4;
  end;
 
-theorem
-    len p <= m implies p|m = p
- proof
-  assume len p <= m;
-  then Seg len p c= Seg m by FINSEQ_1:7;
-  then dom p c= Seg m by FINSEQ_1:def 3;
-  then p|Seg m = p by RELAT_1:97;
-  hence thesis by Def1;
- end;
-
-theorem Th3:
- m <= len p implies len(p|m) = m
-proof
-A1:  m is Nat by ORDINAL2:def 21;
- assume m <= len p;
- then Seg m c= Seg(len p) by FINSEQ_1:7;
- then Seg m c= dom p by FINSEQ_1:def 3;
- then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def1;
- hence m = len(p|m) by A1,FINSEQ_1:def 3;
-end;
+canceled 2;
 
 definition let T be 1-sorted;
  mode FinSequence of T is FinSequence of the carrier of T;
@@ -1559,7 +1531,7 @@ theorem Th31:
   A5: 1+1 in Seg len h by A3,FINSEQ_1:3;
   set p2 = h/.(1+1);
 A6: Q(0) = union { LSeg(h|2,i) : 1 <= i & i+1 <= len (h|2) } by Def6;
-     h|2 = h|(Seg 2) by Def1;
+     h|2 = h|(Seg 2) by FINSEQ_1:def 15;
 then A7: dom (h|2) = dom h /\ Seg 2 by RELAT_1:90
              .= Seg len h /\ Seg 2 by FINSEQ_1:def 3
              .= Seg 2 by A3,FINSEQ_1:9;
@@ -1641,11 +1613,11 @@ then A24:    n + 1 +1 <> n + 2 + 1 by XCMPLX_1:2;
      A30: 1 <= i & i+1 <= len(h|(n+1+2)) by A28;
           i + 1 - 1 = i;
 then A31:   i <= len(h|(n+1+2)) - 1 by A30,REAL_1:49;
-      A32: len(h|(n+1+2))-1 = n+1+2-1 by A18,Th3.= n+(1+1);
+      A32: len(h|(n+1+2))-1 = n+1+2-1 by A18,FINSEQ_1:80.= n+(1+1);
 A33:      n+(1+1) = n+1+1;
           now per cases by A31,A32,A33,NAT_1:26;
        suppose A34: i = n+2;
-        A35: len(h|(n+1+2)) = n+1+2 by A18,Th3;
+        A35: len(h|(n+1+2)) = n+1+2 by A18,FINSEQ_1:80;
             n+1+2 = n+2+1;
         then A36:     1 <= n+2 & n+2<=n+1+2 & n+2+1 <= n+1+2 & 1<=n+2+1 by A21,
 NAT_1:29;
@@ -1660,9 +1632,9 @@ NAT_1:29;
         hence x in Q(n) \/ LSeg(h,n+2) by A27,A29,A34,XBOOLE_0:def 2;
        end;
        suppose A39: i <= n+1;
-       A40: len(h|(n+2)) = n + (1 + 1) by A20,Th3;
+       A40: len(h|(n+2)) = n + (1 + 1) by A20,FINSEQ_1:80;
             i+1 <= n+1+1 by A39,AXIOMS:24;
-        then i+1 <= len(h|(n+2)) by A20,Th3;
+        then i+1 <= len(h|(n+2)) by A20,FINSEQ_1:80;
         then A41: LSeg(h|(n+2),i) in {LSeg(h|(n+2),j) : 1 <= j &
           j+1 <= len(h|(n+2))} by A30;
         A42: 1 <= 1+i & n+1 <= n+1+1 & n+1+1 = n+(1+1) & i+1 <= n+1+1
@@ -1676,7 +1648,8 @@ FINSEQ_1:3;
       then i <= n+1+2 & i+1 <= n+1+2 by A43,AXIOMS:22;
       then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
          by A18,A30,A42,FINSEQ_1:3;
-         then i in Seg len(h|(n+1+2)) & i+1 in Seg len(h|(n+1+2)) by Th3;
+         then i in Seg len(h|(n+1+2)) & i+1 in Seg len(h|(n+1+2))
+            by FINSEQ_1:80;
         then A46: i in dom(h|(n+1+2)) & i+1 in
  dom(h|(n+1+2)) by FINSEQ_1:def 3;
         then A47: (h|(n+1+2))/.i = h/.i by Th1
@@ -1707,16 +1680,16 @@ FINSEQ_1:3;
        A54: 1 <= i & i+1 <= len(h|(n+2)) by A52;
         A55: n + 1 + 2 <= len h & n + 2 <= len h by A19,AXIOMS:22;
         then A56:         i+1 <= n + (1 + 1) & len(h|(n+1+2)) = n+(1+2) by A54,
-Th3;
-         i+1 <= n + 1 + 1 by A54,A55,Th3;
+FINSEQ_1:80;
+         i+1 <= n + 1 + 1 by A54,A55,FINSEQ_1:80;
         then A57: i <= n + 1 & n+1 <= n+(1+1) by REAL_1:53;
             n+2 <= n + 3 by AXIOMS:24;
         then A58: 1 <= i & i+1 <= len(h|(n+1+2)) by A54,A56,AXIOMS:22;
-       A59: len(h|(n+2)) = n + 2 by A20,Th3;
+       A59: len(h|(n+2)) = n + 2 by A20,FINSEQ_1:80;
         A60: 1 <= 1+i & n+1+1 = n+(1+1) & i+1 <= n+1+1
-         by A54,A55,Th3,NAT_1:29;
-        A61: 1 <= i+1 & i <= n+2 & i+1 <= n+2 by A54,A55,A57,Th3,AXIOMS:22,
-NAT_1:29;
+         by A54,A55,FINSEQ_1:80,NAT_1:29;
+        A61: 1 <= i+1 & i <= n+2 & i+1 <= n+2
+         by A54,A55,A57,FINSEQ_1:80,AXIOMS:22,NAT_1:29;
         then A62: i in Seg len(h|(n+2)) & i+1 in
  Seg len(h|(n+2)) by A54,A59,FINSEQ_1:3;
         set p1' = (h|(n+2))/.i, p2' = (h|(n+2))/.(i+1);
@@ -1726,7 +1699,7 @@ then A64:    i <= n+1+2 & i+1 <= n+1+2 by A61,AXIOMS:22;
         then i in Seg(n+1+2) & i+1 in Seg(n+1+2) & n+1+2 <= len h
          by A18,A54,A60,FINSEQ_1:3;
         then A65: i in Seg len(h|(n+1+2)) & i+1 in Seg len(h|(n+1+2)) &
-           len(h|(n+1+2)) = n+1+2 by Th3;
+           len(h|(n+1+2)) = n+1+2 by FINSEQ_1:80;
    then A66: i in dom(h|(n+1+2)) & i+1 in dom(h|(n+1+2)) by FINSEQ_1:def 3;
         then A67: (h|(n+1+2))/.i = h/.i by Th1
              .= p1' by A63,Th1;
@@ -1742,7 +1715,7 @@ then A64:    i <= n+1+2 & i+1 <= n+1+2 by A61,AXIOMS:22;
        suppose A69: x in LSeg(h,n+2);
 A70:      len(h|(n+1+2)) = n+1+2 & 1 <= n+1+2 & n+2 <= n+2+1 &
           1 <= n+2 & n+1+2 = n+2+1
-          by A18,A21,Th3,NAT_1:29;
+          by A18,A21,FINSEQ_1:80,NAT_1:29;
         then n + 2 in Seg len(h|(n+1+2)) & n + 2 + 1 in Seg len(h|(n+1+2))
          by FINSEQ_1:3;
         then A71: n + 2 in dom(h|(n+1+2)) & n + 2 + 1 in dom(h|(n+1+2))
@@ -1779,14 +1752,14 @@ then A72:    1 <= n+2 & n+2+1 <= len(h|(n+1+2)) by FINSEQ_3:27;
            consider i such that
           A78: X = LSeg(h|(n+2),i) and
           A79: 1 <= i & i+1 <= len(h|(n+2)) by A77;
-         A80: len(h|(n+2)) = n+(1+1) by A20,Th3;
-         A81: len(h|(n+2)) = n+1+1 by A20,Th3;
+         A80: len(h|(n+2)) = n+(1+1) by A20,FINSEQ_1:80;
+         A81: len(h|(n+2)) = n+1+1 by A20,FINSEQ_1:80;
 then A82:     i <= n+1 by A79,REAL_1:53;
 A83:    h is s.n.c. by A1,Def10;
 A84:    h is unfolded by A1,Def10;
              now assume
 A85:          i < n+1;
-         A86: 1 <= 1+i & i+1 <= n+(1+1) by A20,A79,Th3,NAT_1:29;
+         A86: 1 <= 1+i & i+1 <= n+(1+1) by A20,A79,FINSEQ_1:80,NAT_1:29;
 A87:      i+1 <= len h by A20,A79,A81,AXIOMS:22;
             A88: i+1 < n+1+1 by A85,REAL_1:53;
          set p1' = h/.i, p2' = h/.(i+1);
@@ -1826,7 +1799,7 @@ A95:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
           end;
          assume A101: x = pn;
           then A102: x in LSeg(pn,pn1) by Th6;
-          A103: len(h|(n+2)) = n+2 by A20,Th3;
+          A103: len(h|(n+2)) = n+2 by A20,FINSEQ_1:80;
             then dom(h|(n+2)) = Seg(n+2) & n + 2 in Seg(n+2)
              by A19,FINSEQ_1:3,def 3;
             then A104: x = (h|(n+2))/.(n+1+1) by A101,Th1;
@@ -1834,7 +1807,7 @@ A95:         n+1 <= n+1+1 & n+1+1 = n+(1+1) & 1 <= 1+n & 1 <= 1+(n+1)
           then A105: x in LSeg(h|(n+2),n+1) by A103,A104,Th27;
                1 <= 1 + n & n + 1 + 1 <= n + (1 + 1) & n+2 <= len h
               by A19,AXIOMS:22,NAT_1:29;
-            then 1 <= n+1 & n+1+1 <= len(h|(n+2)) by Th3;
+            then 1 <= n+1 & n+1+1 <= len(h|(n+2)) by FINSEQ_1:80;
             then LSeg(h|(n+2),n+1) in {LSeg(h|(n+2),i): 1 <= i & i+1 <=
  len(h|(n+2))};
           then x in union {LSeg(h|(n+2),i) : 1 <= i & i+1 <= len(h|(n+2))}
@@ -1864,7 +1837,7 @@ A109:  NE = Q(h1) &
       f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A108;
    consider f being map of I[01], (TOP-REAL 2)|NE such that
 A110: f is_homeomorphism & f.0 = p1 & f.1 = h/.(h1+2) by A109;
-A111: h|(len h) = h|(Seg len h) by Def1
+A111: h|(len h) = h|(Seg len h) by FINSEQ_1:def 15
              .= h|(dom h) by FINSEQ_1:def 3
              .= h by RELAT_1:97;
   then reconsider f as map of I[01], (TOP-REAL 2)|P by A109;

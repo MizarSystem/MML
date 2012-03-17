@@ -1,0 +1,409 @@
+:: Binary Operations on Numbers
+::  by Library Committee
+::
+:: Received June 21, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_2, VECTSP_1, BINOP_1, FUNCT_1, ARYTM_1, COMPLEX1, 
+     COMPLSP1, XCMPLX_0, INT_1, RAT_1, ORDINAL2, ARYTM, RELAT_1, ARYTM_3,
+     RVSUM_1, GR_CY_1, INT_3, MONOID_0;
+ notation XBOOLE_0, SUBSET_1, FUNCT_2, BINOP_1, XCMPLX_0, NUMBERS,
+     XREAL_0, RAT_1, INT_1, ORDINAL2;
+ constructors SUBSET_1, BINOP_1, NUMBERS, XCMPLX_0, XREAL_0, RAT_1, INT_1;
+ clusters NUMBERS, REAL_1, XREAL_0, XBOOLE_0, SQUARE_1, ORDINAL2, XCMPLX_0,
+     INT_1, NAT_1, RAT_1, ARYTM_3;
+ definitions BINOP_1;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ theorems BINOP_1, FUNCT_2, XCMPLX_0, XREAL_0, INT_1, ORDINAL2, XCMPLX_1, 
+     RAT_1;
+ schemes BINOP_1, FUNCT_2;
+
+begin
+
+scheme FuncDefUniq{C, D()->non empty set,
+                   F(Element of C())->set}:
+ for f1,f2 being Function of C(),D() st
+   (for x being Element of C() holds f1.x = F(x)) &
+   (for x being Element of C() holds f2.x = F(x))
+  holds f1 = f2
+proof let f1,f2 be Function of C(),D() such that
+A1:  for x being Element of C() holds f1.x = F(x) and
+A2:  for x being Element of C() holds f2.x = F(x);
+       now let x be Element of C();
+    thus f1.x = F(x) by A1 .= f2.x by A2;
+   end;
+  hence thesis by FUNCT_2:113;
+ end;
+
+scheme BinOpDefuniq{A()->non empty set,
+                   O(Element of A(),Element of A())->set}:
+  for o1,o2 being BinOp of A() st
+    (for a,b being Element of A() holds o1.(a,b) = O(a,b)) &
+    (for a,b being Element of A() holds o2.(a,b) = O(a,b))
+  holds o1 = o2
+proof let o1,o2 be BinOp of A() such that
+A1:  for a,b being Element of A() holds o1.(a,b) = O(a,b) and
+A2:  for a,b being Element of A() holds o2.(a,b) = O(a,b);
+      now let a,b be Element of A();
+   thus o1.(a,b) = O(a,b) by A1 .= o2.(a,b) by A2;
+  end;
+  hence thesis by BINOP_1:2;
+ end;
+
+reserve c,c1,c2,c3 for Element of COMPLEX;
+
+registration
+  cluster -> rational Element of RAT;
+  coherence by RAT_1:def 2;
+end;
+
+definition let c1;
+ redefine func -c1 -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+ redefine func c1" -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+ let c2;
+ redefine func c1+c2 -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+ redefine func c1-c2 -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+ redefine func c1*c2 -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+ redefine func c1/c2 -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+end;
+
+reserve r,r1,r2,r3 for Element of REAL;
+
+definition let r1;
+ redefine func -r1 -> Element of REAL;
+ coherence by XREAL_0:def 1;
+ redefine func r1" -> Element of REAL;
+ coherence by XREAL_0:def 1;
+ let r2;
+ redefine func r1+r2 -> Element of REAL;
+ coherence by XREAL_0:def 1;
+ redefine func r1-r2 -> Element of REAL;
+ coherence by XREAL_0:def 1;
+ redefine func r1*r2 -> Element of REAL;
+ coherence by XREAL_0:def 1;
+ redefine func r1/r2 -> Element of REAL;
+ coherence by XREAL_0:def 1;
+end;
+
+reserve w,w1,w2,w3 for Element of RAT;
+
+definition let w1;
+ redefine func -w1 -> Element of RAT;
+ coherence by RAT_1:def 2;
+ redefine func w1" -> Element of RAT;
+ coherence by RAT_1:def 2;
+ let w2;
+ redefine func w1+w2 -> Element of RAT;
+ coherence by RAT_1:def 2;
+ redefine func w1-w2 -> Element of RAT;
+ coherence by RAT_1:def 2;
+ redefine func w1*w2 -> Element of RAT;
+ coherence by RAT_1:def 2;
+ redefine func w1/w2 -> Element of RAT;
+ coherence by RAT_1:def 2;
+end;
+
+reserve i,i1,i2,i3 for Element of INT;
+
+definition let i1;
+ redefine func -i1 -> Element of INT;
+ coherence by INT_1:def 2;
+ let i2;
+ redefine func i1+i2 -> Element of INT;
+ coherence by INT_1:def 2;
+ redefine func i1-i2 -> Element of INT;
+ coherence by INT_1:def 2;
+ redefine func i1*i2 -> Element of INT;
+ coherence by INT_1:def 2;
+end;
+
+reserve n,n1,n2,n3 for Element of NAT;
+
+definition let n1,n2;
+ redefine func n1+n2 -> Element of NAT;
+ coherence by ORDINAL2:def 21;
+ redefine func n1*n2 -> Element of NAT;
+ coherence by ORDINAL2:def 21;
+end;
+
+definition
+ func compcomplex -> UnOp of COMPLEX means
+   for c holds it.c = -c;
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func invcomplex -> UnOp of COMPLEX means
+   for c holds it.c = c";
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func addcomplex -> BinOp of COMPLEX means
+:Def3: for c1,c2 holds it.(c1,c2) = c1 + c2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func diffcomplex -> BinOp of COMPLEX means
+   for c1,c2 holds it.(c1,c2) = c1 - c2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func multcomplex -> BinOp of COMPLEX means
+:Def5: for c1,c2 holds it.(c1,c2) = c1 * c2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func divcomplex -> BinOp of COMPLEX means
+   for c1,c2 holds it.(c1,c2) = c1 / c2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+end;
+
+definition
+ func compreal -> UnOp of REAL means
+   for r holds it.r = -r;
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func invreal -> UnOp of REAL means
+   for r holds it.r = r";
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func addreal -> BinOp of REAL means
+:Def9: for r1,r2 holds it.(r1,r2) = r1 + r2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func diffreal -> BinOp of REAL means
+   for r1,r2 holds it.(r1,r2) = r1 - r2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func multreal -> BinOp of REAL means
+:Def11: for r1,r2 holds it.(r1,r2) = r1 * r2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func divreal -> BinOp of REAL means
+   for r1,r2 holds it.(r1,r2) = r1 / r2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+end;
+
+definition
+ func comprat -> UnOp of RAT means
+   for w holds it.w = -w;
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func invrat -> UnOp of RAT means
+   for w holds it.w = w";
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func addrat -> BinOp of RAT means
+:Def15: for w1,w2 holds it.(w1,w2) = w1 + w2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func diffrat -> BinOp of RAT means
+   for w1,w2 holds it.(w1,w2) = w1 - w2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func multrat -> BinOp of RAT means
+:Def17: for w1,w2 holds it.(w1,w2) = w1 * w2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func divrat -> BinOp of RAT means
+   for w1,w2 holds it.(w1,w2) = w1 / w2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+end;
+
+definition
+ func compint -> UnOp of INT means
+   for i holds it.i = -i;
+  existence from FUNCT_2:sch 4;
+  uniqueness from FuncDefUniq;
+ func addint -> BinOp of INT means
+:Def20: for i1,i2 holds it.(i1,i2) = i1 + i2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func diffint -> BinOp of INT means
+   for i1,i2 holds it.(i1,i2) = i1 - i2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func multint -> BinOp of INT means
+:Def22: for i1,i2 holds it.(i1,i2) = i1 * i2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+end;
+
+definition
+ func addnat -> BinOp of NAT means
+:Def23: for n1,n2 holds it.(n1,n2) = n1 + n2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+ func multnat -> BinOp of NAT means
+:Def24: for n1,n2 holds it.(n1,n2) = n1 * n2;
+  existence from BINOP_1:sch 2;
+  uniqueness from BinOpDefuniq;
+end;
+
+registration
+ cluster addcomplex -> commutative associative;
+ coherence
+  proof
+   thus addcomplex is commutative
+    proof let c1,c2;
+     thus addcomplex.(c1,c2) = c1 + c2 by Def3
+        .= addcomplex.(c2,c1) by Def3;
+    end;
+   let c1,c2,c3;
+   thus addcomplex.(c1,addcomplex.(c2,c3))
+      = c1 + addcomplex.(c2,c3) by Def3
+     .= c1 + (c2 + c3) by Def3
+     .= c1 + c2 + c3
+     .= addcomplex.(c1,c2) + c3 by Def3
+     .= addcomplex.(addcomplex.(c1,c2),c3) by Def3;
+  end;
+ cluster multcomplex -> commutative associative;
+ coherence
+  proof
+   thus multcomplex is commutative
+    proof let c1,c2;
+     thus multcomplex.(c1,c2) = c1 * c2 by Def5
+        .= multcomplex.(c2,c1) by Def5;
+    end;
+   let c1,c2,c3;
+   thus multcomplex.(c1,multcomplex.(c2,c3))
+      = c1 * multcomplex.(c2,c3) by Def5
+     .= c1 * (c2 * c3) by Def5
+     .= c1 * c2 * c3
+     .= multcomplex.(c1,c2) * c3 by Def5
+     .= multcomplex.(multcomplex.(c1,c2),c3) by Def5;
+  end;
+ cluster addreal -> commutative associative;
+ coherence
+  proof
+   thus addreal is commutative
+    proof let r1,r2;
+     thus addreal.(r1,r2) = r1 + r2 by Def9
+        .= addreal.(r2,r1) by Def9;
+    end;
+   let r1,r2,r3;
+   thus addreal.(r1,addreal.(r2,r3))
+      = r1 + addreal.(r2,r3) by Def9
+     .= r1 + (r2 + r3) by Def9
+     .= r1 + r2 + r3
+     .= addreal.(r1,r2) + r3 by Def9
+     .= addreal.(addreal.(r1,r2),r3) by Def9;
+  end;
+ cluster multreal -> commutative associative;
+ coherence
+  proof
+   thus multreal is commutative
+    proof let r1,r2;
+     thus multreal.(r1,r2) = r1 * r2 by Def11
+        .= multreal.(r2,r1) by Def11;
+    end;
+   let r1,r2,r3;
+   thus multreal.(r1,multreal.(r2,r3))
+      = r1 * multreal.(r2,r3) by Def11
+     .= r1 * (r2 * r3) by Def11
+     .= r1 * r2 * r3
+     .= multreal.(r1,r2) * r3 by Def11
+     .= multreal.(multreal.(r1,r2),r3) by Def11;
+  end;
+ cluster addrat -> commutative associative;
+ coherence
+  proof
+   thus addrat is commutative
+    proof let w1,w2;
+     thus addrat.(w1,w2) = w1 + w2 by Def15
+        .= addrat.(w2,w1) by Def15;
+    end;
+   let w1,w2,w3;
+   thus addrat.(w1,addrat.(w2,w3))
+      = w1 + addrat.(w2,w3) by Def15
+     .= w1 + (w2 + w3) by Def15
+     .= w1 + w2 + w3
+     .= addrat.(w1,w2) + w3 by Def15
+     .= addrat.(addrat.(w1,w2),w3) by Def15;
+  end;
+ cluster multrat -> commutative associative;
+ coherence
+  proof
+   thus multrat is commutative
+    proof let w1,w2;
+     thus multrat.(w1,w2) = w1 * w2 by Def17
+        .= multrat.(w2,w1) by Def17;
+    end;
+   let w1,w2,w3;
+   thus multrat.(w1,multrat.(w2,w3))
+      = w1 * multrat.(w2,w3) by Def17
+     .= w1 * (w2 * w3) by Def17
+     .= w1 * w2 * w3
+     .= multrat.(w1,w2) * w3 by Def17
+     .= multrat.(multrat.(w1,w2),w3) by Def17;
+  end;
+ cluster addint -> commutative associative;
+ coherence
+  proof
+   thus addint is commutative
+    proof let i1,i2;
+     thus addint.(i1,i2) = i1 + i2 by Def20
+        .= addint.(i2,i1) by Def20;
+    end;
+   let i1,i2,i3;
+   thus addint.(i1,addint.(i2,i3))
+      = i1 + addint.(i2,i3) by Def20
+     .= i1 + (i2 + i3) by Def20
+     .= i1 + i2 + i3
+     .= addint.(i1,i2) + i3 by Def20
+     .= addint.(addint.(i1,i2),i3) by Def20;
+  end;
+ cluster multint -> commutative associative;
+ coherence
+  proof
+   thus multint is commutative
+    proof let i1,i2;
+     thus multint.(i1,i2) = i1 * i2 by Def22
+        .= multint.(i2,i1) by Def22;
+    end;
+   let i1,i2,i3;
+   thus multint.(i1,multint.(i2,i3))
+      = i1 * multint.(i2,i3) by Def22
+     .= i1 * (i2 * i3) by Def22
+     .= i1 * i2 * i3
+     .= multint.(i1,i2) * i3 by Def22
+     .= multint.(multint.(i1,i2),i3) by Def22;
+  end;
+ cluster addnat -> commutative associative;
+ coherence
+  proof
+   thus addnat is commutative
+    proof let n1,n2;
+     thus addnat.(n1,n2) = n1 + n2 by Def23
+        .= addnat.(n2,n1) by Def23;
+    end;
+   let n1,n2,n3;
+   thus addnat.(n1,addnat.(n2,n3))
+      = n1 + addnat.(n2,n3) by Def23
+     .= n1 + (n2 + n3) by Def23
+     .= n1 + n2 + n3
+     .= addnat.(n1,n2) + n3 by Def23
+     .= addnat.(addnat.(n1,n2),n3) by Def23;
+  end;
+ cluster multnat -> commutative associative;
+ coherence
+  proof
+   thus multnat is commutative
+    proof let n1,n2;
+     thus multnat.(n1,n2) = n1 * n2 by Def24
+        .= multnat.(n2,n1) by Def24;
+    end;
+   let n1,n2,n3;
+   thus multnat.(n1,multnat.(n2,n3))
+      = n1 * multnat.(n2,n3) by Def24
+     .= n1 * (n2 * n3) by Def24
+     .= n1 * n2 * n3
+     .= multnat.(n1,n2) * n3 by Def24
+     .= multnat.(multnat.(n1,n2),n3) by Def24;
+  end;
+end;

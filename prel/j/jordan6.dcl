@@ -26,5 +26,5 @@ CONNSP_2
 BORSUK_1
 TOPMETR
 #
-­;;M3 U1 K178 ;;;V16 ;V42 ;;
+­;;M3 U1 K179 ;;;V16 ;V42 ;;
 !

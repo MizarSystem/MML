@@ -19,7 +19,7 @@ PROB_2
 FINSET_1
 DYNKIN
 #
-fV31 ;;M3 K56 ;;;K92 A1 ;
-fV2 ;V4 ;;M1 ;M1 ;M1 ;;K116 A1 A2 A3 ;
+fV31 ;;M3 K56 ;;;K93 A1 ;
+fV2 ;V4 ;;M1 ;M1 ;M1 ;;K117 A1 A2 A3 ;
 ­;M1 W1 ;;;M14 A1 ;W1 ;;
 !

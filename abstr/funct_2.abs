@@ -6,7 +6,8 @@
 
 environ
 
- vocabulary RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2;
+ vocabulary RELAT_1, BOOLE, FUNCT_1, PARTFUN1, FUNCT_2, SGRAPH1, RELAT_2,
+      CAT_4;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, RELSET_1,
       FUNCT_1, PARTFUN1;
  constructors TARSKI, PARTFUN1, RELAT_2, XBOOLE_0;
@@ -533,10 +534,10 @@ scheme :: FUNCT_2:sch 9
  Lambda1C{A, B() -> set, C[set], F(set)->set, G(set)->set}:
  ex f being Function of A(),B() st
   for x st x in A() holds
-   (C[x] implies f.x = F(x)) & (not C[x] implies f.x = G(x))
+   (C[ x] implies f.x = F(x)) & (not C[ x] implies f.x = G(x))
  provided
  for x st x in A() holds
-     (C[x] implies F(x) in B()) & (not C[x] implies G(x) in B());
+     (C[ x] implies F(x) in B()) & (not C[ x] implies G(x) in B());
 
 canceled 8;
 
@@ -668,3 +669,29 @@ registration let A,B be non empty set;
  cluster -> non empty Function of A,B;
 end;
 
+begin :: Addenda
+
+:: from CAT_4
+
+definition let o,m,r be set;
+ func (o,m) :-> r -> Function of [:{o},{m}:],{r} means
+:: FUNCT_2:def 5
+      not contradiction;
+end;
+
+:: from RLVECT_2
+
+scheme :: FUNCT_2:sch 10
+ LambdaSep1{D, R() -> non empty set, A() -> Element of D(),
+                  B() -> Element of R(), F(set) -> Element of R()}:
+ ex f being Function of D(),R() st
+  f.A() = B() & for x being Element of D() st x <> A() holds f.x = F(x);
+
+scheme :: FUNCT_2:sch 11
+ LambdaSep2{D, R() -> non empty set, A1, A2() -> Element of D(),
+                  B1, B2() -> Element of R(), F(set) -> Element of R()}:
+ ex f being Function of D(),R() st
+  f.A1() = B1() & f.A2() = B2() &
+   for x being Element of D() st x <> A1() & x <> A2() holds f.x = F(x)
+ provided
+   A1() <> A2();

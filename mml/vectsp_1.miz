@@ -9,12 +9,12 @@ environ
  vocabulary RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
       VECTSP_1, ALGSTR_2;
  notation XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
-      REAL_1, STRUCT_0, RLVECT_1;
- constructors BINOP_1, REAL_1, RLVECT_1, MEMBERED, XBOOLE_0;
+      REAL_1, BINOP_2, STRUCT_0, RLVECT_1;
+ constructors BINOP_1, REAL_1, BINOP_2, RLVECT_1, MEMBERED, XBOOLE_0;
  clusters STRUCT_0, RLVECT_1, RELSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
  requirements NUMERALS, SUBSET, ARITHM;
  definitions RLVECT_1, STRUCT_0;
- theorems BINOP_1, FUNCT_2, RLVECT_1, XCMPLX_0, XCMPLX_1;
+ theorems BINOP_1, FUNCT_2, RLVECT_1, XCMPLX_0, XCMPLX_1, BINOP_2;
  schemes FUNCT_2, BINOP_1;
 
 begin
@@ -25,49 +25,9 @@ begin
  reserve GS for non empty LoopStr;
 
  defpred Lm1[Element of REAL,set] means $2 = -$1;
-Lm1: for x being Element of REAL ex y being Element of REAL st Lm1[x,y];
 
 definition
- canceled 3;
-
- deffunc O(Element of REAL, Element of REAL) = $1+$2;
- func addreal -> BinOp of REAL means
- :Def4: for x,y be Element of REAL holds it.(x,y) = x+y;
-   existence
-    proof
-      thus ex o being BinOp of REAL st
-       for a,b being Element of REAL holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
-    end;
-   uniqueness
-    proof let o1,o2 be BinOp of REAL;
-     assume A1: for x,y being Element of REAL holds o1.(x,y) = x+y;
-     assume A2: for x,y being Element of REAL holds o2.(x,y) = x+y;
-         now let x,y be Element of REAL;
-           o1.(x,y) = x+y & o2.(x,y) = x+y by A1,A2;
-       hence o1.(x,y) = o2.(x,y);
-      end;
-     hence thesis by BINOP_1:2;
-    end;
- func compreal -> UnOp of REAL means
-     for x being Element of REAL holds it.x = -x;
-   existence
-    proof
-     thus ex f being UnOp of REAL st
-      for x being Element of REAL holds Lm1[x,f.x] from FUNCT_2:sch 3(Lm1);
-    end;
-   uniqueness
-   proof let o3,o4 be UnOp of REAL;
-    assume A3: for x being Element of REAL holds o3.x = -x;
-    assume A4: for x being Element of REAL holds o4.x = -x;
-         now let x be Element of REAL;
-          o3.x = -x & o4.x = -x by A3,A4;
-       hence o3.x = o4.x;
-      end;
-    hence thesis by FUNCT_2:113;
-   end;
-end;
-
-definition
+ canceled 5;
  func G_Real -> strict LoopStr equals
  :Def6:  LoopStr (# REAL,addreal,0 #);
   coherence;
@@ -89,8 +49,8 @@ registration
     let x,y be Element of G_Real;
      reconsider x'=x ,y'=y as Element of REAL by Def6;
     thus x+y = (the add of G_Real).(x,y) by RLVECT_1:5
-               .= y'+x' by Def4,Def6
-               .= addreal.(y',x') by Def4
+               .= y'+x' by BINOP_2:def 9,Def6
+               .= addreal.(y',x') by BINOP_2:def 9
                .= y+x by Def6,RLVECT_1:5;
    end;
    hereby
@@ -99,11 +59,11 @@ registration
     thus (x+y)+z = (the add of G_Real).(x+y,z) by RLVECT_1:5
                .= (the add of G_Real).((the add of G_Real).(x,y),z)
                   by RLVECT_1:5
-               .= addreal.((x'+y'),z') by Def4,Def6
-               .= (x'+y')+z' by Def4
+               .= addreal.((x'+y'),z') by BINOP_2:def 9,Def6
+               .= (x'+y')+z' by BINOP_2:def 9
                .= x'+(y'+z')
-               .= addreal.(x',(y'+z')) by Def4
-               .= addreal.(x',addreal.(y',z')) by Def4
+               .= addreal.(x',(y'+z')) by BINOP_2:def 9
+               .= addreal.(x',addreal.(y',z')) by BINOP_2:def 9
                .= (the add of G_Real).(x,y+z) by Def6,RLVECT_1:5
                .= x+(y+z) by RLVECT_1:5;
    end;
@@ -112,7 +72,7 @@ registration
      reconsider x'=x as Element of REAL by Def6;
     thus x+0.G_Real = (the add of G_Real).(x,0.G_Real) by RLVECT_1:5
          .= (the add of G_Real).(x,(the Zero of G_Real)) by RLVECT_1:def 2
-         .= x'+0 by Def4,Def6
+         .= x'+0 by BINOP_2:def 9,Def6
          .= x;
    end;
    let x be Element of G_Real;
@@ -120,7 +80,7 @@ registration
    reconsider y = -x' as Element of G_Real by Def6;
    take y;
    thus x+ y = (the add of G_Real).(x,y) by RLVECT_1:5
-              .= x'+ -x' by Def4,Def6
+              .= x'+ -x' by BINOP_2:def 9,Def6
               .= 0.G_Real by Def6,RLVECT_1:def 2;
   end;
 end;
@@ -248,41 +208,13 @@ definition let IT be non empty doubleLoopStr;
    for a, b, c being Element of IT holds (b+c)*a = b*a + c*a;
 end;
 
- Lm2: for o1, o2 being BinOp of REAL st
-   (for x,y being Element of REAL holds o1.(x,y) = x*y) &
-     (for x,y being Element of REAL holds o2.(x,y) = x*y)
-     holds o1 = o2
-   proof let o1, o2 be BinOp of REAL;
-    assume A1: for x,y being Element of REAL
-              holds o1.(x,y) = x*y;
-    assume A2: for x,y being Element of REAL
-              holds o2.(x,y) = x*y;
-        now let x,y be Element of REAL;
-         o1.(x,y) = x*y & o2.(x,y) = x*y by A1,A2;
-      hence o1.(x,y) = o2.(x,y);
-     end;
-    hence thesis by BINOP_1:2;
-    end;
-
 definition let IT be non empty multLoopStr;
  attr IT is right_unital means :Def13:
   for x being Element of IT holds x * (1_ IT) = x;
 end;
 
 definition
-  deffunc O(Element of REAL, Element of REAL) = $1*$2;
- func multreal -> BinOp of REAL means
- :Def14:for x,y be Element of REAL holds it.(x,y) = x*y;
-   existence
-    proof
-      thus ex o being BinOp of REAL st
-       for a,b being Element of REAL holds o.(a,b) = O(a,b)
-      from BINOP_1:sch 2;
-    end;
-   uniqueness by Lm2;
-end;
-
-definition
+ canceled;
  func F_Real -> strict doubleLoopStr equals
  :Def15: doubleLoopStr (# REAL,addreal,multreal,1,0 #);
   correctness;
@@ -339,11 +271,11 @@ A2:  1_ F_Real = 1 by Def9,Def15;
     thus (x+y)+z = (the add of F_Real).(x+y,z) by RLVECT_1:5
                .= (the add of F_Real).((the add of F_Real).(x,y),z)
                   by RLVECT_1:5
-               .= addreal.((x'+y'),z') by Def4,Def15
-               .= (x'+y')+z' by Def4
+               .= addreal.((x'+y'),z') by BINOP_2:def 9,Def15
+               .= (x'+y')+z' by BINOP_2:def 9
                .= x'+(y'+z')
-               .= addreal.(x',(y'+z')) by Def4
-               .= addreal.(x',addreal.(y',z')) by Def4
+               .= addreal.(x',(y'+z')) by BINOP_2:def 9
+               .= addreal.(x',addreal.(y',z')) by BINOP_2:def 9
                .= (the add of F_Real).(x,y+z) by Def15,RLVECT_1:5
                .= x+(y+z) by RLVECT_1:5;
    end;
@@ -351,7 +283,7 @@ A2:  1_ F_Real = 1 by Def9,Def15;
      reconsider x'=x as Element of REAL by Def15;
    thus x+0.F_Real = (the add of F_Real).(x,0.F_Real) by RLVECT_1:5
         .= (the add of F_Real).(x,(the Zero of F_Real)) by RLVECT_1:def 2
-               .= x'+0 by Def4,Def15
+               .= x'+0 by BINOP_2:def 9,Def15
                .= x;
    end;
    hereby let x be Element of F_Real;
@@ -359,21 +291,21 @@ A2:  1_ F_Real = 1 by Def9,Def15;
      reconsider y=-x' as Element of F_Real by Def15;
      take y' = y;
     thus x+ y' = addreal.(x',y') by Def15,RLVECT_1:5
-               .= x'+ -x' by Def4
+               .= x'+ -x' by BINOP_2:def 9
                .= 0.F_Real by Def15,RLVECT_1:def 2;
    end;
    hereby let x,y be Element of F_Real;
      reconsider x'=x ,y'=y as Element of REAL by Def15;
     thus x+y = (the add of F_Real).(x,y) by RLVECT_1:5
-             .= y'+x' by Def4,Def15
-             .= addreal.(y',x') by Def4
+             .= y'+x' by BINOP_2:def 9,Def15
+             .= addreal.(y',x') by BINOP_2:def 9
              .= y+x by Def15,RLVECT_1:5;
    end;
    hereby let x,y be Element of F_Real;
      reconsider x'=x ,y'=y as Element of REAL by Def15;
     thus x*y = (the mult of F_Real).(x,y) by Def10
-               .= y'*x' by Def14,Def15
-               .= multreal.(y',x') by Def14
+               .= y'*x' by BINOP_2:def 11,Def15
+               .= multreal.(y',x') by BINOP_2:def 11
                .= y*x by Def10,Def15;
    end;
    hereby let x,y,z be Element of F_Real;
@@ -381,11 +313,11 @@ A2:  1_ F_Real = 1 by Def9,Def15;
     thus (x*y)*z = (the mult of F_Real).(x*y,z) by Def10
                .= (the mult of F_Real).((the mult of F_Real).(x,y),z)
                   by Def10
-               .= multreal.((x'*y'),z') by Def14,Def15
-               .= (x'*y')*z' by Def14
+               .= multreal.((x'*y'),z') by BINOP_2:def 11,Def15
+               .= (x'*y')*z' by BINOP_2:def 11
                .= x'*(y'*z')
-               .= multreal.(x',(y'*z')) by Def14
-               .= multreal.(x',multreal.(y',z')) by Def14
+               .= multreal.(x',(y'*z')) by BINOP_2:def 11
+               .= multreal.(x',multreal.(y',z')) by BINOP_2:def 11
                .= (the mult of F_Real).(x,y*z) by Def10,Def15
                .= x*(y*z) by Def10;
    end;
@@ -393,14 +325,14 @@ A2:  1_ F_Real = 1 by Def9,Def15;
      reconsider x'=x as Element of REAL by Def15;
     thus (1_ F_Real)*x = (the mult of F_Real).((1_ F_Real),x) by Def10
                .= (the mult of F_Real).((the unity of F_Real),x) by Def9
-               .= 1*x' by Def14,Def15
+               .= 1*x' by BINOP_2:def 11,Def15
                .= x;
    end;
    hereby let x be Element of F_Real;
      reconsider x'=x as Element of REAL by Def15;
     thus x*(1_ F_Real) = (the mult of F_Real).(x,(1_ F_Real)) by Def10
                .= (the mult of F_Real).(x,(the unity of F_Real)) by Def9
-               .= 1*x' by Def14,Def15
+               .= 1*x' by BINOP_2:def 11,Def15
                .= x;
    end;
    hereby let x,y,z be Element of F_Real;
@@ -408,13 +340,13 @@ A2:  1_ F_Real = 1 by Def9,Def15;
     thus x*(y+z) = (the mult of F_Real).(x,(y+z)) by Def10
                .= (the mult of F_Real).(x,(the add of F_Real).(y,z))
                   by RLVECT_1:5
-               .= multreal.(x',(y'+z')) by Def4,Def15
-               .= x'*(y'+z') by Def14
+               .= multreal.(x',(y'+z')) by BINOP_2:def 9,Def15
+               .= x'*(y'+z') by BINOP_2:def 11
                .= x'*y'+x'*z'
-               .= addreal.(x'*y',x'*z') by Def4
-               .= addreal.(multreal.(x',y'),x'*z') by Def14
+               .= addreal.(x'*y',x'*z') by BINOP_2:def 9
+               .= addreal.(multreal.(x',y'),x'*z') by BINOP_2:def 11
                .= addreal.(multreal.(x',y'),multreal.(x',z'))
-                  by Def14
+                  by BINOP_2:def 11
                .= (the add of F_Real).((x*y),(the mult of F_Real).(x,z))
                   by Def10,Def15
                .= (the add of F_Real).((x*y),(x*z)) by Def10
@@ -422,13 +354,13 @@ A2:  1_ F_Real = 1 by Def9,Def15;
     thus (y+z)*x = (the mult of F_Real).(y+z,x) by Def10
                .= (the mult of F_Real).((the add of F_Real).(y,z),x)
                   by RLVECT_1:5
-               .= multreal.((y'+z'),x') by Def4,Def15
-               .= (y'+z')*x' by Def14
+               .= multreal.((y'+z'),x') by BINOP_2:def 9,Def15
+               .= (y'+z')*x' by BINOP_2:def 11
                .= y'*x'+z'*x'
-               .= addreal.(y'*x',z'*x') by Def4
-               .= addreal.(multreal.(y',x'),z'*x') by Def14
+               .= addreal.(y'*x',z'*x') by BINOP_2:def 9
+               .= addreal.(multreal.(y',x'),z'*x') by BINOP_2:def 11
                .= addreal.(multreal.(y',x'),multreal.(z',x'))
-                  by Def14
+                  by BINOP_2:def 11
                .= (the add of F_Real).((y*x),(the mult of F_Real).(z,x))
                   by Def10,Def15
                .= (the add of F_Real).((y*x),(z*x)) by Def10
@@ -441,7 +373,7 @@ A2:  1_ F_Real = 1 by Def9,Def15;
     reconsider y = (x')" as Element of F_Real by Def15;
     take y;
     thus x*y = (the mult of F_Real).(x,y) by Def10
-            .= 1_ F_Real by A2,A3,Def14,Def15;
+            .= 1_ F_Real by A2,A3,BINOP_2:def 11,Def15;
    end;
    thus 0.F_Real <> 1_ F_Real by A2,Def15,RLVECT_1:def 2;
   end;
@@ -1207,7 +1139,7 @@ Th78: 1_ F_Real + 1_ F_Real <> 0.F_Real
     reconsider t=1 as Element of REAL;
     reconsider t as Element of R by A1,Def15;
         1_ R+1_ R=(the add of R).(t,t) by A2,RLVECT_1:5;
-    hence thesis by A1,Def4,Def15;
+    hence thesis by A1,BINOP_2:def 9,Def15;
    end;
   hence thesis by A1,Def15,RLVECT_1:def 2;
  end;

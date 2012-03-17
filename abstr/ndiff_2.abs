@@ -1,0 +1,213 @@
+:: Differentiable Functions on Normed Linear Spaces. {P}art {II}
+::  by Hiroshi Imura , Yuji Sakai and Yasunari Shidama
+:: 
+:: Received June 4, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, FCONT_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
+      RELAT_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2, SEQ_1, SEQ_2, SEQM_3,
+      RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1, NORMSP_1, RSSPACE,
+      LOPBAN_1, FDIFF_1, NDIFF_2;
+ notation TARSKI, XBOOLE_0, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PRE_TOPC,
+      STRUCT_0, XCMPLX_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, FINSEQ_4,
+      RLVECT_1, SEQ_1, SEQ_2, SEQM_3, ABSVALUE, REALSET2, SQUARE_1, VFUNCT_1,
+      NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_3, NFCONT_1, FDIFF_1, NDIFF_1;
+ constructors REAL_1, BINARITH, SQUARE_1, MEMBERED, SEQ_2, PREPOWER, PARTFUN1,
+      FINSEQ_4, VFUNCT_1, RSSPACE3, LOPBAN_3, NFCONT_1, FDIFF_1, NDIFF_1;
+ clusters RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, SEQ_1, LOPBAN_1,
+      LOPBAN_2, FDIFF_1, NDIFF_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Differentiable Functions on Normed Linear Spaces
+
+ reserve n,k for Nat;
+ reserve x,y,X,X1,Z,Z1 for set;
+ reserve s,g,r,p for Real;
+ reserve S,T for non trivial RealNormSpace;
+ reserve f,f1,f2 for PartFunc of S,T;
+ reserve rseq,rseq1,rseq2 for Real_Sequence;
+ reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
+ reserve x0,x1,x2 for Point of S;
+ reserve Y for Subset of  S;
+ reserve f,f1,f2 for PartFunc of S,T;
+ reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
+ reserve h for convergent_to_0 sequence of S;
+ reserve c for constant sequence of S;
+ reserve R,R1,R2 for REST of S,T;
+ reserve L,L1,L2 for Point of R_NormSpace_of_BoundedLinearOperators(S,T);
+
+definition
+  let X,Y,Z be RealNormSpace;
+  let f be Element of BoundedLinearOperators(X,Y);
+  let g be Element of BoundedLinearOperators(Y,Z);
+  func g*f -> Element of BoundedLinearOperators(X,Z) equals
+:: NDIFF_2:def 1
+  modetrans(g,Y,Z)*modetrans(f,X,Y);
+end;
+
+definition
+  let X,Y,Z be RealNormSpace;
+  let f be Point of R_NormSpace_of_BoundedLinearOperators(X,Y);
+  let g be Point of R_NormSpace_of_BoundedLinearOperators(Y,Z);
+  func g*f -> Point of R_NormSpace_of_BoundedLinearOperators(X,Z)
+   equals
+:: NDIFF_2:def 2
+    modetrans(g,Y,Z)*modetrans(f,X,Y);
+end;
+
+theorem :: NDIFF_2:1
+for x0 be Point of S st f is_differentiable_in x0
+ ex N being Neighbourhood of x0 st
+  (
+    N c= dom f &
+    for z be Point of S holds
+     for h be convergent_to_0 Real_Sequence
+     for c st rng c = {x0} & rng (h*z+c) c= N holds
+      h"(#)(f*(h*z+c) - f*c) is convergent &
+      diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c))
+  );
+
+theorem :: NDIFF_2:2
+for x0 be Point of S st f is_differentiable_in x0
+  for z be Point of S
+  for h be convergent_to_0 Real_Sequence
+  for c st (rng c = {x0}  & rng (h*z+c) c= dom f ) holds
+    h"(#)(f*(h*z+c) - f*c) is convergent &
+    diff(f,x0).z = lim (h"(#)(f*(h*z+c) - f*c));
+
+theorem :: NDIFF_2:3
+for x0 be Point of S
+for N be Neighbourhood of x0 st N c= dom f
+ for z be Point of S
+ for dv be Point of T holds
+  (
+    (for h be convergent_to_0 Real_Sequence
+     for c st ( rng c = {x0} & rng (h*z+c) c= N ) holds
+      h"(#)(f*(h*z+c) - f*c) is convergent &
+      dv = lim (h"(#)(f*(h*z+c) - f*c)))
+    iff
+    (for e be Real st e > 0 holds
+      ex d be Real st d > 0 &
+       for h be Real st ( abs(h) < d  & h <> 0 & h*z+x0 in N) holds
+        ||. h"*(f/.(h*z+x0) -  f/.x0) - dv .|| < e )
+  );
+
+definition
+let S,T;
+let f;
+let x0 be Point of S;
+let z be Point of S;
+pred f is_Gateaux_differentiable_in x0,z means
+:: NDIFF_2:def 3
+ex N be Neighbourhood of x0 st N c= dom f &
+ ex dv be Point of T st
+  for e be Real st e > 0 holds
+   ex d be Real st d > 0 &
+    for h be Real st ( abs(h) < d & h <> 0 & h*z+x0 in N)
+             holds ||. h"*(f/.(h*z+x0) -  f/.x0) - dv .|| < e;
+end;
+
+theorem :: NDIFF_2:4
+(for X be RealNormSpace, x,y be Point of X holds ||.x-y.|| > 0 iff x <> y) &
+(for X be RealNormSpace, x,y be Point of X holds ||.x-y.|| = ||.y-x.||) &
+(for X be RealNormSpace, x,y be Point of X holds ||.x-y.|| = 0 iff x = y) &
+(for X be RealNormSpace, x,y be Point of X holds ||.x-y.|| <> 0 iff x <> y) &
+(for X be RealNormSpace, x,y,z be Point of X, e be Real st e > 0 holds
+  ( (||.x-z.|| <e/2 & ||.z-y.|| <e/2)  implies ||.x-y.|| <e) ) &
+(for X be RealNormSpace, x,y,z be Point of X, e be Real st e > 0 holds
+  ( (||.x-z.|| <e/2 & ||.y-z.|| <e/2)  implies ||.x-y.|| <e) ) &
+(for X be RealNormSpace, x be Point of X st
+  ( for e be Real st e>0 holds  ||.x.|| <e ) holds  x=0.X ) &
+(for X be RealNormSpace, x,y be Point of X st
+  ( for e be Real st e>0 holds  ||.x-y.|| <e ) holds x=y );
+
+definition
+let S,T;
+let f;
+let x0 be Point of S;
+let z be Point of S;
+assume
+     f is_Gateaux_differentiable_in x0,z;
+func Gateaux_diff(f,x0,z) -> Point of T means
+:: NDIFF_2:def 4
+  ex N be Neighbourhood of x0 st N c= dom f &
+   for e be Real st e > 0 holds
+    ex d be Real st d > 0 &
+     for h be Real st ( abs(h) < d  & h <> 0 & h*z+x0 in N ) holds
+      ||. h"*(f/.(h*z+x0) -  f/.x0) - it .|| < e;
+end;
+
+theorem :: NDIFF_2:5
+for x0 be Point of S, z be Point of S holds
+ ( f is_Gateaux_differentiable_in x0,z
+  iff
+   ex N being Neighbourhood of x0 st
+    ( N c= dom f &
+      ex dv be Point of T st
+       for h be convergent_to_0 Real_Sequence
+       for c st rng c = {x0} & rng (h*z+c) c= N holds
+        h"(#)(f*(h*z+c) - f*c) is convergent &
+        dv= lim (h"(#)(f*(h*z+c) - f*c))
+    )
+ );
+
+theorem :: NDIFF_2:6
+for x0 be Point of S st f is_differentiable_in x0
+for z be Point of S holds
+ ( f is_Gateaux_differentiable_in x0,z &
+   Gateaux_diff(f,x0,z)=diff(f,x0).z &
+   ex N being Neighbourhood of x0 st
+    ( N c= dom f &
+      for h be convergent_to_0 Real_Sequence, c st
+       rng c = {x0} & rng (h*z+c) c= N holds
+        h"(#)(f*(h*z+c) - f*c) is convergent &
+        Gateaux_diff(f,x0,z)= lim (h"(#)(f*(h*z+c) - f*c)))
+ );
+
+reserve U for non trivial RealNormSpace;
+reserve f1 for PartFunc of S,T;
+reserve f2 for PartFunc of T,U;
+
+theorem :: NDIFF_2:7
+for R be REST of S,T st R/.0.S=0.T
+ for e be Real st e > 0
+  ex d be Real st
+   d > 0 &
+   for h be Point of S st ||.h.|| < d holds  ||.R/.h.|| <= e*||.h.||;
+
+theorem :: NDIFF_2:8
+ for R be REST of T,U st R/.0.T=0.U
+ for L be bounded LinearOperator of S,T holds
+  R*L is REST of S,U;
+
+theorem :: NDIFF_2:9
+ for  R be REST of S,T
+ for  L be bounded LinearOperator of T,U holds
+  L*R is REST of S,U;
+
+theorem :: NDIFF_2:10
+for R1 be REST of S,T st R1/.0.S=0.T
+for R2 be REST of T,U st R2/.0.T=0.U holds
+ R2*R1 is REST of S,U;
+
+theorem :: NDIFF_2:11
+for R1 be REST of S,T st R1/.0.S=0.T
+for R2 be REST of T,U st R2/.0.T=0.U
+for L be bounded LinearOperator of S,T holds
+ R2*(L+R1) is REST of S,U;
+
+theorem :: NDIFF_2:12
+for R1 be REST of S,T st R1/.0.S=0.T
+for R2 be REST of T,U st R2/.0.T=0.U
+for L1 be bounded LinearOperator of S,T
+for L2 be bounded LinearOperator of T,U holds
+  L2*R1+ R2*(L1+R1) is REST of S,U;
+
+theorem :: NDIFF_2:13
+for f1 be PartFunc of S,T st f1 is_differentiable_in x0
+for f2 be PartFunc of T,U st f2 is_differentiable_in (f1/.x0) holds
+ f2*f1 is_differentiable_in x0 &
+ diff(f2*f1,x0) = diff(f2,f1/.x0)*diff(f1,x0);

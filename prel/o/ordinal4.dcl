@@ -15,5 +15,5 @@ ORDINAL4
 #
 «V5 ;V6 ;V7 ;W11 ;;M1 W11 ;V19 ;;;M9 A1 ;
 fV5 ;V6 ;V7 ;;M1 V1 ;V3 ;V9 ;V12 ;;;K24 A1 ;
-fV1 ;V3 ;V9 ;V12 ;;M1 V1 ;V3 ;V9 ;V12 ;;M1 V1 ;V3 ;V9 ;V12 ;;;K94 A1 A2 ;
+fV1 ;V3 ;V9 ;V12 ;;M1 V1 ;V3 ;V9 ;V12 ;;M1 V1 ;V3 ;V9 ;V12 ;;;K95 A1 A2 ;
 !

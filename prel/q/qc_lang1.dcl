@@ -15,10 +15,10 @@ CARD_1
 FINSEQ_1
 QC_LANG1
 #
-fW1 ;;;K101 ;
 fW1 ;;;K102 ;
 fW1 ;;;K103 ;
 fW1 ;;;K104 ;
 fW1 ;;;K105 ;
-fW1 ;;M2 K70 ;;;K107 A1 ;
+fW1 ;;;K106 ;
+fW1 ;;M2 K70 ;;;K108 A1 ;
 !

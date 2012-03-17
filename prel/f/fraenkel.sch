@@ -84,12 +84,12 @@ M1 W2 ;;M1 W2 ;;M2 K26 F2 ;;;M2 F1 ;;;
 ªM2 K26 F1 ;;;ªM2 F1 ;;&ª&R2 B2 B1 ;M2 F2 ;;ª&R2 B3 F3 ;;R1 B2 F4 B3 ;;P1 B2 B3 ;;;ª&ªM2 F2 ;;ª&R2 B3 F3 ;;R1 B2 F4 B3 ;;P1 B2 B3 ;;ªR2 B2 B1 ;;;;
 #
 M1 W2 ;;M1 W2 ;;M1 ;M1 ;M1 ;;
-V1 èM7 F1 ;F2 ;K58 F1 ;F2 ;;;;F5 B1 ;R3 K51 F1 ;F2 ;B1 F3 ;;F4 ;;;V1 F3 ;;V1 F4 ;;M7 F1 ;F2 ;K58 F1 ;F2 ;;;M7 F1 ;F2 ;K58 F1 ;F2 ;;;ª&R1 K33 B1 F3 ;;K33 B2 F3 ;;;ªR1 F5 B1 ;F5 B2 ;;;;
+V1 èM7 F1 ;F2 ;K59 F1 ;F2 ;;;;F5 B1 ;R3 K51 F1 ;F2 ;B1 F3 ;;F4 ;;;V1 F3 ;;V1 F4 ;;M7 F1 ;F2 ;K59 F1 ;F2 ;;;M7 F1 ;F2 ;K59 F1 ;F2 ;;;ª&R1 K33 B1 F3 ;;K33 B2 F3 ;;;ªR1 F5 B1 ;F5 B2 ;;;;
 #
 M1 W2 ;;M1 W2 ;;M2 K26 F1 ;;;;
 ªM5 V9 ;V11 F1 ;F2 ;;F1 ;F2 ;;ªM2 F1 ;;ª&R2 B2 F3 ;;ªP1 B2 K57 F1 ;F2 ;B1 B2 ;;;M2 F1 ;;ª&R2 B1 F3 ;;M2 F2 ;;ªP1 B1 B2 ;;;
 #
 M1 W2 ;;M1 W2 ;;M2 K26 F1 ;;;;
-ªM7 F1 ;F2 ;K58 F1 ;F2 ;;;ªM2 F1 ;;ª&R2 B2 F3 ;;ªP1 B2 K57 F1 ;F2 ;B1 B2 ;;;M2 F1 ;;ª&R2 B1 F3 ;;M2 F2 ;;ªP1 B1 B2 ;;;
+ªM7 F1 ;F2 ;K59 F1 ;F2 ;;;ªM2 F1 ;;ª&R2 B2 F3 ;;ªP1 B2 K57 F1 ;F2 ;B1 B2 ;;;M2 F1 ;;ª&R2 B1 F3 ;;M2 F2 ;;ªP1 B1 B2 ;;;
 #
 !

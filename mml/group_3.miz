@@ -11,9 +11,9 @@ environ
       ARYTM_1, GROUP_3;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XREAL_0, NAT_1,
       BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, RLVECT_1, FINSET_1,
-      VECTSP_1, GROUP_2, DOMAIN_1, CARD_1, INT_1, GROUP_1;
+      VECTSP_1, GROUP_2, DOMAIN_1, CARD_1, INT_1, INT_2, GROUP_1;
  constructors WELLORD2, REAL_1, BINOP_1, GROUP_2, DOMAIN_1, NAT_1, MEMBERED,
-      XBOOLE_0;
+      XBOOLE_0, INT_2;
  clusters SUBSET_1, FUNCT_1, FINSET_1, GROUP_2, GROUP_1, STRUCT_0, RELSET_1,
       INT_1, MEMBERED, ZFMISC_1, XBOOLE_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -2227,45 +2227,6 @@ theorem
    hence thesis by GROUP_2:def 15;
   end;
 
-Lm6: for X being finite set st card X = 2 ex x,y st x <> y & X = {x,y}
- proof let X be finite set;
-  assume A1: card X = 2;
-then A2:   X <> {} by CARD_1:47;
-    consider x being Element of X;
-       {x} c= X by A1,CARD_1:47,ZFMISC_1:37;
-    then card(X \ {x}) = card X - card{x} by CARD_2:63
-                      .= 1 + 1 - 1 by A1,CARD_1:79
-                      .= 1;
-   then consider y such that A3: X \ {x} = {y} by CARD_2:60;
-  take x,y;
-       now assume x = y;
-      then not x in {x} by A3,XBOOLE_0:def 4;
-     hence contradiction by TARSKI:def 1;
-    end;
-  hence x <> y;
-  thus X c= {x,y}
-   proof let z be set;
-     assume A4: z in X;
-         now per cases;
-       suppose z = x;
-        hence thesis by TARSKI:def 2;
-       end;
-       suppose z <> x;
-         then not z in {x} by TARSKI:def 1;
-         then z in {y} by A3,A4,XBOOLE_0:def 4;
-         then z = y by TARSKI:def 1;
-       hence thesis by TARSKI:def 2;
-      end;
-      end;
-    hence thesis;
-   end;
-  let z be set;
-   assume z in {x,y};
-    then A5: z = x or z = y by TARSKI:def 2;
-       y in X \ {x} by A3,TARSKI:def 1;
-  hence thesis by A2,A5,XBOOLE_0:def 4;
- end;
-
 theorem
     for H being Subgroup of G holds
  Left_Cosets H is finite & index H = 2 implies H is normal Subgroup of G
@@ -2276,9 +2237,9 @@ A3:     B = Left_Cosets H & index H = card B by A1,GROUP_2:176;
     consider C being finite set such that
 A4:   C = Right_Cosets H & index H = card C by A1,GROUP_2:176;
     consider x,y such that A5: x <> y and A6: Left_Cosets H = {x,y}
-                         by A2,A3,Lm6;
+                         by A2,A3,CARD_2:79;
     consider z1,z2 being set such that A7: z1 <> z2 and
-     A8: Right_Cosets H = {z1,z2} by A2,A4,Lm6;
+     A8: Right_Cosets H = {z1,z2} by A2,A4,CARD_2:79;
      A9: carr H in Left_Cosets H & carr H in Right_Cosets H by GROUP_2:165;
      then {x,y} = {x,carr H} or {x,y} = {carr H,y} by A6,TARSKI:def 2;
     then consider z3 being set such that A10: {x,y} = {carr H,z3};
@@ -2673,10 +2634,3 @@ theorem
        (Omega).G is normal Subgroup of G by Th137;
    hence thesis by Th163;
   end;
-
-::
-::  Auxiliary theorems.
-::
-
-theorem
-    for X being finite set st card X = 2 ex x,y st x <> y & X = {x,y} by Lm6;

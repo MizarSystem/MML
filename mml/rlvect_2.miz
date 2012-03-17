@@ -25,49 +25,6 @@ environ
 
 begin
 
-scheme LambdaSep1{D, R() -> non empty set, A() -> Element of D(),
-                  B() -> Element of R(), F(set) -> Element of R()}:
- ex f being Function of D(),R() st
-  f.A() = B() & for x being Element of D() st x <> A() holds f.x = F(x)
-proof
-     defpred P[set,set] means
-     ($1 = A() implies $2 = B()) & ($1 <> A() implies $2 = F($1));
-     A1: for x being Element of D()
-          ex y being Element of R() st P[x,y]
-      proof let x be Element of D();
-            (x = A() implies thesis) & (x <> A() implies thesis);
-       hence thesis;
-      end;
-     consider f being Function of D(),R() such that A2:
-      for x being Element of D() holds P[x,f.x] from FUNCT_2:sch 3(A1);
-    take f;
-    thus thesis by A2;
-   end;
-
-scheme LambdaSep2{D, R() -> non empty set, A1, A2() -> Element of D(),
-                  B1, B2() -> Element of R(), F(set) -> Element of R()}:
- ex f being Function of D(),R() st
-  f.A1() = B1() & f.A2() = B2() &
-   for x being Element of D() st x <> A1() & x <> A2() holds f.x = F(x)
- provided
-  A1: A1() <> A2()
-proof
-      defpred P[set,set] means
-        ($1 = A1() implies $2 = B1()) & ($1 = A2() implies $2 = B2()) &
-        ($1 <> A1() & $1 <> A2() implies $2 = F($1));
-      A2: for x being Element of D()
-           ex y being Element of R() st P[x,y]
-       proof let x be Element of D();
-             (x = A1() implies thesis) & (x = A2() implies thesis) &
-         (x <> A1() & x <> A2() implies thesis) by A1;
-        hence thesis;
-       end;
-      consider f being Function of D(),R() such that A3:
-       for x being Element of D() holds P[x,f.x] from FUNCT_2:sch 3(A2);
-     take f;
-     thus thesis by A3;
-    end;
-
 reserve X,Y,x,y,y1,y2 for set,
         p for FinSequence,
         i,j,k,l,n for Nat,
@@ -661,9 +618,6 @@ registration let V be 1-sorted;
   end;
 end;
 
-Lm2: X is finite & Y is finite implies X \+\ Y is finite
-  by FINSET_1:28;
-
 definition let V be 1-sorted; let S,T be finite Subset of V;
  redefine func S \/ T -> finite Subset of V;
    coherence
@@ -1081,10 +1035,6 @@ theorem Th35:
     hence thesis by Def7;
    end;
 
-Lm3: for f being Function st
-          f " X = f " Y & X c= rng f & Y c= rng f holds X = Y
-           by FUNCT_1:161;
-
 definition let V; let F; let f;
  func f (#) F -> FinSequence of the carrier of V means
   :Def9: len it = len F &
@@ -1340,7 +1290,7 @@ theorem
          consider f being Function of the carrier of V, REAL such that
           A16: f.v = 0 and
           A17: for u being Element of V st u <> v holds
-               f.u = F(u) from LambdaSep1;
+               f.u = F(u) from FUNCT_2:sch 10;
          reconsider f as Element of Funcs(the carrier of V, REAL)
                                                            by FUNCT_2:11;
               now let u;
@@ -1479,7 +1429,7 @@ Th34
        deffunc F(Element of V) = 0;
         consider f such that A51: f.v = a and
          A52: for u being Element of V st u <> v
-              holds f.u = F(u) from LambdaSep1;
+              holds f.u = F(u) from FUNCT_2:sch 10;
         reconsider f as Element of Funcs(the carrier of V, REAL)
                                                           by FUNCT_2:11;
              now let u;
@@ -1532,7 +1482,7 @@ Th34
         deffunc F(Element of V)=0;
           consider f such that A61: f.v = 1 and A62: f.u = 1 and
 A63: for w being Element of V st w <> v & w <> u holds
-                f.w = F(w) from LambdaSep2(A60);
+                f.w = F(w) from FUNCT_2:sch 11(A60);
           reconsider f as Element of Funcs(the carrier of V, REAL)
                                                           by FUNCT_2:11;
                now let w;

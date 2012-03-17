@@ -10,17 +10,97 @@ environ
       VECTSP_1, REALSET2;
  notation TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       FUNCT_2, BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1, REALSET1;
- constructors ENUMSET1, REALSET1, MEMBERED, XBOOLE_0;
- clusters REALSET1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0;
+ constructors ENUMSET1, REALSET1, MEMBERED, XBOOLE_0, BINOP_1, VECTSP_1,
+      FUNCT_3;
+ clusters REALSET1, RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, XBOOLE_0, FUNCT_1,
+      RLVECT_1;
  requirements SUBSET, BOOLE;
 
 
 begin
 
+definition ::group
+  let IT be LoopStr;
+  attr IT is zeroed means
+:: REALSET2:def 1
+                 for a being Element of IT holds
+                      (the add of IT).[a,the Zero of IT] = a &
+                      (the add of IT).[the Zero of IT,a] = a;
+  attr IT is complementable means
+:: REALSET2:def 2
+                 for a being Element of IT
+                  ex b being Element of IT st
+                      (the add of IT).[a,b] = the Zero of IT &
+                      (the add of IT).[b,a] = the Zero of IT;
+end;
+
+definition let L be non empty LoopStr;
+ redefine attr L is add-associative means
+:: REALSET2:def 3
+        for a,b,c being Element of L holds
+                      (the add of L).[(the add of L).[a,b],c] =
+                       (the add of L).[a,(the add of L).[b,c]];
+  redefine attr L is Abelian means
+:: REALSET2:def 4
+
+     for a,b being Element of L holds
+        (the add of L).[a,b] = (the add of L).[b,a];
+end;
+
+registration let X be non empty set, a be BinOp of X, Z be Element of X;
+ cluster LoopStr(#X,a,Z#) -> non empty;
+end;
+
+registration
+ cluster strict Abelian add-associative zeroed
+                        complementable (non empty LoopStr);
+end;
+
+definition ::group
+   mode Group is Abelian add-associative zeroed complementable
+    (non empty LoopStr);
+end;
+
+definition
+  let IT be 1-sorted;
+  attr IT is trivial means
+:: REALSET2:def 5
+     the carrier of IT is trivial;
+end;
+
+registration
+ cluster trivial 1-sorted;
+end;
+
+registration
+ cluster non trivial strict doubleLoopStr;
+end;
+
+definition ::field operator
+   let A be non trivial set;
+   let od,om be BinOp of A;
+   let nd be Element of A;
+   let nm be Element of A\{nd};
+   func field(A,od,om,nd,nm) -> non trivial strict doubleLoopStr means
+:: REALSET2:def 6
+   A = the carrier of it &
+        od = the add of it &
+        om = the mult of it &
+        nd = the Zero of it &
+        nm = the unity of it;
+end;
+
+definition
+ let IT be 1-sorted;
+ redefine attr IT is trivial means
+:: REALSET2:def 7
+     for x,y being Element of IT holds x = y;
+end;
+
 definition
   let IT be doubleLoopStr;
   attr IT is Field-like means
-:: REALSET2:def 1
+:: REALSET2:def 8
    ex A being non trivial set,
             od being BinOp of A, nd being Element of A,
             om being DnT of nd,A, nm being Element of A\{nd} st
@@ -45,7 +125,7 @@ end;
 definition ::supp projection
    let F be Field;
    func suppf(F) -> non trivial set means
-:: REALSET2:def 2
+:: REALSET2:def 9
     ex od being BinOp of it,
              nd being Element of it,
              om being DnT of nd,it,
@@ -56,7 +136,7 @@ end;
 definition ::add projection
    let F be Field;
    func odf(F) -> BinOp of suppf(F) means
-:: REALSET2:def 3
+:: REALSET2:def 10
      ex nd being Element of suppf(F),
               om being DnT of nd, suppf(F),
               nm being Element of suppf(F)\{nd} st
@@ -66,7 +146,7 @@ end;
 definition ::nadd projection
    let F be Field;
    func ndf(F) -> Element of suppf(F) means
-:: REALSET2:def 4
+:: REALSET2:def 11
     ex om being DnT of it,suppf(F),
              nm being Element of suppf(F)\{it} st
            F = field(suppf(F),odf(F),om,it,nm);
@@ -75,7 +155,7 @@ end;
 definition ::mply projection
    let F be Field;
    func omf(F) -> DnT of ndf(F),suppf(F) means
-:: REALSET2:def 5
+:: REALSET2:def 12
    ex nm being Element of suppf(F)\{ndf(F)} st
            F = field(suppf(F),odf(F),it,ndf(F),nm);
 end;
@@ -83,93 +163,60 @@ end;
 definition ::nom projection
    let F be Field;
    func nmf(F) -> Element of suppf(F)\{ndf(F)} means
-:: REALSET2:def 6
+:: REALSET2:def 13
        F = field(suppf(F),odf(F),omf(F),ndf(F),it);
 end;
 
-canceled 7;
-
-theorem :: REALSET2:8
+theorem :: REALSET2:1
    for F being Field holds LoopStr(#suppf(F),odf(F),ndf(F)#) is Group;
 
-theorem :: REALSET2:9
+theorem :: REALSET2:2
    for F being Field, B being non empty set,
        P being BinOp of B, e being Element of B st
    B = suppf(F)\{ndf(F)} & e = nmf(F) & P = omf(F)!(suppf(F),ndf(F)) holds
     LoopStr(#B,P,e#) is Group;
 
-theorem :: REALSET2:10
+theorem :: REALSET2:3
    for F being Field, x,y,z being Element of suppf(F) holds
    (omf(F).[x,odf(F).[y,z]] = odf(F).[omf(F).[x,y],omf(F).[x,z]] &
     omf(F).[odf(F).[x,y],z] = odf(F).[omf(F).[x,z],omf(F).[y,z]] );
 
-theorem :: REALSET2:11
+theorem :: REALSET2:4
    for F being Field,
        a,b,c being Element of suppf(F) holds
    odf(F).[odf(F).[a,b],c] = odf(F).[a,odf(F).[b,c]];
 
-theorem :: REALSET2:12
+theorem :: REALSET2:5
    for F being Field,
        a,b being Element of suppf(F) holds
    odf(F).[a,b] = odf(F).[b,a];
 
-theorem :: REALSET2:13
+theorem :: REALSET2:6
    for F being Field,
        a being Element of suppf(F) holds
    odf(F).[a,ndf(F)] = a & odf(F).[ndf(F),a] = a;
 
-theorem :: REALSET2:14
+theorem :: REALSET2:7
    for F being Field holds
    for a being Element of suppf(F) ex b being Element of suppf(F) st
    odf(F).[a,b] = ndf(F) & odf(F).[b,a] = ndf(F);
 
-definition
-   let F be non trivial set;
-   mode OnePoint of F -> set means
-:: REALSET2:def 7
-ex x being Element of F st it = {x};
-end;
-
-theorem :: REALSET2:15
-   for F being non trivial set holds
-   for A being OnePoint of F holds
-   F\A is non empty set;
-
-registration
-   let F be non trivial set;
-   let A be OnePoint of F;
-   cluster F\A -> non empty;
-end;
-
-registration
-   let F be non trivial set;
- cluster non empty OnePoint of F;
-end;
-
-definition
-   let F be non trivial set;
-   let x be Element of F;
-   redefine func {x} -> OnePoint of F;
-end;
-
-canceled 4;
-
-theorem :: REALSET2:20
+theorem :: REALSET2:8
    for F being Field holds
    for a,b,c being Element of suppf(F)\{ndf(F)} holds
    omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]];
 
-theorem :: REALSET2:21
+theorem :: REALSET2:9
    for F being Field holds
    for a,b being Element of suppf(F)\{ndf(F)} holds
    omf(F).[a,b] = omf(F).[b,a];
 
-theorem :: REALSET2:22
+theorem :: REALSET2:10
    for F being Field holds
    for a being Element of suppf(F)\{ndf(F)} holds
    omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a;
 
-theorem :: REALSET2:23
+theorem :: REALSET2:11
    for F being Field holds
    for a being Element of suppf(F)\{ndf(F)}
    ex b being Element of suppf(F)\{ndf(F)} st
@@ -178,76 +225,74 @@ theorem :: REALSET2:23
 definition ::complement element
    let F be Field;
    func compf(F) -> Function of suppf(F),suppf(F) means
-:: REALSET2:def 8
+:: REALSET2:def 14
  for x being Element of suppf(F) holds odf(F).[x,it.x] = ndf(F);
 end;
 
-canceled 2;
-
-theorem :: REALSET2:26
+theorem :: REALSET2:12
    for F being Field holds
    for x,y being Element of suppf(F) holds
    odf(F).[x,y] = ndf(F) implies y = compf(F).x;
 
-theorem :: REALSET2:27
+theorem :: REALSET2:13
       for F being Field holds
    for x being Element of suppf(F) holds
    x = compf(F).(compf(F).x);
 
-theorem :: REALSET2:28
+theorem :: REALSET2:14
     for F being Field holds
     for a,b being Element of suppf(F) holds
     (odf(F).[a,b] is Element of suppf(F) &
     omf(F).[a,b] is Element of suppf(F) &
     compf(F).a is Element of suppf(F));
 
-theorem :: REALSET2:29
+theorem :: REALSET2:15
    for F being Field holds
    for a,b,c being Element of suppf(F) holds
    omf(F).[a,odf(F).[b,compf(F).c]] =
    odf(F).[omf(F).[a,b],compf(F).(omf(F).[a,c])];
 
-theorem :: REALSET2:30
+theorem :: REALSET2:16
    for F being Field holds
    for a,b,c being Element of suppf(F) holds
    omf(F).[odf(F).[a,compf(F).b],c] =
    odf(F).[omf(F).[a,c],compf(F).(omf(F).[b,c])];
 
-theorem :: REALSET2:31
+theorem :: REALSET2:17
    for F being Field holds
    for a being Element of suppf(F) holds omf(F).[a,ndf(F)] = ndf(F);
 
-theorem :: REALSET2:32
+theorem :: REALSET2:18
    for F being Field holds
    for a being Element of suppf(F) holds omf(F).[ndf(F),a] = ndf(F);
 
-theorem :: REALSET2:33
+theorem :: REALSET2:19
       for F being Field,
        a,b being Element of suppf(F) holds
    compf(F).(omf(F).[a,b]) = omf(F).[a,compf(F).b];
 
-theorem :: REALSET2:34
+theorem :: REALSET2:20
    for F being Field holds omf(F).[nmf(F),ndf(F)] = ndf(F);
 
-theorem :: REALSET2:35
+theorem :: REALSET2:21
    for F being Field holds omf(F).[ndf(F),nmf(F)] = ndf(F);
 
-theorem :: REALSET2:36
+theorem :: REALSET2:22
      for F being Field,
        a,b being Element of suppf(F) holds
    omf(F).[a,b] is Element of suppf(F);
 
-theorem :: REALSET2:37
+theorem :: REALSET2:23
    for F being Field,
        a,b,c being Element of suppf(F) holds
    omf(F).[omf(F).[a,b],c] = omf(F).[a,omf(F).[b,c]];
 
-theorem :: REALSET2:38
+theorem :: REALSET2:24
       for F being Field,
        a,b being Element of suppf(F) holds
    omf(F).[a,b] = omf(F).[b,a];
 
-theorem :: REALSET2:39
+theorem :: REALSET2:25
    for F being Field,
        a being Element of suppf(F) holds
    omf(F).[a,nmf(F)] = a & omf(F).[nmf(F),a] = a;
@@ -255,35 +300,33 @@ theorem :: REALSET2:39
 definition :: reverse element
   let F be Field;
   func revf(F) -> Function of suppf(F)\{ndf(F)},suppf(F)\{ndf(F)} means
-:: REALSET2:def 9
+:: REALSET2:def 15
  for x being Element of suppf(F)\{ndf(F)} holds
         omf(F).[x,it.x] = nmf(F);
 end;
 
-canceled 2;
-
-theorem :: REALSET2:42
+theorem :: REALSET2:26
       for F being Field holds
    for x,y being Element of suppf(F)\{ndf(F)} holds
       omf(F).[x,y] = nmf(F) implies y = revf(F).x;
 
-theorem :: REALSET2:43
+theorem :: REALSET2:27
       for F being Field holds
    for x being Element of suppf(F)\{ndf(F)} holds
       x =revf(F).(revf(F).x);
 
-theorem :: REALSET2:44
+theorem :: REALSET2:28
       for F being Field holds
    for a,b being Element of suppf(F)\{ndf(F)} holds
    omf(F).[a,b] is Element of suppf(F)\{ndf(F)} &
    revf(F).a is Element of suppf(F)\{ndf(F)};
 
-theorem :: REALSET2:45
+theorem :: REALSET2:29
       for F being Field holds
    for a,b,c being Element of suppf(F) holds
    odf(F).[a,b] = odf(F).[a,c] implies b = c;
 
-theorem :: REALSET2:46
+theorem :: REALSET2:30
       for F being Field holds
    for a being Element of suppf(F)\{ndf(F)} holds
    for b,c being Element of suppf(F) holds

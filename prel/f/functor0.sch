@@ -10,6 +10,6 @@ FUNCT_2
 BINOP_1
 #
 M1 W1 ;;M1 V2 ;V4 ;;M2 F1 ;;M2 F1 ;;M1 ;;
-R1 K53 F2 ;F3 ;F4 ;;F5 F3 ;F4 ;;;R1 F2 ;ËM2 F1 ;;M2 F1 ;;;K4 K4 B1 B2 ;F5 B1 B2 ;;P1 B1 B2 ;;P1 F3 ;F4 ;;;
+R1 K54 F2 ;F3 ;F4 ;;F5 F3 ;F4 ;;;R1 F2 ;ËM2 F1 ;;M2 F1 ;;;K4 K4 B1 B2 ;F5 B1 B2 ;;P1 B1 B2 ;;P1 F3 ;F4 ;;;
 #
 !

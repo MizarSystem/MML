@@ -21,13 +21,12 @@ VECTSP_1
 CARD_3
 XREAL_0
 INT_1
-ABSVALUE
 GROUP_1
 GR_CY_1
 SCMFSA_1
 #
-fW1 ;;;K167 ;
-fW1 ;;;K166 ;
-fW1 ;;;K168 ;
-fW1 ;V2 ;;;K169 ;
+fW1 ;;;K160 ;
+fW1 ;;;K159 ;
+fW1 ;;;K161 ;
+fW1 ;V2 ;;;K162 ;
 !

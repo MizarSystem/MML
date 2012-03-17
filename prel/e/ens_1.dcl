@@ -18,9 +18,9 @@ CAT_2
 OPPCAT_1
 ENS_1
 #
-fW1 ;V9 ;;M1 W1 ;;;K151 A1 ;
-fW1 ;;M1 W1 ;;;K152 A1 ;
-fV2 ;V4 ;;M1 W1 ;;M2 K152 A1 ;;;K23 A2 ;
-fV10 ;V11 ;;M1 W1 ;;;K162 A1 ;
-fW1 ;;G1 V11 ;;;K167 A1 ;
+fW1 ;V9 ;;M1 W1 ;;;K152 A1 ;
+fW1 ;;M1 W1 ;;;K153 A1 ;
+fV2 ;V4 ;;M1 W1 ;;M2 K153 A1 ;;;K23 A2 ;
+fV10 ;V11 ;;M1 W1 ;;;K163 A1 ;
+fW1 ;;G1 V11 ;;;K168 A1 ;
 !

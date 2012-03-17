@@ -1,0 +1,428 @@
+:: The Differentiable Functions on Normed Linear Spaces
+::  by Hiroshi Imura , Morishige Kimura and Yasunari Shidama
+:: 
+:: Received May 24, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, FCONT_1, SUBSET_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1,
+      ARYTM_3, RELAT_1, FUNCOP_1, ABSVALUE, LATTICES, SQUARE_1, ORDINAL2,
+      SEQ_1, SEQ_2, SEQM_3, RCOMP_1, BOOLE, REALSET1, FINSEQ_4, PARTFUN1,
+      PARTFUN2, NORMSP_1, RSSPACE, LOPBAN_1, LOPBAN_2, FDIFF_1;
+ notation TARSKI, XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
+      PRE_TOPC, STRUCT_0, FUNCOP_1, BINOP_1, PARTFUN2, XCMPLX_0, XREAL_0,
+      ORDINAL1, NUMBERS, REAL_1, NAT_1, FINSEQ_4, RLVECT_1, SEQ_1, SEQ_2,
+      SEQM_3, ABSVALUE, REALSET2, SQUARE_1, VFUNCT_1, NORMSP_1, RSSPACE,
+      LOPBAN_1, LOPBAN_2, LOPBAN_3, NFCONT_1, FDIFF_1;
+ constructors REAL_1, BINARITH, SQUARE_1, MEMBERED, DOMAIN_1, SEQ_2, PREPOWER,
+      PARTFUN1, PARTFUN2, REALSET1, FINSEQ_4, VFUNCT_1, RSSPACE3, LOPBAN_3,
+      NFCONT_1, FDIFF_1, REALSET2;
+ clusters RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, FUNCT_1, SEQ_1,
+      SEQM_3, LOPBAN_1, LOPBAN_2, FDIFF_1;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Differentiable Function on Normed Linear Spaces
+
+ reserve n,k for Nat;
+ reserve x,y,X,X1,Z,Z1 for set;
+ reserve s,g,r,p for Real;
+ reserve S,T for RealNormSpace;
+ reserve f,f1,f2 for PartFunc of S,T;
+ reserve rseq,rseq1,rseq2 for Real_Sequence;
+ reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
+ reserve x0,x1,x2 for Point of S;
+ reserve Y for Subset of S;
+
+::::: Normed Linear Spaces varsions of RCOMP_1:37 -
+
+::: RCOMP_1:37 --> NFCONT_1:4
+
+theorem :: NDIFF_1:1
+ for x0 be Point of S
+    for N1,N2 being Neighbourhood of x0
+ ex N being Neighbourhood of x0 st N c= N1 & N c= N2;
+
+theorem :: NDIFF_1:2
+for X being Subset of S st X is open
+for r be Point of S st r in X
+ex N being Neighbourhood of r st N c= X;
+
+theorem :: NDIFF_1:3
+for X being Subset of S st X is open
+for r be Point of S st r in X holds
+ex g st 0<g & {y where y is Point of S:||.y-r.|| < g} c= X;
+
+theorem :: NDIFF_1:4
+for X being Subset of S holds
+((for r be Point of S
+  st r in X holds ex N be Neighbourhood of r st N c= X)
+   implies X is open );
+
+theorem :: NDIFF_1:5
+for X being Subset of S holds
+( (for r be Point of S st r in X holds ex N
+be Neighbourhood of r st N c= X) iff X is open);
+
+::::: Normed Linear Spaces varsions of SEQ_1: -
+
+definition let S be ZeroStr;
+  let f be sequence of S;
+  attr f is being_not_0 means
+:: NDIFF_1:def 1
+  rng f c= (the carrier of S) \ {0.S};
+end;
+
+notation let S be ZeroStr;
+  let f be sequence of S;
+  synonym f is_not_0 for f is being_not_0;
+end;
+
+theorem :: NDIFF_1:6
+  seq is being_not_0 iff for x st x in NAT holds seq.x<>0.S;
+
+theorem :: NDIFF_1:7
+  seq is being_not_0 iff for n holds seq.n<>0.S;
+
+definition let RNS be RealLinearSpace;
+          let S be sequence of RNS;
+          let a be Real_Sequence;
+          func a (#) S -> sequence of RNS means
+:: NDIFF_1:def 2
+  for n holds it.n = a.n * S.n;
+end;
+
+definition let RNS be RealLinearSpace;
+           let z be Point of RNS;
+           let a be Real_Sequence;
+           func a * z -> sequence of RNS means
+:: NDIFF_1:def 3
+for n holds it.n = a.n * z;
+end;
+
+theorem :: NDIFF_1:8
+  for rseq1,rseq2 be Real_Sequence holds
+  (rseq1+rseq2)(#)seq=rseq1(#)seq+rseq2(#)seq;
+
+theorem :: NDIFF_1:9
+  for rseq be Real_Sequence
+  for seq1, seq2 be sequence of S holds
+  rseq(#)(seq1+seq2)=rseq(#)seq1+rseq(#)seq2;
+
+theorem :: NDIFF_1:10
+  for rseq be Real_Sequence holds
+   r*(rseq(#)seq) =rseq(#)(r*seq);
+
+theorem :: NDIFF_1:11
+  for rseq1,rseq2 be Real_Sequence holds
+  (rseq1-rseq2)(#)seq=rseq1(#)seq-rseq2(#)seq;
+
+theorem :: NDIFF_1:12
+  for rseq be Real_Sequence
+  for seq1, seq2 be sequence of S
+  holds
+  rseq(#)(seq1-seq2)=rseq(#)seq1-rseq(#)seq2;
+
+theorem :: NDIFF_1:13
+  rseq is convergent & seq is convergent implies
+                   rseq (#) seq is convergent;
+
+theorem :: NDIFF_1:14
+  rseq is convergent & seq is convergent implies
+                 lim (rseq (#) seq) = (lim rseq) * (lim seq);
+
+theorem :: NDIFF_1:15
+ (seq+seq1) ^\k=(seq ^\k) +(seq1 ^\k);
+
+theorem :: NDIFF_1:16
+ (seq-seq1) ^\k=(seq ^\k) -(seq1 ^\k);
+
+theorem :: NDIFF_1:17
+  seq is_not_0 implies seq ^\k is_not_0;
+
+theorem :: NDIFF_1:18
+  seq ^\k is_subsequence_of seq;
+
+theorem :: NDIFF_1:19
+   seq is constant & seq1 is_subsequence_of seq implies
+       seq1 is constant;
+
+theorem :: NDIFF_1:20
+   seq is constant & seq1 is_subsequence_of
+   seq implies seq=seq1;
+
+definition let S;
+  let IT be sequence of S;
+  attr IT is convergent_to_0 means
+:: NDIFF_1:def 4
+      IT is_not_0 & IT is convergent & lim IT = 0.S;
+end;
+
+theorem :: NDIFF_1:21
+for X be RealNormSpace
+  for seq be sequence of X holds
+  seq is constant implies
+      ( seq is convergent
+     & for k be Nat holds lim seq = seq.k );
+
+theorem :: NDIFF_1:22
+  for r be Real st ( 0<r & (for n holds seq.n=(1/(n+r))*x0))
+   holds seq is convergent;
+
+theorem :: NDIFF_1:23
+  for r be Real st
+   (  0<r & (for n holds seq.n=(1/(n+r))*x0 ))
+     holds lim seq=0.S;
+
+theorem :: NDIFF_1:24
+  for a be convergent_to_0 Real_Sequence
+  for z be Point of S st z <> 0.S
+  holds a*z is convergent_to_0;
+
+theorem :: NDIFF_1:25
+(for r be Point of S holds r in Y iff r in the carrier of S)
+iff Y=the carrier of S;
+
+reserve S,T for non trivial RealNormSpace;
+reserve f,f1,f2 for PartFunc of S,T;
+reserve s1,s2,q1,seq,seq1,seq2 for sequence of S;
+reserve x0,x1,x2 for Point of S;
+
+registration
+  let S be non trivial RealNormSpace;
+  cluster convergent_to_0 sequence of S;
+end;
+
+registration let S;
+  cluster constant sequence of S;
+end;
+
+::::Normed Linear Spaces versions of FDIFF_1:::::::::::::::::::::::::
+
+reserve h for convergent_to_0 sequence of S;
+reserve c for constant sequence of S;
+
+definition let S,T;
+  let IT be PartFunc of S,T;
+  attr IT is REST-like means
+:: NDIFF_1:def 5
+  IT is total &
+  for h holds (||.h.||")(#)(IT*h) is convergent &
+    lim ((||.h.||")(#)(IT*h)) = 0.T;
+end;
+
+registration let S,T;
+  cluster REST-like PartFunc of S,T;
+end;
+
+definition let S,T;
+  mode REST of S,T is REST-like PartFunc of S,T;
+end;
+
+theorem :: NDIFF_1:26
+  for R be PartFunc of S,T st R is total holds
+      R is REST-like iff
+        (for r be Real st r > 0  ex d be Real st
+          d > 0 & (for z be Point of S st z <> 0.S & ||.z.|| < d
+                       holds ( ||.z.||"* ||. R/.z .||) < r ) );
+
+theorem :: NDIFF_1:27
+  for R be REST of S,T
+    for s be convergent_to_0 sequence of S
+  holds (R*s) is convergent & lim (R*s) = 0.T;
+
+reserve R,R1,R2 for REST of S,T;
+reserve L,L1,L2 for Point of R_NormSpace_of_BoundedLinearOperators(S,T);
+
+theorem :: NDIFF_1:28
+rng (seq^\n) c= rng seq;
+
+theorem :: NDIFF_1:29
+for h be PartFunc of S,T for seq be sequence of S holds
+rng seq c= dom h implies (h*seq)^\n=h*(seq^\n);
+
+theorem :: NDIFF_1:30
+for h1,h2 be PartFunc of S,T for seq be sequence of S holds
+  h1 is total & h2 is total implies
+  (h1+h2)*seq = h1*seq + h2*seq &
+  (h1-h2)*seq = h1*seq - h2*seq;
+
+theorem :: NDIFF_1:31
+ for h be PartFunc of S,T for seq be sequence of S
+ for r be Real holds
+   h is total implies (r(#)h)*seq = r*(h*seq);
+
+theorem :: NDIFF_1:32
+  f is_continuous_in x0 iff x0 in dom f & for s1 be sequence of S
+st rng s1 c= dom f &
+s1 is convergent & lim s1=x0 & (for n holds s1.n<>x0) holds
+f*s1 is convergent & f/.x0=lim(f*s1);
+
+theorem :: NDIFF_1:33
+for R1,R2 holds R1+R2 is REST of S,T & R1-R2 is REST of S,T;
+
+theorem :: NDIFF_1:34
+for r,R holds r(#)R is REST of S,T;
+
+definition
+let S,T;
+let f be PartFunc of S,T;
+let x0 be Point of S;
+pred f is_differentiable_in x0 means
+:: NDIFF_1:def 6
+ex N being Neighbourhood of x0 st N c= dom f &
+ex L,R st for x be Point of S st x in N holds
+f/.x - f/.x0 = L.(x-x0) + R/.(x-x0);
+end;
+
+definition let S,T;
+           let f be PartFunc of S,T;
+           let x0 be Point of S;
+assume  f is_differentiable_in x0;
+func diff(f,x0) -> Point of R_NormSpace_of_BoundedLinearOperators(S,T)
+means
+:: NDIFF_1:def 7
+ex N being Neighbourhood of x0 st N c= dom f &
+ex R st for x be Point of S st x in N
+holds f/.x-f/.x0 = it.(x-x0) + R/.(x-x0);
+end;
+
+definition let X;
+           let S,T;
+           let f be PartFunc of S,T;
+ pred f is_differentiable_on X means
+:: NDIFF_1:def 8
+ X c=dom f & for x be Point of S
+ st x in X holds f|X is_differentiable_in x;
+end;
+
+theorem :: NDIFF_1:35
+for f be PartFunc of S,T holds
+ (f is_differentiable_on X implies X is Subset of the carrier of S);
+
+theorem :: NDIFF_1:36
+for f be PartFunc of S,T
+for Z be Subset of S st Z is open holds
+( f is_differentiable_on Z iff
+Z c=dom f & for x be Point of S
+st x in Z holds f is_differentiable_in x );
+
+theorem :: NDIFF_1:37
+for f be PartFunc of S,T
+for Y be Subset of S holds
+  f is_differentiable_on Y implies Y is open;
+
+definition let S,T;
+let f be PartFunc of S,T;
+let X be set;
+ assume f is_differentiable_on X;
+ func f`|X -> PartFunc of S, R_NormSpace_of_BoundedLinearOperators(S,T)
+ means
+:: NDIFF_1:def 9
+ dom it = X & for x be Point of S
+ st x in X holds it/.x = diff(f,x);
+end;
+
+theorem :: NDIFF_1:38
+  for f be PartFunc of S,T
+  for Z be Subset of S st Z is open & Z c= dom f
+   & ex r be Point of T st rng f = {r} holds
+   f is_differentiable_on Z
+   & for x be Point of S st x in Z holds (f`|Z)/.x
+   = 0.R_NormSpace_of_BoundedLinearOperators(S,T);
+
+registration let S;
+             let h,n;
+  cluster h^\n -> convergent_to_0;
+end;
+
+registration let S;
+             let c,n;
+  cluster c^\n -> constant;
+end;
+
+theorem :: NDIFF_1:39
+for x0 be Point of S for N being Neighbourhood of x0 st
+f is_differentiable_in x0 & N c= dom f
+holds
+for h be convergent_to_0 sequence of S
+for c st rng c = {x0} & rng (h+c) c= N holds
+(f*(h+c) - f*c) is convergent
+& lim (f*(h+c) - f*c) = 0.T;
+
+theorem :: NDIFF_1:40
+for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
+holds f1+f2 is_differentiable_in x0 & diff(f1+f2,x0)=diff(f1,x0)+diff(f2,x0);
+
+theorem :: NDIFF_1:41
+for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
+holds f1-f2 is_differentiable_in x0 & diff(f1-f2,x0)=diff(f1,x0)-diff(f2,x0);
+
+theorem :: NDIFF_1:42
+for r,f,x0 st f is_differentiable_in x0 holds
+r(#)f is_differentiable_in x0 & diff((r(#)f),x0) = r*diff(f,x0);
+
+theorem :: NDIFF_1:43
+  for f be PartFunc of S,S
+  for Z be Subset of S st Z is open & Z c= dom f & f|Z = id Z holds
+f is_differentiable_on Z
+& for x be Point of S st x in Z
+holds (f`|Z)/.x = id  (the carrier of S);
+
+theorem :: NDIFF_1:44
+  for Z be Subset of S st Z is open
+  for f1,f2 st Z c= dom (f1+f2) & f1 is_differentiable_on Z &
+f2 is_differentiable_on Z holds f1+f2 is_differentiable_on Z &
+for x be Point of S st x in Z
+holds ((f1+f2)`|Z)/.x = diff(f1,x) + diff(f2,x);
+
+theorem :: NDIFF_1:45
+for Z be Subset of S st Z is open
+for f1,f2 st Z c= dom (f1-f2) & f1 is_differentiable_on Z &
+f2 is_differentiable_on Z holds f1-f2 is_differentiable_on Z &
+for x be Point of S st x in Z
+holds ((f1-f2)`|Z)/.x = diff(f1,x) - diff(f2,x);
+
+theorem :: NDIFF_1:46
+for Z be Subset of S st Z is open
+  for r,f st Z c= dom (r(#)f) & f is_differentiable_on Z holds
+r(#)f is_differentiable_on Z & for x be Point of S
+st x in Z holds
+((r(#)f)`|Z)/.x =r*diff(f,x);
+
+theorem :: NDIFF_1:47
+for Z be Subset of S st Z is open holds
+(Z c= dom f & f is_constant_on Z implies
+f is_differentiable_on Z & for x be Point of S
+st x in Z holds (f`|Z)/.x =
+0.R_NormSpace_of_BoundedLinearOperators(S,T));
+
+theorem :: NDIFF_1:48
+ for f be PartFunc of S,S
+ for r be Real for p be Point of S
+ for Z be Subset of S st Z is open holds
+ ( Z c= dom f & (for x be Point of S
+ st x in Z holds f/.x = r*x + p) implies
+  f is_differentiable_on Z & for x be Point of S st x in Z
+  holds (f`|Z)/.x = r * FuncUnit(S) );
+
+theorem :: NDIFF_1:49
+for x0 be Point of S holds
+ f is_differentiable_in x0 implies f is_continuous_in x0;
+
+theorem :: NDIFF_1:50
+  f is_differentiable_on X implies f is_continuous_on X;
+
+theorem :: NDIFF_1:51
+for Z be Subset of S st Z is open holds
+(  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z );
+
+theorem :: NDIFF_1:52
+  f is_differentiable_in x0 implies
+  (ex N being Neighbourhood of x0 st
+   N c= dom f &
+   (ex R st R/.0.S=0.T
+    &  R is_continuous_in 0.S
+    &  for x be Point of S st x in N
+        holds f/.x-f/.x0 = diff(f,x0).(x-x0) + R/.(x-x0) ));

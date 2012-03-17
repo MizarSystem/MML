@@ -7,13 +7,14 @@
 environ
 
  vocabulary FUNCT_1, BOOLE, TARSKI, RELAT_1, MCART_1, RELAT_2, WELLORD1,
-      SUBSET_1, ORDERS_1, PARTFUN1;
+      SUBSET_1, ORDERS_1, PARTFUN1, ORDINAL1, ZFMISC_1, WELLORD2, SETFAM_1,
+      ORDERS_2, HAHNBAN;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, RELAT_2, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, MCART_1, WELLORD1, STRUCT_0, PRE_TOPC;
- constructors RELAT_2, MCART_1, WELLORD1, PRE_TOPC, PARTFUN1, MEMBERED,
-      XBOOLE_0;
- clusters RELSET_1, STRUCT_0, PRE_TOPC, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1,
-      XBOOLE_0;
+      RELSET_1, PARTFUN1, FUNCT_2, MCART_1, ORDINAL1, WELLORD1, SETFAM_1,
+      WELLORD2;
+ constructors RELAT_2, MCART_1, WELLORD1, PARTFUN1, MEMBERED, XBOOLE_0,
+      FUNCT_2, ZFMISC_1, TARSKI, ORDINAL1, SETFAM_1, WELLORD2;
+ clusters RELSET_1, SUBSET_1, MEMBERED, ZFMISC_1, PARTFUN1, XBOOLE_0, ORDINAL1;
  requirements BOOLE, SUBSET;
 
 
@@ -86,372 +87,7 @@ theorem :: ORDERS_1:14
      x in X & y in X & z in X & [x,y] in O & [y,z] in O implies
   [x,z] in O;
 
-::
-::  Partially ordered sets.
-::
-
-definition
- canceled;
-  struct(1-sorted) RelStr (#
-    carrier -> set,
-    InternalRel -> Relation of the carrier
-  #);
-end;
-
-registration
- let X be non empty set;
- let R be Relation of X;
- cluster RelStr(#X,R#) -> non empty;
-end;
-
-definition let A be RelStr;
- attr A is reflexive means
-:: ORDERS_1:def 4
-
-  the InternalRel of A is_reflexive_in the carrier of A;
- attr A is transitive means
-:: ORDERS_1:def 5
-
-  the InternalRel of A is_transitive_in the carrier of A;
- attr A is antisymmetric means
-:: ORDERS_1:def 6
-
-  the InternalRel of A is_antisymmetric_in the carrier of A;
-end;
-
-registration
- cluster non empty reflexive transitive antisymmetric strict RelStr;
-end;
-
-definition
- mode Poset is reflexive transitive antisymmetric RelStr;
-end;
-
-registration let A be Poset;
- cluster the InternalRel of A -> total reflexive antisymmetric transitive;
-end;
-
-registration
- let X be set;
- let O be Order of X;
- cluster RelStr(#X,O#) -> reflexive transitive antisymmetric;
-end;
-
-reserve A for non empty Poset;
-
-reserve a,a1,a2,a3,b,c for Element of A;
-reserve S,T for Subset of A;
-
-definition let A be RelStr; let a1,a2 be Element of A;
- canceled 2;
-
- pred a1 <= a2 means
-:: ORDERS_1:def 9
-   [a1,a2] in the InternalRel of A;
- end;
-
-notation let A be RelStr; let a1,a2 be Element of A;
- synonym a2 >= a1 for a1 <= a2;
-end;
-
-definition let A be RelStr; let a1,a2 be Element of A;
- pred a1 < a2 means
-:: ORDERS_1:def 10
-   a1 <= a2 & a1 <> a2;
- irreflexivity;
- end;
-
-notation let A be RelStr; let a1,a2 be Element of A;
- synonym a2 > a1 for a1 < a2;
-end;
-
-canceled 9;
-
-theorem :: ORDERS_1:24
- for A being reflexive non empty RelStr, a being Element of A
-  holds a <= a;
-
-definition let A be reflexive non empty RelStr;
-           let a1,a2 be Element of A;
- redefine pred a1 <= a2;
- reflexivity;
-end;
-
-theorem :: ORDERS_1:25
- for A being antisymmetric RelStr,
- a1,a2 being Element of A
-  st a1 <= a2 & a2 <= a1 holds a1 = a2;
-
-theorem :: ORDERS_1:26
- for A being transitive RelStr,
-   a1,a2,a3 being Element of A holds
- a1 <= a2 & a2 <= a3 implies a1 <= a3;
-
-canceled;
-
-theorem :: ORDERS_1:28
- for A being antisymmetric RelStr,
-  a1,a2 being Element of A holds
- not(a1 < a2 & a2 < a1);
-
-theorem :: ORDERS_1:29
- for A being transitive antisymmetric RelStr
- for a1,a2,a3 being Element of A holds
- a1 < a2 & a2 < a3 implies a1 < a3;
-
-theorem :: ORDERS_1:30
- for A being antisymmetric RelStr,
-  a1,a2 being Element of A holds
- a1 <= a2 implies not a2 < a1;
-
-canceled;
-
-theorem :: ORDERS_1:32
-     for A being transitive antisymmetric RelStr
- for a1,a2,a3 being Element of A holds
- (a1 < a2 & a2 <= a3) or (a1 <= a2 & a2 < a3) implies a1 < a3;
-
-::
-::  Chains.
-::
-
-definition let A be RelStr;
- let IT be Subset of A;
- attr IT is strongly_connected means
-:: ORDERS_1:def 11
-   the InternalRel of A is_strongly_connected_in IT;
-end;
-
-registration let A be RelStr;
- cluster {}A -> strongly_connected;
-end;
-
-registration let A be RelStr;
- cluster strongly_connected Subset of A;
-end;
-
-definition let A be RelStr;
- mode Chain of A is strongly_connected Subset of A;
-end;
-
-canceled 2;
-
-theorem :: ORDERS_1:35
- for A being non empty reflexive RelStr
- for a being Element of A holds {a} is Chain of A;
-
-theorem :: ORDERS_1:36
- for A being non empty reflexive RelStr, a1,a2 being Element of A holds
- {a1,a2} is Chain of A iff a1 <= a2 or a2 <= a1;
-
-theorem :: ORDERS_1:37
-     for A being RelStr, C being Chain of A, S being Subset of A holds
- S c= C implies S is Chain of A;
-
-theorem :: ORDERS_1:38
- for A being reflexive RelStr, a1,a2 being Element of A holds
- (ex C being Chain of A st a1 in C & a2 in C) iff a1 <= a2 or a2 <= a1;
-
-theorem :: ORDERS_1:39
- for A being reflexive antisymmetric RelStr, a1,a2 being Element of A holds
- (ex C being Chain of A st a1 in C & a2 in C) iff (a1 < a2 iff not a2 <= a1);
-
-theorem :: ORDERS_1:40
- for A being RelStr, T being Subset of A holds
- the InternalRel of A well_orders T implies
-  T is Chain of A;
-
-::
-::  Upper and lower cones.
-::
-
-definition let A; let S;
- func UpperCone(S) -> Subset of A equals
-:: ORDERS_1:def 12
-    {a1 : for a2 st a2 in S holds a2 < a1};
-end;
-
-definition let A; let S;
- func LowerCone(S) -> Subset of A equals
-:: ORDERS_1:def 13
-    {a1 : for a2 st a2 in S holds a1 < a2};
-end;
-
-canceled 2;
-
-theorem :: ORDERS_1:43
- UpperCone({}(A)) = the carrier of A;
-
-theorem :: ORDERS_1:44
-     UpperCone([#](A)) = {};
-
-theorem :: ORDERS_1:45
-     LowerCone({}(A)) = the carrier of A;
-
-theorem :: ORDERS_1:46
-     LowerCone([#](A)) = {};
-
-theorem :: ORDERS_1:47
- a in S implies not a in UpperCone(S);
-
-theorem :: ORDERS_1:48
-     not a in UpperCone{a};
-
-theorem :: ORDERS_1:49
- a in S implies not a in LowerCone(S);
-
-theorem :: ORDERS_1:50
- not a in LowerCone{a};
-
-theorem :: ORDERS_1:51
-     c < a iff a in UpperCone{c};
-
-theorem :: ORDERS_1:52
- a < c iff a in LowerCone{c};
-
-::
-::  Initial segments.
-::
-
-definition let A; let S; let a;
- func InitSegm(S,a) -> Subset of A equals
-:: ORDERS_1:def 14
-    LowerCone{a} /\ S;
-end;
-
-definition let A; let S;
- mode Initial_Segm of S -> Subset of A means
-:: ORDERS_1:def 15
-   ex a st a in S & it = InitSegm(S,a) if S <> {}
-        otherwise it = {};
-end;
-
-reserve I for Initial_Segm of S;
-
-canceled 3;
-
-theorem :: ORDERS_1:56
- x in InitSegm(S,a) iff x in LowerCone{a} & x in S;
-
-theorem :: ORDERS_1:57
- a in InitSegm(S,b) iff a < b & a in S;
-
-canceled 2;
-
-theorem :: ORDERS_1:60
-     InitSegm({}(A),a) = {};
-
-theorem :: ORDERS_1:61
- InitSegm(S,a) c= S;
-
-theorem :: ORDERS_1:62
- not a in InitSegm(S,a);
-
-canceled;
-
-theorem :: ORDERS_1:64
-     a1 < a2 implies InitSegm(S,a1) c= InitSegm(S,a2);
-
-theorem :: ORDERS_1:65
-     S c= T implies InitSegm(S,a) c= InitSegm(T,a);
-
-canceled;
-
-theorem :: ORDERS_1:67
- I c= S;
-
-theorem :: ORDERS_1:68
- S <> {} iff not S is Initial_Segm of S;
-
-theorem :: ORDERS_1:69
- (S <> {} or T <> {}) & (S is Initial_Segm of T) implies
-   not T is Initial_Segm of S;
-
-theorem :: ORDERS_1:70
- a1 < a2 & a1 in S & a2 in T & T is Initial_Segm of S implies
-  a1 in T;
-
-theorem :: ORDERS_1:71
- a in S & S is Initial_Segm of T implies
-  InitSegm(S,a) = InitSegm(T,a);
-
-theorem :: ORDERS_1:72
-     S c= T & the InternalRel of A well_orders T &
-  (for a1,a2 st a2 in S & a1 < a2 holds a1 in S) implies
-    S = T or S is Initial_Segm of T;
-
-theorem :: ORDERS_1:73
- S c= T & the InternalRel of A well_orders T &
-  (for a1,a2 st a2 in S & a1 in T & a1 < a2 holds a1 in S) implies
-    S = T or S is Initial_Segm of T;
-
-::
-::  Chains of choice function of BOOL of partially ordered sets.
-::
-
-reserve f for Choice_Function of BOOL(the carrier of A);
-
-definition let A; let f;
- mode Chain of f -> Chain of A means
-:: ORDERS_1:def 16
-   it <> {} &
-        the InternalRel of A well_orders it &
-        for a st a in it holds f.UpperCone(InitSegm(it,a)) = a;
-end;
-
-reserve fC,fC1,fC2 for Chain of f;
-
-canceled 4;
-
-theorem :: ORDERS_1:78
- {f.(the carrier of A)} is Chain of f;
-
-theorem :: ORDERS_1:79
- f.(the carrier of A) in fC;
-
-theorem :: ORDERS_1:80
- a in fC & b = f.(the carrier of A) implies b <= a;
-
-theorem :: ORDERS_1:81
-     a = f.(the carrier of A) implies InitSegm(fC,a) = {};
-
-theorem :: ORDERS_1:82
-     fC1 meets fC2;
-
-theorem :: ORDERS_1:83
- fC1 <> fC2 implies
-  (fC1 is Initial_Segm of fC2 iff not fC2 is Initial_Segm of fC1);
-
-theorem :: ORDERS_1:84
- fC1 c< fC2 iff fC1 is Initial_Segm of fC2;
-
-definition let A; let f;
- func Chains f -> set means
-:: ORDERS_1:def 17
-   x in it iff x is Chain of f;
-end;
-
-registration let A; let f;
- cluster Chains f -> non empty;
-end;
-
-canceled 2;
-
-theorem :: ORDERS_1:87
- union(Chains(f)) <> {};
-
-theorem :: ORDERS_1:88
- fC <> union(Chains(f)) & S = union(Chains(f)) implies
-  fC is Initial_Segm of S;
-
-theorem :: ORDERS_1:89
-     union(Chains(f)) is Chain of f;
-
-::
-::  Auxiliary theorems.
-::
-
-canceled;
+canceled 76;
 
 theorem :: ORDERS_1:91
      (ex X st X <> {} & X in Y) iff union Y <> {};
@@ -479,3 +115,373 @@ theorem :: ORDERS_1:97
 theorem :: ORDERS_1:98
    for A being set, R being Relation of A st R is_reflexive_in A
   holds dom R = A & field R = A;
+
+begin :: Originally ORDERS_2
+
+ reserve R,P for Relation,
+         X,X1,X2,Y,Z,x,y,z,u for set,
+         g,h for Function,
+         O for Order of X,
+         D for non empty set,
+         d,d1,d2 for Element of D,
+         A1,A2,B for Ordinal,
+         L,L1,L2 for T-Sequence;
+
+::
+::  Orders.
+::
+
+theorem :: ORDERS_1:99
+ dom O = X & rng O = X;
+
+theorem :: ORDERS_1:100
+ field O = X;
+
+definition let R;
+ attr R is being_quasi-order means
+:: ORDERS_1:def 3
+        R is reflexive transitive;
+  attr R is being_partial-order means
+:: ORDERS_1:def 4
+   R is reflexive transitive antisymmetric;
+  attr R is being_linear-order means
+:: ORDERS_1:def 5
+   R is reflexive transitive antisymmetric connected;
+  end;
+
+notation let R;
+ synonym R is_quasi-order for R is being_quasi-order; synonym
+ R is_partial-order for R is being_partial-order; synonym R is_linear-order
+ for R is being_linear-order; end;
+
+canceled 3;
+
+theorem :: ORDERS_1:104
+       R is_quasi-order implies R~ is_quasi-order;
+
+theorem :: ORDERS_1:105
+       R is_partial-order implies R~ is_partial-order;
+
+theorem :: ORDERS_1:106
+  R is_linear-order implies R~ is_linear-order;
+
+theorem :: ORDERS_1:107
+       R is well-ordering implies
+    R is_quasi-order & R is_partial-order & R is_linear-order;
+
+theorem :: ORDERS_1:108
+       R is_linear-order implies R is_quasi-order & R is_partial-order;
+
+theorem :: ORDERS_1:109
+  R is_partial-order implies R is_quasi-order;
+
+theorem :: ORDERS_1:110
+   O is_partial-order;
+
+theorem :: ORDERS_1:111
+      O is_quasi-order;
+
+theorem :: ORDERS_1:112
+      O is connected implies O is_linear-order;
+
+theorem :: ORDERS_1:113
+       R is_quasi-order implies R|_2 X is_quasi-order;
+
+theorem :: ORDERS_1:114
+  R is_partial-order implies R|_2 X is_partial-order;
+
+theorem :: ORDERS_1:115
+       R is_linear-order implies R|_2 X is_linear-order;
+
+canceled 3;
+
+theorem :: ORDERS_1:119
+  {} is_quasi-order &
+   {} is_partial-order &
+    {} is_linear-order &
+     {} is well-ordering;
+
+theorem :: ORDERS_1:120
+  id X is_quasi-order &
+   id X is_partial-order;
+
+definition let R,X;
+ pred R quasi_orders X means
+:: ORDERS_1:def 6
+   R is_reflexive_in X & R is_transitive_in X;
+ pred R partially_orders X means
+:: ORDERS_1:def 7
+   R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X;
+ pred R linearly_orders X means
+:: ORDERS_1:def 8
+   R is_reflexive_in X & R is_transitive_in X & R is_antisymmetric_in X &
+        R is_connected_in X;
+end;
+
+canceled 3;
+
+theorem :: ORDERS_1:124
+    R well_orders X implies
+    R quasi_orders X & R partially_orders X & R linearly_orders X;
+
+theorem :: ORDERS_1:125
+    R linearly_orders X implies R quasi_orders X & R partially_orders X;
+
+theorem :: ORDERS_1:126
+       R partially_orders X implies R quasi_orders X;
+
+theorem :: ORDERS_1:127
+  R is_quasi-order implies R quasi_orders field R;
+
+theorem :: ORDERS_1:128
+       R quasi_orders Y & X c= Y implies R quasi_orders X;
+
+theorem :: ORDERS_1:129
+      R quasi_orders X implies R|_2 X is_quasi-order;
+
+theorem :: ORDERS_1:130
+  R is_partial-order implies R partially_orders field R;
+
+theorem :: ORDERS_1:131
+       R partially_orders Y & X c= Y implies R partially_orders X;
+
+theorem :: ORDERS_1:132
+      R partially_orders X implies R|_2 X is_partial-order;
+
+theorem :: ORDERS_1:133
+      R is_linear-order implies R linearly_orders field R;
+
+theorem :: ORDERS_1:134
+       R linearly_orders Y & X c= Y implies R linearly_orders X;
+
+theorem :: ORDERS_1:135
+      R linearly_orders X implies R|_2 X is_linear-order;
+
+theorem :: ORDERS_1:136
+      R quasi_orders X implies R~ quasi_orders X;
+
+theorem :: ORDERS_1:137
+ R partially_orders X implies R~ partially_orders X;
+
+theorem :: ORDERS_1:138
+      R linearly_orders X implies R~ linearly_orders X;
+
+theorem :: ORDERS_1:139
+      O quasi_orders X;
+
+theorem :: ORDERS_1:140
+      O partially_orders X;
+
+theorem :: ORDERS_1:141
+   R partially_orders X implies R |_2 X is Order of X;
+
+theorem :: ORDERS_1:142
+      R linearly_orders X implies R |_2 X is Order of X;
+
+theorem :: ORDERS_1:143
+      R well_orders X implies R |_2 X is Order of X;
+
+canceled 2;
+
+theorem :: ORDERS_1:146
+       id X quasi_orders X &
+   id X partially_orders X;
+
+definition let R,X;
+ pred X has_upper_Zorn_property_wrt R means
+:: ORDERS_1:def 9
+   for Y st Y c= X & R|_2 Y is_linear-order
+        ex x st x in X & for y st y in Y holds [y,x] in R;
+ pred X has_lower_Zorn_property_wrt R means
+:: ORDERS_1:def 10
+        for Y st Y c= X & R|_2 Y is_linear-order
+        ex x st x in X & for y st y in Y holds [x,y] in R;
+end;
+
+canceled 2;
+
+theorem :: ORDERS_1:149
+  X has_upper_Zorn_property_wrt R implies X <> {};
+
+theorem :: ORDERS_1:150
+       X has_lower_Zorn_property_wrt R implies X <> {};
+
+theorem :: ORDERS_1:151
+  X has_upper_Zorn_property_wrt R iff X has_lower_Zorn_property_wrt R~;
+
+theorem :: ORDERS_1:152
+      X has_upper_Zorn_property_wrt R~ iff X has_lower_Zorn_property_wrt R;
+
+definition let R,x;
+ pred x is_maximal_in R means
+:: ORDERS_1:def 11
+  x in field R & not ex y st y in field R & y <> x & [x,y] in R;
+ pred x is_minimal_in R means
+:: ORDERS_1:def 12
+  x in field R & not ex y st y in field R & y <> x & [y,x] in R;
+ pred x is_superior_of R means
+:: ORDERS_1:def 13
+  x in field R & for y st y in field R & y <> x holds [y,x] in R;
+ pred x is_inferior_of R means
+:: ORDERS_1:def 14
+  x in field R & for y st y in field R & y <> x holds [x,y] in R;
+end;
+
+canceled 4;
+
+theorem :: ORDERS_1:157
+      x is_inferior_of R & R is antisymmetric implies x is_minimal_in R;
+
+theorem :: ORDERS_1:158
+      x is_superior_of R & R is antisymmetric implies x is_maximal_in R;
+
+theorem :: ORDERS_1:159
+      x is_minimal_in R & R is connected implies x is_inferior_of R;
+
+theorem :: ORDERS_1:160
+      x is_maximal_in R & R is connected implies x is_superior_of R;
+
+theorem :: ORDERS_1:161
+       x in X & x is_superior_of R & X c= field R & R is reflexive implies
+   X has_upper_Zorn_property_wrt R;
+
+theorem :: ORDERS_1:162
+       x in X & x is_inferior_of R & X c= field R & R is reflexive implies
+   X has_lower_Zorn_property_wrt R;
+
+theorem :: ORDERS_1:163
+  x is_minimal_in R iff x is_maximal_in R~;
+
+theorem :: ORDERS_1:164
+       x is_minimal_in R~ iff x is_maximal_in R;
+
+theorem :: ORDERS_1:165
+       x is_inferior_of R iff x is_superior_of R~;
+
+theorem :: ORDERS_1:166
+       x is_inferior_of R~ iff x is_superior_of R;
+
+canceled 6;
+
+::
+::  Kuratowski - Zorn Lemma.
+::
+
+ reserve A,C for Ordinal;
+
+theorem :: ORDERS_1:173
+  for R,X st R partially_orders X & field R = X &
+   X has_upper_Zorn_property_wrt R ex x st x is_maximal_in R;
+
+theorem :: ORDERS_1:174
+       for R,X st R partially_orders X & field R = X &
+   X has_lower_Zorn_property_wrt R ex x st x is_minimal_in R;
+
+theorem :: ORDERS_1:175
+  for X st X <> {} &
+   for Z st Z c= X & Z is c=-linear
+     ex Y st Y in X & for X1 st X1 in Z holds X1 c= Y
+   ex Y st Y in X & for Z st Z in X & Z <> Y holds not Y c= Z;
+
+theorem :: ORDERS_1:176
+  for X st X <> {} &
+   for Z st Z c= X & Z is c=-linear
+     ex Y st Y in X & for X1 st X1 in Z holds Y c= X1
+   ex Y st Y in X & for Z st Z in X & Z <> Y holds not Z c= Y;
+
+theorem :: ORDERS_1:177
+  for X st X <> {} &
+   for Z st Z <> {} & Z c= X & Z is c=-linear holds
+    union Z in X
+   ex Y st Y in X & for Z st Z in X & Z <> Y holds not Y c= Z;
+
+theorem :: ORDERS_1:178
+       for X st X <> {} &
+   for Z st Z <> {} & Z c= X & Z is c=-linear
+     holds meet Z in X
+   ex Y st Y in X & for Z st Z in X & Z <> Y holds not Z c= Y;
+
+scheme :: ORDERS_1:sch 1
+ Zorn_Max{A() -> non empty set, P[set,set]}:
+ ex x being Element of A() st
+  for y being Element of A() st x <> y holds not P[x,y]
+provided
+  for x being Element of A() holds P[x,x] and
+  for x,y being Element of A() st P[x,y] & P[y,x] holds x = y and
+  for x,y,z being Element of A() st P[x,y] & P[y,z] holds P[x,z] and
+  for X st X c= A() &
+     (for x,y being Element of A() st x in X & y in X
+       holds P[x,y] or P[y,x]) holds
+     ex y being Element of A() st
+      for x being Element of A() st x in X holds P[x,y];
+
+scheme :: ORDERS_1:sch 2
+ Zorn_Min{A() -> non empty set, P[set,set]}:
+ ex x being Element of A() st
+  for y being Element of A() st x <> y holds not P[y,x]
+provided
+  for x being Element of A() holds P[x,x] and
+  for x,y being Element of A() st P[x,y] & P[y,x] holds x = y and
+  for x,y,z being Element of A() st P[x,y] & P[y,z] holds P[x,z] and
+  for X st X c= A() &
+     (for x,y being Element of A() st x in X & y in X
+       holds P[x,y] or P[y,x]) holds
+     ex y being Element of A() st
+      for x being Element of A() st x in X holds P[y,x];
+
+::
+::  Orders - continuation.
+::
+
+theorem :: ORDERS_1:179
+       R partially_orders X & field R = X implies
+   ex P st R c= P & P linearly_orders X & field P = X;
+
+::
+::  Auxiliary theorems.
+::
+
+theorem :: ORDERS_1:180
+      R c= [:field R,field R:];
+
+theorem :: ORDERS_1:181
+      R is reflexive & X c= field R implies field(R|_2 X) = X;
+
+theorem :: ORDERS_1:182
+      R is_reflexive_in X implies R|_2 X is reflexive;
+
+theorem :: ORDERS_1:183
+      R is_transitive_in X implies R|_2 X is transitive;
+
+theorem :: ORDERS_1:184
+      R is_antisymmetric_in X implies R|_2 X is antisymmetric;
+
+theorem :: ORDERS_1:185
+      R is_connected_in X implies R|_2 X is connected;
+
+theorem :: ORDERS_1:186
+      R is_connected_in X & Y c= X implies R is_connected_in Y;
+
+theorem :: ORDERS_1:187
+      R well_orders X & Y c= X implies R well_orders Y;
+
+theorem :: ORDERS_1:188
+      R is connected implies R~ is connected;
+
+theorem :: ORDERS_1:189
+      R is_reflexive_in X implies R~ is_reflexive_in X;
+
+theorem :: ORDERS_1:190
+      R is_transitive_in X implies R~ is_transitive_in X;
+
+theorem :: ORDERS_1:191
+      R is_antisymmetric_in X implies R~ is_antisymmetric_in X;
+
+theorem :: ORDERS_1:192
+      R is_connected_in X implies R~ is_connected_in X;
+
+theorem :: ORDERS_1:193
+      (R|_2 X)~ = R~|_2 X;
+
+theorem :: ORDERS_1:194
+      R|_2 {} = {};

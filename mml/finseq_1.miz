@@ -20,7 +20,7 @@ environ
  theorems TARSKI, AXIOMS, FUNCT_1, REAL_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
       PARTFUN1, WELLORD2, ORDINAL1, CARD_1, FINSET_1, ORDINAL2, XBOOLE_0,
       XBOOLE_1, XCMPLX_1, MCART_1, GRFUNC_1;
- schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL;
+ schemes FUNCT_1, REAL_1, NAT_1, XBOOLE_0, FRAENKEL, WELLORD2;
 
 begin
 
@@ -598,7 +598,7 @@ end;
 
 canceled;
 
-theorem
+theorem Th23:
      for p being FinSequence of D holds p|(Seg a) is FinSequence of D
 proof
   let p be FinSequence of D;
@@ -1110,7 +1110,7 @@ theorem
 
  end;
 
-theorem
+theorem Th48:
       p^q = {} implies p={} & q={}
 proof
  assume p^q={};
@@ -1280,7 +1280,7 @@ end;
 
 canceled;
 
-theorem
+theorem Th52:
      <*x*> = { [1,x] }
 proof
     for z holds z in <*x*> iff z=[1,x]
@@ -2743,3 +2743,96 @@ theorem
       Card Card n = Card n by CARD_1:81,def 11;
    hence thesis;
   end;
+
+begin :: Addenda
+
+:: From FINSEQ_5
+
+registration let x be set;
+ cluster <*x*> -> non empty;
+  coherence
+ proof <*x*> = { [1,x] } by Th52; hence thesis; end;
+end;
+
+:: From SPRECT_1
+
+registration
+ cluster non empty FinSequence;
+ existence proof take <* 0 *>; thus thesis; end;
+end;
+
+:: From FUNCT_7, actually from GOBOARD4
+
+registration
+ let f1 be FinSequence, f2 be non empty FinSequence;
+ cluster f1^f2 -> non empty;
+ coherence by Th48;
+ cluster f2^f1 -> non empty;
+ coherence by Th48;
+end;
+
+:: from MATRIX_2
+
+scheme SeqDEx{D()->non empty set,A()->Nat,P[set,set]}:
+  ex p being FinSequence of D() st dom p = Seg A() &
+                     for k st k in Seg A() holds P[k,p.k]
+ provided
+A1: for k st k in Seg A() ex x being Element of D() st P[k,x]
+proof
+ A2: for y be set st y in Seg A() ex x st x in D() & P[y,x]
+  proof
+   let y;
+   assume A3:y in Seg A();
+   then reconsider k=y as Nat;
+   consider x being Element of D() such that A4:P[k,x] by A1,A3;
+   take x;
+   thus thesis by A4;
+  end;
+ consider f being Function such that A5:dom f = Seg A() and A6:rng f c= D() and
+   A7:for y be set st y in Seg A() holds P[y,f.y] from WELLORD2:sch 1(A2);
+ reconsider f as FinSequence by A5,Def2;
+ reconsider p=f as FinSequence of D() by A6,Def4;
+ take p;
+ thus thesis by A5,A7;
+end;
+
+::from TOPREAL1
+
+reserve D for set, p for FinSequence of D,
+        m for natural number;
+
+definition let D, p, m;
+ func p|m -> FinSequence of D equals
+  :Def1: p|Seg m;
+ coherence by Th23;
+end;
+
+registration let D be set, f be FinSequence of D;
+ cluster f|0 -> empty;
+  coherence
+ proof f|0 = f|(Seg 0) by Def1;
+  hence f|0 is empty by Th4,RELAT_1:110;
+ end;
+end;
+
+theorem
+    len p <= m implies p|m = p
+ proof
+  assume len p <= m;
+  then Seg len p c= Seg m by Th7;
+  then dom p c= Seg m by Def3;
+  then p|Seg m = p by RELAT_1:97;
+  hence thesis by Def1;
+ end;
+
+theorem 
+ m <= len p implies len(p|m) = m
+proof
+A1:  m is Nat by ORDINAL2:def 21;
+ assume m <= len p;
+ then Seg m c= Seg(len p) by Th7;
+ then Seg m c= dom p by Def3;
+ then Seg m = dom(p|(Seg m)) by RELAT_1:91 .= dom(p|m) by Def1;
+ hence m = len(p|m) by A1,Def3;
+end;
+

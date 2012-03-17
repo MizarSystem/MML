@@ -12,102 +12,43 @@ environ
       ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, NAT_1, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1, PARTFUN1,
-      FUNCT_2, BINOP_1, STRUCT_0, PRE_TOPC, COMPTS_1, FINSEQ_1, FUNCOP_1,
+      FUNCT_2, BINOP_1, BINOP_2,
+      STRUCT_0, PRE_TOPC, COMPTS_1, FINSEQ_1, FUNCOP_1,
       SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4;
  constructors REAL_1, SQUARE_1, COMPLEX1, BINOP_1, COMPTS_1, SETWISEO,
-      FINSEQOP, RVSUM_1, SEQ_4, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0;
+      FINSEQOP, RVSUM_1, SEQ_4, SEQ_1, MEMBERED, PARTFUN1, XBOOLE_0,
+      BINOP_2;
  clusters SUBSET_1, PRE_TOPC, RELSET_1, FINSEQ_2, XREAL_0, COMPLEX1, ARYTM_3,
-      SEQ_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1, FUNCT_2, XBOOLE_0;
+      SEQ_1, MEMBERED, ZFMISC_1, PARTFUN1, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, BINOP_1, COMPTS_1, PRE_TOPC, FINSEQOP, SEQ_4, STRUCT_0,
       XBOOLE_0;
  theorems AXIOMS, TARSKI, SUBSET_1, FUNCT_1, FINSEQ_1, FUNCOP_1, REAL_1,
-      SQUARE_1, FUNCT_2, BINOP_1, PRE_TOPC, SEQ_2, COMPLEX1, SETWISEO,
+      SQUARE_1, BINOP_1, PRE_TOPC, SEQ_2, COMPLEX1, SETWISEO,
       FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4, RELAT_1, SETFAM_1, ZFMISC_1,
-      XBOOLE_0, XCMPLX_0, XCMPLX_1;
- schemes BINOP_1, FUNCT_2, FRAENKEL;
+      XBOOLE_0, XCMPLX_0, BINOP_2;
+ schemes FUNCT_2, FRAENKEL, BINOP_2;
 
 begin
 
 reserve i,j,k,n for Nat, r,r',r1,r2 for Real;
 reserve c,c',c1,c2,c3 for Element of COMPLEX;
 
-scheme FuncDefUniq{C, D()->non empty set,
-                   F((Element of C()))->set}:
- for f1,f2 being Function of C(),D() st
-   (for x being Element of C() holds f1.x = F(x)) &
-   (for x being Element of C() holds f2.x = F(x))
-  holds f1 = f2
-proof let f1,f2 be Function of C(),D() such that
-A1:  for x being Element of C() holds f1.x = F(x) and
-A2:  for x being Element of C() holds f2.x = F(x);
-       now let x be Element of C();
-    thus f1.x = F(x) by A1 .= f2.x by A2;
-   end;
-  hence thesis by FUNCT_2:113;
- end;
+theorem
+   addcomplex is commutative;
 
-scheme BinOpDefuniq{A()->non empty set,
-                   O((Element of A()),Element of A())->set}:
-  for o1,o2 being BinOp of A() st
-    (for a,b being Element of A() holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of A() holds o2.(a,b) = O(a,b))
-  holds o1 = o2
-proof let o1,o2 be BinOp of A() such that
-A1:  for a,b being Element of A() holds o1.(a,b) = O(a,b) and
-A2:  for a,b being Element of A() holds o2.(a,b) = O(a,b);
-      now let a,b be Element of A();
-   thus o1.(a,b) = O(a,b) by A1 .= o2.(a,b) by A2;
-  end;
-  hence thesis by BINOP_1:2;
- end;
-
-  deffunc O(Element of COMPLEX,Element of COMPLEX) = $1+$2;
-
-definition
- func addcomplex -> BinOp of COMPLEX means
-:Def1: for c1,c2 holds it.(c1,c2) = c1 + c2;
-  existence
-  proof
-    thus ex o being BinOp of COMPLEX st
-    for a,b being Element of COMPLEX holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
-  end;
-  uniqueness
-  proof
-    thus for o1,o2 being BinOp of COMPLEX st
-    (for a,b being Element of COMPLEX holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of COMPLEX holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
-  end;
-end;
-
-theorem Th1:
-   addcomplex is commutative
- proof let c1,c2;
-  thus addcomplex.(c1,c2) = c1 + c2 by Def1
-                      .= addcomplex.(c2,c1) by Def1;
- end;
-
-theorem Th2:
-   addcomplex is associative
- proof let c1,c2,c3;
-  thus addcomplex.(c1,addcomplex.(c2,c3))
-      = addcomplex.(c1,c2+c3) by Def1
-     .= c1+(c2+c3) by Def1
-     .= c1+c2+c3
-     .= (addcomplex.(c1,c2))+c3 by Def1
-     .= addcomplex.(addcomplex.(c1,c2),c3) by Def1;
- end;
+theorem
+   addcomplex is associative;
 
 theorem Th3:
    0c is_a_unity_wrt addcomplex
  proof
   thus for c holds addcomplex.(0c,c) = c
    proof let c;
-    thus addcomplex.(0c,c) = 0c + c by Def1 .= c by COMPLEX1:22;
+    thus addcomplex.(0c,c) = 0c + c by BINOP_2:def 3 .= c by COMPLEX1:22;
    end;
   let c;
-  thus addcomplex.(c,0c) = c + 0c by Def1 .= c by COMPLEX1:22;
+  thus addcomplex.(c,0c) = c + 0c by BINOP_2:def 3 .= c by COMPLEX1:22;
  end;
 
 theorem Th4:
@@ -116,34 +57,15 @@ theorem Th4:
 theorem Th5:
    addcomplex has_a_unity by Th3,SETWISEO:def 2;
 
-  deffunc F(Element of COMPLEX) = -$1;
-
-definition
- func compcomplex -> UnOp of COMPLEX means
-:Def2: for c holds it.c = -c;
-  existence
-  proof
-   thus ex f being Function of COMPLEX,COMPLEX st
-    for x being Element of COMPLEX holds f.x = F(x) from FUNCT_2:sch 4;
-  end;
-  uniqueness
-  proof
-  thus for f1,f2 being Function of COMPLEX,COMPLEX st
-   (for x being Element of COMPLEX holds f1.x = F(x)) &
-   (for x being Element of COMPLEX holds f2.x = F(x))
-  holds f1 = f2 from FuncDefUniq;
-  end;
-end;
-
 theorem Th6:
    compcomplex is_an_inverseOp_wrt addcomplex
  proof let c;
-   thus addcomplex.(c,compcomplex.c) = c+compcomplex.c by Def1
-                            .= c+-c by Def2
+   thus addcomplex.(c,compcomplex.c) = c+compcomplex.c by BINOP_2:def 3
+                            .= c+-c by BINOP_2:def 1
                             .= the_unity_wrt addcomplex by Th3,BINOP_1:def 8,
 XCMPLX_0:def 6;
-   thus addcomplex.(compcomplex.c,c) = compcomplex.c+c by Def1
-                              .= -c+c by Def2
+   thus addcomplex.(compcomplex.c,c) = compcomplex.c+c by BINOP_2:def 3
+                              .= -c+c by BINOP_2:def 1
                               .= the_unity_wrt addcomplex by Th3,BINOP_1:def 8,
 XCMPLX_0:def 6
 ;
@@ -153,70 +75,44 @@ theorem Th7:
    addcomplex has_an_inverseOp by Th6,FINSEQOP:def 2;
 
 theorem Th8:
- the_inverseOp_wrt addcomplex = compcomplex by Th2,Th5,Th6,Th7,FINSEQOP:def 3;
+ the_inverseOp_wrt addcomplex = compcomplex by Th5,Th6,Th7,FINSEQOP:def 3;
 
 definition
- func diffcomplex -> BinOp of COMPLEX equals
+ canceled 2;
+ redefine func diffcomplex equals
 :Def3:  addcomplex*(id COMPLEX,compcomplex);
-  correctness;
+  compatibility
+   proof let b be BinOp of COMPLEX;
+     now let c1,c2;
+      thus diffcomplex.(c1,c2) = c1 - c2 by BINOP_2:def 4
+          .= c1 + - c2
+          .= addcomplex.(c1,- c2) by BINOP_2:def 3
+          .= addcomplex.(c1,compcomplex.c2) by BINOP_2:def 1
+          .= (addcomplex*(id COMPLEX,compcomplex)).(c1,c2) by FINSEQOP:87;
+     end;
+     then diffcomplex = addcomplex*(id COMPLEX,compcomplex) by BINOP_1:2;
+    hence thesis;
+   end;
 end;
 
 theorem Th9:
- diffcomplex.(c1,c2) = c1 - c2
- proof
-  thus diffcomplex.(c1,c2) = addcomplex.(c1,compcomplex.c2) by Def3,FINSEQOP:
-87
-                           .= addcomplex.(c1,-c2) by Def2
-                           .= c1 + - c2 by Def1
-                           .= c1 - c2;
- end;
-
-  deffunc O(Element of COMPLEX,Element of COMPLEX) = $1*$2;
-
-definition
- func multcomplex -> BinOp of COMPLEX means
-:Def4: for c1,c2 holds it.(c1,c2) = c1 * c2;
-  existence
-  proof
-    thus ex o being BinOp of COMPLEX st
-    for a,b being Element of COMPLEX holds o.(a,b) = O(a,b) from BINOP_1:sch 2;
-  end;
-  uniqueness
-  proof
-    thus for o1,o2 being BinOp of COMPLEX st
-    (for a,b being Element of COMPLEX holds o1.(a,b) = O(a,b)) &
-    (for a,b being Element of COMPLEX holds o2.(a,b) = O(a,b))
-  holds o1 = o2 from BinOpDefuniq;
-  end;
-end;
+ diffcomplex.(c1,c2) = c1 - c2 by BINOP_2:def 4;
 
 theorem
-       multcomplex is commutative
- proof let c1,c2;
-  thus multcomplex.(c1,c2) = c1 * c2 by Def4
-                          .= multcomplex.(c2,c1) by Def4;
- end;
+   multcomplex is commutative;
 
-theorem Th11:
-   multcomplex is associative
- proof let c1,c2,c3;
-  thus multcomplex.(c1,multcomplex.(c2,c3))
-      = multcomplex.(c1,c2*c3) by Def4
-     .= c1*(c2*c3) by Def4
-     .= c1*c2*c3
-     .= (multcomplex.(c1,c2))*c3 by Def4
-     .= multcomplex.(multcomplex.(c1,c2),c3) by Def4;
- end;
+theorem
+   multcomplex is associative;
 
 theorem Th12:
    1r is_a_unity_wrt multcomplex
  proof
   thus for c holds multcomplex.(1r,c) = c
    proof let c;
-    thus multcomplex.(1r,c) = 1r * c by Def4 .= c by COMPLEX1:29;
+    thus multcomplex.(1r,c) = 1r * c by BINOP_2:def 5 .= c by COMPLEX1:29;
    end;
   let c;
-  thus multcomplex.(c,1r) = c * 1r by Def4 .= c by COMPLEX1:29;
+  thus multcomplex.(c,1r) = c * 1r by BINOP_2:def 5 .= c by COMPLEX1:29;
  end;
 
 theorem Th13:
@@ -230,24 +126,25 @@ theorem Th15:
  proof
       now let c1,c2,c3;
    thus multcomplex.(c1,addcomplex.(c2,c3))
-      = multcomplex.(c1,c2+c3) by Def1
-     .= c1*(c2+c3) by Def4
+      = multcomplex.(c1,c2+c3) by BINOP_2:def 3
+     .= c1*(c2+c3) by BINOP_2:def 5
      .= c1*c2+c1*c3
-     .= addcomplex.(c1*c2,c1*c3) by Def1
-     .= addcomplex.(multcomplex.(c1,c2),c1*c3) by Def4
-     .= addcomplex.(multcomplex.(c1,c2),multcomplex.(c1,c3)) by Def4;
+     .= addcomplex.(c1*c2,c1*c3) by BINOP_2:def 3
+     .= addcomplex.(multcomplex.(c1,c2),c1*c3) by BINOP_2:def 5
+     .= addcomplex.(multcomplex.(c1,c2),multcomplex.(c1,c3)) by BINOP_2:def 5;
    thus multcomplex.(addcomplex.(c1,c2),c3)
-      = multcomplex.(c1+c2,c3) by Def1
-     .= (c1+c2)*c3 by Def4
+      = multcomplex.(c1+c2,c3) by BINOP_2:def 3
+     .= (c1+c2)*c3 by BINOP_2:def 5
      .= c1*c3+c2*c3
-     .= addcomplex.(c1*c3,c2*c3) by Def1
-     .= addcomplex.(multcomplex.(c1,c3),c2*c3) by Def4
-     .= addcomplex.(multcomplex.(c1,c3),multcomplex.(c2,c3)) by Def4;
+     .= addcomplex.(c1*c3,c2*c3) by BINOP_2:def 3
+     .= addcomplex.(multcomplex.(c1,c3),c2*c3) by BINOP_2:def 5
+     .= addcomplex.(multcomplex.(c1,c3),multcomplex.(c2,c3)) by BINOP_2:def 5;
   end;
   hence thesis by BINOP_1:23;
  end;
 
 definition let c;
+ canceled;
  func c multcomplex -> UnOp of COMPLEX equals
 :Def5:  multcomplex[;](c,id COMPLEX);
  coherence;
@@ -259,7 +156,7 @@ Lm1:
   thus (multcomplex[;](c,id COMPLEX)).c'
      = multcomplex.(c,(id COMPLEX).c') by FUNCOP_1:66
     .= multcomplex.(c,c') by FUNCT_1:35
-    .= c*c' by Def4;
+    .= c*c' by BINOP_2:def 5;
  end;
 
 theorem Th16:
@@ -274,23 +171,11 @@ theorem Th17:
   hence thesis by Th15,FINSEQOP:55;
  end;
 
-  deffunc F(Element of COMPLEX) = |.$1.|;
-
 definition
  func abscomplex -> Function of COMPLEX,REAL means
 :Def6: for c holds it.c = |.c.|;
-  existence
-  proof
-   thus ex f being Function of COMPLEX,REAL st
-    for x being Element of COMPLEX holds f.x = F(x) from FUNCT_2:sch 4;
-  end;
-  uniqueness
-  proof
-  thus for f1,f2 being Function of COMPLEX,REAL st
-   (for x being Element of COMPLEX holds f1.x = F(x)) &
-   (for x being Element of COMPLEX holds f2.x = F(x))
-  holds f1 = f2 from FuncDefUniq;
-  end;
+  existence from FUNCT_2:sch 4;
+  uniqueness from BINOP_2:sch 1;
 end;
 
 reserve z,z1,z2 for FinSequence of COMPLEX;
@@ -394,7 +279,7 @@ A1:   k in Seg n and
 A2:   c1 = z1.k & c2 = z2.k;
       z1 + z2 = addcomplex.:(z1,z2) & k in dom(z1+z2) by A1,Def7,Lm3;
   hence (z1 + z2).k = addcomplex.(c1,c2) by A2,FUNCOP_1:28
-                   .= c1 + c2 by Def1;
+                   .= c1 + c2 by BINOP_2:def 3;
  end;
 
 theorem Th25:
@@ -402,7 +287,7 @@ theorem Th25:
  proof
 A1: n-tuples_on COMPLEX = COMPLEX n by Def12;
    thus z1 + z2 = addcomplex.:(z1,z2) by Def7
-               .= addcomplex.:(z2,z1) by A1,Th1,FINSEQOP:34
+               .= addcomplex.:(z2,z1) by A1,FINSEQOP:34
                .= z2 + z1 by Def7;
  end;
 
@@ -413,7 +298,7 @@ A1: n-tuples_on COMPLEX = COMPLEX n by Def12;
    thus z1 + (z2 + z3)
       = addcomplex.:(z1,z2+z3) by Def7
      .= addcomplex.:(z1,addcomplex.:(z2,z3)) by Def7
-     .= addcomplex.:(addcomplex.:(z1,z2),z3) by A1,Th2,FINSEQOP:29
+     .= addcomplex.:(addcomplex.:(z1,z2),z3) by A1,FINSEQOP:29
      .= addcomplex.:(z1+z2,z3) by Def7
      .= z1 + z2 + z3 by Def7;
  end;
@@ -464,7 +349,7 @@ theorem Th29:
 A1:   k in Seg n and
 A2:   c = z.k;
       -z = compcomplex*z & k in dom(-z) by A1,Def9,Lm3;
-  hence (-z).k = compcomplex.c by A2,FUNCT_1:22 .= -c by Def2;
+  hence (-z).k = compcomplex.c by A2,FUNCT_1:22 .= -c by BINOP_2:def 1;
  end;
 
 Lm5: z + -z = 0c n
@@ -472,7 +357,7 @@ Lm5: z + -z = 0c n
 A1: n-tuples_on COMPLEX = COMPLEX n by Def12;
   thus z + -z = addcomplex.:(z,-z) by Def7
              .= addcomplex.:(z,compcomplex*z) by Def9
-             .= n|->0c by A1,Th2,Th4,Th5,Th7,Th8,FINSEQOP:77
+             .= n|->0c by A1,Th4,Th5,Th7,Th8,FINSEQOP:77
              .= 0c n by Def13;
  end;
 
@@ -481,7 +366,7 @@ Lm6: -0c n = 0c n
    thus -0c n = -(n|->0c) by Def13
              .= compcomplex*(n|->0c) by Def9
              .= n|->(compcomplex.0c) by FINSEQOP:17
-             .= n|->0c by Def2,REAL_1:26
+             .= n|->0c by BINOP_2:def 1,REAL_1:26
              .= 0c n by Def13;
  end;
 
@@ -495,7 +380,7 @@ theorem Th31:
        n-tuples_on COMPLEX = COMPLEX n & 0c n = n |-> 0c &
     z1 + z2 = addcomplex.:(z1,z2) & -z1 = compcomplex*z1 & -z2 = compcomplex*z2
      by Def7,Def9,Def12,Def13;
-   hence thesis by Th2,Th4,Th5,Th7,Th8,FINSEQOP:78;
+   hence thesis by Th4,Th5,Th7,Th8,FINSEQOP:78;
  end;
 
 theorem Th32:
@@ -692,8 +577,8 @@ theorem
  proof
   thus (c1*c2)*z
       = (multcomplex[;](c1*c2,id COMPLEX))*z by Lm2
-     .= multcomplex[;](multcomplex.(c1,c2),id COMPLEX)*z by Def4
-     .= multcomplex[;](c1,multcomplex[;](c2,id COMPLEX))*z by Th11,FUNCOP_1:77
+     .= multcomplex[;](multcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 5
+     .= multcomplex[;](c1,multcomplex[;](c2,id COMPLEX))*z by FUNCOP_1:77
      .= (multcomplex[;](c1,id COMPLEX)*multcomplex[;](c2,id COMPLEX))*z
          by FUNCOP_1:69
      .= (multcomplex[;](c1,id COMPLEX))*(multcomplex[;](c2,id COMPLEX)*z)
@@ -708,7 +593,7 @@ theorem
   set c1M = multcomplex[;](c1,id COMPLEX), c2M = multcomplex[;](c2,id COMPLEX);
   thus (c1 + c2)*z
      = (multcomplex[;](c1 + c2,id COMPLEX))*z by Lm2
-    .= multcomplex[;](addcomplex.(c1,c2),id COMPLEX)*z by Def1
+    .= multcomplex[;](addcomplex.(c1,c2),id COMPLEX)*z by BINOP_2:def 3
     .= addcomplex.:(c1M,c2M)*z by Th15,FINSEQOP:36
     .= addcomplex.:(c1M*z,c2M*z) by FUNCOP_1:31
     .= c1M*z + c2M*z by Def7
@@ -747,17 +632,17 @@ A2:  n-tuples_on COMPLEX = COMPLEX n by Def12;
   thus 0c*z = multcomplex[;](0c,id COMPLEX)*z by Lm2
            .= multcomplex[;](0c,(id COMPLEX)*z) by FUNCOP_1:44
            .= multcomplex[;](0c,z) by A1,RELAT_1:79
-           .= n|->0c by A2,Th2,Th4,Th5,Th7,Th15,FINSEQOP:80
+           .= n|->0c by A2,Th4,Th5,Th7,Th15,FINSEQOP:80
            .= 0c n by Def13;
  end;
 
 theorem
        (-1r)*z = -z
  proof
-A1:   compcomplex.1r = -1r by Def2;
+A1:   compcomplex.1r = -1r by BINOP_2:def 1;
    thus (-1r)*z
       = multcomplex[;](-1r,id COMPLEX)*z by Lm2
-     .= compcomplex*z by A1,Th2,Th5,Th7,Th8,Th13,Th14,Th15,FINSEQOP:72
+     .= compcomplex*z by A1,Th5,Th7,Th8,Th13,Th14,Th15,FINSEQOP:72
      .= -z by Def9;
  end;
 
