@@ -10,9 +10,10 @@ environ
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1, LATTICES, FUNCSDOM, SEQ_2,
       REALSET1, PREPOWER, SERIES_1, BHSP_3, RSSPACE, RSSPACE3, ALGSTR_2,
       LOPBAN_1, LOPBAN_2, SUPINF_2, CLVECT_1, CFUNCT_1, CLOPBAN1, COMPLEX1,
-      CFUNCDOM, CLOPBAN2, CSSPACE3, COMSEQ_1, CSSPACE, GROUP_1;
+      CFUNCDOM, CLOPBAN2, CSSPACE3, COMSEQ_1, CSSPACE, GROUP_1, XCMPLX_0;
  notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      PRE_TOPC, BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, ARYTM_0, REAL_1,
+      PRE_TOPC, BINOP_1, STRUCT_0, XCMPLX_0, XREAL_0,
+      ORDINAL1, NUMBERS, ARYTM_0, REAL_1,
       NAT_1, PSCOMP_1, RLVECT_1, NORMSP_1, SEQ_1, SEQ_4, FUNCSDOM, COMPLEX1,
       GROUP_1, VECTSP_1, REALSET2, SERIES_1, PREPOWER, CFUNCT_1, COMSEQ_1,
       COMSEQ_3, CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM;
@@ -20,7 +21,7 @@ environ
       COMPLEX1, LOPBAN_1, CSSPACE3, CLOPBAN1, REALSET2, SERIES_1, COMSEQ_1,
       COMSEQ_3, CFUNCDOM, BINOP_2;
  clusters RELSET_1, STRUCT_0, XREAL_0, MEMBERED, CSSPACE3, CLOPBAN1, ORDINAL2,
-      FUNCT_1, FUNCT_2, COMSEQ_1, CFUNCDOM;
+      FUNCT_1, FUNCT_2, COMSEQ_1, CFUNCDOM, XCMPLX_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions STRUCT_0, GROUP_1, VECTSP_1, CLOPBAN1;
  theorems AXIOMS, ABSVALUE, RLVECT_1, VECTSP_1, BINOP_1, XCMPLX_0, SERIES_1,
@@ -538,7 +539,7 @@ proof
    set EXMULT=Mult_(BoundedLinearOperators(X,X),
                     C_VectorSpace_of_LinearOperators(X,X));
    reconsider gg=g as Element of RRL;
-A1:a*(f*g)=(a*1r)*(f*g) by COMPLEX1:29
+A1:a*(f*g)=(a*1r)*(f*g) by COMPLEX1:def 7
          .=(a*f)*(1r*g) by Th11;
     (1r*g)=(EXMULT).(1r,g) by Def3
         .= (EXMULT).[1r,g] by BINOP_1:def 1
@@ -1104,11 +1105,11 @@ registration
   cluster Complex_l1_Space -> non trivial;
 coherence
 proof
-   set a=[*1/2,0*];
+   reconsider a=1/2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
    reconsider x = a GeoSeq as Complex_Sequence;
-    Im a = 0 by COMPLEX1:7;
+    Im a = 0 by COMPLEX1:28;
 then A1:|.a.| = abs Re(a) by COMPLEX1:136
-        .= abs (1/2) by COMPLEX1:7
+        .= abs (1/2) by COMPLEX1:28
         .= 1/2 by ABSVALUE:def 1;
 
 A2:|.x.| = |.a.| GeoSeq
@@ -1131,7 +1132,7 @@ A3:  (|.x.|).0 = |. x.0 .| by COMSEQ_1:def 14
    then seq_id(x) is absolutely_summable by CSSPACE:3;
    then reconsider v=x as VECTOR of Complex_l1_Space by CSSPACE3:8;
     (seq_id v).0 = x.0 by CSSPACE:3 .= 1 by COMPLEX1:def 7,COMSEQ_3:def 1;
-   then v <> CZeroseq by COMPLEX1:14,CSSPACE:def 6;
+   then v <> CZeroseq by COMPLEX1:def 6,CSSPACE:def 6;
    hence thesis by ANPROJ_1:def 8,CSSPACE3:8;
 end;
 end;
@@ -1154,18 +1155,17 @@ proof
 A1:v  <> 0.X by ANPROJ_1:def 8;
 A2:||. v .||  <> 0 by A1,CLVECT_1:def 10;
 then A3:0 <  ||. v .|| by CLVECT_1:106;
-   set a= [*||. v .||,0*];
-   reconsider w=a"*v as VECTOR of X;
-    Im a = 0 by COMPLEX1:7;
+   reconsider a= ||. v .||+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
+    Im a = 0 by COMPLEX1:28;
 then A4:|.a.| = abs(Re a) by COMPLEX1:136
-        .= abs ||.v.|| by COMPLEX1:7
+        .= abs ||.v.|| by COMPLEX1:28
         .= ||.v.|| by A3,ABSVALUE:def 1;
-A5:|.a".| = |.(1r*a").| by COMPLEX1:29
+A5:|.a".| = |.(1r*a").| by COMPLEX1:def 7
          .= |.1r/a.| by XCMPLX_0:def 9
          .= 1/|.a.| by COMPLEX1:134,153
          .= 1*|.a.|" by XCMPLX_0:def 9
          .= ||.v.||"by A4;
-   take w;
+   take w=a"*v;
    thus ||.w.|| =|.a".|*||.v.|| by CLVECT_1:def 10
                .=1 by A2,A5,XCMPLX_0:def 7;
 end;
@@ -1743,7 +1743,7 @@ A3:  ||.x * y.||
    proof
      let a be Complex;
      let x,y be Element of RBLOP;
-     thus a*(x*y)=(1r*a)*(x*y) by COMPLEX1:29
+     thus a*(x*y)=(1r*a)*(x*y) by COMPLEX1:def 7
                 .=(1r*x)*(a*y) by Th19
                    .=x*(a*y) by Th19;
    end;

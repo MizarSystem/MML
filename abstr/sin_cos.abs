@@ -9,7 +9,8 @@ environ
  vocabulary ARYTM, COMPLEX1, COMSEQ_1, SEQ_1, FDIFF_1, ARYTM_3, ARYTM_1,
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
-      RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1;
+      RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SUBSET_1, SIN_COS, FINSEQ_4, GROUP_1,
+      XCMPLX_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, REAL_1, FUNCT_1, FCONT_1, FUNCT_2, SEQ_1, SEQ_2, FDIFF_1,
       RELAT_1, SERIES_1, NAT_1, FINSEQ_4, NEWTON, COMPLEX1, SQUARE_1, PREPOWER,
@@ -21,7 +22,7 @@ environ
       BINOP_2, NAT_1;
  clusters INT_1, COMSEQ_2, COMSEQ_3, XREAL_0, RELSET_1, FDIFF_1, RCOMP_1,
       SEQ_1, COMSEQ_1, SEQM_3, NEWTON, COMPLEX1, MEMBERED, ORDINAL2, NUMBERS,
-      SQUARE_1;
+      SQUARE_1, XCMPLX_0;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -43,26 +44,20 @@ definition let m,k be Nat;
 
   func CHK(m,k) -> Element of COMPLEX equals
 :: SIN_COS:def 2
-  1r if m <= k otherwise 0c;
-
-  func RHK(m,k) equals
-:: SIN_COS:def 3
   1 if m <= k otherwise 0;
+
+ canceled;
 end;
 
 registration let m,k be Nat;
- cluster RHK(m,k) -> real;
-end;
-
-definition let m,k be Nat;
- redefine func RHK(m,k) -> Real;
+ cluster CHK(m,k) -> real;
 end;
 
 scheme :: SIN_COS:sch 1
  ExComplex_CASE{F(Nat,Nat)->Element of COMPLEX}:
 for k holds
  ex seq st for n holds ((n <= k implies seq.n=F(k,n)) &
-                        (n > k implies seq.n=0c));
+                        (n > k implies seq.n=0));
 
 scheme :: SIN_COS:sch 2
  ExReal_CASE{F(Nat,Nat)->real number}:
@@ -73,7 +68,7 @@ for k holds
 definition
 func Prod_complex_n -> Complex_Sequence means
 :: SIN_COS:def 4
- it.0 = 1r & for n holds it.(n+1) = it.n * [*(n+1),0*];
+ it.0 = 1r & for n holds it.(n+1) = it.n * (n+1+0*<i>);
 end;
 
 definition
@@ -107,17 +102,17 @@ definition let a be real number;
 end;
 
 theorem :: SIN_COS:1
- (0 < n implies [*n,0*] <> 0c) &
+ (0 < n implies n+0*<i> <> 0) &
  0!c = 1r &
- n!c <> 0c &
- (n+1)!c = n!c * [*n+1,0*];
+ n!c <> 0 &
+ (n+1)!c = n!c * (n+1+0*<i>);
 
 theorem :: SIN_COS:2
     n! <> 0 & (n+1)! = n! * (n+1);
 
 theorem :: SIN_COS:3
-(for k st 0 < k holds ((k-'1)!c ) * [*k,0*] = k!c) &
- for m,k st k <= m holds ((m-'k)!c ) * [*(m+1-k),0*] = (m+1-'k)!c;
+(for k st 0 < k holds ((k-'1)!c ) * (k+0*<i>) = k!c) &
+ for m,k st k <= m holds ((m-'k)!c ) * (m+1-k+0*<i>) = (m+1-'k)!c;
 
 definition
 let n be Nat;
@@ -125,7 +120,7 @@ func Coef(n) -> Complex_Sequence means
 :: SIN_COS:def 10
   for k be Nat holds
      (k <= n implies it.k = n!c /( (k!c ) * ((n-'k)!c )))
-    &(k > n implies it.k=0c);
+    &(k > n implies it.k=0);
 end;
 
 definition let n be Nat;
@@ -133,13 +128,13 @@ func Coef_e(n) -> Complex_Sequence means
 :: SIN_COS:def 11
   for k be Nat holds
      (k <= n implies it.k = 1r/((k!c ) * ((n-'k)!c )))
-    & (k > n implies it.k=0c);
+    & (k > n implies it.k=0);
 end;
 
 definition let seq;
 func Sift seq -> Complex_Sequence means
 :: SIN_COS:def 12
-  it.0=0c & for k be Nat holds it.(k+1) = seq.k;
+  it.0=0 & for k be Nat holds it.(k+1) = seq.k;
 end;
 
 definition let n;
@@ -149,7 +144,7 @@ func Expan(n,z,w) -> Complex_Sequence means
   for k be Nat holds
    ( k <= n implies
        it.k=((Coef(n)).k) * (z #N k) * (w #N (n-'k)) ) &
-   (n < k implies it.k=0c);
+   (n < k implies it.k=0);
 end;
 
 definition let n;
@@ -159,7 +154,7 @@ func Expan_e(n,z,w) -> Complex_Sequence means
   for k be Nat holds
    ( k <= n implies
        it.k=((Coef_e(n)).k) * (z #N k) * (w #N (n-'k)) ) &
-   (n < k implies it.k=0c);
+   (n < k implies it.k=0);
 end;
 
 definition let n;
@@ -169,7 +164,7 @@ func Alfa(n,z,w) -> Complex_Sequence means
    for k be Nat holds
    ( k <= n implies
        it.k= (z ExpSeq).k * Partial_Sums(w ExpSeq).(n-'k) ) &
-   ( n < k implies it.k=0c);
+   ( n < k implies it.k=0);
 end;
 
 definition
@@ -193,12 +188,12 @@ func Conj(n,z,w) -> Complex_Sequence means
   ( k <= n implies
      it.k= (z ExpSeq).k * (Partial_Sums(w ExpSeq).n
                           -Partial_Sums(w ExpSeq).(n-'k)))
-   & (n < k implies it.k=0c);
+   & (n < k implies it.k=0);
 end;
 
 theorem :: SIN_COS:4
- z ExpSeq.(n+1) = z ExpSeq.n * z /[*(n+1),0*] &
- z ExpSeq.0=1r &
+ z ExpSeq.(n+1) = z ExpSeq.n * z /(n+1+0*<i>) &
+ z ExpSeq.0=1 &
  |.(z ExpSeq).n .| = (|.z.| ExpSeq ).n;
 
 theorem :: SIN_COS:5
@@ -224,7 +219,7 @@ registration let z;
 end;
 
 theorem :: SIN_COS:11
-(z ExpSeq).0 = 1r & Expan(0,z,w).0 = 1r;
+(z ExpSeq).0 = 1 & Expan(0,z,w).0 = 1;
 
 theorem :: SIN_COS:12
 l <= k implies (Alfa(k+1,z,w)).l = (Alfa(k,z,w)).l + Expan_e(k+1,z,w).l;
@@ -272,7 +267,7 @@ for p being real number st p>0 ex n st for k st n <= k
 
 theorem :: SIN_COS:23
 for seq st for k holds seq.k=Partial_Sums((Conj(k,z,w))).k
-  holds seq is convergent & lim(seq)=0c;
+  holds seq is convergent & lim seq = 0;
 
 begin ::Definition of Exponential Function on Complex
 
@@ -348,7 +343,7 @@ theorem :: SIN_COS:27
 dom(sin)=REAL & dom(cos)=REAL;
 
 theorem :: SIN_COS:28
-    exp([*0,th*])=[*cos(th),sin(th)*];
+    exp([*0,th*])=cos(th)+(sin th)*<i>;
 
 theorem :: SIN_COS:29
     (exp([*0,th*]))*'=exp(-[*0,th*]);

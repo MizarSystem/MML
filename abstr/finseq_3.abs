@@ -7,13 +7,14 @@
 environ
 
  vocabulary FINSEQ_1, BOOLE, ARYTM_1, ZFMISC_1, RELAT_1, INT_1, FUNCT_1,
-      FINSET_1, CARD_1, TARSKI, FINSEQ_2;
- notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_2, FINSET_1, CARD_1, NAT_1, INT_1;
+      FINSET_1, CARD_1, TARSKI, FINSEQ_2, ORDINAL2, ARYTM;
+ notation TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, ORDINAL1, ORDINAL2,
+      XCMPLX_0, XREAL_0, FINSEQ_1, RELAT_1, FUNCT_1, FINSEQ_2, FINSET_1,
+      CARD_1, NAT_1, INT_1;
  constructors FUNCT_2, DOMAIN_1, FINSEQ_2, REAL_1, WELLORD2, NAT_1, INT_1,
       MEMBERED, PARTFUN1, XBOOLE_0;
  clusters FINSEQ_1, FUNCT_1, INT_1, FINSET_1, RELSET_1, XREAL_0, MEMBERED,
-      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2;
+      ZFMISC_1, XBOOLE_0, NUMBERS, ORDINAL2, ARYTM_3, NAT_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -21,7 +22,7 @@ begin
 
 reserve p,q,r for FinSequence;
 reserve u,v,x,y,y1,y2,z,A,D,X,Y for set;
-reserve i,j,k,l,m,n for Nat;
+reserve i,j,k,l,m,n for natural number;
 
 theorem :: FINSEQ_3:1
  Seg 3 = {1,2,3};
@@ -145,8 +146,8 @@ theorem :: FINSEQ_3:42
 
 theorem :: FINSEQ_3:43
  len r = len p + len q &
-  (for k st k in dom p holds r.k = p.k) &
-  (for k st k in dom q holds r.(len p + k) = q.k) implies r = p ^ q;
+  (for k being Nat st k in dom p holds r.k = p.k) &
+  (for k being Nat st k in dom q holds r.(len p + k) = q.k) implies r = p ^ q;
 
 theorem :: FINSEQ_3:44
  for A being finite set st A c= Seg k
@@ -164,7 +165,8 @@ canceled;
 
 theorem :: FINSEQ_3:48
  X c= Seg i & Y c= Seg j implies
-  ((for m,n st m in X & n in Y holds m < n) iff Sgm(X \/ Y) = Sgm(X) ^ Sgm(Y));
+  ((for m,n being Nat st m in X & n in Y holds m < n) iff
+  Sgm(X \/ Y) = Sgm(X) ^ Sgm(Y));
 
 theorem :: FINSEQ_3:49
  Sgm {} = {};
@@ -208,7 +210,7 @@ theorem :: FINSEQ_3:61
  len p = k + 1 & q = p | Seg k implies p = q ^ <* p.(k + 1) *>;
 
 theorem :: FINSEQ_3:62
-     p | X is FinSequence iff ex k st X /\ dom p = Seg k;
+  p | X is FinSequence iff ex k being Nat st X /\ dom p = Seg k;
 
 registration let p be FinSequence, A be set;
  cluster p"A -> finite;
@@ -307,9 +309,11 @@ theorem :: FINSEQ_3:90
 theorem :: FINSEQ_3:91
  len p = k + 1 & q = p | Seg k implies
   (not p.(k + 1) in A iff p - A = (q - A) ^ <* p.(k + 1) *>);
+
 theorem :: FINSEQ_3:92
-     n in dom p implies
- for B being finite set st B = {k : k in dom p & k <= n & p.k in A}
+  n in dom p implies
+  for B being finite set st
+  B = {k where k is Nat : k in dom p & k <= n & p.k in A}
   holds p.n in A or (p - A).(n - card B) = p.n;
 
 theorem :: FINSEQ_3:93

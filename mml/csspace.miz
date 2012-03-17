@@ -9,7 +9,7 @@ environ
  vocabulary RLVECT_1, FUNCT_1, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2, BINOP_1,
       SQUARE_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, BHSP_1, SUPINF_2,
       RSSPACE, CLVECT_1, COMSEQ_1, COMPLEX1, PROB_2, ARYTM_3, CSSPACE,
-      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3;
+      CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
       FUNCT_2, SEQ_1, BINOP_1, STRUCT_0, ZFMISC_1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2,
@@ -18,7 +18,7 @@ environ
       PARTFUN1, BINOP_1, MEMBERED, CLVECT_1, COMSEQ_1, COMPLEX1, FINSEQ_4,
       COMSEQ_3, COMSEQ_2, COMPLEX2, ARYTM_0, NORMSP_1, BINOP_2;
  clusters RELSET_1, STRUCT_0, SEQ_1, XREAL_0, MEMBERED, CLVECT_1, FUNCT_1,
-      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1;
+      COMPLEX1, ORDINAL2, COMSEQ_1, COMSEQ_2, SUBSET_1, XCMPLX_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  definitions TARSKI, RLVECT_1, CLVECT_1, STRUCT_0, NORMSP_1;
  theorems XBOOLE_0, STRUCT_0, RELAT_1, SQUARE_1, TARSKI, ABSVALUE, ZFMISC_1,
@@ -319,7 +319,7 @@ A1:v + 0.V = seq_id(v)+seq_id(0.V) by Th4
        (seq_id(v)+seq_id(CZeroseq)).s
           = (seq_id(v)).s+(seq_id(CZeroseq)).s by COMSEQ_1:def 4
          .= (seq_id(v)).s + 0c by Def6;
-     hence thesis by COMPLEX1:22;
+     hence thesis by COMPLEX1:def 6;
    end;
    hence v + 0.V=seq_id(v) by A1,COMSEQ_1:6 .=v by Def2;
 end;
@@ -803,7 +803,7 @@ proof
    let u, v, w be VECTOR of (0).V0;
 A1:u = 0.V0 & v = 0.V0 & w = 0.V0 by Lm2,TARSKI:def 1;
      u+v = 0.V0 by Lm2,TARSKI:def 1;
-   hence thesis by A1,Lm4,COMPLEX1:22;
+   hence thesis by A1,Lm4,COMPLEX1:def 6;
 end;
 
 Lm8:for u,v being VECTOR of (0).V0, a holds
@@ -813,7 +813,7 @@ proof
    let a;
 A1:u = 0.V0 & v = 0.V0 by Lm2,TARSKI:def 1;
      a*u = 0.V0 by Lm2,TARSKI:def 1;
-   hence thesis by A1,Lm4,COMPLEX1:28;
+   hence thesis by A1,Lm4,COMPLEX1:def 6;
 end;
 set X0 = CUNITSTR(# the carrier of (0).V0,the Zero of (0).V0,the add of (0).V0,
                   the Mult of (0).V0, nil_func #);
@@ -1043,8 +1043,8 @@ theorem Th25:
 (-x).|.y = - x.|.y
 proof
      (-x) .|. y = ((-1r)*x) .|. y by CLVECT_1:4
-             .= (-1r) * x .|. y by Def13;
-   hence thesis by COMPLEX1:46;
+             .= (-1) * x .|. y by Def13,COMPLEX1:def 7;
+   hence thesis;
 end;
 
 theorem Th26:
@@ -1150,24 +1150,12 @@ proof
    hence thesis;
 end;
 
-Lm11:
-for a being Real st a >= 0 holds |.[*a,0*].| = a
-proof
-   let a be Real;
-   assume A1:a >= 0;
-     |.[*a,0*].| = sqrt ((Re [*a,0*])^2 + (Im [*a,0*])^2) by COMPLEX1:def 16
-              .= sqrt (a^2 + (Im [*a,0*])^2) by COMPLEX1:7
-              .= sqrt (a^2 + 0) by COMPLEX1:7,SQUARE_1:60
-              .= abs(a) by COMPLEX1:158;
-   hence thesis by A1,ABSVALUE:def 1;
-end;
-
 theorem Th36:
 |.(x.|.x).| = Re(x.|.x)
 proof
-     Re (x.|.x) >= 0 & Im (x.|.x) = 0 by Def13;
-     then |.[* Re(x.|.x), Im(x.|.x)*].| = Re (x.|.x) by Lm11;
-     hence thesis by COMPLEX1:8;
+  Re (x.|.x) >= 0 & Im (x.|.x) = 0 by Def13;
+     then |.Re(x.|.x)+Im(x.|.x)*<i>.| = Re (x.|.x) by ABSVALUE:def 1;
+    hence thesis by COMPLEX1:29;
 end;
 
 theorem Th37:  ::Schwarz's inequality
@@ -1184,17 +1172,17 @@ A2:  y = 0'(X);
    proof
      assume y <> 0'(X);
 then A3:  y.|.y <> 0c by Def13;
-     set c1 = [*|.(y.|.y).|,0*];
+     reconsider c1 = |.(y.|.y).|+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
      set c2 = -(x.|.y);
 A4: Re (y.|.y) >= 0 & Im (y.|.y) = 0 by Def13;
-     then |.[* Re(y.|.y), Im(y.|.y)*].| = Re (y.|.y) by Lm11;
-     then A5: |.(y.|.y).| = Re (y.|.y) by COMPLEX1:8;
-then A6: (y.|.y) = c1 by A4,COMPLEX1:8;
+     then |.Re(y.|.y)+Im(y.|.y)*<i>.| = Re (y.|.y) by ABSVALUE:def 1;
+     then A5: |.(y.|.y).| = Re (y.|.y) by COMPLEX1:29;
+then A6: (y.|.y) = c1 by A4,COMPLEX1:29;
        ((c1*x+c2*y).|.(c1*x+c2*y))
       = c1*c1*' *(x.|.x) + c1*c2*' *(x.|.y)
        +c1*' *c2*(y.|.x) + c2*c2*' *(y.|.y) by Lm10
      .= c1*(c1*' *(x.|.x)) + c1*(c2*' *(x.|.y))
-       +c1*' *(c2*(y.|.x)) + c1*(c2*c2*') by A4,A5,COMPLEX1:8
+       +c1*' *(c2*(y.|.x)) + c1*(c2*c2*') by A4,A5,COMPLEX1:29
      .= c1*(c1*' *(x.|.x) + c2*' *(x.|.y))
        +c1*(c2*(y.|.x)) + c1*(c2*c2*') by A6,Def13
      .= c1*(c1*' *(x.|.x) + c2*' *(x.|.y) + c2*(y.|.x) + c2*c2*')
@@ -1206,12 +1194,12 @@ then A7: Re( c1*(c1*(x.|.x) + c2*(y.|.x)) ) >= 0 &
        = Re c1 * Re (c1*(x.|.x) + c2*(y.|.x))
        - Im c1 * Im (c1*(x.|.x) + c2*(y.|.x)) by COMPLEX1:24
       .= Re c1 * Re (c1*(x.|.x) + c2*(y.|.x))
-       - 0 * Im (c1*(x.|.x) + c2*(y.|.x)) by COMPLEX1:7
+       - 0 * Im (c1*(x.|.x) + c2*(y.|.x)) by COMPLEX1:28
       .= Re c1 * Re (c1*(x.|.x) + c2*(y.|.x));
 then A8: Re c1 >= 0 & Re (c1*(x.|.x) + c2*(y.|.x)) >= 0 or
      Re c1 <= 0 & Re (c1*(x.|.x) + c2*(y.|.x)) <= 0 by A7,SQUARE_1:25;
        |.(y.|.y).| <> 0 by A3,COMPLEX1:131;
-then A9: Re (c1*(x.|.x)) + Re (c2*(y.|.x)) >= 0 by A4,A5,A8,COMPLEX1:8,19;
+then A9: Re (c1*(x.|.x)) + Re (c2*(y.|.x)) >= 0 by A4,A5,A8,COMPLEX1:29,19;
       Re (c2*(y.|.x)) = Re (-(x.|.y)*(y.|.x))
                     .= - Re(x.|.y * y.|.x) by COMPLEX1:34
                     .= - Re((x.|.y) * (x.|.y)*') by Def13;
@@ -1225,7 +1213,7 @@ then A12: Re((x.|.y) * (x.|.y)*') >= 0 + 0 by A11,REAL_1:55;
        by ABSVALUE:def 1;
 then A13: abs(Re (c1*(x.|.x))) >= abs(Re((x.|.y) * (x.|.y)*'))
        by A10,A12,ABSVALUE:def 1;
-  Im c1 = 0 & Im(x.|.x) = 0 by A4,A5,Def13,COMPLEX1:8;
+  Im c1 = 0 & Im(x.|.x) = 0 by A4,A5,Def13,COMPLEX1:29;
 then A14: Im(c1*(x.|.x)) = Re c1 * 0 + Re (x.|.x)*0 by COMPLEX1:24;
 then A15: Im(c1*(x.|.x)) = 0 & Im((x.|.y) * (x.|.y)*') = 0 by COMPLEX1:126;
        |.c1*(x.|.x).| = abs(Re (c1*(x.|.x))) by A14,COMPLEX1:136;
@@ -1294,8 +1282,8 @@ proof
 then A2:x .|. y = 0c by Def14;
  y .|. x = 0c by A1,Def14;
    then (x + y) .|. (x + y) = x.|.x + 0c + 0c + y.|.y by A2,Th33
-                      .= x.|.x + 0c + y.|.y by COMPLEX1:22;
-   hence thesis by COMPLEX1:22;
+                      .= x.|.x + 0c + y.|.y by COMPLEX1:def 6;
+   hence thesis by COMPLEX1:def 6;
 end;
 
 theorem
@@ -1399,9 +1387,9 @@ then A9:Im(x.|.x + x.|.y + y.|.x + y.|.y)
     = Re((x + y).|.(x + y)) by Th33;
 then A10:Re(x.|.x + x.|.y + y.|.x + y.|.y) >= 0 by Def13;
      (x.|.x + x.|.y + y.|.x + y.|.y)
-    = [*Re(x.|.x + x.|.y + y.|.x + y.|.y),0*] by A9,COMPLEX1:8;
+    = Re(x.|.x + x.|.y + y.|.x + y.|.y)+0*<i> by A9,COMPLEX1:29;
    then |.(x.|.x + x.|.y + y.|.x + y.|.y).|
-    = |.(x.|.x).| + 2*Re(x.|.y) + |.(y.|.y).| by A6,A7,A10,Lm11;
+    = |.(x.|.x).| + 2*Re(x.|.y) + |.(y.|.y).| by A6,A7,A10,ABSVALUE:def 1;
 then A11:||.x + y.||^2 = 2*Re(x.|.y) + (|.(x.|.x).| + |.(y.|.y).|) by A5,Th33;
      |.(x.|.x).| >= 0 by COMPLEX1:132;
    then (sqrt |.(x.|.x).|)^2 = |.(x.|.x).| by SQUARE_1:def 4;
@@ -2182,7 +2170,7 @@ A4:  for k be Nat st P[k] holds P[k+1]
      proof
        let k be Nat such that
 A5:    seq.k = (Partial_Sums (seq)).k;
-       thus seq.(k+1) = 0c + (seq).(k+1) by COMPLEX1:22
+       thus seq.(k+1) = 0c + (seq).(k+1) by COMPLEX1:def 6
                      .= seq.k + seq.(k+1) by A1
                      .= (Partial_Sums seq).(k+1) by A5,COMSEQ_3:def 7;
      end;

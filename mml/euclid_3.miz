@@ -8,16 +8,18 @@ environ
 
  vocabulary RLVECT_1, COMPLEX1, ARYTM_1, SQUARE_1, FUNCT_1, RCOMP_1, SIN_COS,
       ARYTM_3, PRE_TOPC, BOOLE, RELAT_1, COMPTRIG, PROB_2, MCART_1, RVSUM_1,
-      FINSEQ_1, EUCLID, COMPLEX2, EUCLID_2, TOPREAL1, TOPMETR, EUCLID_3;
+      FINSEQ_1, EUCLID, COMPLEX2, EUCLID_2, TOPREAL1, TOPMETR, EUCLID_3,
+      XCMPLX_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, SQUARE_1, NAT_1, RELAT_1,
-      FUNCT_1, SEQ_1, SIN_COS, FUNCT_2, ARYTM_0, NUMBERS, XREAL_0, REAL_1,
+      FUNCT_1, SEQ_1, SIN_COS, FUNCT_2, ARYTM_0, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1,
       COMPLEX1, PRE_TOPC, TOPRNS_1, EUCLID, FINSEQ_1, RVSUM_1, COMPTRIG,
       COMPLEX2, EUCLID_2, TOPREAL1, TOPMETR, RCOMP_1;
  constructors REAL_1, SQUARE_1, SEQ_1, SIN_COS, TOPRNS_1, COMPLEX1, COMPLEX2,
       EUCLID_2, TOPREAL1, TOPMETR, RCOMP_1, MEMBERED, ARYTM_0, BINOP_2,
       COMPTRIG;
  clusters STRUCT_0, RELSET_1, EUCLID, TOPMETR, ARYTM_3, XREAL_0, MEMBERED,
-      NUMBERS, COMPLEX1;
+      NUMBERS, COMPLEX1, XCMPLX_0;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
  definitions XBOOLE_0, TARSKI;
  theorems XCMPLX_1, REAL_1, SQUARE_1, FUNCT_1, TOPREAL3, COMPLEX1, XBOOLE_0,
@@ -47,12 +49,14 @@ theorem Th1: euc2cpx(cpx2euc(z))=z
 proof A1: euc2cpx(cpx2euc(z))=euc2cpx(|[Re z,Im z]|) by Def1;
      (|[Re z,Im z]|)`1=Re z & (|[Re z,Im z]|)`2=Im z by EUCLID:56;
   hence euc2cpx(cpx2euc(z))=[*Re z,Im z*] by A1,Def2
-    .=z by COMPLEX1:8;
+    .= Re z + (Im z)*<i> by COMPLEX1:27
+    .=z by COMPLEX1:29;
 end;
 
 theorem Th2: cpx2euc(euc2cpx(p))=p
 proof A1: cpx2euc(euc2cpx(p))=cpx2euc([* p`1,p`2 *]) by Def2;
-     Re [* p`1,p`2 *] = p`1 & Im [* p`1,p`2 *] = p`2 by COMPLEX1:7;
+  [* p`1,p`2 *] = p`1+(p`2)*<i> by COMPLEX1:27;
+  then Re [* p`1,p`2 *] = p`1 & Im [* p`1,p`2 *] = p`2 by COMPLEX1:28;
   hence cpx2euc(euc2cpx(p))=|[p`1, p`2]| by A1,Def1
     .=p by EUCLID:57;
 end;
@@ -97,14 +101,17 @@ end;
 
 theorem Th8: Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2
 proof
-    euc2cpx(p)=[* p`1,p`2 *] by Def2;
-  hence thesis by COMPLEX1:7;
+    euc2cpx(p)=[* p`1,p`2 *] by Def2
+      .= p`1+(p`2)*<i> by COMPLEX1:27;
+  hence thesis by COMPLEX1:28;
 end;
 
 theorem Th9: cpx2euc([* x1,x2 *])= |[x1,x2]|
-proof A1: (cpx2euc([* x1,x2 *]))`1=Re ([* x1,x2 *]) &
+proof
+X: [* x1,x2 *] = x1+x2*<i> by COMPLEX1:27;
+ A1: (cpx2euc([* x1,x2 *]))`1=Re ([* x1,x2 *]) &
        (cpx2euc([* x1,x2 *]))`2=Im ([* x1,x2 *]) by Th7;
-          Re ([* x1,x2 *])=x1 & Im ([* x1,x2 *])=x2 by COMPLEX1:7;
+          Re ([* x1,x2 *])=x1 & Im ([* x1,x2 *])=x2 by COMPLEX1:28,X;
  hence cpx2euc([* x1,x2 *])= |[x1,x2]| by A1,EUCLID:57;
 end;
 
@@ -130,22 +137,26 @@ end;
 theorem Th12:
 [* (p1+p2)`1,(p1+p2)`2 *] = [* p1`1+p2`1,p1`2+p2`2 *]
 proof
+X: [* p1`1+p2`1,p1`2+p2`2 *] = p1`1+p2`1+(p1`2+p2`2)*<i> by COMPLEX1:27;
+  [* (p1+p2)`1,(p1+p2)`2 *] = (p1+p2)`1+((p1+p2)`2)*<i> by COMPLEX1:27;
+  then
   A1:Re [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`1
-    & Im [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`2 by COMPLEX1:7;
+    & Im [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`2 by COMPLEX1:28;
      (p1+p2)=|[p1`1+p2`1 , p1`2+p2`2]| by EUCLID:59;
   then A2:Re [* (p1+p2)`1,(p1+p2)`2 *]=p1`1+p2`1
     & Im [* (p1+p2)`1,(p1+p2)`2 *]=p1`2+p2`2 by A1,EUCLID:56;
     Re ([* p1`1+p2`1,p1`2+p2`2 *])=p1`1+p2`1
-    & Im ([* p1`1+p2`1,p1`2+p2`2 *])=p1`2+p2`2 by COMPLEX1:7;
+    & Im ([* p1`1+p2`1,p1`2+p2`2 *])=p1`2+p2`2 by COMPLEX1:28,X;
   hence thesis by A2,COMPLEX1:9;
 end;
 
 theorem Th13: euc2cpx(p1+p2)=euc2cpx(p1)+euc2cpx(p2)
 proof
+X: [* p1`1+p2`1,p1`2+p2`2 *] = p1`1+p2`1+(p1`2+p2`2)*<i> by COMPLEX1:27;
      euc2cpx(p1+p2)=[* (p1+p2)`1,(p1+p2)`2 *] by Def2;
     then euc2cpx(p1+p2)=[* p1`1+p2`1,p1`2+p2`2 *] by Th12;
     then A1:Re euc2cpx(p1+p2)=p1`1+p2`1
-      & Im euc2cpx(p1+p2)=p1`2+p2`2 by COMPLEX1:7;
+      & Im euc2cpx(p1+p2)=p1`2+p2`2 by COMPLEX1:28,X;
     A2:Re euc2cpx(p1)=p1`1 & Im euc2cpx(p1)=p1`2 by Th8;
        Re euc2cpx(p2)=p2`1 & Im euc2cpx(p2)=p2`2 by Th8;
   then Re(euc2cpx(p1)+euc2cpx(p2))=p1`1+p2`1
@@ -173,13 +184,16 @@ end;
 
 theorem Th16:[* (-p)`1,(-p)`2 *]=[* -(p`1),-(p`2) *]
 proof
+X: [* -(p`1),-(p`2) *] = -(p`1)+(-(p`2))*<i> by COMPLEX1:27;
+  [* (-p)`1,(-p)`2 *] = (-p)`1+((-p)`2)*<i> by COMPLEX1:27;
+  then
   A1:Re [* (-p)`1,(-p)`2 *]=(-p)`1
-    & Im [* (-p)`1,(-p)`2 *]=(-p)`2 by COMPLEX1:7;
+    & Im [* (-p)`1,(-p)`2 *]=(-p)`2 by COMPLEX1:28;
      -p=|[-p`1, -p`2]| by EUCLID:63;
   then A2:Re [* (-p)`1,(-p)`2 *]=-(p`1)
     & Im [* (-p)`1,(-p)`2 *]=-(p`2) by A1,EUCLID:56;
     Re [* -(p`1),-(p`2) *]=-(p`1)
-    & Im [* -(p`1),-(p`2) *]=-(p`2) by COMPLEX1:7;
+    & Im [* -(p`1),-(p`2) *]=-(p`2) by COMPLEX1:28,X;
   hence thesis by A2,COMPLEX1:9;
 end;
 
@@ -188,7 +202,8 @@ proof
   A1:Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by Th8;
      Re(-euc2cpx(p))=-(Re euc2cpx(p))
     & Im (-euc2cpx(p))=-(Im euc2cpx(p)) by COMPLEX1:34;
-  then -euc2cpx(p)=[* -(p`1),-(p`2) *] by A1,COMPLEX1:8;
+  then -euc2cpx(p) = -(p`1)+(-(p`2))*<i> by A1,COMPLEX1:29
+     .=[* -(p`1),-(p`2) *] by COMPLEX1:27;
   then -euc2cpx(p)=[* (-p)`1,(-p)`2 *] by Th16;
   hence thesis by Def2;
 end;
@@ -217,7 +232,9 @@ theorem  euc2cpx(p)=0c implies p=0.REAL 2 by Th2,Th20;
 
 theorem  cpx2euc(([* r,0 *])*z)=r*(cpx2euc(z))
 proof
-  A1:Re [* r,0 *] = r & Im [* r,0 *] = 0 by COMPLEX1:7;
+  [* r,0 *] = r+0 *<i> by COMPLEX1:27;
+  then
+  A1:Re [* r,0 *] = r & Im [* r,0 *] = 0 by COMPLEX1:28;
   then A2:Re ([* r,0 *]*z) = r * Re z - 0 * Im z by COMPLEX1:24
                      .= r * Re z;
   A3:Im ([* r,0 *]*z) = r * Im z + 0 * Re z by A1,COMPLEX1:24
@@ -229,12 +246,16 @@ end;
 
 theorem Th24: [* r,0 *]*[* r1,r2 *] = [* r*r1,r*r2 *]
 proof
-  A1:Re ([* r,0 *])=r & Im ([* r,0 *])=0 by COMPLEX1:7;
-     Re ([* r1,r2 *])=r1 & Im ([* r1,r2 *])=r2 by COMPLEX1:7;
+X: [* r1,r2 *] = r1+r2*<i> by COMPLEX1:27;
+Z: [* r*r1,r*r2 *] = r*r1+(r*r2)*<i> by COMPLEX1:27;
+Y: [* r,0 *] = r+0 *<i> by COMPLEX1:27;
+  then
+  A1:Re ([* r,0 *])=r & Im ([* r,0 *])=0 by COMPLEX1:28;
+     Re ([* r1,r2 *])=r1 & Im ([* r1,r2 *])=r2 by COMPLEX1:28,X;
   then Re ([* r,0 *]*[* r1,r2 *]) = r * r1 - 0 * r2
     & Im ([* r,0 *]*[* r1,r2 *]) = r * r2 + 0 * r1 by A1,COMPLEX1:24;
   then Re ([* r,0 *]*[* r1,r2 *]) = Re [* r*r1,r*r2 *]
-    & Im ([* r,0 *]*[* r1,r2 *]) = Im [* r*r1,r*r2 *] by COMPLEX1:7;
+    & Im ([* r,0 *]*[* r1,r2 *]) = Im [* r*r1,r*r2 *] by COMPLEX1:28,Z;
   hence thesis by COMPLEX1:9;
 end;
 
@@ -467,16 +488,20 @@ theorem Th48: for x,y being Element of COMPLEX holds
   Re (x .|. y) = (Re x)*(Re y)+(Im x)*(Im y)
 proof let x,y be Element of COMPLEX;
      x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
-                               by COMPLEX2:42;
- hence thesis by COMPLEX1:7;
+                               by COMPLEX2:42
+   .= (Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
+               by COMPLEX1:27;
+ hence thesis by COMPLEX1:28;
 end;
 
 theorem Th49: for x,y being Element of COMPLEX holds
   Im (x .|. y) = -((Re x)*(Im y))+(Im x)*(Re y)
 proof let x,y be Element of COMPLEX;
      x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
-                               by COMPLEX2:42;
- hence thesis by COMPLEX1:7;
+                               by COMPLEX2:42
+   .= (Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
+                       by COMPLEX1:27;
+ hence thesis by COMPLEX1:28;
 end;
 
 theorem Th50: for p,q holds |(p,q)| = p`1*q`1+p`2*q`2
@@ -719,7 +744,7 @@ proof let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
        now per cases by A2,XBOOLE_0:def 2;
     case x in LSeg(p1,p2);
       then x in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A3: x=(1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
       A4: 1-lambda>=0 by A3,SQUARE_1:12;
@@ -731,7 +756,7 @@ proof let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
     end;
     case x in LSeg(p2,p3);
       then x in { (1-lambda)*p2 + lambda*p3 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A6: x=(1-lambda)*p2 + lambda*p3 & 0 <= lambda & lambda <= 1;
       A7: 1-lambda>=0 by A6,SQUARE_1:12;
@@ -743,7 +768,7 @@ proof let n be Nat,p1,p2,p3 be Point of TOP-REAL n;
     end;
     case x in LSeg(p3,p1);
       then x in { (1-lambda)*p3 + lambda*p1 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A9: x=(1-lambda)*p3 + lambda*p1 & 0 <= lambda & lambda <= 1;
       A10: 1-lambda>=0 by A9,SQUARE_1:12;
@@ -1340,7 +1365,7 @@ proof let p1,p2,p3,p;
        now per cases by A3,A4;
     case x in LSeg(p1,p2);
       then x in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A5: x=(1-lambda)*p1 + lambda*p2 & 0 <= lambda & lambda <= 1;
       A6: 1-lambda>=0 by A5,SQUARE_1:12;
@@ -1352,7 +1377,7 @@ proof let p1,p2,p3,p;
     end;
     case x in LSeg(p2,p3);
       then x in { (1-lambda)*p2 + lambda*p3 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A8: x=(1-lambda)*p2 + lambda*p3 & 0 <= lambda & lambda <= 1;
       A9: 1-lambda>=0 by A8,SQUARE_1:12;
@@ -1365,7 +1390,7 @@ proof let p1,p2,p3,p;
     end;
     case x in LSeg(p3,p1);
       then x in { (1-lambda)*p3 + lambda*p1 where lambda is Real:
-                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 4;
+                  0 <= lambda & lambda <= 1 } by TOPREAL1:def 3;
       then consider lambda being Real such that
       A11: x=(1-lambda)*p3 + lambda*p1 & 0 <= lambda & lambda <= 1;
       A12: 1-lambda>=0 by A11,SQUARE_1:12;
@@ -1417,7 +1442,7 @@ proof let p1,p2,p3,p;
             0<=lambda & lambda<=1}
                       by A15,A17,A19,A20;
       hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
-            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+            or p in LSeg(p3,p1) by TOPREAL1:def 3;
      end;
      case tricord2(p1,p2,p3,p)=0;
       then consider a1,a3 being Real such that
@@ -1430,7 +1455,7 @@ proof let p1,p2,p3,p;
       then p in { (1-lambda)*p1 + lambda*p3 where lambda is Real:
             0<=lambda & lambda<=1} by A15,A21,A23,A24;
       hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
-            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+            or p in LSeg(p3,p1) by TOPREAL1:def 3;
      end;
      case tricord3(p1,p2,p3,p)=0;
       then consider a1,a2 being Real such that
@@ -1444,7 +1469,7 @@ proof let p1,p2,p3,p;
       then p in { (1-lambda)*p1 + lambda*p2 where lambda is Real:
             0<=lambda & lambda<=1} by A15,A27,A28,A29;
       hence p in LSeg(p1,p2) or p in LSeg(p2,p3)
-            or p in LSeg(p3,p1) by TOPREAL1:def 4;
+            or p in LSeg(p3,p1) by TOPREAL1:def 3;
      end;
      end;
     hence p in Triangle(p1,p2,p3) by A3;

@@ -11,7 +11,8 @@ environ
       LATTICES, NORMSP_1, COMPLFLD, GROUP_1, POWER, POLYNOM1, ORDINAL2,
       ALGSEQ_1, POLYNOM3, POLYNOM2, ALGSTR_2, FUNCT_4, VECTSP_2, CQC_LANG,
       FCONT_1, FUNCOP_1, PRE_TOPC, SEQ_1, FUNCT_2, QC_LANG1, PARTFUN1, SEQ_4,
-      SEQ_2, COMSEQ_1, SEQM_3, COMPTRIG, RFINSEQ, ABSVALUE, POLYNOM5;
+      SEQ_2, COMSEQ_1, SEQM_3, COMPTRIG, RFINSEQ, ABSVALUE, POLYNOM5,
+      XCMPLX_0;
  notation TARSKI, XBOOLE_0, SUBSET_1, STRUCT_0, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, NAT_1, POWER, PRE_TOPC, RLVECT_1,
       VECTSP_2, VECTSP_1, BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, FRAENKEL,
@@ -27,7 +28,7 @@ environ
       COMSEQ_1, COMSEQ_2, BINARITH, VECTSP_2, GROUP_1, ALGSTR_1, ENDALG,
       COMPLFLD, POLYNOM1, POLYNOM3, TOPREAL1, MONOID_0, VECTSP_1, NAT_1,
       COMPLEX1, MEMBERED, FUNCT_1, FUNCT_2, ORDINAL2, NUMBERS, POLYNOM4,
-      FINSEQ_1;
+      FINSEQ_1, XCMPLX_0;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, ALGSEQ_1, SEQ_4, XBOOLE_0;
  theorems AXIOMS, XREAL_0, TARSKI, ENUMSET1, REAL_1, REAL_2, NAT_1, SQUARE_1,
@@ -242,11 +243,13 @@ end;
     -[**x,y**] = [**-x,-y**]
    proof
     let x,y be Real;
-       [**x,y**] = [*x,y*] by HAHNBAN1:def 1;
-    hence -[**x,y**] = -[*x,y*] by COMPLFLD:4
-       .= [*- Re[*x,y*],-Im [*x,y*]*] by COMPLEX1:def 11
-       .= [*-x,-Im [*x,y*]*] by COMPLEX1:7
-       .= [*-x,-y*] by COMPLEX1:7
+X: [*x,y*] = x+y*<i> by COMPLEX1:27;
+       [**x,y**] = x+y*<i> by HAHNBAN1:def 1;
+    hence -[**x,y**] = -(x+y*<i>) by COMPLFLD:4
+       .= [*- Re[*x,y*],(-Im[*x,y*])*] by COMPLEX1:def 11,X
+       .= - Re[*x,y*]+(-Im[*x,y*])*<i> by COMPLEX1:27
+       .= -x+(-Im[*x,y*])*<i> by COMPLEX1:28,X
+       .= -x+(-y)*<i> by COMPLEX1:28,X
        .= [**-x,-y**] by HAHNBAN1:def 1;
    end;
 
@@ -2671,7 +2674,7 @@ BINOP_1:sch 2;
      A7: now let x be Element of COMPLEX;
       thus (v1+fzero).x = v1.x+fzero.x by COMSEQ_1:def 4
          .= v1.x+0c by FUNCOP_1:13
-         .= v1.x by COMPLEX1:22;
+         .= v1.x by COMPLEX1:def 6;
      end;
      thus v + 0.L = fadd.(v,0.L) by RLVECT_1:5
         .= @(v1+fzero) by A2,A5
@@ -3379,7 +3382,7 @@ then A38: [**c to_power (k+1),0**] <> the Zero of F_Complex by RLVECT_1:def 2;
              [**c to_power (k+1),0**]*gc by A39,VECTSP_1:43;
        then A40: |.q.0*(1.F_Complex-[**c to_power k,0**])+
                 [**c to_power (k+1),0**]*gc.| >= |.q.0 .| by A5,A18;
-        1r = [*1,0*] by ARYTM_0:def 7,COMPLEX1:def 7;
+        1r = 1+0*<i> by ARYTM_0:def 7,COMPLEX1:def 7;
        then A41: |.1.F_Complex-[**c to_power k,0**].| =
             |.[**1,0**]-[**c to_power k,0**].|
                                by COMPLFLD:10,HAHNBAN1:def 1

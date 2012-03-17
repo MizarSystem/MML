@@ -25,7 +25,7 @@ environ
  definitions TARSKI, PRE_TOPC, XBOOLE_0;
  theorems TARSKI, ZFMISC_1, PRE_TOPC, TOPS_1, XBOOLE_0, XBOOLE_1, SUBSET_1,
       TOPS_3, TDLAT_3, YELLOW_8, FRECHET, FRECHET2, BORSUK_5, TOPMETR, NUMBERS,
-      CARD_4, ORDERS_4, GROUP_1;
+      CARD_4, ORDERS_4, GROUP_1, STRUCT_0;
  schemes PRE_TOPC, ORDINAL1;
 
 begin :: Preliminaries
@@ -1208,8 +1208,12 @@ xy:   Cl (B \ {x}) c= Cl ((A \/ B) \ {x}) by PRE_TOPC:49;
   end;
 
 theorem Add:
-  T is being_T1 implies Der Der A c= Der A
+  for T being non empty TopSpace,
+      A being Subset of T st T is being_T1 holds
+    Der Der A c= Der A
   proof
+    let T be non empty TopSpace,
+        A be Subset of T;
     assume
 XX: T is being_T1;
     let x be set;
@@ -1256,15 +1260,28 @@ Z2: f in G & f <> x' by Z1,ZFMISC_1:64;
   end;
 
 theorem Adda:
-  T is being_T1 implies Cl Der A = Der A
+  for T being TopSpace,
+      A being Subset of T st T is being_T1 holds
+    Cl Der A = Der A
   proof
+    let T be TopSpace,
+        A be Subset of T;
     assume
 XX: T is being_T1;
-X1: Cl Der A = Der A \/ Der Der A by Th134a;
-    Der Der A c= Der A by Add,XX; then
-X2: Cl Der A c= Der A \/ Der A by X1,XBOOLE_1:9;
-    Der A c= Cl Der A by PRE_TOPC:48;
-    hence thesis by XBOOLE_0:def 10,X2;
+    per cases;
+    suppose
+YY:   T is non empty;
+X1:   Cl Der A = Der A \/ Der Der A by Th134a;
+      Der Der A c= Der A by YY,Add,XX; then
+X2:   Cl Der A c= Der A \/ Der A by X1,XBOOLE_1:9;
+      Der A c= Cl Der A by PRE_TOPC:48;
+      hence thesis by XBOOLE_0:def 10,X2;
+    end;
+    suppose
+U0:   T is empty; then
+      Cl Der A = {} by LemPos;
+      hence thesis by LemPos,U0;
+    end;
   end;
 
 registration let T be being_T1 non empty TopSpace,

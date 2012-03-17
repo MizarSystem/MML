@@ -147,23 +147,6 @@ A6:   h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
    thus thesis by A4,A5,A6;
  end;
 
- definition
-  func R^2-unit_square -> Subset of TOP-REAL 2 equals
-   :Def3: { p : p`1 = 0 & p`2 <= 1 & p`2 >= 0 or
-                        p`1 <= 1 & p`1 >= 0 & p`2 = 1 or
-                        p`1 <= 1 & p`1 >= 0 & p`2 = 0 or
-                        p`1 = 1 & p`2 <= 1 & p`2 >= 0};
-  coherence
-   proof defpred X[Point of TOP-REAL 2] means
-          $1`1 = 0 & $1`2 <= 1 & $1`2 >= 0 or
-          $1`1 <= 1 & $1`1 >= 0 & $1`2 = 1 or
-          $1`1 <= 1 & $1`1 >= 0 & $1`2 = 0 or
-          $1`1 = 1 & $1`2 <= 1 & $1`2 >= 0;
-        { p : X[p]} c= the carrier of TOP-REAL 2 from FRAENKEL:sch 10;
-    hence thesis;
-   end;
- end;
-
  definition let n; let p1,p2 be Point of TOP-REAL n;
    func LSeg(p1,p2) -> Subset of TOP-REAL n equals
 :Def4: { (1-lambda)*p1 + lambda*p2 : 0 <= lambda & lambda <= 1 };
@@ -179,6 +162,14 @@ A6:   h is_homeomorphism & h.0 = f1.0 & h.1 = f2.1 by A3,A4,A5,TOPMETR2:6;
      end;
     hence thesis;
    end;
+ end;
+
+ definition
+  func R^2-unit_square -> Subset of TOP-REAL 2 equals
+   :Def3:
+    ( LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) ) \/
+    ( LSeg(|[1,1]|,|[1,0]|) \/ LSeg(|[1,0]|,|[0,0]|) );
+  coherence;
  end;
 
 registration let n; let p1,p2 be Point of TOP-REAL n;
@@ -986,8 +977,10 @@ proof
  end;
 
 theorem Th20:
- R^2-unit_square = (LSeg(|[ 0,0 ]|, |[ 0,1 ]|) \/ LSeg(|[ 0,1 ]|, |[ 1,1 ]|))
- \/ (LSeg(|[ 0,0 ]|, |[ 1,0 ]|) \/ LSeg(|[ 1,0 ]|, |[ 1,1 ]|))
+ R^2-unit_square ={ p : p`1 = 0 & p`2 <= 1 & p`2 >= 0 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 1 or
+                        p`1 <= 1 & p`1 >= 0 & p`2 = 0 or
+                        p`1 = 1 & p`2 <= 1 & p`2 >= 0}
 proof
    defpred X12[Point of TOP-REAL 2] means
        $1`1 = 0 & $1`2 <= 1 & $1`2 >= 0 or
@@ -1016,7 +1009,13 @@ end;
 
 registration
  cluster R^2-unit_square -> non empty;
-coherence by Th20;
+coherence
+ proof
+   R^2-unit_square =
+    ( LSeg(|[0,0]|,|[0,1]|) \/ LSeg(|[0,1]|,|[1,1]|) ) \/
+    ( LSeg(|[1,1]|,|[1,0]|) \/ LSeg(|[1,0]|,|[0,0]|) ) by Def3;
+  hence thesis;
+ end;
 end;
 
 theorem
@@ -1478,7 +1477,7 @@ A35:   L~f2 = union {LSeg(p0,p10),LSeg(p10,p1)}
  .= L~f2 by Def6;
     end;
    then A39: L~f2 = (LSeg(p0,p10) \/ LSeg(p10,p1)) by ZFMISC_1:93;
-   thus R^2-unit_square = L~f1 \/ L~f2 by A21,A35,Th20,ZFMISC_1:93;
+   thus R^2-unit_square = L~f1 \/ L~f2 by A21,A35,Def3,ZFMISC_1:93;
      now assume L2 meets L3;
      then consider x being set such that
      A40: x in L2 & x in L3 by XBOOLE_0:3;

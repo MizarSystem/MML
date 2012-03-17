@@ -1,0 +1,1730 @@
+:: Formalization of Ortholattices via Orthoposets
+::  by Adam Grabowski and Markus Moschner
+:: 
+:: Received December 28, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, BOOLE, FUNCT_1, SUBSET_1, LATTICES, ROBBINS3, ORDERS_1,
+      RELAT_1, LATTICE3, ROBBINS1, OPOSET_1, MIDSP_1, VECTSP_2, FILTER_1,
+      REALSET1, RELAT_2, WAYBEL_0, WAYBEL_1, YELLOW_0, PRE_TOPC, SHEFFER1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, FINSUB_1, RELAT_1,
+      RELSET_1, PARTFUN1, FUNCT_1, FUNCT_2, REALSET1, RELAT_2, STRUCT_0,
+      PRE_TOPC, REALSET2, LATTICE3, LATTICES, ORDERS_1, ORDERS_2, FILTER_1,
+      VECTSP_2, MIDSP_1, ROBBINS1, OPOSET_1, WAYBEL_0, WAYBEL_1, YELLOW_0,
+      SHEFFER1;
+ constructors TARSKI, RELSET_1, FUNCT_1, FUNCT_2, STRUCT_0, PRE_TOPC, BINOP_1,
+      FINSUB_1, XBOOLE_0, LATTICES, RELAT_1, ORDERS_1, ORDERS_2, LATTICE3,
+      ROBBINS1, PARTFUN1, MIDSP_1, YELLOW_0, VECTSP_2, REALSET1, FILTER_1,
+      DOMAIN_1, OPOSET_1, REALSET2, FINSEQ_1, FUNCOP_1, NECKLACE, ORDINAL2,
+      SUBSET_1, WAYBEL_0, WAYBEL_1, WAYBEL24, ZFMISC_1, SHEFFER1;
+ clusters FILTER_0, FINSUB_1, STRUCT_0, SUBSET_1, ZFMISC_1, XBOOLE_0, ROBBINS1,
+      LATTICES, MEMBERED, OPOSET_1, ORDERS_1, RELSET_1, RELAT_1, PARTFUN1,
+      FUNCT_1, LATTICE3, YELLOW_1, YELLOW_0, REALSET2, ORDERS_2, SHEFFER1,
+      BINOP_1, EQREL_1, FINSEQ_1, FUNCT_2, PRE_TOPC, REALSET1, WAYBEL_0,
+      WAYBEL_1, WAYBEL24;
+ requirements SUBSET, BOOLE, NUMERALS;
+ definitions FUNCT_1, LATTICE3, LATTICES, OPOSET_1, ROBBINS1, PRE_TOPC,
+      RELAT_2, RELSET_1, STRUCT_0, WAYBEL_0, WAYBEL_1, YELLOW_0, TARSKI;
+ theorems ZFMISC_1, STRUCT_0, LATTICE3, RELAT_1, FILTER_1, LATTICES, OPOSET_1,
+      ORDERS_1, RELSET_1, ROBBINS1, PARTFUN1, RELAT_2, YELLOW_0, FILTER_2,
+      REALSET2, ORDERS_2, WAYBEL_9, WAYBEL_1, FUNCT_2, REALSET1, YELLOW_7,
+      SHEFFER1;
+
+begin :: Another short axiomatization of lattices
+      :: Originally proved by McCune with the help of OTTER
+
+definition let L be non empty \/-SemiLattStr;
+  attr L is join-Associative means :SL1:
+    for x, y, z being Element of L holds
+      x "\/" (y "\/" z) = y "\/" (x "\/" z);
+end;
+
+definition let L be non empty /\-SemiLattStr;
+  attr L is meet-Associative means :SL2:
+    for x, y, z being Element of L holds
+      x "/\" (y "/\" z) = y "/\" (x "/\" z);
+end;
+
+definition let L be non empty LattStr;
+  attr L is meet-Absorbing means :SL3:
+    for x, y being Element of L holds
+      x "\/" (x "/\" y) = x;
+end;
+
+theorem LmEq1a:
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-idempotent join-idempotent
+  proof
+    let L be non empty LattStr;
+    assume
+P0: L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+P1: for x being Element of L holds x "/\" x = x
+    proof
+      let a be Element of L;
+      a = a "/\" (a "\/" a) by LATTICES:def 9,P0;
+      hence thesis by SL3,P0;
+    end;
+    for x being Element of L holds x "\/" x = x
+    proof
+      let a be Element of L;
+      a = a "\/" (a "/\" a) by SL3,P0;
+      hence thesis by LATTICES:def 9,P0;
+    end;
+    hence thesis by P1,SHEFFER1:def 9,ROBBINS1:def 7;
+  end;
+
+theorem LmEq1b:
+  for L being non empty LattStr holds
+      L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-commutative join-commutative
+  proof
+    let L be non empty LattStr;
+    assume
+P0: L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+P1: L is join-idempotent meet-idempotent by P0,LmEq1a;
+P2: for x,y being Element of L holds  x "/\" y = y "/\" x
+    proof
+      let a,b be Element of L;
+      a "/\" b = a "/\" (b "/\" (b "\/" a)) by LATTICES:def 9,P0
+              .= b "/\" (a "/\" (b "\/" a)) by SL2,P0
+              .= b "/\" (a "/\" (b "\/" (a "\/" a))) by P1,ROBBINS1:def 7
+              .= b "/\" (a "/\" (a "\/" (b "\/" a))) by SL1,P0
+              .= b "/\" a by P0,LATTICES:def 9;
+      hence thesis;
+    end;
+    for x,y being Element of L holds  x "\/" y = y "\/" x
+    proof
+      let a,b be Element of L;
+      a "\/" b = a "\/" (b "\/" (b "/\" a)) by SL3,P0
+              .= b "\/" (a "\/" (b "/\" a)) by SL1,P0
+              .= b "\/" (a "\/" (b "/\" (a "/\" a))) by P1,SHEFFER1:def 9
+              .= b "\/" (a "\/" (a "/\" (b "/\" a))) by SL2,P0
+              .= b "\/" a  by SL3,P0;
+      hence thesis;
+    end;
+    hence thesis by P2,LATTICES:def 6,LATTICES:def 4;
+  end;
+  
+theorem LmEq1c: 
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-absorbing
+  proof
+    let L be non empty LattStr;
+    assume
+P0: L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+P1: L is meet-commutative join-commutative by P0,LmEq1b;
+    for x,y being Element of L holds (x "/\" y) "\/" y = y
+    proof
+      let a,b be Element of L;
+      b = b "\/" (b "/\" a) by SL3,P0
+       .= b "\/" (a "/\" b) by P1,LATTICES:def 6
+       .= (a "/\" b) "\/" b by LATTICES:def 4,P1;
+      hence thesis;
+    end;
+    hence thesis by LATTICES:def 8;
+  end;
+  
+theorem LmEq1d:
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-associative join-associative
+  proof
+    let L be non empty LattStr;
+    assume
+P0: L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+P1: L is meet-commutative join-commutative by P0,LmEq1b;
+P2: for x,y,z being Element of L holds x "/\" (y "/\" z) = (x "/\" y) "/\" z
+    proof
+      let a,b,c be Element of L;
+      a "/\" (b "/\" c) = a "/\" (c "/\" b) by P1,LATTICES:def 6
+                        .= c "/\" (a "/\" b) by SL2,P0
+                        .= (a "/\" b) "/\" c by P1,LATTICES:def 6;
+      hence thesis;
+    end;
+    for x,y,z being Element of L holds x "\/" (y "\/" z) = (x "\/" y) "\/" z
+    proof
+      let a,b,c be Element of L;
+      a "\/" (b "\/" c) = a "\/" (c "\/" b) by P1,LATTICES:def 4
+                        .= c "\/" (a "\/" b) by SL1,P0
+                        .= (a "\/" b) "\/" c by P1,LATTICES:def 4;
+      hence thesis;
+    end;
+    hence thesis by P2,LATTICES:def 5,LATTICES:def 7;
+  end;
+  
+theorem ThEq1:
+  for L being non empty LattStr holds
+    L is Lattice-like iff
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+  proof
+    let L be non empty LattStr;
+P1: L is Lattice-like implies
+      L is meet-Associative join-Associative meet-Absorbing join-absorbing
+    proof
+      assume
+P10:  L is Lattice-like;
+P11:  L is meet-absorbing join-absorbing by LATTICES:def 10,P10;
+P12:  L is meet-associative meet-commutative
+        join-associative join-commutative by LATTICES:def 10,P10;
+P13:  for x,y,z being Element of L holds
+        x "\/" (y "\/" z) = y "\/" (x "\/" z)
+      proof
+        let a,b,c be Element of L;
+        a "\/" (b "\/" c) = (a "\/" b) "\/" c by P12,LATTICES:def 5
+                         .= (b "\/" a) "\/" c by P12,LATTICES:def 4
+                         .= b "\/" (a "\/" c) by P12,LATTICES:def 5;
+        hence thesis;
+      end;
+P14:  for x,y,z being Element of L holds
+        x "/\" (y "/\" z) = y "/\" (x "/\" z)
+      proof
+        let a,b,c be Element of L;
+        a "/\" (b "/\" c) = (a "/\" b) "/\" c by P12,LATTICES:def 7
+                         .= (b "/\" a) "/\" c by P12,LATTICES:def 6
+                         .= b "/\" (a "/\" c) by P12,LATTICES:def 7;
+        hence thesis;
+      end;
+      for x,y being Element of L holds x "\/" (x "/\" y) = x
+      proof
+        let a,b be Element of L;
+        a = (b "/\" a) "\/" a by P11,LATTICES:def 8
+         .= (a "/\" b) "\/" a by P12,LATTICES:def 6
+         .= a "\/" (a "/\" b) by P12,LATTICES:def 4;
+        hence thesis;
+      end;
+      hence thesis by LATTICES:def 10,P10,SL3,SL2,P14,SL1,P13;
+    end;
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+      implies
+        L is Lattice-like
+    proof
+      assume
+P20:  L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+P21:  L is meet-commutative join-commutative by LmEq1b,P20;
+P23:  L is meet-associative join-associative by LmEq1d,P20;
+      L is meet-absorbing by LmEq1c,P20;
+      hence thesis by P20,P21,P23,LATTICES:def 10;
+    end;
+    hence thesis by P1;
+  end;
+
+registration
+  cluster Lattice-like ->
+    meet-Associative join-Associative meet-absorbing join-absorbing
+      (non empty LattStr);
+  coherence by ThEq1,LATTICES:def 10;
+  cluster meet-Associative join-Associative meet-Absorbing join-absorbing ->
+    Lattice-like (non empty LattStr);
+  coherence by ThEq1;
+end;
+
+begin :: Orthoposets
+
+registration
+  cluster OrderInvolutive -> Dneg (PartialOrdered (non empty OrthoRelStr));
+  coherence
+  proof
+    let L be PartialOrdered (non empty OrthoRelStr);
+    assume L is OrderInvolutive;
+    then consider f being map of L,L such that
+A1: f = the Compl of L & f is Orderinvolutive by OPOSET_1:def 33;
+    consider g being map of L, L such that
+A2: g = f & g is dneg antitone by A1,OPOSET_1:def 32;
+    thus thesis by A1,A2,OPOSET_1:def 6;
+  end;
+end;
+
+theorem Lm1:
+  for L being Dneg (non empty OrthoRelStr), x being Element of L holds
+     x`` = x
+  proof
+    let L be Dneg (non empty OrthoRelStr),
+        x be Element of L;
+    consider f being map of L,L such that
+A1: f = the Compl of L & f is dneg by OPOSET_1:def 6;
+A2: f.x = x` by A1,ROBBINS1:def 3;
+    f.(f.x) = x by A1,OPOSET_1:def 3;
+    hence thesis by A1,A2,ROBBINS1:def 3;
+  end;
+  
+theorem Lem1:
+  for O being OrderInvolutive PartialOrdered (non empty OrthoRelStr),
+     x, y being Element of O holds x <= y implies y` <= x`
+  proof
+    let O be OrderInvolutive PartialOrdered (non empty OrthoRelStr),
+        x, y be Element of O;
+    assume
+A0: x <= y;
+    consider f being map of O,O such that
+A1: f = the Compl of O & f is Orderinvolutive by OPOSET_1:def 33;
+    consider g being map of O,O such that
+A2: g = f & g is dneg antitone by A1,OPOSET_1:def 32;
+    f.x >= f.y by A0,A2,WAYBEL_9:def 1;
+    then x` >= f.y by A1,ROBBINS1:def 3;
+    hence thesis by A1,ROBBINS1:def 3;
+  end;
+
+registration
+  cluster with_infima with_suprema strict PreOrthoPoset;
+  existence
+  proof
+    take TrivOrthoRelStr;
+    thus thesis;
+  end;
+end;
+
+notation let L be non empty \/-SemiLattStr,
+             x, y be Element of L;
+  synonym x |_| y for x "\/" y;
+end;
+
+notation let L be non empty /\-SemiLattStr,
+             x, y be Element of L;
+  synonym x |^| y for x "/\" y;
+end;
+
+notation let L be non empty RelStr,
+             x, y be Element of L;
+  synonym x "|^|" y for x "/\" y;
+  synonym x "|_|" y for x "\/" y;
+end;
+
+begin :: Merging relational structures and lattice structures together
+
+definition
+  struct (\/-SemiLattStr, RelStr) \/-SemiLattRelStr
+      (# carrier -> set,
+         L_join -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  struct (/\-SemiLattStr, RelStr) /\-SemiLattRelStr
+      (# carrier -> set,
+         L_meet -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  struct (/\-SemiLattRelStr, \/-SemiLattRelStr, LattStr) LattRelStr
+      (# carrier -> set,
+         L_join, L_meet -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  func TrivLattRelStr -> LattRelStr equals :DefTriv2:
+    LattRelStr (# {{}}, op2, op2, id {{}} #);
+  coherence;
+end;
+
+registration
+  cluster TrivLattRelStr -> non empty trivial;
+  coherence by STRUCT_0:def 1,DefTriv2,REALSET2:def 5;
+end;
+
+registration
+  cluster non empty \/-SemiLattRelStr;
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+  cluster non empty /\-SemiLattRelStr;
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+  cluster non empty LattRelStr;
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+end;
+
+theorem
+  for R being non empty RelStr st
+    the InternalRel of R is_reflexive_in the carrier of R &
+    the InternalRel of R is antisymmetric transitive holds
+      R is reflexive antisymmetric transitive
+  proof
+    let r be non empty RelStr;
+    set i = the InternalRel of r;
+    set c = the carrier of r;
+    assume
+P0: i is_reflexive_in c & i is antisymmetric transitive; then
+P2: field i = c by OPOSET_1:7; then
+p8: i is_antisymmetric_in c by RELAT_2:def 12,P0;
+    i is_transitive_in field i by RELAT_2:def 16,P0;
+    hence thesis by p8,P0,P2,ORDERS_2:def 5,ORDERS_2:def 6,ORDERS_2:def 4;
+  end;
+
+registration
+  cluster TrivLattRelStr -> reflexive;
+  coherence 
+  proof
+    set T = TrivLattRelStr;
+    set C = the carrier of T;
+    set I = the InternalRel of T;
+    field I = C by OPOSET_1:1,DefTriv2; then
+    I is_reflexive_in C by RELAT_2:def 9,DefTriv2;
+    hence thesis by ORDERS_2:def 4;
+  end;
+end;
+
+registration
+  cluster antisymmetric reflexive transitive
+    with_suprema with_infima LattRelStr;
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster TrivLattRelStr -> meet-Absorbing;
+  coherence
+  proof
+    set TL = TrivLattRelStr;
+    for x,y being Element of TL holds x "\/" (x "/\" y) = x
+      by REALSET2:def 7;
+    hence thesis by SL3;
+  end;
+end;
+
+Triv6:
+  TrivLattRelStr is Lattice-like;
+
+registration
+  cluster Lattice-like (non empty LattRelStr);
+  existence by Triv6;
+end;
+
+definition let L be Lattice;
+  redefine func LattRel L -> Order of the carrier of L;
+  coherence
+  proof
+A1: LattRel L = { [p,q] where p is Element of L,
+             q is Element of L: p [= q } by FILTER_1:def 8;
+    LattRel L c= [:the carrier of L,the carrier of L:]
+    proof
+      let x be set;
+      assume x in LattRel L;
+      then ex p,q being Element of L st x = [p,q] & p [= q by A1;
+      hence thesis by ZFMISC_1:106;
+    end;
+    then reconsider R = LattRel L as Relation of the carrier of L
+      by RELSET_1:def 1;
+A2: R is_reflexive_in the carrier of L
+    proof
+      let x be set; assume x in the carrier of L;
+      then reconsider x as Element of L;
+      x [= x;
+      hence thesis by FILTER_1:32;
+    end;
+A3: R is_antisymmetric_in the carrier of L
+    proof
+      let x,y be set;
+      assume x in the carrier of L & y in the carrier of L;
+      then reconsider x' = x, y' = y as Element of L;
+      assume [x,y] in R & [y,x] in R;
+      then x' [= y' & y' [= x' by FILTER_1:32;
+      hence thesis by LATTICES:26;
+    end;
+A4: R is_transitive_in the carrier of L
+    proof
+      let x,y,z be set;
+      assume x in the carrier of L & y in the carrier of L &
+      z in the carrier of L;
+      then reconsider x' = x, y' = y, z' = z as Element of L;
+      assume [x,y] in R & [y,z] in R;
+      then x' [= y' & y' [= z' by FILTER_1:32;
+      then x' [= z' by LATTICES:25;
+      hence thesis by FILTER_1:32;
+    end;
+A5: dom R = the carrier of L by A2,ORDERS_1:98;
+    field R = the carrier of L by A2,ORDERS_1:98;
+    hence thesis
+      by A2,A3,A4,A5,PARTFUN1:def 4,RELAT_2:def 9,def 12,def 16;
+  end;
+end;
+
+begin :: Binary approach to ortholattices
+
+definition
+  struct (LattRelStr, OrthoLattStr, OrthoRelStr) OrthoLattRelStr
+      (# carrier -> set,
+         L_join, L_meet -> (BinOp of the carrier),
+         InternalRel -> (Relation of the carrier),
+         Compl -> UnOp of the carrier #);
+end;
+
+definition
+  func TrivCLRelStr -> OrthoLattRelStr equals :DefTriv:
+    OrthoLattRelStr (# {{}}, op2, op2, id {{}}, op1 #);
+  coherence;
+end;
+
+:: Axiomatics for ortholattices is the classical one for lattices extended
+:: by the three following:
+:: x ^ y = c(c(x) v c(y)).     % DM   de_Morgan from ROBBINS1
+:: c(c(x)) = x.                % CC   dneg from OPOSET_1, too specific
+:: x v c(x) = y v c(y).        % ONE
+
+definition let L be non empty ComplStr;
+  attr L is involutive means :DefInv:
+    for x being Element of L holds x`` = x;
+end;
+
+definition let L be non empty ComplLattStr;
+  attr L is with_Top means :WTDef:
+    for x, y being Element of L holds
+      x |_| x` = y |_| y`;
+end;
+
+registration
+  cluster TrivOrtLat -> involutive with_Top;
+  coherence
+  proof
+    thus TrivOrtLat is involutive
+    proof
+      let x be Element of TrivOrtLat;
+      thus thesis by REALSET2:def 7;
+    end;
+    thus TrivOrtLat is with_Top
+    proof
+      let x, y be Element of TrivOrtLat;
+      thus thesis by REALSET2:def 7;
+    end;
+  end;
+end;
+
+registration
+  cluster TrivCLRelStr -> non empty trivial;
+  coherence by DefTriv,STRUCT_0:def 1,REALSET2:def 5;
+end;
+
+registration
+  cluster TrivCLRelStr -> reflexive;
+  coherence
+  proof
+    for x being Element of TrivCLRelStr holds x <= x
+    proof
+      let x be Element of TrivCLRelStr;
+      [x,x] in id {{}} by DefTriv,RELAT_1:def 10;
+      hence thesis by ORDERS_2:def 9,DefTriv;
+    end;
+    hence thesis by YELLOW_0:def 1;
+  end;
+end;
+
+registration
+  cluster TrivCLRelStr -> involutive with_Top;
+  coherence
+  proof
+    set L = TrivCLRelStr;
+    thus L is involutive
+    proof
+      let x be Element of L;
+      thus thesis by REALSET2:def 7;
+    end;
+    thus L is with_Top
+    proof
+      let x, y be Element of L;
+      thus thesis by REALSET2:def 7;
+    end;
+  end;
+end;
+
+registration
+  cluster involutive with_Top de_Morgan Lattice-like (non empty OrthoLattStr);
+  existence
+  proof
+    take TrivOrtLat;
+    thus thesis;
+  end;
+end;
+
+definition
+  mode Ortholattice is involutive with_Top de_Morgan
+    Lattice-like (non empty OrthoLattStr);
+end;
+
+begin :: Lemmas
+
+theorem Cran1A:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-commutative holds
+    L is join-commutative
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is join-commutative;
+    L is join-commutative
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A2:   x' |_| y' = y' |_| x' by A1, LATTICES:def 4;
+      x |_| y = (the L_join of L).(x,y) by LATTICES:def 1
+             .= x' |_| y' by LATTICES:def 1,A1
+             .= (the L_join of K).(y,x) by A2,LATTICES:def 1
+             .= y |_| x by LATTICES:def 1,A1;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+    
+theorem Cran1a:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-commutative holds
+    L is meet-commutative
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is meet-commutative;
+    L is meet-commutative
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A2:   x' "/\" y' = y' "/\" x' by A1, LATTICES:def 6;
+      x "/\" y = (the L_meet of L).(x,y) by LATTICES:def 2
+             .= x' "/\" y' by LATTICES:def 2,A1
+             .= (the L_meet of K).(y,x) by A2,LATTICES:def 2
+             .= y "/\" x by A1,LATTICES:def 2;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+theorem Cran2A:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-associative holds
+    L is join-associative
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is join-associative;
+    L is join-associative
+    proof
+      let x, y, z be Element of L;
+      reconsider x' = x, y' = y, z' = z as Element of K by A1;
+A2:   (x' |_| y') |_| z' = x' |_| (y' |_| z') by A1, LATTICES:def 5;
+      x |_| y |_| z = (the L_join of L).(x |_| y, z) by LATTICES:def 1
+             .= (the L_join of K).(x' |_| y', z') by A1,FILTER_2:8
+             .= x' |_| y' |_| z' by LATTICES:def 1
+             .= (the L_join of K).(x', y' |_| z') by A2,LATTICES:def 1
+             .= (the L_join of L).(x, y |_| z) by A1,FILTER_2:8
+             .= x |_| (y |_| z) by LATTICES:def 1;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+    
+theorem Cran2a:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-associative holds
+    L is meet-associative
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is meet-associative;
+    L is meet-associative
+    proof
+      let x, y, z be Element of L;
+      reconsider x' = x, y' = y, z' = z as Element of K by A1;
+A2:   (x' "/\" y') "/\" z' = x' "/\" (y' "/\" z') by A1, LATTICES:def 7;
+      x "/\" y "/\" z = (the L_meet of L).(x "/\" y, z) by LATTICES:def 2
+             .= (the L_meet of K).(x' "/\" y', z') by A1,FILTER_2:8
+             .= x' "/\" y' "/\" z' by LATTICES:def 2
+             .= (the L_meet of K).(x', y' "/\" z') by A2,LATTICES:def 2
+             .= (the L_meet of L).(x, y "/\" z) by A1,FILTER_2:8
+             .= x "/\" (y "/\" z) by LATTICES:def 2;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  
+theorem Cran3A:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-absorbing holds
+    L is join-absorbing
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is join-absorbing;
+    L is join-absorbing
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A2:   x' "/\" (x' "\/" y') = x' by A1, LATTICES:def 9;
+      x "/\" (x |_| y) = (the L_meet of L).(x, x |_| y) by LATTICES:def 2
+             .= (the L_meet of L).(x, x' |_| y') by A1,FILTER_2:8
+             .= x by A2,LATTICES:def 2,A1;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  
+theorem Cran3a:
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-absorbing holds
+    L is meet-absorbing
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is meet-absorbing;
+    L is meet-absorbing
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A2:   (x' "/\" y') "\/" y' = y' by A1, LATTICES:def 8;
+      (x "/\" y) |_| y = (the L_join of L).(x "/\" y, y) by LATTICES:def 1
+             .= (the L_join of K).(x' "/\" y', y') by A1,FILTER_2:8
+             .= y by A2,LATTICES:def 1;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is Lattice-like holds
+    L is Lattice-like
+  proof
+    let K, L be non empty LattStr;
+    assume
+A1: the LattStr of K = the LattStr of L &
+    K is Lattice-like; then
+    K is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+      by LATTICES:def 10; then
+    L is join-commutative join-associative meet-absorbing
+         meet-commutative meet-associative join-absorbing
+      by A1, Cran3A, Cran3a, Cran2A, Cran2a, Cran1A, Cran1a;
+    hence thesis by LATTICES:def 10;
+  end;
+
+theorem FILTER_2'8:
+  for L1,L2 being non empty \/-SemiLattStr st
+    the \/-SemiLattStr of L1 = the \/-SemiLattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 holds
+    a1 "\/" b1 = a2 "\/" b2
+  proof
+    let L1, L2 be non empty \/-SemiLattStr;
+    assume
+A1: the \/-SemiLattStr of L1 = the \/-SemiLattStr of L2;
+    let a1, b1 be Element of L1,
+        a2, b2 be Element of L2;
+    assume
+A2: a1 = a2 & b1 = b2;
+    a1 "\/" b1 = (the L_join of L1).(a1,b1) by LATTICES:def 1
+              .= a2 "\/" b2 by LATTICES:def 1,A1,A2;
+    hence thesis;
+  end;
+
+theorem FILTER_2''8:
+  for L1,L2 being non empty /\-SemiLattStr st
+    the /\-SemiLattStr of L1 = the /\-SemiLattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 holds
+    a1 "/\" b1 = a2 "/\" b2
+  proof
+    let L1, L2 be non empty /\-SemiLattStr;
+    assume
+A1: the /\-SemiLattStr of L1 = the /\-SemiLattStr of L2;
+    let a1, b1 be Element of L1,
+        a2, b2 be Element of L2;
+    assume
+A2: a1 = a2 & b1 = b2;
+    a1 "/\" b1 = (the L_meet of L1).(a1,b1) by LATTICES:def 2
+              .= a2 "/\" b2 by LATTICES:def 2,A1,A2;
+    hence thesis;
+  end;
+  
+theorem Camel1:
+  for K, L being non empty ComplStr,
+      x being Element of K,
+      y being Element of L st
+    the Compl of K = the Compl of L & x = y holds
+      x` = y`
+  proof
+    let K, L be non empty ComplStr,
+        x be Element of K,
+        y be Element of L;
+    assume
+A1: the Compl of K = the Compl of L & x = y;
+    x` = (the Compl of L).y by A1, ROBBINS1:def 3
+      .= y` by ROBBINS1:def 3;
+    hence thesis;
+  end;
+      
+theorem Cran4A:
+  for K, L being non empty ComplLattStr st
+    the ComplLattStr of K = the ComplLattStr of L &
+    K is with_Top holds
+    L is with_Top
+  proof
+    let K, L be non empty ComplLattStr;
+    assume
+A1: the ComplLattStr of K = the ComplLattStr of L &
+    K is with_Top;
+A2: the \/-SemiLattStr of K = the \/-SemiLattStr of L by A1;
+    for x, y being Element of L holds
+      x |_| x` = y |_| y`
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A3:   x` = x'` & y` = y'` by A1, Camel1;
+      x |_| x` = x' |_| x'` by A2, A3, FILTER_2'8
+              .= y' |_| y'` by A1, WTDef
+              .= y |_| y` by A2, A3, FILTER_2'8;
+      hence thesis;  
+    end;
+    hence thesis by WTDef;
+  end;
+
+theorem Cran5A:
+  for K, L being non empty OrthoLattStr st
+    the OrthoLattStr of K = the OrthoLattStr of L &
+    K is de_Morgan holds
+    L is de_Morgan
+  proof
+    let K, L be non empty OrthoLattStr;
+    assume
+A1: the OrthoLattStr of K = the OrthoLattStr of L &
+    K is de_Morgan;
+    for x, y being Element of L holds x "/\" y = (x` "\/" y`)`
+    proof
+      let x, y be Element of L;
+      reconsider x' = x, y' = y as Element of K by A1;
+A2:   the /\-SemiLattStr of L = the /\-SemiLattStr of K by A1;
+A4:   the \/-SemiLattStr of L = the \/-SemiLattStr of K by A1;
+A3:   x` = x'` & y` = y'` by A1, Camel1;
+      reconsider z = x` "\/" y` as Element of K by A1;
+      x "/\" y = x' "/\" y' by A2, FILTER_2''8
+              .= (x'` "\/" y'`)` by A1, ROBBINS1:def 23
+              .= z` by A4,A3,FILTER_2'8
+              .= (x` "\/" y`)` by A1,Camel1;
+      hence thesis;
+    end;
+    hence thesis by ROBBINS1:def 23;
+  end;
+
+theorem Cran6A:
+  for K, L being non empty OrthoLattStr st
+    the OrthoLattStr of K = the OrthoLattStr of L &
+    K is involutive holds
+    L is involutive
+  proof
+    let K, L be non empty OrthoLattStr;
+    assume
+A1: the OrthoLattStr of K = the OrthoLattStr of L &
+    K is involutive;
+    for x being Element of L holds x`` = x
+    proof
+      let x be Element of L;
+      reconsider x' = x as Element of K by A1;
+      x` = x'` by A1, Camel1; then
+      x`` = x'`` by A1,Camel1
+         .= x by A1,DefInv;
+      hence thesis;
+    end;
+    hence thesis by DefInv;
+  end;
+
+begin :: Structure Extensions
+
+definition let R be RelStr;
+  mode RelAugmentation of R -> LattRelStr means
+    the RelStr of it = the RelStr of R;
+  existence
+  proof
+    consider A, B being BinOp of the carrier of R;
+    set L = LattRelStr (# the carrier of R, A, B, the InternalRel of R #);
+    take L;
+    thus thesis;
+  end;
+end;
+
+definition let R be LattStr;
+  mode LatAugmentation of R -> LattRelStr means :LADef:
+    the LattStr of it = the LattStr of R;
+  existence
+  proof
+    consider IR being Relation of the carrier of R;
+    set L = LattRelStr (# the carrier of R,
+      the L_join of R, the L_meet of R, IR #);
+    take L;
+    thus thesis;
+  end;
+end;
+
+registration let L be non empty LattStr;
+  cluster -> non empty LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+registration let L be meet-associative (non empty LattStr);
+  cluster -> meet-associative LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran2a;
+  end;
+end;
+
+registration let L be join-associative (non empty LattStr);
+  cluster -> join-associative LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran2A;
+  end;
+end;
+
+registration let L be meet-commutative (non empty LattStr);
+  cluster -> meet-commutative LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran1a;
+  end;
+end;
+
+registration let L be join-commutative (non empty LattStr);
+  cluster -> join-commutative LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran1A;
+  end;
+end;
+
+registration let L be join-absorbing (non empty LattStr);
+  cluster -> join-absorbing LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran3A;
+  end;
+end;
+
+registration let L be meet-absorbing (non empty LattStr);
+  cluster -> meet-absorbing LatAugmentation of L;
+  coherence
+  proof
+    let R be LatAugmentation of L;
+    the LattStr of L = the LattStr of R by LADef;
+    hence thesis by Cran3a;
+  end;
+end;
+
+definition let L be non empty \/-SemiLattRelStr;
+  attr L is naturally_sup-generated means :NGDef:
+    for x, y being Element of L holds
+      x <= y iff x |_| y = y;
+end;
+
+definition let L be non empty /\-SemiLattRelStr;
+  attr L is naturally_inf-generated means :IGDef:
+    for x, y being Element of L holds
+      x <= y iff x |^| y = x;
+end;
+
+registration let L be Lattice;
+  cluster naturally_sup-generated naturally_inf-generated
+            Lattice-like LatAugmentation of L;
+  existence
+  proof
+    set R = LattRel L;
+    set S = LattRelStr (# the carrier of L, the L_join of L,
+              the L_meet of L, R #);
+    the LattStr of L = the LattStr of S; then
+    reconsider S as LatAugmentation of L by LADef;
+A2: the \/-SemiLattStr of L = the \/-SemiLattStr of S;
+B2: the /\-SemiLattStr of L = the /\-SemiLattStr of S;
+    for x, y being Element of S holds
+      x <= y iff x |_| y = y
+    proof
+      let x, y be Element of S;
+      reconsider x' = x, y' = y as Element of L;
+      hereby
+        assume x <= y; then
+        [x,y] in the InternalRel of S by ORDERS_2:def 9; then
+        x' [= y' by FILTER_1:32; then
+        x' |_| y' = y' by LATTICES:def 3;
+        hence x |_| y = y by A2,FILTER_2'8;
+      end;
+      assume
+A4:   x |_| y = y;
+      x' |_| y' = x |_| y by A2,FILTER_2'8; then
+      x' [= y' by A4,LATTICES:def 3; then
+      [x',y'] in LattRel L by FILTER_1:32;
+      hence thesis by ORDERS_2:def 9;
+    end; then
+T1: S is naturally_sup-generated by NGDef;
+    for x, y being Element of S holds
+      x <= y iff x |^| y = x
+    proof
+      let x, y be Element of S;
+      reconsider x' = x, y' = y as Element of L;
+      hereby
+        assume x <= y; then
+        [x,y] in the InternalRel of S by ORDERS_2:def 9; then
+        x' [= y' by FILTER_1:32; then
+        x' |^| y' = x' by LATTICES:21;
+        hence x |^| y = x by B2,FILTER_2''8;
+      end;
+      assume
+A4:   x |^| y = x;
+      x' |^| y' = x |^| y by B2,FILTER_2''8; then
+      x' [= y' by A4,LATTICES:21; then
+      [x',y'] in LattRel L by FILTER_1:32;
+      hence thesis by ORDERS_2:def 9;
+    end; then
+    S is naturally_inf-generated by IGDef;
+    hence thesis by T1;
+  end;
+end;
+
+registration
+  cluster trivial non empty reflexive LattRelStr;
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster trivial non empty reflexive OrthoLattRelStr;
+  existence
+  proof
+    take TrivCLRelStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster trivial non empty reflexive OrthoRelStr;
+  existence
+  proof
+    take TrivOrthoRelStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster trivial -> involutive with_Top de_Morgan
+    well-complemented (non empty OrthoLattStr);
+  coherence
+  proof
+    let L be non empty OrthoLattStr;
+    assume L is trivial; then
+    reconsider L' = L as trivial (non empty OrthoLattStr);
+t1: for x, y being Element of L' holds
+      x |_| x` = y |_| y` by REALSET2:def 7;
+t2: for x, y being Element of L' holds
+      x |^| y = (x` |_| y`)` by REALSET2:def 7;
+T3: for x being Element of L' holds x`` = x by REALSET2:def 7;
+    for x being Element of L' holds x` is_a_complement_of x
+    proof
+      let x be Element of L';
+      x |_| x` = Top L' & x |^| x` = Bottom L' &
+        x` |_| x = Top L' & x` |^| x = Bottom L' by REALSET2:def 7;
+      hence thesis by LATTICES:def 18;
+    end;
+    hence thesis by WTDef,t1,t2,T3,DefInv,ROBBINS1:def 10,ROBBINS1:def 23;
+  end;
+end;
+
+registration
+  cluster trivial -> OrderInvolutive Pure PartialOrdered
+    (non empty reflexive OrthoRelStr);
+  coherence
+  proof
+    let L be non empty reflexive OrthoRelStr;
+    assume L is trivial; then
+    reconsider L' = L as trivial (non empty reflexive OrthoRelStr);
+    reconsider f = the Compl of L' as map of L', L';
+    the carrier of L' is trivial by REALSET2:def 5; then
+    consider x being set such that
+X1: the carrier of L' = {x} by REALSET1:def 4;
+    f = id {x} by X1,FUNCT_2:66; then
+A3: f is dneg by X1,OPOSET_1:20;
+    for z, y being Element of L' st z <= y holds f.z >= f.y
+    proof
+      let z, y be Element of L';
+      assume z <= y;
+Z1:   f.z = x by X1,FUNCT_2:65;
+      f.y = x by X1,FUNCT_2:65;
+      hence thesis by Z1,YELLOW_0:def 1;
+    end; then
+    f is antitone by WAYBEL_9:def 1; then
+a1: f is Orderinvolutive by A3,OPOSET_1:def 32;
+    L' is Dneg by A3,OPOSET_1:def 6;
+    hence thesis by a1,OPOSET_1:def 26,OPOSET_1:def 33;
+  end;
+end;
+
+registration
+  cluster trivial -> naturally_sup-generated naturally_inf-generated
+    (non empty reflexive LattRelStr);
+  coherence
+  proof
+    let L be non empty reflexive LattRelStr;
+    assume L is trivial; then
+    reconsider L' = L as trivial (non empty reflexive LattRelStr);
+A1: L' is naturally_sup-generated
+    proof
+      for x, y being Element of L' holds
+        x <= y iff x |_| y = y by REALSET2:def 7;
+      hence thesis by NGDef;
+    end;
+    L' is naturally_inf-generated
+    proof
+      for x, y being Element of L' holds
+        x <= y iff x |^| y = x by REALSET2:def 7;
+      hence thesis by IGDef;
+    end;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  cluster with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated de_Morgan Lattice-like OrderInvolutive Pure
+      PartialOrdered (non empty OrthoLattRelStr);
+  existence
+  proof
+    take TrivCLRelStr;
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated Lattice-like (non empty LattRelStr);
+  existence
+  proof
+    take TrivLattRelStr;
+    thus thesis;
+  end;
+end;
+
+theorem ZgOrd:
+  for L being naturally_sup-generated (non empty LattRelStr),
+      x, y being Element of L holds
+    x <= y iff x [= y
+  proof
+    let L be naturally_sup-generated (non empty LattRelStr),
+        x, y be Element of L;
+    reconsider x' = x, y' = y as Element of L;
+    hereby
+      assume x <= y; then
+      x |_| y = y by NGDef;
+      hence x [= y by LATTICES:def 3;
+    end;
+    assume x [= y; then
+    x |_| y = y by LATTICES:def 3;
+    hence thesis by NGDef;
+  end;
+
+theorem Sony1:
+  for L being naturally_sup-generated Lattice-like (non empty LattRelStr)
+    holds the RelStr of L = LattPOSet L
+  proof
+    let L be naturally_sup-generated Lattice-like (non empty LattRelStr);
+A0: LattPOSet L = RelStr (#the carrier of L, LattRel L#)
+      by LATTICE3:def 2;
+    for x, y being set holds
+      [x,y] in the InternalRel of L iff [x,y] in LattRel L
+    proof
+      let x, y be set;
+      hereby assume
+C1:     [x,y] in the InternalRel of L; then
+        reconsider x' = x, y' = y as Element of L by ZFMISC_1:106;
+        x' <= y' by C1,ORDERS_2:def 9; then
+        x' [= y' by ZgOrd;
+        hence [x,y] in LattRel L by FILTER_1:32;
+      end;
+      assume
+D1:   [x,y] in LattRel L; then
+      reconsider x' = x, y' = y as Element of L by ZFMISC_1:106;
+      x' [= y' by D1,FILTER_1:32; then
+      x' <= y' by ZgOrd;
+      hence thesis by ORDERS_2:def 9;
+    end;
+    hence thesis by A0,RELAT_1:def 2;
+  end;
+
+registration
+  cluster naturally_sup-generated Lattice-like ->
+            with_infima with_suprema (non empty LattRelStr);
+  coherence
+  proof
+    let L be non empty LattRelStr;
+    assume L is naturally_sup-generated Lattice-like; then
+    reconsider L' = L as naturally_sup-generated Lattice-like
+      (non empty LattRelStr);
+    LattPOSet L' is with_suprema with_infima; then
+    the RelStr of L' is with_suprema with_infima by Sony1;
+    hence thesis by YELLOW_7:15,14;
+  end;
+end;
+
+begin :: Extending OrthoLattStr
+
+definition let R be OrthoLattStr;
+  mode CLatAugmentation of R -> OrthoLattRelStr means :CLADef:
+    the OrthoLattStr of it = the OrthoLattStr of R;
+  existence
+  proof
+    consider IR being Relation of the carrier of R;
+    set L = OrthoLattRelStr (# the carrier of R,
+      the L_join of R, the L_meet of R, IR, the Compl of R #);
+    take L;
+    thus thesis;
+  end;
+end;
+
+registration let L be non empty OrthoLattStr;
+  cluster -> non empty CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef;
+    hence thesis by STRUCT_0:def 1;
+  end;
+end;
+
+registration let L be meet-associative (non empty OrthoLattStr);
+  cluster -> meet-associative CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran2a;
+  end;
+end;
+
+registration let L be join-associative (non empty OrthoLattStr);
+  cluster -> join-associative CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran2A;
+  end;
+end;
+
+registration let L be meet-commutative (non empty OrthoLattStr);
+  cluster -> meet-commutative CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran1a;
+  end;
+end;
+
+registration let L be join-commutative (non empty OrthoLattStr);
+  cluster -> join-commutative CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran1A;
+  end;
+end;
+
+registration let L be meet-absorbing (non empty OrthoLattStr);
+  cluster -> meet-absorbing CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran3a;
+  end;
+end;
+
+registration let L be join-absorbing (non empty OrthoLattStr);
+  cluster -> join-absorbing CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the LattStr of L = the LattStr of R;
+    hence thesis by Cran3A;
+  end;
+end;
+
+registration let L be with_Top (non empty OrthoLattStr);
+  cluster -> with_Top CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef; then
+    the ComplLattStr of L = the ComplLattStr of R;
+    hence thesis by Cran4A;
+  end;
+end;
+
+registration let L be non empty Ortholattice;
+  cluster naturally_sup-generated naturally_inf-generated Lattice-like
+    CLatAugmentation of L;
+  existence
+  proof
+    set R = LattRel L;
+    set S = OrthoLattRelStr (# the carrier of L, the L_join of L,
+              the L_meet of L, R, the Compl of L #);
+    the OrthoLattStr of L = the OrthoLattStr of S; then
+    reconsider S as CLatAugmentation of L by CLADef;
+A2: the \/-SemiLattStr of L = the \/-SemiLattStr of S;
+B2: the /\-SemiLattStr of L = the /\-SemiLattStr of S;
+    for x, y being Element of S holds
+      x <= y iff x |_| y = y
+    proof
+      let x, y be Element of S;
+      reconsider x' = x, y' = y as Element of L;
+      hereby
+        assume x <= y; then
+        [x,y] in the InternalRel of S by ORDERS_2:def 9; then
+        x' [= y' by FILTER_1:32; then
+        x' |_| y' = y' by LATTICES:def 3;
+        hence x |_| y = y by A2,FILTER_2'8;
+      end;
+      assume
+A4:   x |_| y = y;
+      x' |_| y' = x |_| y by A2,FILTER_2'8; then
+      x' [= y' by A4,LATTICES:def 3; then
+      [x',y'] in LattRel L by FILTER_1:32;
+      hence thesis by ORDERS_2:def 9;
+    end; then
+T1: S is naturally_sup-generated by NGDef;
+    for x, y being Element of S holds
+      x <= y iff x |^| y = x
+    proof
+      let x, y be Element of S;
+      reconsider x' = x, y' = y as Element of L;
+      hereby
+        assume x <= y; then
+        [x',y'] in the InternalRel of S by ORDERS_2:def 9; then
+        x' [= y' by FILTER_1:32; then
+        x' |^| y' = x' by LATTICES:21;
+        hence x |^| y = x by B2,FILTER_2''8;
+      end;
+      assume
+A4:   x |^| y = x;
+      x' |^| y' = x |^| y by B2,FILTER_2''8; then
+      x' [= y' by A4,LATTICES:21; then
+      [x',y'] in LattRel L by FILTER_1:32;
+      hence thesis by ORDERS_2:def 9;
+    end; then
+    S is naturally_inf-generated by IGDef;
+    hence thesis by T1;
+  end;
+end;
+
+registration
+  cluster involutive with_Top de_Morgan Lattice-like
+    naturally_sup-generated well-complemented (non empty OrthoLattRelStr);
+  existence
+  proof
+    take TrivCLRelStr;
+    thus thesis;
+  end;
+end;
+
+theorem T75:
+  for L being with_infima with_suprema PartialOrdered (non empty OrthoRelStr)
+  for x,y being Element of L holds x <= y implies
+    y = x "|_|" y & x = x "|^|" y
+  proof
+    let L be with_infima with_suprema PartialOrdered (non empty OrthoRelStr);
+    let a,b be Element of L;
+    assume
+P30:a <= b; then
+    b = b "|_|" a by YELLOW_0:24;
+    hence thesis by P30,LATTICE3:13,YELLOW_0:25;
+  end;
+
+definition let L be meet-commutative (non empty /\-SemiLattStr),
+               a, b be Element of L;
+  redefine func a |^| b;
+  commutativity by LATTICES:def 6;
+end;
+
+definition let L be join-commutative (non empty \/-SemiLattStr),
+               a, b be Element of L;
+  redefine func a |_| b;
+  commutativity by LATTICES:def 4;
+end;
+
+registration
+  cluster meet-absorbing join-absorbing meet-commutative
+    naturally_sup-generated -> reflexive (non empty LattRelStr);
+  coherence
+  proof
+    let L be non empty LattRelStr;
+    assume L is meet-absorbing join-absorbing meet-commutative
+      naturally_sup-generated; then
+    reconsider L' = L as meet-absorbing join-absorbing meet-commutative
+      naturally_sup-generated (non empty LattRelStr);
+    for x being Element of L' holds x <= x
+    proof
+      let x be Element of L';
+      x [= x;
+      hence thesis by ZgOrd;
+    end;
+    hence thesis by YELLOW_0:def 1;
+  end;
+end;
+
+registration
+  cluster join-associative naturally_sup-generated -> transitive
+    (non empty LattRelStr);
+  coherence
+  proof
+    let L be non empty LattRelStr;
+    assume L is join-associative naturally_sup-generated; then
+    reconsider L' = L as join-associative naturally_sup-generated
+      (non empty LattRelStr);
+    for x, y, z being Element of L' st x <= y & y <= z holds x <= z
+    proof
+      let x, y, z be Element of L';
+      assume x <= y & y <= z; then
+      x [= y & y [= z by ZgOrd; then
+      x [= z by LATTICES:25;
+      hence thesis by ZgOrd;
+    end;
+    hence thesis by YELLOW_0:def 2;
+  end;
+end;
+
+registration
+  cluster join-commutative naturally_sup-generated -> antisymmetric
+    (non empty LattRelStr);
+  coherence
+  proof
+    let L be non empty LattRelStr;
+    assume L is join-commutative naturally_sup-generated; then
+    reconsider L' = L as join-commutative naturally_sup-generated
+      (non empty LattRelStr);
+    for x, y being Element of L' st x <= y & y <= x holds x = y
+    proof
+      let x, y be Element of L';
+      assume x <= y & y <= x; then
+      x [= y & y [= x by ZgOrd;
+      hence thesis by LATTICES:26;
+    end;
+    hence thesis by YELLOW_0:def 3;
+  end;
+end;
+
+theorem Bul1:
+  for L being with_infima with_suprema naturally_sup-generated
+      Lattice-like (non empty OrthoLattRelStr),
+      x, y being Element of L holds
+    x "|_|" y = x |_| y
+  proof
+    let L be with_infima with_suprema naturally_sup-generated
+      Lattice-like (non empty OrthoLattRelStr),
+        x, y be Element of L;
+    x <= x "|_|" y by YELLOW_0:22; then
+k1: x [= x "|_|" y by ZgOrd;
+    y <= x "|_|" y by YELLOW_0:22; then
+k2: y [= x "|_|" y by ZgOrd;
+a1: (x "|_|" y) |_| (x |_| y) = (x "|_|" y) |_| x |_| y by LATTICES:def 5
+           .= (x "|_|" y) |_| y by k1,LATTICES:def 3
+           .= x "|_|" y by k2,LATTICES:def 3;
+    y [= x |_| y by LATTICES:22; then
+l2: y <= x |_| y by ZgOrd;
+    x [= x |_| y by LATTICES:22; then
+l1: x <= x |_| y by ZgOrd;
+    (x |_| y) "|_|" (x "|_|" y) = (x |_| y) "|_|" x "|_|" y by LATTICE3:14
+           .= (x |_| y) "|_|" y by l1,YELLOW_0:24
+           .= x |_| y by l2,YELLOW_0:24; then
+    x "|_|" y <= x |_| y by YELLOW_0:24; then
+    x "|_|" y [= x |_| y by ZgOrd;
+    hence thesis by a1,LATTICES:def 3;
+  end;
+
+theorem Bul2:
+  for L being with_infima with_suprema naturally_sup-generated
+     Lattice-like (non empty OrthoLattRelStr),
+      x, y being Element of L holds
+    x "|^|" y = x |^| y
+  proof
+    let L be with_infima with_suprema naturally_sup-generated
+      Lattice-like (non empty OrthoLattRelStr),
+        x, y be Element of L;
+    x "|^|" y <= x by YELLOW_0:23; then
+k1: x "|^|" y [= x by ZgOrd;
+    x "|^|" y <= y by YELLOW_0:23; then
+k2: x "|^|" y [= y by ZgOrd;
+a1: (x "|^|" y) |^| (x |^| y) = (x "|^|" y) |^| x |^| y by LATTICES:def 7
+           .= (x "|^|" y) |^| y by k1,LATTICES:21
+           .= x "|^|" y by k2,LATTICES:21;
+    x |^| y [= y by LATTICES:23; then
+l2: x |^| y <= y by ZgOrd;
+    x |^| y [= x by LATTICES:23; then
+l1: x |^| y <= x by ZgOrd;
+    (x |^| y) "|^|" (x "|^|" y) = (x |^| y) "|^|" x "|^|" y by LATTICE3:16
+           .= (x |^| y) "|^|" y by l1,YELLOW_0:25
+           .= x |^| y by l2,YELLOW_0:25; then
+    x |^| y <= x "|^|" y by YELLOW_0:25; then
+    x |^| y [= x "|^|" y by ZgOrd;
+    hence thesis by a1,LATTICES:21;
+  end;
+
+theorem
+  for L being with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated Lattice-like OrderInvolutive
+        PartialOrdered (non empty OrthoLattRelStr) holds
+        L is de_Morgan
+  proof
+    let L be with_infima with_suprema
+      naturally_sup-generated naturally_inf-generated Lattice-like
+        OrderInvolutive PartialOrdered (non empty OrthoLattRelStr);
+P4: for x,y being Element of L holds x` "|_|" y` <= ( x "|^|" y )`
+    proof
+      let a,b be Element of L;
+      set i = a "|^|" b;
+      set s = a` "|_|" b`;
+      i <= a & i <= b by YELLOW_0:23; then
+P42:  a` <= i` & b` <= i` by Lem1; then
+P43:  s <= i` "|_|" b` by WAYBEL_1:3;
+      i` = b` "|_|" i` by T75,P42;
+      hence thesis by LATTICE3:13,P43;
+    end;
+P5: for x,y being Element of L holds ( x "|_|" y )` <= x` "|^|" y`
+    proof
+      let a,b be Element of L;
+      set i = a` "|^|" b`;
+      set s = a "|_|" b;
+      a <= s & b <= s by YELLOW_0:22; then
+P52:  s` <= a` & s` <= b` by Lem1;
+      then s` "|^|" b` <= i by WAYBEL_1:2;
+      hence thesis by T75,P52;
+    end;
+    L is de_Morgan
+    proof
+      for x,y being Element of L holds (x` |_| y`)` = x |^| y
+      proof
+        let a,b be Element of L;
+        set s = a` "|_|" b`;
+        set i = a "|^|" b;
+X1:     i = a |^| b by Bul2;
+X2:     s = a` |_| b` by Bul1;
+        a`` = a & b`` = b by Lm1; then
+P64:    s` <= i by P5;
+        s <= i` by P4;
+        then i`` <= s` by Lem1;
+        then i <= s` by Lm1;
+        hence thesis by X1,X2,P64,ORDERS_2:25;
+      end;
+      hence thesis by ROBBINS1:def 23;
+    end;
+    hence thesis;
+  end;
+
+registration let L be Ortholattice;
+  cluster -> involutive CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef;
+    hence thesis by Cran6A;
+  end;
+end;
+
+registration let L be Ortholattice;
+  cluster -> de_Morgan CLatAugmentation of L;
+  coherence
+  proof
+    let R be CLatAugmentation of L;
+    the OrthoLattStr of L = the OrthoLattStr of R by CLADef;
+    hence thesis by Cran5A;
+  end;
+end;
+
+theorem Imagine2:
+  for L being non empty OrthoLattRelStr st
+    L is involutive with_Top de_Morgan Lattice-like
+      naturally_sup-generated holds
+        L is Orthocomplemented PartialOrdered
+  proof
+    let L be non empty OrthoLattRelStr;
+    assume L is involutive with_Top de_Morgan Lattice-like
+      naturally_sup-generated; then
+    reconsider L' = L as involutive with_Top de_Morgan Lattice-like
+      naturally_sup-generated (non empty OrthoLattRelStr);
+    reconsider f = the Compl of L' as map of L', L';
+    for x being Element of L' holds f.(f.x) = x
+    proof
+      let x be Element of L';
+      f.(f.x) = f.(x`) by ROBBINS1:def 3
+             .= x`` by ROBBINS1:def 3
+             .= x by DefInv;
+      hence thesis;
+    end; then
+A0: f is dneg by OPOSET_1:def 3;
+    for x, y being Element of L' st x <= y holds f.x >= f.y
+    proof
+      let x, y be Element of L';
+      assume
+Y0:   x <= y;
+Y1:   f.x = x` by ROBBINS1:def 3;
+Y2:   f.y = y` by ROBBINS1:def 3;
+      x [= y by Y0,ZgOrd; then
+      x` = (x |^| y)` by LATTICES:21
+        .= (x` |_| y`)`` by ROBBINS1:def 23
+        .= x` |_| y` by DefInv;
+      hence thesis by Y1,Y2,NGDef;
+    end; then
+    f is antitone by WAYBEL_9:def 1; then
+A1: f is Orderinvolutive by A0,OPOSET_1:def 32;
+    for y being Element of L' holds
+       ex_sup_of {y,f.y},L' & ex_inf_of {y,f.y},L'
+       & "\/"({y,f.y},L') is_maximum_of the carrier of L' &
+         "/\"({y,f.y},L') is_minimum_of the carrier of L'
+    proof
+      let y be Element of L';
+      thus ex_sup_of {y,f.y},L' by YELLOW_0:20;
+      thus ex_inf_of {y,f.y},L' by YELLOW_0:21;
+      set t = y |_| y`;
+      for b being Element of L' st b in the carrier of L' holds b <= t
+      proof
+        let b be Element of L';
+        assume b in the carrier of L';
+        b |_| (y |_| y`) = b |_| (b |_| b`) by WTDef
+            .= b |_| b |_| b` by LATTICES:def 5
+            .= b |_| b` by LATTICES:17
+            .= y |_| y` by WTDef; then
+        b [= t by LATTICES:def 3;
+        hence thesis by ZgOrd;
+      end; then
+Y1:   t is_>=_than the carrier of L' by LATTICE3:def 9; then
+      L' is upper-bounded by YELLOW_0:def 5; then
+D1:   ex_sup_of the carrier of L',L' by YELLOW_0:43;
+      reconsider t as Element of L';
+      set xx = "\/"(the carrier of L',L');
+ki:   for a being Element of L' st the carrier of L' is_<=_than a holds
+        t <= a by LATTICE3:def 9;
+      "\/"({y,f.y},L') = "\/"({y,y`},L') by ROBBINS1:def 3
+                      .= y "|_|" y` by YELLOW_0:41
+                      .= y |_| y` by Bul1
+                      .= xx by ki,D1,Y1,YELLOW_0:def 9;
+      hence "\/"({y,f.y},L') is_maximum_of the carrier of L'
+        by D1,WAYBEL_1:def 7;
+IO:   for a, b being Element of L' holds
+        a |^| a` = b |^| b`
+      proof
+        let a, b be Element of L';
+        a |^| a` = (a` |_| a``)` by ROBBINS1:def 23
+                .= (b` |_| b``)` by WTDef
+                .= b |^| b` by ROBBINS1:def 23;
+        hence thesis;
+      end;
+      set t = y |^| y`;
+      for b being Element of L' st b in the carrier of L' holds b >= t
+      proof
+        let b be Element of L';
+        assume b in the carrier of L';
+        b |^| (y |^| y`) = b |^| (b |^| b`) by IO
+            .= b |^| b |^| b` by LATTICES:def 7
+            .= b |^| b` by LATTICES:18
+            .= y |^| y` by IO; then
+        t [= b by LATTICES:21;
+        hence thesis by ZgOrd;
+      end; then
+Y1:   t is_<=_than the carrier of L' by LATTICE3:def 8; then
+      L' is lower-bounded by YELLOW_0:def 4; then
+D1:   ex_inf_of the carrier of L',L' by YELLOW_0:42;
+      reconsider t as Element of L';
+      set xx = "/\"(the carrier of L',L');
+ki:   for a being Element of L' st the carrier of L' is_>=_than a holds
+        t >= a by LATTICE3:def 8;
+      "/\"({y,f.y},L') = "/\"({y,y`},L') by ROBBINS1:def 3
+                      .= y "|^|" y` by YELLOW_0:40
+                      .= y |^| y` by Bul2
+                      .= xx by ki,D1,Y1,YELLOW_0:def 10;
+      hence "/\"({y,f.y},L') is_minimum_of the carrier of L'
+        by D1,WAYBEL_1:def 6;
+    end; then
+    f OrthoComplement_on L' by A1,OPOSET_1:def 36;
+    hence thesis by OPOSET_1:def 37;
+  end;
+
+theorem
+  for L being Ortholattice,
+      E being naturally_sup-generated CLatAugmentation of L holds
+    E is Orthocomplemented by Imagine2;
+
+registration let L be Ortholattice;
+  cluster -> Orthocomplemented
+               (naturally_sup-generated CLatAugmentation of L);
+  coherence by Imagine2;
+end;
+
+theorem Imagine:
+  for L being non empty OrthoLattStr st
+    L is Boolean well-complemented Lattice-like holds
+      L is Ortholattice
+  proof
+    let L be non empty OrthoLattStr;
+    assume L is Boolean well-complemented Lattice-like; then
+    reconsider L' = L as Boolean well-complemented Lattice-like
+      (non empty OrthoLattStr);
+a1: for x being Element of L' holds x`` = x by ROBBINS1:3;
+a2: for x, y being Element of L' holds
+      x |_| x` = y |_| y` by ROBBINS1:4;
+    for x, y being Element of L' holds
+      x "/\" y = (x` "\/" y`)` by ROBBINS1:34;
+    hence thesis by a1,a2,ROBBINS1:def 23,DefInv,WTDef;
+  end;
+
+registration
+  cluster Boolean well-complemented Lattice-like ->
+    involutive with_Top de_Morgan (non empty OrthoLattStr);
+  coherence by Imagine;
+end;

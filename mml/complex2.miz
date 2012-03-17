@@ -37,7 +37,9 @@ for a, b, c be complex number st a-b = c holds a-c = b;
 
 theorem Th1:
 for a, b being Real holds -[*a,b*] = [*-a,-b*]
-proof let a, b be Real;   Re [*a,b*] = a & Im [*a,b*] = b by COMPLEX1:7;
+proof let a, b be Real;
+  [*a,b*] = a+b*<i> by COMPLEX1:27;
+  then Re [*a,b*] = a & Im [*a,b*] = b by COMPLEX1:28;
  hence -[*a,b*] = [*-a,-b*] by COMPLEX1:def 11;
 end;
 
@@ -256,7 +258,7 @@ A1: F_tize(z1+z2)=z1+z2 by Def1;
 end;
 
 theorem
-  for z being Element of COMPLEX holds z = 0c iff F_tize z = 0.F_Complex
+  for z being Element of COMPLEX holds z = 0 iff F_tize z = 0.F_Complex
  by Def1,COMPLFLD:9;
 
 canceled 2;
@@ -302,10 +304,10 @@ A4: r < 2*PI;
 end;
 
 theorem Th22:
-for z being complex number st z <> 0c
+for z being complex number st z <> 0
  holds (Arg z < PI implies Arg -z = Arg z +PI) &
        (Arg z >= PI implies Arg -z = Arg z -PI)
-proof let z be complex number; assume A1: z <> 0c;
+proof let z be complex number; assume A1: z <> 0;
 then A2: |.z.| <> 0 by COMPLEX1:131;
 A3: -z <> 0c by A1,XCMPLX_1:135;
 A4: z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *] by Th19;
@@ -333,7 +335,9 @@ end;
 theorem Th23:
 for r being Real st r >= 0 holds Arg [*r,0*] = 0
 proof let r be Real such that
-A1: r >= 0;   Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:7;
+A1: r >= 0;
+  [*r,0*] = r+0*<i> by COMPLEX1:27;
+  then Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:28;
 then A2:  |.[*r,0*].| = abs(r) by COMPLEX1:136 .= r by A1,ABSVALUE:def 1;
       [*r,0*] = [*|.[*r,0*].|*cos Arg [*r,0*], |.[*r,0*].|*sin Arg [*r,0*] *]
      by Th19;
@@ -364,9 +368,11 @@ proof let z be complex number;
 end;
 
 theorem Th25:
-for z being complex number st z <> 0c holds Arg(z) < PI iff Arg -z >= PI
+for z being complex number st z <> 0 holds Arg(z) < PI iff Arg -z >= PI
 proof let z be complex number;
- assume A1: z<>0c;
+ assume A1: z<>0;
+  then
+B: -z <> 0 by XCMPLX_1:135;
   thus Arg(z)<PI implies Arg(-z)>=PI
    proof assume A2: Arg(z)<PI;
    Arg(z)>=0 by Th18; then PI+0<=PI+Arg(z) by REAL_1:55;
@@ -374,16 +380,16 @@ proof let z be complex number;
    end;
   thus Arg(-z)>=PI implies Arg(z)<PI
    proof assume Arg(-z)>=PI;
-     then A3: Arg(--z)=Arg(-z)-PI by A1,Th22,COMPLEX1:10;
+     then A3: Arg(--z)=Arg(-z)-PI by B,Th22;
      2*PI>Arg(-z) by Th18; then PI+PI-PI>Arg(-z)-PI by REAL_1:54;
     hence Arg(z)<PI by A3;
    end;
 end;
 
 theorem Th26:
-for x, y being complex number st x <> y or x - y <> 0c holds
+for x, y being complex number st x <> y or x - y <> 0 holds
   Arg(x-y) < PI iff Arg(y-x) >= PI
-proof let z1,z2 be complex number; assume z1<>z2 or z1 - z2 <> 0c;
+proof let z1,z2 be complex number; assume z1<>z2 or z1 - z2 <> 0;
   then z1-z2<>0c by XCMPLX_1:15; then Arg(z1-z2)<PI iff Arg(-(z1-z2))>=PI
 by Th25;
  hence Arg(z1-z2)<PI iff Arg(z2-z1)>=PI;
@@ -461,14 +467,16 @@ theorem
     Arg(x+y) < PI
 proof let z1,z2 be complex number;
  assume A1: Arg(z1)<PI & Arg(z2)<PI;
+X: [* |.z2.|,0 *] = |.z2.|+0*<i> by COMPLEX1:27;
+Y: [* |.z1.|,0 *] = |.z1.|+0*<i> by COMPLEX1:27;
      now per cases by Th18;
   case Arg(z1)=0; then A2: z1=[* |.z1.|,0 *] by Th24;
-   then A3: z1=[* |.z1.|,0 *] & Im z1=0 by COMPLEX1:7;
+   A3: z1=[* |.z1.|,0 *] & Im z1=0 by COMPLEX1:28,A2,Y;
       now per cases by Th18;
    case Arg(z2)=0; then A4: z2=[* |.z2.|,0 *] by Th24;
-     then A5: z2=[* |.z2.|,0 *] & Im z2=0 by COMPLEX1:7;
+     then A5: z2=[* |.z2.|,0 *] & Im z2=0 by COMPLEX1:28,X;
      A6: Im (z1+z2)=(Im z1)+(Im z2) by COMPLEX1:19;
-     A7: Re z2=|.z2.| by A4,COMPLEX1:7;
+     A7: Re z2=|.z2.| by A4,COMPLEX1:28,X;
         now per cases;
      case A8: z1+z2=0c;
           Arg (z1+z2)=Arg(z1+z2) .=Arg(0.F_Complex)
@@ -477,9 +485,9 @@ proof let z1,z2 be complex number;
       hence Arg(z1+z2)<PI by COMPTRIG:21;
      end;
      case z1+z2<>0c;
-          Re (z1+z2)=Re z1 + Re z2 by COMPLEX1:19 .=|.z1.| + |.z2.| by A2,A7,
-COMPLEX1:7;
-       then z1+z2 = [* |.z1.| + |.z2.|,0 *] by A3,A5,A6,COMPLEX1:8;
+       Re (z1+z2)=Re z1 + Re z2 by COMPLEX1:19 .=|.z1.| + |.z2.| by A2,A7,Y,
+COMPLEX1:28;
+       then z1+z2 = |.z1.| + |.z2.| + 0*<i> by A3,A5,A6,COMPLEX1:29;
        then A9: z1+z2=[** |.z1.| + |.z2.|,0 **] by HAHNBAN1:def 1;
        A10: 0<= |.z1.| by COMPLEX1:132;   0<= |.z2.| by COMPLEX1:132;
        then 0+0 <= |.z1.| + |.z2.| by A10,REAL_1:55;
@@ -500,7 +508,7 @@ COMPLEX1:7;
    then A12: Im z1>0 by Th27;
       now per cases by Th18;
    case Arg(z2)=0; then z2=[* |.z2.|,0 *] by Th24;
-     then A13: z2=[* |.z2.|,0 *] & Im z2=0 by COMPLEX1:7;
+     then A13: z2=[* |.z2.|,0 *] & Im z2=0 by COMPLEX1:28,X;
         Im (z1+z2)=(Im z1)+(Im z2) by COMPLEX1:19;
      then Arg(z1+z2) in ].0,PI.[ by A12,A13,Th27;
     hence Arg(z1+z2)<PI by JORDAN6:45;
@@ -521,7 +529,9 @@ end;
 theorem Th30:
   for x be Real st x > 0 holds Arg [*0,x*] = PI/2
 proof let x be Real such that
-A1: x > 0; A2: [*0,x*] = [** 0, x **] by HAHNBAN1:def 1;
+A1: x > 0;
+A2: [*0,x*] = 0+x*<i> by COMPLEX1:27
+    .= [** 0, x **] by HAHNBAN1:def 1;
   thus Arg [*0,x*] = PI/2 by A1,A2,COMPTRIG:55;
 end;
 
@@ -539,11 +549,13 @@ for z be complex number st Im z > 0 holds sin Arg z > 0 by COMPTRIG:63;
 theorem Th34:
 for z being complex number holds Arg z = 0 iff Re z >= 0 & Im z = 0
 proof let z being complex number;
+Z: [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
   hereby assume Arg z = 0; then z = [*|.z.|,0*] by Th24;
-   then Re z = |.z.| & Im z = 0 by COMPLEX1:7;
+   then Re z = |.z.| & Im z = 0 by COMPLEX1:28,Z;
    hence Re z >= 0 & Im z = 0 by COMPLEX1:132;
   end;
- assume A1: Re z >= 0 & Im z = 0; then z = [* Re z, 0 *] by COMPLEX1:8
+ assume A1: Re z >= 0 & Im z = 0; then
+  z = Re z +0*<i> by COMPLEX1:29
   .= [**Re z,0**] by HAHNBAN1:def 1;
  hence Arg z = 0 by A1,COMPTRIG:53;
 end;
@@ -564,8 +576,9 @@ proof let z be complex number;
    hence Re z < 0 & Im z = 0 by A1,Th20,COMPLFLD:9,COMPTRIG:21;
  end;
  end;
- assume A4: Re z < 0 & Im z=0; then z = [* Re z, 0 *] by COMPLEX1:8;
-  then z = [** Re z, 0 **] by HAHNBAN1:def 1;
+ assume A4: Re z < 0 & Im z=0;
+  then z = Re z +0*<i> by COMPLEX1:29
+    .= [** Re z, 0 **] by HAHNBAN1:def 1;
  hence Arg z = PI by A4,COMPTRIG:54;
 end;
 
@@ -574,7 +587,8 @@ for z being complex number holds Im z = 0 iff Arg z = 0 or Arg z = PI
 proof let z be complex number;
  hereby assume A1: Im z = 0;   Re z >= 0 or Re z < 0;
  then A2: Arg [**Re z,0**] = 0 or Arg [**Re z,0**] = PI by COMPTRIG:53,54;
-  [**Re z,0**] = [*Re z,0*] by HAHNBAN1:def 1 .= z by A1,COMPLEX1:8;
+  [**Re z,0**] = Re z + 0*<i> by HAHNBAN1:def 1
+   .= z by A1,COMPLEX1:29;
   hence Arg z = 0 or Arg z = PI by A2;
  end;
  assume Arg z = 0 or Arg z = PI;
@@ -599,9 +613,14 @@ for z being Element of COMPLEX st z <> 0
 proof let a be Element of COMPLEX; assume
 A1: a <> 0;
 A2: a = [*|.a.|*cos Arg a, |.a.|*sin Arg a*] by Th19;
-   -a = [*|.-a.|*cos Arg -a, |.-a.|*sin Arg -a*] by Th19;
-then A3: Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a &
-    Re -a = |.-a.|*cos Arg -a & Im -a = |.-a.|*sin Arg -a by A2,COMPLEX1:7;
+   then
+X: a = |.a.|*cos Arg a+(|.a.|*sin Arg a)*<i> by COMPLEX1:27;
+Z: -a = [*|.-a.|*cos Arg -a, |.-a.|*sin Arg -a*] by Th19;
+   then
+Y: -a = |.-a.|*cos Arg -a+(|.-a.|*sin Arg -a)*<i> by COMPLEX1:27;
+A3: Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a &
+    Re -a = |.-a.|*cos Arg -a & Im -a = |.-a.|*sin Arg -a
+         by COMPLEX1:28,X,Y;
 A4: |.-a.| = |.a.| by COMPLEX1:138;
 A5: [*0,0*] = a+-a by ARYTM_0:def 7
   .= [* |.a.|*cos Arg a + (|.a.|*cos Arg -a),
@@ -618,9 +637,10 @@ theorem Th39:
 for a being complex number st a <> 0
  holds cos Arg a = Re a / |.a.| & sin Arg a = Im a / |.a.|
 proof let a be complex number; assume a <> 0;
-then A1: |.a.|<>0 by COMPLEX1:131;   a = [* |.a.|*cos Arg a,|.a.|*sin Arg a*]
-by Th19;
-   then Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:7;
+then A1: |.a.|<>0 by COMPLEX1:131;
+A: a = [* |.a.|*cos Arg a,|.a.|*sin Arg a*] by Th19;
+   then a = |.a.|*cos Arg a+(|.a.|*sin Arg a)*<i> by COMPLEX1:27;
+   then Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:28;
  hence cos Arg a = Re a / |.a.| & sin Arg a = Im a / |.a.| by A1,XCMPLX_1:90;
 end;
 
@@ -632,7 +652,9 @@ proof let a be complex number, r be Real such that
  per cases; suppose a = 0; hence Arg(a*[*r,0*]) = Arg a;
  end;
  suppose A2: a <> 0; set b = a*[*r,0*];
-  A3: Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:7;
+   [*r,0*] =r+0*<i> by COMPLEX1:27;
+   then
+  A3: Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:28;
   then A4: Re b = Re a * r - 0*Im a by COMPLEX1:24 .= r*Re a;
   A5: Im b = Re a * 0 + r * Im a by A3,COMPLEX1:24 .= r*Im a;
   A6: |.b.| = |.a.|*|.[*r,0*].| by COMPLEX1:151
@@ -657,7 +679,9 @@ A1: r < 0;
  end;
  suppose A2: a <> 0; set b = a*[*r,0*];
 A3:  a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
-  A4: Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:7;
+   [*r,0*] =r+0*<i> by COMPLEX1:27;
+   then
+  A4: Re [*r,0*] = r & Im [*r,0*] = 0 by COMPLEX1:28;
   then A5: Re b = Re a * r - 0*Im a by COMPLEX1:24 .= r*Re a;
   A6: Im b = Re a * 0 + r * Im a by A4,COMPLEX1:24 .= r*Im a;
   A7: |.b.| = |.a.|*|.[*r,0*].| by COMPLEX1:151
@@ -679,19 +703,28 @@ end;
 begin :: Inner product
 
 definition :: Inner product of complex numbers
-  let x, y be Element of COMPLEX;
+  let x, y be complex number;
   func x .|. y -> Element of COMPLEX equals :Def3:
   x*(y*');
-  correctness;
+  correctness
+  proof x*(y*') in COMPLEX by XCMPLX_0:def 2;
+   hence thesis;
+  end;
 end;
 
 reserve a, b, c, d, x, y, z for Element of COMPLEX;
 
 theorem Th42:
 x.|.y = [* (Re x)*(Re y)+(Im x)*(Im y), -(Re x)*(Im y)+(Im x)*(Re y) *]
-proof A1: Re [* Re x,Im x *] = Re x & Im [* Re x,Im x *] = Im x &
-          Re[* Re y,-Im y *]=Re y & Im [* Re y,-Im y *] = -Im y by COMPLEX1:7;
- thus x.|.y = x*y*' by Def3 .=[* Re x,Im x *]*y*' by COMPLEX1:8
+proof
+ [* Re x,Im x *] = Re x+(Im x)*<i> &
+ [* Re y,-Im y *] = Re y+(-Im y)*<i> by COMPLEX1:27;
+ then
+ A1: Re [* Re x,Im x *] = Re x & Im [* Re x,Im x *] = Im x &
+          Re[* Re y,-Im y *]=Re y & Im [* Re y,-Im y *] = -Im y by COMPLEX1:28;
+ thus x.|.y = x*y*' by Def3
+ .= (Re x+(Im x)*<i>)*y*' by COMPLEX1:29
+ .=[* Re x,Im x *]*y*' by COMPLEX1:27
  .=[* Re x,Im x *]*[* Re y,-Im y*] by COMPLEX1:def 15
  .=[*(Re x)*(Re y)-(Im x)*(-Im y),(Re x)*(-Im y)+(Im x)*(Re y)*]
      by A1,COMPLEX1:def 10
@@ -712,9 +745,10 @@ z.|.z = [* |.z.|^2,0*] & |.z.|^2 = Re (z.|.z)
 proof A1: (Re z)^2>=0 by SQUARE_1:72;   (Im z)^2>=0 by SQUARE_1:72;
   then A2: (Re z)^2 + (Im z)^2>=0+0 by A1,REAL_1:55;
   A3: |.z.|=sqrt((Re z)^2 + (Im z)^2) by COMPLEX1:def 16;
+X: [* |.z.|^2,0*] = |.z.|^2+0*<i> by COMPLEX1:27;
   thus z.|.z = [* (Re z)^2+(Im z)^2,0*] by Th43 .=[* |.z.|^2,0*] by A2,A3,
 SQUARE_1:def 4;
- hence thesis by COMPLEX1:7;
+ hence thesis by COMPLEX1:28,X;
 end;
 
 theorem Th45:
@@ -786,16 +820,16 @@ end;
 
 theorem Th55:
 (-x).|.y = x.|.(-y)
-proof thus (-x).|.y = ((-1r)*x).|.y by COMPLEX1:46
+proof thus (-x).|.y = ((-1r)*x).|.y by COMPLEX1:def 7,XCMPLX_1:180
  .= (-(1r*')) * x.|.y by Th50,COMPLEX1:115
  .=((-1r)*')* x.|.y by COMPLEX1:119 .= x.|.((-1r)*y) by Th51
- .=x.|.(-y) by COMPLEX1:46;
+ .=x.|.(-y) by COMPLEX1:def 7,XCMPLX_1:180;
 end;
 
 theorem Th56:
 (-x).|.y = - x.|.y
-proof thus (-x).|.y = ((-1r)*x).|.y by COMPLEX1:46
-  .= (-1r) * x.|.y by Th50 .=- x.|.y by COMPLEX1:46;
+proof thus (-x).|.y = ((-1r)*x).|.y by COMPLEX1:def 7,XCMPLX_1:180
+  .= (-1r) * x.|.y by Th50 .=- x.|.y by COMPLEX1:def 7,XCMPLX_1:180;
 end;
 
 theorem Th57:
@@ -822,9 +856,9 @@ proof thus x.|.(y-z) =x*((y-z)*') by Def3 .=x*(y*'-z*') by COMPLEX1:120
 end;
 
 theorem
-   0c.|.x = 0c & x.|.0c = 0c
-proof thus (0c).|.x =(0c)*(x*') by Def3 .=0c by COMPLEX1:28;
- thus x.|.0c = (x*0c*')*'*' by Def3 .= 0c by COMPLEX1:28,113;
+   0 .|.x = 0c & x.|.0 = 0
+proof thus (0).|.x =(0)*(x*') by Def3 .=0c;
+ thus x.|.0 = (x*0*')*'*' by Def3 .= 0 by COMPLEX1:113;
 end;
 
 theorem
@@ -888,29 +922,30 @@ proof thus Rotate(a, 0) =
 end;
 
 theorem Th66:
-Rotate(a, r) = 0c iff a = 0c
+Rotate(a, r) = 0 iff a = 0
 proof
 A1: Rotate(a, r) = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4;
-  hereby assume Rotate(a, r) = 0c;
+  hereby assume Rotate(a, r) = 0;
     then A2: |.a.|*cos (r+Arg a) = 0 & |.a.|*sin (r+Arg a) = 0 by A1,Lm5,
 ARYTM_0:12;
    per cases by A2,XCMPLX_1:6;
-   suppose |.a.| = 0; hence a = 0c by COMPLEX1:131;
+   suppose |.a.| = 0; hence a = 0 by COMPLEX1:131;
    end;
-   suppose cos (r+Arg a) = 0 & sin (r+Arg a) = 0; hence a = 0c by Th11;
+   suppose cos (r+Arg a) = 0 & sin (r+Arg a) = 0; hence a = 0 by Th11;
   end;
   end;
-  assume a = 0c; hence Rotate(a, r)= 0c by A1,ARYTM_0:def 7,COMPLEX1:130;
+  assume a = 0; hence Rotate(a, r)= 0 by A1,ARYTM_0:def 7,COMPLEX1:130;
 end;
 
 theorem Th67:
 |.Rotate(a,r).| = |.a.|
 proof
 A1: |.a.| >= 0 by COMPLEX1:132;
-      Rotate(a,r) = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4;
+      Rotate(a,r) = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4
+      .= |.a.|*cos (r+Arg a)+(|.a.|*sin (r+Arg a))*<i> by COMPLEX1:27;
    then Re Rotate(a,r) = |.a.|*cos (r+Arg a) & Im Rotate(a,r) = |.a.|*sin (r+
 Arg a)
-   by COMPLEX1:7;
+   by COMPLEX1:28;
  hence |.Rotate(a,r).|
   = sqrt((|.a.|*cos (r+Arg a))^2 + (|.a.|*sin (r+Arg a))^2) by COMPLEX1:def 16
  .= sqrt(|.a.|^2*(cos (r+Arg a))^2 + (|.a.|*sin (r+Arg a))^2) by SQUARE_1:68
@@ -920,9 +955,9 @@ Arg a)
 end;
 
 theorem Th68:
-a <> 0c implies ex i being Integer st Arg(Rotate(a,r)) = 2*PI*i+(r+Arg(a))
+a <> 0 implies ex i being Integer st Arg(Rotate(a,r)) = 2*PI*i+(r+Arg(a))
 proof assume
-   a <> 0c;
+   a <> 0;
 then A1: Rotate(a, r) <> 0c by Th66;
 A2: |.a.| = |.Rotate(a,r).| by Th67;
 A3: Rotate(a, r) = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4;
@@ -949,15 +984,17 @@ theorem Th70:
  Re Rotate(a,r) = (Re a)*(cos r)-(Im a)*(sin r) &
  Im Rotate(a,r) = (Re a)*(sin r)+(Im a)*(cos r)
 proof set ra = Rotate(a,r);
- A1: ra = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4;
-       a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19;
- then A2: Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:7;
+ A1: ra = [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *] by Def4
+       .= |.a.|*cos (r+Arg a)+(|.a.|*sin (r+Arg a))*<i> by COMPLEX1:27;
+       a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19
+   .= |.a.|*cos Arg a+(|.a.|*sin Arg a)*<i> by COMPLEX1:27;
+ then A2: Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:28;
   thus Re Rotate(a,r)
-   = |.a.|*cos (r+Arg a) by A1,COMPLEX1:7
+   = |.a.|*cos (r+Arg a) by A1,COMPLEX1:28
   .= |.a.|*((cos r)*cos(Arg a)-(sin r)*sin(Arg a)) by SIN_COS:80
   .= (Re a)*(cos r)-(Im a)*(sin r) by A2;
   thus Im Rotate(a,r)
-   = |.a.|*sin(r+Arg a) by A1,COMPLEX1:7
+   = |.a.|*sin(r+Arg a) by A1,COMPLEX1:28
   .= |.a.|*((sin r)*cos(Arg a)+(cos r)*sin(Arg a)) by SIN_COS:80
   .= (Re a)*(sin r)+(Im a)*(cos r) by A2;
 end;
@@ -1016,9 +1053,10 @@ end;
 theorem Th74:
 Rotate(a, PI) = -a
 proof
- A1:  a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19;
- A2: |.a.|*-cos Arg a = -(|.a.|*cos Arg a) .= - Re a by A1,COMPLEX1:7;
- A3: |.a.|*-sin Arg a = -(|.a.|*sin Arg a) .= - Im a by A1,COMPLEX1:7;
+ A1:  a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19
+    .= |.a.|*cos Arg a+(|.a.|*sin Arg a)*<i> by COMPLEX1:27;
+ A2: |.a.|*-cos Arg a = -(|.a.|*cos Arg a) .= - Re a by A1,COMPLEX1:28;
+ A3: |.a.|*-sin Arg a = -(|.a.|*sin Arg a) .= - Im a by A1,COMPLEX1:28;
  thus Rotate(a, PI)
    = [* |.a.|*cos (PI+Arg a), |.a.|*sin (PI+Arg a) *] by Def4
   .= [* |.a.|*-cos Arg a, |.a.|*sin (PI+Arg a) *] by SIN_COS:84
@@ -1065,7 +1103,8 @@ A2: Arg(b*[*r,0*]) = Arg b by A1,Th40;
 A3: Arg(a*[*r,0*]) = Arg a by A1,Th40;
    per cases;
    suppose A4: b <> 0;
-          Re [*r,0*] <> 0 by A1,COMPLEX1:7;
+     [*r,0*] = r+0*<i> by COMPLEX1:27;
+     then Re [*r,0*] <> 0 by A1,COMPLEX1:28;
    then A5: b*[*r,0*] <> 0 by A4,COMPLEX1:12,XCMPLX_1:6;
     thus angle(a,b) = Arg(Rotate(b,-Arg a)) by A4,Def5
       .= Arg(Rotate(b*[*r,0*],-Arg(a*[*r,0*]))) by A2,A3,A4,A5,Th76
@@ -1129,7 +1168,8 @@ A1: r < 0 and A2: a <> 0 and A3: b <> 0;
        then consider i being Integer such that
    A7: Arg(Rotate(-b, -Arg -a)) = 2*PI*i+(-Arg -a + Arg -b) by Th68;
        set br = b*[*r,0*], ar = a*[*r,0*];
-          Re [*r,0*] <> 0 by A1,COMPLEX1:7;
+   [*r,0*] = r+0*<i> by COMPLEX1:27;
+   then Re [*r,0*] <> 0 by A1,COMPLEX1:28;
    then A8: br <> 0 by A3,COMPLEX1:12,XCMPLX_1:6; then consider j being Integer
 such that
    A9: Arg(Rotate(br,-Arg ar)) = 2*PI*j+(-Arg -a + Arg -b) by A4,A5,Th68;
@@ -1180,27 +1220,39 @@ then A6: mabi > 0 by REAL_1:72;
    set ra = Rotate(a,-Arg a), rb = Rotate(b,-Arg a), r = -Arg a;
 A7: |.a.|*mabi > 0*mabi by A3,A5,A6,REAL_1:70;
 A8: ra = [*|.a.|,0*] by Th69;
+   then
+B: ra = |.a.|+0*<i> by COMPLEX1:27;
    angle(a,b) = angle(ra,rb) by A1,A2,Th79;
 then A9: angle(a,b) = angle(ra*[*mabi,0*],rb*[*mabi,0*]) by A6,Th77;
-A10: Re ra = |.a.| & Im ra = 0 by A8,COMPLEX1:7;
-A11: Re [*mabi,0*] = mabi & Im [*mabi,0*] = 0 by COMPLEX1:7;
+A10: Re ra = |.a.| & Im ra = 0 by COMPLEX1:28,B;
+    [*mabi,0*] = mabi+0*<i> by COMPLEX1:27;
+    then
+A11: Re [*mabi,0*] = mabi & Im [*mabi,0*] = 0 by COMPLEX1:28;
     then Re (ra*[*mabi,0*]) = |.a.|*mabi-0*0 &
     Im (ra*[*mabi,0*]) = |.a.|*0+0*mabi by A10,COMPLEX1:24;
-    then ra*[*mabi,0*] = [*|.a.|*mabi,0*] by COMPLEX1:8;
+    then ra*[*mabi,0*] = |.a.|*mabi+0*<i> by COMPLEX1:29;
+    then ra*[*mabi,0*] = [*|.a.|*mabi,0*] by COMPLEX1:27;
 then A12: angle(a,b) = Arg(rb*[*mabi,0*]) by A7,A9,Th75;
    set IT = rb*[*mabi,0*];
 A13: Re rb = (Re b)*(cos r)-(Im b)*(sin r) &
     Im rb = (Re b)*(sin r)+(Im b)*(cos r) by Th70;
-A14: IT = [* |.IT.|*cos Arg IT, |.IT.|*sin Arg IT *] by Th19;
+A14: IT = [* |.IT.|*cos Arg IT, |.IT.|*sin Arg IT *] by Th19
+    .= |.IT.|*cos Arg IT+(|.IT.|*sin Arg IT)*<i> by COMPLEX1:27;
 A15: Re IT = Re rb * mabi - (Im rb)*0 by A11,COMPLEX1:24 .= Re rb * mabi;
 A16: Im IT = Re rb * 0 + Im rb * mabi by A11,COMPLEX1:24 .= Im rb * mabi;
-       a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19;
-        then Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:7;
+       a = [* |.a.|*cos Arg a, |.a.|*sin Arg a *] by Th19
+        .= |.a.|*cos Arg a+(|.a.|*sin Arg a)*<i> by COMPLEX1:27;
+        then Re a = |.a.|*cos Arg a & Im a = |.a.|*sin Arg a by COMPLEX1:28;
 then A17:  cos Arg a = (Re a)/|.a.| & sin Arg a = (Im a)/|.a.| by A3,
 XCMPLX_1:90;
+X: [* (Re a)*(Re b)+(Im a)*(Im b),-((Re a)*(Im b))+(Im a)*(Re b) *]
+    = (Re a)*(Re b)+(Im a)*(Im b)+(-((Re a)*(Im b))+(Im a)*(Re b))*<i>
+                 by COMPLEX1:27;
 A18: a.|.b =[* (Re a)*(Re b)+(Im a)*(Im b),-((Re a)*(Im b))+(Im a)*(Re b) *]
-    by Th42;
-then A19: Re (a.|.b) = (Re a)*(Re b)+(Im a)*(Im b) by COMPLEX1:7;
+    by Th42
+    .= (Re a)*(Re b)+(Im a)*(Im b)+(-((Re a)*(Im b))+(Im a)*(Re b))*<i>
+       by COMPLEX1:27;
+then A19: Re (a.|.b) = (Re a)*(Re b)+(Im a)*(Im b) by COMPLEX1:28;
 A20: Re rb = (Re b)*(cos r)-(Im b)*(-sin Arg a) by A13,SIN_COS:34
    .= (Re b)*(cos r)+((Im b)*sin Arg a)
    .= (Re b)*((Re a)/|.a.|)+(Im b)*((Im a)/|.a.|) by A17,SIN_COS:34
@@ -1213,7 +1265,7 @@ A21: Im rb = (Re b)*(-sin Arg a)+(Im b)*(cos r) by A13,SIN_COS:34
    .= (-(Re b))*(Im a)/|.a.|+(Im b)*(Re a)/|.a.| by XCMPLX_1:75
    .= --((-(Re b))*(Im a)+(Im b)*(Re a))/|.a.| by XCMPLX_1:63
    .= -(-((-(Re b))*(Im a)+(Im b)*(Re a)))/|.a.| by XCMPLX_1:188
-   .= - Im (a.|.b)/|.a.| by A18,COMPLEX1:7;
+   .= - Im (a.|.b)/|.a.| by A18,COMPLEX1:28;
 A22: mabi^2 >= 0 by SQUARE_1:72;
        (Re rb)^2 >= 0 & (Im rb)^2 >= 0 & 0 = 0+0 by SQUARE_1:72;
 then A23: (Re rb)^2+(Im rb)^2 >= 0 by REAL_1:55;
@@ -1226,13 +1278,13 @@ COMPLEX1:def 16
     .= mabi*sqrt((Re rb)^2+(Im rb)^2) by A6,SQUARE_1:89
     .= mabi*|.rb.| by COMPLEX1:def 16 .= mabi*|.b.| by Th67;
 then A25: |.IT.| <> 0 by A4,A6,XCMPLX_1:6;
-      |.IT.|*cos Arg IT = Re rb * mabi by A14,A15,COMPLEX1:7;
+      |.IT.|*cos Arg IT = Re rb * mabi by A14,A15,COMPLEX1:28;
  hence cos angle(a,b) = Re rb * mabi/|.IT.| by A12,A25,XCMPLX_1:90
       .= Re rb *(mabi/|.IT.|) by XCMPLX_1:75
       .= Re (a.|.b) / |.a.|*(mabi/mabi/|.b.|) by A20,A24,XCMPLX_1:79
       .= Re (a.|.b) / |.a.|*(1/|.b.|) by A6,XCMPLX_1:60
       .= Re (a.|.b)*1 / (|.a.|*|.b.|) by XCMPLX_1:77 .= Re (a.|.b)/mab;
-      |.IT.|*sin Arg IT = Im rb * mabi by A14,A16,COMPLEX1:7;
+      |.IT.|*sin Arg IT = Im rb * mabi by A14,A16,COMPLEX1:28;
  hence sin angle(a,b) = Im rb * mabi/|.IT.| by A12,A25,XCMPLX_1:90
       .= Im rb * (mabi/|.IT.|) by XCMPLX_1:75
       .= (- Im (a.|.b) / |.a.|)*(mabi/mabi/|.b.|) by A21,A24,XCMPLX_1:79
@@ -1242,7 +1294,7 @@ then A25: |.IT.| <> 0 by A4,A6,XCMPLX_1:6;
       .= - Im (a.|.b)/mab by XCMPLX_1:188;
  end;
 
-definition let x, y, z be Element of COMPLEX;
+definition let x, y, z be complex number;
 func angle(x,y,z) -> real number equals :Def6:
   Arg(z-y)-Arg(x-y) if Arg(z-y)-Arg(x-y) >= 0
   otherwise 2*PI+(Arg(z-y)-Arg(x-y));
@@ -1272,7 +1324,7 @@ proof now per cases;
 end;
 
 theorem Th85:
-angle(x,y,z)=angle(x-y,0c,z-y)
+angle(x,y,z)=angle(x-y,0,z-y)
 proof now per cases;
      case A1: Arg((z-y)-0c)-Arg((x-y)-0c)>=0;
       then angle(x-y,0c,z-y)=Arg(z-y)-Arg(x-y) by Def6;
@@ -1282,7 +1334,7 @@ proof now per cases;
       then angle(x-y,0c,z-y)=2*PI+(Arg(z-y)-Arg(x-y)) by Def6;
      hence angle(x-y,0c,z-y)=angle(x,y,z) by A2,Def6;
     end;
-    end; hence angle(x,y,z)=angle(x-y,0c,z-y);
+    end; hence angle(x,y,z)=angle(x-y,0,z-y);
 end;
 
 theorem Th86:
@@ -1293,7 +1345,7 @@ proof thus angle(a,b,c) = angle(a-b,0c,c-b) by Th85
 end;
 
 theorem Th87:
-angle(a,b) = angle(a,0c,b)
+angle(a,b) = angle(a,0,b)
 proof set ab2 = angle(a,b);
 A1: 0 = 0c;
 A2: 0 <= Arg(Rotate(b,-Arg a)) & Arg(Rotate(b,-Arg a)) < 2*PI &
@@ -1309,7 +1361,7 @@ A2: 0 <= Arg(Rotate(b,-Arg a)) & Arg(Rotate(b,-Arg a)) < 2*PI &
        consider i being Integer such that
    A6: Arg(Rotate(b,-Arg a)) = 2*PI*i+(-Arg a + Arg(b)) by A3,Th68;
           0 <= angle(a,0c,b) & angle(a,0c,b) < 2*PI by Th84;
-      hence ab2 = angle(a,0c,b) by A2,A4,A5,A6,Th3;
+      hence ab2 = angle(a,0,b) by A2,A4,A5,A6,Th3;
    end;
    suppose Arg(b-0c)-Arg(a-0c) < 0;
    then A7: angle(a,0c,b) = 2*PI+(Arg(b)-Arg(a)) by Def6 .= 2*PI+(Arg(b)+-Arg(a
@@ -1362,10 +1414,10 @@ by A3,REAL_1:66; then angle(z,y,x)=Arg(x-y)-Arg(z-y) by Def6;
 end;
 
 theorem Th89:
-a <> 0c & b <> 0c implies (Re (a.|.b) = 0
-                      iff angle(a,0c,b) = PI/2 or angle(a,0c,b) = 3/2*PI)
+a <> 0 & b <> 0 implies (Re (a.|.b) = 0
+                      iff angle(a,0,b) = PI/2 or angle(a,0,b) = 3/2*PI)
 proof assume that
-A1: a <> 0c and A2: b <> 0c;
+A1: a <> 0 and A2: b <> 0;
 A3: cos angle(a,b) = Re (a.|.b)/(|.a.|*|.b.|) &
    sin angle(a,b) = - Im (a.|.b)/(|.a.|*|.b.|) by A1,A2,Th83;
 A4: angle(a,b) = angle(a,0c,b) by Th87;
@@ -1377,24 +1429,22 @@ A8: -Im (a.|.b)/(|.a.|*|.b.|) = (-Im (a.|.b))/(|.a.|*|.b.|) by XCMPLX_1:188;
    hereby assume A9: Re (a.|.b) = 0;
      then Im (a.|.b)=|.a.|*|.b.| or Im (a.|.b)= - (|.a.|*|.b.|) by Th64;
      then sin angle(a,b) = 1 or sin angle(a,b) = -1 by A3,A5,A8,XCMPLX_1:60;
-    hence angle(a,0c,b) = PI/2 or angle(a,0c,b) = 3/2*PI
+    hence angle(a,0,b) = PI/2 or angle(a,0,b) = 3/2*PI
            by A3,A4,A6,A7,A9,Th12,COMPTRIG:21,SIN_COS:82;
-   end; assume angle(a,0c,b) = PI/2 or angle(a,0c,b) = 3/2*PI;
-     then 0*(|.a.|*|.b.|) = Re (a.|.b) by A3,A4,A5,COMPTRIG:20,SIN_COS:82
-,XCMPLX_1:88;
+   end; assume angle(a,0,b) = PI/2 or angle(a,0,b) = 3/2*PI;
+     then 0*(|.a.|*|.b.|) = Re (a.|.b) by A3,A4,A5,SIN_COS:82,XCMPLX_1:88;
    hence Re (a.|.b) = 0;
 end;
 
 theorem
-   a <> 0c & b <> 0c implies (Im(a.|.b) = |.a.|*|.b.| or Im(a.|.b) = -|.a.|*|.b
-.|
-                      iff angle(a,0c,b) = PI/2 or angle(a,0c,b) = 3/2*PI)
-proof assume A1: a<>0c & b<>0c;
+   a <> 0 & b <> 0 implies (Im(a.|.b) = |.a.|*|.b.| or Im(a.|.b) = -|.a.|*|.b.|
+                      iff angle(a,0,b) = PI/2 or angle(a,0,b) = 3/2*PI)
+proof assume A1: a<>0 & b<>0;
  hereby assume Im(a.|.b)=|.a.|*|.b.| or Im(a.|.b)=-(|.a.|*|.b.|);
    then Re (a.|.b)=0 by Th64;
-   hence angle(a,0c,b)=PI/2 or angle(a,0c,b)=3/2*PI by A1,Th89;
+   hence angle(a,0,b)=PI/2 or angle(a,0,b)=3/2*PI by A1,Th89;
  end;
- hereby assume angle(a,0c,b)=PI/2 or angle(a,0c,b)=3/2*PI;
+ hereby assume angle(a,0,b)=PI/2 or angle(a,0,b)=3/2*PI;
    then Re (a.|.b)=0 by A1,Th89;
   hence Im(a.|.b)=|.a.|*|.b.| or Im(a.|.b)=-(|.a.|*|.b.|) by Th64;
  end;
@@ -1405,10 +1455,10 @@ for a, b, c being Element of COMPLEX st a <> b & c <> b
  holds Re ((a-b).|.(c-b)) = 0 iff angle(a,b,c) = PI/2 or angle(a,b,c) = 3/2*PI
 proof let x, y,z be Element of COMPLEX; assume A1: x<>y & z<>y;
  A2: now assume x-y=0c; then x=0c+y by XCMPLX_1:27;
-  hence contradiction by A1,COMPLEX1:22;
+  hence contradiction by A1,COMPLEX1:def 6;
  end;
  A3: now assume z-y=0c; then z=0c+y by XCMPLX_1:27;
-  hence contradiction by A1,COMPLEX1:22;
+  hence contradiction by A1,COMPLEX1:def 6;
  end;
     angle(x,y,z)=angle(x-y,0c,z-y) by Th85;
  hence (Re ((x-y).|.(z-y)) = 0 iff angle(x,y,z)=PI/2 or angle(x,y,z)=3/2*PI)
@@ -1577,7 +1627,7 @@ Im a = 0 & Re a > 0 & 0 < Arg(b) & Arg(b) < PI
          0 < angle(0c,b,a) & 0 < angle(b,a,0c)
 proof assume that
 A1: Im a = 0 and A2: Re a > 0 and A3: 0 < Arg(b) and A4: Arg(b) < PI;
-   a = [*Re a, 0*] by A1,COMPLEX1:8;
+   a = Re a + 0*<i> by A1,COMPLEX1:29;
 then a = [**Re a, 0**] by HAHNBAN1:def 1;
 then A5: Arg(a) = 0 by A2,COMPTRIG:53;
 then A6: Arg(-a) = Arg(a)+PI by A2,Th22,COMPLEX1:12,COMPTRIG:21 .= PI by A5;
@@ -1598,12 +1648,14 @@ A18: Re (b-a) = Re b - Re a by COMPLEX1:48;
    then A19: Re b + -Re a < Re b + 0 by REAL_1:67;
    set ba = b-a; set Rb = Re b, Rba = Re ba, Ib = Im b, Iba = Im ba;
    set B = Arg b, BA = Arg ba, mb = |.b.|, mba = |.b-a.|;
-      b = [* mb*cos B, mb*sin B *] &
-   b = [* Re b, Im b *] by Th19,COMPLEX1:8;
-then A20: Re b = mb*cos B & Im b = mb*sin B by ARYTM_0:12;
-      b-a = [* mba*cos BA, mba*sin BA *] &
-   b-a = [* Re ba, Im ba *] by Th19,COMPLEX1:8;
-then A21: Re ba = mba*cos BA & Im ba = mba*sin BA by ARYTM_0:12;
+Y: b = [* mb*cos B, mb*sin B *] by Th19;
+   b = Re b+(Im b)*<i> by COMPLEX1:29
+    .= [* Re b, Im b *] by COMPLEX1:27;
+then A20: Re b = mb*cos B & Im b = mb*sin B by ARYTM_0:12,Y;
+X: b-a = [* mba*cos BA, mba*sin BA *] by Th19;
+   b-a = Re ba+(Im ba)*<i> by COMPLEX1:29
+     .= [* Re ba, Im ba *] by COMPLEX1:27;
+then A21: Re ba = mba*cos BA & Im ba = mba*sin BA by ARYTM_0:12,X;
 A22: mb = sqrt(Rb^2+Ib^2) by COMPLEX1:def 16;
 A23: mba = sqrt(Rba^2+Ib^2) by A17,COMPLEX1:def 16;
     A24: mb >= 0 & mb <> 0 by A16,COMPLEX1:12,133; A25: mba >= 0 & mba <> 0
@@ -1626,7 +1678,9 @@ then A29: mba/mb = (sin B)/sin BA by A17,A20,A21,A24,XCMPLX_1:95;
     then BA > B by A31,A32,Th7; then BA+-B > B+-B by REAL_1:67;
    hence Arg ba - Arg b > 0;
   end;
-  suppose A33: 0 = Rba; then ba = [* 0, Iba *] by COMPLEX1:8;
+  suppose A33: 0 = Rba;
+   then ba = 0+Iba*<i> by COMPLEX1:29
+     .= [* 0, Iba *] by COMPLEX1:27;
    then A34: BA = PI/2 by A16,A17,Th30;
            B in ].0,PI/2.[ by A16,A18,A19,A33,Th31; then B < BA by A34,
 JORDAN6:45;
@@ -1642,7 +1696,9 @@ JORDAN6:45;
       then BA > B by A36,AXIOMS:22; then B+-B < BA+-B by REAL_1:67;
      hence Arg ba - Arg(b) > 0;
     end;
-    suppose 0 = Re b; then b = [* 0, Ib *] by COMPLEX1:8;
+    suppose 0 = Re b;
+     then b = 0+Ib*<i> by COMPLEX1:29
+      .= [* 0, Ib *] by COMPLEX1:27;
       then A37: B = PI/2 by A16,Th30;   BA in ].PI/2,PI.[ by A16,A17,A35,Th32;
       then B < BA by A37,JORDAN6:45; then B+-B < BA+-B by REAL_1:67;
      hence Arg ba - Arg(b) > 0;
@@ -1710,12 +1766,13 @@ A8: c+-b <> a+-b proof assume c+-b = a+-b; then c = a by XCMPLX_1:2;
       hence contradiction by A3,Th93;
      end;  A9: c-b <> 0 by A2,XCMPLX_1:15;
 then A10: angle(a+-b,0c,c+-b) = angle(A,0c,B) by A6,A7,Th92;
-A11: A = [* |.a+-b.|, 0 *] by Th69;
-then A12: Im A = 0 by COMPLEX1:7;
+A11: A = [* |.a+-b.|, 0 *] by Th69
+      .= |.a+-b.|+0*<i> by COMPLEX1:27;
+then A12: Im A = 0 by COMPLEX1:28;
       now assume a+-b = 0c; then a-b = 0c by XCMPLX_0:def 8;
      hence contradiction by A1,XCMPLX_1:15;
    end; then |.a+-b.| > 0 by COMPLEX1:133;
-then A13: Re A > 0 by A11,COMPLEX1:7; then A14: Arg A = 0c by A12,Th34;
+then A13: Re A > 0 by A11,COMPLEX1:28; then A14: Arg A = 0c by A12,Th34;
 then Arg(B-0c)-Arg(A-0c)>= 0 by Th18;
 then A15: angle(a,b,c) = Arg B by A5,A10,A14,Def6;
 A16: angle(b,c,a) = angle(b+-b,c+-b,a+-b) by Th86
@@ -1769,11 +1826,11 @@ end;
 
 Lm10:
 Im a = 0 & Re a > 0 & Arg(b) = PI
- implies angle(a,0c,b)+angle(0c,b,a)+angle(b,a,0c) = PI &
-         0 = angle(0c,b,a) & 0 = angle(b,a,0c)
+ implies angle(a,0,b)+angle(0,b,a)+angle(b,a,0) = PI &
+         0 = angle(0,b,a) & 0 = angle(b,a,0)
 proof assume that
-A1: Im a = 0 and A2: Re a > 0 and A3: Arg(b) = PI;   a = [*Re a, 0*] by A1,
-COMPLEX1:8;
+A1: Im a = 0 and A2: Re a > 0 and A3: Arg(b) = PI;
+    a = Re a + 0*<i> by A1,COMPLEX1:29;
 then A4: a = [**Re a, 0**] by HAHNBAN1:def 1;
 A5: Arg(a) = 0 by A2,A4,COMPTRIG:53;
 then A6: Arg(-a) = Arg(a)+PI by A2,Th22,COMPLEX1:12,COMPTRIG:21 .= PI by A5;
@@ -1806,14 +1863,14 @@ then A19: angle(0c,b,a) = Arg(a-b)-Arg(-b) by XCMPLX_1:150;
 A22:  Arg(a)-Arg(-a) = Arg(a)-(Arg(a)+PI) by A2,A5,Th22,COMPLEX1:12,COMPTRIG:21
   .=-PI;
  thus
-A23: angle(a,0c,b)+angle(0c,b,a)+angle(b,a,0c)
-     = Arg(b)-Arg(-b)-Arg(a)+Arg(a-b)+(Arg(-a)-Arg(b-a)) by A15,A19,A20,
-XCMPLX_1:150
+A23: angle(a,0,b)+angle(0,b,a)+angle(b,a,0)
+     = Arg(b)-Arg(-b)-Arg(a)+Arg(a-b)+(Arg(-a)-Arg(b-a))
+      by A15,A19,A20,XCMPLX_1:150,COMPLEX1:def 6
     .= PI-Arg(a)+Arg(-a)+Arg(a-b)-Arg(b-a) by A21
     .= PI--PI+Arg(a-b)-Arg(b-a) by A22,XCMPLX_1:37
     .= PI+0 by A11,A14 .= PI;
-  thus 0 = angle(0c,b,a) by A17,Def6;
-  thus 0 = angle(b,a,0c) by A3,A5,A15,A17,A18,A23,XCMPLX_1:3;
+  thus 0 = angle(0,b,a) by A17,Def6;
+  thus 0 = angle(b,a,0) by A3,A5,A15,A17,A18,A23,XCMPLX_1:3;
 end;
 
 theorem Th100:
@@ -1828,12 +1885,13 @@ A7: c+-b <> a+-b proof assume c+-b = a+-b; then c = a by XCMPLX_1:2;
       hence contradiction by A3,Th93,COMPTRIG:21;
      end;  A8: c-b <> 0 by A2,XCMPLX_1:15;
 then A9: angle(a+-b,0c,c+-b) = angle(A,0c,B) by A5,A6,Th92;
-A10: A = [* |.a+-b.|, 0 *] by Th69;
-then A11: Im A = 0 by COMPLEX1:7;
+A10: A = [* |.a+-b.|, 0 *] by Th69
+        .= |.a+-b.|+0*<i> by COMPLEX1:27;
+then A11: Im A = 0 by COMPLEX1:28;
       now assume a+-b = 0c; then a-b = 0c by XCMPLX_0:def 8;
      hence contradiction by A1,XCMPLX_1:15;
    end; then |.a+-b.| > 0 by COMPLEX1:133;
-then A12: Re A > 0 by A10,COMPLEX1:7; then A13: Arg A = 0c by A11,Th34;
+then A12: Re A > 0 by A10,COMPLEX1:28; then A13: Arg A = 0c by A11,Th34;
 then Arg(B-0c)-Arg(A-0c)>=0 by Th18;
 then A14: angle(a,b,c) = Arg B by A4,A9,A13,Def6;
 A15: angle(b,c,a) = angle(b+-b,c+-b,a+-b) by Th86

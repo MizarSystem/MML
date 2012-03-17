@@ -19,7 +19,7 @@ environ
  constructors REAL_1, DOMAIN_1, SQUARE_1, BINOP_1, MONOID_0, BILINEAR,
       COMPLEX1, MEMBERED, ARYTM_0, BINOP_2, INT_2;
  clusters STRUCT_0, XREAL_0, SUBSET_1, RELSET_1, SQUARE_1, COMPLFLD, HAHNBAN1,
-      VECTSP10, BILINEAR, COMPLEX1, MEMBERED, NUMBERS;
+      VECTSP10, BILINEAR, COMPLEX1, MEMBERED, NUMBERS, XCMPLX_0;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
  definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP10, BILINEAR, SEQM_3;
  theorems COMPLEX1, SQUARE_1, REAL_1, ABSVALUE, COMPLFLD, AXIOMS, COMPTRIG,
@@ -51,13 +51,14 @@ for a be Element of COMPLEX st a <> 0c holds
  Im ([*(Re a)/|.a.|, (-Im a)/|.a.|*] * a)= 0
  proof let z be Element of COMPLEX;
   set r = |.z.|, a = [*(Re z)/r, (-Im z)/r*];
+X: a = (Re z)/r+((-Im z)/r)*<i> by COMPLEX1:27;
   assume z <> 0c;
  then A1: 0 < r by COMPLEX1:133;
      |.z*z.| = (Re z)^2 + (Im z)^2 by COMPLEX1:154;
  then A2: 0 <= (Re z)^2 + (Im z)^2 by COMPLEX1:132;
  A3: r^2 = (sqrt ((Re z)^2 + (Im z)^2))^2 by COMPLEX1:def 16
        .= (Re z)^2 + (Im z)^2 by A2,SQUARE_1:def 4;
- A4: Re a = (Re z)/r & Im a = (-Im z)/r by COMPLEX1:7;
+ A4: Re a = (Re z)/r & Im a = (-Im z)/r by COMPLEX1:28,X;
   then (Re a)^2 + (Im a)^2 = (Re z)^2/r^2 + ((-Im z)/r)^2 by SQUARE_1:69
         .= (Re z)^2/r^2 + (-Im z)^2/r^2 by SQUARE_1:69
         .= (Re z)^2/r^2 + (Im z)^2/r^2 by SQUARE_1:61
@@ -105,14 +106,14 @@ theorem
  end;
 
 theorem Th4:
-for a be Element of COMPLEX holds a*a*' = [*|.a.|^2,0*]
+for a be Element of COMPLEX holds a*a*' = |.a.|^2+0*<i>
  proof let z be Element of COMPLEX;
      0<= (Re z)^2 & 0<= (Im z)^2 by SQUARE_1:72;
 then A1: 0+0<= (Re z)^2 + (Im z)^2 by REAL_1:55;
      sqrt((Re z)^2 + (Im z)^2) =|.z.| by COMPLEX1:def 16;
   then (Re z)^2 + (Im z)^2 = |.z.|^2 by A1,SQUARE_1:def 4;
   then Re (z*z*')=|.z.|^2 & Im (z*z*')=0 by COMPLEX1:126;
-  hence thesis by COMPLEX1:8;
+  hence thesis by COMPLEX1:29;
  end;
 
 theorem Th5:
@@ -125,7 +126,7 @@ theorem Th7:
 i_FC * i_FC*' = 1.F_Complex
  proof
   thus i_FC * i_FC*' = <i> * <i>" by Th6,COMPLFLD:6,HAHNBAN1:def 2
-   .= 1.F_Complex by COMPLEX1:12,17,65,COMPLFLD:10;
+   .= 1.F_Complex by COMPLEX1:12,17,def 7,XCMPLX_0:def 7,COMPLFLD:10;
  end;
 
 theorem Th8:
@@ -138,10 +139,11 @@ for a be Element of F_Complex st a <> 0.F_Complex holds
 A1: z <> 0.F_Complex;
   reconsider b = z as Element of COMPLEX by COMPLFLD:def 1;
   set a = [**(Re z)/|.z.|, (-Im z)/|.z.|**];
-  set a1 = [*(Re z)/|.z.|, (-Im z)/|.z.|*];
+  set a1 = (Re z)/|.z.|+((-Im z)/|.z.|)*<i>;
+X: a1 = [*(Re z)/|.z.|,((-Im z)/|.z.|)*] by COMPLEX1:27;
 A2: a = a1 by HAHNBAN1:def 1;
   then a*z = a1*b by COMPLFLD:6;
-  hence thesis by A1,A2,Th2,COMPLFLD:9;
+  hence thesis by A1,A2,Th2,COMPLFLD:9,X;
  end;
 
 Lm230: the unity of F_Complex = 1r by COMPLFLD:def 1
@@ -214,16 +216,17 @@ for a be Element of F_Complex st Im a = 0 holds a = a*'
   assume
  A1: Im x = 0;
   reconsider d = x as Element of COMPLEX by COMPLFLD:def 1;
-  thus x = [*Re d, - Im d *] by A1,COMPLEX1:8
+  thus x = Re d+(- Im d)*<i> by A1,COMPLEX1:29
+  .= [*Re d, - Im d *] by COMPLEX1:27
   .= x*' by COMPLEX1:def 15;
  end;
 
 theorem Th15:
 for r,s be Real holds [**r,0**]*[**s,0**] =[**r*s,0**]
  proof let r,s be Real;
-     [**r,0**] = [*r,0*] & [**s,0**] = [*s,0*] by HAHNBAN1:def 1;
-  hence [**r,0**]*[**s,0**] = [*r,0*]*[*s,0*] by COMPLFLD:6
-   .=[*r*s - 0*0,r*0+s*0*] by HAHNBAN1:2
+     [**r,0**] = r+0*<i> & [**s,0**] = s+0*<i> by HAHNBAN1:def 1;
+  hence [**r,0**]*[**s,0**] = (r+0*<i>)*(s+0*<i>) by COMPLFLD:6
+   .=r*s - 0*0+(r*0+s*0)*<i> by HAHNBAN1:2
    .= [**r*s,0**] by HAHNBAN1:def 1;
  end;
 
@@ -231,7 +234,8 @@ theorem Th16:
 for a be Element of F_Complex holds a*a*' = [**|.a.|^2,0**]
  proof let z be Element of F_Complex;
   reconsider a = z, b = z*' as Element of COMPLEX by COMPLFLD:def 1;
-  thus z*z*' = a * b by COMPLFLD:6 .= [*|.a.|^2,0*] by Th4
+  thus z*z*' = a * b by COMPLFLD:6 .= |.a.|^2+0*<i> by Th4
+  .= |.a.|^2+0*<i> by COMPLEX1:27
   .= [**|.z.|^2,0**] by HAHNBAN1:def 1;
  end;
 

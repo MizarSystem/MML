@@ -8,8 +8,10 @@ environ
 
  vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM_1, ARYTM_3, RELAT_1,
       ABSVALUE, ORDINAL2, SQUARE_1, SEQ_1, SEQ_2, SERIES_1, PROB_2, BHSP_1,
-      BHSP_3, SUPINF_2, RSSPACE, COMSEQ_1, COMPLEX1, CSSPACE, CFUNCT_1;
- notation TARSKI, SUBSET_1, ZFMISC_1, NUMBERS, ARYTM_0, STRUCT_0, XREAL_0,
+      BHSP_3, SUPINF_2, RSSPACE, COMSEQ_1, COMPLEX1, CSSPACE, CFUNCT_1,
+      XCMPLX_0;
+ notation TARSKI, SUBSET_1, ZFMISC_1, NUMBERS, ARYTM_0, STRUCT_0,
+      XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, NAT_1, RELAT_1, DOMAIN_1, PARTFUN1, FUNCT_1, FUNCT_2,
       PRE_TOPC, RLVECT_1, NORMSP_1, SQUARE_1, SEQ_1, SEQ_2, SERIES_1, COMSEQ_1,
       CFUNCT_1, COMSEQ_2, COMSEQ_3, CLVECT_1, CLVECT_2, CSSPACE;
@@ -17,7 +19,7 @@ environ
       PARTFUN1, MEMBERED, COMPLEX1, COMSEQ_1, COMSEQ_2, COMSEQ_3, CLVECT_2,
       ARYTM_0, NORMSP_1, BINOP_2;
  clusters RELSET_1, XREAL_0, STRUCT_0, SEQ_1, MEMBERED, ORDINAL2, SUBSET_1,
-      COMPLEX1, COMSEQ_1, COMSEQ_2, COMSEQ_3, CSSPACE, SQUARE_1;
+      COMPLEX1, COMSEQ_1, COMSEQ_2, COMSEQ_3, CSSPACE, SQUARE_1, XCMPLX_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
  theorems RELAT_1, SQUARE_1, AXIOMS, ABSVALUE, ZFMISC_1, REAL_1, SEQ_1, SEQ_2,
       SEQM_3, SERIES_1, INT_1, FUNCT_1, NAT_1, FUNCT_2, RLVECT_1, SEQ_4,
@@ -41,8 +43,9 @@ proof
        .= [*Re((seq.x)*'), -(Im ((seq.x)*'))*] by COMPLEX1:def 15
        .= [*Re(seq.x), -(Im ((seq.x)*'))*] by COMPLEX1:112
        .= [*Re(seq.x), -(-(Im(seq.x)))*] by COMPLEX1:112
-       .= [*Re(seq.x), Im(seq.x)*];
-     hence thesis by COMPLEX1:8;
+       .= [*Re(seq.x), Im(seq.x)*]
+       .= Re(seq.x)+(Im(seq.x))*<i> by COMPLEX1:27;
+     hence thesis by COMPLEX1:29;
    end;
    hence thesis by FUNCT_2:18;
 end;
@@ -595,11 +598,10 @@ A3:  x .|. x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
 
       seq_id(x)(#)(seq_id(x))*' is absolutely_summable by Lm20;
 then A4:  seq_id(x)(#)(seq_id(x))*' is summable by COMSEQ_3:64;
-     then [*Sum(Re(seq_id(x)(#)(seq_id(x))*')),
-       Sum(Im(seq_id(x)(#)(seq_id(x))*'))*] = 0 by A2,A3,COMSEQ_3:54
-        .= [*0, 0*] by COMPLEX1:8,12;
+     then Sum(Re(seq_id(x)(#)(seq_id(x))*'))+
+       (Sum(Im(seq_id(x)(#)(seq_id(x))*')))*<i> = 0 by A2,A3,COMSEQ_3:54;
 then A5:  Sum(Re(seq_id(x)(#)(seq_id(x))*')) = 0 &
-     Sum(Im(seq_id(x)(#)(seq_id(x))*')) = 0 by ARYTM_0:12;
+     Sum(Im(seq_id(x)(#)(seq_id(x))*')) = 0 by COMPLEX1:163;
      set seq = seq_id(x);
      set rseq = Re(seq(#)seq*');
      set iseq = Im(seq(#)seq*');
@@ -693,10 +695,9 @@ A14:Re(x.|.x) >= 0 & Im(x.|.x) = 0
 A15:  x .|. x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
             .= Sum(seq_x(#)seq_x*') by CSSPACE:def 19,def 20;
       Sum(seq_x(#)seq_x*')
-      = [*Sum(Re(seq_x(#)seq_x*')),
-          Sum(Im(seq_x(#)seq_x*'))*] by A13,COMSEQ_3:54;
+    = Sum(Re(seq_x(#)seq_x*'))+Sum(Im(seq_x(#)seq_x*'))*<i> by A13,COMSEQ_3:54;
 then A16:  Re(x.|.x) = Sum(Re(seq_x(#)seq_x*')) &
-     Im(x.|.x) = Sum(Im(seq_x(#)seq_x*')) by A15,COMPLEX1:7;
+     Im(x.|.x) = Sum(Im(seq_x(#)seq_x*')) by A15,COMPLEX1:28;
 A17:  Re(seq_x(#)seq_x*') is summable & Im(seq_x(#)seq_x*') is summable
        by A13,COMSEQ_3:54;
       for n being Nat holds 0 <= (Re(seq_x(#)seq_x*')).n

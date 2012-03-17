@@ -1,0 +1,577 @@
+:: Formalization of Ortholattices via Orthoposets
+::  by Adam Grabowski and Markus Moschner
+:: 
+:: Received December 28, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary BINOP_1, BOOLE, FUNCT_1, SUBSET_1, LATTICES, ROBBINS3, ORDERS_1,
+      RELAT_1, LATTICE3, ROBBINS1, OPOSET_1, MIDSP_1, VECTSP_2, FILTER_1,
+      REALSET1, RELAT_2, WAYBEL_0, WAYBEL_1, YELLOW_0, PRE_TOPC, SHEFFER1;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, FINSUB_1, RELAT_1,
+      RELSET_1, PARTFUN1, FUNCT_1, FUNCT_2, REALSET1, RELAT_2, STRUCT_0,
+      PRE_TOPC, REALSET2, LATTICE3, LATTICES, ORDERS_1, ORDERS_2, FILTER_1,
+      VECTSP_2, MIDSP_1, ROBBINS1, OPOSET_1, WAYBEL_0, WAYBEL_1, YELLOW_0,
+      SHEFFER1;
+ constructors TARSKI, RELSET_1, FUNCT_1, FUNCT_2, STRUCT_0, PRE_TOPC, BINOP_1,
+      FINSUB_1, XBOOLE_0, LATTICES, RELAT_1, ORDERS_1, ORDERS_2, LATTICE3,
+      ROBBINS1, PARTFUN1, MIDSP_1, YELLOW_0, VECTSP_2, REALSET1, FILTER_1,
+      DOMAIN_1, OPOSET_1, REALSET2, FINSEQ_1, FUNCOP_1, NECKLACE, ORDINAL2,
+      SUBSET_1, WAYBEL_0, WAYBEL_1, WAYBEL24, ZFMISC_1, SHEFFER1;
+ clusters FILTER_0, FINSUB_1, STRUCT_0, SUBSET_1, ZFMISC_1, XBOOLE_0, ROBBINS1,
+      LATTICES, MEMBERED, OPOSET_1, ORDERS_1, RELSET_1, RELAT_1, PARTFUN1,
+      FUNCT_1, LATTICE3, YELLOW_1, YELLOW_0, REALSET2, ORDERS_2, SHEFFER1,
+      BINOP_1, EQREL_1, FINSEQ_1, FUNCT_2, PRE_TOPC, REALSET1, WAYBEL_0,
+      WAYBEL_1, WAYBEL24;
+ requirements SUBSET, BOOLE, NUMERALS;
+
+
+begin :: Another short axiomatization of lattices
+      :: Originally proved by McCune with the help of OTTER
+
+definition let L be non empty \/-SemiLattStr;
+  attr L is join-Associative means
+:: ROBBINS3:def 1
+    for x, y, z being Element of L holds
+      x "\/" (y "\/" z) = y "\/" (x "\/" z);
+end;
+
+definition let L be non empty /\-SemiLattStr;
+  attr L is meet-Associative means
+:: ROBBINS3:def 2
+    for x, y, z being Element of L holds
+      x "/\" (y "/\" z) = y "/\" (x "/\" z);
+end;
+
+definition let L be non empty LattStr;
+  attr L is meet-Absorbing means
+:: ROBBINS3:def 3
+    for x, y being Element of L holds
+      x "\/" (x "/\" y) = x;
+end;
+
+theorem :: ROBBINS3:1
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-idempotent join-idempotent;
+
+theorem :: ROBBINS3:2
+  for L being non empty LattStr holds
+      L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-commutative join-commutative;
+
+theorem :: ROBBINS3:3
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-absorbing;
+
+theorem :: ROBBINS3:4
+  for L being non empty LattStr holds
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing
+     implies L is meet-associative join-associative;
+
+theorem :: ROBBINS3:5
+  for L being non empty LattStr holds
+    L is Lattice-like iff
+    L is meet-Associative join-Associative meet-Absorbing join-absorbing;
+
+registration
+  cluster Lattice-like ->
+    meet-Associative join-Associative meet-absorbing join-absorbing
+      (non empty LattStr);
+  cluster meet-Associative join-Associative meet-Absorbing join-absorbing ->
+    Lattice-like (non empty LattStr);
+end;
+
+begin :: Orthoposets
+
+registration
+  cluster OrderInvolutive -> Dneg (PartialOrdered (non empty OrthoRelStr));
+end;
+
+theorem :: ROBBINS3:6
+  for L being Dneg (non empty OrthoRelStr), x being Element of L holds
+     x`` = x;
+
+theorem :: ROBBINS3:7
+  for O being OrderInvolutive PartialOrdered (non empty OrthoRelStr),
+     x, y being Element of O holds x <= y implies y` <= x`;
+
+registration
+  cluster with_infima with_suprema strict PreOrthoPoset;
+end;
+
+notation let L be non empty \/-SemiLattStr,
+             x, y be Element of L;
+  synonym x |_| y for x "\/" y;
+end;
+
+notation let L be non empty /\-SemiLattStr,
+             x, y be Element of L;
+  synonym x |^| y for x "/\" y;
+end;
+
+notation let L be non empty RelStr,
+             x, y be Element of L;
+  synonym x "|^|" y for x "/\" y;
+  synonym x "|_|" y for x "\/" y;
+end;
+
+begin :: Merging relational structures and lattice structures together
+
+definition
+  struct (\/-SemiLattStr, RelStr) \/-SemiLattRelStr
+      (# carrier -> set,
+         L_join -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  struct (/\-SemiLattStr, RelStr) /\-SemiLattRelStr
+      (# carrier -> set,
+         L_meet -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  struct (/\-SemiLattRelStr, \/-SemiLattRelStr, LattStr) LattRelStr
+      (# carrier -> set,
+         L_join, L_meet -> (BinOp of the carrier),
+         InternalRel -> Relation of the carrier #);
+end;
+
+definition
+  func TrivLattRelStr -> LattRelStr equals
+:: ROBBINS3:def 4
+    LattRelStr (# {{}}, op2, op2, id {{}} #);
+end;
+
+registration
+  cluster TrivLattRelStr -> non empty trivial;
+end;
+
+registration
+  cluster non empty \/-SemiLattRelStr;
+  cluster non empty /\-SemiLattRelStr;
+  cluster non empty LattRelStr;
+end;
+
+theorem :: ROBBINS3:8
+  for R being non empty RelStr st
+    the InternalRel of R is_reflexive_in the carrier of R &
+    the InternalRel of R is antisymmetric transitive holds
+      R is reflexive antisymmetric transitive;
+
+registration
+  cluster TrivLattRelStr -> reflexive;
+end;
+
+registration
+  cluster antisymmetric reflexive transitive
+    with_suprema with_infima LattRelStr;
+end;
+
+registration
+  cluster TrivLattRelStr -> meet-Absorbing;
+end;
+
+registration
+  cluster Lattice-like (non empty LattRelStr);
+end;
+
+definition let L be Lattice;
+  redefine func LattRel L -> Order of the carrier of L;
+end;
+
+begin :: Binary approach to ortholattices
+
+definition
+  struct (LattRelStr, OrthoLattStr, OrthoRelStr) OrthoLattRelStr
+      (# carrier -> set,
+         L_join, L_meet -> (BinOp of the carrier),
+         InternalRel -> (Relation of the carrier),
+         Compl -> UnOp of the carrier #);
+end;
+
+definition
+  func TrivCLRelStr -> OrthoLattRelStr equals
+:: ROBBINS3:def 5
+    OrthoLattRelStr (# {{}}, op2, op2, id {{}}, op1 #);
+end;
+
+:: Axiomatics for ortholattices is the classical one for lattices extended
+:: by the three following:
+:: x ^ y = c(c(x) v c(y)).     % DM   de_Morgan from ROBBINS1
+:: c(c(x)) = x.                % CC   dneg from OPOSET_1, too specific
+:: x v c(x) = y v c(y).        % ONE
+
+definition let L be non empty ComplStr;
+  attr L is involutive means
+:: ROBBINS3:def 6
+    for x being Element of L holds x`` = x;
+end;
+
+definition let L be non empty ComplLattStr;
+  attr L is with_Top means
+:: ROBBINS3:def 7
+    for x, y being Element of L holds
+      x |_| x` = y |_| y`;
+end;
+
+registration
+  cluster TrivOrtLat -> involutive with_Top;
+end;
+
+registration
+  cluster TrivCLRelStr -> non empty trivial;
+end;
+
+registration
+  cluster TrivCLRelStr -> reflexive;
+end;
+
+registration
+  cluster TrivCLRelStr -> involutive with_Top;
+end;
+
+registration
+  cluster involutive with_Top de_Morgan Lattice-like (non empty OrthoLattStr);
+end;
+
+definition
+  mode Ortholattice is involutive with_Top de_Morgan
+    Lattice-like (non empty OrthoLattStr);
+end;
+
+begin :: Lemmas
+
+theorem :: ROBBINS3:9
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-commutative holds
+    L is join-commutative;
+
+theorem :: ROBBINS3:10
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-commutative holds
+    L is meet-commutative;
+
+theorem :: ROBBINS3:11
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-associative holds
+    L is join-associative;
+
+theorem :: ROBBINS3:12
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-associative holds
+    L is meet-associative;
+
+theorem :: ROBBINS3:13
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is join-absorbing holds
+    L is join-absorbing;
+
+theorem :: ROBBINS3:14
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is meet-absorbing holds
+    L is meet-absorbing;
+
+theorem :: ROBBINS3:15
+  for K, L being non empty LattStr st
+    the LattStr of K = the LattStr of L &
+    K is Lattice-like holds
+    L is Lattice-like;
+
+theorem :: ROBBINS3:16
+  for L1,L2 being non empty \/-SemiLattStr st
+    the \/-SemiLattStr of L1 = the \/-SemiLattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 holds
+    a1 "\/" b1 = a2 "\/" b2;
+
+theorem :: ROBBINS3:17
+  for L1,L2 being non empty /\-SemiLattStr st
+    the /\-SemiLattStr of L1 = the /\-SemiLattStr of L2
+  for a1,b1 being Element of L1,
+      a2,b2 being Element of L2 st
+   a1 = a2 & b1 = b2 holds
+    a1 "/\" b1 = a2 "/\" b2;
+
+theorem :: ROBBINS3:18
+  for K, L being non empty ComplStr,
+      x being Element of K,
+      y being Element of L st
+    the Compl of K = the Compl of L & x = y holds
+      x` = y`;
+
+theorem :: ROBBINS3:19
+  for K, L being non empty ComplLattStr st
+    the ComplLattStr of K = the ComplLattStr of L &
+    K is with_Top holds
+    L is with_Top;
+
+theorem :: ROBBINS3:20
+  for K, L being non empty OrthoLattStr st
+    the OrthoLattStr of K = the OrthoLattStr of L &
+    K is de_Morgan holds
+    L is de_Morgan;
+
+theorem :: ROBBINS3:21
+  for K, L being non empty OrthoLattStr st
+    the OrthoLattStr of K = the OrthoLattStr of L &
+    K is involutive holds
+    L is involutive;
+
+begin :: Structure Extensions
+
+definition let R be RelStr;
+  mode RelAugmentation of R -> LattRelStr means
+:: ROBBINS3:def 8
+    the RelStr of it = the RelStr of R;
+end;
+
+definition let R be LattStr;
+  mode LatAugmentation of R -> LattRelStr means
+:: ROBBINS3:def 9
+    the LattStr of it = the LattStr of R;
+end;
+
+registration let L be non empty LattStr;
+  cluster -> non empty LatAugmentation of L;
+end;
+
+registration let L be meet-associative (non empty LattStr);
+  cluster -> meet-associative LatAugmentation of L;
+end;
+
+registration let L be join-associative (non empty LattStr);
+  cluster -> join-associative LatAugmentation of L;
+end;
+
+registration let L be meet-commutative (non empty LattStr);
+  cluster -> meet-commutative LatAugmentation of L;
+end;
+
+registration let L be join-commutative (non empty LattStr);
+  cluster -> join-commutative LatAugmentation of L;
+end;
+
+registration let L be join-absorbing (non empty LattStr);
+  cluster -> join-absorbing LatAugmentation of L;
+end;
+
+registration let L be meet-absorbing (non empty LattStr);
+  cluster -> meet-absorbing LatAugmentation of L;
+end;
+
+definition let L be non empty \/-SemiLattRelStr;
+  attr L is naturally_sup-generated means
+:: ROBBINS3:def 10
+    for x, y being Element of L holds
+      x <= y iff x |_| y = y;
+end;
+
+definition let L be non empty /\-SemiLattRelStr;
+  attr L is naturally_inf-generated means
+:: ROBBINS3:def 11
+    for x, y being Element of L holds
+      x <= y iff x |^| y = x;
+end;
+
+registration let L be Lattice;
+  cluster naturally_sup-generated naturally_inf-generated
+            Lattice-like LatAugmentation of L;
+end;
+
+registration
+  cluster trivial non empty reflexive LattRelStr;
+end;
+
+registration
+  cluster trivial non empty reflexive OrthoLattRelStr;
+end;
+
+registration
+  cluster trivial non empty reflexive OrthoRelStr;
+end;
+
+registration
+  cluster trivial -> involutive with_Top de_Morgan
+    well-complemented (non empty OrthoLattStr);
+end;
+
+registration
+  cluster trivial -> OrderInvolutive Pure PartialOrdered
+    (non empty reflexive OrthoRelStr);
+end;
+
+registration
+  cluster trivial -> naturally_sup-generated naturally_inf-generated
+    (non empty reflexive LattRelStr);
+end;
+
+registration
+  cluster with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated de_Morgan Lattice-like OrderInvolutive Pure
+      PartialOrdered (non empty OrthoLattRelStr);
+end;
+
+registration
+  cluster with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated Lattice-like (non empty LattRelStr);
+end;
+
+theorem :: ROBBINS3:22
+  for L being naturally_sup-generated (non empty LattRelStr),
+      x, y being Element of L holds
+    x <= y iff x [= y;
+
+theorem :: ROBBINS3:23
+  for L being naturally_sup-generated Lattice-like (non empty LattRelStr)
+    holds the RelStr of L = LattPOSet L;
+
+registration
+  cluster naturally_sup-generated Lattice-like ->
+            with_infima with_suprema (non empty LattRelStr);
+end;
+
+begin :: Extending OrthoLattStr
+
+definition let R be OrthoLattStr;
+  mode CLatAugmentation of R -> OrthoLattRelStr means
+:: ROBBINS3:def 12
+    the OrthoLattStr of it = the OrthoLattStr of R;
+end;
+
+registration let L be non empty OrthoLattStr;
+  cluster -> non empty CLatAugmentation of L;
+end;
+
+registration let L be meet-associative (non empty OrthoLattStr);
+  cluster -> meet-associative CLatAugmentation of L;
+end;
+
+registration let L be join-associative (non empty OrthoLattStr);
+  cluster -> join-associative CLatAugmentation of L;
+end;
+
+registration let L be meet-commutative (non empty OrthoLattStr);
+  cluster -> meet-commutative CLatAugmentation of L;
+end;
+
+registration let L be join-commutative (non empty OrthoLattStr);
+  cluster -> join-commutative CLatAugmentation of L;
+end;
+
+registration let L be meet-absorbing (non empty OrthoLattStr);
+  cluster -> meet-absorbing CLatAugmentation of L;
+end;
+
+registration let L be join-absorbing (non empty OrthoLattStr);
+  cluster -> join-absorbing CLatAugmentation of L;
+end;
+
+registration let L be with_Top (non empty OrthoLattStr);
+  cluster -> with_Top CLatAugmentation of L;
+end;
+
+registration let L be non empty Ortholattice;
+  cluster naturally_sup-generated naturally_inf-generated Lattice-like
+    CLatAugmentation of L;
+end;
+
+registration
+  cluster involutive with_Top de_Morgan Lattice-like
+    naturally_sup-generated well-complemented (non empty OrthoLattRelStr);
+end;
+
+theorem :: ROBBINS3:24
+  for L being with_infima with_suprema PartialOrdered (non empty OrthoRelStr)
+  for x,y being Element of L holds x <= y implies
+    y = x "|_|" y & x = x "|^|" y;
+
+definition let L be meet-commutative (non empty /\-SemiLattStr),
+               a, b be Element of L;
+  redefine func a |^| b;
+  commutativity;
+end;
+
+definition let L be join-commutative (non empty \/-SemiLattStr),
+               a, b be Element of L;
+  redefine func a |_| b;
+  commutativity;
+end;
+
+registration
+  cluster meet-absorbing join-absorbing meet-commutative
+    naturally_sup-generated -> reflexive (non empty LattRelStr);
+end;
+
+registration
+  cluster join-associative naturally_sup-generated -> transitive
+    (non empty LattRelStr);
+end;
+
+registration
+  cluster join-commutative naturally_sup-generated -> antisymmetric
+    (non empty LattRelStr);
+end;
+
+theorem :: ROBBINS3:25
+  for L being with_infima with_suprema naturally_sup-generated
+      Lattice-like (non empty OrthoLattRelStr),
+      x, y being Element of L holds
+    x "|_|" y = x |_| y;
+
+theorem :: ROBBINS3:26
+  for L being with_infima with_suprema naturally_sup-generated
+     Lattice-like (non empty OrthoLattRelStr),
+      x, y being Element of L holds
+    x "|^|" y = x |^| y;
+
+theorem :: ROBBINS3:27
+  for L being with_infima with_suprema naturally_sup-generated
+      naturally_inf-generated Lattice-like OrderInvolutive
+        PartialOrdered (non empty OrthoLattRelStr) holds
+        L is de_Morgan;
+
+registration let L be Ortholattice;
+  cluster -> involutive CLatAugmentation of L;
+end;
+
+registration let L be Ortholattice;
+  cluster -> de_Morgan CLatAugmentation of L;
+end;
+
+theorem :: ROBBINS3:28
+  for L being non empty OrthoLattRelStr st
+    L is involutive with_Top de_Morgan Lattice-like
+      naturally_sup-generated holds
+        L is Orthocomplemented PartialOrdered;
+
+theorem :: ROBBINS3:29
+  for L being Ortholattice,
+      E being naturally_sup-generated CLatAugmentation of L holds
+    E is Orthocomplemented;
+
+registration let L be Ortholattice;
+  cluster -> Orthocomplemented
+               (naturally_sup-generated CLatAugmentation of L);
+end;
+
+theorem :: ROBBINS3:30
+  for L being non empty OrthoLattStr st
+    L is Boolean well-complemented Lattice-like holds
+      L is Ortholattice;
+
+registration
+  cluster Boolean well-complemented Lattice-like ->
+    involutive with_Top de_Morgan (non empty OrthoLattStr);
+end;

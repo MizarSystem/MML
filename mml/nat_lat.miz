@@ -26,493 +26,9 @@ environ
 
 begin :: Auxiliary Theorems
 
+canceled 47;
+
 reserve n,m,l,k,i,j,s,r,t for Nat;
-
-canceled;
-
-theorem Th2:
-  l >= 1 implies k*l>=k
-proof
-assume A1: l>=1;
-    for k holds k*l>=k
-  proof
-   defpred _P[Nat] means $1*l>=$1;
-   A2:_P[0];
-   A3:for k st _P[k] holds _P[k+1]
-    proof let k;
-     assume A4:k*l>=k;
-        (k + 1)*l = k * l + 1*l;
-     then A5:(k+1)*l>=k+l by A4,REAL_1:55;
-        k+l>=k+1 by A1,REAL_1:55;
-     hence (k+1)*l>=k+1 by A5,AXIOMS:22;
-    end;
-   thus for k holds _P[k] from NAT_1:sch 1(A2,A3);
-  end;
- hence thesis;
-end;
-
-definition let n;
- redefine func n! -> Nat;
- coherence by NEWTON:22;
-end;
-
-theorem Th3:
- l >= 1 & n >= k*l implies n>=k
-proof
- assume that A1: l>=1 and A2: n>=k*l;
-    k*l>=k by A1,Th2;
- hence thesis by A2,AXIOMS:22;
-end;
-
-canceled;
-
-theorem Th5:
- l <> 0 implies l divides l!
-proof
- assume l<>0;
- then consider n such that A1: l = n+1 by NAT_1:22;
-    (n+1) divides (n+1)!
-  proof
-     (n+1)! = (n+1) * (n!) by NEWTON:21;
-  hence thesis by NAT_1:def 3;
-  end;
- hence thesis by A1;
-end;
-
-canceled 2;
-
-theorem
-    n <> 0 implies (n+1)/n > 1
-  proof
-   assume A1: n<>0;
-   then A2: n>0 by NAT_1:19;
-   A3: (n+1)/n=n/n+1/n by XCMPLX_1:63
-         .=1+1/n by A1,XCMPLX_1:60;
-       1/n>0 by A2,REAL_2:127;
-   hence thesis by A3,REAL_1:69;
-  end;
-
-theorem Th9:
-  k/(k+1) < 1
-  proof
-    defpred _P[Nat] means $1/($1+1)<1;
-A1: _P[0];
-A2: _P[m] implies _P[m+1] proof
-     assume m/(m+1)<1;
-     set r=m+1;
-     A3: 0 < r by NAT_1:19;
-        (m+1) < ((m+1)+1) by REAL_1:69;
-    hence thesis by A3,REAL_2:142;
-   end;
-     for m holds _P[m] from NAT_1:sch 1(A1,A2);
-  hence thesis;
- end;
-
-theorem Th10:
-  for l being Nat holds l! >= l
-  proof
-    defpred _P[Nat] means $1! >= $1;
-  A1: _P[0] by NEWTON:18;
-  A2:for l st _P[l] holds _P[l+1] proof let l;
-    assume A3:l!>=l;
-A4:    l!*(l+1)=(l+1)! by NEWTON:21;
-    A5:     l+1>=0 by NAT_1:18;
-       l=0 & (l+1)!>=(l+1) or l>=1 & (l+1)!>=(l+1)
-     proof
-      per cases by NAT_1:39;
-       case l=0;
-       hence thesis by NEWTON:19;
-       end;
-       case A6: l>=1;  (l+1)!>=(l+1)*l by A3,A4,A5,AXIOMS:25;
-       hence (l+1)!>=(l+1) by A6,Th3;
-     end;
-     end;
-    hence (l+1)!>=(l+1);
-   end;
-   thus for l being Nat holds _P[l] from NAT_1:sch 1(A1,A2);
-  end;
-
-canceled;
-
-theorem Th12:
-  for m,n st m<>1 holds m divides n implies not m divides (n+1)
-   proof let m,n;
-    assume that A1:m<>1 and A2:m divides n and A3: m divides (n+1);
-    consider t such that A4: n = m * t by A2,NAT_1:def 3;
-    consider s such that A5: n+1 = m * s by A3,NAT_1:def 3;
-A6:    1=m*s-m*t by A4,A5,XCMPLX_1:26;
-    A7: s<>0 by A5;
-        t <= s
-     proof
-      assume A8: t > s;
-        (n+1)*t=n*s by A4,A5;
-then A9:       t=n*s/(n+1) by XCMPLX_1:90
-           .=s*(n/(n+1)) by XCMPLX_1:75;
-       A10: s>0 by A7,NAT_1:19;
-          n/(n+1)<1 by Th9;
-      hence contradiction by A8,A9,A10,REAL_2:145;
-     end;
-    then reconsider r =s-t as Nat by INT_1:18;
-        1=m*r by A6;
-      hence contradiction by A1,NAT_1:40;
-end;
-
-theorem
-     j divides l & j divides l+1 iff j=1 by Th12,NAT_1:53;
-
-canceled;
-
-theorem Th15:
- for k,j st j<>0 holds j divides (j+k)!
-  proof
-    defpred _P[Nat] means for j st j<>0 holds j divides (j+$1)!;
-A1: _P[0] by Th5;
-A2: for k st _P[k] holds _P[k+1]  proof let k;
-    assume A3: for j st j<>0 holds j divides (j+k)!;
-    let j;
-    assume j<>0;
-     then j divides (j+k)! by A3;
-      then j divides ((j+k)!)*((j+k)+1) by NAT_1:56;
-     hence thesis by NEWTON:21;
-    end;
-   thus for k holds _P[k] from NAT_1:sch 1(A1,A2);
-  end;
-
-theorem Th16:
-  j<=l & j<>0 implies j divides l!
-     proof
-      assume that A1: j<=l and A2: j<>0;
-          ex k st l=j+k by A1,NAT_1:28;
-      hence thesis by A2,Th15;
-     end;
-
-theorem Th17:
-  for l,j st j<>1 & j<>0 holds j divides (l!+1) implies j>l
-    proof let l,j;
-     assume that A1: j<>1 and A2: j<>0 and A3: j divides (l!+1);
-        not j divides l! by A1,A3,Th12;
-     hence thesis by A2,Th16;
-    end;
-
-:: The fundamental properties of lcm, hcf
-
-canceled;
-
-theorem Th19:
-  m lcm (n lcm k) = (m lcm n) lcm k
- proof
-  set M = n lcm k;
-  set K = m lcm M;
-  set N = m lcm n;
-  set L = N lcm k;
-      K = L
-  proof
-  A1: n divides M & k divides M & for l st n divides l & k divides
- l holds M divides l by NAT_1:def 4;
-  A2: m divides K & M divides K & for i st m divides i & M divides
- i holds K divides i by NAT_1:def 4;
-  A3: m divides N & n divides N & for s st m divides s & n divides
- s holds N divides s by NAT_1:def 4;
-  A4: N divides L & k divides L & for j st N divides j & k divides
- j holds L divides j by NAT_1:def 4;
-  A5: K divides L
-   proof
-   A6: m divides L by A3,A4,NAT_1:51;
-       n divides L by A3,A4,NAT_1:51;
-   then M divides L by A4,NAT_1:def 4;
-   hence thesis by A6,NAT_1:def 4;
-   end;
-      L divides K
-   proof
-   A7: k divides K by A1,A2,NAT_1:51;
-       n divides K by A1,A2,NAT_1:51;
-   then N divides K by A2,NAT_1:def 4;
-   hence thesis by A7,NAT_1:def 4;
-   end;
-  hence thesis by A5,NAT_1:52;
-  end;
- hence thesis;
-end;
-
-theorem Th20:
-   m divides n iff m lcm n = n
-proof
-thus m divides n implies m lcm n = n
-proof
- set M = m lcm n;
- assume A1: m divides n;
-  A2: m divides M & n divides M & for s st m divides s & n divides
- s holds M divides s by NAT_1:def 4;
-      M = n
-   proof
-       M divides n by A1,NAT_1:def 4;
-    hence thesis by A2,NAT_1:52;
-   end;
- hence thesis;
-end;
-thus m lcm n = n implies m divides n by NAT_1:def 4;
-end;
-
-canceled 2;
-
-theorem
-    n divides m & k divides m iff n lcm k divides m
- proof
-     n lcm k divides m implies (n divides m & k divides m)
-   proof
-    set M = n lcm k;
-    assume A1: n lcm k divides m;
-        n divides M & k divides M & for l st n divides l & k divides
- l holds M divides l by NAT_1:def 4;
-    hence thesis by A1,NAT_1:51;
-   end;
-   hence thesis by NAT_1:def 4;
-  end;
-
-canceled 2;
-
-theorem
-     m lcm 1 = m
-proof
-set M = m lcm 1;
-A1: m divides M & 1 divides M & for l st m divides l & 1 divides
- l holds M divides l by NAT_1:def 4;
-    M divides m
- proof
-     1 divides m by NAT_1:53;
- hence thesis by NAT_1:def 4; end;
-hence thesis by A1,NAT_1:52; end;
-
-theorem Th27:
- m lcm n divides m*n
- proof
-  set s=m*n;
-  A1: m divides s by NAT_1:56;
-       n divides s by NAT_1:56;
-  hence thesis by A1,NAT_1:def 4; end;
-
-theorem Th28:
-  m hcf (n hcf k) = (m hcf n) hcf k
- proof
-  set M = n hcf k;
-  set K = m hcf M;
-  set N = m hcf n;
-  set L = N hcf k;
-      K = L
-  proof
-  A1: M divides n & M divides k & for l st l divides n & l divides
- k holds l divides M by NAT_1:def 5;
-  A2: K divides m & K divides M & for i st i divides m & i divides
- M holds i divides K by NAT_1:def 5;
-  A3: N divides m & N divides n & for s st s divides m & s divides
- n holds s divides N by NAT_1:def 5;
-  A4: L divides N & L divides k & for j st j divides N & j divides
- k holds j divides L by NAT_1:def 5;
-  A5: K divides L
-   proof
-   A6: K divides k by A1,A2,NAT_1:51;
-   A7: K divides m by NAT_1:def 5;
-       K divides n by A1,A2,NAT_1:51;
-   then K divides N by A7,NAT_1:def 5;
-   hence thesis by A6,NAT_1:def 5;
-   end;
-      L divides K
-   proof
-   A8: L divides n by A3,A4,NAT_1:51;
-   A9: L divides m by A3,A4,NAT_1:51;
-       L divides M by A4,A8,NAT_1:def 5;
-   hence thesis by A9,NAT_1:def 5;
-   end;
-  hence thesis by A5,NAT_1:52;
-  end;
- hence thesis;
- end;
-
-canceled;
-
-theorem Th30:
-  n divides m implies n hcf m = n
-proof
- set N = n hcf m;
- assume A1: n divides m;
- A2: N divides n & N divides m & for k st k divides n & k divides
- m holds k divides N by NAT_1:def 5;
-    N = n
- proof
-      n divides N by A1,NAT_1:def 5;
-  hence thesis by A2,NAT_1:52;
- end;
- hence thesis;
-end;
-
-canceled;
-
-theorem
-     m divides n & m divides k iff m divides n hcf k
- proof
-     m divides n hcf k implies (m divides n & m divides k)
-   proof
-    set M = n hcf k;
-    assume A1: m divides n hcf k;
-        M divides n & M divides k & for l st l divides n & l divides
- k holds l divides M by NAT_1:def 5;
-    hence thesis by A1,NAT_1:51;
-   end;
-   hence thesis by NAT_1:def 5;
-  end;
-
-canceled 2;
-
-theorem Th35:
-  m hcf 1 = 1
-proof set M = m hcf 1;
-A1: M divides m & M divides 1 & for l st l divides m & l divides
- 1 holds l divides M by NAT_1:def 5;
-    1 divides M by NAT_1:53;
-hence thesis by A1,NAT_1:52;end;
-
-theorem
-     m hcf 0 = m
-proof set M = m hcf 0;
-A1: m divides M
- proof
-    m divides 0 by NAT_1:53;
-hence thesis by NAT_1:def 5;end;
-      M divides m by NAT_1:def 5;
-hence thesis by A1,NAT_1:52;end;
-
-theorem Th37:
-  (m hcf n) lcm n = n
-proof
- set M = m hcf n;
-     M divides m & M divides n & for k st k divides m & k divides
- n holds k divides M by NAT_1:def 5;
- hence thesis by Th20;
-end;
-
-theorem Th38:
-  m hcf (m lcm n) = m
-proof
- set M = m lcm n;
-     m divides M & n divides M & for k st m divides k & n divides
- k holds M divides k by NAT_1:def 4;
- hence m hcf (m lcm n) = m by Th30;
-end;
-
-theorem
-     m hcf (m lcm n) = (n hcf m) lcm m
-proof
-    m hcf (m lcm n) = m by Th38;
- hence thesis by Th37;
- end;
-
-theorem
-     m divides n implies m hcf k divides n hcf k
-proof
- set M = m hcf k;
- A1: M divides m & M divides k & for i st i divides m & i divides
- k holds i divides M by NAT_1:def 5;
- assume m divides n;
-  then M divides n by A1,NAT_1:51;
- hence thesis by A1,NAT_1:def 5;
-end;
-
-theorem
-     m divides n implies k hcf m divides k hcf n
-proof
- set M = k hcf m;
- A1: M divides k & M divides m & for i st i divides m & i divides
- k holds i divides M by NAT_1:def 5;
- assume m divides n;
-  then M divides n by A1,NAT_1:51;
- hence thesis by A1,NAT_1:def 5;
-end;
-
-theorem
-     m > 0 implies 0 hcf m > 0
-proof
- assume A1: m>0;
- A2: m divides 0 by NAT_1:53;
-    for n st n divides 0 & n divides m holds n divides m;
- hence 0 hcf m > 0 by A1,A2,NAT_1:def 5;
-end;
-
-theorem Th43:
-  n > 0 implies n hcf m > 0
-proof
- assume that A1: n>0 and A2: n hcf m <= 0;
- A3: (n hcf m) divides n by NAT_1:def 5;
-    n hcf m = 0 or n hcf m < 0 by A2;
-  then ex r st n = 0*r by A3,NAT_1:18,def 3;
- hence contradiction by A1;
-end;
-
-theorem Th44:
-  m > 0 & n > 0 implies m lcm n > 0
-proof
- assume that A1: m>0 and A2: n>0 and A3: m lcm n <= 0;
- A4: (m lcm n) divides m*n by Th27;
-    m lcm n = 0 or m lcm n < 0 by A3;
-  then ex r st m*n = 0*r by A4,NAT_1:18,def 3;
- hence contradiction by A1,A2,REAL_2:122;
-end;
-
-theorem
-     (n hcf m) lcm (n hcf k) divides n hcf (m lcm k)
-proof
-  set M = m lcm k;
-  set N = n hcf k;
-  set P = n hcf m;
-  set L = P lcm N;
-  A1: m divides M & k divides M & for l st m divides l & k divides
- l holds M divides l by NAT_1:def 4;
-  A2: N divides n & N divides k & for s st s divides n & s divides
- k holds s divides N by NAT_1:def 5;
-  A3: P divides n & P divides m & for j st j divides n & j divides
- m holds j divides P by NAT_1:def 5;
-       L divides (n hcf M)
-    proof
-     A4: L divides n by A2,A3,NAT_1:def 4;
-     A5: P divides M by A1,A3,NAT_1:51;
-         N divides M by A1,A2,NAT_1:51;
-      then L divides M by A5,NAT_1:def 4;
-     hence thesis by A4,NAT_1:def 5;
-    end;
-hence thesis;
-end;
-
-theorem
-     m divides l implies m lcm (n hcf l) divides (m lcm n) hcf l
-proof
-  assume A1: m divides l;
-  set M = m lcm n;
-  set K = M hcf l;
-  set N = n hcf l;
-  A2: m divides M & n divides M & for j st m divides j & n divides
- j holds M divides j by NAT_1:def 4;
-  A3: N divides n & N divides l & for s st s divides n & s divides
- l holds s divides N by NAT_1:def 5;
-      (m lcm N) divides K
-    proof
-     A4: m divides K by A1,A2,NAT_1:def 5;
-         N divides M by A2,A3,NAT_1:51;
-      then N divides K by A3,NAT_1:def 5;
-     hence thesis by A4,NAT_1:def 4;
-    end;
-hence thesis;
-end;
-
-theorem
-      n hcf m divides n lcm m
-proof
-  set K = n hcf m;
-  set N = n lcm m;
-  A1: K divides n & K divides m & for i st i divides n & i divides
- m holds i divides K by NAT_1:def 5;
-      n divides N & m divides N & for r st n divides r & m divides
- r holds N divides r by NAT_1:def 4;
-hence thesis by A1,NAT_1:51;
-end;
 
 definition
  canceled 2;
@@ -599,7 +115,7 @@ Lm3:
   A1:(@b hcf @c)=l & @l=l by Def5,Th49;
   A2:@a hcf @b=k & @k=k by Def5,Th49;
   thus a"/\"(b"/\"c) = @a hcf (@b hcf @c) by A1,Th49
-                .= @k hcf @c by A2,Th28
+                .= @k hcf @c by A2,NEWTON:61
                 .= (a"/\"b)"/\"c by Th49;
  end;
 
@@ -613,7 +129,7 @@ Lm4:
   A1:(@b lcm @c)=l & @l=l by Def5,Th48;
   A2:@a lcm @b=k & @k=k by Def5,Th48;
   thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Th48
-                .= @k lcm @c by A2,Th19
+                .= @k lcm @c by A2,NEWTON:56
                 .= (a"\/"b)"\/"c by Th48;
  end;
 
@@ -626,7 +142,7 @@ Lm5:
   A1: @b=b by Def5;
       @a hcf @b=k & @k=k by Def5,Th49;
  hence (a"/\"b)"\/"b = (@a hcf @b) lcm @b by Th48
-               .= b by A1,Th37;
+               .= b by A1,NEWTON:66;
 end;
 
 Lm6:
@@ -638,7 +154,7 @@ Lm6:
   A1: @a=a by Def5;
       @a lcm @b=l & @l=l by Def5,Th48;
   hence a"/\"(a"\/"b) = @a hcf (@a lcm @b) by Th49
-                .= a by A1,Th38;
+                .= a by A1,NEWTON:67;
  end;
 
 canceled 2;
@@ -652,7 +168,7 @@ theorem
         then a"\/"b=b by LATTICES:def 3;
         then @a lcm @b = b by Th48;
         then @a lcm @b = @b by Def5;
-        hence thesis by Th20;
+        hence thesis by NEWTON:57;
         end;
 
 definition
@@ -676,9 +192,9 @@ theorem Th56:
                 0_NN"/\"a = 0_NN & a"/\"0_NN = 0_NN
 proof let a be Element of LattStr (# NAT, lcmlat, hcflat #);
   thus 0_NN"/\"a = 1 hcf @a by Th49,Th55
-              .= 0_NN by Def6,Th35;
+              .= 0_NN by Def6,NEWTON:64;
   thus a"/\"0_NN = @a hcf 1 by Th49,Th55
-              .= 0_NN by Def6,Th35;
+              .= 0_NN by Def6,NEWTON:64;
 end;
 
 definition
@@ -899,7 +415,7 @@ definition
   A3: @n = n & @@n = @n by Def11;
       @m = m & @@m = @m by Def11;
   then A4: f.(m,n)=@(m hcf n) by A1,A3;
-      m hcf n >0 by A2,Th43;
+      m hcf n >0 by A2,NEWTON:72;
   hence thesis by A4,Def10;
   end;
  uniqueness proof deffunc O(Element of NATPLUS,Element of NATPLUS)= $1 hcf $2;
@@ -924,7 +440,7 @@ definition
   A8: @n = n & @@n = @n by Def11;
       @m = m & @@m = @m by Def11;
   then A9: f.(m,n)=@(m lcm n) by A5,A8;
-      m lcm n >0 by A6,A7,Th44;
+      m lcm n >0 by A6,A7,NEWTON:73;
   hence thesis by A9,Def10;
   end;
  uniqueness proof deffunc O(Element of NATPLUS,Element of NATPLUS)= $1 lcm $2;
@@ -983,7 +499,7 @@ Lm8:
   A1:(@b lcm @c)=l & @l=l by Def14,Th69;
   A2:@a lcm @b=k & @k=k by Def14,Th69;
   thus a"\/"(b"\/"c) = @a lcm (@b lcm @c) by A1,Th69
-                .= @k lcm @c by A2,Th19
+                .= @k lcm @c by A2,NEWTON:56
                 .= (a"\/"b)"\/"c by Th69;
  end;
 
@@ -998,7 +514,7 @@ Lm9:
   A1: @b=b by Def14;
       @a hcf @b=k & @k=k by Def14,Th70;
  hence (a"/\"b)"\/"b = (@a hcf @b) lcm @b by Th69
-               .= b by A1,Th37;
+               .= b by A1,NEWTON:66;
 end;
 
 Lm10:
@@ -1024,7 +540,7 @@ Lm11:
   A1:(@b hcf @c)=l & @l=l by Def14,Th70;
   A2:@a hcf @b=k & @k=k by Def14,Th70;
   thus a"/\"(b"/\"c) = @a hcf (@b hcf @c) by A1,Th70
-                .= @k hcf @c by A2,Th28
+                .= @k hcf @c by A2,NEWTON:61
                 .= (a"/\"b)"/\"c by Th70;
  end;
 
@@ -1039,7 +555,7 @@ Lm12:
   A1: @a=a by Def14;
       @a lcm @b=l & @l=l by Def14,Th69;
   hence a"/\"(a"\/"b) = @a hcf (@a lcm @b) by Th70
-                .= a by A1,Th38;
+                .= a by A1,NEWTON:67;
  end;
 
 definition
@@ -1353,7 +869,7 @@ theorem Th81:
      case A2: l=1; take two; thus thesis by A2;
      end;
      case A3: 2<=l;
-          l<=l! by Th10;
+          l<=l! by NEWTON:50;
       then 2<=l! by A3,AXIOMS:22;
        then (2+0) <= (l!+1) by REAL_1:55;
       then consider j such that
@@ -1362,7 +878,7 @@ theorem Th81:
 A7:      j<>0 by A4,INT_2:def 5;
       reconsider j'=j as Prime by A4;
       take j';
-    thus thesis by A5,A6,A7,Th17;
+    thus thesis by A5,A6,A7,NEWTON:55;
    end;
    end;
    hence thesis;

@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.96 $
+;; $Revision: 1.99 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -269,9 +269,9 @@ Possible values are now
 'sorted for sorted list of constructors in absolute notation.
 'constructors for list of constructors in absolute notation,
 'mmlquery behaves as 'sorted, but constructors are inserted
-          directly into the *mmlquery* input buffer.
-          The mmlquery interpreter has to be installed for this,
-          see `mmlquery-program-name'.
+directly into the *mmlquery* input buffer.
+The mmlquery interpreter has to be installed for this,
+see `mmlquery-program-name'.
 'translate for expanded formula in absolute notation,
 'raw for the internal Mizar representation,
 'expanded for expansion of clusters,
@@ -765,6 +765,27 @@ Used for exact completion.")
 ;;;;;;;;;;;;;;;; skeletons ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Special lisp parser "lisppars" is used for this
 
+;;; Howto TEST changes to this:
+;; * Run lisppars on all accommodated articles - creates .lsp
+;; * cat all .lsp into 00all.lsp - quite big
+;; * Try Elisp 'read on all lines of 00all.lsp - e.g.
+;;   (while (not (eobp)) (read (current-buffer)) (forward-line))
+;;   if OK, lisparse produces only valid lisp expressions
+;; * Try calling the rest of functions used for creating 
+;;   the skeleton string - see 'mizar-insert-skeleton for them -
+;;   ** mainly: mizar-parse-fla:
+;;   (while (not (eobp)) 
+;;     (mizar-parse-fla (cdr (read (current-buffer)))) (forward-line))
+;;   ** then mizar-default-skeleton-items:
+;;   (while (not (eobp)) (mizar-default-skeleton-items 
+;;    (car (mizar-parse-fla (cdr (read (current-buffer)))))) (forward-line))
+;;   ** and finally mizar-skeleton-string:
+;;   (while (not (eobp)) (mizar-skeleton-string (mizar-default-skeleton-items 
+;;    (car (mizar-parse-fla (cdr (read (current-buffer))))))) (forward-line))
+;; * the resulting strings should be valid proof skeletons giving only *4
+;;   errors, but I haven't written the script which would actually 
+;;   check this so far
+
 ;;; TODO:
 ;; * Have some language for specifying skeleton-creating 
 ;;   functions, to allow users (and machines) to define their 
@@ -1049,6 +1070,17 @@ This function is called for creating assumptions in the function
 	      (replace-regexp-in-string " +\\(being\\|be\\) .*$" "" (car x)))
 	   (cdr types) ""))
 
+(defun mizar-atomic-parsed-fla-p (fla)
+"The parsed FLA is atomic - string or string in paranthesis."
+(let ((res t))
+  (while (and res (listp fla))
+    (if (eq 'PAR (car fla))
+	(setq fla (cdr fla))
+      (if (equal 1 (length fla))
+	  (setq fla (car fla))
+	(setq res nil))))   ;; neither starts with 'PAR not singleton
+  res))
+
 (defun mizar-default-skeleton-items (fla)
 "Create the default proof skeleton for parsed formula FLA.
 The skeleton is a list of items, each item is a list of either strings 
@@ -1056,7 +1088,7 @@ or lists containing parsed formulas, which are later handed over to
 `mizar-pp-parsed-fla'."
 (let ((beg (car fla)))
   (cond 
-    ((eq 'PAR beg)
+   ((eq 'PAR beg)
     (mizar-default-skeleton-items (cadr fla)))
 
    ((stringp beg) 
@@ -1066,7 +1098,21 @@ or lists containing parsed formulas, which are later handed over to
     (list (list "thus" (symbol-name beg) ";")))
 
    ((eq '& beg)
-    (mapcan 'mizar-default-skeleton-items (cdr fla)))
+;; we have to create subproofs for complicated conjuncts
+    (cond 
+     ((not (third fla)) 	;; end of or recursion - no wrapping
+      (mizar-default-skeleton-items (cadr fla)))
+     ((mizar-atomic-parsed-fla-p (cadr fla))	;; "atomic" - no wrapping
+      (nconc
+       (mizar-default-skeleton-items (cadr fla))
+       (mizar-default-skeleton-items (cons '& (cddr fla)))))
+     (t				;; otherwise we are wrapping
+      (nconc
+       (list (list "thus" (cadr fla) ))
+       (list (list "proof"))
+       (mizar-default-skeleton-items (cadr fla))
+       (list (list "end;"))
+       (mizar-default-skeleton-items (cons '& (cddr fla)))))))
 
    ((eq 'or beg)
     (if (not (third fla)) ;; end of or recursion
@@ -4388,6 +4434,9 @@ Nil iff nothing is processed right now, serves also as a state variable.")
   (mizar-show-errors))
 )
 
+(defun mizar-buf-verifiable-p (&optional buffer)
+"Simple precheck if verifier can be run on BUFFER."
+(string-match "[.]miz$" (buffer-file-name buffer)))
 
 (defun mizar-it-noqr (&optional util forceacc)
 "Run mizar in terminal on the text in the current .miz buffer.
@@ -4962,7 +5011,7 @@ if that value is non-nil."
 	    ["Close all abstracts" mizar-close-all-abstracts t]
 	    )
 	  '("MoMM"
-	    ["Use MoMM (Not Mizar 6.2. yet!)" mizar-toggle-momm :style toggle
+	    ["Use MoMM (needs to be installed)" mizar-toggle-momm :style toggle
 	     :selected mizar-use-momm  :active t]
 	    ["Load theorems only"  (setq mizar-momm-load-tptp
 					 (not mizar-momm-load-tptp))
@@ -5059,8 +5108,8 @@ if that value is non-nil."
 	  ["View theorems" make-theorem-summary t]
 	  ["Reserv. before point" make-reserve-summary t]
 	  "-"
-	  ["Run Mizar" mizar-it t]
-	  ["Mizar Compile" mizar-compile t]
+	  ["Run Mizar" mizar-it (mizar-buf-verifiable-p)]
+	  ["Mizar Compile" mizar-compile (mizar-buf-verifiable-p)]
 	  ["Toggle quick-run" toggle-quick-run :style toggle :selected mizar-quick-run  :active (eq mizar-emacs 'gnuemacs)]
 	  (list "Show output"
 		["none" (mizar-toggle-show-output "none") :style radio :selected (equal mizar-show-output "none") :active t]
@@ -5080,15 +5129,15 @@ if that value is non-nil."
 		["Listvoc" mizar-listvoc t]
 		["Constr" mizar-constr t])
 	  (list "Irrelevant Utilities"	    
-	    ["Irrelevant Premises" mizar-relprem t]
-	    ["Irrelevant Inferences" mizar-relinfer t]
-	    ["Irrelevant Iterative Steps" mizar-reliters t]
-	    ["Irrelevant Labels" mizar-chklab t]
-	    ["Inaccessible Items" mizar-inacc t]
-	    ["Trivial Proofs" mizar-trivdemo t]
+	    ["Irrelevant Premises" mizar-relprem (mizar-buf-verifiable-p)]
+	    ["Irrelevant Inferences" mizar-relinfer (mizar-buf-verifiable-p)]
+	    ["Irrelevant Iterative Steps" mizar-reliters (mizar-buf-verifiable-p)]
+	    ["Irrelevant Labels" mizar-chklab (mizar-buf-verifiable-p)]
+	    ["Inaccessible Items" mizar-inacc (mizar-buf-verifiable-p)]
+	    ["Trivial Proofs" mizar-trivdemo (mizar-buf-verifiable-p)]
 	    (list "Environmental Utils"
-		  ["Irrelevant Theorems" mizar-irrths t]
-		  ["Irrelevant Vocabularies" mizar-irrvoc t]
+		  ["Irrelevant Theorems" mizar-irrths (mizar-buf-verifiable-p)]
+		  ["Irrelevant Vocabularies" mizar-irrvoc (mizar-buf-verifiable-p)]
 		  )
 	    )
 	  '("Other Utilities"
@@ -5097,7 +5146,7 @@ if that value is non-nil."
 	    ["Ratproof" (mizar-it "ratproof") t])
 	  "-"
 	  ["Insert proof skeleton" mizar-insert-skeleton 
-	   :active t
+	   :active (mizar-buf-verifiable-p)
 	   :help "Formula being proved has to be selected"]
 	  ["Comment region" comment-region t]
 ;; uncomment-region is not present in older Emacs
