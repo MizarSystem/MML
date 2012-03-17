@@ -1,26 +1,43 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-NUMBERS
-XREAL_0
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-SETFAM_1
-STRUCT_0
-RLVECT_1
-INT_1
-GROUP_1
-VECTSP_1
-ALGSTR_1
-#
-­W31 ;V34 ;V36 ;;;G3 ;W31 ;V61 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="ALGSTR_1"/>
+</Signature>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="31" value="false"/>
+<Adjective nr="34"/>
+<Adjective nr="36"/>
+</Cluster>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="31" value="false"/>
+<Adjective nr="61"/>
+</Cluster>
+</CCluster>
+</Clusters>

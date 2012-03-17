@@ -1,29 +1,59 @@
-HIDDEN
-TARSKI
-RELAT_1
-FUNCT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-FUNCT_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-FINSUB_1
-SETFAM_1
-STRUCT_0
-XREAL_0
-INT_1
-GROUP_1
-FINSEQ_3
-GROUP_2
-GROUP_3
-LATTICES
-GROUP_4
-#
-fW32 ;V47 ;V48 ;V49 ;V50 ;V51 ;V52 ;V53 ;V54 ;V57 ;V58 ;V59 ;;G3 W32 ;V39 ;V40 ;;;K184 A1 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="FINSEQ_3"/>
+<ArticleID name="GROUP_2"/>
+<ArticleID name="GROUP_3"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="GROUP_4"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="184">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="32" value="false"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="59"/>
+</Cluster>
+</FCluster>
+</Clusters>

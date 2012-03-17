@@ -1,9 +1,70 @@
-HIDDEN
-XBOOLE_0
-#
-«V1 ;;;M1 ;
-«W1 ;;;M1 ;
-fV1 ;;;K1 ;
-fW1 ;;M1 W1 ;;M1 ;;K2 A1 A2 ;
-fW1 ;;M1 W1 ;;M1 ;;K2 A2 A1 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="XBOOLE_0"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="1"/>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="2">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="2">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+</Clusters>

@@ -1,23 +1,116 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-XCMPLX_0
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-XREAL_0
-BINOP_2
-#
-M1 V2 ;V5 ;V24 ;;;
-ùM4 K52 ;K56 ;;™&R12 N1 B1 ;R12 B1 K90 F1 ;;;™P1 B1 K20 F1 ;B1 ;;;P1 N1 K20 F1 ;N1 ;;ùM4 K52 ;K56 ;;™&R12 N1 B1 ;™R12 K90 F1 ;;B1 ;P1 B1 K20 F1 ;B1 ;;™P1 K127 B1 N1 ;K20 F1 ;K127 B1 N1 ;;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="BINOP_2"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="24"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="12">
+<Num nr="1"/>
+<Var nr="1"/>
+</Pred>
+<Pred kind="R" nr="12">
+<Var nr="1"/>
+<Func kind="K" nr="90">
+<Func kind="F" nr="1"/>
+</Func>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="20">
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+<Pred kind="P" nr="1">
+<Num nr="1"/>
+<Func kind="K" nr="20">
+<Func kind="F" nr="1"/>
+<Num nr="1"/>
+</Func>
+</Pred>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="12">
+<Num nr="1"/>
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="12">
+<Func kind="K" nr="90">
+<Func kind="F" nr="1"/>
+</Func>
+<Var nr="1"/>
+</Pred>
+</Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Func kind="K" nr="20">
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+</Func>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="127">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+<Func kind="K" nr="20">
+<Func kind="F" nr="1"/>
+<Func kind="K" nr="127">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</Scheme>
+</Schemes>

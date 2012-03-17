@@ -1,57 +1,168 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-XREAL_0
-INT_1
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-SETFAM_1
-STRUCT_0
-GROUP_1
-FINSEQ_1
-PRE_TOPC
-RELAT_2
-PARTFUN1
-EQREL_1
-ORDERS_1
-ORDERS_2
-YELLOW_0
-LATTICES
-FUNCT_4
-FILTER_0
-FILTER_1
-LATTICE3
-FUNCOP_1
-FINSEQ_2
-PBOOLE
-WAYBEL_0
-WELLORD2
-YELLOW_1
-CARD_3
-WAYBEL_3
-WAYBEL23
-MCART_1
-QC_LANG1
-QC_LANG2
-CQC_LANG
-FRAENKEL
-MARGREL1
-VALUAT_1
-YELLOW15
-#
-fW1 ;V24 ;;;K362 ;
-fV24 ;;M1 ;M7 V24 ;A1 ;;K385 A1 A2 ;
-fW1 ;V110 A1 ;V111 A1 ;V132 A1 ;V133 A1 ;V134 A1 ;V135 A1 ;V137 A1 ;V138 A1 ;;G5 W30 ;;;K133 A1 ;
-­;M1 V24 ;;;M7 A1 ;V24 ;;
-­;G1 V36 ;;;M7 U1 A1 ;;V24 ;;
-­;;M10 K362 ;;V153 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
+<ArticleID name="YELLOW_0"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="PBOOLE"/>
+<ArticleID name="WAYBEL_0"/>
+<ArticleID name="WELLORD2"/>
+<ArticleID name="YELLOW_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="WAYBEL_3"/>
+<ArticleID name="WAYBEL23"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="QC_LANG1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="MARGREL1"/>
+<ArticleID name="VALUAT_1"/>
+<ArticleID name="YELLOW15"/>
+</Signature>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="362"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="24"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="7">
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="385">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="30" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="133">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="110">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="111">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="132">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="133">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="134">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="135">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="137">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="138">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="7">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="G" nr="1">
+<Cluster>
+<Adjective nr="36"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="7">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster/>
+<Typ kind="M" nr="10">
+<Cluster/>
+<Func kind="K" nr="362"/>
+</Typ>
+<Cluster>
+<Adjective nr="153"/>
+</Cluster>
+</CCluster>
+</Clusters>

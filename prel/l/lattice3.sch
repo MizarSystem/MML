@@ -1,15 +1,114 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-#
-M1 ;M1 W1 ;;;
-R1 ËM2 F2 ;;;F1 ;P1 B1 ;K1 F1 ;;;™ùM2 F2 ;;™P1 B1 ;;
-#
-M1 W1 ;;M1 W1 ;;M2 F2 ;;M1 V2 ;V5 ;;;
-R1 K30 F4 ;ËM2 F1 ;;;F3 B1 ;P1 B1 ;;ËM2 F1 ;;;K32 F4 ;F3 B1 ;;P1 B1 ;;R3 F2 ;K22 F4 ;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="1">
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<Func kind="F" nr="1"/>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+<Func kind="K" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Pred>
+<Not>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Not>
+</For>
+</Not>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="2"/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="30">
+<Func kind="F" nr="4"/>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Func kind="F" nr="3">
+<Var nr="1"/>
+</Func>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+</Func>
+<Fraenkel>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Func kind="K" nr="32">
+<Func kind="F" nr="4"/>
+<Func kind="F" nr="3">
+<Var nr="1"/>
+</Func>
+</Func>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Fraenkel>
+</Pred>
+<Pred kind="R" nr="3">
+<Func kind="F" nr="2"/>
+<Func kind="K" nr="22">
+<Func kind="F" nr="4"/>
+</Func>
+</Pred>
+</Scheme>
+</Schemes>

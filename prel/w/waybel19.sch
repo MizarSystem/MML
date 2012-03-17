@@ -1,46 +1,203 @@
-HIDDEN
-RELAT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-FUNCT_1
-TARSKI
-SETFAM_1
-STRUCT_0
-RELSET_1
-FUNCT_2
-ORDERS_1
-ORDERS_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-FUNCOP_1
-FINSEQ_2
-PBOOLE
-FUNCT_4
-FUNCT_5
-MCART_1
-RELAT_2
-PARTFUN1
-YELLOW_0
-WAYBEL_0
-PRE_TOPC
-CANTOR_1
-EQREL_1
-YELLOW_3
-WAYBEL_2
-COMPTS_1
-YELLOW_6
-WAYBEL_9
-LATTICES
-FILTER_0
-FILTER_1
-LATTICE3
-#
-G6 V18 ;V19 ;V20 ;V83 ;V125 ;V126 ;;;
-ùM2 K16 U1 F1 ;;;;™&V84 F1 ;B1 ;™P1 B1 ;;™ùM25 F1 ;;™ùM2 K16 U1 F1 ;;;;™&R2 B2 B1 ;™P1 B2 ;;ùM5 U1 F1 ;;;™&ùM2 K16 U1 F1 ;;;;™&R2 B2 B1 ;™P1 B2 ;;™P1 K202 F1 ;B1 ;;;ùM2 K16 U1 F1 ;;;;ùM2 K16 U1 F1 ;;;;™&P1 B1 ;P1 B2 ;™P1 K44 F1 ;B1 B2 ;;;P1 K201 F1 ;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="PBOOLE"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FUNCT_5"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="YELLOW_0"/>
+<ArticleID name="WAYBEL_0"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="CANTOR_1"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="YELLOW_3"/>
+<ArticleID name="WAYBEL_2"/>
+<ArticleID name="COMPTS_1"/>
+<ArticleID name="YELLOW_6"/>
+<ArticleID name="WAYBEL_9"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="83"/>
+<Adjective nr="125"/>
+<Adjective nr="126"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="16">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="V" nr="84">
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+<Not>
+<For>
+<Typ kind="M" nr="25">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="16">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</Not>
+</For>
+</Not>
+<For>
+<Typ kind="M" nr="5">
+<Cluster/>
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Typ>
+<Not>
+<And>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="16">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="202">
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="16">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Typ>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="16">
+<Func kind="U" nr="1">
+<Func kind="F" nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="44">
+<Func kind="F" nr="1"/>
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</For>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="201">
+<Func kind="F" nr="1"/>
+</Func>
+</Pred>
+</Scheme>
+</Schemes>

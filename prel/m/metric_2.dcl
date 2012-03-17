@@ -1,23 +1,81 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-RELSET_1
-FUNCT_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-XREAL_0
-BINOP_1
-SETFAM_1
-STRUCT_0
-METRIC_1
-METRIC_2
-#
-fW1 ;;G3 W29 ;;;K110 A1 ;
-fW29 ;V30 ;V35 ;V36 ;V37 ;V38 ;;G3 W29 ;V35 ;V37 ;V38 ;;;K119 A1 ;
-­;G3 W29 ;V35 ;V37 ;V38 ;;;M10 A1 ;W1 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="METRIC_1"/>
+<ArticleID name="METRIC_2"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="29" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="110">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="119">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="30"/>
+<Adjective nr="35"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+</Cluster>
+</FCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="10">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</CCluster>
+</Clusters>

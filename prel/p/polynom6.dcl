@@ -1,54 +1,148 @@
-HIDDEN
-RELAT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-FUNCT_1
-RELSET_1
-TARSKI
-FUNCT_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-XCMPLX_0
-SETFAM_1
-STRUCT_0
-XREAL_0
-FUNCOP_1
-FUNCT_3
-PARTFUN1
-NAT_1
-FINSUB_1
-RELAT_2
-FINSEQ_2
-PBOOLE
-FRAENKEL
-FUNCT_7
-RLVECT_1
-INT_1
-GROUP_1
-VECTSP_1
-MATRIX_1
-MATRIX_2
-FINSEQ_4
-MATRLIN
-REALSET1
-REALSET2
-FUNCT_6
-TREES_1
-TREES_2
-TREES_3
-TREES_4
-FVSUM_1
-SEQM_3
-CARD_3
-POLYNOM1
-ALGSTR_1
-#
-fW4 ;V12 ;;M1 V12 ;;M1 W4 ;V12 ;;;K69 A1 A2 ;
-fW4 ;V12 ;;M1 V12 ;;M1 W4 ;V12 ;;;K69 A2 A1 ;
-fW29 ;V53 ;V54 ;V55 ;V56 ;V61 ;V63 ;V69 ;V70 ;V71 ;V72 ;V73 ;V74 ;W89 ;V112 ;V113 ;V114 ;V115 ;V116 ;V117 ;;M1 V12 ;;G8 W29 ;V53 ;V54 ;V55 ;V56 ;V61 ;V63 ;V73 ;W89 ;;;K398 A1 A2 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="NAT_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="PBOOLE"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCT_7"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="MATRIX_1"/>
+<ArticleID name="MATRIX_2"/>
+<ArticleID name="FINSEQ_4"/>
+<ArticleID name="MATRLIN"/>
+<ArticleID name="REALSET1"/>
+<ArticleID name="REALSET2"/>
+<ArticleID name="FUNCT_6"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
+<ArticleID name="TREES_3"/>
+<ArticleID name="TREES_4"/>
+<ArticleID name="FVSUM_1"/>
+<ArticleID name="SEQM_3"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="POLYNOM1"/>
+<ArticleID name="ALGSTR_1"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4" value="false"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="69">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="4" value="false"/>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="4" value="false"/>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="69">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="4" value="false"/>
+<Adjective nr="12"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="61"/>
+<Adjective nr="63"/>
+<Adjective nr="73"/>
+<Adjective nr="89" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="398">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="53"/>
+<Adjective nr="54"/>
+<Adjective nr="55"/>
+<Adjective nr="56"/>
+<Adjective nr="61"/>
+<Adjective nr="63"/>
+<Adjective nr="69"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
+<Adjective nr="74"/>
+<Adjective nr="89" value="false"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="117"/>
+</Cluster>
+</FCluster>
+</Clusters>

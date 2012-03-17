@@ -31,7 +31,7 @@ begin
 ::              Preliminaries                :
 ::-------------------------------------------:
 
-reserve i,i1,i2,n for natural number;
+reserve i,j,k,i1,i2,n for natural number;
 
 theorem Th1:
  i-'i1>=1 or i-i1>=1 implies i-'i1=i-i1
@@ -58,7 +58,7 @@ end;
 
 theorem   i1-i2<=i1-'i2
 proof
-       i1-i2>=0 or i1-i2<0;
+  i1-i2>=0 or i1-i2<0;
  hence thesis by BINARITH:def 3;
 end;
 
@@ -212,6 +212,7 @@ end;
 reserve r,r1,r2 for Real;
 reserve n,i,i1,i2,j,j1,j2 for Nat;
 reserve D for non empty set;
+reserve f for FinSequence of D;
 
 theorem Th15:for p,q being FinSequence st len p<i
  & (i<=len p +len q or i<=len (p^q)) holds
@@ -737,7 +738,8 @@ proof let f be FinSequence of D;
  hence mid(f,1,len f)=f;
 end;
 
-theorem   for f being FinSequence of D st 1<=len f holds
+theorem Th30:
+  for f being FinSequence of D st 1<=len f holds
    mid(f,len f,1)=Rev f
 proof let f be FinSequence of D;
  assume A1:1<=len f;
@@ -794,7 +796,7 @@ proof let f be FinSequence of D,k,i be Nat;
 end;
 
 theorem
-     for f being FinSequence of D, k1,k2 being Nat
+ for f being FinSequence of D, k1,k2 being Nat
  st 1<=k1 & k1<=k2 & k2<=len f holds len mid(f,k1,k2)<=len f
 proof let f be FinSequence of D, k1,k2 be Nat;
   assume A1:1<=k1 & k1<=k2 & k2<=len f;
@@ -811,7 +813,7 @@ proof let f be FinSequence of D, k1,k2 be Nat;
 end;
 
 theorem
-     for f being FinSequence of TOP-REAL n st 2<=len f
+ for f being FinSequence of TOP-REAL n st 2<=len f
  holds f.1 in L~f & f/.1 in L~f & f.len f in L~f & f/.len f in L~f
 proof let f be FinSequence of TOP-REAL n;
  assume A1:2<=len f;
@@ -913,17 +915,17 @@ proof let f be FinSequence of TOP-REAL 2,k1,k2 be Nat;
  per cases;
   suppose A2:k1<=k2;
     then A3:mid(f,k1,k2)=(f/^(k1-'1))|(k2-'k1+1) by Def1;
-        k1<k2 by A1,A2,REAL_1:def 5;
+    k1<k2 by A1,A2,REAL_1:def 5;
     then A4:k1+1<=k2 by NAT_1:38;
     then A5:k1+1<=len f by A1,AXIOMS:22;
     A6:k1-'1<=len f by A1,Th13;
     then A7:len f-'(k1-'1)= len f-(k1-'1) by SCMFSA_7:3
           .=len f-(k1-1) by A1,SCMFSA_7:3
     .=len f-k1+1;
-        k1+1-k1<=len f-k1 by A5,REAL_1:49;
+    k1+1-k1<=len f-k1 by A5,REAL_1:49;
     then 1+1<=len f-k1+1 by AXIOMS:24;
     then A8:f/^(k1-'1) is_S-Seq by A1,A6,A7,Th38;
-        k1+1-k1<=k2-k1 by A4,REAL_1:49;
+    k1+1-k1<=k2-k1 by A4,REAL_1:49;
     then 1<=k2-'k1 by Th1;
     then 1+1<=k2-'k1+1 by AXIOMS:24;
    hence mid(f,k1,k2) is_S-Seq by A3,A8,Th37;
@@ -936,10 +938,10 @@ proof let f be FinSequence of TOP-REAL 2,k1,k2 be Nat;
     then A14:len f-'(k2-'1)= len f-(k2-'1) by SCMFSA_7:3
        .=len f-(k2-1) by A1,SCMFSA_7:3
     .=len f-k2+1;
-        k2+1-k2<=len f-k2 by A12,REAL_1:49;
+    k2+1-k2<=len f-k2 by A12,REAL_1:49;
     then 1+1<=len f-k2+1 by AXIOMS:24;
     then A15:f/^(k2-'1) is_S-Seq by A1,A13,A14,Th38;
-        k2+1-k2<=k1-k2 by A11,REAL_1:49;
+    k2+1-k2<=k1-k2 by A11,REAL_1:49;
     then 1<=k1-'k2 by Th1;
     then 1+1<=k1-'k2+1 by AXIOMS:24;
     then (f/^(k2-'1))|(k1-'k2+1) is S-Sequence_in_R2 by A15,Th37;
@@ -1000,10 +1002,10 @@ proof let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2;
    then consider S being non empty Subset of NAT such that
 A1: Index(p,f) = min S and
 A2: S = { i: p in LSeg(f,i) } by Def2;
-      Index(p,f) in S by A1,CQC_SIM1:def 8;
+    Index(p,f) in S by A1,CQC_SIM1:def 8;
   then A3:  ex i st i = Index(p,f) & p in LSeg(f,i) by A2;
  hence 1 <= Index(p,f) by TOPREAL1:def 5;
-      Index(p,f) + 1 <= len f by A3,TOPREAL1:def 5;
+ Index(p,f) + 1 <= len f by A3,TOPREAL1:def 5;
  hence thesis by NAT_1:38;
 end;
 
@@ -1017,7 +1019,7 @@ proof let f be FinSequence of TOP-REAL 2;
   then consider S being non empty Subset of NAT such that
 A1: Index(p,f) = min S and
 A2: S = { i: p in LSeg(f,i) } by Def2;
-      Index(p,f) in S by A1,CQC_SIM1:def 8;
+  Index(p,f) in S by A1,CQC_SIM1:def 8;
   then ex i st i = Index(p,f) & p in LSeg(f,i) by A2;
  hence p in LSeg(f,Index(p,f));
 end;
@@ -1030,9 +1032,9 @@ proof let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2;
  assume
 A1: p in LSeg(f,1);
   then A2: Index(p,f) <= 1 by Th40;
-      LSeg(f,1) c= L~f by TOPREAL3:26;
+  LSeg(f,1) c= L~f by TOPREAL3:26;
   then Index(p,f) >= 1 by A1,Th41;
- hence Index(p,f) = 1 by A2,AXIOMS:21;
+  hence Index(p,f) = 1 by A2,AXIOMS:21;
 end;
 
 theorem Th44:
@@ -1040,8 +1042,7 @@ theorem Th44:
    st len f >= 2
  holds Index(f/.1,f) = 1
 proof let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2;
- assume len f >= 2;
-  then 1+1 <= len f;
+ assume len f >= 2; then len f >= 1+1;
   then f/.1 in LSeg(f,1) by TOPREAL1:27;
  hence thesis by Th43;
 end;
@@ -1057,7 +1058,7 @@ A1: f is_S-Seq;
  assume
 A2: 1<i1 & i1<=len f;
  then A3: i1 in dom f by FINSEQ_3:27;
-     0 < i1 by A2;
+ 0 < i1 by A2;
  then consider j being Nat such that
 A4: i1 = j+1 by NAT_1:22;
 A5: 1 + 0 <= j by A2,A4,NAT_1:38;
@@ -1079,9 +1080,9 @@ A13: f is unfolded by A1,TOPREAL1:def 10;
    then p in {f/.j} by A7,A11,XBOOLE_0:def 3;
    then A14:  p = f/.j by TARSKI:def 1;
 A15: j < i1 by A4,NAT_1:38;
-       j < len f by A2,A4,NAT_1:38;
+   j < len f by A2,A4,NAT_1:38;
    then A16: j in dom f by A5,FINSEQ_3:27;
-       f is one-to-one by A1,TOPREAL1:def 10;
+   f is one-to-one by A1,TOPREAL1:def 10;
   hence contradiction by A3,A6,A14,A15,A16,PARTFUN2:17;
   end;
   suppose
@@ -1093,62 +1094,63 @@ then A18: LSeg(f,Index(p,f)) meets LSeg(f,j) by XBOOLE_0:4;
 end;
 end;
 
-theorem Th46: for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2,i1
-  st f is_S-Seq & p in LSeg(f,i1)
-   holds i1=Index(p,f) or i1=Index(p,f)+1
-proof let f be FinSequence of TOP-REAL 2,
-  p be Point of TOP-REAL 2,i1;
+theorem Th46:
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2
+ for i1 be Nat st f is s.n.c. & p in LSeg(f,i1) holds
+  i1=Index(p,f) or i1=Index(p,f)+1
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2;
+  let i1 be Nat;
   assume that
-A1:f is_S-Seq and
-A2: p in LSeg(f,i1);
-A3: p in L~f by A2,SPPOL_2:17;
-A4: Index(p,f) <= i1 by A2,Th40;
-  assume
-A5: not thesis;
-   then Index(p,f) < i1 by A4,AXIOMS:21;
-   then Index(p,f)+1 <= i1 by NAT_1:38;
-   then A6: Index(p,f)+1 < i1 by A5,AXIOMS:21;
-       p in LSeg(f,Index(p,f)) by A3,Th42;
-   then p in LSeg(f,Index(p,f)) /\ LSeg(f,i1) by A2,XBOOLE_0:def 3;
-then A7: LSeg(f,Index(p,f)) meets LSeg(f,i1) by XBOOLE_0:4;
-       f is s.n.c. by A1,TOPREAL1:def 10;
-  hence contradiction by A6,A7,TOPREAL1:def 9;
-end;
+   A1: f is s.n.c. and
+   A2: p in LSeg(f,i1);
+  A3: p in L~f by A2,SPPOL_2:17;
+  A4: Index(p,f) <= i1 by A2,Th40;
+  assume A5: not thesis;
+  then Index(p,f) < i1 by A4,AXIOMS:21;
+  then Index(p,f)+1 <= i1 by NAT_1:38;
+  then A6: Index(p,f)+1 < i1 by A5,AXIOMS:21;
+  p in LSeg(f,Index(p,f)) by A3,Th42;
+  then p in LSeg(f,Index(p,f)) /\ LSeg(f,i1) by A2,XBOOLE_0:def 3;
+  then LSeg(f,Index(p,f)) meets LSeg(f,i1) by XBOOLE_0:4;
+  hence contradiction by A6,A1,TOPREAL1:def 9;
+ end;
 
 theorem Th47:
- for f being FinSequence of TOP-REAL 2,
-  p being Point of TOP-REAL 2,i1
-  st f is_S-Seq & i1+1<=len f & p in LSeg(f,i1) & p <> f.i1
-   holds i1=Index(p,f)
-proof let f be FinSequence of TOP-REAL 2,
-  p be Point of TOP-REAL 2,i1;
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2
+ for i1 be Nat st f is unfolded s.n.c. &
+  i1+1<=len f & p in LSeg(f,i1) & p <> f.i1 holds
+   i1=Index(p,f)
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2;
+  let i1 be Nat;
   assume that
-A1:f is_S-Seq and
-A2: i1+1<=len f and
-A3: p in LSeg(f,i1);
-  assume
-A4: p <> f.i1;
-A5: p in L~f by A3,SPPOL_2:17;
-A6: Index(p,f) <= i1 by A3,Th40;
-       p in LSeg(f,Index(p,f)) by A5,Th42;
+   A1: f is unfolded s.n.c. and
+   A2: i1+1<=len f and
+   A3: p in LSeg(f,i1);
+  assume A4: p <> f.i1;
+  A5: p in L~f by A3,SPPOL_2:17;
+  A6: Index(p,f) <= i1 by A3,Th40;
+  p in LSeg(f,Index(p,f)) by A5,Th42;
   then A7: p in LSeg(f,Index(p,f)) /\ LSeg(f,i1) by A3,XBOOLE_0:def 3;
-A8: f is unfolded by A1,TOPREAL1:def 10;
-A9: 1 <= Index(p,f) by A5,Th41;
-A10: 1 <= Index(p,f)+1 by NAT_1:29;
-      i1 < len f by A2,NAT_1:38;
+  A9: 1 <= Index(p,f) by A5,Th41;
+  A10: 1 <= Index(p,f)+1 by NAT_1:29;
+  i1 < len f by A2,NAT_1:38;
   then Index(p,f) < len f by A6,AXIOMS:22;
   then Index(p,f)+1 <= len f by NAT_1:38;
   then A11: Index(p,f) + 1 in dom f by A10,FINSEQ_3:27;
-     now assume
-A12: i1 = Index(p,f)+1;
+  now assume A12: i1 = Index(p,f)+1;
    then Index(p,f) + (1+1) <= len f by A2;
-   then p in {f/.(Index(p,f)+1)} by A7,A8,A9,A12,TOPREAL1:def 8;
+   then p in {f/.(Index(p,f)+1)} by A1,A7,A9,A12,TOPREAL1:def 8;
    then p = f/.(Index(p,f)+1) by TARSKI:def 1;
-  hence contradiction by A4,A11,A12,FINSEQ_4:def 4;
+   hence contradiction by A4,A11,A12,FINSEQ_4:def 4;
+  end;
+  hence thesis by A1,A3,Th46;
  end;
- hence thesis by A1,A3,Th46;
-end;
 
 definition let g be FinSequence of TOP-REAL 2,
                p1,p2 be Point of TOP-REAL 2;
@@ -1174,8 +1176,7 @@ A3: g.len g=p2;
 end;
 
 theorem Th49: for f,g being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2,j
- st p in L~f
+ p being Point of TOP-REAL 2,j st p in L~f
  & g=<*p*>^mid(f,Index(p,f)+1,len f) & 1<=j & j+1<=len g
  holds LSeg(g,j) c= LSeg(f,Index(p,f)+j-'1)
 proof let f,g be FinSequence of TOP-REAL 2,
@@ -1185,9 +1186,8 @@ A1: p in L~f and
 A2: g=<*p*>^mid(f,Index(p,f)+1,len f) and
 A3: 1<=j and
 A4: j+1<=len g;
-  consider i such that A5:1<=i & i+1<=len f & p in LSeg(f,i)
-     by A1,SPPOL_2:13;
-      1<=i+1 by NAT_1:37;
+  consider i such that A5:1<=i & i+1<=len f & p in LSeg(f,i) by A1,SPPOL_2:13;
+  1<=i+1 by NAT_1:37;
   then A6:1<=len f by A5,AXIOMS:22;
   A7:len g=(len <*p*>)+ len(mid(f,Index(p,f)+1,len f))
          by A2,FINSEQ_1:35
@@ -1208,8 +1208,7 @@ then A12:   0+1<=Index(p,f)+1 by NAT_1:38;
           .=1+(len f - Index(p,f));
 A16: len f -'(Index(p,f)+1)=len f -(Index(p,f)+1) by A10,BINARITH:def 3
                            .=len f - Index(p,f) -1;
-         len g=len <*p*> + len mid(f,Index(p,f)+1,len f)
-                                 by A2,FINSEQ_1:35;
+     len g=len <*p*> + len mid(f,Index(p,f)+1,len f) by A2,FINSEQ_1:35;
      then A17:len g=1+len mid(f,Index(p,f)+1,len f) by FINSEQ_1:56;
      A18:j<=len g by A4,NAT_1:38;
      A19:1<=j+1 by A3,NAT_1:38;
@@ -1223,15 +1222,14 @@ A16: len f -'(Index(p,f)+1)=len f -(Index(p,f)+1) by A10,BINARITH:def 3
 then A25:     1-1<=Index(p,f)+j-1 by REAL_1:49;
              j+1-1<=1+len mid(f,Index(p,f)+1,len f)-1
               by A4,A17,REAL_1:49;
-         then j+Index(p,f)<= len f -Index(p,f)+Index(p,f) by A13,A16,AXIOMS:24
-;
+       then j+Index(p,f)<= len f -Index(p,f)+Index(p,f) by A13,A16,AXIOMS:24;
          then Index(p,f)+(j-1)+1 <= len f;
          then A26:Index(p,f)+j-'1+1 <= len f by A25,BINARITH:def 3;
 A27:       j+1-1<=1+len mid(f,Index(p,f)+1,len f)-1
                by A4,A17,REAL_1:49;
         A28:j+1-'1 in dom mid(f,Index(p,f)+1,len f)
           by A3,A21,A27,FINSEQ_3:27;
-            j-'1<=j by GOBOARD9:2;
+        j-'1<=j by GOBOARD9:2;
         then A29:j-'1<=len mid(f,Index(p,f)+1,len f) by A27,AXIOMS:22;
         A30:g.(j+1) =mid(f,Index(p,f)+1,len f).(j+1-'1)
                    by A2,A23,A28,FINSEQ_1:def 7
@@ -1945,37 +1943,40 @@ A6: len f = len Rev f by FINSEQ_5:def 3;
 end;
 
 theorem Th54:
- for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
-    st f is_S-Seq & p in L~f & p <> f.(Index(p,f)+1) holds
- Index(p,Rev f) + Index(p,f) = len f
-proof let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2 such that
-A1: f is_S-Seq and
-A2: p in L~f and
-A3: p <> f.(Index(p,f)+1);
-A4: Rev f is_S-Seq by A1,SPPOL_2:47;
-A5: Index(p,f) < len f by A2,Th41;
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2 st f is unfolded s.n.c. &
+  p in L~f & p <> f.(Index(p,f)+1) holds
+   Index(p,Rev f) + Index(p,f) = len f
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2 such that
+   A1: f is unfolded s.n.c. and
+   A2: p in L~f and
+   A3: p <> f.(Index(p,f)+1);
+  A4a: Rev f is unfolded by A1,SPPOL_2:29;
+  A4b: Rev f is s.n.c. by A1,SPPOL_2:36;
+  A5: Index(p,f) < len f by A2,Th41;
   then A6: len f -' Index(p,f) + Index(p,f) = len f by AMI_5:4;
-A7: len f = len Rev f by FINSEQ_5:def 3;
-      p in LSeg(f,Index(p,f)) by A2,Th42;
+  A7: len f = len Rev f by FINSEQ_5:def 3;
+  p in LSeg(f,Index(p,f)) by A2,Th42;
   then A8: p in LSeg(Rev f,len f -' Index(p,f)) by A6,SPPOL_2:2;
-A9: Index(p,f) < len f by A2,Th41;
+  A9: Index(p,f) < len f by A2,Th41;
   then Index(p,f) + 1 <= len f by NAT_1:38;
   then 1<=len f - Index(p,f) by REAL_1:84;
   then A10: 1<=len f -' Index(p,f) by Th1;
-       0+1 <= Index(p,f) by A2,Th41;
-   then 0 < Index(p,f);
-   then len f + 0 < len f + Index(p,f) by REAL_1:53;
-   then len f - Index(p,f) < len f by REAL_1:84;
-   then A11: len f -' Index(p,f) < len f by A5,SCMFSA_7:3;
-   then A12: len f -' Index(p,f)+1<=len Rev f by A7,NAT_1:38;
-      len f -' Index(p,f) in dom f by A10,A11,FINSEQ_3:27;
+  0+1 <= Index(p,f) by A2,Th41;
+  then len f + 0 < len f + Index(p,f) by REAL_1:53;
+  then len f - Index(p,f) < len f by REAL_1:84;
+  then A11: len f -' Index(p,f) < len f by A5,SCMFSA_7:3;
+  then A12: len f -' Index(p,f)+1<=len Rev f by A7,NAT_1:38;
+  len f -' Index(p,f) in dom f by A10,A11,FINSEQ_3:27;
   then (Rev f).(len f -' Index(p,f))
-         = f.(len f - (len f -' Index(p,f)) + 1) by FINSEQ_5:61
-        .= f.(len f - (len f - Index(p,f)) + 1) by A9,SCMFSA_7:3
-        .= f.(0 + Index(p,f) + 1);
-  then len f -' Index(p,f)=Index(p,Rev f) by A3,A4,A8,A12,Th47;
- hence Index(p,Rev f) + Index(p,f) = len f by A9,AMI_5:4;
-end;
+      = f.(len f - (len f -' Index(p,f)) + 1) by FINSEQ_5:61
+     .= f.(len f - (len f - Index(p,f)) + 1) by A9,SCMFSA_7:3
+     .= f.(0 + Index(p,f) + 1);
+  then len f -' Index(p,f)=Index(p,Rev f) by A3,A4a,A4b,A8,A12,Th47;
+  hence Index(p,Rev f) + Index(p,f) = len f by A9,AMI_5:4;
+ end;
 
 theorem Th55:
  for D for f being FinSequence of D, k being Nat, p being Element of D
@@ -1988,10 +1989,10 @@ A1: f|Seg k = f|k by FINSEQ_1:def 15;
 end;
 
 theorem Th56:
- for D for f being non empty FinSequence of D, k1,k2 being Nat
+ for D for f being FinSequence of D, k1,k2 being Nat
   st k1 < k2 & k1 in dom f
  holds mid(f,k1,k2) = <*f.k1*>^ mid(f,k1+1,k2)
-proof let D; let f be non empty FinSequence of D, k1,k2 being Nat;
+proof let D; let f be FinSequence of D, k1,k2 be Nat;
 assume
 A1: k1 < k2;
  then A2: k1+1 <= k2 by NAT_1:38;
@@ -2033,21 +2034,22 @@ registration let f be non empty FinSequence;
  cluster Rev f -> non empty;
  coherence
   proof
-        dom Rev f = dom f by FINSEQ_5:60;
+   dom Rev f = dom f by FINSEQ_5:60;
    hence thesis by RELAT_1:60,64;
   end;
 end;
 
 theorem Th57:
- for f being non empty FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
+ for f being FinSequence of TOP-REAL 2, p being Point of TOP-REAL 2
     st f is_S-Seq & p in L~f holds
  L_Cut(Rev f,p) = Rev R_Cut(f,p)
 proof
- let f be non empty FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2
- such that
+ let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2 such that
 A1: f is_S-Seq and
 A2: p in L~f;
-A3: Rev f is_S-Seq by A1,SPPOL_2:47;
+B1: f is unfolded s.n.c. by A1,TOPREAL1:def 10;
+A3: Rev f is_S-Seq by A1,SPPOL_2:47; then
+B2: Rev f is unfolded s.n.c. by TOPREAL1:def 10;
 A4: p in L~Rev f by A2,SPPOL_2:22;
 A5: Rev Rev f = f by FINSEQ_6:29;
 A6: len f = len Rev f by FINSEQ_5:def 3;
@@ -2072,9 +2074,9 @@ A19:  p = f.len f;
    then A21: Index(p,Rev f) = 1 by A6,A12,Th44;
         f is one-to-one by A1,TOPREAL1:def 10;
    then A22: p<>f.1 by A13,A16,A18,A19,FUNCT_1:def 8;
-        Rev f is one-to-one by A3,TOPREAL1:def 10;
-    then A23: p <> (Rev f).(1+1) by A8,A16,A17,A20,FUNCT_1:def 8;
-   then Index(p,Rev f) + Index(p,f) = len f by A3,A4,A5,A6,A21,Th54;
+   Rev f is one-to-one by A3,TOPREAL1:def 10;
+   then A23: p <> (Rev f).(1+1) by A8,A16,A17,A20,FUNCT_1:def 8;
+   then Index(p,Rev f) + Index(p,f) = len f by B2,A4,A5,A6,A21,Th54;
    then A24: Index(p,Rev f) = len f - Index(p,f) by XCMPLX_1:26;
   thus L_Cut(Rev f,p)
            = <*p*>^mid(Rev f,Index(p,Rev f)+1,len f) by A6,A21,A23,Def4
@@ -2141,7 +2143,7 @@ A45:   p = (Rev f).(Index(p, Rev f)+1);
       .= f.(Index(p,f)+1) by A6,A46;
     hence contradiction by A42;
    end;
-A47: len f = Index(p,Rev f) + Index(p,f) by A1,A2,A42,Th54;
+A47: len f = Index(p,Rev f) + Index(p,f) by B1,A2,A42,Th54;
 A48: Index(p, f) < len f by A2,Th41;
     Index(p,Rev f) = len f - Index(p,f) by A47
                .= len f -' Index(p,f) by A48,SCMFSA_7:3;
@@ -2155,24 +2157,26 @@ end;
 end;
 
 theorem Th58:
- for f being non empty FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st p in L~f holds
+ for f being FinSequence of TOP-REAL 2,
+     p being Point of TOP-REAL 2 st p in L~f holds
  (L_Cut(f,p)).1=p &
- for i st 1<i & i<=len L_Cut(f,p)
-  holds
+ for i st 1<i & i<=len L_Cut(f,p) holds
    (p = f.(Index(p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i)) &
    (p <> f.(Index(p,f)+1) implies (L_Cut(f,p)).i=f.(Index(p,f)+i-1))
-proof let f be non empty FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2 such that
+proof let f be FinSequence of TOP-REAL 2,
+          p be Point of TOP-REAL 2;
+    assume
 A1: p in L~f;
-      now per cases;
+    then len f <> 0 by TOPREAL1:28; then
+B1: f is non empty by FINSEQ_1:25;
+   now per cases;
    suppose
 A2:   p = f.(Index(p,f)+1);
      then A3:   L_Cut(f,p)=mid(f,Index(p,f)+1,len f) by Def4;
 A4:   1 <= Index(p,f)+1 by NAT_1:29;
          Index(p,f) < len f by A1,Th41;
      then A5:   Index(p,f)+1 <= len f by NAT_1:38;
-         1 in dom f by FINSEQ_5:6;
+     1 in dom f by B1,FINSEQ_5:6;
      then 1 <= len f by FINSEQ_3:27;
     hence (L_Cut(f,p)).1 = p by A2,A3,A4,A5,Th27;
    end;
@@ -2217,133 +2221,130 @@ A16: (L_Cut(f,p)).i =mid(f,Index(p,f)+1,len f).(i-len <*p*>) by A6,A10,A13,Th15
 end;
 
 theorem Th59:
- for f being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st f is_S-Seq & p in L~f holds
- (R_Cut(f,p)).(len R_Cut(f,p))=p &
- for i st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i=f.i
-proof let f be FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2;
- assume that
-A1: f is_S-Seq and
-A2: p in L~f;
-       f is one-to-one & len f >= 2
-   & f is unfolded s.n.c. special by A1,TOPREAL1:def 10;
-   then A3:1<=len f by AXIOMS:22;
-   A4:1<=Index(p,f) & Index(p,f)<=len f by A2,Th41;
-   then A5:len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A3,Th27
-                           .=Index(p,f) by A4,AMI_5:4;
-       now per cases;
-   case p<>f.1;
-     then A6:R_Cut(f,p)= mid(f,1,Index(p,f))^<*p*> by Def5;
-         len (mid(f,1,Index(p,f))^<*p*>)= len mid(f,1,Index(p,f))+len <*p*>
-                                 by FINSEQ_1:35
-     .= len mid(f,1,Index(p,f))+1 by FINSEQ_1:56;
-    hence (R_Cut(f,p)).(len R_Cut(f,p))=p by A6,FINSEQ_1:59;
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2 st p in L~f holds
+  R_Cut(f,p).(len R_Cut(f,p)) = p &
+  for i be Nat st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i = f.i
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2;
+  assume A2: p in L~f;
+  A4: 1<=Index(p,f) & Index(p,f)<len f by A2,Th41;
+  then len f > 1 by AXIOMS:22;
+  then A5: len mid(f,1,Index(p,f))=Index(p,f)-'1+1 by A4,Th27
+     .= Index(p,f) by A4,AMI_5:4;
+  now per cases;
+   suppose p<>f.1;
+    then A6: R_Cut(f,p) = mid(f,1,Index(p,f))^<*p*> by Def5;
+    len (mid(f,1,Index(p,f))^<*p*>)= len mid(f,1,Index(p,f))+len <*p*>
+                                                              by FINSEQ_1:35
+       .= len mid(f,1,Index(p,f))+1 by FINSEQ_1:56;
+    hence (R_Cut(f,p)).(len R_Cut(f,p)) = p by A6,FINSEQ_1:59;
    end;
-   case p=f.1;
-     then A7:R_Cut(f,p)=<*p*> by Def5;
-     then len R_Cut(f,p) = 1 by FINSEQ_1:57;
-    hence (R_Cut(f,p)).(len R_Cut(f,p))=p by A7,FINSEQ_1:57;
+   suppose p=f.1;
+    then A7: R_Cut(f,p) = <*p*> by Def5;
+    then len R_Cut(f,p) = 1 by FINSEQ_1:57;
+    hence (R_Cut(f,p)).(len R_Cut(f,p)) = p by A7,FINSEQ_1:57;
    end;
-   end;
-  hence (R_Cut(f,p)).(len R_Cut(f,p))=p;
-  thus for i st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i=f.i
-  proof let i;assume A8: 1<=i & i<=Index(p,f);
-       now per cases;
-   case p<>f.1;
+  end;
+  hence (R_Cut(f,p)).(len R_Cut(f,p)) = p;
+  thus for i be Nat st 1<=i & i<=Index(p,f) holds R_Cut(f,p).i=f.i
+  proof let i be Nat;
+   assume A8: 1<=i & i<=Index(p,f);
+   now per cases;
+    case p<>f.1;
      then (R_Cut(f,p)).i=(mid(f,1,Index(p,f))^<*p*>).i by Def5
-                 .=mid(f,1,Index(p,f)).i by A5,A8,SCMFSA_7:9
-                 .=f.i by A4,A8,Th32;
-    hence R_Cut(f,p).i=f.i;
+        .= mid(f,1,Index(p,f)).i by A5,A8,SCMFSA_7:9
+        .=f.i by A4,A8,Th32;
+     hence R_Cut(f,p).i = f.i;
+    end;
+    case A9: p=f.1;
+     then A10: R_Cut(f,p) = <*p*> by Def5;
+     A12: len f > 1 by A4,AXIOMS:22;
+     then A11: len f >= 1+1 by NAT_1:38;
+     1 in dom f by A12,FINSEQ_3:27;
+     then p = f/.1 by A9,FINSEQ_4:def 4;
+     then Index(p,f) = 1 by A11,Th44;
+     then i = 1 by A8,AXIOMS:21;
+     hence R_Cut(f,p).i = f.i by A9,A10,FINSEQ_1:57;
+    end;
    end;
-   case
-A9:  p=f.1;
-    then A10:   (R_Cut(f,p)) = <*p*> by Def5;
-A11:  1+1 <= len f by A1,TOPREAL1:def 10;
-    then 1 < len f by NAT_1:38;
-    then 1 in dom f by FINSEQ_3:27;
-    then p = f/.1 by A9,FINSEQ_4:def 4;
-    then Index(p,f) = 1 by A11,Th44;
-    then i = 1 by A8,AXIOMS:21;
-    hence R_Cut(f,p).i = f.i by A9,A10,FINSEQ_1:57;
-   end;
-   end;
-  hence (R_Cut(f,p)).i=f.i;
+   hence (R_Cut(f,p)).i = f.i;
+  end;
  end;
-end;
 
 theorem Th60:
- for f being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st f is_S-Seq & p in L~f holds
- (p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1)&
- (p=f.1 implies len R_Cut(f,p)=Index(p,f))
-proof let f be FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2;
- assume that
-A1: f is_S-Seq and
-A2: p in L~f;
-  consider i such that A3: 1 <= i & i+1 <= len f & p in LSeg(f,i)
-     by A2,SPPOL_2:13;
-      i<=len f by A3,Th9;
-  then A4:1<=len f by A3,AXIOMS:22;
-  A5:1<=Index(p,f) & Index(p,f)<=len f by A2,Th41;
-      now per cases;
-  case p<>f.1;
-     then R_Cut(f,p)=mid(f,1,Index(p,f))^<*p*> by Def5;
-   hence len R_Cut(f,p) = len mid(f,1,Index(p,f))+len <*p*> by FINSEQ_1:35
-        .= len mid(f,1,Index(p,f))+1 by FINSEQ_1:56
-        .= Index(p,f)-'1+1+1 by A4,A5,Th27
-        .=Index(p,f)+1 by A5,AMI_5:4;
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2 st p in L~f holds
+  ( p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1 ) &
+  ( p=f.1 implies len R_Cut(f,p)=Index(p,f) )
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2;
+  assume A2: p in L~f;
+  consider i be Nat such that
+   A3: 1 <= i & i+1 <= len f & p in LSeg(f,i) by A2,SPPOL_2:13;
+  i<=len f by A3,Th9;
+  then A4: 1<=len f by A3,AXIOMS:22;
+  A5: 1<=Index(p,f) & Index(p,f)<=len f by A2,Th41;
+  now per cases;
+   case p<>f.1;
+    then R_Cut(f,p)=mid(f,1,Index(p,f))^<*p*> by Def5;
+    hence len R_Cut(f,p) = len mid(f,1,Index(p,f))+len <*p*> by FINSEQ_1:35
+       .= len mid(f,1,Index(p,f))+1 by FINSEQ_1:56
+       .= Index(p,f)-'1+1+1 by A4,A5,Th27
+       .= Index(p,f)+1 by A5,AMI_5:4;
+   end;
+   case A6: p=f.1;
+    then A7: R_Cut(f,p)=<*p*> by Def5;
+    A8_: len f > i by A3,NAT_1:38;
+    then len f > 1 by A3,AXIOMS:22;
+    then A8: len f >= 1+1 by NAT_1:38;
+    f <> {} by A3,A8_,FINSEQ_1:25;
+    then 1 in dom f by FINSEQ_5:6;
+    then A9: p = f/.1 by A6,FINSEQ_4:def 4;
+    thus len R_Cut(f,p)= 1 by A7,FINSEQ_1:56
+       .= Index(p,f) by A8,A9,Th44;
+   end;
   end;
-  case A6:p=f.1;
-     then A7:R_Cut(f,p)=<*p*> by Def5;
-A8:   len f >= 1+1 by A1,TOPREAL1:def 10;
-         len f <> 0 by A1,TOPREAL1:def 10;
-     then f <> {} by FINSEQ_1:25;
-     then 1 in dom f by FINSEQ_5:6;
-     then A9:    p = f/.1 by A6,FINSEQ_4:def 4;
-   thus len R_Cut(f,p)= 1 by A7,FINSEQ_1:56
-          .= Index(p,f) by A8,A9,Th44;
-   end;
-   end;
-  hence
-        (p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1)&
-    (p=f.1 implies len R_Cut(f,p)=Index(p,f));
-end;
+  hence ( p<>f.1 implies len R_Cut(f,p)=Index(p,f)+1 ) &
+   ( p=f.1 implies len R_Cut(f,p)=Index(p,f) );
+ end;
 
-theorem Th61:for f being non empty FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st f is_S-Seq & p in L~f & p<>f.len f holds
- ( p = f.(Index(p,f)+1) implies len L_Cut(f,p)=len f -Index(p,f)) &
- ( p <> f.(Index(p,f)+1) implies len L_Cut(f,p)=len f -Index(p,f)+1)
-proof let f be non empty FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2;
- assume that
-A1: f is_S-Seq and
-A2: p in L~f and
-A3: p<>f.len f;
-A4: Rev f is_S-Seq & p in L~Rev f by A1,A2,SPPOL_2:22,47;
-A5: p <> (Rev f).1 by A3,FINSEQ_5:65;
-      L_Cut(f,p) = L_Cut(Rev Rev f,p) by FINSEQ_6:29
-       .= Rev R_Cut(Rev f,p) by A4,Th57;
-  then A6: len L_Cut(f,p) = len R_Cut(Rev f,p) by FINSEQ_5:def 3
-    .= Index(p,Rev f)+1 by A4,A5,Th60;
-      now per cases;
-   case
-A7:  p = f.(Index(p,f)+1);
-        Index(p,Rev f) + (Index(p,f) + 1)
-        = Index(p,Rev f) + Index(p,f) + 1
-       .= len f by A1,A2,A3,A7,Th53;
-    then Index(p,Rev f) = len f - (Index(p,f) + 1) by XCMPLX_1:26
-            .= len f - Index(p,f) - 1;
-    hence len L_Cut(f,p) = len f - Index(p,f) by A6;
+theorem Th61:
+ for f be FinSequence of TOP-REAL 2
+ for p be Point of TOP-REAL 2 st p in L~f holds
+  ( p=f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f) ) &
+  ( p<>f.(Index(p,f)+1) implies len L_Cut(f,p) = len f-Index(p,f)+1 )
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2;
+  assume A2: p in L~f;
+  consider i be Nat such that
+   A3: 1 <= i & i+1 <= len f & p in LSeg(f,i) by A2,SPPOL_2:13;
+  i<=len f by A3,Th9;
+  then A4: 1<=len f by A3,AXIOMS:22;
+  1<=Index(p,f) & Index(p,f)<len f by A2,Th41;
+  then A5: 1<Index(p,f)+1 & Index(p,f)+1+0<=len f by NAT_1:38;
+  then A10: len f -(Index(p,f)+1) >= 0 by REAL_1:84;
+  now per cases;
+   case p<>f.(Index(p,f)+1);
+    then L_Cut(f,p)=<*p*>^mid(f,Index(p,f)+1,len f) by Def4;
+    hence len L_Cut(f,p) = 1+len mid(f,Index(p,f)+1,len f) by FINSEQ_5:8
+       .= len f -'(Index(p,f)+1)+1+1 by A4,A5,Th27
+       .= len f -(Index(p,f)+1)+1+1 by A10,BINARITH:def 3
+       .= len f-Index(p,f)+1;
    end;
-   case p <> f.(Index(p,f)+1);
-    then Index(p,Rev f) + Index(p,f) = len f by A1,A2,Th54;
-    hence len L_Cut(f,p) = len f - Index(p,f) + 1 by A6,XCMPLX_1:26;
+   case p=f.(Index(p,f)+1);
+    then A7: L_Cut(f,p)=mid(f,Index(p,f)+1,len f) by Def4;
+    thus len L_Cut(f,p) = len f -' (Index(p,f)+1) + 1 by A4,A5,A7,Th27
+       .= len f -(Index(p,f)+1)+1 by A10,BINARITH:def 3
+       .= len f-Index(p,f);
+   end;
   end;
-  end;
- hence thesis;
-end;
+  hence ( p=f.(Index(p,f)+1) implies len L_Cut(f,p)=len f-Index(p,f) ) &
+   ( p<>f.(Index(p,f)+1) implies len L_Cut(f,p)=len f-Index(p,f)+1 );
+ end;
 
 definition let p1,p2,q1,q2 be Point of TOP-REAL 2;
  pred LE q1,q2,p1,p2 means
@@ -2394,7 +2395,7 @@ A3: 0 <= r2 & r2 <= 1& q2= (1-r2)*p1 + r2*p2 by A1,SPPOL_1:21;
     0<=s2 & s2<=1 & q2=(1-s2)*p1+s2*p2 holds s1<=s2
     proof let s1,s2 be Real;
      assume A6:  0<=s1 & s1<=1 & q1=(1-s1)*p1+s1*p2 &
-           0<=s2 & s2<=1 & q2=(1-s2)*p1+s2*p2;
+      0<=s2 & s2<=1 & q2=(1-s2)*p1+s2*p2;
       then (1-s1)*p1+(s1*p2-s1*p2)=(1-r1)*p1+r1*p2-s1*p2 by A2,EUCLID:49;
       then (1-s1)*p1+(s1*p2-s1*p2)=(1-r1)*p1+(r1*p2-s1*p2) by EUCLID:49;
       then (1-s1)*p1+(0.REAL 2)=(1-r1)*p1+(r1*p2-s1*p2) by EUCLID:46;
@@ -2454,7 +2455,7 @@ A3: 0 <= r2 & r2 <= 1& q2= (1-r2)*p1 + r2*p2 by A1,SPPOL_1:21;
    hence (LE q1,q2,p1,p2 or LT q2,q1,p1,p2) by Def7;
   end;
   end;
-      now assume A11: LE q1,q2,p1,p2 & LT q2,q1,p1,p2;
+  now assume A11: LE q1,q2,p1,p2 & LT q2,q1,p1,p2;
    then A12:r1<=r2 by A2,A3,Def6;
       LE q2,q1,p1,p2 & q1<>q2 by A11,Def7;
    then r2<=r1 by A2,A3,Def6;
@@ -2466,139 +2467,139 @@ A3: 0 <= r2 & r2 <= 1& q2= (1-r2)*p1 + r2*p2 by A1,SPPOL_1:21;
 end;
 
 theorem Th64:
- for f being non empty FinSequence of TOP-REAL 2,
-     p,q,p1,p2 being Point of TOP-REAL 2 st
-     f is_S-Seq & p in L~f & q in L~f & Index(p,f)<Index(q,f)
- holds q in L~L_Cut(f,p)
-proof
- let f be non empty FinSequence of TOP-REAL 2,p,q,p1,p2 be Point of TOP-REAL 2;
- assume that
-A1: f is_S-Seq and
-A2: p in L~f and
-A3: q in L~f and
-A4: Index(p,f)<Index(q,f);
-  set i1=Index(q,f)-'Index(p,f)+1;
-  A5:1<=Index(q,f) & Index(q,f)<len f by A3,Th41;
-  A6:Index(p,f)+1<=Index(q,f) by A4,NAT_1:38;
-  then A7: Index(p,f)+1-Index(p,f)<=Index(q,f)-Index(p,f) by REAL_1:49;
-  then A8:0<=Index(q,f)-Index(p,f);
-  A9:1<=Index(q,f)-'Index(p,f) by A7,BINARITH:def 3;
-  then A10:1<=Index(q,f)-'Index(p,f)+1 by Th11;
-      1+1<=Index(q,f)-'Index(p,f)+1 by A9,AXIOMS:24;
-then A11: 1<Index(q,f)-'Index(p,f)+1 by AXIOMS:22;
-  then A12:len <*p*><Index(q,f)-'Index(p,f)+1 by FINSEQ_1:57;
-  then A13:len <*p*><Index(q,f)-'Index(p,f)+1+1 by NAT_1:38;
-  A14:1<=Index(q,f)-'Index(p,f)+1 by NAT_1:29;
-  A15:1<=Index(p,f)+1 & Index(p,f)+1<=len f by A5,A6,AXIOMS:22,NAT_1:29;
-A16: 1<len f by A5,AXIOMS:22;
-  then len mid(f,Index(p,f)+1,len f)=len f -'(Index(p,f)+1)+1 by A15,Th27;
-  then A17:len <*p*>+len mid(f,Index(p,f)+1,len f)=1+(len f -'(Index(p,f)+1)+1)
-                                        by FINSEQ_1:57
-    .=1+(len f -(Index(p,f)+1)+1) by A15,SCMFSA_7:3
-    .=(len f -Index(p,f))+1;
-  A18:Index(q,f)-Index(p,f)<=len f -Index(p,f) by A5,REAL_1:49;
-then A19: Index(q,f)-Index(p,f)+1<=len f -Index(p,f)+1 by AXIOMS:24;
+ for f be FinSequence of TOP-REAL 2
+ for p,q be Point of TOP-REAL 2 st
+   p in L~f & q in L~f & Index(p,f)<Index(q,f) holds
+  q in L~L_Cut(f,p)
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p,q be Point of TOP-REAL 2;
+  assume that
+   A2: p in L~f and
+   A3: q in L~f and
+   A4: Index(p,f)<Index(q,f);
+  set i1 = Index(q,f)-'Index(p,f)+1;
+  A5: 1<=Index(q,f) & Index(q,f)<len f by A3,Th41;
+  A6: Index(p,f)+1<=Index(q,f) by A4,NAT_1:38;
+  then A7_: Index(p,f)+1-Index(p,f)<=Index(q,f)-Index(p,f) by REAL_1:49;
+  A9: 1<=Index(q,f)-'Index(p,f) by A7_,BINARITH:def 3;
+  then A10: 1<=Index(q,f)-'Index(p,f)+1 by Th11;
+  1+1<=Index(q,f)-'Index(p,f)+1 by A9,AXIOMS:24;
+  then A11: 1<Index(q,f)-'Index(p,f)+1 by AXIOMS:22;
+  then A12: len <*p*><Index(q,f)-'Index(p,f)+1 by FINSEQ_1:57;
+  then A13: len <*p*><Index(q,f)-'Index(p,f)+1+1 by NAT_1:38;
+  A14: 1<=Index(q,f)-'Index(p,f)+1 by NAT_1:29;
+  A15: 1<=Index(p,f)+1 & Index(p,f)+1<=len f by A5,A6,AXIOMS:22,NAT_1:29;
+  1<len f by A5,AXIOMS:22;
+  then len mid(f,Index(p,f)+1,len f) = len f -'(Index(p,f)+1)+1 by A15,Th27;
+  then A17:len <*p*>+len mid(f,Index(p,f)+1,len f) =
+        1+(len f -'(Index(p,f)+1)+1) by FINSEQ_1:57
+     .= 1+(len f -(Index(p,f)+1)+1) by A15,SCMFSA_7:3
+     .= (len f -Index(p,f))+1;
+  A18: Index(q,f)-Index(p,f)<=len f -Index(p,f) by A5,REAL_1:49;
+  then A19: Index(q,f)-Index(p,f)+1<=len f -Index(p,f)+1 by AXIOMS:24;
   then A20:Index(q,f)-'Index(p,f)+1<=len <*p*>+len mid(f,Index(p,f)+1,len f)
-                   by A4,A17,SCMFSA_7:3;
-      Index(q,f)-Index(p,f)<=len f -Index(p,f)-1+1 by A5,REAL_1:49;
+                                                       by A4,A17,SCMFSA_7:3;
+  Index(q,f)-Index(p,f)<=len f -Index(p,f)-1+1 by A5,REAL_1:49;
   then A21:Index(q,f)-'Index(p,f)<=len f - (Index(p,f)+1)+1 by A4,SCMFSA_7:3;
-  A22:1<=Index(q,f)-'Index(p,f)+1+1 by NAT_1:29;
-A23: now assume p=f.len f;
-    then len f <= Index(q,f) by A1,A6,A16,Th45;
-   hence contradiction by A3,Th41;
-  end;
+  A22: 1<=Index(q,f)-'Index(p,f)+1+1 by NAT_1:29;
   per cases;
-  suppose
-A24: p = f.(Index(p,f)+1);
-  then A25:len L_Cut(f,p)=len f -Index(p,f) by A1,A2,A23,Th61;
-   then len L_Cut(f,p)>=Index(q,f)-'Index(p,f) by A4,A18,SCMFSA_7:3;
-  then (L_Cut(f,p))/.(Index(q,f)-'Index(p,f))
-   =L_Cut(f,p).(Index(q,f)-'Index(p,f)) by A9,FINSEQ_4:24
-  .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)) by A24,Def4
-  .=f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1) by A9,A15,A21,Th31
-  .=f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A4,SCMFSA_7:3
-  .=f.Index(q,f);
-  then A26:(L_Cut(f,p))/.(Index(q,f)-'Index(p,f))=f/.Index(q,f)
-                    by A5,FINSEQ_4:24;
-  A27:Index(q,f)<len f by A3,Th41;
-    then A28:Index(q,f)+1<=len f by NAT_1:38;
+   suppose A24: p = f.(Index(p,f)+1);
+    then A25: len L_Cut(f,p)=len f -Index(p,f) by A2,Th61;
+    then len L_Cut(f,p)>=Index(q,f)-'Index(p,f) by A4,A18,SCMFSA_7:3;
+    then (L_Cut(f,p))/.(Index(q,f)-'Index(p,f))
+        = L_Cut(f,p).(Index(q,f)-'Index(p,f)) by A9,FINSEQ_4:24
+       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f))
+                                                       by A24,Def4
+       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1)
+                                                    by A9,A15,A21,Th31
+       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A4,SCMFSA_7:3
+       .= f.Index(q,f);
+    then A26: (L_Cut(f,p))/.(Index(q,f)-'Index(p,f))=f/.Index(q,f)
+                                                          by A5,FINSEQ_4:24;
+    A27: Index(q,f)<len f by A3,Th41;
+    then A28: Index(q,f)+1<=len f by NAT_1:38;
     then Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by REAL_1:49;
     then Index(q,f)-Index(p,f)+1<=len f -Index(p,f);
-    then A29:i1<=len L_Cut(f,p) by A8,A25,BINARITH:def 3;
-    A30:1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
-       by A3,A27,Th41,Th42,NAT_1:38;
-    A31:Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A28,REAL_1:49;
+    then A29:i1<=len L_Cut(f,p) by A7_,A25,BINARITH:def 3;
+    A30: 1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
+                                   by A3,A27,Th41,Th42,NAT_1:38;
+    A31: Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A28,REAL_1:49;
     then Index(q,f)-Index(p,f)+1<=len f -Index(p,f);
     then A32:len L_Cut(f,p)>=Index(q,f)-'Index(p,f)+1 by A4,A25,SCMFSA_7:3;
-     Index(q,f)-Index(p,f)+1<=len f -Index(p,f)-1+1 by A31;
-    then A33:Index(q,f)-'Index(p,f)+1<=len f - (Index(p,f)+1)+1 by A4,
-SCMFSA_7:3;
-    A34:1<=Index(q,f)+1 & Index(q,f)+1<=len f by A30,Th11;
-    A35:(L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
-     =L_Cut(f,p).(Index(q,f)-'Index(p,f)+1) by A11,A32,FINSEQ_4:24
-    .=(mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1) by A24,Def4
-    .=f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1)
-                          by A10,A15,A33,Th31
-    .=f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A4,SCMFSA_7:3
-    .=f/.(Index(q,f)+1) by A34,FINSEQ_4:24;
-        q in LSeg(f,Index(q,f)) by A3,Th42;
-     then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f))),
-             (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)))
-                  by A5,A26,A28,A35,TOPREAL1:def 5;
-   hence q in L~(L_Cut(f,p)) by A9,A29,SPPOL_2:15;
-  end;
-  suppose that
-A36: p <> f.(Index(p,f)+1);
-  A37:len L_Cut(f,p)=len f -Index(p,f)+1 by A1,A2,A23,A36,Th61;
-  then len L_Cut(f,p)>=Index(q,f)-'Index(p,f)+1 by A4,A19,SCMFSA_7:3;
-  then (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
-   =L_Cut(f,p).(Index(q,f)-'Index(p,f)+1) by A14,FINSEQ_4:24
-  .=(<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1) by A36,Def4
-  .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-len <*p*>)
-                          by A12,A20,Th15
-  .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-1)
-                          by FINSEQ_1:57
-  .=f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1) by A9,A15,A21,Th31
-  .=f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A4,SCMFSA_7:3
-  .=f.Index(q,f);
-then A38:(L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)=f/.Index(q,f) by A5,
-FINSEQ_4:24;
-  A39:Index(q,f)<len f by A3,Th41;
-    then A40:Index(q,f)+1<=len f by NAT_1:38;
+    Index(q,f)-Index(p,f)+1<=len f -Index(p,f) by A31;
+    then A33: Index(q,f)-'Index(p,f)+1<=len f - (Index(p,f)+1)+1
+                                                           by A4,SCMFSA_7:3;
+    A34: 1<=Index(q,f)+1 & Index(q,f)+1<=len f by A30,Th11;
+    A35: (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
+        = L_Cut(f,p).(Index(q,f)-'Index(p,f)+1) by A11,A32,FINSEQ_4:24
+       .= (mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1)
+                                                       by A24,Def4
+       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1)
+                                                   by A10,A15,A33,Th31
+       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A4,SCMFSA_7:3
+       .= f/.(Index(q,f)+1) by A34,FINSEQ_4:24;
+    q in LSeg(f,Index(q,f)) by A3,Th42;
+    then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f))),
+     (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)))
+      by A5,A26,A28,A35,TOPREAL1:def 5;
+    hence q in L~(L_Cut(f,p)) by A9,A29,SPPOL_2:15;
+   end;
+   suppose that
+     A36: p <> f.(Index(p,f)+1);
+     A37: len L_Cut(f,p)=len f -Index(p,f)+1 by A2,A36,Th61;
+    then len L_Cut(f,p)>=Index(q,f)-'Index(p,f)+1 by A4,A19,SCMFSA_7:3;
+    then (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
+        = L_Cut(f,p).(Index(q,f)-'Index(p,f)+1) by A14,FINSEQ_4:24
+       .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1)
+                                                       by A36,Def4
+       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-len <*p*>)
+                                                       by A12,A20,Th15
+       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1-1)
+                                                              by FINSEQ_1:57
+       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f))-1)
+                                                    by A9,A15,A21,Th31
+       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f))-1) by A4,SCMFSA_7:3
+       .= f.Index(q,f);
+    then A38:(L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)=f/.Index(q,f)
+                                                          by A5,FINSEQ_4:24;
+    A39: Index(q,f)<len f by A3,Th41;
+    then A40: Index(q,f)+1<=len f by NAT_1:38;
     then Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by REAL_1:49;
     then Index(q,f)-Index(p,f)+1<=len f -Index(p,f);
-    then i1<=len f -Index(p,f) by A8,BINARITH:def 3;
+    then i1<=len f -Index(p,f) by A7_,BINARITH:def 3;
     then A41:i1+1<=len L_Cut(f,p) by A37,AXIOMS:24;
-    A42:1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
-       by A3,A39,Th41,Th42,NAT_1:38;
-    A43:Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A40,REAL_1:49;
-then A44: Index(q,f)-Index(p,f)+1+1<=len f -Index(p,f)+1 by AXIOMS:24;
-    then A45:len L_Cut(f,p)>=Index(q,f)-'Index(p,f)+1+1 by A4,A37,SCMFSA_7:3;
-    A46:Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f)
-                             by A4,A17,A44,SCMFSA_7:3;
-     Index(q,f)-Index(p,f)+1<=len f -Index(p,f)-1+1 by A43;
-    then A47:Index(q,f)-'Index(p,f)+1<=len f - (Index(p,f)+1)+1 by A4,
-SCMFSA_7:3;
-    A48:1<=Index(q,f)+1 & Index(q,f)+1<=len f by A42,Th11;
-    A49:(L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1+1)
-     =L_Cut(f,p).(Index(q,f)-'Index(p,f)+1+1) by A22,A45,FINSEQ_4:24
-    .=(<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1)
-                                            by A36,Def4
-    .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>)
-                          by A13,A46,Th15
-    .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1)
-                          by FINSEQ_1:57
-    .=f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1)
-                          by A10,A15,A47,Th31
-    .=f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A4,SCMFSA_7:3
-    .=f/.(Index(q,f)+1) by A48,FINSEQ_4:24;
-        q in LSeg(f,Index(q,f)) by A3,Th42;
-     then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)),
-             (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1+1)))
-                  by A5,A38,A40,A49,TOPREAL1:def 5;
-   hence q in L~(L_Cut(f,p)) by A14,A41,SPPOL_2:15;
-end;
-end;
+    A42: 1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
+                                   by A3,A39,Th41,Th42,NAT_1:38;
+    A43: Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A40,REAL_1:49;
+    then A44: Index(q,f)-Index(p,f)+1+1<=len f -Index(p,f)+1 by AXIOMS:24;
+    then A45: len L_Cut(f,p)>=Index(q,f)-'Index(p,f)+1+1
+                                                       by A4,A37,SCMFSA_7:3;
+    A46: Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f)
+                                                   by A4,A17,A44,SCMFSA_7:3;
+    Index(q,f)-Index(p,f)+1<=len f -Index(p,f) by A43;
+    then A47: Index(q,f)-'Index(p,f)+1<=len f - (Index(p,f)+1)+1
+                                                           by A4,SCMFSA_7:3;
+    A48: 1<=Index(q,f)+1 & Index(q,f)+1<=len f by A42,Th11;
+    A49: (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1+1)
+        = L_Cut(f,p).(Index(q,f)-'Index(p,f)+1+1) by A22,A45,FINSEQ_4:24
+       .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1)
+                                                       by A36,Def4
+       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>)
+                                                       by A13,A46,Th15
+       .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1)
+                                                              by FINSEQ_1:57
+       .= f.(Index(p,f)+1+(Index(q,f)-'Index(p,f)+1)-1)
+                                                   by A10,A15,A47,Th31
+       .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1) by A4,SCMFSA_7:3
+       .= f/.(Index(q,f)+1) by A48,FINSEQ_4:24;
+    q in LSeg(f,Index(q,f)) by A3,Th42;
+    then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)),
+     (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1+1)))
+      by A5,A38,A40,A49,TOPREAL1:def 5;
+    hence q in L~(L_Cut(f,p)) by A14,A41,SPPOL_2:15;
+   end;
+ end;
 
 theorem Th65:
  for p,q,p1,p2 being Point of TOP-REAL 2 st
@@ -2698,86 +2699,89 @@ proof let p,q,p1,p2 be Point of TOP-REAL 2;
 end;
 
 theorem Th66:
- for f being non empty FinSequence of TOP-REAL 2,p,q,p1,p2 being
- Point of TOP-REAL 2 st f is_S-Seq & p in L~f & q in L~f & p<>q
- & Index(p,f)=Index(q,f) & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1)
- holds q in L~(L_Cut(f,p))
-proof let f be non empty FinSequence of TOP-REAL 2,p,q,p1,p2 be
-  Point of TOP-REAL 2;
- assume that
-A1:f is_S-Seq and
-A2: p in L~f and
-A3: q in L~f and
-A4: p<>q and
-A5: Index(p,f)=Index(q,f) and
-A6: LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1);
+ for f be FinSequence of TOP-REAL 2
+ for p,q be Point of TOP-REAL 2 st p in L~f & q in L~f & p<>q &
+   Index(p,f) = Index(q,f) & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1) holds
+  q in L~L_Cut(f,p)
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p,q be Point of TOP-REAL 2;
+  assume that
+   A2: p in L~f and
+   A3: q in L~f and
+   A4: p<>q and
+   A5: Index(p,f)=Index(q,f) and
+   A6: LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1);
   set i1=Index(q,f)-'Index(p,f)+1;
-  A7:1<=Index(q,f) & Index(q,f)<len f by A3,Th41;
-       Index(q,f)<len f by A3,Th41;
-   then A8:Index(q,f)+1<=len f by NAT_1:38;
-  A9:Index(q,f)-'Index(p,f)=Index(q,f)-Index(p,f) by A5,SCMFSA_7:3
-        .=0 by A5;
-      1<0+1+1;
-  then A10:len <*p*><Index(q,f)-'Index(p,f)+1+1 by A9,FINSEQ_1:57;
-  A11:1<=Index(p,f)+1 by NAT_1:29;
-A12: 1<len f by A7,AXIOMS:22;
-  then len mid(f,Index(p,f)+1,len f)=len f -'(Index(p,f)+1)+1
-         by A5,A8,A11,Th27;
-  then A13:len <*p*>+len mid(f,Index(p,f)+1,len f)=1+(len f -'(Index(p,f)+1)+1)
-                                        by FINSEQ_1:57
-    .=1+(len f -(Index(p,f)+1)+1) by A5,A8,SCMFSA_7:3
-    .=(len f -Index(p,f))+1;
-      Index(q,f)-Index(p,f)<=len f -Index(p,f) by A7,REAL_1:49;
-  then A14: Index(q,f)-Index(p,f)+1<=len f -Index(p,f)+1 by AXIOMS:24;
-A15: now assume A16: p = f.(Index(p,f)+1);
-    then A17:    p = f/.(Index(p,f)+1) by A5,A8,A11,FINSEQ_4:24;
-         q in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) by A6,Def6;
-     then consider r being Real such that
-A18:   0 <= r & r <= 1 and
-A19:   q = (1-r)*f/.(Index(p,f))+r*f/.(Index(p,f)+1) by SPPOL_1:21;
-A20:    p = 1*p by EUCLID:33
-        .= 0.REAL 2 + 1*p by EUCLID:31
-       .= (1-1)*f/.(Index(p,f))+1*p by EUCLID:33;
-     then 1<=r by A6,A17,A18,A19,Def6;
-     then r = 1 by A18,AXIOMS:21;
-   hence contradiction by A4,A5,A8,A11,A16,A19,A20,FINSEQ_4:24;
+  A7: 1<=Index(q,f) & Index(q,f)<len f by A3,Th41;
+  Index(q,f)<len f by A3,Th41;
+  then A8: Index(q,f)+1<=len f by NAT_1:38;
+  A9: Index(q,f)-'Index(p,f)=Index(q,f)-Index(p,f) by A5,SCMFSA_7:3
+     .=0 by A5;
+  1<0+1+1;
+  then A11: len <*p*> < Index(q,f)-'Index(p,f)+1+1 by A9,FINSEQ_1:57;
+  A12: 1<=Index(p,f)+1 by NAT_1:29;
+  1<len f by A7,AXIOMS:22;
+  then len mid(f,Index(p,f)+1,len f) = len f -'(Index(p,f)+1)+1
+                                                    by A5,A8,A12,Th27;
+  then A14: len <*p*> + len mid(f,Index(p,f)+1,len f) =
+        1+(len f -'(Index(p,f)+1)+1) by FINSEQ_1:57
+     .= 1+(len f -(Index(p,f)+1)+1) by A5,A8,SCMFSA_7:3
+     .= (len f -Index(p,f))+1;
+  Index(q,f)-Index(p,f)<=len f -Index(p,f) by A7,REAL_1:49;
+  then A15_: Index(q,f)-Index(p,f)+1<=len f -Index(p,f)+1 by AXIOMS:24;
+  A16: now assume A17: p = f.(Index(p,f)+1);
+   then A18: p = f/.(Index(p,f)+1) by A5,A8,A12,FINSEQ_4:24;
+   q in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) by A6,Def6;
+   then consider r be Real such that
+    A19: 0 <= r & r <= 1 and
+    A20: q = (1-r)*f/.(Index(p,f))+r*f/.(Index(p,f)+1) by SPPOL_1:21;
+   A21: p = 1 * p by EUCLID:33
+      .= 0.REAL 2 + 1 * p by EUCLID:31
+      .= (1-1)*f/.(Index(p,f))+1 * p by EUCLID:33;
+   then 1<=r by A6,A18,A19,A20,Def6;
+   then r = 1 by A19,AXIOMS:21;
+   hence contradiction by A4,A5,A8,A12,A17,A20,A21,FINSEQ_4:24;
   end;
-then p <> f.len f by A1,A12,Th45;
-  then A21:len L_Cut(f,p)=len f -Index(p,f)+1 by A1,A2,A15,Th61;
-  then A22: (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
-   =L_Cut(f,p).(Index(q,f)-'Index(p,f)+1) by A5,A9,A14,FINSEQ_4:24
-  .=(<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1) by A15,Def4
-  .=p by A9,Th16;
-  A23:Index(q,f)<len f by A3,Th41;
-    then A24:Index(q,f)+1<=len f by NAT_1:38;
-    then Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by REAL_1:49;
-    then Index(q,f)-Index(p,f)+1<=len f -Index(p,f);
-    then i1<=len f -Index(p,f) by A5,BINARITH:def 3;
-    then A25:i1+1<=len L_Cut(f,p) by A21,AXIOMS:24;
-    A26:1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
-       by A3,A23,Th41,Th42,NAT_1:38;
-    A27:Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A24,REAL_1:49;
-then A28: Index(q,f)-Index(p,f)+1+1<=len f -Index(p,f)+1 by AXIOMS:24;
-    then A29:Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f
-)
-                         by A5,A13,SCMFSA_7:3;
-    A30: Index(q,f)-Index(p,f)+1<=len f -(Index(p,f)+1)+1 by A27;
-    A31:1<=Index(q,f)+1 & Index(q,f)+1<=len f by A26,Th11;
-       (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1+1)
-     =L_Cut(f,p).(Index(q,f)-'Index(p,f)+1+1) by A5,A9,A21,A28,FINSEQ_4:24
-    .=(<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1)
-                                            by A15,Def4
-    .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>)
-                          by A10,A29,Th15
-    .=mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1)
-                          by FINSEQ_1:57
-    .=f.(1+(Index(p,f)+(Index(q,f)-Index(p,f))+1)-1) by A5,A8,A9,A11,A30,Th31
-    .=f/.(Index(q,f)+1) by A31,FINSEQ_4:24;
-     then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)),
-             (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1+1)))
-                   by A5,A6,A22,Th65;
-   hence q in L~(L_Cut(f,p)) by A9,A25,SPPOL_2:15;
-end;
+  A22: len L_Cut(f,p)=len f -Index(p,f)+1 by A2,A16,Th61;
+  then A23: (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1)
+      = L_Cut(f,p).(Index(q,f)-'Index(p,f)+1)
+         by A5,A9,A15_,FINSEQ_4:24
+     .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1)
+                                                       by A16,Def4
+     .= p by A9,Th16;
+  A24: Index(q,f)<len f by A3,Th41;
+  then A25:Index(q,f)+1<=len f by NAT_1:38;
+  then Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by REAL_1:49;
+  then Index(q,f)-Index(p,f)+1<=len f -Index(p,f);
+  then i1<=len f -Index(p,f) by A5,BINARITH:def 3;
+  then A26: i1+1<=len L_Cut(f,p) by A22,AXIOMS:24;
+  A27: 1<=Index(q,f) & Index(q,f)+1<=len f & q in LSeg(f,Index(q,f))
+                                   by A3,A24,Th41,Th42,NAT_1:38;
+  A28: Index(q,f)+1-Index(p,f)<=len f -Index(p,f) by A25,REAL_1:49;
+  then A29: Index(q,f)-Index(p,f)+1+1<=len f -Index(p,f)+1 by AXIOMS:24;
+  A31: Index(q,f)-'Index(p,f)+1+1<=len <*p*>+len mid(f,Index(p,f)+1,len f)
+                                                   by A5,A14,A29,SCMFSA_7:3;
+  Index(q,f)-Index(p,f)+1<=len f -Index(p,f) by A28;
+  then A32: Index(q,f)-'Index(p,f)+1<=len f - (Index(p,f)+1)+1
+                                                           by A5,SCMFSA_7:3;
+  A33: 1<=Index(q,f)+1 & Index(q,f)+1<=len f by A27,Th11;
+  (L_Cut(f,p))/.(Index(q,f)-'Index(p,f)+1+1)
+      = L_Cut(f,p).(Index(q,f)-'Index(p,f)+1+1)
+         by A5,A9,A22,A29,FINSEQ_4:24
+     .= (<*p*>^mid(f,Index(p,f)+1,len f)).(Index(q,f)-'Index(p,f)+1+1)
+                                                       by A16,Def4
+     .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-len <*p*>)
+                                                       by A11,A31,Th15
+     .= mid(f,Index(p,f)+1,len f).(Index(q,f)-'Index(p,f)+1+1-1)
+                                                              by FINSEQ_1:57
+     .= f.(Index(p,f)+1+(Index(q,f)-Index(p,f)+1)-1)
+        by A5,A8,A9,A12,A32,Th31
+     .= f/.(Index(q,f)+1) by A33,FINSEQ_4:24;
+  then q in LSeg((L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1)),
+   (L_Cut(f,p))/.((Index(q,f)-'Index(p,f)+1+1))) by A5,A6,A23,Th65;
+  hence q in L~(L_Cut(f,p)) by A9,A26,SPPOL_2:15;
+ end;
 
 begin
 ::--------------------------------------------------------:
@@ -2810,26 +2814,28 @@ A3: p<>f.1;
 end;
 
 theorem Th68:
- for f being non empty FinSequence of TOP-REAL 2,
+ for f being FinSequence of TOP-REAL 2,
  p being Point of TOP-REAL 2 st f is_S-Seq & p in L~f &
  p<>f.len f holds L_Cut(f,p) is_S-Seq_joining p,f/.len f
-proof let f be non empty FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2;
+proof let f be FinSequence of TOP-REAL 2, p be Point of TOP-REAL 2;
  assume that
 A1: f is_S-Seq & p in L~f and
 A2: p<>f.len f;
+    len f <> 0 by A1,TOPREAL1:28; then
+B1: f <> {} by FINSEQ_1:25;
 A3: Rev f is_S-Seq & p in L~Rev f by A1,SPPOL_2:22,47;
 A4:  L_Cut(f,p) = L_Cut(Rev Rev f,p) by FINSEQ_6:29
      .= Rev R_Cut(Rev f,p) by A3,Th57;
        p <> (Rev f).1 by A2,FINSEQ_5:65;
    then R_Cut(Rev f,p) is_S-Seq_joining (Rev f)/.1,p by A3,Th67;
    then L_Cut(f,p) is_S-Seq_joining p,(Rev f)/.1 by A4,Th48;
-  hence thesis by FINSEQ_5:68;
+  hence thesis by B1,FINSEQ_5:68;
 end;
 
-theorem Th69:for f being non empty FinSequence of TOP-REAL 2,
+theorem Th69:for f being FinSequence of TOP-REAL 2,
  p being Point of TOP-REAL 2 st f is_S-Seq & p in L~f &
  p<>f.len f holds L_Cut(f,p) is_S-Seq
-proof let f be non empty FinSequence of TOP-REAL 2,
+proof let f be FinSequence of TOP-REAL 2,
  p be Point of TOP-REAL 2;
  assume f is_S-Seq & p in L~f & p<>f.len f;
  then L_Cut(f,p) is_S-Seq_joining p,f/.len f by Th68;
@@ -2848,12 +2854,12 @@ proof let f be FinSequence of TOP-REAL 2,
 end;
 
 Lm1:
-for f being non empty FinSequence of TOP-REAL 2,
+for f being FinSequence of TOP-REAL 2,
  p,q being Point of TOP-REAL 2 st f is_S-Seq & p in L~f & q in L~f &
  p<>q & (Index(p,f)<Index(q,f) or Index(p,f)=Index(q,f)
     & LE p,q,f/.(Index(p,f)),f/.(Index(p,f)+1))
   holds B_Cut(f,p,q) is_S-Seq_joining p,q
-proof let f be non empty FinSequence of TOP-REAL 2,
+proof let f be FinSequence of TOP-REAL 2,
  p,q be Point of TOP-REAL 2;
  assume A1: f is_S-Seq & p in L~f & q in L~f & p<>q;
  assume A2: Index(p,f)<Index(q,f) or Index(p,f)=Index(q,f)
@@ -2906,8 +2912,7 @@ A16:    p = 1*p by EUCLID:33
     end;
     end;
     then A19:   q in L~L_Cut(f,p) by SPPOL_2:17;
-     then 1<=Index(q,L_Cut(f,p)) & Index(q,L_Cut(f,p))<len L_Cut(f,p) by Th41
-;
+    then 1<=Index(q,L_Cut(f,p)) & Index(q,L_Cut(f,p))<len L_Cut(f,p) by Th41;
     then A20: 1<=len L_Cut(f,p) by AXIOMS:22;
     A21:(L_Cut(f,p)).1=p by A17,Def3;
     then p=(L_Cut(f,p))/.(1) by A20,FINSEQ_4:24;
@@ -2915,10 +2920,10 @@ A16:    p = 1*p by EUCLID:33
 end;
 
 theorem Th71:
-for f being non empty FinSequence of TOP-REAL 2,
+for f being FinSequence of TOP-REAL 2,
  p,q being Point of TOP-REAL 2 st f is_S-Seq & p in L~f & q in L~f &
  p<>q holds B_Cut(f,p,q) is_S-Seq_joining p,q
-proof let f be non empty FinSequence of TOP-REAL 2,
+proof let f be FinSequence of TOP-REAL 2,
  p,q be Point of TOP-REAL 2;
  assume A1: f is_S-Seq & p in L~f & q in L~f & p<>q;
  per cases;
@@ -2957,10 +2962,10 @@ A16:   Index(p,f)+0 <> Index(p,f)+1 by XCMPLX_1:2;
 end;
 end;
 
-theorem   for f being non empty FinSequence of TOP-REAL 2,
+theorem   for f being FinSequence of TOP-REAL 2,
  p,q being Point of TOP-REAL 2 st f is_S-Seq & p in L~f & q in L~f &
  p<>q holds B_Cut(f,p,q) is_S-Seq
-proof let f be non empty FinSequence of TOP-REAL 2,
+proof let f be FinSequence of TOP-REAL 2,
  p,q be Point of TOP-REAL 2;
  assume f is_S-Seq & p in L~f & q in L~f &
  p<>q;
@@ -3010,16 +3015,16 @@ g))
      A19:now assume A20:q in rng f & q in rng mid(g,2,len g);
        then q in rng g by A17;
        then A21: q in L~f /\ L~g by A16,A18,A20,XBOOLE_0:def 3;
-           now assume A22:g.1 in rng mid(g,2,len g);
-             2-'1=2-1 by SCMFSA_7:3;
+       now assume A22:g.1 in rng mid(g,2,len g);
+         2-'1=2-1 by SCMFSA_7:3;
          then A23:g.1 in rng (g/^1) by A3,A22,Th26;
          A24:g|1=g|Seg 1 by FINSEQ_1:def 15;
              1 in Seg 1 by FINSEQ_1:5;
          then A25:(g|1).1=g.1 by A24,FUNCT_1:72;
-             len (g|1)=1 by A5,FINSEQ_1:80;
+         len (g|1)=1 by A5,FINSEQ_1:80;
          then 1 in dom (g|1) by FINSEQ_3:27;
          then A26:g.1 in rng (g|1) by A25,FUNCT_1:def 5;
-             rng(g|1) misses rng (g/^1) by A3,FINSEQ_5:37;
+         rng(g|1) misses rng (g/^1) by A3,FINSEQ_5:37;
         hence contradiction by A23,A26,XBOOLE_0:3;
        end;
       hence contradiction by A1,A20,A21,TARSKI:def 1;
@@ -3781,8 +3786,7 @@ AXIOMS:22;
                = LSeg(f^mid(g,2,len g),i) by A275,A288,TOPREAL1:def 5;
           hence LSeg(f^mid(g,2,len g),i)=LSeg(g,(i-'len f+1))
                                 by A280,A283,A290,A295,A300,A301,A303,
-TOPREAL1:def 5
-;
+TOPREAL1:def 5;
        end;
                  j+1<=len f+(len g-1) by A8,A285,FINSEQ_1:35;
               then A304: j+1-len f<=len f+(len g-1)-len f by REAL_1:49;
@@ -3924,8 +3928,8 @@ BINARITH:def 3,NAT_1:29;
     end;
    then f^mid(g,2,len g) is one-to-one & len (f^mid(g,2,len g)) >= 2
    & f^mid(g,2,len g) is unfolded s.n.c. special
-                       by A2,A7,A9,A53,A147,AXIOMS:22,FUNCT_1:def 8
-,TOPREAL1:def 7,def 8,def 9;
+       by A2,A7,A9,A53,A147,AXIOMS:22,FUNCT_1:def 8,
+         TOPREAL1:def 7,def 8,def 9;
  hence f^mid(g,2,len g) is_S-Seq by TOPREAL1:def 10;
 end;
 
@@ -3962,8 +3966,8 @@ proof let f,g be FinSequence of TOP-REAL 2;
 end;
 
 theorem
-     for f being FinSequence of TOP-REAL 2,
- n being Nat holds L~(f/^n) c= L~f
+ for f being FinSequence of TOP-REAL 2,
+     n being Nat holds L~(f/^n) c= L~f
 proof let f be FinSequence of TOP-REAL 2, n be Nat;
  let x be set;assume x in L~(f/^n);
    then x in union { LSeg(f/^n,i) : 1 <= i & i+1 <= len (f/^n) }
@@ -3990,15 +3994,13 @@ end;
 
 theorem Th76:
  for f being FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st p in L~f &
-  f is_S-Seq holds L~R_Cut(f,p) c= L~f
+ p being Point of TOP-REAL 2 st p in L~f holds L~R_Cut(f,p) c= L~f
 proof let f be FinSequence of TOP-REAL 2,
  p be Point of TOP-REAL 2 such that
-A1: p in L~f and
-A2: f is_S-Seq;
-       f is one-to-one & len f >= 2
-   & f is unfolded s.n.c. special by A2,TOPREAL1:def 10;
-   then A3:1<=len f by AXIOMS:22;
+A1: p in L~f;
+    len f <> 0 by A1,TOPREAL1:28;
+    then len f > 0 by NAT_1:19;
+    then A3: len f >= 0+1 by NAT_1:38;
    A4:1<=Index(p,f) & Index(p,f)<=len f by A1,Th41;
  per cases;
  suppose p = f.1;
@@ -4043,28 +4045,296 @@ XBOOLE_1:1;
 end;
 end;
 
-theorem Th77:
- for f being non empty FinSequence of TOP-REAL 2,
- p being Point of TOP-REAL 2 st p in L~f &
-  f is_S-Seq
- holds L~L_Cut(f,p) c= L~f
-proof let f be non empty FinSequence of TOP-REAL 2,
- p be Point of TOP-REAL 2 such that
-A1: p in L~f and
-A2: f is_S-Seq;
-A3: p in L~Rev f & Rev f is_S-Seq by A1,A2,SPPOL_2:22,47;
-       L_Cut(f,p) = L_Cut(Rev Rev f,p) by FINSEQ_6:29
-          .= Rev R_Cut(Rev f,p) by A3,Th57;
-  then L~L_Cut(f,p) = L~R_Cut(Rev f,p) by SPPOL_2:22;
-  then L~L_Cut(f,p) c= L~Rev f by A3,Th76;
- hence L~(L_Cut(f,p)) c= L~f by SPPOL_2:22;
+ThA2:i<=j implies j+k-'i=j+k-i
+proof assume i<=j; then i<=j+k by NAT_1:37;
+ hence thesis by SCMFSA_7:3;
 end;
 
-theorem Th78:for f,g being non empty FinSequence of TOP-REAL 2,
+ThB16: (<*>D)|i=<*>D
+proof len (<*>D)=0 by FINSEQ_1:32;
+  then len (<*>D)<=i by NAT_1:18;
+ hence thesis by FINSEQ_1:79;
+end;
+
+ThB17: Rev (<*>D)=<*>D
+proof
+ thus thesis;
+end;
+
+ThB27: for f1 be FinSequence of D,k be Nat st 1<=k & k<=len f1
+  holds mid(f1,k,k)=<*f1/.k*> & len mid(f1,k,k)=1
+proof let f1 be FinSequence of D,k be Nat;assume A1:1<=k & k<=len f1;
+   A2:len (f1/^(k-'1))=len f1-'(k-'1) by Th19;
+      k-'1+1=k by A1,AMI_5:4;
+   then A3:(f1/^(k-'1)).1=f1.k by A1,Th23;
+   A4:f1/.k=f1.k by A1,FINSEQ_4:24;
+      k-'1+1<=len f1 by A1,AMI_5:4;
+   then k-'1+1-(k-'1)<=len f1-(k-'1) by REAL_1:49;
+   then A5:1<=1 & 1<=len (f1/^(k-'1)) by A2,Th1;
+  then 0<len (f1/^(k-'1));
+  then A6:f1/^(k-'1) is non empty by FINSEQ_1:25;
+     k-'k+1=k-k+1 by SCMFSA_7:3 .=1;
+  then mid(f1,k,k)=(f1/^(k-'1))|1 by Def1
+  .=<*(f1/^(k-'1))/.1*> by A6,FINSEQ_5:23;
+ hence thesis by A3,A4,A5,FINSEQ_1:56,FINSEQ_4:24;
+end;
+
+ThB28: for f1 be FinSequence of D holds mid(f1,0,0)=f1|1
+proof
+  let f1 be FinSequence of D;
+     0-'0+1=0-0+1 by SCMFSA_7:3 .=1;
+  then A1:mid(f1,0,0)=(f1/^(0-'1))|1 by Def1;  0-1<0;
+  then 0-'1=0 by BINARITH:def 3;
+ hence thesis by A1,FINSEQ_5:31;
+end;
+
+ThB29: for f1 be FinSequence of D,k be Nat st len f1<k
+  holds mid(f1,k,k)=<*>D
+proof let f1 be FinSequence of D,k be Nat;assume A1:len f1<k;
+     0<=len f1 by NAT_1:18;
+then A2: 0+1<=k by A1,NAT_1:38;
+     k-'k+1=k-k+1 by SCMFSA_7:3 .=1;
+  then A3:mid(f1,k,k)=(f1/^(k-'1))|1 by Def1;
+     len f1+1<=k by A1,NAT_1:38;
+  then len f1+1-1<=k-1 by REAL_1:49;
+  then len f1<=k-'1 by A2,SCMFSA_7:3;
+  then f1/^(k-'1)=<*>D by FINSEQ_5:35;
+ hence thesis by A3,ThB16;
+end;
+
+ThB30: for f1 be FinSequence of D,
+  i1,i2 holds mid(f1,i1,i2)=Rev mid(f1,i2,i1)
+proof let f1 be FinSequence of D; let k1,k2 be Nat;
+     now per cases;
+  case A1:k1<=k2;
+    then A2:mid(f1,k1,k2)=(f1/^(k1-'1))|(k2-'k1+1) by Def1;
+       now per cases by A1,REAL_1:def 5;
+    case k1<k2;
+      then mid(f1,k2,k1)=Rev mid(f1,k1,k2) by A2,Def1;
+     hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by FINSEQ_6:29;
+    end;
+    case A3:k1=k2;
+         k1=0 or k1>0 by NAT_1:19;
+then A4:    k1=0 or 0+1<=k1 by NAT_1:38;
+         now per cases by A4;
+      case k1=0;
+        then A5:mid(f1,k1,k2)=f1|1 by A3,ThB28;
+           now per cases;
+        case len f1=0; then f1=<*>D by FINSEQ_1:32;
+          then f1|1=<*>D by ThB16;
+         hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,A5,ThB17;
+        end;
+        case len f1<>0;
+          then f1 <> <*>D by FINSEQ_1:32;
+          then f1|1=<*f1/.1*> by FINSEQ_5:23;
+         hence mid(f1,k1,k2)=Rev mid(f1,k2,k1)
+            by A3,A5,FINSEQ_5:63;
+        end;
+        end;
+       hence mid(f1,k1,k2)=Rev mid(f1,k2,k1);
+      end;
+      case 1<=k1 & k1<= len f1;
+        then mid(f1,k1,k1)=<*f1/.k1*> by ThB27;
+       hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,FINSEQ_5:63;
+      end;
+      case len f1<k1; then mid(f1,k1,k1)=<*>D by ThB29;
+       hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A3,ThB17;
+      end;
+      end;
+     hence mid(f1,k1,k2)=Rev mid(f1,k2,k1);
+    end;
+    end;
+   hence mid(f1,k1,k2)=Rev mid(f1,k2,k1);
+  end;
+  case A6:k1>k2;
+    then mid(f1,k1,k2)=Rev ((f1/^(k2-'1))|(k1-'k2+1)) by Def1;
+   hence mid(f1,k1,k2)=Rev mid(f1,k2,k1) by A6,Def1;
+  end;
+  end;
+ hence thesis;
+end;
+
+ThB47:for h being FinSequence of TOP-REAL 2,i1,i2 st
+1<=i1 & i1<=len h & 1<=i2 & i2<=len h holds L~mid(h,i1,i2) c= L~h
+proof let h be FinSequence of TOP-REAL 2,i1,i2;
+ assume A1:1<=i1 & i1<=len h & 1<=i2 & i2<=len h;
+ thus L~mid(h,i1,i2) c= L~h
+ proof let x be set;assume
+   A2: x in L~mid(h,i1,i2);
+      now per cases;
+   case A3:i1<=i2;
+        x in union { LSeg(mid(h,i1,i2),i) : 1 <= i & i+1 <= len mid(h,i1,i2) }
+                           by A2,TOPREAL1:def 6;
+     then consider Y being set such that A4: x in Y
+      & Y in { LSeg(mid(h,i1,i2),i) : 1 <= i & i+1 <= len mid(h,i1,i2) }
+        by TARSKI:def 4;
+     consider i such that A5:Y=LSeg(mid(h,i1,i2),i)
+            & (1 <= i & i+1 <= len mid(h,i1,i2)) by A4;
+     A6:LSeg(mid(h,i1,i2),i)=LSeg(mid(h,i1,i2)/.i,mid(h,i1,i2)/.(i+1))
+                             by A5,TOPREAL1:def 5;
+        i<=i+1 by NAT_1:29;
+     then A7:i<=len mid(h,i1,i2) by A5,AXIOMS:22;
+     then A8:mid(h,i1,i2).i=h.(i+i1-'1) by A1,A3,A5,Th27;
+     A9:len mid(h,i1,i2)=i2-'i1+1 by A1,A3,Th27;
+     A10:1<=i+1 & i+1<=len mid(h,i1,i2) by A5,NAT_1:29;
+     then A11:mid(h,i1,i2).(i+1)=h.(i+1+i1-'1) by A1,A3,Th27;
+     A12:mid(h,i1,i2)/.i=mid(h,i1,i2).i by A5,A7,FINSEQ_4:24;
+     A13:mid(h,i1,i2)/.(i+1)=mid(h,i1,i2).(i+1) by A10,FINSEQ_4:24;
+     1+1<=i+i1 by A1,A5,REAL_1:55;
+then A14: 1+1-1<=i+i1-1 by REAL_1:49;
+     i+1-1<=i2-'i1+1-1 by A5,A9,REAL_1:49;
+     then i<=i2-i1 by A3,SCMFSA_7:3;
+     then A15: i+i1<=i2-i1+i1 by AXIOMS:24;
+     then A16: i+i1<=len h by A1,AXIOMS:22;
+     then A17:1<=i+i1-'1 & i+i1-'1<=len h by A1,A14,ThA2,Th7;
+     then A18:h/.(i+i1-'1)=h.(i+i1-'1) by FINSEQ_4:24;
+     A19:i+1+i1-'1=i+1+i1-1 by A1,ThA2 .=i+i1;
+     then A20:i+1+i1-'1=i+i1-1+1 .=i+i1-'1+1 by A1,ThA2;
+        i+i1-'1<=i+i1-'1+1 by NAT_1:29;
+     then i+i1-'1<=i+i1-1+1 by A1,ThA2;
+     then A21:1<=i+i1 & i+i1<=len h by A1,A15,A17,AXIOMS:22;
+     then LSeg(mid(h,i1,i2),i)=LSeg(h/.(i+i1-'1),h/.(i+1+i1-'1))
+                                  by A6,A8,A11,A12,A13,A18,A19,FINSEQ_4:24
+                    .=LSeg(h,i+i1-'1) by A14,A16,A19,A20,TOPREAL1:def 5;
+     then LSeg(mid(h,i1,i2),i) in { LSeg(h,j) : 1 <= j & j+1 <= len h}
+       by A14,A19,A20,A21;
+     then x in union { LSeg(h,j) : 1 <= j & j+1 <= len h} by A4,A5,TARSKI:def 4
+;
+    hence x in L~h by TOPREAL1:def 6;
+   end;
+   case A22:i1>i2;
+        mid(h,i1,i2)=Rev mid(h,i2,i1) by ThB30;
+     then x in L~mid(h,i2,i1) by A2,SPPOL_2:22;
+     then x in union { LSeg(mid(h,i2,i1),i) : 1 <= i & i+1 <= len mid(h,i2,i1)
+}
+                           by TOPREAL1:def 6;
+     then consider Y being set such that A23: x in Y
+      & Y in { LSeg(mid(h,i2,i1),i) : 1 <= i & i+1 <= len mid(h,i2,i1) }
+       by TARSKI:def 4;
+     consider i such that A24:Y=LSeg(mid(h,i2,i1),i)
+            & (1 <= i & i+1 <= len mid(h,i2,i1)) by A23;
+     A25:LSeg(mid(h,i2,i1),i)=LSeg(mid(h,i2,i1)/.i,mid(h,i2,i1)/.(i+1))
+                             by A24,TOPREAL1:def 5;
+        i<=i+1 by NAT_1:29;
+     then A26:i<=len mid(h,i2,i1) by A24,AXIOMS:22;
+     then A27:mid(h,i2,i1).i=h.(i+i2-'1) by A1,A22,A24,Th27;
+     A28:len mid(h,i2,i1)=i1-'i2+1 by A1,A22,Th27;
+     A29:1<=i+1 & i+1<=len mid(h,i2,i1) by A24,NAT_1:29;
+     then A30:mid(h,i2,i1).(i+1)=h.(i+1+i2-'1) by A1,A22,Th27;
+     A31:mid(h,i2,i1)/.i=mid(h,i2,i1).i by A24,A26,FINSEQ_4:24;
+     A32:mid(h,i2,i1)/.(i+1)=mid(h,i2,i1).(i+1) by A29,FINSEQ_4:24;
+        1+1<=i+i2 by A1,A24,REAL_1:55;
+then A33: 1+1-1<=i+i2-1 by REAL_1:49;
+     then A34:1<=i+i2-'1 by A1,ThA2;
+        i+1-1<=i1-'i2+1-1 by A24,A28,REAL_1:49;
+     then i<=i1-i2 by A22,SCMFSA_7:3;
+     then A35: i+i2<=i1-i2+i2 by AXIOMS:24;
+     then A36:i+i2<=len h by A1,AXIOMS:22;
+then  i+i2-'1<=len h by Th7;
+     then A37:h/.(i+i2-'1)=h.(i+i2-'1) by A34,FINSEQ_4:24;
+     A38:i+1+i2-'1=i+1+i2-1 by A1,ThA2 .=i+i2;
+     then A39:i+1+i2-'1=i+i2-1+1 .=i+i2-'1+1 by A1,ThA2;
+        i+i2-'1<=i+i2-'1+1 by NAT_1:29;
+     then i+i2-'1<=i+i2-1+1 by A1,ThA2;
+     then A40:1<=i+i2 & i+i2<=len h by A1,A34,A35,AXIOMS:22;
+     then LSeg(mid(h,i2,i1),i)=LSeg(h/.(i+i2-'1),h/.(i+1+i2-'1))
+                                  by A25,A27,A30,A31,A32,A37,A38,FINSEQ_4:24
+                       .=LSeg(h,i+i2-'1) by A33,A36,A38,A39,TOPREAL1:def 5;
+     then LSeg(mid(h,i2,i1),i) in { LSeg(h,j) : 1 <= j & j+1 <= len h}
+        by A33,A38,A39,A40;
+     then x in union { LSeg(h,j) : 1 <= j & j+1 <= len h} by A23,A24,
+TARSKI:def 4;
+    hence x in L~h by TOPREAL1:def 6;
+   end;
+   end;
+  hence x in L~h;
+ end;
+end;
+
+ThC9:
+  i in dom f & j in dom f implies len mid(f,i,j) >= 1
+proof
+ assume i in dom f;
+then A1: 1 <= i & i <= len f by FINSEQ_3:27;
+ assume j in dom f;
+then A2: 1 <= j & j <= len f by FINSEQ_3:27;
+     i <= j or j < i;
+  then len mid(f,i,j)=i-'j+1 or len mid(f,i,j)=j-'i+1 by A1,A2,Th27;
+ hence thesis by NAT_1:29;
+end;
+
+ThC11:
+ i in dom f & j in dom f implies mid(f,i,j) is non empty
+proof
+ assume i in dom f & j in dom f;
+  then len mid(f,i,j) >= 1 by ThC9;
+ hence mid(f,i,j) is non empty by FINSEQ_3:27,RELAT_1:60;
+end;
+
+ThC12:
+ i in dom f & j in dom f implies (mid(f,i,j))/.1 = f/.i
+proof
+ assume
+A1: i in dom f;
+then A2: 1 <= i & i <= len f by FINSEQ_3:27;
+ assume
+ A3:j in dom f;
+then A4: 1 <= j & j <= len f by FINSEQ_3:27;
+     mid(f,i,j) is non empty by A1,A3,ThC11;
+  then 1 in dom mid(f,i,j) by FINSEQ_5:6;
+ hence (mid(f,i,j))/.1 = mid(f,i,j).1 by FINSEQ_4:def 4
+      .= f.i by A2,A4,Th27
+      .= f/.i by A1,FINSEQ_4:def 4;
+end;
+
+theorem Th77:
+  for f be FinSequence of TOP-REAL 2
+  for p be Point of TOP-REAL 2 st p in L~f holds
+    L~L_Cut(f,p) c= L~f
+ proof
+  let f be FinSequence of TOP-REAL 2;
+  let p be Point of TOP-REAL 2 such that
+   A1: p in L~f;
+  len f <> 0 by A1,TOPREAL1:28;
+  then len f > 0 by NAT_1:19;
+  then A3: len f >= 0+1 by NAT_1:38;
+  then A14: len f in dom f by FINSEQ_3:27;
+  A4: 1<=Index(p,f) & Index(p,f)<len f by A1,Th41;
+  then A6: 1<Index(p,f)+1 & Index(p,f)+1<=len f by NAT_1:38;
+  then A13: Index(p,f)+1 in dom f by FINSEQ_3:27;
+  per cases;
+   suppose p = f.(Index(p,f)+1);
+    then L_Cut(f,p) = mid(f,Index(p,f)+1,len f) by Def4;
+    hence thesis by A3,A6,ThB47;
+   end;
+   suppose p <> f.(Index(p,f)+1);
+    then A5: L_Cut(f,p) = <*p*>^mid(f,Index(p,f)+1,len f) by Def4;
+    len mid(f,Index(p,f)+1,len f) >= 0+1 by A13,A14,ThC9;
+    then mid(f,Index(p,f)+1,len f) <> {} by FINSEQ_1:25;
+    then A8: L~(<*p*>^mid(f,Index(p,f)+1,len f))
+       = LSeg(p,mid(f,Index(p,f)+1,len f)/.1) \/ L~mid(f,Index(p,f)+1,len f)
+                                                           by SPPOL_2:20;
+    A9: mid(f,Index(p,f)+1,len f)/.1 = f/.(Index(p,f)+1)
+                                              by A13,A14,ThC12;
+    p in LSeg(f,Index(p,f)) by A1,Th42;
+    then A10: p in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1))
+                                                   by A4,A6,TOPREAL1:def 5;
+    f/.(Index(p,f)+1) in LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1))
+                                                              by TOPREAL1:6;
+    then A11: LSeg(p,mid(f,Index(p,f)+1,len f)/.1) c=
+     LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) by A9,A10,TOPREAL1:12;
+    LSeg(f/.(Index(p,f)),f/.(Index(p,f)+1)) c= L~f by A4,A6,SPPOL_2:16;
+    then A12: LSeg(p,mid(f,Index(p,f)+1,len f)/.1) c= L~f by A11,XBOOLE_1:1;
+    L~mid(f,Index(p,f)+1,len f) c= L~f by A3,A6,ThB47;
+    hence L~(L_Cut(f,p)) c= L~f by A5,A8,A12,XBOOLE_1:8;
+   end;
+ end;
+
+theorem Th78:for f,g being FinSequence of TOP-REAL 2,
  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~f &
   f is_S-Seq & g is_S-Seq & L~f /\ L~g={g.1} & p<>f.len f
  holds L_Cut(f,p)^mid(g,2,len g) is_S-Seq_joining p,g/.len g
-proof let f,g be non empty FinSequence of TOP-REAL 2,
+proof let f,g be FinSequence of TOP-REAL 2,
  p be Point of TOP-REAL 2;
  assume that
 A1: f.len f=g.1 and
@@ -4113,11 +4383,11 @@ A7:f is one-to-one & len f >= 2
            by A4,A11,A15,A17,Th74;
 end;
 
-theorem   for f,g being non empty FinSequence of TOP-REAL 2,
+theorem   for f,g being FinSequence of TOP-REAL 2,
  p being Point of TOP-REAL 2 st f.len f=g.1 & p in L~f &
   f is_S-Seq & g is_S-Seq & L~f /\ L~g={g.1} & p<>f.len f
  holds L_Cut(f,p)^mid(g,2,len g) is_S-Seq
-proof let f,g be non empty FinSequence of TOP-REAL 2,
+proof let f,g be FinSequence of TOP-REAL 2,
  p be Point of TOP-REAL 2;assume f.len f=g.1 & p in L~f &
   f is_S-Seq & g is_S-Seq & L~f /\ L~g={g.1} & p<>f.len f;
   then L_Cut(f,p)^mid(g,2,len g) is_S-Seq_joining p,g/.len g by Th78;
@@ -4195,19 +4465,16 @@ proof let f,g be FinSequence of TOP-REAL 2,
  p be Point of TOP-REAL 2;
  assume A1:f.len f=g.1 & p in L~g &
   f is_S-Seq & g is_S-Seq & L~f /\ L~g={g.1} & p<>g.1;
-   then A2:f is one-to-one & len f >= 2
-   & f is unfolded s.n.c. special by TOPREAL1:def 10;
-   A3:g is one-to-one & len g >= 2
-   & g is unfolded s.n.c. special by A1,TOPREAL1:def 10;
+   then A2:f is one-to-one & len f >= 2 by TOPREAL1:def 10;
+   A3:g is one-to-one & len g >= 2 by A1,TOPREAL1:def 10;
    A4:1<=len f by A2,AXIOMS:22;
    A5:1<=len g by A3,AXIOMS:22;
        1+1-1<=len f-1 by A2,REAL_1:49;
    then A6:1<=len f-'1 by Th1;
    A7:len f-'1+1=len f by A4,AMI_5:4;
     A8:R_Cut(g,p) is_S-Seq by A1,Th70;
-      then A9:1+1<=len R_Cut(g,p) by TOPREAL1:def 10;
-        R_Cut(g,p) is_S-Seq_joining g/.1,p
-                 by A1,Th67;
+    then A9:1+1<=len R_Cut(g,p) by TOPREAL1:def 10;
+    R_Cut(g,p) is_S-Seq_joining g/.1,p by A1,Th67;
     then A10:R_Cut(g,p).1=g/.1 & R_Cut(g,p).(len R_Cut(g,p))=p
                            by Def3;
     then A11:R_Cut(g,p).1=f.len f by A1,A5,FINSEQ_4:24;

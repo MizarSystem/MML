@@ -1,30 +1,58 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-RELSET_1
-FUNCT_2
-FRAENKEL
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-SETFAM_1
-STRUCT_0
-XREAL_0
-INT_1
-GROUP_1
-GR_CY_1
-CARD_3
-SCMFSA_1
-#
-fW1 ;;;K147 ;
-fW1 ;;;K146 ;
-fW1 ;;;K148 ;
-fW1 ;V2 ;;;K149 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="GR_CY_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="SCMFSA_1"/>
+</Signature>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="147"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="146"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="148"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="149"/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+</Cluster>
+</FCluster>
+</Clusters>

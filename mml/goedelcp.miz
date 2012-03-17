@@ -1675,40 +1675,56 @@ begin :: Goedel's Completeness Theorem,
       :: Ebb et al, Chapter V, Completeness Theorem 4.1
 
 theorem
-  still_not-bound_in X is finite & X |= p implies X |- p
+Th35:  J,v |= X & Y c= X implies J,v |= Y
+proof
+  assume A2: J,v |= X;
+  assume A1: Y c= X;
+  p in Y implies J,v |= p
   proof
-    assume A1: still_not-bound_in X is finite & X |= p;
-    now assume not X |- p; then
-      reconsider CX = X \/ {'not' p} as Consistent Subset of CQC-WFF
-        by HENMODEL:9;
-A2:  for A,J,v holds not J,v |= CX
-      proof
-        let A,J,v;
-        now assume A3: J,v |= X \/ {'not' p};
-          now let q such that A4: q in X;
-            X c= X \/ {'not' p} by XBOOLE_1:7;
-            hence J,v |= q by A3,A4,CALCUL_1:def 11;
-          end; then
-A5:       J,v |= X by CALCUL_1:def 11;
-          now let q such that A6: q in {'not' p};
-            {'not' p} c= X \/ {'not' p} by XBOOLE_1:7;
-            hence J,v |= q by A3,A6,CALCUL_1:def 11;
-          end; then
-A7:       J,v |= {'not' p} by CALCUL_1:def 11;
-          'not' p in {'not' p} by TARSKI:def 1; then
-          J,v |= 'not' p by A7,CALCUL_1:def 11; then
-          J,v |= X & not J,v |= p by A5,VALUAT_1:28;
-          hence contradiction by A1,CALCUL_1:def 12;
-        end;
-        hence not J,v |= CX;
-      end;
-      still_not-bound_in 'not' p is finite by CQC_SIM1:20; then
-      still_not-bound_in {'not' p} is finite by Th26; then
-      still_not-bound_in X \/
-      still_not-bound_in {'not' p} is finite by A1,FINSET_1:14; then
-      still_not-bound_in CX is finite by Th27; then
-      consider CZ,JH1 such that A8: JH1,valH |= CX by Th34;
-      thus contradiction by A2,A8;
-    end;
-    hence thesis;
+    assume p in Y;
+    then p in X by A1;
+    hence thesis by A2,CALCUL_1:def 11;
   end;
+  hence thesis by CALCUL_1:def 11;
+end;
+
+theorem
+Th36: still_not-bound_in X is finite implies
+  still_not-bound_in (X \/ {p}) is finite
+proof
+  assume A0: still_not-bound_in X is finite;
+  still_not-bound_in p is finite by CQC_SIM1:20;
+  then still_not-bound_in {p} is finite by Th26;
+  then still_not-bound_in X \/ still_not-bound_in {p} is finite
+    by A0,FINSET_1:14;
+  hence thesis by Th27;
+end;
+
+theorem
+Th37:  X |= p implies not J,v |= X \/ {'not' p}
+proof
+  assume A1: X |= p;
+  assume A2: J,v |= X \/ {'not' p};
+  X c= X \/ {'not' p} by XBOOLE_1:7;
+  then A3: J,v |= X by A2,Th35;
+  {'not' p} c= X \/ {'not' p} by XBOOLE_1:7;
+  then A4: J,v |= {'not' p} by A2,Th35;
+  'not' p in {'not' p} by TARSKI:def 1;
+  then J,v |= 'not' p by A4,CALCUL_1:def 11;
+  then not J,v |= p by VALUAT_1:28;
+  hence contradiction by A1,A3,CALCUL_1:def 12;
+end;
+
+theorem
+  still_not-bound_in X is finite & X |= p implies X |- p
+proof
+  assume A0: still_not-bound_in X is finite;
+  assume A1: X |= p;
+  assume A2: not X |- p;
+  reconsider Y = X \/ {'not' p} as Subset of CQC-WFF;
+A3: still_not-bound_in Y is finite by A0,Th36;
+A4: for A,J,v holds not J,v |= Y by A1,Th37;
+A5: Y is Consistent by A2,HENMODEL:9;
+  consider CZ,JH1 such that A6:JH1,valH |= Y by A3,A5,Th34;
+  thus contradiction by A4,A6;
+end;

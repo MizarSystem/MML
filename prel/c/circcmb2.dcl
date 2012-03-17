@@ -1,50 +1,125 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-RELSET_1
-FUNCT_2
-FUNCT_3
-FUNCT_4
-FRAENKEL
-FUNCOP_1
-MCART_1
-ORDINAL1
-ORDINAL2
-NUMBERS
-XREAL_0
-FINSET_1
-CARD_1
-FINSEQ_1
-REALSET1
-SETFAM_1
-STRUCT_0
-RLVECT_1
-INT_1
-GROUP_1
-VECTSP_1
-REALSET2
-FINSEQ_2
-PARTFUN1
-UNIALG_1
-PBOOLE
-MSUALG_1
-FUNCT_6
-CARD_3
-PROB_1
-LANG1
-TREES_1
-TREES_2
-TREES_3
-TREES_4
-DTCONSTR
-MSAFREE
-MSAFREE2
-MARGREL1
-CIRCCOMB
-#
-fV82 K412 A2 A3 ;;V83 K412 A2 A3 ;;V111 K412 A2 A3 ;;V112 K412 A2 A3 ;;V119 K412 A2 A3 ;;V121 K412 A2 A3 ;;;M2 K124 ;;M4 V5 ;V7 K211 A1 K415 ;;K415 ;;K211 A1 K415 ;;K415 ;;M52 A1 ;;K414 A1 K415 ;A2 A3 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="REALSET1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="REALSET2"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="UNIALG_1"/>
+<ArticleID name="PBOOLE"/>
+<ArticleID name="MSUALG_1"/>
+<ArticleID name="FUNCT_6"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="PROB_1"/>
+<ArticleID name="LANG1"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
+<ArticleID name="TREES_3"/>
+<ArticleID name="TREES_4"/>
+<ArticleID name="DTCONSTR"/>
+<ArticleID name="MSAFREE"/>
+<ArticleID name="MSAFREE2"/>
+<ArticleID name="MARGREL1"/>
+<ArticleID name="CIRCCOMB"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="124"/>
+</Typ>
+<Typ kind="M" nr="4">
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="7">
+<Func kind="K" nr="211">
+<LocusVar nr="1"/>
+<Func kind="K" nr="415"/>
+</Func>
+<Func kind="K" nr="415"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="211">
+<LocusVar nr="1"/>
+<Func kind="K" nr="415"/>
+</Func>
+<Func kind="K" nr="415"/>
+</Typ>
+<Typ kind="M" nr="52">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="414">
+<LocusVar nr="1"/>
+<Func kind="K" nr="415"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="82">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="83">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="111">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="112">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="119">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+<Adjective nr="121">
+<Func kind="K" nr="412">
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+</Adjective>
+</Cluster>
+</FCluster>
+</Clusters>

@@ -1,19 +1,101 @@
-HIDDEN
-TARSKI
-RELAT_1
-FUNCT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-FUNCT_2
-SETFAM_1
-STRUCT_0
-PRE_TOPC
-TSEP_1
-TMAP_1
-#
-fW13 ;V14 ;V15 ;;G3 W13 ;V15 ;;M9 W13 ;A1 ;M9 W13 ;A1 ;;K80 A1 A2 A3 ;
-fW13 ;V14 ;V15 ;;G3 W13 ;V15 ;;M2 K22 U1 A1 ;;;;K87 A1 A2 ;
-fW13 ;V14 ;V15 ;;G3 W13 ;V15 ;;M9 A1 ;;K89 A1 A2 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="TSEP_1"/>
+<ArticleID name="TMAP_1"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="9">
+<Cluster>
+<Adjective nr="13" value="false"/>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+<Typ kind="M" nr="9">
+<Cluster>
+<Adjective nr="13" value="false"/>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="80">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="22">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="87">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="15"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="9">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="89">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="14"/>
+<Adjective nr="15"/>
+</Cluster>
+</FCluster>
+</Clusters>

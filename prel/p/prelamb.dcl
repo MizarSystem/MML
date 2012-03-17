@@ -1,29 +1,75 @@
-HIDDEN
-TARSKI
-RELAT_1
-FUNCT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-FUNCT_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-SETFAM_1
-STRUCT_0
-FINSEQ_2
-FUNCOP_1
-TREES_1
-TREES_2
-PRELAMB
-#
-«V35 ;;;G3 ;
-«W28 ;V35 ;;;G3 ;
-«V43 ;;;G4 ;
-«W28 ;V43 ;;;G4 ;
-«W28 ;V44 ;;;G4 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="TREES_1"/>
+<ArticleID name="TREES_2"/>
+<ArticleID name="PRELAMB"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="35"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="35"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="43"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="43"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="44"/>
+</Cluster>
+</RCluster>
+</Clusters>

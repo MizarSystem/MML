@@ -1,33 +1,155 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-RELSET_1
-FUNCT_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-SETFAM_1
-STRUCT_0
-XREAL_0
-INT_1
-CARD_3
-MCART_1
-FUNCT_4
-QC_LANG1
-QC_LANG2
-CQC_LANG
-AMI_1
-FINSEQ_2
-SCMFSA_2
-#
-M2 U6 K2 K75 ;K227 K75 ;;;K229 ;;;M1 V32 ;;M8 K75 ;;M11 K229 ;U4 K2 K75 ;K227 K75 ;;;K229 ;;;;
-™ùM2 K124 U7 K2 K75 ;K227 K75 ;;;K229 ;;;;™&R1 K212 K2 K75 ;K227 K75 ;;;K229 ;B1 ;F4 ;;ùM3 K72 ;K76 ;;&R1 K219 K2 K75 ;K227 K75 ;;;K229 ;B1 K233 B2 ;;F1 B2 ;;R1 K248 B1 K232 B2 ;;F2 B2 ;;R1 K249 B1 K234 B2 ;;F3 B2 ;;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="CARD_3"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="QC_LANG1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
+<ArticleID name="AMI_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="SCMFSA_2"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="U" nr="6">
+<Func kind="K" nr="2">
+<Func kind="K" nr="75"/>
+<Func kind="K" nr="227">
+<Func kind="K" nr="75"/>
+</Func>
+</Func>
+<Func kind="K" nr="229"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="32"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="8">
+<Cluster/>
+<Func kind="K" nr="75"/>
+</Typ>
+<Typ kind="M" nr="11">
+<Cluster/>
+<Func kind="K" nr="229"/>
+<Func kind="U" nr="4">
+<Func kind="K" nr="2">
+<Func kind="K" nr="75"/>
+<Func kind="K" nr="227">
+<Func kind="K" nr="75"/>
+</Func>
+</Func>
+<Func kind="K" nr="229"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="124">
+<Func kind="U" nr="7">
+<Func kind="K" nr="2">
+<Func kind="K" nr="75"/>
+<Func kind="K" nr="227">
+<Func kind="K" nr="75"/>
+</Func>
+</Func>
+<Func kind="K" nr="229"/>
+</Func>
+</Func>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="212">
+<Func kind="K" nr="2">
+<Func kind="K" nr="75"/>
+<Func kind="K" nr="227">
+<Func kind="K" nr="75"/>
+</Func>
+</Func>
+<Func kind="K" nr="229"/>
+<Var nr="1"/>
+</Func>
+<Func kind="F" nr="4"/>
+</Pred>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="72"/>
+<Func kind="K" nr="76"/>
+</Typ>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="219">
+<Func kind="K" nr="2">
+<Func kind="K" nr="75"/>
+<Func kind="K" nr="227">
+<Func kind="K" nr="75"/>
+</Func>
+</Func>
+<Func kind="K" nr="229"/>
+<Var nr="1"/>
+<Func kind="K" nr="233">
+<Var nr="2"/>
+</Func>
+</Func>
+<Func kind="F" nr="1">
+<Var nr="2"/>
+</Func>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="248">
+<Var nr="1"/>
+<Func kind="K" nr="232">
+<Var nr="2"/>
+</Func>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="2"/>
+</Func>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="249">
+<Var nr="1"/>
+<Func kind="K" nr="234">
+<Var nr="2"/>
+</Func>
+</Func>
+<Func kind="F" nr="3">
+<Var nr="2"/>
+</Func>
+</Pred>
+</And>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+</Scheme>
+</Schemes>

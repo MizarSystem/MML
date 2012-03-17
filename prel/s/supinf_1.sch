@@ -1,16 +1,71 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-SUPINF_1
-#
-;
-™ùM3 K40 K6 K52 ;K2 K61 ;K60 ;;;;;™ùM3 K59 ;;&™&R2 B2 B1 ;™P1 B2 ;;™&P1 B2 ;™R2 B2 B1 ;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="SUPINF_1"/>
+</Signature>
+<Scheme>
+<ArgTypes/>
+<Not>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="40">
+<Func kind="K" nr="6">
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="2">
+<Func kind="K" nr="61"/>
+<Func kind="K" nr="60"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="59"/>
+</Typ>
+<And>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+</Not>
+</And>
+</Not>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</And>
+</For>
+</Not>
+</For>
+</Not>
+</Scheme>
+</Schemes>

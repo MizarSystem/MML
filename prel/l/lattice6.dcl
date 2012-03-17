@@ -1,59 +1,291 @@
-HIDDEN
-RELAT_1
-FUNCT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-TARSKI
-FUNCT_2
-SETFAM_1
-STRUCT_0
-LATTICES
-RELAT_2
-PARTFUN1
-ORDERS_1
-ORDERS_2
-ORDINAL1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-FUNCOP_1
-YELLOW_0
-WAYBEL_0
-FUNCT_4
-FILTER_0
-EQREL_1
-FILTER_1
-LATTICE3
-XCMPLX_0
-XREAL_0
-INT_1
-GROUP_1
-FUNCT_3
-RFUNCT_1
-SQUARE_1
-RFINSEQ
-SEQ_1
-RFUNCT_3
-WELLFND1
-REALSET1
-RLVECT_1
-VECTSP_1
-REALSET2
-LATTICE6
-#
-«W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V26 ;V27 ;V28 ;V116 ;;;G5 ;
-«W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V26 ;V27 ;V28 ;V103 ;V149 ;;;G5 ;
-«W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V26 ;V27 ;V28 ;V103 ;V150 ;;;G5 ;
-«W13 ;V16 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V147 ;;;G5 ;
-«W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V26 ;V27 ;V28 ;V103 ;V155 ;;;G5 ;
-fW13 ;V43 ;V44 ;V45 ;V46 ;V64 ;V65 ;V66 ;V95 ;V96 ;V100 ;V101 ;V102 ;V120 ;;G5 W13 ;V23 ;V116 ;;;K199 A1 ;
-fV157 A1 ;;G5 W13 ;V23 ;V103 ;V150 ;;;K334 A1 ;
-fV156 A1 ;;G5 W13 ;V23 ;V103 ;V149 ;;;K335 A1 ;
-­W13 ;V23 ;V116 ;;;G5 ;W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V26 ;V27 ;V28 ;V103 ;;
-­W13 ;V23 ;V116 ;;;G5 ;W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V149 ;;
-­W13 ;V23 ;V116 ;;;G5 ;W13 ;V17 ;V18 ;V19 ;V20 ;V21 ;V22 ;V23 ;V150 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="LATTICES"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDERS_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="YELLOW_0"/>
+<ArticleID name="WAYBEL_0"/>
+<ArticleID name="FUNCT_4"/>
+<ArticleID name="FILTER_0"/>
+<ArticleID name="EQREL_1"/>
+<ArticleID name="FILTER_1"/>
+<ArticleID name="LATTICE3"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="FUNCT_3"/>
+<ArticleID name="RFUNCT_1"/>
+<ArticleID name="SQUARE_1"/>
+<ArticleID name="RFINSEQ"/>
+<ArticleID name="SEQ_1"/>
+<ArticleID name="RFUNCT_3"/>
+<ArticleID name="WELLFND1"/>
+<ArticleID name="REALSET1"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="REALSET2"/>
+<ArticleID name="LATTICE6"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="116"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="103"/>
+<Adjective nr="149"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="103"/>
+<Adjective nr="150"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="16"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="147"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="103"/>
+<Adjective nr="155"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="116"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="199">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="64"/>
+<Adjective nr="65"/>
+<Adjective nr="66"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="100"/>
+<Adjective nr="101"/>
+<Adjective nr="102"/>
+<Adjective nr="120"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="103"/>
+<Adjective nr="150"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="334">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="157">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="5">
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="103"/>
+<Adjective nr="149"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="335">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="156">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="116"/>
+</Cluster>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
+<Adjective nr="103"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="116"/>
+</Cluster>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="149"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes/>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="23"/>
+<Adjective nr="116"/>
+</Cluster>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="13" value="false"/>
+<Adjective nr="17"/>
+<Adjective nr="18"/>
+<Adjective nr="19"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="150"/>
+</Cluster>
+</CCluster>
+</Clusters>

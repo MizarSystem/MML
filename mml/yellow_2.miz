@@ -21,24 +21,11 @@ environ
  theorems TARSKI, STRUCT_0, RELAT_1, FUNCT_1, FUNCT_2, SETFAM_1, LATTICE3,
       WELLORD1, ORDERS_2, PRE_TOPC, TMAP_1, ORDERS_3, YELLOW_0, YELLOW_1,
       WAYBEL_0, GRCAT_1, RELSET_1, XBOOLE_0, XBOOLE_1;
- schemes FUNCT_2, SUPINF_2;
+ schemes FUNCT_2, DOMAIN_1;
 
 begin :: Basic Facts
 
 reserve x, X, Y for set;
-
-scheme RelStrSubset{L() -> non empty set, P[set]}:
-  {x where x is Element of L(): P[x]} is Subset of L()
-proof
-  {x where x is Element of L(): P[x]} c= L()
-  proof
-    let x be set;
-    assume x in {l where l is Element of L(): P[l]};
-    then ex l being Element of L() st x = l & P[l];
-    hence thesis;
-  end;
-  hence thesis;
-end;
 
 theorem
   for L being non empty RelStr
@@ -323,51 +310,6 @@ A8:  z in X & x' <= z & y' <= z by A2,A6,A7,WAYBEL_0:def 1;
  end;
 
 begin :: Maps
-
-scheme LambdaMD{X, Y() -> non empty set, F(set) -> Element of Y()}:
-  ex f being Function of X(), Y() st
-   for x being Element of X() holds f.x = F(x)
-proof
-  thus thesis from FUNCT_2:sch 4;
-end;
-
-scheme KappaMD{X, Y() -> non empty set, F(set) -> set}:
-  ex f being Function of X(), Y() st for x being Element of X() holds
-   f.x = F(x)
-provided
-A1:  for x being Element of X() holds F(x) is Element of Y()
-proof
-A2: now let x be Element of X();
-     F(x) is Element of Y() by A1;
-     hence F(x) in Y();
-    end;
-  consider f being Function of X(), Y() such that
-A3: for x being Element of X() holds f.x = F(x) from SUPINF_2:sch 1(A2);
-  take f;
-  thus thesis by A3;
- end;
-
-scheme NonUniqExMD{X, Y() -> non empty set, P[set,set]}:
-  ex f being Function of X(), Y() st
-    for x being Element of X() holds P[x, f.x]
-provided
-A1:  for x being Element of X() ex y being Element of Y() st P[x, y]
-proof
-A2: for x being set st x in X()
-     ex y being set st y in Y() & P[x,y]
-   proof let x be set;
-    assume x in X();
-    then reconsider x as Element of X();
-    ex y being Element of Y() st P[x,y] by A1;
-    hence thesis;
-   end;
-  consider f being Function of X(),Y() such that
-A3:  for x being set st x in X() holds P[x,f.x]
-   from FUNCT_2:sch 1(A2);
-  reconsider f as Function of X(),Y();
-  take f;
-  thus thesis by A3;
- end;
 
 definition
   let S, T be 1-sorted;
@@ -1157,7 +1099,7 @@ A3:
   then reconsider M as Subset of S;
   defpred P[Element of L] means M is_<=_than f.$1 & f.$1 <= $1;
   reconsider Y = {y where y is Element of L: P[y]} as Subset of L
-    from RelStrSubset;
+    from DOMAIN_1:sch 7;
       inf Y in M by A3;
   then reconsider S as non empty Poset by STRUCT_0:def 1;
 
@@ -1166,7 +1108,7 @@ A3:
     let X be Subset of S;
     defpred Q[Element of L] means X is_<=_than f.$1 & f.$1 <= $1;
     reconsider Y = {y where y is Element of L: Q[y]} as Subset of L
-      from RelStrSubset;
+      from DOMAIN_1:sch 7;
 
     set z = inf Y;
         z in M & M = the carrier of S by A3,YELLOW_0:def 15;
@@ -1701,7 +1643,7 @@ proof
   defpred P[Element of L] means $1 in x or $1 in y or
     ex a, b being Element of L st a in x & b in y & $1 = a "\/" b;
   reconsider Z = {z where z is Element of L: P[z]}
-    as Subset of L from RelStrSubset;
+    as Subset of L from DOMAIN_1:sch 7;
   take Z;
 
   consider z being Element of x';
@@ -2247,7 +2189,7 @@ definition
 A1: for x being Element of L holds F(x) is Element of InclPoset(Ids L)
     by Th43;
   thus ex m being map of L, InclPoset Ids L st
-   for x being Element of L holds m.x = F(x) from KappaMD(A1);
+   for x being Element of L holds m.x = F(x) from FUNCT_2:sch 13(A1);
  end;
   uniqueness
  proof let f1,f2 be map of L,InclPoset(Ids L) such that

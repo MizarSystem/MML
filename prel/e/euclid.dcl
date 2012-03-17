@@ -1,28 +1,64 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-NUMBERS
-XREAL_0
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-FINSEQ_2
-RVSUM_1
-BINOP_1
-SETFAM_1
-STRUCT_0
-METRIC_1
-PRE_TOPC
-EUCLID
-#
-fW34 ;V35 ;V40 ;V41 ;V42 ;V43 ;;M2 K56 ;;;K171 A1 ;
-fW34 ;V44 ;V45 ;;M2 K56 ;;;K172 A1 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="RVSUM_1"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="METRIC_1"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="EUCLID"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="171">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="34" value="false"/>
+<Adjective nr="35"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="172">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="34" value="false"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+</Cluster>
+</FCluster>
+</Clusters>

@@ -8,14 +8,14 @@ environ
 
  vocabulary ORDINAL2, ARYTM, FINSEQ_1, ARYTM_3, ARYTM_1, RELAT_1, FUNCT_1,
       BOOLE, FINSEQ_2, GROUP_1, QC_LANG1, RLVECT_1, NEWTON, FINSEQ_4, CARD_3,
-      NAT_1, INT_1, ABSVALUE;
- notation TARSKI, XBOOLE_0, ORDINAL1, ORDINAL2, NUMBERS, COMPLEX1, XCMPLX_0,
-      XREAL_0, REAL_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, INT_1, NAT_1,
-      RVSUM_1;
+      NAT_1, INT_1, ABSVALUE, FILTER_0, NAT_LAT, FINSET_1, CARD_1, TARSKI;
+ notation TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ORDINAL2, NUMBERS, COMPLEX1,
+      XCMPLX_0, XREAL_0, CARD_1, REAL_1, FUNCT_1, FINSET_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_4, INT_1, INT_2, NAT_1, RVSUM_1;
  constructors FINSEQOP, INT_1, REAL_1, NAT_1, RVSUM_1, FINSEQ_4, SEQ_1,
-      MEMBERED, XBOOLE_0, BINOP_2, ABSVALUE, INT_2;
+      MEMBERED, XBOOLE_0, BINOP_2, ABSVALUE, INT_2, WELLORD2;
  clusters RELSET_1, FINSEQ_2, INT_1, XREAL_0, NAT_1, MEMBERED, ZFMISC_1,
-      XBOOLE_0, ORDINAL2, XCMPLX_0;
+      XBOOLE_0, ORDINAL2, XCMPLX_0, FINSEQ_1, FINSET_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -374,4 +374,101 @@ theorem :: NEWTON:80
 
 theorem :: NEWTON:81
  for m,n st m>0 or n>0 holds ex i,i1 st i*m + i1*n = m hcf n;
+
+:: from NAT_LAT
+
+ reserve n,j,i,k,k1,k2,k3,k4,m,l,s for Nat;
+
+definition
+  func SetPrimes -> Subset of NAT means
+:: NEWTON:def 6
+ for n being Nat holds n in it iff n is prime;
+end;
+
+registration
+  cluster prime Nat;
+end;
+
+definition
+  mode Prime is prime Nat;
+end;
+
+reserve p,f for Prime;
+reserve x for set;
+
+definition let p;
+  func SetPrimenumber p -> Subset of NAT means
+:: NEWTON:def 7
+ for q being Nat holds q in it iff (q < p & q is prime);
+end;
+
+theorem :: NEWTON:82
+ SetPrimenumber p c= SetPrimes;
+
+theorem :: NEWTON:83
+    for q being Prime st p < q holds
+       SetPrimenumber p c= SetPrimenumber q;
+
+theorem :: NEWTON:84
+ SetPrimenumber p c= Seg p;
+
+theorem :: NEWTON:85
+    SetPrimenumber p is finite;
+
+reserve p for Prime;
+
+theorem :: NEWTON:86
+   for l holds ex p st p is prime & p>l;
+
+theorem :: NEWTON:87
+    SetPrimes <> {};
+
+theorem :: NEWTON:88
+    {k:k<2 & k is prime}={};
+
+theorem :: NEWTON:89
+    for p holds {k:k<p & k is prime} c= NAT;
+
+theorem :: NEWTON:90
+ for m holds {k:k<m & k is prime} c= Seg m;
+
+theorem :: NEWTON:91
+ for m holds {k:k<m & k is prime} is finite;
+
+theorem :: NEWTON:92
+ for f being Prime holds not f in {k: k<f & k is prime};
+
+theorem :: NEWTON:93
+    for f holds {k: k<f & k is prime}\/{f} is finite;
+
+theorem :: NEWTON:94
+ for f,g being Prime st f<g holds
+   {k1: k1<f & k1 is prime}\/{f} c={k2: k2<g & k2 is prime};
+
+theorem :: NEWTON:95
+    for k st k>m holds not k in {k1:k1<m & k1 is prime};
+
+definition let n;
+  func primenumber n -> Prime means
+:: NEWTON:def 8
+
+ ex B being finite set st B = {k:k<it & k is prime} & n = card B;
+end;
+
+theorem :: NEWTON:96
+  SetPrimenumber p = {k:k<p & k is prime};
+
+theorem :: NEWTON:97 ::Euklidesa::
+    SetPrimes is infinite;
+
+reserve m,m1,p',p1,i for Nat;
+
+theorem :: NEWTON:98 :: divisibility
+           for i st i is prime holds
+   for m,n holds i divides m * n implies i divides m or i divides n;
+
+:: from URYSOHN1, the proof from CARD_4
+
+theorem :: NEWTON:99
+   m|^n is Nat;
 

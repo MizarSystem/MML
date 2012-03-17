@@ -1,23 +1,115 @@
-HIDDEN
-RELAT_1
-FUNCT_1
-TARSKI
-ORDINAL1
-XBOOLE_0
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-FUNCOP_1
-FINSEQ_2
-PBOOLE
-#
-M1 W12 ;;M11 V2 ;F1 ;;M11 V2 ;F1 ;;;
-™ùM13 F1 ;F2 ;F3 ;;™ùM3 F1 ;;ùM3 K11 F2 ;B2 ;;P1 B2 B3 K11 K11 B1 B2 ;B3 ;;ùM3 F1 ;;ùM3 K11 F2 ;B1 ;;™ùM3 K11 F3 ;B1 ;;™P1 B1 B2 B3 ;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="PBOOLE"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="11">
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+<Func kind="F" nr="1"/>
+</Typ>
+<Typ kind="M" nr="11">
+<Cluster>
+<Adjective nr="2"/>
+</Cluster>
+<Func kind="F" nr="1"/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="13">
+<Cluster/>
+<Func kind="F" nr="1"/>
+<Func kind="F" nr="2"/>
+<Func kind="F" nr="3"/>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="11">
+<Func kind="F" nr="2"/>
+<Var nr="2"/>
+</Func>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+<Var nr="3"/>
+<Func kind="K" nr="11">
+<Func kind="K" nr="11">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Var nr="3"/>
+</Func>
+</Pred>
+</For>
+</For>
+</Not>
+</For>
+</Not>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="F" nr="1"/>
+</Typ>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="11">
+<Func kind="F" nr="2"/>
+<Var nr="1"/>
+</Func>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="11">
+<Func kind="F" nr="3"/>
+<Var nr="1"/>
+</Func>
+</Typ>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+</Not>
+</For>
+</Not>
+</For>
+</For>
+</Scheme>
+</Schemes>

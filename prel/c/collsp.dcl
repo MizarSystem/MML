@@ -1,14 +1,57 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-SETFAM_1
-STRUCT_0
-COLLSP
-#
-«V6 ;;;G3 ;
-«W5 ;V6 ;;;G3 ;
-«W5 ;V6 ;V7 ;V8 ;;;G3 ;
-«W5 ;V6 ;V7 ;V8 ;V9 ;;;G3 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="COLLSP"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="6"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5" value="false"/>
+<Adjective nr="6"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5" value="false"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5" value="false"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
+</Cluster>
+</RCluster>
+</Clusters>

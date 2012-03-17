@@ -1,29 +1,61 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-SUPINF_1
-FINSET_1
-CARD_1
-RELSET_1
-FINSEQ_1
-FINSEQ_2
-XREAL_0
-NEWTON
-CARD_4
-FUNCT_2
-SETFAM_1
-PROB_1
-FINSUB_1
-MEASURE1
-MEASURE2
-MEASURE4
-#
-fW1 ;V36 A1 ;V39 ;V40 ;V43 A1 ;;M1 ;M25 A1 ;;K168 A1 A2 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="SUPINF_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="INT_2"/>
+<ArticleID name="NEWTON"/>
+<ArticleID name="CARD_4"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="PROB_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="MEASURE1"/>
+<ArticleID name="MEASURE2"/>
+<ArticleID name="MEASURE4"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="25">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="205">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="39">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="46">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+</Clusters>

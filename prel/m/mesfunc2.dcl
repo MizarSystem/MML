@@ -1,25 +1,57 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-SUPINF_1
-FINSET_1
-CARD_1
-RELSET_1
-FINSEQ_1
-XREAL_0
-FUNCT_2
-FINSUB_1
-SETFAM_1
-PROB_1
-MEASURE1
-PROB_2
-#
-«V2 ;V5 ;V23 ;V26 ;V43 ;;M1 ;M12 W1 ;V39 A1 ;V42 A1 ;A1 ;;M10 A2 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="SUPINF_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="PROB_1"/>
+<ArticleID name="MEASURE1"/>
+<ArticleID name="PROB_2"/>
+</Signature>
+<RCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="12">
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="39">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="42">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="10">
+<Cluster/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="23"/>
+<Adjective nr="26"/>
+<Adjective nr="43"/>
+</Cluster>
+</RCluster>
+</Clusters>

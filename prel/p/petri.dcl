@@ -1,14 +1,41 @@
-HIDDEN
-RELAT_1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-FUNCT_1
-MCART_1
-PETRI
-#
-«V7 ;;;G1 ;
-«V9 ;;;G1 ;
-«V11 ;;;G1 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="PETRI"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="7"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="9"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="11"/>
+</Cluster>
+</RCluster>
+</Clusters>

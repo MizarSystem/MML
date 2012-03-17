@@ -1,11 +1,42 @@
-HIDDEN
-XBOOLE_0
-RELAT_1
-ZFMISC_1
-SUBSET_1
-NET_1
-#
-«V5 ;;;G1 ;
-«V5 ;V6 ;;;G1 ;
-fV5 ;V6 ;;;G1 K1 ;K1 ;K1 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NET_1"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="6"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="G" nr="1">
+<Func kind="K" nr="1"/>
+<Func kind="K" nr="1"/>
+<Func kind="K" nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="6"/>
+</Cluster>
+</FCluster>
+</Clusters>

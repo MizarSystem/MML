@@ -1,27 +1,109 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-RELSET_1
-FUNCT_2
-BINOP_1
-XREAL_0
-SETFAM_1
-STRUCT_0
-METRIC_1
-PRE_TOPC
-PCOMPS_1
-#
-«W29 ;V40 ;V45 ;;;G4 ;
-«W29 ;V39 ;V40 ;V46 ;;;G4 ;
-fV39 ;V40 ;;M1 ;;K118 A1 ;
-fW29 ;V39 ;V40 ;;M1 W1 ;;;K118 A1 ;
-fV39 ;V40 ;;G3 ;;K121 A1 ;
-fW29 ;V39 ;V40 ;;G3 W29 ;;;K121 A1 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="BINOP_1"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="METRIC_1"/>
+<ArticleID name="PRE_TOPC"/>
+<ArticleID name="PCOMPS_1"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="45"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="46"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="118">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="118">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="121">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="3">
+<Cluster>
+<Adjective nr="29" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="121">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="29" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+</Cluster>
+</FCluster>
+</Clusters>

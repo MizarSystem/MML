@@ -1,35 +1,356 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-RELSET_1
-FINSET_1
-CARD_1
-FINSEQ_1
-FUNCT_2
-FUNCOP_1
-FUNCT_7
-SETFAM_1
-CLASSES2
-ORDINAL4
-AFINSQ_1
-#
-M4 K52 ;K56 ;;;
-™ùM1 V2 ;V5 ;V11 ;V17 ;;™&R1 K151 B1 ;F1 ;;ùM4 K52 ;K56 ;;™&R2 B2 F1 ;;™P1 B2 K20 B1 B2 ;;;;ùM4 K52 ;K56 ;;ùM1 ;ùM1 ;™&R2 B1 F1 ;;P1 B1 B2 ;P1 B1 B3 ;™R1 B2 B3 ;;ùM4 K52 ;K56 ;;™&R2 B1 F1 ;;ùM1 ;™P1 B1 B2 ;;;
-#
-M4 K52 ;K56 ;;M1 ;;
-™ùM1 V2 ;V5 ;V11 ;V17 ;;™&R1 K150 B1 ;F1 ;;ùM4 K52 ;K56 ;;™&R2 B2 F1 ;;™R1 K20 B1 B2 ;F2 B2 ;;;;;
-#
-;
-ùM1 V2 ;V5 ;V11 ;V17 ;;P1 B1 ;P1 K5 ;;ùM1 V2 ;V5 ;V11 ;V17 ;;ùM1 ;™&P1 B1 ;™P1 K142 B1 K155 B2 ;;;;;
-#
-M1 W1 ;;;
-™ùM1 ;™ùM1 ;&™&R2 B2 B1 ;ùM1 V2 ;V5 ;V11 ;V17 ;;™&R2 B3 K159 F1 ;;;P1 B3 ;R1 B2 B3 ;;;™&™ùM1 V2 ;V5 ;V11 ;V17 ;;™&R2 B3 K159 F1 ;;;P1 B3 ;R1 B2 B3 ;;™R2 B2 B1 ;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FUNCT_7"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="CLASSES2"/>
+<ArticleID name="ORDINAL4"/>
+<ArticleID name="AFINSQ_1"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="151">
+<Var nr="1"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Func kind="F" nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="2"/>
+<Func kind="K" nr="20">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="1"/>
+<Func kind="F" nr="1"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="3"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="1">
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</For>
+</For>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="1"/>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Not>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+<Var nr="2"/>
+</Pred>
+</Not>
+</For>
+</And>
+</Not>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="150">
+<Var nr="1"/>
+</Func>
+<Func kind="F" nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Func kind="F" nr="1"/>
+</Pred>
+<Not>
+<Pred kind="R" nr="1">
+<Func kind="K" nr="20">
+<Var nr="1"/>
+<Var nr="2"/>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="2"/>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</And>
+</Not>
+</For>
+</Not>
+</Scheme>
+<Scheme>
+<ArgTypes/>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+</For>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="5"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Not>
+<And>
+<Pred kind="P" nr="1">
+<Var nr="1"/>
+</Pred>
+<Not>
+<Pred kind="P" nr="1">
+<Func kind="K" nr="142">
+<Var nr="1"/>
+<Func kind="K" nr="155">
+<Var nr="2"/>
+</Func>
+</Func>
+</Pred>
+</Not>
+</And>
+</Not>
+</For>
+</For>
+</Scheme>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<And>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="3"/>
+<Func kind="K" nr="159">
+<Func kind="F" nr="1"/>
+</Func>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="3"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+</And>
+</Not>
+</For>
+</And>
+</Not>
+<Not>
+<And>
+<Not>
+<For>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="11"/>
+<Adjective nr="17"/>
+</Cluster>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="2">
+<Var nr="3"/>
+<Func kind="K" nr="159">
+<Func kind="F" nr="1"/>
+</Func>
+</Pred>
+<Pred kind="P" nr="1">
+<Var nr="3"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Var nr="2"/>
+<Var nr="3"/>
+</Pred>
+</And>
+</Not>
+</For>
+</Not>
+<Not>
+<Pred kind="R" nr="2">
+<Var nr="2"/>
+<Var nr="1"/>
+</Pred>
+</Not>
+</And>
+</Not>
+</And>
+</For>
+</Not>
+</For>
+</Not>
+</Scheme>
+</Schemes>

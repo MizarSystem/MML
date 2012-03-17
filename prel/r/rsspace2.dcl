@@ -1,27 +1,56 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-SETFAM_1
-STRUCT_0
-RLVECT_1
-SEQM_3
-NORMSP_1
-BHSP_1
-BHSP_3
-RSSPACE
-#
-fW28 ;V31 ;V32 ;V33 ;V34 ;V35 ;V49 ;;;K159 ;
-fW28 ;V31 ;V32 ;V33 ;V34 ;V35 ;V49 ;V52 ;V53 ;;;K159 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="SEQM_3"/>
+<ArticleID name="NORMSP_1"/>
+<ArticleID name="BHSP_1"/>
+<ArticleID name="BHSP_3"/>
+<ArticleID name="RSSPACE"/>
+</Signature>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="159"/>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="49"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="159"/>
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="31"/>
+<Adjective nr="32"/>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+<Adjective nr="49"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
+</Cluster>
+</FCluster>
+</Clusters>

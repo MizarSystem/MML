@@ -1,31 +1,69 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-RELSET_1
-MCART_1
-FINSET_1
-CARD_1
-FINSEQ_1
-QC_LANG1
-QC_LANG2
-CQC_LANG
-XREAL_0
-INT_1
-FUNCT_2
-SETFAM_1
-STRUCT_0
-GROUP_1
-FIN_TOPO
-#
-«V51 ;;;G4 ;
-«W43 ;V51 ;;;G4 ;
-«W43 ;V49 ;V51 ;V52 ;;;G4 ;
-fW43 ;V51 ;;;K208 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="QC_LANG1"/>
+<ArticleID name="QC_LANG2"/>
+<ArticleID name="CQC_LANG"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="FIN_TOPO"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="51"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="43" value="false"/>
+<Adjective nr="51"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="4">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="43" value="false"/>
+<Adjective nr="49"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="208"/>
+<Cluster>
+<Adjective nr="43" value="false"/>
+<Adjective nr="51"/>
+</Cluster>
+</FCluster>
+</Clusters>

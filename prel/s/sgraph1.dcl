@@ -1,25 +1,97 @@
-HIDDEN
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELAT_1
-FUNCT_1
-TARSKI
-ORDINAL1
-RELSET_1
-ORDINAL2
-NUMBERS
-FINSET_1
-CARD_1
-FINSEQ_1
-FINSEQ_2
-MEMBERED
-SETFAM_1
-STRUCT_0
-SGRAPH1
-#
-«V31 ;;;G3 ;
-fV17 ;V22 ;V23 ;V24 ;V25 ;V26 ;;M1 V16 ;;M1 V16 ;;;K111 A1 A2 ;
-fW1 ;;M1 ;;K113 A1 ;
-­;M1 V1 ;;;M2 K6 A1 ;;V1 ;V17 ;V22 ;V23 ;V24 ;V25 ;V26 ;;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="SGRAPH1"/>
+</Signature>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="3">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="31"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="16"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="16"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="111">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="17"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="113">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
+</FCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="6">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="17"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
+<Adjective nr="24"/>
+<Adjective nr="25"/>
+<Adjective nr="26"/>
+</Cluster>
+</CCluster>
+</Clusters>

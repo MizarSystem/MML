@@ -125,6 +125,8 @@ The result type is not invariant under swapping the arguments
 The type of the argument must be equal to the result type
 # 89
 As yet not implemented for redefined functors
+# 90
+Attributes are not allowed in a prefix
 # 91
 Homonymic fields in structure declaration
 # 92

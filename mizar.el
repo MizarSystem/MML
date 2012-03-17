@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.99 $
+;; $Revision: 1.100 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -274,15 +274,17 @@ The mmlquery interpreter has to be installed for this,
 see `mmlquery-program-name'.
 'translate for expanded formula in absolute notation,
 'raw for the internal Mizar representation,
+'xml for xml internal Mizar representation
 'expanded for expansion of clusters,
 
-The values 'raw and 'expanded are for debugging only, do
+The values 'xml 'raw and 'expanded are for debugging only, do
 not use them to get constructor explanatios."
 :type '(choice (const :tag "sorted list of constructors" sorted)
 	       (const :tag "unsorted list of constructors" constructor)
 	       (const :tag "mmlquery input" mmlquery)
 	       (const :tag "translated formula" translate)
 	       (const :tag "nontranslated (raw) formula" raw)
+	       (const :tag "nontranslated (xml) formula" xml)
 	       (const :tag "raw formula with expanded clusters" expanded))
 :group 'mizar-constructor-explanations)
 
@@ -2208,6 +2210,7 @@ Uses the global tables `cstrnames' and `cstrnrs'."
       (concat kind (int-to-string nr))
       )))
 
+;;; ###REMOVE after debugging - replaced by xml
 (defvar mizartoken2human
   (let ((table (make-vector 256 0))
 	(i 0))
@@ -2221,8 +2224,111 @@ Uses the global tables `cstrnames' and `cstrnrs'."
     table)
 "Table translating internal tokens for formula kinds")
 
+(defun mizar-typ-repr (typ &optional cstronly)
+"Realtive repr of a xml type TYP."
+(let ((head (car typ)) (atts (cadr typ)) (args (cddr typ)))
+(if (equal (car args) "") (setq args nil))
+(cond
+ ((eq head 'Typ)
+  (let ((knd (xml-get-attribute typ 'kind)))
+    (if (equal knd "G") (setq knd "L"))  ;; fixing clash with aggregates
+    (if (equal knd "errortyp") knd
+      (let ((res (concat knd (xml-get-attribute typ 'nr)))
+	    (adjs (cddr (cadr args))) ;; omit lower cluster
+	    (adjstr ""))
+	(if (equal (car adjs) "") (setq adjs nil))
+	(while adjs
+	  (let ((non (if (equal "false" 
+				(xml-get-attribute (car adjs) 'value))
+			 "non " ""))
+		(at (concat "V" (xml-get-attribute (car adjs) 'nr)))
+		(ar1 (if (and (cddr (car adjs)) 
+			      (not (equal "" (car (cddr (car adjs)))))) 
+			 (concat "( " (mapconcat 'mizar-term-repr
+						(cddr (car adjs)) ", ") " )" )
+		       "")))
+	    (setq adjstr (concat adjstr " " non at ar1)
+		  adjs (cdr adjs))))
+	(setq args (cddr args))
+	(concat adjstr " " res
+		(if args (concat "( " 
+				 (mapconcat 'mizar-term-repr args ", ") " )")
+		  ""))))))
+ (t (error "Unexpected Mizar typ: %s" (symbol-name head))))))
+	
+(defun mizar-term-repr (trm &optional cstronly)
+"Relative repr of a xml term TRM."
+(let ((head (car trm)) (atts (cadr trm)) (args (cddr trm)))  
+(if (equal (car args) "") (setq args nil))
+(cond
+ ((eq head 'Func)
+  (concat (xml-get-attribute trm 'kind)
+	  (xml-get-attribute trm 'nr) "( " 
+	  (mapconcat 'mizar-term-repr args ", ") " )" ))
+ ((eq head 'PrivFunc)
+  (concat "privfunc" (xml-get-attribute trm 'nr) "( " 
+	  (mapconcat 'mizar-term-repr (cdr args) ", ") " )" ))
+ ((eq head 'Var) (concat "B" (xml-get-attribute trm 'nr)))
+ ((eq head 'LocusVar) (concat "A" (xml-get-attribute trm 'nr)))
+ ((eq head 'Const) (concat "C" (xml-get-attribute trm 'nr)))
+ ((eq head 'Num) (xml-get-attribute trm 'nr))
+ ((eq head 'It) "it")
+ ((eq head 'ErrorTrm) "error")
+ ((eq head 'Fraenkel)
+  (let ((res "") (lbound mizar-boundnr))
+    (while (eq (caar args) 'Typ)
+      (let ((tmp (concat "B" (int-to-string (incf mizar-boundnr))
+			 " is " (mizar-typ-repr (car args)))))
+	(setq res (if (equal res "") tmp (concat res ", " tmp)))
+	(setq args (cdr args))))
+    (setq res (concat "{ " (mizar-term-repr (car args)) " " res ":"
+		      (mizar-frm-repr (cadr args)) " }")
+	  mizar-boundnr lbound)
+    res))
+ (t (error "Unexpected Mizar term: %s" (symbol-name head))))))
 
-(defun frmrepr (frm &optional cstronly)
+
+(defun mizar-frm-repr (frm &optional cstronly)
+"Relative repr of a xml formula FRM."
+(let ((head (car frm)) (atts (cadr frm)) (args (cddr frm)))
+  (if (equal (car args) "") (setq args nil))
+  (cond
+   ((eq head 'Pred)
+    (concat (xml-get-attribute frm 'kind)
+	    (xml-get-attribute frm 'nr) "( " 
+	    (mapconcat 'mizar-term-repr args ", ") " )" ))
+   ((eq head 'PrivPred)
+    (concat "privpred" (xml-get-attribute frm 'nr) "( " 
+	    (mapconcat 'mizar-term-repr (butlast args) ", ") " )" ))
+   ((eq head 'Not)
+    (concat "not " (mizar-frm-repr (car args)) ))
+   ((eq head 'Verum) "verum")
+   ((eq head 'ErrorFrm) "error")
+   ((eq head 'And) 
+    (concat "( " (mapconcat 'mizar-frm-repr args " & ") " )" ))
+   ((eq head 'For) 
+    (let ((res
+	   (concat "for B" (int-to-string (incf mizar-boundnr)) " being"
+		   (mizar-typ-repr (car args)) " holds "
+		   (mizar-frm-repr (cadr args)))))
+      (decf mizar-boundnr)
+      res))
+   ((eq head 'Is) 
+    (concat (mizar-term-repr (car args)) " is "
+	    (mizar-typ-repr (cadr args))))
+   (t (error "Unexpected Mizar formula: %s" (symbol-name head))))))
+
+(defun frmrepr (prop &optional cstronly)
+  "Relative repr of a formula in the xml proposition PROP."
+  (or (require 'xml nil t) 
+      (error "Your Emacs lacks the xml parsing library, please upgrade"))
+  (setq mizar-boundnr 0)
+  (let ((parsed (with-temp-buffer
+		  (insert prop)
+		  (xml-parse-region (point-min) (point-max)))))
+    (mizar-frm-repr (car (cddr (car parsed))) cstronly)))
+
+(defun frmrepr-abs (frm &optional cstronly)
 "Absolute repr of a formula FRM.
 If CSTRONLY, only list of constructors,
 The clusters inside FRM must already be expanded here."
@@ -2249,13 +2355,34 @@ The clusters inside FRM must already be expanded here."
 		      (concat res (if nonv "non " "") tok))))
 	  (setq cur (+ 1 cur))
 	  (if (not cstronly)
-	      (setq res (concat res (aref mizartoken2human tok)))))))
+	      (setq res (concat res ;;(aref mizartoken2human tok)
+(char-to-string tok)))))))
     res))
 
-(defun expfrmrepr (frm &optional cstronly)
-(frmrepr (fix-pre-type frm) cstronly))
+(defun expfrmrepr (prop &optional cstronly)
+(frmrepr-abs (frmrepr prop) cstronly))
 
 (defun mizar-getbys (aname)
+  "Get constructor repr of propositions from the .pre file for ANAME."
+  (let ((prename (concat aname ".pre")))
+    (or (file-readable-p prename)
+	(error "File unreadable: %s" prename))
+    (let (res)
+      (with-temp-buffer
+	(insert-file-contents prename)
+	(goto-char (point-min))
+	(while (re-search-forward
+		"<Proposition line=.\\([0-9]+\\). col=.\\([0-9]+\\).[^>]*>\\(.\\|[\n]\\)+?<\/Proposition>"
+		(point-max) t)
+	  (let ((line (match-string 1))
+		(col (match-string 2))
+		(frm (match-string 0)))
+	    (setq res (cons (list (string-to-int line)
+				  (string-to-int col) frm) res)))))
+      (nreverse res))))
+
+;; kill after debugging, old pre-xml version
+(defun mizar-getbys-old (aname)
   "Get constructor repr of bys from the .pre file for ANAME."
   (let ((prename (concat aname ".pre")))
     (or (file-readable-p prename)
@@ -2492,8 +2619,9 @@ a list of resources.")
 (defun mizar-transl-frm (frm)
 "Translate FRM according to `mizar-expl-kind'."
 (cond 
- ((eq mizar-expl-kind 'raw) frm)
- ((eq mizar-expl-kind 'expanded) (fix-pre-type frm))
+ ((eq mizar-expl-kind 'xml) frm)
+ ((eq mizar-expl-kind 'raw) (frmrepr frm))
+ ((eq mizar-expl-kind 'expanded) (frmrepr frm))
  ((eq mizar-expl-kind 'translate) (expfrmrepr frm))
  ((eq mizar-expl-kind 'constructors)
   (prin1-to-string (expfrmrepr frm t)))

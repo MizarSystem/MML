@@ -1,52 +1,416 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-XCMPLX_0
-RELSET_1
-FUNCT_2
-FINSET_1
-CARD_1
-FINSEQ_1
-FINSUB_1
-FUNCOP_1
-FINSEQ_2
-XREAL_0
-PARTFUN1
-SETFAM_1
-STRUCT_0
-INT_1
-GROUP_1
-RLVECT_1
-VECTSP_1
-VECTSP_2
-ALGSTR_1
-COMPLEX1
-COMPLFLD
-NAT_1
-RELAT_2
-MATRIX_1
-MATRIX_2
-FINSEQ_4
-MATRLIN
-REALSET1
-REALSET2
-ALGSEQ_1
-POLYNOM3
-POLYNOM5
-#
-«W1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;V105 A1 ;;G8 W38 ;V41 ;;;M5 K56 ;U1 A1 ;;
-«W38 ;V41 ;V43 ;V46 ;V49 ;V50 ;V51 ;V52 ;V58 ;V59 ;V60 ;V61 ;V62 ;V63 ;W64 ;V69 ;V74 ;V75 ;V76 ;V77 ;V78 ;V79 ;W102 ;V106 ;;;G8 ;
-fW1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;;G8 W38 ;V46 ;V49 ;V50 ;V51 ;V52 ;V60 ;V61 ;;M5 V5 ;V18 K56 ;U1 A1 ;;V104 A1 ;K56 ;U1 A1 ;;M3 K56 ;;;K308 A1 A2 A3 ;
-fW1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;;G8 W38 ;V50 ;V51 ;V52 ;V58 ;;M5 V5 ;V18 K56 ;U1 A1 ;;V104 A1 ;K56 ;U1 A1 ;;M3 U1 A1 ;;;K309 A1 A2 A3 ;
-fW1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;;G2 W38 ;;M3 U1 A1 ;;M3 U1 A1 ;;;K310 A1 A2 A3 ;
-fW1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;V105 A1 ;;G8 W38 ;V41 ;;;K302 A1 ;
-fW1 ;V2 ;V5 ;V18 K56 ;U1 A1 ;;V34 K56 ;U1 A1 ;;V104 A1 ;;G8 W38 ;V43 ;V46 ;V50 ;V51 ;V52 ;V61 ;V62 ;V63 ;;M5 V5 ;V18 K56 ;U1 A1 ;;V104 A1 ;K56 ;U1 A1 ;;;K313 A1 A2 ;
-fW38 ;V41 ;V43 ;V46 ;V49 ;V50 ;V51 ;V52 ;V57 ;V58 ;V59 ;V60 ;V61 ;V62 ;V63 ;W64 ;V69 ;V74 ;V75 ;V76 ;V77 ;V78 ;V79 ;W102 ;V106 ;;;K215 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="FINSUB_1"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_2"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="VECTSP_2"/>
+<ArticleID name="ALGSTR_1"/>
+<ArticleID name="COMPLEX1"/>
+<ArticleID name="COMPLFLD"/>
+<ArticleID name="NAT_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="MATRIX_1"/>
+<ArticleID name="MATRIX_2"/>
+<ArticleID name="FINSEQ_4"/>
+<ArticleID name="MATRLIN"/>
+<ArticleID name="REALSET1"/>
+<ArticleID name="REALSET2"/>
+<ArticleID name="ALGSEQ_1"/>
+<ArticleID name="POLYNOM3"/>
+<ArticleID name="POLYNOM5"/>
+</Signature>
+<RCluster>
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="41"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="5">
+<Cluster/>
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="105">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="8">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="43"/>
+<Adjective nr="46"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="102" value="false"/>
+<Adjective nr="106"/>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="46"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="5">
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="308">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="58"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="5">
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="309">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="2">
+<Cluster>
+<Adjective nr="38" value="false"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="310">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+<LocusVar nr="3"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="41"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="302">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="105">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="8">
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="43"/>
+<Adjective nr="46"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="5">
+<Cluster>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="313">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="1" value="false"/>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="18">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="34">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="215"/>
+<Cluster>
+<Adjective nr="38" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="43"/>
+<Adjective nr="46"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52"/>
+<Adjective nr="57"/>
+<Adjective nr="58"/>
+<Adjective nr="59"/>
+<Adjective nr="60"/>
+<Adjective nr="61"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="69"/>
+<Adjective nr="74"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="102" value="false"/>
+<Adjective nr="106"/>
+</Cluster>
+</FCluster>
+</Clusters>

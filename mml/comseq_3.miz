@@ -35,7 +35,12 @@ Lm1: 0c = [*0,0*] by ARYTM_0:def 7;
 Lm1': 0c = 0+0*<i>;
 
 theorem
-   [*(n+1),0*] <> 0c & [*0,(n+1)*] <> 0c by Lm1,ARYTM_0:12;
+   n+1 <> 0c & (n+1)*<i> <> 0c
+ proof
+  thus n+1 <> 0c by ARYTM_0:12;
+   0 + (n+1)*<i> <> 0c by Lm1',COMPLEX1:163;
+  hence thesis;
+ end;
 
 theorem Th2:
 (for n holds rseq.n = 0) implies for m holds (Partial_Sums abs(rseq)).m = 0
@@ -430,21 +435,11 @@ end;
 theorem Th12:
 |.z.| <= abs Re z + abs Im z
 proof
-C: [*Re z,0*] = Re z+0*<i> by COMPLEX1:27;
-D: [*0,Im z*] = 0+(Im z)*<i> by COMPLEX1:27;
-    A1:z = Re z + (Im z)*<i> by COMPLEX1:29
-      .= [*Re z, Im z*] by COMPLEX1:27;
-    A2:Re([*Re z,0*])=Re z by COMPLEX1:28,C;
-    A3:Im([*Re z,0*])=0 by COMPLEX1:28,C;
-    A4:Re([*0,Im z*])=0 by COMPLEX1:28,D;
-    A5:Im([*0,Im z*])=Im z by COMPLEX1:28,D;
-       [*Re z,0*] +[*0,Im z*]
-    =[*Re ([*Re z,0*])+Re([*0,Im z*]), Im ([*Re z,0*])+Im([*0,Im z*])*]
-by COMPLEX1:def 9
-    .=[*Re z ,Im z*] by A3,A4,A5,COMPLEX1:28,C;
-     then A6: |.z.| <= |.[*Re z,0*].| +|.[*0,Im z*].| by A1,COMPLEX1:142;
-            |.[*Re z,0*].| = abs(Re z) by A2,A3,COMPLEX1:136;
-    hence thesis by A4,A5,A6,COMPLEX1:137;
+    A1:z = Re z + (Im z)*<i> by COMPLEX1:29;
+    A4:Re(0+(Im z)*<i>)=0 by COMPLEX1:28;
+    A5:Im(0+(Im z)*<i>)=Im z by COMPLEX1:28;
+  |.z.| <= |.Re z +0*<i>.| +|.0+(Im z)*<i>.| by A1,COMPLEX1:142;
+ hence thesis by A4,A5,COMPLEX1:137;
 end;
 
 theorem Th13:
@@ -478,8 +473,7 @@ proof
 end;
 
 theorem Th15:
-Re seq1 + Re seq2 = Re (seq1+seq2) &
-Im seq1 + Im seq2 = Im (seq1+seq2)
+Re seq1 + Re seq2 = Re (seq1+seq2) & Im seq1 + Im seq2 = Im (seq1+seq2)
 proof
     now let n;
    thus (Re seq1+Re seq2).n=Re seq1.n+Re seq2.n by SEQ_1:11
@@ -528,16 +522,15 @@ proof
 end;
 
 theorem Th17:
-r*Re(z)=Re([*r,0*]*z) & r*Im(z)=Im([*r,0*]*z)
+ r*Re(z)=Re(r*z) & r*Im(z)=Im(r*z)
  proof
-  set zr=[*r,0*];
-  zr = r +0*<i> by COMPLEX1:27;
+B: r = r +0*<i>;
    then
-  A1:Re(zr)=r &Im(zr)=0 by COMPLEX1:28;
-    [*r,0*]*z=[*Re(zr) * Re z - Im(zr) * Im z,Re(zr) * Im z
-             + Re z * Im zr *] by COMPLEX1:def 10
-             .= [*r * Re z,r * Im z*] by A1
-             .= r * Re z+(r * Im z)*<i> by COMPLEX1:27;
+  A1:Re r = r & Im r = 0 by COMPLEX1:28;
+   reconsider r' = r as Element of COMPLEX by XCMPLX_0:def 2;
+    r*z = Re r' * Re z - Im r' * Im z +
+              (Re r' * Im z + Re z * Im r')*<i> by COMPLEX1:def 10
+             .= r * Re z+(r * Im z)*<i> by A1;
   hence thesis by COMPLEX1:28;
 end;
 
@@ -568,26 +561,26 @@ proof
 end;
 
 theorem
-   r(#)Re seq = Re ([*r,0*] (#) seq) & r(#)Im seq = Im ([*r,0*] (#) seq)
+   r(#)Re seq = Re (r (#) seq) & r(#)Im seq = Im (r (#) seq)
 proof
     now let n;
    thus
       (r(#)Re seq).n= r*(Re seq.n) by SEQ_1:13
                  .=r*Re(seq.n) by Def3
-                 .=Re([*r,0*]*(seq.n)) by Th17
-                 .=Re(([*r,0*] (#) seq).n) by COMSEQ_1:def 7
-                 .=Re ([*r,0*] (#) seq).n by Def3;
+                 .=Re(r*(seq.n)) by Th17
+                 .=Re((r (#) seq).n) by COMSEQ_1:def 7
+                 .=Re (r (#) seq).n by Def3;
  end;
- hence r(#)Re seq=Re ([*r,0*] (#) seq) by FUNCT_2:113;
+ hence r(#)Re seq=Re (r (#) seq) by FUNCT_2:113;
     now let n;
    thus
       (r(#)Im seq).n= r*(Im seq.n) by SEQ_1:13
                  .=r*Im(seq.n) by Def4
-                 .=Im([*r,0*]*(seq.n)) by Th17
-                 .=Im(([*r,0*] (#) seq).n) by COMSEQ_1:def 7
-                 .=Im([*r,0*](#)seq).n by Def4;
+                 .=Im(r*(seq.n)) by Th17
+                 .=Im((r(#) seq).n) by COMSEQ_1:def 7
+                 .=Im(r(#)seq).n by Def4;
  end;
- hence r(#)Im seq=Im([*r,0*](#)seq) by FUNCT_2:113;
+ hence r(#)Im seq=Im(r(#)seq) by FUNCT_2:113;
 end;
 
 theorem
@@ -596,17 +589,13 @@ theorem
 Im (z (#) seq) = Re z (#) Im seq + Im z (#) Re seq
 proof
     now let n;
-A:  [*Re(z) * Re(seq.n) - Im(z) * Im(seq.n),
-                       Re(z) * Im(seq.n) + Re(seq.n) * Im(z)*]
-    =Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
-              (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i> by COMPLEX1:27;
    thus
        Re (z (#) seq).n=Re((z (#) seq).n) by Def3
                   .=Re((z * seq.n )) by COMSEQ_1:def 7
-                  .=Re([*Re(z) * Re(seq.n) - Im(z) * Im(seq.n),
-                       Re(z) * Im(seq.n) + Re(seq.n) * Im(z)*])
+                  .=Re(Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
+                       (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i>)
                         by COMPLEX1:def 10
-                  .= Re(z) * Re(seq.n) - Im(z) * Im(seq.n) by COMPLEX1:28,A
+                  .= Re(z) * Re(seq.n) - Im(z) * Im(seq.n) by COMPLEX1:28
                   .= Re(z) *( Re seq.n) - Im(z) * Im(seq.n)
                      by Def3
                   .= Re(z) *( Re seq.n) - Im(z) *( Im seq.n)
@@ -627,17 +616,13 @@ A:  [*Re(z) * Re(seq.n) - Im(z) * Im(seq.n),
    hence
       Re (z (#) seq)=Re(z)(#)Re seq-Im(z)(#)Im seq by FUNCT_2:113;
       now let n;
-A:  [*Re(z) * Re(seq.n) - Im(z) * Im(seq.n),
-                       Re(z) * Im(seq.n) + Re(seq.n) * Im(z)*]
-    =Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
-              (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i> by COMPLEX1:27;
    thus
       Im(z(#)seq).n =Im((z (#) seq).n) by Def4
                   .=Im((z * seq.n )) by COMSEQ_1:def 7
-                  .=Im([*Re(z) * Re(seq.n) - Im(z) * Im(seq.n),
-                       Re(z) * Im(seq.n) + Re(seq.n) * Im(z)*])
+                  .=Im(Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
+                       (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i>)
                         by COMPLEX1:def 10
-                  .= Re(z) * Im(seq.n) + Re(seq.n) * Im(z) by COMPLEX1:28,A
+                  .= Re(z) * Im(seq.n) + Re(seq.n) * Im(z) by COMPLEX1:28
                   .= Re(z) * Im(seq.n) + Im(z) * Re seq.n
                      by Def3
                   .= Re(z) * Im seq.n + Im(z) *( Re seq.n)
@@ -659,18 +644,14 @@ theorem
 Im (seq1 (#) seq2) = Re seq1(#)Im seq2+Im seq1(#)Re seq2
 proof
     now let n;
-A: [*Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n),
-                    Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n)*]
-   = Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
-      (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i> by COMPLEX1:27;
    thus
        Re (seq1 (#) seq2).n=Re((seq1 (#) seq2).n) by Def3
                   .=Re((seq1.n * seq2.n )) by COMSEQ_1:def 5
-                  .=Re([*Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n),
-                    Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n)*])
+                  .=Re(Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
+                     (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i>)
                     by COMPLEX1:def 10
                   .= Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)
-                    by COMPLEX1:28,A
+                    by COMPLEX1:28
                   .= (Re seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)
                      by Def3
                   .= (Re seq1.n) *( Re seq2.n) - Im(seq1.n) * Im(seq2.n)
@@ -695,18 +676,14 @@ A: [*Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n),
    hence Re (seq1 (#) seq2)=Re seq1(#)Re seq2-Im seq1(#)Im seq2 by FUNCT_2:113
 ;
       now let n;
-A: [*Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n),
-                    Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n)*]
-   = Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
-      (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i> by COMPLEX1:27;
    thus
       Im (seq1 (#) seq2).n =Im((seq1 (#) seq2).n) by Def4
                .=Im((seq1.n * seq2.n )) by COMSEQ_1:def 5
-               .=Im([*Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n),
-                    Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n)*])
+               .=Im(Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
+                    (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i>)
                      by COMPLEX1:def 10
                .= Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n)
-               by COMPLEX1:28,A
+               by COMPLEX1:28
                .= Re(seq1.n) * Im(seq2.n) + Im(seq1.n) * Re seq2.n
                   by Def3
                .= Re seq1.n * Im(seq2.n) + Im(seq1.n) * Re seq2.n
@@ -1279,8 +1256,7 @@ proof
 thus Partial_Sums(z GeoSeq).0
  =(z GeoSeq).0 by Def7
 .=1r by Def1
-.=(1r-z)/(1r-z) by A1,COMPLEX1:def 7,XCMPLX_1:60
-.=(1r -1r * z )/(1r-z) by COMPLEX1:def 7
+.=(1r -1r * z )/(1r-z) by COMPLEX1:def 7,A1,XCMPLX_1:60
 .=(1r-(z GeoSeq).0 * z)/(1r-z) by Def1
 .=(1r -(z GeoSeq).(0+1) )/(1r-z) by Def1
 .=(1r-z #N (0+1) )/(1r-z) by Def2;
@@ -1292,8 +1268,7 @@ A3:for n st P[n] holds P[n+1]
  thus
     Partial_Sums(z GeoSeq).(n+1)
     =Partial_Sums(z GeoSeq).n + (z GeoSeq).(n+1) by Def7
-   .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) by A4,Def2
-   .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * 1r by COMPLEX1:def 7
+   .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * 1r by COMPLEX1:def 7,A4,Def2
    .= (1r - z #N (n+1))/(1r-z)+ z #N (n+1) * ((1r-z)/(1r-z))
       by A1,COMPLEX1:def 7,XCMPLX_1:60
    .= (1r - z #N (n+1))/(1r-z)+ (z #N (n+1) * (1r-z))/(1r-z)
@@ -1445,18 +1420,19 @@ end;
 theorem Th39:
 for a, b being convergent Real_Sequence, c being Complex_Sequence
  st (for n holds Re (c.n) = a.n & Im (c.n) = b.n)
-  holds c is convergent & lim(c)=[*lim(a),lim(b)*]
+  holds c is convergent & lim(c)= lim(a) + lim(b)*<i>
   proof
      let a, b be convergent Real_Sequence,
      c be Complex_Sequence; assume
      A1: for n holds Re(c.n) = a.n & Im(c.n) = b.n;
   hence
   A2:  c is convergent by Th38;
-      set g=[*lim(a),lim(b)*];
-A: g = lim(a)+(lim b)*<i> by COMPLEX1:27;
-         for p st 0<p holds ex n st for m st n<=m holds |.c.m-g.|< p
+   reconsider g=lim(a)+lim(b)*<i> as Element of COMPLEX by XCMPLX_0:def 2;
+A: g = lim(a)+(lim b)*<i>;
+         for p being Element of REAL st 0<p
+           ex n st for m st n<=m holds |.c.m-g.|< p
       proof
-      let p be Real;
+      let p be Element of REAL;
           assume 0 < p;
           then A3:    0 < p/2 by SEQ_2:3;
                then consider n1 such that
@@ -1474,10 +1450,10 @@ A: g = lim(a)+(lim b)*<i> by COMPLEX1:27;
              then A7: abs(a.m-lim(a)) + abs(b.m-lim(b))< p/2+ p/2 by REAL_1:67;
 A8:          |.c.m-g.| <= abs(Re(c.m-g)) + abs(Im(c.m-g)) by Th12;
 A9:         Re(c.m)=a.m by A1;
-                Re(g) =lim(a) by COMPLEX1:28,A;
+                Re(g) =lim(a) by COMPLEX1:28;
 then A10:         Re(c.m-g)=a.m-lim(a) by A9,COMPLEX1:48;
 A11:         Im(c.m)=b.m by A1;
-                Im(g) =lim(b) by COMPLEX1:28,A;
+                Im(g) =lim(b) by COMPLEX1:28;
              then Im(c.m-g)=b.m-lim(b) by A11,COMPLEX1:48;
     hence thesis by A7,A8,A10,AXIOMS:22;
     end;
@@ -1562,8 +1538,7 @@ proof
 Y:   for n holds Im c.n=Im(c.n) by Def4;
     then
 X:   c is convergent by A1,A2,Th39;
-  lim(c)=[*lim(Re c),lim(Im c)*] by A1,A2,Th39,Y
-    .= lim(Re c)+(lim(Im c))*<i> by COMPLEX1:27;
+  lim(c) = lim(Re c)+(lim(Im c))*<i> by A1,A2,Th39,Y;
  hence thesis by COMPLEX1:28,X;
 end;
 
@@ -2338,8 +2313,7 @@ deffunc f(Nat) = z #N ($1+1);
     seq2 is convergent by A5,COMSEQ_2:9;
 then A7: seq2-seq1 is convergent by A4,COMSEQ_2:25;
 A8: lim(seq2-seq1)=lim(seq2)-lim(seq1) by A4,A6,COMSEQ_2:26
-             .=1r -0c by A4,A5,COMSEQ_2:10
-             .=1r by COMPLEX1:def 6;
+             .=1r by COMPLEX1:def 6,A4,A5,COMSEQ_2:10;
 
 A9:(1r/(1r-z))(#)(seq2-seq1) is convergent by A7,COMSEQ_2:17;
 A10:lim((1r/(1r-z))(#)(seq2-seq1))=1r/(1r-z) * 1r by A7,A8,COMSEQ_2:18
@@ -2351,8 +2325,7 @@ thus
        Partial_Sums(z GeoSeq).n
     = (1r - z #N (n+1))/(1r-z) by A2,Th36
    .= (1r - seq1.n)/(1r-z) by A3
-   .= (seq2.n-seq1.n)/(1r-z) by A5
-   .= 1r * (seq2.n-seq1.n)/(1r-z) by COMPLEX1:def 7
+   .= 1r * (seq2.n-seq1.n)/(1r-z) by COMPLEX1:def 7,A5
    .= (1r/(1r-z)) * (seq2.n+-seq1.n) by XCMPLX_1:75
    .= (1r/(1r-z)) * (seq2.n+(-seq1).n) by COMSEQ_1:def 9
    .= (1r/(1r-z)) * (seq2+(-seq1)).n by COMSEQ_1:def 4

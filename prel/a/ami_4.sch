@@ -1,18 +1,144 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-XCMPLX_0
-NAT_1
-XREAL_0
-#
-M4 K52 ;K56 ;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;M4 K52 ;K56 ;;;
-™ùM4 K52 ;K56 ;;™&R1 F1 B1 ;K69 F3 ;F4 ;;;R1 F2 B1 ;N0 ;;™R13 F4 ;N0 ;™R13 F3 ;F4 ;;R1 F1 N0 ;F3 ;;R1 F2 N0 ;F4 ;;ùM4 K52 ;K56 ;;™&™R13 F2 B1 ;N0 ;™&R1 F1 K64 B1 N1 ;;F2 B1 ;;R1 F2 K64 B1 N1 ;;K67 F1 B1 ;F2 B1 ;;;;;;
-#
-!
+<?xml version="1.0"?>
+<Schemes>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="NAT_1"/>
+<ArticleID name="XREAL_0"/>
+</Signature>
+<Scheme>
+<ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+</ArgTypes>
+<Not>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="K" nr="69">
+<Func kind="F" nr="3"/>
+<Func kind="F" nr="4"/>
+</Func>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="2">
+<Var nr="1"/>
+</Func>
+<Num nr="0"/>
+</Pred>
+</And>
+</Not>
+</For>
+</Not>
+<Not>
+<Pred kind="R" nr="13">
+<Func kind="F" nr="4"/>
+<Num nr="0"/>
+</Pred>
+</Not>
+<Not>
+<Pred kind="R" nr="13">
+<Func kind="F" nr="3"/>
+<Func kind="F" nr="4"/>
+</Pred>
+</Not>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Num nr="0"/>
+</Func>
+<Func kind="F" nr="3"/>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="2">
+<Num nr="0"/>
+</Func>
+<Func kind="F" nr="4"/>
+</Pred>
+<For>
+<Typ kind="M" nr="4">
+<Cluster/>
+<Func kind="K" nr="52"/>
+<Func kind="K" nr="56"/>
+</Typ>
+<Not>
+<And>
+<Not>
+<Pred kind="R" nr="13">
+<Func kind="F" nr="2">
+<Var nr="1"/>
+</Func>
+<Num nr="0"/>
+</Pred>
+</Not>
+<Not>
+<And>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="1">
+<Func kind="K" nr="64">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="1"/>
+</Func>
+</Pred>
+<Pred kind="R" nr="1">
+<Func kind="F" nr="2">
+<Func kind="K" nr="64">
+<Var nr="1"/>
+<Num nr="1"/>
+</Func>
+</Func>
+<Func kind="K" nr="67">
+<Func kind="F" nr="1">
+<Var nr="1"/>
+</Func>
+<Func kind="F" nr="2">
+<Var nr="1"/>
+</Func>
+</Func>
+</Pred>
+</And>
+</Not>
+</And>
+</Not>
+</For>
+</Scheme>
+</Schemes>

@@ -1,15 +1,62 @@
-HIDDEN
-RELAT_1
-RELAT_2
-FUNCT_1
-WELLORD1
-XBOOLE_0
-ZFMISC_1
-SUBSET_1
-RELSET_1
-PARTFUN1
-TOLER_1
-#
-«V18 A1 A2 ;;M1 ;M4 V4 ;V6 ;V17 A1 A1 ;A1 A1 ;;M6 A1 A2 ;
-fV1 ;V4 ;V5 ;V6 ;V7 ;V8 ;V9 ;V10 ;V11 ;V16 ;;;K16 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="RELAT_2"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="WELLORD1"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="PARTFUN1"/>
+<ArticleID name="TOLER_1"/>
+</Signature>
+<RCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="4">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="6"/>
+<Adjective nr="17">
+<LocusVar nr="1"/>
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<LocusVar nr="1"/>
+<LocusVar nr="1"/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="6">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="18">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+</RCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="16"/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="5"/>
+<Adjective nr="6"/>
+<Adjective nr="7"/>
+<Adjective nr="8"/>
+<Adjective nr="9"/>
+<Adjective nr="10"/>
+<Adjective nr="11"/>
+<Adjective nr="16"/>
+</Cluster>
+</FCluster>
+</Clusters>

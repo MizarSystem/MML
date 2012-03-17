@@ -1,35 +1,84 @@
-HIDDEN
-TARSKI
-XBOOLE_0
-RELAT_1
-FUNCT_1
-ORDINAL1
-ORDINAL2
-ZFMISC_1
-SUBSET_1
-NUMBERS
-XCMPLX_0
-XREAL_0
-RELSET_1
-FUNCT_2
-FUNCOP_1
-FRAENKEL
-FINSET_1
-CARD_1
-FINSEQ_1
-INT_1
-SEQM_3
-SETFAM_1
-STRUCT_0
-RLVECT_1
-GROUP_1
-VECTSP_1
-CLVECT_1
-CLOPBAN1
-CFUNCDOM
-CLOPBAN2
-CLOPBAN3
-CLOPBAN4
-#
-fV2 ;V5 ;V21 K56 ;U1 A1 ;;V76 A1 ;V88 A1 ;V89 A1 ;;G13 W42 ;V45 ;V46 ;V47 ;V48 ;V54 ;V72 ;V75 ;V82 ;V87 ;;M3 U1 A1 ;;;K222 A1 A2 ;
-!
+<?xml version="1.0"?>
+<Clusters>
+<Signature>
+<ArticleID name="HIDDEN"/>
+<ArticleID name="TARSKI"/>
+<ArticleID name="XBOOLE_0"/>
+<ArticleID name="RELAT_1"/>
+<ArticleID name="FUNCT_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="ORDINAL2"/>
+<ArticleID name="ZFMISC_1"/>
+<ArticleID name="SUBSET_1"/>
+<ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
+<ArticleID name="XREAL_0"/>
+<ArticleID name="RELSET_1"/>
+<ArticleID name="FUNCT_2"/>
+<ArticleID name="FUNCOP_1"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="SEQM_3"/>
+<ArticleID name="SETFAM_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="RLVECT_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
+<ArticleID name="CLVECT_1"/>
+<ArticleID name="CLOPBAN1"/>
+<ArticleID name="CFUNCDOM"/>
+<ArticleID name="CLOPBAN2"/>
+<ArticleID name="CLOPBAN3"/>
+<ArticleID name="CLOPBAN4"/>
+</Signature>
+<FCluster>
+<ArgTypes>
+<Typ kind="G" nr="13">
+<Cluster>
+<Adjective nr="42" value="false"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="54"/>
+<Adjective nr="72"/>
+<Adjective nr="75"/>
+<Adjective nr="82"/>
+<Adjective nr="87"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="3">
+<Cluster/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="222">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+<Adjective nr="21">
+<Func kind="K" nr="56"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="76">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="88">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="89">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</FCluster>
+</Clusters>
