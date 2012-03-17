@@ -11,19 +11,19 @@ environ
       SCMFSA6B, SF_MASTR, BOOLE, DTCONSTR, ABSVALUE, AMI_5, UNIALG_2, SCMFSA_4,
       FUNCOP_1, SCMFSA7B, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1,
-      INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, BINARITH, FINSOP_1, FUNCOP_1, DTCONSTR, AMI_1,
+      NAT_1, INT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_4, FUNCT_7, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, BINARITH, FINSOP_1, FUNCOP_1, DTCONSTR, AMI_1,
       SCMFSA_2, SCMFSA_4, SCMFSA_7, SCMFSA6A, SF_MASTR, SCMFSA6B, INT_2,
       XXREAL_0;
  constructors ENUMSET1, XXREAL_0, REAL_1, NAT_1, INT_2, SEQ_1, FINSEQ_4,
       FINSOP_1, PARTFUN1, BINARITH, DTCONSTR, AMI_5, SCMFSA_7, SCMFSA6A,
-      SF_MASTR, SCMFSA6B;
+      SF_MASTR, SCMFSA6B, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
-      FUNCT_7, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, ORDINAL1;
+      FUNCT_7, AMI_1, SCMFSA_2, SCMFSA_4, SF_MASTR, SCMFSA6B, ORDINAL1,
+      VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FINSEQ_2, SCMFSA_2, FUNCOP_1;
+ definitions FINSEQ_2, SCMFSA_2, FUNCOP_1, VALUED_1;
  theorems SCMFSA_7, BINARITH, REAL_1, FINSEQ_1, FINSEQ_2, NAT_1, GRFUNC_1,
       FUNCT_1, FUNCT_4, FUNCT_7, FINSEQ_3, FINSEQ_4, AMI_1, ENUMSET1, SCMFSA_2,
       FUNCOP_1, INT_1, DTCONSTR, FINSEQ_6, RELAT_1, SCMFSA_4, TARSKI, AMI_3,
@@ -111,11 +111,11 @@ A4:   k < n;
       then k < len p by A4,XXREAL_0:2;
       hence insloc k in dom Load p by A1;
      end;
-X:   insloc m in NAT by AMI_1:def 4;
+A5:   insloc m in NAT by AMI_1:def 4;
        now let x be set;
       assume x in dom Load p;
-      then consider m such that A5: insloc m = x & m < len p by A1;
-      thus x in NAT by A5,X;
+      then consider m such that A6: insloc m = x & m < len p by A1;
+      thus x in NAT by A5,A6;
      end;
    then dom Load p c= NAT by TARSKI:def 3;
    hence thesis by A2,AMI_1:def 40,SCMFSA_4:def 4;
@@ -583,9 +583,9 @@ A3: Initialized (a := k) c= s1 by FUNCT_4:26;
 then A4: a := k c= s1 by A3,XBOOLE_1:1;
 A5: IExec(a := k,s) = Result s1 +* s | A by SCMFSA6B:def 1;
     now assume
-X:   a in A;
+A6:   a in A;
      then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      a in A by X;
+      a in A by A6;
     hence contradiction by SCMFSA_2:84;
    end;
    then not a in dom s /\ A by XBOOLE_0:def 3;
@@ -593,33 +593,33 @@ X:   a in A;
    hence IExec(a := k,s).a = (Result s1).a by A5,FUNCT_4:12
    .= k by A1,A2,A4,SCMFSA_7:38;
    hereby let b be read-write Int-Location;
-      assume A6: b <> a;
-  A7: not b in dom Initialized (a := k) by SCMFSA6A:48;
+      assume A7: b <> a;
+  A8: not b in dom Initialized (a := k) by SCMFSA6A:48;
     now assume
-X:   b in A;
+A9:   b in A;
      then reconsider b as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      b in A by X;
+      b in A by A9;
     hence contradiction by SCMFSA_2:84;
    end;
       then not b in dom s /\ A by XBOOLE_0:def 3;
     then not b in dom (s | A) by RELAT_1:90;
       hence IExec(a := k,s).b = (Result s1).b by A5,FUNCT_4:12
-      .= s1.b by A1,A2,A4,A6,SCMFSA_7:38
-      .= s.b by A7,FUNCT_4:12;
+      .= s1.b by A1,A2,A4,A7,SCMFSA_7:38
+      .= s.b by A8,FUNCT_4:12;
      end;
    let f be FinSeq-Location;
-A8: not f in dom Initialized (a := k) by SCMFSA6A:49;
+A10: not f in dom Initialized (a := k) by SCMFSA6A:49;
     now assume
-X:   f in A;
+A11:   f in A;
      then reconsider f as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      f in A by X;
+      f in A by A11;
     hence contradiction by SCMFSA_2:85;
    end;
    then not f in dom s /\ A by XBOOLE_0:def 3;
  then not f in dom (s | A) by RELAT_1:90;
    hence IExec(a := k,s).f = (Result s1).f by A5,FUNCT_4:12
    .= s1.f by A1,A2,A4,SCMFSA_7:38
-   .= s.f by A8,FUNCT_4:12;
+   .= s.f by A10,FUNCT_4:12;
  end;
 
 Lm2:
@@ -853,7 +853,7 @@ A57:  now let p be FinSequence; assume p c= x;
         proof
          let c be Element of NAT;
          assume A60: c in dom aSeq(a1,r1);
-A61:   q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1) c= q by A57,A49,FINSEQ_6:12;
+A61:   q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1) c= q by A49,A57,FINSEQ_6:12;
  then A62:      dom (q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1)) c= dom q by GRFUNC_1:8;
  A63:     c1 + c in dom (q0 ^ FlattenSeq pp0 ^ aSeq(a1,r1)) by A60,FINSEQ_1:41;
     then A64:insloc (c1 + c -' 1) in dom Load q by A6,A62;
@@ -1747,9 +1747,9 @@ A3: Initialized (f := p) c= s1 by FUNCT_4:26;
 then A4: (f := p) c= s1 by A3,XBOOLE_1:1;
 A5: IExec((f := p),s) = Result s1 +* s | A by SCMFSA6B:def 1;
     now assume
-X:   f in A;
+A6:   f in A;
      then reconsider f as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      f in A by X;
+      f in A by A6;
     hence contradiction by SCMFSA_2:85;
    end;
    then not f in dom s /\ A by XBOOLE_0:def 3;
@@ -1757,34 +1757,34 @@ X:   f in A;
    hence IExec((f := p),s).f = (Result s1).f by A5,FUNCT_4:12
    .= p by A1,A2,A4,Lm4;
    hereby let a be read-write Int-Location;
-      assume A6: a <> intloc 1 & a <> intloc 2;
-  A7: not a in dom Initialized (f := p) by SCMFSA6A:48;
+      assume A7: a <> intloc 1 & a <> intloc 2;
+  A8: not a in dom Initialized (f := p) by SCMFSA6A:48;
     now assume
-X:   a in A;
+A9:   a in A;
      then reconsider a as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      a in A by X;
+      a in A by A9;
     hence contradiction by SCMFSA_2:84;
    end;
       then not a in dom s /\ A by XBOOLE_0:def 3;
     then not a in dom (s | A) by RELAT_1:90;
       hence IExec((f := p),s).a = (Result s1).a by A5,FUNCT_4:12
-      .= s1.a by A1,A2,A4,A6,Lm4
-      .= s.a by A7,FUNCT_4:12;
+      .= s1.a by A1,A2,A4,A7,Lm4
+      .= s.a by A8,FUNCT_4:12;
      end;
    let g be FinSeq-Location;
-   assume A8: g <> f;
-A9: not g in dom Initialized (f := p) by SCMFSA6A:49;
+   assume A10: g <> f;
+A11: not g in dom Initialized (f := p) by SCMFSA6A:49;
     now assume
-X:   g in A;
+A12:   g in A;
      then reconsider g as Instruction-Location of SCM+FSA by AMI_1:def 4;
-      g in A by X;
+      g in A by A12;
     hence contradiction by SCMFSA_2:85;
    end;
    then not g in dom s /\ A by XBOOLE_0:def 3;
  then not g in dom (s | A) by RELAT_1:90;
    hence IExec((f := p),s).g = (Result s1).g by A5,FUNCT_4:12
-   .= s1.g by A1,A2,A4,A8,Lm4
-   .= s.g by A9,FUNCT_4:12;
+   .= s1.g by A1,A2,A4,A10,Lm4
+   .= s.g by A11,FUNCT_4:12;
  end;
 
 definition
@@ -2257,72 +2257,72 @@ A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
    end;
    suppose InsCode i = 1;
     then consider da,db being Int-Location such that
-A6:  i = da := db by SCMFSA_2:54;
-        da <> a by A1,A6,Def3;
-    hence Exec(i,s).a = s.a by A6,SCMFSA_2:89;
+A5:  i = da := db by SCMFSA_2:54;
+        da <> a by A1,A5,Def3;
+    hence Exec(i,s).a = s.a by A5,SCMFSA_2:89;
    end;
    suppose InsCode i = 2;
     then consider da, db being Int-Location such that
-A7:  i = AddTo(da,db) by SCMFSA_2:55;
-        da <> a by A1,A7,Def3;
-    hence Exec(i,s).a = s.a by A7,SCMFSA_2:90;
+A6:  i = AddTo(da,db) by SCMFSA_2:55;
+        da <> a by A1,A6,Def3;
+    hence Exec(i,s).a = s.a by A6,SCMFSA_2:90;
    end;
    suppose InsCode i = 3;
     then consider da, db being Int-Location such that
-A8:  i = SubFrom(da, db) by SCMFSA_2:56;
-        da <> a by A1,A8,Def3;
-    hence Exec(i,s).a = s.a by A8,SCMFSA_2:91;
+A7:  i = SubFrom(da, db) by SCMFSA_2:56;
+        da <> a by A1,A7,Def3;
+    hence Exec(i,s).a = s.a by A7,SCMFSA_2:91;
    end;
    suppose InsCode i = 4;
     then consider da, db being Int-Location such that
-A9:  i = MultBy(da,db) by SCMFSA_2:57;
-        da <> a by A1,A9,Def3;
-    hence Exec(i,s).a = s.a by A9,SCMFSA_2:92;
+A8:  i = MultBy(da,db) by SCMFSA_2:57;
+        da <> a by A1,A8,Def3;
+    hence Exec(i,s).a = s.a by A8,SCMFSA_2:92;
    end;
    suppose InsCode i = 5;
     then consider da, db being Int-Location such that
-A10:  i = Divide(da, db) by SCMFSA_2:58;
-        da <> a & db <> a by A1,A10,Def3;
-    hence Exec(i,s).a = s.a by A10,SCMFSA_2:93;
+A9:  i = Divide(da, db) by SCMFSA_2:58;
+        da <> a & db <> a by A1,A9,Def3;
+    hence Exec(i,s).a = s.a by A9,SCMFSA_2:93;
    end;
    suppose InsCode i = 6;
     then consider loc being Instruction-Location of SCM+FSA such that
-A11:  i = goto loc by SCMFSA_2:59;
-    thus Exec(i,s).a = s.a by A11,SCMFSA_2:95;
+A10:  i = goto loc by SCMFSA_2:59;
+    thus Exec(i,s).a = s.a by A10,SCMFSA_2:95;
    end;
    suppose InsCode i = 7;
     then consider loc being Instruction-Location of SCM+FSA,
              da being Int-Location such that
-A12:  i = da=0_goto loc by SCMFSA_2:60;
-    thus Exec(i,s).a = s.a by A12,SCMFSA_2:96;
+A11:  i = da=0_goto loc by SCMFSA_2:60;
+    thus Exec(i,s).a = s.a by A11,SCMFSA_2:96;
    end;
    suppose InsCode i = 8;
      then consider loc being Instruction-Location of SCM+FSA,
               da being Int-Location such that
-A13:  i = da>0_goto loc by SCMFSA_2:61;
-    thus Exec(i,s).a = s.a by A13,SCMFSA_2:97;
+A12:  i = da>0_goto loc by SCMFSA_2:61;
+    thus Exec(i,s).a = s.a by A12,SCMFSA_2:97;
    end;
    suppose InsCode i = 9;
     then consider db, da being Int-Location, g being FinSeq-Location such that
-A14:  i = da := (g,db) by SCMFSA_2:62;
-        da <> a by A1,A14,Def3;
-    hence Exec(i,s).a = s.a by A14,SCMFSA_2:98;
+A13:  i = da := (g,db) by SCMFSA_2:62;
+        da <> a by A1,A13,Def3;
+    hence Exec(i,s).a = s.a by A13,SCMFSA_2:98;
    end;
    suppose InsCode i = 10;
     then consider db, da being Int-Location, g being FinSeq-Location such that
-A15:  i = (g,db):=da by SCMFSA_2:63;
-    thus Exec(i,s).a = s.a by A15,SCMFSA_2:99;
+A14:  i = (g,db):=da by SCMFSA_2:63;
+    thus Exec(i,s).a = s.a by A14,SCMFSA_2:99;
    end;
    suppose InsCode i = 11;
     then consider da being Int-Location, g being FinSeq-Location such that
-A16:  i = da :=len g by SCMFSA_2:64;
-        da <> a by A1,A16,Def3;
-    hence Exec(i,s).a = s.a by A16,SCMFSA_2:100;
+A15:  i = da :=len g by SCMFSA_2:64;
+        da <> a by A1,A15,Def3;
+    hence Exec(i,s).a = s.a by A15,SCMFSA_2:100;
    end;
    suppose InsCode i = 12;
     then consider da being Int-Location, g being FinSeq-Location such that
-A17:  i = g :=<0,...,0> da by SCMFSA_2:65;
-    thus Exec(i,s).a = s.a by A17,SCMFSA_2:101;
+A16:  i = g :=<0,...,0> da by SCMFSA_2:65;
+    thus Exec(i,s).a = s.a by A16,SCMFSA_2:101;
  end;
  end;
 

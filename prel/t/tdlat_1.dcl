@@ -20,11 +20,11 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="88">
+<Func kind="K" nr="87">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -35,11 +35,11 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="92">
+<Func kind="K" nr="91">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -50,11 +50,11 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="96">
+<Func kind="K" nr="95">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

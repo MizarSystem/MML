@@ -18,6 +18,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="METRIC_6"/>
 </Signature>
 <RCluster>
@@ -25,10 +26,10 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -40,6 +41,7 @@
 </Func>
 </Typ>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="7"/>
@@ -49,13 +51,19 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="40">
-<LocusVar nr="1"/>
-</Adjective>
 <Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="45">
+<Adjective nr="42">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="46">
+<Func kind="K" nr="66"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -65,10 +73,10 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -97,7 +105,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="40">
+<Adjective nr="41">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -107,10 +115,10 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="35"/>
 <Adjective nr="36"/>
 <Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -122,7 +130,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="41">
+<Adjective nr="42">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -141,7 +149,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="45">
+<Adjective nr="47">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -19,12 +19,13 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="26" value="false"/>
 </Cluster>
@@ -48,13 +49,13 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -62,17 +63,18 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="137">
+<Func kind="K" nr="147">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="84"/>
+<Func kind="K" nr="83"/>
 </Func>
 <Func kind="F" nr="2"/>
 </Pred>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="78"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <For>
 <Typ kind="M" nr="2">
@@ -85,7 +87,7 @@
 <And>
 <Pred kind="R" nr="1">
 <Var nr="3"/>
-<Func kind="K" nr="137">
+<Func kind="K" nr="147">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -93,10 +95,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="137">
+<Func kind="K" nr="147">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Var nr="2"/>
 <Num nr="1"/>
 </Func>

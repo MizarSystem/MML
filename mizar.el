@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.143 $
+;; $Revision: 1.144 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -460,6 +460,7 @@ MoMM should be installed for this."
   (setq comment-column 48)
   (make-local-variable 'comment-indent-function)
   (setq comment-indent-function 'mizar-comment-indent)
+  (setq tags-case-fold-search nil)
 ;  (set (make-local-variable 'tool-bar-map) mizar-tool-bar-map)
   (make-local-variable 'font-lock-defaults)
   (setq font-lock-defaults
@@ -5441,7 +5442,7 @@ This is a flamewar-resolving hack."
   :type 'hook
   :group 'mizar)
 
-(defun mizar-mode ()
+(defun mizar-mode (&optional arg)
   "Major mode for editing Mizar articles and viewing Mizar abstracts.
 
 In addition to the following commands, there are special bindings

@@ -7,17 +7,19 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
-      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, MOD_1, VECTSP_2, STRUCT_0;
+      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, MOD_1, VECTSP_2, STRUCT_0,
+      ALGSTR_0, MIDSP_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
-      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, STRUCT_0,
-      RLVECT_1, GROUP_1;
- constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, RLVECT_1, GROUP_1;
+      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, FUNCT_5,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1;
+ constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, RLVECT_1, GROUP_1, FUNCT_5,
+      REALSET1, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, STRUCT_0, RLVECT_1,
-      GROUP_1;
+      GROUP_1, ALGSTR_0, SUBSET_1, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
- definitions RLVECT_1, STRUCT_0, GROUP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, ALGSTR_0, VALUED_1;
  theorems FUNCT_2, RLVECT_1, XCMPLX_0, BINOP_2, GROUP_1, NAT_1, BINARITH,
-      XREAL_1, XREAL_0, STRUCT_0;
+      XREAL_1, XREAL_0, STRUCT_0, ALGSTR_0, CARD_1;
  schemes FUNCT_2;
 
 begin
@@ -26,13 +28,13 @@ begin
 ::                         1_ GROUP STRUCTURE
 ::
 
- reserve GS for non empty LoopStr;
+ reserve GS for non empty addLoopStr;
 
 definition
  canceled 5;
 
- func G_Real -> strict LoopStr equals
-    LoopStr (# REAL,addreal,0 #);
+ func G_Real -> strict addLoopStr equals
+    addLoopStr (# REAL,addreal,0 #);
   coherence;
 end;
 
@@ -88,13 +90,13 @@ theorem
 
 registration
  cluster strict add-associative right_zeroed right_complementable
-   Abelian (non empty LoopStr);
+   Abelian (non empty addLoopStr);
   existence proof take G_Real; thus thesis; end;
 end;
 
 definition
   mode AddGroup is add-associative right_zeroed right_complementable
-                        (non empty LoopStr);
+                        (non empty addLoopStr);
 end;
 
 definition
@@ -104,60 +106,6 @@ end;
 ::
 ::                         4. FIELD STRUCTURE
 ::
-
-definition
- struct(HGrStr,OneStr) multLoopStr (# carrier -> set,
-                        mult -> BinOp of the carrier,
-                        OneF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict multLoopStr;
-  existence
-   proof
-     consider A being non empty set, m being BinOp of A, u being Element of A;
-    take multLoopStr(#A,m,u#);
-    thus the carrier of multLoopStr(#A,m,u#) is non empty;
-    thus thesis;
-   end;
-end;
-
-definition
- struct(multLoopStr,ZeroOneStr) multLoopStr_0 (# carrier -> set,
-                        mult -> BinOp of the carrier,
-                        OneF -> Element of the carrier,
-                        ZeroF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict multLoopStr_0;
- existence
-  proof
-    consider A being non empty set,
-             m being BinOp of A, u,Z being Element of A;
-   take multLoopStr_0(#A,m,u,Z#);
-   thus the carrier of multLoopStr_0(#A,m,u,Z#) is non empty;
-   thus thesis;
-  end;
-end;
-
-definition
- struct(LoopStr,multLoopStr_0) doubleLoopStr (# carrier -> set,
-                         add, mult -> BinOp of the carrier,
-                         OneF, ZeroF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict doubleLoopStr;
- existence
-  proof
-    consider A being non empty set,
-             m,a being BinOp of A, u,Z being Element of A;
-   take doubleLoopStr(#A,m,a,u,Z#);
-   thus the carrier of doubleLoopStr(#A,m,a,u,Z#) is non empty;
-   thus thesis;
-  end;
-end;
 
 definition let IT be non empty doubleLoopStr;
  canceled 4;
@@ -170,7 +118,7 @@ end;
 
 definition let IT be non empty multLoopStr;
  attr IT is right_unital means :Def13:
-  for x being Element of IT holds x * 1_IT = x;
+  for x being Element of IT holds x * 1.IT = x;
 end;
 
 definition
@@ -256,27 +204,32 @@ end;
 
 definition let IT be non empty multLoopStr;
  attr IT is left_unital means
- :Def19: for x being Element of IT holds 1_IT * x = x;
+ :Def19: for x being Element of IT holds 1.IT * x = x;
 end;
 
 definition let IT be non empty multLoopStr_0;
- attr IT is almost_left_invertible means
+ redefine attr IT is almost_left_invertible means
  :Def20: for x being Element of IT st x <> 0.IT
-     ex y be Element of IT st x*y = 1.IT;
-end;
-
-notation let IT be non empty multLoopStr_0;
- synonym IT is Field-like for IT is almost_left_invertible;
-end;
-
-definition
- let IT be well-unital (non empty multLoopStr_0);
- redefine attr IT is degenerated means
-:Def21:  0.IT = 1_IT;
+     ex y be Element of IT st y*x = 1.IT;
  compatibility
   proof
-     1_IT = 1.IT by Lm2;
-   hence thesis by STRUCT_0:def 8;
+   thus IT is almost_left_invertible
+     implies for x being Element of IT st x <> 0.IT
+      ex y be Element of IT st y*x = 1.IT
+    proof
+     assume
+A1:   IT is almost_left_invertible;
+     let x be Element of IT;
+     assume x <> 0.IT;
+      then x is left_invertible by A1,ALGSTR_0:def 39;
+     hence ex y be Element of IT st y*x = 1.IT by ALGSTR_0:def 27;
+    end;
+   assume
+A2:  for x being Element of IT st x <> 0.IT
+      ex y be Element of IT st y*x = 1.IT;
+   let x be Element of IT;
+   assume x <> 0.IT;
+   hence ex y be Element of IT st y*x = 1.IT by A2;
   end;
 end;
 
@@ -292,14 +245,6 @@ registration
  end;
 end;
 
-Lm3:
- 1_F_Real = 1
-proof
-  reconsider e = 1 as Element of FR;
-   for h being Element of FR holds h * e = h & e * h = h;
-  hence thesis by GROUP_1:def 5;
-end;
-
 registration
  cluster F_Real -> add-associative right_zeroed right_complementable Abelian
    commutative associative left_unital right_unital distributive
@@ -309,7 +254,8 @@ registration
   proof
    thus for x,y,z being Element of F_Real holds (x+y)+z = x+(y+z);
    thus for x being Element of F_Real holds x+0.F_Real = x;
-   hereby let x be Element of F_Real;
+   thus F_Real is right_complementable
+   proof let x be Element of F_Real;
      reconsider x'=x as Element of REAL;
      reconsider y=-x' as Element of F_Real;
      take y' = y;
@@ -318,8 +264,8 @@ registration
    thus for x,y being Element of F_Real holds  x+y = y+x;
    thus for x,y being Element of F_Real holds  x*y = y*x;
    thus for x,y,z being Element of F_Real holds (x*y)*z = x*(y*z);
-   thus for x being Element of F_Real holds (1_F_Real)*x = x by Lm3;
-   thus for x being Element of F_Real holds x*(1_F_Real) = x by Lm3;
+   thus for x being Element of F_Real holds (1.F_Real)*x = x;
+   thus for x being Element of F_Real holds x*(1.F_Real) = x;
    thus for x,y,z being Element of F_Real holds
        x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
    hereby let x be Element of F_Real;
@@ -327,9 +273,9 @@ registration
     assume A1: x<>0.F_Real;
     reconsider y = (x')" as Element of F_Real;
     take y;
-    thus x*y = 1.F_Real by A1,XCMPLX_0:def 7;
+    thus y*x = 1.F_Real by A1,XCMPLX_0:def 7;
    end;
-   thus 0.F_Real <> 1_F_Real by Lm3;
+   thus 0.F_Real <> 1.F_Real;
   end;
 end;
 
@@ -344,7 +290,7 @@ registration let a be Element of F_Real, x be real number;
   end;
 end;
 
-Lm4: for L being non empty doubleLoopStr st
+Lm3: for L being non empty doubleLoopStr st
    L is distributive holds L is right-distributive left-distributive
 proof
    let L be non empty doubleLoopStr;
@@ -359,7 +305,7 @@ end;
 registration
   cluster distributive -> left-distributive right-distributive
     (non empty doubleLoopStr);
-  coherence by Lm4;
+  coherence by Lm3;
   cluster left-distributive right-distributive -> distributive
     (non empty doubleLoopStr);
   coherence
@@ -375,29 +321,28 @@ registration
 end;
 
 registration
-  cluster unital -> left_unital right_unital (non empty multLoopStr);
+  cluster well-unital -> left_unital right_unital (non empty multLoopStr);
 coherence
 proof
   let L be non empty multLoopStr;
   assume
-A1: L is unital;
-  consider e being Element of L;
-  thus for x being Element of L holds 1_L * x = x by A1,GROUP_1:def 5;
-  thus for x being Element of L holds x * 1_L = x by A1,GROUP_1:def 5;
+A1: L is well-unital;
+  thus for x being Element of L holds 1.L * x = x by A1,Def16;
+  thus for x being Element of L holds x * 1.L = x by A1,Def16;
 end;
   cluster left_unital right_unital -> unital (non empty multLoopStr);
 coherence
 proof
   let L be non empty multLoopStr such that
-A2: (for x being Element of L holds 1_L * x = x) &
-    for x being Element of L holds x * 1_L = x;
-  take 1_L;
+A2: (for x being Element of L holds 1.L * x = x) &
+    for x being Element of L holds x * 1.L = x;
+  take 1.L;
   thus thesis by A2;
 end;
 end;
 
 registration
- cluster commutative associative (non empty HGrStr);
+ cluster commutative associative (non empty multMagma);
   existence proof take F_Real; thus thesis; end;
 end;
 
@@ -423,7 +368,7 @@ end;
 canceled 13;
 
 theorem
-   1_F_Real = 1 by Lm3;
+   1.F_Real = 1;
 
 theorem
    for x,y,z being Element of F_Real holds
@@ -433,16 +378,16 @@ theorem
   x+(-x) = 0.F_Real &
   x*y = y*x &
   (x*y)*z = x*(y*z) &
-  (1_F_Real)*x = x &
-  (x <> 0.F_Real implies ex y be Element of F_Real st x*y = 1.F_Real) &
+  (1.F_Real)*x = x &
+  (x <> 0.F_Real implies ex y be Element of F_Real st y*x = 1.F_Real) &
   x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x
-  by Def19,Def20;
+  by Def20;
 
 theorem
    for FS being non empty doubleLoopStr holds
   (for x,y,z being Element of FS holds
       (x <> 0.FS implies ex y be Element of FS
-      st x*y = 1.FS)
+      st y*x = 1.FS)
        & x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x ) iff
       FS is distributive almost_left_invertible (non empty doubleLoopStr)
        by Def18,Def20;
@@ -466,24 +411,38 @@ theorem Th33:
  proof let F be associative commutative well-unital distributive
        almost_left_invertible (non empty doubleLoopStr),
      x,y,z be Element of F;
-  assume A1: x<>0.F;
-  assume A2: x*y = x*z;
-    1_F = 1.F by Lm2;
+  assume x<>0.F;
    then consider x1 being Element of F such that
-   A3:  x*x1 = 1_F by A1,Def20;
+   A1:  x1*x = 1.F by Def20;
+  assume A2: x*y = x*z;
         x1*x*y = x1*(x*y) & x1*(x*z) = x1*x*z by GROUP_1:def 4;
-    then x*x1*y = z by A2,A3,Def19;
-   hence thesis by A3,Def19;
+    then x*x1*y = z by A1,A2,Def19;
+   hence thesis by A1,Def19;
   end;
 
-definition let F be associative commutative well-unital distributive
+definition let F be associative commutative well-unital
     almost_left_invertible (non empty doubleLoopStr),
    x be Element of F;
+  canceled;
  assume A1: x <> 0.F;
- func x" -> Element of F means
- :Def22:  x*it = 1.F;
-  existence by A1,Def20;
-  uniqueness by A1,Th33;
+ redefine func x" means
+ :Def22:  it*x = 1.F;
+ compatibility
+  proof let IT be Element of F;
+A2:  x is left_invertible by A1,ALGSTR_0:def 39;
+    then consider x1 being Element of F such that
+A3:   x1*x = 1.F by ALGSTR_0:def 27;
+A4:  x is right_mult-cancelable
+     proof let y,z be Element of F;
+      assume
+A5:     y*x = z*x;
+      thus y = y * 1.F by Def16
+         .= z * x*x1 by A3,A5,GROUP_1:def 4
+         .= z * 1.F by A3,GROUP_1:def 4
+         .= z by Def16;
+     end;
+   hence thesis by A2,ALGSTR_0:def 35;
+  end;
 end;
 
 definition let F be associative commutative well-unital distributive
@@ -538,9 +497,9 @@ proof
            right-distributive (non empty doubleLoopStr),
      x,y be Element of F;
      x*y +x*(-y) = x*(y+(-y)) by Def11
-            .= x*(0.F) by RLVECT_1:def 10
+            .= x*(0.F) by RLVECT_1:def 11
             .= 0.F by Th36;
- hence x*(-y) = -x*y by RLVECT_1:def 10;
+ hence x*(-y) = -x*y by RLVECT_1:def 11;
 end;
 
 theorem Th41:
@@ -553,9 +512,9 @@ proof
            left-distributive (non empty doubleLoopStr),
      x,y be Element of F;
      x*y +(-x)*y = (x+(-x))*y by Def12
-            .= (0.F)*y by RLVECT_1:def 10
+            .= (0.F)*y by RLVECT_1:def 11
             .= 0.F by Th39;
- hence (-x)*y = -x*y by RLVECT_1:def 10;
+ hence (-x)*y = -x*y by RLVECT_1:def 11;
 end;
 
 theorem Th42:
@@ -603,7 +562,7 @@ proof
   assume A2: x<>0.F;
    x"*(0.F) = x"*x*y by A1,GROUP_1:def 4
      .= (1.F)*y by A2,Def22
-     .= (1_F)*y by Lm2
+:::     .= (1_F)*y by Lm2
      .= y by Def19;
   hence thesis by Th39;
  end;
@@ -627,9 +586,9 @@ for a,b,c be Element of K holds (a-b)*c =a*c -b*c
 ::
 
 definition let F be 1-sorted;
- struct(LoopStr) VectSpStr over F (#
+ struct(addLoopStr) VectSpStr over F (#
                    carrier -> set,
-                    add -> BinOp of the carrier,
+                    addF -> BinOp of the carrier,
                     ZeroF -> Element of the carrier,
                    lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
@@ -678,7 +637,7 @@ definition let F be non empty 1-sorted, V be non empty VectSpStr over F;
   coherence;
 end;
 
-definition let F be non empty LoopStr;
+definition let F be non empty addLoopStr;
  func comp F -> UnOp of the carrier of F means
       for x being Element of F holds it.x = -x;
 existence
@@ -702,45 +661,53 @@ A2:  for x being Element of F holds g.x = -x;
   end;
 end;
 
-Lm5:
+Lm4:
  now let F be add-associative right_zeroed right_complementable Abelian
    associative left_unital distributive (non empty doubleLoopStr);
   let MLT be
    Function of [:the carrier of F,the carrier of F:],the carrier of F;
-  set GF = VectSpStr
-  (# the carrier of F,the add of F,0.F,MLT #);
-        for x,y,z being Element of GF holds
-            x+y = y+x &
-            (x+y)+z = x+(y+z) &
-            x+(0.GF) = x &
-            ex x' being Element of GF st x+x' = 0.GF
-      proof
-       let x,y,z be Element of GF;
-       reconsider x'=x,y'=y,z'=z as Element of F;
+  set GF = VectSpStr(# the carrier of F,the addF of F,0.F,MLT #);
+  thus GF is Abelian
+   proof let x,y be Element of GF;
+       reconsider x'=x,y'=y as Element of F;
        thus x+y = y'+x' by RLVECT_1:5
                   .= y+x;
+   end;
+  thus GF is add-associative
+   proof
+       let x,y,z be Element of GF;
+       reconsider x'=x,y'=y,z'=z as Element of F;
        thus (x+y)+z = (x'+y')+z'
                   .= x'+(y'+z') by RLVECT_1:def 6
                   .= x+(y+z);
+   end;
+  thus GF is right_zeroed
+   proof
+       let x be Element of GF;
+       reconsider x'=x as Element of F;
        thus x+0.GF = x'+(0.F)
                   .= x by RLVECT_1:10;
+   end;
+   thus GF is right_complementable
+      proof
+       let x be Element of GF;
+       reconsider x'=x as Element of F;
        consider t being Element of F such that
-A1:     x' + t = 0.F by RLVECT_1:def 8;
+A1:     x' + t = 0.F by ALGSTR_0:def 11;
        reconsider t' = t as Element of GF;
        take t';
        thus x + t' = 0.GF by A1;
       end;
-  hence GF is AbGroup by RLVECT_1:def 5,def 6,def 7,def 8;
  end;
 
-Lm6:
+Lm5:
  now let F be add-associative right_zeroed right_complementable
    associative well-unital distributive (non empty doubleLoopStr);
   let MLT be
     Function of [:the carrier of F,the carrier of F:],the carrier of F
  such that
-A1: MLT = the mult of F;
-  set LS = VectSpStr (# the carrier of F,the add of F,0.F,
+A1: MLT = the multF of F;
+  set LS = VectSpStr (# the carrier of F,the addF of F,0.F,
     MLT #);
    let x,y be Element of F;
    let v,w be Element of LS;
@@ -754,7 +721,7 @@ A1: MLT = the mult of F;
   thus (x*y)*v = (x*y)*v' by A1
           .= x*(y*v') by GROUP_1:def 4
           .= x*(y*v) by A1;
-  thus (1_F)*v = (1_F)*v' by A1
+  thus (1.F)*v = (1.F)*v' by A1
           .= v by Def19;
  end;
 
@@ -766,7 +733,7 @@ definition let F be non empty doubleLoopStr;
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_F)*v = v;
+               (1.F)*v = v;
 end;
 
 registration let F be add-associative right_zeroed right_complementable Abelian
@@ -775,15 +742,15 @@ registration let F be add-associative right_zeroed right_complementable Abelian
    strict (non empty VectSpStr over F);
   existence
   proof
-    take V = VectSpStr (# the carrier of F,the add of F,
-                         0.F,the mult of F#);
+    take V = VectSpStr (# the carrier of F,the addF of F,
+                         0.F,the multF of F#);
     thus for x,y being Element of F
     for v,w being Element of V holds
      x*(v+w) = x*v+x*w &
      (x+y)*v = x*v+y*v &
      (x*y)*v = x*(y*v) &
-     (1_F)*v = v by Lm6;
-   thus thesis by Lm5;
+     (1.F)*v = v by Lm5;
+   thus thesis by Lm4;
   end;
 end;
 
@@ -809,7 +776,7 @@ theorem Th59:
  for V being add-associative right_zeroed
              right_complementable VectSp-like (non empty VectSpStr over F),
      v being Element of V
- holds (0.F)*v = 0.V & (-1_F)*v = -v & x*(0.V) = 0.V
+ holds (0.F)*v = 0.V & (-1.F)*v = -v & x*(0.V) = 0.V
 proof
  let F be add-associative right_zeroed right_complementable
     Abelian associative well-unital distributive (non empty doubleLoopStr);
@@ -817,19 +784,19 @@ proof
  let V be add-associative right_zeroed
           right_complementable VectSp-like (non empty VectSpStr over F),
      v be Element of V;
-     v+(0.F)*v = (1_F)*v + (0.F)*v by Def26
-       .= ((1_F)+(0.F))*v by Def26
-       .= (1_F)*v by RLVECT_1:10
+     v+(0.F)*v = (1.F)*v + (0.F)*v by Def26
+       .= ((1.F)+(0.F))*v by Def26
+       .= (1.F)*v by RLVECT_1:10
        .= v by Def26
        .= v+0.V by RLVECT_1:10;
  hence A1: (0.F)*v = 0.V by RLVECT_1:21;
-     (-(1_F))*v+v = (-(1_F))*v + (1_F)*v by Def26
-       .= ((1_F)+(-(1_F)))*v by Def26
-       .= 0.V by A1,RLVECT_1:def 10;
-  then (-(1_F))*v + (v+(-v)) = 0.V + -v by RLVECT_1:def 6;
-  then 0.V + -v = (-(1_F))*v + 0.V by RLVECT_1:16
-            .= (-(1_F))*v by RLVECT_1:10;
- hence (-1_F)*v = -v by RLVECT_1:10;
+     (-(1.F))*v+v = (-(1.F))*v + (1.F)*v by Def26
+       .= ((1.F)+(-(1.F)))*v by Def26
+       .= 0.V by A1,RLVECT_1:def 11;
+  then (-(1.F))*v + (v+(-v)) = 0.V + -v by RLVECT_1:def 6;
+  then 0.V + -v = (-(1.F))*v + 0.V by RLVECT_1:16
+            .= (-(1.F))*v by RLVECT_1:10;
+ hence (-1.F)*v = -v by RLVECT_1:10;
      x*(0.V) = (x*(0.F))*v by A1,Def26
        .= 0.V by A1,Th36;
  hence thesis;
@@ -844,8 +811,7 @@ proof
   assume A2: x<>(0.F);
        x"*x*v = x"*(0.V) by A1,Def26
               .= 0.V by Th59;
-   then 0.V = (1.F)*v by A2,Def22
-        .= (1_F)*v by Lm2;
+   then 0.V = (1.F)*v by A2,Def22;
   hence thesis by Def26;
  end;
 hence thesis by Th59;
@@ -859,11 +825,11 @@ canceled 2;
 
 theorem
      for V being add-associative right_zeroed
-              right_complementable (non empty LoopStr),
+              right_complementable (non empty addLoopStr),
      v,w being Element of V holds
    v+w=0.V iff -v=w
 proof let V be add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
    v,w be Element of V;
       v+w=0.V implies -v=w
    proof
@@ -877,24 +843,24 @@ A1:   v+w=0.V;
   hence thesis by RLVECT_1:16;
  end;
 
-Lm7:
+Lm6:
 for V being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
     v,w being Element of V
 holds -(w+-v)=v-w
  proof let V be add-associative right_zeroed
-                  right_complementable (non empty LoopStr),
+                  right_complementable (non empty addLoopStr),
     v,w be Element of V;
         -(w+-v)=-(-v)-w by RLVECT_1:44;
     hence thesis by RLVECT_1:30;
  end;
 
-Lm8:
+Lm7:
 for V being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
   v,w being Element of V holds -(-v-w)=w+v
  proof let V be add-associative right_zeroed
-                      right_complementable (non empty LoopStr),
+                      right_complementable (non empty addLoopStr),
     v,w be Element of V;
       -(-v-w)=w+-(-v) by RLVECT_1:47;
   hence thesis by RLVECT_1:30;
@@ -902,24 +868,24 @@ for V being add-associative right_zeroed
 
 theorem
      for V being add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
     u,v,w being Element of V holds
   -(v+w)=-w-v & -(w+-v)=v-w & -(v-w)=w+-v & -(-v-w)=w+v &
-      u-(w+v)=u-v-w by Lm7,Lm8,RLVECT_1:41,44,47;
+      u-(w+v)=u-v-w by Lm6,Lm7,RLVECT_1:41,44,47;
 
 theorem
      for V being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      v being Element of V holds
   0.V-v=-v & v-0.V=v by RLVECT_1:26,27;
 
 theorem Th66:
  for F being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      x,y being Element of F holds
   (x+(-y)=0.F iff x=y) & (x-y=0.F iff x=y)
  proof let F be add-associative right_zeroed
-                right_complementable (non empty LoopStr),
+                right_complementable (non empty addLoopStr),
     x,y be Element of F;
         x+(-y)=0.F iff x=y
      proof
@@ -942,7 +908,6 @@ theorem
   assume A1: x<>0.F;
       x"*(x*v)=(x"*x)*v by Def26
          .=1.F*v by A1,Def22
-         .=1_F*v by Lm2
          .=v by Def26;
   hence thesis;
  end;
@@ -962,9 +927,9 @@ theorem Th68:
        (non empty VectSpStr over F),
      x be Element of F,
      v,w be Element of V;
-        A1: -x*v=(-1_F)*(x*v) by Th59
-        .=((-1_F)*x)*v by Def26
-        .=(-(1_F*x))*v by Th41;
+        A1: -x*v=(-1.F)*(x*v) by Th59
+        .=((-1.F)*x)*v by Def26
+        .=(-(1.F*x))*v by Th41;
     hence -x*v=(-x)*v by Def19;
     thus thesis by A1,Def19;
  end;
@@ -976,10 +941,10 @@ registration
    assume
 A1:  F is commutative left_unital;
    let x be Scalar of F;
-       for F be commutative (non empty HGrStr),
+       for F be commutative (non empty multMagma),
     x,y being Element of F holds x*y = y*x;
-    then x*(1_F) = (1_F)*x by A1;
-   hence x*(1_F) = x by A1,Def19;
+    then x*(1.F) = (1.F)*x by A1;
+   hence x*(1.F) = x by A1,Def19;
   end;
 end;
 
@@ -1000,9 +965,9 @@ theorem Th69:
         (non empty VectSpStr over F),
      x be Element of F,
      v be Element of V;
-       x*(-v)=x*((-1_F)*v) by Th59
-        .=(x*(-1_F))*v by Def26
-        .=(-(x*1_F))*v by Th40
+       x*(-v)=x*((-1.F)*v) by Th59
+        .=(x*(-1.F))*v by Def26
+        .=(-(x*1.F))*v by Th40
         .=(-x)*v by Def13;
    hence thesis by Th68;
   end;
@@ -1065,32 +1030,28 @@ theorem
   proof
  let F be Field,
      x be Element of F;
-   assume A1: x <> 0.F; assume A2: not thesis;
-   A3: now assume
-A4:    x" = 0.F;
-     1_F = 1.F by Lm2
-       .= x*0.F by A1,A4,Def22;
-    then 1_F = 0.F by Th39;
-    hence contradiction by Def21;
+   assume A1: x <> 0.F;
+   hereby assume x" = 0.F;
+     then 1.F = x*0.F by A1,Def22;
+    then 1.F = 0.F by Th39;
+    hence contradiction by STRUCT_0:def 8;
    end;
-       now assume -x" = 0.F;
-    then 1_F*x" = (-1_F)*0.F by Th42;
-    then 1_F*x" = 0.F by Th39;
+   assume -x" = 0.F;
+    then 1.F*x" = (-1.F)*0.F by Th42;
+    then 1.F*x" = 0.F by Th39;
     then x*x" = x*0.F by Def19;
     then 1.F = x*0.F by A1,Def22;
     then 1.F = 0.F by Th39;
     hence contradiction by STRUCT_0:def 8;
-   end;
-  hence contradiction by A2,A3;
  end;
 
 canceled 3;
 
 theorem
-Th78: 1_F_Real + 1_F_Real <> 0.F_Real by Lm3;
+Th78: 1.F_Real + 1.F_Real <> 0.F_Real;
 
 definition
- let IT be non empty LoopStr;
+ let IT be non empty addLoopStr;
  canceled;
 
  attr IT is Fanoian means
@@ -1099,14 +1060,14 @@ definition
 end;
 
 registration
- cluster Fanoian (non empty LoopStr);
+ cluster Fanoian (non empty addLoopStr);
  existence
   proof
    take F = F_Real;
    let a be Element of F such that
 A1: a + a = 0.F;
-        a = 1_F * a by Def19;
-    then a + a = (1_F + 1_F) * a by Def18;
+        a = 1.F * a by Def19;
+    then a + a = (1.F + 1.F) * a by Def18;
    hence a = 0.F by A1,Th44,Th78;
   end;
 end;
@@ -1115,17 +1076,17 @@ definition let F be add-associative right_zeroed right_complementable
              commutative associative well-unital almost_left_invertible
              non degenerated distributive (non empty doubleLoopStr);
  redefine attr F is Fanoian means
-:Def29:  1_F+1_F<>0.F;
+:Def29:  1.F+1.F<>0.F;
  compatibility
   proof
-     0.F <> 1_F by Def21;
-   hence F is Fanoian implies 1_F+1_F<>0.F by Def28;
+     0.F <> 1.F by STRUCT_0:def 8;
+   hence F is Fanoian implies 1.F+1.F<>0.F by Def28;
    assume
-A1: 1_F+1_F<>0.F;
+A1: 1.F+1.F<>0.F;
    let a be Element of F such that
 A2: a + a = 0.F;
-        a = 1_F * a by Def19;
-    then a + a = (1_F + 1_F) * a by Def18;
+        a = 1.F * a by Def19;
+    then a + a = (1.F + 1.F) * a by Def18;
    hence a = 0.F by A1,A2,Th44;
   end;
 end;
@@ -1143,7 +1104,7 @@ canceled 5;
 
 theorem
      for F being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      a,b being Element of F holds
  a - b = 0.F implies a = b by Th66;
 
@@ -1151,22 +1112,22 @@ canceled;
 
 theorem Th86:
  for F being add-associative right_zeroed
-                      right_complementable (non empty LoopStr),
+                      right_complementable (non empty addLoopStr),
      a being Element of F holds
   -a = 0.F implies a = 0.F
  proof let F be add-associative right_zeroed
-                       right_complementable (non empty LoopStr),
+                       right_complementable (non empty addLoopStr),
    a be Element of F;
       --a = a by RLVECT_1:30; hence thesis by RLVECT_1:25;
  end;
 
 theorem
      for F being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      a, b being Element of F holds
    a - b = 0.F implies b - a = 0.F
  proof let F be add-associative right_zeroed
-                      right_complementable (non empty LoopStr),
+                      right_complementable (non empty addLoopStr),
     a,b be Element of F;
       a - b = -(b - a) by RLVECT_1:47; hence thesis by Th86;
  end;
@@ -1195,22 +1156,22 @@ then  -(b - c*a) = 0.F by RLVECT_1:25;
 
 theorem
      for F being add-associative right_zeroed
-                          right_complementable (non empty LoopStr),
+                          right_complementable (non empty addLoopStr),
      a, b being Element of F holds
   a + b = -(-b + -a)
  proof let F be add-associative right_zeroed
-                         right_complementable (non empty LoopStr),
+                         right_complementable (non empty addLoopStr),
    a,b be Element of F;
   thus a + b = --(a + b) by RLVECT_1:30 .= -(-b + -a) by RLVECT_1:45;
  end;
 
 theorem
      for F being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      a, b, c being Element of F holds
   (b+a)-(c+a) = b-c
  proof let F be add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
     a,b,c be Element of F;
     thus (b+a)-(c+a) = (b+a)+(-a+-c) by RLVECT_1:45
                     .= ((b+a)+-a)+-c by RLVECT_1:def 6
@@ -1223,23 +1184,23 @@ canceled;
 
 theorem
    for G being add-associative right_zeroed right_complementable
-                        (non empty LoopStr),
+                        (non empty addLoopStr),
       v,w being Element of G holds
   -(-v+w) = -w+v
 proof
   let G be add-associative right_zeroed right_complementable
-                        (non empty LoopStr),
+                        (non empty addLoopStr),
       v,w be Element of G;
   thus -(-v+w) = -w + --v by RLVECT_1:45
               .= -w + v by RLVECT_1:30;
 end;
 
 theorem
-   for G being Abelian add-associative (non empty LoopStr),
+   for G being Abelian add-associative (non empty addLoopStr),
       u,v,w being Element of G holds
    u - v - w = u - w - v
 proof
-  let G be Abelian add-associative (non empty LoopStr),
+  let G be Abelian add-associative (non empty addLoopStr),
       u,v,w be Element of G;
   thus u - v - w = u + -v + -w
                 .= u + -w + -v by RLVECT_1:def 6
@@ -1248,9 +1209,9 @@ proof
 
 theorem
    for B being AbGroup holds
-  HGrStr (# the carrier of B, the add of B #) is commutative Group
+  multMagma (# the carrier of B, the addF of B #) is commutative Group
   proof let B be AbGroup;
-    set G = HGrStr (# the carrier of B, the add of B #);
+    set G = multMagma (# the carrier of B, the addF of B #);
     A1: for a,b be Element of G,
        x,y be Element of B st a = x & b = y
      holds a * b = x + y;

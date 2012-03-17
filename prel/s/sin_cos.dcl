@@ -19,7 +19,12 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
+<ArticleID name="POWER"/>
+<ArticleID name="SERIES_1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="INT_2"/>
@@ -32,14 +37,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="177">
+<Func kind="K" nr="252">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -51,19 +56,19 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="79"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="182">
+<Func kind="K" nr="257">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="80"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="79"/>
 </Adjective>
-<Adjective nr="40"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -74,7 +79,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="196">
+<Func kind="K" nr="271">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -89,7 +94,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="274">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -104,7 +109,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="204">
+<Func kind="K" nr="279">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

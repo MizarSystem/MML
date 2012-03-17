@@ -11,7 +11,6 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XCMPLX_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="COMSEQ_1"/>
@@ -23,7 +22,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="16">
+<Adjective nr="15">
 <Func kind="K" nr="57"/>
 <Func kind="K" nr="54"/>
 </Adjective>
@@ -40,7 +39,7 @@
 </Typ>
 <Pred kind="P" nr="1">
 <Var nr="2"/>
-<Func kind="K" nr="93">
+<Func kind="K" nr="85">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

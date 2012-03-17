@@ -25,13 +25,14 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="PARTFUN1"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="GR_CY_1"/>
 <ArticleID name="MONOID_0"/>
@@ -44,11 +45,11 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="27"/>
-<Adjective nr="94"/>
+<Adjective nr="111"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
+<Func kind="K" nr="303">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -64,13 +65,13 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="252">
+<Func kind="K" nr="292">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="263">
-<Func kind="K" nr="259">
+<Func kind="K" nr="303">
+<Func kind="K" nr="299">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="2"/>
@@ -88,16 +89,16 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="265">
+<Func kind="K" nr="305">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="45"/>
-<Adjective nr="50"/>
+<Adjective nr="46"/>
 <Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -108,13 +109,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="37"/>
 <Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -125,13 +126,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="266">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="100"/>
+<Adjective nr="39"/>
+<Adjective nr="123"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -146,13 +147,13 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="266">
+<Func kind="K" nr="306">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="94"/>
+<Adjective nr="111"/>
 </Cluster>
 </CCluster>
 </Registrations>

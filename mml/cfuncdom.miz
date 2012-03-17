@@ -8,17 +8,20 @@ environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
       RLVECT_1, ARYTM_1, FUNCSDOM, CFUNCDOM, COMPLEX1, COMPLSP1, CFUNCT_1,
-      CLVECT_1, CLOPBAN1, GROUP_1, STRUCT_0, ARYTM;
+      CLVECT_1, CLOPBAN1, GROUP_1, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
-      COMPLEX1, CFUNCT_1, GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM, CLVECT_1;
- constructors DOMAIN_1, BINOP_2, COMPLEX1, FUNCSDOM, CLVECT_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, COMPLEX1, VECTSP_1,
+      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, ALGSTR_0,
+      RLVECT_1, COMPLEX1, CFUNCT_1, GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM,
       CLVECT_1;
+ constructors DOMAIN_1, BINOP_2, COMPLEX1, FUNCSDOM, CLVECT_1, GROUP_1,
+      VECTSP_1, VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, COMPLEX1, VECTSP_1,
+      CLVECT_1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, CLVECT_1, BINOP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, CLVECT_1, BINOP_1, ALGSTR_0,
+      VALUED_1;
  theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, FUNCSDOM,
-      COMPLEX1, BINOP_2, GROUP_1;
+      COMPLEX1, BINOP_2, GROUP_1, ALGSTR_0;
  schemes BINOP_1, FUNCT_2;
 
 begin  :: Operation of complex functions
@@ -624,7 +627,7 @@ proof
             .= u by Th12;
      end;
 
-     thus ex w st u+w = 0.IT
+     thus u is right_complementable
      proof
        reconsider u' = u as Element of Funcs(A,COMPLEX);
        reconsider w = (ComplexFuncExtMult(A)).[-1r,u'] as VECTOR of IT;
@@ -682,9 +685,9 @@ A2: (for a,b st
    proof let w be VECTOR of V;
      reconsider h=w as Element of Funcs(A,COMPLEX);
      consider a,b such that
-A4:  h = (ComplexFuncAdd(A)).((ComplexFuncExtMult(A)).[a,f],
+A3:  h = (ComplexFuncAdd(A)).((ComplexFuncExtMult(A)).[a,f],
                               (ComplexFuncExtMult(A)).[b,g]) by A2;
-       h = a*u + b*v by A4;
+       h = a*u + b*v by A3;
      hence thesis;
    end;
 end;
@@ -729,18 +732,15 @@ proof
 end;
 end;
 
-Lm5: now let A;
-  reconsider e = ComplexFuncUnit(A) as Element of CRing(A);
-   for x being Element of CRing(A) holds x*e=x & e*x=x by Lm4;
-  hence 1_CRing(A) = ComplexFuncUnit(A) by GROUP_1:def 5;
-end;
+Lm5:
+ for A holds 1.CRing(A) = ComplexFuncUnit(A) by Lm4,GROUP_1:def 5;
 
 theorem Th27:
 for x,y,z being Element of CRing(A) holds
   x+y = y+x &
   (x+y)+z = x+(y+z) &
   x+(0.CRing(A)) = x &
-  (ex t being Element of CRing(A) st x+t=(0.CRing(A))) &
+  x is right_complementable &
   x*y = y*x &
   (x*y)*z = x*(y*z) &
   x*(1.CRing(A)) = x &
@@ -779,21 +779,21 @@ proof
         x+y = y+x &
         (x+y)+z = x+(y+z) &
         x+(0.CRing(A)) = x &
-        (ex t being Element of CRing(A) st x+t=(0.CRing(A))) &
+        x is right_complementable &
         x*y = y*x &
         (x*y)*z = x*(y*z) &
         x*(1.CRing(A)) = x &
         (1.CRing(A))*x = x &
         x*(y+z) = x*y + x*z &
         (y+z)*x = y*x + z*x by Th27;
-   hence thesis by GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8
-,VECTSP_1:def 16,def 18;
+   hence thesis by ALGSTR_0:def 16,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6
+,def 7,VECTSP_1:def 16,def 18;
 end;
 
 definition
  struct(doubleLoopStr,CLSStruct) ComplexAlgebraStr (#
            carrier -> set,
-           mult,add -> (BinOp of the carrier),
+           multF,addF -> (BinOp of the carrier),
            Mult -> (Function of [:COMPLEX,the carrier:],the carrier),
            OneF,ZeroF -> Element of the carrier #);
 end;
@@ -847,21 +847,18 @@ proof
 end;
 end;
 
-Lm7: now let A;
-  reconsider e = ComplexFuncUnit(A) as Element of CAlgebra(A);
-   for x being Element of CAlgebra(A) holds x*e=x & e*x=x by Lm6;
-  hence 1_CAlgebra(A) = ComplexFuncUnit(A) by GROUP_1:def 5;
-end;
+Lm7:
+ for A holds 1.CAlgebra(A) = ComplexFuncUnit(A) by Lm6,GROUP_1:def 5;
 
 theorem Th29:
 for x,y,z being Element of CAlgebra(A), a,b holds
   x + y = y + x &
   (x + y) + z = x + (y + z) &
   x + (0.CAlgebra(A)) = x &
-  (ex t being Element of CAlgebra(A) st x + t=(0.CAlgebra(A))) &
+  x is right_complementable &
   x * y = y * x &
   (x * y) * z = x * (y * z) &
-  x * (1_CAlgebra(A)) = x &
+  x * (1.CAlgebra(A)) = x &
   x * (y + z) = x * y + x * z &
   a * (x * y) = (a * x) * y &
   a * (x + y) = a * x + a * y &
@@ -885,7 +882,7 @@ proof
    end;
    thus x*y = y*x by Th9;
    thus (x*y)*z = x*(y*z) by Th10;
-   thus x*(1_CAlgebra(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm7
+   thus x*(1.CAlgebra(A)) = (ComplexFuncMult(A)).(f,ComplexFuncUnit(A)) by Lm7
                      .= (ComplexFuncMult(A)).(ComplexFuncUnit(A),f) by Th9
                      .= x by Th11;
    thus x*(y+z) = x*y + x*z by Th17;
@@ -899,8 +896,8 @@ proof
   attr IT is ComplexAlgebra-like means :Def9:
   for x,y,z being Element of IT
     for a,b holds
-     x * (1_IT) = x &
-     x * (y + z) = x * y + x * z &
+:::     x * (1.IT) = x &
+:::     x * (y + z) = x * y + x * z &
      a * (x * y) = (a * x) * y &
      a * (x + y) = a * x + a * y &
      (a + b) * x = a * x + b * x &
@@ -909,7 +906,8 @@ end;
 
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-    commutative associative ComplexAlgebra-like (non empty ComplexAlgebraStr);
+    commutative associative right_unital right-distributive
+     ComplexAlgebra-like (non empty ComplexAlgebraStr);
 existence
 proof
    consider A;
@@ -918,26 +916,28 @@ proof
     x+y = y+x &
     (x+y)+z = x+(y+z) &
     x+(0.CAlgebra(A)) = x &
-    (ex t being Element of CAlgebra(A) st x+t=(0.CAlgebra(A))) &
+    x is right_complementable &
     x*y = y*x &
     (x*y)*z = x*(y*z) &
-    x*(1_CAlgebra(A)) = x &
+    x*(1.CAlgebra(A)) = x &
     x*(y+z) = x*y + x*z &
     a*(x*y) = (a*x)*y &
     a*(x+y) = a*x + a*y &
     (a+b)*x = a*x + b*x &
     (a*b)*x = a*(b*x) by Th29;
     then CAlgebra(A) is Abelian add-associative right_zeroed
-right_complementable
+    right_complementable right_unital right-distributive
      ComplexAlgebra-like commutative associative
-      by Def9,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
+      by Def9,ALGSTR_0:def 16,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,VECTSP_1:def 11,def 13;
     hence thesis;
    end;
 end;
 
 definition
   mode ComplexAlgebra is Abelian add-associative right_zeroed
-    right_complementable commutative associative ComplexAlgebra-like
+    right_complementable commutative associative
+    right_unital right-distributive ComplexAlgebra-like
     (non empty ComplexAlgebraStr);
 end;
 
@@ -949,21 +949,22 @@ proof
     x+y = y+x &
     (x+y)+z = x+(y+z) &
     x+(0.CAlgebra(A)) = x &
-    (ex t being Element of CAlgebra(A) st x+t=(0.CAlgebra(A))) &
+    x is right_complementable &
     x*y = y*x &
     (x*y)*z = x*(y*z) &
-    x*(1_CAlgebra(A)) = x &
+    x*(1.CAlgebra(A)) = x &
     x*(y+z) = x*y + x*z &
     a*(x*y) = (a*x)*y &
     a*(x+y) = a*x + a*y &
     (a+b)*x = a*x + b*x &
     (a*b)*x = a*(b*x) by Th29;
    hence thesis
-    by Def9,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
+    by Def9,ALGSTR_0:def 16,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,VECTSP_1:def 11,def 13;
 end;
 
 theorem
-   1_CRing(A) = ComplexFuncUnit(A) by Lm5;
+   1.CRing(A) = ComplexFuncUnit(A) by Lm5;
 
 theorem
-   1_CAlgebra(A) = ComplexFuncUnit(A) by Lm7;
+   1.CAlgebra(A) = ComplexFuncUnit(A) by Lm7;

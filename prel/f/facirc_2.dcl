@@ -8,10 +8,10 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="FUNCOP_1"/>
@@ -50,8 +50,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -65,15 +65,15 @@
 </Func>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="49"/>
 <Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
 <Func kind="K" nr="18"/>
 <Cluster>
-<Adjective nr="91"/>
+<Adjective nr="92"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -82,7 +82,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="91"/>
+<Adjective nr="92"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -94,14 +94,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="89" value="false"/>
+<Adjective nr="90" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -124,21 +124,21 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="83"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
+<Adjective nr="86"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -150,7 +150,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="89" value="false"/>
+<Adjective nr="90" value="false"/>
 </Cluster>
 </CCluster>
 </Registrations>

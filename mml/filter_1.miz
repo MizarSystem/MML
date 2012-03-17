@@ -14,12 +14,12 @@ environ
       FUNCT_2, BINOP_1, EQREL_1, DOMAIN_1, WELLORD1, FUNCT_3, FUNCT_4,
       STRUCT_0, LATTICES, FILTER_0, LATTICE2;
  constructors WELLORD1, BINOP_1, FUNCT_3, FUNCT_4, EQREL_1, REALSET1, FILTER_0,
-      LATTICE2;
+      LATTICE2, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      EQREL_1, STRUCT_0, LATTICES, FILTER_0, LATTICE2;
+      EQREL_1, STRUCT_0, LATTICES, FILTER_0, LATTICE2, VALUED_1;
  requirements SUBSET, BOOLE;
  definitions TARSKI, FUNCT_1, WELLORD1, BINOP_1, FILTER_0, LATTICE2, LATTICES,
-      XBOOLE_0;
+      XBOOLE_0, VALUED_1;
  theorems FUNCT_1, FUNCT_2, FUNCT_3, FUNCT_4, WELLORD1, DOMAIN_1, BINOP_1,
       EQREL_1, RELAT_1, ZFMISC_1, LATTICES, FILTER_0, LATTICE2, RELSET_1,
       WELLORD2, XBOOLE_0, XBOOLE_1;
@@ -2221,17 +2221,17 @@ A12:    x = [y,z] by A6,A9,DOMAIN_1:9;
 A13:    y = Class(E,b) by EQREL_1:45;
       set ty = b"\/"(b<=>a);
     ty in y by A13,Th61;
-then A15:    y = Class(E,ty) by A13,EQREL_1:31;
+then A14:    y = Class(E,ty) by A13,EQREL_1:31;
            ty <=> (ty <=> z) = z by Th54;
        then (ty <=> z) <=> ty = z;
        then [ty <=> z,ty] in E by FILTER_0:def 12;
-then A16:       ty <=> z in y by A15,EQREL_1:27;
-then A17:    y = Class(E,ty<=>z) by A13,EQREL_1:31;
+then A15:       ty <=> z in y by A14,EQREL_1:27;
+then A16:    y = Class(E,ty<=>z) by A13,EQREL_1:31;
        (ty<=>z)"\/"((ty<=>z)<=>a) [= ty & ty [= (ty<=>z)"\/"((ty<=>z)<=>a)
-        by A13,A17,Th61;
+        by A13,A16,Th61;
        then h.(ty<=>z) = ((ty<=>z)"\/"((ty<=>z)<=>a)) <=> (ty<=>z) &
        (ty<=>z)"\/"((ty<=>z)<=>a) = ty &
-       y = Class(E,ty<=>z) by A5,A13,A16,EQREL_1:31,LATTICES:26;
+       y = Class(E,ty<=>z) by A5,A13,A15,EQREL_1:31,LATTICES:26;
        then g.(ty <=> z) = y & h.(ty <=> z) = z by A2,Th54;
        then x = f.(ty <=> z) by A6,A8,A12,FUNCT_3:def 8;
       hence thesis by A6,A8,FUNCT_1:def 5;
@@ -2239,45 +2239,45 @@ then A17:    y = Class(E,ty<=>z) by A13,EQREL_1:31;
    thus f is one-to-one
      proof let x,y; assume x in dom f & y in dom f;
       then reconsider x' = x, y' = y as Element of B by A2,A7,FUNCT_3:70;
-A18:    f.x = [g.x',h.x'] & f.y = [g.y',h.y'] & g.x' = Class(E,x') &
+A17:    f.x = [g.x',h.x'] & f.y = [g.y',h.y'] & g.x' = Class(E,x') &
        g.y' = Class(E,y') & h.x' = (x'"\/"(x'<=>a)) <=> x' &
        x'"\/"(x'<=>a) in Class(E,x') & y'"\/"(y'<=>a) in Class(E,y') &
        h.y' = (y'"\/"(y'<=>a)) <=> y' by A2,A5,A6,A8,Th61,FUNCT_3:def 8;
       assume f.x = f.y;
-then A19:    g.x = g.y & h.x = h.y by A18,ZFMISC_1:33;
+then A18:    g.x = g.y & h.x = h.y by A17,ZFMISC_1:33;
        then x'"\/"(x'<=>a) [= y'"\/"(y'<=>a) & y'"\/"(y'<=>a) [= x'"\/"(x'<=>a
 )
-        by A18,Th61;
+        by A17,Th61;
        then y'"\/"(y'<=>a) = x'"\/"(x'<=>a) by LATTICES:26;
-      hence x = y by A18,A19,Th53;
+      hence x = y by A17,A18,Th53;
      end;
    let x,y;
    thus [x,y] in R implies x in field R & y in field R & [f.x,f.y] in S
      proof assume
-A20:    [x,y] in R;
+A19:    [x,y] in R;
       hence x in field R & y in field R by RELAT_1:30;
       reconsider x' = x, y' = y as Element of B
-        by A6,A20,RELAT_1:30;
-A21:    x' [= y' & x'"/\"Top B = x' by A20,Th32,LATTICES:43;
+        by A6,A19,RELAT_1:30;
+A20:    x' [= y' & x'"/\"Top B = x' by A19,Th32,LATTICES:43;
        then Top B [= x' => y' & Top B in F by A1,FILTER_0:12,def 8;
        then x' => y' in F by FILTER_0:9;
-then A22:    x'/\/F [= y'/\/F & x'/\/F = Class(E,x') & Class(E,x') = g.x' &
+then A21:    x'/\/F [= y'/\/F & x'/\/F = Class(E,x') & Class(E,x') = g.x' &
        y'/\/F = Class(E,y') & Class(E,y') = g.y' by A1,A2,Def6,Th16;
-A23:    h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
+A22:    h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
        f.x' = [g.x',h.x'] & f.y' = [g.y',h.y'] & x'"\/"a [= y'"\/"a &
        (x'"\/"(x'<=>a)) <=> x' = x'"\/"a & (y'"\/"(y'<=>a)) <=> y' = y'"\/"a
-         by A3,A5,A6,A8,A21,FILTER_0:1,FUNCT_3:def 8;
+         by A3,A5,A6,A8,A20,FILTER_0:1,FUNCT_3:def 8;
            x'"\/"(x'<=>a) in Class(E,x') & y'"\/"
 (y'<=>a) in Class(E,y') by Th61;
       then reconsider hx = h.x, hy = h.y as Element of latt F
-         by A1,A4,A23,Lm4;
-           hx [= hy by A23,FILTER_0:65;
-       then [x'/\/F,hx] [= [y'/\/F,hy] by A22,Th37;
-      hence thesis by A22,A23;
+         by A1,A4,A22,Lm4;
+           hx [= hy by A22,FILTER_0:65;
+       then [x'/\/F,hx] [= [y'/\/F,hy] by A21,Th37;
+      hence thesis by A21,A22;
      end;
    assume x in field R & y in field R;
    then reconsider x' = x, y' = y as Element of B by Th33;
-A24: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
+A23: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
     Class(E,x') = g.x' & Class(E,y') = g.y' &
     h.x' = (x'"\/"(x'<=>a)) <=> x' & h.y' = (y'"\/"(y'<=>a)) <=> y' &
     f.x' = [g.x',h.x'] & f.y' = [g.y',h.y'] &
@@ -2285,24 +2285,24 @@ A24: x'/\/F = Class(E,x') & y'/\/F = Class(E,y') &
       by A1,A2,A3,A5,A6,A8,Def6,FUNCT_3:def 8;
         x'"\/"(x'<=>a) in Class(E,x') & y'"\/"(y'<=>a) in Class(E,y') by Th61;
    then reconsider hx = h.x, hy = h.y as Element of latt F
-      by A1,A4,A24,Lm4;
+      by A1,A4,A23,Lm4;
    assume [f.x,f.y] in S;
-    then [x'/\/F,hx] [= [y'/\/F,hy] by A24,Th32;
+    then [x'/\/F,hx] [= [y'/\/F,hy] by A23,Th32;
     then x'/\/F [= y'/\/F & hx [= hy by Th37;
     then x' => y' in F & x' => y' = x'`"\/"y' & x'"\/"a [= y'"\/"a & x' [= x'
 "\/"a
-      by A1,A24,Th16,FILTER_0:55,65,LATTICES:22;
+      by A1,A23,Th16,FILTER_0:55,65,LATTICES:22;
     then a [= x'`"\/"y' & x'"/\"(x'"\/"a) [= x'"/\"(y'"\/"a) & x'"/\"(x'"\/"a)
 = x'
      by FILTER_0:18,LATTICES:21,27;
-then A25: x'"/\"a [= x'"/\"(x'`"\/"y') & x'"/\"(x'`"\/"y') = x'"/\"x'`"\/"(x'
+then A24: x'"/\"a [= x'"/\"(x'`"\/"y') & x'"/\"(x'`"\/"y') = x'"/\"x'`"\/"(x'
 "/\"
 y') & x'"/\"x'` = Bottom B &
     Bottom B"\/"(x'"/\"y') = x'"/\"y' & x' [= (x'"/\"y')"\/"(x'"/\"a) & y'"/\"
 x' [= y' &
     y'"/\"x' = x'"/\"y' by LATTICES:23,27,39,47,def 11;
     then x'"/\"a [= y' by LATTICES:25;
-    then (x'"/\"y')"\/"(x'"/\"a) [= y' by A25,FILTER_0:6;
-    then x' [= y' by A25,LATTICES:25;
+    then (x'"/\"y')"\/"(x'"/\"a) [= y' by A24,FILTER_0:6;
+    then x' [= y' by A24,LATTICES:25;
    hence [x,y] in R;
   end;

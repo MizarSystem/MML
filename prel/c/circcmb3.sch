@@ -68,16 +68,16 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <Var nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="97">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -151,16 +151,16 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <Var nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="97">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -242,16 +242,16 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <Var nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="97">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -341,16 +341,16 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <Var nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="97">
 <Var nr="1"/>
 </Adjective>
 </Cluster>
@@ -448,16 +448,16 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="81">
+<Adjective nr="82">
 <Var nr="1"/>
 </Adjective>
-<Adjective nr="96">
+<Adjective nr="97">
 <Var nr="1"/>
 </Adjective>
 </Cluster>

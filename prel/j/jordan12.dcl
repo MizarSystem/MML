@@ -22,16 +22,16 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="TOPREAL1"/>
@@ -40,22 +40,18 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="99">
-<Num nr="2"/>
-</Adjective>
+<Adjective nr="114"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="247">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="102">
-<Num nr="2"/>
-</Adjective>
+<Adjective nr="117"/>
 </Cluster>
 </CCluster>
 </Registrations>

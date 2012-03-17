@@ -11,15 +11,15 @@ environ
       RLVECT_1, MATRIX_2, CARD_3, SEQ_1, ORDINAL2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       INT_1, REAL_1, NAT_1, NAT_D, RAT_1, INT_2, XXREAL_0, PREPOWER, SQUARE_1,
-      RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_3, SEQ_1, RVSUM_1, FINSEQ_4,
-      NEWTON, TREES_4;
+      RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_3, VALUED_1, SEQ_1, RVSUM_1,
+      FINSEQ_4, NEWTON, TREES_4;
  constructors PARTFUN1, REAL_1, SQUARE_1, NAT_1, NAT_D, BINOP_2, FINSEQ_3,
-      FINSEQ_4, FINSOP_1, RVSUM_1, NEWTON, PREPOWER, TREES_4;
+      FINSEQ_4, FINSOP_1, RVSUM_1, NEWTON, PREPOWER, TREES_4, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, NUMBERS,
       XXREAL_0, XREAL_0, SQUARE_1, NAT_1, INT_1, RAT_1, MEMBERED, FINSEQ_1,
-      SEQ_1, RVSUM_1, NEWTON, VALUED_0;
+      SEQ_1, RVSUM_1, NEWTON, VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FINSEQ_1, TARSKI, SQUARE_1, RVSUM_1;
+ definitions FINSEQ_1, TARSKI, SQUARE_1, RVSUM_1, VALUED_1;
  theorems TARSKI, ABSVALUE, INT_1, NAT_1, INT_2, RAT_1, REAL_1, REAL_2, NEWTON,
       PREPOWER, SQUARE_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, FUNCT_1, RVSUM_1,
       PRE_FF, CARD_4, FINSEQ_3, FINSEQ_5, XBOOLE_1, XCMPLX_0, XCMPLX_1,
@@ -78,9 +78,9 @@ Lm1:
  (x>=0 iff x+y>=y) & (x>0 iff x+y>y)
  & (x>=0 iff y>=y-x) & (x>0 iff y>y-x)
 proof
-A1: x>=0 iff x+y>=0+y by XREAL_1:8;
+A1: x>=0 iff x+y>=0 qua Nat+y by XREAL_1:8;
  hence x>=0 iff x+y>=y;
-A2: x>0 iff x+y>0+y by XREAL_1:8;
+A2: x>0 iff x+y>0 qua Nat+y by XREAL_1:8;
  hence x>0 iff x+y>y;
  thus x>=0 iff y>=y-x by A1,XREAL_1:22;
  thus thesis by A2,XREAL_1:21;
@@ -90,7 +90,7 @@ Lm2:
  (x>=0 & y>=z) implies (x+y>=z & y>=z-x)
 proof
  assume x>=0 & y>=z;
- then x+y>=z+0 by XREAL_1:9;
+ then x+y>=z+(0 qua Nat) by XREAL_1:9;
  hence thesis by XREAL_1:22;
 end;
 
@@ -98,7 +98,7 @@ Lm3:
  (x>=0 & y>z or x>0 & y>=z) implies (x+y>z & y>z-x)
 proof
  assume x>=0 & y>z or x>0 & y>=z;
- then x+y>z+0 by XREAL_1:10;
+ then x+y>z+(0 qua Nat) by XREAL_1:10;
  hence thesis by XREAL_1:21;
 end;
 
@@ -134,7 +134,7 @@ proof
  set b=a div 2, d=a mod 2;
  A1: a=2*b+d by NAT_D:2;
      d<2 by NAT_D:1;
- then a=2*b+0 or a=2*b+1 by A1,NAT_1:23;
+ then a=2*b+(0 qua Nat) or a=2*b+1 by A1,NAT_1:23;
  hence thesis;
 end;
 
@@ -223,7 +223,7 @@ proof
  hence thesis by A2,INT_2:def 4;
 end;
 
-Lm7:
+Lm5:
  a hcf b = 1 implies a hcf b|^d = 1 & a|^c hcf b|^d = 1 by Th17;
 
 theorem
@@ -282,7 +282,7 @@ end;
 theorem Th21:
  d divides a & a hcf b = 1 implies d hcf b = 1 by Th20,NEWTON:70;
 
-Lm8:
+Lm6:
  a<>0 implies (a divides b iff b/a is Element of NAT)
 proof
  assume A1: a<>0;
@@ -316,17 +316,17 @@ proof
  hence thesis by A2;
 end;
 
-Lm9:
+Lm7:
  b<>0 & a*k=b implies k is Element of NAT
 proof
  assume A1: b<>0 & a*k=b;
  then A2: a divides (b qua Integer) by INT_1:def 9;
  A3: a<>0 by A1;
  then k=b/a by A1,XCMPLX_1:90;
- hence thesis by A2,A3,Lm8;
+ hence thesis by A2,A3,Lm6;
 end;
 
-Lm10:
+Lm8:
  a+b<=c implies a<=c & b<=c
 proof
  assume A1:a+b<=c;
@@ -339,10 +339,10 @@ theorem
 proof
  assume a<=b-c;
  then a+c <=b by XREAL_1:21;
- hence thesis by Lm10;
+ hence thesis by Lm8;
 end;
 
-Lm11:
+Lm9:
  k<m iff k<=m-1
 proof
  A1:now assume k<m;
@@ -357,16 +357,16 @@ proof
  hence thesis by A1;
 end;
 
-Lm12:
+Lm10:
  k<m+1 iff k<=m
 proof
      k<m+1 iff k-1<m by XREAL_1:21;
- hence thesis by Lm11;
+ hence thesis by Lm9;
 end;
 
 reserve fs,fs1,fs2,fs3 for FinSequence;
 
-Lm13:
+Lm11:
  for f being Function holds (x in dom f & f.x in rng f) or f.x={}
 proof
  let f be Function;
@@ -379,13 +379,13 @@ proof
 end;
 end;
 
-Lm14:
+Lm12:
  for X being set holds 0 in X implies
    for s being FinSequence of X holds s.a is Element of X
 proof
  let X be set; assume A1: 0 in X;
  let s be FinSequence of X;
- A2: s.a in rng s or s.a={} by Lm13;
+ A2: s.a in rng s or s.a={} by Lm11;
      rng s c= X by FINSEQ_1:def 4;
  hence thesis by A1,A2;
 end;
@@ -398,7 +398,7 @@ end;
 definition let fp be FinSequence of NAT;
  let a;
  redefine func fp.a -> Element of NAT;
- coherence by Lm14;
+ coherence by Lm12;
 end;
 
 definition
@@ -482,7 +482,7 @@ definition let fp;
   end;
 end;
 
-Lm15:
+Lm13:
  a in dom fs implies ex fs1,fs2 st fs=fs1^<*fs.a*>^fs2 &
     len fs1=a-1 & len fs2=len fs -a
 proof
@@ -557,7 +557,7 @@ A9: len fs = m + 1 & len Del(fs,a) = m by A1,FINSEQ_3:113;
   correctness;
 end;
 
-Lm16:
+Lm14:
  a in dom fs & fs=fs1^<*v*>^fs2 & len fs1=a-1 implies Del(fs,a)=fs1^fs2
 proof
  assume A1: a in dom fs & fs=fs1^<*v*>^fs2 & len fs1=a-1;
@@ -575,17 +575,17 @@ proof
 A9: e in NAT by ORDINAL1:def 13;
       now per cases;
    suppose A10: e<a;
-    then e<=a-1 by Lm11;
+    then e<=a-1 by Lm9;
 then A11:  e in dom fs1 by A1,A8,FINSEQ_3:27;
     hence (fs1^fs2).e=fs1.e by FINSEQ_1:def 7
              .=fs.e by A3,A11,FINSEQ_1:def 7
              .=(Del(fs,a)).e by A1,A9,A10,Def1;
    end;
    suppose A12: e>=a;
-    then A13: e>a-1 by Lm11;
+    then A13: e>a-1 by Lm9;
     then A14: e+1>a by XREAL_1:21;
     then e+1-a>0 by XREAL_1:52;
-    then A15: e+1-a+1>0+1 by XREAL_1:8;
+    then A15: e+1-a+1>0 qua Nat+1 by XREAL_1:8;
         a>a-1 by XREAL_1:148; then A16: e+1>a-1 by A14,XXREAL_0:2;
     then e+1-(a-1)>0 by XREAL_1:52;
     then reconsider f=e+1-(a-1) as Element of NAT by INT_1:16;
@@ -603,7 +603,7 @@ then A11:  e in dom fs1 by A1,A8,FINSEQ_3:27;
  hence thesis by A7,FINSEQ_1:18;
 end;
 
-Lm17:
+Lm15:
  dom Del(fs,a) c= dom fs
 proof
      now assume A1: a in dom fs;
@@ -638,7 +638,7 @@ redefine func Del(fs,a) -> FinSequence of D1;
   end;
 end;
 
-Lm18:
+Lm16:
  (a<=len fs1 implies Del(fs1^fs2,a)=Del(fs1,a)^fs2) &
  (a>=1 implies Del(fs1^fs2,len fs1 +a)=fs1^Del(fs2,a))
 proof
@@ -659,15 +659,15 @@ proof
    end;
    suppose a>=1; then A6: a in dom f & a in dom fs1 by A3,A4,FINSEQ_3:27;
     then consider g1,g2 being FinSequence such that A7:
-         f=g1^f3^g2 & len g1=a-1 & len g2=len f -a by Lm15;
+         f=g1^f3^g2 & len g1=a-1 & len g2=len f -a by Lm13;
         len(g1^f3)=a-1+1 by A7,FINSEQ_2:19
              .=a;
     then consider t being FinSequence such that A8:
         fs1=g1^f3^t by A3,A7,FINSEQ_1:64;
-    A9: Del(fs1,a)=g1^t by A6,A7,A8,Lm16;
+    A9: Del(fs1,a)=g1^t by A6,A7,A8,Lm14;
         g1^f3^g2=g1^f3^(t^fs2) by A7,A8,FINSEQ_1:45;
     then A10: g2=t^fs2 by FINSEQ_1:46;
-    thus f1=g1^g2 by A6,A7,Lm16
+    thus f1=g1^g2 by A6,A7,Lm14
           .=f2 by A9,A10,FINSEQ_1:45;
   end;
   end;
@@ -689,8 +689,8 @@ proof
     then A17: (len fs1 + a) in dom f by A16,FINSEQ_3:27;
     then consider g1,g2 being FinSequence such that A18:
        f=g1^<*f.(len fs1 +a)*>^g2 & len g1=len fs1 +a -1
-       & len g2=len f -(len fs1 +a) by Lm15;
-    A19: f1=g1^g2 by A17,A18,Lm16;
+       & len g2=len f -(len fs1 +a) by Lm13;
+    A19: f1=g1^g2 by A17,A18,Lm14;
     A20: f=g1^(<*f.(len fs1 +a)*>^g2) by A18,FINSEQ_1:45;
         a-1>=0 by A11,XREAL_1:50;
     then len fs1 +(a-1)>=len fs1 by Lm1;
@@ -701,7 +701,7 @@ FINSEQ_1:45
           .=f by A18,A21,FINSEQ_1:45;
     then A22: fs2=t^<*f.(len fs1 +a)*>^g2 by FINSEQ_1:46;
       len fs1 +(a-1)=len fs1 +len t by A18,A21,FINSEQ_1:35;
-    then Del(fs2,a)=t^g2 by A15,A22,Lm16;
+    then Del(fs2,a)=t^g2 by A15,A22,Lm14;
     hence f1=f2 by A19,A21,FINSEQ_1:45;
   end;
   end;
@@ -710,7 +710,7 @@ FINSEQ_1:45
  hence thesis by A2;
 end;
 
-Lm19:
+Lm17:
  Del(<*v*>^fs,1)=fs & Del(fs^<*v*>,len fs + 1)=fs
 proof
  A1: len <*v*>=1 by FINSEQ_1:56;
@@ -722,8 +722,8 @@ proof
    hence thesis by FINSEQ_1:25;
   end;
  A4: fs^{}=fs & {}^fs=fs by FINSEQ_1:47;
- hence Del(<*v*>^fs,1)=fs by A2,A3,Lm18;
- thus thesis by A3,A4,Lm18;
+ hence Del(<*v*>^fs,1)=fs by A2,A3,Lm16;
+ thus thesis by A3,A4,Lm16;
 end;
 
 canceled 2;
@@ -735,20 +735,20 @@ theorem
  Del(<*v1,v2,v3*>,3) = <*v1,v2*>
 proof
  thus Del(<*v1*>,1)=Del(<*v1*>^{},1) by FINSEQ_1:47
-             .={} by Lm19;
- thus Del(<*v1,v2*>,1)=<*v2*> by Lm19;
+             .={} by Lm17;
+ thus Del(<*v1,v2*>,1)=<*v2*> by Lm17;
      len <*v1*> =1 by FINSEQ_1:56;
  hence A1: Del(<*v1,v2*>,2)=Del(<*v1*>^<*v2*>,len <*v1*> +1)
-                 .=<*v1*> by Lm19;
+                 .=<*v1*> by Lm17;
  thus Del(<*v1,v2,v3*>,1)=Del(<*v1*>^<*v2,v3*>,1) by FINSEQ_1:60
-                  .=<*v2,v3*> by Lm19;
+                  .=<*v2,v3*> by Lm17;
 A2: len<*v1,v2*>=2 by FINSEQ_1:61;
  then A3: 2<=len<*v1,v2*> & len <*v1,v2*>+1=3;
- thus Del(<*v1,v2,v3*>,2)=<*v1,v3*> by A1,A2,Lm18;
- thus Del(<*v1,v2,v3*>,3)=<*v1,v2*> by A3,Lm19;
+ thus Del(<*v1,v2,v3*>,2)=<*v1,v3*> by A1,A2,Lm16;
+ thus Del(<*v1,v2,v3*>,3)=<*v1,v2*> by A3,Lm17;
 end;
 
-Lm20:
+Lm18:
  1<=len fs implies
   fs=<*fs.1*>^Del(fs,1) & fs=Del(fs,len fs)^<*fs.(len fs)*>
 proof
@@ -809,7 +809,7 @@ A15: b in NAT by ORDINAL1:def 13;
  hence fs2=fs by A8,FINSEQ_1:18;
 end;
 
-Lm21:
+Lm19:
  a in dom ft implies Product Del(ft,a)*(ft.a)=Product(ft)
 proof
  defpred P[Nat] means
@@ -824,7 +824,7 @@ proof
       proof
        assume a+1 in dom ft;
        then 1 <= a+1 & a + 1 <= len ft by FINSEQ_3:27;
-       then <*ft.1*>^Del(ft,1)=ft by A3,Lm20;
+       then <*ft.1*>^Del(ft,1)=ft by A3,Lm18;
        then Product(ft)=Product(<*ft.1*>)*Product Del(ft,1) by RVSUM_1:127
                 .=(ft.1)*Product Del(ft,1) by RVSUM_1:125;
        hence thesis by A3;
@@ -835,8 +835,8 @@ proof
          a+1<=len ft by A4,NAT_1:13;
      then A6: (a+1) in dom ft by A5,FINSEQ_3:27;
      then consider fs1,fs2 such that A7: ft=fs1^<*ft.(a+1)*>^fs2 &
-        len fs1=(a+1)-1 & len fs2=len ft-(a+1) by Lm15;
-     A8: Del(ft,a+1)=fs1^fs2 by A6,A7,Lm16;
+        len fs1=(a+1)-1 & len fs2=len ft-(a+1) by Lm13;
+     A8: Del(ft,a+1)=fs1^fs2 by A6,A7,Lm14;
      then reconsider fs1 as FinSequence of REAL by FINSEQ_1:50;
      reconsider fs2 as FinSequence of REAL by A7,FINSEQ_1:50;
          Product(ft)=Product(fs1^<*ft.(a+1)*>)*Product(fs2) by A7,RVSUM_1:127
@@ -871,7 +871,7 @@ proof
       proof
        assume a+1 in dom ft;
        then 1<=a+1 & a+1<=len ft by FINSEQ_3:27;
-       then <*ft.1*>^Del(ft,1)=ft by A3,Lm20;
+       then <*ft.1*>^Del(ft,1)=ft by A3,Lm18;
        then Sum(ft)=Sum(<*ft.1*>)+Sum Del(ft,1) by RVSUM_1:105
                 .=(ft.1)+Sum Del(ft,1) by FINSOP_1:12;
 
@@ -883,8 +883,8 @@ hence thesis by A3;
          a+1<=len ft by A4,NAT_1:13;
      then A6: (a+1) in dom ft by A5,FINSEQ_3:27;
      then consider fs1,fs2 such that A7: ft=fs1^<*ft.(a+1)*>^fs2 &
-        len fs1=(a+1)-1 & len fs2=len ft-(a+1) by Lm15;
-     A8:  Del(ft,a+1)=fs1^fs2 by A6,A7,Lm16;
+        len fs1=(a+1)-1 & len fs2=len ft-(a+1) by Lm13;
+     A8:  Del(ft,a+1)=fs1^fs2 by A6,A7,Lm14;
      then reconsider fs1 as FinSequence of REAL by FINSEQ_1:50;
      reconsider fs2 as FinSequence of REAL by A7,FINSEQ_1:50;
          Sum(ft)=Sum(fs1^<*ft.(a+1)*>)+Sum(fs2) by A7,RVSUM_1:105
@@ -909,7 +909,7 @@ theorem
 proof
  assume a in dom fp;
  then consider fs1,fs2 such that A1: fp=fs1^<*fp.a*>^fs2 &
-     len fs1=a-1 & len fs2=len fp -a by Lm15;
+     len fs1=a-1 & len fs2=len fp -a by Lm13;
  per cases;
  suppose A2:fp.a<>0;
  reconsider fs2 as FinSequence of NAT by A1,FINSEQ_1:50;
@@ -941,7 +941,7 @@ proof
  A3: a<>1 by A2,INT_2:def 4;
      a<>0 by A1,INT_2:35;
  then a>0;
- then a>=0+1 by NAT_1:13;
+ then a>=0 qua Nat+1 by NAT_1:13;
  then A4: a>1 by A3,REAL_1:def 5;
  A5: a divides k by INT_2:31;
     A6: (k gcd h) divides h by INT_2:32;
@@ -1091,23 +1091,23 @@ A6: P[d] & for c being Nat st P[c] holds d<=c from NAT_1:sch 5(A5);
    A7: d>0 by A6;
    consider m,n such that A8: d=a*m+b*n by A6;
     consider e,f be Nat such that A9: a=d*e+f & f<d by A7,NAT_1:17;
-     now assume A11: f<>0;
+     now assume A10: f<>0;
        f=a-d*e by A9
      .=a*(1-m*e)+b*(-(n*e)) by A8;
-     hence contradiction by A6,A9,A11;
+     hence contradiction by A6,A9,A10;
     end;
-   then A12: d divides a by A9,NAT_D:def 3;
-    consider e,f be Nat such that A13: b=d*e+f & f<d by A7,NAT_1:17;
-     now assume A15:f<>0;
-         f=b-d*e by A13
+   then A11: d divides a by A9,NAT_D:def 3;
+    consider e,f be Nat such that A12: b=d*e+f & f<d by A7,NAT_1:17;
+     now assume A13:f<>0;
+         f=b-d*e by A12
         .=b*(1-n*e)+a*(-(m*e)) by A8;
-     hence contradiction by A6,A13,A15;
+     hence contradiction by A6,A12,A13;
     end;
-   then d divides b by A13,NAT_D:def 3;
-   then A16: d divides (a hcf b) by A12,NAT_D:def 5;
+   then d divides b by A12,NAT_D:def 3;
+   then A14: d divides (a hcf b) by A11,NAT_D:def 5;
     (a hcf b) divides a & (a hcf b) divides b by NAT_D:def 5;
    then (a hcf b) divides (d qua Integer) by A8,Th10;
-   then (a hcf b)=d by A16,NAT_D:5;
+   then (a hcf b)=d by A14,NAT_D:5;
    hence thesis by A8;
   end;
   end;
@@ -1170,7 +1170,7 @@ proof
  then k*b>-m & k*a>n by A3,REAL_2:177;
  then k*b--m>0 & k*a-n>0 by XREAL_1:52;
  then reconsider e=k*b+m,d=k*a-n as Element of NAT by INT_1:16;
-     a*e-b*d=a*m+0+b*n;
+     a*e-b*d=a*m+(0 qua Nat)+b*n;
  hence thesis by A2;
 end;
 
@@ -1263,70 +1263,70 @@ theorem
 proof
  assume A1: (a hcf b)=1 & a*b=c|^d;
  set e=a hcf c;
- A3: e divides c & e divides a by NAT_D:def 5;
- then A4: e|^d divides c|^d by Th19;
-     e hcf b=1 by A1,A3,Th21;
- then e|^d hcf b=1 by Lm7;
- then e|^d divides a by A1,A4,Th37;
- then consider g be Nat such that A5: (e|^d)*g=a by NAT_D:def 3;
+ A2: e divides c & e divides a by NAT_D:def 5;
+ then A3: e|^d divides c|^d by Th19;
+     e hcf b=1 by A1,A2,Th21;
+ then e|^d hcf b=1 by Lm5;
+ then e|^d divides a by A1,A3,Th37;
+ then consider g be Nat such that A4: (e|^d)*g=a by NAT_D:def 3;
  reconsider g as Element of NAT by ORDINAL1:def 13;
- A6: now assume A7: d=0;
+ A5: now assume A6: d=0;
   then a*b=1 by A1,NEWTON:9;
   then a divides 1 & b divides 1 by NAT_D:def 3;
   then a=1 & b=1 by Th20;
   then a=1|^0 & b=1|^0 by NEWTON:9;
-  hence thesis by A7;
+  hence thesis by A6;
  end;
      now assume d<>0;
-  then A8: d>=1 by NAT_1:14;
-  then consider d1 being Nat such that A9: d=1+d1 by NAT_1:10;
+  then A7: d>=1 by NAT_1:14;
+  then consider d1 being Nat such that A8: d=1+d1 by NAT_1:10;
   reconsider d1 as Element of NAT by ORDINAL1:def 13;
-  A10: now assume e=0;
-   then A11: a=0 & 0=c by INT_2:5;
+  A9: now assume e=0;
+   then A10: a=0 & 0=c by INT_2:5;
    then b=1 by A1,NEWTON:65;
-   then A12: b=1|^d by NEWTON:15;
-    a=0|^d by A8,A11,NEWTON:16;
-   hence thesis by A12;
+   then A11: b=1|^d by NEWTON:15;
+    a=0|^d by A7,A10,NEWTON:16;
+   hence thesis by A11;
   end;
-      now assume A13: e<>0;
-   then A14: a<>0 or c <>0 by INT_2:5;
-   then A15: a <> 0 by A1,CARD_4:51;
-   A16: now assume A17: 0=c;
-    then a*b=0 by A1,A8,NEWTON:16;
-    then A18: b=0 by A14,A17,XCMPLX_1:6;
+      now assume A12: e<>0;
+   then A13: a<>0 or c <>0 by INT_2:5;
+   then A14: a <> 0 by A1,CARD_4:51;
+   A15: now assume A16: 0=c;
+    then a*b=0 by A1,A7,NEWTON:16;
+    then A17: b=0 by A13,A16,XCMPLX_1:6;
     then a=1 by A1,NEWTON:65;
-    then A19: a=1|^d by NEWTON:15;
-        b=0|^d by A8,A18,NEWTON:16;
-    hence thesis by A19;
+    then A18: a=1|^d by NEWTON:15;
+        b=0|^d by A7,A17,NEWTON:16;
+    hence thesis by A18;
    end;
-       now assume A20: c <>0;
+       now assume A19: c <>0;
         reconsider e1=e as Real by XREAL_0:def 1;
-    A21: e1|^d<>0 by A13,CARD_4:51;
+    A20: e1|^d<>0 by A12,CARD_4:51;
     consider a1,c1 being Integer such that
-      A22: a=e*a1 & e*c1=c & a1,(c1 qua Integer) are_relative_prime
-         by A20,INT_2:38;
-    reconsider a1,c1 as Element of NAT by A15,A20,A22,Lm9;
-    A23: a1=a/e & c1=c/e by A13,A22,XCMPLX_1:90;
-        a1,c1 are_relative_prime by A22;
-    then A24: (a1 hcf c1)=1 by INT_2:def 4;
-        a1=(e|^(d1+1))*g/e by A5,A9,A13,A22,XCMPLX_1:90
+      A21: a=e*a1 & e*c1=c & a1,(c1 qua Integer) are_relative_prime
+         by A19,INT_2:38;
+    reconsider a1,c1 as Element of NAT by A14,A19,A21,Lm7;
+    A22: a1=a/e & c1=c/e by A12,A21,XCMPLX_1:90;
+        a1,c1 are_relative_prime by A21;
+    then A23: (a1 hcf c1)=1 by INT_2:def 4;
+        a1=(e|^(d1+1))*g/e by A4,A8,A12,A21,XCMPLX_1:90
      .=(e*(e|^d1)*g)/e by NEWTON:11
      .=e*((e|^d1)*g)/e
-     .=(e|^d1)*g by A13,XCMPLX_1:90;
+     .=(e|^d1)*g by A12,XCMPLX_1:90;
     then g divides a1 by NAT_D:def 3;
-    then (g hcf c1)=1 by A24,Th21;
-    then A25: (g hcf c1|^d)=1 by Lm7;
-    A26: c1|^d=(e|^d)*(g*b)/(e|^d) by A1,A5,A23,PREPOWER:15
-            .=g*b by A21,XCMPLX_1:90;
+    then (g hcf c1)=1 by A23,Th21;
+    then A24: (g hcf c1|^d)=1 by Lm5;
+    A25: c1|^d=(e|^d)*(g*b)/(e|^d) by A1,A4,A22,PREPOWER:15
+            .=g*b by A20,XCMPLX_1:90;
     then g divides (c1|^d) by NAT_D:def 3;
-    then g=1 by A25,NEWTON:62;
-    hence thesis by A5,A26;
+    then g=1 by A24,NEWTON:62;
+    hence thesis by A4,A25;
    end;
-   hence thesis by A16;
+   hence thesis by A15;
   end;
-  hence thesis by A10;
+  hence thesis by A9;
  end;
- hence thesis by A6;
+ hence thesis by A5;
 end;
 
 :: Chinese remainder theorem
@@ -1483,7 +1483,7 @@ A29:     a in Seg len s2 by FINSEQ_1:def 3;
                .=Product Del(fp,c)*m1+fr1.c by A28,A33;
           hence (fp1.c)*(fr3.c)=(fp.c)*Product Del(fp,c)*m1+(fp.c)*(fr1.c)
                     by A35
-                  .=Product(fp)*m1+(fp.c)*(fr1.c) by A34,Lm21;
+                  .=Product(fp)*m1+(fp.c)*(fr1.c) by A34,Lm19;
          end;
             now per cases by A31,NAT_1:8;
          suppose A36: b<=k; then 1<=k by A31,XXREAL_0:2;
@@ -1527,7 +1527,7 @@ end;
 
 :: THUE'S THEOREM
 
-Lm22:
+Lm20:
  a divides b & b<a implies b=0
 proof
  assume A1: not thesis;
@@ -1535,7 +1535,7 @@ proof
  hence contradiction by A1,NAT_D:7;
 end;
 
-Lm23:
+Lm21:
  k divides m iff k divides (abs(m))
 proof
  per cases;
@@ -1546,10 +1546,10 @@ proof
 end;
 end;
 
-Lm24:
- a divides m iff a divides abs(m) by Lm23;
+Lm22:
+ a divides m iff a divides abs(m) by Lm21;
 
-Lm25:
+Lm23:
  m*n mod n=0
 proof
  per cases;
@@ -1565,7 +1565,7 @@ proof
 end;
 end;
 
-Lm26:
+Lm24:
  k mod n=m mod n implies (k-m) mod n=0
 proof
  assume A1: k mod n=m mod n;
@@ -1574,23 +1574,23 @@ proof
  then k-(k div n)*n=m mod n by A1,INT_1:def 8
           .=m-(m div n)*n by A2,INT_1:def 8;
  then k-m=n*((k div n)-(m div n));
- hence thesis by Lm25;
+ hence thesis by Lm23;
  end;
  suppose n = 0;
  hence thesis by INT_1:def 8;
 end;
 end;
 
-Lm27:
+Lm25:
  n <> 0 & m mod n=0 implies n divides m
 proof
  assume n <> 0 & m mod n=0;
- then m=(m div n)*n+0 by NEWTON:80
+ then m=(m div n)*n+(0 qua Nat) by NEWTON:80
       .=(m div n)*n;
  hence thesis by INT_1:def 9;
 end;
 
-Lm28:
+Lm26:
  (1<x implies 1<sqrt x & sqrt x<x)
  & (0<x & x<1 implies 0<sqrt x & sqrt x<1 & x<sqrt x)
 proof
@@ -1624,7 +1624,7 @@ proof
    thus a divides k*b+e or a divides k*b-e by A4,INT_2:16;
   end;
   suppose A5: a>1;
-   then A6: sqrt a<a by Lm28;
+   then A6: sqrt a<a by Lm26;
    set d=[\sqrt a/];
    set d1=d+1;
    A7: sqrt a>0 by A3,SQUARE_1:93;
@@ -1658,7 +1658,7 @@ A11: d+1>=1 & 1>0 by Lm1;
       then A19: 1<=v1 by A18,Lm1;
       then reconsider v1 as Element of NAT by INT_1:16;
           ((k*((b-1) div d1)+((b-1) mod d1)) mod a)<a by A3,NEWTON:79;
-      then v1<=a by A18,Lm12;
+      then v1<=a by A18,Lm10;
       hence v in Seg a by A19;
     end;
        Seg a c= Seg e1 by A13,FINSEQ_1:7;
@@ -1683,9 +1683,9 @@ A11: d+1>=1 & 1>0 by Lm1;
    A26: abs(y)<=d
     proof
          y<d1 by A24,A25,Lm3;
-     then A27: y<=d by Lm12;
+     then A27: y<=d by Lm10;
          y2-y1<d1 by A24,A25,Lm3;
-     then y2-y1<=d by Lm12;
+     then y2-y1<=d by Lm10;
      then -(y2-y1)>=-d by XREAL_1:26;
      hence thesis by A27,ABSVALUE:12;
     end;
@@ -1701,7 +1701,7 @@ A11: d+1>=1 & 1>0 by Lm1;
      then (e1-1)/d1<d1 by A33,Lm1;
      then (v1-1)/d1<d1 & (v2-1)/d1<d1 by A32,XXREAL_0:2;
      then x1<d1 & x2<d1 by A31,XXREAL_0:2;
-     then A34: x1<=d & x2<=d by Lm12;
+     then A34: x1<=d & x2<=d by Lm10;
      A35: [\0/]=0 by INT_1:47;
          v1-1>=0 & v2-1>=0 by A22,XREAL_1:50;
      then (v1-1)/d1>=0 & (v2-1)/d1>=0 by REAL_2:125;
@@ -1713,20 +1713,20 @@ A11: d+1>=1 & 1>0 by Lm1;
    then A37: abs(x)<a by A9,XXREAL_0:2;
        fs.v1=1+((k*x1+y1) mod a) & fs.v2=1+((k*x2+y2) mod a) by A14,A15,A21;
    then (k*x1+y1) mod a=(k*x2+y2) mod a by A21,XCMPLX_1:2;
-   then ((k*x1+y1)-(k*x2+y2)) mod a = 0 by Lm26;
-   then A38: a divides (k*x1+y1)-(k*x2+y2) by A1,Lm27;
+   then ((k*x1+y1)-(k*x2+y2)) mod a = 0 by Lm24;
+   then A38: a divides (k*x1+y1)-(k*x2+y2) by A1,Lm25;
    A39: (k*x1+y1)-(k*x2+y2)=k*x+y;
    set d2=k*x+y;
    A40: -d2=k*(-x)+-y;
    A41: now assume A42: x=0;
-    then a divides (abs(y)) by A38,Lm24;
-    then abs(y)=0 by A28,Lm22;
+    then a divides (abs(y)) by A38,Lm22;
+    then abs(y)=0 by A28,Lm20;
     hence contradiction by A23,A42,ABSVALUE:7;
    end;
    A43: now assume A44: y=0;
     then a divides x by A1,A38,A39,Th36;
-    then a divides (abs(x)) by Lm24;
-    then abs(x)=0 by A37,Lm22;
+    then a divides (abs(x)) by Lm22;
+    then abs(x)=0 by A37,Lm20;
     hence contradiction by A23,A44,ABSVALUE:7;
    end;
    take b=abs(x), e=abs(y);
@@ -1740,10 +1740,10 @@ end;
 end;
 
 theorem
-      dom Del(fs,a) c= dom fs by Lm17;
+      dom Del(fs,a) c= dom fs by Lm15;
 
 theorem
-      Del (<*v*>^fs, 1) = fs & Del (fs^<*v*>, len fs + 1) = fs by Lm19;
+      Del (<*v*>^fs, 1) = fs & Del (fs^<*v*>, len fs + 1) = fs by Lm17;
 
 begin :: Addenda
 

@@ -22,14 +22,14 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="MATRIX_1"/>
@@ -44,35 +44,31 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="98">
+<Adjective nr="113">
 <Func kind="U" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="99"/>
-<Adjective nr="100">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="104">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="105"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="232">
+<Func kind="K" nr="266">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="261">
+<Func kind="K" nr="295">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="97"/>
+<Adjective nr="112"/>
 </Cluster>
 </FCluster>
 </Registrations>

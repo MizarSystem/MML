@@ -60,7 +60,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -83,7 +83,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="82">
+<Func kind="K" nr="81">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -109,7 +109,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -118,6 +118,35 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+</Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="106">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="24"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="2"/>
+<Adjective nr="5"/>
+</Cluster>
+</Typ>
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="2"/>
@@ -134,35 +163,6 @@
 <Func kind="K" nr="107">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="24"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</Typ>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="2"/>
-<Adjective nr="5"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="108">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
@@ -173,7 +173,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -212,7 +212,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="104">
+<Func kind="K" nr="103">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -259,7 +259,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="102">
+<Func kind="K" nr="101">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

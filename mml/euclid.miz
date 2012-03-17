@@ -11,20 +11,20 @@ environ
       FUNCT_2, ARYTM_3, MCART_1, EUCLID, BOOLE, MONOID_0, SEQ_1, ZF_LANG,
       XREAL_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, COMPLEX1, NAT_1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2, REAL_1,
-      SEQ_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL, SQUARE_1, RVSUM_1,
-      MONOID_0, PRE_TOPC, PCOMPS_1, XXREAL_0;
+      XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, STRUCT_0, METRIC_1, FUNCT_2,
+      REAL_1, VALUED_1, SEQ_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FRAENKEL,
+      SQUARE_1, RVSUM_1, MONOID_0, PRE_TOPC, PCOMPS_1, XXREAL_0;
  constructors FRAENKEL, REAL_1, SQUARE_1, BINOP_2, COMPLEX1, FINSEQOP,
-      PCOMPS_1, MONOID_0;
+      PCOMPS_1, MONOID_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       BINOP_2, MEMBERED, SEQ_1, FINSEQ_2, RVSUM_1, METRIC_1, PCOMPS_1,
-      MONOID_0, VALUED_0;
+      MONOID_0, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FINSEQ_1, STRUCT_0, PCOMPS_1, SQUARE_1, FINSEQ_2, RVSUM_1,
-      MONOID_0;
+      MONOID_0, VALUED_1;
  theorems ABSVALUE, BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQOP, FUNCT_1, FUNCT_2,
       PCOMPS_1, RVSUM_1, SQUARE_1, TARSKI, XREAL_0, XCMPLX_1, COMPLEX1,
-      XREAL_1, XXREAL_0, FUNCOP_1, SEQ_1, ORDINAL1;
+      XREAL_1, XXREAL_0, FUNCOP_1, SEQ_1, ORDINAL1, VALUED_1, RELAT_1;
  schemes FUNCT_2, BINOP_1;
 
 begin
@@ -63,11 +63,30 @@ A3:    for r holds g.r = abs r;
  end;
 
  definition let x be real-yielding FinSequence;
-   func abs x -> FinSequence of REAL equals
+  redefine func abs x -> FinSequence of REAL equals
     absreal*x;
   coherence
   proof
-    thus rng (absreal*x) c= REAL;
+    thus rng abs x c= REAL;
+  end;
+  compatibility
+  proof
+    set g = absreal*x;
+A1: dom abs x = dom x by VALUED_1:def 11;
+    dom absreal = REAL by FUNCT_2:def 1;
+    then rng x c= dom absreal;
+    then
+A2: dom g = dom x by RELAT_1:46;
+    now
+      let a be set;
+      assume
+A3:   a in dom abs x;
+A4:   x . a is real;
+      thus (abs x).a = abs (x . a) by VALUED_1:18
+      .= absreal.(x . a) by A4,Def2
+      .= g.a by A1,A2,A3,FUNCT_1:22;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
   end;
  end;
 
@@ -333,12 +352,13 @@ then A5:  dom (x1+x2) = Seg n by FINSEQ_1:def 3;
      reconsider abs12 = (abs x1 + abs x2).k as Real;
      reconsider abs'12 = (abs (x1 + x2)).k as Real;
          abs(r11 + r22) <= abs(r11) + abs(r22) by COMPLEX1:142;
-     then abs(r12) <= abs(r11) + abs(r22) by A4,A5,SEQ_1:def 3;
+     then abs(r12) <= abs(r11) + abs(r22) by A4,A5,VALUED_1:1,def 1;
      then abs(r12) <= abs(r11) + abs2 & len(abs x1 + abs x2) = n
       by Th6,FINSEQ_2:109;
      then abs(r12) <= abs1 + abs2 & dom(abs x1 + abs x2) = Seg n
       by Th6,FINSEQ_1:def 3;
-     then abs(r12) >= 0 & abs(r12) <= abs12 by A4,COMPLEX1:132,SEQ_1:def 3;
+     then abs(r12) >= 0 & abs(r12) <= abs12 by A4,COMPLEX1:132,VALUED_1:1,def 1
+;
      then abs'12 <= abs12 & 0 <= abs'12 by Th6;
      then (abs'12)^2 <= (abs12)^2 by SQUARE_1:77;
      then (abs'12)^2 <= r2 by RVSUM_1:79;
@@ -815,8 +835,8 @@ theorem Th59: p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]|
     len(p1'+p2') = 2 by Th28;
 then A1:  dom(p1'+p2') = Seg 2 & 2 in {1,2} & 1 in {1,2}
     by FINSEQ_1:def 3,TARSKI:def 2;
-  then A2: (p1+p2)`1 = p1`1 + p2`1 by FINSEQ_1:4,SEQ_1:def 3;
-      (p1+p2)`2 = p1`2 + p2`2 by A1,FINSEQ_1:4,SEQ_1:def 3;
+  then A2: (p1+p2)`1 = p1`1 + p2`1 by FINSEQ_1:4,VALUED_1:1,def 1;
+      (p1+p2)`2 = p1`2 + p2`2 by A1,FINSEQ_1:4,VALUED_1:1,def 1;
   hence p1 + p2 = |[ p1`1 + p2`1, p1`2 + p2`2]| by A2,Th57;
  end;
 

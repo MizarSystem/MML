@@ -7,29 +7,25 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
-      ANPROJ_1, FUNCOP_1, COMPLEX1, REALSET1, STRUCT_0, ARYTM;
+      ANPROJ_1, FUNCOP_1, COMPLEX1, REALSET1, STRUCT_0, ARYTM, ALGSTR_0,
+      VECTSP_2, MIDSP_1, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1, FINSEQ_1, NAT_1,
-      STRUCT_0;
+      FUNCT_3, FUNCT_5, REALSET1, STRUCT_0, ALGSTR_0;
  constructors BINOP_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FINSEQ_1,
-      STRUCT_0;
+      FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0, REALSET1, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, STRUCT_0, REAL_1;
+      XREAL_0, NAT_1, STRUCT_0, REAL_1, ALGSTR_0, REALSET1, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
 definition
- struct (ZeroStr) LoopStr (# carrier -> set,
-                    add -> BinOp of the carrier,
-                    ZeroF -> Element of the carrier #);
-end;
-
-definition
- struct (LoopStr) RLSStruct (# carrier -> set,
+ struct (addLoopStr) RLSStruct (# carrier -> set,
               ZeroF -> Element of the carrier,
-              add -> BinOp of the carrier,
+              addF -> BinOp of the carrier,
               Mult -> Function of [:REAL, the carrier:], the carrier
             #);
 end;
@@ -60,18 +56,8 @@ theorem :: RLVECT_1:3
 reserve v for VECTOR of V;
 reserve a,b for Real;
 
-registration
- cluster strict non empty LoopStr;
-end;
-
- definition let V be non empty LoopStr, v,w be Element of V;
- canceled 2;
-  func v + w -> Element of V equals
-:: RLVECT_1:def 3
-     (the add of V).(v,w);
- end;
-
  definition let V; let v; let a;
+ canceled 3;
   func a * v -> Element of V equals
 :: RLVECT_1:def 4
      (the Mult of V).(a,v);
@@ -84,15 +70,15 @@ end;
 canceled;
 
 theorem :: RLVECT_1:5
-     for V being non empty LoopStr, v,w being Element of V
-   holds v + w = (the add of V).(v,w);
+     for V being non empty addLoopStr, v,w being Element of V
+   holds v + w = (the addF of V).(v,w);
 
 registration let ZS be non empty set, O be Element of ZS,
       F be BinOp of ZS, G be Function of [:REAL,ZS:],ZS;
  cluster RLSStruct (# ZS,O,F,G #) -> non empty;
 end;
 
-definition let IT be non empty LoopStr;
+definition let IT be addLoopStr;
   attr IT is Abelian means
 :: RLVECT_1:def 5
  for v,w being Element of IT holds v + w = w + v;
@@ -103,13 +89,10 @@ definition let IT be non empty LoopStr;
   attr IT is right_zeroed means
 :: RLVECT_1:def 7
  for v being Element of IT holds v + 0.IT = v;
-  attr IT is right_complementable means
-:: RLVECT_1:def 8
- for v being Element of IT
-         ex w being Element of IT st v + w = 0.IT;
 end;
 
 definition let IT be non empty RLSStruct;
+ canceled;
   attr IT is RealLinearSpace-like means
 :: RLVECT_1:def 9
   (for a for v,w being VECTOR of IT holds a * (v + w) = a * v + a * w) &
@@ -118,13 +101,23 @@ definition let IT be non empty RLSStruct;
   (for v being VECTOR of IT holds 1 * v = v);
 end;
 
-registration
- cluster strict Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr);
+definition
+ func Trivial-RLSStruct -> strict RLSStruct equals
+:: RLVECT_1:def 10
+  RLSStruct(#1,op0,op2,pr2(REAL,1)#);
 end;
 
 registration
- cluster non empty strict Abelian add-associative right_zeroed
+ cluster Trivial-RLSStruct -> trivial non empty;
+end;
+
+registration
+ cluster strict Abelian add-associative right_zeroed right_complementable
+                (non empty addLoopStr);
+end;
+
+registration
+ cluster strict Abelian add-associative right_zeroed
      right_complementable RealLinearSpace-like (non empty RLSStruct);
 end;
 
@@ -133,38 +126,28 @@ definition
     right_complementable RealLinearSpace-like (non empty RLSStruct);
 end;
 
-definition let V be Abelian (non empty LoopStr),
+definition let V be Abelian (non empty addLoopStr),
                    v,w be Element of V;
  redefine func v + w;
  commutativity;
 end;
 
-canceled;
+canceled 2;
 
-theorem :: RLVECT_1:7
-     (for v,w being VECTOR of V holds v + w = w + v) &
- (for u,v,w being VECTOR of V holds (u + v) + w = u + (v + w)) &
- (for v being VECTOR of V holds v + 0.V = v) &
- (for v being VECTOR of V
-   ex w being VECTOR of V st v + w = 0.V) &
- (for a for v,w being VECTOR of V holds a * (v + w) = a * v + a * w) &
- (for a,b for v being VECTOR of V holds (a + b) * v = a * v + b * v) &
- (for a,b for v being VECTOR of V holds (a * b) * v = a * (b * v)) &
- (for v being VECTOR of V holds 1 * v = v)
-  implies V is RealLinearSpace;
-
-::
 ::  Axioms of real linear space.
-::
 
 reserve V for RealLinearSpace;
 reserve v,w for VECTOR of V;
 
-canceled 2;
+canceled;
+
+theorem :: RLVECT_1:9
+ for V being add-associative right_zeroed right_complementable addLoopStr
+  holds V is right_add-cancelable;
 
 theorem :: RLVECT_1:10
  for V being add-associative
-      right_zeroed right_complementable (non empty LoopStr),
+      right_zeroed right_complementable (non empty addLoopStr),
      v being Element of V
    holds v + 0.V = v & 0.V + v = v;
 
@@ -173,18 +156,18 @@ theorem :: RLVECT_1:10
 ::  subtraction of vectors.
 ::
 
- definition let V be non empty LoopStr;
+ definition let V be non empty addLoopStr;
    let v be Element of V;
   assume  V is add-associative right_zeroed right_complementable;
-  func - v -> Element of V means
-:: RLVECT_1:def 10
+  redefine func - v means
+:: RLVECT_1:def 11
     v + it = 0.V;
  end;
 
-definition let V be non empty LoopStr;
+definition let V be non empty addLoopStr;
    let v,w be Element of V;
   func v - w -> Element of V equals
-:: RLVECT_1:def 11
+:: RLVECT_1:def 12
      v + (- w);
 end;
 
@@ -196,7 +179,7 @@ canceled 5;
 
 theorem :: RLVECT_1:16
  for V being add-associative right_zeroed
-             right_complementable (non empty LoopStr),
+             right_complementable (non empty addLoopStr),
      v being Element of V
   holds v + -v = 0.V & -v + v = 0.V;
 
@@ -204,25 +187,25 @@ canceled 2;
 
 theorem :: RLVECT_1:19
  for V being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v + w = 0.V implies v = - w;
 
 theorem :: RLVECT_1:20
      for V being add-associative right_zeroed
-          right_complementable (non empty LoopStr),
+          right_complementable (non empty addLoopStr),
      v,u being Element of V
  ex w being Element of V st v + w = u;
 
 theorem :: RLVECT_1:21
  for V being add-associative right_zeroed
-         right_complementable (non empty LoopStr),
+         right_complementable (non empty addLoopStr),
      w,u,v1,v2 being Element of V
    st w + v1 = w + v2 or v1 + w = v2 + w holds v1 = v2;
 
 theorem :: RLVECT_1:22
      for V being add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v + w = v or w + v = v implies w = 0.V;
 
@@ -234,24 +217,24 @@ theorem :: RLVECT_1:24
 
 theorem :: RLVECT_1:25
   for V being add-associative
-         right_zeroed right_complementable (non empty LoopStr)
+         right_zeroed right_complementable (non empty addLoopStr)
     holds - 0.V = 0.V;
 
 theorem :: RLVECT_1:26
      for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v being Element of V
    holds v - 0.V = v;
 
 theorem :: RLVECT_1:27
  for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v being Element of V
    holds 0.V - v = - v;
 
 theorem :: RLVECT_1:28
  for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v being Element of V
    holds v - v = 0.V;
 
@@ -260,13 +243,13 @@ theorem :: RLVECT_1:29
 
 theorem :: RLVECT_1:30
  for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v being Element of V
    holds - (- v) = v;
 
 theorem :: RLVECT_1:31
  for V being add-associative right_zeroed
-    right_complementable (non empty LoopStr),
+    right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - v = - w implies v = w;
 
@@ -280,19 +263,19 @@ theorem :: RLVECT_1:34
 
 theorem :: RLVECT_1:35
  for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v - w = 0.V implies v = w;
 
 theorem :: RLVECT_1:36
      for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      u,v being Element of V
    ex w being Element of V st v - w = u;
 
 theorem :: RLVECT_1:37
      for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      w,v1,v2 being Element of V
     st w - v1 = w - v2 holds v1 = v2;
 
@@ -307,42 +290,42 @@ theorem :: RLVECT_1:40
 
 theorem :: RLVECT_1:41
  for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v,u,w being Element of V
    holds v - (u + w) = (v - w) - u;
 
 theorem :: RLVECT_1:42
-     for V being add-associative (non empty LoopStr),
+     for V being add-associative (non empty addLoopStr),
      v,u,w being Element of V
    holds (v + u) - w = v + (u - w);
 
 theorem :: RLVECT_1:43
      for V being Abelian add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v,u,w being Element of V
    holds v - (u - w) = (v -u) + w;
 
 theorem :: RLVECT_1:44
  for V being add-associative right_zeroed
-         right_complementable (non empty LoopStr),
+         right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v + w) = (- w) - v;
 
 theorem :: RLVECT_1:45
     for V being add-associative right_zeroed
-        right_complementable (non empty LoopStr),
+        right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v + w) = -w + -v;
 
 theorem :: RLVECT_1:46
      for V being Abelian add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds (- v) - w = (- w) - v;
 
 theorem :: RLVECT_1:47
      for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v - w) = w + (- v);
 
@@ -371,7 +354,7 @@ definition let V be non empty 1-sorted;
  redefine func <* v,u,w *> -> FinSequence of the carrier of V;
 end;
 
-reserve V for non empty LoopStr;
+reserve V for non empty addLoopStr;
 reserve F,G,H for FinSequence of the carrier of V;
 reserve f,f',g for Function of NAT, the carrier of V;
 reserve v,u for Element of V;
@@ -379,7 +362,7 @@ reserve j,k,n for Element of NAT;
 
 definition let V; let F;
  func Sum(F) -> Element of V means
-:: RLVECT_1:def 12
+:: RLVECT_1:def 13
    ex f st it = f.(len F) &
            f.0 = 0.V &
             for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
@@ -405,7 +388,7 @@ theorem :: RLVECT_1:56
 
 theorem :: RLVECT_1:57
      for V being Abelian add-associative right_zeroed right_complementable
-      (non empty LoopStr),
+      (non empty addLoopStr),
      F,G being FinSequence of the carrier of V st
    len F = len G &
   (for k for v being Element of V
@@ -413,41 +396,41 @@ theorem :: RLVECT_1:57
   holds Sum(F) = - Sum(G);
 
 theorem :: RLVECT_1:58
-for V being add-associative right_zeroed (non empty LoopStr),
+for V being add-associative right_zeroed (non empty addLoopStr),
     F,G being FinSequence of the carrier of V
 holds Sum(F ^ G) = Sum(F) + Sum(G);
 
  reserve V for add-associative right_zeroed
-             right_complementable (non empty LoopStr);
+             right_complementable (non empty addLoopStr);
  reserve F for FinSequence of the carrier of V;
  reserve v,v1,v2,u,w for Element of V;
  reserve j,k for Element of NAT;
 
 theorem :: RLVECT_1:59
-     for V being Abelian add-associative right_zeroed (non empty LoopStr),
+     for V being Abelian add-associative right_zeroed (non empty addLoopStr),
      F,G being FinSequence of the carrier of V st
    rng F = rng G & F is one-to-one & G is one-to-one
   holds Sum(F) = Sum(G);
 
 theorem :: RLVECT_1:60
-      for V being non empty LoopStr holds
+      for V being non empty addLoopStr holds
     Sum(<*>(the carrier of V)) = 0.V;
 
 theorem :: RLVECT_1:61
     for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v being Element of V
 holds Sum<* v *> = v;
 
 theorem :: RLVECT_1:62
 for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u being Element of V
 holds Sum<* v,u *> = v + u;
 
 theorem :: RLVECT_1:63
 for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u,w being Element of V
 holds Sum<* v,u,w *> = v + u + w;
 
@@ -475,19 +458,19 @@ theorem :: RLVECT_1:69
 
 theorem :: RLVECT_1:70
      for V being Abelian add-associative right_zeroed
-  right_complementable (non empty LoopStr),
+  right_complementable (non empty addLoopStr),
      v,u being Element of V
  holds - Sum<* v,u *> = (- v) - u;
 
 theorem :: RLVECT_1:71
      for V being Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
      v,u,w being Element of V
  holds - Sum<* v,u,w *> = ((- v) - u) - w;
 
 theorem :: RLVECT_1:72
      for V being Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
      v,w being Element of V
  holds Sum<* v,w *> = Sum<* w,v *>;
 
@@ -525,31 +508,31 @@ theorem :: RLVECT_1:82
 
 theorem :: RLVECT_1:83
      for V being Abelian add-associative right_zeroed right_complementable
-                 (non empty LoopStr),
+                 (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,w *> + u;
 
 theorem :: RLVECT_1:84
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* u,w *> + v;
 
 theorem :: RLVECT_1:85
  for V being Abelian add-associative right_zeroed right_complementable
-                  (non empty LoopStr),
+                  (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* u,w,v *>;
 
 theorem :: RLVECT_1:86
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,u,w *>;
 
 theorem :: RLVECT_1:87
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,w,u *>;
 
@@ -557,7 +540,7 @@ canceled;
 
 theorem :: RLVECT_1:89
      for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* w,v,u *>;
 
@@ -592,7 +575,7 @@ definition
   let R be non empty ZeroStr,
       a be Element of R;
   attr a is non-zero means
-:: RLVECT_1:def 13
+:: RLVECT_1:def 14
        a <> 0.R;
 end;
 
@@ -601,24 +584,20 @@ begin :: Addenda
 :: from REALSET2, 2007.02.24, A.T
 
 definition
-  let L be non empty LoopStr;
+  let L be non empty addLoopStr;
   attr L is zeroed means
-:: RLVECT_1:def 14
- for a being Element of L holds a+0.L = a & 0.L+a = a;
-  attr L is complementable means
 :: RLVECT_1:def 15
- for a being Element of L
-        ex b being Element of L st a+b = 0.L & b+a = 0.L;
+ for a being Element of L holds a+0.L = a & 0.L+a = a;
 end;
 
 registration
- cluster zeroed -> right_zeroed (non empty LoopStr);
- cluster complementable -> right_complementable (non empty LoopStr);
+ cluster zeroed -> right_zeroed (non empty addLoopStr);
 end;
 
 registration
- cluster Abelian right_zeroed -> zeroed (non empty LoopStr);
- cluster Abelian right_complementable -> complementable (non empty LoopStr);
+ cluster Abelian right_zeroed -> zeroed (non empty addLoopStr);
+ cluster Abelian right_complementable ->
+            left_complementable (non empty addLoopStr);
 end;
 
 

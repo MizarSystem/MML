@@ -17,18 +17,19 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="ANALOAF"/>
 <ArticleID name="SEMI_AF1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="12">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="79"/>
 </Cluster>
 </RCluster>
 </Registrations>

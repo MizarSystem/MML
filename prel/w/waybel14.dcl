@@ -21,9 +21,9 @@
 <ArticleID name="EQREL_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -50,10 +50,10 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="55"/>
-<Adjective nr="124"/>
+<Adjective nr="125"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -63,12 +63,12 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="267">
+<Func kind="K" nr="270">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="67">
+<Adjective nr="68">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -78,7 +78,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,24 +88,24 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="51"/>
-<Adjective nr="94"/>
+<Adjective nr="50"/>
+<Adjective nr="95"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
+<Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="55"/>
-<Adjective nr="124"/>
 <Adjective nr="125"/>
 <Adjective nr="126"/>
+<Adjective nr="127"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="312">
+<Func kind="K" nr="315">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

@@ -9,25 +9,27 @@ environ
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
       CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
-      REALSET1, STRUCT_0;
+      REALSET1, STRUCT_0, ALGSTR_0, MIDSP_1, VECTSP_2, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC,
-      RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2, COMPLEX1, NORMSP_1, CFUNCT_1;
+      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
+      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, VALUED_1, SEQ_1, SEQ_2,
+      COMPLEX1, NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1;
+      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, REALSET1, STRUCT_0, RLVECT_1;
+      XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, REALSET1, STRUCT_0, RLVECT_1,
+      ALGSTR_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin :: Complex Linear Space
 
 definition
- struct (LoopStr) CLSStruct
+ struct (addLoopStr) CLSStruct
    (# carrier -> set,
       ZeroF -> Element of the carrier,
-      add -> BinOp of the carrier,
+      addF -> BinOp of the carrier,
       Mult -> Function of [:COMPLEX, the carrier:], the carrier #);
 end;
 
@@ -63,9 +65,21 @@ definition let IT be non empty CLSStruct;
   (for v being VECTOR of IT holds 1r * v = v);
 end;
 
+definition
+ func Trivial-CLSStruct -> strict CLSStruct equals
+:: CLVECT_1:def 3
+  CLSStruct(#1,op0,op2,pr2(COMPLEX,1)#);
+end;
+
 registration
-cluster non empty strict Abelian add-associative right_zeroed
-    right_complementable ComplexLinearSpace-like (non empty CLSStruct);
+ cluster Trivial-CLSStruct -> trivial non empty;
+end;
+
+reserve a,b for Complex;
+
+registration
+ cluster strict Abelian add-associative right_zeroed
+     right_complementable ComplexLinearSpace-like (non empty CLSStruct);
 end;
 
 definition
@@ -73,20 +87,7 @@ definition
     right_complementable ComplexLinearSpace-like (non empty CLSStruct);
 end;
 
-theorem :: CLVECT_1:1
-   for V being non empty CLSStruct holds
-  (for v,w being VECTOR of V holds v + w = w + v) &
-  (for u,v,w being VECTOR of V holds (u + v) + w = u + (v + w)) &
-  (for v being VECTOR of V holds v + 0.V = v) &
-  (for v being VECTOR of V ex w being VECTOR of V st v + w = 0.V) &
-  (for z being Complex, v,w being VECTOR of V holds
-    z * (v + w) = z * v + z * w) &
-  (for z1,z2 being Complex, v being VECTOR of V holds
-    (z1 + z2) * v = z1 * v + z2 * v) &
-  (for z1,z2 being Complex, v being VECTOR of V holds
-    (z1 * z2) * v = z1 * (z2 * v)) &
-  (for v being VECTOR of V holds 1r * v = v)
-    implies V is ComplexLinearSpace;
+canceled;
 
 ::
 ::  Axioms of complex linear space.
@@ -94,7 +95,7 @@ theorem :: CLVECT_1:1
 
 reserve V,X,Y for ComplexLinearSpace;
 reserve u,u1,u2,v,v1,v2 for VECTOR of V;
-reserve z,z1,z2 for Complex;
+reserve a,b,z,z1,z2 for Complex;
 
 theorem :: CLVECT_1:2
 z = 0 or v = 0.V implies z * v = 0.V;
@@ -162,7 +163,7 @@ reserve V1,V2,V3 for Subset of V;
 
 definition let V, V1;
   attr V1 is linearly-closed means
-:: CLVECT_1:def 3
+:: CLVECT_1:def 4
  (for v,u being VECTOR of V st v in V1 & u in V1 holds v + u in V1) &
  (for z being Complex, v being VECTOR of V st v in V1 holds z * v in V1);
 end;
@@ -195,10 +196,10 @@ theorem :: CLVECT_1:27
 
 definition let V;
   mode Subspace of V -> ComplexLinearSpace means
-:: CLVECT_1:def 4
+:: CLVECT_1:def 5
     the carrier of it c= the carrier of V &
     0.it = 0.V &
-    the add of it = (the add of V)||the carrier of it &
+    the addF of it = (the addF of V)||the carrier of it &
     the Mult of it = (the Mult of V) | [:COMPLEX, the carrier of it:];
 end;
 
@@ -264,7 +265,7 @@ reserve M for Function of [:COMPLEX,D:],D;
 theorem :: CLVECT_1:44
 V1 = D &
 d1 = 0.V &
-A = (the add of V)||V1 &
+A = (the addF of V)||V1 &
 M = (the Mult of V) | [:COMPLEX,V1:] implies
     CLSStruct (# D,d1,A,M #) is Subspace of V;
 
@@ -315,13 +316,13 @@ V1 <> {} & V1 is linearly-closed implies
 
 definition let V;
 func (0).V -> strict Subspace of V means
-:: CLVECT_1:def 5
+:: CLVECT_1:def 6
 the carrier of it = {0.V};
 end;
 
 definition let V;
 func (Omega).V -> strict Subspace of V equals
-:: CLVECT_1:def 6
+:: CLVECT_1:def 7
  the CLSStruct of V;
 end;
 
@@ -349,13 +350,13 @@ theorem :: CLVECT_1:61
 
 definition let V; let v,W;
 func v + W -> Subset of V equals
-:: CLVECT_1:def 7
+:: CLVECT_1:def 8
   {v + u : u in W};
 end;
 
 definition let V; let W;
 mode Coset of W -> Subset of V means
-:: CLVECT_1:def 8
+:: CLVECT_1:def 9
  ex v st it = v + W;
 end;
 
@@ -500,7 +501,7 @@ begin :: Complex Normed Space
 definition
  struct(CLSStruct) CNORMSTR (# carrier -> set,
             ZeroF -> Element of the carrier,
-             add -> BinOp of the carrier,
+             addF -> BinOp of the carrier,
             Mult -> Function of [:COMPLEX, the carrier:], the carrier,
             norm -> Function of the carrier, REAL #);
 end;
@@ -514,13 +515,13 @@ end;
 
 definition let X, x;
  func ||.x.|| -> Real equals
-:: CLVECT_1:def 9
+:: CLVECT_1:def 10
     ( the norm of X ).x;
 end;
 
 definition let IT be non empty CNORMSTR;
  attr IT is ComplexNormSpace-like means
-:: CLVECT_1:def 10
+:: CLVECT_1:def 11
    for x , y being Point of IT , z holds
           ( ||.x.|| = 0 iff x = 0.IT ) &
           ||.z * x.|| = |.z.| * ||.x.|| &
@@ -588,7 +589,7 @@ let CNS be ComplexLinearSpace;
 let S be sequence of CNS;
 let z;
  func z * S -> sequence of CNS means
-:: CLVECT_1:def 14
+:: CLVECT_1:def 15
      for n holds it.n = z * S.n;
 end;
 
@@ -596,7 +597,7 @@ definition
 let CNS;
 let S;
  attr S is convergent means
-:: CLVECT_1:def 15
+:: CLVECT_1:def 16
    ex g st
      for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
@@ -619,7 +620,7 @@ definition
 let CNS;
 let S;
  func ||.S.|| -> Real_Sequence means
-:: CLVECT_1:def 16
+:: CLVECT_1:def 17
    for n holds it.n =||.(S.n).||;
 end;
 
@@ -631,7 +632,7 @@ let CNS;
 let S;
 assume S is convergent;
  func lim S -> Point of CNS means
-:: CLVECT_1:def 17
+:: CLVECT_1:def 18
   for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
 end;
 

@@ -9,22 +9,22 @@ environ
  vocabularies SEQ_1, COMSEQ_1, COMPLEX1, FUNCT_1, SERIES_1, ABSVALUE, ARYTM,
       ARYTM_1, SUPINF_2, SEQ_2, ARYTM_3, PROB_1, ORDINAL2, SEQM_3, PREPOWER,
       SQUARE_1, RLVECT_1, RELAT_1, POWER, LATTICES, XCMPLX_0, FUNCOP_1,
-      FRECHET2, FUNCT_3, GROUP_1;
+      FRECHET2, FUNCT_3, GROUP_1, PARTFUN1;
  notations TARSKI, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0, XREAL_0,
-      XXREAL_0, COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      FUNCT_3, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1, SQUARE_1, POWER,
-      COMSEQ_1, COMSEQ_2;
+      XXREAL_0, COMPLEX1, REAL_1, NEWTON, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FUNCOP_1, FUNCT_3, VALUED_1, SEQ_1, SEQ_2, NAT_1, SEQM_3, SERIES_1,
+      SQUARE_1, POWER, COMSEQ_1, COMSEQ_2;
  constructors PARTFUN1, FUNCT_3, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      SEQ_2, SEQM_3, COMSEQ_1, COMSEQ_2, NEWTON, SERIES_1, SEQ_1;
+      SEQ_2, SEQM_3, COMSEQ_1, COMSEQ_2, NEWTON, SERIES_1, SEQ_1, VALUED_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, MEMBERED, COMPLEX1, SEQ_1, SEQM_3,
-      COMSEQ_1, COMSEQ_2, NEWTON, VALUED_0;
+      COMSEQ_1, COMSEQ_2, NEWTON, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1;
+ definitions SEQ_2, COMSEQ_2, SERIES_1, SQUARE_1, VALUED_1;
  theorems NAT_1, ABSVALUE, SEQ_1, SEQ_2, SERIES_1, SEQM_3, SEQ_4, POWER,
       COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1, FUNCT_2, XREAL_0, XCMPLX_0,
       XCMPLX_1, FUNCOP_1, RELSET_1, RELAT_1, XBOOLE_1, XREAL_1, NEWTON,
-      XXREAL_0, ORDINAL1, VALUED_0;
+      XXREAL_0, ORDINAL1, VALUED_0, VALUED_1, PARTFUN1, MEMBERED;
  schemes NAT_1, SEQ_1, COMSEQ_1, RECDEF_1;
 
 begin  :: Preliminaries
@@ -299,7 +299,7 @@ begin :: The Operations on Complex Sequences
 Lm3:
   |.seq.n.|=|.seq.|.n & 0 <= |.seq.|.n
 proof
-   |.seq.n.|=|.seq.|.n by COMSEQ_1:def 14;
+   |.seq.n.|=|.seq.|.n by VALUED_1:18,def 11;
   hence thesis by COMPLEX1:132;
 end;
 
@@ -456,7 +456,7 @@ proof
                      .=Re(seq1.n)+Re seq2.n by Def3
                      .=Re(seq1.n)+Re(seq2.n) by Def3
                      .=Re(seq1.n+seq2.n) by COMPLEX1:19
-                     .=Re((seq1+seq2).n) by COMSEQ_1:def 4
+                     .=Re((seq1+seq2).n) by VALUED_1:1
                      .=Re (seq1+seq2).n by Def3;
 
   end;
@@ -466,7 +466,7 @@ proof
                      .=Im(seq1.n)+Im seq2.n by Def4
                      .=Im(seq1.n)+Im(seq2.n) by Def4
                      .=Im(seq1.n+seq2.n) by COMPLEX1:19
-                     .=Im((seq1+seq2).n) by COMSEQ_1:def 4
+                     .=Im((seq1+seq2).n) by VALUED_1:1
                      .=Im (seq1+seq2).n by Def4;
   end;
   hence Im seq1+Im seq2=Im (seq1+seq2) by FUNCT_2:113;
@@ -479,7 +479,7 @@ proof
  thus (-Re seq).n= -(Re seq.n) by SEQ_1:14
             .=-Re(seq.n) by Def3
             .= Re(-(seq.n)) by COMPLEX1:34
-            .= Re((-seq).n) by COMSEQ_1:def 9
+            .= Re((-seq).n) by VALUED_1:8
             .=Re (-seq).n by Def3;
  end;
  hence -Re seq=Re (-seq) by FUNCT_2:113;
@@ -487,7 +487,7 @@ proof
  thus (-Im seq).n=-Im seq.n by SEQ_1:14
           .=-Im(seq.n) by Def4
           .= Im(-(seq.n)) by COMPLEX1:34
-          .= Im((-seq).n) by COMSEQ_1:def 9
+          .= Im((-seq).n) by VALUED_1:8
           .=(Im -seq).n by Def4;
  end;
  hence -Im seq=Im -seq by FUNCT_2:113;
@@ -514,7 +514,7 @@ proof
                         .=Re seq1.n+(Re -seq2).n by Th16
                         .=(Re seq1+Re -seq2).n by SEQ_1:11
                         .=Re (seq1+(-seq2)).n by Th15
-                        .=Re (seq1-seq2).n by COMSEQ_1:def 10;
+                        .=Re (seq1-seq2).n by VALUED_1:12,13,14,15,def 9;
    end;
    hence Re seq1-Re seq2=Re (seq1-seq2) by FUNCT_2:113;
     now let n;
@@ -523,7 +523,7 @@ proof
                         .=Im seq1.n+Im (-seq2).n by Th16
                         .=(Im seq1+Im -seq2).n by SEQ_1:11
                         .=Im (seq1+ -seq2).n by Th15
-                       .=Im(seq1-seq2).n by COMSEQ_1:def 10;
+                       .=Im(seq1-seq2).n by VALUED_1:12,13,14,15,def 9;
    end;
   hence Im seq1-Im seq2=Im(seq1-seq2) by FUNCT_2:113;
 end;
@@ -535,7 +535,7 @@ proof
    thus (r(#)Re seq).n= r*(Re seq.n) by SEQ_1:13
                  .=r*Re(seq.n) by Def3
                  .=Re(r*(seq.n)) by Th17
-                 .=Re((r (#) seq).n) by COMSEQ_1:def 7
+                 .=Re((r (#) seq).n) by VALUED_1:6,def 5
                  .=Re (r (#) seq).n by Def3;
  end;
  hence r(#)Re seq=Re (r (#) seq) by FUNCT_2:113;
@@ -543,7 +543,7 @@ proof
    thus (r(#)Im seq).n= r*(Im seq.n) by SEQ_1:13
                  .=r*Im(seq.n) by Def4
                  .=Im(r*(seq.n)) by Th17
-                 .=Im((r(#) seq).n) by COMSEQ_1:def 7
+                 .=Im((r(#) seq).n) by VALUED_1:6,def 5
                  .=Im(r(#)seq).n by Def4;
  end;
  hence r(#)Im seq=Im(r(#)seq) by FUNCT_2:113;
@@ -555,7 +555,7 @@ theorem
 proof
    now let n;
    thus Re (z (#) seq).n=Re((z (#) seq).n) by Def3
-       .= Re((z * seq.n )) by COMSEQ_1:def 7
+       .= Re((z * seq.n )) by VALUED_1:6,def 5
        .= Re(Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
          (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i>) by COMPLEX1:def 10
        .= Re(z) * Re(seq.n) - Im(z) * Im(seq.n) by COMPLEX1:28
@@ -571,7 +571,7 @@ proof
    hence Re (z (#) seq)=Re(z)(#)Re seq-Im(z)(#)Im seq by FUNCT_2:113;
    now let n;
    thus Im(z(#)seq).n =Im((z (#) seq).n) by Def4
-      .=Im((z * seq.n )) by COMSEQ_1:def 7
+      .=Im((z * seq.n )) by VALUED_1:6,def 5
       .=Im(Re(z) * Re(seq.n) - Im(z) * Im(seq.n)+
         (Re(z) * Im(seq.n) + Re(seq.n) * Im(z))*<i>) by COMPLEX1:def 10
       .= Re(z) * Im(seq.n) + Re(seq.n) * Im(z) by COMPLEX1:28
@@ -590,7 +590,7 @@ theorem
 proof
    now let n;
    thus Re (seq1 (#) seq2).n=Re((seq1 (#) seq2).n) by Def3
-      .=Re((seq1.n * seq2.n )) by COMSEQ_1:def 5
+      .=Re((seq1.n * seq2.n )) by VALUED_1:5
       .=Re(Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
          (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i>)
       by COMPLEX1:def 10
@@ -610,7 +610,7 @@ proof
      by FUNCT_2:113;
    now let n;
    thus Im (seq1 (#) seq2).n =Im((seq1 (#) seq2).n) by Def4
-     .=Im((seq1.n * seq2.n )) by COMSEQ_1:def 5
+     .=Im((seq1.n * seq2.n )) by VALUED_1:5
      .=Im(Re(seq1.n) * Re(seq2.n) - Im(seq1.n) * Im(seq2.n)+
           (Re(seq1.n) * Im(seq2.n) + Re(seq2.n) * Im(seq1.n))*<i>)
                      by COMPLEX1:def 10
@@ -773,12 +773,12 @@ A3: for k st P[k] holds P[k+1]
 A4:   P[k];
       thus |.seq.|.(k+1) = |.0c.| + |.seq.|.(k+1) by COMPLEX1:130
          .= |.seq.k.| + |.seq.|.(k+1) by A1
-         .= (Partial_Sums |.seq.|).k + |.seq.|.(k+1) by A4,COMSEQ_1:def 14
+         .= (Partial_Sums |.seq.|).k + |.seq.|.(k+1) by A4,VALUED_1:18,def 11
          .= (Partial_Sums |.seq.|).(k+1) by SERIES_1:def 1;
     end;
      for n holds P[n] from NAT_1:sch 1(A2,A3);
     hence (Partial_Sums |.seq.|).m = |.seq.|.m
-                                  .= |.seq.m.| by COMSEQ_1:def 14
+                                  .= |.seq.m.| by VALUED_1:18,def 11
                                   .= 0 by A1,COMPLEX1:130;
   end;
 
@@ -877,9 +877,9 @@ proof
 A1:P[0]
   proof
    thus Partial_Sums(z(#)seq).0=(z (#) seq).0 by Def7
-    .=z * seq.0 by COMSEQ_1:def 7
+    .=z * seq.0 by VALUED_1:6,def 5
     .=z * Partial_Sums(seq).0 by Def7
-    .=(z (#) Partial_Sums(seq)).0 by COMSEQ_1:def 7;
+    .=(z (#) Partial_Sums(seq)).0 by VALUED_1:6,def 5;
   end;
 A2:now let n;
 assume
@@ -888,11 +888,11 @@ thus P[n+1]
 proof
 thus Partial_Sums(z (#) seq).(n+1)
 =Partial_Sums(z (#) seq).n + (z (#) seq).(n+1) by Def7
-.=(z * Partial_Sums(seq).n )+ (z (#) seq).(n+1) by A3,COMSEQ_1:def 7
-.=(z * Partial_Sums(seq).n )+ (z * seq.(n+1)) by COMSEQ_1:def 7
+.=(z * Partial_Sums(seq).n )+ (z (#) seq).(n+1) by A3,VALUED_1:6,def 5
+.=(z * Partial_Sums(seq).n )+ (z * seq.(n+1)) by VALUED_1:6,def 5
 .= z * ( Partial_Sums(seq).n + seq.(n+1))
 .= z * ( Partial_Sums(seq).(n+1)) by Def7
-.= (z (#) Partial_Sums(seq)).(n+1) by COMSEQ_1:def 7;
+.= (z (#) Partial_Sums(seq)).(n+1) by VALUED_1:6,def 5;
 end;
 end;
     for n holds P[n] from NAT_1:sch 1(A1,A2);
@@ -905,7 +905,7 @@ proof
   defpred P[Element of NAT] means |. Partial_Sums(seq).$1 .|
       <= Partial_Sums(|.seq.|).$1;
     Partial_Sums(|.seq.|).0 = (|.seq.|).0 by SERIES_1:def 1
-    .= |. seq.0 .| by COMSEQ_1:def 14;
+    .= |. seq.0 .| by VALUED_1:18,def 11;
 then A1: P[0] by Def7;
  A2:now let k such that
      A3: P[k];
@@ -919,7 +919,7 @@ then A1: P[0] by Def7;
         then |. Partial_Sums(seq).(k+1) .| <=
            Partial_Sums(|.seq.|).k + |.seq.(k+1).| by A4,A5,XXREAL_0:2;
      then |. Partial_Sums(seq).(k+1) .|
-        <= Partial_Sums(|.seq.|).k+|.seq.|.(k+1) by COMSEQ_1:def 14;
+        <= Partial_Sums(|.seq.|).k+|.seq.|.(k+1) by VALUED_1:18,def 11;
     hence P[k+1] by SERIES_1:def 1;
     end;
       for k holds P[k] from NAT_1:sch 1(A1,A2);
@@ -944,7 +944,7 @@ A5:    Partial_Sums(|.seq.|).(n+(k+1))- Partial_Sums(|.seq.|).n
            =Partial_Sums(|.seq.|).(n+k)+|.seq.|.(n+k+1)
            - Partial_Sums(|.seq.|).n by SERIES_1:def 1
           .=Partial_Sums(|.seq.|).(n+k)+|.seq.(n+k+1).|
-           - Partial_Sums(|.seq.|).n by COMSEQ_1:def 14
+           - Partial_Sums(|.seq.|).n by VALUED_1:18,def 11
           .=Partial_Sums(|.seq.|).(n+k)- Partial_Sums(|.seq.|).n
            +|.seq.(n+k+1).|;
                 0 <= |.seq.(n+k+1).| by COMPLEX1:132;
@@ -998,7 +998,7 @@ defpred P[Element of NAT] means
          - Partial_Sums(|.seq.|).n
          .=Partial_Sums(|.seq.|).(n+k)+|.seq.|.(n+k+1)
          - Partial_Sums(|.seq.|).n
-         by COMSEQ_1:def 14
+         by VALUED_1:18,def 11
          .=Partial_Sums(|.seq.|).(n+(k+1))- Partial_Sums(|.seq.|).n by
 SERIES_1:def 1
         .=abs( Partial_Sums(|.seq.|).(n+(k+1))- Partial_Sums(|.seq.|).n )
@@ -1187,11 +1187,11 @@ A4:  P[n];
 A5:dom seq = NAT by FUNCT_2:def 1;
     for n holds P[n] from NAT_1:sch 1(A2,A3);
    then A6:Partial_Sums(seq)=Partial_Sums(seq.0 (#) (z GeoSeq))
-     by A5,COMSEQ_1:def 7
+     by A5,VALUED_1:6,7,def 5
                .=seq.0 (#) Partial_Sums(z GeoSeq) by Th29;
    let n;
    thus Partial_Sums(seq).n=seq.0 * Partial_Sums(z GeoSeq).n
-                         by A6,COMSEQ_1:def 7
+                         by A6,VALUED_1:6,def 5
             .=seq.0 * ( (1r - z #N (n+1))/(1r -z) ) by A1,Th36;
 end;
 
@@ -1527,7 +1527,7 @@ A2: for n st n>=m holds |.seq.n.| >= r;
 A3:   n>=m;
        0 <= |.seq.|.n by Lm3;
       then abs((|.seq.|).n) =|.seq.|.n by ABSVALUE:def 1
-                    .=|.seq.n.| by COMSEQ_1:def 14;
+                    .=|.seq.n.| by VALUED_1:18,def 11;
       hence abs((|.seq.|).n) >= r by A2,A3;
     end;
     hence thesis by A1,SERIES_1:43;
@@ -1829,8 +1829,17 @@ registration
 end;
 
 registration let seq be absolutely_summable Complex_Sequence;
-  cluster |.seq.| -> summable;
-  coherence by Def11;
+  cluster |.seq.| -> summable Real_Sequence;
+  coherence  by Def11;
+end;
+
+definition let seq be absolutely_summable Complex_Sequence;
+  redefine func |.seq.| -> summable Real_Sequence;
+  coherence
+  proof
+    |.seq.| is Real_Sequence;
+    hence thesis by Def11;
+  end;
 end;
 
 theorem Th53:
@@ -1913,9 +1922,9 @@ A3:Partial_Sums(seq1)-Partial_Sums(seq2)
 end;
 
 registration let seq1, seq2 be summable Complex_Sequence;
-  cluster seq1 + seq2 -> summable;
+  cluster seq1 + seq2 -> summable Complex_Sequence;
   coherence by Th55;
-  cluster seq1 - seq2 -> summable;
+  cluster seq1 - seq2 -> summable Complex_Sequence;
   coherence by Th56;
 end;
 
@@ -1935,7 +1944,7 @@ end;
 
 registration let z be Element of COMPLEX,
                  seq be summable Complex_Sequence;
-  cluster z (#) seq -> summable;
+  cluster z (#) seq -> summable Complex_Sequence;
   coherence by Th57;
 end;
 
@@ -2109,10 +2118,10 @@ thus Partial_Sums(z GeoSeq).n
    .= (1r - seq1.n)/(1r-z) by A2
    .= 1r * (seq2.n-seq1.n)/(1r-z) by COMPLEX1:def 7,FUNCOP_1:13
    .= (1r/(1r-z)) * (seq2.n+-seq1.n) by XCMPLX_1:75
-   .= (1r/(1r-z)) * (seq2.n+(-seq1).n) by COMSEQ_1:def 9
-   .= (1r/(1r-z)) * (seq2+(-seq1)).n by COMSEQ_1:def 4
-   .= (1r/(1r-z)) * (seq2-seq1).n by COMSEQ_1:def 10
-   .= ((1r/(1r-z))(#)(seq2-seq1)).n by COMSEQ_1:def 7;
+   .= (1r/(1r-z)) * (seq2.n+(-seq1).n) by VALUED_1:8
+   .= (1r/(1r-z)) * (seq2+(-seq1)).n by VALUED_1:1
+   .= (1r/(1r-z)) * (seq2-seq1).n by VALUED_1:12,13,14,15,def 9
+   .= ((1r/(1r-z))(#)(seq2-seq1)).n by VALUED_1:6,def 5;
 end;
   hence Partial_Sums(z GeoSeq) is convergent by A8,COMSEQ_1:6;
   thus Sum(z GeoSeq) = 1r/(1r-z) by A9,A10,COMSEQ_1:6;
@@ -2128,7 +2137,7 @@ A1:|.z.|< 1 & (for n holds seq.(n+1) = z * seq.n);
  thus Partial_Sums(seq).n = seq.0 * ((1r - z #N (n+1))/(1r-z)) by A1,Th37,
 COMPLEX1:134
   .=seq.0 * Partial_Sums(z GeoSeq).n by A1,Th36,COMPLEX1:134
-  .=(seq.0 (#) Partial_Sums(z GeoSeq)).n by COMSEQ_1:def 7;
+  .=(seq.0 (#) Partial_Sums(z GeoSeq)).n by VALUED_1:6,def 5;
 end;
 then A2: Partial_Sums(seq)=(seq.0 (#) Partial_Sums(z GeoSeq)) by COMSEQ_1:6;
      z GeoSeq is summable & Sum(z GeoSeq) = 1r/(1r-z) by A1,Th65;
@@ -2155,10 +2164,10 @@ then consider m such that
 A2:  for n st m<=n holds |.seq2.n.| <= rseq1.n;
 A3:now let n; assume m <= n;
    then |.seq2.n.| <= rseq1.n by A2;
-   hence |.seq2.|.n <= rseq1.n by COMSEQ_1:def 14;
+   hence |.seq2.|.n <= rseq1.n by VALUED_1:18,def 11;
 end;
     now let n;
-    |.seq2.n.|=|.seq2.|.n by COMSEQ_1:def 14;
+    |.seq2.n.|=|.seq2.|.n by VALUED_1:18,def 11;
    hence 0 <= |.seq2.|.n by COMPLEX1:132;
 end;
 hence |.seq2.| is summable by A1,A3,SERIES_1:22;
@@ -2269,7 +2278,7 @@ rseq1 is convergent & lim rseq1 < 1;
                       .=|.seq.|.n by A3,ABSVALUE:def 1;
 A5:  abs((|.seq.|)).(n+1) =abs((|.seq.|).(n+1)) by SEQ_1:16
                       .=|.seq.|.(n+1) by A3,ABSVALUE:def 1;
-A6: |.seq.|.n =|.seq.n.| by COMSEQ_1:def 14;
+A6: |.seq.|.n =|.seq.n.| by VALUED_1:18,def 11;
  hence |.seq.|.n <>0 & rseq1.n=|.seq.|.(n+1)/|.seq.|.n by A2,COMPLEX1:133;
  thus (|.seq.|).n <>0 & rseq1.n=abs((|.seq.|)).(n+1)/|.seq.|.n
    by A2,A5,A6,COMPLEX1:133;
@@ -2298,7 +2307,7 @@ A1: (for n holds seq.n<>0c)
 A2:now let n;
        seq.n<>0c by A1;
    then |.seq.n.|<>0 by COMPLEX1:133;
-   hence |.seq.|.n <>0 by COMSEQ_1:def 14;
+   hence |.seq.|.n <>0 by VALUED_1:18,def 11;
 end;
  consider m such that
 A3:for n st n>=m holds |.seq.|.(n+1)/|.seq.|.n >= 1 by A1;

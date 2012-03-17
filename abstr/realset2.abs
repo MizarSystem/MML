@@ -8,13 +8,14 @@ environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
       VECTSP_1, REALSET2, FUNCT_4, CAT_1, FUNCT_7, GROUP_1, LATTICES, ORDINAL2,
-      XREAL_0, ARYTM_1, VECTSP_2, ARYTM;
+      XREAL_0, ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
       NUMBERS, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
-      ORDINAL1, XCMPLX_0, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors BINOP_1, FUNCT_4, XCMPLX_0, REALSET1, FUNCT_7, VECTSP_1;
+      ORDINAL1, XCMPLX_0, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
+ constructors RLVECT_1, BINOP_1, FUNCT_4, XCMPLX_0, REALSET1, FUNCT_7,
+      VECTSP_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XCMPLX_0, REALSET1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1, ORDINAL1;
+      RLVECT_1, GROUP_1, VECTSP_1, ORDINAL1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE, NUMERALS;
 
 
@@ -56,22 +57,20 @@ registration
 end;
 
 registration
- cluster zero Element of dL-Z_2;
- cluster non zero Element of dL-Z_2;
+ cluster empty Element of dL-Z_2;
+ cluster non empty Element of dL-Z_2;
 end;
 
 definition
   let L be non trivial doubleLoopStr;
   attr L is Field-like means
 :: REALSET2:def 11
-
-   ex om being DnT of 0.L,the carrier of L st
-     om = the mult of L &
+ the multF of L is DnT of 0.L,the carrier of L &
            (for B being non empty set, P being BinOp of B,
                 e being Element of B holds
            B = (the carrier of L)\{0.L} & e = 1.L &
-           P = om!(the carrier of L,0.L)
-           implies LoopStr(#B,P,e#) is AbGroup);
+           P = (the multF of L)||((the carrier of L)\{0.L})
+           implies addLoopStr(#B,P,e#) is AbGroup);
 end;
 
 registration
@@ -105,50 +104,20 @@ definition
 canceled 3;
    func omf(F) -> DnT of 0.F,the carrier of F equals
 :: REALSET2:def 15
-     the mult of F;
-end;
-
-definition
-   let F be Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr);
-   func nmf(F) -> Element of (the carrier of F)\{0.F} equals
-:: REALSET2:def 16
-      1.F;
+     the multF of F;
 end;
 
 theorem :: REALSET2:1
-   for F being Field holds the LoopStr of F is AbGroup;
+   for F being Field holds the addLoopStr of F is AbGroup;
 
-theorem :: REALSET2:2
-   for F being Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr),
-       B being non empty set,
-       P being BinOp of B, e being Element of B st
-   B = (the carrier of F)\{0.F} & e = nmf(F) &
-   P = omf(F)!(the carrier of F,0.F) holds
-    LoopStr(#B,P,e#) is AbGroup;
-
-theorem :: REALSET2:3
-  for F being Field, x,y,z being Element of F holds
-    x*(y+z) = (x*y)+(x*z) &
-    (x+y)*z = x*z+y*z;
-
-theorem :: REALSET2:4
-    for F being Field,
-       a,b,c being Element of (the carrier of F)holds
-   (a+b)+c = a+(b+c);
-
-theorem :: REALSET2:5
-    for F being Field,
-       a,b being Element of (the carrier of F)holds
-   a+b = b+a;
+canceled 4;
 
 theorem :: REALSET2:6
     for F being Field, a being Element of F holds
    a+0.F = a & 0.F+a = a;
 
 theorem :: REALSET2:7
-    for F being Field, a being Element of F ex b being Element of F st
+    for F being AbGroup, a being Element of F ex b being Element of F st
     a+b = 0.F & b+a = 0.F;
 
 theorem :: REALSET2:8
@@ -176,27 +145,20 @@ theorem :: REALSET2:11
    ex b being Element of (the carrier of F)\{0.F} st
    a*b = 1.F & b*a = 1.F;
 
-definition
-   let F be Field;
-   func compf F -> UnOp of the carrier of F means
-:: REALSET2:def 17
- for x being Element of F holds it.x = -x;
-end;
-
 theorem :: REALSET2:12
     for F being Field, x,y being Element of F holds
-   x+y = 0.F implies y = (compf F).x;
+   x+y = 0.F implies y = (comp F).x;
 
 theorem :: REALSET2:13
     for F being Field, x being Element of F holds
-   x = compf(F).(compf(F).x);
+   x = (comp F).((comp F).x);
 
 theorem :: REALSET2:14
      for F being Field,
         a,b being Element of (the carrier of F)holds
-    (the add of F).(a,b) is Element of (the carrier of F)&
+    (the addF of F).(a,b) is Element of (the carrier of F)&
     omf(F).(a,b) is Element of (the carrier of F)&
-    compf(F).a is Element of the carrier of F;
+    (comp F).a is Element of the carrier of F;
 
 theorem :: REALSET2:15
     for F being Field, a,b,c being Element of F holds
@@ -247,10 +209,11 @@ theorem :: REALSET2:25
 
 definition
   let F be Field;
+  canceled 2;
   func revf(F) -> UnOp of (the carrier of F)\{0.F} means
 :: REALSET2:def 18
  for x being Element of (the carrier of F)\{0.F} holds
-        omf(F).(x,it.x) = nmf(F);
+        omf(F).(x,it.x) = 1.F;
 end;
 
 theorem :: REALSET2:26
@@ -286,3 +249,6 @@ registration
       almost_left_invertible (non degenerated doubleLoopStr);
 end;
 
+theorem :: REALSET2:31
+ for F being non degenerated doubleLoopStr holds
+    1.F is Element of (the carrier of F)\{0.F};

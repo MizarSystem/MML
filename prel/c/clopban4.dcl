@@ -22,6 +22,7 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
@@ -34,18 +35,20 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="15">
+<Typ kind="G" nr="16">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
 <Adjective nr="50"/>
-<Adjective nr="68"/>
-<Adjective nr="71"/>
-<Adjective nr="78"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
 <Adjective nr="83"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="97"/>
+<Adjective nr="100"/>
+<Adjective nr="107"/>
+<Adjective nr="112"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -55,7 +58,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="216">
+<Func kind="K" nr="225">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -67,7 +70,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="85">
+<Adjective nr="114">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

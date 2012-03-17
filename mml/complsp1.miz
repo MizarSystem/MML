@@ -6,26 +6,27 @@
 
 environ
 
- vocabularies COMPLEX1, FUNCT_1, BINOP_1, ARYTM_1, FINSEQOP, FUNCOP_1,
+ vocabularies COMPLEX1, FUNCT_1, BINOP_1, ARYTM_1, FINSEQOP, FUNCOP_1, SEQ_1,
       FINSEQ_1, RELAT_1, ABSVALUE, FINSEQ_2, SQUARE_1, RLVECT_1, RVSUM_1,
       PRE_TOPC, BOOLE, SETFAM_1, TARSKI, METRIC_1, SEQ_4, ARYTM, SEQ_2,
       ARYTM_3, SUBSET_1, COMPTS_1, COMPLSP1, XCMPLX_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, NAT_1, SETFAM_1, REAL_1, SQUARE_1, COMPLEX1, FUNCT_1,
-      PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, STRUCT_0, PRE_TOPC, COMPTS_1,
-      FINSEQ_1, FUNCOP_1, RVSUM_1, FINSEQ_2, FINSEQOP, SEQ_4;
+      RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, BINOP_2, STRUCT_0, PRE_TOPC,
+      COMPTS_1, FINSEQ_1, FUNCOP_1, VALUED_1, RVSUM_1, FINSEQ_2, FINSEQOP,
+      SEQ_4;
  constructors SETFAM_1, PARTFUN1, BINOP_1, SETWISEO, REAL_1, SQUARE_1, BINOP_2,
-      COMPLEX1, SEQ_4, FINSEQOP, RVSUM_1, COMPTS_1;
+      COMPLEX1, SEQ_4, FINSEQOP, RVSUM_1, COMPTS_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, BINOP_2, MEMBERED, SEQ_1, FINSEQ_2, PRE_TOPC,
-      VALUED_0;
+      VALUED_0, VALUED_1, ORDINAL1, XCMPLX_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, COMPTS_1, PRE_TOPC, FINSEQOP, SEQ_4, STRUCT_0, XBOOLE_0,
-      COMPLEX1, FINSEQ_2, SQUARE_1, SUBSET_1;
+      COMPLEX1, FINSEQ_1, FINSEQ_2, SQUARE_1, SUBSET_1, VALUED_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, FINSEQ_1, FUNCOP_1, SQUARE_1, BINOP_1,
       PRE_TOPC, COMPLEX1, SETWISEO, FINSEQ_2, FINSEQOP, RVSUM_1, SEQ_4,
       RELAT_1, ZFMISC_1, XBOOLE_0, XCMPLX_0, BINOP_2, XREAL_1, XXREAL_0, SEQ_1,
-      ORDINAL1;
+      ORDINAL1, VALUED_1, FUNCT_2;
  schemes FUNCT_2, FRAENKEL, BINOP_2;
 
 begin
@@ -142,30 +143,149 @@ end;
 reserve z,z1,z2 for FinSequence of COMPLEX;
 
 definition let z1,z2;
-  func z1 + z2 -> FinSequence of COMPLEX equals
-   addcomplex.:(z1,z2);
-  correctness;
-  func z1 - z2 -> FinSequence of COMPLEX equals
+  redefine func z1 + z2 -> FinSequence of COMPLEX equals
+  addcomplex.:(z1,z2);
+  coherence
+  proof
+    thus rng (z1+z2) c= COMPLEX;
+  end;
+  compatibility
+  proof
+    set g = addcomplex.:(z1,z2);
+A1: dom(z1+z2) = dom z1 /\ dom z2 by VALUED_1:def 1;
+    dom addcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1;
+    then [:rng z1, rng z2:] c= dom addcomplex by ZFMISC_1:119;
+    then
+A2: dom g = dom z1 /\ dom z2 by FUNCOP_1:84;
+    now
+      let x be set;
+      assume
+A3:   x in dom (z1+z2);
+A4:   z1.x is Element of COMPLEX & z2.x is Element of COMPLEX
+      by XCMPLX_0:def 2;
+      thus (z1+z2).x = z1.x + z2.x by A3,VALUED_1:def 1
+      .= addcomplex.(z1.x,z2.x) by A4,BINOP_2:def 3
+      .= g.x by A1,A2,A3,FUNCOP_1:28;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
+  redefine func z1 - z2 -> FinSequence of COMPLEX equals
    diffcomplex.:(z1,z2);
-  correctness;
+  coherence
+  proof
+    thus rng (z1-z2) c= COMPLEX;
+  end;
+  compatibility
+  proof
+    set g = diffcomplex.:(z1,z2);
+A5: dom(z1-z2) = dom z1 /\ dom z2 by VALUED_1:12;
+    dom diffcomplex = [:COMPLEX,COMPLEX:] by FUNCT_2:def 1;
+    then [:rng z1, rng z2:] c= dom diffcomplex by ZFMISC_1:119;
+    then
+A6: dom g = dom z1 /\ dom z2 by FUNCOP_1:84;
+    now
+      let x be set;
+      assume
+A7:   x in dom (z1-z2);
+A8:   z1.x is Element of COMPLEX & z2.x is Element of COMPLEX
+      by XCMPLX_0:def 2;
+      thus (z1-z2).x = z1.x - z2.x by A7,VALUED_1:13
+      .= diffcomplex.(z1.x,z2.x) by A8,BINOP_2:def 4
+      .= g.x by A5,A6,A7,FUNCOP_1:28;
+    end;
+    hence thesis by A5,A6,FUNCT_1:9;
+  end;
 end;
 
 definition let z;
-  func -z -> FinSequence of COMPLEX equals
+  redefine func -z -> FinSequence of COMPLEX equals
    compcomplex*z;
-  correctness;
+  coherence
+  proof
+    thus rng -z c= COMPLEX;
+  end;
+  compatibility
+  proof
+    set g = compcomplex*z;
+A1: dom -z = dom z by VALUED_1:8;
+    dom compcomplex = COMPLEX by FUNCT_2:def 1;
+    then
+    rng z c= dom compcomplex;
+    then
+A2: dom g = dom z by RELAT_1:46;
+    now
+      let x be set;
+      assume
+A3:   x in dom -z;
+A4:   z.x is Element of COMPLEX by XCMPLX_0:def 2;
+      thus (-z).x = -z.x by VALUED_1:8
+      .= compcomplex.(z.x) by A4,BINOP_2:def 1
+      .= g.x by A1,A2,A3,FUNCT_1:22;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
 end;
 
-definition let c be complex number, z;
-  func c*z -> FinSequence of COMPLEX equals
+notation let z; let c be complex number;
+  synonym c*z for c(#)z;
+end;
+
+definition let z; let c be complex number;
+  redefine func c*z -> FinSequence of COMPLEX equals
     (c multcomplex)*z;
-  correctness;
+  coherence
+  proof
+    thus rng (c(#)z) c= COMPLEX;
+  end;
+  compatibility
+  proof
+    set g = (c multcomplex)*z;
+A1: dom (c(#)z) = dom z by VALUED_1:def 5;
+    dom (c multcomplex) = COMPLEX by FUNCT_2:def 1;
+    then
+    rng z c= dom (c multcomplex);
+    then
+A2: dom g = dom z by RELAT_1:46;
+    now
+      let x be set;
+      assume
+A3:   x in dom (c(#)z);
+A4:   c is Element of COMPLEX & z.x is Element of COMPLEX by XCMPLX_0:def 2;
+      thus (c(#)z).x = c*z.x by VALUED_1:6
+      .= (c multcomplex).(z.x) by A4,Lm1,BINOP_2:def 1
+      .= g.x by A1,A2,A3,FUNCT_1:22;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
 end;
 
 definition let z;
-  func abs z -> FinSequence of REAL equals
+  redefine func abs z -> FinSequence of REAL equals
    abscomplex*z;
-  correctness;
+  coherence
+  proof
+    thus rng abs z c= REAL;
+  end;
+  compatibility
+  proof
+    set g = abscomplex*z;
+A1: dom abs z = dom z by VALUED_1:def 11;
+    dom abscomplex = COMPLEX by FUNCT_2:def 1;
+    then
+    rng z c= dom abscomplex;
+    then
+A2: dom g = dom z by RELAT_1:46;
+    now
+      let x be set;
+      assume
+A3:   x in dom abs z;
+A4:   z.x is Element of COMPLEX by XCMPLX_0:def 2;
+      thus (abs z).x = abs(z.x) by VALUED_1:18
+      .= abscomplex.(z.x) by A4,Def6
+      .= g.x by A1,A2,A3,FUNCT_1:22;
+    end;
+    hence thesis by A1,A2,FUNCT_1:9;
+  end;
 end;
 
 definition let n;
@@ -255,9 +375,7 @@ theorem
   z1 + z2 = 0c n implies z1 = -z2 & z2 = -z1 by Th7,Th8,BINOP_2:1,FINSEQOP:78;
 
 theorem Th32:
-  --z = z
- proof z + -z = 0c n by Th7,Th8,BINOP_2:1,FINSEQOP:77; hence thesis by Th7,Th8,
-BINOP_2:1,FINSEQOP:78; end;
+  --z = z;
 
 theorem
    -z1 = -z2 implies z1 = z2
@@ -416,7 +534,7 @@ theorem Th51:
          .= z1 - z + z by FINSEQOP:89;
  end;
 
-definition let n,c,z;
+definition let n,z,c;
   redefine func c*z -> Element of COMPLEX n;
   coherence by FINSEQ_2:133;
 end;
@@ -627,7 +745,8 @@ A4:    k in Seg n;
      then A5:     |.c12.| <= abs1 + abs2 by A4,Th59;
           len(abs z1 + abs z2) = n by FINSEQ_2:109;
      then dom (abs z1 + abs z2) = Seg n by FINSEQ_1:def 3;
-     then 0 <= |.c12.| & |.c12.| <= abs12 by A4,A5,COMPLEX1:132,SEQ_1:def 3;
+     then 0 <= |.c12.| & |.c12.| <= abs12 by A4,A5,COMPLEX1:132,VALUED_1:1
+,def 1;
      then abs'12 <= abs12 & 0 <= abs'12 by A4,Th59;
      then (abs'12)^2 <= (abs12)^2 by SQUARE_1:77;
      then (abs'12)^2 <= r2 by RVSUM_1:79;

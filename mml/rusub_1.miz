@@ -7,18 +7,20 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PROB_2, ARYTM_1, RELAT_1, BHSP_1,
-      BOOLE, RLSUB_1, REALSET1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, NUMBERS, XCMPLX_0,
-      MCART_1, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, DOMAIN_1, BINOP_1, REALSET1,
-      RLVECT_1, RLSUB_1, BHSP_1, XXREAL_0;
+      BOOLE, RLSUB_1, REALSET1, ARYTM, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, STRUCT_0, ALGSTR_0, NUMBERS,
+      XCMPLX_0, MCART_1, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, DOMAIN_1, BINOP_1,
+      REALSET1, RLVECT_1, RLSUB_1, BHSP_1, XXREAL_0;
  constructors PARTFUN1, BINOP_1, XXREAL_0, REAL_1, SEQ_1, REALSET1, RLSUB_1,
-      BHSP_1;
+      BHSP_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, NUMBERS, XREAL_0,
-      MEMBERED, SEQ_1, REALSET1, STRUCT_0, BHSP_1, VALUED_0;
+      MEMBERED, SEQ_1, REALSET1, STRUCT_0, BHSP_1, VALUED_0, ALGSTR_0,
+      VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1, STRUCT_0;
+ definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1, STRUCT_0, ALGSTR_0,
+      VALUED_1;
  theorems BHSP_1, RLVECT_1, FUNCT_1, TARSKI, FUNCT_2, ZFMISC_1, XBOOLE_0,
-      RELAT_1, RELSET_1, RLSUB_1, XBOOLE_1, XCMPLX_0, STRUCT_0;
+      RELAT_1, RELSET_1, RLSUB_1, XBOOLE_1, XCMPLX_0, STRUCT_0, ALGSTR_0;
  schemes XBOOLE_0;
 
 begin :: Definition and Axioms of the Subspace of Real Unitary Space
@@ -29,13 +31,13 @@ mode Subspace of V -> RealUnitarySpace means
 :Def1:
   the carrier of it c= the carrier of V &
   0.it = 0.V &
-  the add of it = (the add of V)||the carrier of it &
+  the addF of it = (the addF of V)||the carrier of it &
   the Mult of it = (the Mult of V)|([:REAL, the carrier of it:]) &
   the scalar of it = (the scalar of V)||the carrier of it;
 existence
 proof
    take V;
-A1:dom(the add of V)
+A1:dom(the addF of V)
      = [:the carrier of V, the carrier of V:] by FUNCT_2:def 1;
 A2:dom(the Mult of V)
      = [:REAL, the carrier of V:] by FUNCT_2:def 1;
@@ -107,7 +109,7 @@ proof
    assume
 A1:v = w1 & u = w2;
    reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th3;
-       w1 + w2 = ((the add of V)||the carrier of W).[w1,w2]
+       w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2]
           by Def1;
    hence thesis by A1,FUNCT_1:72;
 end;
@@ -200,7 +202,7 @@ end;
 
 theorem
     for V being RealUnitarySpace, W being Subspace of V holds
- 0.W in V by RLVECT_1:3,Th2;
+ 0.W in V by Th2,RLVECT_1:3;
 
 Lm1:
 for V being RealUnitarySpace, W being Subspace of V,
@@ -296,7 +298,7 @@ D being non empty set, d1 being Element of D, A being BinOp of D,
 M being Function of [:REAL, D:], D, S being Function of [:D,D:],REAL st
  V1 = D &
  d1 = 0.V &
- A = (the add of V)||V1 &
+ A = (the addF of V)||V1 &
  M = (the Mult of V) | [:REAL,V1:] &
  S = (the scalar of V)||V1 holds UNITSTR (# D,d1,A,M,S #) is Subspace of V
 proof
@@ -310,14 +312,14 @@ proof
    assume that
 A1:V1 = D and
 A2:d1 = 0.V and
-A3:A = (the add of V)||V1 and
+A3:A = (the addF of V)||V1 and
 A4:M = (the Mult of V) | [:REAL,V1:] and
 A5:S = (the scalar of V)||V1;
        UNITSTR (# D,d1,A,M,S #) is Subspace of V
    proof
      set W = UNITSTR (# D,d1,A,M,S #);
 A6:  0.W = 0.V by A2;
-A7:  for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
+A7:  for x,y being VECTOR of W holds x + y = (the addF of V).[x,y]
            by A1,A3,FUNCT_1:72;
 A8:  for a being Real, x being VECTOR of W holds a * x = (the Mult of V).[a,x]
            by A1,A4,FUNCT_1:72;
@@ -331,7 +333,7 @@ A9: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
          W is RealUnitarySpace-like RealLinearSpace-like
      Abelian add-associative right_zeroed right_complementable
      proof
-       set AV = the add of V;
+       set AV = the addF of V;
        set MV = the Mult of V;
        set SV = the scalar of V;
        A10: for x,y being Element of W holds x + y = y + x
@@ -339,7 +341,8 @@ A9: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
          let x,y be Element of W;
          reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
          thus x + y = AV.(x1,y1) by A7
-                .= y1 + x1 by RLVECT_1:def 3
+                .= x1 + y1
+                .= y1 + x1
                 .= y + x by A7;
        end;
        A11: for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
@@ -359,13 +362,12 @@ A9: for x,y being VECTOR of W holds x .|. y = (the scalar of V).[x,y]
          thus x + 0.W = y + 0.V by A2,A7
                       .= x by RLVECT_1:10;
        end;
-       A13: for x being VECTOR of W
-        ex y being VECTOR of W st x + y = 0.W
+       A13: W is right_complementable
        proof let x be VECTOR of W;
          reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
          consider v being VECTOR of V such that
-A14:     x1 + v = 0.V by RLVECT_1:def 8;
-           v = - x1 by A14,RLVECT_1:def 10
+A14:     x1 + v = 0.V by ALGSTR_0:def 11;
+           v = - x1 by A14,RLVECT_1:def 11
           .= (- 1) * x1 by RLVECT_1:29
           .= (- 1) * x by A8;
          then reconsider y = v as VECTOR of W;
@@ -481,7 +483,7 @@ A22:        (a*x) .|. y = SV.[(a*x), y] by A9
          end;
        end;
        hence thesis by A10,A11,A12,A13,A15,A16,A17,A18,BHSP_1:def 2
-,RLVECT_1:def 5,def 6,def 7,def 8,def 9;
+,RLVECT_1:def 5,def 6,def 7,def 9;
      end;
      hence thesis by A1,A3,A4,A5,A6,Def1;
    end;
@@ -505,7 +507,7 @@ proof
    assume
 A1:V is Subspace of X & X is Subspace of V;
    set VV = the carrier of V; set VX = the carrier of X;
-   set AV = the add of V; set AX = the add of X;
+   set AV = the addF of V; set AX = the addF of X;
    set MV = the Mult of V; set MX = the Mult of X;
    set SV = the scalar of V; set SX = the scalar of X;
        VV c= VX & VX c= VV by A1,Def1;
@@ -538,11 +540,11 @@ A1:V is Subspace of X & X is Subspace of Y;
 ;
      hence thesis;
    end;
-   thus the add of V = (the add of Y)||the carrier of V
+   thus the addF of V = (the addF of Y)||the carrier of V
    proof
-     set AV = the add of V; set VV = the carrier of V;
-     set AX = the add of X; set VX = the carrier of X;
-     set AY = the add of Y;
+     set AV = the addF of V; set VV = the carrier of V;
+     set AX = the addF of X; set VX = the carrier of X;
+     set AY = the addF of Y;
          AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def1;
      then AV = (AY||VX)||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
@@ -574,15 +576,15 @@ proof
    assume
 A1:the carrier of W1 c= the carrier of W2;
    set VW1 = the carrier of W1; set VW2 = the carrier of W2;
-   set AV = the add of V; set MV = the Mult of V;
+   set AV = the addF of V; set MV = the Mult of V;
    set SV = the scalar of V;
        0.W1 = 0.V & 0.W2 = 0.V by Def1;
    hence the carrier of W1 c= the carrier of W2 &
          0.W1 = 0.W2 by A1;
-   thus the add of W1 =
-        (the add of W2)||the carrier of W1
+   thus the addF of W1 =
+        (the addF of W2)||the carrier of W1
    proof
-         the add of W1 = AV||VW1 & the add of W2 = AV||VW2 &
+         the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 &
      [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def1,ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
@@ -632,11 +634,11 @@ proof
      the carrier of V c= the carrier of V;
    then reconsider V1 = the carrier of V as Subset of V;
        0.V = 0.V &
-   the add of V = (the add of V)||V1 &
+   the addF of V = (the addF of V)||V1 &
    the Mult of V = (the Mult of V) | [:REAL,V1:] &
    the scalar of V = (the scalar of V)||V1
    by FUNCT_2:40;
-   then UNITSTR(#the carrier of V,0.V,the add of V,the Mult of V,
+   then UNITSTR(#the carrier of V,0.V,the addF of V,the Mult of V,
    the scalar of V #) is Subspace of V by Th18;
    hence thesis;
 end;
@@ -729,11 +731,11 @@ A1:V1 <> {} and
 A2:V1 is linearly-closed;
    reconsider D = V1 as non empty set by A1;
    reconsider d1 = 0.V as Element of D by A2,RLSUB_1:4;
-   set A = (the add of V)||V1;
+   set A = (the addF of V)||V1;
    set M = (the Mult of V) | [:REAL,V1:];
    set S = (the scalar of V)||V1;
    set VV = the carrier of V;
-       dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
+       dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
    then A3:  dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:] by
 RELAT_1:90;
 then A4:dom A = [:D,D:] by XBOOLE_1:28;
@@ -864,12 +866,12 @@ A3:    v=v' & w=w';
        reconsider v'=v as VECTOR of V;
        thus v + 0.W = v' + 0.V .= v by RLVECT_1:10;
      end;
-     thus for v being VECTOR of W ex w being VECTOR of W st v + w = 0.W
+     thus W is right_complementable
      proof
        let v be VECTOR of W;
        reconsider v'=v as VECTOR of V;
        consider w' being VECTOR of V such that
-A4:    v' + w' = 0.V by RLVECT_1:def 8;
+A4:    v' + w' = 0.V by ALGSTR_0:def 11;
        reconsider w=w' as VECTOR of W;
        take w;
        thus v + w = 0.W by A4;
@@ -1121,7 +1123,7 @@ proof
      then consider u being VECTOR of V such that
 A1:  0.V = v + u and
 A2:  u in W;
-       v = - u by A1,RLVECT_1:def 10;
+       v = - u by A1,RLVECT_1:def 11;
    hence thesis by A2,Th16;
    end;
    assume v in W;
@@ -1362,7 +1364,7 @@ A9:v = (v + u) + u1 and
 A10:u1 in W;
        v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6;
 then u + u1 = 0.V by RLVECT_1:21;
-   then u = - u1 by RLVECT_1:def 10;
+   then u = - u1 by RLVECT_1:def 11;
    hence thesis by A10,Th16;
   end;
 
@@ -1707,7 +1709,7 @@ A2:v = u + u1 and
 A3:u1 in W;
        0.V = (u + u1) - v by A2,RLVECT_1:28
       .= u1 + (u - v) by RLVECT_1:def 6;
-   then v1 = - u1 by RLVECT_1:def 10;
+   then v1 = - u1 by RLVECT_1:def 11;
    hence v1 in W by A3,Th16;
    thus v + v1 = (u + v) - v by RLVECT_1:def 6
               .= u + (v - v) by RLVECT_1:def 6
@@ -1731,7 +1733,7 @@ A1:v + W = u + W;
 A2:u = v + u1 and A3: u1 in W;
        0.V = (v + u1) - u by A2,RLVECT_1:28
       .= u1 + (v - u) by RLVECT_1:def 6;
-   then v1 = - u1 by RLVECT_1:def 10;
+   then v1 = - u1 by RLVECT_1:def 11;
    hence v1 in W by A3,Th16;
    thus v - v1 = (v - v) + u by RLVECT_1:43
               .= 0.V + u by RLVECT_1:28

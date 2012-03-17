@@ -18,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
@@ -27,19 +28,19 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="158"/>
+<Func kind="K" nr="168"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="53"/>
+<Adjective nr="87"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="158"/>
+<Func kind="K" nr="168"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
 </Cluster>
 </FCluster>
 </Registrations>

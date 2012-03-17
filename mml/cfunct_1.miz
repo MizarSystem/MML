@@ -10,17 +10,17 @@ environ
       FINSEQ_1, FUNCT_1, ARYTM_1, SEQ_1, RFUNCT_1, ABSVALUE, PARTFUN2,
       CFUNCT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2, RFUNCT_1, SEQ_1, COMPLEX1,
-      COMSEQ_1, FINSEQ_4, XXREAL_0;
+      FUNCT_1, RELSET_1, PARTFUN1, PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1,
+      COMPLEX1, COMSEQ_1, FINSEQ_4, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, REAL_1, COMPLEX1, FINSEQ_4, PARTFUN2,
-      COMSEQ_1, RFUNCT_1, SEQ_1;
- registrations RELSET_1, NUMBERS, XCMPLX_0, XREAL_0, MEMBERED, COMPLEX1, SEQ_1,
-      XBOOLE_0, VALUED_0;
+      VALUED_1, COMSEQ_1, RFUNCT_1, SEQ_1;
+ registrations RELSET_1, NUMBERS, XCMPLX_0, XREAL_0, MEMBERED, COMPLEX1,
+      XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0;
+ definitions TARSKI, PARTFUN1, RFUNCT_1, XBOOLE_0, FUNCT_2, VALUED_1;
  theorems TARSKI, SUBSET_1, FUNCT_1, PARTFUN1, PARTFUN2, RFUNCT_1, COMPLEX1,
       COMSEQ_1, SEQ_1, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, VALUED_1, FUNCT_2;
  schemes PARTFUN2;
 
 begin
@@ -96,11 +96,16 @@ theorem Th3:
 dom (f1+f2) = dom f1 /\ dom f2 &
 for c st c in dom(f1+f2) holds (f1+f2)/.c = (f1/.c) + (f2/.c)
 proof
-thus dom (f1+f2) = dom f1 /\ dom f2 by COMSEQ_1:def 2;
+thus
+A1: dom (f1+f2) = dom f1 /\ dom f2 by VALUED_1:1,def 1;
     now let c;
-assume A1:c in dom (f1+f2);
-hence (f1+f2)/.c = (f1+f2).c by PARTFUN1:def 8
-          .= f1/.c+f2/.c by A1,COMSEQ_1:def 2;
+assume A2:c in dom (f1+f2);
+ c in dom f1 & c in dom f2 by A1,A2,XBOOLE_0:def 3;
+    then
+A3: f1.c = f1/.c & f2.c = f2/.c by PARTFUN1:def 8;
+thus (f1+f2)/.c = (f1+f2).c by A2,PARTFUN1:def 8
+          .= f1.c+f2.c by A2,VALUED_1:1,def 1
+          .= f1/.c+f2/.c by A3,VALUED_1:1,def 1;
 end;
 hence thesis;
 end;
@@ -109,19 +114,25 @@ theorem Th4:
 dom (f1-f2) = dom f1 /\ dom f2 &
 for c st c in dom(f1-f2) holds (f1-f2)/.c = (f1/.c) - (f2/.c)
 proof
-A1: dom (f1-f2) = dom (f1+-f2) by COMSEQ_1:def 10
-      .= dom f1 /\ dom(-f2) by COMSEQ_1:def 2;
- hence dom (f1-f2) = dom f1 /\ dom f2 by COMSEQ_1:def 8;
+A1: dom (f1-f2) = dom (f1+-f2) by VALUED_1:12,13,14,15,def 9
+      .= dom f1 /\ dom(-f2) by VALUED_1:1,def 1;
+ hence dom (f1-f2) = dom f1 /\ dom f2 by VALUED_1:8;
     now let c;
 assume A2:c in dom (f1-f2);
- then A3: c in dom (f1+-f2) by COMSEQ_1:def 10;
-A4: c in dom -f2 by A1,A2,XBOOLE_0:def 3;
- then A5: (-f2)/.c = (-f2).c by PARTFUN1:def 8
-           .= -f2/.c by A4,COMSEQ_1:def 8;
+ then A3: c in dom (f1+-f2) by VALUED_1:12,13,14,15,def 9;
+A4: dom -f2 = dom f2 by VALUED_1:8;
+A5: c in dom -f2 by A1,A2,XBOOLE_0:def 3;
+    then
+A6: f2.c = f2/.c by A4,PARTFUN1:def 8;
+ then A7: (-f2)/.c = (-f2).c by A5,PARTFUN1:def 8
+ .= -f2.c by VALUED_1:8
+ .= -f2/.c by A4,A5,PARTFUN1:def 8;
+ c in dom f1 by A1,A2,XBOOLE_0:def 3;
+then
+ A8: f1/.c = f1.c by PARTFUN1:def 8;
 thus (f1-f2)/.c = (f1-f2).c by A2,PARTFUN1:def 8
-        .= (f1+-f2).c by COMSEQ_1:def 10
-        .= f1/.c+-f2/.c by A3,A5,COMSEQ_1:def 2
-        .= f1/.c-f2/.c;
+        .= f1.c - f2.c by A2,VALUED_1:12,13,14,15,def 9
+        .= f1/.c - f2/.c by A6,A8,PARTFUN1:def 8;
 end;
 hence thesis;
 end;
@@ -130,11 +141,16 @@ theorem Th5:
    dom(f1(#)f2)=dom f1 /\ dom f2
    & for c st c in dom(f1(#)f2) holds (f1(#)f2)/.c =(f1/.c) * (f2/.c)
 proof
-thus dom (f1(#)f2) = dom f1 /\ dom f2 by COMSEQ_1:def 3;
+thus
+A1:dom (f1(#)f2) = dom f1 /\ dom f2 by VALUED_1:def 4;
     now let c;
-assume A1:c in dom (f1(#)f2);
-hence (f1(#)f2)/.c = (f1(#)f2).c by PARTFUN1:def 8
-       .= f1/.c * f2/.c by A1,COMSEQ_1:def 3;
+assume A2:c in dom (f1(#)f2);
+then c in dom f1 & c in dom f2 by A1,XBOOLE_0:def 3;
+    then
+A3: f1.c = f1/.c & f2.c = f2/.c by PARTFUN1:def 8;
+thus  (f1(#)f2)/.c = (f1(#)f2).c by A2,PARTFUN1:def 8
+       .= f1.c * f2.c by A2,VALUED_1:def 4
+       .= f1/.c * f2/.c by A3,VALUED_1:def 4;
 end;
 hence thesis;
 end;
@@ -144,11 +160,13 @@ canceled;
 theorem Th7:
  dom (r(#)f) = dom f & for c st c in dom (r(#)f) holds (r(#)f)/.c = r * (f/.c)
 proof
-thus dom (r(#)f) = dom f by COMSEQ_1:def 6;
+thus
+A1:dom (r(#)f) = dom f by VALUED_1:6,def 5;
     now let c;
-assume A1:c in dom (r(#)f);
+assume A2:c in dom (r(#)f);
 hence (r(#)f)/.c = (r(#)f).c by PARTFUN1:def 8
-    .= r *(f/.c) by A1,COMSEQ_1:def 6;
+    .= r *(f.c) by A2,VALUED_1:6,def 5
+    .= r *(f/.c) by A1,A2,PARTFUN1:def 8;
 end;
 hence thesis;
 end;
@@ -158,11 +176,13 @@ canceled;
 theorem Th9:
  dom (-f) = dom f & for c st c in dom (-f) holds (-f)/.c = -f/.c
 proof
-thus dom (-f) = dom f by COMSEQ_1:def 8;
+thus
+A1:dom (-f) = dom f by VALUED_1:8;
     now let c;
-assume A1:c in dom (-f);
+assume A2:c in dom (-f);
 hence (-f)/.c = (-f).c by PARTFUN1:def 8
-      .=-f/.c by A1,COMSEQ_1:def 8;
+      .=-f.c by A2,VALUED_1:8
+      .=-f/.c by A1,A2,PARTFUN1:def 8;
 end;
 hence thesis;
 end;
@@ -256,21 +276,28 @@ end;
 theorem Th19:
 |.f.|"{0} = f"{0} & (-f)"{0} = f"{0}
 proof
+A1: dom |.f.| = dom f by VALUED_1:def 11;
      now let c;
   thus c in (|.f.|)"{0} implies c in f"{0c}
   proof assume c in (|.f.|)"{0};
-   then c in dom (|.f.|) & (|.f.|).c in {0} by FUNCT_1:def 13;
-   then c in dom (|.f.|) & (|.f.|).c = 0 by TARSKI:def 1;
-   then c in dom (|.f.|) & |.(f/.c).| = 0 by COMSEQ_1:def 13;
-   then c in dom f & (f/.c) = 0c by COMPLEX1:131,COMSEQ_1:def 13;
+   then
+A2: c in dom (|.f.|) & (|.f.|).c in {0} by FUNCT_1:def 13;
+A3: f.c = f/.c by A1,A2,PARTFUN1:def 8;
+   c in dom (|.f.|) & (|.f.|).c = 0 by A2,TARSKI:def 1;
+   then c in dom (|.f.|) & |.(f.c).| = 0 by VALUED_1:18,def 11;
+   then c in dom (|.f.|) & |.(f/.c).| = 0 by A3,PARTFUN1:def 8;
+   then c in dom f & (f/.c) = 0c by COMPLEX1:131,VALUED_1:18,def 11;
    then c in dom f & (f/.c) in {0c} by TARSKI:def 1;
    hence thesis by PARTFUN2:44;
   end;
  assume c in (f)"{0c};
-   then c in dom f & (f/.c) in {0c} by PARTFUN2:44;
+   then
+A4: c in dom f & (f/.c) in {0c} by PARTFUN2:44;
+    then
+A5: f.c = f/.c by A1,PARTFUN1:def 8;
    then c in dom (|.f.|) & |.(f/.c).| = 0
-    by COMPLEX1:130,COMSEQ_1:def 13,TARSKI:def 1;
-   then c in dom (|.f.|) & (|.f.|).c = 0 by COMSEQ_1:def 13;
+    by A4,COMPLEX1:130,TARSKI:def 1,VALUED_1:18,def 11;
+   then c in dom (|.f.|) & (|.f.|).c = 0 by A5,VALUED_1:18,def 11;
    then c in dom (|.f.|) & (|.f.|).c in {0} by TARSKI:def 1;
    hence c in (|.f.|)"{0} by FUNCT_1:def 13;
  end;
@@ -297,10 +324,10 @@ end;
 theorem Th20:
 dom (f^^) = dom (f|(dom (f^)))
 proof
-B1:  dom (f^) = dom f \ f"{0c} by Def2;
+A1:  dom (f^) = dom f \ f"{0c} by Def2;
 thus dom (f^^) = dom (f^) \(f^)"{0c} by Def2
  .= dom (f^) \ {} by Th18
- .= dom f /\ dom (f^) by B1,XBOOLE_1:28,36
+ .= dom f /\ dom (f^) by A1,XBOOLE_1:28,36
  .= dom (f|(dom (f^))) by RELAT_1:90;
 end;
 
@@ -336,15 +363,15 @@ begin
 theorem
     (f1 + f2) + f3 = f1 + (f2 + f3)
 proof
-A1: dom (f1 + f2 + f3) = dom (f1 + f2) /\ dom f3 by COMSEQ_1:def 2
-  .= dom f1 /\ dom f2 /\ dom f3 by COMSEQ_1:def 2
+A1: dom (f1 + f2 + f3) = dom (f1 + f2) /\ dom f3 by VALUED_1:1,def 1
+  .= dom f1 /\ dom f2 /\ dom f3 by VALUED_1:1,def 1
   .= dom f1 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
-  .= dom f1 /\ dom (f2 + f3) by COMSEQ_1:def 2
-  .= dom (f1 + (f2 + f3)) by COMSEQ_1:def 2;
+  .= dom f1 /\ dom (f2 + f3) by VALUED_1:1,def 1
+  .= dom (f1 + (f2 + f3)) by VALUED_1:1,def 1;
      now let c; assume A2: c in dom (f1 + f2 + f3);
-  then c in dom f1 /\ dom (f2 + f3) by A1,COMSEQ_1:def 2;
+  then c in dom f1 /\ dom (f2 + f3) by A1,VALUED_1:1,def 1;
 then A3: c in dom (f2 + f3) by XBOOLE_0:def 3;
-      c in dom (f1 + f2) /\ dom f3 by A2,COMSEQ_1:def 2;
+      c in dom (f1 + f2) /\ dom f3 by A2,VALUED_1:1,def 1;
 then A4: c in dom (f1 + f2) by XBOOLE_0:def 3;
  thus (f1 + f2 + f3)/.c = (f1 + f2)/.c + (f3/.c) by A2,Th3
   .= ((f1/.c)) + ((f2/.c)) + (f3/.c) by A4,Th3
@@ -381,15 +408,15 @@ theorem Th24:
 (f1 + f2) (#) f3=f1 (#) f3 + f2 (#) f3
 proof
 A1: dom ((f1 + f2) (#) f3) = dom (f1 + f2) /\ dom f3 by Th5
-  .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by COMSEQ_1:def 2
+  .= dom f1 /\ dom f2 /\ (dom f3 /\ dom f3) by VALUED_1:1,def 1
   .= dom f1 /\ dom f2 /\ dom f3 /\ dom f3 by XBOOLE_1:16
   .= dom f1 /\ dom f3 /\ dom f2 /\ dom f3 by XBOOLE_1:16
   .= dom f1 /\ dom f3 /\ (dom f2 /\ dom f3) by XBOOLE_1:16
   .= dom (f1 (#) f3) /\ (dom f2 /\ dom f3) by Th5
   .= dom (f1 (#) f3) /\ dom (f2 (#) f3) by Th5
-  .= dom (f1 (#) f3 + f2 (#) f3) by COMSEQ_1:def 2;
+  .= dom (f1 (#) f3 + f2 (#) f3) by VALUED_1:1,def 1;
      now let c; assume A2: c in dom ((f1 + f2)(#)f3);
-  then c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,COMSEQ_1:def 2;
+  then c in dom (f1(#)f3) /\ dom (f2(#)f3) by A1,VALUED_1:1,def 1;
 then A3: c in dom (f1(#)f3) & c in dom (f2 (#) f3) by XBOOLE_0:def 3;
       c in dom (f1 + f2) /\ dom f3 by A2,Th5;
 then A4: c in dom (f1 + f2) by XBOOLE_0:def 3;
@@ -479,12 +506,12 @@ theorem
     r(#)(f1 + f2) = r(#)f1 + r(#)f2
 proof
 A1: dom (r(#)(f1 + f2)) = dom (f1 + f2) by Th7
-  .= dom f1 /\ dom f2 by COMSEQ_1:def 2
+  .= dom f1 /\ dom f2 by VALUED_1:1,def 1
   .= dom f1 /\ dom (r(#)f2) by Th7
   .= dom (r(#)f1) /\ dom (r(#)f2) by Th7
-  .= dom (r(#)f1 + r(#)f2) by COMSEQ_1:def 2;
+  .= dom (r(#)f1 + r(#)f2) by VALUED_1:1,def 1;
      now let c; assume A2: c in dom (r(#)(f1 + f2));
-  then c in dom (r(#)f1) /\ dom (r(#)f2) by A1,COMSEQ_1:def 2;
+  then c in dom (r(#)f1) /\ dom (r(#)f2) by A1,VALUED_1:1,def 1;
 then A3: c in dom (r(#)f1) & c in dom (r(#)f2) by XBOOLE_0:def 3;
 A4: c in dom (f1 + f2) by A2,Th7;
  thus (r(#)(f1 + f2))/.c = r * ((f1 + f2)/.c) by A2,Th7
@@ -556,7 +583,7 @@ theorem
     f1 - (f2 + f3) = f1 - f2 - f3
 proof
 A1: dom (f1 - (f2 + f3)) = dom f1 /\ dom (f2 + f3) by Th4
-  .= dom f1 /\ (dom f2 /\ dom f3) by COMSEQ_1:def 2
+  .= dom f1 /\ (dom f2 /\ dom f3) by VALUED_1:1,def 1
   .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
   .= dom (f1 - f2) /\ dom f3 by Th4
   .= dom (f1 - f2 - f3) by Th4;
@@ -592,9 +619,9 @@ A1: dom (f1 - (f2 - f3)) = dom f1 /\ dom (f2 - f3) by Th4
   .= dom f1 /\ (dom f2 /\ dom f3) by Th4
   .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
   .= dom (f1 - f2) /\ dom f3 by Th4
-  .= dom (f1 - f2 + f3) by COMSEQ_1:def 2;
+  .= dom (f1 - f2 + f3) by VALUED_1:1,def 1;
      now let c; assume A2: c in dom (f1 - (f2 - f3));
-  then c in dom (f1 - f2) /\ dom f3 by A1,COMSEQ_1:def 2;
+  then c in dom (f1 - f2) /\ dom f3 by A1,VALUED_1:1,def 1;
 then A3: c in dom (f1 - f2) by XBOOLE_0:def 3;
       c in dom f1 /\ dom (f2 - f3) by A2,Th4;
 then A4: c in dom (f2 - f3) by XBOOLE_0:def 3;
@@ -610,15 +637,15 @@ end;
 theorem
     f1 + (f2 - f3) =f1 + f2 - f3
 proof
-A1: dom (f1 + (f2 - f3)) = dom f1 /\ dom (f2 - f3) by COMSEQ_1:def 2
+A1: dom (f1 + (f2 - f3)) = dom f1 /\ dom (f2 - f3) by VALUED_1:1,def 1
   .= dom f1 /\ (dom f2 /\ dom f3) by Th4
   .= dom f1 /\ dom f2 /\ dom f3 by XBOOLE_1:16
-  .= dom (f1 + f2) /\ dom f3 by COMSEQ_1:def 2
+  .= dom (f1 + f2) /\ dom f3 by VALUED_1:1,def 1
   .= dom (f1 + f2 - f3) by Th4;
      now let c; assume A2: c in dom (f1 + (f2 - f3));
   then c in dom (f1 + f2) /\ dom f3 by A1,Th4;
 then A3: c in dom (f1 + f2) by XBOOLE_0:def 3;
-      c in dom f1 /\ dom (f2 - f3) by A2,COMSEQ_1:def 2;
+      c in dom f1 /\ dom (f2 - f3) by A2,VALUED_1:1,def 1;
 then A4: c in dom (f2 - f3) by XBOOLE_0:def 3;
  thus (f1 + (f2 - f3))/.c = ((f1/.c)) + (f2 - f3)/.c by A2,Th3
   .= ((f1/.c)) + (((f2/.c)) - (f3/.c)) by A4,Th4
@@ -632,21 +659,25 @@ end;
 theorem Th38:
 |.f1(#)f2.| = |.f1.|(#)|.f2.|
 proof
-A1: dom (|.f1 (#) f2.|) = dom (f1 (#) f2) by COMSEQ_1:def 13
+A1: dom (|.f1 (#) f2.|) = dom (f1 (#) f2) by VALUED_1:18,def 11
   .= dom f1 /\ dom f2 by Th5
-  .= dom f1 /\ dom (|.f2.|) by COMSEQ_1:def 13
-  .= dom (|.f1.|) /\ dom (|.f2.|) by COMSEQ_1:def 13
-  .= dom (|.f1.|(#)|.f2.|) by SEQ_1:def 5;
+  .= dom f1 /\ dom (|.f2.|) by VALUED_1:18,def 11
+  .= dom (|.f1.|) /\ dom (|.f2.|) by VALUED_1:18,def 11
+  .= dom (|.f1.|(#)|.f2.|) by VALUED_1:5,def 4;
      now let c; assume A2: c in dom (|.f1 (#) f2.|);
-  then c in dom (|.f1.|) /\ dom (|.f2.|) by A1,SEQ_1:def 5;
+  then c in dom (|.f1.|) /\ dom (|.f2.|) by A1,VALUED_1:5,def 4;
 then A3: c in dom (|.f1.|) & c in dom (|.f2.|) by XBOOLE_0:def 3;
-A4: c in dom (f1 (#) f2) by A2,COMSEQ_1:def 13;
- thus (|.(f1(#)f2).|).c = |.(f1(#)f2)/.c.| by A2,COMSEQ_1:def 13
+A4: c in dom (f1 (#) f2) by A2,VALUED_1:18,def 11;
+    dom |.f1.| = dom f1 & dom |.f2.| = dom f2 by VALUED_1:def 11;
+    then
+A5: f1.c = f1/.c & f2/.c = f2.c by A3,PARTFUN1:def 8;
+ thus (|.(f1(#)f2).|).c = |.(f1(#)f2).c.| by A2,A5,VALUED_1:18,def 11
+  .= |.(f1(#)f2)/.c.| by A4,PARTFUN1:def 8
   .= |.((f1/.c)) * ((f2/.c)).| by A4,Th5
   .= |.((f1/.c)).| * |.((f2/.c)).| by COMPLEX1:151
-  .= ((|.f1.|).c) *( |.((f2/.c)).|) by A3,COMSEQ_1:def 13
-  .= ((|.f1.|).c) * ((|.f2.|).c) by A3,COMSEQ_1:def 13
-  .= (|.f1.|(#)|.f2.|).c by A1,A2,SEQ_1:def 5;
+  .= ((|.f1.|).c) *( |.((f2/.c)).|) by A3,A5,VALUED_1:18,def 11
+  .= ((|.f1.|).c) * ((|.f2.|).c) by A3,A5,VALUED_1:18,def 11
+  .= (|.f1.|(#)|.f2.|).c by A1,A2,VALUED_1:5,def 4;
  end;
  hence thesis by A1,PARTFUN1:34;
 end;
@@ -654,20 +685,22 @@ end;
 theorem Th39:
 |.r(#)f.| = |.r.|(#)|.f.|
 proof
-A1: dom (|.r(#)f.|) = dom (r(#)f) by COMSEQ_1:def 13
+A1: dom f = dom (|.f.|) by VALUED_1:18,def 11;
+A2: dom (|.r(#)f.|) = dom (r(#)f) by VALUED_1:18,def 11
  .= dom f by Th7
- .= dom (|.f.|) by COMSEQ_1:def 13
- .= dom (|.r.|(#)|.f.|) by SEQ_1:def 6;
-     now let c; assume A2: c in dom (|.r(#)f.|);
-then A3: c in dom (|.f.|) by A1,SEQ_1:def 6;
-A4: c in dom (r(#)f) by A2,COMSEQ_1:def 13;
- thus (|.r(#)f.|).c = |.(r(#)f)/.c.| by A2,COMSEQ_1:def 13
-     .=|.r*((f/.c)).| by A4,Th7
+ .= dom (|.r.|(#)|.f.|) by A1,VALUED_1:7,def 5;
+     now let c; assume A3: c in dom (|.r(#)f.|);
+then A4: c in dom (|.f.|) by A2,VALUED_1:7,def 5;
+A5: c in dom (r(#)f) by A3,VALUED_1:18,def 11;
+ thus (|.r(#)f.|).c = |.(r(#)f).c.| by A3,VALUED_1:18,def 11
+     .=|.(r(#)f)/.c.| by A5,PARTFUN1:def 8
+     .=|.r*((f/.c)).| by A5,Th7
      .=|.r.|*|.((f/.c)).| by COMPLEX1:151
-     .=|.r.|*((|.f.|).c) by A3,COMSEQ_1:def 13
-     .=(|.r.|(#)|.f.|).c by A1,A2,SEQ_1:def 6;
+     .=|.r.|*|.((f.c)).| by A1,A4,PARTFUN1:def 8
+     .=|.r.|*((|.f.|).c) by A4,VALUED_1:18,def 11
+     .=(|.r.|(#)|.f.|).c by A2,A3,VALUED_1:7,def 5;
  end;
- hence thesis by A1,PARTFUN1:34;
+ hence thesis by A2,PARTFUN1:34;
 end;
 
 theorem Th40:
@@ -697,7 +730,7 @@ canceled;
 theorem
     f1 - (-f2) = f1 + f2
 proof
-thus f1 - (-f2) = f1 + (-(-f2)) by COMSEQ_1:def 10
+thus f1 - (-f2) = f1 + (-(-f2)) by VALUED_1:12,13,14,15,def 9
  .= f1 + f2 by Th41;
 end;
 
@@ -776,21 +809,24 @@ theorem Th50:
 (|.f.|)^ = |.(f^).|
 proof
 A1: dom ((|.f.|)^) = dom (|.f.|) \ (|.f.|)"{0} by RFUNCT_1:def 8
-  .= dom f \ (|.f.|)"{0} by COMSEQ_1:def 13
+  .= dom f \ (|.f.|)"{0} by VALUED_1:18,def 11
   .= dom f \ f"{0c} by Th19
   .= dom (f^) by Def2
-  .= dom (|.(f^).|) by COMSEQ_1:def 13;
+  .= dom (|.(f^).|) by VALUED_1:18,def 11;
      now let c; assume A2: c in dom ((|.f.|)^);
   then c in dom (|.f.|) \ (|.f.|)"{0} by RFUNCT_1:def 8;
 then A3: c in dom (|.f.|) by XBOOLE_0:def 4;
-A4: c in dom (f^) by A1,A2,COMSEQ_1:def 13;
+A4: c in dom (f^) by A1,A2,VALUED_1:18,def 11;
+A5: dom f = dom |.f.| by VALUED_1:def 11;
  thus ((|.f.|)^).c = ((|.f.|).c)" by A2,RFUNCT_1:def 8
-  .= (|.(f/.c) .|)" by A3,COMSEQ_1:def 13
+  .= (|.(f.c) .|)" by A3,VALUED_1:18,def 11
+  .= (|.(f/.c) .|)" by A3,A5,PARTFUN1:def 8
   .= |.1r.|/|.(f/.c) .| by COMPLEX1:134,XCMPLX_1:217
   .= |.1r/(f/.c) .| by COMPLEX1:153
   .= |.((f/.c))" .| by COMPLEX1:def 7,XCMPLX_1:217
   .= |.(f^)/.c .| by A4,Def2
-  .= (|.(f^).|).c by A1,A2,COMSEQ_1:def 13;
+  .= |.(f^).c .| by A4,PARTFUN1:def 8
+  .= (|.(f^).|).c by A1,A2,VALUED_1:18,def 11;
  end;
  hence thesis by A1,PARTFUN1:34;
 end;
@@ -945,7 +981,7 @@ end;
 theorem Th60:
 f1/f + g1/g = (f1(#)g + g1(#)f)/(f(#)g)
 proof
-A1: dom ((f1/f) + (g1/g)) = dom (f1/f) /\ dom (g1/g) by COMSEQ_1:def 2
+A1: dom ((f1/f) + (g1/g)) = dom (f1/f) /\ dom (g1/g) by VALUED_1:1,def 1
  .= dom f1 /\ (dom f \ f"{0c}) /\ dom (g1/g) by Def1
  .= dom f1 /\ (dom f \ f"{0c}) /\ (dom g1 /\ (dom g \ g"{0c})) by Def1
  .= dom f1 /\ (dom f /\ (dom f \ f"{0c})) /\
@@ -975,11 +1011,11 @@ g) /\ (dom g \ g"{0c}) /\ dom g1) by Th5
  .= dom (f1(#)g) /\ dom (g1(#)f) /\ ((dom f \ f"{0c}) /\ (dom g \ g"{0c}))
                   by XBOOLE_1:16
  .= dom (f1(#)g + g1(#)f) /\ ((dom f \ f"{0c}) /\ (dom g \ g"{0c}))
-                  by COMSEQ_1:def 2
+                  by VALUED_1:1,def 1
  .= dom (f1(#)g + g1(#)f) /\ (dom (f(#)g) \ (f(#)g)"{0c}) by Th16
  .= dom ((f1(#)g + g1(#)f)/(f(#)g)) by Def1;
      now let c; assume A2: c in dom ((f1/f) + (g1/g));
-then A3: c in dom (f1/f) /\ dom (g1/g) by COMSEQ_1:def 2;
+then A3: c in dom (f1/f) /\ dom (g1/g) by VALUED_1:1,def 1;
 then A4: c in dom (f1/f) & c in dom (g1/g) by XBOOLE_0:def 3;
       c in dom (f1 (#)(f^)) /\ dom (g1/g) by A3,Th51;
   then c in dom (f1 (#)(f^)) /\ dom (g1(#)(g^)) by Th51;
@@ -997,7 +1033,7 @@ then A9:c in dom (f(#)g) by Th5;
        c in dom f1 /\ dom g & c in dom g1 /\ dom f by A5,A8,XBOOLE_0:def 3;
 then A10: c in dom (f1(#)g) & c in dom (g1(#)f) by Th5;
    then c in dom (f1(#)g) /\ dom (g1(#)f) by XBOOLE_0:def 3;
-then A11: c in dom (f1(#)g + g1(#)f) by COMSEQ_1:def 2;
+then A11: c in dom (f1(#)g + g1(#)f) by VALUED_1:1,def 1;
    then c in dom (f1(#)g + g1(#)f) /\ dom ((f(#)g)^) by A7,XBOOLE_0:def 3;
    then c in dom ((f1(#)g + g1(#)f)(#)((f(#)g)^)) by Th5;
 then A12: c in dom ((f1(#)g + g1(#)f)/(f(#)g)) by Th51;
@@ -1038,13 +1074,13 @@ end;
 theorem
     f1/f - g1/g = (f1(#)g - g1(#)f)/(f(#)g)
 proof
-thus f1/f - g1/g = f1/f +- g1/g by COMSEQ_1:def 10
+thus f1/f - g1/g = f1/f +- g1/g by VALUED_1:12,13,14,15,def 9
  .= f1/f + (-1r)(#) (g1/g) by Th40
  .= f1/f + ((-1r)(#) g1)/g by Th52
  .= (f1(#)g + (-1r)(#) g1(#)f)/(f(#)g) by Th60
  .= (f1(#)g + (-1r)(#) (g1(#)f))/(f(#)g) by Th26
  .= (f1(#)g + - (g1(#)f))/(f(#)g) by Th40
- .= (f1(#)g - (g1(#)f))/(f(#)g) by COMSEQ_1:def 10;
+ .= (f1(#)g - (g1(#)f))/(f(#)g) by VALUED_1:12,13,14,15,def 9;
 end;
 
 theorem
@@ -1060,22 +1096,22 @@ theorem Th64:
 (f1+f2)|X = f1|X + f2|X & (f1+f2)|X = f1|X + f2 & (f1+f2)|X = f1 + f2|X
 proof
 A1: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
-  .= dom f1 /\ dom f2 /\ (X /\ X) by COMSEQ_1:def 2
+  .= dom f1 /\ dom f2 /\ (X /\ X) by VALUED_1:1,def 1
   .= dom f1 /\ (dom f2 /\ (X /\ X)) by XBOOLE_1:16
   .= dom f1 /\ (dom f2 /\ X /\ X) by XBOOLE_1:16
   .= dom f1 /\ (X /\ dom (f2|X)) by RELAT_1:90
   .= dom f1 /\ X /\ dom (f2|X) by XBOOLE_1:16
   .= dom (f1|X) /\ dom (f2|X) by RELAT_1:90
-  .= dom ((f1|X)+(f2|X)) by COMSEQ_1:def 2;
+  .= dom ((f1|X)+(f2|X)) by VALUED_1:1,def 1;
      now let c; assume A2: c in dom ((f1+f2)|X);
   then c in dom (f1+f2) /\ X by RELAT_1:90;
 then A3: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
-  then c in dom f1 /\ dom f2 by COMSEQ_1:def 2;
+  then c in dom f1 /\ dom f2 by VALUED_1:1,def 1;
   then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
   then c in dom f1 /\ X & c in dom f2 /\ X by A3,XBOOLE_0:def 3;
 then A4: c in dom (f1|X) & c in dom (f2|X) by RELAT_1:90;
   then c in dom (f1|X) /\ dom (f2|X) by XBOOLE_0:def 3;
-then A5: c in dom ((f1|X) + (f2|X)) by COMSEQ_1:def 2;
+then A5: c in dom ((f1|X) + (f2|X)) by VALUED_1:1,def 1;
  thus ((f1+f2)|X)/.c = (f1+f2)/.c by A2,PARTFUN2:32
   .= (((f1/.c))) + (((f2/.c))) by A3,Th3
   .= ((f1|X)/.c) + (((f2/.c))) by A4,PARTFUN2:32
@@ -1084,19 +1120,19 @@ then A5: c in dom ((f1|X) + (f2|X)) by COMSEQ_1:def 2;
  end;
  hence (f1+f2)|X = f1|X + f2|X by A1,PARTFUN2:3;
 A6: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
-  .= dom f1 /\ dom f2 /\ X by COMSEQ_1:def 2
+  .= dom f1 /\ dom f2 /\ X by VALUED_1:1,def 1
   .= dom f1 /\ X /\ dom f2 by XBOOLE_1:16
   .= dom (f1|X) /\ dom f2 by RELAT_1:90
-  .= dom ((f1|X)+ f2) by COMSEQ_1:def 2;
+  .= dom ((f1|X)+ f2) by VALUED_1:1,def 1;
      now let c; assume A7: c in dom ((f1+f2)|X);
   then c in dom (f1+f2) /\ X by RELAT_1:90;
 then A8: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
-  then c in dom f1 /\ dom f2 by COMSEQ_1:def 2;
+  then c in dom f1 /\ dom f2 by VALUED_1:1,def 1;
   then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
   then c in dom f1 /\ X & c in dom f2 by A8,XBOOLE_0:def 3;
 then A9: c in dom (f1|X) & c in dom f2 by RELAT_1:90;
   then c in dom (f1|X) /\ dom f2 by XBOOLE_0:def 3;
-then A10: c in dom ((f1|X) + f2) by COMSEQ_1:def 2;
+then A10: c in dom ((f1|X) + f2) by VALUED_1:1,def 1;
  thus ((f1+f2)|X)/.c = (f1+f2)/.c by A7,PARTFUN2:32
   .= (((f1/.c))) +(((f2/.c))) by A8,Th3
   .= ((f1|X)/.c) +(((f2/.c))) by A9,PARTFUN2:32
@@ -1104,19 +1140,19 @@ then A10: c in dom ((f1|X) + f2) by COMSEQ_1:def 2;
  end;
  hence (f1+f2)|X = f1|X + f2 by A6,PARTFUN2:3;
 A11: dom ((f1+f2)|X) = dom (f1+f2) /\ X by RELAT_1:90
-  .= dom f1 /\ dom f2 /\ X by COMSEQ_1:def 2
+  .= dom f1 /\ dom f2 /\ X by VALUED_1:1,def 1
   .= dom f1 /\ (dom f2 /\ X) by XBOOLE_1:16
   .= dom f1 /\ dom (f2|X) by RELAT_1:90
-  .= dom (f1 + (f2|X)) by COMSEQ_1:def 2;
+  .= dom (f1 + (f2|X)) by VALUED_1:1,def 1;
      now let c; assume A12: c in dom ((f1+f2)|X);
   then c in dom (f1+f2) /\ X by RELAT_1:90;
 then A13: c in dom (f1+f2) & c in X by XBOOLE_0:def 3;
-  then c in dom f1 /\ dom f2 by COMSEQ_1:def 2;
+  then c in dom f1 /\ dom f2 by VALUED_1:1,def 1;
   then c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
   then c in dom f1 & c in dom f2 /\ X by A13,XBOOLE_0:def 3;
 then A14: c in dom f1 & c in dom (f2|X) by RELAT_1:90;
   then c in dom f1 /\ dom (f2|X) by XBOOLE_0:def 3;
-then A15: c in dom (f1 + (f2|X)) by COMSEQ_1:def 2;
+then A15: c in dom (f1 + (f2|X)) by VALUED_1:1,def 1;
  thus ((f1+f2)|X)/.c = (f1+f2)/.c by A12,PARTFUN2:32
   .= (((f1/.c))) +(((f2/.c))) by A13,Th3
   .= (((f1/.c))) +((f2|X)/.c) by A14,PARTFUN2:32
@@ -1232,17 +1268,20 @@ then A9: c in dom (f^) & c in X by XBOOLE_0:def 3;
  end;
  hence (f^)|X = (f|X)^ by A7,PARTFUN2:3;
 A10: dom ((|.f.|)|X) = dom (|.f.|) /\ X by RELAT_1:90
-  .= dom f /\ X by COMSEQ_1:def 13
+  .= dom f /\ X by VALUED_1:18,def 11
   .= dom (f|X) by RELAT_1:90
-  .= dom (|.(f|X).|) by COMSEQ_1:def 13;
+  .= dom (|.(f|X).|) by VALUED_1:18,def 11;
      now let c; assume A11: c in dom ((|.f.|)|X);
   then c in dom (|.f.|) /\ X by RELAT_1:90;
 then A12: c in dom (|.f.|) & c in X by XBOOLE_0:def 3;
-A13: c in dom (f|X) by A10,A11,COMSEQ_1:def 13;
+A13: c in dom (f|X) by A10,A11,VALUED_1:18,def 11;
+A14: dom |.f.| = dom f by VALUED_1:def 11;
  thus ((|.f.|)|X).c = (|.f.|).c by A11,FUNCT_1:70
-  .= |.(f/.c).| by A12,COMSEQ_1:def 13
+  .= |.(f.c).| by A12,VALUED_1:18,def 11
+  .= |.(f/.c).| by A12,A14,PARTFUN1:def 8
   .= |.(f|X)/.c.| by A13,PARTFUN2:32
-  .= (|.(f|X).|).c by A10,A11,COMSEQ_1:def 13;
+  .= |.(f|X).c.| by A13,PARTFUN1:def 8
+  .= (|.(f|X).|).c by A10,A11,VALUED_1:18,def 11;
  end;
  hence thesis by A10,PARTFUN1:34;
 end;
@@ -1250,17 +1289,17 @@ end;
 theorem
     (f1-f2)|X = f1|X - f2|X & (f1-f2)|X = f1|X - f2 &(f1-f2)|X = f1 - f2|X
 proof
-thus (f1-f2)|X = (f1+-f2)|X by COMSEQ_1:def 10
+thus (f1-f2)|X = (f1+-f2)|X by VALUED_1:12,13,14,15,def 9
  .= (f1|X)+ (-f2)|X by Th64
  .= (f1|X)+ -(f2|X) by Th66
- .= (f1|X) - (f2|X) by COMSEQ_1:def 10;
-thus (f1-f2)|X = (f1+-f2)|X by COMSEQ_1:def 10
+ .= (f1|X) - (f2|X) by VALUED_1:12,13,14,15,def 9;
+thus (f1-f2)|X = (f1+-f2)|X by VALUED_1:12,13,14,15,def 9
  .= (f1|X)+ -f2 by Th64
- .= (f1|X) - f2 by COMSEQ_1:def 10;
-thus (f1-f2)|X = (f1+-f2)|X by COMSEQ_1:def 10
+ .= (f1|X) - f2 by VALUED_1:12,13,14,15,def 9;
+thus (f1-f2)|X = (f1+-f2)|X by VALUED_1:12,13,14,15,def 9
  .= f1+ (-f2)|X by Th64
  .= f1 +- (f2|X) by Th66
- .= f1 - (f2|X) by COMSEQ_1:def 10;
+ .= f1 - (f2|X) by VALUED_1:12,13,14,15,def 9;
 end;
 
 theorem
@@ -1316,11 +1355,11 @@ thus f1 is total & f2 is total iff f1+f2 is total
  thus f1 is total & f2 is total implies f1+f2 is total
   proof assume f1 is total & f2 is total;
    then dom f1 = C & dom f2 = C by PARTFUN1:def 4;
-   hence dom (f1+f2) = C /\ C by COMSEQ_1:def 2
+   hence dom (f1+f2) = C /\ C by VALUED_1:1,def 1
    .= C;
   end;
   assume f1+f2 is total; then dom (f1+f2) = C by PARTFUN1:def 4;
-  then dom f1 /\ dom f2 = C by COMSEQ_1:def 2;
+  then dom f1 /\ dom f2 = C by VALUED_1:1,def 1;
  then C c= dom f1 & C c= dom f2 by XBOOLE_1:17;
   hence dom f1 = C & dom f2 = C by XBOOLE_0:def 10;
  end;
@@ -1376,10 +1415,10 @@ f is total iff |.f.| is total
 proof
 thus f is total implies |.f.| is total
  proof assume f is total; then dom f = C by PARTFUN1:def 4;
-  hence dom (|.f.|) = C by COMSEQ_1:def 13;
+  hence dom (|.f.|) = C by VALUED_1:18,def 11;
  end;
  assume |.f.| is total; then dom (|.f.|) = C by PARTFUN1:def 4;
- hence dom f = C by COMSEQ_1:def 13;
+ hence dom f = C by VALUED_1:18,def 11;
 end;
 
 theorem Th74:
@@ -1430,12 +1469,15 @@ proof assume f is total; then r(#)f is total by Th71;
 end;
 
 theorem
-    f is total implies (-f)/.c = - (f/.c) & (|.f.|).c = |. (f/.c) .|
+  f is total implies (-f)/.c = - (f/.c) & (|.f.|).c = |. (f/.c) .|
 proof assume A1: f is total; then -f is total by Th72;
  then dom (-f) = C by PARTFUN1:def 4;
  hence (-f)/.c = - (f/.c) by Th9;
-     |.f.| is total by A1,Th73; then dom (|.f.|) = C by PARTFUN1:def 4;
-hence (|.f.|).c = |. (f/.c) .| by COMSEQ_1:def 13;
+A2: dom |.f.| = dom f by VALUED_1:def 11;
+     |.f.| is total by A1,Th73; then
+A3: dom (|.f.|) = C by PARTFUN1:def 4;
+hence (|.f.|).c = |. (f.c) .| by VALUED_1:18,def 11
+.= |. (f/.c) .| by A2,A3,PARTFUN1:def 8;
 end;
 
 theorem
@@ -1466,31 +1508,36 @@ theorem Th81:
   f is_bounded_on Y iff ex p be real number st
        for c st c in Y /\ dom f holds |.(f/.c).|<= p
 proof
+A1: dom |.f.| = dom f by VALUED_1:18,def 11;
   hereby
   assume
       f is_bounded_on Y;
       then |.f.| is_bounded_on Y by Def3;
    then consider p be real number such that
-     A1: for c being set st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p
+     A2: for c being set st c in Y /\ dom |.f.| holds abs(|.f.|.c) <= p
      by RFUNCT_1:90;
-     A2:dom |.f.| = dom f by COMSEQ_1:def 13;
          now let c such that
          A3: c in Y /\ dom f;
+         c in dom f by A3,XBOOLE_0:def 3;
+         then
+A4:     f.c = f/.c by PARTFUN1:def 8;
        Y /\ dom f c= dom f by XBOOLE_1:17;
-          then abs(|.f.|.c)= abs(|.(f/.c).|) by A2,A3,COMSEQ_1:def 13;
-          hence |.(f/.c).| <= p by A1,A2,A3;
+          then abs(|.f.|.c)= abs(|.(f.c).|)
+          by A1,A3,A4,VALUED_1:18,def 11;
+          hence |.(f/.c).| <= p by A1,A2,A3,A4;
      end;
      hence ex p be real number st
      for c st c in Y /\ dom f holds |.(f/.c).| <= p;
  end;
    given p be real number such that
-       A4: for c st c in Y /\ dom f holds |.(f/.c).| <= p;
-A5:dom |.f.| = dom f by COMSEQ_1:def 13;
+       A5: for c st c in Y /\ dom f holds |.(f/.c).| <= p;
+A6:dom |.f.| = dom f by VALUED_1:18,def 11;
        now let c be set such that
-         A6: c in Y /\ dom |.f.|;
-       c in dom |.f.| by A6,XBOOLE_0:def 3;
-          then abs(|.f.|.c)= abs(|.(f/.c).|) by COMSEQ_1:def 13;
-          hence abs(|.f.|.c) <= p by A4,A5,A6;
+         A7: c in Y /\ dom |.f.|;
+A8:     c in dom |.f.| by A7,XBOOLE_0:def 3;
+          then abs(|.f.|.c)= abs(|.(f.c).|) by VALUED_1:18,def 11
+          .= abs(|.(f/.c).|) by A1,A8,PARTFUN1:def 8;
+          hence abs(|.f.|.c) <= p by A5,A6,A7;
      end;
        then |.f.| is_bounded_on Y by RFUNCT_1:90;
        hence f is_bounded_on Y by Def3;
@@ -1523,11 +1570,15 @@ then |.r(#)f.| is_bounded_on Y by Th39;
 end;
 
 theorem
-    |.f.| is_bounded_below_on X
+  |.f.| is_bounded_below_on X
 proof
  take 0; let c be set; assume c in X /\ dom (|.f.|);
-then A1: c in dom (|.f.|) by XBOOLE_0:def 3;   0 <= |. f/.c .| by COMPLEX1:132;
- hence 0 <= (|.f.|).c by A1,COMSEQ_1:def 13;
+then A1: c in dom (|.f.|) by XBOOLE_0:def 3;
+dom |.f.| = dom f by VALUED_1:18,def 11;
+then
+A2: f.c = f/.c by A1,PARTFUN1:def 8;
+0 <= |. f/.c .| by COMPLEX1:132;
+ hence 0 <= (|.f.|).c by A1,A2,VALUED_1:18,def 11;
 end;
 
 theorem Th86:
@@ -1554,7 +1605,7 @@ proof
   take r0=r1+r2; let c; assume c in X /\ Y /\ dom (f1+f2);
   then A4:  c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 3;
   then c in X & c in Y & c in
- dom f1 /\ dom f2 by COMSEQ_1:def 2,XBOOLE_0:def 3;
+ dom f1 /\ dom f2 by VALUED_1:1,def 1,XBOOLE_0:def 3;
   then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
   then A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
    then A6: |.((f1/.c)).| <= r1 by A2;
@@ -1593,7 +1644,7 @@ hence |.(f1(#)f2)/.c.| <= r by A4,Th5;
  hence f1(#)f2 is_bounded_on X /\ Y by Th81;
      -f2 is_bounded_on Y by A1,Th86; then f1+-f2
  is_bounded_on (X /\ Y) by A1,Th87;
- hence thesis by COMSEQ_1:def 10;
+ hence thesis by VALUED_1:12,13,14,15,def 9;
 end;
 
 theorem
@@ -1618,7 +1669,7 @@ A2: for c st c in X /\ dom f1 holds ((f1/.c)) = cr1 by PARTFUN2:def 3;
 A3: for c st c in Y /\ dom f2 holds ((f2/.c)) = cr2 by A1,PARTFUN2:def 3;
      now let c; assume c in X /\ Y /\ dom (f1+f2);
 then A4: c in X /\ Y & c in dom (f1+f2) by XBOOLE_0:def 3;
-  then c in X & c in Y & c in (dom f1 /\ dom f2) by COMSEQ_1:def 2
+  then c in X & c in Y & c in (dom f1 /\ dom f2) by VALUED_1:1,def 1
 ,XBOOLE_0:def 3;
   then c in X & c in Y & c in dom f1 & c in dom f2 by XBOOLE_0:def 3;
 then A5: c in X /\ dom f1 & c in Y /\ dom f2 by XBOOLE_0:def 3;
@@ -1672,16 +1723,18 @@ then consider r such that A1: for c st c in Y /\ dom f holds (f/.c) = r
           by PARTFUN2:def 3;
      now let c; assume c in Y /\ dom (|.f.|);
 then A2: c in dom (|.f.|) & c in Y by XBOOLE_0:def 3;
-    then c in dom f by COMSEQ_1:def 13;
-then A3: c in Y /\ dom f by A2,XBOOLE_0:def 3;
-  thus (|.f.|).c = |.(f/.c).| by A2,COMSEQ_1:def 13
-   .= |.r.| by A1,A3;
+    then
+A3: c in dom f by VALUED_1:18,def 11;
+then A4: c in Y /\ dom f by A2,XBOOLE_0:def 3;
+  f.c = f/.c by A3,PARTFUN1:def 8;
+  hence (|.f.|).c = |.(f/.c).| by A2,VALUED_1:18,def 11
+   .= |.r.| by A1,A4;
  end;
  hence |.f.| is_constant_on Y by PARTFUN2:76;
-     now take p=-r; let c; assume A4: c in Y /\ dom (-f);
+     now take p=-r; let c; assume A5: c in Y /\ dom (-f);
   then c in Y /\ dom f by Th9;
-then A5: -(f/.c) = p by A1;   c in dom (-f) by A4,XBOOLE_0:def 3;
-  hence (-f)/.c = p by A5,Th9;
+then A6: -(f/.c) = p by A1;   c in dom (-f) by A5,XBOOLE_0:def 3;
+  hence (-f)/.c = p by A6,Th9;
  end;
  hence thesis by PARTFUN2:def 3;
 end;
@@ -1702,7 +1755,7 @@ theorem
                             (-f is_bounded_on Y) &
                             |.f.| is_bounded_on Y
 proof assume A1: f is_constant_on Y;
- thus for r holds r(#)f is_bounded_on Y by Th93,A1,Th91;
+ thus for r holds r(#)f is_bounded_on Y by A1,Th91,Th93;
      -f is_constant_on Y by A1,Th92; hence -f is_bounded_on Y by Th93;
      |.f.| is_constant_on Y by A1,Th92;
  hence |.f.| is_bounded_on Y by RFUNCT_1:108;
@@ -1724,7 +1777,7 @@ proof
  assume A1: f1 is_bounded_on X & f2 is_constant_on Y;
  then -f2 is_constant_on Y by Th92;
 then f1+(-f2) is_bounded_on X /\ Y by A1,Th95;
- hence f1-f2 is_bounded_on X /\ Y by COMSEQ_1:def 10;
+ hence f1-f2 is_bounded_on X /\ Y by VALUED_1:12,13,14,15,def 9;
 A2: f2 is_bounded_on Y by A1,Th93;
  hence f2-f1 is_bounded_on X /\ Y by A1,Th88;
  thus thesis by A1,A2,Th88;

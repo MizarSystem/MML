@@ -11,22 +11,21 @@ environ
       REALSET1, FINSET_1, ALGSTR_1, FINSOP_1, TRIANG_1, CARD_1, FINSEQ_5,
       ORDINAL1, WELLORD2, POLYNOM1, ALGSEQ_1, PARTFUN1, FUNCT_4, CAT_1,
       RFINSEQ, ARYTM_3, QC_LANG1, ENDALG, GRCAT_1, COHSP_1, QUOFIELD, POLYNOM2,
-      CARD_3, ARYTM;
+      CARD_3, ARYTM, ALGSTR_0, VECTSP_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
-      FINSOP_1,
-      RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1, FUNCT_2,
-      BINOP_1, FUNCT_4, XCMPLX_0, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, RLVECT_1,
-      FINSEQ_1, POLYNOM1, STRUCT_0, FUNCOP_1, VECTSP_1, GROUP_1, GROUP_4,
-      QUOFIELD, FINSEQ_5, GRCAT_1, TRIANG_1, RFINSEQ, YELLOW_1,
-      GROUP_6, XXREAL_0;
+      FINSOP_1, RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1,
+      FUNCT_2, BINOP_1, FUNCT_4, XCMPLX_0, REAL_1, NAT_1, ALGSTR_1, ORDERS_1,
+      FINSEQ_1, POLYNOM1, STRUCT_0, ALGSTR_0, RLVECT_1, FUNCOP_1, VECTSP_1,
+      GROUP_1, GROUP_4, QUOFIELD, FINSEQ_5, GRCAT_1, TRIANG_1, RFINSEQ,
+      YELLOW_1, GROUP_6, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, FINSOP_1, RFINSEQ, BINARITH, FINSEQ_5,
       ALGSTR_1, GROUP_4, GRCAT_1, GROUP_6, MONOID_0, TRIANG_1, YELLOW_1,
-      QUOFIELD, POLYNOM1;
+      QUOFIELD, POLYNOM1, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, STRUCT_0, VECTSP_1,
-      ALGSTR_1, MONOID_0, POLYNOM1, VALUED_0;
+      ALGSTR_1, MONOID_0, POLYNOM1, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
- definitions QUOFIELD, GROUP_1, BINOP_1, FUNCOP_1;
+ definitions QUOFIELD, GROUP_1, BINOP_1, FUNCOP_1, ALGSTR_0, VALUED_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, ORDINAL1, RELAT_1,
       ZFMISC_1, VECTSP_1, POLYNOM1, PBOOLE, RELAT_2, WELLORD2, FUNCT_7,
       FUNCT_4, FUNCOP_1, ORDERS_1, SEQM_3, FINSET_1, NAT_1, FINSEQ_4, GRCAT_1,
@@ -443,11 +442,12 @@ end;
 canceled;
 
 theorem Th2:
-for L being unital associative (non empty HGrStr), a being Element of L,
+for L being unital associative (non empty multMagma),
+            a being Element of L,
     n,m being Element of NAT
  holds power(L).(a,n+m) = power(L).(a,n) * power(L).(a,m)
 proof
-let L be unital associative (non empty HGrStr),
+let L be unital associative (non empty multMagma),
     a be Element of L, n,m be Element of NAT;
     defpred P[Element of NAT] means
      power(L).(a,n+$1) = power(L).(a,n) * power(L).(a,$1);
@@ -468,7 +468,7 @@ end;
 
 registration
  cluster Abelian right_zeroed add-associative right_complementable
-         unital distributive commutative associative
+         well-unital distributive commutative associative
          non trivial (non empty doubleLoopStr);
  existence proof take F_Real; thus thesis; end;
 end;
@@ -511,14 +511,14 @@ hence thesis by A1,ORDERS_1:134;
 end;
 
 theorem Th5:
-for L being left_zeroed right_zeroed (non empty LoopStr),
+for L being left_zeroed right_zeroed (non empty addLoopStr),
     p being FinSequence of the carrier of L,
     i being Element of NAT
     st i in dom p & for i' being Element of NAT st i' in dom p & i' <> i
      holds p/.i' = 0.L
 holds Sum p = p/.i
 proof
-let L be left_zeroed right_zeroed (non empty LoopStr),
+let L be left_zeroed right_zeroed (non empty addLoopStr),
     p be FinSequence of the carrier of L,
     i be Element of NAT;
 assume A1: i in dom p &
@@ -529,7 +529,7 @@ A2: Sum p = fp.(len p) &
     fp.0 = 0.L &
     for j being Element of NAT, v being Element of L
     st j < len p & v = p.(j + 1) holds fp.(j + 1) = fp.j + v
-    by RLVECT_1:def 12;
+    by RLVECT_1:def 13;
 defpred P[Element of NAT] means
    ($1 < i & fp.($1) = 0.L) or (i <= $1 & fp.($1) = p/.i);
 consider l being Nat such that A3: dom p = Seg l by FINSEQ_1:def 2;
@@ -594,13 +594,13 @@ end;
 
 theorem
      for L being add-associative right_zeroed right_complementable
-            distributive unital (non empty doubleLoopStr),
+            distributive well-unital (non empty doubleLoopStr),
     p being FinSequence of the carrier of L
     st ex i being Element of NAT st i in dom p & p/.i = 0.L
 holds Product p = 0.L
 proof
 let L be add-associative right_zeroed right_complementable
-         distributive unital (non empty doubleLoopStr),
+         distributive well-unital (non empty doubleLoopStr),
     p be FinSequence of the carrier of L;
 given i being Element of NAT such that
 A1: i in dom p & p/.i = 0.L;
@@ -631,8 +631,8 @@ A4: for j being Element of NAT holds P[j] implies P[j+1]
       then consider fp being Function of NAT,the carrier of L such that
       A8: fp.1 = p.1 &
           (for i being Element of NAT st 0 <> i & i < len p holds
-          fp.(i + 1) = (the mult of L).(fp.i,p.(i+1))) &
-          (the mult of L) "**" p = fp.(len p)
+          fp.(i + 1) = (the multF of L).(fp.i,p.(i+1))) &
+          (the multF of L) "**" p = fp.(len p)
            by FINSOP_1:2;
       A9: dom p = Seg len p by FINSEQ_1:def 3;
       A10: 1 in dom p by A7,FINSEQ_3:27;
@@ -687,7 +687,7 @@ hence thesis by A1,A26;
 end;
 
 theorem Th7:
-for L being Abelian add-associative (non empty LoopStr),
+for L being Abelian add-associative (non empty addLoopStr),
     a being Element of L,
     p,q being FinSequence of the carrier of L
     st len p = len q &
@@ -697,7 +697,7 @@ for L being Abelian add-associative (non empty LoopStr),
            holds q/.i' = p/.i'
 holds Sum q = a + Sum p
 proof
-let L be Abelian add-associative (non empty LoopStr),
+let L be Abelian add-associative (non empty addLoopStr),
     a be Element of L,
     p,q be FinSequence of the carrier of L;
 assume A1: len p = len q &
@@ -711,13 +711,13 @@ A3: Sum p = fp.(len p) &
     fp.0 = 0.L &
     for j being Element of NAT, v being Element of L
     st j < len p & v = p.(j + 1) holds fp.(j + 1) = fp.j + v
-    by RLVECT_1:def 12;
+    by RLVECT_1:def 13;
 consider fq being Function of NAT,the carrier of L such that
 A4: Sum q = fq.(len q) &
     fq.0 = 0.L &
     for j being Element of NAT, v being Element of L
     st j < len q & v = q.(j + 1) holds fq.(j + 1) = fq.j + v
-    by RLVECT_1:def 12;
+    by RLVECT_1:def 13;
 defpred P[Element of NAT] means
    ($1 < i & fp.($1) = fq.($1)) or (i <= $1 & fq.($1) = a + fp.($1));
 consider l being Nat such that A5: dom p = Seg l by FINSEQ_1:def 2;
@@ -809,8 +809,8 @@ assume A1: len p = len q &
 then consider i being Element of NAT such that
 A2: i in dom p & q/.i = a * p/.i &
     for i' being Element of NAT st i' in dom p & i' <> i holds q/.i' = p/.i';
-A3: Product p = (the mult of L) "**" p &
-     Product q = (the mult of L) "**" q by GROUP_4:def 3;
+A3: Product p = (the multF of L) "**" p &
+     Product q = (the multF of L) "**" q by GROUP_4:def 3;
 per cases;
 suppose len p = 0;
   then p = {} by FINSEQ_1:25;
@@ -821,12 +821,12 @@ suppose len p <> 0;
   then consider fp being Function of NAT,the carrier of L such that
   A5: fp.1 = p.1 &
       (for i being Element of NAT st 0 <> i & i < len p holds
-      fp.(i + 1) = (the mult of L).(fp.i,p.(i+1))) & Product p = fp.(len p)
+      fp.(i + 1) = (the multF of L).(fp.i,p.(i+1))) & Product p = fp.(len p)
       by A3,FINSOP_1:2;
   consider fq being Function of NAT,the carrier of L such that
   A6: fq.1 = q.1 &
       (for i being Element of NAT st 0 <> i & i < len q holds
-      fq.(i + 1) = (the mult of L).(fq.i,q.(i+1))) & Product q = fq.(len p)
+      fq.(i + 1) = (the multF of L).(fq.i,q.(i+1))) & Product q = fq.(len p)
       by A1,A3,A4,FINSOP_1:2;
   defpred P[Element of NAT] means
       ($1 < i & fp.($1) = fq.($1)) or
@@ -880,7 +880,7 @@ A14: for j being Element of NAT st 1 <= j & j < len p holds P[j] implies P[j+1]
           then A23: p.(j+1) = p/.(j+1) by A7,PARTFUN1:def 8;
            q.(j+1) = q/.(j+1) by A9,A10,A22,PARTFUN1:def 8;
           then A24: fq.(j+1) = fq.j * q/.(j+1) by A1,A6,A15
-                      .= (the mult of L).(fq.j,p.(j+1))
+                      .= (the multF of L).(fq.j,p.(j+1))
                                by A2,A7,A20,A22,A23
                       .= fp.(j+1) by A5,A15,A16,A17;
                j + 1 < i
@@ -1573,7 +1573,7 @@ end;
 definition
 let n be Ordinal,
     b be bag of n,
-    L be non trivial unital (non empty doubleLoopStr),
+    L be non trivial well-unital (non empty doubleLoopStr),
     x be Function of n, L;
 func eval(b,x) -> Element of L means :Def2:
 ex y being FinSequence of the carrier of L
@@ -1663,12 +1663,12 @@ end;
 
 theorem Th16:
 for n being Ordinal,
-    L being non trivial unital (non empty doubleLoopStr),
+    L being non trivial well-unital (non empty doubleLoopStr),
     x being Function of n, L
-holds eval(EmptyBag n,x) = 1_L
+holds eval(EmptyBag n,x) = 1.L
 proof
 let n be Ordinal,
-    L be non trivial unital (non empty doubleLoopStr),
+    L be non trivial well-unital (non empty doubleLoopStr),
     x be Function of n, L;
 set b = EmptyBag n;
 consider y being FinSequence of the carrier of L such that
@@ -1680,22 +1680,23 @@ A1: len y = (len SgmX(RelIncl n, support b)) &
     by Def2;
 reconsider s = support b as empty Subset of n by Lm7;
      RelIncl n linearly_orders s by Th15;
-then SgmX(RelIncl n, s) = {} by Th9;
-then len (SgmX(RelIncl n, support b)) = 0 by FINSEQ_1:25;
-then y = <*>the carrier of L by A1,FINSEQ_1:32;
-hence thesis by A1,GROUP_4:11;
+ then SgmX(RelIncl n, s) = {} by Th9;
+ then len (SgmX(RelIncl n, support b)) = 0 by FINSEQ_1:25;
+ then y = <*>the carrier of L by A1,FINSEQ_1:32;
+ then eval(EmptyBag n,x) = 1_L by A1,GROUP_4:11;
+hence thesis;
 end;
 
 theorem Th17:
 for n being Ordinal,
-    L being unital non trivial (non empty doubleLoopStr),
+    L being well-unital non trivial (non empty doubleLoopStr),
     u being set,
     b being bag of n st support b = {u}
 for x being Function of n, L
 holds eval(b,x) = power(L).(x.u,b.u)
 proof
 let n be Ordinal,
-    L be unital non trivial (non empty doubleLoopStr),
+    L be well-unital non trivial (non empty doubleLoopStr),
     u be set,
     b be bag of n;
 assume A1: support b = {u};
@@ -1766,7 +1767,7 @@ end;
 Lm8:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     b1,b2 being bag of n,
     u being set
@@ -1778,7 +1779,7 @@ holds eval(b2,x) = a * eval(b1,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial commutative associative (non empty doubleLoopStr),
     b1,b2 be bag of n,
     u be set;
@@ -1995,7 +1996,7 @@ end;
 Lm9:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     b1 being bag of n st
         (ex u being set st support b1 = {u})
@@ -2004,7 +2005,7 @@ holds eval(b1+b2,x) = eval(b1,x) * eval(b2,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive Abelian
+         well-unital distributive Abelian
          non trivial commutative associative (non empty doubleLoopStr),
     b1 be bag of n;
 assume A1: ex u being set st support b1 = {u};
@@ -2180,7 +2181,7 @@ end;
 theorem Th18:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive Abelian
+            well-unital distributive Abelian
             non trivial commutative associative (non empty doubleLoopStr),
     b1,b2 being bag of n,
     x being Function of n, L
@@ -2188,7 +2189,7 @@ holds eval(b1+b2,x) = eval(b1,x) * eval(b2,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive Abelian
+         well-unital distributive Abelian
          non trivial commutative associative (non empty doubleLoopStr),
     b1,b2 be bag of n,
     x be Function of n, L;
@@ -2201,7 +2202,7 @@ let n be Ordinal,
       then support b1 = {} by CARD_2:59;
       then A2: b1 = EmptyBag n by Th14;
       hence eval(b1+b2,x) = eval(b2,x) by POLYNOM1:57
-                         .= 1_L * eval(b2,x) by GROUP_1:def 5
+                         .= 1.L * eval(b2,x) by VECTSP_1:def 16
                          .= eval(b1,x) * eval(b2,x) by A2,Th16;
       end;
     A3: for k being Element of NAT st P[k] holds P[k + 1]
@@ -2347,7 +2348,7 @@ begin :: Evaluation of Polynomials ---------------------------------------------
 registration
 let n be Ordinal,
     L be add-associative right_zeroed right_complementable
-         (non empty LoopStr),
+         (non empty addLoopStr),
     p,q be Polynomial of n, L;
 cluster p - q -> finite-Support;
 coherence
@@ -2359,14 +2360,14 @@ end;
 
 theorem Th19:
 for L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial (non empty doubleLoopStr),
     n being Ordinal,
     p being Polynomial of n,L st Support p = {}
 holds p = 0_(n,L)
 proof
  let L be right_zeroed add-associative right_complementable
-          unital distributive
+          well-unital distributive
           non trivial (non empty doubleLoopStr),
      n be Ordinal,
      p be Polynomial of n,L such that
@@ -2387,7 +2388,7 @@ end;
 registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L;
 cluster Support p -> finite;
@@ -2397,14 +2398,14 @@ end;
 theorem Th20:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial (non empty doubleLoopStr),
     p being Polynomial of n,L
 holds BagOrder n linearly_orders Support p
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L;
 set R = BagOrder n;
@@ -2449,7 +2450,7 @@ end;
 definition
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L,
     x be Function of n, L;
@@ -2531,7 +2532,7 @@ end;
 theorem Th21:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial (non empty doubleLoopStr),
     p being Polynomial of n,L,
     b being bag of n st Support p = {b}
@@ -2540,7 +2541,7 @@ holds eval(p,x) = p.b * eval(b,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L,
     b be bag of n;
@@ -2609,14 +2610,14 @@ end;
 theorem Th22:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial (non empty doubleLoopStr),
     x being Function of n, L
 holds eval(0_(n,L),x) = 0.L
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 set 0p = 0_(n,L);
@@ -2645,13 +2646,13 @@ end;
 theorem Th23:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive non trivial (non empty doubleLoopStr),
+            well-unital distributive non trivial (non empty doubleLoopStr),
    x being Function of n, L
-holds eval(1_(n,L),x) = 1_L
+holds eval(1_(n,L),x) = 1.L
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive non trivial (non empty doubleLoopStr),
+         well-unital distributive non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 set 1p = 1_(n,L);
 A1: for u being set holds u in Support 1p implies u in {EmptyBag n}
@@ -2669,7 +2670,7 @@ A1: for u being set holds u in Support 1p implies u in {EmptyBag n}
     assume A3: u in {EmptyBag n};
     then A4: u = EmptyBag n by TARSKI:def 1;
     reconsider u as Element of Bags n by A3,TARSKI:def 1;
-         1p.u = 1_L by A4,POLYNOM1:84;
+         1p.u = 1.L by A4,POLYNOM1:84;
     then 1p.u <> 0.L by POLYNOM1:27;
     hence thesis by POLYNOM1:def 9;
     end;
@@ -2721,8 +2722,8 @@ A20: len y = len sg1p &
         y/.i = (1p * sg1p)/.i * eval(((sg1p)/.i)@,x) by Def4;
 A21: y.1 = y/.1 by A18,A20,FINSEQ_4:24
              .= (1p * sg1p)/.1 * eval(((sg1p)/.1)@,x) by A18,A20
-             .= (1p * sg1p)/.1 * 1_L by A19,Th16
-             .= (1p * sg1p)/.1 by GROUP_1:def 5;
+             .= (1p * sg1p)/.1 * 1.L by A19,Th16
+             .= (1p * sg1p)/.1 by VECTSP_1:def 16;
 A22: sg1p.1 in rng sg1p by A9,FUNCT_1:def 5;
 A23: 1 in dom sg1p by A8,FINSEQ_3:33;
      sg1p.1 in {EmptyBag n} by A5,A6,A22,TRIANG_1:def 2;
@@ -2732,15 +2733,15 @@ then 1 in dom (1p * sg1p) by A23,A24,FUNCT_1:21;
 then (1p * sg1p)/.1 = (1p * sg1p).1 by PARTFUN1:def 8
                    .= 1p.(sg1p.1) by A9,FUNCT_1:23
                    .= 1p.(EmptyBag n) by A7,A22,TARSKI:def 1
-                   .= 1_L by POLYNOM1:84;
-then y = <* 1_L *> by A18,A20,A21,FINSEQ_1:57;
-hence eval(1_(n,L),x) = 1_L by A20,RLVECT_1:61;
+                   .= 1.L by POLYNOM1:84;
+then y = <* 1.L *> by A18,A20,A21,FINSEQ_1:57;
+hence eval(1_(n,L),x) = 1.L by A20,RLVECT_1:61;
 end;
 
 theorem Th24:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            unital distributive
+            well-unital distributive
             non trivial (non empty doubleLoopStr),
     p being Polynomial of n,L,
     x being Function of n, L
@@ -2748,7 +2749,7 @@ holds eval(-p,x) = - eval(p,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive
+         well-unital distributive
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L,
     x be Function of n, L;
@@ -2795,22 +2796,22 @@ A8: len ymp = len SgmX(BagOrder n, Support mp) &
         ymp/.i = (mp * SgmX(BagOrder n, Support mp))/.i *
                  eval(((SgmX(BagOrder n, Support mp))/.i)@,x) by Def4;
 A9: len ymp = len yp by A1,A4,A7,A8,TARSKI:2;
-A10: dom ((-1_L) * yp) = dom yp by POLYNOM1:def 2;
-consider k being Element of NAT such that A11: k = len ((-1_L) * yp);
+A10: dom ((-1.L) * yp) = dom yp by POLYNOM1:def 2;
+consider k being Element of NAT such that A11: k = len ((-1.L) * yp);
 consider l being Element of NAT such that A12: l = len yp;
-A13: dom ((-1_L) * yp) = Seg k & dom yp = Seg l by A11,A12,FINSEQ_1:def 3;
-then A14: len ymp = len ((-1_L) * yp) by A9,A10,A11,A12,FINSEQ_1:8;
+A13: dom ((-1.L) * yp) = Seg k & dom yp = Seg l by A11,A12,FINSEQ_1:def 3;
+then A14: len ymp = len ((-1.L) * yp) by A9,A10,A11,A12,FINSEQ_1:8;
 for k being Nat st 1 <= k & k <= len ymp
-     holds ymp.k = ((-1_L) * yp).k
+     holds ymp.k = ((-1.L) * yp).k
   proof
   let k be Nat;
   assume A15: 1 <= k & k <= len ymp;
   then
 A16: k in Seg l by A9,A12,FINSEQ_1:3;
   then A17: k in dom yp by A12,FINSEQ_1:def 3;
-  A18: 1 <= k & k <= len ((-1_L) * yp) by A9,A10,A11,A12,A13,A15,FINSEQ_1:8;
+  A18: 1 <= k & k <= len ((-1.L) * yp) by A9,A10,A11,A12,A13,A15,FINSEQ_1:8;
     A19: (mp * SgmX(BagOrder n, Support p))/.k =
-        (-1_L) * ((p * SgmX(BagOrder n, Support p))/.k)
+        (-1.L) * ((p * SgmX(BagOrder n, Support p))/.k)
       proof
       reconsider b = SgmX(BagOrder n, Support p)/.k as bag of n
        by POLYNOM1:def 14;
@@ -2825,37 +2826,37 @@ A16: k in Seg l by A9,A12,FINSEQ_1:3;
        .= mp.b by A21,PARTFUN1:def 8
        .= -(p.b) by POLYNOM1:def 22
        .= -(p/.b) by A21,PARTFUN1:def 8
-       .= -(1_L * p/.b) by GROUP_1:def 5
-       .= (-1_L) * p/.b by VECTSP_1:41
-       .= (-1_L) * ((p * SgmX(BagOrder n, Support p))/.k) by A24,PARTFUN2:6;
+       .= -(1.L * p/.b) by VECTSP_1:def 16
+       .= (-1.L) * p/.b by VECTSP_1:41
+       .= (-1.L) * ((p * SgmX(BagOrder n, Support p))/.k) by A24,PARTFUN2:6;
       end;
     thus ymp.k = ymp/.k by A15,A16,FINSEQ_4:24
-              .= ((-1_L) * ((p * SgmX(BagOrder n, Support p))/.k)) *
+              .= ((-1.L) * ((p * SgmX(BagOrder n, Support p))/.k)) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x)
                  by A6,A8,A15,A16,A19
-              .= (-(1_L * ((p * SgmX(BagOrder n, Support p))/.k))) *
+              .= (-(1.L * ((p * SgmX(BagOrder n, Support p))/.k))) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x) by VECTSP_1:41
               .= (-((p * SgmX(BagOrder n, Support p))/.k)) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x)
-                 by GROUP_1:def 5
+                 by VECTSP_1:def 16
               .= -(((p * SgmX(BagOrder n, Support p))/.k) *
                  eval(((SgmX(BagOrder n, Support p))/.k)@,x)) by VECTSP_1:41
               .= - (yp/.k) by A7,A9,A15,A16
-              .= - (1_L * (yp/.k)) by GROUP_1:def 5
-              .= (-1_L) * (yp/.k) by VECTSP_1:41
-              .= ((-1_L) * yp)/.k by A17,POLYNOM1:def 2
-              .= ((-1_L) * yp).k by A16,A18,FINSEQ_4:24;
+              .= - (1.L * (yp/.k)) by VECTSP_1:def 16
+              .= (-1.L) * (yp/.k) by VECTSP_1:41
+              .= ((-1.L) * yp)/.k by A17,POLYNOM1:def 2
+              .= ((-1.L) * yp).k by A16,A18,FINSEQ_4:24;
   end;
-hence eval(mp,x) = Sum((-1_L) * yp) by A8,A14,FINSEQ_1:18
-                .= (-1_L) * eval(p,x) by A7,POLYNOM1:28
-                .= -(1_L * eval(p,x)) by VECTSP_1:41
-                .= - eval(p,x) by GROUP_1:def 5;
+hence eval(mp,x) = Sum((-1.L) * yp) by A8,A14,FINSEQ_1:18
+                .= (-1.L) * eval(p,x) by A7,POLYNOM1:28
+                .= -(1.L * eval(p,x)) by VECTSP_1:41
+                .= - eval(p,x) by VECTSP_1:def 16;
 end;
 
 Lm10:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial (non empty doubleLoopStr),
     p,q being Polynomial of n,L,
     x being Function of n, L,
@@ -2866,7 +2867,7 @@ holds eval(q,x) = eval(p,x) + q.b * eval(b,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial (non empty doubleLoopStr),
     p,q be Polynomial of n,L,
     x be Function of n, L,
@@ -3046,7 +3047,7 @@ end;
 Lm11:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial (non empty doubleLoopStr),
     p being Polynomial of n,L st
         (ex b being bag of n st Support p = {b})
@@ -3056,7 +3057,7 @@ holds eval(p+q,x) = eval(p,x) + eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive Abelian
+         well-unital distributive Abelian
          non trivial (non empty doubleLoopStr),
     p be Polynomial of n,L;
 assume A1: ex b being bag of n st Support p = {b};
@@ -3295,7 +3296,7 @@ end;
 theorem Th25:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial (non empty doubleLoopStr),
     p,q being Polynomial of n,L,
     x being Function of n, L
@@ -3303,7 +3304,7 @@ holds eval(p+q,x) = eval(p,x) + eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial (non empty doubleLoopStr),
     p,q be Polynomial of n,L,
     x be Function of n, L;
@@ -3494,7 +3495,7 @@ end;
 theorem
      for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial (non empty doubleLoopStr),
     p,q being Polynomial of n,L,
     x being Function of n, L
@@ -3502,20 +3503,20 @@ holds eval(p-q,x) = eval(p,x) - eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial (non empty doubleLoopStr),
     p,q be Polynomial of n,L,
     x be Function of n, L;
  thus eval(p-q,x) = eval(p + -q,x) by POLYNOM1:def 23
                .= eval(p,x) + eval(-q,x) by Th25
                .= eval(p,x) + -eval(q,x) by Th24
-               .= eval(p,x) - eval(q,x) by RLVECT_1:def 11;
+               .= eval(p,x) - eval(q,x) by RLVECT_1:def 12;
 end;
 
 Lm12:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     p,q being Polynomial of n,L,
     b1, b2 being bag of n st Support p = {b1} & Support q = {b2}
@@ -3524,7 +3525,7 @@ holds eval(p*'q,x) = eval(p,x) * eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
           non trivial commutative associative (non empty doubleLoopStr),
     p,q be Polynomial of n,L,
     b1, b2 be bag of n;
@@ -3676,7 +3677,7 @@ end;
 Lm13:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     q being Polynomial of n,L st ex b being bag of n st Support q = {b}
 for p being Polynomial of n,L,
@@ -3685,7 +3686,7 @@ holds eval(p*'q,x) = eval(p,x) * eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial commutative associative (non empty doubleLoopStr),
     q be Polynomial of n,L;
 given b being bag of n such that
@@ -3882,7 +3883,7 @@ end;
 theorem Th27:
 for n being Ordinal,
     L being right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative
              (non empty doubleLoopStr),
     p,q being Polynomial of n,L,
@@ -3891,7 +3892,7 @@ holds eval(p*'q,x) = eval(p,x) * eval(q,x)
 proof
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial commutative associative (non empty doubleLoopStr),
     p,q be Polynomial of n,L,
     x be Function of n, L;
@@ -4087,7 +4088,7 @@ begin :: Evaluation Homomorphism -----------------------------------------------
 definition
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         unital distributive non trivial (non empty doubleLoopStr),
+         well-unital distributive non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 func Polynom-Evaluation(n,L,x) -> Function of Polynom-Ring(n,L),L means :Def5:
 for p being Polynomial of n,L holds it.p = eval(p,x);
@@ -4137,16 +4138,16 @@ end;
 registration
  let n be Ordinal,
      L be right_zeroed Abelian add-associative right_complementable
-          unital distributive associative
+          well-unital distributive associative
           non trivial (non empty doubleLoopStr);
- cluster Polynom-Ring (n, L) -> unital;
+ cluster Polynom-Ring (n, L) -> well-unital;
  coherence;
 end;
 
 registration
 let n be Ordinal,
     L be Abelian right_zeroed add-associative right_complementable
-         unital distributive associative
+         well-unital distributive associative
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 cluster Polynom-Evaluation(n,L,x) -> unity-preserving;
@@ -4161,7 +4162,7 @@ end;
 registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-         Abelian unital distributive
+         Abelian well-unital distributive
          non trivial (non empty doubleLoopStr),
     x be Function of n, L;
 cluster Polynom-Evaluation(n,L,x) -> additive;
@@ -4187,7 +4188,7 @@ end;
 registration
  let n be Ordinal,
      L be right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     x be Function of n, L;
  cluster Polynom-Evaluation(n,L,x) -> multiplicative;
@@ -4213,7 +4214,7 @@ end;
 registration
 let n be Ordinal,
     L be right_zeroed add-associative right_complementable
-            Abelian unital distributive
+            Abelian well-unital distributive
             non trivial commutative associative (non empty doubleLoopStr),
     x be Function of n, L;
  cluster Polynom-Evaluation(n,L,x) -> RingHomomorphism;

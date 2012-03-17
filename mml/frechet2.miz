@@ -13,18 +13,18 @@ environ
       ARYTM, SUBSET_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0,
       ORDINAL1, SETFAM_1, FINSET_1, CARD_4, TOPS_2, RELAT_1, FUNCT_1, RELSET_1,
-      PARTFUN1, SEQ_1, FUNCT_2, COMPTS_1, URYSOHN1, REAL_1, NAT_1, PRE_CIRC,
-      LIMFUNC1, SEQM_3, METRIC_1, PCOMPS_1, TBSP_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, FINSOP_1, METRIC_6, YELLOW_8, BHSP_3, FRECHET, SEQ_4;
+      PARTFUN1, VALUED_1, SEQ_1, FUNCT_2, COMPTS_1, URYSOHN1, REAL_1, NAT_1,
+      PRE_CIRC, LIMFUNC1, SEQM_3, METRIC_1, PCOMPS_1, TBSP_1, DOMAIN_1,
+      STRUCT_0, PRE_TOPC, FINSOP_1, METRIC_6, YELLOW_8, BHSP_3, FRECHET, SEQ_4;
  constructors SETFAM_1, PARTFUN1, NAT_1, NAT_D, SEQ_1, FINSOP_1, LIMFUNC1,
       REALSET1, CARD_4, PRE_CIRC, TOPS_2, COMPTS_1, PCOMPS_1, BHSP_3, TBSP_1,
-      URYSOHN1, METRIC_6, YELLOW_8, FRECHET;
+      URYSOHN1, METRIC_6, YELLOW_8, FRECHET, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XREAL_0, NAT_1, MEMBERED, SEQM_3, REALSET1, CARD_4, STRUCT_0, METRIC_1,
-      PCOMPS_1, FRECHET, VALUED_0;
+      PCOMPS_1, FRECHET, VALUED_0, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SEQM_3, PRE_TOPC, TOPS_2, METRIC_6, FUNCT_1, FUNCT_2,
-      FRECHET, XBOOLE_0;
+      FRECHET, XBOOLE_0, VALUED_1;
  theorems FRECHET, URYSOHN1, YELLOW_8, PRE_TOPC, TARSKI, FUNCOP_1, NORMSP_1,
       ZFMISC_1, PCOMPS_1, COMPTS_1, WAYBEL12, FUNCT_1, AXIOMS, CARD_1, RELAT_1,
       SETFAM_1, ORDINAL1, FUNCT_2, TOPS_1, TOPS_2, FINSET_1, SUBSET_1, SEQM_3,
@@ -148,7 +148,7 @@ A2:   (id NAT).n = x by FUNCT_1:def 5;
   hence id NAT is Real_Sequence by A1,FUNCT_2:4;
 end;
 
-Lm8:
+Lm7:
 for RS being Real_Sequence st RS=id NAT holds
   RS is increasing
 proof
@@ -163,14 +163,14 @@ end;
 
 theorem
      for RS being Real_Sequence st RS=id NAT holds
-  RS is increasing Seq_of_Nat by Lm8;
+  RS is increasing Seq_of_Nat by Lm7;
 
-Lm9:
+Lm8:
 for T being non empty 1-sorted, S being sequence of T holds
   ex NS being increasing Seq_of_Nat st S = S * NS
 proof
   let T be non empty 1-sorted, S be sequence of T;
-  reconsider NS=id NAT as increasing Seq_of_Nat by Lm6,Lm8;
+  reconsider NS=id NAT as increasing Seq_of_Nat by Lm6,Lm7;
   take NS;
   thus S = S * NS by FUNCT_2:23;
 end;
@@ -180,7 +180,7 @@ for T being non empty 1-sorted, S being sequence of T holds
   S is subsequence of S
 proof
   let T be non empty 1-sorted, S be sequence of T;
-     ex NS being increasing Seq_of_Nat st S = S * NS by Lm9;
+     ex NS being increasing Seq_of_Nat st S = S * NS by Lm8;
   hence S is subsequence of S by BHSP_3:def 4;
 end;
 
@@ -204,7 +204,7 @@ A3: S1=S*NS by BHSP_3:def 4;
   hence y in rng S by A4,FUNCT_1:def 5;
 end;
 
-Lm10:
+Lm9:
 for T being non empty 1-sorted, S being sequence of T,
     NS being increasing Seq_of_Nat holds
       S*NS is subsequence of S
@@ -219,7 +219,7 @@ end;
 definition
 let T be non empty 1-sorted, NS be increasing Seq_of_Nat, S be sequence of T;
 redefine func S*NS -> subsequence of S;
-correctness by Lm10;
+correctness by Lm9;
 end;
 
 theorem Th5:
@@ -321,7 +321,7 @@ A16: for k being Element of NAT holds P[k] implies P[k+1] by A11;
     hence g.n<g.(n+1);
   end;
   then reconsider g as increasing Seq_of_Nat
-   by A12,VALUED_0:def 6,SEQM_3:def 11;
+   by A12,SEQM_3:def 11,VALUED_0:def 6;
   reconsider S1 = S() * g as sequence of T();
 A17: dom S1 = NAT by NORMSP_1:17;
   reconsider S1 as subsequence of S();
@@ -434,7 +434,7 @@ A4: for m being Element of NAT st n2 <= m holds not S.m in B by A2,Th6;
   hence contradiction by A1,A5,A6,XBOOLE_0:def 2;
 end;
 
-Lm11:for T being non empty TopSpace st T is first-countable holds
+Lm10:for T being non empty TopSpace st T is first-countable holds
   for x being Point of T holds
     ex B being Basis of x st
       ex S being Function st
@@ -663,7 +663,7 @@ A4: for U1,U2 being Subset of T st
 A5: ex S being Function st
       dom S = NAT &
       rng S = B1 &
-      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm11;
+      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm10;
   consider S1 being Function such that
 A6: dom S1 = NAT and
 A7: rng S1 = B1 and
@@ -672,7 +672,7 @@ A8: for n,m being Element of NAT st m >= n holds S1.m c= S1.n by A5;
 A9: ex S being Function st
       dom S = NAT &
       rng S = B2 &
-      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm11;
+      for n,m being Element of NAT st m >= n holds S.m c= S.n by A1,Lm10;
   consider S2 being Function such that
 A10:dom S2 = NAT and
 A11:rng S2 = B2 and
@@ -2393,7 +2393,7 @@ theorem
       ex S being Function st
         dom S = NAT &
         rng S = B &
-        for n,m being Element of NAT st m >= n holds S.m c= S.n by Lm11;
+        for n,m being Element of NAT st m >= n holds S.m c= S.n by Lm10;
 
 theorem
    for T being non empty TopSpace st

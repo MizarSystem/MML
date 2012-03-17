@@ -23,22 +23,22 @@
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
 </Signature>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>

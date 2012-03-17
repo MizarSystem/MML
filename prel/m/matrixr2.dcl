@@ -13,17 +13,18 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="XREAL_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
+<ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIXR1"/>
 <ArticleID name="MATRIXR2"/>
 </Signature>
@@ -31,14 +32,14 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="188">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

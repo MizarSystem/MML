@@ -13,11 +13,12 @@ environ
       INT_1, INT_2, FINSET_1, NAT_1, NAT_D, FUNCT_1, NEWTON, EULER_1, RFINSEQ,
       RVSUM_1, RELAT_1, FINSEQ_1, FINSEQ_3, TREES_4, WSIERP_1;
  constructors REAL_1, SQUARE_1, NAT_1, NAT_D, NEWTON, RFINSEQ, WSIERP_1,
-      EULER_1, SEQM_3;
+      EULER_1, SEQM_3, VALUED_1, PARTFUN1, SEQ_1;
  registrations FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, FINSEQ_1, RVSUM_1, WSIERP_1, SEQM_3, NEWTON, XBOOLE_0, VALUED_0;
+      INT_1, FINSEQ_1, RVSUM_1, WSIERP_1, SEQM_3, NEWTON, XBOOLE_0, VALUED_0,
+      VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0;
+ definitions TARSKI, FUNCT_1, XBOOLE_0, VALUED_1;
  theorems INT_2, FINSEQ_1, NAT_1, ABSVALUE, REAL_1, INT_1, FUNCT_1, REAL_2,
       EULER_1, PREPOWER, RFINSEQ, FINSEQ_2, RVSUM_1, FINSEQ_3, FINSET_1,
       NEWTON, RELAT_1, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_5, XXREAL_0,
@@ -30,7 +31,7 @@ reserve a,b,m,x,n,l,xi,xj for Nat,
         t,z for Integer,
         f,F for FinSequence of NAT;
 
-Lm2:t < 1 iff t <= 0
+Lm1:t < 1 iff t <= 0
 proof
    t < 1 implies t <= 0
   proof
@@ -43,7 +44,7 @@ proof
   hence thesis;
 end;
 
-Lm3:a <> 0 implies a-1 >= 0
+Lm2:a <> 0 implies a-1 >= 0
 proof
   assume a <> 0;
   then a >= 1 by NAT_1:14;
@@ -51,7 +52,7 @@ proof
   hence thesis;
 end;
 
-Lm4:1 gcd z = 1
+Lm3:1 gcd z = 1
 proof
   thus 1 gcd z = abs 1 hcf abs(z) by INT_2:51
          .= 1 hcf abs z by ABSVALUE:def 1
@@ -68,11 +69,11 @@ theorem
 proof
   assume A1:m > 1 & m*t >= 1;
   assume t < 1;
-  then t <= 0 by Lm2;
+  then t <= 0 by Lm1;
   hence contradiction by A1,XREAL_1:133;
 end;
 
-Lm5:m > 1 & 1-m <= z & z <= m-1 & m divides z implies z = 0
+Lm4:m > 1 & 1-m <= z & z <= m-1 & m divides z implies z = 0
 proof
   assume A1:m > 1 & 1-m <= z & z <= m-1 & m divides z;
   assume A2:z <> 0;
@@ -144,14 +145,14 @@ A8:a*(k*kb) = (k*km)*p+(a*(k*kb) mod (k*km)) &
 A9:(a*(k*kb) mod (k*km)) = k*((a*kb)-(km*p)) by A8;
   set tm = (a*kb)-(km*p);
 A10:tm = 0 implies m gcd n <> 1 by A1,A5,A7,A9,NEWTON:65;
-A16:k <> -1 by NAT_1:2;
-A13:tm <> 0 implies m gcd n <> 1
+A11:k <> -1 by NAT_1:2;
+A12:tm <> 0 implies m gcd n <> 1
   proof
     assume tm <> 0;
      then m gcd n = k*(km gcd tm) by A1,A3,A5,A6,A7,A9,EULER_1:16;
-    hence m gcd n <> 1 by A2,A16,INT_1:22;
+    hence m gcd n <> 1 by A2,A11,INT_1:22;
   end;
- hence contradiction by A1,A10,A13,INT_2:def 4;
+ hence contradiction by A1,A10,A12,INT_2:def 4;
 end;
 
 theorem
@@ -457,7 +458,7 @@ proof
   then consider tt be Integer such that
     A5:(a-1) = m*tt by INT_1:def 9;
   A6:a = m*tt+1 by A5;
-      a-1 >= 0 by A1,Lm3;
+      a-1 >= 0 by A1,Lm2;
   then tt >= 0 by A1,A5,REAL_2:145;
   then reconsider tt,m as Element of NAT by INT_1:16;
       a mod m = (((m*tt) mod m)+1) mod m by A6,NAT_D:22
@@ -717,89 +718,89 @@ proof
       then m*s hcf m*1 = m by EULER_1:6;
       hence contradiction by A1,A6,A8,INT_2:def 4;
     end;
-    then A10:a*t mod m >= 1 by NAT_1:14;
+    then A9:a*t mod m >= 1 by NAT_1:14;
      a*t mod m <= m by A1,NAT_D:1;
-    hence thesis by A3,A7,A10;
+    hence thesis by A3,A7,A9;
   end;
 ::End of Euler's Lemma1
 
 ::Begin Euler's Lemma2
-  A11:xi in X & xj in X & xi <> xj implies a*xi mod m <> a*xj mod m
+  A10:xi in X & xj in X & xi <> xj implies a*xi mod m <> a*xj mod m
   proof
-    assume A12:xi in X & xj in X & xi <> xj;
-    assume A13:a*xi mod m = a*xj mod m;
+    assume A11:xi in X & xj in X & xi <> xj;
+    assume A12:a*xi mod m = a*xj mod m;
     set tm = a*xi mod m,sm = a*xj mod m;
     consider t being Element of NAT such that
-      A14:t = xi and
+      A13:t = xi and
           m,t are_relative_prime and
-      A15:t >= 1 & t <= m by A12;
-    A16:tm = (a*t)-m*((a*t) div m) by A1,A14,NEWTON:77;
+      A14:t >= 1 & t <= m by A11;
+    A15:tm = (a*t)-m*((a*t) div m) by A1,A13,NEWTON:77;
     consider s being Element of NAT such that
-      A17:s = xj and
+      A16:s = xj and
           m,s are_relative_prime and
-    A18:s >= 1 & s <= m by A12;
- sm = (a*s)-m*((a*s) div m) by A1,A17,NEWTON:77;
-    then 0 = a*(t-s)-m*(((a*t) div m)-((a*s) div m)) by A13,A16;
-    then A19:m divides a*(t-s) by INT_1:def 9;
+    A17:s >= 1 & s <= m by A11;
+ sm = (a*s)-m*((a*s) div m) by A1,A16,NEWTON:77;
+    then 0 = a*(t-s)-m*(((a*t) div m)-((a*s) div m)) by A12,A15;
+    then A18:m divides a*(t-s) by INT_1:def 9;
     reconsider m,a,c = (t-s) as Integer;
         a,m are_relative_prime by A1;
-    then A20:m divides c by A19,INT_2:40;
-        1-m <= c & c <= m-1 by A15,A18,REAL_1:92;
-    then t-s = 0 by A1,A20,Lm5;
-    hence contradiction by A12,A14,A17;
+    then A19:m divides c by A18,INT_2:40;
+        1-m <= c & c <= m-1 by A14,A17,REAL_1:92;
+    then t-s = 0 by A1,A19,Lm4;
+    hence contradiction by A11,A13,A16;
   end;
 ::End of Euler's Lemma2
 
 ::Begin Euler's Lemma3
-  A21:X = Y
+  A20:X = Y
   proof
     thus X c= Y
     proof
       let x be set;
       assume x in X;
       then consider xx being Element of NAT such that
-        A22:x = xx and
-        A23:m,xx are_relative_prime and
-        A24:xx >= 1 & xx <= m;
-          xx <> m by A1,A23,EULER_1:2;
-      then xx < m by A24,XXREAL_0:1;
-      then A25:xx mod m = xx by NAT_D:24;
+        A21:x = xx and
+        A22:m,xx are_relative_prime and
+        A23:xx >= 1 & xx <= m;
+          xx <> m by A1,A22,EULER_1:2;
+      then xx < m by A23,XXREAL_0:1;
+      then A24:xx mod m = xx by NAT_D:24;
       consider i,j being Integer such that
-        A26:i*a+j*m = xx by A1,EULER_1:11;
-        A27: i = (i div m)*m+(i mod m) by A1,NEWTON:80;
-      A28:i mod m <> 0
+        A25:i*a+j*m = xx by A1,EULER_1:11;
+        A26: i = (i div m)*m+(i mod m) by A1,NEWTON:80;
+      A27:i mod m <> 0
       proof
         assume i mod m = 0;
-        then A29: 0 = i-(i div m)*m by A1,INT_1:def 8;
-        then xx = m*((i div m)*a+j) by A26;
-        then A30:((i div m)*a+j) <> 0 & 1 <> 0 by A24;
-            m gcd xx = m*1 gcd m*((i div m)*a+j) by A26,A29
-                    .= m*(1 gcd ((i div m)*a+j)) by A1,A30,EULER_1:16
-                    .= m*1 by Lm4
+        then A28: 0 = i-(i div m)*m by A1,INT_1:def 8;
+        then xx = m*((i div m)*a+j) by A25;
+        then A29:((i div m)*a+j) <> 0 & 1 <> 0 by A23;
+            m gcd xx = m*1 gcd m*((i div m)*a+j) by A25,A28
+                    .= m*(1 gcd ((i div m)*a+j)) by A1,A29,EULER_1:16
+                    .= m*1 by Lm3
                     .= m;
         then m hcf xx = m;
-        hence contradiction by A1,A23,INT_2:def 4;
+        hence contradiction by A1,A22,INT_2:def 4;
       end;
           i mod m >= 0 by NEWTON:78;
       then reconsider im = i mod m as Element of NAT by INT_1:16;
-      A31:im >= 1 by A28,NAT_1:14;
-      A32:im <= m by A1,NEWTON:79;
+      A30:im >= 1 by A27,NAT_1:14;
+      A31:im <= m by A1,NEWTON:79;
       reconsider ij = (i mod m)*a+(((i div m)*a)+j)*m as Element of NAT
-       by A26,A27;
-      A33: ij mod m = im*a mod m by EULER_1:13;
-      then m,im are_relative_prime by A1,A23,A25,A26,A27,A28,Th6;
-      then im in X by A31,A32;
-      hence x in Y by A22,A25,A26,A27,A33;
+       by A25,A26;
+      A32: ij mod m = im*a mod m by EULER_1:13;
+      then m,im are_relative_prime by A1,A22,A24,A25,A26,A27,Th6;
+      then im in X by A30,A31;
+      hence x in Y by A21,A24,A25,A26,A32;
     end;
     let y be set;
     assume y in Y;
     then consider yy being Element of NAT such that
-      A34:y = yy and
-      A35:ex u being Element of NAT st yy = a*u mod m & u in X;
+      A33:y = yy and
+      A34:ex u being Element of NAT st yy = a*u mod m & u in X;
     consider uu being Element of NAT such that
-      A36:yy = a*uu mod m and
-      A37:uu in X by A35;
-    thus y in X by A2,A34,A36,A37;
+      A35:yy = a*uu mod m and
+      A36:uu in X by A34;
+    thus y in X by A2,A33,A35,A36;
   end;
 ::End of Euler'S Lemma3
 
@@ -808,82 +809,82 @@ proof
   reconsider FY = FYY mod m as FinSequence of NAT;
 
 ::Begin Euler's Lemma4
-  A38:X c= Seg m
+  A37:X c= Seg m
   proof
     let x be set;
     assume x in X;
     then consider xx being Element of NAT such that
-      A39:x = xx and
+      A38:x = xx and
           m,xx are_relative_prime and
-      A40:xx >= 1 & xx <= m;
-    thus thesis by A39,A40,FINSEQ_1:3;
+      A39:xx >= 1 & xx <= m;
+    thus thesis by A38,A39,FINSEQ_1:3;
   end;
 ::End of Euler's Lemma4
 
   then reconsider X as finite set by FINSET_1:13;
-  A41:len(FX) = card X by A38,FINSEQ_3:44
+  A40:len(FX) = card X by A37,FINSEQ_3:44
         .= Euler m by EULER_1:def 1;
 
-  A42: dom FY = Seg(len FY) by FINSEQ_1:def 3
+  A41: dom FY = Seg(len FY) by FINSEQ_1:def 3
         .= Seg(len FYY) by Def1
         .= Seg(len FX) by NEWTON:6;
-  then A43:dom FX = dom FY by FINSEQ_1:def 3;
+  then A42:dom FX = dom FY by FINSEQ_1:def 3;
       dom FYY = Seg(len FYY) by FINSEQ_1:def 3
          .= Seg(len FX) by NEWTON:6;
-  then A44:dom FX = dom FYY by FINSEQ_1:def 3;
+  then A43:dom FX = dom FYY by FINSEQ_1:def 3;
 
 ::Begin Euler's Lemma5
-  A45:rng FY = Y
+  A44:rng FY = Y
   proof
     thus rng FY c= Y
     proof
       let x be set;
       assume x in rng FY;
       then consider y being set such that
-        A46:y in dom FY & x = FY.y by FUNCT_1:def 5;
-      reconsider y as Element of NAT by A46;
-          y in dom FX by A42,A46,FINSEQ_1:def 3;
-      then A47: FY.y = (FYY.y) mod m by A44,Def1
+        A45:y in dom FY & x = FY.y by FUNCT_1:def 5;
+      reconsider y as Element of NAT by A45;
+          y in dom FX by A41,A45,FINSEQ_1:def 3;
+      then A46: FY.y = (FYY.y) mod m by A43,Def1
                .= (a*FX.y) mod m by RVSUM_1:66;
-          FX.y in rng FX by A43,A46,FUNCT_1:def 5;
-      then FX.y in X by A38,FINSEQ_1:def 13;
-      hence thesis by A46,A47;
+          FX.y in rng FX by A42,A45,FUNCT_1:def 5;
+      then FX.y in X by A37,FINSEQ_1:def 13;
+      hence thesis by A45,A46;
     end;
     let y be set;
     assume y in Y;
     then consider yy being Element of NAT such that
-      A48:y = yy and
-      A49:ex u being Element of NAT st yy = a*u mod m & u in X;
+      A47:y = yy and
+      A48:ex u being Element of NAT st yy = a*u mod m & u in X;
     consider uu being Element of NAT such that
-      A50:yy = a*uu mod m and
-      A51:uu in X by A49;
-        uu in rng FX by A38,A51,FINSEQ_1:def 13;
+      A49:yy = a*uu mod m and
+      A50:uu in X by A48;
+        uu in rng FX by A37,A50,FINSEQ_1:def 13;
     then consider xx being set such that
-      A52:xx in dom FX & uu = FX.xx by FUNCT_1:def 5;
-    reconsider xx as Element of NAT by A52;
-        FY.xx = (FYY.xx) mod m by A44,A52,Def1
-         .= y by A48,A50,A52,RVSUM_1:66;
-    hence y in rng FY by A43,A52,FUNCT_1:def 5;
+      A51:xx in dom FX & uu = FX.xx by FUNCT_1:def 5;
+    reconsider xx as Element of NAT by A51;
+        FY.xx = (FYY.xx) mod m by A43,A51,Def1
+         .= y by A47,A49,A51,RVSUM_1:66;
+    hence y in rng FY by A42,A51,FUNCT_1:def 5;
   end;
 ::End of Euler's Lemma5
 
 ::Begin Euler's Lemma6
-  A53: FY is one-to-one
+  A52: FY is one-to-one
   proof
     let x1,x2 be set;
-    assume A54: x1 in dom FY & x2 in dom FY & FY.x1 = FY.x2;
-    then A55:x1 in dom FX & x2 in dom FX & FY.x1 = FY.x2 by A42,FINSEQ_1:def 3;
-    reconsider x1 as Element of NAT by A54;
-    reconsider x2 as Element of NAT by A54;
-    A56: FY.x1 = (FYY.x1) mod m by A44,A55,Def1
+    assume A53: x1 in dom FY & x2 in dom FY & FY.x1 = FY.x2;
+    then A54:x1 in dom FX & x2 in dom FX & FY.x1 = FY.x2 by A41,FINSEQ_1:def 3;
+    reconsider x1 as Element of NAT by A53;
+    reconsider x2 as Element of NAT by A53;
+    A55: FY.x1 = (FYY.x1) mod m by A43,A54,Def1
               .= (a*FX.x1) mod m by RVSUM_1:66;
-    A57: FY.x2 = (FYY.x2) mod m by A44,A55,Def1
+    A56: FY.x2 = (FYY.x2) mod m by A43,A54,Def1
               .= (a*FX.x2) mod m by RVSUM_1:66;
-    A58: FX.x1 in rng FX by A43,A54,FUNCT_1:def 5;
-    A59: FX.x2 in rng FX by A43,A54,FUNCT_1:def 5;
-    A60:FX is one-to-one by A38,FINSEQ_3:99;
-        not(FX.x1 in X & FX.x2 in X & FX.x1 <> FX.x2) by A11,A54,A56,A57;
-    hence thesis by A38,A55,A58,A59,A60,FINSEQ_1:def 13,FUNCT_1:def 8;
+    A57: FX.x1 in rng FX by A42,A53,FUNCT_1:def 5;
+    A58: FX.x2 in rng FX by A42,A53,FUNCT_1:def 5;
+    A59:FX is one-to-one by A37,FINSEQ_3:99;
+        not(FX.x1 in X & FX.x2 in X & FX.x1 <> FX.x2) by A10,A53,A55,A56;
+    hence thesis by A37,A54,A57,A58,A59,FINSEQ_1:def 13,FUNCT_1:def 8;
   end;
 ::End of Euler's Lemma6
 
@@ -892,77 +893,77 @@ proof
   proof
     let x be set;
         now per cases;
-      suppose A61: x in X;
-        then A62: x in rng FX by A38,FINSEQ_1:def 13;
-            FX is one-to-one by A38,FINSEQ_3:99;
-        then A63: len(FX-{x}) = len(FX)-1 by A62,FINSEQ_3:97;
-           A64: len(FX-{x})-len(FX-{x})
+      suppose A60: x in X;
+        then A61: x in rng FX by A37,FINSEQ_1:def 13;
+            FX is one-to-one by A37,FINSEQ_3:99;
+        then A62: len(FX-{x}) = len(FX)-1 by A61,FINSEQ_3:97;
+           A63: len(FX-{x})-len(FX-{x})
                  = len(FX)-card(FX"{x})-len(FX-{x}) by FINSEQ_3:66;
-   A65: len(FY-{x}) = len(FY)-1 by A21,A45,A53,A61,FINSEQ_3:97;
+   A64: len(FY-{x}) = len(FY)-1 by A20,A44,A52,A60,FINSEQ_3:97;
          len(FY-{x}) = len(FY)-card(FY"{x}) by FINSEQ_3:66;
-        hence thesis by A63,A64,A65;
+        hence thesis by A62,A63,A64;
       end;
-      suppose A66: not(x in X);
-        then A67: not(x in rng FX) by A38,FINSEQ_1:def 13;
-         FY"{x} = {} by A21,A45,A66,FUNCT_1:142;
-        hence thesis by A67,FUNCT_1:142;
+      suppose A65: not(x in X);
+        then A66: not(x in rng FX) by A37,FINSEQ_1:def 13;
+         FY"{x} = {} by A20,A44,A65,FUNCT_1:142;
+        hence thesis by A66,FUNCT_1:142;
     end;
     end;
     hence thesis;
   end;
 ::End of Euler's Lemma7
 
-  then A68:FX,FY are_fiberwise_equipotent by RFINSEQ:def 1;
-  then A69:(Product FX) mod m = (Product FY) mod m by Th25;
-  A70:len(FX) = len(FY) by A68,RFINSEQ:16;
+  then A67:FX,FY are_fiberwise_equipotent by RFINSEQ:def 1;
+  then A68:(Product FX) mod m = (Product FY) mod m by Th25;
+  A69:len(FX) = len(FY) by A67,RFINSEQ:16;
 
 ::Begin Euler's Lemma8
-  A71:(Product FY) mod m = (a |^ len(FY)*Product FX) mod m
+  A70:(Product FY) mod m = (a |^ len(FY)*Product FX) mod m
   proof
     defpred P[Nat] means
        $1 <= len(FY) implies
           (Product (FY|$1)) mod m = (a |^ len(FY|$1)*Product (FX|$1)) mod m;
-    A72: P[0]
+    A71: P[0]
     proof
        0 <= len FY;
       then len (FY|0) = 0 by FINSEQ_1:80;
       hence thesis by NEWTON:9,RVSUM_1:124;
     end;
-    A73: for n st P[n] holds P[n+1]
+    A72: for n st P[n] holds P[n+1]
     proof
       let n;
           now per cases;
-        suppose A74: n+1 <= len FY;
-          assume A75:P[n];
-          A76:n <= n+1 by NAT_1:11;
-          then n <= len FY by A74,XXREAL_0:2;
-          then A77:len(FY|n) = n by FINSEQ_1:80;
-          A78:len (FY|(n+1)) = n+1 by A74,FINSEQ_1:80;
-          then A79:FY|(n+1)
+        suppose A73: n+1 <= len FY;
+          assume A74:P[n];
+          A75:n <= n+1 by NAT_1:11;
+          then n <= len FY by A73,XXREAL_0:2;
+          then A76:len(FY|n) = n by FINSEQ_1:80;
+          A77:len (FY|(n+1)) = n+1 by A73,FINSEQ_1:80;
+          then A78:FY|(n+1)
                  = (FY|(n+1))|n ^ <* (FY|(n+1)).(n+1) *> by RFINSEQ:20;
            0+1 <= n+1 by NAT_1:13;
-          then A80: n+1 in dom FY by A74,FINSEQ_3:27;
-          A81:(FY|(n+1))|n = FY|n by A76,FINSEQ_5:80;
-          A82: (FY|(n+1)).(n+1) = FY.(n+1) by FINSEQ_3:121;
-              len (FX|(n+1)) = n+1 by A70,A74,FINSEQ_1:80;
-          then A83:FX|(n+1)
+          then A79: n+1 in dom FY by A73,FINSEQ_3:27;
+          A80:(FY|(n+1))|n = FY|n by A75,FINSEQ_5:80;
+          A81: (FY|(n+1)).(n+1) = FY.(n+1) by FINSEQ_3:121;
+              len (FX|(n+1)) = n+1 by A69,A73,FINSEQ_1:80;
+          then A82:FX|(n+1)
                  = (FX|(n+1))|n ^ <* (FX|(n+1)).(n+1) *> by RFINSEQ:20;
-          A84:(FX|(n+1))|n = FX|n by A76,FINSEQ_5:80;
-          A85: (FX|(n+1)).(n+1) = FX.(n+1) by FINSEQ_3:121;
+          A83:(FX|(n+1))|n = FX|n by A75,FINSEQ_5:80;
+          A84: (FX|(n+1)).(n+1) = FX.(n+1) by FINSEQ_3:121;
               (Product(FY|(n+1))) mod m = (Product(FY|n)*FY.(n+1)) mod m
-          by A79,A81,A82,RVSUM_1:126
+          by A78,A80,A81,RVSUM_1:126
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
-                      *(FY.(n+1) mod m)) mod m by A74,A75,A76,Th11,XXREAL_0:2
+                      *(FY.(n+1) mod m)) mod m by A73,A74,A75,Th11,XXREAL_0:2
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
-                      *((FYY.(n+1) mod m) mod m)) mod m by A43,A44,A80,Def1
+                      *((FYY.(n+1) mod m) mod m)) mod m by A42,A43,A79,Def1
             .= (((a |^ len(FY|n)*Product(FX|n)) mod m)
                       *((a*FX).(n+1) mod m)) mod m by Th7
             .= ((a |^ len(FY|n)*Product(FX|n))*(a*FX).(n+1)) mod m by Th11
-            .= (a |^ n*Product (FX|n))*(a*(FX.(n+1))) mod m by A77,RVSUM_1:66
+            .= (a |^ n*Product (FX|n))*(a*(FX.(n+1))) mod m by A76,RVSUM_1:66
             .= (a |^ n*a)*(Product(FX|n)*(FX.(n+1))) mod m
             .= (a |^ len(FY|(n+1)))*(Product(FX|n)*(FX.(n+1))) mod m
-               by A78,NEWTON:11
-            .= (a |^ len(FY|(n+1)))*(Product(FX|(n+1))) mod m by A83,A84,A85,
+               by A77,NEWTON:11
+            .= (a |^ len(FY|(n+1)))*(Product(FX|(n+1))) mod m by A82,A83,A84,
 RVSUM_1:126;
         hence P[n+1];
         end;
@@ -972,33 +973,33 @@ RVSUM_1:126;
       end;
       hence thesis;
     end;
-    A86: for n holds P[n] from NAT_1:sch 2(A72,A73);
+    A85: for n holds P[n] from NAT_1:sch 2(A71,A72);
         FY|len FY = FY|(Seg len FY) by FINSEQ_1:def 15;
-    then A87:FY = FY|len FY by FINSEQ_2:23;
+    then A86:FY = FY|len FY by FINSEQ_2:23;
         FX|len FX = FX|(Seg len FX) by FINSEQ_1:def 15;
-    then FX = FX|len FY by A70,FINSEQ_2:23;
-    hence thesis by A86,A87;
+    then FX = FX|len FY by A69,FINSEQ_2:23;
+    hence thesis by A85,A86;
   end;
 
 ::End of Euler's Lemma8
 
-  A88: len FY = Euler m by A41,A68,RFINSEQ:16;
-  A89:a |^ Euler m <> 0 by A1,PREPOWER:12;
+  A87: len FY = Euler m by A40,A67,RFINSEQ:16;
+  A88:a |^ Euler m <> 0 by A1,PREPOWER:12;
 
 ::Begin Euler's Lemma9
-  A90:Product FX <> 0
+  A89:Product FX <> 0
   proof
     assume Product FX = 0;
     then consider k being Nat such that
-      A91:k in dom FX and
-      A92:FX.k = 0 by RVSUM_1:133;
-    A93:rng FX = X by A38,FINSEQ_1:def 13;
-        FX.k in rng FX by A91,FUNCT_1:def 5;
+      A90:k in dom FX and
+      A91:FX.k = 0 by RVSUM_1:133;
+    A92:rng FX = X by A37,FINSEQ_1:def 13;
+        FX.k in rng FX by A90,FUNCT_1:def 5;
     then consider p being Element of NAT such that
-      A94:FX.k = p and
+      A93:FX.k = p and
           m,p are_relative_prime and
-      A95:p >= 1 & p <= m by A93;
-    thus contradiction by A92,A94,A95;
+      A94:p >= 1 & p <= m by A92;
+    thus contradiction by A91,A93,A94;
   end;
 ::End of Euler's Lemma9
 
@@ -1007,40 +1008,40 @@ RVSUM_1:126;
   proof
     defpred P[Nat] means
       $1 <= len FX implies (Product (FX|$1)),m are_relative_prime;
-    A96: P[0]
+    A95: P[0]
     proof
        (Product (FX|0)) hcf m = 1 by NEWTON:64,RVSUM_1:124;
       hence thesis by INT_2:def 4;
     end;
-    A97: for n st P[n] holds P[n+1]
+    A96: for n st P[n] holds P[n+1]
     proof
       let n;
           now per cases;
-        suppose A98:len FX >= n+1;
-          assume A99:P[n];
-          A100: n <= n+1 by NAT_1:11;
+        suppose A97:len FX >= n+1;
+          assume A98:P[n];
+          A99: n <= n+1 by NAT_1:11;
           reconsider FF = (FX|(n+1)) as FinSequence of NAT;
           reconsider ff = FF.(n+1) as Element of NAT;
-              len FF = n+1 by A98,FINSEQ_1:80;
-          then A101:FF = (FF|n) ^ <*ff*> by RFINSEQ:20;
+              len FF = n+1 by A97,FINSEQ_1:80;
+          then A100:FF = (FF|n) ^ <*ff*> by RFINSEQ:20;
               n <= n+1 by NAT_1:11;
-          then A102:FX|n = FF|n by FINSEQ_5:80;
-          A103:rng FX = X by A38,FINSEQ_1:def 13;
-          A104:(FX|(n+1)).(n+1) = FX.(n+1) by FINSEQ_3:121;
+          then A101:FX|n = FF|n by FINSEQ_5:80;
+          A102:rng FX = X by A37,FINSEQ_1:def 13;
+          A103:(FX|(n+1)).(n+1) = FX.(n+1) by FINSEQ_3:121;
            0+1 <= (n+1) by XREAL_1:8;
-          then n+1 in dom FX by A98,FINSEQ_3:27;
-          then (FX|(n+1)).(n+1) in rng FX by A104,FUNCT_1:def 5;
+          then n+1 in dom FX by A97,FINSEQ_3:27;
+          then (FX|(n+1)).(n+1) in rng FX by A103,FUNCT_1:def 5;
           then consider p being Element of NAT such that
-            A105:ff = p and
-            A106:m,p are_relative_prime and
-              p >= 1 & p <= m by A103;
+            A104:ff = p and
+            A105:m,p are_relative_prime and
+              p >= 1 & p <= m by A102;
           reconsider a = (Product (FF|n)),b = ff,m' = m as Integer;
-          A107:a,m' are_relative_prime by A98,A99,A100,A102,XXREAL_0:2;
-              b,m' are_relative_prime by A105,A106;
-          then a*b,m' are_relative_prime by A107,INT_2:41;
+          A106:a,m' are_relative_prime by A97,A98,A99,A101,XXREAL_0:2;
+              b,m' are_relative_prime by A104,A105;
+          then a*b,m' are_relative_prime by A106,INT_2:41;
           then (Product ((FF|n) ^ <*ff*>)),m' are_relative_prime by RVSUM_1:126
 ;
-        hence P[n+1] by A101;
+        hence P[n+1] by A100;
         end;
         suppose len FX < n+1;
         hence thesis;
@@ -1048,11 +1049,11 @@ RVSUM_1:126;
       end;
       hence thesis;
     end;
-    A108:for n holds P[n] from NAT_1:sch 2(A96,A97);
+    A107:for n holds P[n] from NAT_1:sch 2(A95,A96);
         FX|len(FX) = FX by FINSEQ_1:79;
-    hence thesis by A108;
+    hence thesis by A107;
   end;
-  hence thesis by A1,A69,A71,A88,A89,A90,Th27;
+  hence thesis by A1,A68,A70,A87,A88,A89,Th27;
 end;
 ::End of Euler's Theorem
 

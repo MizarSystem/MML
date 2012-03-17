@@ -32,12 +32,12 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="4">
@@ -45,21 +45,21 @@
 <Adjective nr="5"/>
 <Adjective nr="8">
 <Func kind="U" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="86"/>
 </Adjective>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="175">
+<Func kind="K" nr="176">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>

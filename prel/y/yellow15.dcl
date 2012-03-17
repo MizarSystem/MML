@@ -86,16 +86,16 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="134">
-<LocusVar nr="1"/>
-</Adjective>
 <Adjective nr="135">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="137">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 <Adjective nr="138">
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="139">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

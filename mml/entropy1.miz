@@ -12,23 +12,24 @@ environ
       LIMFUNC1, FDIFF_1, RCOMP_1, SEQ_1, SUPINF_2, PARTFUN3, ROUGHS_1,
       FINSEQ_4, ENTROPY1, FUNCOP_1;
  notations TARSKI, SUBSET_1, XBOOLE_0, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, NAT_D, ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1, SEQ_1,
-      ZFMISC_1, FUNCOP_1, RVSUM_1, FINSEQ_1, FINSEQ_2, NEWTON, MATRIXR1,
+      NAT_1, NAT_D, ORDINAL1, NUMBERS, PARTFUN1, RELAT_1, FUNCT_1, VALUED_1,
+      SEQ_1, ZFMISC_1, FUNCOP_1, RVSUM_1, FINSEQ_1, FINSEQ_2, NEWTON, MATRIXR1,
       MATRIX_1, PARTFUN3, POWER, LIMFUNC1, RCOMP_1, FCONT_1, MATRPROB, FDIFF_1,
       TAYLOR_1;
  constructors REAL_1, NAT_D, BINOP_2, MATRIX_3, MATRIXR1, MATRLIN, EUCLID_2,
       NAT_1, MATRPROB, PARTFUN3, PARTFUN2, FDIFF_1, FCONT_1, POWER, LIMFUNC1,
-      SIN_COS, TAYLOR_1, INTEGRA1;
+      SIN_COS, TAYLOR_1, INTEGRA1, VALUED_1, PARTFUN1, SEQ_1;
  registrations MATRPROB, RELSET_1, NAT_1, MEMBERED, ORDINAL1, SEQ_1, XREAL_0,
-      FCONT_3, RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0;
+      FCONT_3, RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0, VALUED_1,
+      FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN3, FINSEQ_2, LIMFUNC1, RCOMP_1;
+ definitions TARSKI, PARTFUN3, FINSEQ_2, LIMFUNC1, RCOMP_1, VALUED_1;
  theorems FUNCT_1, SEQ_1, NAT_1, REAL_2, MATRIX_2, XREAL_1, NAT_2, MATRIXR1,
       GOBOARD1, XBOOLE_0, EUCLID_2, PROB_3, INTEGRA5, FINSEQ_1, MATRIX_1,
       GOBRD13, FINSEQ_2, PARTFUN3, FINSEQ_3, RVSUM_1, POWER, FDIFF_1, RELSET_1,
       TREES_1, XBOOLE_1, TAYLOR_1, LIMFUNC1, SQUARE_1, RELAT_1, ROLLE, FCONT_1,
       XCMPLX_1, INTEGRA1, XXREAL_0, REAL_1, ORDINAL1, MATRPROB, FUNCOP_1,
-      PEPIN, NAT_D, PARTFUN1;
+      PEPIN, NAT_D, PARTFUN1, VALUED_1;
  schemes FINSEQ_2, SEQ_1, NAT_1, RECDEF_1, FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -83,7 +84,7 @@ A3: dom f2 = Z by TAYLOR_1:def 2;
     defpred P[set] means $1 in Z;
     deffunc F(Real) = ($1 - 1) - (log_ number_e).$1;
     set f = f1 - f2;
-A4: dom f = Z /\ REAL by A2,A3,SEQ_1:def 4
+A4: dom f = Z /\ REAL by A2,A3,VALUED_1:12,13,14,15
          .= Z by XBOOLE_1:28;
 A5: for r st r in Z holds f1.r = 1*r + (-1)
     proof let r such that r in Z;
@@ -123,8 +124,8 @@ A14: for x be Real st x > 0 holds f.x = (x - 1) - (log_ number_e).x
 A15:   x > 0;
        x in {g where g is Real : 0<g} by A15;
 then A16:   x in dom f by A4,LIMFUNC1:152;
-then A17:   f.x = f1.x - f2.x by SEQ_1:def 4;
-       x in dom f1 /\ dom f2 by A16,SEQ_1:def 4;
+then A17:   f.x = f1.x - f2.x by VALUED_1:12,13,14,15;
+       x in dom f1 /\ dom f2 by A16,VALUED_1:12,13,14,15;
       then x in dom f1 & x in dom f2 by XBOOLE_0:def 3;
       hence thesis by A1,A17;
     end;
@@ -481,7 +482,7 @@ theorem Th10:
 A1: p is nonnegative & r>=0;
      now let k such that
 A2:   k in dom (r*p);
-       k in dom p by A2,SEQ_1:def 6;
+       k in dom p by A2,VALUED_1:7,def 5;
 then A3:   p.k >= 0 by A1,Def1;
        (r*p).k = r*(p.k) by RVSUM_1:66;
       hence (r*p).k >= 0 by A1,A3,XREAL_1:129;
@@ -913,7 +914,7 @@ A2:     i in dom M;
 A3:     i in Seg len M by A2,FINSEQ_1:def 3;
 A4:     dom Line(M,i) = Seg len Line(M,i) by FINSEQ_1:def 3
           .= Seg width M by MATRIX_1:def 8 .= Seg len q by A1,Th21
-          .= dom q by FINSEQ_1:def 3 .= dom(p.i * q) by SEQ_1:def 6;
+          .= dom q by FINSEQ_1:def 3 .= dom(p.i * q) by VALUED_1:7,def 5;
          for j be Nat st j in dom Line(M,i) holds (Line(M,i)).j = (p.i * q).j
         proof let j be Nat such that
 A5:       j in dom Line(M,i);
@@ -1232,7 +1233,7 @@ A6:     dom Line(MR1,i) = Seg len Line(MR1,i) by FINSEQ_1:def 3
           .= Seg width MR1 by MATRIX_1:def 8
           .= Seg len Line(MR,i) by A3,MATRIX_1:def 8
           .= dom Line(MR,i) by FINSEQ_1:def 3
-          .= dom(p.i * Line(MR,i)) by SEQ_1:def 6;
+          .= dom(p.i * Line(MR,i)) by VALUED_1:7,def 5;
          for j be Nat st j in dom Line(MR1,i) holds
           (Line(MR1,i)).j = (p.i * Line(MR,i)).j
         proof let j be Nat such that
@@ -2103,7 +2104,7 @@ A1:   q = -p0;
       thus len q = len p & for k st k in dom q holds
         q.k = p.k * log(2,1/(p.k))
       proof
-A2:     dom q = dom p0 by A1,SEQ_1:def 7;
+A2:     dom q = dom p0 by A1,VALUED_1:8;
 A3:     Seg len q = dom q by FINSEQ_1:def 3 .= Seg len p0 by A2,FINSEQ_1:def 3
           .= Seg len p by Th47;
         hence len q = len p by FINSEQ_1:8;
@@ -2130,7 +2131,7 @@ then A7:       q.k = -(p.k * log(2,p.k)) by A2,A4,Th47
 A9: len q = len p & for k st k in dom q holds q.k = p.k * log(2,1/(p.k));
 A10: dom q = Seg len q by FINSEQ_1:def 3 .= Seg len p0 by A9,Th47
       .= dom p0 by FINSEQ_1:def 3;
-then A11: dom q = dom -p0 by SEQ_1:def 7;
+then A11: dom q = dom -p0 by VALUED_1:8;
     for k be Nat st k in dom q holds (-p0).k = q.k
     proof let k be Nat; assume
 A12:   k in dom q;
@@ -2174,15 +2175,15 @@ theorem Th51:
 A1: r>=0;
     reconsider q=r*p as nonnegative FinSequence of REAL by A1,Th10;
     set qq = Infor_FinSeq_of q;
-A2: dom q = dom p by SEQ_1:def 6;
+A2: dom q = dom p by VALUED_1:7,def 5;
      len q = len qq by Th47;
 then A3: dom q = dom qq by FINSEQ_3:31;
-A4: dom (r*log(2,r)*p) = dom p by SEQ_1:def 6;
+A4: dom (r*log(2,r)*p) = dom p by VALUED_1:7,def 5;
 A5: len FinSeq_log(2,p) = len p by Def6;
 then A6: dom FinSeq_log(2,p) = dom p by FINSEQ_3:31;
      len mlt(p,FinSeq_log(2,p)) = len p by A5,MATRPROB:30;
 then A7: dom mlt(p,FinSeq_log(2,p)) = dom p by FINSEQ_3:31;
-    then dom (r*mlt(p,FinSeq_log(2,p))) = dom p by SEQ_1:def 6;
+    then dom (r*mlt(p,FinSeq_log(2,p))) = dom p by VALUED_1:7,def 5;
     then len (r*log(2,r)*p) = len (r*mlt(p,FinSeq_log(2,p)))
       by A4,FINSEQ_3:31;
     then len ((r*log(2,r)*p) + (r*mlt(p,FinSeq_log(2,p)))) = len (r*log(2,r)*p
@@ -2205,11 +2206,11 @@ A12:   (r*mlt(p,FinSeq_log(2,p))).k = r*(mlt(p,FinSeq_log(2,p))).k
         then qq.k = (r*log(2,r)*p).k + (r*mlt(p,FinSeq_log(2,p))).k
           by A2,A3,A6,A9,A10,A11,A12,Def6;
         hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
-          by A2,A3,A4,A8,A9,SEQ_1:def 3;
+          by A2,A3,A4,A8,A9,VALUED_1:1,def 1;
       end;
       suppose p.k=0;
         hence qq.k = ((r*log(2,r)*p)+(r*mlt(p,FinSeq_log(2,p)))).k
-          by A2,A3,A4,A8,A9,A10,A11,A12,SEQ_1:def 3;
+          by A2,A3,A4,A8,A9,A10,A11,A12,VALUED_1:1,def 1;
       end;
     end;
     hence thesis by A2,A3,A4,A8,FINSEQ_1:17;
@@ -2422,7 +2423,7 @@ A1: dom p = Seg len p by FINSEQ_1:def 3
 A2: for k be Nat st k in dom p1 holds p1.k >= 0
     proof let k be Nat such that
 A3:   k in dom p1;
-       k in dom p by A1,A3,SEQ_1:def 7;
+       k in dom p by A1,A3,VALUED_1:8;
       then (Infor_FinSeq_of p).k <= 0 by Th52;
       then -((Infor_FinSeq_of p).k) >= -0 by XREAL_1:26;
       hence thesis by RVSUM_1:35;
@@ -2485,7 +2486,7 @@ A5: len (pp - qq) = len p by A1,EUCLID_2:7;
 then A6: dom (pp - qq) = dom pp & dom (pp - qq) = dom qq by A1,FINSEQ_3:31;
 A7: dom pp = Seg len pp by FINSEQ_1:def 3 .= dom p by A1,FINSEQ_1:def 3;
      for k st k in dom pp holds (pp - qq).k = pp.k - qq.k
-      by A6,SEQ_1:def 4;
+      by A6,VALUED_1:12,13,14,15;
 then A8: Sum pp - Sum qq = Sum(pp-qq) by A1,A5,Th8;
     set p1 = pp-qq;
 A9: len p1 = len p & for k st k in dom p holds
@@ -2503,7 +2504,7 @@ then A12:     1/(p.k) > 0 & (q.k)/(p.k) > 0 by REAL_2:127;
 A13:     -log(2,p.k)=log(2,1/(p.k)) by A11,Th5;
 A14:     log(2,(q.k)/(p.k))
           = log(2,number_e)*log(number_e,(q.k)/(p.k)) by A4,A12,POWER:64;
-        thus p1.k = pp.k - qq.k by A6,A7,A10,SEQ_1:def 4
+        thus p1.k = pp.k - qq.k by A6,A7,A10,VALUED_1:12,13,14,15
           .= p.k*(log(2,1/(p.k)) + log(2,(q.k))) by A11,A13
           .= p.k*log(2,(1/(p.k))*(q.k)) by A11,A12,POWER:61
           .= p.k*log(2,(1*(q.k))/(p.k)) by XCMPLX_1:75
@@ -2535,7 +2536,7 @@ A25: p1 is Element of n-tuples_on REAL by A9,FINSEQ_2:110;
 A26: p2 is Element of n-tuples_on REAL by A15,FINSEQ_2:110;
 A27: len(q-p)=len q by A1,EUCLID_2:7;
 then A28: dom(q-p)=dom p2 by A1,A15,FINSEQ_3:31;
-then A29: dom p2 = dom(log(2,number_e)*(q-p)) by SEQ_1:def 6;
+then A29: dom p2 = dom(log(2,number_e)*(q-p)) by VALUED_1:7,def 5;
 A30: for k be Nat st k in dom p2 holds p2.k=(log(2,number_e)*(q-p)).k
     proof let k be Nat such that
 A31:   k in dom p2;
@@ -2546,14 +2547,14 @@ A33:   p.k>0 by A2,A17,A31;
         .= log(2,number_e)*(((p.k)*(q.k))/(p.k)-p.k) by XCMPLX_1:75
         .= log(2,number_e)*(((p.k)/(p.k))*(q.k)-p.k) by XCMPLX_1:75
         .= log(2,number_e)*(1*(q.k)-p.k) by A33,XCMPLX_1:60
-        .= log(2,number_e)*(q-p).k by A28,A31,SEQ_1:def 4
+        .= log(2,number_e)*(q-p).k by A28,A31,VALUED_1:12,13,14,15
         .= (log(2,number_e)*(q-p)).k by RVSUM_1:66;
     end;
 A34: for k st k in dom q holds (q-p).k=q.k-p.k
     proof let k such that
 A35:   k in dom q;
        k in dom(q-p) by A27,A35,FINSEQ_3:31;
-      hence thesis by SEQ_1:def 4;
+      hence thesis by VALUED_1:12,13,14,15;
     end;
 A36: Sum p2 = Sum(log(2,number_e)*(q-p)) by A29,A30,FINSEQ_1:17
       .= log(2,number_e)* Sum(q-p) by RVSUM_1:117
@@ -2638,7 +2639,7 @@ A10: dom Infor_FinSeq_of p
      .= Seg n by Th47;
 A11: len p3 = n & for k st k in Seg n holds p3.k=-p.k*log(2,p.k)
     proof
-       dom p3 = Seg n by A10,SEQ_1:def 7;
+       dom p3 = Seg n by A10,VALUED_1:8;
       hence len p3 = n by FINSEQ_1:def 3;
       hereby let k such that
 A12:     k in Seg n;
@@ -2657,7 +2658,7 @@ A15: Sum p3 = Entropy p by RVSUM_1:118;
 A16: dom p2 = dom p by A7,FINSEQ_3:31;
  p2 = (-log(2,1/n1))*p
     proof
-A17:   dom p2 = dom((-log(2,1/n1))*p) by A16,SEQ_1:def 6;
+A17:   dom p2 = dom((-log(2,1/n1))*p) by A16,VALUED_1:7,def 5;
        for k be Nat st k in dom p2 holds p2.k = ((-log(2,1/n1))*p).k
       proof let k be Nat such that
 A18:     k in dom p2;
@@ -2719,20 +2720,20 @@ A1: len p = len M * width M by Th39;
 A2: len pp = len p by Th47;
 A3: len MM = len M & width MM = width M by Def8;
 then len qq = len M * width M by Th39;
-then A5: dom qq = dom pp & dom qq = dom p by A1,A2,FINSEQ_3:31;
+then A4: dom qq = dom pp & dom qq = dom p by A1,A2,FINSEQ_3:31;
        now let k be Nat such that
-A6:     k in dom qq;
-         k in Seg len qq by A6,FINSEQ_1:def 3;
+A5:     k in dom qq;
+         k in Seg len qq by A5,FINSEQ_1:def 3;
         then k >= 1 & k <= len qq by FINSEQ_1:3;
         then reconsider l = k - 1 as Element of NAT by NAT_1:21;
         set ii=(l div width MM)+1;
         set jj=(l mod width MM)+1;
-A7:     [ii,jj] in Indices MM & qq.k = MM*(ii,jj) by A6,Th41;
-A8:     p.k = M*(ii,jj) by A3,A5,A6,Th41;
-        thus pp.k = p.k *log(2,p.k) by A5,A6,Th47
-          .= qq.k by A7,A8,Th54;
+A6:     [ii,jj] in Indices MM & qq.k = MM*(ii,jj) by A5,Th41;
+A7:     p.k = M*(ii,jj) by A3,A4,A5,Th41;
+        thus pp.k = p.k *log(2,p.k) by A4,A5,Th47
+          .= qq.k by A6,A7,Th54;
       end;
-      hence thesis by A5,FINSEQ_1:17;
+      hence thesis by A4,FINSEQ_1:17;
   end;
 
 theorem Th60:
@@ -2758,10 +2759,10 @@ A8:   k in dom L;
         by A5,A8,Th19;
 A9:   pp = p.k * q by A1,A5,A8,Th22;
 A10:   p.k>=0 by A5,A8,Def1;
-       dom (p.k*log(2,p.k)*q) = dom q by SEQ_1:def 6;
+       dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:7,def 5;
 then A11:   len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
        dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
-        by SEQ_1:def 6;
+        by VALUED_1:7,def 5;
 then A12:   len (p.k*log(2,p.k)*q) = len (p.k*mlt(q,FinSeq_log(2,q)))
         by A6,A11,FINSEQ_3:31;
       thus L.k = Sum(M1.k) by A8,MATRPROB:def 1
@@ -2780,7 +2781,7 @@ then A12:   len (p.k*log(2,p.k)*q) = len (p.k*mlt(q,FinSeq_log(2,q)))
     set p1= Infor_FinSeq_of p;
     set p2= (Sum Infor_FinSeq_of q)*p;
 A13: len p1 = len p by Th47;
-     dom p2 = dom p by SEQ_1:def 6;
+     dom p2 = dom p by VALUED_1:7,def 5;
 then A14: len p1 = len L & len p1 = len p2 & dom p1 = dom L & dom p1 = dom p2
       by A2,A3,A4,A13,FINSEQ_3:31;
      now let k such that
@@ -2896,7 +2897,7 @@ theorem Th63:
     set q=-LineSum Infor_FinSeq_of M;
 A1: len p = len M &
     for k st k in dom p holds p.k = -Sum ((Infor_FinSeq_of M).k) by Th62;
-A2: dom q = dom LineSum Infor_FinSeq_of M by SEQ_1:def 7;
+A2: dom q = dom LineSum Infor_FinSeq_of M by VALUED_1:8;
     then len q = len LineSum Infor_FinSeq_of M by FINSEQ_3:31;
     then len q = len Infor_FinSeq_of M by MATRPROB:def 1;
     then len q = len M by Def8;
@@ -2943,10 +2944,10 @@ A8:   k in dom L;
 then A9:   len mlt(q,FinSeq_log(2,q)) = len q by MATRPROB:30;
 A10:   pp = p.k * q by A1,A2,A6,A8,Th27;
 A11:   p.k>=0 by A6,A8,Def1;
-       dom (p.k*log(2,p.k)*q) = dom q by SEQ_1:def 6;
+       dom (p.k*log(2,p.k)*q) = dom q by VALUED_1:7,def 5;
 then A12:   len (p.k*log(2,p.k)*q) = len q by FINSEQ_3:31;
        dom (p.k*mlt(q,FinSeq_log(2,q))) = dom mlt(q,FinSeq_log(2,q))
-        by SEQ_1:def 6;
+        by VALUED_1:7,def 5;
 then A13:   len (p.k*mlt(q,FinSeq_log(2,q))) = len mlt(q,FinSeq_log(2,q))
         by FINSEQ_3:31;
         L.k = Sum(M2.k) by A8,MATRPROB:def 1

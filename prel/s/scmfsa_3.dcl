@@ -54,7 +54,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="20"/>
-<Adjective nr="69">
+<Adjective nr="70">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>
@@ -64,7 +64,7 @@
 </Func>
 <Func kind="K" nr="243"/>
 </Adjective>
-<Adjective nr="74" value="false">
+<Adjective nr="75" value="false">
 <Func kind="K" nr="77"/>
 <Func kind="K" nr="15">
 <Func kind="K" nr="76"/>

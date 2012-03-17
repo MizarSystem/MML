@@ -10,22 +10,22 @@ environ
       MATRIX_1, TREES_1, GROUP_1, MATRIX_3, RELAT_1, BOOLE, FUNCT_2, MATRIX_2,
       FINSEQ_2, SGRAPH1, BINOP_1, SETWISEO, FINSOP_1, FINSUB_1, NAT_1, CARD_3,
       FINSET_1, JORDAN3, FUNCOP_1, CQC_LANG, FINSEQ_4, QC_LANG1, RFINSEQ,
-      SQUARE_1, CARD_1, FINSEQ_5, REALSET1, ROUGHS_1, ARYTM;
+      SQUARE_1, CARD_1, FINSEQ_5, REALSET1, ROUGHS_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, XXREAL_0, NAT_1, NAT_D,
-      RELAT_1, FUNCT_1, BINOP_1, ZFMISC_1, RLVECT_1, CARD_1, NUMBERS, VECTSP_1,
-      FUNCT_2, FUNCOP_1, SETWISEO, SEQ_1, FINSEQ_4, PARTFUN1, GROUP_4,
-      FINSUB_1, NEWTON, FINSOP_1, SETWOP_2, FINSEQ_1, STRUCT_0, MATRIX_2,
-      MATRIX_3, FINSET_1, JORDAN3, BINARITH, MATRIX_1, RFINSEQ,
-      FINSEQ_5, GROUP_1;
+      RELAT_1, FUNCT_1, BINOP_1, ZFMISC_1, CARD_1, NUMBERS, VECTSP_1, FUNCT_2,
+      FUNCOP_1, SETWISEO, VALUED_1, SEQ_1, FINSEQ_4, PARTFUN1, GROUP_4,
+      FINSUB_1, NEWTON, FINSOP_1, SETWOP_2, FINSEQ_1, STRUCT_0, ALGSTR_0,
+      RLVECT_1, MATRIX_2, MATRIX_3, FINSET_1, JORDAN3, BINARITH, MATRIX_1,
+      RFINSEQ, FINSEQ_5, GROUP_1;
  constructors RELAT_2, PARTFUN1, SETWISEO, REAL_1, SQUARE_1, NAT_1, NAT_D,
       FINSEQ_4, FINSOP_1, NEWTON, RFINSEQ, BINARITH, FINSEQ_5, ALGSTR_1,
-      GROUP_4, MATRIX_3, JORDAN3;
+      GROUP_4, MATRIX_3, JORDAN3, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, FINSUB_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, GROUP_1,
-      VECTSP_1, MATRIX_2, FVSUM_1;
+      VECTSP_1, MATRIX_2, FVSUM_1, ALGSTR_0, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, BINOP_1, RLVECT_1, FINSEQ_1, MATRIX_1, FINSEQ_2,
-      GROUP_4;
+      GROUP_4, ALGSTR_0, VALUED_1;
  theorems BINOP_1, RLVECT_1, MATRIX_3, VECTSP_1, MATRIX_1, GROUP_1, FUNCT_1,
       FINSEQ_1, NAT_1, MATRIX_2, FINSEQ_2, TARSKI, FINSOP_1, FVSUM_1, SETWISEO,
       FUNCT_2, XBOOLE_0, GROUP_4, ENUMSET1, ZFMISC_1, BINARITH, JORDAN3,
@@ -331,14 +331,7 @@ end;
 theorem Th9:
   for n being Element of NAT,a,b being Element of Group_of_Perm n,
       pa,pb being Element of Permutations n st
-        a=pa & b=pb holds a*b=pb*pa
- proof let n be Element of NAT,a,b be Element of Group_of_Perm n,
-  pa,pb be Element of Permutations n;
-  assume A1: a=pa & b=pb;
-   a*b=(the mult of Group_of_Perm n).(a,b) by GROUP_1:def 1
-     .=pb*pa by A1,MATRIX_2:def 13;
-  hence a*b=pb*pa;
- end;
+        a=pa & b=pb holds a*b=pb*pa by MATRIX_2:def 13;
 
 theorem Th10: for a,b being Element of Group_of_Perm 2 st
 (ex p being Element of Permutations 2 st p=a & p is_transposition)&
@@ -537,13 +530,13 @@ proof let K be Field, M be Matrix of 2,K;
      by MATRIX_2:def 11;
    A3:len Path_matrix(p1,M) = 2 by MATRIX_3:def 7;
    A4:len Path_matrix(p2,M) = 2 by MATRIX_3:def 7;
-   A5: Det M=(the add of K) $$ (FinOmega Permutations 2,Path_product M)
+   A5: Det M=(the addF of K) $$ (FinOmega Permutations 2,Path_product M)
          by MATRIX_3:def 9;
    set X=Permutations 2;
    set Y=the carrier of K;
    set B=FinOmega Permutations 2;
    set f=Path_product M;
-   set F=the add of K;
+   set F=the addF of K;
     Permutations 2 is finite by MATRIX_2:30;
    then A6: B=Permutations 2 by MATRIX_2:def 17;
    then consider G being Function of Fin X, Y such that
@@ -554,7 +547,7 @@ proof let K be Field, M be Matrix of 2,K;
            for x being Element of X st x in B \ B'
             holds G.(B' \/ {x}) = F.(G.B',f.x) by A5,SETWISEO:def 3;
    A8: G.{p1} = f.p1 by A7;
-   A9: G.B = (the add of K).(f.p1,f.p2)
+   A9: G.B = (the addF of K).(f.p1,f.p2)
      proof
        reconsider B'={.p1.} as Element of Fin X;
        A10: B' c= B
@@ -567,9 +560,9 @@ proof let K be Field, M be Matrix of 2,K;
        then G.(B' \/ {p2}) = F.(G.B',f.p2) by A7,A10;
       hence thesis by A6,A8,Th3,ENUMSET1:41;
      end;
-     A11: f.p1 = -((the mult of K) "**" (Path_matrix(p1,M)),p1)
+     A11: f.p1 = -((the multF of K) "**" (Path_matrix(p1,M)),p1)
                      by MATRIX_3:def 8;
-     A12: f.p2 = -((the mult of K) "**" (Path_matrix(p2,M)),p2)
+     A12: f.p2 = -((the multF of K) "**" (Path_matrix(p2,M)),p2)
                      by MATRIX_3:def 8;
      A13: 1 in Seg 2;
      then A14: 1 in dom Path_matrix(p1,M) by A3,FINSEQ_1:def 3;
@@ -585,22 +578,22 @@ proof let K be Field, M be Matrix of 2,K;
      then A21: Path_matrix(p2,M).1=M*(1,2) by A17,MATRIX_3:def 7;
       p2.2 = 1 by FINSEQ_1:61;
      then A22: Path_matrix(p2,M).2=M*(2,1) by A18,MATRIX_3:def 7;
-     set di=(the mult of K) $$ (Path_matrix(p1,M));
-     set dj=(the mult of K) $$ (Path_matrix(p2,M));
+     set di=(the multF of K) $$ (Path_matrix(p1,M));
+     set dj=(the multF of K) $$ (Path_matrix(p2,M));
      consider f3 being Function of NAT,the carrier of K such that
      A23: f3.1 = (Path_matrix(p1,M)).1 &
      (for n being Element of NAT st 0 <> n & n < 2 holds
-       f3.(n + 1) = (the mult of K).(f3.n,(Path_matrix(p1,M)).(n + 1)))
+       f3.(n + 1) = (the multF of K).(f3.n,(Path_matrix(p1,M)).(n + 1)))
        & di = f3.2 by A3,FINSOP_1:def 1;
-     A24: f3.(1+1)=(the mult of K).(f3.1,(Path_matrix(p1,M)).(1+1)) by A23
-           .=(M*(1,1))*(M*(2,2)) by A19,A20,A23,GROUP_1:def 1;
+     A24: f3.(1+1)=(the multF of K).(f3.1,(Path_matrix(p1,M)).(1+1)) by A23
+           .=(M*(1,1))*(M*(2,2)) by A19,A20,A23;
      consider f4 being Function of NAT,the carrier of K such that
      A25: f4.1 = (Path_matrix(p2,M)).1 &
      (for n being Element of NAT st 0 <> n & n < 2 holds
-       f4.(n + 1) = (the mult of K).(f4.n,(Path_matrix(p2,M)).(n + 1)))
+       f4.(n + 1) = (the multF of K).(f4.n,(Path_matrix(p2,M)).(n + 1)))
        & dj = f4.2 by A4,FINSOP_1:def 1;
-     A26: f4.(1+1)=(the mult of K).(f4.1,(Path_matrix(p2,M)).(1+1)) by A25
-           .=(M*(1,2))*(M*(2,1)) by A21,A22,A25,GROUP_1:def 1;
+     A26: f4.(1+1)=(the multF of K).(f4.1,(Path_matrix(p2,M)).(1+1)) by A25
+           .=(M*(1,2))*(M*(2,1)) by A21,A22,A25;
      set D0={s1,s2};
      reconsider l0=<*>D0 as FinSequence of Group_of_Perm(2) by Th3,
 MATRIX_2:def 13;
@@ -688,7 +681,7 @@ proof let K be Field, n be Element of NAT;
   assume A1: n>=1;
   set B=FinOmega Permutations n;
   set f=Path_product(0.(K,n,n));
-  set F=the add of K;
+  set F=the addF of K;
   set Y=the carrier of K;
   set X=Permutations n;
    Permutations(n) is finite by MATRIX_2:30;
@@ -703,7 +696,7 @@ proof let K be Field, n be Element of NAT;
         x in dom (Path_product(0.(K,n,n)));
      for p being Element of Permutations(n) holds
     (Permutations(n) --> 0.K).p
-        = -((the mult of K) $$ Path_matrix(p,(0.(K,n,n))),p)
+        = -((the multF of K) $$ Path_matrix(p,(0.(K,n,n))),p)
     proof let p be Element of Permutations(n);
       A4: len (n |-> 0.K)=n by FINSEQ_2:69;
        for i,j st i in dom (n |-> 0.K)
@@ -719,18 +712,19 @@ proof let K be Field, n be Element of NAT;
         hence (n |-> 0.K).i=(0.(K,n,n))*(i,j) by A7,MATRIX_3:3;
        end;
       then A8: Path_matrix(p,(0.(K,n,n)))=(n |-> 0.K) by A4,MATRIX_3:def 7;
-      defpred P[Element of NAT] means (the mult of K) $$ ( ($1+1) |-> 0.K)=0.K;
+      defpred P[Element of NAT]
+       means (the multF of K) $$ ( ($1+1) |-> 0.K)=0.K;
        (1 |-> 0.K)= <* 0.K *> by FINSEQ_2:73;
      then A9: P[0] by FINSOP_1:12;
      A10: for k being Element of NAT st P[k] holds P[k+1]
        proof let k be Element of NAT;
         assume A11: P[k];
-         A12: (the mult of K) has_a_unity by FVSUM_1:11;
+         A12: (the multF of K) has_a_unity by FVSUM_1:11;
           (k+1+1) |-> 0.K = ((k+1) |-> 0.K) ^ <* 0.K *> by FINSEQ_2:74;
-         then (the mult of K) $$ ( (k+1+1) |-> 0.K)
-           =(the mult of K).((the mult of K)$$(((k+1) |-> 0.K)),0.K)
+         then (the multF of K) $$ ( (k+1+1) |-> 0.K)
+           =(the multF of K).((the multF of K)$$(((k+1) |-> 0.K)),0.K)
                               by A12,FINSOP_1:5
-          .= (0.K)*(0.K) by A11,GROUP_1:def 1
+          .= (0.K)*(0.K) by A11
           .= 0.K by VECTSP_1:36;
         hence P[k+1];
        end;
@@ -748,7 +742,8 @@ proof let K be Field, n be Element of NAT;
       end;
       end;
      hence (Permutations(n) --> 0.K).p
-        = -((the mult of K) $$ Path_matrix(p,(0.(K,n,n))),p) by A8,A13,A14,A15;
+        = -((the multF of K) $$ Path_matrix(p,(0.(K,n,n))),p)
+         by A8,A13,A14,A15;
     end;
    hence (Path_product(0.(K,n,n))).x=(Permutations(n) --> 0.K).x
                                  by MATRIX_3:def 8;
@@ -786,7 +781,7 @@ proof let K be Field, n be Element of NAT;
        hence G0.(B' \/ {x}) = F.(G0.B',f.x) by A22,A23,A24,BINOP_1:11;
      end;
    end;
-  then (the add of K) $$ (FinOmega(Permutations(n)),Path_product(0.(K,n,n)))=
+  then (the addF of K) $$ (FinOmega(Permutations(n)),Path_product(0.(K,n,n)))=
 0.K
                           by A2,A17,A18,A21,SETWISEO:def 3;
  hence thesis by MATRIX_3:def 9;
@@ -812,7 +807,7 @@ let K be Field, n be Element of NAT;
   reconsider p0=idseq n as Permutation of Seg n;
   A4: id (Seg n) is even by MATRIX_2:29;
   set f=Path_product(1.(K,n));
-  set F=(the add of K);
+  set F=(the addF of K);
   set Y=the carrier of K;
   set X=Permutations(n);
   deffunc F3(set) = IFIN(idseq n,$1,1_K,0.K);
@@ -848,28 +843,29 @@ let K be Field, n be Element of NAT;
   proof let x be set;assume
      x in dom (Path_product(1.(K,n)));
      for p being Element of Permutations(n) holds
-    f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
+    f2.p = -((the multF of K) $$ Path_matrix(p,(1.(K,n))),p)
     proof let p be Element of Permutations(n);
       A11: len (n |-> 1_K)=n by FINSEQ_2:69;
-      defpred P[Element of NAT] means (the mult of K) $$ ( ($1+1) |-> 1_K)=1_K;
+      defpred P[Element of NAT]
+       means (the multF of K) $$ ( ($1+1) |-> 1_K)=1_K;
        (1 |-> 1_K)= <* 1_K *> by FINSEQ_2:73;
      then A12: P[0] by FINSOP_1:12;
      A13: for k being Element of NAT st P[k] holds P[k+1]
        proof let k be Element of NAT;
         assume A14: P[k];
-         A15: (the mult of K) has_a_unity by FVSUM_1:11;
+         A15: (the multF of K) has_a_unity by FVSUM_1:11;
           (k+1+1) |-> 1_K = ((k+1) |-> 1_K) ^ <* 1_K *> by FINSEQ_2:74;
-         then (the mult of K) $$ ( (k+1+1) |-> 1_K)
-           =(the mult of K).((the mult of K)$$(((k+1) |-> 1_K)),1_K)
+         then (the multF of K) $$ ( (k+1+1) |-> 1_K)
+           =(the multF of K).((the multF of K)$$(((k+1) |-> 1_K)),1_K)
                               by A15,FINSOP_1:5
-          .= (1_K)*(1_K) by A14,GROUP_1:def 1
+          .= (1_K)*(1_K) by A14
           .= 1_K by GROUP_1:def 5;
         hence P[k+1];
        end;
       A16: for k being Element of NAT holds P[k] from NAT_1:sch 1(A12,A13);
        n-'1=n-1 by A1,BINARITH:50;
       then n-'1+1=n;
-      then A17: (the mult of K) $$ (n |-> 1_K)=1_K by A16;
+      then A17: (the multF of K) $$ (n |-> 1_K)=1_K by A16;
       A18: now per cases;
       case p is even;
        hence -(0.K,p)=(0.K) by MATRIX_2:def 16;
@@ -886,8 +882,8 @@ let K be Field, n be Element of NAT;
         reconsider p1=p0 as Element of Permutations n
                                    by MATRIX_2:def 11;
          len Permutations n = n by MATRIX_2:20;
-         then A21: -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
-           = (the mult of K) $$ Path_matrix(p,(1.(K,n)))
+         then A21: -((the multF of K) $$ Path_matrix(p,(1.(K,n))),p)
+           = (the multF of K) $$ Path_matrix(p,(1.(K,n)))
                     by A4,A19,MATRIX_2:def 16;
                 for i,j st i in dom (n |-> 1_K)
                    & j=p.i holds (n |-> 1_K).i=(1.(K,n))*(i,j)
@@ -902,7 +898,7 @@ let K be Field, n be Element of NAT;
          then [i,j] in Indices (1.(K,n)) by A23,A26,ZFMISC_1:def 2;
         hence (n |-> 1_K).i=(1.(K,n))*(i,j) by A22,A24,A25,MATRIX_1:def 12;
        end;
-       hence f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
+       hence f2.p = -((the multF of K) $$ Path_matrix(p,(1.(K,n))),p)
                             by A11,A17,A20,A21,MATRIX_3:def 7;
       end;
       case A27: p<>idseq n;
@@ -934,7 +930,7 @@ MATRIX_3:def 7;
           ex p3 being FinSequence of K st len p3=$1+1 &
             p3.1=(Path_matrix(p,(1.(K,n)))).1 &
          (for n3 being Element of NAT st 0 <> n3 & n3 < $1+1 & n3<n holds
-           p3.(n3 + 1) = (the mult of K).
+           p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)));
           1 in Seg len (Path_matrix(p,(1.(K,n)))) by A1,A34;
          then 1 in dom (Path_matrix(p,(1.(K,n)))) by FINSEQ_1:def 3;
@@ -949,7 +945,7 @@ MATRIX_3:def 7;
          A39: len q3=1 by FINSEQ_1:56;
          A40: q3.1=(Path_matrix(p,(1.(K,n)))).1 by FINSEQ_1:57;
           for n3 being Element of NAT st 0 <> n3 & n3 < 0+1 & n3< n holds
-           q3.(n3 + 1) = (the mult of K).
+           q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
           proof let n3 be Element of NAT;
             assume A41: 0 <> n3 & n3 < 0+1 & n3< n;
@@ -967,7 +963,7 @@ MATRIX_3:def 7;
               p3.1=(Path_matrix(p,(1.(K,n)))).1 &
              (for n3 being Element of NAT st 0 <> n3 & n3 < k+1 & n3<n
               holds
-               p3.(n3 + 1) = (the mult of K).
+               p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)))
                                       by A44,NAT_1:12;
               defpred P6[set,set] means
@@ -1011,7 +1007,7 @@ MATRIX_3:def 7;
               then [f6.(k+1),(Path_matrix(p,(1.(K,n)))).(k + 1+1)]
                              in [:the carrier of K, the carrier of K:]
                                   by A51,ZFMISC_1:def 2;
-              then reconsider e=(the mult of K).
+              then reconsider e=(the multF of K).
                   (f6.(k+1),(Path_matrix(p,(1.(K,n)))).(k + 1+1))
                      as Element of K by FUNCT_2:7;
              reconsider q3=p3^<* e *> as FinSequence of K;
@@ -1023,13 +1019,13 @@ MATRIX_3:def 7;
             then A53: q3.1=(Path_matrix(p,(1.(K,n)))).1 by A46,FINSEQ_1:def 7;
              for n3 being Element of NAT st 0 <> n3 & n3 < k+1+1 & n3<n
               holds
-               q3.(n3 + 1) = (the mult of K).
+               q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
             proof let n3 be Element of NAT;
               assume A54: 0 <> n3 & n3 < k+1+1 & n3<n;
                  now per cases;
                 case A55: n3<k+1;
-                  then A56: p3.(n3 + 1) = (the mult of K).
+                  then A56: p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)) by A46,A54;
                    1<=n3+1 & n3+1<=k+1 by A55,NAT_1:12,13;
                   then n3+1 in Seg len p3 by A46;
@@ -1039,7 +1035,7 @@ MATRIX_3:def 7;
                   then 0+1<=n3 by NAT_1:13;
                   then n3 in Seg len p3 by A46,A55;
                   then n3 in dom p3 by FINSEQ_1:def 3;
-                  hence q3.(n3 + 1) = (the mult of K).
+                  hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
                                    by A56,A57,FINSEQ_1:def 7;
                 end;
@@ -1055,12 +1051,12 @@ MATRIX_3:def 7;
                    (q3).(n3+1) = (<*e*>).(n3+1 - (k+1))
                                   by A46,A52,A58,A59,FINSEQ_1:37
                              .= e by A60,FINSEQ_1:def 8;
-                 hence q3.(n3 + 1) = (the mult of K).
+                 hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
                                  by A50,A60,A61,A62;
                 end;
                 end;
-               hence q3.(n3 + 1) = (the mult of K).
+               hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1));
             end;
             hence P3[k+1] by A52,A53;
@@ -1079,7 +1075,7 @@ MATRIX_3:def 7;
          A65: len p3=n-'1+1 &
             p3.1=(Path_matrix(p,(1.(K,n)))).1 &
          (for n3 being Element of NAT st 0 <> n3 & n3 < n-'1+1 & n3<n holds
-           p3.(n3 + 1) = (the mult of K).
+           p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))) by A63,A64;
         reconsider A=NAT as non empty set;
         defpred P[set,set] means
@@ -1113,7 +1109,7 @@ MATRIX_3:def 7;
         then A70: f4.1=(Path_matrix(p,(1.(K,n)))).1 by A65,A69;
         A71: for n3 being Element of NAT
           st 0 <> n3 & n3 < len (Path_matrix(p,(1.(K,n)))) holds
-           f4.(n3 + 1) = (the mult of K).
+           f4.(n3 + 1) = (the multF of K).
                   (f4.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
          proof let n3 be Element of NAT;
            assume A72: 0 <> n3 & n3 < len (Path_matrix(p,(1.(K,n))));
@@ -1123,11 +1119,11 @@ MATRIX_3:def 7;
              n3+1<=len (Path_matrix(p,(1.(K,n)))) by A72,NAT_1:13;
             then n3+1 in Seg n by A34,A74;
             then A75: f4.(n3+1)=p3.(n3+1) by A69;
-            A76: p3.(n3 + 1) = (the mult of K).
+            A76: p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1))
                                    by A34,A64,A65,A72;
              n3 in Seg n by A34,A72,A73;
-          hence f4.(n3 + 1) = (the mult of K).
+          hence f4.(n3 + 1) = (the multF of K).
             (f4.n3,(Path_matrix(p,(1.(K,n)))).(n3 + 1)) by A69,A75,A76;
          end;
          defpred P5[Element of NAT] means f4.(i0+$1)=0.K;
@@ -1148,10 +1144,10 @@ A81:        i0 <= n by A29,A30,FINSEQ_1:3;
            reconsider a=f4.(i0-'1) as Element of K;
             i0-'1=i0-1 by A79,BINARITH:50;
            then i0-'1+1=i0;
-           then f4.(i0) = (the mult of K).
+           then f4.(i0) = (the multF of K).
                   (f4.(i0-'1),(Path_matrix(p,(1.(K,n)))).(i0))
                             by A71,A80,A82
-                  .= a*(0.K) by A37,GROUP_1:def 1
+                  .= a*(0.K) by A37
                   .= 0.K by VECTSP_1:36;
            hence P5[0];
           end;
@@ -1182,10 +1178,10 @@ A81:        i0 <= n by A29,A30,FINSEQ_1:3;
                              as Element of K by A91;
                 i0+k+1 in Seg n by A86,A87;
                then f4.(i0+k+1)=p3.(i0+k+1) by A69
-                          .=(the mult of K).
+                          .=(the multF of K).
                    (p3.(i0+k),(Path_matrix(p,(1.(K,n)))).(i0+k+1))
                            by A64,A65,A78,A88,A89
-                         .= (0.K)*(b) by A90,GROUP_1:def 1
+                         .= (0.K)*(b) by A90
                          .= 0.K by VECTSP_1:36;
               hence f4.(i0+(k+1))=0.K;
              end;
@@ -1200,11 +1196,11 @@ A81:        i0 <= n by A29,A30,FINSEQ_1:3;
            then A92: P5[n-'i0];
             i0 <= n by A29,A30,FINSEQ_1:3;
            then n-'i0 =n-i0 by BINARITH:50;
-       hence f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p)
+       hence f2.p = -((the multF of K) $$ Path_matrix(p,(1.(K,n))),p)
                   by A1,A18,A33,A34,A70,A71,A92,FINSOP_1:3;
       end;
       end;
-     hence f2.p = -((the mult of K) $$ Path_matrix(p,(1.(K,n))),p);
+     hence f2.p = -((the multF of K) $$ Path_matrix(p,(1.(K,n))),p);
     end;
    hence (Path_product(1.(K,n))).x=f2.x by MATRIX_3:def 8;
   end;
@@ -1297,7 +1293,7 @@ A81:        i0 <= n by A29,A30,FINSEQ_1:3;
       hence G0.(B' \/ {x}) = F.(G0.B',f.x) by A106,A108,A115;
      end;
    end;
-  then (the add of K) $$ (FinOmega(Permutations n),Path_product(1.(K,n)))=1_K
+  then (the addF of K) $$ (FinOmega(Permutations n),Path_product(1.(K,n)))=1_K
                                        by A2,A3,A94,A96,A100,MATRIX_2:def 13
 ,SETWISEO:def 3;
  hence thesis by MATRIX_3:def 9;
@@ -1333,7 +1329,7 @@ end;
 theorem
    for K being Field, n being Element of NAT, A being Matrix of n,K st
     n>=1 & A is diagonal holds
-      Det A = (the mult of K) $$ (diagonal_of_Matrix A)
+      Det A = (the multF of K) $$ (diagonal_of_Matrix A)
 proof let K be Field, n be Element of NAT,
   A be Matrix of n,K;
   assume A1: n>=1 & A is diagonal;
@@ -1342,8 +1338,8 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
   consider f4 being Function of NAT,the carrier of K such that
    A3:  f4.1 = F4.1 &
      (for n4 being Element of NAT st 0 <> n4 & n4 < len F4 holds
-       f4.(n4 + 1) = (the mult of K).(f4.n4,F4.(n4 + 1)))
-       & (the mult of K)$$ (diagonal_of_Matrix A) = f4.(len F4)
+       f4.(n4 + 1) = (the multF of K).(f4.n4,F4.(n4 + 1)))
+       & (the multF of K)$$ (diagonal_of_Matrix A) = f4.(len F4)
                                by A1,A2,FINSOP_1:def 1;
   deffunc F5(Nat) = f4.$1;
    ex z being FinSequence of K st len z = n &
@@ -1363,10 +1359,10 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
   reconsider p0=idseq n as Permutation of Seg n;
   A7: p0 is even by MATRIX_2:29;
   set f=Path_product(A);
-  set F=the add of K;
+  set F=the addF of K;
   set Y=the carrier of K;
   set X=Permutations n;
-  set k1=(the mult of K)$$(diagonal_of_Matrix A);
+  set k1=(the multF of K)$$(diagonal_of_Matrix A);
   deffunc F3(set) = IFIN(idseq n,$1,k1,0.K);
   A8: for x being set st x in Fin X holds F3(x) in Y
   proof let x be set;
@@ -1397,7 +1393,7 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
    holds (Path_product A).x=f2.x
   proof let x be set;assume x in dom Path_product A;
      for p being Element of Permutations n holds
-    f2.p = -((the mult of K) $$ Path_matrix(p,A),p)
+    f2.p = -((the multF of K) $$ Path_matrix(p,A),p)
     proof let p be Element of Permutations n;
       A14: now per cases;
       suppose p is even;
@@ -1414,8 +1410,8 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
            .= k1 by A15,FUNCOP_1:def 8;
         reconsider p1=p0 as Element of Permutations n by MATRIX_2:def 11;
          len Permutations n = n by MATRIX_2:20;
-        then A17: -((the mult of K) $$ Path_matrix(p,A),p)
-           = (the mult of K) $$ Path_matrix(p,(A))
+        then A17: -((the multF of K) $$ Path_matrix(p,A),p)
+           = (the multF of K) $$ Path_matrix(p,(A))
                     by A7,A15,MATRIX_2:def 16;
         for i,j st i in dom ((diagonal_of_Matrix A))
                    & j=p.i holds ((diagonal_of_Matrix A)).i=(A)*(i,j)
@@ -1427,7 +1423,7 @@ A2: len (diagonal_of_Matrix A)=n by MATRIX_3:def 10;
                                      by A18,A19,MATRIX_3:def 10;
        end;
        hence f2.p
-        = -((the mult of K) $$ Path_matrix(p,A),p)
+        = -((the multF of K) $$ Path_matrix(p,A),p)
                                  by A2,A16,A17,MATRIX_3:def 7;
       end;
       case A20: p<>idseq n;
@@ -1456,7 +1452,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
           ex p3 being FinSequence of K st len p3=$1+1 &
             p3.1=(Path_matrix(p,A)).1 &
          (for n3 being Element of NAT st 0 <> n3 & n3 < $1+1 & n3<n holds
-           p3.(n3 + 1) = (the mult of K).
+           p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,A)).(n3 + 1)));
           1 in Seg len (Path_matrix(p,A)) by A1,A29;
          then 1 in dom (Path_matrix(p,A)) by FINSEQ_1:def 3;
@@ -1469,7 +1465,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
          A33: len q3=1 by FINSEQ_1:56;
          A34: q3.1=(Path_matrix(p,A)).1 by FINSEQ_1:57;
           for n3 being Element of NAT st 0 <> n3 & n3 < 0+1 & n3< n holds
-           q3.(n3 + 1) = (the mult of K).
+           q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,A)).(n3 + 1))
           proof let n3 be Element of NAT;
             assume A35: 0 <> n3 & n3 < 0+1 & n3< n;
@@ -1486,7 +1482,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
              A40: len p3=k+1 &
               p3.1=(Path_matrix(p,A)).1 &
              (for n3 being Element of NAT st 0 <> n3 & n3 < k+1 & n3<n holds
-               p3.(n3 + 1) = (the mult of K).
+               p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,A)).(n3 + 1))) by A38,NAT_1:12;
               defpred P6[set,set] means
                 ($1 in Seg (k+1) implies $2=p3.$1)&
@@ -1526,7 +1522,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
               then [f6.(k+1),(Path_matrix(p,A)).(k + 1+1)]
                              in [:the carrier of K, the carrier of K:]
                                   by A45,ZFMISC_1:def 2;
-              then reconsider e=(the mult of K).
+              then reconsider e=(the multF of K).
                   (f6.(k+1),(Path_matrix(p,A)).(k + 1+1))
                      as Element of K by FUNCT_2:7;
              reconsider q3=p3^<* e *> as FinSequence of K;
@@ -1538,13 +1534,13 @@ then A22:     dom p = Seg n by MATRIX_2:20;
             then A47: q3.1=(Path_matrix(p,(A))).1 by A40,FINSEQ_1:def 7;
              for n3 being Element of NAT st 0 <> n3 & n3 < k+1+1 & n3<n
               holds
-               q3.(n3 + 1) = (the mult of K).
+               q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(A))).(n3 + 1))
             proof let n3 be Element of NAT;
               assume A48: 0 <> n3 & n3 < k+1+1 & n3<n;
                  now per cases;
                 case A49: n3<k+1;
-                  then A50: p3.(n3 + 1) = (the mult of K).
+                  then A50: p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(A))).(n3 + 1)) by A40,A48;
                    1<=n3+1 & n3+1<=k+1 by A49,NAT_1:12,13;
                   then n3+1 in Seg len p3 by A40;
@@ -1554,7 +1550,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
                   then 0+1<=n3 by NAT_1:13;
                   then n3 in Seg len p3 by A40,A49;
                   then n3 in dom p3 by FINSEQ_1:def 3;
-                 hence q3.(n3 + 1) = (the mult of K).
+                 hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(A))).(n3 + 1))
                                      by A50,A51,FINSEQ_1:def 7;
                 end;
@@ -1570,11 +1566,11 @@ then A22:     dom p = Seg n by MATRIX_2:20;
                  (q3).(n3+1) = (<*e*>).(n3+1 - (k+1))
                                   by A40,A46,A52,A53,FINSEQ_1:37
                              .= e by A54,FINSEQ_1:def 8;
-                 hence q3.(n3 + 1) = (the mult of K).
+                 hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(A))).(n3 + 1)) by A44,A54,A55,A56;
                 end;
                 end;
-               hence q3.(n3 + 1) = (the mult of K).
+               hence q3.(n3 + 1) = (the multF of K).
                   (q3.n3,(Path_matrix(p,(A))).(n3 + 1));
             end;
             hence P3[k+1] by A46,A47;
@@ -1593,7 +1589,7 @@ then A22:     dom p = Seg n by MATRIX_2:20;
          A59: len p3=n-'1+1 &
             p3.1=(Path_matrix(p,A)).1 &
          (for n3 being Element of NAT st 0 <> n3 & n3 < n-'1+1 & n3<n holds
-           p3.(n3 + 1) = (the mult of K).
+           p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,(A))).(n3 + 1))) by A57,A58;
         reconsider Ab=NAT as non empty set;
         defpred P[set,set] means
@@ -1627,7 +1623,7 @@ A60:   for x3 being Element of Ab
         then A64: f4.1=(Path_matrix(p,A)).1 by A59,A63;
         A65: for n3 being Element of NAT
           st 0 <> n3 & n3 < len (Path_matrix(p,A)) holds
-           f4.(n3 + 1) = (the mult of K).
+           f4.(n3 + 1) = (the multF of K).
                   (f4.n3,(Path_matrix(p,A)).(n3 + 1))
          proof let n3 be Element of NAT;
            assume A66: 0 <> n3 & n3 < len (Path_matrix(p,A));
@@ -1637,10 +1633,10 @@ A60:   for x3 being Element of Ab
              n3+1<=len (Path_matrix(p,A)) by A66,NAT_1:13;
             then n3+1 in Seg n by A29,A68;
             then A69: f4.(n3+1)=p3.(n3+1) by A63;
-            A70: p3.(n3 + 1) = (the mult of K).
+            A70: p3.(n3 + 1) = (the multF of K).
                   (p3.n3,(Path_matrix(p,A)).(n3 + 1)) by A29,A58,A59,A66;
              n3 in Seg n by A29,A66,A67;
-          hence f4.(n3 + 1) = (the mult of K).
+          hence f4.(n3 + 1) = (the multF of K).
                   (f4.n3,(Path_matrix(p,A)).(n3 + 1)) by A63,A69,A70;
          end;
          defpred P5[Element of NAT] means f4.(i0+$1)=0.K;
@@ -1658,9 +1654,9 @@ A60:   for x3 being Element of Ab
           reconsider a=f4.(i0-'1) as Element of K;
            i0-'1=i0-1 by A72,BINARITH:50;
           then i0-'1+1=i0;
-          then f4.i0 = (the mult of K).
+          then f4.i0 = (the multF of K).
                   (f4.(i0-'1),(Path_matrix(p,A)).i0) by A65,A73,A74
-                  .= a*(0.K) by A31,GROUP_1:def 1
+                  .= a*(0.K) by A31
                   .= 0.K by VECTSP_1:36;
            hence P5[0];
           end;
@@ -1690,9 +1686,9 @@ A60:   for x3 being Element of Ab
                              as Element of K by A84;
                 i0+k+1 in Seg n by A78,A79;
                then f4.(i0+k+1)=p3.(i0+k+1) by A63
-                          .=(the mult of K).
+                          .=(the multF of K).
                    (p3.(i0+k),(Path_matrix(p,A)).(i0+k+1)) by A58,A59,A81,A82
-                         .= (0.K)*b by A83,GROUP_1:def 1
+                         .= (0.K)*b by A83
                          .= 0.K by VECTSP_1:36;
               hence f4.(i0+(k+1))=0.K;
              end;
@@ -1706,18 +1702,18 @@ A60:   for x3 being Element of Ab
             for k being Element of NAT holds P5[k] from NAT_1:sch 1(A75,A76);
            then A85: P5[n-'i0];
             n-'i0 =n-i0 by A25,BINARITH:50;
-       hence f2.p = -((the mult of K) $$ Path_matrix(p,A),p)
+       hence f2.p = -((the multF of K) $$ Path_matrix(p,A),p)
            by A1,A14,A28,A29,A64,A65,A85,FINSOP_1:3;
       end;
       end;
-     hence f2.p = -((the mult of K) $$ Path_matrix(p,(A)),p);
+     hence f2.p = -((the multF of K) $$ Path_matrix(p,(A)),p);
     end;
    hence (Path_product(A)).x=f2.x by MATRIX_3:def 8;
   end;
   then A86: Path_product(A)=f2 by A12,FUNCT_1:9;
   A87: now assume A88: idseq n in B;
     thus G0.(B)=IFIN(idseq n,B,k1,0.K) by A9
-        .=(the mult of K)$$ (diagonal_of_Matrix A) by A88,Def1;
+        .=(the multF of K)$$ (diagonal_of_Matrix A) by A88,Def1;
    end;
   A89: for e being Element of Y st e is_a_unity_wrt F holds G0.({}) = e
     proof let e be Element of Y;assume e is_a_unity_wrt F;
@@ -1802,8 +1798,8 @@ A60:   for x3 being Element of Ab
        hence G0.(B' \/ {x}) = F.(G0.B',f.x) by A99,A101,A108;
      end;
    end;
-  then (the add of K) $$ (FinOmega(Permutations(n)),Path_product(A))=
-  (the mult of K)$$ (diagonal_of_Matrix A)
+  then (the addF of K) $$ (FinOmega(Permutations(n)),Path_product(A))=
+  (the multF of K)$$ (diagonal_of_Matrix A)
                                        by A5,A6,A87,A89,A93,MATRIX_2:def 13
 ,SETWISEO:def 3;
  hence thesis by MATRIX_3:def 9;
@@ -2137,13 +2133,13 @@ ITG be Element of Group_of_Perm(n);
    rng qf = Seg n by A2,FUNCT_2:def 3;
   then A4: ITP"*ITP=id Seg n & ITP*ITP"=id Seg n by A3,FUNCT_1:61;
   reconsider pf=ITP" as Element of Group_of_Perm n by MATRIX_2:def 13;
-  A5: (the mult of (Group_of_Perm n)).(ITG,pf)=(ITP")*ITP
+  A5: (the multF of (Group_of_Perm n)).(ITG,pf)=(ITP")*ITP
                                     by A1,MATRIX_2:def 13;
-  A6: (the mult of (Group_of_Perm n)).(pf,ITG)=ITP*(ITP")
+  A6: (the multF of (Group_of_Perm n)).(pf,ITG)=ITP*(ITP")
                                     by A1,MATRIX_2:def 13;
   A7: idseq n=1_Group_of_Perm n by MATRIX_2:28;
-  A8: ITG*pf=(the mult of (Group_of_Perm(n))).(ITG,pf) by GROUP_1:def 1;
-   pf*ITG=(the mult of (Group_of_Perm(n))).(pf,ITG) by GROUP_1:def 1;
+  A8: ITG*pf=(the multF of (Group_of_Perm(n))).(ITG,pf);
+   pf*ITG=(the multF of (Group_of_Perm(n))).(pf,ITG);
  hence ITP"=ITG" by A4,A5,A6,A7,A8,GROUP_1:def 6;
 end;
 
@@ -2266,27 +2262,27 @@ then A6: -(x,p) = -x by MATRIX_2:def 16;
 end;
 
 theorem Th30:for K being Field,f1,f2 being FinSequence of K holds
-  (the mult of K) $$ (f1^f2) = ((the mult of K)$$f1)*((the mult of K)$$f2)
+  (the multF of K) $$ (f1^f2) = ((the multF of K)$$f1)*((the multF of K)$$f2)
  proof let K be Field,f1,f2 be FinSequence of K;
-   (the mult of K) is associative &
-    ((the mult of K) has_a_unity or len f1 >= 1 & len f2 >= 1)
+   (the multF of K) is associative &
+    ((the multF of K) has_a_unity or len f1 >= 1 & len f2 >= 1)
                                    by GROUP_1:31,34;
-  hence (the mult of K) $$ (f1^f2)
-    = (the mult of K).((the mult of K) $$ f1,(the mult of K) $$ f2)
+  hence (the multF of K) $$ (f1^f2)
+    = (the multF of K).((the multF of K) $$ f1,(the multF of K) $$ f2)
                                    by FINSOP_1:6
-    .=(the mult of K) $$ f1 * (the mult of K) $$ f2 by GROUP_1:def 1;
+    .=(the multF of K) $$ f1 * (the multF of K) $$ f2;
  end;
 
 theorem
   Th31:for K being Field,R1,R2 be FinSequence of K
          st R1,R2 are_fiberwise_equipotent holds
-      (the mult of K)$$ R1 = (the mult of K)$$ R2
+      (the multF of K)$$ R1 = (the multF of K)$$ R2
 proof :: The proof is copying and string relacing of EULER_2:25
   let K be Field;
   defpred P[Nat] means
     for f,g be FinSequence of K
       st f,g are_fiberwise_equipotent & len f = $1
-      holds (the mult of K)$$ f = (the mult of K)$$ g;
+      holds (the multF of K)$$ f = (the multF of K)$$ g;
   A1:P[0]
   proof let f,g be FinSequence of K; assume
         f,g are_fiberwise_equipotent & len f = 0;
@@ -2338,15 +2334,15 @@ A17:f = fn ^ <*a*> by A4,RFINSEQ:20;
       hence card(fn"{x}) = card(((g|m1)^(g/^m))"{x});
     end;
     then fn, (g|m1)^(g/^m) are_fiberwise_equipotent by RFINSEQ:def 1;
-    then (the mult of K)$$ fn = (the mult of K)$$((g|m1)^gg) by A3,A16;
-    hence (the mult of K)$$ f
-     = (the mult of K)$$((g|m1)^gg)*(the mult of K)$$ <*a*> by A17,Th30
-    .= (the mult of K)$$(g|m1)*(the mult of K)$$ gg*(the mult of K)$$ <*a*>
+    then (the multF of K)$$ fn = (the multF of K)$$((g|m1)^gg) by A3,A16;
+    hence (the multF of K)$$ f
+     = (the multF of K)$$((g|m1)^gg)*(the multF of K)$$ <*a*> by A17,Th30
+    .= (the multF of K)$$(g|m1)*(the multF of K)$$ gg*(the multF of K)$$ <*a*>
                                         by Th30
-    .= (the mult of K)$$(g|m1)*(the mult of K)$$ <*a*>*(the mult of K)$$ gg
+    .= (the multF of K)$$(g|m1)*(the multF of K)$$ <*a*>*(the multF of K)$$ gg
                                          by GROUP_1:def 4
-             .= (the mult of K)$$ gm*(the mult of K)$$ gg by A13,A15,Th30
-             .= (the mult of K)$$ g by A9,Th30;
+             .= (the multF of K)$$ gm*(the multF of K)$$ gg by A13,A15,Th30
+             .= (the multF of K)$$ g by A9,Th30;
   end;
   A18:for n holds P[n] from NAT_1:sch 2(A1,A2);
   let R1,R2 be FinSequence of K; assume
@@ -2382,7 +2378,7 @@ theorem Th33:
   for n being Element of NAT, K being Field,
       p being Element of Permutations(n),
  f,g being FinSequence of K st n>=1 & len f=n & g=f*p holds
- (the mult of K) $$ f = (the mult of K) $$ g by Th31,Th32;
+ (the multF of K) $$ f = (the multF of K) $$ g by Th31,Th32;
 
 theorem Th34: for n being Element of NAT, K being Field,
 p being Element of Permutations(n),
@@ -2456,11 +2452,11 @@ proof let n be Element of NAT, K be Field, p be Element of Permutations n,
  assume A1: n>=1;
 A2: len (Path_matrix(p,A))=n by MATRIX_3:def 7;
   then reconsider g=Path_matrix(p,A)*(p") as FinSequence of K by A1,Th34;
-   (Path_product(A@)).(p") = -((the mult of K) $$ Path_matrix(p",A@),p")
+   (Path_product(A@)).(p") = -((the multF of K) $$ Path_matrix(p",A@),p")
                                  by MATRIX_3:def 8
-                         .= -((the mult of K) $$ g,p") by A1,Th35
-                         .= -((the mult of K) $$ g,p) by A1,Th29
-                         .= -((the mult of K) $$ (Path_matrix(p,A)),p)
+                         .= -((the multF of K) $$ g,p") by A1,Th35
+                         .= -((the multF of K) $$ g,p) by A1,Th29
+                         .= -((the multF of K) $$ (Path_matrix(p,A)),p)
                                  by A1,A2,Th33;
  hence (Path_product(A@)).(p") = (Path_product(A)).p by MATRIX_3:def 8;
 end;
@@ -2472,7 +2468,7 @@ proof let n be Element of NAT, K be Field, A be Matrix of n,K;
  assume A1: n>=1;
   set f=Path_product(A);
   set f2=Path_product(A@);
-  set F=(the add of K);
+  set F=(the addF of K);
   set Y=the carrier of K;
   set X=Permutations(n);
   set B=FinOmega(Permutations(n));
@@ -2480,7 +2476,7 @@ proof let n be Element of NAT, K be Field, A be Matrix of n,K;
   then A2: (B <> {} or F has_a_unity) by MATRIX_2:def 17;
   A3: Permutations(n) is finite by MATRIX_2:30;
   then A4: B=Permutations(n) by MATRIX_2:def 17;
-  set I=(the add of K) $$ (FinOmega(Permutations(n)),Path_product(A@));
+  set I=(the addF of K) $$ (FinOmega(Permutations(n)),Path_product(A@));
  consider G0 being Function of Fin X, Y such that
   A5: I = G0.B &
           (for e being Element of Y st e is_a_unity_wrt F holds G0.{} = e) &
@@ -2657,10 +2653,10 @@ G0.{p" where p is Permutation of Seg n : p in B' \/ {x}} by A8;
         hence G1.(B' \/ {x}) = F.(G1.B',f.x) by A1,A25,A36,Th36;
       end;
     end;
-  then A37: (the add of K) $$ (FinOmega(Permutations n),Path_product A)
-  =(the add of K) $$ (FinOmega(Permutations n),Path_product(A@))
+  then A37: (the addF of K) $$ (FinOmega(Permutations n),Path_product A)
+  =(the addF of K) $$ (FinOmega(Permutations n),Path_product(A@))
                                  by A2,A9,A14,A17,SETWISEO:def 3;
-   Det A = (the add of K) $$ (FinOmega(Permutations n),Path_product A)
+   Det A = (the addF of K) $$ (FinOmega(Permutations n),Path_product A)
                                  by MATRIX_3:def 9;
  hence Det A = Det (A@) by A37,MATRIX_3:def 9;
 end;

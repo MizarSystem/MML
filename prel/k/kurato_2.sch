@@ -63,7 +63,7 @@
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="104">
+<Func kind="K" nr="103">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -82,7 +82,7 @@
 <Typ kind="G" nr="5">
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="6">

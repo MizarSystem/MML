@@ -17,7 +17,6 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -28,6 +27,7 @@
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -51,25 +51,25 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="44"/>
-<Adjective nr="134"/>
+<Adjective nr="43"/>
+<Adjective nr="135"/>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
+<Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
-<Adjective nr="48"/>
+<Adjective nr="70"/>
 <Adjective nr="71"/>
-<Adjective nr="72"/>
-<Adjective nr="124"/>
+<Adjective nr="125"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="135">
+<Adjective nr="136">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -80,7 +80,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="131">
+<Adjective nr="132">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

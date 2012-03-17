@@ -114,20 +114,20 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="77"/>
+<Adjective nr="55"/>
 <Adjective nr="78"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
-<Adjective nr="77"/>
+<Adjective nr="55"/>
 <Adjective nr="78"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

@@ -35,12 +35,12 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -462,12 +462,12 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="59">
+<Adjective nr="60">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>

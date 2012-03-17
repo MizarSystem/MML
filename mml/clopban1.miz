@@ -10,19 +10,21 @@ environ
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, GRCAT_1, UNIALG_1, LATTICES,
       FUNCOP_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SEQM_3, BHSP_3, RSSPACE,
       RSSPACE3, PARTFUN1, LOPBAN_1, XCMPLX_0, COMPLEX1, CLVECT_1, CFUNCT_1,
-      CLOPBAN1, CSSPACE3, MONOID_0, FRAENKEL;
+      CLOPBAN1, CSSPACE3, MONOID_0, FRAENKEL, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       FUNCT_2, FUNCT_3, PRE_TOPC, DOMAIN_1, FUNCOP_1, BINOP_1, STRUCT_0,
-      MONOID_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1,
-      PSCOMP_1, COMPLEX1, RLVECT_1, FRAENKEL, NORMSP_1, SEQ_1, SEQ_2, SEQM_3,
-      SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1, CSSPACE, CSSPACE3, LOPBAN_1;
+      ALGSTR_0, MONOID_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1, NUMBERS,
+      REAL_1, NAT_1, PSCOMP_1, COMPLEX1, RLVECT_1, FRAENKEL, NORMSP_1,
+      VALUED_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, FUNCSDOM, CFUNCT_1, CLVECT_1,
+      CSSPACE, CSSPACE3, LOPBAN_1;
  constructors DOMAIN_1, FUNCT_3, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQM_3,
-      FUNCSDOM, MONOID_0, PSCOMP_1, LOPBAN_1, CSSPACE3;
+      FUNCSDOM, MONOID_0, PSCOMP_1, LOPBAN_1, CSSPACE3, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FUNCOP_1,
       NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, SEQM_3,
-      STRUCT_0, RLVECT_1, MONOID_0, CLVECT_1, CSSPACE3;
+      STRUCT_0, RLVECT_1, MONOID_0, CLVECT_1, CSSPACE3, VALUED_1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SEQ_4, RLVECT_1, FRAENKEL, BINOP_1, STRUCT_0;
+ definitions SEQ_4, RLVECT_1, FRAENKEL, BINOP_1, STRUCT_0, ALGSTR_0, VALUED_1;
  theorems XBOOLE_0, REAL_2, TARSKI, ABSVALUE, RLVECT_1, BINOP_1, FUNCOP_1,
       FUNCSDOM, XREAL_0, XCMPLX_0, SEQ_1, SEQ_2, SEQM_3, FUNCT_1, NAT_1,
       FUNCT_2, SEQ_4, FUNCT_3, CLVECT_1, LOPBAN_1, CSSPACE, COMPLEX1, CSSPACE3,
@@ -270,7 +272,7 @@ proof
        thus u+0.IT = (FuncAdd(X,Y)).(FuncZero(X,Y),u') by Th4
               .= u by Th6;
      end;
-     thus ex w st u+w = 0.IT
+     thus u is right_complementable
      proof
        reconsider u' = u as Element of Funcs(X,the carrier of Y);
        reconsider w = (FuncExtMult(X,Y)).[-1r,u'] as VECTOR of IT;
@@ -406,7 +408,7 @@ begin :: Complex Vector Space of Linear Operators
 
 definition
   let X be non empty CLSStruct;
-  let Y be non empty LoopStr;
+  let Y be non empty addLoopStr;
   let IT be Function of X, Y;
   attr IT is additive means :Def3:
   for x,y being VECTOR of X holds IT.(x+y) = IT.x+IT.y;
@@ -630,7 +632,7 @@ A13:       v' is LinearOperator of X,Y by A8,Def5;
      end;
      hence thesis by Def5;
    end;
-   hence thesis by A1,CLVECT_1:def 3;
+   hence thesis by A1,CLVECT_1:def 4;
 end;
 
 theorem Th16:
@@ -817,14 +819,14 @@ A4:  r is Real by XREAL_0:def 1;
      assume r > 0;
      then consider m1 be Element of NAT such that
 A5:  for n be Element of NAT st n >= m1 holds ||.(seq.n) - g.|| < r
-       by A1,A2,A4,CLVECT_1:def 17;
+       by A1,A2,A4,CLVECT_1:def 18;
      take k = m1;
        now let n be Element of NAT; assume n >= k;
 then A6:    ||.(seq.n) - g.|| < r by A5;
          abs(||.(seq.n).|| - ||.g.||) <= ||.(seq.n) - g.||
          by CLVECT_1:111;
        then abs(||.(seq.n).|| - ||.g.||) < r by A6,XXREAL_0:2;
-       hence abs(||.seq.||.n - ||.g.||) < r by CLVECT_1:def 16;
+       hence abs(||.seq.||.n - ||.g.||) < r by CLVECT_1:def 17;
      end;
      hence for n be Element of NAT st k <= n
      holds abs(||.seq.||.n - ||.g.||) < r;
@@ -968,7 +970,7 @@ A4:    0 <= K2 &
 A5:    0 + 0 <= K1+K2 by A3,A4,XREAL_1:9;
          now let x be VECTOR of X;
 A6:      ||. f.x .|| =||. u1.x+v1.x .|| by Th18;
-A7:      ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by CLVECT_1:def 10;
+A7:      ||. u1.x+v1.x .|| <= ||. u1.x .||+ ||. v1.x .|| by CLVECT_1:def 11;
 A8:      ||. u1.x .|| <= K1*||. x .|| by A3;
            ||. v1.x .|| <= K2*||. x .|| by A4;
          then ||. u1.x .|| + ||. v1.x .|| <= K1*||. x .|| +K2*||. x .||
@@ -996,7 +998,7 @@ A10:   0 <= K &
        take K1=|.c.| * K;
 A11:   0 <= K & 0 <=|.c.| by A10,COMPLEX1:132;
          now let x be VECTOR of X;
-A12:     ||. c*v1.x .|| = |.c.|* ||. v1.x .|| by CLVECT_1:def 10;
+A12:     ||. c*v1.x .|| = |.c.|* ||. v1.x .|| by CLVECT_1:def 11;
 A13:     ||. v1.x .|| <= K*||. x .|| by A10;
            0 <=|.c.| by COMPLEX1:132;
          then |.c.| * ||. v1.x .|| <= |.c.| * (K*||. x .||) by A13,XREAL_1:66;
@@ -1006,7 +1008,7 @@ A13:     ||. v1.x .|| <= K*||. x .|| by A10;
      end;
      hence thesis by Def8;
    end;
-   hence thesis by A1,CLVECT_1:def 3;
+   hence thesis by A1,CLVECT_1:def 4;
 end;
 
 theorem Th25:
@@ -1235,11 +1237,11 @@ A8:      t = 0.X;
 then A9:      g.t = g.(0c*0.X) by CLVECT_1:2
             .=0c*g.(0.X) by Def4
             .=0.Y by CLVECT_1:2;
-           ||.t.|| = 0 by A8,CLVECT_1:def 10;
-         hence ||.g.t.|| <= K*||.t.|| by A9,CLVECT_1:def 10;
+           ||.t.|| = 0 by A8,CLVECT_1:def 11;
+         hence ||.g.t.|| <= K*||.t.|| by A9,CLVECT_1:def 11;
        end;
        case t <> 0.X;
-then A10:     ||.t.|| <> 0 by CLVECT_1:def 10;
+then A10:     ||.t.|| <> 0 by CLVECT_1:def 11;
 then A11:     ||.t.|| > 0 by CLVECT_1:106;
 A12:     |. ||.t.||"+0*<i> .| =abs( 1*||.t.||" )
           .=abs( 1/||.t.||) by XCMPLX_0:def 9
@@ -1250,10 +1252,10 @@ A12:     |. ||.t.||"+0*<i> .| =abs( 1*||.t.||" )
          reconsider t0 = ||.t.||"+0*<i> as Element of COMPLEX
               by XCMPLX_0:def 2;
          reconsider t1= t0 * t as VECTOR of X;
-A13:     ||.t1.|| = |.t0.| * ||.t.|| by CLVECT_1:def 10
+A13:     ||.t1.|| = |.t0.| * ||.t.|| by CLVECT_1:def 11
                  .=1 by A10,A12,XCMPLX_0:def 7;
      ||.g.t.||/||.t.|| =||.g.t.|| * |. t0 .| by A12,XCMPLX_0:def 9
-          .=||. t0*g.t .|| by CLVECT_1:def 10
+          .=||. t0*g.t .|| by CLVECT_1:def 11
           .=||.g.t1.|| by Def4;
          then ||.g.t.||/||.t.|| in PreNorms(g) by A13;
 then A14:     ||.g.t.||/||.t.|| <= K by A1,SEQ_4:def 4;
@@ -1382,11 +1384,11 @@ A3:      t  = 0.X;
 then A4:      g.t =g.(0c * 0.X) by CLVECT_1:2
             .=0c * g.(0.X) by Def4
             .=0.Y by CLVECT_1:2;
-           ||.t.|| = 0 by A3,CLVECT_1:def 10;
-         hence ||.g.t.|| <= ||.f.||*||.t.|| by A4,CLVECT_1:def 10;
+           ||.t.|| = 0 by A3,CLVECT_1:def 11;
+         hence ||.g.t.|| <= ||.f.||*||.t.|| by A4,CLVECT_1:def 11;
        end;
        case t <> 0.X;
-then A5:      ||.t.|| <> 0 by CLVECT_1:def 10;
+then A5:      ||.t.|| <> 0 by CLVECT_1:def 11;
 then A6:      ||.t.|| > 0 by CLVECT_1:106;
          reconsider t0 = ||.t.||"+0*<i> as Element of COMPLEX
                   by XCMPLX_0:def 2;
@@ -1397,17 +1399,17 @@ A7:      |. t0 .| =abs( 1*||.t.||" )
           .=1*||.t.||" by XCMPLX_0:def 9
           .=||.t.||";
          reconsider t1= t0*t as VECTOR of X;
-A8:      ||.t1.|| = |.t0.| * ||.t.|| by CLVECT_1:def 10
+A8:      ||.t1.|| = |.t0.| * ||.t.|| by CLVECT_1:def 11
                  .=1 by A5,A7,XCMPLX_0:def 7;
            ||.g.t.||/||.t.|| =||.g.t.|| * |. t0 .| by A7,XCMPLX_0:def 9
-            .=||.t0*g.t.|| by CLVECT_1:def 10
+            .=||.t0*g.t.|| by CLVECT_1:def 11
             .=||.g.t1.|| by Def4;
          then ||.g.t.||/||.t.|| in
            {||.g.s.|| where s is VECTOR of X : ||.s.|| <= 1 } by A8;
          then ||.g.t.||/||.t.|| <= sup PreNorms(g) by A2,SEQ_4:def 4;
          then ||.g.t.||/||.t.||
               <= BoundedLinearOperatorsNorm(X,Y).g by Th34;
-then A9:     ||.g.t.||/||.t.|| <= ||.f.|| by A1,CLVECT_1:def 9;
+then A9:     ||.g.t.||/||.t.|| <= ||.f.|| by A1,CLVECT_1:def 10;
            ||.g.t.||/||.t.||*||.t.||
            = ||.g.t.||*||.t.||"*||.t.|| by XCMPLX_0:def 9
           .=||.g.t.||*(||.t.||"*||.t.||)
@@ -1442,7 +1444,7 @@ A5:r0 in PreNorms(g) by XBOOLE_0:def 1;
      0 <= r0 by A1,A5;
 then A6:0 <=sup PreNorms(g) by A4,A5,SEQ_4:def 4;
      BoundedLinearOperatorsNorm(X,Y).f = sup PreNorms(g) by Th34;
-   hence thesis by A6,CLVECT_1:def 9;
+   hence thesis by A6,CLVECT_1:def 10;
 end;
 
 theorem Th38:
@@ -1467,7 +1469,7 @@ A4:    r in PreNorms(g);
        consider t be VECTOR of X such that
 A5:    r=||.g.t.|| & ||.t.|| <= 1 by A4;
          ||.g.t.|| = ||.0.Y.|| by A2,FUNCOP_1:13
-                .= 0 by CLVECT_1:def 10;
+                .= 0 by CLVECT_1:def 11;
        hence 0 <= r & r <=0 by A5;
      end;
 A6:  PreNorms(g) is non empty bounded_above by Th30;
@@ -1479,7 +1481,7 @@ A8:  0 <= r0 & r0<=0 by A3,A7;
          implies sup PreNorms(g) <= 0 by SEQ_4:62;
      then sup PreNorms(g) = 0 by A3,A6,A7,A8,SEQ_4:def 4;
      then BoundedLinearOperatorsNorm(X,Y).f=0 by Th34;
-     hence thesis by CLVECT_1:def 9;
+     hence thesis by CLVECT_1:def 10;
    end;
 end;
 
@@ -1572,7 +1574,7 @@ A2:  ||.f.|| = 0;
        now let t be VECTOR of X;
          ||.g.t.|| <= ||.f.|| *||.t.|| by Th36;
        then ||.g.t.|| = 0 by A2,CLVECT_1:106;
-       hence g.t =0.Y by CLVECT_1:def 10
+       hence g.t =0.Y by CLVECT_1:def 11
                 .=z.t by FUNCOP_1:13;
      end;
      then g=z by FUNCT_2:113;
@@ -1593,7 +1595,7 @@ A7:      r in PreNorms(g);
          consider t be VECTOR of X such that
 A8:      r=||.g.t.|| & ||.t.|| <= 1 by A7;
            ||.g.t.|| = ||.0.Y.|| by A5,FUNCOP_1:13
-              .= 0 by CLVECT_1:def 10;
+              .= 0 by CLVECT_1:def 11;
          hence 0 <= r & r <=0 by A8;
        end;
 A9:   PreNorms(g) is non empty bounded_above by Th30;
@@ -1605,7 +1607,7 @@ A11:   0<=r0 by A6,A10;
          implies sup PreNorms(g) <= 0 by SEQ_4:62;
        then sup PreNorms(g) = 0 by A6,A9,A10,A11,SEQ_4:def 4;
        then BoundedLinearOperatorsNorm(X,Y).f =0 by Th34;
-       hence thesis by CLVECT_1:def 9;
+       hence thesis by CLVECT_1:def 10;
      end;
    end;
 
@@ -1616,7 +1618,7 @@ A12:||.c*f.|| = |.c.| * ||.f.||
 A13: now let t be VECTOR of X such that
 A14:   ||.t.|| <= 1;
 A15:   ||.h1.t.||= ||.c*f1.t.|| by Th40;
-A16:   ||.c*f1.t.|| =|.c.|*||.f1.t.|| by CLVECT_1:def 10;
+A16:   ||.c*f1.t.|| =|.c.|*||.f1.t.|| by CLVECT_1:def 11;
 A17:   ||.f1.t.||<= ||.f.||*||.t.|| by Th36;
          0 <= ||.f.|| by Th37;
        then ||.f.||*||.t.|| <= ||.f.||*1 by A14,XREAL_1:66;
@@ -1635,7 +1637,7 @@ A22: (for s be real number st s in PreNorms(h1) holds s <= |.c.|*||.f.|| )
        implies sup PreNorms(h1) <=  |.c.|*||.f.|| by SEQ_4:62;
        BoundedLinearOperatorsNorm(X,Y).(c*f)
       = sup PreNorms(h1) by Th34;
-then A23: ||.c*f.|| <= |.c.|*||.f.|| by A19,A22,CLVECT_1:def 9;
+then A23: ||.c*f.|| <= |.c.|*||.f.|| by A19,A22,CLVECT_1:def 10;
        now per cases;
        case
 A24:     c <> 0c;
@@ -1645,7 +1647,7 @@ A26:       ||.t.|| <= 1;
 then A27:       c"*h1.t =( c"* c)*f1.t by CLVECT_1:def 2
                .=1r*f1.t by A24,COMPLEX1:def 7,XCMPLX_0:def 7
                .=f1.t by CLVECT_1:def 2;
-A28:       ||.c"*h1.t.|| =|.c".|*||.h1.t.|| by CLVECT_1:def 10;
+A28:       ||.c"*h1.t.|| =|.c".|*||.h1.t.|| by CLVECT_1:def 11;
 A29:       ||.h1.t.||<= ||.c*f.||*||.t.|| by Th36;
              0 <= ||.c*f.|| by Th37;
            then ||.c*f.||*||.t.|| <= ||.c*f.||*1 by A26,XREAL_1:66;
@@ -1666,7 +1668,7 @@ A36:     (for s be real number st s in PreNorms(f1) holds
            implies sup PreNorms(f1) <= |.c.|"*||.c*f.|| by SEQ_4:62;
            BoundedLinearOperatorsNorm(X,Y).(f)
           = sup PreNorms(f1) by Th34;
-then A37:     ||.f.|| <=|.c.|"*||.c*f.|| by A32,A36,CLVECT_1:def 9;
+then A37:     ||.f.|| <=|.c.|"*||.c*f.|| by A32,A36,CLVECT_1:def 10;
            0 <= |.c.| by COMPLEX1:132;
          then |.c.|*||.f.|| <=|.c.|*(|.c.|"*||.c*f.||) by A37,XREAL_1:66;
          then |.c.|*||.f.|| <=(|.c.|*|.c.|")*||.c*f.||;
@@ -1695,7 +1697,7 @@ A38:     c = 0c;
 A39: now let t be VECTOR of X such that
 A40:   ||.t.|| <= 1;
 A41:   ||.h1.t.||= ||.f1.t+g1.t.|| by Th39;
-A42:   ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by CLVECT_1:def 10;
+A42:   ||.f1.t+g1.t.|| <=||.f1.t.||+||.g1.t.|| by CLVECT_1:def 11;
 A43:   ||.f1.t.||<= ||.f.||*||.t.|| by Th36;
          ||.g1.t.||<= ||.g.||*||.t.|| by Th36;
 then A44:   ||.f1.t.||+||.g1.t.|| <= ||.f.||*||.t.|| +  ||.g.||*||.t.||
@@ -1718,7 +1720,7 @@ A48:   r=||.h1.t.|| & ||.t.|| <= 1 by A47;
 A49: (for s be real number st s in PreNorms(h1) holds s <= ||.f.|| + ||.g.||)
        implies sup PreNorms(h1) <= ||.f.|| + ||.g.|| by SEQ_4:62;
        BoundedLinearOperatorsNorm(X,Y).(f+g) = sup PreNorms(h1) by Th34;
-     hence ||.f+g.|| <=||.f.|| + ||.g.|| by A46,A49,CLVECT_1:def 9;
+     hence ||.f+g.|| <=||.f.|| + ||.g.|| by A46,A49,CLVECT_1:def 10;
    end;
    hence thesis by A1,A3,A12;
 end;
@@ -1734,7 +1736,7 @@ proof
      x = 0.C_NormSpace_of_BoundedLinearOperators(X,Y) ) &
     ||.c*x.|| = |.c.| * ||.x.|| &
     ||.x+y.|| <= ||.x.|| +  ||.y.|| by Th41;
-   hence thesis by CLVECT_1:def 10;
+   hence thesis by CLVECT_1:def 11;
 end;
 
 theorem Th43:
@@ -1855,10 +1857,10 @@ A3:  e1 >0;
      reconsider e =e1 as Real by XREAL_0:def 1;
      consider k be Element of NAT such that
 A4:  for n be Element of NAT st n >= k holds ||.seq.n - lim seq.|| < e
-         by A1,A3,CLVECT_1:def 17;
+         by A1,A3,CLVECT_1:def 18;
 A5:  now let m be Element of NAT such that
 A6:    m >= k;
-         ||.seq.m.||= ||.seq.||.m by CLVECT_1:def 16;
+         ||.seq.m.||= ||.seq.||.m by CLVECT_1:def 17;
 then A7:    abs( ||.seq.||.m - ||.lim seq.||  ) <= ||.seq.m - lim seq.||
          by CLVECT_1:111;
          ||.seq.m - lim seq.||  <e by A4,A6;
@@ -1896,8 +1898,8 @@ A6:    now
 A7:      m >= k;
 A8:      abs( ||.vseq.m.||- ||.vseq.k.|| )
             <= ||.(vseq.m) - (vseq.k).|| by CLVECT_1:111;
-A9:      ||.vseq.k.||= ||.vseq.||.k by CLVECT_1:def 16;
-A10:     ||.vseq.m.||= ||.vseq.||.m by CLVECT_1:def 16;
+A9:      ||.vseq.k.||= ||.vseq.||.k by CLVECT_1:def 17;
+A10:     ||.vseq.m.||= ||.vseq.||.m by CLVECT_1:def 17;
            ||.(vseq.m) - (vseq.k).|| <e by A5,A7;
          hence abs( ||.vseq.||.m - ||.vseq.||.k  ) <e1
            by A8,A9,A10,XXREAL_0:2;
@@ -1958,12 +1960,12 @@ A20:              xseq.n=modetrans((vseq.n),X,Y).x by A12
                        .=0c * modetrans((vseq.m),X,Y).x by Def4
                        .=0.Y by CLVECT_1:2;
                   then ||.xseq.n -xseq.m.|| = ||.0.Y.|| by A20,RLVECT_1:26
-                        .=0 by CLVECT_1:def 10;
+                        .=0 by CLVECT_1:def 11;
                   hence ||.xseq.n -xseq.m.|| < e by A18;
                 end;
               end;
               case x <>0.X;
-then A21:            ||.x.|| <> 0 by CLVECT_1:def 10;
+then A21:            ||.x.|| <> 0 by CLVECT_1:def 11;
 then A22:            ||.x.|| > 0 by CLVECT_1:106;
                 then e/||.x.||>0 by A18,XREAL_1:141;
                 then consider k be Element of NAT such that
@@ -2046,7 +2048,7 @@ A33:    (for n be Element of NAT holds zseq.n=modetrans((vseq.n),X,Y).(c*x))
               .= c*modetrans((vseq.n),X,Y).x by Def4
               .= c*xseq.n by A32;
           end;
-          hence thesis by CLVECT_1:def 14;
+          hence thesis by CLVECT_1:def 15;
         end;
         hence tseq.(c*x)=c*tseq.x by A32,A33,CLVECT_1:124;
       end;
@@ -2077,9 +2079,9 @@ A40:    ||.tseq.x.|| = lim ||.xseq.|| by A36,Th22;
 A41:    for n be Element of NAT holds ||.xseq.||.n  <=( ||.x.||(#)||.vseq.||).n
         proof
           let n be Element of NAT;
-A42:      ||.xseq.||.n = ||.(xseq.n).|| by CLVECT_1:def 16;
+A42:      ||.xseq.||.n = ||.(xseq.n).|| by CLVECT_1:def 17;
 A43:      ||.(xseq.n).|| <= ||.vseq.n.|| * ||.x.|| by A37;
-            ||.vseq.n.|| = ||.vseq.||.n by CLVECT_1:def 16;
+            ||.vseq.n.|| = ||.vseq.||.n by CLVECT_1:def 17;
           hence thesis by A42,A43,SEQ_1:13;
         end;
 A44:    ||.x.||(#)||.vseq.|| is convergent by A3,SEQ_2:21;
@@ -2093,7 +2095,7 @@ A44:    ||.x.||(#)||.vseq.|| is convergent by A3,SEQ_2:21;
       proof
           now let n be Element of NAT;
             ||.vseq.n.|| >=0 by CLVECT_1:106;
-          hence ||.vseq.||.n >=0 by CLVECT_1:def 16;
+          hence ||.vseq.||.n >=0 by CLVECT_1:def 17;
         end;
         hence thesis by A3,SEQ_2:31;
       end;
@@ -2160,7 +2162,7 @@ A63:               x in NAT;
                    reconsider k=x as Element of NAT by A63;
                    thus rseq.x = ||.xseq.k - xseq.n.|| by A59
                        .= ||.(xseq - xseq.n).k.|| by NORMSP_1:def 7
-                       .= ||.(xseq - xseq.n).||.x by CLVECT_1:def 16;
+                       .= ||.(xseq - xseq.n).||.x by CLVECT_1:def 17;
                  end;
                  hence thesis by SEQ_1:8;
                end;
@@ -2224,7 +2226,7 @@ A76:     (for s be real number st s in PreNorms(h1) holds s <= e)
           implies sup PreNorms(h1) <=e by SEQ_4:62;
            BoundedLinearOperatorsNorm(X,Y).(vseq.n-tv)
           = sup PreNorms(h1) by Th34;
-         hence ||.vseq.n-tv.|| <=e by A73,A76,CLVECT_1:def 9;
+         hence ||.vseq.n-tv.|| <=e by A73,A76,CLVECT_1:def 10;
        end;
        hence thesis;
      end;
@@ -2246,7 +2248,7 @@ A81:     n >= m;
        end;
        hence thesis;
      end;
-     hence thesis by CLVECT_1:def 15;
+     hence thesis by CLVECT_1:def 16;
 end;
 
 theorem Th47:

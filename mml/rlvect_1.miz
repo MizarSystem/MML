@@ -7,32 +7,29 @@
 environ
 
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
-      ANPROJ_1, FUNCOP_1, COMPLEX1, REALSET1, STRUCT_0, ARYTM;
+      ANPROJ_1, FUNCOP_1, COMPLEX1, REALSET1, STRUCT_0, ARYTM, ALGSTR_0,
+      VECTSP_2, MIDSP_1, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, FUNCOP_1, REAL_1, FINSEQ_1, NAT_1,
-      STRUCT_0;
+      FUNCT_3, FUNCT_5, REALSET1, STRUCT_0, ALGSTR_0;
  constructors BINOP_1, FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FINSEQ_1,
-      STRUCT_0;
+      FUNCT_3, FUNCT_5, STRUCT_0, ALGSTR_0, REALSET1, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, STRUCT_0, REAL_1;
+      XREAL_0, NAT_1, STRUCT_0, REAL_1, ALGSTR_0, REALSET1, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCT_1, TARSKI, STRUCT_0, RELAT_1;
+ definitions FUNCT_1, TARSKI, STRUCT_0, RELAT_1, ALGSTR_0, VALUED_1;
  theorems FUNCT_1, NAT_1, REAL_1, TARSKI, RELAT_1, STRUCT_0, XBOOLE_0,
-      XBOOLE_1, FINSEQ_1, XCMPLX_0, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1;
+      XBOOLE_1, FINSEQ_1, XCMPLX_0, FUNCOP_1, XREAL_1, XXREAL_0, ORDINAL1,
+      ALGSTR_0, CARD_1;
  schemes BINOP_1, FINSEQ_1, FUNCT_2, NAT_1;
 
 begin
 
 definition
- struct (ZeroStr) LoopStr (# carrier -> set,
-                    add -> BinOp of the carrier,
-                    ZeroF -> Element of the carrier #);
-end;
-
-definition
- struct (LoopStr) RLSStruct (# carrier -> set,
+ struct (addLoopStr) RLSStruct (# carrier -> set,
               ZeroF -> Element of the carrier,
-              add -> BinOp of the carrier,
+              addF -> BinOp of the carrier,
               Mult -> Function of [:REAL, the carrier:], the carrier
             #);
 end;
@@ -70,27 +67,8 @@ theorem
 reserve v for VECTOR of V;
 reserve a,b for Real;
 
-registration
- cluster strict non empty LoopStr;
- existence
-  proof
-   set ZS = {0};
-   reconsider O = 0 as Element of ZS by TARSKI:def 1;
-   consider F being BinOp of ZS;
-   take LoopStr (# ZS,F,O #);
-   thus LoopStr (# ZS,F,O #) is strict;
-   thus the carrier of LoopStr (# ZS,F,O #) is non empty;
-  end;
-end;
-
- definition let V be non empty LoopStr, v,w be Element of V;
- canceled 2;
-  func v + w -> Element of V equals
-     (the add of V).(v,w);
-  coherence;
- end;
-
  definition let V; let v; let a;
+ canceled 3;
   func a * v -> Element of V equals
      (the Mult of V).(a,v);
   coherence;
@@ -103,8 +81,8 @@ end;
 canceled;
 
 theorem
-     for V being non empty LoopStr, v,w being Element of V
-   holds v + w = (the add of V).(v,w);
+     for V being non empty addLoopStr, v,w being Element of V
+   holds v + w = (the addF of V).(v,w);
 
 registration let ZS be non empty set, O be Element of ZS,
       F be BinOp of ZS, G be Function of [:REAL,ZS:],ZS;
@@ -188,7 +166,7 @@ Lm1: now
    end;
  end;
 
-definition let IT be non empty LoopStr;
+definition let IT be addLoopStr;
   attr IT is Abelian means
 :Def5: for v,w being Element of IT holds v + w = w + v;
   attr IT is add-associative means
@@ -196,12 +174,10 @@ definition let IT be non empty LoopStr;
          holds (u + v) + w = u + (v + w);
   attr IT is right_zeroed means
 :Def7: for v being Element of IT holds v + 0.IT = v;
-  attr IT is right_complementable means
-:Def8: for v being Element of IT
-         ex w being Element of IT st v + w = 0.IT;
 end;
 
 definition let IT be non empty RLSStruct;
+ canceled;
   attr IT is RealLinearSpace-like means :Def9:
   (for a for v,w being VECTOR of IT holds a * (v + w) = a * v + a * w) &
   (for a,b for v being VECTOR of IT holds (a + b) * v = a * v + b * v) &
@@ -209,72 +185,71 @@ definition let IT be non empty RLSStruct;
   (for v being VECTOR of IT holds 1 * v = v);
 end;
 
+definition
+ func Trivial-RLSStruct -> strict RLSStruct equals
+  RLSStruct(#1,op0,op2,pr2(REAL,1)#);
+ coherence;
+end;
+
+registration
+ cluster Trivial-RLSStruct -> trivial non empty;
+ coherence by CARD_1:87,STRUCT_0:def 9;
+end;
+
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr);
+                (non empty addLoopStr);
   existence
  proof
-   set ZS = {0};
-   reconsider O = 0 as Element of ZS by TARSKI:def 1;
-   deffunc A((Element of ZS), Element of ZS) = O;
-   consider F being BinOp of ZS such that
-A1: for x,y being Element of ZS holds F.(x,y) = A(x,y)
-        from BINOP_1:sch 4;
-   reconsider W = LoopStr (# ZS,F,O #) as non empty LoopStr by STRUCT_0:def 1;
-  take W;
-  thus W is strict;
-  thus for x,y being Element of W holds x + y = y + x
-   proof let x,y be Element of W;
-     reconsider X = x, Y = y as Element of ZS;
-          x + y = A(X,Y) & y + x = A(Y,X) by A1;
-    hence thesis;
-   end;
-  thus for x,y,z being Element of W
-     holds (x + y) + z = x + (y + z)
-   proof let x,y,z be Element of W;
-     reconsider X = x, Y = y, Z = z as Element of ZS;
-          (x + y) + z = A(A(X,Y),Z) & x + (y + z) = A(X,A(Y,Z)) by A1;
-    hence thesis;
-   end;
-  thus for x being Element of W holds x + 0.W = x
-   proof let x be Element of W;
-     reconsider X = x as Element of ZS;
-           x + 0.W = A(X,O) by A1;
-    hence thesis by TARSKI:def 1;
-   end;
-  let x be Element of W;
-     reconsider y = O as Element of W;
-   take y;
-   thus x + y = 0.W by A1;
+  take S = Trivial-addLoopStr;
+  thus S is strict;
+  thus S is Abelian
+     proof let x be Element of S;
+      thus thesis by STRUCT_0:def 10;
+     end;
+  thus S is add-associative
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+  thus S is right_zeroed
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+  thus thesis;
  end;
 end;
 
 registration
- cluster non empty strict Abelian add-associative right_zeroed
+ cluster strict Abelian add-associative right_zeroed
      right_complementable RealLinearSpace-like (non empty RLSStruct);
   existence
    proof
-     consider ZS being non empty set, O being Element of ZS,
-      F being BinOp of ZS, G being Function of [:REAL,ZS:],ZS such that
-A1:   (for v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
-     (for u,v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds
-      (u + v) + w = u + (v + w)) &
-     (for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
-      v + 0.RLSStruct (# ZS,O,F,G #) = v) &
-     (for v being VECTOR of RLSStruct (# ZS,O,F,G #)
-       ex w being VECTOR of RLSStruct (# ZS,O,F,G #) st
-        v + w = 0.RLSStruct (# ZS,O,F,G #)) &
-     (for a for v,w being VECTOR of RLSStruct (# ZS,O,F,G #) holds
-      a * (v + w) = a * v + a * w) &
-     (for a,b for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
-      (a + b) * v = a * v + b * v) &
-     (for a,b for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds
-      (a * b) * v = a * (b * v)) &
-     (for v being VECTOR of RLSStruct (# ZS,O,F,G #) holds 1 * v = v)
-      by Lm1;
-    take RLSStruct (# ZS,O,F,G #);
-    thus RLSStruct (# ZS,O,F,G #) is non empty;
-     thus thesis by A1,Def5,Def6,Def7,Def8,Def9;
+     take S = Trivial-RLSStruct;
+     thus S is strict;
+     thus S is Abelian
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is  add-associative
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is  right_zeroed
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is right_complementable
+      proof let x be Element of S;
+       take x;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus for a for v,w being VECTOR of S holds a * (v + w) = a * v + a * w
+                    by STRUCT_0:def 10;
+     thus for a,b for v being VECTOR of S holds (a + b) * v = a * v + b * v
+                    by STRUCT_0:def 10;
+     thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v)
+                    by STRUCT_0:def 10;
+     thus for v being VECTOR of S holds 1 * v = v by STRUCT_0:def 10;
    end;
 end;
 
@@ -283,46 +258,32 @@ definition
     right_complementable RealLinearSpace-like (non empty RLSStruct);
 end;
 
-definition let V be Abelian (non empty LoopStr),
+definition let V be Abelian (non empty addLoopStr),
                    v,w be Element of V;
  redefine func v + w;
  commutativity by Def5;
 end;
 
-canceled;
+canceled 2;
 
-theorem
-     (for v,w being VECTOR of V holds v + w = w + v) &
- (for u,v,w being VECTOR of V holds (u + v) + w = u + (v + w)) &
- (for v being VECTOR of V holds v + 0.V = v) &
- (for v being VECTOR of V
-   ex w being VECTOR of V st v + w = 0.V) &
- (for a for v,w being VECTOR of V holds a * (v + w) = a * v + a * w) &
- (for a,b for v being VECTOR of V holds (a + b) * v = a * v + b * v) &
- (for a,b for v being VECTOR of V holds (a * b) * v = a * (b * v)) &
- (for v being VECTOR of V holds 1 * v = v)
-  implies V is RealLinearSpace by Def5,Def6,Def7,Def8,Def9;
-
-::
 ::  Axioms of real linear space.
-::
 
 reserve V for RealLinearSpace;
 reserve v,w for VECTOR of V;
 
 Lm2:
  for V being
-  add-associative right_zeroed right_complementable (non empty LoopStr),
+  add-associative right_zeroed right_complementable (non empty addLoopStr),
      v,w being Element of V
     st v + w = 0.V holds w + v = 0.V
   proof
    let V be
-     add-associative right_zeroed right_complementable (non empty LoopStr),
+     add-associative right_zeroed right_complementable (non empty addLoopStr),
        v,w be Element of V;
    assume
 A1:  v + w = 0.V;
    consider u being Element of V such that
-A2:   w + u = 0.V by Def8;
+A2:   w + u = 0.V by ALGSTR_0:def 11;
         w + v = w + (v + (w + u)) by A2,Def7
          .= w + (v + w + u) by Def6
          .= w + (v + w) + u by Def6
@@ -330,21 +291,38 @@ A2:   w + u = 0.V by Def8;
     hence thesis by A2;
   end;
 
-canceled 2;
+canceled;
+
+theorem Th9:
+ for V being add-associative right_zeroed right_complementable addLoopStr
+  holds V is right_add-cancelable
+proof
+ let V being add-associative right_zeroed right_complementable addLoopStr;
+ let v being Element of V;
+  consider v1 being Element of V such that
+A1: v + v1 = 0.V by ALGSTR_0:def 11;
+ let u, w be Element of V;
+ assume
+A2: u + v = w + v;
+ thus u = u + 0.V by Def7
+       .= u + v + v1 by A1,Def6
+       .= w + 0.V by A1,A2,Def6
+       .= w by Def7;
+end;
 
 theorem Th10:
  for V being add-associative
-      right_zeroed right_complementable (non empty LoopStr),
+      right_zeroed right_complementable (non empty addLoopStr),
      v being Element of V
    holds v + 0.V = v & 0.V + v = v
   proof
    let V be add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
        v be Element of V;
    thus
 A1:   v + 0.V = v by Def7;
     consider w being Element of V such that
-A2:   v + w = 0.V by Def8;
+A2:   v + w = 0.V by ALGSTR_0:def 11;
       w + v = 0.V by A2,Lm2;
    hence 0.V + v = v by A1,A2,Def6;
   end;
@@ -354,37 +332,59 @@ A2:   v + w = 0.V by Def8;
 ::  subtraction of vectors.
 ::
 
- definition let V be non empty LoopStr;
+ definition let V be non empty addLoopStr;
    let v be Element of V;
   assume A1: V is add-associative right_zeroed right_complementable;
-  func - v -> Element of V means
-   :Def10: v + it = 0.V;
-  existence by A1,Def8;
-  uniqueness
-   proof let v1,v2 be Element of V;
-    assume that A2: v + v1 = 0.V and A3: v + v2 = 0.V;
-    thus v1 = v1 + (v + v2) by A1,A3,Th10
-           .= (v1 + v) + v2 by A1,Def6
-           .= 0.V + v2 by A1,A2,Lm2
-           .= v2 by A1,Th10;
+   then
+A2:  v is right_complementable by ALGSTR_0:def 16;
+  redefine func - v means
+   :Def11: v + it = 0.V;
+  compatibility
+   proof let IT be Element of V;
+     consider v1 being Element of V such that
+A3:    v + v1 = 0.V by A2,ALGSTR_0:def 11;
+A4: V is right_add-cancelable by A1,Th9;
+   then
+A5: v is right_add-cancelable by ALGSTR_0:def 7;
+A6: v1 is right_add-cancelable by A4,ALGSTR_0:def 7;
+A7: v is left_complementable
+    proof
+     take v1;
+      v1 + v + v1 = v1 + 0.V by A1,A3,Def6
+           .= v1 by A1,Th10
+           .= 0.V + v1 by A1,Th10;
+     hence thesis by A6,ALGSTR_0:def 4;
+
+    end;
+      v + -v + v = v + (-v + v) by A1,Def6
+          .= v + 0.V by A5,A7,ALGSTR_0:def 13
+          .= v by A1,Th10
+          .= 0.V + v by A1,Th10;
+    hence IT = -v implies v + IT = 0.V by A5,ALGSTR_0:def 4;
+    assume
+A8:   v + IT = 0.V;
+    thus IT = 0.V + IT by A1,Th10
+       .= -v + v + IT by A5,A7,ALGSTR_0:def 13
+       .= -v + 0.V by A1,A8,Def6
+       .= -v by A1,Th10;
    end;
  end;
 
 Lm3:
  for V being add-associative right_zeroed
-           right_complementable (non empty LoopStr),
+           right_complementable (non empty addLoopStr),
      v,u being Element of V
   ex w being Element of V st v + w = u
  proof let V be add-associative
-      right_zeroed right_complementable (non empty LoopStr);
+      right_zeroed right_complementable (non empty addLoopStr);
    let v,u be Element of V;
   take w = (- v) + u;
   thus v + w = (v + (- v)) + u by Def6
-            .= 0.V + u by Def10
+            .= 0.V + u by Def11
             .= u by Th10;
  end;
 
-definition let V be non empty LoopStr;
+definition let V be non empty addLoopStr;
    let v,w be Element of V;
   func v - w -> Element of V equals
      v + (- w);
@@ -399,13 +399,13 @@ canceled 5;
 
 theorem Th16:
  for V being add-associative right_zeroed
-             right_complementable (non empty LoopStr),
+             right_complementable (non empty addLoopStr),
      v being Element of V
   holds v + -v = 0.V & -v + v = 0.V
  proof let V be add-associative right_zeroed
-             right_complementable (non empty LoopStr),
+             right_complementable (non empty addLoopStr),
            v be Element of V;
-  thus v + -v = 0.V by Def10;
+  thus v + -v = 0.V by Def11;
   hence -v + v = 0.V by Lm2;
  end;
 
@@ -413,30 +413,30 @@ canceled 2;
 
 theorem Th19:
  for V being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v + w = 0.V implies v = - w
   proof let V be add-associative right_zeroed
-        right_complementable (non empty LoopStr);
+        right_complementable (non empty addLoopStr);
    let v,w be Element of V;
    assume v + w = 0.V;
 then w + v = 0.V by Lm2;
-   hence thesis by Def10;
+   hence thesis by Def11;
   end;
 
 theorem
      for V being add-associative right_zeroed
-          right_complementable (non empty LoopStr),
+          right_complementable (non empty addLoopStr),
      v,u being Element of V
  ex w being Element of V st v + w = u by Lm3;
 
 theorem Th21:
  for V being add-associative right_zeroed
-         right_complementable (non empty LoopStr),
+         right_complementable (non empty addLoopStr),
      w,u,v1,v2 being Element of V
    st w + v1 = w + v2 or v1 + w = v2 + w holds v1 = v2
   proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let w,u,v1,v2 be Element of V;
 A1:  now assume that A2: w + v1 = w + v2;
     thus v1 = 0.V + v1 by Th10
@@ -459,11 +459,11 @@ A1:  now assume that A2: w + v1 = w + v2;
 
 theorem
      for V being add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v + w = v or w + v = v implies w = 0.V
   proof let V be add-associative right_zeroed right_complementable
-      (non empty LoopStr),
+      (non empty addLoopStr),
         v,w be Element of V;
    assume v + w = v or w + v = v;
    then v + w = v + 0.V or w + v = 0.V + v by Th10;
@@ -504,21 +504,21 @@ theorem Th24:
 
 theorem Th25:
   for V being add-associative
-         right_zeroed right_complementable (non empty LoopStr)
+         right_zeroed right_complementable (non empty addLoopStr)
     holds - 0.V = 0.V
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
-   thus 0.V = 0.V + (- 0.V) by Def10
+     right_complementable (non empty addLoopStr);
+   thus 0.V = 0.V + (- 0.V) by Def11
            .= - 0.V by Th10;
   end;
 
 theorem
      for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v being Element of V
    holds v - 0.V = v
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
+     right_complementable (non empty addLoopStr);
    let v be Element of V;
    thus v - 0.V = v + 0.V by Th25
                .= v by Th10;
@@ -526,15 +526,15 @@ theorem
 
 theorem
  for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v being Element of V
    holds 0.V - v = - v by Th10;
 
 theorem
  for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v being Element of V
-   holds v - v = 0.V by Def10;
+   holds v - v = 0.V by Def11;
 
 theorem Th29:
  - v = (- 1) * v
@@ -543,29 +543,29 @@ theorem Th29:
                         .= 0.V by Th23;
    hence (- v) = (- v) + (v + (- 1) * v) by Th10
              .= ((- v) + v) + (- 1) * v by Def6
-             .= 0.V + (- 1) * v by Def10
+             .= 0.V + (- 1) * v by Def11
              .= (- 1) * v by Th10;
   end;
 
 theorem Th30:
  for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v being Element of V
    holds - (- v) = v
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
+     right_complementable (non empty addLoopStr);
    let v be Element of V;
-         v + -v = 0.V by Def10;
+         v + -v = 0.V by Def11;
     hence thesis by Th19;
   end;
 
 theorem Th31:
  for V being add-associative right_zeroed
-    right_complementable (non empty LoopStr),
+    right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - v = - w implies v = w
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
+     right_complementable (non empty addLoopStr);
    let v,w be Element of V;
    assume - v = - w;
    hence v = - (- w) by Th30
@@ -577,7 +577,7 @@ canceled;
 theorem Th33:
  v = - v implies v = 0.V
   proof assume v = - v;
-    then 0.V = v + v by Def10
+    then 0.V = v + v by Def11
                .= 1 * v + v by Def9
                .= 1 * v + 1 * v by Def9
                .= (1 + 1) * v by Def9
@@ -589,30 +589,30 @@ theorem
      v + v = 0.V implies v = 0.V
   proof assume
     v + v = 0.V;
-    then v = - v by Def10;
+    then v = - v by Def11;
    hence thesis by Th33;
   end;
 
 theorem Th35:
  for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds v - w = 0.V implies v = w
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
+     right_complementable (non empty addLoopStr);
    let v,w be Element of V;
     assume v - w = 0.V;
-    then - v = - w by Def10;
+    then - v = - w by Def11;
    hence thesis by Th31;
   end;
 
 theorem
      for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      u,v being Element of V
    ex w being Element of V st v - w = u
   proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let u,v be Element of V;
    consider w being Element of V such that
 A1: v + w = u by Lm3;
@@ -622,11 +622,11 @@ A1: v + w = u by Lm3;
 
 theorem
      for V being add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      w,v1,v2 being Element of V
     st w - v1 = w - v2 holds v1 = v2
   proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let w,v1,v2 be Element of V;
    assume
    w - v1 = w - v2;
@@ -660,47 +660,47 @@ theorem
 
 Lm4:
  for V being add-associative right_zeroed
-    right_complementable (non empty LoopStr),
+    right_complementable (non empty addLoopStr),
      u,w being Element of V
    holds - (u + w) = -w + -u
 proof
  let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      u,w be Element of V;
       u + w + (-w + -u)
         = u + (w + (-w + -u)) by Def6
        .= u + (w + -w + -u) by Def6
-       .= u + (0.V + -u) by Def10
+       .= u + (0.V + -u) by Def11
        .= u + -u by Th10
-       .= 0.V by Def10;
- hence -(u + w) = -w + -u by Def10;
+       .= 0.V by Def11;
+ hence -(u + w) = -w + -u by Def11;
 end;
 
 theorem Th41:
  for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
      v,u,w being Element of V
    holds v - (u + w) = (v - w) - u
   proof let V be add-associative right_zeroed
-     right_complementable (non empty LoopStr);
+     right_complementable (non empty addLoopStr);
    let v,u,w be Element of V;
    thus v - (u + w) = v + (-w + -u) by Lm4
                    .= (v - w) - u by Def6;
   end;
 
 theorem
-     for V being add-associative (non empty LoopStr),
+     for V being add-associative (non empty addLoopStr),
      v,u,w being Element of V
    holds (v + u) - w = v + (u - w) by Def6;
 
 theorem
      for V being Abelian add-associative right_zeroed
-     right_complementable (non empty LoopStr),
+     right_complementable (non empty addLoopStr),
      v,u,w being Element of V
    holds v - (u - w) = (v -u) + w
   proof
    let V be Abelian add-associative right_zeroed
-          right_complementable (non empty LoopStr);
+          right_complementable (non empty addLoopStr);
    let v,u,w be Element of V;
    thus v - (u - w) = v - (u + - w)
                    .= (v - u) - - w by Th41
@@ -709,11 +709,11 @@ theorem
 
 theorem Th44:
  for V being add-associative right_zeroed
-         right_complementable (non empty LoopStr),
+         right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v + w) = (- w) - v
   proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let v,w be Element of V;
    thus - (v + w) = 0.V - (v + w) by Th10
                  .= (0.V - w) - v by Th41
@@ -722,18 +722,18 @@ theorem Th44:
 
 theorem
     for V being add-associative right_zeroed
-        right_complementable (non empty LoopStr),
+        right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v + w) = -w + -v by Lm4;
 
 theorem
      for V being Abelian add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds (- v) - w = (- w) - v
   proof
    let V be Abelian add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let v,w be Element of V;
    thus (- v) - w = - (w + v) by Th44
                  .= (- w) - v by Th44;
@@ -741,11 +741,11 @@ theorem
 
 theorem
      for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
      v,w being Element of V
    holds - (v - w) = w + (- v)
   proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr);
+      right_complementable (non empty addLoopStr);
    let v,w be Element of V;
    thus - (v - w) = --w + -v by Lm4
                  .= w + -v by Th30;
@@ -770,7 +770,7 @@ theorem Th49:
 theorem
      a <> 0 & a * v = a * w implies v = w
   proof assume that A1: a <> 0 and A2: a * v = a * w;
-         0.V = a * v - a * w by A2,Def10
+         0.V = a * v - a * w by A2,Def11
         .= a * (v - w) by Th48;
      then v - w = 0.V by A1,Th24;
    hence thesis by Th35;
@@ -779,7 +779,7 @@ theorem
 theorem
      v <> 0.V & a * v = b * v implies a = b
   proof assume that A1: v <> 0.V and A2: a * v = b * v;
-        0.V = a * v - b * v by A2,Def10
+        0.V = a * v - b * v by A2,Def11
        .= (a - b) * v by Th49;
     then (- b) + a = 0 by A1,Th24;
    hence thesis;
@@ -808,7 +808,7 @@ definition let V be non empty 1-sorted;
   end;
 end;
 
-reserve V for non empty LoopStr;
+reserve V for non empty addLoopStr;
 reserve F,G,H for FinSequence of the carrier of V;
 reserve f,f',g for Function of NAT, the carrier of V;
 reserve v,u for Element of V;
@@ -816,7 +816,7 @@ reserve j,k,n for Element of NAT;
 
 definition let V; let F;
  func Sum(F) -> Element of V means
-  :Def12: ex f st it = f.(len F) &
+  :Def13: ex f st it = f.(len F) &
            f.0 = 0.V &
             for j,v st j < len F & v = F.(j + 1) holds f.(j + 1) = f.j + v;
  existence
@@ -959,7 +959,7 @@ end;
 Lm5: Sum(<*>(the carrier of V)) = 0.V
  proof set S = <*>(the carrier of V);
         ex f st Sum(S) = f.(len S) & f.0 = 0.V &
-    for j,v st j < len S & v = S.(j + 1) holds f.(j + 1) = f.j + v by Def12;
+    for j,v st j < len S & v = S.(j + 1) holds f.(j + 1) = f.j + v by Def13;
   hence thesis by FINSEQ_1:25;
  end;
 
@@ -989,10 +989,10 @@ theorem Th55:
                      A3: v = F.(len F);
      consider f such that A4: Sum(F) = f.(len F) and A5: f.0 = 0.V and
       A6: for j,v st j < len F & v = F.(j + 1) holds
-          f.(j + 1) = f.j + v by Def12;
+          f.(j + 1) = f.j + v by Def13;
      consider g such that A7: Sum(G) = g.(len G) and A8: g.0 = 0.V and
       A9: for j,v st j < len G & v = G.(j + 1) holds
-          g.(j + 1) = g.j + v by Def12;
+          g.(j + 1) = g.j + v by Def13;
       defpred P[Element of NAT] means for H holds len H = $1 & H = F | (Seg $1)
              & len H <= len G implies f.(len H) = g.(len H);
       A10:  P[0] by A5,A8;
@@ -1023,7 +1023,7 @@ A19:          len p <= len G by A15,A16,A17,XXREAL_0:2;
               k < k + 1 by XREAL_1:31;
           then k < len G by A13,A15,XXREAL_0:2;
           then f.(k + 1) = f.k + v & g.(k + 1) = g.k + v by A6,A9,A20,A21;
-       hence f.(len H) = g.(len H) by A12,A13,A17,A18,A19;
+       hence f.(len H) = g.(len H) by A12,A13,A15,A16,A17,A18,XXREAL_0:2;
       end;
       hence thesis;
       end;
@@ -1031,8 +1031,7 @@ A22:    dom G = Seg len G by FINSEQ_1:def 3;
 
            for k holds P[k] from NAT_1:sch 1(A10,A11);
       then A23: f.(len G) = g.(len G) by A2,A22;
-          len G < len F by A1,XREAL_1:31;
-    hence thesis by A1,A3,A4,A6,A7,A23;
+    hence thesis by A1,A3,A4,A6,A7,XREAL_1:31;
    end;
 
 reserve V for RealLinearSpace;
@@ -1085,7 +1084,7 @@ A10:          now let k,v;
           A15: n + 1 in Seg(n + 1) by FINSEQ_1:6;
          then reconsider v1 = H.(n + 1),v2 = I.(n + 1) as VECTOR of V
             by A5,A6,Th54;
-          A16: v1 = a * v2 by A6,A7,A15;
+          A16: v1 = a * v2 by A6,A7,FINSEQ_1:6;
 A17:        dom q = Seg len q by FINSEQ_1:def 3;
             dom p = Seg len p by FINSEQ_1:def 3;
        hence Sum(H) = Sum(p) + v1 by A6,A9,Th55
@@ -1102,7 +1101,7 @@ A18:   dom F = Seg len F by FINSEQ_1:def 3;
 
 theorem
      for V being Abelian add-associative right_zeroed right_complementable
-      (non empty LoopStr),
+      (non empty addLoopStr),
      F,G being FinSequence of the carrier of V st
    len F = len G &
   (for k for v being Element of V
@@ -1110,7 +1109,7 @@ theorem
   holds Sum(F) = - Sum(G)
  proof
   let V be Abelian add-associative right_zeroed right_complementable
-           (non empty LoopStr),
+           (non empty addLoopStr),
       F,G be FinSequence of the carrier of V;
   defpred P[set] means  for H,I being FinSequence of the carrier of V
       st len H = len I & len H = $1 &
@@ -1159,7 +1158,7 @@ A10:          now let k; let v be Element of V;
        then reconsider v1 = H.(n + 1),v2 = I.(n + 1)
          as Element of V
           by A5,A6,Th54;
-        A16: v1 = - v2 by A6,A7,A15;
+        A16: v1 = - v2 by A6,A7,FINSEQ_1:6;
 A17:   dom q = Seg len q by FINSEQ_1:def 3;
       dom p = Seg len p by FINSEQ_1:def 3;
      hence Sum(H) = Sum(p) + v1 by A6,A9,Th55
@@ -1175,10 +1174,10 @@ A18:   dom F = Seg len F by FINSEQ_1:def 3;
  end;
 
 theorem Th58:
-for V being add-associative right_zeroed (non empty LoopStr),
+for V being add-associative right_zeroed (non empty addLoopStr),
     F,G being FinSequence of the carrier of V
 holds Sum(F ^ G) = Sum(F) + Sum(G)
-  proof let V be add-associative right_zeroed (non empty LoopStr),
+  proof let V be add-associative right_zeroed (non empty addLoopStr),
     F,G be FinSequence of the carrier of V;
     defpred P[set] means for G be FinSequence of the carrier of V st len G = $1
       holds Sum(F ^ G) = Sum(F) + Sum(G);
@@ -1277,7 +1276,7 @@ A25:      dom p = Seg len p by FINSEQ_1:def 3;
   end;
 
  reserve V for add-associative right_zeroed
-             right_complementable (non empty LoopStr);
+             right_complementable (non empty addLoopStr);
  reserve F for FinSequence of the carrier of V;
  reserve v,v1,v2,u,w for Element of V;
  reserve j,k for Element of NAT;
@@ -1285,18 +1284,18 @@ A25:      dom p = Seg len p by FINSEQ_1:def 3;
 
 Lm7:
 for V being add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
     v being Element of V
 holds Sum<* v *> = v
  proof let V be add-associative right_zeroed
-      right_complementable (non empty LoopStr),
+      right_complementable (non empty addLoopStr),
     v be Element of V;
     set S = <* v *>;
    consider f being Function of NAT, the carrier of V such that
 A1: Sum(S) = f.(len S) and A2: f.0 = 0.V and
     A3: for j for v being Element of V
       st j < len S & v = S.(j + 1) holds
-        f.(j + 1) = f.j + v by Def12;
+        f.(j + 1) = f.j + v by Def13;
     A4: len S = 1 by FINSEQ_1:56;
         0 < 1;
    then consider j such that A5: j < len S by A4;
@@ -1309,12 +1308,12 @@ A1: Sum(S) = f.(len S) and A2: f.0 = 0.V and
  end;
 
 theorem
-     for V being Abelian add-associative right_zeroed (non empty LoopStr),
+     for V being Abelian add-associative right_zeroed (non empty addLoopStr),
      F,G being FinSequence of the carrier of V st
    rng F = rng G & F is one-to-one & G is one-to-one
   holds Sum(F) = Sum(G)
  proof
-  let V be Abelian add-associative right_zeroed (non empty LoopStr),
+  let V be Abelian add-associative right_zeroed (non empty addLoopStr),
       F,G be FinSequence of the carrier of V;
   defpred P[set] means for H,I being FinSequence of the carrier of V
        st len H = $1 & rng H = rng I &
@@ -1480,7 +1479,7 @@ A42:             y in {v} by A40,XBOOLE_0:def 3;
          A59: Seg(k + 1) = dom H by A6,FINSEQ_1:def 3;
          then A60: rng H = H .: (Seg(k + 1)) by RELAT_1:146;
          H .: (Seg k) = H .: Seg(k + 1) \ Im(H,k + 1) by A8,A57,FUNCT_1:123;
-         then A61: rng p = rng q by A7,A11,A56,A58,A59,A60,FUNCT_1:117;
+         then A61: rng p = rng q by A7,A56,A58,A59,A60,FINSEQ_1:6,FUNCT_1:117;
          A62: p is one-to-one by A8,FUNCT_1:84;
 A63:         q is one-to-one
           proof let y1,y2 be set;
@@ -1577,22 +1576,22 @@ A98: for k be Nat st k in dom p holds H.k=p.k by FUNCT_1:70;
    end;
 
 theorem
-      for V being non empty LoopStr holds
+      for V being non empty addLoopStr holds
     Sum(<*>(the carrier of V)) = 0.V by Lm5;
 
 theorem
     for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v being Element of V
 holds Sum<* v *> = v by Lm7;
 
 theorem Th62:
 for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u being Element of V
 holds Sum<* v,u *> = v + u
   proof let V be add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u be Element of V;
         <* v,u *> = <* v *> ^ <* u *> by FINSEQ_1:def 9;
    hence Sum<* v,u *> = Sum<* v *> + Sum<* u *> by Th58
@@ -1602,11 +1601,11 @@ holds Sum<* v,u *> = v + u
 
 theorem Th63:
 for V being add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u,w being Element of V
 holds Sum<* v,u,w *> = v + u + w
   proof let V be add-associative right_zeroed
-       right_complementable (non empty LoopStr),
+       right_complementable (non empty addLoopStr),
     v,u,w be Element of V;
         <* v,u,w *> = <* v,u *> ^ <* w *> by FINSEQ_1:60;
    hence Sum<* v,u,w *> = Sum<* v,u *> + Sum<* w *> by Th58
@@ -1659,12 +1658,12 @@ theorem
 
 theorem
      for V being Abelian add-associative right_zeroed
-  right_complementable (non empty LoopStr),
+  right_complementable (non empty addLoopStr),
      v,u being Element of V
  holds - Sum<* v,u *> = (- v) - u
   proof
    let V be Abelian add-associative right_zeroed
-    right_complementable (non empty LoopStr),
+    right_complementable (non empty addLoopStr),
      v,u be Element of V;
    thus - Sum<* v,u *> = - (v + u) by Th62
                     .= (- v) - u by Th44;
@@ -1672,12 +1671,12 @@ theorem
 
 theorem
      for V being Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
      v,u,w being Element of V
  holds - Sum<* v,u,w *> = ((- v) - u) - w
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-             (non empty LoopStr),
+             (non empty addLoopStr),
      v,u,w be Element of V;
    thus - Sum<* v,u,w *> = - (v + u + w) by Th63
                       .= (- (v + u)) - w by Th44
@@ -1686,12 +1685,12 @@ theorem
 
 theorem
      for V being Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
      v,w being Element of V
  holds Sum<* v,w *> = Sum<* w,v *>
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-            (non empty LoopStr),
+            (non empty addLoopStr),
      v,w be Element of V;
    thus Sum<* v,w *> = v + w by Th62
                   .= Sum<* w,v *> by Th62;
@@ -1724,7 +1723,7 @@ theorem
 theorem
      Sum<* v,- v *> = 0.V & Sum<* - v,v *> = 0.V
   proof
-A1:   v + - v = 0.V by Def10;
+A1:   v + - v = 0.V by Def11;
    hence Sum<* v,- v *> = 0.V by Th62;
          - v + v = 0.V by A1,Lm2;
    hence Sum<* - v, v *> = 0.V by Th62;
@@ -1781,12 +1780,12 @@ theorem
 
 theorem
      for V being Abelian add-associative right_zeroed right_complementable
-                 (non empty LoopStr),
+                 (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,w *> + u
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-                 (non empty LoopStr),
+                 (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = u + v + w by Th63
                     .= u + (v + w) by Def6
@@ -1795,12 +1794,12 @@ theorem
 
 theorem Th84:
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* u,w *> + v
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-              (non empty LoopStr),
+              (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = u + v + w by Th63
                     .= u + w + v by Def6
@@ -1809,12 +1808,12 @@ theorem Th84:
 
 theorem Th85:
  for V being Abelian add-associative right_zeroed right_complementable
-                  (non empty LoopStr),
+                  (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* u,w,v *>
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-                 (non empty LoopStr),
+                 (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = u + v + w by Th63
                     .= u + w + v by Def6
@@ -1823,12 +1822,12 @@ theorem Th85:
 
 theorem Th86:
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,u,w *>
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = u + v + w by Th63
                     .= Sum<* v,u,w *> by Th63;
@@ -1836,12 +1835,12 @@ theorem Th86:
 
 theorem Th87:
  for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* v,w,u *>
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-              (non empty LoopStr),
+              (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = Sum<* v,u,w *> by Th86
                     .= Sum<* v,w,u *> by Th85;
@@ -1851,12 +1850,12 @@ canceled;
 
 theorem
      for V being Abelian add-associative right_zeroed right_complementable
-                (non empty LoopStr),
+                (non empty addLoopStr),
      v,u,w being Element of V
  holds Sum<* u,v,w *> = Sum<* w,v,u *>
   proof
    let V be Abelian add-associative right_zeroed right_complementable
-              (non empty LoopStr),
+              (non empty addLoopStr),
      v,u,w be Element of V;
    thus Sum<* u,v,w *> = Sum<* w,u,v *> by Th87
                     .= Sum<* w,v,u *> by Th85;
@@ -1949,36 +1948,24 @@ begin :: Addenda
 :: from REALSET2, 2007.02.24, A.T
 
 definition
-  let L be non empty LoopStr;
+  let L be non empty addLoopStr;
   attr L is zeroed means
-:Def14: for a being Element of L holds a+0.L = a & 0.L+a = a;
-  attr L is complementable means
-:Def15: for a being Element of L
-        ex b being Element of L st a+b = 0.L & b+a = 0.L;
+:Def15: for a being Element of L holds a+0.L = a & 0.L+a = a;
 end;
 
 registration
- cluster zeroed -> right_zeroed (non empty LoopStr);
+ cluster zeroed -> right_zeroed (non empty addLoopStr);
  coherence
-  proof let L be non empty LoopStr;
+  proof let L be non empty addLoopStr;
    assume L is zeroed;
-   hence for v being Element of L holds v + 0.L = v by Def14;
-  end;
- cluster complementable -> right_complementable (non empty LoopStr);
- coherence
-  proof let L be non empty LoopStr;
-   assume
-A1:   L is complementable;
-   let v be Element of L;
-     ex w being Element of L st v+w = 0.L & w+v = 0.L by A1,Def15;
-   hence thesis;
+   hence for v being Element of L holds v + 0.L = v by Def15;
   end;
 end;
 
 registration
- cluster Abelian right_zeroed -> zeroed (non empty LoopStr);
+ cluster Abelian right_zeroed -> zeroed (non empty addLoopStr);
  coherence
-  proof let L be non empty LoopStr;
+  proof let L be non empty addLoopStr;
    assume
 A1:   L is Abelian right_zeroed;
    let a be Element of L;
@@ -1986,14 +1973,16 @@ A1:   L is Abelian right_zeroed;
    hence 0.L+a = a by A1,Def5;
 
   end;
- cluster Abelian right_complementable -> complementable (non empty LoopStr);
+ cluster Abelian right_complementable ->
+            left_complementable (non empty addLoopStr);
  coherence
-  proof let L be non empty LoopStr;
+  proof let L be non empty addLoopStr;
    assume
-A2:   L is Abelian right_complementable;
+A2:  L is Abelian right_complementable;
    let a be Element of L;
-    consider w being Element of L such that
-A3:   a+w = 0.L by A2,Def8;
+    a is right_complementable by A2,ALGSTR_0:def 16;
+    then consider w being Element of L such that
+A3:   a+w = 0.L by ALGSTR_0:def 11;
    take w;
    thus thesis by A2,A3,Def5;
   end;

@@ -1,0 +1,583 @@
+:: Basic Algebraic Structures
+::  by Library Committee
+::
+:: Received December 8, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies STRUCT_0, BINOP_1, FUNCT_1, MONOID_0, RLVECT_1, CAT_1, FUNCT_7,
+      ARYTM_1, VECTSP_1, ARYTM, MIDSP_1, REALSET1, ALGSTR_1, GROUP_1, ARYTM_3,
+      BINOM, RELAT_1, BOOLE, FUNCT_2, ALGSTR_0, VECTSP_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELSET_1, RELAT_1, FUNCOP_1,
+      FUNCT_2, FUNCT_7, CARD_1, REALSET1, FUNCT_5, STRUCT_0, BINOP_1;
+ constructors BINOP_1, STRUCT_0, FUNCT_7, REALSET1, FUNCT_5, VALUED_1,
+      PARTFUN1, SEQ_1;
+ registrations STRUCT_0, RELSET_1, SUBSET_1, REALSET1, ZFMISC_1, XBOOLE_0,
+      FUNCOP_1, VALUED_1, FUNCT_2;
+ requirements BOOLE, SUBSET;
+
+
+begin :: Additive structures
+
+reserve D for non empty set,
+        d,e for Element of D,
+        o for BinOp of D;
+reserve T for trivial set,
+        s,t for Element of T,
+        f for BinOp of T;
+reserve N for non trivial set,
+        n,m for Element of N,
+        b for BinOp of N;
+
+definition
+ struct (1-sorted) addMagma
+        (# carrier -> set,
+           addF -> BinOp of the carrier #);
+end;
+
+registration let D,o;
+ cluster addMagma(#D,o#) -> non empty;
+end;
+
+registration let T,f;
+ cluster addMagma(#T,f#) -> trivial;
+end;
+
+registration let N,b;
+ cluster addMagma(#N,b#) -> non trivial;
+end;
+
+definition let M be addMagma;
+ let x,y be Element of M;
+ func x+y -> Element of M equals
+:: ALGSTR_0:def 1
+(the addF of M).(x,y);
+end;
+
+definition
+ func Trivial-addMagma -> addMagma equals
+:: ALGSTR_0:def 2
+   addMagma(#1, op2 #);
+end;
+
+registration
+ cluster Trivial-addMagma -> strict non empty trivial;
+end;
+
+registration
+ cluster strict non empty trivial addMagma;
+end;
+
+definition let M be addMagma, x be Element of M;
+ attr x is left_add-cancelable means
+:: ALGSTR_0:def 3
+ for y,z being Element of M st x+y = x+z holds y = z;
+ attr x is right_add-cancelable means
+:: ALGSTR_0:def 4
+ for y,z being Element of M st y+x = z+x holds y = z;
+end;
+
+definition let M be addMagma, x be Element of M;
+ attr x is add-cancelable means
+:: ALGSTR_0:def 5
+ x is right_add-cancelable left_add-cancelable;
+end;
+
+registration let M be addMagma;
+ cluster right_add-cancelable left_add-cancelable
+        -> add-cancelable Element of M;
+ cluster add-cancelable
+        -> right_add-cancelable left_add-cancelable Element of M;
+end;
+
+definition let M be addMagma;
+ attr M is left_add-cancelable means
+:: ALGSTR_0:def 6
+ for x being Element of M holds x is left_add-cancelable;
+ attr M is right_add-cancelable means
+:: ALGSTR_0:def 7
+ for x being Element of M holds x is right_add-cancelable;
+end;
+
+definition let M be addMagma;
+ attr M is add-cancelable means
+:: ALGSTR_0:def 8
+ M is right_add-cancelable left_add-cancelable;
+end;
+
+registration
+ cluster right_add-cancelable left_add-cancelable
+        -> add-cancelable addMagma;
+ cluster add-cancelable
+        -> right_add-cancelable left_add-cancelable addMagma;
+end;
+
+registration
+ cluster Trivial-addMagma -> add-cancelable;
+end;
+
+registration
+ cluster add-cancelable strict non empty trivial  addMagma;
+end;
+
+registration let M be left_add-cancelable addMagma;
+ cluster ->  left_add-cancelable Element of M;
+end;
+
+registration let M be right_add-cancelable addMagma;
+ cluster ->  right_add-cancelable Element of M;
+end;
+
+definition
+ struct (ZeroStr,addMagma) addLoopStr
+        (# carrier -> set,
+           addF -> BinOp of the carrier,
+           ZeroF -> Element of the carrier #);
+end;
+
+registration let D,o,d;
+ cluster addLoopStr(#D,o,d#) -> non empty;
+end;
+
+registration let T,f,t;
+ cluster addLoopStr(#T,f,t#) -> trivial;
+end;
+
+registration let N,b,m;
+ cluster addLoopStr(#N,b,m#) -> non trivial;
+end;
+
+definition
+ func Trivial-addLoopStr -> addLoopStr equals
+:: ALGSTR_0:def 9
+   addLoopStr(#1, op2, op0 #);
+end;
+
+registration
+ cluster Trivial-addLoopStr -> strict non empty trivial;
+end;
+
+registration
+ cluster strict non empty trivial addLoopStr;
+end;
+
+definition let M be addLoopStr, x be Element of M;
+ attr x is left_complementable means
+:: ALGSTR_0:def 10
+ ex y being Element of M st y+x = 0.M;
+ attr x is right_complementable means
+:: ALGSTR_0:def 11
+ ex y being Element of M st x+y = 0.M;
+end;
+
+definition let M be addLoopStr, x be Element of M;
+ attr x is complementable means
+:: ALGSTR_0:def 12
+ x is right_complementable left_complementable;
+end;
+
+registration let M be addLoopStr;
+ cluster right_complementable left_complementable
+        -> complementable Element of M;
+ cluster complementable
+        -> right_complementable left_complementable Element of M;
+end;
+
+definition let M be addLoopStr, x be Element of M;
+ assume
+ x is left_complementable right_add-cancelable;
+ func -x -> Element of M means
+:: ALGSTR_0:def 13
+ it + x = 0.M;
+end;
+
+definition let V be addLoopStr;
+   let v,w be Element of V;
+  func v - w -> Element of V equals
+:: ALGSTR_0:def 14
+     v + -w;
+end;
+
+registration
+ cluster Trivial-addLoopStr -> add-cancelable;
+end;
+
+definition let M be addLoopStr;
+ attr M is left_complementable means
+:: ALGSTR_0:def 15
+ for x being Element of M holds x is left_complementable;
+ attr M is right_complementable means
+:: ALGSTR_0:def 16
+ for x being Element of M holds x is right_complementable;
+end;
+
+definition let M be addLoopStr;
+ attr M is complementable means
+:: ALGSTR_0:def 17
+ M is right_complementable left_complementable;
+end;
+
+registration
+ cluster right_complementable left_complementable
+        -> complementable addLoopStr;
+ cluster complementable
+        -> right_complementable left_complementable addLoopStr;
+end;
+
+registration
+ cluster Trivial-addLoopStr -> complementable;
+end;
+
+registration
+ cluster complementable add-cancelable strict non empty trivial addLoopStr;
+end;
+
+registration let M be left_complementable addLoopStr;
+ cluster -> left_complementable Element of M;
+end;
+
+registration let M be right_complementable addLoopStr;
+ cluster ->  right_complementable Element of M;
+end;
+
+begin :: Multiplicative structures
+
+definition
+ struct (1-sorted) multMagma
+        (# carrier -> set,
+           multF -> BinOp of the carrier #);
+end;
+
+registration let D,o;
+ cluster multMagma(#D,o#) -> non empty;
+end;
+
+registration let T,f;
+ cluster multMagma(#T,f#) -> trivial;
+end;
+
+registration let N,b;
+ cluster multMagma(#N,b#) -> non trivial;
+end;
+
+definition let M be multMagma;
+ let x,y be Element of M;
+ func x*y -> Element of M equals
+:: ALGSTR_0:def 18
+(the multF of M).(x,y);
+end;
+
+definition
+ func Trivial-multMagma -> multMagma equals
+:: ALGSTR_0:def 19
+   multMagma(#1, op2 #);
+end;
+
+registration
+ cluster Trivial-multMagma -> strict non empty trivial;
+end;
+
+registration
+ cluster strict non empty trivial multMagma;
+end;
+
+definition let M be multMagma, x be Element of M;
+ attr x is left_mult-cancelable means
+:: ALGSTR_0:def 20
+ for y,z being Element of M st x*y = x*z holds y = z;
+ attr x is right_mult-cancelable means
+:: ALGSTR_0:def 21
+ for y,z being Element of M st y*x = z*x holds y = z;
+end;
+
+definition let M be multMagma, x be Element of M;
+ attr x is mult-cancelable means
+:: ALGSTR_0:def 22
+ x is right_mult-cancelable left_mult-cancelable;
+end;
+
+registration let M be multMagma;
+ cluster right_mult-cancelable left_mult-cancelable
+        -> mult-cancelable Element of M;
+ cluster mult-cancelable
+        -> right_mult-cancelable left_mult-cancelable Element of M;
+end;
+
+definition let M be multMagma;
+ attr M is left_mult-cancelable means
+:: ALGSTR_0:def 23
+  for x being Element of M holds x is left_mult-cancelable;
+ attr M is right_mult-cancelable means
+:: ALGSTR_0:def 24
+  for x being Element of M holds x is right_mult-cancelable;
+end;
+
+definition let M be multMagma;
+ attr M is mult-cancelable means
+:: ALGSTR_0:def 25
+ M is left_mult-cancelable right_mult-cancelable;
+end;
+
+registration
+ cluster right_mult-cancelable left_mult-cancelable
+        -> mult-cancelable multMagma;
+ cluster mult-cancelable
+        -> right_mult-cancelable left_mult-cancelable multMagma;
+end;
+
+registration
+ cluster Trivial-multMagma -> mult-cancelable;
+end;
+
+registration
+ cluster mult-cancelable strict non empty trivial  multMagma;
+end;
+
+registration let M be left_mult-cancelable multMagma;
+ cluster ->  left_mult-cancelable Element of M;
+end;
+
+registration let M be right_mult-cancelable multMagma;
+ cluster ->  right_mult-cancelable Element of M;
+end;
+
+definition
+ struct (OneStr,multMagma) multLoopStr
+        (# carrier -> set,
+           multF -> BinOp of the carrier,
+           OneF -> Element of the carrier #);
+end;
+
+registration let D,o,d;
+ cluster multLoopStr(#D,o,d#) -> non empty;
+end;
+
+registration let T,f,t;
+ cluster multLoopStr(#T,f,t#) -> trivial;
+end;
+
+registration let N,b,m;
+ cluster multLoopStr(#N,b,m#) -> non trivial;
+end;
+
+definition
+ func Trivial-multLoopStr -> multLoopStr equals
+:: ALGSTR_0:def 26
+   multLoopStr(#1, op2, op0 #);
+end;
+
+registration
+ cluster Trivial-multLoopStr -> strict non empty trivial;
+end;
+
+registration
+ cluster strict non empty trivial multLoopStr;
+end;
+
+registration
+ cluster Trivial-multLoopStr -> mult-cancelable;
+end;
+
+definition let M be multLoopStr, x be Element of M;
+ attr x is left_invertible means
+:: ALGSTR_0:def 27
+ ex y being Element of M st y*x = 1.M;
+ attr x is right_invertible means
+:: ALGSTR_0:def 28
+ ex y being Element of M st x*y = 1.M;
+end;
+
+definition let M be multLoopStr, x be Element of M;
+ attr x is invertible means
+:: ALGSTR_0:def 29
+ x is right_invertible left_invertible;
+end;
+
+registration let M be multLoopStr;
+ cluster right_invertible left_invertible
+        -> invertible Element of M;
+ cluster invertible
+        -> right_invertible left_invertible Element of M;
+end;
+
+definition let M be multLoopStr, x be Element of M;
+ assume
+ x is left_invertible right_mult-cancelable;
+ func /x -> Element of M means
+:: ALGSTR_0:def 30
+ it * x = 1.M;
+end;
+
+definition let M be multLoopStr;
+ attr M is left_invertible means
+:: ALGSTR_0:def 31
+ for x being Element of M holds x is left_invertible;
+ attr M is right_invertible means
+:: ALGSTR_0:def 32
+ for x being Element of M holds x is right_invertible;
+end;
+
+definition let M be multLoopStr;
+ attr M is invertible means
+:: ALGSTR_0:def 33
+ M is right_invertible left_invertible;
+end;
+
+registration
+ cluster right_invertible left_invertible
+        -> invertible multLoopStr;
+ cluster invertible
+        -> right_invertible left_invertible multLoopStr;
+end;
+
+registration
+ cluster Trivial-multLoopStr -> invertible;
+end;
+
+registration
+ cluster invertible mult-cancelable strict non empty trivial multLoopStr;
+end;
+
+registration let M be left_invertible multLoopStr;
+ cluster -> left_invertible Element of M;
+end;
+
+registration let M be right_invertible multLoopStr;
+ cluster ->  right_invertible Element of M;
+end;
+
+begin :: Almost
+
+definition
+ struct (multLoopStr,ZeroOneStr) multLoopStr_0
+        (# carrier -> set,
+           multF -> BinOp of the carrier,
+           ZeroF, OneF -> Element of the carrier #);
+end;
+
+registration let D,o,d,e;
+ cluster multLoopStr_0(#D,o,d,e#) -> non empty;
+end;
+
+registration let T,f,s,t;
+ cluster multLoopStr_0(#T,f,s,t#) -> trivial;
+end;
+
+registration let N,b,m,n;
+ cluster multLoopStr_0(#N,b,m,n#) -> non trivial;
+end;
+
+definition
+ func Trivial-multLoopStr_0 -> multLoopStr_0 equals
+:: ALGSTR_0:def 34
+   multLoopStr_0(#1, op2, op0, op0 #);
+end;
+
+registration
+ cluster Trivial-multLoopStr_0 -> strict non empty trivial;
+end;
+
+registration
+ cluster strict non empty trivial multLoopStr_0;
+end;
+
+definition let M be multLoopStr_0, x be Element of M;
+ func x" -> Element of M means
+:: ALGSTR_0:def 35
+ it * x = 1.M if x is left_invertible right_mult-cancelable
+    otherwise it = 0.M;
+end;
+
+definition let M be multLoopStr_0;
+ attr M is almost_left_cancelable means
+:: ALGSTR_0:def 36
+  for x being Element of M st x <> 0.M
+     holds x is left_mult-cancelable;
+ attr M is almost_right_cancelable means
+:: ALGSTR_0:def 37
+  for x being Element of M st x <> 0.M
+     holds x is right_mult-cancelable;
+end;
+
+definition let M be multLoopStr_0;
+ attr M is almost_cancelable means
+:: ALGSTR_0:def 38
+ M is almost_left_cancelable almost_right_cancelable;
+end;
+
+registration
+ cluster almost_right_cancelable almost_left_cancelable
+        -> almost_cancelable multLoopStr_0;
+ cluster almost_cancelable
+        -> almost_right_cancelable almost_left_cancelable multLoopStr_0;
+end;
+
+registration
+ cluster Trivial-multLoopStr_0 -> almost_cancelable;
+end;
+
+registration
+ cluster almost_cancelable strict non empty trivial  multLoopStr_0;
+end;
+
+definition let M be multLoopStr_0;
+ attr M is almost_left_invertible means
+:: ALGSTR_0:def 39
+ for x being Element of M st x <> 0.M holds x is left_invertible;
+ attr M is almost_right_invertible means
+:: ALGSTR_0:def 40
+ for x being Element of M st x <> 0.M holds x is right_invertible;
+end;
+
+definition let M be multLoopStr_0;
+ attr M is almost_invertible means
+:: ALGSTR_0:def 41
+ M is almost_right_invertible almost_left_invertible;
+end;
+
+registration
+ cluster almost_right_invertible almost_left_invertible
+        -> almost_invertible multLoopStr_0;
+ cluster almost_invertible
+        -> almost_right_invertible almost_left_invertible multLoopStr_0;
+end;
+
+registration
+ cluster Trivial-multLoopStr_0 -> almost_invertible;
+end;
+
+registration
+ cluster Trivial-multLoopStr_0 -> almost_invertible;
+end;
+
+registration
+ cluster almost_invertible almost_cancelable
+    strict non empty trivial multLoopStr_0;
+end;
+
+begin :: Double
+
+definition
+ struct(addLoopStr,multLoopStr_0) doubleLoopStr (# carrier -> set,
+                         addF, multF -> BinOp of the carrier,
+                         OneF, ZeroF -> Element of the carrier #);
+end;
+
+definition
+ func Trivial-doubleLoopStr -> doubleLoopStr equals
+:: ALGSTR_0:def 42
+   doubleLoopStr(#1, op2, op2, op0, op0 #);
+end;
+
+registration
+ cluster Trivial-doubleLoopStr -> strict non empty trivial;
+  :: dlaczego "def 1"? !!!
+end;
+
+registration
+ cluster strict non empty trivial doubleLoopStr;
+end;
+
+
+

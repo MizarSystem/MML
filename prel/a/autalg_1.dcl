@@ -23,6 +23,7 @@
 <ArticleID name="PBOOLE"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="UNIALG_1"/>
@@ -51,23 +52,23 @@
 </RCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="6">
+<Typ kind="G" nr="11">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="52"/>
-<Adjective nr="53"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="53"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -91,30 +92,30 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="55" value="false"/>
+<Adjective nr="91" value="false"/>
 </Cluster>
 </Typ>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="58">
+<Adjective nr="94">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="193">
+<Func kind="K" nr="204">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="53"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 </FCluster>
 </Registrations>

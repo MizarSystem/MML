@@ -8,18 +8,18 @@ environ
 
  vocabularies FINSET_1, REALSET1, RELAT_1, BOOLE, SUBSET_1, VECTSP_1, BINOP_1,
       GROUP_1, FUNCT_1, RLSUB_1, CARD_1, TARSKI, SETFAM_1, FINSUB_1, SETWISEO,
-      ARYTM_3, GROUP_2, ARYTM;
+      ARYTM_3, GROUP_2, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, FINSUB_1, FINSET_1,
-      REALSET1, XXREAL_0, CARD_1, NUMBERS, STRUCT_0, GROUP_1, WELLORD2,
-      BINOP_1, SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1, NAT_D,
-      MCART_1;
+      REALSET1, XXREAL_0, CARD_1, NUMBERS, STRUCT_0, ALGSTR_0, GROUP_1,
+      WELLORD2, BINOP_1, SETWISEO, DOMAIN_1, RELAT_1, FUNCT_1, RELSET_1, NAT_1,
+      NAT_D, MCART_1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, SETWISEO, XXREAL_0, NAT_1,
-      NAT_D, MEMBERED, REALSET1, GROUP_1;
+      NAT_D, MEMBERED, REALSET1, GROUP_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSET_1, FINSUB_1, MEMBERED,
-      REALSET1, STRUCT_0, GROUP_1;
+      REALSET1, STRUCT_0, GROUP_1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, GROUP_1, STRUCT_0, TARSKI, XBOOLE_0, BINOP_1, REALSET1,
-      SUBSET_1;
+      SUBSET_1, ALGSTR_0, VALUED_1;
  theorems CARD_1, CARD_2, ENUMSET1, FINSET_1, FINSUB_1, FUNCT_1, FUNCT_2,
       GROUP_1, TARSKI, WELLORD2, ZFMISC_1, RELAT_1, RELSET_1, XBOOLE_0,
       XBOOLE_1, XCMPLX_1, NAT_D, STRUCT_0, NAT_1;
@@ -143,7 +143,7 @@ A2:  A" <> {};
    hence thesis;
   end;
 
-reserve G for non empty HGrStr,A,B,C for Subset of G;
+reserve G for non empty multMagma,A,B,C for Subset of G;
 reserve a,b,g,g1,g2,h,h1,h2 for Element of G;
 
 definition let G; let A,B;
@@ -621,7 +621,7 @@ theorem Th40:
 theorem
   {}(the carrier of G) * a = {} & a * {}(the carrier of G) = {} by Th20;
 
-reserve G for Group-like (non empty HGrStr);
+reserve G for Group-like (non empty multMagma);
 reserve h,g,g1,g2 for Element of G;
 reserve A for Subset of G;
 
@@ -663,13 +663,13 @@ theorem Th43:
 theorem
  G is commutative Group implies g * A = A * g by Th29;
 
-definition let G be Group-like (non empty HGrStr);
- mode Subgroup of G -> Group-like (non empty HGrStr) means
+definition let G be Group-like (non empty multMagma);
+ mode Subgroup of G -> Group-like (non empty multMagma) means
   :Def5: the carrier of it c= the carrier of G &
-        the mult of it = (the mult of G)||the carrier of it;
+        the multF of it = (the multF of G)||the carrier of it;
  existence
   proof take G;
-        dom(the mult of G) = [:the carrier of G,the carrier of G:]
+        dom(the multF of G) = [:the carrier of G,the carrier of G:]
                                                           by FUNCT_2:def 1;
    hence thesis by RELAT_1:97;
   end;
@@ -711,7 +711,7 @@ theorem Th51:
 theorem Th52:
  h1 = g1 & h2 = g2 implies h1 * h2 = g1 * g2
   proof assume A1: h1 = g1 & h2 = g2;
- h1 * h2 = ((the mult of G)||the carrier of H).[h1,h2] by Def5;
+ h1 * h2 = ((the multF of G)||the carrier of H).[h1,h2] by Def5;
    hence thesis by A1,FUNCT_1:72;
   end;
 
@@ -820,7 +820,7 @@ registration let G;
  cluster strict Subgroup of G;
   existence
    proof
-    set H = HGrStr (#the carrier of G, the mult of G#);
+    set H = multMagma (#the carrier of G, the multF of G#);
         H is Group-like
       proof
        reconsider t = 1_G as Element of H;
@@ -838,9 +838,9 @@ registration let G;
        thus s * a = x" * x
                  .= t by GROUP_1:def 6;
       end;
-      then reconsider H as Group-like (non empty HGrStr);
-      the mult of H =
-       (the mult of G)||the carrier of H by FUNCT_2:40;
+      then reconsider H as Group-like (non empty multMagma);
+      the multF of H =
+       (the multF of G)||the carrier of H by FUNCT_2:40;
      then H is Subgroup of G by Def5;
     hence thesis;
    end;
@@ -854,9 +854,9 @@ theorem Th61:
       A2: for g1,g2 st g1 in A & g2 in A holds g1 * g2 in A and
       A3: for g st g in A holds g" in A;
      reconsider D = A as non empty set by A1;
-     set o = (the mult of G)||A;
-         A4: dom o = dom(the mult of G) /\ [:A,A:] &
-           dom(the mult of G) = [:the carrier of G,the carrier of G:] &
+     set o = (the multF of G)||A;
+         A4: dom o = dom(the multF of G) /\ [:A,A:] &
+           dom(the multF of G) = [:the carrier of G,the carrier of G:] &
            [:A,A:] c= [:the carrier of G,the carrier of G:]
                                      by FUNCT_2:def 1,RELAT_1:90;
       then A5: dom o = [:A,A:] by XBOOLE_1:28;
@@ -872,10 +872,10 @@ theorem Th61:
         hence thesis by A2,A9;
        end;
      then reconsider o as BinOp of D by A5,FUNCT_2:def 1,RELSET_1:11;
-     set H = HGrStr (# D,o #);
+     set H = multMagma (# D,o #);
      A10: now let g1,g2; let h1,h2 be Element of H;
        assume A11: g1 = h1 & g2 = h2;
-         h1 * h2 = ((the mult of G)||A).[h1,h2];
+         h1 * h2 = ((the multF of G)||A).[h1,h2];
       hence g1 * g2 = h1 * h2 by A11,FUNCT_1:72;
      end;
           H is Group-like
@@ -899,7 +899,7 @@ theorem Th61:
         thus s * a = x" * x by A10
                   .= t by GROUP_1:def 6;
        end;
-     then reconsider H as Group-like (non empty HGrStr);
+     then reconsider H as Group-like (non empty multMagma);
      reconsider H as strict Subgroup of G by Def5;
     take H;
     thus thesis;
@@ -925,18 +925,18 @@ end;
 theorem Th63:
   G is Subgroup of G
   proof
-   dom(the mult of G) = [:the carrier of G,the carrier of G:]
+   dom(the multF of G) = [:the carrier of G,the carrier of G:]
      by FUNCT_2:def 1;
    hence the carrier of G c= the carrier of G &
-     the mult of G = (the mult of G)||the carrier of G by RELAT_1:97;
+     the multF of G = (the multF of G)||the carrier of G by RELAT_1:97;
   end;
 
 theorem Th64:
  G1 is Subgroup of G2 & G2 is Subgroup of G1
-  implies the HGrStr of G1 = the HGrStr of G2
+  implies the multMagma of G1 = the multMagma of G2
   proof assume that A1: G1 is Subgroup of G2 and A2: G2 is Subgroup of G1;
     set A = the carrier of G1; set B = the carrier of G2;
-    set f = the mult of G1; set g = the mult of G2;
+    set f = the multF of G1; set g = the multF of G2;
 A3:     A c= B & B c= A by A1,A2,Def5;
      then A4: A = B by XBOOLE_0:def 10;
          f = g||A by A1,Def5
@@ -951,11 +951,11 @@ theorem Th65:
   proof assume that A1: G1 is Subgroup of G2 and A2: G2 is Subgroup of G3;
     set A = the carrier of G1;
     set B = the carrier of G2;
-    set C = the carrier of G3; set h = the mult of G3;
+    set C = the carrier of G3; set h = the multF of G3;
      A3: A c= B & B c= C by A1,A2,Def5;
      then A4: A c= C by XBOOLE_1:1;
      A5: [:A,A:] c= [:B,B:] by A3,ZFMISC_1:119;
-         the mult of G1 = (the mult of G2)||A by A1,Def5
+         the multF of G1 = (the multF of G2)||A by A1,Def5
       .= (h||B)||A by A2,Def5
       .= h||A by A5,FUNCT_1:82;
    hence thesis by A4,Def5;
@@ -965,11 +965,11 @@ theorem Th66:
  the carrier of H1 c= the carrier of H2 implies H1 is Subgroup of H2
   proof set A = the carrier of H1;
         set B = the carrier of H2;
-        set h = the mult of G;
+        set h = the multF of G;
     assume A1:the carrier of H1 c= the carrier of H2;
    hence the carrier of H1 c= the carrier of H2;
-         the mult of H1 = h||A &
-        the mult of H2 = h||B &
+         the multF of H1 = h||A &
+        the multF of H2 = h||B &
         [:A,A:] c= [:B,B:] by A1,Def5,ZFMISC_1:119;
    hence thesis by FUNCT_1:82;
   end;
@@ -991,14 +991,15 @@ theorem Th67:
 
 theorem Th68:
  the carrier of H1 = the carrier of H2
-  implies the HGrStr of H1 = the HGrStr of H2
+  implies the multMagma of H1 = the multMagma of H2
   proof assume the carrier of H1 = the carrier of H2;
     then H1 is Subgroup of H2 & H2 is Subgroup of H1 by Th66;
    hence thesis by Th64;
   end;
 
 theorem Th69:
- (for g holds g in H1 iff g in H2) implies the HGrStr of H1 = the HGrStr of H2
+ (for g holds g in H1 iff g in H2)
+  implies the multMagma of H1 = the multMagma of H2
   proof
    assume for g holds g in H1 iff g in H2;
     then H1 is Subgroup of H2 & H2 is Subgroup of H1 by Th67;
@@ -1014,7 +1015,7 @@ end;
 theorem Th70:
   for G being Group, H being Subgroup of G st
     the carrier of G c= the carrier of H holds
-      the HGrStr of H = the HGrStr of G
+      the multMagma of H = the multMagma of G
   proof let G be Group, H be Subgroup of G;
 A1: the carrier of H c= the carrier of G by Def5;
    assume the carrier of G c= the carrier of H;
@@ -1025,7 +1026,7 @@ then A2:the carrier of G = the carrier of H by A1,XBOOLE_0:def 10;
 
 theorem Th71:
  (for g being Element of G holds g in H) implies
-  the HGrStr of H = the HGrStr of G
+  the multMagma of H = the multMagma of G
   proof
    assume for g being Element of G holds g in H;
     then A1: for g be Element of G
@@ -1059,9 +1060,9 @@ end;
 
 definition let G;
   func (Omega).G -> strict Subgroup of G equals
-    the HGrStr of G;
+    the multMagma of G;
  coherence
-  proof set H = the HGrStr of G;
+  proof set H = the multMagma of G;
     H is Group-like
     proof
       consider e' being Element of G such that
@@ -1080,14 +1081,14 @@ A2:   h' * g' = e' & g' * h' = e' by A1;
       take g;
       thus h * g = e & g * h = e by A2;
     end;
-   then reconsider H as Group-like (non empty HGrStr);
+   then reconsider H as Group-like (non empty multMagma);
     H is Subgroup of G
     proof
      thus the carrier of H c= the carrier of G;
-     dom(the mult of G) = [:the carrier of G,the carrier of G:]
+     dom(the multF of G) = [:the carrier of G,the carrier of G:]
       by FUNCT_2:def 1;
-     hence the mult of H =
-         (the mult of G)||the carrier of H by RELAT_1:97;
+     hence the multF of H =
+         (the multF of G)||the carrier of H by RELAT_1:97;
     end;
    hence thesis;
   end;
@@ -1174,7 +1175,7 @@ A3:   B = the carrier of G & ord G = card B by A1,GROUP_1:def 15;
 
 theorem
   for G being Group, H being Subgroup of G holds
-    G is finite & ord G = ord H implies the HGrStr of H = the HGrStr of G
+    G is finite & ord G = ord H implies the multMagma of H = the multMagma of G
   proof let G be Group, H be Subgroup of G;
    assume that A1: G is finite and A2: ord G = ord H;
 A3: H is finite by A1,Th48;
@@ -1407,10 +1408,10 @@ theorem
 
 Lm3:
  for H1 being Subgroup of G holds
- H1 is Subgroup of H2 iff the HGrStr of (H1 /\ H2) = the HGrStr of H1
+ H1 is Subgroup of H2 iff the multMagma of (H1 /\ H2) = the multMagma of H1
  proof let H1 be Subgroup of G;
   thus H1 is Subgroup of H2 implies
-    the HGrStr of (H1 /\ H2) = the HGrStr of H1
+    the multMagma of (H1 /\ H2) = the multMagma of H1
    proof assume H1 is Subgroup of H2;
      then the carrier of H1 c= the carrier of H2 by Def5;
      then (the carrier of H1) /\ (the carrier of H2) = the carrier of H1 &
@@ -1419,7 +1420,7 @@ Lm3:
                                           by Def10,XBOOLE_1:28;
     hence thesis by Th68;
    end;
-   assume the HGrStr of (H1 /\ H2) = the HGrStr of H1;
+   assume the multMagma of (H1 /\ H2) = the multMagma of H1;
     then the carrier of H1 = carr(H1) /\ carr(H2) by Def10
        .= (the carrier of H1) /\ (the carrier of H2);
     then the carrier of H1 c= the carrier of H2 by XBOOLE_1:17;
@@ -1453,7 +1454,7 @@ theorem
 theorem
   for H1 being Subgroup of G holds
     H1 is Subgroup of H2 iff
-      the HGrStr of (H1 /\ H2) = the HGrStr of H1 by Lm3;
+      the multMagma of (H1 /\ H2) = the multMagma of H1 by Lm3;
 
 theorem
   H1 is Subgroup of H2 implies H1 /\ H3 is Subgroup of H2
@@ -1625,7 +1626,7 @@ theorem Th133:
 theorem Th134:
   a * (Omega).G = the carrier of G & (Omega).G * a = the carrier of G
   proof the carrier of (Omega).G = carr((Omega).G) & (Omega).
-G = the HGrStr of G &
+G = the multMagma of G &
         [#](the carrier of G) = the carrier of G &
         [#](the carrier of G) * a = the carrier of G &
         a * [#](the carrier of G) = the carrier of G &

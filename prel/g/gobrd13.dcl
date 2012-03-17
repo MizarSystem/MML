@@ -22,20 +22,22 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRLIN"/>
 <ArticleID name="GOBRD13"/>
@@ -54,7 +56,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="295">
+<Func kind="K" nr="344">
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
@@ -75,7 +77,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="104"/>
+<Adjective nr="134"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -83,7 +85,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="104"/>
+<Adjective nr="134"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

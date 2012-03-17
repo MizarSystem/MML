@@ -20,29 +20,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
 <Adjective nr="20"/>
-<Adjective nr="21"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -52,10 +30,32 @@
 </Typ>
 <Cluster>
 <Adjective nr="12" value="false"/>
-<Adjective nr="19"/>
+<Adjective nr="20"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="12" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
 <Adjective nr="22"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="12" value="false"/>
+<Adjective nr="20"/>
+<Adjective nr="21"/>
+<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </RCluster>
 </Registrations>

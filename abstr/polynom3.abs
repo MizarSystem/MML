@@ -11,20 +11,20 @@ environ
       FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
       POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
       GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, VECTSP_2,
-      GR_CY_1, ARYTM;
+      GR_CY_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      ORDERS_1, STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, PARTFUN1,
-      FINSET_1, FUNCT_1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_5,
-      FINSOP_1, SEQ_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1, TREES_4,
-      WSIERP_1, MATRLIN, BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1,
-      NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
+      ORDERS_1, STRUCT_0, ALGSTR_0, NAT_1, RELAT_1, RELAT_2, RELSET_1,
+      PARTFUN1, FINSET_1, FUNCT_1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_5, FINSOP_1, VALUED_1, SEQ_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1,
+      FVSUM_1, TREES_4, WSIERP_1, MATRLIN, BINARITH, GROUP_1, DTCONSTR,
+      RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
  constructors BINOP_1, SQUARE_1, NAT_1, FINSEQOP, FINSOP_1, REALSET1, RFINSEQ,
       BINARITH, FINSEQ_5, WSIERP_1, ALGSEQ_1, BHSP_1, DTCONSTR, TRIANG_1,
-      POLYNOM1;
+      POLYNOM1, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
       FINSEQ_2, REALSET1, FINSEQ_5, STRUCT_0, VECTSP_1, GOBRD13, POLYNOM1,
-      VALUED_0;
+      VALUED_0, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
 
 
@@ -32,13 +32,13 @@ begin  :: Preliminaries
 
   theorem :: POLYNOM3:1
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be FinSequence of the carrier of L st
     for i be Element of NAT st i in dom p holds p.i = 0.L holds
      Sum p = 0.L;
 
   theorem :: POLYNOM3:2
-   for V be Abelian add-associative right_zeroed (non empty LoopStr)
+   for V be Abelian add-associative right_zeroed (non empty addLoopStr)
    for p be FinSequence of the carrier of V holds
     Sum p = Sum Rev p;
 
@@ -202,7 +202,7 @@ begin  :: Decomposition of Element of NATural Numbers
     holds Decomp(n,2).i = <*i-'1,n+1-'i*>;
 
   definition
-   let L be non empty HGrStr;
+   let L be non empty multMagma;
    let p,q,r be sequence of L;
    let t be FinSequence of 3-tuples_on NAT;
    func prodTuples(p,q,r,t) -> Element of (the carrier of L)* means
@@ -213,7 +213,7 @@ begin  :: Decomposition of Element of NATural Numbers
   end;
 
   theorem :: POLYNOM3:15
-   for L be non empty HGrStr
+   for L be non empty multMagma
    for p,q,r be sequence of L
    for t be FinSequence of 3-tuples_on NAT
    for P be Permutation of dom t
@@ -279,7 +279,7 @@ begin  :: Polynomials
     n >= len p iff n is_at_least_length_of p;
 
   scheme :: POLYNOM3:sch 2
- PolynomialLambdaF{R()->non empty LoopStr, A()->Element of NAT,
+ PolynomialLambdaF{R()->non empty addLoopStr, A()->Element of NAT,
                            F(Element of NAT)->Element of R()}:
    ex p be Polynomial of R() st
     len p <= A() & for n be Element of NAT st n < A() holds p.n=F(n);
@@ -289,32 +289,32 @@ begin  :: Polynomials
   end;
 
   registration
-   let L be right_zeroed (non empty LoopStr);
+   let L be right_zeroed (non empty addLoopStr);
    let p,q be Polynomial of L;
    cluster p+q -> finite-Support;
   end;
 
   theorem :: POLYNOM3:24
-   for L be right_zeroed (non empty LoopStr)
+   for L be right_zeroed (non empty addLoopStr)
    for p,q be Polynomial of L
    for n be Element of NAT holds
     (n is_at_least_length_of p & n is_at_least_length_of q) implies
      n is_at_least_length_of p+q;
 
   theorem :: POLYNOM3:25
-        for L be right_zeroed (non empty LoopStr)
+        for L be right_zeroed (non empty addLoopStr)
    for p,q be Polynomial of L holds
     support (p+q) c= support p \/ support q;
 
   definition
-   let L be Abelian (non empty LoopStr);
+   let L be Abelian (non empty addLoopStr);
    let p,q be sequence of L;
    redefine func p+q;
    commutativity;
   end;
 
   theorem :: POLYNOM3:26
-   for L be add-associative (non empty LoopStr)
+   for L be add-associative (non empty addLoopStr)
    for p,q,r be sequence of L holds
     p+q+r = p+(q+r);
 
@@ -324,13 +324,13 @@ begin  :: Polynomials
 
   registration
    let L be add-associative right_zeroed right_complementable
-    (non empty LoopStr);
+    (non empty addLoopStr);
    let p be Polynomial of L;
    cluster -p -> finite-Support;
   end;
 
   definition
-   let L be non empty LoopStr;
+   let L be non empty addLoopStr;
    let p,q be sequence of L;
    redefine func p-q equals
 :: POLYNOM3:def 8
@@ -339,13 +339,13 @@ begin  :: Polynomials
 
   registration
    let L be add-associative right_zeroed right_complementable
-    (non empty LoopStr);
+    (non empty addLoopStr);
    let p,q be Polynomial of L;
    cluster p-q -> finite-Support;
   end;
 
   theorem :: POLYNOM3:27
-   for L be non empty LoopStr
+   for L be non empty addLoopStr
    for p,q be sequence of L
    for n be Element of NAT holds
     (p-q).n = p.n - q.n;
@@ -365,13 +365,13 @@ begin  :: Polynomials
 canceled;
 
   theorem :: POLYNOM3:29
-   for L be right_zeroed (non empty LoopStr)
+   for L be right_zeroed (non empty addLoopStr)
    for p be sequence of L holds
     p+0_.(L) = p;
 
   theorem :: POLYNOM3:30
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be sequence of L holds
     p-p = 0_.(L);
 
@@ -423,8 +423,8 @@ canceled;
     (p+q)*'r = p*'r+q*'r;
 
   theorem :: POLYNOM3:34
-   for L be Abelian add-associative right_zeroed right_complementable unital
-    associative distributive (non empty doubleLoopStr)
+   for L be Abelian add-associative right_zeroed right_complementable
+    well-unital associative distributive (non empty doubleLoopStr)
    for p,q,r be sequence of L holds
     p*'q*'r = p*'(q*'r);
 
@@ -487,8 +487,8 @@ begin  :: The Ring of Polynomials
   end;
 
   registration
-   let L be Abelian add-associative right_zeroed right_complementable unital
-                          associative distributive (non empty doubleLoopStr);
+   let L be Abelian add-associative right_zeroed right_complementable
+       well-unital associative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> associative;
   end;
 
@@ -507,4 +507,4 @@ begin  :: The Ring of Polynomials
 theorem :: POLYNOM3:37
   for L being add-associative right_zeroed right_complementable well-unital
             Abelian commutative distributive (non empty doubleLoopStr) holds
-  1_Polynom-Ring L = 1_.L;
+  1.Polynom-Ring L = 1_.L;

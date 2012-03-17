@@ -7,13 +7,14 @@
 environ
 
  vocabularies VECTSP_1, REALSET2, FUNCT_1, BOOLE, BINOP_1, REALSET3, RLVECT_1,
-      ARYTM_1, GROUP_1, ARYTM;
+      ARYTM_1, GROUP_1, ARYTM, ALGSTR_0;
  notations TARSKI, ZFMISC_1, SUBSET_1, DOMAIN_1, FUNCT_1, FUNCT_2, BINOP_1,
-      STRUCT_0, GROUP_1, RLVECT_1, VECTSP_1, REALSET2;
- constructors BINOP_1, REALSET2;
- registrations SUBSET_1, RELSET_1, REALSET1, STRUCT_0, REALSET2;
+      STRUCT_0, ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, REALSET2;
+ constructors BINOP_1, REALSET2, VALUED_1, PARTFUN1, SEQ_1;
+ registrations SUBSET_1, RELSET_1, REALSET1, STRUCT_0, REALSET2, VALUED_1,
+      FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions BINOP_1, RLVECT_1, REALSET2, GROUP_1;
+ definitions BINOP_1, RLVECT_1, REALSET2, GROUP_1, ALGSTR_0, VALUED_1;
  theorems FUNCT_2, ZFMISC_1, REALSET2, XBOOLE_0, RLVECT_1, VECTSP_1;
  schemes BINOP_1;
 
@@ -21,21 +22,18 @@ begin
 
 :: Properties of fields
 
-theorem
-    for F being Field holds -0.F = 0.F by RLVECT_1:25;
+canceled;
 
 theorem Th2:
-   for F being Field holds revf(F).(nmf(F)) = nmf(F)
+   for F being Field holds revf(F).1.F = 1.F
 proof
    let F be Field;
-     nmf(F)*nmf(F) = 1.F by REALSET2:10;
-   hence thesis by REALSET2:26;
+A1:  1.F is Element of (the carrier of F)\{0.F} by REALSET2:31;
+    then 1.F*1.F = 1.F by REALSET2:10;
+   hence thesis by A1,REALSET2:26;
 end;
 
-theorem
-    for F being Field holds
-   for a,b being Element of the carrier of F holds
-     -(a-b) = b+-a by RLVECT_1:47;
+canceled;
 
 theorem Th4:
    for F being Field holds
@@ -52,18 +50,15 @@ A2:omf(F).(b,revf(F).a) is Element of (the carrier of F)\{0.F}
 by REALSET2:28;
     revfb*(b*revfa) = revfa*(b*revfb) by REALSET2:8
         .= revfa*(omf F).(b,revfb)
-        .= revfa*nmf F by REALSET2:def 18
+        .= revfa*1.F by REALSET2:def 18
         .= revf(F).a by REALSET2:10;
     then a*revfb*(b*revfa) = a*revfa by A2,REALSET2:8
         .= (omf F).(a,revfa)
-        .= nmf(F) by REALSET2:def 18;
+        .= 1.F by REALSET2:def 18;
    hence thesis by A1,A2,REALSET2:26;
 end;
 
-theorem
-    for F being Field holds
-   for a,b being Element of the carrier of F holds
-     -(a+b) = -a + -b by RLVECT_1:45;
+canceled;
 
 theorem Th6:
    for F being Field,
@@ -130,14 +125,14 @@ A1:omf(F).(a,revf(F).b) = omf(F).(c,revf(F).d) implies
       assume
    A2:omf(F).(a,revf(F).b) = omf(F).(c,revf(F).d);
    A3:a = a*1.F by REALSET2:25
-       .= omf(F).(a,nmf(F))
+       .= omf(F).(a,1.F)
        .= omf(F).(a,b*revfb) by REALSET2:def 18
        .= a*(revfb*b)
        .= a*revfb*b by REALSET2:23
        .= b*crevfd by A2
        .= omf(F).(b,omf(F).(c,revf(F).d));
 A4:      c = c*1.F by REALSET2:25
-       .= omf(F).(c,nmf(F))
+       .= omf(F).(c,1.F)
        .= omf(F).(c,d*revfd) by REALSET2:def 18
        .= c*(revfd*d)
        .= c*revfd*d by REALSET2:23;
@@ -154,7 +149,7 @@ A4:      c = c*1.F by REALSET2:25
       assume
    A5:omf(F).(a,d) = omf(F).(b,c);
           a = a*1.F by REALSET2:25
-       .= omf(F).(a,nmf(F))
+       .= omf(F).(a,1.F)
        .= a*(d*revfd) by REALSET2:def 18
        .= a*d*revfd by REALSET2:23
        .= b*c*revfd by A5
@@ -163,17 +158,14 @@ A4:      c = c*1.F by REALSET2:25
       hence omf(F).(a,revf(F).b)
         = crevfd*b*revfb
        .= crevfd*(b*revfb) by REALSET2:23
-       .= omf(F).(omf(F).(c,revf(F).d),nmf(F)) by REALSET2:def 18
+       .= omf(F).(omf(F).(c,revf(F).d),1.F) by REALSET2:def 18
        .= omf(F).(c,revfd)*1.F
        .= omf(F).(c,revf(F).d) by REALSET2:25;
    end;
    hence thesis by A1;
 end;
 
-theorem
-       for F being Field holds
-   for a,b being Element of the carrier of F holds
-   a*b = 0.F iff a = 0.F or b = 0.F by VECTSP_1:44;
+canceled;
 
 theorem
        for F being Field holds
@@ -203,8 +195,8 @@ theorem
        for F being Field holds
    for a,b being Element of the carrier of F holds
    for c,d being Element of (the carrier of F)\{0.F} holds
-   (the add of F).(omf(F).(a,revf(F).c),omf(F).(b,revf(F).d)) =
-   omf(F).((the add of F).(omf(F).(a,d),omf(F).(b,c)),revf(F).(omf(F).(c,d)))
+   (the addF of F).(omf(F).(a,revf(F).c),omf(F).(b,revf(F).d)) =
+   omf(F).((the addF of F).(omf(F).(a,d),omf(F).(b,c)),revf(F).(omf(F).(c,d)))
 proof
    let F be Field;
    let a,b be Element of the carrier of F;
@@ -213,13 +205,13 @@ proof
             as Element of F by XBOOLE_0:def 4;
 A1: omf(F).(c,d) is Element of (the carrier of F)\{0.F} by REALSET2:28;
 A2:a = a*1.F by REALSET2:25
-          .= omf(F).(a,nmf(F))
+          .= omf(F).(a,1.F)
           .= a*(d*revfd) by REALSET2:def 18
           .= a*d*revfd by REALSET2:23;
      reconsider revfc = revf(F).c,  revfd = revf(F).d
       as Element of (the carrier of F)\{0.F};
 A3:b = b*1.F by REALSET2:25
-          .= omf(F).(b,nmf(F))
+          .= omf(F).(b,1.F)
           .= b*(c*revfc) by REALSET2:def 18
           .= b*c*revfc by REALSET2:23;
 A4:omf(F).(a,revf(F).c) = a*d*revfd*revfc by A2
@@ -232,21 +224,22 @@ A4:omf(F).(a,revf(F).c) = a*d*revfd*revfc by A2
          .= b*c*(revfc*revfd) by REALSET2:23
           .= omf(F).(omf(F).(b,c),revf(F).(omf(F).(c,d))) by Th6;
 
-   hence (the add of F).(omf(F).(a,revf(F).c),omf(F).(b,revf(F).d))
+   hence (the addF of F).(omf(F).(a,revf(F).c),omf(F).(b,revf(F).d))
     = a*d*revfcd+b*c*revfcd by A4
-   .= (a*d+b*c)*revfcd by REALSET2:3
- .= omf(F).((the add of F).(omf(F).(a,d),omf(F).(b,c)),revf(F).(omf(F).(c,d)));
+   .= (a*d+b*c)*revfcd by VECTSP_1:def 18
+ .= omf(F).((the addF of F).
+ (omf(F).(a,d),omf(F).(b,c)),revf(F).(omf(F).(c,d)));
 end;
 
 definition ::subtraction
    let F be Field;
    func osf(F) -> BinOp of the carrier of F means
 :Def1: for x,y being Element of the carrier of F holds
-        it.(x,y) = (the add of F).(x,compf(F).y);
+        it.(x,y) = (the addF of F).(x,(comp F).y);
 existence
 proof
   defpred P[Element of the carrier of F,Element of the carrier of F,set]
-          means $3=(the add of F).($1,compf(F).$2);
+          means $3=(the addF of F).($1,(comp F).$2);
  A1: for x being Element of the carrier of F
       for y being Element of the carrier of F
       ex z being Element of the carrier of F st P[x,y,z];
@@ -256,7 +249,7 @@ proof
    P[x,y,f.(x,y)] from BINOP_1:sch 3(A1);
    then consider S being BinOp of the carrier of F such that
 A2:for x,y being Element of the carrier of F holds
-   S.(x,y)=(the add of F).(x,compf(F).y);
+   S.(x,y)=(the addF of F).(x,(comp F).y);
    take S;
    thus thesis by A2;
 end;
@@ -264,16 +257,16 @@ uniqueness
 proof
    let S1,S2 be BinOp of the carrier of F such that
 A3:for x,y being Element of the carrier of F holds
-        S1.(x,y) = (the add of F).(x,compf(F).y) and
+        S1.(x,y) = (the addF of F).(x,(comp F).y) and
 A4:for x,y being Element of the carrier of F holds
-        S2.(x,y) = (the add of F).(x,compf(F).y);
+        S2.(x,y) = (the addF of F).(x,(comp F).y);
        now let p be set;
       assume p in [:the carrier of F,the carrier of F:];
       then consider x,y being set such that
    A5:x in the carrier of F & y in the carrier of F & p=[x,y]
    by ZFMISC_1:def 2;
       thus S1.p = S1.(x,y) by A5
-          .= (the add of F).(x,compf(F).y) by A3,A5
+          .= (the addF of F).(x,(comp F).y) by A3,A5
           .= S2.(x,y) by A4,A5
           .= S2.p by A5;
    end;
@@ -289,8 +282,8 @@ theorem
 proof
    let F be Field;
    let x be Element of the carrier of F;
-   thus osf(F).(x,x) = (the add of F).(x,compf(F).x) by Def1
-               .= x-x by REALSET2:def 17
+   thus osf(F).(x,x) = (the addF of F).(x,(comp F).x) by Def1
+               .= x-x by VECTSP_1:def 25
                .= 0.F by RLVECT_1:16;
 end;
 
@@ -301,18 +294,15 @@ theorem Th15:
 proof
    let F be Field;
    let a,b,c be Element of the carrier of F;
-   thus omf(F).(a,osf(F).(b,c)) = omf(F).(a,(the add of F).(b,compf(F).c))
+   thus omf(F).(a,osf(F).(b,c)) = omf(F).(a,(the addF of F).(b,(comp F).c))
            by Def1
-        .= a*(b-c) by REALSET2:def 17
+        .= a*(b-c) by VECTSP_1:def 25
         .= a*b-a*c by REALSET2:15
-        .= (the add of F).(omf(F).(a,b),compf(F).(a*c)) by REALSET2:def 17
+        .= (the addF of F).(omf(F).(a,b),(comp F).(a*c)) by VECTSP_1:def 25
         .= osf(F).(omf(F).(a,b),omf(F).(a,c)) by Def1;
 end;
 
-theorem
-    for F being Field holds
-   for a,b being Element of the carrier of F holds
-   osf(F).(a,b) is Element of the carrier of F;
+canceled;
 
 theorem
        for F being Field holds
@@ -333,30 +323,30 @@ end;
 theorem
        for F being Field holds
    for a,b being Element of the carrier of F holds
-   osf(F).(a,b) = compf(F).(osf(F).(b,a))
+   osf(F).(a,b) = (comp F).(osf(F).(b,a))
 proof
    let F be Field;
    let a,b be Element of the carrier of F;
-       osf(F).(a,b) = (the add of F).(a,compf(F).b) by Def1
-               .= a+-b by REALSET2:def 17
+       osf(F).(a,b) = (the addF of F).(a,(comp F).b) by Def1
+               .= a+-b by VECTSP_1:def 25
                .= -(b-a) by RLVECT_1:47
-               .= compf(F).(b+-a) by REALSET2:def 17
-               .= compf(F).((the add of F).(b,compf(F).a)) by REALSET2:def 17;
+               .= (comp F).(b+-a) by VECTSP_1:def 25
+               .= (comp F).((the addF of F).(b,(comp F).a)) by VECTSP_1:def 25;
    hence thesis by Def1;
 end;
 
 theorem
        for F being Field holds
    for a,b being Element of the carrier of F holds
-   osf(F).(compf(F).a,b) = compf(F).((the add of F).(a,b))
+   osf(F).((comp F).a,b) = (comp F).((the addF of F).(a,b))
 proof
    let F be Field;
    let a,b be Element of the carrier of F;
-   thus osf(F).(compf(F).a,b) = (the add of F).(compf(F).a,compf(F).b) by Def1
-        .= (the add of F).(-a,compf(F).b) by REALSET2:def 17
-        .= -a+-b by REALSET2:def 17
+   thus osf(F).((comp F).a,b) = (the addF of F).((comp F).a,(comp F).b) by Def1
+        .= (the addF of F).(-a,(comp F).b) by VECTSP_1:def 25
+        .= -a+-b by VECTSP_1:def 25
         .= -(a+b) by RLVECT_1:45
-        .= compf(F).((the add of F).(a,b)) by REALSET2:def 17;
+        .= (comp F).((the addF of F).(a,b)) by VECTSP_1:def 25;
 end;
 
 theorem Th20:
@@ -366,22 +356,22 @@ theorem Th20:
 proof
    let F be Field;
    let a,b,c,d be Element of the carrier of F;
-A1:osf(F).(a,b) = (the add of F).(a,compf(F).b) by Def1
-              .= a-b by REALSET2:def 17;
-       osf(F).(c,d) = (the add of F).(c,compf(F).d) by Def1
-              .= c-d by REALSET2:def 17;
+A1:osf(F).(a,b) = (the addF of F).(a,(comp F).b) by Def1
+              .= a-b by VECTSP_1:def 25;
+       osf(F).(c,d) = (the addF of F).(c,(comp F).d) by Def1
+              .= c-d by VECTSP_1:def 25;
    hence thesis by A1,Th7;
 end;
 
 theorem
        for F being Field holds
    for a being Element of the carrier of F holds
-   osf(F).(0.F,a) = compf(F).a
+   osf(F).(0.F,a) = (comp F).a
 proof
    let F be Field;
    let a be Element of the carrier of F;
-   thus osf(F).(0.F,a) = 0.F+compf(F).a by Def1
-                    .= compf(F).a by REALSET2:6;
+   thus osf(F).(0.F,a) = 0.F+(comp F).a by Def1
+                    .= (comp F).a by REALSET2:6;
 end;
 
 theorem Th22:
@@ -391,8 +381,8 @@ theorem Th22:
 proof
    let F be Field;
    let a be Element of the carrier of F;
-   thus osf(F).(a,0.F) = (the add of F).(a,compf(F).0.F) by Def1
-                    .= (the add of F).(a,-0.F) by REALSET2:def 17
+   thus osf(F).(a,0.F) = (the addF of F).(a,(comp F).0.F) by Def1
+                    .= (the addF of F).(a,-0.F) by VECTSP_1:def 25
                     .= a+0.F by RLVECT_1:25
                     .= a by REALSET2:6;
 end;
@@ -426,41 +416,41 @@ end;
 theorem
        for F being Field holds
    for a,b,c being Element of the carrier of F holds
-   osf(F).(a,osf(F).(b,c)) = (the add of F).(osf(F).(a,b),c)
+   osf(F).(a,osf(F).(b,c)) = (the addF of F).(osf(F).(a,b),c)
 proof
    let F be Field;
    let a,b,c be Element of the carrier of F;
-   thus osf(F).(a,osf(F).(b,c)) = osf(F).(a,(the add of F).(b,compf(F).c))
+   thus osf(F).(a,osf(F).(b,c)) = osf(F).(a,(the addF of F).(b,(comp F).c))
              by Def1
-        .= a+compf(F).(b+compf(F).c) by Def1
-        .= a+compf(F).(b+-c) by REALSET2:def 17
-        .= a+-(b+-c) by REALSET2:def 17
+        .= a+(comp F).(b+(comp F).c) by Def1
+        .= a+(comp F).(b+-c) by VECTSP_1:def 25
+        .= a+-(b+-c) by VECTSP_1:def 25
        .= a+(-b+--c) by RLVECT_1:45
-    .= a+(compf(F).b+--c) by REALSET2:def 17
-    .= a+(compf(F).b+compf(F).(-c)) by REALSET2:def 17
-    .= a+(compf(F).b+compf(F).(compf(F).c))
-                by REALSET2:def 17
-        .= a+(compf(F).b+c) by REALSET2:13
-        .= a+(compf(F).b)+c by REALSET2:4
-        .= (the add of F).(osf(F).(a,b),c) by Def1;
+    .= a+((comp F).b+--c) by VECTSP_1:def 25
+    .= a+((comp F).b+(comp F).(-c)) by VECTSP_1:def 25
+    .= a+((comp F).b+(comp F).((comp F).c))
+                by VECTSP_1:def 25
+        .= a+((comp F).b+c) by REALSET2:13
+        .= a+((comp F).b)+c by RLVECT_1:def 6
+        .= (the addF of F).(osf(F).(a,b),c) by Def1;
 end;
 
 theorem
        for F being Field holds
    for a,b,c being Element of the carrier of F holds
-   osf(F).(a,(the add of F).(b,c)) = osf(F).(osf(F).(a,b),c)
+   osf(F).(a,(the addF of F).(b,c)) = osf(F).(osf(F).(a,b),c)
 proof
    let F be Field;
    let a,b,c be Element of the carrier of F;
-   thus osf(F).(a,(the add of F).(b,c))
-    = (the add of F).(a,compf(F).((the add of F).(b,c))) by Def1
-    .= a-(b+c) by REALSET2:def 17
+   thus osf(F).(a,(the addF of F).(b,c))
+    = (the addF of F).(a,(comp F).((the addF of F).(b,c))) by Def1
+    .= a-(b+c) by VECTSP_1:def 25
         .= a-b-c by RLVECT_1:41
-        .= (the add of F).((the add of F).(a,-b),compf(F).c)
-        by REALSET2:def 17
-        .= (the add of F).((the add of F).(a,compf(F).b),compf(F).c)
-        by REALSET2:def 17
-        .= (the add of F).(osf(F).(a,b),compf(F).c) by Def1
+        .= (the addF of F).((the addF of F).(a,-b),(comp F).c)
+        by VECTSP_1:def 25
+        .= (the addF of F).((the addF of F).(a,(comp F).b),(comp F).c)
+        by VECTSP_1:def 25
+        .= (the addF of F).(osf(F).(a,b),(comp F).c) by Def1
         .= osf(F).(osf(F).(a,b),c) by Def1;
 end;
 
@@ -524,19 +514,15 @@ canceled 2;
 theorem Th29:
    for F being Field holds
    for x being Element of (the carrier of F)\{0.F} holds
-      ovf(F).(x,x) = nmf(F)
+      ovf(F).(x,x) = 1.F
 proof
    let F be Field;
    let x be Element of (the carrier of F)\{0.F};
    thus ovf(F).(x,x) = omf(F).(x,revf(F).x) by Def2
-               .=nmf(F) by REALSET2:def 18;
+               .=1.F by REALSET2:def 18;
 end;
 
-theorem
-    for F being Field holds
-   for a being Element of the carrier of F holds
-   for b being Element of (the carrier of F)\{0.F} holds
-   ovf(F).(a,b) is Element of the carrier of F;
+canceled;
 
 theorem Th31:
    for F being Field holds
@@ -558,18 +544,18 @@ end;
 theorem
        for F being Field holds
    for a being Element of (the carrier of F)\{0.F} holds
-   omf(F).(a,ovf(F).(nmf(F),a)) = nmf(F) &
-   omf(F).(ovf(F).(nmf(F),a),a) = nmf(F)
+   omf(F).(a,ovf(F).(1.F,a)) = 1.F &
+   omf(F).(ovf(F).(1.F,a),a) = 1.F
 proof
    let F be Field;
    let a be Element of (the carrier of F)\{0.F};
- thus A1:omf(F).(a,ovf(F).(nmf(F),a))
+ thus A1:omf(F).(a,ovf(F).(1.F,a))
         = ovf(F).(a*1.F,a) by Th31
         .= ovf(F).(a,a) by REALSET2:25
-        .= nmf(F) by Th29;
- thus omf(F).(ovf(F).(nmf(F),a),a) = ovf(F).(nmf(F),a)*a
-     .= a*ovf(F).(nmf(F),a)
-     .= nmf(F) by A1;
+        .= 1.F by Th29;
+ thus omf(F).(ovf(F).(1.F,a),a) = ovf(F).(1.F,a)*a
+     .= a*ovf(F).(1.F,a)
+     .= 1.F by A1;
 end;
 
 canceled 2;
@@ -615,13 +601,13 @@ end;
 theorem
        for F being Field holds
    for a being Element of (the carrier of F)\{0.F} holds
-   ovf(F).(nmf(F),a) = revf(F).a
+   ovf(F).(1.F,a) = revf(F).a
 proof
    let F be Field;
    let a be Element of (the carrier of F)\{0.F};
     reconsider revfa = revf(F).a
       as Element of (the carrier of F)\{0.F};
-   thus ovf(F).(nmf(F),a) = omf(F).(nmf(F),revf(F).a) by Def2
+   thus ovf(F).(1.F,a) = omf(F).(1.F,revf(F).a) by Def2
                     .= 1.F*revfa
                     .= revf(F).a by REALSET2:10;
 end;
@@ -629,11 +615,12 @@ end;
 theorem Th39:
    for F being Field holds
    for a being Element of the carrier of F holds
-   ovf(F).(a,nmf(F)) = a
+   ovf(F).(a,1.F) = a
 proof
    let F be Field;
    let a be Element of the carrier of F;
-   thus ovf(F).(a,nmf(F)) = omf(F).(a,revf(F).nmf(F)) by Def2
+    1.F is Element of (the carrier of F)\{0.F} by REALSET2:31;
+   hence ovf(F).(a,1.F) = omf(F).(a,revf(F).1.F) by Def2
                     .= a*1.F by Th2
                     .= a by REALSET2:25;
 end;
@@ -647,11 +634,12 @@ proof
    let F be Field;
    let a be Element of (the carrier of F)\{0.F};
    let b,c be Element of the carrier of F;
-   set d=nmf(F);
-A1:omf(F).(c,d) =c*1.F
+   set d=1.F;
+A1:  1.F is Element of (the carrier of F)\{0.F} by REALSET2:31;
+A2:omf(F).(c,d) =c*1.F
      .= c by REALSET2:25;
        ovf(F).(b,d) = b by Th39;
-   hence thesis by A1,Th37;
+   hence thesis by A1,A2,Th37;
 end;
 
 theorem
@@ -663,13 +651,14 @@ proof
    let F be Field;
    let a,c be Element of the carrier of F;
    let b be Element of (the carrier of F)\{0.F};
-   set d=nmf(F);
+   set d=1.F;
 A1:omf(F).(c,d) = c*1.F
        .= c by REALSET2:25;
 A2:ovf(F).(a,d) = a by Th39;
+A3:  1.F is Element of (the carrier of F)\{0.F} by REALSET2:31;
     omf(F).(b,a) = b*a .= a*b
        .= omf(F).(a,b);
-   hence thesis by A1,A2,Th37;
+   hence thesis by A1,A2,A3,Th37;
 end;
 
 theorem

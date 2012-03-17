@@ -17,6 +17,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="ANALOAF"/>
 <ArticleID name="DIRAF"/>
@@ -24,13 +25,13 @@
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="12">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="47"/>
+<Adjective nr="76"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 </Registrations>

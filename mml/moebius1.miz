@@ -13,16 +13,17 @@ environ
       XREAL_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, FINSET_1, REALSET1, ORDINAL1, CARD_1,
       NUMBERS, XCMPLX_0, XREAL_0, XXREAL_0, NAT_1, NAT_D, INT_2, NEWTON,
-      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, SEQ_1, SEQM_3, PBOOLE,
-      SQUARE_1, POLYNOM1, POLYNOM2, RVSUM_1, WSIERP_1, BINOP_2, PRE_CIRC,
-      NAT_3, DOMAIN_1, ABIAN, PYTHTRIP, UPROOTS;
+      SETFAM_1, RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, VALUED_1, SEQ_1, SEQM_3,
+      PBOOLE, SQUARE_1, POLYNOM1, POLYNOM2, RVSUM_1, WSIERP_1, BINOP_2,
+      PRE_CIRC, NAT_3, DOMAIN_1, ABIAN, PYTHTRIP, UPROOTS;
  constructors SETFAM_1, NAT_D, FINSOP_1, REALSET1, BINARITH, PRE_CIRC,
-      WSIERP_1, ABIAN, PEPIN, PYTHTRIP, FACIRC_1, POLYNOM2, UPROOTS, NAT_3;
+      WSIERP_1, ABIAN, PEPIN, PYTHTRIP, FACIRC_1, POLYNOM2, UPROOTS, NAT_3,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, RVSUM_1,
-      NEWTON, PRE_CIRC, POLYNOM1, NAT_3, VALUED_0;
+      NEWTON, PRE_CIRC, POLYNOM1, NAT_3, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, ARITHM, REAL, BOOLE;
- definitions TARSKI, XBOOLE_0, RVSUM_1;
+ definitions TARSKI, XBOOLE_0, RVSUM_1, VALUED_1;
  theorems XBOOLE_0, NAT_3, BAGORDER, NEWTON, INT_2, NAT_2, WSIERP_1, SQUARE_1,
       CARD_1, PEPIN, NAT_1, XCMPLX_1, XREAL_1, PYTHTRIP, HEYTING3, ORDINAL1,
       EULER_1, XREAL_0, PRE_CIRC, FINSEQ_1, XBOOLE_1, TARSKI, ZFMISC_1,
@@ -1592,7 +1593,7 @@ then A5:         not x in Y /\ SCNAT by A1,Lm1;
             reconsider k = x as Element of NAT by A4;
 A6:         k in support SMoebius X & not (k in support SMoebius Y)
               by A4,A5,Def5;
-             (SMoebius (X \/ Y)).x = Moebius k + 0 by A3,Def5
+             (SMoebius (X \/ Y)).x = Moebius k + (0 qua Nat) by A3,Def5
               .= Moebius k + SMoebius Y.k by A6,POLYNOM1:def 7
               .= SMoebius X.k + SMoebius Y.k by A6,Def5
               .= (SMoebius X + SMoebius Y).x by POLYNOM1:def 5;
@@ -1604,7 +1605,7 @@ then A8:         not x in X /\ SCNAT by A1,Lm1;
             consider k being Element of NAT such that A9: k = x by A7;
 A10:         k in support SMoebius Y & not (k in support SMoebius X)
               by A7,A8,A9,Def5;
-             (SMoebius (X \/ Y)).x = Moebius k + 0 by A3,A9,Def5
+             (SMoebius (X \/ Y)).x = Moebius k + (0 qua Nat) by A3,A9,Def5
               .= Moebius k + SMoebius X.k by A10,POLYNOM1:def 7
               .= SMoebius Y.k + SMoebius X.k by A10,Def5
               .= (SMoebius X + SMoebius Y).x by A9,POLYNOM1:def 5;
@@ -2018,27 +2019,27 @@ theorem Th52:
       assume Radical n <= 0;
       then Product PFactors n = 0;
       then consider f being FinSequence of COMPLEX such that
-A2:   Product f = 0 &
+A1:   Product f = 0 &
       f = (PFactors n) * canFS(support PFactors n) by NAT_3:def 5;
-A3:   not ex k being Nat st k in dom f & f.k = 0
+A2:   not ex k being Nat st k in dom f & f.k = 0
       proof
-A4:     rng canFS support PFactors n c= support PFactors n by FINSEQ_1:def 4;
+A3:     rng canFS support PFactors n c= support PFactors n by FINSEQ_1:def 4;
         given k being Nat such that
-A5:     k in dom f & f.k = 0;
-         k in dom canFS support PFactors n by A2,A5,FUNCT_1:21;
-then A6:     (canFS support PFactors n).k in rng canFS support PFactors n
+A4:     k in dom f & f.k = 0;
+         k in dom canFS support PFactors n by A1,A4,FUNCT_1:21;
+then A5:     (canFS support PFactors n).k in rng canFS support PFactors n
           by FUNCT_1:12;
-then     (canFS support PFactors n).k in support PFactors n by A4;
+then     (canFS support PFactors n).k in support PFactors n by A3;
         then (canFS support PFactors n).k in SetPrimes;
         then reconsider p = (canFS support PFactors n).k as prime
         Element of NAT by NEWTON:def 6;
-         p in support PFactors n by A4,A6;
-then A7:     p in support pfexp n by Def6;
-         f.k = (PFactors n).p by A2,A5,FUNCT_1:22
-           .= p by A7,Def6;
-        hence thesis by A5;
+         p in support PFactors n by A3,A5;
+then A6:     p in support pfexp n by Def6;
+         f.k = (PFactors n).p by A1,A4,FUNCT_1:22
+           .= p by A6,Def6;
+        hence thesis by A4;
       end;
-      thus contradiction by A2,A3,RVSUM_1:133;
+      thus contradiction by A1,A2,RVSUM_1:133;
   end;
 
 registration let n be non zero natural number;

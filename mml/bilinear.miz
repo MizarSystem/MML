@@ -9,15 +9,15 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, SUBSET_1,
       FUNCOP_1, GRCAT_1, UNIALG_1, BINOP_1, LATTICES, RELAT_1, HAHNBAN1,
       FUNCT_5, RLSUB_1, ALGSTR_2, REALSET1, BOOLE, SEQM_3, GROUP_6, VECTSP10,
-      BILINEAR, RELAT_2, SPPOL_1, VECTSP_2, ARYTM;
+      BILINEAR, RELAT_2, SPPOL_1, VECTSP_2, ARYTM, ALGSTR_0, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, FUNCT_1, RELAT_1,
-      REALSET1, STRUCT_0, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1,
-      FUNCT_2, FUNCT_5, VECTSP_4, BORSUK_1, HAHNBAN1, VECTSP10;
- constructors FUNCT_5, BORSUK_1, VECTSP10;
+      REALSET1, STRUCT_0, ALGSTR_0, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1,
+      RELSET_1, FUNCT_2, FUNCT_5, VECTSP_4, BORSUK_1, HAHNBAN1, VECTSP10;
+ constructors FUNCT_5, BORSUK_1, VECTSP10, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_4,
-      HAHNBAN1, VECTSP10;
+      HAHNBAN1, VECTSP10, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, BINOP_1;
+ definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, BINOP_1, VALUED_1;
  theorems FUNCT_5, XBOOLE_1, FUNCT_2, HAHNBAN1, VECTSP_1, PRE_TOPC, FUNCOP_1,
       RLVECT_1, ANPROJ_1, VECTSP_4, TARSKI, FUNCT_1, REALSET1, ZFMISC_1,
       DOMAIN_1, VECTSP10, MOD_1, GROUP_1, BINOP_1, STRUCT_0;
@@ -44,7 +44,7 @@ definition
 end;
 
 definition
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V,W be non empty VectSpStr over K;
  let f,g be Form of V,W;
 func f+g -> Form of V,W means :Def3:
@@ -74,7 +74,7 @@ func f+g -> Form of V,W means :Def3:
 end;
 
 definition
- let K be non empty HGrStr;
+ let K be non empty multMagma;
  let V,W be non empty VectSpStr over K;
  let f be Form of V,W;
  let a be Element of K;
@@ -105,7 +105,7 @@ func a*f -> Form of V,W means :Def4:
 end;
 
 definition
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V,W be non empty VectSpStr over K;
  let f be Form of V,W;
 func -f -> Form of V,W means :Def5:
@@ -139,25 +139,25 @@ definition
  let V,W be non empty VectSpStr over K;
  let f be Form of V,W;
 redefine func -f -> Form of V,W equals
-     (- 1_K) *f;
+     (- 1.K) *f;
  coherence;
  compatibility
   proof
   let g be Form of V,W;
-  thus g= -f implies g = (- 1_K) *f
+  thus g= -f implies g = (- 1.K) *f
    proof
     assume A1: g =-f;
         now
      let v be Vector of V, w be Vector of W;
       thus g.(v,w)= -f.(v,w) by A1,Def5
-       .= (-1_K )* f.(v,w) by MOD_1:14
-       .=((- 1_K) *f).(v,w) by Def4;
+       .= (-1.K )* f.(v,w) by MOD_1:14
+       .=((- 1.K) *f).(v,w) by Def4;
      end;
     hence thesis by BINOP_1:2;
    end;
-  assume A2: g = (- 1_K) *f;
+  assume A2: g = (- 1.K) *f;
        now let v be Vector of V, w be Vector of W;
-    thus g.(v,w)= (-1_K )* f.(v,w) by A2,Def4
+    thus g.(v,w)= (-1.K )* f.(v,w) by A2,Def4
      .=- f.(v,w) by MOD_1:14
      .= (-f).(v,w) by Def5;
     end;
@@ -166,7 +166,7 @@ redefine func -f -> Form of V,W equals
 end;
 
 definition
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V,W be non empty VectSpStr over K;
  let f,g be Form of V,W;
 func f-g -> Form of V,W equals
@@ -175,7 +175,7 @@ correctness;
 end;
 
 definition
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V,W be non empty VectSpStr over K;
  let f,g be Form of V,W;
 redefine func f - g -> Form of V,W means :Def8:
@@ -192,13 +192,13 @@ redefine func f - g -> Form of V,W means :Def8:
     let v be Vector of V, w be Vector of W;
      thus h.(v,w) = f.(v,w) + (-g).(v,w) by A1,Def3
       .= f.(v,w) + -g.(v,w) by Def5
-      .= f.(v,w) -g.(v,w) by RLVECT_1:def 11;
+      .= f.(v,w) -g.(v,w) by RLVECT_1:def 12;
     end;
     assume
  A2: for v be Vector of V, w be Vector of W holds h.(v,w) = f.(v,w) - g.(v,w);
          now let v be Vector of V, w be Vector of W;
       thus h.(v,w) = f.(v,w) - g.(v,w) by A2
-       .= f.(v,w) +- g.(v,w) by RLVECT_1:def 11
+       .= f.(v,w) +- g.(v,w) by RLVECT_1:def 12
       .= f.(v,w) + (-g).(v,w) by Def5
      .= (f-g).(v,w) by Def3;
     end;
@@ -207,7 +207,7 @@ redefine func f - g -> Form of V,W means :Def8:
 end;
 
 Lm1:
-now let K be Abelian (non empty LoopStr), V,W be non empty VectSpStr over K,
+now let K be Abelian (non empty addLoopStr), V,W be non empty VectSpStr over K,
       f,g be Form of V,W;
       now let v be Vector of V,w be Vector of W;
    thus (f+g).(v,w) = f.(v,w) + g.(v,w) by Def3
@@ -217,7 +217,7 @@ now let K be Abelian (non empty LoopStr), V,W be non empty VectSpStr over K,
 end;
 
 definition
- let K be Abelian (non empty LoopStr);
+ let K be Abelian (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f,g be Form of V,W;
 redefine func f+g;
@@ -227,11 +227,11 @@ end;
 canceled;
 
 theorem
-    for K be right_zeroed (non empty LoopStr)
+    for K be right_zeroed (non empty addLoopStr)
 for V,W be non empty VectSpStr over K
  for f be Form of V,W holds f + NulForm(V,W) = f
  proof
-  let K be right_zeroed (non empty LoopStr),
+  let K be right_zeroed (non empty addLoopStr),
       V,W be non empty VectSpStr over K, f be Form of V,W;
   set g = NulForm(V,W);
        now let v be Vector of V, w be Vector of W;
@@ -243,11 +243,11 @@ for V,W be non empty VectSpStr over K
 end;
 
 theorem
-    for K be add-associative (non empty LoopStr)
+    for K be add-associative (non empty addLoopStr)
 for V,W be non empty VectSpStr over K
  for f,g,h be Form of V,W holds f+g+h = f+(g+h)
  proof
-  let K be add-associative (non empty LoopStr),
+  let K be add-associative (non empty addLoopStr),
     V,W be non empty VectSpStr over K, f,g,h be Form of V,W;
        now let v be Vector of V, w be Vector of W;
     thus (f+g+h).(v,w) = (f+g).(v,w) + h.(v,w) by Def3
@@ -261,13 +261,13 @@ end;
 
 theorem
     for K be add-associative right_zeroed right_complementable (non empty
-LoopStr
+addLoopStr
 )
 for V,W be non empty VectSpStr over K
  for f be Form of V,W holds f - f = NulForm(V,W)
  proof
   let K be add-associative right_zeroed right_complementable
-           (non empty LoopStr),
+           (non empty addLoopStr),
         V,W be non empty VectSpStr over K, f be Form of V,W;
        now let v be Vector of V, w be Vector of W;
     thus (f-f).(v,w) = f.(v,w) - f.(v,w) by Def8
@@ -338,13 +338,13 @@ for a,b be Element of K
 theorem
     for K be left_unital (non empty doubleLoopStr)
 for V,W be non empty VectSpStr over K
- for f be Form of V,W holds (1_K)*f = f
+ for f be Form of V,W holds (1.K)*f = f
  proof
   let K be left_unital (non empty doubleLoopStr),
       V,W be non empty VectSpStr over K, f be Form of V,W;
        now
    let v be Vector of V, w be Vector of W;
-    thus ((1_K)*f).(v,w) = (1_K) * f.(v,w) by Def4
+    thus ((1.K)*f).(v,w) = (1.K) * f.(v,w) by Def4
     .= f.(v,w) by VECTSP_1:def 19;
    end;
   hence thesis by BINOP_1:2;
@@ -473,12 +473,12 @@ for K be non empty ZeroStr,
  end;
 
 theorem Th13:
-for K be non empty LoopStr
+for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f,g be Form of V,W, w be Vector of W holds
   FunctionalSAF(f+g,w) = FunctionalSAF(f,w) + FunctionalSAF(g,w)
  proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f,g be Form of V,W, w be Vector of W;
        now let v be Vector of V;
     thus (FunctionalSAF(f+g,w)).v = (f+g).(v,w) by Th10
@@ -491,12 +491,12 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem Th14:
-for K be non empty LoopStr
+for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f,g be Form of V,W, v be Vector of V holds
   FunctionalFAF(f+g,v) = FunctionalFAF(f,v) + FunctionalFAF(g,v)
  proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f,g be Form of V,W, w be Vector of V;
        now let v be Vector of W;
     thus (FunctionalFAF(f+g,w)).v = (f+g).(w,v) by Th9
@@ -543,12 +543,12 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem Th17:
-for K be non empty LoopStr
+for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f be Form of V,W, w be Vector of W holds
   FunctionalSAF(-f,w) = - FunctionalSAF(f,w)
   proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f be Form of V,W, w be Vector of W;
        now let v be Vector of V;
     thus (FunctionalSAF(-f,w)).v = (-f).(v,w) by Th10
@@ -560,12 +560,12 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem Th18:
-for K be non empty LoopStr
+for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f be Form of V,W, v be Vector of V holds
   FunctionalFAF(-f,v) = -FunctionalFAF(f,v)
   proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f be Form of V,W, w be Vector of V;
        now let v be Vector of W;
     thus (FunctionalFAF(-f,w)).v = (-f).(w,v) by Th9
@@ -577,19 +577,19 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem
-    for K be non empty LoopStr
+    for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f,g be Form of V,W, w be Vector of W holds
   FunctionalSAF(f-g,w) = FunctionalSAF(f,w) - FunctionalSAF(g,w)
  proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f,g be Form of V,W, w be Vector of W;
        now let v be Vector of V;
     thus (FunctionalSAF(f-g,w)).v = (f-g).(v,w) by Th10
     .= f.(v,w) - g.(v,w) by Def8
     .= (FunctionalSAF(f,w)).v - g.(v,w) by Th10
     .= (FunctionalSAF(f,w)).v - (FunctionalSAF(g,w)).v by Th10
-    .= (FunctionalSAF(f,w)).v +- (FunctionalSAF(g,w)).v by RLVECT_1:def 11
+    .= (FunctionalSAF(f,w)).v +- (FunctionalSAF(g,w)).v by RLVECT_1:def 12
     .= (FunctionalSAF(f,w)).v + (-FunctionalSAF(g,w)).v by HAHNBAN1:def 7
     .= (FunctionalSAF(f,w) -FunctionalSAF(g,w)).v by HAHNBAN1:def 6;
     end;
@@ -597,19 +597,19 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem
-    for K be non empty LoopStr
+    for K be non empty addLoopStr
 for V,W be non empty VectSpStr over K
  for f,g be Form of V,W, v be Vector of V holds
   FunctionalFAF(f-g,v) = FunctionalFAF(f,v) - FunctionalFAF(g,v)
  proof
-  let K be non empty LoopStr, V,W be non empty VectSpStr over K,
+  let K be non empty addLoopStr, V,W be non empty VectSpStr over K,
       f,g be Form of V,W, w be Vector of V;
        now let v be Vector of W;
     thus (FunctionalFAF(f-g,w)).v = (f-g).(w,v) by Th9
     .= f.(w,v) - g.(w,v) by Def8
     .= (FunctionalFAF(f,w)).v - g.(w,v) by Th9
     .= (FunctionalFAF(f,w)).v - (FunctionalFAF(g,w)).v by Th9
-    .= (FunctionalFAF(f,w)).v +- (FunctionalFAF(g,w)).v by RLVECT_1:def 11
+    .= (FunctionalFAF(f,w)).v +- (FunctionalFAF(g,w)).v by RLVECT_1:def 12
     .= (FunctionalFAF(f,w)).v + (-FunctionalFAF(g,w)).v by HAHNBAN1:def 7
     .= (FunctionalFAF(f,w) -FunctionalFAF(g,w)).v by HAHNBAN1:def 6;
     end;
@@ -620,7 +620,7 @@ begin
 :: Two Form generated by Functionals.
 
 definition
-  let K be non empty HGrStr;
+  let K be non empty multMagma;
   let V,W be non empty VectSpStr over K;
   let f be Functional of V; let g be Functional of W;
  func FormFunctional(f,g) -> Form of V,W means :Def11:
@@ -718,12 +718,12 @@ for V,W be non empty VectSpStr over K
  end;
 
 theorem Th25:
-for K be non empty HGrStr
+for K be non empty multMagma
 for V,W be non empty VectSpStr over K
   for f be Functional of V, g be Functional of W, v be Vector of V holds
      FunctionalFAF(FormFunctional(f,g),v) = f.v * g
  proof
-  let K be non empty HGrStr, V,W be non empty VectSpStr over K;
+  let K be non empty multMagma, V,W be non empty VectSpStr over K;
   let f be Functional of V, h be Functional of W, v be Vector of V;
   set F = FormFunctional(f,h), FF = FunctionalFAF(F,v);
         now let y be Vector of W;
@@ -735,12 +735,13 @@ for V,W be non empty VectSpStr over K
   end;
 
 theorem Th26:
-for K be commutative (non empty HGrStr)
+for K be commutative (non empty multMagma)
 for V,W be non empty VectSpStr over K
   for f be Functional of V, g be Functional of W, w be Vector of W holds
       FunctionalSAF(FormFunctional(f,g),w) = g.w * f
   proof
-  let K be commutative (non empty HGrStr), V,W be non empty VectSpStr over K;
+  let K be commutative (non empty multMagma),
+      V,W be non empty VectSpStr over K;
   let f be Functional of V,h be Functional of W, y be Vector of W;
   set F = FormFunctional(f,h), FF = FunctionalSAF(F,y);
        now let v be Vector of V;
@@ -755,7 +756,7 @@ begin
 ::Bilinear Forms and Their Properties
 
 definition
-  let K be non empty LoopStr;
+  let K be non empty addLoopStr;
   let V,W be non empty VectSpStr over K;
   let f be Form of V,W;
  attr f is additiveFAF means :Def12:
@@ -765,7 +766,7 @@ definition
 end;
 
 definition
-  let K be non empty HGrStr;
+  let K be non empty multMagma;
   let V,W be non empty VectSpStr over K;
   let f be Form of V,W;
  attr f is homogeneousFAF means :Def14:
@@ -775,7 +776,7 @@ definition
 end;
 
 registration
-  let K be right_zeroed (non empty LoopStr);
+  let K be right_zeroed (non empty addLoopStr);
   let V,W be non empty VectSpStr over K;
 cluster NulForm(V,W) -> additiveFAF;
   coherence
@@ -794,7 +795,7 @@ cluster NulForm(V,W) -> additiveSAF;
 end;
 
 registration
-  let K be right_zeroed (non empty LoopStr);
+  let K be right_zeroed (non empty addLoopStr);
   let V,W be non empty VectSpStr over K;
 cluster additiveFAF additiveSAF Form of V,W;
   existence
@@ -1051,7 +1052,7 @@ cluster non trivial non constant
 end;
 
 registration
- let K be Abelian add-associative right_zeroed (non empty LoopStr);
+ let K be Abelian add-associative right_zeroed (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f,g be additiveSAF Form of V,W;
 cluster f+g -> additiveSAF;
@@ -1077,7 +1078,7 @@ A1: Ff is additive & Fg is additive by Def13;
 end;
 
 registration
- let K be Abelian add-associative right_zeroed (non empty LoopStr);
+ let K be Abelian add-associative right_zeroed (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f,g be additiveFAF Form of V,W;
 cluster f+g -> additiveFAF;
@@ -1150,7 +1151,7 @@ end;
 
 registration
  let K be Abelian add-associative right_zeroed right_complementable
-          (non empty LoopStr);
+          (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f be additiveSAF Form of V,W;
 cluster -f -> additiveSAF;
@@ -1165,7 +1166,7 @@ A1: Ff is additive by Def13;
    .= -(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
    .= (- Ff.v) - Ff.y by RLVECT_1:44
    .= (-Ff).v - Ff.y by HAHNBAN1:def 7
-   .= (-Ff).v + - Ff.y by RLVECT_1:def 11
+   .= (-Ff).v + - Ff.y by RLVECT_1:def 12
    .= (-Ff).v + (-Ff).y by HAHNBAN1:def 7
    .= Ffg.v + (-Ff).y by Th17
    .= Ffg.v + Ffg.y by Th17;
@@ -1174,7 +1175,7 @@ end;
 
 registration
  let K be Abelian add-associative right_zeroed right_complementable
-         (non empty LoopStr);
+         (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f be additiveFAF Form of V,W;
 cluster -f -> additiveFAF;
@@ -1189,7 +1190,7 @@ cluster -f -> additiveFAF;
     .= -(Ff.v + Ff.y) by A1,HAHNBAN1:def 11
     .= (- Ff.v) - Ff.y by RLVECT_1:44
     .= (-Ff).v - Ff.y by HAHNBAN1:def 7
-    .= (-Ff).v + - Ff.y by RLVECT_1:def 11
+    .= (-Ff).v + - Ff.y by RLVECT_1:def 12
     .= (-Ff).v + (-Ff).y by HAHNBAN1:def 7
     .= Ffg.v + (-Ff).y by Th18
     .= Ffg.v + Ffg.y by Th18;
@@ -1198,7 +1199,7 @@ end;
 
 registration
  let K be Abelian add-associative right_zeroed right_complementable
-          (non empty LoopStr);
+          (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f,g be additiveSAF Form of V,W;
 cluster f-g -> additiveSAF;
@@ -1207,7 +1208,7 @@ end;
 
 registration
  let K be Abelian add-associative right_zeroed right_complementable
-          (non empty LoopStr);
+          (non empty addLoopStr);
  let V,W be non empty VectSpStr over K;
  let f,g be additiveFAF Form of V,W;
 cluster f-g -> additiveFAF;
@@ -1359,12 +1360,12 @@ cluster f-g -> homogeneousFAF;
 end;
 
 theorem Th27:
-for K be non empty LoopStr
+for K be non empty addLoopStr
  for V,W be non empty VectSpStr over K
  for v,u be Vector of V, w be Vector of W, f be Form of V,W
  st f is additiveSAF holds f.(v+u,w) = f.(v,w) + f.(u,w)
  proof
-  let K be non empty LoopStr;
+  let K be non empty addLoopStr;
   let V,W be non empty VectSpStr over K;
   let v,w be Vector of V, y be Vector of W, f be Form of V,W;
   set F=FunctionalSAF(f,y);
@@ -1377,12 +1378,12 @@ for K be non empty LoopStr
  end;
 
 theorem Th28:
-for K be non empty LoopStr
+for K be non empty addLoopStr
  for V,W be non empty VectSpStr over K
  for v be Vector of V, u,w be Vector of W, f be Form of V,W
  st f is additiveFAF holds f.(v,u+w) = f.(v,u) + f.(v,w)
   proof
-  let K be non empty LoopStr;
+  let K be non empty addLoopStr;
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y,z be Vector of W, f be Form of V,W;
   set F=FunctionalFAF(f,v);
@@ -1395,13 +1396,13 @@ for K be non empty LoopStr
   end;
 
 theorem Th29:
-for K be right_zeroed (non empty LoopStr)
+for K be right_zeroed (non empty addLoopStr)
 for V,W be non empty VectSpStr over K
  for v,u be Vector of V, w,t be Vector of W,
     f be additiveSAF additiveFAF Form of V,W holds
    f.(v+u,w+t) = f.(v,w) + f.(v,t) + (f.(u,w) + f.(u,t))
  proof
-  let K be right_zeroed (non empty LoopStr);
+  let K be right_zeroed (non empty addLoopStr);
   let V,W be non empty VectSpStr over K;
   let v,w be Vector of V, y,z be Vector of W,
     f be additiveSAF additiveFAF Form of V,W;
@@ -1442,12 +1443,12 @@ for V,W be right_zeroed (non empty VectSpStr over K)
  end;
 
 theorem Th32:
-for K be non empty HGrStr
+for K be non empty multMagma
  for V,W be non empty VectSpStr over K
  for v be Vector of V, w be Vector of W, a be Element of K
  for f be Form of V,W st f is homogeneousSAF holds f.(a*v,w) = a*f.(v,w)
   proof
-  let K be non empty HGrStr;
+  let K be non empty multMagma;
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y be Vector of W, r be Element of K,
      f be Form of V,W;
@@ -1460,12 +1461,12 @@ for K be non empty HGrStr
   end;
 
 theorem Th33:
-for K be non empty HGrStr
+for K be non empty multMagma
  for V,W be non empty VectSpStr over K
  for v be Vector of V, w be Vector of W, a be Element of K
  for f be Form of V,W st f is homogeneousFAF holds f.(v,a*w) = a*f.(v,w)
   proof
-  let K be non empty HGrStr;
+  let K be non empty multMagma;
   let V,W be non empty VectSpStr over K;
   let v be Vector of V, y be Vector of W, r be Element of K,
       f be Form of V,W;
@@ -1523,12 +1524,12 @@ for K be add-associative right_zeroed right_complementable Abelian
     associative well-unital distributive (non empty doubleLoopStr);
   let V,W be VectSp of K, v,w be Vector of V, y be Vector of W;
   let f be additiveSAF homogeneousSAF Form of V,W;
-   thus f.(v-w,y) = f.(v+(-w),y) by RLVECT_1:def 11
+   thus f.(v-w,y) = f.(v+(-w),y) by RLVECT_1:def 12
     .= f.(v,y) +f.(-w,y) by Th27
-    .= f.(v,y) +f.((-1_K)* w,y) by VECTSP_1:59
-    .= f.(v,y) +(-1_K)*f.(w,y) by Th32
-    .= f.(v,y) + -(1_K * f.(w,y)) by VECTSP_1:41
-    .= f.(v,y) -(1_K * f.(w,y)) by RLVECT_1:def 11
+    .= f.(v,y) +f.((-1.K)* w,y) by VECTSP_1:59
+    .= f.(v,y) +(-1.K)*f.(w,y) by Th32
+    .= f.(v,y) + -(1.K * f.(w,y)) by VECTSP_1:41
+    .= f.(v,y) -(1.K * f.(w,y)) by RLVECT_1:def 12
     .= f.(v,y) - f.( w,y)by VECTSP_1:def 19;
    end;
 
@@ -1544,12 +1545,12 @@ for K be add-associative right_zeroed right_complementable
     Abelian associative well-unital distributive (non empty doubleLoopStr);
   let V,W be VectSp of K, v be Vector of V, y,z be Vector of W,
       f be additiveFAF homogeneousFAF Form of V,W;
-  thus f.(v,y-z) = f.(v, y+(-z)) by RLVECT_1:def 11
+  thus f.(v,y-z) = f.(v, y+(-z)) by RLVECT_1:def 12
     .= f.(v,y) + f.(v,-z) by Th28
-    .= f.(v,y) + f.(v,(-1_K)* z) by VECTSP_1:59
-    .= f.(v,y) + (-1_K)*f.(v,z) by Th33
-    .= f.(v,y) + -(1_K * f.(v,z)) by VECTSP_1:41
-    .= f.(v,y) -(1_K * f.(v,z)) by RLVECT_1:def 11
+    .= f.(v,y) + f.(v,(-1.K)* z) by VECTSP_1:59
+    .= f.(v,y) + (-1.K)*f.(v,z) by Th33
+    .= f.(v,y) + -(1.K * f.(v,z)) by VECTSP_1:41
+    .= f.(v,y) -(1.K * f.(v,z)) by RLVECT_1:def 12
     .= f.(v,y) - f.(v,z)by VECTSP_1:def 19;
   end;
 
@@ -2029,10 +2030,10 @@ st A = v + LKer(f) holds it.(A,w) = f.(v,w);
        A7: A = a+L by VECTSP10:23;
         consider b be Vector of V such that
        A8: B = b+L by VECTSP10:23;
-       A9: the add of vq = addCoset(V,L) by VECTSP10:def 6;
+       A9: the addF of vq = addCoset(V,L) by VECTSP10:def 6;
        A10: aC.(A,B) =a+b+L by A1,A7,A8,VECTSP10:def 3;
         thus ffw.(A+B) = ff.(A+B,w) by Th10
-         .= ff.((the add of vq).(A,B),w) by RLVECT_1:5
+         .= ff.((the addF of vq).(A,B),w) by RLVECT_1:5
          .= f.(a+b,w) by A6,A9,A10
          .= f.(a,w) + f.(b,w) by Th27
          .= ff.(A,w) + f.(b,w) by A6,A7
@@ -2134,10 +2135,10 @@ st A = w + RKer(f) holds it.(v,A) = f.(v,w);
        A7: A = a+L by VECTSP10:23;
         consider b be Vector of W such that
        A8: B = b+L by VECTSP10:23;
-       A9: the add of vq = addCoset(W,L) by VECTSP10:def 6;
+       A9: the addF of vq = addCoset(W,L) by VECTSP10:def 6;
        A10: aC.(A,B) =a+b+L by A1,A7,A8,VECTSP10:def 3;
         thus ffw.(A+B) = ff.(v,A+B) by Th9
-         .= ff.(v,(the add of vq).(A,B)) by RLVECT_1:5
+         .= ff.(v,(the addF of vq).(A,B)) by RLVECT_1:5
          .= f.(v,a+b) by A6,A9,A10
          .= f.(v,a) + f.(v,b) by Th28
          .= ff.(v,A) + f.(v,b) by A6,A7
@@ -2328,10 +2329,10 @@ existence
        A13: A = a+L by VECTSP10:23;
         consider b be Vector of V such that
        A14: B = b+L by VECTSP10:23;
-       A15: the add of vq = aCv by VECTSP10:def 6;
+       A15: the addF of vq = aCv by VECTSP10:def 6;
        A16: aCv.(A,B) =a+b+L by A1,A13,A14,VECTSP10:def 3;
         thus ffw.(A+B) = ff.(A+B,ww) by Th10
-         .= ff.((the add of vq).(A,B),ww) by RLVECT_1:5
+         .= ff.((the addF of vq).(A,B),ww) by RLVECT_1:5
          .= f.(a+b,w) by A10,A12,A15,A16
          .= f.(a,w) + f.(b,w) by Th27
          .= ff.(A,ww) + f.(b,w) by A10,A12,A13
@@ -2352,10 +2353,10 @@ existence
       A19: A = a+R by VECTSP10:23;
         consider b be Vector of W such that
       A20: B = b+R by VECTSP10:23;
-      A21: the add of wq = aCw by VECTSP10:def 6;
+      A21: the addF of wq = aCw by VECTSP10:def 6;
       A22: aCw.(A,B) =a+b+R by A2,A19,A20,VECTSP10:def 3;
         thus ffv.(A+B) = ff.(vv,A+B) by Th9
-         .= ff.(vv,(the add of wq).(A,B)) by RLVECT_1:5
+         .= ff.(vv,(the addF of wq).(A,B)) by RLVECT_1:5
          .= f.(v,a+b) by A10,A18,A21,A22
          .= f.(v,a) + f.(v,b) by Th28
          .= ff.(vv,A) + f.(v,b) by A10,A18,A19
@@ -2725,13 +2726,15 @@ for f be Functional of V, g be Functional of W
 
 theorem Th52:
 for K be add-associative right_zeroed right_complementable associative
- commutative well-unital Field-like distributive (non empty doubleLoopStr)
+ commutative well-unital almost_left_invertible distributive
+  (non empty doubleLoopStr)
 for V, W be non empty VectSpStr over K
 for f be Functional of V, g be Functional of W
 st g <> 0Functional(W) holds leftker FormFunctional(f,g) = ker f
  proof
   let K be add-associative right_zeroed right_complementable associative
-    commutative well-unital Field-like distributive (non empty doubleLoopStr),
+    commutative well-unital almost_left_invertible distributive
+     (non empty doubleLoopStr),
    V, W be non empty VectSpStr over K,
    f be Functional of V, g be Functional of W;
   set fg = FormFunctional(f,g);
@@ -2782,13 +2785,15 @@ for f be Functional of V, g be Functional of W
 
 theorem Th54:
 for K be add-associative right_zeroed right_complementable associative
-   commutative well-unital Field-like distributive (non empty doubleLoopStr)
+   commutative well-unital almost_left_invertible distributive
+    (non empty doubleLoopStr)
 for V, W be non empty VectSpStr over K
 for f be Functional of V, g be Functional of W
 st f <> 0Functional(V) holds rightker FormFunctional(f,g) = ker g
  proof
   let K be add-associative right_zeroed right_complementable associative
-    commutative well-unital Field-like distributive (non empty doubleLoopStr),
+    commutative well-unital almost_left_invertible distributive
+     (non empty doubleLoopStr),
    V, W be non empty VectSpStr over K,
    f be Functional of V, g be Functional of W;
   set fg = FormFunctional(f,g);
@@ -2816,7 +2821,8 @@ st f <> 0Functional(V) holds rightker FormFunctional(f,g) = ker g
 
 theorem Th55:
 for K be add-associative right_zeroed right_complementable commutative Abelian
-      associative well-unital distributive Field-like (non empty doubleLoopStr)
+      associative well-unital distributive almost_left_invertible
+       (non empty doubleLoopStr)
 for V be VectSp of K, W be non empty VectSpStr over K
 for f be linear-Functional of V, g be Functional of W
 st g <> 0Functional(W) holds
@@ -2824,7 +2830,8 @@ st g <> 0Functional(W) holds
   LQForm(FormFunctional(f,g)) = FormFunctional(CQFunctional(f),g)
  proof
  let K be add-associative right_zeroed right_complementable commutative Abelian
-   associative well-unital distributive Field-like (non empty doubleLoopStr),
+   associative well-unital distributive almost_left_invertible
+    (non empty doubleLoopStr),
    V be VectSp of K, W be non empty VectSpStr over K,
    f be linear-Functional of V, g be Functional of W;
   assume
@@ -2857,7 +2864,8 @@ st g <> 0Functional(W) holds
 
 theorem Th56:
 for K be add-associative right_zeroed right_complementable commutative Abelian
-    associative well-unital distributive Field-like (non empty doubleLoopStr)
+    associative well-unital distributive almost_left_invertible
+     (non empty doubleLoopStr)
 for V be non empty VectSpStr over K, W be VectSp of K
 for f be Functional of V, g be linear-Functional of W
 st f <> 0Functional(V) holds
@@ -2865,7 +2873,8 @@ st f <> 0Functional(V) holds
  RQForm(FormFunctional(f,g)) = FormFunctional(f,CQFunctional(g))
  proof
  let K be add-associative right_zeroed right_complementable commutative Abelian
-   associative well-unital distributive Field-like (non empty doubleLoopStr),
+   associative well-unital distributive almost_left_invertible
+    (non empty doubleLoopStr),
    V be non empty VectSpStr over K, W be VectSp of K,
    f be Functional of V, g be linear-Functional of W;
   assume
@@ -3127,14 +3136,14 @@ end;
 
 registration
  let K be add-associative right_zeroed right_complementable
-       (non empty LoopStr);
+       (non empty addLoopStr);
  let V be non empty VectSpStr over K;
 cluster alternating additiveFAF additiveSAF Form of V,V;
  existence proof take NulForm(V,V); thus thesis; end;
 end;
 
 registration
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V be non empty VectSpStr over K;
  let f,g be symmetric Form of V,V;
 cluster f+g -> symmetric;
@@ -3164,7 +3173,7 @@ cluster a*f -> symmetric;
 end;
 
 registration
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V be non empty VectSpStr over K;
  let f be symmetric Form of V,V;
 cluster -f -> symmetric;
@@ -3178,7 +3187,7 @@ cluster -f -> symmetric;
 end;
 
 registration
- let K be non empty LoopStr;
+ let K be non empty addLoopStr;
  let V be non empty VectSpStr over K;
  let f,g be symmetric Form of V,V;
 cluster f-g -> symmetric;
@@ -3186,7 +3195,7 @@ cluster f-g -> symmetric;
 end;
 
 registration
- let K be right_zeroed (non empty LoopStr);
+ let K be right_zeroed (non empty addLoopStr);
  let V be non empty VectSpStr over K;
  let f,g be alternating Form of V,V;
 cluster f+g -> alternating;
@@ -3218,7 +3227,7 @@ end;
 
 registration
  let K be add-associative right_zeroed right_complementable
-       (non empty LoopStr);
+       (non empty addLoopStr);
  let V be non empty VectSpStr over K;
  let f be alternating Form of V,V;
 cluster -f -> alternating;
@@ -3233,7 +3242,7 @@ end;
 
 registration
  let K be add-associative right_zeroed right_complementable
-      (non empty LoopStr);
+      (non empty addLoopStr);
  let V be non empty VectSpStr over K;
  let f,g be alternating Form of V,V;
 cluster f-g -> alternating;
@@ -3276,13 +3285,13 @@ for f be symmetric bilinear-Form of V,V holds
 
 theorem Th59:
 for K be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
 for V be non empty VectSpStr over K
 for f be alternating additiveSAF additiveFAF Form of V,V
 for v,w be Vector of V holds f.(v,w)=-f.(w,v)
  proof
   let K be add-associative right_zeroed right_complementable
-          (non empty LoopStr),
+          (non empty addLoopStr),
       V be non empty VectSpStr over K,
       f be alternating additiveSAF additiveFAF Form of V,V,
       v,w be Vector of V;

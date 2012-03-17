@@ -12,12 +12,11 @@ environ
       FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM, SETFAM_1,
       AMISTD_2, PRALG_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      NAT_1,
-      RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
-      SETFAM_1, ORDINAL1, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
-      FUNCT_4, FINSET_1, CARD_2, CLASSES1;
+      NAT_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
+      SETFAM_1, ORDINAL1, WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4,
+      FINSET_1, CARD_2, CLASSES1;
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCOP_1,
-      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1;
+      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, XREAL_0, CARD_1;
  requirements NUMERALS, BOOLE, SUBSET;
@@ -782,7 +781,7 @@ theorem
       F <= G implies Sum F <=` Sum G
   proof assume F <= G;
     then disjoin F <= disjoin G by Th34;
-   hence Sum F <=` Sum G by CARD_1:27,Th35;
+   hence Sum F <=` Sum G by Th35,CARD_1:27;
   end;
 
 theorem
@@ -2129,7 +2128,7 @@ A5:     x in dom g;
   end;
 
 theorem
-  g in sproduct f implies g|A in sproduct f by Th80, RELAT_1:88;
+  g in sproduct f implies g|A in sproduct f by Th80,RELAT_1:88;
 
 theorem Th82:
  g in sproduct f implies g|A in sproduct f|A
@@ -2263,7 +2262,7 @@ begin  :: from PRALG_2, 2007.11.14, A.T.
 
 definition let IT be set;
   attr IT is with_common_domain means
-:Def1:   for f,g be Function st f in IT & g in IT holds dom f = dom g;
+:Def10:   for f,g be Function st f in IT & g in IT holds dom f = dom g;
 end;
 
 registration
@@ -2278,7 +2277,7 @@ existence
     then f = h & g = h by TARSKI:def 1;
     hence thesis;
    end;
-  hence A is with_common_domain by Def1;
+  hence A is with_common_domain by Def10;
       for x be set st x in A holds x is Function by TARSKI:def 1;
   hence A is functional by FRAENKEL:def 1;
   thus A is non empty;
@@ -2295,14 +2294,14 @@ theorem
     then f = {} & g = {} by TARSKI:def 1;
     hence thesis;
    end;
-  hence thesis by A1,Def1,FRAENKEL:def 1;
+  hence thesis by A1,Def10,FRAENKEL:def 1;
  end;
 
 definition
  let X be with_common_domain functional set;
  canceled;  :: miejsce na uogolnienie
 func DOM X -> set means :: overloading (dom) dozwolony
-:Def11: (for x be Function st x in X holds it = dom x) if X <> {}
+:Def12: (for x be Function st x in X holds it = dom x) if X <> {}
  otherwise it = {};
 existence
  proof
@@ -2314,7 +2313,7 @@ existence
    reconsider x as Function by A1,FRAENKEL:def 1;
    take dom x;
    let y be Function; assume y in X;
-   hence thesis by A1,Def1;
+   hence thesis by A1,Def10;
   end;
  thus X = {} implies ex Y be set st Y = {};
  end;
@@ -2344,7 +2343,7 @@ theorem
  proof
   let X be with_common_domain functional set; assume A1: X = {{}};
       {} in {{}} by TARSKI:def 1;
-  hence thesis by A1,Def11,RELAT_1:60;
+  hence thesis by A1,Def12,RELAT_1:60;
  end;
 
 begin  :: Product like sets, from AMISTD_2, 2007.11.14, A.T.
@@ -2354,7 +2353,7 @@ definition
   func product" S -> Function means  :: tu trzeba uzyc DOM
                              :: uzywajac meet mamy definicje
                              :: nie przez czesci
-:Def1: (for x being set holds x in dom it iff
+:Def13: (for x being set holds x in dom it iff
        for f being Function st f in S holds x in dom f) &
   (for i being set st i in dom it holds it.i = pi(S,i)) if S is non empty
   otherwise it = {};
@@ -2452,7 +2451,7 @@ A2:   dom f in D;
         let Y be set;
         assume Y in D;
         then ex f being Element of S st Y = dom f & not contradiction;
-        hence x in Y by A1,Def1;
+        hence x in Y by A1,Def13;
       end;
       hence x in meet D by A2,SETFAM_1:def 1;
     end;
@@ -2466,7 +2465,7 @@ A3:   x in meet D;
       then dom f in D;
       hence x in dom f by A3,SETFAM_1:def 1;
     end;
-    hence thesis by Def1;
+    hence thesis by Def13;
   end;
 
 theorem
@@ -2481,7 +2480,7 @@ A1:   i in dom product" S;
     hereby
       let x be set;
       assume x in (product" S).i;
-      then x in pi(S,i) by A1,Def1;
+      then x in pi(S,i) by A1,Def13;
       then ex f being Function st f in S & x = f.i by Def6;
       hence x in {f.i where f is Element of S: not contradiction};
     end;
@@ -2489,19 +2488,19 @@ A1:   i in dom product" S;
     assume x in {f.i where f is Element of S: not contradiction};
     then ex f being Element of S st x = f.i & not contradiction;
     then x in pi(S,i) by Def6;
-    hence thesis by A1,Def1;
+    hence thesis by A1,Def13;
   end;
 
 definition
   let S be set;
- attr S is product-like means :Def2:
+ attr S is product-like means :Def14:
   ex f being Function st S = product f;
 end;
 
 registration
   let f be Function;
  cluster product f -> product-like;
-coherence by Def2;
+coherence by Def14;
 end;
 
 registration
@@ -2531,15 +2530,15 @@ existence
   end;
 end;
 
-theorem Th7:
+theorem Th92:
  for S being functional with_common_domain set holds dom product" S = DOM S
   proof
     let S be functional with_common_domain set;
     per cases;
     suppose
 A1:   S is empty;
-    hence dom product" S = {} by Def1,RELAT_1:60
-     .= DOM S by A1,Def11;
+    hence dom product" S = {} by Def13,RELAT_1:60
+     .= DOM S by A1,Def12;
     end;
     suppose
 A2:   S is non empty;
@@ -2547,18 +2546,18 @@ A2:   S is non empty;
     hereby
       let x be set;
       assume x in dom product" S;
-      then x in dom f by A2,Def1;
-      hence x in DOM S by A2,Def11;
+      then x in dom f by A2,Def13;
+      hence x in DOM S by A2,Def12;
     end;
     let x be set;
     assume
        x in DOM S;
-    then for f being Function st f in S holds x in dom f by Def11;
-    hence thesis by A2,Def1;
+    then for f being Function st f in S holds x in dom f by Def12;
+    hence thesis by A2,Def13;
   end;
   end;
 
-theorem Th8:
+theorem Th93:
      for S being functional set, i being set st i in dom product" S
   holds (product" S).i = pi(S,i)
   proof
@@ -2566,17 +2565,17 @@ theorem Th8:
         i be set;
     per cases;
     suppose S = {};
-    then dom product" S = dom {} by Def1;
+    then dom product" S = dom {} by Def13;
     hence thesis;
     end;
     suppose
 A1:   S <> {};
     assume i in dom product" S;
-    hence thesis by A1,Def1;
+    hence thesis by A1,Def13;
   end;
   end;
 
-theorem Th9:
+theorem Th94:
  for S being functional with_common_domain set holds S c= product product" S
   proof
     let S be functional with_common_domain set;
@@ -2584,23 +2583,23 @@ theorem Th9:
     assume
 A1:   f in S;
     then reconsider f as Element of S;
-A2: dom f = DOM S by A1,Def11
-         .= dom product" S by Th7;
+A2: dom f = DOM S by A1,Def12
+         .= dom product" S by Th92;
          for i being set st i in dom product" S holds f.i in (product" S).i
     proof
       let i be set;
       assume i in dom product" S;
-      then (product" S).i = pi(S,i) by A1,Def1;
+      then (product" S).i = pi(S,i) by A1,Def13;
       hence f.i in (product" S).i by A1,Def6;
     end;
     hence thesis by A2,Th18;
   end;
 
-theorem Th10:
+theorem Th95:
  for S being non empty product-like set holds S = product product" S
   proof
     let S be non empty product-like set;
-    thus S c= product product" S by Th9;
+    thus S c= product product" S by Th94;
     let x be set;
     assume x in product product" S;
     then consider g being Function such that
@@ -2609,10 +2608,10 @@ A2:   dom g = dom product" S and
 A3:   for z being set st z in dom product" S holds g.z in (product" S).z
          by Def5;
     consider p being Function such that
-A4:   S = product p by Def2;
+A4:   S = product p by Def14;
     consider s being Element of S;
-A5: dom g = DOM S by A2,Th7
-         .= dom s by Def11
+A5: dom g = DOM S by A2,Th92
+         .= dom s by Def12
          .= dom p by A4,Th18;
          for z being set st z in dom p holds g.z in p.z
     proof
@@ -2620,7 +2619,7 @@ A5: dom g = DOM S by A2,Th7
       assume
 A6:     z in dom p;
       then g.z in (product" S).z by A2,A3,A5;
-      then g.z in pi(S,z) by A2,A5,A6,Def1;
+      then g.z in pi(S,z) by A2,A5,A6,Def13;
       then ex f being Function st f in S & g.z = f.z by Def6;
       hence g.z in p.z by A4,A6,Th18;
     end;

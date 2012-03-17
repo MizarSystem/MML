@@ -11,14 +11,15 @@ environ
       TREES_1, INCSP_1, GOBOARD1, SEQ_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
       REAL_1, NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1, NAT_1, FINSEQ_1, FINSEQ_3,
-      FINSEQ_4, SEQ_1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1, MATRIX_1,
-      MATRIX_2;
- constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, MATRIX_2,
-      TOPREAL1;
+      FINSEQ_4, VALUED_1, SEQ_1, STRUCT_0, PRE_TOPC, EUCLID, TOPREAL1,
+      MATRIX_1, MATRIX_2;
+ constructors PARTFUN1, XXREAL_0, NAT_1, COMPLEX1, FINSEQ_4, MATRIX_2, SEQ_1,
+      TOPREAL1, VALUED_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
-      NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID, SEQ_1, MEMBERED, VALUED_0;
+      NAT_1, INT_1, FINSEQ_1, STRUCT_0, EUCLID, SEQ_1, MEMBERED, VALUED_0,
+      VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCT_1;
+ definitions TARSKI, XBOOLE_0, FUNCT_1, VALUED_1;
  theorems TARSKI, REAL_1, NAT_1, ZFMISC_1, FUNCT_1, FINSEQ_1, ABSVALUE,
       FINSEQ_2, FINSEQ_3, REAL_2, MATRIX_1, TOPREAL1, MATRIX_2, TOPREAL3,
       FINSEQ_4, RELAT_1, INT_1, CARD_1, PARTFUN2, XBOOLE_0, XBOOLE_1, CARD_4,
@@ -419,87 +420,87 @@ then A13:      1<=i & i<=n by XXREAL_0:2;
       A15: ex k be Nat st R[k] by A10,A13,FINSEQ_1:3;
       A16: for k be Nat holds R[k] implies k<=len v by FINSEQ_3:27;
       consider m be Nat such that
-      A18: R[m] & for k be Nat st R[k] holds k<=m
+      A17: R[m] & for k be Nat st R[k] holds k<=m
          from NAT_1:sch 6(A16,A15);
-A17:     R[m] & for k st R[k] holds k<=m by A18;
+A18:     R[m] & for k st R[k] holds k<=m by A17;
          reconsider m as Element of NAT by ORDINAL1:def 13;
       take k = m+1;
-      thus k in dom v & v.k = i+1 by A1,A2,A4,A5,A11,A14,A17,Th14;
+      thus k in dom v & v.k = i+1 by A1,A2,A4,A5,A11,A14,A18,Th14;
      end;
      end;
     hence thesis;
    end;
   thus for i holds P[i] from NAT_1:sch 1(A8,A9);
   let m,k,i,r; assume
-  A18: m in dom v & v.m = i & (for j st j in dom v & v.j = i holds j<=m) &
+  A19: m in dom v & v.m = i & (for j st j in dom v & v.j = i holds j<=m) &
       m<k & k in dom v & r = v.k;
-  then A19: 1<=m & m<=len v & 1<=k & k<=len v by FINSEQ_3:27;
-A20: i in rng v by A18,FUNCT_1:def 5;
-  then A21: 1<=i & i<=n & i<=i+1 by A2,FINSEQ_1:3,NAT_1:11;
+  then A20: 1<=m & m<=len v & 1<=k & k<=len v by FINSEQ_3:27;
+A21: i in rng v by A19,FUNCT_1:def 5;
+  then A22: 1<=i & i<=n & i<=i+1 by A2,FINSEQ_1:3,NAT_1:11;
        now per cases;
    suppose i=n;
-    then len v<=m by A4,A7,A18;
-    hence thesis by A18,A19,XXREAL_0:1;
+    then len v<=m by A4,A7,A19;
+    hence thesis by A19,A20,XXREAL_0:1;
    end;
-   suppose i<>n; then i<n by A21,REAL_1:def 5;
+   suppose i<>n; then i<n by A22,REAL_1:def 5;
     then 1<=i+1 & i+1<=n by NAT_1:11,13;
     then i+1 in Seg n by FINSEQ_1:3;
-    then A22: m+1 in dom v & v.(m+1) = i+1 by A1,A2,A4,A5,A18,A20,Th14;
+    then A23: m+1 in dom v & v.(m+1) = i+1 by A1,A2,A4,A5,A19,A21,Th14;
     defpred P[set] means
     for j,s st j=$1 & j>0 & m+j in dom v & s=v.(m+j) holds i<s;
-    A23: P[0];
-    A24: for k st P[k] holds P[k+1]
+    A24: P[0];
+    A25: for k st P[k] holds P[k+1]
      proof let k such that
-      A25: P[k];
+      A26: P[k];
       let j,s such that
-      A26: j=k+1 & j>0 & m+j in dom v & s=v.(m+j);
+      A27: j=k+1 & j>0 & m+j in dom v & s=v.(m+j);
        per cases;
        suppose k=0;
-        hence i<s by A22,A26,NAT_1:13;
+        hence i<s by A23,A27,NAT_1:13;
        end;
        suppose k<>0;
-        then A27: 0<k & m+(k+1)<=len v & m+k+1 = m+(k+1) & m+k<=m+k+1 & m<=m+k
-           by A26,FINSEQ_3:27,NAT_1:11;
-        then A28: 1<=m+k & m+k<=len v & m+k<= len v - 1 by A19,XREAL_1:21
+        then A28: 0<k & m+(k+1)<=len v & m+k+1 = m+(k+1) & m+k<=m+k+1 & m<=m+k
+           by A27,FINSEQ_3:27,NAT_1:11;
+        then A29: 1<=m+k & m+k<=len v & m+k<= len v - 1 by A20,XREAL_1:21
 ,XXREAL_0:2;
-        then A29: m+k in dom v by FINSEQ_3:27;
+        then A30: m+k in dom v by FINSEQ_3:27;
         then v.(m+k) in rng v by FUNCT_1:def 5;
         then v.(m+k) in Seg n & Seg n c= NAT by A2;
         then reconsider r1=v.(m+k) as Element of NAT;
-            s in rng v by A26,FUNCT_1:def 5;
+            s in rng v by A27,FUNCT_1:def 5;
         then s in Seg n & Seg n c= NAT by A2;
         then reconsider s1=s as Element of NAT;
-        A30: i<r1 by A25,A27,A29;
-             now per cases by A5,A26,A27,A28;
-         suppose A31: abs(r1-s)=1;
-               now per cases by A31,Th1;
-           suppose r1>s & r1=s+1; then A32: i<=s1 by A30,NAT_1:13;
-                 now per cases by A32,REAL_1:def 5;
+        A31: i<r1 by A26,A28,A30;
+             now per cases by A5,A27,A28,A29;
+         suppose A32: abs(r1-s)=1;
+               now per cases by A32,Th1;
+           suppose r1>s & r1=s+1; then A33: i<=s1 by A31,NAT_1:13;
+                 now per cases by A33,REAL_1:def 5;
              case i<s; hence thesis;
              end;
-             case s=i; then m+j<=m by A18,A26;
+             case s=i; then m+j<=m by A19,A27;
               then j<=m-m by XREAL_1:21;
-              hence contradiction by A26;
+              hence contradiction by A27;
              end;
              end;
             hence thesis;
            end;
-           suppose r1<s & s=r1+1; hence i<s by A30,XXREAL_0:2;
+           suppose r1<s & s=r1+1; hence i<s by A31,XXREAL_0:2;
            end;
            end;
           hence thesis;
          end;
-         suppose r1=s; hence thesis by A25,A27,A29;
+         suppose r1=s; hence thesis by A26,A28,A30;
          end;
          end;
         hence thesis;
      end;
      end;
-    A33: for k holds P[k] from NAT_1:sch 1(A23,A24);
-    A34: 0< k - m & m<=k by A18,XREAL_1:52;
-    reconsider l = k - m as Element of NAT by A18,INT_1:18;
+    A34: for k holds P[k] from NAT_1:sch 1(A24,A25);
+    A35: 0< k - m & m<=k by A19,XREAL_1:52;
+    reconsider l = k - m as Element of NAT by A19,INT_1:18;
         m+l = k;
-    hence i<r by A18,A33,A34;
+    hence i<r by A19,A34,A35;
    end;
    end;
   hence thesis;
@@ -2272,57 +2273,57 @@ A7: dom G = Seg len G & dom D = Seg len D & dom f = Seg len f
 A8: ex m be Nat st P[m];
   consider m be Nat such that
   A9: P[m] & for i be Nat st P[i] holds m<=i from NAT_1:sch 5(A8);
-A30: for i st P[i] holds m<=i by A9;
+A10: for i st P[i] holds m<=i by A9;
   reconsider m as Element of NAT by ORDINAL1:def 13;
   take t = f|m;
-  A10: t = f|Seg m by FINSEQ_1:def 15;
-  A11: width D = k by A2,A4,Th26;
+  A11: t = f|Seg m by FINSEQ_1:def 15;
+  A12: width D = k by A2,A4,Th26;
   then 1<width G & width D<width G by A2,A3,NAT_1:13;
-  then A12: Col(D,1)=Col(G,1) & Col(D,width D)=Col(G,width D)
-           by A2,A3,A4,A11,Th29;
-  A13: 1<=m & m<=len f by A9,FINSEQ_3:27;
-  then A14: len t = m & dom t=Seg len t by FINSEQ_1:80,def 3;
-  then 1 in Seg m & len t in Seg m by A13,FINSEQ_1:3;
+  then A13: Col(D,1)=Col(G,1) & Col(D,width D)=Col(G,width D)
+           by A2,A3,A4,A12,Th29;
+  A14: 1<=m & m<=len f by A9,FINSEQ_3:27;
+  then A15: len t = m & dom t=Seg len t by FINSEQ_1:80,def 3;
+  then 1 in Seg m & len t in Seg m by A14,FINSEQ_1:3;
   hence t/.1 in rng Col(D,1) & t/.len t in rng Col(D,width D) & 1<=len t
-   by A1,A9,A11,A12,A14,FINSEQ_1:3,FINSEQ_4:86;
-  A15: Indices D = [:dom D,Seg width D:] by MATRIX_1:def 5;
-  A16: now let n; assume A17: n in dom t;
-    then A18: n in dom f & t/.n=f/.n & n<=m by A9,A14,FINSEQ_3:27,FINSEQ_4:86;
+   by A1,A9,A12,A13,A15,FINSEQ_1:3,FINSEQ_4:86;
+  A16: Indices D = [:dom D,Seg width D:] by MATRIX_1:def 5;
+  A17: now let n; assume A18: n in dom t;
+    then A19: n in dom f & t/.n=f/.n & n<=m by A9,A15,FINSEQ_3:27,FINSEQ_4:86;
     then consider i,j such that
-    A19: [i,j] in Indices G & f/.n=G*(i,j) by A1,Def11;
+    A20: [i,j] in Indices G & f/.n=G*(i,j) by A1,Def11;
     take i,j;
-    A20: i in dom G & j in Seg width G & len Col(G,j) = len G &
+    A21: i in dom G & j in Seg width G & len Col(G,j) = len G &
        dom Col(G,j)=Seg len Col(G,j) &
        for i st i in dom G holds Col(G,j).i=G*(i,j)
-         by A6,A19,FINSEQ_1:def 3,MATRIX_1:def 9,ZFMISC_1:106;
+         by A6,A20,FINSEQ_1:def 3,MATRIX_1:def 9,ZFMISC_1:106;
     then Col(G,j).i=G*(i,j);
-    then A21: 1<=j & f/.n in rng Col(G,j) by A7,A19,A20,FINSEQ_1:3
+    then A22: 1<=j & f/.n in rng Col(G,j) by A7,A20,A21,FINSEQ_1:3
 ,FUNCT_1:def 5;
         k<=k+1 by NAT_1:11;
     then k in Seg width G by A2,A3,FINSEQ_1:3;
-    then j<=k by A1,A9,A18,A20,A21,Th50,A30;
-    then A22: j in Seg k by A21,FINSEQ_1:3;
-    hence [i,j] in Indices D by A5,A7,A11,A15,A20,ZFMISC_1:106;
-    thus t/.n = G*(i,j) by A9,A14,A17,A19,FINSEQ_4:86
-    .= D*(i,j) by A2,A20,A22,Th36;
+    then j<=k by A1,A9,A10,A19,A21,A22,Th50;
+    then A23: j in Seg k by A22,FINSEQ_1:3;
+    hence [i,j] in Indices D by A5,A7,A12,A16,A21,ZFMISC_1:106;
+    thus t/.n = G*(i,j) by A9,A15,A18,A20,FINSEQ_4:86
+    .= D*(i,j) by A2,A21,A23,Th36;
    end;
        now let n; assume n in dom t & n+1 in dom t;
-    then A23: t/.n=f/.n & t/.(n+1)=f/.(n+1) &
-    n in dom f & n+1 in dom f by A9,A14,FINSEQ_4:86;
+    then A24: t/.n=f/.n & t/.(n+1)=f/.(n+1) &
+    n in dom f & n+1 in dom f by A9,A15,FINSEQ_4:86;
     let i1,i2,j1,j2 be Element of NAT; assume
-    A24: [i1,i2] in Indices D & [j1,j2] in Indices D & t/.n=D*(i1,i2) &
+    A25: [i1,i2] in Indices D & [j1,j2] in Indices D & t/.n=D*(i1,i2) &
                t/.(n+1)=D*(j1,j2);
-    then A25: i1 in dom D & i2 in Seg k & j1 in dom D & j2 in Seg k
-              by A11,A15,ZFMISC_1:106;
-    then A26: f/.n=G*(i1,i2) & f/.(n+1)=G*(j1,j2) by A2,A5,A7,A23,A24,Th36;
+    then A26: i1 in dom D & i2 in Seg k & j1 in dom D & j2 in Seg k
+              by A12,A16,ZFMISC_1:106;
+    then A27: f/.n=G*(i1,i2) & f/.(n+1)=G*(j1,j2) by A2,A5,A7,A24,A25,Th36;
         k<=k+1 by NAT_1:11;
     then Seg k c= Seg width G by A2,FINSEQ_1:7;
-    then [i1,i2] in Indices G & [j1,j2] in Indices G by A5,A6,A7,A25,
+    then [i1,i2] in Indices G & [j1,j2] in Indices G by A5,A6,A7,A26,
 ZFMISC_1:106;
-    hence abs(i1-j1)+abs(i2-j2) = 1 by A1,A23,A26,Def11;
+    hence abs(i1-j1)+abs(i2-j2) = 1 by A1,A24,A27,Def11;
    end;
-  hence t is_sequence_on D by A16,Def11;
-  thus rng t c= rng f by A10,RELAT_1:99;
+  hence t is_sequence_on D by A17,Def11;
+  thus rng t c= rng f by A11,RELAT_1:99;
  end;
 
 theorem

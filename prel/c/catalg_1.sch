@@ -11,12 +11,12 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_4"/>
-<ArticleID name="MCART_1"/>
-<ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FINSEQ_2"/>
@@ -65,7 +65,7 @@
 <For>
 <Typ kind="G" nr="9">
 <Cluster>
-<Adjective nr="57">
+<Adjective nr="58">
 <Func kind="K" nr="343">
 <Func kind="F" nr="1"/>
 </Func>
@@ -188,7 +188,7 @@
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="86">
+<Func kind="K" nr="111">
 <Func kind="F" nr="2"/>
 <Var nr="6"/>
 <Var nr="5"/>

@@ -9,18 +9,17 @@ environ
  vocabularies FUNCT_1, ARYTM, RELAT_1, PARTFUN1, BOOLE, ARYTM_1, ABSVALUE,
       ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      MEMBERED, VALUED_0,
-      REAL_1, RELAT_1, FUNCT_1, COMPLEX1, NAT_1, RELSET_1, PARTFUN1,
-      FUNCT_2;
+      MEMBERED, VALUED_0, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, NAT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, VALUED_1;
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, REAL_1, MEMBERED, COMPLEX1,
-      VALUED_0, INT_1, RAT_1;
+      VALUED_0, INT_1, RAT_1, VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0;
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, XREAL_0, RELAT_1, VALUED_0;
+ definitions TARSKI, XREAL_0, RELAT_1, VALUED_0, VALUED_1;
  theorems FUNCT_1, TARSKI, ABSVALUE, FUNCT_2, PARTFUN1, RELSET_1, RELAT_1,
-      XREAL_0, ZFMISC_1, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, MEMBERED,
-      COMPLEX1, ORDINAL1, VALUED_0;
+      XREAL_0, ZFMISC_1, XBOOLE_0, XCMPLX_0, XCMPLX_1, COMPLEX1, ORDINAL1,
+      VALUED_1;
  schemes FUNCT_1, FUNCT_2, XBOOLE_0;
 
 begin
@@ -305,147 +304,6 @@ A2: dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c);
  hence thesis by A1,A2,PARTFUN1:34;
 end;
 
-definition
-  let f1, f2 be real-yielding Function;
-  func f1+f2 -> Function means :Def3:
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c + f2.c;
-  existence
-  proof
-    deffunc F(set) = f1.$1 + f2.$1;
-     ex f being Function st dom f = dom f1 /\ dom f2 &
-    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-  let f, g be Function such that
-A1: dom f = dom f1 /\ dom f2 and
-A2: for c being set st c in dom f holds f.c = f1.c + f2.c and
-A3: dom g = dom f1 /\ dom f2 and
-A4: for c being set st c in dom g holds g.c = f1.c + f2.c;
-     now let x;
-      assume
-A5:   x in dom f;
-      hence f.x = f1.x + f2.x by A2 .= g.x by A1,A3,A4,A5;
-    end;
-    hence f = g by A1,A3,FUNCT_1:9;
-  end;
-  commutativity;
-  func f1-f2 -> Function means :Def4:
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c - f2.c;
-  existence
-  proof
-    deffunc F(set) = f1.$1 - f2.$1;
-     ex f being Function st dom f = dom f1 /\ dom f2 &
-    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-  let f, g be Function such that
-A6: dom f = dom f1 /\ dom f2 and
-A7: for c being set st c in dom f holds f.c = f1.c - f2.c and
-A8: dom g = dom f1 /\ dom f2 and
-A9: for c being set st c in dom g holds g.c = f1.c - f2.c;
-     now let x;
-      assume
-A10:  x in dom f;
-      hence f.x = f1.x - f2.x by A7 .= g.x by A6,A8,A9,A10;
-    end;
-    hence f = g by A6,A8,FUNCT_1:9;
-  end;
-  func f1(#)f2 -> Function means :Def5:
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c * f2.c;
-  existence
-  proof
-    deffunc F(set) = f1.$1 * f2.$1;
-     ex f being Function st dom f = dom f1 /\ dom f2 &
-    for x st x in dom f1 /\ dom f2 holds f.x = F(x) from FUNCT_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-  let f, g be Function such that
-A11: dom f = dom f1 /\ dom f2 and
-A12: for c being set st c in dom f holds f.c = f1.c * f2.c and
-A13: dom g = dom f1 /\ dom f2 and
-A14: for c being set st c in dom g holds g.c = f1.c * f2.c;
-     now let x;
-      assume
-A15:  x in dom f;
-      hence f.x = f1.x * f2.x by A12 .= g.x by A11,A13,A14,A15;
-    end;
-    hence f = g by A11,A13,FUNCT_1:9;
-  end;
-  commutativity;
-end;
-
-registration
-  let f1, f2 be real-yielding Function;
-  cluster f1+f2 -> real-yielding;
-  coherence
-  proof
-    set F = f1+f2;
-    let x be set;
-   assume x in dom F;
-    then F.x = f1.x + f2.x by Def3;
-    hence thesis;
-  end;
-  cluster f1-f2 -> real-yielding;
-  coherence
-  proof
-    set F = f1-f2;
-    let x be set;
-   assume x in dom F;
-     then F.x = f1.x - f2.x by Def4;
-    hence thesis;
-  end;
-  cluster f1(#)f2 -> real-yielding;
-  coherence
-  proof
-    set F = f1(#)f2;
-    let x be set;
-   assume x in dom F;
-     then F.x = f1.x * f2.x by Def5;
-    hence thesis;
-  end;
-end;
-
-definition
-  let C be set, D be real-membered set;
-  let f1, f2 be PartFunc of C,D;
-  redefine func f1+f2 -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = f1+f2;
-A1: dom F = dom f1 /\ dom f2 by Def3;
-    rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A1,PARTFUN1:28;
-  end;
-  redefine func f1-f2 -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = f1-f2;
-A2: dom F = dom f1 /\ dom f2 by Def4;
-     rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A2,PARTFUN1:28;
-  end;
-  redefine func f1(#)f2 -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = f1(#)f2;
-A3: dom F = dom f1 /\ dom f2 by Def5;
-    rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A3,PARTFUN1:28;
-  end;
-end;
-
 theorem Th11:
  seq = seq1 + seq2 iff for n holds seq.n =seq1.n + seq2.n
   proof
@@ -454,7 +312,7 @@ theorem Th11:
 A1:  seq = seq1 + seq2;
      let n;
      dom seq = NAT by FUNCT_2:def 1;
-     hence seq.n =seq1.n + seq2.n by A1,Def3;
+     hence seq.n =seq1.n + seq2.n by A1,VALUED_1:def 1;
     end;
    assume
 A2: for n holds seq.n =seq1.n + seq2.n;
@@ -462,7 +320,7 @@ A3: dom seq = NAT /\ NAT by FUNCT_2:def 1
         .= NAT /\ dom seq2 by FUNCT_2:def 1
         .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
     for n being set st n in dom seq holds seq.n = seq1.n + seq2.n by A2;
-   hence thesis by A3,Def3;
+   hence thesis by A3,VALUED_1:def 1;
   end;
 
 theorem Th12:
@@ -473,7 +331,7 @@ theorem Th12:
 A1:  seq = seq1 (#) seq2;
      let n;
      dom seq = NAT by FUNCT_2:def 1;
-     hence seq.n =seq1.n * seq2.n by A1,Def5;
+     hence seq.n =seq1.n * seq2.n by A1,VALUED_1:def 4;
     end;
    assume
 A2:  for n holds seq.n =seq1.n * seq2.n;
@@ -481,338 +339,51 @@ A3:  dom seq = NAT /\ NAT by FUNCT_2:def 1
         .= NAT /\ dom seq2 by FUNCT_2:def 1
         .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
     for n being set st n in dom seq holds seq.n = seq1.n * seq2.n by A2;
-   hence thesis by A3,Def5;
+   hence thesis by A3,VALUED_1:def 4;
   end;
-
-definition
-  let seq1,seq2;
-  redefine func seq1+seq2 -> Real_Sequence;
-  coherence
-  proof
-     dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    then dom(seq1+seq2) = NAT /\ NAT by Def3;
-    hence thesis by FUNCT_2:130;
-  end;
-  redefine func seq1-seq2 -> Real_Sequence;
-  coherence
-  proof
-    dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    then dom(seq1-seq2) = NAT /\ NAT by Def4;
-    hence thesis by FUNCT_2:130;
-  end;
-  redefine func seq1(#)seq2 -> Real_Sequence;
-  coherence
-  proof
-    dom seq1 = NAT & dom seq2 = NAT by FUNCT_2:def 1;
-    then dom(seq1(#)seq2) = NAT /\ NAT by Def5;
-    hence thesis by FUNCT_2:130;
-  end;
-end;
-
-definition
-  let f be real-yielding Function;
-  let r be real number;
-  func r(#)f -> Function means :Def6:
-  dom it = dom f & for c being set st c in dom it holds it.c = r * f.c;
-existence
-  proof
-    deffunc F(set) = r * f.$1;
-    ex h being Function st dom h = dom f &
-    for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-  let h, g be Function such that
-A1: dom h = dom f and
-A2: for c being set st c in dom h holds h.c = r * f.c and
-A3: dom g = dom f and
-A4: for c being set st c in dom g holds g.c = r * f.c;
-     now let x;
-      assume
-A5:   x in dom h;
-      hence h.x = r * f.x by A2 .= g.x by A1,A3,A4,A5;
-    end;
-    hence h = g by A1,A3,FUNCT_1:9;
-  end;
-end;
-
-registration
-  let r be real number; let f be real-yielding Function;
-  cluster r(#)f -> real-yielding;
-  coherence
-  proof
-    set F = r(#)f;
-    let x be set;
-    assume x in dom F;
-     then F.x = r * f.x by Def6;
-    hence thesis;
-  end;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  let r be real number;
-  redefine func r(#)f -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = r(#)f;
-A1: dom F = dom f by Def6;
-     rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A1,PARTFUN1:28;
-  end;
-end;
-
-definition
-  let seq,r;
-  redefine func r(#)seq -> Real_Sequence;
-  coherence
-  proof
-    dom seq = NAT  by FUNCT_2:def 1;
-    then dom(r(#)seq) = NAT by Def6;
-    hence thesis by FUNCT_2:130;
-  end;
-end;
 
 theorem Th13:
   seq1 = r(#)seq2 iff for n holds seq1.n=r*seq2.n
  proof
   thus seq1 = r(#)seq2 implies for n holds seq1.n=r*seq2.n
-   proof assume
-A1: seq1 = r(#)seq2;
-    let n;
-    dom(r(#)seq2) = NAT by FUNCT_2:def 1;
-    hence thesis by A1,Def6;
-   end;
+  by VALUED_1:6;
   assume
-A2: for n holds seq1.n=r*seq2.n;
-A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
-   for n being set st n in dom seq1 holds seq1.n = r * seq2.n by A2;
-  hence thesis by A3,Def6;
+A1: for n holds seq1.n=r*seq2.n;
+A2: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
+   for n being set st n in dom seq1 holds seq1.n = r * seq2.n by A1;
+  hence thesis by A2,VALUED_1:def 5;
  end;
 
-definition
-  let f be real-yielding Function;
-  func -f -> real-yielding Function means :Def7:
-  dom it = dom f & for c being set st c in dom it holds it.c = -(f.c);
-existence
-  proof
-    deffunc F(set) = -f.$1;
-    consider h being Function such that
-A1: dom h = dom f and
-A2: for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
-    rng h c= REAL
-    proof
-      let y be set;
-      assume y in rng h;
-      then consider x being set such that
-A3:   x in dom h and
-A4:   h.x = y by FUNCT_1:def 5;
-       h.x = -f.x by A1,A2,A3;
-      hence thesis by A4;
-    end;
-    then reconsider h as real-yielding Function by VALUED_0:def 3;
-    take h;
-    thus thesis by A1,A2;
-  end;
-  uniqueness
-  proof
-  let h, g be real-yielding Function such that
-A5: dom h = dom f and
-A6: for c being set st c in dom h holds h.c = -f.c and
-A7: dom g = dom f and
-A8: for c being set st c in dom g holds g.c = -f.c;
-     now let x;
-      assume
-A9:   x in dom h;
-      hence h.x = -f.x by A6 .= g.x by A5,A7,A8,A9;
-    end;
-    hence h = g by A5,A7,FUNCT_1:9;
-  end;
-  involutiveness
-  proof
-    let g,h be real-yielding Function;
-    assume that
-A10: dom h = dom g and
-A11: for c being set st c in dom g holds g.c = -h.c;
-    thus dom h = dom g by A10;
-    let c be set;
-    assume
-A12: c in dom h;
-    thus h.c = --h.c  .= -g.c by A10,A11,A12;
-  end;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  redefine func -f -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = -f;
-A1: dom F = dom f by Def7;
-    rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A1,PARTFUN1:28;
-  end;
-end;
-
-definition let seq;
-  redefine func -seq -> Real_Sequence;
-  coherence
-  proof
-    dom seq = NAT  by FUNCT_2:def 1;
-    then dom(-seq) = NAT by Def7;
-    hence thesis by FUNCT_2:130;
-  end;
-end;
-
-theorem Th14:
+theorem
   seq1 = -seq2 iff for n holds seq1.n= -seq2.n
  proof
-  thus seq1 = -seq2 implies for n holds seq1.n=-seq2.n
-   proof assume
-A1:  seq1 = -seq2;
-    let n;
-    dom(-seq2) = NAT by FUNCT_2:def 1;
-    hence thesis by A1,Def7;
-   end;
+  thus seq1 = -seq2 implies for n holds seq1.n=-seq2.n by VALUED_1:8;
   assume
-A2: for n holds seq1.n= -seq2.n;
-A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
-     for n being set st n in dom seq1 holds seq1.n = - seq2.n by A2;
-  hence thesis by A3,Def7;
+A1: for n holds seq1.n= -seq2.n;
+A2: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq2 by FUNCT_2:def 1;
+     for n being set st n in dom seq1 holds seq1.n = - seq2.n by A1;
+  hence thesis by A2,VALUED_1:9;
  end;
 
-theorem Th15:
- seq1 - seq2 = seq1 +- seq2
- proof
-A1: dom(seq1 +- seq2) = NAT /\ NAT by FUNCT_2:def 1
-      .= NAT /\ dom seq2 by FUNCT_2:def 1
-      .= dom seq1 /\ dom seq2 by FUNCT_2:def 1;
-      for c being set st c in dom(seq1 +- seq2)
-     holds (seq1 +- seq2).c = seq1.c - seq2.c
-  proof let c be set;
-   assume
-A2: c in dom(seq1 +- seq2);
-   hence (seq1 +- seq2).c = seq1.c + (-seq2).c by Th11
-         .= seq1.c + -seq2.c by A2,Th14
-         .= seq1.c - seq2.c;
-  end;
-  hence thesis by A1,Def4;
- end;
-
-definition let seq;
-  func seq" -> Real_Sequence means :Def8: for n holds it.n=(seq.n)";
- existence
-  proof deffunc U(Element of NAT) = (seq.$1)";
-   thus ex f being Real_Sequence st
-    for n holds f.n=U(n) from ExRealSeq;
-  end;
- uniqueness
-  proof
-   let seq1,seq2 such that
-A1: for n holds seq1.n=(seq.n)" and
-A2: for n holds seq2.n=(seq.n)";
-    now let n;
-     seq1.n=(seq.n)" & seq2.n=(seq.n)" by A1,A2;
-     hence seq1.n=seq2.n;
-    end;
-   hence seq1=seq2 by FUNCT_2:113;
-  end;
-end;
-
-definition let seq1,seq;
-  func seq1 /" seq ->Real_Sequence equals
-    seq1(#)(seq");
-  correctness;
-end;
-
-definition
-  let f be real-yielding Function;
-  func abs f -> Function means :Def10:
-  dom it = dom f & for c being set st c in dom it holds it.c = abs(f.c);
-existence
-  proof
-    deffunc F(set) = abs(f.$1);
-    ex h being Function st dom h = dom f &
-    for x st x in dom f holds h.x = F(x) from FUNCT_1:sch 3;
-    hence thesis;
-  end;
-  uniqueness
-  proof
-  let h, g be Function such that
-A1: dom h = dom f and
-A2: for c being set st c in dom h holds h.c = abs(f.c) and
-A3: dom g = dom f and
-A4: for c being set st c in dom g holds g.c = abs(f.c);
-     now let x;
-      assume
-A5:   x in dom h;
-      hence h.x = abs(f.x) by A2 .= g.x by A1,A3,A4,A5;
-    end;
-    hence h = g by A1,A3,FUNCT_1:9;
-  end;
-end;
-
-registration
-  let f be real-yielding Function;
-  cluster abs f -> real-yielding;
-  coherence
-  proof
-    set F = abs f;
-    let x be set;
-    assume x in dom F;
-     then F.x = abs(f.x) by Def10;
-    hence thesis;
-  end;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  redefine func abs f -> PartFunc of C,REAL;
-  coherence
-  proof
-    set F = abs f;
-A1: dom F = dom f by Def10;
-     rng F c= REAL by VALUED_0:def 3;
-    then F is PartFunc of dom F, REAL by PARTFUN1:25;
-    hence thesis by A1,PARTFUN1:28;
-  end;
-end;
-
-definition
-  let seq;
-  redefine func abs seq -> Real_Sequence;
-  coherence
-  proof
-     dom seq = NAT  by FUNCT_2:def 1;
-    then dom(abs seq) = NAT by Def10;
-    hence thesis by FUNCT_2:130;
-  end;
-end;
+theorem
+  seq1 - seq2 = seq1 +- seq2;
 
 theorem Th16:
   seq1 = abs seq iff for n holds seq1.n= abs(seq.n)
  proof
   thus seq1 = abs seq implies for n holds seq1.n=abs(seq.n)
-   proof assume
-A1: seq1 = abs(seq);
-    let n;
-    dom(abs(seq)) = NAT by FUNCT_2:def 1;
-    hence thesis by A1,Def10;
-   end;
+  by VALUED_1:18;
   assume
-A2: for n holds seq1.n= abs(seq.n);
-A3: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq by FUNCT_2:def 1;
-     for n being set st n in dom seq1 holds seq1.n = abs(seq.n) by A2;
-  hence thesis by A3,Def10;
+A1: for n holds seq1.n= abs(seq.n);
+A2: dom seq1 = NAT by FUNCT_2:def 1 .= dom seq by FUNCT_2:def 1;
+    for n being set st n in dom seq1 holds seq1.n = abs(seq.n) by A1;
+  hence thesis by A2,VALUED_1:def 11;
  end;
 
 canceled 3;
 
-theorem
- Th20: (seq1+seq2)+seq3=seq1+(seq2+seq3)
+theorem Th20:
+  (seq1 + seq2) + seq3 = seq1 + (seq2 + seq3)
   proof
    now let n;
     thus ((seq1+seq2)+seq3).n=(seq1+seq2).n+ seq3.n by Th11
@@ -826,8 +397,8 @@ theorem
 
 canceled;
 
-theorem
- Th22: (seq1(#)seq2)(#)seq3=seq1(#)(seq2(#)seq3)
+theorem Th22:
+  (seq1 (#) seq2) (#) seq3 = seq1 (#) (seq2 (#) seq3)
   proof
    now let n;
     thus ((seq1(#)seq2)(#)seq3).n=(seq1(#)seq2).n*seq3.n by Th12
@@ -839,10 +410,10 @@ theorem
   hence thesis by FUNCT_2:113;
  end;
 
-theorem
- Th23: (seq1+seq2)(#)seq3=seq1(#)seq3+seq2(#)seq3
+theorem Th23:
+  (seq1 + seq2) (#) seq3 = seq1 (#) seq3 + seq2 (#) seq3
   proof
-       now let n;
+    now let n;
     thus ((seq1+seq2)(#)seq3).n=(seq1+seq2).n*seq3.n by Th12
      .=(seq1.n+seq2.n)*seq3.n by Th11
      .=seq1.n*seq3.n+seq2.n*seq3.n
@@ -854,22 +425,14 @@ theorem
  end;
 
 theorem
-  seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2 by Th23;
+  seq3 (#) (seq1 + seq2) = seq3 (#) seq1 + seq3 (#) seq2 by Th23;
 
 theorem
- Th25: -seq=(-1)(#)seq
-  proof
-   now let n;
-    thus ((-1)(#)seq).n=(-1)*seq.n by Th13
-     .=-(1*seq.n)
-     .=(-seq).n by Th14;
-   end;
-  hence thesis by FUNCT_2:113;
- end;
+  -seq = (-1) (#) seq;
 
 theorem
  Th26: r(#)(seq1(#)seq2)=r(#)seq1(#)seq2
-  proof
+ proof
    now let n;
     thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by Th13
      .=r*(seq1.n*seq2.n) by Th12
@@ -880,10 +443,10 @@ theorem
   hence thesis by FUNCT_2:113;
  end;
 
-theorem
- Th27: r(#)(seq1(#)seq2)=seq1(#)(r(#)seq2)
+theorem Th27:
+  r (#) (seq1 (#) seq2) = seq1 (#) (r (#) seq2)
   proof
-       now let n;
+    now let n;
     thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by Th13
      .=r*(seq1.n*seq2.n) by Th12
      .=seq1.n*(r*seq2.n)
@@ -893,15 +456,12 @@ theorem
   hence thesis by FUNCT_2:113;
  end;
 
-theorem
- Th28: (seq1-seq2)(#)seq3=seq1(#)seq3-seq2(#)seq3
+theorem Th28:
+  (seq1 - seq2) (#) seq3 = seq1 (#) seq3 - seq2 (#) seq3
  proof
-  thus (seq1-seq2)(#)seq3=(seq1+-seq2)(#)seq3 by Th15
-   .=seq1(#)seq3+(-seq2)(#)seq3 by Th23
-   .=seq1(#)seq3+((-1)(#)seq2)(#)seq3 by Th25
-   .=seq1(#)seq3+(-1)(#)(seq2(#)seq3) by Th26
-   .=seq1(#)seq3+-(seq2(#)seq3) by Th25
-   .=seq1(#)seq3-seq2(#)seq3 by Th15;
+  thus (seq1-seq2)(#)seq3=seq1(#)seq3+(-seq2)(#)seq3 by Th23
+   .=seq1(#)seq3+-(seq2(#)seq3) by Th26
+   .=seq1(#)seq3-seq2(#)seq3;
  end;
 
 theorem
@@ -936,29 +496,33 @@ theorem
 theorem
  Th32: r(#)(seq1-seq2)=r(#)seq1-r(#)seq2
   proof
-   thus r(#)(seq1-seq2)=r(#)(seq1+-seq2) by Th15
+   thus r(#)(seq1-seq2)=r(#)(seq1+-seq2)
     .=r(#)seq1+r(#)(-seq2) by Th30
-    .=r(#)seq1+r(#)((-1)(#)seq2) by Th25
+    .=r(#)seq1+r(#)((-1)(#)seq2)
     .=r(#)seq1+((-1)*r)(#)seq2 by Th31
     .=r(#)seq1+(-1)(#)(r(#)seq2) by Th31
-    .=r(#)seq1+-(r(#)seq2) by Th25
-    .=r(#)seq1-(r(#)seq2) by Th15;
+    .=r(#)seq1+-(r(#)seq2)
+    .=r(#)seq1-(r(#)seq2);
   end;
 
 theorem
-  r(#)(seq1/"seq)=(r(#)seq1)/"seq by Th26;
+  r(#)(seq1/"seq)=(r(#)seq1)/"seq
+  proof
+    thus r(#)(seq1/"seq)= r(#)(seq1(#)(seq"))
+    .= (r(#)seq1)/"seq by Th26;
+  end;
 
 theorem
   seq1-(seq2+seq3)=seq1-seq2-seq3
   proof
-   thus seq1-(seq2+seq3)=seq1+-(seq2+seq3) by Th15
-    .=seq1+(-1)(#)(seq2+seq3) by Th25
+   thus seq1-(seq2+seq3)=seq1+-(seq2+seq3)
+    .=seq1+(-1)(#)(seq2+seq3)
     .=seq1+((-1)(#)seq2+(-1)(#)seq3) by Th30
-    .=seq1+(-seq2+(-1)(#)seq3) by Th25
-    .=seq1+(-seq2+-seq3) by Th25
+    .=seq1+(-seq2+(-1)(#)seq3)
+    .=seq1+(-seq2+-seq3)
     .=seq1+-seq2+-seq3 by Th20
-    .=seq1-seq2+-seq3 by Th15
-    .=seq1-seq2-seq3 by Th15;
+    .=seq1-seq2+-seq3
+    .=seq1-seq2-seq3;
  end;
 
 theorem
@@ -975,43 +539,31 @@ theorem
   for F being real-yielding Function holds --F = F;
 
 theorem
- Th37: seq1-(-seq2)=seq1+seq2
-  proof
-   thus seq1-(-seq2)=seq1+(-(-seq2)) by Th15
-    .=seq1+seq2;
-  end;
+  seq1 - (-seq2) = seq1 + seq2;
 
 theorem
   seq1-(seq2-seq3)=seq1-seq2+seq3
   proof
-   thus seq1-(seq2-seq3)=seq1+-(seq2-seq3) by Th15
-    .=seq1+(-1)(#)(seq2-seq3) by Th25
+   thus seq1-(seq2-seq3)=seq1+-(seq2-seq3)
+    .=seq1+(-1)(#)(seq2-seq3)
     .=seq1+((-1)(#)seq2-((-1)(#)seq3)) by Th32
-    .=seq1+(-seq2-((-1)(#)seq3)) by Th25
-    .=seq1+(-seq2-(-seq3)) by Th25
-    .=seq1+(-seq2+seq3) by Th37
+    .=seq1+(-seq2-((-1)(#)seq3))
+    .=seq1+(-seq2-(-seq3))
+    .=seq1+(-seq2+seq3)
     .=seq1+-seq2+seq3 by Th20
-    .=seq1-seq2+seq3 by Th15;
+    .=seq1-seq2+seq3;
   end;
 
 theorem
   seq1+(seq2-seq3)=seq1+seq2-seq3
   proof
-   thus seq1+(seq2-seq3)=seq1+(seq2+-seq3) by Th15
+   thus seq1+(seq2-seq3)=seq1+(seq2+-seq3)
     .=seq1+seq2+-seq3 by Th20
-    .=seq1+seq2-seq3 by Th15;
+    .=seq1+seq2-seq3;
   end;
 
 theorem
-  (-seq1)(#)seq2=-(seq1(#)seq2) & seq1(#)(-seq2)=-(seq1(#)seq2)
-  proof
-   thus (-seq1)(#)seq2=(-1)(#)seq1(#)seq2 by Th25
-    .=(-1)(#)(seq1(#)seq2) by Th26
-    .=-(seq1(#)seq2) by Th25;
-   thus seq1(#)(-seq2)=seq1(#)((-1)(#)seq2) by Th25
-    .=(-1)(#)(seq1(#)seq2) by Th27
-    .=-(seq1(#)seq2) by Th25;
-  end;
+  (-seq1)(#)seq2=-(seq1(#)seq2) & seq1(#)(-seq2)=-(seq1(#)seq2) by Th26;
 
 theorem
  Th41:seq is being_not_0 implies seq" is being_not_0
@@ -1021,20 +573,12 @@ theorem
  A2: not seq" is being_not_0;
    consider n1 such that
 A3: (seq").n1=0 by A2,Th7;
-   (seq.n1)"=(seq").n1 by Def8;
+  (seq.n1)"=(seq").n1 by VALUED_1:10;
    hence contradiction by A1,A3,Th7,XCMPLX_1:203;
   end;
 
 theorem
- Th42:seq""=seq
-  proof
-   now let n;
-     thus (seq"").n=((seq").n)" by Def8
-      .=(seq.n)"" by Def8
-      .=seq.n;
-    end;
-   hence thesis by FUNCT_2:113;
-  end;
+  seq"" = seq;
 
 theorem
  Th43:seq is being_not_0 & seq1 is being_not_0 iff seq(#)seq1 is being_not_0
@@ -1072,11 +616,11 @@ theorem
   proof
    now let n;
      thus ((seq")(#)(seq1")).n=((seq").n)*((seq1").n) by Th12
-      .=((seq").n)*(seq1.n)" by Def8
-      .=(seq.n)"*(seq1.n)" by Def8
+      .=((seq").n)*(seq1.n)" by VALUED_1:10
+      .=(seq.n)"*(seq1.n)" by VALUED_1:10
       .=((seq.n)*(seq1.n))" by XCMPLX_1:205
       .=((seq(#)seq1).n)" by Th12
-      .=((seq(#)seq1)").n by Def8;
+      .=((seq(#)seq1)").n by VALUED_1:10;
     end;
    hence thesis by FUNCT_2:113;
   end;
@@ -1090,7 +634,7 @@ A1: seq is being_not_0;
  A2: seq.n<>0 by A1,Th7;
      thus ((seq1/"seq)(#)seq).n=((seq1(#)seq").n)*seq.n by Th12
       .=(seq1.n)*(seq".n)*seq.n by Th12
-      .=(seq1.n)*(seq.n)"*seq.n by Def8
+      .=(seq1.n)*(seq.n)"*seq.n by VALUED_1:10
       .=(seq1.n)*((seq.n)"*seq.n)
       .=(seq1.n)*1 by A2,XCMPLX_0:def 7
       .=seq1.n;
@@ -1131,22 +675,25 @@ theorem
   proof
    now let n;
      thus (seq/"seq1)".n=(seq"(#)seq1"").n by Th44
-      .=(seq1/"seq).n by Th42;
+      .=(seq1/"seq).n;
     end;
    hence thesis by FUNCT_2:113;
   end;
 
 theorem
-   seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq by Th22;
+  seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq
+  proof
+    thus seq2(#)(seq1/"seq) = seq2(#)(seq1(#)(seq"))
+    .=(seq2(#)seq1)/"seq by Th22;
+  end;
 
 theorem
-   seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq
+  seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq
   proof
-        now let n;
-     thus (seq2/"(seq/"seq1)).n=((seq2(#)(seq1/"seq))).n by Th48
-      .=((seq2(#)seq1)/"seq).n by Th22;
-    end;
-   hence thesis by FUNCT_2:113;
+    thus seq2/"(seq/"seq1) = seq2(#)(seq/"seq1)"
+    .= seq2(#)(seq1/"seq) by Th48
+    .= seq2(#)(seq1(#)(seq"))
+    .= (seq2(#)seq1)/"seq by Th22;
   end;
 
 theorem
@@ -1161,7 +708,7 @@ A1: seq1 is being_not_0;
       .=(seq2.n)*((seq1.n)*(seq1.n)")*seq".n by A2,XCMPLX_0:def 7
       .=(seq2.n)*(seq1.n)*((seq1.n)"*seq".n)
       .=((seq2(#)seq1).n)*((seq1.n)"*seq".n) by Th12
-      .=((seq2(#)seq1).n)*((seq1".n)*seq".n) by Def8
+      .=((seq2(#)seq1).n)*((seq1".n)*seq".n) by VALUED_1:10
       .=((seq2(#)seq1).n)*(seq"(#)seq1").n by Th12
       .=((seq2(#)seq1).n)*(seq(#)seq1)".n by Th44
       .=((seq2(#)seq1)/"(seq(#)seq1)).n by Th12;
@@ -1184,22 +731,16 @@ A5: r*seq.n1=0 by A4,Th13;
   end;
 
 theorem
-  seq is being_not_0 implies -seq is being_not_0
-  proof
-   assume
-    seq is being_not_0;
-   then (-1)(#)seq is being_not_0 by Th52;
-   hence thesis by Th25;
-  end;
+  seq is being_not_0 implies -seq is being_not_0 by Th52;
 
 theorem
  Th54:(r(#)seq)"=r"(#)seq"
   proof
    now let n;
-     thus (r(#)seq)".n=((r(#)seq).n)" by Def8
+     thus (r(#)seq)".n=((r(#)seq).n)" by VALUED_1:10
       .=(r*(seq.n))" by Th13
       .=r"*(seq.n)" by XCMPLX_1:205
-      .=r"*seq".n by Def8
+      .=r"*seq".n by VALUED_1:10
       .=(r"(#)seq").n by Th13;
     end;
    hence thesis by FUNCT_2:113;
@@ -1208,26 +749,29 @@ theorem
  Lm1:(-1)"=-1;
 
 theorem
- Th55:(-seq)"=(-1)(#)seq"
-  proof
-   thus (-seq)"=((-1)(#)seq)" by Th25
-    .=(-1)(#)seq" by Lm1,Th54;
-  end;
+  (-seq)" = (-1)(#)seq" by Lm1,Th54;
 
 theorem
   -seq1/"seq=(-seq1)/"seq & seq1/"(-seq)=-seq1/"seq
   proof
-   thus -seq1/"seq=(-1)(#)(seq1/"seq) by Th25
+   thus -seq1/"seq=(-1)(#)(seq1/"seq)
+    .=(-1)(#)(seq1(#)(seq"))
     .=((-1)(#)seq1)/"seq by Th26
-    .=(-seq1)/"seq by Th25;
-   thus seq1/"(-seq)=seq1(#)((-1)(#)seq") by Th55
+    .=(-seq1)/"seq;
+   thus seq1/"(-seq)=seq1(#)((-1)(#)seq") by Lm1,Th54
     .=(-1)(#)(seq1(#)(seq")) by Th27
-    .=-(seq1/"seq) by Th25;
+    .=-(seq1/"seq);
   end;
 
 theorem
-  seq1/"seq + seq1'/"seq=(seq1+seq1')/"seq &
-    seq1/"seq - seq1'/"seq=(seq1-seq1')/"seq by Th23,Th28;
+  seq1/"seq + seq1'/"seq = (seq1 + seq1') /" seq &
+  seq1/"seq - seq1'/"seq = (seq1 - seq1') /" seq
+  proof
+    thus seq1/"seq + seq1'/"seq = (seq1 + seq1') (#) (seq") by Th23
+    .= (seq1 + seq1') /" seq;
+    thus seq1/"seq - seq1'/"seq = (seq1 - seq1') (#) (seq") by Th28
+    .= (seq1 - seq1') /" seq;
+  end;
 
 theorem
   seq is being_not_0 & seq' is being_not_0 implies
@@ -1240,18 +784,20 @@ A2: seq' is being_not_0;
    thus seq1/"seq + seq1'/"seq'=(seq1(#)seq')/"(seq(#)seq')+seq1'/"seq'
       by A2,Th51
     .=(seq1(#)seq')/"(seq(#)seq')+(seq1'(#)seq)/"(seq(#)seq') by A1,Th51
-    .=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq') by Th23;
+    .=(seq1(#)seq'+seq1'(#)seq)(#)((seq(#)seq')") by Th23
+    .=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq');
    thus seq1/"seq - seq1'/"seq'=(seq1(#)seq')/"(seq(#)seq')-seq1'/"seq'
       by A2,Th51
     .=(seq1(#)seq')/"(seq(#)seq')-(seq1'(#)seq)/"(seq(#)seq') by A1,Th51
-    .=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq') by Th28;
+    .=(seq1(#)seq'-seq1'(#)seq)(#)((seq(#)seq')") by Th28
+    .=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq');
   end;
 
 theorem
   (seq1'/"seq)/"(seq'/"seq1)=(seq1'(#)seq1)/"(seq(#)seq')
   proof
    thus (seq1'/"seq)/"(seq'/"seq1)=(seq1'/"seq)(#)(seq'"(#)seq1"") by Th44
-    .=(seq1'(#)seq")(#)(seq1(#)seq'") by Th42
+    .=(seq1'(#)seq")(#)(seq1(#)seq'")
     .=seq1'(#)seq"(#)seq1(#)seq'" by Th22
     .=seq1'(#)(seq1(#)seq")(#)seq'" by Th22
     .=seq1'(#)((seq1(#)seq")(#)seq'") by Th22
@@ -1292,12 +838,12 @@ theorem
   proof
     now let n;
      thus (abs(seq")).n=abs(seq".n) by Th16
-      .=abs((seq.n)") by Def8
+      .=abs((seq.n)") by VALUED_1:10
       .=abs(1/(seq.n)) by XCMPLX_1:217
       .=1/abs(seq.n) by ABSVALUE:15
       .=(abs(seq.n))" by XCMPLX_1:217
       .=(abs(seq).n)" by Th16
-      .=(abs(seq))".n by Def8;
+      .=(abs(seq))".n by VALUED_1:10;
     end;
    hence thesis by FUNCT_2:113;
   end;
@@ -1335,3 +881,10 @@ definition
     hence thesis;
   end;
 end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1+f2 -> real-valued;
+  coherence;
+end;
+

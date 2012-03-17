@@ -25,15 +25,15 @@
 <ArticleID name="REALSET1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GRAPH_1"/>
@@ -47,7 +47,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="276">
+<Func kind="K" nr="310">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -61,18 +61,12 @@
 <Adjective nr="17"/>
 <Adjective nr="21"/>
 <Adjective nr="27" value="false"/>
-<Adjective nr="111"/>
-<Adjective nr="112">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="113">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="114"/>
-<Adjective nr="116">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="117"/>
+<Adjective nr="126"/>
+<Adjective nr="127"/>
+<Adjective nr="128"/>
+<Adjective nr="129"/>
+<Adjective nr="131"/>
+<Adjective nr="132"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -93,7 +87,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="294">
+<Func kind="K" nr="328">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

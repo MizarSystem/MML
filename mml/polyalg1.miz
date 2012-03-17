@@ -10,21 +10,21 @@ environ
       LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
       ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
       UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1, REALSET1,
-      VECTSP_2, STRUCT_0, ARYTM;
+      VECTSP_2, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      REALSET1, STRUCT_0, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
-      FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
-      VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3,
-      POLYNOM5, VECTSP_4, XXREAL_0;
+      REALSET1, STRUCT_0, ALGSTR_0, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSEQ_1, FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1,
+      RLVECT_1, VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1,
+      POLYNOM3, POLYNOM5, VECTSP_4, XXREAL_0;
  constructors FINSEQ_4, SETFAM_1, BINOP_1, XXREAL_0, FINSOP_1, REALSET1,
       RFINSEQ, BINARITH, ALGSTR_1, VECTSP_4, BHSP_1, POLYNOM1, POLYNOM3,
-      POLYNOM5, SEQ_1;
+      POLYNOM5, SEQ_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, XREAL_0, NAT_1, FINSEQ_1,
       REALSET1, STRUCT_0, VECTSP_1, FVSUM_1, POLYNOM3, POLYNOM5, BINOM,
-      ORDINAL1;
+      ORDINAL1, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_4, BINOP_1, REALSET1,
-      STRUCT_0;
+      STRUCT_0, ALGSTR_0, VALUED_1;
  theorems TARSKI, NAT_1, RLVECT_1, VECTSP_1, BINARITH, FUNCT_1, FUNCT_2,
       FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSEQ_5, RFINSEQ, BINOP_1, POLYNOM1,
       POLYNOM3, STRUCT_0, ZFMISC_1, POLYNOM5, BINOM, RELAT_1, VECTSP_4,
@@ -37,7 +37,7 @@ begin :: Preliminaries
 definition let F be 1-sorted;
  struct ( doubleLoopStr,VectSpStr over F ) AlgebraStr over F (#
          carrier -> set,
-         add, mult -> BinOp of the carrier,
+         addF, multF -> BinOp of the carrier,
          ZeroF, OneF -> Element of the carrier,
          lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
@@ -99,7 +99,7 @@ proof
   thus x*(v+w) = x*v+x*w &
       (x+y)*v = x*v+y*v &
       (x*y)*v = x*(y*v) &
-      (1_L)*v = v by A1;
+      (1.L)*v = v by A1;
 end;
 thus A is mix-associative
 proof
@@ -297,22 +297,22 @@ definition
      reconsider y1=y as Element of P1 by A39;
      reconsider p=x as sequence of L by A27;
      reconsider q=y as sequence of L by A33;
-     thus (the add of P1).(x,y) = x+y1
+     thus (the addF of P1).(x,y) = x+y1
         .= p+q by A28
         .= x1+y by A34
-        .= (the add of P2).(x,y);
+        .= (the addF of P2).(x,y);
     end;
-    then A41: the add of P1 = the add of P2 by A40,BINOP_1:2;
+    then A41: the addF of P1 = the addF of P2 by A40,BINOP_1:2;
     A42: now let x be Element of P1,
             y be Element of P2;
      reconsider x1=x as Element of P2 by A39;
      reconsider y1=y as Element of P1 by A39;
      reconsider p=x as sequence of L by A27;
      reconsider q=y as sequence of L by A33;
-     thus (the mult of P1).(x,y) = x*y1
+     thus (the multF of P1).(x,y) = x*y1
         .= p*'q by A29
         .= x1*y by A35
-        .= (the mult of P2).(x,y);
+        .= (the multF of P2).(x,y);
     end;
          now let a be Element of L,
             x be Element of P1;
@@ -401,7 +401,7 @@ definition
 
   registration
    let L be Abelian add-associative right_zeroed right_complementable
-   unital associative distributive (non empty doubleLoopStr);
+   well-unital associative distributive (non empty doubleLoopStr);
    cluster Formal-Series L -> associative;
    coherence
    proof
@@ -417,7 +417,7 @@ definition
 
 registration
   cluster add-associative associative right_zeroed left_zeroed
-    right_unital left_unital
+    well-unital
     right_complementable distributive (non empty doubleLoopStr);
   existence
   proof
@@ -531,23 +531,19 @@ end;
 registration
   let L be right_zeroed add-associative right_complementable
     distributive well-unital (non empty doubleLoopStr);
-  cluster Formal-Series L -> unital;
+  cluster Formal-Series L -> well-unital;
   coherence
-  proof
-    reconsider e = 1_.L as Element of Formal-Series L by Def2;
-    take e;
-    thus thesis by Lm1;
+  proof set F = Formal-Series L;
+   let x be Element of Formal-Series L;
+    1.F = 1_.L by Def2;
+   hence thesis by Lm1;
   end;
 end;
 
-Lm2: now
-   let L be add-associative right_zeroed right_complementable well-unital
-         distributive (non empty doubleLoopStr);
-   set F = Formal-Series L;
-   reconsider e = 1_.L as Element of F by Def2;
-    for x being Element of F holds x*e = x & e*x = x by Lm1;
-   hence 1_F = 1_.L by GROUP_1:def 5;
-end;
+Lm2:
+  for L being add-associative right_zeroed right_complementable well-unital
+         distributive (non empty doubleLoopStr)
+   holds 1_Formal-Series L = 1_.L by Def2,Lm1,GROUP_1:def 5;
 
 registration
    let L be Abelian add-associative right_zeroed right_complementable
@@ -640,14 +636,14 @@ theorem Th8:
 
 theorem Th9:
    for L be associative well-unital (non empty doubleLoopStr)
-   for p being sequence of L holds 1_L*p = p
+   for p being sequence of L holds 1.L*p = p
     proof
      let L be associative well-unital (non empty doubleLoopStr);
      let p be sequence of L;
-      for i being Element of NAT holds ((1_L)*p).i = p.i
+      for i being Element of NAT holds ((1.L)*p).i = p.i
       proof
        let i be Element of NAT;
-       thus ((1_L)*p).i = (1_L)*p.i by POLYNOM5:def 3
+       thus ((1.L)*p).i = (1.L)*p.i by POLYNOM5:def 3
         .= p.i by VECTSP_1:def 19;
       end;
      hence thesis by FUNCT_2:113;
@@ -678,7 +674,7 @@ thus (x+y)*v = (x'+y')*p by Def2
 thus (x*y)*v = (x'*y')*p by Def2
        .= x'*(y'*p) by Th8
        .= x*(y*v) by A3,Def2;
-thus (1_L)*v = 1_L*p by Def2
+thus (1.L)*v = 1.L*p by Def2
        .= v by Th9;
    end;
 end;
@@ -750,10 +746,10 @@ end;
 
 Lm3:
   now let L be 1-sorted, A be AlgebraStr over L;
-         dom the add of A = [:the carrier of A,the carrier of A:] by Th2;
-    hence the add of A = (the add of A)||the carrier of A by RELAT_1:98;
-         dom the mult of A = [:the carrier of A,the carrier of A:] by Th2;
-    hence the mult of A = (the mult of A)||the carrier of A by RELAT_1:98;
+         dom the addF of A = [:the carrier of A,the carrier of A:] by Th2;
+    hence the addF of A = (the addF of A)||the carrier of A by RELAT_1:98;
+         dom the multF of A = [:the carrier of A,the carrier of A:] by Th2;
+    hence the multF of A = (the multF of A)||the carrier of A by RELAT_1:98;
          dom the lmult of A = [:the carrier of L,the carrier of A:] by Th2;
     hence the lmult of A = (the lmult of A)|[:the carrier of L,the carrier of A
 :]
@@ -765,8 +761,8 @@ definition
   let A be AlgebraStr over L;
  mode Subalgebra of A -> AlgebraStr over L means :Def3:
   the carrier of it c= the carrier of A & 1.it = 1.A & 0.it = 0.A &
-  the add of it = (the add of A)||the carrier of it &
-  the mult of it = (the mult of A)||the carrier of it &
+  the addF of it = (the addF of A)||the carrier of it &
+  the multF of it = (the multF of A)||the carrier of it &
   the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
   existence
    proof take A; thus thesis by Lm3; end;
@@ -779,8 +775,8 @@ theorem Th11:
   let L be 1-sorted;
   let A be AlgebraStr over L;
   thus the carrier of A c= the carrier of A & 1.A = 1.A & 0.A = 0.A &
-  the add of A = (the add of A)||the carrier of A &
-  the mult of A = (the mult of A)||the carrier of A &
+  the addF of A = (the addF of A)||the carrier of A &
+  the multF of A = (the multF of A)||the carrier of A &
   the lmult of A = (the lmult of A)|[:the carrier of L,the carrier of A:]
    by Lm3;
  end;
@@ -801,12 +797,12 @@ A3: the carrier of A c= the carrier of B by A1,Def3;
    thus 0.A = 0.B by A1,Def3 .= 0.C by A2,Def3;
 A4: [:the carrier of A,the carrier of A:] c=
         [:the carrier of B,the carrier of B:] by A3,ZFMISC_1:119;
-   thus the add of A = (the add of B)||the carrier of A by A1,Def3
-     .= ((the add of C)||the carrier of B)||the carrier of A by A2,Def3
-     .= (the add of C)||the carrier of A by A4,FUNCT_1:82;
-   thus the mult of A = (the mult of B)||the carrier of A by A1,Def3
-     .= ((the mult of C)||the carrier of B)||the carrier of A by A2,Def3
-   .= (the mult of C)||the carrier of A by A4,FUNCT_1:82;
+   thus the addF of A = (the addF of B)||the carrier of A by A1,Def3
+     .= ((the addF of C)||the carrier of B)||the carrier of A by A2,Def3
+     .= (the addF of C)||the carrier of A by A4,FUNCT_1:82;
+   thus the multF of A = (the multF of B)||the carrier of A by A1,Def3
+     .= ((the multF of C)||the carrier of B)||the carrier of A by A2,Def3
+   .= (the multF of C)||the carrier of A by A4,FUNCT_1:82;
 A5: [:the carrier of L,the carrier of A:] c=
           [:the carrier of L,the carrier of B:] by A3,ZFMISC_1:119;
    thus
@@ -829,15 +825,15 @@ A2: B is Subalgebra of A;
 A3: the carrier of A c= the carrier of B by A1,Def3;
 A4: the carrier of B c= the carrier of A by A2,Def3;
 then A5: the carrier of A = the carrier of B by A3,XBOOLE_0:def 10;
-A6: dom (the add of B) = [:the carrier of B,the carrier of B:] by Th1;
-A7: dom (the mult of B) = [:the carrier of B,the carrier of B:] by Th1;
+A6: dom (the addF of B) = [:the carrier of B,the carrier of B:] by Th1;
+A7: dom (the multF of B) = [:the carrier of B,the carrier of B:] by Th1;
 A8:dom (the lmult of B) = [:the carrier of L,the carrier of B:] by Th2;
      A9: [:the carrier of L,the carrier of B:] c=
               [:the carrier of L,the carrier of A:] by A4,ZFMISC_1:119;
-A10: the add of A = (the add of B)||the carrier of A by A1,Def3
-     .= the add of B by A5,A6,RELAT_1:97;
-A11: the mult of A = (the mult of B)||the carrier of A by A1,Def3
-     .= the mult of B by A5,A7,RELAT_1:97;
+A10: the addF of A = (the addF of B)||the carrier of A by A1,Def3
+     .= the addF of B by A5,A6,RELAT_1:97;
+A11: the multF of A = (the multF of B)||the carrier of A by A1,Def3
+     .= the multF of B by A5,A7,RELAT_1:97;
 A12: the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
       by A1,Def3
      .= the lmult of B by A8,A9,RELAT_1:97;
@@ -855,14 +851,14 @@ proof
 let L be 1-sorted;
 let A,B be AlgebraStr over L such that
 A1: the AlgebraStr of A = the AlgebraStr of B;
-A2: dom (the add of B) = [:the carrier of B,the carrier of B:] by Th1;
-A3: dom (the mult of B) = [:the carrier of B,the carrier of B:] by Th1;
+A2: dom (the addF of B) = [:the carrier of B,the carrier of B:] by Th1;
+A3: dom (the multF of B) = [:the carrier of B,the carrier of B:] by Th1;
 A4:dom (the lmult of B) = [:the carrier of L,the carrier of B:] by Th2;
 thus the carrier of A c= the carrier of B by A1;
 thus 1.A = 1.B by A1;
 thus 0.A = 0.B by A1;
-thus the add of A = (the add of B)||the carrier of A by A1,A2,RELAT_1:97;
-thus the mult of A = (the mult of B)||the carrier of A by A1,A3,RELAT_1:97;
+thus the addF of A = (the addF of B)||the carrier of A by A1,A2,RELAT_1:97;
+thus the multF of A = (the multF of B)||the carrier of A by A1,A3,RELAT_1:97;
 thus the lmult of A = (the lmult of B)|[:the carrier of L,the carrier of A:]
            by A1,A4,RELAT_1:97;
 end;
@@ -890,7 +886,7 @@ registration
   cluster strict Subalgebra of B;
 existence
 proof
-  reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
+  reconsider b = AlgebraStr(# the carrier of B, the addF of B, the multF of B,
         0.B, 1.B, the lmult of B #)
         as Subalgebra of B by Th14;
   take b;
@@ -904,7 +900,7 @@ registration
   cluster strict non empty Subalgebra of B;
 existence
 proof
-reconsider b = AlgebraStr(# the carrier of B, the add of B, the mult of B,
+reconsider b = AlgebraStr(# the carrier of B, the addF of B, the multF of B,
         0.B, 1.B, the lmult of B #)
         as Subalgebra of B by Th14;
 take b;
@@ -913,7 +909,7 @@ end;
 end;
 
 definition
-  let L be non empty HGrStr;
+  let L be non empty multMagma;
   let B be non empty AlgebraStr over L;
   let A be Subset of B;
   attr A is opers_closed means :Def4:
@@ -924,45 +920,45 @@ definition
 end;
 
 theorem Th15:
-for L being non empty HGrStr
+for L being non empty multMagma
 for B being non empty AlgebraStr over L
 for A being non empty Subalgebra of B holds
 for x,y being Element of B,
 x',y' being Element of A st x = x' & y = y' holds
 x+y = x'+ y'
 proof
-  let L be non empty HGrStr;
+  let L be non empty multMagma;
   let B be non empty AlgebraStr over L;
   let A be non empty Subalgebra of B;
   let x,y be Element of B,
       x',y' be Element of A such that
 A1: x = x' & y = y';
  [x',y'] in [:the carrier of A,the carrier of A:] by ZFMISC_1:106;
-hence x+y = ((the add of B)||the carrier of A).[x',y'] by A1,FUNCT_1:72
+hence x+y = ((the addF of B)||the carrier of A).[x',y'] by A1,FUNCT_1:72
         .= x'+ y' by Def3;
 end;
 
 theorem Th16:
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B holds
 for x,y being Element of B,
 x',y' being Element of A st x = x' & y = y' holds
  x*y = x'* y'
 proof
-let L be non empty HGrStr;
+let L be non empty multMagma;
 let B be non empty AlgebraStr over L;
 let A be non empty Subalgebra of B;
 let x,y be Element of B,
    x',y' be Element of A such that
 A1: x = x' & y = y';
  [x',y'] in [:the carrier of A,the carrier of A:] by ZFMISC_1:106;
-hence x*y = ((the mult of B)||the carrier of A).[x',y'] by A1,FUNCT_1:72
+hence x*y = ((the multF of B)||the carrier of A).[x',y'] by A1,FUNCT_1:72
         .= x'* y' by Def3;
 end;
 
 theorem Th17:
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B holds
 for a being Element of L
@@ -970,7 +966,7 @@ for x being Element of B,
 x' being Element of A st x = x' holds
  a * x = a * x'
 proof
-let L be non empty HGrStr;
+let L be non empty multMagma;
 let B be non empty AlgebraStr over L;
 let A be non empty Subalgebra of B;
 let a be Element of L;
@@ -986,12 +982,12 @@ end;
 canceled;
 
 theorem
-     for L be non empty HGrStr
+     for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B ex C being Subset of B st
 the carrier of A = C & C is opers_closed
 proof
- let L be non empty HGrStr;
+ let L be non empty multMagma;
  let B be non empty AlgebraStr over L;
  let A be non empty Subalgebra of B;
  take C = the carrier of A;
@@ -1033,20 +1029,20 @@ A5:    x in C & y in C;
 end;
 
 theorem Th20:
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be Subset of B st A is opers_closed ex C being strict Subalgebra of B
 st the carrier of C = A
 proof
- let L be non empty HGrStr;
+ let L be non empty multMagma;
  let B be non empty AlgebraStr over L;
  let A be Subset of B such that
 A1: A is opers_closed;
 A2: [:A,A:] c= [:the carrier of B,the carrier of B:] by ZFMISC_1:119;
- reconsider f1 = (the add of B)||A as Function;
+ reconsider f1 = (the addF of B)||A as Function;
        dom f1 = [:A,A:] & for x being set st x in [:A,A:] holds f1.x in A
    proof
-          [:A,A:] c= dom the add of B by A2,Th1;
+          [:A,A:] c= dom the addF of B by A2,Th1;
     hence dom f1 = [:A,A:] by RELAT_1:91;
     let x be set such that
 A3:  x in [:A,A:];
@@ -1058,8 +1054,8 @@ A5:  A is linearly-closed by A1,Def4;
      hence f1.x in A by A4,A5,VECTSP_4:def 1;
     end;
  then reconsider ad = f1 as BinOp of A by FUNCT_2:5;
- reconsider f2 = (the mult of B)||A as Function;
-         [:A,A:] c= dom the mult of B by A2,Th1;
+ reconsider f2 = (the multF of B)||A as Function;
+         [:A,A:] c= dom the multF of B by A2,Th1;
 then A6: dom f2 = [:A,A:] by RELAT_1:91;
        for x being set st x in [:A,A:] holds f2.x in A
    proof
@@ -1102,7 +1098,7 @@ A13: 1.c = 1.B;
 end;
 
 theorem Th21:
-for L being non empty HGrStr
+for L being non empty multMagma
 for B being non empty AlgebraStr over L
 for A being non empty Subset of B
 for X being Subset-Family of B st
@@ -1110,7 +1106,7 @@ for X being Subset-Family of B st
    ex C being Subalgebra of B st Y = the carrier of C & A c= Y) holds
      meet X is opers_closed
  proof
-  let L being non empty HGrStr;
+  let L being non empty multMagma;
   let B being non empty AlgebraStr over L;
   let A being non empty Subset of B;
   let X being Subset-Family of B such that
@@ -1202,7 +1198,7 @@ A17:   Y = the carrier of C & A c= Y by A1;
  end;
 
 definition
-let L be non empty HGrStr;
+let L be non empty multMagma;
 let B be non empty AlgebraStr over L;
 let A be non empty Subset of B;
  func GenAlg A -> strict non empty Subalgebra of B means :Def5:
@@ -1262,12 +1258,12 @@ then A13: the carrier of P1 = the carrier of P2 by A11,XBOOLE_0:def 10;
 A14:  the carrier of P2 c= the carrier of B by Def3;
      then reconsider x' = x1 as Element of B by TARSKI:def 3;
      reconsider y' = y as Element of B by A14,TARSKI:def 3;
-     thus (the add of P1).(x,y) = x + y1
+     thus (the addF of P1).(x,y) = x + y1
         .= x' + y' by Th15
         .= x1 + y by Th15
-        .= (the add of P2).(x,y);
+        .= (the addF of P2).(x,y);
     end;
-then A15: the add of P1 = the add of P2 by A13,BINOP_1:2;
+then A15: the addF of P1 = the addF of P2 by A13,BINOP_1:2;
          now let x be Element of P1,
             y be Element of P2;
      reconsider x1=x as Element of P2 by A11,A12,XBOOLE_0:def 10
@@ -1277,12 +1273,12 @@ then A15: the add of P1 = the add of P2 by A13,BINOP_1:2;
 A16:  the carrier of P2 c= the carrier of B by Def3;
      then reconsider x' = x1 as Element of B by TARSKI:def 3;
      reconsider y' = y as Element of B by A16,TARSKI:def 3;
-     thus (the mult of P1).(x,y) = x * y1
+     thus (the multF of P1).(x,y) = x * y1
         .= x' * y' by Th16
         .= x1 * y by Th16
-        .= (the mult of P2).(x,y);
+        .= (the multF of P2).(x,y);
     end;
-then A17: the mult of P1 = the mult of P2 by A13,BINOP_1:2;
+then A17: the multF of P1 = the multF of P2 by A13,BINOP_1:2;
 A18: 0.P1 = 0.B by Def3
         .= 0.P2 by Def3;
 A19: 1.P1 = 1.B by Def3
@@ -1303,12 +1299,12 @@ A19: 1.P1 = 1.B by Def3
 end;
 
 theorem Th22:
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subset of B st A is opers_closed holds
 the carrier of GenAlg A = A
  proof
-  let L be non empty HGrStr;
+  let L be non empty multMagma;
   let B be non empty AlgebraStr over L;
   let A be non empty Subset of B such that
 A1: A is opers_closed;
@@ -1440,7 +1436,7 @@ A4: the carrier of Polynom-Algebra L c= the carrier of Formal-Series L
        by A1,Def3;
 A5: for x being Element of Polynom-Algebra L
     for y being Element of Polynom-Ring L holds
-    (the add of Polynom-Algebra L).(x,y)=(the add of Polynom-Ring L).(x,y)
+    (the addF of Polynom-Algebra L).(x,y)=(the addF of Polynom-Ring L).(x,y)
     proof let x be Element of Polynom-Algebra L,
             y be Element of Polynom-Ring L;
      reconsider x1=x as Element of Polynom-Ring L
@@ -1453,11 +1449,11 @@ A5: for x being Element of Polynom-Algebra L
       by A1,TARSKI:def 3;
      reconsider p=x as AlgSequence of L by A3,POLYNOM3:def 12;
      reconsider q=y as AlgSequence of L by POLYNOM3:def 12;
-     thus (the add of Polynom-Algebra L).(x,y) = x+y1
+     thus (the addF of Polynom-Algebra L).(x,y) = x+y1
         .= x' + y' by A1,Th15
         .= p+q by Def2
         .= x1+y by POLYNOM3:def 12
-        .= (the add of Polynom-Ring L).(x,y);
+        .= (the addF of Polynom-Ring L).(x,y);
     end;
          now let x be Element of Polynom-Algebra L,
             y be Element of Polynom-Ring L;
@@ -1471,13 +1467,13 @@ A5: for x being Element of Polynom-Algebra L
       by A1,TARSKI:def 3;
      reconsider p=x as AlgSequence of L by A3,POLYNOM3:def 12;
      reconsider q=y as AlgSequence of L by POLYNOM3:def 12;
-     thus (the mult of Polynom-Algebra L).(x,y) = x*y1
+     thus (the multF of Polynom-Algebra L).(x,y) = x*y1
         .= x' * y' by A1,Th16
         .= p*'q by Def2
         .= x1*y by POLYNOM3:def 12
-        .= (the mult of Polynom-Ring L).(x,y);
+        .= (the multF of Polynom-Ring L).(x,y);
     end;
-then A6: the mult of Polynom-Algebra L = the mult of Polynom-Ring L
+then A6: the multF of Polynom-Algebra L = the multF of Polynom-Ring L
   by A3,BINOP_1:2;
 A7: 0.Polynom-Algebra L = 0.(Formal-Series L) by A1,Def3
        .= 0_.(L) by Def2

@@ -8,20 +8,23 @@ environ
 
  vocabularies RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
       BINOP_1, SQUARE_1, PROB_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1,
-      BHSP_1, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1;
+      BHSP_1, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1, ALGSTR_0;
  notations TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, COMPLEX1, STRUCT_0, REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, REALSET1, FUNCOP_1, RLVECT_1, RLSUB_1, BHSP_1, SQUARE_1, SEQ_1,
-      SEQ_2, SEQM_3, SERIES_1, BINOP_1;
+      XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, REALSET1, FUNCOP_1, RLVECT_1, RLSUB_1, BHSP_1,
+      SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, NAT_D,
-      COMPLEX1, SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1;
+      COMPLEX1, SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1,
+      VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, REALSET1, STRUCT_0, RLVECT_1, BHSP_1;
+      MEMBERED, REALSET1, STRUCT_0, RLVECT_1, BHSP_1, ALGSTR_0, VALUED_1,
+      FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions SQUARE_1, BINOP_1, TARSKI, RLVECT_1, XBOOLE_0, REALSET1, STRUCT_0;
+ definitions SQUARE_1, BINOP_1, TARSKI, RLVECT_1, XBOOLE_0, REALSET1, STRUCT_0,
+      ALGSTR_0, VALUED_1;
  theorems XBOOLE_0, STRUCT_0, RELAT_1, TARSKI, ABSVALUE, ZFMISC_1, SEQ_1,
       SEQ_2, SEQM_3, SERIES_1, COMSEQ_3, INT_1, FUNCT_1, NAT_1, FUNCT_2,
-      RLVECT_1, RLSUB_1, SEQ_4, BINOP_1, FUNCOP_1, XREAL_1, ORDINAL1;
+      RLVECT_1, RLSUB_1, SEQ_4, BINOP_1, FUNCOP_1, XREAL_1, ORDINAL1, ALGSTR_0;
  schemes NAT_1, BINOP_1, XBOOLE_0, BINOP_2;
 
 begin
@@ -424,9 +427,45 @@ proof
 end;
 
 definition
-  func Linear_Space_of_RealSequences -> RealLinearSpace equals
+  func Linear_Space_of_RealSequences -> RLSStruct equals
     RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #);
-  correctness by Lm1,Th6,Th7,Th8,Th9,Th10,Th11,Th12,RLVECT_1:7;
+  correctness;
+:::   by Lm1,Th6,Th7,Th8,Th9,Th10,Th11,Th12,RLVECT_1:7;
+end;
+
+registration
+ cluster Linear_Space_of_RealSequences -> strict non empty;
+coherence;
+end;
+
+registration
+ cluster Linear_Space_of_RealSequences
+  ->  Abelian add-associative right_zeroed
+      right_complementable RealLinearSpace-like;
+coherence
+  proof set S = Linear_Space_of_RealSequences;
+   thus S is Abelian by Lm1;
+   thus S is add-associative
+    proof let u,v,w be Element of S;
+      thus (u + v) + w = u + (v + w) by Th6;
+    end;
+   thus S is right_zeroed
+    proof let v be Element of S;
+      thus v + 0.S = v by Th7;
+    end;
+   thus S is right_complementable
+    proof let v be Element of S;
+     thus ex w being VECTOR of S st v + w = 0.S by Th8;
+    end;
+   thus for a being Real
+    for v,w being VECTOR of S holds a * (v + w) = a * v + a * w by Th9;
+   thus for a,b being Real
+    for v being VECTOR of S holds (a + b) * v = a * v + b * v by Th10;
+   thus for a,b being Real
+    for v being VECTOR of S holds (a * b) * v = a * (b * v) by Th11;
+   let v be VECTOR of S;
+   thus 1 * v = v by Th12;
+ end;
 end;
 
 definition
@@ -434,14 +473,14 @@ let X be RealLinearSpace;
 let X1 be Subset of X such that
 A1:X1 is linearly-closed non empty;
 func Add_(X1,X) -> BinOp of X1 equals
-:Def8: (the add of X)||X1;
+:Def8: (the addF of X)||X1;
 correctness
 proof
 A2:[:X1,X1:] c= [:the carrier of X,the carrier of X:] by ZFMISC_1:119;
-A3:dom (the add of X)
+A3:dom (the addF of X)
   = [:the carrier of X,the carrier of X:] by FUNCT_2:def 1;
-then A4: dom ((the add of X)||X1) =[:X1,X1:] by A2,RELAT_1:91;
-        for z be set st z in [:X1,X1:] holds ((the add of X)||X1).z in
+then A4: dom ((the addF of X)||X1) =[:X1,X1:] by A2,RELAT_1:91;
+        for z be set st z in [:X1,X1:] holds ((the addF of X)||X1).z in
 X1
    proof
      let z be set such that
@@ -449,8 +488,8 @@ A5:  z in [:X1,X1:];
      consider r,x  be set such that
 A6:  r in X1 & x in X1 & z=[r,x] by A5,ZFMISC_1:def 2;
      reconsider y=x,r1=r as VECTOR of X by A6;
-     [r,x] in dom ((the add of X)||X1) by A2,A3,A5,A6,RELAT_1:91;
-     then ((the add of X)||X1).z
+     [r,x] in dom ((the addF of X)||X1) by A2,A3,A5,A6,RELAT_1:91;
+     then ((the addF of X)||X1).z
         = r1+y by A6,FUNCT_1:70;
      hence thesis by A1,A6,RLSUB_1:def 1;
    end;
@@ -511,7 +550,7 @@ proof
    let V1 be Subset of V such that
 A1:V1 is linearly-closed non empty;
 A2:Zero_(V1,V) = 0.V by A1,Def10;
-A3:Add_(V1,V)= (the add of V)||V1 by A1,Def8;
+A3:Add_(V1,V)= (the addF of V)||V1 by A1,Def8;
       Mult_(V1,V) = (the Mult of V) | [:REAL,V1:] by A1,Def9;
    hence thesis by A1,A2,A3,RLSUB_1:32;
 end;
@@ -736,27 +775,24 @@ definition
 end;
 
 theorem Th19:
-for l be UNITSTR st
-RLSStruct (# the carrier of l, 0.l, the add of l,
-        the Mult of l #) is RealLinearSpace holds l is RealLinearSpace
-proof
-  let l be UNITSTR such that
-A1: RLSStruct (# the carrier of l, 0.l, the add of l,
-        the Mult of l #) is RealLinearSpace;
-       the carrier of l is non empty by A1,STRUCT_0:def 1;
-  then reconsider l as non empty RLSStruct by STRUCT_0:def 1;
-  reconsider l0=RLSStruct (# the carrier of l,
-        0.l, the add of l,
-        the Mult of l #) as RealLinearSpace by A1;
-A2: for v,w being VECTOR of l holds v + w = w + v
+for l be RLSStruct st the RLSStruct of l is RealLinearSpace
+ holds l is RealLinearSpace
+ proof
+  let l be RLSStruct such that
+A1: the RLSStruct of l is RealLinearSpace;
+   the carrier of l is non empty by A1,STRUCT_0:def 1;
+   then reconsider l as non empty RLSStruct by STRUCT_0:def 1;
+   reconsider l0=RLSStruct (# the carrier of l,
+        0.l, the addF of l, the Mult of l #) as RealLinearSpace by A1;
+A2: l is Abelian
   proof
     let v,w be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
     reconsider w1=w as VECTOR of l0;
-    thus v+w =v1+w1
-       .= w +v by RLVECT_1:def 3;
+    thus v+w =v1+w1 .= w1+v1
+       .= w +v;
   end;
-A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
+A3: l is add-associative
   proof
     let u,v,w be VECTOR of l;
     reconsider u1=u, v1=v, w1=w as VECTOR of l0;
@@ -765,7 +801,7 @@ A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
        .= u1+(v1+w1) by RLVECT_1:def 6
        .= u+(v+w);
   end;
-A4: for v being VECTOR of l holds v + 0.l = v
+A4: l is right_zeroed
 proof
 let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
@@ -773,18 +809,20 @@ let v be VECTOR of l;
         .= v by RLVECT_1:def 7;
 end;
 
-A5:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
+A5: l is right_complementable
 proof
     let v be VECTOR of l;
     reconsider v1=v as VECTOR of l0;
     consider w1 being VECTOR of l0 such that
-    A6: v1 + w1 = 0.l0 by RLVECT_1:def 8;
+    A6: v1 + w1 = 0.l0 by ALGSTR_0:def 11;
     reconsider w = w1 as VECTOR of l;
     take w;
     thus thesis by A6;
 end;
 
-A7:for a be Real for v,w being VECTOR of l holds
+  l is RealLinearSpace-like
+  proof
+   thus for a be Real for v,w being VECTOR of l holds
          a * (v + w) = a * v + a * w
   proof
     let a be Real;
@@ -795,7 +833,7 @@ A7:for a be Real for v,w being VECTOR of l holds
        .= a*v +a*w;
   end;
 
-A8:for a,b be Real for v being VECTOR of l
+  thus for a,b be Real for v being VECTOR of l
    holds (a + b) * v = a * v + b * v
   proof
     let a,b be Real;
@@ -806,7 +844,7 @@ A8:for a,b be Real for v being VECTOR of l
        .= a*v +b*v;
   end;
 
-A9:for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
+  thus for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
   proof
     let a,b be Real;
     let v be VECTOR of l;
@@ -815,14 +853,15 @@ A9:for a,b be Real for v being VECTOR of l holds (a * b) * v = a * (b * v)
        .=a*(b*v1) by RLVECT_1:def 9
        .= a*(b*v);
   end;
-    for v being VECTOR of l holds 1 * v = v
+  thus  for v being VECTOR of l holds 1 * v = v
    proof
      let v be VECTOR of l;
      reconsider v1=v as VECTOR of l0;
      thus 1*v= 1*v1
             .= v by RLVECT_1:def 9;
    end;
-   hence thesis by A2,A3,A4,A5,A7,A8,A9,RLVECT_1:7;
+  end;
+   hence thesis by A2,A3,A4,A5;
 end;
 
 theorem
@@ -931,10 +970,6 @@ end;
 registration
   cluster l2_Space -> Abelian add-associative right_zeroed
     right_complementable RealLinearSpace-like;
-  coherence
-   proof
-   0.l2_Space =Zero_(the_set_of_l2RealSequences,Linear_Space_of_RealSequences);
-    hence thesis by Th16,Th19;
-   end;
+  coherence by Th16,Th19;
 end;
 

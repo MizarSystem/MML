@@ -10,20 +10,20 @@ environ
       BOOLE, FUNCT_1, LIMFUNC2, LIMFUNC1, RCOMP_1, ARYTM_1, FDIFF_1, ARYTM_3,
       SEQM_3, ARYTM, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, NAT_1, FUNCOP_1, SEQ_1, SEQ_2, SEQM_3, RELSET_1, PARTFUN1,
-      RFUNCT_1, RCOMP_1, RFUNCT_2, FCONT_1, FDIFF_1, LIMFUNC1, LIMFUNC2,
-      LIMFUNC3, XXREAL_0;
+      REAL_1, NAT_1, FUNCOP_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3, RELSET_1,
+      PARTFUN1, RFUNCT_1, RCOMP_1, RFUNCT_2, FCONT_1, FDIFF_1, LIMFUNC1,
+      LIMFUNC2, LIMFUNC3, XXREAL_0;
  constructors PARTFUN1, FUNCOP_1, REAL_1, NAT_1, SEQ_2, SEQM_3, PROB_1,
       RCOMP_1, RFUNCT_1, RFUNCT_2, FCONT_1, LIMFUNC1, FDIFF_1, LIMFUNC2,
-      LIMFUNC3, SEQ_1;
- registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED, SEQ_1, SEQM_3,
-      RCOMP_1, VALUED_0;
+      LIMFUNC3, VALUED_1, SEQ_1;
+ registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED, SEQM_3, RCOMP_1,
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PROB_1, LIMFUNC1;
+ definitions TARSKI, VALUED_1, PROB_1, LIMFUNC1;
  theorems TARSKI, REAL_1, NAT_1, RFUNCT_1, RCOMP_1, FCONT_1, FDIFF_1, REAL_2,
       ROLLE, SEQ_2, SEQ_4, LIMFUNC2, LIMFUNC1, RFUNCT_2, SEQM_3, LIMFUNC3,
       ZFMISC_1, FUNCT_1, SEQ_1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_0,
-      XCMPLX_1, FUNCOP_1, XREAL_1, XXREAL_0;
+      XCMPLX_1, FUNCOP_1, XREAL_1, XXREAL_0, VALUED_1;
  schemes RCOMP_1;
 
 begin
@@ -155,8 +155,8 @@ A3: r is Real by XREAL_0:def 1;
     then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
     then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
 ;
-    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A13: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A14: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
     A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
     A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
@@ -167,7 +167,7 @@ A3: r is Real by XREAL_0:def 1;
     A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
     then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
 ;
-    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
     then A24: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
     then A25: (f.x)(#)g-(g.x)(#)
@@ -179,17 +179,18 @@ f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A28: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A28,SEQ_1:def 6
+    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A28,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A30: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A25,A29,ROLLE:1;
@@ -348,8 +349,8 @@ LIMFUNC3:def 2;
     then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
     then A82: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A81,FCONT_1:19
 ;
-    A83: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A84: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A83: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A84: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A85: N c= dom ((g.x)(#)f) by A75,A83,FCONT_1:14;
     A86: N c= dom ((f.x)(#)g) by A76,A84,FCONT_1:14;
     A87: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
@@ -360,7 +361,7 @@ LIMFUNC3:def 2;
     A92: ].x,x0.[ c= dom ((f.x)(#)g) by A86,A88,XBOOLE_1:1;
     then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A90,XBOOLE_1:19
 ;
-    then A93: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A93: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x,x0.[ by A1,A88,FDIFF_1:34;
     then A94: (f.x)(#)g is_differentiable_on ].x,x0.[ by A92,FDIFF_1:28;
     then A95: (f.x)(#)g-(g.x)(#)
@@ -372,18 +373,19 @@ f is_differentiable_on ].x,x0.[ by A91,A93,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A98: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)
 g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A99: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A96,A97,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A98,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A98,SEQ_1:def 6
+    A99: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A96,A97,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A98,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A98,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A96,A97,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A98,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A98,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A96,A97,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A98,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A98,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A100: t in ].x,x0.[ & diff(f1,t)=0 by A74,A82,A95,A99,ROLLE:1;
@@ -554,8 +556,8 @@ A3: r is Real by XREAL_0:def 1;
     then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
     then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
 ;
-    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A13: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A14: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
     A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
     A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
@@ -566,7 +568,7 @@ A3: r is Real by XREAL_0:def 1;
     A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
     then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
 ;
-    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
     then A24: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
     then A25: (f.x)(#)g-(g.x)(#)
@@ -578,17 +580,18 @@ f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A28: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A28,SEQ_1:def 6
+    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A28,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A30: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A25,A29,ROLLE:1;
@@ -747,8 +750,8 @@ LIMFUNC3:def 3;
     then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
     then A82: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A81,FCONT_1:19
 ;
-    A83: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A84: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A83: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A84: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A85: N c= dom ((g.x)(#)f) by A75,A83,FCONT_1:14;
     A86: N c= dom ((f.x)(#)g) by A76,A84,FCONT_1:14;
     A87: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
@@ -759,7 +762,7 @@ LIMFUNC3:def 3;
     A92: ].x,x0.[ c= dom ((f.x)(#)g) by A86,A88,XBOOLE_1:1;
     then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A90,XBOOLE_1:19
 ;
-    then A93: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A93: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x,x0.[ by A1,A88,FDIFF_1:34;
     then A94: (f.x)(#)g is_differentiable_on ].x,x0.[ by A92,FDIFF_1:28;
     then A95: (f.x)(#)g-(g.x)(#)
@@ -771,18 +774,19 @@ f is_differentiable_on ].x,x0.[ by A91,A93,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A98: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)
 g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A99: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A96,A97,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A98,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A98,SEQ_1:def 6
+    A99: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A96,A97,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A98,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A98,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A96,A97,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A98,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A98,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A96,A97,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A98,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A98,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A100: t in ].x,x0.[ & diff(f1,t)=0 by A74,A82,A95,A99,ROLLE:1;
@@ -1043,15 +1047,15 @@ A26:          z in ].x0,x.[ \/ {x0,x} by A3,A24,RCOMP_1:11;
         (f.x)(#)g is_continuous_on [.x0,x.] by A13,FCONT_1:21;
     then A29: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A28,FCONT_1:19
 ;
-    A30: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A31: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A30: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A31: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A32: ].x0,x0+r.[ c= dom ((g.x)(#)f) by A5,A30,FCONT_1:14;
     A33: ].x0,x0+r.[ c= dom ((f.x)(#)g) by A6,A31,FCONT_1:14;
     A34: ].x0,x.[ c= dom ((g.x)(#)f) by A7,A32,XBOOLE_1:1;
     then A35: (g.x)(#)f is_differentiable_on ].x0,x.[ by A9,FDIFF_1:28;
     A36: ].x0,x.[ c= dom ((f.x)(#)g) by A7,A33,XBOOLE_1:1;
     then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A34,XBOOLE_1:19;
-    then A37: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A37: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
     A38: (f.x)(#)g is_differentiable_on ].x0,x.[ by A10,A36,FDIFF_1:28;
     then A39: (f.x)(#)g-(g.x)(#)
 f is_differentiable_on ].x0,x.[ by A35,A37,FDIFF_1:27;
@@ -1062,17 +1066,18 @@ f is_differentiable_on ].x0,x.[ by A35,A37,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A42: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A42,SEQ_1:def 6
+    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A42,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A44: t in ].x0,x.[ & diff(f1,t)=0 by A3,A29,A39,A43,ROLLE:1;
@@ -1377,15 +1382,15 @@ A26:          z in ].x,x0.[ \/ {x,x0} by A3,A24,RCOMP_1:11;
         (f.x)(#)g is_continuous_on [.x,x0.] by A13,FCONT_1:21;
     then A29: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A28,FCONT_1:19
 ;
-    A30: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A31: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A30: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A31: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A32: ].x0-r,x0.[ c= dom ((g.x)(#)f) by A5,A30,FCONT_1:14;
     A33: ].x0-r,x0.[ c= dom ((f.x)(#)g) by A6,A31,FCONT_1:14;
     A34: ].x,x0.[ c= dom ((g.x)(#)f) by A7,A32,XBOOLE_1:1;
     then A35: (g.x)(#)f is_differentiable_on ].x,x0.[ by A9,FDIFF_1:28;
     A36: ].x,x0.[ c= dom ((f.x)(#)g) by A7,A33,XBOOLE_1:1;
     then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A34,XBOOLE_1:19;
-    then A37: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A37: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
     A38: (f.x)(#)g is_differentiable_on ].x,x0.[ by A10,A36,FDIFF_1:28;
     then A39: (f.x)(#)g-(g.x)(#)
 f is_differentiable_on ].x,x0.[ by A35,A37,FDIFF_1:27;
@@ -1396,17 +1401,18 @@ f is_differentiable_on ].x,x0.[ by A35,A37,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A42: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A42,SEQ_1:def 6
+    A43: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A40,A41,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A42,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A42,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A40,A41,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A42,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A42,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A44: t in ].x,x0.[ & diff(f1,t)=0 by A3,A29,A39,A43,ROLLE:1;
@@ -1620,8 +1626,8 @@ A3: r is Real by XREAL_0:def 1;
     then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
     then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
 ;
-    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A13: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A14: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
     A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
     A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
@@ -1632,7 +1638,7 @@ A3: r is Real by XREAL_0:def 1;
     A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
     then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
 ;
-    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
     then A24: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
     then A25: (f.x)(#)g-(g.x)(#)
@@ -1644,17 +1650,18 @@ f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A28: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A28,SEQ_1:def 6
+    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A28,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A30: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A25,A29,ROLLE:1;
@@ -1817,8 +1824,8 @@ by FUNCOP_1:13;
     then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
     then A84: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A83,FCONT_1:19
 ;
-    A85: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A86: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A85: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A86: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A87: N c= dom ((g.x)(#)f) by A77,A85,FCONT_1:14;
     A88: N c= dom ((f.x)(#)g) by A78,A86,FCONT_1:14;
     A89: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
@@ -1829,7 +1836,7 @@ by FUNCOP_1:13;
     A94: ].x,x0.[ c= dom ((f.x)(#)g) by A88,A90,XBOOLE_1:1;
     then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A92,XBOOLE_1:19
 ;
-    then A95: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A95: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x,x0.[ by A1,A90,FDIFF_1:34;
     then A96: (f.x)(#)g is_differentiable_on ].x,x0.[ by A94,FDIFF_1:28;
     then A97: (f.x)(#)g-(g.x)(#)
@@ -1842,18 +1849,19 @@ f is_differentiable_on ].x,x0.[ by A93,A95,FDIFF_1:27
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A100: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)
 g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A101: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A98,A99,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A100,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A100,SEQ_1:def 6
+    A101: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A98,A99,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A100,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A100,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A98,A99,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A100,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A100,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A98,A99,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A100,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A100,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A102: t in ].x,x0.[ & diff(f1,t)=0 by A76,A84,A97,A101,ROLLE:1;
@@ -2030,8 +2038,8 @@ implies f/g is_convergent_in x0 & lim(f/g,x0) = diff(f,x0)/diff(g,x0)
     then (f.x)(#)g is_continuous_on [.x0,x.] by FCONT_1:21;
     then A12: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x0,x.] by A11,FCONT_1:19
 ;
-    A13: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A14: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A13: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A14: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A15: N c= dom ((g.x)(#)f) by A6,A13,FCONT_1:14;
     A16: N c= dom ((f.x)(#)g) by A7,A14,FCONT_1:14;
     A17: ].x0,x.[ c= [.x0,x.] by RCOMP_1:15;
@@ -2042,7 +2050,7 @@ implies f/g is_convergent_in x0 & lim(f/g,x0) = diff(f,x0)/diff(g,x0)
     A22: ].x0,x.[ c= dom ((f.x)(#)g) by A16,A18,XBOOLE_1:1;
     then ].x0,x.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A20,XBOOLE_1:19
 ;
-    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A23: ].x0,x.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x0,x.[ by A1,A18,FDIFF_1:34;
     then A24: (f.x)(#)g is_differentiable_on ].x0,x.[ by A22,FDIFF_1:28;
     then A25: (f.x)(#)g-(g.x)(#)
@@ -2054,17 +2062,18 @@ f is_differentiable_on ].x0,x.[ by A21,A23,FDIFF_1:27;
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A28: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A28,SEQ_1:def 6
+    A29: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A26,A27,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A28,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A28,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A26,A27,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A28,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A28,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A30: t in ].x0,x.[ & diff(f1,t)=0 by A5,A12,A25,A29,ROLLE:1;
@@ -2239,8 +2248,8 @@ FCONT_1:def 1;
     then (f.x)(#)g is_continuous_on [.x,x0.] by FCONT_1:21;
     then A83: (f.x)(#)g - (g.x)(#)f is_continuous_on [.x,x0.] by A82,FCONT_1:19
 ;
-    A84: dom ((g.x)(#)f) = dom f by SEQ_1:def 6;
-    A85: dom ((f.x)(#)g) = dom g by SEQ_1:def 6;
+    A84: dom ((g.x)(#)f) = dom f by VALUED_1:7,def 5;
+    A85: dom ((f.x)(#)g) = dom g by VALUED_1:7,def 5;
     A86: N c= dom ((g.x)(#)f) by A76,A84,FCONT_1:14;
     A87: N c= dom ((f.x)(#)g) by A77,A85,FCONT_1:14;
     A88: ].x,x0.[ c= [.x,x0.] by RCOMP_1:15;
@@ -2251,7 +2260,7 @@ FCONT_1:def 1;
     A93: ].x,x0.[ c= dom ((f.x)(#)g) by A87,A89,XBOOLE_1:1;
     then ].x,x0.[ c= dom ((f.x)(#)g) /\ dom ((g.x)(#)f) by A91,XBOOLE_1:19
 ;
-    then A94: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by SEQ_1:def 4;
+    then A94: ].x,x0.[ c= dom ((f.x)(#)g - (g.x)(#)f) by VALUED_1:12,13,14,15;
      g is_differentiable_on ].x,x0.[ by A1,A89,FDIFF_1:34;
     then A95: (f.x)(#)g is_differentiable_on ].x,x0.[ by A93,FDIFF_1:28;
     then A96: (f.x)(#)g-(g.x)(#)
@@ -2264,18 +2273,19 @@ f is_differentiable_on ].x,x0.[ by A92,A94,FDIFF_1:27
     then x0 in dom ((f.x)(#)g) /\ dom ((g.x)(#)f) & x in dom ((f.x)(#)g) /\
  dom ((g.x)
 (#)f)
-     by SEQ_1:def 4;
+     by VALUED_1:12,13,14,15;
     then A99: x0 in dom ((f.x)(#)g) & x0 in dom ((g.x)(#)f) & x in dom ((f.x)
 (#)
 g) &
     x in dom ((g.x)(#)f) by XBOOLE_0:def 3;
-    A100: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A97,A98,SEQ_1:def 4
-         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A99,SEQ_1:def 6
-         .= 0 - (g.x)*0 by A1,A99,SEQ_1:def 6
+    A100: f1.x0 = ((f.x)(#)g).x0 - ((g.x)(#)f).x0 by A97,A98,VALUED_1:12,13,14
+,15
+         .= (f.x)*(g.x0) - ((g.x)(#)f).x0 by A99,VALUED_1:7,def 5
+         .= 0 - (g.x)*0 by A1,A99,VALUED_1:7,def 5
          .= 0;
-        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A97,A98,SEQ_1:def 4
-         .= (f.x)*(g.x) - ((g.x)(#)f).x by A99,SEQ_1:def 6
-         .= (g.x)*(f.x) - (g.x)*(f.x) by A99,SEQ_1:def 6
+        f1.x = ((f.x)(#)g).x - ((g.x)(#)f).x by A97,A98,VALUED_1:12,13,14,15
+         .= (f.x)*(g.x) - ((g.x)(#)f).x by A99,VALUED_1:7,def 5
+         .= (g.x)*(f.x) - (g.x)*(f.x) by A99,VALUED_1:7,def 5
          .= 0;
     then consider t such that
     A101: t in ].x,x0.[ & diff(f1,t)=0 by A75,A83,A96,A100,ROLLE:1;

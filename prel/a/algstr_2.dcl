@@ -13,16 +13,17 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
+<ArticleID name="ALGSTR_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
-<ArticleID name="ALGSTR_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -30,27 +31,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="29" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
-<Adjective nr="53"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="64"/>
+<Adjective nr="19" value="false"/>
+<Adjective nr="23" value="false"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
+<Adjective nr="66"/>
 <Adjective nr="69"/>
-<Adjective nr="74"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="87"/>
+<Adjective nr="89"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="141"/>
+<Func kind="K" nr="154"/>
 <Cluster>
-<Adjective nr="53"/>
-<Adjective nr="74"/>
+<Adjective nr="62"/>
+<Adjective nr="69"/>
 </Cluster>
 </FCluster>
 </Registrations>

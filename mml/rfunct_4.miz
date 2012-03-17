@@ -12,18 +12,18 @@ environ
       BOOLE, MEASURE5, FCONT_1, SUPINF_1, ABSVALUE, RFUNCT_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       RELAT_1, COMPLEX1, NAT_1, FUNCT_1, FINSEQ_1, REAL_1, FINSEQ_2, PARTFUN1,
-      FINSEQOP, BINOP_2, SEQ_1, RVSUM_1, RCOMP_1, RFUNCT_3, SUPINF_1, MEASURE5,
-      FCONT_1, XXREAL_0;
+      FINSEQOP, BINOP_2, VALUED_1, SEQ_1, RVSUM_1, RCOMP_1, RFUNCT_3, SUPINF_1,
+      MEASURE5, FCONT_1, XXREAL_0;
  constructors BINOP_1, REAL_1, NAT_1, BINOP_2, COMPLEX1, FINSEQOP, RCOMP_1,
-      RVSUM_1, FCONT_1, RFUNCT_3, MEASURE5;
+      RVSUM_1, FCONT_1, RFUNCT_3, MEASURE5, VALUED_1, PARTFUN1, SEQ_1;
  registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, BINOP_2, MEMBERED, SEQ_1,
-      FINSEQ_2, XBOOLE_0, VALUED_0;
+      FINSEQ_2, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions FINSEQ_2, RVSUM_1;
+ definitions FINSEQ_2, RVSUM_1, VALUED_1;
  theorems RCOMP_1, REAL_1, REAL_2, SQUARE_1, RFUNCT_3, TARSKI, PARTFUN1, SEQ_1,
       FINSEQ_1, FINSEQ_2, RVSUM_1, NAT_1, MEASURE5, MEASURE6, FCONT_1,
       ABSVALUE, FUNCT_1, XREAL_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, XREAL_1,
-      COMPLEX1, XXREAL_0, FINSEQOP, FUNCOP_1;
+      COMPLEX1, XXREAL_0, FINSEQOP, FUNCOP_1, VALUED_1;
  schemes NAT_1;
 
 begin :: Some useful properties of n-tuples_on REAL
@@ -488,45 +488,47 @@ Lm1:
 f is_strictly_convex_on X implies f-r is_strictly_convex_on X
 proof
    assume A1:f is_strictly_convex_on X;
-   then X c= dom f &
+   then
+A2: X c= dom f &
    for p being Real st 0<p & p<1 holds
    for r,s being Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    f.(p*r + (1-p)*s) < p*f.r + (1-p)*f.s by Def1;
-then A2:X c= dom(f-r) by RFUNCT_3:def 12;
+   dom f = dom (f-r) by VALUED_1:3;
+then A3:X c= dom(f-r) by A2,VALUED_1:3;
        for p being Real st 0<p & p<1 holds
    for t,s being Real st t in X & s in X & p*t + (1-p)*s in X & t <> s holds
    (f-r).(p*t + (1-p)*s) < p*(f-r).t + (1-p)*(f-r).s
    proof
-    let p be Real; assume A3:0<p & p<1;
+    let p be Real; assume A4:0<p & p<1;
         for t,s being Real st t in X & s in X & p*t + (1-p)*s in X & t <> s
 holds
     (f-r).(p*t + (1-p)*s) < p*(f-r).t + (1-p)*(f-r).s
     proof
      let t,s be Real; assume
-     A4:t in X & s in X & p*t + (1-p)*s in X & t <> s;
-     then f.(p*t + (1-p)*s) < p*f.t + (1-p)*f.s by A1,A3,Def1;
-then A5:  f.(p*t + (1-p)*s)-r < p*f.t + (1-p)*f.s - r by XREAL_1:11;
+     A5:t in X & s in X & p*t + (1-p)*s in X & t <> s;
+     then f.(p*t + (1-p)*s) < p*f.t + (1-p)*f.s by A1,A4,Def1;
+then A6:  f.(p*t + (1-p)*s)-r < p*f.t + (1-p)*f.s - r by XREAL_1:11;
          (f-r).t = f.t-r & (f-r).s = f.s-r &
-     (f-r).(p*t + (1-p)*s) = f.(p*t + (1-p)*s)-r by A2,A4,RFUNCT_3:def 12;
-     hence thesis by A5;
+     (f-r).(p*t + (1-p)*s) = f.(p*t + (1-p)*s)-r by A2,A3,A5,VALUED_1:3;
+     hence thesis by A6;
     end;
     hence thesis;
    end;
-   hence thesis by A2,Def1;
+   hence thesis by A3,Def1;
 end;
 
 theorem
-    f is_strictly_convex_on X iff f-r is_strictly_convex_on X
+  f is_strictly_convex_on X iff f-r is_strictly_convex_on X
 proof
-A1:dom((f-r)-(-r))=dom(f-r) by RFUNCT_3:def 12;
-A2:dom(f-r) = dom f by RFUNCT_3:def 12;
+A1:dom((f-r)-(-r))=dom(f-r) by VALUED_1:3;
+A2:dom(f-r) = dom f by VALUED_1:3;
        for x being Element of REAL st x in dom (f-r) holds
    ((f-r)-(-r)).x = f.x
    proof
     let x be Element of REAL;
     assume A3:x in dom (f-r);
-    then ((f-r)-(-r)).x=(f-r).x-(-r) by A1,RFUNCT_3:def 12 .=(f-r).x+r
-    .=f.x-r+r by A3,RFUNCT_3:def 12 .= f.x-(r-r);
+    then ((f-r)-(-r)).x=(f-r).x-(-r) by A1,VALUED_1:3 .=(f-r).x+r
+    .=f.x-r+r by A2,A3,VALUED_1:3 .= f.x-(r-r);
     hence thesis;
    end;
    then (f-r)-(-r) = f by A1,A2,PARTFUN1:34;
@@ -542,7 +544,7 @@ proof
    for p being Real st 0<p & p<1 holds
    for r,s being Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    f.(p*r + (1-p)*s) < p*f.r + (1-p)*f.s by Def1;
-then A3:X c= dom(r(#)f) by SEQ_1:def 6;
+then A3:X c= dom(r(#)f) by VALUED_1:7,def 5;
        for p being Real st 0<p & p<1 holds
    for t,s being Real st t in X & s in X & p*t + (1-p)*s in X & t <> s holds
    (r(#)f).(p*t + (1-p)*s) < p*(r(#)f).t + (1-p)*(r(#)f).s
@@ -558,7 +560,7 @@ holds
      then A6: r*(f.(p*t + (1-p)*s)) < r*(p*f.t + (1-p)*f.s) by A1,XREAL_1:70;
          (r(#)f).(p*t + (1-p)*s) = r*(f.(p*t + (1-p)*s)) &
      p*(r(#)f).t=p*(r*f.t) & (1-p)*(r(#)
-f).s = (1-p)*(r*f.s) by A3,A5,SEQ_1:def 6;
+f).s = (1-p)*(r*f.s) by A3,A5,VALUED_1:7,def 5;
      hence thesis by A6;
     end;
     hence thesis;
@@ -571,14 +573,14 @@ theorem Th12:
 proof
    assume A1:0<r;
 then A2:0 < 1/r by REAL_2:127;
-A3:dom((1/r)(#)(r(#)f))=dom(r(#)f) & dom(r(#)f) = dom f by SEQ_1:def 6;
+A3:dom((1/r)(#)(r(#)f))=dom(r(#)f) & dom(r(#)f) = dom f by VALUED_1:7,def 5;
        for x being Element of REAL st x in dom(r(#)f) holds
    ((1/r)(#)(r(#)f)).x = f.x
    proof
     let x be Element of REAL;
     assume A4:x in dom (r(#)f);
-    then ((1/r)(#)(r(#)f)).x = (1/r)*(r(#)f).x by A3,SEQ_1:def 6
-    .= (1/r)*(r*f.x) by A4,SEQ_1:def 6
+    then ((1/r)(#)(r(#)f)).x = (1/r)*(r(#)f).x by A3,VALUED_1:7,def 5
+    .= (1/r)*(r*f.x) by A4,VALUED_1:7,def 5
     .= (1/r)*r*f.x
     .= 1*f.x by A1,XCMPLX_1:107;
     hence thesis;
@@ -601,7 +603,7 @@ then A2:X c= dom f &
    for r,s be Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    g.(p*r + (1-p)*s) < p*g.r + (1-p)*g.s by A1,Def1;
    then X c= dom f /\ dom g by A2,XBOOLE_1:19;
-then A3:X c= dom (f+g) by SEQ_1:def 3;
+then A3:X c= dom (f+g) by VALUED_1:1,def 1;
        for p be Real st 0<p & p<1 holds
    for r,s be Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    (f+g).(p*r + (1-p)*s) < p*(f+g).r + (1-p)*(f+g).s
@@ -617,7 +619,7 @@ then A6:  f.(p*r + (1-p)*s) < p*f.r + (1-p)*f.s &
 A7:  (p*f.r+(1-p)*f.s)+(p*g.r+(1-p)*g.s)
       = p*(f.r+g.r) + (1-p)*(f.s+g.s);
          (f+g).(p*r + (1-p)*s) = f.(p*r+(1-p)*s)+g.(p*r+(1-p)*s) &
-     (f+g).r = (f.r+g.r) & (f+g).s = (f.s+g.s) by A3,A5,SEQ_1:def 3;
+     (f+g).r = (f.r+g.r) & (f+g).s = (f.s+g.s) by A3,A5,VALUED_1:1,def 1;
      hence thesis by A6,A7,XREAL_1:10;
     end;
     hence thesis;
@@ -632,7 +634,7 @@ proof
    assume A1:f is_strictly_convex_on X & g is_convex_on X;
    then X c= dom f & X c= dom g by Def1,RFUNCT_3:def 13;
    then X c= dom f /\ dom g by XBOOLE_1:19;
-then A2:X c= dom (f+g) by SEQ_1:def 3;
+then A2:X c= dom (f+g) by VALUED_1:1,def 1;
        for p being Real st 0<p & p<1 holds
    for r,s being Real st r in X & s in X & p*r + (1-p)*s in X & r <> s holds
    (f+g).(p*r + (1-p)*s) < p*(f+g).r + (1-p)*(f+g).s
@@ -650,7 +652,7 @@ then A5:  f.(p*r+(1-p)*s) < p*f.r+(1-p)*f.s &
 A6:  (p*f.r+(1-p)*f.s)+(p*g.r+(1-p)*g.s)
       = p*(f.r+g.r) + (1-p)*(f.s+g.s);
          (f+g).(p*r + (1-p)*s) = f.(p*r+(1-p)*s)+g.(p*r+(1-p)*s) &
-     (f+g).r = (f.r+g.r) & (f+g).s = (f.s+g.s) by A2,A4,SEQ_1:def 3;
+     (f+g).r = (f.r+g.r) & (f+g).s = (f.s+g.s) by A2,A4,VALUED_1:1,def 1;
      hence thesis by A5,A6,XREAL_1:10;
     end;
     hence thesis;

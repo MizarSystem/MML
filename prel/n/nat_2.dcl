@@ -20,6 +20,7 @@
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
 <ArticleID name="REALSET1"/>
+<ArticleID name="RAT_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -38,6 +39,7 @@
 <Adjective nr="19"/>
 <Adjective nr="20"/>
 <Adjective nr="24" value="false"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <RCluster>

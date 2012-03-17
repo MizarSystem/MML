@@ -10,17 +10,18 @@ environ
       SEQFUNC, RELAT_1, BOOLE, ORDINAL2, RAT_1, ARYTM_3, SERIES_1, FUNCOP_1,
       NEWTON, RLVECT_1, RELOC, FUZZY_2, INCPROJ;
  notations ORDINAL1, XCMPLX_0, XREAL_0, REAL_1, NAT_1, SERIES_1, XXREAL_0,
-      TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1, SEQ_1,
-      SEQ_4, SEQFUNC, RELAT_1, PARTFUN3, FUNCOP_1, BINARITH, NEWTON, MEASURE6,
-      FUNCT_2, RELSET_1;
+      TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, PARTFUN1,
+      VALUED_1, SEQ_1, SEQ_4, SEQFUNC, RELAT_1, PARTFUN3, FUNCOP_1, BINARITH,
+      NEWTON, MEASURE6, FUNCT_2, RELSET_1;
  constructors PARTFUN1, REAL_1, NAT_1, SEQFUNC, NEWTON, SERIES_1, MEASURE6,
-      BINARITH, PARTFUN3;
+      BINARITH, PARTFUN3, VALUED_1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, PARTFUN1, FUNCOP_1, NUMBERS,
-      XREAL_0, MEMBERED, SEQ_1, VALUED_0;
+      XREAL_0, MEMBERED, SEQ_1, VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions VALUED_1;
  theorems FUNCT_2, PARTFUN1, SEQFUNC, ORDINAL1, FUNCT_1, SEQ_1, XBOOLE_0,
       XCMPLX_1, BINARITH, NEWTON, FUNCOP_1, XBOOLE_1, SERIES_1, TARSKI,
-      MEASURE6, RFUNCT_1, ZFMISC_1, XREAL_0;
+      MEASURE6, RFUNCT_1, ZFMISC_1, XREAL_0, VALUED_1;
  schemes NAT_1, RECDEF_1, SEQ_1;
 
 begin
@@ -123,7 +124,7 @@ definition let f be Function of REAL,REAL,
  redefine func fD(f,h) -> Function of REAL,REAL;
  coherence
  proof
-  dom fD(f,h) = dom Shift(f,h) /\ dom f by SEQ_1:def 4
+  dom fD(f,h) = dom Shift(f,h) /\ dom f by VALUED_1:12,13,14,15
             .= REAL /\ dom f by FUNCT_2:def 1
             .= REAL /\ REAL by FUNCT_2:def 1
             .= REAL;
@@ -143,7 +144,7 @@ definition let f be Function of REAL,REAL,
  redefine func bD(f,h) -> Function of REAL,REAL;
  coherence
  proof
-  dom bD(f,h) = dom Shift(f,-h) /\ dom f by SEQ_1:def 4
+  dom bD(f,h) = dom Shift(f,-h) /\ dom f by VALUED_1:12,13,14,15
             .= REAL /\ dom f by FUNCT_2:def 1
             .= REAL /\ REAL by FUNCT_2:def 1
             .= REAL;
@@ -170,7 +171,7 @@ definition let f be Function of REAL,REAL,
  redefine func cD(f,h) -> Function of REAL,REAL;
  coherence
  proof
-  dom cD(f,h) = dom Shift(f,h/2) /\ dom Shift(f,-h/2) by SEQ_1:def 4
+  dom cD(f,h) = dom Shift(f,h/2) /\ dom Shift(f,-h/2) by VALUED_1:12,13,14,15
             .= REAL /\ dom Shift(f,-h/2) by FUNCT_2:def 1
             .= REAL /\ REAL by FUNCT_2:def 1
             .= REAL;
@@ -268,7 +269,7 @@ theorem Th3:
   fD(f,h).x = f.(x+h) - f.x
 proof
    dom (Shift(f,h) - f) = REAL by FUNCT_2:def 1;
-  hence fD(f,h).x = Shift(f,h).x - f.x by SEQ_1:def 4
+  hence fD(f,h).x = Shift(f,h).x - f.x by VALUED_1:12,13,14,15
                  .= f.(x+h) - f.x by Def2;
 end;
 
@@ -277,7 +278,7 @@ theorem Th4:
 proof
 A1: dom (-fD(f,-h)) = REAL by FUNCT_2:def 1;
     thus bD(f,h).x = (-fD(f,-h)).x by Th1
-                  .= - fD(f,-h).x by A1,SEQ_1:def 7
+                  .= - fD(f,-h).x by A1,VALUED_1:8
                   .= - (f.(x+-h) - f.x) by Th3
                   .= f.x - f.(x-h);
 end;
@@ -286,7 +287,7 @@ theorem Th5:
   cD(f,h).x = f.(x+h/2) - f.(x-h/2)
 proof
  dom (Shift(f,h/2) - Shift(f,-h/2)) = REAL by FUNCT_2:def 1;
-    hence cD(f,h).x = Shift(f,h/2).x - Shift(f,-h/2).x by SEQ_1:def 4
+    hence cD(f,h).x = Shift(f,h/2).x - Shift(f,-h/2).x by VALUED_1:12,13,14,15
                   .= f.(x+h/2) - Shift(f,-h/2).x by Def2
                   .= f.(x+h/2) - f.(x+-h/2) by Def2
                   .= f.(x+h/2) - f.(x-h/2);
@@ -352,8 +353,8 @@ A4:  x in dom (r(#)f) by A2,FUNCT_2:def 1;
       fdif(r(#)f,h).(0+1).x = fD(fdif(r(#)f,h).0,h).x by Def6
                           .= fD(r(#)f,h).x by Def6
                           .= (r(#)f).(x+h) - (r(#)f).x by Th3
-                          .= r * f.(x+h) - (r(#)f).x by A3,SEQ_1:def 6
-                          .= r * f.(x+h) - r * f.x by A4,SEQ_1:def 6
+                          .= r * f.(x+h) - (r(#)f).x by A3,VALUED_1:7,def 5
+                          .= r * f.(x+h) - r * f.x by A4,VALUED_1:7,def 5
                           .= r * (f.(x+h) - f.x)
                           .= r * fD(f,h).x by Th3
                           .= r * fD(fdif(f,h).0,h).x by Def6
@@ -392,16 +393,16 @@ A1: X[0]
       x in REAL;
      then x in dom f1 & x in dom f2 by FUNCT_2:def 1;
      then x in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x in dom (f1+f2) by SEQ_1:def 3;
+then A2:  x in dom (f1+f2) by VALUED_1:1,def 1;
       x+h in REAL;
      then x+h in dom f1 & x+h in dom f2 by FUNCT_2:def 1;
      then x+h in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x+h in dom (f1+f2) by SEQ_1:def 3;
+then A3:  x+h in dom (f1+f2) by VALUED_1:1,def 1;
       fdif(f1+f2,h).(0+1).x = fD(fdif(f1+f2,h).0,h).x by Def6
        .= fD(f1+f2,h).x by Def6
        .= (f1+f2).(x+h) - (f1+f2).x by Th3
-       .= f1.(x+h) + f2.(x+h) - (f1+f2).x by A3,SEQ_1:def 3
-       .= f1.(x+h) + f2.(x+h) - (f1.x + f2.x) by A2,SEQ_1:def 3
+       .= f1.(x+h) + f2.(x+h) - (f1+f2).x by A3,VALUED_1:1,def 1
+       .= f1.(x+h) + f2.(x+h) - (f1.x + f2.x) by A2,VALUED_1:1,def 1
        .= (f1.(x+h) - f1.x) + (f2.(x+h) - f2.x)
        .= fD(f1,h).x + (f2.(x+h) - f2.x) by Th3
        .= fD(f1,h).x + fD(f2,h).x by Th3
@@ -449,17 +450,17 @@ A1: X[0]
       x in REAL;
      then x in dom f1 & x in dom f2 by FUNCT_2:def 1;
      then x in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x in dom (f1-f2) by SEQ_1:def 4;
+then A2:  x in dom (f1-f2) by VALUED_1:12,13,14,15;
       x+h in REAL;
      then x+h in dom f1 & x+h in dom f2 by FUNCT_2:def 1;
      then x+h in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x+h in dom (f1-f2) by SEQ_1:def 4;
+then A3:  x+h in dom (f1-f2) by VALUED_1:12,13,14,15;
        fdif(f1-f2,h).(0+1).x
     = fD(fdif(f1-f2,h).0,h).x by Def6
    .= fD(f1-f2,h).x by Def6
    .= (f1-f2).(x+h) - (f1-f2).x by Th3
-   .= f1.(x+h) - f2.(x+h) - (f1-f2).x by A3,SEQ_1:def 4
-   .= f1.(x+h) - f2.(x+h) - (f1.x - f2.x) by A2,SEQ_1:def 4
+   .= f1.(x+h) - f2.(x+h) - (f1-f2).x by A3,VALUED_1:12,13,14,15
+   .= f1.(x+h) - f2.(x+h) - (f1.x - f2.x) by A2,VALUED_1:12,13,14,15
    .= (f1.(x+h) - f1.x) - (f2.(x+h) - f2.x)
    .= fD(f1,h).x - (f2.(x+h) - f2.x) by Th3
    .= fD(f1,h).x - fD(f2,h).x by Th3
@@ -665,8 +666,8 @@ A4:  x in dom (r(#)f) by A2,FUNCT_2:def 1;
       bdif(r(#)f,h).(0+1).x = bD(bdif(r(#)f,h).0,h).x by Def7
                           .= bD(r(#)f,h).x by Def7
                           .= (r(#)f).x - (r(#)f).(x-h) by Th4
-                          .= (r(#)f).x - r * f.(x-h) by A3,SEQ_1:def 6
-                          .= r * f.x - r * f.(x-h) by A4,SEQ_1:def 6
+                          .= (r(#)f).x - r * f.(x-h) by A3,VALUED_1:7,def 5
+                          .= r * f.x - r * f.(x-h) by A4,VALUED_1:7,def 5
                           .= r * (f.x - f.(x-h))
                           .= r * bD(f,h).x by Th4
                           .= r * bD(bdif(f,h).0,h).x by Def7
@@ -705,16 +706,16 @@ A1: X[0]
   x in REAL;
      then x in dom f1 & x in dom f2 by FUNCT_2:def 1;
      then x in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x in dom (f1+f2) by SEQ_1:def 3;
+then A2:  x in dom (f1+f2) by VALUED_1:1,def 1;
       x-h in REAL;
      then x-h in dom f1 & x-h in dom f2 by FUNCT_2:def 1;
      then x-h in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x-h in dom (f1+f2) by SEQ_1:def 3;
+then A3:  x-h in dom (f1+f2) by VALUED_1:1,def 1;
       bdif(f1+f2,h).(0+1).x = bD(bdif(f1+f2,h).0,h).x by Def7
    .= bD(f1+f2,h).x by Def7
    .= (f1+f2).x - (f1+f2).(x-h) by Th4
-   .= f1.x + f2.x - (f1+f2).(x-h) by A2,SEQ_1:def 3
-   .= f1.x + f2.x - (f1.(x-h) + f2.(x-h)) by A3,SEQ_1:def 3
+   .= f1.x + f2.x - (f1+f2).(x-h) by A2,VALUED_1:1,def 1
+   .= f1.x + f2.x - (f1.(x-h) + f2.(x-h)) by A3,VALUED_1:1,def 1
    .= (f1.x - f1.(x-h)) + (f2.x - f2.(x-h))
    .= bD(f1,h).x + (f2.x - f2.(x-h)) by Th4
    .= bD(f1,h).x + bD(f2,h).x by Th4
@@ -763,17 +764,17 @@ A1: X[0]
   x in REAL;
      then x in dom f1 & x in dom f2 by FUNCT_2:def 1;
      then x in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x in dom (f1-f2) by SEQ_1:def 4;
+then A2:  x in dom (f1-f2) by VALUED_1:12,13,14,15;
       x-h in REAL;
      then x-h in dom f1 & x-h in dom f2 by FUNCT_2:def 1;
      then x-h in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x-h in dom (f1-f2) by SEQ_1:def 4;
+then A3:  x-h in dom (f1-f2) by VALUED_1:12,13,14,15;
        bdif(f1-f2,h).(0+1).x
     = bD(bdif(f1-f2,h).0,h).x by Def7
    .= bD(f1-f2,h).x by Def7
    .= (f1-f2).x - (f1-f2).(x-h) by Th4
-   .= f1.x - f2.x - (f1-f2).(x-h) by A2,SEQ_1:def 4
-   .= f1.x - f2.x - (f1.(x-h) - f2.(x-h)) by A3,SEQ_1:def 4
+   .= f1.x - f2.x - (f1-f2).(x-h) by A2,VALUED_1:12,13,14,15
+   .= f1.x - f2.x - (f1.(x-h) - f2.(x-h)) by A3,VALUED_1:12,13,14,15
    .= (f1.x - f1.(x-h)) - (f2.x - f2.(x-h))
    .= bD(f1,h).x - (f2.x - f2.(x-h)) by Th4
    .= bD(f1,h).x - bD(f2,h).x by Th4
@@ -978,8 +979,10 @@ then A3:  x-h/2 in dom (r(#)f) by FUNCT_2:def 1;
       cdif(r(#)f,h).(0+1).x = cD(cdif(r(#)f,h).0,h).x by Def8
                           .= cD(r(#)f,h).x by Def8
                           .= (r(#)f).(x+h/2) - (r(#)f).(x-h/2) by Th5
-                          .= r * f.(x+h/2) - (r(#)f).(x-h/2) by A2,SEQ_1:def 6
-                          .= r * f.(x+h/2) - r * f.(x-h/2) by A3,SEQ_1:def 6
+                          .= r * f.(x+h/2) - (r(#)f).(x-h/2) by A2,VALUED_1:7
+,def 5
+                          .= r * f.(x+h/2) - r * f.(x-h/2) by A3,VALUED_1:7
+,def 5
                           .= r * (f.(x+h/2) - f.(x-h/2))
                           .= r * cD(f,h).x by Th5
                           .= r * cD(cdif(f,h).0,h).x by Def8
@@ -1017,16 +1020,17 @@ A1: X[0]
       x-h/2 in REAL;
      then x-h/2 in dom f1 & x-h/2 in dom f2 by FUNCT_2:def 1;
      then x-h/2 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x-h/2 in dom (f1+f2) by SEQ_1:def 3;
+then A2:  x-h/2 in dom (f1+f2) by VALUED_1:1,def 1;
       x+h/2 in REAL;
      then x+h/2 in dom f1 & x+h/2 in dom f2 by FUNCT_2:def 1;
      then x+h/2 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x+h/2 in dom (f1+f2) by SEQ_1:def 3;
+then A3:  x+h/2 in dom (f1+f2) by VALUED_1:1,def 1;
       cdif(f1+f2,h).(0+1).x = cD(cdif(f1+f2,h).0,h).x by Def8
      .= cD(f1+f2,h).x by Def8
      .= (f1+f2).(x+h/2) - (f1+f2).(x-h/2) by Th5
-     .= f1.(x+h/2) + f2.(x+h/2) - (f1+f2).(x-h/2) by A3,SEQ_1:def 3
-     .= f1.(x+h/2) + f2.(x+h/2) - (f1.(x-h/2) + f2.(x-h/2)) by A2,SEQ_1:def 3
+     .= f1.(x+h/2) + f2.(x+h/2) - (f1+f2).(x-h/2) by A3,VALUED_1:1,def 1
+     .= f1.(x+h/2) + f2.(x+h/2) - (f1.(x-h/2) + f2.(x-h/2)) by A2,VALUED_1:1
+,def 1
      .= (f1.(x+h/2) - f1.(x-h/2)) + (f2.(x+h/2) - f2.(x-h/2))
      .= cD(f1,h).x + (f2.(x+h/2) - f2.(x-h/2)) by Th5
      .= cD(f1,h).x + cD(f2,h).x by Th5
@@ -1075,16 +1079,17 @@ A1: X[0]
       x-h/2 in REAL;
      then x-h/2 in dom f1 & x-h/2 in dom f2 by FUNCT_2:def 1;
      then x-h/2 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2:  x-h/2 in dom (f1-f2) by SEQ_1:def 4;
+then A2:  x-h/2 in dom (f1-f2) by VALUED_1:12,13,14,15;
       x+h/2 in REAL;
      then x+h/2 in dom f1 & x+h/2 in dom f2 by FUNCT_2:def 1;
      then x+h/2 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A3:  x+h/2 in dom (f1-f2) by SEQ_1:def 4;
+then A3:  x+h/2 in dom (f1-f2) by VALUED_1:12,13,14,15;
        cdif(f1-f2,h).(0+1).x = cD(cdif(f1-f2,h).0,h).x by Def8
    .= cD(f1-f2,h).x by Def8
    .= (f1-f2).(x+h/2) - (f1-f2).(x-h/2) by Th5
-   .= f1.(x+h/2) - f2.(x+h/2) - (f1-f2).(x-h/2) by A3,SEQ_1:def 4
-   .= f1.(x+h/2) - f2.(x+h/2) - (f1.(x-h/2) - f2.(x-h/2)) by A2,SEQ_1:def 4
+   .= f1.(x+h/2) - f2.(x+h/2) - (f1-f2).(x-h/2) by A3,VALUED_1:12,13,14,15
+   .= f1.(x+h/2) - f2.(x+h/2) - (f1.(x-h/2) - f2.(x-h/2)) by A2,VALUED_1:12,13
+,14,15
    .= (f1.(x+h/2) - f1.(x-h/2)) - (f2.(x+h/2) - f2.(x-h/2))
    .= cD(f1,h).x - (f2.(x+h/2) - f2.(x-h/2)) by Th5
    .= cD(f1,h).x - cD(f2,h).x by Th5
@@ -1347,8 +1352,8 @@ theorem Th31:
 proof
     x0 in REAL & x1 in REAL;
 then A1:x0 in dom (r(#)f) & x1 in dom (r(#)f) by FUNCT_2:def 1;
-    [!(r(#)f),x0,x1!] = (r*f.x0-(r(#)f).x1)/(x0-x1) by A1,SEQ_1:def 6
-                    .= (r*f.x0-r*f.x1)/(x0-x1) by A1,SEQ_1:def 6
+    [!(r(#)f),x0,x1!] = (r*f.x0-(r(#)f).x1)/(x0-x1) by A1,VALUED_1:7,def 5
+                    .= (r*f.x0-r*f.x1)/(x0-x1) by A1,VALUED_1:7,def 5
                     .= r*(f.x0-f.x1)/(x0-x1)
                     .= r*[!f,x0,x1!] by XCMPLX_1:75;
    hence thesis;
@@ -1361,9 +1366,9 @@ proof
    then x0 in dom f1 & x0 in dom f2 & x1 in dom f1 & x1 in dom f2 by
 FUNCT_2:def 1;
    then x0 in dom f1 /\ dom f2 & x1 in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A1:x0 in dom (f1+f2) & x1 in dom (f1+f2) by SEQ_1:def 3;
-   [!(f1+f2),x0,x1!] = (f1.x0+f2.x0-(f1+f2).x1)/(x0-x1) by A1,SEQ_1:def 3
-    .= (f1.x0+f2.x0-(f1.x1+f2.x1))/(x0-x1) by A1,SEQ_1:def 3
+then A1:x0 in dom (f1+f2) & x1 in dom (f1+f2) by VALUED_1:1,def 1;
+   [!(f1+f2),x0,x1!] = (f1.x0+f2.x0-(f1+f2).x1)/(x0-x1) by A1,VALUED_1:1,def 1
+    .= (f1.x0+f2.x0-(f1.x1+f2.x1))/(x0-x1) by A1,VALUED_1:1,def 1
     .= ((f1.x0-f1.x1)+(f2.x0-f2.x1))/(x0-x1)
     .= [!f1,x0,x1!]+[!f2,x0,x1!] by XCMPLX_1:63;
    hence thesis;
@@ -1498,17 +1503,17 @@ proof
      x in REAL;
     then x in dom f1 & x in dom f2 by FUNCT_2:def 1;
     then x in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A1: x in dom (f1(#)f2) by SEQ_1:def 5;
+then A1: x in dom (f1(#)f2) by VALUED_1:5,def 4;
      x+h in REAL;
     then x+h in dom f1 & x+h in dom f2 by FUNCT_2:def 1;
     then x+h in dom f1 /\ dom f2 by XBOOLE_0:def 3;
-then A2: x+h in dom (f1(#)f2) by SEQ_1:def 5;
+then A2: x+h in dom (f1(#)f2) by VALUED_1:5,def 4;
      (fdif(f1(#)f2,h).1).x = fdif(f1(#)f2,h).(0+1).x
     .= fD(fdif(f1(#)f2,h).0,h).x by Def6
     .= fD(f1(#)f2,h).x by Def6
     .= (f1(#)f2).(x+h) - (f1(#)f2).x by Th3
-    .= f1.(x+h) * f2.(x+h) - (f1(#)f2).x by A2,SEQ_1:def 5
-    .= f1.(x+h) * f2.(x+h) - f1.x * f2.x by A1,SEQ_1:def 5
+    .= f1.(x+h) * f2.(x+h) - (f1(#)f2).x by A2,VALUED_1:5,def 4
+    .= f1.(x+h) * f2.(x+h) - f1.x * f2.x by A1,VALUED_1:5,def 4
     .= f1.x * (f2.(x+h) - f2.x) + (f1.(x+h) - f1.x) * f2.(x+h)
     .= f1.x * fD(f2,h).x + (f1.(x+h) - f1.x) * f2.(x+h) by Th3
     .= f1.x * fD(f2,h).x + fD(f1,h).x * f2.(x+h) by Th3

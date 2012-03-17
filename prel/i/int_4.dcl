@@ -21,17 +21,17 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="SQUARE_1"/>
-<ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
@@ -53,7 +53,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="29"/>
-<Adjective nr="37"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -62,7 +62,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="267">
+<Func kind="K" nr="300">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -75,7 +75,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="29"/>
-<Adjective nr="37"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -84,7 +84,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="330">
+<Func kind="K" nr="364">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -96,11 +96,11 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="180">
+<Func kind="K" nr="224">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -111,11 +111,11 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="334">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -129,11 +129,11 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="50"/>
+<Adjective nr="35"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="334">
+<Func kind="K" nr="368">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

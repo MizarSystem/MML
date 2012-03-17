@@ -8,15 +8,17 @@ environ
 
  vocabularies RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, ABSVALUE, ORDINAL2,
       BINOP_1, SQUARE_1, PROB_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1,
-      BHSP_1, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1;
+      BHSP_1, SUPINF_2, RSSPACE, FUNCOP_1, REALSET1, ALGSTR_0;
  notations TARSKI, SUBSET_1, XBOOLE_0, ZFMISC_1, ORDINAL1, NUMBERS, XXREAL_0,
-      XREAL_0, COMPLEX1, STRUCT_0, REAL_1, NAT_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, REALSET1, FUNCOP_1, RLVECT_1, RLSUB_1, BHSP_1, SQUARE_1, SEQ_1,
-      SEQ_2, SEQM_3, SERIES_1, BINOP_1;
+      XREAL_0, COMPLEX1, STRUCT_0, ALGSTR_0, REAL_1, NAT_1, RELAT_1, FUNCT_1,
+      PARTFUN1, FUNCT_2, REALSET1, FUNCOP_1, RLVECT_1, RLSUB_1, BHSP_1,
+      SQUARE_1, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, NAT_D,
-      COMPLEX1, SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1;
+      COMPLEX1, SEQ_2, SEQM_3, SERIES_1, REALSET1, RLSUB_1, BHSP_1, SEQ_1,
+      VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      MEMBERED, REALSET1, STRUCT_0, RLVECT_1, BHSP_1;
+      MEMBERED, REALSET1, STRUCT_0, RLVECT_1, BHSP_1, ALGSTR_0, VALUED_1,
+      FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -131,9 +133,20 @@ for v being VECTOR of
  RLSStruct(# the_set_of_RealSequences,Zeroseq,l_add,l_mult #) holds 1 * v = v;
 
 definition
-  func Linear_Space_of_RealSequences -> RealLinearSpace equals
+  func Linear_Space_of_RealSequences -> RLSStruct equals
 :: RSSPACE:def 7
     RLSStruct (# the_set_of_RealSequences, Zeroseq, l_add, l_mult #);
+:::   by Lm1,Th6,Th7,Th8,Th9,Th10,Th11,Th12,RLVECT_1:7;
+end;
+
+registration
+ cluster Linear_Space_of_RealSequences -> strict non empty;
+end;
+
+registration
+ cluster Linear_Space_of_RealSequences
+  ->  Abelian add-associative right_zeroed
+      right_complementable RealLinearSpace-like;
 end;
 
 definition
@@ -142,7 +155,7 @@ let X1 be Subset of X such that
 X1 is linearly-closed non empty;
 func Add_(X1,X) -> BinOp of X1 equals
 :: RSSPACE:def 8
- (the add of X)||X1;
+ (the addF of X)||X1;
 end;
 
 definition
@@ -241,9 +254,8 @@ definition
 end;
 
 theorem :: RSSPACE:19
-for l be UNITSTR st
-RLSStruct (# the carrier of l, 0.l, the add of l,
-        the Mult of l #) is RealLinearSpace holds l is RealLinearSpace;
+for l be RLSStruct st the RLSStruct of l is RealLinearSpace
+ holds l is RealLinearSpace;
 
 theorem :: RSSPACE:20
    for rseq be Real_Sequence

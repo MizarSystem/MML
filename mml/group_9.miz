@@ -11,23 +11,23 @@ environ
       ISOCAT_1, FUNCT_2, ARYTM_1, ARYTM, ARYTM_3, FINSET_1, FINSEQ_2, TARSKI,
       INT_1, MATRIX_2, CARD_1, SGRAPH1, SUBSET_1, GROUP_4, NAT_1, NATTRA_1,
       FINSEQ_5, LATTICES, SQUARE_1, PARTFUN1, RFINSEQ, MEMBERED, RFUNCT_2,
-      FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9;
+      FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, ORDINAL1, XREAL_0, RELAT_1,
-      FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, PARTFUN1, FINSEQ_1, ZFMISC_1,
-      CARD_1, PRE_CIRC, FINSET_1, INT_1, NAT_1, FINSEQ_2, FINSEQ_3, GROUP_1,
-      GROUP_2, GROUP_3, XXREAL_0, SETFAM_1, GROUP_4, FINSEQ_5, RFUNCT_2,
-      NUMBERS, MEMBERED, MATRIX_2, FINSEQ_4, RFINSEQ, BINOP_1, REALSET1,
-      GROUP_6, NAT_D;
+      FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, ALGSTR_0, PARTFUN1, FINSEQ_1,
+      ZFMISC_1, CARD_1, PRE_CIRC, FINSET_1, INT_1, NAT_1, FINSEQ_2, FINSEQ_3,
+      GROUP_1, GROUP_2, GROUP_3, XXREAL_0, SETFAM_1, GROUP_4, FINSEQ_5,
+      RFUNCT_2, NUMBERS, MEMBERED, MATRIX_2, FINSEQ_4, RFINSEQ, BINOP_1,
+      REALSET1, GROUP_6, NAT_D;
  constructors SETFAM_1, PARTFUN1, BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D,
       FINSEQ_4, RFUNCT_1, RFUNCT_2, RFINSEQ, BINARITH, FINSEQ_5, PRE_CIRC,
-      REALSET2, GROUP_4, GROUP_6, MATRIX_2, SEQ_1;
+      REALSET2, GROUP_4, GROUP_6, MATRIX_2, SEQ_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
       SEQ_1, PRE_CIRC, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, GROUP_6, MATRIX_2,
-      VALUED_0;
+      VALUED_0, ALGSTR_0, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions GROUP_2, GROUP_6, FINSEQ_3, FINSEQ_5, TARSKI, SUBSET_1, FINSEQ_1,
-      GROUP_1, REALSET1, RELAT_1, GROUP_4;
+      GROUP_1, REALSET1, RELAT_1, GROUP_4, ALGSTR_0, VALUED_1;
  theorems FINSEQ_1, GROUP_2, GROUP_3, TARSKI, GROUP_6, FINSEQ_2, FUNCT_1,
       FUNCT_2, RELAT_1, XBOOLE_0, XBOOLE_1, NAT_1, GROUP_1, XREAL_1, RELSET_1,
       PARTFUN1, FINSEQ_3, INT_1, ZFMISC_1, CARD_1, CARD_2, FINSET_1, XCMPLX_1,
@@ -356,9 +356,9 @@ end;
 
 definition
   let O be set;
-  struct (HGrStr) HGrWOpStr over O
+  struct (multMagma) HGrWOpStr over O
   (# carrier -> set,
-     mult    -> BinOp of the carrier,
+     multF    -> BinOp of the carrier,
      action  -> Action of O, the carrier #);
 end;
 
@@ -378,7 +378,7 @@ definition
   let IT be non empty HGrWOpStr over O;
   attr IT is distributive means :Def5:
   for G being Group, a being Action of O, the carrier of G
-    st a = the action of IT & the HGrStr of G = the HGrStr of IT
+    st a = the action of IT & the multMagma of G = the multMagma of IT
     holds a is distributive;
 end;
 
@@ -429,17 +429,17 @@ end;
 
 Lm3: for O being set, G being strict Group holds
   ex H being non empty HGrWOpStr over O
-    st H is strict distributive Group-like associative & G = the HGrStr of H
+    st H is strict distributive Group-like associative & G = the multMagma of H
 proof
   let O be set;
   let G be strict Group;
   set A = the carrier of G;
-  set m = the mult of G;
+  set m = the multF of G;
   reconsider h=[:O,{id the carrier of G}:] as Action of O, the carrier of G
     by Lm2;
   set GO = HGrWOpStr(#A,m,h#);
   reconsider GO as non empty HGrWOpStr over O by STRUCT_0:def 1;
-  reconsider G'=GO as non empty HGrStr;
+  reconsider G'=GO as non empty multMagma;
   A1: now
     set e=1_G;
     reconsider e'=e as Element of G';
@@ -468,7 +468,7 @@ proof
     let G'' be Group;
     let a be Action of O, the carrier of G'';
     assume A4: a = the action of GO;
-    assume A5: the HGrStr of G'' = the HGrStr of GO;
+    assume A5: the multMagma of G'' = the multMagma of GO;
      now
       let o be Element of O;
       assume o in O;
@@ -495,7 +495,7 @@ registration
     consider G be strict Group;
     consider H be non empty HGrWOpStr over O such that
     A1: H is strict distributive Group-like associative &
-      the HGrStr of H = G by Lm3;
+      the multMagma of H = G by Lm3;
     take H;
     thus thesis by A1;
   end;
@@ -519,7 +519,7 @@ definition
      now
       assume A1: o in O;
       consider G' be Group such that
-      A2: the HGrStr of G' = the HGrStr of G;
+      A2: the multMagma of G' = the multMagma of G;
       reconsider a=the action of G as Action of O, the carrier of G' by A2;
        a is distributive by A2,Def5;
       then reconsider f'=a.o as Homomorphism of G', G' by A1,Def4;
@@ -528,7 +528,7 @@ definition
         reconsider g1'=g1,g2'=g2 as Element of G' by A2;
          f.(g1 * g2) = f'.(g1' * g2') by A2
         .= f'.g1' * f'.g2' by GROUP_6:def 7
-        .= (the mult of G).(f.g1,f.g2) by A2;
+        .= (the multF of G).(f.g1,f.g2) by A2;
         hence f.(g1 * g2) = f.g1 * f.g2;
       end;
       hence (the action of G).o is Homomorphism of G,G by GROUP_6:def 7;
@@ -563,7 +563,8 @@ Lm4: for O being set, G being GroupWithOperators of O
 proof
   let O be set;
   let G be GroupWithOperators of O;
-    reconsider G' = the HGrWOpStr of G as non empty HGrStr by STRUCT_0:def 1;
+    reconsider G' = the HGrWOpStr of G as non empty multMagma
+     by STRUCT_0:def 1;
     A1: now
       set e=1_G;
       reconsider e'=e as Element of G';
@@ -591,13 +592,13 @@ proof
     then reconsider G' as strict Group-like associative
     (non empty HGrWOpStr over O) by A1,GROUP_1:def 3,def 4;
      for G being Group, a being Action of O, the carrier of G
-      st a = the action of G' & the HGrStr of G = the HGrStr of G'
+      st a = the action of G' & the multMagma of G = the multMagma of G'
       holds a is distributive by Def5;
     then reconsider G' as distributive Group-like associative
                               (non empty HGrWOpStr over O) by Def5;
-     dom(the mult of G) = [:the carrier of G',the carrier of G':]
+     dom(the multF of G) = [:the carrier of G',the carrier of G':]
       by FUNCT_2:def 1;
-    then the mult of G' = (the mult of G)||the carrier of G' by RELAT_1:97;
+    then the multF of G' = (the multF of G)||the carrier of G' by RELAT_1:97;
     then A2: G' is Subgroup of G by GROUP_2:def 5;
      now
       let o be Element of O;
@@ -641,7 +642,7 @@ proof
   let H1,H2 be strict StableSubgroup of G;
   assume A1: the carrier of H1 = the carrier of H2;
   reconsider H1'=H1,H2'=H2 as Subgroup of G by Def7;
-  A2: the HGrStr of H1' = the HGrStr of H2' by A1,GROUP_2:68;
+  A2: the multMagma of H1' = the multMagma of H2' by A1,GROUP_2:68;
   A3: dom the action of H2 = O by FUNCT_2:def 1
   .= dom the action of H1 by FUNCT_2:def 1;
    now let x be set;
@@ -664,10 +665,10 @@ definition
     set G'=(1).G;
     consider H be non empty HGrWOpStr over O such that
     A1: H is strict distributive Group-like associative &
-      G' = the HGrStr of H by Lm3;
+      G' = the multMagma of H by Lm3;
     reconsider H as strict GroupWithOperators of O by A1;
     A2: the carrier of H c= the carrier of G &
-        the mult of H = (the mult of G)||the carrier of H
+        the multF of H = (the multF of G)||the carrier of H
         by A1,GROUP_2:def 5;
     then A3: H is Subgroup of G by GROUP_2:def 5;
      now
@@ -714,7 +715,8 @@ definition
   let G be GroupWithOperators of O;
   let IT be StableSubgroup of G;
   attr IT is normal means :Def10:
-  for H being strict Subgroup of G st H = the HGrStr of IT holds H is normal;
+  for H being strict Subgroup of G
+   st H = the multMagma of IT holds H is normal;
 end;
 
 registration
@@ -729,10 +731,10 @@ registration
     take H';
      now
       let H'' be strict Subgroup of G;
-      assume A1: H'' = the HGrStr of H;
+      assume A1: H'' = the multMagma of H;
       reconsider G'=G as Group;
-      A2: the mult of (1).G'
-      = (the mult of G')||the carrier of (1).G' by GROUP_2:def 5;
+      A2: the multF of (1).G'
+      = (the multF of G')||the carrier of (1).G' by GROUP_2:def 5;
        the carrier of (1).G' = {1_G'} by GROUP_2:def 7
       .= the carrier of (1).G by Def8;
       hence H'' is normal by A1,A2,GROUP_2:def 5;
@@ -753,7 +755,7 @@ registration
     take H';
      now
       let H'' be strict Subgroup of H;
-      assume A1: the HGrStr of H' = H'';
+      assume A1: the multMagma of H' = H'';
       reconsider H as Group;
        the carrier of H'' = {1_H} by A1,Def8;
       then H'' = (1).H by GROUP_2:def 7;
@@ -773,7 +775,7 @@ registration
       let H be strict Subgroup of G;
       reconsider G'=G as Group;
       reconsider H'=H as strict Subgroup of G';
-      assume H = the HGrStr of (1).G;
+      assume H = the multMagma of (1).G;
       then the carrier of H = {1_G} by Def8;
       then H' = (1).G' by GROUP_2:def 7;
       hence H is normal;
@@ -787,7 +789,7 @@ registration
       let H be strict Subgroup of G;
       reconsider G'=G as Group;
       reconsider H'=H as strict Subgroup of G';
-      assume H = the HGrStr of (Omega).G;
+      assume H = the multMagma of (Omega).G;
       then H' = (Omega).G';
       hence H is normal;
     end;
@@ -937,13 +939,13 @@ end;
 Lm7:
   for O being set, G being GroupWithOperators of O,
       N being normal StableSubgroup of G holds
-  the HGrStr of N is strict normal Subgroup of G
+  the multMagma of N is strict normal Subgroup of G
 proof
   let O be set;
   let G be GroupWithOperators of O;
   let N be normal StableSubgroup of G;
-  set H = the HGrStr of N;
-  reconsider H as non empty HGrStr;
+  set H = the multMagma of N;
+  reconsider H as non empty multMagma;
    now
     set e=1_N;
     reconsider e'=e as Element of H;
@@ -962,10 +964,10 @@ proof
      g'*h' = g*h .= 1_N by GROUP_1:def 6;
     hence g' * h' = e';
   end;
-  then reconsider H as Group-like (non empty HGrStr) by GROUP_1:def 3;
+  then reconsider H as Group-like (non empty multMagma) by GROUP_1:def 3;
    N is Subgroup of G by Def7;
   then the carrier of H c= the carrier of G &
-    the mult of H = (the mult of G)||the carrier of H by GROUP_2:def 5;
+    the multF of H = (the multF of G)||the carrier of H by GROUP_2:def 5;
   then reconsider H as Subgroup of G by GROUP_2:def 5;
    H is normal by Def10;
   hence thesis;
@@ -975,7 +977,7 @@ Lm8:
   for G1, G2 being Group,
       A1 being Subset of G1, A2 being Subset of G2,
       H1 being strict Subgroup of G1, H2 being strict Subgroup of G2
-  st the HGrStr of G1 = the HGrStr of G2 & A1 = A2 & H1 = H2
+  st the multMagma of G1 = the multMagma of G2 & A1 = A2 & H1 = H2
   holds A1 * H1 = A2 * H2 & H1 * A1 = H2 * A2
 proof
   let G1, G2 be Group;
@@ -983,7 +985,7 @@ proof
   let A2 be Subset of G2;
   let H1 be strict Subgroup of G1;
   let H2 be strict Subgroup of G2;
-  assume A1: the HGrStr of G1 = the HGrStr of G2;
+  assume A1: the multMagma of G1 = the multMagma of G2;
   assume A2: A1 = A2;
   assume A3: H1 = H2;
   A4: now
@@ -1023,7 +1025,7 @@ registration
     set Gp2 = Group_of_Perm 2;
     consider G be non empty HGrWOpStr over O such that
     A1: G is strict distributive Group-like associative
-      & Gp2 = the HGrStr of G by Lm3;
+      & Gp2 = the multMagma of G by Lm3;
     reconsider G as strict GroupWithOperators of O by A1;
     take G;
      now assume A2: G is not simple;
@@ -1038,12 +1040,13 @@ registration
         st H <> (Omega).G & H <> (1).G;
         then consider H be strict normal StableSubgroup of G such that
         A4: H <> (Omega).G & H <> (1).G;
-        reconsider H' = the HGrStr of H as strict normal Subgroup of G by Lm7;
+        reconsider H' = the multMagma of H as strict normal Subgroup of G
+         by Lm7;
         reconsider G' = G as Group;
         reconsider H' as strict normal Subgroup of G';
         set H''=H';
          the carrier of H'' c= the carrier of G' &
-          the mult of H'' = (the mult of G')||the carrier of H''
+          the multF of H'' = (the multF of G')||the carrier of H''
             by GROUP_2:def 5;
         then reconsider H'' as strict Subgroup of Gp2 by A1,GROUP_2:def 5;
          now
@@ -1082,25 +1085,25 @@ definition
   let G be GroupWithOperators of O;
   let N be normal StableSubgroup of G;
   func Cosets N -> set means :Def14:
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = Cosets H;
   existence
   proof
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
     set x = Cosets H;
     take x;
     let H be strict normal Subgroup of G;
-    assume H = the HGrStr of N;
+    assume H = the multMagma of N;
     hence x = Cosets H;
   end;
   uniqueness
   proof
     let y1,y2 be set;
     assume A1: for H being strict normal Subgroup of G
-      st H = the HGrStr of N holds y1 = Cosets H;
+      st H = the multMagma of N holds y1 = Cosets H;
     assume A2: for H being strict normal Subgroup of G
-      st H = the HGrStr of N holds y2 = Cosets H;
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+      st H = the multMagma of N holds y2 = Cosets H;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      y1 = Cosets H by A1;
     hence y1=y2 by A2;
   end;
@@ -1111,26 +1114,26 @@ definition
   let G be GroupWithOperators of O;
   let N be normal StableSubgroup of G;
   func CosOp N -> BinOp of Cosets N means :Def15:
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = CosOp H;
   existence
   proof
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      Cosets N = Cosets H by Def14;
     then reconsider x = CosOp H as BinOp of Cosets N;
     take x;
     let H be strict normal Subgroup of G;
-    assume H = the HGrStr of N;
+    assume H = the multMagma of N;
     hence x = CosOp H;
   end;
   uniqueness
   proof
     let y1,y2 be BinOp of Cosets N;
     assume A1: for H being strict normal Subgroup of G
-      st H = the HGrStr of N holds y1 = CosOp H;
+      st H = the multMagma of N holds y1 = CosOp H;
     assume A2: for H being strict normal Subgroup of G
-      st H = the HGrStr of N holds y2 = CosOp H;
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+      st H = the multMagma of N holds y2 = CosOp H;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      y1 = CosOp H by A1;
     hence y1=y2 by A2;
   end;
@@ -1197,7 +1200,7 @@ definition
       deffunc F(set) = {[A,B] where A,B is Element of Cosets N:
         for o being Element of O st $1=o holds
           ex g,h being Element of G st g in A & h in B & h = (G^o).g};
-      reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+      reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
       A3: Cosets N = Cosets H by Def14;
       A4: now
         let x be set;
@@ -1373,15 +1376,15 @@ registration
   cluster G./.N -> non empty;
   correctness
   proof
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      Cosets N = Cosets H by Def14;
     hence thesis by STRUCT_0:def 1;
   end;
   cluster G./.N -> distributive Group-like associative;
   correctness
   proof
-    set G' = the HGrStr of G./.N;
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+    set G' = the multMagma of G./.N;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      the carrier of G./.N = the carrier of G./.H by Def14;
     then A1: G' is Group-like associative by Def15;
     A2: now
@@ -1413,7 +1416,7 @@ registration
       let G' be Group;
       let a be Action of O, the carrier of G';
       assume A5: a = the action of G./.N;
-      assume A6: the HGrStr of G' = the HGrStr of G./.N;
+      assume A6: the multMagma of G' = the multMagma of G./.N;
        now
         let o be Element of O;
         assume A7: o in O;
@@ -1454,7 +1457,7 @@ registration
           A22: @((nat_hom H).g2)=(nat_hom H).g2;
           A23: (nat_hom H).g1=g1*H by GROUP_6:def 9;
           A24: (nat_hom H).g2=g2*H by GROUP_6:def 9;
-           A1*A2 = (the mult of G').(A1',A2') by A11,A17,A19,ZFMISC_1:33
+           A1*A2 = (the multF of G').(A1',A2') by A11,A17,A19,ZFMISC_1:33
           .= @(A1'*A2') by A6,Def15 .= @A1' * @A2' by GROUP_6:25;
           then A1*A2 = (g1 * H)*(g2 * H) by A14,A17,Lm9
           .= ((nat_hom H).g1)*((nat_hom H).g2) by A21,A22,A23,A24,GROUP_6:24
@@ -1474,7 +1477,7 @@ registration
           A27: @((nat_hom H).h2)=(nat_hom H).h2;
           A28: (nat_hom H).h1=h1*H by GROUP_6:def 9;
           A29: (nat_hom H).h2=h2*H by GROUP_6:def 9;
-           B1*B2 = (the mult of G').(B1',B2') by A11,A17,A19,ZFMISC_1:33
+           B1*B2 = (the multF of G').(B1',B2') by A11,A17,A19,ZFMISC_1:33
           .= @(B1'*B2') by A6,Def15 .= @B1' * @B2' by GROUP_6:25;
           then B1*B2 = (h1 * H)*(h2 * H) by A14,A17,Lm9
           .= ((nat_hom H).h1)*((nat_hom H).h2) by A26,A27,A28,A29,GROUP_6:24
@@ -1663,11 +1666,11 @@ definition
   let G be GroupWithOperators of O;
   let N be normal StableSubgroup of G;
   func nat_hom N -> Homomorphism of G, G./.N means :Def23:
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = nat_hom H;
   existence
   proof
-    set H = the HGrStr of N;
+    set H = the multMagma of N;
     reconsider H as strict normal Subgroup of G by Lm7;
     set IT = nat_hom H;
     reconsider K = G./.N as GroupWithOperators of O;
@@ -1726,17 +1729,19 @@ A1: now
     reconsider IT' as Homomorphism of G, G./.N;
     take IT';
     let H be strict normal Subgroup of G;
-    assume H = the HGrStr of N;
+    assume H = the multMagma of N;
     hence IT' = nat_hom H;
   end;
   uniqueness
   proof
     let IT1,IT2 be Homomorphism of G, G./.N;
-    assume A11: for H being strict normal Subgroup of G st H = the HGrStr of N
+    assume
+A11: for H being strict normal Subgroup of G st H = the multMagma of N
       holds IT1 = nat_hom H;
-    assume A12: for H being strict normal Subgroup of G st H = the HGrStr of N
+    assume
+A12: for H being strict normal Subgroup of G st H = the multMagma of N
       holds IT2 = nat_hom H;
-    reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+    reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
      IT1 = nat_hom H & IT2 = nat_hom H by A11,A12;
     hence thesis;
   end;
@@ -1789,7 +1794,7 @@ proof
   consider H' be strict Subgroup of G such that
   A5: the carrier of H' = A by A1,A2,A3,GROUP_2:61;
   set A' = the carrier of H';
-  set m' = the mult of H';
+  set m' = the multF of H';
   A6: now
     let H be non empty HGrWOpStr over O;
     let a' be Action of O,A';
@@ -1832,14 +1837,14 @@ proof
       let G' be Group;
       let a be Action of O, the carrier of G';
       assume a = the action of H;
-      assume the HGrStr of G' = the HGrStr of H;
+      assume the multMagma of G' = the multMagma of H;
        for o being Element of O st o in O
         holds a.o is Homomorphism of G', G' by A8;
       hence a is distributive by Def4;
     end;
     then reconsider H as GroupWithOperators of O by A6,Def5;
     A9: the carrier of H c= the carrier of G &
-    the mult of H = (the mult of G)||the carrier of H by GROUP_2:def 5;
+    the multF of H = (the multF of G)||the carrier of H by GROUP_2:def 5;
     then A10: H is Subgroup of G by GROUP_2:def 5;
      now
       let o be Element of O;
@@ -1941,13 +1946,13 @@ proof
       by STRUCT_0:def 1;
     A31: H is Group-like by A6;
      the carrier of H c= the carrier of G &
-    the mult of H = (the mult of G)||the carrier of H by GROUP_2:def 5;
+    the multF of H = (the multF of G)||the carrier of H by GROUP_2:def 5;
     then A32: H is Subgroup of G by A31,GROUP_2:def 5;
      now
       let G' be Group;
       let a be Action of O, the carrier of G';
       assume A33: a = the action of H;
-      assume A34: the HGrStr of G' = the HGrStr of H;
+      assume A34: the multMagma of G' = the multMagma of H;
        now
         let o be Element of O;
         assume o in O;
@@ -2057,7 +2062,7 @@ registration
   proof
      now
       let N be strict Subgroup of G;
-      assume A1: N = the HGrStr of Ker g;
+      assume A1: N = the multMagma of Ker g;
       reconsider G'=G,H'=H as Group;
       reconsider g'=g as Homomorphism of G', H';
        the carrier of Ker g' = {a where a is Element of G: g.a = 1_H}
@@ -2071,12 +2076,12 @@ end;
 
 Lm16: for O being set, G being GroupWithOperators of O,
       H being StableSubgroup of G holds
-  the HGrStr of H is strict Subgroup of G
+  the multMagma of H is strict Subgroup of G
 proof
   let O be set;
   let G be GroupWithOperators of O;
   let H be StableSubgroup of G;
-  reconsider H'=the HGrStr of H as non empty HGrStr;
+  reconsider H'=the multMagma of H as non empty multMagma;
    now
     set e=1_H;
     reconsider e'=e as Element of H';
@@ -2095,10 +2100,10 @@ proof
      g'*h' = g*h .= 1_H by GROUP_1:def 6;
     hence g' * h' = e';
   end;
-  then reconsider H' as Group-like (non empty HGrStr) by GROUP_1:def 3;
+  then reconsider H' as Group-like (non empty multMagma) by GROUP_1:def 3;
    H is Subgroup of G by Def7;
   then the carrier of H' c= the carrier of G &
-    the mult of H' = (the mult of G)||the carrier of H' by GROUP_2:def 5;
+    the multF of H' = (the multF of G)||the carrier of H' by GROUP_2:def 5;
   hence thesis by GROUP_2:def 5;
 end;
 
@@ -2112,7 +2117,7 @@ proof
   let G,H be GroupWithOperators of O;
   let G' be strict StableSubgroup of G;
   let f be Homomorphism of G,H;
-  reconsider G'' = the HGrStr of G' as strict Subgroup of G by Lm16;
+  reconsider G'' = the multMagma of G' as strict Subgroup of G by Lm16;
   set A = {f.g where g is Element of G:g in G''};
    1_G in G'' by GROUP_2:55;
   then f.(1_G) in A;
@@ -2158,7 +2163,7 @@ proof
   end;
   then consider H'' be strict StableSubgroup of H such that
   A12: the carrier of H'' = A by A2,A7,Lm15;
-  reconsider H'=the HGrStr of H'' as strict Subgroup of H by Lm16;
+  reconsider H'=the multMagma of H'' as strict Subgroup of H by Lm16;
   take H'';
    now
     let h be Element of H;
@@ -2746,7 +2751,7 @@ end;
 theorem Th22:
   union Cosets N = the carrier of G
 proof
-  reconsider H = the HGrStr of N as strict normal Subgroup of G by Lm7;
+  reconsider H = the multMagma of N as strict normal Subgroup of G by Lm7;
   A1: Cosets N = Cosets H by Def14;
   A2: union Left_Cosets H c= the carrier of G;
    now
@@ -2776,7 +2781,7 @@ theorem Th23:
     st the carrier of N = carr N1 * carr N2
 proof
   let N1,N2 be strict normal StableSubgroup of G;
-  set N1' = the HGrStr of N1; set N2' = the HGrStr of N2;
+  set N1' = the multMagma of N1; set N2' = the multMagma of N2;
   reconsider N1',N2' as strict normal Subgroup of G by Lm7;
   set A = carr N1' * carr N2';
   set B = carr N1'; set C = carr N2';
@@ -2817,7 +2822,7 @@ proof
   end;
   then consider H be strict StableSubgroup of G such that
   A6: the carrier of H = A by A1,A3,A4,Lm15;
-   for H'' being strict Subgroup of G st H'' = the HGrStr of H
+   for H'' being strict Subgroup of G st H'' = the multMagma of H
     holds H'' is normal by A1,A2,A6,GROUP_2:68;
   then H is normal by Def10;
   hence thesis by A6;
@@ -3765,7 +3770,7 @@ Def29;
    now
     let H be strict StableSubgroup of G;
     assume A4: A c= the carrier of H;
-    reconsider H'=the HGrStr of H as strict Subgroup of G by Lm16;
+    reconsider H'=the multMagma of H as strict Subgroup of G by Lm16;
      gr A is Subgroup of H' by A4,GROUP_4:def 5;
     then B c= the carrier of H' by A1,GROUP_2:def 5;
     hence the_stable_subgroup_of B is StableSubgroup of H by Def29;
@@ -3779,7 +3784,7 @@ theorem Th28:
     holds N1 * N2 = N2 * N1
 proof
   let N1,N2 be strict normal StableSubgroup of G;
-  reconsider N1'= the HGrStr of N1,N2'= the HGrStr of N2
+  reconsider N1'= the multMagma of N1,N2'= the multMagma of N2
     as strict normal Subgroup of G by Lm7;
   thus N1 * N2 = carr N2' * carr N1' by GROUP_3:148 .= N2 * N1;
 end;
@@ -3993,9 +3998,9 @@ proof
   then reconsider N' = N as StableSubgroup of H1;
    now
     let H be strict Subgroup of H1;
-    assume A1: H = the HGrStr of N';
+    assume A1: H = the multMagma of N';
     A2: H1 is Subgroup of G by Def7;
-    reconsider N''=the HGrStr of N as normal Subgroup of G by Lm7;
+    reconsider N''=the multMagma of N as normal Subgroup of G by Lm7;
     reconsider N as Subgroup of G by Def7;
      N'' is Subgroup of N by GROUP_2:66;
     hence H is normal by A1,A2,GROUP_6:9;
@@ -4022,8 +4027,8 @@ proof
     reconsider A = H1 /\ N as StableSubgroup of H1 by Lm34;
      now
       let H be strict Subgroup of H1;
-      assume A1: H = the HGrStr of A;
-      reconsider N'=the HGrStr of N as normal Subgroup of G by Lm7;
+      assume A1: H = the multMagma of A;
+      reconsider N'=the multMagma of N as normal Subgroup of G by Lm7;
        now let b be Element of H1;
         thus b * H c= H * b
         proof let x;
@@ -4077,13 +4082,13 @@ proof
   hence thesis by Def8;
 end;
 
-Lm35: for N' being normal Subgroup of G st N' = the HGrStr of N
-  holds G./.N' = the HGrStr of G./.N & 1_(G./.N') = 1_(G./.N)
+Lm35: for N' being normal Subgroup of G st N' = the multMagma of N
+  holds G./.N' = the multMagma of G./.N & 1_(G./.N') = 1_(G./.N)
 proof
   let N' be normal Subgroup of G;
-  assume A1: N' = the HGrStr of N;
+  assume A1: N' = the multMagma of N;
   then Cosets N' = Cosets N by Def14;
-  hence G./.N' = the HGrStr of G./.N by A1,Def15;
+  hence G./.N' = the multMagma of G./.N by A1,Def15;
   reconsider e=1_(G./.N') as Element of G./.N by A1,Def14;
    now
     let h be Element of G./.N;
@@ -4098,7 +4103,7 @@ end;
 theorem Th43:
   1_(G./.N) = carr N
 proof
-  reconsider N' = the HGrStr of N as normal Subgroup of G by Lm7;
+  reconsider N' = the multMagma of N as normal Subgroup of G by Lm7;
    1_(G./.N') = carr N' by GROUP_6:29;
   hence thesis by Lm35;
 end;
@@ -4114,12 +4119,12 @@ proof
   let MN be normal StableSubgroup of N;
   assume A1: MN=M;
   assume A2: M is StableSubgroup of N;
-  reconsider N' = the HGrStr of N as normal Subgroup of G by Lm7;
-  reconsider M' = the HGrStr of M as normal Subgroup of G by Lm7;
-  reconsider MN' = the HGrStr of MN as normal Subgroup of N by Lm7;
+  reconsider N' = the multMagma of N as normal Subgroup of G by Lm7;
+  reconsider M' = the multMagma of M as normal Subgroup of G by Lm7;
+  reconsider MN' = the multMagma of MN as normal Subgroup of N by Lm7;
    M is Subgroup of N by A2,Def7;
   then the carrier of M c= the carrier of N &
-    the mult of M = (the mult of N)||the carrier of M
+    the multF of M = (the multF of N)||the carrier of M
     by GROUP_2:def 5;
   then A3: M' is Subgroup of N' by GROUP_2:def 5;
   then reconsider K=N'./.(N',M')`*` as normal Subgroup of G./.M' by GROUP_6:35;
@@ -4218,11 +4223,11 @@ proof
   end;
   A19: the carrier of K = Cosets MN' by A6,TARSKI:2
   .= the carrier of N./.MN by Def14;
-  A20: the mult of K = CosOp MN' by A13,GROUP_6:def 4
-  .= the mult of N./.MN by Def15;
+  A20: the multF of K = CosOp MN' by A13,GROUP_6:def 4
+  .= the multF of N./.MN by Def15;
   A21: now
     let H be strict Subgroup of G./.M;
-    assume A22: H = the HGrStr of N./.MN;
+    assume A22: H = the multMagma of N./.MN;
      now
       let a be Element of G./.M;
       reconsider a'=a as Element of G./.M' by Def14;
@@ -4246,9 +4251,9 @@ proof
     hence H is normal by GROUP_3:141;
   end;
   A27: the carrier of N./.MN c= the carrier of G./.M by A5,A19,GROUP_2:def 5;
-   the mult of N./.MN
-  = (the mult of G./.M')||the carrier of K by A20,GROUP_2:def 5
-  .= (the mult of G./.M)||the carrier of N./.MN by A19,Def15;
+   the multF of N./.MN
+  = (the multF of G./.M')||the carrier of K by A20,GROUP_2:def 5
+  .= (the multF of G./.M)||the carrier of N./.MN by A19,Def15;
   then A28: N./.MN is Subgroup of G./.M by A27,GROUP_2:def 5;
    now
     let o be Element of O;
@@ -4409,7 +4414,7 @@ theorem Th48:
   for N being strict normal StableSubgroup of G holds Ker nat_hom N = N
 proof
   let N be strict normal StableSubgroup of G;
-  reconsider N' = the HGrStr of N as strict normal Subgroup of G by Lm7;
+  reconsider N' = the multMagma of N as strict normal Subgroup of G by Lm7;
   A1: nat_hom N = nat_hom N' by Def23;
   A2: 1_(G./.N) = 1_(G./.N') by Lm35;
    the carrier of Ker nat_hom N =
@@ -4435,8 +4440,8 @@ theorem Th50:
   Image nat_hom N = G./.N
 proof
   reconsider H = G./.N as strict StableSubgroup of G./.N by Lm4;
-  reconsider N' = the HGrStr of N as strict normal Subgroup of G by Lm7;
-  A1: G./.N' = the HGrStr of G./.N by Lm35;
+  reconsider N' = the multMagma of N as strict normal Subgroup of G by Lm7;
+  A1: G./.N' = the multMagma of G./.N by Lm35;
    the carrier of Image nat_hom N = nat_hom N .: (the carrier of G) by Def25
   .= nat_hom N' .: (the carrier of G) by Def23
   .= the carrier of Image nat_hom N' by GROUP_6:def 11
@@ -4501,7 +4506,7 @@ theorem Th54:
 proof
   set g = nat_hom (1).G;
   reconsider G'=G as Group;
-  reconsider H = the HGrStr of (1).G as strict normal Subgroup of G by Lm7;
+  reconsider H = the multMagma of (1).G as strict normal Subgroup of G by Lm7;
   A1: the carrier of H = {1_G'} by Def8;
   A2: nat_hom (1).G = nat_hom H by Def23
   .= nat_hom (1).G' by A1,GROUP_2:def 7;
@@ -4549,7 +4554,8 @@ theorem Th57:
   for G being strict GroupWithOperators of O holds G./.(Omega).G is trivial
 proof
   let G be strict GroupWithOperators of O;
-  reconsider H=the HGrStr of (Omega).G as strict normal Subgroup of G by Lm7;
+  reconsider H=the multMagma of (Omega).G as strict normal Subgroup of G
+   by Lm7;
   reconsider G'=G as Group;
   A1: H = (Omega).G';
    the carrier of G./.(Omega).G = Cosets H by Def14
@@ -4606,12 +4612,13 @@ proof
     hence x in the carrier of Ker h by Def24;
   end;
   then the carrier of Ker h' = the carrier of Ker h by TARSKI:2;
-  then A5: the HGrStr of Ker h' = the HGrStr of Ker h by A2,GROUP_2:68;
+  then A5: the multMagma of Ker h' = the multMagma of Ker h by A2,GROUP_2:68;
   then A6: the carrier of G'./.Ker h' = the carrier of G./.Ker h by Def14;
   A7: Image h is Subgroup of H by Def7;
   A8: the carrier of Image h' = h' .: (the carrier of G') by GROUP_6:def 11
   .= the carrier of Image h by Def25;
-  then A9: the HGrStr of Image h' = the HGrStr of Image h by A7,GROUP_2:68;
+  then A9: the multMagma of Image h' = the multMagma of Image h
+   by A7,GROUP_2:68;
   reconsider g=g' as Function of G./.Ker h, Image h by A6,A8;
   A10: now
     let o be Element of O;
@@ -4728,22 +4735,22 @@ theorem
 
 theorem
    for G being strict Group holds
-    ex H being strict GroupWithOperators of O st G = the HGrStr of H
+    ex H being strict GroupWithOperators of O st G = the multMagma of H
 proof
   let G be strict Group;
   consider H be non empty HGrWOpStr over O such that
   A1: H is strict distributive Group-like associative &
-    G = the HGrStr of H by Lm3;
+    G = the multMagma of H by Lm3;
   reconsider H as strict GroupWithOperators of O by A1;
   take H;
-  thus G = the HGrStr of H by A1;
+  thus G = the multMagma of H by A1;
 end;
 
 theorem
-   the HGrStr of H1 is strict Subgroup of G by Lm16;
+   the multMagma of H1 is strict Subgroup of G by Lm16;
 
 theorem
-   the HGrStr of N is strict normal Subgroup of G by Lm7;
+   the multMagma of N is strict normal Subgroup of G by Lm7;
 
 theorem
    g1 in H1 implies (G^o).g1 in H1 by Lm10;
@@ -4763,8 +4770,8 @@ theorem
     the_stable_subgroup_of C = the_stable_subgroup_of B by Lm32;
 
 theorem
- for N' being normal Subgroup of G st N' = the HGrStr of N
-  holds G./.N' = the HGrStr of G./.N & 1_(G./.N') = 1_(G./.N) by Lm35;
+ for N' being normal Subgroup of G st N' = the multMagma of N
+  holds G./.N' = the multMagma of G./.N & 1_(G./.N') = 1_(G./.N) by Lm35;
 
 theorem Th75:
   the carrier of H1 = the carrier of H2 implies
@@ -4772,7 +4779,7 @@ theorem Th75:
 proof
   assume A1: the carrier of H1 = the carrier of H2;
   reconsider H1'=H1,H2'=H2 as Subgroup of G by Def7;
-  A2: the HGrStr of H1' = the HGrStr of H2' by A1,GROUP_2:68;
+  A2: the multMagma of H1' = the multMagma of H2' by A1,GROUP_2:68;
   A3: dom the action of H2 = O by FUNCT_2:def 1
   .= dom the action of H1 by FUNCT_2:def 1;
    now let x;
@@ -4792,7 +4799,7 @@ proof
   then consider e be set such that
   A1: the carrier of H1./.N1 = {e} by GROUP_6:def 2;
   set H=H1;
-  reconsider N=the HGrStr of N1 as normal Subgroup of H by Lm7;
+  reconsider N=the multMagma of N1 as normal Subgroup of H by Lm7;
    Cosets N1 = Cosets N by Def14;
   then consider e be set such that
   A2: the carrier of H./.N = {e} by A1;
@@ -4824,7 +4831,7 @@ end;
 theorem Th77:
   the carrier of H1 = the carrier of N1 implies H1./.N1 is trivial
 proof
-  reconsider N1' = the HGrStr of N1 as strict normal Subgroup of H1 by Lm7;
+  reconsider N1' = the multMagma of N1 as strict normal Subgroup of H1 by Lm7;
   A1: Cosets N1 = Cosets N1' by Def14;
   assume A2: the carrier of H1 = the carrier of N1;
    now
@@ -4864,7 +4871,7 @@ proof
   let H' be strict StableSubgroup of H;
   let f be Homomorphism of G,H;
   assume A1: N = Ker f;
-  reconsider H'' = the HGrStr of H' as strict Subgroup of H by Lm16;
+  reconsider H'' = the multMagma of H' as strict Subgroup of H by Lm16;
   set A = {g where g is Element of G:f.g in H''};
   A2: 1_H in H'' by GROUP_2:55;
   then f.(1_G) in H'' by Lm13;
@@ -4913,7 +4920,7 @@ proof
   end;
   then consider G'' be strict StableSubgroup of G such that
   A12: the carrier of G'' = A by A4,A9,Lm15;
-  reconsider G' = the HGrStr of G'' as strict Subgroup of G by Lm16;
+  reconsider G' = the multMagma of G'' as strict Subgroup of G by Lm16;
   take G'';
    now
     let g be Element of G;
@@ -4969,7 +4976,7 @@ proof
        end;
        hence g * G' c= G' * g by TARSKI:def 3;
      end;
-     then for H being strict Subgroup of G st H = the HGrStr of G''
+     then for H being strict Subgroup of G st H = the multMagma of G''
        holds H is normal by GROUP_3:141;
      hence G'' is normal by Def10;
   end;
@@ -4993,7 +5000,7 @@ proof
   let G' be strict StableSubgroup of G;
   let f be Homomorphism of G,H;
   assume A1: N = Ker f;
-  reconsider G'' = the HGrStr of G' as strict Subgroup of G by Lm16;
+  reconsider G'' = the multMagma of G' as strict Subgroup of G by Lm16;
   set A = {f.g where g is Element of G:g in G''};
    1_G in G'' by GROUP_2:55;
   then f.(1_G) in A;
@@ -5039,7 +5046,7 @@ proof
   end;
   then consider H'' be strict StableSubgroup of H such that
   A13: the carrier of H'' = A by A3,A8,Lm15;
-  reconsider H' = the HGrStr of H'' as strict Subgroup of H by Lm16;
+  reconsider H' = the multMagma of H'' as strict Subgroup of H by Lm16;
   take H'';
   A14: now
     let h be Element of H;
@@ -5061,7 +5068,7 @@ proof
     hence h in A by A18;
   end;
   hence A19: the carrier of H'' = f.:(the carrier of G') by A13,SUBSET_1:8;
-  reconsider N'=the HGrStr of N as strict Subgroup of G by Lm16;
+  reconsider N'=the multMagma of N as strict Subgroup of G by Lm16;
    N' is normal by A1,Def10;
   then A20: carr G'' * N' = N' * carr G'' by GROUP_3:143;
   A21: dom f = the carrier of G by FUNCT_2:def 1;
@@ -5135,7 +5142,7 @@ proof
       hence h1 * H' c= H' * h1 by TARSKI:def 3;
     end;
     then for H1 being strict Subgroup of H
-      st H1 = the HGrStr of H'' holds H1 is normal by GROUP_3:141;
+      st H1 = the multMagma of H'' holds H1 is normal by GROUP_3:141;
     hence H'' is normal by Def10;
   end;
   hence thesis;
@@ -5151,12 +5158,12 @@ proof
   let G be strict GroupWithOperators of O;
   let N be strict normal StableSubgroup of G;
   let H be strict StableSubgroup of G./.N;
-  reconsider N' = the HGrStr of N as strict normal Subgroup of G by Lm7;
-  reconsider H' = the HGrStr of H as strict Subgroup of G./.N by Lm16;
+  reconsider N' = the multMagma of N as strict normal Subgroup of G by Lm7;
+  reconsider H' = the multMagma of H as strict Subgroup of G./.N by Lm16;
   A1: the carrier of H' c= the carrier of G./.N &
-    the mult of H' = (the mult of G./.N)||the carrier of H' by GROUP_2:def 5;
+    the multF of H' = (the multF of G./.N)||the carrier of H' by GROUP_2:def 5;
   A2: the carrier of G./.N = the carrier of G./.N' by Def14;
-   the mult of G./.N = the mult of G./.N' by Def15;
+   the multF of G./.N = the multF of G./.N' by Def15;
   then reconsider H' as strict Subgroup of G./.N' by A1,A2,GROUP_2:def 5;
   assume the carrier of G = (nat_hom N)"(the carrier of H);
   then A3: the carrier of G = (nat_hom N')"(the carrier of H') by Def23;
@@ -5194,12 +5201,12 @@ proof
   then not the carrier of H = {1_(G./.N)} by Def8;
   then consider h be set such that
   A2: not (h in the carrier of H iff h in {1_(G./.N)}) by TARSKI:2;
-  reconsider N' = the HGrStr of N as strict normal Subgroup of G by Lm7;
-  reconsider H' = the HGrStr of H as strict Subgroup of G./.N by Lm16;
+  reconsider N' = the multMagma of N as strict normal Subgroup of G by Lm7;
+  reconsider H' = the multMagma of H as strict Subgroup of G./.N by Lm16;
   A3: the carrier of H' c= the carrier of G./.N &
-    the mult of H' = (the mult of G./.N)||the carrier of H' by GROUP_2:def 5;
+    the multF of H' = (the multF of G./.N)||the carrier of H' by GROUP_2:def 5;
   A4: the carrier of G./.N = the carrier of G./.N' by Def14;
-   the mult of G./.N = the mult of G./.N' by Def15;
+   the multF of G./.N = the multF of G./.N' by Def15;
   then reconsider H' as strict Subgroup of G./.N' by A3,A4,GROUP_2:def 5;
   A5: the carrier of N' = (nat_hom N')"(the carrier of H') by A1,Def23;
   per cases by A2;
@@ -5243,7 +5250,7 @@ proof
     st H' <> (Omega).H & H' <> (1).H;
     then consider H' be strict normal StableSubgroup of H such that
     A4: H' <> (Omega).H & H' <> (1).H;
-    reconsider H'' = the HGrStr of H' as strict normal Subgroup of H by Lm7;
+    reconsider H'' = the multMagma of H' as strict normal Subgroup of H by Lm7;
     consider f be Homomorphism of G,H such that
     A5: f is_isomorphism by A1,Def22;
     A6: f is_epimorphism by A5,Def21;
@@ -5295,7 +5302,7 @@ proof
     end;
     then consider G'' be strict StableSubgroup of G such that
     A16: the carrier of G'' = A by A8,A13,Lm15;
-    reconsider G'=the HGrStr of G'' as strict Subgroup of G by Lm16;
+    reconsider G'=the multMagma of G'' as strict Subgroup of G by Lm16;
      the carrier of H'<>{1_H} by A4,Def8;
     then consider x be set such that
     A17: x in the carrier of H' & x<>1_H by ZFMISC_1:41;
@@ -5308,7 +5315,7 @@ proof
      y<>1_G by A17,A19,Lm13;
     then the carrier of G'' <> {1_G} by A20,TARSKI:def 1;
     then A21: G''<>(1).G by Def8;
-     the HGrStr of H' <> the HGrStr of H by A4,Lm5;
+     the multMagma of H' <> the multMagma of H by A4,Lm5;
     then consider h be Element of H such that
     A22: not h in H'' by GROUP_2:71;
     consider g be Element of G such that
@@ -5343,7 +5350,7 @@ proof
        end;
        hence g * G' c= G' * g by TARSKI:def 3;
     end;
-    then for H being strict Subgroup of G st H = the HGrStr of G''
+    then for H being strict Subgroup of G st H = the multMagma of G''
       holds H is normal by GROUP_3:141;
     then G'' is normal by Def10;
     hence contradiction by A2,A21,A25,Def13;
@@ -5841,8 +5848,8 @@ proof
   let f be Homomorphism of G,H;
   assume A1: N = Ker f;
   assume A2: L is strict normal StableSubgroup of G';
-  reconsider Ns = the HGrStr of N as strict normal Subgroup of G by A1,Lm7;
-  reconsider Gs' = the HGrStr of G' as strict Subgroup of G by Lm16;
+  reconsider Ns = the multMagma of N as strict normal Subgroup of G by A1,Lm7;
+  reconsider Gs' = the multMagma of G' as strict Subgroup of G by Lm16;
   consider H' be strict StableSubgroup of H such that
   A3: the carrier of H' = f.:(the carrier of G') &
        f"(the carrier of H') = the carrier of G'"\/"N &
@@ -6144,7 +6151,7 @@ FINSEQ_2:15;
         then A7: H2=(1).G by A6,FINSEQ_1:61;
         then reconsider H2 as StableSubgroup of H1 by Th16;
          now let H be strict Subgroup of H1;
-          assume the HGrStr of H2 = H;
+          assume the multMagma of H2 = H;
           then A8: the carrier of H = {1_G} by A7,Def8;
           reconsider H1 as Subgroup of G by Def7;
            the carrier of H = {1_H1} by A8,GROUP_2:53;
@@ -9603,7 +9610,7 @@ FINSEQ_2:14;
           then A82: the carrier of H1' c= the carrier of H1 by GROUP_2:def 5;
            now
             let H' be strict Subgroup of H1;
-            assume A83: H' = the HGrStr of H2;
+            assume A83: H' = the multMagma of H2;
              now
               let a be Element of H1;
               reconsider a'=a as Element of H2' by A80,Th2;
@@ -9612,7 +9619,7 @@ FINSEQ_2:14;
                 then consider b be Element of H1 such that
                 A84: x = a * b & b in H' by GROUP_2:125;
                 set b'=b;
-                reconsider H1s'=the HGrStr of H1' as normal Subgroup of H2'
+                reconsider H1s'=the multMagma of H1' as normal Subgroup of H2'
                   by A60,Lm7;
                 A85: a' * H1s' c= H1s' * a' by GROUP_3:141;
                 A86: H1 is Subgroup of H2' by A80,Def7;

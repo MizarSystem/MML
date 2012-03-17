@@ -18,11 +18,8 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="XREAL_0"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 </Signature>
 <Scheme>
@@ -34,11 +31,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -73,13 +70,13 @@
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="151">
+<Func kind="K" nr="139">
 <Var nr="1"/>
 </Func>
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="152">
+<Func kind="K" nr="140">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -108,11 +105,11 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
 <Not>
@@ -143,7 +140,7 @@
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="151">
+<Func kind="K" nr="139">
 <Var nr="1"/>
 </Func>
 </Pred>
@@ -151,7 +148,7 @@
 <Pred kind="P" nr="1">
 <Var nr="2"/>
 <Var nr="3"/>
-<Func kind="K" nr="152">
+<Func kind="K" nr="140">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 <Var nr="2"/>
@@ -186,10 +183,10 @@
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="24">
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Func kind="F" nr="3"/>
 </Func>
 </Func>
@@ -252,10 +249,10 @@
 <Var nr="2"/>
 </Func>
 <Func kind="K" nr="24">
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Func kind="F" nr="2"/>
 </Func>
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Func kind="F" nr="3"/>
 </Func>
 </Func>

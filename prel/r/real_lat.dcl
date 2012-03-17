@@ -21,26 +21,26 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="100"/>
 <Cluster>
 <Adjective nr="20" value="false"/>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="100"/>
 <Cluster>
-<Adjective nr="29"/>
-<Adjective nr="36"/>
-</Cluster>
-</FCluster>
-<FCluster>
-<ArgTypes/>
-<Func kind="K" nr="101"/>
-<Cluster>
-<Adjective nr="29"/>
+<Adjective nr="30"/>
 <Adjective nr="37"/>
+</Cluster>
+</FCluster>
+<FCluster>
+<ArgTypes/>
+<Func kind="K" nr="100"/>
+<Cluster>
+<Adjective nr="30"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -49,7 +49,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="101"/>
+<Func kind="K" nr="100"/>
 </Func>
 </Typ>
 <Cluster>

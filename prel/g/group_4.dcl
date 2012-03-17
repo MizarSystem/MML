@@ -21,6 +21,7 @@
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
@@ -28,23 +29,23 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="10">
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="53"/>
-<Adjective nr="54"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="179">
+<Func kind="K" nr="189">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="43"/>
-<Adjective nr="46"/>
+<Adjective nr="37"/>
+<Adjective nr="44"/>
 <Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 </Registrations>

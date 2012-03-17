@@ -15,12 +15,12 @@ environ
       RFINSEQ, STRUCT_0, MATRIX_1, PRE_TOPC, COMPTS_1, EUCLID, TOPREAL1,
       GOBOARD1, GOBOARD2, SPPOL_1, PSCOMP_1, GOBOARD5, XXREAL_0;
  constructors PARTFUN1, XXREAL_0, NAT_1, FINSEQ_4, NEWTON, RFINSEQ, BINARITH,
-      COMPTS_1, GOBOARD2, SPPOL_1, GOBOARD5, PSCOMP_1;
+      COMPTS_1, GOBOARD2, SPPOL_1, GOBOARD5, PSCOMP_1, VALUED_1, SEQ_1;
  registrations RELAT_1, XREAL_0, REAL_1, NAT_1, FINSEQ_1, STRUCT_0, EUCLID,
       GOBOARD2, SPRECT_1, ORDINAL1, SEQ_1, MEMBERED, NEWTON, XBOOLE_0,
-      VALUED_0;
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions GOBOARD1, GOBOARD5, TOPREAL1, XBOOLE_0;
+ definitions GOBOARD1, GOBOARD5, TOPREAL1, XBOOLE_0, VALUED_1;
  theorems ZFMISC_1, NAT_1, FINSEQ_1, MATRIX_1, GOBOARD1, FINSEQ_4, EUCLID,
       FINSEQ_3, REAL_1, REAL_2, PSCOMP_1, SPRECT_1, FINSEQ_5, GOBOARD7,
       GOBOARD5, SPRECT_2, ABSVALUE, UNIFORM1, SUBSET_1, GOBRD11, GOBOARD2,
@@ -357,23 +357,23 @@ then G*(i1,j1)`2 <= G*(i1',j1')`2 by A16,A19,A84,A85,SPRECT_3:24;
   end;
  thus f is special
   proof let i be Nat;
-A200: i in NAT by ORDINAL1:def 13;
+A88: i in NAT by ORDINAL1:def 13;
    assume 1 <= i & i+1 <= len f;
    then consider i1,j1,i2,j2 such that
-A88:  [i1,j1] in Indices G and
-A89: f/.i = G*(i1,j1) and
-A90:  [i2,j2] in Indices G and
-A91: f/.(i+1) = G*(i2,j2) and
-A92:  i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
-      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,Th6,A200;
+A89:  [i1,j1] in Indices G and
+A90: f/.i = G*(i1,j1) and
+A91:  [i2,j2] in Indices G and
+A92: f/.(i+1) = G*(i2,j2) and
+A93:  i1 = i2 & j1+1 = j2 or i1+1 = i2 & j1 = j2 or
+      i1 = i2+1 & j1 = j2 or i1 = i2 & j1 = j2+1 by A1,A88,Th6;
       1 <= i1 & i1 <= len G & 1 <= j1 & j1 <= width G &
-      1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A88,A90,GOBOARD5:1;
+      1 <= i2 & i2 <= len G & 1 <= j2 & j2 <= width G by A89,A91,GOBOARD5:1;
    then G*(i1,j1)`2 = G*(1,j1)`2 & G*(i2,j1)`2 = G*(1,j1)`2 &
     G*(i1,j2)`2 = G*(1,j2)`2 & G*(i2,j2)`2 = G*(1,j2)`2 &
      G*(i1,j1)`1 = G*(i1,1)`1 & G*(i1,j2)`1 = G*(i1,1)`1 &
       G*(i2,j1)`1 = G*(i2,1)`1 & G*(i2,j2)`1 = G*(i2,1)`1 by GOBOARD5:2,3;
    hence (f/.i)`1 = (f/.(i+1))`1 or (f/.i)`2 = (f/.(i+1))`2
-    by A89,A91,A92;
+    by A90,A92,A93;
   end;
 end;
 
@@ -823,40 +823,40 @@ reserve i, j, n for Nat;
 theorem
   i <= len Gauge(C,n) implies cell(Gauge(C,n),i,len Gauge(C,n)) misses C
 proof set G = Gauge(C,n);
-A100: i in NAT by ORDINAL1:def 13;
+A1: i in NAT by ORDINAL1:def 13;
  assume
-A1:  i <= len G;
-A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+A2:  i <= len G;
+A3:  len G = 2|^n + (1+2) & len G = width G by Def1;
  assume cell(G,i,len G) /\ C <> {};
  then consider p such that
-A3: p in cell(G,i,len G) /\ C by SUBSET_1:10;
-A4: p in cell(G,i,len G) & p in C by A3,XBOOLE_0:def 3;
+A4: p in cell(G,i,len G) /\ C by SUBSET_1:10;
+A5: p in cell(G,i,len G) & p in C by A4,XBOOLE_0:def 3;
      4 <= len G by Th13;
-then A5: 1 <= len G by XXREAL_0:2;
+then A6: 1 <= len G by XXREAL_0:2;
   set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
   set NS = (N-S)/(2|^n);
-      [1,width G] in Indices G by A2,A5,GOBOARD7:10;
-  then A6: G*(1,width G) = |[W+((E-W)/(2|^n))*(1-2), S+NS*((width G)-2)]| by
+      [1,width G] in Indices G by A3,A6,GOBOARD7:10;
+  then A7: G*(1,width G) = |[W+((E-W)/(2|^n))*(1-2), S+NS*((width G)-2)]| by
 Def1;
-A7:  2|^n > 0 by NEWTON:102;
+A8:  2|^n > 0 by NEWTON:102;
       N > S by Th12;
   then N-S > 0 by XREAL_1:52;
-then A8:  NS > 0 by A7,REAL_2:127;
-    NS*((width G)-2) =NS*(2|^n) + NS*1 by A2
-                        .= N-S+NS by A7,XCMPLX_1:88;
-   then G*(1,width G)`2 = N + NS by A6,EUCLID:56;
-then A9:  G*(1,width G)`2 > N by A8,XREAL_1:31;
+then A9:  NS > 0 by A8,REAL_2:127;
+    NS*((width G)-2) =NS*(2|^n) + NS*1 by A3
+                        .= N-S+NS by A8,XCMPLX_1:88;
+   then G*(1,width G)`2 = N + NS by A7,EUCLID:56;
+then A10:  G*(1,width G)`2 > N by A9,XREAL_1:31;
       i = 0 or i > 0 by NAT_1:3;
-then A10: i = 0 or i >= 1+0 by NAT_1:9;
- per cases by A1,A10,REAL_1:def 5;
+then A11: i = 0 or i >= 1+0 by NAT_1:9;
+ per cases by A2,A11,REAL_1:def 5;
  suppose i = 0;
   then cell(G,i,width G) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
    by GOBRD11:25;
   then consider r,s such that
-A11: p = |[r,s]| and
-A12: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A2,A4;
-      p`2 = s by A11,EUCLID:56;
-  then N < p`2 & p`2 <= N by A4,A9,A12,PSCOMP_1:71,XXREAL_0:2;
+A12: p = |[r,s]| and
+A13: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A3,A5;
+      p`2 = s by A12,EUCLID:56;
+  then N < p`2 & p`2 <= N by A5,A10,A13,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose i = len G;
@@ -864,22 +864,22 @@ A12: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A2,A4;
 }
      by GOBRD11:28;
   then consider r,s such that
-A13: p = |[r,s]| and
-A14: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A2,A4;
-      p`2 = s by A13,EUCLID:56;
-  then N < p`2 & p`2 <= N by A4,A9,A14,PSCOMP_1:71,XXREAL_0:2;
+A14: p = |[r,s]| and
+A15: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A3,A5;
+      p`2 = s by A14,EUCLID:56;
+  then N < p`2 & p`2 <= N by A5,A10,A15,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose 1 <= i & i < len G;
   then cell(G,i,width G)
           = {|[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*
 (1,width G)`2 <= s}
-  by A100,GOBRD11:31;
+  by A1,GOBRD11:31;
   then consider r,s such that
-A15: p = |[r,s]| and
-A16: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s by A2,A4;
-      p`2 = s by A15,EUCLID:56;
-  then N < p`2 & p`2 <= N by A4,A9,A16,PSCOMP_1:71,XXREAL_0:2;
+A16: p = |[r,s]| and
+A17: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & G*(1,width G)`2 <= s by A3,A5;
+      p`2 = s by A16,EUCLID:56;
+  then N < p`2 & p`2 <= N by A5,A10,A17,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
 end;
 end;
@@ -887,60 +887,60 @@ end;
 theorem
   j <= len Gauge(C,n) implies cell(Gauge(C,n),len Gauge(C,n),j) misses C
 proof set G = Gauge(C,n);
-A100: j in NAT by ORDINAL1:def 13;
+A1: j in NAT by ORDINAL1:def 13;
  assume
-A1:  j <= len G;
-A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+A2:  j <= len G;
+A3:  len G = 2|^n + (1+2) & len G = width G by Def1;
  assume cell(G,len G,j) /\ C <> {};
  then consider p such that
-A3: p in cell(G,len G,j) /\ C by SUBSET_1:10;
-A4: p in cell(G,len G,j) & p in C by A3,XBOOLE_0:def 3;
+A4: p in cell(G,len G,j) /\ C by SUBSET_1:10;
+A5: p in cell(G,len G,j) & p in C by A4,XBOOLE_0:def 3;
      4 <= len G by Th13;
-then A5: 1 <= len G by XXREAL_0:2;
+then A6: 1 <= len G by XXREAL_0:2;
   set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
   set EW = (E-W)/(2|^n);
-      [len G,1] in Indices G by A2,A5,GOBOARD7:10;
-  then A6: G*(len G,1) = |[W+EW*((len G)-2), S+((N-S)/(2|^n))*(1-2)]| by Def1;
-A7:  2|^n > 0 by NEWTON:102;
+      [len G,1] in Indices G by A3,A6,GOBOARD7:10;
+  then A7: G*(len G,1) = |[W+EW*((len G)-2), S+((N-S)/(2|^n))*(1-2)]| by Def1;
+A8:  2|^n > 0 by NEWTON:102;
       E > W by Th11;
   then E-W > 0 by XREAL_1:52;
-then A8:  EW > 0 by A7,REAL_2:127;
-    EW*((len G)-2) = EW*(2|^n) + EW*1 by A2
-                      .= E-W+EW by A7,XCMPLX_1:88;
-   then G*(len G,1)`1 = E + EW by A6,EUCLID:56;
-then A9:  G*(len G,1)`1 > E by A8,XREAL_1:31;
+then A9:  EW > 0 by A8,REAL_2:127;
+    EW*((len G)-2) = EW*(2|^n) + EW*1 by A3
+                      .= E-W+EW by A8,XCMPLX_1:88;
+   then G*(len G,1)`1 = E + EW by A7,EUCLID:56;
+then A10:  G*(len G,1)`1 > E by A9,XREAL_1:31;
       j = 0 or j > 0 by NAT_1:3;
-then A10: j = 0 or j >= 1+0 by NAT_1:9;
- per cases by A1,A10,REAL_1:def 5;
+then A11: j = 0 or j >= 1+0 by NAT_1:9;
+ per cases by A2,A11,REAL_1:def 5;
  suppose j = 0;
   then cell(G,len G,j) = {|[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2}
     by GOBRD11:27;
   then consider r,s such that
-A11: p = |[r,s]| and
-A12: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A4;
-      p`1 = r by A11,EUCLID:56;
-  then E < p`1 & p`1 <= E by A4,A9,A12,PSCOMP_1:71,XXREAL_0:2;
+A12: p = |[r,s]| and
+A13: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A5;
+      p`1 = r by A12,EUCLID:56;
+  then E < p`1 & p`1 <= E by A5,A10,A13,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose j = len G;
    then cell(G,len G,j)={|[r,s]| : G*(len G,1)`1 <= r & G*(1,width G)`2 <= s}
-     by A2,GOBRD11:28;
+     by A3,GOBRD11:28;
   then consider r,s such that
-A13: p = |[r,s]| and
-A14: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A4;
-      p`1 = r by A13,EUCLID:56;
-  then E < p`1 & p`1 <= E by A4,A9,A14,PSCOMP_1:71,XXREAL_0:2;
+A14: p = |[r,s]| and
+A15: G*(len G,1)`1 <= r & G*(1,width G)`2 <= s by A5;
+      p`1 = r by A14,EUCLID:56;
+  then E < p`1 & p`1 <= E by A5,A10,A15,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose 1 <= j & j < len G;
   then cell(G,len G,j)
    = { |[r,s]| : G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 }
-    by A100,A2,GOBRD11:29;
+    by A1,A3,GOBRD11:29;
   then consider r,s such that
-A15: p = |[r,s]| and
-A16: G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A4;
-      p`1 = r by A15,EUCLID:56;
-  then E < p`1 & p`1 <= E by A4,A9,A16,PSCOMP_1:71,XXREAL_0:2;
+A16: p = |[r,s]| and
+A17: G*(len G,1)`1 <= r & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A5;
+      p`1 = r by A16,EUCLID:56;
+  then E < p`1 & p`1 <= E by A5,A10,A17,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
 end;
 end;
@@ -948,58 +948,58 @@ end;
 theorem
   i <= len Gauge(C,n) implies cell(Gauge(C,n),i,0) misses C
 proof set G = Gauge(C,n);
-A100: i in NAT by ORDINAL1:def 13;
+A1: i in NAT by ORDINAL1:def 13;
  assume
-A1:  i <= len G;
-A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+A2:  i <= len G;
+A3:  len G = 2|^n + (1+2) & len G = width G by Def1;
  assume cell(G,i,0) /\ C <> {};
  then consider p such that
-A3: p in cell(G,i,0) /\ C by SUBSET_1:10;
-A4: p in cell(G,i,0) & p in C by A3,XBOOLE_0:def 3;
+A4: p in cell(G,i,0) /\ C by SUBSET_1:10;
+A5: p in cell(G,i,0) & p in C by A4,XBOOLE_0:def 3;
      4 <= len G by Th13;
-then A5: 1 <= len G by XXREAL_0:2;
+then A6: 1 <= len G by XXREAL_0:2;
   set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
   set NS = (N-S)/(2|^n);
-      [1,1] in Indices G by A2,A5,GOBOARD7:10;
+      [1,1] in Indices G by A3,A6,GOBOARD7:10;
   then G*(1,1) = |[W+((E-W)/(2|^n))*(1-2), S+NS*(1-2)]| by Def1;
-then A6:  G*(1,1)`2 = S+NS*(-1) by EUCLID:56;
-A7:  2|^n > 0 by NEWTON:102;
+then A7:  G*(1,1)`2 = S+NS*(-1) by EUCLID:56;
+A8:  2|^n > 0 by NEWTON:102;
       N > S by Th12;
   then N-S > 0 by XREAL_1:52;
-  then NS > 0 by A7,REAL_2:127;
+  then NS > 0 by A8,REAL_2:127;
   then NS*(-1) < 0 * (-1) by XREAL_1:71;
-then A8:  G*(1,1)`2 < S+0 by A6,XREAL_1:8;
+then A9:  G*(1,1)`2 < S+0 by A7,XREAL_1:8;
       i = 0 or i > 0 by NAT_1:3;
-then A9: i = 0 or i >= 1+0 by NAT_1:9;
- per cases by A1,A9,REAL_1:def 5;
+then A10: i = 0 or i >= 1+0 by NAT_1:9;
+ per cases by A2,A10,REAL_1:def 5;
  suppose i = 0;
   then cell(G,i,0) ={ |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
    by GOBRD11:24;
   then consider r,s such that
-A10: p = |[r,s]| and
-A11: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A4;
-      p`2 = s by A10,EUCLID:56;
-  then S > p`2 & p`2 >= S by A4,A8,A11,PSCOMP_1:71,XXREAL_0:2;
+A11: p = |[r,s]| and
+A12: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A5;
+      p`2 = s by A11,EUCLID:56;
+  then S > p`2 & p`2 >= S by A5,A9,A12,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose i = len G;
    then cell(G,i,0)={ |[r,s]| : G*(len G,1)`1 <= r & s <= G*(1,1)`2 }
      by GOBRD11:27;
   then consider r,s such that
-A12: p = |[r,s]| and
-A13: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A4;
-      p`2 = s by A12,EUCLID:56;
-  then S > p`2 & p`2 >= S by A4,A8,A13,PSCOMP_1:71,XXREAL_0:2;
+A13: p = |[r,s]| and
+A14: G*(len G,1)`1 <= r & s <= G*(1,1)`2 by A5;
+      p`2 = s by A13,EUCLID:56;
+  then S > p`2 & p`2 >= S by A5,A9,A14,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose 1 <= i & i < len G;
   then cell(G,i,0) = { |[r,s]|: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*
-(1,1)`2 } by A100,GOBRD11:30;
+(1,1)`2 } by A1,GOBRD11:30;
   then consider r,s such that
-A14: p = |[r,s]| and
-A15: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1)`2 by A4;
-      p`2 = s by A14,EUCLID:56;
-  then S > p`2 & p`2 >= S by A4,A8,A15,PSCOMP_1:71,XXREAL_0:2;
+A15: p = |[r,s]| and
+A16: G*(i,1)`1 <= r & r <= G*(i+1,1)`1 & s <= G*(1,1)`2 by A5;
+      p`2 = s by A15,EUCLID:56;
+  then S > p`2 & p`2 >= S by A5,A9,A16,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
 end;
 end;
@@ -1007,59 +1007,59 @@ end;
 theorem
   j <= len Gauge(C,n) implies cell(Gauge(C,n),0,j) misses C
 proof set G = Gauge(C,n);
-A100: j in NAT by ORDINAL1:def 13;
+A1: j in NAT by ORDINAL1:def 13;
  assume
-A1:  j <= len G;
-A2:  len G = 2|^n + (1+2) & len G = width G by Def1;
+A2:  j <= len G;
+A3:  len G = 2|^n + (1+2) & len G = width G by Def1;
  assume cell(G,0,j) /\ C <> {};
  then consider p such that
-A3: p in cell(G,0,j) /\ C by SUBSET_1:10;
-A4: p in cell(G,0,j) & p in C by A3,XBOOLE_0:def 3;
+A4: p in cell(G,0,j) /\ C by SUBSET_1:10;
+A5: p in cell(G,0,j) & p in C by A4,XBOOLE_0:def 3;
      4 <= len G by Th13;
-then A5: 1 <= len G by XXREAL_0:2;
+then A6: 1 <= len G by XXREAL_0:2;
   set W = W-bound C, S = S-bound C, E = E-bound C, N = N-bound C;
   set EW = (E-W)/(2|^n);
-      [1,1] in Indices G by A2,A5,GOBOARD7:10;
+      [1,1] in Indices G by A3,A6,GOBOARD7:10;
   then G*(1,1) = |[W+EW*(1-2), S+((N-S)/(2|^n))*(1-2)]| by Def1;
-then A6:  G*(1,1)`1 = W+EW*(-1) by EUCLID:56;
-A7:  2|^n > 0 by NEWTON:102;
+then A7:  G*(1,1)`1 = W+EW*(-1) by EUCLID:56;
+A8:  2|^n > 0 by NEWTON:102;
       E > W by Th11;
   then E-W > 0 by XREAL_1:52;
-  then EW > 0 by A7,REAL_2:127;
+  then EW > 0 by A8,REAL_2:127;
   then EW*(-1) < 0 * (-1) by XREAL_1:71;
-then A8:  G*(1,1)`1 < W+0 by A6,XREAL_1:8;
+then A9:  G*(1,1)`1 < W+0 by A7,XREAL_1:8;
       j = 0 or j > 0 by NAT_1:3;
-then A9: j = 0 or j >= 1+0 by NAT_1:9;
- per cases by A1,A9,REAL_1:def 5;
+then A10: j = 0 or j >= 1+0 by NAT_1:9;
+ per cases by A2,A10,REAL_1:def 5;
  suppose j = 0;
   then cell(G,0,j) = { |[r,s]| : r <= G*(1,1)`1 & s <= G*(1,1)`2 }
    by GOBRD11:24;
   then consider r,s such that
-A10: p = |[r,s]| and
-A11: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A4;
-      p`1 = r by A10,EUCLID:56;
-  then W > p`1 & p`1 >= W by A4,A8,A11,PSCOMP_1:71,XXREAL_0:2;
+A11: p = |[r,s]| and
+A12: r <= G*(1,1)`1 & s <= G*(1,1)`2 by A5;
+      p`1 = r by A11,EUCLID:56;
+  then W > p`1 & p`1 >= W by A5,A9,A12,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose j = len G;
    then cell(G,0,j)={ |[r,s]| : r <= G*(1,1)`1 & G*(1,width G)`2 <= s }
-     by A2,GOBRD11:25;
+     by A3,GOBRD11:25;
   then consider r,s such that
-A12: p = |[r,s]| and
-A13: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A4;
-      p`1 = r by A12,EUCLID:56;
-  then W > p`1 & p`1 >= W by A4,A8,A13,PSCOMP_1:71,XXREAL_0:2;
+A13: p = |[r,s]| and
+A14: r <= G*(1,1)`1 & G*(1,width G)`2 <= s by A5;
+      p`1 = r by A13,EUCLID:56;
+  then W > p`1 & p`1 >= W by A5,A9,A14,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
  end;
  suppose 1 <= j & j < len G;
   then cell(G,0,j) = { |[r,s]| : r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <=
  G*(1,j+1)`2 }
-    by A100,A2,GOBRD11:26;
+    by A1,A3,GOBRD11:26;
   then consider r,s such that
-A14: p = |[r,s]| and
-A15: r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A4;
-      p`1 = r by A14,EUCLID:56;
-  then W > p`1 & p`1 >= W by A4,A8,A15,PSCOMP_1:71,XXREAL_0:2;
+A15: p = |[r,s]| and
+A16: r <= G*(1,1)`1 & G*(1,j)`2 <= s & s <= G*(1,j+1)`2 by A5;
+      p`1 = r by A15,EUCLID:56;
+  then W > p`1 & p`1 >= W by A5,A9,A16,PSCOMP_1:71,XXREAL_0:2;
   hence contradiction;
 end;
 end;

@@ -10,18 +10,19 @@ environ
       RELAT_1, LATTICE3, ROBBINS1, OPOSET_1, MIDSP_1, VECTSP_2, FILTER_1,
       REALSET1, RELAT_2, WAYBEL_0, WAYBEL_1, YELLOW_0, SHEFFER1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, BINOP_1, RELAT_1, RELSET_1, PARTFUN1,
-      RELAT_2, FUNCT_2, STRUCT_0, LATTICE3, LATTICES, ORDERS_1, ORDERS_2,
-      FILTER_1, VECTSP_2, MIDSP_1, ROBBINS1, QMAX_1, OPOSET_1, WAYBEL_0,
-      WAYBEL_1, YELLOW_0, SHEFFER1;
+      RELAT_2, FUNCT_2, FUNCT_5, STRUCT_0, LATTICE3, LATTICES, ORDERS_1,
+      ORDERS_2, FILTER_1, VECTSP_2, MIDSP_1, ROBBINS1, QMAX_1, OPOSET_1,
+      WAYBEL_0, WAYBEL_1, YELLOW_0, SHEFFER1;
  constructors BINOP_1, MIDSP_1, VECTSP_2, REALSET2, LATTICE3, WAYBEL_1,
-      YELLOW_6, OPOSET_1, SHEFFER1;
+      YELLOW_6, OPOSET_1, SHEFFER1, FUNCT_5, VALUED_1, PARTFUN1, SEQ_1;
  registrations SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, REALSET1,
-      STRUCT_0, LATTICES, YELLOW_0, YELLOW_1, ROBBINS1, OPOSET_1, SHEFFER1;
+      STRUCT_0, LATTICES, YELLOW_0, YELLOW_1, ROBBINS1, OPOSET_1, SHEFFER1,
+      VALUED_1;
  requirements SUBSET, BOOLE;
- definitions LATTICES, RELAT_2, TARSKI;
+ definitions LATTICES, RELAT_2, TARSKI, VALUED_1;
  theorems ZFMISC_1, STRUCT_0, LATTICE3, RELAT_1, FILTER_1, LATTICES, OPOSET_1,
       ORDERS_1, RELSET_1, ROBBINS1, PARTFUN1, RELAT_2, YELLOW_0, ORDERS_2,
-      WAYBEL_9, WAYBEL_1, FUNCT_2, REALSET1, YELLOW_7, SHEFFER1;
+      WAYBEL_9, WAYBEL_1, FUNCT_2, REALSET1, YELLOW_7, SHEFFER1, CARD_1;
 
 begin :: Another short axiomatization of lattices
       :: Originally proved by McCune with the help of OTTER
@@ -55,16 +56,16 @@ A1: L is meet-Associative join-Associative meet-Absorbing join-absorbing;
 A2: for x being Element of L holds x "/\" x = x
     proof
       let a be Element of L;
-       a = a "/\" (a "\/" a) by LATTICES:def 9,A1;
-      hence thesis by Def3,A1;
+       a = a "/\" (a "\/" a) by A1,LATTICES:def 9;
+      hence thesis by A1,Def3;
     end;
      for x being Element of L holds x "\/" x = x
     proof
       let a be Element of L;
-       a = a "\/" (a "/\" a) by Def3,A1;
-      hence thesis by LATTICES:def 9,A1;
+       a = a "\/" (a "/\" a) by A1,Def3;
+      hence thesis by A1,LATTICES:def 9;
     end;
-    hence thesis by A2,SHEFFER1:def 9,ROBBINS1:def 7;
+    hence thesis by A2,ROBBINS1:def 7,SHEFFER1:def 9;
   end;
 
 theorem Th2:
@@ -79,24 +80,24 @@ then A2: L is join-idempotent meet-idempotent by Th1;
 A3: for x,y being Element of L holds  x "/\" y = y "/\" x
     proof
       let a,b be Element of L;
-       a "/\" b = a "/\" (b "/\" (b "\/" a)) by LATTICES:def 9,A1
-              .= b "/\" (a "/\" (b "\/" a)) by Def2,A1
+       a "/\" b = a "/\" (b "/\" (b "\/" a)) by A1,LATTICES:def 9
+              .= b "/\" (a "/\" (b "\/" a)) by A1,Def2
               .= b "/\" (a "/\" (b "\/" (a "\/" a))) by A2,ROBBINS1:def 7
-              .= b "/\" (a "/\" (a "\/" (b "\/" a))) by Def1,A1
+              .= b "/\" (a "/\" (a "\/" (b "\/" a))) by A1,Def1
               .= b "/\" a by A1,LATTICES:def 9;
       hence thesis;
     end;
      for x,y being Element of L holds  x "\/" y = y "\/" x
     proof
       let a,b be Element of L;
-       a "\/" b = a "\/" (b "\/" (b "/\" a)) by Def3,A1
-              .= b "\/" (a "\/" (b "/\" a)) by Def1,A1
+       a "\/" b = a "\/" (b "\/" (b "/\" a)) by A1,Def3
+              .= b "\/" (a "\/" (b "/\" a)) by A1,Def1
               .= b "\/" (a "\/" (b "/\" (a "/\" a))) by A2,SHEFFER1:def 9
-              .= b "\/" (a "\/" (a "/\" (b "/\" a))) by Def2,A1
-              .= b "\/" a  by Def3,A1;
+              .= b "\/" (a "\/" (a "/\" (b "/\" a))) by A1,Def2
+              .= b "\/" a  by A1,Def3;
       hence thesis;
     end;
-    hence thesis by A3,LATTICES:def 6,LATTICES:def 4;
+    hence thesis by A3,LATTICES:def 4,def 6;
   end;
 
 theorem Th3:
@@ -111,9 +112,9 @@ then A2: L is meet-commutative join-commutative by Th2;
      for x,y being Element of L holds (x "/\" y) "\/" y = y
     proof
       let a,b be Element of L;
-       b = b "\/" (b "/\" a) by Def3,A1
+       b = b "\/" (b "/\" a) by A1,Def3
        .= b "\/" (a "/\" b) by A2,LATTICES:def 6
-       .= (a "/\" b) "\/" b by LATTICES:def 4,A2;
+       .= (a "/\" b) "\/" b by A2,LATTICES:def 4;
       hence thesis;
     end;
     hence thesis by LATTICES:def 8;
@@ -132,7 +133,7 @@ A3: for x,y,z being Element of L holds x "/\" (y "/\" z) = (x "/\" y) "/\" z
     proof
       let a,b,c be Element of L;
        a "/\" (b "/\" c) = a "/\" (c "/\" b) by A2,LATTICES:def 6
-                        .= c "/\" (a "/\" b) by Def2,A1
+                        .= c "/\" (a "/\" b) by A1,Def2
                         .= (a "/\" b) "/\" c by A2,LATTICES:def 6;
       hence thesis;
     end;
@@ -140,11 +141,11 @@ A3: for x,y,z being Element of L holds x "/\" (y "/\" z) = (x "/\" y) "/\" z
     proof
       let a,b,c be Element of L;
        a "\/" (b "\/" c) = a "\/" (c "\/" b) by A2,LATTICES:def 4
-                        .= c "\/" (a "\/" b) by Def1,A1
+                        .= c "\/" (a "\/" b) by A1,Def1
                         .= (a "\/" b) "\/" c by A2,LATTICES:def 4;
       hence thesis;
     end;
-    hence thesis by A3,LATTICES:def 5,LATTICES:def 7;
+    hence thesis by A3,LATTICES:def 5,def 7;
   end;
 
 theorem Th5:
@@ -160,7 +161,7 @@ A1: L is Lattice-like implies
 A2:  L is Lattice-like;
 then A3:  L is meet-absorbing join-absorbing by LATTICES:def 10;
 A4:  L is meet-associative meet-commutative
-        join-associative join-commutative by LATTICES:def 10,A2;
+        join-associative join-commutative by A2,LATTICES:def 10;
 A5:  for x,y,z being Element of L holds
         x "\/" (y "\/" z) = y "\/" (x "\/" z)
       proof
@@ -187,7 +188,7 @@ A6:  for x,y,z being Element of L holds
          .= a "\/" (a "/\" b) by A4,LATTICES:def 4;
         hence thesis;
       end;
-      hence thesis by LATTICES:def 10,A2,Def3,Def2,A6,Def1,A5;
+      hence thesis by A2,A5,A6,Def1,Def2,Def3,LATTICES:def 10;
     end;
      L is meet-Associative join-Associative meet-Absorbing join-absorbing
       implies
@@ -196,8 +197,8 @@ A6:  for x,y,z being Element of L holds
       assume
 A7:  L is meet-Associative join-Associative meet-Absorbing join-absorbing;
 then A8:  L is meet-commutative join-commutative by Th2;
-A9:  L is meet-associative join-associative by Th4,A7;
-       L is meet-absorbing by Th3,A7;
+A9:  L is meet-associative join-associative by A7,Th4;
+       L is meet-absorbing by A7,Th3;
       hence thesis by A7,A8,A9,LATTICES:def 10;
     end;
     hence thesis by A1;
@@ -309,13 +310,13 @@ end;
 
 definition
   func TrivLattRelStr -> LattRelStr equals
-     LattRelStr (# {{}}, op2, op2, id {{}} #);
+     LattRelStr (# 1, op2, op2, id 1 #);
   coherence;
 end;
 
 registration
   cluster TrivLattRelStr -> non empty trivial;
-  coherence by STRUCT_0:def 1,STRUCT_0:def 9;
+  coherence by CARD_1:87,STRUCT_0:def 1,def 9;
 end;
 
 registration
@@ -351,9 +352,9 @@ theorem
     assume
 A1: i is_reflexive_in c & i is antisymmetric transitive;
 then A2: field i = c by OPOSET_1:7;
-then A3: i is_antisymmetric_in c by RELAT_2:def 12,A1;
-     i is_transitive_in field i by RELAT_2:def 16,A1;
-    hence thesis by A3,A1,A2,ORDERS_2:def 5,ORDERS_2:def 6,ORDERS_2:def 4;
+then A3: i is_antisymmetric_in c by A1,RELAT_2:def 12;
+     i is_transitive_in field i by A1,RELAT_2:def 16;
+    hence thesis by A1,A2,A3,ORDERS_2:def 4,def 5,def 6;
   end;
 
 registration
@@ -459,7 +460,7 @@ end;
 
 definition
   func TrivCLRelStr -> OrthoLattRelStr equals
-     OrthoLattRelStr (# {{}}, op2, op2, id {{}}, op1 #);
+     OrthoLattRelStr (# 1, op2, op2, id 1, op1 #);
   coherence;
 end;
 
@@ -499,7 +500,7 @@ end;
 
 registration
   cluster TrivCLRelStr -> non empty trivial;
-  coherence by STRUCT_0:def 1,STRUCT_0:def 9;
+  coherence by CARD_1:87,STRUCT_0:def 1,def 9;
 end;
 
 registration
@@ -509,8 +510,8 @@ registration
      for x being Element of TrivCLRelStr holds x <= x
     proof
       let x be Element of TrivCLRelStr;
-       [x,x] in id {{}} by RELAT_1:def 10;
-      hence thesis by ORDERS_2:def 9;
+       [x,x] in id {{}} by CARD_1:87,RELAT_1:def 10;
+      hence thesis by CARD_1:87,ORDERS_2:def 9;
     end;
     hence thesis by YELLOW_0:def 1;
   end;
@@ -564,7 +565,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
-   x' |_| y' = y' |_| x' by A1, LATTICES:def 4;
+   x' |_| y' = y' |_| x' by A1,LATTICES:def 4;
       hence thesis by A1;
     end;
     hence thesis;
@@ -584,7 +585,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
-   x' "/\" y' = y' "/\" x' by A1, LATTICES:def 6;
+   x' "/\" y' = y' "/\" x' by A1,LATTICES:def 6;
       hence thesis by A1;
     end;
     hence thesis;
@@ -604,7 +605,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y, z be Element of L;
       reconsider x' = x, y' = y, z' = z as Element of K by A1;
-   (x' |_| y') |_| z' = x' |_| (y' |_| z') by A1, LATTICES:def 5;
+   (x' |_| y') |_| z' = x' |_| (y' |_| z') by A1,LATTICES:def 5;
       hence thesis by A1;
     end;
     hence thesis;
@@ -624,7 +625,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y, z be Element of L;
       reconsider x' = x, y' = y, z' = z as Element of K by A1;
-   (x' "/\" y') "/\" z' = x' "/\" (y' "/\" z') by A1, LATTICES:def 7;
+   (x' "/\" y') "/\" z' = x' "/\" (y' "/\" z') by A1,LATTICES:def 7;
       hence thesis by A1;
     end;
     hence thesis;
@@ -644,7 +645,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
-   x' "/\" (x' "\/" y') = x' by A1, LATTICES:def 9;
+   x' "/\" (x' "\/" y') = x' by A1,LATTICES:def 9;
       hence thesis by A1;
     end;
     hence thesis;
@@ -664,7 +665,7 @@ A1: the LattStr of K = the LattStr of L &
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
-   (x' "/\" y') "\/" y' = y' by A1, LATTICES:def 8;
+   (x' "/\" y') "\/" y' = y' by A1,LATTICES:def 8;
       hence thesis by A1;
     end;
     hence thesis;
@@ -685,7 +686,7 @@ A1: the LattStr of K = the LattStr of L &
       by LATTICES:def 10;
     then L is join-commutative join-associative meet-absorbing
          meet-commutative meet-associative join-absorbing
-      by A1, Th13, Th14, Th11, Th12, Th9, Th10;
+      by A1,Th9,Th10,Th11,Th12,Th13,Th14;
     hence thesis by LATTICES:def 10;
   end;
 
@@ -738,7 +739,7 @@ A1: the ComplLattStr of K = the ComplLattStr of L &
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
        x |_| x` = x' |_| x'` by A1,Th18
-              .= y' |_| y'` by A1, Def7
+              .= y' |_| y'` by A1,Def7
               .= y |_| y` by A1,Th18;
       hence thesis;
     end;
@@ -759,11 +760,11 @@ A1: the OrthoLattStr of K = the OrthoLattStr of L &
     proof
       let x, y be Element of L;
       reconsider x' = x, y' = y as Element of K by A1;
-A2:   x` = x'` & y` = y'` by A1, Th18;
+A2:   x` = x'` & y` = y'` by A1,Th18;
       reconsider z = x` "\/" y` as Element of K by A1;
        x "/\" y = x' "/\" y' by A1
-              .= (x'` "\/" y'`)` by A1, ROBBINS1:def 23
-              .= (x` "\/" y`)` by A2,A1,Th18;
+              .= (x'` "\/" y'`)` by A1,ROBBINS1:def 23
+              .= (x` "\/" y`)` by A1,A2,Th18;
       hence thesis;
     end;
     hence thesis by ROBBINS1:def 23;
@@ -783,7 +784,7 @@ A1: the OrthoLattStr of K = the OrthoLattStr of L &
     proof
       let x be Element of L;
       reconsider x' = x as Element of K by A1;
-       x` = x'` by A1, Th18;
+       x` = x'` by A1,Th18;
       then x`` = x'`` by A1,Th18
          .= x by A1,Def6;
       hence thesis;
@@ -1001,7 +1002,7 @@ A3: for x being Element of L' holds x`` = x by STRUCT_0:def 10;
         x` |_| x = Top L' & x` |^| x = Bottom L' by STRUCT_0:def 10;
       hence thesis by LATTICES:def 18;
     end;
-    hence thesis by Def7,A1,A2,A3,Def6,ROBBINS1:def 10,ROBBINS1:def 23;
+    hence thesis by A1,A2,A3,Def6,Def7,ROBBINS1:def 10,def 23;
   end;
 end;
 
@@ -1029,7 +1030,7 @@ A3:   f.z = x by A1,FUNCT_2:65;
     then f is antitone by WAYBEL_9:def 1;
 then A4: f is Orderinvolutive by A2,OPOSET_1:def 32;
      L' is Dneg by A2,OPOSET_1:def 6;
-    hence thesis by A4,OPOSET_1:def 26,OPOSET_1:def 33;
+    hence thesis by A4,OPOSET_1:def 26,def 33;
   end;
 end;
 
@@ -1135,7 +1136,7 @@ registration
       (non empty LattRelStr);
      LattPOSet L' is with_suprema with_infima;
     then the RelStr of L' is with_suprema with_infima by Th23;
-    hence thesis by YELLOW_7:15,14;
+    hence thesis by YELLOW_7:14,15;
   end;
 end;
 
@@ -1464,8 +1465,8 @@ A1: for x,y being Element of L holds x` "|_|" y` <= ( x "|^|" y )`
        i <= a & i <= b by YELLOW_0:23;
 then A2:  a` <= i` & b` <= i` by Th7;
 then A3:  s <= i` "|_|" b` by WAYBEL_1:3;
-       i` = b` "|_|" i` by Th24,A2;
-      hence thesis by LATTICE3:13,A3;
+       i` = b` "|_|" i` by A2,Th24;
+      hence thesis by A3,LATTICE3:13;
     end;
 A4: for x,y being Element of L holds ( x "|_|" y )` <= x` "|^|" y`
     proof
@@ -1475,7 +1476,7 @@ A4: for x,y being Element of L holds ( x "|_|" y )` <= x` "|^|" y`
        a <= s & b <= s by YELLOW_0:22;
 then A5:  s` <= a` & s` <= b` by Th7;
       then s` "|^|" b` <= i by WAYBEL_1:2;
-      hence thesis by Th24,A5;
+      hence thesis by A5,Th24;
     end;
      L is de_Morgan
     proof
@@ -1584,7 +1585,7 @@ A8:   for a being Element of L' st the carrier of L' is_<=_than a holds
        "\/"({y,f.y},L') = "\/"({y,y`},L') by ROBBINS1:def 3
                       .= y "|_|" y` by YELLOW_0:41
                       .= y |_| y` by Th25
-                      .= xx by A8,A7,A6,YELLOW_0:def 9;
+                      .= xx by A6,A7,A8,YELLOW_0:def 9;
       hence "\/"({y,f.y},L') is_maximum_of the carrier of L'
         by A7,WAYBEL_1:def 7;
 A9:   for a, b being Element of L' holds
@@ -1618,7 +1619,7 @@ A12:   for a being Element of L' st the carrier of L' is_>=_than a holds
        "/\"({y,f.y},L') = "/\"({y,y`},L') by ROBBINS1:def 3
                       .= y "|^|" y` by YELLOW_0:40
                       .= y |^| y` by Th26
-                      .= xx by A12,A11,A10,YELLOW_0:def 10;
+                      .= xx by A10,A11,A12,YELLOW_0:def 10;
       hence "/\"({y,f.y},L') is_minimum_of the carrier of L'
         by A11,WAYBEL_1:def 6;
     end;
@@ -1651,7 +1652,7 @@ A2: for x, y being Element of L' holds
       x |_| x` = y |_| y` by ROBBINS1:4;
      for x, y being Element of L' holds
       x "/\" y = (x` "\/" y`)` by ROBBINS1:34;
-    hence thesis by A1,A2,ROBBINS1:def 23,Def6,Def7;
+    hence thesis by A1,A2,Def6,Def7,ROBBINS1:def 23;
   end;
 
 registration

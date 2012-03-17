@@ -24,14 +24,14 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="INT_1"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="FINSEQ_6"/>
 <ArticleID name="TOPREAL1"/>
@@ -43,24 +43,20 @@
 <Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="96">
+<Adjective nr="111">
 <Func kind="U" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="247">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="97"/>
-<Adjective nr="98">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="102">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="103"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="247">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -68,11 +64,11 @@
 </ArgTypes>
 <Func kind="K" nr="16">
 <Func kind="U" nr="1">
-<Func kind="K" nr="202">
+<Func kind="K" nr="247">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="261">
+<Func kind="K" nr="295">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>

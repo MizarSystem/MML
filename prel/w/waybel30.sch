@@ -45,13 +45,13 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="20"/>
-<Adjective nr="42"/>
+<Adjective nr="21"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="112"/>
+<Adjective nr="45"/>
 <Adjective nr="113"/>
-<Adjective nr="139"/>
+<Adjective nr="114"/>
+<Adjective nr="140"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

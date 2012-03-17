@@ -22,16 +22,16 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
@@ -42,7 +42,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="248">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -56,19 +56,15 @@
 <Adjective nr="20"/>
 <Adjective nr="25">
 <Func kind="U" nr="1">
-<Func kind="K" nr="248">
+<Func kind="K" nr="282">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="97"/>
-<Adjective nr="98">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="102">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="103"/>
+<Adjective nr="112"/>
+<Adjective nr="113"/>
+<Adjective nr="117"/>
+<Adjective nr="118"/>
 </Cluster>
 </RCluster>
 </Registrations>

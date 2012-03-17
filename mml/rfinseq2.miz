@@ -9,16 +9,18 @@ environ
  vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, FUNCT_2, FINSEQ_1, ARYTM_1,
       SQUARE_1, PROB_1, RFINSEQ, RFINSEQ2, CQC_LANG, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0, XXREAL_0,
-      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, REAL_1, NAT_1, SEQ_1, RVSUM_1,
-      FUNCOP_1, RFINSEQ, INTEGRA2;
- constructors FUNCOP_1, REAL_1, NAT_1, BINOP_2, SEQM_3, RFINSEQ, INTEGRA2;
+      RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, REAL_1, NAT_1, VALUED_1, SEQ_1,
+      RVSUM_1, FUNCOP_1, RFINSEQ, INTEGRA2;
+ constructors FUNCOP_1, REAL_1, NAT_1, BINOP_2, SEQM_3, RFINSEQ, INTEGRA2,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS, XXREAL_0,
-      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, RFINSEQ, INTEGRA2, VALUED_0;
+      XREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1, RFINSEQ, INTEGRA2, VALUED_0,
+      VALUED_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions INTEGRA2;
+ definitions INTEGRA2, VALUED_1;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, REAL_1, NAT_1, FUNCT_1,
       FUNCT_2, RVSUM_1, RELAT_1, FUNCOP_1, EUCLID_2, RFINSEQ, INTEGRA2,
-      XREAL_1, XXREAL_0, SEQ_1;
+      XREAL_1, XXREAL_0, SEQ_1, VALUED_1;
  schemes NAT_1;
 
 begin
@@ -680,7 +682,8 @@ proof let f1,f2 be FinSequence of REAL;
   then A2: len (f1+f2)=len f1 by EUCLID_2:6;
     then A3: max_p (f1+f2) in dom (f1+f2) by A1,Def1;
     then A4: 1<=max_p (f1+f2) & max_p (f1+f2)<=len (f1+f2) by FINSEQ_3:27;
-    A5: max (f1+f2)=f1.(max_p (f1+f2)) + f2.(max_p (f1+f2)) by A3,SEQ_1:def 3;
+    A5: max (f1+f2)=f1.(max_p (f1+f2)) + f2.(max_p (f1+f2)) by A3,VALUED_1:1
+,def 1;
     A6: max_p (f1+f2) in Seg len f1 by A2,A4,FINSEQ_1:3;
     then max_p (f1+f2) in dom f1 by FINSEQ_1:def 3;
     then A7: f1.(max_p (f1+f2))<=f1.(max_p f1) by A1,Def1;
@@ -696,7 +699,8 @@ proof let f1,f2 be FinSequence of REAL;
   then A2: len (f1+f2)=len f1 by EUCLID_2:6;
   then A3: min_p (f1+f2) in dom (f1+f2) by A1,Def2;
   then A4: 1<=min_p (f1+f2) & min_p (f1+f2)<=len (f1+f2) by FINSEQ_3:27;
-  A5: min (f1+f2)=f1.(min_p (f1+f2)) + f2.(min_p (f1+f2)) by A3,SEQ_1:def 3;
+  A5: min (f1+f2)=f1.(min_p (f1+f2)) + f2.(min_p (f1+f2)) by A3,VALUED_1:1
+,def 1;
   A6: min_p (f1+f2) in Seg len f1 by A2,A4,FINSEQ_1:3;
   then min_p (f1+f2) in dom f1 by FINSEQ_1:def 3;
   then A7: f1.(min_p (f1+f2))>=f1.(min_p f1) by A1,Def2;
@@ -710,7 +714,7 @@ holds max (a*f)=a*(max f) & max_p (a*f)=max_p f
 proof let f be FinSequence of REAL, a be Real;
  assume A1: len f>0 & a>0;
   A2: len (a*f)=len f by EUCLID_2:8;
-  A3: dom (a*f)=dom f by SEQ_1:def 6;
+  A3: dom (a*f)=dom f by VALUED_1:7,def 5;
   A4: max_p (a*f) in dom (a*f) by A1,A2,Def1;
   then A5: 1<=max_p (a*f) & max_p (a*f)<=len (a*f) by FINSEQ_3:27;
   A6: max (a*f)=a*(f.(max_p (a*f))) by RVSUM_1:66;
@@ -740,7 +744,7 @@ holds min (a*f)=a*(min f) & min_p (a*f)=min_p f
 proof let f be FinSequence of REAL, a be Real;
  assume A1: len f>0 & a>0;
   A2: len (a*f)=len f by EUCLID_2:8;
-  A3: dom (a*f)=dom f by SEQ_1:def 6;
+  A3: dom (a*f)=dom f by VALUED_1:7,def 5;
   A4: min_p (a*f) in dom (a*f) by A1,A2,Def2;
   then A5: 1<=min_p (a*f) & min_p (a*f)<=len (a*f) by FINSEQ_3:27;
   A6: min (a*f)=a*(f.(min_p (a*f))) by RVSUM_1:66;
@@ -769,7 +773,7 @@ holds max (-f)=-(min f) & max_p (-f)=min_p f
 proof let f be FinSequence of REAL;
  assume A1: len f>0;
   A2: len (-f)=len f by EUCLID_2:5;
-  A3: dom (-f)=dom f by SEQ_1:def 7;
+  A3: dom (-f)=dom f by VALUED_1:8;
   A4: max_p (-f) in dom (-f) by A1,A2,Def1;
   then A5: 1<=max_p (-f) & max_p (-f)<=len (-f) by FINSEQ_3:27;
   A6: max (-f)=-(f.(max_p (-f))) by RVSUM_1:35;
@@ -797,7 +801,7 @@ holds min (-f)=-(max f) & min_p (-f)=max_p f
 proof let f be FinSequence of REAL;
  assume A1: len f>0;
   A2: len (-f)=len f by EUCLID_2:5;
-  A3: dom (-f)=dom f by SEQ_1:def 7;
+  A3: dom (-f)=dom f by VALUED_1:8;
   A4: min_p (-f) in dom (-f) by A1,A2,Def2;
   then A5: 1<=min_p (-f) & min_p (-f)<=len (-f) by FINSEQ_3:27;
   A6: min (-f)=-(f.(min_p (-f))) by RVSUM_1:35;
@@ -1145,7 +1149,7 @@ func sort_a f -> non-decreasing FinSequence of REAL means
 ::Ascend Sorting or Rearrangement of FinSequences
 :Def6: f,it are_fiberwise_equipotent;
 existence by INTEGRA2:3;
-uniqueness by RFINSEQ:2,Th19;
+uniqueness by Th19,RFINSEQ:2;
 end;
 
 theorem    for f being non-increasing FinSequence of REAL
@@ -1168,7 +1172,7 @@ proof let f be FinSequence of REAL;
          (-f).n <= (-f).(n+1)
   proof let n be Element of NAT;
    assume A2: n in dom (-f) & n+1 in dom (-f);
-       dom (-f)=dom f by SEQ_1:def 7;
+       dom (-f)=dom f by VALUED_1:8;
     then A3: f.n >= f.(n+1) by A1,A2,RFINSEQ:def 4;
     A4: (-f).n=-(f.n) by RVSUM_1:35;
       (-f).(n+1)= -(f.(n+1)) by RVSUM_1:35;
@@ -1185,7 +1189,7 @@ proof let f be FinSequence of REAL;
          (-f).n >= (-f).(n+1)
   proof let n be Element of NAT;
    assume A2: n in dom (-f) & n+1 in dom (-f);
-       dom (-f)=dom f by SEQ_1:def 7;
+       dom (-f)=dom f by VALUED_1:8;
     then A3: f.n <= f.(n+1) by A1,A2,INTEGRA2:def 1;
     A4: (-f).n=-(f.n) by RVSUM_1:35;
       (-f).(n+1)= -(f.(n+1)) by RVSUM_1:35;
@@ -1202,8 +1206,8 @@ proof let f,g be FinSequence of REAL,P be Permutation of dom g;
   A3: dom g=Seg len g by FINSEQ_1:def 3;
   then 1 in dom g by A1,FINSEQ_1:3;
   then A4: dom P=dom g by FUNCT_2:def 1;
-  A5: dom (-g)=dom g by SEQ_1:def 7;
-  A6: dom (-f)=dom (g*P) by A1,SEQ_1:def 7;
+  A5: dom (-g)=dom g by VALUED_1:8;
+  A6: dom (-f)=dom (g*P) by A1,VALUED_1:8;
   then A7: dom (-f)=dom P by A2,RELAT_1:46;
   then A8: dom (-f)=dom ((-g)*P) by A2,A5,RELAT_1:46;
   A9: rng ((-g)*P) = rng (-g) by A2,A5,RELAT_1:47;
@@ -1228,7 +1232,7 @@ proof let f,g be FinSequence of REAL;
  assume A1: f,g are_fiberwise_equipotent;
   then consider P being Permutation of dom g such that
   A2: f = g*P by RFINSEQ:17;
-  A3: dom (-g)=dom g by SEQ_1:def 7;
+  A3: dom (-g)=dom g by VALUED_1:8;
      now per cases;
   case len g>=1;
    hence -f=(-g)*P by A2,Th26;

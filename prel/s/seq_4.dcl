@@ -25,20 +25,20 @@
 <Adjective nr="4"/>
 <Adjective nr="6"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
 </Adjective>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
 </Adjective>
 <Adjective nr="28"/>
 </Cluster>

@@ -10,23 +10,25 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, COMPLEX1, ABSVALUE, ARYTM_3,
       SQUARE_1, COMPLFLD, HAHNBAN, FUNCT_1, SUBSET_1, FUNCOP_1, GRCAT_1,
       UNIALG_1, BINOP_1, LATTICES, ALGSTR_2, RLSUB_1, RELAT_1, BOOLE, HAHNBAN1,
-      XCMPLX_0, ARYTM, GROUP_1, REALSET1, POWER, VECTSP_2;
+      XCMPLX_0, ARYTM, GROUP_1, REALSET1, POWER, VECTSP_2, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, REALSET1, NUMBERS,
       ARYTM_0, XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, SQUARE_1, POWER,
-      STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4, FUNCT_1,
-      FUNCT_2, BINOP_1, RELSET_1, NATTRA_1, BORSUK_1, HAHNBAN, COMPLFLD,
-      XXREAL_0;
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, RLSUB_1, VECTSP_4,
+      FUNCT_1, FUNCT_2, BINOP_1, RELSET_1, NATTRA_1, BORSUK_1, HAHNBAN,
+      COMPLFLD, XXREAL_0;
  constructors ARYTM_0, REAL_1, SQUARE_1, NAT_1, BINOP_2, POWER, REALSET1,
-      RLSUB_1, COMPLFLD, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN;
+      RLSUB_1, COMPLFLD, VECTSP_4, NATTRA_1, BORSUK_1, HAHNBAN, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, RELSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      MEMBERED, STRUCT_0, RLVECT_1, VECTSP_1, COMPLFLD, HAHNBAN;
+      MEMBERED, STRUCT_0, RLVECT_1, VECTSP_1, COMPLFLD, HAHNBAN, ALGSTR_0,
+      VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, RLSUB_1, HAHNBAN, SQUARE_1, BINOP_1, RLVECT_1, VECTSP_1,
-      COMPLEX1, STRUCT_0;
+      COMPLEX1, STRUCT_0, ALGSTR_0, VALUED_1;
  theorems TARSKI, ZFMISC_1, SQUARE_1, ABSVALUE, FUNCT_1, FUNCT_2, COMPLEX1,
       COMPLFLD, STRUCT_0, VECTSP_1, FUNCOP_1, RLVECT_1, BINOP_1, HAHNBAN,
       VECTSP_4, XBOOLE_0, RELAT_1, XCMPLX_1, ARYTM_0, GROUP_1, XXREAL_0,
-      XCMPLX_0, POWER;
+      XCMPLX_0, POWER, ALGSTR_0;
  schemes FUNCT_2, BINOP_1, NAT_1;
 
 begin :: Preliminaries
@@ -40,9 +42,9 @@ begin :: Preliminaries
              right-distributive (non empty doubleLoopStr);
     let x,y be Element of F;
          x*y +x*(-y) = x*(y+(-y)) by VECTSP_1:def 11
-               .= x*(0.F) by RLVECT_1:def 10
+               .= x*(0.F) by RLVECT_1:def 11
                .= 0.F by VECTSP_1:36;
-    hence x*(-y) = -x*y by RLVECT_1:def 10;
+    hence x*(-y) = -x*y by RLVECT_1:def 11;
    end;
 
   theorem
@@ -178,7 +180,7 @@ begin :: Functionals of Vector Space
   end;
 
   definition
-   let K be non empty LoopStr;
+   let K be non empty addLoopStr;
    let V be non empty VectSpStr over K;
    let f,g be Functional of V;
  canceled 3;
@@ -209,7 +211,7 @@ begin :: Functionals of Vector Space
   end;
 
   definition
-   let K be non empty LoopStr;
+   let K be non empty addLoopStr;
    let V be non empty VectSpStr over K;
    let f be Functional of V;
    func -f -> Functional of V means :Def7:
@@ -238,7 +240,7 @@ A3: for x be Element of V holds b.x = -(f.x);
   end;
 
   definition
-   let K be non empty LoopStr;
+   let K be non empty addLoopStr;
    let V be non empty VectSpStr over K;
    let f,g be Functional of V;
    func f-g -> Functional of V equals
@@ -247,7 +249,7 @@ A3: for x be Element of V holds b.x = -(f.x);
   end;
 
   definition
-   let K be non empty HGrStr;
+   let K be non empty multMagma;
    let V be non empty VectSpStr over K;
    let v be Element of K;
    let f be Functional of V;
@@ -285,7 +287,7 @@ A3: for x be Element of V holds b.x = -(f.x);
   end;
 
   definition
-   let K be non empty LoopStr;
+   let K be non empty addLoopStr;
    let V be non empty VectSpStr over K;
    let F be Functional of V;
    attr F is additive means :Def11:
@@ -293,7 +295,7 @@ A3: for x be Element of V holds b.x = -(f.x);
   end;
 
   definition
-   let K be non empty HGrStr;
+   let K be non empty multMagma;
    let V be non empty VectSpStr over K;
    let F be Functional of V;
    attr F is homogeneous means :Def12:
@@ -324,7 +326,7 @@ A3: for x be Element of V holds b.x = -(f.x);
   end;
 
   registration
-   let K be right_zeroed (non empty LoopStr);
+   let K be right_zeroed (non empty addLoopStr);
    let V be non empty VectSpStr over K;
    cluster 0Functional(V) -> additive;
    coherence
@@ -378,12 +380,12 @@ A3: for x be Element of V holds b.x = -(f.x);
 canceled 2;
 
   theorem Th20:
-   for K be Abelian (non empty LoopStr)
+   for K be Abelian (non empty addLoopStr)
    for V be non empty VectSpStr over K
    for f,g be Functional of V holds
     f+g = g+f
    proof
-    let K be Abelian (non empty LoopStr);
+    let K be Abelian (non empty addLoopStr);
     let V be non empty VectSpStr over K;
     let f,g be Functional of V;
      now let x be Element of V;
@@ -394,12 +396,12 @@ canceled 2;
    end;
 
   theorem Th21:
-   for K be add-associative (non empty LoopStr)
+   for K be add-associative (non empty addLoopStr)
    for V be non empty VectSpStr over K
    for f,g,h be Functional of V holds
     f+g+h = f+(g+h)
    proof
-    let K be add-associative (non empty LoopStr);
+    let K be add-associative (non empty addLoopStr);
     let V be non empty VectSpStr over K;
     let f,g,h be Functional of V;
          now let x be Element of V;
@@ -419,12 +421,12 @@ canceled 2;
     (0Functional(V)).x = 0.K by FUNCOP_1:13;
 
   theorem Th23:
-   for K be right_zeroed (non empty LoopStr)
+   for K be right_zeroed (non empty addLoopStr)
    for V be non empty VectSpStr over K
    for f be Functional of V holds
     f + 0Functional(V) = f
    proof
-    let K be right_zeroed (non empty LoopStr);
+    let K be right_zeroed (non empty addLoopStr);
     let V be non empty VectSpStr over K;
     let f be Functional of V;
          now let x be Element of V;
@@ -437,13 +439,13 @@ canceled 2;
 
   theorem Th24:
    for K be add-associative right_zeroed right_complementable
-            (non empty LoopStr)
+            (non empty addLoopStr)
    for V be non empty VectSpStr over K
    for f be Functional of V holds
     f-f = 0Functional(V)
    proof
     let K be add-associative right_zeroed right_complementable
-            (non empty LoopStr);
+            (non empty addLoopStr);
     let V be non empty VectSpStr over K;
     let f be Functional of V;
          now let x be Element of V;
@@ -499,13 +501,13 @@ canceled 2;
    end;
 
   theorem Th27:
-   for K be associative (non empty HGrStr)
+   for K be associative (non empty multMagma)
    for V be non empty VectSpStr over K
    for r,s be Element of K
    for f be Functional of V holds
     (r*s)*f = r*(s*f)
    proof
-    let K be associative (non empty HGrStr);
+    let K be associative (non empty multMagma);
     let V be non empty VectSpStr over K;
     let r,s be Element of K;
     let f be Functional of V;
@@ -522,13 +524,13 @@ canceled 2;
    for K be left_unital (non empty doubleLoopStr)
    for V be non empty VectSpStr over K
    for f be Functional of V holds
-    (1_K)*f = f
+    (1.K)*f = f
    proof
     let K be left_unital (non empty doubleLoopStr);
     let V be non empty VectSpStr over K;
     let f be Functional of V;
          now let x be Element of V;
-     thus ((1_K)*f).x = (1_K)*f.x by Def9
+     thus ((1.K)*f).x = (1.K)*f.x by Def9
         .= f.x by VECTSP_1:def 19;
     end;
     hence thesis by FUNCT_2:113;
@@ -658,7 +660,7 @@ begin :: The Vector Space of linear Functionals
    func V*' -> non empty strict VectSpStr over K means :Def14:
     (for x be set holds x in the carrier of it iff
                        x is linear-Functional of V) &
-    (for f,g be linear-Functional of V holds (the add of it).(f,g) = f+g) &
+    (for f,g be linear-Functional of V holds (the addF of it).(f,g) = f+g) &
     (0.it = 0Functional(V)) &
     for f be linear-Functional of V for x be Element of K holds
      (the lmult of it).(x,f) = x*f;
@@ -730,13 +732,13 @@ begin :: The Vector Space of linear Functionals
     assume that
      A11: for x be set holds x in the carrier of V1 iff
                         x is linear-Functional of V and
-     A12: for f,g be linear-Functional of V holds (the add of V1).(f,g)=f+g and
+A12: for f,g be linear-Functional of V holds (the addF of V1).(f,g)=f+g and
      A13: 0.V1 = 0Functional(V) and
      A14: for f be linear-Functional of V for x be Element of K
           holds (the lmult of V1).(x,f) = x*f and
      A15: for x be set holds x in the carrier of V2 iff
                         x is linear-Functional of V and
-     A16: for f,g be linear-Functional of V holds (the add of V2).(f,g)=f+g and
+A16: for f,g be linear-Functional of V holds (the addF of V2).(f,g)=f+g and
      A17: 0.V2 = 0Functional(V) and
      A18: for f be linear-Functional of V for x be Element of K
            holds (the lmult of V2).(x,f) = x*f;
@@ -754,10 +756,10 @@ begin :: The Vector Space of linear Functionals
     then A19: the carrier of V1 = the carrier of V2 by TARSKI:2;
          now let x,y be Element of V1;
      reconsider f=x, g=y as linear-Functional of V by A11;
-     thus (the add of V1).(x,y) = f+g by A12
-        .= (the add of V2).(x,y) by A16;
+     thus (the addF of V1).(x,y) = f+g by A12
+        .= (the addF of V2).(x,y) by A16;
     end;
-    then A20: the add of V1 = the add of V2 by A19,BINOP_1:2;
+    then A20: the addF of V1 = the addF of V2 by A19,BINOP_1:2;
          now let r be Element of K;
      let x be Element of V1;
      reconsider f=x as linear-Functional of V by A11;
@@ -792,10 +794,10 @@ begin :: The Vector Space of linear Functionals
    proof
     let u,v,w be Element of V*';
     reconsider f=u,g=v,h=w as linear-Functional of V by Def14;
-    thus u+v+w = (the add of V*').(f+g,w) by Def14
+    thus u+v+w = (the addF of V*').(f+g,w) by Def14
        .= f+g+h by Def14
        .= f+(g+h) by Th21
-       .= (the add of V*').(u,g+h) by Def14
+       .= (the addF of V*').(u,g+h) by Def14
        .= u+(v+w) by Def14;
    end;
 
@@ -804,7 +806,7 @@ begin :: The Vector Space of linear Functionals
    proof
     let x be Element of V*';
     reconsider f=x as linear-Functional of V by Def14;
-    thus x + 0.(V*') = (the add of V*').(x,0Functional(V)) by Def14
+    thus x + 0.(V*') = (the addF of V*').(x,0Functional(V)) by Def14
        .= f+0Functional(V) by Def14
        .= x by Th23;
    end;
@@ -835,19 +837,19 @@ begin :: The Vector Space of linear Functionals
     thus x*(v+w) = (the lmult of V*').(x,f+g) by Def14
        .= x*(f+g) by Def14
        .= x*f+x*g by Th25
-       .= (the add of V*').(x*f,x*g) by Def14
-       .= (the add of V*').((the lmult of V*').(x,f),x*g) by Def14
+       .= (the addF of V*').(x*f,x*g) by Def14
+       .= (the addF of V*').((the lmult of V*').(x,f),x*g) by Def14
        .= x*v+x*w by Def14;
     thus (x+y)*v = (x+y)*f by Def14
        .= x*f+y*f by Th26
-       .= (the add of V*').(x*f,y*f) by Def14
-       .= (the add of V*').((the lmult of V*').(x,f),y*f) by Def14
+       .= (the addF of V*').(x*f,y*f) by Def14
+       .= (the addF of V*').((the lmult of V*').(x,f),y*f) by Def14
        .= x*v+y*v by Def14;
     thus (x*y)*v = (x*y)*f by Def14
        .= x*(y*f) by Th27
        .= (the lmult of V*').(x,y*f) by Def14
        .= x*(y*v) by Def14;
-    thus (1_K)*v = (1_K)*f by Def14
+    thus (1.K)*v = (1.K)*f by Def14
        .= v by Th28;
    end;
   end;
@@ -1032,7 +1034,7 @@ begin :: Hahn Banach Theorem
   definition
    let V be non empty VectSpStr over F_Complex;
    func RealVS(V) -> strict RLSStruct means :Def22:
-    the LoopStr of it = the LoopStr of V &
+    the addLoopStr of it = the addLoopStr of V &
     for r be Real, v be Vector of V holds
      (the Mult of it).(r,v)=[**r,0**]*v;
    existence
@@ -1042,8 +1044,8 @@ begin :: Hahn Banach Theorem
      such that
      A1: for r be Real, v be Vector of V holds
       f.(r,v)=F(r,v) from BINOP_1:sch 4;
-    take R = RLSStruct (#the carrier of V, 0.V, the add of V, f#);
-    thus the LoopStr of R = the LoopStr of V;
+    take R = RLSStruct (#the carrier of V, 0.V, the addF of V, f#);
+    thus the addLoopStr of R = the addLoopStr of V;
     let r be Real;
     let v be Vector of V;
     thus (the Mult of R).(r,v) = [**r,0**]*v by A1;
@@ -1051,10 +1053,10 @@ begin :: Hahn Banach Theorem
    uniqueness
    proof
     let a,b be strict RLSStruct such that
-     A2: the LoopStr of a = the LoopStr of V and
+     A2: the addLoopStr of a = the addLoopStr of V and
      A3: for r be Real, v be Vector of V holds
      (the Mult of a).(r,v)=[**r,0**]*v and
-     A4: the LoopStr of b = the LoopStr of V and
+     A4: the addLoopStr of b = the addLoopStr of V and
      A5: for r be Real, v be Vector of V holds
      (the Mult of b).(r,v)=[**r,0**]*v;
          now
@@ -1071,7 +1073,7 @@ begin :: Hahn Banach Theorem
    cluster RealVS(V) -> non empty;
    coherence
    proof
-     the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     hence RealVS(V) is non empty by STRUCT_0:def 1;
    end;
   end;
@@ -1082,10 +1084,11 @@ registration
   coherence
   proof
     let v,w be Element of RealVS(V);
-A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider v1=v,w1=w as Element of V;
     thus v + w = v1 + w1 by A1
-              .= w + v by A1,RLVECT_1:def 3;
+              .= w1 + v1
+              .= w + v by A1;
   end;
 end;
 
@@ -1095,7 +1098,7 @@ registration
   coherence
   proof
     let u,v,w be Element of RealVS(V);
-A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider u1=u,v1=v,w1=w as Element of V;
     thus (u + v) + w = (u1 + v1) + w1 by A1
         .= u1 + (v1 + w1) by RLVECT_1:def 6
@@ -1109,7 +1112,7 @@ registration
   coherence
   proof
     let v be Element of RealVS(V);
-A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider v1=v as Element of V;
     thus v + 0.RealVS(V) = v1 + 0.V by A1
              .= v by RLVECT_1:def 7;
@@ -1122,10 +1125,10 @@ end;
    coherence
    proof
     let v be Element of RealVS(V);
-    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider v1=v as Element of V;
     consider w1 be Element of V such that
-     A2: v1 + w1 = 0.V by RLVECT_1:def 8;
+     A2: v1 + w1 = 0.V by ALGSTR_0:def 11;
     reconsider w=w1 as Element of RealVS(V) by A1;
     take w;
     thus v + w = 0.RealVS(V) by A1,A2;
@@ -1142,12 +1145,12 @@ end;
      proof
       let a be Real;
       let v,w be Element of RealVS(V);
-      A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       set a1=[**a,0**];
       reconsider v1=v,w1=w as Element of V by A1;
       thus a * (v + w) = [**a,0**] * (v1 + w1) by A1,Def22
             .= a1 * v1 + a1 * w1 by VECTSP_1:def 26
-            .= (the add of V).[((the Mult of RealVS(V)).(a,v1)),[**a,0**]*w1]
+            .= (the addF of V).[((the Mult of RealVS(V)).(a,v1)),[**a,0**]*w1]
                                                                        by Def22
             .= a * v + a * w by A1,Def22;
      end;
@@ -1156,14 +1159,14 @@ end;
      proof
       let a,b be Real;
       let v be Element of RealVS(V);
-      A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       set a1=[**a,0**];
       set b1=[**b,0**];
       A3: [**a,0**] + [**b,0**] = [**a+b,0**];
       reconsider v1=v as Element of V by A2;
       thus (a + b) * v = ([**a,0**] + [**b,0**]) * v1 by A3,Def22
              .= a1 * v1 + b1 * v1 by VECTSP_1:def 26
-             .= (the add of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
+             .= (the addF of RealVS(V)).[((the Mult of RealVS(V)).(a,v)),
                                                        ([**b,0**]*v1)] by A2,
 Def22
              .= a * v + b * v by Def22;
@@ -1173,7 +1176,7 @@ Def22
      proof
       let a,b be Real;
       let v be Element of RealVS(V);
-      A4: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+      A4: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
       A5: [**a*b,0**] = [**a,0**]*[**b,0**];
       reconsider v1=v as Element of V by A4;
       thus (a * b) * v = ([**a,0**] * [**b,0**]) * v1 by A5,Def22
@@ -1182,7 +1185,7 @@ Def22
        .= a * (b * v) by Def22;
      end;
     let v be Element of RealVS(V);
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider v1=v as Element of V;
     thus 1 * v = [**1,0**] * v1 by Def22
               .= v by COMPLFLD:10,VECTSP_1:def 26;
@@ -1197,15 +1200,16 @@ Def22
     let V be non empty VectSp of F_Complex;
     let M be Subspace of V;
     A1: the carrier of M c= the carrier of V by VECTSP_4:def 2;
-    A2: the LoopStr of M = the LoopStr of RealVS(M) by Def22;
-    A3: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    A2: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
+    A3: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     hence A4: the carrier of RealVS(M) c= the carrier of RealVS(V) by A2,
 VECTSP_4:def 2;
     thus 0.RealVS(M) = 0.M by A2
        .= 0.V by VECTSP_4:def 2
        .= 0.RealVS(V) by A3;
-    thus the add of RealVS(M)
-    = (the add of RealVS(V))||the carrier of RealVS(M) by A2,A3,VECTSP_4:def 2;
+    thus the addF of RealVS(M)
+    = (the addF of RealVS(V))||the carrier of RealVS(M)
+     by A2,A3,VECTSP_4:def 2;
          [:REAL,the carrier of RealVS(M):] c= [:REAL,the carrier of RealVS(V):]
                                                           by A4,ZFMISC_1:118;
     then [:REAL,the carrier of RealVS(M):] c= dom (the Mult of RealVS(V))
@@ -1286,7 +1290,7 @@ VECTSP_4:def 2;
    proof
     let V be non empty VectSpStr over F_Complex;
     let p be RFunctional of V;
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     hence p is Functional of RealVS(V);
    end;
 
@@ -1303,7 +1307,7 @@ VECTSP_4:def 2;
      let x be VECTOR of RealVS(V);
      let r be Real;
      assume A2: r > 0;
-          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+          the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
           r*x = [**r,0**]*x1 by Def22;
      hence p1.(r*x) = abs(r)*p1.x by Def19
@@ -1312,7 +1316,7 @@ VECTSP_4:def 2;
          p1 is subadditive
     proof
      let x,y be VECTOR of RealVS(V);
-     A3: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     A3: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x, y1=y as Vector of V;
           x+y = x1+y1 by A3;
      hence p1.(x+y) <= p1.x + p1.y by Def16;
@@ -1331,7 +1335,7 @@ VECTSP_4:def 2;
     deffunc F(Element of V) = Re(l.$1);
     consider f be Function of the carrier of V,REAL such that
      A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider f as Functional of RealVS(V);
     take f;
     thus thesis by A1;
@@ -1345,7 +1349,7 @@ VECTSP_4:def 2;
      b.i = Re(l.i);
          now
      let i be Element of RealVS(V);
-          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+          the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider j=i as Element of V;
      thus a.i = Re(l.j) by A2
              .= b.i by A3;
@@ -1365,7 +1369,7 @@ VECTSP_4:def 2;
     deffunc F(Element of V) = Im(l.$1);
     consider f be Function of the carrier of V,REAL such that
 A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
-     the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider f as Functional of RealVS(V);
     take f;
     thus thesis by A1;
@@ -1379,7 +1383,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
      b.i = Im(l.i);
          now
      let i be Element of RealVS(V);
-          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+          the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider j=i as Element of V;
      thus a.i = Im(l.j) by A2
              .= b.i by A3;
@@ -1395,7 +1399,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
      l;
    coherence
    proof
-     the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     hence thesis;
    end;
   end;
@@ -1407,7 +1411,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
      l;
    coherence
    proof
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     hence thesis;
    end;
   end;
@@ -1419,7 +1423,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
    coherence
    proof
     let x,y be Vector of V;
-    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x,y1=y as VECTOR of RealVS(V);
          x+y = x1+y1 by A1;
     hence (RtoC l).(x+y) = (RtoC l).x+(RtoC l).y by HAHNBAN:def 4;
@@ -1433,7 +1437,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
    coherence
    proof
     let x,y be VECTOR of RealVS(V);
-    A1: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+    A1: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x,y1=y as Vector of V;
          x+y = x1+y1 by A1;
     hence (CtoR l).(x+y) = (CtoR l).x+(CtoR l).y by Def17;
@@ -1448,7 +1452,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
    proof
     let x be Vector of V;
     let r be Real;
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x as VECTOR of RealVS(V);
          [**r,0**]*x = r*x1 by Def22;
     hence (RtoC l).([**r,0**]*x) = r*(RtoC l).x by HAHNBAN:def 5;
@@ -1463,7 +1467,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
    proof
     let x be VECTOR of RealVS(V);
     let r be Real;
-         the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+         the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
     then reconsider x1=x as Vector of V;
          [**r,0**]*x1 = r*x by Def22;
     hence (CtoR l).(r*x) = r*(CtoR l).x by Def18;
@@ -1544,7 +1548,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
     A1: projRe(l) is additive
     proof
      let x,y be VECTOR of RealVS(V);
-     A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x, y1=y as Vector of V;
      thus (projRe(l)).(x+y) = Re(l.(x1+y1)) by A2,Def23
         .= Re(l.x1+l.y1) by Def11
@@ -1556,7 +1560,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
     proof
      let x be VECTOR of RealVS(V);
      let r be Real;
-          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+          the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
           r*x = [**r,0**]*x1 by Def22;
      hence (projRe(l)).(r*x) = Re(l.([**r,0**]*x1)) by Def23
@@ -1579,7 +1583,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
     A1: projIm(l) is additive
     proof
      let x,y be VECTOR of RealVS(V);
-     A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+     A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x, y1=y as Vector of V;
      thus (projIm(l)).(x+y) = Im(l.(x1+y1)) by A2,Def24
         .= Im(l.x1+l.y1) by Def11
@@ -1591,7 +1595,7 @@ A1: for i be Element of V holds f.i = F(i) from FUNCT_2:sch 4;
     proof
      let x be VECTOR of RealVS(V);
      let r be Real;
-          the LoopStr of V = the LoopStr of RealVS(V) by Def22;
+          the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
      then reconsider x1=x as Vector of V;
           r*x = [**r,0**]*x1 by Def22;
      hence (projIm(l)).(r*x) = Im(l.([**r,0**]*x1)) by Def24
@@ -1694,8 +1698,8 @@ VECTSP_1:def 26
     reconsider RVSM = RealVS(M) as Subspace of RealVS(V) by Th30;
     reconsider p1=p as Banach-Functional of RealVS(V) by Th32;
     reconsider prRl = projRe(l) as linear-Functional of RVSM by Th33;
-    A2: the LoopStr of V = the LoopStr of RealVS(V) by Def22;
-    A3: the LoopStr of M = the LoopStr of RealVS(M) by Def22;
+    A2: the addLoopStr of V = the addLoopStr of RealVS(V) by Def22;
+    A3: the addLoopStr of M = the addLoopStr of RealVS(M) by Def22;
          for x be VECTOR of RVSM
      for v be VECTOR of RealVS(V) st x=v holds prRl.x <= p1.v
     proof

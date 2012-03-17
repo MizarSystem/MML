@@ -9,29 +9,33 @@ environ
  vocabularies BINOP_1, FUNCT_1, ARYTM_1, RELAT_1, FINSEQ_1, BOOLE, RLVECT_1,
       ORDINAL2, ARYTM, CLVECT_1, ARYTM_3, SQUARE_1, ABSVALUE, COMPLEX1, SEQ_1,
       CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
-      REALSET1, STRUCT_0;
+      REALSET1, STRUCT_0, ALGSTR_0, MIDSP_1, VECTSP_2, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
       XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
-      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, STRUCT_0, PRE_TOPC,
-      RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2, COMPLEX1, NORMSP_1, CFUNCT_1;
+      FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
+      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, VALUED_1, SEQ_1, SEQ_2,
+      COMPLEX1, NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
-      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1;
+      COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, REALSET1, STRUCT_0, RLVECT_1;
+      XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, REALSET1, STRUCT_0, RLVECT_1,
+      ALGSTR_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1;
+ definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0,
+      VALUED_1;
  theorems STRUCT_0, TARSKI, RLVECT_1, COMPLEX1, XCMPLX_0, SQUARE_1, FINSEQ_1,
       NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1, RELSET_1,
-      REAL_1, ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1, XXREAL_0, NORMSP_1;
+      REAL_1, ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1, XXREAL_0, NORMSP_1,
+      ALGSTR_0, CARD_1;
  schemes BINOP_1, FUNCT_2, NAT_1, XBOOLE_0, SEQ_1;
 
 begin :: Complex Linear Space
 
 definition
- struct (LoopStr) CLSStruct
+ struct (addLoopStr) CLSStruct
    (# carrier -> set,
       ZeroF -> Element of the carrier,
-      add -> BinOp of the carrier,
+      addF -> BinOp of the carrier,
       Mult -> Function of [:COMPLEX, the carrier:], the carrier #);
 end;
 
@@ -164,31 +168,50 @@ definition let IT be non empty CLSStruct;
   (for v being VECTOR of IT holds 1r * v = v);
 end;
 
+definition
+ func Trivial-CLSStruct -> strict CLSStruct equals
+  CLSStruct(#1,op0,op2,pr2(COMPLEX,1)#);
+ coherence;
+end;
+
 registration
-cluster non empty strict Abelian add-associative right_zeroed
-    right_complementable ComplexLinearSpace-like (non empty CLSStruct);
-existence
-proof
-   consider ZS being non empty set, O being Element of ZS,
-   F being BinOp of ZS, G being Function of [:COMPLEX,ZS:],ZS such that
-A1:(for v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds v + w = w + v) &
-   (for u,v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds
-      (u + v) + w = u + (v + w)) &
-   (for v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
-      v + 0.CLSStruct (# ZS,O,F,G #) = v) &
-   (for v being VECTOR of CLSStruct (# ZS,O,F,G #)
-      ex w being VECTOR of CLSStruct (# ZS,O,F,G #) st
-        v + w = 0.CLSStruct (# ZS,O,F,G #)) &
-   (for z being Complex, v,w being VECTOR of CLSStruct (# ZS,O,F,G #) holds
-     z * (v + w) = z * v + z * w) &
-   (for z1,z2 being Complex, v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
-     (z1 + z2) * v = z1 * v + z2 * v) &
-   (for z1,z2 being Complex, v being VECTOR of CLSStruct (# ZS,O,F,G #) holds
-     (z1 * z2) * v = z1 * (z2 * v)) &
-   (for v being VECTOR of CLSStruct (# ZS,O,F,G #) holds 1r * v = v) by Lm1;
-   take CLSStruct (# ZS,O,F,G #);
-   thus CLSStruct (# ZS,O,F,G #) is non empty;
-   thus thesis by A1,Def2,RLVECT_1:def 5,def 6,def 7,def 8;
+ cluster Trivial-CLSStruct -> trivial non empty;
+ coherence by CARD_1:87,STRUCT_0:def 9;
+end;
+
+reserve a,b for Complex;
+
+registration
+ cluster strict Abelian add-associative right_zeroed
+     right_complementable ComplexLinearSpace-like (non empty CLSStruct);
+  existence
+   proof
+     take S = Trivial-CLSStruct;
+     thus S is strict;
+     thus S is Abelian
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is  add-associative
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is  right_zeroed
+      proof let x be Element of S;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus S is right_complementable
+      proof let x be Element of S;
+       take x;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus for a for v,w being VECTOR of S holds a * (v + w) = a * v + a * w
+                    by STRUCT_0:def 10;
+     thus for a,b for v being VECTOR of S holds (a + b) * v = a * v + b * v
+                    by STRUCT_0:def 10;
+     thus for a,b for v being VECTOR of S holds (a * b) * v = a * (b * v)
+                    by STRUCT_0:def 10;
+     thus for v being VECTOR of S holds 1r * v = v by STRUCT_0:def 10;
    end;
 end;
 
@@ -197,20 +220,7 @@ definition
     right_complementable ComplexLinearSpace-like (non empty CLSStruct);
 end;
 
-theorem
-   for V being non empty CLSStruct holds
-  (for v,w being VECTOR of V holds v + w = w + v) &
-  (for u,v,w being VECTOR of V holds (u + v) + w = u + (v + w)) &
-  (for v being VECTOR of V holds v + 0.V = v) &
-  (for v being VECTOR of V ex w being VECTOR of V st v + w = 0.V) &
-  (for z being Complex, v,w being VECTOR of V holds
-    z * (v + w) = z * v + z * w) &
-  (for z1,z2 being Complex, v being VECTOR of V holds
-    (z1 + z2) * v = z1 * v + z2 * v) &
-  (for z1,z2 being Complex, v being VECTOR of V holds
-    (z1 * z2) * v = z1 * (z2 * v)) &
-  (for v being VECTOR of V holds 1r * v = v)
-    implies V is ComplexLinearSpace by Def2,RLVECT_1:def 5,def 6,def 7,def 8;
+canceled;
 
 ::
 ::  Axioms of complex linear space.
@@ -218,7 +228,7 @@ theorem
 
 reserve V,X,Y for ComplexLinearSpace;
 reserve u,u1,u2,v,v1,v2 for VECTOR of V;
-reserve z,z1,z2 for Complex;
+reserve a,b,z,z1,z2 for Complex;
 
 theorem Th2:
 z = 0 or v = 0.V implies z * v = 0.V
@@ -289,7 +299,7 @@ theorem
    v + v = 0.V implies v = 0.V
 proof
    assume v + v = 0.V;
-   then v = - v by RLVECT_1:def 10;
+   then v = - v by RLVECT_1:def 11;
    hence thesis by Th5;
 end;
 
@@ -358,23 +368,23 @@ A2:z1 * v = z2 * v;
 end;
 
 Lm2:
-for V being non empty LoopStr holds Sum(<*>(the carrier of V)) = 0.V
+for V being non empty addLoopStr holds Sum(<*>(the carrier of V)) = 0.V
 proof
-   let V be non empty LoopStr;
+   let V be non empty addLoopStr;
    set S = <*>(the carrier of V);
       ex f being Function of NAT, the carrier of V st
     Sum(S) = f.(len S) & f.0 = 0.V &
    for j being Element of NAT, v being Element of V
     st j < len S & v = S.(j + 1) holds
-   f.(j + 1) = f.j + v by RLVECT_1:def 12;
+   f.(j + 1) = f.j + v by RLVECT_1:def 13;
    hence thesis by FINSEQ_1:25;
 end;
 
 Lm3:
-for V being non empty LoopStr, F being FinSequence of the carrier of V holds
+for V being non empty addLoopStr, F being FinSequence of the carrier of V holds
   len F = 0 implies Sum(F) = 0.V
 proof
- let V be non empty LoopStr;
+ let V be non empty addLoopStr;
  let F be FinSequence of the carrier of V;
   assume len F = 0;
    then F = <*>(the carrier of V) by FINSEQ_1:32;
@@ -533,7 +543,7 @@ begin :: Subspace and Cosets of Subspaces in Complex Linear Space
 reserve V1,V2,V3 for Subset of V;
 
 definition let V, V1;
-  attr V1 is linearly-closed means :Def3:
+  attr V1 is linearly-closed means :Def4:
  (for v,u being VECTOR of V st v in V1 & u in V1 holds v + u in V1) &
  (for z being Complex, v being VECTOR of V st v in V1 holds z * v in V1);
 end;
@@ -546,7 +556,7 @@ A1:V1 <> {} and
 A2:V1 is linearly-closed;
    consider x being Element of V1;
    reconsider x as Element of V by A1,TARSKI:def 3;
-      0c * x in V1 by A1,A2,Def3;
+      0c * x in V1 by A1,A2,Def4;
    hence thesis by Th2;
 end;
 
@@ -558,7 +568,7 @@ proof
 A1:V1 is linearly-closed;
    let v be VECTOR of V;
    assume v in V1;
-   then (- 1r) * v in V1 by A1,Def3;
+   then (- 1r) * v in V1 by A1,Def4;
    hence thesis by Th4;
 end;
 
@@ -573,7 +583,7 @@ A1:V1 is linearly-closed;
 A2:v in V1 and
 A3:u in V1;
       v - u = v + (- u) & - u in V1 by A1,A3,Th22;
-   hence thesis by A1,A2,Def3;
+   hence thesis by A1,A2,Def4;
 end;
 
 theorem Th24:
@@ -626,7 +636,7 @@ A6:  v1 in V1 & v2 in V2 by A2,A3;
      consider u1,u2 be VECTOR of V such that
 A7:  u = u1 + u2 and
 A8:  u1 in V1 & u2 in V2 by A2,A4;
-A9:  v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def3;
+A9:  v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def4;
         v + u = ((v1 + v2) + u1) + u2 by A5,A7,RLVECT_1:def 6
           .= ((v1 + u1) + v2) + u2 by RLVECT_1:def 6
           .= (v1 + u1) + (v2 + u2) by RLVECT_1:def 6;
@@ -637,7 +647,7 @@ A9:  v1 + u1 in V1 & v2 + u2 in V2 by A1,A6,A8,Def3;
    then consider v1,v2 be VECTOR of V such that
 A10: v = v1 + v2 and
 A11: v1 in V1 & v2 in V2 by A2;
-A12: z * v1 in V1 & z * v2 in V2 by A1,A11,Def3;
+A12: z * v1 in V1 & z * v2 in V2 by A1,A11,Def4;
       z * v = z * v1 + z * v2 by A10,Def2;
    hence z * v in V3 by A2,A12;
 end;
@@ -653,26 +663,26 @@ A1:V1 is linearly-closed & V2 is linearly-closed;
    proof let v,u be VECTOR of V;
      assume v in V1 /\ V2 & u in V1 /\ V2;
      then v in V1 & v in V2 & u in V1 & u in V2 by XBOOLE_0:def 3;
-     then v + u in V1 & v + u in V2 by A1,Def3;
+     then v + u in V1 & v + u in V2 by A1,Def4;
      hence thesis by XBOOLE_0:def 3;
    end;
    let z be Complex, v be VECTOR of V;
    assume v in V1 /\ V2;
    then v in V1 & v in V2 by XBOOLE_0:def 3;
-   then z * v in V1 & z * v in V2 by A1,Def3;
+   then z * v in V1 & z * v in V2 by A1,Def4;
    hence thesis by XBOOLE_0:def 3;
 end;
 
 definition let V;
-  mode Subspace of V -> ComplexLinearSpace means :Def4:
+  mode Subspace of V -> ComplexLinearSpace means :Def5:
     the carrier of it c= the carrier of V &
     0.it = 0.V &
-    the add of it = (the add of V)||the carrier of it &
+    the addF of it = (the addF of V)||the carrier of it &
     the Mult of it = (the Mult of V) | [:COMPLEX, the carrier of it:];
 existence
 proof
       the carrier of V c= the carrier of V &
-   the add of V = (the add of V)||the carrier of V &
+   the addF of V = (the addF of V)||the carrier of V &
    the Mult of V = (the Mult of V) | [:COMPLEX, the carrier of V:]
      by FUNCT_2:40;
    hence thesis;
@@ -690,7 +700,7 @@ theorem
 proof
    assume x in W1 & W1 is Subspace of W2;
    then x in the carrier of W1 & the carrier of W1 c= the carrier of W2
-     by Def4,STRUCT_0:def 5;
+     by Def5,STRUCT_0:def 5;
    hence thesis by STRUCT_0:def 5;
 end;
 
@@ -699,7 +709,7 @@ x in W implies x in V
 proof
    assume x in W;
    then x in the carrier of W & the carrier of W c= the carrier of V
-     by Def4,STRUCT_0:def 5;
+     by Def5,STRUCT_0:def 5;
    hence thesis by STRUCT_0:def 5;
 end;
 
@@ -712,13 +722,13 @@ proof
 end;
 
 theorem
-0.W = 0.V by Def4;
+0.W = 0.V by Def5;
 
 theorem
    0.W1 = 0.W2
 proof
-   thus 0.W1 = 0.V by Def4
-            .= 0.W2 by Def4;
+   thus 0.W1 = 0.V by Def5
+            .= 0.W2 by Def5;
 end;
 
 theorem Th33:
@@ -727,7 +737,7 @@ proof
    assume
 A1:v = w1 & u = w2;
    reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th30;
-      w1 + w2 = ((the add of V)||the carrier of W).[w1,w2] by Def4;
+      w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2] by Def5;
    hence thesis by A1,FUNCT_1:72;
 end;
 
@@ -737,7 +747,7 @@ proof
    assume
 A1:w = v;
    reconsider ww1 = w as VECTOR of V by Th30;
-      z * w = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,w] by Def4;
+      z * w = ((the Mult of V) | [:COMPLEX, the carrier of W:]).[z,w] by Def5;
    hence thesis by A1,FUNCT_1:72;
 end;
 
@@ -787,14 +797,14 @@ end;
 theorem Th37:
 0.V in W
 proof
-      0.W in W & 0.V = 0.W by Def4,RLVECT_1:3;
+      0.W in W & 0.V = 0.W by Def5,RLVECT_1:3;
    hence thesis;
 end;
 
 theorem
    0.W1 in W2
 proof
-      0.W1 = 0.V by Def4;
+      0.W1 = 0.V by Def5;
    hence thesis by Th37;
 end;
 
@@ -806,9 +816,9 @@ u in W & v in W implies u + v in W
 proof
    assume u in W & v in W;
 then A1:u in the carrier of W & v in the carrier of W by STRUCT_0:def 5;
-   reconsider VW = the carrier of W as Subset of V by Def4;
+   reconsider VW = the carrier of W as Subset of V by Def5;
       VW is linearly-closed by Lm5;
-   then u + v in the carrier of W by A1,Def3;
+   then u + v in the carrier of W by A1,Def4;
    hence thesis by STRUCT_0:def 5;
 end;
 
@@ -817,9 +827,9 @@ v in W implies z * v in W
 proof
    assume v in W;
 then A1:v in the carrier of W by STRUCT_0:def 5;
-   reconsider VW = the carrier of W as Subset of V by Def4;
+   reconsider VW = the carrier of W as Subset of V by Def5;
       VW is linearly-closed by Lm5;
-   then z * v in the carrier of W by A1,Def3;
+   then z * v in the carrier of W by A1,Def4;
    hence thesis by STRUCT_0:def 5;
 end;
 
@@ -849,29 +859,29 @@ reserve M for Function of [:COMPLEX,D:],D;
 theorem Th44:
 V1 = D &
 d1 = 0.V &
-A = (the add of V)||V1 &
+A = (the addF of V)||V1 &
 M = (the Mult of V) | [:COMPLEX,V1:] implies
     CLSStruct (# D,d1,A,M #) is Subspace of V
 proof
    assume that
 A1:V1 = D and
 A2:d1 = 0.V and
-A3:A = (the add of V)||V1 and
+A3:A = (the addF of V)||V1 and
 A4:M = (the Mult of V) | [:COMPLEX,V1:];
    set W = CLSStruct (# D,d1,A,M #);
 A5: 0.W = 0.V by A2;
-A6:for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
+A6:for x,y being VECTOR of W holds x + y = (the addF of V).[x,y]
        by A1,A3,FUNCT_1:72;
       W is Abelian add-associative right_zeroed right_complementable
         ComplexLinearSpace-like
    proof
-     set AV = the add of V; set MV = the Mult of V;
+     set AV = the addF of V; set MV = the Mult of V;
      thus for x,y being VECTOR of W holds x + y = y + x
      proof
        let x,y be VECTOR of W;
        reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-       thus x + y = AV.(x1,y1) by A6
-                 .= y1 + x1 by RLVECT_1:def 3
+       thus x + y = x1 + y1 by A6
+                 .= y1 + x1
                  .= y + x by A6;
      end;
      thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
@@ -891,13 +901,12 @@ A6:for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
        thus x + 0.W = y + 0.V by A2,A6
                    .= x by RLVECT_1:10;
      end;
-     thus for x being VECTOR of W
-            ex y being VECTOR of W st x + y = 0.W
+     thus W is right_complementable
      proof
        let x be VECTOR of W;
        reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
-       consider v such that A7: x1 + v = 0.V by RLVECT_1:def 8;
-          v = - x1 by A7,RLVECT_1:def 10
+       consider v such that A7: x1 + v = 0.V by ALGSTR_0:def 11;
+          v = - x1 by A7,RLVECT_1:def 11
         .= (- 1r) * x1 by Th4
         .= (- 1r) * x by A1,A4,FUNCT_1:72;
        then reconsider y = v as VECTOR of W;
@@ -942,7 +951,7 @@ A6:for x,y being VECTOR of W holds x + y = (the add of V).[x,y]
      thus 1r * x = 1r * y by A1,A4,FUNCT_1:72
                 .= x by Def2;
    end;
-   hence thesis by A1,A3,A4,A5,Def4;
+   hence thesis by A1,A3,A4,A5,Def5;
 end;
 
 theorem Th45:
@@ -961,14 +970,14 @@ proof
    assume
 A1:V is Subspace of X & X is Subspace of V;
    set VV = the carrier of V; set VX = the carrier of X;
-   set AV = the add of V; set AX = the add of X;
+   set AV = the addF of V; set AX = the addF of X;
    set MV = the Mult of V; set MX = the Mult of X;
-      VV c= VX & VX c= VV by A1,Def4;
+      VV c= VX & VX c= VV by A1,Def5;
 then A2:VV = VX by XBOOLE_0:def 10;
-A3:0.V = 0.X by A1,Def4;
-      AV = AX||VV & AX = AV||VX by A1,Def4;
+A3:0.V = 0.X by A1,Def5;
+      AV = AX||VV & AX = AV||VX by A1,Def5;
 then A4:AV = AX by A2,RELAT_1:101;
-      MV = MX | [:COMPLEX,VV:] & MX = MV | [:COMPLEX,VX:] by A1,Def4;
+      MV = MX | [:COMPLEX,VV:] & MX = MV | [:COMPLEX,VX:] by A1,Def5;
    hence thesis by A2,A3,A4,RELAT_1:101;
 end;
 
@@ -980,21 +989,21 @@ A1:V is Subspace of X & X is Subspace of Y;
    thus the carrier of V c= the carrier of Y
    proof
         the carrier of V c= the carrier of X &
-     the carrier of X c= the carrier of Y by A1,Def4;
+     the carrier of X c= the carrier of Y by A1,Def5;
      hence thesis by XBOOLE_1:1;
    end;
    thus 0.V = 0.Y
    proof
-        0.V = 0.X & 0.X = 0.Y by A1,Def4
+        0.V = 0.X & 0.X = 0.Y by A1,Def5
 ;
      hence thesis;
    end;
-   thus the add of V = (the add of Y)||the carrier of V
+   thus the addF of V = (the addF of Y)||the carrier of V
    proof
-     set AV = the add of V; set VV = the carrier of V;
-     set AX = the add of X; set VX = the carrier of X;
-     set AY = the add of Y;
-        AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def4;
+     set AV = the addF of V; set VV = the carrier of V;
+     set AX = the addF of X; set VX = the carrier of X;
+     set AY = the addF of Y;
+        AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def5;
      then AV = AY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
@@ -1002,7 +1011,7 @@ A1:V is Subspace of X & X is Subspace of Y;
    set MX = the Mult of X; set VX = the carrier of X;
    set MY = the Mult of Y;
       MV = MX | [:COMPLEX,VV:] &
-   MX = MY | [:COMPLEX,VX:] & VV c= VX by A1,Def4;
+   MX = MY | [:COMPLEX,VX:] & VV c= VX by A1,Def5;
    then MV = (MY | [:COMPLEX,VX:]) | [:COMPLEX,VV:] &
         [:COMPLEX,VV:] c= [:COMPLEX,VX:] by ZFMISC_1:118;
    hence thesis by FUNCT_1:82;
@@ -1013,19 +1022,19 @@ the carrier of W1 c= the carrier of W2 implies W1 is Subspace of W2
 proof
    assume A1: the carrier of W1 c= the carrier of W2;
    set VW1 = the carrier of W1; set VW2 = the carrier of W2;
-   set AV = the add of V; set MV = the Mult of V;
-      0.W1 = 0.V & 0.W2 = 0.V by Def4;
+   set AV = the addF of V; set MV = the Mult of V;
+      0.W1 = 0.V & 0.W2 = 0.V by Def5;
    hence the carrier of W1 c= the carrier of W2 &
          0.W1 = 0.W2 by A1;
-   thus the add of W1 = (the add of W2)||the carrier of W1
+   thus the addF of W1 = (the addF of W2)||the carrier of W1
    proof
-        the add of W1 = AV||VW1 & the add of W2 = AV||VW2 &
-     [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def4,ZFMISC_1:119;
+        the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2 &
+     [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def5,ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
    end;
       the Mult of W1 = MV | [:COMPLEX,VW1:] &
      the Mult of W2 = MV | [:COMPLEX,VW2:] &
-       [:COMPLEX,VW1:] c= [:COMPLEX,VW2:] by A1,Def4,ZFMISC_1:118;
+       [:COMPLEX,VW1:] c= [:COMPLEX,VW2:] by A1,Def5,ZFMISC_1:118;
    hence thesis by FUNCT_1:82;
 end;
 
@@ -1039,7 +1048,7 @@ A1:for v st v in W1 holds v in W2;
      let x be set;
      assume
 A2:  x in the carrier of W1;
-        the carrier of W1 c= the carrier of V by Def4;
+        the carrier of W1 c= the carrier of V by Def5;
      then reconsider v = x as VECTOR of V by A2;
         v in W1 by A2,STRUCT_0:def 5;
      then v in W2 by A1;
@@ -1056,10 +1065,10 @@ proof
    the carrier of V c= the carrier of V;
    then reconsider V1 = the carrier of V as Subset of V;
       0.V = 0.V &
-    the add of V = (the add of V)||V1 &
+    the addF of V = (the addF of V)||V1 &
      the Mult of V = (the Mult of V) | [:COMPLEX,V1:]
       by FUNCT_2:40;
-   then CLSStruct(#the carrier of V,0.V,the add of V,the Mult of V
+   then CLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V
 #)
       is Subspace of V by Th44;
    hence thesis;
@@ -1089,7 +1098,7 @@ A1:for v holds v in W1 iff v in W2;
      proof
        assume
 A2:    x in the carrier of W1;
-          the carrier of W1 c= the carrier of V by Def4;
+          the carrier of W1 c= the carrier of V by Def5;
        then reconsider v = x as VECTOR of V by A2;
           v in W1 by A2,STRUCT_0:def 5;
        then v in W2 by A1;
@@ -1097,7 +1106,7 @@ A2:    x in the carrier of W1;
      end;
      assume
 A3:  x in the carrier of W2;
-        the carrier of W2 c= the carrier of V by Def4;
+        the carrier of W2 c= the carrier of V by Def5;
      then reconsider v = x as VECTOR of V by A3;
         v in W2 by A3,STRUCT_0:def 5;
      then v in W1 by A1;
@@ -1141,10 +1150,10 @@ A1:V1 <> {} and
 A2:V1 is linearly-closed;
    reconsider D = V1 as non empty set by A1;
    reconsider d1 = 0.V as Element of D by A2,Th21;
-   set A = (the add of V)||V1;
+   set A = (the addF of V)||V1;
    set M = (the Mult of V) | [:COMPLEX,V1:];
    set VV = the carrier of V;
-      dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
+      dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
    then dom A = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:]
         by RELAT_1:90,ZFMISC_1:119;
 then A3:dom A = [:D,D:] by XBOOLE_1:28;
@@ -1177,7 +1186,7 @@ A12:   [x1,x2] in [:VV,VV:] & [x1,x2] in [:V1,V1:] by A10,ZFMISC_1:106;
        reconsider v1 = x1, v2 = x2 as Element of VV by A10;
 
           y = v1 + v2 by A9,A11,A12,FUNCT_1:72;
-       hence y in D by A2,A10,Def3;
+       hence y in D by A2,A10,Def4;
      end;
      hence thesis by FUNCT_1:def 5;
    end;
@@ -1208,7 +1217,7 @@ A21:   [x1,x2] in [:COMPLEX,VV:] & [x1,x2] in [:COMPLEX,V1:]
        reconsider v2 = x2 as Element of VV by A19;
        reconsider xx1 = x1 as Complex by A18;
           y = xx1 * v2 by A17,A20,A21,FUNCT_1:72;
-       hence y in D by A2,A19,Def3;
+       hence y in D by A2,A19,Def4;
      end;
      hence thesis by FUNCT_1:def 5;
    end;
@@ -1223,7 +1232,7 @@ end;
 :: Definition of zero subspace and improper subspace of complex linear space.
 
 definition let V;
-func (0).V -> strict Subspace of V means :Def5:
+func (0).V -> strict Subspace of V means :Def6:
 the carrier of it = {0.V};
 correctness
 proof
@@ -1260,11 +1269,11 @@ A1:  for z for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
        reconsider v'=v as VECTOR of V;
        thus v + 0.W = v' + 0.V .= v by RLVECT_1:10;
      end;
-     thus for v being VECTOR of W ex w being VECTOR of W st v + w = 0.W
+     thus W is right_complementable
      proof let v be VECTOR of W;
        reconsider v'=v as VECTOR of V;
        consider w' being VECTOR of V such that
-A2:    v' + w' = 0.V by RLVECT_1:def 8;
+A2:    v' + w' = 0.V by ALGSTR_0:def 11;
        reconsider w=w' as VECTOR of W;
        take w;
        thus v + w = 0.W by A2;
@@ -1313,9 +1322,9 @@ theorem Th56:
 (0).W = (0).V
 proof
       the carrier of (0).W = {0.W} &
-    the carrier of (0).V = {0.V} by Def5;
+    the carrier of (0).V = {0.V} by Def6;
    then the carrier of (0).W = the carrier of (0).V &
-    (0).W is Subspace of V by Def4,Th47;
+    (0).W is Subspace of V by Def5,Th47;
    hence thesis by Th50;
 end;
 
@@ -1332,8 +1341,8 @@ theorem
 theorem
    (0).V is Subspace of W
 proof
-      the carrier of (0).V = {0.V} by Def5
-                       .= {0.W} by Def4;
+      the carrier of (0).V = {0.V} by Def6
+                       .= {0.W} by Def5;
    hence thesis by Th48;
 end;
 
@@ -1409,11 +1418,11 @@ then A4:  x in W by STRUCT_0:def 5;
 end;
 
 definition let V; let W;
-mode Coset of W -> Subset of V means :Def8:
+mode Coset of W -> Subset of V means :Def9:
  ex v st it = v + W;
 existence
 proof
-   reconsider VW = the carrier of W as Subset of V by Def4;
+   reconsider VW = the carrier of W as Subset of V by Def5;
    take VW;
    take 0.V;
    thus thesis by Lm6;
@@ -1434,7 +1443,7 @@ proof
      then consider u such that
 A1:  0.V = v + u and
 A2:  u in W;
-        v = - u by A1,RLVECT_1:def 10;
+        v = - u by A1,RLVECT_1:def 11;
      hence thesis by A2,Th42;
    end;
    assume v in W;
@@ -1465,7 +1474,7 @@ proof
 A1:  x = v + u and
 A2:  u in (0).V;
         the carrier of (0).V = {0.V} & u in the carrier of (0).V
-         by A2,Def5,STRUCT_0:def 5;
+         by A2,Def6,STRUCT_0:def 5;
      then u = 0.V by TARSKI:def 1;
      then x = v by A1,RLVECT_1:10;
      hence thesis by TARSKI:def 1;
@@ -1554,7 +1563,7 @@ A3:  u in W;
    let x be set;
    assume
 A4:x in the carrier of W;
-      the carrier of W c= the carrier of V & v in V by Def4,RLVECT_1:3;
+      the carrier of W c= the carrier of V & v in V by Def5,RLVECT_1:3;
    then reconsider y = x as Element of V by A4;
       z * v in W & x in W by A1,A4,Th41,STRUCT_0:def 5;
 then A5:y - z * v in W by Th43;
@@ -1629,7 +1638,7 @@ A9:v = (v + u) + u1 and
 A10:u1 in W;
       v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6;
 then u + u1 = 0.V by RLVECT_1:21;
-   then u = - u1 by RLVECT_1:def 10;
+   then u = - u1 by RLVECT_1:def 11;
    hence thesis by A10,Th42;
 end;
 
@@ -1893,7 +1902,7 @@ theorem Th86:
       then consider u1 such that A2: v = u + u1 and A3: u1 in W;
             0.V = (u + u1) - v by A2,RLVECT_1:28
                .= u1 + (u - v) by RLVECT_1:def 6;
-        then v1 = - u1 by RLVECT_1:def 10;
+        then v1 = - u1 by RLVECT_1:def 11;
     hence v1 in W by A3,Th42;
     thus v + v1 = (u + v) - v by RLVECT_1:def 6
                .= u + (v - v) by RLVECT_1:def 6
@@ -1911,7 +1920,7 @@ theorem Th87:
       then consider u1 such that A2: u = v + u1 and A3: u1 in W;
             0.V = (v + u1) - u by A2,RLVECT_1:28
                .= u1 + (v - u) by RLVECT_1:def 6;
-        then v1 = - u1 by RLVECT_1:def 10;
+        then v1 = - u1 by RLVECT_1:def 11;
     hence v1 in W by A3,Th42;
     thus v - v1 = (v - v) + u by RLVECT_1:43
                .= 0.V + u by RLVECT_1:28
@@ -1925,8 +1934,8 @@ theorem Th88:
    thus v + W1 = v + W2 implies W1 = W2
     proof assume A1: v + W1 = v + W2;
            the carrier of W1 = the carrier of W2
-       proof A2: the carrier of W1 c= the carrier of V by Def4;
-             A3: the carrier of W2 c= the carrier of V by Def4;
+       proof A2: the carrier of W1 c= the carrier of V by Def5;
+             A3: the carrier of W2 c= the carrier of V by Def5;
         thus the carrier of W1 c= the carrier of W2
          proof let x be set;
            assume A4: x in the carrier of W1;
@@ -2016,7 +2025,7 @@ theorem
   proof
    thus C is linearly-closed implies C = the carrier of W
     proof assume A1: C is linearly-closed;
-      consider v such that A2: C = v + W by Def8;
+      consider v such that A2: C = v + W by Def9;
             C <> {} by A2,Th63;
        then 0.V in v + W by A1,A2,Th21;
      hence thesis by A2,Th67;
@@ -2031,21 +2040,21 @@ theorem
   proof
    let W1,W2 be strict Subspace of V,
     C1 be Coset of W1, C2 be Coset of W2;
- A1:    ex v1 st C1 = v1 + W1 by Def8;
-          ex v2 st C2 = v2 + W2 by Def8;
+ A1:    ex v1 st C1 = v1 + W1 by Def9;
+          ex v2 st C2 = v2 + W2 by Def9;
    hence thesis by A1,Th89;
   end;
 
 theorem
       {v} is Coset of (0).V
   proof v + (0).V = {v} by Th65;
-   hence thesis by Def8;
+   hence thesis by Def9;
   end;
 
 theorem
       V1 is Coset of (0).V implies (ex v st V1 = {v})
   proof assume V1 is Coset of (0).V;
-    then consider v such that A1: V1 = v + (0).V by Def8;
+    then consider v such that A1: V1 = v + (0).V by Def9;
    take v;
    thus thesis by A1,Th65;
   end;
@@ -2053,7 +2062,7 @@ theorem
 theorem
       the carrier of W is Coset of W
   proof the carrier of W = 0.V + W by Lm6;
-   hence thesis by Def8;
+   hence thesis by Def9;
   end;
 
 theorem
@@ -2064,20 +2073,20 @@ theorem
     then reconsider A = the carrier of V as Subset of V;
     consider v;
           A = v + (Omega).V by Th66;
-   hence thesis by Def8;
+   hence thesis by Def9;
   end;
 
 theorem
       V1 is Coset of (Omega).V implies V1 = the carrier of V
   proof assume V1 is Coset of (Omega).V;
-    then ex v st V1 = v + (Omega).V by Def8;
+    then ex v st V1 = v + (Omega).V by Def9;
    hence thesis by Th66;
   end;
 
 theorem
       0.V in C iff C = the carrier of W
   proof
-          ex v st C = v + W by Def8;
+          ex v st C = v + W by Def9;
    hence thesis by Th67;
   end;
 
@@ -2086,7 +2095,7 @@ theorem Th98:
   proof
    thus u in C implies C = u + W
     proof assume A1: u in C;
-            ex v st C = v + W by Def8;
+            ex v st C = v + W by Def9;
      hence thesis by A1,Th74;
     end;
    thus thesis by Th63;
@@ -2111,12 +2120,12 @@ theorem
   proof
    thus (ex C st v1 in C & v2 in C) implies v1 - v2 in W
     proof given C such that A1: v1 in C & v2 in C;
-            ex v st C = v + W by Def8;
+            ex v st C = v + W by Def9;
      hence thesis by A1,Th85;
     end;
     assume v1 - v2 in W;
      then consider v such that A2: v1 in v + W & v2 in v + W by Th85;
-     reconsider C = v + W as Coset of W by Def8;
+     reconsider C = v + W as Coset of W by Def9;
    take C;
    thus thesis by A2;
   end;
@@ -2124,8 +2133,8 @@ theorem
 theorem
       u in B & u in C implies B = C
   proof assume A1: u in B & u in C;
- A2:    ex v1 st B = v1 + W by Def8;
-          ex v2 st C = v2 + W by Def8;
+ A2:    ex v1 st B = v1 + W by Def9;
+          ex v2 st C = v2 + W by Def9;
    hence thesis by A1,A2,Th76;
   end;
 
@@ -2134,7 +2143,7 @@ begin :: Complex Normed Space
 definition
  struct(CLSStruct) CNORMSTR (# carrier -> set,
             ZeroF -> Element of the carrier,
-             add -> BinOp of the carrier,
+             addF -> BinOp of the carrier,
             Mult -> Function of [:COMPLEX, the carrier:], the carrier,
             norm -> Function of the carrier, REAL #);
 end;
@@ -2162,7 +2171,7 @@ definition let X, x;
 coherence;
 end;
      consider V being ComplexLinearSpace;
-Lm8:   the carrier of (0).V = {0.V} by Def5;
+Lm8:   the carrier of (0).V = {0.V} by Def6;
   reconsider niltonil = (the carrier of (0).V) --> 0
       as Function of the carrier of (0).V , REAL by FUNCOP_1:57;
 
@@ -2188,7 +2197,7 @@ let u, v be VECTOR of (0).V;
 hence thesis by Lm8,Lm9,TARSKI:def 1;
 end;
 reconsider X =
- CNORMSTR (# the carrier of (0).V, 0.((0).V), the add of (0).V,
+ CNORMSTR (# the carrier of (0).V, 0.((0).V), the addF of (0).V,
            the Mult of (0).V, niltonil #)
             as non empty CNORMSTR by STRUCT_0:def 1;
 
@@ -2201,7 +2210,7 @@ reconsider u = x, w = y as VECTOR of (0).V;
 
 thus ||.x.|| = 0 iff x = 0'(X)
 proof
-     0'(X) = 0.V by Def4;
+     0'(X) = 0.V by Def5;
 hence thesis by Lm8,FUNCOP_1:13,TARSKI:def 1;
 end;
 
@@ -2213,7 +2222,7 @@ end;
 
 definition let IT be non empty CNORMSTR;
  attr IT is ComplexNormSpace-like means
-:Def10:   for x , y being Point of IT , z holds
+:Def11:   for x , y being Point of IT , z holds
           ( ||.x.|| = 0 iff x = 0.IT ) &
           ||.z * x.|| = |.z.| * ||.x.|| &
           ||.x + y.|| <= ||.x.|| + ||.y.||;
@@ -2226,7 +2235,7 @@ registration
   existence
    proof
     take X;
-    thus X is ComplexNormSpace-like by Def10,Lm12;
+    thus X is ComplexNormSpace-like by Def11,Lm12;
 A1:  for x,y be VECTOR of X for x',y' be VECTOR of (0).V
       st x = x' & y = y'
       holds x + y= x' + y' &
@@ -2283,13 +2292,12 @@ v
       reconsider v'= v as VECTOR of (0).V;
       thus v + 0.X = v'+ 0.(0).V .=v by RLVECT_1:10;
      end;
-     thus for v being VECTOR of X
-       ex w being VECTOR of X st v + w = 0.X
+     thus X is right_complementable
        proof
         let v be VECTOR of X;
         reconsider v'= v as VECTOR of (0).V;
         consider w' be VECTOR of (0).V such that
-        A2: v' + w' = 0.(0).V by RLVECT_1:def 8;
+        A2: v' + w' = 0.(0).V by ALGSTR_0:def 11;
         reconsider w = w' as VECTOR of X;
         take w;
         thus v + w = 0.X by A2;
@@ -2308,13 +2316,13 @@ end;
  reserve x, y, w, g, g1, g2 for Point of CNS;
 
 theorem
-    ||.0.CNS.|| = 0 by Def10;
+    ||.0.CNS.|| = 0 by Def11;
 
 theorem Th104:
  ||.-x.|| = ||.x.||
 proof
 A1:   ||.-x.|| = ||.(-1r) * x.|| by Th4
-           .= |.-1r.| * ||.x.|| by Def10;
+           .= |.-1r.| * ||.x.|| by Def11;
           |.-1r.| = 1 by COMPLEX1:134,138;
      hence thesis by A1;
 end;
@@ -2322,7 +2330,7 @@ end;
 theorem Th105:
  ||.x - y.|| <= ||.x.|| + ||.y.||
 proof
-      ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def10;
+      ||.x - y.|| <= ||.x.|| + ||.(-y).|| by Def11;
      hence thesis by Th104;
 end;
 
@@ -2330,7 +2338,7 @@ theorem Th106:
  0 <= ||.x.||
 proof
           ||.x - x.|| = ||.0'(CNS).|| by RLVECT_1:28
-              .= 0 by Def10;
+              .= 0 by Def11;
    then 0 <= ||.x.|| + ||.x.|| by Th105;
      then 0 <= (||.x.|| + ||.x.||)/2 by XREAL_1:138;
      hence thesis;
@@ -2339,15 +2347,15 @@ end;
 theorem
     ||.z1 * x + z2 * y.|| <= |.z1.| * ||.x.|| + |.z2.| * ||.y.||
 proof
-          ||.z1 * x + z2 * y.|| <= ||.z1 * x.|| + ||.z2 * y.|| by Def10;
-     then ||.z1 * x + z2 * y.|| <= |.z1.| * ||.x.|| + ||.z2 * y.|| by Def10;
-     hence thesis by Def10;
+          ||.z1 * x + z2 * y.|| <= ||.z1 * x.|| + ||.z2 * y.|| by Def11;
+     then ||.z1 * x + z2 * y.|| <= |.z1.| * ||.x.|| + ||.z2 * y.|| by Def11;
+     hence thesis by Def11;
 end;
 
 theorem Th108:
  ||.x - y.|| = 0 iff x = y
 proof
-        ||.x - y.|| = 0 iff x - y = 0'(CNS) by Def10;
+        ||.x - y.|| = 0 iff x - y = 0'(CNS) by Def11;
      hence thesis by RLVECT_1:28,35;
 end;
 
@@ -2364,7 +2372,7 @@ proof
           (x - y) + y = x - (y - y) by RLVECT_1:43
                 .= x - 0'(CNS) by RLVECT_1:28
                 .= x by RLVECT_1:26;
-     then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def10;
+     then ||.x.|| <= ||.x - y.|| + ||.y.|| by Def11;
      hence thesis by XREAL_1:22;
 end;
 
@@ -2375,7 +2383,7 @@ A1:   ||.x.|| - ||.y.|| <= ||.x - y.|| by Th110;
           (y - x) + x = y - (x - x) by RLVECT_1:43
                 .= y - 0'(CNS) by RLVECT_1:28
                 .= y by RLVECT_1:26;
-     then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def10;
+     then ||.y.|| <= ||.y - x.|| + ||.x.|| by Def11;
      then ||.y.|| - ||.x.|| <= ||.y - x.|| by XREAL_1:22;
      then ||.y.|| - ||.x.|| <= ||.x - y.|| by Th109;
      then - ||.x - y.|| <= -(||.y.|| - ||.x.||) by XREAL_1:26;
@@ -2389,7 +2397,7 @@ proof
           .= x + (((-y) + y) + (-w)) by RLVECT_1:16
           .= x + ((-y) + (y + (-w))) by RLVECT_1:def 6
           .= (x - y) + (y - w) by RLVECT_1:def 6;
-     hence thesis by Def10;
+     hence thesis by Def11;
 end;
 
 theorem
@@ -2408,7 +2416,7 @@ let CNS be ComplexLinearSpace;
 let S be sequence of CNS;
 let z;
  func z * S -> sequence of CNS means
-:Def14:     for n holds it.n = z * S.n;
+:Def15:     for n holds it.n = z * S.n;
 existence proof
   deffunc F(Element of NAT) = z * S.$1;
   thus ex S being sequence of CNS st for n holds S.n = F(n)
@@ -2433,7 +2441,7 @@ end;
 definition
 let CNS;
 let S;
- attr S is convergent means :Def15:
+ attr S is convergent means :Def16:
    ex g st
      for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - g.|| < r;
 end;
@@ -2448,10 +2456,10 @@ proof
  A2:  S2 is convergent;
       consider g1 such that
  A3:  for r st 0 < r ex m st for n st m <= n holds
-      ||.(S1.n) - g1.|| < r by A1,Def15;
+      ||.(S1.n) - g1.|| < r by A1,Def16;
       consider g2 such that
  A4:  for r st 0 < r ex m st for n st m <= n holds
-      ||.(S2.n) - g2.|| < r by A2,Def15;
+      ||.(S2.n) - g2.|| < r by A2,Def16;
       take g = g1 + g2;
       let r; assume 0 < r;
  then A5:  0< r/2 by SEQ_2:3;
@@ -2477,7 +2485,7 @@ proof
       .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 6
       .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
            ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
-      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def10;
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def11;
       hence ||.(S1 + S2).n - g.|| < r by A10,A11,XXREAL_0:2;
   end;
 
@@ -2489,10 +2497,10 @@ proof
  A2:  S2 is convergent;
       consider g1 such that
  A3:  for r st 0 < r ex m st for n st m <= n holds
-      ||.(S1.n) - g1.|| < r by A1,Def15;
+      ||.(S1.n) - g1.|| < r by A1,Def16;
       consider g2 such that
  A4:  for r st 0 < r ex m st for n st m <= n holds
-      ||.(S2.n) - g2.|| < r by A2,Def15;
+      ||.(S2.n) - g2.|| < r by A2,Def16;
       take g = g1 - g2;
       let r; assume 0 < r;
  then A5:  0< r/2 by SEQ_2:3;
@@ -2528,7 +2536,7 @@ proof
      assume S is convergent;
            then consider g such that
      A1:    for r st 0 < r ex m st for n
-           st m <= n holds ||.(S.n) - g.|| < r by Def15;
+           st m <= n holds ||.(S.n) - g.|| < r by Def16;
            take h = g - x;
            let r; assume 0 < r;
            then consider m1 such that
@@ -2550,7 +2558,7 @@ proof
      assume S is convergent;
            then consider g such that
      A1:    for r st 0 < r ex m st for n
-           st m <= n holds ||.(S.n) - g.|| < r by Def15;
+           st m <= n holds ||.(S.n) - g.|| < r by Def16;
            take h = z * g;
      A2:    now assume
      A3:   z = 0;
@@ -2565,9 +2573,9 @@ proof
            by A3,Th2
                         .= ||.0'(CNS) - 0'(CNS).|| by Th2
                         .= ||.0'(CNS).|| by RLVECT_1:26
-                        .= 0 by Def10;
+                        .= 0 by Def11;
            then ||.z * (S.n) - h.|| < r by A5,Th106;
-           hence ||.(z * S).n - h.|| < r by Def14;
+           hence ||.(z * S).n - h.|| < r by Def15;
            end;
                 now assume
 A6:        z <> 0c;
@@ -2583,13 +2591,13 @@ A6:        z <> 0c;
            let n; assume k <= n;
      then A11:   ||.(S.n) - g.|| < r/|.z.| by A10;
      A12:   ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by Th10
-                                    .= |.z.| * ||.(S.n) - g.|| by Def10;
+                                    .= |.z.| * ||.(S.n) - g.|| by Def11;
                 |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
                             .= |.z.| *|.z.|" * r
                             .= 1 * r by A9,XCMPLX_0:def 7
                             .= r;
            then ||.(z *(S.n)) - h.|| < r by A7,A11,A12,XREAL_1:70;
-           hence ||.(z * S).n - h.|| < r by Def14;
+           hence ||.(z * S).n - h.|| < r by Def15;
            end;
      hence thesis by A2;
 end;
@@ -2598,7 +2606,7 @@ definition
 let CNS;
 let S;
  func ||.S.|| -> Real_Sequence means
-:Def16:   for n holds it.n =||.(S.n).||;
+:Def17:   for n holds it.n =||.(S.n).||;
 existence
          proof
            deffunc F(Element of NAT) = ||.(S.$1).||;
@@ -2626,7 +2634,7 @@ proof
      assume S is convergent;
            then consider g such that
      A1:    for r st 0 < r ex m st for n
-           st m <= n holds ||.(S.n) - g.|| < r by Def15;
+           st m <= n holds ||.(S.n) - g.|| < r by Def16;
                 now let r be real number;
 A2:        r is Real by XREAL_0:def 1;
            assume 0 < r;
@@ -2638,7 +2646,7 @@ A2:        r is Real by XREAL_0:def 1;
      then A4:    ||.(S.n) - g.|| < r by A3;
                 abs(||.(S.n).|| - ||.g.||) <= ||.(S.n) - g.|| by Th111;
            then abs(||.(S.n).|| - ||.g.||) < r by A4,XXREAL_0:2;
-           hence abs(||.S.||.n - ||.g.||) < r by Def16;
+           hence abs(||.S.||.n - ||.g.||) < r by Def17;
            end;
            hence for n st k <= n holds abs(||.S.||.n - ||.g.||) < r;
            end;
@@ -2649,9 +2657,9 @@ definition
 let CNS;
 let S;
 assume A1:S is convergent;
- func lim S -> Point of CNS means :Def17:
+ func lim S -> Point of CNS means :Def18:
   for r st 0 < r ex m st for n st m <= n holds ||.(S.n) - it.|| < r;
-existence by A1,Def15;
+existence by A1,Def16;
 uniqueness
           proof
                     for x , y st
@@ -2712,7 +2720,7 @@ proof
 A4:        r is Real by XREAL_0:def 1;
          assume 0 < r;
            then consider m1 such that
-     A5:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def17;
+     A5:    for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,A2,A4,Def18;
            take k = m1;
            let n; assume
               k <= n;
@@ -2721,9 +2729,9 @@ A4:        r is Real by XREAL_0:def 1;
       abs(||.(S.n) - g.|| - ||.0'(CNS).||) <= ||.((S.n) - g ) - 0'(CNS).||
            by Th111;
            then abs(||.(S.n) - g.|| - ||.0'(CNS).||) < r by A6,XXREAL_0:2;
-           then abs((||.(S.n) - g.|| - 0)) < r by Def10;
+           then abs((||.(S.n) - g.|| - 0)) < r by Def11;
            then abs((||.(S - g).n.|| - 0)) < r by NORMSP_1:def 7;
-           hence abs((||.S - g.||.n - 0)) < r by Def16;
+           hence abs((||.S - g.||.n - 0)) < r by Def17;
            end;
     hence thesis by A3,SEQ_2:def 7;
 end;
@@ -2742,9 +2750,9 @@ proof
            now let r; assume 0 < r;
  then A4:  0< r/2 by SEQ_2:3;
       then consider m1 such that
- A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def17;
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def18;
       consider m2 such that
- A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def17;
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def18;
       take k = m1 + m2;
       let n such that
   A7:  k <= n;
@@ -2763,10 +2771,10 @@ NORMSP_1:def 5
       .= ||.(S1.n) - g1 + (-g2) + (S2.n).|| by RLVECT_1:def 6
       .= ||.(S1.n) - g1 + ((S2.n) - g2).|| by RLVECT_1:def 6;
            ||.(S1.n) - g1 + ((S2.n) - g2).|| <=
-      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def10;
+      ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Def11;
       hence ||.(S1 + S2).n - g.|| < r by A9,A10,XXREAL_0:2;
       end;
-      hence thesis by A3,Def17;
+      hence thesis by A3,Def18;
 end;
 
 theorem
@@ -2784,9 +2792,9 @@ proof
            now let r; assume 0 < r;
  then A4:  0< r/2 by SEQ_2:3;
       then consider m1 such that
- A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def17;
+ A5:  for n st m1 <= n holds ||.(S1.n) - g1.|| < r/2 by A1,Def18;
       consider m2 such that
- A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def17;
+ A6:  for n st m2 <= n holds ||.(S2.n) - g2.|| < r/2 by A2,A4,Def18;
       take k = m1 + m2;
       let n such that
   A7:  k <= n;
@@ -2808,7 +2816,7 @@ proof
       ||.(S1.n) - g1.|| + ||.(S2.n) - g2.|| by Th105;
       hence ||.(S1 - S2).n - g.|| < r by A9,A10,XXREAL_0:2;
       end;
-      hence thesis by A3,Def17;
+      hence thesis by A3,Def18;
 end;
 
 theorem
@@ -2821,7 +2829,7 @@ proof
       set h = g - x;
            now let r; assume 0 < r;
       then consider m1 such that
- A3:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def17;
+ A3:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def18;
       take k = m1;
       let n; assume k <= n;
  then A4:   ||.(S.n) - g.|| < r by A3;
@@ -2832,7 +2840,7 @@ proof
                    .= ||.((S.n) - x) - h.|| by RLVECT_1:47;
       hence ||.(S - x).n - h.|| < r by A4,NORMSP_1:def 7;
       end;
-      hence thesis by A2,Def17;
+      hence thesis by A2,Def18;
 end;
 
 theorem
@@ -2847,16 +2855,16 @@ proof
      A4:   z = 0;
            let r; assume 0 < r;
            then consider m1 such that
-     A5:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def17;
+     A5:   for n st m1 <= n holds ||.(S.n) - g.|| < r by A1,Def18;
            take k = m1;
            let n; assume k <= n;
      then A6:   ||.(S.n) - g.|| < r by A5;
              ||.z * (S.n) - z * g.|| = ||.0c * (S.n) - 0'(CNS).|| by A4,Th2
                         .= ||.0'(CNS) - 0'(CNS).|| by Th2
                         .= ||.0'(CNS).|| by RLVECT_1:26
-                        .= 0 by Def10;
+                        .= 0 by Def11;
            then ||.z * (S.n) - h.|| < r by A6,Th106;
-           hence ||.(z * S).n - h.|| < r by Def14;
+           hence ||.(z * S).n - h.|| < r by Def15;
            end;
                 now assume
 A7:        z <> 0c;
@@ -2867,18 +2875,18 @@ A7:        z <> 0c;
                 0/|.z.| =0;
            then 0 < r/|.z.| by A8,A9,REAL_1:73;
            then consider m1 such that
-     A11:   for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1,Def17;
+     A11:   for n st m1 <= n holds ||.(S.n) - g.|| < r/|.z.| by A1,Def18;
            take k = m1;
            let n; assume k <= n;
      then A12:   ||.(S.n) - g.|| < r/|.z.| by A11;
      A13:   ||.(z * (S.n)) - (z * g).|| = ||.z * ((S.n) - g).|| by Th10
-                                    .= |.z.| * ||.(S.n) - g.|| by Def10;
+                                    .= |.z.| * ||.(S.n) - g.|| by Def11;
                 |.z.| * (r/|.z.|) = |.z.| * (|.z.|" * r) by XCMPLX_0:def 9
                             .= |.z.| *|.z.|" * r
                             .= 1 * r by A10,XCMPLX_0:def 7
                             .= r;
            then ||.(z *(S.n)) - h.|| < r by A8,A12,A13,XREAL_1:70;
-           hence ||.(z * S).n - h.|| < r by Def14;
+           hence ||.(z * S).n - h.|| < r by Def15;
            end;
-     hence thesis by A2,A3,Def17;
+     hence thesis by A2,A3,Def18;
 end;

@@ -71,7 +71,7 @@
 <Func kind="F" nr="2"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="80">
+<Func kind="K" nr="79">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>

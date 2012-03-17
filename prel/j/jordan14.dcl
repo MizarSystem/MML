@@ -23,14 +23,14 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="FINSEQ_5"/>
@@ -52,39 +52,35 @@
 <Cluster>
 <Adjective nr="6" value="false"/>
 <Adjective nr="7" value="false"/>
-<Adjective nr="98">
+<Adjective nr="113">
 <Func kind="U" nr="1">
-<Func kind="K" nr="233">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
 </Func>
 </Adjective>
-<Adjective nr="99"/>
-<Adjective nr="100">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="104">
-<Num nr="2"/>
-</Adjective>
-<Adjective nr="105"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
 </Cluster>
 <Func kind="U" nr="1">
-<Func kind="K" nr="233">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="280">
+<Func kind="K" nr="314">
 <Num nr="2"/>
-<Func kind="K" nr="267">
+<Func kind="K" nr="301">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="41">
-<Func kind="K" nr="233">
+<Adjective nr="42">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -94,11 +90,11 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="116"/>
+<Adjective nr="131"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="233">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -109,20 +105,20 @@
 <Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="134">
-<Func kind="K" nr="233">
+<Func kind="K" nr="133">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
-<Func kind="K" nr="279">
-<Func kind="K" nr="286">
+<Func kind="K" nr="313">
+<Func kind="K" nr="320">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="112">
-<Func kind="K" nr="233">
+<Adjective nr="127">
+<Func kind="K" nr="267">
 <Num nr="2"/>
 </Func>
 </Adjective>

@@ -17,43 +17,44 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="8">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="45"/>
+<Adjective nr="70"/>
+<Adjective nr="71"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
+<Adjective nr="80"/>
+<Adjective nr="81"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -89,14 +90,14 @@
 <Adjective nr="4"/>
 <Adjective nr="8">
 <Func kind="K" nr="24">
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="78"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="24">
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="78"/>
 <LocusVar nr="1"/>
 </Func>
 <LocusVar nr="1"/>
@@ -109,17 +110,17 @@
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="78"/>
 </Adjective>
 </Cluster>
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="78"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="8">
+<Func kind="G" nr="13">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -128,7 +129,7 @@
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -7,13 +7,15 @@
 environ
 
  vocabularies RLVECT_1, MIDSP_1, PRE_TOPC, FUNCT_1, QC_LANG1, ARYTM_1,
-      VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2, ARYTM;
+      VECTSP_1, RLVECT_2, BINOP_1, MIDSP_2, ARYTM, ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, DOMAIN_1, STRUCT_0,
-      PRE_TOPC, RLVECT_1, VECTSP_1, MIDSP_1;
- constructors BINOP_1, DOMAIN_1, VECTSP_1, MIDSP_1;
- registrations XBOOLE_0, RELSET_1, STRUCT_0, VECTSP_1, MIDSP_1;
+      ALGSTR_0, PRE_TOPC, RLVECT_1, VECTSP_1, MIDSP_1;
+ constructors BINOP_1, DOMAIN_1, VECTSP_1, MIDSP_1, RLVECT_1, VALUED_1,
+      PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, RELSET_1, STRUCT_0, VECTSP_1, MIDSP_1, VALUED_1,
+      FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions STRUCT_0, VECTSP_1;
+ definitions STRUCT_0, VECTSP_1, VALUED_1;
  theorems BINOP_1, MIDSP_1, RLVECT_1, VECTSP_1;
  schemes BINOP_1;
 
@@ -23,7 +25,7 @@ begin
                        :: GROUP OF FREE VECTORS
                        ::
 
- reserve G for non empty LoopStr;
+ reserve G for non empty addLoopStr;
  reserve x for Element of G;
  reserve M for non empty MidStr;
  reserve p,q,r for Point of M;
@@ -69,7 +71,7 @@ definition let S,G,w,a,x;
 end;
 
 reserve G for add-associative right_zeroed right_complementable
-    (non empty LoopStr);
+    (non empty addLoopStr);
 reserve x for Element of G;
 reserve w for Function of [:S,S:],the carrier of G;
 
@@ -167,17 +169,17 @@ Th11: for w being Function of [:the carrier of M,the carrier of M:],
  end;
 
 reserve G for add-associative right_zeroed right_complementable
-   Abelian (non empty LoopStr);
+   Abelian (non empty addLoopStr);
 reserve x for Element of G;
 
 canceled;
 
 theorem Th13:
-  for G being add-associative Abelian (non empty LoopStr),
+  for G being add-associative Abelian (non empty addLoopStr),
       x,y,z,t being Element of G holds
  (x+y)+(z+t) = (x+z)+(y+t)
  proof
-   let G be add-associative Abelian (non empty LoopStr),
+   let G be add-associative Abelian (non empty addLoopStr),
       x,y,z,t be Element of G;
    thus (x+y)+(z+t) = x+(y+(z+t)) by RLVECT_1:def 6
                    .= x+(z+(y+t)) by RLVECT_1:def 6
@@ -185,7 +187,7 @@ theorem Th13:
  end;
 
 theorem
-  for G being add-associative Abelian (non empty LoopStr),
+  for G being add-associative Abelian (non empty addLoopStr),
       x,y being Element of G holds
  Double (x + y) = Double x + Double y by Th13;
 
@@ -193,7 +195,7 @@ theorem
 Th15: Double (-x) = -Double x
  proof
        0.G = Double 0.G by RLVECT_1:def 7
-      .= Double (x+-x) by RLVECT_1:def 10
+      .= Double (x+-x) by RLVECT_1:def 11
       .= Double x + Double (-x) by Th13;
    hence thesis by RLVECT_1:19;
  end;
@@ -283,7 +285,7 @@ Th18: (for a being set holds a is Element of vectgroup(M)
       let a,b be Element of G,x,y be Vector of M such that
       A1: a=x & b=y;
       reconsider xx = x, yy = y as Element of setvect(M) by MIDSP_1:71;
-      thus a+b = (the add of G).(a,b) by RLVECT_1:5
+      thus a+b = (the addF of G).(a,b) by RLVECT_1:5
               .= (addvect(M)).(xx,yy) by A1,MIDSP_1:83
               .= xx+yy by MIDSP_1:def 15
               .= x+y by MIDSP_1:def 14;
@@ -330,7 +332,7 @@ Lm1:(for a being Element of vectgroup(M)
             .= 0.G by Th18;
   end;
 
-definition let IT be non empty LoopStr;
+definition let IT be non empty addLoopStr;
  attr IT is midpoint_operator means
  :Def5: (for a being Element of IT
       ex x being Element of IT st Double x = a)
@@ -339,10 +341,10 @@ definition let IT be non empty LoopStr;
 end;
 
 registration
-  cluster midpoint_operator -> Fanoian (non empty LoopStr);
+  cluster midpoint_operator -> Fanoian (non empty addLoopStr);
   coherence
   proof
-   let L be non empty LoopStr;
+   let L be non empty addLoopStr;
    assume A1: L is midpoint_operator;
    let a be Element of L; assume a + a = 0.L;
    then Double a = 0.L;
@@ -352,7 +354,7 @@ end;
 
 registration
  cluster strict midpoint_operator add-associative right_zeroed
-  right_complementable Abelian (non empty LoopStr);
+  right_complementable Abelian (non empty addLoopStr);
  existence
   proof
    consider M;
@@ -367,17 +369,17 @@ registration
 end;
 
 reserve G for midpoint_operator add-associative right_zeroed
-  right_complementable Abelian (non empty LoopStr);
+  right_complementable Abelian (non empty addLoopStr);
 reserve x,y for Element of G;
 
 theorem Th19:
   for G being Fanoian add-associative right_zeroed
-   right_complementable (non empty LoopStr),
+   right_complementable (non empty addLoopStr),
       x being Element of G holds
   x = -x implies x = 0.G
  proof
    let G be Fanoian add-associative right_zeroed right_complementable
-     (non empty LoopStr),
+     (non empty addLoopStr),
        x be Element of G;
    assume A1:x = -x;
        -x + x = 0.G by RLVECT_1:16;
@@ -386,15 +388,15 @@ theorem Th19:
 
 theorem Th20:
   for G being Fanoian add-associative right_zeroed
-   right_complementable Abelian (non empty LoopStr),
+   right_complementable Abelian (non empty addLoopStr),
       x,y being Element of G holds
   Double x = Double y implies x = y
  proof
    let G be Fanoian add-associative right_zeroed
-    right_complementable Abelian (non empty LoopStr),
+    right_complementable Abelian (non empty addLoopStr),
        x,y be Element of G;
    assume Double x = Double y;
-   then 0.G = (x+x)+-(y+y) by RLVECT_1:def 10
+   then 0.G = (x+x)+-(y+y) by RLVECT_1:def 11
            .= x+x+(-y+-y) by RLVECT_1:45
            .= x+(x+(-y+-y)) by RLVECT_1:def 6
            .= x+(x+-y+-y) by RLVECT_1:def 6
@@ -405,7 +407,7 @@ theorem Th20:
  end;
 
 definition let G be midpoint_operator add-associative right_zeroed
-   right_complementable Abelian (non empty LoopStr),
+   right_complementable Abelian (non empty addLoopStr),
                x be Element of G;
  func Half x -> Element of G means
  :Def6: Double it = x;
@@ -767,7 +769,7 @@ Th33: M is MidSp iff ex G st ex w
    end;
    given G being midpoint_operator
      add-associative right_zeroed right_complementable
-      Abelian (non empty LoopStr), w being Function of
+      Abelian (non empty addLoopStr), w being Function of
         [:the carrier of M,the carrier of M:],the carrier of G such that
     A3: w is_atlas_of the carrier of M,G & M,G are_associated_wrp w;
     thus M is MidSp by A3,Th23;
@@ -775,7 +777,7 @@ Th33: M is MidSp iff ex G st ex w
 
 definition let M be non empty MidStr;
  struct AtlasStr over M
-  (# algebra -> non empty LoopStr,
+  (# algebra -> non empty addLoopStr,
      function -> Function of [:the carrier of M,the carrier of M:],
                             the carrier of the algebra #);
 end;
@@ -795,7 +797,7 @@ registration let M be MidSp;
   proof
     consider G being midpoint_operator
     add-associative right_zeroed right_complementable Abelian
-     (non empty LoopStr),
+     (non empty addLoopStr),
              w being Function of [:the carrier of M,the carrier of M:],
                                  the carrier of G such that
     A1: w is_atlas_of the carrier of M,G and

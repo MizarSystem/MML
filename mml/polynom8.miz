@@ -12,21 +12,22 @@ environ
       ARYTM_3, RELAT_1, FUNCT_1, ABSVALUE, MCART_1, FINSEQ_2, POLYNOM3,
       POLYNOM8, ARYTM;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, NUMBERS, XCMPLX_0,
-      XXREAL_0, SEQ_1, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, PARTFUN1, RLVECT_1,
-      FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1, VECTSP_1, FVSUM_1, ALGSEQ_1,
-      POLYNOM5, POLYNOM3, MATRIX_1, MATRIX_3, INT_1, NAT_1, BINARITH, POLYNOM4,
-      MCART_1, INT_2;
+      XXREAL_0, VALUED_1, SEQ_1, VECTSP_2, BINOP_1, BINOM, ALGSTR_1, PARTFUN1,
+      FINSEQ_1, FINSEQ_2, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1,
+      FVSUM_1, ALGSEQ_1, POLYNOM5, POLYNOM3, MATRIX_1, MATRIX_3, INT_1, NAT_1,
+      BINARITH, POLYNOM4, MCART_1, INT_2;
  constructors REAL_1, SQUARE_1, FINSOP_1, BINARITH, VECTSP_2, ALGSTR_2,
-      TOPREAL1, MATRIX_3, POLYNOM1, POLYNOM4, POLYNOM5, BINOM;
+      TOPREAL1, MATRIX_3, POLYNOM1, POLYNOM4, POLYNOM5, BINOM, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1,
-      STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1, POLYNOM3;
+      STRUCT_0, VECTSP_1, ALGSTR_1, GCD_1, POLYNOM3, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions VECTSP_1, RLVECT_1, BINOM, FINSEQ_1, MATRIX_1, POLYNOM3;
+ definitions VECTSP_1, RLVECT_1, BINOM, FINSEQ_1, MATRIX_1, POLYNOM3, VALUED_1;
  theorems FVSUM_1, GROUP_1, BINOM, VECTSP_1, ALGSEQ_1, NAT_1, FINSEQ_4, INT_1,
       FUNCT_2, XREAL_1, VECTSP_2, ALGSTR_1, MATRIX_1, FUNCT_1, MATRIX_3,
       FINSEQ_1, ZFMISC_1, COMPLEX1, RLVECT_1, POLYNOM4, BINARITH, TARSKI,
       REAL_1, MCART_1, FINSEQ_2, POLYNOM1, ABSVALUE, POLYNOM3, POLYNOM5,
-      FINSEQ_3, ORDINAL1, XXREAL_0, FUNCOP_1, PARTFUN1;
+      FINSEQ_3, ORDINAL1, XXREAL_0, FUNCOP_1, PARTFUN1, STRUCT_0;
  schemes NAT_1, FUNCT_2, MATRIX_1, FINSEQ_1, INT_1;
 
 begin :: Preliminaries
@@ -60,7 +61,7 @@ proof let n be Element of NAT;
 assume A1: x <> 0.L;
 defpred P[Element of NAT] means x |^ $1 <> 0.L;
  x |^ 0 = 1_L by BINOM:8;
-then A2: P[0] by VECTSP_1:def 21;
+then A2: P[0] by STRUCT_0:def 8;
 A3: now let n be Element of NAT;
   assume P[n];
   then (x |^ n) * x <> 0.L by A1,VECTSP_2:def 5;
@@ -71,24 +72,24 @@ hence thesis;
 end;
 
 registration
-cluster Field-like -> domRing-like (associative well-unital
+cluster almost_left_invertible -> domRing-like (associative well-unital
                       add-associative right_zeroed right_complementable
-                      left-distributive (non empty doubleLoopStr));
+                      right-distributive (non empty doubleLoopStr));
 coherence
 proof
 let L be associative well-unital add-associative right_zeroed
-         right_complementable left-distributive (non empty doubleLoopStr);
-assume A1: L is Field-like;
+         right_complementable right-distributive (non empty doubleLoopStr);
+assume A1: L is almost_left_invertible;
  for x,y being Element of L holds x*y = 0.L implies x = 0.L or y = 0.L
   proof
   let x,y be Element of L;
   assume A2: x*y = 0.L;
    now assume A3: x <> 0.L & y <> 0.L;
-    then consider yy being Element of L such that
-    A4: y * yy = 1_L by A1,VECTSP_1:def 20;
-     x = x * 1_L by VECTSP_1:def 13
-     .= (x * y) * yy by A4,GROUP_1:def 4
-     .= 0.L by A2,VECTSP_1:39;
+    then consider xx being Element of L such that
+    A4: xx * x = 1.L by A1,VECTSP_1:def 20;
+     y = 1.L * y by VECTSP_1:def 19
+     .= xx * (x * y) by A4,GROUP_1:def 4
+     .= 0.L by A2,VECTSP_1:36;
     hence contradiction by A3;
     end;
   hence thesis;
@@ -99,37 +100,37 @@ end;
 
 theorem Th2:
 for L being add-associative right_zeroed right_complementable associative
-            commutative well-unital Field-like
+            commutative well-unital almost_left_invertible
             distributive (non empty doubleLoopStr),
     x,y being Element of L st x <> 0.L & y <> 0.L
 holds (x * y)" = x" * y"
 proof
   let L be add-associative right_zeroed right_complementable
-           associative commutative well-unital Field-like
+           associative commutative well-unital almost_left_invertible
            distributive (non empty doubleLoopStr);
   let x,y be Element of L;
   assume A1: x <> 0.L & y <> 0.L;
 then A2: x * y <> 0.L by VECTSP_1:44;
    (x" * y") * (x * y) = x" * y" * y * x by GROUP_1:def 4
                      .= x" * (y" * y) * x by GROUP_1:def 4
-                     .= x" * 1_L * x by A1,VECTSP_1:def 22
+                     .= x" * 1.L * x by A1,VECTSP_1:def 22
                      .= x" * x by VECTSP_1:def 13
-                     .= 1_L by A1,VECTSP_1:def 22;
+                     .= 1.L by A1,VECTSP_1:def 22;
 hence thesis by A2,VECTSP_1:def 22;
 end;
 
 theorem Th3:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     z,z1 being Element of L
 holds z <> 0.L implies z1 = (z1 * z) / z
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     z,z1 be Element of L;
 assume A1: z <> 0.L;
 thus (z1 * z) / z = z1 * (z * z") by GROUP_1:def 4
-                 .= z1 * 1_L by A1,VECTSP_1:def 22
+                 .= z1 * 1.L by A1,VECTSP_1:def 22
                  .= z1 by VECTSP_1:def 19;
 end;
 
@@ -139,32 +140,32 @@ for L being left_zeroed right_zeroed add-associative
     m being Element of NAT,
     s being FinSequence of L
 st len s = m &
-   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1_L
-holds Sum s = m * 1_L
+   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L
+holds Sum s = m * 1.L
 proof
 let L be left_zeroed right_zeroed add-associative
          right_complementable (non empty doubleLoopStr),
     m be Element of NAT, s be FinSequence of L;
 assume A1: len s = m &
-   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1_L;
+   for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L;
 defpred P[Element of NAT] means
   for s being FinSequence of L
   st len s = $1 & for k being Element of NAT st 1 <= k & k <= $1
-  holds s/.k = 1_L holds Sum s = $1 * 1_L;
+  holds s/.k = 1.L holds Sum s = $1 * 1.L;
 A2: P[0]
   proof
    for s being FinSequence of L
   st len s = 0 & for k being Element of NAT st 1 <= k & k <= 0
-  holds s/.k = 1_L holds Sum s = 0 * 1_L
+  holds s/.k = 1.L holds Sum s = 0 * 1.L
   proof
     let s be FinSequence of L;
     assume A3: len s = 0 & for k being Element of NAT st 1 <= k & k <= 0
-               holds s/.k = 1_L;
+               holds s/.k = 1.L;
 A4: <*>the carrier of L
         is Element of 0-tuples_on the carrier of L by FINSEQ_2:114;
      Sum s = Sum (<*>(the carrier of L)) by A3,FINSEQ_1:25
          .= 0.L by A4,FVSUM_1:93
-         .= 0 * 1_L by BINOM:13;
+         .= 0 * 1.L by BINOM:13;
     hence thesis;
   end;
   hence thesis;
@@ -175,19 +176,19 @@ A5: for l being Element of NAT st P[l] holds P[l+1]
    assume
 A6: for g being FinSequence of L
        st (len g = l & for k being Element of NAT st 1 <= k & k <= l
-          holds g/.k = 1_L) holds Sum g = l * 1_L;
+          holds g/.k = 1.L) holds Sum g = l * 1.L;
     for s being FinSequence of L
       st len s = l+1 & for k being Element of NAT st 1 <= k & k <= l+1
-          holds s/.k = 1_L holds Sum s = (l+1) * 1_L
+          holds s/.k = 1.L holds Sum s = (l+1) * 1.L
   proof
     let s be FinSequence of L;
     assume A7: len s = l+1 &
-     for k being Element of NAT st 1 <= k & k <= l+1 holds s/.k = 1_L;
+     for k being Element of NAT st 1 <= k & k <= l+1 holds s/.k = 1.L;
      ex G being FinSequence of L
      st (dom G = Seg l &
-     for k being Nat st k in Seg l holds G.k = 1_L)
+     for k being Nat st k in Seg l holds G.k = 1.L)
     proof
-      defpred P[Nat,set] means $2 = 1_L;
+      defpred P[Nat,set] means $2 = 1.L;
   A8: for n being Nat st n in Seg l holds
        ex x being Element of L st P[n,x];
        ex G be FinSequence of L
@@ -197,27 +198,27 @@ A6: for g being FinSequence of L
     end;
     then consider g being FinSequence of L such that
 A9:dom g = Seg l &
-     for k being Nat st k in Seg l holds g.k = 1_L;
-A10:for k being Nat st 1 <= k & k <= l holds g/.k = 1_L
+     for k being Nat st k in Seg l holds g.k = 1.L;
+A10:for k being Nat st 1 <= k & k <= l holds g/.k = 1.L
     proof
       let k be Nat;
       assume A11: 1 <= k & k <= l;
       then A12: k in Seg l by FINSEQ_1:3;
       A13: k in dom g by A9,A11,FINSEQ_1:3;
-       1_L = g.k by A9,A12
+       1.L = g.k by A9,A12
       .= g/.k by A13,PARTFUN1:def 8;
       hence thesis;
     end;
 then A14: len g = l & for k being Element of NAT st 1 <= k & k <= l
-                    holds g/.k = 1_L by A9,FINSEQ_1:def 3;
- s = g^<*1_L*>
+                    holds g/.k = 1.L by A9,FINSEQ_1:def 3;
+ s = g^<*1.L*>
     proof
-       dom <*1_L*> = Seg 1 by FINSEQ_1:def 8;
-  then A15: len <*1_L*> = 1 by FINSEQ_1:def 3;
+       dom <*1.L*> = Seg 1 by FINSEQ_1:def 8;
+  then A15: len <*1.L*> = 1 by FINSEQ_1:def 3;
   A16: dom s = Seg (l + 1) by A7,FINSEQ_1:def 3;
-A17:   dom (g^<*1_L*>) = Seg (len g + len <*1_L*>) by FINSEQ_1:def 7
+A17:   dom (g^<*1.L*>) = Seg (len g + len <*1.L*>) by FINSEQ_1:def 7
                        .= dom s by A9,A15,A16,FINSEQ_1:def 3;
-       for k being Nat st k in dom s holds s.k = (g^<*1_L*>).k
+       for k being Nat st k in dom s holds s.k = (g^<*1.L*>).k
       proof
         let k be Nat;
 A18:     k in NAT by ORDINAL1:def 13;
@@ -227,9 +228,9 @@ A20:     dom s = Seg(l + 1) by A7,FINSEQ_1:def 3;
         suppose A21: 1 <= k & k <= l;
           then A22: k in dom g by A9,A18;
           A23: 1 <= k & k <= l+1 by A21,NAT_1:12;
-           (g^<*1_L*>).k = g.k by A22,FINSEQ_1:def 7
+           (g^<*1.L*>).k = g.k by A22,FINSEQ_1:def 7
           .= g/.k by A22,PARTFUN1:def 8
-          .= 1_L by A10,A21
+          .= 1.L by A10,A21
           .= s/.k by A7,A18,A23
           .= s.k by A19,PARTFUN1:def 8;
           hence thesis;
@@ -239,18 +240,18 @@ A20:     dom s = Seg(l + 1) by A7,FINSEQ_1:def 3;
           then (l+1) - k is Element of NAT by INT_1:16;
           then 0 <= (l+1) - k + 1 by NAT_1:12;
           then reconsider ii = (l+1) - k + 1 as Element of NAT by INT_1:16;
-      A25: dom <*1_L*> = Seg 1 by FINSEQ_1:def 8;
+      A25: dom <*1.L*> = Seg 1 by FINSEQ_1:def 8;
            l+1 <= k & k <= l+1 by A24,NAT_1:13;
           then ii = k - k + 1 by XXREAL_0:1;
-          then A26: ii in dom <*1_L*> by A25;
+          then A26: ii in dom <*1.L*> by A25;
            l+1 <= k & k <= l+1 by A24,NAT_1:13;
 then A27:       ii = k - k + 1 by XXREAL_0:1;
            l + 0 < k + l by A24,XREAL_1:10;
           then l+1 <= k+l by NAT_1:13;
 then A28:       (l+1)-l <= (k+l)-l by XREAL_1:11;
-           (g^<*1_L*>).k = (g^<*1_L*>).(len g + ii) by A9,A27,FINSEQ_1:def 3
-          .= <*1_L*>.1 by A26,A27,FINSEQ_1:def 7
-          .= 1_L by FINSEQ_1:def 8
+           (g^<*1.L*>).k = (g^<*1.L*>).(len g + ii) by A9,A27,FINSEQ_1:def 3
+          .= <*1.L*>.1 by A26,A27,FINSEQ_1:def 7
+          .= 1.L by FINSEQ_1:def 8
           .= s/.k by A7,A18,A24,A28
           .= s.k by A19,PARTFUN1:def 8;
           hence thesis;
@@ -258,10 +259,10 @@ then A28:       (l+1)-l <= (k+l)-l by XREAL_1:11;
       end;
       hence thesis by A17,FINSEQ_1:17;
     end;
-    then Sum s = Sum g + 1_L by FVSUM_1:87
-    .= (l*1_L) + 1_L by A6,A14
-    .= (l*1_L) + (1*1_L) by BINOM:14
-    .= (l+1) * 1_L by BINOM:16;
+    then Sum s = Sum g + 1.L by FVSUM_1:87
+    .= (l*1.L) + 1.L by A6,A14
+    .= (l*1.L) + (1*1.L) by BINOM:14
+    .= (l+1) * 1.L by BINOM:16;
     hence thesis;
   end;
   hence thesis;
@@ -273,33 +274,33 @@ end;
 theorem Th5:
 for L being add-associative right_zeroed right_complementable
             associative commutative well-unital distributive
-            Field-like  (non empty doubleLoopStr),
+            almost_left_invertible  (non empty doubleLoopStr),
     s being FinSequence of L,
     q being Element of L
-st q <> 1_L &
+st q <> 1.L &
    for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1)
-holds Sum s = (1_L - q |^ (len s)) / (1_L - q)
+holds Sum s = (1.L - q |^ (len s)) / (1.L - q)
 proof
 let L be add-associative right_zeroed right_complementable
          associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     s be FinSequence of L, q be Element of L;
-assume A1: q <> 1_L &
+assume A1: q <> 1.L &
       for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
 defpred P[Nat] means
   for s being FinSequence of L st len s = $1
   for q being Element of L
-  st q <> 1_L &
+  st q <> 1.L &
      for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1)
-  holds Sum s = (1_L - q |^ (len s)) / (1_L - q);
+  holds Sum s = (1.L - q |^ (len s)) / (1.L - q);
  now let s be FinSequence of L;
   assume A2: len s = 0;
   let q be Element of L;
-  assume q <> 1_L &
+  assume q <> 1.L &
      for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
   A3: s = <*>(the carrier of L) by A2,FINSEQ_1:32;
-  thus (1_L - q |^ 0) / (1_L - q) = (1_L - 1_L) / (1_L - q) by BINOM:8
-   .= 0.L / (1_L - q) by RLVECT_1:28
+  thus (1.L - q |^ 0) / (1.L - q) = (1.L - 1_L) / (1.L - q) by BINOM:8
+   .= 0.L / (1.L - q) by RLVECT_1:28
    .= 0.L by VECTSP_1:36
    .= Sum s by A3,RLVECT_1:60;
   end;
@@ -311,7 +312,7 @@ A5: for k being Nat st P[k] holds P[k + 1]
     now let s be FinSequence of L;
      assume A7: len s = k+1;
      let q be Element of L;
-     assume A8: q <> 1_L &
+     assume A8: q <> 1.L &
       for i being Nat st 1 <= i & i <= len s holds s.i = q |^ (i-'1);
      set f = s|(Seg k);
      reconsider f as FinSequence by FINSEQ_1:19;
@@ -344,37 +345,37 @@ A5: for k being Nat st P[k] holds P[k + 1]
      then len s - 1 >= 1 - 1 by XREAL_1:11;
      then A20: len(s) -' 1 = len(s) - 1 by BINARITH:def 3
                         .= len f + 1 - 1 by A7,A9,FINSEQ_1:21;
-     A21: now assume 1_L - q = 0.L;
-        then (1_L - q) + q = q by ALGSTR_1:def 5;
-        then 1_L + (-q + q) = q by RLVECT_1:def 6;
-        then 1_L + 0.L = q by RLVECT_1:16;
+     A21: now assume 1.L - q = 0.L;
+        then (1.L - q) + q = q by ALGSTR_1:def 5;
+        then 1.L + (-q + q) = q by RLVECT_1:def 6;
+        then 1.L + 0.L = q by RLVECT_1:16;
         hence contradiction by A8,RLVECT_1:def 7;
         end;
       len s in dom s by A19,FINSEQ_3:27;
      then A22: s/.(len s) = s.(len s) by PARTFUN1:def 8;
      hence Sum(s) = Sum(f) + s/.(len s) by A17,A18,RLVECT_1:55
-        .= (1_L - q |^ (len f)) / (1_L - q)  + s/.(len s) by A6,A8,A10,A14
-        .= (1_L - q |^ (len f)) / (1_L - q) + q |^ (len f) by A8,A19,A20,A22
-        .= (1_L - q |^ (len f)) / (1_L - q)
-                   + (q |^ (len f) * (1_L - q)) / (1_L - q) by A21,Th3
-        .= ((1_L - q |^ (len f))
-                   + (q |^ (len f) * (1_L - q))) /(1_L - q) by VECTSP_1:def 12
-        .= ((1_L - q |^ (len f))
-           + ((q |^ (len f) * 1_L) + (q |^ (len f) * (-q)))) / (1_L - q)
+        .= (1.L - q |^ (len f)) / (1.L - q)  + s/.(len s) by A6,A8,A10,A14
+        .= (1.L - q |^ (len f)) / (1.L - q) + q |^ (len f) by A8,A19,A20,A22
+        .= (1.L - q |^ (len f)) / (1.L - q)
+                   + (q |^ (len f) * (1.L - q)) / (1.L - q) by A21,Th3
+        .= ((1.L - q |^ (len f))
+                   + (q |^ (len f) * (1.L - q))) /(1.L - q) by VECTSP_1:def 12
+        .= ((1.L - q |^ (len f))
+           + ((q |^ (len f) * 1.L) + (q |^ (len f) * (-q)))) / (1.L - q)
                    by VECTSP_1:def 11
-        .= ((1_L - q |^ (len f))
-            + (q |^ (len f) +  (q |^ (len f) * (-q)))) / (1_L - q)
+        .= ((1.L - q |^ (len f))
+            + (q |^ (len f) +  (q |^ (len f) * (-q)))) / (1.L - q)
                    by VECTSP_1:def 13
-        .= (1_L + (-q |^ (len f)
-           + (q |^ (len f) +  (q |^ (len f) * (-q))))) / (1_L - q)
+        .= (1.L + (-q |^ (len f)
+           + (q |^ (len f) +  (q |^ (len f) * (-q))))) / (1.L - q)
                    by RLVECT_1:def 6
-         .= (1_L + ((-q |^ (len f)
-            + q |^ (len f)) + (q |^ (len f) * (-q)))) / (1_L - q)
+         .= (1.L + ((-q |^ (len f)
+            + q |^ (len f)) + (q |^ (len f) * (-q)))) / (1.L - q)
                    by RLVECT_1:def 6
-         .= (1_L + (0.L + (q |^ (len f) * (-q)))) / (1_L - q) by RLVECT_1:16
-         .= (1_L + (q |^ (len f) * (-q))) / (1_L - q) by ALGSTR_1:def 5
-         .= (1_L + -((q |^ (len f) * q))) / (1_L - q) by VECTSP_1:40
-         .= (1_L - q |^ (len s)) / (1_L - q) by A17,GROUP_1:def 8;
+         .= (1.L + (0.L + (q |^ (len f) * (-q)))) / (1.L - q) by RLVECT_1:16
+         .= (1.L + (q |^ (len f) * (-q))) / (1.L - q) by ALGSTR_1:def 5
+         .= (1.L + -((q |^ (len f) * q))) / (1.L - q) by VECTSP_1:40
+         .= (1.L - q |^ (len s)) / (1.L - q) by A17,GROUP_1:def 8;
        end;
    hence thesis;
    end;
@@ -385,7 +386,7 @@ end;
 definition let L be well-unital (non empty doubleLoopStr),
                m be Element of NAT;
   func emb(m,L) -> Element of L equals
-     m * 1_L;
+     m * 1.L;
   coherence;
 end;
 
@@ -674,15 +675,15 @@ end;
   uniqueness
  proof
  let z1,z2 be sequence of L;
- assume A3: for i being Nat holds z1.i = (m1.i) * (m2.i);
- assume A4: for i being Nat holds z2.i = (m1.i) * (m2.i);
- A5: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
+ assume A4: for i being Nat holds z1.i = (m1.i) * (m2.i);
+ assume A5: for i being Nat holds z2.i = (m1.i) * (m2.i);
+ A6: dom z1 = NAT by FUNCT_2:def 1 .= dom z2 by FUNCT_2:def 1;
   now let x be set;
    assume x in dom z1;
    then reconsider x' = x as Element of NAT by FUNCT_2:def 1;
-   thus z1.x = (m1.x') * (m2.x') by A3 .= z2.x by A4;
+   thus z1.x = (m1.x') * (m2.x') by A4 .= z2.x by A5;
    end;
- hence z1 = z2 by A5,FUNCT_1:9;
+ hence z1 = z2 by A6,FUNCT_1:9;
  end;
 end;
 
@@ -771,7 +772,7 @@ begin :: Powers in doubleLoopStrs
 
 definition
   let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
       a be Element of L,
       i be Integer;
   func pow(a,i) -> Element of L equals :Def3:
@@ -791,24 +792,24 @@ end;
 
 theorem Th13:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L
-holds pow(x,0) = 1_L
+holds pow(x,0) = 1.L
 proof
 let L be associative commutative well-unital distributive
-          Field-like (non empty doubleLoopStr),
+          almost_left_invertible (non empty doubleLoopStr),
     x be Element of L;
    pow(x,0) = x |^ 0 by Def3 .= 1_L by BINOM:8;
   hence thesis;
 end;
 
 Lm3: for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     a being Element of L, i being Integer
 holds 0 > i implies pow(a,i) = (pow(a, abs(i)))"
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     a be Element of L, i be Integer;
 assume A1: 0 > i;
  pow(a, abs i) = power(L).(a,abs i) by Def3;
@@ -816,21 +817,21 @@ hence thesis by A1,Def3; end;
 
 Lm4:
 for L being associative commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     i being Integer,
     x being Element of L
 holds i <= 0 implies pow(x,i) = (pow(x, abs i))"
 proof
 let L be associative commutative well-unital distributive
-          Field-like non degenerated (non empty doubleLoopStr);
+          almost_left_invertible non degenerated (non empty doubleLoopStr);
 let i be Integer; let x be Element of L;
-A1: 1_L <> 0.L by VECTSP_1:def 21;
+A1: 1.L <> 0.L by STRUCT_0:def 8;
 assume A2: i <= 0;
   per cases by A2;
   suppose i < 0; hence thesis by Lm3; end;
   suppose A3: i = 0;
-    hence pow(x, i) = 1_L by Th13
-    .= 1_L * (1_L)" by A1,VECTSP_1:def 22
+    hence pow(x, i) = 1.L by Th13
+    .= 1.L * (1.L)" by A1,VECTSP_1:def 22
     .= (1_L)" by VECTSP_1:def 19
     .= (x |^ 0)" by BINOM:8
     .= (x |^ abs i)" by A3,ABSVALUE:def 1
@@ -839,24 +840,24 @@ end;
 
 theorem Th14:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L
 holds pow(x,1) = x
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x be Element of L;
 thus pow(x, 1) = x |^ 1 by Def3  .= x by BINOM:8;
 end;
 
 theorem Th15:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L
 holds pow(x,-1) = x"
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     x be Element of L;
  abs(-1) = --1 & --1 = 1 by ABSVALUE:def 1;
 hence pow(x, -1) = (pow(x, 1))" by Lm3  .= x" by Th14;
@@ -864,22 +865,22 @@ end;
 
 Lm5:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
    i being Element of NAT
-holds pow(1_L,i) = 1_L
+holds pow(1.L,i) = 1.L
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let i be Element of NAT;
-defpred P[Element of NAT] means pow(1_L,$1) = 1_L;
- pow(1_L,0) = power(L).(1_L,0) by Def3;
+defpred P[Element of NAT] means pow(1.L,$1) = 1.L;
+ pow(1_L,0) = power(L).(1.L,0) by Def3;
 then A1: P[0] by GROUP_1:def 8;
 A2: now let k be Element of NAT;
    assume A3: P[k];
-    pow(1_L,k+1) = power(L).(1_L,k+1) by Def3
-               .= power(L).(1_L,k) * 1_L by GROUP_1:def 8
-               .= 1_L * 1_L by A3,Def3
-               .= 1_L by VECTSP_1:def 19;
+    pow(1.L,k+1) = power(L).(1.L,k+1) by Def3
+               .= power(L).(1.L,k) * 1.L by GROUP_1:def 8
+               .= 1.L * 1.L by A3,Def3
+               .= 1.L by VECTSP_1:def 19;
    hence P[k+1];
    end;
  for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
@@ -888,34 +889,34 @@ end;
 
 theorem Th16:
 for L being associative commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     i being Integer
-holds pow(1_L,i) = 1_L
+holds pow(1.L,i) = 1.L
 proof
 let L be associative commutative well-unital distributive
-         Field-like non degenerated (non empty doubleLoopStr);
+         almost_left_invertible non degenerated (non empty doubleLoopStr);
 let i be Integer;
 per cases;
   suppose 0 <= i; then i is Element of NAT by INT_1:16;
     hence thesis by Lm5; end;
   suppose A1: 0 > i;
-    A2: pow(1_L,abs i) = 1_L by Lm5;
-    A3: pow(1_L,i) = (power(L).(1_L,abs i))" by A1,Def3
-        .= (1_L)" by A2,Def3;
-    A4: 1_L <> 0.L by VECTSP_1:def 21;
-     1_L * 1_L = 1_L by VECTSP_1:def 13;
+    A2: pow(1.L,abs i) = 1.L by Lm5;
+    A3: pow(1.L,i) = (power(L).(1.L,abs i))" by A1,Def3
+        .= (1.L)" by A2,Def3;
+    A4: 1.L <> 0.L by STRUCT_0:def 8;
+     1.L * 1.L = 1.L by VECTSP_1:def 13;
     hence thesis by A3,A4,VECTSP_1:def 22;  end;
   end;
 
 theorem Th17:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L,
     n being Element of NAT
 holds pow(x,n+1) = pow(x,n) * x & pow(x,n+1) = x * pow(x,n)
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x be Element of L; let n be Element of NAT;
  pow(x,n+1) = x |^ (n+1) by Def3
   .= (x |^ n) * x by GROUP_1:def 8
@@ -926,15 +927,15 @@ end;
 Lm6:
 for L being well-unital (non empty doubleLoopStr),
     n being Element of NAT
-holds (1_L) |^ n = 1_L
+holds (1.L) |^ n = 1.L
 proof
 let L be well-unital (non empty doubleLoopStr), n be Element of NAT;
-defpred P[Element of NAT] means (1_L)|^$1 = 1_L;
+defpred P[Element of NAT] means (1.L)|^$1 = 1_L;
 A1: P[0] by BINOM:8;
 A2: now let k be Element of NAT;
    assume A3: P[k];
-    (1_L)|^(k+1) = (1_L)|^k * 1_L by GROUP_1:def 8
-               .= 1_L by A3,VECTSP_1:def 19;
+    (1.L)|^(k+1) = (1.L)|^k * 1.L by GROUP_1:def 8
+               .= 1.L by A3,VECTSP_1:def 19;
    hence P[k+1];
    end;
  for k being Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
@@ -943,35 +944,35 @@ end;
 
 Lm7:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     m being Element of NAT,
     x being Element of L st x <> 0.L
-holds (x|^m) * ((x")|^m) = 1_L
+holds (x|^m) * ((x")|^m) = 1.L
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     m be Element of NAT, x be Element of L;
 assume A1: x <> 0.L;
    (x |^ m) * ((x") |^ m) = (x * x") |^ m by BINOM:10
-  .= (1_L) |^ m by A1,VECTSP_1:def 22
-  .= 1_L by Lm6;
+  .= (1.L) |^ m by A1,VECTSP_1:def 22
+  .= 1.L by Lm6;
   hence thesis;
 end;
 
 theorem Th18:
 for L being add-associative right_zeroed right_complementable associative
             commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     i being Integer,
     x being Element of L st x <> 0.L
 holds (pow(x, i))" = pow(x, -i)
 proof
 let L be add-associative right_zeroed right_complementable associative
             commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr);
+            almost_left_invertible non degenerated (non empty doubleLoopStr);
 let i be Integer; let x be Element of L;
 assume A1: x <> 0.L;
-A2: 1_L <> 0.L by VECTSP_1:def 21;
+A2: 1.L <> 0.L by STRUCT_0:def 8;
 per cases;
 suppose A3: i >= 0;
      per cases by A3,XREAL_1:26;
@@ -980,9 +981,9 @@ suppose A3: i >= 0;
                       .= (pow(x, (--i)))" by A4,ABSVALUE:def 1
                       .= (pow(x, i))"; end;
      suppose A5: i = 0;
-         hence pow(x, (- i)) = 1_L by Th13
-               .= 1_L * (1_L)" by A2,VECTSP_1:def 22
-               .= (1_L)" by VECTSP_1:def 19
+         hence pow(x, (- i)) = 1.L by Th13
+               .= 1.L * (1.L)" by A2,VECTSP_1:def 22
+               .= (1.L)" by VECTSP_1:def 19
                .= (pow(x, i))" by A5,Th13; end;
     end;
 suppose A6: i < 0;
@@ -1029,7 +1030,7 @@ A2:   now per cases by Lm1;
       .= pow(x, abs(j+1)) * ((x * pow(x, abs j))") by A1,A6,Th2
       .= pow(x, abs(j+1)) * (pow(x, abs(j) + 1))" by Th17
       .= pow(x, abs(j+1)) * (pow(x, abs(j+1)))" by A5,ABSVALUE:def 1
-      .= 1_L by A7,VECTSP_1:def 22;
+      .= 1.L by A7,VECTSP_1:def 22;
     end;
     suppose A8: j < - 1;
       then A9:j + 1 < - 1 + 1 by XREAL_1:8;
@@ -1052,17 +1053,17 @@ A2:   now per cases by Lm1;
       .= (pow(x, abs(j+1)) * x)" * pow(x, -j) by A1,A10,Th2
       .= (pow(x, (abs(j + 1) + 1)))" * pow(x, -j) by Th17
       .= (pow(x, (- (j + 1) + 1)))" * pow(x, -j) by A9,ABSVALUE:def 1
-      .= 1_L by A11,VECTSP_1:def 22;
+      .= 1.L by A11,VECTSP_1:def 22;
     end;
     suppose A12: j = - 1;
       A13: x" <> 0.L by A1,VECTSP_1:74;
       thus pow(x, j+1) * (pow(x, -1) * pow(x, -j)) =
-        1_L * (pow(x, -1) * pow(x, -j)) by A12,Th13
+        1.L * (pow(x, -1) * pow(x, -j)) by A12,Th13
       .= (pow(x, -1) * pow(x, -j)) by VECTSP_1:def 19
       .= x" * pow(x, -j) by Th15
       .= x" * (pow(x, j))" by A1,Th18
       .= x" * (x")" by A12,Th15
-      .= 1_L by A13,VECTSP_1:def 22;
+      .= 1.L by A13,VECTSP_1:def 22;
     end;
   end;
   A14: pow(x, j+1) <> 0.L
@@ -1114,7 +1115,7 @@ A19: pow(x, -1) = (x |^ (abs(-1)))" by Def3;
     end;
   end;
    pow(x, j+1) * pow(x, -(j+1)) = pow(x, j+1) * (pow(x, j+1))" by A1,Th18
-  .= 1_L by A14,VECTSP_1:def 22;
+  .= 1.L by A14,VECTSP_1:def 22;
   then A22: pow(x, -(j + 1)) = pow(x, -1) * pow(x, -j)
     by A2,A20,VECTSP_1:33;
   thus pow(x, j+1) = pow(x, -(-(j+1)))
@@ -1151,7 +1152,7 @@ A2: now per cases by Lm2;
     .= pow(x, abs(j-1)) * x * pow(x, -j) by A4,ABSVALUE:def 1
     .= pow(x, abs(j-1)) * x * ((pow(x, abs(-j)))") by A6,Lm4
     .= pow(x, abs(j-1) + 1) * ((pow(x, abs(-j)))") by Th17
-    .= 1_L by A5,A7,A8,VECTSP_1:def 22;
+    .= 1.L by A5,A7,A8,VECTSP_1:def 22;
   end;
   suppose A9: j < 0;
     A10: - 1 < 0 & 0 + 0 = 0;
@@ -1171,14 +1172,14 @@ A2: now per cases by Lm2;
     .= (pow(x, abs(j-1)))" * pow(x, 1 + abs(-j)) by Th17
     .= (pow(x, abs(j-1)))" * pow(x, 1 + (-j)) by A14,ABSVALUE:def 1
     .= (pow(x, abs(j-1)))" * pow(x, abs(j-1)) by A13,A15,ABSVALUE:def 1
-    .= 1_L by A11,VECTSP_1:def 22;
+    .= 1.L by A11,VECTSP_1:def 22;
   end;
   suppose A16: j = 0;
     hence pow(x, j-1) * (x * pow(x, -j)) = x" * (x * pow(x, -j)) by Th15
     .= x" * x * pow(x, -j) by GROUP_1:def 4
-    .= 1_L * pow(x, -j) by A1,VECTSP_1:def 22
+    .= 1.L * pow(x, -j) by A1,VECTSP_1:def 22
     .= pow(x, 0) by A16,VECTSP_1:def 19
-    .= 1_L by Th13;
+    .= 1.L by Th13;
   end;
   end;
   A17: pow(x, j-1) <> 0.L
@@ -1225,7 +1226,7 @@ A2: now per cases by Lm2;
   end;
    pow(x, j-1) * (pow(x, 1-j)) = pow(x, j-1) * pow(x, -(j-1))
   .= pow(x, j-1) * (pow(x, j-1))" by A1,Th18
-  .= 1_L by A17,VECTSP_1:def 22;
+  .= 1.L by A17,VECTSP_1:def 22;
   then x * pow(x, -j) = pow(x, 1-j) by A2,A19,VECTSP_1:33;
   then (pow(x, 1-j))" = (pow(x, -j))" * x" by A1,A21,Th2
   .= pow(x, -(- j)) * x" by A1,Th18
@@ -1247,7 +1248,7 @@ defpred P[Integer] means for i being Integer
 A2: P[0]
   proof
     let i be Integer;
-    thus pow(x, i+0) = pow(x, i) * 1_L by VECTSP_1:def 13
+    thus pow(x, i+0) = pow(x, i) * 1.L by VECTSP_1:def 13
                     .= pow(x, i) * pow(x, 0) by Th13;
   end;
   A3: for j being Integer holds P[j] implies P[j - 1] & P[j + 1]
@@ -1278,22 +1279,24 @@ A2: P[0]
 end;
 
 Lm8:
-for L being Field-like associative well-unital add-associative right_zeroed
+for L being almost_left_invertible associative well-unital add-associative
+ right_zeroed
             right_complementable left-distributive commutative
             non degenerated (non empty doubleLoopStr),
     k being Element of NAT,
     x being Element of L st x <> 0.L
 holds x" |^ k = (x |^ k)"
 proof
-let L be Field-like associative well-unital add-associative right_zeroed
+let L be almost_left_invertible associative well-unital add-associative
+ right_zeroed
             right_complementable left-distributive commutative
             non degenerated (non empty doubleLoopStr);
 let k be Element of NAT; let x be Element of L;
 assume A1: x <> 0.L;
-A2: 1_L <> 0.L by VECTSP_1:def 21;
+A2: 1.L <> 0.L by STRUCT_0:def 8;
 defpred P[Element of NAT] means x" |^ $1 = (x |^ $1)";
       x" |^ 0 = 1_L by BINOM:8
-            .= 1_L * (1_L)" by A2,VECTSP_1:def 22
+            .= 1.L * (1.L)" by A2,VECTSP_1:def 22
             .= (1_L)" by VECTSP_1:def 19
             .= (x |^ 0)" by BINOM:8;
 then A3: P[0];
@@ -1311,14 +1314,16 @@ end;
 end;
 
 theorem Th22:
-for L being Field-like associative well-unital add-associative right_zeroed
+for L being almost_left_invertible associative well-unital add-associative
+ right_zeroed
             right_complementable left-distributive commutative
             non degenerated (non empty doubleLoopStr),
     k being Element of NAT,
     x being Element of L st x <> 0.L
 holds pow(x", k) = pow(x, -k)
 proof
-let L be Field-like associative well-unital add-associative right_zeroed
+let L be almost_left_invertible associative well-unital add-associative
+ right_zeroed
          right_complementable left-distributive commutative
          non degenerated (non empty doubleLoopStr);
 let k be Element of NAT;
@@ -1348,13 +1353,13 @@ end;
 
 theorem Th24:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L,
     n,m being Element of NAT
 holds pow(x, n * m) = pow(pow(x, n), m)
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x be Element of L;
 let n,m be Element of NAT;
  pow(x, n*m) = x |^ (n*m) by Def3
@@ -1366,23 +1371,23 @@ end;
 
 Lm9:
 for L being add-associative right_zeroed right_complementable associative
-            commutative well-unital Field-like
+            commutative well-unital almost_left_invertible
             distributive non degenerated (non empty doubleLoopStr),
     x being Element of L st x <> 0.L
 for n being Element of NAT
 holds pow(x", n) = (pow(x, n))"
 proof
 let L be add-associative right_zeroed right_complementable associative
-         commutative well-unital Field-like
+         commutative well-unital almost_left_invertible
          distributive non degenerated (non empty doubleLoopStr);
 let x be Element of L;
 assume A1: x <> 0.L;
 let n be Element of NAT;
-A2: 1_L <> 0.L by VECTSP_1:def 21;
+A2: 1.L <> 0.L by STRUCT_0:def 8;
 defpred P[Nat] means pow(x", $1) = (pow(x, $1))";
- pow(x", 0) = 1_L by Th13
-          .= 1_L * (1_L)" by A2,VECTSP_1:def 22
-          .= (1_L)" by VECTSP_1:def 19
+ pow(x", 0) = 1.L by Th13
+          .= 1.L * (1.L)" by A2,VECTSP_1:def 22
+          .= (1.L)" by VECTSP_1:def 19
           .= (pow(x, 0))" by Th13;
 then A3: P[0];
  now let n be Element of NAT;
@@ -1519,13 +1524,13 @@ end;
 
 theorem Th27:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L,
     i,k being Element of NAT st 1 <= k
 holds pow(x, i*(k-1)) = pow(x|^i, k-1)
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x be Element of L; let i,k be Element of NAT;
 assume 1 <= k; then 0 < k;
 then reconsider m = k-1 as Element of NAT by NAT_1:20;
@@ -1537,34 +1542,34 @@ end;
 
 Lm10:
 for L being associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr),
+            almost_left_invertible (non empty doubleLoopStr),
     x being Element of L,
     m being Element of NAT
-holds (x <> 0.L & x |^ m = 1_L) implies (x") |^ m = 1_L
+holds (x <> 0.L & x |^ m = 1.L) implies (x") |^ m = 1.L
 proof
 let L be associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr),
+         almost_left_invertible (non empty doubleLoopStr),
     x be Element of L, m be Element of NAT;
-assume x <> 0.L & x |^ m = 1_L;
-then 1_L * ((x") |^ m) = 1_L by Lm7;
-hence (x") |^ m = 1_L by VECTSP_1:def 13;
+assume x <> 0.L & x |^ m = 1.L;
+then 1.L * ((x") |^ m) = 1.L by Lm7;
+hence (x") |^ m = 1.L by VECTSP_1:def 13;
 end;
 
 Lm11:
 for L being associative commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     x being Element of L,
     i being Element of NAT
-holds (x <> 0.L & (x") |^ i = 1_L) implies x |^ i = 1_L
+holds (x <> 0.L & (x") |^ i = 1.L) implies x |^ i = 1.L
 proof
 let L be associative commutative well-unital distributive
-         Field-like non degenerated (non empty doubleLoopStr),
+         almost_left_invertible non degenerated (non empty doubleLoopStr),
     x be Element of L, i be Element of NAT;
-assume A1: x <> 0.L & (x") |^ i = 1_L;
+assume A1: x <> 0.L & (x") |^ i = 1.L;
 A2: 1_L = x |^ 0 by BINOM:8;
- ((x") |^ i) * 1_L = 1_L by A1,VECTSP_1:def 13;
+ ((x") |^ i) * 1.L = 1.L by A1,VECTSP_1:def 13;
 then A3: ((x")|^i)*(x|^0) = ((x")|^i)*(x|^i) by A1,A2,Lm7;
- (x") |^ i <> 0.L by A1,VECTSP_1:def 21;
+ (x") |^ i <> 0.L by A1,STRUCT_0:def 8;
 hence thesis by A2,A3,VECTSP_1:33;
 end;
 
@@ -1795,8 +1800,8 @@ definition
       x be Element of L,
       n be Element of NAT;
   pred x is_primitive_root_of_degree n means :Def6:
-    n <> 0 & x|^n = 1_L &
-    for i being Element of NAT st 0 < i & i < n holds x|^i <> 1_L;
+    n <> 0 & x|^n = 1.L &
+    for i being Element of NAT st 0 < i & i < n holds x|^i <> 1.L;
 end;
 
 theorem Th30:
@@ -1828,47 +1833,47 @@ then 0 < n;
 then 0 + 1 < n + 1 by XREAL_1:10;
 then 1 <= n by NAT_1:13;
 then (0.L)|^n  = 0.L by A3;
-then (0.L)|^n <> 1_L by VECTSP_1:def 21;
+then (0.L)|^n <> 1.L by STRUCT_0:def 8;
 hence contradiction by A4,Def6;
 end;
 
 theorem Th31:
 for L being add-associative right_zeroed right_complementable associative
             commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     m being Element of NAT,
     x being Element of L st x is_primitive_root_of_degree m
 holds x" is_primitive_root_of_degree m
 proof
 let L be add-associative right_zeroed right_complementable associative
          commutative well-unital distributive
-         Field-like non degenerated (non empty doubleLoopStr);
+         almost_left_invertible non degenerated (non empty doubleLoopStr);
 let m be Element of NAT;
 let x be Element of L;
 assume A1: x is_primitive_root_of_degree m;
 then A2: m <> 0 by Def6;
-A3: x <> 0.L by A1,Th30;  x |^ m = 1_L by A1,Def6;
-then A4: x" |^ m = 1_L by A3,Lm10;
- for i being Element of NAT st 0 < i & i < m holds x" |^i <> 1_L
+A3: x <> 0.L by A1,Th30;  x |^ m = 1.L by A1,Def6;
+then A4: x" |^ m = 1.L by A3,Lm10;
+ for i being Element of NAT st 0 < i & i < m holds x" |^i <> 1.L
   proof
   let i be Element of NAT; assume 0 < i & i < m;
-  then x |^ i <> 1_L by A1,Def6; hence thesis by A3,Lm11; end;
+  then x |^ i <> 1.L by A1,Def6; hence thesis by A3,Lm11; end;
 hence thesis by A2,A4,Def6;
 end;
 
 theorem Th32:
 for L being add-associative right_zeroed right_complementable
             associative commutative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     m being Element of NAT,
     x being Element of L st x is_primitive_root_of_degree m
 for i,j being Nat
     st 1 <= i & i <= m & 1 <= j & j <= m & i <> j
-holds pow(x,i-j) <> 1_L
+holds pow(x,i-j) <> 1.L
 proof
 let L be add-associative right_zeroed right_complementable
          associative commutative well-unital distributive
-         Field-like non degenerated (non empty doubleLoopStr);
+         almost_left_invertible non degenerated (non empty doubleLoopStr);
 let m be Element of NAT;
 let x be Element of L;
 assume A1: x is_primitive_root_of_degree m;
@@ -1883,7 +1888,7 @@ suppose A4: i > j;
   then k + 1 <= (i - 1) + 1 by XREAL_1:8;
   then k < i by NAT_1:13;
   then k < m by A2,XXREAL_0:2;
-  then x|^k <> 1_L by A1,A5,Def6;
+  then x|^k <> 1.L by A1,A5,Def6;
   hence thesis by Def3; end;
 suppose i <= j;
   then A6: i < j by A2,REAL_1:def 5;
@@ -1895,9 +1900,9 @@ suppose i <= j;
   then k + 1 <= (j - 1) + 1 by XREAL_1:8;
   then k < j by NAT_1:13;
   then A10: k < m by A2,XXREAL_0:2;
-  then A11: x|^k <> 1_L & x|^k <> 0.L by A1,A3,A9,Def6,Th1;
-   now assume (x|^k)" = 1_L;
-    then 1_L = x|^k * 1_L by A11,VECTSP_1:def 22 .= x|^k by VECTSP_1:def 13;
+  then A11: x|^k <> 1.L & x|^k <> 0.L by A1,A3,A9,Def6,Th1;
+   now assume (x|^k)" = 1.L;
+    then 1.L = x|^k * 1.L by A11,VECTSP_1:def 22 .= x|^k by VECTSP_1:def 13;
     hence contradiction by A1,A9,A10,Def6;
     end;
   hence thesis by A7,A8,Def3; end;
@@ -2046,7 +2051,7 @@ end;
 
 definition
   let L be associative commutative well-unital distributive
-           Field-like (non empty doubleLoopStr),
+           almost_left_invertible (non empty doubleLoopStr),
       m be Nat,
       x be Element of L;
   func Vandermonde(x,m) -> Matrix of m,L means :Def8:
@@ -2102,7 +2107,7 @@ end;
 
 notation
   let L be associative commutative well-unital distributive
-           Field-like (non empty doubleLoopStr),
+           almost_left_invertible (non empty doubleLoopStr),
       m be Nat,
       x be Element of L;
   synonym VM(x,m) for Vandermonde(x,m);
@@ -2135,7 +2140,7 @@ A8: i in dom M by A6,ZFMISC_1:106;
      Sum(mlt(Line(1.(L,m),i),Col(M,j))) = (Col(M,j)).i
       proof
          i in dom Line(1.(L,m),i) & i in dom Col(M,j) &
-        Line(1.(L,m),i).i=1_L &
+        Line(1.(L,m),i).i=1.L &
         for k being Nat st k in dom Line(1.(L,m),i) & k<>i
             holds Line(1.(L,m),i).k = 0.L
           proof
@@ -2151,7 +2156,7 @@ A8: i in dom M by A6,ZFMISC_1:106;
             A14: Indices 1.(L,m) = [:Seg m,Seg m:] by A1,MATRIX_1:24;
             then A15: [i,i] in Indices 1.(L,m) by A10,A11,ZFMISC_1:106;
             A16: Line(1.(L,m),i).i = 1.(L,m)*(i,i) by A13,MATRIX_1:def 8
-                                  .= 1_L by A15,MATRIX_1:def 12;
+                                  .= 1.L by A15,MATRIX_1:def 12;
              for k being Nat st k in dom Line(1.(L,m),i) & k<>i
               holds Line(1.(L,m),i).k = 0.L
             proof
@@ -2455,28 +2460,28 @@ then A8: len s = m & (for k being Nat st 1 <= k & k <= m
                  holds s/.k = pow(x,(i-j)*(k-1))) by A4,FINSEQ_1:def 3;
 A9: pow(x, m*(i-j)) = pow(pow(x, m), i-j) by A2,Th26
     .= pow(x|^m, i-j) by Def3
-    .= pow(1_L, i-j) by A1,Def6
-    .= 1_L by Th16;
-A10: pow(x,i-j) <> 1_L by A1,Th32;
+    .= pow(1.L, i-j) by A1,Def6
+    .= 1.L by Th16;
+A10: pow(x,i-j) <> 1.L by A1,Th32;
 A11: for k being Nat st 1 <= k & k <= len s holds s.k = (pow(x,i-j)) |^ (k-'1)
   proof
     let k be Nat;
-    assume A13: 1 <= k & k <= len s;
-then A14: 1 - 1 <= k - 1 by XREAL_1:11;
-     s.k = s/.k by A13,FINSEQ_4:24
-    .= pow(x, (i-j)*(k-1)) by A8,A13
-    .= pow(x, (i-j)*(k-'1)) by A14,BINARITH:def 3
+    assume A12: 1 <= k & k <= len s;
+then A13: 1 - 1 <= k - 1 by XREAL_1:11;
+     s.k = s/.k by A12,FINSEQ_4:24
+    .= pow(x, (i-j)*(k-1)) by A8,A12
+    .= pow(x, (i-j)*(k-'1)) by A13,BINARITH:def 3
     .= pow(pow(x,i-j),k-'1) by A2,Th26
     .= (pow(x,i-j)) |^ (k-'1) by Def3;
     hence thesis;
   end;
-  consider r being Element of L such that A15: r = pow(x, i-j);
+  consider r being Element of L such that A14: r = pow(x, i-j);
    Sum s =
-     (1_L-((pow(x, i-j)) |^ (len s)) ) / (1_L-pow(x, i-j)) by A10,A11,Th5
-  .= (1_L-((pow(x, i-j)) |^ m))/(1_L-pow(x, i-j)) by A4,FINSEQ_1:def 3
-  .= (1_L - (pow(pow(x,i-j),m))) / (1_L - pow(x,i-j)) by Def3
-  .= (1_L - (pow(x,(i-j)*m))) / (1_L - pow(x,i-j)) by A2,Th26
-  .= 0.L / (1_L - r) by A9,A15,VECTSP_1:66
+     (1.L-((pow(x, i-j)) |^ (len s)) ) / (1.L-pow(x, i-j)) by A10,A11,Th5
+  .= (1.L-((pow(x, i-j)) |^ m))/(1.L-pow(x, i-j)) by A4,FINSEQ_1:def 3
+  .= (1.L - (pow(pow(x,i-j),m))) / (1.L - pow(x,i-j)) by Def3
+  .= (1.L - (pow(x,(i-j)*m))) / (1.L - pow(x,i-j)) by A2,Th26
+  .= 0.L / (1.L - r) by A9,A14,VECTSP_1:66
   .= 0.L by VECTSP_1:39;
 hence thesis by A1,A8,Th37;
 end;
@@ -2533,16 +2538,16 @@ A3: i in NAT & j in NAT by ORDINAL1:def 13;
     suppose A13: i = j;
        (VM(x,m) * VM(x",m))*(i,j) = emb(m,L) * (1.(L,m)*(i,j))
       proof
-        A14: for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1_L
+        A14: for k being Element of NAT st 1 <= k & k <= m holds s/.k = 1.L
         proof
           let k be Element of NAT;
           assume 1 <= k & k <= m;
-          then s/.k = pow(x, (i-j)*(k-1)) by A8 .= 1_L by A13,Th13;
+          then s/.k = pow(x, (i-j)*(k-1)) by A8 .= 1.L by A13,Th13;
           hence thesis;
         end;
         A15: (VM(x,m) * VM(x",m))*(i,j) = Sum s by A2,A3,A4,A7,A8,Th37
-            .= m * 1_L by A7,A14,Th4
-            .= emb(m,L) * 1_L by VECTSP_1:def 19;
+            .= m * 1.L by A7,A14,Th4
+            .= emb(m,L) * 1.L by VECTSP_1:def 19;
          i in Seg m by A4,FINSEQ_1:3;
         then [i,i] in Indices 1.(L,m) by A12,ZFMISC_1:106;
         hence thesis by A13,A15,MATRIX_1:def 12;
@@ -3050,7 +3055,7 @@ assume A3: emb(2*m,L) <> 0.L;
   = (emb(2*m,L))" * DFT(DFT(p*'q,x,2*m), x", 2*m) by Th34
  .= (emb(2*m,L))" * (emb(2*m,L) * (p*'q)) by A1,A2,Th43
  .= ((emb(2*m,L))" * emb(2*m,L)) * (p*'q) by Th10
- .= 1_L * (p*'q) by A3,VECTSP_1:def 22
+ .= 1.L * (p*'q) by A3,VECTSP_1:def 22
  .= p*'q by POLYNOM5:28;
 hence thesis;
 end;

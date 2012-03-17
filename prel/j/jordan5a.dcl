@@ -22,11 +22,13 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="COMPTS_1"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="ENUMSET1"/>
@@ -51,15 +53,15 @@
 </ArgTypes>
 <Typ kind="M" nr="9">
 <Cluster/>
-<Func kind="K" nr="203">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="33" value="false"/>
-<Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="46"/>
+<Adjective nr="42"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -69,13 +71,13 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="248">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40"/>
 <Adjective nr="41"/>
-<Adjective nr="90"/>
+<Adjective nr="42"/>
+<Adjective nr="93"/>
 </Cluster>
 </FCluster>
 </Registrations>

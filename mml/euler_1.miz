@@ -10,14 +10,14 @@ environ
       FINSET_1, CARD_1, BOOLE, FUNCT_1, SGRAPH1, RELAT_1, FINSEQ_1, EULER_1,
       NAT_LAT;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
-      XCMPLX_0,
-      INT_1, NAT_1, NAT_D, INT_2, FINSEQ_1, FINSET_1, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, XXREAL_0, NEWTON;
- constructors BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, NEWTON;
+      XCMPLX_0, INT_1, NAT_1, NAT_D, INT_2, FINSEQ_1, FINSET_1, RELAT_1,
+      FUNCT_1, FUNCT_2, BINOP_1, XXREAL_0, NEWTON;
+ constructors BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D, NEWTON, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
-      XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
+      XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_1;
+ definitions TARSKI, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_1, VALUED_1;
  theorems TARSKI, INT_2, AXIOMS, FINSEQ_1, CARD_1, FINSET_1, NAT_1, ABSVALUE,
       CARD_2, REAL_1, ZFMISC_1, INT_1, FUNCT_1, FUNCT_2, PRE_FF, DOMAIN_1,
       RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, NEWTON, XREAL_1, COMPLEX1,
@@ -29,7 +29,7 @@ begin :: Preliminary
 reserve a,b,c,k,l,m,n for Nat,
         i,j,x,y for Integer;
 
-Lm3:k <> 0 & ([\ j/k /]) + 1 >= j/k implies k >= j - (([\ j/k /])*k)
+Lm1:k <> 0 & ([\ j/k /]) + 1 >= j/k implies k >= j - (([\ j/k /])*k)
 proof
   assume A1:k <> 0 & ([\ j/k /]) + 1 >= j/k;
      then ([\ j/k /]) + 1 + -1 >= j/k + -1 by XREAL_1:8;
@@ -57,7 +57,7 @@ A1:k in NAT & n in NAT by ORDINAL1:def 13;
   hence thesis by AXIOMS:30;
 end;
 
-Lm4:not 1 is prime by INT_2:def 5;
+Lm2:not 1 is prime by INT_2:def 5;
 
 theorem Th2:
   n,n are_relative_prime iff n = 1
@@ -98,7 +98,7 @@ proof
     assume A1:n is prime & k in X;
     then A2:ex kk being Element of NAT st
              kk = k & n,kk are_relative_prime & kk >= 1 & kk <= n;
-    then k <> n by A1,Lm4,Th2;
+    then k <> n by A1,Lm2,Th2;
     then k < n by A2,REAL_1:def 5;
     hence thesis by A1,A2,Th1,TARSKI:def 1;
   end;
@@ -125,9 +125,9 @@ theorem Th6:
 proof
   assume A1:a hcf b = 1;
   reconsider a' = a , b' = b as Integer;
-  A3:a',b' are_relative_prime by A1,INT_2:def 4;
+  A2:a',b' are_relative_prime by A1,INT_2:def 4;
   let m;
-  thus a*m hcf b*m = abs(abs(m)) by A3,INT_2:39
+  thus a*m hcf b*m = abs(abs(m)) by A2,INT_2:39
              .= m by ABSVALUE:def 1;
 end;
 
@@ -186,26 +186,26 @@ proof
          A7:a hcf b > 0 by A4,NEWTON:71;
             now per cases;
           suppose
-S:         a + b*kk = 0;
+A8:         a + b*kk = 0;
             then a hcf b = 0 hcf b by NAT_1:7
                       .= b by NEWTON:65;
-           hence (a + b*(kk + 1)) hcf b = a hcf b by NAT_D:32,S;
+           hence (a + b*(kk + 1)) hcf b = a hcf b by A8,NAT_D:32;
           end;
           suppose (a + b*kk) > 0;
-            then A8:((a + b*kk) div (a hcf b)) <> 0 by A6;
+            then A9:((a + b*kk) div (a hcf b)) <> 0 by A6;
             set T1 = ((a + b*kk) div (a hcf b));
                 a hcf b divides b by NAT_D:def 5;
-            then A9:b = (a hcf b)*(b div (a hcf b)) by NAT_D:3;
-            then A10:(b div (a hcf b)) <> 0 by A4;
+            then A10:b = (a hcf b)*(b div (a hcf b)) by NAT_D:3;
+            then A11:(b div (a hcf b)) <> 0 by A4;
             set T2 = (b div (a hcf b));
-                T1*T hcf T2*T = T by A3,A5,A9,NAT_D:3;
-            then T1,T2 are_relative_prime by A7,A8,A10,Th7;
+                T1*T hcf T2*T = T by A3,A5,A10,NAT_D:3;
+            then T1,T2 are_relative_prime by A7,A9,A11,Th7;
             then T1 hcf T2 = 1 by INT_2:def 4;
-            then A11:(T1 + T2) hcf T2 = 1 by Th8;
+            then A12:(T1 + T2) hcf T2 = 1 by Th8;
                 (a + b*(kk + 1)) hcf b = ((a + b*kk) + b) hcf b
-                                  .= (T*T1 + T*T2) hcf T*T2 by A5,A9,NAT_D:3
+                                  .= (T*T1 + T*T2) hcf T*T2 by A5,A10,NAT_D:3
                                   .= (T*(T1 + T2)) hcf T*T2
-                                  .= a hcf b by A11,Th6;
+                                  .= a hcf b by A12,Th6;
           hence (a + b*(kk + 1)) hcf b = a hcf b;
         end;
         end;
@@ -413,57 +413,57 @@ proof
   then A1:a > 0 & b > 0;
   set i = a hcf b;
   A2:a = abs(a) & b = abs(b) by ABSVALUE:def 1;
-  A4:i divides a & i divides b by NAT_D:def 5;
-  then A5:a = i*(a div i) & b = i*(b div i) by NAT_D:3;
-  A6:i divides abs(a + xx*b)
+  A3:i divides a & i divides b by NAT_D:def 5;
+  then A4:a = i*(a div i) & b = i*(b div i) by NAT_D:3;
+  A5:i divides abs(a + xx*b)
   proof
     per cases;
       suppose a + xx*b < 0;
-        then A7:abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
-            -(a + xx*b) = i * (-((a div i) + (xx*(b div i)))) by A5;
-      hence thesis by A7,INT_1:def 9;
+        then A6:abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
+            -(a + xx*b) = i * (-((a div i) + (xx*(b div i)))) by A4;
+      hence thesis by A6,INT_1:def 9;
       end;
       suppose (a + xx*b) >= 0;
-        then A8:abs((a + xx*b)) = a + xx*b by ABSVALUE:def 1;
-            a + xx*b = i*((a div i) + (xx*(b div i))) by A5;
-    hence thesis by A8,INT_1:def 9;
+        then A7:abs((a + xx*b)) = a + xx*b by ABSVALUE:def 1;
+            a + xx*b = i*((a div i) + (xx*(b div i))) by A4;
+    hence thesis by A7,INT_1:def 9;
   end;
   end;
    for m be Nat st m divides abs((a + xx*b)) & m divides abs(b) holds
   m divides i
   proof
     let mm be Nat;
-    assume A9:mm divides abs((a + xx*b)) & mm divides abs(b);
+    assume A8:mm divides abs((a + xx*b)) & mm divides abs(b);
     then consider n being Nat such that
-           A10:b = mm*n by A2,NAT_D:def 3;
+           A9:b = mm*n by A2,NAT_D:def 3;
        reconsider mm as Element of NAT by ORDINAL1:def 13;
         now per cases;
       suppose (a + xx*b) >= 0;
-        then A11:abs((a + xx*b)) = (a + xx*b) by ABSVALUE:def 1;
+        then A10:abs((a + xx*b)) = (a + xx*b) by ABSVALUE:def 1;
             consider t being Integer such that
-                 A12:(a + xx*b) = mm*t by A9,A11,INT_1:def 9;
-            A13:a = mm*t - mm*(xx*n) by A10,A12,XCMPLX_1:26
+                 A11:(a + xx*b) = mm*t by A8,A10,INT_1:def 9;
+            A12:a = mm*t - mm*(xx*n) by A9,A11,XCMPLX_1:26
                    .= mm*(t - (xx*n));
             then (t - (xx*n)) >= 0 by A1,XREAL_1:136;
             then reconsider tt = (t - (xx*n)) as Element of NAT by INT_1:16;
-                a = mm*tt by A13;
+                a = mm*tt by A12;
           hence mm divides a by NAT_D:def 3;
       end;
       suppose (a + xx*b) < 0;
-        then A15:abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
+        then A13:abs((a + xx*b)) = -(a + xx*b) by ABSVALUE:def 1;
             consider t being Integer such that
-                   A16:-(a + xx*b) = mm*t by A9,A15,INT_1:def 9;
-            A17:a = -mm*t - mm*(xx*n) by A10,A16,XCMPLX_1:26
+                   A14:-(a + xx*b) = mm*t by A8,A13,INT_1:def 9;
+            A15:a = -mm*t - mm*(xx*n) by A9,A14,XCMPLX_1:26
                         .= mm*(-t - (xx*n));
             then (-t - (xx*n)) >= 0 by A1,XREAL_1:136;
             then reconsider tt = (-t - (xx*n)) as Element of NAT by INT_1:16;
-                a = mm*tt by A17;
+                a = mm*tt by A15;
           hence mm divides a by NAT_D:def 3;
     end;
     end;
-    hence thesis by A2,A9,NEWTON:63;
+    hence thesis by A2,A8,NEWTON:63;
   end;
-  then abs((a + xx*b)) hcf abs(b) = i by A2,A4,A6,NAT_D:def 5;
+  then abs((a + xx*b)) hcf abs(b) = i by A2,A3,A5,NAT_D:def 5;
   hence thesis by INT_2:51;
 end;
 
@@ -509,10 +509,10 @@ proof
   then 1,1 are_relative_prime by INT_2:def 4;
   hence thesis;
 end;
-then Lm5:Card{1} = Euler 1 by TARSKI:def 1;
+then Lm3:Card{1} = Euler 1 by TARSKI:def 1;
 
 theorem
-      Euler 1 = 1 by Lm5,CARD_1:79;
+      Euler 1 = 1 by Lm3,CARD_1:79;
 
 set X = {k where k is Element of NAT :
  2,k are_relative_prime & k >= 1 & k <= 2};
@@ -534,10 +534,10 @@ proof
   then 2,1 are_relative_prime by INT_2:def 4;
   hence thesis;
 end;
-then Lm6:Card{1} = Euler 2 by TARSKI:def 1;
+then Lm4:Card{1} = Euler 2 by TARSKI:def 1;
 
 theorem
-      Euler 2 = 1 by Lm6,CARD_1:79;
+      Euler 2 = 1 by Lm4,CARD_1:79;
 
 theorem Th20:
   n > 1 implies Euler n <= n - 1
@@ -625,7 +625,7 @@ proof
   assume A1:m > 1 & n > 1 & m,n are_relative_prime;
   then A2:m*n <> 1 by NAT_1:15;
   A3:m*n <> 0 by A1,XCMPLX_1:6;
-  A4:m*n >= 1 by NAT_1:14,A1,XCMPLX_1:6;
+  A4:m*n >= 1 by A1,NAT_1:14,XCMPLX_1:6;
   set A={i where i is Element of NAT:n,i are_relative_prime & i >= 1 & i <= n};
   set B={i where i is Element of NAT:m,i are_relative_prime & i >= 1 & i <= m};
   set C={i where i is Element of NAT:ex x,y being Integer st
@@ -675,7 +675,7 @@ proof
           A16:(m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A3,INT_1:def 8
                                  .= i1 - ([\ i1/i2 /])*i2 by INT_1:def 7;
               ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
-          hence (m*y + n*x) mod m*n <= m*n by A1,XCMPLX_1:6,A16,Lm3;
+          hence (m*y + n*x) mod m*n <= m*n by A1,A16,Lm1,XCMPLX_1:6;
         end;
         then z in Seg (m*n) by A12,A14,A15,FINSEQ_1:3;
       hence z in Seg (m*n) \/ {0} by XBOOLE_0:def 2;
@@ -707,7 +707,7 @@ proof
         A24:(m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A3,INT_1:def 8
                                .= i1 - ([\ i1/i2 /])*i2 by INT_1:def 7;
             ([\ i1/i2 /]) + 1 >= i1/i2 by INT_1:52;
-        hence (m*y + n*x) mod m*n <= m*n by A1,XCMPLX_1:6,A24,Lm3;
+        hence (m*y + n*x) mod m*n <= m*n by A1,A24,Lm1,XCMPLX_1:6;
       end;
       per cases;
         suppose i > 0;
@@ -743,13 +743,13 @@ proof
     A33:x1 = x0 - (x0 div m)*m by A1,A30,INT_1:def 8
            .= x0 - ([\ x0/m /])*m by INT_1:def 7;
         ([\ x0/m /]) + 1 >= x0/m by INT_1:52;
-    then A34:x1 <= m by A1,A33,Lm3;
+    then A34:x1 <= m by A1,A33,Lm1;
     A35:y0 mod n = y0- (y0 div n)*n by A1,INT_1:def 8;
     set k = y0 div n;
     A36:y1 = y0 - (y0 div n)*n by A1,A31,INT_1:def 8
            .= y0 - ([\ y0/n /])*n by INT_1:def 7;
         ([\ y0/n /]) + 1 >= y0/n by INT_1:52;
-    then A37:y1 <= n by A1,A36,Lm3;
+    then A37:y1 <= n by A1,A36,Lm1;
     A38: m*y0 + n*x0 = m*y1 + n*x1 + (m*n)*(k+j) by A30,A31,A32,A35;
         (m*y0 + n*x0) mod (m*n)
         = (m*y0 + n*x0) - ((m*y0 + n*x0) div (m*n))*(m*n) by A3,INT_1:def 8
@@ -892,10 +892,10 @@ proof
     set w = (((x1*m + x2*n) div (m*n)) - ((y1*m + y2*n) div (m*n)));
     consider p being Integer such that
       A89:p = m;
-    A91:m*(x1 - y1) + n*(x2 - y2) = (m*n)*w by A4,A86,A87,A88,NAT_D:2;
+    A90:m*(x1 - y1) + n*(x2 - y2) = (m*n)*w by A4,A86,A87,A88,NAT_D:2;
     then n*(x2 - y2) = m*((n*w) - (x1 - y1));
     then
-B92:  p divides n*(x2 - y2) by A89,INT_1:def 9;
+A91:  p divides n*(x2 - y2) by A89,INT_1:def 9;
     then A92:m divides (x2 - y2) by A1,A89,INT_2:40;
        A93: x2 - y2 = 0
     proof
@@ -913,7 +913,7 @@ B92:  p divides n*(x2 - y2) by A89,INT_1:def 9;
             set b = m + -1;
               b is Element of NAT by A94,A97,INT_1:16;
             then k < b + 1 by A95,A97,NAT_1:13;
-            hence contradiction by B92,A95,A96,NAT_D:7,A1,A89,INT_2:40;
+            hence contradiction by A1,A89,A91,A95,A96,INT_2:40,NAT_D:7;
           end;
         hence thesis by A95;
         end;
@@ -939,9 +939,9 @@ B92:  p divides n*(x2 - y2) by A89,INT_1:def 9;
     end;
     consider p being Integer such that
       A104:p = n;
-        m*(x1 - y1) = n*((m*w) - (x2 - y2)) by A91;
+        m*(x1 - y1) = n*((m*w) - (x2 - y2)) by A90;
     then
-B106:   p divides m*(x1 - y1) by A104,INT_1:def 9;
+A105:   p divides m*(x1 - y1) by A104,INT_1:def 9;
     then A106:n divides (x1 - y1) by A1,A104,INT_2:40;
         x1 - y1 = 0
     proof
@@ -959,7 +959,7 @@ B106:   p divides m*(x1 - y1) by A104,INT_1:def 9;
             set b = n + -1;
               b is Element of NAT by A107,A110,INT_1:16;
             then k < b + 1 by A108,A110,NAT_1:13;
-            hence contradiction by B106,A108,A109,NAT_D:7,A1,A104,INT_2:40;
+            hence contradiction by A1,A104,A105,A108,A109,INT_2:40,NAT_D:7;
           end;
         hence thesis by A108;
         end;
@@ -1025,21 +1025,21 @@ B106:   p divides m*(x1 - y1) by A104,INT_1:def 9;
           p divides x0 by INT_2:32;
       then consider i2 being Integer such that
         A132:x0 = p*i2 by INT_1:def 9;
-      A135:(m*y0 + n*x0) mod m*n
+      A133:(m*y0 + n*x0) mod m*n
                = ((p*i1)*y0 + n*(p*i2)) - (((p*i1)*y0 + n*(p*i2))
                    div((p*i1)*n))*((p*i1)*n) by A3,A130,A132,INT_1:def 8;
       set k = ((p*i1)*y0 + n*(p*i2))div((p*i1)*n);
-      A136:((p*i1)*y0 + n*(p*i2)) - k*((p*i1)*n)
+      A134:((p*i1)*y0 + n*(p*i2)) - k*((p*i1)*n)
                          = p*((i1*y0 + n*i2) - ((i1*k)*n));
       set j = (i1*y0 + n*i2) - ((i1*k)*n);
           not j < 0
       proof
         assume j < 0;
         then p*j < 0*j by A131,XREAL_1:71;
-        hence contradiction by A3,A119,A130,A132,A136,INT_1:def 8;
+        hence contradiction by A3,A119,A130,A132,A134,INT_1:def 8;
       end;
       then reconsider p,j as Element of NAT by INT_1:16;
-      A137:m*n = p*(i1*n) by A130;
+      A135:m*n = p*(i1*n) by A130;
       set jj = i1*n;
          not jj < 0
       proof
@@ -1048,157 +1048,157 @@ B106:   p divides m*(x1 - y1) by A104,INT_1:def 9;
         hence contradiction by A3,A130;
       end;
       then reconsider jj as Element of NAT by INT_1:16;
-          now per cases by A1,A137,XCMPLX_1:6;
-        suppose A138:p <> 0 & jj <> 0 & j <> 0;
-          then A139:p > 0;
-              p*jj gcd p*j = 1 by A119,A130,A120,INT_2:def 4,A135;
-          then A140:p*(jj gcd j) = 1 by A138,A139,Th16;
-        thus p = 1 by A140,NAT_1:15;
+          now per cases by A1,A135,XCMPLX_1:6;
+        suppose A136:p <> 0 & jj <> 0 & j <> 0;
+          then A137:p > 0;
+              p*jj gcd p*j = 1 by A119,A120,A130,A133,INT_2:def 4;
+          then A138:p*(jj gcd j) = 1 by A136,A137,Th16;
+        thus p = 1 by A138,NAT_1:15;
         end;
         suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj hcf 0 = 1 by A119,A120,A130,A135,A136,INT_2:def 4;
+          then p*jj hcf 0 = 1 by A119,A120,A130,A133,A134,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
         hence p = 1 by NAT_1:15;
       end;
       end;
       hence thesis by INT_2:def 4;
     end;
-    A141:n,y0 are_relative_prime
+    A139:n,y0 are_relative_prime
     proof
       set p = n gcd y0;
           p divides n by INT_2:31;
       then consider i1 being Integer such that
-             A142:n = p*i1 by INT_1:def 9;
-          p <> 0 & i1 <> 0 by A1,A142;
-      then A143:p > 0;
+             A140:n = p*i1 by INT_1:def 9;
+          p <> 0 & i1 <> 0 by A1,A140;
+      then A141:p > 0;
           p divides y0 by INT_2:32;
       then consider i2 being Integer such that
-        A144:y0 = p*i2 by INT_1:def 9;
-      A147:(m*y0 + n*x0) mod m*n
+        A142:y0 = p*i2 by INT_1:def 9;
+      A143:(m*y0 + n*x0) mod m*n
         = (m*(p*i2) + (p*i1)*x0) - ((m*(p*i2) + (p*i1)*x0)
-                    div (m*(p*i1)))*(m*(p*i1)) by A3,A142,A144,INT_1:def 8;
+                    div (m*(p*i1)))*(m*(p*i1)) by A3,A140,A142,INT_1:def 8;
       set k = (m*(p*i2) + (p*i1)*x0) div (m*(p*i1));
-      A148:(m*(p*i2) + (p*i1)*x0) - k*(m*(p*i1))
+      A144:(m*(p*i2) + (p*i1)*x0) - k*(m*(p*i1))
                          = p*((m*i2 + i1*x0) - ((i1*k)*m));
       set j = (m*i2 + i1*x0) - ((i1*k)*m);
           j >= 0
       proof
         assume j < 0;
-        then p*j < 0*j by A143,XREAL_1:71;
-        hence contradiction by A3,A119,A142,A144,A148,INT_1:def 8;
+        then p*j < 0*j by A141,XREAL_1:71;
+        hence contradiction by A3,A119,A140,A142,A144,INT_1:def 8;
       end;
       then reconsider p,j as Element of NAT by INT_1:16;
-      A149:m*n = p*(i1*m) by A142;
+      A145:m*n = p*(i1*m) by A140;
       set jj = i1*m;
          not jj < 0
       proof
         assume jj < 0;
-        then p*jj < 0*jj by A143,XREAL_1:71;
-        hence contradiction by A3,A142;
+        then p*jj < 0*jj by A141,XREAL_1:71;
+        hence contradiction by A3,A140;
       end;
       then reconsider jj as Element of NAT by INT_1:16;
-          now per cases by A1,A149,XCMPLX_1:6;
-        suppose A150:p <> 0 & jj <> 0 & j <> 0;
-          then A151:p > 0;
-          p*jj gcd p*j = 1 by A119,A142,A147,A120,INT_2:def 4;
-          then A152:p*(jj gcd j) = 1 by A150,A151,Th16;
-        thus p = 1 by A152,NAT_1:15;
+          now per cases by A1,A145,XCMPLX_1:6;
+        suppose A146:p <> 0 & jj <> 0 & j <> 0;
+          then A147:p > 0;
+          p*jj gcd p*j = 1 by A119,A120,A140,A143,INT_2:def 4;
+          then A148:p*(jj gcd j) = 1 by A146,A147,Th16;
+        thus p = 1 by A148,NAT_1:15;
         end;
         suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj hcf 0 = 1 by A119,A120,A142,A147,A148,INT_2:def 4;
+          then p*jj hcf 0 = 1 by A119,A120,A140,A143,A144,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
         hence p = 1 by NAT_1:15;
       end;
       end;
       hence thesis by INT_2:def 4;
     end;
-    reconsider x,y as Element of NAT by A121,A122,NEWTON:78,INT_1:16;
-    A153:x <> 0
+    reconsider x,y as Element of NAT by A121,A122,INT_1:16,NEWTON:78;
+    A149:x <> 0
     proof
       assume x = 0;
-      then A154:x0 - (x0 div m)*m = 0 by A1,A121,INT_1:def 8;
+      then A150:x0 - (x0 div m)*m = 0 by A1,A121,INT_1:def 8;
       set j = x0 div m;
-      A155:(m*y0 + n*x0) mod m*n =
+      A151:(m*y0 + n*x0) mod m*n =
  m*(y0 + (n*j)) - ((m*(y0 + (n*j))) div m*n)*(m*n)
-             by A3,A154,INT_1:def 8
+             by A3,A150,INT_1:def 8
            .= m*((y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n)));
       set jj = (y0 + (n*j)) - (n*((m*(y0 + (n*j))) div m*n));
-      reconsider g = m*jj as Element of NAT by A119,A155;
-      A156:g > 0 or g = 0;
-      A157:not jj < 0
+      reconsider g = m*jj as Element of NAT by A119,A151;
+      A152:g > 0 or g = 0;
+      A153:not jj < 0
       proof
         assume jj < 0;
         then m*jj < 0*jj by A1,XREAL_1:71;
-        hence contradiction by A156;
+        hence contradiction by A152;
       end;
-      A159:m*n gcd m*jj = 1 by A119,A155,A120,INT_2:def 4;
-      reconsider jj as Element of NAT by A157,INT_1:16;
+      A154:m*n gcd m*jj = 1 by A119,A120,A151,INT_2:def 4;
+      reconsider jj as Element of NAT by A153,INT_1:16;
          jj = 0
       proof
         assume not(jj = 0);
-        then A160:m*(n gcd jj) = 1 by A1,A159,Th16;
-        thus contradiction by A1,A160,NAT_1:15;
+        then A155:m*(n gcd jj) = 1 by A1,A154,Th16;
+        thus contradiction by A1,A155,NAT_1:15;
       end;
-      then m*n hcf 0 = 1 by A119,A120,A155,INT_2:def 4;
+      then m*n hcf 0 = 1 by A119,A120,A151,INT_2:def 4;
       hence contradiction by A2,NEWTON:65;
     end;
-    then A161:x >= 0 + 1 by A124,INT_1:20;
-    A162:y <> 0
+    then A156:x >= 0 + 1 by A124,INT_1:20;
+    A157:y <> 0
     proof
       assume y = 0;
-      then A163:y0 - (y0 div n)*n = 0 by A1,A122,INT_1:def 8;
+      then A158:y0 - (y0 div n)*n = 0 by A1,A122,INT_1:def 8;
       set j = y0 div n;
-      A164:(m*y0 + n*x0) mod m*n =
+      A159:(m*y0 + n*x0) mod m*n =
  n*((m*j) + x0) - ((n*((m*j) + x0)) div m*n)*(m*n)
-             by A3,A163,INT_1:def 8
+             by A3,A158,INT_1:def 8
            .= n*(((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n)));
       set jj = ((m*j) + x0) - (m*((n*((m*j) + x0)) div m*n));
-      reconsider g = n*jj as Element of NAT by A119,A164;
-      A165:g > 0 or g = 0;
-      A166:not jj < 0
+      reconsider g = n*jj as Element of NAT by A119,A159;
+      A160:g > 0 or g = 0;
+      A161:not jj < 0
       proof
         assume jj < 0;
         then n*jj < 0*jj by A1,XREAL_1:71;
-        hence contradiction by A165;
+        hence contradiction by A160;
       end;
-      A168:m*n gcd n*jj = 1 by A119,A164,A120,INT_2:def 4;
-      reconsider jj as Element of NAT by A166,INT_1:16;
+      A162:m*n gcd n*jj = 1 by A119,A120,A159,INT_2:def 4;
+      reconsider jj as Element of NAT by A161,INT_1:16;
          jj = 0
       proof
         assume not(jj = 0);
-        then A169:n*(m gcd jj) = 1 by A1,A168,Th16;
-        thus contradiction by A1,A169,NAT_1:15;
+        then A163:n*(m gcd jj) = 1 by A1,A162,Th16;
+        thus contradiction by A1,A163,NAT_1:15;
       end;
-      then m*n hcf 0 = 1 by A119,A120,A164,INT_2:def 4;
+      then m*n hcf 0 = 1 by A119,A120,A159,INT_2:def 4;
       hence contradiction by A2,NEWTON:65;
    end;
-   then A170:y >= 0 + 1 by A125,INT_1:20;
-   A171:m,x are_relative_prime
+   then A164:y >= 0 + 1 by A125,INT_1:20;
+   A165:m,x are_relative_prime
    proof
      x = x0 - (x0 div m)*m by A1,A121,INT_1:def 8;
         then x0 gcd m = x + (x0 div m)*m gcd m;
-     then A172:x0 gcd m = x gcd m by A1,A153,Th17;
-     m hcf x = 1 by A172,A129,INT_2:def 4;
+     then A166:x0 gcd m = x gcd m by A1,A149,Th17;
+     m hcf x = 1 by A129,A166,INT_2:def 4;
      hence thesis by INT_2:def 4;
    end;
-   A173:n,y are_relative_prime
+   A167:n,y are_relative_prime
    proof
      y = y0 - (y0 div n)*n by A1,A122,INT_1:def 8;
         then y0 gcd n = y + (y0 div n)*n gcd n;
-     then A174:y0 gcd n = y gcd n by A1,A162,Th17;
-         y0 gcd n = 1 by A141,INT_2:def 4;
-     hence thesis by INT_2:def 4,A174;
+     then A168:y0 gcd n = y gcd n by A1,A157,Th17;
+         y0 gcd n = 1 by A139,INT_2:def 4;
+     hence thesis by A168,INT_2:def 4;
    end;
-       x in B by A123,A161,A171;
+       x in B by A123,A156,A165;
    then reconsider x as Element of B;
-       y in A by A123,A170,A173;
+       y in A by A123,A164,A167;
    then reconsider y as Element of A;
-   A175:dom f = [:A,B:] by FUNCT_2:def 1;
+   A169:dom f = [:A,B:] by FUNCT_2:def 1;
    consider w being set such that
-     A176:w = [y,x];
-   A177:w in dom f by A175,A176,ZFMISC_1:106;
+     A170:w = [y,x];
+   A171:w in dom f by A169,A170,ZFMISC_1:106;
        i = f.(y,x) by A67,A119,A126;
-   hence z in rng f by A117,A176,A177,FUNCT_1:def 5;
+   hence z in rng f by A117,A170,A171,FUNCT_1:def 5;
  end;
  then Card[:A,B:] = Card C by A68,Th12;
 hence thesis by A18,CARD_2:65;

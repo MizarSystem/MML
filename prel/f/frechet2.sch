@@ -21,6 +21,7 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="SEQM_3"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
@@ -288,7 +289,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="152">
+<Func kind="K" nr="162">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>
@@ -419,7 +420,7 @@
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
-<Func kind="K" nr="152">
+<Func kind="K" nr="162">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="2"/>

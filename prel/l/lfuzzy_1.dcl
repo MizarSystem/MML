@@ -16,8 +16,8 @@
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="FUNCT_4"/>
 <ArticleID name="FUZZY_1"/>
+<ArticleID name="FUNCT_4"/>
 <ArticleID name="FUZZY_4"/>
 <ArticleID name="LFUZZY_1"/>
 </Signature>
@@ -113,7 +113,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="105">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -157,7 +157,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="111">
+<Func kind="K" nr="106">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>
@@ -201,7 +201,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="110">
+<Func kind="K" nr="105">
 <Func kind="K" nr="11">
 <LocusVar nr="1"/>
 <LocusVar nr="1"/>

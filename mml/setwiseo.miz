@@ -487,7 +487,7 @@ A20:               C1 <> {} & C1 c= B & B' = C1 \/ {x};
                       now
 A21:                 not x in C & not x in C1 by A16,A19,A20;
 A22:                 C c= B' \ {x} & C1 c= B' \ {x}
-           by A21,ZFMISC_1:40,A19,A20,XBOOLE_1:7;
+           by A19,A20,A21,XBOOLE_1:7,ZFMISC_1:40;
                   B' \ {x} = C \ {x} & B' \{x} = C1 \ {x} by A19,A20,
 XBOOLE_1:40;
                       then B' \ {x} = C & B' \ {x} = C1 by A22,XBOOLE_0:def 10;
@@ -577,7 +577,7 @@ then A44:             x' in B \(B' \ {x}) by A37,XBOOLE_0:def 4;
                     .= C \/ {.x.} by XBOOLE_1:4;
                 hence J.(B' \/ {.x'.}) = F.(G.C, f.x) by A24,A42
                          .= F.(F.(G.(B'\{.x.}), f.x'), f.x)
-                                    by A15,A28,XBOOLE_1:43,A43,A44
+                                    by A15,A28,A43,A44,XBOOLE_1:43
                          .= F.(G.(B'\{.x.}),F.(f.x', f.x)) by A3,BINOP_1:def 3
                          .= F.(G.(B'\{x}),F.(f.x, f.x')) by A2,BINOP_1:def 2
                          .= F.(F.(G.(B'\{.x.}), f.x), f.x') by A3,BINOP_1:def 3
@@ -719,26 +719,26 @@ A9:     B' c= B & B' <> {};
 A10:     x in B;
          per cases;
          suppose x in B';
-then A12:        B' \/ {x} = B' by ZFMISC_1:46;
-then A13:        {x} c= B' by XBOOLE_1:7;
+then A11:        B' \/ {x} = B' by ZFMISC_1:46;
+then A12:        {x} c= B' by XBOOLE_1:7;
                not x in B' \ {x} by ZFMISC_1:64;
-then A14:        x in B \ (B' \ {x}) by A10,XBOOLE_0:def 4;
+then A13:        x in B \ (B' \ {x}) by A10,XBOOLE_0:def 4;
             per cases;
             suppose
-A15:         B' = {x};
+A14:         B' = {x};
              hence G.(B' \/ {x}) = f.x by A7
                          .= F.(f.x, f.x) by A2,BINOP_1:def 4
-                         .= F.(G.B',f.x) by A7,A15;
+                         .= F.(G.B',f.x) by A7,A14;
             end;
             suppose B' <> {x};
-              then not B' c= {x} by A13,XBOOLE_0:def 10;
+              then not B' c= {x} by A12,XBOOLE_0:def 10;
               then B' \ {x} <> {} by XBOOLE_1:37;
-then A16:          G.(B' \ {.x.} \/ {.x.}) = F.(G.(B' \ {.x.}), f.x)
-                  by A8,A9,XBOOLE_1:1,A14;
+then A15:          G.(B' \ {.x.} \/ {.x.}) = F.(G.(B' \ {.x.}), f.x)
+                  by A8,A9,A13,XBOOLE_1:1;
              thus G.(B' \/ {x}) = G.(B' \ {x} \/ {x}) by XBOOLE_1:39
-                   .= F.(G.(B' \ {x}), F.(f.x,f.x)) by A2,A16,BINOP_1:def 4
+                   .= F.(G.(B' \ {x}), F.(f.x,f.x)) by A2,A15,BINOP_1:def 4
                    .= F.(F.(G.(B' \ {.x.}),f.x), f.x) by A4,BINOP_1:def 3
-                   .= F.(G.B',f.x) by A12,A16,XBOOLE_1:39;
+                   .= F.(G.B',f.x) by A11,A15,XBOOLE_1:39;
            end;
          end;
          suppose not x in B';
@@ -749,21 +749,21 @@ then A16:          G.(B' \ {.x.} \/ {.x.}) = F.(G.(B' \ {.x.}), f.x)
    hence thesis by A5,A6,A7;
   end;
  given G being Function of Fin X, Y such that
-A17: IT = G.B and
-A18: for e being Element of Y st e is_a_unity_wrt F holds G.{} = e and
-A19: for x being Element of X holds G.{x} = f.x and
-A20: for B' being Element of Fin X st B' c= B & B' <> {}
+A16: IT = G.B and
+A17: for e being Element of Y st e is_a_unity_wrt F holds G.{} = e and
+A18: for x being Element of X holds G.{x} = f.x and
+A19: for B' being Element of Fin X st B' c= B & B' <> {}
      for x being Element of X st x in B holds G.(B' \/ {x}) = F.(G.B',f.x);
       for B' being Element of Fin X st B' c= B & B' <> {}
    for x being Element of X st x in B \ B' holds G.(B' \/ {x}) = F.(G.B',f.x)
    proof let B' be Element of Fin X such that
-A21:   B' c= B & B' <> {};
+A20:   B' c= B & B' <> {};
     let x be Element of X;
     assume x in B \ B';
      then x in B by XBOOLE_0:def 4;
-    hence G.(B' \/ {x}) = F.(G.B',f.x) by A20,A21;
+    hence G.(B' \/ {x}) = F.(G.B',f.x) by A19,A20;
    end;
- hence IT = F $$ (B,f) by A1,A3,A4,A17,A18,A19,Def3;
+ hence IT = F $$ (B,f) by A1,A3,A4,A16,A17,A18,Def3;
 end;
 
  reserve X, Y for non empty set,
@@ -799,9 +799,9 @@ A3:  for x being Element of X holds G.{x} = f.x and
 A4:  for B' being Element of Fin X st B' c= {a,b} & B' <> {}
       for x being Element of X st x in {a,b} holds G.(B' \/ {x}) = F.(G.B',f.x)
                                                                     by A1,Th25;
-A6: b in {a,b} by TARSKI:def 2;
+A5: b in {a,b} by TARSKI:def 2;
   thus F $$ ({.a,b.},f) = G.({.a.} \/ {.b.}) by A2,ENUMSET1:41
-                     .= F.(G.{.a.}, f.b) by A4,ZFMISC_1:12,A6
+                     .= F.(G.{.a.}, f.b) by A4,A5,ZFMISC_1:12
                      .= F.(f.a, f.b) by A3;
  end;
 
@@ -819,13 +819,13 @@ A3:  for x being Element of X holds G.{x} = f.x and
 A4:  for B' being Element of Fin X st B' c= {a,b,c} & B' <> {}
       for x being Element of X st x in
  {a,b,c} holds G.(B' \/ {x}) = F.(G.B',f.x) by A1,Th25;
-A6: b in {a,b,c} by ENUMSET1:def 1;
-A7: G.{a,b} = G.({a} \/ {b}) by ENUMSET1:41
-           .= F.(G.{.a.}, f.b) by A4,Th3,A6
+A5: b in {a,b,c} by ENUMSET1:def 1;
+A6: G.{a,b} = G.({a} \/ {b}) by ENUMSET1:41
+           .= F.(G.{.a.}, f.b) by A4,A5,Th3
            .= F.(f.a, f.b) by A3;
-A9: c in {a,b,c} by ENUMSET1:def 1;
+A7: c in {a,b,c} by ENUMSET1:def 1;
   thus F $$ ({.a,b,c.},f) = G.({.a,b.} \/ {.c.}) by A2,ENUMSET1:43
-                     .= F.(F.(f.a, f.b), f.c) by A4,A7,Th4,A9;
+                     .= F.(F.(f.a, f.b), f.c) by A4,A6,A7,Th4;
  end;
 
 :: If B is non empty
@@ -864,19 +864,19 @@ A12:  C \/ {y} c= B;
 A13:  C c= B & y in B by A12,Th8;
 A14:    B c= B \/ {x} by XBOOLE_1:7;
        per cases;
-       suppose A16: C = {};
-        hence G.(C \/ {y}) = f.y by A4 .= G'.(C \/ {y}) by A7,A16;
+       suppose A15: C = {};
+        hence G.(C \/ {y}) = f.y by A4 .= G'.(C \/ {y}) by A7,A15;
        end;
        suppose
-A17:     C <> {};
+A16:     C <> {};
         hence G.(C \/ {y}) = F.(G'.C, f.y) by A5,A11,A13,A14,XBOOLE_1:1
-                        .= G'.(C \/ {y}) by A8,A13,A17;
+                        .= G'.(C \/ {y}) by A8,A13,A16;
       end;
     end;
-A18: for C being Element of Fin X holds X[C] from FinSubInd3(A9,A10);
+A17: for C being Element of Fin X holds X[C] from FinSubInd3(A9,A10);
      x in B \/ {x} by Th6;
    hence F $$(B \/ {.x.}, f) = F.(G.B, f.x) by A2,A3,A5,XBOOLE_1:7
-                        .= F.(F $$(B,f),f.x) by A2,A6,A18;
+                        .= F.(F $$(B,f),f.x) by A2,A6,A17;
   end;
 
 theorem Th30:
@@ -907,7 +907,7 @@ A7:      B <> {};
         thus F $$ (B1 \/ (B \/ {.x.}),f)
                     = F $$ (B1 \/ B \/ {.x.},f) by XBOOLE_1:4
                    .= F.(F.(F $$ (B1,f),F $$ (B,f)), f.x)
-                          by A1,A5,A7,XBOOLE_1:15,Th29
+                          by A1,A5,A7,Th29,XBOOLE_1:15
                    .= F.(F $$ (B1,f),F.(F $$ (B,f), f.x)) by A1,BINOP_1:def 3
                    .= F.(F $$ (B1,f),F $$ (B \/ {.x.},f)) by A1,A7,Th29;
       end;
@@ -1030,7 +1030,7 @@ A7:  f.:(A \/ {x}) = g.:B;
       suppose f.x in f.:A; then consider x' being Element of X such that
 A8:     x' in A and
 A9:     f.x' = f.x by FUNCT_2:116;
-A11:     g.:B = f.:A \/ Im(f,x) by A7,RELAT_1:153
+A10:     g.:B = f.:A \/ Im(f,x) by A7,RELAT_1:153
            .= f.:A \/ {f.x} by Th13
            .= f.:A by A8,A9,FUNCT_2:43,ZFMISC_1:46;
        thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A8,Th29
@@ -1040,56 +1040,56 @@ A11:     g.:B = f.:A \/ Im(f,x) by A7,RELAT_1:153
                    .= F.(F$$(A,f), f.x') by A1,BINOP_1:def 4
                    .= F$$(A \/ {.x'.},f) by A1,A8,Th29
                    .= F$$(A,f) by A8,ZFMISC_1:46
-                   .= F$$(B,g) by A6,A8,A11;
+                   .= F$$(B,g) by A6,A8,A10;
       end;
       suppose
-A12:     not f.x in f.:A;
+A11:     not f.x in f.:A;
        per cases;
-       suppose A13: A = {};
-         then A14:      g.:B = Im(f,x) by A7 .= {f.x} by Th13;
-         thus F$$(A \/ {.x.},f) = f.x by A1,A13,Th26
-                      .= F$$(B,g) by A1,A14,Th34;
+       suppose A12: A = {};
+         then A13:      g.:B = Im(f,x) by A7 .= {f.x} by Th13;
+         thus F$$(A \/ {.x.},f) = f.x by A1,A12,Th26
+                      .= F$$(B,g) by A1,A13,Th34;
         end;
         suppose
-A15:       A <> {};
+A14:       A <> {};
           reconsider B2 = B /\ g"{f.x} as Element of Fin X by Th16,XBOOLE_1:17;
           reconsider B1 = B \ g"{f.x} as Element of Fin X by Th16;
-A16:       B = B1 \/ B2 by XBOOLE_1:51;
-A17:       now assume B1 = {};
+A15:       B = B1 \/ B2 by XBOOLE_1:51;
+A16:       now assume B1 = {};
             then B c= g"{f.x} by XBOOLE_1:37;
-            then A18:           g.:B c= g.:g"{f.x} by RELAT_1:156;
-A19:          f.:A misses {f.x} by A12,ZFMISC_1:56;
+            then A17:           g.:B c= g.:g"{f.x} by RELAT_1:156;
+A18:          f.:A misses {f.x} by A11,ZFMISC_1:56;
                 g.:g"{f.x} c= {f.x} by FUNCT_1:145;
-            then f.:(A \/ {x}) c= {f.x} by A7,A18,XBOOLE_1:1;
+            then f.:(A \/ {x}) c= {f.x} by A7,A17,XBOOLE_1:1;
             then f.:A \/ f.:{x} c= {f.x} by RELAT_1:153;
             then f.:A = f.:A /\ {f.x} by XBOOLE_1:11,28
-                    .= {} by A19,XBOOLE_0:def 7;
-           hence contradiction by A15,Th19;
+                    .= {} by A18,XBOOLE_0:def 7;
+           hence contradiction by A14,Th19;
           end;
               x in A \/ {x} by Th6;
           then f.x in g.:B by A7,FUNCT_2:43;
           then consider x' being Element of X such that
-A20:        x' in B and
-A21:        g.x' = f.x by FUNCT_2:116;
-              x' in g"{f.x} by A21,Th12;
-then A22:       B2 <> {} by A20,XBOOLE_0:def 3;
-A23:       f.:A = f.:A \ {f.x} by A12,ZFMISC_1:65
+A19:        x' in B and
+A20:        g.x' = f.x by FUNCT_2:116;
+              x' in g"{f.x} by A20,Th12;
+then A21:       B2 <> {} by A19,XBOOLE_0:def 3;
+A22:       f.:A = f.:A \ {f.x} by A11,ZFMISC_1:65
              .= f.:A \ Im(f,x) by Th13
              .= (f.:A \/ f.:{x}) \ f.:{x} by XBOOLE_1:40
              .= f.:(A \/ {x}) \ Im(f,x) by RELAT_1:153
              .= g.:B \ {f.x} by A7,Th13
              .= g.:B1 by Th11;
-A24:       for b being Element of X st b in B2 holds g.b = f.x
+A23:       for b being Element of X st b in B2 holds g.b = f.x
            proof let b be Element of X;
             assume b in B2;
              then b in g"{f.x} by XBOOLE_0:def 3;
              then g.b in {f.x} by FUNCT_1:def 13;
             hence g.b = f.x by TARSKI:def 1;
            end;
-        thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A15,Th29
-                      .= F.(F$$(B1,g), f.x) by A6,A15,A23
-                      .= F.(F$$(B1,g), F$$(B2,g)) by A1,A22,A24,Th33
-                      .= F$$(B,g) by A1,A16,A17,A22,Th30;
+        thus F$$(A \/ {.x.},f) = F.(F$$(A,f), f.x) by A1,A14,Th29
+                      .= F.(F$$(B1,g), f.x) by A6,A14,A22
+                      .= F.(F$$(B1,g), F$$(B2,g)) by A1,A21,A23,Th33
+                      .= F$$(B,g) by A1,A15,A16,A21,Th30;
        end;
      end;
    end;

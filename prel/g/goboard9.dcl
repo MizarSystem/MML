@@ -23,10 +23,12 @@
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN1"/>
@@ -37,7 +39,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="207">
+<Func kind="K" nr="252">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -45,7 +47,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="63">
+<Adjective nr="66">
 <Num nr="2"/>
 </Adjective>
 </Cluster>
@@ -74,7 +76,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

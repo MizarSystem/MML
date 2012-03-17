@@ -11,17 +11,17 @@ environ
       SCMFSA6A, AMI_2, FUNCT_7, SCMPDS_1, ABSVALUE, NAT_1, ARYTM_1, SCMFSA6B,
       FUNCOP_1, SCMPDS_4, ARYTM;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      RELAT_1,
-      FUNCT_1, FUNCT_4, INT_1, NAT_1, FINSET_1, SEQ_1, STRUCT_0, AMI_1, AMI_2,
-      AMI_3, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMPDS_3, INT_2, XXREAL_0;
+      RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, FINSET_1, VALUED_1, SEQ_1,
+      STRUCT_0, AMI_1, AMI_2, AMI_3, FUNCT_7, SCMPDS_1, SCMPDS_2, SCMPDS_3,
+      INT_2, XXREAL_0;
  constructors WELLORD2, XXREAL_0, NAT_1, SEQ_1, INT_2, AMI_5, SCMPDS_1,
-      SCMPDS_3, DOMAIN_1;
+      SCMPDS_3, DOMAIN_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, FUNCT_1, ORDINAL1, RELSET_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, TREES_2,
-      AMI_1, SCMPDS_2, SCMPDS_3, AMI_2, SCMPDS_1;
+      AMI_1, SCMPDS_2, SCMPDS_3, AMI_2, SCMPDS_1, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, AMI_3, SCMPDS_3, FUNCT_7, XBOOLE_0, SCMPDS_2,
-      FUNCOP_1, AMI_2;
+      FUNCOP_1, AMI_2, VALUED_1;
  theorems AMI_1, AMI_3, NAT_1, CQC_LANG, TARSKI, FUNCT_4, FUNCT_1, ZFMISC_1,
       INT_1, RELAT_1, SCMPDS_2, AMI_2, FUNCT_2, FUNCT_7, SCMPDS_3, CARD_1,
       PRE_CIRC, WELLORD2, ENUMSET1, CARD_3, ABSVALUE, GRFUNC_1, CARD_2,
@@ -851,16 +851,16 @@ SCMPDS_2:52,53
     suppose A14: x in S1;
      then
 A15:   x = IC SCMPDS by TARSKI:def 1;
-X: (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS by A14,TARSKI:def 1
+A16: (the Object-Kind of SCMPDS).x = ObjectKind IC SCMPDS by A14,TARSKI:def 1
        .= NAT by AMI_1:def 11;
-Y:  x = NAT by A15,SCMPDS_2:6;
+A17:  x = NAT by A15,SCMPDS_2:6;
     inspos m in NAT by AMI_1:def 4;
     then
-U:   x <> inspos m by A14,SCMPDS_2:52,53,Y;
-    x <> DataLoc(m,0) by AMI_2:27,Y,SCMPDS_2:def 2;
-    then f.x in NAT by A12,AMI_1:def 4,U;
+A18:   x <> inspos m by A14,A17,SCMPDS_2:52,53;
+    x <> DataLoc(m,0) by A17,AMI_2:27,SCMPDS_2:def 2;
+    then f.x in NAT by A12,A18,AMI_1:def 4;
    hence f.x in (the Object-Kind of SCMPDS).x
-              by A12,A15,SCMPDS_2:52,98,X;
+              by A12,A15,A16,SCMPDS_2:52,98;
     end;
     suppose x in NAT;
      then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
@@ -873,21 +873,21 @@ U:   x <> inspos m by A14,SCMPDS_2:52,53,Y;
   then reconsider f as State of SCMPDS by A7,A9,CARD_3:18;
  take f;
   consider m such that
-A16: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
+A19: IC SCMPDS = IC SCMPDS & f.IC SCMPDS = I() or
     IC SCMPDS = inspos m & f.IC SCMPDS = F(m) or
     IC SCMPDS = DataLoc(m,0) & f.IC SCMPDS = G(m) by A8;
- thus IC f = I() by A16,SCMPDS_2:52,98;
+ thus IC f = I() by A19,SCMPDS_2:52,98;
  let i be Element of NAT;
   consider m such that
-A17: inspos i = IC SCMPDS & f.inspos i = I() or
+A20: inspos i = IC SCMPDS & f.inspos i = I() or
     inspos i = inspos m & f.inspos i = F(m) or
     inspos i = DataLoc(m,0) & f.inspos i = G(m) by A8;
-  thus f.inspos i = F(i) by A17,SCMPDS_2:53,98;
+  thus f.inspos i = F(i) by A20,SCMPDS_2:53,98;
   consider m such that
-A18: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
+A21: DataLoc(i,0) = IC SCMPDS & f.DataLoc(i,0) = I() or
     DataLoc(i,0) = inspos m & f.DataLoc(i,0) = F(m) or
     DataLoc(i,0) = DataLoc(m,0) & f.DataLoc(i,0) = G(m) by A8;
- thus f.DataLoc(i,0) = G(i) by A18,Th17,SCMPDS_2:52,53;
+ thus f.DataLoc(i,0) = G(i) by A21,Th17,SCMPDS_2:52,53;
 end;
 
 theorem    :: Th34
@@ -921,28 +921,28 @@ theorem     :: T29
    let s1,s2 be State of SCMPDS;
 A1: NAT c= dom s1 by AMI_1:114;
 A2: NAT c= dom s2 by AMI_1:114;
-X:      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
+A3:      (for l being Instruction-Location of SCMPDS holds s1.l = s2.l) implies
  (for l being set st l in SCM-Instr-Loc
        holds s1.l = s2.l)
     proof assume
-Z:    for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
+A4:    for l being Instruction-Location of SCMPDS holds s1.l = s2.l;
      let x be set;
      assume x in SCM-Instr-Loc;
       then reconsider l=x as Instruction-Location of SCMPDS by AMI_1:def 4;
-      s1.l = s2.l by Z;
+      s1.l = s2.l by A4;
      hence thesis;
     end;
    (for l being set st l in SCM-Instr-Loc
        holds s1.l = s2.l) implies
       (for l being Instruction-Location of SCMPDS holds s1.l = s2.l)
     proof assume
-Z:    for l being set st l in SCM-Instr-Loc holds s1.l = s2.l;
+A5:    for l being set st l in SCM-Instr-Loc holds s1.l = s2.l;
      let l be Instruction-Location of SCMPDS;
-X:    l in SCM-Instr-Loc by AMI_1:def 4;
-      then s1.l = s2.l by Z;
+A6:    l in SCM-Instr-Loc by AMI_1:def 4;
+      then s1.l = s2.l by A5;
      hence thesis;
     end;
-   hence thesis by A1,A2,FUNCT_1:165,X;
+   hence thesis by A1,A2,A3,FUNCT_1:165;
 end;
 
 theorem  :: T32
@@ -951,7 +951,7 @@ theorem  :: T32
 proof let i be Instruction-Location of SCMPDS;
  i in SCM-Instr-Loc by AMI_1:def 4;
  then i in SCM-Instr-Loc;
- hence thesis by AMI_2:29,XBOOLE_0:3,AMI_1:def 4;
+ hence thesis by AMI_1:def 4,AMI_2:29,XBOOLE_0:3;
 end;
 
 theorem Th23:    :: Th38
@@ -1028,12 +1028,10 @@ theorem    :: T18
    let I,J be Program-block;
        dom I c= NAT by AMI_1:def 40;
    then dom I \ NAT = {} by XBOOLE_1:37;
-then A1: dom (I | (dom I \ NAT)) = {} by
-RELAT_1:191;
+then A1: dom (I | (dom I \ NAT)) = {} by RELAT_1:191;
        dom J c= NAT by AMI_1:def 40;
    then dom J \ NAT = {} by XBOOLE_1:37;
-then A2: dom (J | (dom J \ NAT)) = {} by
-RELAT_1:191;
+then A2: dom (J | (dom J \ NAT)) = {} by RELAT_1:191;
        for x be set st x in {} holds
       (I | (dom I \ NAT)).x =
           (J | (dom J \ NAT)).x;
@@ -1708,17 +1706,17 @@ A13:     j = IC Cn & ICplusConst(Cn,-1)=abs(j+(-1))
         consider mj be Element of SCM-Instr-Loc such that
 A14:      mj = IC s1 & Next mj = Next IC s1 by SCMPDS_2:def 19;
      reconsider i = IC s1 as Element of NAT by AMI_1:def 4;
-A16:     j=i+1 by A11,A13,A14;
+A15:     j=i+1 by A11,A13,A14;
     thus IC((Computation s1).(n+1))
             = IC Following Cn by AMI_1:def 19
-           .=abs(i+4 + -4 ) by A12,A13,A16,SCMPDS_2:66
+           .=abs(i+4 + -4 ) by A12,A13,A15,SCMPDS_2:66
            .=IC s1 by ABSVALUE:def 1;
    end;
    end;
-then A17: for n st X[n] holds X[n+1];
-A18: for n holds X[n] from NAT_1:sch 1(A6,A17);
+then A16: for n st X[n] holds X[n+1];
+A17: for n holds X[n] from NAT_1:sch 1(A6,A16);
  let n;
-   per cases by A18;
+   per cases by A17;
    suppose IC((Computation s1).n) = IC s1;
        then CurInstr((Computation s1).n)
           = s1.IC s1 by AMI_1:54
@@ -1854,42 +1852,42 @@ A6: not Next IC (Computation s).n in dom stop(I) by A4,Th71;
    set IAt = stop(I) +* Start-At inspos 0;
        dom stop(I) misses dom Start-At inspos 0 by Th54;
 then A7: stop I c= IAt by FUNCT_4:33;
-X: IC s2 in SCM-Instr-Loc by AMI_1:def 4;
-Y: Next IC s2 in SCM-Instr-Loc by AMI_1:def 4;
+A8: IC s2 in SCM-Instr-Loc by AMI_1:def 4;
+A9: Next IC s2 in SCM-Instr-Loc by AMI_1:def 4;
   Initialized stop(I) = IAt;
-then A8: IAt is halting by A1,Def10;
+then A10: IAt is halting by A1,Def10;
        (IAt) | IL = stop I by Th58;
-then A9:  dom stop (I) = dom(IAt) /\ IL
+then A11:  dom stop (I) = dom(IAt) /\ IL
         by RELAT_1:90;
-then A10: not IC s2 in dom IAt by A4,XBOOLE_0:def 3,X;
-A11: not Next IC s2 in dom IAt by A6,A9,XBOOLE_0:def 3,Y;
-        IAt c= t1 by A2,A10,FUNCT_7:91;
-    then IAt c= t2 by A11,FUNCT_7:91;
-then A12: IAt c= s0 by Th69;
-then A13: s0 is halting by A8,AMI_1:def 26;
-A14: s,t1 equal_outside IL by FUNCT_7:93,X;
-      t1,t2 equal_outside IL by FUNCT_7:93,Y;
-  then s,t2 equal_outside IL by A14,FUNCT_7:29;
+then A12: not IC s2 in dom IAt by A4,A8,XBOOLE_0:def 3;
+A13: not Next IC s2 in dom IAt by A6,A9,A11,XBOOLE_0:def 3;
+        IAt c= t1 by A2,A12,FUNCT_7:91;
+    then IAt c= t2 by A13,FUNCT_7:91;
+then A14: IAt c= s0 by Th69;
+then A15: s0 is halting by A10,AMI_1:def 26;
+A16: s,t1 equal_outside IL by A8,FUNCT_7:93;
+      t1,t2 equal_outside IL by A9,FUNCT_7:93;
+  then s,t2 equal_outside IL by A16,FUNCT_7:29;
   then s,s0 equal_outside IL by Th69;
-then A15: s0,s equal_outside IL by FUNCT_7:28;
-A16: stop I c= s0 by A7,A12,XBOOLE_1:1;
-A17: stop I c= s by A2,A7,XBOOLE_1:1;
+then A17: s0,s equal_outside IL by FUNCT_7:28;
+A18: stop I c= s0 by A7,A14,XBOOLE_1:1;
+A19: stop I c= s by A2,A7,XBOOLE_1:1;
      for m st m < n holds IC((Computation s).m) in dom stop I by A5;
-then A18: (Computation s0).n,s2 equal_outside IL by A15,A16,A17,Th67;
-A19: s2,t3 equal_outside IL by FUNCT_7:93,X;
-       t3,t4 equal_outside IL by FUNCT_7:93,Y;
-   then s2,t4 equal_outside IL by A19,FUNCT_7:29;
+then A20: (Computation s0).n,s2 equal_outside IL by A17,A18,A19,Th67;
+A21: s2,t3 equal_outside IL by A8,FUNCT_7:93;
+       t3,t4 equal_outside IL by A9,FUNCT_7:93;
+   then s2,t4 equal_outside IL by A21,FUNCT_7:29;
    then s2,s1 equal_outside IL by Th69;
-then A20: (Computation s0).n, s1 equal_outside IL by A18,FUNCT_7:29;
+then A22: (Computation s0).n, s1 equal_outside IL by A20,FUNCT_7:29;
           s| IL = s2 | IL by AMI_1:123;
       then t1 | IL = t3 | IL by FUNCT_7:95;
       then t2 | IL = t4 | IL by FUNCT_7:95;
       then s0 | IL = t4 | IL by Th69;
   then s0 | IL = s1 | IL by Th69;
     then (Computation s0).n | IL = s1 | IL by AMI_1:123;
-then A21: (Computation s0).n = s1 by A20,FUNCT_7:92;
+then A23: (Computation s0).n = s1 by A22,FUNCT_7:92;
       s1 is not halting by Th66;
- hence contradiction by A13,A21,AMI_1:93;
+ hence contradiction by A15,A23,AMI_1:93;
  end;
 end;
 

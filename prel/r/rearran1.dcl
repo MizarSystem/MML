@@ -10,6 +10,7 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
@@ -18,9 +19,11 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="SEQM_3"/>
 <ArticleID name="XXREAL_0"/>
@@ -34,7 +37,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="20"/>
+<Adjective nr="21"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -47,11 +50,11 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="20"/>
-<Adjective nr="24"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49">
+<Adjective nr="21"/>
+<Adjective nr="25"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
+<Adjective nr="52">
 <Func kind="K" nr="23">
 <LocusVar nr="1"/>
 </Func>

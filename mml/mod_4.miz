@@ -8,16 +8,19 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, VECTSP_1, OPPCAT_1, RLVECT_1, ARYTM_1,
       FUNCSDOM, VECTSP_2, LATTICES, BINOP_1, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
-      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ARYTM;
+      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ARYTM, ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
-      STRUCT_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, VECTSP_2,
-      GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
- constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2;
+      STRUCT_0, ALGSTR_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
+      VECTSP_2, GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
+ constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1,
+      VALUED_1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2,
+      ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions RLVECT_1, STRUCT_0, GROUP_1, GROUP_6, GRCAT_1, RINGCAT1, VECTSP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, GROUP_6, GRCAT_1, RINGCAT1, VECTSP_1,
+      ALGSTR_0, VALUED_1;
  theorems FUNCT_1, FUNCT_2, RINGCAT1, VECTSP_1, VECTSP_2, FUNCT_4, RLVECT_1,
-      RELAT_1, GROUP_1, FUNCOP_1, GRCAT_1, GROUP_6;
+      RELAT_1, GROUP_1, FUNCOP_1, GRCAT_1, GROUP_6, ALGSTR_0, STRUCT_0;
 
 begin :: Funkcje przeciwne
 
@@ -47,8 +50,8 @@ reserve K for non empty doubleLoopStr;
 definition let K;
  func opp K -> strict doubleLoopStr equals
     doubleLoopStr (# the carrier of K,
-                               the add of K,
-                               ~(the mult of K),
+                               the addF of K,
+                               ~(the multF of K),
                                1.K,
                                0.K #);
  correctness;
@@ -142,12 +145,12 @@ proof
 end;
 
 theorem
- the LoopStr of opp(K) = the LoopStr of K &
+ the addLoopStr of opp(K) = the addLoopStr of K &
 (K is add-associative right_zeroed right_complementable implies
     comp opp K = comp K)
     & for x being set holds x is Scalar of opp(K) iff x is Scalar of K
 proof
- thus the LoopStr of opp(K) = the LoopStr of K;
+ thus the addLoopStr of opp(K) = the addLoopStr of K;
 hereby assume A1:K is add-associative right_zeroed right_complementable;
 A2: dom comp opp K = the carrier of K by FUNCT_2:def 1;
 A3: dom comp K = the carrier of K by FUNCT_2:def 1;
@@ -241,7 +244,7 @@ registration let K be right_complementable (non empty doubleLoopStr);
   proof let x be Element of opp K;
     reconsider a = x as Element of K;
     consider b being Element of K such that
-A1:   a + b = 0.K by RLVECT_1:def 8;
+A1:   a + b = 0.K by ALGSTR_0:def 11;
     reconsider y = b as Element of opp K;
    take y;
    thus x+y = 0.opp K by A1;
@@ -301,29 +304,29 @@ Th7: for K being Skew-Field holds opp(K) is Skew-Field
    let K be Skew-Field;
    set L = opp(K);
        for x being Scalar of L holds
-    (x <> 0.L implies ex y be Scalar of L st x*y = 1_L)
+    (x <> 0.L implies ex y be Scalar of L st y*x = 1_L)
     & 0.L <> 1_L
     proof
      let x be Scalar of L;
      A1: 1_K = 1_L & 0.K = 0.L;
-          x <> 0.L implies ex y be Scalar of L st x*y = 1_L
+          x <> 0.L implies ex y be Scalar of L st y*x = 1_L
       proof
        assume
        A2: x <> 0.L;
        reconsider a = x as Scalar of K;
        consider b being Scalar of K such that
-       A3: b*a = 1_K by A2,VECTSP_2:40;
+       A3: a*b = 1_K by A2,VECTSP_2:40;
        reconsider y = b as Scalar of opp(K);
        take y;
        thus thesis by A3,Lm3;
       end;
-     hence thesis by A1,VECTSP_1:def 21;
+     hence thesis by A1,STRUCT_0:def 8;
     end;
-   hence thesis by VECTSP_1:def 20,def 21;
+   hence thesis by STRUCT_0:def 8,VECTSP_1:def 20;
   end;
 
 registration let K be Skew-Field;
- cluster opp(K) -> non degenerated Field-like associative Abelian
+ cluster opp(K) -> non degenerated almost_left_invertible associative Abelian
    add-associative right_zeroed right_complementable unital distributive;
  coherence by Th7;
 end;
@@ -347,7 +350,7 @@ theorem
   end;
 
 registration let K be Field;
- cluster opp(K) -> strict Field-like;
+ cluster opp(K) -> strict almost_left_invertible;
  coherence;
 end;
 
@@ -361,14 +364,14 @@ definition let K,V;
    the carrier of opp(K):], the carrier of V
     st o = ~(the lmult of V)
    holds it = RightModStr
-    (# the carrier of V, the add of V, 0.V, o #);
+    (# the carrier of V, the addF of V, 0.V, o #);
  existence
   proof
     reconsider o = ~(the lmult of V) as
     Function of [:the carrier of V,
     the carrier of opp(K):], the carrier of V;
     take RightModStr
-      (#the carrier of V, the add of V, 0.V, o#);
+      (#the carrier of V, the addF of V, 0.V, o#);
     thus thesis;
   end;
  uniqueness
@@ -377,16 +380,16 @@ definition let K,V;
 A1:  for o being Function of [:the carrier of V,
     the carrier of opp(K):], the carrier of V
     st o = ~(the lmult of V) holds M1 = RightModStr
-      (# the carrier of V, the add of V, 0.V, o #) and
+      (# the carrier of V, the addF of V, 0.V, o #) and
 A2:  for o being Function of [:the carrier of V,
     the carrier of opp(K):], the carrier of V
     st o = ~(the lmult of V) holds M2 = RightModStr
-     (# the carrier of V, the add of V, 0.V, o #);
+     (# the carrier of V, the addF of V, 0.V, o #);
     reconsider o = ~(the lmult of V) as
     Function of [:the carrier of V,
     the carrier of opp(K):], the carrier of V;
    thus M1 = RightModStr
-    (# the carrier of V, the add of V, 0.V, o #) by A1
+    (# the carrier of V, the addF of V, 0.V, o #) by A1
     .= M2 by A2;
   end;
 end;
@@ -398,23 +401,23 @@ registration let K,V;
   reconsider o = ~(the lmult of V) as
     Function of [:the carrier of V,the carrier of opp(K):], the carrier of V;
       opp V = RightModStr
-    (# the carrier of V, the add of V, 0.V, o #)
+    (# the carrier of V, the addF of V, 0.V, o #)
  by Def2;
   hence the carrier of opp V is non empty;
  end;
 end;
 
 theorem
-Th9: the LoopStr of opp(V) = the LoopStr of V
+Th9: the addLoopStr of opp(V) = the addLoopStr of V
  & for x being set holds x is Vector of V iff x is Vector of opp(V)
   proof
     reconsider p = ~(the lmult of V) as
      Function of [:the carrier of V,
      the carrier of opp(K):], the carrier of V;
     A1: opp(V) = RightModStr
-     (# the carrier of V, the add of V, 0.V, p #)
+     (# the carrier of V, the addF of V, 0.V, p #)
  by Def2;
-   hence the LoopStr of opp(V) = the LoopStr of V;
+   hence the addLoopStr of opp(V) = the addLoopStr of V;
     let x be set;
    thus thesis by A1;
   end;
@@ -426,7 +429,7 @@ definition let K,V; let o be Function of [:the carrier of K,
    ~o;
  coherence
   proof
-  the LoopStr of opp(V) = the LoopStr of V by Th9;
+  the addLoopStr of opp(V) = the addLoopStr of V by Th9;
    hence ~o is Function of [:the carrier of opp(V),
     the carrier of opp(K):], the carrier of opp(V);
   end;
@@ -439,7 +442,7 @@ Th10: the rmult of opp(V) = opp(the lmult of V)
      Function of [:the carrier of V,
      the carrier of opp(K):], the carrier of V;
         opp(V) = RightModStr
-     (# the carrier of V, the add of V, 0.V, p #) by Def2;
+     (# the carrier of V, the addF of V, 0.V, p #) by Def2;
    hence the rmult of opp(V) = opp(the lmult of V);
   end;
 
@@ -452,14 +455,14 @@ definition let K,W;
    the carrier of W:], the carrier of W
     st o = ~(the rmult of W)
    holds it = VectSpStr
-    (# the carrier of W, the add of W, 0.W, o #);
+    (# the carrier of W, the addF of W, 0.W, o #);
  existence
   proof
     reconsider o = ~(the rmult of W) as Function of [:the carrier of opp(K
 ),
     the carrier of W:], the carrier of W;
     take VectSpStr
-     (#the carrier of W, the add of W, 0.W, o#);
+     (#the carrier of W, the addF of W, 0.W, o#);
     thus thesis;
   end;
  uniqueness
@@ -468,16 +471,16 @@ definition let K,W;
 A1:  for o being Function of [:the carrier of opp(K),
    the carrier of W:], the carrier of W
     st o = ~(the rmult of W) holds M1 = VectSpStr
-      (# the carrier of W, the add of W, 0.W, o #) and
+      (# the carrier of W, the addF of W, 0.W, o #) and
 A2:  for o being Function of [:the carrier of opp(K),
    the carrier of W:], the carrier of W
     st o = ~(the rmult of W) holds M2 = VectSpStr
-     (# the carrier of W, the add of W, 0.W, o #);
+     (# the carrier of W, the addF of W, 0.W, o #);
     reconsider o = ~(the rmult of W) as
     Function of [:the carrier of opp(K),
    the carrier of W:], the carrier of W;
    thus M1 = VectSpStr
-    (# the carrier of W, the add of W, 0.W, o #) by A1
+    (# the carrier of W, the addF of W, 0.W, o #) by A1
     .= M2 by A2;
   end;
 end;
@@ -489,7 +492,7 @@ registration let K,W;
   reconsider o = ~(the rmult of W) as Function of [:the carrier of opp(K),
                                       the carrier of W:], the carrier of W;
       opp W = VectSpStr
-     (#the carrier of W, the add of W, 0.W, o#)
+     (#the carrier of W, the addF of W, 0.W, o#)
  by Def4;
   hence the carrier of opp W is non empty;
  end;
@@ -498,16 +501,16 @@ end;
 canceled;
 
 theorem
-Th12: the LoopStr of opp(W) = the LoopStr of W
+Th12: the addLoopStr of opp(W) = the addLoopStr of W
  & for x being set holds x is Vector of W iff x is Vector of opp(W)
   proof
     reconsider p = ~(the rmult of W) as
      Function of [:the carrier of opp(K),
    the carrier of W:], the carrier of W;
     A1: opp(W) = VectSpStr
-     (# the carrier of W, the add of W, 0.W, p #)
+     (# the carrier of W, the addF of W, 0.W, p #)
  by Def4;
-   hence the LoopStr of opp(W) = the LoopStr of W;
+   hence the addLoopStr of opp(W) = the addLoopStr of W;
     let x be set;
    thus thesis by A1;
   end;
@@ -520,7 +523,7 @@ definition let K,W; let o be Function of [:the carrier of W,
    ~o;
  coherence
   proof
-  the LoopStr of opp(W) = the LoopStr of W by Th12;
+  the addLoopStr of opp(W) = the addLoopStr of W by Th12;
     then reconsider o' = ~o as Function of [:the carrier of opp(K),
     the carrier of opp(W):],
     the carrier of opp(W);
@@ -538,7 +541,7 @@ Th13: the lmult of opp(W) = opp(the rmult of W)
      Function of [:the carrier of opp(K),
     the carrier of W:], the carrier of W;
         opp(W) = VectSpStr
-     (# the carrier of W, the add of W, 0.W, p #)
+     (# the carrier of W, the addF of W, 0.W, p #)
  by Def4;
    hence the lmult of opp(W) = opp(the rmult of W);
   end;
@@ -581,7 +584,7 @@ proof
  let W be non empty RightModStr over L, v1,v2 be Vector of V,
   w1,w2 be Vector of W such that
 A1: L=opp(K) & W=opp(V) & v1=w1 & v2=w2;
-     the LoopStr of opp(V) = the LoopStr of V by Th9;
+     the addLoopStr of opp(V) = the addLoopStr of V by Th9;
  hence w1+w2 = v1+v2 by A1;
 end;
 
@@ -623,7 +626,7 @@ proof
   let W be non empty RightModStr over L; let v1,v2 be Vector of V,
   w1,w2 be Vector of W such that
 A1: K=opp(L) & V=opp(W) & v1=w1 & v2=w2;
-      the LoopStr of opp(W) = the LoopStr of W by Th12;
+      the addLoopStr of opp(W) = the addLoopStr of W by Th12;
  hence w1+w2 = v1+v2 by A1;
 end;
 
@@ -635,8 +638,8 @@ K
  proof let K be strict non empty doubleLoopStr,
            V be non empty VectSpStr over K;
    set W = opp(V);
-A1: the LoopStr of opp(W) = the LoopStr of W by Th12
-                         .= the LoopStr of V by Th9;
+A1: the addLoopStr of opp(W) = the addLoopStr of W by Th12
+                         .= the addLoopStr of V by Th9;
 A2: opp(the rmult of W) = opp(opp(the lmult of V)) by Th10
                       .= the lmult of V by FUNCT_4:54;
      opp(opp(K)) = K by FUNCT_4:54;
@@ -650,8 +653,8 @@ theorem
  proof let K be strict non empty doubleLoopStr,
            W be non empty RightModStr over K;
    set V = opp(W);
-A1: the LoopStr of opp(V) = the LoopStr of V by Th9
-                         .= the LoopStr of W by Th12;
+A1: the addLoopStr of opp(V) = the addLoopStr of V by Th9
+                         .= the addLoopStr of W by Th12;
 A2: opp(the lmult of V) = opp(opp(the rmult of W)) by Th13
                       .= the rmult of W by FUNCT_4:54;
      opp(opp(K)) = K by FUNCT_4:54;
@@ -664,7 +667,7 @@ Th25: for K being Ring, V being LeftMod of K holds
  proof let K be Ring, V be LeftMod of K;
    set R=opp(K);
    reconsider W=opp(V) as non empty RightModStr over R;
-A1: the LoopStr of opp V = the LoopStr of V by Th9;
+A1: the addLoopStr of opp V = the addLoopStr of V by Th9;
      then A2: for a,b be Element of opp V
       for x,y be Element of V
        st x = a & b = y
@@ -691,7 +694,7 @@ A3:  opp V is Abelian add-associative right_zeroed right_complementable
        let a be Element of opp V;
         reconsider x = a as Element of V by Th9;
         consider b being Element of V such that
-A4:      x + b = 0.V by RLVECT_1:def 8;
+A4:      x + b = 0.V by ALGSTR_0:def 11;
         reconsider b' = b as Element of opp V by Th9;
        take b';
        thus a + b' = 0.opp V by A1,A4;
@@ -728,7 +731,7 @@ Th26: for K being Ring, W being RightMod of K holds
  proof let K be Ring, W be RightMod of K;
    set R=opp(K);
    reconsider V=opp(W) as non empty VectSpStr over R;
-A1: the LoopStr of opp W = the LoopStr of W by Th12;
+A1: the addLoopStr of opp W = the addLoopStr of W by Th12;
      then A2: for a,b be Element of opp W
       for x,y be Element of W
        st x = a & b = y
@@ -755,7 +758,7 @@ A3:  opp W is Abelian add-associative right_zeroed right_complementable
        let a be Element of opp W;
         reconsider x = a as Element of W by Th12;
         consider b being Element of W such that
-A4:      x + b = 0.W by RLVECT_1:def 8;
+A4:      x + b = 0.W by ALGSTR_0:def 11;
         reconsider b' = b as Element of opp W by Th12;
        take b';
        thus a + b' = 0.opp W by A1,A4;
@@ -788,7 +791,7 @@ end;
 
 begin :: Morfizmy pierscieni
 
-definition let K,L be non empty HGrStr;
+definition let K,L be non empty multMagma;
            let IT be Function of K,L;
  attr IT is antimultiplicative means :Def6:
   for x,y being Scalar of K holds IT.(x*y) = IT.y*IT.x;
@@ -1430,7 +1433,7 @@ end;
 Lm16: f.(-x) = -f.x
 proof
  set a = 0.G, b = 0.H, y = f.x;
-     x+-x = a & y+-y = b by RLVECT_1:def 10;
+     x+-x = a & y+-y = b by RLVECT_1:def 11;
  then y+f.(-x) = f.a by Def19
          .= b by Lm15;
  hence thesis by VECTSP_1:63;

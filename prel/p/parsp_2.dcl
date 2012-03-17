@@ -15,26 +15,27 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="FINSEQ_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="PARSP_1"/>
 <ArticleID name="PARSP_2"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="12">
+<Typ kind="G" nr="13">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="64"/>
-<Adjective nr="65"/>
-<Adjective nr="66"/>
+<Adjective nr="23" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
 </Cluster>
 </RCluster>
 </Registrations>

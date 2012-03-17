@@ -18,6 +18,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLSUB_1"/>
 <ArticleID name="NORMSP_1"/>
@@ -28,40 +29,40 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="53"/>
+<Adjective nr="50"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="42"/>
-<Adjective nr="43"/>
-<Adjective nr="53"/>
+<Adjective nr="50"/>
+<Adjective nr="75"/>
+<Adjective nr="76"/>
+<Adjective nr="77"/>
+<Adjective nr="78"/>
+<Adjective nr="87"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="159">
+<Func kind="K" nr="169">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>

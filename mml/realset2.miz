@@ -8,20 +8,20 @@ environ
 
  vocabularies BOOLE, REALSET1, FUNCT_1, RELAT_1, BINOP_1, RLVECT_1, QC_LANG1,
       VECTSP_1, REALSET2, FUNCT_4, CAT_1, FUNCT_7, GROUP_1, LATTICES, ORDINAL2,
-      XREAL_0, ARYTM_1, VECTSP_2, ARYTM;
+      XREAL_0, ARYTM_1, VECTSP_2, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, DOMAIN_1, RELAT_1, FUNCT_1,
-      NUMBERS,
-      REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7, ORDINAL1,
-      XCMPLX_0, STRUCT_0, RLVECT_1, GROUP_1, VECTSP_1;
- constructors BINOP_1, FUNCT_4, XCMPLX_0, REALSET1, FUNCT_7, VECTSP_1;
+      NUMBERS, REALSET1, FUNCOP_1, FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
+      ORDINAL1, XCMPLX_0, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1;
+ constructors RLVECT_1, BINOP_1, FUNCT_4, XCMPLX_0, REALSET1, FUNCT_7,
+      VECTSP_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, XCMPLX_0, REALSET1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1, ORDINAL1;
+      RLVECT_1, GROUP_1, VECTSP_1, ORDINAL1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE, NUMERALS;
  definitions RLVECT_1, TARSKI, REALSET1, BINOP_1, STRUCT_0, FUNCOP_1, VECTSP_1,
-      GROUP_1;
+      GROUP_1, ALGSTR_0, VALUED_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ZFMISC_1, ENUMSET1, REALSET1, VECTSP_1,
       RELSET_1, XBOOLE_0, RLVECT_1, FUNCT_4, FUNCOP_1, CARD_1, XBOOLE_1,
-      FUNCT_7, STRUCT_0, GROUP_1;
+      FUNCT_7, STRUCT_0, GROUP_1, ALGSTR_0;
  schemes FUNCT_2;
 
 begin
@@ -274,17 +274,9 @@ Lm21: for a being Element of dL holds a + 0.dL = a
            a=x or a=y by Lm2,CARD_1:88,TARSKI:def 2;
        hence thesis by Lm6,Lm8;
      end;
-Lm22: for a being Element of dL ex b being Element of dL st
-       a+b = 0.dL
-     proof
-       let a be Element of dL;
-       take a;
-         a=x or a=y by Lm2,CARD_1:88,TARSKI:def 2;
-       hence thesis by Lm6,Lm9;
-     end;
-Lm23:  for a,b,c being Element of dL holds a+b+c = a+(b+c)
+Lm22:  for a,b,c being Element of dL holds a+b+c = a+(b+c)
          by Lm20;
-Lm24: for a,b being Element of dL holds a+b = b+a
+Lm23: for a,b being Element of dL holds a+b = b+a
      proof
        let a,b be Element of dL;
            (a=x & b=x) or (a=x & b=y) or (a=y & b=x) or (a=y & b=y)
@@ -292,9 +284,10 @@ Lm24: for a,b being Element of dL holds a+b = b+a
        hence thesis by Lm7,Lm8;
      end;
      reconsider om1=om as DnT of nd,A by Lm19,REALSET1:def 8;
-Lm25:for B being non empty set, P being BinOp of B,
+
+Lm24:for B being non empty set, P being BinOp of B,
          e being Element of B st
-     B = A\{nd} & e = nm & P = om1!(A,nd) holds LoopStr(#B,P,e#) is AbGroup
+     B = A\{nd} & e = nm & P = om1!(A,nd) holds addLoopStr(#B,P,e#) is AbGroup
      proof
         let B be non empty set,
             P be BinOp of B,
@@ -307,31 +300,33 @@ Lm25:for B being non empty set, P being BinOp of B,
            a = y & b = y & c = y by A1,Lm17,TARSKI:def 1;
           hence thesis by A1,Lm17,TARSKI:def 1;
         end;
-    A3: for a being Element of LoopStr(#B,P,e#) holds a+0.LoopStr(#B,P,e#) = a
+    A3: for a being Element of addLoopStr(#B,P,e#)
+     holds a+0.addLoopStr(#B,P,e#) = a
         proof
-          let a be Element of LoopStr(#B,P,e#);
+          let a be Element of addLoopStr(#B,P,e#);
            a = y by A1,Lm17,TARSKI:def 1;
           hence thesis by A1,Lm17,TARSKI:def 1;
         end;
-    A4: for a being Element of LoopStr(#B,P,e#)
-         ex b being Element of LoopStr(#B,P,e#) st
-           a+b = 0.LoopStr(#B,P,e#)
+    A4:
+       addLoopStr(#B,P,e#) is right_complementable
         proof
-          let a be Element of LoopStr(#B,P,e#);
+          let a be Element of addLoopStr(#B,P,e#);
           take a;
           thus thesis by A1,Lm17,TARSKI:def 1;
         end;
-A5:     for a,b,c being Element of LoopStr(#B,P,e#) holds a+b+c = a+(b+c) by A2
+A5:     for a,b,c being Element of addLoopStr(#B,P,e#) holds a+b+c = a+(b+c)
+ by A2
 ;
-            for a,b being Element of LoopStr(#B,P,e#) holds a+b = b+a
+            for a,b being Element of addLoopStr(#B,P,e#) holds a+b = b+a
         proof
-          let a,b be Element of LoopStr(#B,P,e#);
+          let a,b be Element of addLoopStr(#B,P,e#);
               a = y & b = y by A1,Lm17,TARSKI:def 1;
           hence thesis;
         end;
-        hence thesis by A3,A4,A5,RLVECT_1:def 5,def 6,def 7,def 8;
+        hence thesis by A3,A4,A5,RLVECT_1:def 5,def 6,def 7;
      end;
-Lm26: for a,b,d being Element of dL holds
+
+Lm25: for a,b,d being Element of dL holds
          a*(b+d) = a*b+a*d & (b+d)*a = b*a+d*a
      proof
        let a,b,d be Element of dL;
@@ -404,13 +399,13 @@ registration
 end;
 
 registration
- cluster zero Element of dL-Z_2;
+ cluster empty Element of dL-Z_2;
  existence
   proof reconsider z = 0 as Element of dL-Z_2 by CARD_1:88,TARSKI:def 2;
    take z;
    thus thesis;
   end;
- cluster non zero Element of dL-Z_2;
+ cluster non empty Element of dL-Z_2;
  existence
   proof reconsider z = 1 as Element of dL-Z_2 by CARD_1:88,TARSKI:def 2;
    take z;
@@ -421,14 +416,12 @@ end;
 definition
   let L be non trivial doubleLoopStr;
   attr L is Field-like means
-:Def11:
-   ex om being DnT of 0.L,the carrier of L st
-     om = the mult of L &
+:Def11: the multF of L is DnT of 0.L,the carrier of L &
            (for B being non empty set, P being BinOp of B,
                 e being Element of B holds
            B = (the carrier of L)\{0.L} & e = 1.L &
-           P = om!(the carrier of L,0.L)
-           implies LoopStr(#B,P,e#) is AbGroup);
+           P = (the multF of L)||((the carrier of L)\{0.L})
+           implies addLoopStr(#B,P,e#) is AbGroup);
 end;
 
 registration
@@ -463,8 +456,15 @@ A2:   1.L = nm;
      then reconsider L as non degenerated doubleLoopStr by A1,Lm2,
 STRUCT_0:def 8;
     take L;
-    thus thesis by A2,Def11,Lm21,Lm22,Lm23,Lm24,Lm25,Lm26,RLVECT_1:def 5,def 6
-,def 7,def 8,VECTSP_1:def 18;
+     L is right_complementable
+     proof
+       let a be Element of L;
+       take a;
+         a=x or a=y by Lm2,CARD_1:88,TARSKI:def 2;
+       hence thesis by Lm6,Lm9;
+     end;
+    hence thesis by A2,Def11,Lm21,Lm22,Lm23,Lm24,Lm25,RLVECT_1:def 5,def 6
+,def 7,VECTSP_1:def 18;
    end;
 end;
 
@@ -485,7 +485,7 @@ A2: L is right-distributive
                     by A1,VECTSP_1:def 18;
     end;
     set B = (the carrier of L)\{0.L};
-     for y being set st y in [:B,B:] holds (the mult of L).y in B
+     for y being set st y in [:B,B:] holds (the multF of L).y in B
      proof let z be set;
       assume z in [:B,B:];
        then consider x,y such that
@@ -496,17 +496,15 @@ A4:     z = [x,y] by ZFMISC_1:103;
        then x <> 0.L & y <> 0.L by TARSKI:def 1;
        then x*y <> 0.L by A1,VECTSP_1:44;
        then not x*y in {0.L} by TARSKI:def 1;
-      hence (the mult of L).z in B by A4,XBOOLE_0:def 4;
+      hence (the multF of L).z in B by A4,XBOOLE_0:def 4;
      end;
-    then reconsider om = the mult of L as DnT of 0.L,the carrier of L
-              by REALSET1:def 8;
-   take om;
-   thus om = the mult of L;
+    hence the multF of L is DnT of 0.L,the carrier of L by REALSET1:def 8;
+    then reconsider om = the multF of L as DnT of 0.L,the carrier of L;
    let B be non empty set, P be BinOp of B, e be Element of B such that
 A5: B = (the carrier of L)\{0.L} and
 A6: e = 1.L and
-A7: P = om!(the carrier of L,0.L);
-    set K = LoopStr(#B,P,e#);
+A7: P = (the multF of L)||((the carrier of L)\{0.L});
+    set K = addLoopStr(#B,P,e#);
 A8:  K is Abelian
      proof let v,w be Element of K;
        reconsider a=v, b=w as Element of L by A5,XBOOLE_0:def 4;
@@ -545,25 +543,25 @@ A16:  K is right_zeroed
         not a in {0.L} by A5,XBOOLE_0:def 4;
        then a <> 0.L by TARSKI:def 1;
        then consider b being Element of L such that
-A17:      a*b = 1.L by A1,VECTSP_1:def 20;
+A17:      b*a = 1.L by A1,VECTSP_1:def 20;
+A18:      a*b = 1.L by A1,A17,GROUP_1:def 16;
         0.L <> 1.L by STRUCT_0:def 8;
-       then b <> 0.L by A1,A2,A17,VECTSP_1:36;
+       then b <> 0.L by A1,A2,A18,VECTSP_1:36;
        then not b in {0.L} by TARSKI:def 1;
        then reconsider w=b as Element of K by A5,XBOOLE_0:def 4;
       take w;
         [v,w] in [:B,B:];
-      hence v + w = 0.K by A5,A6,A7,A17,FUNCT_1:72;
+      hence v + w = 0.K by A5,A6,A7,A18,FUNCT_1:72;
      end;
-   hence LoopStr(#B,P,e#) is AbGroup by A8,A11,A16;
+   hence addLoopStr(#B,P,e#) is AbGroup by A8,A11,A16;
   end;
 end;
 
-Lm27:
- for F being Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr) holds
+Lm26:
+ for F being non degenerated doubleLoopStr holds
     1.F is Element of (the carrier of F)\{0.F}
- proof let F be Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr);
+ proof
+  let F be non degenerated doubleLoopStr;
     1.F <> 0.F by STRUCT_0:def 8;
    then not 1.F in {0.F} by TARSKI:def 1;
   hence 1.F is Element of (the carrier of F)\{0.F} by XBOOLE_0:def 4;
@@ -578,33 +576,15 @@ definition
         right_zeroed right_complementable (non degenerated doubleLoopStr);
 canceled 3;
    func omf(F) -> DnT of 0.F,the carrier of F equals
-     the mult of F;
- coherence
-  proof
-   consider om being DnT of 0.F,the carrier of F such that
-A1: om = the mult of F and
-     for B being non empty set, P being BinOp of B,
-                e being Element of B holds
-           B = (the carrier of F)\{0.F} & e = 1.F &
-           P = om!(the carrier of F,0.F)
-           implies LoopStr(#B,P,e#) is AbGroup by Def11;
-   thus thesis by A1;
-  end;
-end;
-
-definition
-   let F be Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr);
-   func nmf(F) -> Element of (the carrier of F)\{0.F} equals
-      1.F;
- coherence by Lm27;
+     the multF of F;
+ coherence by Def11;
 end;
 
 theorem
-   for F being Field holds the LoopStr of F is AbGroup
+   for F being Field holds the addLoopStr of F is AbGroup
 proof
  let F be Field;
-  set L = the LoopStr of F;
+  set L = the addLoopStr of F;
 A1: L is Abelian
     proof let v,w be Element of L;
       reconsider a=v, b=w as Element of F;
@@ -629,7 +609,7 @@ A3: L is right_zeroed
      proof let v be Element of L;
        reconsider a=v as Element of F;
        consider b being Element of F such that
-A4:      a + b = 0.F by RLVECT_1:def 8;
+A4:      a + b = 0.F by ALGSTR_0:def 11;
        reconsider w=b as Element of L;
       take w;
       thus v + w = 0.L by A4;
@@ -637,51 +617,22 @@ A4:      a + b = 0.F by RLVECT_1:def 8;
  hence thesis by A1,A2,A3;
 end;
 
-theorem Th2:
-   for F being Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr),
-       B being non empty set,
-       P being BinOp of B, e being Element of B st
-   B = (the carrier of F)\{0.F} & e = nmf(F) &
-   P = omf(F)!(the carrier of F,0.F) holds
-    LoopStr(#B,P,e#) is AbGroup
-proof
- let F be Field-like Abelian distributive add-associative
-        right_zeroed right_complementable (non degenerated doubleLoopStr),
-     B be non empty set, P be BinOp of B, e be Element of B;
-  set A = the carrier of F, od = the add of F, nd = 0.F;
-  set nm = 1.F;
-   ex om being DnT of nd,A st om = the mult of F &
-   for B being non empty set,
-       P being BinOp of B,
-       e being Element of B st
-       B = A\{nd} & e = nm & P = om!(A,nd) holds
-                  LoopStr(#B,P,e#) is AbGroup by Def11;
- hence thesis;
-end;
-
-theorem
-  for F being Field, x,y,z being Element of F holds
-    x*(y+z) = (x*y)+(x*z) &
-    (x+y)*z = x*z+y*z by VECTSP_1:def 18;
-
-theorem
-    for F being Field,
-       a,b,c being Element of (the carrier of F)holds
-   (a+b)+c = a+(b+c) by RLVECT_1:def 6;
-
-theorem
-    for F being Field,
-       a,b being Element of (the carrier of F)holds
-   a+b = b+a;
+canceled 4;
 
 theorem
     for F being Field, a being Element of F holds
-   a+0.F = a & 0.F+a = a by RLVECT_1:def 14;
+   a+0.F = a & 0.F+a = a by RLVECT_1:def 15;
 
-theorem
-    for F being Field, a being Element of F ex b being Element of F st
-    a+b = 0.F & b+a = 0.F by RLVECT_1:def 15;
+theorem Th7:
+    for F being AbGroup, a being Element of F ex b being Element of F st
+    a+b = 0.F & b+a = 0.F :::by ALGSTR_0:def 16;  ::: !!!
+    proof let F be AbGroup, a be Element of F;
+      consider b being Element of F such that
+A1:     a+b = 0.F by ALGSTR_0:def 11;
+    take b;
+    thus a+b = 0.F by A1;
+    hence b+a = 0.F;
+    end;
 
 theorem Th8:
    for F being Field-like Abelian distributive add-associative
@@ -694,8 +645,8 @@ proof
        a,b,c be Element of suppf1(F)\{0.F};
    set B = suppf1(F)\{0.F};
    set P = omf(F)!(suppf1(F),0.F);
-   set e = nmf(F);
-   reconsider D = LoopStr(#B,P,e#) as strict AbGroup by Th2;
+   reconsider e = 1.F as Element of B by Lm26;
+   reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
    reconsider a,b,c as Element of D;
 A1:omf(F)||(suppf1(F)\{0.F})
     is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -703,7 +654,7 @@ A1:omf(F)||(suppf1(F)\{0.F})
 then A2:dom(omf(F)||(suppf1(F)\{0.F})) =
     [:suppf1(F)\{0.F},suppf1(F)\{0.F}:] by FUNCT_2:def 1;
 A3:for s,t being Element of (suppf1(F)\{0.F}) holds
-    (the add of D).(s,t) is Element of (suppf1(F)\{0.F}) &
+    (the addF of D).(s,t) is Element of (suppf1(F)\{0.F}) &
     omf(F).(s,t) is Element of (suppf1(F)\{0.F})
     proof
         let s,t be Element of (suppf1(F)\{0.F});
@@ -716,26 +667,27 @@ A3:for s,t being Element of (suppf1(F)\{0.F}) holds
         hence thesis by A2,A4,A5,FUNCT_1:70;
     end;
 A6:for x,y being Element of suppf1(F)\{0.F} holds
-    omf(F).(x,y) = (the add of D).(x,y)
+    omf(F).(x,y) = (the addF of D).(x,y)
     proof
       let x,y be Element of suppf1(F)\{0.F};
           [x,y] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
       hence thesis by A2,FUNCT_1:70;
     end;
 A7:for x,y,z being Element of suppf1(F)\{0.F} holds
-  omf(F).((the add of D).(x,y),z) = (the add of D).((the add of D).(x,y),z) &
-    (the add of D).(x,omf(F).(y,z)) = omf(F).(x,omf(F).(y,z))
+  omf(F).((the addF of D).(x,y),z)
+   = (the addF of D).((the addF of D).(x,y),z) &
+    (the addF of D).(x,omf(F).(y,z)) = omf(F).(x,omf(F).(y,z))
     proof
         let x,y,z be Element of suppf1(F)\{0.F};
-    A8:(the add of D).(x,y) is Element of suppf1(F)\{0.F} by A3;
+    A8:(the addF of D).(x,y) is Element of suppf1(F)\{0.F} by A3;
             omf(F).(y,z) is Element of suppf1(F)\{0.F} by A3;
         hence thesis by A6,A8;
     end;
     reconsider x=a, y=b, z=c as Element of F;
-      (x*y)*z = omf(F).((the add of D).(a,b),c) by A6
+      (x*y)*z = omf(F).((the addF of D).(a,b),c) by A6
                            .= a+b+c by A7
                            .= a+(b+c) by RLVECT_1:def 6
-                           .= (the add of D).(a,omf(F).(b,c)) by A6
+                           .= (the addF of D).(a,omf(F).(b,c)) by A6
                            .= x*(y*z) by A7;
    hence thesis;
 end;
@@ -751,8 +703,8 @@ proof
        a,b be Element of suppf1(F)\{0.F};
    set B = suppf1(F)\{0.F};
    set P = omf(F)!(suppf1(F),0.F);
-   set e = nmf(F);
-   reconsider D = LoopStr(#B,P,e#) as strict AbGroup by Th2;
+   reconsider e = 1.F as Element of B by Lm26;
+   reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
    reconsider a,b as Element of D;
        omf(F)||(suppf1(F)\{0.F})
     is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -760,7 +712,7 @@ proof
 then A1: dom(omf(F)||(suppf1(F)\{0.F})) =
     [:suppf1(F)\{0.F},suppf1(F)\{0.F}:] by FUNCT_2:def 1;
 A2:for x,y being Element of suppf1(F)\{0.F} holds
-    omf(F).(x,y) = (the add of D).(x,y)
+    omf(F).(x,y) = (the addF of D).(x,y)
     proof
         let x,y be Element of suppf1(F)\{0.F};
             [x,y] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
@@ -784,8 +736,8 @@ proof
        a be Element of suppf1(F)\{0.F};
    set B = suppf1(F)\{0.F};
    set P = omf(F)!(suppf1(F),0.F);
-   set e = nmf(F);
-   reconsider D = LoopStr(#B,P,e#) as strict AbGroup by Th2;
+   reconsider e = 1.F as Element of B by Lm26;
+   reconsider D = addLoopStr(#B,P,e#) as strict AbGroup by Def11;
    reconsider a as Element of D;
     omf(F)||(suppf1(F)\{0.F})
     is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
@@ -793,16 +745,16 @@ proof
 then A1: dom(omf(F)||(suppf1(F)\{0.F})) =
     [:suppf1(F)\{0.F},suppf1(F)\{0.F}:] by FUNCT_2:def 1;
 A2:for x,y being Element of suppf1(F)\{0.F} holds
-    omf(F).(x,y) = (the add of D).(x,y)
+    omf(F).(x,y) = (the addF of D).(x,y)
     proof
         let x,y be Element of suppf1(F)\{0.F};
         [x,y] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
         hence thesis by A1,FUNCT_1:70;
     end;
-then A3:omf(F).(a,nmf(F)) = a + 0.D
+then A3:omf(F).(a,1.F) = a + 0.D
                      .= a by RLVECT_1:def 7;
-       omf(F).(nmf(F),a) = 0.D + a by A2
-                     .= a by RLVECT_1:def 14;
+       omf(F).(1.F,a) = 0.D + a by A2
+                     .= a by RLVECT_1:def 15;
    hence thesis by A3;
 end;
 
@@ -818,21 +770,21 @@ proof
        a be Element of suppf1(F)\{0.F};
    set B = suppf1(F)\{0.F};
    set P = omf(F)!(suppf1(F),0.F);
-   set e = nmf(F);
-       LoopStr(#B,P,e#) is AbGroup by Th2;
+   reconsider e = 1.F as Element of B by Lm26;
+       addLoopStr(#B,P,e#) is AbGroup by Def11;
    then consider D being strict AbGroup such that
-A1:D = LoopStr(#B,P,e#);
+A1:D = addLoopStr(#B,P,e#);
    reconsider a as Element of D by A1;
    consider b being Element of D such that
 A2: a+b = 0.D & b+a = 0.D
-    by RLVECT_1:def 15;
+    by Th7;
     omf(F)||(suppf1(F)\{0.F})
     is Function of [:suppf1(F)\{0.F},suppf1(F)\{0.F}:],
     (suppf1(F)\{0.F}) by REALSET1:11;
 then A3: dom(omf(F)||(suppf1(F)\{0.F})) =
     [:suppf1(F)\{0.F},suppf1(F)\{0.F}:] by FUNCT_2:def 1;
 A4:for x,y being Element of suppf1(F)\{0.F} holds
-    omf(F).(x,y) = (the add of D).(x,y)
+    omf(F).(x,y) = (the addF of D).(x,y)
     proof
         let x,y be Element of suppf1(F)\{0.F};
         [x,y] in [:suppf1(F)\{0.F},suppf1(F)\{0.F}:];
@@ -843,55 +795,31 @@ A4:for x,y being Element of suppf1(F)\{0.F} holds
    thus thesis by A1,A2,A4;
 end;
 
-definition
-   let F be Field;
-   func compf F -> UnOp of the carrier of F means
-:Def17: for x being Element of F holds it.x = -x;
-existence
- proof deffunc F(Element of F) = -$1;
-  consider f being UnOp of the carrier of F such that
-A1: for x being Element of F holds f.x = F(x) from FUNCT_2:sch 4;
-  take f;
-  thus thesis by A1;
- end;
-uniqueness
-proof
-   let C1,C2 be UnOp of the carrier of F such that
-A2:for x being Element of F holds C1.x = -x and
-A3:for x being Element of F holds C2.x = -x;
-   for x being Element of F holds C1.x = C2.x
-   proof let x be Element of F;
-    thus C1.x = -x by A2 .= C2.x by A3;
-   end;
- hence thesis by FUNCT_2:113;
-end;
-end;
-
 theorem
     for F being Field, x,y being Element of F holds
-   x+y = 0.F implies y = (compf F).x
+   x+y = 0.F implies y = (comp F).x
 proof
    let F be Field, x,y be Element of F;
    assume x+y = 0.F;
     then y = -x by RLVECT_1:19;
-   hence thesis by Def17;
+   hence thesis by VECTSP_1:def 25;
 end;
 
 theorem
     for F being Field, x being Element of F holds
-   x = compf(F).(compf(F).x)
+   x = (comp F).((comp F).x)
 proof
    let F be Field, x be Element of F;
-   thus x = --x by RLVECT_1:30 .= (compf(F).-x) by Def17
-         .= compf(F).(compf(F).x) by Def17;
+   thus x = --x by RLVECT_1:30 .= (comp F).-x by VECTSP_1:def 25
+         .= (comp F).((comp F).x) by VECTSP_1:def 25;
 end;
 
 theorem
      for F being Field,
         a,b being Element of (the carrier of F)holds
-    (the add of F).(a,b) is Element of (the carrier of F)&
+    (the addF of F).(a,b) is Element of (the carrier of F)&
     omf(F).(a,b) is Element of (the carrier of F)&
-    compf(F).a is Element of the carrier of F;
+    (comp F).a is Element of the carrier of F;
 
 theorem
     for F being Field, a,b,c being Element of F holds
@@ -1016,12 +944,13 @@ end;
 
 definition
   let F be Field;
+  canceled 2;
   func revf(F) -> UnOp of (the carrier of F)\{0.F} means
 :Def18: for x being Element of (the carrier of F)\{0.F} holds
-        omf(F).(x,it.x) = nmf(F);
+        omf(F).(x,it.x) = 1.F;
 existence
 proof
-  defpred Z[set,set] means omf(F).($1,$2) = nmf(F);
+  defpred Z[set,set] means omf(F).($1,$2) = 1.F;
    A1:for x being set st x in suppf1(F)\{0.F} ex y being set st
           y in suppf1(F)\{0.F} & Z[x,y]
       proof
@@ -1040,7 +969,7 @@ proof
 (A1);
     then consider C being Function of suppf1(F)\{0.F},suppf1(F)\{0.F}
     such that
-A3:for x being set st x in suppf1(F)\{0.F} holds omf(F).(x,C.x) = nmf(F);
+A3:for x being set st x in suppf1(F)\{0.F} holds omf(F).(x,C.x) = 1.F;
     take C;
     thus thesis by A3;
 end;
@@ -1048,9 +977,9 @@ uniqueness
 proof
    let C1,C2 be Function of suppf1(F)\{0.F},suppf1(F)\{0.F} such that
 A4:for x being Element of suppf1(F)\{0.F} holds
-       omf(F).(x,C1.x) = nmf(F) and
+       omf(F).(x,C1.x) = 1.F and
 A5:for x being Element of suppf1(F)\{0.F} holds
-       omf(F).(x,C2.x) = nmf(F);
+       omf(F).(x,C2.x) = 1.F;
        for x being set st x in suppf1(F)\{0.F} holds C1.x = C2.x
       proof
          let x be set;
@@ -1082,7 +1011,7 @@ proof
 A1: x*y = 1.F;
     reconsider rx = revf(F).x as Element of F by XBOOLE_0:def 4;
        y = y*1.F by Th10
-         .= omf(F).(y,nmf(F))
+         .= omf(F).(y,1.F)
          .= y*(x*rx) by Def18
          .= 1.F*rx by A1,Th8
          .= revf(F).x by Th10;
@@ -1099,10 +1028,10 @@ proof
     reconsider rx = revf(F).x as Element of F by XBOOLE_0:def 4;
     reconsider rrx = revf(F).(revf(F).x) as Element of F by XBOOLE_0:def 4;
     x =x*1.F by Th10
-         .= omf(F).(x,nmf(F))
+         .= omf(F).(x,1.F)
          .= x*(rx*rrx) by Def18
          .= x*rx*rrx by Th8
-         .= omf(F).(nmf(F),revf(F).(revf(F).x)) by Def18
+         .= omf(F).(1.F,revf(F).(revf(F).x)) by Def18
          .= 1.F*rrx
          .= revf(F).(revf(F).x) by Th10;
    hence thesis;
@@ -1139,11 +1068,11 @@ A1: a*b = a*c;
     reconsider ra = revf(F).a as Element of F by XBOOLE_0:def 4;
 
      b = 1.F*b by Th25
-    .= omf(F).(nmf(F),b)
+    .= omf(F).(1.F,b)
     .= (x*ra)*b by Def18
     .= ra*(x*c) by A1,Th23
     .= (x*ra)*c by Th23
-    .= omf(F).(nmf(F),c) by Def18
+    .= omf(F).(1.F,c) by Def18
     .= 1.F*c
     .= c by Th25;
    hence thesis;
@@ -1183,3 +1112,6 @@ A2:   x*y = 1.L & y*x = 1.L by A1,Th11;
   end;
 end;
 
+theorem
+ for F being non degenerated doubleLoopStr holds
+    1.F is Element of (the carrier of F)\{0.F} by Lm26;

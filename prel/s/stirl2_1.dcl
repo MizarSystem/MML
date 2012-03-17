@@ -22,7 +22,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="23">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="4">
@@ -52,7 +52,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
 <Cluster/>

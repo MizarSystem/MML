@@ -1,0 +1,2372 @@
+:: Properties of Number-Valued Functions
+::  by Library Committee
+::
+:: Received December 18, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies FUNCT_1, COMPLEX1, RELAT_1, BOOLE, PARTFUN1, SEQ_1, ARYTM_1,
+      XCMPLX_0, ARYTM, VALUED_0, MEMBERED, RAT_1, INT_1, ORDINAL2, SQUARE_1,
+      ARYTM_3, ABSVALUE, FINSEQ_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, COMPLEX1,
+      XXREAL_0, XREAL_0, RAT_1, INT_1, INT_2, SQUARE_1, RELAT_1, FUNCT_1,
+      RELSET_1, PARTFUN1, FUNCT_2, FINSEQ_1, MEMBERED, VALUED_0;
+ constructors PARTFUN1, REAL_1, COMPLEX1, RAT_1, INT_1, XXREAL_0, VALUED_0,
+      SQUARE_1, MEMBERED, FUNCT_2, INT_2, FRAENKEL, FINSEQ_1;
+ registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
+      MEMBERED, COMPLEX1, VALUED_0, RAT_1, INT_1, NAT_1, FRAENKEL, FUNCT_1,
+      RELAT_1, SUBSET_1;
+ requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
+ definitions XCMPLX_0, SQUARE_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
+      VALUED_0;
+ theorems FUNCT_1, FUNCT_2, RELSET_1, PARTFUN1, VALUED_0, XCMPLX_1, COMPLEX1,
+      XCMPLX_0, FINSEQ_1, XBOOLE_0;
+ schemes FUNCT_1;
+
+begin :: f1 + f2
+
+Lm1:
+for f being FinSequence, h being Function st
+   dom h = dom f holds h is FinSequence
+proof
+  let f be FinSequence, h be Function such that
+A1: dom h = dom f;
+  h is FinSequence-like
+  proof
+    take len f;
+    thus dom h = Seg len f by A1,FINSEQ_1:def 3;
+  end;
+  hence thesis;
+end;
+
+Lm0:
+for f, g being FinSequence, h being Function st
+   dom h = dom f /\ dom g holds h is FinSequence
+proof
+  let f, g be FinSequence, h be Function such that
+A1: dom h = dom f /\ dom g;
+    consider n being natural number such that
+A2: dom f = Seg n by FINSEQ_1:def 2;
+    consider m being natural number such that
+A3: dom g = Seg m by FINSEQ_1:def 2;
+    h is FinSequence-like
+    proof
+      per cases;
+      suppose
+A4:     n <= m;
+        take n;
+        thus dom h = Seg n by A1,A2,A3,A4,FINSEQ_1:9;
+      end;
+      suppose
+A5:     m <= n;
+        take m;
+        thus dom h = Seg m by A1,A2,A3,A5,FINSEQ_1:9;
+      end;
+    end;
+    hence thesis;
+end;
+
+registration
+  cluster complex-valued FinSequence;
+  existence
+  proof
+    take <*>COMPLEX;
+    thus thesis;
+  end;
+end;
+
+registration :: move somewhere
+  let r be rational number;
+  cluster |. r .| -> rational;
+  coherence
+  proof
+    |. r .| = -r or |. r .| = r by COMPLEX1:157;
+    hence thesis;
+end;
+end;
+
+definition
+  let f1,f2 be complex-valued Function;
+  deffunc F(set) = f1.$1 + f2.$1;
+  set X = dom f1 /\ dom f2;
+  func f1 + f2 -> Function means :Def1:
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c + f2.c;
+  existence
+  proof
+    ex f being Function st dom f = X &
+    for x being set st x in X holds f.x = F(x)
+    from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let f, g be Function such that
+A1: dom f = X and
+A2: for c being set st c in dom f holds f.c = F(c) and
+A3: dom g = X and
+A4: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A5:   x in dom f;
+      hence f.x = F(x) by A2 .= g.x by A1,A3,A4,A5;
+    end;
+    hence f = g by A1,A3,FUNCT_1:9;
+  end;
+  commutativity;
+end;
+
+registration
+  let f1,f2 be complex-valued Function;
+  cluster f1+f2 -> complex-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1+f2);
+    then (f1+f2).x = f1.x + f2.x by Def1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1+f2 -> real-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1+f2);
+    then (f1+f2).x = f1.x + f2.x by Def1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be rational-valued Function;
+  cluster f1+f2 -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1+f2);
+    then (f1+f2).x = f1.x + f2.x by Def1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be integer-valued Function;
+  cluster f1+f2 -> integer-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1+f2);
+    then (f1+f2).x = f1.x + f2.x by Def1;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be natural-valued Function;
+  cluster f1+f2 -> natural-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1+f2);
+    then (f1+f2).x = f1.x + f2.x by Def1;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be complex-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1+f2 -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f1+f2) = dom f1 /\ dom f2 by Def1;
+    rng (f1+f2) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be real-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1+f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f1+f2) = dom f1 /\ dom f2 by Def1;
+    rng (f1+f2) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be rational-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1+f2 -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f1+f2) = dom f1 /\ dom f2 by Def1;
+    rng (f1+f2) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be integer-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1+f2 -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (f1+f2) = dom f1 /\ dom f2 by Def1;
+    rng (f1+f2) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be natural-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1+f2 -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom (f1+f2) = dom f1 /\ dom f2 by Def1;
+    rng (f1+f2) c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be complex-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1+f2 -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1+f2) = C /\ C by Def1 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be real-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1+f2 -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1+f2) = C /\ C by Def1 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be rational-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1+f2 -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1+f2) = C /\ C by Def1 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be integer-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1+f2 -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1+f2) = C /\ C by Def1 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be natural-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1+f2 -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1+f2) = C /\ C by Def1 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem
+  for C being set, D1,D2 being complex-membered non empty set
+  for f1 being Function of C,D1, f2 being Function of C,D2
+  for c being Element of C holds (f1+f2).c = f1.c + f2.c
+  proof
+    let C be set; let D1,D2 be complex-membered non empty set;
+    let f1 be Function of C,D1, f2 be Function of C,D2;
+A1: dom(f1+f2) = C by FUNCT_2:def 1;
+    let c be Element of C;
+    per cases;
+    suppose C is non empty;
+      hence thesis by A1,Def1;
+    end;
+    suppose
+A2:   C is empty;
+      then dom f1 = {} & dom f2 = {} by PARTFUN1:54;
+      then f1.c = 0 & f2.c = 0 by FUNCT_1:def 4;
+      hence (f1+f2).c = f1.c + f2.c by A1,A2,FUNCT_1:def 4;
+    end;
+  end;
+
+registration
+  let f1, f2 be complex-valued FinSequence;
+  cluster f1+f2 -> FinSequence-like;
+  coherence
+  proof
+    dom(f1+f2) = dom f1 /\ dom f2 by Def1;
+    hence thesis by Lm0;
+  end;
+end;
+
+begin :: r + f
+
+definition
+  let f be complex-valued Function, r be complex number;
+  deffunc F(set) = r + f.$1;
+  func r + f -> Function means :Def2:
+  dom it = dom f & for c being set st c in dom it holds it.c = r + f.c;
+  existence
+  proof
+    ex g being Function st dom g = dom f &
+    for x being set st x in dom f holds g.x = F(x)
+    from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let h, g be Function such that
+A1: dom h = dom f and
+A2: for c being set st c in dom h holds h.c = F(c) and
+A3: dom g = dom f and
+A4: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A5:   x in dom h;
+      hence h.x = F(x) by A2 .= g.x by A1,A3,A4,A5;
+    end;
+    hence h = g by A1,A3,FUNCT_1:9;
+  end;
+end;
+
+notation
+  let f be complex-valued Function, r be complex number;
+  synonym f + r for r + f;
+end;
+
+registration
+  let f be complex-valued Function, r be complex number;
+  cluster r+f -> complex-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r+f);
+    then (r+f).x = r + f.x by Def2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be real-valued Function, r be real number;
+  cluster r+f -> real-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r+f);
+    then (r+f).x = r + f.x by Def2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be rational-valued Function, r be rational number;
+  cluster r+f -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r+f);
+    then (r+f).x = r + f.x by Def2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be integer-valued Function, r be integer number;
+  cluster r+f -> integer-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r+f);
+    then (r+f).x = r + f.x by Def2;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be natural-valued Function, r be natural number;
+  cluster r+f -> natural-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r+f);
+    then (r+f).x = r + f.x by Def2;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D; let r be complex number;
+  redefine func r+f -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (r+f) = dom f by Def2;
+    rng (r+f) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D; let r be real number;
+  redefine func r+f -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (r+f) = dom f by Def2;
+    rng (r+f) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D; let r be rational number;
+  redefine func r+f -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (r+f) = dom f by Def2;
+    rng (r+f) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D; let r be integer number;
+  redefine func r+f -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (r+f) = dom f by Def2;
+    rng (r+f) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be natural-membered set;
+  let f be PartFunc of C,D; let r be natural number;
+  redefine func r+f -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom (r+f) = dom f by Def2;
+    rng (r+f) c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D; let r be complex number;
+  cluster r+f -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom(r+f) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D; let r be real number;
+  cluster r+f -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom(r+f) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D; let r be rational number;
+  cluster r+f -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom(r+f) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D; let r be integer number;
+  cluster r+f -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom(r+f) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be natural-membered non empty set;
+  let f be Function of C,D; let r be natural number;
+  cluster r+f -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom(r+f) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem
+  for C being non empty set, D being complex-membered non empty set
+  for f being Function of C,D, r being complex number
+  for c being Element of C holds (r+f).c = r + f.c
+  proof
+    let C be non empty set; let D be complex-membered non empty set;
+    let f be Function of C,D, r be complex number;
+    dom(r+f) = C by FUNCT_2:def 1;
+    hence thesis by Def2;
+  end;
+
+registration
+  let f be complex-valued FinSequence, r be complex number;
+  cluster r+f -> FinSequence-like;
+  coherence
+  proof
+    dom (r+f) = dom f by Def2;
+    hence thesis by Lm1;
+  end;
+end;
+
+begin :: f - r
+
+definition
+  let f be complex-valued Function, r be complex number;
+  func f - r -> Function equals
+  -r + f;
+  coherence;
+end;
+
+theorem Th3:
+  for f being complex-valued Function, r being complex number holds
+  dom (f-r) = dom f & for c being set st c in dom f holds (f-r).c = f.c - r
+  proof
+    let f be complex-valued Function, r be complex number;
+    dom (f-r) = dom f by Def2;
+    hence thesis by Def2;
+  end;
+
+registration
+  let f be complex-valued Function, r be complex number;
+  cluster f-r -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f be real-valued Function, r be real number;
+  cluster f-r -> real-valued;
+  coherence;
+end;
+
+registration
+  let f be rational-valued Function, r be rational number;
+  cluster f-r -> rational-valued;
+  coherence;
+end;
+
+registration
+  let f be integer-valued Function, r be integer number;
+  cluster f-r -> integer-valued;
+  coherence;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D; let r be complex number;
+  redefine func f-r -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f-r) = dom f by Def2;
+    rng (f-r) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D; let r be real number;
+  redefine func f-r -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f-r) = dom f by Def2;
+    rng (f-r) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D; let r be rational number;
+  redefine func f-r -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f-r) = dom f by Def2;
+    rng (f-r) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D; let r be integer number;
+  redefine func f-r -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (f-r) = dom f by Def2;
+    rng (f-r) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D; let r be complex number;
+  cluster f-r -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom(f-r) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D; let r be real number;
+  cluster f-r -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom(f-r) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D; let r be rational number;
+  cluster f-r -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom(f-r) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D; let r be integer number;
+  cluster f-r -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom(f-r) = dom f by Def2
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem
+  for C being non empty set, D being complex-membered non empty set
+  for f being Function of C,D, r being complex number
+  for c being Element of C holds (f-r).c = f.c - r
+  proof
+    let C be non empty set; let D be complex-membered non empty set;
+    let f be Function of C,D, r be complex number;
+    dom (f-r) = C by FUNCT_2:def 1;
+    hence thesis by Def2;
+  end;
+
+registration
+  let f be complex-valued FinSequence, r be complex number;
+  cluster f-r -> FinSequence-like;
+  coherence;
+end;
+
+begin :: f1 (#) f2
+
+definition
+  let f1,f2 be complex-valued Function;
+  deffunc F(set) = f1.$1 * f2.$1;
+  set X = dom f1 /\ dom f2;
+  func f1 (#) f2 -> Function means :Def4:
+  dom it = dom f1 /\ dom f2 &
+  for c being set st c in dom it holds it.c = f1.c * f2.c;
+  existence
+  proof
+    ex f being Function st dom f = X &
+    for x being set st x in X holds f.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+  let f, g be Function such that
+A1: dom f = X and
+A2: for c being set st c in dom f holds f.c = F(c) and
+A3: dom g = X and
+A4: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A5:   x in dom f;
+      hence f.x = F(x) by A2 .= g.x by A1,A3,A4,A5;
+    end;
+    hence f = g by A1,A3,FUNCT_1:9;
+  end;
+  commutativity;
+end;
+
+theorem Th70:
+  for f1,f2 being complex-valued Function
+  for c being set holds (f1(#)f2).c = f1.c * f2.c
+  proof
+    let f1,f2 be complex-valued Function;
+    let c be set;
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    per cases;
+    suppose
+      c in dom (f1(#)f2);
+      hence (f1(#)f2).c = f1.c * f2.c by Def4;
+    end;
+    suppose
+A2:   not c in dom (f1(#)f2);
+      then not c in dom f1 or not c in dom f2 by A1,XBOOLE_0:def 3;
+      then
+A3:   f1.c = 0 or f2.c = 0 by FUNCT_1:def 4;
+      thus (f1(#)f2).c = 0 * 0 by A2,FUNCT_1:def 4
+      .= f1.c * f2.c by A3;
+    end;
+  end;
+
+registration
+  let f1,f2 be complex-valued Function;
+  cluster f1(#)f2 -> complex-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1(#)f2);
+    then (f1(#)f2).x = f1.x * f2.x by Def4;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1(#)f2 -> real-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1(#)f2);
+    then (f1(#)f2).x = f1.x * f2.x by Def4;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be rational-valued Function;
+  cluster f1(#)f2 -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1(#)f2);
+    then (f1(#)f2).x = f1.x * f2.x by Def4;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be integer-valued Function;
+  cluster f1(#)f2 -> integer-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1(#)f2);
+    then (f1(#)f2).x = f1.x * f2.x by Def4;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f1,f2 be natural-valued Function;
+  cluster f1(#)f2 -> natural-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f1(#)f2);
+    then (f1(#)f2).x = f1.x * f2.x by Def4;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be complex-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1(#)f2 -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    rng (f1(#)f2) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be real-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1(#)f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    rng (f1(#)f2) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be rational-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1(#)f2 -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    rng (f1(#)f2) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be integer-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1(#)f2 -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    rng (f1(#)f2) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be natural-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1(#)f2 -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom (f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    rng (f1(#)f2) c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be complex-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1(#)f2 -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1(#)f2) = C /\ C by Def4 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be real-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1(#)f2 -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1(#)f2) = C /\ C by Def4 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be rational-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1(#)f2 -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1(#)f2) = C /\ C by Def4 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be integer-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1(#)f2 -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1(#)f2) = C /\ C by Def4 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be natural-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1(#)f2 -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom f1 = C & dom f2 = C by FUNCT_2:def 1;
+    then dom(f1(#)f2) = C /\ C by Def4 .= C;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f1, f2 be complex-valued FinSequence;
+  cluster f1(#)f2 -> FinSequence-like;
+  coherence
+  proof
+    dom(f1(#)f2) = dom f1 /\ dom f2 by Def4;
+    hence thesis by Lm0;
+  end;
+end;
+
+begin :: r (#) f
+
+definition
+  let f be complex-valued Function, r be complex number;
+  deffunc F(set) = r * f.$1;
+  func r (#) f -> Function means :Def5:
+  dom it = dom f & for c being set st c in dom it holds it.c = r * f.c;
+  existence
+  proof
+    ex g being Function st dom g = dom f &
+    for x being set st x in dom f holds g.x = F(x)
+    from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let h, g be Function such that
+A1: dom h = dom f and
+A2: for c being set st c in dom h holds h.c = F(c) and
+A3: dom g = dom f and
+A4: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A5:   x in dom h;
+      hence h.x = F(x) by A2 .= g.x by A1,A3,A4,A5;
+    end;
+    hence h = g by A1,A3,FUNCT_1:9;
+  end;
+end;
+
+notation
+  let f be complex-valued Function, r be complex number;
+  synonym f (#) r for r (#) f;
+end;
+
+theorem Th6:
+  for f being complex-valued Function, r being complex number
+  for c being set holds (r(#)f).c = r * f.c
+  proof
+    let f be complex-valued Function, r be complex number;
+    let c be set;
+A1: dom f = dom (r(#)f) by Def5;
+    per cases;
+    suppose
+      c in dom f;
+      hence (r(#)f).c = r * f.c by A1,Def5;
+    end;
+    suppose
+A2:   not c in dom f;
+      hence (r(#)f).c = r*0 by A1,FUNCT_1:def 4
+      .= r * f.c by A2,FUNCT_1:def 4;
+    end;
+  end;
+
+registration
+  let f be complex-valued Function, r be complex number;
+  cluster r(#)f -> complex-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r(#)f);
+    then (r(#)f).x = r * f.x by Def5;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be real-valued Function, r be real number;
+  cluster r(#)f -> real-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r(#)f);
+    then (r(#)f).x = r * f.x by Def5;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be rational-valued Function, r be rational number;
+  cluster r(#)f -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r(#)f);
+    then (r(#)f).x = r * f.x by Def5;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be integer-valued Function, r be integer number;
+  cluster r(#)f -> integer-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r(#)f);
+    then (r(#)f).x = r * f.x by Def5;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be natural-valued Function, r be natural number;
+  cluster r(#)f -> natural-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (r(#)f);
+    then (r(#)f).x = r * f.x by Def5;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D; let r be complex number;
+  redefine func r(#)f -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (r(#)f) = dom f by Def5;
+    rng (r(#)f) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D; let r be real number;
+  redefine func r(#)f -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (r(#)f) = dom f by Def5;
+    rng (r(#)f) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D; let r be rational number;
+  redefine func r(#)f -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (r(#)f) = dom f by Def5;
+    rng (r(#)f) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D; let r be integer number;
+  redefine func r(#)f -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (r(#)f) = dom f by Def5;
+    rng (r(#)f) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be natural-membered set;
+  let f be PartFunc of C,D; let r be natural number;
+  redefine func r(#)f -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom (r(#)f) = dom f by Def5;
+    rng (r(#)f) c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D; let r be complex number;
+  cluster r(#)f -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom(r(#)f) = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D; let r be real number;
+  cluster r(#)f -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom(r(#)f) = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D; let r be rational number;
+  cluster r(#)f -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom(r(#)f) = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D; let r be integer number;
+  cluster r(#)f -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom(r(#)f) = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be natural-membered non empty set;
+  let f be Function of C,D; let r be natural number;
+  cluster r(#)f -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom(r(#)f) = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem
+  for C being non empty set, D being complex-membered non empty set
+  for f being Function of C,D, r being complex number
+  for g being Function of C,COMPLEX
+  st for c being Element of C holds g.c = r * f.c
+  holds g = r(#)f
+  proof
+    let C be non empty set, D be complex-membered non empty set;
+    let f be Function of C,D, r be complex number;
+    let g be Function of C,COMPLEX such that
+A1: for c being Element of C holds g.c = r * f.c;
+    let x be Element of C;
+    thus g.x = r*f.x by A1
+    .= (r(#)f).x by Th6;
+  end;
+
+registration
+  let f be complex-valued FinSequence, r be complex number;
+  cluster r(#)f -> FinSequence-like;
+  coherence
+  proof
+    dom (r(#)f) = dom f by Def5;
+    hence thesis by Lm1;
+  end;
+end;
+
+begin :: -f
+
+definition
+  let f be complex-valued Function;
+  func -f -> complex-valued Function equals
+  (-1) (#) f;
+  coherence;
+  involutiveness
+  proof
+    let r, h be complex-valued Function;
+    assume
+A1: r = (-1)(#)h;
+    thus dom ((-1)(#)r) = dom r by Def5
+    .= dom h by A1,Def5;
+    let c be set;
+    assume c in dom h;
+    reconsider a = (-1)*(h.c) as complex number;
+    thus h.c = (-1) * a
+    .= (-1)*r.c by A1,Th6
+    .= ((-1)(#)r).c by Th6;
+  end;
+end;
+
+theorem Th8:
+  for f being complex-valued Function holds
+  dom -f = dom f & for c being set holds (-f).c = -(f.c)
+  proof
+    let f be complex-valued Function;
+    thus
+A1: dom -f = dom f by Def5;
+    let c be set;
+    per cases;
+    suppose c in dom f;
+      hence (-f).c = (-1)*f.c by A1,Def5
+      .= -(f.c);
+    end;
+    suppose
+A2:   not c in dom f;
+      hence (-f).c = -(0 qua complex number) by A1,FUNCT_1:def 4
+      .= -(f.c) by A2,FUNCT_1:def 4;
+    end;
+  end;
+
+theorem
+  for f being complex-valued Function, g being Function
+  st dom f = dom g & for c being set st c in dom f holds g.c = -(f.c)
+  holds g = -f
+  proof
+    let f be complex-valued Function, g be Function;
+    assume that
+A1: dom f = dom g and
+A2: for c being set st c in dom f holds g.c = -(f.c);
+    thus dom -f = dom g by A1,Def5;
+    let c be set;
+    assume
+A3: c in dom g;
+    thus (-f).c = -f.c by Th8
+    .= g.c by A1,A2,A3;
+  end;
+
+registration
+  let f be complex-valued Function;
+  cluster -f -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster -f -> real-valued;
+  coherence;
+end;
+
+registration
+  let f be rational-valued Function;
+  cluster -f -> rational-valued;
+  coherence;
+end;
+
+registration
+  let f be integer-valued Function;
+  cluster -f -> integer-valued;
+  coherence;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom -f = dom f by Def5;
+    rng -f c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom -f = dom f by Def5;
+    rng -f c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom -f = dom f by Def5;
+    rng -f c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D;
+  redefine func -f -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom -f = dom f by Def5;
+    rng -f c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D;
+  cluster -f -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom -f = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D;
+  cluster -f -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom -f = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D;
+  cluster -f -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom -f = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D;
+  cluster -f -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom -f = dom f by Def5
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f be complex-valued FinSequence;
+  cluster -f -> FinSequence-like;
+  coherence;
+end;
+
+begin :: f"
+
+definition
+  let f be complex-valued Function;
+  deffunc F(set) = (f.$1)";
+  func f" -> complex-valued Function means :Def7: ::better name
+  dom it = dom f & for c being set st c in dom it holds it.c = (f.c)";
+  existence
+  proof
+    consider g being Function such that
+A1: dom g = dom f and
+A2: for x being set st x in dom f holds g.x = F(x)
+    from FUNCT_1:sch 3;
+    g is complex-valued
+    proof
+      let x be set;
+      assume x in dom g;
+      then g.x = (f.x)" by A1,A2;
+      hence thesis;
+    end;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let h, g be complex-valued Function such that
+A3: dom h = dom f and
+A4: for c being set st c in dom h holds h.c = F(c) and
+A5: dom g = dom f and
+A6: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A7:   x in dom h;
+      hence h.x = F(x) by A4 .= g.x by A3,A5,A6,A7;
+    end;
+    hence h = g by A3,A5,FUNCT_1:9;
+  end;
+  involutiveness
+  proof
+    let r, h be complex-valued Function;
+    assume that
+A8: dom r = dom h and
+A9: for c being set st c in dom r holds r.c = (h.c)";
+    thus dom r = dom h by A8;
+    let c be set;
+    assume
+A10: c in dom h;
+    thus h.c = (h.c)""
+    .= (r.c)" by A8,A9,A10;
+  end;
+end;
+
+theorem Th11:
+  for f being complex-valued Function holds
+  for c being set holds f".c = (f.c)"
+  proof
+    let f be complex-valued Function;
+A1: dom (f") = dom f by Def7;
+    let c be set;
+    per cases;
+    suppose c in dom f;
+      hence f".c = (f.c)" by A1,Def7;
+    end;
+    suppose
+A2:   not c in dom f;
+      hence f".c = 0 qua complex number" by A1,FUNCT_1:def 4,XCMPLX_1:203
+      .= (f.c)" by A2,FUNCT_1:def 4;
+    end;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster f" -> real-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f");
+    then f".x = (f.x)" by Def7;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be rational-valued Function;
+  cluster f" -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom (f");
+    then f".x = (f.x)" by Def7;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D;
+  redefine func f" -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f") = dom f by Def7;
+    rng (f") c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D;
+  redefine func f" -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f") = dom f by Def7;
+    rng (f") c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D;
+  redefine func f" -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f") = dom f by Def7;
+    rng (f") c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D;
+  cluster f" -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom (f") = dom f by Def7
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D;
+  cluster f" -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom (f") = dom f by Def7
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D;
+  cluster f" -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom (f") = dom f by Def7
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f be complex-valued FinSequence;
+  cluster f" -> FinSequence-like;
+  coherence
+  proof
+    dom (f") = dom f by Def7;
+    hence thesis by Lm1;
+  end;
+end;
+
+begin :: f^2
+
+definition
+  let f be complex-valued Function;
+  func f^2 -> Function equals
+  f (#) f;
+  coherence;
+end;
+
+theorem Th12:
+  for f being complex-valued Function holds
+  dom (f^2) = dom f & for c being set holds f^2.c = (f.c)^2
+  proof
+    let f be complex-valued Function;
+    thus
+A1: dom (f^2) = dom f /\ dom f by Def4
+    .= dom f;
+    let c be set;
+    per cases;
+    suppose c in dom f;
+      hence f^2.c = (f.c)^2 by A1,Def4;
+    end;
+    suppose
+A2:   not c in dom f;
+      hence f^2.c = 0 qua complex number^2 by A1,FUNCT_1:def 4
+      .= (f.c)^2 by A2,FUNCT_1:def 4;
+    end;
+  end;
+
+registration
+  let f be complex-valued Function;
+  cluster f^2 -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f be real-valued Function;
+  cluster f^2 -> real-valued;
+  coherence;
+end;
+
+registration
+  let f be rational-valued Function;
+  cluster f^2 -> rational-valued;
+  coherence;
+end;
+
+registration
+  let f be integer-valued Function;
+  cluster f^2 -> integer-valued;
+  coherence;
+end;
+
+registration
+  let f be natural-valued Function;
+  cluster f^2 -> natural-valued;
+  coherence;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D;
+  redefine func f^2 -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f^2) = dom f by Th12;
+    rng (f^2) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be real-membered set;
+  let f be PartFunc of C,D;
+  redefine func f^2 -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f^2) = dom f by Th12;
+    rng (f^2) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D;
+  redefine func f^2 -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f^2) = dom f by Th12;
+    rng (f^2) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D;
+  redefine func f^2 -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (f^2) = dom f by Th12;
+    rng (f^2) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be natural-membered set;
+  let f be PartFunc of C,D;
+  redefine func f^2 -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom (f^2) = dom f by Th12;
+    rng (f^2) c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D;
+  cluster f^2 -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom (f^2) = dom f by Th12
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be real-membered non empty set;
+  let f be Function of C,D;
+  cluster f^2 -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom (f^2) = dom f by Th12
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D;
+  cluster f^2 -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom (f^2) = dom f by Th12
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D;
+  cluster f^2 -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom (f^2) = dom f by Th12
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be natural-membered non empty set;
+  let f be Function of C,D;
+  cluster f^2 -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom (f^2) = dom f by Th12
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f be complex-valued FinSequence;
+  cluster f^2 -> FinSequence-like;
+  coherence;
+end;
+
+begin :: f1 - f2
+
+definition
+  let f1,f2 be complex-valued Function;
+  func f1 - f2 -> Function equals
+  f1 + - f2;
+  coherence;
+end;
+
+registration
+  let f1,f2 be complex-valued Function;
+  cluster f1-f2 -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1-f2 -> real-valued;
+  coherence;
+end;
+
+registration
+  let f1,f2 be rational-valued Function;
+  cluster f1-f2 -> rational-valued;
+  coherence;
+end;
+
+registration
+  let f1,f2 be integer-valued Function;
+  cluster f1-f2 -> integer-valued;
+  coherence;
+end;
+
+theorem Th13:
+  for f1,f2 being complex-valued Function holds
+  dom (f1-f2) = dom f1 /\ dom f2
+  proof
+    let f1,f2 be complex-valued Function;
+    thus dom (f1-f2) = dom f1 /\ dom -f2 by Def1
+    .= dom f1 /\ dom f2 by Def5;
+  end;
+
+theorem
+  for f1,f2 being complex-valued Function
+  for c being set st c in dom (f1-f2) holds (f1-f2).c = f1.c - f2.c
+  proof
+    let f1,f2 be complex-valued Function;
+    let c be set;
+    assume c in dom (f1-f2);
+    hence (f1-f2).c = f1.c+(-f2).c by Def1
+    .= f1.c-f2.c by Th8;
+  end;
+
+theorem
+  for f1,f2 being complex-valued Function, f being Function
+  st dom f = dom (f1-f2) &
+  for c being set st c in dom f holds f.c = f1.c - f2.c
+  holds f = f1-f2
+  proof
+    let f1,f2 be complex-valued Function, f be Function such that
+A1: dom f = dom (f1-f2) and
+A2: for c being set st c in dom f holds f.c = f1.c - f2.c;
+    thus dom f = dom (f1-f2) by A1;
+    let c be set;
+    assume
+A3: c in dom f;
+    hence f.c = f1.c - f2.c by A2
+    .= f1.c+(-f2).c by Th8
+    .= (f1-f2).c by A1,A3,Def1;
+  end;
+
+definition
+  let C be set; let D1,D2 be complex-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1-f2 -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f1-f2) = dom f1 /\ dom f2 by Th13;
+    rng (f1-f2) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be real-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1-f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f1-f2) = dom f1 /\ dom f2 by Th13;
+    rng (f1-f2) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be rational-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1-f2 -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f1-f2) = dom f1 /\ dom f2 by Th13;
+    rng (f1-f2) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be integer-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1-f2 -> PartFunc of C,INT;
+  coherence
+  proof
+A1: dom (f1-f2) = dom f1 /\ dom f2 by Th13;
+    rng (f1-f2) c= INT by VALUED_0:def 5;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+Lm2:
+  for C being set, D1,D2 being complex-membered non empty set,
+  f1 being Function of C,D1, f2 being Function of C,D2 holds dom(f1-f2) = C
+  proof
+    let C be set; let D1,D2 be complex-membered non empty set;
+    let f1 be Function of C,D1;
+    let f2 be Function of C,D2;
+    thus dom(f1-f2) = dom f1 /\ dom -f2 by Def1
+    .= C /\ dom -f2 by FUNCT_2:def 1
+    .= C /\ C by FUNCT_2:def 1
+    .= C;
+  end;
+
+registration
+  let C be set; let D1,D2 be complex-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1-f2 -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom(f1-f2) = C by Lm2;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be real-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1-f2 -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom(f1-f2) = C by Lm2;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be rational-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1-f2 -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom(f1-f2) = C by Lm2;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be integer-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1-f2 -> total PartFunc of C,INT;
+  coherence
+  proof
+    dom(f1-f2) = C by Lm2;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+theorem
+  for C being set, D1,D2 being complex-membered non empty set
+  for f1 being Function of C,D1, f2 being Function of C,D2
+  for c being Element of C holds (f1-f2).c = f1.c - f2.c
+  proof
+    let C be set; let D1,D2 be complex-membered non empty set;
+    let f1 be Function of C,D1, f2 be Function of C,D2;
+    let c be Element of C;
+A1: dom(f1-f2) = C by FUNCT_2:def 1;
+    per cases;
+    suppose C is non empty;
+      hence (f1-f2).c = f1.c + (-f2).c by A1,Def1
+      .= f1.c - f2.c by Th8;
+    end;
+    suppose
+A2:   C is empty;
+      then dom f1 = {} & dom f2 = {} by PARTFUN1:54;
+      then f1.c = 0 & f2.c = 0 by FUNCT_1:def 4;
+      hence (f1-f2).c = f1.c - f2.c by A1,A2,FUNCT_1:def 4;
+    end;
+  end;
+
+registration
+  let f1, f2 be complex-valued FinSequence;
+  cluster f1-f2 -> FinSequence-like;
+  coherence;
+end;
+
+begin :: f1 /" f2
+
+definition
+  let f1,f2 be complex-valued Function;
+  func f1 /" f2 -> Function equals
+  f1 (#) (f2");
+  coherence;
+end;
+
+theorem Th61:
+  for f1,f2 being complex-valued Function holds
+  dom (f1/"f2) = dom f1 /\ dom f2
+  proof
+    let f1,f2 be complex-valued Function;
+    thus dom (f1/"f2) = dom f1 /\ dom (f2") by Def4
+    .= dom f1 /\ dom f2 by Def7;
+  end;
+
+theorem Th60:
+  for f1,f2 being complex-valued Function
+  for c being set holds (f1/"f2).c = f1.c / f2.c
+  proof
+    let f1,f2 be complex-valued Function;
+    let c be set;
+A1: dom (f1/"f2) = dom f1 /\ dom f2 by Th61;
+    per cases;
+    suppose
+A4:   c in dom (f1/"f2);
+      thus (f1/"f2).c = f1.c * (f2").c by A4,Def4
+      .= f1.c / f2.c by Th11;
+    end;
+    suppose
+A2:   not c in dom (f1/"f2);
+      then not c in dom f1 or not c in dom f2 by A1,XBOOLE_0:def 3;
+      then
+A3:   f1.c = 0 or f2.c = 0 by FUNCT_1:def 4;
+      thus (f1/"f2).c = 0 / 0 by A2,FUNCT_1:def 4
+      .= f1.c / f2.c by A3,XCMPLX_1:62;
+    end;
+  end;
+
+registration
+  let f1,f2 be complex-valued Function;
+  cluster f1/"f2 -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1/"f2 -> real-valued;
+  coherence;
+end;
+
+registration
+  let f1,f2 be rational-valued Function;
+  cluster f1/"f2 -> rational-valued;
+  coherence;
+end;
+
+definition
+  let C be set; let D1,D2 be complex-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1/"f2 -> PartFunc of C,COMPLEX;
+  coherence
+  proof
+A1: dom (f1/"f2) = dom f1 /\ dom f2 by Th61;
+    rng (f1/"f2) c= COMPLEX by VALUED_0:def 1;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be real-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1/"f2 -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom (f1/"f2) = dom f1 /\ dom f2 by Th61;
+    rng (f1/"f2) c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D1,D2 be rational-membered set;
+  let f1 be PartFunc of C,D1;
+  let f2 be PartFunc of C,D2;
+  redefine func f1/"f2 -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom (f1/"f2) = dom f1 /\ dom f2 by Th61;
+    rng (f1/"f2) c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+Th18:
+  for C being set, D1,D2 being complex-membered non empty set
+  for f1 being Function of C,D1, f2 being Function of C,D2 holds
+  dom(f1/"f2) = C
+  proof
+    let C be set; let D1,D2 be complex-membered non empty set;
+    let f1 be Function of C,D1, f2 be Function of C,D2;
+    thus dom(f1/"f2) = dom f1 /\ dom f2 by Th61
+    .= C /\ dom f2 by FUNCT_2:def 1
+    .= C /\ C by FUNCT_2:def 1
+    .= C;
+  end;
+
+registration
+  let C be set; let D1,D2 be complex-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1/"f2 -> total PartFunc of C,COMPLEX;
+  coherence
+  proof
+    dom(f1/"f2) = C by Th18;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be real-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1/"f2 -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom(f1/"f2) = C by Th18;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D1,D2 be rational-membered non empty set;
+  let f1 be Function of C,D1;
+  let f2 be Function of C,D2;
+  cluster f1/"f2 -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom(f1/"f2) = C by Th18;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f1, f2 be complex-valued FinSequence;
+  cluster f1/"f2 -> FinSequence-like;
+  coherence;
+end;
+
+begin :: abs f
+
+definition
+  let f be complex-valued Function;
+  deffunc F(set) = |.f.$1.|;
+  func |. f .| -> real-valued Function means :Def11:
+  dom it = dom f & for c being set st c in dom it holds it.c = |. f.c .|;
+  existence
+  proof
+    consider g being Function such that
+A1: dom g = dom f and
+A2: for x being set st x in dom f holds g.x = F(x)
+    from FUNCT_1:sch 3;
+    g is real-valued
+    proof
+      let x be set;
+      assume x in dom g;
+      then g.x = |. f.x .| by A1,A2;
+      hence thesis;
+    end;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let h, g be real-valued Function such that
+A3: dom h = dom f and
+A4: for c being set st c in dom h holds h.c = F(c) and
+A5: dom g = dom f and
+A6: for c being set st c in dom g holds g.c = F(c);
+    now let x be set;
+      assume
+A7:   x in dom h;
+      hence h.x = F(x) by A4 .= g.x by A3,A5,A6,A7;
+    end;
+    hence h = g by A3,A5,FUNCT_1:9;
+  end;
+  projectivity
+  proof
+    let r be real-valued Function;
+    let h be real-valued Function;
+    assume that
+    dom r = dom h and
+A8: for c being set st c in dom r holds r.c = |.h.c.|;
+    thus dom r = dom r;
+    let c be set;
+    assume
+A9: c in dom r;
+    hence r.c = |.|.h.c.|.| by A8
+    .= |.r.c.| by A8,A9;
+  end;
+end;
+
+notation
+  let f be complex-valued Function;
+  synonym abs f for |. f .|;
+end;
+
+theorem
+  for f being complex-valued Function holds
+  for c being set holds |.f.|.c = |.f.c.|
+  proof
+    let f be complex-valued Function;
+A1: dom |.f.| = dom f by Def11;
+    let c be set;
+    per cases;
+    suppose c in dom f;
+      hence |.f.|.c = |.f.c.| by A1,Def11;
+    end;
+    suppose
+A2:   not c in dom f;
+      hence |.f.|.c = |.0 qua complex number.| by A1,COMPLEX1:130,FUNCT_1:def 4
+      .= |.f.c.| by A2,FUNCT_1:def 4;
+    end;
+end;
+
+registration
+  let f be rational-valued Function;
+  cluster |.f.| -> rational-valued;
+  coherence
+  proof
+    let x be set;
+    assume x in dom |.f.|;
+    then |.f.|.x = |.f.x.| by Def11;
+    hence thesis;
+  end;
+end;
+
+registration
+  let f be integer-valued Function;
+  cluster |.f.| -> natural-valued;
+  coherence
+  proof
+    let x be set;
+    abs(f.x) is natural;
+    hence thesis by Def11;
+  end;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D;
+  redefine func |.f.| -> PartFunc of C,REAL;
+  coherence
+  proof
+A1: dom |.f.| = dom f by Def11;
+    rng |.f.| c= REAL by VALUED_0:def 3;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be complex-membered set;
+  let f be PartFunc of C,D;
+  redefine func abs(f) -> PartFunc of C,REAL;
+  coherence
+  proof
+    abs(f) = |.f.|;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D;
+  redefine func |.f.| -> PartFunc of C,RAT;
+  coherence
+  proof
+A1: dom |.f.| = dom f by Def11;
+    rng |.f.| c= RAT by VALUED_0:def 4;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be rational-membered set;
+  let f be PartFunc of C,D;
+  redefine func abs(f) -> PartFunc of C,RAT;
+  coherence
+  proof
+    abs(f) = |.f.|;
+    hence thesis;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D;
+  redefine func |.f.| -> PartFunc of C,NAT;
+  coherence
+  proof
+A1: dom |.f.| = dom f by Def11;
+    rng |.f.| c= NAT by VALUED_0:def 6;
+    hence thesis by A1,RELSET_1:11;
+  end;
+end;
+
+definition
+  let C be set; let D be integer-membered set;
+  let f be PartFunc of C,D;
+  redefine func abs(f) -> PartFunc of C,NAT;
+  coherence
+  proof
+    abs(f) = |.f.|;
+    hence thesis;
+  end;
+end;
+
+registration
+  let C be set; let D be complex-membered non empty set;
+  let f be Function of C,D;
+  cluster |.f.| -> total PartFunc of C,REAL;
+  coherence
+  proof
+    dom |.f.| = dom f by Def11
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be rational-membered non empty set;
+  let f be Function of C,D;
+  cluster |.f.| -> total PartFunc of C,RAT;
+  coherence
+  proof
+    dom |.f.| = dom f by Def11
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let C be set; let D be integer-membered non empty set;
+  let f be Function of C,D;
+  cluster |.f.| -> total PartFunc of C,NAT;
+  coherence
+  proof
+    dom |.f.| = dom f by Def11
+    .= C by FUNCT_2:def 1;
+    hence thesis by PARTFUN1:def 4;
+  end;
+end;
+
+registration
+  let f be complex-valued FinSequence;
+  cluster |.f.| -> FinSequence-like;
+  coherence
+  proof
+    dom abs f = dom f by Def11;
+    hence thesis by Lm1;
+  end;
+end;
+
+theorem
+  for f, g being FinSequence, h being Function st
+  dom h = dom f /\ dom g holds h is FinSequence by Lm0;

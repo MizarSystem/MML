@@ -7,13 +7,15 @@
 environ
 
  vocabularies RLVECT_1, BINOP_1, ARYTM_1, FUNCT_1, LATTICES, RELAT_1, ARYTM_3,
-      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, MOD_1, VECTSP_2, STRUCT_0;
+      VECTSP_1, ALGSTR_2, REALSET1, GROUP_1, ARYTM, MOD_1, VECTSP_2, STRUCT_0,
+      ALGSTR_0, MIDSP_1;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1, FUNCT_2, BINOP_1,
-      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, STRUCT_0,
-      RLVECT_1, GROUP_1;
- constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, RLVECT_1, GROUP_1;
+      ORDINAL1, XCMPLX_0, XXREAL_0, XREAL_0, BINARITH, BINOP_2, FUNCT_5,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1;
+ constructors BINOP_1, XXREAL_0, NAT_1, BINARITH, RLVECT_1, GROUP_1, FUNCT_5,
+      REALSET1, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XREAL_0, STRUCT_0, RLVECT_1,
-      GROUP_1;
+      GROUP_1, ALGSTR_0, SUBSET_1, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, ARITHM, BOOLE;
 
 
@@ -23,14 +25,14 @@ begin
 ::                         1_ GROUP STRUCTURE
 ::
 
- reserve GS for non empty LoopStr;
+ reserve GS for non empty addLoopStr;
 
 definition
  canceled 5;
 
- func G_Real -> strict LoopStr equals
+ func G_Real -> strict addLoopStr equals
 :: VECTSP_1:def 6
-    LoopStr (# REAL,addreal,0 #);
+    addLoopStr (# REAL,addreal,0 #);
 end;
 
 registration
@@ -64,12 +66,12 @@ theorem :: VECTSP_1:6
 
 registration
  cluster strict add-associative right_zeroed right_complementable
-   Abelian (non empty LoopStr);
+   Abelian (non empty addLoopStr);
 end;
 
 definition
   mode AddGroup is add-associative right_zeroed right_complementable
-                        (non empty LoopStr);
+                        (non empty addLoopStr);
 end;
 
 definition
@@ -79,37 +81,6 @@ end;
 ::
 ::                         4. FIELD STRUCTURE
 ::
-
-definition
- struct(HGrStr,OneStr) multLoopStr (# carrier -> set,
-                        mult -> BinOp of the carrier,
-                        OneF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict multLoopStr;
-end;
-
-definition
- struct(multLoopStr,ZeroOneStr) multLoopStr_0 (# carrier -> set,
-                        mult -> BinOp of the carrier,
-                        OneF -> Element of the carrier,
-                        ZeroF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict multLoopStr_0;
-end;
-
-definition
- struct(LoopStr,multLoopStr_0) doubleLoopStr (# carrier -> set,
-                         add, mult -> BinOp of the carrier,
-                         OneF, ZeroF -> Element of the carrier #);
-end;
-
-registration
- cluster non empty strict doubleLoopStr;
-end;
 
 definition let IT be non empty doubleLoopStr;
  canceled 4;
@@ -125,7 +96,7 @@ end;
 definition let IT be non empty multLoopStr;
  attr IT is right_unital means
 :: VECTSP_1:def 13
-  for x being Element of IT holds x * 1_IT = x;
+  for x being Element of IT holds x * 1.IT = x;
 end;
 
 definition
@@ -179,25 +150,14 @@ end;
 definition let IT be non empty multLoopStr;
  attr IT is left_unital means
 :: VECTSP_1:def 19
-  for x being Element of IT holds 1_IT * x = x;
+  for x being Element of IT holds 1.IT * x = x;
 end;
 
 definition let IT be non empty multLoopStr_0;
- attr IT is almost_left_invertible means
+ redefine attr IT is almost_left_invertible means
 :: VECTSP_1:def 20
   for x being Element of IT st x <> 0.IT
-     ex y be Element of IT st x*y = 1.IT;
-end;
-
-notation let IT be non empty multLoopStr_0;
- synonym IT is Field-like for IT is almost_left_invertible;
-end;
-
-definition
- let IT be well-unital (non empty multLoopStr_0);
- redefine attr IT is degenerated means
-:: VECTSP_1:def 21
-  0.IT = 1_IT;
+     ex y be Element of IT st y*x = 1.IT;
 end;
 
 registration
@@ -223,12 +183,12 @@ registration
 end;
 
 registration
-  cluster unital -> left_unital right_unital (non empty multLoopStr);
+  cluster well-unital -> left_unital right_unital (non empty multLoopStr);
   cluster left_unital right_unital -> unital (non empty multLoopStr);
 end;
 
 registration
- cluster commutative associative (non empty HGrStr);
+ cluster commutative associative (non empty multMagma);
 end;
 
 registration
@@ -251,7 +211,7 @@ end;
 canceled 13;
 
 theorem :: VECTSP_1:20
-   1_F_Real = 1;
+   1.F_Real = 1;
 
 theorem :: VECTSP_1:21
    for x,y,z being Element of F_Real holds
@@ -261,15 +221,15 @@ theorem :: VECTSP_1:21
   x+(-x) = 0.F_Real &
   x*y = y*x &
   (x*y)*z = x*(y*z) &
-  (1_F_Real)*x = x &
-  (x <> 0.F_Real implies ex y be Element of F_Real st x*y = 1.F_Real) &
+  (1.F_Real)*x = x &
+  (x <> 0.F_Real implies ex y be Element of F_Real st y*x = 1.F_Real) &
   x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x;
 
 theorem :: VECTSP_1:22
    for FS being non empty doubleLoopStr holds
   (for x,y,z being Element of FS holds
       (x <> 0.FS implies ex y be Element of FS
-      st x*y = 1.FS)
+      st y*x = 1.FS)
        & x*(y+z) = x*y+x*z & (y+z)*x = y*x+z*x ) iff
       FS is distributive almost_left_invertible (non empty doubleLoopStr);
 
@@ -289,13 +249,14 @@ theorem :: VECTSP_1:33
      x,y,z being Element of F
   holds (x <> 0.F & x*y = x*z) implies y = z;
 
-definition let F be associative commutative well-unital distributive
+definition let F be associative commutative well-unital
     almost_left_invertible (non empty doubleLoopStr),
    x be Element of F;
+  canceled;
  assume  x <> 0.F;
- func x" -> Element of F means
+ redefine func x" means
 :: VECTSP_1:def 22
-   x*it = 1.F;
+   it*x = 1.F;
 end;
 
 definition let F be associative commutative well-unital distributive
@@ -363,9 +324,9 @@ for a,b,c be Element of K holds (a-b)*c =a*c -b*c;
 ::
 
 definition let F be 1-sorted;
- struct(LoopStr) VectSpStr over F (#
+ struct(addLoopStr) VectSpStr over F (#
                    carrier -> set,
-                    add -> BinOp of the carrier,
+                    addF -> BinOp of the carrier,
                     ZeroF -> Element of the carrier,
                    lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
@@ -400,7 +361,7 @@ definition let F be non empty 1-sorted, V be non empty VectSpStr over F;
    (the lmult of V).(x,v);
 end;
 
-definition let F be non empty LoopStr;
+definition let F be non empty addLoopStr;
  func comp F -> UnOp of the carrier of F means
 :: VECTSP_1:def 25
       for x being Element of F holds it.x = -x;
@@ -415,7 +376,7 @@ definition let F be non empty doubleLoopStr;
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_F)*v = v;
+               (1.F)*v = v;
 end;
 
 registration let F be add-associative right_zeroed right_complementable Abelian
@@ -446,7 +407,7 @@ theorem :: VECTSP_1:59
  for V being add-associative right_zeroed
              right_complementable VectSp-like (non empty VectSpStr over F),
      v being Element of V
- holds (0.F)*v = 0.V & (-1_F)*v = -v & x*(0.V) = 0.V;
+ holds (0.F)*v = 0.V & (-1.F)*v = -v & x*(0.V) = 0.V;
 
 theorem :: VECTSP_1:60
      x*v = 0.V iff x = 0.F or v = 0.V;
@@ -459,26 +420,26 @@ canceled 2;
 
 theorem :: VECTSP_1:63
      for V being add-associative right_zeroed
-              right_complementable (non empty LoopStr),
+              right_complementable (non empty addLoopStr),
      v,w being Element of V holds
    v+w=0.V iff -v=w;
 
 theorem :: VECTSP_1:64
      for V being add-associative right_zeroed
-                    right_complementable (non empty LoopStr),
+                    right_complementable (non empty addLoopStr),
     u,v,w being Element of V holds
   -(v+w)=-w-v & -(w+-v)=v-w & -(v-w)=w+-v & -(-v-w)=w+v &
       u-(w+v)=u-v-w;
 
 theorem :: VECTSP_1:65
      for V being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      v being Element of V holds
   0.V-v=-v & v-0.V=v;
 
 theorem :: VECTSP_1:66
  for F being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      x,y being Element of F holds
   (x+(-y)=0.F iff x=y) & (x-y=0.F iff x=y);
 
@@ -535,10 +496,10 @@ theorem :: VECTSP_1:74
 canceled 3;
 
 theorem :: VECTSP_1:78
- 1_F_Real + 1_F_Real <> 0.F_Real;
+ 1.F_Real + 1.F_Real <> 0.F_Real;
 
 definition
- let IT be non empty LoopStr;
+ let IT be non empty addLoopStr;
  canceled;
 
  attr IT is Fanoian means
@@ -548,7 +509,7 @@ definition
 end;
 
 registration
- cluster Fanoian (non empty LoopStr);
+ cluster Fanoian (non empty addLoopStr);
 end;
 
 definition let F be add-associative right_zeroed right_complementable
@@ -556,7 +517,7 @@ definition let F be add-associative right_zeroed right_complementable
              non degenerated distributive (non empty doubleLoopStr);
  redefine attr F is Fanoian means
 :: VECTSP_1:def 29
-  1_F+1_F<>0.F;
+  1.F+1.F<>0.F;
 end;
 
 registration
@@ -567,7 +528,7 @@ canceled 5;
 
 theorem :: VECTSP_1:84
      for F being add-associative right_zeroed
-                   right_complementable (non empty LoopStr),
+                   right_complementable (non empty addLoopStr),
      a,b being Element of F holds
  a - b = 0.F implies a = b;
 
@@ -575,13 +536,13 @@ canceled;
 
 theorem :: VECTSP_1:86
  for F being add-associative right_zeroed
-                      right_complementable (non empty LoopStr),
+                      right_complementable (non empty addLoopStr),
      a being Element of F holds
   -a = 0.F implies a = 0.F;
 
 theorem :: VECTSP_1:87
      for F being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      a, b being Element of F holds
    a - b = 0.F implies b - a = 0.F;
 
@@ -592,13 +553,13 @@ theorem :: VECTSP_1:88
 
 theorem :: VECTSP_1:89
      for F being add-associative right_zeroed
-                          right_complementable (non empty LoopStr),
+                          right_complementable (non empty addLoopStr),
      a, b being Element of F holds
   a + b = -(-b + -a);
 
 theorem :: VECTSP_1:90
      for F being add-associative right_zeroed
-                     right_complementable (non empty LoopStr),
+                     right_complementable (non empty addLoopStr),
      a, b, c being Element of F holds
   (b+a)-(c+a) = b-c;
 
@@ -606,18 +567,18 @@ canceled;
 
 theorem :: VECTSP_1:92
    for G being add-associative right_zeroed right_complementable
-                        (non empty LoopStr),
+                        (non empty addLoopStr),
       v,w being Element of G holds
   -(-v+w) = -w+v;
 
 theorem :: VECTSP_1:93
-   for G being Abelian add-associative (non empty LoopStr),
+   for G being Abelian add-associative (non empty addLoopStr),
       u,v,w being Element of G holds
    u - v - w = u - w - v;
 
 theorem :: VECTSP_1:94
    for B being AbGroup holds
-  HGrStr (# the carrier of B, the add of B #) is commutative Group;
+  multMagma (# the carrier of B, the addF of B #) is commutative Group;
 
 begin :: Addenda
 

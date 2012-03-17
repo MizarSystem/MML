@@ -14,27 +14,28 @@ environ
       FUNCOP_1;
  notations BINOP_1, SETWISEO, TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, REALSET1,
       RELAT_1, FUNCT_1, ORDINAL1, COMPLEX1, RELSET_1, FUNCT_2, FINSEQ_1,
-      ZFMISC_1, PCOMPS_1, PRE_TOPC, FINSET_1, CARD_1, NUMBERS, XXREAL_0,
-      XREAL_0,
-      REAL_1, NAT_1, FINSOP_1, STRUCT_0, TOPS_2, COMPTS_1, METRIC_1, NEWTON,
-      CARD_3, PROB_1, URYSOHN1, FUNCOP_1, CANTOR_1, CARD_4, DOMAIN_1,
+      ZFMISC_1, PCOMPS_1, PRE_TOPC, FINSET_1, CARD_1,
+      XCMPLX_0, NUMBERS, XXREAL_0,
+      XREAL_0, REAL_1, NAT_1, FINSOP_1,
+      VALUED_1, STRUCT_0, TOPS_2, COMPTS_1, METRIC_1,
+      NEWTON, CARD_3, PROB_1, URYSOHN1, FUNCOP_1, CANTOR_1, CARD_4, DOMAIN_1,
       TOPMETR, FRAENKEL, URYSOHN3, PSCOMP_1, BORSUK_1, TMAP_1;
  constructors SETFAM_1, SETWISEO, FRAENKEL, REAL_1, SQUARE_1, NAT_1, PROB_1,
       FINSOP_1, NEWTON, REALSET1, CARD_4, CARD_5, TOPS_2, COMPTS_1, TMAP_1,
-      CANTOR_1, PSCOMP_1, URYSOHN3;
+      CANTOR_1, PSCOMP_1, URYSOHN3, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, FINSEQ_1, SEQ_1,
       CARD_LAR, STRUCT_0, TOPS_1, COMPTS_1, METRIC_1, BORSUK_1, TOPMETR,
-      PSCOMP_1, WAYBEL12, VALUED_0;
+      PSCOMP_1, WAYBEL12, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions PCOMPS_1, TARSKI, BINOP_1, SUBSET_1, COMPTS_1;
+ definitions PCOMPS_1, TARSKI, BINOP_1, SUBSET_1, COMPTS_1, VALUED_1;
  theorems SQUARE_1, FUNCT_1, FUNCT_2, METRIC_1, XREAL_0, XCMPLX_1, ABSVALUE,
       TOPMETR, TMAP_1, CARD_1, PCOMPS_1, PCOMPS_2, BORSUK_1, XBOOLE_1, TARSKI,
       SETFAM_1, XBOOLE_0, SUBSET_1, TOPS_1, TOPS_2, PRE_TOPC, REALSET1,
       FINSET_1, COMPTS_1, CARD_3, URYSOHN1, NAT_1, YELLOW_9, FINSEQ_1, CARD_2,
       CARD_4, CANTOR_1, FINSOP_1, SETWISEO, NEWTON, TOPREAL6, ZFMISC_1,
       BINOP_1, REAL_2, SEQ_2, PROB_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
-      PREPOWER, ORDINAL1;
+      PREPOWER, ORDINAL1, RELSET_1, VALUED_1;
  schemes FUNCT_1, FRAENKEL, FUNCT_2, NAT_1;
 
 begin
@@ -1522,32 +1523,33 @@ Lm7:
   end;
 
 definition let T;let F,G be RealMap of T;
-deffunc fg(Element of T)=F.$1+G.$1;
-  func F+G -> RealMap of T means :Def7:
-    for t being Element of T holds it.t=F.t+G.t;
-existence
-proof
-  defpred P[Element of T,set] means $2 = fg($1);
-  A1:for t being Element of T ex y being Element of REAL st
-  P[t,y];
-  consider FG being RealMap of T such that
-  A2:for x being Element of T holds P[x,FG.x]
-  from FUNCT_2:sch 3(A1);
-  take FG;thus thesis by A2;
-end;
-uniqueness
-proof
-   now let FG1,FG2 be RealMap of T such that A3:
-      for t being Element of T holds FG1.t=fg(t) &
-      for t being Element of T holds FG2.t=fg(t);
-     now let t be Element of T;
-       FG1.t=fg(t) & FG2.t=fg(t) by A3;
-      hence FG1.t=FG2.t;
+  redefine func F+G -> RealMap of T means :Def7:
+  for t being Element of T holds it.t=F.t+G.t;
+  coherence
+  proof
+    F+G is Function of the carrier of T,REAL;
+    hence thesis;
+ end;
+  compatibility
+ proof
+   let m be RealMap of T;
+   thus m = F+G implies
+   for p being Element of T holds m.p = F.p+G.p by VALUED_1:1;
+   assume
+A3: for p being Element of T holds m.p = F.p+G.p;
+A1: dom m = the carrier of T by FUNCT_2:def 1;
+A2: dom (F+G) = dom F /\ dom G by VALUED_1:def 1
+    .= (the carrier of T) /\ dom G by FUNCT_2:def 1
+    .= (the carrier of T) /\ the carrier of T by FUNCT_2:def 1;
+    now
+      let x be set;
+      assume
+A4:   x in dom m;
+      hence m.x = (F.x)+(G.x) by A3
+      .= (F+G).x by A2,A4,VALUED_1:def 1;
     end;
-   hence FG1=FG2 by FUNCT_2:113;
-  end;
-  hence thesis;
-end;
+   hence thesis by A1,A2,FUNCT_1:9;
+ end;
 end;
 
 theorem
@@ -1747,11 +1749,7 @@ A1: for f1,f2 being RealMap of T holds ADD.(f1,f2)=f1+f2;
   thus ADD is commutative
   proof
     let f1,f2 be Element of F;
-     now let t be Element of T;
-       (f1+f2).t=f1.t+f2.t by Def7;
-      hence (f1+f2).t=(f2+f1).t by Def7;
-    end;
-    then f1+f2=f2+f1 & ADD.(f1,f2)=f1+f2 by A1,FUNCT_2:113;
+    f1+f2=f2+f1 & ADD.(f1,f2)=f1+f2 by A1;
     hence thesis by A1;
   end;
   thus ADD is associative

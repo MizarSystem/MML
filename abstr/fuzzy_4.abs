@@ -11,11 +11,12 @@ environ
       FUZZY_4, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, SQUARE_1, BINOP_1, RELAT_1, RELSET_1, PARTFUN1,
-      FUNCT_4, SEQ_1, SEQ_4, RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1, FUZZY_1,
-      FUZZY_2;
- constructors FUNCT_4, REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_2;
+      FUNCT_4, VALUED_1, SEQ_1, SEQ_4, RFUNCT_1, INTEGRA1, RCOMP_1, PSCOMP_1,
+      FUZZY_1, FUZZY_2;
+ constructors FUNCT_4, REAL_1, SQUARE_1, RFUNCT_1, PSCOMP_1, INTEGRA1, FUZZY_2,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
-      INTEGRA1, RELAT_1;
+      INTEGRA1, RELAT_1, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE;
 
 
@@ -36,8 +37,8 @@ for F be Membership_Func of C1 holds
 (for x st x in dom F holds F.x >= inf rng F);
 
 theorem :: FUZZY_4:2
-  for F,G be Membership_Func of C1 holds
-    (for x st x in C1 holds F.x <= G.x) implies sup rng F <= sup rng G;
+    for F,G be Membership_Func of C1 holds
+(for x st x in C1 holds F.x <= G.x) implies sup rng F <= sup rng G;
 
 theorem :: FUZZY_4:3
 for f be RMembership_Func of C1,C2, c be set holds
@@ -49,14 +50,15 @@ end;
 
 theorem :: FUZZY_4:4
   for f be RMembership_Func of C1,C2, x,y holds
-    0 <= f.(x,y) & f.(x,y) <= 1;
+   0 <= f.(x,y) & f.(x,y) <= 1;
 
-begin :: Definition and properties of converse fuzzy relation
+begin
+:: Definition and properties of converse fuzzy relation
 
 notation
-  let C1,C2 be non empty set;
-  let h be RMembership_Func of C2,C1;
-  synonym converse h for ~h;
+let C1,C2 be non empty set;
+let h be RMembership_Func of C2,C1;
+ synonym converse h for ~h;
 end;
 
 definition
@@ -68,16 +70,16 @@ for x,y st [x,y] in [:C1,C2:] holds it.(x,y) = h.(y,x);
 end;
 
 theorem :: FUZZY_4:5
-  for f be RMembership_Func of C1,C2 holds
-    converse converse f = f;
+ for f be RMembership_Func of C1,C2 holds
+converse converse f = f;
 
 theorem :: FUZZY_4:6
-  for f be RMembership_Func of C1,C2 holds
-    1_minus(converse f) = converse(1_minus f);
+for f be RMembership_Func of C1,C2 holds
+1_minus(converse f) = converse(1_minus f);
 
 theorem :: FUZZY_4:7
-  for f,g be RMembership_Func of C1,C2 holds
-    converse max(f,g) = max(converse f,converse g);
+for f,g be RMembership_Func of C1,C2 holds
+converse max(f,g) = max(converse f,converse g);
 
 theorem :: FUZZY_4:8
 for f,g be RMembership_Func of C1,C2 holds
@@ -93,8 +95,8 @@ theorem :: FUZZY_4:10
   f c= g implies converse f c= converse g;
 
 theorem :: FUZZY_4:11
-  for f,g be RMembership_Func of C1,C2 holds
-    converse(f\g) = (converse f)\(converse g);
+   for f,g be RMembership_Func of C1,C2 holds
+  converse(f\g) = (converse f)\(converse g);
 
 theorem :: FUZZY_4:12
    for f,g be RMembership_Func of C1,C2 holds
@@ -124,24 +126,24 @@ for x,z st [x,z] in [:C1,C3:] holds it.(x,z) = sup(rng(min(h,g,x,z)));
 end;
 
 theorem :: FUZZY_4:13
- for f be RMembership_Func of C1,C2,
+ for f   be RMembership_Func of C1,C2,
     g,h be RMembership_Func of C2,C3 holds
 f(#)(max(g,h)) = max(f(#)g,f(#)h);
 
 theorem :: FUZZY_4:14
  for f,g be RMembership_Func of C1,C2,
-     h be RMembership_Func of C2,C3 holds
+    h   be RMembership_Func of C2,C3 holds
 (max(f,g))(#)h = max(f(#)h,g(#)h);
 
 theorem :: FUZZY_4:15
- for f be RMembership_Func of C1,C2,
+ for f   be RMembership_Func of C1,C2,
     g,h be RMembership_Func of C2,C3
  holds
   f(#)(min(g,h)) c= min(f(#)g,f(#)h);
 
 theorem :: FUZZY_4:16
  for f,g be RMembership_Func of C1,C2,
-    h be RMembership_Func of C2,C3
+    h   be RMembership_Func of C2,C3
 holds
  min(f,g)(#)h c= min(f(#)h,g(#)h);
 
@@ -179,8 +181,8 @@ for c be Element of [:C1,C2:] holds
 (Zmf(C1,C2)).c = 0 & (Umf(C1,C2)).c = 1;
 
 theorem :: FUZZY_4:21
-  for x,y st [x,y] in [:C1,C2:] holds
-    (Zmf(C1,C2)). [x,y] = 0 & (Umf(C1,C2)). [x,y] = 1;
+    for x,y st [x,y] in [:C1,C2:] holds
+(Zmf(C1,C2)). [x,y] = 0 & (Umf(C1,C2)). [x,y] = 1;
 
 theorem :: FUZZY_4:22
 for f be RMembership_Func of C2,C3 holds

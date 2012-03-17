@@ -23,12 +23,13 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="FUNCT_6"/>
 <ArticleID name="FUNCT_3"/>
@@ -43,8 +44,9 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_1"/>
 <ArticleID name="CARD_3"/>
 <ArticleID name="FVSUM_1"/>
@@ -93,9 +95,9 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
-<Func kind="K" nr="454">
+<Func kind="K" nr="502">
 <Var nr="5"/>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -108,7 +110,7 @@
 </Fraenkel>
 </Pred>
 <Pred kind="R" nr="40">
-<Func kind="K" nr="301">
+<Func kind="K" nr="340">
 <Func kind="K" nr="154">
 <Var nr="4"/>
 </Func>
@@ -161,9 +163,9 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
-<Func kind="K" nr="454">
+<Func kind="K" nr="502">
 <Var nr="5"/>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -177,9 +179,9 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="440">
+<Func kind="K" nr="488">
 <Var nr="1"/>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -189,8 +191,8 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="465">
-<Func kind="K" nr="301">
+<Func kind="K" nr="513">
+<Func kind="K" nr="340">
 <Func kind="K" nr="154">
 <Var nr="4"/>
 </Func>
@@ -246,9 +248,9 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
-<Func kind="K" nr="454">
+<Func kind="K" nr="502">
 <Var nr="5"/>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="5"/>
 </Func>
@@ -261,9 +263,9 @@
 </Fraenkel>
 </Pred>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="440">
+<Func kind="K" nr="488">
 <Var nr="1"/>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>
@@ -272,15 +274,15 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="465">
-<Func kind="K" nr="301">
+<Func kind="K" nr="513">
+<Func kind="K" nr="340">
 <Func kind="K" nr="154">
 <Var nr="4"/>
 </Func>
 </Func>
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="465">
+<Func kind="K" nr="513">
 <Var nr="3"/>
 <Var nr="1"/>
 </Func>

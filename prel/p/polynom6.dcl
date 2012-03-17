@@ -22,11 +22,15 @@
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
-<ArticleID name="FINSEQ_3"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="FINSEQ_3"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_0"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="RELAT_2"/>
@@ -95,27 +99,27 @@
 </Typ>
 <Typ kind="G" nr="10">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="43" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="57"/>
-<Adjective nr="59"/>
-<Adjective nr="85"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="66"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
+<Adjective nr="93"/>
+<Adjective nr="99"/>
+<Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="300">
+<Func kind="K" nr="371">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="43" value="false"/>
-<Adjective nr="80"/>
-<Adjective nr="85"/>
+<Adjective nr="46" value="false"/>
+<Adjective nr="51" value="false"/>
+<Adjective nr="89"/>
+<Adjective nr="122"/>
 </Cluster>
 </FCluster>
 </Registrations>

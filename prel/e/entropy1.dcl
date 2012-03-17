@@ -21,13 +21,13 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -53,10 +53,10 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="25"/>
-<Adjective nr="73"/>
-<Adjective nr="74"/>
-<Adjective nr="75"/>
-<Adjective nr="125"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="84"/>
+<Adjective nr="140"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -77,8 +77,8 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="25"/>
-<Adjective nr="65"/>
-<Adjective nr="126">
+<Adjective nr="79"/>
+<Adjective nr="141">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -86,7 +86,7 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="96"/>
+<Adjective nr="111"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
@@ -94,41 +94,41 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="125"/>
+<Adjective nr="140"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="65"/>
-<Adjective nr="98"/>
+<Adjective nr="79"/>
+<Adjective nr="113"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="79"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="65"/>
-<Adjective nr="99"/>
+<Adjective nr="79"/>
+<Adjective nr="114"/>
 </Cluster>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <Func kind="K" nr="42"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="79"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -24,7 +24,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="16" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -35,8 +35,8 @@
 <Cluster>
 <Adjective nr="16" value="false"/>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
+<Adjective nr="26"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -44,7 +44,7 @@
 <Func kind="K" nr="101"/>
 <Cluster>
 <Adjective nr="16" value="false"/>
-<Adjective nr="23"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -52,8 +52,8 @@
 <Func kind="K" nr="101"/>
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="23"/>
-<Adjective nr="25"/>
+<Adjective nr="24"/>
+<Adjective nr="26"/>
 </Cluster>
 </FCluster>
 </Registrations>

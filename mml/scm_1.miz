@@ -10,11 +10,12 @@ environ
       NAT_1, MCART_1, SCM_1, ARYTM;
  notations TARSKI, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, INT_1, MCART_1, RELAT_1,
       FUNCT_1, FUNCT_2, FINSEQ_1, AMI_1, AMI_2, AMI_3, XXREAL_0;
- constructors XXREAL_0, NAT_1, SEQ_1, AMI_2, AMI_3;
+ constructors XXREAL_0, NAT_1, SEQ_1, AMI_2, AMI_3, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, ORDINAL1, RELSET_1, FRAENKEL,
-      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, AMI_3, AMI_2;
+      NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1, AMI_3, AMI_2,
+      VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions AMI_1, AMI_2;
+ definitions AMI_1, AMI_2, VALUED_1;
  theorems NAT_1, INT_1, MCART_1, FUNCT_1, FUNCT_2, FINSEQ_1, CARD_3, AMI_1,
       AMI_2, AMI_3, FINSEQ_3, RELSET_1, ORDINAL1;
  schemes PARTFUN1, WELLORD2;
@@ -155,12 +156,12 @@ PARTFUN1:sch 1;
       then reconsider n = x as Element of SCM-Memory;
    per cases;
    suppose
-S:  x = NAT;
+A11:  x = NAT;
      then
-B:      s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
+A12:      s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
        by A10,AMI_2:30,def 5,AMI_3:def 1;
      il.il in SCM-Instr-Loc by AMI_1:def 4;
-    hence s1.x in (the Object-Kind of SCM).x by AMI_3:def 1,S,B;
+    hence s1.x in (the Object-Kind of SCM).x by A11,A12,AMI_3:def 1;
    end;
    suppose x <> NAT; then s1.n = s.x by A10;
     hence s1.x in (the Object-Kind of SCM).x by A9,CARD_3:18;
@@ -171,7 +172,7 @@ B:      s1.n = il.il & (the Object-Kind of SCM).x = SCM-Instr-Loc
   deffunc V(set) = s1.$1;
   defpred X[set] means ex n being Element of NAT st $1 = il.n;
   consider s2 being Function such that
-A11: dom s2 = SCM-Memory &
+A13: dom s2 = SCM-Memory &
     for x being set st x in SCM-Memory holds
      (X[x] implies s2.x = U(x)) &
      (not X[x] implies s2.x = V(x)) from PARTFUN1:sch 1;
@@ -179,26 +180,26 @@ A11: dom s2 = SCM-Memory &
       then reconsider n = x as Element of SCM-Memory;
    per cases;
    suppose
-S:    ex n being Element of NAT st x = il.n;
+A14:    ex n being Element of NAT st x = il.n;
      then
-B:    s2.x = I1.n & x is Instruction-Location of SCM by A11;
-C:   s2.x is Instruction of SCM by AMI_2:11,AMI_3:def 1,B;
-     reconsider a=x as Element of SCM-Instr-Loc by B,AMI_1:def 4;
-     (the Object-Kind of SCM).a = SCM-Instr by AMI_2:11,AMI_3:def 1,B,S;
-    hence s2.x in (the Object-Kind of SCM).x by AMI_3:def 1,C;
+A15:    s2.x = I1.n & x is Instruction-Location of SCM by A13;
+A16:   s2.x is Instruction of SCM by A15,AMI_2:11,AMI_3:def 1;
+     reconsider a=x as Element of SCM-Instr-Loc by A15,AMI_1:def 4;
+     (the Object-Kind of SCM).a = SCM-Instr by A14,A15,AMI_2:11,AMI_3:def 1;
+    hence s2.x in (the Object-Kind of SCM).x by A16,AMI_3:def 1;
    end;
    suppose not ex n being Element of NAT st x = il.n;
-    then s2.n = s1.x by A11;
+    then s2.n = s1.x by A13;
     hence s2.x in (the Object-Kind of SCM).x by A9,CARD_3:18;
    end;
   end;
-  then reconsider s2 as State of SCM by A9,A11,CARD_3:18;
+  then reconsider s2 as State of SCM by A9,A13,CARD_3:18;
   deffunc U(set) = D1.$1;
   deffunc V(set) = s2.$1;
   defpred X[set] means ex n being Element of NAT st $1 = dl.n;
 
   consider s3 being Function such that
-A14: dom s3 = SCM-Memory &
+A17: dom s3 = SCM-Memory &
     for x being set st x in SCM-Memory holds
      (X[x] implies s3.x = U(x)) &
      (not X[x] implies s3.x = V(x)) from PARTFUN1:sch 1;
@@ -207,36 +208,36 @@ A14: dom s3 = SCM-Memory &
    per cases;
    suppose ex n being Element of NAT st x = dl.n;
      then
-A15:    s3.x = D1.n & x in SCM-Data-Loc by A14,AMI_3:def 2;
+A18:    s3.x = D1.n & x in SCM-Data-Loc by A17,AMI_3:def 2;
      then (the Object-Kind of SCM).x = INT by AMI_2:10,AMI_3:def 1;
-    hence s3.x in (the Object-Kind of SCM).x by A15;
+    hence s3.x in (the Object-Kind of SCM).x by A18;
    end;
    suppose not ex n being Element of NAT st x = dl.n;
-    then s3.n = s2.x by A14;
+    then s3.n = s2.x by A17;
     hence s3.x in (the Object-Kind of SCM).x by A9,CARD_3:18;
   end;
   end;
-  then reconsider s3 as State of SCM by A9,A14,CARD_3:18;
+  then reconsider s3 as State of SCM by A9,A17,CARD_3:18;
 
   take s3;
-  thus IC s3 = s2.NAT by A14,Th7,AMI_2:30,AMI_3:4
-            .= s1.NAT by A11,Th7,AMI_2:30,AMI_3:4
+  thus IC s3 = s2.NAT by A17,Th7,AMI_2:30,AMI_3:4
+            .= s1.NAT by A13,Th7,AMI_2:30,AMI_3:4
             .= il.il by A10,AMI_2:30;
   hereby let k be Element of NAT; assume k<len I;
   then consider k' being Element of NAT such that
-A16: il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1)
+A19: il.(ps+k) = il.(ps+k') & k' < len I & I1.il.(ps+k) = I.(k'+1)
      by A4,AMI_3:def 1;
-A17:    ps+k = ps+k' by A16,AMI_3:53;
+A20:    ps+k = ps+k' by A19,AMI_3:53;
         for n being Element of NAT holds il.(ps+k) <> dl.n by AMI_3:56;
-   hence s3.il.(ps+k) = s2.il.(ps+k) by A14,AMI_3:def 1
-               .= I.(k+1) by A11,A16,A17,AMI_3:def 1;
+   hence s3.il.(ps+k) = s2.il.(ps+k) by A17,AMI_3:def 1
+               .= I.(k+1) by A13,A19,A20,AMI_3:def 1;
    end;
    let k be Element of NAT; assume k < len D;
    then consider k' being Element of NAT such that
-A18: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
+A21: dl.(ds+k) = dl.(ds+k') & k' < len D & D1.dl.(ds+k) = D.(k'+1)
                 by A8,AMI_3:def 1;
-     ds+k = ds+k' by A18,AMI_3:52;
-   hence s3.dl.(ds+k) = D.(k+1) by A14,A18,AMI_3:def 1;
+     ds+k = ds+k' by A21,AMI_3:52;
+   hence s3.dl.(ds+k) = D.(k+1) by A17,A21,AMI_3:def 1;
  end;
 end;
 

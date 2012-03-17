@@ -14,6 +14,7 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="ALGSEQ_1"/>
 </Signature>
 <RCluster>
@@ -26,7 +27,7 @@
 </ArgTypes>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
@@ -34,13 +35,20 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="7" value="false"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 <Func kind="U" nr="1">
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="26">
+<Adjective nr="27">
+<Func kind="K" nr="82"/>
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Adjective>
+<Adjective nr="28">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

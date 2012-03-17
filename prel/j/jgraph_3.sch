@@ -21,9 +21,11 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="ENUMSET1"/>
 <ArticleID name="DOMAIN_1"/>
@@ -38,7 +40,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -51,7 +53,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="228">
+<Func kind="K" nr="273">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -60,17 +62,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="187">
+<Func kind="K" nr="231">
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="228">
+<Func kind="K" nr="273">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -84,7 +86,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -97,7 +99,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="228">
+<Func kind="K" nr="273">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -106,7 +108,7 @@
 </Fraenkel>
 <Func kind="K" nr="35">
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -114,7 +116,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -126,17 +128,17 @@
 </Fraenkel>
 <Func kind="K" nr="32">
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="187">
+<Func kind="K" nr="231">
 <Func kind="U" nr="1">
-<Func kind="K" nr="227">
+<Func kind="K" nr="272">
 <Num nr="2"/>
 </Func>
 </Func>
-<Func kind="K" nr="228">
+<Func kind="K" nr="273">
 <Num nr="2"/>
 </Func>
 </Func>

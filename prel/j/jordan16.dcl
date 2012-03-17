@@ -28,8 +28,10 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="JORDAN16"/>
@@ -45,7 +47,7 @@
 <Cluster/>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="238">
+<Func kind="K" nr="283">
 <LocusVar nr="1"/>
 </Func>
 </Func>
@@ -70,14 +72,14 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="46">
+<Adjective nr="47">
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
-<Adjective nr="65"/>
+<Adjective nr="62"/>
+<Adjective nr="63"/>
+<Adjective nr="64"/>
+<Adjective nr="68"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -93,7 +95,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="247">
+<Func kind="K" nr="292">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -103,7 +105,7 @@
 <Func kind="K" nr="42"/>
 <Func kind="K" nr="42"/>
 </Adjective>
-<Adjective nr="65"/>
+<Adjective nr="68"/>
 </Cluster>
 </FCluster>
 </Registrations>

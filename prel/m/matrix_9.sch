@@ -21,25 +21,26 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="FINSEQ_3"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_2"/>
 </Signature>
 <Scheme>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="88"/>
+<Func kind="K" nr="87"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="78">
-<Func kind="K" nr="183">
+<Func kind="K" nr="77">
+<Func kind="K" nr="191">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -51,7 +52,7 @@
 <For>
 <Typ kind="M" nr="14">
 <Cluster/>
-<Func kind="K" nr="183">
+<Func kind="K" nr="191">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -74,7 +75,7 @@
 <For>
 <Typ kind="M" nr="14">
 <Cluster/>
-<Func kind="K" nr="183">
+<Func kind="K" nr="191">
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
@@ -83,8 +84,8 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
-<Func kind="K" nr="78">
-<Func kind="K" nr="183">
+<Func kind="K" nr="77">
+<Func kind="K" nr="191">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>

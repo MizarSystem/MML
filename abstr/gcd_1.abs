@@ -9,11 +9,12 @@ environ
 
  vocabularies BINOP_1, VECTSP_1, LATTICES, ALGSTR_2, VECTSP_2, FUNCSDOM,
       RLVECT_1, ARYTM_3, ARYTM_1, GROUP_1, EQREL_1, BOOLE, SETFAM_1, COHSP_1,
-      INT_2, RELAT_1, GCD_1, ARYTM;
+      INT_2, RELAT_1, GCD_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, REAL_1, NUMBERS, BINOP_2, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, FUNCSDOM;
- constructors BINOP_2, MEMBERED, VECTSP_2;
- registrations XBOOLE_0, SUBSET_1, MEMBERED, STRUCT_0, VECTSP_1;
+      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, FUNCSDOM;
+ constructors BINOP_2, MEMBERED, VECTSP_2, MONOID_0, VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, MEMBERED, STRUCT_0, VECTSP_1, MONOID_0,
+      VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -46,7 +47,8 @@ end;
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
          associative commutative domRing-like distributive
-         well-unital non degenerated Field-like (non empty doubleLoopStr);
+         well-unital non degenerated almost_left_invertible
+          (non empty doubleLoopStr);
 end;
 
 reserve R for domRing-like commutative Ring;
@@ -62,7 +64,7 @@ a <> 0.R implies ((a * b = a * c implies b = c) &
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be non empty HGrStr;
+let R be non empty multMagma;
 let x,y be Element of R;
  pred x divides y means
 :: GCD_1:def 1
@@ -70,7 +72,7 @@ let x,y be Element of R;
 end;
 
 definition
-let R be unital (non empty multLoopStr);
+let R be right_unital (non empty multLoopStr);
 let x,y be Element of R;
  redefine pred x divides y;
  reflexivity;
@@ -81,7 +83,7 @@ let R be non empty multLoopStr;
 let x be Element of R;
  attr x is unital means
 :: GCD_1:def 2
- x divides 1_R;
+ x divides 1.R;
 end;
 
 definition
@@ -100,7 +102,7 @@ let x,y be Element of R;
 end;
 
 definition
-let R be unital (non empty multLoopStr);
+let R be well-unital (non empty multLoopStr);
 let x,y be Element of R;
  redefine pred x is_associated_to y;
  reflexivity;
@@ -157,11 +159,11 @@ implies (a/b = 0.R iff a = 0.R);
 
 theorem :: GCD_1:9
 for a being Element of R holds
-a <> 0.R implies a/a = 1_R;
+a <> 0.R implies a/a = 1.R;
 
 theorem :: GCD_1:10
 for R being non degenerated domRing-like commutative Ring
-for a being Element of R holds a/1_R = a;
+for a being Element of R holds a/1.R = a;
 
 theorem :: GCD_1:11
 for a,b,c being Element of R holds
@@ -195,7 +197,7 @@ a is_associated_to 0.R implies a = 0.R;
 
 theorem :: GCD_1:17
 for a,b being Element of R holds
-(a <> 0.R & a * b = a) implies b = 1_R;
+(a <> 0.R & a * b = a) implies b = 1.R;
 
 theorem :: GCD_1:18
 for a,b being Element of R holds
@@ -221,7 +223,7 @@ let a be Element of R;
 end;
 
 registration
-let R be unital (non empty multLoopStr);
+let R be well-unital (non empty multLoopStr);
 let a be Element of R;
   cluster Class a -> non empty;
 end;
@@ -244,12 +246,12 @@ registration let R be non empty multLoopStr;
 end;
 
 theorem :: GCD_1:21
-for R being unital (non empty multLoopStr)
+for R being well-unital (non empty multLoopStr)
 for X being Subset of R holds
 X in Classes R implies X is non empty;
 
 definition
-let R be associative unital (non empty multLoopStr);
+let R be associative well-unital (non empty multLoopStr);
 mode Am of R -> non empty Subset of R means
 :: GCD_1:def 7
   (for a being Element of R ex z being Element of it
@@ -259,23 +261,23 @@ mode Am of R -> non empty Subset of R means
 end;
 
 definition
-let R be associative unital (non empty multLoopStr);
+let R be associative well-unital (non empty multLoopStr);
 mode AmpleSet of R -> non empty Subset of R means
 :: GCD_1:def 8
-  it is Am of R & 1_R in it;
+  it is Am of R & 1.R in it;
 end;
 
 theorem :: GCD_1:22
-for R being associative unital (non empty multLoopStr)
+for R being associative well-unital (non empty multLoopStr)
 for Amp being AmpleSet of R holds
-(1_R in Amp) &
+(1.R in Amp) &
 (for a being Element of R ex z being Element of Amp
  st z is_associated_to a) &
 (for x,y being Element of Amp holds x <> y implies
  x is_not_associated_to y);
 
 theorem :: GCD_1:23
-   for R being associative unital (non empty multLoopStr)
+   for R being associative well-unital (non empty multLoopStr)
 for Amp being AmpleSet of R
 for x,y being Element of Amp holds
 x is_associated_to y implies x = y;
@@ -288,7 +290,7 @@ for Amp being AmpleSet of R holds
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be associative unital (non empty multLoopStr);
+let R be associative well-unital (non empty multLoopStr);
 let Amp be AmpleSet of R;
 let x be Element of R;
  func NF(x,Amp) -> Element of R means
@@ -298,7 +300,7 @@ end;
 
 theorem :: GCD_1:25
 for Amp being AmpleSet of R holds
-NF(0.R,Amp) = 0.R & NF(1_R,Amp) = 1_R;
+NF(0.R,Amp) = 0.R & NF(1.R,Amp) = 1.R;
 
 theorem :: GCD_1:26
    for Amp being AmpleSet of R
@@ -309,7 +311,7 @@ a in Amp iff a = NF(a,Amp);
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be associative unital (non empty multLoopStr);
+let R be associative well-unital (non empty multLoopStr);
 let Amp be AmpleSet of R;
   attr Amp is multiplicative means
 :: GCD_1:def 10
@@ -345,23 +347,24 @@ registration
 end;
 
 registration
-  cluster gcd-like associative commutative unital (non empty multLoopStr);
+  cluster gcd-like associative commutative well-unital (non empty multLoopStr);
 end;
 
 registration
-  cluster gcd-like associative commutative unital
+  cluster gcd-like associative commutative well-unital
     (non empty multLoopStr_0);
 end;
 
 registration
  cluster -> gcd-like
-            (Field-like add-associative right_zeroed right_complementable
+            (almost_left_invertible add-associative right_zeroed
+             right_complementable
             left_unital well-unital left-distributive right-distributive
             commutative (non empty doubleLoopStr));
 end;
 
 registration
-  cluster gcd-like associative commutative unital domRing-like
+  cluster gcd-like associative commutative well-unital domRing-like
           unital distributive non degenerated
           Abelian add-associative right_zeroed right_complementable
           (non empty doubleLoopStr);
@@ -372,7 +375,7 @@ definition
 end;
 
 definition
-let R be gcd-like associative unital (non empty multLoopStr);
+let R be gcd-like associative well-unital (non empty multLoopStr);
 let Amp be AmpleSet of R;
 let x,y be Element of R;
   func gcd(x,y,Amp) -> Element of R means
@@ -415,7 +418,7 @@ gcd(0.R,0.R,Amp) = 0.R;
 theorem :: GCD_1:33
 for Amp being AmpleSet of R
 for a being Element of R holds
-gcd(a,1_R,Amp) = 1_R & gcd(1_R,a,Amp) = 1_R;
+gcd(a,1.R,Amp) = 1.R & gcd(1.R,a,Amp) = 1.R;
 
 theorem :: GCD_1:34
 for Amp being AmpleSet of R
@@ -445,13 +448,13 @@ gcd(a * c,b * c,Amp) is_associated_to (c * gcd(a,b,Amp));
 theorem :: GCD_1:38
 for Amp being AmpleSet of R
 for a,b,c being Element of R holds
-(gcd(a,b,Amp) = 1_R) implies (gcd(a,(b * c),Amp) = gcd(a,c,Amp));
+(gcd(a,b,Amp) = 1.R) implies (gcd(a,(b * c),Amp) = gcd(a,c,Amp));
 
 theorem :: GCD_1:39
 for Amp being AmpleSet of R
 for a,b,c being Element of R holds
 ((c = gcd(a,b,Amp)) & (c <> 0.R)) implies
-gcd((a/c),(b/c),Amp) = 1_R;
+gcd((a/c),(b/c),Amp) = 1.R;
 
 theorem :: GCD_1:40
 for Amp being AmpleSet of R
@@ -466,7 +469,7 @@ begin
 theorem :: GCD_1:41
 for Amp being AmpleSet of R
 for r1,r2,s1,s2 being Element of R holds
-(gcd(r1,r2,Amp) = 1_R & gcd(s1,s2,Amp) = 1_R &
+(gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
  r2 <> 0.R & s2 <> 0.R) implies
 gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
     (r2 * (s2/gcd(r2,s2,Amp))),Amp) =
@@ -476,10 +479,10 @@ gcd(((r1 * (s2/gcd(r2,s2,Amp))) + (s1 * (r2/gcd(r2,s2,Amp)))),
 theorem :: GCD_1:42
 for Amp being AmpleSet of R
 for r1,r2,s1,s2 being Element of R holds
-(gcd(r1,r2,Amp) = 1_R & gcd(s1,s2,Amp) = 1_R &
+(gcd(r1,r2,Amp) = 1.R & gcd(s1,s2,Amp) = 1.R &
  r2 <> 0.R & s2 <> 0.R) implies
 gcd(((r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp))),
-    ((r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))),Amp) = 1_R;
+    ((r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp))),Amp) = 1.R;
 
 begin
 
@@ -487,12 +490,12 @@ begin
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be gcd-like associative unital (non empty multLoopStr);
+let R be gcd-like associative well-unital (non empty multLoopStr);
 let Amp be AmpleSet of R;
 let x,y be Element of R;
   pred x,y are_canonical_wrt Amp means
 :: GCD_1:def 13
-  gcd(x,y,Amp) = 1_R;
+  gcd(x,y,Amp) = 1.R;
 end;
 
 theorem :: GCD_1:43
@@ -501,11 +504,11 @@ for x,y being Element of R st x,y are_canonical_wrt Amp
  holds x,y are_canonical_wrt Amp';
 
 definition
-let R be gcd-like associative unital (non empty multLoopStr);
+let R be gcd-like associative well-unital (non empty multLoopStr);
 let x,y be Element of R;
  pred x,y are_co-prime means
 :: GCD_1:def 14
- ex Amp being AmpleSet of R st gcd(x,y,Amp) = 1_R;
+ ex Amp being AmpleSet of R st gcd(x,y,Amp) = 1.R;
 end;
 
 definition
@@ -518,15 +521,15 @@ end;
 theorem :: GCD_1:44
 for Amp being AmpleSet of R
 for x,y being Element of R holds
-x,y are_co-prime implies gcd(x,y,Amp) = 1_R;
+x,y are_co-prime implies gcd(x,y,Amp) = 1.R;
 
 definition
-let R be gcd-like associative unital (non empty multLoopStr_0);
+let R be gcd-like associative well-unital (non empty multLoopStr_0);
 let Amp be AmpleSet of R;
 let x,y be Element of R;
   pred x,y are_normalized_wrt Amp means
 :: GCD_1:def 15
-  gcd(x,y,Amp) = 1_R & y in Amp & y <> 0.R;
+  gcd(x,y,Amp) = 1.R & y in Amp & y <> 0.R;
 end;
 
 :: Addition
@@ -542,7 +545,7 @@ assume  r1,r2 are_co-prime & s1,s2 are_co-prime &
 :: GCD_1:def 16
   s1 if r1 = 0.R,
   r1 if s1 = 0.R,
-  (r1 * s2) + (r2 * s1) if gcd(r2,s2,Amp) = 1_R,
+  (r1 * s2) + (r2 * s1) if gcd(r2,s2,Amp) = 1.R,
   0.R if (r1 * (s2/gcd(r2,s2,Amp))) +
                 (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
   otherwise ((r1 * (s2/gcd(r2,s2,Amp))) +
@@ -562,8 +565,8 @@ assume  r1,r2 are_co-prime & s1,s2 are_co-prime &
 :: GCD_1:def 17
   s2 if r1 = 0.R,
   r2 if s1 = 0.R,
-  r2 * s2 if gcd(r2,s2,Amp) = 1_R,
-  1_R if (r1 * (s2/gcd(r2,s2,Amp))) +
+  r2 * s2 if gcd(r2,s2,Amp) = 1.R,
+  1.R if (r1 * (s2/gcd(r2,s2,Amp))) +
                 (s1 * (r2/gcd(r2,s2,Amp))) = 0.R
                 otherwise
   (r2 * (s2/gcd(r2,s2,Amp))) / gcd((r1 * (s2/gcd(r2,s2,Amp))) +
@@ -600,9 +603,9 @@ let r1,r2,s1,s2 be Element of R;
   func mult1(r1,r2,s1,s2,Amp) -> Element of R equals
 :: GCD_1:def 18
   0.R if r1 = 0.R or s1 = 0.R,
-  r1 * s1 if r2 = 1_R & s2 = 1_R,
-  (r1 * s1)/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1_R,
-  (r1 * s1)/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1_R
+  r1 * s1 if r2 = 1.R & s2 = 1.R,
+  (r1 * s1)/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1.R,
+  (r1 * s1)/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R
   otherwise (r1/gcd(r1,s2,Amp)) * (s1/gcd(s1,r2,Amp));
 end;
 
@@ -614,10 +617,10 @@ assume  r1,r2 are_co-prime & s1,s2 are_co-prime &
            r2 = NF(r2,Amp) & s2 = NF(s2,Amp);
   func mult2(r1,r2,s1,s2,Amp) -> Element of R equals
 :: GCD_1:def 19
-  1_R if r1 = 0.R or s1 = 0.R,
-  1_R if r2 = 1_R & s2 = 1_R,
-  s2/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1_R,
-  r2/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1_R
+  1.R if r1 = 0.R or s1 = 0.R,
+  1.R if r2 = 1.R & s2 = 1.R,
+  s2/gcd(r1,s2,Amp) if s2 <> 0.R & r2 = 1.R,
+  r2/gcd(s1,r2,Amp) if r2 <> 0.R & s2 = 1.R
   otherwise (r2/gcd(s1,r2,Amp)) * (s2/gcd(r1,s2,Amp));
 end;
 
@@ -652,7 +655,7 @@ theorem :: GCD_1:51
 canceled;
 
 theorem :: GCD_1:53
-    for F being Field-like commutative Ring
+    for F being almost_left_invertible commutative Ring
 for a, b being Element of F st a <> 0.F & b <> 0.F holds
 a"*b" = (b*a)";
 

@@ -13,12 +13,13 @@ environ
       RELAT_1, FUNCT_1, FUNCT_4, INT_1, NAT_1, STRUCT_0, FUNCOP_1, FINSET_1,
       AMI_1, AMI_2, AMI_3, SCMPDS_1, SCMPDS_2, BINARITH, INT_2, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, INT_2, SEQ_1, BINARITH, AMI_5,
-      SCMPDS_1, SCMPDS_2, REAL_1;
+      SCMPDS_1, SCMPDS_2, REAL_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, TREES_2, AMI_1, AMI_3,
-      SCMPDS_2;
+      SCMPDS_2, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM, REAL;
- definitions AMI_1, AMI_2, AMI_3, TARSKI, XBOOLE_0, FUNCOP_1, SCMPDS_2;
+ definitions AMI_1, AMI_2, AMI_3, TARSKI, XBOOLE_0, FUNCOP_1, SCMPDS_2,
+      VALUED_1;
  theorems AMI_1, AMI_3, GRFUNC_1, NAT_1, FUNCOP_1, TARSKI, FUNCT_4, FUNCT_1,
       FINSET_1, ZFMISC_1, INT_1, RELAT_1, AMI_5, ABSVALUE, SCMPDS_2, BINARITH,
       FUNCT_2, XBOOLE_0, XBOOLE_1, CARD_3, AMI_2;
@@ -677,12 +678,12 @@ then A2: dom (s | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
     proof
        let x be set;
        assume
-X:      x in SCM-Instr-Loc;
+A3:      x in SCM-Instr-Loc;
        then reconsider l = x as Instruction-Location of SCMPDS by AMI_1:def 4;
        thus (Exec (i, s) | SCM-Instr-Loc).x
-              = (Exec (i, s)).l by FUNCT_1:72,X
+              = (Exec (i, s)).l by A3,FUNCT_1:72
              .= s.l by AMI_1:def 13
-             .= (s | SCM-Instr-Loc).x by FUNCT_1:72,X;
+             .= (s | SCM-Instr-Loc).x by A3,FUNCT_1:72;
     end;
     hence Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc by A1,A2,FUNCT_1:9;
 end;
@@ -856,8 +857,7 @@ A3:  d1 in dom DataPart p by A1;
        (NAT) \ dom p;
          not NAT c= dom p
      by FINSET_1:13,SCMPDS_2:11;
-     then A4: (NAT) \ dom p <> {} by
-XBOOLE_1:37;
+     then A4: (NAT) \ dom p <> {} by XBOOLE_1:37;
      then il is Element of NAT
                by XBOOLE_0:def 4;
      then reconsider il as Instruction-Location of SCMPDS by AMI_1:def 4;
@@ -1049,10 +1049,10 @@ proof
     reconsider m=IC s1 as Element of NAT by AMI_1:def 4;
     set mm=m+2;
         mm-2+k1=m+k1;
-then A3: mm-2+k1>=0 by NAT_1:2;
+then A2: mm-2+k1>=0 by NAT_1:2;
         mm-2+k2=m+k2;
  then mm-2+k2>=0 by NAT_1:2;
-    hence thesis by A1,A3,Th18;
+    hence thesis by A1,A2,Th18;
 end;
 
 theorem Th20:
@@ -1146,78 +1146,78 @@ A1:  p c= s;
    set loc = IC Csi;
   assume
 A2: not IC (Computation s).i in dom ProgramPart(p);
-X:  loc in NAT by AMI_1:def 4;
+A3:  loc in NAT by AMI_1:def 4;
      loc in dom ProgramPart p iff
          loc in dom p /\ NAT by FUNCT_1:68;
- then A3:not loc in dom p by A2,XBOOLE_0:def 3,X;
+ then A4:not loc in dom p by A2,A3,XBOOLE_0:def 3;
     set p1 = p +* (loc .--> goto 0 );
     set p2 = p +* (loc .--> goto 1 );
 
-A4:  dom p1 = dom p \/ dom (loc .--> goto 0 ) &
+A5:  dom p1 = dom p \/ dom (loc .--> goto 0 ) &
          dom p2 = dom p \/ dom (loc .--> goto 1 ) by FUNCT_4:def 1;
-A5:  dom (loc .--> goto 0 ) = {loc} &
+A6:  dom (loc .--> goto 0 ) = {loc} &
          dom (loc .--> goto 1 ) = {loc} by FUNCOP_1:19;
-then A6:  loc in dom (loc .--> goto 0 ) &
+then A7:  loc in dom (loc .--> goto 0 ) &
          loc in dom (loc .--> goto 1) by TARSKI:def 1;
-then A7:   loc in dom p1 & loc in dom p2 by A4,XBOOLE_0:def 2;
+then A8:   loc in dom p1 & loc in dom p2 by A5,XBOOLE_0:def 2;
 
     consider s1 being State of SCMPDS such that
-A8: p1 c= s1 by AMI_1:82;
+A9: p1 c= s1 by AMI_1:82;
     consider s2 being State of SCMPDS such that
-A9: p2 c= s2 by AMI_1:82;
+A10: p2 c= s2 by AMI_1:82;
 
  set Cs1i = (Computation s1).i;
  set Cs2i = (Computation s2).i;
 
-A10:  IC SCMPDS in dom p by Th17;
+A11:  IC SCMPDS in dom p by Th17;
       p is not autonomic
    proof
      take s1, s2;
          dom s1 = the carrier of SCMPDS & dom s2 = the carrier of SCMPDS
                                                     by AMI_1:79;
-then A11: dom p c= dom s1 & dom p c= dom s2 by AMI_1:80;
+then A12: dom p c= dom s1 & dom p c= dom s2 by AMI_1:80;
          now let x be set; assume
-A12:    x in dom p;
+A13:    x in dom p;
        then dom p misses dom (loc .--> goto 0 ) &
-       x in dom p1 by A3,A4,A5,XBOOLE_0:def 2,ZFMISC_1:56;
-       then p.x = p1.x & p1.x = s1.x by A8,A12,FUNCT_4:17,GRFUNC_1:8;
+       x in dom p1 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
+       then p.x = p1.x & p1.x = s1.x by A9,A13,FUNCT_4:17,GRFUNC_1:8;
       hence p.x = s1.x;
      end;
-    hence A13: p c= s1 by A11,GRFUNC_1:8;
+    hence A14: p c= s1 by A12,GRFUNC_1:8;
         now let x be set; assume
-A14:   x in dom p;
+A15:   x in dom p;
       then dom p misses dom (loc .--> goto 1 ) &
-      x in dom p2 by A3,A4,A5,XBOOLE_0:def 2,ZFMISC_1:56;
-      then p.x = p2.x & p2.x = s2.x by A9,A14,FUNCT_4:17,GRFUNC_1:8;
+      x in dom p2 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
+      then p.x = p2.x & p2.x = s2.x by A10,A15,FUNCT_4:17,GRFUNC_1:8;
      hence p.x = s2.x;
     end;
-   hence A15: p c= s2 by A11,GRFUNC_1:8;
+   hence A16: p c= s2 by A12,GRFUNC_1:8;
            (loc .--> goto 0 ).loc = goto 0 &
        (loc .--> goto 1 ).loc = goto 1 by FUNCOP_1:87;
-       then p1.loc = goto 0 & p2.loc = goto 1 by A6,FUNCT_4:14;
-then A16:  s1.loc = goto 0 & s2.loc = goto 1 by A7,A8,A9,GRFUNC_1:8;
+       then p1.loc = goto 0 & p2.loc = goto 1 by A7,FUNCT_4:14;
+then A17:  s1.loc = goto 0 & s2.loc = goto 1 by A8,A9,A10,GRFUNC_1:8;
 
   take k = i+1;
 
   set Cs1k = (Computation s1).k;
   set Cs2k = (Computation s2).k;
-A17: Cs1k = Following Cs1i by AMI_1:def 19
+A18: Cs1k = Following Cs1i by AMI_1:def 19
           .= Exec (CurInstr Cs1i, Cs1i);
-A18: Cs2k = Following Cs2i by AMI_1:def 19
+A19: Cs2k = Following Cs2i by AMI_1:def 19
           .= Exec (CurInstr Cs2i, Cs2i);
-      A19:   Cs1i.loc = goto 0 & Cs2i.loc = goto 1 by A16,AMI_1:54;
-A20:  (Cs1i|dom p) = (Csi|dom p) by A1,A13,AMI_1:def 25;
-A21: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS &
-     Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by A10,FUNCT_1:72;
-     A22: (Cs1i|dom p) = (Cs2i|dom p) by A13,A15,AMI_1:def 25;
+      A20:   Cs1i.loc = goto 0 & Cs2i.loc = goto 1 by A17,AMI_1:54;
+A21:  (Cs1i|dom p) = (Csi|dom p) by A1,A14,AMI_1:def 25;
+A22: Cs1i.IC SCMPDS = (Cs1i|dom p).IC SCMPDS &
+     Csi.IC SCMPDS = (Csi|dom p).IC SCMPDS by A11,FUNCT_1:72;
+     A23: (Cs1i|dom p) = (Cs2i|dom p) by A14,A16,AMI_1:def 25;
 then Cs1i.IC SCMPDS = loc & Cs2i.IC SCMPDS = loc
-           by A10,A20,A21,FUNCT_1:72;
-then A23: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) &
-     Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A17,A18,A19,SCMPDS_2:66;
-     A24: IC Cs1i = IC Cs2i by A10,A21,A22,FUNCT_1:72;
+           by A11,A21,A22,FUNCT_1:72;
+then A24: Cs1k.IC SCMPDS = ICplusConst(Cs1i,0) &
+     Cs2k.IC SCMPDS = ICplusConst(Cs2i,1) by A18,A19,A20,SCMPDS_2:66;
+     A25: IC Cs1i = IC Cs2i by A11,A22,A23,FUNCT_1:72;
          (Cs1k|dom p).IC SCMPDS = Cs1k.IC SCMPDS &
-     (Cs2k|dom p).IC SCMPDS = Cs2k.IC SCMPDS by A10,FUNCT_1:72;
-   hence Cs1k|dom p <> Cs2k|dom p by A23,A24,Th19;
+     (Cs2k|dom p).IC SCMPDS = Cs2k.IC SCMPDS by A11,FUNCT_1:72;
+   hence Cs1k|dom p <> Cs2k|dom p by A24,A25,Th19;
   end;
  hence contradiction;
 end;
@@ -2000,12 +2000,12 @@ A9:  inspos m in dom J;
 A10:  not inspos m in dom J;
    then not ex l st inspos(m+n) = inspos(l+n) & inspos l in dom J;
 
-then A13:  not inspos(m+n) in dom Shift(J,n) by A2;
+then A11:  not inspos(m+n) in dom Shift(J,n) by A2;
         inspos m in dom I \/ dom J by A8,FUNCT_4:def 1;
-then A14:  inspos m in dom I by A10,XBOOLE_0:def 2;
+then A12:  inspos m in dom I by A10,XBOOLE_0:def 2;
     thus (Shift(I,n) +* Shift(J,n)).inspos(m+n)
-      = Shift(I,n).inspos(m+n) by A13,FUNCT_4:12
-     .= I.inspos m by A14,Def7
+      = Shift(I,n).inspos(m+n) by A11,FUNCT_4:12
+     .= I.inspos m by A12,Def7
      .= (I +* J).inspos m by A10,FUNCT_4:12;
   end;
   end;

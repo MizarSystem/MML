@@ -15,13 +15,11 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
@@ -135,11 +133,11 @@
 </Scheme>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="16">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="25" value="false"/>
-<Adjective nr="82"/>
-<Adjective nr="106"/>
+<Adjective nr="23" value="false"/>
+<Adjective nr="93"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -156,7 +154,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="217">
+<Func kind="K" nr="195">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -165,7 +163,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Typ>
-<Func kind="K" nr="217">
+<Func kind="K" nr="195">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">
@@ -190,7 +188,7 @@
 </Pred>
 </Fraenkel>
 </Func>
-<Func kind="K" nr="217">
+<Func kind="K" nr="195">
 <Func kind="F" nr="1"/>
 <Fraenkel>
 <Typ kind="M" nr="2">

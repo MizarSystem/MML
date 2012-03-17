@@ -8,16 +8,19 @@ environ
 
  vocabularies CLASSES2, FUNCSDOM, VECTSP_2, MOD_2, CAT_1, MIDSP_1, GRCAT_1,
       ENS_1, INCSP_1, ORDINAL4, FUNCT_2, RELAT_1, VECTSP_1, BOOLE, FUNCT_3,
-      FUNCT_1, TARSKI, ARYTM_3, PARTFUN1, MODCAT_1, RLVECT_1, ALGSTR_1, ARYTM;
+      FUNCT_1, TARSKI, ARYTM_3, PARTFUN1, MODCAT_1, RLVECT_1, ALGSTR_1, ARYTM,
+      ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_2, PARTFUN1,
-      BINOP_1, STRUCT_0, RLVECT_1, VECTSP_1, FUNCSDOM, VECTSP_2, CAT_1,
-      CLASSES2, ALGSTR_1, GRCAT_1, MOD_2, FUNCT_3, MIDSP_1;
- constructors MIDSP_1, VECTSP_2, ALGSTR_1, GRCAT_1, MOD_2;
+      BINOP_1, FUNCT_5, STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_1, FUNCSDOM,
+      VECTSP_2, CAT_1, CLASSES2, ALGSTR_1, GRCAT_1, MOD_2, FUNCT_3, MIDSP_1;
+ constructors MIDSP_1, VECTSP_2, ALGSTR_1, GRCAT_1, MOD_2, FUNCT_5, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, CAT_1, VECTSP_2,
-      GRCAT_1, MOD_2;
+      GRCAT_1, MOD_2, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
+ definitions ALGSTR_0, VALUED_1;
  theorems CAT_1, GRCAT_1, FUNCT_2, MOD_2, TARSKI, ZFMISC_1, RELSET_1, XBOOLE_0,
-      ALGSTR_1, BINOP_1;
+      ALGSTR_1, BINOP_1, ALGSTR_0;
  schemes FUNCT_2, BINOP_1, TARSKI;
 
 begin
@@ -209,7 +212,7 @@ definition let x,y,R;
  pred GO x,y,R means
  :Def5: ex x1,x2 being set st x = [x1,x2] &
     ex G being strict LeftMod of R st y = G
-    & x1 = the LoopStr of G
+    & x1 = the addLoopStr of G
     & x2 = the lmult of G;
 end;
 
@@ -222,46 +225,44 @@ Th6: for x,y1,y2 being set st GO x,y1,R & GO x,y2,R holds y1 = y2
    consider a1,a2 being set such that
      A3: x = [a1,a2] and
      A4: ex G being strict LeftMod of R st y1 = G
-                 & a1 = the LoopStr of G
+                 & a1 = the addLoopStr of G
                  & a2 = the lmult of G by A1,Def5;
    consider b1,b2 being set such that
    A5: x = [b1,b2] and
    A6: ex G being strict LeftMod of R st y2 = G
-               & b1 = the LoopStr of G
+               & b1 = the addLoopStr of G
                & b2 = the lmult of G by A2,Def5;
    consider G1 being strict LeftMod of R such that
    A7: y1 = G1
-       & a1 = the LoopStr of G1
+       & a1 = the addLoopStr of G1
        & a2 = the lmult of G1 by A4;
    consider G2 being strict LeftMod of R such that
    A8: y2 = G2
-       & b1 = the LoopStr of G2
+       & b1 = the addLoopStr of G2
        & b2 = the lmult of G2 by A6;
-         the LoopStr of G1 = the LoopStr of G2
+         the addLoopStr of G1 = the addLoopStr of G2
    & the lmult of G1 = the lmult of G2 by A3,A5,A7,A8,ZFMISC_1:33;
    hence thesis by A7,A8;
  end;
 
 theorem
 Th7: for UN ex x st x in {[G,f] where G is Element of GroupObjects(UN),
-   f is Element of Funcs([:the carrier of R,{{}}:],{{}}) : not contradiction}
+   f is Element of Funcs([:the carrier of R,1:],1) : not contradiction}
       & GO x,TrivialLMod(R),R
  proof
    let UN;
    set T = TrivialLMod(R);
-A1: op0 = {} by TARSKI:def 1 .= Extract {} by TARSKI:def 1;
-A2:T = VectSpStr (#{{}},op2,op0,pr2(the carrier of R, {{}})#)
+A1:T = VectSpStr (#1,op2,op0,pr2(the carrier of R, 1)#)
     by MOD_2:def 2;
-   then reconsider x1 = the LoopStr of T as Element of GroupObjects(UN)
-    by A1,ALGSTR_1:def 4,GRCAT_1:42;
-   reconsider f1 = (the lmult of T)
- as Function of [:the carrier of R,{{}}:],{{}} by A2;
-   reconsider x2 = f1 as Element of Funcs([:the carrier of R,{{}}:],{{}}) by
+   then reconsider x1 = the addLoopStr of T as Element of GroupObjects(UN)
+    by ALGSTR_0:def 3,GRCAT_1:42;
+   reconsider f1 = the lmult of T as Function of [:the carrier of R,1:],1
+           by A1;
+   reconsider x2 = f1 as Element of Funcs([:the carrier of R,1:],1) by
 FUNCT_2:11;
    take x = [x1,x2];
    thus x in {[G,f] where G is Element of GroupObjects(UN),
-      f is Element of Funcs([:the carrier of R,{{}}:],{{}
-}) : not contradiction};
+      f is Element of Funcs([:the carrier of R,1:],1) : not contradiction};
    thus GO x,TrivialLMod(R),R by Def5;
  end;
 
@@ -269,12 +270,12 @@ definition let UN,R;
  func LModObjects(UN,R) -> set means
  :Def6: for y holds y in it iff ex x st
     x in {[G,f] where G is Element of GroupObjects(UN),
-     f is Element of Funcs([:the carrier of R,{{}}:],{{}}) : not contradiction}
+     f is Element of Funcs([:the carrier of R,1:],1) : not contradiction}
   & GO x,y,R;
  existence
   proof
     set N = {[G,f] where G is Element of GroupObjects(UN),
-  f is Element of Funcs([:the carrier of R,{{}}:],{{}}) : not contradiction};
+  f is Element of Funcs([:the carrier of R,1:],1) : not contradiction};
     defpred P[set,set] means GO $1,$2,R;
     A1: for x,y1,y2 being set st P[x,y1] & P[x,y2] holds y1 = y2 by Th6;
     consider Y being set such that
@@ -285,8 +286,7 @@ definition let UN,R;
  uniqueness
   proof
     set N = {[G,f] where G is Element of GroupObjects(UN),
-     f is Element of Funcs([:the carrier of R,{{}}:],{{}}) :
-       not contradiction};
+     f is Element of Funcs([:the carrier of R,1:],1) : not contradiction};
     let Y1,Y2 be set such that
     A3: for y holds y in Y1 iff ex x st x in N & GO x,y,R and
     A4: for y holds y in Y2 iff ex x st x in N & GO x,y,R;
@@ -302,7 +302,7 @@ theorem Th8:
 TrivialLMod(R) in LModObjects(UN,R)
  proof
        ex x st x in {[G,f] where G is Element of GroupObjects(UN),
-    f is Element of Funcs([:the carrier of R,{{}}:],{{}}) : not contradiction}
+    f is Element of Funcs([:the carrier of R,1:],1) : not contradiction}
     & GO x,TrivialLMod(R),R by Th7;
    hence thesis by Def6;
  end;
@@ -318,13 +318,13 @@ Th9: for x being Element of LModObjects(UN,R)
  proof
    let x be Element of LModObjects(UN,R);
    set N = {[G,f] where G is Element of GroupObjects(UN),
-    f is Element of Funcs([:the carrier of R,{{}}:],{{}}) : not contradiction};
+    f is Element of Funcs([:the carrier of R,1:],1) : not contradiction};
    consider u being set such that
    A1: u in N & GO u,x,R by Def6;
        ex a1,a2 being set st
    u = [a1,a2] &
  ex G being strict LeftMod of R st x = G
-            & a1 = the LoopStr of G
+            & a1 = the addLoopStr of G
             & a2 = the lmult of G by A1,Def5;
    hence thesis;
  end;
@@ -687,12 +687,11 @@ theorem
   thus f' is Morphism of C;
    consider x such that
 A1: x in {[G,ff] where G is Element of GroupObjects(UN),
-     ff is Element of Funcs([:the carrier of R,{{}}:],{{}
-}) : not contradiction}
+     ff is Element of Funcs([:the carrier of R,1:],1) : not contradiction}
    & GO x,b,R by Def6;
       ex x1,x2 being set st x = [x1,x2] &
     ex G being strict LeftMod of R st b = G
-    & x1 = the LoopStr of G
+    & x1 = the addLoopStr of G
     & x2 = the lmult of G by A1,Def5;
   hence b is strict Element of V;
   thus b' is Object of C;

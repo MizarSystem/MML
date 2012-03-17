@@ -8,13 +8,15 @@ environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
       RLVECT_1, ARYTM_1, FUNCSDOM, CFUNCDOM, COMPLEX1, COMPLSP1, CFUNCT_1,
-      CLVECT_1, CLOPBAN1, GROUP_1, STRUCT_0, ARYTM;
+      CLVECT_1, CLOPBAN1, GROUP_1, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
-      COMPLEX1, CFUNCT_1, GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM, CLVECT_1;
- constructors DOMAIN_1, BINOP_2, COMPLEX1, FUNCSDOM, CLVECT_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, COMPLEX1, VECTSP_1,
+      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, ALGSTR_0,
+      RLVECT_1, COMPLEX1, CFUNCT_1, GROUP_1, VECTSP_1, FRAENKEL, FUNCSDOM,
       CLVECT_1;
+ constructors DOMAIN_1, BINOP_2, COMPLEX1, FUNCSDOM, CLVECT_1, GROUP_1,
+      VECTSP_1, VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, COMPLEX1, VECTSP_1,
+      CLVECT_1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE, ARITHM;
 
 
@@ -218,7 +220,7 @@ for x,y,z being Element of CRing(A) holds
   x+y = y+x &
   (x+y)+z = x+(y+z) &
   x+(0.CRing(A)) = x &
-  (ex t being Element of CRing(A) st x+t=(0.CRing(A))) &
+  x is right_complementable &
   x*y = y*x &
   (x*y)*z = x*(y*z) &
   x*(1.CRing(A)) = x &
@@ -232,7 +234,7 @@ CRing(A) is commutative Ring;
 definition
  struct(doubleLoopStr,CLSStruct) ComplexAlgebraStr (#
            carrier -> set,
-           mult,add -> (BinOp of the carrier),
+           multF,addF -> (BinOp of the carrier),
            Mult -> (Function of [:COMPLEX,the carrier:],the carrier),
            OneF,ZeroF -> Element of the carrier #);
 end;
@@ -262,10 +264,10 @@ for x,y,z being Element of CAlgebra(A), a,b holds
   x + y = y + x &
   (x + y) + z = x + (y + z) &
   x + (0.CAlgebra(A)) = x &
-  (ex t being Element of CAlgebra(A) st x + t=(0.CAlgebra(A))) &
+  x is right_complementable &
   x * y = y * x &
   (x * y) * z = x * (y * z) &
-  x * (1_CAlgebra(A)) = x &
+  x * (1.CAlgebra(A)) = x &
   x * (y + z) = x * y + x * z &
   a * (x * y) = (a * x) * y &
   a * (x + y) = a * x + a * y &
@@ -277,8 +279,8 @@ for x,y,z being Element of CAlgebra(A), a,b holds
 :: CFUNCDOM:def 9
   for x,y,z being Element of IT
     for a,b holds
-     x * (1_IT) = x &
-     x * (y + z) = x * y + x * z &
+:::     x * (1.IT) = x &
+:::     x * (y + z) = x * y + x * z &
      a * (x * y) = (a * x) * y &
      a * (x + y) = a * x + a * y &
      (a + b) * x = a * x + b * x &
@@ -287,12 +289,14 @@ end;
 
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-    commutative associative ComplexAlgebra-like (non empty ComplexAlgebraStr);
+    commutative associative right_unital right-distributive
+     ComplexAlgebra-like (non empty ComplexAlgebraStr);
 end;
 
 definition
   mode ComplexAlgebra is Abelian add-associative right_zeroed
-    right_complementable commutative associative ComplexAlgebra-like
+    right_complementable commutative associative
+    right_unital right-distributive ComplexAlgebra-like
     (non empty ComplexAlgebraStr);
 end;
 
@@ -300,7 +304,7 @@ theorem :: CFUNCDOM:30
   CAlgebra(A) is ComplexAlgebra;
 
 theorem :: CFUNCDOM:31
-   1_CRing(A) = ComplexFuncUnit(A);
+   1.CRing(A) = ComplexFuncUnit(A);
 
 theorem :: CFUNCDOM:32
-   1_CAlgebra(A) = ComplexFuncUnit(A);
+   1.CAlgebra(A) = ComplexFuncUnit(A);

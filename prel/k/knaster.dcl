@@ -17,15 +17,13 @@
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="FUNCT_4"/>
@@ -64,15 +62,19 @@
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="153"/>
+<Adjective nr="26">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Adjective>
+<Adjective nr="164"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="51"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="50"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -86,10 +88,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="159">
+<Adjective nr="170">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="160">
+<Adjective nr="171">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -97,17 +99,17 @@
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="107"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="118"/>
 </Cluster>
 <Typ kind="G" nr="7">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="35" value="false"/>
-<Adjective nr="51"/>
-<Adjective nr="56"/>
+<Adjective nr="33" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="55"/>
 </Cluster>
 </CCluster>
 </Registrations>

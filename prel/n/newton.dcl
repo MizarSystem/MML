@@ -22,6 +22,7 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="NEWTON"/>
 </Signature>
 <RCluster>
@@ -41,6 +42,7 @@
 <Adjective nr="19" value="false"/>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
+<Adjective nr="34"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -98,7 +100,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -119,7 +121,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -140,7 +142,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="128">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -156,7 +158,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="131">
+<Func kind="K" nr="133">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -176,7 +178,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -197,7 +199,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
+<Func kind="K" nr="135">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -213,7 +215,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="140">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -222,7 +224,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="140">
+<Func kind="K" nr="142">
 <Num nr="2"/>
 </Func>
 <Cluster>
@@ -231,7 +233,7 @@
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="139"/>
+<Func kind="K" nr="141"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="22" value="false"/>

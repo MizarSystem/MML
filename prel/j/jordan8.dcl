@@ -26,13 +26,13 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
 <ArticleID name="SPPOL_1"/>
@@ -46,7 +46,7 @@
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="209">
+<Func kind="K" nr="248">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -58,15 +58,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="260">
+<Func kind="K" nr="294">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="3" value="false"/>
-<Adjective nr="100"/>
-<Adjective nr="104"/>
-<Adjective nr="105"/>
+<Adjective nr="115"/>
+<Adjective nr="119"/>
+<Adjective nr="120"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -74,17 +74,17 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="45">
-<Func kind="K" nr="209">
+<Adjective nr="46">
+<Func kind="K" nr="248">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="108" value="false"/>
-<Adjective nr="109" value="false"/>
+<Adjective nr="123" value="false"/>
+<Adjective nr="124" value="false"/>
 </Cluster>
 <Func kind="K" nr="23">
 <Func kind="U" nr="1">
-<Func kind="K" nr="209">
+<Func kind="K" nr="248">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -96,14 +96,14 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="260">
+<Func kind="K" nr="294">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="100"/>
-<Adjective nr="106"/>
-<Adjective nr="107"/>
+<Adjective nr="115"/>
+<Adjective nr="121"/>
+<Adjective nr="122"/>
 </Cluster>
 </FCluster>
 </Registrations>

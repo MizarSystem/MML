@@ -11,24 +11,25 @@ environ
       ARYTM, NAT_LAT, NAT_3, ALGSEQ_1, FUNCT_1, CARD_3, BOOLE, FINSEQ_2,
       VECTSP_1, MEMBERED, NEWTON, QC_LANG1, RLVECT_1, PREPOWER;
  notations SUBSET_1, XXREAL_0, PREPOWER, TARSKI, XBOOLE_0, ORDINAL1, CARD_1,
-      NUMBERS,
-      XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, BINARITH, ABIAN,
+      NUMBERS, XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, BINARITH, ABIAN,
       SQUARE_1, NEWTON, FINSET_1, PEPIN, NAT_3, RELAT_1, REAL_1, FUNCT_1,
       FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, PRE_CIRC, POWER,
       MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1;
  constructors REAL_1, NAT_1, NAT_D, FINSEQOP, PREPOWER, POWER, BINARITH,
-      PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3;
+      PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
-      FINSEQ_2, RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0;
+      FINSEQ_2, RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0,
+      VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON;
+ definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON, VALUED_1;
  theorems TARSKI, REAL_1, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1,
       CARD_2, FINSET_1, SQUARE_1, EULER_1, EULER_2, BINARITH, PREPOWER, POWER,
       ABSVALUE, NEWTON, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1,
       CARD_4, XBOOLE_0, PRE_CIRC, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
       FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1, PROB_3, INTEGRA5,
-      COMPTRIG, XXREAL_0, SEQ_1, NAT_D;
+      COMPTRIG, XXREAL_0, SEQ_1, NAT_D, VALUED_1;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -516,9 +517,9 @@ theorem Th10:
   holds q hcf b = 1 & q<>0 & b<>0 implies q|^n hcf b = 1
   proof
     let n,q,b be Nat;
-    assume A2:q hcf b = 1 & q<>0 & b<>0;
+    assume A1:q hcf b = 1 & q<>0 & b<>0;
     then q,b are_relative_prime by INT_2:def 4;
-    then (q|^n),b are_relative_prime by A2,EULER_2:32;
+    then (q|^n),b are_relative_prime by A1,EULER_2:32;
     hence thesis by INT_2:def 4;
   end;
 
@@ -904,22 +905,22 @@ theorem Th20:
         then b1 hcf x = x by PEPIN:2;
         then x divides b1 by NAT_D:def 5;
         then consider c be Nat such that
-        A22: b1=x*c by NAT_D:def 3;
-        A23: x|^xcb divides b & not(x|^(xcb+1) divides b) by A18,NAT_3:def 7;
-        then b = x*c*x|^xcb by A13,A16,A22
+        A21: b1=x*c by NAT_D:def 3;
+        A22: x|^xcb divides b & not(x|^(xcb+1) divides b) by A18,NAT_3:def 7;
+        then b = x*c*x|^xcb by A13,A16,A21
         .= c*(x|^xcb*x)
         .= c*x|^(xcb+1) by NEWTON:11;
-        hence contradiction by A23,NAT_D:def 3;
+        hence contradiction by A22,NAT_D:def 3;
       end;
-      then A24: x|^xcb,b1 are_relative_prime by EULER_2:32;
+      then A23: x|^xcb,b1 are_relative_prime by EULER_2:32;
       reconsider b1 as non empty Nat;
        card support pfexp (x|^xcb*b1) =
-      card support pfexp x|^xcb + card support pfexp b1 by A24,NAT_3:47;
+      card support pfexp x|^xcb + card support pfexp b1 by A23,NAT_3:47;
       then n+1=card {x} + card support pfexp b1 by A15,A19,A20,NAT_3:42;
       then n+1=1+card (support pfexp b1) by CARD_2:60;
       hence thesis;
     end;
-    A25: for a,a1,b,b1 being non empty Nat, x being Prime
+    A24: for a,a1,b,b1 being non empty Nat, x being Prime
       st (for p being Element of NAT st p is prime
       holds p |-count a <= p |-count b)
         & a1=a div (x|^(x|-count a)) & b1=b div (x|^(x|-count b))
@@ -928,86 +929,86 @@ theorem Th20:
     proof
       let a,a1,b,b1 be non empty Nat;
       let x be Prime;
-      assume A26: for p being Element of NAT st p is prime
+      assume A25: for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b;
-      assume A27: a1=a div (x|^(x|-count a));
-      assume A28: b1=b div (x|^(x|-count b));
+      assume A26: a1=a div (x|^(x|-count a));
+      assume A27: b1=b div (x|^(x|-count b));
       let p be Element of NAT;
-      assume A29: p is prime;
-      then A30: p>1 by INT_2:def 5;
+      assume A28: p is prime;
+      then A29: p>1 by INT_2:def 5;
       set xca=x|-count a; set xcb=x|-count b;
-      A31: x>1 by INT_2:def 5;
+      A30: x>1 by INT_2:def 5;
       then x|^xca divides a by NAT_3:def 7;
-      then A32: p|-count a1
-      =(p|-count a)-'(p|-count x|^xca) by A27,A29,NAT_3:31;
-       x|^xcb divides b by A31,NAT_3:def 7;
-      then A33: p|-count b1 = (p|-count b)-'(p|-count x|^xcb) by A28,A29,
+      then A31: p|-count a1
+      =(p|-count a)-'(p|-count x|^xca) by A26,A28,NAT_3:31;
+       x|^xcb divides b by A30,NAT_3:def 7;
+      then A32: p|-count b1 = (p|-count b)-'(p|-count x|^xcb) by A27,A28,
 NAT_3:31;
       per cases;
       suppose x=p;
-        then p|-count x|^xca = p|-count a by A30,NAT_3:25;
-        hence p |-count a1 <= p |-count b1 by A32,NAT_2:10;
+        then p|-count x|^xca = p|-count a by A29,NAT_3:25;
+        hence p |-count a1 <= p |-count b1 by A31,NAT_2:10;
       end;
-      suppose A34: x<>p;
-         p|-count x|^xca=xca * (p|-count x) by A29,NAT_3:32
-        .= xca * 0 by A30,A34,NAT_3:24
+      suppose A33: x<>p;
+         p|-count x|^xca=xca * (p|-count x) by A28,NAT_3:32
+        .= xca * 0 by A29,A33,NAT_3:24
         .= 0;
-        then A35: p|-count a1=(p|-count a)-0 by A32,BINARITH:50
+        then A34: p|-count a1=(p|-count a)-0 by A31,BINARITH:50
         .=p|-count a;
-         p|-count x|^xcb=xcb * (p|-count x) by A29,NAT_3:32
-        .= xcb * 0 by A30,A34,NAT_3:24
+         p|-count x|^xcb=xcb * (p|-count x) by A28,NAT_3:32
+        .= xcb * 0 by A29,A33,NAT_3:24
         .= 0;
-        then p|-count b1=(p|-count b)-0 by A33,BINARITH:50
+        then p|-count b1=(p|-count b)-0 by A32,BINARITH:50
         .=p|-count b;
-        hence p |-count a1 <= p |-count b1 by A26,A29,A35;
+        hence p |-count a1 <= p |-count b1 by A25,A28,A34;
       end;
     end;
-    A36: for n being Element of NAT holds P[n] implies P[n+1]
+    A35: for n being Element of NAT holds P[n] implies P[n+1]
     proof
       let n be Element of NAT;
-      assume A37: P[n];
+      assume A36: P[n];
        for a,b being non empty Nat st card(support pfexp b)=n+1
         holds (for p being Element of NAT st p is prime
         holds p |-count a <= p |-count b)
         implies (ex c being Element of NAT st b=a*c)
       proof
         let a,b be non empty Nat;
-        assume A38: card(support pfexp b)=n+1;
-        assume A39: for p being Element of NAT st p is prime
+        assume A37: card(support pfexp b)=n+1;
+        assume A38: for p being Element of NAT st p is prime
           holds p |-count a <= p |-count b;
-         support pfexp b<>{} by A38,CARD_4:17;
+         support pfexp b<>{} by A37,CARD_4:17;
         then consider x being set such that
-        A40: x in support pfexp b by XBOOLE_0:def 1;
-        reconsider x as Prime by A40,NAT_3:34;
-A41:     x in NAT by ORDINAL1:def 13;
+        A39: x in support pfexp b by XBOOLE_0:def 1;
+        reconsider x as Prime by A39,NAT_3:34;
+A40:     x in NAT by ORDINAL1:def 13;
         set a1=a div (x|^(x|-count a));
         set b1=b div (x|^(x|-count b));
         reconsider a1,b1 as non empty Nat by A8;
-        A42: card(support pfexp b1)=n by A14,A38,A40;
+        A41: card(support pfexp b1)=n by A14,A37,A39;
          for p being Element of NAT st p is prime
         holds p |-count a1 <= p |-count b1
-              by A25,A39;
+              by A24,A38;
         then consider d be Element of NAT such that
-        A43: b1=a1*d by A37,A42;
+        A42: b1=a1*d by A36,A41;
         set xcb=x|-count b; set xca=x|-count a;
-         xcb>=xca by A39,A41;
-        then A44: xcb-xca=xcb-'xca by BINARITH:50;
+         xcb>=xca by A38,A40;
+        then A43: xcb-xca=xcb-'xca by BINARITH:50;
          x<>1 by INT_2:def 5;
-        then A45: x|^(xcb) divides b & x|^(xca) divides a by NAT_3:def 7;
-        then A46: b = d*(a div (x|^xca))*(x|^(xca+(xcb-'xca))) by A13,A43,A44
+        then A44: x|^(xcb) divides b & x|^(xca) divides a by NAT_3:def 7;
+        then A45: b = d*(a div (x|^xca))*(x|^(xca+(xcb-'xca))) by A13,A42,A43
         .= d*(a div (x|^xca))*(x|^xca*x|^(xcb-'xca)) by NEWTON:13
         .= d*((a div (x|^xca))*x|^xca)*x|^(xcb-'xca)
-        .= d*a*x|^(xcb-'xca) by A13,A45
+        .= d*a*x|^(xcb-'xca) by A13,A44
         .= a*(d*x|^(xcb-'xca));
         reconsider e=d*x|^(xcb-'xca) as Element of NAT by ORDINAL1:def 13;
         take e;
-        thus b=a*e by A46;
+        thus b=a*e by A45;
       end;
       hence thesis;
     end;
-    A47: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A36);
+    A46: for n being Element of NAT holds P[n] from NAT_1:sch 1(A2,A35);
      ex n1 being Element of NAT st n1=card(support pfexp b);
-    hence thesis by A1,A47;
+    hence thesis by A1,A46;
   end;
 
 theorem Th21:
@@ -2940,7 +2941,7 @@ proof
         assume y in rng f;
         then consider x being set such that
 A6:     x in dom f & y = f.x by FUNCT_1:def 5;
-         f.x = (fn ^ <* 0 *>).x + fn1.x by A6,SEQ_1:def 3;
+         f.x = (fn ^ <* 0 *>).x + fn1.x by A6,VALUED_1:1,def 1;
         hence y in NAT by A6;
       end;
 then   rng f c= NAT by TARSKI:def 3;
@@ -2958,7 +2959,7 @@ then   rng f c= NAT by TARSKI:def 3;
       proof
         let k be Element of NAT;
         assume A10: k in dom f;
-        then A11: f.k = fn0.k + fn1.k by SEQ_1:def 3;
+        then A11: f.k = fn0.k + fn1.k by VALUED_1:1,def 1;
         A12: k in dom fn0 & k in dom fn1 by A7,A10,XBOOLE_0:def 3;
         A13: fn0.k=[\ n/(p|^k) /]
         proof
@@ -3092,7 +3093,7 @@ theorem Th49:
     .= Seg (n+n) by A1,FINSEQ_2:69
     .= Seg (2*n);
     A8: dom ((-(f1^f0))+(-(f1^f0))) = dom (-(f1^f0)) /\ dom (-(f1^f0)) by Th41
-    .= Seg (2*n) by A7,SEQ_1:def 7;
+    .= Seg (2*n) by A7,VALUED_1:8;
     A9: dom f = dom f2 /\ dom ((-(f1^f0))+(-(f1^f0))) by Th41
     .= Seg (2*n) /\ Seg (2*n) by A4,A8,FINSEQ_1:def 3;
     hence len f = 2*n by FINSEQ_1:def 3;
@@ -3102,8 +3103,8 @@ theorem Th49:
       let k be Element of NAT;
       assume A10: k in dom f;
       then A11: k in dom f2 by A4,A9,FINSEQ_1:def 3;
-      A12: f.k = f2.k+((-(f1^f0))+(-(f1^f0))).k by A10,SEQ_1:def 3
-      .=f2.k+((-(f1^f0)).k+(-(f1^f0)).k) by A8,A9,A10,SEQ_1:def 3
+      A12: f.k = f2.k+((-(f1^f0))+(-(f1^f0))).k by A10,VALUED_1:1,def 1
+      .=f2.k+((-(f1^f0)).k+(-(f1^f0)).k) by A8,A9,A10,VALUED_1:1,def 1
       .=f2.k+2*(-(f1^f0)).k
       .=f2.k+2*(-(f1^f0).k) by RVSUM_1:35
       .=f2.k-2*(f1^f0).k

@@ -44,8 +44,8 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="78"/>
+<Adjective nr="45"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -55,14 +55,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="38"/>
 <Adjective nr="39"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
 <Adjective nr="43"/>
 <Adjective nr="44"/>
-<Adjective nr="78"/>
+<Adjective nr="45"/>
+<Adjective nr="79"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -83,9 +83,9 @@
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="44"/>
-<Adjective nr="49"/>
+<Adjective nr="38"/>
+<Adjective nr="45"/>
+<Adjective nr="50"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -106,9 +106,9 @@
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="44"/>
-<Adjective nr="78"/>
+<Adjective nr="38"/>
+<Adjective nr="45"/>
+<Adjective nr="79"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -116,31 +116,8 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="78"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster>
-<Adjective nr="102">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-<Typ kind="M" nr="26">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="78"/>
-</Cluster>
-</CCluster>
-<CCluster>
-<ArgTypes>
-<Typ kind="G" nr="7">
-<Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="44"/>
-<Adjective nr="78"/>
+<Adjective nr="45"/>
+<Adjective nr="79"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -154,7 +131,30 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="78"/>
+<Adjective nr="79"/>
+</Cluster>
+</CCluster>
+<CCluster>
+<ArgTypes>
+<Typ kind="G" nr="7">
+<Cluster>
+<Adjective nr="28" value="false"/>
+<Adjective nr="45"/>
+<Adjective nr="79"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="104">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+<Typ kind="M" nr="26">
+<Cluster/>
+<LocusVar nr="1"/>
+</Typ>
+<Cluster>
+<Adjective nr="79"/>
 </Cluster>
 </CCluster>
 </Registrations>

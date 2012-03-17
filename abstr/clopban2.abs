@@ -11,17 +11,19 @@ environ
       PREPOWER, SERIES_1, BHSP_3, RSSPACE, RSSPACE3, ALGSTR_2, LOPBAN_1,
       LOPBAN_2, SUPINF_2, CLVECT_1, CFUNCT_1, CLOPBAN1, COMPLEX1, CFUNCDOM,
       CLOPBAN2, CSSPACE3, COMSEQ_1, CSSPACE, GROUP_1, XCMPLX_0, VECTSP_2,
-      STRUCT_0;
+      STRUCT_0, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, PARTFUN1, FUNCT_2,
-      PRE_TOPC, BINOP_1, STRUCT_0, XCMPLX_0, XXREAL_0, XREAL_0, ORDINAL1,
-      NUMBERS, REAL_1, NAT_1, PSCOMP_1, RLVECT_1, SEQ_1, SEQ_4, FUNCSDOM,
-      COMPLEX1, GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1, COMSEQ_1, COMSEQ_3,
-      CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM, PREPOWER;
+      PRE_TOPC, BINOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XXREAL_0, XREAL_0,
+      ORDINAL1, NUMBERS, REAL_1, NAT_1, PSCOMP_1, RLVECT_1, VALUED_1, SEQ_1,
+      SEQ_4, FUNCSDOM, COMPLEX1, GROUP_1, VECTSP_1, SERIES_1, CFUNCT_1,
+      COMSEQ_1, COMSEQ_3, CLVECT_1, CSSPACE, CSSPACE3, CLOPBAN1, CFUNCDOM,
+      PREPOWER;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMSEQ_1, PREPOWER,
-      SERIES_1, COMSEQ_3, PSCOMP_1, CSSPACE3, CLOPBAN1, CFUNCDOM;
+      SERIES_1, COMSEQ_3, PSCOMP_1, CSSPACE3, CLOPBAN1, CFUNCDOM, FUNCSDOM,
+      VECTSP_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XCMPLX_0, XXREAL_0, XREAL_0, MEMBERED, COMPLEX1, COMSEQ_1, STRUCT_0,
-      CLVECT_1, CSSPACE3, CLOPBAN1, CFUNCDOM;
+      CLVECT_1, CSSPACE3, CLOPBAN1, CFUNCDOM, ALGSTR_0, VALUED_1, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -169,8 +171,7 @@ for X be ComplexNormSpace
   x+y = y+x &
   (x+y)+z = x+(y+z) &
   x+(0.Ring_of_BoundedLinearOperators(X)) = x &
-  (ex t being Element of Ring_of_BoundedLinearOperators(X) st
-    x+t = 0.Ring_of_BoundedLinearOperators(X)) &
+  x is right_complementable &
   (x*y)*z = x*(y*z) &
   x*(1.Ring_of_BoundedLinearOperators(X)) = x &
   (1.Ring_of_BoundedLinearOperators(X))*x = x &
@@ -221,11 +222,10 @@ for X be ComplexNormSpace
     x+y = y+x &
     (x+y)+z = x+(y+z) &
     x+(0.C_Algebra_of_BoundedLinearOperators(X)) = x &
-    (ex t being Element of C_Algebra_of_BoundedLinearOperators(X) st
-      x+t = 0.C_Algebra_of_BoundedLinearOperators(X)) &
+    x is right_complementable &
     (x*y)*z = x*(y*z) &
-    x*(1_C_Algebra_of_BoundedLinearOperators(X)) = x &
-    (1_C_Algebra_of_BoundedLinearOperators(X))*x = x &
+    x*(1.C_Algebra_of_BoundedLinearOperators(X)) = x &
+    (1.C_Algebra_of_BoundedLinearOperators(X))*x = x &
     x*(y+z) = x*y + x*z &
     (y+z)*x = y*x + z*x &
     a*(x*y) = (a*x)*y &
@@ -236,7 +236,8 @@ for X be ComplexNormSpace
 
 definition
  mode ComplexBLAlgebra is Abelian add-associative right_zeroed
-   right_complementable associative ComplexAlgebra-like
+   right_complementable associative right_unital right-distributive
+   ComplexAlgebra-like
    (non empty ComplexAlgebraStr);
 end;
 
@@ -267,7 +268,7 @@ for X be non trivial ComplexNormSpace holds
 definition
   struct(ComplexAlgebraStr,CNORMSTR) Normed_Complex_AlgebraStr
           (# carrier -> set,
-             mult,add -> (BinOp of the carrier),
+             multF,addF -> (BinOp of the carrier),
              Mult -> (Function of [:COMPLEX,the carrier:],the carrier),
              OneF,ZeroF -> Element of the carrier,
              norm -> Function of the carrier, REAL#);
@@ -313,11 +314,10 @@ for X be ComplexNormSpace
    x+y = y+x &
    (x+y)+z = x+(y+z) &
    x+(0.C_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-   (ex t being Element of C_Normed_Algebra_of_BoundedLinearOperators(X) st
-     x + t = 0.C_Normed_Algebra_of_BoundedLinearOperators(X)) &
+   x is right_complementable &
    (x*y)*z = x*(y*z) &
-   x*(1_C_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
-   (1_C_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
+   x*(1.C_Normed_Algebra_of_BoundedLinearOperators(X)) = x &
+   (1.C_Normed_Algebra_of_BoundedLinearOperators(X))*x = x &
    x*(y+z) = x*y + x*z &
    (y+z)*x = y*x + z*x &
    a*(x*y) = (a*x)*y &
@@ -332,19 +332,22 @@ for X be ComplexNormSpace holds
  C_Normed_Algebra_of_BoundedLinearOperators(X)
   is ComplexNormSpace-like Abelian add-associative
   right_zeroed right_complementable
-     associative ComplexAlgebra-like ComplexLinearSpace-like;
+     associative right_unital right-distributive
+     ComplexAlgebra-like ComplexLinearSpace-like;
 
 registration
   cluster ComplexNormSpace-like Abelian add-associative
      right_zeroed right_complementable
-     associative ComplexAlgebra-like ComplexLinearSpace-like
+     associative right_unital right-distributive
+     ComplexAlgebra-like ComplexLinearSpace-like
      strict (non empty Normed_Complex_AlgebraStr);
 end;
 
 definition
   mode Normed_Complex_Algebra is ComplexNormSpace-like Abelian add-associative
       right_zeroed right_complementable
-      associative ComplexAlgebra-like ComplexLinearSpace-like
+      associative right_unital right-distributive
+      ComplexAlgebra-like ComplexLinearSpace-like
       (non empty Normed_Complex_AlgebraStr);
 end;
 
@@ -353,7 +356,8 @@ registration
   cluster C_Normed_Algebra_of_BoundedLinearOperators(X)
   -> ComplexNormSpace-like Abelian add-associative
      right_zeroed right_complementable
-     associative ComplexAlgebra-like ComplexLinearSpace-like;
+     associative right_unital right-distributive
+     ComplexAlgebra-like ComplexLinearSpace-like;
 end;
 
 definition let X be non empty Normed_Complex_AlgebraStr;
@@ -362,7 +366,7 @@ definition let X be non empty Normed_Complex_AlgebraStr;
        for x,y being Element of X holds ||. x*y .|| <= ||.x.|| * ||.y.||;
   attr X is Banach_Algebra-like_2 means
 :: CLOPBAN2:def 10
-       ||. 1_X .|| = 1;
+       ||. 1.X .|| = 1;
   attr X is Banach_Algebra-like_3 means
 :: CLOPBAN2:def 11
        for a being Complex for x,y being Element of X
@@ -400,12 +404,12 @@ end;
 
 theorem :: CLOPBAN2:21
    for X being ComplexNormSpace holds
-  1_Ring_of_BoundedLinearOperators(X) = FuncUnit(X);
+  1.Ring_of_BoundedLinearOperators(X) = FuncUnit(X);
 
 theorem :: CLOPBAN2:22
    for X being ComplexNormSpace holds
-  1_C_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
+  1.C_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
 
 theorem :: CLOPBAN2:23
    for X being ComplexNormSpace holds
-  1_C_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);
+  1.C_Normed_Algebra_of_BoundedLinearOperators(X) = FuncUnit(X);

@@ -22,8 +22,9 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="MIDSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="MIDSP_2"/>
 <ArticleID name="MIDSP_3"/>
 </Signature>
@@ -31,7 +32,7 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -52,10 +53,10 @@
 <Not>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="107">
+<Func kind="K" nr="106">
 <Var nr="1"/>
 </Func>
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <Func kind="F" nr="1"/>
 <Num nr="1"/>
 </Func>

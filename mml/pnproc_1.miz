@@ -12,18 +12,19 @@ environ
  notations TARSKI, XBOOLE_0, DOMAIN_1, RELAT_1, FUNCT_1, SUBSET_1, FINSET_1,
       PARTFUN1, CARD_1, FINSEQ_1, FUNCT_2, FUNCOP_1, NUMBERS, ORDINAL1,
       XCMPLX_0, NAT_1, BINARITH, MCART_1, FINSEQ_2, FINSEQ_4, LANG1, FUNCT_7,
-      INT_1, XXREAL_0;
+      INT_1, XXREAL_0, VALUED_1;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_1,
-      FINSEQ_4, BINARITH, FUNCT_7, LANG1;
+      FINSEQ_4, BINARITH, FUNCT_7, LANG1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1, NAT_1,
-      XREAL_0, INT_1, FINSEQ_1, FUNCT_7, GRAPH_2, FINSET_1, VALUED_0;
+      XREAL_0, INT_1, FINSEQ_1, FUNCT_7, GRAPH_2, FINSET_1, VALUED_0, VALUED_1,
+      FUNCT_2, MEMBERED, NUMBERS, RELSET_1;
  requirements BOOLE, SUBSET, REAL, NUMERALS, ARITHM;
- definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1;
+ definitions TARSKI, XBOOLE_0, FUNCOP_1, RELAT_1, VALUED_1;
  theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, REAL_1, REAL_2, RELSET_1, FUNCOP_1,
       XBOOLE_1, CARD_1, RELAT_1, MCART_1, INT_1, FINSEQ_1, FUNCT_7, XBOOLE_0,
       TREES_2, FINSEQ_3, ENUMSET1, ZFMISC_1, GRFUNC_1, PRE_CIRC, CARD_2,
       BAGORDER, FINSET_1, GRAPH_2, WELLORD2, FINSEQ_6, XREAL_1, BINARITH,
-      XXREAL_0, ORDINAL1, PARTFUN1;
+      XXREAL_0, ORDINAL1, PARTFUN1, VALUED_1;
  schemes NAT_1, FUNCT_1, FINSEQ_1;
 
 begin :: Preliminaries
@@ -88,7 +89,7 @@ A1:   q = {[i,x]};
 then A2:   i in dom q by RELAT_1:20;
       consider k be Nat such that
 A3:    dom q c= Seg k by FINSEQ_1:def 12;
-          i >= 0+1 by A2,A3,FINSEQ_1:3;
+          i >= 0 qua Nat+1 by A2,A3,FINSEQ_1:3;
 then A4:   i > 0 by NAT_1:13;
       then reconsider p = {[i,x]} as FinSubsequence by Th1;
       A5: Seq q = q* Sgm(dom q) by FINSEQ_1:def 14;
@@ -153,7 +154,7 @@ A3:       dom p = Seg len p by FINSEQ_1:def 3;
 A4:       len p <= 1+1 by CARD_2:69;
               len p <> 0 by CARD_2:59;
           then len p > 0 by NAT_1:3;
-          then A5: len p >= 0+1 by NAT_1:13;
+          then A5: len p >= 0 qua Nat+1 by NAT_1:13;
 A6:    now assume len p = 1;
          hence x1 = 1 & x2 = 1 by A1,A3,FINSEQ_1:4,TARSKI:def 1;
          hence y1 = y2 by A2;
@@ -200,12 +201,12 @@ A1: 1 <= j & j <= l or l+1 <= j & j <= l+k;
     per cases by A1;
     suppose A2: 1 <= j & j <= l;
          0 <= k by NAT_1:2;
-     then l+0 <= l+k by XREAL_1:9;
+     then l+(0 qua Nat) <= l+k by XREAL_1:9;
      hence thesis by A2,XXREAL_0:2;
     end;
     suppose A3: l+1 <= j & j <= l+k;
          0 <= l by NAT_1:2;
-     then 0+1 <= l+1 by XREAL_1:9;
+     then 0 qua Nat+1 <= l+1 by XREAL_1:9;
      hence thesis by A3,XXREAL_0:2;
   end;
   end;
@@ -341,12 +342,22 @@ then A2:  x in f"Y & [x,y] in f by RELAT_1:def 11;
 begin :: Markings on Petri nets
 
 definition let P be set;
- mode marking of P -> Function means :Def1:
+  mode marking of P -> Function means :Def1:
   dom it = P & rng it c= NAT;
- existence
+  existence
   proof consider f being Function of P, NAT;
    take f;
    thus thesis by FUNCT_2:def 1,RELSET_1:12;
+ end;
+end;
+
+definition let P be set;
+ redefine mode marking of P -> Function of P,NAT;
+ coherence
+ proof
+   let f be marking of P;
+   dom f = P & rng f c= NAT by Def1;
+   hence thesis by FUNCT_2:4;
  end;
 end;
 
@@ -371,7 +382,7 @@ definition
 A1:   rng m c= NAT by Def1;
          p in dom m or not p in dom m;
      then m.p in rng m or m.p = 0 by FUNCT_1:12,def 4;
-    hence m.p is Element of NAT by A1,CARD_1:51;
+    hence m.p is Element of NAT by A1;
   end;
  redefine func m.p -> Element of NAT;
  coherence
@@ -379,9 +390,9 @@ A1:   rng m c= NAT by Def1;
 A2:   rng m c= NAT by Def1;
          p in dom m or not p in dom m;
      then m.p in rng m or m.p = 0 by FUNCT_1:12,def 4;
-    hence m.p is Element of NAT by A2,CARD_1:51;
+    hence m.p is Element of NAT by A2;
   end;
- end;
+end;
 
 scheme MarkingLambda { P() -> set, F(set) -> Element of NAT }:
  ex m being marking of P() st
@@ -469,32 +480,40 @@ end;
 definition
  let P be set;
  let m1, m2 be marking of P;
- func m1 + m2 -> marking of P means :Def5:
+ redefine func m1 + m2 -> marking of P means :Def5:
   for p being set st p in P holds
     it multitude_of p = (m1 multitude_of p)+(m2 multitude_of p);
- existence
+ coherence
  proof
-  deffunc F(set) = (m1 multitude_of $1)+(m2 multitude_of $1);
-  thus ex m be marking of P st for p being set st p in P holds
-   m multitude_of p = F(p) from MarkingLambda;
+   dom (m1+m2) = P & rng (m1+m2) c= NAT by FUNCT_2:def 1,RELSET_1:12;
+   hence thesis by Def1;
  end;
- uniqueness
-  proof
-   let M1, M2 being marking of P such that
-A1: for p being set st p in P holds
-     M1 multitude_of p = (m1 multitude_of p)+(m2 multitude_of p) and
-A2: for p being set st p in P holds
-     M2 multitude_of p = (m1 multitude_of p)+(m2 multitude_of p);
-   let p; assume
-A3: p in P;
-   hence M1 multitude_of p = (m1 multitude_of p)+(m2 multitude_of p) by A1
-     .= M2 multitude_of p by A2,A3;
-  end;
- commutativity;
+ compatibility
+ proof
+   let m be marking of P;
+   thus m = m1+m2 implies
+   for p being set st p in P holds
+   m multitude_of p = (m1 multitude_of p)+(m2 multitude_of p) by VALUED_1:1;
+   assume
+A3: for p being set st p in P holds
+   m multitude_of p = (m1 multitude_of p)+(m2 multitude_of p);
+A1: dom m = P by Def1;
+A2: dom (m1+m2) = dom m1 /\ dom m2 by VALUED_1:def 1
+    .= P /\ dom m2 by Def1
+    .= P /\ P by Def1;
+    now
+      let x be set;
+      assume
+A4:   x in dom m;
+      hence m.x = m1.x+m2.x by A3,A1
+      .= (m1+m2).x by A3,A1,A2,A4,VALUED_1:def 1;
+    end;
+   hence thesis by A1,A2,FUNCT_1:9;
+ end;
 end;
 
 theorem
-      m + {$}P = m
+  m + {$}P = m
    proof
          now let p; assume
            p in P;
@@ -1061,7 +1080,7 @@ A6:      F = G^<*x*> & len G = k by A4,TREES_2:4;
              k+1 in dom F
           proof
                 0 <= k by NAT_1:2;
-            then 0+1 <= k+1 by XREAL_1:9;
+            then 0 qua Nat+1 <= k+1 by XREAL_1:9;
             hence thesis by A4,FINSEQ_3:27;
           end;
          then consider t such that
@@ -1584,7 +1603,7 @@ reserve q,q1,q2,q3,q4 for FinSubsequence;
 theorem Th52:
   0 Shift q = q
    proof
-     set X = {0+k where k is Element of NAT: k in dom q};
+     set X = {0 qua Nat+k where k is Element of NAT: k in dom q};
 A1:  dom (0 Shift q) = X by Def15;
 A2:  X = dom q
       proof
@@ -1593,7 +1612,7 @@ A2:  X = dom q
            let x;
            assume x in X;
            then consider k such that
-A3:        x = 0+k & k in dom q;
+A3:        x = 0 qua Nat+k & k in dom q;
            thus x in dom q by A3;
          end;
         let x; assume
@@ -1602,13 +1621,13 @@ A4:     x in dom q;
 A5:     dom q c= Seg l by FINSEQ_1:def 12;
             x in Seg l by A4,A5;
         then reconsider k = x as Element of NAT;
-        x = 0+k;
+        x = 0 qua Nat+k;
         hence x in X by A4;
       end;
          now
        let x; assume x in X;
        then consider k such that
-A6:    x = 0+k & k in dom q;
+A6:    x = 0 qua Nat+k & k in dom q;
        thus (0 Shift q).x = q.x by A6,Def15;
      end;
      hence thesis by A1,A2,FUNCT_1:9;
@@ -1682,7 +1701,7 @@ A4:    k1 = k & 1 <= k & k <= len p by A1,A3;
     x in X;
      then consider j1 such that
 A5:  x = j1 & i+1 <= j1 & j1 <= i+(len p);
-         i+0 <= i+1 by XREAL_1:9;
+         i+(0 qua Nat) <= i+1 by XREAL_1:9;
      then i <= j1 by A5,XXREAL_0:2;
      then consider k2 being Nat such that
 A6: j1 = i+k2 by NAT_1:10;
@@ -1860,7 +1879,8 @@ A6:     dom fs = Seg len fs by FINSEQ_1:def 3
             n+1 <= m by A5,INT_1:20;
         then n+1 <= len fs by A5,XXREAL_0:2;
 then A7:     n <= (len fs) - 1 by XREAL_1:21;
-            (len fs) + 0 <= (len fs) + 1 & n+0 <= n+1 by XREAL_1:9;
+            (len fs) + (0 qua Nat) <= (len fs) + 1 &
+            n+(0 qua Nat) <= n+1 by XREAL_1:9;
         then (len fs) - 1 <= len fs by XREAL_1:22;
         then n <= len fs by A7,XXREAL_0:2;
 then A8:     n in dom p by A2,A5,A6;
@@ -1918,7 +1938,7 @@ then A2:  dom (p1 \/ ((len p1) Shift p2)) = dom p1 by Th55;
     suppose A5: p1 = {} & p2 <> {};
      then dom (p1 \/ ((len p1) Shift p2)) = dom (0 Shift p2) by FINSEQ_1:25
                                     .= dom p2 by Th52
-                                    .= Seg (0+len p2) by FINSEQ_1:def 3
+                                    .= Seg (0 qua Nat+len p2) by FINSEQ_1:def 3
                                     .= Seg (len p1 + len p2) by A5,FINSEQ_1:25;
      hence thesis;
     end;
@@ -2632,7 +2652,8 @@ A14:     dom fs = Seg len fs by FINSEQ_1:def 3
             n+1 <= m by A13,INT_1:20;
         then n+1 <= len fs by A13,XXREAL_0:2;
 then A15:     n <= (len fs) - 1 by XREAL_1:21;
-            (len fs) + 0 <= (len fs) + 1 & n+0 <= n+1 by XREAL_1:9;
+            (len fs) + (0 qua Nat) <= (len fs) + 1 &
+            n+(0 qua Nat) <= n+1 by XREAL_1:9;
         then (len fs) - 1 <= len fs by XREAL_1:22;
         then n <= len fs by A15,XXREAL_0:2;
 then A16:     n in dom Seq q by A5,A12,A13,A14;
@@ -2703,7 +2724,7 @@ A5:  x = i+j1 & j1 in dom q by A2;
      then consider j2 such that
 A6:  j1 = j2 & 1 <= j2 & j2 <= k by A3;
          0 <= i by NAT_1:2;
-     then A7: 0+1 <= i+j1 by A6,XREAL_1:9;
+     then A7: 0 qua Nat+1 <= i+j1 by A6,XREAL_1:9;
          i+j1 <= i+k by A6,XREAL_1:9;
      hence x in Seg (i+k) by A4,A5,A7;
    end;
@@ -2724,7 +2745,7 @@ A3:  dom q2 c= Seg k by FINSEQ_1:def 12;
      then
 A4:  dom (len p Shift q2) c= Seg (len p + k) by A3,Th78;
          0 <= k by NAT_1:2;
-     then len p + 0 <= len p + k by XREAL_1:9;
+     then len p + (0 qua Nat) <= len p + k by XREAL_1:9;
      then Seg len p c= Seg (len p + k) by FINSEQ_1:7;
      then dom q1 c= Seg (len p + k) by A1,A2,XBOOLE_1:1;
      then dom q1 \/ dom (len p Shift q2) c= Seg (len p + k) by A4,XBOOLE_1:8;
@@ -2875,7 +2896,8 @@ A19:     0 <= len Seq q1 & 0 <= len Seq q2 by NAT_1:2;
 A20:     now assume x in dom Seq q1;
           then consider k1 such that
 A21:       x = k1 & 1 <= k1 & k1 <= len Seq q1 by A13;
-              len Seq q1 + 0 <= len Seq q1 + len Seq q2 by A19,XREAL_1:9;
+              len Seq q1 + (0 qua Nat) <= len Seq q1 + len Seq q2
+              by A19,XREAL_1:9;
           then k1 <= len Seq q1 + len Seq q2 by A21,XXREAL_0:2;
           hence x in Seg (len Seq q1 + len Seq q2) by A12,A21;
         end;
@@ -2883,7 +2905,7 @@ A21:       x = k1 & 1 <= k1 & k1 <= len Seq q1 by A13;
           then consider k2 such that
 A22:       x = k2 & len Seq q1 + 1 <= k2 & k2 <= len Seq q1 + len Seq q2 by A14
 ;
-              0+1 <= len Seq q1 + 1 by A19,XREAL_1:9;
+              0 qua Nat+1 <= len Seq q1 + 1 by A19,XREAL_1:9;
           then 1 <= k2 by A22,XXREAL_0:2;
           hence x in Seg (len Seq q1 + len Seq q2) by A12,A22;
         end;

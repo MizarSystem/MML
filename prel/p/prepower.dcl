@@ -19,26 +19,32 @@
 <ArticleID name="COMPLEX1"/>
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="PREPOWER"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="4">
 <Cluster/>
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
 </Typ>
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="7" value="false"/>
 <Adjective nr="8">
-<Func kind="K" nr="83"/>
-<Func kind="K" nr="79"/>
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
 </Adjective>
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="28"/>
+<Adjective nr="28">
+<Func kind="K" nr="82"/>
+<Func kind="K" nr="78"/>
+</Adjective>
+<Adjective nr="29"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -49,7 +55,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="114">
+<Func kind="K" nr="113">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -70,7 +76,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="122">
+<Func kind="K" nr="128">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -91,7 +97,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="124">
+<Func kind="K" nr="130">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

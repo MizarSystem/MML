@@ -10,18 +10,18 @@ environ
       LATTICES, RELAT_1, NORMSP_1, ARYTM_3, POLYNOM3, ARYTM_1, GROUP_1,
       ALGSTR_1, ALGSTR_2, FINSEQ_1, RFINSEQ, MATRIX_2, FINSEQ_4, BOOLE,
       UNIALG_2, RLSUB_1, SETFAM_1, POLYNOM1, ALGSEQ_1, POLYALG1, REALSET1,
-      VECTSP_2, STRUCT_0, ARYTM;
+      VECTSP_2, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, NUMBERS, XCMPLX_0,
-      REALSET1, STRUCT_0, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
-      FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1, RLVECT_1,
-      VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1, POLYNOM3,
-      POLYNOM5, VECTSP_4, XXREAL_0;
+      REALSET1, STRUCT_0, ALGSTR_0, NAT_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2,
+      FINSEQ_1, FINSEQ_4, FINSOP_1, RFINSEQ, BINOP_1, BINARITH, GROUP_1,
+      RLVECT_1, VECTSP_1, NORMSP_1, BHSP_1, POLYNOM1, ALGSTR_1, ALGSEQ_1,
+      POLYNOM3, POLYNOM5, VECTSP_4, XXREAL_0;
  constructors FINSEQ_4, SETFAM_1, BINOP_1, XXREAL_0, FINSOP_1, REALSET1,
       RFINSEQ, BINARITH, ALGSTR_1, VECTSP_4, BHSP_1, POLYNOM1, POLYNOM3,
-      POLYNOM5, SEQ_1;
+      POLYNOM5, SEQ_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, XREAL_0, NAT_1, FINSEQ_1,
       REALSET1, STRUCT_0, VECTSP_1, FVSUM_1, POLYNOM3, POLYNOM5, BINOM,
-      ORDINAL1;
+      ORDINAL1, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -30,7 +30,7 @@ begin :: Preliminaries
 definition let F be 1-sorted;
  struct ( doubleLoopStr,VectSpStr over F ) AlgebraStr over F (#
          carrier -> set,
-         add, mult -> BinOp of the carrier,
+         addF, multF -> BinOp of the carrier,
          ZeroF, OneF -> Element of the carrier,
          lmult -> Function of [:the carrier of F,the carrier:],
                                       the carrier #);
@@ -112,13 +112,13 @@ definition
 
   registration
    let L be Abelian add-associative right_zeroed right_complementable
-   unital associative distributive (non empty doubleLoopStr);
+   well-unital associative distributive (non empty doubleLoopStr);
    cluster Formal-Series L -> associative;
   end;
 
 registration
   cluster add-associative associative right_zeroed left_zeroed
-    right_unital left_unital
+    well-unital
     right_complementable distributive (non empty doubleLoopStr);
 end;
 
@@ -141,7 +141,7 @@ end;
 registration
   let L be right_zeroed add-associative right_complementable
     distributive well-unital (non empty doubleLoopStr);
-  cluster Formal-Series L -> unital;
+  cluster Formal-Series L -> well-unital;
 end;
 
 registration
@@ -171,7 +171,7 @@ theorem :: POLYALG1:8
 
 theorem :: POLYALG1:9
    for L be associative well-unital (non empty doubleLoopStr)
-   for p being sequence of L holds 1_L*p = p;
+   for p being sequence of L holds 1.L*p = p;
 
 registration
    let L be Abelian add-associative associative right_zeroed
@@ -197,8 +197,8 @@ definition
  mode Subalgebra of A -> AlgebraStr over L means
 :: POLYALG1:def 3
   the carrier of it c= the carrier of A & 1.it = 1.A & 0.it = 0.A &
-  the add of it = (the add of A)||the carrier of it &
-  the mult of it = (the mult of A)||the carrier of it &
+  the addF of it = (the addF of A)||the carrier of it &
+  the multF of it = (the multF of A)||the carrier of it &
   the lmult of it = (the lmult of A)|[:the carrier of L,the carrier of it:];
 end;
 
@@ -239,7 +239,7 @@ registration
 end;
 
 definition
-  let L be non empty HGrStr;
+  let L be non empty multMagma;
   let B be non empty AlgebraStr over L;
   let A be Subset of B;
   attr A is opers_closed means
@@ -251,7 +251,7 @@ definition
 end;
 
 theorem :: POLYALG1:15
-for L being non empty HGrStr
+for L being non empty multMagma
 for B being non empty AlgebraStr over L
 for A being non empty Subalgebra of B holds
 for x,y being Element of B,
@@ -259,7 +259,7 @@ x',y' being Element of A st x = x' & y = y' holds
 x+y = x'+ y';
 
 theorem :: POLYALG1:16
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B holds
 for x,y being Element of B,
@@ -267,7 +267,7 @@ x',y' being Element of A st x = x' & y = y' holds
  x*y = x'* y';
 
 theorem :: POLYALG1:17
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B holds
 for a being Element of L
@@ -278,19 +278,19 @@ x' being Element of A st x = x' holds
 canceled;
 
 theorem :: POLYALG1:19
-     for L be non empty HGrStr
+     for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subalgebra of B ex C being Subset of B st
 the carrier of A = C & C is opers_closed;
 
 theorem :: POLYALG1:20
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be Subset of B st A is opers_closed ex C being strict Subalgebra of B
 st the carrier of C = A;
 
 theorem :: POLYALG1:21
-for L being non empty HGrStr
+for L being non empty multMagma
 for B being non empty AlgebraStr over L
 for A being non empty Subset of B
 for X being Subset-Family of B st
@@ -299,7 +299,7 @@ for X being Subset-Family of B st
      meet X is opers_closed;
 
 definition
-let L be non empty HGrStr;
+let L be non empty multMagma;
 let B be non empty AlgebraStr over L;
 let A be non empty Subset of B;
  func GenAlg A -> strict non empty Subalgebra of B means
@@ -310,7 +310,7 @@ let A be non empty Subset of B;
 end;
 
 theorem :: POLYALG1:22
-for L be non empty HGrStr
+for L be non empty multMagma
 for B be non empty AlgebraStr over L
 for A be non empty Subset of B st A is opers_closed holds
 the carrier of GenAlg A = A;

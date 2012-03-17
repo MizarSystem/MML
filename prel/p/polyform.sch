@@ -18,6 +18,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -47,7 +48,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="78"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,7 +57,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="23">
-<Func kind="K" nr="296">
+<Func kind="K" nr="304">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -66,7 +67,7 @@
 <For>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="296">
+<Func kind="K" nr="304">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -85,7 +86,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="296">
+<Func kind="K" nr="304">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -101,7 +102,7 @@
 </Pred>
 <Pred kind="R" nr="2">
 <Var nr="2"/>
-<Func kind="K" nr="296">
+<Func kind="K" nr="304">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>

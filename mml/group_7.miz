@@ -9,19 +9,19 @@ environ
  vocabularies FINSEQ_1, FUNCT_1, PBOOLE, RELAT_1, VECTSP_1, PRALG_1, RLVECT_2,
       ZF_REFLE, CARD_3, TARSKI, BINOP_1, GROUP_1, REALSET1, BOOLE, SEMI_AF1,
       GROUP_2, FINSET_1, FUNCT_4, GROUP_6, WELLORD1, GROUP_7, FUNCOP_1,
-      MONOID_0, ARYTM;
+      MONOID_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       NUMBERS, NAT_1, FINSEQ_1, RELSET_1, FUNCT_2, FUNCT_4, FINSET_1, BINOP_1,
-      REALSET1, XXREAL_0, PBOOLE, PRE_CIRC, STRUCT_0, MONOID_0, GROUP_1,
-      GROUP_2, GROUP_6, CARD_3, PRALG_1, PRALG_2;
+      REALSET1, XXREAL_0, PBOOLE, PRE_CIRC, STRUCT_0, ALGSTR_0, MONOID_0,
+      GROUP_1, GROUP_2, GROUP_6, CARD_3, PRALG_1, PRALG_2;
  constructors BINOP_1, XXREAL_0, REALSET1, PRE_CIRC, GROUP_6, MONOID_0,
-      PRALG_1, PRALG_2;
+      PRALG_1, PRALG_2, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, XREAL_0,
       FINSEQ_1, REALSET1, STRUCT_0, GROUP_1, GROUP_2, MONOID_0, PRALG_2,
-      ORDINAL1, CARD_3;
+      ORDINAL1, CARD_3, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET;
  definitions STRUCT_0, GROUP_1, TARSKI, GROUP_2, GROUP_6, FINSEQ_1, XBOOLE_0,
-      PRALG_1, FUNCT_1, PBOOLE, BINOP_1, REALSET1;
+      PRALG_1, FUNCT_1, PBOOLE, BINOP_1, REALSET1, ALGSTR_0, VALUED_1;
  theorems PRALG_1, FUNCT_1, PBOOLE, STRUCT_0, CARD_3, FUNCT_2, BINOP_1, TARSKI,
       ZFMISC_1, GROUP_1, GROUP_2, GROUP_6, FUNCT_4, FINSEQ_1, FINSEQ_3,
       ENUMSET1, RELSET_1, XBOOLE_0, XBOOLE_1, RELAT_1, FUNCOP_1, MONOID_0,
@@ -49,7 +49,7 @@ reserve i, I for set,
 
 definition let R be Relation;
  attr R is HGrStr-yielding means :Def1:
-  for y being set st y in rng R holds y is non empty HGrStr;
+  for y being set st y in rng R holds y is non empty multMagma;
 end;
 
 registration
@@ -69,14 +69,14 @@ registration let I be set;
  cluster HGrStr-yielding ManySortedSet of I;
 existence
   proof
-    consider H being non empty HGrStr;
+    consider H being non empty multMagma;
     set f = I --> H;
     take f;
     let a be set;
     assume a in rng f;
 then A1: ex x being set st x in dom f & a = f.x by FUNCT_1:def 5;
          dom f = I by PBOOLE:def 3;
-    hence a is non empty HGrStr by A1,FUNCOP_1:13;
+    hence a is non empty multMagma by A1,FUNCOP_1:13;
   end;
 end;
 
@@ -97,7 +97,7 @@ end;
 definition let I be non empty set,
                F be HGrStr-Family of I,
                i be Element of I;
- redefine func F.i -> non empty HGrStr;
+ redefine func F.i -> non empty multMagma;
 coherence
   proof
          dom F = I by PBOOLE:def 3;
@@ -116,7 +116,7 @@ then A2: ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
       by PRALG_1:def 13;
          dom F = I by PBOOLE:def 3;
     then F.i in rng F by A1,FUNCT_1:def 5;
-    then F.i is non empty HGrStr by Def1;
+    then F.i is non empty multMagma by Def1;
     hence thesis by A2,STRUCT_0:def 1;
   end;
 end;
@@ -133,25 +133,26 @@ end;
 
 definition let I be set,
                F be HGrStr-Family of I;
- func product F -> strict HGrStr means :Def2:
+ func product F -> strict multMagma means :Def2:
   the carrier of it = product Carrier F &
   for f, g being Element of product Carrier F, i being set st i in I
-   ex Fi being non empty HGrStr, h being Function st
-    Fi = F.i & h = (the mult of it).(f,g) &
-   h.i = (the mult of Fi).(f.i,g.i);
+   ex Fi being non empty multMagma, h being Function st
+    Fi = F.i & h = (the multF of it).(f,g) &
+   h.i = (the multF of Fi).(f.i,g.i);
 existence
   proof
     set A = product Carrier F;
 A1: dom Carrier F = I by PBOOLE:def 3;
 defpred P[Element of A, Element of A, set] means
-  for i being set st i in I ex Fi being non empty HGrStr, h being Function st
-    Fi = F.i & h = $3 & h.i = (the mult of Fi).($1.i,$2.i);
+  for i being set st i in I ex Fi being non empty multMagma,
+      h being Function st
+    Fi = F.i & h = $3 & h.i = (the multF of Fi).($1.i,$2.i);
 A2: for x, y being Element of A ex z being Element of A st P[x,y,z]
     proof
       let x, y be Element of A;
 defpred R[set,set] means
- ex Fi being non empty HGrStr st Fi = F.$1 &
-  $2 = (the mult of Fi).(x.$1,y.$1);
+ ex Fi being non empty multMagma st Fi = F.$1 &
+  $2 = (the multF of Fi).(x.$1,y.$1);
 A3:   for i being set st i in I ex w being set st w in union rng Carrier F &
         R[i,w]
       proof
@@ -160,12 +161,12 @@ A4:       i in I;
         then reconsider I1 = I as non empty set;
         reconsider i1 = i as Element of I1 by A4;
         reconsider F1 = F as HGrStr-Family of I1;
-        take w = (the mult of (F1.i1)).(x.i1,y.i1);
+        take w = (the multF of (F1.i1)).(x.i1,y.i1);
 A5:     ex R being 1-sorted st R = F.i1 & (Carrier F1).i1 = the carrier of R
           by PRALG_1:def 13;
         then x.i1 in the carrier of (F1.i1) & y.i1 in the carrier of (F1.i1)
           by A1,CARD_3:18;
-        then A6: (the mult of (F1.i1)).(x.i1,y.i1) in the carrier of (F1.i1)
+        then A6: (the multF of (F1.i1)).(x.i1,y.i1) in the carrier of (F1.i1)
           by BINOP_1:29;
              (Carrier F).i1 in rng Carrier F by A1,FUNCT_1:def 5;
         hence w in union rng Carrier F by A5,A6,TARSKI:def 4;
@@ -180,8 +181,8 @@ A8:   dom z = dom Carrier F by A7,PBOOLE:def 3;
       proof
         let i be set; assume
 A9:      i in dom Carrier F;
-then A10:    ex Fi being non empty HGrStr st Fi = F.i &
-         z.i = (the mult of Fi).(x.i,y.i) by A1,A7;
+then A10:    ex Fi being non empty multMagma st Fi = F.i &
+         z.i = (the multF of Fi).(x.i,y.i) by A1,A7;
 A11:    ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
             by A1,A9,PRALG_1:def 13;
         reconsider I1 = I as non empty set by A9,PBOOLE:def 3;
@@ -195,16 +196,16 @@ A11:    ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
       take z;
       let i be set;
       assume i in I;
-      then consider Fi being non empty HGrStr such that
-A12:    Fi = F.i & z.i = (the mult of Fi).(x.i,y.i) by A7;
+      then consider Fi being non empty multMagma such that
+A12:    Fi = F.i & z.i = (the multF of Fi).(x.i,y.i) by A7;
       take Fi, z;
-      thus Fi = F.i & z = z & z.i = (the mult of Fi).(x.i,y.i) by A12;
+      thus Fi = F.i & z = z & z.i = (the multF of Fi).(x.i,y.i) by A12;
     end;
     consider B being BinOp of A such that
 A13:  for a, b being Element of A holds P[a,b,B.(a,b)]
        from BINOP_1:sch 3(A2);
-    take HGrStr (#A,B#);
-    thus the carrier of HGrStr (#A,B#) = product Carrier F;
+    take multMagma (#A,B#);
+    thus the carrier of multMagma (#A,B#) = product Carrier F;
     let f, g be Element of product Carrier F,
         i be set;
     assume i in I;
@@ -212,18 +213,20 @@ A13:  for a, b being Element of A holds P[a,b,B.(a,b)]
   end;
 uniqueness
   proof
-    let A, B be strict HGrStr such that
+    let A, B be strict multMagma such that
 A14:  the carrier of A = product Carrier F and
 A15:  for f, g being Element of product Carrier F, i being set st i in I
-      ex Fi being non empty HGrStr, h being Function st
-       Fi = F.i & h = (the mult of A).(f,g) & h.i = (the mult of Fi).(f.i,g.i)
+      ex Fi being non empty multMagma, h being Function st
+       Fi = F.i & h = (the multF of A).(f,g) &
+       h.i = (the multF of Fi).(f.i,g.i)
      and
 A16:  the carrier of B = product Carrier F and
 A17:  for f, g being Element of product Carrier F, i being set st i in I
-      ex Fi being non empty HGrStr, h being Function st
-       Fi = F.i & h = (the mult of B).(f,g) & h.i = (the mult of Fi).(f.i,g.i);
+      ex Fi being non empty multMagma, h being Function st
+       Fi = F.i & h = (the multF of B).(f,g) &
+       h.i = (the multF of Fi).(f.i,g.i);
          for x, y being set st x in the carrier of A & y in the carrier of A
-     holds (the mult of A).(x,y) = (the mult of B).(x,y)
+     holds (the multF of A).(x,y) = (the multF of B).(x,y)
     proof
       let x, y be set such that
 A18:     x in the carrier of A & y in the carrier of A;
@@ -232,11 +235,11 @@ A18:     x in the carrier of A & y in the carrier of A;
            [x1,y1] in [:the carrier of A, the carrier of A:] by A18,
 ZFMISC_1:106
 ;
-       then reconsider f = (the mult of A).[x1,y1] as Element of P
+       then reconsider f = (the multF of A).[x1,y1] as Element of P
         by A14,FUNCT_2:7;
            [x1,y1] in [:the carrier of B, the carrier of B:]
         by A16,ZFMISC_1:106;
-      then reconsider g = (the mult of B).[x1,y1] as Element of P
+      then reconsider g = (the multF of B).[x1,y1] as Element of P
         by A16,FUNCT_2:7;
            dom Carrier F = I by PBOOLE:def 3;
 then A19:  dom f = I & dom g = I by CARD_3:18;
@@ -244,16 +247,16 @@ then A19:  dom f = I & dom g = I by CARD_3:18;
       proof
         let i be set; assume
 A20:      i in I;
-        then consider Fi being non empty HGrStr,
+        then consider Fi being non empty multMagma,
                  h1 being Function such that
-A21:      Fi = F.i & h1 = (the mult of A).(x1,y1) &
-           h1.i = (the mult of Fi).(x1.i,y1.i) by A15;
-    ex Gi being non empty HGrStr, h2 being Function st
-         Gi = F.i & h2 = (the mult of B).(x1,y1) &
-          h2.i = (the mult of Gi).(x1.i,y1.i) by A17,A20;
+A21:      Fi = F.i & h1 = (the multF of A).(x1,y1) &
+           h1.i = (the multF of Fi).(x1.i,y1.i) by A15;
+    ex Gi being non empty multMagma, h2 being Function st
+         Gi = F.i & h2 = (the multF of B).(x1,y1) &
+          h2.i = (the multF of Gi).(x1.i,y1.i) by A17,A20;
         hence f.i = g.i by A21;
       end;
-      hence (the mult of A).(x,y) = (the mult of B).(x,y) by A19,FUNCT_1:9;
+      hence (the multF of A).(x,y) = (the multF of B).(x,y) by A19,FUNCT_1:9;
     end;
     hence thesis by A14,A16,BINOP_1:1;
   end;
@@ -270,14 +273,14 @@ A1:   the carrier of product F = product Carrier F by Def2;
 end;
 
 theorem Th4:
- for F being HGrStr-Family of I, G being non empty HGrStr,
+ for F being HGrStr-Family of I, G being non empty multMagma,
      p, q being Element of product F,
      x, y being Element of G st
    i in I & G = F.i & f = p & g = q & h = p * q & f.i = x & g.i = y holds
   x * y = h.i
   proof
     let F be HGrStr-Family of I,
-        G be non empty HGrStr,
+        G be non empty multMagma,
         p, q be Element of product F,
         x, y be Element of G such that
 A1:   i in I and
@@ -287,21 +290,21 @@ A4:   h = p * q & f.i = x & g.i = y;
     set GP = product F;
          p in the carrier of GP & q in the carrier of GP;
     then f in product Carrier F & g in product Carrier F by A3,Def2;
-    then consider Fi being non empty HGrStr, m being Function such that
-A5:  Fi = F.i & m = (the mult of GP).(f,g) &
-      m.i = (the mult of Fi).(f.i,g.i) by A1,Def2;
+    then consider Fi being non empty multMagma, m being Function such that
+A5:  Fi = F.i & m = (the multF of GP).(f,g) &
+      m.i = (the multF of Fi).(f.i,g.i) by A1,Def2;
     thus x * y = h.i by A2,A3,A4,A5;
   end;
 
 definition let I be set, F be HGrStr-Family of I;
  attr F is Group-like means :Def3:
-  for i being set st i in I ex Fi being Group-like (non empty HGrStr)
+  for i being set st i in I ex Fi being Group-like (non empty multMagma)
    st Fi = F.i;
  attr F is associative means :Def4:
-  for i being set st i in I ex Fi being associative (non empty HGrStr)
+  for i being set st i in I ex Fi being associative (non empty multMagma)
    st Fi = F.i;
  attr F is commutative means :Def5:
-  for i being set st i in I ex Fi being commutative (non empty HGrStr)
+  for i being set st i in I ex Fi being commutative (non empty multMagma)
    st Fi = F.i;
 end;
 
@@ -314,7 +317,7 @@ compatibility
       assume
 A1:     F is Group-like;
       let i be Element of I;
-           ex Fi being Group-like (non empty HGrStr) st Fi = F.i by A1,Def3;
+           ex Fi being Group-like (non empty multMagma) st Fi = F.i by A1,Def3;
       hence F.i is Group-like;
     end;
     assume
@@ -322,7 +325,7 @@ A2:   for i being Element of I holds F.i is Group-like;
     let i be set;
     assume i in I;
     then reconsider i1 = i as Element of I;
-    reconsider F1 = F.i1 as Group-like (non empty HGrStr) by A2;
+    reconsider F1 = F.i1 as Group-like (non empty multMagma) by A2;
     take F1;
     thus thesis;
   end;
@@ -334,7 +337,8 @@ compatibility
       assume
 A3:     F is associative;
       let i be Element of I;
-           ex Fi being associative (non empty HGrStr) st Fi = F.i by A3,Def4;
+           ex Fi being associative (non empty multMagma) st Fi = F.i
+            by A3,Def4;
       hence F.i is associative;
     end;
     assume
@@ -342,7 +346,7 @@ A4:   for i being Element of I holds F.i is associative;
     let i be set;
     assume i in I;
     then reconsider i1 = i as Element of I;
-    reconsider Fi = F.i1 as associative (non empty HGrStr) by A4;
+    reconsider Fi = F.i1 as associative (non empty multMagma) by A4;
     take Fi;
     thus thesis;
   end;
@@ -354,7 +358,8 @@ compatibility
       assume
 A5:     F is commutative;
       let i be Element of I;
-           ex Fi being commutative (non empty HGrStr) st Fi = F.i by A5,Def5;
+           ex Fi being commutative (non empty multMagma) st Fi = F.i
+            by A5,Def5;
       hence F.i is commutative;
     end;
     assume
@@ -362,7 +367,7 @@ A6:   for i being Element of I holds F.i is commutative;
     let i be set;
     assume i in I;
     then reconsider i1 = i as Element of I;
-    reconsider Fi = F.i1 as commutative (non empty HGrStr) by A6;
+    reconsider Fi = F.i1 as commutative (non empty multMagma) by A6;
     take Fi;
     thus thesis;
   end;
@@ -381,7 +386,7 @@ existence
       assume i in rng f;
 then A1:   ex x being set st x in dom f & i = f.x by FUNCT_1:def 5;
            dom f = I by PBOOLE:def 3;
-      hence i is non empty HGrStr by A1,FUNCOP_1:13;
+      hence i is non empty multMagma by A1,FUNCOP_1:13;
     end;
     then reconsider f as HGrStr-Family of I;
     take f;
@@ -391,7 +396,7 @@ A2:     i in I;
       then reconsider I1 = I as non empty set;
       reconsider i1 = i as Element of I1 by A2;
       reconsider F1 = f as HGrStr-Family of I1;
-      reconsider Fi = F1.i1 as Group-like (non empty HGrStr) by FUNCOP_1:13;
+      reconsider Fi = F1.i1 as Group-like (non empty multMagma) by FUNCOP_1:13;
       take Fi;
       thus Fi = f.i;
     end;
@@ -401,7 +406,8 @@ A3:     i in I;
       then reconsider I1 = I as non empty set;
       reconsider i1 = i as Element of I1 by A3;
       reconsider F1 = f as HGrStr-Family of I1;
-      reconsider Fi = F1.i1 as associative (non empty HGrStr) by FUNCOP_1:13;
+      reconsider Fi = F1.i1 as associative (non empty multMagma)
+       by FUNCOP_1:13;
       take Fi;
       thus Fi = f.i;
     end;
@@ -410,7 +416,7 @@ A4:   i in I;
     then reconsider I1 = I as non empty set;
     reconsider i1 = i as Element of I1 by A4;
     reconsider F1 = f as HGrStr-Family of I1;
-    reconsider Fi = F1.i1 as commutative (non empty HGrStr) by FUNCOP_1:13;
+    reconsider Fi = F1.i1 as commutative (non empty multMagma) by FUNCOP_1:13;
     take Fi;
     thus Fi = f.i;
   end;
@@ -422,7 +428,7 @@ coherence
   proof
     set G = product F;
 defpred P[set,set] means
- ex Fi being non empty HGrStr,
+ ex Fi being non empty multMagma,
     e being Element of Fi st Fi = F.$1 & $2 = e &
    for h being Element of Fi holds h * e = h & e * h = h &
     ex g being Element of Fi st h * g = e & g * h = e;
@@ -457,7 +463,7 @@ A7:   for x being set st x in I holds P[x,ee.x] from WELLORD2:sch 1(A2);
          now
       let i be set; assume
 A8:    i in dom ee;
-      then consider Fi being non empty HGrStr,
+      then consider Fi being non empty multMagma,
                e being Element of Fi such that
 A9:    Fi = F.i & ee.i = e &
        for h being Element of Fi holds h * e = h & e * h = h &
@@ -472,16 +478,16 @@ then A10:ee in product Carrier F by A1,A6,CARD_3:18;
     take e1;
     let h be Element of G;
     reconsider h1 = h as Element of product Carrier F by Def2;
-    reconsider he = (the mult of G).(h,e1), eh = (the mult of G).(e1,h)
+    reconsider he = (the multF of G).(h,e1), eh = (the multF of G).(e1,h)
       as Element of product Carrier F by Def2;
 A11:dom he = I & dom eh = I & dom h1 = I by A1,CARD_3:18;
          now
       let i be set; assume
 A12:     i in I;
-then A13:  ex Gi being non empty HGrStr, f being Function st
-        Gi = F.i & f = (the mult of G).(h1,e1) &
-        f.i = (the mult of Gi).(h1.i,ee.i) by A10,Def2;
-      consider Fi being non empty HGrStr,
+then A13:  ex Gi being non empty multMagma, f being Function st
+        Gi = F.i & f = (the multF of G).(h1,e1) &
+        f.i = (the multF of Gi).(h1.i,ee.i) by A10,Def2;
+      consider Fi being non empty multMagma,
                e2 being Element of Fi such that
 A14:   Fi = F.i & ee.i = e2 &
        for h being Element of Fi holds h * e2 = h & e2 * h = h &
@@ -495,10 +501,10 @@ A14:   Fi = F.i & ee.i = e2 &
          now
       let i be set; assume
 A15:    i in I;
-then A16:  ex Gi being non empty HGrStr, f being Function st
-        Gi = F.i & f = (the mult of G).(e1,h1) &
-        f.i = (the mult of Gi).(ee.i,h1.i) by A10,Def2;
-      consider Fi being non empty HGrStr,
+then A16:  ex Gi being non empty multMagma, f being Function st
+        Gi = F.i & f = (the multF of G).(e1,h1) &
+        f.i = (the multF of Gi).(ee.i,h1.i) by A10,Def2;
+      consider Fi being non empty multMagma,
                e2 being Element of Fi such that
 A17:   Fi = F.i & ee.i = e2 &
        for h being Element of Fi holds h * e2 = h & e2 * h = h &
@@ -510,7 +516,7 @@ A17:   Fi = F.i & ee.i = e2 &
     end;
     hence e1 * h = h by A11,FUNCT_1:9;
 defpred R[set,set] means
- ex Fi being non empty HGrStr,
+ ex Fi being non empty multMagma,
     hi being Element of Fi st Fi = F.$1 & hi = h1.$1 &
   ex g being Element of Fi st hi * g = ee.$1 & g * hi = ee.$1
      & $2 = g;
@@ -519,7 +525,7 @@ A18:for i being set st i in I ex y being set st
     proof
       let i be set; assume
 A19:    i in I;
-      then consider Fi being non empty HGrStr,
+      then consider Fi being non empty multMagma,
                e being Element of Fi such that
 A20:    Fi = F.i & ee.i = e and
 A21:    for h being Element of Fi holds h * e = h & e * h = h &
@@ -546,7 +552,7 @@ A25:  for x being set st x in I holds R[x,gg.x] from WELLORD2:sch 1(A18);
 A26:    i in dom gg;
 then A27:  ex R being 1-sorted st R = F.i & (Carrier F).i = the carrier of R
        by A24,PRALG_1:def 13;
-      consider Fi being non empty HGrStr,
+      consider Fi being non empty multMagma,
                hi being Element of Fi such that
 A28:    Fi = F.i & hi = h1.i &
         ex g being Element of Fi
@@ -556,34 +562,34 @@ A28:    Fi = F.i & hi = h1.i &
 then A29:gg in product Carrier F by A1,A24,CARD_3:18;
     then reconsider g1 = gg as Element of G by Def2;
     take g1;
-    reconsider he = (the mult of G).(h,g1), eh = (the mult of G).(g1,h)
+    reconsider he = (the multF of G).(h,g1), eh = (the multF of G).(g1,h)
       as Element of product Carrier F by Def2;
 A30:dom he = I & dom eh = I by A1,CARD_3:18;
          now
       let i be set; assume
 A31:    i in I;
-then A32:  ex Fi being non empty HGrStr,
+then A32:  ex Fi being non empty multMagma,
          hi being Element of Fi st
        Fi = F.i & hi = h1.i &
         ex g being Element of Fi st
          hi * g = ee.i & g * hi = ee.i & gg.i = g by A25;
-      consider Gi being non empty HGrStr, h5 being Function such that
-A33:    Gi = F.i & h5 = (the mult of G).(h1,gg) &
-        h5.i = (the mult of Gi).(h1.i,gg.i) by A29,A31,Def2;
+      consider Gi being non empty multMagma, h5 being Function such that
+A33:    Gi = F.i & h5 = (the multF of G).(h1,gg) &
+        h5.i = (the multF of Gi).(h1.i,gg.i) by A29,A31,Def2;
       thus he.i = ee.i by A32,A33;
     end;
     hence h * g1 = e1 by A6,A30,FUNCT_1:9;
          now
       let i be set; assume
 A34:    i in I;
-      then consider Fi being non empty HGrStr,
+      then consider Fi being non empty multMagma,
                hi being Element of Fi such that
 A35:    Fi = F.i & hi = h1.i &
         ex g being Element of Fi st
          hi * g = ee.i & g * hi = ee.i & gg.i = g by A25;
-      consider Gi being non empty HGrStr, h5 being Function such that
-A36:    Gi = F.i & h5 = (the mult of G).(gg,h1) &
-        h5.i = (the mult of Gi).(gg.i,h1.i) by A29,A34,Def2;
+      consider Gi being non empty multMagma, h5 being Function such that
+A36:    Gi = F.i & h5 = (the multF of G).(gg,h1) &
+        h5.i = (the multF of Gi).(gg.i,h1.i) by A29,A34,Def2;
       thus eh.i = ee.i by A35,A36;
     end;
     hence g1 * h = e1 by A6,A30,FUNCT_1:9;
@@ -597,28 +603,28 @@ coherence
     set G = product F;
     let x, y, z be Element of G;
     reconsider x1 = x, y1 = y, z1 = z as Element of product Carrier F by Def2;
-    set xy = (the mult of G).(x,y),
-        yz = (the mult of G).(y,z),
-        s = (the mult of G).(xy,z),
-        t = (the mult of G).(x,yz);
+    set xy = (the multF of G).(x,y),
+        yz = (the multF of G).(y,z),
+        s = (the multF of G).(xy,z),
+        t = (the multF of G).(x,yz);
     reconsider xy, yz, s, t as Element of product Carrier F by Def2;
          dom Carrier F = I by PBOOLE:def 3;
 then A1: dom s = I & dom t = I by CARD_3:18;
  now
       let i be set; assume
 A2:     i in I;
-      then consider XY being non empty HGrStr, hxy being Function such that
-A3:     XY = F.i & hxy = (the mult of G).(x,y) &
-        hxy.i = (the mult of XY).(x1.i,y1.i) by Def2;
-      consider YZ being non empty HGrStr, hyz being Function such that
-A4:     YZ = F.i & hyz = (the mult of G).(y,z) &
-        hyz.i = (the mult of YZ).(y1.i,z1.i) by A2,Def2;
-      consider XYZ1 being non empty HGrStr, hxyz1 being Function such that
-A5:     XYZ1 = F.i & hxyz1 = (the mult of G).(xy,z) &
-        hxyz1.i = (the mult of XYZ1).(xy.i,z1.i) by A2,Def2;
-      consider XYZ2 being non empty HGrStr, hxyz2 being Function such that
-A6:     XYZ2 = F.i & hxyz2 = (the mult of G).(x,yz) &
-        hxyz2.i = (the mult of XYZ2).(x1.i,yz.i) by A2,Def2;
+      then consider XY being non empty multMagma, hxy being Function such that
+A3:     XY = F.i & hxy = (the multF of G).(x,y) &
+        hxy.i = (the multF of XY).(x1.i,y1.i) by Def2;
+      consider YZ being non empty multMagma, hyz being Function such that
+A4:     YZ = F.i & hyz = (the multF of G).(y,z) &
+        hyz.i = (the multF of YZ).(y1.i,z1.i) by A2,Def2;
+      consider XYZ1 being non empty multMagma, hxyz1 being Function such that
+A5:     XYZ1 = F.i & hxyz1 = (the multF of G).(xy,z) &
+        hxyz1.i = (the multF of XYZ1).(xy.i,z1.i) by A2,Def2;
+      consider XYZ2 being non empty multMagma, hxyz2 being Function such that
+A6:     XYZ2 = F.i & hxyz2 = (the multF of G).(x,yz) &
+        hxyz2.i = (the multF of XYZ2).(x1.i,yz.i) by A2,Def2;
      reconsider xi = x1.i, yi = y1.i as Element of XY
        by A2,A3,Lm1;
      reconsider zi = z1.i, xiyi = xi*yi
@@ -642,22 +648,22 @@ coherence
   proof
     set G = product F;
     let x, y be Element of G;
-    reconsider x1 = x, y1 = y, xy = (the mult of G).(x,y),
-        yx = (the mult of G).(y,x) as Element of product Carrier F by Def2;
+    reconsider x1 = x, y1 = y, xy = (the multF of G).(x,y),
+        yx = (the multF of G).(y,x) as Element of product Carrier F by Def2;
          dom Carrier F = I by PBOOLE:def 3;
 then A1: dom xy = I & dom yx = I by CARD_3:18;
  now
       let i be set; assume
 A2:     i in I;
-      then consider XY being non empty HGrStr, hxy being Function such that
-A3:     XY = F.i & hxy = (the mult of G).(x,y) &
-        hxy.i = (the mult of XY).(x1.i,y1.i) by Def2;
-      consider YX being non empty HGrStr, hyx being Function such that
-A4:     YX = F.i & hyx = (the mult of G).(y,x) &
-        hyx.i = (the mult of YX).(y1.i,x1.i) by A2,Def2;
+      then consider XY being non empty multMagma, hxy being Function such that
+A3:     XY = F.i & hxy = (the multF of G).(x,y) &
+        hxy.i = (the multF of XY).(x1.i,y1.i) by Def2;
+      consider YX being non empty multMagma, hyx being Function such that
+A4:     YX = F.i & hyx = (the multF of G).(y,x) &
+        hyx.i = (the multF of YX).(y1.i,x1.i) by A2,Def2;
       reconsider xi = x1.i, yi = y1.i as Element of XY
        by A2,A3,Lm1;
-      consider Fi being commutative (non empty HGrStr) such that
+      consider Fi being commutative (non empty multMagma) such that
 A5:     Fi = F.i by A2,Def5;
       thus xy.i = xi * yi by A3
                .= yi * xi by A3,A5,GROUP_1:def 16
@@ -668,12 +674,12 @@ A5:     Fi = F.i by A2,Def5;
 end;
 
 theorem
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is Group-like holds
   G is Group-like
   proof
     let F be HGrStr-Family of I,
-        G be non empty HGrStr such that
+        G be non empty multMagma such that
 A1:  i in I & G = F.i;
     set GP = product F;
     given e being Element of GP such that
@@ -686,7 +692,7 @@ A2:   for h being Element of GP holds
     let h be Element of G;
 defpred P[set,set] means
  ($1 = i implies $2 = h) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A3: for j being set st j in I ex k being set st P[j,k]
     proof
@@ -700,7 +706,7 @@ A4:     j in I;
 A5:     j <> i;
            j in dom F by A4,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = h by A5;
@@ -724,7 +730,7 @@ A11:    i = j;
       hence g.j in (Carrier F).j by A1,A10,A11;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A12:    H = F.j & g.j = a by A6,A7,A9;
       thus g.j in (Carrier F).j by A10,A12;
@@ -744,12 +750,12 @@ A14:  g1 * gg = e & gg * g1 = e by A2;
   end;
 
 theorem
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is associative holds
   G is associative
   proof
     let F be HGrStr-Family of I,
-        G be non empty HGrStr such that
+        G be non empty multMagma such that
 A1:  i in I & G = F.i and
 A2:  for x, y, z being Element of product F holds
       (x*y)*z = x*(y*z);
@@ -757,7 +763,7 @@ A2:  for x, y, z being Element of product F holds
     let x, y, z be Element of G;
 defpred X[set,set] means
  ($1 = i implies $2 = x) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A3: for j being set st j in I ex k being set st X[j,k]
     proof
@@ -771,7 +777,7 @@ A4:     j in I;
 A5:     j <> i;
            j in dom F by A4,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = x by A5;
@@ -782,7 +788,7 @@ A5:     j <> i;
 A6:   for j being set st j in I holds X[j,gx.j] from PBOOLE:sch 3(A3);
 defpred Y[set,set] means
  ($1 = i implies $2 = y) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A7: for j being set st j in I ex k being set st Y[j,k]
     proof
@@ -796,7 +802,7 @@ A8:     j in I;
 A9:     j <> i;
            j in dom F by A8,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = y by A9;
@@ -807,7 +813,7 @@ A9:     j <> i;
 A10:   for j being set st j in I holds Y[j,gy.j] from PBOOLE:sch 3(A7);
 defpred Z[set,set] means
  ($1 = i implies $2 = z) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A11: for j being set st j in I ex k being set st Z[j,k]
     proof
@@ -821,7 +827,7 @@ A12:     j in I;
 A13:     j <> i;
            j in dom F by A12,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = z by A13;
@@ -845,7 +851,7 @@ A19:    i = j;
       hence gx.j in (Carrier F).j by A1,A18,A19;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A20:    H = F.j & gx.j = a by A6,A15,A17;
       thus gx.j in (Carrier F).j by A18,A20;
@@ -865,7 +871,7 @@ A23:    i = j;
       hence gy.j in (Carrier F).j by A1,A22,A23;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A24:    H = F.j & gy.j = a by A10,A15,A21;
       thus gy.j in (Carrier F).j by A22,A24;
@@ -885,7 +891,7 @@ A27:    i = j;
       hence gz.j in (Carrier F).j by A1,A26,A27;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A28:    H = F.j & gz.j = a by A14,A15,A25;
       thus gz.j in (Carrier F).j by A26,A28;
@@ -905,12 +911,12 @@ A30: gx.i = x & gy.i = y & gz.i = z by A1,A6,A10,A14;
   end;
 
 theorem
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is commutative holds
   G is commutative
   proof
     let F be HGrStr-Family of I,
-        G be non empty HGrStr such that
+        G be non empty multMagma such that
 A1:  i in I & G = F.i and
 A2:  for x, y being Element of product F holds
       x*y = y*x;
@@ -918,7 +924,7 @@ A2:  for x, y being Element of product F holds
     let x, y be Element of G;
 defpred X[set,set] means
  ($1 = i implies $2 = x) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A3: for j being set st j in I ex k being set st X[j,k]
     proof
@@ -932,7 +938,7 @@ A4:     j in I;
 A5:     j <> i;
            j in dom F by A4,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = x by A5;
@@ -943,7 +949,7 @@ A5:     j <> i;
 A6:   for j being set st j in I holds X[j,gx.j] from PBOOLE:sch 3(A3);
 defpred Y[set,set] means
  ($1 = i implies $2 = y) &
- ($1 <> i implies ex H being non empty HGrStr,
+ ($1 <> i implies ex H being non empty multMagma,
   a being Element of H st H = F.$1 & $2 = a);
 A7: for j being set st j in I ex k being set st Y[j,k]
     proof
@@ -957,7 +963,7 @@ A8:     j in I;
 A9:     j <> i;
            j in dom F by A8,PBOOLE:def 3;
       then F.j in rng F by FUNCT_1:def 5;
-      then reconsider Fj = F.j as non empty HGrStr by Def1;
+      then reconsider Fj = F.j as non empty multMagma by Def1;
       consider a being Element of Fj;
       take a;
       thus j = i implies a = y by A9;
@@ -981,7 +987,7 @@ A15:    i = j;
       hence gx.j in (Carrier F).j by A1,A14,A15;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A16:    H = F.j & gx.j = a by A6,A11,A13;
       thus gx.j in (Carrier F).j by A14,A16;
@@ -1001,7 +1007,7 @@ A19:    i = j;
       hence gy.j in (Carrier F).j by A1,A18,A19;
       end;
       suppose j <> i;
-      then consider H being non empty HGrStr,
+      then consider H being non empty multMagma,
                a being Element of H such that
 A20:    H = F.j & gy.j = a by A10,A11,A17;
       thus gy.j in (Carrier F).j by A18,A20;
@@ -1018,12 +1024,12 @@ A22: gx.i = x & gy.i = y by A1,A6,A10;
 
 theorem Th8:
  for F being Group-like HGrStr-Family of I
-  st for i being set st i in I ex G being Group-like (non empty HGrStr)
+  st for i being set st i in I ex G being Group-like (non empty multMagma)
    st G = F.i & s.i = 1_G
  holds s = 1_product F
   proof
     let F be Group-like HGrStr-Family of I such that
-A1:   for i being set st i in I ex G being Group-like (non empty HGrStr)
+A1:   for i being set st i in I ex G being Group-like (non empty multMagma)
        st G = F.i & s.i = 1_G;
     set GP = product F;
 A2: dom s = I by PBOOLE:def 3;
@@ -1031,7 +1037,7 @@ A3: dom Carrier F = I by PBOOLE:def 3;
          now
       let i be set; assume
 A4:     i in dom s;
-      then consider G being Group-like (non empty HGrStr) such that
+      then consider G being Group-like (non empty multMagma) such that
 A5:     G = F.i & s.i = 1_G by A1,A2;
       consider R being 1-sorted such that
 A6:    R = F.i & (Carrier F).i = the carrier of R by A2,A4,PRALG_1:def 13;
@@ -1047,10 +1053,10 @@ A8:   dom he = I & dom eh = I & dom h1 = I by A3,CARD_3:18;
            now
         let i be set; assume
 A9:       i in I;
-        then consider Fi being non empty HGrStr, m being Function such that
-A10:      Fi = F.i & m = (the mult of GP).(h,s) &
-          m.i = (the mult of Fi).(h1.i,s.i) by A7,Def2;
-        consider G being Group-like (non empty HGrStr) such that
+        then consider Fi being non empty multMagma, m being Function such that
+A10:      Fi = F.i & m = (the multF of GP).(h,s) &
+          m.i = (the multF of Fi).(h1.i,s.i) by A7,Def2;
+        consider G being Group-like (non empty multMagma) such that
 A11:      G = F.i & s.i = 1_G by A1,A9;
         reconsider b = h1.i, c = s.i as Element of G
           by A9,A11,Lm1;
@@ -1061,10 +1067,10 @@ A11:      G = F.i & s.i = 1_G by A1,A9;
            now
         let i be set; assume
 A12:       i in I;
-        then consider Fi being non empty HGrStr, m being Function such that
-A13:      Fi = F.i & m = (the mult of GP).(s,h) &
-          m.i = (the mult of Fi).(s.i,h1.i) by A7,Def2;
-        consider G being Group-like (non empty HGrStr) such that
+        then consider Fi being non empty multMagma, m being Function such that
+A13:      Fi = F.i & m = (the multF of GP).(s,h) &
+          m.i = (the multF of Fi).(s.i,h1.i) by A7,Def2;
+        consider G being Group-like (non empty multMagma) such that
 A14:      G = F.i & s.i = 1_G by A1,A12;
         reconsider b = h1.i, c = s.i as Element of G
           by A12,A14,Lm1;
@@ -1078,12 +1084,12 @@ A14:      G = F.i & s.i = 1_G by A1,A12;
 
 theorem Th9:
  for F being Group-like HGrStr-Family of I,
-     G being Group-like (non empty HGrStr) st i in I & G = F.i &
+     G being Group-like (non empty multMagma) st i in I & G = F.i &
    f = 1_product F
  holds f.i = 1_G
   proof
     let F be Group-like HGrStr-Family of I,
-        G be Group-like (non empty HGrStr) such that
+        G be Group-like (non empty multMagma) such that
 A1:  i in I & G = F.i & f = 1_product F;
     set GP = product F;
          f in the carrier of GP by A1;
@@ -1094,7 +1100,7 @@ then A2: f in product Carrier F by Def2;
 A3:   dom Carrier F = I by PBOOLE:def 3;
 defpred P[set,set] means
  ($1 = i implies $2 = h) &
- ($1 <> i implies ex H being Group-like (non empty HGrStr) st H = F.$1
+ ($1 <> i implies ex H being Group-like (non empty multMagma) st H = F.$1
    & $2 = 1_H);
 A4:   for j being set st j in I ex k being set st P[j,k]
       proof
@@ -1106,7 +1112,7 @@ A5:       j in I;
         end;
         suppose
 A6:       j <> i;
-        consider Fj being Group-like (non empty HGrStr) such that
+        consider Fj being Group-like (non empty multMagma) such that
 A7:       Fj = F.j by A5,Def3;
         take 1_Fj;
         thus j = i implies 1_Fj = h by A6;
@@ -1129,22 +1135,22 @@ A12:       i = j;
         hence g.j in (Carrier F).j by A1,A11,A12;
         end;
         suppose j <> i;
-        then consider H being Group-like (non empty HGrStr) such that
+        then consider H being Group-like (non empty multMagma) such that
 A13:      H = F.j & g.j = 1_H by A8,A9,A10;
         thus g.j in (Carrier F).j by A11,A13;
       end;
       end;
 then A14:  g in product Carrier F by A3,A9,CARD_3:18;
       then reconsider g1 = g as Element of GP by Def2;
-      consider Fi being non empty HGrStr, m being Function such that
-A15:    Fi = F.i & m = (the mult of GP).(g,f) &
-        m.i = (the mult of Fi).(g.i,f.i) by A1,A2,A14,Def2;
+      consider Fi being non empty multMagma, m being Function such that
+A15:    Fi = F.i & m = (the multF of GP).(g,f) &
+        m.i = (the multF of Fi).(g.i,f.i) by A1,A2,A14,Def2;
           A16: g1 * 1_product F = g1 by GROUP_1:def 5;
            g.i = h by A1,A8;
       hence h * e = h by A1,A15,A16;
-      consider Fi being non empty HGrStr, m being Function such that
-A17:    Fi = F.i & m = (the mult of GP).(f,g) &
-        m.i = (the mult of Fi).(f.i,g.i) by A1,A2,A14,Def2;
+      consider Fi being non empty multMagma, m being Function such that
+A17:    Fi = F.i & m = (the multF of GP).(f,g) &
+        m.i = (the multF of Fi).(f.i,g.i) by A1,A2,A14,Def2;
           A18: 1_product F * g1 = g1 by GROUP_1:def 5;
            g.i = h by A1,A8;
       hence e * h = h by A1,A17,A18;
@@ -1186,9 +1192,9 @@ A8: dom xf = I & dom fx = I & dom II = I by A3,CARD_3:18;
          now
       let i be set; assume
 A9:    i in I;
-      then consider Fi being non empty HGrStr, m being Function such that
-A10:    Fi = F.i & m = (the mult of GP).(x,s) &
-        m.i = (the mult of Fi).(x1.i,s.i) by A7,Def2;
+      then consider Fi being non empty multMagma, m being Function such that
+A10:    Fi = F.i & m = (the multF of GP).(x,s) &
+        m.i = (the multF of Fi).(x1.i,s.i) by A7,Def2;
       consider G being Group, y being Element of G such that
 A11:    G = F.i & s.i = y" & y = g.i by A2,A9;
            y * y" = 1_G by GROUP_1:def 6;
@@ -1198,9 +1204,9 @@ then A12: x * f1 = 1_GP by A8,FUNCT_1:9;
          now
       let i be set; assume
 A13:    i in I;
-      then consider Fi being non empty HGrStr, m being Function such that
-A14:    Fi = F.i & m = (the mult of GP).(s,x) &
-        m.i = (the mult of Fi).(s.i,x1.i) by A7,Def2;
+      then consider Fi being non empty multMagma, m being Function such that
+A14:    Fi = F.i & m = (the multF of GP).(s,x) &
+        m.i = (the multF of Fi).(s.i,x1.i) by A7,Def2;
       consider G being Group, y being Element of G such that
 A15:    G = F.i & s.i = y" & y = g.i by A2,A13;
            y" * y = 1_G by GROUP_1:def 6;
@@ -1226,16 +1232,16 @@ A1:  i in I & G = F.i & f = x & g = x" & f.i = y;
          x in the carrier of GP & x" in the carrier of GP;
 then A2: f in product Carrier F & g in product Carrier F by A1,Def2;
     then reconsider gi = g.i as Element of G by A1,Lm1;
-    consider Fi being non empty HGrStr, h being Function such that
-A3:   Fi = F.i & h = (the mult of GP).(f,g) &
-      h.i = (the mult of Fi).(f.i,g.i) by A1,A2,Def2;
-         (the mult of GP).(f,g) = x * x" by A1
+    consider Fi being non empty multMagma, h being Function such that
+A3:   Fi = F.i & h = (the multF of GP).(f,g) &
+      h.i = (the multF of Fi).(f.i,g.i) by A1,A2,Def2;
+         (the multF of GP).(f,g) = x * x" by A1
       .= 1_GP by GROUP_1:def 6;
 then A4: y * gi = 1_G by A1,A3,Th9;
-    consider Fi being non empty HGrStr, h being Function such that
-A5:   Fi = F.i & h = (the mult of GP).(g,f) &
-      h.i = (the mult of Fi).(g.i,f.i) by A1,A2,Def2;
-         (the mult of GP).(g,f) = x" * x by A1
+    consider Fi being non empty multMagma, h being Function such that
+A5:   Fi = F.i & h = (the multF of GP).(g,f) &
+      h.i = (the multF of Fi).(g.i,f.i) by A1,A2,Def2;
+         (the multF of GP).(g,f) = x" * x by A1
       .= 1_GP by GROUP_1:def 6;
 then gi * y = 1_G by A1,A5,Th9;
     hence g.i = y" by A4,GROUP_1:def 6;
@@ -1248,7 +1254,7 @@ definition let I be set,
    ex g being Element of product Carrier F,
       J being finite Subset of I, f being ManySortedSet of J st
      g = 1_product F & x = g +* f &
-     for j being set st j in J ex G being Group-like (non empty HGrStr) st
+     for j being set st j in J ex G being Group-like (non empty multMagma) st
       G = F.j & f.j in the carrier of G & f.j <> 1_G;
 existence
   proof
@@ -1265,7 +1271,7 @@ A2: now
 defpred P[set] means
  ex J being finite Subset of I, f being ManySortedSet of J st
   $1 = g +* f &
-  for j being set st j in J ex G being Group-like (non empty HGrStr) st
+  for j being set st j in J ex G being Group-like (non empty multMagma) st
    G = F.j & f.j in the carrier of G & f.j <> 1_G;
 
     consider A being set such that
@@ -1287,16 +1293,16 @@ A5: P[g]
       take J, f;
       thus g = g +* f by FUNCT_4:22;
       thus for j being set st j in J
-       ex G being Group-like (non empty HGrStr) st
+       ex G being Group-like (non empty multMagma) st
         G = F.j & f.j in the carrier of G & f.j <> 1_G;
     end;
     then reconsider A as non empty set by A3;
-    set b = (the mult of GP)||A;
+    set b = (the multF of GP)||A;
          dom b = [:A,A:] & rng b c= A
     proof
-           dom the mult of GP = [:the carrier of GP,the carrier of GP:] by
+           dom the multF of GP = [:the carrier of GP,the carrier of GP:] by
 FUNCT_2:def 1;
-      then [:A,A:] c= dom the mult of GP by A4,ZFMISC_1:119;
+      then [:A,A:] c= dom the multF of GP by A4,ZFMISC_1:119;
       hence A6:     dom b = [:A,A:] by RELAT_1:91;
       let y be set;
       assume y in rng b;
@@ -1308,13 +1314,13 @@ A8:     x1 in A & x2 in A & x = [x1,x2] by A6,A7,ZFMISC_1:def 2;
                f1 being ManySortedSet of J1 such that
 A9:    x1 = g +* f1 and
 A10:    for j being set st j in J1
-         ex G being Group-like (non empty HGrStr) st
+         ex G being Group-like (non empty multMagma) st
           G = F.j & f1.j in the carrier of G & f1.j <> 1_G by A3,A8;
       consider J2 being finite Subset of I,
                f2 being ManySortedSet of J2 such that
 A11:     x2 = g +* f2 and
 A12:     for j being set st j in J2
-         ex G being Group-like (non empty HGrStr) st
+         ex G being Group-like (non empty multMagma) st
           G = F.j & f2.j in the carrier of G & f2.j <> 1_G by A3,A8;
 A13:  dom f1 = J1 & dom f2 = J2 by PBOOLE:def 3;
       reconsider x1, x2 as Function by A9,A11;
@@ -1328,13 +1334,13 @@ then A16:    ex R being 1-sorted st R = F.i & CF.i = the carrier of R
         per cases;
         suppose
 A17:      i in J1;
-        then ex G being Group-like (non empty HGrStr) st
+        then ex G being Group-like (non empty multMagma) st
           G = F.i & f1.i in the carrier of G & f1.i <> 1_G by A10;
         hence x1.i in CF.i by A9,A13,A16,A17,FUNCT_4:14;
         end;
         suppose
 A18:      not i in J1;
-        consider G being Group-like (non empty HGrStr) such that
+        consider G being Group-like (non empty multMagma) such that
 A19:      G = F.i by A15,Def3;
              x1.i = g.i by A9,A13,A18,FUNCT_4:12
             .= 1_G by A15,A19,Th9;
@@ -1352,13 +1358,13 @@ then A22:    ex R being 1-sorted st R = F.i & CF.i = the carrier of R
         per cases;
         suppose
 A23:      i in J2;
-        then ex G being Group-like (non empty HGrStr) st
+        then ex G being Group-like (non empty multMagma) st
          G = F.i & f2.i in the carrier of G & f2.i <> 1_G by A12;
         hence x2.i in CF.i by A11,A13,A22,A23,FUNCT_4:14;
         end;
         suppose
 A24:      not i in J2;
-        consider G being Group-like (non empty HGrStr) such that
+        consider G being Group-like (non empty multMagma) such that
 A25:      G = F.i by A21,Def3;
              x2.i = g.i by A11,A13,A24,FUNCT_4:12
             .= 1_G by A21,A25,Th9;
@@ -1369,7 +1375,7 @@ A25:      G = F.i by A21,Def3;
       reconsider X1 = x1, X2 = x2 as Element of GP by Def2;
       reconsider ff = X1*X2 as Element of product CF by Def2;
       defpred S[set] means
-        ex G being Group-like (non empty HGrStr),
+        ex G being Group-like (non empty multMagma),
            k1, k2 being Element of G st
          G = F.$1 & k1 = x1.$1 & k2 = x2.$1 & k1*k2 = 1_G &
           f1.$1 <> 1_G & f2.$1 <> 1_G;
@@ -1379,7 +1385,7 @@ A27:  now
         reconsider J = {} as finite Subset of I by XBOOLE_1:2;
         take J;
         thus for j being set st j in J
-         ex G being Group-like (non empty HGrStr) st
+         ex G being Group-like (non empty multMagma) st
           G = F.j & ff.j in the carrier of G & ff.j <> 1_G;
       end;
           A28: [x1,x2] in [:A,A:] by A8,ZFMISC_1:106;
@@ -1390,14 +1396,14 @@ then A29:  y = X1*X2 by A7,A8,FUNCT_1:72;
         reconsider J = J1 \/ J2 \ K as finite Subset of I;
         take J;
         defpred R[set,set] means
-        ex G being Group-like (non empty HGrStr),
+        ex G being Group-like (non empty multMagma),
            k1, k2 being Element of G st
         G = F.$1 & k1 = x1.$1 & k2 = x2.$1 & $2 = k1*k2;
 A30:    for j being set st j in J ex t being set st R[j,t]
         proof
           let j be set; assume
 A31:        j in J;
-          then consider G being Group-like (non empty HGrStr) such that
+          then consider G being Group-like (non empty multMagma) such that
 A32:        G = F.j by Def3;
           reconsider k1 = x1.j, k2 = x2.j as Element of G
             by A31,A32,Lm1;
@@ -1415,19 +1421,20 @@ A36:    dom gf = dom g \/ dom f by FUNCT_4:def 1
              now
           let i be set; assume
 A37:        i in I;
-          then consider Fi being non empty HGrStr, h being Function such that
-A38:        Fi = F.i & h = (the mult of GP).(x1,x2) &
-            h.i = (the mult of Fi).(x1.i,x2.i) by Def2;
-          consider FF being Group-like (non empty HGrStr) such that
+          then consider Fi being non empty multMagma, h being Function
+          such that
+A38:        Fi = F.i & h = (the multF of GP).(x1,x2) &
+            h.i = (the multF of Fi).(x1.i,x2.i) by Def2;
+          consider FF being Group-like (non empty multMagma) such that
 A39:        FF = F.i by A37,Def3;
-          reconsider Fi as Group-like (non empty HGrStr) by A38,A39;
+          reconsider Fi as Group-like (non empty multMagma) by A38,A39;
           reconsider x1i = x1.i, x2i = x2.i as Element of Fi
            by A37,A38,Lm1;
 A40:      y1.i = x1i * x2i by A7,A8,A28,A38,FUNCT_1:72;
           per cases;
           suppose
 A41:        i in J;
-          then ex GG being Group-like (non empty HGrStr),
+          then ex GG being Group-like (non empty multMagma),
              k1a, k2a being Element of GG st
             GG = F.i & k1a = x1.i & k2a = x2.i & f.i = k1a*k2a by A33;
           hence y1.i = gf.i by A29,A34,A38,A41,FUNCT_4:14;
@@ -1444,7 +1451,7 @@ then A43:      gf.i = g.i by A34,FUNCT_4:12
             hence y1.i = gf.i by A38,A39,A40,A43,GROUP_1:def 5;
             end;
             case i in K;
-            then ex GG being Group-like (non empty HGrStr),
+            then ex GG being Group-like (non empty multMagma),
                k1, k2 being Element of GG st
               GG = F.i & k1 = x1.i & k2 = x2.i & k1*k2 = 1_GG &
               f1.i <> 1_GG & f2.i <> 1_GG by A26;
@@ -1457,7 +1464,7 @@ then A43:      gf.i = g.i by A34,FUNCT_4:12
         hence y = gf by A35,A36,FUNCT_1:9;
         let j be set; assume
 A44:      j in J;
-        then consider G being Group-like (non empty HGrStr),
+        then consider G being Group-like (non empty multMagma),
                  k1, k2 being Element of G such that
 A45:      G = F.j & k1 = x1.j & k2 = x2.j & f.j = k1*k2 by A33;
         take G;
@@ -1468,7 +1475,7 @@ A46:    j in J1 \/ J2 by A44,XBOOLE_0:def 4;
         suppose
 A47:      j in J1 & not j in J2;
 then A48:    x1.j = f1.j by A9,A13,FUNCT_4:14;
-        consider G1 being Group-like (non empty HGrStr) such that
+        consider G1 being Group-like (non empty multMagma) such that
 A49:      G1 = F.j & f1.j in the carrier of G1 & f1.j <> 1_G1 by A10,A47;
              x2.j = g.j by A11,A13,A47,FUNCT_4:12
             .= 1_G1 by A44,A49,Th9;
@@ -1477,7 +1484,7 @@ A49:      G1 = F.j & f1.j in the carrier of G1 & f1.j <> 1_G1 by A10,A47;
         suppose
 A50:      not j in J1 & j in J2;
 then A51:    x2.j = f2.j by A11,A13,FUNCT_4:14;
-        consider G2 being Group-like (non empty HGrStr) such that
+        consider G2 being Group-like (non empty multMagma) such that
 A52:      G2 = F.j & f2.j in the carrier of G2 & f2.j <> 1_G2 by A12,A50;
              x1.j = g.j by A9,A13,A50,FUNCT_4:12
             .= 1_G2 by A44,A52,Th9;
@@ -1485,9 +1492,9 @@ A52:      G2 = F.j & f2.j in the carrier of G2 & f2.j <> 1_G2 by A12,A50;
         end;
         suppose
 A53:      j in J1 & j in J2;
-then A54:    ex G1 being Group-like (non empty HGrStr) st
+then A54:    ex G1 being Group-like (non empty multMagma) st
          G1 = F.j & f1.j in the carrier of G1 & f1.j <> 1_G1 by A10;
-A55:    ex G2 being Group-like (non empty HGrStr) st
+A55:    ex G2 being Group-like (non empty multMagma) st
           G2 = F.j & f2.j in the carrier of G2 & f2.j <> 1_G2 by A12,A53;
              not j in K by A44,XBOOLE_0:def 4;
         hence f.j <> 1_G by A26,A44,A45,A54,A55;
@@ -1496,7 +1503,7 @@ A55:    ex G2 being Group-like (non empty HGrStr) st
       hence y in A by A3,A27,A29;
     end;
     then reconsider b as BinOp of A by FUNCT_2:def 1,RELSET_1:11;
-    set H = HGrStr (#A,b#);
+    set H = multMagma (#A,b#);
          H is Group-like
     proof
       reconsider e = g as Element of H by A3,A5;
@@ -1515,7 +1522,8 @@ A57:  P[h1"]
         consider J being finite Subset of I,
                  f being ManySortedSet of J such that
 A58:      h = g +* f and
-A59:      for j being set st j in J ex G being Group-like (non empty HGrStr) st
+A59:      for j being set st j in J
+ ex G being Group-like (non empty multMagma) st
            G = F.j & f.j in the carrier of G & f.j <> 1_G by A3;
 
 defpred W[set,set] means
@@ -1526,13 +1534,13 @@ A60:    for i being set st i in J ex j being set st W[i,j]
         proof
           let i be set; assume
 A61:        i in J;
-          then consider Gg being Group-like (non empty HGrStr) such that
+          then consider Gg being Group-like (non empty multMagma) such that
 A62:        Gg = F.i by Def3;
-               ex Ga being associative (non empty HGrStr) st Ga = F.i by A61,
-Def4
+               ex Ga being associative (non empty multMagma) st Ga = F.i
+                by A61,Def4
 ;
           then reconsider G = Gg as Group by A62;
-               ex GG being Group-like (non empty HGrStr) st
+               ex GG being Group-like (non empty multMagma) st
            GG = F.i & f.i in the carrier of GG & f.i <> 1_GG by A59,A61;
           then reconsider m = f.i as Element of G by A62;
           take m";
@@ -1550,10 +1558,10 @@ A66:    dom gf' = dom g \/ dom f' by FUNCT_4:def 1
              now
           let i be set; assume
 A67:        i in I;
-          then consider G3 being Group-like (non empty HGrStr) such that
+          then consider G3 being Group-like (non empty multMagma) such that
 A68:        G3 = F.i by Def3;
-               ex G4 being associative (non empty HGrStr) st G4 = F.i by A67,
-Def4
+               ex G4 being associative (non empty multMagma) st G4 = F.i
+                by A67,Def4
 ;
           then consider G5 being Group such that
 A69:        G5 = F.i by A68;
@@ -1584,7 +1592,7 @@ that
 A77:      G = F.j & m = f.j & f'.j = m" by A63;
         take G;
         thus G = F.j & f'.j in the carrier of G by A77;
-             ex G1 being Group-like (non empty HGrStr) st
+             ex G1 being Group-like (non empty multMagma) st
          G1 = F.j & f.j in the carrier of G1 & f.j <> 1_G1 by A59,A76;
         hence f'.j <> 1_G by A77,GROUP_1:18;
       end;
@@ -1597,7 +1605,7 @@ A78:  [h,h'] in [:A,A:] & [h',h] in [:A,A:] by ZFMISC_1:106;
       thus h' * h = h1" * h1 by A78,FUNCT_1:72
         .= e by GROUP_1:def 6;
     end;
-    then reconsider H as Group-like (non empty HGrStr);
+    then reconsider H as Group-like (non empty multMagma);
          H is Subgroup of GP
     proof
      thus the carrier of H c= the carrier of GP by A4;
@@ -1612,13 +1620,15 @@ A78:  [h,h'] in [:A,A:] & [h',h] in [:A,A:] by ZFMISC_1:106;
       hence ex g being Element of product CF,
                J being finite Subset of I, f being ManySortedSet of J st
         g = 1_product F & x = g +* f &
-        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+        for j being set st j in J
+         ex G being Group-like (non empty multMagma) st
          G = F.j & f.j in the carrier of G & f.j <> 1_G;
     end;
     given g being Element of product CF,
           J being finite Subset of I, f being ManySortedSet of J such that
 A79:   g = 1_product F & x = g +* f &
-        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+        for j being set st j in J
+         ex G being Group-like (non empty multMagma) st
          G = F.j & f.j in the carrier of G & f.j <> 1_G;
     set gf = g +* f;
 A80:dom g = I by A2;
@@ -1633,13 +1643,13 @@ then A84:  ex R being 1-sorted st R = F.i & CF.i = the carrier of R
       per cases;
       suppose
 A85:    i in J;
-      then consider G being Group-like (non empty HGrStr) such that
+      then consider G being Group-like (non empty multMagma) such that
 A86:    G = F.i & f.i in the carrier of G & f.i <> 1_G by A79;
       thus gf.i in CF.i by A81,A84,A85,A86,FUNCT_4:14;
       end;
       suppose
 A87:    not i in J;
-      consider G being Group-like (non empty HGrStr) such that
+      consider G being Group-like (non empty multMagma) such that
 A88:    G = F.i by A83,Def3;
            gf.i = g.i by A81,A87,FUNCT_4:12
           .= 1_G by A79,A83,A88,Th9;
@@ -1655,7 +1665,7 @@ uniqueness
       ex g being Element of product Carrier F,
        J being finite Subset of I, f being ManySortedSet of J st
       g = 1_product F & $1 = g +* f &
-      for j being set st j in J ex G being Group-like (non empty HGrStr) st
+      for j being set st j in J ex G being Group-like (non empty multMagma) st
        G = F.j & f.j in the carrier of G & f.j <> 1_G;
     let A, B be strict Subgroup of product F such that
 A89:  for x being set holds x in the carrier of A iff P[x] and
@@ -1668,12 +1678,13 @@ end;
 registration let I be set,
      F be associative Group-like HGrStr-Family of I,
                f, g be Element of sum F;
- cluster (the mult of sum F).(f,g) -> Function-like Relation-like;
+ cluster (the multF of sum F).(f,g) -> Function-like Relation-like;
 coherence
   proof
 A1: the carrier of sum F c= the carrier of product F by GROUP_2:def 5;
-         (the mult of sum F).(f,g) in the carrier of sum F;
-    then reconsider h = (the mult of sum F).(f,g) as Element of product Carrier
+         (the multF of sum F).(f,g) in the carrier of sum F;
+    then
+    reconsider h = (the multF of sum F).(f,g) as Element of product Carrier
 F
      by A1,Def2;
          h is Function;
@@ -1707,11 +1718,12 @@ then A3:   dom f = I;
            ex g being Element of product Carrier F,
          J being finite Subset of I, f being ManySortedSet of J st
         g = 1_GP & x = g +* f &
-        for j being set st j in J ex G being Group-like (non empty HGrStr) st
+        for j being set st j in J ex G being Group-like (non empty multMagma)
+         st
          G = F.j & f.j in the carrier of G & f.j <> 1_G
       proof
 defpred P[set] means
- ex G being Group-like (non empty HGrStr),
+ ex G being Group-like (non empty multMagma),
     m being Element of G st G = F.$1 & m = f.$1 & m <> 1_G;
         consider J being set such that
 A4:       for j being set holds j in J iff j in I & P[j] from XBOOLE_0:sch 1;
@@ -1743,7 +1755,7 @@ A10:        i in J;
           end;
           suppose
 A11:        not i in J;
-          consider G being Group-like (non empty HGrStr) such that
+          consider G being Group-like (non empty multMagma) such that
 A12:         G = F.i by A9,Def3;
                f.i is Element of G by A9,A12,Lm1;
           hence f.i = 1_G by A4,A9,A11,A12
@@ -1754,7 +1766,7 @@ A12:         G = F.i by A9,Def3;
         hence x = g +* ff by A3,A8,FUNCT_1:9;
         let j be set; assume
 A13:      j in J;
-        then consider G being Group-like (non empty HGrStr),
+        then consider G being Group-like (non empty multMagma),
                  m being Element of G such that
 A14:      G = F.j & m = f.j & m <> 1_G by A4;
         take G;
@@ -1770,9 +1782,9 @@ A14:      G = F.j & m = f.j & m <> 1_G by A4;
 begin  :: The product of one, two and three groups
 
 theorem Th13:
- for G1 being non empty HGrStr holds <*G1*> is HGrStr-Family of {1}
+ for G1 being non empty multMagma holds <*G1*> is HGrStr-Family of {1}
  proof
-    let G1 be non empty HGrStr;
+    let G1 be non empty multMagma;
 A1: dom <*G1*> = {1} by FINSEQ_1:4,def 8;
     then reconsider A = <*G1*> as ManySortedSet of {1} by PBOOLE:def 3;
          A is HGrStr-yielding
@@ -1787,16 +1799,16 @@ A2:     x in dom A & A.x = y by FUNCT_1:def 5;
     hence thesis;
   end;
 
-definition let G1 be non empty HGrStr;
+definition let G1 be non empty multMagma;
  redefine func <*G1*> -> HGrStr-Family of {1};
 coherence by Th13;
 end;
 
 theorem Th14:
- for G1 being Group-like (non empty HGrStr) holds
+ for G1 being Group-like (non empty multMagma) holds
   <*G1*> is Group-like HGrStr-Family of {1}
  proof
-    let G1 be Group-like (non empty HGrStr);
+    let G1 be Group-like (non empty multMagma);
     reconsider A = <*G1*> as HGrStr-Family of {1};
          A is Group-like
    proof
@@ -1807,16 +1819,16 @@ theorem Th14:
     hence thesis;
   end;
 
-definition let G1 be Group-like (non empty HGrStr);
+definition let G1 be Group-like (non empty multMagma);
  redefine func <*G1*> -> Group-like HGrStr-Family of {1};
 coherence by Th14;
 end;
 
 theorem Th15:
- for G1 being associative (non empty HGrStr) holds
+ for G1 being associative (non empty multMagma) holds
   <*G1*> is associative HGrStr-Family of {1}
  proof
-    let G1 be associative (non empty HGrStr);
+    let G1 be associative (non empty multMagma);
     reconsider A = <*G1*> as HGrStr-Family of {1};
          A is associative
    proof
@@ -1827,16 +1839,16 @@ theorem Th15:
     hence thesis;
   end;
 
-definition let G1 be associative (non empty HGrStr);
+definition let G1 be associative (non empty multMagma);
  redefine func <*G1*> -> associative HGrStr-Family of {1};
 coherence by Th15;
 end;
 
 theorem Th16:
- for G1 being commutative (non empty HGrStr) holds
+ for G1 being commutative (non empty multMagma) holds
   <*G1*> is commutative HGrStr-Family of {1}
  proof
-    let G1 be commutative (non empty HGrStr);
+    let G1 be commutative (non empty multMagma);
     reconsider A = <*G1*> as HGrStr-Family of {1};
          A is commutative
    proof
@@ -1847,7 +1859,7 @@ theorem Th16:
     hence thesis;
   end;
 
-definition let G1 be commutative (non empty HGrStr);
+definition let G1 be commutative (non empty multMagma);
  redefine func <*G1*> -> commutative HGrStr-Family of {1};
 coherence by Th16;
 end;
@@ -1893,7 +1905,7 @@ definition let G1 be commutative Group;
 coherence by Th18;
 end;
 
-registration let G1 be non empty HGrStr;
+registration let G1 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1*>;
 coherence
  proof
@@ -1904,7 +1916,7 @@ coherence
   end;
 end;
 
-registration let G1 be non empty HGrStr;
+registration let G1 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1*>;
 coherence
  proof
@@ -1915,7 +1927,7 @@ coherence
   end;
 end;
 
-definition let G1 be non empty HGrStr,
+definition let G1 be non empty multMagma,
                x be Element of G1;
  redefine func <*x*> -> Element of product <*G1*>;
 coherence
@@ -1940,9 +1952,9 @@ then A5:   a = 1 by TARSKI:def 1;
 end;
 
 theorem Th19:
- for G1, G2 being non empty HGrStr holds <*G1,G2*> is HGrStr-Family of {1,2}
+ for G1, G2 being non empty multMagma holds <*G1,G2*> is HGrStr-Family of {1,2}
   proof
-    let G1, G2 be non empty HGrStr;
+    let G1, G2 be non empty multMagma;
 A1: dom <*G1,G2*> = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
     then reconsider A = <*G1,G2*> as ManySortedSet of {1,2} by PBOOLE:def 3;
          A is HGrStr-yielding
@@ -1957,16 +1969,16 @@ A2:     x in dom A & A.x = y by FUNCT_1:def 5;
     hence thesis;
   end;
 
-definition let G1, G2 be non empty HGrStr;
+definition let G1, G2 be non empty multMagma;
  redefine func <*G1,G2*> -> HGrStr-Family of {1,2};
 coherence by Th19;
 end;
 
 theorem Th20:
- for G1, G2 being Group-like (non empty HGrStr) holds
+ for G1, G2 being Group-like (non empty multMagma) holds
   <*G1,G2*> is Group-like HGrStr-Family of {1,2}
   proof
-    let G1, G2 be Group-like (non empty HGrStr);
+    let G1, G2 be Group-like (non empty multMagma);
     reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
          A is Group-like
     proof
@@ -1977,16 +1989,16 @@ theorem Th20:
     hence thesis;
   end;
 
-definition let G1, G2 be Group-like (non empty HGrStr);
+definition let G1, G2 be Group-like (non empty multMagma);
  redefine func <*G1,G2*> -> Group-like HGrStr-Family of {1,2};
 coherence by Th20;
 end;
 
 theorem Th21:
- for G1, G2 being associative (non empty HGrStr) holds
+ for G1, G2 being associative (non empty multMagma) holds
   <*G1,G2*> is associative HGrStr-Family of {1,2}
   proof
-    let G1, G2 be associative (non empty HGrStr);
+    let G1, G2 be associative (non empty multMagma);
     reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
          A is associative
     proof
@@ -1997,16 +2009,16 @@ theorem Th21:
     hence thesis;
   end;
 
-definition let G1, G2 be associative (non empty HGrStr);
+definition let G1, G2 be associative (non empty multMagma);
  redefine func <*G1,G2*> -> associative HGrStr-Family of {1,2};
 coherence by Th21;
 end;
 
 theorem Th22:
- for G1, G2 being commutative (non empty HGrStr) holds
+ for G1, G2 being commutative (non empty multMagma) holds
   <*G1,G2*> is commutative HGrStr-Family of {1,2}
   proof
-    let G1, G2 be commutative (non empty HGrStr);
+    let G1, G2 be commutative (non empty multMagma);
     reconsider A = <*G1,G2*> as HGrStr-Family of {1,2};
          A is commutative
     proof
@@ -2017,7 +2029,7 @@ theorem Th22:
     hence thesis;
   end;
 
-definition let G1, G2 be commutative (non empty HGrStr);
+definition let G1, G2 be commutative (non empty multMagma);
  redefine func <*G1,G2*> -> commutative HGrStr-Family of {1,2};
 coherence by Th22;
 end;
@@ -2063,7 +2075,7 @@ definition let G1, G2 be commutative Group;
 coherence by Th24;
 end;
 
-registration let G1, G2 be non empty HGrStr;
+registration let G1, G2 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1,G2*>;
 coherence
   proof
@@ -2074,7 +2086,7 @@ coherence
   end;
 end;
 
-registration let G1, G2 be non empty HGrStr;
+registration let G1, G2 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1,G2*>;
 coherence
   proof
@@ -2085,7 +2097,7 @@ coherence
   end;
 end;
 
-definition let G1, G2 be non empty HGrStr,
+definition let G1, G2 be non empty multMagma,
                x be Element of G1,
                y be Element of G2;
  redefine func <*x,y*> -> Element of product <*G1,G2*>;
@@ -2121,10 +2133,10 @@ A6:     a = 2;
 end;
 
 theorem Th25:
- for G1, G2, G3 being non empty HGrStr holds
+ for G1, G2, G3 being non empty multMagma holds
   <*G1,G2,G3*> is HGrStr-Family of {1,2,3}
   proof
-    let G1, G2, G3 be non empty HGrStr;
+    let G1, G2, G3 be non empty multMagma;
 A1: dom <*G1,G2,G3*> = {1,2,3} by FINSEQ_3:1,30;
     then reconsider A = <*G1,G2,G3*> as ManySortedSet of {1,2,3} by
 PBOOLE:def 3;
@@ -2140,16 +2152,16 @@ A2:     x in dom A & A.x = y by FUNCT_1:def 5;
     hence thesis;
   end;
 
-definition let G1, G2, G3 be non empty HGrStr;
+definition let G1, G2, G3 be non empty multMagma;
  redefine func <*G1,G2,G3*> -> HGrStr-Family of {1,2,3};
 coherence by Th25;
 end;
 
 theorem Th26:
- for G1, G2, G3 being Group-like (non empty HGrStr) holds
+ for G1, G2, G3 being Group-like (non empty multMagma) holds
   <*G1,G2,G3*> is Group-like HGrStr-Family of {1,2,3}
   proof
-    let G1, G2, G3 be Group-like (non empty HGrStr);
+    let G1, G2, G3 be Group-like (non empty multMagma);
     reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
          A is Group-like
     proof
@@ -2160,16 +2172,16 @@ theorem Th26:
     hence thesis;
   end;
 
-definition let G1, G2, G3 be Group-like (non empty HGrStr);
+definition let G1, G2, G3 be Group-like (non empty multMagma);
  redefine func <*G1,G2,G3*> -> Group-like HGrStr-Family of {1,2,3};
 coherence by Th26;
 end;
 
 theorem Th27:
- for G1, G2, G3 being associative (non empty HGrStr) holds
+ for G1, G2, G3 being associative (non empty multMagma) holds
   <*G1,G2,G3*> is associative HGrStr-Family of {1,2,3}
   proof
-    let G1, G2, G3 be associative (non empty HGrStr);
+    let G1, G2, G3 be associative (non empty multMagma);
     reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
          A is associative
     proof
@@ -2180,16 +2192,16 @@ theorem Th27:
     hence thesis;
   end;
 
-definition let G1, G2, G3 be associative (non empty HGrStr);
+definition let G1, G2, G3 be associative (non empty multMagma);
  redefine func <*G1,G2,G3*> -> associative HGrStr-Family of {1,2,3};
 coherence by Th27;
 end;
 
 theorem Th28:
- for G1, G2, G3 being commutative (non empty HGrStr) holds
+ for G1, G2, G3 being commutative (non empty multMagma) holds
   <*G1,G2,G3*> is commutative HGrStr-Family of {1,2,3}
   proof
-    let G1, G2, G3 be commutative (non empty HGrStr);
+    let G1, G2, G3 be commutative (non empty multMagma);
     reconsider A = <*G1,G2,G3*> as HGrStr-Family of {1,2,3};
          A is commutative
     proof
@@ -2200,7 +2212,7 @@ theorem Th28:
     hence thesis;
   end;
 
-definition let G1, G2, G3 be commutative (non empty HGrStr);
+definition let G1, G2, G3 be commutative (non empty multMagma);
  redefine func <*G1,G2,G3*> -> commutative HGrStr-Family of {1,2,3};
 coherence by Th28;
 end;
@@ -2246,7 +2258,7 @@ definition let G1, G2, G3 be commutative Group;
 coherence by Th30;
 end;
 
-registration let G1, G2, G3 be non empty HGrStr;
+registration let G1, G2, G3 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1,G2,G3*>;
 coherence
   proof
@@ -2257,7 +2269,7 @@ coherence
   end;
 end;
 
-registration let G1, G2, G3 be non empty HGrStr;
+registration let G1, G2, G3 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1,G2,G3*>;
 coherence
   proof
@@ -2268,7 +2280,7 @@ coherence
   end;
 end;
 
-definition let G1, G2, G3 be non empty HGrStr,
+definition let G1, G2, G3 be non empty multMagma,
                x be Element of G1,
                y be Element of G2,
                z be Element of G3;
@@ -2311,7 +2323,7 @@ A7:     a = 3;
   end;
 end;
 
-reserve G1, G2, G3 for non empty HGrStr,
+reserve G1, G2, G3 for non empty multMagma,
         x1, x2 for Element of G1,
         y1, y2 for Element of G2,
         z1, z2 for Element of G3;
@@ -2409,7 +2421,7 @@ then A7:   k in Seg 3 by A6;
     hence thesis by A3,A4,FINSEQ_1:18;
   end;
 
-reserve G1, G2, G3 for Group-like (non empty HGrStr);
+reserve G1, G2, G3 for Group-like (non empty multMagma);
 
 theorem
       1_product <*G1*> = <*1_G1*>
@@ -2421,13 +2433,14 @@ theorem
       thus dom s = {1} by FINSEQ_1:4,def 8;
     end;
     then reconsider s as ManySortedSet of {1};
-         for i being set st i in {1} ex G being Group-like (non empty HGrStr)
+         for i being set st i in {1}
+          ex G being Group-like (non empty multMagma)
      st G = f.i & s.i = 1_G
     proof
       let i be set;
       assume i in {1};
 then A1:   i = 1 by TARSKI:def 1;
-      then reconsider G = f.i as Group-like (non empty HGrStr) by
+      then reconsider G = f.i as Group-like (non empty multMagma) by
 FINSEQ_1:def 8;
       take G;
            f.i = G1 by A1,FINSEQ_1:def 8;
@@ -2446,7 +2459,8 @@ theorem
       thus dom s = {1,2} by FINSEQ_1:4,FINSEQ_3:29;
     end;
     then reconsider s as ManySortedSet of {1,2};
-         for i being set st i in {1,2} ex G being Group-like (non empty HGrStr)
+         for i being set st i in {1,2}
+          ex G being Group-like (non empty multMagma)
      st G = f.i & s.i = 1_G
     proof
       let i be set such that
@@ -2454,14 +2468,16 @@ A1:     i in {1,2};
       per cases by A1,TARSKI:def 2;
       suppose
 A2:     i = 1;
-      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:61;
+      then
+      reconsider G = f.i as Group-like (non empty multMagma) by FINSEQ_1:61;
       take G;
            f.i = G1 by A2,FINSEQ_1:61;
       hence G = f.i & s.i = 1_G by A2,FINSEQ_1:61;
       end;
       suppose
 A3:     i = 2;
-      then reconsider G = f.i as Group-like (non empty HGrStr)by FINSEQ_1:61;
+      then reconsider G = f.i as Group-like (non empty multMagma)
+      by FINSEQ_1:61;
       take G;
            f.i = G2 by A3,FINSEQ_1:61;
       hence G = f.i & s.i = 1_G by A3,FINSEQ_1:61;
@@ -2481,7 +2497,7 @@ theorem
     end;
     then reconsider s as ManySortedSet of {1,2,3};
          for i being set st i in {1,2,3} ex G being Group-like (non empty
-HGrStr
+multMagma
 )
      st G = f.i & s.i = 1_G
     proof
@@ -2490,21 +2506,24 @@ A1:     i in {1,2,3};
       per cases by A1,ENUMSET1:def 1;
       suppose
 A2:     i = 1;
-      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      then reconsider G = f.i as Group-like (non empty multMagma)
+       by FINSEQ_1:62;
       take G;
            f.i = G1 by A2,FINSEQ_1:62;
       hence G = f.i & s.i = 1_G by A2,FINSEQ_1:62;
       end;
       suppose
 A3:     i = 2;
-      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      then reconsider G = f.i as Group-like (non empty multMagma)
+       by FINSEQ_1:62;
       take G;
            f.i = G2 by A3,FINSEQ_1:62;
       hence G = f.i & s.i = 1_G by A3,FINSEQ_1:62;
       end;
       suppose
 A4:     i = 3;
-      then reconsider G = f.i as Group-like (non empty HGrStr) by FINSEQ_1:62;
+      then reconsider G = f.i as Group-like (non empty multMagma)
+       by FINSEQ_1:62;
       take G;
            f.i = G3 by A4,FINSEQ_1:62;
       hence G = f.i & s.i = 1_G by A4,FINSEQ_1:62;

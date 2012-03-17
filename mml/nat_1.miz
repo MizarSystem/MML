@@ -8,9 +8,8 @@ environ
 
  vocabularies ORDINAL2, ARYTM, ARYTM_1, ORDINAL1, XREAL_0, ZF_LANG, HENMODEL,
       FINSET_1, CARD_1, BOOLE, TARSKI, GR_CY_1;
- notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1,
-      NUMBERS, XCMPLX_0, XREAL_0,
-      REAL_1, XXREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, FINSET_1, CARD_1, NUMBERS,
+      XCMPLX_0, XREAL_0, REAL_1, XXREAL_0;
  constructors NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, CARD_1, WELLORD2;
  registrations SUBSET_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, REAL_1,
       XBOOLE_0, CARD_1, FINSET_1;
@@ -413,21 +412,21 @@ A2:   ex k being Nat st P[k]
        A3:   ex k being Nat st P1[k] by A1;
     consider k being Nat such that
 A4:   P1[k] and
-A9:   for m being Nat st P1[m] holds k <= m from Min(A3);
+A5:   for m being Nat st P1[m] holds k <= m from Min(A3);
     take k;
     thus P[k]
       proof assume
-A5:      not P[k];
+A6:      not P[k];
        consider n being Nat such that
-A6:      P[n] by A2;
-         n <= k & n <> k by A4,A5,A6;
+A7:      P[n] by A2;
+         n <= k & n <> k by A4,A6,A7;
        then k <> 0 by Th2;
        then consider m such that
-A7:      k = m + 1 by Th6;
-        for n being Nat st P[n] holds n <= m by A7,Th8,A4,A5;
-        then A8:    k <= m by A9;
+A8:      k = m + 1 by Th6;
+        for n being Nat st P[n] holds n <= m by A4,A6,A8,Th8;
+        then A9:    k <= m by A5;
         -m + m + 1 = -m + (m + 1) & -m + m + 0 = -m + (m + 0);
-       hence contradiction by A7,A8,XREAL_1:8;
+       hence contradiction by A8,A9,XREAL_1:8;
       end;
     thus thesis by A4;
    end;
@@ -496,12 +495,12 @@ A2:  for k being Nat st k <> 0 & P[k]
      ex n being Nat st n < k & P[n]
 proof
    consider k being Nat such that
-A4:  P[k] & for n being Nat st P[n] holds k <= n from Min(A1);
+A3:  P[k] & for n being Nat st P[n] holds k <= n from Min(A1);
      now assume k <> 0;
-       then ex n being Nat st n < k & P[n] by A2,A4;
-       hence contradiction by A4;
+       then ex n being Nat st n < k & P[n] by A2,A3;
+       hence contradiction by A3;
     end;
-   hence P[0] by A4;
+   hence P[0] by A3;
   end;
 
 :: Exact division and rest of division
@@ -699,11 +698,11 @@ A5: now let m be Element of NAT;
      then P[M+m+1] by A2,Th11;
     hence Q[m+1];
     end;
-A7: for m being Element of NAT holds Q[m] from Ind(A4,A5);
+A6: for m being Element of NAT holds Q[m] from Ind(A4,A5);
     consider m being Nat such that
-A8: i = M() + m by A3,Th10;
+A7: i = M() + m by A3,Th10;
      m in NAT by ORDINAL1:def 13;
-   hence thesis by A7,A8;
+   hence thesis by A6,A7;
 end;
 
 :: from INT_2, 2006.05.30, AG
@@ -923,7 +922,7 @@ end;
 
 reserve x,X,Y,Z for set;
 
-theorem Th52:
+theorem Th39:
  for n being natural number holds succ n = n + 1
   proof let n be natural number;
 A1:  n = {K where K is Element of NAT: K < n} &
@@ -955,7 +954,7 @@ A6:  x = K & K < n+1 by A1;
    hence thesis by ORDINAL1:13;
   end;
 
-theorem Th56:
+theorem Th40:
  n <= m iff n c= m
   proof
 defpred P[Nat] means for m holds $1 <= m iff $1 c= m;
@@ -972,12 +971,12 @@ A4:       m = n+1+k by Th10;
               n <= n+k by Th11;
           then n c= (n+k) by A3;
       then succ n c= succ (n+k) & (n+1) = succ n &
-          (n+k+1) = succ (n+k) by Th52,ORDINAL2:1;
+          (n+k+1) = succ (n+k) by Th39,ORDINAL2:1;
          hence thesis by A4;
         end;
       assume
 A5:    (n+1) c= m;
-           (n+1) = succ n by Th52;
+           (n+1) = succ n by Th39;
         then n in m by A5,ORDINAL1:33;
         then n c= m & n <> m by ORDINAL1:def 2;
        then n <= m & n <> m by A3;
@@ -989,16 +988,16 @@ A5:    (n+1) c= m;
   end;
 
 theorem
- Th72: Card n <=` Card m iff n <= m
+ Th41: Card n <=` Card m iff n <= m
   proof reconsider n,m as Element of NAT by ORDINAL1:def 13;
         (Card n <=` Card m iff Card n c= Card m) &
      Card n = n & Card m = m &
-      ( n c= m iff n <= m) by CARD_1:def 5,Th56;
+      ( n c= m iff n <= m) by Th40,CARD_1:def 5;
    hence thesis;
   end;
 
 theorem
- Th73: Card n <` Card m iff n < m
+ Th42: Card n <` Card m iff n < m
   proof
      Card n c< Card m iff Card n c= Card m & Card n <> Card m by XBOOLE_0:def 8
 ;
@@ -1006,7 +1005,7 @@ theorem
      (Card n = Card m iff n = m) &
       (n <= m & n <> m iff n < m) &
     (Card n <=` Card m iff n <= m)
-     by CARD_1:71,Th72,ORDINAL1:21,def 2,REAL_1:def 5;
+     by Th41,CARD_1:71,ORDINAL1:21,def 2,REAL_1:def 5;
    hence thesis;
   end;
 
@@ -1016,13 +1015,13 @@ theorem
   nextcard Card n = Card(n+1)
   proof reconsider n as Element of NAT by ORDINAL1:def 13;
       n < n+1 & Card Card n = Card n by Th13;
-then A1:  Card Card n <` Card(n+1) by Th73;
+then A1:  Card Card n <` Card(n+1) by Th42;
         for M st Card Card n <` M holds Card(n+1) <=` M
      proof let M such that
 A2:     Card Card n in M;
          Card n = n & M = M by CARD_1:def 5;
        then succ n c= M & (n+1) = succ n &
-        Card(n+1) = (n+1) by A2,CARD_1:def 5,Th52,ORDINAL1:33;
+        Card(n+1) = (n+1) by A2,Th39,CARD_1:def 5,ORDINAL1:33;
       hence Card(n+1) c= M;
      end;
    hence thesis by A1,CARD_1:def 6;
@@ -1030,7 +1029,7 @@ A2:     Card Card n in M;
 
 definition let n be natural number;
  redefine func succ n equals n+1;
- compatibility by Th52;
+ compatibility by Th39;
 end;
 
 theorem
@@ -1040,7 +1039,7 @@ theorem
    assume
       X c= Y;
     then Card X <=` Card Y by CARD_1:27;
-   hence card X <= card Y by Th56;
+   hence card X <= card Y by Th40;
   end;
 
 reserve l for Element of NAT;
@@ -1073,7 +1072,7 @@ theorem
    k <= n implies k = k /\ n
 proof
    assume k <= n;
-    then Segm k c= Segm n by Th56;
+    then Segm k c= Segm n by Th40;
    hence thesis by XBOOLE_1:28;
 end;
 

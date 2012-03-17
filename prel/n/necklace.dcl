@@ -31,7 +31,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -40,7 +40,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="135">
+<Func kind="K" nr="134">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -71,19 +71,19 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="142">
+<Func kind="K" nr="141">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="48"/>
+<Adjective nr="35"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="48"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -91,7 +91,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="42"/>
+<Adjective nr="43"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -102,12 +102,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="143">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -118,12 +118,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="48"/>
+<Adjective nr="35"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -134,12 +134,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="50"/>
+<Adjective nr="35"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -151,12 +151,12 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -168,7 +168,7 @@
 </Typ>
 </ArgTypes>
 <Func kind="U" nr="1">
-<Func kind="K" nr="144">
+<Func kind="K" nr="143">
 <LocusVar nr="1"/>
 </Func>
 </Func>

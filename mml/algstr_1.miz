@@ -7,18 +7,21 @@
 environ
 
  vocabularies RLVECT_1, BOOLE, MIDSP_1, REALSET1, ARYTM_1, VECTSP_1, CAT_1,
-      BINOP_1, RELAT_1, ARYTM_3, ALGSTR_1, GROUP_1, VECTSP_2, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_2, STRUCT_0,
-      GROUP_1, VECTSP_1, RLVECT_1, MIDSP_1;
- constructors BINOP_1, BINOP_2, VECTSP_1, MIDSP_1;
- registrations SUBSET_1, NUMBERS, VECTSP_1;
+      BINOP_1, RELAT_1, ARYTM_3, ALGSTR_1, GROUP_1, VECTSP_2, ARYTM, MOD_1,
+      ALGSTR_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, REAL_1, BINOP_2, FUNCT_5,
+      STRUCT_0, ALGSTR_0, GROUP_1, VECTSP_1, RLVECT_1, MIDSP_1;
+ constructors BINOP_1, BINOP_2, VECTSP_1, MIDSP_1, RLVECT_1, FUNCT_5, VALUED_1,
+      PARTFUN1, SEQ_1;
+ registrations SUBSET_1, NUMBERS, VECTSP_1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1;
- theorems RLVECT_1, VECTSP_1, TARSKI, XCMPLX_1, BINOP_2, GROUP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, VECTSP_1, ALGSTR_0, VALUED_1;
+ theorems RLVECT_1, VECTSP_1, TARSKI, XCMPLX_1, BINOP_2, GROUP_1, CARD_1,
+      ALGSTR_0, STRUCT_0, VECTSP_2;
 
 begin :: GROUPS
 
- reserve L for non empty LoopStr;
+ reserve L for non empty addLoopStr;
  reserve a,b,c,x,y,z for Element of L;
 
 theorem Th1: (for a holds a + 0.L = a)
@@ -71,75 +74,56 @@ definition let x be set;
   coherence by TARSKI:def 1;
  end;
 
-definition
- func L_Trivial -> strict LoopStr equals
-   LoopStr (# {{}}, op2, Extract {} #);
- correctness;
-end;
-
-registration
- cluster L_Trivial -> non empty;
- coherence
-  proof
-     thus the carrier of L_Trivial is non empty;
-  end;
-end;
-
 canceled;
 
 theorem Th5:
- for a,b being Element of L_Trivial holds a = b
+ for a,b being Element of Trivial-addLoopStr holds a = b
   proof
-   let a,b be Element of L_Trivial;
-   thus a = {} by TARSKI:def 1 .= b by TARSKI:def 1;
+   let a,b be Element of Trivial-addLoopStr;
+   thus a = {} by CARD_1:87,TARSKI:def 1 .= b by CARD_1:87,TARSKI:def 1;
   end;
 
 theorem
-      for a,b be Element of L_Trivial holds a+b = 0.L_Trivial
+      for a,b be Element of Trivial-addLoopStr holds a+b = 0.Trivial-addLoopStr
  by Th5;
 
-Lm1: for a be Element of L_Trivial holds a + 0.L_Trivial = a
+Lm1: for a be Element of Trivial-addLoopStr holds a + 0.Trivial-addLoopStr = a
  by Th5;
 
-Lm2: for a be Element of L_Trivial holds 0.L_Trivial + a = a
+Lm2: for a be Element of Trivial-addLoopStr holds 0.Trivial-addLoopStr + a = a
  by Th5;
 
-Lm3: for a,b be Element of L_Trivial
-             ex x be Element of L_Trivial st a+x=b
+Lm3: for a,b be Element of Trivial-addLoopStr
+             ex x be Element of Trivial-addLoopStr st a+x=b
 proof
-  let a,b be Element of L_Trivial;
-  take x = 0.L_Trivial;
+  let a,b be Element of Trivial-addLoopStr;
+  take x = 0.Trivial-addLoopStr;
   thus a+x = b by Th5;
 end;
 
-Lm4: for a,b be Element of L_Trivial
-             ex x be Element of L_Trivial st x+a=b
+Lm4: for a,b be Element of Trivial-addLoopStr
+             ex x be Element of Trivial-addLoopStr st x+a=b
 proof
-  let a,b be Element of L_Trivial;
-  take x = 0.L_Trivial;
+  let a,b be Element of Trivial-addLoopStr;
+  take x = 0.Trivial-addLoopStr;
   thus x+a = b by Th5;
 end;
 
-Lm5: for a,x,y be Element of L_Trivial holds a+x=a+y
+Lm5: for a,x,y be Element of Trivial-addLoopStr holds a+x=a+y
     implies x=y by Th5;
 
-Lm6: for a,x,y be Element of L_Trivial holds x+a=y+a
+Lm6: for a,x,y be Element of Trivial-addLoopStr holds x+a=y+a
    implies x=y by Th5;
 
-definition let IT be non empty LoopStr;
+definition let IT be non empty addLoopStr;
+  canceled;
   attr IT is left_zeroed means
 :Def5: for a being Element of IT holds 0.IT + a = a;
+
 end;
 
-definition let L be non empty LoopStr;
-  attr L is add-left-cancelable means :Def6:
-    for a,b,c being Element of L holds
-      a + b = a + c implies b = c;
-
-  attr L is add-right-cancelable means :Def7:
-    for a,b,c being Element of L holds
-      b + a = c + a implies b = c;
-
+definition let L be non empty addLoopStr;
+  canceled 2;
   attr L is add-left-invertible means :Def8:
     for a,b be Element of L
       ex x being Element of L st x + a = b;
@@ -149,24 +133,43 @@ definition let L be non empty LoopStr;
       ex x being Element of L st a + x = b;
 end;
 
-definition let IT be non empty LoopStr;
-  attr IT is Loop-like means :Def10:
-    IT is add-left-cancelable add-right-cancelable
+definition let IT be non empty addLoopStr;
+ canceled 2;
+  attr IT is Loop-like means :Def12:
+    IT is left_add-cancelable right_add-cancelable
           add-left-invertible add-right-invertible;
 end;
 
 registration
-  cluster Loop-like -> add-left-cancelable add-right-cancelable
-             add-left-invertible add-right-invertible (non empty LoopStr);
-  coherence by Def10;
-  cluster add-left-cancelable add-right-cancelable
+  cluster Loop-like -> left_add-cancelable right_add-cancelable
+             add-left-invertible add-right-invertible (non empty addLoopStr);
+  coherence by Def12;
+  cluster left_add-cancelable right_add-cancelable
           add-left-invertible add-right-invertible ->
-              Loop-like (non empty LoopStr);
-  coherence by Def10;
+              Loop-like (non empty addLoopStr);
+  coherence by Def12;
 end;
 
+Lm7: for L being addLoopStr st L is left_add-cancelable
+ for x,y,z being Element of L st x+y = x+z holds y = z
+ proof let L be addLoopStr;
+  assume L is left_add-cancelable;
+   then reconsider L as left_add-cancelable addLoopStr;
+   for x,y,z being Element of L st x+y = x+z holds y = z by ALGSTR_0:def 3;
+  hence thesis;
+ end;
+
+Lm8: for L being addLoopStr st L is right_add-cancelable
+ for x,y,z being Element of L st y+x = z+x holds y = z
+ proof let L be addLoopStr;
+  assume L is right_add-cancelable;
+   then reconsider L as right_add-cancelable addLoopStr;
+   for x,y,z being Element of L st y+x = z+x holds y = z by ALGSTR_0:def 4;
+  hence thesis;
+ end;
+
 theorem Th7:
-  for L being non empty LoopStr holds
+  for L being non empty addLoopStr holds
     L is Loop-like iff
      (for a,b be Element of L
         ex x being Element of L st a+x=b)
@@ -175,82 +178,91 @@ theorem Th7:
      & (for a,x,y be Element of L holds a+x=a+y implies x=y)
      & (for a,x,y be Element of L holds x+a=y+a implies x=y)
 proof
-  let L be non empty LoopStr;
+  let L be non empty addLoopStr;
   hereby assume L is Loop-like;
-then A1: L is add-left-cancelable add-right-cancelable
-          add-left-invertible add-right-invertible by Def10;
+then A1: L is left_add-cancelable right_add-cancelable
+          add-left-invertible add-right-invertible by Def12;
     hence for a,b be Element of L
       ex x being Element of L st a+x=b by Def9;
     thus for a,b be Element of L
         ex x being Element of L st x+a=b by A1,Def8;
     thus for a,x,y be Element of L holds a+x=a+y implies x=y
-     by A1,Def6;
+     by A1,Lm7;
     let a,x,y be Element of L;
-    thus x+a=y+a implies x=y by A1,Def7;
+    thus x+a=y+a implies x=y by A1,Lm8;
    end;
-   assume (for a,b be Element of L
+   assume
+A2:    (for a,b be Element of L
         ex x being Element of L st a+x=b)
      & (for a,b be Element of L
         ex x being Element of L st x+a=b)
      & (for a,x,y be Element of L holds a+x=a+y implies x=y)
      & (for a,x,y be Element of L holds x+a=y+a implies x=y);
-   hence L is add-left-cancelable add-right-cancelable
-         add-left-invertible add-right-invertible by Def6,Def7,Def8,Def9;
+   thus L is left_add-cancelable
+    proof let x,x,x be Element of L;
+     thus thesis by A2;
+    end;
+   thus L is right_add-cancelable
+    proof let x,x,x be Element of L;
+     thus thesis by A2;
+    end;
+   thus L is add-left-invertible add-right-invertible by A2,Def8,Def9;
 end;
 
-Lm7: for a,b,c be Element of L_Trivial
+Lm9: for a,b,c be Element of Trivial-addLoopStr
     holds (a+b)+c = a+(b+c) by Th5;
 
-Lm8: for a,b be Element of L_Trivial holds a+b = b+a by Th5;
+Lm10: for a,b be Element of Trivial-addLoopStr holds a+b = b+a by Th5;
 
 registration
-  cluster L_Trivial -> add-associative Loop-like right_zeroed left_zeroed;
-  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Lm6,Lm7,Th7,RLVECT_1:def 6,def 7;
+  cluster Trivial-addLoopStr
+   -> add-associative Loop-like right_zeroed left_zeroed;
+  coherence by Def5,Lm1,Lm2,Lm3,Lm4,Lm5,Lm6,Lm9,Th7,RLVECT_1:def 6,def 7;
 end;
 
 registration
- cluster strict left_zeroed right_zeroed Loop-like (non empty LoopStr);
+ cluster strict left_zeroed right_zeroed Loop-like (non empty addLoopStr);
   existence
    proof
-     take L_Trivial;
+     take Trivial-addLoopStr;
      thus thesis;
    end;
 end;
 
 definition
-  mode Loop is left_zeroed right_zeroed Loop-like (non empty LoopStr);
+  mode Loop is left_zeroed right_zeroed Loop-like (non empty addLoopStr);
 end;
 
 registration
  cluster strict add-associative Loop;
   existence
    proof
-    take L_Trivial;
+    take Trivial-addLoopStr;
     thus thesis;
    end;
 end;
 
 definition
-  mode Group is add-associative Loop;
+  mode AddGroup is add-associative Loop;
 end;
 
 registration
- cluster Loop-like -> right_complementable (non empty LoopStr);
+ cluster Loop-like -> add-left-invertible (non empty addLoopStr);
  coherence
-  proof let L be (non empty LoopStr);
+  proof let L be (non empty addLoopStr);
   assume L is Loop-like;
-   hence for a being Element of L
-   ex x being Element of L st a+x = 0.L by Th7;
+   hence for a,b being Element of L
+   ex x being Element of L st x+a = b by Th7;
   end;
  cluster add-associative right_zeroed right_complementable
-              -> left_zeroed Loop-like (non empty LoopStr);
+              -> left_zeroed Loop-like (non empty addLoopStr);
  coherence
   proof let L;
     assume
 A1:  L is add-associative right_zeroed right_complementable;
      then reconsider G = L
        as add-associative right_zeroed right_complementable
-             (non empty LoopStr);
+             (non empty addLoopStr);
     thus for a holds 0.L + a = a by A1,RLVECT_1:10;
           now thus for a,b ex x st a+x=b by A1,RLVECT_1:20;
       thus for a,b ex x st x+a=b
@@ -275,12 +287,12 @@ end;
 canceled;
 
 theorem Th9:
-   L is Group iff
+   L is AddGroup iff
      (for a holds a + 0.L = a)
    & (for a ex x st a+x = 0.L)
    & (for a,b,c holds (a+b)+c = a+(b+c))
   proof
-    thus L is Group implies
+    thus L is AddGroup implies
            (for a holds a + 0.L = a)
          & (for a ex x st a+x = 0.L)
          & (for a,b,c holds (a+b)+c = a+(b+c))
@@ -335,14 +347,14 @@ theorem Th9:
   end;
 
 registration
-  cluster L_Trivial -> Abelian;
-  coherence by Lm8,RLVECT_1:def 5;
+  cluster Trivial-addLoopStr -> Abelian;
+  coherence by Lm10,RLVECT_1:def 5;
 end;
 
 registration
- cluster strict Abelian Group;
+ cluster strict Abelian AddGroup;
   existence
-   proof take L_Trivial;
+   proof take Trivial-addLoopStr;
     thus thesis;
    end;
 end;
@@ -350,84 +362,72 @@ end;
 canceled;
 
 theorem
-       L is Abelian Group iff
+       L is Abelian AddGroup iff
      (for a holds a + 0.L = a)
    & (for a ex x st a+x = 0.L)
    & (for a,b,c holds (a+b)+c = a+(b+c))
    & (for a,b holds a+b = b+a) by Th9,RLVECT_1:def 5;
 
-definition
- func multL_Trivial -> strict multLoopStr equals
-   multLoopStr (# {{}}, op2, Extract {} #);
- correctness;
-end;
-
 registration
- cluster multL_Trivial -> non empty;
- coherence
-  proof
-    thus the carrier of multL_Trivial is non empty;
-  end;
+ cluster Trivial-multLoopStr -> non empty;
+ coherence;
 end;
 
 canceled 6;
 
 theorem Th18:
- for a,b being Element of multL_Trivial holds a = b
+ for a,b being Element of Trivial-multLoopStr holds a = b
   proof
-   let a,b be Element of multL_Trivial;
-   thus a = {} by TARSKI:def 1 .= b by TARSKI:def 1;
+   let a,b be Element of Trivial-multLoopStr;
+   thus a = {} by CARD_1:87,TARSKI:def 1 .= b by CARD_1:87,TARSKI:def 1;
   end;
 
 theorem
-   for a,b be Element of multL_Trivial
-  holds a*b = 1.multL_Trivial by Th18;
+   for a,b be Element of Trivial-multLoopStr
+  holds a*b = 1.Trivial-multLoopStr by Th18;
 
-Lm9: for a be Element of multL_Trivial
-   holds a * 1.multL_Trivial = a by Th18;
+Lm11: for a be Element of Trivial-multLoopStr
+   holds a * 1.Trivial-multLoopStr = a by Th18;
 
-Lm10: for a be Element of multL_Trivial
-   holds 1.multL_Trivial * a = a by Th18;
+Lm12: for a be Element of Trivial-multLoopStr
+   holds 1.Trivial-multLoopStr * a = a by Th18;
 
-Lm11: for a,b be Element of multL_Trivial
-             ex x be Element of multL_Trivial st a*x=b
+Lm13: for a,b be Element of Trivial-multLoopStr
+             ex x be Element of Trivial-multLoopStr st a*x=b
          proof
-           let a,b be Element of multL_Trivial;
-           take x = 1_multL_Trivial;
+           let a,b be Element of Trivial-multLoopStr;
+           take x = 1_Trivial-multLoopStr;
            thus a*x = b by Th18;
          end;
 
-Lm12: for a,b be Element of multL_Trivial
-             ex x be Element of multL_Trivial st x*a=b
+Lm14: for a,b be Element of Trivial-multLoopStr
+             ex x be Element of Trivial-multLoopStr st x*a=b
          proof
-           let a,b be Element of multL_Trivial;
-           take x = 1_multL_Trivial;
+           let a,b be Element of Trivial-multLoopStr;
+           take x = 1_Trivial-multLoopStr;
            thus x*a = b by Th18;
          end;
 
-   Lm13: for a,x,y be Element of multL_Trivial
-   holds a*x=a*y implies x=y by Th18;
-
-   Lm14: for a,x,y be Element of multL_Trivial
-   holds x*a=y*a implies x=y by Th18;
-
   definition let IT be non empty multLoopStr;
-    attr IT is invertible means :Def12:
+  canceled;
+    attr IT is invertible means :Def14:
        (for a,b   be Element of IT
        ex x being Element of IT st a*x=b)
        & (for a,b   be Element of IT
        ex x being Element of IT st x*a=b);
-    attr IT is cancelable means :Def13:
-       (for a,x,y be Element of IT holds a*x=a*y implies x=y)
-       & (for a,x,y be Element of IT holds x*a=y*a implies x=y);
+    canceled;
   end;
+
+notation let L be non empty multLoopStr;
+ synonym L is cancelable for L is mult-cancelable;
+end;
 
 registration
  cluster strict well-unital invertible cancelable (non empty multLoopStr);
   existence
    proof
-      multL_Trivial is well-unital invertible cancelable
- by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_1:def 16;
+      Trivial-multLoopStr is well-unital invertible cancelable
+ by Def14,Lm11,Lm12,Lm13,Lm14,VECTSP_1:def 16;
     hence thesis;
    end;
 end;
@@ -437,17 +437,17 @@ definition
 end;
 
   registration
-    cluster multL_Trivial -> well-unital invertible cancelable;
-    coherence by Def12,Def13,Lm9,Lm10,Lm11,Lm12,Lm13,Lm14,VECTSP_1:def 16;
+    cluster Trivial-multLoopStr -> well-unital invertible cancelable;
+    coherence by Def14,Lm11,Lm12,Lm13,Lm14,VECTSP_1:def 16;
   end;
 
-Lm15: for a,b,c be Element of multL_Trivial
+Lm15: for a,b,c be Element of Trivial-multLoopStr
     holds (a*b)*c = a*(b*c) by Th18;
 
 registration
  cluster strict associative multLoop;
   existence
-   proof multL_Trivial is associative by Lm15,GROUP_1:def 4;
+   proof Trivial-multLoopStr is associative by Lm15,GROUP_1:def 4;
     hence thesis;
    end;
 end;
@@ -514,7 +514,7 @@ theorem Th22:
            (for a holds a * 1.L = a)
          & (for a ex x st a*x = 1.L)
          & (for a,b,c holds (a*b)*c = a*(b*c))
- by Def12,GROUP_1:def 4,VECTSP_1:def 16;
+ by Def14,GROUP_1:def 4,VECTSP_1:def 16;
         assume A1: (for a holds a * 1.L = a)
                   & (for a ex x st a*x = 1.L)
                   & (for a,b,c holds (a*b)*c = a*(b*c));
@@ -543,8 +543,7 @@ theorem Th22:
                thus x*a = b * 1.L by A1,A4
                        .= b by A1;
              end;
-           thus for a,x,y be Element of L
-           holds a*x=a*y implies x=y
+           thus L is left_mult-cancelable
              proof
                let a,x,y;
                consider z such that A5: z*a = 1.L by A1,Lm18;
@@ -552,8 +551,7 @@ theorem Th22:
                then (z*a)*x = z*(a*y) by A1 .= (z*a)*y by A1;
                hence x = 1.L * y by A2,A5 .= y by A2;
              end;
-           thus for a,x,y be Element of L
-           holds x*a=y*a implies x=y
+           thus L is right_mult-cancelable
              proof
                let a,x,y;
                consider z such that A6: a*z = 1.L by A1;
@@ -562,21 +560,21 @@ theorem Th22:
                hence x = y * 1.L by A1,A6 .= y by A1;
              end;
          end;
-       hence thesis by A1,Def12,Def13,GROUP_1:def 4,VECTSP_1:def 16;
+       hence thesis by A1,Def14,ALGSTR_0:def 25,GROUP_1:def 4,VECTSP_1:def 16;
   end;
 
 registration
-  cluster multL_Trivial -> associative;
+  cluster Trivial-multLoopStr -> associative;
   coherence by Lm15,GROUP_1:def 4;
 end;
 
-Lm19: for a,b be Element of multL_Trivial holds a*b = b*a
+Lm19: for a,b be Element of Trivial-multLoopStr holds a*b = b*a
        by Th18;
 
 registration
  cluster strict commutative multGroup;
   existence
-   proof multL_Trivial is commutative by Lm19,GROUP_1:def 16;
+   proof Trivial-multLoopStr is commutative by Lm19,GROUP_1:def 16;
     hence thesis;
    end;
 end;
@@ -590,15 +588,19 @@ theorem
    & (for a,b,c holds (a*b)*c = a*(b*c))
    & (for a,b holds a*b = b*a) by Th22,GROUP_1:def 16;
 
-definition
+notation
   let L be invertible cancelable (non empty multLoopStr);
-  let a be Element of L;
- canceled 2;
+  let x be Element of L;
+ synonym x" for /x;
+end;
 
-  func a" -> Element of L means :Def16:
-    a*it = 1.L;
-  existence by Def12;
-  uniqueness by Def13;
+registration
+  let L be invertible cancelable (non empty multLoopStr);
+  cluster -> left_invertible Element of L;
+  coherence
+   proof let x be Element of L;
+    thus ex y being Element of L st y*x = 1.L by Def14;
+   end;
 end;
 
  reserve G for multGroup;
@@ -607,16 +609,17 @@ end;
 canceled;
 
 theorem
-      a*(a") = 1.G & a"*a=1.G
+     a"*a=1.G &  a*(a") = 1.G
     proof
-      thus A1: a*(a") = 1.G by Def16;
+      thus A1: a"*a = 1.G by ALGSTR_0:def 30;
           (for a holds a * 1.G = a)
       & (for a ex x st a*x = 1.G)
       & (for a,b,c holds (a*b)*c = a*(b*c)) by Th22;
-      hence (a")*a = 1.G by A1,Lm16;
+      hence a*a" = 1.G by A1,Lm16;
     end;
 
 definition
+ canceled 3;
   let L be invertible cancelable (non empty multLoopStr);
   let a, b be Element of L;
   func a/b -> Element of L equals
@@ -628,16 +631,13 @@ definition
  canceled 3;
 
  func multEX_0 -> strict multLoopStr_0 equals
-   multLoopStr_0 (# REAL, multreal, 1, 0 #);
+   multLoopStr_0 (# REAL, multreal, 0, 1 #);
  correctness;
 end;
 
 registration
  cluster multEX_0 -> non empty;
- coherence
-  proof
-    thus the carrier of multEX_0 is non empty;
-  end;
+ coherence;
 end;
 
 Lm20: now
@@ -750,21 +750,17 @@ Lm28: for a be Element of multEX_0
      end;
 
 definition let IT be non empty multLoopStr_0;
-  attr IT is almost_invertible means :Def22:
+  attr IT is almost_invertible means :Def24:
      (for a,b be Element of IT st a<>0.IT
        ex x be Element of IT st a*x=b) &
      (for a,b be Element of IT st a<>0.IT
        ex x be Element of IT st x*a=b);
 
-  attr IT is almost_cancelable means :Def23:
-     (for a,x,y be Element of IT st a<>0.IT
-         holds a*x=a*y implies x=y) &
-     (for a,x,y be Element of IT st a<>0.IT
-           holds x*a=y*a implies x=y);
 end;
 
 definition let IT be non empty multLoopStr_0;
-  attr IT is multLoop_0-like means :Def24:
+  canceled;
+  attr IT is multLoop_0-like means :Def26:
     IT is almost_invertible almost_cancelable
      & (for a be Element of IT holds a*0.IT = 0.IT)
      & (for a be Element of IT holds 0.IT*a = 0.IT);
@@ -786,21 +782,37 @@ theorem Th34:
 proof
   let L be non empty multLoopStr_0;
   hereby assume L is multLoop_0-like;
-    then L is almost_invertible almost_cancelable
-     & (for a be Element of L holds a*0.L = 0.L)
-     & (for a be Element of L holds 0.L*a = 0.L) by Def24;
+    then
+A1:    L is almost_invertible almost_cancelable &
+     (for a be Element of L holds a*0.L = 0.L)
+     & (for a be Element of L holds 0.L*a = 0.L) by Def26;
     hence (for a,b be Element of L st a<>0.L
          ex x be Element of L st a*x=b) &
      (for a,b be Element of L st a<>0.L
-         ex x be Element of L st x*a=b) &
+         ex x be Element of L st x*a=b) by Def24;
+    thus
      (for a,x,y be Element of L st a<>0.L
-           holds a*x=a*y implies x=y) &
+           holds a*x=a*y implies x=y)
+     proof let a,x,y be Element of L such that
+A2:      a<>0.L;
+       L is almost_left_cancelable by A1,ALGSTR_0:def 38;
+       then a is left_mult-cancelable by A2,ALGSTR_0:def 36;
+      hence a*x=a*y implies x=y by ALGSTR_0:def 20;
+     end;
+    thus
      (for a,x,y be Element of L st a<>0.L
-           holds x*a=y*a implies x=y) &
-     (for a be Element of L holds a*0.L = 0.L) &
-     (for a be Element of L holds 0.L*a = 0.L) by Def22,Def23;
+           holds x*a=y*a implies x=y)
+     proof let a,x,y be Element of L such that
+A3:      a<>0.L;
+       L is almost_right_cancelable by A1,ALGSTR_0:def 38;
+       then a is right_mult-cancelable by A3,ALGSTR_0:def 37;
+      hence x*a=y*a implies x=y by ALGSTR_0:def 21;
+     end;
+     thus (for a be Element of L holds a*0.L = 0.L) &
+      (for a be Element of L holds 0.L*a = 0.L) by A1;
   end;
-  assume (for a,b be Element of L st a<>0.L
+  assume
+A4: (for a,b be Element of L st a<>0.L
          ex x be Element of L st a*x=b) &
      (for a,b be Element of L st a<>0.L
          ex x be Element of L st x*a=b) &
@@ -810,16 +822,33 @@ proof
            holds x*a=y*a implies x=y) &
      (for a be Element of L holds a*0.L = 0.L) &
      (for a be Element of L holds 0.L*a = 0.L);
+A5: L is almost_left_cancelable
+    proof let x being Element of L;
+     assume
+A6:     x <> 0.L;
+     let y,z be Element of L;
+     assume x*y = x*z;
+     hence y = z by A4,A6;
+    end;
+   L is almost_right_cancelable
+    proof let x being Element of L;
+     assume
+A7:     x <> 0.L;
+     let y,z be Element of L;
+     assume y*x = z*x;
+     hence y = z by A4,A7;
+    end;
   then L is almost_invertible almost_cancelable
      & (for a be Element of L holds a*0.L = 0.L)
-     & (for a be Element of L holds 0.L*a = 0.L) by Def22,Def23;
-  hence thesis by Def24;
+     & (for a be Element of L holds 0.L*a = 0.L) by A4,A5,Def24,ALGSTR_0:def 38
+;
+  hence thesis by Def26;
 end;
 
 registration
   cluster multLoop_0-like -> almost_invertible almost_cancelable
     (non empty multLoopStr_0);
-  coherence by Def24;
+  coherence by Def26;
 end;
 
 registration
@@ -828,7 +857,7 @@ registration
   existence
    proof
       multEX_0 is well-unital multLoop_0-like non degenerated
- by Lm22,Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Th34,VECTSP_1:def 21;
+ by Lm22,Lm23,Lm24,Lm25,Lm26,Lm27,Lm28,Th34,STRUCT_0:def 8;
     hence thesis;
    end;
 end;
@@ -859,7 +888,7 @@ registration
  cluster strict associative non degenerated multLoop_0;
   existence
    proof multEX_0 is associative non degenerated by Lm21,Lm22,Lm29,
-GROUP_1:def 4,VECTSP_1:def 21;
+GROUP_1:def 4,STRUCT_0:def 8;
     hence thesis;
    end;
 end;
@@ -890,7 +919,7 @@ registration
  cluster strict commutative multGroup_0;
   existence
    proof multEX_0 is commutative non degenerated
-     by Lm21,Lm22,Lm30,GROUP_1:def 16,VECTSP_1:def 21;
+     by Lm21,Lm22,Lm30,GROUP_1:def 16,STRUCT_0:def 8;
     hence thesis;
    end;
 end;
@@ -899,12 +928,18 @@ canceled 2;
 
 definition
   let L be almost_invertible almost_cancelable (non empty multLoopStr_0);
-  let a be Element of L;
-  assume A1: a<>0.L;
-  func a" -> Element of L means :Def25:
-    a*it = 1_L;
-  existence by A1,Def22;
-  uniqueness by A1,Def23;
+  let x be Element of L;
+  assume A1: x<>0.L;
+  redefine func x" means :Def27:
+    it*x = 1.L;
+  compatibility
+  proof let IT be Element of L;
+    consider x1 being Element of L such that
+A2:   x1*x = 1.L by A1,Def24;
+A3:  x is left_invertible by A2,ALGSTR_0:def 27;
+    x is right_mult-cancelable by A1,ALGSTR_0:def 37;
+   hence thesis by A3,ALGSTR_0:def 35;
+  end;
 end;
 
 reserve G for associative almost_invertible almost_cancelable well-unital
@@ -914,15 +949,15 @@ reserve a,x for Element of G;
 canceled;
 
 theorem
-   a<>0.G implies a*(a") = 1_G & a"*a=1_G
+   a<>0.G implies a"*a=1.G &  a*(a") = 1.G
     proof
       assume A1:a<>0.G;
-      hence A2: a*(a") = 1_G by Def25;
+      hence A2: a"*a = 1.G by Def27;
       consider x such that
-A3:   x*a = 1_G by A1,Def22;
-       x*(a*(a")) = 1_G * (a") by A3,GROUP_1:def 4;
-      then x = 1_G * (a") by A2,VECTSP_1:def 13;
-      hence thesis by A3,VECTSP_1:def 19;
+A3:   a*x = 1.G by A1,Def24;
+       a"*a*x = a" * 1.G by A3,GROUP_1:def 4;
+      then x = a" * 1.G by A2,VECTSP_1:def 19;
+      hence thesis by A3,VECTSP_1:def 13;
     end;
 
 definition

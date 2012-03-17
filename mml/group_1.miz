@@ -8,17 +8,17 @@ environ
 
  vocabularies INT_1, VECTSP_1, ABSVALUE, BINOP_1, FUNCT_1, ARYTM_1, REALSET1,
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
-      GROUP_1, ENDALG, ARYTM;
+      GROUP_1, ENDALG, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0,
-      RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, FINSET_1, STRUCT_0, RLVECT_1,
-      INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
+      XXREAL_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, FINSET_1, STRUCT_0,
+      ALGSTR_0, RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, FINSEQOP, RLVECT_1;
+      INT_2, FINSEQOP, RLVECT_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, STRUCT_0, XBOOLE_0;
+      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO;
+ definitions BINOP_1, FINSEQOP, STRUCT_0, RLVECT_1, SETWISEO, ALGSTR_0,
+      VALUED_1;
  theorems ABSVALUE, BINOP_1, CARD_1, FINSEQOP, FUNCT_2, INT_1, NAT_1, REAL_1,
       ZFMISC_1, STRUCT_0, BINOP_2, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
       NAT_D;
@@ -29,41 +29,11 @@ begin
  reserve n for Element of NAT;
  reserve i,j for Integer;
 
-definition
-  struct(1-sorted) HGrStr (# carrier -> set,
-                             mult -> BinOp of the carrier #);
-end;
-
-registration
-  cluster non empty strict HGrStr;
-  existence
-   proof
-    consider A being non empty set, m being BinOp of A;
-    take HGrStr(#A,m#);
-    thus the carrier of HGrStr(#A,m#) is non empty;
-    thus thesis;
-   end;
-end;
-
-definition
-  let S be non empty HGrStr;
-  let x, y be Element of S;
-  func x*y -> Element of S equals
-    (the mult of S).(x,y);
-  coherence;
-end;
-
- reserve S for non empty HGrStr;
+ reserve S for non empty multMagma;
  reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
-registration
- let A be non empty set, m be BinOp of A;
- cluster HGrStr(#A,m#) -> non empty;
- coherence by STRUCT_0:def 1;
-end;
-
 Lm1:
-now set G = HGrStr (# REAL, addreal #);
+now set G = multMagma (# REAL, addreal #);
  thus for h,g,f being Element of G holds h * g * f = h * (g * f)
   proof let h,g,f be Element of G;
     reconsider A = h, B = g, C = f as Real;
@@ -85,7 +55,8 @@ now set G = HGrStr (# REAL, addreal #);
  thus g * h = (- A) + A by BINOP_2:def 9  .= e;
 end;
 
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
+ canceled;
   attr IT is unital means
   :Def2: ex e being Element of IT st
         for h being Element of IT holds
@@ -101,9 +72,9 @@ definition let IT be non empty HGrStr;
 end;
 
 registration
-  cluster Group-like -> unital (non empty HGrStr);
+  cluster Group-like -> unital (non empty multMagma);
  coherence
-  proof let IT be non empty HGrStr;
+  proof let IT be non empty multMagma;
    assume ex e being Element of IT st
         for h being Element of IT holds
          h * e = h & e * h = h &
@@ -115,17 +86,17 @@ registration
 end;
 
 registration
-  cluster strict Group-like associative (non empty HGrStr);
+  cluster strict Group-like associative (non empty multMagma);
   existence
    proof
-      HGrStr (# REAL, addreal #) is Group-like associative
+      multMagma (# REAL, addreal #) is Group-like associative
       by Def3,Def4,Lm1;
     hence thesis;
    end;
 end;
 
 definition
-  mode Group is Group-like associative (non empty HGrStr);
+  mode Group is Group-like associative (non empty multMagma);
 end;
 
 canceled 4;
@@ -171,8 +142,8 @@ A7: s1 = s2 * (r * t1) by A1,A4,A5
   end;
 
 theorem Th7:
-  HGrStr (# REAL, addreal #) is associative Group-like
-  proof set G = HGrStr (# REAL, addreal #);
+  multMagma (# REAL, addreal #) is associative Group-like
+  proof set G = multMagma (# REAL, addreal #);
    thus for h,g,f being Element of G
      holds h * g * f = h * (g * f)
     proof let h,g,f be Element of G;
@@ -195,10 +166,10 @@ theorem Th7:
    thus g * h = (- A) + A by BINOP_2:def 9 .= e;
   end;
 
- reserve G for Group-like (non empty HGrStr);
+ reserve G for Group-like (non empty multMagma);
  reserve e,h for Element of G;
 
-definition let G be non empty HGrStr such that
+definition let G be non empty multMagma such that
 A1: G is unital;
  func 1_G -> Element of G means
   :Def5: for h being Element of G
@@ -442,21 +413,21 @@ end;
 canceled 2;
 
 theorem Th31:
- for G being associative (non empty HGrStr)
- holds the mult of G is associative
-  proof let G be associative (non empty HGrStr);
+ for G being associative (non empty multMagma)
+ holds the multF of G is associative
+  proof let G be associative (non empty multMagma);
    let h,g,f be Element of G;
-    set o = the mult of G;
+    set o = the multF of G;
    thus o.(h,o.(g,f)) = h * (g * f)
                      .= h * g * f by Def4
                      .= o.(o.(h,g),f);
   end;
 
 theorem Th32:
-  for G being unital (non empty HGrStr)
- holds 1_G is_a_unity_wrt the mult of G
-  proof let G be unital (non empty HGrStr);
-    set o = the mult of G;
+  for G being unital (non empty multMagma)
+ holds 1_G is_a_unity_wrt the multF of G
+  proof let G be unital (non empty multMagma);
+    set o = the multF of G;
         now let h be Element of G;
      thus o.(1_G,h) = 1_G * h
                    .= h by Def5;
@@ -467,47 +438,47 @@ theorem Th32:
   end;
 
 theorem Th33:
-  for G being unital (non empty HGrStr)
- holds the_unity_wrt the mult of G = 1_G
-  proof let G be unital (non empty HGrStr);
-        1_G is_a_unity_wrt the mult of G by Th32;
+  for G being unital (non empty multMagma)
+ holds the_unity_wrt the multF of G = 1_G
+  proof let G be unital (non empty multMagma);
+        1_G is_a_unity_wrt the multF of G by Th32;
    hence thesis by BINOP_1:def 8;
   end;
 
 theorem Th34:
-  for G being unital (non empty HGrStr)
- holds the mult of G has_a_unity
-  proof let G be unital (non empty HGrStr);
+  for G being unital (non empty multMagma)
+ holds the multF of G has_a_unity
+  proof let G be unital (non empty multMagma);
    take 1_G;
    thus thesis by Th32;
   end;
 
 theorem Th35:
-  inverse_op(G) is_an_inverseOp_wrt the mult of G
+  inverse_op(G) is_an_inverseOp_wrt the multF of G
   proof let h be Element of G;
-   thus (the mult of G).(h,inverse_op(G).h) = h * h" by Def7
+   thus (the multF of G).(h,inverse_op(G).h) = h * h" by Def7
                        .= 1_G by Def6
-                       .= the_unity_wrt the mult of G by Th33;
-   thus (the mult of G).(inverse_op(G).h,h) = h" * h by Def7
+                       .= the_unity_wrt the multF of G by Th33;
+   thus (the multF of G).(inverse_op(G).h,h) = h" * h by Def7
                        .= 1_G by Def6
-                       .= the_unity_wrt the mult of G by Th33;
+                       .= the_unity_wrt the multF of G by Th33;
   end;
 
 theorem Th36:
-  the mult of G has_an_inverseOp
-  proof inverse_op(G) is_an_inverseOp_wrt the mult of G by Th35;
+  the multF of G has_an_inverseOp
+  proof inverse_op(G) is_an_inverseOp_wrt the multF of G by Th35;
    hence thesis by FINSEQOP:def 2;
   end;
 
 theorem
-  the_inverseOp_wrt the mult of G = inverse_op(G)
-  proof set o = the mult of G;
+  the_inverseOp_wrt the multF of G = inverse_op(G)
+  proof set o = the multF of G;
    o has_a_unity & o is associative & o has_an_inverseOp &
    inverse_op(G) is_an_inverseOp_wrt o by Th31,Th34,Th35,Th36;
    hence thesis by FINSEQOP:def 3;
   end;
 
-definition let G be non empty HGrStr;
+definition let G be non empty multMagma;
  func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
   :Def8: for h being Element of G
    holds it.(h,0) = 1_G & for n holds it.(h,n + 1) = it.(h,n) * h;
@@ -1363,14 +1334,14 @@ proof let n be Nat;
            then ord h <= n by A3,A4,Def12;
           then consider m being Nat such that
           A6: n = ord h + m by NAT_1:10;
-           A8: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
+           A7: h |^ n = h |^ ord h * (h |^ m) by A6,Th48
                    .= 1_G * (h |^ m) by Th82
                    .= h |^ m by Def5;
                m < n by A5,A6,NAT_1:16;
-           then ord h divides m by A2,A3,A8;
-          then consider i being Nat such that A9: m = ord h * i
+           then ord h divides m by A2,A3,A7;
+          then consider i being Nat such that A8: m = ord h * i
           by NAT_D:def 3;
-          n = ord h * (1 + i) by A6,A9;
+          n = ord h * (1 + i) by A6,A8;
          hence thesis by NAT_D:def 3;
        end;
 end;
@@ -1414,9 +1385,9 @@ theorem
    hence thesis by A1,Def15;
   end;
 
-  reconsider G0 = HGrStr (# REAL, addreal #) as Group by Th7;
+  reconsider G0 = multMagma (# REAL, addreal #) as Group by Th7;
 
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
  attr IT is commutative means
  :Def16: for x,y being Element of IT holds x*y = y*x;
 end;
@@ -1432,7 +1403,7 @@ registration
    end;
 end;
 
-definition let FS be commutative (non empty HGrStr);
+definition let FS be commutative (non empty multMagma);
  let x,y be Element of FS;
  redefine func x*y;
  commutativity by Def16;
@@ -1441,8 +1412,8 @@ end;
 canceled;
 
 theorem
-  HGrStr (# REAL, addreal #) is commutative Group
-  proof reconsider G = HGrStr (# REAL, addreal #) as Group by Th7;
+  multMagma (# REAL, addreal #) is commutative Group
+  proof reconsider G = multMagma (# REAL, addreal #) as Group by Th7;
     G is commutative
      proof
       let h,g be Element of G;
@@ -1467,15 +1438,10 @@ theorem
 theorem
   (a * b) |^ i = a |^ i * (b |^ i) by Th73;
 
-registration let A be non empty set, m be BinOp of A, u be Element of A;
-  cluster LoopStr(#A,m,u#) -> non empty;
-  coherence by STRUCT_0:def 1;
-end;
-
 theorem
-  LoopStr (# the carrier of A, the mult of A, 1_A #)
+  addLoopStr (# the carrier of A, the multF of A, 1_A #)
     is Abelian add-associative right_zeroed right_complementable
-  proof set G = LoopStr (# the carrier of A, the mult of A, 1_A #);
+  proof set G = addLoopStr (# the carrier of A, the multF of A, 1_A #);
   thus G is Abelian
    proof let a,b be Element of G;
     reconsider x = a, y = b as Element of A;
@@ -1509,11 +1475,11 @@ begin :: Addenda
 :: from COMPTRIG, 2006.08.12, A.T.
 
 theorem Th98:
-  for L be unital (non empty HGrStr)
+  for L be unital (non empty multMagma)
   for x be Element of L holds
     (power L).(x,1) = x
    proof
-    let L be unital (non empty HGrStr);
+    let L be unital (non empty multMagma);
     let x be Element of L;
      0+1 = 1;
     hence (power L).(x,1) = (power L).(x,0) * x by Def8
@@ -1522,11 +1488,11 @@ theorem Th98:
    end;
 
 theorem
-  for L be unital (non empty HGrStr)
+  for L be unital (non empty multMagma)
   for x be Element of L holds
     (power L).(x,2) = x*x
    proof
-    let L be unital (non empty HGrStr);
+    let L be unital (non empty multMagma);
     let x be Element of L;
      1+1 = 2;
     hence (power L).(x,2) = (power L).(x,1) * x by Def8
@@ -1534,12 +1500,12 @@ theorem
    end;
 
 theorem
-  for L be associative commutative unital (non empty HGrStr)
+  for L be associative commutative unital (non empty multMagma)
   for x,y be Element of L
   for n be Element of NAT holds
     (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n)
    proof
-    let L be associative commutative unital (non empty HGrStr);
+    let L be associative commutative unital (non empty multMagma);
     let x,y be Element of L;
     defpred P[Element of NAT] means
      (power L).(x*y,$1) = (power L).(x,$1) * (power L).(y,$1);
@@ -1564,7 +1530,7 @@ Def8
 
 :: Moved from ENDALG, 17.01_2006, AK
 
-definition let G,H be non empty HGrStr;
+definition let G,H be non empty multMagma;
   let IT be Function of G,H;
   attr IT is unity-preserving means
    IT.1_G = 1_H;

@@ -19,6 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BHSP_1"/>
@@ -28,7 +29,9 @@
 <ArticleID name="LOPBAN_1"/>
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -39,20 +42,20 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="274">
+<Func kind="K" nr="331">
 <Num nr="1"/>
 <Num nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="17">
-<Func kind="K" nr="244">
+<Func kind="K" nr="301">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="42"/>
 </Adjective>
 <Adjective nr="19">
-<Func kind="K" nr="244">
+<Func kind="K" nr="301">
 <Num nr="1"/>
 </Func>
 <Func kind="K" nr="42"/>

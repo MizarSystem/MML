@@ -17,14 +17,14 @@ environ
       FINSEQ_4, AMI_1, AMI_2, AMI_3, SCMFSA_1, SCMFSA_2, SCMFSA_3, AMISTD_1,
       AMISTD_2, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, INT_2, FINSEQ_4, REALSET1,
-      PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2;
+      PRALG_2, AMI_5, SCMFSA_1, SCMFSA_3, AMISTD_2, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, TEX_2,
       AMI_1, AMI_3, AMI_5, SCMFSA_2, AMISTD_2, AMI_2, RELSET_1, FUNCT_4,
-      CARD_3;
+      CARD_3, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, SCMFSA_2, AMISTD_1, AMISTD_2, XBOOLE_0,
-      FUNCOP_1, SCMFSA_1, AMI_1, AMI_2, AMI_3, CARD_3;
+      FUNCOP_1, SCMFSA_1, AMI_1, AMI_2, AMI_3, CARD_3, VALUED_1;
  theorems TARSKI, NAT_1, AMI_1, AMI_3, FUNCT_4, FUNCT_1, FUNCT_2, RELSET_1,
       FUNCOP_1, SETFAM_1, AMISTD_1, MCART_1, FINSEQ_1, FINSEQ_3, AMISTD_2,
       AMI_6, FUNCT_7, CARD_3, SCMFSA6A, SCMFSA_2, INT_1, ENUMSET1, BVFUNC14,
@@ -2363,26 +2363,26 @@ A2:   f is bijective
   end;
  let k be Element of NAT;
    A6: SUCC (f.k) = {f.k, Next (f.k)} by Th84;
-X: f.k in NAT by AMI_1:def 4;
+A7: f.k in NAT by AMI_1:def 4;
    reconsider k1=k+1 as Element of NAT by ORDINAL1:def 13;
-Y: f.k1 in NAT by AMI_1:def 4;
+A8: f.k1 in NAT by AMI_1:def 4;
    then
-   A7: f.(k+1) = insloc (k+1) & f.k = insloc k by A1,X,Y;
-   A8: f.(k+1) = insloc (k+1) by A1,Y
+   A9: f.(k+1) = insloc (k+1) & f.k = insloc k by A1,A7,A8;
+   A10: f.(k+1) = insloc (k+1) by A1,A8
               .= Next insloc k by SCMFSA_2:32;
-    hence f.(k+1) in SUCC (f.k) by A6,A7,TARSKI:def 2;
+    hence f.(k+1) in SUCC (f.k) by A6,A9,TARSKI:def 2;
     let j be Element of NAT;
     assume
- A9:  f.j in SUCC (f.k);
-   A10: f is one-to-one by A2,FUNCT_2:def 4;
-   A11: dom f = NAT by FUNCT_2:def 1;
-X:  Next (f.k) in NAT by AMI_1:def 4;
-     per cases by A6,A9,TARSKI:def 2;
+ A11:  f.j in SUCC (f.k);
+   A12: f is one-to-one by A2,FUNCT_2:def 4;
+   A13: dom f = NAT by FUNCT_2:def 1;
+A14:  Next (f.k) in NAT by AMI_1:def 4;
+     per cases by A6,A11,TARSKI:def 2;
      suppose f.j = f.k;
-      hence k <= j by A10,A11,FUNCT_1:def 8;
+      hence k <= j by A12,A13,FUNCT_1:def 8;
      end;
      suppose f.j = Next (f.k);
-         then j = k+1 by A7,A8,A10,A11,FUNCT_1:def 8,X;
+         then j = k+1 by A9,A10,A12,A13,A14,FUNCT_1:def 8;
       hence k <= j by NAT_1:11;
    end;
    end;
@@ -2391,14 +2391,14 @@ registration
  cluster SCM+FSA -> standard;
 coherence
   proof deffunc U(Element of NAT) = insloc $1;
-X: for k being Element of NAT holds U(k) is Element of NAT by AMI_1:def 4;
+A1: for k being Element of NAT holds U(k) is Element of NAT by AMI_1:def 4;
     consider f being Function of NAT, NAT
        such that
-A1:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 9(X);
+A2:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 9(A1);
     reconsider f as IL-Function of NAT, SCM+FSA by AMI_1:def 36;
         f is bijective &
      for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
-      for j being Element of NAT st f.j in SUCC (f.k) holds k <= j by A1,Th85;
+      for j being Element of NAT st f.j in SUCC (f.k) holds k <= j by A2,Th85;
     hence SCM+FSA is standard by AMISTD_1:19;
   end;
 end;
@@ -2406,25 +2406,25 @@ end;
 theorem Th86:
  il.(SCM+FSA,k) = insloc k
   proof deffunc U(Element of NAT) = insloc $1;
-X: for k being Element of NAT holds U(k) is Element of NAT by AMI_1:def 4;
+A1: for k being Element of NAT holds U(k) is Element of NAT by AMI_1:def 4;
     consider f being Function of NAT, NAT
       such that
-A1:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 9(X);
+A2:   for k being Element of NAT holds f.k = U(k) from FUNCT_2:sch 9(A1);
     reconsider f as IL-Function of NAT, SCM+FSA by AMI_1:def 36;
-A2:  f is bijective by A1,Th85;
-A3:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
-      for j being Element of NAT st f.j in SUCC (f.k) holds k <= j by A1,Th85;
+A3:  f is bijective by A2,Th85;
+A4:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
+      for j being Element of NAT st f.j in SUCC (f.k) holds k <= j by A2,Th85;
         ex f being IL-Function of NAT, SCM+FSA st
      f is bijective &
      (for m, n being Element of NAT holds m <= n iff f.m <= f.n) &
      insloc k = f.k
     proof
       take f;
-      thus f is bijective by A1,Th85;
+      thus f is bijective by A2,Th85;
       thus for m, n being Element of NAT holds m <= n iff f.m <= f.n
-      by A2,A3,AMISTD_1:18;
+      by A3,A4,AMISTD_1:18;
        insloc k in NAT by AMI_1:def 4;
-      hence thesis by A1;
+      hence thesis by A2;
     end;
     hence thesis by AMISTD_1:def 12;
   end;

@@ -22,8 +22,9 @@
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="MIDSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="MIDSP_2"/>
 <ArticleID name="MIDSP_3"/>
 </Signature>
@@ -31,15 +32,15 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="50">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -48,10 +49,10 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -63,26 +64,26 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 </ArgTypes>
-<Typ kind="G" nr="9">
+<Typ kind="G" nr="14">
 <Cluster/>
-<Func kind="K" nr="94">
+<Func kind="K" nr="93">
 <LocusVar nr="1"/>
 <Num nr="2"/>
 </Func>
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="46"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="83"/>
+<Func kind="K" nr="82"/>
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -110,21 +111,21 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="8">
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <LocusVar nr="2"/>
 </Adjective>
 </Cluster>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <LocusVar nr="2"/>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="9">
+<Func kind="G" nr="14">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -132,7 +133,7 @@
 </Func>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="50">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -14,13 +14,13 @@ environ
       NAT_1, STRUCT_0, FINSET_1, FINSEQ_1, AMI_1, AMI_2, AMI_3, AMI_4,
       XXREAL_0;
  constructors WELLORD2, DOMAIN_1, XXREAL_0, NAT_1, NAT_D, SEQ_1, FINSEQ_4,
-      AMI_2, AMI_4;
+      AMI_2, AMI_4, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FRAENKEL, NUMBERS, XREAL_0, INT_1, FINSEQ_1, CARD_3, AMI_1, AMI_2, AMI_3,
-      FINSET_1;
+      FINSET_1, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions AMI_1, TARSKI, AMI_3, WELLORD2, FUNCT_1, XBOOLE_0, FUNCOP_1,
-      CARD_1, AMI_2;
+      CARD_1, AMI_2, VALUED_1;
  theorems AMI_1, AMI_2, AMI_3, GRFUNC_1, NAT_1, SCM_1, CQC_LANG, TARSKI,
       FUNCOP_1, FUNCT_4, FUNCT_1, MCART_1, GR_CY_1, FUNCT_2, CARD_3, FINSET_1,
       ZFMISC_1, AMI_4, ENUMSET1, CARD_1, CARD_4, RELAT_1, ORDINAL1, XBOOLE_0,
@@ -1146,11 +1146,11 @@ then A2: dom (s | SCM-Instr-Loc) = SCM-Instr-Loc by RELAT_1:91;
        let x be set;
        assume  x in SCM-Instr-Loc;
        then reconsider l = x as Instruction-Location of SCM by AMI_1:def 4;
-X:     l in SCM-Instr-Loc by AMI_1:def 4;
+A3:     l in SCM-Instr-Loc by AMI_1:def 4;
        thus (Exec (i, s) | SCM-Instr-Loc).x
-              = (Exec (i, s)).l by FUNCT_1:72,X
+              = (Exec (i, s)).l by A3,FUNCT_1:72
              .= s.l by AMI_1:def 13
-             .= (s | SCM-Instr-Loc).x by FUNCT_1:72,X;
+             .= (s | SCM-Instr-Loc).x by A3,FUNCT_1:72;
       end;
     hence Exec (i, s) | SCM-Instr-Loc = s | SCM-Instr-Loc by A1,A2,FUNCT_1:9;
    end;
@@ -1172,8 +1172,7 @@ Lm1:
  {IC SCM} \/ (NAT) \/ SCM-Data-Loc
           by Th23,XBOOLE_1:4;
  then (the carrier of SCM) \ ({IC SCM} \/ NAT)
-    = SCM-Data-Loc \ ({IC SCM} \/ NAT) by
-XBOOLE_1:40
+    = SCM-Data-Loc \ ({IC SCM} \/ NAT) by XBOOLE_1:40
    .= SCM-Data-Loc by A1,XBOOLE_1:83;
   hence thesis;
  end;
@@ -1595,75 +1594,75 @@ A2:   loc = il.ll by Th19;
    set loc1 = il.(ll+1);
   assume
 A3: not IC (Computation s).i in dom ProgramPart(p);
-X:     loc in SCM-Instr-Loc by AMI_1:def 4;
+A4:     loc in SCM-Instr-Loc by AMI_1:def 4;
      loc in dom ProgramPart p iff loc in dom p /\ SCM-Instr-Loc by FUNCT_1:68;
-then A4:not loc in dom p by A3,XBOOLE_0:def 3,X;
+then A5:not loc in dom p by A3,A4,XBOOLE_0:def 3;
 
     set p1 = p +* (loc .--> goto loc);
     set p2 = p +* (loc .--> goto loc1);
 
-A5:  dom p1 = dom p \/ dom (loc .--> goto loc) &
+A6:  dom p1 = dom p \/ dom (loc .--> goto loc) &
          dom p2 = dom p \/ dom (loc .--> goto loc1) by FUNCT_4:def 1;
-A6:  dom (loc .--> goto loc) = {loc} &
+A7:  dom (loc .--> goto loc) = {loc} &
          dom (loc .--> goto loc1) = {loc} by CQC_LANG:5;
-then A7:  loc in dom (loc .--> goto loc) &
+then A8:  loc in dom (loc .--> goto loc) &
          loc in dom (loc .--> goto loc1) by TARSKI:def 1;
-then A8:   loc in dom p1 & loc in dom p2 by A5,XBOOLE_0:def 2;
+then A9:   loc in dom p1 & loc in dom p2 by A6,XBOOLE_0:def 2;
 
     consider s1 being State of SCM such that
-A9: p1 c= s1 by AMI_1:82;
+A10: p1 c= s1 by AMI_1:82;
     consider s2 being State of SCM such that
-A10: p2 c= s2 by AMI_1:82;
+A11: p2 c= s2 by AMI_1:82;
 
  set Cs1i = (Computation s1).i;
  set Cs2i = (Computation s2).i;
 
-A11:  IC SCM in dom p by Th84;
+A12:  IC SCM in dom p by Th84;
       p is not autonomic
    proof
      take s1, s2;
          dom s1 = the carrier of SCM & dom s2 = the carrier of SCM
                                                     by AMI_1:79;
-then A12: dom p c= dom s1 & dom p c= dom s2 by AMI_1:80;
+then A13: dom p c= dom s1 & dom p c= dom s2 by AMI_1:80;
          now let x be set; assume
-A13:    x in dom p;
+A14:    x in dom p;
        then dom p misses dom (loc .--> goto loc) &
-       x in dom p1 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
-       then p.x = p1.x & p1.x = s1.x by A9,A13,FUNCT_4:17,GRFUNC_1:8;
+       x in dom p1 by A5,A6,A7,XBOOLE_0:def 2,ZFMISC_1:56;
+       then p.x = p1.x & p1.x = s1.x by A10,A14,FUNCT_4:17,GRFUNC_1:8;
       hence p.x = s1.x;
      end;
-    hence A14: p c= s1 by A12,GRFUNC_1:8;
+    hence A15: p c= s1 by A13,GRFUNC_1:8;
         now let x be set; assume
-A15:   x in dom p;
+A16:   x in dom p;
  then dom p misses dom (loc .--> goto loc1) &
-      x in dom p2 by A4,A5,A6,XBOOLE_0:def 2,ZFMISC_1:56;
-      then p.x = p2.x & p2.x = s2.x by A10,A15,FUNCT_4:17,GRFUNC_1:8;
+      x in dom p2 by A5,A6,A7,XBOOLE_0:def 2,ZFMISC_1:56;
+      then p.x = p2.x & p2.x = s2.x by A11,A16,FUNCT_4:17,GRFUNC_1:8;
      hence p.x = s2.x;
     end;
-   hence A16: p c= s2 by A12,GRFUNC_1:8;
+   hence A17: p c= s2 by A13,GRFUNC_1:8;
            (loc .--> goto loc).loc = goto loc &
        (loc .--> goto loc1).loc = goto loc1 by CQC_LANG:6;
-       then p1.loc = goto loc & p2.loc = goto loc1 by A7,FUNCT_4:14;
-then A17:  s1.loc = goto loc & s2.loc = goto loc1 by A8,A9,A10,GRFUNC_1:8;
+       then p1.loc = goto loc & p2.loc = goto loc1 by A8,FUNCT_4:14;
+then A18:  s1.loc = goto loc & s2.loc = goto loc1 by A9,A10,A11,GRFUNC_1:8;
 
   take k = i+1;
 
   set Cs1k = (Computation s1).k;
   set Cs2k = (Computation s2).k;
-A18: Cs1k = Following Cs1i by AMI_1:def 19
+A19: Cs1k = Following Cs1i by AMI_1:def 19
           .= Exec (CurInstr Cs1i, Cs1i);
-A19: Cs2k = Following Cs2i by AMI_1:def 19
+A20: Cs2k = Following Cs2i by AMI_1:def 19
           .= Exec (CurInstr Cs2i, Cs2i);
-      A20:   Cs1i.loc = goto loc & Cs2i.loc = goto loc1 by A17,AMI_1:54;
-A21:  (Cs1i|dom p) = (Csi|dom p) by A1,A14,AMI_1:def 25;
-A22: Cs1i.IC SCM = (Cs1i|dom p).IC SCM &
-     Csi.IC SCM = (Csi|dom p).IC SCM by A11,FUNCT_1:72;
-      (Cs1i|dom p) = (Cs2i|dom p) by A14,A16,AMI_1:def 25;
- then   Cs1i.IC SCM = loc & Cs2i.IC SCM = loc by A11,A21,A22,FUNCT_1:72;
-then A23:   Cs1k.IC SCM = loc & Cs2k.IC SCM = loc1 by A18,A19,A20,AMI_3:13;
+      A21:   Cs1i.loc = goto loc & Cs2i.loc = goto loc1 by A18,AMI_1:54;
+A22:  (Cs1i|dom p) = (Csi|dom p) by A1,A15,AMI_1:def 25;
+A23: Cs1i.IC SCM = (Cs1i|dom p).IC SCM &
+     Csi.IC SCM = (Csi|dom p).IC SCM by A12,FUNCT_1:72;
+      (Cs1i|dom p) = (Cs2i|dom p) by A15,A17,AMI_1:def 25;
+ then   Cs1i.IC SCM = loc & Cs2i.IC SCM = loc by A12,A22,A23,FUNCT_1:72;
+then A24:   Cs1k.IC SCM = loc & Cs2k.IC SCM = loc1 by A19,A20,A21,AMI_3:13;
          (Cs1k|dom p).IC SCM = Cs1k.IC SCM & (Cs2k|dom p).IC SCM = Cs2k.IC SCM
-                                                    by A11,FUNCT_1:72;
-   hence Cs1k|dom p <> Cs2k|dom p by A2,A23;
+                                                    by A12,FUNCT_1:72;
+   hence Cs1k|dom p <> Cs2k|dom p by A2,A24;
   end;
  hence contradiction;
 end;

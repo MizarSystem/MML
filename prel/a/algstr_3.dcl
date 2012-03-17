@@ -22,35 +22,35 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="19" value="false"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="19" value="false"/>
-<Adjective nr="26"/>
 <Adjective nr="27"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="19" value="false"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="19" value="false"/>
+<Adjective nr="27"/>
+<Adjective nr="28"/>
 </Cluster>
 </RCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="93"/>
+<Func kind="K" nr="92"/>
 <Cluster>
 <Adjective nr="19" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="27"/>
 </Cluster>
 </FCluster>
 </Registrations>

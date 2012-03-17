@@ -9,18 +9,20 @@ environ
  vocabularies RING_1, EQREL_1, RELAT_2, SETWISEO, VECTSP_1, FUNCT_1, ARYTM_3,
       RELAT_1, RLVECT_1, ARYTM_1, BINOP_1, FUNCSDOM, LATTICES, GROUP_1,
       FILTER_2, IDEAL_1, FILTER_0, SUBSET_1, VECTSP_2, GROUP_4, COLLSP,
-      WAYBEL20, PARTFUN1, ORDERS_2, WELLORD2, WELLORD1, TARSKI, ARYTM;
+      WAYBEL20, PARTFUN1, ORDERS_2, WELLORD2, WELLORD1, TARSKI, ARYTM,
+      ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETWISEO, RELAT_1, RELSET_1, FUNCT_1,
       PARTFUN1, ALG_1, RELAT_2, EQREL_1, WELLORD1, WELLORD2, ORDERS_1, BINOP_1,
-      DOMAIN_1, STRUCT_0, GROUP_1, RLVECT_1, VECTSP_1, VECTSP_2, FUNCSDOM,
-      IDEAL_1;
+      DOMAIN_1, STRUCT_0, ALGSTR_0, GROUP_1, RLVECT_1, VECTSP_1, VECTSP_2,
+      FUNCSDOM, IDEAL_1;
  constructors WELLORD1, WELLORD2, BINOP_1, SETWISEO, ORDERS_1, EQREL_1, GCD_1,
-      IDEAL_1;
+      IDEAL_1, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FINSUB_1, EQREL_1, STRUCT_0,
-      VECTSP_1, ALGSTR_1, QUOFIELD, IDEAL_1;
+      VECTSP_1, ALGSTR_1, QUOFIELD, IDEAL_1, VALUED_1, FUNCT_2;
  requirements BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, RELAT_1, RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2,
-      IDEAL_1, ORDERS_1, RELAT_2, WELLORD1, STRUCT_0;
+      IDEAL_1, ORDERS_1, RELAT_2, WELLORD1, STRUCT_0, ALGSTR_1, ALGSTR_0,
+      VALUED_1;
  theorems VECTSP_1, TARSKI, FUNCT_1, RLVECT_1, VECTSP_2, XBOOLE_0, FUNCT_2,
       BINOP_1, ZFMISC_1, GROUP_1, IDEAL_1, RELAT_1, EQREL_1, SETWISEO,
       ORDERS_1, WELLORD2, RELAT_2, STRUCT_0;
@@ -39,12 +41,12 @@ end;
 
 theorem Th1:
   for L being add-associative right_zeroed right_complementable
-  (non empty LoopStr),
+  (non empty addLoopStr),
   a, b being Element of L
   holds a - b + b = a
   proof
     let L be add-associative right_zeroed right_complementable
-    (non empty LoopStr),
+    (non empty addLoopStr),
     a, b be Element of L;
     thus a-b+b = a+(-b+b) by RLVECT_1:def 6
     .= a+0.L by RLVECT_1:16
@@ -53,12 +55,12 @@ theorem Th1:
 
 theorem Th2:
   for L being add-associative right_zeroed right_complementable
-  Abelian (non empty LoopStr),
+  Abelian (non empty addLoopStr),
       b, c being Element of L holds
   c = b - (b - c)
 proof
     let L be add-associative right_zeroed right_complementable
-    Abelian (non empty LoopStr),
+    Abelian (non empty addLoopStr),
         b, c be Element of L;
     set a = b - c;
      a+c-a = c-a+a by RLVECT_1:42
@@ -68,12 +70,12 @@ end;
 
 theorem Th3:
   for L being add-associative right_zeroed right_complementable
-  Abelian (non empty LoopStr),
+  Abelian (non empty addLoopStr),
   a, b, c being Element of L holds
   a - b - (c - b) = a - c
   proof
     let L be add-associative right_zeroed right_complementable
-    Abelian (non empty LoopStr),
+    Abelian (non empty addLoopStr),
     a, b, c be Element of L;
     thus a-b-(c-b) = a-b-c+b by RLVECT_1:43
     .= a-b+b-c by RLVECT_1:42
@@ -85,7 +87,7 @@ theorem Th3:
 begin :: Ideals
 
 definition
-  let K be non empty HGrStr, S be Subset of K;
+  let K be non empty multMagma, S be Subset of K;
   attr S is quasi-prime means
   :Def1:
   for a, b being Element of K st a*b in S holds a in S or b in S;
@@ -132,7 +134,7 @@ registration
 end;
 
 registration
-  let R be non empty LoopStr;
+  let R be non empty addLoopStr;
   cluster [#]R -> add-closed;
   coherence
   proof
@@ -142,7 +144,7 @@ registration
 end;
 
 registration
-  let R be non empty HGrStr;
+  let R be non empty multMagma;
   cluster [#]R -> left-ideal right-ideal;
   coherence
   proof
@@ -162,7 +164,7 @@ theorem
     let R be domRing;
     thus {0.R} is proper
     proof
-       1_R <> 0.R by VECTSP_1:def 21;
+       1_R <> 0.R by STRUCT_0:def 8;
       then not 1_R in {0.R} by TARSKI:def 1;
       hence thesis by IDEAL_1:19;
     end;
@@ -460,11 +462,11 @@ definition
 
   (for x, y being Element of it ex a, b being Element of R st
   x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) &
-  (the add of it).(x,y) = Class(EqRel(R,I),a+b)) &
+  (the addF of it).(x,y) = Class(EqRel(R,I),a+b)) &
 
   (for x, y being Element of it ex a, b being Element of R st
   x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b) &
-  (the mult of it).(x,y) = Class(EqRel(R,I),a*b));
+  (the multF of it).(x,y) = Class(EqRel(R,I),a*b));
 
   existence
   proof
@@ -520,29 +522,29 @@ A14: 1.X = Class(E,1.R) and
 A15: 0.X = Class(E,0.R) and
 A16: for x, y being Element of X ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
-    (the add of X).(x,y) = Class(E,a+b) and
+    (the addF of X).(x,y) = Class(E,a+b) and
 A17: for x, y being Element of X ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
-    (the mult of X).(x,y) = Class(E,a*b) and
+    (the multF of X).(x,y) = Class(E,a*b) and
 A18: the carrier of Y = Class E and
 A19: 1.Y = Class(E,1.R) and
 A20: 0.Y = Class(E,0.R) and
 A21: for x, y being Element of Y ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
-    (the add of Y).(x,y) = Class(E,a+b) and
+    (the addF of Y).(x,y) = Class(E,a+b) and
 A22: for x, y being Element of Y ex a, b being Element of R st
     x = Class(E,a) & y = Class(E,b) &
-    (the mult of Y).(x,y) = Class(E,a*b);
+    (the multF of Y).(x,y) = Class(E,a*b);
      for x, y being Element of X holds
-    (the add of X).(x,y) = (the add of Y).(x,y)
+    (the addF of X).(x,y) = (the addF of Y).(x,y)
     proof
       let x, y be Element of X;
       consider a, b being Element of R such that
 A23:  x = Class(E,a) & y = Class(E,b) and
-A24:  (the add of X).(x,y) = Class(E,a+b) by A16;
+A24:  (the addF of X).(x,y) = Class(E,a+b) by A16;
       consider a1, b1 being Element of R such that
 A25:  x = Class(E,a1) & y = Class(E,b1) and
-A26:  (the add of Y).(x,y) = Class(E,a1+b1) by A13,A18,A21;
+A26:  (the addF of Y).(x,y) = Class(E,a1+b1) by A13,A18,A21;
        a-a1 in I & b-b1 in I by A23,A25,Th6;
       then A27:  a-a1+(b-b1) in I by IDEAL_1:def 1;
        a+b-(a1+b1) = a+b-a1-b1 by RLVECT_1:41
@@ -550,17 +552,17 @@ A26:  (the add of Y).(x,y) = Class(E,a1+b1) by A13,A18,A21;
       .= a-a1+(b-b1) by RLVECT_1:42;
       hence thesis by A24,A26,A27,Th6;
     end;
-    then A28: the add of X = the add of Y by A13,A18,BINOP_1:2;
+    then A28: the addF of X = the addF of Y by A13,A18,BINOP_1:2;
      for x, y being Element of X holds
-    (the mult of X).(x,y) = (the mult of Y).(x,y)
+    (the multF of X).(x,y) = (the multF of Y).(x,y)
     proof
       let x, y be Element of X;
       consider a, b being Element of R such that
 A29:  x = Class(E,a) & y = Class(E,b) and
-A30:  (the mult of X).(x,y) = Class(E,a*b) by A17;
+A30:  (the multF of X).(x,y) = Class(E,a*b) by A17;
       consider a1, b1 being Element of R such that
 A31:  x = Class(E,a1) & y = Class(E,b1) and
-A32:  (the mult of Y).(x,y) = Class(E,a1*b1) by A13,A18,A22;
+A32:  (the multF of Y).(x,y) = Class(E,a1*b1) by A13,A18,A22;
        a-a1 in I & b-b1 in I by A29,A31,Th6;
       then (a-a1)*b in I & a1*(b-b1) in I by IDEAL_1:def 2,def 3;
       then A33:  (a-a1)*b + a1*(b-b1) in I by IDEAL_1:def 1;
@@ -617,7 +619,7 @@ theorem Th13:
 A1: x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b);
     consider a1, b1 being Element of R such that
 A2: x = Class(EqRel(R,I),a1) & y = Class(EqRel(R,I),b1) and
-A3: (the add of R/I).(x,y) = Class(EqRel(R,I),a1+b1) by Def6;
+A3: (the addF of R/I).(x,y) = Class(EqRel(R,I),a1+b1) by Def6;
 A4: a1-a in I & b1-b in I by A1,A2,Th6;
      a1-a+(b1-b) = a1-a+b1-b by RLVECT_1:42
     .= a1+b1-a-b by RLVECT_1:42
@@ -634,7 +636,7 @@ theorem Th14:
 A1: x = Class(EqRel(R,I),a) & y = Class(EqRel(R,I),b);
     consider a1, b1 being Element of R such that
 A2: x = Class(EqRel(R,I),a1) & y = Class(EqRel(R,I),b1) and
-A3: (the mult of R/I).(x,y) = Class(EqRel(R,I),a1*b1) by Def6;
+A3: (the multF of R/I).(x,y) = Class(EqRel(R,I),a1*b1) by Def6;
      a1-a in I & b1-b in I by A1,A2,Th6;
     then (a1-a)*b in I & a1*(b1-b) in I by IDEAL_1:def 2,def 3;
     then A4: (a1-a)*b+a1*(b1-b) in I by IDEAL_1:def 1;
@@ -679,7 +681,7 @@ registration
   proof
 A1: 1.R = 1_R;
     set E = EqRel(R,I);
-    set g = the add of R/I;
+    set g = the addF of R/I;
     hereby
       let x, y be Element of R/I;
       consider a being Element of R such that
@@ -730,7 +732,8 @@ A15:   b-0.R = b by RLVECT_1:26;
       .= b by RLVECT_1:def 7;
       hence v + 0.(R/I) = v by A12,A13,A14,A15,Th6;
     end;
-    hereby
+    thus R/I is right_complementable
+    proof
       let v be Element of R/I;
       consider a, b being Element of R such that
 A16:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
@@ -739,7 +742,7 @@ A16:   v = Class(E,a) & 0.(R/I) = Class(E,b) and
       take w;
 A17:   0.(R/I) = Class(E,0.R) by Def6;
       thus v + w = Class(E,a+-a) by A16,Th13
-      .= 0.(R/I) by A17,RLVECT_1:def 10;
+      .= 0.(R/I) by A17,RLVECT_1:def 11;
     end;
     hereby
       let x, y, z be Element of R/I;
@@ -858,24 +861,23 @@ theorem Th16:
   I is proper iff R/I is non degenerated
   proof
     set E = EqRel(R,I);
-A1: 1.R = 1_R;
-A2: 0.(R/I) = Class(E,0.R) by Def6;
-A3: 1.(R/I) = Class(E,1.R) by Def6;
-A4: 1.R-0.R = 1.R by RLVECT_1:26;
+A1: 0.(R/I) = Class(E,0.R) by Def6;
+A2: 1.(R/I) = Class(E,1.R) by Def6;
+A3: 1.R-0.R = 1.R by RLVECT_1:26;
     thus I is proper implies R/I is non degenerated
     proof
       assume that
-A5:   I is proper and
-A6:   0.(R/I) = 1.(R/I);
-       1.R-0.R in I by A2,A3,A6,Th6;
-      hence thesis by A1,A4,A5,IDEAL_1:19;
+A4:   I is proper and
+A5:   0.(R/I) = 1.(R/I);
+       1.R-0.R in I by A1,A2,A5,Th6;
+      hence thesis by A3,A4,IDEAL_1:19;
     end;
     assume
-A7: R/I is non degenerated;
+A6: R/I is non degenerated;
     assume not I is proper;
-    then 1.R in I by A1,IDEAL_1:19;
-    then Class(E,1.R) = Class(E,0.R) by A4,Th6;
-    hence thesis by A2,A3,A7,STRUCT_0:def 8;
+    then 1.R in I by IDEAL_1:19;
+    then Class(E,1.R) = Class(E,0.R) by A3,Th6;
+    hence thesis by A1,A2,A6,STRUCT_0:def 8;
   end;
 
 theorem Th17:
@@ -932,17 +934,16 @@ theorem
   end;
 
 theorem Th19:
-  R is commutative & I is quasi-maximal implies R/I is Field-like
+  R is commutative & I is quasi-maximal implies R/I is almost_left_invertible
   proof
-A1: 1.R = 1_R;
     set E = EqRel(R,I);
     assume that
-A2: R is commutative and
-A3: I is quasi-maximal;
+A1: R is commutative and
+A2: I is quasi-maximal;
     let x be Element of R/I such that
-A4: x <> 0.(R/I);
+A3: x <> 0.(R/I);
     consider a being Element of R such that
-A5: x = Class(E,a) by Th11;
+A4: x = Class(E,a) by Th11;
     set M = {a*r+s where r, s is Element of R: s in I};
      M c= the carrier of R
     proof
@@ -952,62 +953,62 @@ A5: x = Class(E,a) by Th11;
       hence thesis;
     end;
     then reconsider M as Subset of R;
-A6: a*1.R+0.R = a+0.R by A1,VECTSP_1:def 13
+A5: a*1.R+0.R = a+0.R by VECTSP_1:def 13
     .= a by RLVECT_1:def 7;
      0.R in I by IDEAL_1:2;
-    then A7: a in M by A6;
-A8: M is add-closed
+    then A6: a in M by A5;
+A7: M is add-closed
     proof
       let c, d be Element of R;
       assume c in M;
       then consider rc, sc being Element of R such that
-A9:   c = a*rc+sc and
-A10:   sc in I;
+A8:   c = a*rc+sc and
+A9:   sc in I;
       assume d in M;
       then consider rd, sd being Element of R such that
-A11:   d = a*rd+sd and
-A12:   sd in I;
-A13:   sc+sd in I by A10,A12,IDEAL_1:def 1;
+A10:   d = a*rd+sd and
+A11:   sd in I;
+A12:   sc+sd in I by A9,A11,IDEAL_1:def 1;
        a*(rc+rd)+(sc+sd) = a*rc+a*rd+(sc+sd) by VECTSP_1:def 11
       .= a*rc+a*rd+sc+sd by RLVECT_1:def 6
       .= a*rc+sc+a*rd+sd by RLVECT_1:def 6
-      .= c+d by A9,A11,RLVECT_1:def 6;
-      hence c+d in M by A13;
+      .= c+d by A8,A10,RLVECT_1:def 6;
+      hence c+d in M by A12;
     end;
-A14: M is left-ideal
+A13: M is left-ideal
     proof
       let p, x be Element of R;
       assume x in M;
       then consider r, s being Element of R such that
-A15:   x = a*r+s and
-A16:   s in I;
-A17:   p*s in I by A16,IDEAL_1:def 2;
+A14:   x = a*r+s and
+A15:   s in I;
+A16:   p*s in I by A15,IDEAL_1:def 2;
        a*(r*p)+p*s = a*r*p+p*s by GROUP_1:def 4
-      .= a*r*p+s*p by A2,GROUP_1:def 16
-      .= x*p by A15,VECTSP_1:def 12
-      .= p*x by A2,GROUP_1:def 16;
-      hence p*x in M by A17;
+      .= a*r*p+s*p by A1,GROUP_1:def 16
+      .= x*p by A14,VECTSP_1:def 12
+      .= p*x by A1,GROUP_1:def 16;
+      hence p*x in M by A16;
     end;
-A18: M is right-ideal
+A17: M is right-ideal
     proof
       let p, x be Element of R;
       assume x in M;
       then consider r, s being Element of R such that
-A19:   x = a*r+s and
-A20:   s in I;
-A21:   p*s in I by A20,IDEAL_1:def 2;
+A18:   x = a*r+s and
+A19:   s in I;
+A20:   p*s in I by A19,IDEAL_1:def 2;
        a*(r*p)+p*s = a*r*p+p*s by GROUP_1:def 4
-      .= a*r*p+s*p by A2,GROUP_1:def 16
-      .= x*p by A19,VECTSP_1:def 12;
-      hence x*p in M by A21;
+      .= a*r*p+s*p by A1,GROUP_1:def 16
+      .= x*p by A18,VECTSP_1:def 12;
+      hence x*p in M by A20;
     end;
-A22: now
+A21: now
       assume
-A23:   a in I;
+A22:   a in I;
        a-0.R = a by RLVECT_1:26;
-      then Class(E,a) = Class(E,0.R) by A23,Th6
+      then Class(E,a) = Class(E,0.R) by A22,Th6
       .= 0.(R/I) by Def6;
-      hence contradiction by A4,A5;
+      hence contradiction by A3,A4;
     end;
      I c= M
     proof
@@ -1018,54 +1019,54 @@ A23:   a in I;
       .= i by RLVECT_1:def 7;
       hence thesis;
     end;
-    then M is non proper by A3,A7,A8,A14,A18,A22,Def3;
+    then M is non proper by A2,A6,A7,A13,A17,A21,Def3;
     then M = the carrier of R by IDEAL_1:def 5;
     then 1.R in M;
     then consider b, m being Element of R such that
-A24: 1.R = a*b+m and
-A25: m in I;
+A23: 1.R = a*b+m and
+A24: m in I;
     reconsider y = Class(E,b) as Element of R/I by Th12;
     take y;
-A26: m = 1.R-a*b by A24,VECTSP_2:22;
-A27: Class(E,1.R) = 1.(R/I) by Def6;
-    thus x*y = Class(E,a*b) by A5,Th14
-    .= 1.(R/I) by A25,A26,A27,Th6;
+A25: m = 1.R-a*b by A23,VECTSP_2:22;
+A26: Class(E,1.R) = 1.(R/I) by Def6;
+    thus y*x = Class(E,b*a) by A4,Th14
+    .= Class(E,a*b) by A1,GROUP_1:def 16
+    .= 1.(R/I) by A24,A25,A26,Th6;
   end;
 
 theorem Th20:
-  R/I is Field-like implies I is quasi-maximal
+  R/I is almost_left_invertible implies I is quasi-maximal
   proof
-A1: 1.R = 1_R;
     set E = EqRel(R,I);
-A2: Class(E,0.R) = 0.(R/I) by Def6;
-A3: Class(E,1.R) = 1.(R/I) by Def6;
+A1: Class(E,0.R) = 0.(R/I) by Def6;
+A2: Class(E,1.R) = 1.(R/I) by Def6;
     assume
-A4: R/I is Field-like;
+A3: R/I is almost_left_invertible;
     given J being Ideal of R such that
-A5: I c= J and
-A6: J <> I and
-A7: J is proper;
-     not J c= I by A5,A6,XBOOLE_0:def 10;
+A4: I c= J and
+A5: J <> I and
+A6: J is proper;
+     not J c= I by A4,A5,XBOOLE_0:def 10;
     then consider a being set such that
-A8: a in J and
-A9: not a in I by TARSKI:def 3;
-    reconsider a as Element of R by A8;
+A7: a in J and
+A8: not a in I by TARSKI:def 3;
+    reconsider a as Element of R by A7;
     reconsider x = Class(E,a) as Element of R/I by Th12;
      now
       assume x = 0.(R/I);
-      then a-0.R in I by A2,Th6;
-      hence contradiction by A9,RLVECT_1:26;
+      then a-0.R in I by A1,Th6;
+      hence contradiction by A8,RLVECT_1:26;
     end;
     then consider y being Element of R/I such that
-A10: x*y = 1.(R/I) by A4,VECTSP_1:def 20;
+A9: y*x = 1.(R/I) by A3,VECTSP_1:def 20;
     consider b being Element of R such that
-A11: y = Class(E,b) by Th11;
-     x*y = Class(E,a*b) by A11,Th14;
-    then A12: a*b-1.R in I by A3,A10,Th6;
-A13: a*b in J by A8,IDEAL_1:def 3;
-     1.R = a*b-(a*b-1.R) by Th2;
-    then 1.R in J by A5,A12,A13,IDEAL_1:15;
-    hence thesis by A1,A7,IDEAL_1:19;
+A10: y = Class(E,b) by Th11;
+     y*x = Class(E,b*a) by A10,Th14;
+    then A11: b*a-1.R in I by A2,A9,Th6;
+A12: b*a in J by A7,IDEAL_1:def 2;
+     1.R = b*a-(b*a-1.R) by Th2;
+    then 1.R in J by A4,A11,A12,IDEAL_1:15;
+    hence thesis by A6,IDEAL_1:19;
   end;
 
 theorem
@@ -1092,10 +1093,10 @@ registration
     let I be Ideal of R;
     assume
 A1: I is proper quasi-maximal;
-    then A2: R/I is Field-like non degenerated by Th16,Th19;
+    then A2: R/I is almost_left_invertible non degenerated by Th16,Th19;
      for A being add-associative right_zeroed right_complementable
     commutative associative well-unital
-    distributive Field-like (non empty doubleLoopStr)
+    distributive almost_left_invertible (non empty doubleLoopStr)
     holds A is domRing-like;
     then R/I is domRing-like by A2;
     hence I is proper quasi-prime by A1,Th17;
@@ -1282,6 +1283,6 @@ end;
 
 registration
   let R be non degenerated commutative Ring, I be quasi-maximal Ideal of R;
-  cluster R/I -> Field-like;
+  cluster R/I -> almost_left_invertible;
   coherence by Th19;
 end;

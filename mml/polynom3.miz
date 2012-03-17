@@ -11,24 +11,24 @@ environ
       FINSET_1, TRIANG_1, ARYTM_1, CARD_1, VECTSP_1, NORMSP_1, FUNCT_2,
       POLYNOM1, ALGSEQ_1, FUNCOP_1, FUNCT_4, ARYTM_3, LATTICES, ALGSTR_2,
       GROUP_1, BINOP_1, DTCONSTR, RFINSEQ, POLYNOM3, FINSEQ_4, VECTSP_2,
-      GR_CY_1, ARYTM;
+      GR_CY_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
-      ORDERS_1,
-      STRUCT_0, NAT_1, RELAT_1, RELAT_2, RELSET_1, PARTFUN1, FINSET_1,
-      FUNCT_1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2, FINSEQ_5, FINSOP_1,
-      SEQ_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1, FVSUM_1, TREES_4, WSIERP_1,
-      MATRLIN, BINARITH, GROUP_1, DTCONSTR, RLVECT_1, VECTSP_1, NORMSP_1,
-      POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
+      ORDERS_1, STRUCT_0, ALGSTR_0, NAT_1, RELAT_1, RELAT_2, RELSET_1,
+      PARTFUN1, FINSET_1, FUNCT_1, FUNCT_2, TRIANG_1, FINSEQ_1, FINSEQ_2,
+      FINSEQ_5, FINSOP_1, VALUED_1, SEQ_1, FINSEQOP, RFINSEQ, BINOP_1, RVSUM_1,
+      FVSUM_1, TREES_4, WSIERP_1, MATRLIN, BINARITH, GROUP_1, DTCONSTR,
+      RLVECT_1, VECTSP_1, NORMSP_1, POLYNOM1, ALGSEQ_1, XXREAL_0, BHSP_1;
  constructors BINOP_1, SQUARE_1, NAT_1, FINSEQOP, FINSOP_1, REALSET1, RFINSEQ,
       BINARITH, FINSEQ_5, WSIERP_1, ALGSEQ_1, BHSP_1, DTCONSTR, TRIANG_1,
-      POLYNOM1;
+      POLYNOM1, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1, SEQ_1,
       FINSEQ_2, REALSET1, FINSEQ_5, STRUCT_0, VECTSP_1, GOBRD13, POLYNOM1,
-      VALUED_0;
+      VALUED_0, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions TARSKI, XBOOLE_0, RELAT_1, RELAT_2, MATRLIN, RLVECT_1, GROUP_1,
-      VECTSP_1, ALGSEQ_1, FINSEQ_2, FUNCT_2, STRUCT_0, CARD_1;
+      VECTSP_1, ALGSEQ_1, FINSEQ_2, FUNCT_2, STRUCT_0, CARD_1, ALGSTR_0,
+      VALUED_1;
  theorems AXIOMS, TARSKI, ENUMSET1, RELSET_1, REAL_1, REAL_2, INT_1, NAT_1,
       CARD_1, FINSET_1, RLVECT_1, VECTSP_1, BINARITH, ALGSEQ_1, RELAT_2,
       ORDERS_1, FUNCT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1, FINSEQ_2,
@@ -43,13 +43,13 @@ begin  :: Preliminaries
 
   theorem Th1:
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be FinSequence of the carrier of L st
     for i be Element of NAT st i in dom p holds p.i = 0.L holds
      Sum p = 0.L
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p be FinSequence of the carrier of L;
     assume A1: for k be Element of NAT st k in dom p holds p.k = 0.L;
          now let k be Nat; assume A2: k in dom p;
@@ -60,11 +60,11 @@ A3:       k in NAT by ORDINAL1:def 13;
    end;
 
   theorem Th2:
-   for V be Abelian add-associative right_zeroed (non empty LoopStr)
+   for V be Abelian add-associative right_zeroed (non empty addLoopStr)
    for p be FinSequence of the carrier of V holds
     Sum p = Sum Rev p
    proof
-    let V be Abelian add-associative right_zeroed (non empty LoopStr);
+    let V be Abelian add-associative right_zeroed (non empty addLoopStr);
     defpred P[FinSequence of the carrier of V] means Sum $1 = Sum Rev $1;
     A1: P[<*>(the carrier of V)];
     A2: for p be FinSequence of the carrier of V
@@ -654,7 +654,7 @@ begin  :: Decomposition of Element of NATural Numbers
                                                      by BINARITH:53;
     reconsider p2 = (i-'1)|->0 as FinSequence of NAT;
          Sum p1 = Sum p2 + n by RVSUM_1:104
-        .= 0+n by RVSUM_1:111;
+        .= 0 qua Nat+n by RVSUM_1:111;
     then reconsider A as non empty finite Subset of i-tuples_on NAT by A2;
          SgmX (TuplesOrder i,A) is non empty finite;
     hence thesis by A1;
@@ -774,7 +774,7 @@ begin  :: Decomposition of Element of NATural Numbers
       A24: x = <*i,n-'i*> and
       A25: i <= n;
           i = 0 or i > 0;
-     then A26: i = 0 or i >= 0+1 by NAT_1:13;
+     then A26: i = 0 or i >= 0 qua Nat+1 by NAT_1:13;
           now per cases by A25,A26,FINSEQ_1:3;
       suppose A27: i = 0;
        A28: n+1 in dom q1 by A15,FINSEQ_1:6;
@@ -951,7 +951,7 @@ Def4;
     assume that
      A4: Decomp(n,2).i = <*k1,n-'k1*> and
      A5: Decomp(n,2).(i+1) = <*k2,n-'k2*>;
-         i+0 < i+1 by XREAL_1:8;
+         i+(0 qua Nat) < i+1 by XREAL_1:8;
     then A6: k1 < k2 by A4,A5,Th11;
     then A7: k1+1 <= k2 by NAT_1:13;
     assume k2 <> k1+1;
@@ -973,7 +973,7 @@ Def4;
     then consider k be Nat such that k in dom Decomp(n,2) and
      A11: Decomp(n,2).k = <*k1+1,n-'(k1+1)*> by FINSEQ_2:11;
      reconsider k as Element of NAT by ORDINAL1:def 13;
-         k1+0 < k1+1 by XREAL_1:8;
+         k1+(0 qua Nat) < k1+1 by XREAL_1:8;
     then i < k by A4,A11,Th11;
     then i+1 <= k by NAT_1:13;
     hence contradiction by A5,A8,A11,Th11;
@@ -991,7 +991,7 @@ Def4;
     then 1 in Seg (n+1) by FINSEQ_1:3;
     then 1 in Seg len Decomp(n,2) by Th9;
     then A3: 1 in dom Decomp(n,2) by FINSEQ_1:def 3;
-         Sum <*0,n*> = 0+n by RVSUM_1:107;
+         Sum <*0,n*> = 0 qua Nat+n by RVSUM_1:107;
     then A4: <*0,n*> in A by A2;
          field TuplesOrder 2 = 2-tuples_on NAT by ORDERS_1:100;
     then TuplesOrder 2 linearly_orders 2-tuples_on NAT by ORDERS_1:133;
@@ -1089,7 +1089,7 @@ Def4;
    end;
 
   definition
-   let L be non empty HGrStr;
+   let L be non empty multMagma;
    let p,q,r be sequence of L;
    let t be FinSequence of 3-tuples_on NAT;
    func prodTuples(p,q,r,t) -> Element of (the carrier of L)* means :Def5:
@@ -1132,14 +1132,14 @@ then A7:    i in dom t by FINSEQ_1:def 3;
   end;
 
   theorem Th15:
-   for L be non empty HGrStr
+   for L be non empty multMagma
    for p,q,r be sequence of L
    for t be FinSequence of 3-tuples_on NAT
    for P be Permutation of dom t
    for t1 be FinSequence of 3-tuples_on NAT st t1 = t*P holds
     prodTuples(p,q,r,t1) = prodTuples(p,q,r,t)*P
    proof
-    let L be non empty HGrStr;
+    let L be non empty multMagma;
     let p,q,r be sequence of L;
     let t be FinSequence of 3-tuples_on NAT;
     let P be Permutation of dom t;
@@ -1260,7 +1260,7 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
           .= (p|j).n by A10,A11,A14,A15,PARTFUN1:def 8
           .= q.n by A7,A10,A12,FINSEQ_1:def 7;
       end;
-       Sum q + Sum r >= Sum q + 0 by XREAL_1:8;
+       Sum q + Sum r >= Sum q + (0 qua Nat) by XREAL_1:8;
       hence Sum (p|i) <= Sum (p|j) by A4,A6,A8,A9,FINSEQ_2:10;
      end;
      suppose j > len p;
@@ -1290,7 +1290,7 @@ A7:  dom t1 = Seg len t1 by FINSEQ_1:def 3;
             .= p.n by A24,A26,A27,A28,PARTFUN1:def 8
             .= q.n by A20,A24,A25,FINSEQ_1:def 7;
         end;
-         Sum q + Sum r >= Sum q + 0 by XREAL_1:8;
+         Sum q + Sum r >= Sum q + (0 qua Nat) by XREAL_1:8;
         hence Sum (p|i) <= Sum (p|j) by A16,A19,A21,A22,A23,FINSEQ_2:10;
       end;
       end;
@@ -1431,7 +1431,7 @@ begin  :: Polynomials
     hence n >= len p by ALGSEQ_1:def 4;
    end;
 
-  scheme PolynomialLambdaF{R()->non empty LoopStr, A()->Element of NAT,
+  scheme PolynomialLambdaF{R()->non empty addLoopStr, A()->Element of NAT,
                            F(Element of NAT)->Element of R()}:
    ex p be Polynomial of R() st
     len p <= A() & for n be Element of NAT st n < A() holds p.n=F(n)
@@ -1463,7 +1463,7 @@ proof
        i in NAT by ORDINAL1:def 13;
        hence i>=A() implies f.i=0.R() by A2;
      end;
-    
+
     then A() is_at_least_length_of f by ALGSEQ_1:def 3;
     hence thesis by ALGSEQ_1:def 4;
    end;
@@ -1476,7 +1476,7 @@ proof
   end;
 
   registration
-   let L be right_zeroed (non empty LoopStr);
+   let L be right_zeroed (non empty addLoopStr);
    let p,q be Polynomial of L;
    cluster p+q -> finite-Support;
    coherence
@@ -1487,23 +1487,23 @@ proof
           len p + len q >= len p by NAT_1:11;
      then i >= len p by A1,XXREAL_0:2;
      then A2: p.i = 0.L by ALGSEQ_1:22;
-A4:  i in NAT by ORDINAL1:def 13;
+A3:  i in NAT by ORDINAL1:def 13;
      len p + len q >= len q by NAT_1:11;
-     then A3: i >= len q by A1,XXREAL_0:2;
-     thus (p+q).i = p.i + q.i by NORMSP_1:def 5,A4
-        .= 0.L + 0.L by A2,A3,ALGSEQ_1:22
+     then A4: i >= len q by A1,XXREAL_0:2;
+     thus (p+q).i = p.i + q.i by A3,NORMSP_1:def 5
+        .= 0.L + 0.L by A2,A4,ALGSEQ_1:22
         .= 0.L by RLVECT_1:def 7;
    end;
   end;
 
   theorem Th24:
-   for L be right_zeroed (non empty LoopStr)
+   for L be right_zeroed (non empty addLoopStr)
    for p,q be Polynomial of L
    for n be Element of NAT holds
     (n is_at_least_length_of p & n is_at_least_length_of q) implies
      n is_at_least_length_of p+q
    proof
-    let L be right_zeroed (non empty LoopStr);
+    let L be right_zeroed (non empty addLoopStr);
     let p,q be Polynomial of L;
     let n be Element of NAT;
     assume that
@@ -1513,16 +1513,16 @@ A4:  i in NAT by ORDINAL1:def 13;
 A3: i in NAT by ORDINAL1:def 13;
      assume i>=n;
      then p.i = 0.L & q.i = 0.L by A1,A2,ALGSEQ_1:def 3;
-     hence (p+q).i = 0.L + 0.L by NORMSP_1:def 5,A3
+     hence (p+q).i = 0.L + 0.L by A3,NORMSP_1:def 5
         .= 0.L by RLVECT_1:def 7;
    end;
 
   theorem
-        for L be right_zeroed (non empty LoopStr)
+        for L be right_zeroed (non empty addLoopStr)
    for p,q be Polynomial of L holds
     support (p+q) c= support p \/ support q
    proof
-    let L be right_zeroed (non empty LoopStr);
+    let L be right_zeroed (non empty addLoopStr);
     let p,q be Polynomial of L;
     let x be set;
     assume A1: x in support (p+q);
@@ -1543,7 +1543,7 @@ A3: i in NAT by ORDINAL1:def 13;
    end;
 
   definition
-   let L be Abelian (non empty LoopStr);
+   let L be Abelian (non empty addLoopStr);
    let p,q be sequence of L;
    redefine func p+q;
    commutativity
@@ -1558,11 +1558,11 @@ A3: i in NAT by ORDINAL1:def 13;
   end;
 
   theorem Th26:
-   for L be add-associative (non empty LoopStr)
+   for L be add-associative (non empty addLoopStr)
    for p,q,r be sequence of L holds
     p+q+r = p+(q+r)
    proof
-    let L be add-associative (non empty LoopStr);
+    let L be add-associative (non empty addLoopStr);
     let p,q,r be sequence of L;
          now let n be Element of NAT;
      thus (p+q+r).n = (p+q).n + r.n by NORMSP_1:def 5
@@ -1580,7 +1580,7 @@ A3: i in NAT by ORDINAL1:def 13;
 
   registration
    let L be add-associative right_zeroed right_complementable
-    (non empty LoopStr);
+    (non empty addLoopStr);
    let p be Polynomial of L;
    cluster -p -> finite-Support;
    coherence
@@ -1596,10 +1596,10 @@ A3: i in NAT by ORDINAL1:def 13;
   end;
 
 Lm1:
-   for L be non empty LoopStr
+   for L be non empty addLoopStr
    for p,q be sequence of L holds p-q = p+-q
    proof
-    let L be non empty LoopStr;
+    let L be non empty addLoopStr;
     let p,q be sequence of L;
     let n be Element of NAT;
     thus (p-q).n = p.n-q.n by NORMSP_1:def 6
@@ -1608,7 +1608,7 @@ Lm1:
    end;
 
   definition
-   let L be non empty LoopStr;
+   let L be non empty addLoopStr;
    let p,q be sequence of L;
    redefine func p-q equals
      p+-q;
@@ -1617,14 +1617,14 @@ Lm1:
 
   registration
    let L be add-associative right_zeroed right_complementable
-    (non empty LoopStr);
+    (non empty addLoopStr);
    let p,q be Polynomial of L;
    cluster p-q -> finite-Support;
    coherence;
   end;
 
   theorem
-   for L be non empty LoopStr
+   for L be non empty addLoopStr
    for p,q be sequence of L
    for n be Element of NAT holds
     (p-q).n = p.n - q.n by NORMSP_1:def 6;
@@ -1652,11 +1652,11 @@ Lm1:
 canceled;
 
   theorem Th29:
-   for L be right_zeroed (non empty LoopStr)
+   for L be right_zeroed (non empty addLoopStr)
    for p be sequence of L holds
     p+0_.(L) = p
    proof
-    let L be right_zeroed (non empty LoopStr);
+    let L be right_zeroed (non empty addLoopStr);
     let p be sequence of L;
          now let n be Element of NAT;
      thus (p+0_.(L)).n = p.n + (0_.(L)).n by NORMSP_1:def 5
@@ -1668,12 +1668,12 @@ canceled;
 
   theorem Th30:
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be sequence of L holds
     p-p = 0_.(L)
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p be sequence of L;
          now let n be Element of NAT;
      thus (p-p).n = p.n - p.n by NORMSP_1:def 6
@@ -1700,7 +1700,7 @@ canceled;
 A1: i in NAT by ORDINAL1:def 13;
      assume i >= 1;
      hence (1_.(L)).i = (0_.(L)).i by FUNCT_7:34
-        .= 0.L by FUNCOP_1:13,A1;
+        .= 0.L by A1,FUNCOP_1:13;
    end;
   end;
 
@@ -1717,7 +1717,7 @@ A1: i in NAT by ORDINAL1:def 13;
 A1: n in NAT by ORDINAL1:def 13;
     assume n <> 0;
     hence (1_.(L)).n = (0_.(L)).n by FUNCT_7:34
-       .= 0.L by FUNCOP_1:13,A1;
+       .= 0.L by A1,FUNCOP_1:13;
    end;
 
   definition
@@ -1932,13 +1932,13 @@ A9: for k be Element of NAT st k in dom r3 holds r3.k = q.(k-'1) * r.(i+1-'k)
    end;
 
   theorem Th34:
-   for L be Abelian add-associative right_zeroed right_complementable unital
-    associative distributive (non empty doubleLoopStr)
+   for L be Abelian add-associative right_zeroed right_complementable
+    well-unital associative distributive (non empty doubleLoopStr)
    for p,q,r be sequence of L holds
     p*'q*'r = p*'(q*'r)
    proof
-    let L be Abelian add-associative right_zeroed right_complementable unital
-     associative distributive (non empty doubleLoopStr);
+    let L be Abelian add-associative right_zeroed right_complementable
+          well-unital associative distributive (non empty doubleLoopStr);
     let p,q,r be sequence of L;
     now let i be Element of NAT;
      consider r1 be FinSequence of the carrier of L such that
@@ -2392,11 +2392,11 @@ then A131: FlattenSeq g1=prodTuples(p,q,r,FlattenSeq g2) by A112,FINSEQ_2:10;
       then i+1-j+1 = i+1-'j+1 by BINARITH:def 3;
       then reconsider lj = len Card g2 - j + 1 as Element of NAT
        by A9,A191,FINSEQ_3:31;
-           i+1-(i+1-j+1) = 0+(j-1);
+           i+1-(i+1-j+1) = 0 qua Nat+(j-1);
       then A203: i+1-(i+1-j+1) >= 0 by A196,XREAL_1:50;
-      then A204: i+1-'lj+1 = 0+(j-1)+1 by A9,A192,BINARITH:def 3
+      then A204: i+1-'lj+1 = 0 qua Nat+(j-1)+1 by A9,A192,BINARITH:def 3
          .= j;
-      A205: i+1-j+1 >= 0+1 by A202,XREAL_1:8;
+      A205: i+1-j+1 >= 0 qua Nat+1 by A202,XREAL_1:8;
            j-1 >= 0 by A196,XREAL_1:50;
       then i+1-(j-1) <= i+1 by REAL_2:173;
        then lj in Seg (i+1) by A9,A192,A205,FINSEQ_1:3;
@@ -2521,9 +2521,9 @@ A231:   i+1+1 >= i+1 by NAT_1:11;
       A10: k-1 >= 0 by A8,XREAL_1:50;
            i+1-k+1 > i+1-k by XREAL_1:31;
       then reconsider k1 = len r2 - k + 1 as Element of NAT by A4,A9,INT_1:16;
-      A11: i+1-k+1 >= 0+1 by A9,XREAL_1:8;
+      A11: i+1-k+1 >= 0 qua Nat+1 by A9,XREAL_1:8;
            1-k <= 0 by A8,REAL_2:106;
-      then i+(1-k) <= i+0 by XREAL_1:8;
+      then i+(1-k) <= i+(0 qua Nat) by XREAL_1:8;
       then A12: k1 <= i+1 by A4,XREAL_1:8;
       then A13: k1 in dom r2 by A4,A11,FINSEQ_3:27;
            i+1-k1 >= 0 by A12,XREAL_1:50;
@@ -2749,22 +2749,22 @@ begin  :: The Ring of Polynomials
      reconsider y1=y as Element of P1 by A28;
      reconsider p=x as sequence of L by A18;
      reconsider q=y as sequence of L by A23;
-     thus (the add of P1).(x,y) = x+y1
+     thus (the addF of P1).(x,y) = x+y1
         .= p+q by A19
         .= x1+y by A24
-        .= (the add of P2).(x,y);
+        .= (the addF of P2).(x,y);
     end;
-    then A30: the add of P1 = the add of P2 by A29,BINOP_1:2;
+    then A30: the addF of P1 = the addF of P2 by A29,BINOP_1:2;
      now let x be Element of P1,
             y be Element of P2;
      reconsider x1=x as Element of P2 by A28;
      reconsider y1=y as Element of P1 by A28;
      reconsider p=x as sequence of L by A18;
      reconsider q=y as sequence of L by A23;
-     thus (the mult of P1).(x,y) = x*y1
+     thus (the multF of P1).(x,y) = x*y1
         .= p*'q by A20
         .= x1*y by A25
-        .= (the mult of P2).(x,y);
+        .= (the multF of P2).(x,y);
     end;
     hence P1 = P2 by A21,A22,A26,A27,A29,A30,BINOP_1:2;
    end;
@@ -2835,8 +2835,8 @@ begin  :: The Ring of Polynomials
   end;
 
   registration
-   let L be Abelian add-associative right_zeroed right_complementable unital
-                          associative distributive (non empty doubleLoopStr);
+   let L be Abelian add-associative right_zeroed right_complementable
+       well-unital associative distributive (non empty doubleLoopStr);
    cluster Polynom-Ring L -> associative;
    coherence
    proof
@@ -2900,4 +2900,4 @@ end;
 theorem
   for L being add-associative right_zeroed right_complementable well-unital
             Abelian commutative distributive (non empty doubleLoopStr) holds
-  1_Polynom-Ring L = 1_.L by Def12;
+  1.Polynom-Ring L = 1_.L by Def12;

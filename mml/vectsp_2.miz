@@ -8,14 +8,18 @@ environ
 
  vocabularies VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1,
       RELAT_1, ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1,
-      STRUCT_0, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
- constructors BINOP_1, FUNCT_3, VECTSP_1, MIDSP_1;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0, GROUP_1, VECTSP_1;
+      STRUCT_0, ARYTM, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, FUNCT_5,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1,
+      FUNCT_3;
+ constructors BINOP_1, FUNCT_3, VECTSP_1, MIDSP_1, ALGSTR_0, FUNCSDOM, FUNCT_5,
+      VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, GROUP_1, VECTSP_1, ALGSTR_0,
+      VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions VECTSP_1, RLVECT_1, STRUCT_0, GROUP_1;
- theorems VECTSP_1, FUNCT_2, TARSKI, RLVECT_1, STRUCT_0, GROUP_1;
+ definitions VECTSP_1, RLVECT_1, STRUCT_0, GROUP_1, ALGSTR_0, VALUED_1;
+ theorems VECTSP_1, FUNCT_2, TARSKI, RLVECT_1, STRUCT_0, GROUP_1, CARD_1,
+      ALGSTR_0;
 
 begin :: 1_ RING
 
@@ -130,7 +134,7 @@ theorem
  end;
 
 registration
- cluster non degenerated Field-like Ring;
+ cluster non degenerated almost_left_invertible Ring;
  existence
   proof
    consider F;
@@ -140,7 +144,7 @@ registration
 end;
 
 definition
- mode Skew-Field is non degenerated Field-like Ring;
+ mode Skew-Field is non degenerated almost_left_invertible Ring;
 end;
 
 registration
@@ -160,43 +164,41 @@ canceled 3;
 :: 10. AXIOMS OF SKEW-FIELD
 
 registration
- cluster commutative left_unital -> unital (non empty multLoopStr);
+ cluster commutative left_unital -> well-unital (non empty multLoopStr);
  coherence
   proof let F be non empty multLoopStr;
    assume
 A1:  F is commutative left_unital;
-   take 1_F;
    let x be Scalar of F;
-       for F be commutative (non empty HGrStr),
+       for F be commutative (non empty multMagma),
     x,y being Element of F holds x*y = y*x;
-    then x*(1_F) = (1_F)*x by A1;
-   hence x*(1_F) = x & (1_F)*x = x by A1,VECTSP_1:def 19;
+    then x*(1.F) = (1.F)*x by A1;
+   hence x*(1.F) = x & (1.F)*x = x by A1,VECTSP_1:def 19;
   end;
- cluster commutative right_unital -> unital (non empty multLoopStr);
+ cluster commutative right_unital -> well-unital (non empty multLoopStr);
  coherence
   proof let F be non empty multLoopStr;
    assume
 A2:  F is commutative right_unital;
-  take 1_F;
    let x be Element of F;
-       for F be commutative (non empty HGrStr),
+       for F be commutative (non empty multMagma),
     x,y being Element of F holds x*y = y*x;
-    then x*(1_F) = (1_F)*x by A2;
-   hence x*(1_F) = x & (1_F)*x = x by A2,VECTSP_1:def 13;
+    then x*(1.F) = (1.F)*x by A2;
+   hence x*(1.F) = x & (1.F)*x = x by A2,VECTSP_1:def 13;
   end;
 end;
 
 :: 11_ SOME PROPERTIES OF RING
 
  reserve R for Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
          x, y, z for Scalar of R;
 
 Lm3: x + y = z implies x = z - y
 proof
  assume A1: x + y = z;
  thus x = x + 0.R by RLVECT_1:10
-  .= x + (y + -y) by RLVECT_1:def 10
+  .= x + (y + -y) by RLVECT_1:def 11
   .= z - y by A1,RLVECT_1:def 6;
 end;
 
@@ -204,7 +206,7 @@ Lm4: x = z - y implies x + y = z
 proof
  assume x = z - y;
  then x + y = z + (y + -y) by RLVECT_1:def 6
-  .= z + 0.R by RLVECT_1:def 10 .= z by RLVECT_1:10;
+  .= z + 0.R by RLVECT_1:def 11 .= z by RLVECT_1:10;
  hence thesis;
 end;
 
@@ -217,12 +219,12 @@ canceled 11;
 
 theorem Th34:
  for R being add-associative right_zeroed
-                right_complementable (non empty LoopStr),
+                right_complementable (non empty addLoopStr),
      x being Element of R holds
 x=0.R iff -x=0.R
 proof
  let R be add-associative right_zeroed
-                right_complementable (non empty LoopStr),
+                right_complementable (non empty addLoopStr),
      x be Element of R;
  thus x=0.R implies -x=0.R by RLVECT_1:25;
    assume -x = 0.R;
@@ -234,12 +236,12 @@ canceled 3;
 
 theorem
      for R being add-associative right_zeroed Abelian
-              right_complementable (non empty LoopStr)
+              right_complementable (non empty addLoopStr)
  for x,y being Element of R
   ex z being Element of R st x = y+z & x = z+y
 proof
   let R be add-associative right_zeroed Abelian
-              right_complementable (non empty LoopStr);
+              right_complementable (non empty addLoopStr);
  let x,y be Element of R;
  take z = -y+x;
      z+y = x+(-y+y) by RLVECT_1:def 6 .= x+0.R by RLVECT_1:16
@@ -256,90 +258,102 @@ theorem Th39:
  for F being add-associative right_zeroed right_complementable
      distributive non degenerated (non empty doubleLoopStr)
  for x, y being Element of F holds
-   x*y = 1.F implies x<>0.F & y<>0.F
-proof
-let F be add-associative right_zeroed right_complementable
-     distributive non degenerated (non empty doubleLoopStr),
-  x, y be Element of F;
-A1: x = 0.F implies x*y <> 1.F
-  proof
-    assume x = 0.F;
-    then x*y = 0.F by VECTSP_1:39;
-    hence thesis by STRUCT_0:def 8;
-  end;
-      y = 0.F implies x*y <> 1.F
-   proof
-    assume y = 0.F;
-    then x*y = 0.F by VECTSP_1:36;
-    hence thesis by STRUCT_0:def 8;
-   end;
-  hence thesis by A1;
-end;
+   x*y = 1.F implies x<>0.F & y<>0.F by STRUCT_0:def 8,VECTSP_1:36,39;
 
 theorem Th40:
- for SF being non degenerated Field-like associative
-    Abelian add-associative right_zeroed right_complementable
+ for SF being non degenerated almost_left_invertible associative
+       add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
      x being Element of SF holds
-  x<>0.SF implies ex y being Element of SF st y*x = 1_SF
+  x<>0.SF implies ex y being Element of SF st x*y = 1.SF
  proof
-  let SF be non degenerated Field-like associative
-    Abelian add-associative right_zeroed right_complementable
+  let SF be non degenerated almost_left_invertible associative
+    add-associative right_zeroed right_complementable
         well-unital right_unital distributive (non empty doubleLoopStr),
      x be Element of SF;
   assume x<>0.SF;
   then consider y be Element of SF
-  such that A1: x*y = 1_SF by VECTSP_1:def 20;
+  such that A1: y*x = 1.SF by VECTSP_1:def 20;
       y<>0.SF by A1,Th39;
   then consider z be Element of SF
-  such that A2: y*z = 1_SF by VECTSP_1:def 20;
-A3:  z = (x*y)*z by A1,VECTSP_1:def 19
-.= x*1_SF by A2,GROUP_1:def 4 .= x by VECTSP_1:def 13;
+  such that A2: z*y = 1.SF by VECTSP_1:def 20;
+A3:  z = z*(y*x) by A1,VECTSP_1:def 16
+.= 1.SF*x by A2,GROUP_1:def 4 .= x by VECTSP_1:def 16;
   take y;
   thus thesis by A2,A3;
  end;
 
-theorem
-Th41: x*y = 1_SF implies y*x = 1_SF
+theorem Th41:
+ for SF being add-associative right_zeroed right_complementable
+     distributive non degenerated
+     almost_left_invertible associative
+     well-unital (non empty doubleLoopStr)
+ for x,y being Element of SF st y*x = 1.SF holds x*y = 1.SF
  proof
-  assume A1: x*y = 1_SF;
+  let SF be non degenerated almost_left_invertible associative
+    add-associative right_zeroed right_complementable
+        well-unital distributive (non empty doubleLoopStr);
+  let x,y be Element of SF;
+  assume A1: y*x = 1.SF;
   then x<>0.SF by Th39;
-  then consider z such that A2: z*x = 1_SF by Th40;
-      y = (z*x)*y by A2,VECTSP_1:def 19
-     .= z*1_SF by A1,GROUP_1:def 4 .= z by VECTSP_1:def 13;
+  then consider z being Element of SF such that
+  A2: x*z = 1_SF by Th40;
+      y = y*(x*z) by A2,VECTSP_1:def 13
+     .= 1_SF*z by A1,GROUP_1:def 4 .= z by VECTSP_1:def 19;
   hence thesis by A2;
  end;
 
 theorem Th42:
- for SF being non degenerated Field-like associative
+ for SF being non degenerated almost_left_invertible associative
     Abelian add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
      x,y,z being Element of SF holds
         x * y = x * z & x<>0.SF implies y = z
  proof
-  let SF be non degenerated Field-like associative
+  let SF be non degenerated almost_left_invertible associative
     Abelian add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
      x,y,z be Element of SF;
   assume that A1: x * y = x * z and A2: x<>0.SF;
   consider u being Element of SF such that
-  A3: u * x = 1_SF by A2,Th40;
-      y = (u*x)*y by A3,VECTSP_1:def 19 .= u*(x*z) by A1,GROUP_1:def 4
-  .= 1_SF*z by A3,GROUP_1:def 4 .= z by VECTSP_1:def 19;
+  A3: x * u = 1_SF by A2,Th40;
+A4:   u * x = 1_SF by A3,Th41;
+   then y = (u*x)*y by VECTSP_1:def 19 .= u*(x*z) by A1,GROUP_1:def 4
+  .= 1_SF*z by A4,GROUP_1:def 4 .= z by VECTSP_1:def 19;
   hence thesis;
  end;
 
-definition let SF be non degenerated Field-like associative
-    Abelian add-associative right_zeroed right_complementable
+definition let SF be non degenerated almost_left_invertible associative
+    add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
                x be Element of SF;
   assume A1: x<>0.SF;
  canceled;
 
-  func x" -> Scalar of SF
-    means :Def7:  x * it = 1_SF;
-  existence by A1,VECTSP_1:def 20;
-  uniqueness by A1,Th42;
+  redefine func x" means
+:Def7:  it * x = 1.SF;
+  compatibility
+  proof let IT be Element of SF;
+A2:  x is left_invertible by A1,ALGSTR_0:def 39;
+    then consider y being Element of SF such that
+A3:  y*x = 1.SF by ALGSTR_0:def 27;
+    x is right_invertible
+     proof take y;
+      thus thesis by A3,Th41;
+     end;
+    then consider x1 being Element of SF such that
+A4:   x*x1 = 1.SF by ALGSTR_0:def 28;
+A5:  x is right_mult-cancelable
+     proof let y,z be Element of SF;
+      assume
+A6:     y*x = z*x;
+      thus y = y * 1.SF by VECTSP_1:def 16
+         .= z * x*x1 by A4,A6,GROUP_1:def 4
+         .= z * 1.SF by A4,GROUP_1:def 4
+         .= z by VECTSP_1:def 16;
+     end;
+   hence thesis by A2,ALGSTR_0:def 35;
+  end;
 end;
 
 definition let SF,x,y;
@@ -349,28 +363,28 @@ definition let SF,x,y;
 end;
 
 theorem Th43:
-   x<>0.SF implies x * x" = 1_SF & x" * x = 1_SF
+   x<>0.SF implies x * x" = 1.SF & x" * x = 1.SF
   proof
     assume x<>0.SF;
-    then x * x" = 1_SF by Def7;
+    then x"*x = 1_SF by Def7;
     hence thesis by Th41;
   end;
 
 canceled;
 
 theorem
-Th45: x*y = 1_SF implies x = y" & y = x"
+Th45: y*x = 1_SF implies x = y" & y = x"
  proof
-      now A1: x*y = 1_SF implies x = y"
+      now A1: y*x = 1_SF implies x = y"
    proof
-    assume A2: x*y = 1_SF;
+    assume A2: y*x = 1_SF;
     then A3: y<>0.SF by Th39;
-        y*x = 1_SF by A2,Th41;
+        x*y = 1_SF by A2,Th41;
     hence thesis by A3,Def7;
    end;
-      x*y = 1_SF implies y = x"
+      y*x = 1_SF implies y = x"
    proof
-    assume A4: x*y = 1_SF;
+    assume A4: y*x = 1_SF;
     then x<>0.SF by Th39;
     hence thesis by A4,Def7;
    end;
@@ -409,8 +423,8 @@ theorem Th48:
     assume A1:x<>0.SF;
     assume x"=0.SF;
     then x*x"=0.SF by VECTSP_1:36;
-    then 1_SF=0.SF by A1,Th43;
-    hence contradiction by VECTSP_1:def 21;
+    then 1.SF=0.SF by A1,Th43;
+    hence contradiction by STRUCT_0:def 8;
   end;
 
 theorem Th49:
@@ -471,11 +485,7 @@ proof
  thus
 A2: -x/y=(-x)/y by VECTSP_1:41;
 A3:
-   -1_SF<>0.SF
-   proof
-      1_SF<>0.SF by VECTSP_1:def 21;
-     hence thesis by Th34;
-   end;
+   -1.SF<>0.SF by Th34,STRUCT_0:def 8;
     x/(-y)=-x/y
    proof
       x/(-y)=(x*(-1_SF))/((-y)*(-1_SF))
@@ -530,8 +540,8 @@ end;
 :: 13. LEFT-, RIGHT-, AND BI-MODULE STRUCTURE
 
 definition let FS be 1-sorted;
- struct(LoopStr) RightModStr over FS (# carrier -> set,
-      add -> BinOp of the carrier,
+ struct(addLoopStr) RightModStr over FS (# carrier -> set,
+      addF -> BinOp of the carrier,
       ZeroF -> Element of the carrier,
       rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
 end;
@@ -564,7 +574,7 @@ end;
 definition let FS1,FS2 be 1-sorted;
  struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
    (# carrier -> set,
-    add -> BinOp of the carrier,
+    addF -> BinOp of the carrier,
     ZeroF -> Element of the carrier,
     lmult -> Function of [:the carrier of FS1, the carrier:], the carrier,
     rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
@@ -597,14 +607,24 @@ end;
  reserve R, R1, R2 for Ring;
 
 definition let R be Abelian add-associative right_zeroed
-                    right_complementable (non empty LoopStr);
+                    right_complementable (non empty addLoopStr);
  func AbGr R -> strict AbGroup equals
-   LoopStr (#the carrier of R, the add of R, 0.R#);
+   addLoopStr (#the carrier of R, the addF of R, 0.R#);
  coherence
   proof
    reconsider IT =
-     LoopStr(# the carrier of R,the add of R,0.R #)
-      as non empty LoopStr;
+     addLoopStr(# the carrier of R,the addF of R,0.R #)
+      as non empty addLoopStr;
+A1: IT is right_complementable
+    proof
+    let x be Element of IT;
+    reconsider x'=x as Scalar of R;
+    consider b being Scalar of R such that
+A2:  x' + b = 0.R by ALGSTR_0:def 11;
+    reconsider b' = b as Element of IT;
+    take b';
+    thus x + b' = 0.IT by A2;
+    end;
        for x,y,z being Element of IT holds
             x+y = y+x &
             (x+y)+z = x+(y+z) &
@@ -621,17 +641,17 @@ definition let R be Abelian add-associative right_zeroed
     thus x+0.IT = x'+(0.R)
                .= x by RLVECT_1:10;
     consider b being Scalar of R such that
-A1:  x' + b = 0.R by RLVECT_1:def 8;
+A3:  x' + b = 0.R by ALGSTR_0:def 11;
     reconsider b' = b as Element of IT;
     take b';
-    thus x + b' = 0.IT by A1;
+    thus x + b' = 0.IT by A3;
    end;
-   hence thesis by RLVECT_1:def 5,def 6,def 7,def 8;
+   hence thesis by A1,RLVECT_1:def 5,def 6,def 7;
   end;
  end;
 
-deffunc LEFTMODULE(Ring) = VectSpStr(# the carrier of $1,the add of $1,
-              0.$1, the mult of $1 #);
+deffunc LEFTMODULE(Ring) = VectSpStr(# the carrier of $1,the addF of $1,
+              0.$1, the multF of $1 #);
 
 Lm5:
   LEFTMODULE(R) is Abelian add-associative right_zeroed right_complementable
@@ -662,7 +682,7 @@ A1: for x,y,z being Scalar of R
       let x be Element of LEFTMODULE(R);
       reconsider x'= x as Scalar of R;
       consider b' being Scalar of R such that
-A2:    x' + b' = 0.R by RLVECT_1:def 8;
+A2:    x' + b' = 0.R by ALGSTR_0:def 11;
       reconsider b = b' as Element of LEFTMODULE(R);
       take b;
       thus x+b = 0.(LEFTMODULE(R)) by A2;
@@ -684,13 +704,13 @@ definition let R;
 
  func LeftModule R -> Abelian add-associative right_zeroed right_complementable
    strict (non empty VectSpStr over R) equals
-     VectSpStr (# the carrier of R, the add of R,
-                           0.R, the mult of R #);
+     VectSpStr (# the carrier of R, the addF of R,
+                           0.R, the multF of R #);
  coherence by Lm5;
 end;
 
-deffunc RIGHTMODULE(Ring) = RightModStr(# the carrier of $1,the add of $1,
-              0.$1, the mult of $1 #);
+deffunc RIGHTMODULE(Ring) = RightModStr(# the carrier of $1,the addF of $1,
+              0.$1, the multF of $1 #);
 
 Lm6:
   RIGHTMODULE(R) is Abelian add-associative right_zeroed right_complementable
@@ -719,7 +739,7 @@ A1: for x,y,z being Scalar of R
      let x be Element of RIGHTMODULE(R);
      reconsider x'= x as Scalar of R;
       consider b' being Scalar of R such that
-A2:    x' + b' = 0.R by RLVECT_1:def 8;
+A2:    x' + b' = 0.R by ALGSTR_0:def 11;
       reconsider b = b' as Element of RIGHTMODULE(R);
       take b;
       thus x+b = 0.(RIGHTMODULE(R)) by A2;
@@ -742,8 +762,8 @@ definition let R;
 
  func RightModule R -> Abelian add-associative right_zeroed
   right_complementable strict (non empty RightModStr over R) equals
-    RightModStr (# the carrier of R, the add of R,
-                         0.R, the mult of R #);
+    RightModStr (# the carrier of R, the addF of R,
+                         0.R, the multF of R #);
  coherence by Lm6;
 end;
 
@@ -755,43 +775,31 @@ definition let R be non empty 1-sorted, V be non empty RightModStr over R;
   coherence;
 end;
 
-definition
- canceled;
-
- func op1 -> UnOp of {{}} means   not contradiction;
-  existence;
-  uniqueness by FUNCT_2:66;
-
- func op0 -> Element of {{}} means   not contradiction;
-  existence;
-  uniqueness
-   proof
-     let x,y be Element of {{}};
-         x = {} & y = {} by TARSKI:def 1;
-     hence thesis;
-   end;
-end;
-
-deffunc BIMODULE(Ring,Ring) = BiModStr(# {{}},op2,op0,
-pr2 (the carrier of $1, {{}}), pr1 ({{}},the carrier of $2) #);
+deffunc BIMODULE(Ring,Ring) = BiModStr(# 1,op2,op0,
+pr2 (the carrier of $1, 1), pr1 (1,the carrier of $2) #);
 
 Lm7:
   BIMODULE(R1,R2) is Abelian add-associative right_zeroed right_complementable
   proof
-   set G = BiModStr(# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
-   pr1 ({{}},the carrier of R2) #);
+   set G = BiModStr(# 1,op2,op0,pr2 (the carrier of R1, 1),
+   pr1 (1,the carrier of R2) #);
+A1: G is right_complementable
+    proof let x be Element of G;
+     take x;
+     thus thesis by CARD_1:87,TARSKI:def 1;
+    end;
        now
      let x,y,z be Element of G;
            x+y = {} & y+x = {}
      & (x+y)+z = {} & x+(y+z) = {}
      & x+(0.G) = {} & x = {}
-     & x+(-x) = {} & (0.G) = {} by TARSKI:def 1;
+     & x+(-x) = {} & (0.G) = {} by CARD_1:87,TARSKI:def 1;
      hence x+y = y+x &
              (x+y)+z = x+(y+z) &
              x+(0.G) = x &
              ex x' being Element of G st x+x' = 0.G;
     end;
-   hence thesis by RLVECT_1:def 5,def 6,def 7,def 8;
+   hence thesis by A1,RLVECT_1:def 5,def 6,def 7;
   end;
 
 registration let R1,R2;
@@ -807,12 +815,12 @@ end;
 end;
 
 definition let R1,R2;
- canceled 2;
+ canceled 5;
 
  func BiModule(R1,R2) -> Abelian add-associative right_zeroed
    right_complementable strict (non empty BiModStr over R1,R2) equals
-    BiModStr (# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
-   pr1 ({{}},the carrier of R2) #);
+    BiModStr (# 1,op2,op0,pr2 (the carrier of R1, 1),
+   pr1 (1,the carrier of R2) #);
  coherence by Lm7;
 end;
 
@@ -824,10 +832,10 @@ Th71: for x,y being Scalar of R
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_R)*v = v
+               (1.R)*v = v
 proof
- set MLT = the mult of R;
- set LS = VectSpStr (# the carrier of R,the add of R,
+ set MLT = the multF of R;
+ set LS = VectSpStr (# the carrier of R,the addF of R,
                        0.R ,MLT #);
       for x,y being Scalar of R
       for v,w being Vector of LS holds
@@ -865,7 +873,7 @@ registration let R;
        x*(v+w) = x*v+x*w &
        (x+y)*v = x*v+y*v &
        (x*y)*v = x*(y*v) &
-       (1_R)*v = v by Th71;
+       (1.R)*v = v by Th71;
     thus thesis;
    end;
 end;
@@ -900,11 +908,11 @@ Th77: for x,y being Scalar of R
                v*(y*x) = (v*y)*x &
                v*(1_R) = v
 proof
- set GF = LoopStr (# the carrier of R,the add of R,0.R #);
+ set GF = addLoopStr (# the carrier of R,the addF of R,0.R #);
       GF = AbGr R;
  then reconsider GF as AbGroup;
- set MLT = the mult of R;
- set LS = RightModStr (# the carrier of R,the add of R,0.R,MLT #);
+ set MLT = the multF of R;
+ set LS = RightModStr (# the carrier of R,the addF of R,0.R,MLT #);
       for x,y being Scalar of R
       for v,w being Vector of LS holds
               (v+w)*x = v*x+w*x &
@@ -998,7 +1006,7 @@ proof
          x*(v+w) = a & x*v+x*w = a &
      (x+y)*v = a & x*v+y*v = a &
      (x*y)*v = a & x*(y*v) = a &
-     (1_R1)*v = a & v = a by TARSKI:def 1;
+     (1_R1)*v = a & v = a by CARD_1:87,TARSKI:def 1;
      hence x*(v+w) = x*v+x*w
            & (x+y)*v = x*v+y*v
            & (x*y)*v = x*(y*v)
@@ -1007,7 +1015,7 @@ proof
     v*(p+q) = a & v*p+v*q = a &
     v*(q*p) = a & (v*q)*p = a &
     v*(1_R2) = a & v = a &
-    x*(v*p) = a & (x*v)*p = a by TARSKI:def 1;
+    x*(v*p) = a & (x*v)*p = a by CARD_1:87,TARSKI:def 1;
     hence thesis;
 end;
 

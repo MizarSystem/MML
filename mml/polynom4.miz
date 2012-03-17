@@ -10,23 +10,26 @@ environ
       BINOP_1, VECTSP_1, LATTICES, REALSET1, ALGSTR_2, NORMSP_1, POLYNOM3,
       ARYTM_3, ALGSEQ_1, POLYNOM1, SQUARE_1, FINSEQ_4, FUNCT_4, GROUP_1,
       POLYNOM2, VECTSP_2, ENDALG, GRCAT_1, COHSP_1, QUOFIELD, POLYNOM4,
-      ALGSTR_1, ARYTM;
+      ALGSTR_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1, RELAT_1,
-      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, SEQ_1, POLYNOM1, STRUCT_0,
-      FINSEQ_2, FINSOP_1, RFINSEQ, BINARITH, NORMSP_1, RLVECT_1, GROUP_1,
-      VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1, QUOFIELD, BHSP_1,
-      ALGSEQ_1, POLYNOM3, GROUP_6, XXREAL_0;
+      FUNCT_1, PARTFUN1, FUNCT_2, BINOP_1, FINSEQ_1, VALUED_1, SEQ_1, POLYNOM1,
+      STRUCT_0, ALGSTR_0, FINSEQ_2, FINSOP_1, RFINSEQ, BINARITH, NORMSP_1,
+      RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2, FVSUM_1, ALGSTR_1, GRCAT_1,
+      QUOFIELD, BHSP_1, ALGSEQ_1, POLYNOM3, GROUP_6, XXREAL_0;
  constructors SQUARE_1, FINSEQOP, FINSOP_1, RFINSEQ, BINARITH, ALGSTR_1,
-      ALGSEQ_1, BHSP_1, GRCAT_1, GROUP_6, QUOFIELD, POLYNOM1, POLYNOM3, SEQ_1;
+      ALGSEQ_1, BHSP_1, GRCAT_1, GROUP_6, QUOFIELD, POLYNOM1, POLYNOM3, SEQ_1,
+      VALUED_1, PARTFUN1;
  registrations ORDINAL1, RELSET_1, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1,
-      FINSEQ_2, STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM3, XBOOLE_0;
+      FINSEQ_2, STRUCT_0, VECTSP_1, ALGSTR_1, POLYNOM3, XBOOLE_0, ALGSTR_0,
+      VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions ALGSEQ_1, QUOFIELD, GROUP_1, GRCAT_1, GROUP_6, POLYNOM3, FINSEQ_2;
+ definitions ALGSEQ_1, QUOFIELD, GROUP_1, GRCAT_1, GROUP_6, POLYNOM3, FINSEQ_2,
+      VALUED_1;
  theorems REAL_1, NAT_1, FUNCT_2, FUNCT_7, FUNCOP_1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSEQ_4, FINSEQ_5, RFINSEQ, BINARITH, RLVECT_1, VECTSP_1,
       VECTSP_2, FVSUM_1, NORMSP_1, ALGSEQ_1, GROUP_1, POLYNOM2, POLYNOM3,
       INT_1, NAT_2, MATRIX_3, ALGSTR_1, XREAL_1, XXREAL_0, BHSP_1, STRUCT_0,
-      PARTFUN1, ORDINAL1;
+      PARTFUN1, ORDINAL1, ALGSTR_0;
  schemes NAT_1, FINSEQ_2, POLYNOM3, FUNCT_2;
 
 begin
@@ -40,37 +43,37 @@ canceled 2;
     p = (p|(n-'1))^<*p.n*>^(p/^n) by FINSEQ_5:87;
 
 Lm1:
-for R being left_zeroed add-right-cancelable
+for R being left_zeroed right_add-cancelable
             right-distributive (non empty doubleLoopStr),
     a being Element of R
 holds a * 0.R = 0.R
 proof
-let R be left_zeroed add-right-cancelable
+let R be left_zeroed right_add-cancelable
             right-distributive (non empty doubleLoopStr),
     a be Element of R;
      a * 0.R = a * (0.R + 0.R) by ALGSTR_1:def 5
           .= a * 0.R + a * 0.R by VECTSP_1:def 11;
 then a * 0.R + a * 0.R = 0.R + a * 0.R by ALGSTR_1:def 5;
-hence thesis by ALGSTR_1:def 7;
+hence thesis by ALGSTR_0:def 4;
 end;
 
 registration
-cluster Field-like -> domRing-like
-           (left_zeroed add-right-cancelable right-distributive
+cluster almost_left_invertible -> domRing-like
+           (left_zeroed right_add-cancelable right-distributive
             well-unital commutative associative (non empty doubleLoopStr));
 coherence
  proof
- let L be left_zeroed add-right-cancelable right-distributive well-unital
+ let L be left_zeroed right_add-cancelable right-distributive well-unital
           commutative associative (non empty doubleLoopStr);
- assume A1: L is Field-like;
+ assume A1: L is almost_left_invertible;
       now let x,y be Element of L;
    assume A2: x * y = 0.L;
    thus x = 0.L or y = 0.L
      proof
      assume x <> 0.L;
      then consider z being Element of L such that
-     A3: x * z = 1.L by A1,VECTSP_1:def 20;
-          z * 0.L = 1_L * y by A2,A3,GROUP_1:def 4
+     A3: z * x = 1.L by A1,VECTSP_1:def 20;
+          z * 0.L = 1.L * y by A2,A3,GROUP_1:def 4
             .= y by VECTSP_1:def 19;
      hence y = 0.L by Lm1;
      end;
@@ -82,7 +85,7 @@ end;
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
          associative commutative distributive unital
-         domRing-like Field-like
+         domRing-like almost_left_invertible
          non degenerated non trivial (non empty doubleLoopStr);
   existence proof
       consider F be non degenerated strict Field;
@@ -178,12 +181,12 @@ canceled;
    end;
 
   theorem Th9:
-   for L be right_zeroed (non empty LoopStr)
+   for L be right_zeroed (non empty addLoopStr)
    for p,q be Polynomial of L
    for n be Element of NAT st n >= len p & n >= len q holds
     n >= len (p+q)
    proof
-    let L be right_zeroed (non empty LoopStr);
+    let L be right_zeroed (non empty addLoopStr);
     let p,q be Polynomial of L;
     let n be Element of NAT;
     assume that
@@ -197,12 +200,12 @@ canceled;
 
   theorem Th10:
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p,q be Polynomial of L st len p <> len q holds
     len (p+q) = max(len p,len q)
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p,q be Polynomial of L;
     assume A1: len p <> len q;
     per cases by A1,REAL_1:def 5;
@@ -254,12 +257,12 @@ canceled;
 
   theorem Th11:
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be Polynomial of L holds
     len (-p) = len p
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p be Polynomial of L;
     A1: len p is_at_least_length_of -p
     proof
@@ -275,10 +278,10 @@ canceled;
           n is_at_least_length_of p
      proof
       let i be Nat;
-A5:   i in NAT by ORDINAL1:def 13;
+A4:   i in NAT by ORDINAL1:def 13;
       assume i >= n;
       then (-p).i = 0.L by A3,ALGSEQ_1:def 3;
-      then -p.i = 0.L by BHSP_1:def 10,A5;
+      then -p.i = 0.L by A4,BHSP_1:def 10;
       hence p.i = 0.L by VECTSP_2:34;
      end;
      hence len p <= n by ALGSEQ_1:def 4;
@@ -288,13 +291,13 @@ A5:   i in NAT by ORDINAL1:def 13;
 
   theorem
         for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p,q be Polynomial of L
    for n be Element of NAT st n >= len p & n >= len q holds
     n >= len (p-q)
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p,q be Polynomial of L;
     let n be Element of NAT;
     assume that
@@ -527,31 +530,31 @@ begin  :: Leading Monomials
    proof
     take len p;
     let i be Nat;
-A10: i in NAT by ORDINAL1:def 13;
-    A1: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
+A1: i in NAT by ORDINAL1:def 13;
+    A2: Leading-Monomial(p) = 0_.(L)+*(len p-'1,p.(len p-'1)) by Th14;
     assume i >= len p;
     then i+1 > len p by NAT_1:13;
-    then A2: i+1-1 > len p-1 by XREAL_1:11;
+    then A3: i+1-1 > len p-1 by XREAL_1:11;
     per cases;
      suppose len p > 0;
       then len p >= 0+1 by NAT_1:13;
       then len p-1 >= 0+1-1 by XREAL_1:11;
-      then i <> len p-'1 by A2,BINARITH:def 3;
-      hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,FUNCT_7:34
-         .= 0.L by FUNCOP_1:13,A10;
+      then i <> len p-'1 by A3,BINARITH:def 3;
+      hence (Leading-Monomial(p)).i = (0_.(L)).i by A2,FUNCT_7:34
+         .= 0.L by A1,FUNCOP_1:13;
      end;
-     suppose A3: len p = 0;
-      then A4: len p-'1 = 0 by NAT_2:10;
+     suppose A4: len p = 0;
+      then A5: len p-'1 = 0 by NAT_2:10;
            0 in NAT;
-      then A5: 0 in dom 0_.(L) by NORMSP_1:17;
+      then A6: 0 in dom 0_.(L) by NORMSP_1:17;
            now per cases;
        suppose i > 0;
-        hence (Leading-Monomial(p)).i = (0_.(L)).i by A1,A4,FUNCT_7:34
-           .= 0.L by FUNCOP_1:13,A10;
+        hence (Leading-Monomial(p)).i = (0_.(L)).i by A2,A5,FUNCT_7:34
+           .= 0.L by A1,FUNCOP_1:13;
        end;
        suppose i = 0;
-        hence (Leading-Monomial(p)).i = p.0 by A1,A4,A5,FUNCT_7:33
-           .= (0_.(L)).0 by A3,Th8
+        hence (Leading-Monomial(p)).i = p.0 by A2,A5,A6,FUNCT_7:33
+           .= (0_.(L)).0 by A4,Th8
            .= 0.L by FUNCOP_1:13;
       end;
       end;
@@ -614,45 +617,45 @@ A10: i in NAT by ORDINAL1:def 13;
       A4: len p is_at_least_length_of r
       proof
        let i be Nat;
-A10:   i in NAT by ORDINAL1:def 13;
+A5:   i in NAT by ORDINAL1:def 13;
        assume i >= len p;
        then i+1 > len p by NAT_1:13;
        then i+1-1 > len p-1 by XREAL_1:11;
        then i <> len p-'1 by A3,BINARITH:def 3;
        hence r.i = (0_.(L)).i by A1,FUNCT_7:34
-          .= 0.L by FUNCOP_1:13,A10;
+          .= 0.L by A5,FUNCOP_1:13;
       end;
            len p-'1 in NAT;
-      then A5: len p-'1 in dom 0_.(L) by NORMSP_1:17;
+      then A6: len p-'1 in dom 0_.(L) by NORMSP_1:17;
            now let m be Nat;
-       assume A6: m is_at_least_length_of r;
-       A7: len p = len p-'1+1 by A2,BINARITH:53;
+       assume A7: m is_at_least_length_of r;
+       A8: len p = len p-'1+1 by A2,BINARITH:53;
        assume len p > m;
        then len p >= m+1 by NAT_1:13;
        then len p-1 >= m+1-1 by XREAL_1:11;
        then len p-'1 >= m by BINARITH:def 3;
-       then r.(len p-'1) = 0.L by A6,ALGSEQ_1:def 3;
-       then p.(len p-'1) = 0.L by A1,A5,FUNCT_7:33;
-       hence contradiction by A7,ALGSEQ_1:25;
+       then r.(len p-'1) = 0.L by A7,ALGSEQ_1:def 3;
+       then p.(len p-'1) = 0.L by A1,A6,FUNCT_7:33;
+       hence contradiction by A8,ALGSEQ_1:25;
       end;
       hence thesis by A4,ALGSEQ_1:def 4;
      end;
-     suppose A8: len p = 0;
+     suppose A9: len p = 0;
       hence len Leading-Monomial(p) = len (0_.(L)) by Th15
-         .= len p by A8,Th8;
+         .= len p by A9,Th8;
    end;
    end;
 
   theorem Th19:
    for L be add-associative right_zeroed right_complementable
-    (non empty LoopStr)
+    (non empty addLoopStr)
    for p be Polynomial of L st len p <> 0
    ex q be Polynomial of L st
     len q < len p & p = q+Leading-Monomial(p) &
     for n be Element of NAT st n < len p-1 holds q.n = p.n
    proof
     let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr);
+     (non empty addLoopStr);
     let p be Polynomial of L;
     assume A1: len p <> 0;
     deffunc F(Element of NAT) = p.$1;
@@ -670,26 +673,26 @@ A10:   i in NAT by ORDINAL1:def 13;
                                                                    by A5,Th10
        .= len p by A5,A6,XXREAL_0:def 9;
          now let k be Nat;
-A10:       k in NAT by ORDINAL1:def 13;
+A8:       k in NAT by ORDINAL1:def 13;
      assume k < len p;
      then k+1 <= len p by NAT_1:13;
-     then A8: k+1-1 <= len p-1 by XREAL_1:11;
-     per cases by A8,REAL_1:def 5;
+     then A9: k+1-1 <= len p-1 by XREAL_1:11;
+     per cases by A9,REAL_1:def 5;
       suppose k < len p-1;
-       then A9: k < len p-'1 by BINARITH:def 3;
+       then A10: k < len p-'1 by BINARITH:def 3;
        thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
-       by NORMSP_1:def 5,A10
-          .= p.k + (Leading-Monomial(p)).k by A3,A9,A10
-          .= p.k + 0.L by A9,Def1,A10
+       by A8,NORMSP_1:def 5
+          .= p.k + (Leading-Monomial(p)).k by A3,A8,A10
+          .= p.k + 0.L by A8,A10,Def1
           .= p.k by RLVECT_1:def 7;
       end;
       suppose k = len p-1;
-       then A10: k = len p-'1 by BINARITH:def 3;
+       then A11: k = len p-'1 by BINARITH:def 3;
        thus (q+Leading-Monomial(p)).k = q.k + (Leading-Monomial(p)).k
-       by NORMSP_1:def 5,A10
-          .= 0.L + (Leading-Monomial(p)).k by A2,A10,ALGSEQ_1:22
+       by A11,NORMSP_1:def 5
+          .= 0.L + (Leading-Monomial(p)).k by A2,A11,ALGSEQ_1:22
           .= (Leading-Monomial(p)).k by RLVECT_1:10
-          .= p.k by A10,Def1;
+          .= p.k by A11,Def1;
     end;
     end;
     hence p = q+Leading-Monomial(p) by A7,ALGSEQ_1:28;
@@ -770,7 +773,7 @@ begin  :: Evaluation of Polynomials
    for L be well-unital add-associative right_zeroed right_complementable
     associative non degenerated (non empty doubleLoopStr)
    for x be Element of L holds
-    eval(1_.(L),x) = 1_L
+    eval(1_.(L),x) = 1.L
    proof
     let L be well-unital add-associative right_zeroed right_complementable
      associative non degenerated (non empty doubleLoopStr);
@@ -785,11 +788,12 @@ begin  :: Evaluation of Polynomials
     then 1 in dom F by FINSEQ_1:def 3;
     then F.1 = (1_.(L)).(1-'1) * (power L).(x,1-'1) by A3
        .= (1_.(L)).(0) * (power L).(x,1-'1) by BINARITH:51
-       .= 1_L * (power L).(x,1-'1) by POLYNOM3:31
+       .= 1.L * (power L).(x,1-'1) by POLYNOM3:31
        .= (power L).(x,1-'1) by VECTSP_1:def 19
        .= (power L).(x,0) by BINARITH:51
-       .= 1_L by GROUP_1:def 8;
-    then F = <*1_L*> by A4,FINSEQ_1:57;
+       .= 1_L by GROUP_1:def 8
+       .= 1.L;
+    then F = <*1.L*> by A4,FINSEQ_1:57;
     hence thesis by A1,RLVECT_1:61;
    end;
 
@@ -1090,7 +1094,7 @@ unital
     let x be Element of L;
     thus eval(p-q,x) = eval(p,x) + eval(-q,x) by Th22
        .= eval(p,x) +- eval(q,x) by Th23
-       .= eval(p,x) - eval(q,x) by RLVECT_1:def 11;
+       .= eval(p,x) - eval(q,x) by RLVECT_1:def 12;
    end;
 
   theorem Th25:

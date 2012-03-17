@@ -11,23 +11,23 @@ environ
       TREES_1, POWER, INT_1, BINTREE2, MCART_1, EUCLID, FINSEQ_2, MIDSP_3,
       MARGREL1, ZF_LANG, NAT_1, MATRIX_2, RELAT_2, PRE_TOPC, FUNCT_2, SUBSET_1,
       BINOP_1, UNIALG_1, COMPLEX1, VECTSP_1, GROUP_1, GROUP_2, VECTMETR,
-      FINSEQ_4, PARTFUN1, STRUCT_0, ARYTM;
+      FINSEQ_4, PARTFUN1, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, MCART_1, XCMPLX_0,
       COMPLEX1, REAL_1, RELAT_2, INT_1, NAT_1, NAT_D, POWER, ABIAN, SERIES_1,
       RELAT_1, RELSET_1, MARGREL1, BINOP_1, DOMAIN_1, FUNCT_1, PARTFUN1,
-      FUNCT_2, STRUCT_0, PRE_TOPC, FINSEQ_1, FINSEQ_2, FINSEQ_4, FINSEQOP,
-      BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2, RVSUM_1,
-      RLVECT_1, GROUP_1, GROUP_2, TOPS_2, METRIC_1, EUCLID, XXREAL_0;
+      FUNCT_2, STRUCT_0, ALGSTR_0, PRE_TOPC, FINSEQ_1, FINSEQ_2, FINSEQ_4,
+      FINSEQOP, BINARITH, TREES_1, TREES_2, TREES_4, BINTREE1, BINTREE2,
+      RVSUM_1, RLVECT_1, GROUP_1, GROUP_2, TOPS_2, METRIC_1, EUCLID, XXREAL_0;
  constructors XXREAL_0, REAL_1, NAT_1, NAT_D, COMPLEX1, FINSEQOP, FINSEQ_4,
       FINSOP_1, SERIES_1, REALSET1, BINARITH, ABIAN, TOPS_2, GROUP_2, GRCAT_1,
-      EUCLID, BINTREE2;
+      EUCLID, BINTREE2, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, BINOP_2, MEMBERED, SEQ_1, MARGREL1,
       FINSEQ_2, TREES_2, STRUCT_0, GROUP_1, METRIC_1, GROUP_2, BINTREE1,
-      BINTREE2, VALUED_0;
+      BINTREE2, VALUED_0, VALUED_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions STRUCT_0, TARSKI, XBOOLE_0, MARGREL1, XBOOLEAN, RLVECT_1, RVSUM_1,
-      EUCLID, FINSEQ_2;
+      EUCLID, FINSEQ_2, ALGSTR_0, VALUED_1;
  theorems STRUCT_0, TARSKI, MCART_1, REAL_1, REAL_2, NAT_1, NAT_2, ZFMISC_1,
       BINOP_1, RELAT_1, FUNCT_1, FUNCT_2, POWER, FINSEQ_1, FINSEQ_2, FINSEQ_4,
       FINSEQ_5, BINARITH, BINARI_2, BINARI_3, ABSVALUE, TOPS_2, FUNCOP_1,
@@ -896,7 +896,7 @@ definition
   struct(RLSStruct,MetrStruct) RLSMetrStruct (# carrier -> set,
           distance -> Function of [:the carrier,the carrier:],REAL,
           ZeroF -> Element of the carrier,
-          add -> BinOp of the carrier,
+          addF -> BinOp of the carrier,
           Mult -> Function of [:REAL, the carrier:],the carrier #);
 end;
 
@@ -1076,7 +1076,13 @@ end;
     thus W is Abelian by A4,RLVECT_1:def 5;
     thus W is add-associative by A5,RLVECT_1:def 6;
     thus W is right_zeroed by A6,RLVECT_1:def 7;
-    thus W is right_complementable by A7,RLVECT_1:def 8;
+    thus W is right_complementable
+    proof
+     let x be VECTOR of W;
+     reconsider y = O as VECTOR of W;
+     take y;
+     thus x + y = 0.W by A2;
+    end;
     thus W is RealLinearSpace-like by A8,A9,A10,A11,RLVECT_1:def 9;
     thus W is Reflexive by A12,METRIC_1:1;
     thus W is discerning by A12,METRIC_1:2;
@@ -1145,7 +1151,7 @@ end;
     the carrier of it = REAL n &
     the distance of it = Pitag_dist n &
     0.it = 0*n &
-    (for x,y be Element of REAL n holds (the add of it).(x,y) = x + y) &
+    (for x,y be Element of REAL n holds (the addF of it).(x,y) = x + y) &
     for x be Element of REAL n,r be Element of REAL holds
      (the Mult of it).(r,x) = r * x;
    existence
@@ -1176,7 +1182,8 @@ A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
      thus v + 0.RLSMS = v1 + (n |-> (0 qua Real)) by A1
                      .= v by RVSUM_1:33;
     end;
-    A6: now let v be Element of RLSMS;
+A6:  RLSMS is right_complementable
+    proof let v be Element of RLSMS;
      reconsider v1 = v as Element of n-tuples_on REAL;
      reconsider w = -v1 as Element of RLSMS;
      take w;
@@ -1278,7 +1285,7 @@ A1: for x,y be Element of REAL n holds f.(x,y) = F(x,y) from BINOP_1:sch 4;
     end;
     reconsider RLSMS as strict Abelian add-associative right_zeroed
           right_complementable RealLinearSpace-like (non empty RLSMetrStruct)
-           by A3,A4,A5,A6,A7,RLVECT_1:def 5,def 6,def 7,def 8,def 9;
+           by A3,A4,A5,A6,A7,RLVECT_1:def 5,def 6,def 7,def 9;
     reconsider RLSMS as strict RealLinearMetrSpace by A8,A11,A15,Def5,Def6,
 METRIC_1:1,2,3,4;
     take RLSMS;
@@ -1290,21 +1297,21 @@ METRIC_1:1,2,3,4;
      A18: the carrier of V1 = REAL n and
      A19: the distance of V1 = Pitag_dist n and
      A20: 0.V1 = 0*n and
-     A21: for x,y be Element of REAL n holds (the add of V1).(x,y) = x + y and
+     A21: for x,y be Element of REAL n holds (the addF of V1).(x,y) = x + y and
      A22: for x be Element of REAL n,r be Element of REAL holds
       (the Mult of V1).(r,x) = r*x and
      A23: the carrier of V2 = REAL n and
      A24: the distance of V2 = Pitag_dist n and
      A25: 0.V2 = 0*n and
-     A26: for x,y be Element of REAL n holds (the add of V2).(x,y) = x + y and
+     A26: for x,y be Element of REAL n holds (the addF of V2).(x,y) = x + y and
      A27: for x be Element of REAL n,r be Element of REAL holds
       (the Mult of V2).(r,x) = r*x;
          now let x,y be Element of V1;
      reconsider x1 = x, y1 = y as Element of REAL n by A18;
-     thus (the add of V1).(x,y) = x1 + y1 by A21
-        .= (the add of V2).(x,y) by A26;
+     thus (the addF of V1).(x,y) = x1 + y1 by A21
+        .= (the addF of V2).(x,y) by A26;
     end;
-    then A28: the add of V1 = the add of V2 by A18,A23,BINOP_1:2;
+    then A28: the addF of V1 = the addF of V2 by A18,A23,BINOP_1:2;
          now let r be Element of REAL,
             x be Element of V1;
      reconsider x1 = x as Element of REAL n by A18;
@@ -1330,10 +1337,10 @@ begin  :: Groups of Isometric Functions
 
   definition
    let n be Element of NAT;
-   func IsomGroup n -> strict HGrStr means :Def9:
+   func IsomGroup n -> strict multMagma means :Def9:
     the carrier of it = ISOM RLMSpace n &
     (for f,g be Function st f in ISOM RLMSpace n &
-     g in ISOM RLMSpace n holds (the mult of it).(f,g) = f*g);
+     g in ISOM RLMSpace n holds (the multF of it).(f,g) = f*g);
    existence
    proof
      defpred P[set, set, set] means
@@ -1357,9 +1364,9 @@ begin  :: Groups of Isometric Functions
     consider o be BinOp of ISOM RLMSpace n such that
      A6: for a,b be Element of ISOM RLMSpace n holds P[a,b, o.(a,b)]
        from BINOP_1:sch 3(A1);
-    take G = HGrStr(#ISOM RLMSpace n,o#);
+    take G = multMagma(#ISOM RLMSpace n,o#);
          for f,g be Function st f in ISOM RLMSpace n &
-     g in ISOM RLMSpace n holds (the mult of G).(f,g) = f*g
+     g in ISOM RLMSpace n holds (the multF of G).(f,g) = f*g
     proof
      let f,g be Function;
      assume that
@@ -1369,20 +1376,20 @@ begin  :: Groups of Isometric Functions
       A9: f1 = f and
       A10: g1 = g and
       A11: o.(f,g) = f1*g1 by A6,A7,A8;
-     thus (the mult of G).(f,g) = f*g by A9,A10,A11;
+     thus (the multF of G).(f,g) = f*g by A9,A10,A11;
     end;
     hence thesis;
    end;
    uniqueness
    proof
     set V = RLMSpace n;
-    let G1,G2 be strict HGrStr such that
+    let G1,G2 be strict multMagma such that
      A12: the carrier of G1 = ISOM V and
      A13: for f,g be Function st f in ISOM V & g in ISOM V holds
-          (the mult of G1).(f,g) = f*g and
+          (the multF of G1).(f,g) = f*g and
      A14: the carrier of G2 = ISOM V and
      A15: for f,g be Function st f in ISOM V & g in ISOM V holds
-          (the mult of G2).(f,g) = f*g;
+          (the multF of G2).(f,g) = f*g;
          now let f,g be Element of G1;
      consider f1 be Function of RLMSpace n,RLMSpace n such that
       A16: f1 = f and
@@ -1390,8 +1397,8 @@ begin  :: Groups of Isometric Functions
      consider g1 be Function of RLMSpace n,RLMSpace n such that
       A17: g1 = g and
            g1 is isometric by A12,Def4;
-     thus (the mult of G1).(f,g) = f1*g1 by A12,A13,A16,A17
-        .= (the mult of G2).(f,g) by A12,A15,A16,A17;
+     thus (the multF of G1).(f,g) = f1*g1 by A12,A13,A16,A17
+        .= (the multF of G2).(f,g) by A12,A15,A16,A17;
     end;
     hence G1 = G2 by A12,A14,BINOP_1:2;
    end;
@@ -1432,17 +1439,16 @@ begin  :: Groups of Isometric Functions
      then A10: x1*y1 in ISOM RLMSpace n by Def4;
           y1*z1 is isometric by A6,A9,Th4;
      then A11: y1*z1 in ISOM RLMSpace n by Def4;
-     thus (x*y)*z = (the mult of IsomGroup n).(x*y,z) by GROUP_1:def 1
-        .= (the mult of IsomGroup n).((the mult of IsomGroup n).(x,y),z)
-                                                          by GROUP_1:def 1
-        .= (the mult of IsomGroup n).(x1*y1,z) by A1,A2,A4,A5,Def9
+     thus (x*y)*z = (the multF of IsomGroup n).(x*y,z)
+        .= (the multF of IsomGroup n).((the multF of IsomGroup n).(x,y),z)
+        .= (the multF of IsomGroup n).(x1*y1,z) by A1,A2,A4,A5,Def9
         .= (x1*y1)*z1 by A7,A8,A10,Def9
         .= x1*(y1*z1) by RELAT_1:55
-        .= (the mult of IsomGroup n).(x,y1*z1) by A1,A2,A11,Def9
-        .= (the mult of IsomGroup n).(x,(the mult of IsomGroup n).(y,z))
+        .= (the multF of IsomGroup n).(x,y1*z1) by A1,A2,A11,Def9
+        .= (the multF of IsomGroup n).(x,(the multF of IsomGroup n).(y,z))
                                                             by A4,A5,A7,A8,Def9
-        .= (the mult of IsomGroup n).(x,y*z) by GROUP_1:def 1
-        .= x*(y*z) by GROUP_1:def 1;
+        .= (the multF of IsomGroup n).(x,y*z)
+        .= x*(y*z);
     end;
     hence IsomGroup n is associative by GROUP_1:def 4;
          ex e be Element of IsomGroup n st
@@ -1461,10 +1467,10 @@ begin  :: Groups of Isometric Functions
      then consider h1 be Function of RLMSpace n,RLMSpace n such that
       A14: h1 = h and
       A15: h1 is isometric by Def4;
-     thus h * e = (the mult of IsomGroup n).(h,e) by GROUP_1:def 1
+     thus h * e = (the multF of IsomGroup n).(h,e)
         .= h1*id(the carrier of RLMSpace n) by A12,A13,A14,Def9
         .= h by A14,FUNCT_2:23;
-     thus e * h = (the mult of IsomGroup n).(e,h) by GROUP_1:def 1
+     thus e * h = (the multF of IsomGroup n).(e,h)
         .= id(the carrier of RLMSpace n)*h1 by A12,A13,A14,Def9
         .= h by A14,FUNCT_2:23;
           h1" is isometric by A15,Th3;
@@ -1473,10 +1479,10 @@ begin  :: Groups of Isometric Functions
      take g;
      A17: rng h1 = [#](RLMSpace n) by A15,Def3;
      A18: h1 is one-to-one by A15,Th2;
-     thus h * g = (the mult of IsomGroup n).(h,g) by GROUP_1:def 1
+     thus h * g = (the multF of IsomGroup n).(h,g)
         .= h1*h1" by A13,A14,A16,Def9
         .= e by A17,A18,TOPS_2:65;
-     thus g * h = (the mult of IsomGroup n).(g,h) by GROUP_1:def 1
+     thus g * h = (the multF of IsomGroup n).(g,h)
         .= h1"*h1 by A13,A14,A16,Def9
         .= id dom h1 by A17,A18,TOPS_2:65
         .= e by FUNCT_2:def 1;
@@ -1500,10 +1506,10 @@ begin  :: Groups of Isometric Functions
      then consider h1 be Function of RLMSpace n,RLMSpace n such that
       A3: h1 = h and
            h1 is isometric by Def4;
-     thus h * e = (the mult of IsomGroup n).(h,e) by GROUP_1:def 1
+     thus h * e = (the multF of IsomGroup n).(h,e)
         .= h1*id(the carrier of RLMSpace n) by A1,A2,A3,Def9
         .= h by A3,FUNCT_2:23;
-     thus e * h = (the mult of IsomGroup n).(e,h) by GROUP_1:def 1
+     thus e * h = (the multF of IsomGroup n).(e,h)
         .= id(the carrier of RLMSpace n)*h1 by A1,A2,A3,Def9
         .= h by A3,FUNCT_2:23;
     end;
@@ -1530,11 +1536,11 @@ begin  :: Groups of Isometric Functions
     then reconsider g1 = g" as Element of IsomGroup n by Def9;
     A6: rng f1 = [#](RLMSpace n) by A4,Def3;
     A7: f1 is one-to-one by A4,Th2;
-    A8: f * g1 = (the mult of IsomGroup n).(f,g1) by GROUP_1:def 1
+    A8: f * g1 = (the multF of IsomGroup n).(f,g1)
        .= f1*g" by A2,A3,A5,Def9
        .= id(RLMSpace n) by A1,A3,A6,A7,TOPS_2:65
        .= 1_IsomGroup n by Th10;
-         g1 * f = (the mult of IsomGroup n).(g1,f) by GROUP_1:def 1
+         g1 * f = (the multF of IsomGroup n).(g1,f)
        .= g"*f1 by A2,A3,A5,Def9
        .= id dom f1 by A1,A3,A6,A7,TOPS_2:65
        .= id(RLMSpace n) by FUNCT_2:def 1
@@ -1664,7 +1670,7 @@ begin  :: Groups of Isometric Functions
      then A26: g in ISOM RLMSpace n by Def9;
      reconsider g2 = g as Element of G by A21;
      reconsider g3 = g2 as Element of IsomGroup n by A23,TARSKI:def 3;
-     A27: g3*f3 = (the mult of IsomGroup n).(g,f) by GROUP_1:def 1
+     A27: g3*f3 = (the multF of IsomGroup n).(g,f)
         .= g*f by A24,A26,Def9;
         f2 in G & g2 in G by STRUCT_0:def 5;
      then g3*f3 in G by GROUP_2:59;

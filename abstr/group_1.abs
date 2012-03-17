@@ -8,14 +8,14 @@ environ
 
  vocabularies INT_1, VECTSP_1, ABSVALUE, BINOP_1, FUNCT_1, ARYTM_1, REALSET1,
       RELAT_1, SETWISEO, FINSEQOP, ARYTM_3, CARD_1, FINSET_1, RLVECT_1,
-      GROUP_1, ENDALG, ARYTM;
+      GROUP_1, ENDALG, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       XXREAL_0, RELAT_1, FUNCT_1, REAL_1, FUNCT_2, BINOP_2, FINSET_1, STRUCT_0,
-      RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
+      ALGSTR_0, RLVECT_1, INT_1, NAT_1, FINSEQOP, SETWISEO, BINOP_1, INT_2;
  constructors BINOP_1, SETWISEO, XXREAL_0, REAL_1, NAT_1, NAT_D, BINOP_2,
-      INT_2, FINSEQOP, RLVECT_1;
+      INT_2, FINSEQOP, RLVECT_1, ALGSTR_0, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, RELSET_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, STRUCT_0, XBOOLE_0;
+      INT_1, STRUCT_0, XBOOLE_0, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -24,32 +24,11 @@ begin
  reserve n for Element of NAT;
  reserve i,j for Integer;
 
-definition
-  struct(1-sorted) HGrStr (# carrier -> set,
-                             mult -> BinOp of the carrier #);
-end;
-
-registration
-  cluster non empty strict HGrStr;
-end;
-
-definition
-  let S be non empty HGrStr;
-  let x, y be Element of S;
-  func x*y -> Element of S equals
-:: GROUP_1:def 1
-    (the mult of S).(x,y);
-end;
-
- reserve S for non empty HGrStr;
+ reserve S for non empty multMagma;
  reserve r,r1,r2,s,s1,s2,t,t1,t2 for Element of S;
 
-registration
- let A be non empty set, m be BinOp of A;
- cluster HGrStr(#A,m#) -> non empty;
-end;
-
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
+ canceled;
   attr IT is unital means
 :: GROUP_1:def 2
    ex e being Element of IT st
@@ -68,15 +47,15 @@ definition let IT be non empty HGrStr;
 end;
 
 registration
-  cluster Group-like -> unital (non empty HGrStr);
+  cluster Group-like -> unital (non empty multMagma);
 end;
 
 registration
-  cluster strict Group-like associative (non empty HGrStr);
+  cluster strict Group-like associative (non empty multMagma);
 end;
 
 definition
-  mode Group is Group-like associative (non empty HGrStr);
+  mode Group is Group-like associative (non empty multMagma);
 end;
 
 canceled 4;
@@ -94,12 +73,12 @@ theorem :: GROUP_1:6
     S is associative Group-like;
 
 theorem :: GROUP_1:7
-  HGrStr (# REAL, addreal #) is associative Group-like;
+  multMagma (# REAL, addreal #) is associative Group-like;
 
- reserve G for Group-like (non empty HGrStr);
+ reserve G for Group-like (non empty multMagma);
  reserve e,h for Element of G;
 
-definition let G be non empty HGrStr such that
+definition let G be non empty multMagma such that
  G is unital;
  func 1_G -> Element of G means
 :: GROUP_1:def 5
@@ -184,31 +163,31 @@ end;
 canceled 2;
 
 theorem :: GROUP_1:31
- for G being associative (non empty HGrStr)
- holds the mult of G is associative;
+ for G being associative (non empty multMagma)
+ holds the multF of G is associative;
 
 theorem :: GROUP_1:32
-  for G being unital (non empty HGrStr)
- holds 1_G is_a_unity_wrt the mult of G;
+  for G being unital (non empty multMagma)
+ holds 1_G is_a_unity_wrt the multF of G;
 
 theorem :: GROUP_1:33
-  for G being unital (non empty HGrStr)
- holds the_unity_wrt the mult of G = 1_G;
+  for G being unital (non empty multMagma)
+ holds the_unity_wrt the multF of G = 1_G;
 
 theorem :: GROUP_1:34
-  for G being unital (non empty HGrStr)
- holds the mult of G has_a_unity;
+  for G being unital (non empty multMagma)
+ holds the multF of G has_a_unity;
 
 theorem :: GROUP_1:35
-  inverse_op(G) is_an_inverseOp_wrt the mult of G;
+  inverse_op(G) is_an_inverseOp_wrt the multF of G;
 
 theorem :: GROUP_1:36
-  the mult of G has_an_inverseOp;
+  the multF of G has_an_inverseOp;
 
 theorem :: GROUP_1:37
-  the_inverseOp_wrt the mult of G = inverse_op(G);
+  the_inverseOp_wrt the multF of G = inverse_op(G);
 
-definition let G be non empty HGrStr;
+definition let G be non empty multMagma;
  func power G -> Function of [:the carrier of G,NAT:], the carrier of G means
 :: GROUP_1:def 8
    for h being Element of G
@@ -395,7 +374,7 @@ canceled 3;
 theorem :: GROUP_1:90
   G is finite implies ord G >= 1;
 
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
  attr IT is commutative means
 :: GROUP_1:def 16
   for x,y being Element of IT holds x*y = y*x;
@@ -405,7 +384,7 @@ registration
  cluster strict commutative Group;
 end;
 
-definition let FS be commutative (non empty HGrStr);
+definition let FS be commutative (non empty multMagma);
  let x,y be Element of FS;
  redefine func x*y;
  commutativity;
@@ -414,7 +393,7 @@ end;
 canceled;
 
 theorem :: GROUP_1:92
-  HGrStr (# REAL, addreal #) is commutative Group;
+  multMagma (# REAL, addreal #) is commutative Group;
 
 reserve A for commutative Group;
 reserve a,b for Element of A;
@@ -430,12 +409,8 @@ theorem :: GROUP_1:95
 theorem :: GROUP_1:96
   (a * b) |^ i = a |^ i * (b |^ i);
 
-registration let A be non empty set, m be BinOp of A, u be Element of A;
-  cluster LoopStr(#A,m,u#) -> non empty;
-end;
-
 theorem :: GROUP_1:97
-  LoopStr (# the carrier of A, the mult of A, 1_A #)
+  addLoopStr (# the carrier of A, the multF of A, 1_A #)
     is Abelian add-associative right_zeroed right_complementable;
 
 begin :: Addenda
@@ -443,24 +418,24 @@ begin :: Addenda
 :: from COMPTRIG, 2006.08.12, A.T.
 
 theorem :: GROUP_1:98
-  for L be unital (non empty HGrStr)
+  for L be unital (non empty multMagma)
   for x be Element of L holds
     (power L).(x,1) = x;
 
 theorem :: GROUP_1:99
-  for L be unital (non empty HGrStr)
+  for L be unital (non empty multMagma)
   for x be Element of L holds
     (power L).(x,2) = x*x;
 
 theorem :: GROUP_1:100
-  for L be associative commutative unital (non empty HGrStr)
+  for L be associative commutative unital (non empty multMagma)
   for x,y be Element of L
   for n be Element of NAT holds
     (power L).(x*y,n) = (power L).(x,n) * (power L).(y,n);
 
 :: Moved from ENDALG, 17.01_2006, AK
 
-definition let G,H be non empty HGrStr;
+definition let G,H be non empty multMagma;
   let IT be Function of G,H;
   attr IT is unity-preserving means
 :: GROUP_1:def 17

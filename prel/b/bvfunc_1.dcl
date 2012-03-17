@@ -38,9 +38,14 @@
 </Func>
 </Typ>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="2"/>
 <Adjective nr="5"/>
 <Adjective nr="7"/>
+<Adjective nr="16">
+<LocusVar nr="1"/>
+<Func kind="K" nr="136"/>
+</Adjective>
 <Adjective nr="18">
 <LocusVar nr="1"/>
 <Func kind="K" nr="136"/>

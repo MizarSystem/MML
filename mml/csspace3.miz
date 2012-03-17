@@ -9,23 +9,24 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, ARYTM_3,
       RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, SEQ_2, SERIES_1, SUPINF_2, RSSPACE,
       CLVECT_1, BINOP_1, RLSUB_1, RSSPACE3, COMSEQ_1, COMPLEX1, CSSPACE,
-      CFUNCT_1, METRIC_1, CSSPACE3, FUNCOP_1, REALSET1;
+      CFUNCT_1, METRIC_1, CSSPACE3, FUNCOP_1, REALSET1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, ORDINAL1, NUMBERS, STRUCT_0,
-      XREAL_0, REAL_1, NAT_1, RELAT_1, BINOP_1, REALSET1, DOMAIN_1, PARTFUN1,
-      FUNCT_1, XXREAL_0, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1, SEQ_1, SEQ_2,
-      SERIES_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3, CLVECT_1,
-      CSSPACE;
+      ALGSTR_0, XREAL_0, REAL_1, NAT_1, RELAT_1, BINOP_1, REALSET1, DOMAIN_1,
+      PARTFUN1, FUNCT_1, XXREAL_0, FUNCT_2, FUNCOP_1, PRE_TOPC, RLVECT_1,
+      VALUED_1, SEQ_1, SEQ_2, SERIES_1, COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2,
+      COMSEQ_3, CLVECT_1, CSSPACE;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, XXREAL_0, REAL_1, NAT_1, SEQ_2,
-      COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, REALSET1, CSSPACE, SEQ_1;
+      COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, REALSET1, CSSPACE, SEQ_1,
+      VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
       XREAL_0, MEMBERED, COMPLEX1, COMSEQ_1, COMSEQ_2, REALSET1, STRUCT_0,
-      CLVECT_1;
+      CLVECT_1, CSSPACE, ALGSTR_0, VALUED_1, VALUED_0, XCMPLX_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions REALSET1, RLVECT_1, BINOP_1, STRUCT_0;
+ definitions REALSET1, RLVECT_1, BINOP_1, STRUCT_0, ALGSTR_0, VALUED_1;
  theorems RELAT_1, ABSVALUE, ZFMISC_1, SEQ_1, SEQ_2, SERIES_1, FUNCT_1, NAT_1,
       FUNCT_2, RLVECT_1, RSSPACE, CSSPACE, CLVECT_1, COMSEQ_1, COMSEQ_2,
       COMSEQ_3, COMPLEX1, TARSKI, XBOOLE_0, STRUCT_0, RSSPACE2, FUNCOP_1,
-      XREAL_1, XXREAL_0;
+      XREAL_1, XXREAL_0, ALGSTR_0, VALUED_1;
  schemes NAT_1, SEQ_1, FUNCT_2, COMSEQ_1, XBOOLE_0;
 
 begin :: Complex_l1_Space:The Space of Absolute Summable Complex Sequences
@@ -98,10 +99,10 @@ A3:for n be Element of NAT holds cseq.n=c by FUNCOP_1:13;
      thus rseq.i=|.(seq.i-c).| by A2
         .=|.(seq.i-(cseq.i)).|by FUNCOP_1:13
         .=|.(seq.i+-(cseq.i)).|
-        .=|.(seq.i+(-cseq).i).| by COMSEQ_1:def 9
-        .=|.((seq+(-cseq)).i).| by COMSEQ_1:def 4
-        .=|.(seq -cseq).i .| by COMSEQ_1:def 10
-        .=|. seq-cseq .| .i by COMSEQ_1:def 14;
+        .=|.(seq.i+(-cseq).i).| by VALUED_1:8
+        .=|.((seq+(-cseq)).i).| by VALUED_1:1
+        .=|.(seq -cseq).i .| by VALUED_1:12,13,14,15,def 9
+        .=|. seq-cseq .| .i by VALUED_1:18,def 11;
    end;
 then A4:for x be set st x in NAT holds rseq.x = |.(seq -cseq).| .x;
 A5:cseq is convergent by A3,COMSEQ_2:9;
@@ -154,19 +155,19 @@ then A6:    p+q is summable by A5,SERIES_1:10;
 A7:    for n be Element of NAT holds 0<=r.n
        proof
          let n be Element of NAT;
-           r.n=|.((seq_id(v+u)).n).| by COMSEQ_1:def 14;
+           r.n=|.((seq_id(v+u)).n).| by VALUED_1:18,def 11;
          hence thesis by COMPLEX1:132;
        end;
          for n be Element of NAT holds r.n <=(p+q).n
        proof
          let n be Element of NAT;
-A8:      r.n=|.((seq_id(v+u)).n).| by COMSEQ_1:def 14
+A8:      r.n=|.((seq_id(v+u)).n).| by VALUED_1:18,def 11
            .=|.((seq_id(seq_id(v) + seq_id(u))).n).| by CSSPACE:4,def 7
            .=|.((seq_id v + seq_id u).n).| by CSSPACE:3
-           .=|.((seq_id v).n + (seq_id u).n).| by COMSEQ_1:def 4;
+           .=|.((seq_id v).n + (seq_id u).n).| by VALUED_1:1;
            |.((seq_id v).n).|+|.((seq_id u).n).|
-            = |.(seq_id v).| .n + |.((seq_id u).n).| by COMSEQ_1:def 14
-           .= |.(seq_id v).| .n+ |.(seq_id u).| .n by COMSEQ_1:def 14
+            = |.(seq_id v).| .n + |.((seq_id u).n).| by VALUED_1:18,def 11
+           .= |.(seq_id v).| .n+ |.(seq_id u).| .n by VALUED_1:18,def 11
            .= (p + q).n by SEQ_1:11;
          hence r.n <= (p+q).n by A8,COMPLEX1:142;
        end;
@@ -192,16 +193,16 @@ A11:   r1 is summable by A10,SERIES_1:13;
 A12:   for n be Element of NAT holds 0<=q1.n
        proof
          let n be Element of NAT;
-           q1.n=|.((seq_id(a*v)).n).| by COMSEQ_1:def 14;
+           q1.n=|.((seq_id(a*v)).n).| by VALUED_1:18,def 11;
          hence thesis by COMPLEX1:132;
        end;
          for n be Element of NAT holds q1.n <=r1.n
        proof
          let n be Element of NAT;
-           q1.n=|.((seq_id(a*v)).n).| by COMSEQ_1:def 14
+           q1.n=|.((seq_id(a*v)).n).| by VALUED_1:18,def 11
             .=|.((seq_id(a(#)seq_id v)).n).| by CSSPACE:5,def 7
             .=|.((a(#)seq_id v).n).| by CSSPACE:3
-            .=|.(a(#)seq_id v).| .n by COMSEQ_1:def 14;
+            .=|.(a(#)seq_id v).| .n by VALUED_1:18,def 11;
          hence thesis by COMSEQ_1:53;
        end;
        then q1 is summable by A11,A12,SERIES_1:24;
@@ -209,7 +210,7 @@ A12:   for n be Element of NAT holds 0<=q1.n
      end;
      hence a*v in W by Def1,CSSPACE:def 7;
    end;
-   hence thesis by A1,CLVECT_1:def 3;
+   hence thesis by A1,CLVECT_1:def 4;
 end;
 end;
 
@@ -282,105 +283,7 @@ canceled 2;
 
 theorem Th4:
 for l be CNORMSTR st the CLSStruct of l is ComplexLinearSpace
-  holds l is ComplexLinearSpace
-proof
-   let l be CNORMSTR such that
-A1: the CLSStruct of l is ComplexLinearSpace;
-     the carrier of l is non empty by A1,STRUCT_0:def 1;
-   then reconsider l as non empty CLSStruct by STRUCT_0:def 1;
-   reconsider l0=CLSStruct (# the carrier of l, 0.l, the add  of l,
-        the Mult of l#) as ComplexLinearSpace by A1;
-A2:for v,w being VECTOR of l holds v + w = w + v
-   proof
-     let v,w be VECTOR of l;
-     reconsider v1=v, w1=w as VECTOR of l0;
-    thus v+w =v1+w1
-       .= w +v by RLVECT_1:def 3;
-   end;
-A3:for u,v,w being VECTOR of l holds (u + v) + w = u + (v + w)
-   proof
-     let u,v,w be VECTOR of l;
-     reconsider u1=u, v1=v, w1=w as VECTOR of l0;
-     thus (u + v) + w =(u1+v1)+w1
-       .=u1+(v1+w1) by RLVECT_1:def 6
-       .= u+(v+w);
-   end;
-A4:for v being VECTOR of l holds v + 0.l = v
-   proof
-     let v be VECTOR of l;
-     reconsider v1=v as VECTOR of l0;
-       v+0.l= v1 + 0.l0
-         .= v1 by RLVECT_1:def 7;
-     hence thesis;
-   end;
-
-A5:for v being VECTOR of l ex w being VECTOR of l st v + w = 0.l
-   proof
-     let v be VECTOR of l;
-     reconsider v1=v as VECTOR of l0;
-     consider w1 being VECTOR of l0 such that
-A6:  v1 + w1 = 0.l0 by RLVECT_1:def 8;
-     reconsider w = w1 as VECTOR of l;
-     take w;
-     thus thesis by A6;
-   end;
-
-A7:for a be Complex for v,w being VECTOR of l holds
-         a * (v + w) = a * v + a * w
-   proof
-     let a be Complex;
-     let v,w be VECTOR of l;
-     reconsider v1=v, w1=w as VECTOR of l0;
-     thus a*(v+w)
-        = (the Mult of l).[a,(the add of l).(v1,w1)] by CLVECT_1:def 1
-       .=a*(v1+w1) by CLVECT_1:def 1
-       .=a*v1+a*w1 by CLVECT_1:def 2
-       .=(the add of l).[(the Mult of l).[a,v1],a*w1] by CLVECT_1:def 1
-       .=(the add of l).[(the Mult of l).[a,v1],
-                (the Mult of l).[a,w1]] by CLVECT_1:def 1
-       .=(the add of l).[a*v, (the Mult of l).[a,w]] by CLVECT_1:def 1
-       .= a*v +a*w by CLVECT_1:def 1;
-   end;
-
-A8:for a,b be Complex for v being VECTOR of l
-     holds (a + b) * v = a * v + b * v
-   proof
-     let a,b be Complex;
-     let v be VECTOR of l;
-     reconsider v1=v as VECTOR of l0;
-     thus (a+b)*v = (the Mult of l).[(a+b),v] by CLVECT_1:def 1
-       .=(a+b)*v1 by CLVECT_1:def 1
-       .=a*v1+b*v1 by CLVECT_1:def 2
-       .=(the add of l).[(the Mult of l).[a,v1],b*v1] by CLVECT_1:def 1
-       .=(the add of l).[(the Mult of l).[a,v1],
-                (the Mult of l).[b,v1]] by CLVECT_1:def 1
-       .=(the add of l).[a*v, (the Mult of l).[b,v]] by CLVECT_1:def 1
-       .= a*v +b*v by CLVECT_1:def 1;
-   end;
-
-A9:for a,b be Complex for v being VECTOR of l holds (a * b) * v = a * (b * v)
-   proof
-     let a,b be Complex;
-     let v be VECTOR of l;
-     reconsider v1=v as VECTOR of l0;
-     thus (a*b)*v = (the Mult of l).[a*b,v] by CLVECT_1:def 1
-       .=(a*b)*v1 by CLVECT_1:def 1
-       .=a*(b*v1) by CLVECT_1:def 2
-       .=(the Mult of l).[a,b*v1] by CLVECT_1:def 1
-       .=(the Mult of l).[a,(the Mult of l).[b,v1]] by CLVECT_1:def 1
-       .=(the Mult of l).[a,b*v] by CLVECT_1:def 1
-       .= a*(b*v) by CLVECT_1:def 1;
-   end;
-     for v being VECTOR of l holds 1r * v = v
-   proof
-     let v be VECTOR of l;
-     reconsider v1=v as VECTOR of l0;
-     thus 1r*v= (the Mult of l).[1r,v] by CLVECT_1:def 1
-            .= 1r*v1 by CLVECT_1:def 1
-            .= v by CLVECT_1:def 2;
-   end;
-   hence thesis by A2,A3,A4,A5,A7,A8,A9,CLVECT_1:1;
-end;
+  holds l is ComplexLinearSpace by CSSPACE:87;
 
 theorem Th5:
 for cseq be Complex_Sequence st (for n be Element of NAT holds cseq.n=0c) holds
@@ -392,7 +295,7 @@ A2:for n be Element of NAT holds (|.cseq.|).n=0
    proof
      let n be Element of NAT;
        cseq.n=0c by A1;
-     hence thesis by COMPLEX1:130,COMSEQ_1:def 14;
+     hence thesis by COMPLEX1:130,VALUED_1:18,def 11;
    end;
 A3:for m be Element of NAT holds Partial_Sums (|.cseq.|).m = 0
    proof
@@ -449,13 +352,13 @@ A4:for n be Element of NAT holds 0 <= (|.cseq.|).n
    proof
      let n be Element of NAT;
        0 <= |.(cseq.n).| by COMPLEX1:132;
-     hence thesis by COMSEQ_1:def 14;
+     hence thesis by VALUED_1:18,def 11;
    end;
      for n be Element of NAT holds cseq.n = 0c
    proof
      let n be Element of NAT;
        (|.cseq.|).n =0 by A2,A3,A4,RSSPACE:21;
-     then |.(cseq.n).| = 0 by COMSEQ_1:def 14;
+     then |.(cseq.n).| = 0 by VALUED_1:18,def 11;
      hence thesis by COMPLEX1:131;
    end;
    hence thesis;
@@ -529,11 +432,11 @@ A3:for u,v be VECTOR of l1 holds u+v =seq_id(u)+seq_id(v)
      set L1=Linear_Space_of_ComplexSequences;
      set W = the_set_of_l1ComplexSequences;
 A4:  [:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
-       dom (the add of L1)
+       dom (the addF of L1)
        = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
-then A5:  dom ((the add of Linear_Space_of_ComplexSequences)||W)
+then A5:  dom ((the addF of Linear_Space_of_ComplexSequences)||W)
        =[:W,W:] by A4,RELAT_1:91;
-       u+v =((the add of Linear_Space_of_ComplexSequences)||W).[u,v]
+       u+v =((the addF of Linear_Space_of_ComplexSequences)||W).[u,v]
           by CSSPACE:def 8
         .=u1+v1 by A5,FUNCT_1:70;
      hence thesis by CSSPACE:4,def 7;
@@ -574,7 +477,7 @@ A10:for u,v be VECTOR of l1 holds u-v =seq_id(u)-seq_id(v)
      let u,v be VECTOR of l1;
      thus u-v = seq_id(u)+seq_id(-v) by A3
              .= seq_id(u)+(-seq_id(v)) by A9
-             .= seq_id(u)-seq_id(v) by COMSEQ_1:def 10;
+             .= seq_id(u)-seq_id(v) by VALUED_1:12,13,14,15,def 9;
    end;
 
 A11:0.l1 = CZeroseq
@@ -586,7 +489,7 @@ A11:0.l1 = CZeroseq
      for v be VECTOR of l1 holds ||.v.|| = Sum |.seq_id v.|
    proof
      let v be VECTOR of l1;
-     thus ||.v.|| = (the norm of l1).v by CLVECT_1:def 9
+     thus ||.v.|| = (the norm of l1).v by CLVECT_1:def 10
                  .= Sum |.seq_id v.| by Def2;
    end;
    hence thesis by A1,A2,A3,A6,A9,A10,A11;
@@ -613,7 +516,7 @@ then A4:  for n be Element of NAT holds 0 = (seq_id x).n by A2,A3,Th6;
 A5:now assume
        x=0.Complex_l1_Space;
 then A6:  for n be Element of NAT holds (seq_id x).n=0 by Th8,CSSPACE:def 6;
-     thus ||.x.|| = (the norm of Complex_l1_Space). x by CLVECT_1:def 9
+     thus ||.x.|| = (the norm of Complex_l1_Space). x by CLVECT_1:def 10
             .= Sum |.seq_id x.| by Def2
             .= 0 by A6,Th5;
    end;
@@ -621,7 +524,7 @@ A7:for n be Element of NAT holds 0 <= (|.seq_id x.|).n
    proof
      let n be Element of NAT;
        0 <= |.((seq_id x).n).| by COMPLEX1:132;
-     hence thesis by COMSEQ_1:def 14;
+     hence thesis by VALUED_1:18,def 11;
    end;
      seq_id x is absolutely_summable by Def1;
 then A8:|.seq_id x.| is summable by COMSEQ_3:def 11;
@@ -635,8 +538,8 @@ A12:for n be Element of NAT holds (|.seq_id(x+y).|).n
        (|.seq_id(x+y).|).n
          = (|.(seq_id(seq_id(x)+seq_id y)).|).n by Th8
         .= (|.(seq_id x+seq_id y).|).n by CSSPACE:3
-        .= |.((seq_id x+seq_id y).n).| by COMSEQ_1:def 14
-        .= |.(((seq_id x).n)+((seq_id y).n)).| by COMSEQ_1:def 4;
+        .= |.((seq_id x+seq_id y).n).| by VALUED_1:18,def 11
+        .= |.(((seq_id x).n)+((seq_id y).n)).| by VALUED_1:1;
      hence thesis;
    end;
 
@@ -649,8 +552,8 @@ A13:for n be Element of NAT holds (|.seq_id(x+y).|).n
      then (|.(seq_id(x+y)).|) .n
        <= |.((seq_id x).n).| + |.((seq_id y).n).| by A12;
      then (|.(seq_id(x+y)).|) .n
-        <= (|.(seq_id x).|).n + |.((seq_id y).n).| by COMSEQ_1:def 14;
-     hence thesis by COMSEQ_1:def 14;
+        <= (|.(seq_id x).|).n + |.((seq_id y).n).| by VALUED_1:18,def 11;
+     hence thesis by VALUED_1:18,def 11;
    end;
 
 A14:for n being Element of NAT holds
@@ -669,7 +572,7 @@ then A16:|.seq_id y.| is summable by COMSEQ_3:def 11;
 then A17:|.seq_id x.| + |.seq_id y.| is summable by A15,SERIES_1:10;
      now
      let n be Element of NAT;
-       (|.seq_id(x+y).|).n = |.((seq_id(x+y)).n).| by COMSEQ_1:def 14;
+       (|.seq_id(x+y).|).n = |.((seq_id(x+y)).n).| by VALUED_1:18,def 11;
      hence 0 <= (|.seq_id(x+y).|).n by COMPLEX1:132;
    end;
 then A18:Sum(|.seq_id(x+y).|) <= Sum(|.seq_id x.| + |.seq_id y.|)
@@ -679,10 +582,10 @@ A19:for n be Element of NAT holds
    proof
      let n be Element of NAT;
        (|.(p(#)seq_id(x)).|).n
-               =|.((p(#)seq_id(x)).n).| by COMSEQ_1:def 14
-              .=|.(p*((seq_id x).n)).| by COMSEQ_1:def 7
+               =|.((p(#)seq_id(x)).n).| by VALUED_1:18,def 11
+              .=|.(p*((seq_id x).n)).| by VALUED_1:6,def 5
               .=(|.p.|)*(|.((seq_id x).n).|) by COMPLEX1:151
-              .=(|.p.|)*((|.seq_id x.|).n) by COMSEQ_1:def 14;
+              .=(|.p.|)*((|.seq_id x.|).n) by VALUED_1:18,def 11;
      hence thesis;
    end;
      seq_id x is absolutely_summable by Def1;
@@ -699,7 +602,7 @@ end;
 registration
  cluster Complex_l1_Space -> ComplexNormSpace-like ComplexLinearSpace-like
        Abelian add-associative right_zeroed right_complementable;
-  coherence by Lm3,Th4,Th9,CLVECT_1:def 10;
+  coherence by Lm3,Th4,Th9,CLVECT_1:def 11;
 end;
 
 Lm4:
@@ -725,10 +628,10 @@ A4:for n be Element of NAT holds cseq.n=c by FUNCOP_1:13;
      thus rseq.i=|.(seq.i-c).|+seq1.i by A3
             .=|.(seq.i-cseq.i).|+seq1.i by FUNCOP_1:13
             .=|.(seq.i+(-cseq.i)).|+seq1.i
-            .=|.(seq.i+(-cseq).i).|+seq1.i by COMSEQ_1:def 9
-            .=|.((seq+ -cseq).i).| + seq1.i by COMSEQ_1:def 4
-            .=|.((seq-cseq).i).| + seq1.i by COMSEQ_1:def 10
-            .=|.(seq-cseq).| .i + seq1.i by COMSEQ_1:def 14
+            .=|.(seq.i+(-cseq).i).|+seq1.i by VALUED_1:8
+            .=|.((seq+ -cseq).i).| + seq1.i by VALUED_1:1
+            .=|.((seq-cseq).i).| + seq1.i by VALUED_1:12,13,14,15,def 9
+            .=|.(seq-cseq).| .i + seq1.i by VALUED_1:18,def 11
             .=(|.(seq-cseq).| + seq1).i by SEQ_1:11;
    end;
    then for x be set st x in NAT holds
@@ -875,22 +778,23 @@ COMSEQ_3:def 11;
              proof
                let i be Element of NAT;
                  0 <= |.((seq_id((vseq.m) - (vseq.k))).i).| by COMPLEX1:132;
-               hence thesis by COMSEQ_1:def 14;
+               hence thesis by VALUED_1:18,def 11;
              end;
 then A11:         |.(seq_id((vseq.m) - (vseq.k))).| .i
                <= Sum(|.(seq_id((vseq.m) - (vseq.k))).|) by A10,RSSPACE2:4;
                seq_id((vseq.m) - (vseq.k))
                = seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Th8
               .= seq_id((vseq.m))-seq_id((vseq.k)) by CSSPACE:3
-              .= seq_id((vseq.m))+-seq_id((vseq.k)) by COMSEQ_1:def 10;
+              .= seq_id((vseq.m))+-seq_id((vseq.k)) by VALUED_1:12,13,14,15
+,def 9;
              then (seq_id((vseq.m) - (vseq.k))).i
-               =(seq_id((vseq.m))).i+(-seq_id((vseq.k))).i by COMSEQ_1:def 4
-              .=(seq_id((vseq.m))).i+(-(seq_id((vseq.k))).i) by COMSEQ_1:def 9
+               =(seq_id((vseq.m))).i+(-seq_id((vseq.k))).i by VALUED_1:1
+              .=(seq_id((vseq.m))).i+(-(seq_id((vseq.k))).i) by VALUED_1:8
               .=(seq_id((vseq.m))).i-(seq_id((vseq.k))).i
               .=rseqi.m -(seq_id((vseq.k))).i by A4
               .=rseqi.m - rseqi.k by A4;
              then |.(rseqi.m-rseqi.k).| = |.(seq_id((vseq.m) - (vseq.k))).| .i
-               by COMSEQ_1:def 14;
+               by VALUED_1:18,def 11;
              hence thesis by A9,A11,XXREAL_0:2;
            end;
            hence thesis;
@@ -939,14 +843,14 @@ A19: for m,n be Element of NAT st n >= k & m >= k holds
 A20:    n >= k & m >= k;
          ||.(vseq.n) - (vseq.m).|| < e by A18,A20;
 then A21:   (the norm of Complex_l1_Space).(vseq.n-vseq.m) < e by
-CLVECT_1:def 9;
+CLVECT_1:def 10;
 A22:   seq_id(vseq.n-vseq.m) is absolutely_summable
          by Def1;
          for i be Element of NAT holds 0 <= |.(seq_id(vseq.n-vseq.m)).| .i
        proof
          let i be Element of NAT;
            0 <= |.((seq_id(vseq.n-vseq.m)).i).| by COMPLEX1:132;
-         hence thesis by COMSEQ_1:def 14;
+         hence thesis by VALUED_1:18,def 11;
        end;
        hence thesis by A21,A22,Def2,COMSEQ_3:def 11;
      end;
@@ -992,22 +896,25 @@ holds rseq.m = |.(rseq0.m-(seq_id(vseq.n)).0).|
                  rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|).0 by A26
                 .=(|.seq_id(vseq.m-vseq.n).|).0 by SERIES_1:def 1
                 .=(|.seq_id(vseq.m)-seq_id(vseq.n).|).0 by A24
-                .=(|.seq_id(vseq.m)+-seq_id(vseq.n).|).0 by COMSEQ_1:def 10
-                .=|.((seq_id(vseq.m)+-seq_id(vseq.n)).0).| by COMSEQ_1:def 14
+                .=(|.seq_id(vseq.m)+-seq_id(vseq.n).|).0 by VALUED_1:12,13,14
+,15,def 9
+                .=|.((seq_id(vseq.m)+-seq_id(vseq.n)).0).| by VALUED_1:18
+,def 11
                 .=|.((seq_id(vseq.m)).0+(-seq_id(vseq.n)).0).|
-                   by COMSEQ_1:def 4
+                   by VALUED_1:1
                 .=|.((seq_id(vseq.m)).0+-(seq_id(vseq.n)).0).|
-                   by COMSEQ_1:def 9
+                   by VALUED_1:8
                 .=|.((seq_id(vseq.m)).0-(seq_id(vseq.n)).0).|;
              hence thesis by A27;
            end;
            then lim rseq = |.lim(rseq0) -((seq_id(vseq.n)).0 ).| by A27,Th1
                  .= |. tseq.0+-((seq_id(vseq.n)).0).| by A27
-                 .= |.(tseq.0+(-(seq_id(vseq.n))).0).| by COMSEQ_1:def 9
-                 .= |.((tseq+(-seq_id((vseq.n)))).0).| by COMSEQ_1:def 4
-                 .= |.((tseq-(seq_id((vseq.n)))).0).| by COMSEQ_1:def 10
+                 .= |.(tseq.0+(-(seq_id(vseq.n))).0).| by VALUED_1:8
+                 .= |.((tseq+(-seq_id((vseq.n)))).0).| by VALUED_1:1
+                 .= |.((tseq-(seq_id((vseq.n)))).0).| by VALUED_1:12,13,14,15
+,def 9
                  .= |.((seq_id tseq-(seq_id((vseq.n)))).0).| by CSSPACE:3
-                 .= |.(seq_id tseq-(seq_id(vseq.n))).| .0 by COMSEQ_1:def 14
+                 .= |.(seq_id tseq-(seq_id(vseq.n))).| .0 by VALUED_1:18,def 11
                  .=Partial_Sums(|.seq_id tseq-(seq_id(vseq.n)).|).0
                         by SERIES_1:def 1;
            hence thesis by A27,A28,Th1;
@@ -1055,13 +962,13 @@ A35:       now
                  +Partial_Sums(|.seq_id(vseq.m-vseq.n).|).i by A24
               .=|.seq_id(vseq.m)-seq_id(vseq.n).| .(i+1) + rseqb.m by A32
               .=|.((seq_id(vseq.m)-seq_id(vseq.n)).(i+1)).|
-                 + rseqb.m by COMSEQ_1:def 14
+                 + rseqb.m by VALUED_1:18,def 11
               .=|.((seq_id(vseq.m)+-seq_id(vseq.n)).(i+1)).|
-                 + rseqb.m by COMSEQ_1:def 10
+                 + rseqb.m by VALUED_1:12,13,14,15,def 9
               .=|.((seq_id(vseq.m)).(i+1)+(-seq_id(vseq.n)).(i+1)).|
-                 + rseqb.m by COMSEQ_1:def 4
+                 + rseqb.m by VALUED_1:1
               .=|.((seq_id(vseq.m)).(i+1)+-(seq_id(vseq.n)).(i+1)).|
-                 + rseqb.m by COMSEQ_1:def 9
+                 + rseqb.m by VALUED_1:8
               .= |.((seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1)).|
                  + rseqb.m
               .= |.(rseq0.m-(seq_id(vseq.n)).(i+1)).| + rseqb.m by A34;
@@ -1071,13 +978,13 @@ A35:       now
               .= |.(tseq.(i+1)+-(seq_id(vseq.n)).(i+1) ).|
                   + lim rseqb by A34
               .= |.(tseq.(i+1)+(-seq_id(vseq.n)).(i+1) ).|
-                  + lim rseqb by COMSEQ_1:def 9
+                  + lim rseqb by VALUED_1:8
               .= |.((tseq+(-seq_id(vseq.n))).(i+1) ).|
-                  + lim rseqb by COMSEQ_1:def 4
+                  + lim rseqb by VALUED_1:1
               .= |.((tseq-(seq_id(vseq.n))).(i+1) ).|
-                  + lim rseqb by COMSEQ_1:def 10
+                  + lim rseqb by VALUED_1:12,13,14,15,def 9
               .= |.(tseq-(seq_id(vseq.n))).| .(i+1)
-                  + lim rseqb by COMSEQ_1:def 14
+                  + lim rseqb by VALUED_1:18,def 11
               .= |.(tseq-(seq_id(vseq.n))).| .(i+1)
                   + Partial_Sums(|.((seq_id tseq -seq_id(vseq.n))).|).i
                          by A30,A32
@@ -1128,7 +1035,7 @@ A43: for i be Element of NAT holds 0 <= |.(seq_id tseq-seq_id(vseq.n)).| .i
      proof
        let i be Element of NAT;
          |.(seq_id tseq -seq_id(vseq.n)).| .i
-         =|.((seq_id tseq -seq_id(vseq.n)).i).| by COMSEQ_1:def 14;
+         =|.((seq_id tseq -seq_id(vseq.n)).i).| by VALUED_1:18,def 11;
        hence thesis by COMPLEX1:132;
      end;
 A44: Partial_Sums(|.((seq_id tseq -seq_id(vseq.n))).|) is bounded_above
@@ -1161,7 +1068,7 @@ A45: Sum(|.((seq_id tseq -seq_id(vseq.n))).|)
 A46: for i be Element of NAT holds 0 <= |.(seq_id tseq).| .i
      proof
        let i be Element of NAT;
-         |.(seq_id tseq).| .i = |.((seq_id tseq).i).| by COMSEQ_1:def 14;
+         |.(seq_id tseq).| .i = |.((seq_id tseq).i).| by VALUED_1:18,def 11;
        hence thesis by COMPLEX1:132;
      end;
      consider m be Element of NAT such that
@@ -1179,13 +1086,14 @@ A50: a + b is summable by A48,A49,SERIES_1:10;
        for i be Element of NAT holds d.i <= (a+b).i
      proof
        let i be Element of NAT;
-A51:   a.i = |.((seq_id tseq -seq_id(vseq.m)).i).| by COMSEQ_1:def 14
-          .= |.((seq_id tseq+-seq_id(vseq.m)).i).| by COMSEQ_1:def 10
-          .= |.((seq_id tseq).i+(-seq_id(vseq.m)).i).| by COMSEQ_1:def 4
-          .= |.((seq_id tseq).i+(-(seq_id(vseq.m)).i)).| by COMSEQ_1:def 9
+A51:   a.i = |.((seq_id tseq -seq_id(vseq.m)).i).| by VALUED_1:18,def 11
+          .= |.((seq_id tseq+-seq_id(vseq.m)).i).| by VALUED_1:12,13,14,15
+,def 9
+          .= |.((seq_id tseq).i+(-seq_id(vseq.m)).i).| by VALUED_1:1
+          .= |.((seq_id tseq).i+(-(seq_id(vseq.m)).i)).| by VALUED_1:8
           .=|.((seq_id tseq).i-(seq_id(vseq.m)).i).|;
-A52:   b.i=|.((seq_id(vseq.m)).i).| by COMSEQ_1:def 14;
-         d.i=|.((seq_id tseq).i).| by COMSEQ_1:def 14;
+A52:   b.i=|.((seq_id(vseq.m)).i).| by VALUED_1:18,def 11;
+         d.i=|.((seq_id tseq).i).| by VALUED_1:18,def 11;
        then d.i-b.i <= a.i by A51,A52,COMPLEX1:145;
        then d.i-b.i+b.i<= a.i + b.i by XREAL_1:8;
        hence thesis by SEQ_1:11;
@@ -1219,9 +1127,9 @@ then A59:   (the norm of Complex_l1_Space).(u-v) < e
          by A58,Def2;
          ||.(vseq.n) - tv.|| =||.-(tv-(vseq.n)).|| by RLVECT_1:47
           .=||.tv-(vseq.n).|| by CLVECT_1:104;
-       hence ||.(vseq.n) - tv.|| < e by A59,CLVECT_1:def 9;
+       hence ||.(vseq.n) - tv.|| < e by A59,CLVECT_1:def 10;
      end;
      hence thesis;
    end;
-   hence thesis by CLVECT_1:def 15;
+   hence thesis by CLVECT_1:def 16;
 end;

@@ -10,17 +10,18 @@ environ
       SQUARE_1, FUNCT_2, RLSUB_1, SEQ_1, SEQ_2, SERIES_1, BHSP_1, SUPINF_2,
       RSSPACE, CLVECT_1, COMSEQ_1, COMPLEX1, PROB_2, ARYTM_3, CSSPACE,
       CFUNCT_1, PRE_TOPC, NORMSP_1, METRIC_1, SEQM_3, XCMPLX_0, FUNCOP_1,
-      REALSET1, STRUCT_0, ARYTM;
+      REALSET1, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, PRE_TOPC, RELAT_1, DOMAIN_1, FUNCT_1,
-      FUNCT_2, FUNCOP_1, SEQ_1, BINOP_1, REALSET1, STRUCT_0, ZFMISC_1, NUMBERS,
-      XCMPLX_0, XXREAL_0, REAL_1, SQUARE_1, COMPLEX1, COMSEQ_1, CFUNCT_1,
-      COMSEQ_2, COMSEQ_3, SERIES_1, NAT_1, RLVECT_1, NORMSP_1, BHSP_1,
-      CLVECT_1;
+      FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1, BINOP_1, REALSET1, STRUCT_0,
+      ALGSTR_0, ZFMISC_1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, SQUARE_1,
+      COMPLEX1, COMSEQ_1, CFUNCT_1, COMSEQ_2, COMSEQ_3, SERIES_1, NAT_1,
+      RLVECT_1, NORMSP_1, BHSP_1, CLVECT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, SEQ_1,
-      COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, REALSET1, BHSP_1, CLVECT_1;
+      COMSEQ_1, COMSEQ_2, SERIES_1, COMSEQ_3, REALSET1, BHSP_1, CLVECT_1,
+      VALUED_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FUNCT_2,
       NUMBERS, XCMPLX_0, XXREAL_0, MEMBERED, COMPLEX1, COMSEQ_1, COMSEQ_2,
-      REALSET1, STRUCT_0, CLVECT_1;
+      REALSET1, STRUCT_0, CLVECT_1, ALGSTR_0, RLVECT_1, VALUED_1, VALUED_0;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -135,9 +136,15 @@ for v being VECTOR of
   1r * v = v;
 
 definition
-  func Linear_Space_of_ComplexSequences -> ComplexLinearSpace equals
+  func Linear_Space_of_ComplexSequences -> strict non empty CLSStruct equals
 :: CSSPACE:def 7
     CLSStruct (# the_set_of_ComplexSequences, CZeroseq, l_add, l_mult #);
+end;
+
+registration
+ cluster Linear_Space_of_ComplexSequences
+  -> Abelian add-associative right_zeroed
+    right_complementable ComplexLinearSpace-like;
 end;
 
 definition
@@ -146,7 +153,7 @@ let X1 be Subset of X such that
 X1 is linearly-closed & X1 is non empty;
 func Add_(X1,X) -> BinOp of X1 equals
 :: CSSPACE:def 8
-  (the add of X)||X1;
+  (the addF of X)||X1;
 end;
 
 definition
@@ -220,7 +227,7 @@ begin  :: Unitary space with complex coefficient
 definition
  struct(CLSStruct) CUNITSTR (# carrier -> set,
          ZeroF -> Element of the carrier,
-          add -> BinOp of the carrier,
+          addF -> BinOp of the carrier,
          Mult -> Function of [:COMPLEX, the carrier:], the carrier,
        scalar -> Function of [: the carrier, the carrier :], COMPLEX #);
 end;
@@ -552,7 +559,7 @@ func Complex_l2_Space -> non empty CUNITSTR equals
 end;
 
 theorem :: CSSPACE:87
-for l be CUNITSTR st
+for l be CLSStruct st
  the CLSStruct of l is ComplexLinearSpace holds l is ComplexLinearSpace;
 
 theorem :: CSSPACE:88

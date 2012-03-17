@@ -9,24 +9,26 @@ environ
  vocabularies PRE_TOPC, RLVECT_1, VECTSP_1, FINSEQ_1, FINSEQ_2, RVSUM_1,
       EUCLID, BINOP_1, FUNCT_1, ARYTM, ARYTM_1, RELAT_1, COMPLEX1, ABSVALUE,
       SQUARE_1, ORDINAL2, SEQ_1, SEQ_2, BOOLE, REALSET1, NORMSP_1, RSSPACE3,
-      LOPBAN_1, REAL_NS1, BHSP_1, METRIC_1, BHSP_3, PROB_2, EUCLID_2;
+      LOPBAN_1, REAL_NS1, BHSP_1, METRIC_1, BHSP_3, PROB_2, EUCLID_2, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2,
-      BINOP_1, PRE_TOPC, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, FUNCOP_1,
-      ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, COMPLEX1, REAL_1,
-      RLVECT_1, BHSP_1, BHSP_2, BINOP_2, SEQ_1, SEQ_2, RVSUM_1, NORMSP_1,
-      EUCLID, EUCLID_2, RSSPACE3, LOPBAN_1, BHSP_3;
+      BINOP_1, PRE_TOPC, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, ALGSTR_0,
+      FUNCOP_1, ORDINAL1, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, COMPLEX1,
+      REAL_1, RLVECT_1, BHSP_1, BHSP_2, BINOP_2, VALUED_1, SEQ_1, SEQ_2,
+      RVSUM_1, NORMSP_1, EUCLID, EUCLID_2, RSSPACE3, LOPBAN_1, BHSP_3;
  constructors REAL_1, SQUARE_1, NAT_1, BINOP_2, COMPLEX1, SUPINF_1, SEQ_2,
-      FINSEQOP, REALSET2, BHSP_2, BHSP_3, EUCLID_2, RSSPACE3, LOPBAN_1;
+      FINSEQOP, REALSET2, BHSP_2, BHSP_3, EUCLID_2, RSSPACE3, LOPBAN_1,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1, FINSEQ_2, STRUCT_0, NORMSP_1,
-      BHSP_1, REVROT_1, RSSPACE3, VALUED_0;
+      BHSP_1, REVROT_1, RSSPACE3, VALUED_0, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions RLVECT_1, BINOP_1, BHSP_1, RSSPACE3, BHSP_3, SQUARE_1, STRUCT_0;
+ definitions RLVECT_1, BINOP_1, BHSP_1, RSSPACE3, BHSP_3, SQUARE_1, STRUCT_0,
+      ALGSTR_0, VALUED_1;
  theorems TARSKI, XREAL_0, NORMSP_1, EUCLID, RLVECT_1, SEQ_2, SEQ_4, BINOP_1,
       COMPLEX1, ABSVALUE, RSSPACE3, FINSEQ_1, FINSEQ_2, RVSUM_1, FUNCT_2,
       LOPBAN_1, REAL_1, ZFMISC_1, FUNCOP_1, SEQ_1, NAT_1, SQUARE_1, FUNCT_1,
       FINSEQ_5, XREAL_1, RFUNCT_4, JORDAN2C, BHSP_2, BHSP_1, EUCLID_2,
-      EUCLID_4, EUCLIDLP, BHSP_3, XXREAL_0, STRUCT_0;
+      EUCLID_4, EUCLIDLP, BHSP_3, XXREAL_0, STRUCT_0, ALGSTR_0, VALUED_1;
  schemes NAT_1, SEQ_1, BINOP_1, BINOP_2, FUNCT_2, FINSEQ_1;
 
 begin :: R^n space as RealLinearSpace
@@ -167,7 +169,7 @@ definition let n be Element of NAT;
   func REAL-NS n -> strict non empty NORMSTR means :Def4:
   the carrier of it = REAL n &
   0.it = 0*n &
-  the add of it = Euclid_add n &
+  the addF of it = Euclid_add n &
   the Mult of it = Euclid_mult n &
   the norm of it = Euclid_norm n;
 existence
@@ -358,7 +360,7 @@ A9:   b * v = b * v1 by Th3;
       reconsider u1 = u, v1 = v, w1 = w as Element of REAL n by Def4;
 A10:   v + w =v1+w1 by Th2;
       thus (u + v) + w
-              =(Euclid_add n).((the add of REAL-NS n).(u,v),w) by Def4
+              =(Euclid_add n).((the addF of REAL-NS n).(u,v),w) by Def4
               .=(Euclid_add n).((Euclid_add n).(u1,v1), w1) by Def4
               .=(Euclid_add n).(u1,(Euclid_add n).(v1,w1)) by BINOP_1:def 3
               .=(Euclid_add n).(u1,v1+w1) by Def1
@@ -386,8 +388,7 @@ A11:   0.(REAL-NS n) = 0*n by Def4;
     end;
     hence thesis by RLVECT_1:def 7;
    end;
-    for v being VECTOR of REAL-NS n
-    ex w being VECTOR of REAL-NS n st v + w = 0.(REAL-NS n)
+  REAL-NS n is right_complementable
    proof
     let v be VECTOR of REAL-NS n;
     thus ex w being VECTOR of REAL-NS n st v + w = 0.(REAL-NS n)
@@ -401,7 +402,7 @@ A12:   0.(REAL-NS n) = 0*n by Def4 .= n|->0 by EUCLID:def 4;
            .=0.(REAL-NS n) by A12,RVSUM_1:40;
     end;
    end;
-   hence thesis by RLVECT_1:def 8;
+   hence thesis by ALGSTR_0:def 11;
   end;
 end;
 
@@ -726,7 +727,7 @@ A16:       for m be Element of NAT st m >= k holds
 then A17:       ||.(seq.m) - x.|| < e by A16;
             len ((xseq.m) - xs) = (n+1) by EUCLID:2;
            then i in dom ((xseq.m) - xs) by A12,FINSEQ_1:def 3;
-then A18:       (xseq.m).i-xs.i = ((xseq.m) - xs).i by SEQ_1:def 4;
+then A18:       (xseq.m).i-xs.i = ((xseq.m) - xs).i by VALUED_1:12,13,14,15;
             (xseq.m)-xs = (seq.m) - x by A9,Th5;
 then A19:       abs((xseq.m).i-xs.i) <= ||.(seq.m) - x.|| by A12,A18,Th9;
             rseqi.m-xs.i=(xseq.m).i-xs.i by A13;
@@ -973,7 +974,8 @@ A8:   k<=m;
 A9:   ||.(vseq.m) - (vseq.k).|| < e by A7,A8;
          len ((xvseq.m) - (xvseq.k)) =n by EUCLID:2;
         then i in dom ((xvseq.m) - (xvseq.k)) by A3,FINSEQ_1:def 3;
-then A10:   (xvseq.m).i-(xvseq.k).i = ((xvseq.m) - (xvseq.k)).i by SEQ_1:def 4;
+then A10:   (xvseq.m).i-(xvseq.k).i = ((xvseq.m) - (xvseq.k)).i by VALUED_1:12
+,13,14,15;
          (xvseq.m)-(xvseq.k) = (vseq.m) - (vseq.k) by Th5;
 then A11:   abs((xvseq.m).i-(xvseq.k).i)
                    <= ||.(vseq.m) - (vseq.k).|| by A3,A10,Th9;
@@ -1042,7 +1044,7 @@ definition let n be Element of NAT;
   func REAL-US n -> strict non empty UNITSTR means :Def6:
   the carrier of it = REAL n &
   0.it = 0*n &
-  the add of it = Euclid_add n &
+  the addF of it = Euclid_add n &
   the Mult of it = Euclid_mult n &
   the scalar of it = Euclid_scalar n;
 existence
@@ -1316,19 +1318,14 @@ A24:  (u + v) + w = (Euclid_add n).(u+v,w1) by Def6
     hence thesis by EUCLID_4:1;
    end;
    hence REAL-US n is right_zeroed by RLVECT_1:def 7;
-    for v being Element of REAL-US n
-     ex w being Element of REAL-US n st v + w = 0.(REAL-US n)
-   proof
     let v be Element of REAL-US n;
     reconsider v1=v as Element of REAL n by Def6;
     reconsider w = -v1 as Element of REAL-US n by Def6;
-     v + w = (Euclid_add n).(v1,-v1) by Def6
+    take w;
+    thus v + w = (Euclid_add n).(v1,-v1) by Def6
          .= v1 + -v1 by Def1
          .= 0*n by EUCLIDLP:7
          .= 0.(REAL-US n) by Def6;
-    hence thesis;
-   end;
-   hence REAL-US n is right_complementable by RLVECT_1:def 8;
 end;
 end;
 

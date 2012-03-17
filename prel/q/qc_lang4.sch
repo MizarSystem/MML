@@ -119,7 +119,7 @@
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="87"/>
+<Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
 <Pred kind="V" nr="21">

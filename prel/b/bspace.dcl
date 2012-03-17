@@ -22,10 +22,11 @@
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="FINSEQ_3"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="MATRLIN"/>
@@ -41,18 +42,18 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="237">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
-<Adjective nr="65">
-<Func kind="K" nr="232"/>
+<Adjective nr="49"/>
+<Adjective nr="87">
+<Func kind="K" nr="240"/>
 </Adjective>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
+<Adjective nr="92"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -63,7 +64,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="246">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -93,7 +94,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="246">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -108,40 +109,40 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="237">
+<Func kind="K" nr="245">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="70">
-<Func kind="K" nr="232"/>
+<Adjective nr="99">
+<Func kind="K" nr="240"/>
 </Adjective>
 </Cluster>
 </FCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
-<Adjective nr="72"/>
+<Adjective nr="101"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="100"/>
 </Cluster>
 </CCluster>
 <CCluster>
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="71"/>
+<Adjective nr="100"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="72"/>
+<Adjective nr="101"/>
 </Cluster>
 </CCluster>
 </Registrations>

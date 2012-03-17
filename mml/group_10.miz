@@ -10,28 +10,28 @@ environ
       FINSEQ_2, FINSEQ_4, COMPLEX1, BINOP_1, VECTSP_1, GROUP_1, REALSET1,
       NAT_1, TARSKI, CARD_1, GROUP_2, FUNCOP_1, FUNCT_2, FINSET_1, RLSUB_1,
       SETFAM_1, EQREL_1, GROUP_3, GRAPH_1, ARYTM, ORDINAL2, GROUP_4, NEWTON,
-      GR_CY_1, CARD_FIN, FILTER_0, NAT_3, GROUP_9, GROUP_10;
+      GR_CY_1, CARD_FIN, FILTER_0, NAT_3, GROUP_9, GROUP_10, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
-      ZFMISC_1,
-      XXREAL_0, INT_2, NAT_1, NAT_D, FINSET_1, RELAT_1, REALSET1, FUNCT_1,
-      RELSET_1, FUNCT_2, FINSEQ_1, BINARITH, RVSUM_1, STRUCT_0,
-      GROUP_1, GROUP_2, GROUP_3, EQREL_1, FUNCOP_1, WSIERP_1, NEWTON, DOMAIN_1,
-      BINOP_2, GR_CY_1, ORDINAL1, XREAL_0, GROUP_4, CARD_FIN, PARTFUN1, NAT_3,
-      GROUP_9, TOPGRP_1;
+      ZFMISC_1, XXREAL_0, INT_2, NAT_1, NAT_D, FINSET_1, RELAT_1, REALSET1,
+      FUNCT_1, RELSET_1, FUNCT_2, FINSEQ_1, BINARITH, RVSUM_1, STRUCT_0,
+      ALGSTR_0, GROUP_1, GROUP_2, GROUP_3, EQREL_1, FUNCOP_1, WSIERP_1, NEWTON,
+      DOMAIN_1, BINOP_2, GR_CY_1, ORDINAL1, XREAL_0, GROUP_4, CARD_FIN,
+      PARTFUN1, NAT_3, GROUP_9, TOPGRP_1;
  constructors SETFAM_1, WELLORD2, XXREAL_0, REAL_1, NAT_D, EQREL_1, BINARITH,
-      WSIERP_1, REALSET2, UPROOTS, GR_CY_1, GROUP_4, CARD_FIN, NAT_3, TOPGRP_1;
+      WSIERP_1, REALSET2, UPROOTS, GR_CY_1, GROUP_4, CARD_FIN, NAT_3, TOPGRP_1,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, RELSET_1, FINSET_1,
       XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, SEQ_1, NEWTON,
       STRUCT_0, GROUP_2, FSM_1, DYNKIN, GROUP_1, GROUP_3, GR_CY_1, FUNCT_2,
-      SEQM_3, GROUP_6, FRAENKEL, NAT_3, REALSET1, VALUED_0;
+      SEQM_3, GROUP_6, FRAENKEL, NAT_3, REALSET1, VALUED_0, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions GROUP_2, TARSKI, REALSET1, RELAT_1, WELLORD2;
+ definitions GROUP_2, TARSKI, REALSET1, RELAT_1, WELLORD2, VALUED_1;
  theorems FINSEQ_1, GROUP_2, GROUP_3, TARSKI, GROUP_6, FINSEQ_2, FUNCT_1,
       FUNCT_2, RELAT_1, XBOOLE_0, XBOOLE_1, NAT_1, GROUP_1, XREAL_1, RELSET_1,
       PARTFUN1, FINSEQ_3, INT_1, ZFMISC_1, CARD_1, CARD_2, FINSET_1, XCMPLX_1,
       ORDINAL1, FINSEQ_4, XXREAL_0, STRUCT_0, NAT_D, GR_CY_1, NEWTON, CARD_FIN,
       WEDDWITT, WELLORD2, EQREL_1, FUNCOP_1, RVSUM_1, PEPIN, NAT_4, SEQ_1,
-      GROUP_8, NAT_3, BINARITH, GROUP_9, GR_CY_2, TOPGRP_1;
+      GROUP_8, NAT_3, BINARITH, GROUP_9, GR_CY_2, TOPGRP_1, VALUED_1;
  schemes FUNCT_1, FINSEQ_1, NAT_1, FUNCT_2, SUBSET_1;
 
 begin :: Group Operating on a Set
@@ -64,7 +64,7 @@ A1: A.s = f & dom f = E & rng f c= E by FUNCT_2:def 2;
 end;
 
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   let A be Action of (the carrier of S), E;
   attr A is being_left_operation means :Def1:
@@ -73,7 +73,7 @@ definition
 end;
 
 registration
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   cluster being_left_operation Action of (the carrier of S), E;
   correctness
@@ -108,13 +108,13 @@ end;
 
 :: ALG I.5.1 DEF 1
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   mode LeftOperation of S, E is
     being_left_operation Action of (the carrier of S), E;
 end;
 
-scheme ExLeftOperation {E()->set, S()->Group-like (non empty HGrStr),
+scheme ExLeftOperation {E()->set, S()->Group-like (non empty multMagma),
                         f(Element of S())->Function of E(),E()}:
   ex T being LeftOperation of S(), E()
     st for s being Element of S() holds T.s = f(s)
@@ -204,12 +204,12 @@ A11:  1_S() = s' & T.(1_S()) = f(s') by A10,ZFMISC_1:33;
 end;
 
 theorem Th1:
-  for E being non empty set, S being Group-like (non empty HGrStr),
+  for E being non empty set, S being Group-like (non empty multMagma),
       s being Element of S, LO being LeftOperation of S, E
   holds LO^s is one-to-one
 proof
   let E be non empty set;
-  let S be Group-like (non empty HGrStr);
+  let S be Group-like (non empty multMagma);
   let s be Element of S;
   let LO be LeftOperation of S, E;
   consider e be Element of S such that
@@ -230,13 +230,13 @@ end;
 :: left translation
 :: ALG I.3.1
 notation
-  let S be non empty HGrStr;
+  let S be non empty multMagma;
   let s be Element of S;
   synonym the_left_translation_of s for s*;
 end;
 
 definition
-  let S be Group-like associative (non empty HGrStr);
+  let S be Group-like associative (non empty multMagma);
   func the_left_operation_of S -> LeftOperation of S, the carrier of S
     means :Def2:
     for s being Element of S holds it.s = the_left_translation_of s;
@@ -539,7 +539,7 @@ end;
 definition
   let E be non empty set;
   let n be natural number;
-  let S be Group-like (non empty HGrStr);
+  let S be Group-like (non empty multMagma);
   let s be Element of S;
   let LO be LeftOperation of S, E;
   assume A1: Card n <=` Card E;
@@ -644,7 +644,7 @@ end;
 definition
   let E be non empty set;
   let n be natural number;
-  let S be Group-like (non empty HGrStr);
+  let S be Group-like (non empty multMagma);
   let LO be LeftOperation of S, E;
   assume A1: Card n <=` Card E;
   func the_extension_of_left_operation_of(n,LO) ->
@@ -739,7 +739,7 @@ A15: for s being Element of S
 end;
 
 definition
-  let S be non empty HGrStr;
+  let S be non empty multMagma;
   let s be Element of S;
   let Z be non empty set;
   func the_left_translation_of(s,Z) ->
@@ -866,7 +866,7 @@ A16: for z1 being Element of [:the carrier of S,Z:] holds
 end;
 
 definition
-  let S be Group-like associative (non empty HGrStr);
+  let S be Group-like associative (non empty multMagma);
   let Z be non empty set;
   func the_left_operation_of(S,Z) -> LeftOperation of S,[:the carrier of S,Z:]
     means :Def7:
@@ -1252,7 +1252,7 @@ definition
 end;
 
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   let T be LeftOperation of S, E;
   let x be Element of E;
@@ -1261,7 +1261,7 @@ definition
 end;
 
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   let T be LeftOperation of S, E;
   func the_fixed_points_of T -> Subset of E equals :Def13:
@@ -1301,7 +1301,7 @@ end;
 
 :: ALG I.5.4 Definition 5
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be set;
   let T be LeftOperation of S, E;
   let x,y be Element of E;
@@ -1310,12 +1310,12 @@ definition
 end;
 
 theorem Th4:
-  for S being unital (non empty HGrStr),
+  for S being unital (non empty multMagma),
       E being non empty set, x being Element of E,
       T being LeftOperation of S, E
   holds x,x are_conjugated_under T
 proof
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be non empty set;
   let x be Element of E;
   let T be LeftOperation of S, E;
@@ -1348,13 +1348,13 @@ proof
 end;
 
 theorem Th6:
-  for S being unital (non empty HGrStr),
+  for S being unital (non empty multMagma),
       E being non empty set, x,y,z being Element of E,
       T being LeftOperation of S, E
   st x,y are_conjugated_under T & y,z are_conjugated_under T
   holds x,z are_conjugated_under T
 proof
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be non empty set;
   let x,y,z be Element of E;
   let T be LeftOperation of S, E;
@@ -1372,7 +1372,7 @@ proof
 end;
 
 definition
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be non empty set;
   let T be LeftOperation of S, E;
   let x be Element of E;
@@ -1403,12 +1403,12 @@ A1: for y being Element of E holds y in X iff P[y] from SUBSET_1:sch 3;
 end;
 
 theorem Th7:
-  for S being unital (non empty HGrStr),
+  for S being unital (non empty multMagma),
       E being non empty set, x being Element of E,
       T being LeftOperation of S, E holds
   the_orbit_of(x,T) is non empty
 proof
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be non empty set;
   let x be Element of E;
   let T be LeftOperation of S, E;
@@ -1462,12 +1462,12 @@ A4: z1=z1'' & y,z1'' are_conjugated_under T by A2;
 end;
 
 theorem Th9:
-  for S being unital (non empty HGrStr),
+  for S being unital (non empty multMagma),
       E being non empty finite set, x being Element of E,
       T being LeftOperation of S, E
   st x is_fixed_under T holds the_orbit_of(x,T) = {x}
 proof
-  let S be unital (non empty HGrStr);
+  let S be unital (non empty multMagma);
   let E be non empty finite set;
   let x be Element of E;
   let T be LeftOperation of S, E;
@@ -2067,7 +2067,7 @@ proof
   let n be natural number;
   assume A1: n > 0;
   set G = INT.Group(n);
-A2: HGrStr(#Segm(n),addint(n)#) = G by A1,GR_CY_1:def 6;
+A2: multMagma(#Segm(n),addint(n)#) = G by A1,GR_CY_1:def 6;
   reconsider k = n as Element of NAT by ORDINAL1:def 13;
 A3: Segm k is finite; then
   reconsider G as finite Group by A2,STRUCT_0:def 11;
@@ -2308,7 +2308,7 @@ proof
   reconsider p' = p as prime Element of NAT by ORDINAL1:def 13;
   reconsider k1 = p'|^r as Element of NAT by ORDINAL1:def 13;
   set S = INT.Group(k1);
-A3: HGrStr(#Segm(k1),addint(k1)#) = S by GR_CY_1:def 6;
+A3: multMagma(#Segm(k1),addint(k1)#) = S by GR_CY_1:def 6;
 A4: ord S = k1 by Lm2;
   reconsider CS = the carrier of S as finite set by A3;
   reconsider S as finite Group by A3,STRUCT_0:def 11;
@@ -2565,7 +2565,7 @@ A12: for i being Element of NAT st i in Seg len f holds pf.i = F(i) by A10;
     reconsider c' as FinSequence of NAT by FINSEQ_1:def 4;
     A27: dom c = Seg len c' by A17,FINSEQ_1:def 3
     .= dom c' by FINSEQ_1:def 3
-    .= dom(p'*c') by SEQ_1:def 6;
+    .= dom(p'*c') by VALUED_1:7,def 5;
     for k being Nat st k in dom c holds c.k = (p'*c').k
     proof
       let k be Nat;
@@ -2576,7 +2576,7 @@ A12: for i being Element of NAT st i in Seg len f holds pf.i = F(i) by A10;
       .= p'' * c.k / p'' by XCMPLX_1:75
       .= (p'' / p'') * c.k by XCMPLX_1:75
       .= 1 * c.k by XCMPLX_1:60;
-      hence c.k = (p'*c').k by A27,A28,SEQ_1:def 6;
+      hence c.k = (p'*c').k by A27,A28,VALUED_1:7,def 5;
     end; then
     A30: c = p' * c' by A27,FINSEQ_1:17;
     card E mod p = p'*(Sum c') mod p' by A16,A30,RVSUM_1:117
@@ -2905,7 +2905,7 @@ A10: x' = g' * P by GROUP_2:def 15;
   .= ord(P2 |^ g) by A33,GROUP_3:79
   .= card carr(P2 |^ g) by A49,GROUP_1:def 15; then
   carr P1 = carr (P2 |^ g) by A32,A48,CARD_FIN:1; then
-  the HGrStr of P1 = the HGrStr of P2 |^ g by GROUP_2:68;
+  the multMagma of P1 = the multMagma of P2 |^ g by GROUP_2:68;
   hence P1,P2 are_conjugated by GROUP_3:def 11;
 end;
 
@@ -2941,7 +2941,8 @@ registration
 A1: P is_Sylow_p-subgroup_of_prime p by Th12;
     set P' = (Omega).P;
     the carrier of P c= the carrier of G &
-      the mult of P = (the mult of G)||the carrier of P by GROUP_2:def 5; then
+      the multF of P = (the multF of G)||the carrier of P by GROUP_2:def 5;
+      then
     reconsider P' as strict Subgroup of G by GROUP_2:def 5;
     reconsider H'=P' as Element of Subgroups G by GROUP_3:def 1;
     P is_p-group_of_prime p & not p divides index P by A1,Def19; then
@@ -3287,7 +3288,7 @@ proof
   A2: P = H & H is_p-group_of_prime p by Def18;
   set P' = (Omega).P;
   the carrier of P c= the carrier of G &
-    the mult of P = (the mult of G)||the carrier of P by GROUP_2:def 5; then
+    the multF of P = (the multF of G)||the carrier of P by GROUP_2:def 5; then
   reconsider P' as strict Subgroup of G by GROUP_2:def 5;
   reconsider H'=P' as Element of Subgroups G by GROUP_3:def 1;
   A3: ord P <> 0 by A2,GROUP_1:90;
@@ -3458,13 +3459,13 @@ proof
       the carrier of Q'' |^ n c= the carrier of N by GROUP_2:def 5; then
       A40: [:the carrier of Q'' |^ n,the carrier of Q'' |^ n:] c=
         [:the carrier of N,the carrier of N:] by ZFMISC_1:119;
-      A41: (the mult of G)||the carrier of Q'' |^ n
-      = ((the mult of G)||the carrier of N)||the carrier of Q'' |^ n
+      A41: (the multF of G)||the carrier of Q'' |^ n
+      = ((the multF of G)||the carrier of N)||the carrier of Q'' |^ n
         by A40,RELAT_1:103
-      .= (the mult of N)||the carrier of Q'' |^ n by GROUP_2:def 5;
-      the mult of Q' |^ n' = (the mult of G)||the carrier of Q'' |^ n
+      .= (the multF of N)||the carrier of Q'' |^ n by GROUP_2:def 5;
+      the multF of Q' |^ n' = (the multF of G)||the carrier of Q'' |^ n
         by A39,GROUP_2:def 5
-      .= the mult of Q'' |^ n by A41,GROUP_2:def 5;
+      .= the multF of Q'' |^ n by A41,GROUP_2:def 5;
       hence x=P' by A12,A13,A14,A31,A32,A33,TARSKI:2;
     end;
     assume A42: x=P';

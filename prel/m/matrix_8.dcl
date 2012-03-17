@@ -19,11 +19,12 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_8"/>
 </Signature>
 <FCluster>
@@ -37,28 +38,28 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
+<Adjective nr="46"/>
+<Adjective nr="66"/>
+<Adjective nr="73"/>
+<Adjective nr="75"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="161">
+<Func kind="K" nr="164">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="68">
+<Adjective nr="97">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -75,28 +76,28 @@
 <Cluster>
 <Adjective nr="26" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="47"/>
-<Adjective nr="49"/>
-<Adjective nr="57"/>
-<Adjective nr="58"/>
-<Adjective nr="60"/>
+<Adjective nr="46"/>
+<Adjective nr="66"/>
+<Adjective nr="73"/>
+<Adjective nr="75"/>
+<Adjective nr="78"/>
+<Adjective nr="79"/>
+<Adjective nr="80"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="160">
+<Func kind="K" nr="163">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="66">
+<Adjective nr="95">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
-<Adjective nr="67">
+<Adjective nr="96">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>

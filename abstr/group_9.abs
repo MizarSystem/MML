@@ -11,20 +11,20 @@ environ
       ISOCAT_1, FUNCT_2, ARYTM_1, ARYTM, ARYTM_3, FINSET_1, FINSEQ_2, TARSKI,
       INT_1, MATRIX_2, CARD_1, SGRAPH1, SUBSET_1, GROUP_4, NAT_1, NATTRA_1,
       FINSEQ_5, LATTICES, SQUARE_1, PARTFUN1, RFINSEQ, MEMBERED, RFUNCT_2,
-      FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9;
+      FINSEQ_4, CARD_3, BINOP_1, COHSP_1, COMPLEX1, GROUP_9, ALGSTR_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, XCMPLX_0, ORDINAL1, XREAL_0, RELAT_1,
-      FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, PARTFUN1, FINSEQ_1, ZFMISC_1,
-      CARD_1, PRE_CIRC, FINSET_1, INT_1, NAT_1, FINSEQ_2, FINSEQ_3, GROUP_1,
-      GROUP_2, GROUP_3, XXREAL_0, SETFAM_1, GROUP_4, FINSEQ_5, RFUNCT_2,
-      NUMBERS, MEMBERED, MATRIX_2, FINSEQ_4, RFINSEQ, BINOP_1, REALSET1,
-      GROUP_6, NAT_D;
+      FUNCT_1, RELSET_1, FUNCT_2, STRUCT_0, ALGSTR_0, PARTFUN1, FINSEQ_1,
+      ZFMISC_1, CARD_1, PRE_CIRC, FINSET_1, INT_1, NAT_1, FINSEQ_2, FINSEQ_3,
+      GROUP_1, GROUP_2, GROUP_3, XXREAL_0, SETFAM_1, GROUP_4, FINSEQ_5,
+      RFUNCT_2, NUMBERS, MEMBERED, MATRIX_2, FINSEQ_4, RFINSEQ, BINOP_1,
+      REALSET1, GROUP_6, NAT_D;
  constructors SETFAM_1, PARTFUN1, BINOP_1, XXREAL_0, REAL_1, NAT_1, NAT_D,
       FINSEQ_4, RFUNCT_1, RFUNCT_2, RFINSEQ, BINARITH, FINSEQ_5, PRE_CIRC,
-      REALSET2, GROUP_4, GROUP_6, MATRIX_2, SEQ_1;
+      REALSET2, GROUP_4, GROUP_6, MATRIX_2, SEQ_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, FINSEQ_1,
       SEQ_1, PRE_CIRC, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, GROUP_6, MATRIX_2,
-      VALUED_0;
+      VALUED_0, ALGSTR_0, VALUED_1;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -83,9 +83,9 @@ end;
 
 definition
   let O be set;
-  struct (HGrStr) HGrWOpStr over O
+  struct (multMagma) HGrWOpStr over O
   (# carrier -> set,
-     mult    -> BinOp of the carrier,
+     multF    -> BinOp of the carrier,
      action  -> Action of O, the carrier #);
 end;
 
@@ -100,7 +100,7 @@ definition
   attr IT is distributive means
 :: GROUP_9:def 5
   for G being Group, a being Action of O, the carrier of G
-    st a = the action of IT & the HGrStr of G = the HGrStr of IT
+    st a = the action of IT & the multMagma of G = the multMagma of IT
     holds a is distributive;
 end;
 
@@ -164,7 +164,8 @@ definition
   let IT be StableSubgroup of G;
   attr IT is normal means
 :: GROUP_9:def 10
-  for H being strict Subgroup of G st H = the HGrStr of IT holds H is normal;
+  for H being strict Subgroup of G
+   st H = the multMagma of IT holds H is normal;
 end;
 
 registration
@@ -235,7 +236,7 @@ definition
   let N be normal StableSubgroup of G;
   func Cosets N -> set means
 :: GROUP_9:def 14
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = Cosets H;
 end;
 
@@ -245,7 +246,7 @@ definition
   let N be normal StableSubgroup of G;
   func CosOp N -> BinOp of Cosets N means
 :: GROUP_9:def 15
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = CosOp H;
 end;
 
@@ -368,7 +369,7 @@ definition
   let N be normal StableSubgroup of G;
   func nat_hom N -> Homomorphism of G, G./.N means
 :: GROUP_9:def 23
-  for H being strict normal Subgroup of G st H = the HGrStr of N
+  for H being strict normal Subgroup of G st H = the multMagma of N
     holds it = nat_hom H;
 end;
 
@@ -788,13 +789,13 @@ theorem :: GROUP_9:66
 
 theorem :: GROUP_9:67
    for G being strict Group holds
-    ex H being strict GroupWithOperators of O st G = the HGrStr of H;
+    ex H being strict GroupWithOperators of O st G = the multMagma of H;
 
 theorem :: GROUP_9:68
-   the HGrStr of H1 is strict Subgroup of G;
+   the multMagma of H1 is strict Subgroup of G;
 
 theorem :: GROUP_9:69
-   the HGrStr of N is strict normal Subgroup of G;
+   the multMagma of N is strict normal Subgroup of G;
 
 theorem :: GROUP_9:70
    g1 in H1 implies (G^o).g1 in H1;
@@ -814,8 +815,8 @@ theorem :: GROUP_9:73
     the_stable_subgroup_of C = the_stable_subgroup_of B;
 
 theorem :: GROUP_9:74
- for N' being normal Subgroup of G st N' = the HGrStr of N
-  holds G./.N' = the HGrStr of G./.N & 1_(G./.N') = 1_(G./.N);
+ for N' being normal Subgroup of G st N' = the multMagma of N
+  holds G./.N' = the multMagma of G./.N & 1_(G./.N') = 1_(G./.N);
 
 theorem :: GROUP_9:75
   the carrier of H1 = the carrier of H2 implies

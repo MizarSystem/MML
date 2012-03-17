@@ -7,17 +7,19 @@
 environ
 
  vocabularies RLVECT_1, BOOLE, ARYTM_1, RELAT_1, FUNCT_1, BINOP_1, RLSUB_1,
-      REALSET1, ARYTM;
+      REALSET1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, REAL_1,
       MCART_1, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1, REALSET1, DOMAIN_1,
-      STRUCT_0, RLVECT_1;
- constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, REALSET1, RLVECT_1;
+      STRUCT_0, ALGSTR_0, RLVECT_1;
+ constructors PARTFUN1, BINOP_1, REAL_1, NAT_1, REALSET1, RLVECT_1, VALUED_1,
+      SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, NUMBERS, REALSET1,
-      STRUCT_0, RLVECT_1, REAL_1, ORDINAL1;
+      STRUCT_0, RLVECT_1, REAL_1, ORDINAL1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1, STRUCT_0;
+ definitions RLVECT_1, TARSKI, XBOOLE_0, REALSET1, BINOP_1, STRUCT_0, ALGSTR_0,
+      VALUED_1;
  theorems FUNCT_1, FUNCT_2, RLVECT_1, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_0, STRUCT_0;
+      XBOOLE_0, XBOOLE_1, XCMPLX_0, STRUCT_0, ALGSTR_0;
  schemes XBOOLE_0;
 
 begin
@@ -142,13 +144,13 @@ theorem
    :Def2:
     the carrier of it c= the carrier of V &
     0.it = 0.V &
-    the add of it = (the add of V)||the carrier of it &
+    the addF of it = (the addF of V)||the carrier of it &
     the Mult of it = (the Mult of V) | [:REAL, the carrier of it:];
   existence
    proof
          the carrier of V c= the carrier of V &
      0.V = 0.V &
-     the add of V = (the add of V)||the carrier of V &
+     the addF of V = (the addF of V)||the carrier of V &
      the Mult of V = (the Mult of V) | [:REAL, the carrier of V:] by FUNCT_2:40
 ;
     hence thesis;
@@ -203,7 +205,7 @@ theorem Th21:
  w1 = v & w2 = u implies w1 + w2 = v + u
   proof assume A1: v = w1 & u = w2;
     reconsider ww1 = w1, ww2 = w2 as VECTOR of V by Th18;
-          w1 + w2 = ((the add of V)||the carrier of W).[w1,w2] by Def2;
+          w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2] by Def2;
    hence thesis by A1,FUNCT_1:72;
   end;
 
@@ -306,18 +308,18 @@ theorem Th31:
 theorem Th32:
  V1 = D &
  d1 = 0.V &
- A = (the add of V)||V1 &
+ A = (the addF of V)||V1 &
  M = (the Mult of V) | [:REAL,V1:] implies
            RLSStruct (# D,d1,A,M #) is Subspace of V
   proof assume that A1: V1 = D and A2: d1 = 0.V and
-                    A3: A = (the add of V)||V1 and
+                    A3: A = (the addF of V)||V1 and
                     A4: M = (the Mult of V) | [:REAL,V1:];
      set W = RLSStruct (# D,d1,A,M #);
       A5: 0.W = 0.V by A2;
-A6: for x,y being VECTOR of W holds x + y = (the add of V).(x,y)
+A6: for x,y being VECTOR of W holds x + y = (the addF of V).(x,y)
      proof let x,y be VECTOR of W;
-      thus x + y = (the add of V).[x,y] by A1,A3,FUNCT_1:72
-                .= (the add of V).(x,y);
+      thus x + y = (the addF of V).[x,y] by A1,A3,FUNCT_1:72
+                .= (the addF of V).(x,y);
      end;
 A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
      proof let a; let x be VECTOR of W;
@@ -327,15 +329,15 @@ A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
           W is Abelian add-associative right_zeroed right_complementable
             RealLinearSpace-like
        proof
-         set AV = the add of V; set MV = the Mult of V;
-        thus for x,y being VECTOR of W holds x + y = y + x
+         set AV = the addF of V; set MV = the Mult of V;
+        thus W is Abelian
          proof let x,y be VECTOR of W;
            reconsider x1 = x, y1 = y as VECTOR of V by A1,TARSKI:def 3;
-          thus x + y = AV.(x1,y1) by A6
-                .= y1 + x1 by RLVECT_1:def 3
+          thus x + y = x1 + y1 by A6
+                .= y1 + x1
                 .= y + x by A6;
          end;
-        thus for x,y,z being VECTOR of W holds (x + y) + z = x + (y + z)
+        thus W is add-associative
          proof let x,y,z be VECTOR of W;
            reconsider x1 = x, y1 = y, z1 = z as VECTOR of V by A1,TARSKI:def 3;
           thus (x + y) + z = AV.(x + y,z1) by A6
@@ -344,18 +346,17 @@ A7: for a for x being VECTOR of W holds a * x = (the Mult of V).(a,x)
                           .= AV.(x1,y + z) by A6
                           .= x + (y + z) by A6;
          end;
-        thus for x being VECTOR of W holds x + 0.W = x
+        thus W is right_zeroed
          proof let x be VECTOR of W;
            reconsider y = x, z = 0.W as VECTOR of V by A1,TARSKI:def 3;
           thus x + 0.W = y + 0.V by A2,A6
                       .= x by RLVECT_1:10;
          end;
-        thus for x being VECTOR of W
-              ex y being VECTOR of W st x + y = 0.W
+        thus W is right_complementable
          proof let x be VECTOR of W;
            reconsider x1 = x as VECTOR of V by A1,TARSKI:def 3;
-           consider v such that A8: x1 + v = 0.V by RLVECT_1:def 8;
-              v = - x1 by A8,RLVECT_1:def 10
+           consider v such that A8: x1 + v = 0.V by ALGSTR_0:def 11;
+              v = - x1 by A8,RLVECT_1:def 11
              .= (- 1) * x1 by RLVECT_1:29
              .= (- 1) * x by A7;
            then reconsider y = v as VECTOR of W;
@@ -414,7 +415,7 @@ theorem Th34:
   proof let V,X be strict RealLinearSpace;
    assume A1: V is Subspace of X & X is Subspace of V;
     set VV = the carrier of V; set VX = the carrier of X;
-    set AV = the add of V; set AX = the add of X;
+    set AV = the addF of V; set AX = the addF of X;
     set MV = the Mult of V; set MX = the Mult of X;
          VV c= VX & VX c= VV by A1,Def2;
      then A2: VV = VX by XBOOLE_0:def 10;
@@ -439,10 +440,10 @@ theorem Th35:
                                                                  by A1,Def2;
      hence thesis;
     end;
-   thus the add of V = (the add of Y)||the carrier of V
-    proof set AV = the add of V; set VV = the carrier of V;
-          set AX = the add of X; set VX = the carrier of X;
-          set AY = the add of Y;
+   thus the addF of V = (the addF of Y)||the carrier of V
+    proof set AV = the addF of V; set VV = the carrier of V;
+          set AX = the addF of X; set VX = the carrier of X;
+          set AY = the addF of Y;
           AV = AX||VV & AX = AY||VX & VV c= VX by A1,Def2;
       then AV = AY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
      hence thesis by FUNCT_1:82;
@@ -460,15 +461,15 @@ theorem Th36:
  the carrier of W1 c= the carrier of W2 implies W1 is Subspace of W2
   proof assume A1: the carrier of W1 c= the carrier of W2;
     set VW1 = the carrier of W1; set VW2 = the carrier of W2;
-    set AV = the add of V; set MV = the Mult of V;
+    set AV = the addF of V; set MV = the Mult of V;
          0.W1 = 0.V & 0.W2 = 0.V by Def2
 ;
      hence the carrier of W1 c= the carrier of W2 &
            0.W1 = 0.W2 by A1;
-     thus the add of W1 =
-          (the add of W2)||the carrier of W1
+     thus the addF of W1 =
+          (the addF of W2)||the carrier of W1
       proof
-            the add of W1 = AV||VW1 & the add of W2 = AV||VW2
+            the addF of W1 = AV||VW1 & the addF of W2 = AV||VW2
 &
          [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def2,ZFMISC_1:119;
        hence thesis by FUNCT_1:82;
@@ -503,9 +504,9 @@ registration let V;
        the carrier of V c= the carrier of V;
      then reconsider V1 = the carrier of V as Subset of V;
          0.V = 0.V &
-     the add of V = (the add of V)||V1 &
+     the addF of V = (the addF of V)||V1 &
      the Mult of V = (the Mult of V) | [:REAL,V1:] by FUNCT_2:40;
-     then RLSStruct(#the carrier of V,0.V,the add of V,the Mult of V
+     then RLSStruct(#the carrier of V,0.V,the addF of V,the Mult of V
 #)
       is Subspace of V by Th32;
     hence thesis;
@@ -574,10 +575,10 @@ theorem Th43:
    proof assume that A1: V1 <> {} and A2: V1 is linearly-closed;
      reconsider D = V1 as non empty set by A1;
      reconsider d1 = 0.V as Element of D by A2,Th4;
-      set A = (the add of V)||V1;
+      set A = (the addF of V)||V1;
       set M = (the Mult of V) | [:REAL,V1:];
       set VV = the carrier of V;
-            dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
+            dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
         then dom A
          = [:VV,VV:] /\ [:V1,V1:] & [:V1,V1:] c= [:VV,VV:]
                                                  by RELAT_1:90;
@@ -689,11 +690,11 @@ A1:     for a for v,w be VECTOR of W, v',w' be VECTOR of V st v=v' & w=w'
           reconsider v'=v as VECTOR of V;
          thus v + 0.W = v' + 0.V .= v by RLVECT_1:10;
         end;
-       thus for v being VECTOR of W ex w being VECTOR of W st v + w = 0.W
+       thus W is right_complementable
         proof let v be VECTOR of W;
           reconsider v'=v as VECTOR of V;
           consider w' being VECTOR of V such that
-A2:         v' + w' = 0.V by RLVECT_1:def 8;
+A2:         v' + w' = 0.V by ALGSTR_0:def 11;
           reconsider w=w' as VECTOR of W;
          take w;
          thus v + w = 0.W by A2;
@@ -865,7 +866,7 @@ theorem Th58:
    thus 0.V in v + W implies v in W
     proof assume 0.V in v + W;
    then consider u such that A1: 0.V = v + u and A2: u in W;
-       v = - u by A1,RLVECT_1:def 10;
+       v = - u by A1,RLVECT_1:def 11;
      hence thesis by A2,Th30;
     end;
     assume v in W;
@@ -1037,7 +1038,7 @@ theorem Th68:
      then consider u1 such that A9: v = (v + u) + u1 and A10: u1 in W;
           v = v + 0.V & v = v + (u + u1) by A9,RLVECT_1:10,def 6;
 then u + u1 = 0.V by RLVECT_1:21;
-   then u = - u1 by RLVECT_1:def 10;
+   then u = - u1 by RLVECT_1:def 11;
    hence thesis by A10,Th30;
   end;
 
@@ -1270,7 +1271,7 @@ theorem Th82:
       then consider u1 such that A2: v = u + u1 and A3: u1 in W;
            0.V = (u + u1) - v by A2,RLVECT_1:28
                .= u1 + (u - v) by RLVECT_1:def 6;
-        then v1 = - u1 by RLVECT_1:def 10;
+        then v1 = - u1 by RLVECT_1:def 11;
     hence v1 in W by A3,Th30;
     thus v + v1 = (u + v) - v by RLVECT_1:def 6
                .= u + (v - v) by RLVECT_1:def 6
@@ -1288,7 +1289,7 @@ theorem Th83:
       then consider u1 such that A2: u = v + u1 and A3: u1 in W;
            0.V = (v + u1) - u by A2,RLVECT_1:28
                .= u1 + (v - u) by RLVECT_1:def 6;
-        then v1 = - u1 by RLVECT_1:def 10;
+        then v1 = - u1 by RLVECT_1:def 11;
     hence v1 in W by A3,Th30;
     thus v - v1 = (v - v) + u by RLVECT_1:43
                .= 0.V + u by RLVECT_1:28

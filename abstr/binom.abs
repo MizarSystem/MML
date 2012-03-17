@@ -8,54 +8,32 @@ environ
 
  vocabularies RLVECT_1, ALGSTR_1, VECTSP_2, ARYTM_1, BINOP_1, LATTICES,
       GROUP_1, VECTSP_1, ALGSTR_2, FUNCT_1, FUNCT_2, MCART_1, RELAT_1,
-      FINSEQ_1, FINSEQ_4, NEWTON, FINSEQ_2, BOOLE, BINOM, ARYTM;
+      FINSEQ_1, FINSEQ_4, NEWTON, FINSEQ_2, BOOLE, BINOM, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, STRUCT_0,
-      PARTFUN1, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, RELSET_1, BINOP_1, ALGSTR_1,
-      FINSEQ_2, VECTSP_1, VECTSP_2, GROUP_1, NEWTON, RLVECT_1, MCART_1,
-      POLYNOM1, XXREAL_0;
+      ALGSTR_0, PARTFUN1, FUNCT_1, FUNCT_2, NAT_1, FINSEQ_1, RELSET_1, BINOP_1,
+      ALGSTR_1, FINSEQ_2, VECTSP_1, VECTSP_2, GROUP_1, NEWTON, RLVECT_1,
+      MCART_1, POLYNOM1, XXREAL_0;
  constructors BINOP_1, XXREAL_0, REAL_1, NAT_1, NEWTON, ALGSTR_1, MONOID_0,
-      POLYNOM1;
+      POLYNOM1, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1,
-      FINSEQ_2, STRUCT_0, VECTSP_1, ALGSTR_1, MONOID_0, INT_1;
+      FINSEQ_2, STRUCT_0, VECTSP_1, ALGSTR_1, MONOID_0, INT_1, ALGSTR_0,
+      VALUED_1;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
 
 
 begin  :: Preliminaries
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-definition
-  let L be non empty LoopStr;
- canceled 2;
-
-attr L is add-cancelable means
-:: BINOM:def 3
-  for a,b,c being Element of L
-  holds (a + b = a + c implies b = c) & (b + a = c + a implies b = c);
-end;
-
 registration
-cluster add-left-cancelable (non empty LoopStr);
-cluster add-right-cancelable (non empty LoopStr);
-cluster add-cancelable (non empty LoopStr);
-end;
-
-registration
-cluster add-left-cancelable add-right-cancelable ->
-                     add-cancelable (non empty LoopStr);
-cluster add-cancelable ->
-           add-left-cancelable add-right-cancelable (non empty LoopStr);
-end;
-
-registration
-cluster Abelian add-right-cancelable ->
-  add-left-cancelable (non empty LoopStr);
-cluster Abelian add-left-cancelable ->
-            add-right-cancelable (non empty LoopStr);
+cluster Abelian right_add-cancelable ->
+  left_add-cancelable (non empty addLoopStr);
+cluster Abelian left_add-cancelable ->
+            right_add-cancelable (non empty addLoopStr);
 end;
 
 registration
 cluster right_zeroed right_complementable add-associative ->
-           add-right-cancelable (non empty LoopStr);
+           right_add-cancelable (non empty addLoopStr);
 end;
 
 registration
@@ -65,13 +43,13 @@ cluster Abelian add-associative left_zeroed right_zeroed
 end;
 
 theorem :: BINOM:1
-for R being right_zeroed add-left-cancelable
+for R being right_zeroed left_add-cancelable
             left-distributive (non empty doubleLoopStr),
     a being Element of R
 holds 0.R * a = 0.R;
 
 theorem :: BINOM:2
-for R being left_zeroed add-right-cancelable
+for R being left_zeroed right_add-cancelable
             right-distributive (non empty doubleLoopStr),
     a being Element of R
 holds a * 0.R = 0.R;
@@ -96,19 +74,19 @@ begin  ::  On Finite Sequences
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 theorem :: BINOM:3
-for L being left_zeroed (non empty LoopStr),
+for L being left_zeroed (non empty addLoopStr),
     a being Element of L
 holds Sum <* a *> = a;
 
 theorem :: BINOM:4
-    for R being left_zeroed add-right-cancelable
+    for R being left_zeroed right_add-cancelable
             right-distributive (non empty doubleLoopStr),
     a being Element of R,
     p being FinSequence of the carrier of R
 holds Sum(a * p) = a * Sum p;
 
 theorem :: BINOM:5
-for R being right_zeroed add-left-cancelable
+for R being right_zeroed left_add-cancelable
             left-distributive (non empty doubleLoopStr),
     a being Element of R,
     p being FinSequence of the carrier of R
@@ -121,7 +99,8 @@ theorem :: BINOM:6
 holds Sum(p * a) = Sum(a * p);
 
 definition
-let R be non empty LoopStr,
+ canceled 3;
+let R be non empty addLoopStr,
     p,q be FinSequence of the carrier of R such that dom p = dom q;
 func p + q -> FinSequence of the carrier of R means
 :: BINOM:def 4
@@ -130,7 +109,7 @@ func p + q -> FinSequence of the carrier of R means
 end;
 
 theorem :: BINOM:7
-for R being Abelian right_zeroed add-associative (non empty LoopStr),
+for R being Abelian right_zeroed add-associative (non empty addLoopStr),
     p,q being FinSequence of the carrier of R st dom p = dom q
 holds Sum(p + q) = Sum p + Sum q;
 
@@ -138,7 +117,7 @@ begin  ::  On Powers in Rings
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be unital (non empty HGrStr),
+let R be unital (non empty multMagma),
     a be Element of R,
     n be Nat;
 func a|^n -> Element of R equals
@@ -147,26 +126,26 @@ func a|^n -> Element of R equals
 end;
 
 theorem :: BINOM:8
-for R being unital (non empty HGrStr),
+for R being unital (non empty multMagma),
     a being Element of R
 holds a|^0 = 1_R & a|^1 = a;
 
 canceled;
 
 theorem :: BINOM:10
-    for R being unital associative commutative (non empty HGrStr),
+    for R being unital associative commutative (non empty multMagma),
     a,b being Element of R,
     n being Element of NAT
 holds (a * b)|^n = (a|^n) * (b|^n);
 
 theorem :: BINOM:11
-for R being unital associative (non empty HGrStr),
+for R being unital associative (non empty multMagma),
     a being Element of R,
     n,m being Element of NAT
 holds a|^(n+m) = (a|^n) * (a|^m);
 
 theorem :: BINOM:12
-    for R being unital associative (non empty HGrStr),
+    for R being unital associative (non empty multMagma),
     a being Element of R,
     n,m being Element of NAT
 holds (a|^n)|^m = a|^(n * m);
@@ -175,7 +154,7 @@ begin  ::  On Element of NATural Products in Rings
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
-let R be non empty LoopStr;
+let R be non empty addLoopStr;
 func Nat-mult-left(R)
         -> Function of [:NAT,the carrier of R:],the carrier of R means
 :: BINOM:def 6
@@ -191,7 +170,7 @@ func Nat-mult-right(R)
 end;
 
 definition
-let R be non empty LoopStr,
+let R be non empty addLoopStr,
     a be Element of R,
     n be Element of NAT;
 func n * a -> Element of R equals
@@ -203,53 +182,53 @@ func a * n -> Element of R equals
 end;
 
 theorem :: BINOM:13
-for R being non empty LoopStr,
+for R being non empty addLoopStr,
     a being Element of R
 holds 0 * a = 0.R & a * 0 = 0.R;
 
 theorem :: BINOM:14
-for R being right_zeroed (non empty LoopStr),
+for R being right_zeroed (non empty addLoopStr),
     a being Element of R
 holds 1 * a = a;
 
 theorem :: BINOM:15
-for R being left_zeroed (non empty LoopStr),
+for R being left_zeroed (non empty addLoopStr),
     a being Element of R
 holds a * 1 = a;
 
 theorem :: BINOM:16
-for R being left_zeroed add-associative (non empty LoopStr),
+for R being left_zeroed add-associative (non empty addLoopStr),
     a being Element of R,
     n,m being Element of NAT
 holds (n + m) * a = n * a + m * a;
 
 theorem :: BINOM:17
-for R being right_zeroed add-associative (non empty LoopStr),
+for R being right_zeroed add-associative (non empty addLoopStr),
     a being Element of R,
     n,m being Element of NAT
 holds a * (n + m) = a * n + a * m;
 
 theorem :: BINOM:18
-for R being left_zeroed right_zeroed add-associative (non empty LoopStr),
+for R being left_zeroed right_zeroed add-associative (non empty addLoopStr),
     a being Element of R,
     n being Element of NAT
 holds n * a = a * n;
 
 theorem :: BINOM:19
-    for R being Abelian (non empty LoopStr),
+    for R being Abelian (non empty addLoopStr),
     a being Element of R,
     n being Element of NAT
 holds n * a = a * n;
 
 theorem :: BINOM:20
-for R being left_zeroed right_zeroed add-left-cancelable add-associative
+for R being left_zeroed right_zeroed left_add-cancelable add-associative
             left-distributive (non empty doubleLoopStr),
     a,b being Element of R,
     n being Element of NAT
 holds (n * a) * b = n * (a * b);
 
 theorem :: BINOM:21
-for R being left_zeroed right_zeroed add-right-cancelable add-associative
+for R being left_zeroed right_zeroed right_add-cancelable add-associative
             distributive (non empty doubleLoopStr),
     a,b being Element of R,
     n being Element of NAT

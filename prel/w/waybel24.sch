@@ -114,11 +114,11 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="53"/>
 <Adjective nr="54"/>
 <Adjective nr="55"/>
-<Adjective nr="112"/>
+<Adjective nr="56"/>
 <Adjective nr="113"/>
+<Adjective nr="114"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

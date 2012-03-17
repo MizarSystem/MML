@@ -39,7 +39,7 @@
 </Typ>
 </ArgTypes>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="74">
+<Func kind="K" nr="73">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
 <Func kind="F" nr="4"/>

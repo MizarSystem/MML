@@ -8,16 +8,17 @@ environ
 
  vocabularies TARSKI, BOOLE, LATTICES, VECTSP_1, FUNCT_1, LATTICE3, BINOP_1,
       FINSET_1, FREEALG, MONOID_0, ALGSTR_2, GROUP_1, BHSP_3, SETWISEO, SEQM_3,
-      GRAPH_1, FUNCT_3, RELAT_1, QUANTAL1, SETFAM_1, STRUCT_0, ARYTM;
+      GRAPH_1, FUNCT_3, RELAT_1, QUANTAL1, SETFAM_1, STRUCT_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, GROUP_1, VECTSP_1,
       FUNCT_1, RELSET_1, BINOP_1, SETWISEO, PARTFUN1, FUNCT_2, STRUCT_0,
-      FINSET_1, DOMAIN_1, LATTICES, LATTICE3, MONOID_0;
- constructors SETFAM_1, BINOP_1, DOMAIN_1, SETWISEO, VECTSP_1, LATTICE3;
+      ALGSTR_0, FINSET_1, DOMAIN_1, LATTICES, LATTICE3, MONOID_0;
+ constructors SETFAM_1, BINOP_1, DOMAIN_1, SETWISEO, VECTSP_1, LATTICE3,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
-      STRUCT_0, LATTICES, GROUP_1, LATTICE3;
+      STRUCT_0, LATTICES, GROUP_1, LATTICE3, ALGSTR_0, VALUED_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, BINOP_1, SETWISEO, LATTICES, LATTICE3, MONOID_0, STRUCT_0,
-      XBOOLE_0;
+      XBOOLE_0, ALGSTR_0, VALUED_1;
  theorems TARSKI, ZFMISC_1, BINOP_1, LATTICES, LATTICE3, SETWISEO, MONOID_0,
       FUNCT_1, FUNCT_2, STRUCT_0, RELSET_1, XBOOLE_1, GROUP_1;
  schemes FUNCT_2, FRAENKEL;
@@ -61,7 +62,7 @@ proof assume not thesis;
  deffunc carr(non empty LattStr) = the carrier of $1;
  deffunc join(LattStr) = the L_join of $1;
  deffunc met(LattStr) = the L_meet of $1;
- deffunc times(HGrStr) = the mult of $1;
+ deffunc times(multMagma) = the multF of $1;
 
 theorem Th1:
  for L1,L2 being non empty LattStr st the LattStr of L1 = the LattStr of L2
@@ -147,9 +148,9 @@ A1:  for Y being finite Subset of X ex x being Element of L st
   end;
 
 definition
-  struct (LattStr, HGrStr) QuantaleStr
+  struct (LattStr, multMagma) QuantaleStr
    (# carrier -> set,
-     L_join, L_meet, mult -> BinOp of the carrier #);
+     L_join, L_meet, multF -> BinOp of the carrier #);
 end;
 
 registration
@@ -164,7 +165,7 @@ end;
 definition
   struct (QuantaleStr, multLoopStr) QuasiNetStr
    (# carrier -> set,
-     L_join, L_meet, mult -> (BinOp of the carrier),
+     L_join, L_meet, multF -> (BinOp of the carrier),
      OneF -> Element of the carrier #);
 end;
 
@@ -178,7 +179,7 @@ registration
   end;
 end;
 
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
  attr IT is with_left-zero means
       ex a being Element of IT st
    for b being Element of IT holds a*b = a;
@@ -187,24 +188,24 @@ definition let IT be non empty HGrStr;
    for a being Element of IT holds a*b = b;
 end;
 
-definition let IT be non empty HGrStr;
+definition let IT be non empty multMagma;
  attr IT is with_zero means:
 Def4:
   IT is with_left-zero with_right-zero;
 end;
 
 registration
- cluster with_zero -> with_left-zero with_right-zero (non empty HGrStr);
+ cluster with_zero -> with_left-zero with_right-zero (non empty multMagma);
   coherence by Def4;
- cluster with_left-zero with_right-zero -> with_zero (non empty HGrStr);
+ cluster with_left-zero with_right-zero -> with_zero (non empty multMagma);
   coherence by Def4;
 end;
 
 registration
- cluster with_zero (non empty HGrStr);
+ cluster with_zero (non empty multMagma);
   existence
    proof consider x being set, f being BinOp of {x};
-    take G = HGrStr(#{x},f#); reconsider x as Element of G
+    take G = multMagma(#{x},f#); reconsider x as Element of G
      by TARSKI:def 1;
     thus G is with_left-zero
      proof take x; thus thesis by TARSKI:def 1;
@@ -530,7 +531,7 @@ A3:  Bottom Q' = "\/"({},Q') by LATTICE3:50;
         from EmptyFraenkel(A2);
       hence a[*]b = b by A3,Def5;
      end;
-    then Q is with_zero (non empty HGrStr) &
+    then Q is with_zero (non empty multMagma) &
     Q is left-distributive right-distributive
     complete Lattice-like (non empty QuasiNetStr);
    hence thesis by A1;
@@ -917,8 +918,8 @@ A5:        d = a'[*]b'[*]c & c[*](a[*]b) [= s;
 
 theorem Th19:
  D is dualizing implies Q is unital &
-  the_unity_wrt the mult of Q = D -r> D &
-   the_unity_wrt the mult of Q = D -l> D
+  the_unity_wrt the multF of Q = D -r> D &
+   the_unity_wrt the multF of Q = D -l> D
   proof assume
 A1:  (a-r>D)-l>D = a & (a-l>D)-r>D = a;
    set I = D-l>D, J = D-r>D;
@@ -950,11 +951,11 @@ A8:  I is_a_unity_wrt times(Q)
      proof
       thus I is_a_left_unity_wrt times(Q)
        proof let a;
-        thus times(Q).(I,a) = J [*] a by A7,GROUP_1:def 1 .= a by A2;
+        thus times(Q).(I,a) = J [*] a by A7 .= a by A2;
         end;
       thus I is_a_right_unity_wrt times(Q)
        proof let a;
-        thus times(Q).(a,I) = a [*] I by GROUP_1:def 1 .= a by A2;
+        thus times(Q).(a,I) = a [*] I .= a by A2;
        end;
      end;
    hence times(Q) has_a_unity by SETWISEO:def 2;
@@ -989,7 +990,7 @@ A3:  P3[d] iff P4[d]
 definition
   struct (QuasiNetStr) Girard-QuantaleStr
   (# carrier -> set,
-    L_join, L_meet, mult -> (BinOp of the carrier),
+    L_join, L_meet, multF -> (BinOp of the carrier),
     OneF, absurd -> Element of the carrier #);
 end;
 
@@ -1288,7 +1289,7 @@ Q = the absurd of Q & the absurd of Q is dualizing
     then Top Q = the_unity_wrt times(Q) & times(Q) has_a_unity
      by Th19,MONOID_0:def 10;
     then times(Q).(a,Top Q) = a & times(Q).(Top Q,a) = a by SETWISEO:23;
-   hence thesis by GROUP_1:def 1;
+   hence thesis;
   end;
 
 theorem

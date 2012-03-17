@@ -9,19 +9,20 @@ environ
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, HAHNBAN, FUNCT_1, GRCAT_1, UNIALG_1,
       BINOP_1, LATTICES, RELAT_1, HAHNBAN1, MCART_1, RLSUB_1, RLSUB_2,
       RLVECT_3, RLVECT_2, FUNCT_2, REALSET1, BOOLE, SEQM_3, GROUP_6, SETFAM_1,
-      ARYTM_3, VECTSP10, GROUP_1, VECTSP_2;
+      ARYTM_3, VECTSP10, GROUP_1, VECTSP_2, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_1, REALSET1, DOMAIN_1,
-      STRUCT_0, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1, FUNCT_2,
-      FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
- constructors BINOP_1, REALSET2, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
+      STRUCT_0, ALGSTR_0, RLVECT_1, BINOP_1, GROUP_1, VECTSP_1, RELSET_1,
+      FUNCT_2, FRAENKEL, VECTSP_4, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1;
+ constructors BINOP_1, REALSET2, VECTSP_5, VECTSP_6, VECTSP_7, HAHNBAN1,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, FINSET_1, STRUCT_0,
-      VECTSP_1, VECTSP_4, HAHNBAN1;
+      VECTSP_1, VECTSP_4, HAHNBAN1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
  definitions HAHNBAN1, TARSKI, XBOOLE_0, VECTSP_4, VECTSP_5, RLVECT_1, FUNCT_1,
-      STRUCT_0;
+      STRUCT_0, ALGSTR_0, VALUED_1;
  theorems XBOOLE_1, FUNCT_2, HAHNBAN1, VECTSP_1, RLVECT_1, ANPROJ_1, MCART_1,
       VECTSP_5, VECTSP_4, VECTSP_6, VECTSP_7, TARSKI, FUNCT_1, XBOOLE_0,
-      REALSET1, ZFMISC_1, BINOP_1, GROUP_1, STRUCT_0;
+      REALSET1, ZFMISC_1, BINOP_1, GROUP_1, STRUCT_0, ALGSTR_0;
  schemes FUNCT_2, BINOP_1;
 
 begin
@@ -30,7 +31,7 @@ begin
 definition
  let K be doubleLoopStr;
 func StructVectSp(K) -> strict VectSpStr over K equals
-  VectSpStr (# the carrier of K, the add of K, 0.K, the mult of K#);
+  VectSpStr (# the carrier of K, the addF of K, 0.K, the multF of K#);
  coherence;
 end;
 
@@ -94,15 +95,13 @@ cluster StructVectSp(K) -> right_complementable;
  coherence
    proof
     set V = StructVectSp(K);
-         now let x be Vector of V;
+    let x be Vector of V;
       reconsider x'=x as Element of K;
       consider t be Element of K such that
-   A1: x' + t = 0.K by RLVECT_1:def 8;
+   A1: x' + t = 0.K by ALGSTR_0:def 11;
       reconsider t' = t as Vector of V;
       take t';
       thus x + t' = 0.V by A1;
-     end;
-    hence thesis by RLVECT_1:def 8;
   end;
 end;
 
@@ -118,30 +117,30 @@ cluster StructVectSp(K) -> VectSp-like;
      reconsider v' = v , w' = w as Element of K;
    A1: (the lmult of V).(x,w) = x*w by VECTSP_1:def 24;
    A2: (the lmult of V).(y,v) = y*v by VECTSP_1:def 24;
-     set MLT = the mult of K;
-     thus x*(v+w) = MLT.(x,(the add of K).(v',w')) by VECTSP_1:def 24
-       .= x*(v'+w') by GROUP_1:def 1
+     set MLT = the multF of K;
+     thus x*(v+w) = MLT.(x,(the addF of K).(v',w')) by VECTSP_1:def 24
+       .= x*(v'+w')
        .= x*v'+x*w' by VECTSP_1:def 18
-       .= (the add of K).(MLT.(x,v'),x*w') by GROUP_1:def 1
-       .= (the add of K).
-          ((the lmult of V).(x,v),(the lmult of V).(x,w)) by GROUP_1:def 1
+       .= (the addF of K).(MLT.(x,v'),x*w')
+       .= (the addF of K).
+          ((the lmult of V).(x,v),(the lmult of V).(x,w))
        .= x*v+x*w by A1,VECTSP_1:def 24;
      thus (x+y)*v = (the lmult of V).((x+y),v) by VECTSP_1:def 24
-       .= (x+y)*v' by GROUP_1:def 1
+       .= (x+y)*v'
        .= x*v'+y*v' by VECTSP_1:def 18
-       .= (the add of K).(MLT.(x,v'),y*v') by GROUP_1:def 1
-       .= (the add of K).
-          ((the lmult of V).(x,v),(the lmult of V).(y,v)) by GROUP_1:def 1
+       .= (the addF of K).(MLT.(x,v'),y*v')
+       .= (the addF of K).
+          ((the lmult of V).(x,v),(the lmult of V).(y,v))
        .= x*v+y*v by A2,VECTSP_1:def 24;
      thus (x*y)*v = (the lmult of V).((x*y),v) by VECTSP_1:def 24
-       .= (x*y)*v' by GROUP_1:def 1
+       .= (x*y)*v'
        .= x*(y*v') by GROUP_1:def 4
-       .= MLT.(x,y*v') by GROUP_1:def 1
-       .= (the lmult of V).(x,(the lmult of V).(y,v)) by GROUP_1:def 1
+       .= MLT.(x,y*v')
+       .= (the lmult of V).(x,(the lmult of V).(y,v))
        .= (the lmult of V).(x,(y*v)) by VECTSP_1:def 24
        .= x*(y*v) by VECTSP_1:def 24;
-     thus (1_K)*v = MLT.(1_K,v') by VECTSP_1:def 24
-       .= (1_K)*v' by GROUP_1:def 1
+     thus (1.K)*v = MLT.(1.K,v') by VECTSP_1:def 24
+       .= (1.K)*v'
        .= v by VECTSP_1:def 19;
     end;
    hence thesis by VECTSP_1:def 26;
@@ -210,9 +209,9 @@ for V be add-associative right_zeroed right_complementable VectSp-like
   let V be add-associative right_zeroed right_complementable VectSp-like
          (non empty VectSpStr over F),
      v be Vector of V;
-       v+(0.F)*v = (1_F)*v + (0.F)*v by VECTSP_1:def 26
-     .= ((1_F)+(0.F))*v by VECTSP_1:def 26
-     .= (1_F)*v by RLVECT_1:10
+       v+(0.F)*v = (1.F)*v + (0.F)*v by VECTSP_1:def 26
+     .= ((1.F)+(0.F))*v by VECTSP_1:def 26
+     .= (1.F)*v by RLVECT_1:10
      .= v by VECTSP_1:def 26
      .= v+0.V by RLVECT_1:10;
     hence A1:(0.F)*v = 0.V by RLVECT_1:21;
@@ -877,7 +876,7 @@ definition
 func VectQuot(V,W) -> strict Abelian add-associative right_zeroed
     right_complementable VectSp-like (non empty VectSpStr over K) means :Def6:
   the carrier of it = CosetSet(V,W) &
-  the add of it = addCoset(V,W) &
+  the addF of it = addCoset(V,W) &
   0.it = zeroCoset(V,W) &
   the lmult of it = lmultCoset(V,W);
  existence
@@ -970,7 +969,7 @@ A15: A is right_zeroed
    A27: lC.(x,A1) =x*a+W by A22,A24,Def5;
    A28: lC.(x,A1) = x*A1 & lC.(x,A2) = x*A2 by VECTSP_1:def 24;
    A29: lC.(x,A2) =x*b+W by A23,A25,Def5;
-    thus x*(A1+A2) = lC.(x,(the add of A).(A1,A2)) by VECTSP_1:def 24
+    thus x*(A1+A2) = lC.(x,(the addF of A).(A1,A2)) by VECTSP_1:def 24
         .= x*(a+b) +W by A26,Def5
         .= x*a+x*b +W by VECTSP_1:def 26
         .= x*A1+x*A2 by A27,A28,A29,Def3;
@@ -1091,7 +1090,7 @@ st A1 = v1 + W & A2 = v2 + W holds A1 + A2 = v1 + v2 + W
  let K be add-associative right_zeroed right_complementable
     Abelian associative well-unital distributive (non empty doubleLoopStr),
    V be VectSp of K, W be Subspace of V;
-  set vw = VectQuot(V,W), ad = the add of vw;
+  set vw = VectQuot(V,W), ad = the addF of vw;
   let A1,A2 be Vector of vw, v1,v2 be Vector of V;
   assume that
  A1: A1 = v1 + W and
@@ -1226,7 +1225,7 @@ A3:     for e be Element of (X + Lin{v})
  end;
 
 registration
- let K be right_zeroed (non empty LoopStr);
+ let K be right_zeroed (non empty addLoopStr);
  let V be non empty VectSpStr over K;
 cluster additive 0-preserving Functional of V;
  existence
@@ -1405,7 +1404,7 @@ thus f is homogeneous
  thus f is non constant
    proof
     assume A5: f is constant;
-   A6:  1_K <> 0.K by VECTSP_1:def 21;
+   A6:  1_K <> 0.K by STRUCT_0:def 8;
    A7: the carrier of V = dom f by FUNCT_2:def 1;
         f1.(0.V)=0.K by HAHNBAN1:def 13;
     hence contradiction by A4,A5,A6,A7,FUNCT_1:def 16;
@@ -1414,7 +1413,7 @@ thus f is homogeneous
   proof
     set x = [v,1_K], y = [0.V, 0.K];
     assume A8: f is trivial;
-   A9:  1_K <> 0.K by VECTSP_1:def 21;
+   A9:  1_K <> 0.K by STRUCT_0:def 8;
    A10: the carrier of V = dom f by FUNCT_2:def 1;
        f1.(0.V)=0.K by HAHNBAN1:def 13;
    then A11: x in f & y in f by A4,A10,FUNCT_1:8;
@@ -1493,7 +1492,7 @@ A5: f is additive
  A6: f is non constant
    proof
     assume A7: f is constant;
-    A8:  1_K <> 0.K by VECTSP_1:def 21;
+    A8:  1_K <> 0.K by STRUCT_0:def 8;
     A9: the carrier of V = dom f by FUNCT_2:def 1;
         f.(0.V)=0.K by HAHNBAN1:def 13;
     hence contradiction by A4,A7,A8,A9,FUNCT_1:def 16;
@@ -1502,7 +1501,7 @@ A5: f is additive
    proof
     set x = [v,1_K], y = [0.V, 0.K];
     assume A10: f is trivial;
-   A11:  1_K <> 0.K by VECTSP_1:def 21;
+   A11:  1_K <> 0.K by STRUCT_0:def 8;
    A12: the carrier of V = dom f by FUNCT_2:def 1;
        f.(0.V)=0.K by HAHNBAN1:def 13;
    then A13: x in f & y in f by A4,A12,FUNCT_1:8;
@@ -1622,11 +1621,11 @@ theorem
  end;
 
 theorem
-    for K be non empty LoopStr
+    for K be non empty addLoopStr
 for V be non empty VectSpStr over K
 for f,g be Functional of V, v be Vector of V holds (f-g).v = f.v - g.v
  proof
-  let K be non empty LoopStr;
+  let K be non empty addLoopStr;
   let V be non empty VectSpStr over K;
   let f,g be Functional of V, v be Vector of V;
   thus (f-g).v = f.v + (-g).v by HAHNBAN1:def 6
@@ -1674,7 +1673,7 @@ func ker f -> Subset of V equals
 end;
 
 registration
- let K be right_zeroed (non empty LoopStr);
+ let K be right_zeroed (non empty addLoopStr);
  let V be non empty VectSpStr over K;
  let f be 0-preserving Functional of V;
 cluster ker f -> non empty;
@@ -1829,7 +1828,7 @@ func
    A8: A = a+W by Th23;
      consider b be Vector of V such that
    A9: B = b+W by Th23;
-   A10: the add of vq = addCoset(V,W) by Def6;
+   A10: the addF of vq = addCoset(V,W) by Def6;
     aC.(A,B) =a+b+W by A2,A8,A9,Def3;
     hence ff.(A+B) = f.(a+b) by A7,A10
     .= f.a + f.b by HAHNBAN1:def 11

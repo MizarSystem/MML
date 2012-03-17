@@ -8,11 +8,14 @@ environ
 
  vocabularies VECTSP_1, RLVECT_1, LATTICES, ARYTM_1, FUNCSDOM, BINOP_1,
       RELAT_1, ARYTM_3, FUNCT_1, BOOLE, MIDSP_1, FUNCT_3, VECTSP_2, GROUP_1,
-      STRUCT_0, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1, FUNCT_3;
- constructors BINOP_1, FUNCT_3, VECTSP_1, MIDSP_1;
- registrations XBOOLE_0, SUBSET_1, STRUCT_0, GROUP_1, VECTSP_1;
+      STRUCT_0, ARYTM, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FUNCT_2, BINOP_1, FUNCT_5,
+      STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, MIDSP_1,
+      FUNCT_3;
+ constructors BINOP_1, FUNCT_3, VECTSP_1, MIDSP_1, ALGSTR_0, FUNCSDOM, FUNCT_5,
+      VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, STRUCT_0, GROUP_1, VECTSP_1, ALGSTR_0,
+      VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -69,11 +72,11 @@ theorem :: VECTSP_2:13
    F is domRing;
 
 registration
- cluster non degenerated Field-like Ring;
+ cluster non degenerated almost_left_invertible Ring;
 end;
 
 definition
- mode Skew-Field is non degenerated Field-like Ring;
+ mode Skew-Field is non degenerated almost_left_invertible Ring;
 end;
 
 registration
@@ -87,14 +90,14 @@ canceled 3;
 :: 10. AXIOMS OF SKEW-FIELD
 
 registration
- cluster commutative left_unital -> unital (non empty multLoopStr);
- cluster commutative right_unital -> unital (non empty multLoopStr);
+ cluster commutative left_unital -> well-unital (non empty multLoopStr);
+ cluster commutative right_unital -> well-unital (non empty multLoopStr);
 end;
 
 :: 11_ SOME PROPERTIES OF RING
 
  reserve R for Abelian add-associative right_zeroed right_complementable
-               (non empty LoopStr),
+               (non empty addLoopStr),
          x, y, z for Scalar of R;
 
 canceled 5;
@@ -106,7 +109,7 @@ canceled 11;
 
 theorem :: VECTSP_2:34
  for R being add-associative right_zeroed
-                right_complementable (non empty LoopStr),
+                right_complementable (non empty addLoopStr),
      x being Element of R holds
 x=0.R iff -x=0.R;
 
@@ -114,7 +117,7 @@ canceled 3;
 
 theorem :: VECTSP_2:38
      for R being add-associative right_zeroed Abelian
-              right_complementable (non empty LoopStr)
+              right_complementable (non empty addLoopStr)
  for x,y being Element of R
   ex z being Element of R st x = y+z & x = z+y;
 
@@ -130,33 +133,36 @@ theorem :: VECTSP_2:39
    x*y = 1.F implies x<>0.F & y<>0.F;
 
 theorem :: VECTSP_2:40
- for SF being non degenerated Field-like associative
-    Abelian add-associative right_zeroed right_complementable
+ for SF being non degenerated almost_left_invertible associative
+       add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
      x being Element of SF holds
-  x<>0.SF implies ex y being Element of SF st y*x = 1_SF;
+  x<>0.SF implies ex y being Element of SF st x*y = 1.SF;
 
 theorem :: VECTSP_2:41
- x*y = 1_SF implies y*x = 1_SF;
+ for SF being add-associative right_zeroed right_complementable
+     distributive non degenerated
+     almost_left_invertible associative
+     well-unital (non empty doubleLoopStr)
+ for x,y being Element of SF st y*x = 1.SF holds x*y = 1.SF;
 
 theorem :: VECTSP_2:42
- for SF being non degenerated Field-like associative
+ for SF being non degenerated almost_left_invertible associative
     Abelian add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
      x,y,z being Element of SF holds
         x * y = x * z & x<>0.SF implies y = z;
 
-definition let SF be non degenerated Field-like associative
-    Abelian add-associative right_zeroed right_complementable
+definition let SF be non degenerated almost_left_invertible associative
+    add-associative right_zeroed right_complementable
         well-unital distributive (non empty doubleLoopStr),
                x be Element of SF;
   assume  x<>0.SF;
  canceled;
 
-  func x" -> Scalar of SF
-    means
+  redefine func x" means
 :: VECTSP_2:def 7
-x * it = 1_SF;
+  it * x = 1.SF;
 end;
 
 definition let SF,x,y;
@@ -167,12 +173,12 @@ x * y";
 end;
 
 theorem :: VECTSP_2:43
-   x<>0.SF implies x * x" = 1_SF & x" * x = 1_SF;
+   x<>0.SF implies x * x" = 1.SF & x" * x = 1.SF;
 
 canceled;
 
 theorem :: VECTSP_2:45
- x*y = 1_SF implies x = y" & y = x";
+ y*x = 1_SF implies x = y" & y = x";
 
 theorem :: VECTSP_2:46
   x<>0.SF & y<>0.SF implies x"*y"=(y*x)";
@@ -213,8 +219,8 @@ theorem :: VECTSP_2:57
 :: 13. LEFT-, RIGHT-, AND BI-MODULE STRUCTURE
 
 definition let FS be 1-sorted;
- struct(LoopStr) RightModStr over FS (# carrier -> set,
-      add -> BinOp of the carrier,
+ struct(addLoopStr) RightModStr over FS (# carrier -> set,
+      addF -> BinOp of the carrier,
       ZeroF -> Element of the carrier,
       rmult -> Function of [: the carrier, the carrier of FS:], the carrier #);
 end;
@@ -237,7 +243,7 @@ end;
 definition let FS1,FS2 be 1-sorted;
  struct (VectSpStr over FS1, RightModStr over FS2) BiModStr over FS1,FS2
    (# carrier -> set,
-    add -> BinOp of the carrier,
+    addF -> BinOp of the carrier,
     ZeroF -> Element of the carrier,
     lmult -> Function of [:the carrier of FS1, the carrier:], the carrier,
     rmult -> Function of [:the carrier, the carrier of FS2:], the carrier #);
@@ -259,10 +265,10 @@ end;
  reserve R, R1, R2 for Ring;
 
 definition let R be Abelian add-associative right_zeroed
-                    right_complementable (non empty LoopStr);
+                    right_complementable (non empty addLoopStr);
  func AbGr R -> strict AbGroup equals
 :: VECTSP_2:def 9
-   LoopStr (#the carrier of R, the add of R, 0.R#);
+   addLoopStr (#the carrier of R, the addF of R, 0.R#);
  end;
 
 registration let R;
@@ -276,8 +282,8 @@ definition let R;
  func LeftModule R -> Abelian add-associative right_zeroed right_complementable
    strict (non empty VectSpStr over R) equals
 :: VECTSP_2:def 11
-     VectSpStr (# the carrier of R, the add of R,
-                           0.R, the mult of R #);
+     VectSpStr (# the carrier of R, the addF of R,
+                           0.R, the multF of R #);
 end;
 
 registration let R;
@@ -291,8 +297,8 @@ definition let R;
  func RightModule R -> Abelian add-associative right_zeroed
   right_complementable strict (non empty RightModStr over R) equals
 :: VECTSP_2:def 14
-    RightModStr (# the carrier of R, the add of R,
-                         0.R, the mult of R #);
+    RightModStr (# the carrier of R, the addF of R,
+                         0.R, the multF of R #);
 end;
 
 definition let R be non empty 1-sorted, V be non empty RightModStr over R;
@@ -303,31 +309,19 @@ definition let R be non empty 1-sorted, V be non empty RightModStr over R;
     (the rmult of V).(v,x);
 end;
 
-definition
- canceled;
-
- func op1 -> UnOp of {{}} means
-:: VECTSP_2:def 17
-not contradiction;
-
- func op0 -> Element of {{}} means
-:: VECTSP_2:def 18
-not contradiction;
-end;
-
 registration let R1,R2;
  cluster Abelian add-associative right_zeroed right_complementable
    strict (non empty BiModStr over R1,R2);
 end;
 
 definition let R1,R2;
- canceled 2;
+ canceled 5;
 
  func BiModule(R1,R2) -> Abelian add-associative right_zeroed
    right_complementable strict (non empty BiModStr over R1,R2) equals
 :: VECTSP_2:def 21
-    BiModStr (# {{}},op2,op0,pr2 (the carrier of R1, {{}}),
-   pr1 ({{}},the carrier of R2) #);
+    BiModStr (# 1,op2,op0,pr2 (the carrier of R1, 1),
+   pr1 (1,the carrier of R2) #);
 end;
 
 canceled 13;
@@ -338,7 +332,7 @@ theorem :: VECTSP_2:71
                x*(v+w) = x*v+x*w &
                (x+y)*v = x*v+y*v &
                (x*y)*v = x*(y*v) &
-               (1_R)*v = v;
+               (1.R)*v = v;
 
 registration let R;
  cluster VectSp-like Abelian add-associative right_zeroed right_complementable

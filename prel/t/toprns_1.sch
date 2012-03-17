@@ -19,12 +19,15 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
@@ -33,14 +36,15 @@
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="218">
+<Func kind="K" nr="274">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -54,7 +58,7 @@
 <Adjective nr="17">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="218">
+<Func kind="K" nr="274">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
@@ -62,20 +66,21 @@
 </Cluster>
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="218">
+<Func kind="K" nr="274">
 <Func kind="F" nr="1"/>
 </Func>
 </Func>
 </Typ>
 <Not>
 <For>
-<Typ kind="M" nr="2">
+<Typ kind="M" nr="3">
 <Cluster/>
+<Func kind="K" nr="42"/>
 <Func kind="K" nr="46"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="132">
-<Func kind="K" nr="218">
+<Func kind="K" nr="142">
+<Func kind="K" nr="274">
 <Func kind="F" nr="1"/>
 </Func>
 <Var nr="1"/>

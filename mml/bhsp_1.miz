@@ -8,19 +8,21 @@ environ
 
  vocabularies RLVECT_1, BINOP_1, FUNCT_1, PRE_TOPC, PROB_2, RLSUB_1, ARYTM_1,
       ABSVALUE, SQUARE_1, FUNCT_3, ARYTM_3, NORMSP_1, METRIC_1, RELAT_1,
-      SEQM_3, BHSP_1, ARYTM, FUNCOP_1, STRUCT_0;
+      SEQM_3, BHSP_1, ARYTM, FUNCOP_1, STRUCT_0, ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, BINOP_1, STRUCT_0,
-      DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1, QUIN_1,
-      XXREAL_0;
+      ALGSTR_0, DOMAIN_1, PRE_TOPC, RLVECT_1, RLSUB_1, SQUARE_1, NORMSP_1,
+      QUIN_1, XXREAL_0;
  constructors BINOP_1, DOMAIN_1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, MEMBERED,
-      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1;
+      COMPLEX1, SEQ_1, QUIN_1, RLSUB_1, NORMSP_1, VALUED_1, PARTFUN1;
  registrations SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
-      SQUARE_1, MEMBERED, STRUCT_0, RLVECT_1, XBOOLE_0;
+      SQUARE_1, MEMBERED, STRUCT_0, RLVECT_1, XBOOLE_0, ALGSTR_0, VALUED_1,
+      FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, NORMSP_1, STRUCT_0, SQUARE_1;
+ definitions RLVECT_1, NORMSP_1, STRUCT_0, SQUARE_1, ALGSTR_0, VALUED_1;
  theorems TARSKI, REAL_2, SQUARE_1, ABSVALUE, RLVECT_1, RLSUB_1, QUIN_1,
-      FUNCT_2, NORMSP_1, XREAL_0, COMPLEX1, FUNCOP_1, XREAL_1, XXREAL_0;
+      FUNCT_2, NORMSP_1, XREAL_0, COMPLEX1, FUNCOP_1, XREAL_1, XXREAL_0,
+      ALGSTR_0;
  schemes FUNCT_2;
 
 begin
@@ -28,7 +30,7 @@ begin
 definition
  struct(RLSStruct) UNITSTR (# carrier -> set,
          ZeroF -> Element of the carrier,
-          add -> BinOp of the carrier,
+          addF -> BinOp of the carrier,
          Mult -> Function of [:REAL, the carrier:], the carrier,
        scalar -> Function of [: the carrier, the carrier :], REAL #);
 end;
@@ -108,7 +110,7 @@ proof
      u = 0.V0 & v = 0.V0 by Lm1,TARSKI:def 1;
  hence thesis by Lm1,Lm3,TARSKI:def 1;
 end;
-set X0 = UNITSTR(# the carrier of (0).V0,0.(0).V0,the add of (0).V0,
+set X0 = UNITSTR(# the carrier of (0).V0,0.(0).V0,the addF of (0).V0,
                   the Mult of (0).V0, nilfunc #);
 
 Lm7:
@@ -209,13 +211,12 @@ A1: for x,y be VECTOR of X0
       reconsider v'= v as VECTOR of (0).V0;
       thus v + 0.X0 = v'+ 0.(0).V0 .=v by RLVECT_1:10;
      end;
-     thus for v being VECTOR of X0
-       ex w being VECTOR of X0 st v + w = 0.X0
+     thus X0 is right_complementable
        proof
         let v be VECTOR of X0;
         reconsider v'= v as VECTOR of (0).V0;
         consider w' be VECTOR of (0).V0 such that
-        A2: v' + w' = 0.(0).V0 by RLVECT_1:def 8;
+        A2: v' + w' = 0.(0).V0 by ALGSTR_0:def 11;
         reconsider w = w' as VECTOR of X0;
         take w;
         thus v + w = 0.X0 by A2;
@@ -688,7 +689,7 @@ end;
 reserve seq, seq1, seq2, seq3 for sequence of X;
 reserve k, n, m for Element of NAT;
 
-definition let X be non empty LoopStr; let seq be sequence of X;
+definition let X be non empty addLoopStr; let seq be sequence of X;
  canceled 4;
 
   func - seq -> sequence of X means
@@ -713,7 +714,7 @@ uniqueness
   end;
 end;
 
-definition let X be non empty LoopStr;
+definition let X be non empty addLoopStr;
   let seq be sequence of X; let x be Point of X;
  canceled;
 

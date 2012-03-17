@@ -24,6 +24,7 @@
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
@@ -31,10 +32,10 @@
 </Signature>
 <RCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="45"/>
+<Adjective nr="81"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -73,7 +74,7 @@
 <LocusVar nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="52">
+<Adjective nr="88">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -90,7 +91,7 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="191">
+<Func kind="K" nr="201">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -100,12 +101,12 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="37" value="false"/>
 <Adjective nr="43"/>
-<Adjective nr="46"/>
-<Adjective nr="47"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -115,7 +116,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="213">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

@@ -8,18 +8,19 @@ environ
 
  vocabularies VECTSP_1, FINSEQ_1, RELAT_1, FUNCT_1, FUNCOP_1, MATRIX_1,
       FINSEQ_2, TREES_1, RLVECT_1, BOOLE, INCSP_1, QC_LANG1, FUNCT_2, BINOP_1,
-      GROUP_1, NAT_1, ARYTM_1, FINSET_1, FINSUB_1, MATRIX_2, CARD_3, ARYTM;
+      GROUP_1, NAT_1, ARYTM_1, FINSET_1, FINSUB_1, MATRIX_2, CARD_3, ARYTM,
+      ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1,
-      FINSEQ_1, FUNCT_2, STRUCT_0, NAT_1, NAT_D, GROUP_1, GROUP_4, BINOP_1,
-      RLVECT_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2, FINSEQ_3,
-      FINSEQ_4, FINSEQOP, NUMBERS, XCMPLX_0, XXREAL_0;
+      FINSEQ_1, FUNCT_2, STRUCT_0, ALGSTR_0, NAT_1, NAT_D, GROUP_1, GROUP_4,
+      BINOP_1, RLVECT_1, VECTSP_1, MATRIX_1, FINSET_1, FINSUB_1, FINSEQ_2,
+      FINSEQ_3, FINSEQ_4, FINSEQOP, NUMBERS, XCMPLX_0, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, FINSUB_1, XXREAL_0, NAT_1, NAT_D,
-      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1;
+      FINSEQOP, FINSEQ_4, GROUP_4, MATRIX_1, VECTSP_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, FINSEQ_2, STRUCT_0, GROUP_1,
-      MATRIX_1, ORDINAL1;
+      MATRIX_1, ORDINAL1, ALGSTR_0, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, FINSEQ_2, MATRIX_1, TARSKI;
+ definitions STRUCT_0, FINSEQ_2, MATRIX_1, TARSKI, ALGSTR_0, VALUED_1;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, GROUP_1, FUNCT_1, FUNCT_2,
       ZFMISC_1, NAT_1, BINOP_1, FINSUB_1, FINSET_1, GROUP_4, FRAENKEL,
       MATRIX_1, RELAT_1, XBOOLE_0, FUNCOP_1, ORDINAL1, NAT_D;
@@ -851,9 +852,9 @@ begin :: Group of Permutations
 
 definition let n;
   canceled;
-  func Group_of_Perm(n) -> strict HGrStr means :Def13:
+  func Group_of_Perm(n) -> strict multMagma means :Def13:
     the carrier of it = Permutations(n) &
-    for q,p be Element of Permutations(n) holds (the mult of it).(q,p)=p*q;
+    for q,p be Element of Permutations(n) holds (the multF of it).(q,p)=p*q;
  existence
  proof
   defpred P[Element of Permutations(n),Element of Permutations(n),set] means
@@ -870,21 +871,21 @@ definition let n;
     consider o being BinOp of Permutations(n) such that
     A2:for q,p being Element of Permutations(n)
       holds P[q,p,o.(q,p)] from BINOP_1:sch 3(A1);
-   take HGrStr(# Permutations(n),o#);
+   take multMagma(# Permutations(n),o#);
    thus thesis by A2;
 end;
  uniqueness
  proof
-  let G1,G2 be strict HGrStr;
+  let G1,G2 be strict multMagma;
   assume that A3:the carrier of G1 = Permutations(n) and
- A4:for q,p be Element of Permutations(n) holds (the mult of G1).(q,p)=p*q
+ A4:for q,p be Element of Permutations(n) holds (the multF of G1).(q,p)=p*q
     and A5:the carrier of G2 = Permutations(n) and
     A6:for q,p be Element of Permutations(n) holds
-      (the mult of G2).(q,p)=p*q;
+      (the multF of G2).(q,p)=p*q;
       now let q,p be Element of G1;
    reconsider q' = q, p' = p as Element of Permutations(n) by A3;
-   thus (the mult of G1).(q,p)=p'*q' by A4
-                             .=(the mult of G2).(q,p) by A6;
+   thus (the multF of G1).(q,p)=p'*q' by A4
+                             .=(the multF of G2).(q,p) by A6;
   end;
   hence thesis by A3,A5,BINOP_1:2;
  end;
@@ -950,17 +951,11 @@ A1: for p,q,r being Element of Group_of_Perm(n) holds
       end;
       then A4:q' * p' is Element of Permutations(n) by Def11;
    A5:r' * q' is Element of Permutations(n) by A2,Def11;
-       (p * q) * r = (the mult of Group_of_Perm n).((p*q),r) by GROUP_1:def 1
-                 .= (the mult of Group_of_Perm n).
-            (((the mult of Group_of_Perm n).(p',q')),r') by GROUP_1:def 1
-                 .=(the mult of Group_of_Perm n).((q'*p'),r') by Def13
+       (p * q) * r =(the multF of Group_of_Perm n).((q'*p'),r') by Def13
                  .=r'*(q' *p' ) by A4,Def13
                  .=(r' *q') * p' by RELAT_1:55
-                 .=(the mult of Group_of_Perm n).(p',(r'*q')) by A5,Def13
-                 .=(the mult of Group_of_Perm n).
-                     (p,(the mult of Group_of_Perm n).(q,r)) by Def13
-                 .=(the mult of Group_of_Perm n).(p,(q*r)) by GROUP_1:def 1
-                 .=p *(q* r) by GROUP_1:def 1;
+                 .=(the multF of Group_of_Perm n).(p',(r'*q')) by A5,Def13
+                 .=p *(q* r) by Def13;
       hence thesis;
     end;
      ex e being Element of Group_of_Perm(n) st
@@ -974,11 +969,9 @@ A1: for p,q,r being Element of Group_of_Perm(n) holds
       proof
         let p be Element of Group_of_Perm(n);
         reconsider p'=p as Element of Permutations(n) by Def13;
-     A7:p * e =(the mult of Group_of_Perm(n)).(p',e') by GROUP_1:def 1
-             .=e' * p' by Def13
+     A7:p * e =e' * p' by Def13
              .=p by Th24;
-         e * p =(the mult of Group_of_Perm(n)).(e',p') by GROUP_1:def 1
-             .=p' * e' by Def13
+         e * p =p' * e' by Def13
              .=p by Th24;
         hence thesis by A7;
       end;
@@ -991,11 +984,9 @@ A1: for p,q,r being Element of Group_of_Perm(n) holds
         reconsider r=q as Permutation of Seg n by Def11;
         reconsider f=r" as Element of Permutations(n) by Def11;
         reconsider g=f as Element of Group_of_Perm(n) by Th26;
-    A8: p * g=(the mult of Group_of_Perm(n)).(q,f) by GROUP_1:def 1
-            .=f*q by Def13
+    A8: p * g= f*q by Def13
             .=e by Th25;
-    A9: g * p=(the mult of Group_of_Perm(n)).(f,q) by GROUP_1:def 1
-            .=q*f by Def13
+    A9: g * p= q*f by Def13
             .=e by Th25;
         take g;
         thus thesis by A8,A9;
@@ -1017,11 +1008,9 @@ theorem Th28:
     proof
       let p be Element of Group_of_Perm(n);
       reconsider p'=p as Element of Permutations(n) by Def13;
-   A1:p * e =(the mult of Group_of_Perm(n)).(p',e') by GROUP_1:def 1
-           .=e' * p' by Def13
+   A1:p * e =e' * p' by Def13
            .=p by Th24;
-       e * p =(the mult of Group_of_Perm(n)).(e',p') by GROUP_1:def 1
-           .=p' * e' by Def13
+       e * p =p' * e' by Def13
            .=p by Th24;
       hence thesis by A1;
     end;

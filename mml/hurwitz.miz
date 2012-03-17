@@ -10,36 +10,40 @@ environ
       FINSEQ_1, COMPLEX1, FUNCT_4, POLYNOM3, RELAT_1, RLVECT_1, NORMSP_1,
       BOOLE, VECTSP_1, BINOP_1, ALGSEQ_1, FUNCOP_1, LATTICES, FINSEQ_4,
       POLYNOM5, NAT_1, XCMPLX_0, SQUARE_1, SGRAPH1, INT_1, VECTSP_2, ALGSTR_2,
-      HURWITZ, ARYTM;
- notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XCMPLX_0, VECTSP_2,
-      FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, XXREAL_0, SEQ_1, GROUP_1, INT_1,
-      FUNCOP_1, RLVECT_1, POLYNOM1, COMPLEX1, COMPLFLD, FINSEQ_1, BINOP_1,
-      BINARITH, NORMSP_1, BHSP_1, ALGSEQ_1, FUNCT_4, POLYNOM3, POLYNOM4,
-      RELSET_1, POLYNOM5, STRUCT_0, VECTSP_1, SQUARE_1;
+      HURWITZ, ARYTM, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, NUMBERS, XCMPLX_0, ALGSTR_0,
+      VECTSP_2, FUNCT_1, PARTFUN1, FUNCT_2, NAT_1, XXREAL_0, VALUED_1, SEQ_1,
+      GROUP_1, INT_1, FUNCOP_1, RLVECT_1, POLYNOM1, COMPLEX1, COMPLFLD,
+      FINSEQ_1, BINOP_1, BINARITH, NORMSP_1, BHSP_1, ALGSEQ_1, FUNCT_4,
+      POLYNOM3, POLYNOM4, RELSET_1, POLYNOM5, STRUCT_0, VECTSP_1, SQUARE_1;
  constructors BINOP_1, REAL_1, SQUARE_1, FINSOP_1, BINARITH, VECTSP_2,
-      ALGSTR_1, BHSP_1, POLYNOM1, POLYNOM4, POLYNOM5, SEQ_1;
+      ALGSTR_1, BHSP_1, POLYNOM1, POLYNOM4, POLYNOM5, SEQ_1, VALUED_1,
+      PARTFUN1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCOP_1, XCMPLX_0, XXREAL_0,
       XREAL_0, SQUARE_1, NAT_1, INT_1, MEMBERED, FINSEQ_1, STRUCT_0, VECTSP_1,
-      COMPLFLD, ALGSTR_1, GCD_1, POLYNOM3, POLYNOM4, POLYNOM5;
+      COMPLFLD, ALGSTR_1, GCD_1, POLYNOM3, POLYNOM4, POLYNOM5, VALUED_1,
+      FUNCT_2;
  requirements NUMERALS, SUBSET, REAL, BOOLE, ARITHM;
- definitions FINSEQ_1, POLYNOM3, COMPLEX1, SQUARE_1;
+ definitions FINSEQ_1, POLYNOM3, COMPLEX1, SQUARE_1, VALUED_1;
  theorems GROUP_1, VECTSP_1, ALGSEQ_1, NAT_1, FUNCT_1, FUNCT_2, XREAL_1,
       REAL_1, SQUARE_1, VECTSP_2, INT_1, FINSEQ_1, RLVECT_1, POLYNOM4,
       BINARITH, TARSKI, FUNCT_4, POLYNOM3, XBOOLE_1, POLYNOM2, FUNCOP_1,
       XCMPLX_1, XCMPLX_0, COMPLFLD, POLYNOM5, XXREAL_0, ALGSTR_1, COMPLEX1,
-      FINSEQ_2, POLYNOM1, FINSEQ_3, BHSP_1, NORMSP_1, ORDINAL1, PARTFUN1;
+      FINSEQ_2, POLYNOM1, FINSEQ_3, BHSP_1, NORMSP_1, ORDINAL1, PARTFUN1,
+      STRUCT_0;
  schemes NAT_1, FUNCT_2, FINSEQ_1;
 
 begin :: Preliminaries
 
 Lm1:
 for L being add-associative right_zeroed right_complementable
-           (non empty LoopStr)
+           (non empty addLoopStr)
 for F being FinSequence of L for G being FinSequence
 for k being Nat st G = F|(Seg k) & len F = k + 1 holds
 G is FinSequence of L & dom G c= dom F & len G = k & F = G ^ <*F/.(k+1)*>
 proof
-let L be add-associative right_zeroed right_complementable (non empty LoopStr);
+let L be add-associative right_zeroed right_complementable
+ (non empty addLoopStr);
 let F be FinSequence of L; let G1 be FinSequence; let k be Nat;
 assume A1: G1 = F|(Seg k) & len F = k + 1;
 reconsider G = G1 as FinSequence;
@@ -84,12 +88,12 @@ end;
 theorem Th1:
 for L being add-associative right_zeroed right_complementable
             associative commutative well-unital distributive
-            Field-like (non empty doubleLoopStr)
+            almost_left_invertible (non empty doubleLoopStr)
 for x being Element of L st x <> 0.L holds -(x") = (-x)"
 proof
 let L be add-associative right_zeroed right_complementable
          associative commutative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x be Element of L; assume A1: x <> 0.L;
 A2: now assume -x = 0.L; then --x = 0.L by RLVECT_1:25;
    hence contradiction by A1,RLVECT_1:30; end;
@@ -100,21 +104,21 @@ end;
 
 theorem Th2:
 for L being add-associative right_zeroed right_complementable
-            associative commutative well-unital Field-like
+            associative commutative well-unital almost_left_invertible
             distributive non degenerated (non empty doubleLoopStr)
 for k being Element of NAT holds power(L).(-1_L,k) <> 0.L
 proof
 let L be add-associative right_zeroed right_complementable
-             associative commutative well-unital Field-like
+             associative commutative well-unital almost_left_invertible
              distributive non degenerated (non empty doubleLoopStr),
     k be Element of NAT;
 defpred P[Nat] means power(L).(-1_L,$1) <> 0.L;
- 1_L <> 0.L by VECTSP_1:def 21; then A1: P[0] by GROUP_1:def 8;
+ 1_L <> 0.L by STRUCT_0:def 8; then A1: P[0] by GROUP_1:def 8;
 A2: now let k be Element of NAT; assume A3: P[k];
    A4: power(L).(-1_L,k+1) = power(L).(-1_L,k) * (-1_L) by GROUP_1:def 8;
     now assume A5: -1_L = 0.L;  1_L = 1_L * 1_L by VECTSP_1:def 13
         .= (-1_L) * (-1_L) by VECTSP_1:42 .= 0.L by A5,VECTSP_1:36;
-        hence contradiction by VECTSP_1:def 21; end;
+        hence contradiction by STRUCT_0:def 8; end;
    hence P[k+1] by A3,A4,VECTSP_1:44;
    end;
  for k be Element of NAT holds P[k] from NAT_1:sch 1(A1,A2);
@@ -122,16 +126,17 @@ hence thesis;
 end;
 
 theorem Th3:
-for L being associative right_unital (non empty multLoopStr)
+for L being associative well-unital (non empty multLoopStr)
 for x being Element of L
 for k1,k2 being Element of NAT
 holds power(L).(x,k1) * power(L).(x,k2) = power(L).(x,k1+k2)
 proof
-let L be associative right_unital (non empty multLoopStr), x be Element of L,
+let L be associative well-unital (non empty multLoopStr), x be Element of L,
 k1,k2 be Element of NAT;
 defpred P[Nat] means ex j being Element of NAT st j = $1 &
                  power(L).(x,k1) * power(L).(x,j) = power(L).(x,k1+j);
- power(L).(x,k1) * power(L).(x,0) = power(L).(x,k1) * 1_L by GROUP_1:def 8
+ 1_L = 1.L;
+ then power(L).(x,k1) * power(L).(x,0) = power(L).(x,k1) * 1.L by GROUP_1:def 8
                                 .= power(L).(x,k1+0) by VECTSP_1:def 13;
 then A1: P[0];
 A2: now let j be Element of NAT; assume A3: P[j];
@@ -269,14 +274,14 @@ end;
 
 theorem Th7:
 for L being add-associative right_zeroed right_complementable
-            Abelian (non empty LoopStr),
+            Abelian (non empty addLoopStr),
     F1,F2 being FinSequence of L
     st len F1 = len F2 &
        for i being Element of NAT st i in dom F1 holds F1/.i = -(F2/.i)
 holds Sum F1 = - Sum F2
 proof
 let L be add-associative right_zeroed right_complementable Abelian
-         (non empty LoopStr), F1,F2 being FinSequence of L;
+         (non empty addLoopStr), F1,F2 being FinSequence of L;
 assume A1: len F1 = len F2 &
        (for i being Element of NAT st i in dom F1 holds F1/.i = -(F2/.i));
 defpred P[Nat] means for F1,F2 being FinSequence of L st len F1 = $1
@@ -378,10 +383,10 @@ begin :: More about Polynomials
 
 Lm4:
 for L being add-associative right_zeroed
-            right_complementable (non empty LoopStr)
+            right_complementable (non empty addLoopStr)
 for p being Polynomial of L holds -(-p) = p
 proof let L be add-associative right_zeroed right_complementable
-     (non empty LoopStr); let p be Polynomial of L;
+     (non empty addLoopStr); let p be Polynomial of L;
 A1: len p = len(-p) by POLYNOM4:11 .= len(-(-p)) by POLYNOM4:11;
  now let x be Nat; assume x < len p;
 A2:   x in NAT by ORDINAL1:def 13;
@@ -391,10 +396,10 @@ hence thesis by A1,ALGSEQ_1:28; end;
 
 theorem Th9:
 for L being add-associative right_zeroed right_complementable
-            (non empty LoopStr) holds -0_.(L) = 0_.(L)
+            (non empty addLoopStr) holds -0_.(L) = 0_.(L)
 proof
 let L be add-associative right_zeroed right_complementable
-(non empty LoopStr); set e = 0_.(L), f = - 0_.(L);
+(non empty addLoopStr); set e = 0_.(L), f = - 0_.(L);
 A1: len f = len e by POLYNOM4:11;
  for x being Nat st x < len e holds e.x = f.x by POLYNOM4:6;
 hence thesis by A1,ALGSEQ_1:28;
@@ -416,7 +421,7 @@ then f = - x by RLVECT_1:19; hence -f = -p by RLVECT_1:30; end;
 
 theorem
  for L being add-associative right_zeroed right_complementable
-            (non empty LoopStr)
+            (non empty addLoopStr)
 for p being Polynomial of L holds -(-p) = p by Lm4;
 
 theorem Th11:
@@ -797,11 +802,12 @@ hence thesis by Th20; end;
 
 theorem
  for L being add-associative right_zeroed right_complementable
-            (non empty LoopStr)
+            (non empty addLoopStr)
 for p1,p2 being Polynomial of L st deg p1 <> deg p2
 holds deg(p1 + p2) = max(deg(p1),deg(p2))
 proof
-let L be add-associative right_zeroed right_complementable (non empty LoopStr);
+let L be add-associative right_zeroed right_complementable
+ (non empty addLoopStr);
 let p1,p2 be Polynomial of L;
 assume deg p1 <> deg p2;
 then A1: deg(p1+p2) = max(len(p1),len(p2)) - 1 by POLYNOM4:10;
@@ -825,11 +831,11 @@ suppose p <> 0_.(L); hence thesis by Lm9; end; end;
 
 theorem Th22:
 for L being add-associative right_zeroed right_complementable
-            Abelian (non empty LoopStr)
+            Abelian (non empty addLoopStr)
 for p1,p2 being Polynomial of L holds deg(p1 + p2) <= max(deg(p1),deg(p2))
 proof
 let L be add-associative right_zeroed right_complementable
-         Abelian (non empty LoopStr); let p1,p2 be Polynomial of L;
+         Abelian (non empty addLoopStr); let p1,p2 be Polynomial of L;
 per cases;
 suppose A1: p1 = 0_.(L);
   then deg(p1) = -1 by Th20; then A2: deg(p2) >= deg(p1) by Lm10;
@@ -849,12 +855,12 @@ suppose p1 <> 0_.(L) & p2 <> 0_.(L);
    for k being Nat st k >= m+1 holds (p1+p2).k = 0.L
     proof
     let k be Nat; assume A5: k >= m + 1;
-A10: k in NAT by ORDINAL1:def 13;
+A6: k in NAT by ORDINAL1:def 13;
      deg(p1) <= m & deg(p2) <= m by XXREAL_0:25;
     then deg(p1) + 1 <= m + 1 & deg(p2) + 1 <= m + 1 by XREAL_1:8;
     then k >= deg(p1) + 1 & k >= deg(p2) + 1 by A5,XXREAL_0:2;
     then p1.k = 0.L & p2.k = 0.L by ALGSEQ_1:22;
-    hence (p1+p2).k = 0.L + 0.L by A10,NORMSP_1:def 5 .= 0.L by RLVECT_1:def 7;
+    hence (p1+p2).k = 0.L + 0.L by A6,NORMSP_1:def 5 .= 0.L by RLVECT_1:def 7;
     end;
   then m+1 is_at_least_length_of (p1+p2) by ALGSEQ_1:def 3;
   then len(p1+p2)<=m+1 by ALGSEQ_1:def 4; then len(p1+p2)-1<=m+1-1 by
@@ -941,7 +947,7 @@ then {0,k} c= NAT by TARSKI:def 3;
 then A4: dom(0_.(L)) \/ dom(f) = NAT by A2,A3,XBOOLE_1:12;
 A5: i in NAT by ORDINAL1:def 13;
  not(i in dom f) by A1,TARSKI:def 2;
-hence t.i = (0_.(L)).i by A4,A5,FUNCT_4:def 1 .= 0.L by FUNCOP_1:13,A5;
+hence t.i = (0_.(L)).i by A4,A5,FUNCT_4:def 1 .= 0.L by A5,FUNCOP_1:13;
 end;
 
 :: the polynomials x^k - z^k
@@ -1013,44 +1019,45 @@ suppose A1: k = 0;
 A2: i in NAT by ORDINAL1:def 13;
    assume i >= 1;
   then not(i in dom f) by A1,TARSKI:def 2;
-  hence t.i = (0_.(L)).i by FUNCT_4:12 .= 0.L by FUNCOP_1:13,A2;
+  hence t.i = (0_.(L)).i by FUNCT_4:12 .= 0.L by A2,FUNCOP_1:13;
   end;
-then A2: 1 is_at_least_length_of t by ALGSEQ_1:def 3;
- now let m be Nat; assume A3: m is_at_least_length_of t;
-   now assume m < 1; then A4: m = 0 by NAT_1:14;
-    A5: k in {k} by TARSKI:def 1; then A6: k in dom({k}-->1_L) by FUNCOP_1:19;
+then A3: 1 is_at_least_length_of t by ALGSEQ_1:def 3;
+ now let m be Nat; assume A4: m is_at_least_length_of t;
+   now assume m < 1; then A5: m = 0 by NAT_1:14;
+    A6: k in {k} by TARSKI:def 1; then A7: k in dom({k}-->1_L) by FUNCOP_1:19;
      dom f = {0,k} by FUNCT_4:65; then 0 in dom f by TARSKI:def 2;
     then t.0 = f.0 by FUNCT_4:14 .= (({0}-->a)+*({k}-->1_L)).0 by FUNCT_4:def 4
-            .= ({0} --> 1_L).0 by A1,A6,FUNCT_4:14 .= 1_L by A1,A5,FUNCOP_1:13;
-    then t.0 <> 0.L by VECTSP_1:def 21;
-    hence contradiction by A3,A4,ALGSEQ_1:def 3;
+            .= ({0} --> 1_L).0 by A1,A7,FUNCT_4:14 .= 1_L by A1,A6,FUNCOP_1:13;
+    then t.0 <> 0.L by STRUCT_0:def 8;
+    hence contradiction by A4,A5,ALGSEQ_1:def 3;
     end;
   hence 1 <= m;
   end;
-then len rpoly(k,z) = 1 by A2,ALGSEQ_1:def 4; hence thesis by A1; end;
-suppose A7: k <> 0;
+then len rpoly(k,z) = 1 by A3,ALGSEQ_1:def 4; hence thesis by A1; end;
+suppose A8: k <> 0;
  now let i be Nat; assume i >= k+1; then i > k by NAT_1:13;
   hence t.i = 0.L by Lm12; end;
-then A8: (k+1) is_at_least_length_of t by ALGSEQ_1:def 3;
- now let m be Nat; assume A9: m is_at_least_length_of t;
-   now assume m < k + 1; then A10: m <= k by NAT_1:13;  t.k = 1_L by A7,Lm11;
-    then t.k <> 0.L by VECTSP_1:def 21;
-    hence contradiction by A9,A10,ALGSEQ_1:def 3; end;
+then A9: (k+1) is_at_least_length_of t by ALGSEQ_1:def 3;
+ now let m be Nat; assume A10: m is_at_least_length_of t;
+   now assume m < k + 1; then A11: m <= k by NAT_1:13;  t.k = 1_L by A8,Lm11;
+    then t.k <> 0.L by STRUCT_0:def 8;
+    hence contradiction by A10,A11,ALGSEQ_1:def 3; end;
   hence k+1 <= m; end;
-then len rpoly(k,z) = k + 1 by A8,ALGSEQ_1:def 4;
+then len rpoly(k,z) = k + 1 by A9,ALGSEQ_1:def 4;
 hence thesis; end;
 end;
 
 theorem Th28:
 for L being add-associative right_zeroed right_complementable well-unital
-            commutative associative distributive Field-like
+            commutative associative distributive almost_left_invertible
             non degenerated (non empty doubleLoopStr)
 for p being Polynomial of L
 holds deg(p) = 1 iff ex x,z being Element of L st
 x <> 0.L & p = x * rpoly(1,z)
 proof
 let L be add-associative right_zeroed right_complementable well-unital
-    commutative associative distributive Field-like  non degenerated
+    commutative associative distributive almost_left_invertible
+    non degenerated
 (non empty doubleLoopStr), p be Polynomial of L;
 A1:now given x,z being Element of L such that A2: x <> 0.L & p = x * rpoly(1,z)
 ;
@@ -1112,7 +1119,7 @@ then F.2 = p.1* (power L).(x,1+0) by A1,A6
         .= 1_L * x by Lm11  .= x by VECTSP_1:def 19;
 hence eval(p,x) = Sum(<*-z*>) + Sum(<*x*>) by A1,A3,A5,RLVECT_1:58
               .= Sum(<*-z*>) + x by RLVECT_1:61
-              .= -z + x by RLVECT_1:61 .= x - z by RLVECT_1:def 11;
+              .= -z + x by RLVECT_1:61 .= x - z by RLVECT_1:def 12;
 end;
 
 theorem Th30:
@@ -1169,7 +1176,7 @@ A5: for i being Nat st i >= k holds f.i = 0.L
    thus thesis by A6,A7;
    end;
  ex n being Nat st
-for i being Nat st i >= n holds f.i = 0.L by A5,ORDINAL1:def 13,NAT_1:13;
+for i being Nat st i >= n holds f.i = 0.L by A5,NAT_1:13,ORDINAL1:def 13;
 then reconsider p = f as AlgSequence of L by ALGSEQ_1:def 2;
 take p;
  now let i be Nat; assume A8: i < k;
@@ -1216,7 +1223,7 @@ set p = qpoly(k,z);
 then A1: k is_at_least_length_of p by ALGSEQ_1:def 3;
 A2: k - k' - 1 = 0;  k - 1 < k - 0 by XREAL_1:12;
 then p.(k-1) = power(L).(z,0) by A2,Def4 .= 1_L by GROUP_1:def 8;
-then A3: p.(k-1) <> 0.L by VECTSP_1:def 21;
+then A3: p.(k-1) <> 0.L by STRUCT_0:def 8;
  now let m be Nat;
   assume A4: m is_at_least_length_of p;
    now assume k > m; then k' + 1 > m;
@@ -1627,7 +1634,7 @@ begin :: Division of Polynomials
 definition
 let L be Abelian add-associative right_zeroed right_complementable
          well-unital associative commutative distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let p,s be Polynomial of L such that A1:s <> 0_.(L);
 func p div s -> Polynomial of L means :Def5:
   ex t being Polynomial of L st p = it *' s + t & deg t < deg s;
@@ -1702,11 +1709,11 @@ existence
      A22: for j being Nat st j <> degn holds g1.j = 0.L
          proof
          let j be Nat;
-A24:     j in NAT by ORDINAL1:def 13;
-         assume A23: j <> degn;
+A23:     j in NAT by ORDINAL1:def 13;
+         assume A24: j <> degn;
           dom({degn} --> al) = {degn} by FUNCOP_1:19;
-         then not(j in dom({degn} --> al)) by A23,TARSKI:def 1;
-         hence g1.j = (0_.(L)).j by FUNCT_4:12 .= 0.L by FUNCOP_1:13,A24; end;
+         then not(j in dom({degn} --> al)) by A24,TARSKI:def 1;
+         hence g1.j = (0_.(L)).j by FUNCT_4:12 .= 0.L by A23,FUNCOP_1:13; end;
       ex l being Nat st
      for i being Nat st i>=l holds g1.i = 0.L
        proof
@@ -1716,11 +1723,11 @@ A24:     j in NAT by ORDINAL1:def 13;
          end;
        hence thesis; end;
      then reconsider g1 as Polynomial of L by ALGSEQ_1:def 2;
-     set s1 = p - (g + g1) *' s; A24: s1 in M;
+     set s1 = p - (g + g1) *' s; A25: s1 in M;
       now let i be Nat;
-A100:   i in NAT by ORDINAL1:def 13;
-       assume A25: i >= k';
-       A26: s1 - f = (p + -(g + g1) *' s) + (-p + -(-(g *' s))) by A5,Th11
+A26:   i in NAT by ORDINAL1:def 13;
+       assume A27: i >= k';
+       A28: s1 - f = (p + -(g + g1) *' s) + (-p + -(-(g *' s))) by A5,Th11
               .= ((p + -(g + g1) *' s) + -p) + -(-(g *' s)) by POLYNOM3:26
               .= ((p - p) + -(g + g1) *' s) + -(-(g *' s)) by POLYNOM3:26
               .= (0_.(L) + -(g+g1) *' s) + -(-(g*'s)) by POLYNOM3:30
@@ -1734,79 +1741,79 @@ A100:   i in NAT by ORDINAL1:def 13;
               .= (-g1) *' s + 0_.(L) by POLYNOM3:30
               .= (-g1) *' s by POLYNOM3:29
               .= -(g1 *' s) by Th12;
-       A27: s1 = s1 + 0_.(L) by POLYNOM3:29
+       A29: s1 = s1 + 0_.(L) by POLYNOM3:29
          .= s1 + (f - f) by POLYNOM3:30
          .= (s1 + -f) + f by POLYNOM3:26
-         .= f - g1 *' s by A26;
-       A28: dom f = NAT & dom(g1 *' s) = NAT by FUNCT_2:def 1;
-       A29: s1.i = f.i + (-(g1 *' s)).i by A27,NORMSP_1:def 5,A100
-           .= f.i + -(g1 *' s).i by BHSP_1:def 10,A100
-           .= f/.i + -(g1 *' s).i by A28,PARTFUN1:def 8,A100
-           .= f/.i + -(g1 *' s)/.i by A28,PARTFUN1:def 8,A100;
+         .= f - g1 *' s by A28;
+       A30: dom f = NAT & dom(g1 *' s) = NAT by FUNCT_2:def 1;
+       A31: s1.i = f.i + (-(g1 *' s)).i by A26,A29,NORMSP_1:def 5
+           .= f.i + -(g1 *' s).i by A26,BHSP_1:def 10
+           .= f/.i + -(g1 *' s).i by A26,A30,PARTFUN1:def 8
+           .= f/.i + -(g1 *' s)/.i by A26,A30,PARTFUN1:def 8;
        consider sf being FinSequence of L such that
-A30:   len sf = i+1 & (g1 *' s).i = Sum sf &
+A32:   len sf = i+1 & (g1 *' s).i = Sum sf &
        for m being Element of NAT st m in dom sf
-       holds sf.m = g1.(m-'1) * s.(i+1-'m) by POLYNOM3:def 11,A100;
-       A31: dom sf = Seg(len sf) by FINSEQ_1:def 3;
+       holds sf.m = g1.(m-'1) * s.(i+1-'m) by A26,POLYNOM3:def 11;
+       A33: dom sf = Seg(len sf) by FINSEQ_1:def 3;
         degn + 1 = k - deg(s) by A4;
-       then A32: degn + 1 <= k by A9,XREAL_1:45;
-       A33: now let m be Nat;
-           assume A34: m in dom sf & m <> degn + 1;
-           then 1 <= m & m <= len sf by A31,FINSEQ_1:3;
+       then A34: degn + 1 <= k by A9,XREAL_1:45;
+       A35: now let m be Nat;
+           assume A36: m in dom sf & m <> degn + 1;
+           then 1 <= m & m <= len sf by A33,FINSEQ_1:3;
            then m - 1 >= 1 - 1 by XREAL_1:11;
            then m-'1 = m-1 by BINARITH:def 3;
-           then (m-'1) <> degn by A34;
+           then (m-'1) <> degn by A36;
            hence g1.(m-'1) = 0.L by A22; end;
-       A35: now let i' be Element of NAT;
-           assume A36: i' in dom sf & i' <> degn + 1;
-           then sf.i' = g1.(i'-'1) * s.(i+1-'i') by A30
-                     .= 0.L * s.(i+1-'i') by A33,A36
+       A37: now let i' be Element of NAT;
+           assume A38: i' in dom sf & i' <> degn + 1;
+           then sf.i' = g1.(i'-'1) * s.(i+1-'i') by A32
+                     .= 0.L * s.(i+1-'i') by A35,A38
                      .= 0.L by VECTSP_1:39;
-           hence sf/.i' = 0.L by A36,PARTFUN1:def 8; end;
-        i + 1 >= k by A14,A25,XREAL_1:8;
-       then A37: i + 1 >= degn + 1 by A32,XXREAL_0:2;
-       then A38: i + 1 - (degn + 1) is Element of NAT by INT_1:18;
-A100:  i in NAT by ORDINAL1:def 13;
+           hence sf/.i' = 0.L by A38,PARTFUN1:def 8; end;
+        i + 1 >= k by A14,A27,XREAL_1:8;
+       then A39: i + 1 >= degn + 1 by A34,XXREAL_0:2;
+       then A40: i + 1 - (degn + 1) is Element of NAT by INT_1:18;
+A41:  i in NAT by ORDINAL1:def 13;
         1 <= degn + 1 by NAT_1:11;
-       then A39: degn + 1 in dom sf by A30,A31,A37;
-       then A40: Sum sf = sf/.(degn + 1) by A35,POLYNOM2:5,A100
-                  .= sf.(degn+1) by A39,PARTFUN1:def 8
-                  .= g1.(degn+1-'1) * s.(i+1-'(degn+1)) by A30,A39
+       then A42: degn + 1 in dom sf by A32,A33,A39;
+       then A43: Sum sf = sf/.(degn + 1) by A37,A41,POLYNOM2:5
+                  .= sf.(degn+1) by A42,PARTFUN1:def 8
+                  .= g1.(degn+1-'1) * s.(i+1-'(degn+1)) by A32,A42
                   .= al * s.(i+1-'(degn+1)) by A21,BINARITH:39;
-       per cases by A25,REAL_1:def 5;
-       suppose A41: i > k';
+       per cases by A27,REAL_1:def 5;
+       suppose A44: i > k';
          then i + 1 > k' + 1 by XREAL_1:8;
          then i >= len f by NAT_1:13;
          then f.i = 0.L by ALGSEQ_1:22;
-         then A42: f/.i = 0.L by A28,PARTFUN1:def 8,A100;
-         A43: i+1-'(degn+1) = i - k' + (len(s)-1) by A38,BINARITH:def 3;
-         reconsider e = i - k' as Element of NAT by A41,INT_1:18;
-          i - k' > k' - k' by A41,XREAL_1:11;
+         then A45: f/.i = 0.L by A30,A41,PARTFUN1:def 8;
+         A46: i+1-'(degn+1) = i - k' + (len(s)-1) by A40,BINARITH:def 3;
+         reconsider e = i - k' as Element of NAT by A44,INT_1:18;
+          i - k' > k' - k' by A44,XREAL_1:11;
          then e + 1 > 0 + 1 by XREAL_1:8;
          then e >= 1 by NAT_1:13;
          then i - k' - 1 >= 1 - 1 by XREAL_1:11;
          then (i - k' - 1) + len(s) >= 0 + len(s) by XREAL_1:8;
-         then s.(i+1-'(degn+1)) = 0.L by A43,ALGSEQ_1:22;
-         then Sum sf = 0.L by A40,VECTSP_1:36;
-         hence s1.i = 0.L + -(0.L) by A28,A29,A30,A42,PARTFUN1:def 8,A100
+         then s.(i+1-'(degn+1)) = 0.L by A46,ALGSEQ_1:22;
+         then Sum sf = 0.L by A43,VECTSP_1:36;
+         hence s1.i = 0.L + -(0.L) by A30,A31,A32,A41,A45,PARTFUN1:def 8
                    .= 0.L + 0.L by RLVECT_1:25 .= 0.L by RLVECT_1:def 7; end;
-       suppose A44: i = k';
-          (i+1)-'(degn+1) = i + 1 - (degn + 1) by A38,BINARITH:def 3
-               .= len s -' 1 by A9,A44,BINARITH:def 3;
+       suppose A47: i = k';
+          (i+1)-'(degn+1) = i + 1 - (degn + 1) by A40,BINARITH:def 3
+               .= len s -' 1 by A9,A47,BINARITH:def 3;
          then Sum sf = f.(len f-'1) * ((s.(len s-'1))" * s.(len s-'1))
-                     by A40,GROUP_1:def 4
+                     by A43,GROUP_1:def 4
                .= f.(len f-'1) * 1_L by A10,VECTSP_1:def 22
                .= f.(len f-'1) by VECTSP_1:def 13
                .= f.(len f-1) by A12,BINARITH:def 3
                .= f/.(len f-1) by A13,PARTFUN1:def 8;
          hence s1.i = f/.(len f-1)+-(f/.(len f-1))
-                      by A28,A29,A30,A44,PARTFUN1:def 8
+                      by A30,A31,A32,A47,PARTFUN1:def 8
                    .= 0.L by RLVECT_1:16; end;
        end;
      then k' is_at_least_length_of s1 by ALGSEQ_1:def 3;
      then len(s1) <= k' by ALGSEQ_1:def 4;
      then len(s1) < k by A14,NAT_1:13;
-     hence contradiction by A3,A24;
+     hence contradiction by A3,A25;
      end;
    hence thesis by A5,A6;
    end;
@@ -1814,34 +1821,34 @@ A100:  i in NAT by ORDINAL1:def 13;
 uniqueness
  proof
  let f1,f2 be Polynomial of L;
- given t1 being Polynomial of L such that A45: p = f1*'s+t1 & deg t1 < deg s;
- given t2 being Polynomial of L such that A46: p = f2*'s+t2 & deg t2 < deg s;
+ given t1 being Polynomial of L such that A48: p = f1*'s+t1 & deg t1 < deg s;
+ given t2 being Polynomial of L such that A49: p = f2*'s+t2 & deg t2 < deg s;
   f2 *' s = f2 *' s + 0_.(L) by POLYNOM3:29
         .= f2 *' s + (t2 - t2) by POLYNOM3:30
-        .= (f1 *' s + t1) + -t2 by A45,A46,POLYNOM3:26;
- then A47: f2 *' s - f1 *' s
+        .= (f1 *' s + t1) + -t2 by A48,A49,POLYNOM3:26;
+ then A50: f2 *' s - f1 *' s
    = (f1 *' s + (t1 + -t2)) + -(f1 *' s) by POLYNOM3:26
   .= (t1 + -t2) + (f1 *' s -(f1 *' s)) by POLYNOM3:26
   .= (t1 + -t2) + 0_.(L) by POLYNOM3:30 .= t1 - t2 by POLYNOM3:29;
- A48: (f2 - f1) *' s = f2 *' s + (-f1) *' s by POLYNOM3:33
+ A51: (f2 - f1) *' s = f2 *' s + (-f1) *' s by POLYNOM3:33
         .= f2 *' s - f1*' s by Th12;
-  now assume A49: f1 <> f2;
-   A50: now assume f2 - f1 = 0_.(L);
+  now assume A52: f1 <> f2;
+   A53: now assume f2 - f1 = 0_.(L);
        then f1 = (f2 + -f1) + f1 by POLYNOM3:29
               .= f2 + (f1 - f1) by POLYNOM3:26 .= f2 + 0_.(L) by POLYNOM3:30;
-       hence contradiction by A49,POLYNOM3:29; end;
+       hence contradiction by A52,POLYNOM3:29; end;
    then reconsider d = deg(f2-f1), degs = deg(s) as Nat by A1,Lm9;
-   A51: deg(t1-t2) = d + degs by A1,A47,A48,A50,Th23;
+   A54: deg(t1-t2) = d + degs by A1,A50,A51,A53,Th23;
     deg(t1-t2) <= max(deg(t1),deg(-t2)) by Th22;
-   then A52: deg(t1-t2) <= max(deg(t1),deg(t2)) by POLYNOM4:11;
+   then A55: deg(t1-t2) <= max(deg(t1),deg(t2)) by POLYNOM4:11;
     deg(t1-t2) < degs proof
     per cases by XXREAL_0:16;
-    suppose max(deg(t1),deg(t2))=deg(t1);hence thesis by A45,A52,XXREAL_0:2
+    suppose max(deg(t1),deg(t2))=deg(t1);hence thesis by A48,A55,XXREAL_0:2
 ;end;
-    suppose max(deg(t1),deg(t2))=deg(t2);hence thesis by A46,A52,XXREAL_0:2
+    suppose max(deg(t1),deg(t2))=deg(t2);hence thesis by A49,A55,XXREAL_0:2
 ;end;
     end;
-   hence contradiction by A51,NAT_1:11;
+   hence contradiction by A54,NAT_1:11;
    end;
  hence thesis;
  end;
@@ -1850,7 +1857,7 @@ end;
 definition
 let L be Abelian add-associative right_zeroed right_complementable
          well-unital associative commutative distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let p,s be Polynomial of L;
 func p mod s -> Polynomial of L equals
    p - (p div s) *' s;
@@ -1860,7 +1867,7 @@ end;
 definition
 let L be Abelian add-associative right_zeroed right_complementable
          well-unital associative commutative distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let p,s be Polynomial of L;
 pred s divides p means :Def7:
   p mod s = 0_.(L);
@@ -1869,13 +1876,13 @@ end;
 theorem Th34:
 for L being Abelian add-associative right_zeroed right_complementable
             well-unital associative commutative distributive
-            Field-like (non empty doubleLoopStr)
+            almost_left_invertible (non empty doubleLoopStr)
 for p,s being Polynomial of L st s <> 0_.(L)
 holds s divides p iff ex t being Polynomial of L st t *' s = p
 proof
 let L be Abelian add-associative right_zeroed right_complementable
          well-unital associative commutative distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let p,s be Polynomial of L;
 assume A1: s <> 0_.(L);
 A2: now assume A3: s divides p;
@@ -1900,32 +1907,32 @@ end;
 theorem
  for L being Abelian add-associative right_zeroed right_complementable
             well-unital associative commutative distributive
-            Field-like non degenerated (non empty doubleLoopStr)
+            almost_left_invertible non degenerated (non empty doubleLoopStr)
 for p being Polynomial of L
 for z being Element of L st z is_a_root_of p holds rpoly(1,z) divides p
 proof
 let L be Abelian add-associative right_zeroed right_complementable
-   well-unital associative commutative distributive Field-like
+   well-unital associative commutative distributive almost_left_invertible
    non degenerated (non empty doubleLoopStr), p be Polynomial of L;
 let z be Element of L;
 assume z is_a_root_of p;
 then consider s being Polynomial of L such that
 A1: p = rpoly(1,z) *' s by Th33; A2: rpoly(1,z).1 = 1_L by Lm11;
- 1_L <> 0.L by VECTSP_1:def 21; then rpoly(1,z) <> 0_.(L) by A2,FUNCOP_1:13;
+ 1_L <> 0.L by STRUCT_0:def 8; then rpoly(1,z) <> 0_.(L) by A2,FUNCOP_1:13;
 hence rpoly(1,z) divides p by A1,Th34;
 end;
 
 theorem
  for L being Abelian add-associative right_zeroed right_complementable
             well-unital associative commutative distributive
-            Field-like non degenerated (non empty doubleLoopStr)
+            almost_left_invertible non degenerated (non empty doubleLoopStr)
 for p being Polynomial of L
 for z being Element of L st p <> 0_.(L) & z is_a_root_of p
 holds deg(p div rpoly(1,z)) = deg(p) - 1
 proof
 let L be Abelian add-associative right_zeroed right_complementable
             well-unital associative commutative distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
 p be Polynomial of L; let z be Element of L;
 assume A1: p <> 0_.(L) & z is_a_root_of p;
 then consider s being Polynomial of L such that
@@ -2426,7 +2433,7 @@ COMPLFLD:85
         .= -x by VECTSP_1:def 19;
 hence eval(p,x) = Sum(<*-(z*')*>) + Sum(<*-x*>) by A1,A4,A7,RLVECT_1:58
               .= Sum(<*-(z*')*>) + -x by RLVECT_1:61
-              .= -(z*') + -x by RLVECT_1:61 .= -x - (z*') by RLVECT_1:def 11;
+              .= -(z*') + -x by RLVECT_1:61 .= -x - (z*') by RLVECT_1:def 12;
 end;
 
 theorem Th49:
@@ -2762,7 +2769,7 @@ b" by A5,COMPLFLD:7;
 then A24: (a'*' * a') * (b'") - (b'*') = (a*' * a) * (b") - (b*') by COMPLFLD:5
 ;
 A25:  (a*' * a) * (b") - (b*')
-   = ((a*') * (b" * a)) + -(b*') by RLVECT_1:def 11;
+   = ((a*') * (b" * a)) + -(b*') by RLVECT_1:def 12;
  |.a'.|*|.b'.|  > |.b'.|*|.b'.| by A1,A6,XREAL_1:70;
 then A26: |.a'.|^2  - |.b'.|^2 <> 0 by A1,A3,XREAL_1:70;
 then A27: (|.a'.|^2  - |.b'.|^2)" <> 0 by XCMPLX_1:203;
@@ -2778,7 +2785,7 @@ A31: now assume -b1 = 0.F_Complex;
 A32: now assume A33: b1" = 0.F_Complex;
       b1" * b1 = 1_F_Complex by A30,COMPLFLD:9,VECTSP_1:def 22;
      then 0.F_Complex = 1_F_Complex by A33,VECTSP_1:36;
-     hence contradiction by VECTSP_1:def 21; end;
+     hence contradiction by STRUCT_0:def 8; end;
 A34: now assume -(b1") = 0.F_Complex;
      then -(-b1") = 0.F_Complex by RLVECT_1:25;
      hence contradiction by A32,RLVECT_1:30; end;
@@ -2930,7 +2937,7 @@ reconsider ef = eval(f,rho), ef1 = eval(f*',rho) as Element of F_Complex;
   then deg 0_.(F_Complex) < deg rpoly(1,rho) by Th20;
   then A6: F*(f,rho) = (F*(f,rho) div rpoly(1,rho)) *' rpoly(1,rho)
     by A4,A5,Def5;
-   1_F_Complex <> 0.F_Complex by VECTSP_1:def 21;
+   1_F_Complex <> 0.F_Complex by STRUCT_0:def 8;
   then (1_F_Complex) * rpoly(1,rho) is Hurwitz by A2,Th39;
   then rpoly(1,rho) is Hurwitz by POLYNOM5:28;
   then F*(f,rho) is Hurwitz by A3,A6,Th41;

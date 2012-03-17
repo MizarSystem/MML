@@ -20,15 +20,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
-</Cluster>
-</RCluster>
-<RCluster>
-<ArgTypes/>
-<Typ kind="G" nr="5">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="20"/>
 </Cluster>
 </RCluster>
@@ -47,9 +38,18 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="19"/>
+<Adjective nr="22"/>
+</Cluster>
+</RCluster>
+<RCluster>
+<ArgTypes/>
+<Typ kind="G" nr="5">
+<Cluster/>
+</Typ>
+<Cluster>
 <Adjective nr="20"/>
 <Adjective nr="21"/>
+<Adjective nr="22"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -7,7 +7,7 @@
 environ
 
  vocabularies RELAT_1, BOOLE, FUNCT_1, FUNCT_3, PARTFUN1, BINOP_1, MCART_1,
-      FUNCOP_1, PRALG_1, ZF_REFLE, CAT_1, CQC_LANG;
+      FUNCOP_1, PRALG_1, ZF_REFLE, CAT_1, CQC_LANG, CAT_4, FUNCT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, MCART_1, RELSET_1, RELAT_1,
       FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1;
  constructors PARTFUN1, BINOP_1, FUNCT_3;
@@ -1093,7 +1093,7 @@ theorem
 proof let F,f,g be Function such that
 A1: [:rng f, rng g:] c= dom F;
    rng<:f,g:> c= [:rng f, rng g:] by FUNCT_3:71;
- hence dom(F.:(f,g)) = dom<:f,g:> by RELAT_1:46,A1,XBOOLE_1:1
+ hence dom(F.:(f,g)) = dom<:f,g:> by A1,RELAT_1:46,XBOOLE_1:1
      .= dom f /\ dom g by FUNCT_3:def 8;
 end;
 
@@ -1216,9 +1216,9 @@ registration let x,y be set;
  coherence
   proof set f = x .--> y;
    let x1,x2 be set;
-A:  dom f = {x} by Th19;
+A1:  dom f = {x} by Th19;
    assume x1 in dom f & x2 in dom f;
-    then x1 =x & x2 = x by A,TARSKI:def 1;
+    then x1 =x & x2 = x by A1,TARSKI:def 1;
    hence thesis;
   end;
 end;
@@ -1256,3 +1256,33 @@ A6: dom(a.-->b) c= dom f by A1,A4,ZFMISC_1:37;
  hence a.-->b c= f by A6,GRFUNC_1:8;
 end;
 
+:: from FUNCT_2, 2007.11.22, A.T., :: from CAT_4
+
+notation let o,m,r be set;
+ synonym (o,m) :-> r for (o,m) .--> r;
+end;
+
+Lm2: for o,m,r be set
+ holds (o,m) :-> r is Function of [:{o},{m}:],{r}
+ proof let o,m,r be set;
+   set R = (o,m) :-> r;
+A1: dom R = {[o,m]} by Th19
+       .= [:{o},{m}:] by ZFMISC_1:35;
+   rng R c= {r}  by Th19;
+   then reconsider R as Relation of [:{o},{m}:],{r} by A1,RELSET_1:11;
+   R is quasi_total by A1,FUNCT_2:def 1;
+  hence (o,m) :-> r is Function of [:{o},{m}:],{r};
+ end;
+
+definition let o,m,r be set;
+ redefine func (o,m) :-> r -> Function of [:{o},{m}:],{r} means
+       not contradiction;
+ coherence by Lm2;
+ compatibility
+  proof
+   let f be Function of [:{o},{m}:],{r};
+   thus f = (o,m) .--> r implies not contradiction;
+    (o,m) .--> r is Function of [:{o},{m}:],{r} by Lm2;
+   hence f = (o,m) .--> r by FUNCT_2:66;
+  end;
+end;

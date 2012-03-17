@@ -67,7 +67,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="27">
@@ -92,7 +92,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="39" value="false"/>
-<Adjective nr="56" value="false"/>
+<Adjective nr="57" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="27">

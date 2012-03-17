@@ -19,6 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="CLVECT_1"/>
@@ -27,18 +28,18 @@
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="172"/>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="64"/>
+<Adjective nr="98"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="161"/>
+<Func kind="K" nr="172"/>
 <Cluster>
 <Adjective nr="36" value="false"/>
-<Adjective nr="69"/>
+<Adjective nr="103"/>
 </Cluster>
 </FCluster>
 </Registrations>

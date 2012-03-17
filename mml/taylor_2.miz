@@ -11,18 +11,19 @@ environ
       RCOMP_1, SIN_COS, FDIFF_1, SERIES_1, GROUP_1, SUPINF_2, TAYLOR_1,
       TAYLOR_2, RFUNCT_2, MATRIX_2;
  notations SUBSET_1, RELAT_1, PARTFUN1, RFUNCT_2, RCOMP_1, XXREAL_0, XCMPLX_0,
-      XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, SEQ_1, SEQ_2,
-      SERIES_1, FDIFF_1, SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN;
+      XREAL_0, ORDINAL1, NUMBERS, COMPLEX1, REAL_1, NAT_1, VALUED_1, SEQ_1,
+      SEQ_2, SERIES_1, FDIFF_1, SEQFUNC, NEWTON, SIN_COS, TAYLOR_1, ABIAN;
  constructors ARYTM_0, REAL_1, NAT_1, SEQ_2, RCOMP_1, RFUNCT_2, LIMFUNC1,
-      FDIFF_1, SERIES_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1;
+      FDIFF_1, SERIES_1, COMSEQ_3, SIN_COS, ABIAN, TAYLOR_1, SEQ_1, VALUED_1,
+      PARTFUN1;
  registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, SEQ_1,
-      RCOMP_1, XBOOLE_0, VALUED_0;
+      RCOMP_1, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2, ORDINAL1;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TAYLOR_1;
+ definitions TAYLOR_1, VALUED_1;
  theorems XBOOLE_1, ABSVALUE, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
       SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, NEWTON, POWER,
       FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1, ABIAN, COMPLEX1,
-      XXREAL_0;
+      XXREAL_0, VALUED_1;
  schemes NAT_1;
 
 begin
@@ -469,7 +470,8 @@ A1: n! > 0 by NEWTON:23;
   end;
   then abs(x) ExpSeq = abs(x ExpSeq) by SEQ_1:16;
   then abs(x ExpSeq) is summable by SIN_COS:49;
-  hence thesis by SERIES_1:def 5;
+
+hence thesis by SERIES_1:def 5;
 end;
 
 theorem
@@ -514,7 +516,7 @@ proof
   A4: dom ((-sin) | ].-r,r.[) = dom(-sin) /\ ].-r,r.[ by FUNCT_1:68
                               .= dom((-1)(#)sin) /\ ].-r,r.[
                                      by RFUNCT_1:38
-                              .= dom(sin) /\ ].-r,r.[ by SEQ_1:def 6
+                              .= dom(sin) /\ ].-r,r.[ by VALUED_1:7,def 5
                               .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
   A5: dom (sin | ].-r,r.[) = dom(sin) /\ ].-r,r.[ by FUNCT_1:68
                            .= ].-r,r.[ by SIN_COS:27,XBOOLE_1:28;
@@ -537,11 +539,11 @@ proof
     let x be Real such that
 A10: x in ].-r,r.[;
      x in dom (sin) by SIN_COS:27;
-then A11: x in dom ((-1)(#)sin ) by SEQ_1:def 6;
+then A11: x in dom ((-1)(#)sin ) by VALUED_1:7,def 5;
      (cos `| ].-r,r.[).x=diff(cos,x) by A3,A10,FDIFF_1:def 8
                        .=-sin.x by SIN_COS:68
                        .=(-1)*sin.x
-                       .= ((-1)(#)sin ).x by A11,SEQ_1:def 6
+                       .= ((-1)(#)sin ).x by A11,VALUED_1:7,def 5
                        .=(-sin).x by RFUNCT_1:38
                        .=((-sin) | ].-r,r.[).x by A4,A10,FUNCT_1:70;
     hence thesis;
@@ -677,22 +679,22 @@ proof
    abs(0-0)=0 by ABSVALUE:7;
   then A2: 0 in ].0-r,0+r.[ by A1,RCOMP_1:8;
   A3: dom(((-1) |^ n) (#) (sin | ].-r,r.[))
-        = dom(sin | ].-r,r.[) by SEQ_1:def 6
+        = dom(sin | ].-r,r.[) by VALUED_1:7,def 5
        .= ].-r,r.[ by Th17;
   A4: 0 in dom(sin | ].-r,r.[) by A2,Th17;
   A5: dom(((-1) |^ n) (#) (cos | ].-r,r.[))
-        = dom(cos | ].-r,r.[) by SEQ_1:def 6
+        = dom(cos | ].-r,r.[) by VALUED_1:7,def 5
        .= ].-r,r.[ by Th17;
   A6: 0 in dom(cos | ].-r,r.[) by A2,Th17;
   A7: dom(((-1) |^ (n+1)) (#) (sin | ].-r,r.[))
-        = dom(sin | ].-r,r.[) by SEQ_1:def 6
+        = dom(sin | ].-r,r.[) by VALUED_1:7,def 5
        .= ].-r,r.[ by Th17;
   A8: Maclaurin(sin, ].-r,r.[,x).(2*n)
          = (diff(sin,].-r,r.[).(2*n)).0 * (x-0) |^ (2*n) / ((2*n)!)
                      by TAYLOR_1:def 7
         .= ((-1) |^ n (#) sin | ].-r,r.[).0 * x |^ (2*n) / ((2*n)!) by Th19
         .= (((-1) |^ n) * (sin | ].-r,r.[).0) * x |^ (2*n) / ((2*n)!)
-                     by A2,A3,SEQ_1:def 6
+                     by A2,A3,VALUED_1:7,def 5
         .= ((-1) |^ n) * sin.0 * x |^ (2*n) / ((2*n)!) by A4,FUNCT_1:70
         .= 0 by SIN_COS:33;
   A9: Maclaurin(sin, ].-r,r.[,x).(2*n+1)
@@ -701,7 +703,7 @@ proof
          .= ((-1) |^ n (#) cos | ].-r,r.[).0 * x |^ (2*n+1) / ((2*n+1)!)
                      by Th19
          .= (((-1) |^ n) * (cos | ].-r,r.[).0) * x |^ (2*n+1) / ((2*n+1)!)
-                     by A2,A5,SEQ_1:def 6
+                     by A2,A5,VALUED_1:7,def 5
          .= ((-1) |^ n) * cos.0 * x |^ (2*n+1) / ((2*n+1)!) by A6,FUNCT_1:70
          .= (-1) |^ n * x |^ (2*n+1) / ((2*n+1)!) by SIN_COS:33;
   A10: Maclaurin(cos, ].-r,r.[,x).(2*n)
@@ -709,7 +711,7 @@ proof
                      by TAYLOR_1:def 7
          .= ((-1) |^ n (#) cos | ].-r,r.[).0 * x |^ (2*n) / ((2*n)!) by Th19
          .= (((-1) |^ n) * (cos | ].-r,r.[).0) * x |^ (2*n) / ((2*n)!)
-                     by A2,A5,SEQ_1:def 6
+                     by A2,A5,VALUED_1:7,def 5
          .= ((-1) |^ n) * cos.0 * x |^ (2*n) / ((2*n)!) by A6,FUNCT_1:70
          .= (-1) |^ n * x |^ (2*n) / ((2*n)!) by SIN_COS:33;
    Maclaurin(cos, ].-r,r.[,x).(2*n+1)
@@ -718,7 +720,7 @@ proof
       .= ((-1) |^ (n+1) (#) sin | ].-r,r.[).0 * x |^ (2*n+1) / ((2*n+1)!)
                      by Th19
       .= (((-1) |^ (n+1)) * (sin | ].-r,r.[).0) * x |^ (2*n+1) / ((2*n+1)!)
-                     by A2,A7,SEQ_1:def 6
+                     by A2,A7,VALUED_1:7,def 5
       .= ((-1) |^ (n+1)) * sin.0 * x |^ (2*n+1) / ((2*n+1)!) by A4,FUNCT_1:70
       .= 0 by SIN_COS:33;
   hence thesis by A8,A9,A10;
@@ -737,7 +739,7 @@ proof
         A2: i=2*j by ABIAN:def 2;
         thus dom(diff(sin,].-r,r.[).i)
                     = dom((-1) |^ j (#) sin | ].-r,r.[) by A2,Th19
-                   .= dom((sin | ].-r,r.[)) by SEQ_1:def 6
+                   .= dom((sin | ].-r,r.[)) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
       end;
       suppose i is odd;
@@ -745,7 +747,7 @@ proof
         A3: i=2*j+1 by ABIAN:9;
         thus dom(diff(sin,].-r,r.[).i)
                     = dom((-1) |^ j (#) cos | ].-r,r.[) by A3,Th19
-                   .= dom((cos | ].-r,r.[)) by SEQ_1:def 6
+                   .= dom((cos | ].-r,r.[)) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
       end;
     end;
@@ -788,7 +790,7 @@ proof
         A10: i = 2*j by ABIAN:def 2;
         thus dom(diff(cos,].-r,r.[).i)
                     = dom((-1) |^ j (#) cos | ].-r,r.[) by A10,Th19
-                   .= dom((cos | ].-r,r.[)) by SEQ_1:def 6
+                   .= dom((cos | ].-r,r.[)) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
       end;
       suppose i is odd;
@@ -796,7 +798,7 @@ proof
         A11: i = 2*j+1 by ABIAN:9;
         thus dom(diff(cos,].-r,r.[).i)
                     = dom((-1) |^ (j+1) (#) sin | ].-r,r.[) by A11,Th19
-                   .= dom((sin | ].-r,r.[)) by SEQ_1:def 6
+                   .= dom((sin | ].-r,r.[)) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
       end;
     end;
@@ -914,13 +916,13 @@ proof
             then consider k be Element of NAT such that
             A16: n = 2*k by ABIAN:def 2;
             A17: dom(((-1) |^ k) (#) (sin | ].-r,r.[))
-                   = dom(sin | ].-r,r.[) by SEQ_1:def 6
+                   = dom(sin | ].-r,r.[) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
             A18: (s*x) in dom(sin | ].-r,r.[) by A4,Th17;
             A19: abs((diff(sin,].-r,r.[).n).(s*x))
                     = abs(((-1) |^ k (#) sin | ].-r,r.[).(s*x)) by A16,Th19
                     .= abs(((-1) |^ k) * ((sin | ].-r,r.[).(s*x)))
-                        by A4,A17,SEQ_1:def 6
+                        by A4,A17,VALUED_1:7,def 5
                     .= abs((-1) |^ k) * abs((sin | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by A12
@@ -932,13 +934,13 @@ proof
             then consider k be Element of NAT such that
             A20: n = 2*k+1 by ABIAN:9;
             A21: dom(((-1) |^ k) (#) (cos | ].-r,r.[))
-                   = dom(cos | ].-r,r.[) by SEQ_1:def 6
+                   = dom(cos | ].-r,r.[) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
             A22: (s*x) in dom(cos | ].-r,r.[) by A4,Th17;
             A23: abs((diff(sin,].-r,r.[).n).(s*x))
                      = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by A20,Th19
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
-                        by A4,A21,SEQ_1:def 6
+                        by A4,A21,VALUED_1:7,def 5
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by A12
@@ -954,13 +956,13 @@ proof
             then consider k be Element of NAT such that
             A25: n = 2*k by ABIAN:def 2;
             A26: dom(((-1) |^ k) (#) (cos | ].-r,r.[))
-                   = dom(cos | ].-r,r.[) by SEQ_1:def 6
+                   = dom(cos | ].-r,r.[) by VALUED_1:7,def 5
                   .= ].-r,r.[ by Th17;
             A27: (s*x) in dom(cos | ].-r,r.[) by A4,Th17;
             A28: abs((diff(cos,].-r,r.[).n).(s*x))
                      = abs(((-1) |^ k (#) cos | ].-r,r.[).(s*x)) by A25,Th19
                     .= abs(((-1) |^ k) * ((cos | ].-r,r.[).(s*x)))
-                        by A4,A26,SEQ_1:def 6
+                        by A4,A26,VALUED_1:7,def 5
                     .= abs((-1) |^ k) * abs((cos | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((cos | ].-r,r.[).(s*x)) by A12
@@ -972,14 +974,14 @@ proof
             then consider k be Element of NAT such that
             A29: n = 2*k+1 by ABIAN:9;
             A30: dom(((-1) |^ (k+1)) (#) (sin | ].-r,r.[))
-                   = dom(sin | ].-r,r.[) by SEQ_1:def 6
+                   = dom(sin | ].-r,r.[) by VALUED_1:7,def 5
                    .= ].-r,r.[ by Th17;
             A31: (s*x) in dom(sin | ].-r,r.[) by A4,Th17;
             A32: abs((diff(cos,].-r,r.[).n).(s*x))
                      = abs(((-1) |^ (k+1) (#) sin | ].-r,r.[).(s*x))
                         by A29,Th19
                     .= abs(((-1) |^ (k+1)) * ((sin | ].-r,r.[).(s*x)))
-                        by A4,A30,SEQ_1:def 6
+                        by A4,A30,VALUED_1:7,def 5
                     .= abs((-1) |^ (k+1)) * abs((sin | ].-r,r.[).(s*x))
                         by COMPLEX1:151
                     .= 1 * abs((sin | ].-r,r.[).(s*x)) by A12

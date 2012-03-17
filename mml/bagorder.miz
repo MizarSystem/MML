@@ -15,19 +15,19 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, STRUCT_0, RELAT_1,
       RELAT_2, RELSET_1, PARTFUN1, FINSET_1, FINSUB_1, FUNCOP_1, ORDINAL1,
       MCART_1, WELLORD1, ORDERS_1, ORDERS_2, WELLFND1, CARD_1, NUMBERS,
-      XXREAL_0,
-      REAL_1, NAT_1, FUNCT_1, SEQ_1, SEQM_3, WAYBEL_0, PBOOLE, PRALG_1,
-      CARD_3, DICKSON, BINARITH, FINSEQ_1, RVSUM_1, WSIERP_1, POLYNOM1,
-      PRE_CIRC, YELLOW_1, WAYBEL_4, FUNCT_2, FUNCT_4, TRIANG_1, POLYNOM2,
-      SEQ_4, DOMAIN_1, FINSEQOP, RFINSEQ;
+      XXREAL_0, REAL_1, NAT_1, FUNCT_1, VALUED_1, SEQ_1, SEQM_3, WAYBEL_0,
+      PBOOLE, PRALG_1, CARD_3, DICKSON, BINARITH, FINSEQ_1, RVSUM_1, WSIERP_1,
+      POLYNOM1, PRE_CIRC, YELLOW_1, WAYBEL_4, FUNCT_2, FUNCT_4, TRIANG_1,
+      POLYNOM2, SEQ_4, DOMAIN_1, FINSEQOP, RFINSEQ;
  constructors DOMAIN_1, REAL_1, NAT_1, FINSEQOP, RFINSEQ, BINARITH, PRE_CIRC,
-      WSIERP_1, PRALG_1, TRIANG_1, WAYBEL_4, WELLFND1, POLYNOM2, DICKSON;
+      WSIERP_1, PRALG_1, TRIANG_1, WAYBEL_4, WELLFND1, POLYNOM2, DICKSON,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FINSET_1, FINSUB_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1,
       MEMBERED, FINSEQ_1, SEQ_1, CARD_5, STRUCT_0, ORDERS_2, WAYBEL_0,
-      YELLOW_1, POLYNOM1, DICKSON, VALUED_0;
+      YELLOW_1, POLYNOM1, DICKSON, VALUED_0, VALUED_1;
  requirements SUBSET, NUMERALS, REAL, BOOLE, ARITHM;
- definitions TARSKI, RELAT_2, WELLFND1, FINSEQ_2, FUNCOP_1;
+ definitions TARSKI, RELAT_2, WELLFND1, FINSEQ_2, FUNCOP_1, VALUED_1;
  theorems WELLORD1, TARSKI, RELAT_2, RELSET_1, ZFMISC_1, ORDERS_2, NAT_1,
       FUNCT_1, REAL_1, FINSET_1, AXIOMS, CARD_3, PBOOLE, YELLOW_1, PRALG_1,
       FUNCOP_1, POLYNOM1, BINARITH, PARTIT_2, WELLFND1, SEQM_3, RELAT_1,
@@ -35,7 +35,7 @@ environ
       WAYBEL_4, ORDINAL1, FUNCT_2, CARD_2, MCART_1, FINSUB_1, ORDERS_1,
       FUNCT_7, FUNCT_4, CARD_4, TRIANG_1, WELLORD2, FINSEQ_3, FINSEQ_5, SEQ_4,
       FINSEQOP, RFINSEQ, EULER_1, XBOOLE_0, XBOOLE_1, PARTFUN1, XREAL_1,
-      XXREAL_0, SEQ_1, VALUED_0;
+      XXREAL_0, SEQ_1, VALUED_0, VALUED_1;
  schemes NAT_1, RELSET_1, FUNCT_1, FINSET_1, RECDEF_1, FUNCT_2, ORDINAL1;
 
 begin :: Preliminaries
@@ -77,7 +77,7 @@ A1: Seg n = {x where x is Element of NAT : 1 <= x & x <= n} by FINSEQ_1:def 1;
     assume A3: k-1 is Element of NAT & k-1 < n;
     then reconsider k1 = k-1 as Element of NAT;
          0 <= k1;
-    then A4: 0+1 <= k-1+1 by XREAL_1:8;
+    then A4: 0 qua Nat+1 <= k-1+1 by XREAL_1:8;
     reconsider n1 = n-1 as Element of NAT by A3,NAT_1:20;
       k-1+1 <= n-1+1 by A3,NAT_1:13;
     hence k in Seg n by A1,A4;
@@ -245,9 +245,9 @@ proof
     assume A1: CUTA1 = CUTB1 & CUTA2 = CUTB2;
     A2: now let k be Element of NAT such that
     A3: k in i+1;
-             (i+1)-'0 = i+1+0-'0;
+             (i+1)-'0 = i+1+(0 qua Nat)-'0;
     then A4: k in ((i+1)-'0) by A3,BINARITH:39;
-        then CUTB1.k = b.(0+k) by Def1;
+        then CUTB1.k = b.(0 qua Nat+k) by Def1;
         hence a.k = b.k by A1,A4,Def1;
     end;
     A5: now let x be Element of NAT such that
@@ -292,7 +292,7 @@ registration let x be non empty set, n be non empty Element of NAT;
   cluster Fin (x,n) -> non empty;
 coherence proof
     consider y being Element of x;
-    A1: 0+1 < n+1 by XREAL_1:10;
+    A1: 0 qua Nat+1 < n+1 by XREAL_1:10;
      now per cases by ORDINAL1:26;
         suppose 1 c= n;
             hence Card {y} <=`n by CARD_1:79;
@@ -773,7 +773,7 @@ A17: xsb is one-to-one by A7,TRIANG_1:8;
 then A21: b*xsbs'b = (len xsbs'b) |-> (0 qua Real) by FUNCT_1:9;
         h = (b*xsb)^(b*xsbs'b) by FINSEQOP:10;
    then Sum h = Sum (b*xsb) + Sum (b*xsbs'b) by RVSUM_1:105
-        .= Sum f + 0 by A1,A21,RVSUM_1:111;
+        .= Sum f + (0 qua Nat) by A1,A21,RVSUM_1:111;
   hence Sum f = Sum g by A18,RFINSEQ:22;
 end;
 end;
@@ -838,7 +838,7 @@ then A23: Seg ln = dom (fa'b+fb'a) by A17,FINSEQ_3:31;
         .= fa'b'.k +
            b.(SgmX(RelIncl n, support(a+b)).k) by A10,A16,A24,FUNCT_1:23
         .= fa'bk+fb'ak by A10,A16,A24,FUNCT_1:23
-        .= (fa'b+fb'a).k by A23,A24,SEQ_1:def 3;
+        .= (fa'b+fb'a).k by A23,A24,VALUED_1:1,def 1;
     end;
     then fab' = fa'b + fb'a by FINSEQ_1:17;
     hence thesis by A3,A5,A7,A19,A20,A21,INTEGRA5:2;
@@ -1541,7 +1541,7 @@ A5:   now assume ilo is non well_founded;
      then A10: rng s = support a by TRIANG_1:def 2;
               now assume rng s = {};
          then A11: a = EmptyBag o by A10,Th20;
-             reconsider b = f.(0+1) as bag of o by POLYNOM1:def 14;
+             reconsider b = f.(0 qua Nat+1) as bag of o by POLYNOM1:def 14;
          A12: b <> a by A7,WELLFND1:def 7;
                   [b,a] in ir by A7,WELLFND1:def 7;
              then consider i being Ordinal such that
@@ -3931,7 +3931,7 @@ A70: P3[0] proof set b = (S.0)`2;
     A71: z = b & z is descending;
         reconsider b as sequence of FinPoset R by A71;
         take b;
-    A72: a.(0+1) = (S.(0+1))`1 by A50;
+    A72: a.(0 qua Nat+1) = (S.(0 qua Nat+1))`1 by A50;
         consider S12 being sequence of FinPoset R,
                  S1max being Function of NAT, CR,
                  a1 being Element of R,
@@ -3946,7 +3946,7 @@ A70: P3[0] proof set b = (S.0)`2;
              b1t = SeqShift(S12,i1) and
              (for i being Element of NAT holds b1.i = b1t.i \ {a1}) &
         (for i being Element of NAT st i1 <= i holds S1max.i = a1) and
-    A76: S.(0+1) = [a1,b1] by A47;
+    A76: S.(0 qua Nat+1) = [a1,b1] by A47;
              rng S1max c= CR by RELSET_1:12;
         then a1 in rng S1max by A1,A75,Def19;
         then consider i being set such that
@@ -3957,7 +3957,7 @@ A70: P3[0] proof set b = (S.0)`2;
         take i;
         thus b = (S.0)`2;
          a1 in b.i by A73,A77,A78,Def15;
-        hence a.(0+1) in b.i by A72,A76,MCART_1:def 1;
+        hence a.(0 qua Nat+1) in b.i by A72,A76,MCART_1:def 1;
     end;
 A79: for n being Element of NAT st P3[n] holds P3[n+1]
  proof let n being Element of NAT;
@@ -4005,12 +4005,13 @@ A89: P4[0] proof
     A90: a.0 = (S.0)`1 by A50;
         consider b being sequence of FinPoset R, i being Element of NAT
          such that
-    A91: b = (S.0)`2 & a.(0+1) in b.i by A70;
+    A91: b = (S.0)`2 & a.(0 qua Nat+1) in b.i by A70;
         consider bb being sequence of FinPoset R such that
     A92: bb = (S.0)`2 and
     A93: for x being set st x in bb.i holds
          x <> (S.0)`1 & [x, (S.0)`1] in IR by A51;
-        thus a.(0+1) <> a.0 & [a.(0+1), a.0] in IR by A90,A91,A92,A93;
+        thus a.(0 qua Nat+1) <> a.0 & [a.(0 qua Nat+1), a.0] in IR
+        by A90,A91,A92,A93;
     end;
 A94: for n being Element of NAT st P4[n] holds P4[n+1]
  proof let n be Element of NAT;

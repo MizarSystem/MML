@@ -8,15 +8,16 @@ environ
 
  vocabularies VECTSP_1, FINSEQ_1, RLVECT_1, RELAT_1, BOOLE, FINSEQ_2, TREES_1,
       FUNCT_1, QC_LANG1, INCSP_1, GROUP_1, ARYTM_1, BINOP_1, MATRIX_1,
-      ROUGHS_1, ARYTM;
+      ROUGHS_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, FUNCT_1,
-      FUNCT_2, FINSEQ_1, FINSEQ_2, STRUCT_0, BINOP_1, FINSEQOP, RLVECT_1,
-      GROUP_1, VECTSP_1, XXREAL_0;
- constructors BINOP_1, XXREAL_0, FINSEQOP, VECTSP_1;
+      FUNCT_2, FINSEQ_1, FINSEQ_2, STRUCT_0, ALGSTR_0, BINOP_1, FINSEQOP,
+      RLVECT_1, GROUP_1, VECTSP_1, XXREAL_0;
+ constructors BINOP_1, XXREAL_0, FINSEQOP, VECTSP_1, RLVECT_1, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, XREAL_0, FINSEQ_1, FINSEQ_2,
-      STRUCT_0, GROUP_1, VECTSP_1, ORDINAL1;
+      STRUCT_0, GROUP_1, VECTSP_1, ORDINAL1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, RLVECT_1, BINOP_1, FINSEQ_2, STRUCT_0;
+ definitions TARSKI, RLVECT_1, BINOP_1, FINSEQ_2, STRUCT_0, ALGSTR_0, VALUED_1;
  theorems FINSEQ_1, FINSEQ_2, FINSEQ_3, TARSKI, FUNCOP_1, FUNCT_1, FUNCT_2,
       ZFMISC_1, NAT_1, BINOP_1, REAL_1, RLVECT_1, RELAT_1, ORDINAL1;
  schemes FINSEQ_1, BINOP_1, FINSEQ_2;
@@ -1172,13 +1173,13 @@ definition let K,n;
   coherence by Th10;
 
   func 1.(K,n) -> Matrix of n,K means :Def12:
-   (for i st [i,i] in Indices it holds it*(i,i) = 1_K) &
+   (for i st [i,i] in Indices it holds it*(i,i) = 1.K) &
    for i,j st [i,j] in Indices it & i <> j holds it*(i,j) = 0.K;
   existence
   proof
     reconsider n1=n as Element of NAT by ORDINAL1:def 13;
     defpred P[set,set,set] means
-      ($1 = $2 implies $3 = 1_K) & ($1 <> $2 implies $3 = 0.K);
+      ($1 = $2 implies $3 = 1.K) & ($1 <> $2 implies $3 = 0.K);
 A1: for i,j st [i,j] in [:Seg n1, Seg n1:]
       for x1,x2 being Element of K st P[i,j,x1] & P[i,j,x2] holds x1 = x2;
 A2: for i,j st [i,j] in [:Seg n1, Seg n1:]
@@ -1186,7 +1187,7 @@ A2: for i,j st [i,j] in [:Seg n1, Seg n1:]
     proof
       let i,j;
       assume [i,j] in [:Seg n1, Seg n1:];
-       (i = j implies P[i,j,1_K]) & (i <> j implies P[i,j,0.K]);
+       (i = j implies P[i,j,1.K]) & (i <> j implies P[i,j,0.K]);
       hence thesis;
     end;
     consider M being Matrix of n1,K such that
@@ -1200,15 +1201,15 @@ A3: for i,j st [i,j] in Indices M holds P[i,j,M*(i,j)] from MatrixEx(A1,A2);
     let M1,M2 be Matrix of n,K;
 A4: Indices M1 =Indices M2 by Th27;
     assume that
-A5: (for i st [i,i] in Indices M1 holds M1*(i,i) = 1_K) and
+A5: (for i st [i,i] in Indices M1 holds M1*(i,i) = 1.K) and
 A6: for i,j st [i,j] in Indices M1 & i <> j holds M1*(i,j) = 0.K and
-A7: for i st [i,i] in Indices M2 holds M2*(i,i) = 1_K and
+A7: for i st [i,i] in Indices M2 holds M2*(i,i) = 1.K and
 A8: for i,j st [i,j] in Indices M2 & i <> j holds M2*(i,j) = 0.K;
 A9: now let i,j;
       assume A10:[i,j] in Indices M1;
 A11:  now
        assume i=j;
-       then M1*(i,j)=1_K & M2*(i,j)=1_K by A4,A5,A7,A10;
+       then M1*(i,j)=1.K & M2*(i,j)=1.K by A4,A5,A7,A10;
        hence M1*(i,j)=M2*(i,j);
       end;
        now assume i<>j;
@@ -1424,7 +1425,7 @@ A2:Indices A= Indices (A + (-A)) by Th27;
     assume A3:[i,j] in Indices (A + (-A));
    hence (A + (-A))*(i,j)=A*(i,j)+ (-A)*(i,j) by A2,Def14
                         .=A*(i,j)+ (-A*(i,j)) by A2,A3,Def13
-                        .=0.F by RLVECT_1:def 10
+                        .=0.F by RLVECT_1:def 11
                         .=(0.(F,n))*(i,j) by A1,A2,A3,Th30;
    end;
    hence thesis by Th28;
@@ -1433,7 +1434,7 @@ A2:Indices A= Indices (A + (-A)) by Th27;
 definition let F,n;
   func n-G_Matrix_over F -> strict AbGroup means
      the carrier of it = n-Matrices_over F &
-   (for A,B holds (the add of it).(A,B) = A+B) &
+   (for A,B holds (the addF of it).(A,B) = A+B) &
    0.it = 0.(F,n);
     existence
     proof
@@ -1470,7 +1471,7 @@ A4:  for a being Element of n-Matrices_over F
        thus thesis;
      end;
      reconsider A0=0.(F,n) as Element of n-Matrices_over F;
-     set G=LoopStr (# n-Matrices_over F,h,A0 #);
+     set G=addLoopStr (# n-Matrices_over F,h,A0 #);
       G is Abelian add-associative right_zeroed right_complementable
      proof
        thus G is Abelian
@@ -1505,22 +1506,22 @@ A5:  ex A st a=A & b= -A by A4;
     uniqueness
     proof thus for G1,G2 being strict AbGroup st
     (the carrier of G1 = n-Matrices_over F &
-     (for A,B holds (the add of G1).(A,B) = A+B) &
+     (for A,B holds (the addF of G1).(A,B) = A+B) &
      0.G1 = 0.(F,n)) &
      (the carrier of G2 = n-Matrices_over F &
-     (for A,B holds (the add of G2).(A,B) = A+B) &
+     (for A,B holds (the addF of G2).(A,B) = A+B) &
      0.G2 = 0.(F,n)) holds G1=G2
      proof let G1,G2 be strict AbGroup;
      assume that
 A7:  the carrier of G1 = n-Matrices_over F and
-A8:  (for A,B holds (the add of G1).(A,B) = A+B) and
+A8:  (for A,B holds (the addF of G1).(A,B) = A+B) and
 A9:  0.G1 = 0.(F,n) and
 A10: the carrier of G2 = n-Matrices_over F and
-A11: (for A,B holds (the add of G2).(A,B) = A+B) and
+A11: (for A,B holds (the addF of G2).(A,B) = A+B) and
 A12: 0.G2 = 0.(F,n);
        now let a,b be Element of G1;
        reconsider A = a, B = b as Matrix of n,F by A7,Th31;
-       thus (the add of G1).(a,b)= A+B by A8 .= (the add of G2).(a,b) by A11;
+       thus (the addF of G1).(a,b)= A+B by A8 .= (the addF of G2).(a,b) by A11;
       end;
     hence G1 = G2 by A7,A9,A10,A12,BINOP_1:2;
     end;

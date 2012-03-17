@@ -9,18 +9,19 @@ environ
  vocabularies FUNCT_1, REALSET1, GROUP_2, GROUP_3, RLSUB_1, INT_1, BOOLE,
       RELAT_1, GROUP_1, RCOMP_1, SUBSET_1, GROUP_4, GROUP_5, VECTSP_1,
       NATTRA_1, FINSET_1, CARD_1, BINOP_1, QC_LANG1, ABSVALUE, WELLORD1,
-      LATTICES, GROUP_6, FUNCOP_1, COHSP_1, ENDALG, ARYTM;
+      LATTICES, GROUP_6, FUNCOP_1, COHSP_1, ENDALG, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, REALSET1, CARD_1, NUMBERS,
       XXREAL_0, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1,
-      FINSET_1, BINOP_1, INT_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, NAT_1,
-      GROUP_4, GROUP_5, INT_2;
+      FINSET_1, BINOP_1, INT_1, STRUCT_0, ALGSTR_0, GROUP_1, GROUP_2, GROUP_3,
+      NAT_1, GROUP_4, GROUP_5, INT_2;
  constructors RELAT_2, PARTFUN1, BINOP_1, FUNCOP_1, FINSUB_1, XXREAL_0, NAT_1,
-      INT_2, REALSET2, GROUP_4, GROUP_5;
+      INT_2, REALSET2, GROUP_4, GROUP_5, VALUED_1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSET_1,
-      XREAL_0, INT_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, ORDINAL1;
+      XREAL_0, INT_1, STRUCT_0, GROUP_1, GROUP_2, GROUP_3, ORDINAL1, ALGSTR_0,
+      VALUED_1;
  requirements NUMERALS, SUBSET, BOOLE;
  definitions XBOOLE_0, FUNCT_1, GROUP_1, GROUP_2, TARSKI, BINOP_1, REALSET1,
-      GROUP_4;
+      GROUP_4, ALGSTR_0, VALUED_1;
  theorems BINOP_1, CARD_1, CARD_2, FINSET_1, FUNCT_1, FUNCT_2, GROUP_1,
       GROUP_2, GROUP_3, GROUP_4, GROUP_5, TARSKI, ZFMISC_1, RELAT_1, RELSET_1,
       XBOOLE_0, XBOOLE_1, FUNCOP_1, STRUCT_0;
@@ -176,8 +177,8 @@ theorem Th8:
     for a,b being Element of G holds [.a,b.] in B
   proof let G be strict Group, B be strict Subgroup of G;
    thus G` is Subgroup of B implies
-    for a,b being Element of G holds [.a,b.] in B by GROUP_5:84,GROUP_2:49;
-    assume A2: for a,b being Element of G holds [.a,b.] in B;
+    for a,b being Element of G holds [.a,b.] in B by GROUP_2:49,GROUP_5:84;
+    assume A1: for a,b being Element of G holds [.a,b.] in B;
      defpred P[set,set] means not contradiction;
      deffunc F(Element of G,Element of G) = [.$1,$2.];
      reconsider X =
@@ -187,7 +188,7 @@ theorem Th8:
        proof let x;
          assume x in X;
           then ex a,b being Element of G st x = [.a,b.];
-           then x in B by A2;
+           then x in B by A1;
         hence thesis by STRUCT_0:def 5;
        end;
       then gr X is Subgroup of B by GROUP_4:def 5;
@@ -223,12 +224,12 @@ theorem Th9:
   end;
 
 definition let G,B; let M be normal Subgroup of G;
-  assume A1: the HGrStr of M is Subgroup of B;
+  assume A1: the multMagma of M is Subgroup of B;
   func (B,M)`*` -> strict normal Subgroup of B equals
-  :Def1:  the HGrStr of M;
+  :Def1:  the multMagma of M;
  coherence
   proof
-   reconsider x = the HGrStr of M as Subgroup of G by A1;
+   reconsider x = the multMagma of M as Subgroup of G by A1;
        now let a;
     thus a * x = a * M
               .= M * a by GROUP_3:140
@@ -437,8 +438,8 @@ definition let G; let N be normal Subgroup of G;
 end;
 
 definition let G; let N be normal Subgroup of G;
-  func G./.N -> HGrStr equals
-     HGrStr (# Cosets N, CosOp N #);
+  func G./.N -> multMagma equals
+     multMagma (# Cosets N, CosOp N #);
   correctness;
 end;
 
@@ -455,7 +456,7 @@ theorem
 
 theorem
    for N being normal Subgroup of G holds
-    the mult of G./.N = CosOp N;
+    the multF of G./.N = CosOp N;
 
  reserve N for normal Subgroup of G;
  reserve S,T1,T2 for Element of G./.N;
@@ -622,8 +623,8 @@ theorem Th34:
           then a * J = b * M & J * a = M * b by Th2;
        hence thesis by A3,Th16;
       end;
-    set g = the mult of I;
-    set f = the mult of G./.M;
+    set g = the multF of I;
+    set f = the multF of G./.M;
     set X = [: the carrier of I,the carrier of I :];
        dom g = X & dom f = [: the carrier of G./.M,the carrier of G./.M :] &
      X c= [: the carrier of G./.M,the carrier of G./.M :]
@@ -799,7 +800,7 @@ Lm1: (for a holds f.a = 1_H) implies f.(a * b) = f.a * f.b
                  .= f.a * f.b by A1;
  end;
 
-definition let G, H be non empty HGrStr; let f be Function of G, H;
+definition let G, H be non empty multMagma; let f be Function of G, H;
   attr f is multiplicative means :Def7:
     for a, b being Element of G holds f.(a * b) = f.a * f.b;
 end;

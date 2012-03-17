@@ -13,6 +13,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="ENUMSET1"/>
@@ -27,7 +28,9 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
@@ -48,7 +51,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="K" nr="10">
-<Func kind="K" nr="212">
+<Func kind="K" nr="264">
 <Func kind="F" nr="1"/>
 <Func kind="F" nr="2"/>
 </Func>
@@ -100,7 +103,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="51" value="false"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -142,7 +145,7 @@
 <Var nr="2"/>
 </Pred>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="101">
+<Func kind="K" nr="107">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -166,7 +169,7 @@
 <Pred kind="P" nr="1">
 <Func kind="F" nr="2"/>
 </Pred>
-<Pred kind="V" nr="64">
+<Pred kind="V" nr="68">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>
@@ -174,7 +177,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="51" value="false"/>
+<Adjective nr="54" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -214,7 +217,7 @@
 </Pred>
 </Not>
 <Pred kind="R" nr="2">
-<Func kind="K" nr="101">
+<Func kind="K" nr="107">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -244,7 +247,7 @@
 </And>
 </Not>
 </For>
-<Pred kind="V" nr="64">
+<Pred kind="V" nr="68">
 <Func kind="F" nr="1"/>
 </Pred>
 </Scheme>

@@ -9,20 +9,21 @@ environ
  vocabularies VECTSP_1, FUNCT_1, FINSEQ_4, RELAT_1, FUNCT_2, PARTFUN1,
       FINSEQ_2, FINSEQ_1, CAT_1, FUNCOP_1, BOOLE, BINOP_1, SETWISEO, ALGSTR_1,
       MONOID_0, LATTICE2, MCART_1, GROUP_1, VECTSP_2, FUNCT_3, FINSET_1,
-      COMPLEX1, CARD_1, ARYTM_1, MONOID_1, ARYTM;
+      COMPLEX1, CARD_1, ARYTM_1, MONOID_1, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, REAL_1,
-      NAT_1,
-      RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, MONOID_0, RELSET_1, PARTFUN1,
-      FUNCT_2, BINOP_1, FUNCOP_1, SETWISEO, FINSET_1, FRAENKEL, FUNCT_3,
-      FINSEQ_2, LATTICE2, FUNCT_4, FUNCT_6, GROUP_1, VECTSP_1,
-      DOMAIN_1;
+      NAT_1, RELAT_1, STRUCT_0, FUNCT_1, FINSEQ_1, MONOID_0, RELSET_1,
+      PARTFUN1, FUNCT_2, BINOP_1, FUNCOP_1, SETWISEO, FINSET_1, FRAENKEL,
+      FUNCT_3, FINSEQ_2, LATTICE2, FUNCT_4, FUNCT_6, GROUP_1, VECTSP_1,
+      DOMAIN_1, ALGSTR_0;
  constructors BINOP_1, DOMAIN_1, FUNCT_3, SETWISEO, FRAENKEL, XXREAL_0, REAL_1,
-      NAT_1, BINOP_2, FUNCT_5, FUNCT_6, LATTICE2, MONOID_0;
+      NAT_1, BINOP_2, FUNCT_5, FUNCT_6, LATTICE2, MONOID_0, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
-      FUNCOP_1, FINSET_1, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, MONOID_0;
+      FUNCOP_1, FINSET_1, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, MONOID_0,
+      VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, BINOP_1, LATTICE2, SETWISEO, MONOID_0, STRUCT_0, XBOOLE_0,
-      FUNCT_6;
+      FUNCT_6, ALGSTR_0, VALUED_1;
  theorems TARSKI, NAT_1, FINSET_1, FINSEQ_1, BINOP_1, SETWISEO, MCART_1,
       FUNCOP_1, ZFMISC_1, FUNCT_1, FUNCT_2, FUNCT_3, CARD_1, CARD_2, FINSEQ_2,
       FINSEQ_3, FUNCT_5, MONOID_0, GRFUNC_1, RELAT_1, RELSET_1, XBOOLE_0,
@@ -33,7 +34,7 @@ begin :: Updating
 
  reserve x,y,z, X,Y,Z for set, n for Element of NAT;
 
- deffunc op(HGrStr) = the mult of $1;
+ deffunc op(multMagma) = the multF of $1;
  deffunc un(multLoopStr) = 1.$1;
 
 definition let D1,D2,D be non empty set;
@@ -517,50 +518,50 @@ z) &
    hence thesis by A4,GRFUNC_1:8;
   end;
 
-definition let G be non empty HGrStr; let A be set;
- func .:(G,A) -> HGrStr equals:
+definition let G be non empty multMagma; let A be set;
+ func .:(G,A) -> multMagma equals:
 Def3:
    multLoopStr (# Funcs(A, the carrier of G),
-   (the mult of G,the carrier of G).:A,
-   A --> the_unity_wrt the mult of G#) if G is unital otherwise
-   HGrStr (# Funcs(A, the carrier of G),
-   (the mult of G,the carrier of G).:A #);
+   (the multF of G,the carrier of G).:A,
+   A --> the_unity_wrt the multF of G#) if G is unital otherwise
+   multMagma (# Funcs(A, the carrier of G),
+   (the multF of G,the carrier of G).:A #);
   correctness;
 end;
 
-registration let G be non empty HGrStr; let A be set;
+registration let G be non empty multMagma; let A be set;
  cluster .:(G,A) -> non empty;
  coherence
   proof
    per cases;
    suppose G is unital;
     then .:(G,A) = multLoopStr (# Funcs(A, the carrier of G),
-   (the mult of G,the carrier of G).:A,
-   (A --> the_unity_wrt the mult of G)#) by Def3;
+   (the multF of G,the carrier of G).:A,
+   (A --> the_unity_wrt the multF of G)#) by Def3;
    hence the carrier of .:(G,A) is non empty;
    end;
    suppose G is not unital;
-    then .:(G,A) = HGrStr (# Funcs(A, the carrier of G),
-   (the mult of G,the carrier of G).:A #) by Def3;
+    then .:(G,A) = multMagma (# Funcs(A, the carrier of G),
+   (the multF of G,the carrier of G).:A #) by Def3;
    hence the carrier of .:(G,A) is non empty;
   end;
   end;
 end;
 
-reserve G for non empty HGrStr;
+reserve G for non empty multMagma;
 
- deffunc carr(non empty HGrStr) = the carrier of $1;
+ deffunc carr(non empty multMagma) = the carrier of $1;
 
 theorem Th18:
  the carrier of .:(G,X) = Funcs(X, the carrier of G) &
- the mult of .:(G,X) = (the mult of G, the carrier of G).:X
+ the multF of .:(G,X) = (the multF of G, the carrier of G).:X
   proof
         (G is unital implies
       .:(G,X) = multLoopStr(#Funcs(X, carr(G)),
       (op(G),carr(G)).:X,
       (X --> the_unity_wrt op(G))#)) &
     (not G is unital implies
-      .:(G,X) = HGrStr(#Funcs(X, carr(G)),
+      .:(G,X) = multMagma(#Funcs(X, carr(G)),
       (op(G),carr(G)).:X#)) &
     (G is unital or not G is unital) by Def3;
    hence thesis;
@@ -587,7 +588,7 @@ Lm1: .:(G,X) is constituted-Functions
   hence thesis;
  end;
 
-registration let G be non empty HGrStr, A be set;
+registration let G be non empty multMagma, A be set;
  cluster .:(G,A) -> constituted-Functions;
   coherence by Lm1;
 end;
@@ -608,7 +609,7 @@ theorem Th21:
    hence thesis by FUNCT_1:9;
   end;
 
-definition let G be non empty HGrStr, A be non empty set;
+definition let G be non empty multMagma, A be non empty set;
  let f be Element of .:(G,A);
  let a be Element of A;
  redefine func f.a -> Element of G;
@@ -619,7 +620,7 @@ A1:   rng f c= carr(G) & dom f = A by Th20; then f.a in rng f by FUNCT_1:def 5
     hence thesis by A1;
    end;
 end;
-registration let G be non empty HGrStr, A be non empty set;
+registration let G be non empty multMagma, A be non empty set;
  let f be Element of .:(G,A);
  cluster rng f -> non empty;
   coherence
@@ -636,14 +637,14 @@ theorem Th22:
   proof let f1,f2 be Element of .:(G,D), a be Element of D;
     reconsider g1 = f1, g2 = f2 as Element of Funcs(D, carr(G)) by Th18;
         op(.:(G,D)) = (op(G),carr(G)).:D & f1*f2 = op(.:(G,D)).(f1,f2)
-     by Th18,GROUP_1:def 1;
+     by Th18;
     then dom (op(G).:(g1,g2)) = D & f1*f2 = op(G).:(g1,g2) by Def2,
 FUNCT_2:def 1;
    hence (f1*f2).a = op(G).(f1.a,f2.a) by FUNCOP_1:28
-                  .= (f1.a)*(f2.a) by GROUP_1:def 1;
+                  .= (f1.a)*(f2.a);
   end;
 
-definition let G be unital (non empty HGrStr); let A be set;
+definition let G be unital (non empty multMagma); let A be set;
  redefine func .:(G,A) -> well-unital constituted-Functions strict
   (non empty multLoopStr);
   coherence
@@ -652,7 +653,7 @@ definition let G be unital (non empty HGrStr); let A be set;
 A1:   a is_a_unity_wrt op(G) by SETWISEO:def 2;
     set M = multLoopStr(#Funcs(A, carr(G)), (op(G),carr(G)).:A,
                    (A --> the_unity_wrt op(G))#);
-A2:    1.M = A --> the_unity_wrt the mult of G;
+A2:    1.M = A --> the_unity_wrt the multF of G;
 A3:   a = the_unity_wrt op(G) &
      .:(G,A) = M by A1,Def3,BINOP_1:def 8;
          A --> a is_a_unity_wrt (op(G),carr(G)).:A by A1,Th10;
@@ -661,16 +662,16 @@ A3:   a = the_unity_wrt op(G) &
 end;
 
 theorem Th23:
- for G being unital (non empty HGrStr) holds
-   1..:(G,X) = X --> the_unity_wrt the mult of G
-  proof let G be unital (non empty HGrStr);
+ for G being unital (non empty multMagma) holds
+   1..:(G,X) = X --> the_unity_wrt the multF of G
+  proof let G be unital (non empty multMagma);
         .:(G,X) = multLoopStr(#Funcs(X, carr(G)), (op(G), carr(G)).:X,
     (X --> the_unity_wrt op(G))#) by Def3;
    hence thesis;
   end;
 
 theorem Th24:
- for G being non empty HGrStr, A being set holds
+ for G being non empty multMagma, A being set holds
   (G is commutative implies .:(G,A) is commutative) &
   (G is associative implies .:(G,A) is associative) &
   (G is idempotent implies .:(G,A) is idempotent) &
@@ -713,12 +714,14 @@ theorem
   end;
 
 theorem
-     for G being unital (non empty HGrStr), H being non empty SubStr of G st
-  the_unity_wrt the mult of G in the carrier of H holds
+     for G being unital (non empty multMagma), H being non empty SubStr of G st
+  the_unity_wrt the multF of G in the carrier of H holds
    .:(H,X) is MonoidalSubStr of .:(G,X)
-  proof let G be unital (non empty HGrStr), H be non empty SubStr of G; assume
-A1:  the_unity_wrt the mult of G in carr(H);
-   then reconsider G' = G, H' = H as unital (non empty HGrStr) by MONOID_0:32;
+  proof let G be unital (non empty multMagma), H be non empty SubStr of G;
+  assume
+A1:  the_unity_wrt the multF of G in carr(H);
+   then reconsider G' = G, H' = H as unital (non empty multMagma)
+    by MONOID_0:32;
 A2:  op(H) <= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X &
     1..:(G',X) = X --> the_unity_wrt op(G) &
     1..:(H',X) = X --> the_unity_wrt op(H) &
@@ -731,7 +734,7 @@ A2:  op(H) <= op(G) & op(.:(G,X)) = (op(G), carr(G)).:X &
 
 definition
  let G be unital associative commutative
-          cancelable uniquely-decomposable (non empty HGrStr);
+          cancelable uniquely-decomposable (non empty multMagma);
  let A be set;
  redefine func .:(G,A) -> commutative cancelable uniquely-decomposable
                 constituted-Functions strict Monoid;
@@ -753,10 +756,10 @@ end;
 
 theorem Th27:
  the carrier of MultiSet_over X = Funcs(X,NAT) &
- the mult of MultiSet_over X = (addnat,NAT).:X &
+ the multF of MultiSet_over X = (addnat,NAT).:X &
  1.MultiSet_over X = X --> 0
   proof
-        the HGrStr of <NAT,+,0> = <NAT,+> & MultiSet_over X = .:(<NAT,+,0>, X)
+    the multMagma of <NAT,+,0> = <NAT,+> & MultiSet_over X = .:(<NAT,+,0>, X)
 &
     the_unity_wrt op(<NAT,+>) = 0 by MONOID_0:44,def 22;
    hence thesis by Th18,Th23,MONOID_0:52;
@@ -802,7 +805,7 @@ theorem Th30:
  for m1,m2 being Multiset of D, a being Element of D holds
    (m1 [*] m2).a = (m1.a)+(m2.a)
   proof let m1,m2 be Multiset of D, a be Element of D;
-   reconsider N = <NAT,+,0> as non empty HGrStr;
+   reconsider N = <NAT,+,0> as non empty multMagma;
    reconsider f1 = m1, f2 = m2 as Element of .:(N,D);
    thus (m1 [*] m2).a = (f1.a)*(f2.a) by Th22
                    .= (m1.a)+(m2.a) by MONOID_0:51;
@@ -1623,34 +1626,35 @@ A9:    x in B; then reconsider c = x as Element of D;
    hence thesis by A1,Th54;
   end;
 
-definition let G be non empty HGrStr;
- func bool G -> HGrStr equals:
+definition let G be non empty multMagma;
+ func bool G -> multMagma equals:
 Def9:
-   multLoopStr(#bool the carrier of G, (the mult of G).:^2,
-     {the_unity_wrt the mult of G}#) if G is unital otherwise
-   HGrStr(#bool the carrier of G, (the mult of G).:^2#);
+   multLoopStr(#bool the carrier of G, (the multF of G).:^2,
+     {the_unity_wrt the multF of G}#) if G is unital otherwise
+   multMagma(#bool the carrier of G, (the multF of G).:^2#);
   correctness;
 end;
 
-registration let G be non empty HGrStr;
+registration let G be non empty multMagma;
  cluster bool G -> non empty;
  coherence
   proof
    per cases;
    suppose G is unital;
-    then bool G = multLoopStr(#bool the carrier of G, (the mult of G).:^2,
-     {the_unity_wrt the mult of G}#) by Def9;
+    then bool G = multLoopStr(#bool the carrier of G, (the multF of G).:^2,
+     {the_unity_wrt the multF of G}#) by Def9;
     hence the carrier of bool G is non empty;
    end;
    suppose G is not unital;
-    then bool G = HGrStr(#bool the carrier of G, (the mult of G).:^2#) by Def9
+    then bool G = multMagma(#bool the carrier of G, (the multF of G).:^2#)
+    by Def9
 ;
     hence the carrier of bool G is non empty;
   end;
   end;
 end;
 
-definition let G be unital (non empty HGrStr);
+definition let G be unital (non empty multMagma);
  redefine func bool G -> well-unital strict (non empty multLoopStr);
   coherence
    proof
@@ -1665,29 +1669,29 @@ end;
 
 theorem Th56:
  the carrier of bool G = bool the carrier of G &
- the mult of bool G = (the mult of G).:^2
+ the multF of bool G = (the multF of G).:^2
   proof
     bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#)
 or
-    bool G = HGrStr(#bool the carrier of G, op(G).:^2#) by Def9;
+    bool G = multMagma(#bool the carrier of G, op(G).:^2#) by Def9;
    hence thesis;
   end;
 
 theorem
-     for G being unital (non empty HGrStr) holds
-   1.bool G = {the_unity_wrt the mult of G}
-  proof let G be unital (non empty HGrStr);
+     for G being unital (non empty multMagma) holds
+   1.bool G = {the_unity_wrt the multF of G}
+  proof let G be unital (non empty multMagma);
         bool G = multLoopStr(#bool carr(G), op(G).:^2,{the_unity_wrt op(G)}#)
      by Def9;
    hence thesis;
   end;
 
 theorem
-     for G being non empty HGrStr holds
+     for G being non empty multMagma holds
   (G is commutative implies bool G is commutative) &
   (G is associative implies bool G is associative) &
   (G is uniquely-decomposable implies bool G is uniquely-decomposable)
-  proof let G be non empty HGrStr;
+  proof let G be non empty multMagma;
 A1:  op(bool G) = op(G).:^2 & carr(bool G) = bool carr(G) by Th56;
    thus G is commutative implies bool G is commutative
     proof assume op(G) is commutative;

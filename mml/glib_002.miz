@@ -11,14 +11,15 @@ environ
       MSAFREE2, MSUALG_1, NEWTON, ORDINAL1, QUANTAL1, PBOOLE, PRE_TOPC,
       REALSET1, RELAT_1, RELAT_2, TARSKI, TOPGEN_1, TREES_1, SETFAM_1, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, CARD_1, NUMBERS, SUBSET_1, SETFAM_1,
-      DOMAIN_1,
-      XCMPLX_0, ABIAN, XXREAL_0, RELAT_1, FUNCT_1, PBOOLE, FUNCT_2,
+      DOMAIN_1, XCMPLX_0, ABIAN, XXREAL_0, RELAT_1, FUNCT_1, PBOOLE, FUNCT_2,
       FINSEQ_1, FINSET_1, NAT_1, FUNCOP_1, GLIB_000, GLIB_001;
- constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, BINOP_2, CARD_FIL, GLIB_001;
+ constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, BINOP_2, CARD_FIL, GLIB_001,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, XREAL_0, NAT_1, INT_1, CARD_1, GLIB_000, ABIAN, GLIB_001;
+      FINSET_1, XREAL_0, NAT_1, INT_1, CARD_1, GLIB_000, ABIAN, GLIB_001,
+      VALUED_1, FUNCT_2;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions TARSKI, FUNCOP_1;
+ definitions TARSKI, FUNCOP_1, VALUED_1;
  theorems CARD_1, CARD_2, FUNCOP_1, FINSEQ_1, FINSEQ_3, FINSET_1, FUNCT_1,
       FUNCT_2, GLIB_000, GLIB_001, HEYTING3, INT_1, JORDAN12, NAT_1, ORDINAL1,
       PBOOLE, PENCIL_1, REAL_1, RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, XCMPLX_1,
@@ -1081,467 +1082,466 @@ Lm21:
   now let k be Nat; assume
  A1: for n being Nat st n < k holds P[n];
     now let G be non trivial finite connected _Graph such that
-   A10: G.order() = k;
-   A11: G.numComponents() = 1 by Lm18;
+   A2: G.order() = k;
+   A3: G.numComponents() = 1 by Lm18;
      now per cases;
     suppose
-    A12: not ex v being Vertex of G st v is cut-vertex;
+    A4: not ex v being Vertex of G st v is cut-vertex;
         consider v1,v2 being Vertex of G such that
-    A13: v1 <> v2 by GLIB_000:24;
+    A5: v1 <> v2 by GLIB_000:24;
         take v1,v2;
-        thus v1 <> v2 by A13;
-        thus not v1 is cut-vertex & not v2 is cut-vertex by A12; end;
+        thus v1 <> v2 by A5;
+        thus not v1 is cut-vertex & not v2 is cut-vertex by A4; end;
     suppose ex cv being Vertex of G st cv is cut-vertex;
         then consider cv being Vertex of G such that
-    A14: cv is cut-vertex;
+    A6: cv is cut-vertex;
         consider G2 being removeVertex of G,cv;
-         1 < G2.numComponents() by A11,A14,Def11;
+         1 < G2.numComponents() by A3,A6,Def11;
         then 1+1 <= G2.numComponents() by NAT_1:13;
         then card 2 <= card G2.componentSet() by CARD_1:66;
         then Card 2 c= Card G2.componentSet() by CARD_2:57;
         then 2 c= Card G2.componentSet() by CARD_1:66;
         then consider C1,C2 being set such that
-    A15: C1 in G2.componentSet() & C2 in G2.componentSet() &
+    A7: C1 in G2.componentSet() & C2 in G2.componentSet() &
         C1 <> C2 by PENCIL_1:2;
-        reconsider C1,C2 as Element of G2.componentSet() by A15;
-    A16: G2.order() + 1 = k by A10,GLIB_000:51;
+        reconsider C1,C2 as Element of G2.componentSet() by A7;
+    A8: G2.order() + 1 = k by A2,GLIB_000:51;
          G.edgesBetween( (the_Vertices_of G) \ {cv} ) =
           (the_Edges_of G) \ (G.edgesInOut({cv})) by GLIB_000:38;
         then G.edgesBetween( (the_Vertices_of G) \ {cv} ) =
           (the_Edges_of G) \ cv.edgesInOut() by GLIB_000:def 42;
-    then A17: the_Vertices_of G2 = (the_Vertices_of G) \ {cv} &
+    then A9: the_Vertices_of G2 = (the_Vertices_of G) \ {cv} &
         the_Edges_of G2 = (the_Edges_of G) \ cv.edgesInOut() by GLIB_000:50;
-    A18: now let C be Component of G2;
+    A10: now let C be Component of G2;
        now assume
-      A19: for a being Vertex of C holds
+      A11: for a being Vertex of C holds
           not ex e being set st e Joins cv,a,G;
           consider x being Vertex of C;
            the_Vertices_of C c= the_Vertices_of G2;
           then reconsider x'=x as Vertex of G2 by TARSKI:def 3;
            the_Vertices_of G2 c= the_Vertices_of G;
           then reconsider x''=x' as Vertex of G by TARSKI:def 3;
-           not x' in {cv} by A17,XBOOLE_0:def 4;
-      then A20: x <> cv by TARSKI:def 1;
+           not x' in {cv} by A9,XBOOLE_0:def 4;
+      then A12: x <> cv by TARSKI:def 1;
           consider W being Walk of G such that
-      A21: W is_Walk_from cv,x'' by Def1;
+      A13: W is_Walk_from cv,x'' by Def1;
           consider P being Path of W;
-           P is_Walk_from cv,x'' by A21,GLIB_001:161;
-      then A22: P.first() = cv & P.last() = x by GLIB_001:def 23;
-      then A23: P is non trivial by A20,GLIB_001:128;
-      then A24: len P <> 1 by GLIB_001:126;
+           P is_Walk_from cv,x'' by A13,GLIB_001:161;
+      then A14: P.first() = cv & P.last() = x by GLIB_001:def 23;
+      then A15: P is non trivial by A12,GLIB_001:128;
+      then A16: len P <> 1 by GLIB_001:126;
            1 <= len P by HEYTING3:1;
-          then 2*0+1 < len P by A24,REAL_1:def 5;
+          then 2*0+1 < len P by A16,REAL_1:def 5;
           then P.(1+1) Joins P.1,P.(1+2),G by GLIB_001:def 3;
-      then A25: P.2 Joins cv, P.3, G by A22,GLIB_001:def 6;
-      A26: the_Vertices_of C = G2.reachableFrom(x') by Lm16;
+      then A17: P.2 Joins cv, P.3, G by A14,GLIB_001:def 6;
+      A18: the_Vertices_of C = G2.reachableFrom(x') by Lm16;
           set P2 = P.cut(2*1+1, len P);
-      A27: 2*1+1 <= len P by A23,GLIB_001:126;
+      A19: 2*1+1 <= len P by A15,GLIB_001:126;
           then P2 is_Walk_from P.3, P.(len P) by GLIB_001:38;
-      then A28: P2 is_Walk_from P.3, x by A22,GLIB_001:def 7;
-      A29: P.(2*0+1)=cv & P.(len P)=x by A22,GLIB_001:def 6,def 7;
+      then A20: P2 is_Walk_from P.3, x by A14,GLIB_001:def 7;
+      A21: P.(2*0+1)=cv & P.(len P)=x by A14,GLIB_001:def 6,def 7;
         now assume cv in P2.vertices();
            then consider n being odd Element of NAT such that
-       A30: n <= len P2 & P2.n = cv by GLIB_001:88;
-       A31: 1 <= n by HEYTING3:1;
-           then n in dom P2 by A30,FINSEQ_3:27;
-       then P.(3+n-1) = cv & 3+n-1 in dom P by A27,A30,GLIB_001:48;
-       then A32: cv = P.(n+2) & 2+n <= len P by FINSEQ_3:27;
-            1+0 < n+2 by A31,XREAL_1:10;
-           hence contradiction by A20,A29,A32,GLIB_001:def 28;
+       A22: n <= len P2 & P2.n = cv by GLIB_001:88;
+       A23: 1 <= n by HEYTING3:1;
+           then n in dom P2 by A22,FINSEQ_3:27;
+       then P.(3+n-1) = cv & 3+n-1 in dom P by A19,A22,GLIB_001:48;
+       then A24: cv = P.(n+2) & 2+n <= len P by FINSEQ_3:27;
+            1+0 < n+2 by A23,XREAL_1:10;
+           hence contradiction by A12,A21,A24,GLIB_001:def 28;
        end; then reconsider P2 as Walk of G2 by GLIB_001:172;
-           P2 is_Walk_from P.3, x by A28,GLIB_001:20;
+           P2 is_Walk_from P.3, x by A20,GLIB_001:20;
           then P2.reverse() is_Walk_from x,P.3 by GLIB_001:24;
           then P.3 in G2.reachableFrom(x') by Def5;
-          hence contradiction by A19,A25,A26;
+          hence contradiction by A11,A17,A18;
       end; then consider a being Vertex of C, e being set such that
-     A33: e Joins cv,a,G;
-     A34: e in the_Edges_of G by A33,GLIB_000:def 15;
+     A25: e Joins cv,a,G;
+     A26: e in the_Edges_of G by A25,GLIB_000:def 15;
         now per cases;
        suppose C is trivial;
            then consider v'' being Vertex of C such that
-       A35: the_Vertices_of C = {v''} by GLIB_000:25;
+       A27: the_Vertices_of C = {v''} by GLIB_000:25;
             the_Vertices_of C c= the_Vertices_of G2;
            then reconsider v'=v'' as Vertex of G2 by TARSKI:def 3;
-            not v' in {cv} by A17,XBOOLE_0:def 4;
-       then A36: v' <> cv by TARSKI:def 1;
-       A37: {v'} = G2.reachableFrom(v') by A35,Lm16;
+            not v' in {cv} by A9,XBOOLE_0:def 4;
+       then A28: v' <> cv by TARSKI:def 1;
+       A29: {v'} = G2.reachableFrom(v') by A27,Lm16;
            reconsider v=v' as Vertex of G by GLIB_000:45;
            take v;
            thus v in the_Vertices_of C;
          now assume
-        A38: v is cut-vertex;
+        A30: v is cut-vertex;
             consider G3 being removeVertex of G,v;
-        A39: 1 < G3.numComponents() by A11,A38,Def11;
-        A40: now let e, z be set; assume
-         A41: e Joins v,z,G;
-         then A42: e in the_Edges_of G & z in the_Vertices_of G
+        A31: 1 < G3.numComponents() by A3,A30,Def11;
+        A32: now let e, z be set; assume
+         A33: e Joins v,z,G;
+         then A34: e in the_Edges_of G & z in the_Vertices_of G
                by GLIB_000:16,def 15;
            now assume
-          A43: z <> v & z <> cv;
-              then not e in cv.edgesInOut() by A36,A41,GLIB_000:68;
-              then e in the_Edges_of G2 by A17,A42,XBOOLE_0:def 4;
-          then A44: e Joins v,z,G2 by A41,GLIB_000:76;
+          A35: z <> v & z <> cv;
+              then not e in cv.edgesInOut() by A28,A33,GLIB_000:68;
+              then e in the_Edges_of G2 by A9,A34,XBOOLE_0:def 4;
+          then A36: e Joins v,z,G2 by A33,GLIB_000:76;
                v in G2.reachableFrom(v') by Lm1;
-              then z in G2.reachableFrom(v') by A44,Lm2;
-              hence contradiction by A37,A43,TARSKI:def 1;
+              then z in G2.reachableFrom(v') by A36,Lm2;
+              hence contradiction by A29,A35,TARSKI:def 1;
           end;
           hence z = v or z = cv;
          end;
           now let x,y be Vertex of G3;
            now per cases;
           suppose
-          A45: x = y; set W = G3.walkOf(x);
+          A37: x = y; set W = G3.walkOf(x);
               take W;
-              thus W is_Walk_from x,y by A45,GLIB_001:14; end;
+              thus W is_Walk_from x,y by A37,GLIB_001:14; end;
           suppose
-          A46: x <> y;
+          A38: x <> y;
               reconsider x'=x,y'=y as Vertex of G by GLIB_000:45;
               consider W being Walk of G such that
-          A47: W is_Walk_from x',y' by Def1;
+          A39: W is_Walk_from x',y' by Def1;
               consider P being Path of W;
-          A48: P is_Walk_from x',y' by A47,GLIB_001:161;
+          A40: P is_Walk_from x',y' by A39,GLIB_001:161;
                the_Vertices_of G3 = (the_Vertices_of G)\{v} by GLIB_000:50;
               then not x in {v} & not y in {v} by XBOOLE_0:def 4;
               then x <> v & y <> v by TARSKI:def 1;
-          then A49: v <> P.1 & v <> P.(len P) by A48,GLIB_001:18;
+          then A41: v <> P.1 & v <> P.(len P) by A40,GLIB_001:18;
             now assume v in P.vertices();
                then consider n being odd Element of NAT such that
-           A50: n <= len P & P.n = v by GLIB_001:88;
+           A42: n <= len P & P.n = v by GLIB_001:88;
                 1 <= n by HEYTING3:1;
-               then 1 < n by A49,A50,REAL_1:def 5;
+               then 1 < n by A41,A42,REAL_1:def 5;
                then 1+1 <= n by NAT_1:13;
                then reconsider n2 = n-2*1 as odd Element of NAT by INT_1:18;
                set e1 = P.(n2+1), e2 = P.(n+1);
-                n - 2 < len P - 0 by A50,REAL_1:92;
+                n - 2 < len P - 0 by A42,REAL_1:92;
                then e1 Joins P.n2, P.(n2+2), G by GLIB_001:def 3;
-           then A51: e1 Joins v, P.n2, G by A50,GLIB_000:17;
-           A52: n < len P by A49,A50,REAL_1:def 5;
-           then A53: e2 Joins v, P.(n+2), G by A50,GLIB_001:def 3;
+           then A43: e1 Joins v, P.n2, G by A42,GLIB_000:17;
+           A44: n < len P by A41,A42,REAL_1:def 5;
+           then A45: e2 Joins v, P.(n+2), G by A42,GLIB_001:def 3;
              now assume
-            A54: P.n2 = v;
+            A46: P.n2 = v;
                  n2 < n - 0 by REAL_1:92;
-                hence contradiction by A49,A50,A54,GLIB_001:def 28;
+                hence contradiction by A41,A42,A46,GLIB_001:def 28;
             end;
-           then A55: P.n2 = cv by A40,A51;
-           A56: n+2 <= len P by A52,GLIB_001:1;
+           then A47: P.n2 = cv by A32,A43;
+           A48: n+2 <= len P by A44,GLIB_001:1;
              now assume
-            A57: P.(n+2) = v;
+            A49: P.(n+2) = v;
                  n+0 < n+2 by XREAL_1:10;
-                hence contradiction by A49,A50,A56,A57,GLIB_001:def 28;
+                hence contradiction by A41,A42,A48,A49,GLIB_001:def 28;
             end;
-           then A58: P.(n+2) = cv by A40,A53;
+           then A50: P.(n+2) = cv by A32,A45;
                 n2 < n - 0 by REAL_1:92;
                then n2+0 < n+2 by XREAL_1:10;
-               then cv = P.1 & cv = P.(len P) by A55,A56,A58,GLIB_001:def 28;
-               then cv = x & cv = y by A48,GLIB_001:18;
-               hence contradiction by A46;
+               then cv = P.1 & cv = P.(len P) by A47,A48,A50,GLIB_001:def 28;
+               then cv = x & cv = y by A40,GLIB_001:18;
+               hence contradiction by A38;
            end; then reconsider P as Walk of G3 by GLIB_001:172;
               take P;
-              thus P is_Walk_from x,y by A48,GLIB_001:20; end;
+              thus P is_Walk_from x,y by A40,GLIB_001:20; end;
           end;
           hence ex P being Walk of G3 st P is_Walk_from x,y;
          end;
             then G3 is connected by Def1;
-            hence contradiction by A39,Lm18;
+            hence contradiction by A31,Lm18;
         end;
         hence not v is cut-vertex; end;
        suppose C is non trivial; then reconsider C'=C as non trivial _Graph;
             C.order() <= G2.order() by GLIB_000:78;
            then C.order()+0 < G2.order()+1 by XREAL_1:10;
            then consider v1, v2 being Vertex of C' such that
-       A59: v1 <> v2 & not v1 is cut-vertex & not v2 is cut-vertex by A1,A16;
+       A51: v1 <> v2 & not v1 is cut-vertex & not v2 is cut-vertex by A1,A8;
            consider C'R1 being removeVertex of C',v1;
            consider C'R2 being removeVertex of C',v2;
-       A60: C'R1 is connected & C'R2 is connected by A59,Lm20;
+       A52: C'R1 is connected & C'R2 is connected by A51,Lm20;
             v1 in the_Vertices_of G2 & v2 in the_Vertices_of G2
              by GLIB_000:45;
-           then not v1 in {cv} & not v2 in {cv} by A17,XBOOLE_0:def 4;
-       then A61: v1 <> cv & v2 <> cv by TARSKI:def 1;
-       A62: the_Vertices_of C'R1 = (the_Vertices_of C') \ {v1} &
+           then not v1 in {cv} & not v2 in {cv} by A9,XBOOLE_0:def 4;
+       then A53: v1 <> cv & v2 <> cv by TARSKI:def 1;
+       A54: the_Vertices_of C'R1 = (the_Vertices_of C') \ {v1} &
            the_Vertices_of C'R2 = (the_Vertices_of C') \ {v2} by GLIB_000:50;
          now per cases;
         suppose not v1 in cv.allNeighbors();
-        then A63: v1 <> a by A33,GLIB_000:74;
+        then A55: v1 <> a by A25,GLIB_000:74;
             reconsider v'=v1 as Vertex of G2 by GLIB_000:45;
             reconsider v =v' as Vertex of G by GLIB_000:45;
             take v;
             thus v in the_Vertices_of C;
             consider G3 being removeVertex of G,v;
-        A64: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
-             not cv in {v} by A61,TARSKI:def 1;
-            then reconsider cv' = cv as Vertex of G3 by A64,XBOOLE_0:def 4;
-        A65: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
+        A56: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
+             not cv in {v} by A53,TARSKI:def 1;
+            then reconsider cv' = cv as Vertex of G3 by A56,XBOOLE_0:def 4;
+        A57: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
           now let y be Vertex of G3;
            now per cases;
           suppose y = cv;
               then G3.walkOf(y) is_Walk_from cv',y by GLIB_001:14;
               hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           suppose
-          A66: y <> cv;
+          A58: y <> cv;
             now per cases;
            suppose
-           A67: y in the_Vertices_of C;
-                not y in {v1} by A64,XBOOLE_0:def 4;
-           then A68: y in the_Vertices_of C'R1 by A62,A67,XBOOLE_0:def 4;
-                 not a in {v1} by A63,TARSKI:def 1;
-               then a in the_Vertices_of C'R1 by A62,XBOOLE_0:def 4;
+           A59: y in the_Vertices_of C;
+                not y in {v1} by A56,XBOOLE_0:def 4;
+           then A60: y in the_Vertices_of C'R1 by A54,A59,XBOOLE_0:def 4;
+                 not a in {v1} by A55,TARSKI:def 1;
+               then a in the_Vertices_of C'R1 by A54,XBOOLE_0:def 4;
                then consider W being Walk of C'R1 such that
-           A69: W is_Walk_from y,a by A60,A68,Def1;
-           A70: W.1 = y & W.(len W) = a by A69,GLIB_001:18;
-           A71: now assume v in W.vertices();
-                then not v in {v1} by A62,XBOOLE_0:def 4;
+           A61: W is_Walk_from y,a by A52,A60,Def1;
+           A62: W.1 = y & W.(len W) = a by A61,GLIB_001:18;
+           A63: now assume v in W.vertices();
+                then not v in {v1} by A54,XBOOLE_0:def 4;
                 hence contradiction by TARSKI:def 1;
                end;
                reconsider W as Walk of C by GLIB_001:168;
                reconsider W as Walk of G2 by GLIB_001:168;
                reconsider W as Walk of G by GLIB_001:168;
-                not v in W.vertices() by A71,GLIB_001:99;
+                not v in W.vertices() by A63,GLIB_001:99;
                then reconsider W as Walk of G3 by GLIB_001:172;
-           A72: W is_Walk_from y,a by A70,GLIB_001:18;
-                not e in v.edgesInOut() by A33,A61,A63,GLIB_000:68;
-               then e in (the_Edges_of G)\v.edgesInOut() by A34,XBOOLE_0:def 4
+           A64: W is_Walk_from y,a by A62,GLIB_001:18;
+                not e in v.edgesInOut() by A25,A53,A55,GLIB_000:68;
+               then e in (the_Edges_of G)\v.edgesInOut() by A26,XBOOLE_0:def 4
 ;
                then e in (the_Edges_of G)\G.edgesInOut({v}) by GLIB_000:def 42
 ;
                then e in G.edgesBetween((the_Vertices_of G)\{v}) by GLIB_000:38
 ;
                then e in the_Edges_of G3 by GLIB_000:50;
-               then e Joins cv,a,G3 by A33,GLIB_000:76;
+               then e Joins cv,a,G3 by A25,GLIB_000:76;
                then e Joins a,cv,G3 by GLIB_000:17;
-               then W.addEdge(e) is_Walk_from y,cv by A72,GLIB_001:67;
+               then W.addEdge(e) is_Walk_from y,cv by A64,GLIB_001:67;
                then W.addEdge(e).reverse() is_Walk_from cv,y by GLIB_001:24;
                hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
            suppose
-           A73: not y in the_Vertices_of C;
+           A65: not y in the_Vertices_of C;
                reconsider y'=y as Vertex of G by GLIB_000:45;
                consider W being Walk of G such that
-           A74: W is_Walk_from cv,y' by Def1;
+           A66: W is_Walk_from cv,y' by Def1;
                consider P being Path of W;
-           A75: P is_Walk_from cv,y' by A74,GLIB_001:161;
-           then A76: P.1 = cv & P.(len P) = y' by GLIB_001:18;
+           A67: P is_Walk_from cv,y' by A66,GLIB_001:161;
+           then A68: P.1 = cv & P.(len P) = y' by GLIB_001:18;
              now assume v in P.vertices();
                 then consider n being odd Element of NAT such that
-            A77: n <= len P & P.n = v by GLIB_001:88;
+            A69: n <= len P & P.n = v by GLIB_001:88;
                  1 <= n by HEYTING3:1;
-            then A78: 1 < n by A61,A76,A77,REAL_1:def 5;
+            then A70: 1 < n by A53,A68,A69,REAL_1:def 5;
                 set P2 = P.cut(n,len P);
-            A79: P2 is_Walk_from v, y' by A76,A77,GLIB_001:38;
+            A71: P2 is_Walk_from v, y' by A68,A69,GLIB_001:38;
               now assume cv in P2.vertices();
                  then consider m being odd Element of NAT such that
-             A80: m <= len P2 & P2.m = cv by GLIB_001:88;
-             A81: 1 <= m by HEYTING3:1;
-                 then m in dom P2 by A80,FINSEQ_3:27;
-             then A82: P.(n+m-1) = cv & n+m-1 in dom P by A77,A80,GLIB_001:48;
+             A72: m <= len P2 & P2.m = cv by GLIB_001:88;
+             A73: 1 <= m by HEYTING3:1;
+                 then m in dom P2 by A72,FINSEQ_3:27;
+             then A74: P.(n+m-1) = cv & n+m-1 in dom P by A69,A72,GLIB_001:48;
                  then reconsider nm1 = n+m-1 as odd Element of NAT;
-                  1+1 < n+m by A78,A81,XREAL_1:10;
+                  1+1 < n+m by A70,A73,XREAL_1:10;
                  then 1+1-1 < n+m-1 by REAL_1:92;
-             then A83: 2*0+1 < n+m-1;
-                  n+m-1 is Element of NAT by A82;
-                 then n+m-1 <= len P by A82,FINSEQ_3:27;
-                 hence contradiction by A66,A76,A82,A83,GLIB_001:def 28;
+             then A75: 2*0+1 < n+m-1;
+                  n+m-1 is Element of NAT by A74;
+                 then n+m-1 <= len P by A74,FINSEQ_3:27;
+                 hence contradiction by A58,A68,A74,A75,GLIB_001:def 28;
              end; then reconsider P2 as Walk of G2 by GLIB_001:172;
-                 P2 is_Walk_from v,y' by A79,GLIB_001:20;
-                hence contradiction by A65,A73,Def5;
+                 P2 is_Walk_from v,y' by A71,GLIB_001:20;
+                hence contradiction by A57,A65,Def5;
             end; then reconsider P as Walk of G3 by GLIB_001:172;
                take P;
-               thus P is_Walk_from cv',y by A75,GLIB_001:20; end;
+               thus P is_Walk_from cv',y by A67,GLIB_001:20; end;
            end;
            hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           end;
              hence ex W being Walk of G3 st W is_Walk_from cv',y;
          end; then G3 is connected by Lm6;
             then G3.numComponents() = 1 by Lm18;
-            hence not v is cut-vertex by A11,Def11; end;
+            hence not v is cut-vertex by A3,Def11; end;
         suppose v1 in cv.allNeighbors() & not v2 in cv.allNeighbors();
-        then A84: v2 <> a by A33,GLIB_000:74;
+        then A76: v2 <> a by A25,GLIB_000:74;
             reconsider v'=v2 as Vertex of G2 by GLIB_000:45;
             reconsider v =v' as Vertex of G by GLIB_000:45;
             take v;
             thus v in the_Vertices_of C;
             consider G3 being removeVertex of G,v;
-        A85: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
-             not cv in {v} by A61,TARSKI:def 1;
-            then reconsider cv' = cv as Vertex of G3 by A85,XBOOLE_0:def 4;
-        A86: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
+        A77: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
+             not cv in {v} by A53,TARSKI:def 1;
+            then reconsider cv' = cv as Vertex of G3 by A77,XBOOLE_0:def 4;
+        A78: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
           now let y be Vertex of G3;
            now per cases;
           suppose y = cv;
               then G3.walkOf(y) is_Walk_from cv',y by GLIB_001:14;
               hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           suppose
-          A87: y <> cv;
+          A79: y <> cv;
             now per cases;
            suppose
-           A88: y in the_Vertices_of C;
-                not y in {v2} by A85,XBOOLE_0:def 4;
-           then A89: y in the_Vertices_of C'R2 by A62,A88,XBOOLE_0:def 4;
-                not a in {v2} by A84,TARSKI:def 1;
-               then a in the_Vertices_of C'R2 by A62,XBOOLE_0:def 4;
+           A80: y in the_Vertices_of C;
+                not y in {v2} by A77,XBOOLE_0:def 4;
+           then A81: y in the_Vertices_of C'R2 by A54,A80,XBOOLE_0:def 4;
+                not a in {v2} by A76,TARSKI:def 1;
+               then a in the_Vertices_of C'R2 by A54,XBOOLE_0:def 4;
                then consider W being Walk of C'R2 such that
-           A90: W is_Walk_from y,a by A60,A89,Def1;
-           A91: W.1 = y & W.(len W) = a by A90,GLIB_001:18;
-           A92: now assume v in W.vertices();
-                then not v in {v2} by A62,XBOOLE_0:def 4;
+           A82: W is_Walk_from y,a by A52,A81,Def1;
+           A83: W.1 = y & W.(len W) = a by A82,GLIB_001:18;
+           A84: now assume v in W.vertices();
+                then not v in {v2} by A54,XBOOLE_0:def 4;
                 hence contradiction by TARSKI:def 1;
                end;
                reconsider W as Walk of C by GLIB_001:168;
                reconsider W as Walk of G2 by GLIB_001:168;
                reconsider W as Walk of G by GLIB_001:168;
-                not v in W.vertices() by A92,GLIB_001:99;
+                not v in W.vertices() by A84,GLIB_001:99;
                then reconsider W as Walk of G3 by GLIB_001:172;
-           A93: W is_Walk_from y,a by A91,GLIB_001:18;
-                not e in v.edgesInOut() by A33,A61,A84,GLIB_000:68;
-               then e in (the_Edges_of G) \ v.edgesInOut() by A34,
+           A85: W is_Walk_from y,a by A83,GLIB_001:18;
+                not e in v.edgesInOut() by A25,A53,A76,GLIB_000:68;
+               then e in (the_Edges_of G) \ v.edgesInOut() by A26,
 XBOOLE_0:def 4;
 then e in (the_Edges_of G)\G.edgesInOut({v}) by GLIB_000:def 42;
                then e in G.edgesBetween(the_Vertices_of G\{v}) by GLIB_000:38;
                then e in the_Edges_of G3 by GLIB_000:50;
-                then e Joins cv,a,G3 by A33,GLIB_000:76;
+                then e Joins cv,a,G3 by A25,GLIB_000:76;
                 then e Joins a,cv,G3 by GLIB_000:17;
-                then W.addEdge(e) is_Walk_from y,cv by A93,GLIB_001:67;
+                then W.addEdge(e) is_Walk_from y,cv by A85,GLIB_001:67;
                 then W.addEdge(e).reverse() is_Walk_from cv,y by GLIB_001:24;
                 hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
             suppose
-            A94: not y in the_Vertices_of C;
+            A86: not y in the_Vertices_of C;
                 reconsider y'=y as Vertex of G by GLIB_000:45;
                 consider W being Walk of G such that
-            A95: W is_Walk_from cv,y' by Def1;
+            A87: W is_Walk_from cv,y' by Def1;
                 consider P being Path of W;
-            A96: P is_Walk_from cv,y' by A95,GLIB_001:161;
-            then A97: P.1 = cv & P.(len P) = y' by GLIB_001:18;
+            A88: P is_Walk_from cv,y' by A87,GLIB_001:161;
+            then A89: P.1 = cv & P.(len P) = y' by GLIB_001:18;
               now assume v in P.vertices();
                  then consider n being odd Element of NAT such that
-             A98: n <= len P & P.n = v by GLIB_001:88;
+             A90: n <= len P & P.n = v by GLIB_001:88;
                   1 <= n by HEYTING3:1;
-             then A99: 1 < n by A61,A97,A98,REAL_1:def 5;
+             then A91: 1 < n by A53,A89,A90,REAL_1:def 5;
                  set P2 = P.cut(n,len P);
-             A100: P2 is_Walk_from v, y' by A97,A98,GLIB_001:38;
+             A92: P2 is_Walk_from v, y' by A89,A90,GLIB_001:38;
                now assume cv in P2.vertices();
                   then consider m being odd Element of NAT such that
-              A101: m <= len P2 & P2.m = cv by GLIB_001:88;
-              A102: 1 <= m by HEYTING3:1;
-                  then m in dom P2 by A101,FINSEQ_3:27;
-              then A103: P.(n+m-1) = cv & n+m-1 in dom P by A98,A101,
-GLIB_001:48;
+              A93: m <= len P2 & P2.m = cv by GLIB_001:88;
+              A94: 1 <= m by HEYTING3:1;
+                  then m in dom P2 by A93,FINSEQ_3:27;
+              then A95: P.(n+m-1) = cv & n+m-1 in dom P by A90,A93,GLIB_001:48;
 then reconsider nm1 = n+m-1 as odd Element of NAT;
-                   1+1 < n+m by A99,A102,XREAL_1:10;
+                   1+1 < n+m by A91,A94,XREAL_1:10;
                   then 1+1-1 < n+m-1 by REAL_1:92;
-              then A104: 2*0+1 < n+m-1;
-                   n+m-1 is Element of NAT by A103;
-                  then n+m-1 <= len P by A103,FINSEQ_3:27;
-                  hence contradiction by A87,A97,A103,A104,GLIB_001:def 28;
+              then A96: 2*0+1 < n+m-1;
+                   n+m-1 is Element of NAT by A95;
+                  then n+m-1 <= len P by A95,FINSEQ_3:27;
+                  hence contradiction by A79,A89,A95,A96,GLIB_001:def 28;
               end;
                  then reconsider P2 as Walk of G2 by GLIB_001:172;
-                  P2 is_Walk_from v,y' by A100,GLIB_001:20;
-                 hence contradiction by A86,A94,Def5;
+                  P2 is_Walk_from v,y' by A92,GLIB_001:20;
+                 hence contradiction by A78,A86,Def5;
              end;
                 then reconsider P as Walk of G3 by GLIB_001:172;
                 take P;
-                thus P is_Walk_from cv',y by A96,GLIB_001:20; end;
+                thus P is_Walk_from cv',y by A88,GLIB_001:20; end;
             end;
               hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           end;
              hence ex W being Walk of G3 st W is_Walk_from cv',y;
          end; then G3 is connected by Lm6;
             then G3.numComponents() = 1 by Lm18;
-            hence not v is cut-vertex by A11,Def11; end;
+            hence not v is cut-vertex by A3,Def11; end;
         suppose v1 in cv.allNeighbors() & v2 in cv.allNeighbors();
             then consider e being set such that
-        A105: e Joins cv,v2,G by GLIB_000:74;
-        A106: e in the_Edges_of G by A105,GLIB_000:def 15;
+        A97: e Joins cv,v2,G by GLIB_000:74;
+        A98: e in the_Edges_of G by A97,GLIB_000:def 15;
             set a = v2;
             reconsider v'=v1 as Vertex of G2 by GLIB_000:45;
             reconsider v =v' as Vertex of G by GLIB_000:45;
             take v;
             thus v in the_Vertices_of C;
             consider G3 being removeVertex of G,v;
-        A107: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
-             not cv in {v} by A61,TARSKI:def 1;
-            then reconsider cv' = cv as Vertex of G3 by A107,XBOOLE_0:def 4;
-        A108: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
+        A99: the_Vertices_of G3 = (the_Vertices_of G) \ {v} by GLIB_000:50;
+             not cv in {v} by A53,TARSKI:def 1;
+            then reconsider cv' = cv as Vertex of G3 by A99,XBOOLE_0:def 4;
+        A100: the_Vertices_of C = G2.reachableFrom(v') by Lm16;
           now let y be Vertex of G3;
            now per cases;
           suppose y = cv;
               then G3.walkOf(y) is_Walk_from cv',y by GLIB_001:14;
               hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           suppose
-          A109: y <> cv;
+          A101: y <> cv;
             now per cases;
             suppose
-            A110: y in the_Vertices_of C;
-                 not y in {v1} by A107,XBOOLE_0:def 4;
-            then A111: y in the_Vertices_of C'R1 by A62,A110,XBOOLE_0:def 4;
-                 not a in {v1} by A59,TARSKI:def 1;
-                then a in the_Vertices_of C'R1 by A62,XBOOLE_0:def 4;
+            A102: y in the_Vertices_of C;
+                 not y in {v1} by A99,XBOOLE_0:def 4;
+            then A103: y in the_Vertices_of C'R1 by A54,A102,XBOOLE_0:def 4;
+                 not a in {v1} by A51,TARSKI:def 1;
+                then a in the_Vertices_of C'R1 by A54,XBOOLE_0:def 4;
                 then consider W being Walk of C'R1 such that
-            A112: W is_Walk_from y,a by A60,A111,Def1;
-            A113: W.1 = y & W.(len W) = a by A112,GLIB_001:18;
-            A114: now assume v in W.vertices();
-                    then not v in {v1} by A62,XBOOLE_0:def 4;
+            A104: W is_Walk_from y,a by A52,A103,Def1;
+            A105: W.1 = y & W.(len W) = a by A104,GLIB_001:18;
+            A106: now assume v in W.vertices();
+                    then not v in {v1} by A54,XBOOLE_0:def 4;
                     hence contradiction by TARSKI:def 1;
                 end;
                 reconsider W as Walk of C by GLIB_001:168;
                 reconsider W as Walk of G2 by GLIB_001:168;
                 reconsider W as Walk of G by GLIB_001:168;
-                 not v in W.vertices() by A114,GLIB_001:99;
+                 not v in W.vertices() by A106,GLIB_001:99;
                 then reconsider W as Walk of G3 by GLIB_001:172;
-            A115: W is_Walk_from y,a by A113,GLIB_001:18;
-                 not e in v.edgesInOut() by A59,A61,A105,GLIB_000:68;
-                then e in (the_Edges_of G)\v.edgesInOut() by A106,
-XBOOLE_0:def 4;
+            A107: W is_Walk_from y,a by A105,GLIB_001:18;
+                 not e in v.edgesInOut() by A51,A53,A97,GLIB_000:68;
+                then e in (the_Edges_of G)\v.edgesInOut() by A98,XBOOLE_0:def 4
+;
 then e in (the_Edges_of G)\G.edgesInOut({v}) by GLIB_000:def 42;
                 then e in G.edgesBetween(the_Vertices_of G\{v}) by GLIB_000:38
 ;
                 then e in the_Edges_of G3 by GLIB_000:50;
-                then e Joins cv,a,G3 by A105,GLIB_000:76;
+                then e Joins cv,a,G3 by A97,GLIB_000:76;
                 then e Joins a,cv,G3 by GLIB_000:17;
-                then W.addEdge(e) is_Walk_from y,cv by A115,GLIB_001:67;
+                then W.addEdge(e) is_Walk_from y,cv by A107,GLIB_001:67;
                 then W.addEdge(e).reverse() is_Walk_from cv,y by GLIB_001:24;
                 hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
             suppose
-            A116: not y in the_Vertices_of C;
+            A108: not y in the_Vertices_of C;
                 reconsider y'=y as Vertex of G by GLIB_000:45;
                 consider W being Walk of G such that
-            A117: W is_Walk_from cv,y' by Def1;
+            A109: W is_Walk_from cv,y' by Def1;
                 consider P being Path of W;
-            A118: P is_Walk_from cv,y' by A117,GLIB_001:161;
-            then A119: P.1 = cv & P.(len P) = y' by GLIB_001:18;
+            A110: P is_Walk_from cv,y' by A109,GLIB_001:161;
+            then A111: P.1 = cv & P.(len P) = y' by GLIB_001:18;
               now assume v in P.vertices();
                  then consider n being odd Element of NAT such that
-             A120: n <= len P & P.n = v by GLIB_001:88;
+             A112: n <= len P & P.n = v by GLIB_001:88;
                   1 <= n by HEYTING3:1;
-             then A121: 1 < n by A61,A119,A120,REAL_1:def 5;
+             then A113: 1 < n by A53,A111,A112,REAL_1:def 5;
                  set P2 = P.cut(n,len P);
-             A122: P2 is_Walk_from v, y' by A119,A120,GLIB_001:38;
+             A114: P2 is_Walk_from v, y' by A111,A112,GLIB_001:38;
                now assume cv in P2.vertices();
                   then consider m being odd Element of NAT such that
-              A123: m <= len P2 & P2.m = cv by GLIB_001:88;
-              A124: 1 <= m by HEYTING3:1;
-                  then m in dom P2 by A123,FINSEQ_3:27;
-              then A125: P.(n+m-1) = cv & n+m-1 in dom P by A120,A123,
+              A115: m <= len P2 & P2.m = cv by GLIB_001:88;
+              A116: 1 <= m by HEYTING3:1;
+                  then m in dom P2 by A115,FINSEQ_3:27;
+              then A117: P.(n+m-1) = cv & n+m-1 in dom P by A112,A115,
 GLIB_001:48;
 then reconsider nm1 = n+m-1 as odd Element of NAT;
-                   1+1 < n+m by A121,A124,XREAL_1:10;
+                   1+1 < n+m by A113,A116,XREAL_1:10;
                   then 1+1-1 < n+m-1 by REAL_1:92;
-              then A126: 2*0+1 < n+m-1;
-                   n+m-1 is Element of NAT by A125;
-                  then n+m-1 <= len P by A125,FINSEQ_3:27;
-                  hence contradiction by A109,A119,A125,A126,GLIB_001:def 28;
+              then A118: 2*0+1 < n+m-1;
+                   n+m-1 is Element of NAT by A117;
+                  then n+m-1 <= len P by A117,FINSEQ_3:27;
+                  hence contradiction by A101,A111,A117,A118,GLIB_001:def 28;
               end;
                  then reconsider P2 as Walk of G2 by GLIB_001:172;
-                  P2 is_Walk_from v,y' by A122,GLIB_001:20;
-                 hence contradiction by A108,A116,Def5;
+                  P2 is_Walk_from v,y' by A114,GLIB_001:20;
+                 hence contradiction by A100,A108,Def5;
              end;
                 then reconsider P as Walk of G3 by GLIB_001:172;
                 take P;
-                thus P is_Walk_from cv',y by A118,GLIB_001:20; end;
+                thus P is_Walk_from cv',y by A110,GLIB_001:20; end;
             end;
               hence ex W being Walk of G3 st W is_Walk_from cv',y; end;
           end;
              hence ex W being Walk of G3 st W is_Walk_from cv',y;
          end; then G3 is connected by Lm6;
             then G3.numComponents() = 1 by Lm18;
-            hence not v is cut-vertex by A11,Def11; end;
+            hence not v is cut-vertex by A3,Def11; end;
         end;
            hence ex v being Vertex of G st
              v in the_Vertices_of C & not v is cut-vertex; end;
@@ -1552,31 +1552,31 @@ then reconsider nm1 = n+m-1 as odd Element of NAT;
         consider CC1 being inducedSubgraph of G2,C1;
         consider CC2 being inducedSubgraph of G2,C2;
         consider v1 being Vertex of G such that
-    A127: v1 in the_Vertices_of CC1 & not v1 is cut-vertex by A18;
+    A119: v1 in the_Vertices_of CC1 & not v1 is cut-vertex by A10;
         consider v2 being Vertex of G such that
-    A128: v2 in the_Vertices_of CC2 & not v2 is cut-vertex by A18;
+    A120: v2 in the_Vertices_of CC2 & not v2 is cut-vertex by A10;
         take v1,v2;
       now assume v1 = v2;
-     then A129: CC1 == CC2 by A127,A128,Lm17;
+     then A121: CC1 == CC2 by A119,A120,Lm17;
           C1 is non empty Subset of the_Vertices_of G2 &
          C2 is non empty Subset of the_Vertices_of G2 by Lm13;
          then the_Vertices_of CC1 = C1 & the_Vertices_of CC2 = C2
            by GLIB_000:def 39;
-         hence contradiction by A15,A129,GLIB_000:def 36;
+         hence contradiction by A7,A121,GLIB_000:def 36;
      end;
         hence v1 <> v2;
-        thus not v1 is cut-vertex & not v2 is cut-vertex by A127,A128; end;
+        thus not v1 is cut-vertex & not v2 is cut-vertex by A119,A120; end;
     end;
        hence ex v1,v2 being Vertex of G st v1 <> v2 &
        not v1 is cut-vertex & not v2 is cut-vertex;
    end;
       hence P[k]; end;
-then A130: for k being Nat st
+then A122: for k being Nat st
 for n being Nat st n < k holds P[n] holds P[k];
-A131: for k being Nat holds P[k] from NAT_1:sch 4(A130);
+A123: for k being Nat holds P[k] from NAT_1:sch 4(A122);
     let G be non trivial finite connected _Graph;
      G.order() = G.order();
-    hence thesis by A131;
+    hence thesis by A123;
 end;
 
 registration let G be non trivial finite connected _Graph;

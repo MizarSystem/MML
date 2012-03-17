@@ -8,16 +8,18 @@ environ
 
  vocabularies RLVECT_1, VECTSP_1, MCART_1, VECTSP_2, BINOP_1, LATTICES,
       SETFAM_1, FUNCSDOM, ARYTM_3, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, GRCAT_1,
-      COHSP_1, ENDALG, SUBSET_1, QUOFIELD, GROUP_1;
+      COHSP_1, ENDALG, SUBSET_1, QUOFIELD, GROUP_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, SETFAM_1, BINOP_1, DOMAIN_1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, TOPS_2, FUNCSDOM, GRCAT_1, GCD_1,
-      GROUP_6;
- constructors PARTFUN1, DOMAIN_1, TOPS_2, ALGSTR_1, GRCAT_1, GROUP_6, GCD_1;
+      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, TOPS_2, FUNCSDOM,
+      GRCAT_1, GCD_1, GROUP_6;
+ constructors PARTFUN1, DOMAIN_1, TOPS_2, ALGSTR_1, GRCAT_1, GROUP_6, GCD_1,
+      VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_1,
-      ALGSTR_1, GCD_1;
+      ALGSTR_1, GCD_1, VALUED_1;
  requirements SUBSET, BOOLE;
- definitions RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2, STRUCT_0, XBOOLE_0;
+ definitions RLVECT_1, GROUP_1, VECTSP_1, VECTSP_2, STRUCT_0, XBOOLE_0,
+      ALGSTR_0, VALUED_1;
  theorems TARSKI, MCART_1, VECTSP_1, VECTSP_2, SUBSET_1, BINOP_1, RLVECT_1,
       FUNCT_1, FUNCT_2, GCD_1, RELAT_1, RELSET_1, GRCAT_1, TOPS_2, XBOOLE_0,
       GROUP_1, GROUP_6, STRUCT_0;
@@ -963,7 +965,7 @@ func q0.I -> Element of Quot.I means :Def8:
  for z being Element of Q.I holds z in it iff z`1 = 0.I;
 existence
  proof
-       1_I <> 0.I by VECTSP_1:def 21;
+       1_I <> 0.I by STRUCT_0:def 8;
  then reconsider t = [0.I,1_I] as Element of Q.I by Def1;
  set M = QClass.t;
  A1: for z being Element of Q.I holds
@@ -1020,7 +1022,7 @@ func q1.I -> Element of Quot.I means :Def9:
  for z being Element of Q.I holds z in it iff z`1 = z`2;
 existence
  proof
-       1_I <> 0.I by VECTSP_1:def 21;
+       1_I <> 0.I by STRUCT_0:def 8;
  then reconsider t = [1_I,1_I] as Element of Q.I by Def1;
  set M = QClass.t;
  A1: for z being Element of Q.I holds
@@ -1700,7 +1702,7 @@ A7: t`1 = 0.I
         .= x`2 * (a`1 * y`2) + (-(x`2 * a`1)) * y`2 by GCD_1:51
         .= x`2 * (a`1 * y`2) + (-(x`2 * a`1) * y`2) by GCD_1:51
         .= (x`2 * a`1) * y`2 + (-(x`2 * a`1 * y`2)) by GROUP_1:def 4
-        .= 0.I by RLVECT_1:def 10;
+        .= 0.I by RLVECT_1:def 11;
     hence thesis by A3,VECTSP_2:def 5;
     end;
 A8: t`2 <> 0.I by Th2;
@@ -1813,13 +1815,13 @@ Th21:for I being non degenerated domRing-like commutative Ring holds
 proof
 let I be non degenerated domRing-like commutative Ring;
 assume A1: q1.I = q0.I;
-      0.I <> 1_I by VECTSP_1:def 21;
+      0.I <> 1_I by STRUCT_0:def 8;
 then reconsider t = [0.I,1_I] as Element of Q.I by Def1;
 A2: t`1 = 0.I by MCART_1:def 1;
 then t in q0.I by Def8;
 then t`1 = t`2 by A1,Def9;
 then 0.I = 1_I by A2,MCART_1:def 2;
-hence contradiction by VECTSP_1:def 21;
+hence contradiction by STRUCT_0:def 8;
 end;
 
 ::: Redefinition of the Operations' Types
@@ -2146,8 +2148,8 @@ end;
 theorem
  for I being non degenerated domRing-like commutative Ring holds
 the carrier of the_Field_of_Quotients(I) = Quot.I &
-the add of the_Field_of_Quotients(I) = quotadd(I) &
-the mult of the_Field_of_Quotients(I) = quotmult(I) &
+the addF of the_Field_of_Quotients(I) = quotadd(I) &
+the multF of the_Field_of_Quotients(I) = quotmult(I) &
 0.the_Field_of_Quotients(I) = q0.I &
 1.the_Field_of_Quotients(I) = q1.I;
 
@@ -2365,7 +2367,7 @@ theorem
 Th49:for I being non degenerated domRing-like commutative Ring holds
 the_Field_of_Quotients(I) is add-associative right_zeroed right_complementable
     Abelian associative unital distributive
-      Field-like non degenerated (non empty doubleLoopStr)
+      almost_left_invertible non degenerated (non empty doubleLoopStr)
 proof
 let I be non degenerated domRing-like commutative Ring;
 A1: the_Field_of_Quotients(I) is associative
@@ -2375,26 +2377,26 @@ A1: the_Field_of_Quotients(I) is associative
         (x * y) * z = x * (y * z) by Th25;
     hence thesis by GROUP_1:def 4;
     end;
-A2: the_Field_of_Quotients(I) is Field-like
-    proof
-          for x being Element of the_Field_of_Quotients(I)
-        st x <> 0.the_Field_of_Quotients(I)
-        ex y be Element of the_Field_of_Quotients(I)
-        st x * y = 1.the_Field_of_Quotients(I) by Th48;
-    hence thesis by VECTSP_1:def 20;
+A2: the_Field_of_Quotients(I) is almost_left_invertible
+    proof let x be Element of the_Field_of_Quotients I;
+     assume x <> 0.the_Field_of_Quotients I;
+      then consider y being Element of the_Field_of_Quotients I such that
+A3:     x * y = 1.the_Field_of_Quotients I by Th48;
+     take y;
+     thus y * x = 1.the_Field_of_Quotients I by A3;
     end;
-A3: the_Field_of_Quotients(I) is Abelian
+A4: the_Field_of_Quotients(I) is Abelian
     proof
           for u,v being Element of the_Field_of_Quotients(I) holds
         u + v = v + u by Lm3;
     hence thesis by RLVECT_1:def 5;
     end;
-A4: the_Field_of_Quotients(I) is non degenerated
+A5: the_Field_of_Quotients(I) is non degenerated
     proof
-    A5: q0.I <> q1.I by Th21;
-    A6: 0.the_Field_of_Quotients(I) = q0.I;
+    A6: q0.I <> q1.I by Th21;
+    A7: 0.the_Field_of_Quotients(I) = q0.I;
           1.the_Field_of_Quotients(I) = q1.I;
-    hence thesis by A5,A6,STRUCT_0:def 8;
+    hence thesis by A6,A7,STRUCT_0:def 8;
     end;
      the_Field_of_Quotients(I) is distributive
     proof
@@ -2403,12 +2405,12 @@ A4: the_Field_of_Quotients(I) is non degenerated
         x * (y+z) = x*y + x*z & (y+z) * x = y*x + z*x by Lm9;
     hence thesis by VECTSP_1:def 18;
     end;
-hence thesis by A1,A2,A3,A4;
+hence thesis by A1,A2,A4,A5;
 end;
 
 registration let I be non degenerated domRing-like commutative Ring;
   cluster the_Field_of_Quotients(I) ->
-    Abelian associative distributive Field-like non degenerated;
+    Abelian associative distributive almost_left_invertible non degenerated;
   coherence by Th49;
 end;
 
@@ -2479,12 +2481,12 @@ registration
 cluster -> domRing-like right_unital
    (add-associative right_zeroed right_complementable
         commutative associative well-unital
-        distributive Field-like (non empty doubleLoopStr));
+        distributive almost_left_invertible (non empty doubleLoopStr));
 coherence
   proof
     let R be add-associative right_zeroed right_complementable
         commutative associative well-unital
-        distributive Field-like (non empty doubleLoopStr);
+        distributive almost_left_invertible (non empty doubleLoopStr);
     thus R is domRing-like
     proof
       let x,y be Element of R such that
@@ -2502,12 +2504,14 @@ end;
 registration
 cluster add-associative right_zeroed right_complementable
         Abelian commutative associative left_unital
-        distributive Field-like non degenerated (non empty doubleLoopStr);
+        distributive almost_left_invertible non degenerated
+         (non empty doubleLoopStr);
 existence
 proof
   consider R being add-associative right_zeroed right_complementable
         Abelian commutative associative left_unital
-        distributive Field-like non degenerated (non empty doubleLoopStr);
+        distributive almost_left_invertible non degenerated
+         (non empty doubleLoopStr);
   take R;
   thus thesis;
 end;
@@ -2515,7 +2519,7 @@ end;
 
 definition
 let F be commutative associative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x, y be Element of F;
 func x/y -> Element of F equals
    x * y";
@@ -2523,11 +2527,11 @@ correctness;
 end;
 
 theorem
-Th51:for F being non degenerated Field-like commutative Ring
+Th51:for F being non degenerated almost_left_invertible commutative Ring
 for a,b,c,d being Element of F st b <> 0.F & d <> 0.F holds
 (a/b) * (c/d) = (a * c) / (b * d)
 proof
-let F be non degenerated Field-like commutative Ring;
+let F be non degenerated almost_left_invertible commutative Ring;
 let a,b,c,d be Element of F;
 assume A1: b <> 0.F & d <> 0.F;
       (a/b) * (c/d) = (a * (b" * (c * d"))) by GROUP_1:def 4
@@ -2538,11 +2542,11 @@ hence thesis;
 end;
 
 theorem
-Th52:for F being non degenerated Field-like commutative Ring
+Th52:for F being non degenerated almost_left_invertible commutative Ring
 for a,b,c,d being Element of F st b <> 0.F & d <> 0.F holds
 (a/b) + (c/d) = (a*d + c*b) / (b * d)
 proof
-let F be non degenerated Field-like commutative Ring;
+let F be non degenerated almost_left_invertible commutative Ring;
 let a,b,c,d be Element of F;
 assume A1: b <> 0.F & d <> 0.F;
        then (a*d + c*b) / (b * d)
@@ -2619,9 +2623,9 @@ assume f is RingHomomorphism;
 then A1: f is additive by Def21;
      f.(0.R) = f.(0.R+0.R) by RLVECT_1:10
            .= f.(0.R) + f.(0.R) by A1,GRCAT_1:def 13;
- then 0.S = (f.(0.R) + f.(0.R)) + (-f.(0.R)) by RLVECT_1:def 10
+ then 0.S = (f.(0.R) + f.(0.R)) + (-f.(0.R)) by RLVECT_1:def 11
        .= f.(0.R) + (f.(0.R) + (-f.(0.R))) by RLVECT_1:def 6
-       .= f.(0.R) + 0.S by RLVECT_1:def 10
+       .= f.(0.R) + 0.S by RLVECT_1:def 11
        .= f.(0.R) by RLVECT_1:10;
 hence thesis;
 end;
@@ -2648,12 +2652,12 @@ hence thesis by A2,Th53;
 end;
 
 theorem
-Th55:for R,S being non degenerated Field-like commutative Ring
+Th55:for R,S being non degenerated almost_left_invertible commutative Ring
 for f being Function of R, S st f is RingHomomorphism
 for x being Element of R st x <> 0.R holds
 f.(x") = (f.x)"
 proof
-let R,S be non degenerated Field-like commutative Ring;
+let R,S be non degenerated almost_left_invertible commutative Ring;
 let f be Function of R, S;
 assume f is RingHomomorphism;
 then A1: f is multiplicative & f is unity-preserving by Def21;
@@ -2662,21 +2666,17 @@ assume A2: x <> 0.R;
 A3: f.x * f.(x") = f.(x"*x) by A1,GROUP_6:def 7
              .= f.(1_R) by A2,VECTSP_1:def 22
              .= 1_S by A1,GROUP_1:def 17;
-       now
-    assume f.x = 0.S;
-    then f.x * f.(x") = 0.S by VECTSP_1:39;
-    hence contradiction by A3,STRUCT_0:def 8;
-  end;
+   then f.x <> 0.S by STRUCT_0:def 8,VECTSP_1:39;
   hence thesis by A3,VECTSP_1:def 22;
 end;
 
 theorem
-Th56:for R,S being non degenerated Field-like commutative Ring
+Th56:for R,S being non degenerated almost_left_invertible commutative Ring
 for f being Function of R, S st f is RingHomomorphism
 for x,y being Element of R st y <> 0.R holds
 f.(x * y") = f.x * (f.y)"
 proof
-let R,S be non degenerated Field-like commutative Ring;
+let R,S be non degenerated almost_left_invertible commutative Ring;
 let f be Function of R, S;
 assume A1: f is RingHomomorphism;
 let x,y be Element of R;
@@ -3117,11 +3117,13 @@ let I be non degenerated domRing-like commutative Ring;
 hence thesis by Def25;
 end;
 
-theorem
-Th62:for F being non degenerated Field-like domRing-like commutative Ring holds
+theorem Th62:
+ for F
+  being non degenerated almost_left_invertible domRing-like commutative Ring
+ holds
 F is_ringisomorph_to the_Field_of_Quotients(F)
 proof
-let F be non degenerated Field-like domRing-like commutative Ring;
+let F be non degenerated almost_left_invertible domRing-like commutative Ring;
 A1: 0.F <> 1.F by STRUCT_0:def 8;
 A2: dom canHom(F) = the carrier of F by FUNCT_2:def 1;
  A3: canHom(F) is embedding by Th60;
@@ -3143,7 +3145,7 @@ then A4: canHom(F) is RingHomomorphism by Def23;
         consider a,b being Element of F such that
         A7: u = [a,b] & b <> 0.F by Def1;
         consider z being Element of F such that
-        A8: b * z = 1.F by A7,VECTSP_1:def 20;
+        A8: z * b = 1.F by A7,VECTSP_1:def 20;
         reconsider t = [a*z,1.F] as Element of Q.F by A1,Def1;
         A9: QClass.t = QClass.u
              proof
@@ -3212,7 +3214,7 @@ pred I has_Field_of_Quotients_Pair F,f means :Def29:
  f is RingMonomorphism &
  for F' being add-associative right_zeroed right_complementable
               Abelian commutative associative well-unital distributive
-              Field-like non degenerated (non empty doubleLoopStr)
+              almost_left_invertible non degenerated (non empty doubleLoopStr)
  for f' being Function of I, F' st f' is RingMonomorphism holds
    ex h being Function of F, F' st h is RingHomomorphism &
            h*f = f' &
@@ -3225,14 +3227,14 @@ theorem
      for I being non degenerated domRing-like commutative Ring holds
 ex F being add-associative right_zeroed right_complementable
            Abelian commutative associative well-unital distributive
-           Field-like non degenerated (non empty doubleLoopStr)
+           almost_left_invertible non degenerated (non empty doubleLoopStr)
 st ex f being Function of I, F st I has_Field_of_Quotients_Pair F,f
 proof
 let I be non degenerated domRing-like commutative Ring;
  A1: canHom(I) is embedding by Th60;
      now let F' be add-associative right_zeroed right_complementable
            Abelian commutative associative well-unital distributive
-           Field-like non degenerated (non empty doubleLoopStr);
+           almost_left_invertible non degenerated (non empty doubleLoopStr);
 let f' be Function of I, F';
 assume A2: f' is RingMonomorphism;
 then f' is RingHomomorphism by Def23;
@@ -3691,7 +3693,7 @@ theorem
      for I being domRing-like commutative Ring
 for F,F' being add-associative right_zeroed right_complementable
     Abelian commutative associative well-unital distributive
-      Field-like non degenerated (non empty doubleLoopStr)
+      almost_left_invertible non degenerated (non empty doubleLoopStr)
 for f being Function of I, F
 for f' being Function of I, F'
 st I has_Field_of_Quotients_Pair F,f &
@@ -3701,7 +3703,7 @@ proof
 let I be domRing-like commutative Ring;
 let F,F' be add-associative right_zeroed right_complementable
     Abelian commutative associative well-unital distributive
-      Field-like non degenerated (non empty doubleLoopStr);
+      almost_left_invertible non degenerated (non empty doubleLoopStr);
 let f be Function of I, F;
 let f' be Function of I, F';
 assume A1: I has_Field_of_Quotients_Pair F,f &

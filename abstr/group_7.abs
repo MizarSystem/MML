@@ -9,16 +9,16 @@ environ
  vocabularies FINSEQ_1, FUNCT_1, PBOOLE, RELAT_1, VECTSP_1, PRALG_1, RLVECT_2,
       ZF_REFLE, CARD_3, TARSKI, BINOP_1, GROUP_1, REALSET1, BOOLE, SEMI_AF1,
       GROUP_2, FINSET_1, FUNCT_4, GROUP_6, WELLORD1, GROUP_7, FUNCOP_1,
-      MONOID_0, ARYTM;
+      MONOID_0, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
       NUMBERS, NAT_1, FINSEQ_1, RELSET_1, FUNCT_2, FUNCT_4, FINSET_1, BINOP_1,
-      REALSET1, XXREAL_0, PBOOLE, PRE_CIRC, STRUCT_0, MONOID_0, GROUP_1,
-      GROUP_2, GROUP_6, CARD_3, PRALG_1, PRALG_2;
+      REALSET1, XXREAL_0, PBOOLE, PRE_CIRC, STRUCT_0, ALGSTR_0, MONOID_0,
+      GROUP_1, GROUP_2, GROUP_6, CARD_3, PRALG_1, PRALG_2;
  constructors BINOP_1, XXREAL_0, REALSET1, PRE_CIRC, GROUP_6, MONOID_0,
-      PRALG_1, PRALG_2;
+      PRALG_1, PRALG_2, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FINSET_1, XREAL_0,
       FINSEQ_1, REALSET1, STRUCT_0, GROUP_1, GROUP_2, MONOID_0, PRALG_2,
-      ORDINAL1, CARD_3;
+      ORDINAL1, CARD_3, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET;
 
 
@@ -44,7 +44,7 @@ reserve i, I for set,
 definition let R be Relation;
  attr R is HGrStr-yielding means
 :: GROUP_7:def 1
-  for y being set st y in rng R holds y is non empty HGrStr;
+  for y being set st y in rng R holds y is non empty multMagma;
 end;
 
 registration
@@ -66,7 +66,7 @@ end;
 definition let I be non empty set,
                F be HGrStr-Family of I,
                i be Element of I;
- redefine func F.i -> non empty HGrStr;
+ redefine func F.i -> non empty multMagma;
 end;
 
 registration let I be set, F be HGrStr-Family of I;
@@ -75,13 +75,13 @@ end;
 
 definition let I be set,
                F be HGrStr-Family of I;
- func product F -> strict HGrStr means
+ func product F -> strict multMagma means
 :: GROUP_7:def 2
   the carrier of it = product Carrier F &
   for f, g being Element of product Carrier F, i being set st i in I
-   ex Fi being non empty HGrStr, h being Function st
-    Fi = F.i & h = (the mult of it).(f,g) &
-   h.i = (the mult of Fi).(f.i,g.i);
+   ex Fi being non empty multMagma, h being Function st
+    Fi = F.i & h = (the multF of it).(f,g) &
+   h.i = (the multF of Fi).(f.i,g.i);
 end;
 
 registration let I be set, F be HGrStr-Family of I;
@@ -89,7 +89,7 @@ registration let I be set, F be HGrStr-Family of I;
 end;
 
 theorem :: GROUP_7:4
- for F being HGrStr-Family of I, G being non empty HGrStr,
+ for F being HGrStr-Family of I, G being non empty multMagma,
      p, q being Element of product F,
      x, y being Element of G st
    i in I & G = F.i & f = p & g = q & h = p * q & f.i = x & g.i = y holds
@@ -98,15 +98,15 @@ theorem :: GROUP_7:4
 definition let I be set, F be HGrStr-Family of I;
  attr F is Group-like means
 :: GROUP_7:def 3
-  for i being set st i in I ex Fi being Group-like (non empty HGrStr)
+  for i being set st i in I ex Fi being Group-like (non empty multMagma)
    st Fi = F.i;
  attr F is associative means
 :: GROUP_7:def 4
-  for i being set st i in I ex Fi being associative (non empty HGrStr)
+  for i being set st i in I ex Fi being associative (non empty multMagma)
    st Fi = F.i;
  attr F is commutative means
 :: GROUP_7:def 5
-  for i being set st i in I ex Fi being commutative (non empty HGrStr)
+  for i being set st i in I ex Fi being commutative (non empty multMagma)
    st Fi = F.i;
 end;
 
@@ -140,29 +140,29 @@ registration let I be set, F be commutative HGrStr-Family of I;
 end;
 
 theorem :: GROUP_7:5
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is Group-like holds
   G is Group-like;
 
 theorem :: GROUP_7:6
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is associative holds
   G is associative;
 
 theorem :: GROUP_7:7
-      for F being HGrStr-Family of I, G being non empty HGrStr st
+      for F being HGrStr-Family of I, G being non empty multMagma st
    i in I & G = F.i & product F is commutative holds
   G is commutative;
 
 theorem :: GROUP_7:8
  for F being Group-like HGrStr-Family of I
-  st for i being set st i in I ex G being Group-like (non empty HGrStr)
+  st for i being set st i in I ex G being Group-like (non empty multMagma)
    st G = F.i & s.i = 1_G
  holds s = 1_product F;
 
 theorem :: GROUP_7:9
  for F being Group-like HGrStr-Family of I,
-     G being Group-like (non empty HGrStr) st i in I & G = F.i &
+     G being Group-like (non empty multMagma) st i in I & G = F.i &
    f = 1_product F
  holds f.i = 1_G;
 
@@ -189,14 +189,14 @@ definition let I be set,
    ex g being Element of product Carrier F,
       J being finite Subset of I, f being ManySortedSet of J st
      g = 1_product F & x = g +* f &
-     for j being set st j in J ex G being Group-like (non empty HGrStr) st
+     for j being set st j in J ex G being Group-like (non empty multMagma) st
       G = F.j & f.j in the carrier of G & f.j <> 1_G;
 end;
 
 registration let I be set,
      F be associative Group-like HGrStr-Family of I,
                f, g be Element of sum F;
- cluster (the mult of sum F).(f,g) -> Function-like Relation-like;
+ cluster (the multF of sum F).(f,g) -> Function-like Relation-like;
 end;
 
 theorem :: GROUP_7:12
@@ -207,33 +207,33 @@ theorem :: GROUP_7:12
 begin  :: The product of one, two and three groups
 
 theorem :: GROUP_7:13
- for G1 being non empty HGrStr holds <*G1*> is HGrStr-Family of {1};
+ for G1 being non empty multMagma holds <*G1*> is HGrStr-Family of {1};
 
-definition let G1 be non empty HGrStr;
+definition let G1 be non empty multMagma;
  redefine func <*G1*> -> HGrStr-Family of {1};
 end;
 
 theorem :: GROUP_7:14
- for G1 being Group-like (non empty HGrStr) holds
+ for G1 being Group-like (non empty multMagma) holds
   <*G1*> is Group-like HGrStr-Family of {1};
 
-definition let G1 be Group-like (non empty HGrStr);
+definition let G1 be Group-like (non empty multMagma);
  redefine func <*G1*> -> Group-like HGrStr-Family of {1};
 end;
 
 theorem :: GROUP_7:15
- for G1 being associative (non empty HGrStr) holds
+ for G1 being associative (non empty multMagma) holds
   <*G1*> is associative HGrStr-Family of {1};
 
-definition let G1 be associative (non empty HGrStr);
+definition let G1 be associative (non empty multMagma);
  redefine func <*G1*> -> associative HGrStr-Family of {1};
 end;
 
 theorem :: GROUP_7:16
- for G1 being commutative (non empty HGrStr) holds
+ for G1 being commutative (non empty multMagma) holds
   <*G1*> is commutative HGrStr-Family of {1};
 
-definition let G1 be commutative (non empty HGrStr);
+definition let G1 be commutative (non empty multMagma);
  redefine func <*G1*> -> commutative HGrStr-Family of {1};
 end;
 
@@ -254,47 +254,48 @@ definition let G1 be commutative Group;
                     Group-like associative commutative HGrStr-Family of {1};
 end;
 
-registration let G1 be non empty HGrStr;
+registration let G1 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1*>;
 end;
 
-registration let G1 be non empty HGrStr;
+registration let G1 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1*>;
 end;
 
-definition let G1 be non empty HGrStr,
+definition let G1 be non empty multMagma,
                x be Element of G1;
  redefine func <*x*> -> Element of product <*G1*>;
 end;
 
 theorem :: GROUP_7:19
- for G1, G2 being non empty HGrStr holds <*G1,G2*> is HGrStr-Family of {1,2};
+ for G1, G2 being non empty multMagma holds <*G1,G2*> is HGrStr-Family of {1,2}
+;
 
-definition let G1, G2 be non empty HGrStr;
+definition let G1, G2 be non empty multMagma;
  redefine func <*G1,G2*> -> HGrStr-Family of {1,2};
 end;
 
 theorem :: GROUP_7:20
- for G1, G2 being Group-like (non empty HGrStr) holds
+ for G1, G2 being Group-like (non empty multMagma) holds
   <*G1,G2*> is Group-like HGrStr-Family of {1,2};
 
-definition let G1, G2 be Group-like (non empty HGrStr);
+definition let G1, G2 be Group-like (non empty multMagma);
  redefine func <*G1,G2*> -> Group-like HGrStr-Family of {1,2};
 end;
 
 theorem :: GROUP_7:21
- for G1, G2 being associative (non empty HGrStr) holds
+ for G1, G2 being associative (non empty multMagma) holds
   <*G1,G2*> is associative HGrStr-Family of {1,2};
 
-definition let G1, G2 be associative (non empty HGrStr);
+definition let G1, G2 be associative (non empty multMagma);
  redefine func <*G1,G2*> -> associative HGrStr-Family of {1,2};
 end;
 
 theorem :: GROUP_7:22
- for G1, G2 being commutative (non empty HGrStr) holds
+ for G1, G2 being commutative (non empty multMagma) holds
   <*G1,G2*> is commutative HGrStr-Family of {1,2};
 
-definition let G1, G2 be commutative (non empty HGrStr);
+definition let G1, G2 be commutative (non empty multMagma);
  redefine func <*G1,G2*> -> commutative HGrStr-Family of {1,2};
 end;
 
@@ -315,49 +316,49 @@ definition let G1, G2 be commutative Group;
                    Group-like associative commutative HGrStr-Family of {1,2};
 end;
 
-registration let G1, G2 be non empty HGrStr;
+registration let G1, G2 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1,G2*>;
 end;
 
-registration let G1, G2 be non empty HGrStr;
+registration let G1, G2 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1,G2*>;
 end;
 
-definition let G1, G2 be non empty HGrStr,
+definition let G1, G2 be non empty multMagma,
                x be Element of G1,
                y be Element of G2;
  redefine func <*x,y*> -> Element of product <*G1,G2*>;
 end;
 
 theorem :: GROUP_7:25
- for G1, G2, G3 being non empty HGrStr holds
+ for G1, G2, G3 being non empty multMagma holds
   <*G1,G2,G3*> is HGrStr-Family of {1,2,3};
 
-definition let G1, G2, G3 be non empty HGrStr;
+definition let G1, G2, G3 be non empty multMagma;
  redefine func <*G1,G2,G3*> -> HGrStr-Family of {1,2,3};
 end;
 
 theorem :: GROUP_7:26
- for G1, G2, G3 being Group-like (non empty HGrStr) holds
+ for G1, G2, G3 being Group-like (non empty multMagma) holds
   <*G1,G2,G3*> is Group-like HGrStr-Family of {1,2,3};
 
-definition let G1, G2, G3 be Group-like (non empty HGrStr);
+definition let G1, G2, G3 be Group-like (non empty multMagma);
  redefine func <*G1,G2,G3*> -> Group-like HGrStr-Family of {1,2,3};
 end;
 
 theorem :: GROUP_7:27
- for G1, G2, G3 being associative (non empty HGrStr) holds
+ for G1, G2, G3 being associative (non empty multMagma) holds
   <*G1,G2,G3*> is associative HGrStr-Family of {1,2,3};
 
-definition let G1, G2, G3 be associative (non empty HGrStr);
+definition let G1, G2, G3 be associative (non empty multMagma);
  redefine func <*G1,G2,G3*> -> associative HGrStr-Family of {1,2,3};
 end;
 
 theorem :: GROUP_7:28
- for G1, G2, G3 being commutative (non empty HGrStr) holds
+ for G1, G2, G3 being commutative (non empty multMagma) holds
   <*G1,G2,G3*> is commutative HGrStr-Family of {1,2,3};
 
-definition let G1, G2, G3 be commutative (non empty HGrStr);
+definition let G1, G2, G3 be commutative (non empty multMagma);
  redefine func <*G1,G2,G3*> -> commutative HGrStr-Family of {1,2,3};
 end;
 
@@ -378,22 +379,22 @@ definition let G1, G2, G3 be commutative Group;
                  Group-like associative commutative HGrStr-Family of {1,2,3};
 end;
 
-registration let G1, G2, G3 be non empty HGrStr;
+registration let G1, G2, G3 be non empty multMagma;
  cluster -> FinSequence-like Element of product Carrier <*G1,G2,G3*>;
 end;
 
-registration let G1, G2, G3 be non empty HGrStr;
+registration let G1, G2, G3 be non empty multMagma;
  cluster -> FinSequence-like Element of product <*G1,G2,G3*>;
 end;
 
-definition let G1, G2, G3 be non empty HGrStr,
+definition let G1, G2, G3 be non empty multMagma,
                x be Element of G1,
                y be Element of G2,
                z be Element of G3;
  redefine func <*x,y,z*> -> Element of product <*G1,G2,G3*>;
 end;
 
-reserve G1, G2, G3 for non empty HGrStr,
+reserve G1, G2, G3 for non empty multMagma,
         x1, x2 for Element of G1,
         y1, y2 for Element of G2,
         z1, z2 for Element of G3;
@@ -407,7 +408,7 @@ theorem :: GROUP_7:32
 theorem :: GROUP_7:33
       <*x1,y1,z1*> * <*x2,y2,z2*> = <*x1*x2,y1*y2,z1*z2*>;
 
-reserve G1, G2, G3 for Group-like (non empty HGrStr);
+reserve G1, G2, G3 for Group-like (non empty multMagma);
 
 theorem :: GROUP_7:34
       1_product <*G1*> = <*1_G1*>;

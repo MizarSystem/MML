@@ -22,6 +22,7 @@
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
 <ArticleID name="TBSP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="RLTOPSP1"/>
 <ArticleID name="NORMSP_1"/>
@@ -32,29 +33,29 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="10">
+<Typ kind="G" nr="15">
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="58"/>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
-<Adjective nr="62"/>
-<Adjective nr="76"/>
-<Adjective nr="84"/>
+<Adjective nr="69"/>
+<Adjective nr="94"/>
+<Adjective nr="95"/>
+<Adjective nr="96"/>
+<Adjective nr="97"/>
+<Adjective nr="110"/>
+<Adjective nr="118"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="170">
+<Func kind="K" nr="182">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
 <Adjective nr="26" value="false"/>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
-<Adjective nr="53"/>
+<Adjective nr="50"/>
+<Adjective nr="54"/>
 </Cluster>
 </FCluster>
 </Registrations>

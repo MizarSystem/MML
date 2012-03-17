@@ -8,19 +8,20 @@ environ
 
  vocabularies MATRIXR1, FINSEQ_1, FUNCT_1, ARYTM_1, VECTSP_1, RLVECT_1,
       MATRIX_1, TREES_1, ARYTM, RELAT_1, FINSEQ_2, INCSP_1, CAT_3, RVSUM_1,
-      QC_LANG1, EUCLID;
+      QC_LANG1, EUCLID, ALGSTR_0;
  notations TARSKI, SUBSET_1, XXREAL_0, XREAL_0, REAL_1, NAT_1, FUNCT_1,
-      MATRIX_1, RLVECT_1, NUMBERS, ORDINAL1, VECTSP_1, RELSET_1, FINSEQ_1,
-      SEQ_1, STRUCT_0, GROUP_1, MATRIX_4, MATRIX_3, RVSUM_1, FINSEQ_2,
-      FINSEQOP, FVSUM_1, EUCLID;
- constructors XXREAL_0, REAL_1, BINOP_2, FVSUM_1, GOBOARD1, MATRIX_3, MATRIX_4;
+      MATRIX_1, NUMBERS, ORDINAL1, VECTSP_1, RELSET_1, FINSEQ_1, VALUED_1,
+      SEQ_1, STRUCT_0, ALGSTR_0, RLVECT_1, GROUP_1, MATRIX_4, MATRIX_3,
+      RVSUM_1, FINSEQ_2, FINSEQOP, FVSUM_1, EUCLID;
+ constructors XXREAL_0, REAL_1, BINOP_2, FVSUM_1, GOBOARD1, MATRIX_3, MATRIX_4,
+      VALUED_1, PARTFUN1, SEQ_1;
  registrations RELSET_1, NUMBERS, XXREAL_0, NAT_1, MEMBERED, FINSEQ_1, SEQ_1,
-      FINSEQ_2, STRUCT_0, VECTSP_1, XBOOLE_0, VALUED_0;
+      FINSEQ_2, STRUCT_0, VECTSP_1, XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
- definitions VECTSP_1, MATRIX_1, STRUCT_0;
+ definitions VECTSP_1, MATRIX_1, STRUCT_0, ALGSTR_0, VALUED_1;
  theorems MATRIX_3, MATRIX_1, MATRIX_4, MATRIX_5, XREAL_0, FUNCT_1, FINSEQ_1,
       MATRIX_2, FINSEQ_2, TARSKI, FVSUM_1, ZFMISC_1, EUCLID_2, RVSUM_1, EUCLID,
-      FINSEQ_3, XXREAL_0, ORDINAL1, SEQ_1;
+      FINSEQ_3, XXREAL_0, ORDINAL1, SEQ_1, VALUED_1;
  schemes FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -183,11 +184,11 @@ end;
 begin :: Matrices of Real Elements
 
 theorem Th16:
-  for K being non empty HGrStr,
+  for K being non empty multMagma,
       p being FinSequence of K,
       a being Element of K holds
    len (a*p)=len p
-proof let K be non empty HGrStr,
+proof let K be non empty multMagma,
   p be FinSequence of K, a be Element of K;
   reconsider q=p as Element of (len p)-tuples_on the carrier of K
                                    by FINSEQ_2:110;
@@ -774,13 +775,13 @@ A2:len C=n & for j be Nat st j in Seg n holds C.j = F(j)
      st y = p & len p = 1
    proof let y be set;
      assume y in rng C;
-     then consider z be set such that A4: z in dom C & y=C.z
+     then consider z be set such that A3: z in dom C & y=C.z
        by FUNCT_1:def 5;
-     reconsider z as Element of NAT by A4;
-      z in Seg len C by A4,FINSEQ_1:def 3;
-then A5:  C.z = <*x.z*> by A2;
+     reconsider z as Element of NAT by A3;
+      z in Seg len C by A3,FINSEQ_1:def 3;
+then A4:  C.z = <*x.z*> by A2;
       len <*x.z*>=1 by FINSEQ_1:56;
-     hence ex p being FinSequence of REAL st y = p & len p = 1 by A4,A5;
+     hence ex p being FinSequence of REAL st y = p & len p = 1 by A3,A4;
    end;
    then reconsider B=C as Matrix of REAL by MATRIX_1:9;
     for p being FinSequence of REAL st p in rng B holds len p = 1
@@ -788,31 +789,31 @@ then A5:  C.z = <*x.z*> by A2;
      let p be FinSequence of REAL;
      assume p in rng B;
      then consider i be Nat such that
-A6:  i in dom B and A7:B.i =p by FINSEQ_2:11;
-A8:  i in Seg len B by A6,FINSEQ_1:def 3;
+A5:  i in dom B and A6:B.i =p by FINSEQ_2:11;
+A7:  i in Seg len B by A5,FINSEQ_1:def 3;
       len <*x.i*>=1 by FINSEQ_1:56;
-     hence thesis by A2,A7,A8;
+     hence thesis by A2,A6,A7;
    end;
    then reconsider A=B as Matrix of len B,1,REAL by MATRIX_1:def 3;
-A9: width A = 1 by A1,A2,MATRIX_1:24;
+A8: width A = 1 by A1,A2,MATRIX_1:24;
     Seg len x = dom x by FINSEQ_1:def 3;
-   hence thesis by A2,A9;
+   hence thesis by A2,A8;
  end;
 uniqueness
  proof
  let A,B be Matrix of REAL;
   assume that
-A10: len A = len x & width A = 1 and
-A11: for k being Nat st k in dom x holds A.k =<*x.k*> and
-A12: len B = len x & width B = 1 and
-A13: for k being Nat st k in dom x holds B.k =<*x.k*>;
-A14:dom A = dom x & dom B = dom x by A10,A12,FINSEQ_3:31;
+A9: len A = len x & width A = 1 and
+A10: for k being Nat st k in dom x holds A.k =<*x.k*> and
+A11: len B = len x & width B = 1 and
+A12: for k being Nat st k in dom x holds B.k =<*x.k*>;
+A13:dom A = dom x & dom B = dom x by A9,A11,FINSEQ_3:31;
    now let k be Nat;
-    assume A15:k in dom x;
-    hence A.k=<*x.k*> by A11
-            .=B.k by A13,A15;
+    assume A14:k in dom x;
+    hence A.k=<*x.k*> by A10
+            .=B.k by A12,A14;
   end;
-  hence A=B by A14,FINSEQ_1:17;
+  hence A=B by A13,FINSEQ_1:17;
  end;
 end;
 
@@ -908,7 +909,7 @@ A22:    q2 = (ColVec2Mx x2).i & (ColVec2Mx x2)*(i,j)=q2.j
           by A12,A15,MATRIX_1:def 6;
          (ColVec2Mx x2).i=<* x2.i *> by A1,A4,A16,Def9;
         then q2.j=x2.i by A17,A22,FINSEQ_1:57;
-        hence thesis by A7,A16,A18,A19,A20,A21,A22,SEQ_1:def 3;
+        hence thesis by A7,A16,A18,A19,A20,A21,A22,VALUED_1:1,def 1;
       end;
     end;
     hence thesis by A1,A2,A3,A5,A6,A8,A9,A10,Th26;
@@ -1137,7 +1138,7 @@ A21:  q1.j=x1.j by A16,A17,A20,Def10;
 A22:  q2 = (LineVec2Mx x2).i & (LineVec2Mx x2)*(i,j) =q2.j
         by A12,A15,MATRIX_1:def 6;
        q2.j=x2.j by A3,A16,A17,A22,Def10;
-      hence thesis by A7,A16,A18,A19,A20,A21,A22,SEQ_1:def 3;
+      hence thesis by A7,A16,A18,A19,A20,A21,A22,VALUED_1:1,def 1;
     end;
     hence thesis by A1,A2,A4,A5,A6,A8,A9,A10,Th26;
 end;
@@ -1253,7 +1254,7 @@ then A11:   [j,i] in Indices A by A2,ZFMISC_1:106;
 A12:   Col(A,i).j=A*(j,i) by A10,MATRIX_1:def 9;
        Col(B,i).j=B*(j,i) by A8,A10,MATRIX_1:def 9;
       then Col(A,i).j+Col(B,i).j=(A+B)*(j,i) by A11,A12,Th25;
-      hence thesis by A7,A9,SEQ_1:def 3;
+      hence thesis by A7,A9,VALUED_1:1,def 1;
     end;
     hence thesis by A3,A5,A6,MATRIX_1:def 9;
 end;
@@ -1283,7 +1284,7 @@ A11:    Line(A,i).j=A*(i,j) by A9,MATRIX_1:def 8;
         reconsider j as Element of NAT by ORDINAL1:def 13;
         Line(B,i).j=B*(i,j) by A1,A9,MATRIX_1:def 8;
        then Line(A,i).j+Line(B,i).j=(A+B)*(i,j) by A10,A11,Th25;
-       hence thesis by A5,A7,A8,SEQ_1:def 3;
+       hence thesis by A5,A7,A8,VALUED_1:1,def 1;
      end;
      hence thesis by A3,A5,A6,MATRIX_1:def 8;
 end;

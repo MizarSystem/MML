@@ -6,17 +6,17 @@
 
 environ
 
- vocabularies FUNCT_1, COMPLEX1, RELAT_1, ANPROJ_1, BOOLE, PARTFUN1, FINSEQ_4,
-      SEQ_1, ARYTM_1, ARYTM_3, COMSEQ_1, XCMPLX_0, ARYTM, FUNCOP_1;
+ vocabularies FUNCT_1, COMPLEX1, RELAT_1, ANPROJ_1, BOOLE, PARTFUN1, SEQ_1,
+      ARYTM_1, ARYTM_3, COMSEQ_1, ARYTM, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, XCMPLX_0, NUMBERS, COMPLEX1,
-      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, FINSEQ_4, SEQ_1;
- constructors PARTFUN1, FUNCOP_1, REAL_1, COMPLEX1, SEQ_1, FINSEQ_4;
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1;
+ constructors PARTFUN1, FUNCOP_1, REAL_1, COMPLEX1, SEQ_1, VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XREAL_0,
-      MEMBERED, COMPLEX1;
+      MEMBERED, COMPLEX1, VALUED_0, VALUED_1;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions PARTFUN1;
+ definitions PARTFUN1, VALUED_1;
  theorems COMPLEX1, FUNCT_1, FUNCT_2, TARSKI, SEQ_1, RELSET_1, SUBSET_1,
-      XBOOLE_0, XCMPLX_1, XCMPLX_0, FUNCOP_1;
+      XBOOLE_0, XCMPLX_1, XCMPLX_0, FUNCOP_1, VALUED_1;
  schemes FUNCT_1, SEQ_1;
 
 begin
@@ -77,9 +77,9 @@ A2: for n holds f.n is Element of COMPLEX;
  end;
 
 definition
- let seq,n;
-redefine func seq.n ->Element of COMPLEX;
- coherence by Th2;
+  let seq,n;
+  redefine func seq.n -> Element of COMPLEX;
+  coherence by Th2;
 end;
 
 scheme ExComplexSeq{F(Element of NAT)->Element of COMPLEX}:
@@ -196,355 +196,6 @@ theorem
    thus rng seq={r} by A2;
  end;
 
-definition let C be non empty set; let f1,f2 be PartFunc of C,COMPLEX;
-  deffunc f(set) = f1/.$1 + f2/.$1;
-  defpred P[set] means $1 in dom f1 /\ dom f2;
-  set X = dom f1 /\ dom f2;
-func f1+f2 -> PartFunc of C,COMPLEX means :Def2:
- dom it = dom f1 /\ dom f2 &
-  for c being Element of C st c in dom it holds it.c = f1/.c + f2/.c;
-existence
-proof
-consider F be PartFunc of C,COMPLEX such that
- A1: for c being Element of C holds c in dom F iff P[c] and
- A2: for c being Element of C st c in dom F holds F.c = f(c) from SEQ_1:sch 3;
- take F;
- thus dom F = dom f1 /\ (dom f2 qua Subset of C) by A1,SUBSET_1:8;
- let c be Element of C; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-  proof
-    thus for f,g being PartFunc of C,COMPLEX st
-   (dom f=X & for c be Element of C st c in dom f holds f.c = f(c)) &
-   (dom g=X & for c be Element of C st c in dom g holds g.c = f(c))
-   holds f = g from SEQ_1:sch 4;
-  end;
-  commutativity;
-  deffunc f(set) = f1/.$1 * f2/.$1;
-func f1(#)f2 -> PartFunc of C,COMPLEX means :Def3:
-dom it = dom f1 /\ dom f2 &
-   for c being Element of C st c in dom it holds it.c = f1/.c * f2/.c;
-existence
-proof
-consider F be PartFunc of C,COMPLEX such that
- A3: for c being Element of C holds c in dom F iff P[c] and
- A4: for c being Element of C st c in dom F holds F.c = f(c) from SEQ_1:sch 3;
- take F;
- thus dom F = dom f1 /\ dom f2 by A3,SUBSET_1:8;
- let c be Element of C; assume c in dom F; hence thesis by A4;
-end;
-uniqueness
-  proof
-    thus for f,g being PartFunc of C,COMPLEX st
-   (dom f=X & for c be Element of C st c in dom f holds f.c = f(c)) &
-   (dom g=X & for c be Element of C st c in dom g holds g.c = f(c))
-   holds f = g from SEQ_1:sch 4;
-  end;
-  commutativity;
-end;
-
-definition let C be non empty set; let f1,f2 be Function of C,COMPLEX;
- redefine
-func f1+f2 means :Def4:
-  dom it = C & for c being Element of C holds it.c = f1.c + f2.c;
- compatibility
-  proof let IT be PartFunc of C,COMPLEX;
-   thus IT = f1+f2 implies
-    dom IT = C & for c being Element of C holds IT.c = f1.c + f2.c
-    proof assume
-A1:    IT = f1+f2;
-     hence A2:     dom IT = dom f1 /\ dom f2 by Def2
-             .= C /\ dom f2 by FUNCT_2:def 1
-             .= C /\ C by FUNCT_2:def 1
-             .= C;
-     let c be Element of C;
-          f1.c = f1/.c & f2.c = f2/.c by FUNCT_2:176;
-     hence IT.c = f1.c + f2.c by A1,A2,Def2;
-    end;
-   assume that
-A3: dom IT = C and
-A4: for c being Element of C holds IT.c = f1.c + f2.c;
-A5:  dom IT = C /\ C by A3
-          .= C /\ dom f2 by FUNCT_2:def 1
-          .= dom f1 /\ dom f2 by FUNCT_2:def 1;
-        for c being Element of C st c in dom IT holds IT.c = f1/.c + f2/.c
-     proof let c be Element of C;
-      assume c in dom IT;
-           f1.c = f1/.c & f2/.c = f2.c by FUNCT_2:176;
-      hence IT.c = f1/.c + f2/.c by A4;
-     end;
-   hence IT = f1+f2 by A5,Def2;
-  end;
-func f1(#)f2 means :Def5:
-  dom it = C &
-   for c being Element of C holds it.c = f1.c * f2.c;
- compatibility
-  proof let IT be PartFunc of C,COMPLEX;
-   thus IT = f1(#)f2 implies
-    dom IT = C & for c being Element of C holds IT.c = f1.c * f2.c
-    proof assume
-A6:    IT = f1(#)f2;
-     hence A7:     dom IT = dom f1 /\ dom f2 by Def3
-             .= C /\ dom f2 by FUNCT_2:def 1
-             .= C /\ C by FUNCT_2:def 1
-             .= C;
-     let c be Element of C;
-          f1.c = f1/.c & f2.c = f2/.c by FUNCT_2:176;
-     hence IT.c = f1.c * f2.c by A6,A7,Def3;
-    end;
-   assume that
-A8: dom IT = C and
-A9: for c being Element of C holds IT.c = f1.c * f2.c;
-A10:  dom IT = C /\ C by A8
-          .= C /\ dom f2 by FUNCT_2:def 1
-          .= dom f1 /\ dom f2 by FUNCT_2:def 1;
-        for c being Element of C st c in dom IT holds IT.c = f1/.c * f2/.c
-     proof let c be Element of C;
-      assume c in dom IT;
-           f1.c = f1/.c & f2/.c = f2.c by FUNCT_2:176;
-      hence IT.c = f1/.c * f2/.c by A9;
-     end;
-   hence IT = f1(#)f2 by A10,Def3;
-  end;
-end;
-
-registration let C be non empty set; let seq1,seq2 be Function of C,COMPLEX;
-  cluster seq1+seq2 -> total;
-  coherence
-   proof
-       dom seq1 = C & dom seq2 = C by FUNCT_2:def 1;
-    hence dom(seq1 + seq2) = C /\ C by Def2 .= C;
-   end;
-  cluster seq1(#)seq2 -> total;
-  coherence
-   proof
-       dom seq1 = C & dom seq2 = C by FUNCT_2:def 1;
-    hence dom(seq1 (#) seq2) = C /\ C by Def3 .= C;
-   end;
-end;
-
-definition let C be non empty set;
- let f be PartFunc of C,COMPLEX, r be complex number;
-func r(#)f -> PartFunc of C,COMPLEX means :Def6:
- dom it = dom f & for c being Element of C st c in dom it holds it.c = r*f/.c;
-existence
-proof reconsider r as Element of COMPLEX by XCMPLX_0:def 2;
-  deffunc f(set) = r * f/.$1;
-  defpred P[set] means $1 in dom f;
-consider F be PartFunc of C,COMPLEX such that
- A1: for c being Element of C holds c in dom F iff P[c] and
- A2: for c being Element of C st c in dom F holds F.c = f(c) from SEQ_1:sch 3;
- take F;
- thus dom F = dom f by A1,SUBSET_1:8;
- let c be Element of C; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-proof
-  deffunc f(set) = r * f/.$1;
-  thus for h,g being PartFunc of C,COMPLEX st
-   (dom h=dom f & for c be Element of C st c in dom h holds h.c = f(c)) &
-   (dom g=dom f & for c be Element of C st c in dom g holds g.c = f(c))
-  holds h = g from SEQ_1:sch 4;
-end;
-end;
-
-definition let C be non empty set;
- let f be Function of C,COMPLEX, r be complex number;
- redefine func r(#)f means :Def7:
-  dom it = C & for n being Element of C holds it.n=r*f.n;
- compatibility
-  proof let IT be PartFunc of C,COMPLEX;
-   thus IT = r(#)f implies
-    dom IT = C & for c being Element of C holds IT.c = r * f.c
-    proof assume
-A1:    IT = r(#)f;
-     hence A2:     dom IT = dom f by Def6
-             .= C by FUNCT_2:def 1;
-     let c be Element of C;
-          f.c = f/.c by FUNCT_2:176;
-     hence IT.c = r * f.c by A1,A2,Def6;
-    end;
-   assume that
-A3: dom IT = C and
-A4: for c being Element of C holds IT.c = r * f.c;
-A5:  dom IT = dom f by A3,FUNCT_2:def 1;
-        for c being Element of C st c in dom IT holds IT.c = r * f/.c
-     proof let c be Element of C;
-      assume c in dom IT;
-           f/.c = f.c by FUNCT_2:176;
-      hence IT.c = r * f/.c by A4;
-     end;
-   hence IT = r(#)f by A5,Def6;
-  end;
-end;
-
-registration
- let C be non empty set; let seq be Function of C,COMPLEX, r be complex number;
- cluster r(#)seq -> total;
- coherence
-  proof
-   thus dom(r(#)seq) = dom seq by Def6 .= C by FUNCT_2:def 1;
-  end;
-end;
-
-definition let C be non empty set; let f be PartFunc of C,COMPLEX;
-  deffunc f(set) = -f/.$1;
-func -f ->PartFunc of C,COMPLEX means :Def8:
- dom it = dom f & for c being Element of C st c in dom it holds it.c = -(f/.c);
-existence
-proof
-  defpred P[set] means $1 in dom f;
-consider F being PartFunc of C,COMPLEX such that
-A1: for c being Element of C holds c in dom F iff P[c] and
-A2: for c being Element of C st c in dom F holds F.c = f(c) from SEQ_1:sch 3;
- take F;
- thus dom f = dom F by A1,SUBSET_1:8;
- let c be Element of C; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-proof
-  thus for h,g being PartFunc of C,COMPLEX st
-   (dom h=dom f & for c be Element of C st c in dom h holds h.c = f(c)) &
-   (dom g=dom f & for c be Element of C st c in dom g holds g.c = f(c))
-  holds h = g from SEQ_1:sch 4;
-end;
-end;
-
-definition let C be non empty set; let f be Function of C,COMPLEX;
- redefine func - f means
-:Def9: dom it = C & for n being Element of C holds it.n=-f.n;
- compatibility
-  proof let IT be PartFunc of C,COMPLEX;
-   thus IT = -f implies
-    dom IT = C & for c being Element of C holds IT.c = -f.c
-    proof assume
-A1:    IT = -f;
-     hence A2:     dom IT = dom f by Def8
-             .= C by FUNCT_2:def 1;
-     let c be Element of C;
-          f.c = f/.c by FUNCT_2:176;
-     hence IT.c = -f.c by A1,A2,Def8;
-    end;
-   assume that
-A3: dom IT = C and
-A4: for c being Element of C holds IT.c = -f.c;
-A5:  dom IT = dom f by A3,FUNCT_2:def 1;
-        for c being Element of C st c in dom IT holds IT.c = -f/.c
-     proof let c be Element of C;
-      assume c in dom IT;
-           f/.c = f.c by FUNCT_2:176;
-      hence IT.c = -f/.c by A4;
-     end;
-   hence IT = -f by A5,Def8;
-  end;
-end;
-
-registration let C be non empty set; let seq be Function of C,COMPLEX;
- cluster - seq -> total;
- coherence
-  proof
-   thus dom -seq = dom seq by Def8 .= C by FUNCT_2:def 1;
-  end;
-end;
-
-definition let C be non empty set; let f1,f2 be PartFunc of C,COMPLEX;
-func f1-f2 -> PartFunc of C,COMPLEX equals    f1 +- f2;
- correctness;
-end;
-
-registration let C be non empty set; let f1,f2 be Function of C,COMPLEX;
- cluster f1-f2 -> total;
- correctness;
-end;
-
-definition
- let seq;
-func seq" -> Complex_Sequence means :Def11: for n holds it.n=(seq.n)";
- existence
- proof
-   deffunc f(Element of NAT) = (seq.$1)";
-   thus ex s be Complex_Sequence st for n holds s.n=f(n) from ExComplexSeq;
- end;
- uniqueness
-  proof
-   let seq1,seq2 such that
-A1: for n holds seq1.n=(seq.n)" and
-A2: for n holds seq2.n=(seq.n)";
-        now let n;
-         seq1.n=(seq.n)" & seq2.n=(seq.n)" by A1,A2;
-     hence seq1.n=seq2.n;
-    end;
-   hence seq1=seq2 by Th6;
-  end;
-end;
-
-definition
- let seq1,seq;
-func seq1 /" seq ->Complex_Sequence equals   seq1(#)(seq");
- correctness;
-end;
-
-definition let C be non empty set; let f be PartFunc of C,COMPLEX;
-  deffunc f(set) = |.f/.$1.|;
-func |.f.| -> PartFunc of C,REAL means :Def13:
- dom it = dom f &
- for c being Element of C st c in dom it holds it.c = |.f/.c.|;
-existence
-proof
-  defpred P[set] means $1 in dom f;
-consider F be PartFunc of C,REAL such that
- A1: for c being Element of C holds c in dom F iff P[c] and
- A2: for c being Element of C st c in dom F holds F.c = f(c) from SEQ_1:sch 3;
- take F;
- thus dom F = dom f by A1,SUBSET_1:8;
- let c be Element of C; assume c in dom F; hence thesis by A2;
-end;
-uniqueness
-proof
-  thus for h,g being PartFunc of C,REAL st
-   (dom h=dom f & for c be Element of C st c in dom h holds h.c = f(c)) &
-   (dom g=dom f & for c be Element of C st c in dom g holds g.c = f(c))
-  holds h = g from SEQ_1:sch 4;
-end;
-end;
-
-definition let C be non empty set; let seq be Function of C,COMPLEX;
- redefine func |.seq.| means :Def14:
-  dom it = C & for n being Element of C holds it.n=|.seq.n.|;
- compatibility
-  proof let IT be PartFunc of C,REAL;
-   thus IT = |.seq.| implies
-    dom IT = C & for c being Element of C holds IT.c = |.seq.c.|
-    proof assume
-A1:    IT = |.seq.|;
-     hence A2:     dom IT = dom seq by Def13
-             .= C by FUNCT_2:def 1;
-     let c be Element of C;
-          seq.c = seq/.c by FUNCT_2:176;
-     hence IT.c = |.seq.c.| by A1,A2,Def13;
-    end;
-   assume that
-A3: dom IT = C and
-A4: for c being Element of C holds IT.c = |.seq.c.|;
-A5:  dom IT = dom seq by A3,FUNCT_2:def 1;
-        for c being Element of C st c in dom IT holds IT.c = |.seq/.c.|
-     proof let c be Element of C;
-      assume c in dom IT;
-           seq/.c = seq.c by FUNCT_2:176;
-      hence IT.c = |.seq/.c.| by A4;
-     end;
-   hence IT = |.seq.| by A5,Def13;
-  end;
-end;
-
-registration let C be non empty set; let seq be Function of C,COMPLEX;
-  cluster |.seq.|-> total;
- coherence
-  proof
-   thus dom|.seq.| = dom seq by Def13 .= C by FUNCT_2:def 1;
-  end;
-end;
-
 canceled;
 
 theorem
@@ -552,11 +203,11 @@ theorem
   proof
        now let n;
     thus ((seq1+seq2)+seq3).n=(seq1+seq2 qua Complex_Sequence).n+ seq3.n
-       by Def4
-     .=seq1.n+seq2.n+seq3.n by Def4
+       by VALUED_1:1
+     .=seq1.n+seq2.n+seq3.n by VALUED_1:1
      .=seq1.n+(seq2.n+seq3.n)
-     .=seq1.n+(seq2+seq3).n by Def4
-     .=(seq1+(seq2+seq3)).n by Def4;
+     .=seq1.n+(seq2+seq3).n by VALUED_1:1
+     .=(seq1+(seq2+seq3)).n by VALUED_1:1;
    end;
   hence thesis by Th6;
  end;
@@ -567,11 +218,11 @@ theorem
  Th11: (seq1(#)seq2)(#)seq3=seq1(#)(seq2(#)seq3)
   proof
        now let n;
-    thus ((seq1(#)seq2)(#)seq3).n=(seq1(#)seq2).n*seq3.n by Def5
-     .=seq1.n*seq2.n*seq3.n by Def5
+    thus ((seq1(#)seq2)(#)seq3).n=(seq1(#)seq2).n*seq3.n by VALUED_1:5
+     .=seq1.n*seq2.n*seq3.n by VALUED_1:5
      .=seq1.n*(seq2.n*seq3.n)
-     .=seq1.n*(seq2(#)seq3).n by Def5
-     .=(seq1(#)(seq2(#)seq3)).n by Def5;
+     .=seq1.n*(seq2(#)seq3).n by VALUED_1:5
+     .=(seq1(#)(seq2(#)seq3)).n by VALUED_1:5;
    end;
   hence thesis by Th6;
  end;
@@ -580,39 +231,39 @@ theorem
  Th12: (seq1+seq2)(#)seq3=seq1(#)seq3+seq2(#)seq3
   proof
        now let n;
-    thus ((seq1+seq2)(#)seq3).n=(seq1+seq2).n*seq3.n by Def5
-     .=(seq1.n+seq2.n)*seq3.n by Def4
+    thus ((seq1+seq2)(#)seq3).n=(seq1+seq2).n*seq3.n by VALUED_1:5
+     .=(seq1.n+seq2.n)*seq3.n by VALUED_1:1
      .=seq1.n*seq3.n+seq2.n*seq3.n
-     .=(seq1(#)seq3).n+seq2.n*seq3.n by Def5
-     .=(seq1(#)seq3).n+(seq2(#)seq3).n by Def5
-     .=((seq1(#)seq3)+(seq2(#)seq3)).n by Def4;
+     .=(seq1(#)seq3).n+seq2.n*seq3.n by VALUED_1:5
+     .=(seq1(#)seq3).n+(seq2(#)seq3).n by VALUED_1:5
+     .=((seq1(#)seq3)+(seq2(#)seq3)).n by VALUED_1:1;
    end;
   hence thesis by Th6;
  end;
 
 theorem
-      seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2 by Th12;
+  seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2 by Th12;
 
 theorem
  Th14: -seq=(-1r)(#)seq
   proof
-       now let n;
-    thus ((-1r)(#)seq).n=(-1r)*seq.n by Def7
-     .=-seq.n by COMPLEX1:def 7
-     .=(-seq).n by Def9;
-   end;
-  hence thesis by Th6;
- end;
+    now let n;
+      thus ((-1r)(#)seq).n=(-1r)*seq.n by VALUED_1:6
+      .=-seq.n by COMPLEX1:def 7
+      .=(-seq).n by VALUED_1:8;
+    end;
+    hence thesis by Th6;
+  end;
 
 theorem
  Th15: r(#)(seq1(#)seq2)=r(#)seq1(#)seq2
   proof
        now let n;
-    thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by Def7
-     .=r*(seq1.n*seq2.n) by Def5
+    thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by VALUED_1:6
+     .=r*(seq1.n*seq2.n) by VALUED_1:5
      .=(r*seq1.n)*seq2.n
-     .=(r(#)seq1).n*seq2.n by Def7
-     .=(r(#)seq1 (#) seq2).n by Def5;
+     .=(r(#)seq1).n*seq2.n by VALUED_1:6
+     .=(r(#)seq1 (#) seq2).n by VALUED_1:5;
    end;
   hence thesis by Th6;
  end;
@@ -621,11 +272,11 @@ theorem
  Th16: r(#)(seq1(#)seq2)=seq1(#)(r(#)seq2)
   proof
        now let n;
-    thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by Def7
-     .=r*(seq1.n*seq2.n) by Def5
+    thus (r(#)(seq1(#)seq2)).n=r*(seq1(#)seq2).n by VALUED_1:6
+     .=r*(seq1.n*seq2.n) by VALUED_1:5
      .=seq1.n*(r*seq2.n)
-     .=seq1.n*(r(#)seq2).n by Def7
-     .=(seq1(#)(r(#)seq2)).n by Def5;
+     .=seq1.n*(r(#)seq2).n by VALUED_1:6
+     .=(seq1(#)(r(#)seq2)).n by VALUED_1:5;
    end;
   hence thesis by Th6;
  end;
@@ -646,12 +297,12 @@ theorem
  Th19: r(#)(seq1+seq2)=r(#)seq1+r(#)seq2
   proof
        now let n;
-    thus (r(#)(seq1 + seq2)).n=r*(seq1+seq2).n by Def7
-     .=r*(seq1.n+seq2.n) by Def4
+    thus (r(#)(seq1 + seq2)).n=r*(seq1+seq2).n by VALUED_1:6
+     .=r*(seq1.n+seq2.n) by VALUED_1:1
      .=r*seq1.n+r*seq2.n
-     .=(r(#)seq1).n+r*seq2.n by Def7
-     .=(r(#)seq1).n+(r(#)seq2).n by Def7
-     .=((r(#)seq1)+(r(#)seq2)).n by Def4;
+     .=(r(#)seq1).n+r*seq2.n by VALUED_1:6
+     .=(r(#)seq1).n+(r(#)seq2).n by VALUED_1:6
+     .=((r(#)seq1)+(r(#)seq2)).n by VALUED_1:1;
    end;
   hence thesis by Th6;
  end;
@@ -660,10 +311,10 @@ theorem
  Th20: (r*p)(#)seq=r(#)(p(#)seq)
   proof
        now let n;
-    thus ((r*p)(#)seq).n=(r*p)*seq.n by Def7
+    thus ((r*p)(#)seq).n=(r*p)*seq.n by VALUED_1:6
      .=r*(p*seq.n)
-     .=r*(p(#)seq).n by Def7
-     .=(r(#)(p(#)seq)).n by Def7;
+     .=r*(p(#)seq).n by VALUED_1:6
+     .=(r(#)(p(#)seq)).n by VALUED_1:6;
    end;
   hence thesis by Th6;
  end;
@@ -679,10 +330,14 @@ theorem
   end;
 
 theorem
-  r(#)(seq1/"seq)=(r(#)seq1)/"seq by Th15;
+  r(#)(seq1/"seq)=(r(#)seq1)/"seq
+  proof
+    thus r(#)(seq1/"seq) = r(#)(seq1(#)(seq)")
+    .= (r(#)seq1)/"seq by Th15;
+  end;
 
 theorem
-      seq1-(seq2+seq3)=seq1-seq2-seq3
+  seq1-(seq2+seq3)=seq1-seq2-seq3
   proof
    thus seq1-(seq2+seq3)=seq1+(-1r)(#)(seq2+seq3) by Th14
     .=seq1+((-1r)(#)seq2+(-1r)(#)seq3) by Th19
@@ -695,14 +350,14 @@ theorem
  Th24:  1r(#)seq=seq
   proof
        now let n;
-    thus (1r(#)seq).n=1r*seq.n by Def7
+    thus (1r(#)seq).n=1r*seq.n by VALUED_1:6
      .=seq.n by COMPLEX1:def 7;
    end;
    hence thesis by Th6;
   end;
 
 theorem
- Th25:  -(-seq)=seq
+  --seq = seq
   proof
    thus -(-seq)=(-1r)(#)(-seq) by Th14
     .=(-1r)(#)((-1r)(#)seq) by Th14
@@ -711,21 +366,24 @@ theorem
    end;
 
 theorem
-  seq1-(-seq2)=seq1+seq2 by Th25;
+  seq1 - (-seq2) = seq1 + seq2;
 
 theorem
-      seq1-(seq2-seq3)=seq1-seq2+seq3
+  seq1 - (seq2 - seq3) = seq1 - seq2 + seq3
   proof
    thus seq1-(seq2-seq3)=seq1+(-1r)(#)(seq2-seq3) by Th14
     .=seq1+((-1r)(#)seq2-((-1r)(#)seq3)) by Th21
     .=seq1+(-seq2-((-1r)(#)seq3)) by Th14
     .=seq1+(-seq2-(-seq3)) by Th14
-    .=seq1+(-seq2+seq3) by Th25
     .=seq1-seq2+seq3 by Th9;
   end;
 
 theorem
-      seq1+(seq2-seq3)=seq1+seq2-seq3 by Th9;
+  seq1 + (seq2 - seq3) = seq1 + seq2 - seq3
+  proof
+    thus seq1 + (seq2-seq3) = seq1 + (seq2+-seq3)
+    .= seq1+seq2-seq3 by Th9;
+  end;
 
 theorem
       (-seq1)(#)seq2=-(seq1(#)seq2) & seq1(#)(-seq2)=-(seq1(#)seq2)
@@ -746,20 +404,12 @@ theorem
  A2: not seq" is non-zero;
    consider n1 such that
  A3: (seq").n1=0c by A2,Th4;
-       (seq.n1)"=(seq").n1 by Def11;
+   (seq.n1)"=(seq").n1 by VALUED_1:10;
    hence contradiction by A1,A3,Th4,XCMPLX_1:203;
   end;
 
 theorem
- Th31:seq""=seq
-  proof
-        now let n;
-     thus (seq"").n=((seq").n)" by Def11
-      .=(seq.n)"" by Def11
-      .=seq.n;
-    end;
-   hence thesis by Th6;
-  end;
+  seq""=seq;
 
 theorem
  Th32:seq is non-zero & seq1 is non-zero iff seq(#)seq1 is non-zero
@@ -772,7 +422,7 @@ A2: seq1 is non-zero;
         now let n;
  A3: seq.n<>0c by A1,Th4;
  A4: seq1.n<>0c by A2,Th4;
-         (seq(#)seq1).n=(seq.n)*(seq1.n) by Def5;
+         (seq(#)seq1).n=(seq.n)*(seq1.n) by VALUED_1:5;
      hence (seq(#)seq1).n<>0c by A3,A4,XCMPLX_1:6;
     end;
    hence thesis by Th4;
@@ -780,12 +430,12 @@ A2: seq1 is non-zero;
   assume
 A5: seq(#)seq1 is non-zero;
        now let n;
-        (seq(#)seq1).n=(seq.n)*(seq1.n) by Def5;
+        (seq(#)seq1).n=(seq.n)*(seq1.n) by VALUED_1:5;
     hence seq.n<>0c by A5,Th4;
    end;
   hence seq is non-zero by Th4;
        now let n;
-        (seq(#)seq1).n=(seq.n)*(seq1.n) by Def5;
+        (seq(#)seq1).n=(seq.n)*(seq1.n) by VALUED_1:5;
     hence seq1.n<>0c by A5,Th4;
    end;
   hence seq1 is non-zero by Th4;
@@ -798,12 +448,12 @@ theorem
     seq is non-zero and
     seq1 is non-zero;
         now let n;
-     thus ((seq")(#)(seq1")).n=((seq").n)*((seq1").n) by Def5
-      .=((seq").n)*(seq1.n)" by Def11
-      .=(seq.n)"*(seq1.n)" by Def11
+     thus ((seq")(#)(seq1")).n=((seq").n)*((seq1").n) by VALUED_1:5
+      .=((seq").n)*(seq1.n)" by VALUED_1:10
+      .=(seq.n)"*(seq1.n)" by VALUED_1:10
       .=((seq.n)*(seq1.n))" by XCMPLX_1:205
-      .=((seq(#)seq1).n)" by Def5
-      .=((seq(#)seq1)").n by Def11;
+      .=((seq(#)seq1).n)" by VALUED_1:5
+      .=((seq(#)seq1)").n by VALUED_1:10;
     end;
    hence thesis by Th6;
   end;
@@ -815,9 +465,9 @@ theorem
 A1: seq is non-zero;
         now let n;
  A2: seq.n<>0c by A1,Th4;
-     thus ((seq1/"seq)(#)seq).n=((seq1(#)seq").n)*seq.n by Def5
-      .=(seq1.n)*(seq".n)*seq.n by Def5
-      .=(seq1.n)*(seq.n)"*seq.n by Def11
+     thus ((seq1/"seq)(#)seq).n=((seq1(#)seq").n)*seq.n by VALUED_1:5
+      .=(seq1.n)*(seq".n)*seq.n by VALUED_1:5
+      .=(seq1.n)*(seq.n)"*seq.n by VALUED_1:10
       .=(seq1.n)*((seq.n)"*seq.n)
       .=(seq1.n)*1r by A2,COMPLEX1:def 7,XCMPLX_0:def 7
       .=seq1.n by COMPLEX1:def 7;
@@ -834,15 +484,15 @@ A1: seq is non-zero and
 A2: seq1 is non-zero;
         now let n;
   thus ((seq'/"seq)(#)(seq1'/"seq1)).n=((seq'(#)seq").n)*(seq1'/"seq1).n by
-Def5
-       .=(seq'.n)*(seq".n)*(seq1'(#)seq1").n by Def5
-        .=(seq'.n)*(seq".n)*((seq1'.n)*seq1".n) by Def5
+VALUED_1:5
+       .=(seq'.n)*(seq".n)*(seq1'(#)seq1").n by VALUED_1:5
+        .=(seq'.n)*(seq".n)*((seq1'.n)*seq1".n) by VALUED_1:5
         .=(seq'.n)*((seq1'.n)*((seq".n)*seq1".n))
-        .=(seq'.n)*((seq1'.n)*((seq"(#)seq1").n)) by Def5
+        .=(seq'.n)*((seq1'.n)*((seq"(#)seq1").n)) by VALUED_1:5
         .=(seq'.n)*(seq1'.n)*((seq"(#)seq1").n)
         .=(seq'.n)*(seq1'.n)*((seq(#)seq1)".n) by A1,A2,Th33
-        .=((seq'(#)seq1').n)*(seq(#)seq1)".n by Def5
-        .=((seq'(#)seq1')/"(seq(#)seq1)).n by Def5;
+        .=((seq'(#)seq1').n)*(seq(#)seq1)".n by VALUED_1:5
+        .=((seq'(#)seq1')/"(seq(#)seq1)).n by VALUED_1:5;
       end;
      hence thesis by Th6;
    end;
@@ -866,13 +516,17 @@ A2: seq1 is non-zero;
 A3: seq1" is non-zero by A2,Th30;
         now let n;
      thus (seq/"seq1)".n=(seq"(#)seq1"").n by A1,A3,Th33
-      .=(seq1/"seq).n by Th31;
+      .=(seq1/"seq).n;
     end;
    hence thesis by Th6;
   end;
 
 theorem
-  seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq by Th11;
+  seq2 (#) (seq1 /" seq) = (seq2 (#) seq1) /" seq
+  proof
+    thus seq2 (#) (seq1 /" seq) = seq2 (#) seq1 (#) (seq") by Th11
+    .= (seq2 (#) seq1) /" seq;
+  end;
 
 theorem
      seq is non-zero & seq1 is non-zero implies
@@ -883,7 +537,8 @@ A1: seq is non-zero and
 A2: seq1 is non-zero;
         now let n;
      thus (seq2/"(seq/"seq1)).n=((seq2(#)(seq1/"seq))).n by A1,A2,Th37
-      .=((seq2(#)seq1)/"seq).n by Th11;
+      .=((seq2(#)seq1)(#)(seq")).n by Th11
+      .=((seq2(#)seq1)/"seq).n;
     end;
    hence thesis by Th6;
   end;
@@ -897,15 +552,15 @@ A1: seq is non-zero and
 A2: seq1 is non-zero;
         now let n;
   A3: seq1.n<>0c by A2,Th4;
-     thus (seq2/"seq).n=(seq2.n)*1r*seq".n by Def5,COMPLEX1:def 7
+     thus (seq2/"seq).n=(seq2.n)*1r*seq".n by COMPLEX1:def 7,VALUED_1:5
       .=(seq2.n)*((seq1.n)*(seq1.n)")*seq".n
             by A3,COMPLEX1:def 7,XCMPLX_0:def 7
       .=(seq2.n)*(seq1.n)*((seq1.n)"*seq".n)
-      .=((seq2(#)seq1).n)*((seq1.n)"*seq".n) by Def5
-      .=((seq2(#)seq1).n)*((seq1".n)*seq".n) by Def11
-      .=((seq2(#)seq1).n)*(seq"(#)seq1").n by Def5
+      .=((seq2(#)seq1).n)*((seq1.n)"*seq".n) by VALUED_1:5
+      .=((seq2(#)seq1).n)*((seq1".n)*seq".n) by VALUED_1:10
+      .=((seq2(#)seq1).n)*(seq"(#)seq1").n by VALUED_1:5
       .=((seq2(#)seq1).n)*(seq(#)seq1)".n by A1,A2,Th33
-      .=((seq2(#)seq1)/"(seq(#)seq1)).n by Def5;
+      .=((seq2(#)seq1)/"(seq(#)seq1)).n by VALUED_1:5;
     end;
    hence thesis by Th6;
   end;
@@ -919,7 +574,7 @@ A2: seq is non-zero and
 A3: not r(#)seq is non-zero;
    consider n1 such that
 A4: (r(#)seq).n1=0c by A3,Th4;
-A5: r*seq.n1=0c by A4,Def7;
+A5: r*seq.n1=0c by A4,VALUED_1:6;
         seq.n1 <> 0c by A2,Th4;
    hence contradiction by A1,A5,XCMPLX_1:6;
   end;
@@ -941,11 +596,11 @@ theorem
     r<>0c and
     seq is non-zero;
         now let n;
-     thus (r(#)seq)".n=((r(#)seq).n)" by Def11
-      .=(r*(seq.n))" by Def7
+     thus (r(#)seq)".n=((r(#)seq).n)" by VALUED_1:10
+      .=(r*(seq.n))" by VALUED_1:6
       .=r"*(seq.n)" by XCMPLX_1:205
-      .=r"*seq".n by Def11
-      .=(r"(#)seq").n by Def7;
+      .=r"*seq".n by VALUED_1:10
+      .=(r"(#)seq").n by VALUED_1:6;
     end;
    hence thesis by Th6;
   end;
@@ -953,11 +608,8 @@ theorem
 theorem
  Th44:seq is non-zero implies (-seq)"=(-1r)(#)seq"
   proof
-   assume
-A1: seq is non-zero;
-A2:  (-1)" = -1;
-   thus (-seq)"=((-1r)(#)seq)" by Th14
-    .=(-1r)(#)seq" by A1,A2,Th43,COMPLEX1:def 7;
+    (-1)" = -1;
+   hence thesis by Th43,COMPLEX1:def 7;
   end;
 
 theorem
@@ -967,7 +619,7 @@ theorem
    assume
  A1: seq is non-zero;
    thus -seq1/"seq=(-1r)(#)(seq1/"seq) by Th14
-    .=((-1r)(#)seq1)/"seq by Th15
+    .=((-1r)(#)seq1)(#)(seq") by Th15
     .=(-seq1)/"seq by Th14;
    thus seq1/"(-seq)=seq1(#)((-1r)(#)seq") by A1,Th44
     .=(-1r)(#)(seq1(#)(seq")) by Th16
@@ -975,8 +627,14 @@ theorem
   end;
 
 theorem
- seq1/"seq + seq1'/"seq=(seq1+seq1')/"seq &
-                    seq1/"seq - seq1'/"seq=(seq1-seq1')/"seq by Th12,Th17;
+  seq1/"seq + seq1'/"seq = (seq1+seq1') /" seq &
+  seq1/"seq - seq1'/"seq = (seq1-seq1') /" seq
+  proof
+    thus seq1/"seq + seq1'/"seq = (seq1+seq1')(#)(seq") by Th12
+    .= (seq1+seq1') /" seq;
+    thus seq1/"seq - seq1'/"seq = (seq1-seq1')(#)(seq") by Th17
+    .= (seq1-seq1') /" seq;
+  end;
 
 theorem
      seq is non-zero & seq' is non-zero implies
@@ -989,11 +647,13 @@ A2: seq' is non-zero;
    thus seq1/"seq + seq1'/"seq'=(seq1(#)seq')/"(seq(#)seq')+seq1'/"seq'
       by A1,A2,Th40
     .=(seq1(#)seq')/"(seq(#)seq')+(seq1'(#)seq)/"(seq(#)seq') by A1,A2,Th40
-    .=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq') by Th12;
+    .=(seq1(#)seq'+seq1'(#)seq)(#)((seq(#)seq')") by Th12
+    .=(seq1(#)seq'+seq1'(#)seq)/"(seq(#)seq');
    thus seq1/"seq - seq1'/"seq'=(seq1(#)seq')/"(seq(#)seq')-seq1'/"seq'
       by A1,A2,Th40
     .=(seq1(#)seq')/"(seq(#)seq')-(seq1'(#)seq)/"(seq(#)seq') by A1,A2,Th40
-    .=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq') by Th17;
+    .=(seq1(#)seq'-seq1'(#)seq)(#)((seq(#)seq')") by Th17
+    .=(seq1(#)seq'-seq1'(#)seq)/"(seq(#)seq');
   end;
 
 theorem
@@ -1007,7 +667,6 @@ A2: seq' is non-zero;
 then seq1" is non-zero by Th30;
    hence (seq1'/"seq)/"(seq'/"seq1)=
 (seq1'/"seq)(#)(seq'"(#)seq1"") by A2,Th33
-    .=(seq1'(#)seq")(#)(seq1(#)seq'") by Th31
     .=seq1'(#)seq"(#)seq1(#)seq'" by Th11
     .=seq1'(#)(seq1(#)seq")(#)seq'" by Th11
     .=seq1'(#)((seq1(#)seq")(#)seq'") by Th11
@@ -1020,40 +679,41 @@ theorem
  Th49:|.seq(#)seq'.|=|.seq.|(#)|.seq'.|
   proof
        now let n;
-    thus (|.seq(#)seq'.|).n=|.((seq(#)seq').n).| by Def14
-     .=|.(seq.n)*(seq'.n).| by Def5
+    thus (|.seq(#)seq'.|).n=|.((seq(#)seq').n).| by VALUED_1:18
+     .=|.(seq.n)*(seq'.n).| by VALUED_1:5
      .=|.(seq.n).|*|.(seq'.n).| by COMPLEX1:151
-     .=((|.seq.|).n)*|.(seq'.n).| by Def14
-     .=((|.seq.|).n)*(|.seq'.|).n by Def14
-     .=(|.seq.|(#)|.seq'.|).n by SEQ_1:12;
+     .=((|.seq.|).n)*|.(seq'.n).| by VALUED_1:18
+     .=((|.seq.|).n)*(|.seq'.|).n by VALUED_1:18
+     .=(|.seq.|(#)|.seq'.|).n by VALUED_1:5;
    end;
   hence thesis by FUNCT_2:113;
  end;
 
 theorem
-     seq is non-zero implies |.seq.| is_not_0
+  seq is non-zero implies |.seq.| is_not_0
   proof
    assume
  A1: seq is non-zero;
-        now let n;
-         seq.n<>0c by A1,Th4;
-     then |.seq.n.|<>0 by COMPLEX1:131;
-     hence (|.seq.|).n<>0 by Def14;
-    end;
+ |.seq.| is PartFunc of NAT,REAL;
+ now let n;
+   seq.n<>0c by A1,Th4;
+   then |.seq.n.|<>0 by COMPLEX1:131;
+   hence (|.seq.|).n<>0 by VALUED_1:18;
+ end;
    hence thesis by SEQ_1:7;
   end;
 
-theorem
- Th51: |.seq.|"=|.seq".|
+theorem Th51:
+  |. seq .| " = |. seq" .|
   proof
-        now let n;
-     thus (|.seq".|).n=|.seq".n.| by Def14
-      .=|.(seq.n)".| by Def11
+    now let n;
+     thus (|.seq".|).n=|.seq".n.| by VALUED_1:18
+      .=|.(seq.n)".| by VALUED_1:10
       .=|.1r/(seq.n).| by COMPLEX1:def 7,XCMPLX_1:217
       .=1/|.seq.n.| by COMPLEX1:134,153
       .=|.seq.n.|" by XCMPLX_1:217
-      .=(|.seq.|.n)" by Def14
-      .=(|.seq.|)".n by SEQ_1:def 8;
+      .=(|.seq.|.n)" by VALUED_1:18
+      .=(|.seq.|)".n by VALUED_1:10;
     end;
    hence thesis by FUNCT_2:113;
   end;
@@ -1062,19 +722,18 @@ theorem
    |.seq'/"seq.|=|.seq'.|/"|.seq.|
   proof
    thus |.seq'/"seq.|=|.seq'.|(#)|.seq".| by Th49
-    .=|.seq'.|(#)|.seq.|" by Th51
-    .=|.seq'.|/"|.seq.| by SEQ_1:def 9;
+    .=|.seq'.|/"|.seq.| by Th51;
   end;
 
 theorem
      |.r(#)seq.|=|.r.|(#)|.seq.|
   proof
        now let n;
-    thus |.r(#)seq.|.n=|.(r(#)seq).n.| by Def14
-     .=|.r*(seq.n).| by Def7
+    thus |.r(#)seq.|.n=|.(r(#)seq).n.| by VALUED_1:18
+     .=|.r*(seq.n).| by VALUED_1:6
      .=|.r.|*|.seq.n.| by COMPLEX1:151
-     .=|.r.|*(|.seq.|).n by Def14
-     .=(|.r.|(#)|.seq.|).n by SEQ_1:13;
+     .=|.r.|*(|.seq.|).n by VALUED_1:18
+     .=(|.r.|(#)|.seq.|).n by VALUED_1:6;
    end;
   hence thesis by FUNCT_2:113;
  end;

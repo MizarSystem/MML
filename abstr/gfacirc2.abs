@@ -1,0 +1,548 @@
+:: Stability of n-bit Generalized Full Adder Circuits (GFAs). Part {II}
+::  by Katsumi Wasaki
+:: 
+:: Received December 18, 2007
+:: Copyright (c) 2007 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, MCART_1, RELAT_1, AMI_1, CARD_1, FUNCT_1, FUNCT_4,
+      FUNCT_5, FUNCOP_1, FINSEQ_1, FINSEQ_2, PBOOLE, MARGREL1, LATTICES,
+      ZF_REFLE, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB, FACIRC_1,
+      TWOSCOMP, GFACIRC1, GFACIRC2, ARYTM;
+ notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, XCMPLX_0, NAT_1, MCART_1,
+      RELAT_1, CARD_1, STRUCT_0, FUNCT_1, FUNCT_2, FUNCT_5, FINSEQ_1, FINSEQ_2,
+      PBOOLE, MARGREL1, MSUALG_1, MSAFREE2, CIRCUIT1, CIRCUIT2, CIRCCOMB,
+      FACIRC_1, TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS, XXREAL_0;
+ constructors ENUMSET1, XXREAL_0, FUNCT_5, CLASSES1, BINARITH, CIRCUIT2,
+      FACIRC_1, TWOSCOMP, FACIRC_2, GFACIRC1, NUMBERS;
+ registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, XXREAL_0, XREAL_0, NAT_1,
+      FINSEQ_1, MARGREL1, FINSEQ_2, STRUCT_0, CIRCCOMB, FACIRC_1, CIRCCMB2,
+      FACIRC_2, NUMBERS;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: 1. Stability of n-bit Generalized Full Adder Circuit (TYPE-0)
+::========================================================================
+
+::========================================================================
+:: [n-bit Combined GFA TYPE-0]
+::
+::   Composition : n-bit Ripple Carry Connection using GFA TYPE-0
+::   Function    : x[1..n] + y[1..n] + 0 = c[n] + s[1..n] (Addition)
+::
+::           x[n]   y[n]             x[2]   y[2]    x[1]   y[1]
+::             |     /                 |     /        |     /
+::             |    /                  |    /         |    /
+::         +---*---*               +---*---*      +---*---*     +---+
+::         |  GFA  *<----....---+  |  GFA  *<--+  |  GFA  *<----|'0'|
+::         | TYPE0 |            |  | TYPE0 |   |  | TYPE0 |     +---+
+::         *---*---+            |  *---*---+   |  *---*---+
+::        /    |                |_/    |       |_/    |
+::       /     |                       |              |
+::     c[n]   s[n]                    s[2]           s[1]
+::
+::   Calculation : Following(s,1+2*n) is stable.
+::
+::=========================================================================
+
+::------------------------------------------------
+:: 1-1. Definitions of n-Bit GFA Structure and Circuit (TYPE-0)
+::------------------------------------------------
+
+:: Combined Circuit Structure (n-bit) of GFA TYPE-0
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ func n-BitGFA0Str(x,y) ->
+      unsplit gate`1=arity gate`2isBoolean non void strict
+      non empty ManySortedSign means
+:: GFACIRC2:def 1
+
+  ex f,h being ManySortedSet of NAT st
+   it = f.n &
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Element of NAT, S being non empty ManySortedSign, z be set
+    st S = f.n & z = h.n
+    holds f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
+          h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), z);
+end;
+
+:: Algebraic Circuit Structure (n-bit) of GFA TYPE-0
+
+definition
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ func n-BitGFA0Circ(x,y) ->
+      Boolean gate`2=den strict Circuit of n-BitGFA0Str(x,y) means
+:: GFACIRC2:def 2
+
+  ex f,g,h being ManySortedSet of NAT st
+   n-BitGFA0Str(x,y) = f.n & it = g.n &
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Element of NAT, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitGFA0Circ(x .(n+1), y.(n+1), z) &
+     h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), z);
+end;
+
+:: Ripple Carry Output (c[1..n]) of n-bit GFA (TYPE-0)
+
+definition
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ func n-BitGFA0CarryOutput(x,y) ->
+      Element of InnerVertices (n-BitGFA0Str(x,y)) means
+:: GFACIRC2:def 3
+
+  ex h being ManySortedSet of NAT st
+   it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Element of NAT holds
+    h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), h.n);
+end;
+
+::-----------------------------------------------
+:: 1-2. Properties of n-Bit GFA Structure and Circuit (TYPE-0)
+::-----------------------------------------------
+
+:: Recursive Circuit Composition of (n+1)-depth GFA Structure
+
+theorem :: GFACIRC2:1
+ for x,y being FinSequence, f,g,h being ManySortedSet of NAT st
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->FALSE] &
+   for n being Element of NAT, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitGFA0Str(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitGFA0Circ(x .(n+1), y.(n+1), z) &
+     h.(n+1) = GFA0CarryOutput(x .(n+1), y.(n+1), z)
+ for n being Element of NAT holds
+   n-BitGFA0Str(x,y) = f.n & n-BitGFA0Circ(x,y) = g.n &
+   n-BitGFA0CarryOutput(x,y) = h.n;
+
+:: Special Case : (0)-depth GFA Structure
+
+theorem :: GFACIRC2:2
+  for a,b being FinSequence holds
+    0-BitGFA0Str(a,b)  = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+    0-BitGFA0Circ(a,b) = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->FALSE) &
+    0-BitGFA0CarryOutput(a,b) = [<*>, (0-tuples_on BOOLEAN)-->FALSE];
+
+:: Special Case : (1)-depth GFA Structure with input signals a,b (sequence)
+
+theorem :: GFACIRC2:3
+ for a,b being FinSequence, c being set
+   st c = [<*>, (0-tuples_on BOOLEAN)-->FALSE]
+  holds
+   1-BitGFA0Str(a,b)  = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->FALSE) +*
+                        BitGFA0Str(a.1, b.1, c) &
+   1-BitGFA0Circ(a,b) = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->FALSE) +*
+                        BitGFA0Circ(a.1, b.1, c) &
+   1-BitGFA0CarryOutput(a,b) = GFA0CarryOutput(a.1, b.1, c);
+
+:: Special Case : (1)-depth GFA Structure with input signals a,b (set)
+
+theorem :: GFACIRC2:4
+ for a,b,c being set st c = [<*>, (0-tuples_on BOOLEAN)-->FALSE]
+  holds
+   1-BitGFA0Str(<*a*>,<*b*>) =
+                       1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->FALSE) +*
+                       BitGFA0Str(a, b, c) &
+   1-BitGFA0Circ(<*a*>,<*b*>) =
+                       1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->FALSE) +*
+                       BitGFA0Circ(a, b, c) &
+   1-BitGFA0CarryOutput(<*a*>,<*b*>) = GFA0CarryOutput(a, b, c);
+
+:: Structural Equivalency of GFA Structure which is used the combined
+:: input signals p[1..n] ^ p[n+1].
+
+theorem :: GFACIRC2:5
+ for n be Element of NAT
+ for p,q being FinSeqLen of n
+ for p1,p2, q1,q2 being FinSequence holds
+   n-BitGFA0Str(p^p1, q^q1)  = n-BitGFA0Str(p^p2, q^q2) &
+   n-BitGFA0Circ(p^p1, q^q1) = n-BitGFA0Circ(p^p2, q^q2) &
+   n-BitGFA0CarryOutput(p^p1, q^q1) = n-BitGFA0CarryOutput(p^p2, q^q2);
+
+:: Special Case : (n+1)-depth GFA Structure with input signals
+::                x[1..n]^a and y[1..n]^b.
+
+theorem :: GFACIRC2:6
+ for n be Element of NAT
+ for x,y being FinSeqLen of n
+ for a,b being set holds
+   (n+1)-BitGFA0Str(x^<*a*>, y^<*b*>) = n-BitGFA0Str(x, y) +*
+         BitGFA0Str(a, b, n-BitGFA0CarryOutput(x, y)) &
+   (n+1)-BitGFA0Circ(x^<*a*>, y^<*b*>) = n-BitGFA0Circ(x, y) +*
+         BitGFA0Circ(a, b, n-BitGFA0CarryOutput(x, y)) &
+   (n+1)-BitGFA0CarryOutput(x^<*a*>, y^<*b*>) =
+         GFA0CarryOutput(a, b, n-BitGFA0CarryOutput(x, y));
+
+:: Main Proposision : (n+1)-depth GFA Structure with input signals
+::                    x[1..n] and y[1..n].
+
+theorem :: GFACIRC2:7
+ for n be Element of NAT
+ for x,y being FinSequence holds
+   (n+1)-BitGFA0Str(x, y) = n-BitGFA0Str(x, y) +*
+         BitGFA0Str(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x, y)) &
+   (n+1)-BitGFA0Circ(x, y) = n-BitGFA0Circ(x, y) +*
+         BitGFA0Circ(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x, y)) &
+   (n+1)-BitGFA0CarryOutput(x, y) =
+         GFA0CarryOutput(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x, y));
+
+::-------------------------------------------------------
+:: 1-3. InnerVertices and Adder Output of n-Bit GFA Structure (TYPE-0)
+::-------------------------------------------------------
+
+:: m-bit GFA Circuit contains whole internal signals in
+:: n-bit GFA Circuit if n<=m.
+
+theorem :: GFACIRC2:8
+ for n,m be Element of NAT st n <= m
+ for x,y being FinSequence holds
+   InnerVertices (n-BitGFA0Str(x,y)) c= InnerVertices (m-BitGFA0Str(x,y));
+
+:: whole internal signals (n+1)-bit GFA Circuit is the conjunction
+:: of internal signals in n-bit GFA Circuits and one-bit GFA Circuit.
+
+theorem :: GFACIRC2:9
+ for n be Element of NAT
+ for x,y being FinSequence holds
+  InnerVertices ((n+1)-BitGFA0Str(x,y)) =
+      InnerVertices (n-BitGFA0Str(x,y)) \/
+      InnerVertices BitGFA0Str(x .(n+1), y.(n+1), n-BitGFA0CarryOutput(x,y));
+
+:: k-th (k \in [1,n]) Adder Output of n-bit Combined GFA Circuit (TYPE-0)
+
+definition
+ let k,n be Element of NAT such that
+ k >= 1 & k <= n;
+ let x,y be FinSequence;
+ func (k,n)-BitGFA0AdderOutput(x,y) ->
+      Element of InnerVertices (n-BitGFA0Str(x,y)) means
+:: GFACIRC2:def 4
+
+   ex i being Element of NAT st k = i+1 &
+     it = GFA0AdderOutput(x .k, y.k, i-BitGFA0CarryOutput(x,y));
+end;
+
+:: Main Proposision : k-th Ripple Carry Output of n-depth GFA Circuit
+
+theorem :: GFACIRC2:10
+ for n,k being Element of NAT st k < n
+ for x,y being FinSequence holds
+   (k+1,n)-BitGFA0AdderOutput(x,y) =
+     GFA0AdderOutput(x .(k+1), y.(k+1), k-BitGFA0CarryOutput(x,y));
+
+theorem :: GFACIRC2:11
+ for n being Element of NAT
+ for x,y being FinSequence holds
+   InnerVertices (n-BitGFA0Str(x,y)) is Relation;
+
+registration
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ cluster n-BitGFA0CarryOutput(x,y) -> pair;
+end;
+
+:: whole input signals (n+1)-bit GFA Circuit is the conjunction
+:: of input signals in n-bit GFA Circuits and one-bit GFA Circuit.
+
+theorem :: GFACIRC2:12
+ for f,g being nonpair-yielding FinSequence
+ for n being Element of NAT holds
+   InputVertices ((n+1)-BitGFA0Str(f,g)) =
+     (InputVertices (n-BitGFA0Str(f,g)))\/
+      ((InputVertices BitGFA0Str(f.(n+1),g.(n+1),
+         n-BitGFA0CarryOutput(f,g)) \ {n-BitGFA0CarryOutput(f,g)})) &
+   InnerVertices (n-BitGFA0Str(f,g)) is Relation &
+   InputVertices (n-BitGFA0Str(f,g)) is without_pairs;
+
+:: Main Proposision : whole input signals of n-depth GFA Circuit
+
+theorem :: GFACIRC2:13
+ for n being Element of NAT
+ for x,y being nonpair-yielding FinSeqLen of n holds
+   InputVertices (n-BitGFA0Str(x,y)) = rng x \/ rng y;
+
+::--------------------------------
+:: 1-5. Stability of n-Bit GFA Circuit (TYPE-0)
+::--------------------------------
+
+theorem :: GFACIRC2:14
+ for n being Element of NAT
+ for x,y being nonpair-yielding FinSeqLen of n
+ for s being State of n-BitGFA0Circ(x,y) holds
+   Following(s,1+2*n) is stable;
+
+::========================================================================
+begin :: 2. Stability of n-bit Generalized Full Adder Circuit (TYPE-1)
+::========================================================================
+
+::========================================================================
+:: [n-bit Combined GFA TYPE-1]
+::
+::   Composition : n-bit Ripple Carry Connection using GFA TYPE-1
+::   Function    : x[1..n] - y[1..n] + 1 = c[n] - s[1..n] (Subtraction)
+::
+::           x[n]   -y[n]            x[2]   -y[2]   x[1]   -y[1]
+::             |     /                 |     /        |     /
+::             |    /                  |    /         |    /
+::         +---*---O               +---*---O      +---*---O     +---+
+::         |  GFA  *<----....---+  |  GFA  *<--+  |  GFA  *<----|'1'|
+::         | TYPE1 |            |  | TYPE1 |   |  | TYPE1 |     +---+
+::         *---O---+            |  *---O---+   |  *---O---+
+::        /    |                |_/    |       |_/    |
+::       /     |                       |              |
+::     c[n]  -s[n]                   -s[2]          -s[1]
+::
+::   Calculation : Following(s,1+2*n) is stable.
+::
+::=========================================================================
+
+::------------------------------------------------
+:: 2-1. Definitions of n-Bit GFA Structure and Circuit (TYPE-1)
+::------------------------------------------------
+
+:: Combined Circuit Structure (n-bit) of GFA TYPE-1
+
+definition
+ let n be Nat;
+ let x,y be FinSequence;
+ func n-BitGFA1Str(x,y) ->
+      unsplit gate`1=arity gate`2isBoolean non void strict
+      non empty ManySortedSign means
+:: GFACIRC2:def 5
+
+  ex f,h being ManySortedSet of NAT st
+   it = f.n &
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
+   for n being Element of NAT, S being non empty ManySortedSign, z be set
+    st S = f.n & z = h.n
+    holds f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
+          h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), z);
+end;
+
+:: Algebraic Circuit Structure (n-bit) of GFA TYPE-1
+
+definition
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ func n-BitGFA1Circ(x,y) ->
+      Boolean gate`2=den strict Circuit of n-BitGFA1Str(x,y) means
+:: GFACIRC2:def 6
+
+  ex f,g,h being ManySortedSet of NAT st
+   n-BitGFA1Str(x,y) = f.n & it = g.n &
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
+   for n being Element of NAT, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitGFA1Circ(x .(n+1), y.(n+1), z) &
+     h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), z);
+end;
+
+:: Ripple Carry Output (c[1..n]) of n-bit GFA (TYPE-1)
+
+definition
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ func n-BitGFA1CarryOutput(x,y) ->
+      Element of InnerVertices (n-BitGFA1Str(x,y)) means
+:: GFACIRC2:def 7
+
+  ex h being ManySortedSet of NAT st
+   it = h.n & h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
+   for n being Element of NAT holds
+    h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), h.n);
+end;
+
+::-----------------------------------------------
+:: 2-2. Properties of n-Bit GFA Structure and Circuit (TYPE-1)
+::-----------------------------------------------
+
+:: Recursive Circuit Composition of (n+1)-depth GFA Structure
+
+theorem :: GFACIRC2:15
+ for x,y being FinSequence, f,g,h being ManySortedSet of NAT st
+   f.0 = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+   g.0 = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+   h.0 = [<*>, (0-tuples_on BOOLEAN)-->TRUE] &
+   for n being Element of NAT, S being non empty ManySortedSign,
+       A being non-empty MSAlgebra over S
+   for z being set st S = f.n & A = g.n & z = h.n holds
+     f.(n+1) = S +* BitGFA1Str(x .(n+1), y.(n+1), z) &
+     g.(n+1) = A +* BitGFA1Circ(x .(n+1), y.(n+1), z) &
+     h.(n+1) = GFA1CarryOutput(x .(n+1), y.(n+1), z)
+ for n being Element of NAT holds
+   n-BitGFA1Str(x,y) = f.n & n-BitGFA1Circ(x,y) = g.n &
+   n-BitGFA1CarryOutput(x,y) = h.n;
+
+:: Special Case : (0)-depth GFA Structure
+
+theorem :: GFACIRC2:16
+  for a,b being FinSequence holds
+    0-BitGFA1Str(a,b)  = 1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+    0-BitGFA1Circ(a,b) = 1GateCircuit(<*>,(0-tuples_on BOOLEAN)-->TRUE) &
+    0-BitGFA1CarryOutput(a,b) = [<*>, (0-tuples_on BOOLEAN)-->TRUE];
+
+:: Special Case : (1)-depth GFA Structure with input signals a,b (sequence)
+
+theorem :: GFACIRC2:17
+ for a,b being FinSequence, c being set
+   st c = [<*>, (0-tuples_on BOOLEAN)-->TRUE]
+  holds
+   1-BitGFA1Str(a,b)  = 1GateCircStr(<*>, (0-tuples_on BOOLEAN)-->TRUE) +*
+                        BitGFA1Str(a.1, b.1, c) &
+   1-BitGFA1Circ(a,b) = 1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->TRUE) +*
+                        BitGFA1Circ(a.1, b.1, c) &
+   1-BitGFA1CarryOutput(a,b) = GFA1CarryOutput(a.1, b.1, c);
+
+:: Special Case : (1)-depth GFA Structure with input signals a,b (set)
+
+theorem :: GFACIRC2:18
+ for a,b,c being set st c = [<*>, (0-tuples_on BOOLEAN)-->TRUE]
+  holds
+   1-BitGFA1Str(<*a*>,<*b*>) =
+                       1GateCircStr(<*>,(0-tuples_on BOOLEAN)-->TRUE) +*
+                       BitGFA1Str(a, b, c) &
+   1-BitGFA1Circ(<*a*>,<*b*>) =
+                       1GateCircuit(<*>, (0-tuples_on BOOLEAN)-->TRUE) +*
+                       BitGFA1Circ(a, b, c) &
+   1-BitGFA1CarryOutput(<*a*>,<*b*>) = GFA1CarryOutput(a, b, c);
+
+:: Structural Equivalency of GFA Structure which is used the combined
+:: input signals p[1..n] ^ p[n+1].
+
+theorem :: GFACIRC2:19
+ for n be Element of NAT
+ for p,q being FinSeqLen of n
+ for p1,p2, q1,q2 being FinSequence holds
+   n-BitGFA1Str(p^p1, q^q1)  = n-BitGFA1Str(p^p2, q^q2) &
+   n-BitGFA1Circ(p^p1, q^q1) = n-BitGFA1Circ(p^p2, q^q2) &
+   n-BitGFA1CarryOutput(p^p1, q^q1) = n-BitGFA1CarryOutput(p^p2, q^q2);
+
+:: Special Case : (n+1)-depth GFA Structure with input signals
+::                x[1..n]^a and y[1..n]^b.
+
+theorem :: GFACIRC2:20
+ for n be Element of NAT
+ for x,y being FinSeqLen of n
+ for a,b being set holds
+   (n+1)-BitGFA1Str(x^<*a*>, y^<*b*>) = n-BitGFA1Str(x, y) +*
+         BitGFA1Str(a, b, n-BitGFA1CarryOutput(x, y)) &
+   (n+1)-BitGFA1Circ(x^<*a*>, y^<*b*>) = n-BitGFA1Circ(x, y) +*
+         BitGFA1Circ(a, b, n-BitGFA1CarryOutput(x, y)) &
+   (n+1)-BitGFA1CarryOutput(x^<*a*>, y^<*b*>) =
+         GFA1CarryOutput(a, b, n-BitGFA1CarryOutput(x, y));
+
+:: Main Proposision : (n+1)-depth GFA Structure with input signals
+::                    x[1..n] and y[1..n].
+
+theorem :: GFACIRC2:21
+ for n be Element of NAT
+ for x,y being FinSequence holds
+   (n+1)-BitGFA1Str(x, y) = n-BitGFA1Str(x, y) +*
+         BitGFA1Str(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x, y)) &
+   (n+1)-BitGFA1Circ(x, y) = n-BitGFA1Circ(x, y) +*
+         BitGFA1Circ(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x, y)) &
+   (n+1)-BitGFA1CarryOutput(x, y) =
+         GFA1CarryOutput(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x, y));
+
+::-------------------------------------------------------
+:: 2-3. InnerVertices and Adder Output of n-Bit GFA Structure (TYPE-1)
+::-------------------------------------------------------
+
+:: m-bit GFA Circuit contains whole internal signals in
+:: n-bit GFA Circuit if n<=m.
+
+theorem :: GFACIRC2:22
+ for n,m be Element of NAT st n <= m
+ for x,y being FinSequence holds
+   InnerVertices (n-BitGFA1Str(x,y)) c= InnerVertices (m-BitGFA1Str(x,y));
+
+:: whole internal signals (n+1)-bit GFA Circuit is the conjunction
+:: of internal signals in n-bit GFA Circuits and one-bit GFA Circuit.
+
+theorem :: GFACIRC2:23
+ for n be Element of NAT
+ for x,y being FinSequence holds
+  InnerVertices ((n+1)-BitGFA1Str(x,y)) =
+      InnerVertices (n-BitGFA1Str(x,y)) \/
+      InnerVertices BitGFA1Str(x .(n+1), y.(n+1), n-BitGFA1CarryOutput(x,y));
+
+:: k-th (k \in [1,n]) Adder Output of n-bit Combined GFA Circuit (TYPE-1)
+
+definition
+ let k,n be Element of NAT such that
+ k >= 1 & k <= n;
+ let x,y be FinSequence;
+ func (k,n)-BitGFA1AdderOutput(x,y) ->
+      Element of InnerVertices (n-BitGFA1Str(x,y)) means
+:: GFACIRC2:def 8
+
+   ex i being Element of NAT st k = i+1 &
+     it = GFA1AdderOutput(x .k, y.k, i-BitGFA1CarryOutput(x,y));
+end;
+
+:: Main Proposision : k-th Ripple Carry Output of n-depth GFA Circuit
+
+theorem :: GFACIRC2:24
+ for n,k being Element of NAT st k < n
+ for x,y being FinSequence holds
+   (k+1,n)-BitGFA1AdderOutput(x,y) =
+     GFA1AdderOutput(x .(k+1), y.(k+1), k-BitGFA1CarryOutput(x,y));
+
+theorem :: GFACIRC2:25
+ for n being Element of NAT
+ for x,y being FinSequence holds
+   InnerVertices (n-BitGFA1Str(x,y)) is Relation;
+
+registration
+ let n be Element of NAT;
+ let x,y be FinSequence;
+ cluster n-BitGFA1CarryOutput(x,y) -> pair;
+end;
+
+:: whole input signals (n+1)-bit GFA Circuit is the conjunction
+:: of input signals in n-bit GFA Circuits and one-bit GFA Circuit.
+
+theorem :: GFACIRC2:26
+ for f,g being nonpair-yielding FinSequence
+ for n being Element of NAT holds
+   InputVertices ((n+1)-BitGFA1Str(f,g)) =
+     (InputVertices (n-BitGFA1Str(f,g)))\/
+      ((InputVertices BitGFA1Str(f.(n+1),g.(n+1),
+         n-BitGFA1CarryOutput(f,g)) \ {n-BitGFA1CarryOutput(f,g)})) &
+   InnerVertices (n-BitGFA1Str(f,g)) is Relation &
+   InputVertices (n-BitGFA1Str(f,g)) is without_pairs;
+
+:: Main Proposision : whole input signals of n-depth GFA Circuit
+
+theorem :: GFACIRC2:27
+ for n being Element of NAT
+ for x,y being nonpair-yielding FinSeqLen of n holds
+   InputVertices (n-BitGFA1Str(x,y)) = rng x \/ rng y;
+
+::--------------------------------
+:: 2-5. Stability of n-Bit GFA Circuit (TYPE-1)
+::--------------------------------
+
+theorem :: GFACIRC2:28
+ for n being Element of NAT
+ for x,y being nonpair-yielding FinSeqLen of n
+ for s being State of n-BitGFA1Circ(x,y) holds
+   Following(s,1+2*n) is stable;

@@ -22,9 +22,10 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="NEWTON"/>
 </Signature>
@@ -40,7 +41,7 @@
 <Func kind="K" nr="57"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="195">
+<Func kind="K" nr="233">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -73,7 +74,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="190">
+<Func kind="K" nr="228">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -89,7 +90,7 @@
 <Func kind="K" nr="56"/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -100,7 +101,7 @@
 <Func kind="K" nr="57"/>
 </Typ>
 <Cluster>
-<Adjective nr="36"/>
+<Adjective nr="31"/>
 </Cluster>
 </CCluster>
 </Registrations>

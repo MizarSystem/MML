@@ -8,14 +8,15 @@ environ
 
  vocabularies RLVECT_1, VECTSP_1, MCART_1, VECTSP_2, BINOP_1, LATTICES,
       SETFAM_1, FUNCSDOM, ARYTM_3, BOOLE, ARYTM_1, FUNCT_1, RELAT_1, GRCAT_1,
-      COHSP_1, ENDALG, SUBSET_1, QUOFIELD, GROUP_1;
+      COHSP_1, ENDALG, SUBSET_1, QUOFIELD, GROUP_1, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, MCART_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, SETFAM_1, BINOP_1, DOMAIN_1, STRUCT_0,
-      RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, TOPS_2, FUNCSDOM, GRCAT_1, GCD_1,
-      GROUP_6;
- constructors PARTFUN1, DOMAIN_1, TOPS_2, ALGSTR_1, GRCAT_1, GROUP_6, GCD_1;
+      ALGSTR_0, RLVECT_1, GROUP_1, VECTSP_2, VECTSP_1, TOPS_2, FUNCSDOM,
+      GRCAT_1, GCD_1, GROUP_6;
+ constructors PARTFUN1, DOMAIN_1, TOPS_2, ALGSTR_1, GRCAT_1, GROUP_6, GCD_1,
+      VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELSET_1, FUNCT_2, STRUCT_0, VECTSP_1,
-      ALGSTR_1, GCD_1;
+      ALGSTR_1, GCD_1, VALUED_1;
  requirements SUBSET, BOOLE;
 
 
@@ -365,8 +366,8 @@ end;
 theorem :: QUOFIELD:32
  for I being non degenerated domRing-like commutative Ring holds
 the carrier of the_Field_of_Quotients(I) = Quot.I &
-the add of the_Field_of_Quotients(I) = quotadd(I) &
-the mult of the_Field_of_Quotients(I) = quotmult(I) &
+the addF of the_Field_of_Quotients(I) = quotadd(I) &
+the multF of the_Field_of_Quotients(I) = quotmult(I) &
 0.the_Field_of_Quotients(I) = q0.I &
 1.the_Field_of_Quotients(I) = q1.I;
 
@@ -465,11 +466,11 @@ theorem :: QUOFIELD:49
 for I being non degenerated domRing-like commutative Ring holds
 the_Field_of_Quotients(I) is add-associative right_zeroed right_complementable
     Abelian associative unital distributive
-      Field-like non degenerated (non empty doubleLoopStr);
+      almost_left_invertible non degenerated (non empty doubleLoopStr);
 
 registration let I be non degenerated domRing-like commutative Ring;
   cluster the_Field_of_Quotients(I) ->
-    Abelian associative distributive Field-like non degenerated;
+    Abelian associative distributive almost_left_invertible non degenerated;
 end;
 
 theorem :: QUOFIELD:50
@@ -487,18 +488,19 @@ registration
 cluster -> domRing-like right_unital
    (add-associative right_zeroed right_complementable
         commutative associative well-unital
-        distributive Field-like (non empty doubleLoopStr));
+        distributive almost_left_invertible (non empty doubleLoopStr));
 end;
 
 registration
 cluster add-associative right_zeroed right_complementable
         Abelian commutative associative left_unital
-        distributive Field-like non degenerated (non empty doubleLoopStr);
+        distributive almost_left_invertible non degenerated
+         (non empty doubleLoopStr);
 end;
 
 definition
 let F be commutative associative well-unital distributive
-         Field-like (non empty doubleLoopStr);
+         almost_left_invertible (non empty doubleLoopStr);
 let x, y be Element of F;
 func x/y -> Element of F equals
 :: QUOFIELD:def 17
@@ -506,12 +508,12 @@ func x/y -> Element of F equals
 end;
 
 theorem :: QUOFIELD:51
-for F being non degenerated Field-like commutative Ring
+for F being non degenerated almost_left_invertible commutative Ring
 for a,b,c,d being Element of F st b <> 0.F & d <> 0.F holds
 (a/b) * (c/d) = (a * c) / (b * d);
 
 theorem :: QUOFIELD:52
-for F being non degenerated Field-like commutative Ring
+for F being non degenerated almost_left_invertible commutative Ring
 for a,b,c,d being Element of F st b <> 0.F & d <> 0.F holds
 (a/b) + (c/d) = (a*d + c*b) / (b * d);
 
@@ -575,13 +577,13 @@ for x being Element of R holds
 f.x = 0.S iff x = 0.R;
 
 theorem :: QUOFIELD:55
-for R,S being non degenerated Field-like commutative Ring
+for R,S being non degenerated almost_left_invertible commutative Ring
 for f being Function of R, S st f is RingHomomorphism
 for x being Element of R st x <> 0.R holds
 f.(x") = (f.x)";
 
 theorem :: QUOFIELD:56
-for R,S being non degenerated Field-like commutative Ring
+for R,S being non degenerated almost_left_invertible commutative Ring
 for f being Function of R, S st f is RingHomomorphism
 for x,y being Element of R st y <> 0.R holds
 f.(x * y") = f.x * (f.y)";
@@ -645,7 +647,9 @@ theorem :: QUOFIELD:61
 I is_embedded_in the_Field_of_Quotients(I);
 
 theorem :: QUOFIELD:62
-for F being non degenerated Field-like domRing-like commutative Ring holds
+ for F
+  being non degenerated almost_left_invertible domRing-like commutative Ring
+ holds
 F is_ringisomorph_to the_Field_of_Quotients(F);
 
 registration let I be non degenerated domRing-like commutative Ring;
@@ -667,7 +671,7 @@ pred I has_Field_of_Quotients_Pair F,f means
  f is RingMonomorphism &
  for F' being add-associative right_zeroed right_complementable
               Abelian commutative associative well-unital distributive
-              Field-like non degenerated (non empty doubleLoopStr)
+              almost_left_invertible non degenerated (non empty doubleLoopStr)
  for f' being Function of I, F' st f' is RingMonomorphism holds
    ex h being Function of F, F' st h is RingHomomorphism &
            h*f = f' &
@@ -680,14 +684,14 @@ theorem :: QUOFIELD:64
      for I being non degenerated domRing-like commutative Ring holds
 ex F being add-associative right_zeroed right_complementable
            Abelian commutative associative well-unital distributive
-           Field-like non degenerated (non empty doubleLoopStr)
+           almost_left_invertible non degenerated (non empty doubleLoopStr)
 st ex f being Function of I, F st I has_Field_of_Quotients_Pair F,f;
 
 theorem :: QUOFIELD:65
      for I being domRing-like commutative Ring
 for F,F' being add-associative right_zeroed right_complementable
     Abelian commutative associative well-unital distributive
-      Field-like non degenerated (non empty doubleLoopStr)
+      almost_left_invertible non degenerated (non empty doubleLoopStr)
 for f being Function of I, F
 for f' being Function of I, F'
 st I has_Field_of_Quotients_Pair F,f &

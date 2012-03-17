@@ -10,17 +10,16 @@ environ
       CARD_1, RELAT_1, FUNCOP_1, BOOLE, AMI_2, SF_MASTR, CAT_1, FUNCT_7, AMI_5,
       ARYTM_1, NAT_1, ABSVALUE, FINSEQ_1, FINSEQ_2, SCMFSA6C, FINSEQ_4, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, CARD_3, CARD_1, NUMBERS,
-      XCMPLX_0,
-      NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_4, FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, FUNCT_7, SCMFSA_2,
-      SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
+      XCMPLX_0, NAT_1, INT_1, COMPLEX1, RELAT_1, FUNCT_1, PARTFUN1, FINSEQ_1,
+      FINSEQ_2, FINSEQ_4, FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, FUNCT_7,
+      SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, SCMFSA6B, XXREAL_0;
  constructors DOMAIN_1, SETWISEO, XXREAL_0, NAT_1, INT_2, SEQ_1, FINSEQ_4,
-      AMI_5, PARTFUN1, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA_1;
+      AMI_5, PARTFUN1, SCMFSA6A, SF_MASTR, SCMFSA6B, SCMFSA_1, VALUED_1;
  registrations XBOOLE_0, SETFAM_1, RELAT_1, FUNCT_1, FUNCOP_1, FINSET_1,
       FRAENKEL, NUMBERS, XREAL_0, INT_1, CARD_3, AMI_1, SCMFSA_2, SCMFSA6A,
-      SF_MASTR, SCMFSA6B, ORDINAL1;
+      SF_MASTR, SCMFSA6B, ORDINAL1, VALUED_1, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions FUNCOP_1, AMI_1, AMI_3, SCMFSA_2, SCMFSA6B;
+ definitions FUNCOP_1, AMI_1, AMI_3, SCMFSA_2, SCMFSA6B, VALUED_1;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, ZFMISC_1, FUNCOP_1,
       TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, ENUMSET1, GRFUNC_1, SCMFSA6A,
       SF_MASTR, SCMFSA6B, XBOOLE_0, XBOOLE_1, CARD_3;
@@ -911,13 +910,13 @@ A3: InsCode i <= 10+1 implies InsCode i <= 10 or InsCode i = 11 by NAT_1:8;
 A4: InsCode i <= 9+1 implies InsCode i <= 8+1 or InsCode i = 10 by NAT_1:8;
 
   set l = i;
-A6:  dom Exec(l,s1) = the carrier of SCM+FSA by AMI_1:79;
-A7:  dom Exec(l,s2) = the carrier of SCM+FSA by AMI_1:79;
-A8:   dom Exec(l,s1) = dom Exec(l,s2) by A6,AMI_1:79;
-A9:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations))
+A5:  dom Exec(l,s1) = the carrier of SCM+FSA by AMI_1:79;
+A6:  dom Exec(l,s2) = the carrier of SCM+FSA by AMI_1:79;
+A7:   dom Exec(l,s1) = dom Exec(l,s2) by A5,AMI_1:79;
+A8:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations))
+          = (Int-Locations \/ FinSeq-Locations) by A5,RELAT_1:91;
+A9:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations))
           = (Int-Locations \/ FinSeq-Locations) by A6,RELAT_1:91;
-A10:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations))
-          = (Int-Locations \/ FinSeq-Locations) by A7,RELAT_1:91;
   per cases by A2,A3,A4,NAT_1:8,33;
   suppose InsCode i = 0; then i = halt SCM+FSA by SCMFSA_2:122;
     then Exec (i,s1) = s1 & Exec (i,s2) = s2 by AMI_1:def 8;
@@ -927,827 +926,827 @@ A10:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations))
   end;
   suppose InsCode i = 1;
    then consider db,da being Int-Location such that
-A11: l = db := da by SCMFSA_2:54;
+A10: l = db := da by SCMFSA_2:54;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A12:     Int-Locations \/ FinSeq-Locations =
+then A11:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A13:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A12:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A13:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A14:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A15: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A16:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A17:     not x in {db} by A15,XBOOLE_0:def 4;
-     per cases by A16,XBOOLE_0:def 2;
+     assume A14: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A15:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A16:     not x in {db} by A14,XBOOLE_0:def 4;
+     per cases by A15,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A18:      a <> db by A17,TARSKI:def 1;
+A17:      a <> db by A16,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A15,FUNCT_1:72
-       .= s1.a by A11,A18,SCMFSA_2:89
+        = (Exec (l,s1)).a by A14,FUNCT_1:72
+       .= s1.a by A10,A17,SCMFSA_2:89
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A16,FUNCT_1:72
-       .= s2.a by A1,A16,FUNCT_1:72
-       .= (Exec (l,s2)).a by A11,A18,SCMFSA_2:89
+                 by A15,FUNCT_1:72
+       .= s2.a by A1,A15,FUNCT_1:72
+       .= (Exec (l,s2)).a by A10,A17,SCMFSA_2:89
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A15,FUNCT_1:72;
+                by A14,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A15,FUNCT_1:72
-       .= s1.a by A11,SCMFSA_2:89
+        = (Exec (l,s1)).a by A14,FUNCT_1:72
+       .= s1.a by A10,SCMFSA_2:89
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A16,FUNCT_1:72
-       .= s2.a by A1,A16,FUNCT_1:72
-       .= (Exec (l,s2)).a by A11,SCMFSA_2:89
+                 by A15,FUNCT_1:72
+       .= s2.a by A1,A15,FUNCT_1:72
+       .= (Exec (l,s2)).a by A10,SCMFSA_2:89
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A15,FUNCT_1:72;
+                by A14,FUNCT_1:72;
     end;
     end;
- then A19:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A18:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A13,A14,FUNCT_1:9;
+  by A12,A13,FUNCT_1:9;
         da in Int-Locations by SCMFSA_2:9;
- then A20: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-A21: Exec(l, s1).db = s1.da by A11,SCMFSA_2:89;
-A22: Exec(l, s2).db = s2.da by A11,SCMFSA_2:89;
+ then A19: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+A20: Exec(l, s1).db = s1.da by A10,SCMFSA_2:89;
+A21: Exec(l, s2).db = s2.da by A10,SCMFSA_2:89;
          s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A20,FUNCT_1:72
-       .= s2.da by A1,A20,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A21,A22,GRFUNC_1:90;
+                 by A19,FUNCT_1:72
+       .= s2.da by A1,A19,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A20,A21,GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A12,A19,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A11,A18,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 2;
    then consider db,da being Int-Location such that
-A23: l = AddTo(db,da) by SCMFSA_2:55;
+A22: l = AddTo(db,da) by SCMFSA_2:55;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A24:     Int-Locations \/ FinSeq-Locations =
+then A23:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A25:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A24:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A25:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A26:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A27: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A28:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A29:     not x in {db} by A27,XBOOLE_0:def 4;
-     per cases by A28,XBOOLE_0:def 2;
+     assume A26: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A27:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A28:     not x in {db} by A26,XBOOLE_0:def 4;
+     per cases by A27,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A30:      a <> db by A29,TARSKI:def 1;
+A29:      a <> db by A28,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A27,FUNCT_1:72
-       .= s1.a by A23,A30,SCMFSA_2:90
+        = (Exec (l,s1)).a by A26,FUNCT_1:72
+       .= s1.a by A22,A29,SCMFSA_2:90
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A28,FUNCT_1:72
-       .= s2.a by A1,A28,FUNCT_1:72
-       .= (Exec (l,s2)).a by A23,A30,SCMFSA_2:90
+                 by A27,FUNCT_1:72
+       .= s2.a by A1,A27,FUNCT_1:72
+       .= (Exec (l,s2)).a by A22,A29,SCMFSA_2:90
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A27,FUNCT_1:72;
+                by A26,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A27,FUNCT_1:72
-       .= s1.a by A23,SCMFSA_2:90
+        = (Exec (l,s1)).a by A26,FUNCT_1:72
+       .= s1.a by A22,SCMFSA_2:90
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A28,FUNCT_1:72
-       .= s2.a by A1,A28,FUNCT_1:72
-       .= (Exec (l,s2)).a by A23,SCMFSA_2:90
+                 by A27,FUNCT_1:72
+       .= s2.a by A1,A27,FUNCT_1:72
+       .= (Exec (l,s2)).a by A22,SCMFSA_2:90
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A27,FUNCT_1:72;
+                by A26,FUNCT_1:72;
     end;
     end;
- then A31:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A30:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A25,A26,FUNCT_1:9;
+  by A24,A25,FUNCT_1:9;
         da in Int-Locations & db in Int-Locations by SCMFSA_2:9;
- then A32: da in Int-Locations \/ FinSeq-Locations &
+ then A31: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-A33: Exec(l, s1).db = s1.db + s1.da by A23,SCMFSA_2:90;
-A34: Exec(l, s2).db = s2.db + s2.da by A23,SCMFSA_2:90;
-A35: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A32,FUNCT_1:72
-       .= s2.da by A1,A32,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A32,FUNCT_1:72
-         .= s2.db by A1,A32,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A33,A34,A35,GRFUNC_1:90;
+A32: Exec(l, s1).db = s1.db + s1.da by A22,SCMFSA_2:90;
+A33: Exec(l, s2).db = s2.db + s2.da by A22,SCMFSA_2:90;
+A34: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A31,FUNCT_1:72
+       .= s2.da by A1,A31,FUNCT_1:72;
+        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A31,FUNCT_1:72
+         .= s2.db by A1,A31,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A32,A33,A34,GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A24,A31,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A23,A30,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 3;
    then consider db,da being Int-Location such that
-A36: l = SubFrom(db,da) by SCMFSA_2:56;
+A35: l = SubFrom(db,da) by SCMFSA_2:56;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A37:     Int-Locations \/ FinSeq-Locations =
+then A36:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A38:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A37:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A38:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A39:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A40: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A41:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A42:     not x in {db} by A40,XBOOLE_0:def 4;
-     per cases by A41,XBOOLE_0:def 2;
+     assume A39: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A40:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A41:     not x in {db} by A39,XBOOLE_0:def 4;
+     per cases by A40,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A43:      a <> db by A42,TARSKI:def 1;
+A42:      a <> db by A41,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A40,FUNCT_1:72
-       .= s1.a by A36,A43,SCMFSA_2:91
+        = (Exec (l,s1)).a by A39,FUNCT_1:72
+       .= s1.a by A35,A42,SCMFSA_2:91
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A41,FUNCT_1:72
-       .= s2.a by A1,A41,FUNCT_1:72
-       .= (Exec (l,s2)).a by A36,A43,SCMFSA_2:91
+                 by A40,FUNCT_1:72
+       .= s2.a by A1,A40,FUNCT_1:72
+       .= (Exec (l,s2)).a by A35,A42,SCMFSA_2:91
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A40,FUNCT_1:72;
+                by A39,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A40,FUNCT_1:72
-       .= s1.a by A36,SCMFSA_2:91
+        = (Exec (l,s1)).a by A39,FUNCT_1:72
+       .= s1.a by A35,SCMFSA_2:91
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A41,FUNCT_1:72
-       .= s2.a by A1,A41,FUNCT_1:72
-       .= (Exec (l,s2)).a by A36,SCMFSA_2:91
+                 by A40,FUNCT_1:72
+       .= s2.a by A1,A40,FUNCT_1:72
+       .= (Exec (l,s2)).a by A35,SCMFSA_2:91
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A40,FUNCT_1:72;
+                by A39,FUNCT_1:72;
     end;
     end;
- then A44:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A43:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A38,A39,FUNCT_1:9;
+  by A37,A38,FUNCT_1:9;
         da in Int-Locations & db in Int-Locations by SCMFSA_2:9;
- then A45: da in Int-Locations \/ FinSeq-Locations &
+ then A44: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
-A46: Exec(l, s1).db = s1.db - s1.da by A36,SCMFSA_2:91;
-A47: Exec(l, s2).db = s2.db - s2.da by A36,SCMFSA_2:91;
-A48: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A45,FUNCT_1:72
-       .= s2.da by A1,A45,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A45,FUNCT_1:72
-         .= s2.db by A1,A45,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A46,A47,A48,GRFUNC_1:90;
+A45: Exec(l, s1).db = s1.db - s1.da by A35,SCMFSA_2:91;
+A46: Exec(l, s2).db = s2.db - s2.da by A35,SCMFSA_2:91;
+A47: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A44,FUNCT_1:72
+       .= s2.da by A1,A44,FUNCT_1:72;
+        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A44,FUNCT_1:72
+         .= s2.db by A1,A44,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A45,A46,A47,GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A37,A44,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A36,A43,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 4;
    then consider db,da being Int-Location such that
-A49: l = MultBy(db,da) by SCMFSA_2:57;
+A48: l = MultBy(db,da) by SCMFSA_2:57;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A50:     Int-Locations \/ FinSeq-Locations =
+then A49:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A51:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A50:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A51:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A52:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A53: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A54:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A55:     not x in {db} by A53,XBOOLE_0:def 4;
-     per cases by A54,XBOOLE_0:def 2;
+     assume A52: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A53:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A54:     not x in {db} by A52,XBOOLE_0:def 4;
+     per cases by A53,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A56:      a <> db by A55,TARSKI:def 1;
+A55:      a <> db by A54,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A53,FUNCT_1:72
-       .= s1.a by A49,A56,SCMFSA_2:92
+        = (Exec (l,s1)).a by A52,FUNCT_1:72
+       .= s1.a by A48,A55,SCMFSA_2:92
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A54,FUNCT_1:72
-       .= s2.a by A1,A54,FUNCT_1:72
-       .= (Exec (l,s2)).a by A49,A56,SCMFSA_2:92
+                 by A53,FUNCT_1:72
+       .= s2.a by A1,A53,FUNCT_1:72
+       .= (Exec (l,s2)).a by A48,A55,SCMFSA_2:92
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A53,FUNCT_1:72;
+                by A52,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A53,FUNCT_1:72
-       .= s1.a by A49,SCMFSA_2:92
+        = (Exec (l,s1)).a by A52,FUNCT_1:72
+       .= s1.a by A48,SCMFSA_2:92
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A54,FUNCT_1:72
-       .= s2.a by A1,A54,FUNCT_1:72
-       .= (Exec (l,s2)).a by A49,SCMFSA_2:92
+                 by A53,FUNCT_1:72
+       .= s2.a by A1,A53,FUNCT_1:72
+       .= (Exec (l,s2)).a by A48,SCMFSA_2:92
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A53,FUNCT_1:72;
+                by A52,FUNCT_1:72;
     end;
     end;
- then A57:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A56:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A51,A52,FUNCT_1:9;
+  by A50,A51,FUNCT_1:9;
         da in Int-Locations & db in Int-Locations by SCMFSA_2:9;
- then A58: da in Int-Locations \/ FinSeq-Locations &
+ then A57: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
-A59: Exec(l, s1).db = s1.db * s1.da by A49,SCMFSA_2:92;
-A60: Exec(l, s2).db = s2.db * s2.da by A49,SCMFSA_2:92;
-A61: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A58,FUNCT_1:72
-       .= s2.da by A1,A58,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A58,FUNCT_1:72
-         .= s2.db by A1,A58,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A59,A60,A61,GRFUNC_1:90;
+A58: Exec(l, s1).db = s1.db * s1.da by A48,SCMFSA_2:92;
+A59: Exec(l, s2).db = s2.db * s2.da by A48,SCMFSA_2:92;
+A60: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A57,FUNCT_1:72
+       .= s2.da by A1,A57,FUNCT_1:72;
+        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A57,FUNCT_1:72
+         .= s2.db by A1,A57,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A58,A59,A60,GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A50,A57,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A49,A56,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 5;
    then consider db,da being Int-Location such that
-A62: l = Divide(db,da) by SCMFSA_2:58;
+A61: l = Divide(db,da) by SCMFSA_2:58;
  hereby
  per cases;
- suppose A63: da <> db;
+ suppose A62: da <> db;
          db in Int-Locations & da in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations &
      da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A64:     Int-Locations \/ FinSeq-Locations =
+then A63:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db,da} by ZFMISC_1:48
                  .= (Int-Locations \/ FinSeq-Locations \ {db,da} ) \/ {db,da}
                           by XBOOLE_1:39;
-A65:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db,da}))
+A64:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db,da}))
+          = (Int-Locations \/ FinSeq-Locations \ {db,da})
+                         by A5,RELAT_1:91;
+A65:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db,da}))
           = (Int-Locations \/ FinSeq-Locations \ {db,da})
                          by A6,RELAT_1:91;
-A66:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db,da}))
-          = (Int-Locations \/ FinSeq-Locations \ {db,da})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db,da})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
     proof
      let x be set;
-     assume A67: x in ((Int-Locations \/ FinSeq-Locations) \ {db,da});
-then A68:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A69:     not x in {db,da} by A67,XBOOLE_0:def 4;
-     per cases by A68,XBOOLE_0:def 2;
+     assume A66: x in ((Int-Locations \/ FinSeq-Locations) \ {db,da});
+then A67:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A68:     not x in {db,da} by A66,XBOOLE_0:def 4;
+     per cases by A67,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A70:     a <> da & a <> db by A69,TARSKI:def 2;
+A69:     a <> da & a <> db by A68,TARSKI:def 2;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
-        = (Exec (l,s1)).a by A67,FUNCT_1:72
-       .= s1.a by A62,A70,SCMFSA_2:93
+        = (Exec (l,s1)).a by A66,FUNCT_1:72
+       .= s1.a by A61,A69,SCMFSA_2:93
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A68,FUNCT_1:72
-       .= s2.a by A1,A68,FUNCT_1:72
-       .= (Exec (l,s2)).a by A62,A70,SCMFSA_2:93
+                 by A67,FUNCT_1:72
+       .= s2.a by A1,A67,FUNCT_1:72
+       .= (Exec (l,s2)).a by A61,A69,SCMFSA_2:93
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
-                by A67,FUNCT_1:72;
+                by A66,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
-        = (Exec (l,s1)).a by A67,FUNCT_1:72
-       .= s1.a by A62,SCMFSA_2:93
+        = (Exec (l,s1)).a by A66,FUNCT_1:72
+       .= s1.a by A61,SCMFSA_2:93
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A68,FUNCT_1:72
-       .= s2.a by A1,A68,FUNCT_1:72
-       .= (Exec (l,s2)).a by A62,SCMFSA_2:93
+                 by A67,FUNCT_1:72
+       .= s2.a by A1,A67,FUNCT_1:72
+       .= (Exec (l,s2)).a by A61,SCMFSA_2:93
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da})).x
-                by A67,FUNCT_1:72;
+                by A66,FUNCT_1:72;
     end;
     end;
- then A71:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da} )
+ then A70:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db,da} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db,da} )
-  by A65,A66,FUNCT_1:9;
+  by A64,A65,FUNCT_1:9;
         da in Int-Locations & db in Int-Locations by SCMFSA_2:9;
- then A72: da in Int-Locations \/ FinSeq-Locations &
+ then A71: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
-A73: Exec(l, s1).db = s1.db div s1.da by A62,A63,SCMFSA_2:93;
-A74: Exec(l, s1).da = s1.db mod s1.da by A62,SCMFSA_2:93;
-A75: Exec(l, s2).db = s2.db div s2.da by A62,A63,SCMFSA_2:93;
-A76: Exec(l, s2).da = s2.db mod s2.da by A62,SCMFSA_2:93;
-A77: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A72,FUNCT_1:72
-       .= s2.da by A1,A72,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A72,FUNCT_1:72
-         .= s2.db by A1,A72,FUNCT_1:72;
-then Exec (l,s1) | {db,da} = Exec(l,s2) | {db,da} by A8,A73,A74,A75,A76,A77,
+A72: Exec(l, s1).db = s1.db div s1.da by A61,A62,SCMFSA_2:93;
+A73: Exec(l, s1).da = s1.db mod s1.da by A61,SCMFSA_2:93;
+A74: Exec(l, s2).db = s2.db div s2.da by A61,A62,SCMFSA_2:93;
+A75: Exec(l, s2).da = s2.db mod s2.da by A61,SCMFSA_2:93;
+A76: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A71,FUNCT_1:72
+       .= s2.da by A1,A71,FUNCT_1:72;
+        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A71,FUNCT_1:72
+         .= s2.db by A1,A71,FUNCT_1:72;
+then Exec (l,s1) | {db,da} = Exec(l,s2) | {db,da} by A7,A72,A73,A74,A75,A76,
 GRFUNC_1:91;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A64,A71,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A63,A70,
 RELAT_1:185;
  end;
- suppose A78: da = db;
+ suppose A77: da = db;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A79:     Int-Locations \/ FinSeq-Locations =
+then A78:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A80:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A79:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A80:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A81:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A82: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A83:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A84:     not x in {db} by A82,XBOOLE_0:def 4;
-     per cases by A83,XBOOLE_0:def 2;
+     assume A81: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A82:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A83:     not x in {db} by A81,XBOOLE_0:def 4;
+     per cases by A82,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A85:      a <> db by A84,TARSKI:def 1;
+A84:      a <> db by A83,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A82,FUNCT_1:72
-       .= s1.a by A62,A78,A85,SCMFSA_2:94
+        = (Exec (l,s1)).a by A81,FUNCT_1:72
+       .= s1.a by A61,A77,A84,SCMFSA_2:94
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A83,FUNCT_1:72
-       .= s2.a by A1,A83,FUNCT_1:72
-       .= (Exec (l,s2)).a by A62,A78,A85,SCMFSA_2:94
+                 by A82,FUNCT_1:72
+       .= s2.a by A1,A82,FUNCT_1:72
+       .= (Exec (l,s2)).a by A61,A77,A84,SCMFSA_2:94
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A82,FUNCT_1:72;
+                by A81,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A82,FUNCT_1:72
-       .= s1.a by A62,A78,SCMFSA_2:94
+        = (Exec (l,s1)).a by A81,FUNCT_1:72
+       .= s1.a by A61,A77,SCMFSA_2:94
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A83,FUNCT_1:72
-       .= s2.a by A1,A83,FUNCT_1:72
-       .= (Exec (l,s2)).a by A62,A78,SCMFSA_2:94
+                 by A82,FUNCT_1:72
+       .= s2.a by A1,A82,FUNCT_1:72
+       .= (Exec (l,s2)).a by A61,A77,SCMFSA_2:94
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A82,FUNCT_1:72;
+                by A81,FUNCT_1:72;
     end;
     end;
- then A86:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A85:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A80,A81,FUNCT_1:9;
+  by A79,A80,FUNCT_1:9;
         da in Int-Locations & db in Int-Locations by SCMFSA_2:9;
- then A87: da in Int-Locations \/ FinSeq-Locations &
+ then A86: da in Int-Locations \/ FinSeq-Locations &
     db in Int-Locations \/ FinSeq-Locationsby XBOOLE_0:def 2;
-A88: Exec(l, s1).db = s1.db mod s1.da by A62,A78,SCMFSA_2:94;
-A89: Exec(l, s2).db = s2.db mod s2.da by A62,A78,SCMFSA_2:94;
-A90: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A87,FUNCT_1:72
-       .= s2.da by A1,A87,FUNCT_1:72;
-        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A87,FUNCT_1:72
-         .= s2.db by A1,A87,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A88,A89,A90,GRFUNC_1:90;
+A87: Exec(l, s1).db = s1.db mod s1.da by A61,A77,SCMFSA_2:94;
+A88: Exec(l, s2).db = s2.db mod s2.da by A61,A77,SCMFSA_2:94;
+A89: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A86,FUNCT_1:72
+       .= s2.da by A1,A86,FUNCT_1:72;
+        s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db by A86,FUNCT_1:72
+         .= s2.db by A1,A86,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A87,A88,A89,GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A79,A86,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A78,A85,
 RELAT_1:185;
 end;
 end;
 
   end;
   suppose InsCode i = 6; then consider l1 such that
-  A91: i = goto l1 by SCMFSA_2:59;
+  A90: i = goto l1 by SCMFSA_2:59;
       for x being set st x in ((Int-Locations \/ FinSeq-Locations))
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
     proof let x be set;
-     assume A92: x in ((Int-Locations \/ FinSeq-Locations));
-     per cases by A92,XBOOLE_0:def 2;
+     assume A91: x in ((Int-Locations \/ FinSeq-Locations));
+     per cases by A91,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A92,FUNCT_1:72
-       .= s1.a by A91,SCMFSA_2:95
+        = (Exec (l,s1)).a by A91,FUNCT_1:72
+       .= s1.a by A90,SCMFSA_2:95
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A92,FUNCT_1:72
-       .= s2.a by A1,A92,FUNCT_1:72
-       .= (Exec (l,s2)).a by A91,SCMFSA_2:95
+                 by A91,FUNCT_1:72
+       .= s2.a by A1,A91,FUNCT_1:72
+       .= (Exec (l,s2)).a by A90,SCMFSA_2:95
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A92,FUNCT_1:72;
+                by A91,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A92,FUNCT_1:72
-       .= s1.a by A91,SCMFSA_2:95
+        = (Exec (l,s1)).a by A91,FUNCT_1:72
+       .= s1.a by A90,SCMFSA_2:95
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A92,FUNCT_1:72
-       .= s2.a by A1,A92,FUNCT_1:72
-       .= (Exec (l,s2)).a by A91,SCMFSA_2:95
+                 by A91,FUNCT_1:72
+       .= s2.a by A1,A91,FUNCT_1:72
+       .= (Exec (l,s2)).a by A90,SCMFSA_2:95
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A92,FUNCT_1:72;
+                by A91,FUNCT_1:72;
     end;
     end;
  hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations )
-             by A9,A10,FUNCT_1:9;
+             by A8,A9,FUNCT_1:9;
   end;
   suppose InsCode i = 7; then consider l1, a such that
-  A93: i = a=0_goto l1 by SCMFSA_2:60;
+  A92: i = a=0_goto l1 by SCMFSA_2:60;
     for x being set st x in ((Int-Locations \/ FinSeq-Locations))
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
     proof let x be set;
-     assume A94: x in ((Int-Locations \/ FinSeq-Locations));
-     per cases by A94,XBOOLE_0:def 2;
+     assume A93: x in ((Int-Locations \/ FinSeq-Locations));
+     per cases by A93,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A94,FUNCT_1:72
-       .= s1.a by A93,SCMFSA_2:96
+        = (Exec (l,s1)).a by A93,FUNCT_1:72
+       .= s1.a by A92,SCMFSA_2:96
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A94,FUNCT_1:72
-       .= s2.a by A1,A94,FUNCT_1:72
-       .= (Exec (l,s2)).a by A93,SCMFSA_2:96
+                 by A93,FUNCT_1:72
+       .= s2.a by A1,A93,FUNCT_1:72
+       .= (Exec (l,s2)).a by A92,SCMFSA_2:96
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A94,FUNCT_1:72;
+                by A93,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A94,FUNCT_1:72
-       .= s1.a by A93,SCMFSA_2:96
+        = (Exec (l,s1)).a by A93,FUNCT_1:72
+       .= s1.a by A92,SCMFSA_2:96
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A94,FUNCT_1:72
-       .= s2.a by A1,A94,FUNCT_1:72
-       .= (Exec (l,s2)).a by A93,SCMFSA_2:96
+                 by A93,FUNCT_1:72
+       .= s2.a by A1,A93,FUNCT_1:72
+       .= (Exec (l,s2)).a by A92,SCMFSA_2:96
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A94,FUNCT_1:72;
+                by A93,FUNCT_1:72;
     end;
     end;
  hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations )
-             by A9,A10,FUNCT_1:9;
+             by A8,A9,FUNCT_1:9;
 
   end;
   suppose InsCode i = 8; then consider l1, a such that
-  A95: i = a>0_goto l1 by SCMFSA_2:61;
+  A94: i = a>0_goto l1 by SCMFSA_2:61;
     for x being set st x in ((Int-Locations \/ FinSeq-Locations))
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
     proof let x be set;
-     assume A96: x in ((Int-Locations \/ FinSeq-Locations));
-     per cases by A96,XBOOLE_0:def 2;
+     assume A95: x in ((Int-Locations \/ FinSeq-Locations));
+     per cases by A95,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A96,FUNCT_1:72
-       .= s1.a by A95,SCMFSA_2:97
+        = (Exec (l,s1)).a by A95,FUNCT_1:72
+       .= s1.a by A94,SCMFSA_2:97
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A96,FUNCT_1:72
-       .= s2.a by A1,A96,FUNCT_1:72
-       .= (Exec (l,s2)).a by A95,SCMFSA_2:97
+                 by A95,FUNCT_1:72
+       .= s2.a by A1,A95,FUNCT_1:72
+       .= (Exec (l,s2)).a by A94,SCMFSA_2:97
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A96,FUNCT_1:72;
+                by A95,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations)).x
-        = (Exec (l,s1)).a by A96,FUNCT_1:72
-       .= s1.a by A95,SCMFSA_2:97
+        = (Exec (l,s1)).a by A95,FUNCT_1:72
+       .= s1.a by A94,SCMFSA_2:97
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A96,FUNCT_1:72
-       .= s2.a by A1,A96,FUNCT_1:72
-       .= (Exec (l,s2)).a by A95,SCMFSA_2:97
+                 by A95,FUNCT_1:72
+       .= s2.a by A1,A95,FUNCT_1:72
+       .= (Exec (l,s2)).a by A94,SCMFSA_2:97
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations)).x
-                by A96,FUNCT_1:72;
+                by A95,FUNCT_1:72;
     end;
     end;
  hence Exec (l,s1) | (Int-Locations \/ FinSeq-Locations )
      = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations )
-             by A9,A10,FUNCT_1:9;
+             by A8,A9,FUNCT_1:9;
 
   end;
   suppose InsCode i = 9;
    then consider da,db being Int-Location, fa being FinSeq-Location such that
-A97: l = db:=(fa,da) by SCMFSA_2:62;
+A96: l = db:=(fa,da) by SCMFSA_2:62;
          db in Int-Locations by SCMFSA_2:9;
      then db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A98:     Int-Locations \/ FinSeq-Locations =
+then A97:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {db} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {db} ) \/ {db}
                           by XBOOLE_1:39;
-A99:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+A98:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {db}))
+          = (Int-Locations \/ FinSeq-Locations \ {db})
+                         by A5,RELAT_1:91;
+A99:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
           = (Int-Locations \/ FinSeq-Locations \ {db})
                          by A6,RELAT_1:91;
-A100:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {db}))
-          = (Int-Locations \/ FinSeq-Locations \ {db})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {db})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
     proof
      let x be set;
-     assume A101: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
-then A102:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A103:     not x in {db} by A101,XBOOLE_0:def 4;
-     per cases by A102,XBOOLE_0:def 2;
+     assume A100: x in ((Int-Locations \/ FinSeq-Locations) \ {db});
+then A101:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A102:     not x in {db} by A100,XBOOLE_0:def 4;
+     per cases by A101,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A104:      a <> db by A103,TARSKI:def 1;
+A103:      a <> db by A102,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A101,FUNCT_1:72
-       .= s1.a by A97,A104,SCMFSA_2:98
+        = (Exec (l,s1)).a by A100,FUNCT_1:72
+       .= s1.a by A96,A103,SCMFSA_2:98
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A102,FUNCT_1:72
-       .= s2.a by A1,A102,FUNCT_1:72
-       .= (Exec (l,s2)).a by A97,A104,SCMFSA_2:98
+                 by A101,FUNCT_1:72
+       .= s2.a by A1,A101,FUNCT_1:72
+       .= (Exec (l,s2)).a by A96,A103,SCMFSA_2:98
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A101,FUNCT_1:72;
+                by A100,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-        = (Exec (l,s1)).a by A101,FUNCT_1:72
-       .= s1.a by A97,SCMFSA_2:98
+        = (Exec (l,s1)).a by A100,FUNCT_1:72
+       .= s1.a by A96,SCMFSA_2:98
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A102,FUNCT_1:72
-       .= s2.a by A1,A102,FUNCT_1:72
-       .= (Exec (l,s2)).a by A97,SCMFSA_2:98
+                 by A101,FUNCT_1:72
+       .= s2.a by A1,A101,FUNCT_1:72
+       .= (Exec (l,s2)).a by A96,SCMFSA_2:98
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db})).x
-                by A101,FUNCT_1:72;
+                by A100,FUNCT_1:72;
     end;
     end;
- then A105:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
+ then A104:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {db} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {db} )
-  by A99,A100,FUNCT_1:9;
+  by A98,A99,FUNCT_1:9;
         da in Int-Locations by SCMFSA_2:9;
- then A106: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A105: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
  consider k1 being Element of NAT such that
-A107: k1 = abs(s1.da) and
-A108: Exec(l, s1).db = (s1.fa)/.k1 by A97,SCMFSA_2:98;
+A106: k1 = abs(s1.da) and
+A107: Exec(l, s1).db = (s1.fa)/.k1 by A96,SCMFSA_2:98;
  consider k2 being Element of NAT such that
-A109: k2 = abs(s2.da) and
-A110: Exec(l, s2).db = (s2.fa)/.k2 by A97,SCMFSA_2:98;
-A111: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A106,FUNCT_1:72
-       .= s2.da by A1,A106,FUNCT_1:72;
+A108: k2 = abs(s2.da) and
+A109: Exec(l, s2).db = (s2.fa)/.k2 by A96,SCMFSA_2:98;
+A110: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A105,FUNCT_1:72
+       .= s2.da by A1,A105,FUNCT_1:72;
         fa in FinSeq-Locations by SCMFSA_2:10;
- then A112: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A111: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
     then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa
                  by FUNCT_1:72
-       .= s2.fa by A1,A112,FUNCT_1:72;
-then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A8,A107,A108,A109,A110,A111,
+       .= s2.fa by A1,A111,FUNCT_1:72;
+then Exec (l,s1) | {db} = Exec(l,s2) | {db} by A7,A106,A107,A108,A109,A110,
 GRFUNC_1:90;
 hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A98,A105,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A97,A104,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 10;
    then consider da,db being Int-Location, fa being FinSeq-Location such that
-A113: l = (fa,da):=db by SCMFSA_2:63;
+A112: l = (fa,da):=db by SCMFSA_2:63;
          fa in FinSeq-Locations by SCMFSA_2:10;
      then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A114:     Int-Locations \/ FinSeq-Locations =
+then A113:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {fa} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {fa} ) \/ {fa}
                           by XBOOLE_1:39;
-A115:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+A114:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A5,RELAT_1:91;
+A115:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
           = (Int-Locations \/ FinSeq-Locations \ {fa})
                          by A6,RELAT_1:91;
-A116:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
-          = (Int-Locations \/ FinSeq-Locations \ {fa})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {fa})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
     proof
      let x be set;
-     assume A117: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
-then A118:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A119:     not x in {fa} by A117,XBOOLE_0:def 4;
-     per cases by A118,XBOOLE_0:def 2;
+     assume A116: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
+then A117:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A118:     not x in {fa} by A116,XBOOLE_0:def 4;
+     per cases by A117,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-        = (Exec (l,s1)).a by A117,FUNCT_1:72
-       .= s1.a by A113,SCMFSA_2:99
+        = (Exec (l,s1)).a by A116,FUNCT_1:72
+       .= s1.a by A112,SCMFSA_2:99
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A118,FUNCT_1:72
-       .= s2.a by A1,A118,FUNCT_1:72
-       .= (Exec (l,s2)).a by A113,SCMFSA_2:99
+                 by A117,FUNCT_1:72
+       .= s2.a by A1,A117,FUNCT_1:72
+       .= (Exec (l,s2)).a by A112,SCMFSA_2:99
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-                by A117,FUNCT_1:72;
+                by A116,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
-A120:      a <> fa by A119,TARSKI:def 1;
+A119:      a <> fa by A118,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-        = (Exec (l,s1)).a by A117,FUNCT_1:72
-       .= s1.a by A113,A120,SCMFSA_2:99
+        = (Exec (l,s1)).a by A116,FUNCT_1:72
+       .= s1.a by A112,A119,SCMFSA_2:99
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A118,FUNCT_1:72
-       .= s2.a by A1,A118,FUNCT_1:72
-       .= (Exec (l,s2)).a by A113,A120,SCMFSA_2:99
+                 by A117,FUNCT_1:72
+       .= s2.a by A1,A117,FUNCT_1:72
+       .= (Exec (l,s2)).a by A112,A119,SCMFSA_2:99
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-                by A117,FUNCT_1:72;
+                by A116,FUNCT_1:72;
     end;
     end;
- then A121:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+ then A120:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa} )
-  by A115,A116,FUNCT_1:9;
+  by A114,A115,FUNCT_1:9;
         da in Int-Locations by SCMFSA_2:9;
- then A122: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A121: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
  consider k1 being Element of NAT such that
-A123: k1 = abs(s1.da) and
-A124: Exec(l, s1).fa = s1.fa+*(k1,s1.db) by A113,SCMFSA_2:99;
+A122: k1 = abs(s1.da) and
+A123: Exec(l, s1).fa = s1.fa+*(k1,s1.db) by A112,SCMFSA_2:99;
  consider k2 being Element of NAT such that
-A125: k2 = abs(s2.da) and
-A126: Exec(l, s2).fa = s2.fa+*(k2,s2.db) by A113,SCMFSA_2:99;
-A127: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
-                 by A122,FUNCT_1:72
-       .= s2.da by A1,A122,FUNCT_1:72;
+A124: k2 = abs(s2.da) and
+A125: Exec(l, s2).fa = s2.fa+*(k2,s2.db) by A112,SCMFSA_2:99;
+A126: s1.da = (s1 | (Int-Locations \/ FinSeq-Locations)).da
+                 by A121,FUNCT_1:72
+       .= s2.da by A1,A121,FUNCT_1:72;
         db in Int-Locations by SCMFSA_2:9;
- then A128: db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A129: s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db
+ then A127: db in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+then A128: s1.db = (s1 | (Int-Locations \/ FinSeq-Locations)).db
                  by FUNCT_1:72
-       .= s2.db by A1,A128,FUNCT_1:72;
+       .= s2.db by A1,A127,FUNCT_1:72;
         fa in FinSeq-Locations by SCMFSA_2:10;
- then A130: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A129: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
     then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa
                  by FUNCT_1:72
-       .= s2.fa by A1,A130,FUNCT_1:72;
-then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A8,A123,A124,A125,A126,A127,A129
+       .= s2.fa by A1,A129,FUNCT_1:72;
+then Exec (l,s1) | {fa} = Exec(l,s2) | {fa} by A7,A122,A123,A124,A125,A126,A128
 ,GRFUNC_1:90;
  hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A114,A121,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A113,A120,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 11;
    then consider da being Int-Location, fa being FinSeq-Location such that
-A131: l = da:=len fa by SCMFSA_2:64;
+A130: l = da:=len fa by SCMFSA_2:64;
          da in Int-Locations by SCMFSA_2:9;
      then da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A132:     Int-Locations \/ FinSeq-Locations =
+then A131:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {da} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {da} ) \/ {da}
                           by XBOOLE_1:39;
-A133:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {da}))
+A132:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {da}))
+          = (Int-Locations \/ FinSeq-Locations \ {da})
+                         by A5,RELAT_1:91;
+A133:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {da}))
           = (Int-Locations \/ FinSeq-Locations \ {da})
                          by A6,RELAT_1:91;
-A134:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {da}))
-          = (Int-Locations \/ FinSeq-Locations \ {da})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {da})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
     proof
      let x be set;
-     assume A135: x in ((Int-Locations \/ FinSeq-Locations) \ {da});
-then A136:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A137:     not x in {da} by A135,XBOOLE_0:def 4;
-     per cases by A136,XBOOLE_0:def 2;
+     assume A134: x in ((Int-Locations \/ FinSeq-Locations) \ {da});
+then A135:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A136:     not x in {da} by A134,XBOOLE_0:def 4;
+     per cases by A135,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
-A138:      a <> da by A137,TARSKI:def 1;
+A137:      a <> da by A136,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
-        = (Exec (l,s1)).a by A135,FUNCT_1:72
-       .= s1.a by A131,A138,SCMFSA_2:100
+        = (Exec (l,s1)).a by A134,FUNCT_1:72
+       .= s1.a by A130,A137,SCMFSA_2:100
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A136,FUNCT_1:72
-       .= s2.a by A1,A136,FUNCT_1:72
-       .= (Exec (l,s2)).a by A131,A138,SCMFSA_2:100
+                 by A135,FUNCT_1:72
+       .= s2.a by A1,A135,FUNCT_1:72
+       .= (Exec (l,s2)).a by A130,A137,SCMFSA_2:100
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
-                by A135,FUNCT_1:72;
+                by A134,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da})).x
-        = (Exec (l,s1)).a by A135,FUNCT_1:72
-       .= s1.a by A131,SCMFSA_2:100
+        = (Exec (l,s1)).a by A134,FUNCT_1:72
+       .= s1.a by A130,SCMFSA_2:100
        .= (s1 | (Int-Locations \/ FinSeq-Locations)).a
-                 by A136,FUNCT_1:72
-       .= s2.a by A1,A136,FUNCT_1:72
-       .= (Exec (l,s2)).a by A131,SCMFSA_2:100
+                 by A135,FUNCT_1:72
+       .= s2.a by A1,A135,FUNCT_1:72
+       .= (Exec (l,s2)).a by A130,SCMFSA_2:100
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da})).x
-                by A135,FUNCT_1:72;
+                by A134,FUNCT_1:72;
     end;
     end;
- then A139:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da} )
+ then A138:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {da} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {da} )
-  by A133,A134,FUNCT_1:9;
+  by A132,A133,FUNCT_1:9;
         fa in FinSeq-Locations by SCMFSA_2:10;
- then A140: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A139: fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
     then s1.fa = (s1 | (Int-Locations \/ FinSeq-Locations)).fa
                  by FUNCT_1:72
-       .= s2.fa by A1,A140,FUNCT_1:72;
-    then Exec (l,s1).da = len(s2.fa) by A131,SCMFSA_2:100
-         .= Exec (l,s2).da by A131,SCMFSA_2:100;
-then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A6,A7,GRFUNC_1:90;
+       .= s2.fa by A1,A139,FUNCT_1:72;
+    then Exec (l,s1).da = len(s2.fa) by A130,SCMFSA_2:100
+         .= Exec (l,s2).da by A130,SCMFSA_2:100;
+then Exec (l,s1) | {da} = Exec(l,s2) | {da} by A5,A6,GRFUNC_1:90;
  hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A132,A139,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A131,A138,
 RELAT_1:185;
 
   end;
   suppose InsCode i = 12;
     then consider da being Int-Location, fa being FinSeq-Location such that
-  A141: i = fa:=<0,...,0>da by SCMFSA_2:65;
+  A140: i = fa:=<0,...,0>da by SCMFSA_2:65;
   set l = i;
          fa in FinSeq-Locations by SCMFSA_2:10;
      then fa in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
-then A142:     Int-Locations \/ FinSeq-Locations =
+then A141:     Int-Locations \/ FinSeq-Locations =
         Int-Locations \/ FinSeq-Locations \/ {fa} by ZFMISC_1:46
                  .= (Int-Locations \/ FinSeq-Locations \ {fa} ) \/ {fa}
                           by XBOOLE_1:39;
-A143:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+A142:  dom ((Exec (l,s1)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
+          = (Int-Locations \/ FinSeq-Locations \ {fa})
+                         by A5,RELAT_1:91;
+A143:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
           = (Int-Locations \/ FinSeq-Locations \ {fa})
                          by A6,RELAT_1:91;
-A144:  dom ((Exec (l,s2)) | (Int-Locations \/ FinSeq-Locations \ {fa}))
-          = (Int-Locations \/ FinSeq-Locations \ {fa})
-                         by A7,RELAT_1:91;
        for x being set st x in ((Int-Locations \/ FinSeq-Locations) \ {fa})
     holds (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
         = (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
     proof
      let x be set;
-     assume A145: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
-then A146:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
-A147:     not x in {fa} by A145,XBOOLE_0:def 4;
-     per cases by A146,XBOOLE_0:def 2;
+     assume A144: x in ((Int-Locations \/ FinSeq-Locations) \ {fa});
+then A145:     x in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 4;
+A146:     not x in {fa} by A144,XBOOLE_0:def 4;
+     per cases by A145,XBOOLE_0:def 2;
      suppose x in Int-Locations;
       then reconsider a = x as Int-Location by SCMFSA_2:11;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-        = (Exec (l,s1)).a by A145,FUNCT_1:72
-       .= s1.a by A141,SCMFSA_2:101
+        = (Exec (l,s1)).a by A144,FUNCT_1:72
+       .= s1.a by A140,SCMFSA_2:101
        .= (s1 | (Int-Locations \/ FinSeq-Locations )).a
-                 by A146,FUNCT_1:72
-       .= s2.a by A1,A146,FUNCT_1:72
-       .= (Exec (l,s2)).a by A141,SCMFSA_2:101
+                 by A145,FUNCT_1:72
+       .= s2.a by A1,A145,FUNCT_1:72
+       .= (Exec (l,s2)).a by A140,SCMFSA_2:101
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-                by A145,FUNCT_1:72;
+                by A144,FUNCT_1:72;
      end;
      suppose x in FinSeq-Locations;
       then reconsider a = x as FinSeq-Location by SCMFSA_2:12;
-A148:      a <> fa by A147,TARSKI:def 1;
+A147:      a <> fa by A146,TARSKI:def 1;
      thus (Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-        = (Exec (l,s1)).a by A145,FUNCT_1:72
-       .= s1.a by A141,A148,SCMFSA_2:101
+        = (Exec (l,s1)).a by A144,FUNCT_1:72
+       .= s1.a by A140,A147,SCMFSA_2:101
        .= (s1 | (Int-Locations \/ FinSeq-Locations )).a
-                 by A146,FUNCT_1:72
-       .= s2.a by A1,A146,FUNCT_1:72
-       .= (Exec (l,s2)).a by A141,A148,SCMFSA_2:101
+                 by A145,FUNCT_1:72
+       .= s2.a by A1,A145,FUNCT_1:72
+       .= (Exec (l,s2)).a by A140,A147,SCMFSA_2:101
        .= (Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa})).x
-                by A145,FUNCT_1:72;
+                by A144,FUNCT_1:72;
     end;
     end;
- then A149:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
+ then A148:  Exec (l,s1) | (Int-Locations \/ FinSeq-Locations \ {fa} )
  = Exec (l,s2) | (Int-Locations \/ FinSeq-Locations \ {fa} )
-  by A143,A144,FUNCT_1:9;
+  by A142,A143,FUNCT_1:9;
         da in Int-Locations by SCMFSA_2:9;
- then A150: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
+ then A149: da in Int-Locations \/ FinSeq-Locations by XBOOLE_0:def 2;
  consider k1 being Element of NAT such that
-A151: k1 = abs(s1.da) and
-A152: Exec(l, s1).fa = k1 |->0 by A141,SCMFSA_2:101;
+A150: k1 = abs(s1.da) and
+A151: Exec(l, s1).fa = k1 |->0 by A140,SCMFSA_2:101;
  consider k2 being Element of NAT such that
-A153: k2 = abs(s2.da) and
-A154: Exec(l, s2).fa = k2 |->0 by A141,SCMFSA_2:101;
+A152: k2 = abs(s2.da) and
+A153: Exec(l, s2).fa = k2 |->0 by A140,SCMFSA_2:101;
      s1.da = (s1 | (Int-Locations \/ FinSeq-Locations )).da
-                 by A150,FUNCT_1:72
-       .= s2.da by A1,A150,FUNCT_1:72;
+                 by A149,FUNCT_1:72
+       .= s2.da by A1,A149,FUNCT_1:72;
 then Exec (l,s1) | {fa} = Exec(l,s2) | {fa}
-        by A8,A151,A152,A153,A154,GRFUNC_1:90
+        by A7,A150,A151,A152,A153,GRFUNC_1:90
 ;
   hence Exec (l,s1) |(Int-Locations \/ FinSeq-Locations)
-          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A142,A149,
+          = Exec (l,s2) |(Int-Locations \/ FinSeq-Locations) by A141,A148,
 RELAT_1:185;
 end;
 end;

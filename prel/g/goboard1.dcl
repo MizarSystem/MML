@@ -21,16 +21,16 @@
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="MEMBERED"/>
-<ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="GOBOARD1"/>
@@ -47,10 +47,10 @@
 <Adjective nr="7" value="false"/>
 <Adjective nr="16"/>
 <Adjective nr="20"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
-<Adjective nr="96"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="111"/>
 </Cluster>
 </RCluster>
 <RCluster>
@@ -65,18 +65,18 @@
 <Adjective nr="6"/>
 <Adjective nr="16"/>
 <Adjective nr="20"/>
-<Adjective nr="90"/>
-<Adjective nr="91"/>
-<Adjective nr="92"/>
+<Adjective nr="87"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
 </Cluster>
 </RCluster>
 <RCluster>
 <ArgTypes/>
 <Typ kind="M" nr="7">
 <Cluster/>
-<Func kind="K" nr="126">
+<Func kind="K" nr="125">
 <Func kind="U" nr="1">
-<Func kind="K" nr="247">
+<Func kind="K" nr="281">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -88,11 +88,11 @@
 <Adjective nr="4"/>
 <Adjective nr="16"/>
 <Adjective nr="20"/>
-<Adjective nr="65"/>
-<Adjective nr="98"/>
-<Adjective nr="99"/>
-<Adjective nr="100"/>
-<Adjective nr="101"/>
+<Adjective nr="79"/>
+<Adjective nr="113"/>
+<Adjective nr="114"/>
+<Adjective nr="115"/>
+<Adjective nr="116"/>
 </Cluster>
 </RCluster>
 </Registrations>

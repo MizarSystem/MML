@@ -31,13 +31,13 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="RCOMP_1"/>
-<ArticleID name="GROUP_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="MATRIX_1"/>
 <ArticleID name="GOBOARD1"/>
 <ArticleID name="INTEGRA1"/>
@@ -50,7 +50,7 @@
 <Adjective nr="47"/>
 </Cluster>
 <Func kind="K" nr="10">
-<Func kind="K" nr="142"/>
+<Func kind="K" nr="141"/>
 </Func>
 </Typ>
 <Typ kind="M" nr="2">
@@ -58,7 +58,7 @@
 <Func kind="K" nr="62"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="310">
+<Func kind="K" nr="344">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>

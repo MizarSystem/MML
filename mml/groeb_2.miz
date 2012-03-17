@@ -12,19 +12,22 @@ environ
       BINOP_1, ARYTM_3, TERMORD, IDEAL_1, RELAT_2, DICKSON, MCART_1, FINSEQ_1,
       FINSEQ_4, REWRITE1, BINOM, TARSKI, FINSET_1, PBOOLE, POLYRED, CAT_3,
       SQUARE_1, ALGSEQ_1, BAGORDER, ORDERS_1, RFINSEQ, WAYBEL_4, FINSEQ_7,
-      GROEB_1, GROEB_2, ARYTM;
+      GROEB_1, GROEB_2, ARYTM, ALGSTR_0, GROUP_1;
  notations TARSKI, RELAT_1, XBOOLE_0, SUBSET_1, RELAT_2, RELSET_1, FUNCT_1,
-      ORDINAL1, XCMPLX_0, PARTFUN1, ALGSTR_1, RLVECT_1, FINSET_1, MCART_1,
-      FINSEQ_1, VECTSP_2, POLYNOM7, BINOM, PBOOLE, ORDERS_2, POLYNOM1, IDEAL_1,
-      REWRITE1, BAGORDER, STRUCT_0, VECTSP_1, TERMORD, POLYRED, GROUP_1,
-      BINARITH, NUMBERS, NAT_1, GROEB_1, RFINSEQ, FINSEQ_7, WAYBEL_4, XXREAL_0;
+      ORDINAL1, XCMPLX_0, PARTFUN1, ALGSTR_1, FINSET_1, MCART_1, FINSEQ_1,
+      VECTSP_2, POLYNOM7, BINOM, PBOOLE, ORDERS_2, POLYNOM1, IDEAL_1, REWRITE1,
+      BAGORDER, STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_1, TERMORD, POLYRED,
+      GROUP_1, BINARITH, NUMBERS, NAT_1, GROEB_1, RFINSEQ, FINSEQ_7, WAYBEL_4,
+      XXREAL_0;
  constructors RFINSEQ, REWRITE1, FINSEQ_7, VECTSP_2, WAYBEL_4, WELLFND1,
-      IDEAL_1, BAGORDER, TERMORD, POLYRED, GROEB_1;
+      IDEAL_1, BAGORDER, TERMORD, POLYRED, GROEB_1, BINOP_1, BINOM, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, INT_1, FINSEQ_1, REWRITE1, STRUCT_0, VECTSP_1, ORDERS_2,
       ALGSTR_1, GCD_1, POLYNOM1, POLYNOM2, POLYNOM4, BINOM, IDEAL_1, POLYNOM7,
-      TERMORD, POLYRED, VALUED_0;
+      TERMORD, POLYRED, VALUED_0, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
+ definitions ALGSTR_0, VALUED_1;
  theorems TARSKI, RELSET_1, FINSEQ_1, ZFMISC_1, VECTSP_1, POLYNOM1, REAL_1,
       FINSEQ_4, RLVECT_1, NAT_1, MCART_1, POLYNOM7, REWRITE1, XBOOLE_0,
       IDEAL_1, TERMORD, INT_1, FUNCT_1, FINSET_1, XBOOLE_1, PBOOLE, BINARITH,
@@ -79,14 +82,14 @@ end;
 
 theorem
     for L being add-associative right_zeroed
-            right_complementable (non empty LoopStr),
+            right_complementable (non empty addLoopStr),
     p being FinSequence of L,
     n being Element of NAT
 st for k being Element of NAT st k in dom p & k > n holds p.k = 0.L
 holds Sum p = Sum(p|n)
 proof
 let L be add-associative right_zeroed right_complementable
-         (non empty LoopStr),
+         (non empty addLoopStr),
     p be FinSequence of L,
     n be Element of NAT;
 assume A1: for k being Element of NAT st k in dom p & k > n holds p.k = 0.L;
@@ -169,12 +172,12 @@ thus thesis by A1,A26,A27;
 end;
 
 theorem
-    for L being add-associative right_zeroed Abelian (non empty LoopStr),
+    for L being add-associative right_zeroed Abelian (non empty addLoopStr),
     f being FinSequence of L,
     i,j being Element of NAT
 holds Sum Swap(f,i,j) = Sum f
 proof
-let L be add-associative right_zeroed Abelian (non empty LoopStr),
+let L be add-associative right_zeroed Abelian (non empty addLoopStr),
     f be FinSequence of L,
     i,j be Element of NAT;
 per cases;
@@ -606,17 +609,17 @@ end;
 
 registration
 let L be add-associative right_zeroed right_complementable
-         (non trivial LoopStr),
+         (non trivial addLoopStr),
     a be non-zero Element of L;
 cluster -a -> non-zero;
 coherence
  proof
- A1: a <> 0.L by RLVECT_1:def 13;
+ A1: a <> 0.L by RLVECT_1:def 14;
      now assume -a = 0.L;
    then --a = 0.L by RLVECT_1:25;
    hence contradiction by A1,RLVECT_1:30;
    end;
- hence thesis by RLVECT_1:def 13;
+ hence thesis by RLVECT_1:def 14;
  end;
 end;
 
@@ -722,7 +725,7 @@ coherence
      b in Support p by A1;
  then reconsider b as Element of Bags n;
  A2: p.b <> 0.L by A1,POLYNOM1:def 9;
-     a <> 0.L by RLVECT_1:def 13;
+     a <> 0.L by RLVECT_1:def 14;
  then a * p.b <> 0.L by A2,VECTSP_2:def 5;
  then ap.b <> 0.L by POLYNOM7:def 10;
  then b in Support ap by POLYNOM1:def 9;
@@ -771,14 +774,14 @@ end;
 theorem Th17:
 for n being Ordinal,
     L being add-associative right_zeroed right_complementable
-            (non empty LoopStr),
+            (non empty addLoopStr),
     p being Series of n,L,
     b being bag of n
 holds b *' (-p) = -(b *' p)
 proof
 let n be Ordinal,
     L be add-associative right_zeroed right_complementable
-         (non empty LoopStr),
+         (non empty addLoopStr),
     p be Series of n,L,
     b be bag of n;
 set q1 = b *' (-p), q2 = -(b *' p);
@@ -807,7 +810,7 @@ end;
 
 theorem Th18:
 for n being Ordinal,
-    L being left_zeroed add-right-cancelable
+    L being left_zeroed right_add-cancelable
             right-distributive (non empty doubleLoopStr),
     p being Series of n,L,
     b being bag of n,
@@ -815,7 +818,7 @@ for n being Ordinal,
 holds b *' (a * p) = a * (b *' p)
 proof
 let n be Ordinal,
-    L be left_zeroed add-right-cancelable
+    L be left_zeroed right_add-cancelable
          right-distributive (non empty doubleLoopStr),
     p be Series of n,L,
     b be bag of n,
@@ -908,7 +911,7 @@ for n being Ordinal,
     T being connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     f being Polynomial of n,L,
     g being set,
     P being Subset of Polynom-Ring(n,L)
@@ -918,7 +921,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     f be Polynomial of n,L,
     g be set,
     P be Subset of Polynom-Ring(n,L);
@@ -960,7 +963,8 @@ for n being Element of NAT,
     T being connected admissible TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     P being Subset of Polynom-Ring(n,L) st not(0_(n,L) in P)
 holds (for p1,p2 being Polynomial of n,L st p1 <> p2 & p1 in P & p2 in P
        for m1,m2 being Monomial of n,L st HM(m1 *'p1,T) = HM(m2 *'p2,T)
@@ -971,7 +975,8 @@ let n be Element of NAT,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Abelian Field-like non degenerated (non empty doubleLoopStr),
+         Abelian almost_left_invertible non degenerated
+          (non empty doubleLoopStr),
     P be Subset of Polynom-Ring(n,L);
 assume not(0_(n,L) in P);
 assume A1: for p1,p2 being Polynomial of n,L st p1 <> p2 & p1 in P & p2 in P
@@ -1095,7 +1100,7 @@ set R = PolyRedRel(P,T);
                     (HC(m1,T)*(HC(g1,T)*(HC(g1,T)"))) * (HT(m1,T) *' g1)
                     by GROUP_1:def 4
                  .= (mg1 - mg2) -
-                    (HC(m1,T)*1_L) * (HT(m1,T) *' g1) by A20,VECTSP_1:def 22
+                    (HC(m1,T)*1.L) * (HT(m1,T) *' g1) by A20,VECTSP_1:def 22
                  .= (mg1 - mg2) -
                     HC(m1,T) * (HT(m1,T) *' g1) by VECTSP_1:def 19
                  .= (mg1 - mg2) - Monom(HC(m1,T),HT(m1,T)) *' g1 by POLYRED:22
@@ -1165,7 +1170,7 @@ set R = PolyRedRel(P,T);
                     (HC(m2,T)*(HC(g2,T)*(HC(g2,T)"))) * (HT(m2,T) *' g2)
                     by GROUP_1:def 4
                  .= (mg2 - mg1) -
-                    (HC(m2,T)*1_L) * (HT(m2,T) *' g2) by A20,VECTSP_1:def 22
+                    (HC(m2,T)*1.L) * (HT(m2,T) *' g2) by A20,VECTSP_1:def 22
                  .= (mg2 - mg1) -
                     HC(m2,T) * (HT(m2,T) *' g2) by VECTSP_1:def 19
                  .= (mg2 - mg1) - Monom(HC(m2,T),HT(m2,T)) *' g2 by POLYRED:22
@@ -1188,8 +1193,8 @@ set R = PolyRedRel(P,T);
                   R reduces (-m1)*'g1,0_(n,L) by A11,POLYRED:45;
               then R reduces -mg1,0_(n,L) by POLYRED:6;
               then A37: R reduces mg2-mg1,0_(n,L) by A36,REWRITE1:17;
-                  -(1_(n,L)) = -((1_L) |(n,L)) by POLYNOM7:20
-                        .= (-1_L) |(n,L) by Th20;
+                  -(1_(n,L)) = -((1.L) |(n,L)) by POLYNOM7:20
+                        .= (-1.L) |(n,L) by Th20;
               then A38: R reduces (-1_(n,L))*'(mg2-mg1),(-1_(n,L))*'0_(n,L)
                         by A37,POLYRED:47;
                   (-1_(n,L))*'(mg2-mg1)
@@ -1251,7 +1256,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     p1,p2 be Polynomial of n,L;
 func S-Poly(p1,p2,T) -> Polynomial of n,L equals
    HC(p2,T) * (lcm(HT(p1,T),HT(p2,T))/HT(p1,T)) *' p1 -
@@ -1281,8 +1286,8 @@ set f = <*p*>;
   then i = 1 by A2,TARSKI:def 1;
   then f/.i = f.1 by A2,PARTFUN1:def 8
            .= p by FINSEQ_1:57
-           .= 1_L * p by VECTSP_1:def 19
-           .= 1_L * p * 1_L by VECTSP_1:def 13;
+           .= 1.L * p by VECTSP_1:def 19
+           .= 1.L * p * 1.L by VECTSP_1:def 13;
   hence ex u,v being Element of L, a being Element of P' st f/.i = u*a*v by A1;
   end;
 then reconsider f as LinearCombination of P' by IDEAL_1:def 9;
@@ -1315,7 +1320,7 @@ reconsider x as Element of Polynom-Ring(n,L);
 then A2: -q = -g by RLVECT_1:19;
 thus p - q = p + (-q) by POLYNOM1:def 23
           .= f + (-g) by A1,A2,POLYNOM1:def 27
-          .= f - g by RLVECT_1:def 11;
+          .= f - g by RLVECT_1:def 12;
 end;
 
 theorem Th22:
@@ -1323,7 +1328,7 @@ for n being Ordinal,
     T being connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like Abelian (non trivial doubleLoopStr),
+            almost_left_invertible Abelian (non trivial doubleLoopStr),
     P being Subset of Polynom-Ring(n,L),
     p1,p2 being Polynomial of n,L st p1 in P & p2 in P
 holds S-Poly(p1,p2,T) in P-Ideal
@@ -1332,7 +1337,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like Abelian (non trivial doubleLoopStr),
+         almost_left_invertible Abelian (non trivial doubleLoopStr),
     P be Subset of Polynom-Ring(n,L),
     p1,p2 be Polynomial of n,L;
 assume A1: p1 in P & p2 in P;
@@ -1363,7 +1368,7 @@ for n being Ordinal,
     T being connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     m1,m2 being Monomial of n,L
 holds S-Poly(m1,m2,T) = 0_(n,L)
 proof
@@ -1371,7 +1376,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     m1,m2 be Monomial of n,L;
 per cases;
 suppose A1: m1 = 0_(n,L);
@@ -1412,7 +1417,7 @@ suppose A3: m2 = 0_(n,L);
 end;
 suppose m1 <> 0_(n,L) & m2 <> 0_(n,L);
 then HC(m1,T) <> 0.L & HC(m2,T) <> 0.L by TERMORD:17;
-then A5: HC(m1,T) is non-zero & HC(m2,T) is non-zero by RLVECT_1:def 13;
+then A5: HC(m1,T) is non-zero & HC(m2,T) is non-zero by RLVECT_1:def 14;
 A6: m1 = Monom(coefficient(m1),term(m1)) by POLYNOM7:11
      .= Monom(HC(m1,T),term(m1)) by TERMORD:23
      .= Monom(HC(m1,T),HT(m1,T)) by TERMORD:23;
@@ -1445,7 +1450,7 @@ for n being Ordinal,
     T being connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     p being Polynomial of n,L
 holds S-Poly(p,0_(n,L),T) = 0_(n,L) & S-Poly(0_(n,L),p,T) = 0_(n,L)
 proof
@@ -1453,7 +1458,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     p be Polynomial of n,L;
 set p2 = 0_(n,L);
 thus S-Poly(p,0_(n,L),T)
@@ -1488,7 +1493,7 @@ theorem
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     p1,p2 being Polynomial of n,L
 holds S-Poly(p1,p2,T) = 0_(n,L) or
       HT(S-Poly(p1,p2,T),T) < lcm(HT(p1,T),HT(p2,T)),T
@@ -1497,7 +1502,7 @@ let n be Ordinal,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     p1,p2 be Polynomial of n,L;
 assume A1: S-Poly(p1,p2,T) <> 0_(n,L);
 set sp = S-Poly(p1,p2,T),
@@ -1509,7 +1514,7 @@ hence thesis by A1,Th25;
 end;
 suppose A2: p1 <> 0_(n,L) & p2 <> 0_(n,L);
 then A3: HC(p1,T) <> 0.L & HC(p2,T) <> 0.L by TERMORD:17;
-then A4: HC(p1,T) is non-zero & HC(p2,T) is non-zero by RLVECT_1:def 13;
+then A4: HC(p1,T) is non-zero & HC(p2,T) is non-zero by RLVECT_1:def 14;
 A5: HT(p1,T) divides lcm(HT(p1,T),HT(p2,T)) by Th7;
 A6: HT(p2,T) divides lcm(HT(p1,T),HT(p2,T)) by Th7;
 A7: p1 is non-zero & p2 is non-zero by A2,POLYNOM7:def 2;
@@ -1588,7 +1593,7 @@ theorem
     T being connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     p1,p2 being non-zero Polynomial of n,L
 holds HT(p2,T) divides HT(p1,T) implies
       HC(p2,T) * p1 top_reduces_to S-Poly(p1,p2,T),p2,T
@@ -1597,7 +1602,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     p1,p2 be non-zero Polynomial of n,L;
 assume A1: HT(p2,T) divides HT(p1,T);
 A2: p1 <> 0_(n,L) & p2 <> 0_(n,L) by POLYNOM7:def 2;
@@ -1618,7 +1623,7 @@ POLYNOM7:def 10
  .= (hcp2*p1) - ((hcp2*HC(p1,T))/HC(p2,T)) * (b *' p2) by TERMORD:def 7
  .= (hcp2*p1) - ((hcp2*HC(p1,T))*(HC(p2,T)")) * (b *' p2) by VECTSP_1:def 23
  .= (hcp2*p1) - (HC(p1,T)*(hcp2*(HC(p2,T)"))) * (b *' p2) by GROUP_1:def 4
- .= (hcp2*p1) - (HC(p1,T)*1_L) * (b *' p2) by A4,VECTSP_1:def 22
+ .= (hcp2*p1) - (HC(p1,T)*1.L) * (b *' p2) by A4,VECTSP_1:def 22
  .= (hcp2*p1) - HC(p1,T) * (b *' p2) by VECTSP_1:def 13
  .= HC(p2,T) * (EmptyBag n) *' p1 - HC(p1,T) * (b *' p2) by POLYRED:17
  .= HC(p2,T) * (HT(p1,T)/HT(p1,T)) *' p1 - HC(p1,T) * (b *' p2) by Th10
@@ -1632,7 +1637,7 @@ theorem
     T being connected admissible TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive Abelian
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     G being Subset of Polynom-Ring(n,L)
 holds G is_Groebner_basis_wrt T
 implies (for g1,g2,h being Polynomial of n,L
@@ -1644,7 +1649,7 @@ let n be Element of NAT,
     T be connected admissible TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive Abelian
-         Field-like non degenerated (non empty doubleLoopStr),
+         almost_left_invertible non degenerated (non empty doubleLoopStr),
     G be Subset of Polynom-Ring(n,L);
 assume A1: G is_Groebner_basis_wrt T;
 set R = PolyRedRel(G,T);
@@ -1692,7 +1697,7 @@ theorem
     T being connected admissible TermOrder of n,
     L being Abelian add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     G being Subset of Polynom-Ring(n,L)
 holds (for g1,g2,h being Polynomial of n,L
          st g1 in G & g2 in G &
@@ -1705,7 +1710,7 @@ let n be Element of NAT,
     T be connected admissible TermOrder of n,
     L be Abelian add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like non degenerated (non empty doubleLoopStr),
+         almost_left_invertible non degenerated (non empty doubleLoopStr),
     G be Subset of Polynom-Ring(n,L);
 assume A1: for g1,g2,h being Polynomial of n,L
          st g1 in G & g2 in G &
@@ -1739,7 +1744,8 @@ for n being Element of NAT,
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     G being Subset of Polynom-Ring(n,L) st not(0_(n,L) in G)
 holds (for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
        holds PolyRedRel(G,T) reduces S-Poly(g1,g2,T),0_(n,L))
@@ -1749,7 +1755,8 @@ let n be Element of NAT,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Abelian Field-like non degenerated (non empty doubleLoopStr),
+         Abelian almost_left_invertible non degenerated
+          (non empty doubleLoopStr),
     G be Subset of Polynom-Ring(n,L);
 assume A1: not(0_(n,L) in G);
 assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
@@ -1766,7 +1773,7 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
     set b1 = coefficient(m1), b2 = coefficient(m2);
     set u1 = term(m1), u2 = term(m2);
     A5: a1 <> 0.L & a2 <> 0.L by A1,A3,TERMORD:17;
-    then reconsider a1,a2 as non-zero Element of L by RLVECT_1:def 13;
+    then reconsider a1,a2 as non-zero Element of L by RLVECT_1:def 14;
     reconsider g1,g2 as non-zero Polynomial of n,L by A1,A3,POLYNOM7:def 2;
     A6: HC(m1*'g1,T) = coefficient(HM(m1*'g1,T)) by TERMORD:22
                     .= HC(m2*'g2,T) by A4,TERMORD:22;
@@ -1795,7 +1802,7 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
       hence thesis;
     end;
     case A10: b1 <> 0.L & b2 <> 0.L;
-      then reconsider b1,b2 as non-zero Element of L by RLVECT_1:def 13;
+      then reconsider b1,b2 as non-zero Element of L by RLVECT_1:def 14;
           HC(m1,T) <> 0.L & HC(m2,T) <> 0.L by A10,TERMORD:23;
       then m1 <> 0_(n,L) & m2 <> 0_(n,L) by TERMORD:17;
       then reconsider m1,m2 as non-zero Monomial of n,L by POLYNOM7:def 2;
@@ -1811,7 +1818,7 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
         .= Monom(b2,u2) *' Monom(a2,t2) by POLYNOM7:11
         .= Monom(b2*a2,u2+t2) by TERMORD:3;
           b1 * a1 <> 0.L & b2 * a2 <> 0.L by A5,A10,VECTSP_2:def 5;
-      then A12: b1 * a1 is non-zero & b2 * a2 is non-zero by RLVECT_1:def 13;
+      then A12: b1 * a1 is non-zero & b2 * a2 is non-zero by RLVECT_1:def 14;
       then A13: u1 + t1 = term(Monom(b2*a2,u2+t2)) by A11,POLYNOM7:10
                       .= u2 + t2 by A12,POLYNOM7:10;
           t1 divides lcm(t1,t2) by Th7;
@@ -1834,13 +1841,13 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
            .= b2 * a2 by POLYNOM7:9;
       then (b1 * a1) / a2 = (b2 * a2) * a2" by VECTSP_1:def 23
                          .= b2 * (a2 * a2") by GROUP_1:def 4
-                         .= b2 * 1_L by A5,VECTSP_1:def 22;
+                         .= b2 * 1.L by A5,VECTSP_1:def 22;
       then A19: b2 / a1 = ((b1 * a1) / a2) / a1 by VECTSP_1:def 13
                       .= ((b1 * a1) * a2") / a1 by VECTSP_1:def 23
                       .= ((b1 * a1) * a2") * a1" by VECTSP_1:def 23
                       .= ((b1 * a2") * a1) * a1" by GROUP_1:def 4
                       .= (b1 * a2") * (a1 * a1") by GROUP_1:def 4
-                      .= (b1 * a2") * 1_L by A5,VECTSP_1:def 22
+                      .= (b1 * a2") * 1.L by A5,VECTSP_1:def 22
                       .= b1 * a2" by VECTSP_1:def 13
                       .= b1 / a2 by VECTSP_1:def 23;
           HT(g1,T) divides lcm(HT(g1,T),HT(g2,T)) by Th7;
@@ -1849,10 +1856,10 @@ assume A2: for g1,g2 being Polynomial of n,L st g1 in G & g2 in G
       then A21: s2 = lcm(HT(g1,T),HT(g2,T))/HT(g2,T) by A15,Def1;
       A22: (b1/a2)*a2 = (b1*a2")*a2 by VECTSP_1:def 23
                     .= b1*(a2"*a2) by GROUP_1:def 4
-                    .= b1*1_L by A5,VECTSP_1:def 22;
+                    .= b1*1.L by A5,VECTSP_1:def 22;
       A23: (b2/a1)*a1 = (b2*a1")*a1 by VECTSP_1:def 23
                     .= b2*(a1"*a1) by GROUP_1:def 4
-                    .= b2*1_L by A5,VECTSP_1:def 22
+                    .= b2*1.L by A5,VECTSP_1:def 22
                     .= b2 by VECTSP_1:def 13;
       A24: m1 *' g1 - m2 *' g2
         = Monom(b1,u1) *' g1 - m2 *' g2 by POLYNOM7:11
@@ -1893,7 +1900,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     P be Subset of Polynom-Ring(n,L);
 func S-Poly(P,T) -> Subset of Polynom-Ring(n,L) equals
    { S-Poly(p1,p2,T) where p1,p2 is Polynomial of n,L :
@@ -1917,7 +1924,7 @@ let n be Ordinal,
     T be connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     P be finite Subset of Polynom-Ring(n,L);
 cluster S-Poly(P,T) -> finite;
 coherence
@@ -1975,7 +1982,8 @@ theorem
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     G being Subset of Polynom-Ring(n,L)
      st not(0_(n,L) in G) &
         for g being Polynomial of n,L st g in G holds g is Monomial of n,L
@@ -1985,7 +1993,8 @@ let n being Element of NAT,
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     G being Subset of Polynom-Ring(n,L);
 assume A1: not(0_(n,L) in G) & for g being Polynomial of n,L
                                st g in G holds g is Monomial of n,L;
@@ -2540,7 +2549,8 @@ for n being Ordinal,
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     f,g being Polynomial of n,L,
     f',g' being Element of Polynom-Ring(n,L) st f = f' & g = g'
 for P being non empty Subset of Polynom-Ring(n,L)
@@ -2556,7 +2566,8 @@ let n be Ordinal,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Abelian Field-like non degenerated (non empty doubleLoopStr),
+         Abelian almost_left_invertible non degenerated
+          (non empty doubleLoopStr),
     f,g be Polynomial of n,L,
     f',g' be Element of Polynom-Ring(n,L);
 assume A1: f = f' & g = g';
@@ -2741,7 +2752,7 @@ A7: now let k be Nat;
        take B;
        A45: gg + Sum B = gg + (Sum(A') + Sum(<*mp*>)) by RLVECT_1:58
              .= gg + (Sum(A') + mp) by RLVECT_1:61
-             .= (hh + -mp) + (Sum(A') + mp) by A36,RLVECT_1:def 11
+             .= (hh + -mp) + (Sum(A') + mp) by A36,RLVECT_1:def 12
              .= hh + (-mp + (Sum(A') + mp)) by RLVECT_1:def 6
              .= hh + (Sum(A') + (-mp + mp)) by RLVECT_1:def 6
              .= hh + (Sum(A') + 0.(Polynom-Ring(n,L))) by RLVECT_1:16
@@ -2888,7 +2899,7 @@ then Sum A + -(Sum(A/^i))
   = Sum B + (Sum(A/^i) + -Sum(A/^i)) by RLVECT_1:def 6
  .= Sum B + 0.(Polynom-Ring(n,L)) by RLVECT_1:16
  .= Sum B by RLVECT_1:def 7;
-then A3: Sum B = Sum A - (Sum(A/^i)) by RLVECT_1:def 11
+then A3: Sum B = Sum A - (Sum(A/^i)) by RLVECT_1:def 12
              .= f - g by A1,A2,Lm3;
     dom(A|(Seg i)) c= dom A by RELAT_1:89;
 then A4: dom B c= dom A by A1,FINSEQ_1:def 15;
@@ -2946,7 +2957,7 @@ then Sum A + -(Sum(A|i))
   = (Sum(A|i) + -Sum(A|i)) + Sum B by RLVECT_1:def 6
  .= 0.(Polynom-Ring(n,L)) + Sum B by RLVECT_1:16
  .= Sum B by ALGSTR_1:def 5;
-then A3: Sum B = Sum A - (Sum(A|i)) by RLVECT_1:def 11
+then A3: Sum B = Sum A - (Sum(A|i)) by RLVECT_1:def 12
              .= f - g by A1,A2,Lm3;
     now let j being Element of NAT;
   assume A4: j in dom B;
@@ -3046,7 +3057,8 @@ for n being Ordinal,
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Abelian Field-like non degenerated (non empty doubleLoopStr),
+            Abelian almost_left_invertible non degenerated
+             (non empty doubleLoopStr),
     f being Polynomial of n,L,
     P being non empty Subset of Polynom-Ring(n,L)
 holds PolyRedRel(P,T) reduces f,0_(n,L) implies
@@ -3056,7 +3068,8 @@ let n be Ordinal,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Abelian Field-like non degenerated (non empty doubleLoopStr),
+         Abelian almost_left_invertible non degenerated
+          (non empty doubleLoopStr),
     f be Polynomial of n,L,
     P be non empty Subset of Polynom-Ring(n,L);
 assume A1: PolyRedRel(P,T) reduces f,0_(n,L);
@@ -3090,7 +3103,7 @@ for n being Ordinal,
     T being admissible connected TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive
-            Field-like (non trivial doubleLoopStr),
+            almost_left_invertible (non trivial doubleLoopStr),
     f being non-zero Polynomial of n,L,
     P being non empty Subset of Polynom-Ring(n,L)
 holds f has_a_Standard_Representation_of P,T implies
@@ -3100,7 +3113,7 @@ let n be Ordinal,
     T be admissible connected TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive
-         Field-like (non trivial doubleLoopStr),
+         almost_left_invertible (non trivial doubleLoopStr),
     f be non-zero Polynomial of n,L,
     P be non empty Subset of Polynom-Ring(n,L);
 assume f has_a_Standard_Representation_of P,T;
@@ -3130,7 +3143,7 @@ theorem
     T being connected admissible TermOrder of n,
     L being add-associative right_complementable right_zeroed
             commutative associative well-unital distributive Abelian
-            Field-like non degenerated (non empty doubleLoopStr),
+            almost_left_invertible non degenerated (non empty doubleLoopStr),
     G being non empty Subset of Polynom-Ring(n,L)
 holds G is_Groebner_basis_wrt T
       iff for f being non-zero Polynomial of n,L st f in G-Ideal
@@ -3140,7 +3153,7 @@ let n be Element of NAT,
     T be connected admissible TermOrder of n,
     L be add-associative right_complementable right_zeroed
          commutative associative well-unital distributive Abelian
-         Field-like non degenerated (non empty doubleLoopStr),
+         almost_left_invertible non degenerated (non empty doubleLoopStr),
     P be non empty Subset of Polynom-Ring(n,L);
 A1: now assume P is_Groebner_basis_wrt T;
    then PolyRedRel(P,T) is locally-confluent by GROEB_1:def 3;
@@ -3148,7 +3161,7 @@ A1: now assume P is_Groebner_basis_wrt T;
    then PolyRedRel(P,T) is with_UN_property by GROEB_1:13;
    then A2: PolyRedRel(P,T) is with_Church-Rosser_property by GROEB_1:14;
     for f being non-zero Polynomial of n,L st f in P-Ideal
-     holds f has_a_Standard_Representation_of P,T by Th43,A2,GROEB_1:15;
+     holds f has_a_Standard_Representation_of P,T by A2,Th43,GROEB_1:15;
    hence for f being non-zero Polynomial of n,L st f in P-Ideal
          holds f has_a_Standard_Representation_of P,T;
    end;

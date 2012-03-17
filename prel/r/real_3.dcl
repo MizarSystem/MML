@@ -17,6 +17,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="VALUED_0"/>
+<ArticleID name="PARTFUN1"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
@@ -28,6 +29,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
+<Adjective nr="7" value="false"/>
 <Adjective nr="18">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="42"/>
@@ -36,6 +38,10 @@
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="25"/>
+<Adjective nr="27">
+<Func kind="K" nr="46"/>
+<Func kind="K" nr="42"/>
+</Adjective>
 </Cluster>
 </RCluster>
 <FCluster>

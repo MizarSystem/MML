@@ -9,16 +9,17 @@ environ
  vocabularies SEQ_1, PROB_1, ARYTM_3, RELAT_1, SEQ_2, FUNCT_1, ARYTM_1,
       ORDINAL2, ARYTM, ABSVALUE, BOOLE, SUBSET_1, PROB_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
-      XREAL_0, COMPLEX1, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, SEQ_1, SEQ_2,
-      PROB_1, NAT_1, XXREAL_0;
- constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PROB_1, SEQ_1;
+      XREAL_0, COMPLEX1, RELAT_1, REAL_1, FUNCT_1, FUNCT_2, VALUED_1, SEQ_1,
+      SEQ_2, PROB_1, NAT_1, XXREAL_0;
+ constructors XXREAL_0, REAL_1, NAT_1, COMPLEX1, VALUED_1, SEQ_1, SEQ_2,
+      PROB_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQ_1, VALUED_0;
+      XREAL_0, MEMBERED, VALUED_0;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions PROB_1, SUBSET_1;
  theorems FUNCT_1, REAL_1, FUNCT_2, SEQ_1, SEQ_2, SUBSET_1, PROB_1, NAT_1,
       TARSKI, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1, COMPLEX1, XREAL_1,
-      ORDINAL1;
+      ORDINAL1, VALUED_1;
  schemes FUNCT_1, FUNCT_2, NAT_1;
 
 begin
@@ -472,10 +473,10 @@ theorem
   end;
 
 theorem
- P.(A \ (A /\ B)) = P.A - P.(A /\ B) by XBOOLE_1:17,PROB_1:69;
+ P.(A \ (A /\ B)) = P.A - P.(A /\ B) by PROB_1:69,XBOOLE_1:17;
 
 theorem
- P.(A /\ B) <= P.B & P.(A /\ B) <= P.A by XBOOLE_1:17,PROB_1:70;
+ P.(A /\ B) <= P.B & P.(A /\ B) <= P.A by PROB_1:70,XBOOLE_1:17;
 
 theorem
 Th24: C = B` implies P.A = P.(A /\ B) + P.(A /\ C)
@@ -652,7 +653,7 @@ Th37: for A,B,P st A,B are_independent_respect_to P
       P.(A /\ ([#] Sigma \ B)) = P.(A /\ B`)
                        .= P.(A \ B) by SUBSET_1:32
                        .= P.(A \ (A /\ B)) by XBOOLE_1:47
-                       .= P.A * 1 - P.A * P.B by A1,XBOOLE_1:17,PROB_1:69
+                       .= P.A * 1 - P.A * P.B by A1,PROB_1:69,XBOOLE_1:17
                        .= P.A * (1 - P.B)
                        .= P.A * P.([#] Sigma \ B) by PROB_1:68;
   hence thesis by Def5;
@@ -695,7 +696,7 @@ theorem
   A3: P.B < 1;
   A4: ([#] Sigma \ A),([#] Sigma \ B) are_independent_respect_to P by A1,Th38;
   A5: 0 < P.([#] Sigma \ A) by A2,Th27;
-B6:    0 < P.([#] Sigma \ B) by A3,Th27;
+A6:    0 < P.([#] Sigma \ B) by A3,Th27;
   A7: now let r,r1; assume 0 < r1;
       then - r1 < -0 by XREAL_1:26;
       then r + - r1 < r + 0 by XREAL_1:8;
@@ -704,7 +705,7 @@ B6:    0 < P.([#] Sigma \ B) by A3,Th27;
        P.(A \/ B) = 1 - P.([#] Sigma \ (A \/ B)) by Th26
             .= 1 - P.(([#] Sigma \ A) /\ ([#] Sigma \ B)) by XBOOLE_1:53
             .= 1 - P.([#] Sigma \ A) * P.([#] Sigma \ B) by A4,Def5;
-   hence thesis by B6,A7,A5,XREAL_1:131;
+   hence thesis by A5,A6,A7,XREAL_1:131;
    end;
 
 ::
@@ -773,7 +774,7 @@ A12:   n in dom(f*ASeq);
                        .= (P*BSeq).n/P.B by A10,A12,Th11
                        .= (P.B)" * (P*BSeq).n by XCMPLX_0:def 9;
      end;
-    then A13: f*ASeq = (P.B)" (#) (P*BSeq) by A10,A11,SEQ_1:def 6;
+    then A13: f*ASeq = (P.B)" (#) (P*BSeq) by A10,A11,VALUED_1:def 5;
     A14: P*BSeq is convergent & lim (P*BSeq) = P.(Intersection BSeq)
                                                          by A9,PROB_1:def 13;
      hence f*ASeq is convergent by A13,SEQ_2:21;
@@ -819,7 +820,7 @@ theorem
        P.(A /\ B /\ C) = P.A * P.|.A.B * P.|.(A /\ B).C
    proof let P,A,B,C;
    assume A1: 0 < P.(A /\ B);
-  then A2: 0 < P.A by XBOOLE_1:17,PROB_1:70;
+  then A2: 0 < P.A by PROB_1:70,XBOOLE_1:17;
        P.(A /\ B /\ C) = P.(B /\ A) * P.|.(A /\ B).C by A1,Th42
                 .= P.A * P.|.A.B * P.|.(A /\ B).C by A2,Th42;
    hence thesis;

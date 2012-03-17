@@ -11,14 +11,16 @@ environ
       FUNCT_1, PBOOLE, RELAT_1, WELLORD1, COHSP_1, LATTICE7, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
       FUNCT_2, DOMAIN_1, CARD_1, NUMBERS, STRUCT_0, ORDERS_1, PBOOLE, ORDERS_2,
-      LATTICE3, YELLOW_0, YELLOW_1, YELLOW_4, WAYBEL_1, WAYBEL_0,
-      NAT_1, RELAT_2, COHSP_1, XXREAL_0;
+      LATTICE3, YELLOW_0, YELLOW_1, YELLOW_4, WAYBEL_1, WAYBEL_0, NAT_1,
+      RELAT_2, COHSP_1, XXREAL_0;
  constructors DOMAIN_1, XXREAL_0, NAT_1, NAT_D, MEMBERED, COHSP_1, WAYBEL_1,
-      YELLOW_4;
+      YELLOW_4, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, MEMBERED, STRUCT_0, ORDERS_2,
-      LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_2, WAYBEL11, YELLOW11, XXREAL_0;
+      LATTICE3, YELLOW_0, YELLOW_1, WAYBEL_2, WAYBEL11, YELLOW11, XXREAL_0,
+      VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, WAYBEL_0, WAYBEL_1, LATTICE3, RELAT_2, COHSP_1, XBOOLE_0;
+ definitions TARSKI, WAYBEL_0, WAYBEL_1, LATTICE3, RELAT_2, COHSP_1, XBOOLE_0,
+      VALUED_1;
  theorems WAYBEL_0, WAYBEL_1, WAYBEL_2, YELLOW_0, YELLOW_1, YELLOW_4, LATTICE3,
       TARSKI, FUNCT_1, FUNCT_2, ORDERS_2, WAYBEL_4, CARD_1, CARD_2, NAT_1,
       YELLOW_5, REAL_1, PBOOLE, COHSP_1, WAYBEL13, WAYBEL_6, RELSET_1,
@@ -146,25 +148,25 @@ A4:  P[k] & for n being Nat st P[n] holds n <= k
      take k;
      thus thesis by A4;
    end;
- then consider k such that A4: P[k] & for n st P[n] holds n <= k;
+ then consider k such that A5: P[k] & for n st P[n] holds n <= k;
  take k;
- thus thesis by A4;
+ thus thesis by A5;
 end;
 
 uniqueness
  proof
  let a,b be Element of NAT such that
-  A5: (ex A be Chain of Bottom L,x st a= card A) and
-  A6:  (for A be Chain of Bottom L,x holds card A <= a) and
-  A7: (ex B be Chain of Bottom L,x st b= card B) and
-  A8: (for A be Chain of Bottom L,x holds card A <= b);
-  consider A be Chain of Bottom L,x such that A9: a= card A &
-   (for A be Chain of Bottom L,x holds card A <= a) by A5,A6;
-  consider B be Chain of Bottom L,x such that A10: b= card B &
-   (for A be Chain of Bottom L,x holds card A <= b) by A7,A8;
-  A11: a<=b by A9,A10;
-        b<=a by A9,A10;
-  hence thesis by A11,XXREAL_0:1;
+  A6: (ex A be Chain of Bottom L,x st a= card A) and
+  A7:  (for A be Chain of Bottom L,x holds card A <= a) and
+  A8: (ex B be Chain of Bottom L,x st b= card B) and
+  A9: (for A be Chain of Bottom L,x holds card A <= b);
+  consider A be Chain of Bottom L,x such that A10: a= card A &
+   (for A be Chain of Bottom L,x holds card A <= a) by A6,A7;
+  consider B be Chain of Bottom L,x such that A11: b= card B &
+   (for A be Chain of Bottom L,x holds card A <= b) by A8,A9;
+  A12: a<=b by A10,A11;
+        b<=a by A10,A11;
+  hence thesis by A12,XXREAL_0:1;
  end;
 end;
 
@@ -511,12 +513,7 @@ defpred Q[Element of NAT] means
 
 A2: for n be Element of NAT holds Q[n]
  proof
-A3: Q[0]
-  proof
-     for x be Element of L() st height(x) <= 0 holds P[x]
-           by Th7,NAT_1:13;
-   hence thesis;
-  end;
+A3: Q[0] by Th7,NAT_1:13;
 A4: for n be Element of NAT st Q[n] holds Q[n+1]
     proof
      let n be Element of NAT;
@@ -612,24 +609,24 @@ let X be non empty Subset of L;
       thus thesis by A5,A6;
      end;
      consider k being Nat such that
-A5:  P[k] and
-A6:  for n being Nat st P[n] holds n <= k
+A7:  P[k] and
+A8:  for n being Nat st P[n] holds n <= k
      from NAT_1:sch 6 (A1,A4);
-     for n being Element of NAT st P[n] holds n <= k by A6;
-     hence thesis by A5;
+     for n being Element of NAT st P[n] holds n <= k by A8;
+     hence thesis by A7;
    end;
 
-  then consider k such that A7: P[k] & for n st P[n] holds n <= k;
-  consider x be Element of L such that A8: x in X & k=height(x) &
-   for n st ex y be Element of L st y in X & n=height(y) holds n <= k by A7;
+  then consider k such that A9: P[k] & for n st P[n] holds n <= k;
+  consider x be Element of L such that A10: x in X & k=height(x) &
+   for n st ex y be Element of L st y in X & n=height(y) holds n <= k by A9;
         for y be Element of L st y in X holds not (x < y)
    proof
     let y be Element of L;
-     assume A9: y in X & x < y;
+     assume A11: y in X & x < y;
      then height(x)<height(y) by Th2;
-    hence contradiction by A8,A9;
+    hence contradiction by A10,A11;
    end;
-  hence thesis by A8;
+  hence thesis by A10;
 end;
 
 definition
@@ -663,38 +660,38 @@ existence
       hence thesis by A5;
      end;
      consider k being Nat such that
-A5:  P[k] and
-A6:  for n being Nat st P[n] holds n <= k from NAT_1:sch 6 (A1,A4);
-     for n being Element of NAT st P[n] holds n <= k by A6;
-     hence thesis by A5;
+A6:  P[k] and
+A7:  for n being Nat st P[n] holds n <= k from NAT_1:sch 6 (A1,A4);
+     for n being Element of NAT st P[n] holds n <= k by A7;
+     hence thesis by A6;
    end;
 
-  then consider k such that A7: P[k] & for n st P[n] holds n <= k;
-  consider x be Element of L such that A8: x in A & k=height(x) and
-     A9: for n st ex z be Element of L st z in
- A & n=height(z) holds n<=k by A7;
+  then consider k such that A8: P[k] & for n st P[n] holds n <= k;
+  consider x be Element of L such that A9: x in A & k=height(x) and
+     A10: for n st ex z be Element of L st z in
+ A & n=height(z) holds n<=k by A8;
   take x;
   thus for w be Element of L st w in A holds w <= x
     proof
      let w be Element of L;
-     assume A10: w in A;
-      then height(w)<=height(x) by A8,A9;
-     hence thesis by A8,A10,Th5;
+     assume A11: w in A;
+      then height(w)<=height(x) by A9,A10;
+     hence thesis by A9,A11,Th5;
     end;
-  thus x in A by A8;
+  thus x in A by A9;
  end;
 uniqueness
  proof
   let s,t be Element of L such that
-   A11: for x be Element of L st x in A holds x <= s and A12: s in A and
-    A13: for y be Element of L st y in A holds y <= t and A14: t in A;
+   A12: for x be Element of L st x in A holds x <= s and A13: s in A and
+    A14: for y be Element of L st y in A holds y <= t and A15: t in A;
   consider A be non empty Chain of L such that
-   A15: (for x be Element of L st x in A holds x <= s) & s in A and
-    A16: (for y be Element of L st y in A holds y <= t) & t in A by A11,A12,A13
-,A14;
-A17:  t <= s by A15,A16;
-          s <= t by A15,A16;
-  hence s=t by A17,ORDERS_2:25;
+   A16: (for x be Element of L st x in A holds x <= s) & s in A and
+    A17: (for y be Element of L st y in A holds y <= t) & t in A by A12,A13,A14
+,A15;
+A18:  t <= s by A16,A17;
+          s <= t by A16,A17;
+  hence s=t by A18,ORDERS_2:25;
  end;
 end;
 

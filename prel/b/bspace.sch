@@ -19,10 +19,11 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="VECTSP_6"/>
 <ArticleID name="BSPACE"/>
 </Signature>
@@ -44,7 +45,7 @@
 </Pred>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="155">
+<Func kind="K" nr="163">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>
@@ -69,9 +70,9 @@
 </Pred>
 <Not>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="100">
+<Func kind="K" nr="99">
 <Var nr="1"/>
-<Func kind="K" nr="102">
+<Func kind="K" nr="101">
 <Var nr="2"/>
 </Func>
 </Func>

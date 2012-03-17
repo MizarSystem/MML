@@ -34,7 +34,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -42,7 +42,7 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Not>
@@ -65,7 +65,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="78">
 <Func kind="U" nr="4">
 <Var nr="1"/>
 </Func>
@@ -93,7 +93,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -101,7 +101,7 @@
 <Var nr="5"/>
 <Var nr="6"/>
 </Func>
-<Func kind="K" nr="160">
+<Func kind="K" nr="161">
 <Func kind="F" nr="2">
 <Var nr="4"/>
 <Var nr="5"/>
@@ -196,20 +196,20 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 </ArgTypes>
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="44"/>
+<Adjective nr="45"/>
 </Cluster>
 </Typ>
 <Not>
@@ -232,7 +232,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="78">
 <Func kind="U" nr="4">
 <Var nr="1"/>
 </Func>
@@ -260,7 +260,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="U" nr="5">
 <Var nr="1"/>
 </Func>
@@ -268,7 +268,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="160">
+<Func kind="K" nr="161">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>
@@ -303,7 +303,7 @@
 </Typ>
 <And>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="79">
+<Func kind="K" nr="78">
 <Func kind="U" nr="4">
 <Var nr="2"/>
 </Func>
@@ -331,7 +331,7 @@
 <Func kind="F" nr="1"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="97">
+<Func kind="K" nr="98">
 <Func kind="U" nr="5">
 <Var nr="2"/>
 </Func>
@@ -339,7 +339,7 @@
 <Var nr="6"/>
 <Var nr="7"/>
 </Func>
-<Func kind="K" nr="160">
+<Func kind="K" nr="161">
 <Func kind="F" nr="2">
 <Var nr="5"/>
 <Var nr="6"/>

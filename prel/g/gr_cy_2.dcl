@@ -19,6 +19,7 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="GROUP_2"/>
 <ArticleID name="GROUP_3"/>
@@ -26,20 +27,20 @@
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="27" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
+<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="169">
+<Func kind="K" nr="179">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="41">
+<Adjective nr="49"/>
+<Adjective nr="77">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

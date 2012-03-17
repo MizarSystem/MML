@@ -144,9 +144,14 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="6"/>
 <Adjective nr="9"/>
 <Adjective nr="19">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Adjective>
+<Adjective nr="39">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Adjective>
@@ -229,9 +234,14 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
+<Adjective nr="1" value="false"/>
 <Adjective nr="6"/>
 <Adjective nr="9"/>
 <Adjective nr="19">
+<LocusVar nr="2"/>
+<LocusVar nr="1"/>
+</Adjective>
+<Adjective nr="39">
 <LocusVar nr="2"/>
 <LocusVar nr="1"/>
 </Adjective>

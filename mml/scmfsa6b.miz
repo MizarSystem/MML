@@ -10,17 +10,16 @@ environ
       AMI_3, CAT_1, SCM_1, INT_1, FUNCOP_1, FUNCT_7, SF_MASTR, AMI_5, FINSEQ_1,
       RELOC, CARD_1, SCMFSA6B, CARD_3, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, SETFAM_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0,
-      NAT_1, FUNCT_7, INT_1, RELAT_1, FUNCT_1, FINSEQ_1, SEQ_1,
-      FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
+      XXREAL_0, NAT_1, FUNCT_7, INT_1, RELAT_1, FUNCT_1, FINSEQ_1, VALUED_1,
+      SEQ_1, FUNCOP_1, FUNCT_4, STRUCT_0, AMI_1, SCMFSA_2, SCMFSA_4, SCMFSA_5,
       SCMFSA6A, SF_MASTR;
  constructors DOMAIN_1, XXREAL_0, NAT_1, PARTFUN1, SEQ_1, AMI_5, SCMFSA_5,
-      SCMFSA6A, SF_MASTR;
+      SCMFSA6A, SF_MASTR, VALUED_1;
  registrations SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, CARD_3, AMI_1,
-      SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, XBOOLE_0;
+      SCMFSA_2, SCMFSA_4, SCMFSA6A, SF_MASTR, XBOOLE_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions FUNCOP_1, AMI_1, AMI_3, SCMFSA_2;
+ definitions FUNCOP_1, AMI_1, AMI_3, SCMFSA_2, VALUED_1;
  theorems RELAT_1, FUNCT_7, FUNCT_4, FUNCT_1, SCMFSA_3, INT_1, FUNCOP_1,
       TARSKI, NAT_1, SCMFSA_4, AMI_1, SCMFSA_2, FSM_1, LATTICE2, SCMFSA_5,
       GRFUNC_1, CARD_3, SCMFSA6A, SF_MASTR, XBOOLE_0, XBOOLE_1, XREAL_1,
@@ -396,49 +395,49 @@ A5: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A3);
    set IAt = I +* Start-At insloc 0;
         dom I misses dom Start-At insloc 0 by SF_MASTR:64;
 then A6: I c= IAt by FUNCT_4:33;
-X:  IC s2 in NAT by AMI_1:def 4;
-A7: IAt is halting by A1,Def3;
+A7:  IC s2 in NAT by AMI_1:def 4;
+A8: IAt is halting by A1,Def3;
        (IAt)|NAT = I by Th6;
   then dom I = dom(IAt)/\NAT
         by RELAT_1:90;
-  then not IC s2 in dom IAt by A4,XBOOLE_0:def 3,X;
-  then A8: IAt c= s0 by A2,FUNCT_7:91;
-then A9: s0 is halting by A7,AMI_1:def 26;
-        s,s0 equal_outside NAT by FUNCT_7:93,X;
-then A10: s0,s equal_outside NAT by FUNCT_7:28
+  then not IC s2 in dom IAt by A4,A7,XBOOLE_0:def 3;
+  then A9: IAt c= s0 by A2,FUNCT_7:91;
+then A10: s0 is halting by A8,AMI_1:def 26;
+        s,s0 equal_outside NAT by A7,FUNCT_7:93;
+then A11: s0,s equal_outside NAT by FUNCT_7:28
 ;
-A11: I c= s0 by A6,A8,XBOOLE_1:1;
-A12: I c= s by A2,A6,XBOOLE_1:1;
+A12: I c= s0 by A6,A9,XBOOLE_1:1;
+A13: I c= s by A2,A6,XBOOLE_1:1;
       for m st m < n holds IC((Computation s).m) in dom I by A5;
-then A13: (Computation s0).n,s2 equal_outside
-    NAT by A10,A11,A12,Th21;
-        s2,s1 equal_outside NAT by FUNCT_7:93,X;
-   then A14: (Computation s0).n,s1 equal_outside
-    NAT by A13,FUNCT_7:29;
-A15:  s|NAT
+then A14: (Computation s0).n,s2 equal_outside
+    NAT by A11,A12,A13,Th21;
+        s2,s1 equal_outside NAT by A7,FUNCT_7:93;
+   then A15: (Computation s0).n,s1 equal_outside
+    NAT by A14,FUNCT_7:29;
+A16:  s|NAT
      = s2|NAT by AMI_1:123;
         (Computation s0).n|NAT
       = s0|NAT by AMI_1:123
-     .= s1|NAT by A15,FUNCT_7:95;
-   then A16: (Computation s0).n = s1 by A14,FUNCT_7:92;
+     .= s1|NAT by A16,FUNCT_7:95;
+   then A17: (Computation s0).n = s1 by A15,FUNCT_7:92;
        s1 is not halting by Th20;
- hence contradiction by A9,A16,AMI_1:93;
+ hence contradiction by A10,A17,AMI_1:93;
 end;
 
  cluster keeping_0 -> paraclosed Macro-Instruction;
  coherence proof
   let I be Macro-Instruction; assume
-A17: I is keeping_0;
+A18: I is keeping_0;
   let s be State of SCM+FSA, n be Element of NAT;
  assume
-A18: I +* Start-At insloc 0 c= s;
-A19: dom I c= NAT by AMI_1:def 40;
+A19: I +* Start-At insloc 0 c= s;
+A20: dom I c= NAT by AMI_1:def 40;
   defpred X[Nat] means not IC (Computation s).$1 in dom I;
  assume not IC (Computation s).n in dom I;
-then A20: ex n be Nat st X[n];
+then A21: ex n be Nat st X[n];
   consider n be Nat such that
-A21: X[n] and
-A22: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A20);
+A22: X[n] and
+A23: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A21);
      reconsider n as Element of NAT by ORDINAL1:def 13;
    set FI = FirstNotUsed(I);
    set s2 = (Computation s).n;
@@ -447,62 +446,62 @@ A22: for m be Nat st X[m] holds n <= m from NAT_1:sch 5(A20);
       not I is keeping_0 proof
   take s0;
    set IS = I +* Start-At insloc 0;
-A23: dom IS = dom I \/ dom Start-At insloc 0 by FUNCT_4:def 1
+A24: dom IS = dom I \/ dom Start-At insloc 0 by FUNCT_4:def 1
            .= dom I \/ {IC SCM+FSA} by FUNCOP_1:19;
         IC s2 <> IC SCM+FSA by AMI_1:48;
    then not IC s2 in {IC SCM+FSA} by TARSKI:def 1;
-   then not IC s2 in dom IS by A21,A23,XBOOLE_0:def 2;
-then A24: IS c= s00 by A18,FUNCT_7:91;
-A25:  now assume
-A26:      FI in dom I;
-     then reconsider FI as Instruction-Location of SCM+FSA by A19,AMI_1:def 4;
-      FI in dom I by A26;
+   then not IC s2 in dom IS by A22,A24,XBOOLE_0:def 2;
+then A25: IS c= s00 by A19,FUNCT_7:91;
+A26:  now assume
+A27:      FI in dom I;
+     then reconsider FI as Instruction-Location of SCM+FSA by A20,AMI_1:def 4;
+      FI in dom I by A27;
     hence contradiction by SCMFSA_2:84;
    end;
         FI <> IC SCM+FSA by SCMFSA_2:81;
    then not FI in {IC SCM+FSA} by TARSKI:def 1;
-   then not FI in dom IS by A23,A25,XBOOLE_0:def 2;
-  hence A27: I +* Start-At insloc 0 c= s0 by A24,FUNCT_7:91;
+   then not FI in dom IS by A24,A26,XBOOLE_0:def 2;
+  hence A28: I +* Start-At insloc 0 c= s0 by A25,FUNCT_7:91;
   take k = n+1;
  set s02 = (Computation s0).n;
-A28: (for m st m < n holds IC (Computation s).m in dom I) by A22;
-A29: not FI in UsedIntLoc I by SF_MASTR:54;
-A30: not IC s2 in UsedIntLoc I proof assume not thesis; then IC s2 is
+A29: (for m st m < n holds IC (Computation s).m in dom I) by A23;
+A30: not FI in UsedIntLoc I by SF_MASTR:54;
+A31: not IC s2 in UsedIntLoc I proof assume not thesis; then IC s2 is
 Int-Location by SCMFSA_2:11;
       hence contradiction by SCMFSA_2:84;
      end;
-A31:  s0 | UsedIntLoc I = s00 | UsedIntLoc I by A29,FUNCT_7:94
-                        .= s | UsedIntLoc I by A30,FUNCT_7:94;
-A32: not FI in UsedInt*Loc I proof assume not thesis; then FI is
+A32:  s0 | UsedIntLoc I = s00 | UsedIntLoc I by A30,FUNCT_7:94
+                        .= s | UsedIntLoc I by A31,FUNCT_7:94;
+A33: not FI in UsedInt*Loc I proof assume not thesis; then FI is
 FinSeq-Location by SCMFSA_2:12;
        hence contradiction by SCMFSA_2:83;
       end;
-A33: not IC s2 in UsedInt*Loc I proof assume not thesis; then IC s2 is
+A34: not IC s2 in UsedInt*Loc I proof assume not thesis; then IC s2 is
 FinSeq-Location by SCMFSA_2:12;
       hence contradiction by SCMFSA_2:85;
      end;
-A34:  s0 | UsedInt*Loc I = s00 | UsedInt*Loc I by A32,FUNCT_7:94
-                         .= s | UsedInt*Loc I by A33,FUNCT_7:94;
-then A35: (for m st m < n holds IC (Computation s0).m in dom I)
-       by A18,A27,A28,A31,SF_MASTR:73;
-A36: IC s02 = IC s2 by A18,A27,A28,A31,A34,SF_MASTR:73;
+A35:  s0 | UsedInt*Loc I = s00 | UsedInt*Loc I by A33,FUNCT_7:94
+                         .= s | UsedInt*Loc I by A34,FUNCT_7:94;
+then A36: (for m st m < n holds IC (Computation s0).m in dom I)
+       by A19,A28,A29,A32,SF_MASTR:73;
+A37: IC s02 = IC s2 by A19,A28,A29,A32,A35,SF_MASTR:73;
            FI in dom s00 by SCMFSA_2:66;
  then s0.FI = (s.intloc 0)+1 by FUNCT_7:33;
-then A37: s02.FI = (s.intloc 0)+1 by A27,A29,A35,SF_MASTR:69;
-A38: IC s2 in dom s by AMI_1:116;
+then A38: s02.FI = (s.intloc 0)+1 by A28,A30,A36,SF_MASTR:69;
+A39: IC s2 in dom s by AMI_1:116;
           IC s2 <> FI & IC s2 in dom s00 by AMI_1:116,SCMFSA_2:84;
-     then A39: s0.IC s2 = s00.IC s2 by FUNCT_7:34
-             .= intloc 0 := FI by A38,FUNCT_7:33;
-A40: intloc 0 <> IC s2 & intloc 0 in dom s by SCMFSA_2:66,84;
-A41: s0.intloc 0 = s00.intloc 0 by FUNCT_7:34
-                .= s.intloc 0 by A40,FUNCT_7:34;
-A42: (s.intloc 0) < (s.intloc 0)+1 by XREAL_1:31;
+     then A40: s0.IC s2 = s00.IC s2 by FUNCT_7:34
+             .= intloc 0 := FI by A39,FUNCT_7:33;
+A41: intloc 0 <> IC s2 & intloc 0 in dom s by SCMFSA_2:66,84;
+A42: s0.intloc 0 = s00.intloc 0 by FUNCT_7:34
+                .= s.intloc 0 by A41,FUNCT_7:34;
+A43: (s.intloc 0) < (s.intloc 0)+1 by XREAL_1:31;
          (Computation s0).k = Following s02 by AMI_1:def 19
-      .= Exec(intloc 0 := FI, s02) by A36,A39,AMI_1:54;
-  hence ((Computation s0).k).intloc 0 <> s0.intloc 0 by A37,A41,A42,SCMFSA_2:89
+      .= Exec(intloc 0 := FI, s02) by A37,A40,AMI_1:54;
+  hence ((Computation s0).k).intloc 0 <> s0.intloc 0 by A38,A42,A43,SCMFSA_2:89
 ;
  end;
- hence contradiction by A17;
+ hence contradiction by A18;
 end;
 end;
 
@@ -707,24 +706,24 @@ A13: for k being Element of NAT st P[k] holds P[k + 1]
            dom J misses dom Start-At insloc 0 by SF_MASTR:64;
 then A18:  J c= JAt by FUNCT_4:33;
 then A19: dom J c= dom JAt by GRFUNC_1:8;
-X: l in NAT by AMI_1:def 4;
-   A20: IC C1.(k + 1) in dom J by A1,Def2;
+A20: l in NAT by AMI_1:def 4;
+   A21: IC C1.(k + 1) in dom J by A1,Def2;
       dom ProgramPart J = dom J /\ NAT
           by FUNCT_1:68;
-  then A21: l in dom ProgramPart J by A20,XBOOLE_0:def 3,X;
-   A22: j = s1.IC C1.(k + 1) by AMI_1:54
-      .= JAt.IC C1.(k + 1) by A1,A19,A20,GRFUNC_1:8
-      .= J.l by A18,A20,GRFUNC_1:8;
-X: IC C2.(k + 1) in NAT by AMI_1:def 4;
-           IC C2.(k + 1) in dom Relocated(J,n) by A17,A20,SCMFSA_5:4;
+  then A22: l in dom ProgramPart J by A20,A21,XBOOLE_0:def 3;
+   A23: j = s1.IC C1.(k + 1) by AMI_1:54
+      .= JAt.IC C1.(k + 1) by A1,A19,A21,GRFUNC_1:8
+      .= J.l by A18,A21,GRFUNC_1:8;
+A24: IC C2.(k + 1) in NAT by AMI_1:def 4;
+           IC C2.(k + 1) in dom Relocated(J,n) by A17,A21,SCMFSA_5:4;
       then IC C2.(k + 1) in
  dom Relocated(J,n) /\ NAT
-          by XBOOLE_0:def 3,X;
-   then A23: IC C2.(k + 1) in dom ProgramPart Relocated(J,n) by FUNCT_1:68;
+          by A24,XBOOLE_0:def 3;
+   then A25: IC C2.(k + 1) in dom ProgramPart Relocated(J,n) by FUNCT_1:68;
       thus IncAddr(CurInstr C1.(k + 1),n)
-       = Relocated(J,n).(l + n) by A21,A22,SCMFSA_5:7
-      .= (ProgramPart Relocated(J,n)).(IC C2.(k + 1)) by A17,FUNCT_1:72,X
-      .= s2.IC C2.(k + 1) by A2,A23,GRFUNC_1:8
+       = Relocated(J,n).(l + n) by A22,A23,SCMFSA_5:7
+      .= (ProgramPart Relocated(J,n)).(IC C2.(k + 1)) by A17,A24,FUNCT_1:72
+      .= s2.IC C2.(k + 1) by A2,A25,GRFUNC_1:8
       .= CurInstr C2.(k + 1) by AMI_1:54;
       thus C1.(k + 1) | (Int-Locations \/ FinSeq-Locations)
        = C2.(k + 1) | (Int-Locations \/ FinSeq-Locations) by A14,A15,A16,
@@ -966,8 +965,7 @@ A15:   CurInstr(Cs.m) = I.IC(Cs.m) by A11,A12,GRFUNC_1:8;
      then CurInstr(Cs.m) = (I ';' J).IC(Cs.m) by A11,A15,SCMFSA6A:54
         .= CurInstr(CsIJ.m) by A10,A11,A13,A14,GRFUNC_1:8;
     hence (Computation s).(m+1),(Computation(s+*(I ';' J))).(m+1)
-     equal_outside NAT by A5,A6,A8,A9,NAT_1:13
-,SCMFSA6A:32;
+     equal_outside NAT by A5,A6,A8,A9,NAT_1:13,SCMFSA6A:32;
    end;
  thus for m holds X[m] from NAT_1:sch 1(A3,A4);
 end;
@@ -1353,8 +1351,7 @@ A20:   CurInstr(Cs.m) = I.IC(Cs.m) by A16,A17,GRFUNC_1:8;
      then CurInstr(Cs.m) = (I ';' J).IC(Cs.m) by A16,A20,SCMFSA6A:54
         .= CurInstr(CsIJ.m) by A15,A16,A18,A19,GRFUNC_1:8;
     hence (Computation s1).(m+1),(Computation(s2)).(m+1)
-      equal_outside NAT by A10,A11,A13,A14,
-NAT_1:13,SCMFSA6A:32;
+      equal_outside NAT by A10,A11,A13,A14,NAT_1:13,SCMFSA6A:32;
    end;
  thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;
@@ -1698,8 +1695,7 @@ A18:   CurInstr(Cs.m) = I.IC(Cs.m) by A14,A15,GRFUNC_1:8;
      then CurInstr(Cs.m) = (I ';' J).IC(Cs.m) by A14,A18,SCMFSA6A:54
         .= CurInstr(CsIJ.m) by A13,A14,A16,A17,GRFUNC_1:8;
     hence (Computation s1).(m+1),(Computation(s2)).(m+1)
-      equal_outside NAT by A10,A11,A12,
-SCMFSA6A:32;
+      equal_outside NAT by A10,A11,A12,SCMFSA6A:32;
    end;
  thus for k being Element of NAT holds X[k] from NAT_1:sch 1(A8, A9);
 end;

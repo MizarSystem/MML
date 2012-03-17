@@ -10,17 +10,19 @@ environ
       ARYTM_3, RELAT_1, SEQ_2, ORDINAL2, ABSVALUE, LIMFUNC1, FRAENKEL, FUNCT_2,
       BOOLE, INT_1, POWER, GROUP_1, ASYMPT_0, FUNCOP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, SEQ_1, SEQ_2,
-      NEWTON, POWER, PRE_CIRC, FINSET_1, LIMFUNC1, XXREAL_0;
+      COMPLEX1, REAL_1, FUNCT_1, FUNCT_2, FRAENKEL, INT_1, NAT_1, VALUED_1,
+      SEQ_1, SEQ_2, NEWTON, POWER, PRE_CIRC, FINSET_1, LIMFUNC1, XXREAL_0;
  constructors FRAENKEL, REAL_1, NAT_1, SEQ_2, LIMFUNC1, NEWTON, POWER,
-      PRE_CIRC, SEQ_1;
+      PRE_CIRC, SEQ_1, VALUED_1, PARTFUN1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FINSET_1, FRAENKEL, NUMBERS,
-      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1, VALUED_0;
+      XXREAL_0, XREAL_0, NAT_1, INT_1, MEMBERED, SEQ_1, VALUED_0, VALUED_1,
+      FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, FRAENKEL;
+ definitions TARSKI, FRAENKEL, VALUED_1;
  theorems TARSKI, FUNCT_2, FRAENKEL, INT_1, NAT_1, PRE_CIRC, REAL_1, SEQ_1,
       SQUARE_1, SEQ_2, ABSVALUE, LIMFUNC1, POWER, PRE_FF, XREAL_0, XBOOLE_0,
-      XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1;
+      XCMPLX_0, XCMPLX_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1,
+      VALUED_1;
  schemes FUNCT_2, FINSEQ_1, NAT_1;
 
 begin :: Preliminaries
@@ -245,29 +247,8 @@ definition let f,g be eventually-nonnegative Real_Sequence;
   end;
 end;
 
-definition let f be Real_Sequence, c be real number;
- func c+f -> Real_Sequence means :Def9:
-  for n holds it.n = c + f.n;
- existence proof
-    reconsider c as Real by XREAL_0:def 1;
-    deffunc F(Element of NAT) = c+f.$1;
-    consider h being Function of NAT, REAL such that
- A1: for n being Element of NAT holds h.n = F(n) from FUNCT_2:sch 4;
-  take h; let n; thus thesis by A1;
- end;
- uniqueness proof let j,k be Real_Sequence such that
- A2: for n holds j.n = c + f.n and
- A3: for n holds k.n = c + f.n;
-       now let n; thus j.n = c + f.n by A2 .= k.n by A3; end;
-  hence j = k by FUNCT_2:113;
- end;
- end;
-
-notation let f be Real_Sequence, c be real number;
- synonym f+c for c+f;
-end;
-
 definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+ canceled;
  redefine func c(#)f -> eventually-nonnegative Real_Sequence;
   coherence proof
      consider N such that
@@ -283,27 +264,35 @@ definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
   end;
 end;
 
-registration let f be eventually-nonnegative Real_Sequence,
+definition let f be eventually-nonnegative Real_Sequence,
                c be non negative Real;
- cluster c+f -> eventually-nonnegative;
+ redefine func c+f -> eventually-nonnegative Real_Sequence;
   coherence proof
    consider N such that
   A1: for n st n >= N holds f.n >= 0 by Def4;
+  c+f is eventually-nonnegative
+  proof
    take N; let n; assume n >= N;
   then f.n >= 0 by A1;
   then c + f.n >= 0 + 0 by XREAL_1:9;
-   hence (c+f).n >= 0 by Def9;
+   hence (c+f).n >= 0 by VALUED_1:2;
+  end;
+  hence thesis;
   end;
 end;
 
-registration let f be eventually-nonnegative Real_Sequence, c be positive Real;
- cluster c+f -> eventually-positive;
+definition let f be eventually-nonnegative Real_Sequence, c be positive Real;
+ redefine func c+f -> eventually-positive Real_Sequence;
   coherence proof
      consider N such that
   A1: for n st n >= N holds f.n >= 0 by Def4;
+  c+f is eventually-positive
+  proof
    take N; let n; assume n >= N;
   then f.n >= 0 by A1; then c + f.n > 0 + 0 by XREAL_1:10;
-   hence (c+f).n > 0 by Def9;
+   hence (c+f).n > 0 by VALUED_1:2;
+   end;
+   hence thesis;
   end;
 end;
 
@@ -358,8 +347,8 @@ Lm1:
  for f,g being Real_Sequence, n being Element of NAT holds (f/"g).n = f.n/g.n
 proof
  let f,g be Real_Sequence, n be Element of NAT;
-  thus (f/"g).n = (f(#)(g")).n by SEQ_1:def 9 .= f.n*g".n by SEQ_1:12
-              .= f.n*(g.n)" by SEQ_1:def 8 .= f.n/g.n by XCMPLX_0:def 9;
+  thus (f/"g).n = (f(#)(g")).n by VALUED_1:def 10 .= f.n*g".n by SEQ_1:12
+              .= f.n*(g.n)" by VALUED_1:10,def 7 .= f.n/g.n by XCMPLX_0:def 9;
 end;
 
 theorem Th1: :: Problem 3.25
@@ -375,12 +364,12 @@ A2:  n >= N;
 A3: P[n];
 A4: for m be Nat st m >= n & P[m] holds P[m+1] proof
     let m be Nat;
-A6: m in NAT by ORDINAL1:def 13;
+A5: m in NAT by ORDINAL1:def 13;
     assume
-   A5: m >= n & f.n <= f.m;
+   A6: m >= n & f.n <= f.m;
     then m >= N by A2,XXREAL_0:2;
-    then f.m <= f.(m+1) by A1,A6;
-    hence f.n <= f.(m+1) by A5,XXREAL_0:2;
+    then f.m <= f.(m+1) by A1,A5;
+    hence f.n <= f.(m+1) by A6,XXREAL_0:2;
    end;
     for m be Nat st m >= n holds P[m] from NAT_1:sch 8(A3,A4);
   hence thesis;
@@ -532,14 +521,15 @@ A3: now
   then A11: 1 < p*(f.n*(g.n)") by XCMPLX_0:def 9;
   A12: f.n <> 0 by A10;
   A13: now assume g.n*(f.n)" < p*f.n*(f.n)";
-        then g.n*f".n < p*f.n*(f.n)" by SEQ_1:def 8;
+        then g.n*f".n < p*f.n*(f.n)" by VALUED_1:10,def 7;
         then (g(#)(f")).n < p*(f.n*(f.n)") by SEQ_1:12;
         then (g(#)(f")).n < p*1 by A12,XCMPLX_0:def 7
-; hence (g/"f).n-0 < p by SEQ_1:def 9;
+; hence (g/"f).n-0 < p by VALUED_1:def 10;
       end;
   A14: now assume g.n*(f.n)" > g.n*0;
-        then g.n*f".n > 0 by SEQ_1:def 8;
-        then (g(#)f").n > 0 by SEQ_1:12; hence (g/"f).n-0 >= 0 by SEQ_1:def 9
+        then g.n*f".n > 0 by VALUED_1:10,def 7;
+        then (g(#)f").n > 0 by SEQ_1:12; hence (g/"f).n-0 >= 0 by
+VALUED_1:def 10
 ;
       end;
 
@@ -1009,7 +999,7 @@ proof
        now let n; assume n >= N;
   then A5: t.n <= c1*f.n & t.n >= 0 by A4;
            f.n+0 <= f.n+c by XREAL_1:9;
-      then f.n <= (c+f).n by Def9;
+      then f.n <= (c+f).n by VALUED_1:2;
       then c1*f.n <= c1*(c+f).n by A3,XREAL_1:66;
    hence t.n <= c1*(c+f).n & t.n >= 0 by A5,XXREAL_0:2;
   end;
@@ -1042,9 +1032,9 @@ A6: for n st n >= N2 holds g.n > 0 by Def6;
       then abs((f/"g).n-l) < delta by A3;
       then (f/"g).n - l <= delta by ABSVALUE:12;
       then (f/"g).n <= 1*l + 1*l by XREAL_1:22;
-      then (f(#)(g")).n <= c by SEQ_1:def 9;
+      then (f(#)(g")).n <= c by VALUED_1:def 10;
       then f.n*(g").n <= c by SEQ_1:12;
-  then A11: f.n*(g.n)" <= c by SEQ_1:def 8;
+  then A11: f.n*(g.n)" <= c by VALUED_1:10,def 7;
   A12: g.n > 0 by A6,A10;
       then f.n*(g.n)"*g.n <= c*g.n by A11,XREAL_1:66;
       then f.n*((g.n)"*g.n) <= c*g.n;
@@ -1092,9 +1082,9 @@ A7: now let n; assume
  then A12:  n >= N & n >= N1 by A11,XXREAL_0:2;
       then abs((f/"g).n-0) < 1 by A4;
       then (f/"g).n <= 1 by ABSVALUE:12;
-      then (f(#)(g")).n <= 1 by SEQ_1:def 9;
+      then (f(#)(g")).n <= 1 by VALUED_1:def 10;
       then f.n*(g").n <= 1 by SEQ_1:12;
- then A13:  f.n*(g.n)" <= 1 by SEQ_1:def 8;
+ then A13:  f.n*(g.n)" <= 1 by VALUED_1:10,def 7;
            g.n > 0 by A6,A10;
       then f.n*(g.n)"*g.n <= 1*g.n by A13,XREAL_1:66;
  then A14: f.n*((g.n)"*g.n) <= 1*g.n;
@@ -2673,14 +2663,14 @@ proof
      end;
      suppose
       t.n > c*f.n; then t.n > 0 + c*f.n;
-     then A35: t.n - c*f.n >= 0 by XREAL_1:21;
+     then A34: t.n - c*f.n >= 0 by XREAL_1:21;
              t.n <= c*(f.n+g.n) by A32,SEQ_1:11;
         then t.n <= c*f.n + c*g.n;
         then t.n - c*f.n <= c*g.n by XREAL_1:22;
-      hence g'.n <= c*g.n & g'.n >= 0 by A27,A35;
+      hence g'.n <= c*g.n & g'.n >= 0 by A27,A34;
     end;
     end;
- then A36:g' in Big_Oh(g) by A19,A28;
+ then A35:g' in Big_Oh(g) by A19,A28;
          now let n be Element of NAT;
      per cases;
      suppose t.n <= c*f.n;
@@ -2692,7 +2682,7 @@ proof
       hence f'.n + g'.n = t.n;
     end;
     end;
-  hence x in Big_Oh(f) + Big_Oh(g) by A17,A28,A31,A36;
+  hence x in Big_Oh(f) + Big_Oh(g) by A17,A28,A31,A35;
  end;
  hence thesis by TARSKI:2;
 end;

@@ -16,13 +16,14 @@ environ
       FINSET_1, FUNCT_4, FINSEQ_2, FINSEQ_4, FUNCT_7, AMI_1, AMI_2, AMI_3,
       SCMFSA_1, XXREAL_0;
  constructors PARTFUN1, WELLORD2, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, INT_2,
-      FINSEQ_4, FINSOP_1, CAT_2, AMI_5, SCMFSA_1;
+      FINSEQ_4, FINSOP_1, CAT_2, AMI_5, SCMFSA_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       FUNCOP_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1, INT_1, FINSEQ_1, CARD_3,
-      STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, SCMFSA_1, ORDINAL2, ORDINAL3;
+      STRUCT_0, AMI_1, AMI_2, AMI_3, AMI_5, SCMFSA_1, ORDINAL2, ORDINAL3,
+      VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, AMI_1, FUNCT_1, WELLORD2, XBOOLE_0, AMI_2, AMI_3,
-      SCMFSA_1, FUNCOP_1, CARD_1;
+      SCMFSA_1, FUNCOP_1, CARD_1, VALUED_1;
  theorems MCART_1, SCMFSA_1, AMI_1, TARSKI, INT_1, RELAT_1, AMI_5, FUNCT_2,
       FUNCT_4, GR_CY_1, CARD_3, FUNCOP_1, FUNCT_1, AMI_3, ENUMSET1, NAT_1,
       CARD_1, CARD_4, AMI_2, FUNCT_7, ZFMISC_1, ORDINAL1, STRUCT_0, XBOOLE_0,
@@ -1093,44 +1094,44 @@ A1:  the Instruction-Counter of SCM+FSA = NAT by FUNCT_7:def 1,SCMFSA_1:5;
       reconsider S = s|SCM-Memory +* (SCM-Instr-Loc --> I) as State of SCM by
 SCMFSA_1:18;
 A3:   dom(s|SCM+FSA-Instr-Loc)=dom s /\ SCM+FSA-Instr-Loc by RELAT_1:90;
-X:   l in SCM+FSA-Instr-Loc by AMI_1:def 4;
+A4:   l in SCM+FSA-Instr-Loc by AMI_1:def 4;
           dom s = dom SCM+FSA-OK by CARD_3:18 .=
       {NAT} \/ SCM+FSA-Data-Loc \/ SCM+FSA-Data*-Loc \/ SCM+FSA-Instr-Loc
                         by FUNCT_2:def 1,SCMFSA_1:8;
-     then l in dom s by XBOOLE_0:def 2,X;
-then A4:   l in dom(s|SCM+FSA-Instr-Loc) by A3,XBOOLE_0:def 3,X;
+     then l in dom s by A4,XBOOLE_0:def 2;
+then A5:   l in dom(s|SCM+FSA-Instr-Loc) by A3,A4,XBOOLE_0:def 3;
      thus Exec(i,s).l = (s +* Exec(I,S) +* s|SCM+FSA-Instr-Loc).l
                        by Th75
-          .= (s|SCM+FSA-Instr-Loc).l by A4,FUNCT_4:14
-          .= s.l by A4,FUNCT_1:70;
+          .= (s|SCM+FSA-Instr-Loc).l by A5,FUNCT_4:14
+          .= s.l by A5,FUNCT_1:70;
      end;
      suppose i in { [J,<*dB,fA,dA*>] : J in {9,10} };
       then consider J,dB,dA,fA such that
-A5:    i = [J,<*dB,fA,dA*>] and
-A6:    J in {9,10};
-           now per cases by A6,TARSKI:def 2;
+A6:    i = [J,<*dB,fA,dA*>] and
+A7:    J in {9,10};
+           now per cases by A7,TARSKI:def 2;
        suppose J = 9;
-        then InsCode I = 9 by A5,MCART_1:7;
+        then InsCode I = 9 by A6,MCART_1:7;
        then consider i being Integer, k such that
              k = abs(S.(I int_addr2)) and
              i = (S.(I coll_addr1))/.k and
-A7:     SCM+FSA-Exec-Res(I,S) =
+A8:     SCM+FSA-Exec-Res(I,S) =
             SCM+FSA-Chg(SCM+FSA-Chg(S,I int_addr1,i),Next IC S)
              by SCMFSA_1:def 17;
        thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I int_addr1,i).l' by A7,SCMFSA_1:23
+           = SCM+FSA-Chg(S,I int_addr1,i).l' by A8,SCMFSA_1:23
           .= S.l' by SCMFSA_1:28;
        end;
        suppose J = 10;
-        then InsCode I = 10 by A5,MCART_1:7;
+        then InsCode I = 10 by A6,MCART_1:7;
        then consider f being FinSequence of INT,k such that
              k = abs(S.(I int_addr2)) and
              f = S.(I coll_addr1)+*(k,S.(I int_addr1)) and
-A8:     SCM+FSA-Exec-Res(I,S) =
+A9:     SCM+FSA-Exec-Res(I,S) =
           SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr1,f),Next IC S)
            by SCMFSA_1:def 17;
        thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I coll_addr1,f).l' by A8,SCMFSA_1:23
+           = SCM+FSA-Chg(S,I coll_addr1,f).l' by A9,SCMFSA_1:23
           .= S.l' by SCMFSA_1:32;
       end;
       end;
@@ -1138,11 +1139,11 @@ A8:     SCM+FSA-Exec-Res(I,S) =
      end;
      suppose i in { [K,<*dC,fB*>] : K in {11,12} };
       then consider J,dC,fB such that
-A9:    i = [J,<*dC,fB*>] and
-A10:    J in{11,12};
-           now per cases by A10,TARSKI:def 2;
+A10:    i = [J,<*dC,fB*>] and
+A11:    J in{11,12};
+           now per cases by A11,TARSKI:def 2;
        suppose J = 11;
-        then InsCode I = 11 by A9,MCART_1:7;
+        then InsCode I = 11 by A10,MCART_1:7;
        hence SCM+FSA-Exec-Res(I,S).l'
            = SCM+FSA-Chg(SCM+FSA-Chg(S,I int_addr3,len(S.(I coll_addr2))),
                          Next IC S).l' by SCMFSA_1:def 17
@@ -1151,15 +1152,15 @@ A10:    J in{11,12};
           .= S.l' by SCMFSA_1:28;
        end;
        suppose J = 12;
-        then InsCode I = 12 by A9,MCART_1:7;
+        then InsCode I = 12 by A10,MCART_1:7;
         then consider f being FinSequence of INT,k such that
               k = abs(S.(I int_addr3)) and
               f = k |-> 0 and
-A11:      SCM+FSA-Exec-Res(I,S) =
+A12:      SCM+FSA-Exec-Res(I,S) =
            SCM+FSA-Chg(SCM+FSA-Chg(S,I coll_addr2,f),Next IC S)
                  by SCMFSA_1:def 17;
        thus SCM+FSA-Exec-Res(I,S).l'
-           = SCM+FSA-Chg(S,I coll_addr2,f).l' by A11,SCMFSA_1:23
+           = SCM+FSA-Chg(S,I coll_addr2,f).l' by A12,SCMFSA_1:23
           .= S.l' by SCMFSA_1:32;
       end;
       end;

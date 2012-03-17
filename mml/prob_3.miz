@@ -12,16 +12,17 @@ environ
       FINSEQ_1, FUNCT_1, PROB_3;
  notations FINSEQ_1, ORDINAL1, CARD_3, FINSUB_1, REAL_1, RELAT_1, TARSKI,
       XBOOLE_0, RVSUM_1, FINSOP_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      SETFAM_1, BINOP_1, SETWOP_2, BINOP_2, SETWISEO, NAT_1, COMPLEX1, SEQ_1,
-      SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1, PROB_2, KURATO_2,
-      SETLIM_2, SEQM_3, SETLIM_1, RINFSUP1, SERIES_1, PCOMPS_1, XXREAL_0;
+      SETFAM_1, BINOP_1, SETWOP_2, BINOP_2, SETWISEO, NAT_1, COMPLEX1,
+      VALUED_1, SEQ_1, SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1,
+      PROB_2, KURATO_2, SETLIM_2, SEQM_3, SETLIM_1, RINFSUP1, SERIES_1,
+      PCOMPS_1, XXREAL_0;
  constructors SETFAM_1, PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, BINOP_2,
       COMPLEX1, SEQ_2, SEQM_3, PROB_2, FINSOP_1, RVSUM_1, SERIES_1, PCOMPS_1,
-      KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2;
+      KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2, VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1,
-      MEMBERED, SEQ_1, PROB_1, VALUED_0;
+      MEMBERED, SEQ_1, PROB_1, VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0;
+ definitions TARSKI, XBOOLE_0, VALUED_1;
  theorems FUNCT_1, FUNCT_2, SEQ_1, ABSVALUE, SEQ_2, SUBSET_1, NAT_1, TARSKI,
       XBOOLE_0, XBOOLE_1, PROB_2, SETLIM_2, RINFSUP1, RELAT_1, SETFAM_1,
       ZFMISC_1, SEQM_3, CARD_3, SETLIM_1, PROB_1, FINSUB_1, SERIES_1, FINSEQ_1,
@@ -353,10 +354,10 @@ A7:   (for k st k <= i holds x in A1.k) implies
         x in (Partial_Intersection A1).i;assume
 A8:   for k st k <= i+1 holds x in A1.k;
 A9:   for k st k <= i holds x in A1.k by A8,NAT_1:12;
-  A11: x in A1.(i+1) by A8;
+  A10: x in A1.(i+1) by A8;
        (Partial_Intersection A1).(i+1) =
         (Partial_Intersection A1).i /\ A1.(i+1) by Def1;
-      hence thesis by A7,A9,A11,XBOOLE_0:def 3;
+      hence thesis by A7,A9,A10,XBOOLE_0:def 3;
     end;
     for n holds P[n] from NAT_1:sch 2(A5,A6);
    hence thesis;
@@ -535,34 +536,34 @@ A1: x in (Partial_Diff_Union A1).n;
 A2:     n = n1+1;
      x in A1.(n1+1) \ (Partial_Union A1).n1 by A1,A2,Def3;
         then
-A4:     x in A1.n & not x in (Partial_Union A1).n1 by A2,XBOOLE_0:def 4;
+A3:     x in A1.n & not x in (Partial_Union A1).n1 by A2,XBOOLE_0:def 4;
         for k st k < n holds not x in A1.k
         proof let k; assume k < n;
           then k <= n1 by A2,NAT_1:13;
-          hence thesis by A4,Th15;
+          hence thesis by A3,Th15;
         end;
-        hence thesis by A4;
+        hence thesis by A3;
       end;
    end;
    hence thesis;
  end;
  assume
-A5: x in A1.n & for k st k < n holds not x in A1.k;
+A4: x in A1.n & for k st k < n holds not x in A1.k;
    now per cases by NAT_1:6;
    case n = 0;
-     hence thesis by A5,Def3;
+     hence thesis by A4,Def3;
    end;
    case ex n1 being Nat st n = n1 + 1;
     then consider n1 being Nat such that
-A6: n = n1+1;
+A5: n = n1+1;
      for k st k <= n1 holds not x in A1.k
     proof let k; assume k <= n1;
       then k < n1+1 by NAT_1:13;
-      hence thesis by A5,A6;
+      hence thesis by A4,A5;
     end;
     then not x in (Partial_Union A1).n1 by Th15;
-    then x in A1.(n1+1) \ (Partial_Union A1).n1 by A5,A6,XBOOLE_0:def 4;
-    hence thesis by A6,Def3;
+    then x in A1.(n1+1) \ (Partial_Union A1).n1 by A4,A5,XBOOLE_0:def 4;
+    hence thesis by A5,Def3;
    end;
    end;
  hence thesis;

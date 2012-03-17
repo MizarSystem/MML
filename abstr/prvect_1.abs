@@ -8,37 +8,39 @@ environ
 
  vocabularies RLVECT_1, VECTSP_1, BINOP_1, FUNCT_1, FINSEQOP, ARYTM_1,
       FINSEQ_2, RELAT_1, CARD_3, CAT_1, SETWISEO, FUNCOP_1, PARTFUN1, FINSEQ_1,
-      BOOLE, ZF_REFLE, FRAENKEL, FUNCT_3, FUNCT_6, GROUP_2, PRVECT_1, ARYTM;
+      BOOLE, ZF_REFLE, FRAENKEL, FUNCT_3, FUNCT_6, GROUP_2, PRVECT_1, ARYTM,
+      ALGSTR_0, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1, CARD_3,
-      RELAT_1, FUNCT_1, STRUCT_0, PARTFUN1, FUNCT_2, FUNCT_3, BINOP_1,
-      FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1, FINSEQOP, FINSEQ_1, FRAENKEL,
-      FUNCT_6, SETWISEO, FINSEQ_2;
+      RELAT_1, FUNCT_1, STRUCT_0, ALGSTR_0, PARTFUN1, FUNCT_2, FUNCT_3,
+      BINOP_1, FUNCOP_1, RLVECT_1, GROUP_1, VECTSP_1, FINSEQOP, FINSEQ_1,
+      FRAENKEL, FUNCT_6, SETWISEO, FINSEQ_2;
  constructors PARTFUN1, BINOP_1, FUNCT_3, SETWISEO, FRAENKEL, FUNCT_5, CARD_3,
-      FINSEQOP, FUNCT_6, VECTSP_1;
+      FINSEQOP, FUNCT_6, VECTSP_1, RLVECT_1, VALUED_1, SEQ_1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2, FUNCOP_1,
-      FRAENKEL, FINSEQ_1, FINSEQ_2, CARD_3, STRUCT_0, GROUP_1, VECTSP_1;
+      FRAENKEL, FINSEQ_1, FINSEQ_2, CARD_3, STRUCT_0, GROUP_1, VECTSP_1,
+      ALGSTR_0, VALUED_1;
  requirements BOOLE, SUBSET;
 
 
 begin :: Abelian Groups and Fields
 
 reserve G for Abelian add-associative right_complementable right_zeroed
-    (non empty LoopStr);
+    (non empty addLoopStr);
 
 canceled 2;
 
 theorem :: PRVECT_1:3
- 0.G is_a_unity_wrt the add of G;
+ 0.G is_a_unity_wrt the addF of G;
 
 theorem :: PRVECT_1:4
- for G being AbGroup holds comp G is_an_inverseOp_wrt the add of G;
+ for G being AbGroup holds comp G is_an_inverseOp_wrt the addF of G;
 
-reserve GS for non empty LoopStr;
+reserve GS for non empty addLoopStr;
 
 theorem :: PRVECT_1:5
-      the add of GS is commutative associative &
-  0.GS is_a_unity_wrt the add of GS &
-  comp GS is_an_inverseOp_wrt the add of GS implies
+      the addF of GS is commutative associative &
+  0.GS is_a_unity_wrt the addF of GS &
+  comp GS is_an_inverseOp_wrt the addF of GS implies
    GS is AbGroup;
 
 reserve F for Field;
@@ -46,10 +48,10 @@ reserve F for Field;
 canceled 4;
 
 theorem :: PRVECT_1:10
-      0.F is_a_unity_wrt the add of F;
+      0.F is_a_unity_wrt the addF of F;
 
 theorem :: PRVECT_1:11
- 1_F is_a_unity_wrt the mult of F;
+ 1_F is_a_unity_wrt the multF of F;
 
 begin :: The $n$-Product of a Binary and Unary Operation
 
@@ -110,12 +112,12 @@ theorem :: PRVECT_1:17
 
 begin :: The $n$-Power of a Group and of a Field
 
-definition let F be non empty LoopStr, n;
+definition let F be non empty addLoopStr, n;
   assume F is Abelian add-associative right_zeroed right_complementable;
   func n -Group_over F -> strict AbGroup equals
 :: PRVECT_1:def 3
-     LoopStr(# n-tuples_on the carrier of F,
-        product(the add of F,n),
+     addLoopStr(# n-tuples_on the carrier of F,
+        product(the addF of F,n),
         (n .--> 0.F) qua Element of n-tuples_on the carrier of F#);
 end;
 
@@ -132,13 +134,13 @@ definition let F,n;
 :: PRVECT_1:def 4
    for x being Element of F,
        v being Element of n-tuples_on the carrier of F holds
-    it.(x,v) = (the mult of F)[;](x,v);
+    it.(x,v) = (the multF of F)[;](x,v);
  end;
 
 definition let F,n;
   func n -VectSp_over F -> strict VectSpStr over F means
 :: PRVECT_1:def 5
-   the LoopStr of it = n -Group_over F &
+   the addLoopStr of it = n -Group_over F &
    the lmult of it = n -Mult_over F;
  end;
 
@@ -324,7 +326,7 @@ end;
 definition let g;
  func addop g -> BinOps of carr g means
 :: PRVECT_1:def 13
-  len it = len carr g & for i holds it.i = the add of g.i;
+  len it = len carr g & for i holds it.i = the addF of g.i;
  func complop g -> UnOps of carr g means
 :: PRVECT_1:def 14
   len it = len carr g & for i holds it.i = comp g.i;
@@ -337,6 +339,6 @@ definition
  let G be Group-Sequence;
  func product G -> strict AbGroup equals
 :: PRVECT_1:def 16
-       LoopStr(# product carr G, [:addop G:], zeros G #);
+       addLoopStr(# product carr G, [:addop G:], zeros G #);
 end;
 

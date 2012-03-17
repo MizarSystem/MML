@@ -14,11 +14,11 @@ environ
       XREAL_0, INT_1, INT_2, NAT_1, NAT_D, SETWOP_2, POWER, SERIES_1, BINARITH,
       ABIAN, SQUARE_1, NEWTON, EULER_1, FINSET_1, XXREAL_0;
  constructors SQUARE_1, NAT_1, NAT_D, SETWOP_2, NEWTON, SERIES_1, BINARITH,
-      EULER_1, ABIAN;
+      EULER_1, ABIAN, VALUED_1, PARTFUN1, SEQ_1;
  registrations ORDINAL1, FINSET_1, FINSUB_1, XXREAL_0, XREAL_0, SQUARE_1,
-      NAT_1, INT_1, NEWTON, ABIAN, SERIES_1, XBOOLE_0;
+      NAT_1, INT_1, NEWTON, ABIAN, SERIES_1, XBOOLE_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, INT_1, SQUARE_1;
+ definitions TARSKI, INT_1, SQUARE_1, VALUED_1;
  theorems REAL_2, REAL_1, NAT_1, NAT_2, INT_1, INT_2, FINSEQ_1, CARD_2,
       FINSET_1, EULER_1, EULER_2, BINARITH, PREPOWER, PRE_FF, POWER, NEWTON,
       XCMPLX_0, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1, NAT_D;
@@ -416,13 +416,13 @@ theorem
   p > 2 & p is prime implies p is odd
 proof
   let p be Nat;
-  assume A2:p > 2 & p is prime;
+  assume A1:p > 2 & p is prime;
   assume p is even;
   then p mod 2 = 0 by NAT_2:23;
   then consider k being Nat such that
-    A3:p = 2*k + 0 & 0 < 2 by NAT_D:def 2;
-      2 divides p by A3,NAT_D:def 3;
-  hence contradiction by A2,INT_2:def 5;
+    A2:p = 2*k + 0 & 0 < 2 by NAT_D:def 2;
+      2 divides p by A2,NAT_D:def 3;
+  hence contradiction by A1,INT_2:def 5;
 end;
 
 theorem
@@ -810,13 +810,13 @@ proof
         consider u being Nat such that
           A6:p |^ (k+1) = (p*i)*u by A4,A5,NAT_D:def 3;
             p*(p |^ k) = p*(i*u) by A6,NEWTON:11;
-        then A8:p |^ k = p*(i*u) div p by A2,NAT_D:18;
-        then A9:p |^ k = i*u by A2,NAT_D:18;
-        then A10:u divides p |^ k by NAT_D:def 3;
-            u <> 1 by A1,A5,A9,NEWTON:11;
+        then A7:p |^ k = p*(i*u) div p by A2,NAT_D:18;
+        then A8:p |^ k = i*u by A2,NAT_D:18;
+        then A9:u divides p |^ k by NAT_D:def 3;
+            u <> 1 by A1,A5,A8,NEWTON:11;
         then consider j being Element of NAT such that
-          A11:u = p*j by A1,A10,Th33;
-            p |^ k = n*j by A2,A5,A8,A11,NAT_D:18;
+          A10:u = p*j by A1,A9,Th33;
+            p |^ k = n*j by A2,A5,A7,A10,NAT_D:18;
       hence thesis by NAT_D:def 3;
     end;
     end;
@@ -932,20 +932,20 @@ theorem Th38:
     implies (n |^ (p -'1)) mod p = 1
 proof
   let p be Nat;
-  assume A2:p is prime & n,p are_relative_prime;
-  then A3:p > 1 by INT_2:def 5;
-  A4:p <> 0 by A2,INT_2:def 5;
-  A5:n <> 0
+  assume A1:p is prime & n,p are_relative_prime;
+  then A2:p > 1 by INT_2:def 5;
+  A3:p <> 0 by A1,INT_2:def 5;
+  A4:n <> 0
   proof
     assume n = 0;
     then n hcf p = p by NEWTON:65;
-    then n hcf p > 1 by A2,INT_2:def 5;
-    hence contradiction by A2,INT_2:def 4;
+    then n hcf p > 1 by A1,INT_2:def 5;
+    hence contradiction by A1,INT_2:def 4;
   end;
-  then (n |^ p) mod p = n mod p by A2,EULER_2:34;
-  then A6:(n |^ (p -' 1))*n mod p = n mod p by A4,A5,Th27;
-      (n |^ (p -'1)) <> 0 by A5,PREPOWER:12;
-  hence thesis by A2,A3,A5,A6,EULER_2:27;
+  then (n |^ p) mod p = n mod p by A1,EULER_2:34;
+  then A5:(n |^ (p -' 1))*n mod p = n mod p by A3,A4,Th27;
+      (n |^ (p -'1)) <> 0 by A4,PREPOWER:12;
+  hence thesis by A1,A2,A4,A5,EULER_2:27;
 end;
 
 theorem Th39:
@@ -979,7 +979,7 @@ end;
 
 definition let a be Integer;
   redefine func a^2 -> Element of NAT;
-coherence by XREAL_1:65,INT_1:16;
+coherence by INT_1:16,XREAL_1:65;
 end;
 
 theorem Th40:
@@ -1307,9 +1307,9 @@ definition
     for k st k > 0 & (i |^ k) mod p = 1 holds kk <= k
     proof
       let k;
-A1:   k in NAT by ORDINAL1:def 13;
+A10:   k in NAT by ORDINAL1:def 13;
       assume k > 0 & (i |^ k) mod p = 1;
-      then k in A by A1;
+      then k in A by A10;
       hence thesis by A8;
     end;
     hence thesis by A9;
@@ -1317,11 +1317,11 @@ A1:   k in NAT by ORDINAL1:def 13;
   uniqueness
   proof
     let k1,k2 be Element of NAT such that
-      A10:k1 > 0 & (i |^ k1) mod p = 1 & for k st k > 0 & (i |^ k) mod p = 1
+      A11:k1 > 0 & (i |^ k1) mod p = 1 & for k st k > 0 & (i |^ k) mod p = 1
            holds 0 < k1 & k1 <= k and
-      A11:k2 > 0 & (i |^ k2) mod p = 1 & for k st k > 0 & (i |^ k) mod p = 1
+      A12:k2 > 0 & (i |^ k2) mod p = 1 & for k st k > 0 & (i |^ k) mod p = 1
            holds 0 < k2 & k2 <= k;
-        k1 <= k2 & k2 <= k1 by A10,A11;
+        k1 <= k2 & k2 <= k1 by A11,A12;
     hence thesis by XXREAL_0:1;
   end;
 end;

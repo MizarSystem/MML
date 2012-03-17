@@ -22,43 +22,44 @@
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="COMPTRIG"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="GROUP_1"/>
 <ArticleID name="VECTSP_1"/>
+<ArticleID name="RLVECT_1"/>
 <ArticleID name="COMPLFLD"/>
 </Signature>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="54"/>
+<Adjective nr="71"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="180"/>
 <Cluster>
-<Adjective nr="54"/>
-<Adjective nr="58"/>
+<Adjective nr="71"/>
+<Adjective nr="81"/>
 </Cluster>
 </FCluster>
 <FCluster>
 <ArgTypes/>
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="180"/>
 <Cluster>
 <Adjective nr="32" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
-<Adjective nr="40"/>
 <Adjective nr="48"/>
-<Adjective nr="50"/>
-<Adjective nr="54"/>
-<Adjective nr="57"/>
-<Adjective nr="59"/>
-<Adjective nr="60"/>
-<Adjective nr="61"/>
+<Adjective nr="68"/>
+<Adjective nr="71"/>
+<Adjective nr="74"/>
+<Adjective nr="76"/>
+<Adjective nr="80"/>
+<Adjective nr="82"/>
+<Adjective nr="83"/>
+<Adjective nr="88"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -67,7 +68,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="172"/>
+<Func kind="K" nr="180"/>
 </Func>
 </Typ>
 <Cluster>

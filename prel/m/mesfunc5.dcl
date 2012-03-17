@@ -10,8 +10,11 @@
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
@@ -26,7 +29,7 @@
 <ArticleID name="MEMBERED"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="SUPINF_1"/>
@@ -49,7 +52,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="72"/>
+<Adjective nr="75"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -58,7 +61,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="78"/>
+<Adjective nr="81"/>
 </Cluster>
 </CCluster>
 <CCluster>
@@ -71,7 +74,7 @@
 </ArgTypes>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="77"/>
+<Adjective nr="80"/>
 </Cluster>
 <Typ kind="M" nr="5">
 <Cluster/>
@@ -80,7 +83,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="79"/>
+<Adjective nr="82"/>
 </Cluster>
 </CCluster>
 </Registrations>

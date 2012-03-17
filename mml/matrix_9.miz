@@ -9,20 +9,21 @@ environ
  vocabularies VECTSP_1, RLVECT_1, MATRIX_1, FINSEQ_2, ARYTM_1, FINSEQ_1,
       TREES_1, FUNCT_1, RELAT_1, BOOLE, BINOP_1, SETWISEO, MATRIX_2, FINSUB_1,
       FINSET_1, FUNCOP_1, MATRIX_3, MATRIX_9, FINSEQ_5, FUNCT_2, SGRAPH1,
-      CARD_3, FINSEQ_4, NAT_1, CALCUL_2, ARYTM;
+      CARD_3, FINSEQ_4, NAT_1, CALCUL_2, ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       NAT_D, ENUMSET1, FINSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FINSEQ_1,
-      FINSEQ_2, BINOP_1, FINSOP_1, BINARITH, STRUCT_0, GROUP_1, VECTSP_1,
-      RLVECT_1, SETWISEO, GROUP_4, SETWOP_2, FINSUB_1, MATRIX_1, FINSEQ_4,
-      FINSEQ_5, MATRIX_2, MATRIX_3, XXREAL_0;
+      FINSEQ_2, BINOP_1, FINSOP_1, BINARITH, STRUCT_0, ALGSTR_0, GROUP_1,
+      VECTSP_1, RLVECT_1, SETWISEO, GROUP_4, SETWOP_2, FINSUB_1, MATRIX_1,
+      FINSEQ_4, FINSEQ_5, MATRIX_2, MATRIX_3, XXREAL_0;
  constructors RELAT_2, PARTFUN1, BINOP_1, SETWISEO, XXREAL_0, NAT_1, NAT_D,
-      FINSEQ_4, FINSOP_1, BINARITH, FINSEQ_5, ALGSTR_1, GROUP_4, MATRIX_7;
+      FINSEQ_4, FINSOP_1, BINARITH, FINSEQ_5, ALGSTR_1, GROUP_4, MATRIX_7,
+      VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCT_2, FINSET_1, FINSUB_1, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1,
       FINSEQ_5, FINSEQ_6, STRUCT_0, GROUP_1, VECTSP_1, MATRIX_2, FVSUM_1,
-      CHAIN_1;
+      CHAIN_1, VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions RLVECT_1, FINSEQ_2, FINSEQ_1;
+ definitions RLVECT_1, FINSEQ_2, FINSEQ_1, ALGSTR_0, VALUED_1;
  theorems FINSEQ_1, FINSEQ_2, TARSKI, FUNCT_2, NAT_1, BINOP_1, FUNCT_1,
       SETWISEO, VECTSP_1, ZFMISC_1, FVSUM_1, SETWOP_2, MATRIX_1, MATRIX_2,
       FUNCOP_1, FINSUB_1, FINSEQ_3, RLVECT_1, RELAT_1, FINSOP_1, RELSET_1,
@@ -258,11 +259,11 @@ begin :: The Permanent of a Matrix
 definition let n,K;let M be Matrix of n,K;
   func PPath_product M -> Function of Permutations n, the carrier of K means
 :Def1: for p being Element of Permutations(n) holds
-    it.p = (the mult of K) $$ Path_matrix(p,M);
+    it.p = (the multF of K) $$ Path_matrix(p,M);
 existence
 proof
    deffunc V(Element of Permutations n) =
-        (the mult of K) $$ Path_matrix($1,M);
+        (the multF of K) $$ Path_matrix($1,M);
    consider f being Function of Permutations(n),the carrier of K such that
 A1: for p being Element of Permutations(n) holds
       f.p = V(p) from FUNCT_2:sch 4;
@@ -274,11 +275,11 @@ proof
    let f1,f2 be Function of Permutations(n), the carrier of K;
    assume that
 A2: for p being Element of Permutations(n) holds
-     f1.p = (the mult of K) $$ Path_matrix(p,M) and
+     f1.p = (the multF of K) $$ Path_matrix(p,M) and
 A3: for p being Element of Permutations(n) holds
-     f2.p = (the mult of K) $$ Path_matrix(p,M);
+     f2.p = (the multF of K) $$ Path_matrix(p,M);
     now let p be Element of Permutations(n);
-      f1.p = (the mult of K) $$ Path_matrix(p,M) by A2;
+      f1.p = (the multF of K) $$ Path_matrix(p,M) by A2;
      hence f1.p=f2.p by A3;
    end;
    hence thesis by FUNCT_2:113;
@@ -287,7 +288,7 @@ end;
 
 definition let n, K; let M be Matrix of n,K;
   func Per M -> Element of K equals
-     (the add of K) $$ (FinOmega Permutations n, PPath_product M);
+     (the addF of K) $$ (FinOmega Permutations n, PPath_product M);
   coherence;
 end;
 
@@ -308,7 +309,7 @@ then A4:  1 in dom Path_matrix(p,M);
      then Path_matrix(p,M).1 = M*(1,1) by A4,MATRIX_3:def 7;
      then Path_matrix(p,M).1 = a by MATRIX_2:5;
 then A5:  Path_matrix(p,M) = <*a*> by A2,FINSEQ_1:57;
-A6:  (PPath_product M).p = (the mult of K) $$ Path_matrix(p,M) by Def1;
+A6:  (PPath_product M).p = (the multF of K) $$ Path_matrix(p,M) by Def1;
       <*a*> = 1|->a by FINSEQ_2:73;
      hence thesis by A5,A6,FINSOP_1:17;
    end;
@@ -324,7 +325,7 @@ proof let K be Field, n be Element of NAT;
     assume A1: n>=1;
     set B = FinOmega Permutations n;
     set f = PPath_product(0.(K,n,n));
-    set F = the add of K;
+    set F = the addF of K;
     set Y = the carrier of K;
     set X = Permutations n;
  Permutations(n) is finite by MATRIX_2:30;
@@ -338,7 +339,7 @@ then A3:dom (PPath_product(0.(K,n,n))) = dom (Permutations(n) --> 0.K)
       assume x in dom PPath_product(0.(K,n,n));
        for p being Element of Permutations n holds
         (Permutations(n) --> 0.K).p =
-          (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
+          (the multF of K) $$ Path_matrix(p,(0.(K,n,n)))
       proof let p be Element of Permutations(n);
 A4:     len (n |-> 0.K) = n by FINSEQ_2:69;
          for i,j st i in dom (n |-> 0.K) & j=p.i holds
@@ -357,25 +358,25 @@ then A7:       (n |-> 0.K).i=0.K by FUNCOP_1:13;
         end;
 then A8:     Path_matrix(p,(0.(K,n,n))) = n |-> 0.K by A4,MATRIX_3:def 7;
         defpred P[Element of NAT] means
-         (the mult of K) $$ (($1+1) |-> 0.K)=0.K;
+         (the multF of K) $$ (($1+1) |-> 0.K)=0.K;
          1 |-> 0.K = <* 0.K *> by FINSEQ_2:73;
 then A9:     P[0] by FINSOP_1:12;
 A10:     for k being Element of NAT st P[k] holds P[k+1]
         proof let k be Element of NAT;
           assume A11: P[k];
-A12:       (the mult of K) has_a_unity by FVSUM_1:11;
+A12:       (the multF of K) has_a_unity by FVSUM_1:11;
            (k+1+1) |-> 0.K = ((k+1) |-> 0.K) ^ <* 0.K *> by FINSEQ_2:74;
-          then (the mult of K) $$ ( (k+1+1) |-> 0.K)
-             = (the mult of K).(0.K,0.K) by A11,A12,FINSOP_1:5
-            .= (0.K)*(0.K) by GROUP_1:def 1
+          then (the multF of K) $$ ( (k+1+1) |-> 0.K)
+             = (the multF of K).(0.K,0.K) by A11,A12,FINSOP_1:5
+            .= (0.K)*(0.K)
             .= 0.K by VECTSP_1:36;
           hence P[k+1];
         end;
 A13:     for k being Element of NAT holds P[k] from NAT_1:sch 1(A9,A10);
          n-'1+1=n by A1,BINARITH:53;
-        then (the mult of K) $$ Path_matrix(p,(0.(K,n,n))) = 0.K by A8,A13;
+        then (the multF of K) $$ Path_matrix(p,(0.(K,n,n))) = 0.K by A8,A13;
         hence (Permutations(n) --> 0.K).p
-          = (the mult of K) $$ Path_matrix(p,(0.(K,n,n)))
+          = (the multF of K) $$ Path_matrix(p,(0.(K,n,n)))
             by FUNCOP_1:13;
       end;
       hence (PPath_product(0.(K,n,n))).x = (Permutations(n) --> 0.K).x
@@ -456,9 +457,9 @@ A6:  Path_matrix (p, (a,b)][(c,d)).2=(a,b)][(c,d)*(2,1)
    end;
 
 theorem Th11:
-  (the mult of K) $$ <* a,b *> = a * b
+  (the multF of K) $$ <* a,b *> = a * b
   proof
-     (the mult of K) $$ <* a,b *> = Product <*a,b*> by GROUP_4:def 3
+     (the multF of K) $$ <* a,b *> = Product <*a,b*> by GROUP_4:def 3
                                 .= a * b by GROUP_4:13;
     hence thesis;
   end;
@@ -513,26 +514,26 @@ theorem
     reconsider id2 = idseq 2 as Permutation of Seg 2;
     reconsider Id2 = idseq 2 as Element of Permutations 2 by MATRIX_2:def 11;
     reconsider rid2 = Rev idseq 2 as Element of Permutations 2 by Th4;
-    set F = the add of K;
+    set F = the addF of K;
     set f = Path_product M;
      len Permutations 2 = 2 by MATRIX_2:20;
 then A1: Id2 is even by MATRIX_2:29;
-A2: f.id2 = -((the mult of K) $$ Path_matrix (Id2,M),Id2)
+A2: f.id2 = -((the multF of K) $$ Path_matrix (Id2,M),Id2)
            by MATRIX_3:def 8
-         .= (the mult of K) $$ Path_matrix (Id2,M)
+         .= (the multF of K) $$ Path_matrix (Id2,M)
            by A1,MATRIX_2:def 16
-         .= (the mult of K) $$ <*a,d*> by Th9
+         .= (the multF of K) $$ <*a,d*> by Th9
          .= a*d by Th11;
     reconsider f1 = f.Id2, f2 = f.rid2 as Element of K;
     A3: 1 in Seg 2;
 A4: rid2 = <*2,1*> by FINSEQ_2:61,FINSEQ_5:64;
 A5: id2 <> rid2 by A3,Th2,FUNCT_1:35;
     A6: len Permutations 2 = 2 by MATRIX_2:20;
-A7: f.rid2 = -((the mult of K) $$ Path_matrix (rid2,M),rid2)
+A7: f.rid2 = -((the multF of K) $$ Path_matrix (rid2,M),rid2)
        by MATRIX_3:def 8
-       .= -(the mult of K) $$ Path_matrix (rid2,M) by A4,A6,Th12,
+       .= -(the multF of K) $$ Path_matrix (rid2,M) by A4,A6,Th12,
 MATRIX_2:def 16
-       .= -(the mult of K) $$ <*b,c*> by Th10
+       .= -(the multF of K) $$ <*b,c*> by Th10
        .= -b*c by Th11;
      Permutations 2 is finite by MATRIX_2:30;
 then FinOmega Permutations 2 = Permutations 2 by MATRIX_2:def 17;
@@ -548,13 +549,13 @@ theorem
     reconsider Id2 = idseq 2 as Element of Permutations 2 by MATRIX_2:def 11;
     reconsider id2 = Id2 as Permutation of Seg 2;
     reconsider rid2 = Rev idseq 2 as Element of Permutations 2 by Th4;
-    set F = the add of K;
+    set F = the addF of K;
     set f = PPath_product M;
-A1: f.id2 = (the mult of K) $$ Path_matrix (Id2,M) by Def1
-         .= (the mult of K) $$ <*a,d*> by Th9
+A1: f.id2 = (the multF of K) $$ Path_matrix (Id2,M) by Def1
+         .= (the multF of K) $$ <*a,d*> by Th9
          .= a*d by Th11;
-A2: f.rid2 = (the mult of K) $$ Path_matrix (rid2,M) by Def1
-       .= (the mult of K) $$ <*b,c*> by Th10
+A2: f.rid2 = (the multF of K) $$ Path_matrix (rid2,M) by Def1
+       .= (the multF of K) $$ <*b,c*> by Th10
        .= b*c by Th11;
      Permutations 2 is finite by MATRIX_2:30;
 then A3: FinOmega Permutations 2 = Permutations 2 by MATRIX_2:def 17;
@@ -1002,9 +1003,9 @@ A20: z = M.3 & M*(3,2) = z.2 by MATRIX_1:def 6;
   end;
 
 theorem Th26:
-  (the mult of K) $$ <* a,b,c *> = a * b * c
+  (the multF of K) $$ <* a,b,c *> = a * b * c
   proof
-     (the mult of K) $$ <* a,b,c *>
+     (the multF of K) $$ <* a,b,c *>
        = Product <* a,b,c *> by GROUP_4:def 3
       .= a * b * c by FVSUM_1:104;
     hence thesis;
@@ -1601,7 +1602,7 @@ A1:   len l = 2 * 1 by FINSEQ_1:61;
       hence (len l) mod 2 = 0 by NAT_D:13;
       reconsider L2 = l2, L1 = l1 as Element of Permutations 3 by Th27;
        Product l = l2 * l1 by GROUP_4:13
-               .= (the mult of Group_of_Perm 3).(l2,l1) by GROUP_1:def 1
+               .= (the multF of Group_of_Perm 3).(l2,l1)
                .= L1 * L2 by MATRIX_2:def 13
                .= <*2,3,1*> by Th37;
       hence f = Product l;
@@ -1650,7 +1651,7 @@ A1:   len l = 2 * 1 by FINSEQ_1:61;
       hence (len l) mod 2 = 0 by NAT_D:13;
       reconsider L2 = l2, L1 = l1 as Element of Permutations 3 by Th27;
        Product l = l1 * l2 by GROUP_4:13
-               .= (the mult of Group_of_Perm 3).(l1,l2) by GROUP_1:def 1
+               .= (the multF of Group_of_Perm 3).(l1,l2)
                .= L2 * L1 by MATRIX_2:def 13
                .= <*3,1,2*> by Th37;
       hence f = Product l;
@@ -1959,37 +1960,37 @@ theorem
     reconsider rid3 = Rev idseq 3 as Element of Permutations 3 by Th4;
     reconsider a3 = <*1,3,2*>, a4 = <*2,3,1*>, a5 = <*2,1,3*>,
                a6 = <*3,1,2*> as Element of Permutations 3 by Th27;
-    set F = the add of K;
+    set F = the addF of K;
     set r = Path_product M;
 A2: id3 is even by MATRIX_2:29;
 A3: 3 = len Permutations 3 by MATRIX_2:20;
 then A4: Id3 is even by MATRIX_2:29;
-A5: r.id3 = -((the mult of K) $$ Path_matrix (Id3,M),Id3)
+A5: r.id3 = -((the multF of K) $$ Path_matrix (Id3,M),Id3)
             by MATRIX_3:def 8
-         .= (the mult of K) $$ Path_matrix (Id3,M) by A2,A3,MATRIX_2:def 16
-         .= (the mult of K) $$ <* a,e,i *> by A1,Th20,FINSEQ_2:62
+         .= (the multF of K) $$ Path_matrix (Id3,M) by A2,A3,MATRIX_2:def 16
+         .= (the multF of K) $$ <* a,e,i *> by A1,Th20,FINSEQ_2:62
          .= a*e*i by Th26;
-A6: r.rid3 = -((the mult of K) $$ Path_matrix (rid3,M),rid3)
+A6: r.rid3 = -((the multF of K) $$ Path_matrix (rid3,M),rid3)
           by MATRIX_3:def 8
-       .= -(the mult of K) $$ Path_matrix (rid3,M) by A3,Th15,Th42,
+       .= -(the multF of K) $$ Path_matrix (rid3,M) by A3,Th15,Th42,
 MATRIX_2:def 16
-       .= -(the mult of K) $$ <* c,e,g *> by A1,Th15,Th21
+       .= -(the multF of K) $$ <* c,e,g *> by A1,Th15,Th21
        .= -c*e*g by Th26;
-A7: r.a3 = -((the mult of K) $$ Path_matrix (a3,M),a3) by MATRIX_3:def 8
-       .= -(the mult of K) $$ Path_matrix (a3,M) by A3,Th44,MATRIX_2:def 16
-       .= -(the mult of K) $$ <* a,f,h *> by A1,Th22
+A7: r.a3 = -((the multF of K) $$ Path_matrix (a3,M),a3) by MATRIX_3:def 8
+       .= -(the multF of K) $$ Path_matrix (a3,M) by A3,Th44,MATRIX_2:def 16
+       .= -(the multF of K) $$ <* a,f,h *> by A1,Th22
        .= -a*f*h by Th26;
-A8: r.a4 = -((the mult of K) $$ Path_matrix (a4,M),a4) by MATRIX_3:def 8
-       .= (the mult of K) $$ Path_matrix (a4,M) by A3,Lm6,MATRIX_2:def 16
-       .= (the mult of K) $$ <* b,f,g *> by A1,Th23
+A8: r.a4 = -((the multF of K) $$ Path_matrix (a4,M),a4) by MATRIX_3:def 8
+       .= (the multF of K) $$ Path_matrix (a4,M) by A3,Lm6,MATRIX_2:def 16
+       .= (the multF of K) $$ <* b,f,g *> by A1,Th23
        .= b*f*g by Th26;
-A9: r.a5 = -((the mult of K) $$ Path_matrix (a5,M),a5) by MATRIX_3:def 8
-       .= -(the mult of K) $$ Path_matrix (a5,M) by A3,Th43,MATRIX_2:def 16
-       .= -(the mult of K) $$ <* b,d,i *> by A1,Th24
+A9: r.a5 = -((the multF of K) $$ Path_matrix (a5,M),a5) by MATRIX_3:def 8
+       .= -(the multF of K) $$ Path_matrix (a5,M) by A3,Th43,MATRIX_2:def 16
+       .= -(the multF of K) $$ <* b,d,i *> by A1,Th24
        .= -b*d*i by Th26;
-A10: r.a6 = -((the mult of K) $$ Path_matrix (a6,M),a6) by MATRIX_3:def 8
-       .= (the mult of K) $$ Path_matrix (a6,M) by A3,Lm7,MATRIX_2:def 16
-       .= (the mult of K) $$ <* c,d,h *> by A1,Th25
+A10: r.a6 = -((the multF of K) $$ Path_matrix (a6,M),a6) by MATRIX_3:def 8
+       .= (the multF of K) $$ Path_matrix (a6,M) by A3,Lm7,MATRIX_2:def 16
+       .= (the multF of K) $$ <* c,d,h *> by A1,Th25
        .= c*d*h by Th26;
      Permutations 3 is finite by MATRIX_2:30;
 then A11: FinOmega Permutations 3 = Permutations 3 by MATRIX_2:def 17;
@@ -2044,25 +2045,25 @@ theorem
     reconsider rid3 = Rev idseq 3 as Element of Permutations 3 by Th4;
     reconsider a3 = <*1,3,2*>, a4 = <*2,3,1*>, a5 = <*2,1,3*>,
                a6 = <*3,1,2*> as Element of Permutations 3 by Th27;
-    set F = the add of K;
+    set F = the addF of K;
     set r = PPath_product M;
-A2: r.id3 = (the mult of K) $$ Path_matrix (Id3,M) by Def1
-         .= (the mult of K) $$ <* a,e,i *> by A1,Th20,FINSEQ_2:62
+A2: r.id3 = (the multF of K) $$ Path_matrix (Id3,M) by Def1
+         .= (the multF of K) $$ <* a,e,i *> by A1,Th20,FINSEQ_2:62
          .= a*e*i by Th26;
-A3: r.rid3 = (the mult of K) $$ Path_matrix (rid3,M) by Def1
-       .= (the mult of K) $$ <* c,e,g *> by A1,Th15,Th21
+A3: r.rid3 = (the multF of K) $$ Path_matrix (rid3,M) by Def1
+       .= (the multF of K) $$ <* c,e,g *> by A1,Th15,Th21
        .= c*e*g by Th26;
-A4: r.a3 = (the mult of K) $$ Path_matrix (a3,M) by Def1
-       .= (the mult of K) $$ <* a,f,h *> by A1,Th22
+A4: r.a3 = (the multF of K) $$ Path_matrix (a3,M) by Def1
+       .= (the multF of K) $$ <* a,f,h *> by A1,Th22
        .= a*f*h by Th26;
-A5: r.a4 = (the mult of K) $$ Path_matrix (a4,M) by Def1
-       .= (the mult of K) $$ <* b,f,g *> by A1,Th23
+A5: r.a4 = (the multF of K) $$ Path_matrix (a4,M) by Def1
+       .= (the multF of K) $$ <* b,f,g *> by A1,Th23
        .= b*f*g by Th26;
-A6: r.a5 = (the mult of K) $$ Path_matrix (a5,M) by Def1
-       .= (the mult of K) $$ <* b,d,i *> by A1,Th24
+A6: r.a5 = (the multF of K) $$ Path_matrix (a5,M) by Def1
+       .= (the multF of K) $$ <* b,d,i *> by A1,Th24
        .= b*d*i by Th26;
-A7: r.a6 = (the mult of K) $$ Path_matrix (a6,M) by Def1
-       .= (the mult of K) $$ <* c,d,h *> by A1,Th25
+A7: r.a6 = (the multF of K) $$ Path_matrix (a6,M) by Def1
+       .= (the multF of K) $$ <* c,d,h *> by A1,Th25
        .= c*d*h by Th26;
      Permutations 3 is finite by MATRIX_2:30;
 then A8: FinOmega Permutations 3 = Permutations 3 by MATRIX_2:def 17;
@@ -2171,7 +2172,7 @@ A1: l in Seg n &
      len Path_matrix (p, M) = n by MATRIX_3:def 7;
     then k in dom (Path_matrix(p,M)) by A1,FINSEQ_1:def 3;
 then A2: Product Path_matrix(p,M) = 0.K by A1,FVSUM_1:107;
-A3: (Path_product M).p = -((the mult of K) $$ Path_matrix(p,M),p)
+A3: (Path_product M).p = -((the multF of K) $$ Path_matrix(p,M),p)
       by MATRIX_3:def 8
                       .= - (Product (Path_matrix(p,M)),p) by GROUP_4:def 3;
     per cases;
@@ -2189,7 +2190,7 @@ theorem Th51:
   for M being Matrix of n, K st
     (ex i being Element of NAT st i in Seg n &
     for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
-      (the add of K) $$ (FinOmega Permutations n, Path_product M) = 0.K
+      (the addF of K) $$ (FinOmega Permutations n, Path_product M) = 0.K
   proof
     let M be Matrix of n, K;
     reconsider n1=n as Element of NAT by ORDINAL1:def 13;
@@ -2197,7 +2198,7 @@ theorem Th51:
     given i being Element of NAT such that
 A1: i in Seg n &
     for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
-    set F = the add of K;
+    set F = the addF of K;
     set f = Path_product M1;
     set P1 = FinOmega Permutations n;
     consider c being Element of Permutations n;
@@ -2247,7 +2248,7 @@ A1:  l in Seg n & Path_matrix (p,M).l = 0.K by Th49;
       len Path_matrix (p, M) = n by MATRIX_3:def 7;
      then l in dom Path_matrix(p,M) by A1,FINSEQ_1:def 3;
 then A2:  Product Path_matrix(p,M) = 0.K by A1,FVSUM_1:107;
-      (PPath_product M).p = (the mult of K) $$ Path_matrix(p,M) by Def1
+      (PPath_product M).p = (the multF of K) $$ Path_matrix(p,M) by Def1
       .= 0.K by A2,GROUP_4:def 3;
      hence thesis;
    end;
@@ -2256,7 +2257,7 @@ Lm11:
   for M being Matrix of n, K st
     (ex i being Element of NAT st i in Seg n &
       for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K) holds
-      (the add of K) $$ (FinOmega Permutations n, PPath_product M) = 0.K
+      (the addF of K) $$ (FinOmega Permutations n, PPath_product M) = 0.K
   proof
     let M be Matrix of n, K;
     reconsider n1=n as Element of NAT by ORDINAL1:def 13;
@@ -2264,7 +2265,7 @@ Lm11:
     assume
 A1: ex i being Element of NAT st i in Seg n &
     for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
-    set F = the add of K;
+    set F = the addF of K;
     set f = PPath_product M1;
     set P1 = FinOmega Permutations n1;
     consider c being Element of Permutations n;
@@ -2308,7 +2309,7 @@ theorem
     assume
 A1: ex i being Element of NAT st i in Seg n &
     for k being Element of NAT st k in Seg n holds Col(M,i).k = 0.K;
-    set F = the add of K;
+    set F = the addF of K;
     set f = Path_product M;
      Permutations n is finite by MATRIX_2:30;
 then FinOmega Permutations n = Permutations n by MATRIX_2:def 17;

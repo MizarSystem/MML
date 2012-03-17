@@ -1,6 +1,6 @@
 :: Egoroff's Theorem
 ::  by Noboru Endou , Yasunari Shidama and Keiko Narita
-:: 
+::
 :: Received October 30, 2007
 :: Copyright (c) 2007 Association of Mizar Users
 
@@ -15,18 +15,19 @@ environ
       XREAL_0, COMPLEX1, XXREAL_0, SUPINF_1, PROB_1, REAL_1, NAT_1, SETFAM_1,
       MEASURE1, KURATO_2, SETLIM_1, MEASURE2, MEASURE6, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, RFUNCT_3, FUNCT_2, SUPINF_2, RINFSUP1, SEQFUNC,
-      FINSEQ_4, PSCOMP_1, SEQ_1, SEQ_4, SEQ_2, SEQM_3, NEWTON, PREPOWER,
-      SERIES_1, EXTREAL1, MEMBERED, MESFUNC1, MESFUNC2, MESFUNC5, RINFSUP2,
-      CARD_3;
+      FINSEQ_4, PSCOMP_1, VALUED_1, SEQ_1, SEQ_4, SEQ_2, SEQM_3, NEWTON,
+      PREPOWER, SERIES_1, EXTREAL1, MEMBERED, MESFUNC1, MESFUNC2, MESFUNC5,
+      RINFSUP2, CARD_3;
  constructors REAL_1, NAT_1, EXTREAL1, NEWTON, PREPOWER, SERIES_1, MESFUNC1,
       PROB_2, MEASURE6, MEASURE3, FINSEQ_4, PARTFUN3, KURATO_2, RINFSUP1,
-      SETLIM_1, MESFUNC5, RINFSUP2, PARTFUN1, CARD_3;
+      SETLIM_1, MESFUNC5, RINFSUP2, PARTFUN1, CARD_3, VALUED_1, SEQ_1;
  registrations SUBSET_1, RELSET_1, XREAL_0, MEMBERED, ORDINAL1, PARTFUN1,
-      MEASURE1, FUNCT_2, RELAT_1, XXREAL_0, XBOOLE_0, FUNCT_1, NUMBERS,
-      CARD_3;
+      MEASURE1, FUNCT_2, RELAT_1, XXREAL_0, XBOOLE_0, FUNCT_1, NUMBERS, CARD_3,
+      VALUED_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, SUPINF_2, CARD_3, FUNCT_6, FINSEQ_4, PROB_1, PSCOMP_1,
-      MEASURE6, RINFSUP1, SETLIM_1, XCMPLX_0, MESFUNC1, XBOOLE_0, RINFSUP2;
+      MEASURE6, RINFSUP1, SETLIM_1, XCMPLX_0, MESFUNC1, XBOOLE_0, RINFSUP2,
+      VALUED_1;
  theorems ABSVALUE, MEASURE1, MEASURE2, MEASURE3, NAT_1, TARSKI, SUPINF_1,
       PARTFUN1, FUNCT_1, FUNCT_2, SEQFUNC, KURATO_2, SUPINF_2, RELSET_1,
       EXTREAL1, EXTREAL2, SETFAM_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SERIES_1,
@@ -41,7 +42,7 @@ begin :: Selected Properties of Functional Sequences
          X for non empty set,
          S for SigmaField of X;
 
-theorem Lm000:
+theorem Th1:
 for M be sigma_Measure of S,
     F be Function of NAT,S, n holds
 {x where x is Element of X : for k st n <= k holds x in F.k } is Element of S
@@ -51,45 +52,45 @@ proof
    set G = {x where x is Element of X : for k st n <= k holds x in F.k};
    deffunc Fn(Element of NAT) = F.(n+$1);
    consider E be Function of NAT,S such that
-P1: for k be Element of NAT holds E.k=Fn(k) from FUNCT_2:sch 4;
+A1: for k be Element of NAT holds E.k=Fn(k) from FUNCT_2:sch 4;
    rng E is N_Sub_set_fam of X by MEASURE1:52; then
    rng E is N_Measure_fam of S by MEASURE2:def 1; then
-P4:meet rng E is Element of S by MEASURE2:3;
+A2:meet rng E is Element of S by MEASURE2:3;
    now let z be set;
     assume z in G; then
-P6: ex x be Element of X st
+A3: ex x be Element of X st
     z=x & for k be natural number st n <= k holds x in F.k;
     for Y be set st Y in rng E holds z in Y
     proof
      let Y be set;
      assume Y in rng E; then
      consider l be set such that
-P7:   l in NAT & Y=E.l by FUNCT_2:17;
-     reconsider l as Element of NAT by P7;
+A4:   l in NAT & Y=E.l by FUNCT_2:17;
+     reconsider l as Element of NAT by A4;
      n <= n+l by NAT_1:12; then
-     z in F.(n+l) by P6;
-     hence z in Y by P1,P7;
+     z in F.(n+l) by A3;
+     hence z in Y by A1,A4;
     end;
     hence z in meet rng E by SETFAM_1:def 1;
    end; then
-P8:G c= meet rng E by TARSKI:def 3;
+A5:G c= meet rng E by TARSKI:def 3;
    now let z be set;
-    assume P9: z in meet rng E;
+    assume A6: z in meet rng E;
     now let k be natural number;
      assume n <= k; then
      reconsider l=k-n as Element of NAT by NAT_1:21;
      E.l in rng E by FUNCT_2:6; then
-     z in E.l by P9,SETFAM_1:def 1; then
-     z in F.(n+l) by P1;
+     z in E.l by A6,SETFAM_1:def 1; then
+     z in F.(n+l) by A1;
      hence z in F.k;
     end;
-    hence z in G by P9,P4;
+    hence z in G by A2,A6;
    end; then
    meet rng E c= G by TARSKI:def 3;
-   hence thesis by P4,P8,XBOOLE_0:def 10;
+   hence thesis by A2,A5,XBOOLE_0:def 10;
 end;
 
-theorem Lm410:
+theorem Th2:
 for F be SetSequence of X, n be Element of NAT holds
  (superior_setsequence F).n = union rng(F^\n) &
  (inferior_setsequence F).n = meet rng(F^\n)
@@ -102,7 +103,7 @@ proof
    hence (inferior_setsequence F).n = meet rng (F ^\ n) by SETLIM_1:10;
 end;
 
-theorem Lm420:
+theorem Th3:
 for M be sigma_Measure of S,
     F be SetSequence of S
  ex G be Function of NAT,S st
@@ -110,20 +111,20 @@ for M be sigma_Measure of S,
 proof
    let M be sigma_Measure of S,
        F be SetSequence of S;
-B1:dom(@inferior_setsequence(F)) = NAT by FUNCT_2:def 1;
+A1:dom(@inferior_setsequence(F)) = NAT by FUNCT_2:def 1;
    for x be set st x in NAT holds (@inferior_setsequence(F)).x in S
       by PROB_1:def 9; then
-   reconsider G= @inferior_setsequence(F) as Function of NAT,S by B1,FUNCT_2:5;
+   reconsider G= @inferior_setsequence(F) as Function of NAT,S by A1,FUNCT_2:5;
    now let n being Element of NAT;
-P11:n<=n+1 by NAT_1:12;
+A2:n<=n+1 by NAT_1:12;
     @inferior_setsequence(F) is non-decreasing by SETLIM_1:73;
-    hence G.n c= G.(n+1) by PROB_1:def 7,P11;
+    hence G.n c= G.(n+1) by A2,PROB_1:def 7;
    end; then
    M.(union rng G)= sup rng(M*G) by MEASURE2:27;
    hence thesis;
 end;
 
-theorem Lm421:
+theorem Th4:
 for M be sigma_Measure of S,
     F be SetSequence of S st M.(Union F) < +infty holds
  ex G be Function of NAT,S st
@@ -131,31 +132,31 @@ for M be sigma_Measure of S,
 proof
    let M be sigma_Measure of S,
        F be SetSequence of S;
-   assume AS0: M.(Union F) < +infty;
-B1:dom(@superior_setsequence F) = NAT by FUNCT_2:def 1;
+   assume A1: M.(Union F) < +infty;
+A2:dom(@superior_setsequence F) = NAT by FUNCT_2:def 1;
    for x be set st x in NAT holds (@superior_setsequence F).x in S
     by PROB_1:def 9; then
-   reconsider G= @superior_setsequence F as Function of NAT,S by B1,FUNCT_2:5;
-P1:for n being Element of NAT holds G.(n+1) c= G.n
+   reconsider G= @superior_setsequence F as Function of NAT,S by A2,FUNCT_2:5;
+A3:for n being Element of NAT holds G.(n+1) c= G.n
    proof
     let n be Element of NAT;
-P11:n<=n+1 by NAT_1:12;
+A4:n<=n+1 by NAT_1:12;
     @superior_setsequence F is non-increasing by SETLIM_1:72;
-    hence thesis by PROB_1:def 6,P11;
+    hence thesis by A4,PROB_1:def 6;
    end;
    G.0 = union {F.k where k is Element of NAT : 0 <= k} by SETLIM_1:def 3; then
    G.0 = union rng F by SETLIM_1:9; then
-P2:M.(meet rng G)= inf rng(M*G) by AS0,P1,MEASURE3:14;
+A5:M.(meet rng G)= inf rng(M*G) by A1,A3,MEASURE3:14;
    reconsider F1 = F, G1 = G as SetSequence of X;
    consider f being SetSequence of X such that
-P3: lim_sup F1 = meet f &
+A6: lim_sup F1 = meet f &
     for n being Element of NAT holds f.n = Union (F1^\n) by KURATO_2:def 4;
    now let n be Element of NAT;
-    f.n = Union (F1^\n) by P3;
-    hence f.n = G1.n by Lm410;
+    f.n = Union (F1^\n) by A6;
+    hence f.n = G1.n by Th2;
    end; then
    f = G1 by FUNCT_2:113;
-   hence thesis by P2,P3;
+   hence thesis by A5,A6;
 end;
 
 theorem
@@ -168,7 +169,7 @@ proof
        F be SetSequence of S;
    assume F is convergent; then
    lim_inf F = lim F by SETLIM_1:def 13;
-   hence thesis by Lm420;
+   hence thesis by Th3;
 end;
 
 theorem
@@ -179,20 +180,20 @@ for M be sigma_Measure of S,
 proof
    let M be sigma_Measure of S,
        F be SetSequence of S;
-   assume A: F is convergent & M.(Union F) < +infty; then
+   assume A1: F is convergent & M.(Union F) < +infty; then
    lim_sup F = lim F by SETLIM_1:def 13;
-   hence thesis by Lm421,A;
+   hence thesis by A1,Th4;
 end;
 
 definition
 let X,Y be set, F be Functional_Sequence of X,Y;
-attr F is with_the_same_dom means :defsamedom1:
+attr F is with_the_same_dom means :Def1:
  rng F is with_common_domain;
 end;
 
 definition
 let X,Y be set, F be Functional_Sequence of X,Y;
-redefine attr F is with_the_same_dom means :defsamedom:
+redefine attr F is with_the_same_dom means :Def2:
  for n,m be natural number holds dom(F.n) = dom(F.m);
 correctness
 proof
@@ -200,7 +201,7 @@ A1:F is with_the_same_dom implies
     for n,m be natural number holds dom(F.n) = dom(F.m)
    proof
     assume F is with_the_same_dom; then
-A2: rng F is with_common_domain by defsamedom1;
+A2: rng F is with_common_domain by Def1;
     hereby let n,m be natural number;
      dom F = NAT by SEQFUNC:def 1; then
      n in dom F & m in dom F by ORDINAL1:def 13; then
@@ -211,20 +212,20 @@ A2: rng F is with_common_domain by defsamedom1;
    (for n,m be natural number holds dom(F.n) = dom(F.m)) implies
      F is with_the_same_dom
    proof
-    assume A6:for n,m be natural number holds dom(F.n)=dom(F.m);
+    assume A3:for n,m be natural number holds dom(F.n)=dom(F.m);
     now let f,g be Function;
-     assume A3: f in rng F & g in rng F; then
+     assume A4: f in rng F & g in rng F; then
      consider n be set such that
-A4:   n in dom F & f = F.n by FUNCT_1:def 5;
+A5:   n in dom F & f = F.n by FUNCT_1:def 5;
      consider m be set such that
-A5:   m in dom F & g = F.m by A3,FUNCT_1:def 5;
-     n in NAT & m in NAT by A4,A5,SEQFUNC:def 1; then
+A6:   m in dom F & g = F.m by A4,FUNCT_1:def 5;
+     n in NAT & m in NAT by A5,A6,SEQFUNC:def 1; then
      reconsider n,m as Nat by ORDINAL1:def 13;
-     dom(F.n) = dom(F.m) by A6;
-     hence dom f = dom g by A4,A5;
+     dom(F.n) = dom(F.m) by A3;
+     hence dom f = dom g by A5,A6;
     end; then
     rng F is with_common_domain by CARD_3:def 10;
-    hence F is with_the_same_dom by defsamedom1;
+    hence F is with_the_same_dom by Def1;
    end;
    hence thesis by A1;
 end;
@@ -246,7 +247,7 @@ end;
 end;
 
 definition let X be non empty set, f be Functional_Sequence of X,ExtREAL;
-  func inf f -> PartFunc of X,ExtREAL means :definff:
+  func inf f -> PartFunc of X,ExtREAL means :Def3:
    dom it = dom(f.0) &
    for x be Element of X st x in dom it holds it.x = inf(f#x);
 existence
@@ -254,114 +255,114 @@ proof
    deffunc F(Element of X) = inf (f#$1);
    defpred P[set] means $1 in dom(f.0);
    consider g being PartFunc of X,ExtREAL such that
-A:  (for x be Element of X holds x in dom g iff P[x]) &
-    (for x be Element of X st x in dom g holds g/.x = F(x)) 
+A1:  (for x be Element of X holds x in dom g iff P[x]) &
+    (for x be Element of X st x in dom g holds g/.x = F(x))
       from PARTFUN2:sch 2;
    take g;
-B: for x be set holds x in dom g iff x in dom(f.0) by A;
+A2: for x be set holds x in dom g iff x in dom(f.0) by A1;
    now let x be Element of X;
-    assume C:x in dom g; then
-    g/.x = inf (f#x) by A;
-    hence g.x = inf (f#x) by C,PARTFUN1:def 8;
+    assume A3:x in dom g; then
+    g/.x = inf (f#x) by A1;
+    hence g.x = inf (f#x) by A3,PARTFUN1:def 8;
    end;
-   hence thesis by B,TARSKI:2;
+   hence thesis by A2,TARSKI:2;
 end;
 uniqueness
 proof
    let g,h be PartFunc of X,ExtREAL;
-   assume 
-A1: dom g = dom (f.0) & 
+   assume
+A4: dom g = dom (f.0) &
     for x be Element of X st x in dom g holds g.x=inf(f#x);
    assume
-A2: dom h = dom (f.0) & 
+A5: dom h = dom (f.0) &
     for x be Element of X st x in dom h holds h.x=inf(f#x);
    now let x be Element of X;
-    assume A3: x in dom g; then
+    assume A6: x in dom g; then
     g/.x = g.x by PARTFUN1:def 8; then
-    g/.x = inf(f#x) by A1,A3; then
-    g/.x = h.x by A2,A1,A3;
-    hence g/.x = h/.x by A2,A1,A3,PARTFUN1:def 8;
+    g/.x = inf(f#x) by A4,A6; then
+    g/.x = h.x by A4,A5,A6;
+    hence g/.x = h/.x by A4,A5,A6,PARTFUN1:def 8;
    end;
-   hence thesis by A1,A2,PARTFUN2:3;
+   hence thesis by A4,A5,PARTFUN2:3;
 end;
 end;
 
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func sup f -> PartFunc of X,ExtREAL means :defsupf:
+func sup f -> PartFunc of X,ExtREAL means :Def4:
  dom it = dom(f.0) &
  for x be Element of X st x in dom it holds it.x = sup(f#x);
-existence 
+existence
 proof
    deffunc F(Element of X) = sup(f#$1);
    defpred P[set] means $1 in dom(f.0);
    consider g being PartFunc of X,ExtREAL such that
-A:  (for x be Element of X holds x in dom g iff P[x]) &
+A1:  (for x be Element of X holds x in dom g iff P[x]) &
     for x be Element of X st x in dom g holds g/.x = F(x) from PARTFUN2:sch 2;
    take g;
-B: for x be set holds x in dom g iff x in dom(f.0) by A;
+A2: for x be set holds x in dom g iff x in dom(f.0) by A1;
    now let x be Element of X;
-    assume C:x in dom g; then
-    g/.x =sup (f#x) by A;
-    hence g.x =sup (f#x) by C,PARTFUN1:def 8;
+    assume A3:x in dom g; then
+    g/.x =sup (f#x) by A1;
+    hence g.x =sup (f#x) by A3,PARTFUN1:def 8;
    end;
-   hence thesis by B,TARSKI:2;
+   hence thesis by A2,TARSKI:2;
 end;
 uniqueness
 proof
    let g,h be PartFunc of X,ExtREAL;
-   assume 
-A1: dom g = dom(f.0) & for x be Element of X st x in dom g holds g.x=sup(f#x);
-   assume 
-A2: dom h = dom(f.0) & for x be Element of X st x in dom h holds h.x=sup(f#x);
+   assume
+A4: dom g = dom(f.0) & for x be Element of X st x in dom g holds g.x=sup(f#x);
+   assume
+A5: dom h = dom(f.0) & for x be Element of X st x in dom h holds h.x=sup(f#x);
    now let x be Element of X;
-    assume A3: x in dom g;
-    g/.x = g.x by PARTFUN1:def 8,A3; then
-    g/.x = sup(f#x) by A1,A3; then
-    g/.x = h.x by A2,A1,A3;
-    hence g/.x = h/.x by A2,A1,A3,PARTFUN1:def 8;
+    assume A6: x in dom g;
+    g/.x = g.x by A6,PARTFUN1:def 8; then
+    g/.x = sup(f#x) by A4,A6; then
+    g/.x = h.x by A4,A5,A6;
+    hence g/.x = h/.x by A4,A5,A6,PARTFUN1:def 8;
    end;
-   hence thesis by A1,A2,PARTFUN2:3;
+   hence thesis by A4,A5,PARTFUN2:3;
 end;
 end;
 
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func inferior_realsequence f 
-        -> with_the_same_dom Functional_Sequence of X,ExtREAL means :definf:
- for n be natural number holds 
-  dom(it.n) = dom(f.0) & 
-  for x be Element of X st x in dom(it.n) holds 
+func inferior_realsequence f
+        -> with_the_same_dom Functional_Sequence of X,ExtREAL means :Def5:
+ for n be natural number holds
+  dom(it.n) = dom(f.0) &
+  for x be Element of X st x in dom(it.n) holds
    (it.n).x=(inferior_realsequence(f#x)).n;
-existence 
+existence
 proof
-   defpred P[Element of NAT,Function] means 
-    dom $2 = dom(f.0) & 
+   defpred P[Element of NAT,Function] means
+    dom $2 = dom(f.0) &
     for x be Element of X st x in dom $2 holds
      $2.x=(inferior_realsequence(f#x)).$1;
-P0:for n being Element of NAT
+A1:for n being Element of NAT
     ex y being Element of PFuncs(X,ExtREAL) st P[n,y]
    proof
     let n being Element of NAT;
     deffunc F(Element of X) = (inferior_realsequence(f#$1)).n;
     defpred P[set] means $1 in dom(f.0);
     consider g being PartFunc of X,ExtREAL such that
-A:   (for x be Element of X holds x in dom g iff P[x]) &
+A2:   (for x be Element of X holds x in dom g iff P[x]) &
      for x be Element of X st x in dom g holds g/.x = F(x) from PARTFUN2:sch 2;
     take g;
-B:  for x be set holds x in dom g iff x in dom(f.0) by A;
+A3:  for x be set holds x in dom g iff x in dom(f.0) by A2;
     now let x be Element of X;
-     assume C:x in dom g; then
-     g/.x =(inferior_realsequence (f#x)).n by A;
-     hence g.x =(inferior_realsequence (f#x)).n by C,PARTFUN1:def 8;
+     assume A4:x in dom g; then
+     g/.x =(inferior_realsequence (f#x)).n by A2;
+     hence g.x =(inferior_realsequence (f#x)).n by A4,PARTFUN1:def 8;
     end;
-    hence thesis by B,PARTFUN1:119,TARSKI:2;
+    hence thesis by A3,PARTFUN1:119,TARSKI:2;
    end;
    consider g being Function of NAT,PFuncs(X,ExtREAL) such that
-P1: for n being Element of NAT holds P[n,g.n] from FUNCT_2:sch 10(P0);
-P3:for n holds
+A5: for n being Element of NAT holds P[n,g.n] from FUNCT_2:sch 10(A1);
+A6:for n holds
     dom(g.n) = dom(f.0) &
     for x be Element of X st x in dom(g.n) holds
      (g.n).x = (inferior_realsequence(f#x)).n
@@ -370,46 +371,46 @@ P3:for n holds
     reconsider n'=n as Element of NAT by ORDINAL1:def 13;
     dom(g.n') = dom(f.0) &
     for x be Element of X st x in dom(g.n') holds
-     (g.n').x = (inferior_realsequence(f#x)).n' by P1;
+     (g.n').x = (inferior_realsequence(f#x)).n' by A5;
     hence thesis;
    end;
-P2:dom g = NAT by FUNCT_2:def 1;
-   for n be Element of NAT holds g.n is PartFunc of X,ExtREAL; then 
-   reconsider g as Functional_Sequence of X,ExtREAL by P2,SEQFUNC:1;
+A7:dom g = NAT by FUNCT_2:def 1;
+   for n be Element of NAT holds g.n is PartFunc of X,ExtREAL; then
+   reconsider g as Functional_Sequence of X,ExtREAL by A7,SEQFUNC:1;
    now let k,l be natural number;
     reconsider k'=k, l'=l as Element of NAT by ORDINAL1:def 13;
-    dom(g.k') = dom(f.0) by P1; then
-    dom(g.k) = dom(g.l') by P1;
+    dom(g.k') = dom(f.0) by A5; then
+    dom(g.k) = dom(g.l') by A5;
     hence dom(g.k) = dom(g.l);
    end; then
    reconsider g as with_the_same_dom Functional_Sequence of X,ExtREAL
-    by defsamedom;
+    by Def2;
    take g;
-   thus thesis by P3;
+   thus thesis by A6;
 end;
 uniqueness
 proof
    let g,h be with_the_same_dom Functional_Sequence of X,ExtREAL;
-   assume 
-A1: for n be natural number holds 
-     dom (g.n) = dom (f.0) & 
+   assume
+A8: for n be natural number holds
+     dom (g.n) = dom (f.0) &
      for x be Element of X st x in dom (g.n) holds
       (g.n).x=(inferior_realsequence(f#x)).n;
    assume
-A2: for n be natural number holds
+A9: for n be natural number holds
      dom (h.n) = dom (f.0) &
      for x be Element of X st x in dom (h.n) holds
       (h.n).x=(inferior_realsequence(f#x)).n;
    now let n be Element of NAT;
-A4: dom(g.n) = dom(f.0) by A1 .=dom(h.n) by A2;
+A10: dom(g.n) = dom(f.0) by A8 .=dom(h.n) by A9;
     now let x be Element of X;
-     assume A3: x in dom (g.n); then
+     assume A11: x in dom (g.n); then
      (g.n)/.x = (g.n).x by PARTFUN1:def 8; then
-     (g.n)/.x = (inferior_realsequence (f#x)).n by A1,A3; then
-     (g.n)/.x = (h.n).x by A2,A3,A4;
-     hence (g.n)/.x = (h.n)/.x by PARTFUN1:def 8,A3,A4;
+     (g.n)/.x = (inferior_realsequence (f#x)).n by A8,A11; then
+     (g.n)/.x = (h.n).x by A9,A10,A11;
+     hence (g.n)/.x = (h.n)/.x by A10,A11,PARTFUN1:def 8;
     end;
-    hence g.n=h.n by A4,PARTFUN2:3;
+    hence g.n=h.n by A10,PARTFUN2:3;
    end;
    hence thesis by SEQFUNC:2;
 end;
@@ -418,40 +419,40 @@ end;
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func superior_realsequence f 
-      -> with_the_same_dom Functional_Sequence of X,ExtREAL means :defsup:
+func superior_realsequence f
+      -> with_the_same_dom Functional_Sequence of X,ExtREAL means :Def6:
  for n be natural number holds
   dom(it.n) = dom(f.0) &
   for x be Element of X st x in dom(it.n) holds
    (it.n).x = (superior_realsequence(f#x)).n;
-existence 
+existence
 proof
-   defpred P[Element of NAT,Function] means 
+   defpred P[Element of NAT,Function] means
     dom $2 = dom(f.0) &
     for x be Element of X st x in dom $2 holds
      $2.x=(superior_realsequence(f#x)).$1;
-P0:for n being Element of NAT 
+A1:for n being Element of NAT
     ex y being Element of PFuncs(X,ExtREAL) st P[n, y]
    proof
     let n being Element of NAT;
     deffunc F(Element of X) = (superior_realsequence(f#$1)).n;
     defpred P[set] means $1 in dom(f.0);
     consider g being PartFunc of X,ExtREAL such that
-A:   (for x be Element of X holds x in dom g iff P[x]) &
-     (for x be Element of X st x in dom g holds g/.x = F(x)) 
+A2:   (for x be Element of X holds x in dom g iff P[x]) &
+     (for x be Element of X st x in dom g holds g/.x = F(x))
        from PARTFUN2:sch 2;
     take g;
-B:  for x be set holds x in dom g iff x in dom(f.0) by A;
+A3:  for x be set holds x in dom g iff x in dom(f.0) by A2;
     now let x be Element of X;
-     assume C:x in dom g; then
-     g/.x =(superior_realsequence(f#x)).n by A;
-     hence g.x =(superior_realsequence(f#x)).n by C,PARTFUN1:def 8;
+     assume A4:x in dom g; then
+     g/.x =(superior_realsequence(f#x)).n by A2;
+     hence g.x =(superior_realsequence(f#x)).n by A4,PARTFUN1:def 8;
     end;
-    hence thesis by B,PARTFUN1:119,TARSKI:2;
+    hence thesis by A3,PARTFUN1:119,TARSKI:2;
    end;
    consider g being Function of NAT, PFuncs(X,ExtREAL) such that
-P1: for n being Element of NAT holds P[n,g.n] from FUNCT_2:sch 10(P0);
-P3:for n holds
+A5: for n being Element of NAT holds P[n,g.n] from FUNCT_2:sch 10(A1);
+A6:for n holds
     dom(g.n) = dom(f.0) &
     for x be Element of X st x in dom(g.n) holds
      (g.n).x = (superior_realsequence(f#x)).n
@@ -460,52 +461,52 @@ P3:for n holds
     reconsider n'=n as Element of NAT by ORDINAL1:def 13;
     dom(g.n') = dom(f.0) &
     for x be Element of X st x in dom(g.n') holds
-     (g.n').x = (superior_realsequence(f#x)).n' by P1;
+     (g.n').x = (superior_realsequence(f#x)).n' by A5;
     hence thesis;
    end;
-P2:dom g = NAT by FUNCT_2:def 1;
-   for n be Element of NAT holds g.n is PartFunc of X,ExtREAL; then 
-   reconsider g as Functional_Sequence of X,ExtREAL by P2,SEQFUNC:1;
+A7:dom g = NAT by FUNCT_2:def 1;
+   for n be Element of NAT holds g.n is PartFunc of X,ExtREAL; then
+   reconsider g as Functional_Sequence of X,ExtREAL by A7,SEQFUNC:1;
    now let k,l be Nat;
     reconsider k'=k, l'=l as Element of NAT by ORDINAL1:def 13;
-    dom(g.k') = dom(f.0) by P1; then
-    dom(g.k) = dom(g.l') by P1;
+    dom(g.k') = dom(f.0) by A5; then
+    dom(g.k) = dom(g.l') by A5;
     hence dom(g.k) = dom(g.l);
    end; then
    reconsider g as with_the_same_dom Functional_Sequence of X,ExtREAL
-    by defsamedom;
+    by Def2;
    take g;
-   thus thesis by P3;
+   thus thesis by A6;
 end;
 uniqueness
 proof
    let g,h be with_the_same_dom Functional_Sequence of X,ExtREAL;
-   assume 
-A1: for n holds 
-     dom (g.n) = dom (f.0) & 
+   assume
+A8: for n holds
+     dom (g.n) = dom (f.0) &
      for x be Element of X st x in dom (g.n) holds
       (g.n).x=(superior_realsequence(f#x)).n;
    assume
-A2: for n holds
-     dom (h.n) = dom (f.0) & 
+A9: for n holds
+     dom (h.n) = dom (f.0) &
      for x be Element of X st x in dom (h.n) holds
       (h.n).x=(superior_realsequence(f#x)).n;
    now let n be Element of NAT;
-A4: dom(g.n) = dom(f.0) by A1 .=dom(h.n) by A2;
+A10: dom(g.n) = dom(f.0) by A8 .=dom(h.n) by A9;
     now let x be Element of X;
-     assume A3: x in dom (g.n);
-     (g.n)/.x =(g.n).x by PARTFUN1:def 8,A3; then
-     (g.n)/.x =(superior_realsequence(f#x)).n by A1,A3; then
-     (g.n)/.x =(h.n).x by A2,A3,A4;
-     hence (g.n)/.x =(h.n)/.x by PARTFUN1:def 8,A3,A4;
+     assume A11: x in dom (g.n);
+     (g.n)/.x =(g.n).x by A11,PARTFUN1:def 8; then
+     (g.n)/.x =(superior_realsequence(f#x)).n by A8,A11; then
+     (g.n)/.x =(h.n).x by A9,A10,A11;
+     hence (g.n)/.x =(h.n)/.x by A10,A11,PARTFUN1:def 8;
     end;
-    hence g.n=h.n by A4,PARTFUN2:3;
+    hence g.n=h.n by A10,PARTFUN2:3;
    end;
    hence thesis by SEQFUNC:2;
 end;
 end;
 
-theorem inferiorf:
+theorem Th7:
 for f be Functional_Sequence of X,ExtREAL holds
  for x be Element of X st x in dom (f.0) holds
   (inferior_realsequence f)#x = inferior_realsequence(f#x)
@@ -513,15 +514,15 @@ proof
    let f be Functional_Sequence of X,ExtREAL;
    set F = inferior_realsequence f;
    hereby let x be Element of X;
-    assume AS1: x in dom (f.0);
+    assume A1: x in dom (f.0);
     now let n be Element of NAT;
-P3:  dom(F.n) = dom (f.0) by definf;
+A2:  dom(F.n) = dom (f.0) by Def5;
      (F#x).n = (F.n).x by MESFUNC5:def 13;
-     hence (F#x).n =(inferior_realsequence (f#x)).n by AS1,P3,definf;
+     hence (F#x).n =(inferior_realsequence (f#x)).n by A1,A2,Def5;
     end;
     hence F#x = inferior_realsequence(f#x) by FUNCT_2:113;
    end;
-end; 
+end;
 
 definition let X,Y be set;
   redefine mode Functional_Sequence of X,Y -> Function of NAT,PFuncs(X,Y);
@@ -548,7 +549,7 @@ proof
 end;
 end;
 
-registration 
+registration
   let X,Y be set;
   let f be with_the_same_dom Functional_Sequence of X,Y;
   let n be Element of NAT;
@@ -561,14 +562,14 @@ proof
     reconsider k'=k, l'=l as Element of NAT by ORDINAL1:def 13;
     reconsider g=f as Function of NAT,PFuncs(X,Y);
     dom((f^\n).k) = dom((g.(n+k'))) by KURATO_2:def 2; then
-    dom((f^\n).k) = dom((g.(n+l'))) by defsamedom;
+    dom((f^\n).k) = dom((g.(n+l'))) by Def2;
     hence dom((f^\n).k)=dom((f^\n).l) by KURATO_2:def 2;
    end;
-   hence f^\n is with_the_same_dom by defsamedom;
+   hence f^\n is with_the_same_dom by Def2;
 end;
 end;
 
-theorem inferiorf1:
+theorem Th8:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     n be Element of NAT holds
 (inferior_realsequence f).n = inf(f^\n)
@@ -576,12 +577,12 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        n be Element of NAT;
    reconsider g=f as Function of NAT,PFuncs(X,ExtREAL);
-P1:dom((inferior_realsequence f).n) = dom(f.0) by definf;
-   dom inf(f^\n) =dom((f^\n).0) by definff; then
+A1:dom((inferior_realsequence f).n) = dom(f.0) by Def5;
+   dom inf(f^\n) =dom((f^\n).0) by Def3; then
    dom inf(f^\n) =dom(g.(n+0)) by KURATO_2:def 2; then
-P2:dom inf(f^\n) =dom(f.0) by defsamedom;
+A2:dom inf(f^\n) =dom(f.0) by Def2;
    now let x be Element of X;
-    assume AS1: x in dom inf(f^\n);
+    assume A3: x in dom inf(f^\n);
     now let k be Element of NAT;
      ((f^\n)#x).k =((f^\n).k).x by MESFUNC5:def 13; then
      ((f^\n)#x).k =(g.(n+k)).x by KURATO_2:def 2; then
@@ -589,15 +590,15 @@ P2:dom inf(f^\n) =dom(f.0) by defsamedom;
      hence ((f^\n)#x).k = ((f#x)^\n).k by KURATO_2:def 2;
     end; then
     (f^\n)#x = (f#x)^\n by FUNCT_2:113; then
-P3: (inf(f^\n)).x =inf((f#x)^\n) by definff,AS1; 
+A4: (inf(f^\n)).x =inf((f#x)^\n) by A3,Def3;
     ((inferior_realsequence f).n ).x = (inferior_realsequence(f#x)).n
-      by definf,AS1,P1,P2;
-    hence (inf(f^\n)).x = ((inferior_realsequence f).n).x by P3,RINFSUP2:27;
+      by A1,A2,A3,Def5;
+    hence (inf(f^\n)).x = ((inferior_realsequence f).n).x by A4,RINFSUP2:27;
    end;
-   hence thesis by P1,P2,PARTFUN1:34;
+   hence thesis by A1,A2,PARTFUN1:34;
 end;
 
-theorem superiorf1:
+theorem Th9:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     n be Element of NAT holds
 (superior_realsequence f).n = sup(f^\n)
@@ -605,12 +606,12 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        n be Element of NAT;
    reconsider g=f as Function of NAT,PFuncs(X,ExtREAL);
-P1:dom ((superior_realsequence f).n) = dom(f.0) by defsup;
-   dom sup(f^\n) = dom((f^\n).0) by defsupf; then
+A1:dom ((superior_realsequence f).n) = dom(f.0) by Def6;
+   dom sup(f^\n) = dom((f^\n).0) by Def4; then
    dom sup(f^\n) = dom(g.(n+0)) by KURATO_2:def 2; then
-P2:dom sup(f^\n) = dom(f.0) by defsamedom;
+A2:dom sup(f^\n) = dom(f.0) by Def2;
    now let x be Element of X;
-    assume AS1: x in dom sup(f^\n);
+    assume A3: x in dom sup(f^\n);
     now let k be Element of NAT;
      ((f^\n)#x).k =((f^\n).k).x by MESFUNC5:def 13; then
      ((f^\n)#x).k =(g.(n+k)).x by KURATO_2:def 2; then
@@ -618,114 +619,114 @@ P2:dom sup(f^\n) = dom(f.0) by defsamedom;
      hence ((f^\n)#x).k = ((f#x)^\n).k by KURATO_2:def 2;
     end; then
     (f^\n)#x = (f#x)^\n by FUNCT_2:113; then
-P3: (sup(f^\n)).x =sup ((f#x)^\n) by defsupf,AS1; 
+A4: (sup(f^\n)).x =sup ((f#x)^\n) by A3,Def4;
     ((superior_realsequence f).n ).x = (superior_realsequence (f#x)).n
-      by defsup,AS1,P1,P2;
-    hence (sup (f^\n)).x = ((superior_realsequence f).n ).x by P3,RINFSUP2:27;
+      by A1,A2,A3,Def6;
+    hence (sup (f^\n)).x = ((superior_realsequence f).n ).x by A4,RINFSUP2:27;
    end;
-   hence thesis by P1,P2,PARTFUN1:34;
+   hence thesis by A1,A2,PARTFUN1:34;
 end;
 
-theorem superiorf:
+theorem Th10:
 for f be Functional_Sequence of X,ExtREAL,
     x be Element of X st x in dom(f.0) holds
  (superior_realsequence f)#x = superior_realsequence(f#x)
 proof
    let f be Functional_Sequence of X,ExtREAL,
        x be Element of X;
-   assume AS1: x in dom(f.0);
+   assume A1: x in dom(f.0);
    set F = superior_realsequence f;
    now let n be Element of NAT;
-    dom(F.n) = dom(f.0) & (F#x).n = (F.n).x by defsup,MESFUNC5:def 13;
-    hence (F#x).n =(superior_realsequence(f#x)).n by AS1,defsup;
+    dom(F.n) = dom(f.0) & (F#x).n = (F.n).x by Def6,MESFUNC5:def 13;
+    hence (F#x).n =(superior_realsequence(f#x)).n by A1,Def6;
    end;
    hence F#x = superior_realsequence(f#x) by FUNCT_2:113;
-end; 
+end;
 
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func lim_inf f -> PartFunc of X,ExtREAL means :defliminff:
- dom it = dom (f.0) & 
+func lim_inf f -> PartFunc of X,ExtREAL means :Def8:
+ dom it = dom (f.0) &
  for x be Element of X st x in dom it holds it.x = lim_inf(f#x);
-existence 
+existence
 proof
    deffunc F(Element of X) = lim_inf(f#$1);
    defpred P[set] means $1 in dom(f.0);
    consider g being PartFunc of X,ExtREAL such that
-A:  (for x be Element of X holds x in dom g iff P[x]) &
+A1:  (for x be Element of X holds x in dom g iff P[x]) &
     for x be Element of X st x in dom g holds g/.x = F(x) from PARTFUN2:sch 2;
    take g;
-B: for x be set holds x in dom g iff x in dom(f.0) by A;
+A2: for x be set holds x in dom g iff x in dom(f.0) by A1;
    now let x be Element of X;
-    assume C:x in dom g; then
-    g/.x =lim_inf(f#x) by A;
-    hence g.x =lim_inf(f#x) by C,PARTFUN1:def 8;
+    assume A3:x in dom g; then
+    g/.x =lim_inf(f#x) by A1;
+    hence g.x =lim_inf(f#x) by A3,PARTFUN1:def 8;
    end;
-   hence thesis by B,TARSKI:2;
+   hence thesis by A2,TARSKI:2;
 end;
 uniqueness
 proof
    let g,h be PartFunc of X,ExtREAL;
    assume that
-A1: dom g = dom(f.0) & 
+A4: dom g = dom(f.0) &
     for x be Element of X st x in dom g holds g.x=lim_inf(f#x) and
-A2: dom h = dom(f.0) &
+A5: dom h = dom(f.0) &
     for x be Element of X st x in dom h holds h.x=lim_inf(f#x);
    now let x be Element of X;
-    assume A3: x in dom g; then
+    assume A6: x in dom g; then
     g/.x =g.x by PARTFUN1:def 8; then
-    g/.x =lim_inf (f#x) by A1,A3; then
-    g/.x =h.x by A2,A1,A3;
-    hence g/.x =h/.x by A2,A1,A3,PARTFUN1:def 8;
+    g/.x =lim_inf (f#x) by A4,A6; then
+    g/.x =h.x by A4,A5,A6;
+    hence g/.x =h/.x by A4,A5,A6,PARTFUN1:def 8;
    end;
-   hence thesis by A1,A2,PARTFUN2:3;
+   hence thesis by A4,A5,PARTFUN2:3;
 end;
 end;
 
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func lim_sup f -> PartFunc of X,ExtREAL means :deflimsupf:
- dom it = dom (f.0) & 
+func lim_sup f -> PartFunc of X,ExtREAL means :Def9:
+ dom it = dom (f.0) &
  for x be Element of X st x in dom it holds it.x = lim_sup(f#x);
-existence 
+existence
 proof
    deffunc F(Element of X) = lim_sup(f#$1);
    defpred P[set] means $1 in dom(f.0);
    consider g being PartFunc of X,ExtREAL such that
-A:  (for x be Element of X holds x in dom g iff P[x]) &
+A1:  (for x be Element of X holds x in dom g iff P[x]) &
     for x be Element of X st x in dom g holds g/.x = F(x) from PARTFUN2:sch 2;
    take g;
-B: for x be set holds x in dom g iff x in dom(f.0) by A;
+A2: for x be set holds x in dom g iff x in dom(f.0) by A1;
    now let x be Element of X;
-    assume C:x in dom g; then
-    g/.x =lim_sup(f#x) by A;
-    hence g.x =lim_sup(f#x) by C,PARTFUN1:def 8;
+    assume A3:x in dom g; then
+    g/.x =lim_sup(f#x) by A1;
+    hence g.x =lim_sup(f#x) by A3,PARTFUN1:def 8;
    end;
-   hence thesis by B,TARSKI:2;
+   hence thesis by A2,TARSKI:2;
 end;
 uniqueness
 proof
    let g,h be PartFunc of X,ExtREAL;
-   assume 
-A1: dom g = dom(f.0) &
+   assume
+A4: dom g = dom(f.0) &
     for x be Element of X st x in dom g holds g.x=lim_sup(f#x);
-   assume 
-A2: dom h = dom(f.0) & 
+   assume
+A5: dom h = dom(f.0) &
     for x be Element of X st x in dom h holds h.x=lim_sup(f#x);
    now let x be Element of X;
-    assume A3: x in dom g; then
+    assume A6: x in dom g; then
     g/.x = g.x by PARTFUN1:def 8; then
-    g/.x = lim_sup (f#x) by A1,A3; then
-    g/.x = h.x by A2,A1,A3;
-    hence g/.x = h/.x by A2,A1,A3,PARTFUN1:def 8;
+    g/.x = lim_sup (f#x) by A4,A6; then
+    g/.x = h.x by A4,A5,A6;
+    hence g/.x = h/.x by A4,A5,A6,PARTFUN1:def 8;
    end;
-   hence thesis by A1,A2,PARTFUN2:3;
+   hence thesis by A4,A5,PARTFUN2:3;
 end;
 end;
 
-theorem liminff:
+theorem Th11:
 for f be Functional_Sequence of X,ExtREAL holds
  (for x be Element of X st x in dom lim_inf f holds
    (lim_inf f).x=sup inferior_realsequence(f#x) &
@@ -735,46 +736,46 @@ for f be Functional_Sequence of X,ExtREAL holds
 proof
    let f be Functional_Sequence of X,ExtREAL;
    dom(sup inferior_realsequence f)
-    =dom((inferior_realsequence f).0) by defsupf; then
-   dom(sup inferior_realsequence f) = dom(f.0) by definf; then
-A1:dom(sup inferior_realsequence f) = dom(lim_inf f) by defliminff; 
-L1:now let x be Element of X;
-    assume AS1: x in dom lim_inf f; then
-P2: (lim_inf f).x=lim_inf(f#x) by defliminff;
+    =dom((inferior_realsequence f).0) by Def4; then
+   dom(sup inferior_realsequence f) = dom(f.0) by Def5; then
+A1:dom(sup inferior_realsequence f) = dom(lim_inf f) by Def8;
+A2:now let x be Element of X;
+    assume A3: x in dom lim_inf f; then
+A4: (lim_inf f).x=lim_inf(f#x) by Def8;
     hence (lim_inf f).x= sup inferior_realsequence(f#x);
-    dom lim_inf f = dom(f.0) by defliminff;
-    hence (lim_inf f).x = sup((inferior_realsequence f)#x) by inferiorf,AS1,P2;
-    hence (lim_inf f).x =(sup inferior_realsequence f).x by defsupf,AS1,A1;
+    dom lim_inf f = dom(f.0) by Def8;
+    hence (lim_inf f).x = sup((inferior_realsequence f)#x) by A3,A4,Th7;
+    hence (lim_inf f).x =(sup inferior_realsequence f).x by A1,A3,Def4;
    end; then
    for x be Element of X st x in dom lim_inf f holds
      (lim_inf f).x =(sup inferior_realsequence f).x;
-   hence thesis by L1,PARTFUN1:34,A1;
+   hence thesis by A1,A2,PARTFUN1:34;
 end;
 
-theorem limsupf:
+theorem Th12:
 for f be Functional_Sequence of X,ExtREAL holds
- (for x be Element of X st x in dom lim_sup f holds 
+ (for x be Element of X st x in dom lim_sup f holds
    (lim_sup f).x=inf superior_realsequence(f#x) &
    (lim_sup f).x=inf ((superior_realsequence f)#x) &
    (lim_sup f).x=inf (superior_realsequence f).x ) &
  lim_sup f = inf superior_realsequence f
 proof
    let f be Functional_Sequence of X,ExtREAL;
-AS2:dom(inf superior_realsequence f)
-     =dom((superior_realsequence f).0) by definff
-    .=dom(f.0) by defsup
-    .=dom lim_sup f by deflimsupf;
-L1:now let x be Element of X;
-    assume AS1: x in dom (lim_sup f); then
-P2: (lim_sup f).x=lim_sup (f#x) by deflimsupf;
+A1:dom(inf superior_realsequence f)
+     =dom((superior_realsequence f).0) by Def3
+    .=dom(f.0) by Def6
+    .=dom lim_sup f by Def9;
+A2:now let x be Element of X;
+    assume A3: x in dom (lim_sup f); then
+A4: (lim_sup f).x=lim_sup (f#x) by Def9;
     hence (lim_sup f).x = inf superior_realsequence(f#x);
-    dom lim_sup f = dom(f.0) by deflimsupf;
-    hence (lim_sup f).x = inf((superior_realsequence f)#x) by superiorf,AS1,P2;
-    hence (lim_sup f).x = (inf superior_realsequence f).x by definff,AS1,AS2;
+    dom lim_sup f = dom(f.0) by Def9;
+    hence (lim_sup f).x = inf((superior_realsequence f)#x) by A3,A4,Th10;
+    hence (lim_sup f).x = (inf superior_realsequence f).x by A1,A3,Def3;
    end; then
    for x be Element of X st x in dom lim_sup f holds
     (lim_sup f).x =(inf superior_realsequence f).x;
-   hence thesis by L1,PARTFUN1:34,AS2;
+   hence thesis by A1,A2,PARTFUN1:34;
 end;
 
 theorem
@@ -785,73 +786,73 @@ proof
    let f be Functional_Sequence of X,ExtREAL,
        x be Element of X;
    assume x in dom(f.0); then
-   x in dom(lim_sup f) & x in dom(lim_inf f) by deflimsupf,defliminff; then
-   (lim_sup f).x = lim_sup (f#x) & (lim_inf f).x = lim_inf (f#x) 
-     by deflimsupf,defliminff;
+   x in dom(lim_sup f) & x in dom(lim_inf f) by Def8,Def9; then
+   (lim_sup f).x = lim_sup (f#x) & (lim_inf f).x = lim_inf (f#x)
+     by Def8,Def9;
    hence thesis by RINFSUP2:40;
 end;
- 
+
 definition
 let X be non empty set,
     f be Functional_Sequence of X,ExtREAL;
-func lim f -> PartFunc of X,ExtREAL means :deflimf:
- dom it = dom (f.0) & 
+func lim f -> PartFunc of X,ExtREAL means :Def10:
+ dom it = dom (f.0) &
  for x be Element of X st x in dom it holds it.x=lim(f#x);
-existence 
+existence
 proof
    deffunc F(Element of X) = lim (f#$1);
    defpred P[set] means $1 in dom(f.0);
    consider g being PartFunc of X,ExtREAL such that
-A:  (for x be Element of X holds x in dom g iff  P[x]) &
+A1:  (for x be Element of X holds x in dom g iff  P[x]) &
     for x be Element of X st x in dom g holds g/.x = F(x) from PARTFUN2:sch 2;
    take g;
-B: for x be set holds x in dom g iff x in dom(f.0) by A;
+A2: for x be set holds x in dom g iff x in dom(f.0) by A1;
    now let x be Element of X;
-    assume C:x in dom g; then
-    g/.x =lim(f#x) by A;
-    hence g.x =lim(f#x) by C,PARTFUN1:def 8;
+    assume A3:x in dom g; then
+    g/.x =lim(f#x) by A1;
+    hence g.x =lim(f#x) by A3,PARTFUN1:def 8;
    end;
-   hence thesis by B,TARSKI:2;
+   hence thesis by A2,TARSKI:2;
 end;
 uniqueness
 proof
    let g,h be PartFunc of X,ExtREAL;
-   assume 
-A1: dom g = dom (f.0) & 
+   assume
+A4: dom g = dom (f.0) &
     for x be Element of X st x in dom g holds g.x=lim(f#x);
    assume
-A2: dom h = dom (f.0) & 
+A5: dom h = dom (f.0) &
     for x be Element of X st x in dom h holds h.x=lim(f#x);
    now let x be Element of X;
-    assume A3: x in dom g; then
+    assume A6: x in dom g; then
     g/.x = g.x by PARTFUN1:def 8; then
-    g/.x = lim (f#x) by A1,A3; then
-    g/.x = h.x by A2,A1,A3;
-    hence g/.x = h/.x by A2,A1,A3,PARTFUN1:def 8;
+    g/.x = lim (f#x) by A4,A6; then
+    g/.x = h.x by A4,A5,A6;
+    hence g/.x = h/.x by A4,A5,A6,PARTFUN1:def 8;
    end;
-   hence thesis by A1,A2,PARTFUN2:3;
+   hence thesis by A4,A5,PARTFUN2:3;
 end;
 end;
 
-theorem Lm4201x:
+theorem Th14:
 for f be Functional_Sequence of X,ExtREAL,
-    x be Element of X st 
+    x be Element of X st
  x in dom lim f & f#x is convergent holds
-   (lim f).x= (lim_sup f).x & (lim f).x = (lim_inf f).x 
+   (lim f).x= (lim_sup f).x & (lim f).x = (lim_inf f).x
 proof
    let f be Functional_Sequence of X,ExtREAL;
    let x be Element of X;
    assume
-AS1:x in dom lim f & f#x is convergent; then
-   x in dom (f.0) by deflimf; then
-   x in dom(lim_sup f) & x in dom(lim_inf f) by deflimsupf,defliminff; then
-P2:(lim_sup f).x = lim_sup (f#x) & (lim_inf f).x = lim_inf (f#x)
-      by deflimsupf,defliminff;
-   lim (f#x) = lim_sup (f#x) & lim (f#x) = lim_inf (f#x) by AS1,RINFSUP2:41;
-   hence thesis by AS1,deflimf,P2;
+A1:x in dom lim f & f#x is convergent; then
+   x in dom (f.0) by Def10; then
+   x in dom(lim_sup f) & x in dom(lim_inf f) by Def8,Def9; then
+A2:(lim_sup f).x = lim_sup (f#x) & (lim_inf f).x = lim_inf (f#x)
+      by Def8,Def9;
+   lim (f#x) = lim_sup (f#x) & lim (f#x) = lim_inf (f#x) by A1,RINFSUP2:41;
+   hence thesis by A1,A2,Def10;
 end;
 
-theorem Lm4AAA:
+theorem Th15:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     F be SetSequence of S,
     r be real number st
@@ -863,67 +864,67 @@ proof
        r be real number;
    set E = dom(f.0);
    assume
-AS: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
+A1: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
    now let x be set;
     assume x in union rng F; then
     consider y be set such that
-AS2: x in y & y in rng F by TARSKI:def 4;
-    consider n be set such that 
-P0:  n in dom F & y=F.n by AS2,FUNCT_1:def 5;
-    reconsider z=x as Element of X by AS2;
-    reconsider n as Element of NAT by P0;
-    F.n = E /\ great_dom(f.n,R_EAL r) by AS; then
-P2: x in E & x in great_dom(f.n,R_EAL r) by AS2,P0,XBOOLE_0:def 3; then
-P3: ex w being R_eal st w=(f.n).z & R_EAL r < w by MESFUNC1:def 14;
-P4: x in dom (sup f) by defsupf,P2; then
-P5: (sup f).z = sup(f#z) by defsupf;
+A2: x in y & y in rng F by TARSKI:def 4;
+    consider n be set such that
+A3:  n in dom F & y=F.n by A2,FUNCT_1:def 5;
+    reconsider z=x as Element of X by A2;
+    reconsider n as Element of NAT by A3;
+    F.n = E /\ great_dom(f.n,R_EAL r) by A1; then
+A4: x in E & x in great_dom(f.n,R_EAL r) by A2,A3,XBOOLE_0:def 3; then
+A5: ex w being R_eal st w=(f.n).z & R_EAL r < w by MESFUNC1:def 14;
+A6: x in dom (sup f) by A4,Def4; then
+A7: (sup f).z = sup(f#z) by Def4;
     (f.n).z=(f#z).n by MESFUNC5:def 13; then
-    (f.n).z <= (sup f).z by P5,RINFSUP2:23; then
-    R_EAL r < (sup f).z by XXREAL_0:2,P3; then
-    x in great_dom(sup f,R_EAL r) by MESFUNC1:def 14,P4;
-    hence x in E /\ great_dom(sup f,R_EAL r) by P2,XBOOLE_0:def 3;
+    (f.n).z <= (sup f).z by A7,RINFSUP2:23; then
+    R_EAL r < (sup f).z by A5,XXREAL_0:2; then
+    x in great_dom(sup f,R_EAL r) by A6,MESFUNC1:def 14;
+    hence x in E /\ great_dom(sup f,R_EAL r) by A4,XBOOLE_0:def 3;
    end; then
-L: union rng F c= E /\ great_dom(sup f,R_EAL r) by TARSKI:def 3;
+A8: union rng F c= E /\ great_dom(sup f,R_EAL r) by TARSKI:def 3;
    now let x be set;
     assume
-Q0:  x in E /\ great_dom(sup f,R_EAL r); then
+A9:  x in E /\ great_dom(sup f,R_EAL r); then
     reconsider z=x as Element of X;
-Q1: x in E & x in great_dom(sup f,R_EAL r) by Q0,XBOOLE_0:def 3; then
-Q2: ex y being R_eal st y=(sup f).z & R_EAL r < y by MESFUNC1:def 14;
+A10: x in E & x in great_dom(sup f,R_EAL r) by A9,XBOOLE_0:def 3; then
+A11: ex y being R_eal st y=(sup f).z & R_EAL r < y by MESFUNC1:def 14;
     ex n be Element of NAT st R_EAL r < (f.n).z
     proof
      assume
-Q21:  for n be Element of NAT holds (f.n).z <= R_EAL r;
+A12:  for n be Element of NAT holds (f.n).z <= R_EAL r;
      for x be ext-real number st x in rng (f#z) holds x <= R_EAL r
      proof
       let x be ext-real number;
       assume x in rng (f#z); then
       consider m be set such that
-H3:    m in NAT & x=(f#z).m by FUNCT_2:17;
-      reconsider m as Element of NAT by H3;
-      x=(f.m).z by MESFUNC5:def 13,H3;
-      hence thesis by Q21;
-     end; then 
+A13:    m in NAT & x=(f#z).m by FUNCT_2:17;
+      reconsider m as Element of NAT by A13;
+      x=(f.m).z by A13,MESFUNC5:def 13;
+      hence thesis by A12;
+     end; then
      R_EAL r is majorant of rng (f#z) by SUPINF_1:def 9; then
-DDD: sup (f#z) <= R_EAL r by SUPINF_1:def 16;
-     x in dom (sup f) by defsupf,Q1;
-     hence contradiction by Q2,DDD,defsupf;
+A14: sup (f#z) <= R_EAL r by SUPINF_1:def 16;
+     x in dom (sup f) by A10,Def4;
+     hence contradiction by A11,A14,Def4;
     end; then
     consider n be Element of NAT such that
-Q3:  R_EAL r < (f.n).z;
-    x in dom (f.n) by Q1,defsamedom; then 
-QQQ:x in E & x in great_dom(f.n,R_EAL r) 
-      by Q3,Q0,XBOOLE_0:def 3,MESFUNC1:def 14;
-    F.n = E /\ great_dom(f.n,R_EAL r) by AS; then
-Q4: x in F.n by QQQ,XBOOLE_0:def 3;
-    F.n in rng F by FUNCT_2:6; 
-    hence x in union rng F by Q4,TARSKI:def 4;
+A15:  R_EAL r < (f.n).z;
+    x in dom (f.n) by A10,Def2; then
+A16:x in E & x in great_dom(f.n,R_EAL r)
+      by A9,A15,MESFUNC1:def 14,XBOOLE_0:def 3;
+    F.n = E /\ great_dom(f.n,R_EAL r) by A1; then
+A17: x in F.n by A16,XBOOLE_0:def 3;
+    F.n in rng F by FUNCT_2:6;
+    hence x in union rng F by A17,TARSKI:def 4;
    end; then
    E /\ great_dom((sup f),R_EAL r) c= union rng F by TARSKI:def 3;
-   hence union rng F = E /\ great_dom(sup f,R_EAL r) by L,XBOOLE_0:def 10;
+   hence union rng F = E /\ great_dom(sup f,R_EAL r) by A8,XBOOLE_0:def 10;
 end;
 
-theorem Lm4CCC:
+theorem Th16:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     F be SetSequence of S,
     r be real number st
@@ -935,66 +936,66 @@ proof
        F be SetSequence of S,
        r be real number;
    assume
-AS: for n be natural number holds F.n = dom(f.0) /\ great_eq_dom(f.n,R_EAL r);
+A1: for n be natural number holds F.n = dom(f.0) /\ great_eq_dom(f.n,R_EAL r);
    set E = dom(f.0);
    now let x be set;
     assume
-AS1: x in meet rng F; then
+A2: x in meet rng F; then
     reconsider z=x as Element of X;
     F.0 in rng F by FUNCT_2:6; then
-P1: x in F.0 by AS1,SETFAM_1:def 1;
-    F.0 = E /\ great_eq_dom(f.0,R_EAL r) by AS; then
-P2: x in E & x in great_eq_dom(f.0,R_EAL r) by P1,XBOOLE_0:def 3;
-K0: now let n be Element of NAT;
+A3: x in F.0 by A2,SETFAM_1:def 1;
+    F.0 = E /\ great_eq_dom(f.0,R_EAL r) by A1; then
+A4: x in E & x in great_eq_dom(f.0,R_EAL r) by A3,XBOOLE_0:def 3;
+A5: now let n be Element of NAT;
      F.n in rng F by FUNCT_2:6; then
- P1: z in F.n by AS1,SETFAM_1:def 1;
-     F.n = E /\ great_eq_dom(f.n,R_EAL r) by AS; then
-     z in E & x in great_eq_dom(f.n,R_EAL r) by P1,XBOOLE_0:def 3; then
+ A6: z in F.n by A2,SETFAM_1:def 1;
+     F.n = E /\ great_eq_dom(f.n,R_EAL r) by A1; then
+     z in E & x in great_eq_dom(f.n,R_EAL r) by A6,XBOOLE_0:def 3; then
      ex w being R_eal st w=(f.n).z & R_EAL r <= w by MESFUNC1:def 15;
      hence R_EAL r <= (f#z).n by MESFUNC5:def 13;
     end;
     now let s be ext-real number;
      assume s in rng (f#z); then
      ex k be set st k in NAT & s=(f#z).k by FUNCT_2:17;
-     hence R_EAL r <= s by K0;
+     hence R_EAL r <= s by A5;
     end; then
     R_EAL r is minorant of rng (f#z) by SUPINF_1:def 10; then
-P51:R_EAL r <= inf (f#z) by SUPINF_1:def 17;
-P52:x in dom (inf f) by P2,definff; then
-    R_EAL r <= (inf f).x by P51,definff; then
-    x in great_eq_dom(inf f,R_EAL r) by MESFUNC1:def 15,P52;
-    hence x in E /\ great_eq_dom(inf f,R_EAL r) by P2,XBOOLE_0:def 3;
+A7:R_EAL r <= inf (f#z) by SUPINF_1:def 17;
+A8:x in dom (inf f) by A4,Def3; then
+    R_EAL r <= (inf f).x by A7,Def3; then
+    x in great_eq_dom(inf f,R_EAL r) by A8,MESFUNC1:def 15;
+    hence x in E /\ great_eq_dom(inf f,R_EAL r) by A4,XBOOLE_0:def 3;
    end; then
-L: meet rng F c= E /\ great_eq_dom(inf f,R_EAL r) by TARSKI:def 3;
+A9: meet rng F c= E /\ great_eq_dom(inf f,R_EAL r) by TARSKI:def 3;
    now let x be set;
-    assume 
-Q0:  x in E /\ great_eq_dom(inf f,R_EAL r); then
+    assume
+A10:  x in E /\ great_eq_dom(inf f,R_EAL r); then
     reconsider z=x as Element of X;
-Q1: x in E & x in great_eq_dom(inf f,R_EAL r) by Q0,XBOOLE_0:def 3; then
-Q2: ex y being R_eal st y=(inf f).z & R_EAL r <= y by MESFUNC1:def 15;
+A11: x in E & x in great_eq_dom(inf f,R_EAL r) by A10,XBOOLE_0:def 3; then
+A12: ex y being R_eal st y=(inf f).z & R_EAL r <= y by MESFUNC1:def 15;
     now let y be set;
-     assume AS3: y in rng F;
+     assume A13: y in rng F;
      consider n be set such that
-AS31: n in NAT & y=F.n by AS3,FUNCT_2:17;
-     reconsider n as Element of NAT by AS31;
-     x in dom inf f by Q1,definff; then
- P42:(inf f).z = inf(f#z) by definff;
+A14: n in NAT & y=F.n by A13,FUNCT_2:17;
+     reconsider n as Element of NAT by A14;
+     x in dom inf f by A11,Def3; then
+ A15:(inf f).z = inf(f#z) by Def3;
      (f.n).z=(f#z).n by MESFUNC5:def 13; then
      inf (f#z)<= (f.n).z by RINFSUP2:23; then
-Q3:  R_EAL r <= (f.n).z by P42,Q2,XXREAL_0:2;
-     x in dom (f.n) by Q1,defsamedom; then
-QQQ: x in E & x in great_eq_dom(f.n,R_EAL r) 
-       by Q0,Q3,XBOOLE_0:def 3,MESFUNC1:def 15;
-     F.n = E /\ great_eq_dom(f.n,R_EAL r) by AS; 
-     hence x in y by AS31,QQQ,XBOOLE_0:def 3;
+A16:  R_EAL r <= (f.n).z by A12,A15,XXREAL_0:2;
+     x in dom (f.n) by A11,Def2; then
+A17: x in E & x in great_eq_dom(f.n,R_EAL r)
+       by A10,A16,MESFUNC1:def 15,XBOOLE_0:def 3;
+     F.n = E /\ great_eq_dom(f.n,R_EAL r) by A1;
+     hence x in y by A14,A17,XBOOLE_0:def 3;
     end;
     hence x in meet rng F by SETFAM_1:def 1;
    end; then
    E /\ great_eq_dom((inf f),R_EAL r) c= meet rng F by TARSKI:def 3;
-   hence meet rng F = E /\ great_eq_dom(inf f,R_EAL r) by L,XBOOLE_0:def 10;
+   hence meet rng F = E /\ great_eq_dom(inf f,R_EAL r) by A9,XBOOLE_0:def 10;
 end;
 
-theorem Lm4202a:
+theorem Th17:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     F be SetSequence of S,
     r be real number st
@@ -1008,8 +1009,8 @@ proof
        F be SetSequence of S,
        r be real number;
    set E = dom(f.0);
-   assume 
-AS: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
+   assume
+A1: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
    let n be natural number;
    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
    set f1=f^\n';
@@ -1018,23 +1019,23 @@ AS: for n be natural number holds F.n = E /\ great_dom(f.n,R_EAL r);
     F1.k= F.(n+k) by KURATO_2:def 2;
     hence F1.k in S by PROB_1:def 9;
    end; then
-B0:F1 is SetSequence of S by PROB_1:def 9;
+A2:F1 is SetSequence of S by PROB_1:def 9;
    consider g be Function of NAT,PFuncs(X,ExtREAL) such that
-D1: f=g & f^\n'=g^\n';
-   dom(f1.0)= dom(g.(n+0)) by D1,KURATO_2:def 2; then
-D2:dom(f1.0)= E by D1,defsamedom;
+A3: f=g & f^\n'=g^\n';
+   dom(f1.0)= dom(g.(n+0)) by A3,KURATO_2:def 2; then
+A4:dom(f1.0)= E by A3,Def2;
    now let k be natural number;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
     F1.k = F.(n+k') by KURATO_2:def 2; then
-    F1.k = E /\ great_dom(f.(n+k'),R_EAL r) by AS;
+    F1.k = E /\ great_dom(f.(n+k'),R_EAL r) by A1;
     hence F1.k = E /\ great_dom(f1.k,R_EAL r) by KURATO_2:def 2;
    end; then
-P1:union rng F1 = E /\ great_dom(sup f1,R_EAL r) by D2,Lm4AAA,B0;
-   union rng (F^\n') = (superior_setsequence F).n by Lm410;
-   hence thesis by P1,superiorf1;
+A5:union rng F1 = E /\ great_dom(sup f1,R_EAL r) by A2,A4,Th15;
+   union rng (F^\n') = (superior_setsequence F).n by Th2;
+   hence thesis by A5,Th9;
 end;
 
-theorem Lm4202b:
+theorem Th18:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     F be SetSequence of S,
     r be real number st
@@ -1049,7 +1050,7 @@ proof
        r be real number;
    set E = dom(f.0);
    assume that
-A2: for n be natural number holds F.n = E /\ great_eq_dom(f.n,R_EAL r);
+A1: for n be natural number holds F.n = E /\ great_eq_dom(f.n,R_EAL r);
    let n be natural number;
    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
    set f1=f^\n';
@@ -1058,23 +1059,23 @@ A2: for n be natural number holds F.n = E /\ great_eq_dom(f.n,R_EAL r);
     F1.k= F.(n+k) by KURATO_2:def 2;
     hence F1.k in S by PROB_1:def 9;
    end; then
-B0:F1 is SetSequence of S by PROB_1:def 9;
+A2:F1 is SetSequence of S by PROB_1:def 9;
    consider g be Function of NAT,PFuncs(X,ExtREAL) such that
-D1: f=g & f^\n'=g^\n';
-   dom (f1.0)= dom(g.(n+0)) by D1,KURATO_2:def 2; then
-D2:dom(f1.0) = E by D1,defsamedom;
+A3: f=g & f^\n'=g^\n';
+   dom (f1.0)= dom(g.(n+0)) by A3,KURATO_2:def 2; then
+A4:dom(f1.0) = E by A3,Def2;
    now let k be natural number;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
     F1.k = F.(n+k') by KURATO_2:def 2; then
-    F1.k = E /\ great_eq_dom(f.(n+k'),R_EAL r) by A2;
+    F1.k = E /\ great_eq_dom(f.(n+k'),R_EAL r) by A1;
     hence F1.k = E /\ great_eq_dom(f1.k,R_EAL r) by KURATO_2:def 2;
    end; then
-P1:meet rng F1 = E /\ great_eq_dom(inf f1,R_EAL r) by Lm4CCC,B0,D2;
-   meet rng(F^\n') = (inferior_setsequence F).n by Lm410;
-   hence thesis by P1,inferiorf1;
+A5:meet rng F1 = E /\ great_eq_dom(inf f1,R_EAL r) by A2,A4,Th16;
+   meet rng(F^\n') = (inferior_setsequence F).n by Th2;
+   hence thesis by A5,Th8;
 end;
 
-theorem Lm4202x:
+theorem Th19:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     E be Element of S st
  dom (f.0) = E & (for n be natural number holds f.n is_measurable_on E)
@@ -1084,43 +1085,43 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        E be Element of S;
    assume
-AS: dom (f.0) = E & 
+A1: dom (f.0) = E &
     for n be natural number holds f.n is_measurable_on E;
    let n;
    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
-L0:dom((superior_realsequence f).n') = E by defsup,AS;
+A2:dom((superior_realsequence f).n') = E by A1,Def6;
    now let r be real number;
     deffunc G(Element of NAT) = E /\ great_dom(f.$1,R_EAL r);
-    consider F being Function of NAT,bool X such that 
-AS0: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
-AS1:for x being natural number holds F.x = E /\ great_dom(f.x,R_EAL r)
+    consider F being Function of NAT,bool X such that
+A3: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
+A4:for x being natural number holds F.x = E /\ great_dom(f.x,R_EAL r)
     proof
      let x be natural number;
      reconsider x'=x as Element of NAT by ORDINAL1:def 13;
-     F.x' = E /\ great_dom(f.x',R_EAL r) by AS0;
+     F.x' = E /\ great_dom(f.x',R_EAL r) by A3;
      hence thesis;
     end;
     now let i be Element of NAT;
- Q1: F.i=E /\ great_dom(f.i,R_EAL r) by AS0;
- Q2: f.i is_measurable_on E by AS;
-     dom (f.i) = E by AS,defsamedom; then
-     E /\ great_dom(f.i,R_EAL r) is_measurable_on S by MESFUNC1:33,Q2;
-     hence F.i in S by Q1,MESFUNC1:def 11;
+ A5: F.i=E /\ great_dom(f.i,R_EAL r) by A3;
+ A6: f.i is_measurable_on E by A1;
+     dom (f.i) = E by A1,Def2; then
+     E /\ great_dom(f.i,R_EAL r) is_measurable_on S by A6,MESFUNC1:33;
+     hence F.i in S by A5,MESFUNC1:def 11;
     end; then
     reconsider F as SetSequence of S by PROB_1:def 9;
-L1: (superior_setsequence F).n
-     = E /\ great_dom((superior_realsequence f).n,R_EAL r) by Lm4202a,AS,AS1;
+A7: (superior_setsequence F).n
+     = E /\ great_dom((superior_realsequence f).n,R_EAL r) by A1,A4,Th17;
     for x be set st x in NAT holds (@superior_setsequence F).x in S
       by PROB_1:def 9; then
     (superior_setsequence F).n' in S;
     hence
      E /\ great_dom((superior_realsequence f).n,R_EAL r) is_measurable_on S
-      by L1,MESFUNC1:def 11;
+      by A7,MESFUNC1:def 11;
    end;
-   hence (superior_realsequence f).n is_measurable_on E by MESFUNC1:33,L0;
+   hence (superior_realsequence f).n is_measurable_on E by A2,MESFUNC1:33;
 end;
 
-theorem Lm4202y:
+theorem Th20:
  for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
      E be Element of S st
  dom (f.0) = E & (for n be natural number holds f.n is_measurable_on E)
@@ -1130,43 +1131,43 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        E be Element of S;
    assume
-AS: dom(f.0) = E &
+A1: dom(f.0) = E &
     for n be natural number holds f.n is_measurable_on E;
    let n be natural number;
    reconsider n'=n as Element of NAT by ORDINAL1:def 13;
-L0:dom((inferior_realsequence f).n') = E by definf,AS;
+A2:dom((inferior_realsequence f).n') = E by A1,Def5;
    now let r be real number;
     deffunc G(Element of NAT) = E /\ great_eq_dom(f.$1,R_EAL r);
     consider F being Function of NAT,bool X such that
-AS0: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
-AS1:for x being natural number holds F.x = E /\ great_eq_dom(f.x,R_EAL r)
+A3: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
+A4:for x being natural number holds F.x = E /\ great_eq_dom(f.x,R_EAL r)
     proof
      let x be natural number;
      reconsider x'=x as Element of NAT by ORDINAL1:def 13;
-     F.x' = E /\ great_eq_dom(f.x',R_EAL r) by AS0;
+     F.x' = E /\ great_eq_dom(f.x',R_EAL r) by A3;
      hence thesis;
     end;
     now let i be Element of NAT;
- Q1: F.i=E /\ great_eq_dom(f.i,R_EAL r) by AS0;
- Q2: f.i is_measurable_on E by AS;
-     dom (f.i) = E by AS,defsamedom; then
-     E /\ great_eq_dom(f.i,R_EAL r) is_measurable_on S by MESFUNC1:31,Q2;
-     hence F.i in S by Q1,MESFUNC1:def 11;
+ A5: F.i=E /\ great_eq_dom(f.i,R_EAL r) by A3;
+ A6: f.i is_measurable_on E by A1;
+     dom (f.i) = E by A1,Def2; then
+     E /\ great_eq_dom(f.i,R_EAL r) is_measurable_on S by A6,MESFUNC1:31;
+     hence F.i in S by A5,MESFUNC1:def 11;
     end; then
     reconsider F as SetSequence of S by PROB_1:def 9;
-L1: (inferior_setsequence F).n
-    = E /\ great_eq_dom((inferior_realsequence f).n,R_EAL r) by AS,AS1,Lm4202b;
+A7: (inferior_setsequence F).n
+    = E /\ great_eq_dom((inferior_realsequence f).n,R_EAL r) by A1,A4,Th18;
     for x be set st x in NAT holds (@inferior_setsequence F).x in S
       by PROB_1:def 9; then
     (inferior_setsequence F).n' in S;
     hence
      E /\ great_eq_dom((inferior_realsequence f).n,R_EAL r )
-      is_measurable_on S by L1,MESFUNC1:def 11;
+      is_measurable_on S by A7,MESFUNC1:def 11;
    end;
-   hence (inferior_realsequence f).n is_measurable_on E by MESFUNC1:31,L0;
+   hence (inferior_realsequence f).n is_measurable_on E by A2,MESFUNC1:31;
 end;
 
-theorem Lm4202c:
+theorem Th21:
  for f be Functional_Sequence of X,ExtREAL,
      F be SetSequence of S,
      r be real number st
@@ -1181,13 +1182,13 @@ proof
    set E = dom(f.0);
    set g=superior_realsequence f;
    assume
-AS: for n be natural number holds F.n = E /\ great_eq_dom(g.n,R_EAL r);
-   dom(g.0) = dom(f.0) by defsup; then
-   meet rng F = E /\ great_eq_dom(inf g,R_EAL r) by Lm4CCC,AS;
-   hence thesis by limsupf;
+A1: for n be natural number holds F.n = E /\ great_eq_dom(g.n,R_EAL r);
+   dom(g.0) = dom(f.0) by Def6; then
+   meet rng F = E /\ great_eq_dom(inf g,R_EAL r) by A1,Th16;
+   hence thesis by Th12;
 end;
 
-theorem Lm4202d:
+theorem Th22:
 for f be Functional_Sequence of X,ExtREAL,
     F be SetSequence of S,
     r be real number st
@@ -1202,13 +1203,13 @@ proof
    set E = dom(f.0);
    set g=inferior_realsequence f;
    assume
-AS: for n be natural number holds F.n = E /\ great_dom(g.n,R_EAL r);
-   dom(g.0) = dom(f.0) by definf; then
-   union rng F = E /\ great_dom(sup g,R_EAL r) by Lm4AAA,AS;
-   hence thesis by liminff;
+A1: for n be natural number holds F.n = E /\ great_dom(g.n,R_EAL r);
+   dom(g.0) = dom(f.0) by Def5; then
+   union rng F = E /\ great_dom(sup g,R_EAL r) by A1,Th15;
+   hence thesis by Th11;
 end;
 
-theorem Lm4202:
+theorem Th23:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     E be Element of S st
 dom (f.0) = E &
@@ -1218,43 +1219,43 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        E be Element of S;
    assume
-AS: dom (f.0) = E & 
+A1: dom (f.0) = E &
     for n be natural number holds f.n is_measurable_on E;
-L0:dom (lim_sup f) = dom(f.0) by deflimsupf;
+A2:dom (lim_sup f) = dom(f.0) by Def9;
    now let r be real number;
     deffunc G(Element of NAT)
      = E /\ great_eq_dom((superior_realsequence f).$1,R_EAL r);
-    consider F being Function of NAT,bool X such that 
-AS0: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
-AS1:for x being natural number holds 
+    consider F being Function of NAT,bool X such that
+A3: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
+A4:for x being natural number holds
       F.x = E /\ great_eq_dom((superior_realsequence f).x,R_EAL r)
     proof
      let x be natural number;
      reconsider x'=x as Element of NAT by ORDINAL1:def 13;
-     F.x' = E /\ great_eq_dom((superior_realsequence f).x',R_EAL r) by AS0;
+     F.x' = E /\ great_eq_dom((superior_realsequence f).x',R_EAL r) by A3;
      hence thesis;
     end;
     now let i be Element of NAT;
-Q1:  F.i = E /\ great_eq_dom((superior_realsequence f).i,R_EAL r) by AS0;
-Q2:  (superior_realsequence f).i is_measurable_on E by Lm4202x,AS;
-     dom((superior_realsequence f).i) = dom(f.0) by defsup; then
+A5:  F.i = E /\ great_eq_dom((superior_realsequence f).i,R_EAL r) by A3;
+A6:  (superior_realsequence f).i is_measurable_on E by A1,Th19;
+     dom((superior_realsequence f).i) = dom(f.0) by Def6; then
      E /\ great_eq_dom((superior_realsequence f).i,R_EAL r) is_measurable_on S
-       by AS,MESFUNC1:31,Q2;
-     hence F.i in S by Q1,MESFUNC1:def 11;
+       by A1,A6,MESFUNC1:31;
+     hence F.i in S by A5,MESFUNC1:def 11;
     end; then
     reconsider F as SetSequence of S by PROB_1:def 9;
-L1: meet F = E /\ great_eq_dom(lim_sup f,R_EAL r) by Lm4202c,AS,AS1;
-P1: dom F = NAT by FUNCT_2:def 1;
+A7: meet F = E /\ great_eq_dom(lim_sup f,R_EAL r) by A1,A4,Th21;
+A8: dom F = NAT by FUNCT_2:def 1;
     for x be set st x in NAT holds F.x in S by PROB_1:def 9; then
-T0: F is Function of NAT,S by FUNCT_2:5,P1; then
-T1: rng F is N_Sub_set_fam of X by MEASURE1:52;
-    rng F c= S by T0,RELSET_1:12; then
-    rng F is N_Measure_fam of S by T1,MEASURE2:def 1; then
+A9: F is Function of NAT,S by A8,FUNCT_2:5; then
+A10: rng F is N_Sub_set_fam of X by MEASURE1:52;
+    rng F c= S by A9,RELSET_1:12; then
+    rng F is N_Measure_fam of S by A10,MEASURE2:def 1; then
     meet rng F in S by MEASURE2:3;
     hence E /\ great_eq_dom(lim_sup f,R_EAL r) is_measurable_on S
-      by L1,MESFUNC1:def 11;
+      by A7,MESFUNC1:def 11;
    end;
-   hence lim_sup f is_measurable_on E by MESFUNC1:31,L0,AS;
+   hence lim_sup f is_measurable_on E by A1,A2,MESFUNC1:31;
 end;
 
 theorem
@@ -1267,46 +1268,46 @@ proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        E be Element of S;
    assume
-AS: dom(f.0) = E &
+A1: dom(f.0) = E &
     for n be natural number holds f.n is_measurable_on E; then
-L0:dom lim_inf f = E by defliminff;
+A2:dom lim_inf f = E by Def8;
    now let r be real number;
     deffunc G(Element of NAT)
      = E /\ great_dom((inferior_realsequence f).$1,R_EAL r);
-    consider F being Function of NAT,bool X such that 
-AS0: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
-AS1:for x be natural number holds 
+    consider F being Function of NAT,bool X such that
+A3: for x being Element of NAT holds F.x = G(x) from FUNCT_2:sch 4;
+A4:for x be natural number holds
       F.x = E /\ great_dom((inferior_realsequence f).x,R_EAL r)
     proof
      let x be natural number;
      reconsider x'=x as Element of NAT by ORDINAL1:def 13;
-     F.x' = E /\ great_dom((inferior_realsequence f).x',R_EAL r) by AS0;
+     F.x' = E /\ great_dom((inferior_realsequence f).x',R_EAL r) by A3;
      hence thesis;
     end;
     now let i be Element of NAT;
-Q1:  F.i = E /\ great_dom((inferior_realsequence f).i,R_EAL r) by AS0;
-Q2:  (inferior_realsequence f).i is_measurable_on E by Lm4202y,AS;
-     dom((inferior_realsequence f).i) = E by definf,AS; then
+A5:  F.i = E /\ great_dom((inferior_realsequence f).i,R_EAL r) by A3;
+A6:  (inferior_realsequence f).i is_measurable_on E by A1,Th20;
+     dom((inferior_realsequence f).i) = E by A1,Def5; then
      E /\ great_dom((inferior_realsequence f).i,R_EAL r) is_measurable_on S
-       by MESFUNC1:33,Q2;
-     hence F.i in S by Q1,MESFUNC1:def 11;
+       by A6,MESFUNC1:33;
+     hence F.i in S by A5,MESFUNC1:def 11;
     end; then
     reconsider F as SetSequence of S by PROB_1:def 9;
-L1: union rng F = E /\ great_dom(lim_inf f,R_EAL r) by Lm4202d,AS,AS1;
-P1: dom F = NAT by FUNCT_2:def 1;
+A7: union rng F = E /\ great_dom(lim_inf f,R_EAL r) by A1,A4,Th22;
+A8: dom F = NAT by FUNCT_2:def 1;
     for x be set st x in NAT holds F.x in S by PROB_1:def 9; then
-T0: F is Function of NAT,S by FUNCT_2:5,P1; then
-T1: rng F c= S by RELSET_1:12;
-    rng F is N_Sub_set_fam of X by T0,MEASURE1:52; then
-    rng F is N_Measure_fam of S by T1,MEASURE2:def 1; then
+A9: F is Function of NAT,S by A8,FUNCT_2:5; then
+A10: rng F c= S by RELSET_1:12;
+    rng F is N_Sub_set_fam of X by A9,MEASURE1:52; then
+    rng F is N_Measure_fam of S by A10,MEASURE2:def 1; then
     union rng F in S by MEASURE2:3;
     hence E /\ great_dom(lim_inf f,R_EAL r) is_measurable_on S
-      by L1,MESFUNC1:def 11;
+      by A7,MESFUNC1:def 11;
    end;
-   hence lim_inf f is_measurable_on E by MESFUNC1:33,L0;
+   hence lim_inf f is_measurable_on E by A2,MESFUNC1:33;
 end;
 
-theorem Lm4204:
+theorem Th25:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     E be Element of S st
  dom(f.0) = E &
@@ -1316,22 +1317,22 @@ for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
 proof
    let f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        E be Element of S;
-   assume 
+   assume
 A1: dom (f.0) = E; then
-X1:dom lim f = E & dom lim_sup f = E by deflimf,deflimsupf;
+A2:dom lim f = E & dom lim_sup f = E by Def9,Def10;
    assume that
-A2: for n be natural number holds f.n is_measurable_on E and
-A3: for x be Element of X st x in E holds f#x is convergent;
-P3:now let x be Element of X;
-    assume A:x in dom lim f; then
-    f#x is convergent by X1,A3;
-    hence (lim f).x= (lim_sup f).x by Lm4201x,A;
+A3: for n be natural number holds f.n is_measurable_on E and
+A4: for x be Element of X st x in E holds f#x is convergent;
+A5:now let x be Element of X;
+    assume A6:x in dom lim f; then
+    f#x is convergent by A2,A4;
+    hence (lim f).x= (lim_sup f).x by A6,Th14;
    end;
-   lim_sup f is_measurable_on E by Lm4202,A1,A2;
-   hence thesis by P3,X1,PARTFUN1:34;
+   lim_sup f is_measurable_on E by A1,A3,Th23;
+   hence thesis by A2,A5,PARTFUN1:34;
 end;
 
-theorem Lm42:
+theorem Th26:
 for f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     g be PartFunc of X,ExtREAL,
     E be Element of S st
@@ -1346,20 +1347,20 @@ proof
        E be Element of S;
    assume that
 A1: dom (f.0) = E & for n be natural number holds f.n is_measurable_on E and
-A3: dom g = E and
-A4: for x be Element of X st x in E holds f#x is convergent & g.x = lim(f#x);
-P2:for x be Element of X st x in E holds f#x is convergent by A4;
-X1:dom lim f = E by A1,deflimf;
+A2: dom g = E and
+A3: for x be Element of X st x in E holds f#x is convergent & g.x = lim(f#x);
+A4:for x be Element of X st x in E holds f#x is convergent by A3;
+A5:dom lim f = E by A1,Def10;
    now let x be Element of X;
-    assume A:x in dom lim f; then
-    g.x= lim(f#x) by A4,X1;
-    hence g.x = (lim f).x by deflimf,A;
-   end; then 
-   g = lim f by X1,A3,PARTFUN1:34;
-   hence thesis by P2,A1,Lm4204;
+    assume A6:x in dom lim f; then
+    g.x= lim(f#x) by A3,A5;
+    hence g.x = (lim f).x by A6,Def10;
+   end; then
+   g = lim f by A2,A5,PARTFUN1:34;
+   hence thesis by A1,A4,Th25;
 end;
 
-theorem Lm52:
+theorem Th27:
 for f be Functional_Sequence of X,ExtREAL,
     g be PartFunc of X,ExtREAL st
 for x be Element of X st x in dom g holds
@@ -1369,24 +1370,24 @@ proof
    let f be Functional_Sequence of X,ExtREAL,
        g be PartFunc of X,ExtREAL;
    assume that
-AS4:for x be Element of X st x in dom g holds
+A1:for x be Element of X st x in dom g holds
      f#x is convergent_to_finite_number & g.x = lim (f#x);
    now let x be Element of X;
-    assume C0: x in dom g; then
-C1: f#x is convergent_to_finite_number & g.x = lim (f#x) by AS4; then
-C2: f#x is convergent by MESFUNC5:def 11;
+    assume A2: x in dom g; then
+A3: f#x is convergent_to_finite_number & g.x = lim (f#x) by A1; then
+A4: f#x is convergent by MESFUNC5:def 11;
     not (lim (f#x)=-infty & f#x is convergent_to_-infty ) &
     not (lim (f#x)=+infty & f#x is convergent_to_+infty )
-      by MESFUNC5:56,57,C1; then
+      by A3,MESFUNC5:56,57; then
     consider g0 be real number such that
-C5:  lim (f#x) = g0 &
+A5:  lim (f#x) = g0 &
      (for p be real number st 0<p
        ex n be Nat st
         for m be Nat st n<=m holds |.(f#x).m-lim (f#x).| < p) &
-     f#x is convergent_to_finite_number by MESFUNC5:def 12,C2;
-C6: g.x =g0 by C5,AS4,C0;
+     f#x is convergent_to_finite_number by A4,MESFUNC5:def 12;
+A6: g.x =g0 by A1,A2,A5;
     g0 is Real by XREAL_0:def 1; then
-    |. g.x .| = abs g0 by C6,EXTREAL2:49;
+    |. g.x .| = abs g0 by A6,EXTREAL2:49;
     hence |. g.x .| < +infty by XXREAL_0:9;
    end;
    hence thesis by MESFUNC2:def 1;
@@ -1394,7 +1395,7 @@ end;
 
 begin :: Egoroff's Theorem
 
-theorem Lm10:
+theorem Th28:
 for M be sigma_Measure of S,
     f be with_the_same_dom Functional_Sequence of X,ExtREAL,
     g be PartFunc of X,ExtREAL,
@@ -1429,270 +1430,270 @@ A5: for x be Element of X st x in E holds
    for x be Element of X st x in E holds f#x is convergent & g.x = lim(f#x)
    proof
     let x be Element of X;
-    assume P010: x in E; then
+    assume A8: x in E; then
     f#x is convergent_to_finite_number by A5;
     hence f#x is convergent by MESFUNC5:def 11;
-    thus g.x = lim (f#x) by A5,P010;
+    thus g.x = lim (f#x) by A5,A8;
    end; then
-P1:g is_measurable_on E by Lm42,A2,A3,A4;
-P2:g is finite by Lm52,A4,A5;
-P3:for n be Element of NAT holds
+A9:g is_measurable_on E by A2,A3,A4,Th26;
+A10:g is finite by A4,A5,Th27;
+A11:for n be Element of NAT holds
     |.f.n - g.| is_measurable_on E & dom(f.n-g) = E & dom(|.f.n - g.|) = E
    proof
     let n be Element of NAT;
     dom(f.n) = E & f.n is_measurable_on E & f.n is finite
-      by A2,A3,defsamedom; then
-P32:f.n - g is_measurable_on E by MESFUNC2:13,P1,P2,A4;
-    dom(f.n-g) = dom(f.n) /\ dom g by MESFUNC2:2,P2; then
-    dom(f.n-g) = E /\ E by A2,defsamedom,A4;
-    hence thesis by P32,MESFUNC2:29,MESFUNC1:def 10;
+      by A2,A3,Def2; then
+A12:f.n - g is_measurable_on E by A4,A9,A10,MESFUNC2:13;
+    dom(f.n-g) = dom(f.n) /\ dom g by A10,MESFUNC2:2; then
+    dom(f.n-g) = E /\ E by A2,A4,Def2;
+    hence thesis by A12,MESFUNC1:def 10,MESFUNC2:29;
    end;
    defpred P[Element of NAT,set] means $2 =E /\ less_dom(|.f.$1 - g.|,R_EAL e);
-P40:
+A13:
    for n be Element of NAT ex Z be Element of S st P[n,Z]
    proof
     let n be Element of NAT;
-    |.f.n - g.| is_measurable_on E by P3; then
+    |.f.n - g.| is_measurable_on E by A11; then
     E /\ less_dom(|.f.n - g.|,R_EAL e) is_measurable_on S
       by MESFUNC1:def 17; then
     E /\ less_dom(|.f.n - g.|,R_EAL e) in S by MESFUNC1:def 11;
     hence thesis;
    end;
    consider K be Function of NAT,S such that
-P4: for n be Element of NAT holds P[n,K.n] from FUNCT_2:sch 10(P40);
+A14: for n be Element of NAT holds P[n,K.n] from FUNCT_2:sch 10(A13);
    defpred Q[Element of NAT,set] means
     $2 ={x where x is Element of X : for k st $1 <= k holds x in K.k};
-P50:
+A15:
    for n be Element of NAT ex Z be Element of S st Q[n,Z]
    proof
     let n be Element of NAT;
     take Z = {x where x is Element of X : for k st n <= k holds x in K.k};
-    thus thesis by Lm000; 
+    thus thesis by Th1;
    end;
    consider EN be Function of NAT,S such that
-P5: for n be Element of NAT holds Q[n,EN.n] from FUNCT_2:sch 10(P50);
-P6:M is nonnegative by MEASURE1:def 11; then
-P7:0. <= M.E by MEASURE1:def 4;
-P8:for n be natural number holds
+A16: for n be Element of NAT holds Q[n,EN.n] from FUNCT_2:sch 10(A15);
+A17:M is nonnegative by MEASURE1:def 11; then
+A18:0. <= M.E by MEASURE1:def 4;
+A19:for n be natural number holds
     EN.n c= E & M.(EN.n) <= M.E & M.(EN.n) is Element of REAL &
     M.(E \ EN.n)= M.E - M.(EN.n) & M.(E \ EN.n) is Element of REAL
    proof
     let n be natural number;
     reconsider n'=n as Element of NAT by ORDINAL1:def 13;
     thus
-P81: EN.n c= E
+A20: EN.n c= E
     proof
      let z be set;
      assume z in EN.n; then
      z in {x where x is Element of X :
-              for k st n' <= k holds x in K.k } by P5; then
-     ex x be Element of X st 
+              for k st n' <= k holds x in K.k } by A16; then
+     ex x be Element of X st
       z=x & for k st n <= k holds x in K.k; then
      z in K.n; then
-     z in E /\ less_dom(|.f.n' - g.| ,R_EAL e) by P4;
+     z in E /\ less_dom(|.f.n' - g.| ,R_EAL e) by A14;
      hence z in E by XBOOLE_0:def 3;
     end;
-    hence P82: M.(EN.n) <= M.E by MEASURE1:62;
-P83:-infty < M.(EN.n) by P6,MEASURE1:def 4;
-    hence M.(EN.n) is Element of REAL by A1,P82,EXTREAL1:1;
-P84:M.(EN.n) < +infty by A1,P82,EXTREAL1:7;
-    hence M.(E \ EN.n)= M.E - M.(EN.n) by P81,MEASURE1:63;
-    reconsider r1= M.E as Real by A1,P7,EXTREAL1:1;
-    reconsider r2= M.(EN.n) as Real by P82,A1,EXTREAL1:1,P83;
+    hence A21: M.(EN.n) <= M.E by MEASURE1:62;
+A22:-infty < M.(EN.n) by A17,MEASURE1:def 4;
+    hence M.(EN.n) is Element of REAL by A1,A21,EXTREAL1:1;
+A23:M.(EN.n) < +infty by A1,A21,EXTREAL1:7;
+    hence M.(E \ EN.n)= M.E - M.(EN.n) by A20,MEASURE1:63;
+    reconsider r1= M.E as Real by A1,A18,EXTREAL1:1;
+    reconsider r2= M.(EN.n) as Real by A1,A21,A22,EXTREAL1:1;
     M.E - M.(EN.n) = r1-r2 by SUPINF_2:5;
-    hence M.(E \ EN.n) is Element of REAL by P84,P81,MEASURE1:63;
+    hence M.(E \ EN.n) is Element of REAL by A20,A23,MEASURE1:63;
    end;
-P9:for n,m be Element of NAT st n <= m holds
+A24:for n,m be Element of NAT st n <= m holds
     EN.n c= EN.m & M.(EN.n) <= M.(EN.m)
    proof
     let n,m be Element of NAT;
-    assume AS: n <= m;
+    assume A25: n <= m;
     thus EN.n c= EN.m
     proof
      let z be set;
      assume z in EN.n; then
      z in {x where x is Element of X :
-            for k st n <= k holds x in K.k} by P5; then
-P61: ex x be Element of X st
+            for k st n <= k holds x in K.k} by A16; then
+A26: ex x be Element of X st
       z=x & for k st n <= k holds x in K.k;
-     for k st m <= k holds z in K.k by AS,P61,XXREAL_0:2;
+     for k st m <= k holds z in K.k by A25,A26,XXREAL_0:2;
      then
-     z in {y where y is Element of X : for k st m <= k holds y in K.k} by P61;
-     hence thesis by P5;
+     z in {y where y is Element of X : for k st m <= k holds y in K.k} by A26;
+     hence thesis by A16;
     end;
     hence M.(EN.n) <= M.(EN.m) by MEASURE1:62;
    end;
    defpred R[Element of NAT,set] means $2=M.(EN.$1);
-P100:
+A27:
    now let n be Element of NAT;
-    M.(EN.n) is Element of REAL by P8;
+    M.(EN.n) is Element of REAL by A19;
     hence ex y be Element of REAL st R[n,y];
    end;
    consider seq1 be Real_Sequence such that
-P10:for n be Element of NAT holds R[n,seq1.n] from FUNCT_2:sch 10(P100);
-M1:dom(M*EN) = NAT & dom seq1 = NAT by FUNCT_2:def 1;
+A28:for n be Element of NAT holds R[n,seq1.n] from FUNCT_2:sch 10(A27);
+A29:dom(M*EN) = NAT & dom seq1 = NAT by FUNCT_2:def 1;
    now let x be set;
-    assume AS:x in dom (M*EN); then
+    assume A30:x in dom (M*EN); then
     reconsider n=x as Element of NAT;
-    (M*EN).x = M.(EN.n) by FUNCT_1:22,AS;
-    hence (M*EN).x = seq1.x by P10;
+    (M*EN).x = M.(EN.n) by A30,FUNCT_1:22;
+    hence (M*EN).x = seq1.x by A28;
    end; then
-M2:M*EN=seq1 by FUNCT_1:9,M1;
-P12:
+A31:M*EN=seq1 by A29,FUNCT_1:9;
+A32:
    union rng EN=E
    proof
     now let y be set;
      assume y in rng EN; then
      consider x be set such that
-P121: x in NAT & y=EN.x by FUNCT_2:17;
-     reconsider x'=x as natural number by P121,ORDINAL1:def 13;
-     y = EN.x' by P121;
-     hence y c= E by P8;
+A33: x in NAT & y=EN.x by FUNCT_2:17;
+     reconsider x'=x as natural number by A33,ORDINAL1:def 13;
+     y = EN.x' by A33;
+     hence y c= E by A19;
     end; then
-B:  union rng EN c= E by ZFMISC_1:94;
+A34:  union rng EN c= E by ZFMISC_1:94;
     E c= union rng EN
     proof
      let z be set;
-     assume AS: z in E; then
+     assume A35: z in E; then
      reconsider x= z as Element of X;
-C1:  f#x is convergent_to_finite_number & g.x = lim (f#x) by A5,AS; then
-C2:  f#x is convergent by MESFUNC5:def 11;
+A36:  f#x is convergent_to_finite_number & g.x = lim (f#x) by A5,A35; then
+A37:  f#x is convergent by MESFUNC5:def 11;
      not (lim(f#x) = -infty & f#x is convergent_to_-infty) &
      not (lim(f#x) = +infty & f#x is convergent_to_+infty)
-       by MESFUNC5:56,57,C1; then
+       by A36,MESFUNC5:56,57; then
      ex g be real number st lim(f#x) = g &
        (for p be real number st 0 < p
          ex n be Nat st
           for m be Nat st n<=m holds |.(f#x).m - lim(f#x).| < p) &
-       f#x is convergent_to_finite_number by MESFUNC5:def 12,C2; then
+       f#x is convergent_to_finite_number by A37,MESFUNC5:def 12; then
      consider n be Nat such that
-C4:   for m be Nat st n<=m holds |.(f#x).m - lim(f#x).| < e by A7;
+A38:   for m be Nat st n<=m holds |.(f#x).m - lim(f#x).| < e by A7;
      reconsider n0=n as Element of NAT by ORDINAL1:def 13;
      now let k;
       reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-      assume ASB: n0 <=k;
-  D1: dom(f.k' - g) = E by P3;
-  D2: dom |.f.k' - g.| = E by P3;
-      |.(f#x).k-lim (f#x).| < e by ASB,C4; then
-      |.(f.k).x-g.x.| < e by C1,MESFUNC5:def 13; then
-      |.(f.k - g).x .| < e by MESFUNC1:def 4,D1,AS; then
-      (|.f.k - g.|).x < e by MESFUNC1:def 10,D2,AS; then
-      x in less_dom(|.f.k - g.|,R_EAL e) by MESFUNC1:def 12,D2,AS; then
-      x in E /\ less_dom(|.f.k - g.|,R_EAL e) by AS,XBOOLE_0:def 3;
-      then x in K.k' by P4;
+      assume A39: n0 <=k;
+  A40: dom(f.k' - g) = E by A11;
+  A41: dom |.f.k' - g.| = E by A11;
+      |.(f#x).k-lim (f#x).| < e by A38,A39; then
+      |.(f.k).x-g.x.| < e by A36,MESFUNC5:def 13; then
+      |.(f.k - g).x .| < e by A35,A40,MESFUNC1:def 4; then
+      (|.f.k - g.|).x < e by A35,A41,MESFUNC1:def 10; then
+      x in less_dom(|.f.k - g.|,R_EAL e) by A35,A41,MESFUNC1:def 12; then
+      x in E /\ less_dom(|.f.k - g.|,R_EAL e) by A35,XBOOLE_0:def 3;
+      then x in K.k' by A14;
       hence x in K.k;
      end; then
      x in {y where y is Element of X : for k st n0 <= k holds y in K.k}; then
-C5:  x in EN.n0 by P5;
+A42:  x in EN.n0 by A16;
      EN.n0 in rng EN by FUNCT_2:6;
-     hence thesis by C5,TARSKI:def 4;
+     hence thesis by A42,TARSKI:def 4;
     end;
-    hence thesis by B,XBOOLE_0:def 10;
+    hence thesis by A34,XBOOLE_0:def 10;
    end;
-P13: seq1 is convergent & lim seq1 = M.E
+A43: seq1 is convergent & lim seq1 = M.E
    proof
     now let n,m be Element of NAT;
-     assume B: n<=m;
-     seq1.n = M.(EN.n) & seq1.m = M.(EN.m) by P10;
-     hence seq1.n <= seq1.m by B,P9;
+     assume A44: n<=m;
+     seq1.n = M.(EN.n) & seq1.m = M.(EN.m) by A28;
+     hence seq1.n <= seq1.m by A24,A44;
     end; then
-P131: seq1 is non-decreasing by SEQM_3:12;
-    reconsider r1 = M.E as Real by A1,P7,EXTREAL1:1;
-P133: now let n be Element of NAT;
-     M.(EN.n) <= M.E by P8; then
-B:   seq1.n <= r1 by P10;
+A45: seq1 is non-decreasing by SEQM_3:12;
+    reconsider r1 = M.E as Real by A1,A18,EXTREAL1:1;
+A46: now let n be Element of NAT;
+     M.(EN.n) <= M.E by A19; then
+A47:   seq1.n <= r1 by A28;
      r1+0 < r1+1 by XREAL_1:10;
-     hence seq1.n < r1+1 by B,XXREAL_0:2;
+     hence seq1.n < r1+1 by A47,XXREAL_0:2;
     end; then
-P132:
+A48:
     seq1 is bounded_above by SEQ_2:def 3;
-    hence seq1 is convergent by P131,SEQ_4:51;
+    hence seq1 is convergent by A45,SEQ_4:51;
     consider r be real number such that
-X4:  for n be Element of NAT holds seq1.n < r by P133;
+A49:  for n be Element of NAT holds seq1.n < r by A46;
     now let d be real number;
      assume d in rng seq1; then
      ex x be set st x in NAT & d=seq1.x by FUNCT_2:17;
-     hence d <= r by X4;
+     hence d <= r by A49;
     end; then
     rng seq1 is bounded_above by SEQ_4:def 1; then
-X1: sup rng(M*EN) = sup rng seq1 by M2,RINFSUP2:1;
-P11:for n being Element of NAT holds EN.n c= EN.(n+1)
+A50: sup rng(M*EN) = sup rng seq1 by A31,RINFSUP2:1;
+A51:for n being Element of NAT holds EN.n c= EN.(n+1)
     proof
      let n be Element of NAT;
      n <=n+1 by NAT_1:12;
-     hence thesis by P9;
+     hence thesis by A24;
     end;
-    lim seq1 = sup seq1 by P131,P132,RINFSUP1:24;
-    hence lim seq1 =M.E by X1,P12,P11,MEASURE2:27;
+    lim seq1 = sup seq1 by A45,A48,RINFSUP1:24;
+    hence lim seq1 =M.E by A32,A50,A51,MEASURE2:27;
    end;
    defpred U[Element of NAT,set] means $2=M.(E \ EN.$1);
-P140:
+A52:
    now let n be Element of NAT;
-    M.(E \ EN.n) is Element of REAL by P8;
+    M.(E \ EN.n) is Element of REAL by A19;
     hence ex y be Element of REAL st U[n,y];
    end;
    consider seq2 be Real_Sequence such that
-P14:for n be Element of NAT holds U[n,seq2.n] from FUNCT_2:sch 10(P140);
-   reconsider ME= M.E as Real by A1,P7,EXTREAL1:1;
+A53:for n be Element of NAT holds U[n,seq2.n] from FUNCT_2:sch 10(A52);
+   reconsider ME= M.E as Real by A1,A18,EXTREAL1:1;
    deffunc V(set)=ME;
    consider seq3 be Real_Sequence such that
-P15:for n be Element of NAT holds seq3.n=V(n) from SEQ_1:sch 1;
+A54:for n be Element of NAT holds seq3.n=V(n) from SEQ_1:sch 1;
    now let n be Element of NAT;
-W1: M.(EN.n)=seq1.n by P10;
-    seq2.n = M.(E \ EN.n) by P14; then
-    seq2.n = M.E-M.(EN.n) by P8; then
-    seq2.n = ME- seq1.n by W1,SUPINF_2:5; then
-    seq2.n = seq3.n - seq1.n by P15;
+A55: M.(EN.n)=seq1.n by A28;
+    seq2.n = M.(E \ EN.n) by A53; then
+    seq2.n = M.E-M.(EN.n) by A19; then
+    seq2.n = ME- seq1.n by A55,SUPINF_2:5; then
+    seq2.n = seq3.n - seq1.n by A54;
     hence seq2.n = seq3.n +(- seq1).n by SEQ_1:14;
    end; then
    seq2 = seq3 + (-seq1) by SEQ_1:11; then
-P16:
+A56:
    seq2 = seq3 - seq1 by SEQ_1:15;
-P160:
-   seq3 is constant by SEQM_3:def 6,P15; then
-P161:
+A57:
+   seq3 is constant by A54,SEQM_3:def 6; then
+A58:
    seq3 is convergent by SEQ_4:39;
-P162:
-   seq3.0 = ME by P15;
-P17:seq2 is convergent by SEQ_2:25,P13,P161,P16;
-   lim seq2 = lim seq3 -lim seq1 by SEQ_2:26,P161,P13,P16; then
-   lim seq2 =ME - ME by P162,P13,P160,SEQ_4:40; then
+A59:
+   seq3.0 = ME by A54;
+A60:seq2 is convergent by A43,A56,A58,SEQ_2:25;
+   lim seq2 = lim seq3 -lim seq1 by A43,A56,A58,SEQ_2:26; then
+   lim seq2 =ME - ME by A43,A57,A59,SEQ_4:40; then
    consider N be Element of NAT such that
-P180:
+A61:
     for m be Element of NAT st N<=m holds abs(seq2.m-0)< r
-      by P17,SEQ_2:def 7,A6;
-P181:
-   abs(seq2.N - 0)< r by P180;
-   M.(E \ EN.N)=seq2.N by P14; then
-   0 <= seq2.N by P6,MEASURE1:def 4; then
-P18:
-   seq2.N < r by P181,ABSVALUE:def 1;
+      by A6,A60,SEQ_2:def 7;
+A62:
+   abs(seq2.N - 0)< r by A61;
+   M.(E \ EN.N)=seq2.N by A53; then
+   0 <= seq2.N by A17,MEASURE1:def 4; then
+A63:
+   seq2.N < r by A62,ABSVALUE:def 1;
    reconsider H = E \ EN.N as Element of S;
    take H,N;
-   E\H = E /\ EN.N & EN.N c= E by P8,XBOOLE_1:48; then
-P201: E\H = EN.N by XBOOLE_1:28;
+   E\H = E /\ EN.N & EN.N c= E by A19,XBOOLE_1:48; then
+A64: E\H = EN.N by XBOOLE_1:28;
    for k be natural number st N < k holds
     for x be Element of X st x in E\H holds |. (f.k).x - g.x .| < e
    proof
     let k be natural number;
     reconsider k'=k as Element of NAT by ORDINAL1:def 13;
-    assume AA1: N < k;
+    assume A65: N < k;
     let x be Element of X;
     assume x in E\H; then
     x in {y where y is Element of X :
-           for k st N <= k holds y in K.k} by P5,P201; then
-PE1:ex y be Element of X st x=y &
+           for k st N <= k holds y in K.k} by A16,A64; then
+A66:ex y be Element of X st x=y &
      for k st N <= k holds y in K.k;
-    x in K.k by AA1,PE1; then
-    x in E /\ less_dom(|.f.k' - g.|,R_EAL e) by P4; then
-AS: x in E & x in less_dom(|.f.k - g.|,R_EAL e) by XBOOLE_0:def 3; then
-PE4:ex y being R_eal st y=(|.f.k - g.|).x & y < R_EAL e by MESFUNC1:def 12;
-D1: dom (f.k' - g) = E by P3;
-    dom |.f.k' - g.| = E by P3; then
-    |.(f.k - g).x .| < e by PE4,MESFUNC1:def 10,AS;
-    hence |.(f.k).x-g.x.| < e by MESFUNC1:def 4,D1,AS;
+    x in K.k by A65,A66; then
+    x in E /\ less_dom(|.f.k' - g.|,R_EAL e) by A14; then
+A67: x in E & x in less_dom(|.f.k - g.|,R_EAL e) by XBOOLE_0:def 3; then
+A68:ex y being R_eal st y=(|.f.k - g.|).x & y < R_EAL e by MESFUNC1:def 12;
+A69: dom (f.k' - g) = E by A11;
+    dom |.f.k' - g.| = E by A11; then
+    |.(f.k - g).x .| < e by A67,A68,MESFUNC1:def 10;
+    hence |.(f.k).x-g.x.| < e by A67,A69,MESFUNC1:def 4;
    end;
-   hence thesis by P14,P18,XBOOLE_1:36;
+   hence thesis by A53,A63,XBOOLE_1:36;
 end;
 
 theorem
@@ -1705,13 +1706,13 @@ proof
 A2:dom F = X & dom G = X by FUNCT_2:def 1;
    now let Z be set;
     assume Z in DIFFERENCE({E},rng F); then
-    consider X1,Y be set such that 
+    consider X1,Y be set such that
 A3:  X1 in {E} & Y in rng F & Z = X1 \ Y by SETFAM_1:def 6;
     consider x be set such that
 A4:  x in dom F & Y = F.x by A3,FUNCT_1:def 5;
     reconsider x as Element of X by A4;
     X1 = E by A3,TARSKI:def 1; then
-    Z = G.x by A3,A1,A4; 
+    Z = G.x by A1,A3,A4;
     hence Z in rng G by A2,FUNCT_1:12;
    end; then
 A5:DIFFERENCE({E},rng F) c= rng G by TARSKI:def 3;
@@ -1720,7 +1721,7 @@ A5:DIFFERENCE({E},rng F) c= rng G by TARSKI:def 3;
     consider x be set such that
 A6:  x in dom G & Z = G.x by FUNCT_1:def 5;
     reconsider x as Element of X by A6;
-A7: Z = E \ F.x by A6,A1;
+A7: Z = E \ F.x by A1,A6;
 A8: F.x in rng F by A2,FUNCT_1:12;
     E in {E} by TARSKI:def 1;
     hence Z in DIFFERENCE({E},rng F) by A7,A8,SETFAM_1:def 6;
@@ -1759,45 +1760,45 @@ proof
        f be with_the_same_dom Functional_Sequence of X,ExtREAL,
        g be PartFunc of X,ExtREAL,
        E be Element of S such that
-AS0: dom(f.0) = E &
-    for n be natural number holds f.n is_measurable_on E and 
-AS1: M.E < +infty and
-AS2:
+A1: dom(f.0) = E &
+    for n be natural number holds f.n is_measurable_on E and
+A2: M.E < +infty and
+A3:
    for n be natural number holds
     ex L be Element of S st
      L c= E & M.(E\L) = 0 &
      for x be Element of X st x in L holds |. (f.n).x .| < +infty and
-AS3:
-   ex G be Element of S st 
+A4:
+   ex G be Element of S st
     G c= E & M.(E\G) = 0 &
-    (for x be Element of X st x in E holds 
+    (for x be Element of X st x in E holds
       (f#x) is convergent_to_finite_number) &
     dom g = E &
     (for x be Element of X st x in G holds g.x = lim (f#x));
    let e0 be real number;
-   assume AS50: 0 < e0;
+   assume A5: 0 < e0;
    set e=e0/2;
    defpred P[Element of NAT,set] means
     $2 c= E & M.(E\$2) = 0 &
     for x be Element of X st x in ($2) holds |. (f.$1).x .| < +infty;
-P10: for n be Element of NAT ex Z be Element of S st P[n,Z] by AS2;
+A6: for n be Element of NAT ex Z be Element of S st P[n,Z] by A3;
    consider LN be Function of NAT,S such that
-P1: for n be Element of NAT holds P[n,LN.n] from FUNCT_2:sch 10(P10);
+A7: for n be Element of NAT holds P[n,LN.n] from FUNCT_2:sch 10(A6);
    consider G be Element of S such that
-P2: G c= E & M.(E\G) = 0 &
-    (for x be Element of X st x in E holds 
-      f#x is convergent_to_finite_number) & 
+A8: G c= E & M.(E\G) = 0 &
+    (for x be Element of X st x in E holds
+      f#x is convergent_to_finite_number) &
     dom g = E &
-    (for x be Element of X st x in G holds g.x = lim (f#x)) by AS3;
+    (for x be Element of X st x in G holds g.x = lim (f#x)) by A4;
    rng LN is N_Sub_set_fam of X by MEASURE1:52; then
    rng LN is N_Measure_fam of S by MEASURE2:def 1; then
    reconsider MRLN= meet(rng LN) as Element of S by MEASURE2:3;
    MRLN /\ G is Element of S; then
    reconsider L = (meet rng LN) /\ G as Element of S;
-P30: E\L = (E\(meet rng LN)) \/ (E\G) by XBOOLE_1:54;
+A9: E\L = (E\(meet rng LN)) \/ (E\G) by XBOOLE_1:54;
    deffunc ELN(Element of NAT) = E \ (LN.$1);
    consider ELN be Function of NAT,S such that
-P31:for n be Element of NAT holds ELN.n=ELN(n) from FUNCT_2:sch 4;
+A10:for n be Element of NAT holds ELN.n=ELN(n) from FUNCT_2:sch 4;
    rng ELN is N_Sub_set_fam of X by MEASURE1:52; then
    reconsider RELN= rng ELN as N_Measure_fam of S by MEASURE2:def 1;
    for A being set st A in RELN holds A is measure_zero of M
@@ -1805,137 +1806,137 @@ P31:for n be Element of NAT holds ELN.n=ELN(n) from FUNCT_2:sch 4;
     let A being set;
     assume A in RELN; then
     consider n be set such that
-P341:n in NAT & A=ELN.n by FUNCT_2:17;
-    reconsider n as Element of NAT by P341;
-    M.(ELN.n) = M.(E \(LN.n)) by P31 .=0 by P1;
-    hence thesis by MEASURE1:def 13,P341;
+A11:n in NAT & A=ELN.n by FUNCT_2:17;
+    reconsider n as Element of NAT by A11;
+    M.(ELN.n) = M.(E \(LN.n)) by A10 .=0 by A7;
+    hence thesis by A11,MEASURE1:def 13;
    end; then
    union RELN is measure_zero of M by MEASURE2:16; then
-P37:
+A12:
    M.(union RELN) = 0. by MEASURE1:def 13;
    now let x be set;
     assume x in union RELN; then
     consider Y be set such that
-E1:  x in Y & Y in RELN by TARSKI:def 4;
+A13:  x in Y & Y in RELN by TARSKI:def 4;
     consider m be set such that
-E2:  m in dom ELN & ELN.m = Y by E1,FUNCT_1:def 5;
-    reconsider m as Element of NAT by E2;
-    Y = E \ (LN.m) by P31,E2; then
-E3: x in E & not (x in LN.m) by E1,XBOOLE_0:def 4;
+A14:  m in dom ELN & ELN.m = Y by A13,FUNCT_1:def 5;
+    reconsider m as Element of NAT by A14;
+    Y = E \ (LN.m) by A10,A14; then
+A15: x in E & not (x in LN.m) by A13,XBOOLE_0:def 4;
     dom LN = NAT by FUNCT_2:def 1; then
     LN.m in rng LN by FUNCT_1:12; then
-    not x in meet(rng LN) by E3,SETFAM_1:def 1;
-    hence x in E \ (meet rng LN) by E3,XBOOLE_0:def 4;
+    not x in meet(rng LN) by A15,SETFAM_1:def 1;
+    hence x in E \ (meet rng LN) by A15,XBOOLE_0:def 4;
    end; then
-E4:union RELN c= E \ (meet rng LN) by TARSKI:def 3;
+A16:union RELN c= E \ (meet rng LN) by TARSKI:def 3;
    now let x be set;
     assume x in E \ (meet rng LN); then
-E5: x in E & not x in meet rng LN by XBOOLE_0:def 4; then
+A17: x in E & not x in meet rng LN by XBOOLE_0:def 4; then
     consider Y be set such that
-E6:  Y in rng LN & not x in Y by SETFAM_1:def 1;
+A18:  Y in rng LN & not x in Y by SETFAM_1:def 1;
     consider m be set such that
-E7:  m in dom LN & Y = LN.m by E6,FUNCT_1:def 5;
-    reconsider m as Element of NAT by E7;
-    ELN.m = E \ (LN.m) by P31; then
-E9: x in ELN.m by E5,E6,E7,XBOOLE_0:def 4;
+A19:  m in dom LN & Y = LN.m by A18,FUNCT_1:def 5;
+    reconsider m as Element of NAT by A19;
+    ELN.m = E \ (LN.m) by A10; then
+A20: x in ELN.m by A17,A18,A19,XBOOLE_0:def 4;
     dom ELN = NAT by FUNCT_2:def 1; then
     ELN.m in rng ELN by FUNCT_1:12;
-    hence x in union RELN by E9,TARSKI:def 4;
+    hence x in union RELN by A20,TARSKI:def 4;
    end; then
    E \ (meet rng LN) c= union RELN by TARSKI:def 3; then
-   union RELN = E\(meet rng LN) by E4,XBOOLE_0:def 10; then
-   M.(E\L) <= M.(union RELN) + M.(E\G) by P30,MEASURE1:64; then
-P38:M.(E\L) <= 0. by P2,P37,SUPINF_2:18;
+   union RELN = E\(meet rng LN) by A16,XBOOLE_0:def 10; then
+   M.(E\L) <= M.(union RELN) + M.(E\G) by A9,MEASURE1:64; then
+A21:M.(E\L) <= 0. by A8,A12,SUPINF_2:18;
    M is nonnegative by MEASURE1:def 11; then
-P3:M.(E\L) = 0 by P38,MEASURE1:def 4;
+A22:M.(E\L) = 0 by A21,MEASURE1:def 4;
    deffunc FNL(Nat) = (f.$1)|L;
    consider fL be Functional_Sequence of X,ExtREAL such that
-P4: for n be Nat holds fL.n=FNL(n) from SEQFUNC:sch 1;
+A23: for n be Nat holds fL.n=FNL(n) from SEQFUNC:sch 1;
    for n,m be Nat holds dom (fL.n) = dom (fL.m)
-   proof  
+   proof
     let n,m be Nat;
-    fL.n = (f.n)|L & fL.m = (f.m)|L by P4; then
+    fL.n = (f.n)|L & fL.m = (f.m)|L by A23; then
     dom (fL.n) = dom(f.n) /\ L & dom (fL.m) = dom(f.m) /\ L by FUNCT_1:68;
-    hence thesis by defsamedom;
+    hence thesis by Def2;
    end; then
-   reconsider fL as with_the_same_dom Functional_Sequence of X,ExtREAL 
-     by defsamedom;
+   reconsider fL as with_the_same_dom Functional_Sequence of X,ExtREAL
+     by Def2;
    set gL = g|L;
    L c= G by XBOOLE_1:17; then
-R03:
-   L c= E by P2,XBOOLE_1:1; then
+A24:
+   L c= E by A8,XBOOLE_1:1; then
    M.L <= M.E by MEASURE1:62; then
-R0:M.L < +infty by AS1,XXREAL_0:2;
+A25:M.L < +infty by A2,XXREAL_0:2;
    for n be natural number holds
-    dom (fL.n) = L & fL.n is_measurable_on L & fL.n is finite 
+    dom (fL.n) = L & fL.n is_measurable_on L & fL.n is finite
    proof
     let n be natural number;
     reconsider n'=n as Element of NAT by ORDINAL1:def 13;
-RR1:fL.n = (f.n)|L by P4; then
-RR2:dom (fL.n) = dom(f.n) /\ L by FUNCT_1:68; then
-    dom (fL.n') = E /\ L by AS0,defsamedom;
-    hence 
-R11: dom (fL.n) = L by R03,XBOOLE_1:28;
-    f.n is_measurable_on E by AS0; then
-    f.n is_measurable_on L by R03,MESFUNC1:34;
-    hence fL.n is_measurable_on L by RR1,R11,RR2,MESFUNC5:48;
+A26:fL.n = (f.n)|L by A23; then
+A27:dom (fL.n) = dom(f.n) /\ L by FUNCT_1:68; then
+    dom (fL.n') = E /\ L by A1,Def2;
+    hence
+A28: dom (fL.n) = L by A24,XBOOLE_1:28;
+    f.n is_measurable_on E by A1; then
+    f.n is_measurable_on L by A24,MESFUNC1:34;
+    hence fL.n is_measurable_on L by A26,A27,A28,MESFUNC5:48;
     for x be Element of X st x in dom (fL.n) holds |. (fL.n).x .| < +infty
     proof
      let x be Element of X;
-     assume R131: x in dom (fL.n); then
-EE1: x in meet(rng LN) by R11,XBOOLE_0:def 3;
+     assume A29: x in dom (fL.n); then
+A30: x in meet(rng LN) by A28,XBOOLE_0:def 3;
      dom LN = NAT by FUNCT_2:def 1; then
      LN.n' in rng LN by FUNCT_1:12; then
-     x in LN.n by EE1,SETFAM_1:def 1; then
-     |. (f.n').x .| < +infty by P1;
-     hence thesis by RR1,R131,FUNCT_1:68;
+     x in LN.n by A30,SETFAM_1:def 1; then
+     |. (f.n').x .| < +infty by A7;
+     hence thesis by A26,A29,FUNCT_1:68;
     end;
     hence thesis by MESFUNC2:def 1;
    end; then
-R1:dom (fL.0) = L &
+A31:dom (fL.0) = L &
    for n be natural number holds fL.n is_measurable_on L & fL.n is finite;
    dom gL = dom g /\ L by FUNCT_1:68; then
-R2:dom gL = L by P2,R03,XBOOLE_1:28;
-R3:for x be Element of X st x in L holds
+A32:dom gL = L by A8,A24,XBOOLE_1:28;
+A33:for x be Element of X st x in L holds
     fL#x is convergent_to_finite_number & gL.x = lim (fL#x)
    proof
     let x be Element of X;
-    assume R321: x in L; then
-R312:f#x is convergent_to_finite_number by P2,R03;
-EEE1:dom (fL#x)= NAT & dom (f#x)=NAT by FUNCT_2:def 1;
-L1: for y be set st y in NAT holds (fL#x).y = (f#x).y
+    assume A34: x in L; then
+A35:f#x is convergent_to_finite_number by A8,A24;
+A36:dom (fL#x)= NAT & dom (f#x)=NAT by FUNCT_2:def 1;
+A37: for y be set st y in NAT holds (fL#x).y = (f#x).y
     proof
      let y be set;
      assume y in NAT; then
      reconsider n = y as Element of NAT;
-     ((f.n)|L).x = (f.n).x by R321,FUNCT_1:72; then
-R314:(fL.n).x = (f.n).x by P4;
+     ((f.n)|L).x = (f.n).x by A34,FUNCT_1:72; then
+A38:(fL.n).x = (f.n).x by A23;
      (f.n).x = (f#x).n by MESFUNC5:def 13;
-     hence thesis by R314,MESFUNC5:def 13;
+     hence thesis by A38,MESFUNC5:def 13;
     end;
-    hence fL#x is convergent_to_finite_number by R312,EEE1,FUNCT_1:9;
+    hence fL#x is convergent_to_finite_number by A35,A36,FUNCT_1:9;
     L c= G by XBOOLE_1:17; then
-R322:g.x = lim (f#x) by P2,R321;
-    fL#x = f#x by L1,FUNCT_2:18;
-    hence thesis by R322,R321,FUNCT_1:72;
+A39:g.x = lim (f#x) by A8,A34;
+    fL#x = f#x by A37,FUNCT_2:18;
+    hence thesis by A34,A39,FUNCT_1:72;
    end;
-P6:for p be natural number
+A40:for p be natural number
     ex Hp be Element of S, Np be natural number st
      Hp c= L & M.(Hp) < (e(#) (1/2) GeoSeq).p &
      for k be natural number st Np < k holds
-      for x be Element of X st x in L\Hp holds 
+      for x be Element of X st x in L\Hp holds
        |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).p
    proof
     let p be natural number;
     reconsider p'=p as Element of NAT by ORDINAL1:def 13;
     0 < (1/2)|^p by PREPOWER:13; then
-R611:0 < ((1/2)GeoSeq).p' by PREPOWER:def 1;
-R612:0 < e by AS50,XREAL_1:141;
+A41:0 < ((1/2)GeoSeq).p' by PREPOWER:def 1;
+A42:0 < e by A5,XREAL_1:141;
     (e(#)(1/2) GeoSeq).p = e*((1/2)GeoSeq).p' by SEQ_1:13; then
-R61:0 < (e(#)(1/2) GeoSeq).p by R611,R612,REAL_2:122;
+A43:0 < (e(#)(1/2) GeoSeq).p by A41,A42,REAL_2:122;
     0 < (1/2)|^p by PREPOWER:13; then
     0 < ((1/2)GeoSeq).p' by PREPOWER:def 1;
-    hence thesis by R61,R0,R1,R2,R3,Lm10;
+    hence thesis by A25,A31,A32,A33,A43,Th28;
    end;
    defpred R[Element of NAT,set] means
     $2 c= L & M.($2) < (e(#)(1/2)GeoSeq).$1 &
@@ -1943,153 +1944,153 @@ R61:0 < (e(#)(1/2) GeoSeq).p by R611,R612,REAL_2:122;
      for k be Element of NAT st Np < k holds
       for x be Element of X st x in L\$2 holds
        |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).$1;
-P70:
+A44:
    for n be Element of NAT ex Z be Element of S st R[n,Z]
    proof
     let n be Element of NAT;
     reconsider n'=n as natural number;
     consider Z be Element of S, Np be natural number such that
-P71: Z c= L & M.Z < (e(#)(1/2)GeoSeq).n' &
+A45: Z c= L & M.Z < (e(#)(1/2)GeoSeq).n' &
      for k be natural number st Np < k holds
       for x be Element of X st x in L\Z holds
-       |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).n' by P6;
+       |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).n' by A40;
     reconsider Np'=Np as Element of NAT by ORDINAL1:def 13;
     Z c= L & M.Z < (e(#)(1/2)GeoSeq).n &
     for k be Element of NAT st Np' < k holds
      for x be Element of X st x in L\Z holds
-      |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).n' by P71;
+      |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).n' by A45;
     hence thesis;
    end;
    consider HP be Function of NAT,S such that
-P7: for p be Element of NAT holds R[p,HP.p] from FUNCT_2:sch 10(P70);
+A46: for p be Element of NAT holds R[p,HP.p] from FUNCT_2:sch 10(A44);
    reconsider MRHP= union rng HP as Element of S by MEASURE1:53;
    L \ MRHP is Element of S; then
    consider F be Element of S such that
-P8: F= L \ (union rng HP);
-P9:F c= L by P8,XBOOLE_1:36;
+A47: F= L \ (union rng HP);
+A48:F c= L by A47,XBOOLE_1:36;
    defpred U[Element of NAT,set] means $2= M.(HP.$1);
-P110:
+A49:
    for n be Element of NAT ex y be Element of REAL st U[n,y]
    proof
     let n be Element of NAT;
-Q1: M.(HP.n) < (e(#)(1/2)GeoSeq).n by P7;
+A50: M.(HP.n) < (e(#)(1/2)GeoSeq).n by A46;
     (e(#)(1/2)GeoSeq).n < +infty by XXREAL_0:9; then
-Q2: M.(HP.n) < +infty by Q1,XXREAL_0:2;
+A51: M.(HP.n) < +infty by A50,XXREAL_0:2;
     M is nonnegative by MEASURE1:def 11; then
     -infty < M.(HP.n) by MEASURE1:def 4; then
-    M.(HP.n) is Real by Q2,MEASURE3:1;
+    M.(HP.n) is Real by A51,MEASURE3:1;
     hence thesis;
    end;
    consider me be Real_Sequence such that
-P11:for p be Element of NAT holds U[p,me.p] from FUNCT_2:sch 10(P110); 
-P12:
-   for p be Element of NAT holds me.p <= (e(#)(1/2) GeoSeq).p 
+A52:for p be Element of NAT holds U[p,me.p] from FUNCT_2:sch 10(A49);
+A53:
+   for p be Element of NAT holds me.p <= (e(#)(1/2) GeoSeq).p
    proof
     let p be Element of NAT;
-    me.p = M.(HP.p) by P11;
-    hence thesis by P7;
+    me.p = M.(HP.p) by A52;
+    hence thesis by A46;
    end;
    abs(1/2) = 1/2 by ABSVALUE:def 1; then
-P12y:
+A54:
    (1/2)GeoSeq is summable & Sum((1/2)GeoSeq) = 1/(1-(1/2)) by SERIES_1:28;
 then
-P12x:
+A55:
    e(#)(1/2) GeoSeq is summable by SERIES_1:13;
    for p be Element of NAT holds 0 <=me.p & me.p <= (e(#)(1/2)GeoSeq).p
    proof
     let p be Element of NAT;
     M is nonnegative by MEASURE1:def 11; then
     0. <= M.(HP.p) by MEASURE1:def 4;
-    hence thesis by P12,P11;
+    hence thesis by A52,A53;
    end; then
-P13:
+A56:
    me is summable & Sum me <= Sum(e(#)(1/2)GeoSeq) & me is nonnegative
-      by P12x,SERIES_1:24,RINFSUP1:def 3;
+      by A55,RINFSUP1:def 3,SERIES_1:24;
    dom me =NAT by FUNCT_2:def 1; then
-P1471:
+A57:
    dom me = dom (M*HP) by FUNCT_2:def 1;
    for x be set st x in dom me holds me.x = (M*HP).x
    proof
     let x be set;
-    assume P1472: x in dom me; then
-    (M*HP).x= M.(HP.x) by P1471,FUNCT_1:22;
-    hence (M*HP).x = me.x by P1472,P11; 
+    assume A58: x in dom me; then
+    (M*HP).x= M.(HP.x) by A57,FUNCT_1:22;
+    hence (M*HP).x = me.x by A52,A58;
    end; then
-   me=M*HP by P1471,FUNCT_1:9; then
-P146:
-   Sum me = SUM(M*HP) by P13,PROB_4:13;
+   me=M*HP by A57,FUNCT_1:9; then
+A59:
+   Sum me = SUM(M*HP) by A56,PROB_4:13;
    rng HP is N_Sub_set_fam of X by MEASURE1:52; then
    rng HP is N_Measure_fam of S by MEASURE2:def 1; then
-P145: M.(union rng HP) <= Sum me by P146,MEASURE2:13;
-P15: Sum(e(#)(1/2)GeoSeq) = e* 2 by SERIES_1:13,P12y;
-P17: for x be Element of X st x in F holds
+A60: M.(union rng HP) <= Sum me by A59,MEASURE2:13;
+A61: Sum(e(#)(1/2)GeoSeq) = e* 2 by A54,SERIES_1:13;
+A62: for x be Element of X st x in F holds
     for p be Element of NAT holds x in L \ HP.p
-   proof 
+   proof
     let x be Element of X;
-    assume P171: x in F;
+    assume A63: x in F;
     let p be Element of NAT;
     dom HP = NAT by FUNCT_2:def 1; then
     HP.p in rng HP by FUNCT_1:12; then
     HP.p c= union rng HP by ZFMISC_1:92; then
     L\(union rng HP) c= L\HP.p by XBOOLE_1:34;
-    hence thesis by P8,P171;
+    hence thesis by A47,A63;
    end;
 
-P19:
-   for q be real number st 0 < q  
+A64:
+   for q be real number st 0 < q
     ex p be Element of NAT st ((1/2) GeoSeq).p < q
    proof
     let q be real number;
-    assume P101: 0 < q;
-    (1/2) GeoSeq is convergent & lim (1/2)GeoSeq = 0 by P12y,SERIES_1:7; then
+    assume A65: 0 < q;
+    (1/2) GeoSeq is convergent & lim (1/2)GeoSeq = 0 by A54,SERIES_1:7; then
     consider p be Element of NAT such that
-P105:for n be Element of NAT st p <=n holds abs(((1/2) GeoSeq).n - 0) < q
-       by SEQ_2:def 7,P101;
+A66:for n be Element of NAT st p <=n holds abs(((1/2) GeoSeq).n - 0) < q
+       by A65,SEQ_2:def 7;
     take p;
-P106: abs(((1/2) GeoSeq).p- 0) < q by P105;
+A67: abs(((1/2) GeoSeq).p- 0) < q by A66;
     0 < (1/2)|^p by PREPOWER:13; then
     0 <= ((1/2) GeoSeq).p by PREPOWER:def 1;
-    hence ((1/2)GeoSeq).p < q by P106,ABSVALUE:def 1;
+    hence ((1/2)GeoSeq).p < q by A67,ABSVALUE:def 1;
    end;
    reconsider MRHP= union rng HP as Element of S by MEASURE1:53;
-Q1:F c= E by P9,R03,XBOOLE_1:1;
-Q21:E\F = (E\L) \/ E /\ (union rng HP) by P8,XBOOLE_1:52;
+A68:F c= E by A24,A48,XBOOLE_1:1;
+A69:E\F = (E\L) \/ E /\ (union rng HP) by A47,XBOOLE_1:52;
    E /\ (union rng HP) c= (union rng HP) by XBOOLE_1:17; then
-   E\F c= (E\L) \/ (union rng HP) by Q21,XBOOLE_1:9; then
-Q22:M.(E\F) <= M.(E\L \/ MRHP) by MEASURE1:62;
-   M.(E\L \/ MRHP) <= M.(E\L) + M.MRHP by MEASURE1:64; then 
-   M.(E\F) <= M.(E\L) + M.MRHP by Q22,XXREAL_0:2; then
-Q26:M.(E\F) <= M.MRHP by P3,SUPINF_2:18;
-   M.MRHP <= 2*e by P13,P15,P145,XXREAL_0:2; then
-Q2:M.(E \ F) <= e0 by Q26,XXREAL_0:2;
+   E\F c= (E\L) \/ (union rng HP) by A69,XBOOLE_1:9; then
+A70:M.(E\F) <= M.(E\L \/ MRHP) by MEASURE1:62;
+   M.(E\L \/ MRHP) <= M.(E\L) + M.MRHP by MEASURE1:64; then
+   M.(E\F) <= M.(E\L) + M.MRHP by A70,XXREAL_0:2; then
+A71:M.(E\F) <= M.MRHP by A22,SUPINF_2:18;
+   M.MRHP <= 2*e by A56,A60,A61,XXREAL_0:2; then
+A72:M.(E \ F) <= e0 by A71,XXREAL_0:2;
    for q be real number st 0 < q
-    ex N be natural number st 
-     for n be natural number st N < n holds 
-      for x be Element of X st x in F holds |. (f.n).x - g.x .| < q 
+    ex N be natural number st
+     for n be natural number st N < n holds
+      for x be Element of X st x in F holds |. (f.n).x - g.x .| < q
    proof
     let q be real number;
     assume 0 < q; then
     consider p be Element of NAT such that
-ASQ32:((1/2) GeoSeq).p < q by P19;
+A73:((1/2) GeoSeq).p < q by A64;
     consider Np be Element of NAT such that
-P182:for k be Element of NAT st Np < k holds
+A74:for k be Element of NAT st Np < k holds
       for x be Element of X st x in L\HP.p holds
-       |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).p by P7;
+       |. (fL.k).x - gL.x .| < ((1/2)GeoSeq).p by A46;
     take Np;
     hereby let n be natural number;
      reconsider n' =n as Element of NAT by ORDINAL1:def 13;
-     assume ASQ311: Np < n;
+     assume A75: Np < n;
      hereby let x be Element of X;
-      assume ASQ312: x in F; then
-      x in L\HP.p by P17; then
-      |. (fL.n').x - gL.x .| < ((1/2)GeoSeq).p by P182,ASQ311; then
-Q33:  |. (fL.n).x - gL.x .| < q by ASQ32,XXREAL_0:2;
-Q35:  fL.n= (f.n)|L by P4;
-Q34:  F c= L by P8,XBOOLE_1:36; then
-      gL.x = g.x by FUNCT_1:72,ASQ312; 
-      hence |. (f.n).x - g.x .| < q by Q33,Q34,Q35,ASQ312,FUNCT_1:72;
+      assume A76: x in F; then
+      x in L\HP.p by A62; then
+      |. (fL.n').x - gL.x .| < ((1/2)GeoSeq).p by A74,A75; then
+A77:  |. (fL.n).x - gL.x .| < q by A73,XXREAL_0:2;
+A78:  fL.n= (f.n)|L by A23;
+A79:  F c= L by A47,XBOOLE_1:36; then
+      gL.x = g.x by A76,FUNCT_1:72;
+      hence |. (f.n).x - g.x .| < q by A76,A77,A78,A79,FUNCT_1:72;
      end;
     end;
    end;
-   hence thesis by Q1,Q2;
+   hence thesis by A68,A72;
 end;

@@ -12,9 +12,9 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="SEQ_2"/>
 </Signature>
 <CCluster>
@@ -22,7 +22,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 <Adjective nr="27"/>
 </Cluster>
 <Typ kind="M" nr="1">
@@ -31,7 +31,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 </Cluster>
@@ -41,7 +41,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 <Adjective nr="25"/>
 <Adjective nr="26"/>
 </Cluster>
@@ -51,7 +51,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="21"/>
+<Adjective nr="18"/>
 <Adjective nr="27"/>
 </Cluster>
 </CCluster>

@@ -10,19 +10,22 @@ environ
       ARYTM_1, RVSUM_1, EUCLID, RELAT_1, COMPLEX1, ABSVALUE, SQUARE_1, FUNCT_2,
       BOOLE, NORMSP_1, RSSPACE3, REAL_NS1, BHSP_3, SEQ_2, SEQ_1, FINSEQ_2,
       CARD_3, SETWISEO, FINSEQ_1, FUNCT_3, FUNCT_6, GROUP_2, PRVECT_1,
-      PRVECT_2, ORDINAL2, ARYTM, STRUCT_0;
+      PRVECT_2, ORDINAL2, ARYTM, STRUCT_0, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_3, XXREAL_0,
       NUMBERS, XCMPLX_0, XREAL_0, COMPLEX1, NAT_1, RELAT_1, FUNCT_1, RVSUM_1,
-      STRUCT_0, FUNCT_2, FUNCT_3, BINOP_1, REAL_1, SEQ_1, SEQ_2, RLVECT_1,
-      VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQOP, SQUARE_1, PRE_TOPC,
-      EUCLID, PRVECT_1, NORMSP_1, RSSPACE3, LOPBAN_1, REAL_NS1;
+      STRUCT_0, ALGSTR_0, FUNCT_2, FUNCT_3, BINOP_1, REAL_1, VALUED_1, SEQ_1,
+      SEQ_2, RLVECT_1, VECTSP_1, SETWISEO, FINSEQ_1, FINSEQ_2, FINSEQOP,
+      SQUARE_1, PRE_TOPC, EUCLID, PRVECT_1, NORMSP_1, RSSPACE3, LOPBAN_1,
+      REAL_NS1;
  constructors FUNCT_3, FINSEQOP, REAL_1, SEQ_2, COMPLEX1, SQUARE_1, BINOP_2,
-      SETWISEO, PRVECT_1, RSSPACE3, LOPBAN_1, REAL_NS1;
+      SETWISEO, PRVECT_1, RSSPACE3, LOPBAN_1, REAL_NS1, VALUED_1, PARTFUN1,
+      SEQ_1;
  registrations FRAENKEL, STRUCT_0, FINSEQ_2, FINSEQ_1, CARD_3, RLVECT_1,
       PRVECT_1, XREAL_0, MEMBERED, NORMSP_1, REAL_NS1, ORDINAL1, FUNCT_1,
-      FUNCT_2, RELAT_1, SEQ_1, XBOOLE_0, NUMBERS, VALUED_0;
+      FUNCT_2, RELAT_1, SEQ_1, XBOOLE_0, NUMBERS, VALUED_0, VALUED_1;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions RLVECT_1, NORMSP_1, FINSEQ_2, EUCLID, STRUCT_0, SQUARE_1;
+ definitions RLVECT_1, NORMSP_1, FINSEQ_2, EUCLID, STRUCT_0, SQUARE_1,
+      ALGSTR_0, VALUED_1;
  theorems BINOP_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQOP,
       FUNCOP_1, SETWISEO, TARSKI, CARD_3, RLVECT_1, RELAT_1, RVSUM_1, ABSVALUE,
       FVSUM_1, SEQ_1, SEQ_2, PRVECT_1, NORMSP_1, SQUARE_1, STRUCT_0, EUCLID,
@@ -372,17 +375,17 @@ end;
 definition let G be RealLinearSpace-Sequence;
   func addop G -> BinOps of carr G means :Def5:
     len it = len carr G &
-    for j be Element of dom carr G holds it.j = the add of G.j;
+    for j be Element of dom carr G holds it.j = the addF of G.j;
 existence
 proof
-   deffunc F(Element of dom carr G) = the add of G.$1;
+   deffunc F(Element of dom carr G) = the addF of G.$1;
    consider p being non empty FinSequence such that
 A1: len p = len carr G &
     for j be Element of dom carr G holds p.j = F(j) from PRVECT_1:sch 1;
     now let j be Element of dom carr G;
      len G = len carr G by Def4;
     then reconsider k = j as Element of dom G by FINSEQ_3:31;
-     p.j = the add of G.j & the carrier of G.k = (carr G).k by A1,Def4;
+     p.j = the addF of G.j & the carrier of G.k = (carr G).k by A1,Def4;
     hence p.j is BinOp of (carr G).j;
    end;
    then reconsider p' = p as BinOps of carr G by A1,PRVECT_1:19;
@@ -394,15 +397,15 @@ proof
    let f,h be BinOps of carr G;
    assume that
 A2: len f = len carr G &
-     for j be Element of dom carr G holds f.j = the add of G.j and
+     for j be Element of dom carr G holds f.j = the addF of G.j and
 A3: len h = len carr G &
-     for j be Element of dom carr G holds h.j = the add of G.j;
+     for j be Element of dom carr G holds h.j = the addF of G.j;
    reconsider f' = f,h' = h as FinSequence;
 A4:dom f' = Seg len f' & dom h' = Seg len h' by FINSEQ_1:def 3;
     now let i be Nat;
     assume i in dom f';
     then reconsider i' = i as Element of dom carr G by A2,FINSEQ_3:31;
-     f'.i = the add of G.i' by A2;
+     f'.i = the addF of G.i' by A2;
     hence f'.i = h'.i by A3;
    end;
    hence f = h by A2,A3,A4,FINSEQ_1:17;
@@ -529,11 +532,11 @@ definition let G be RealLinearSpace-Sequence;
 end;
 
 Lm1:
-for LS be non empty LoopStr st
-the add of LS is commutative associative holds LS is Abelian add-associative
+for LS be non empty addLoopStr st
+the addF of LS is commutative associative holds LS is Abelian add-associative
 proof
-   let LS be non empty LoopStr;
-   deffunc ad(LoopStr) = the add of $1;
+   let LS be non empty addLoopStr;
+   deffunc ad(addLoopStr) = the addF of $1;
    assume that
 A1: ad(LS) is commutative and
 A2: ad(LS) is associative;
@@ -544,11 +547,11 @@ A2: ad(LS) is associative;
 end;
 
 Lm2:
-for LS be non empty LoopStr st
- the ZeroF of LS is_a_unity_wrt the add of LS holds LS is right_zeroed
+for LS be non empty addLoopStr st
+ the ZeroF of LS is_a_unity_wrt the addF of LS holds LS is right_zeroed
 proof
-   let LS be non empty LoopStr;
-   assume A1:the ZeroF of LS is_a_unity_wrt the add of LS;
+   let LS be non empty addLoopStr;
+   assume A1:the ZeroF of LS is_a_unity_wrt the addF of LS;
    let x be Element of LS;
    thus x + 0.LS = x by A1,BINOP_1:11;
 end;
@@ -556,7 +559,7 @@ end;
 Lm3:
 for G be RealLinearSpace-Sequence holds
  for v1,w1 be Element of product carr G, i be Element of dom carr G holds
-   ([:addop G:].(v1,w1)).i = (the add of G.i).(v1.i,w1.i) &
+   ([:addop G:].(v1,w1)).i = (the addF of G.i).(v1.i,w1.i) &
    for vi,wi be VECTOR of G.i st vi=v1.i & wi=w1.i holds
     ([:addop G:].(v1,w1)).i = vi+wi
 proof
@@ -584,7 +587,7 @@ Lm5:
 for G be RealLinearSpace-Sequence holds product G is RealLinearSpace-like
 proof
    let G be RealLinearSpace-Sequence;
-   deffunc ad(LoopStr) = the add of $1;
+   deffunc ad(addLoopStr) = the addF of $1;
    reconsider GS =
     RLSStruct(# product carr G,zeros G,[:addop G:],[:multop G:] #)
      as non empty RLSStruct;
@@ -655,7 +658,7 @@ registration let G be RealLinearSpace-Sequence;
     right_complementable RealLinearSpace-like;
 coherence
 proof
-   deffunc ad(LoopStr) = the add of $1;
+   deffunc ad(addLoopStr) = the addF of $1;
    deffunc car(1-sorted) = the carrier of $1;
    reconsider GS = RLSStruct(# product carr G,zeros G,
         [:addop G:],[:multop G:] #) as non empty RLSStruct;
@@ -675,7 +678,7 @@ then A2:[:addop G:] is commutative by PRVECT_1:25;
     hence (addop G).i is associative by FVSUM_1:3;
    end;
 then A3:[:addop G:] is associative by PRVECT_1:26;
-   deffunc zr(LoopStr) = the ZeroF of $1;
+   deffunc zr(addLoopStr) = the ZeroF of $1;
     now let i be Element of dom carr G;
 A4:  (addop G).i = ad(G.i) & (zeros G).i = zr(G.i) & (carr G).i = car(G.i)
       by A1,Def5,Def7;

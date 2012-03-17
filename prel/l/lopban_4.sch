@@ -13,41 +13,44 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="VALUED_0"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="VALUED_0"/>
 <ArticleID name="INT_1"/>
+<ArticleID name="MEMBERED"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="NORMSP_1"/>
 <ArticleID name="BINOP_1"/>
-<ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
 <ArticleID name="FUNCSDOM"/>
 <ArticleID name="LOPBAN_1"/>
+<ArticleID name="GROUP_1"/>
+<ArticleID name="VECTSP_1"/>
 <ArticleID name="LOPBAN_2"/>
-<ArticleID name="MEMBERED"/>
 <ArticleID name="SEQ_1"/>
 </Signature>
 <Scheme>
 <ArgTypes>
-<Typ kind="G" nr="14">
+<Typ kind="G" nr="15">
 <Cluster>
-<Adjective nr="38" value="false"/>
-<Adjective nr="47"/>
-<Adjective nr="48"/>
-<Adjective nr="49"/>
-<Adjective nr="50"/>
-<Adjective nr="51"/>
-<Adjective nr="56"/>
-<Adjective nr="65"/>
-<Adjective nr="83"/>
+<Adjective nr="44" value="false"/>
+<Adjective nr="64"/>
+<Adjective nr="89"/>
+<Adjective nr="90"/>
+<Adjective nr="91"/>
 <Adjective nr="92"/>
+<Adjective nr="96"/>
+<Adjective nr="103"/>
+<Adjective nr="110"/>
+<Adjective nr="114"/>
+<Adjective nr="116"/>
+<Adjective nr="127"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -67,7 +70,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="19">
+<Adjective nr="25">
 <Func kind="K" nr="46"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -94,7 +97,7 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="237">
+<Func kind="K" nr="227">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>
@@ -119,7 +122,7 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="237">
+<Func kind="K" nr="227">
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
 </Func>

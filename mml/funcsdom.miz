@@ -8,16 +8,19 @@ environ
 
  vocabularies BINOP_1, FUNCT_2, FUNCT_1, QC_LANG1, RELAT_1, FUNCOP_1, VECTSP_1,
       RLVECT_1, ARYTM_1, LATTICES, FUNCSDOM, GROUP_1, VECTSP_2, STRUCT_0,
-      ARYTM;
+      ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, RLVECT_1,
-      REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
- constructors BINOP_1, DOMAIN_1, FUNCOP_1, FRAENKEL, REAL_1, BINOP_2, VECTSP_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, RLVECT_1, VECTSP_1;
+      FUNCT_2, BINOP_1, DOMAIN_1, FUNCOP_1, BINOP_2, STRUCT_0, ALGSTR_0,
+      RLVECT_1, REAL_1, GROUP_1, VECTSP_1, FRAENKEL;
+ constructors BINOP_1, DOMAIN_1, FUNCOP_1, FRAENKEL, REAL_1, BINOP_2, VECTSP_1,
+      ALGSTR_0, RLVECT_1, VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, NUMBERS, RLVECT_1, VECTSP_1,
+      ALGSTR_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_1;
+ definitions RLVECT_1, STRUCT_0, GROUP_1, BINOP_1, VECTSP_1, ALGSTR_0,
+      VALUED_1;
  theorems FUNCT_2, BINOP_1, FUNCOP_1, RLVECT_1, VECTSP_1, TARSKI, BINOP_2,
-      GROUP_1;
+      GROUP_1, STRUCT_0;
  schemes BINOP_1, FUNCT_2;
 
 begin
@@ -609,8 +612,8 @@ Th34: RLSStruct(#Funcs(A,REAL),
               .= u by Th21;
   end;
 
-  thus ex w st u+w = 0.IT
-   proof
+  thus IT is right_complementable
+   proof let u;
 
     reconsider u' = u as Element of Funcs(A,REAL);
 
@@ -714,13 +717,7 @@ end;
 canceled 3;
 
 theorem
-   1_RRing(A) = RealFuncUnit(A)
-proof
-  set FR = RRing(A);
-  reconsider e = RealFuncUnit(A) as Element of FR;
-   for h being Element of FR holds h * e = h & e * h = h by Lm4;
-  hence thesis by GROUP_1:def 5;
-end;
+   1.RRing(A) = RealFuncUnit(A) by Lm4,GROUP_1:def 5;
 
 theorem Th42:
    for x,y,z being Element of RRing(A) holds
@@ -766,23 +763,40 @@ registration
    associative commutative right_unital right-distributive
    (non empty doubleLoopStr);
   existence
-    proof consider A;
-         for x,y,z being Element of RRing(A) holds
-         x+y = y+x &
-         (x+y)+z = x+(y+z) &
-         x+(0.RRing(A)) = x &
-         (ex t being Element of RRing(A) st
-           x+t=(0.RRing(A))) &
-         x*y = y*x &
-         (x*y)*z = x*(y*z) &
-         x*(1.RRing(A)) = x &
-         x*(y+z) = x*y + x*z by Th42;
-      then RRing(A) is
-         Abelian add-associative right_zeroed right_complementable
-           associative commutative right_unital right-distributive
-        by GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8
-,VECTSP_1:def 11;
-     hence thesis;
+    proof
+     take L = Trivial-doubleLoopStr;
+     thus L is strict;
+     thus L is Abelian
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is add-associative
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is right_zeroed
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is right_complementable
+      proof let x be Element of L;
+       take x;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is associative
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is commutative
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     thus L is right_unital
+      proof let x be Element of L;
+       thus thesis by STRUCT_0:def 10;
+      end;
+     let x be Element of L;
+     thus thesis by STRUCT_0:def 10;
     end;
 end;
 
@@ -802,19 +816,24 @@ A3:  RRing A is add-associative
 A4:  RRing A is right_zeroed
    proof let x be Element of RRing A; thus thesis by Th42; end;
 A5: RRing A is right_complementable
+   proof let x be Element of RRing A;
+     consider t being Element of RRing A such that
+A6:   x+t = 0.RRing(A) by Th42;
+    take t;
+    thus thesis by A6;
+   end;
+A7: RRing A is associative
    proof let x be Element of RRing A; thus thesis by Th42; end;
-A6: RRing A is associative
-   proof let x be Element of RRing A; thus thesis by Th42; end;
-A7: RRing A is well-unital
+A8: RRing A is well-unital
    proof let x be Element of RRing A; thus thesis by Th42; end;
       RRing A is distributive
    proof let x be Element of RRing A; thus thesis by Th42; end;
-  hence thesis by A1,A2,A3,A4,A5,A6,A7;
+  hence thesis by A1,A2,A3,A4,A5,A7,A8;
   end;
 
 definition
   struct(doubleLoopStr,RLSStruct) AlgebraStr (# carrier -> set,
-                 mult,add -> (BinOp of the carrier),
+                 multF,addF -> (BinOp of the carrier),
                  Mult -> (Function of [:REAL,the carrier:],the carrier),
                  OneF,ZeroF -> Element of the carrier #);
 end;
@@ -871,13 +890,7 @@ end;
 end;
 
 theorem Th44:
-  1_RAlgebra(A) = RealFuncUnit(A)
-proof
-  set F = RAlgebra(A);
-  reconsider e = RealFuncUnit(A) as Element of F;
-   for x being Element of F holds x*e=x & e*x=x by Lm5;
-  hence 1_F = RealFuncUnit(A) by GROUP_1:def 5;
-end;
+  1.RAlgebra(A) = RealFuncUnit(A) by Lm5,GROUP_1:def 5;
 
 canceled 4;
 
@@ -887,11 +900,9 @@ theorem Th49:
          x+y = y+x &
          (x+y)+z = x+(y+z) &
          x+(0.RAlgebra(A)) = x &
-         (ex t being Element of RAlgebra(A) st
-                                            x+t=(0.RAlgebra(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_RAlgebra(A)) = x &
+         x*(1.RAlgebra(A)) = x &
          x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
@@ -905,17 +916,9 @@ theorem Th49:
   thus (x+y)+z = x+(y+z) by Th17;
   thus x+(0.RAlgebra(A)) = (RealFuncAdd(A)).(RealFuncZero(A),f) by Th16
                      .= x by Th21;
-  thus ex t being Element of RAlgebra(A) st
-                                            x+t=(0.RAlgebra(A))
-   proof
-    set h = (RealFuncExtMult(A)).[-1,f];
-    reconsider t=h as Element of IT;
-    take t;
-    thus x+t = 0.IT by Th22;
-   end;
   thus x*y = y*x by Th18;
   thus (x*y)*z = x*(y*z) by Th19;
-  thus x*(1_RAlgebra(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th44
+  thus x*(1.RAlgebra(A)) = (RealFuncMult(A)).(f,RealFuncUnit(A)) by Th44
                      .= (RealFuncMult(A)).(RealFuncUnit(A),f) by Th18
                      .= x by Th20;
   thus x*(y+z) = x*y + x*z by Th26;
@@ -929,17 +932,27 @@ theorem Th49:
   attr IT is Algebra-like means
    :Def20: for x,y,z being Element of IT
            for a,b holds
-         x*(1_IT) = x &
-         x*(y+z) = x*y + x*z &
+:::         x*(1.IT) = x &
+:::         x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
          (a+b)*x = a*x + b*x &
          (a*b)*x = a*(b*x);
 end;
 
+Lm6: RAlgebra A is right_complementable
+   proof let x be Element of RAlgebra A;
+     reconsider f=x as Element of Funcs(A,REAL);
+    set h = (RealFuncExtMult(A)).[-1,f];
+    reconsider t=h as Element of RAlgebra A;
+    take t;
+    thus x+t = 0.RAlgebra A by Th22;
+   end;
+
 registration
  cluster strict Abelian add-associative right_zeroed right_complementable
-    commutative associative Algebra-like (non empty AlgebraStr);
+    commutative associative right_unital right-distributive
+     Algebra-like (non empty AlgebraStr);
   existence
    proof consider A;
          for x,y,z being Element of RAlgebra(A)
@@ -947,27 +960,27 @@ registration
          x+y = y+x &
          (x+y)+z = x+(y+z) &
          x+(0.RAlgebra(A)) = x &
-         (ex t being Element of RAlgebra(A) st
-          x+t=(0.RAlgebra(A))) &
          x*y = y*x &
          (x*y)*z = x*(y*z) &
-         x*(1_RAlgebra(A)) = x &
+         x*(1.RAlgebra(A)) = x &
          x*(y+z) = x*y + x*z &
          a*(x*y) = (a*x)*y &
          a*(x+y) = a*x + a*y &
          (a+b)*x = a*x + b*x &
          (a*b)*x = a*(b*x) by Th49;
      then RAlgebra(A) is Abelian add-associative right_zeroed
-right_complementable
+        right_complementable right_unital right-distributive
         Algebra-like commutative associative
-      by Def20,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
+      by Def20,Lm6,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,VECTSP_1:def 11,def 13;
     hence thesis;
    end;
 end;
 
 definition
   mode Algebra is Abelian add-associative right_zeroed right_complementable
-    commutative associative Algebra-like (non empty AlgebraStr);
+    commutative associative right_unital right-distributive
+     Algebra-like (non empty AlgebraStr);
 end;
 
 theorem
@@ -978,16 +991,15 @@ theorem
        x+y = y+x &
        (x+y)+z = x+(y+z) &
        x+(0.RAlgebra(A)) = x &
-       (ex t being Element of RAlgebra(A) st
-                                          x+t=(0.RAlgebra(A))) &
        x*y = y*x &
        (x*y)*z = x*(y*z) &
-       x*(1_RAlgebra(A)) = x &
+       x*(1.RAlgebra(A)) = x &
        x*(y+z) = x*y + x*z &
        a*(x*y) = (a*x)*y &
        a*(x+y) = a*x + a*y &
        (a+b)*x = a*x + b*x &
        (a*b)*x = a*(b*x) by Th49;
    hence thesis
-    by Def20,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7,def 8;
+    by Def20,Lm6,GROUP_1:def 4,def 16,RLVECT_1:def 5,def 6,def 7
+,VECTSP_1:def 11,def 13;
  end;

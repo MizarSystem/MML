@@ -17,20 +17,21 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
+<ArticleID name="ALGSTR_0"/>
 <ArticleID name="RLVECT_1"/>
 <ArticleID name="ANALOAF"/>
 <ArticleID name="AFVECT01"/>
 </Signature>
 <RCluster>
 <ArgTypes/>
-<Typ kind="G" nr="7">
+<Typ kind="G" nr="12">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="25" value="false"/>
 <Adjective nr="30" value="false"/>
-<Adjective nr="42"/>
-<Adjective nr="45"/>
+<Adjective nr="76"/>
+<Adjective nr="79"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -52,13 +53,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="G" nr="7">
+<Func kind="G" nr="12">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="25" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="76"/>
 </Cluster>
 </FCluster>
 </Registrations>

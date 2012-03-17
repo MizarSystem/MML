@@ -23,8 +23,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
-<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="PBOOLE"/>
 <ArticleID name="YELLOW_0"/>
@@ -44,7 +44,7 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="122" value="false"/>
+<Adjective nr="123" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -53,8 +53,8 @@
 </Func>
 <Cluster>
 <Adjective nr="16" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="37"/>
+<Adjective nr="26"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -62,17 +62,17 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="16" value="false"/>
-<Adjective nr="32"/>
-<Adjective nr="138"/>
+<Adjective nr="33"/>
+<Adjective nr="139"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="91">
+<Func kind="K" nr="90">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25"/>
-<Adjective nr="138"/>
+<Adjective nr="26"/>
+<Adjective nr="139"/>
 </Cluster>
 </FCluster>
 </Registrations>

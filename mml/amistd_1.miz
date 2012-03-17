@@ -12,19 +12,18 @@ environ
       ORDINAL1, FUNCT_2, FRECHET, PRE_TOPC, WAYBEL_0, CARD_1, AMISTD_1,
       MEMBERED, NAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, SETFAM_1, ORDINAL1,
-      CARD_1, XXREAL_0,
-      NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1, RELSET_1,
-      PARTFUN1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4,
-      FUNCOP_1, FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, FUNCT_2,
-      AMI_1;
+      CARD_1, XXREAL_0, NUMBERS, XCMPLX_0, NAT_1, MEMBERED, REALSET1, FUNCT_1,
+      RELSET_1, PARTFUN1, DOMAIN_1, CARD_3, FINSEQ_1, FINSEQ_4, FUNCOP_1,
+      FINSET_1, FUNCT_4, STRUCT_0, BINARITH, PRE_CIRC, FUNCT_2, AMI_1;
  constructors RELAT_2, PARTFUN1, WELLORD2, XXREAL_0, REAL_1, NAT_1, SEQ_1,
-      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, STRUCT_0, GRAPH_2, AMI_1, INT_2;
+      FINSEQ_4, REALSET1, BINARITH, PRE_CIRC, STRUCT_0, GRAPH_2, AMI_1, INT_2,
+      VALUED_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
       PARTFUN1, FUNCT_2, FUNCOP_1, FINSET_1, FRAENKEL, NUMBERS, XREAL_0, NAT_1,
       MEMBERED, FINSEQ_1, CARD_3, REALSET1, FINSEQ_5, PRE_CIRC, FUNCT_7,
-      STRUCT_0, AMI_1, CARD_4, JORDAN1J;
+      STRUCT_0, AMI_1, CARD_4, JORDAN1J, VALUED_1;
  requirements NUMERALS, BOOLE, REAL, SUBSET, ARITHM;
- definitions TARSKI, STRUCT_0, AMI_1, YELLOW_8, XBOOLE_0, FUNCOP_1;
+ definitions TARSKI, STRUCT_0, AMI_1, YELLOW_8, XBOOLE_0, FUNCOP_1, VALUED_1;
  theorems TARSKI, FINSEQ_4, FINSEQ_1, GRAPH_2, REAL_1, NAT_1, AMI_1, FUNCT_4,
       CARD_2, FUNCT_1, FUNCT_2, RELAT_1, ENUMSET1, ZFMISC_1, CARD_1, FUNCOP_1,
       CARD_3, ORDINAL1, MCART_1, GRFUNC_1, FINSEQ_3, BINARITH, INT_1, SETFAM_1,
@@ -62,21 +61,21 @@ theorem Th11:
     set f = (IL) --> I;
     set Ok = the Object-Kind of S;
 A1: dom f = IL by FUNCOP_1:19;
-X:  IL c= the carrier of S by AMI_1:def 3;
-A2: dom s = the carrier of S by AMI_1:79;
-then A3: dom Ok = dom s by FUNCT_2:def 1;
+A2:  IL c= the carrier of S by AMI_1:def 3;
+A3: dom s = the carrier of S by AMI_1:79;
+then A4: dom Ok = dom s by FUNCT_2:def 1;
          for x st x in dom f holds f.x in Ok.x
     proof
       let x;
       assume
-A4:     x in dom f;
-then A5:   f.x = I by A1,FUNCOP_1:13;
-      reconsider x as Instruction-Location of S by A1,A4,AMI_1:def 4;
+A5:     x in dom f;
+then A6:   f.x = I by A1,FUNCOP_1:13;
+      reconsider x as Instruction-Location of S by A1,A5,AMI_1:def 4;
            Ok.x = ObjectKind x
           .= the Instructions of S by AMI_1:def 14;
-      hence thesis by A5;
+      hence thesis by A6;
     end;
-    then f in sproduct Ok by A1,A2,A3,CARD_3:def 9,X;
+    then f in sproduct Ok by A1,A2,A3,A4,CARD_3:def 9;
     hence thesis by CARD_3:69;
   end;
 
@@ -176,8 +175,8 @@ then A9: dom b = {il} by A4,RELAT_1:91;
 A10:     x in {il};
 then A11:   x = il by TARSKI:def 1;
       thus a.x = (Computation s1).i.x by A4,A10,FUNCT_1:72
-              .= I by A5,A11,A1,A2,AMI_1:81
-              .= (Computation s2).i.x by A5,A11,A1,A3,AMI_1:81
+              .= I by A1,A2,A5,A11,AMI_1:81
+              .= (Computation s2).i.x by A1,A3,A5,A11,AMI_1:81
               .= b.x by A4,A10,FUNCT_1:72;
     end;
     hence (Computation s1).i|dom f = (Computation s2).i|dom f
@@ -230,7 +229,7 @@ end;
 
 definition let IL,N be set, S be AMI-Struct over IL,N;
  mode IL-Subset of S -> Subset of IL means
-:Defx:  not contradiction;
+:Def1:  not contradiction;
  existence;
 end;
 
@@ -238,7 +237,7 @@ registration let IL,N be set, S be AMI-Struct over IL,N;
  cluster empty IL-Subset of S;
  existence
   proof
-    {}IL is IL-Subset of S by Defx;
+    {}IL is IL-Subset of S by Def1;
    hence thesis;
   end;
 end;
@@ -248,7 +247,7 @@ registration
  cluster non empty IL-Subset of S;
  existence
   proof consider x being Element of IL;
-    {x} is IL-Subset of S by Defx;
+    {x} is IL-Subset of S by Def1;
    hence thesis;
   end;
 end;
@@ -287,7 +286,7 @@ definition
        then ex s st e = IC Following s & IC s = l & s.l = i;
       hence e in IL by AMI_1:def 4;
      end;
-   hence thesis by Defx;
+   hence thesis by Def1;
   end;
 end;
 
@@ -323,10 +322,10 @@ registration
 coherence
   proof
     consider s being State of S;
-X:  l in IL by AMI_1:def 4;
+A1:  l in IL by AMI_1:def 4;
          ObjectKind IC S = IL &
       ObjectKind l = the Instructions of S by AMI_1:def 11,def 14;
-    then reconsider f = (IC S,l) --> (l,i) as FinPartState of S by AMI_1:58,X;
+    then reconsider f = (IC S,l) --> (l,i) as FinPartState of S by A1,AMI_1:58;
          IC Following (s +* f) in NIC(i,l) by Lm2;
     hence thesis;
   end;
@@ -414,23 +413,23 @@ A2:    n = IC Following s & IC s = il & s.il = i;
     let n be set;
     assume
 A3:   n in {il};
-X:  il in IL by AMI_1:def 4;
+A4:  il in IL by AMI_1:def 4;
     consider s being State of S;
          ObjectKind IC S = IL &
       ObjectKind il = the Instructions of S by AMI_1:def 11,def 14;
     then reconsider f = (IC S,il) --> (il,i) as FinPartState of S
-       by AMI_1:58,X;
+       by A4,AMI_1:58;
     set a = s+*f;
-A4: dom f = {IC S,il} by FUNCT_4:65;
-then A5: IC S in dom f by TARSKI:def 2;
-A6: il in dom f by A4,TARSKI:def 2;
-A7: IC S <> il by AMI_1:48;
-A8: a.IC S = f.IC S by A5,FUNCT_4:14
-          .= il by A7,FUNCT_4:66;
-then a.IC a = f.il by A6,FUNCT_4:14
+A5: dom f = {IC S,il} by FUNCT_4:65;
+then A6: IC S in dom f by TARSKI:def 2;
+A7: il in dom f by A5,TARSKI:def 2;
+A8: IC S <> il by AMI_1:48;
+A9: a.IC S = f.IC S by A6,FUNCT_4:14
+          .= il by A8,FUNCT_4:66;
+then a.IC a = f.il by A7,FUNCT_4:14
           .= i by FUNCT_4:66;
         then IC Following a = a.IC S by A1
-       .= n by A3,A8,TARSKI:def 1;
+       .= n by A3,A9,TARSKI:def 1;
     hence n in NIC(i,il) by Lm2;
   end;
 
@@ -445,9 +444,9 @@ definition let IL,N,S,l1,l2;
  reflexivity
   proof
    let l;
-X:  l in IL by AMI_1:def 4;
+A1:  l in IL by AMI_1:def 4;
    take <*l*>;
-   thus <*l*>/.1 = l by FINSEQ_4:25,X;
+   thus <*l*>/.1 = l by A1,FINSEQ_4:25;
    hence thesis by FINSEQ_1:56;
   end;
 end;
@@ -483,38 +482,38 @@ A7:     f2 = <*x*> by FINSEQ_6:113;
   let n such that
 A8: 1 <= n and
 A9: n < len(f1^'f2);
-A11: len (f1^'f2) +1 = len f1 + len f2 by GRAPH_2:13;
+A10: len (f1^'f2) +1 = len f1 + len f2 by GRAPH_2:13;
   per cases by XXREAL_0:1;
   suppose
-A12:  n < len f1;
+A11:  n < len f1;
     then n+1 <= len f1 by NAT_1:13;
-then A13:  (f1^'f2)/.(n+1) = f1/.(n+1) by NAT_1:11,GRAPH_2:61;
-        (f1^'f2)/.n = f1/.n by A8,A12,GRAPH_2:61;
-  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A3,A8,A12,A13;
+then A12:  (f1^'f2)/.(n+1) = f1/.(n+1) by GRAPH_2:61,NAT_1:11;
+        (f1^'f2)/.n = f1/.n by A8,A11,GRAPH_2:61;
+  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A3,A8,A11,A12;
   end;
   suppose
-A14:  n = len f1;
-then A15:  (f1^'f2)/.n = f2/.1 by A2,A4,A8,GRAPH_2:61;
+A13:  n = len f1;
+then A14:  (f1^'f2)/.n = f2/.1 by A2,A4,A8,GRAPH_2:61;
         n+1 < len (f1^'f2) +1 by A9,XREAL_1:8;
-then A16:  1 < len f2 by A11,A14,XREAL_1:8;
-   then (f1^'f2)/.(n+1) = f2/.(1+1) by A14,GRAPH_2:62;
-  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A15,A16;
+then A15:  1 < len f2 by A10,A13,XREAL_1:8;
+   then (f1^'f2)/.(n+1) = f2/.(1+1) by A13,GRAPH_2:62;
+  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A14,A15;
   end;
   suppose
-A17:  n > len f1;
+A16:  n > len f1;
    then consider m being Nat such that
-A18:  len f1 + m = n by NAT_1:10;
+A17:  len f1 + m = n by NAT_1:10;
       reconsider m as Element of NAT by ORDINAL1:def 13;
-B19:     len f1 + m > len f1 + 0 by A17,A18;
-         len f1 + m+1 < len f1 + len f2 by A9,A11,A18,XREAL_1:8;
+A18:     len f1 + m > len f1 + 0 by A16,A17;
+         len f1 + m+1 < len f1 + len f2 by A9,A10,A17,XREAL_1:8;
     then len f1 + (m+1) < len f1 + len f2;
-then A21:  m+1 < len f2 by XREAL_1:8;
+then A19:  m+1 < len f2 by XREAL_1:8;
          m <= m+1 by NAT_1:11;
-    then m < len f2 by A21,XXREAL_0:2;
-then A22:  (f1^'f2)/.n = f2/.(m+1) by A18,B19,GRAPH_2:62,NAT_1:14;
-        (f1^'f2)/.(n+1) = (f1^'f2)/.(len f1 + (m+1)) by A18
-          .= f2/.(m+1+1) by NAT_1:11,A21,GRAPH_2:62;
-  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,NAT_1:11,A21,A22;
+    then m < len f2 by A19,XXREAL_0:2;
+then A20:  (f1^'f2)/.n = f2/.(m+1) by A17,A18,GRAPH_2:62,NAT_1:14;
+        (f1^'f2)/.(n+1) = (f1^'f2)/.(len f1 + (m+1)) by A17
+          .= f2/.(m+1+1) by A19,GRAPH_2:62,NAT_1:11;
+  hence (f1^'f2)/.(n+1) in SUCC (f1^'f2)/.n by A6,A19,A20,NAT_1:11;
  end;
  end;
 
@@ -548,48 +547,48 @@ A4: for m, n being Element of NAT holds m <= n iff f2.m <= f2.n;
   defpred P[Nat] means f1.$1 <> f2.$1;
   assume f1 <> f2;
   then  ex c being Element of NAT st P[c] by FUNCT_2:113;
-  then a5: ex c being Nat st P[c];
+  then A5: ex c being Nat st P[c];
       consider d being Nat such that
   A6: P[d] and
-  A7: for n being Nat st P[n] holds d <= n from NAT_1:sch 5(a5);
-  dom f1 = NAT & dom f2 = NAT by FUNCT_2: def 1;
+  A7: for n being Nat st P[n] holds d <= n from NAT_1:sch 5(A5);
+  dom f1 = NAT & dom f2 = NAT by FUNCT_2:def 1;
   then d in dom f1 & d in dom f2 by ORDINAL1:def 13;
   then
-Y:  f1.d in rng f1 & f2.d in rng f2 by FUNCT_1:12;
+A8:  f1.d in rng f1 & f2.d in rng f2 by FUNCT_1:12;
       reconsider d as Element of NAT by ORDINAL1:def 13;
       f1 is onto & f2 is onto by A1,A3,FUNCT_2:def 4;
-  then A8: rng f1 = IL &
+  then A9: rng f1 = IL &
       rng f2 = IL by FUNCT_2:def 3;
       then consider d2 being set such that
-  A9: d2 in dom f2 & f1.d = f2.d2 by FUNCT_1:def 5,Y;
-      reconsider d2 as Element of NAT by A9;
+  A10: d2 in dom f2 & f1.d = f2.d2 by A8,FUNCT_1:def 5;
+      reconsider d2 as Element of NAT by A10;
       consider d1 being set such that
-  A10: d1 in dom f1 & f2.d = f1.d1 by A8,FUNCT_1:def 5,Y;
-      reconsider d1 as Element of NAT by A10;
-  A11: f1 is one-to-one & f2 is one-to-one by A1,A3,FUNCT_2:def 4;
-  A12: dom f1 = NAT & dom f2 = NAT by FUNCT_2:def 1;
+  A11: d1 in dom f1 & f2.d = f1.d1 by A8,A9,FUNCT_1:def 5;
+      reconsider d1 as Element of NAT by A11;
+  A12: f1 is one-to-one & f2 is one-to-one by A1,A3,FUNCT_2:def 4;
+  A13: dom f1 = NAT & dom f2 = NAT by FUNCT_2:def 1;
   per cases;
-  suppose A13: d1 <= d & d2 <= d;
+  suppose A14: d1 <= d & d2 <= d;
       then f2.d2 <= f2.d by A4;
-      then d <= d1 by A2,A9,A10;
-   hence contradiction by A6,A10,A13,XXREAL_0:1;
+      then d <= d1 by A2,A10,A11;
+   hence contradiction by A6,A11,A14,XXREAL_0:1;
   end;
-  suppose A14: d <= d1 & d2 <= d;
+  suppose A15: d <= d1 & d2 <= d;
            f2.d2 = f1.d2 proof assume not thesis; then d <= d2 by A7;
-        hence contradiction by A6,A9,A14,XXREAL_0:1;
+        hence contradiction by A6,A10,A15,XXREAL_0:1;
       end;
-    hence contradiction by A6,A9,A11,A12,FUNCT_1:def 8;
+    hence contradiction by A6,A10,A12,A13,FUNCT_1:def 8;
   end;
-  suppose A15: d1 <= d & d <= d2;
+  suppose A16: d1 <= d & d <= d2;
            f1.d1 = f2.d1 proof assume not thesis; then d <= d1 by A7;
-       hence contradiction by A6,A10,A15,XXREAL_0:1;
+       hence contradiction by A6,A11,A16,XXREAL_0:1;
       end;
-   hence contradiction by A6,A10,A11,A12,FUNCT_1:def 8;
+   hence contradiction by A6,A11,A12,A13,FUNCT_1:def 8;
   end;
-  suppose A16: d <= d1 & d <= d2;
+  suppose A17: d <= d1 & d <= d2;
       then f2.d <= f2.d2 by A4;
-      then d1 <= d by A2,A9,A10;
-   hence contradiction by A6,A10,A16,XXREAL_0:1;
+      then d1 <= d by A2,A10,A11;
+   hence contradiction by A6,A11,A17,XXREAL_0:1;
 end;
 end;
 
@@ -763,11 +762,11 @@ A50:  for k being Element of NAT holds f.(k+1) in SUCC (f.k) &
         then 1 <= p+1 & p+1 <= len F by NAT_1:13;
     then A59: p in dom F & p+1 in dom F by A58,FINSEQ_3:27;
     then A60: p in Seg (mn+1) & p+1 in Seg (mn+1) by A53,FINSEQ_1:def 3;
-B61:         p <= m+p by NAT_1:11;
+A61:         p <= m+p by NAT_1:11;
     A62: F/.(p+1) = F.(p+1) by A59,PARTFUN1:def 8
          .= f.(m+(p+1)-'1) by A54,A60
          .= f.(m+p+1-'1)
-         .= f.(m+p-'1+1) by B61,BINARITH:56,A58,XXREAL_0:2;
+         .= f.(m+p-'1+1) by A58,A61,BINARITH:56,XXREAL_0:2;
          F/.p = F.p by A59,PARTFUN1:def 8
          .= f.(m+p-'1) by A54,A60;
      hence F/.(p+1) in SUCC F/.p by A50,A62;
@@ -797,23 +796,23 @@ A65: dom f = NAT by FUNCT_2:def 1;
        suppose
 A72:       k > 0;
              k < len F by A71,NAT_1:13;
-       then A74: F/.(k+1) in SUCC F/.k by A67,A72,NAT_1:14;
+       then A73: F/.(k+1) in SUCC F/.k by A67,A72,NAT_1:14;
            consider l being Element of NAT such that
-       A75: F/.k = f.l & m <= l by A70,A71,A72,NAT_1:13,14;
+       A74: F/.k = f.l & m <= l by A70,A71,A72,NAT_1:13,14;
                 rng f = IL by A64,FUNCT_2:def 3;
            then consider l1 being set such that
-       A76: l1 in dom f & f.l1 = F/.(k+1) by FUNCT_1:def 5;
-           reconsider l1 as Element of NAT by A76;
-                l <= l1 by A50,A74,A75,A76;
+       A75: l1 in dom f & f.l1 = F/.(k+1) by FUNCT_1:def 5;
+           reconsider l1 as Element of NAT by A75;
+                l <= l1 by A50,A73,A74,A75;
         hence ex l being Element of NAT st F/.(k+1) = f.l & m <= l
-                 by A76,A75,XXREAL_0:2;
+                 by A74,A75,XXREAL_0:2;
       end;
       end; hence P[k+1];
      end;
- A77: for k being Element of NAT holds P[k] from NAT_1:sch 1(A68, A69);
+ A76: for k being Element of NAT holds P[k] from NAT_1:sch 1(A68, A69);
         len F <> 0 by FINSEQ_1:25;
    then 1 <= len F by NAT_1:14;
-   then ex l being Element of NAT st F/.len F = f.l & m <= l by A77;
+   then ex l being Element of NAT st F/.len F = f.l & m <= l by A76;
    hence m <= n by A64,A65,A66,FUNCT_1:def 8;
 end;
 
@@ -908,61 +907,61 @@ A4: now let s be Element of product Ok;
          .= dom Ok \/ {NAT} by CARD_3:18
          .= dom Ok by A1,XBOOLE_1:7,12;
        let o be set; assume
-      A6: o in dom Ok;
-      then A7: o in NAT or o in {NAT} by XBOOLE_0:def 2;
-      A8: dom (NAT .-->succ(s.NAT)) = {NAT} by FUNCOP_1:19;
-       per cases by A7,TARSKI:def 1;
+      A5: o in dom Ok;
+      then A6: o in NAT or o in {NAT} by XBOOLE_0:def 2;
+      A7: dom (NAT .-->succ(s.NAT)) = {NAT} by FUNCOP_1:19;
+       per cases by A6,TARSKI:def 1;
        suppose o in NAT;
            then o <> NAT;
            then not o in {NAT} by TARSKI:def 1;
            then (s+*(NAT .-->succ(s.NAT))).o = s.o
-              by A8,FUNCT_4:12;
-        hence (s+*(NAT .-->succ(s.NAT))).o in Ok.o by A6,CARD_3:18;
+              by A7,FUNCT_4:12;
+        hence (s+*(NAT .-->succ(s.NAT))).o in Ok.o by A5,CARD_3:18;
        end;
-       suppose A9: o = NAT;
+       suppose A8: o = NAT;
                 NAT in {NAT} by TARSKI:def 1;
-       then A10: NAT in dom Ok by A1,XBOOLE_0:def 2;
+       then A9: NAT in dom Ok by A1,XBOOLE_0:def 2;
                 dom (NAT .-->IL) = {NAT} by FUNCOP_1:19;
-       then A11: NAT in dom (NAT .-->IL) by TARSKI:def 1;
-       A12: NAT in {NAT} by TARSKI:def 1;
-       A13: Ok.o = (NAT .-->IL).NAT by A9,A11,FUNCT_4:14
-               .= NAT by A12,FUNCOP_1:13;
-           then reconsider k = s.NAT as Element of NAT by A9,A10,CARD_3:18;
+       then A10: NAT in dom (NAT .-->IL) by TARSKI:def 1;
+       A11: NAT in {NAT} by TARSKI:def 1;
+       A12: Ok.o = (NAT .-->IL).NAT by A8,A10,FUNCT_4:14
+               .= NAT by A11,FUNCOP_1:13;
+           then reconsider k = s.NAT as Element of NAT by A8,A9,CARD_3:18;
                 NAT is_limit_ordinal by ORDINAL1:def 12;
-       then A14: succ k in NAT by ORDINAL1:41;
-A15:        o in {NAT} by A9,TARSKI:def 1;
+       then A13: succ k in NAT by ORDINAL1:41;
+A14:        o in {NAT} by A8,TARSKI:def 1;
           then (s+*(NAT .-->succ(s.NAT))).o
-             = (NAT .-->succ(s.NAT)).o by A8,FUNCT_4:14
-            .= succ(s.NAT) by A15,FUNCOP_1:13;
-        hence (s+*(NAT .-->succ(s.NAT))).o in Ok.o by A13,A14;
+             = (NAT .-->succ(s.NAT)).o by A7,FUNCT_4:14
+            .= succ(s.NAT) by A14,FUNCOP_1:13;
+        hence (s+*(NAT .-->succ(s.NAT))).o in Ok.o by A12,A13;
       end;
       end;
      hence F(s) in product Ok by CARD_3:18;
     end;
    consider f being Function of product Ok, product Ok such that
-A16:  for s being Element of product Ok holds f.s= F(s) from FUNCT_2:sch 8
+A15:  for s being Element of product Ok holds f.s= F(s) from FUNCT_2:sch 8
 (A4);
    set E = ([1,0] .--> f) +* ([0,0] .--> id product Ok);
-A17:dom E = dom ([1,0] .--> f) \/ dom ([0,0] .--> id product Ok)
+A16:dom E = dom ([1,0] .--> f) \/ dom ([0,0] .--> id product Ok)
            by FUNCT_4:def 1
         .= {[1,0]} \/ dom ([0,0] .--> id product Ok) by FUNCOP_1:19
         .= {[1,0]} \/ {[0,0]} by FUNCOP_1:19
         .= ins by ENUMSET1:41;
-A18:rng E c= rng ([1,0] .--> f) \/ rng ([0,0] .--> id product Ok)
+A17:rng E c= rng ([1,0] .--> f) \/ rng ([0,0] .--> id product Ok)
      by FUNCT_4:18;
-A19:rng ([1,0] .--> f) c= {f} &
+A18:rng ([1,0] .--> f) c= {f} &
      rng ([0,0] .--> id product Ok) c= {id product Ok} by FUNCOP_1:19;
         rng E c= Funcs(product Ok, product Ok)
    proof
      let e be set;
      assume e in rng E;
      then e in rng ([1,0] .--> f) or e in rng ([0,0] .--> id product Ok)
-         by A18,XBOOLE_0:def 2;
-     then e = f or e = id product Ok by A19,TARSKI:def 1;
+         by A17,XBOOLE_0:def 2;
+     then e = f or e = id product Ok by A18,TARSKI:def 1;
      hence thesis by FUNCT_2:12;
    end;
    then reconsider E as Function of ins, Funcs(product Ok, product Ok)
-     by A17,FUNCT_2:def 1,RELSET_1:11;
+     by A16,FUNCT_2:def 1,RELSET_1:11;
    set M = AMI-Struct(# O, IC1, ins, Ok, E#);
   take M qua  strict AMI-Struct over NAT,N;
   thus the carrier of M = NAT \/ {NAT};
@@ -974,40 +973,40 @@ A19:rng ([1,0] .--> f) c= {f} &
                               product the Object-Kind of M;
   take f;
   thus for s being Element of product the Object-Kind of M
-       holds f.s = s+*(NAT .-->succ(s.NAT)) by A16;
+       holds f.s = s+*(NAT .-->succ(s.NAT)) by A15;
   thus thesis;
  end;
  uniqueness
  proof
   let it1, it2 be strict AMI-Struct over NAT,N such that
-A20: the carrier of it1 = NAT \/ {NAT} &
+A19: the carrier of it1 = NAT \/ {NAT} &
  the Instruction-Counter of it1 = NAT &
  the Instructions of it1 = {[0,0],[1,0]} &
  the Object-Kind of it1 =
      (NAT --> III)+*(NAT .-->NAT);
  given f1 being Function of product the Object-Kind of it1,
                         product the Object-Kind of it1 such that
-A21: (for s being Element of product the Object-Kind of it1
+A20: (for s being Element of product the Object-Kind of it1
        holds f1.s = s+*(NAT .-->succ(s.NAT))) &
  the Execution of it1 =
    ([1,0] .--> f1) +* ([0,0] .--> id product the Object-Kind of it1);
   assume
-A22:  the carrier of it2 = NAT \/ {NAT} &
+A21:  the carrier of it2 = NAT \/ {NAT} &
  the Instruction-Counter of it2 = NAT &
  the Instructions of it2 = {[0,0],[1,0]} &
  the Object-Kind of it2 =
      (NAT --> III)+*(NAT .-->NAT);
  given f2 being Function of product the Object-Kind of it2,
                         product the Object-Kind of it2 such that
-A23: (for s being Element of product the Object-Kind of it2
+A22: (for s being Element of product the Object-Kind of it2
        holds f2.s = s+*(NAT .-->succ(s.NAT))) &
      the Execution of it2 =
        ([1,0] .--> f2) +* ([0,0] .--> id product the Object-Kind of it2);
         now let c be Element of product the Object-Kind of it1;
-    thus f1.c = c+*(NAT .-->succ(c.NAT)) by A21
-             .= f2.c by A20,A22,A23;
+    thus f1.c = c+*(NAT .-->succ(c.NAT)) by A20
+             .= f2.c by A19,A21,A22;
    end;
-  hence it1 = it2 by A20,A21,A22,A23,FUNCT_2:113;
+  hence it1 = it2 by A19,A20,A21,A22,FUNCT_2:113;
  end;
 end;
 
@@ -1060,23 +1059,23 @@ A1:  the carrier of IT = NAT \/ {NAT} &
   thus
    STC N is IC-Ins-separated
   proof
-   thus ObjectKind IC IT = NAT by Def11,A4;
+   thus ObjectKind IC IT = NAT by A4,Def11;
   end;
   thus STC N is definite
   proof
   let l be Instruction-Location of IT;
-X:     l in NAT by AMI_1:def 4;
+A5:     l in NAT by AMI_1:def 4;
       then l <> NAT & dom (NAT .-->NAT) = {NAT} by FUNCOP_1:19;
-  then A5: not l in dom (NAT .-->NAT) by TARSKI:def 1;
+  then A6: not l in dom (NAT .-->NAT) by TARSKI:def 1;
     thus ObjectKind l = ((NAT --> III)+*(NAT .-->NAT)).l by Def11
-     .= (NAT --> III).l by A5,FUNCT_4:12
-     .= the Instructions of IT by A1,FUNCOP_1:13,X;
+     .= (NAT --> III).l by A6,FUNCT_4:12
+     .= the Instructions of IT by A1,A5,FUNCOP_1:13;
   end;
   thus IT is realistic
   proof
-A6:  the Instruction-Counter of IT = NAT by Def11;
+A7:  the Instruction-Counter of IT = NAT by Def11;
    assume the Instruction-Counter of IT in NAT;
-   hence contradiction by A6;
+   hence contradiction by A7;
   end;
   thus IT is steady-programmed
   proof
@@ -1237,39 +1236,39 @@ proof
  let l be Instruction-Location of STC N,
      i be Element of the Instructions of STC N;
  assume that
-A2: l = z and
-A3: InsCode i = 1;
+A1: l = z and
+A2: InsCode i = 1;
    set M = STC N;
    set F = { IC Following s where s is State of M: IC s = l & s.l = i };
         now let y be set;
     hereby assume y in F; then consider s being State of M such that
-    A4: y = IC Following s & IC s = l & s.l = i;
-             y = succ z by A2,A3,A4,Lm4
+    A3: y = IC Following s & IC s = l & s.l = i;
+             y = succ z by A1,A2,A3,Lm4
          .= z+1 by NAT_1:39;
      hence y in {z+1} by TARSKI:def 1;
     end;
     assume y in {z+1};
-    then A5: y = z+1 by TARSKI:def 1
+    then A4: y = z+1 by TARSKI:def 1
          .= succ z by NAT_1:39;
         consider w being State of M;
         set f = (NAT) --> i;
-A6:     dom f = NAT by FUNCOP_1:19;
-X:  l in NAT by AMI_1:def 4;
+A5:     dom f = NAT by FUNCOP_1:19;
+A6:  l in NAT by AMI_1:def 4;
         reconsider s = w +* f as State of M by Th11;
-        reconsider l' = l as Element of ObjectKind IC M by AMI_1:def 11,X;
+        reconsider l' = l as Element of ObjectKind IC M by A6,AMI_1:def 11;
         set u = (IC M).-->l';
         set t = s+*u;
 A7:     dom u = {IC M} by FUNCOP_1:19;
     then IC M in dom u by TARSKI:def 1;
     then A8: IC t = u.IC M by FUNCT_4:14
-            .= z by A2,FUNCOP_1:87;
+            .= z by A1,FUNCOP_1:87;
              l <> IC M by AMI_1:48;
         then not l in dom u by A7,TARSKI:def 1;
     then A9: t.l = s.l by FUNCT_4:12
-           .= f.l by A6,FUNCT_4:14,X
-           .= i by FUNCOP_1:13,X;
-            then IC Following t = succ z by A2,A3,A8,Lm4;
-    hence y in F by A2,A5,A8,A9;
+           .= f.l by A5,A6,FUNCT_4:14
+           .= i by A6,FUNCOP_1:13;
+            then IC Following t = succ z by A1,A2,A8,Lm4;
+    hence y in F by A1,A4,A8,A9;
    end;
  hence NIC(i, l) = {z+1} by TARSKI:2;
 end;
@@ -1295,7 +1294,7 @@ A2: x in meet X by XBOOLE_0:def 1;
  suppose
  A3: InsCode i = 0;
  reconsider i as Instruction of STC N;
-  for l being Instruction-Location of STC N holds NIC(i,l)={l} by Th15,A3,Th20;
+  for l being Instruction-Location of STC N holds NIC(i,l)={l} by A3,Th15,Th20;
  hence thesis by Th14;
 end;
 end;
@@ -1322,9 +1321,9 @@ A3:   InsCode ii = 1;
      hence y in {{z},{z+1}} by TARSKI:def 2;
      end;
      suppose
-S:     InsCode ii = 0;
+A4:     InsCode ii = 0;
          JUMP ii = {} by Lm6;
-        then y = {z} by A1,A2,S,Th15,Th20;
+        then y = {z} by A1,A2,A4,Th15,Th20;
      hence y in {{z},{z+1}} by TARSKI:def 2;
     end;
     end;
@@ -1366,10 +1365,10 @@ registration
    set M = STC N;
    reconsider f = id NAT as IL-Function of NAT, STC N by AMI_1:def 36;
         now let k be Element of NAT;
-   A2: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
+   A1: f.(k+1) = k+1 & SUCC (f.k) = {k,k+1} by Th24,FUNCT_1:35;
     hence f.(k+1) in SUCC (f.k) by TARSKI:def 2;
     let j be Element of NAT; assume f.j in SUCC (f.k);
-    then f.j = k or f.j = k+1 by A2,TARSKI:def 2;
+    then f.j = k or f.j = k+1 by A1,TARSKI:def 2;
     then j = k+1 or j = k by FUNCT_1:35;
     hence k <= j by NAT_1:11;
    end;
@@ -1457,14 +1456,14 @@ proof
 A1: f1 is bijective & (for m, n being Element of NAT holds m <= n
 iff f1.m <= f1.n) &
     il.(T,k1) = f1.k1 by Def12;
-X:  l in NAT by AMI_1:def 4;
+A2:  l in NAT by AMI_1:def 4;
            f1 is onto by A1,FUNCT_2:def 4;
      then rng f1 = NAT by FUNCT_2:def 3;
       then consider k being set such that
-  A2: k in dom f1 & f1.k = l by FUNCT_1:def 5,X;
-      reconsider k as Element of NAT by A2;
+  A3: k in dom f1 & f1.k = l by A2,FUNCT_1:def 5;
+      reconsider k as Element of NAT by A3;
   take k;
-  thus l = il.(T,k) by A1,A2,Def12;
+  thus l = il.(T,k) by A1,A3,Def12;
 end;
 
 definition
@@ -1529,11 +1528,11 @@ theorem Th30:
   proof
     let l1, l2 be Instruction-Location of T;
     assume
-A2:   l1 <= l2 & l2 <= l1;
+A1:   l1 <= l2 & l2 <= l1;
     reconsider T as standard (IC-Ins-separated
      definite (non empty stored-program AMI-Struct over NAT,N));
     reconsider l1, l2 as Instruction-Location of T;
-         locnum l1 <= locnum l2 & locnum l2 <= locnum l1 by A2,Th29;
+         locnum l1 <= locnum l2 & locnum l2 <= locnum l1 by A1,Th29;
     hence thesis by Th27,XXREAL_0:1;
   end;
 
@@ -1620,13 +1619,13 @@ iff f.m <= f.n) &
    il.(M,z) = f.z by Def12;
    reconsider f2 = id NAT as IL-Function of NAT, STC N by AMI_1:def 36;
         now let k be Element of NAT;
-   A4: f2.(k+1) = k+1 & f2.k = k by FUNCT_1:35;
-   A5: SUCC f2.k = {k,k+1} by Th24,FUNCT_1:35;
-    hence f2.(k+1) in SUCC (f2.k) by A4,TARSKI:def 2;
+   A3: f2.(k+1) = k+1 & f2.k = k by FUNCT_1:35;
+   A4: SUCC f2.k = {k,k+1} by Th24,FUNCT_1:35;
+    hence f2.(k+1) in SUCC (f2.k) by A3,TARSKI:def 2;
     let j be Element of NAT; assume
-   A6: f2.j in SUCC (f2.k);
+   A5: f2.j in SUCC (f2.k);
           j = f2.j & j+1 = f2.(j+1) by FUNCT_1:35;
-     then j = k or j = k+1 by A5,A6,TARSKI:def 2;
+     then j = k or j = k+1 by A4,A5,TARSKI:def 2;
     hence k <= j by NAT_1:11;
    end;
    then for m, n being Element of NAT holds m <= n iff f2.m <= f2.n
@@ -1666,7 +1665,7 @@ A1:   InsCode i = 1;
 A2:   l = il.(M,k) by Th26;
         k = locnum l by A2,Def13;
    then NextLoc l = k+1 by Th37;
- hence NIC(i, l) = {NextLoc l} by A1,A2,Th37,Lm5;
+ hence NIC(i, l) = {NextLoc l} by A1,A2,Lm5,Th37;
 end;
 
 theorem
@@ -1677,10 +1676,10 @@ proof
    set M = STC N;
    consider k being natural number such that
 A1: l = il.(M,k) by Th26;
-A3: k = locnum l by A1,Def13;
- thus SUCC l = {k,k+1} by A1,Th37,Th24
+A2: k = locnum l by A1,Def13;
+ thus SUCC l = {k,k+1} by A1,Th24,Th37
    .= {k,il.(M,k+1)} by Th37
-   .= {l, NextLoc l} by A1,A3,Th37;
+   .= {l, NextLoc l} by A1,A2,Th37;
 end;
 
 definition
@@ -1754,7 +1753,7 @@ theorem Th42:
 A1:   i is sequential;
     consider s being State of S;
     NIC(i,IC s) = {NextLoc IC s} by A1,Th41;
-    then NIC(i,IC s) <> {IC s} by ZFMISC_1:6,Th35;
+    then NIC(i,IC s) <> {IC s} by Th35,ZFMISC_1:6;
    hence thesis by Th15;
   end;
 
@@ -1958,21 +1957,21 @@ theorem Th49:
     let F be lower non empty programmed FinPartState of T;
     consider l being set such that
 A1:   l in dom F by XBOOLE_0:def 1;
-X:  dom F c= NAT by AMI_1:def 40;
+A2:  dom F c= NAT by AMI_1:def 40;
     then reconsider l as Instruction-Location of T by A1,AMI_1:def 4;
     consider f being IL-Function of NAT, T such that
-A2:   f is bijective and
-A3:   for m, n being Element of NAT holds m <= n iff f.m <= f.n and
-A4:   il.(T,0) = f.0 by Def12;
-         f is onto by A2,FUNCT_2:def 4;
+A3:   f is bijective and
+A4:   for m, n being Element of NAT holds m <= n iff f.m <= f.n and
+A5:   il.(T,0) = f.0 by Def12;
+         f is onto by A3,FUNCT_2:def 4;
     then rng f = NAT by FUNCT_2:def 3;
     then consider x being set such that
-A5:   x in dom f and
-A6:   l = f.x by FUNCT_1:def 5,A1,X;
-    reconsider x as Element of NAT by A5;
+A6:   x in dom f and
+A7:   l = f.x by A1,A2,FUNCT_1:def 5;
+    reconsider x as Element of NAT by A6;
          0 <= x by NAT_1:2;
-    then f.0 <= f.x by A3;
-    hence thesis by A1,A4,A6,Def20;
+    then f.0 <= f.x by A4;
+    hence thesis by A1,A5,A7,Def20;
   end;
 
 theorem Th50:
@@ -2158,7 +2157,7 @@ then A3: k <= card F -' 1 by BINARITH:67;
     per cases by A3,REAL_1:def 5;
     suppose k < card F -' 1;
 then A4: k+1 < card F -' 1 + 1 by XREAL_1:8;
-    card F >= 1 by NAT_1:14,CARD_2:59;
+    card F >= 1 by CARD_2:59,NAT_1:14;
     then k+1 < card F by A4,BINARITH:53;
     then il.(T,k+1) in dom F by Th50;
     then il.(T,k+1) <= LastLoc F by Th53;
@@ -2322,12 +2321,12 @@ theorem
 proof
  let i be Instruction of Trivial-AMI(IL,N);
    set M = Trivial-AMI(IL,N);
-A2: the Instructions of M = {[0,{}]} by AMI_1:def 2;
+A1: the Instructions of M = {[0,{}]} by AMI_1:def 2;
  let s be State of M;
    the Object-Kind of M = (IL --> {[0,{}]}) +* (IL .--> IL) by AMI_1:def 2;
   then (the Execution of M).i =
   ([0,{}] .--> id product the Object-Kind of M).i by AMI_1:def 2
-     .= id product the Object-Kind of M by A2,FUNCOP_1:13;
+     .= id product the Object-Kind of M by A1,FUNCOP_1:13;
  hence Exec(i,s) = s by FUNCT_1:35;
 end;
 

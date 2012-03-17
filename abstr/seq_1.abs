@@ -10,11 +10,11 @@ environ
       ARYTM_3, SEQ_1, ZF_REFLE, MEMBERED, VALUED_0;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       MEMBERED, VALUED_0, REAL_1, RELAT_1, FUNCT_1, COMPLEX1, NAT_1, RELSET_1,
-      PARTFUN1, FUNCT_2;
+      PARTFUN1, FUNCT_2, VALUED_1;
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, REAL_1, MEMBERED, COMPLEX1,
-      VALUED_0, INT_1, RAT_1;
+      VALUED_0, INT_1, RAT_1, VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, MEMBERED,
-      VALUED_0;
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -109,135 +109,20 @@ scheme :: SEQ_1:sch 4
    (dom g=X() & for c be Element of C() st c in dom g holds g.c = F(c))
   holds f = g;
 
-definition
-  let f1, f2 be real-yielding Function;
-  func f1+f2 -> Function means
-:: SEQ_1:def 3
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c + f2.c;
-  commutativity;
-  func f1-f2 -> Function means
-:: SEQ_1:def 4
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c - f2.c;
-  func f1(#)f2 -> Function means
-:: SEQ_1:def 5
-  dom it = dom f1 /\ dom f2 &
-  for c being set st c in dom it holds it.c = f1.c * f2.c;
-  commutativity;
-end;
-
-registration
-  let f1, f2 be real-yielding Function;
-  cluster f1+f2 -> real-yielding;
-  cluster f1-f2 -> real-yielding;
-  cluster f1(#)f2 -> real-yielding;
-end;
-
-definition
-  let C be set, D be real-membered set;
-  let f1, f2 be PartFunc of C,D;
-  redefine func f1+f2 -> PartFunc of C,REAL;
-  redefine func f1-f2 -> PartFunc of C,REAL;
-  redefine func f1(#)f2 -> PartFunc of C,REAL;
-end;
-
 theorem :: SEQ_1:11
  seq = seq1 + seq2 iff for n holds seq.n =seq1.n + seq2.n;
 
 theorem :: SEQ_1:12
  seq = seq1 (#) seq2 iff for n holds seq.n =seq1.n * seq2.n;
 
-definition
-  let seq1,seq2;
-  redefine func seq1+seq2 -> Real_Sequence;
-  redefine func seq1-seq2 -> Real_Sequence;
-  redefine func seq1(#)seq2 -> Real_Sequence;
-end;
-
-definition
-  let f be real-yielding Function;
-  let r be real number;
-  func r(#)f -> Function means
-:: SEQ_1:def 6
-  dom it = dom f & for c being set st c in dom it holds it.c = r * f.c;
-end;
-
-registration
-  let r be real number; let f be real-yielding Function;
-  cluster r(#)f -> real-yielding;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  let r be real number;
-  redefine func r(#)f -> PartFunc of C,REAL;
-end;
-
-definition
-  let seq,r;
-  redefine func r(#)seq -> Real_Sequence;
-end;
-
 theorem :: SEQ_1:13
   seq1 = r(#)seq2 iff for n holds seq1.n=r*seq2.n;
-
-definition
-  let f be real-yielding Function;
-  func -f -> real-yielding Function means
-:: SEQ_1:def 7
-  dom it = dom f & for c being set st c in dom it holds it.c = -(f.c);
-  involutiveness;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  redefine func -f -> PartFunc of C,REAL;
-end;
-
-definition let seq;
-  redefine func -seq -> Real_Sequence;
-end;
 
 theorem :: SEQ_1:14
   seq1 = -seq2 iff for n holds seq1.n= -seq2.n;
 
 theorem :: SEQ_1:15
- seq1 - seq2 = seq1 +- seq2;
-
-definition let seq;
-  func seq" -> Real_Sequence means
-:: SEQ_1:def 8
-for n holds it.n=(seq.n)";
-end;
-
-definition let seq1,seq;
-  func seq1 /" seq ->Real_Sequence equals
-:: SEQ_1:def 9
-    seq1(#)(seq");
-end;
-
-definition
-  let f be real-yielding Function;
-  func abs f -> Function means
-:: SEQ_1:def 10
-  dom it = dom f & for c being set st c in dom it holds it.c = abs(f.c);
-end;
-
-registration
-  let f be real-yielding Function;
-  cluster abs f -> real-yielding;
-end;
-
-definition
-  let C be set, D be real-membered set, f be PartFunc of C,D;
-  redefine func abs f -> PartFunc of C,REAL;
-end;
-
-definition
-  let seq;
-  redefine func abs seq -> Real_Sequence;
-end;
+  seq1 - seq2 = seq1 +- seq2;
 
 theorem :: SEQ_1:16
   seq1 = abs seq iff for n holds seq1.n= abs(seq.n);
@@ -245,30 +130,30 @@ theorem :: SEQ_1:16
 canceled 3;
 
 theorem :: SEQ_1:20
-  (seq1+seq2)+seq3=seq1+(seq2+seq3);
+  (seq1 + seq2) + seq3 = seq1 + (seq2 + seq3);
 
 canceled;
 
 theorem :: SEQ_1:22
-  (seq1(#)seq2)(#)seq3=seq1(#)(seq2(#)seq3);
+  (seq1 (#) seq2) (#) seq3 = seq1 (#) (seq2 (#) seq3);
 
 theorem :: SEQ_1:23
-  (seq1+seq2)(#)seq3=seq1(#)seq3+seq2(#)seq3;
+  (seq1 + seq2) (#) seq3 = seq1 (#) seq3 + seq2 (#) seq3;
 
 theorem :: SEQ_1:24
-  seq3(#)(seq1+seq2)=seq3(#)seq1+seq3(#)seq2;
+  seq3 (#) (seq1 + seq2) = seq3 (#) seq1 + seq3 (#) seq2;
 
 theorem :: SEQ_1:25
-  -seq=(-1)(#)seq;
+  -seq = (-1) (#) seq;
 
 theorem :: SEQ_1:26
   r(#)(seq1(#)seq2)=r(#)seq1(#)seq2;
 
 theorem :: SEQ_1:27
-  r(#)(seq1(#)seq2)=seq1(#)(r(#)seq2);
+  r (#) (seq1 (#) seq2) = seq1 (#) (r (#) seq2);
 
 theorem :: SEQ_1:28
-  (seq1-seq2)(#)seq3=seq1(#)seq3-seq2(#)seq3;
+  (seq1 - seq2) (#) seq3 = seq1 (#) seq3 - seq2 (#) seq3;
 
 theorem :: SEQ_1:29
   seq3(#)seq1-seq3(#)seq2=seq3(#)(seq1-seq2);
@@ -295,7 +180,7 @@ theorem :: SEQ_1:36
   for F being real-yielding Function holds --F = F;
 
 theorem :: SEQ_1:37
-  seq1-(-seq2)=seq1+seq2;
+  seq1 - (-seq2) = seq1 + seq2;
 
 theorem :: SEQ_1:38
   seq1-(seq2-seq3)=seq1-seq2+seq3;
@@ -310,7 +195,7 @@ theorem :: SEQ_1:41
  seq is being_not_0 implies seq" is being_not_0;
 
 theorem :: SEQ_1:42
- seq""=seq;
+  seq"" = seq;
 
 theorem :: SEQ_1:43
  seq is being_not_0 & seq1 is being_not_0 iff seq(#)seq1 is being_not_0;
@@ -331,10 +216,10 @@ theorem :: SEQ_1:48
  (seq/"seq1)"=seq1/"seq;
 
 theorem :: SEQ_1:49
-   seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq;
+  seq2(#)(seq1/"seq)=(seq2(#)seq1)/"seq;
 
 theorem :: SEQ_1:50
-   seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq;
+  seq2/"(seq/"seq1)=(seq2(#)seq1)/"seq;
 
 theorem :: SEQ_1:51
  seq1 is being_not_0 implies
@@ -350,14 +235,14 @@ theorem :: SEQ_1:54
  (r(#)seq)"=r"(#)seq";
 
 theorem :: SEQ_1:55
- (-seq)"=(-1)(#)seq";
+  (-seq)" = (-1)(#)seq";
 
 theorem :: SEQ_1:56
   -seq1/"seq=(-seq1)/"seq & seq1/"(-seq)=-seq1/"seq;
 
 theorem :: SEQ_1:57
-  seq1/"seq + seq1'/"seq=(seq1+seq1')/"seq &
-    seq1/"seq - seq1'/"seq=(seq1-seq1')/"seq;
+  seq1/"seq + seq1'/"seq = (seq1 + seq1') /" seq &
+  seq1/"seq - seq1'/"seq = (seq1 - seq1') /" seq;
 
 theorem :: SEQ_1:58
   seq is being_not_0 & seq' is being_not_0 implies
@@ -389,3 +274,9 @@ definition
   let n be Nat;
   redefine func f.n -> Element of D;
 end;
+
+registration
+  let f1,f2 be real-valued Function;
+  cluster f1+f2 -> real-valued;
+end;
+

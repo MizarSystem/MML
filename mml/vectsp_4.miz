@@ -7,16 +7,19 @@
 environ
 
  vocabularies RLVECT_1, VECTSP_1, ARYTM_1, BINOP_1, LATTICES, RLSUB_1, BOOLE,
-      RELAT_1, FUNCT_1, REALSET1, VECTSP_2;
+      RELAT_1, FUNCT_1, REALSET1, VECTSP_2, ALGSTR_0, GROUP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, REALSET1, FUNCT_1,
-      FUNCT_2, STRUCT_0, DOMAIN_1, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1;
- constructors PARTFUN1, BINOP_1, REALSET1, VECTSP_1;
+      FUNCT_2, STRUCT_0, ALGSTR_0, DOMAIN_1, BINOP_1, RLVECT_1, GROUP_1,
+      VECTSP_1;
+ constructors PARTFUN1, BINOP_1, REALSET1, VECTSP_1, ALGSTR_0, RLVECT_1,
+      VALUED_1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, REALSET1, STRUCT_0, VECTSP_1,
-      RELAT_1;
+      RELAT_1, ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions TARSKI, VECTSP_1, RLVECT_1, XBOOLE_0, BINOP_1, REALSET1, STRUCT_0;
+ definitions TARSKI, VECTSP_1, RLVECT_1, XBOOLE_0, BINOP_1, REALSET1, STRUCT_0,
+      ALGSTR_0, VALUED_1;
  theorems FUNCT_1, FUNCT_2, TARSKI, VECTSP_1, ZFMISC_1, RLVECT_1, RELAT_1,
-      VECTSP_2, RELSET_1, XBOOLE_0, XBOOLE_1, STRUCT_0;
+      VECTSP_2, RELSET_1, XBOOLE_0, XBOOLE_1, STRUCT_0, ALGSTR_0;
  schemes XBOOLE_0;
 
 begin
@@ -44,7 +47,8 @@ begin
                    .= a * v - b * v by VECTSP_1:68;
   end;
 
- definition let GF be non empty HGrStr; let V be non empty VectSpStr over GF;
+ definition let GF be non empty multMagma;
+  let V be non empty VectSpStr over GF;
    let V1 be Subset of V;
   attr V1 is linearly-closed means :Def1:
     (for v,u being Element of V st v in V1 & u in V1
@@ -265,7 +269,7 @@ theorem
    :Def2:
     the carrier of it c= the carrier of V &
     0.it = 0.V &
-    the add of it = (the add of V)||the carrier of it &
+    the addF of it = (the addF of V)||the carrier of it &
     the lmult of it =
      (the lmult of V) |([:the carrier of GF, the carrier of it:] qua set);
   existence
@@ -326,7 +330,7 @@ theorem Th21:
   proof assume A1: v = w1 & u = w2;
     set IW = [:the carrier of W, the carrier of W:];
     reconsider ww1 = w1, ww2 = w2 as Element of V by Th18;
-          w1 + w2 = ((the add of V)||the carrier of W).[w1,w2] by Def2;
+          w1 + w2 = ((the addF of V)||the carrier of W).[w1,w2] by Def2;
    hence thesis by A1,FUNCT_1:72;
   end;
 
@@ -430,7 +434,7 @@ theorem Th32:
   proof
     A1: the carrier of V c= the carrier of V &
         0.V = 0.V;
-        the add of V = (the add of V)||the carrier of V &
+        the addF of V = (the addF of V)||the carrier of V &
     the lmult of V =
      (the lmult of V) |([:the carrier of GF, the carrier of V:] qua set)
       by FUNCT_2:40;
@@ -446,8 +450,8 @@ theorem Th33:
    assume A1: V is Subspace of X & X is Subspace of V;
     set VV = the carrier of V;
     set VX = the carrier of X;
-    set AV = the add of V;
-    set AX = the add of X;
+    set AV = the addF of V;
+    set AX = the addF of X;
     set MV = the lmult of V; set MX = the lmult of X;
           VV c= VX & VX c= VV by A1,Def2;
      then A2: VV = VX by XBOOLE_0:def 10;
@@ -473,12 +477,12 @@ theorem Th34:
           0.X = 0.Y by A1,Def2;
      hence thesis;
     end;
-   A4: the add of V = (the add of Y)||the carrier of V
-    proof set AV = the add of V;
+   A4: the addF of V = (the addF of Y)||the carrier of V
+    proof set AV = the addF of V;
           set VV = the carrier of V;
-          set AX = the add of X;
+          set AX = the addF of X;
           set VX = the carrier of X;
-          set AY = the add of Y;
+          set AY = the addF of Y;
           AV = AX||VV & AX = AY||VX & VV c= VX
                                                      by A1,Def2;
       then AV = AY||VX||VV & [:VV,VV:] c= [:VX,VX:] by ZFMISC_1:119;
@@ -507,12 +511,12 @@ theorem Th35:
     set VW1 = the carrier of W1;
     set VW2 = the carrier of W2;
     set MW1 = the lmult of W1; set MW2 = the lmult of W2;
-    set AV = the add of V; set MV = the lmult of V;
+    set AV = the addF of V; set MV = the lmult of V;
      A2: 0.W1 = 0.V &
      0.W2 = 0.V by Def2;
-     A3: the add of W1 = (the add of W2)||the carrier of W1
+     A3: the addF of W1 = (the addF of W2)||the carrier of W1
       proof
-            (the add of W1) = AV||VW1 & (the add of W2) = AV||VW2 &
+            (the addF of W1) = AV||VW1 & (the addF of W2) = AV||VW2 &
          [:VW1,VW1:] c= [:VW2,VW2:] by A1,Def2,ZFMISC_1:119;
        hence thesis by FUNCT_1:82;
       end;
@@ -548,7 +552,7 @@ registration let GF be add-associative right_zeroed right_complementable
   existence
    proof
     set M = the lmult of V;
-    set W = VectSpStr (# the carrier of V,the add of V,0.V,M #);
+    set W = VectSpStr (# the carrier of V,the addF of V,0.V,M #);
      A1: for a,b be Element of W
       for x,y be Element of V st x = a & b = y
       holds a + b = x + y;
@@ -592,13 +596,13 @@ A2:  W is Abelian add-associative right_zeroed right_complementable
        thus a * b * v = a * b * x
                      .= a * (b * x) by VECTSP_1:def 26
                      .= a * (b * v);
-       thus 1_GF * v = 1_GF * x
+       thus 1.GF * v = 1_GF * x
                     .= v by VECTSP_1:def 26;
       end;
     then reconsider W as Abelian add-associative right_zeroed
       right_complementable VectSp-like (non empty VectSpStr over GF) by A2;
 A3:  0.W = 0.V;
-         the add of W = (the add of V)||the carrier of W &
+         the addF of W = (the addF of V)||the carrier of W &
      the lmult of W = (the lmult of V) |
       ([:the carrier of GF, the carrier of W:] qua set) by FUNCT_2:40;
      then reconsider W as Subspace of V by A3,Def2;
@@ -687,9 +691,9 @@ theorem Th42:
  proof assume that A1: V1 <> {} and A2: V1 is linearly-closed;
    set VV = the carrier of V;
    reconsider D = V1 as non empty set by A1;
-   set A = (the add of V)||D;
+   set A = (the addF of V)||D;
     A3: V1 c= the carrier of V &
-        dom(the add of V) = [:VV,VV:] by FUNCT_2:def 1;
+        dom(the addF of V) = [:VV,VV:] by FUNCT_2:def 1;
         [:D,D:] c= [:VV,VV:] by ZFMISC_1:119;
     then A4: dom A = [:D,D:] by A3,RELAT_1:91;
         rng A c= D
@@ -803,7 +807,7 @@ A22:    (comp V).x = C.x by A9,FUNCT_1:70;
       thus a * b * v = a * b * x by A23
                     .= a * (b * x) by VECTSP_1:def 26
                     .= a * (b * v) by A23,A25;
-      thus 1_GF * v = 1_GF * x by A23
+      thus 1.GF * v = 1_GF * x by A23
                    .= v by VECTSP_1:def 26;
      end;
    then reconsider W as Abelian add-associative right_zeroed
@@ -854,7 +858,7 @@ A2:  W is Abelian add-associative right_zeroed right_complementable
        let x be Element of W;
        reconsider x' = x as Element of V;
        consider b being Element of V such that
-A3:     x' + b = 0.V by RLVECT_1:def 8;
+A3:     x' + b = 0.V by ALGSTR_0:def 11;
        reconsider b' = b as Element of W;
        take b';
        thus x+b' = 0.W by A3;
@@ -873,7 +877,7 @@ A3:     x' + b = 0.V by RLVECT_1:def 8;
        thus (x*y)*v = (x*y)*v'
                    .= x*(y*v') by VECTSP_1:def 26
                    .= x*(y*v);
-       thus (1_GF)*v = (1_GF)*v'
+       thus (1.GF)*v = (1_GF)*v'
                     .= v by VECTSP_1:def 26;
       end;
      then reconsider W as Abelian add-associative right_zeroed
@@ -1159,7 +1163,7 @@ theorem
    let GF be Field, V be VectSp of GF,
        v be Element of V,
        W be Subspace of V;
-       1_GF <> 0.GF & 0.GF = - 0.GF by RLVECT_1:25,VECTSP_1:def 21;
+       1.GF <> 0.GF & 0.GF = - 0.GF by RLVECT_1:25,STRUCT_0:def 8;
     then - 1_GF <> 0.GF by VECTSP_2:34;
     then (v in W iff ((- 1_GF) * v) + W = the carrier of W) &
      (- 1_GF) * v = - v by Th65,Th66,VECTSP_1:59;

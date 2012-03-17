@@ -13,18 +13,18 @@ environ
       NEWTON, PARTFUN1, PBOOLE, POLYNOM1, PRE_TOPC, QUANTAL1, REALSET1,
       RELAT_1, RELAT_2, RLVECT_1, SQUARE_1, TARSKI, TREES_1, UPROOTS;
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, CARD_1, NUMBERS, SUBSET_1,
-      XCMPLX_0,
-      XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1, FUNCT_1,
-      FINSEQ_1, FINSEQ_2, SEQ_1, PBOOLE, FUNCT_2, RVSUM_1, ABIAN,
-      ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4,
+      XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1,
+      FUNCT_1, FINSEQ_1, FINSEQ_2, VALUED_1, SEQ_1, PBOOLE, FUNCT_2, RVSUM_1,
+      ABIAN, ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4,
       GLIB_000, GLIB_001, GLIB_002, GLIB_003;
  constructors DOMAIN_1, REAL_1, SQUARE_1, BINOP_2, FINSOP_1, RVSUM_1, GRAPH_2,
-      UPROOTS, GLIB_002, GLIB_003;
+      UPROOTS, GLIB_002, GLIB_003, VALUED_1, PARTFUN1, SEQ_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, GLIB_000,
-      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0;
+      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0, VALUED_1,
+      FUNCT_2;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
- definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1;
+ definitions TARSKI, GLIB_000, GLIB_003, RVSUM_1, FUNCOP_1, VALUED_1;
  theorems BAGORDER, CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSEQ_2,
       FINSEQ_3, FINSET_1, FRAENKEL, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000,
       GLIB_001, GLIB_002, GLIB_003, HEYTING3, INT_1, JORDAN12, NAT_1, PARTFUN1,
@@ -374,12 +374,12 @@ then A14: support c is finite by FINSET_1:13;
     per cases;
     suppose A16: i = x;
      thus (a+b).i = a.i + b.i by POLYNOM1:def 5
-                 .= 0 + b.i by A16,FUNCT_7:96 .= b1.i by A16,FUNCT_7:96;
+     .= 0 qua Nat + b.i by A16,FUNCT_7:96 .= b1.i by A16,FUNCT_7:96;
     end;
     suppose A17: i <> x;
      thus (a+b).i = a.i + b.i by POLYNOM1:def 5
        .= b1.i + b.i by A17,FUNCT_4:88
-       .= b1.i + 0 by A15,A17,FUNCT_4:88        .= b1.i;
+       .= b1.i + (0 qua Nat) by A15,A17,FUNCT_4:88        .= b1.i;
     end;
    end;
    then b1 = a+b by PBOOLE:3;
@@ -390,7 +390,7 @@ A20: Sum b = b1.x by Th8;
    A21: (EmptyBag X).i = 0 by POLYNOM1:56;
     per cases;
      suppose A22: i = x;
-      hence b2.i = y by A1,FUNCT_7:96      .= 0 + c.i by A22,FUNCT_7:96
+      hence b2.i = y by A1,FUNCT_7:96      .= 0 qua Nat+ c.i by A22,FUNCT_7:96
                .= a.i + c.i by A22,FUNCT_7:96 .= (a+c).i by POLYNOM1:def 5;
      end;
      suppose A23: i <> x;
@@ -635,44 +635,44 @@ A3: dom IT = NAT &
     defpred P2[Nat] means IT.$1 is real-WEV WEVGraph;
 A4: P2[0] by A3;
 A5: now let n be Nat;
-A10:  n in NAT by ORDINAL1:def 13;
+A6:  n in NAT by ORDINAL1:def 13;
       assume P2[n];
         then consider Gn,Gn1 being real-WEV WEVGraph such that
-    A6: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3,A10;
-        thus P2[n+1] by A6;
+    A7: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3,A6;
+        thus P2[n+1] by A7;
     end;
-A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
+A8: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
     then for n being Nat holds IT.n is _Graph;
     then reconsider IT as GraphSeq by GLIB_000:def 55;
-A8: for n be Nat holds IT.n is real-WEV WEVGraph by A7,ORDINAL1:def 13;
+A9: for n be Nat holds IT.n is real-WEV WEVGraph by A8,ORDINAL1:def 13;
     then for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled];
     then reconsider IT as WEVGraphSeq
       by GLIB_003:def 24,def 25,def 26;
-     for n being Nat holds IT.n is real-WEV by A8;
+     for n being Nat holds IT.n is real-WEV by A9;
     then reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
     thus IT.0 = DIJK:Init(G,src) by A3;
     let n be Element of NAT;
     consider Gn,Gn1 being real-WEV WEVGraph such that
-A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3;
-    thus IT.(n+1) = DIJK:Step(IT.n) by A9;
+A10: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = DIJK:Step(Gn) by A3;
+    thus IT.(n+1) = DIJK:Step(IT.n) by A10;
   end;
   uniqueness proof
     let IT1,IT2 be real-WEV WEVGraphSeq such that
-A10: IT1.0 = DIJK:Init(G,src) &
+A11: IT1.0 = DIJK:Init(G,src) &
     for n being Element of NAT holds IT1.(n+1) = DIJK:Step(IT1.n) and
-A11: IT2.0 = DIJK:Init(G,src) &
+A12: IT2.0 = DIJK:Init(G,src) &
     for n being Element of NAT holds IT2.(n+1) = DIJK:Step(IT2.n);
     defpred P[Element of NAT] means IT1.$1 = IT2.$1;
-A12: P[0] by A10,A11;
+A13: P[0] by A11,A12;
      now let n be Element of NAT; assume P[n];
-        then IT1.(n+1) = DIJK:Step(IT2.n) by A10
-                   .= IT2.(n+1) by A11;
+        then IT1.(n+1) = DIJK:Step(IT2.n) by A11
+                   .= IT2.(n+1) by A12;
         hence P[n+1];
     end;
-then A13: for n being Element of NAT st P[n] holds P[n+1];
-     for n being Element of NAT holds P[n] from NAT_1:sch 1(A12,A13);
+then A14: for n being Element of NAT st P[n] holds P[n+1];
+     for n being Element of NAT holds P[n] from NAT_1:sch 1(A13,A14);
     then for n being set st n in NAT holds IT1.n = IT2.n;
     hence IT1 = IT2 by PBOOLE:3;
   end;
@@ -1784,11 +1784,13 @@ GLIB_003:32;
                     then A118: WA.cost() = WKA.cost() + WKB.cost() by A117,
 GLIB_003:31;
                          0 <= WKB.cost() by GLIB_003:36;
-                        then 0 + WKA.cost() <= WA.cost() by A118,XREAL_1:9;
+                         then 0 qua Nat + WKA.cost() <= WA.cost()
+                         by A118,XREAL_1:9;
                     then A119: pc+ec <= WA.cost() by A115,XXREAL_0:2;
                          ea in the_Edges_of G by A93,GLIB_000:def 16;
                         then 0 <= (the_Weight_of G).ea by GLIB_003:38;
-                        then pc+ec+0 <= WA.cost()+(the_Weight_of G).ea
+                        then pc+ec+(0 qua Nat) <=
+                        WA.cost()+(the_Weight_of G).ea
                           by A119,XREAL_1:9;
                         hence contradiction by A87,A89,A95,A101,GLIB_003:32;
                     end;
@@ -2526,44 +2528,44 @@ A3: dom IT = NAT &
     defpred P2[Nat] means IT.$1 is real-WEV WEVGraph;
 A4: P2[0] by A3;
 A5: now let n be Nat;
-A10:  n in NAT by ORDINAL1:def 13;
+A6:  n in NAT by ORDINAL1:def 13;
       assume P2[n];
         then consider Gn,Gn1 being real-WEV WEVGraph such that
-    A6: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3,A10;
-        thus P2[n+1] by A6;
+    A7: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3,A6;
+        thus P2[n+1] by A7;
     end;
-A7: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
+A8: for n being Nat holds P2[n] from NAT_1:sch 2(A4,A5);
     then for n being Nat holds IT.n is _Graph;
     then reconsider IT as GraphSeq by GLIB_000:def 55;
      for n being Nat holds
       IT.n is [Weighted] & IT.n is [ELabeled] & IT.n is [VLabeled]
-         by A7,ORDINAL1:def 13;
+         by A8,ORDINAL1:def 13;
     then reconsider IT as WEVGraphSeq
       by GLIB_003:def 24,def 25,def 26;
-     for n being Nat holds IT.n is real-WEV by A7,ORDINAL1:def 13;
+     for n being Nat holds IT.n is real-WEV by A8,ORDINAL1:def 13;
     then reconsider IT as real-WEV WEVGraphSeq by GLIB_003:def 31;
     take IT;
     thus IT.0 = PRIM:Init(G) by A3;
     let n be Element of NAT;
     consider Gn,Gn1 being real-WEV WEVGraph such that
-A8: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
-    thus IT.(n+1) = PRIM:Step(IT.n) by A8;
+A9: IT.n = Gn & IT.(n+1) = Gn1 & Gn1 = PRIM:Step(Gn) by A3;
+    thus IT.(n+1) = PRIM:Step(IT.n) by A9;
   end;
   uniqueness proof
     let IT1,IT2 be real-WEV WEVGraphSeq such that
-A9: IT1.0 = PRIM:Init(G) &
+A10: IT1.0 = PRIM:Init(G) &
     for n being Element of NAT holds IT1.(n+1) = PRIM:Step(IT1.n) and
-A10: IT2.0 = PRIM:Init(G) &
+A11: IT2.0 = PRIM:Init(G) &
     for n being Element of NAT holds IT2.(n+1) = PRIM:Step(IT2.n);
     defpred P[Element of NAT] means IT1.$1 = IT2.$1;
-A11: P[0] by A9,A10;
+A12: P[0] by A10,A11;
      now let n be Element of NAT; assume P[n];
-        then IT1.(n+1) = PRIM:Step(IT2.n) by A9
-                   .= IT2.(n+1) by A10;
+        then IT1.(n+1) = PRIM:Step(IT2.n) by A10
+                   .= IT2.(n+1) by A11;
         hence P[n+1];
     end;
-then A12: for n being Element of NAT st P[n] holds P[n+1];
-     for n being Element of NAT holds P[n] from NAT_1:sch 1(A11,A12);
+then A13: for n being Element of NAT st P[n] holds P[n+1];
+     for n being Element of NAT holds P[n] from NAT_1:sch 1(A12,A13);
     then for n being set st n in NAT holds IT1.n = IT2.n;
     hence IT1 = IT2 by PBOOLE:3;
   end;

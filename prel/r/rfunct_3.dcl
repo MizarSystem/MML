@@ -14,6 +14,7 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="SEQM_3"/>
@@ -25,7 +26,9 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="FUNCT_3"/>
 <ArticleID name="RFUNCT_1"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
 </Signature>
 <RCluster>
@@ -63,7 +66,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <FCluster>
@@ -76,19 +79,19 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 <LocusVar nr="1"/>
-<Func kind="K" nr="86"/>
+<Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="202">
+<Func kind="K" nr="254">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -101,19 +104,19 @@
 <Typ kind="M" nr="4">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 <LocusVar nr="1"/>
-<Func kind="K" nr="86"/>
+<Func kind="K" nr="85"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="203">
+<Func kind="K" nr="255">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="31"/>
+<Adjective nr="32"/>
 </Cluster>
 </FCluster>
 </Registrations>

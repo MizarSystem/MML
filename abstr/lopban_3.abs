@@ -9,16 +9,19 @@ environ
  vocabularies PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, VECTSP_1,
       ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, PROB_1, SEQ_2, SEQM_3,
       CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_1, LOPBAN_2,
-      LOPBAN_3, SUPINF_2, FUNCOP_1, FRECHET2;
+      LOPBAN_3, SUPINF_2, FUNCOP_1, FRECHET2, ALGSTR_0, GROUP_1, VECTSP_2,
+      BINOP_1;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, PRE_TOPC,
-      DOMAIN_1, BINOP_1, FUNCOP_1, STRUCT_0, XCMPLX_0, XREAL_0, XXREAL_0,
-      ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, RLVECT_1, GROUP_1, VECTSP_1,
-      NORMSP_1, RSSPACE3, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER, POWER,
-      BHSP_3, BHSP_4, LOPBAN_1, LOPBAN_2;
+      DOMAIN_1, BINOP_1, FUNCOP_1, STRUCT_0, ALGSTR_0, XCMPLX_0, XREAL_0,
+      XXREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, COMPLEX1, RLVECT_1, GROUP_1,
+      VECTSP_1, NORMSP_1, RSSPACE3, VALUED_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1,
+      PREPOWER, POWER, BHSP_3, BHSP_4, LOPBAN_1, LOPBAN_2;
  constructors PARTFUN1, DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2,
-      BINOP_2, PREPOWER, SERIES_1, BHSP_3, BHSP_4, RSSPACE3, LOPBAN_2, SEQ_1;
+      BINOP_2, PREPOWER, SERIES_1, BHSP_3, BHSP_4, RSSPACE3, LOPBAN_2, SEQ_1,
+      VECTSP_1, GCD_1, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0,
-      XREAL_0, MEMBERED, SEQM_3, STRUCT_0, VECTSP_1, NORMSP_1, LOPBAN_2;
+      XREAL_0, MEMBERED, SEQM_3, STRUCT_0, VECTSP_1, NORMSP_1, LOPBAN_2,
+      ALGSTR_0, GCD_1, VALUED_1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
 
 
@@ -432,16 +435,14 @@ theorem :: LOPBAN_3:43
          x+y = y+x &
          (x+y)+z = x+(y+z) &
          x+(0.X) = x &
-         (ex t being Element of
-          X st  x+t=
-          0.X) &
+         (ex t being Element of X st  x+t= 0.X) &
          (x*y)*z = x*(y*z) &
          1*x=x     &
          0*x=0.X  &
          a*0.X =0.X&
          (-1)*x=-x &
-         x*(1_X) = x &
-         (1_X)*x = x &
+         x*(1.X) = x &
+         (1.X)*x = x &
          x*(y+z) = x*y + x*z &
          (y+z)*x = y*x + z*x &
          a*(x*y) = (a*x)*y &
@@ -465,17 +466,20 @@ theorem :: LOPBAN_3:43
            ||.a * x.|| = abs(a) * ||.x.|| &
            ||.x + y.|| <= ||.x.|| + ||.y.|| &
           ||. x*y .|| <= ||.x.|| * ||.y.|| &
-            ||. 1_X .|| = 1  &
+            ||. 1.X .|| = 1  &
           X is complete;
 
+registration
+ cluster -> well-unital Banach_Algebra;
+end;
+
 definition
-  let X be non empty multLoopStr;
+  let X be well-unital associative (non empty multLoopStr);
   let v be Element of X;
  canceled;
-
-  attr v is invertible means
+  redefine attr v is invertible means
 :: LOPBAN_3:def 8
-   ex w be Element of X st v*w = 1_X & w*v=1_X;
+   ex w be Element of X st v*w = 1.X & w*v=1.X;
 end;
 
 definition let X be non empty Normed_AlgebraStr;
@@ -501,13 +505,19 @@ definition let X be non empty Normed_AlgebraStr;
   for n be Element of NAT holds it.n = seq1.n * seq2.n;
 end;
 
+notation
+  let X be  associative well-unital (non empty multLoopStr);
+  let x be Element of X;
+ synonym x" for /x;
+end;
+
 definition
-  let X be Banach_Algebra;
+  let X be associative well-unital (non empty multLoopStr);
   let x be Element of X such that
       x is invertible;
-  func x" -> Element of X means
+  redefine func x" means
 :: LOPBAN_3:def 12
-    x*it= 1_X & it*x= 1_X;
+    x*it= 1.X & it*x= 1.X;
 end;
 
 definition
@@ -515,7 +525,7 @@ definition
   let z be Element of X;
   func z GeoSeq -> sequence of X means
 :: LOPBAN_3:def 13
-  it.0 = 1_X & for n be Element of NAT  holds it.(n+1) = it.n * z;
+  it.0 = 1.X & for n be Element of NAT  holds it.(n+1) = it.n * z;
 end;
 
 definition
@@ -529,7 +539,7 @@ end;
 theorem :: LOPBAN_3:44
     for X be Banach_Algebra
     for z be Element of X holds
-  z #N 0 = 1_X;
+  z #N 0 = 1.X;
 
 theorem :: LOPBAN_3:45
 for X be Banach_Algebra
@@ -539,13 +549,13 @@ for X be Banach_Algebra
 theorem :: LOPBAN_3:46
     for X be Banach_Algebra
   for x be Point of X
-      st ||.1_X - x .|| < 1
-  holds ( (1_X - x) GeoSeq is summable
-  & (1_X - x) GeoSeq is norm_summable);
+      st ||.1.X - x .|| < 1
+  holds ( (1.X - x) GeoSeq is summable
+  & (1.X - x) GeoSeq is norm_summable);
 
 theorem :: LOPBAN_3:47
     for X be Banach_Algebra
   for x be Point of X
-      st  ||.1_X - x .|| < 1
-  holds x is invertible & x" = Sum ((1_X - x) GeoSeq );
+      st  ||.1.X - x .|| < 1
+  holds x is invertible & x" = Sum ((1.X - x) GeoSeq );
 

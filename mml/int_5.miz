@@ -19,14 +19,15 @@ environ
       WSIERP_1, BINOP_1, PROB_3;
  constructors BINARITH, ABIAN, WSIERP_1, PEPIN, UPROOTS, NAT_3, NAT_D,
       REALSET1, GR_CY_1, FINSEQ_5, GOBRD10, EULER_2, RFINSEQ, GROUP_4,
-      FINSEQ_7, REAL_1, WELLORD2, CALCUL_2, SETFAM_1, PROB_3;
+      FINSEQ_7, REAL_1, WELLORD2, CALCUL_2, SETFAM_1, PROB_3, VALUED_1,
+      PARTFUN1, SEQ_1;
  registrations XXREAL_0, MEMBERED, RELAT_1, FINSEQ_1, ORDINAL1, WSIERP_1,
       NUMBERS, XBOOLE_0, XREAL_0, NAT_1, INT_1, SEQ_1, FINSET_1, NAT_3,
       RVSUM_1, FUNCOP_1, CALCUL_2, FUNCT_1, CARD_1, NEWTON, SUBSET_1, POLYNOM1,
-      VALUED_0;
+      VALUED_0, VALUED_1, FUNCT_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions INT_1, FUNCT_1, XCMPLX_0, INT_2, SQUARE_1, FINSEQ_2, TARSKI,
-      CALCUL_2, CARD_3, CARD_1;
+      CALCUL_2, CARD_3, CARD_1, VALUED_1;
  theorems FINSEQ_1, FINSEQ_7, RELAT_1, FINSEQ_3, FINSEQ_2, ABSVALUE, FINSEQ_5,
       BINARITH, EULER_2, INT_3, SEQ_2, FINSEQ_4, FUNCT_2, XBOOLE_0, NAT_3,
       NEWTON, INT_2, NAT_2, WSIERP_1, SQUARE_1, CARD_1, PEPIN, NAT_1, XCMPLX_1,
@@ -34,7 +35,7 @@ environ
       FINSET_1, NUMBERS, INT_1, FUNCT_1, SEQ_1, CARD_4, FUNCOP_1, REAL_1,
       XXREAL_0, NAT_D, HILBERT3, GOBRD10, SERIES_2, GRAPH_5, HILBERT2, RFINSEQ,
       ZFMISC_1, CARD_2, XREAL_0, FINSEQ_6, CALCUL_2, NAT_4, PROB_3, TOPREAL7,
-      POLYNOM1, CARD_3, REAL_3, PRE_FF, INT_4;
+      POLYNOM1, CARD_3, REAL_3, PRE_FF, INT_4, VALUED_1;
  schemes NAT_1, FINSEQ_5, FUNCT_2, RECDEF_1, FINSEQ_2, FUNCT_7, FINSEQ_1;
 
 begin
@@ -342,8 +343,8 @@ A8: for k being Element of NAT st k in dom f3
        proof let k be Element of NAT;
          assume A9:k in dom f3;
          then A10:k >= 1 by FINSEQ_3:27;
-         A11:k in dom f2 by A9,SEQ_1:def 6;
-         thus f3.k = (x-a)*(f2.k) by A9,SEQ_1:def 6
+         A11:k in dom f2 by A9,VALUED_1:7,def 5;
+         thus f3.k = (x-a)*(f2.k) by A9,VALUED_1:7,def 5
                 .= (x-a)*((fr.k) * x|^(k-'1)) by A7,A11
                 .= (fr.k) * (x|^(k-'1)*x) - a*(fr.k) * x|^(k-'1)
                 .= (fr.k)*x|^(k-'1+1) - a*(fr.k) * x|^(k-'1) by NEWTON:11
@@ -380,7 +381,7 @@ then A14:  f4.(n+1) = (fp.(n+2))*x|^(n+1) & f5.1 = a*(fr.1)*1 by NEWTON:9;
          hence thesis by INT_1:def 2;
      end;
      then reconsider f5 as FinSequence of INT by FINSEQ_2:14;
-A15: dom f3 = dom f2 by SEQ_1:def 6;then
+A15: dom f3 = dom f2 by VALUED_1:7,def 5;then
 A16: dom f3 = dom f4 & dom f3 = dom f5 by A4,A7,A12,A13,FINSEQ_3:31;
 A17:len f3 = len f2 by A15,FINSEQ_3:31;
 A18:   for d st d in dom f3 holds f3.d = f4.d - f5.d
@@ -929,16 +930,16 @@ A5:s,p are_relative_prime by A1,A2,Th14;
     suppose A7:s<0;
      then -s > 0 by XREAL_1:60;
      then reconsider s' = -s as Element of NAT by INT_1:16;
-X:   abs p = p by ABSVALUE:def 1;
+A8:   abs p = p by ABSVALUE:def 1;
      s' hcf p = s' gcd p by Lm1
              .= abs(s) gcd p by A7,ABSVALUE:def 1
-             .= s gcd p by INT_2:51,X
+             .= s gcd p by A8,INT_2:51
              .= 1 by A5,INT_2:def 4;
      then s',p are_relative_prime by INT_2:def 4;
-     then A8:s'|^(p-'1) mod p = 1 by PEPIN:38;
+     then A9:s'|^(p-'1) mod p = 1 by PEPIN:38;
      s|^(p-'1) mod p = (s|^2)|^((p-'1) div 2) mod p by A4,NEWTON:14
                     .= ((-s)|^2)|^((p-'1) div 2) mod p by WSIERP_1:2
-                    .= 1 by A4,A8,NEWTON:14;
+                    .= 1 by A4,A9,NEWTON:14;
      hence thesis by A6;
     end;
 end;
@@ -1628,7 +1629,7 @@ end;
 theorem Th36: p>2 implies Lege (-1,p) = (-1)|^((p-'1) div 2)
 proof assume A1:p>2;
   (-1) gcd p = (-1)|^1 gcd p by NEWTON:10
-        .= abs((-1)|^1) hcf abs(p) by  INT_2:51
+        .= abs((-1)|^1) hcf abs(p) by INT_2:51
         .= 1 hcf abs(p) by SERIES_2:1
         .= 1 by NEWTON:64;
   then A2:Lege (-1,p),(-1)|^((p-'1) div 2) are_congruent_mod p by A1,Th28;
@@ -1851,7 +1852,7 @@ A5: p in NAT by ORDINAL1:def 13;
    set X = {k where k is Element of NAT:k in rng f1 & k > p/2};
 A6:rng idseq p' = Seg p' by RELAT_1:71;
    then reconsider I = idseq p' as FinSequence of NAT by FINSEQ_1:def 4;
-   dom f = dom I by A2,SEQ_1:def 6;
+   dom f = dom I by A2,VALUED_1:7,def 5;
    then A7:len f = len I by FINSEQ_3:31    .= p' by FINSEQ_2:55;
    (Product f1) mod p = (Product f) mod p by A5,EULER_2:26;
    then A8:Product f1,Product f are_congruent_mod p by INT_3:12;
@@ -1889,10 +1890,10 @@ A19:p' = ((p-'1)+1) div 2 by A13,NAT_2:28
     then A22:Product I gcd p = 1 by Lm1;
 A23:    for d st d in dom f holds f.d = a*d
      proof let d; assume A24:d in dom f;
-       then d in dom I by A2,SEQ_1:def 6;
+       then d in dom I by A2,VALUED_1:7,def 5;
        then d in Seg len I by FINSEQ_1:def 3;
        then A25:d is Element of Seg p' by FINSEQ_2:55;
-      thus f.d = a * I.d by A2,A24,SEQ_1:def 6
+      thus f.d = a * I.d by A2,A24,VALUED_1:7,def 5
                .= a*d by A12,A25,FINSEQ_2:57;
      end;
 A26:len f1 = len f by EULER_2:def 1;
@@ -2025,7 +2026,7 @@ A67:len f2 = p' by A7,A26,A33,A48,FINSEQ_3:44;
     then A69:len(f2|n) = n by FINSEQ_1:80;
     set f3 = (len (f2/^n) |-> p) - (f2/^n);
     set f4 = (f2|n) ^ f3;
-A70:dom f3 = dom(len (f2/^n) |-> p)/\dom(f2/^n) by SEQ_1:def 4
+A70:dom f3 = dom(len (f2/^n) |-> p)/\dom(f2/^n) by VALUED_1:12,13,14,15
           .= (Seg len (len(f2/^n) |-> p))/\dom(f2/^n) by FINSEQ_1:def 3
           .= (Seg len(f2/^n))/\dom(f2/^n) by FINSEQ_2:69
           .= dom(f2/^n) /\ dom(f2/^n) by FINSEQ_1:def 3
@@ -2040,7 +2041,7 @@ A73:for d st d in dom f3 holds f3.d = p - (f2/^n).d
 A75:  d in Seg len(f2/^n) by A70,A74,FINSEQ_1:def 3;
        p in NAT by ORDINAL1:def 13;
        then (len (f2/^n) |-> p).d = p by A66,A72,A75,FINSEQ_2:71;
-       hence thesis by A74,SEQ_1:def 4;
+       hence thesis by A74,VALUED_1:12,13,14,15;
      end;
 A76:for d st d in dom f3 holds f3.d > 0 & f3.d <= p'
      proof let d; assume A77:d in dom f3;
@@ -2211,10 +2212,10 @@ A9: p div 2 >= 1 by A1,NAT_2:15;
      then A10:p div (2*2) <= p div 2 by NAT_2:29;
 A11:    for d st d in dom fp holds fp.d = 2*d
      proof let d; assume A12:d in dom fp;
-       then d in dom I by SEQ_1:def 6;
+       then d in dom I by VALUED_1:7,def 5;
        then d in Seg len I by FINSEQ_1:def 3;
        then A13:d is Element of Seg p' by FINSEQ_2:55;
-      thus fp.d = 2 * I.d  by A12,SEQ_1:def 6
+      thus fp.d = 2 * I.d  by A12,VALUED_1:7,def 5
                .= 2 * d by A8,A9,A13,FINSEQ_2:57;
      end;
        for d being Nat st d in dom fp holds fp.d in NAT
@@ -2223,7 +2224,7 @@ A11:    for d st d in dom fp holds fp.d = 2*d
        hence thesis by ORDINAL1:def 13;
      end;
      then reconsider fp as FinSequence of NAT by FINSEQ_2:14;
-     dom fp = dom I by SEQ_1:def 6;then
+     dom fp = dom I by VALUED_1:7,def 5;then
 A14:len fp = len I by FINSEQ_3:31   .= p' by FINSEQ_2:55;
   set f = fp mod p;
   set X = {k where k is Element of NAT:k in rng f & k > p/2};
@@ -2632,10 +2633,10 @@ A3:len(f-h) = len f & len(g-k) = len g by A1,TOPREAL7:8;
        per cases by A5,FINSEQ_1:38;
       suppose A6:d in dom(f-h);
         then A7:((f-h)^(g-k)).d = (f-h).d by FINSEQ_1:def 7
-                  .= f.d - h.d by A6,SEQ_1:def 4;
+                  .= f.d - h.d by A6,VALUED_1:12,13,14,15;
 A8:     dom f = dom(f-h) & dom h = dom(f-h) by A1,A3,FINSEQ_3:31;
         d in dom(f^g-h^k) by A4,A6,FINSEQ_2:18;
-        then (f^g-h^k).d = (f^g).d - (h^k).d by SEQ_1:def 4
+        then (f^g-h^k).d = (f^g).d - (h^k).d by VALUED_1:12,13,14,15
                         .= f.d - (h^k).d by A6,A8,FINSEQ_1:def 7
                         .= f.d - h.d by A6,A8,FINSEQ_1:def 7;
        hence thesis by A7;
@@ -2644,11 +2645,11 @@ A8:     dom f = dom(f-h) & dom h = dom(f-h) by A1,A3,FINSEQ_3:31;
        then consider e such that A9:e in dom(g-k) & d = len(f-h) + e
        by ORDINAL1:def 13;
 A10:   ((f-h)^(g-k)).d = (g-k).e by A9,FINSEQ_1:def 7
-                      .=g.e - k.e by A9,SEQ_1:def 4;
+                      .=g.e - k.e by A9,VALUED_1:12,13,14,15;
         e in dom g & e in dom k by A1,A3,A9,FINSEQ_3:31;
         then A11:(f^g).d = g.e & (h^k).d = k.e by A1,A3,A9,FINSEQ_1:def 7;
         d in dom(f^g-h^k) by A4,A9,FINSEQ_1:41;
-       hence thesis by A10,A11,SEQ_1:def 4;
+       hence thesis by A10,A11,VALUED_1:12,13,14,15;
     end;
    end;
   hence thesis by A4,FINSEQ_1:17;
@@ -2794,7 +2795,7 @@ A4:2,p are_relative_prime & 2,q are_relative_prime by A1,EULER_1:3;
     set p' = (p-'1) div 2;
     set q' = (q-'1) div 2;
     set f1 = q*idseq p';
-     dom f1 = dom idseq p' by SEQ_1:def 6;then
+     dom f1 = dom idseq p' by VALUED_1:7,def 5;then
 A5:len f1 = len idseq p' by FINSEQ_3:31;then
 A6:len f1 = p' by FINSEQ_2:55;
 A7:  p>1 & q>1 by INT_2:def 5;
@@ -2817,8 +2818,8 @@ A18:q' = ((q-'1)+1) div 2 by A10,NAT_2:28
       .= q div 2 by A7,BINARITH:53;
 A19:    for d st d in dom f1 holds f1.d = q*d
      proof let d; assume A20:d in dom f1;
-       then A21:f1.d = q * (idseq p').d by SEQ_1:def 6;
-       d in dom idseq p' by A20,SEQ_1:def 6;
+       then A21:f1.d = q * (idseq p').d by VALUED_1:7,def 5;
+       d in dom idseq p' by A20,VALUED_1:7,def 5;
        then d in Seg len idseq p' by FINSEQ_1:def 3;
        then d is Element of Seg p' by FINSEQ_2:55;
       hence thesis by A9,A21,FINSEQ_2:57;
@@ -2865,8 +2866,8 @@ A30:len f2 = p' &
 A31:len f3 = len f1 by EULER_2:def 1;
     then A32:dom f1 = dom f3 by FINSEQ_3:31;
 A33: dom f1 = dom f2 by A6,A30,FINSEQ_3:31;
-A34: dom (p*f2+f3) = dom (p*f2) /\ dom f3 by SEQ_1:def 3
-           .= dom f2 /\ dom f3 by SEQ_1:def 6
+A34: dom (p*f2+f3) = dom (p*f2) /\ dom f3 by VALUED_1:1,def 1
+           .= dom f2 /\ dom f3 by VALUED_1:7,def 5
            .= dom f1 by A32,A33;
 A35:   for d st d in dom f1 holds f1.d = f2.d * p + f3.d
      proof let d; assume d in dom f1;
@@ -2875,14 +2876,14 @@ A35:   for d st d in dom f1 holds f1.d = f2.d * p + f3.d
      end;
      for d being Nat st d in dom f1 holds f1.d = (p*f2+f3).d
       proof let d be Nat; assume A36:d in dom f1;
-        then A37:(p*f2+f3).d = (p*f2).d + f3.d by A34,SEQ_1:def 3;
-        d in dom (p*f2) by A33,A36,SEQ_1:def 6;
-       hence  (p*f2+f3).d = p * f2.d + f3.d by A37,SEQ_1:def 6
+        then A37:(p*f2+f3).d = (p*f2).d + f3.d by A34,VALUED_1:1,def 1;
+        d in dom (p*f2) by A33,A36,VALUED_1:7,def 5;
+       hence  (p*f2+f3).d = p * f2.d + f3.d by A37,VALUED_1:7,def 5
                     .= f1.d by A35,A36;
       end;
      then A38:f1 = p*f2 + f3 by A34,FINSEQ_1:17;
 A39: p*f2 is Element of NAT* & f3 is Element of NAT* by FINSEQ_1:def 11;
-     dom(p*f2) = dom f2 by SEQ_1:def 6;
+     dom(p*f2) = dom f2 by VALUED_1:7,def 5;
      then len(p*f2) = p' & len f3 = p' by A5,A30,A31,FINSEQ_2:55,FINSEQ_3:31;
      then p*f2 in p'-tuples_on NAT & f3 in p'-tuples_on NAT by A39;
      then p*f2 is Element of p'-tuples_on REAL &
@@ -3016,7 +3017,7 @@ A79:    len(f4/^n) = (len f4 -' n) by BINARITH:76
                   .= m by A59;
         set f5 = (m|->p)-(f4/^n);
         set f6 = (f4|n)^f5;
-A80:dom f5 = dom(m |-> p) /\ dom(f4/^n) by SEQ_1:def 4
+A80:dom f5 = dom(m |-> p) /\ dom(f4/^n) by VALUED_1:12,13,14,15
           .= (Seg len (m |-> p)) /\ dom(f4/^n) by FINSEQ_1:def 3
           .= (Seg len(f4/^n))/\dom(f4/^n) by A79,FINSEQ_2:69
           .= dom(f4/^n) /\ dom(f4/^n) by FINSEQ_1:def 3
@@ -3026,7 +3027,7 @@ A82:for d st d in dom f5 holds f5.d = p - (f4/^n).d
      proof let d; assume A83:d in dom f5;
         then d in Seg m by A79,A80,FINSEQ_1:def 3;
         then (m |-> p).d = p by A76,FINSEQ_2:71;
-       hence thesis by A83,SEQ_1:def 4;
+       hence thesis by A83,VALUED_1:12,13,14,15;
      end;
 A84:for d st d in dom f5 holds f5.d > 0 & f5.d <= p'
      proof let d; assume A85:d in dom f5;
@@ -3139,13 +3140,13 @@ A109:f6 is FinSequence of REAL & f4/^n is FinSequence of REAL by FINSEQ_2:27;
    end;
   end;
      set g1 = p*idseq q';
-     dom g1 = dom idseq q' by SEQ_1:def 6;then
+     dom g1 = dom idseq q' by VALUED_1:7,def 5;then
      len g1 = len idseq q' by FINSEQ_3:31;then
 A112: len g1 = q' by FINSEQ_2:55;
 A113:    for d st d in dom g1 holds g1.d = p*d
      proof let d; assume A114:d in dom g1;
-       then A115:g1.d = p * (idseq q').d by SEQ_1:def 6;
-       d in dom idseq q' by A114,SEQ_1:def 6;
+       then A115:g1.d = p * (idseq q').d by VALUED_1:7,def 5;
+       d in dom idseq q' by A114,VALUED_1:7,def 5;
        then d in Seg len idseq q' by FINSEQ_1:def 3;
        then d is Element of Seg q' by FINSEQ_2:55;
       hence thesis by A9,A115,FINSEQ_2:57;
@@ -3191,8 +3192,8 @@ A124:len g2 = q' & for d being Element of NAT st d in dom g2 holds g2.d = F(d)
 A125: len g3 = len g1 by EULER_2:def 1;then
 A126: dom g1 = dom g3 by FINSEQ_3:31;
 A127: dom g1 = dom g2 by A112,A124,FINSEQ_3:31;
-A128: dom (q*g2+g3) = dom (q*g2) /\ dom g3 by SEQ_1:def 3
-           .= dom g2 /\ dom g3 by SEQ_1:def 6
+A128: dom (q*g2+g3) = dom (q*g2) /\ dom g3 by VALUED_1:1,def 1
+           .= dom g2 /\ dom g3 by VALUED_1:7,def 5
            .= dom g1 by A126,A127;
 A129:   for d st d in dom g1 holds g1.d = g2.d * q + g3.d
      proof let d; assume d in dom g1;
@@ -3201,14 +3202,14 @@ A129:   for d st d in dom g1 holds g1.d = g2.d * q + g3.d
      end;
      for d being Nat st d in dom g1 holds g1.d = (q*g2+g3).d
       proof let d be Nat; assume A130:d in dom g1;
-       then A131:(q*g2+g3).d = (q*g2).d + g3.d by A128,SEQ_1:def 3;
-       d in dom (q*g2) by A127,A130,SEQ_1:def 6;
-       hence  (q*g2+g3).d = q * g2.d + g3.d by A131,SEQ_1:def 6
+       then A131:(q*g2+g3).d = (q*g2).d + g3.d by A128,VALUED_1:1,def 1;
+       d in dom (q*g2) by A127,A130,VALUED_1:7,def 5;
+       hence  (q*g2+g3).d = q * g2.d + g3.d by A131,VALUED_1:7,def 5
                     .= g1.d by A129,A130;
       end;
      then A132:g1 = q*g2 + g3 by A128,FINSEQ_1:17;
 A133: q*g2 is Element of NAT* & g3 is Element of NAT* by FINSEQ_1:def 11;
-     dom(q*g2) = dom g2 by SEQ_1:def 6;
+     dom(q*g2) = dom g2 by VALUED_1:7,def 5;
      then len(q*g2) = q' & len g3 = q' by A112,A124,EULER_2:def 1,FINSEQ_3:31;
      then A134:q*g2 in q'-tuples_on NAT & g3 in q'-tuples_on NAT by A133;
      q*g2 is Element of q'-tuples_on REAL & g3 is Element of q'-tuples_on REAL
@@ -3277,31 +3278,31 @@ A155:g4 = (Sgm YY)^(Sgm XX)
     proof
             for k,l being Element of NAT st k in YY & l in XX holds k < l
            proof let k,l be Element of NAT;
-             assume A157:k in YY & l in XX;
+             assume A156:k in YY & l in XX;
              then k in rng g4 & not k in XX by XBOOLE_0:def 4;
-             then A158:k <= q/2;
+             then A157:k <= q/2;
              ex l1 being Element of NAT st l1 = l & l1 in rng g4 & l1>q/2
-                                                                by A157;
-            hence thesis by A158,XXREAL_0:2;
+                                                                by A156;
+            hence thesis by A157,XXREAL_0:2;
            end;
            then Sgm (YY\/XX) = (Sgm YY)^(Sgm XX) by A151,A154,FINSEQ_3:48;
            then Sgm (rng g4 \/ XX) = (Sgm YY)^(Sgm XX) by XBOOLE_1:39;
           hence thesis by A145,A150,XBOOLE_1:12;
      end;
      Sum g4 = Sum(Sgm YY) + Sum(Sgm XX) by A155,RVSUM_1:105;
-     then A159:p*(Sum idseq q')=q*(Sum g2)+Sum(Sgm YY)+Sum(Sgm XX)
+     then A158:p*(Sum idseq q')=q*(Sum g2)+Sum(Sgm YY)+Sum(Sgm XX)
        by A135,A148,RVSUM_1:117;
-A160:     len Sgm YY = nn
+A159:     len Sgm YY = nn
      proof
       len Sgm YY = card YY by A151,FINSEQ_3:44
                 .= q' - mm by A112,A125,A150,A152,CARD_2:63;
       hence thesis;
      end;
-    then A161:g4/^nn = Sgm XX by A155,FINSEQ_5:40;
+    then A160:g4/^nn = Sgm XX by A155,FINSEQ_5:40;
     g4 = (g4|nn)^(g4/^nn) by RFINSEQ:21;then
-A162:g4|nn is one-to-one & g4/^nn is one-to-one by A146,FINSEQ_3:98;
+A161:g4|nn is one-to-one & g4/^nn is one-to-one by A146,FINSEQ_3:98;
     Sgm YY c= g4 by A155,FINSEQ_6:12;
-    then A163:g4|nn = Sgm YY by A160,FINSEQ_3:122;
+    then A162:g4|nn = Sgm YY by A159,FINSEQ_3:122;
     for d being Nat st d in dom idseq q' holds (idseq q').d in NAT
       proof let d be Nat; assume d in dom idseq q';
         then d in Seg len idseq q' by FINSEQ_1:def 3;
@@ -3311,158 +3312,158 @@ A162:g4|nn is one-to-one & g4/^nn is one-to-one by A146,FINSEQ_3:98;
       end;
     then idseq q' is FinSequence of NAT by FINSEQ_2:14;
     then reconsider N = Sum idseq q' as Element of NAT by Lm4;
-A164:  Lege(p,q) = (-1)|^(Sum g2)
+A163:  Lege(p,q) = (-1)|^(Sum g2)
     proof per cases;
-      suppose A165:XX is empty;
+      suppose A164:XX is empty;
          for d st d in dom g4 holds g4.d > 0 & g4.d <= q'
         proof let d; assume d in dom g4;
-          then A166:g4.d in rng g4 by FUNCT_1:12;
-          not g4.d in XX by A165;
-          then A167:g4.d <= q/2 by A166;
-          g4.d in (rng g3)\/{0} by A145,A166,XBOOLE_0:def 2;
-          then not g4.d in {0} by A141,A145,A166,XBOOLE_0:5;
+          then A165:g4.d in rng g4 by FUNCT_1:12;
+          not g4.d in XX by A164;
+          then A166:g4.d <= q/2 by A165;
+          g4.d in (rng g3)\/{0} by A145,A165,XBOOLE_0:def 2;
+          then not g4.d in {0} by A141,A145,A165,XBOOLE_0:5;
           then g4.d <> 0 by TARSKI:def 1;
-         hence thesis by A18,A167,INT_1:81;
+         hence thesis by A18,A166,INT_1:81;
         end;
          then rng g3 = Seg q' by A145,A146,A153,Th40;
          then g4 = idseq q' by FINSEQ_3:54;
          then p*N = q*(Sum g2) + N by A135,A148,RVSUM_1:117;
          then p*N - N = q*(Sum g2);
-         then A168:(p-'1)*N = q*(Sum g2) by A8;
-         2 divides q*(Sum g2) by A11,A168,NAT_D:9;
+         then A167:(p-'1)*N = q*(Sum g2) by A8;
+         2 divides q*(Sum g2) by A11,A167,NAT_D:9;
          then 2 divides ((Sum g2)-0) by A4,PEPIN:3;
          then Sum g2,0 are_congruent_mod 2 by INT_2:19;
          then (Sum g2) mod 2 = 0 mod 2 by INT_3:12;
-         then (-1)|^mm = (-1)|^(Sum g2) by A165,Th45,CARD_1:78;
+         then (-1)|^mm = (-1)|^(Sum g2) by A164,Th45,CARD_1:78;
         hence thesis by A1,A3,A145,Th41;
       end;
       suppose XX is non empty;
-        then A169:mm <> 0 by CARD_4:17;
-A170:    nn <= len g4 by A153,XREAL_1:45;then
-A171:    len(g4|nn) = nn by FINSEQ_1:80;
-A172:    len(g4/^nn) = (len g4 -' nn) by BINARITH:76
-                  .= len g4 - nn by A170,BINARITH:50
+        then A168:mm <> 0 by CARD_4:17;
+A169:    nn <= len g4 by A153,XREAL_1:45;then
+A170:    len(g4|nn) = nn by FINSEQ_1:80;
+A171:    len(g4/^nn) = (len g4 -' nn) by BINARITH:76
+                  .= len g4 - nn by A169,BINARITH:50
                   .= mm by A153;
         set g5 = (mm|->q)-(g4/^nn);
         set g6 = (g4|nn)^g5;
-A173:dom g5 = dom(mm |-> q) /\ dom(g4/^nn) by SEQ_1:def 4
+A172:dom g5 = dom(mm |-> q) /\ dom(g4/^nn) by VALUED_1:12,13,14,15
           .= (Seg len (mm |-> q)) /\ dom(g4/^nn) by FINSEQ_1:def 3
-          .= (Seg len(g4/^nn))/\dom(g4/^nn) by A172,FINSEQ_2:69
+          .= (Seg len(g4/^nn))/\dom(g4/^nn) by A171,FINSEQ_2:69
           .= dom(g4/^nn) /\ dom(g4/^nn) by FINSEQ_1:def 3
           .= dom(g4/^nn);
-then A174:len g5 = len(g4/^nn) by FINSEQ_3:31;
-A175:for d st d in dom g5 holds g5.d = q - (g4/^nn).d
-     proof let d; assume A176:d in dom g5;
-        then d in Seg mm by A172,A173,FINSEQ_1:def 3;
-        then (mm |-> q).d = q by A169,FINSEQ_2:71;
-       hence thesis by A176,SEQ_1:def 4;
+then A173:len g5 = len(g4/^nn) by FINSEQ_3:31;
+A174:for d st d in dom g5 holds g5.d = q - (g4/^nn).d
+     proof let d; assume A175:d in dom g5;
+        then d in Seg mm by A171,A172,FINSEQ_1:def 3;
+        then (mm |-> q).d = q by A168,FINSEQ_2:71;
+       hence thesis by A175,VALUED_1:12,13,14,15;
      end;
-A177:for d st d in dom g5 holds g5.d > 0 & g5.d <= q'
-     proof let d; assume A178:d in dom g5;
-        then A179:g5.d = q - (g4/^nn).d by A175;
+A176:for d st d in dom g5 holds g5.d > 0 & g5.d <= q'
+     proof let d; assume A177:d in dom g5;
+        then A178:g5.d = q - (g4/^nn).d by A174;
         then reconsider w = g5.d as Element of INT by INT_1:def 2;
-        (Sgm XX).d in rng Sgm XX by A161,A173,A178,FUNCT_1:12;
+        (Sgm XX).d in rng Sgm XX by A160,A172,A177,FUNCT_1:12;
         then (Sgm XX).d in XX by A154,FINSEQ_1:def 13;
         then consider ll be Element of NAT such that
-A180:    ll = (Sgm XX).d & ll in rng g3 & ll > q/2 by A145;
-A181:    w < q - q/2 by A161,A179,A180,XREAL_1:12;
+A179:    ll = (Sgm XX).d & ll in rng g3 & ll > q/2 by A145;
+A180:    w < q - q/2 by A160,A178,A179,XREAL_1:12;
         consider e being Nat such that
-A182:e in dom g3 & g3.e=(g4/^nn).d by A161,A180,FINSEQ_2:11;
-        (g4/^nn).d = g1.e mod q by A126,A182,EULER_2:def 1;
+A181:e in dom g3 & g3.e=(g4/^nn).d by A160,A179,FINSEQ_2:11;
+        (g4/^nn).d = g1.e mod q by A126,A181,EULER_2:def 1;
         then (g4/^nn).d < q by NAT_D:1;
-       hence thesis by A18,A179,A181,INT_1:81,XREAL_1:52;
+       hence thesis by A18,A178,A180,INT_1:81,XREAL_1:52;
      end;
         for d being Nat st d in dom g5 holds g5.d in NAT
      proof let d be Nat; assume d in dom g5;
-       then g5.d = q - (g4/^nn).d & g5.d > 0 by A175,A177;
+       then g5.d = q - (g4/^nn).d & g5.d > 0 by A174,A176;
       hence thesis by INT_1:16;
      end;
      then reconsider g5 as FinSequence of NAT by FINSEQ_2:14;
      for d,e being Element of NAT st 1<=d & d<e & e<=len g5 holds g5.d <> g5.e
-     proof let d,e be Element of NAT;assume A183:1<=d & d<e & e<=len g5;
+     proof let d,e be Element of NAT;assume A182:1<=d & d<e & e<=len g5;
        then 1<=d & d<len g5 & 1<=e & e<=len g5 by XXREAL_0:2;
-       then A184:d in dom g5 & e in dom g5 by FINSEQ_3:27;
-       then g5.d = q - (g4/^nn).d & g5.e = q - (g4/^nn).e by A175;
-       hence thesis by A162,A173,A183,A184,FUNCT_1:def 8;
+       then A183:d in dom g5 & e in dom g5 by FINSEQ_3:27;
+       then g5.d = q - (g4/^nn).d & g5.e = q - (g4/^nn).e by A174;
+       hence thesis by A161,A172,A182,A183,FUNCT_1:def 8;
      end;
      then len g5 = card rng g5 by GRAPH_5:10;
-     then A185:g5 is one-to-one by FINSEQ_4:77;
+     then A184:g5 is one-to-one by FINSEQ_4:77;
      g4|nn is FinSequence of NAT & g5 is FinSequence of NAT;then
      reconsider g6 as FinSequence of NAT by FINSEQ_1:96;
-A186: len g6 = len(g4|nn) + len g5 by FINSEQ_1:35
-           .= q' by A171,A172,A174;
-A187: rng idseq q' = Seg q' by RELAT_1:71;
+A185: len g6 = len(g4|nn) + len g5 by FINSEQ_1:35
+           .= q' by A170,A171,A173;
+A186: rng idseq q' = Seg q' by RELAT_1:71;
          rng(g4|nn) misses rng g5
      proof assume not rng(g4|nn) misses rng g5;
        then consider x be set such that
-A188:   x in rng(g4|nn) & x in rng g5 by XBOOLE_0:3;
+A187:   x in rng(g4|nn) & x in rng g5 by XBOOLE_0:3;
        rng(g4|nn) c= rng g4 by FINSEQ_5:21;
        then consider d1 be Nat such that
-A189:   d1 in dom g3 & g3.d1 = x by A145,A188,FINSEQ_2:11;
-A190:   d1 in dom g1 by A125,A189,FINSEQ_3:31;then
-A191:   x = g1.d1 mod q by A189,EULER_2:def 1;
+A188:   d1 in dom g3 & g3.d1 = x by A145,A187,FINSEQ_2:11;
+A189:   d1 in dom g1 by A125,A188,FINSEQ_3:31;then
+A190:   x = g1.d1 mod q by A188,EULER_2:def 1;
        consider e being Nat such that
-A192:   e in dom g5 & g5.e = x by A188,FINSEQ_2:11;
-       x = q - (g4/^nn).e by A175,A192;
-       then A193:x = q - g4.(e+nn) by A170,A173,A192,RFINSEQ:def 2;
-       e+nn in dom g4 by A173,A192,FINSEQ_5:29;
+A191:   e in dom g5 & g5.e = x by A187,FINSEQ_2:11;
+       x = q - (g4/^nn).e by A174,A191;
+       then A192:x = q - g4.(e+nn) by A169,A172,A191,RFINSEQ:def 2;
+       e+nn in dom g4 by A172,A191,FINSEQ_5:29;
        then g4.(e+nn) in rng g3 by A145,FUNCT_1:12;
        then consider e1 be Nat such that
-A194:   e1 in dom g3 & g3.e1 = g4.(e+nn) by FINSEQ_2:11;
-A195:   e1 in dom g1 by A125,A194,FINSEQ_3:31;
-       then g4.(e+nn) = g1.e1 mod q by A194,EULER_2:def 1;
-       then ((g1.d1 mod q)+(g1.e1 mod q)) mod q = 0 by A191,A193,NAT_D:25;
+A193:   e1 in dom g3 & g3.e1 = g4.(e+nn) by FINSEQ_2:11;
+A194:   e1 in dom g1 by A125,A193,FINSEQ_3:31;
+       then g4.(e+nn) = g1.e1 mod q by A193,EULER_2:def 1;
+       then ((g1.d1 mod q)+(g1.e1 mod q)) mod q = 0 by A190,A192,NAT_D:25;
        then (g1.d1 + g1.e1) mod q = 0 by EULER_2:8;
        then q divides (g1.d1 + g1.e1) by PEPIN:6;
-       then q divides (d1*p + g1.e1) by A113,A190;
-       then q divides (d1*p + e1*p) by A113,A195;
+       then q divides (d1*p + g1.e1) by A113,A189;
+       then q divides (d1*p + e1*p) by A113,A194;
        then q divides (d1+e1)*p;
-       then A196:q divides (d1+e1) by A2,PEPIN:3;
-       d1 >= 1 & d1 <= q' & e1 >= 1 & e1 <= q' by A112,A125,A189,A194,
+       then A195:q divides (d1+e1) by A2,PEPIN:3;
+       d1 >= 1 & d1 <= q' & e1 >= 1 & e1 <= q' by A112,A125,A188,A193,
 FINSEQ_3:27;
        then d1+e1 >= 1+1 & d1+e1 <= q'+q' by XREAL_1:9;
        then d1+e1>0 & d1+e1 < q by A12,A15,XXREAL_0:2;
-      hence contradiction by A196,NAT_D:7;
+      hence contradiction by A195,NAT_D:7;
      end;
-     then A197:g6 is one-to-one by A162,A185,FINSEQ_3:98;
+     then A196:g6 is one-to-one by A161,A184,FINSEQ_3:98;
        for d st d in dom g6 holds g6.d>0 & g6.d <= q'
-    proof let d;assume A198:d in dom g6;
-       per cases by A198,FINSEQ_1:38;
-     suppose A199:d in dom(g4|nn);
-       then (g4|nn).d in rng Sgm YY by A163,FUNCT_1:12;
+    proof let d;assume A197:d in dom g6;
+       per cases by A197,FINSEQ_1:38;
+     suppose A198:d in dom(g4|nn);
+       then (g4|nn).d in rng Sgm YY by A162,FUNCT_1:12;
        then (g4|nn).d in YY by A151,FINSEQ_1:def 13;then
-A200:  (g4|nn).d in rng g4 & not (g4|nn).d in XX by XBOOLE_0:def 4;
+A199:  (g4|nn).d in rng g4 & not (g4|nn).d in XX by XBOOLE_0:def 4;
        then (g4|nn).d <= q/2;
-       then A201:(g4|nn).d <= q' by A18,INT_1:81;
-       not (g4|nn).d in {0} by A141,A145,A200,XBOOLE_0:3;
+       then A200:(g4|nn).d <= q' by A18,INT_1:81;
+       not (g4|nn).d in {0} by A141,A145,A199,XBOOLE_0:3;
        then (g4|nn).d <> 0 by TARSKI:def 1;
        then (g4|nn).d > 0;
-      hence thesis by A199,A201,FINSEQ_1:def 7;
+      hence thesis by A198,A200,FINSEQ_1:def 7;
      end;
      suppose ex l being Nat st l in dom g5 & d=len(g4|nn)+ l;
        then consider l be Element of NAT such that
-A202:  l in dom g5 & d = len(g4|nn)+ l by ORDINAL1:def 13;
-       g6.d = g5.l by A202,FINSEQ_1:def 7;
-       hence thesis by A177,A202;
+A201:  l in dom g5 & d = len(g4|nn)+ l by ORDINAL1:def 13;
+       g6.d = g5.l by A201,FINSEQ_1:def 7;
+       hence thesis by A176,A201;
      end;
     end;
-     then rng g6 = rng idseq q' by A186,A187,A197,Th40;
-     then A203:g6,(idseq q') are_fiberwise_equipotent by A197,RFINSEQ:39;
-A204:g6 is FinSequence of REAL & g4/^nn is FinSequence of REAL
+     then rng g6 = rng idseq q' by A185,A186,A196,Th40;
+     then A202:g6,(idseq q') are_fiberwise_equipotent by A196,RFINSEQ:39;
+A203:g6 is FinSequence of REAL & g4/^nn is FinSequence of REAL
                                                   by FINSEQ_2:27;
-     then N = Sum g6 by A203,RFINSEQ:22
+     then N = Sum g6 by A202,RFINSEQ:22
            .= Sum(g4|nn) + Sum g5 by RVSUM_1:105
-           .= Sum(g4|nn) + (mm*q - Sum(g4/^nn)) by A172,A204,Th47
+           .= Sum(g4|nn) + (mm*q - Sum(g4/^nn)) by A171,A203,Th47
            .= Sum(g4|nn) + mm*q - Sum(g4/^nn);
-     then (p-1)*N = q*(Sum g2) + 2*Sum(Sgm XX) - mm*q by A159,A161,A163;
-     then A205:(p-'1)*N mod 2 = ((q*(Sum g2)-mm*q) + 2*Sum(Sgm XX)) mod 2
+     then (p-1)*N = q*(Sum g2) + 2*Sum(Sgm XX) - mm*q by A158,A160,A162;
+     then A204:(p-'1)*N mod 2 = ((q*(Sum g2)-mm*q) + 2*Sum(Sgm XX)) mod 2
                                                            by A7,BINARITH:50
                              .= (q*(Sum g2)-mm*q) mod 2 by EULER_1:13;
      2 divides (p-'1)*N by A11,NAT_D:9;
-     then (q*((Sum g2)-mm)) mod 2 = 0 by A205,PEPIN:6;
-     then A206:2 divides (q*((Sum g2)-mm)) by Lm2;
+     then (q*((Sum g2)-mm)) mod 2 = 0 by A204,PEPIN:6;
+     then A205:2 divides (q*((Sum g2)-mm)) by Lm2;
      2,(q qua Integer) are_relative_prime by A4,EULER_2:1;
-     then 2 divides ((Sum g2) - mm) by A206,INT_2:40;
+     then 2 divides ((Sum g2) - mm) by A205,INT_2:40;
      then (Sum g2),mm are_congruent_mod 2 by INT_2:19;
      then (Sum g2) mod 2 = mm mod 2 by INT_3:12;
      then (-1)|^(Sum g2) = (-1)|^mm by Th45;
@@ -3473,14 +3474,14 @@ A204:g6 is FinSequence of REAL & g4/^nn is FinSequence of REAL
    proof reconsider A = Seg p',B = Seg q' as non empty finite Subset of NAT
                                           by A9,FINSEQ_1:5;
      deffunc F(Element of A,Element of B) = $1/p - $2/q;
-A207: for x be Element of A, y be Element of B holds F(x,y) in REAL
+A206: for x be Element of A, y be Element of B holds F(x,y) in REAL
 by XREAL_0:def 1;
     consider z being Function of [:A,B:], REAL such that
-A208: for x be Element of A, y be Element of B
-    holds z.(x,y) = F(x,y) from FUNCT_7:sch 1(A207);
+A207: for x be Element of A, y be Element of B
+    holds z.(x,y) = F(x,y) from FUNCT_7:sch 1(A206);
     defpred G[set,set] means ex x be Element of A st $1=x
         & $2 = {[x,y] where y is Element of B:z.(x,y)>0};
-A209: for d being Nat st d in Seg p'
+A208: for d being Nat st d in Seg p'
         ex x1 be Element of bool dom z st G[d,x1]
      proof let d be Nat; assume d in Seg p';
        then reconsider d as Element of A;
@@ -3488,39 +3489,39 @@ A209: for d being Nat st d in Seg p'
        x1 c= dom z
         proof let l be set; assume l in x1;
           then consider yy be Element of B such that
-A210:       [d,yy] = l & z.(d,yy) > 0;
-          l in [:A,B:] by A210;
+A209:       [d,yy] = l & z.(d,yy) > 0;
+          l in [:A,B:] by A209;
          hence thesis by FUNCT_2:def 1;
         end;
       hence thesis;
      end;
     consider Pr be FinSequence of bool dom z such that
-A211: dom Pr = Seg p' &
+A210: dom Pr = Seg p' &
     for d being Nat st d in Seg p' holds G[d,Pr.d]
-                                              from FINSEQ_1:sch 5(A209);
-A212: len Pr = p' by A211,FINSEQ_1:def 3;
+                                              from FINSEQ_1:sch 5(A208);
+A211: len Pr = p' by A210,FINSEQ_1:def 3;
    for d,e st d in dom Pr & e in dom Pr & d<>e holds Pr.d misses Pr.e
   proof let d,e;
-    assume A213:d in dom Pr & e in dom Pr & d<>e;
+    assume A212:d in dom Pr & e in dom Pr & d<>e;
     then consider x1 be Element of A such that
-A214: x1=d & Pr.d = {[x1,y] where y is Element of B:z.(x1,y)>0} by A211;
+A213: x1=d & Pr.d = {[x1,y] where y is Element of B:z.(x1,y)>0} by A210;
     consider x2 be Element of A such that
-A215: x2=e & Pr.e = {[x2,y] where y is Element of B:z.(x2,y)>0} by A211,A213;
+A214: x2=e & Pr.e = {[x2,y] where y is Element of B:z.(x2,y)>0} by A210,A212;
      now assume not Pr.d misses Pr.e;
        then consider l be set such that
-A216:   l in Pr.d & l in Pr.e by XBOOLE_0:3;
+A215:   l in Pr.d & l in Pr.e by XBOOLE_0:3;
        consider y1 be Element of B such that
-A217:   l = [x1,y1] & z.(x1,y1) > 0 by A214,A216;
+A216:   l = [x1,y1] & z.(x1,y1) > 0 by A213,A215;
        consider y2 be Element of B such that
-A218:   l = [x2,y2] & z.(x2,y2) > 0 by A215,A216;
-       thus contradiction by A213,A214,A215,A217,A218,ZFMISC_1:33;
+A217:   l = [x2,y2] & z.(x2,y2) > 0 by A214,A215;
+       thus contradiction by A212,A213,A214,A216,A217,ZFMISC_1:33;
      end;
    hence thesis;
   end;
-  then A219:Card union rng Pr = Sum Card Pr by A212,Th48;
+  then A218:Card union rng Pr = Sum Card Pr by A211,Th48;
 defpred K[set,set] means ex y be Element of B st $1=y
         & $2 = {[x,y] where x is Element of A:z.(x,y)<0};
-A220: for d being Nat st d in Seg q'
+A219: for d being Nat st d in Seg q'
          ex x1 be Element of bool dom z st K[d,x1]
      proof let d be Nat; assume d in Seg q';
        then reconsider d as Element of B;
@@ -3528,152 +3529,152 @@ A220: for d being Nat st d in Seg q'
        x1 c= dom z
         proof let l be set; assume l in x1;
           then consider xx be Element of A such that
-A221:      [xx,d] = l & z.(xx,d) < 0;
-          l in [:A,B:] by A221;
+A220:      [xx,d] = l & z.(xx,d) < 0;
+          l in [:A,B:] by A220;
          hence thesis by FUNCT_2:def 1;
         end;
       hence thesis;
      end;
     consider Pk be FinSequence of bool dom z such that
-A222: dom Pk = Seg q' &
+A221: dom Pk = Seg q' &
     for d being Nat st d in Seg q' holds K[d,Pk.d]
-                                            from FINSEQ_1:sch 5(A220);
-A223: len Pk = q' by A222,FINSEQ_1:def 3;
+                                            from FINSEQ_1:sch 5(A219);
+A222: len Pk = q' by A221,FINSEQ_1:def 3;
    for d,e st d in dom Pk & e in dom Pk & d<>e holds Pk.d misses Pk.e
   proof let d,e;
-    assume A224:d in dom Pk & e in dom Pk & d<>e;
+    assume A223:d in dom Pk & e in dom Pk & d<>e;
     then consider y1 be Element of B such that
-A225: y1=d & Pk.d = {[x,y1] where x is Element of A:z.(x,y1)<0} by A222;
+A224: y1=d & Pk.d = {[x,y1] where x is Element of A:z.(x,y1)<0} by A221;
     consider y2 be Element of B such that
-A226: y2=e & Pk.e = {[x,y2] where x is Element of A:z.(x,y2)<0} by A222,A224;
+A225: y2=e & Pk.e = {[x,y2] where x is Element of A:z.(x,y2)<0} by A221,A223;
      now assume not Pk.d misses Pk.e;
        then consider l be set such that
-A227:   l in Pk.d & l in Pk.e by XBOOLE_0:3;
+A226:   l in Pk.d & l in Pk.e by XBOOLE_0:3;
        consider x1 be Element of A such that
-A228:   l = [x1,y1] & z.(x1,y1) < 0 by A225,A227;
+A227:   l = [x1,y1] & z.(x1,y1) < 0 by A224,A226;
        consider x2 be Element of A such that
-A229:   l = [x2,y2] & z.(x2,y2) < 0 by A226,A227;
-       thus contradiction by A224,A225,A226,A228,A229,ZFMISC_1:33;
+A228:   l = [x2,y2] & z.(x2,y2) < 0 by A225,A226;
+       thus contradiction by A223,A224,A225,A227,A228,ZFMISC_1:33;
      end;
    hence thesis;
   end;
-  then A230:Card union rng Pk = Sum Card Pk by A223,Th48;
+  then A229:Card union rng Pk = Sum Card Pk by A222,Th48;
   reconsider U1 = union rng Pr, U2 = union rng Pk as finite Subset of dom z
     by FINSET_1:13,PROB_3:53;
    U1 misses U2
     proof assume U1 meets U2;
        then consider l be set such that
-A231:   l in U1 & l in U2 by XBOOLE_0:3;
-       l in Union Pr by A231;
+A230:   l in U1 & l in U2 by XBOOLE_0:3;
+       l in Union Pr by A230;
        then consider k1 be Nat such that
-A232:   k1 in dom Pr & l in Pr.k1 by PROB_3:54;
-       l in Union Pk by A231;
+A231:   k1 in dom Pr & l in Pr.k1 by PROB_3:54;
+       l in Union Pk by A230;
        then consider k2 be Nat such that
-A233:   k2 in dom Pk & l in Pk.k2 by PROB_3:54;
+A232:   k2 in dom Pk & l in Pk.k2 by PROB_3:54;
        reconsider k1,k2 as Element of NAT by ORDINAL1:def 13;
        consider m1 be Element of A such that
-A234:   m1 = k1 & Pr.k1 = {[m1,y] where y is Element of B:z.(m1,y)>0}
-                                                             by A211,A232;
+A233:   m1 = k1 & Pr.k1 = {[m1,y] where y is Element of B:z.(m1,y)>0}
+                                                             by A210,A231;
        consider m2 be Element of B such that
-A235:   l = [m1,m2] & z.(m1,m2) > 0 by A232,A234;
+A234:   l = [m1,m2] & z.(m1,m2) > 0 by A231,A233;
        consider n1 be Element of B such that
-A236:   n1 = k2 & Pk.k2 = {[x,n1] where x is Element of A:z.(x,n1)<0}
-                                                            by A222,A233;
+A235:   n1 = k2 & Pk.k2 = {[x,n1] where x is Element of A:z.(x,n1)<0}
+                                                            by A221,A232;
        consider n2 be Element of A such that
-A237:   l = [n2,n1] & z.(n2,n1) < 0 by A233,A236;
-       m1 = n2 & m2 = n1 by A235,A237,ZFMISC_1:33;
-      hence contradiction by A235,A237;
+A236:   l = [n2,n1] & z.(n2,n1) < 0 by A232,A235;
+       m1 = n2 & m2 = n1 by A234,A236,ZFMISC_1:33;
+      hence contradiction by A234,A236;
     end;
-   then A238:card(U1 \/ U2)
-     = (Sum Card Pr) + (Sum Card Pk) by A219,A230,CARD_2:53;
+   then A237:card(U1 \/ U2)
+     = (Sum Card Pr) + (Sum Card Pk) by A218,A229,CARD_2:53;
     U1 \/ U2 = dom z
     proof dom z c= U1 \/ U2
       proof let l be set; assume l in dom z;
         then consider x,y be set such that
-A239:    x in A & y in B & l = [x,y] by ZFMISC_1:def 2;
-        reconsider x as Element of A by A239;
-        reconsider y as Element of B by A239;
-A240:       z.(x,y) <> 0
+A238:    x in A & y in B & l = [x,y] by ZFMISC_1:def 2;
+        reconsider x as Element of A by A238;
+        reconsider y as Element of B by A238;
+A239:       z.(x,y) <> 0
         proof assume z.(x,y) = 0;
-          then x/p - y/q = 0 by A208;
+          then x/p - y/q = 0 by A207;
           then x*q = y*p by XCMPLX_1:96;
           then p divides x*q by NAT_D:def 3;
-          then A241:p divides x by A3,WSIERP_1:37;
-A242:      x >= 0 + 1 & x <= p' by FINSEQ_1:3;
-          then p <= x by A241,NAT_D:7;
-         hence contradiction by A16,A242,XXREAL_0:2;
+          then A240:p divides x by A3,WSIERP_1:37;
+A241:      x >= 0 + 1 & x <= p' by FINSEQ_1:3;
+          then p <= x by A240,NAT_D:7;
+         hence contradiction by A16,A241,XXREAL_0:2;
         end;
-       per cases by A240;
-         suppose A243:z.(x,y) > 0;
-           G[x,Pr.x] by A211;
-           then l in Pr.x by A239,A243;
-           then l in Union Pr by A211,PROB_3:54;
+       per cases by A239;
+         suppose A242:z.(x,y) > 0;
+           G[x,Pr.x] by A210;
+           then l in Pr.x by A238,A242;
+           then l in Union Pr by A210,PROB_3:54;
           hence thesis by XBOOLE_0:def 2;
          end;
-         suppose A244:z.(x,y) < 0;
-           K[y,Pk.y] by A222;
-           then l in Pk.y by A239,A244;
-           then l in Union Pk by A222,PROB_3:54;
+         suppose A243:z.(x,y) < 0;
+           K[y,Pk.y] by A221;
+           then l in Pk.y by A238,A243;
+           then l in Union Pk by A221,PROB_3:54;
           hence thesis by XBOOLE_0:def 2;
          end;
       end;
      hence thesis by XBOOLE_0:def 10;
     end;
-    then A245:(Sum Card Pr) + (Sum Card Pk)
-                  = card [:A,B:] by A238,FUNCT_2:def 1
+    then A244:(Sum Card Pr) + (Sum Card Pk)
+                  = card [:A,B:] by A237,FUNCT_2:def 1
                  .= card A * card B by CARD_2:65
                  .= p'* card B by FINSEQ_1:78
                  .= p' * q' by FINSEQ_1:78;
-A246:Card Pr = f2
-    proof A247:dom Card Pr = dom Pr by CARD_3:def 2
-                         .= dom f2 by A30,A211,FINSEQ_1:def 3;
+A245:Card Pr = f2
+    proof A246:dom Card Pr = dom Pr by CARD_3:def 2
+                         .= dom f2 by A30,A210,FINSEQ_1:def 3;
       for d being Nat st d in dom Card Pr holds (Card Pr).d = f2.d
-     proof let d be Nat; assume A248:d in dom Card Pr;
-       then A249:d in dom Pr by CARD_3:def 2;
-       d in Seg p' by A30,A247,A248,FINSEQ_1:def 3;
+     proof let d be Nat; assume A247:d in dom Card Pr;
+       then A248:d in dom Pr by CARD_3:def 2;
+       d in Seg p' by A30,A246,A247,FINSEQ_1:def 3;
        then consider m be Element of A such that
-A250:   m = d & Pr.d = {[m,y] where y is Element of B:z.(m,y)>0} by A211;
+A249:   m = d & Pr.d = {[m,y] where y is Element of B:z.(m,y)>0} by A210;
          Pr.d = [:{m},Seg(f2.m):]
        proof set L = [:{m},Seg(f2.m):];
-A251:      Pr.d c= L
+A250:      Pr.d c= L
          proof let l be set; assume l in Pr.d;
            then consider y1 be Element of B such that
-A252:       l = [m,y1] & z.(m,y1) > 0 by A250;
-           m/p - y1/q > 0 by A208,A252;
+A251:       l = [m,y1] & z.(m,y1) > 0 by A249;
+           m/p - y1/q > 0 by A207,A251;
            then m/p - y1/q + y1/q > 0 + y1/q by XREAL_1:8;
            then m/p*q > y1/q*q by XREAL_1:70;
            then (m*q)/p > y1 by XCMPLX_1:88;
-           then A253:((m*q) div p) >= y1 by INT_1:81;
+           then A252:((m*q) div p) >= y1 by INT_1:81;
            m in Seg p';then
-A254:       m in dom f1 by A6,FINSEQ_1:def 3;
-           then ((f1.m) div p) >= y1 by A19,A253;then
-A255:       y1 <= f2.m by A30,A33,A254;
+A253:       m in dom f1 by A6,FINSEQ_1:def 3;
+           then ((f1.m) div p) >= y1 by A19,A252;then
+A254:       y1 <= f2.m by A30,A33,A253;
            y1 >= 1 by FINSEQ_1:3;then
-A256:       y1 in Seg(f2.m) by A255,FINSEQ_1:3;
+A255:       y1 in Seg(f2.m) by A254,FINSEQ_1:3;
            m in {m} by TARSKI:def 1;
-          hence thesis by A252,A256,ZFMISC_1:def 2;
+          hence thesis by A251,A255,ZFMISC_1:def 2;
          end;
             L c= Pr.d
          proof let l be set;
           assume l in L;
           then consider x,y be set such that
-A257:      x in {m} & y in Seg(f2.m) & l = [x,y] by ZFMISC_1:def 2;
+A256:      x in {m} & y in Seg(f2.m) & l = [x,y] by ZFMISC_1:def 2;
           m <= p' by FINSEQ_1:3;
           then m*q <= p'*q by XREAL_1:66;then
-A258:      (m*q) div p <= (p'*q) div p by NAT_2:26;
+A257:      (m*q) div p <= (p'*q) div p by NAT_2:26;
           now assume q mod p = 0;
-           then A259:p divides q by PEPIN:6;
+           then A258:p divides q by PEPIN:6;
            then p <= q by NAT_D:7;
            then p < q by A1,REAL_1:def 5;
-           hence contradiction by A7,A259,NAT_4:12;
+           hence contradiction by A7,A258,NAT_4:12;
           end;
-          then A260: -(q div p) = (-q) div p + 1 by WSIERP_1:49;
+          then A259: -(q div p) = (-q) div p + 1 by WSIERP_1:49;
           2 divides (p-'1)*q by A11,NAT_D:9;
           then (p-'1)*q mod 2 = 0 by PEPIN:6;
           then ((p-'1)*q) div 2 = (p-'1)*q/2 by REAL_3:4;then
-A261:      (p'*q) div p = ((p-1)*q) div (2*p) by A8,A12,NAT_2:29
+A260:      (p'*q) div p = ((p-1)*q) div (2*p) by A8,A12,NAT_2:29
                .= ((p*q - q) div p) div 2 by PRE_FF:5
-               .= (q+(-(q div p)-1)) div 2 by A260,INT_3:8
+               .= (q+(-(q div p)-1)) div 2 by A259,INT_3:8
                .= (2*q'+(-(q div p))) div 2 by A8,A12
                .= q'+((-(q div p)) div 2) by INT_3:8;
             (p'*q) div p <= q'
@@ -3681,103 +3682,103 @@ A261:      (p'*q) div p = ((p-1)*q) div (2*p) by A8,A12,NAT_2:29
              suppose (q div p) mod 2 = 0;
               then (-(q div p)) div 2 = -((q div p) div 2) by WSIERP_1:50
                        .= -(q div (2*p)) by NAT_2:29;
-              then (p'*q) div p = q'-(q div (2*p)) by A261;
+              then (p'*q) div p = q'-(q div (2*p)) by A260;
               hence thesis by XREAL_1:45;
              end;
              suppose (q div p) mod 2 <> 0;
               then -((q div p) div 2) = (-(q div p)) div 2 +1 by WSIERP_1:49;
               then (-(q div p)) div 2 = -((q div p) div 2)-1
                        .= -(q div (2*p)) - 1 by NAT_2:29;
-              then (p'*q) div p = q' -((q div (2*p)) + 1) by A261;
+              then (p'*q) div p = q' -((q div (2*p)) + 1) by A260;
               hence thesis by XREAL_1:45;
              end;
            end;
-           then A262:(m*q) div p <= q' by A258,XXREAL_0:2;
+           then A261:(m*q) div p <= q' by A257,XXREAL_0:2;
            m in Seg p';then
-A263:       m in dom f1 by A6,FINSEQ_1:def 3;
-           then A264:f2.m = f1.m div p by A30,A33   .= (m*q) div p by A19,A263;
-           reconsider y as Element of NAT by A257;
-           1 <= y & y <= f2.m by A257,FINSEQ_1:3;
-           then 1 <= y & y <= q' by A262,A264,XXREAL_0:2;
+A262:       m in dom f1 by A6,FINSEQ_1:def 3;
+           then A263:f2.m = f1.m div p by A30,A33   .= (m*q) div p by A19,A262;
+           reconsider y as Element of NAT by A256;
+           1 <= y & y <= f2.m by A256,FINSEQ_1:3;
+           then 1 <= y & y <= q' by A261,A263,XXREAL_0:2;
            then reconsider y as Element of B by FINSEQ_1:3;
-A265:       y <= [\m*q/p/] by A257,A264,FINSEQ_1:3;
+A264:       y <= [\m*q/p/] by A256,A263,FINSEQ_1:3;
            now assume m*q/p is integer;
             then p divides m*q by WSIERP_1:22;
-            then A266:p divides m by A3,WSIERP_1:37;
-A267:        0+1 <= m & m <= p' by FINSEQ_1:3;
-            then p <= m by A266,NAT_D:7;
-            hence contradiction by A16,A267,XXREAL_0:2;
+            then A265:p divides m by A3,WSIERP_1:37;
+A266:        0+1 <= m & m <= p' by FINSEQ_1:3;
+            then p <= m by A265,NAT_D:7;
+            hence contradiction by A16,A266,XXREAL_0:2;
            end;
            then [\m*q/p/] < m*q/p by INT_1:48;
-           then y < m*q/p by A265,XXREAL_0:2;
+           then y < m*q/p by A264,XXREAL_0:2;
            then y*p < (m*q)/p*p by XREAL_1:70;
            then y*p < m*q by XCMPLX_1:88;
            then y/q < m/p by XREAL_1:108;
            then m/p - y/q > 0 by XREAL_1:52;
-           then z.(m,y) > 0 by A208;
-           then [m,y] in Pr.d by A250;
-          hence thesis by A257,TARSKI:def 1;
+           then z.(m,y) > 0 by A207;
+           then [m,y] in Pr.d by A249;
+          hence thesis by A256,TARSKI:def 1;
          end;
-          hence thesis by A251,XBOOLE_0:def 10;
+          hence thesis by A250,XBOOLE_0:def 10;
        end;
        then Card(Pr.d) = Card [:Seg(f2.m),{m}:] by CARD_2:11
                           .= Card Seg(f2.m) by CARD_2:13;
-       then Card(Pr.d) = Card(f2.d) by A250,FINSEQ_1:76
+       then Card(Pr.d) = Card(f2.d) by A249,FINSEQ_1:76
           .= f2.d by CARD_1:66;
-       hence thesis by A249,CARD_3:def 2;
+       hence thesis by A248,CARD_3:def 2;
      end;
-    hence thesis by A247,FINSEQ_1:17;
+    hence thesis by A246,FINSEQ_1:17;
     end;
     Card Pk = g2
-    proof A268:dom Card Pk = Seg(len g2) by A124,A222,CARD_3:def 2
+    proof A267:dom Card Pk = Seg(len g2) by A124,A221,CARD_3:def 2
       .= dom g2 by FINSEQ_1:def 3;
       for d being Nat st d in dom Card Pk holds (Card Pk).d = g2.d
-     proof let d be Nat; assume A269:d in dom Card Pk;
-       then A270:d in dom Pk by CARD_3:def 2;
-       d in Seg q' by A124,A268,A269,FINSEQ_1:def 3;
+     proof let d be Nat; assume A268:d in dom Card Pk;
+       then A269:d in dom Pk by CARD_3:def 2;
+       d in Seg q' by A124,A267,A268,FINSEQ_1:def 3;
        then consider n be Element of B such that
-A271:   n = d & Pk.d = {[x,n] where x is Element of A:z.(x,n)<0} by A222;
+A270:   n = d & Pk.d = {[x,n] where x is Element of A:z.(x,n)<0} by A221;
          Pk.d = [:Seg(g2.n),{n}:]
        proof set L = [:Seg(g2.n),{n}:];
-A272:      Pk.d c= L
+A271:      Pk.d c= L
          proof let l be set; assume l in Pk.d;
            then consider x be Element of A such that
-A273:       l = [x,n] & z.(x,n) < 0 by A271;
-           x/p - n/q < 0 by A208,A273;
+A272:       l = [x,n] & z.(x,n) < 0 by A270;
+           x/p - n/q < 0 by A207,A272;
            then x/p - n/q + n/q < 0 + n/q by XREAL_1:8;
            then x/p*p < n/q*p by XREAL_1:70;
            then x < (n*p)/q by XCMPLX_1:88;then
-A274:       x <= (n*p) div q by INT_1:81;
+A273:       x <= (n*p) div q by INT_1:81;
            n in Seg q';then
-A275:       n in dom g1 by A112,FINSEQ_1:def 3;then
-       ((g1.n) div q) >= x by A113,A274;then
-A276:       x <= g2.n by A124,A127,A275;
+A274:       n in dom g1 by A112,FINSEQ_1:def 3;then
+       ((g1.n) div q) >= x by A113,A273;then
+A275:       x <= g2.n by A124,A127,A274;
            x >= 1 by FINSEQ_1:3;then
-A277:       x in Seg(g2.n) by A276,FINSEQ_1:3;
+A276:       x in Seg(g2.n) by A275,FINSEQ_1:3;
            n in {n} by TARSKI:def 1;
-          hence thesis by A273,A277,ZFMISC_1:def 2;
+          hence thesis by A272,A276,ZFMISC_1:def 2;
          end;
          L c= Pk.d
          proof let l be set;
           assume l in L;
           then consider x,y be set such that
-A278:      x in Seg(g2.n) & y in {n} & l = [x,y] by ZFMISC_1:def 2;
+A277:      x in Seg(g2.n) & y in {n} & l = [x,y] by ZFMISC_1:def 2;
           n <= q' by FINSEQ_1:3;
           then n*p <= q'*p by XREAL_1:66;then
-A279:      (n*p) div q <= (q'*p) div q by NAT_2:26;
+A278:      (n*p) div q <= (q'*p) div q by NAT_2:26;
           now assume p mod q = 0;
-           then A280:q divides p by PEPIN:6;
+           then A279:q divides p by PEPIN:6;
            then q <= p by NAT_D:7;
            then q < p by A1,REAL_1:def 5;
-           hence contradiction by A7,A280,NAT_4:12;
+           hence contradiction by A7,A279,NAT_4:12;
          end;
-         then A281: -(p div q) = (-p) div q + 1 by WSIERP_1:49;
+         then A280: -(p div q) = (-p) div q + 1 by WSIERP_1:49;
          2 divides (q-'1)*p by A11,NAT_D:9;
          then (q-'1)*p mod 2 = 0 by PEPIN:6;
          then ((q-'1)*p) div 2 = (q-'1)*p/2 by REAL_3:4;then
-A282:     (q'*p) div q = ((q-1)*p) div (2*q) by A8,A12,NAT_2:29
+A281:     (q'*p) div q = ((q-1)*p) div (2*q) by A8,A12,NAT_2:29
                .= ((q*p - p) div q) div 2 by PRE_FF:5
-               .= (p+(-(p div q)-1)) div 2 by A281,INT_3:8
+               .= (p+(-(p div q)-1)) div 2 by A280,INT_3:8
                .= (2*p'-(p div q)) div 2 by A8,A12
                .= p'+((-(p div q)) div 2) by INT_3:8;
              (q'*p) div q <= p'
@@ -3785,7 +3786,7 @@ A282:     (q'*p) div q = ((q-1)*p) div (2*q) by A8,A12,NAT_2:29
             suppose (p div q) mod 2 = 0;
              then (-(p div q)) div 2 = -((p div q) div 2) by WSIERP_1:50
                        .= -(p div (2*q)) by NAT_2:29;
-             then (q'*p) div q = p'-(p div (2*q)) by A282;
+             then (q'*p) div q = p'-(p div (2*q)) by A281;
              hence thesis by XREAL_1:45;
             end;
             suppose (p div q) mod 2 <> 0;
@@ -3793,47 +3794,47 @@ A282:     (q'*p) div q = ((q-1)*p) div (2*q) by A8,A12,NAT_2:29
              then (-(p div q)) div 2 = -((p div q) div 2)-1
                        .= -(p div (2*q)) - 1 by NAT_2:29;
              then (q'*p) div q
-                             = p' -((p div (2*q)) + 1) by A282;
+                             = p' -((p div (2*q)) + 1) by A281;
              hence thesis by XREAL_1:45;
             end;
           end;
-          then A283:(n*p) div q <= p' by A279,XXREAL_0:2;
+          then A282:(n*p) div q <= p' by A278,XXREAL_0:2;
           n in Seg q';then
-A284:      n in dom g1 by A112,FINSEQ_1:def 3;then
-A285:      g2.n = g1.n div q by A124,A127   .= (n*p) div q by A113,A284;
-          reconsider x as Element of NAT by A278;
-A286:      1 <= x & x <= g2.n by A278,FINSEQ_1:3;
-          then 1 <= x & x <= p' by A283,A285,XXREAL_0:2;
+A283:      n in dom g1 by A112,FINSEQ_1:def 3;then
+A284:      g2.n = g1.n div q by A124,A127   .= (n*p) div q by A113,A283;
+          reconsider x as Element of NAT by A277;
+A285:      1 <= x & x <= g2.n by A277,FINSEQ_1:3;
+          then 1 <= x & x <= p' by A282,A284,XXREAL_0:2;
           then reconsider x as Element of A by FINSEQ_1:3;
           now assume n*p/q is integer;
             then q divides n*p by WSIERP_1:22;
-            then A287:q divides n by A3,WSIERP_1:37;
-A288:       0+1 <= n & n <= q' by FINSEQ_1:3;
-            then q <= n by A287,NAT_D:7;
-            hence contradiction by A16,A288,XXREAL_0:2;
+            then A286:q divides n by A3,WSIERP_1:37;
+A287:       0+1 <= n & n <= q' by FINSEQ_1:3;
+            then q <= n by A286,NAT_D:7;
+            hence contradiction by A16,A287,XXREAL_0:2;
            end;
            then [\n*p/q/] < n*p/q by INT_1:48;
-           then x < n*p/q by A285,A286,XXREAL_0:2;
+           then x < n*p/q by A284,A285,XXREAL_0:2;
            then x*q < (n*p)/q*q by XREAL_1:70;
            then x*q < n*p by XCMPLX_1:88;
            then x/p < n/q by XREAL_1:108;
            then x/p - n/q < 0 by XREAL_1:51;
-           then z.(x,n) < 0 by A208;
-           then [x,n] in Pk.d by A271;
-          hence thesis by A278,TARSKI:def 1;
+           then z.(x,n) < 0 by A207;
+           then [x,n] in Pk.d by A270;
+          hence thesis by A277,TARSKI:def 1;
          end;
-        hence thesis by A272,XBOOLE_0:def 10;
+        hence thesis by A271,XBOOLE_0:def 10;
        end;
        then Card(Pk.d) = Card Seg(g2.n) by CARD_2:13;
-       then Card(Pk.d) = Card(g2.d) by A271,FINSEQ_1:76
+       then Card(Pk.d) = Card(g2.d) by A270,FINSEQ_1:76
                       .= g2.d by CARD_1:66;
-       hence thesis by A270,CARD_3:def 2;
+       hence thesis by A269,CARD_3:def 2;
      end;
-    hence thesis by A268,FINSEQ_1:17;
+    hence thesis by A267,FINSEQ_1:17;
    end;
-  hence thesis by A245,A246;
+  hence thesis by A244,A245;
   end;
- hence thesis by A69,A164,NEWTON:13;
+ hence thesis by A69,A163,NEWTON:13;
 end;
 
 theorem p>2 & q>2 & p<>q & p mod 4 = 3 & q mod 4 = 3 implies

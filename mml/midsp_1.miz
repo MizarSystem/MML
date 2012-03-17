@@ -7,14 +7,14 @@
 environ
 
  vocabularies BINOP_1, QC_LANG1, FUNCT_1, BOOLE, MCART_1, RELAT_1, VECTSP_1,
-      ARYTM_1, RLVECT_1, MIDSP_1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, DOMAIN_1, STRUCT_0,
-      RLVECT_1, MCART_1, FUNCT_2;
- constructors BINOP_1, DOMAIN_1, RLVECT_1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0;
+      ARYTM_1, RLVECT_1, MIDSP_1, ARYTM, ALGSTR_0;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, BINOP_1, DOMAIN_1, FUNCT_5,
+      STRUCT_0, ALGSTR_0, RLVECT_1, MCART_1, FUNCT_2;
+ constructors BINOP_1, DOMAIN_1, RLVECT_1, FUNCT_5, VALUED_1, PARTFUN1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
- definitions STRUCT_0, RLVECT_1;
- theorems FUNCT_2, TARSKI, MCART_1, BINOP_1;
+ definitions STRUCT_0, RLVECT_1, ALGSTR_0, VALUED_1;
+ theorems FUNCT_2, TARSKI, MCART_1, BINOP_1, CARD_1;
  schemes FUNCT_2, BINOP_1;
 
 begin :: PRELIMINARY
@@ -43,14 +43,9 @@ definition let MS,a,b;
 end;
 
 definition
-  func op2 -> BinOp of {{}} means   not contradiction;
-  existence;
-  uniqueness by FUNCT_2:66;
-end;
-
-definition
+ canceled;
 func Example -> MidStr equals
-   MidStr (# {{}}, op2 #);
+   MidStr (# 1, op2 #);
 correctness;
 end;
 
@@ -65,7 +60,7 @@ end;
 canceled 4;
 
 theorem
-    the carrier of Example = {{}};
+    the carrier of Example = 1;
 
 theorem
     the MIDPOINT of Example = op2;
@@ -83,12 +78,13 @@ Th10: for a,b,c,d being Element of Example holds
          ex x being Element of Example st x@a = b
 proof
  let a,b,c,d be Element of Example;
- thus a@a = {} by TARSKI:def 1 .= a by TARSKI:def 1;
- thus a@b = {} by TARSKI:def 1 .= b@a by TARSKI:def 1;
- thus (a@b)@(c@d) = {} by TARSKI:def 1 .= (a@c)@(b@d) by TARSKI:def 1
+ thus a@a = {} by CARD_1:87,TARSKI:def 1 .= a by CARD_1:87,TARSKI:def 1;
+ thus a@b = {} by CARD_1:87,TARSKI:def 1 .= b@a by CARD_1:87,TARSKI:def 1;
+ thus (a@b)@(c@d) = {} by CARD_1:87,TARSKI:def 1
+ .= (a@c)@(b@d) by CARD_1:87,TARSKI:def 1
 ;
  take x = a;
- thus x@a = {} by TARSKI:def 1 .= b by TARSKI:def 1;
+ thus x@a = {} by CARD_1:87,TARSKI:def 1 .= b by CARD_1:87,TARSKI:def 1;
 end;
 
 :: A. MIDPOINT ALGEBRAS
@@ -853,8 +849,8 @@ definition let M;
 end;
 
 definition let M;
- func vectgroup(M) -> LoopStr equals
-    LoopStr (# setvect(M), addvect(M), zerovect(M) #);
+ func vectgroup(M) -> addLoopStr equals
+    addLoopStr (# setvect(M), addvect(M), zerovect(M) #);
  coherence;
 end;
 
@@ -872,7 +868,7 @@ theorem
  the carrier of vectgroup(M) = setvect(M);
 
 theorem
- the add of vectgroup(M) = addvect(M);
+ the addF of vectgroup(M) = addvect(M);
 
 canceled;
 

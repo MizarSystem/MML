@@ -19,18 +19,18 @@
 <ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="STRUCT_0"/>
-<ArticleID name="RLVECT_1"/>
+<ArticleID name="ALGSTR_0"/>
+<ArticleID name="ALGSTR_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="GROUP_1"/>
-<ArticleID name="VECTSP_1"/>
-<ArticleID name="ALGSTR_1"/>
+<ArticleID name="RLVECT_1"/>
 </Signature>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="38"/>
+<Adjective nr="88"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -61,10 +61,10 @@
 </FCluster>
 <FCluster>
 <ArgTypes>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="39"/>
+<Adjective nr="89"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -98,11 +98,11 @@
 <Typ kind="G" nr="7">
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="52"/>
+<Adjective nr="85"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="U" nr="6">
+<Func kind="U" nr="5">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -131,15 +131,15 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="40"/>
+<Adjective nr="88"/>
+<Adjective nr="90"/>
 </Cluster>
-<Typ kind="G" nr="5">
+<Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
 <Adjective nr="29" value="false"/>
-<Adjective nr="67"/>
+<Adjective nr="73"/>
 </Cluster>
 </CCluster>
 </Registrations>

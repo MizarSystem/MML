@@ -244,7 +244,7 @@
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="23"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">

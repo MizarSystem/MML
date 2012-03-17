@@ -8,12 +8,14 @@ environ
 
  vocabularies FUNCT_1, RELAT_1, VECTSP_1, OPPCAT_1, RLVECT_1, ARYTM_1,
       FUNCSDOM, VECTSP_2, LATTICES, BINOP_1, INCSP_1, MOD_1, ORDINAL4, GROUP_6,
-      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ARYTM;
+      MOD_4, GROUP_1, GRCAT_1, ENDALG, COHSP_1, ARYTM, ALGSTR_0;
  notations XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, DOMAIN_1,
-      STRUCT_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM, VECTSP_2,
-      GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
- constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1;
- registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2;
+      STRUCT_0, ALGSTR_0, BINOP_1, RLVECT_1, GROUP_1, VECTSP_1, FUNCSDOM,
+      VECTSP_2, GRCAT_1, FUNCT_4, GROUP_6, RINGCAT1;
+ constructors PARTFUN1, DOMAIN_1, VECTSP_2, GRCAT_1, GROUP_6, RINGCAT1,
+      VALUED_1, SEQ_1;
+ registrations XBOOLE_0, SUBSET_1, RELSET_1, STRUCT_0, VECTSP_1, VECTSP_2,
+      ALGSTR_0, VALUED_1, FUNCT_2;
  requirements SUBSET, BOOLE;
 
 
@@ -38,8 +40,8 @@ definition let K;
  func opp K -> strict doubleLoopStr equals
 :: MOD_4:def 1
     doubleLoopStr (# the carrier of K,
-                               the add of K,
-                               ~(the mult of K),
+                               the addF of K,
+                               ~(the multF of K),
                                1.K,
                                0.K #);
 end;
@@ -59,7 +61,7 @@ registration let K be add-associative right_complementable right_zeroed
 end;
 
 theorem :: MOD_4:2
- the LoopStr of opp(K) = the LoopStr of K &
+ the addLoopStr of opp(K) = the addLoopStr of K &
 (K is add-associative right_zeroed right_complementable implies
     comp opp K = comp K)
     & for x being set holds x is Scalar of opp(K) iff x is Scalar of K;
@@ -129,7 +131,7 @@ theorem :: MOD_4:7
  for K being Skew-Field holds opp(K) is Skew-Field;
 
 registration let K be Skew-Field;
- cluster opp(K) -> non degenerated Field-like associative Abelian
+ cluster opp(K) -> non degenerated almost_left_invertible associative Abelian
    add-associative right_zeroed right_complementable unital distributive;
 end;
 
@@ -137,7 +139,7 @@ theorem :: MOD_4:8
      for K being Field holds opp(K) is strict Field;
 
 registration let K be Field;
- cluster opp(K) -> strict Field-like;
+ cluster opp(K) -> strict almost_left_invertible;
 end;
 
 begin :: Moduly przeciwne
@@ -151,7 +153,7 @@ definition let K,V;
    the carrier of opp(K):], the carrier of V
     st o = ~(the lmult of V)
    holds it = RightModStr
-    (# the carrier of V, the add of V, 0.V, o #);
+    (# the carrier of V, the addF of V, 0.V, o #);
 end;
 
 registration let K,V;
@@ -159,7 +161,7 @@ registration let K,V;
 end;
 
 theorem :: MOD_4:9
- the LoopStr of opp(V) = the LoopStr of V
+ the addLoopStr of opp(V) = the addLoopStr of V
  & for x being set holds x is Vector of V iff x is Vector of opp(V);
 
 definition let K,V; let o be Function of [:the carrier of K,
@@ -183,7 +185,7 @@ definition let K,W;
    the carrier of W:], the carrier of W
     st o = ~(the rmult of W)
    holds it = VectSpStr
-    (# the carrier of W, the add of W, 0.W, o #);
+    (# the carrier of W, the addF of W, 0.W, o #);
 end;
 
 registration let K,W;
@@ -193,7 +195,7 @@ end;
 canceled;
 
 theorem :: MOD_4:12
- the LoopStr of opp(W) = the LoopStr of W
+ the addLoopStr of opp(W) = the addLoopStr of W
  & for x being set holds x is Vector of W iff x is Vector of opp(W);
 
 definition let K,W; let o be Function of [:the carrier of W,
@@ -287,7 +289,7 @@ end;
 
 begin :: Morfizmy pierscieni
 
-definition let K,L be non empty HGrStr;
+definition let K,L be non empty multMagma;
            let IT be Function of K,L;
  attr IT is antimultiplicative means
 :: MOD_4:def 6

@@ -29,9 +29,11 @@
 <ArticleID name="PCOMPS_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
-<ArticleID name="MEMBERED"/>
+<ArticleID name="INT_1"/>
+<ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_0"/>
-<ArticleID name="SEQ_1"/>
+<ArticleID name="MEMBERED"/>
+<ArticleID name="VALUED_1"/>
 <ArticleID name="RVSUM_1"/>
 <ArticleID name="EUCLID"/>
 <ArticleID name="TOPREAL1"/>
@@ -64,7 +66,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="42">
+<Adjective nr="43">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
@@ -96,7 +98,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="42">
+<Adjective nr="43">
 <Func kind="K" nr="46"/>
 <Func kind="K" nr="10">
 <LocusVar nr="1"/>
@@ -109,19 +111,19 @@
 <Typ kind="M" nr="10">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="249">
+<Func kind="K" nr="295">
 <Num nr="2"/>
 </Func>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="262">
+<Func kind="K" nr="308">
 <Num nr="2"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="40">
-<Func kind="K" nr="249">
+<Adjective nr="41">
+<Func kind="K" nr="295">
 <Num nr="2"/>
 </Func>
 </Adjective>
@@ -132,18 +134,18 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="30" value="false"/>
-<Adjective nr="51"/>
 <Adjective nr="52"/>
 <Adjective nr="53"/>
 <Adjective nr="54"/>
+<Adjective nr="55"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="166">
+<Func kind="K" nr="167">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="77"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <FCluster>
@@ -153,13 +155,13 @@
 <Func kind="K" nr="46"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="249">
+<Func kind="K" nr="295">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
 <Adjective nr="38"/>
-<Adjective nr="77"/>
+<Adjective nr="39"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <CCluster>
@@ -226,13 +228,13 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="81">
+<Adjective nr="84">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="82">
+<Adjective nr="85">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="83">
+<Adjective nr="86">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
