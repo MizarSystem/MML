@@ -32,7 +32,7 @@ theorem Th1:
 A1:   i >= 0 & j >= 0;
 A2:  i div j = [\ i / j /] by INT_1:def 7;
 A3:  i / j - 1 < [\ i / j /] by INT_1:def 4;
-      i / j >= 0 & 0 - 1 = - 1 by A1,REAL_2:125;
+       i / j >= 0 & 0 - 1 = - 1 by A1,REAL_2:125;
     then i / j - 1 >= -1 by REAL_1:49;
     then - 1 < [\ i / j /] by A3,AXIOMS:22;
    hence i div j >= 0 by A2,INT_1:21;
@@ -44,25 +44,22 @@ theorem Th2:
       & abs(i) div abs(j) = i div j
 proof let i,j be Integer;
 assume that A1: i >= 0 and A2: j >= 0;
-per cases by A2,REAL_1:def 5;
-suppose A2:j > 0;
-A3: i = abs(i) & j = abs(j) by A1,A2,ABSVALUE:def 1;
-    i mod j >= 0 & i div j >= 0 by A1,A2,Th1,GR_CY_2:2;
+per cases by A2;
+suppose A3:j > 0;
+then A4: i = abs(i) & j = abs(j) by A1,ABSVALUE:def 1;
+     i mod j >= 0 & i div j >= 0 by A1,A3,Th1,GR_CY_2:2;
   then reconsider n = i mod j, m = i div j as Nat by INT_1:16;
-A4: n < j by A2,GR_CY_2:3;
-    n = i - m * j by A2,INT_1:def 8;
+A5: n < j by A3,GR_CY_2:3;
+     n = i - m * j by A3,INT_1:def 8;
   then i = j * m + n by XCMPLX_1:27;
- hence thesis by A3,A4,NAT_1:def 1,def 2;
+ hence thesis by A4,A5,NAT_1:def 1,def 2;
  end;
  suppose
- B1:j = 0;
- abs(0) = 0 by ABSVALUE:def 1;
- then
-B2: abs(i) mod abs(0) = 0 & abs(i) div abs(0) = 0
+ A6:j = 0;
+  abs(0) = 0 by ABSVALUE:def 1;
+ then abs(i) mod abs(0) = 0 & abs(i) div abs(0) = 0
   by NAT_1:def 1,def 2;
-B3: i mod 0 = 0 by INT_1:def 8;
-  i div 0 = 0 by INT_1:75;
- hence thesis by B1,B2,B3;
+ hence thesis by A6,INT_1:75,def 8;
  end;
 end;
 
@@ -84,13 +81,13 @@ A6: 0 < b() & b() < a() by A1,A2;
 A7: q.0 = a() and
 A8: for i holds q.(i+1) = _F(i,q.i) from RECDEF_1:sch 4;
    deffunc _Q(Nat) = q.$1;
-     q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
+      q.(0+1) = IFEQ(q.0,0,0,G(0)) by A8
      .= G(0) by A1,A2,A7,CQC_LANG:def 1;
 then A9: _Q(0) = a() & _Q(1) = b() by A4,A7;
 A10: for k st q.k qua Nat > 0 holds q.k = F(k)
     proof let k such that
 A11:    q.k qua Nat > 0;
-       now per cases;
+        now per cases;
       case k = 0;
        hence q.k = F(k) by A3,A7;
       end;
@@ -99,11 +96,11 @@ A11:    q.k qua Nat > 0;
 A12:       k = i+1 by NAT_1:22;
 A13:      now assume
 A14:        q.i qua Nat = 0;
-            q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+             q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
              .= 0 by A14,CQC_LANG:def 1;
          hence contradiction by A11;
         end;
-          q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
+           q.k = IFEQ(q.i,0,0,G(i)) by A8,A12
           .= G(i) by A13,CQC_LANG:def 1;
       hence q.k = F(k) by A5,A11,A12;
      end;
@@ -112,37 +109,36 @@ A14:        q.i qua Nat = 0;
     end;
 A15: for k holds _Q(k+2) = _Q(k) mod _Q(k+1)
     proof let k;
-        now per cases;
+         now per cases;
        case
 A16:      q.(k+1) <> 0;
-           now assume
+            now assume
 A17:        G(k) = 0;
 A18:        q.k = 0 or q.k <> 0;
 
-             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+              q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
             .= 0 by A17,A18,CQC_LANG:def 1;
           hence contradiction by A16;
          end;
          then A19:       G(k) > 0 by NAT_1:19;
-A20:       q.(k+(1+1)) = q.((k+1)+1) by XCMPLX_1:1
+A20:       q.(k+(1+1)) = q.((k+1)+1)
            .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
            .= G(k+1) by A16,CQC_LANG:def 1
            .= F(k) mod G(k) by A5,A19;
 A21:       now assume
 A22:         q.k = 0;
-             q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+              q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
             .= 0 by A22,CQC_LANG:def 1;
           hence contradiction by A16;
          end;
 then A23:       q.k qua Nat > 0 by NAT_1:19;
-           q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
+            q.(k+1) = IFEQ(q.k,0,0,G(k)) by A8
             .= G(k) by A21,CQC_LANG:def 1;
         hence q.(k+2) = q.(k) mod q.(k+1) by A10,A20,A23;
        end;
        case
 A24:       q.(k+1) = 0;
-        thus q.(k+2) = q.(k+(1+1))
-           .= q.((k+1)+1) by XCMPLX_1:1
+        thus q.(k+2) = q.((k+1)+1)
            .= IFEQ(q.(k+1),0,0,G(k+1)) by A8
            .= 0 by A24,CQC_LANG:def 1
            .= q.(k) mod q.(k+1) by A24,NAT_1:def 2;
@@ -176,7 +172,7 @@ definition
   proof
     set EA3 = (il.3 .--> (b >0_goto il.0)) +* (il.4 .--> halt SCM);
     set EA2 = (il.2 .--> (a := dl.2)) +* EA3;
-      EA3 is programmed by AMI_3:35;
+       EA3 is programmed by AMI_3:35;
     then EA2 is programmed by AMI_3:35;
     then (il.1 .--> Divide(a,b)) +* EA2 is programmed by AMI_3:35;
     hence thesis by AMI_3:35;
@@ -210,7 +206,7 @@ A1: dom IN0 = { il.0 } by CQC_LANG:5;
 A2: dom IN1 = { il.1 } by CQC_LANG:5;
 A3: dom IN2 = { il.2 } by CQC_LANG:5;
 A4: dom IN3 = { il.3 } by CQC_LANG:5;
-   dom IN4 = { il.4 } by CQC_LANG:5;
+    dom IN4 = { il.4 } by CQC_LANG:5;
 then dom EA3 = { il.3 } \/ { il.4 } by A4,FUNCT_4:def 1
           .= { il.3,il.4 } by ENUMSET1:41;
 then dom EA2 = { il.2 } \/ { il.3,il.4 } by A3,FUNCT_4:def 1
@@ -236,32 +232,32 @@ then A6: dom EA2 = { il.2 } \/ { il.3,il.4 } by A2,FUNCT_4:def 1
 then A7: dom EA1 = { il.1 } \/ { il.2,il.3,il.4 } by A1,FUNCT_4:def 1
           .= { il.1,il.2,il.3,il.4 } by ENUMSET1:44;
   assume A8: Euclide-Algorithm c= s;
-      il.0 <> il.1 & il.0 <> il.2 & il.0 <> il.3 & il.0 <> il.4 by AMI_3:53;
+       il.0 <> il.1 & il.0 <> il.2 & il.0 <> il.3 & il.0 <> il.4 by AMI_3:53;
     then A9: not il.0 in dom EA1 by A7,ENUMSET1:18;
-   il.0 in dom EA0 by Def1,Th4,ENUMSET1:24;
+    il.0 in dom EA0 by Def1,Th4,ENUMSET1:24;
   hence s.il.0 = EA0.il.0 by A8,Def1,GRFUNC_1:8
       .= IN0.il.0 by A9,FUNCT_4:12
       .= c := b by CQC_LANG:6;
-     EA1 c= EA0 by FUNCT_4:26;
+      EA1 c= EA0 by FUNCT_4:26;
 then A10: EA1 c= s by A8,Def1,XBOOLE_1:1;
-      il.1 <> il.2 & il.1 <> il.3 & il.1 <> il.4 by AMI_3:53;
+       il.1 <> il.2 & il.1 <> il.3 & il.1 <> il.4 by AMI_3:53;
 then A11: not il.1 in dom EA2 by A6,ENUMSET1:13;
-   il.1 in dom EA1 by A7,ENUMSET1:19;
+    il.1 in dom EA1 by A7,ENUMSET1:19;
   hence s.il.1 = EA1.il.1 by A10,GRFUNC_1:8
       .= IN1.il.1 by A11,FUNCT_4:12
       .= Divide(a,b) by CQC_LANG:6;
-     EA2 c= EA1 by FUNCT_4:26;
+      EA2 c= EA1 by FUNCT_4:26;
 then A12: EA2 c= s by A10,XBOOLE_1:1;
-      il.2 <> il.3 & il.2 <> il.4 by AMI_3:53;
+       il.2 <> il.3 & il.2 <> il.4 by AMI_3:53;
 then A13: not il.2 in dom EA3 by A5,TARSKI:def 2;
-   il.2 in dom EA2 by A6,ENUMSET1:14;
+    il.2 in dom EA2 by A6,ENUMSET1:14;
   hence s.il.2 = EA2.il.2 by A12,GRFUNC_1:8
       .= IN2.il.2 by A13,FUNCT_4:12
       .= a := c by CQC_LANG:6;
-     EA3 c= EA2 by FUNCT_4:26;
-then A14: EA3 c= s by A12,XBOOLE_1:1; il.3 <> il.4 by AMI_3:53;
+      EA3 c= EA2 by FUNCT_4:26;
+then A14: EA3 c= s by A12,XBOOLE_1:1;  il.3 <> il.4 by AMI_3:53;
 then A15: not il.3 in dom IN4 by A4,TARSKI:def 1;
-   il.3 in dom EA3 by A5,TARSKI:def 2;
+    il.3 in dom EA3 by A5,TARSKI:def 2;
   hence s.il.3 = EA3.il.3 by A14,GRFUNC_1:8
       .= IN3.il.3 by A15,FUNCT_4:12
       .= b >0_goto il.0 by CQC_LANG:6;
@@ -320,7 +316,7 @@ A3: (Computation s).(k+1)
      .= il.(1+1) by A2,AMI_3:54
      .= il.2;
    thus
-      (Computation s).(k+1).a = (Computation s).k.a div (Computation s).k.b &
+       (Computation s).(k+1).a = (Computation s).k.a div (Computation s).k.b &
     (Computation s).(k+1).b = (Computation s).k.a mod (Computation s).k.b &
     (Computation s).(k+1).c = (Computation s).k.c by A3,Lm1,AMI_3:12;
  end;
@@ -417,45 +413,41 @@ A5: for k st _P[k] holds _P[k+1] proof let k;
     set c4 = (Computation s).(4*k), c5 = (Computation s).(4*k+1),
         c6 = (Computation s).(4*k+2), c7 = (Computation s).(4*k+3),
         c8 = (Computation s).(4*k+4);
-A6: 4*k+4*1 = 4*(k+1) by XCMPLX_1:8;
-A7: c6 = (Computation s).(4*k+(1+1))
-       .= (Computation s).((4*k+1)+1) by XCMPLX_1:1;
-A8: c7 = (Computation s).(4*k+(2+1))
-       .= (Computation s).((4*k+2)+1) by XCMPLX_1:1;
-A9: c8 = (Computation s).(4*k+(3+1))
-       .= (Computation s).((4*k+3)+1) by XCMPLX_1:1;
+A6: c6 = (Computation s).((4*k+1)+1);
+A7: c7 = (Computation s).((4*k+2)+1);
+A8: c8 = (Computation s).((4*k+3)+1);
     assume
-A10: c4.a > 0;
+A9: c4.a > 0;
     assume
-A11:   c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4;
-       now per cases by A11;
+A10:   c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4;
+        now per cases by A10;
       case
-A12:     c4.b > 0;
-       then A13:    IC c5 = il.1 &
+A11:     c4.b > 0;
+       then A12:    IC c5 = il.1 &
         c5.a = c4.a &
         c5.b = c4.b &
-        c5.c = c4.b by A2,A11,Th5;
-then A14:    IC c6 = il.2 &
+        c5.c = c4.b by A2,A10,Th5;
+then A13:    IC c6 = il.2 &
         c6.b = c5.a mod c5.b &
-        c6.c = c5.c by A2,A7,Th6;
-    then A15: IC c7 = il.3 &
+        c6.c = c5.c by A2,A6,Th6;
+    then A14: IC c7 = il.3 &
         c7.a = c6.c &
         c7.b = c6.b &
-        c7.c = c6.c by A2,A8,Th7;
+        c7.c = c6.c by A2,A7,Th7;
 then (c7.b > 0 implies IC c8 = il.0) &
         (c7.b <= 0 implies IC c8 = il.4) &
         c8.a = c7.a &
-        c8.b = c7.b by A2,A9,Th8;
+        c8.b = c7.b by A2,A8,Th8;
       hence c8.a > 0 & (c8.b > 0 & IC c8 = il.0 or c8.b = 0 & IC c8 = il.4)
-       by A12,A13,A14,A15,GR_CY_2:2;
+       by A11,A12,A13,A14,GR_CY_2:2;
       end;
       case c4.b = 0;
-       hence c8.a > 0 & c8.b = 0 & IC c8 = il.4 by A2,A10,A11,Th9;
+       hence c8.a > 0 & c8.b = 0 & IC c8 = il.4 by A2,A9,A10,Th9;
      end;
      end;
-    hence _P[k+1] by A6;
+    hence _P[k+1];
    end;
-     for k holds _P[k] from NAT_1:sch 1(A4,A5);
+      for k holds _P[k] from NAT_1:sch 1(A4,A5);
   hence thesis;
  end;
 
@@ -473,29 +465,25 @@ A3: s.a > 0 & s.b > 0 and
 A4: (Computation s).(4*k).b > 0;
   set c4 = (Computation s).(4*k), c5 = (Computation s).(4*k+1),
       c6 = (Computation s).(4*k+2), c7 = (Computation s).(4*k+3);
-A5: 4*k+4*1 = 4*(k+1) by XCMPLX_1:8;
-A6: c6 = (Computation s).(4*k+(1+1))
-       .= (Computation s).((4*k+1)+1) by XCMPLX_1:1;
-A7: c7 = (Computation s).(4*k+(2+1))
-       .= (Computation s).((4*k+2)+1) by XCMPLX_1:1;
-A8: (Computation s).(4*k+4) = (Computation s).(4*k+(3+1))
-       .= (Computation s).((4*k+3)+1) by XCMPLX_1:1;
-     c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4 by A1,A2,A3,Lm3;
-   then A9:    IC c5 = il.1 &
+A5: c6 = (Computation s).((4*k+1)+1);
+A6: c7 = (Computation s).((4*k+2)+1);
+A7: (Computation s).(4*k+4) = (Computation s).((4*k+3)+1);
+      c4.b > 0 & IC c4 = il.0 or c4.b = 0 & IC c4 = il.4 by A1,A2,A3,Lm3;
+   then A8:    IC c5 = il.1 &
         c5.a = c4.a &
         c5.b = c4.b &
         c5.c = c4.b by A2,A4,Th5;
-then A10:    IC c6 = il.2 &
+then A9:    IC c6 = il.2 &
         c6.b = c5.a mod c5.b &
-        c6.c = c5.c by A2,A6,Th6;
-then A11:    IC c7 = il.3 &
+        c6.c = c5.c by A2,A5,Th6;
+then A10:    IC c7 = il.3 &
         c7.a = c6.c &
         c7.b = c6.b &
-        c7.c = c6.c by A2,A7,Th7;
- hence (Computation s).(4*(k+1)).a = (Computation s).(4*k).b by A2,A5,A8,A9,A10
-,Th8;
+        c7.c = c6.c by A2,A6,Th7;
+ hence (Computation s).(4*(k+1)).a = (Computation s).(4*k).b by A2,A7,A8,A9,
+Th8;
  thus (Computation s).(4*(k+1)).b =
-(Computation s).(4*k).a mod (Computation s).(4*k).b by A2,A5,A8,A9,A10,A11,Th8;
+(Computation s).(4*k).a mod (Computation s).(4*k).b by A2,A7,A8,A9,A10,Th8;
 end;
 
 Lm5:
@@ -532,14 +520,14 @@ A14: (Computation s).(4*(k+1)).b >= 0 by A1,A2,A3,A4,A5,Lm3;
    thus G(k+1) = (Computation s).(4*(k+1)).b by A14,ABSVALUE:def 1
         .= (Computation s).(4*k).a mod (Computation s).(4*k).b
               by A1,A2,A3,A4,A5,A12,A13,Lm4,ABSVALUE:7
-        .= F(k) mod G(k) by A12,A13,A15,Th2,ABSVALUE:7;
+        .= F(k) mod G(k) by A12,A15,Th2;
   end;
   consider k such that
 A16: F(k) = x' hcf y' and
 A17: G(k) = 0 from Euklides'(A7,A8,A9,A10,A11);
 A18: abs(x) = x' & abs(y) = y' by A6,ABSVALUE:def 1;
 A19: ((Computation s).(4*k)).a > 0 by A1,A2,A3,A4,A5,Lm3;
-     (Computation s).(4*k).b = 0 by A17,ABSVALUE:7;
+      (Computation s).(4*k).b = 0 by A17,ABSVALUE:7;
    then A20: IC (Computation s).(4*k) = il.4 by A1,A2,A3,A4,A5,Lm3;
 A21: s halts_at il.4 by A2,Lm2;
   hence (Result s).a = ((Computation s).(4*k)).a by A20,AMI_3:44
@@ -560,7 +548,7 @@ A3: s.a = x and
 A4: s.b = y and
 A5: x > 0 and
 A6: y > 0;
-    now per cases by AXIOMS:21;
+     now per cases by AXIOMS:21;
    case x > y;
     hence (Result s).a = x gcd y by A1,A2,A3,A4,A6,Lm5;
    end;
@@ -568,7 +556,7 @@ A6: y > 0;
 A7:  x = y;
      take s' = (Computation s).4;
      reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
-      abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
+       abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
     then A8:  x mod y = x' mod y' by A5,A6,Th2
            .= 0 by A7,GR_CY_1:5;
 
@@ -585,7 +573,7 @@ A9:  s = (Computation s).(4*0) & s' = (Computation s).(4*(0+1)) by AMI_1:def 19
 A10:  y > x;
      take s' = (Computation s).4;
      reconsider x' = x, y' = y as Nat by A5,A6,INT_1:16;
-      abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
+       abs(x) = x' & abs(y) = y' by A5,A6,ABSVALUE:def 1;
     then A11:  x mod y = x' mod y' by A5,A6,Th2
            .= x' by A10,GR_CY_1:4;
 
@@ -597,9 +585,9 @@ then A14: s' starts_at il.0 by AMI_3:def 14;
 A15: Euclide-Algorithm c= s' by A2,AMI_3:43;
      then consider k0 being Nat such that
 A16:   s' halts_at IC (Computation s').k0 by A5,A10,A13,A14,Lm5;
-       (Computation s).(k0+4) = (Computation s').k0 by AMI_1:51;
+        (Computation s).(k0+4) = (Computation s').k0 by AMI_1:51;
 then A17:  s halts_at IC (Computation s).(k0+4) by A16,AMI_3:48;
-       (Result s').a = x gcd y by A5,A10,A13,A14,A15,Lm5;
+        (Result s').a = x gcd y by A5,A10,A13,A14,A15,Lm5;
     hence (Result s).a = x gcd y by A17,AMI_3:47;
   end;
   end;
@@ -624,7 +612,8 @@ A3:    x2 > 0 & y2 > 0 &  p = (a,b) --> (x2,y2) & q2 = a .--> (x2 gcd y2);
 A4:    a <> b by AMI_3:52;
 then A5:    x1 = ((a,b) --> (x1,y1)).a by FUNCT_4:66
         .= x2 by A2,A3,A4,FUNCT_4:66;
-      y1 = ((a,b) --> (x1,y1)).b by A4,FUNCT_4:66 .= y2 by A2,A3,A4,FUNCT_4:66;
+       y1 = ((a,b) --> (x1,y1)).b by A4,FUNCT_4:66 .= y2 by A2,A3,A4,FUNCT_4:66
+;
      hence q1 = q2 by A2,A3,A5;
     end;
     consider f being Function such that
@@ -636,12 +625,12 @@ A7:  dom f c= FinPartSt SCM
        then [e,f.e] in f by FUNCT_1:8;
       hence e in FinPartSt SCM by A6;
      end;
-      rng f c= FinPartSt SCM
+       rng f c= FinPartSt SCM
      proof let q be set;
       assume q in rng f;
        then consider p being set such that
 A8:     [p,q] in f by RELAT_1:def 5;
-         ex x,y being Integer st
+          ex x,y being Integer st
         x > 0 & y > 0 &p = (a,b) --> (x,y) & q = a .--> (x gcd y) by A6,A8;
       hence q in FinPartSt SCM by AMI_3:31;
      end;
@@ -655,7 +644,7 @@ A8:     [p,q] in f by RELAT_1:def 5;
    given x,y being Integer such that
 A9:   x > 0 & y > 0 &
      p = (a,b) --> (x,y) & q = a .--> (x gcd y);
-      p in FinPartSt SCM by AMI_3:31;
+       p in FinPartSt SCM by AMI_3:31;
    hence [p,q] in f by A6,A9;
   end;
  uniqueness
@@ -689,7 +678,7 @@ A3:  p in dom Euclide-Function;
   end;
   given x,y being Integer such that
 A4:  x > 0 & y > 0 & p = (a,b) --> (x,y);
-      [p,a .--> (x gcd y)] in Euclide-Function by A4,Def2;
+       [p,a .--> (x gcd y)] in Euclide-Function by A4,Def2;
   hence thesis by FUNCT_1:8;
  end;
 
@@ -704,7 +693,7 @@ theorem Th12:
  end;
 
 theorem
-   (Start-At il.0) +* Euclide-Algorithm computes Euclide-Function
+    (Start-At il.0) +* Euclide-Algorithm computes Euclide-Function
  proof let x be set;
   assume x in dom Euclide-Function;
    then consider i1,i2 being Integer such that
@@ -715,34 +704,34 @@ A2:  x = (a,b) --> (i1,i2) by Th11;
    set q = Euclide-Algorithm;
 A3: dom s = { a, b } by A2,FUNCT_4:65;
 then A4: a in dom s & b in dom s by TARSKI:def 2;
-      dom(Start-At il.0) = { IC SCM } by AMI_3:34;
+       dom(Start-At il.0) = { IC SCM } by AMI_3:34;
     then A5:  dom p = { IC SCM } \/ { il.0,il.1,il.2,il.3,il.4 }
       by Th4,FUNCT_4:def 1;
 A6: now assume
-      dom p meets dom s;
+       dom p meets dom s;
       then consider x being set such that
 A7:    x in dom p & x in dom s by XBOOLE_0:3;
-        x in { IC SCM } or x in { il.0,il.1,il.2,il.3,il.4 }
+         x in { IC SCM } or x in { il.0,il.1,il.2,il.3,il.4 }
         by A5,A7,XBOOLE_0:def 2;
 then A8:     x = IC SCM or x = il.0 or x = il.1 or x = il.2 or x = il.3 or x =
 il.4
        by ENUMSET1:23,TARSKI:def 1;
-        x = a or x = b by A3,A7,TARSKI:def 2;
+         x = a or x = b by A3,A7,TARSKI:def 2;
      hence contradiction by A8,AMI_3:56,57;
     end;
     then A9:  p c= p +* s by FUNCT_4:33;
-       q c= p by FUNCT_4:26;
+        q c= p by FUNCT_4:26;
 then A10: q c= p +* s by A9,XBOOLE_1:1;
 A11: p +* s starts_at il.0
      proof
 A12:   dom p c= dom(p +* s) by A9,RELAT_1:25;
-         IC SCM in { IC SCM } by TARSKI:def 1;
+          IC SCM in { IC SCM } by TARSKI:def 1;
        then A13:     IC SCM in dom p by A5,XBOOLE_0:def 2;
-         dom p /\ dom s = {} by A6,XBOOLE_0:def 7;
+          dom p /\ dom s = {} by A6,XBOOLE_0:def 7;
 then A14:     not IC SCM in dom s by A13,XBOOLE_0:def 3;
       thus
-     IC SCM in dom(p +* s) by A12,A13;
-         IC SCM <> il.0 & IC SCM <> il.1 & IC SCM <> il.2 &
+      IC SCM in dom(p +* s) by A12,A13;
+          IC SCM <> il.0 & IC SCM <> il.1 & IC SCM <> il.2 &
         IC SCM <> il.3 & IC SCM <> il.4 by AMI_3:57;
 then A15:    not IC SCM in dom q by Th4,ENUMSET1:23;
       thus IC(p +* s) = (p +* s).IC SCM by A12,A13,AMI_3:def 16
@@ -756,7 +745,7 @@ A16: for t being State of SCM st p +* s c= t holds t.a = i1 & t.b = i2
    proof let t be State of SCM such that
 A17: p +* s c= t;
 A18:   a <> b by AMI_3:52;
-      s c= p +* s by FUNCT_4:26;
+       s c= p +* s by FUNCT_4:26;
 then A19: s c= t by A17,XBOOLE_1:1;
     hence t.a = s.a by A4,GRFUNC_1:8
       .= i1 by A2,A18,FUNCT_4:66;
@@ -780,7 +769,7 @@ A28: dom(p +* s) = { IC SCM } \/ C \/ { a, b } by A3,A5,FUNCT_4:def 1
     let k;
     set Cs = Computation s1, Cs2 = Computation s2;
 A29:  Euclide-Algorithm c= Cs2.k by A26,AMI_3:43;
-      Euclide-Algorithm c= Cs.k by A24,AMI_3:43;
+       Euclide-Algorithm c= Cs.k by A24,AMI_3:43;
     then A30:   (Cs.k)|C = Euclide-Algorithm by Th4,GRFUNC_1:64
       .= (Cs2.k)|C by A29,Th4,GRFUNC_1:64;
 A31: dom(Cs.k) = the carrier of SCM by AMI_3:36
@@ -806,9 +795,9 @@ then A38:   j = 1 or j = 2 or j = 3 or j = 4 by CQC_THE1:5;
      per cases by A1,A25,A26,A27,Lm3;
      suppose
 A39:   IC Cs2.(4*i) = il.0;
-A40:   4*i + 1 + 1 = 4*i + (1 + 1) by XCMPLX_1:1;
-A41:   (4*i+2)+1 = 4*i+(2+1) by XCMPLX_1:1;
-A42:   4*i + 3 + 1 = 4*i + (3 + 1) by XCMPLX_1:1;
+A40:   4*i + 1 + 1 = 4*i + (1 + 1);
+A41:   (4*i+2)+1 = 4*i+(2+1);
+A42:   4*i + 3 + 1 = 4*i + (3 + 1);
 A43:   IC Cs.(4*i) = (Cs.(4*i)).IC SCM by AMI_1:def 15
         .= il.0 by A35,A39,AMI_1:def 15;
       then A44: IC Cs.(4*i+1) = il.1 & IC Cs2.(4*i+1) = il.1 by A24,A26,A39,Th5
@@ -835,7 +824,7 @@ A53:  (Cs.(4*i+3)).a = (Cs.(4*i+2)).dl.2 by A24,A41,A48,Th7
            .= (Cs2.(4*i+3)).a by A26,A41,A48,A51,Th7;
 A54:  (Cs.(4*i+3)).b = (Cs.(4*i+2)).b by A24,A41,A48,Th7
            .= (Cs2.(4*i+3)).b by A26,A41,A48,A50,Th7;
-       (Cs.(4*i+3)).b <= 0 or (Cs.(4*i+3)).b > 0;
+        (Cs.(4*i+3)).b <= 0 or (Cs.(4*i+3)).b > 0;
     then A55: IC Cs.(4*i+4) = il.4 & IC Cs2.(4*i+4) = il.4 or
     IC Cs.(4*i+4) = il.0 & IC Cs2.(4*i+4) = il.0 by A24,A26,A42,A52,A54,Th8;
 A56:  (Cs.(4*i+4)).a = (Cs.(4*i+3)).a by A24,A42,A52,Th8
@@ -853,7 +842,7 @@ def 15
      suppose
 A58:    IC Cs2.(4*i) = il.4;
 A59:    4*i + j >= 4*i by NAT_1:29;
-        IC Cs.(4*i) = (Cs.(4*i)).IC SCM by AMI_1:def 15
+         IC Cs.(4*i) = (Cs.(4*i)).IC SCM by AMI_1:def 15
         .= il.4 by A35,A58,AMI_1:def 15;
       then s1 halts_at IC Cs.(4*i) & s2 halts_at IC Cs2.(4*i) by A24,A26,A58,
 Lm2;
@@ -864,7 +853,7 @@ Lm2;
     end;
     end;
 A60: 4 > 0;
-     _P[k] from AMI_3:sch 1(A32,A60,A34);
+      _P[k] from AMI_3:sch 1(A32,A60,A34);
    then (Cs.k)|A = (Cs2.k)|A by A31,AMI_3:26;
     hence (Computation s1).k|dom(p +* s) = (Computation s2).k|dom(p +* s)
      by A28,A30,AMI_3:20;
@@ -885,7 +874,7 @@ A65:   t.a = i1 & t.b = i2 by A16,A62;
    end;
    suppose
 A66:   i1 = i2;
-      abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
+       abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
     then A67:  i1 mod i2 = i1' mod i2' by A1,Th2
            .= 0 by A66,GR_CY_1:5;
 
@@ -898,7 +887,7 @@ A68:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by AMI_1:def
    end;
    suppose
 A69:  i1 < i2;
-      abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
+       abs(i1) = i1' & abs(i2) = i2' by A1,ABSVALUE:def 1;
     then A70:  i1 mod i2 = i1' mod i2' by A1,Th2
            .= i1' by A69,GR_CY_1:4;
 
@@ -907,16 +896,16 @@ A71:  t = (Computation t).(4*0) & t' = (Computation t).(4*(0+1)) by AMI_1:def
     then A72:  t'.a = i2 & t'.b = i1 by A1,A63,A64,A65,A70,Lm4;
      then IC t' = il.0 by A1,A63,A64,A65,A71,Lm3;
 then A73: t' starts_at il.0 by AMI_3:def 14;
-       Euclide-Algorithm c= t' by A63,AMI_3:43;
+        Euclide-Algorithm c= t' by A63,AMI_3:43;
      then consider k0 being Nat such that
 A74:   t' halts_at IC (Computation t').k0 by A1,A69,A72,A73,Lm5;
-       (Computation t).(k0+4) = (Computation t').k0 by AMI_1:51;
+        (Computation t).(k0+4) = (Computation t').k0 by AMI_1:51;
      then t halts_at IC (Computation t).(k0+4) by A74,AMI_3:48;
      hence thesis by AMI_3:40;
     end;
     end;
   hence
-  p +* s is pre-program of SCM by A20;
+   p +* s is pre-program of SCM by A20;
 A75: Euclide-Function.s = a .--> (i1 gcd i2) by A1,A2,Th12;
    consider t being State of SCM such that
 A76:  p +* s c= t by AMI_3:39;
@@ -924,21 +913,21 @@ A77: dom s = { a, b } by A2,FUNCT_4:65;
 then A78: a in dom s & b in dom s by TARSKI:def 2;
 A79: s c= p +* s by FUNCT_4:26;
 then A80: s c= t by A76,XBOOLE_1:1;
-      q c= p by FUNCT_4:26;
+       q c= p by FUNCT_4:26;
     then q c= p +* s by A9,XBOOLE_1:1;
 then A81: q c= t by A76,XBOOLE_1:1;
 A82: t starts_at il.0 by A11,A76,AMI_3:49;
-      a in the carrier of SCM;
+       a in the carrier of SCM;
 then A83: a in dom Result t by AMI_3:36;
-     a <> b by AMI_3:52;
+      a <> b by AMI_3:52;
    then s.a = i1 & s.b = i2 by A2,FUNCT_4:66;
    then t.a = i1 & t.b = i2 by A78,A80,GRFUNC_1:8;
    then (Result t).a = i1 gcd i2 by A1,A81,A82,Th10;
 then A84: Euclide-Function.s c= Result t by A75,A83,AMI_3:27;
 A85: dom s c= dom(p +* s) by A79,RELAT_1:25;
-      dom(a .--> (i1 gcd i2)) = { a } by CQC_LANG:5;
+       dom(a .--> (i1 gcd i2)) = { a } by CQC_LANG:5;
     then dom(a .--> (i1 gcd i2)) c= dom s by A77,ZFMISC_1:12;
 then A86: dom(a .--> (i1 gcd i2)) c= dom(p +* s) by A85,XBOOLE_1:1;
-     Result(p +* s) = (Result t)|dom(p +* s) by A20,A61,A76,AMI_1:def 28;
+      Result(p +* s) = (Result t)|dom(p +* s) by A20,A61,A76,AMI_1:def 28;
   hence Euclide-Function.s c= Result(p +* s) by A75,A84,A86,AMI_3:21;
  end;

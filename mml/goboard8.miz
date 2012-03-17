@@ -29,7 +29,7 @@ reserve i,j,k,i1,j1 for Nat,
 reserve f for non constant standard special_circular_sequence;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+1 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+1,j+2) or
@@ -42,7 +42,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+1 <= len GoB f and
@@ -50,45 +50,45 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+1,j+2) or
       f/.(k+2) = (GoB f)*(i+1,j) & f/.k = (GoB f)*(i+1,j+2));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j <= width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  j+1+1 = j+(1+1) by XCMPLX_1:1;
-then A13:   j+1 < width GoB f by A7,NAT_1:38;
-A14:  i < len GoB f by A6,NAT_1:38;
+  j+1+1 = j+(1+1);
+then A12:   j+1 < width GoB f by A7,NAT_1:38;
+A13:  i < len GoB f by A6,NAT_1:38;
  assume
-A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
          \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
-                                       by A6,A7,A12,A13,A14,GOBOARD6:67;
-  then A16: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
+                                       by A6,A7,A12,A13,GOBOARD6:67;
+  then A15: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
              \/
- { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A12,A15,XBOOLE_1:63
+ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A14,XBOOLE_1:63
 ;
-A17: L~f misses Int cell(GoB f,i,j) by A10,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,j+1) by A11,A14,GOBOARD7:14;
+A16: L~f misses Int cell(GoB f,i,j) by A10,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
-                                         by A17,XBOOLE_1:70;
-    then L~f meets { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
                                          by A16,XBOOLE_1:70;
+    then L~f meets { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
+                                         by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
-A18:  LSeg(f/.(k+1),(GoB f)*(i,j+1)) = LSeg(f,k0)
+        1 <= k0 & k0+1 <= len f and
+A17:  LSeg(f/.(k+1),(GoB f)*(i,j+1)) = LSeg(f,k0)
                                           by A6,A8,A11,GOBOARD7:42;
-A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
+A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
-A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
- hence contradiction by A6,A7,A8,A9,A13,A14,A18,A19,A20,GOBOARD7:62;
+A19:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+ hence contradiction by A6,A7,A8,A9,A12,A13,A17,A18,A19,GOBOARD7:62;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+2 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i+1,j+2) or
@@ -101,7 +101,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -109,46 +109,46 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i+1,j+2) or
       f/.(k+2) = (GoB f)*(i+2,j+1) & f/.k = (GoB f)*(i+1,j+2));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j < width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-       i+1+1 = i+(1+1) by XCMPLX_1:1;
+        i+1+1 = i+(1+1);
 then A12:   i+1 < len GoB f by A6,NAT_1:38;
-A13:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A13:  j+1+1 = j+(1+1);
 then A14:   j+1 < width GoB f by A7,NAT_1:38;
 A15:  i < len GoB f by A12,NAT_1:38;
  assume
 A16: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
          \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
-                                       by A6,A7,A13,A14,A15,GOBOARD6:67;
+                                       by A6,A7,A14,A15,GOBOARD6:67;
   then A17: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
              \/
- { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A13,A16,XBOOLE_1:63
+ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A16,XBOOLE_1:63
 ;
 A18: L~f misses Int cell(GoB f,i,j) by A10,A15,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,j+1) by A11,A15,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,j+1) by A11,A15,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
                                          by A18,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
                                          by A17,XBOOLE_1:70;
     then 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A19:  LSeg(
 f/.(k+1),(GoB f)*(i,j+1)) = LSeg(f,k0) by A6,A8,A11,A12,GOBOARD7:42;
 A20:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A21:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A8,A9,A11,A12,A13,A14,A19,A20,A21,GOBOARD7:63;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+2 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
@@ -161,7 +161,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -169,19 +169,19 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+2,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
       f/.(k+2) = (GoB f)*(i+2,j+1) & f/.k = (GoB f)*(i+1,j));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j < width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-    i+1+1 = i+(1+1) by XCMPLX_1:1;
+     i+1+1 = i+(1+1);
 then A12:   i+1 < len GoB f by A6,NAT_1:38;
-       j+1+1 = j+(1+1) by XCMPLX_1:1;
+        j+1+1 = j+(1+1);
 then A13:   j+1 < width GoB f by A7,NAT_1:38;
 A14:  i < len GoB f by A12,NAT_1:38;
  assume
 A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
          \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
@@ -189,24 +189,24 @@ A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
   then A16: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
              \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,i,j) by A10,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,j+1) by A11,A14,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,j+1) by A11,A14,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
                                          by A17,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
                                          by A16,XBOOLE_1:70;
     then 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(
 f/.(k+1),(GoB f)*(i,j+1)) = LSeg(f,k0) by A6,A8,A11,A12,GOBOARD7:42;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A10,A12,A18,A19,A20,GOBOARD7:64;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+1 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i,j+1) &
      (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
@@ -219,7 +219,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+1 <= len GoB f and
@@ -227,17 +227,17 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i,j+1) and
 A9: (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i,j+2) or
       f/.(k+2) = (GoB f)*(i,j) & f/.k = (GoB f)*(i,j+2));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j <= width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-    j+1+1 = j+(1+1) by XCMPLX_1:1;
+     j+1+1 = j+(1+1);
 then A12:   j+1 < width GoB f by A7,NAT_1:38;
 A13:  i < len GoB f by A6,NAT_1:38;
  assume
 A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
          \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
@@ -245,25 +245,25 @@ A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
   then A15: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
              \/ { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) } by A14,XBOOLE_1:63;
 A16: L~f misses Int cell(GoB f,i,j) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,j+1) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i,j+1)
                                          by A16,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) }
                                          by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A17:  LSeg(f/.(k+1),(GoB f)*(i+1,j+1)) = LSeg(f,k0)
                                           by A6,A8,A11,GOBOARD7:42;
 A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A19:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A12,A13,A17,A18,A19,GOBOARD7:61;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+2 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j+2) or
@@ -276,7 +276,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -284,19 +284,19 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j+2) or
       f/.(k+2) = (GoB f)*(i,j+1) & f/.k = (GoB f)*(i+1,j+2));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j < width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A12:  i+1+1 = i+(1+1);
 then A13:   i+1 < len GoB f by A6,NAT_1:38;
-A14:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A14:  j+1+1 = j+(1+1);
 then A15:   j+1 < width GoB f by A7,NAT_1:38;
 A16:  1 <= i+1 by NAT_1:29;
  assume
 A17: LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
          1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
+     LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
        1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2)))
      c= Int cell(GoB f,i+1,j) \/ Int cell(GoB f,i+1,j+1)
          \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) }
@@ -305,25 +305,25 @@ A17: LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
              \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*
 (i+2,j+1)) } by A17,XBOOLE_1:63;
 A19: L~f misses Int cell(GoB f,i+1,j) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i+1,j) \/ Int cell(GoB f,i+1,j+1)
                                          by A19,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) }
                                          by A18,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A20:  LSeg(f/.(k+1),(GoB f)*(i+2,j+1)) = LSeg(f,k0)
                                  by A6,A8,A11,A12,A16,GOBOARD7:42;
 A21:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A22:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A8,A9,A11,A13,A14,A15,A20,A21,A22,GOBOARD7:63;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= i & i+2 <= len GoB f & 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
@@ -336,7 +336,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -344,19 +344,19 @@ A7:   1 <= j & j+2 <= width GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+1,j) or
       f/.(k+2) = (GoB f)*(i,j+1) & f/.k = (GoB f)*(i+1,j));
-       j < j+2 by REAL_1:69;
+        j < j+2 by REAL_1:69;
 then A10: j < width GoB f by A7,AXIOMS:22;
-       j+1 <= j+2 by AXIOMS:24;
+        j+1 <= j+2 by AXIOMS:24;
 then A11: 1 <= j+1 & j+1 <= width GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A12:  i+1+1 = i+(1+1);
 then A13:   i+1 < len GoB f by A6,NAT_1:38;
-       j+1+1 = j+(1+1) by XCMPLX_1:1;
+        j+1+1 = j+(1+1);
 then A14:   j+1 < width GoB f by A7,NAT_1:38;
 A15:  1 <= i+1 by NAT_1:29;
  assume
 A16: LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
          1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
+     LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
        1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2)))
      c= Int cell(GoB f,i+1,j) \/ Int cell(GoB f,i+1,j+1)
          \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) }
@@ -365,24 +365,24 @@ A16: LSeg(1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)),
              \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*
 (i+2,j+1)) } by A16,XBOOLE_1:63;
 A18: L~f misses Int cell(GoB f,i+1,j) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i+1,j) \/ Int cell(GoB f,i+1,j+1)
                                          by A18,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) }
                                          by A17,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A19:  LSeg(f/.(k+1),(GoB f)*(i+2,j+1)) = LSeg(f,k0)
                           by A6,A8,A11,A12,A15,GOBOARD7:42;
 A20:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A21:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A10,A13,A19,A20,A21,GOBOARD7:64;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i st 1 <= i & i+2 <= len GoB f &
     f/.(k+1) = (GoB f)*(i+1,1) &
     (f/.k = (GoB f)*(i+2,1) & f/.(k+2) = (GoB f)*(i+1,2) or
@@ -395,16 +395,16 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i such that
 A6:  1 <= i & i+2 <= len GoB f and
 A7: f/.(k+1) = (GoB f)*(i+1,1) and
 A8: (f/.k = (GoB f)*(i+2,1) & f/.(k+2) = (GoB f)*(i+1,2) or
      f/.(k+2) = (GoB f)*(i+2,1) & f/.k = (GoB f)*(i+1,2));
-    width GoB f <> 0 by GOBOARD1:def 5;
+     width GoB f <> 0 by GOBOARD1:def 5;
 then A9: 0+1 <= width GoB f by RLVECT_1:99;
-       i+1+1 = i+(1+1) by XCMPLX_1:1;
+        i+1+1 = i+(1+1);
 then A10:   i+1 < len GoB f by A6,NAT_1:38;
 A11:   1 < width GoB f by GOBOARD7:35;
 A12:  0 < width GoB f by A9,NAT_1:38;
@@ -412,7 +412,7 @@ A13:  i < len GoB f by A10,NAT_1:38;
  assume
 A14: LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
          1/2*((GoB f)*(i,1)+(GoB f)*(i+1,2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
+     LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
        1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1+1)))
      c= Int cell(GoB f,i,0) \/ Int cell(GoB f,i,1)
          \/ { 1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1)) }
@@ -420,24 +420,24 @@ A14: LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
   then A15: L~f meets Int cell(GoB f,i,0) \/ Int cell(GoB f,i,1)
              \/ { 1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1)) } by A14,XBOOLE_1:63;
 A16: L~f misses Int cell(GoB f,i,0) by A12,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,1) by A9,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,1) by A9,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,0) \/ Int cell(GoB f,i,1)
                                          by A16,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1)) }
                                          by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A17:  LSeg(f/.(k+1),(GoB f)*(i,1)) = LSeg(f,k0) by A6,A7,A9,A10,GOBOARD7:42;
 A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A19: 1+1 = 2;
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A10,A11,A17,A18,A19,A20,GOBOARD7:63;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i st 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,1) &
      (f/.k = (GoB f)*(i,1) & f/.(k+2) = (GoB f)*(i+1,2) or
@@ -450,16 +450,16 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i such that
 A6:  1 <= i & i+2 <= len GoB f and
 A7: f/.(k+1) = (GoB f)*(i+1,1) and
 A8: (f/.k = (GoB f)*(i,1) & f/.(k+2) = (GoB f)*(i+1,2) or
       f/.(k+2) = (GoB f)*(i,1) & f/.k = (GoB f)*(i+1,2));
-    width GoB f <> 0 by GOBOARD1:def 5;
+     width GoB f <> 0 by GOBOARD1:def 5;
 then A9: 0+1 <= width GoB f by RLVECT_1:99;
-A10:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A10:  i+1+1 = i+(1+1);
 then A11:   i+1 < len GoB f by A6,NAT_1:38;
 A12:   1 < width GoB f by GOBOARD7:35;
 A13:  0 < width GoB f by A9,NAT_1:38;
@@ -467,7 +467,7 @@ A14:  1 <= i+1 by NAT_1:29;
  assume
 A15: LSeg(1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|,
          1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|,
+     LSeg(1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|,
        1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,2)))
      c= Int cell(GoB f,i+1,0) \/ Int cell(GoB f,i+1,1)
          \/ { 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1)) }
@@ -475,26 +475,26 @@ A15: LSeg(1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|,
   then A16: L~f meets Int cell(GoB f,i+1,0) \/ Int cell(GoB f,i+1,1)
              \/ { 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1)) } by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,i+1,0) by A11,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,1) by A9,A11,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,1) by A9,A11,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i+1,0) \/ Int cell(GoB f,i+1,1)
                                          by A17,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1)) }
                                          by A16,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(f/.(k+1),(GoB f)*(i+2,1)) = LSeg(f,k0)
                              by A6,A7,A9,A10,A14,GOBOARD7:42;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
 A21: 1+1 = 2;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A11,A12,A18,A19,A20,A21,GOBOARD7:63;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i st 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,width GoB f) &
      (f/.k = (GoB f)*(i+2,width GoB f)
@@ -510,7 +510,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -523,14 +523,14 @@ A9: 1 < width GoB f by GOBOARD7:35;
 then A10: width GoB f -'1 +1 = width GoB f by AMI_5:4;
 then A11:   1 <= width GoB f -' 1 by A9,NAT_1:38;
 A12: width GoB f -' 1 < width GoB f by A10,NAT_1:38;
-       i+1+1 = i+(1+1) by XCMPLX_1:1;
+        i+1+1 = i+(1+1);
 then A13:   i+1 < len GoB f by A6,NAT_1:38;
 then A14:  i < len GoB f by NAT_1:38;
  assume
 A15: LSeg(1/2*((GoB f)*(i,width GoB f -' 1)+(GoB f)*(i+1,width GoB f)),
          1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f))+|[0,1]|)
                     meets L~f;
-     1/2*((GoB f)*(i,width GoB f -' 1)+(GoB f)*(i+1,width GoB f)) =
+      1/2*((GoB f)*(i,width GoB f -' 1)+(GoB f)*(i+1,width GoB f)) =
     1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f -' 1))
                             by A6,A10,A11,A13,GOBOARD7:11;
   then LSeg(1/2*((GoB f)*(i,width GoB f -' 1)+(GoB f)*(i+1,width GoB f)),
@@ -543,7 +543,7 @@ A15: LSeg(1/2*((GoB f)*(i,width GoB f -' 1)+(GoB f)*(i+1,width GoB f)),
              \/ { 1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f)) }
         by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,i,width GoB f -' 1) by A12,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i,width GoB f) by A14,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i,width GoB f) by A14,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,width GoB f -' 1)
                   \/ Int cell(GoB f,i,width GoB f)
                                          by A17,XBOOLE_1:70;
@@ -553,18 +553,18 @@ A17: L~f misses Int cell(GoB f,i,width GoB f -' 1) by A12,A14,GOBOARD7:14;
     then 1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f)) in L~f
                                  by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(f/.(k+1),(GoB f)*(i,width GoB f)) = LSeg(f,k0)
                                            by A6,A7,A9,A13,GOBOARD7:42;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A10,A11,A12,A13,A18,A19,A20,GOBOARD7:64;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i st 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,width GoB f) &
      (f/.k = (GoB f)*(i,width GoB f) &
@@ -580,7 +580,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i such that
 A6:  1 <= i & i+2 <= len GoB f and
@@ -594,14 +594,14 @@ A10: 1 <= width GoB f by GOBOARD7:35;
 then A11: width GoB f -'1 +1 = width GoB f by AMI_5:4;
 then A12:   1 <= width GoB f -' 1 by A9,NAT_1:38;
 A13: width GoB f -' 1 < width GoB f by A11,NAT_1:38;
-A14:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A14:  i+1+1 = i+(1+1);
 then A15:   i+1 < len GoB f by A6,NAT_1:38;
 A16:  1 <= i+1 by NAT_1:29;
  assume
 A17: LSeg(1/2*((GoB f)*(i+1,width GoB f -' 1)+(GoB f)*(i+2,width GoB f)),
          1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|)
       meets L~f;
-     1/2*((GoB f)*(i+1,width GoB f -' 1)+(GoB f)*(i+2,width GoB f)) =
+      1/2*((GoB f)*(i+1,width GoB f -' 1)+(GoB f)*(i+2,width GoB f)) =
     1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f -' 1))
               by A6,A11,A12,A14,A16,GOBOARD7:11;
   then LSeg(1/2*((GoB f)*(i+1,width GoB f -' 1)+(GoB f)*(i+2,width GoB f)),
@@ -614,7 +614,7 @@ A17: LSeg(1/2*((GoB f)*(i+1,width GoB f -' 1)+(GoB f)*(i+2,width GoB f)),
              \/ { 1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f)) }
                        by A17,XBOOLE_1:63;
 A19: L~f misses Int cell(GoB f,i+1,width GoB f -' 1) by A13,A15,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,width GoB f) by A15,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,width GoB f) by A15,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i+1,width GoB f -' 1)
                   \/ Int cell(GoB f,i+1,width GoB f) by A19,XBOOLE_1:70;
     then L~f meets {1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*
@@ -623,17 +623,17 @@ A19: L~f misses Int cell(GoB f,i+1,width GoB f -' 1) by A13,A15,GOBOARD7:14;
     then 1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f)) in L~f
                           by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A20:  LSeg(f/.(k+1),(GoB f)*(i+2,width GoB f)) = LSeg(f,k0)
                    by A6,A7,A10,A14,A16,GOBOARD7:42;
 A21:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A22:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A11,A12,A13,A15,A20,A21,A22,GOBOARD7:64;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for i,j st 1 <= j & j+1 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+2,j+1) or
@@ -646,7 +646,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let i,j such that
 A6:  1 <= j & j+1 <= width GoB f and
@@ -654,45 +654,45 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i,j+1) & f/.(k+2) = (GoB f)*(i+2,j+1) or
       f/.(k+2) = (GoB f)*(i,j+1) & f/.k = (GoB f)*(i+2,j+1));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i <= len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  i+1+1 = i+(1+1) by XCMPLX_1:1;
-then A13:   i+1 < len GoB f by A7,NAT_1:38;
-A14:  j < width GoB f by A6,NAT_1:38;
+  i+1+1 = i+(1+1);
+then A12:   i+1 < len GoB f by A7,NAT_1:38;
+A13:  j < width GoB f by A6,NAT_1:38;
  assume
-A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1+1,j+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
          \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
-                                       by A6,A7,A12,A13,A14,GOBOARD6:68;
-  then A16: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
+                                       by A6,A7,A12,A13,GOBOARD6:68;
+  then A15: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
              \/
- { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A12,A15,XBOOLE_1:63
+ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A14,XBOOLE_1:63
 ;
-A17: L~f misses Int cell(GoB f,i,j) by A10,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j) by A11,A14,GOBOARD7:14;
+A16: L~f misses Int cell(GoB f,i,j) by A10,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
-                                         by A17,XBOOLE_1:70;
-    then L~f meets { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
                                          by A16,XBOOLE_1:70;
+    then L~f meets { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
+                                         by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
-A18:  LSeg(f/.(k+1),(GoB f)*(i+1,j)) = LSeg(f,k0)
+        1 <= k0 & k0+1 <= len f and
+A17:  LSeg(f/.(k+1),(GoB f)*(i+1,j)) = LSeg(f,k0)
                                           by A6,A8,A11,GOBOARD7:41;
-A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
+A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
-A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
- hence contradiction by A6,A7,A8,A9,A13,A14,A18,A19,A20,GOBOARD7:64;
+A19:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+ hence contradiction by A6,A7,A8,A9,A12,A13,A17,A18,A19,GOBOARD7:64;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j,i st 1 <= j & j+2 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i+2,j+1) or
@@ -705,7 +705,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j,i such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -713,46 +713,46 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i+2,j+1) or
       f/.(k+2) = (GoB f)*(i+1,j+2) & f/.k = (GoB f)*(i+2,j+1));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i < len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-       j+1+1 = j+(1+1) by XCMPLX_1:1;
+        j+1+1 = j+(1+1);
 then A12:   j+1 < width GoB f by A6,NAT_1:38;
-A13:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A13:  i+1+1 = i+(1+1);
 then A14:   i+1 < len GoB f by A7,NAT_1:38;
 A15:  j < width GoB f by A12,NAT_1:38;
  assume
 A16: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1+1,j+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
          \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
-                                       by A6,A7,A13,A14,A15,GOBOARD6:68;
+                                       by A6,A7,A14,A15,GOBOARD6:68;
   then A17: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
              \/
- { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A13,A16,XBOOLE_1:63
+ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A16,XBOOLE_1:63
 ;
 A18: L~f misses Int cell(GoB f,i,j) by A10,A15,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j) by A11,A15,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j) by A11,A15,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
                                          by A18,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
                                          by A17,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A19:  LSeg(
 f/.(k+1),(GoB f)*(i+1,j)) = LSeg(f,k0) by A6,A8,A11,A12,GOBOARD7:41;
 A20:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A21:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A8,A9,A11,A12,A13,A14,A19,A20,A21,GOBOARD7:61;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j,i st 1 <= j & j+2 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i,j+1) or
@@ -765,7 +765,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j,i such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -773,19 +773,19 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+1,j+2) & f/.(k+2) = (GoB f)*(i,j+1) or
       f/.(k+2) = (GoB f)*(i+1,j+2) & f/.k = (GoB f)*(i,j+1));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i < len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-    j+1+1 = j+(1+1) by XCMPLX_1:1;
+     j+1+1 = j+(1+1);
 then A12:   j+1 < width GoB f by A6,NAT_1:38;
-       i+1+1 = i+(1+1) by XCMPLX_1:1;
+        i+1+1 = i+(1+1);
 then A13:   i+1 < len GoB f by A7,NAT_1:38;
 A14:  j < width GoB f by A12,NAT_1:38;
  assume
 A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
          \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
@@ -793,24 +793,24 @@ A15: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
   then A16: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
              \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,i,j) by A10,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j) by A11,A14,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j) by A11,A14,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
                                          by A17,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
                                          by A16,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(
 f/.(k+1),(GoB f)*(i+1,j)) = LSeg(f,k0) by A6,A8,A11,A12,GOBOARD7:41;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A10,A12,A18,A19,A20,GOBOARD7:62;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j,i st 1 <= j & j+1 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j) &
      (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
@@ -823,7 +823,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j,i such that
 A6:  1 <= j & j+1 <= width GoB f and
@@ -831,17 +831,17 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j) and
 A9: (f/.k = (GoB f)*(i,j) & f/.(k+2) = (GoB f)*(i+2,j) or
       f/.(k+2) = (GoB f)*(i,j) & f/.k = (GoB f)*(i+2,j));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i <= len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-    i+1+1 = i+(1+1) by XCMPLX_1:1;
+     i+1+1 = i+(1+1);
 then A12:   i+1 < len GoB f by A7,NAT_1:38;
 A13:  j < width GoB f by A6,NAT_1:38;
  assume
 A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
          1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
+     LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
        1/2*((GoB f)*(i+1,j)+(GoB f)*(i+2,j+1)))
      c= Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
          \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
@@ -849,25 +849,25 @@ A14: LSeg(1/2*((GoB f)*(i,j)+(GoB f)*(i+1,j+1)),
   then A15: L~f meets Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
              \/ { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) } by A14,XBOOLE_1:63;
 A16: L~f misses Int cell(GoB f,i,j) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j) \/ Int cell(GoB f,i+1,j)
                                          by A16,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) }
                                          by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j)+(GoB f)*(i+1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A17:  LSeg(f/.(k+1),(GoB f)*(i+1,j+1)) = LSeg(f,k0)
                                           by A6,A8,A11,GOBOARD7:41;
 A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A19:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A12,A13,A17,A18,A19,GOBOARD7:63;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j,i st 1 <= j & j+2 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+2,j+1) or
@@ -880,7 +880,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j,i such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -888,19 +888,19 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i+2,j+1) or
       f/.(k+2) = (GoB f)*(i+1,j) & f/.k = (GoB f)*(i+2,j+1));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i < len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A12:  j+1+1 = j+(1+1);
 then A13:   j+1 < width GoB f by A6,NAT_1:38;
-A14:  i+1+1 = i+(1+1) by XCMPLX_1:1;
+A14:  i+1+1 = i+(1+1);
 then A15:   i+1 < len GoB f by A7,NAT_1:38;
 A16:  1 <= j+1 by NAT_1:29;
  assume
 A17: LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
          1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
+     LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
        1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2)))
      c= Int cell(GoB f,i,j+1) \/ Int cell(GoB f,i+1,j+1)
          \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) }
@@ -909,25 +909,25 @@ A17: LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
              \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*
 (i+1,j+2)) } by A17,XBOOLE_1:63;
 A19: L~f misses Int cell(GoB f,i,j+1) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j+1) \/ Int cell(GoB f,i+1,j+1)
                                          by A19,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) }
                                          by A18,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A20:  LSeg(f/.(k+1),(GoB f)*(i+1,j+2)) = LSeg(f,k0)
                                   by A6,A8,A11,A12,A16,GOBOARD7:41;
 A21:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A22:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A8,A9,A11,A13,A14,A15,A20,A21,A22,GOBOARD7:61;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j,i st 1 <= j & j+2 <= width GoB f & 1 <= i & i+2 <= len GoB f &
      f/.(k+1) = (GoB f)*(i+1,j+1) &
      (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
@@ -940,7 +940,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j,i such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -948,19 +948,19 @@ A7:   1 <= i & i+2 <= len GoB f and
 A8: f/.(k+1) = (GoB f)*(i+1,j+1) and
 A9: (f/.k = (GoB f)*(i+1,j) & f/.(k+2) = (GoB f)*(i,j+1) or
       f/.(k+2) = (GoB f)*(i+1,j) & f/.k = (GoB f)*(i,j+1));
-       i < i+2 by REAL_1:69;
+        i < i+2 by REAL_1:69;
 then A10: i < len GoB f by A7,AXIOMS:22;
-       i+1 <= i+2 by AXIOMS:24;
+        i+1 <= i+2 by AXIOMS:24;
 then A11: 1 <= i+1 & i+1 <= len GoB f by A7,AXIOMS:22,NAT_1:29;
-A12:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A12:  j+1+1 = j+(1+1);
 then A13:   j+1 < width GoB f by A6,NAT_1:38;
-       i+1+1 = i+(1+1) by XCMPLX_1:1;
+        i+1+1 = i+(1+1);
 then A14:   i+1 < len GoB f by A7,NAT_1:38;
 A15:  1 <= j+1 by NAT_1:29;
  assume
 A16: LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
          1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
+     LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
        1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+2,j+2)))
      c= Int cell(GoB f,i,j+1) \/ Int cell(GoB f,i+1,j+1)
          \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) }
@@ -969,24 +969,24 @@ A16: LSeg(1/2*((GoB f)*(i,j+1)+(GoB f)*(i+1,j+2)),
              \/ { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*
 (i+1,j+2)) } by A16,XBOOLE_1:63;
 A18: L~f misses Int cell(GoB f,i,j+1) by A10,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,i+1,j+1) by A11,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,i,j+1) \/ Int cell(GoB f,i+1,j+1)
                                          by A18,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) }
                                          by A17,XBOOLE_1:70;
     then 1/2*((GoB f)*(i+1,j+1)+(GoB f)*(i+1,j+2)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A19:  LSeg(f/.(k+1),(GoB f)*(i+1,j+2)) = LSeg(f,k0)
                                 by A6,A8,A11,A12,A15,GOBOARD7:41;
 A20:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A21:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A9,A10,A13,A19,A20,A21,GOBOARD7:62;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j st 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(1,j+1) &
      (f/.k = (GoB f)*(1,j+2) & f/.(k+2) = (GoB f)*(2,j+1) or
@@ -999,16 +999,16 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j such that
 A6:  1 <= j & j+2 <= width GoB f and
 A7: f/.(k+1) = (GoB f)*(1,j+1) and
 A8: (f/.k = (GoB f)*(1,j+2) & f/.(k+2) = (GoB f)*(2,j+1) or
       f/.(k+2) = (GoB f)*(1,j+2) & f/.k = (GoB f)*(2,j+1));
-    len GoB f <> 0 by GOBOARD1:def 5;
+     len GoB f <> 0 by GOBOARD1:def 5;
 then A9: 0+1 <= len GoB f by RLVECT_1:99;
-       j+1+1 = j+(1+1) by XCMPLX_1:1;
+        j+1+1 = j+(1+1);
 then A10:   j+1 < width GoB f by A6,NAT_1:38;
 A11:   1 < len GoB f by GOBOARD7:34;
 A12:  0 < len GoB f by A9,NAT_1:38;
@@ -1016,7 +1016,7 @@ A13:  j < width GoB f by A10,NAT_1:38;
  assume
 A14: LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
          1/2*((GoB f)*(1,j)+(GoB f)*(2,j+1))) meets L~f;
-    LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
+     LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
        1/2*((GoB f)*(1,j)+(GoB f)*(1+1,j+1)))
      c= Int cell(GoB f,0,j) \/ Int cell(GoB f,1,j)
          \/ { 1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1)) }
@@ -1024,24 +1024,24 @@ A14: LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
   then A15: L~f meets Int cell(GoB f,0,j) \/ Int cell(GoB f,1,j)
              \/ { 1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1)) } by A14,XBOOLE_1:63;
 A16: L~f misses Int cell(GoB f,0,j) by A12,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,1,j) by A9,A13,GOBOARD7:14;
+       L~f misses Int cell(GoB f,1,j) by A9,A13,GOBOARD7:14;
     then L~f misses Int cell(GoB f,0,j) \/ Int cell(GoB f,1,j)
                                          by A16,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1)) }
                                          by A15,XBOOLE_1:70;
     then 1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A17:  LSeg(f/.(k+1),(GoB f)*(1,j)) = LSeg(f,k0) by A6,A7,A9,A10,GOBOARD7:41;
 A18:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A19: 1+1 = 2;
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A10,A11,A17,A18,A19,A20,GOBOARD7:61;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j st 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(1,j+1) &
      (f/.k = (GoB f)*(1,j) & f/.(k+2) = (GoB f)*(2,j+1) or
@@ -1054,16 +1054,16 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j such that
 A6:  1 <= j & j+2 <= width GoB f and
 A7: f/.(k+1) = (GoB f)*(1,j+1) and
 A8: (f/.k = (GoB f)*(1,j) & f/.(k+2) = (GoB f)*(2,j+1) or
       f/.(k+2) = (GoB f)*(1,j) & f/.k = (GoB f)*(2,j+1));
-    len GoB f <> 0 by GOBOARD1:def 5;
+     len GoB f <> 0 by GOBOARD1:def 5;
 then A9: 0+1 <= len GoB f by RLVECT_1:99;
-A10:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A10:  j+1+1 = j+(1+1);
 then A11:   j+1 < width GoB f by A6,NAT_1:38;
 A12:   1 < len GoB f by GOBOARD7:34;
 A13:  0 < len GoB f by A9,NAT_1:38;
@@ -1071,7 +1071,7 @@ A14:  1 <= j+1 by NAT_1:29;
  assume
 A15: LSeg(1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|,
          1/2*((GoB f)*(1,j+1)+(GoB f)*(2,j+2))) meets L~f;
-    LSeg(1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|,
+     LSeg(1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|,
        1/2*((GoB f)*(1,j+1)+(GoB f)*(2,j+2)))
      c= Int cell(GoB f,0,j+1) \/ Int cell(GoB f,1,j+1)
          \/ { 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2)) }
@@ -1079,26 +1079,26 @@ A15: LSeg(1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|,
   then A16: L~f meets Int cell(GoB f,0,j+1) \/ Int cell(GoB f,1,j+1)
              \/ { 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2)) } by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,0,j+1) by A11,A13,GOBOARD7:14;
-      L~f misses Int cell(GoB f,1,j+1) by A9,A11,GOBOARD7:14;
+       L~f misses Int cell(GoB f,1,j+1) by A9,A11,GOBOARD7:14;
     then L~f misses Int cell(GoB f,0,j+1) \/ Int cell(GoB f,1,j+1)
                                          by A17,XBOOLE_1:70;
     then L~f meets { 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2)) }
                                          by A16,XBOOLE_1:70;
     then 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2)) in L~f by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(f/.(k+1),(GoB f)*(1,j+2)) = LSeg(f,k0)
                                   by A6,A7,A9,A10,A14,GOBOARD7:41;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
 A21: 1+1 = 2;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A11,A12,A18,A19,A20,A21,GOBOARD7:61;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j st 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(len GoB f,j+1) &
      (f/.k = (GoB f)*(len GoB f,j+2)
@@ -1114,7 +1114,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -1127,14 +1127,14 @@ A9: 1 < len GoB f by GOBOARD7:34;
 then A10: len GoB f -'1 +1 = len GoB f by AMI_5:4;
 then A11:   1 <= len GoB f -' 1 by A9,NAT_1:38;
 A12: len GoB f -' 1 < len GoB f by A10,NAT_1:38;
-       j+1+1 = j+(1+1) by XCMPLX_1:1;
+        j+1+1 = j+(1+1);
 then A13:   j+1 < width GoB f by A6,NAT_1:38;
 then A14:  j < width GoB f by NAT_1:38;
  assume
 A15: LSeg(1/2*((GoB f)*(len GoB f -' 1,j)+(GoB f)*(len GoB f,j+1)),
          1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|)
                     meets L~f;
-     1/2*((GoB f)*(len GoB f -' 1,j)+(GoB f)*(len GoB f,j+1)) =
+      1/2*((GoB f)*(len GoB f -' 1,j)+(GoB f)*(len GoB f,j+1)) =
     1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j))
                             by A6,A10,A11,A13,GOBOARD7:11;
   then LSeg(1/2*((GoB f)*(len GoB f -' 1,j)+(GoB f)*(len GoB f,j+1)),
@@ -1147,7 +1147,7 @@ A15: LSeg(1/2*((GoB f)*(len GoB f -' 1,j)+(GoB f)*(len GoB f,j+1)),
              \/ { 1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1)) }
         by A15,XBOOLE_1:63;
 A17: L~f misses Int cell(GoB f,len GoB f -' 1,j) by A12,A14,GOBOARD7:14;
-      L~f misses Int cell(GoB f,len GoB f,j) by A14,GOBOARD7:14;
+       L~f misses Int cell(GoB f,len GoB f,j) by A14,GOBOARD7:14;
     then L~f misses Int cell(GoB f,len GoB f -' 1,j)
                   \/ Int cell(GoB f,len GoB f,j)
                                          by A17,XBOOLE_1:70;
@@ -1156,18 +1156,18 @@ A17: L~f misses Int cell(GoB f,len GoB f -' 1,j) by A12,A14,GOBOARD7:14;
     then 1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1)) in L~f
                                  by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A18:  LSeg(f/.(k+1),(GoB f)*(len GoB f,j)) = LSeg(f,k0)
                                     by A6,A7,A9,A13,GOBOARD7:41;
 A19:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 
 A20:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A10,A11,A12,A13,A18,A19,A20,GOBOARD7:62;
 end;
 
 theorem
-    for k st 1 <= k & k+2 <= len f
+     for k st 1 <= k & k+2 <= len f
   for j st 1 <= j & j+2 <= width GoB f &
      f/.(k+1) = (GoB f)*(len GoB f,j+1) &
      (f/.k = (GoB f)*(len GoB f,j) &
@@ -1183,7 +1183,7 @@ proof
 A1:   k >= 1 and
 A2: k+2 <= len f;
 A3:   1 <= k+1 by NAT_1:29;
-A4:  k+1+1 = k+(1+1) by XCMPLX_1:1;
+A4:  k+1+1 = k+(1+1);
 then A5:     k+1 < len f by A2,NAT_1:38;
  let j such that
 A6:  1 <= j & j+2 <= width GoB f and
@@ -1197,14 +1197,14 @@ A10: 1 <= len GoB f by GOBOARD7:34;
 then A11: len GoB f -'1 +1 = len GoB f by AMI_5:4;
 then A12:   1 <= len GoB f -' 1 by A9,NAT_1:38;
 A13: len GoB f -' 1 < len GoB f by A11,NAT_1:38;
-A14:  j+1+1 = j+(1+1) by XCMPLX_1:1;
+A14:  j+1+1 = j+(1+1);
 then A15:   j+1 < width GoB f by A6,NAT_1:38;
 A16:  1 <= j+1 by NAT_1:29;
  assume
 A17: LSeg(1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j+2)),
          1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|)
       meets L~f;
-     1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j+2)) =
+      1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j+2)) =
     1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f -' 1,j+2))
               by A6,A11,A12,A14,A16,GOBOARD7:11;
   then LSeg(1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j+2)),
@@ -1217,7 +1217,7 @@ A17: LSeg(1/2*((GoB f)*(len GoB f -' 1,j+1)+(GoB f)*(len GoB f,j+2)),
              \/ { 1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2)) }
                        by A17,XBOOLE_1:63;
 A19: L~f misses Int cell(GoB f,len GoB f -' 1,j+1) by A13,A15,GOBOARD7:14;
-      L~f misses Int cell(GoB f,len GoB f,j+1) by A15,GOBOARD7:14;
+       L~f misses Int cell(GoB f,len GoB f,j+1) by A15,GOBOARD7:14;
     then L~f misses Int cell(GoB f,len GoB f -' 1,j+1)
                   \/ Int cell(GoB f,len GoB f,j+1) by A19,XBOOLE_1:70;
     then L~f meets {1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))}
@@ -1225,12 +1225,12 @@ A19: L~f misses Int cell(GoB f,len GoB f -' 1,j+1) by A13,A15,GOBOARD7:14;
     then 1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2)) in L~f
                           by ZFMISC_1:56;
     then consider k0 being Nat such that
-       1 <= k0 & k0+1 <= len f and
+        1 <= k0 & k0+1 <= len f and
 A20:  LSeg(f/.(k+1),(GoB f)*(len GoB f,j+2)) = LSeg(f,k0)
                    by A6,A7,A10,A14,A16,GOBOARD7:41;
 A21:  LSeg(f,k0) c= L~f & LSeg(f,k) c= L~f & LSeg(f,k+1) c= L~f by TOPREAL3:26;
 A22:  LSeg(f,k) = LSeg(f/.k,f/.(k+1)) by A1,A5,TOPREAL1:def 5;
-    LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
+     LSeg(f,k+1) = LSeg(f/.(k+1),f/.(k+2)) by A2,A3,A4,TOPREAL1:def 5;
  hence contradiction by A6,A7,A8,A11,A12,A13,A15,A20,A21,A22,GOBOARD7:62;
 end;
 
@@ -1255,7 +1255,7 @@ A9: 1 < width GoB f by GOBOARD7:35;
    per cases;
    suppose (f/.i)`1 <= (f/.(i+1))`1;
     then A10:   (f/.i)`1 <= x `1 by A8,TOPREAL1:9;
-      i <= len f by A7,NAT_1:38;
+       i <= len f by A7,NAT_1:38;
     then i in dom f by A6,FINSEQ_3:27;
     then consider i1,j1 such that
 A11:  [i1,j1] in Indices GoB f and
@@ -1268,7 +1268,7 @@ A13: 1 <= j1 & j1 <= width GoB f & 1 <= i1 & i1 <= len GoB f by A11,GOBOARD5:1;
    end;
    suppose (f/.i)`1 >= (f/.(i+1))`1;
     then A15:   (f/.(i+1))`1 <= x `1 by A8,TOPREAL1:9;
-      1 <= i+1 by NAT_1:29;
+       1 <= i+1 by NAT_1:29;
     then i+1 in dom f by A7,FINSEQ_3:27;
     then consider i1,j1 such that
 A16:  [i1,j1] in Indices GoB f and
@@ -1300,7 +1300,7 @@ A9: 1 < width GoB f by GOBOARD7:35;
    per cases;
    suppose (f/.i)`1 >= (f/.(i+1))`1;
     then A10:   (f/.i)`1 >= x `1 by A8,TOPREAL1:9;
-      i <= len f by A7,NAT_1:38;
+       i <= len f by A7,NAT_1:38;
     then i in dom f by A6,FINSEQ_3:27;
     then consider i1,j1 such that
 A11:  [i1,j1] in Indices GoB f and
@@ -1313,7 +1313,7 @@ A13: 1 <= j1 & j1 <= width GoB f & 1 <= i1 & i1 <= len GoB f by A11,GOBOARD5:1;
    end;
    suppose (f/.i)`1 <= (f/.(i+1))`1;
     then A15:   (f/.(i+1))`1 >= x `1 by A8,TOPREAL1:9;
-      1 <= i+1 by NAT_1:29;
+       1 <= i+1 by NAT_1:29;
     then i+1 in dom f by A7,FINSEQ_3:27;
     then consider i1,j1 such that
 A16:  [i1,j1] in Indices GoB f and
@@ -1345,7 +1345,7 @@ A9: 1 < len GoB f by GOBOARD7:34;
    per cases;
    suppose (f/.j)`2 <= (f/.(j+1))`2;
     then A10:   (f/.j)`2 <= x `2 by A8,TOPREAL1:10;
-      j <= len f by A7,NAT_1:38;
+       j <= len f by A7,NAT_1:38;
     then j in dom f by A6,FINSEQ_3:27;
     then consider i1,j1 such that
 A11:  [i1,j1] in Indices GoB f and
@@ -1358,7 +1358,7 @@ A13: 1 <= i1 & i1 <= len GoB f & 1 <= j1 & j1 <= width GoB f by A11,GOBOARD5:1;
    end;
    suppose (f/.j)`2 >= (f/.(j+1))`2;
     then A15:   (f/.(j+1))`2 <= x `2 by A8,TOPREAL1:10;
-      1 <= j+1 by NAT_1:29;
+       1 <= j+1 by NAT_1:29;
     then j+1 in dom f by A7,FINSEQ_3:27;
     then consider i1,j1 such that
 A16:  [i1,j1] in Indices GoB f and
@@ -1390,7 +1390,7 @@ A9: 1 < len GoB f by GOBOARD7:34;
    per cases;
    suppose (f/.j)`2 >= (f/.(j+1))`2;
     then A10:   (f/.j)`2 >= x `2 by A8,TOPREAL1:10;
-      j <= len f by A7,NAT_1:38;
+       j <= len f by A7,NAT_1:38;
     then j in dom f by A6,FINSEQ_3:27;
     then consider i1,j1 such that
 A11:  [i1,j1] in Indices GoB f and
@@ -1403,7 +1403,7 @@ A13: 1 <= i1 & i1 <= len GoB f & 1 <= j1 & j1 <= width GoB f by A11,GOBOARD5:1;
    end;
    suppose (f/.j)`2 <= (f/.(j+1))`2;
     then A15:   (f/.(j+1))`2 >= x `2 by A8,TOPREAL1:10;
-      1 <= j+1 by NAT_1:29;
+       1 <= j+1 by NAT_1:29;
     then j+1 in dom f by A7,FINSEQ_3:27;
     then consider i1,j1 such that
 A16:  [i1,j1] in Indices GoB f and
@@ -1417,43 +1417,37 @@ A18: 1 <= i1 & i1 <= len GoB f & 1 <= j1 & j1 <= width GoB f by A16,GOBOARD5:1;
  end;
 
 theorem
-    for i st 1 <= i & i+2 <= len GoB f holds
+     for i st 1 <= i & i+2 <= len GoB f holds
     LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
          1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|) misses L~f
 proof
  let i such that
 A1:  1 <= i & i+2 <= len GoB f;
 A2: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A3: p in LSeg(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|,
          1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|);
 A4:  i <= i+2 by NAT_1:29;
     then i <= len GoB f by A1,AXIOMS:22;
 then A5:  (GoB f)*(i,1)`2 = (GoB f)*(1,1)`2 by A1,A2,GOBOARD5:2;
-      i+1 <= i+2 by AXIOMS:24;
+       i+1 <= i+2 by AXIOMS:24;
     then 1 <= i+1 & i+1 <= len GoB f by A1,AXIOMS:22,NAT_1:29;
 then A6:  (GoB f)*(i+1,1)`2 = (GoB f)*(1,1)`2 by A2,GOBOARD5:2;
-      1 <= i+2 by A1,A4,AXIOMS:22;
+       1 <= i+2 by A1,A4,AXIOMS:22;
 then A7:  (GoB f)*(i+2,1)`2 = (GoB f)*(1,1)`2 by A1,A2,GOBOARD5:2;
-      (1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|)`2
+       (1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|)`2
        = (1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1)))`2- |[0,1]|`2 by TOPREAL3:8
       .= 1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))`2- |[0,1]|`2 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)- |[0,1]|`2 by A5,A6,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`2)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`2-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`2-1;
+      .= 1*((GoB f)*(1,1))`2-1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|
       = |[(1/2*((GoB f)*(i,1)+(GoB f)*(i+1,1))- |[0,1]|)`1,
           ((GoB f)*(1,1))`2-1]| by EUCLID:57;
-      (1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|)`2
+       (1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|)`2
        = (1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1)))`2- |[0,1]|`2 by TOPREAL3:8
       .= 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))`2- |[0,1]|`2 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)- |[0,1]|`2 by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`2)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`2-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`2-1;
+      .= 1*((GoB f)*(1,1))`2-1 by EUCLID:56;
     then 1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|
       = |[(1/2*((GoB f)*(i+1,1)+(GoB f)*(i+2,1))- |[0,1]|)`1,
           (GoB f)*(1,1)`2-1]| by EUCLID:57;
@@ -1465,28 +1459,25 @@ then A7:  (GoB f)*(i+2,1)`2 = (GoB f)*(1,1)`2 by A1,A2,GOBOARD5:2;
 end;
 
 theorem
-    LSeg((GoB f)*(1,1)- |[1,1]|,1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|)
+     LSeg((GoB f)*(1,1)- |[1,1]|,1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|)
        misses L~f
 proof
 A1: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A2: p in LSeg((GoB f)*(1,1)- |[1,1]|,
          1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|);
-      1 < len GoB f by GOBOARD7:34;
+       1 < len GoB f by GOBOARD7:34;
     then 1+1 <= len GoB f by NAT_1:38;
 then A3:  (GoB f)*(2,1)`2 = (GoB f)*(1,1)`2 by A1,GOBOARD5:2;
-      ((GoB f)*(1,1)- |[1,1]|)`2 = ((GoB f)*(1,1))`2- |[1,1]|`2 by TOPREAL3:8
+       ((GoB f)*(1,1)- |[1,1]|)`2 = ((GoB f)*(1,1))`2- |[1,1]|`2 by TOPREAL3:8
       .= (GoB f)*(1,1)`2-1 by EUCLID:56;
     then A4:    (GoB f)*(1,1)- |[1,1]|
       = |[((GoB f)*(1,1)- |[1,1]|)`1,(GoB f)*(1,1)`2-1]| by EUCLID:57;
-      (1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|)`2
+       (1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|)`2
        = (1/2*((GoB f)*(1,1)+(GoB f)*(2,1)))`2- |[0,1]|`2 by TOPREAL3:8
       .= 1/2*((GoB f)*(1,1)+(GoB f)*(2,1))`2- |[0,1]|`2 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)- |[0,1]|`2 by A3,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`2)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`2-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`2-1;
+      .= 1*((GoB f)*(1,1))`2-1 by EUCLID:56;
     then 1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|
       = |[(1/2*((GoB f)*(1,1)+(GoB f)*(2,1))- |[0,1]|)`1,
           (GoB f)*(1,1)`2-1]| by EUCLID:57;
@@ -1498,36 +1489,33 @@ then A3:  (GoB f)*(2,1)`2 = (GoB f)*(1,1)`2 by A1,GOBOARD5:2;
 end;
 
 theorem
-      LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
+       LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
          (GoB f)*(len GoB f,1)+|[1,-1]|) misses L~f
 proof
 A1: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A2: p in LSeg(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|,
             (GoB f)*(len GoB f,1)+|[1,-1]|);
 A3:  1 < len GoB f by GOBOARD7:34;
     then A4:   len GoB f -' 1 +1 = len GoB f by AMI_5:4;
     then A5:   1 <= len GoB f -' 1 by A3,NAT_1:38;
-      len GoB f -' 1 <= len GoB f by A4,NAT_1:29;
+       len GoB f -' 1 <= len GoB f by A4,NAT_1:29;
 then A6:  (GoB f)*(len GoB f -' 1,1)`2 = (GoB f)*(1,1)`2 by A1,A5,GOBOARD5:2;
 A7:  (GoB f)*(len GoB f,1)`2 = (GoB f)*(1,1)`2 by A1,A3,GOBOARD5:2;
-      (1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|)`2
+       (1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|)`2
     = (1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1)))`2- |[0,1]|`2
                                             by TOPREAL3:8
       .= 1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))`2- |[0,1]|`2
                                             by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)- |[0,1]|`2 by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`2+(GoB f)*(1,1)`2)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`2)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`2-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`2-1;
+      .= 1*((GoB f)*(1,1))`2-1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|
       = |[(1/2*((GoB f)*(len GoB f -' 1,1)+(GoB f)*(len GoB f,1))- |[0,1]|)`1,
           (GoB f)*(1,1)`2-1]| by EUCLID:57;
-      ((GoB f)*(len GoB f,1)+|[1,-1]|)`2
+       ((GoB f)*(len GoB f,1)+|[1,-1]|)`2
        = (GoB f)*(1,1)`2+|[1,-1]|`2 by A7,TOPREAL3:7
       .= (GoB f)*(1,1)`2+-1 by EUCLID:56
-      .= (GoB f)*(1,1)`2-1 by XCMPLX_0:def 8;
+      .= (GoB f)*(1,1)`2-1;
     then (GoB f)*(len GoB f,1)+|[1,-1]|
       = |[((GoB f)*(len GoB f,1)+|[1,-1]|)`1,(GoB f)*
 (1,1)`2-1]| by EUCLID:57;
@@ -1539,7 +1527,7 @@ A7:  (GoB f)*(len GoB f,1)`2 = (GoB f)*(1,1)`2 by A1,A3,GOBOARD5:2;
 end;
 
 theorem
-    for i st 1 <= i & i+2 <= len GoB f holds
+     for i st 1 <= i & i+2 <= len GoB f holds
     LSeg(1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f))+|[0,1]|,
          1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|)
             misses L~f
@@ -1547,7 +1535,7 @@ proof
  let i such that
 A1:  1 <= i & i+2 <= len GoB f;
 A2: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A3: p in LSeg(1/2*((GoB f)*(i,width GoB f)+(GoB f)*
 (i+1,width GoB f))+|[0,1]|,
          1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|);
@@ -1555,14 +1543,14 @@ A4:  i <= i+2 by NAT_1:29;
     then i <= len GoB f by A1,AXIOMS:22;
 then A5:  (GoB f)*(i,width GoB f)`2 = (GoB f)*
 (1,width GoB f)`2 by A1,A2,GOBOARD5:2;
-      i+1 <= i+2 by AXIOMS:24;
+       i+1 <= i+2 by AXIOMS:24;
     then 1 <= i+1 & i+1 <= len GoB f by A1,AXIOMS:22,NAT_1:29;
 then A6:  (GoB f)*(i+1,width GoB f)`2 = (GoB f)*
 (1,width GoB f)`2 by A2,GOBOARD5:2;
-      1 <= i+2 by A1,A4,AXIOMS:22;
+       1 <= i+2 by A1,A4,AXIOMS:22;
 then A7:  (GoB f)*(i+2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
                                                  by A1,A2,GOBOARD5:2;
-      (1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f))+|[0,1]|)`2
+       (1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f))+|[0,1]|)`2
        = (1/2*((GoB f)*(i,width GoB f)+(GoB f)*
 (i+1,width GoB f)))`2+|[0,1]|`2
                  by TOPREAL3:7
@@ -1570,16 +1558,12 @@ then A7:  (GoB f)*(i+2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
                  by TOPREAL3:9
       .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+|[0,1]|`2
                  by A5,A6,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+1
-                 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,width GoB f))`2)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,width GoB f))`2+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,width GoB f))`2+1;
+      .= 1*((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(i,width GoB f)+(GoB f)*(i+1,width GoB f))+|[0,1]|
       = |[(1/2*((GoB f)*(i,width GoB f)+(GoB f)*
 (i+1,width GoB f))+|[0,1]|)`1,
           (GoB f)*(1,width GoB f)`2+1]| by EUCLID:57;
-      (1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|)`2
+       (1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|)`2
       = (1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*
 (i+2,width GoB f)))`2+|[0,1]|`2
                by TOPREAL3:7
@@ -1588,11 +1572,7 @@ then A7:  (GoB f)*(i+2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
                by TOPREAL3:9
       .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+|[0,1]|`2
                by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+1
-               by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,width GoB f))`2)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,width GoB f))`2+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,width GoB f))`2+1;
+      .= 1*((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
     then 1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|
    = |[(1/2*((GoB f)*(i+1,width GoB f)+(GoB f)*(i+2,width GoB f))+|[0,1]|)`1,
        (GoB f)*(1,width GoB f)`2+1]| by EUCLID:57;
@@ -1605,37 +1585,33 @@ then A7:  (GoB f)*(i+2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
 end;
 
 theorem
-    LSeg((GoB f)*(1,width GoB f)+|[-1,1]|,
+     LSeg((GoB f)*(1,width GoB f)+|[-1,1]|,
        1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|)
        misses L~f
 proof
 A1: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A2: p in LSeg((GoB f)*(1,width GoB f)+|[-1,1]|,
          1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|);
 
-      1 < len GoB f by GOBOARD7:34;
+       1 < len GoB f by GOBOARD7:34;
     then 1+1 <= len GoB f by NAT_1:38;
 then A3:  (GoB f)*(2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2 by A1,GOBOARD5:
 2;
-      ((GoB f)*(1,width GoB f)+|[-1,1]|)`2
+       ((GoB f)*(1,width GoB f)+|[-1,1]|)`2
        = ((GoB f)*(1,width GoB f))`2+|[-1,1]|`2 by TOPREAL3:7
       .= (GoB f)*(1,width GoB f)`2+1 by EUCLID:56;
     then A4:    (GoB f)*(1,width GoB f)+|[-1,1]|
       = |[((GoB f)*(1,width GoB f)+|[-1,1]|)`1,(GoB f)*(1,width GoB f)`2+1]|
                            by EUCLID:57;
-      (1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|)`2
+       (1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|)`2
        = (1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f)))`2+|[0,1]|`2
                            by TOPREAL3:7
       .= 1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))`2+|[0,1]|`2
                            by TOPREAL3:9
       .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+|[0,1]|`2
                            by A3,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+1
-                           by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,width GoB f))`2)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,width GoB f))`2+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,width GoB f))`2+1;
+      .= 1*((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
     then 1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|
       = |[(1/2*((GoB f)*(1,width GoB f)+(GoB f)*(2,width GoB f))+|[0,1]|)`1,
           (GoB f)*(1,width GoB f)`2+1]| by EUCLID:57;
@@ -1648,24 +1624,24 @@ then A3:  (GoB f)*(2,width GoB f)`2 = (GoB f)*(1,width GoB f)`2 by A1,GOBOARD5:
 end;
 
 theorem
-      LSeg(1/2*((GoB f)*(len GoB f -' 1,width GoB f)+
+       LSeg(1/2*((GoB f)*(len GoB f -' 1,width GoB f)+
               (GoB f)*(len GoB f,width GoB f))+|[0,1]|,
          (GoB f)*(len GoB f,width GoB f)+|[1,1]|) misses L~f
 proof
 A1: 1 <= width GoB f by GOBOARD7:35;
-    now let p such that
+     now let p such that
 A2: p in LSeg(1/2*((GoB f)*(len GoB f -' 1,width GoB f)+
                  (GoB f)*(len GoB f,width GoB f))+|[0,1]|,
             (GoB f)*(len GoB f,width GoB f)+|[1,1]|);
 A3:  1 < len GoB f by GOBOARD7:34;
     then A4:   len GoB f -' 1 +1 = len GoB f by AMI_5:4;
     then A5:   1 <= len GoB f -' 1 by A3,NAT_1:38;
-      len GoB f -' 1 <= len GoB f by A4,NAT_1:29;
+       len GoB f -' 1 <= len GoB f by A4,NAT_1:29;
 then A6:  (GoB f)*(len GoB f -' 1,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
                     by A1,A5,GOBOARD5:2;
 A7:  (GoB f)*(len GoB f,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
                     by A1,A3,GOBOARD5:2;
-      (1/2*((GoB f)*(len GoB f -' 1,width GoB f)
+       (1/2*((GoB f)*(len GoB f -' 1,width GoB f)
            +(GoB f)*(len GoB f,width GoB f))+|[0,1]|)`2
        = (1/2*((GoB f)*(len GoB f -' 1,width GoB f)
            +(GoB f)*(len GoB f,width GoB f)))`2+|[0,1]|`2 by TOPREAL3:7
@@ -1673,17 +1649,13 @@ A7:  (GoB f)*(len GoB f,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
            +(GoB f)*(len GoB f,width GoB f))`2+|[0,1]|`2 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+|[0,1]|`2
                     by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,width GoB f)`2+(GoB f)*(1,width GoB f)`2)+1
-                    by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,width GoB f))`2)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,width GoB f))`2+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,width GoB f))`2+1;
+      .= 1*((GoB f)*(1,width GoB f))`2+1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(len GoB f -' 1,width GoB f)
            +(GoB f)*(len GoB f,width GoB f))+|[0,1]|
       = |[(1/2*((GoB f)*(len GoB f -' 1,width GoB f)
                  +(GoB f)*(len GoB f,width GoB f))+|[0,1]|)`1,
           (GoB f)*(1,width GoB f)`2+1]| by EUCLID:57;
-      ((GoB f)*(len GoB f,width GoB f)+|[1,1]|)`2
+       ((GoB f)*(len GoB f,width GoB f)+|[1,1]|)`2
        = (GoB f)*(1,width GoB f)`2+|[1,1]|`2 by A7,TOPREAL3:7
       .= (GoB f)*(1,width GoB f)`2+1 by EUCLID:56;
     then (GoB f)*(len GoB f,width GoB f)+|[1,1]|
@@ -1698,43 +1670,37 @@ A7:  (GoB f)*(len GoB f,width GoB f)`2 = (GoB f)*(1,width GoB f)`2
 end;
 
 theorem
-    for j st 1 <= j & j+2 <= width GoB f holds
+     for j st 1 <= j & j+2 <= width GoB f holds
     LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
          1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|) misses L~f
 proof
  let j such that
 A1:  1 <= j & j+2 <= width GoB f;
 A2: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A3: p in LSeg(1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|,
          1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|);
 A4:  j <= j+2 by NAT_1:29;
     then j <= width GoB f by A1,AXIOMS:22;
 then A5:  (GoB f)*(1,j)`1 = (GoB f)*(1,1)`1 by A1,A2,GOBOARD5:3;
-      j+1 <= j+2 by AXIOMS:24;
+       j+1 <= j+2 by AXIOMS:24;
     then 1 <= j+1 & j+1 <= width GoB f by A1,AXIOMS:22,NAT_1:29;
 then A6:  (GoB f)*(1,j+1)`1 = (GoB f)*(1,1)`1 by A2,GOBOARD5:3;
-      1 <= j+2 by A1,A4,AXIOMS:22;
+       1 <= j+2 by A1,A4,AXIOMS:22;
 then A7:  (GoB f)*(1,j+2)`1 = (GoB f)*(1,1)`1 by A1,A2,GOBOARD5:3;
-      (1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|)`1
+       (1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|)`1
        = (1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1)))`1- |[1,0]|`1 by TOPREAL3:8
       .= 1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))`1- |[1,0]|`1 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)- |[1,0]|`1 by A5,A6,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`1)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`1-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`1-1;
+      .= 1*((GoB f)*(1,1))`1-1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|
       = |[(GoB f)*(1,1)`1-1,
           (1/2*((GoB f)*(1,j)+(GoB f)*(1,j+1))- |[1,0]|)`2]| by EUCLID:57;
-      (1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|)`1
+       (1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|)`1
        = (1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2)))`1- |[1,0]|`1 by TOPREAL3:8
       .= 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))`1- |[1,0]|`1 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)- |[1,0]|`1 by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`1)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`1-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`1-1;
+      .= 1*((GoB f)*(1,1))`1-1 by EUCLID:56;
     then 1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|
       = |[(GoB f)*(1,1)`1-1,
           (1/2*((GoB f)*(1,j+1)+(GoB f)*(1,j+2))- |[1,0]|)`2]| by EUCLID:57;
@@ -1746,29 +1712,26 @@ then A7:  (GoB f)*(1,j+2)`1 = (GoB f)*(1,1)`1 by A1,A2,GOBOARD5:3;
 end;
 
 theorem
-    LSeg((GoB f)*(1,1)- |[1,1]|,1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|)
+     LSeg((GoB f)*(1,1)- |[1,1]|,1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|)
        misses L~f
 proof
 A1: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A2: p in LSeg((GoB f)*(1,1)- |[1,1]|,
          1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|);
 
-      1 < width GoB f by GOBOARD7:35;
+       1 < width GoB f by GOBOARD7:35;
     then 1+1 <= width GoB f by NAT_1:38;
 then A3:  (GoB f)*(1,2)`1 = (GoB f)*(1,1)`1 by A1,GOBOARD5:3;
-      ((GoB f)*(1,1)- |[1,1]|)`1 = ((GoB f)*(1,1))`1- |[1,1]|`1 by TOPREAL3:8
+       ((GoB f)*(1,1)- |[1,1]|)`1 = ((GoB f)*(1,1))`1- |[1,1]|`1 by TOPREAL3:8
       .= (GoB f)*(1,1)`1-1 by EUCLID:56;
     then A4:    (GoB f)*(1,1)- |[1,1]|
       = |[(GoB f)*(1,1)`1-1,((GoB f)*(1,1)- |[1,1]|)`2]| by EUCLID:57;
-      (1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|)`1
+       (1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|)`1
        = (1/2*((GoB f)*(1,1)+(GoB f)*(1,2)))`1- |[1,0]|`1 by TOPREAL3:8
       .= 1/2*((GoB f)*(1,1)+(GoB f)*(1,2))`1- |[1,0]|`1 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)- |[1,0]|`1 by A3,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`1)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`1-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`1-1;
+      .= 1*((GoB f)*(1,1))`1-1 by EUCLID:56;
     then 1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|
       = |[(GoB f)*(1,1)`1-1,
           (1/2*((GoB f)*(1,1)+(GoB f)*(1,2))- |[1,0]|)`2]| by EUCLID:57;
@@ -1780,38 +1743,36 @@ then A3:  (GoB f)*(1,2)`1 = (GoB f)*(1,1)`1 by A1,GOBOARD5:3;
 end;
 
 theorem
-      LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))- |[1,0]|,
+       LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))- |[1,0]|
+,
          (GoB f)*(1,width GoB f)+|[-1,1]|) misses L~f
 proof
 A1: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A2: p in LSeg(1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*
 (1,width GoB f))- |[1,0]|,
             (GoB f)*(1,width GoB f)+|[-1,1]|);
 A3:  1 < width GoB f by GOBOARD7:35;
     then A4:   width GoB f -' 1 +1 = width GoB f by AMI_5:4;
     then A5:   1 <= width GoB f -' 1 by A3,NAT_1:38;
-      width GoB f -' 1 <= width GoB f by A4,NAT_1:29;
+       width GoB f -' 1 <= width GoB f by A4,NAT_1:29;
 then A6:  (GoB f)*(1,width GoB f -' 1)`1 = (GoB f)*(1,1)`1 by A1,A5,GOBOARD5:3;
 A7:  (GoB f)*(1,width GoB f)`1 = (GoB f)*(1,1)`1 by A1,A3,GOBOARD5:3;
-      (1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))- |[1,0]|)`1
+       (1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))- |[1,0]|)`1
        = (1/2*((GoB f)*(1,width GoB f -' 1)
              +(GoB f)*(1,width GoB f)))`1- |[1,0]|`1 by TOPREAL3:8
       .= 1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*
       (1,width GoB f))`1- |[1,0]|`1 by TOPREAL3:9
       .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)- |[1,0]|`1 by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(1,1)`1+(GoB f)*(1,1)`1)-1 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(1,1))`1)-1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(1,1))`1-1 by XCMPLX_1:4
-      .= 1*((GoB f)*(1,1))`1-1;
+      .= 1*((GoB f)*(1,1))`1-1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(1,width GoB f -' 1)+(GoB f)*(1,width GoB f))- |[1
 ,0]|
       = |[(GoB f)*(1,1)`1-1,(1/2*((GoB f)*(1,width GoB f -' 1)
             +(GoB f)*(1,width GoB f))- |[1,0]|)`2]| by EUCLID:57;
-      ((GoB f)*(1,width GoB f)+|[-1,1]|)`1
+       ((GoB f)*(1,width GoB f)+|[-1,1]|)`1
        = (GoB f)*(1,1)`1+|[-1,1]|`1 by A7,TOPREAL3:7
       .= (GoB f)*(1,1)`1+-1 by EUCLID:56
-      .= (GoB f)*(1,1)`1-1 by XCMPLX_0:def 8;
+      .= (GoB f)*(1,1)`1-1;
     then (GoB f)*(1,width GoB f)+|[-1,1]|
      = |[(GoB f)*(1,1)`1-1,((GoB f)*
 (1,width GoB f)+|[-1,1]|)`2]| by EUCLID:57;
@@ -1824,7 +1785,7 @@ A7:  (GoB f)*(1,width GoB f)`1 = (GoB f)*(1,1)`1 by A1,A3,GOBOARD5:3;
 end;
 
 theorem
-    for j st 1 <= j & j+2 <= width GoB f holds
+     for j st 1 <= j & j+2 <= width GoB f holds
     LSeg(1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|,
          1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|)
             misses L~f
@@ -1832,46 +1793,38 @@ proof
  let j such that
 A1:  1 <= j & j+2 <= width GoB f;
 A2: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A3: p in LSeg(1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|,
          1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|);
 A4:  j <= j+2 by NAT_1:29;
     then j <= width GoB f by A1,AXIOMS:22;
 then A5:  (GoB f)*(len GoB f,j)`1 = (GoB f)*(len GoB f,1)`1 by A1,A2,GOBOARD5:3
 ;
-      j+1 <= j+2 by AXIOMS:24;
+       j+1 <= j+2 by AXIOMS:24;
     then 1 <= j+1 & j+1 <= width GoB f by A1,AXIOMS:22,NAT_1:29;
 then A6:  (GoB f)*(len GoB f,j+1)`1 = (GoB f)*(len GoB f,1)`1 by A2,GOBOARD5:3;
-      1 <= j+2 by A1,A4,AXIOMS:22;
+       1 <= j+2 by A1,A4,AXIOMS:22;
 then A7:  (GoB f)*(len GoB f,j+2)`1 = (GoB f)*(len GoB f,1)`1
                                                  by A1,A2,GOBOARD5:3;
-      (1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|)`1
+       (1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|)`1
        = (1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1)))`1+|[1,0]|`1
                  by TOPREAL3:7
       .= 1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))`1+|[1,0]|`1
                  by TOPREAL3:9
       .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+|[1,0]|`1
                  by A5,A6,TOPREAL3:7
-      .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+1
-                 by EUCLID:56
-      .= 1/2*(2*((GoB f)*(len GoB f,1))`1)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(len GoB f,1))`1+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(len GoB f,1))`1+1;
+      .= 1*((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(len GoB f,j)+(GoB f)*(len GoB f,j+1))+|[1,0]|
       = |[(GoB f)*(len GoB f,1)`1+1,(1/2*((GoB f)*(len GoB f,j)
                 +(GoB f)*(len GoB f,j+1))+|[1,0]|)`2]| by EUCLID:57;
-      (1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|)`1
+       (1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|)`1
       = (1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2)))`1+|[1,0]|`1
                by TOPREAL3:7
       .= 1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))`1+|[1,0]|`1
                by TOPREAL3:9
       .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+|[1,0]|`1
                by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+1
-               by EUCLID:56
-      .= 1/2*(2*((GoB f)*(len GoB f,1))`1)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(len GoB f,1))`1+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(len GoB f,1))`1+1;
+      .= 1*((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
     then 1/2*((GoB f)*(len GoB f,j+1)+(GoB f)*(len GoB f,j+2))+|[1,0]|
    = |[(GoB f)*(len GoB f,1)`1+1,(1/2*((GoB f)*(len GoB f,j+1)
              +(GoB f)*(len GoB f,j+2))+|[1,0]|)`2]| by EUCLID:57;
@@ -1884,36 +1837,32 @@ then A7:  (GoB f)*(len GoB f,j+2)`1 = (GoB f)*(len GoB f,1)`1
 end;
 
 theorem
-    LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
+     LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
        1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)
        misses L~f
 proof
 A1: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A2: p in LSeg((GoB f)*(len GoB f,1)+|[1,-1]|,
          1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|);
 
-      1 < width GoB f by GOBOARD7:35;
+       1 < width GoB f by GOBOARD7:35;
     then 1+1 <= width GoB f by NAT_1:38;
 then A3:  (GoB f)*(len GoB f,2)`1 = (GoB f)*(len GoB f,1)`1 by A1,GOBOARD5:3;
-      ((GoB f)*(len GoB f,1)+|[1,-1]|)`1
+       ((GoB f)*(len GoB f,1)+|[1,-1]|)`1
        = ((GoB f)*(len GoB f,1))`1+|[1,-1]|`1 by TOPREAL3:7
       .= (GoB f)*(len GoB f,1)`1+1 by EUCLID:56;
     then A4:    (GoB f)*(len GoB f,1)+|[1,-1]|
       = |[(GoB f)*(len GoB f,1)`1+1,((GoB f)*(len GoB f,1)+|[1,-1]|)`2]|
                            by EUCLID:57;
-      (1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)`1
+       (1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)`1
        = (1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2)))`1+|[1,0]|`1
                            by TOPREAL3:7
       .= 1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))`1+|[1,0]|`1
                            by TOPREAL3:9
       .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+|[1,0]|`1
                            by A3,TOPREAL3:7
-      .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+1
-                           by EUCLID:56
-      .= 1/2*(2*((GoB f)*(len GoB f,1))`1)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(len GoB f,1))`1+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(len GoB f,1))`1+1;
+      .= 1*((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
     then 1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|
       = |[(GoB f)*(len GoB f,1)`1+1,
           (1/2*((GoB f)*(len GoB f,1)+(GoB f)*(len GoB f,2))+|[1,0]|)`2]|
@@ -1927,24 +1876,24 @@ then A3:  (GoB f)*(len GoB f,2)`1 = (GoB f)*(len GoB f,1)`1 by A1,GOBOARD5:3;
 end;
 
 theorem
-      LSeg(1/2*((GoB f)*(len GoB f,width GoB f -' 1)+
+       LSeg(1/2*((GoB f)*(len GoB f,width GoB f -' 1)+
               (GoB f)*(len GoB f,width GoB f))+|[1,0]|,
          (GoB f)*(len GoB f,width GoB f)+|[1,1]|) misses L~f
 proof
 A1: 1 <= len GoB f by GOBOARD7:34;
-    now let p such that
+     now let p such that
 A2: p in LSeg(1/2*((GoB f)*(len GoB f,width GoB f -' 1)+
                  (GoB f)*(len GoB f,width GoB f))+|[1,0]|,
             (GoB f)*(len GoB f,width GoB f)+|[1,1]|);
 A3:  1 < width GoB f by GOBOARD7:35;
     then A4:   width GoB f -' 1 +1 = width GoB f by AMI_5:4;
     then A5:   1 <= width GoB f -' 1 by A3,NAT_1:38;
-      width GoB f -' 1 <= width GoB f by A4,NAT_1:29;
+       width GoB f -' 1 <= width GoB f by A4,NAT_1:29;
 then A6:  (GoB f)*(len GoB f,width GoB f -' 1)`1 = (GoB f)*(len GoB f,1)`1
                     by A1,A5,GOBOARD5:3;
 A7:  (GoB f)*(len GoB f,width GoB f)`1 = (GoB f)*(len GoB f,1)`1
                     by A1,A3,GOBOARD5:3;
-      (1/2*((GoB f)*(len GoB f,width GoB f -' 1)
+       (1/2*((GoB f)*(len GoB f,width GoB f -' 1)
            +(GoB f)*(len GoB f,width GoB f))+|[1,0]|)`1
        = (1/2*((GoB f)*(len GoB f,width GoB f -' 1)
            +(GoB f)*(len GoB f,width GoB f)))`1+|[1,0]|`1 by TOPREAL3:7
@@ -1952,18 +1901,14 @@ A7:  (GoB f)*(len GoB f,width GoB f)`1 = (GoB f)*(len GoB f,1)`1
            +(GoB f)*(len GoB f,width GoB f))`1+|[1,0]|`1 by TOPREAL3:9
       .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+|[1,0]|`1
                     by A6,A7,TOPREAL3:7
-      .= 1/2*((GoB f)*(len GoB f,1)`1+(GoB f)*(len GoB f,1)`1)+1
-                    by EUCLID:56
-      .= 1/2*(2*((GoB f)*(len GoB f,1))`1)+1 by XCMPLX_1:11
-      .= 1/2*2*((GoB f)*(len GoB f,1))`1+1 by XCMPLX_1:4
-      .= 1*((GoB f)*(len GoB f,1))`1+1;
+      .= 1*((GoB f)*(len GoB f,1))`1+1 by EUCLID:56;
     then A8:    1/2*((GoB f)*(len GoB f,width GoB f -' 1)
            +(GoB f)*(len GoB f,width GoB f))+|[1,0]|
       = |[(GoB f)*(len GoB f,1)`1+1,(1/2*((GoB f)*
 (len GoB f,width GoB f -' 1)
                  +(GoB f)*(len GoB f,width GoB f))+|[1,0]|)`2
           ]| by EUCLID:57;
-      ((GoB f)*(len GoB f,width GoB f)+|[1,1]|)`1
+       ((GoB f)*(len GoB f,width GoB f)+|[1,1]|)`1
        = (GoB f)*(len GoB f,1)`1+|[1,1]|`1 by A7,TOPREAL3:7
       .= (GoB f)*(len GoB f,1)`1+1 by EUCLID:56;
     then (GoB f)*(len GoB f,width GoB f)+|[1,1]|
@@ -1978,10 +1923,10 @@ A7:  (GoB f)*(len GoB f,width GoB f)`1 = (GoB f)*(len GoB f,1)`1
 end;
 
 theorem
-   1 <= k & k+1 <= len f implies Int left_cell(f,k) misses L~f
+    1 <= k & k+1 <= len f implies Int left_cell(f,k) misses L~f
 proof assume
 A1: 1 <= k & k+1 <= len f;
-   k <= k+1 by NAT_1:29;
+    k <= k+1 by NAT_1:29;
   then k <= len f by A1,AXIOMS:22;
 then A2: k in dom f by A1,FINSEQ_3:27;
    then consider i1,j1 being Nat such that
@@ -1989,24 +1934,24 @@ A3: [i1,j1] in Indices GoB f and
 A4: f/.k = (GoB f)*(i1,j1) by GOBOARD2:25;
 A5: i1 <= len GoB f by A3,GOBOARD5:1;
 A6: j1 <= width GoB f by A3,GOBOARD5:1;
-    i1 <> 0 by A3,GOBOARD5:1;
+     i1 <> 0 by A3,GOBOARD5:1;
   then consider i such that
 A7: i1 = i+1 by NAT_1:22;
-      i <= i1 by A7,NAT_1:29;
+       i <= i1 by A7,NAT_1:29;
 then A8: i <= len GoB f by A5,AXIOMS:22;
-    j1 <> 0 by A3,GOBOARD5:1;
+     j1 <> 0 by A3,GOBOARD5:1;
   then consider j such that
 A9: j1 = j+1 by NAT_1:22;
-      j <= j1 by A9,NAT_1:29;
+       j <= j1 by A9,NAT_1:29;
 then A10: j <= width GoB f by A6,AXIOMS:22;
-    k+1 >= 1 by NAT_1:29;
+     k+1 >= 1 by NAT_1:29;
 then A11: k+1 in dom f by A1,FINSEQ_3:27;
    then consider i2,j2 being Nat such that
 A12: [i2,j2] in Indices GoB f and
 A13: f/.(k+1) = (GoB f)*(i2,j2) by GOBOARD2:25;
 A14: i2 <= len GoB f by A12,GOBOARD5:1;
 A15: j2 <= width GoB f by A12,GOBOARD5:1;
-    abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A11,A12,A13,GOBOARD5:13;
+     abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A11,A12,A13,GOBOARD5:13;
   then A16: abs(i1-i2) = 1 & j1 = j2 or abs(j1-j2)=1 & i1 = i2 by GOBOARD1:2;
  per cases by A16,GOBOARD1:1;
  suppose i1 = i2 & j1+1 = j2;
@@ -2029,10 +1974,10 @@ end;
 end;
 
 theorem
-   1 <= k & k+1 <= len f implies Int right_cell(f,k) misses L~f
+    1 <= k & k+1 <= len f implies Int right_cell(f,k) misses L~f
 proof assume
 A1: 1 <= k & k+1 <= len f;
-   k <= k+1 by NAT_1:29;
+    k <= k+1 by NAT_1:29;
   then k <= len f by A1,AXIOMS:22;
 then A2: k in dom f by A1,FINSEQ_3:27;
    then consider i1,j1 being Nat such that
@@ -2040,24 +1985,24 @@ A3: [i1,j1] in Indices GoB f and
 A4: f/.k = (GoB f)*(i1,j1) by GOBOARD2:25;
 A5: i1 <= len GoB f by A3,GOBOARD5:1;
 A6: j1 <= width GoB f by A3,GOBOARD5:1;
-    i1 <> 0 by A3,GOBOARD5:1;
+     i1 <> 0 by A3,GOBOARD5:1;
   then consider i such that
 A7: i1 = i+1 by NAT_1:22;
-      i <= i1 by A7,NAT_1:29;
+       i <= i1 by A7,NAT_1:29;
 then A8: i <= len GoB f by A5,AXIOMS:22;
-    j1 <> 0 by A3,GOBOARD5:1;
+     j1 <> 0 by A3,GOBOARD5:1;
   then consider j such that
 A9: j1 = j+1 by NAT_1:22;
-      j <= j1 by A9,NAT_1:29;
+       j <= j1 by A9,NAT_1:29;
 then A10: j <= width GoB f by A6,AXIOMS:22;
-    k+1 >= 1 by NAT_1:29;
+     k+1 >= 1 by NAT_1:29;
 then A11: k+1 in dom f by A1,FINSEQ_3:27;
    then consider i2,j2 being Nat such that
 A12: [i2,j2] in Indices GoB f and
 A13: f/.(k+1) = (GoB f)*(i2,j2) by GOBOARD2:25;
 A14: i2 <= len GoB f by A12,GOBOARD5:1;
 A15: j2 <= width GoB f by A12,GOBOARD5:1;
-    abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A11,A12,A13,GOBOARD5:13;
+     abs(i1-i2)+abs(j1-j2) = 1 by A2,A3,A4,A11,A12,A13,GOBOARD5:13;
   then A16: abs(i1-i2) = 1 & j1 = j2 or abs(j1-j2)=1 & i1 = i2 by GOBOARD1:2;
  per cases by A16,GOBOARD1:1;
  suppose i1 = i2 & j1+1 = j2;

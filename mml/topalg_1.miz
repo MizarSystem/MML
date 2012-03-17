@@ -32,7 +32,7 @@ environ
       FUNCT_1, SEQ_2, REAL_1, TOPREAL3, GOBOARD6, XREAL_0, METRIC_1, AXIOMS,
       SPPOL_1, RVSUM_1, ABSVALUE, PRE_TOPC, SEQ_4, RCOMP_1, FUNCT_3, UNIFORM1,
       RCOMP_2, SQUARE_1, REAL_2, BORSUK_4, JORDAN5A, TOPREAL5, SUBSET_1,
-      JORDAN2C, GROUP_6, WAYBEL_1;
+      JORDAN2C, GROUP_6, WAYBEL_1, JGRAPH_6;
  schemes EQREL_1, BINOP_1, XBOOLE_0, FUNCT_2;
 
 begin :: Preliminaries
@@ -244,7 +244,7 @@ OO: [. 0,1 .] = {r where r is Real: 0 <= r & r <= 1 } by RCOMP_1:def 1;
   hence |.p*f.| <= |.f.| by Tla;
 end;
 
-theorem Tsum:
+theorem
   for e1, e2, e3, e4, e5, e6 being Point of Euclid n,
       p1, p2, p3, p4 being Point of TOP-REAL n st
    e1 = p1 & e2 = p2 & e3 = p3 & e4 = p4 & e5 = p1+p3 & e6 = p2+p4 &
@@ -341,7 +341,9 @@ b5: |. x*(f1-f2) + y*(f3-f4) .| <= abs(x)*|.f1-f2.| + abs(y)*|.f3-f4.|
   hence dist(e5,e6) < abs(x)*p+abs(y)*q by b1,b5,AXIOMS:22;
 end;
 
-theorem TT102:
+canceled;
+
+TT102:
   for X being non empty TopSpace,
       f1, f2, g being map of X,TOP-REAL n st
     f1 is continuous & f2 is continuous &
@@ -353,70 +355,17 @@ proof
 A1: f1 is continuous and
 A1a: f2 is continuous and
 A3: for p being Point of X holds g.p = f1.p + f2.p;
-  for p being Point of X, V being Subset of TOP-REAL n st g.p in V & V is open
-   ex W being Subset of X st p in W & W is open & g.:W c= V
+  consider h being map of X,TOP-REAL n such that
+a1: for r being Point of X holds h.r = f1.r + f2.r and
+a2: h is continuous by A1,A1a,JGRAPH_6:20;
+  for x being Point of X holds g.x = h.x
   proof
-    let p be Point of X,
-        V be Subset of TOP-REAL n;
-    assume g.p in V & V is open;
-    then
-A5: g.p in Int V by TOPS_1:55;
-    reconsider r = g.p as Point of Euclid n by TOPREAL3:13;
-    consider r0 being real number such that
-A6:   r0 > 0 and
-A6a:  Ball(r,r0) c= V by A5,GOBOARD6:8;
-hh: r0/2 is Real by XREAL_0:def 1;
-    reconsider r1 = f1.p as Point of Euclid n by TOPREAL3:13;
-    reconsider G1 = Ball(r1,r0/2) as Subset of TOP-REAL n by TOPREAL3:13;
-B1: r0/2 > 0 by A6,SEQ_2:3;
-A8: r1 in G1 by B1,GOBOARD6:4;
-    G1 is open by hh,GOBOARD6:6;
-    then consider W1 being Subset of X such that
-A9:   p in W1 and
-A9a:   W1 is open and
-A9b:   f1.:W1 c= G1 by A1,A8,JGRAPH_2:20;
-    reconsider r2 = f2.p as Point of Euclid n by TOPREAL3:13;
-    reconsider G2 = Ball(r2,r0/2) as Subset of TOP-REAL n by TOPREAL3:13;
-A11: r2 in G2 by B1,GOBOARD6:4;
-    G2 is open by hh,GOBOARD6:6;
-    then consider W2 being Subset of X such that
-A12:  p in W2 and
-A12a:  W2 is open and
-A12b:  f2.:W2 c= G2 by A1a,A11,JGRAPH_2:20;
-    take W = W1 /\ W2;
-    thus p in W by A9,A12,XBOOLE_0:def 3;
-    thus W is open by A9a,A12a,TOPS_1:38;
-    g.:W c= Ball(r,r0)
-    proof
-      let x be set;
-      assume x in g.:W;
-      then consider z being set such that
-A15:    z in dom g and
-A15a:    z in W and
-A15b:    g.z = x by FUNCT_1:def 12;
-A16:  z in W1 by A15a,XBOOLE_0:def 3;
-      reconsider z as Point of X by A15;
-A17:  z in the carrier of X;
-      then z in dom f1 by FUNCT_2:def 1;
-      then
-A18:  f1.z in f1.:W1 by A16,FUNCT_1:def 12;
-      reconsider ea1 = f1.z as Point of Euclid n by TOPREAL3:13;
-A19:  z in W2 by A15a,XBOOLE_0:def 3;
-      z in dom f2 by A17,FUNCT_2:def 1;
-      then
-A20:  f2.z in f2.:W2 by A19,FUNCT_1:def 12;
-      reconsider ea2 = f2.z as Point of Euclid n by TOPREAL3:13;
-A21:  x = f1.z + f2.z by A3,A15b;
-      then reconsider e1x = x as Point of Euclid n by TOPREAL3:13;
-C1:   dist(r1,ea1) < r0/2 by A9b,A18,METRIC_1:12;
-C4:   dist(r2,ea2) < r0/2 by A12b,A20,METRIC_1:12;
-      r = f1.p + f2.p by A3;
-      then dist(r,e1x) < r0/2 + r0/2 by A21,C1,C4,Tsum;      
-      hence x in Ball(r,r0) by METRIC_1:12;
-    end;
-    hence g.:W c= V by A6a,XBOOLE_1:1;
+    let x be Point of X;
+    thus g.x = f1.x + f2.x by A3
+      .= h.x by a1;
   end;
-  hence g is continuous by JGRAPH_2:20;
+  then g = h by FUNCT_2:113;
+  hence g is continuous by a2;
 end;
 
 theorem Tcon1:

@@ -1,6 +1,6 @@
 :: Hilbert Space of Complex Sequences
 ::  by Noboru Endou
-:: 
+::
 :: Received February 24, 2004
 :: Copyright (c) 2004 Association of Mizar Users
 
@@ -28,16 +28,16 @@ environ
 
 begin :: Hilbert space of complex sequences
 
-Cor1:
+Lm1:
 for seq be Complex_Sequence holds seq = (seq*')*'
 proof
    let seq be Complex_Sequence;
-   for x be set st x in NAT holds seq.x = (seq*')*'.x
+    for x be set st x in NAT holds seq.x = (seq*')*'.x
    proof
      let x be set;
-     assume x in NAT; then
-     reconsider x as Nat;
-     (seq*')*'.x = (seq*'.x)*' by COMSEQ_2:def 2
+     assume x in NAT;
+     then reconsider x as Nat;
+      (seq*')*'.x = (seq*'.x)*' by COMSEQ_2:def 2
        .= ((seq.x)*')*' by COMSEQ_2:def 2
        .= [*Re((seq.x)*'), -(Im ((seq.x)*'))*] by COMPLEX1:def 15
        .= [*Re(seq.x), -(Im ((seq.x)*'))*] by COMPLEX1:112
@@ -48,7 +48,7 @@ proof
    hence thesis by FUNCT_2:18;
 end;
 
-Cor2:
+Lm2:
 for seq be Complex_Sequence holds Partial_Sums (seq*') = (Partial_Sums seq)*'
 proof
    let seq be Complex_Sequence;
@@ -56,7 +56,7 @@ proof
 
 A1:P[0]
    proof
-     Partial_Sums(seq*').0 = seq*'.0 by COMSEQ_3:def 7
+      Partial_Sums(seq*').0 = seq*'.0 by COMSEQ_3:def 7
      .= (seq.0)*' by COMSEQ_2:def 2
      .= ((Partial_Sums seq).0)*' by COMSEQ_3:def 7;
      hence (Partial_Sums (seq*')).0 = (Partial_Sums seq)*'.0
@@ -67,7 +67,7 @@ A2:now let n be Nat;
 A3:  P[n];
      thus P[n+1]
      proof
-       Partial_Sums(seq*').(n+1)
+        Partial_Sums(seq*').(n+1)
         = Partial_Sums(seq*').n + seq*'.(n+1) by COMSEQ_3:def 7
        .= (Partial_Sums seq)*'.n + (seq.(n+1))*' by A3,COMSEQ_2:def 2
        .= ((Partial_Sums seq).n)*' + (seq.(n+1))*' by COMSEQ_2:def 2
@@ -76,77 +76,79 @@ A3:  P[n];
        hence thesis by COMSEQ_2:def 2;
      end;
    end;
-   for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
+    for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
    hence thesis by COMSEQ_1:6;
 end;
 
 Lm3: for a,b be Real holds 0 <= a^2 + b^2
 proof
    let a,b be Real;
-   0<=a^2 & 0<=b^2 by SQUARE_1:72; then 0 +0 <=a^2 + b^2 by REAL_1:55;
+    0<=a^2 & 0<=b^2 by SQUARE_1:72; then 0 +0 <=a^2 + b^2 by REAL_1:55;
    hence thesis;
 end;
 
-Cor2a:
+Lm4:
 for z1, z2 be Complex st
  (Re z1)*(Im z2) = (Re z2)*(Im z1) & (Re z1)*(Re z2)+(Im z1)*(Im z2) >= 0 holds
   |.z1 + z2.| = |.z1.| + |.z2.|
 proof
    let z1, z2 be Complex;
    assume that
-A0:(Re z1)*(Im z2) = (Re z2)*(Im z1) and
-AA:(Re z1)*(Re z2) + (Im z1)*(Im z2) >= 0;
-B0:(Re z1)*(Im z2) - (Re z2)*(Im z1) = 0 by A0;
+A1:(Re z1)*(Im z2) = (Re z2)*(Im z1) and
+A2:(Re z1)*(Re z2) + (Im z1)*(Im z2) >= 0;
+A3:(Re z1)*(Im z2) - (Re z2)*(Im z1) = 0 by A1;
    set r1 = Re z1, r2 = Re z2, i1 = Im z1, i2 = Im z2;
-A1:0 <= r1^2+i1^2 & 0 <= r2^2+i2^2 by Lm3; then
-A2:(sqrt (r1^2+i1^2))^2 = r1^2+i1^2 &
+A4:0 <= r1^2+i1^2 & 0 <= r2^2+i2^2 by Lm3;
+then A5:(sqrt (r1^2+i1^2))^2 = r1^2+i1^2 &
     (sqrt (r2^2+i2^2))^2 = r2^2+i2^2 by SQUARE_1:def 4;
-A3:(Re(z1 + z2))^2 = (r1+ r2)^2 by COMPLEX1:19
+A6:(Re(z1 + z2))^2 = (r1+ r2)^2 by COMPLEX1:19
       .= r1^2 + 2*r1*r2 + r2^2 by SQUARE_1:63;
-   (Im(z1 + z2))^2 = (i1 + i2)^2 by COMPLEX1:19
-      .= i1^2 + 2*i1*i2 + i2^2 by SQUARE_1:63; then
-A4:(Re(z1+z2))^2+(Im(z1+z2))^2
-    = r1^2 + i1^2 + (2*r1*r2 + 2*i1*i2) + (r2^2 + i2^2) by A3;
-   r1^2*r2^2=(r1*r2)^2 & r1^2*i2^2=(r1*i2)^2 & i1^2*r2^2=(i1*r2)^2 & i1^2*i2^2
-    =(i1*i2)^2 by SQUARE_1:68; then
-   r1^2*(r2^2+i2^2)=(r1*r2)^2+(r1*i2)^2 & i1^2*(r2^2+i2^2)=(i1*r2)^2+(i1*i2)^2
-     by XCMPLX_1:8; then
-A5:(r1^2+i1^2)*(r2^2+i2^2)
+    (Im(z1 + z2))^2 = (i1 + i2)^2 by COMPLEX1:19
+      .= i1^2 + 2*i1*i2 + i2^2 by SQUARE_1:63;
+then A7:(Re(z1+z2))^2+(Im(z1+z2))^2
+    = r1^2 + i1^2 + (2*r1*r2 + 2*i1*i2) + (r2^2 + i2^2) by A6;
+    r1^2*r2^2=(r1*r2)^2 & r1^2*i2^2=(r1*i2)^2 & i1^2*r2^2=(i1*r2)^2 & i1^2*i2^2
+    =(i1*i2)^2 by SQUARE_1:68;
+   then r1^2*(r2^2+i2^2)=(r1*r2)^2+(r1*i2)^2 & i1^2*(r2^2+i2^2)=(i1*r2)^2+(i1*
+i2)^2
+     by XCMPLX_1:8;
+then A8:(r1^2+i1^2)*(r2^2+i2^2)
     = (r1*i2)^2+(r1*r2)^2+((i1*r2)^2+(i1*i2)^2) by XCMPLX_1:8
    .= ((r1*i2)^2+(i1*r2)^2)+((r1*r2)^2+(i1*i2)^2);
-   (r1*r2 + i1*i2)^2 = (r1*r2)^2+2*(r1*r2)*(i1*i2)+(i1*i2)^2 by SQUARE_1:63
-   .= ((r1*r2)^2+(i1*i2)^2) + 2*(r1*i2)*(i1*r2); then
-   (r1^2+i1^2)*(r2^2+i2^2)-(r1*r2+i1*i2)^2
-    = (r1*i2)^2-2*(r1*i2)*(i1*r2)+(i1*r2)^2 by A5
-   .= (r1*i2-i1*r2)^2 by SQUARE_1:64; then
-   r1*r2+i1*i2 = abs(r1*r2+i1*i2) &
+    (r1*r2 + i1*i2)^2 = (r1*r2)^2+2*(r1*r2)*(i1*i2)+(i1*i2)^2 by SQUARE_1:63
+   .= ((r1*r2)^2+(i1*i2)^2) + 2*(r1*i2)*(i1*r2);
+   then (r1^2+i1^2)*(r2^2+i2^2)-(r1*r2+i1*i2)^2
+    = (r1*i2)^2-2*(r1*i2)*(i1*r2)+(i1*r2)^2 by A8
+   .= (r1*i2-i1*r2)^2 by SQUARE_1:64;
+   then r1*r2+i1*i2 = abs(r1*r2+i1*i2) &
    sqrt (r1*r2+i1*i2)^2 = sqrt ((r1^2+i1^2)*(r2^2+i2^2))
-     by AA,B0,ABSVALUE:def 1,XCMPLX_1:15,SQUARE_1:60; then
-A6:r1*r2+i1*i2 = sqrt (r1*r2+i1*i2)^2 &
+     by A2,A3,ABSVALUE:def 1,SQUARE_1:60,XCMPLX_1:15;
+then A9:r1*r2+i1*i2 = sqrt (r1*r2+i1*i2)^2 &
    sqrt (r1*r2+i1*i2)^2 = sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2)
-     by A1,SQUARE_1:91,97;
-   (2*r1*r2 + 2*i1*i2) = 2*(r1*r2 + i1*i2) & 0 <= 2; then
-   (2*r1*r2 + 2*i1*i2) = 2*sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2)
-     by A6; then
-   0 <= (Re(z1 + z2))^2 + (Im(z1 + z2))^2 &
+     by A4,SQUARE_1:91,97;
+    (2*r1*r2 + 2*i1*i2) = 2*(r1*r2 + i1*i2) & 0 <= 2;
+   then (2*r1*r2 + 2*i1*i2) = 2*sqrt (r1^2+i1^2)*sqrt (r2^2+i2^2)
+     by A9;
+   then 0 <= (Re(z1 + z2))^2 + (Im(z1 + z2))^2 &
     0 <= sqrt (r1^2+i1^2) &
      0 <= sqrt (r2^2+i2^2) &
       (Re(z1 + z2))^2 + (Im(z1 + z2))^2
        = (sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2))^2
-        by A1,A2,A4,Lm3,SQUARE_1:63,def 4; then
-   0 + 0 <= sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2) &
+        by A4,A5,A7,Lm3,SQUARE_1:63,def 4;
+   then 0 + 0 <= sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2) &
     sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) =
      sqrt ((sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2))^2)
-      by REAL_1:55; then
-   sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) =
-    (sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2)) by SQUARE_1:89; then
-   sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) = sqrt (r1^2+i1^2) + |.z2.|
-    by COMPLEX1:def 16; then
-   sqrt ((Re(z1 + z2))^2+(Im(z1 + z2))^2) = |.z1.|+|.z2.| by COMPLEX1:def 16;
+      by REAL_1:55;
+   then sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) =
+    (sqrt (r1^2+i1^2) + sqrt (r2^2+i2^2)) by SQUARE_1:89;
+   then sqrt ((Re(z1 + z2))^2 + (Im(z1 + z2))^2) = sqrt (r1^2+i1^2) + |.z2.|
+    by COMPLEX1:def 16;
+   then sqrt ((Re(z1 + z2))^2+(Im(z1 + z2))^2) = |.z1.|+|.z2.| by COMPLEX1:def
+16;
    hence thesis by COMPLEX1:def 16;
 end;
 
-Cor2b:
+Lm5:
 for seq be Complex_Sequence, n be Nat st
  (for i be Nat holds (Re seq).i >= 0 & (Im seq).i = 0) holds
    (|.Partial_Sums seq.|).n = (Partial_Sums |.seq.|).n
@@ -154,137 +156,138 @@ proof
    let seq be Complex_Sequence;
    let n be Nat;
    assume
-A0:for i be Nat holds (Re seq).i >= 0 & (Im seq).i = 0;
+A1:for i be Nat holds (Re seq).i >= 0 & (Im seq).i = 0;
    defpred P[Nat] means (|.Partial_Sums seq.|).$1 = (Partial_Sums |.seq.|).$1;
 
-A1:P[0]
+A2:P[0]
    proof
-     (|.Partial_Sums seq.|).0 = |.((Partial_Sums seq).0).| by COMSEQ_1:def 14
+      (|.Partial_Sums seq.|).0 = |.((Partial_Sums seq).0).| by COMSEQ_1:def 14
       .= |.(seq.0).| by COMSEQ_3:def 7
      .= (|.seq.|).0 by COMSEQ_1:def 14;
      hence thesis by SERIES_1:def 1;
    end;
-A2:now let m be Nat;
+A3:now let m be Nat;
      assume
-A3:  P[m];
+A4:  P[m];
      thus P[m+1]
      proof
-C1:    for i be Nat holds (Partial_Sums Re seq).i >= 0
+A5:    for i be Nat holds (Partial_Sums Re seq).i >= 0
        proof
          let i be Nat;
          defpred Q1[Nat] means (Partial_Sums Re seq).$1 >= 0;
-D1:      Q1[0]
+A6:      Q1[0]
          proof
-           (Partial_Sums Re seq).0 = (Re seq).0 by SERIES_1:def 1;
-           hence thesis by A0;
+            (Partial_Sums Re seq).0 = (Re seq).0 by SERIES_1:def 1;
+           hence thesis by A1;
          end;
-D2:      now let k be Nat;
+A7:      now let k be Nat;
            assume
-D3:        Q1[k];
+A8:        Q1[k];
            thus Q1[k+1]
            proof
-D4:          (Partial_Sums Re seq).(k+1)
+A9:          (Partial_Sums Re seq).(k+1)
               = (Partial_Sums Re seq).k + (Re seq).(k+1) by SERIES_1:def 1;
-             (Partial_Sums Re seq).k >= 0 & (Re seq).(k+1) >= 0
-               by D3,A0; then
-             (Partial_Sums Re seq).(k+1) >= 0 + 0 by D4,REAL_1:55;
+              (Partial_Sums Re seq).k >= 0 & (Re seq).(k+1) >= 0
+               by A1,A8;
+             then (Partial_Sums Re seq).(k+1) >= 0 + 0 by A9,REAL_1:55;
              hence thesis;
            end;
          end;
-         for i be Nat holds Q1[i] from NAT_1:sch 1(D1,D2);
+          for i be Nat holds Q1[i] from NAT_1:sch 1(A6,A7);
          hence thesis;
        end;
-C2:    for i be Nat holds (Partial_Sums Im seq).i = 0
+A10:    for i be Nat holds (Partial_Sums Im seq).i = 0
        proof
          let i be Nat;
          defpred Q2[Nat] means (Partial_Sums Im seq).$1 = 0;
-E1:      Q2[0]
+A11:      Q2[0]
          proof
-           (Partial_Sums Im seq).0 = (Im seq).0 by SERIES_1:def 1;
-           hence thesis by A0;
+            (Partial_Sums Im seq).0 = (Im seq).0 by SERIES_1:def 1;
+           hence thesis by A1;
          end;
-E2:      now let k be Nat;
+A12:      now let k be Nat;
            assume
-E3:        Q2[k];
+A13:        Q2[k];
            thus Q2[k+1]
            proof
-             (Partial_Sums Im seq).(k+1)
+              (Partial_Sums Im seq).(k+1)
               = (Partial_Sums Im seq).k + (Im seq).(k+1) by SERIES_1:def 1;
-             hence thesis by A0,E3;
+             hence thesis by A1,A13;
            end;
          end;
-         for i be Nat holds Q2[i] from NAT_1:sch 1(E1,E2);
+          for i be Nat holds Q2[i] from NAT_1:sch 1(A11,A12);
          hence thesis;
        end;
-P0:    (|.Partial_Sums seq.|).(m+1)
+A14:    (|.Partial_Sums seq.|).(m+1)
         = |.(Partial_Sums seq).(m+1).| by COMSEQ_1:def 14
        .= |.Partial_Sums seq.m + seq.(m+1).| by COMSEQ_3:def 7;
 
-       (Partial_Sums Re seq).m >= 0 & (Partial_Sums Im seq).m = 0
-         by C1,C2; then
-       (Re (Partial_Sums seq)).m >= 0 & (Im (Partial_Sums seq)).m = 0
-         by COMSEQ_3:26; then
-P3:    Re(Partial_Sums seq.m) >= 0 & Im(Partial_Sums seq.m) = 0
+        (Partial_Sums Re seq).m >= 0 & (Partial_Sums Im seq).m = 0
+         by A5,A10;
+       then (Re (Partial_Sums seq)).m >= 0 & (Im (Partial_Sums seq)).m = 0
+         by COMSEQ_3:26;
+then A15:    Re(Partial_Sums seq.m) >= 0 & Im(Partial_Sums seq.m) = 0
          by COMSEQ_3:def 3,def 4;
-       (Re seq).(m+1) >= 0 & (Im seq).(m+1) = 0 by A0; then
-P2:    Re(seq.(m+1)) >=0 & Im(seq.(m+1)) = 0 by COMSEQ_3:def 3,def 4;
+        (Re seq).(m+1) >= 0 & (Im seq).(m+1) = 0 by A1;
+then A16:    Re(seq.(m+1)) >=0 & Im(seq.(m+1)) = 0 by COMSEQ_3:def 3,def 4;
        set z1 = Partial_Sums seq.m;
        set z2 = seq.(m+1);
-P1:    (Re z1)*(Im z2) = (Re z2)*(Im z1) by P2,P3;
-       (Re z1)*(Re z2)+(Im z1)*(Im z2) >= 0 by P2,P3,REAL_2:121; then
-       (|.Partial_Sums seq.|).(m+1)
-        = |.(Partial_Sums seq.m).| + |.(seq.(m+1)).| by P0,P1,Cor2a
+A17:    (Re z1)*(Im z2) = (Re z2)*(Im z1) by A15,A16;
+        (Re z1)*(Re z2)+(Im z1)*(Im z2) >= 0 by A15,A16,REAL_2:121;
+       then (|.Partial_Sums seq.|).(m+1)
+        = |.(Partial_Sums seq.m).| + |.(seq.(m+1)).| by A14,A17,Lm4
        .= (|.Partial_Sums seq.|).m + |.(seq.(m+1)).| by COMSEQ_1:def 14
-       .= (Partial_Sums |.seq.|).m + (|.seq.|).(m+1) by A3,COMSEQ_1:def 14;
+       .= (Partial_Sums |.seq.|).m + (|.seq.|).(m+1) by A4,COMSEQ_1:def 14;
        hence thesis by SERIES_1:def 1;
      end;
    end;
-   for m be Nat holds P[m] from NAT_1:sch 1(A1,A2);
+    for m be Nat holds P[m] from NAT_1:sch 1(A2,A3);
    hence thesis;
 end;
 
-Cor3:
+Lm6:
 for seq be Complex_Sequence st seq is summable holds
  Sum (seq*') = (Sum seq)*'
 proof
    let seq be Complex_Sequence;
-   assume seq is summable; then
-A1:Partial_Sums seq is convergent by COMSEQ_3:def 10;
-   Sum(seq*')
+   assume seq is summable;
+then A1:Partial_Sums seq is convergent by COMSEQ_3:def 10;
+    Sum(seq*')
     = lim Partial_Sums (seq*') by COMSEQ_3:def 8
-   .= lim ((Partial_Sums seq)*') by Cor2
+   .= lim ((Partial_Sums seq)*') by Lm2
    .= (lim Partial_Sums seq)*' by A1,COMSEQ_2:12;
    hence thesis by COMSEQ_3:def 8;
 end;
 
-Cor4:
+Lm7:
 for seq be Complex_Sequence st seq is absolutely_summable holds
   |. Sum seq .| <= Sum |.seq.|
 proof
    let seq be Complex_Sequence;
    assume
-A0:seq is absolutely_summable; then
-B0:seq is summable by COMSEQ_3:64; then
-A1:Partial_Sums seq is convergent by COMSEQ_3:def 10;
+A1:seq is absolutely_summable;
+then A2:seq is summable by COMSEQ_3:64;
+then A3:Partial_Sums seq is convergent by COMSEQ_3:def 10;
    reconsider Pseq = Partial_Sums seq as convergent Complex_Sequence
-     by B0,COMSEQ_3:def 10;
-B1:|.Pseq.| is convergent & |.Pseq.| = |.Partial_Sums seq.|;
-A2:|. Sum seq .| = |. lim Partial_Sums seq .| by COMSEQ_3:def 8
-    .= lim |.Partial_Sums seq.| by A1,COMSEQ_2:11;
+     by A2,COMSEQ_3:def 10;
+A4:|.Pseq.| is convergent & |.Pseq.| = |.Partial_Sums seq.|;
+A5:|. Sum seq .| = |. lim Partial_Sums seq .| by COMSEQ_3:def 8
+    .= lim |.Partial_Sums seq.| by A3,COMSEQ_2:11;
 
-   |.seq.| is summable by A0,COMSEQ_3:def 11; then
-A3:Partial_Sums |.seq.| is convergent by SERIES_1:def 2;
-   for k be Nat holds (|.Partial_Sums seq.|).k <= (Partial_Sums |.seq.|).k
+    |.seq.| is summable by A1,COMSEQ_3:def 11;
+then A6:Partial_Sums |.seq.| is convergent by SERIES_1:def 2;
+    for k be Nat holds (|.Partial_Sums seq.|).k <= (Partial_Sums |.seq.|).k
    proof
      let k be Nat;
-     |.Partial_Sums seq .k .| <= Partial_Sums(|.seq.|).k by COMSEQ_3:30;
+      |.Partial_Sums seq .k .| <= Partial_Sums(|.seq.|).k by COMSEQ_3:30;
      hence thesis by COMSEQ_1:def 14;
-   end; then
-   lim |.Partial_Sums(seq).| <= lim Partial_Sums(|.seq.|) by B1,A3,SEQ_2:32;
-   hence thesis by A2,SERIES_1:def 3;
+   end;
+   then lim |.Partial_Sums(seq).| <= lim Partial_Sums(|.seq.|) by A4,A6,SEQ_2:
+32;
+   hence thesis by A5,SERIES_1:def 3;
 end;
 
-Cor5:
+Lm8:
 for seq be Complex_Sequence st seq is summable &
  (for n be Nat holds (Re seq).n >= 0 & (Im seq).n = 0) holds
   |. Sum seq .| = Sum |.seq.|
@@ -293,16 +296,16 @@ proof
    assume that
 A1:seq is summable and
 A2:for n be Nat holds (Re seq).n >= 0 & (Im seq).n = 0;
-   for x be set st x in NAT holds
-   (|.Partial_Sums seq.|).x = (Partial_Sums |.seq.|).x by A2,Cor2b; then
-   |.Partial_Sums seq.| = Partial_Sums |.seq.| by SEQ_1:8; then
-A3:lim |.Partial_Sums seq.| = Sum |.seq.| by SERIES_1:def 3;
-   Partial_Sums seq is convergent by A1,COMSEQ_3:def 10; then
-   |.lim Partial_Sums seq.| = Sum |.seq.| by A3,COMSEQ_2:11;
+    for x be set st x in NAT holds
+   (|.Partial_Sums seq.|).x = (Partial_Sums |.seq.|).x by A2,Lm5;
+   then |.Partial_Sums seq.| = Partial_Sums |.seq.| by SEQ_1:8;
+then A3:lim |.Partial_Sums seq.| = Sum |.seq.| by SERIES_1:def 3;
+    Partial_Sums seq is convergent by A1,COMSEQ_3:def 10;
+   then |.lim Partial_Sums seq.| = Sum |.seq.| by A3,COMSEQ_2:11;
    hence thesis by COMSEQ_3:def 8;
 end;
 
-Cor6:
+Lm9:
 for seq be Complex_Sequence, n be Nat holds
  (Re (seq(#)seq*')).n >= 0 & (Im (seq(#)seq*')).n = 0
 proof
@@ -313,51 +316,51 @@ A1:(Re(seq(#)seq*')).n = Re((seq(#)seq*').n) by COMSEQ_3:def 3
    .= Re (seq.n * seq*'.n) by COMSEQ_1:def 5
    .= Re (seq.n * (seq.n)*') by COMSEQ_2:def 2
    .= (Re z1)^2 + (Im z1)^2 by COMPLEX1:126;
-   0 <= (Re z1)^2 & 0 <= (Im z1)^2 by SQUARE_1:72; then
-   (Re(seq(#)seq*')).n >= 0+0 by A1,REAL_1:55;
+    0 <= (Re z1)^2 & 0 <= (Im z1)^2 by SQUARE_1:72;
+   then (Re(seq(#)seq*')).n >= 0+0 by A1,REAL_1:55;
    hence (Re (seq(#)seq*')).n >= 0;
 
-   (Im (seq(#)seq*')).n = Im((seq(#)seq*').n) by COMSEQ_3:def 4
+    (Im (seq(#)seq*')).n = Im((seq(#)seq*').n) by COMSEQ_3:def 4
    .= Im (seq.n * seq*'.n) by COMSEQ_1:def 5
    .= Im (seq.n * (seq.n)*') by COMSEQ_2:def 2;
    hence thesis by COMPLEX1:126;
 end;
 
-LM1b:
+Lm10:
 for x be set holds x is Element of Complex_l2_Space
   iff x is Complex_Sequence & |.seq_id(x).|(#)|.seq_id(x).| is summable
 proof
-   for x be set holds x is Element of Complex_l2_Space
+    for x be set holds x is Element of Complex_l2_Space
      iff x is Complex_Sequence & |.seq_id(x).|(#)|.seq_id(x).| is summable
    proof
      let x be set;
-     x in the_set_of_ComplexSequences iff x is Complex_Sequence
+      x in the_set_of_ComplexSequences iff x is Complex_Sequence
        by CSSPACE:def 1;
      hence thesis by CSSPACE:def 11,def 20;
    end;
    hence thesis;
 end;
 
-LM1d:
+Lm11:
 0.Complex_l2_Space = CZeroseq
 proof
    set W = the_set_of_l2ComplexSequences;
    thus 0.Complex_l2_Space = Zero_(W,Linear_Space_of_ComplexSequences)
-          by RLVECT_1:def 2,CSSPACE:def 20
+          by CSSPACE:def 20,RLVECT_1:def 2
        .= 0.Linear_Space_of_ComplexSequences by CSSPACE:14,def 10
-       .= CZeroseq by RLVECT_1:def 2,CSSPACE:def 7;
+       .= CZeroseq by CSSPACE:def 7,RLVECT_1:def 2;
 end;
 
-LM1e:
+Lm12:
 for u be VECTOR of Complex_l2_Space holds u =seq_id(u)
 proof
    let u be VECTOR of Complex_l2_Space;
-   u is VECTOR of Linear_Space_of_ComplexSequences
+    u is VECTOR of Linear_Space_of_ComplexSequences
      by CLVECT_1:30,CSSPACE:15,def 20;
    hence thesis by CSSPACE:17;
 end;
 
-LM1f:
+Lm13:
 for u,v be VECTOR of Complex_l2_Space holds u+v =seq_id(u)+seq_id(v)
 proof
    let u,v be VECTOR of Complex_l2_Space;
@@ -365,21 +368,21 @@ proof
      by CLVECT_1:30,CSSPACE:15,def 20;
    set L1 = Linear_Space_of_ComplexSequences;
    set W = the_set_of_l2ComplexSequences;
-A4:[:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
-   dom (the add of L1)
-     = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1; then
-A5:dom ((the add of Linear_Space_of_ComplexSequences) | [:W,W:])
-     =[:W,W:] by A4,RELAT_1:91;
-   u+v =(the add of Complex_l2_Space).[u,v] by RLVECT_1:def 3
+A1:[:W,W:] c= [:the carrier of L1,the carrier of L1:] by ZFMISC_1:119;
+    dom (the add of L1)
+     = [:the carrier of L1,the carrier of L1:] by FUNCT_2:def 1;
+then A2:dom ((the add of Linear_Space_of_ComplexSequences) | [:W,W:])
+     =[:W,W:] by A1,RELAT_1:91;
+    u+v =(the add of Complex_l2_Space).[u,v] by RLVECT_1:def 3
       .=((the add of Linear_Space_of_ComplexSequences)|[:W,W:]).[u,v]
      by CSSPACE:14,def 8,def 20
       .=(the add of Linear_Space_of_ComplexSequences).[u,v]
-     by A5,FUNCT_1:70,CSSPACE:def 20
+     by A2,CSSPACE:def 20,FUNCT_1:70
       .=u1+v1 by RLVECT_1:def 3;
    hence thesis by CSSPACE:17;
 end;
 
-LM1g:
+Lm14:
 for r be Complex for u be VECTOR of Complex_l2_Space
   holds r*u =r(#)seq_id(u)
 proof
@@ -389,68 +392,68 @@ proof
      by CLVECT_1:30,CSSPACE:15,def 20;
    set L1=Linear_Space_of_ComplexSequences;
    set W = the_set_of_l2ComplexSequences;
-A7:[:COMPLEX,W:] c= [:COMPLEX,the carrier of L1:] by ZFMISC_1:119;
-   dom (the Mult of L1) = [:COMPLEX,the carrier of L1:] by FUNCT_2:def 1; then
-A8:dom ((the Mult of Linear_Space_of_ComplexSequences) | [:COMPLEX,W:])
-       =[:COMPLEX,W:] by A7,RELAT_1:91;
-   r*u =(the Mult of Complex_l2_Space).[r,u] by CLVECT_1:def 1
+A1:[:COMPLEX,W:] c= [:COMPLEX,the carrier of L1:] by ZFMISC_1:119;
+    dom (the Mult of L1) = [:COMPLEX,the carrier of L1:] by FUNCT_2:def 1;
+then A2:dom ((the Mult of Linear_Space_of_ComplexSequences) | [:COMPLEX,W:])
+       =[:COMPLEX,W:] by A1,RELAT_1:91;
+    r*u =(the Mult of Complex_l2_Space).[r,u] by CLVECT_1:def 1
       .=((the Mult of Linear_Space_of_ComplexSequences)|[:COMPLEX,W:]).[r,u]
         by CSSPACE:14,def 9,def 20
       .=(the Mult of Linear_Space_of_ComplexSequences).[r,u]
-        by A8,FUNCT_1:70,CSSPACE:def 20
+        by A2,CSSPACE:def 20,FUNCT_1:70
       .=r*u1 by CLVECT_1:def 1;
    hence thesis by CSSPACE:17;
 end;
 
-LM1h:
+Lm15:
 for u be VECTOR of Complex_l2_Space holds
   -u =-seq_id(u) & seq_id(-u)=-seq_id(u)
 proof
    let u be VECTOR of Complex_l2_Space;
-   -u = (-1r)*u by CLVECT_1:4
-     .= (-1r)(#)seq_id(u) by LM1g
+    -u = (-1r)*u by CLVECT_1:4
+     .= (-1r)(#)seq_id(u) by Lm14
      .= -seq_id(u) by COMSEQ_1:14;
-   hence thesis by LM1e;
+   hence thesis by Lm12;
 end;
 
-LM1i:
+Lm16:
 for u,v be VECTOR of Complex_l2_Space holds u-v =seq_id(u)-seq_id(v)
 proof
    let u,v be VECTOR of Complex_l2_Space;
    thus u-v = u+(-v) by RLVECT_1:def 11
-           .= seq_id(u)+seq_id(-v) by LM1f
-           .= seq_id(u)+(-seq_id(v)) by LM1h
+           .= seq_id(u)+seq_id(-v) by Lm13
+           .= seq_id(u)+(-seq_id(v)) by Lm15
            .= seq_id(u)-seq_id(v) by COMSEQ_1:def 10;
 end;
 
-LM1j:
+Lm17:
 for v,w be VECTOR of Complex_l2_Space holds
    |.seq_id(v).|(#)|.seq_id(w).| is summable
 proof
      let u,v be VECTOR of Complex_l2_Space;
-A13: |.(seq_id(v)).|(#)|.(seq_id(v)).| is summable by CSSPACE:def 11,def 20;
-A14: |.(seq_id(u)).|(#)|.(seq_id(u)).| is summable by CSSPACE:def 11,def 20;
+A1: |.(seq_id(v)).|(#)|.(seq_id(v)).| is summable by CSSPACE:def 11,def 20;
+A2: |.(seq_id(u)).|(#)|.(seq_id(u)).| is summable by CSSPACE:def 11,def 20;
      set p = |.(seq_id(v)).|(#)|.(seq_id(v)).|;
      set q = |.(seq_id(u)).|(#)|.(seq_id(u)).|;
      set r = abs(|.(seq_id(u)).|(#)|.(seq_id(v)).|);
-A15: p+q is summable by A13,A14,SERIES_1:10;
-A16: for n be Nat holds 0<=(2(#)r).n
+A3: p+q is summable by A1,A2,SERIES_1:10;
+A4: for n be Nat holds 0<=(2(#)r).n
      proof
        let n be Nat;
        set rr=|.(seq_id(u)).|(#)|.(seq_id(v)).|;
-A17:   (2(#)r).n = 2*r.n by SEQ_1:13
+A5:   (2(#)r).n = 2*r.n by SEQ_1:13
                 .= 2*abs(rr.n) by SEQ_1:16;
        reconsider tt=abs(rr.n) as Real;
-       0 <= 2 & 0 <= tt by ABSVALUE:5;
-       hence thesis by A17,SQUARE_1:19;
+        0 <= 2 & 0 <= tt by ABSVALUE:5;
+       hence thesis by A5,SQUARE_1:19;
      end;
-     for n be Nat holds (2(#)r).n <=(p+q).n
+      for n be Nat holds (2(#)r).n <=(p+q).n
      proof
        let n be Nat;
        set s = seq_id v, t = seq_id u;
        reconsider sn=|.(s.n).|,tn=|.(t.n).| as Real;
        reconsider ss=abs sn,tt=abs tn as Real;
-A18:   (2(#)r).n =2*r.n by SEQ_1:13
+A6:   (2(#)r).n =2*r.n by SEQ_1:13
            .=2*abs( (|.seq_id(u).|(#)|.seq_id(v).|).n ) by SEQ_1:16
            .=2*(abs( (|.seq_id(u).|).n * (|.seq_id(v).|).n )) by SEQ_1:12
            .=2*(abs( (|.seq_id(u).|).n ) * abs( (|.seq_id(v).|).n ))
@@ -459,7 +462,7 @@ A18:   (2(#)r).n =2*r.n by SEQ_1:13
                 by COMSEQ_1:def 14
            .= 2*(ss*tt) by COMSEQ_1:def 14
            .= 2*abs(sn)*abs(tn);
-       (p+q).n = p.n +q.n by SEQ_1:11
+        (p+q).n = p.n +q.n by SEQ_1:11
               .= ((|.s.|).n*(|.s.|).n) + q.n by SEQ_1:12
               .= ((|.s.|).n*(|.s.|).n) + ((|.t.|).n*(|.t.|).n) by SEQ_1:12
               .= (|.(s.n).|*(|.s.|).n) + ((|.t.|).n*(|.t.|).n)
@@ -471,23 +474,24 @@ A18:   (2(#)r).n =2*r.n by SEQ_1:13
               .= sn^2 + (|.(t.n).|*|.(t.n).|) by COMSEQ_1:def 14
               .= sn^2 + tn^2 by SQUARE_1:def 3
               .=(abs(sn))^2 + tn^2 by SQUARE_1:62
-              .=(abs(sn))^2 + (abs(tn))^2 by SQUARE_1:62; then
-A19:   (p+q).n - (2(#)r).n
-         = (abs(sn))^2 - 2*abs(sn)*abs(tn) + (abs(tn))^2 by A18
+              .=(abs(sn))^2 + (abs(tn))^2 by SQUARE_1:62;
+then A7:   (p+q).n - (2(#)r).n
+         = (abs(sn))^2 - 2*abs(sn)*abs(tn) + (abs(tn))^2 by A6
         .= (abs(sn)-abs(tn))^2 by SQUARE_1:64;
-       0 <= (abs(sn)-abs(tn))^2 by SQUARE_1:72; then
-       0 + (2(#)r).n <= (p+q).n - (2(#)r).n + (2(#)r).n by A19,REAL_1:55;
+        0 <= (abs(sn)-abs(tn))^2 by SQUARE_1:72;
+       then 0 + (2(#)r).n <= (p+q).n - (2(#)r).n + (2(#)r).n by A7,REAL_1:55;
        hence thesis;
-     end; then
-A20: 2(#)r is summable by A15,A16,SERIES_1:24;
+     end;
+then A8: 2(#)r is summable by A3,A4,SERIES_1:24;
      set q0 = 1/2;
-     q0(#)(2(#)r)=(q0*2)(#)r by SEQ_1:31 .=r by SEQ_1:35; then
-     r is summable by A20,SERIES_1:13; then
-     |.seq_id(u).|(#)|.seq_id(v).| is absolutely_summable by SERIES_1:def 5;
+      q0(#)(2(#)r)=(q0*2)(#)r by SEQ_1:31 .=r by SEQ_1:35;
+     then r is summable by A8,SERIES_1:13;
+     then |.seq_id(u).|(#)|.seq_id(v).| is absolutely_summable by SERIES_1:def
+5;
      hence thesis by SERIES_1:40;
 end;
 
-LM1k:
+Lm18:
  for v,w be VECTOR of Complex_l2_Space holds
    v.|.w = Sum(seq_id(v)(#)(seq_id(w))*')
 proof
@@ -496,7 +500,7 @@ proof
              .= Sum(seq_id(v)(#)(seq_id(w))*') by CSSPACE:def 19,def 20;
 end;
 
-LM:
+Lm19:
 for seq being Complex_Sequence holds
  |.seq.| = |.seq*'.|
 proof
@@ -504,58 +508,58 @@ proof
    reconsider rseq1 = |.seq.| as Real_Sequence;
    reconsider rseq2 = |.seq*'.| as Real_Sequence;
 
-A4:for n being Element of NAT holds (|.seq.|).n = (|.seq*'.|).n
+for n being Element of NAT holds (|.seq.|).n = (|.seq*'.|).n
    proof
      let n be Element of NAT;
-     (|.seq*'.|).n = |.((seq*').n).| by COMSEQ_1:def 14
+      (|.seq*'.|).n = |.((seq*').n).| by COMSEQ_1:def 14
                   .= |.(seq.n)*'.| by COMSEQ_2:def 2
                   .= |.(seq.n).| by COMPLEX1:139;
      hence thesis by COMSEQ_1:def 14;
    end;
-   for n be set st n in NAT holds rseq1.n = rseq2.n by A4;
+   then for n be set st n in NAT holds rseq1.n = rseq2.n;
    hence thesis by SEQ_1:8;
 end;
 
-LM1l:
+Lm20:
 for x be set holds x is Element of Complex_l2_Space
  iff x is Complex_Sequence & seq_id(x)(#)(seq_id(x))*' is absolutely_summable
 proof
-A0:for x be set holds (x is Element of Complex_l2_Space) implies
+A1:for x be set holds (x is Element of Complex_l2_Space) implies
     (x is Complex_Sequence & seq_id(x)(#)(seq_id(x))*' is absolutely_summable)
    proof
      let x be set;
      assume
-A1:  x is Element of Complex_l2_Space; then
-     x in the_set_of_ComplexSequences by CSSPACE:def 11,def 20;
+A2:  x is Element of Complex_l2_Space;
+     then x in the_set_of_ComplexSequences by CSSPACE:def 11,def 20;
      hence x is Complex_Sequence by CSSPACE:def 1;
-     seq_id(x)(#)(seq_id(x))*' is absolutely_summable
+      seq_id(x)(#)(seq_id(x))*' is absolutely_summable
      proof
-A5:    |.seq_id(x).| = |.(seq_id(x))*'.| by LM;
-       |.seq_id(x).|(#)|.seq_id(x).| is summable by A1,LM1j; then
-       |.seq_id(x)(#)(seq_id(x))*'.| is summable by A5,COMSEQ_1:49;
+A3:    |.seq_id(x).| = |.(seq_id(x))*'.| by Lm19;
+        |.seq_id(x).|(#)|.seq_id(x).| is summable by A2,Lm17;
+       then |.seq_id(x)(#)(seq_id(x))*'.| is summable by A3,COMSEQ_1:49;
        hence thesis by COMSEQ_3:def 11;
      end;
      hence thesis;
    end;
-   for x be set holds
+    for x be set holds
     (x is Complex_Sequence & seq_id(x)(#)(seq_id(x))*' is absolutely_summable)
      implies (x is Element of Complex_l2_Space)
    proof
      let x be set;
      assume that
-B1:  x is Complex_Sequence and
-B2:  seq_id(x)(#)(seq_id(x))*' is absolutely_summable;
-B3:  x in the_set_of_ComplexSequences by B1,CSSPACE:def 1;
-     |.seq_id(x)(#)(seq_id(x))*'.| is summable by B2,COMSEQ_3:def 11; then
-     |.seq_id(x).|(#)|.(seq_id(x))*'.| is summable by COMSEQ_1:49; then
-     |.seq_id(x).|(#)|.(seq_id(x)).| is summable by LM;
-     hence thesis by B3,CSSPACE:def 11,def 20;
+A4:  x is Complex_Sequence and
+A5:  seq_id(x)(#)(seq_id(x))*' is absolutely_summable;
+A6:  x in the_set_of_ComplexSequences by A4,CSSPACE:def 1;
+      |.seq_id(x)(#)(seq_id(x))*'.| is summable by A5,COMSEQ_3:def 11;
+     then |.seq_id(x).|(#)|.(seq_id(x))*'.| is summable by COMSEQ_1:49;
+     then |.seq_id(x).|(#)|.(seq_id(x)).| is summable by Lm19;
+     hence thesis by A6,CSSPACE:def 11,def 20;
    end;
-   hence thesis by A0;
+   hence thesis by A1;
 end;
 
 theorem
-( the carrier of Complex_l2_Space = the_set_of_l2ComplexSequences) &
+ ( the carrier of Complex_l2_Space = the_set_of_l2ComplexSequences) &
 (for x be set holds x is Element of Complex_l2_Space
   iff x is Complex_Sequence & |.seq_id(x).|(#)|.seq_id(x).| is summable) &
 (for x be set holds x is Element of Complex_l2_Space
@@ -573,7 +577,7 @@ theorem
    |.seq_id(v).|(#)|.seq_id(w).| is summable &
  for v,w be VECTOR of Complex_l2_Space holds
    v.|.w = Sum(seq_id(v)(#)(seq_id(w))*')
- by LM1b,LM1e,LM1f,LM1g,LM1h,LM1i,LM1d,LM1j,LM1k,LM1l,CSSPACE:def 20;
+ by Lm10,Lm11,Lm12,Lm13,Lm14,Lm15,Lm16,Lm17,Lm18,Lm20,CSSPACE:def 20;
 
 theorem Th2:
 for x,y,z being Point of Complex_l2_Space for a be Complex holds
@@ -590,22 +594,22 @@ A2:  x .|. x = 0;
 A3:  x .|. x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
             .= Sum(seq_id(x)(#)(seq_id(x))*') by CSSPACE:def 19,def 20;
 
-     seq_id(x)(#)(seq_id(x))*' is absolutely_summable by LM1l; then
-A4:  seq_id(x)(#)(seq_id(x))*' is summable by COMSEQ_3:64; then
-     [*Sum(Re(seq_id(x)(#)(seq_id(x))*')),
+      seq_id(x)(#)(seq_id(x))*' is absolutely_summable by Lm20;
+then A4:  seq_id(x)(#)(seq_id(x))*' is summable by COMSEQ_3:64;
+     then [*Sum(Re(seq_id(x)(#)(seq_id(x))*')),
        Sum(Im(seq_id(x)(#)(seq_id(x))*'))*] = 0 by A2,A3,COMSEQ_3:54
-        .= [*0, 0*] by COMPLEX1:12,8; then
-B1:  Sum(Re(seq_id(x)(#)(seq_id(x))*')) = 0 &
+        .= [*0, 0*] by COMPLEX1:8,12;
+then A5:  Sum(Re(seq_id(x)(#)(seq_id(x))*')) = 0 &
      Sum(Im(seq_id(x)(#)(seq_id(x))*')) = 0 by ARYTM_0:12;
      set seq = seq_id(x);
      set rseq = Re(seq(#)seq*');
      set iseq = Im(seq(#)seq*');
 
-B3:  for n be Nat holds
+A6:  for n be Nat holds
        rseq.n = (Re(seq.n))^2 + (Im(seq.n))^2
      proof
        let n be Nat;
-       rseq.n = ( Re seq (#) Re (seq*') -Im seq (#) Im (seq*') ).n
+        rseq.n = ( Re seq (#) Re (seq*') -Im seq (#) Im (seq*') ).n
                   by COMSEQ_3:21
              .= ( Re seq (#) Re (seq*') + -Im seq (#) Im (seq*') ).n
                   by SEQ_1:15
@@ -640,124 +644,124 @@ B3:  for n be Nat holds
        hence thesis by SQUARE_1:def 3;
      end;
 
-B4:  (for n be Nat holds 0 <= rseq.n) & rseq is summable
+A7:  (for n be Nat holds 0 <= rseq.n) & rseq is summable
      proof
-       for n be Nat holds 0 <= rseq.n
+        for n be Nat holds 0 <= rseq.n
        proof
          let n be Nat;
-C1:      rseq.n = (Re(seq.n))^2 + (Im(seq.n))^2 by B3;
-         (Re(seq.n))^2 >= 0 & (Im(seq.n))^2 >= 0 by SQUARE_1:72; then
-         rseq.n >= 0 + 0 by C1,REAL_1:55;
+A8:      rseq.n = (Re(seq.n))^2 + (Im(seq.n))^2 by A6;
+          (Re(seq.n))^2 >= 0 & (Im(seq.n))^2 >= 0 by SQUARE_1:72;
+         then rseq.n >= 0 + 0 by A8,REAL_1:55;
          hence thesis;
        end;
        hence thesis by A4,COMSEQ_3:54;
      end;
 
-A6:  for n be Nat holds (seq_id(x)).n = 0
+A9:  for n be Nat holds (seq_id(x)).n = 0
      proof
        let n be Nat;
-       rseq.n = (Re(seq.n))^2 + (Im(seq.n))^2 by B3; then
-       (Re(seq.n))^2 + (Im(seq.n))^2 = 0 by B4,B1,RSSPACE:21;
+        rseq.n = (Re(seq.n))^2 + (Im(seq.n))^2 by A6;
+       then (Re(seq.n))^2 + (Im(seq.n))^2 = 0 by A5,A7,RSSPACE:21;
        hence thesis by COMPLEX1:13;
      end;
-     x is Element of the_set_of_ComplexSequences by CSSPACE:def 11,def 20;
-     hence x=0.Complex_l2_Space by A6,LM1d,CSSPACE:def 6;
+      x is Element of the_set_of_ComplexSequences by CSSPACE:def 11,def 20;
+     hence x=0.Complex_l2_Space by A9,Lm11,CSSPACE:def 6;
 
    end;
-A7:now assume
-A8:  x=0.Complex_l2_Space;
-A9:  for n be Nat holds (seq_id(x)(#)(seq_id(x))*').n=0
+A10:now assume
+A11:  x=0.Complex_l2_Space;
+A12:  for n be Nat holds (seq_id(x)(#)(seq_id(x))*').n=0
      proof
        let n be Nat;
        thus (seq_id(x)(#)(seq_id(x))*').n
                = (seq_id(x)).n * ((seq_id(x))*').n by COMSEQ_1:def 5
-              .=0c * ((seq_id(x))*').n by A8,LM1d,CSSPACE:def 6
+              .=0c * ((seq_id(x))*').n by A11,Lm11,CSSPACE:def 6
 
               .= 0;
      end;
      thus x.|.x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
                .= Sum(seq_id(x)(#)(seq_id(x))*') by CSSPACE:def 19,def 20
-               .=0 by A9,CSSPACE:88;
+               .=0 by A12,CSSPACE:88;
    end;
 
    set seq_x = seq_id(x);
 
-   seq_x(#)seq_x*' is absolutely_summable by LM1l; then
-A11:seq_x(#)seq_x*' is summable by COMSEQ_3:64;
+    seq_x(#)seq_x*' is absolutely_summable by Lm20;
+then A13:seq_x(#)seq_x*' is summable by COMSEQ_3:64;
 
-A10:Re(x.|.x) >= 0 & Im(x.|.x) = 0
+A14:Re(x.|.x) >= 0 & Im(x.|.x) = 0
    proof
-C1:  x .|. x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
+A15:  x .|. x = (the scalar of Complex_l2_Space).[x,x] by CSSPACE:def 12
             .= Sum(seq_x(#)seq_x*') by CSSPACE:def 19,def 20;
-     Sum(seq_x(#)seq_x*')
+      Sum(seq_x(#)seq_x*')
       = [*Sum(Re(seq_x(#)seq_x*')),
-          Sum(Im(seq_x(#)seq_x*'))*] by A11,COMSEQ_3:54; then
-C2:  Re(x.|.x) = Sum(Re(seq_x(#)seq_x*')) &
-     Im(x.|.x) = Sum(Im(seq_x(#)seq_x*')) by C1,COMPLEX1:7;
-C3:  Re(seq_x(#)seq_x*') is summable & Im(seq_x(#)seq_x*') is summable
-       by A11,COMSEQ_3:54;
-     for n being Nat holds 0 <= (Re(seq_x(#)seq_x*')).n
+          Sum(Im(seq_x(#)seq_x*'))*] by A13,COMSEQ_3:54;
+then A16:  Re(x.|.x) = Sum(Re(seq_x(#)seq_x*')) &
+     Im(x.|.x) = Sum(Im(seq_x(#)seq_x*')) by A15,COMPLEX1:7;
+A17:  Re(seq_x(#)seq_x*') is summable & Im(seq_x(#)seq_x*') is summable
+       by A13,COMSEQ_3:54;
+      for n being Nat holds 0 <= (Re(seq_x(#)seq_x*')).n
      proof
        let n be Nat;
-C4:    (Re(seq_x(#)seq_x*')).n = Re((seq_x(#)seq_x*').n) by COMSEQ_3:def 3
+A18:    (Re(seq_x(#)seq_x*')).n = Re((seq_x(#)seq_x*').n) by COMSEQ_3:def 3
          .= Re( seq_x.n * seq_x*'.n ) by COMSEQ_1:def 5
          .= Re( seq_x.n * (seq_x.n)*') by COMSEQ_2:def 2
          .= (Re(seq_x.n))^2 + (Im(seq_x.n))^2 by COMPLEX1:126;
-       (Re(seq_x.n))^2 >= 0 & (Im(seq_x.n))^2 >= 0 by SQUARE_1:72; then
-       (Re(seq_x(#)seq_x*')).n >= 0 + 0 by C4,REAL_1:55;
+        (Re(seq_x.n))^2 >= 0 & (Im(seq_x.n))^2 >= 0 by SQUARE_1:72;
+       then (Re(seq_x(#)seq_x*')).n >= 0 + 0 by A18,REAL_1:55;
        hence thesis;
      end;
-     hence Re(x.|.x) >= 0 by C2,C3,SERIES_1:21;
+     hence Re(x.|.x) >= 0 by A16,A17,SERIES_1:21;
 
-     for n being Nat holds (Im(seq_x(#)seq_x*')).n = 0
+      for n being Nat holds (Im(seq_x(#)seq_x*')).n = 0
      proof
        let n be Nat;
-       (Im(seq_x(#)seq_x*')).n = Im((seq_x(#)seq_x*').n) by COMSEQ_3:def 4
+        (Im(seq_x(#)seq_x*')).n = Im((seq_x(#)seq_x*').n) by COMSEQ_3:def 4
          .= Im( seq_x.n * seq_x*'.n ) by COMSEQ_1:def 5
          .= Im( seq_x.n * (seq_x.n)*') by COMSEQ_2:def 2;
        hence thesis by COMPLEX1:126;
      end;
-     hence thesis by C2,RSSPACE:20;
+     hence thesis by A16,RSSPACE:20;
    end;
 
    set seq_y = seq_id(y);
    set seq_z = seq_id(z);
 
-   |.seq_x.|(#)|.seq_y.| is summable by LM1j; then
+    |.seq_x.|(#)|.seq_y.| is summable by Lm17;
 
-   |.seq_x*'.|(#)|.seq_y.| is summable by LM; then
-   |.seq_x*'(#)seq_y.| is summable by COMSEQ_1:49; then
-   seq_x*'(#)seq_y is absolutely_summable by COMSEQ_3:def 11; then
-A12':seq_x*'(#)seq_y is summable by COMSEQ_3:64;
+   then |.seq_x*'.|(#)|.seq_y.| is summable by Lm19;
+   then |.seq_x*'(#)seq_y.| is summable by COMSEQ_1:49;
+   then seq_x*'(#)seq_y is absolutely_summable by COMSEQ_3:def 11;
+then A19:seq_x*'(#)seq_y is summable by COMSEQ_3:64;
 
-A13:x .|. y = (the scalar of Complex_l2_Space).[x,y] by CSSPACE:def 12
+A20:x .|. y = (the scalar of Complex_l2_Space).[x,y] by CSSPACE:def 12
            .= Sum(seq_x(#)seq_y*') by CSSPACE:def 19,def 20
-           .= Sum((seq_x*')*'(#)seq_y*') by Cor1
+           .= Sum((seq_x*')*'(#)seq_y*') by Lm1
            .= Sum( (seq_x*'(#)seq_y)*' ) by COMSEQ_2:5
-           .= (Sum (seq_x*'(#)seq_y) )*' by A12',Cor3
+           .= (Sum (seq_x*'(#)seq_y) )*' by A19,Lm6
            .= ((the scalar of Complex_l2_Space).[y,x])*'
                 by CSSPACE:def 19,def 20
            .=(y .|. x)*' by CSSPACE:def 12;
 
-   |.seq_x.|(#)|.seq_z.| is summable by LM1j; then
-   |.seq_x.|(#)|.seq_z*'.| is summable by LM; then
-   |.seq_x(#)seq_z*'.| is summable by COMSEQ_1:49; then
-   seq_x(#)seq_z*' is absolutely_summable by COMSEQ_3:def 11; then
-A14:seq_x(#)seq_z*' is summable by COMSEQ_3:64;
+    |.seq_x.|(#)|.seq_z.| is summable by Lm17;
+   then |.seq_x.|(#)|.seq_z*'.| is summable by Lm19;
+   then |.seq_x(#)seq_z*'.| is summable by COMSEQ_1:49;
+   then seq_x(#)seq_z*' is absolutely_summable by COMSEQ_3:def 11;
+then A21:seq_x(#)seq_z*' is summable by COMSEQ_3:64;
 
-   |.seq_y.|(#)|.seq_z.| is summable by LM1j; then
+    |.seq_y.|(#)|.seq_z.| is summable by Lm17;
 
-   |.seq_y.|(#)|.seq_z*'.| is summable by LM; then
-   |.seq_y(#)seq_z*'.| is summable by COMSEQ_1:49; then
-   seq_y(#)seq_z*' is absolutely_summable by COMSEQ_3:def 11; then
-A15:seq_y(#)seq_z*' is summable by COMSEQ_3:64;
+   then |.seq_y.|(#)|.seq_z*'.| is summable by Lm19;
+   then |.seq_y(#)seq_z*'.| is summable by COMSEQ_1:49;
+   then seq_y(#)seq_z*' is absolutely_summable by COMSEQ_3:def 11;
+then A22:seq_y(#)seq_z*' is summable by COMSEQ_3:64;
 
-A16:(x+y).|.z =(the scalar of Complex_l2_Space).[x+y,z] by CSSPACE:def 12
+A23:(x+y).|.z =(the scalar of Complex_l2_Space).[x+y,z] by CSSPACE:def 12
        .= Sum(seq_id(x+y)(#)seq_z*') by CSSPACE:def 19,def 20
-       .= Sum(seq_id(seq_x+seq_y)(#)seq_z*') by LM1f
+       .= Sum(seq_id(seq_x+seq_y)(#)seq_z*') by Lm13
        .= Sum((seq_x+seq_y)(#)seq_z*') by CSSPACE:3
        .= Sum(seq_x(#)seq_z*'+seq_y(#)seq_z*') by COMSEQ_1:13
-       .= Sum(seq_x(#)seq_z*')+Sum(seq_y(#)seq_z*') by A14,A15,COMSEQ_3:55
+       .= Sum(seq_x(#)seq_z*')+Sum(seq_y(#)seq_z*') by A21,A22,COMSEQ_3:55
        .=(the scalar of Complex_l2_Space).[x,z]+Sum(seq_y(#)seq_z*')
                         by CSSPACE:def 19,def 20
        .=(the scalar of Complex_l2_Space).[x,z]
@@ -765,20 +769,20 @@ A16:(x+y).|.z =(the scalar of Complex_l2_Space).[x+y,z] by CSSPACE:def 12
        .= x.|.z +(the scalar of Complex_l2_Space).[y,z] by CSSPACE:def 12
        .= x.|.z + y.|.z by CSSPACE:def 12;
 
-   |.seq_x.|(#)|.seq_y.| is summable by LM1j; then
-   |.seq_x.|(#)|.seq_y*'.| is summable by LM; then
-   |.seq_x(#)seq_y*'.| is summable by COMSEQ_1:49; then
-   seq_x(#)seq_y*' is absolutely_summable by COMSEQ_3:def 11; then
-A17:seq_x(#)seq_y*' is summable by COMSEQ_3:64;
-   (a*x).|.y = (the scalar of Complex_l2_Space).[a*x,y] by CSSPACE:def 12
+    |.seq_x.|(#)|.seq_y.| is summable by Lm17;
+   then |.seq_x.|(#)|.seq_y*'.| is summable by Lm19;
+   then |.seq_x(#)seq_y*'.| is summable by COMSEQ_1:49;
+   then seq_x(#)seq_y*' is absolutely_summable by COMSEQ_3:def 11;
+then A24:seq_x(#)seq_y*' is summable by COMSEQ_3:64;
+    (a*x).|.y = (the scalar of Complex_l2_Space).[a*x,y] by CSSPACE:def 12
       .=Sum(seq_id(a*x)(#)seq_y*') by CSSPACE:def 19,def 20
-      .=Sum(seq_id(a(#)seq_x)(#)seq_y*') by LM1g
+      .=Sum(seq_id(a(#)seq_x)(#)seq_y*') by Lm14
       .=Sum(a(#)seq_x(#)seq_y*') by CSSPACE:3
       .=Sum(a(#)(seq_x(#)seq_y*')) by COMSEQ_1:15
-      .=a*Sum(seq_x(#)seq_y*') by A17,COMSEQ_3:57
+      .=a*Sum(seq_x(#)seq_y*') by A24,COMSEQ_3:57
       .=a*(the scalar of Complex_l2_Space).[x,y] by CSSPACE:def 19,def 20
       .=a*(x.|.y) by CSSPACE:def 12;
-   hence thesis by A1,A7,A10,A13,A16;
+   hence thesis by A1,A10,A14,A20,A23;
 end;
 
 registration
@@ -786,21 +790,21 @@ registration
   coherence by Th2,CSSPACE:def 13;
 end;
 
-Lm2a:
+Lm21:
 for x,y be Complex holds 2*|.x*y.| <= |.x.|^2 + |.y.|^2
 proof
    let x,y be Complex;
    set a = |.x.|;
    set b = |.y.|;
 A1:a*a = |.x.|^2 & b*b = |.y.|^2 & a*b = |.x*y.|
-     by SQUARE_1:def 3,COMPLEX1:151;
-   (a - b)^2 = (a - b)*(a - b) by SQUARE_1:def 3
-    .= a*a - (a*b + a*b) + b*b; then
-   a*a + b*b - (a*b + a*b) >= 0 by SQUARE_1:72;
+     by COMPLEX1:151,SQUARE_1:def 3;
+    (a - b)^2 = (a - b)*(a - b) by SQUARE_1:def 3
+    .= a*a - (a*b + a*b) + b*b;
+   then a*a + b*b - (a*b + a*b) >= 0 by SQUARE_1:72;
    hence thesis by A1,REAL_2:105;
 end;
 
-Lm2:
+Lm22:
 for x,y be Complex holds
  |.x+y.|*|.x+y.| <= 2*|.x.|*|.x.| + 2*|.y.|*|.y.| &
  |.x.|*|.x.| <= 2*|.x-y.|*|.x-y.| + 2*|.y.|*|.y.|
@@ -809,37 +813,38 @@ A1:now
      let x,y be Complex;
 A2:  |.x+y.|*|.x+y.| =|.(x+y)*(x+y).| by COMPLEX1:151
       .= |.x*x + x*y + x*y + y*y.|;
-B1:  |.x*x.| = |.x.|*|.x.| & |.x.|^2 = |.x.|*|.x.| &
+A3:  |.x*x.| = |.x.|*|.x.| & |.x.|^2 = |.x.|*|.x.| &
      |.y*y.| = |.y.|*|.y.| & |.y.|^2 = |.y.|*|.y.|
        by COMPLEX1:151,SQUARE_1:def 3;
-A3:  |.x*x + x*y + x*y + y*y.| <= |.x*x + x*y + x*y.| + |.y*y.| &
+A4:  |.x*x + x*y + x*y + y*y.| <= |.x*x + x*y + x*y.| + |.y*y.| &
      |.x*x + x*y + x*y.| <= |.x*x + x*y.| + |.x*y.| &
-     |.x*x + x*y.| <= |.x*x.| + |.x*y.| by COMPLEX1:142; then
-A4:  |.x*x + x*y + x*y + y*y.| - |.y*y.| <= |.x*x + x*y + x*y.| &
-     |.x*x + x*y + x*y.| - |.x*y.| <= |.x*x + x*y.| by REAL_1:86; then
-     |.x*x + x*y + x*y.| - |.x*y.| <= |.x*x.| + |.x*y.| by A3,AXIOMS:22; then
-     |.x*x + x*y + x*y.| <= |.x*x.| + |.x*y.| + |.x*y.| by REAL_1:86; then
-     |.x+y.|*|.x+y.| - |.y*y.| <= |.x*x.| + 2*|.x*y.|
-       by A2,A4,AXIOMS:22; then
-A5:  |.x+y.|*|.x+y.| - |.y*y.| - |.x*x.| <= 2*|.x*y.| by REAL_1:86;
-     2*|.x*y.| <= |.x.|^2 + |.y.|^2 by Lm2a; then
-     |.x+y.|*|.x+y.| - |.y*y.| - |.x*x.| <= |.x.|^2 + |.y.|^2
-       by A5,AXIOMS:22; then
-     |.x+y.|*|.x+y.|- |.y.|*|.y.| <= |.x.|*|.x.| + |.y.|*|.y.| + |.x.|*|.x.|
-       by B1,REAL_1:86; then
-     |.x+y.|*|.x+y.| <= 2*(|.x.|*|.x.|) + |.y.|*|.y.| + |.y.|*|.y.|
+     |.x*x + x*y.| <= |.x*x.| + |.x*y.| by COMPLEX1:142;
+then A5:  |.x*x + x*y + x*y + y*y.| - |.y*y.| <= |.x*x + x*y + x*y.| &
+     |.x*x + x*y + x*y.| - |.x*y.| <= |.x*x + x*y.| by REAL_1:86;
+     then |.x*x + x*y + x*y.| - |.x*y.| <= |.x*x.| + |.x*y.| by A4,AXIOMS:22;
+     then |.x*x + x*y + x*y.| <= |.x*x.| + |.x*y.| + |.x*y.| by REAL_1:86;
+     then |.x+y.|*|.x+y.| - |.y*y.| <= |.x*x.| + 2*|.x*y.|
+       by A2,A5,AXIOMS:22;
+then A6:  |.x+y.|*|.x+y.| - |.y*y.| - |.x*x.| <= 2*|.x*y.| by REAL_1:86;
+      2*|.x*y.| <= |.x.|^2 + |.y.|^2 by Lm21;
+     then |.x+y.|*|.x+y.| - |.y*y.| - |.x*x.| <= |.x.|^2 + |.y.|^2
+       by A6,AXIOMS:22;
+     then |.x+y.|*|.x+y.|- |.y.|*|.y.| <= |.x.|*|.x.| + |.y.|*|.y.| + |.x.|*|.
+x.|
+       by A3,REAL_1:86;
+     then |.x+y.|*|.x+y.| <= 2*(|.x.|*|.x.|) + |.y.|*|.y.| + |.y.|*|.y.|
        by REAL_1:86;
      hence |.x+y.|*|.x+y.| <=2*|.x.|*|.x.|+2*|.y.|*|.y.|;
    end;
-     now
+      now
      let x,y be Complex;
-       |.(x-y)+y.|=|.x.|;
+        |.(x-y)+y.|=|.x.|;
      hence |.x.|*|.x.| <= 2*|.x-y.|*|.x-y.|+2*|.y.|*|.y.| by A1;
    end;
    hence thesis by A1;
 end;
 
-Lm4:
+Lm23:
 for c be Complex, seq be Complex_Sequence st seq is convergent
 for rseq be Real_Sequence st
   (for m be Nat holds rseq .m = |.seq.m-c.|*|.seq.m-c.|)
@@ -853,7 +858,7 @@ A2:for i be Nat holds rseq .i = |.seq.i-c.|*|.seq.i-c.|;
    deffunc F(set)=c;
    consider cseq be Complex_Sequence such that
 A3:for n be Nat holds cseq.n=F(n) from COMSEQ_1:sch 1;
-   now let i be Nat;
+    now let i be Nat;
      thus rseq.i=|.seq.i-c.|*|.seq.i-c.| by A2
         .=|.seq.i-(cseq.i).|*|.seq.i-c.| by A3
         .=|.seq.i-(cseq.i).|*|.seq.i-(cseq.i).| by A3
@@ -866,25 +871,25 @@ A3:for n be Nat holds cseq.n=F(n) from COMSEQ_1:sch 1;
         .=(|.seq -cseq.| .i)*|.(seq -cseq).i.| by COMSEQ_1:def 14
         .=(|.seq -cseq.| .i)*(|.seq -cseq.| .i) by COMSEQ_1:def 14
         .=(|.seq -cseq.|(#)|.seq -cseq.|) .i by SEQ_1:12;
-   end; then
-A4:for x be set st x in NAT holds
+   end;
+then A4:for x be set st x in NAT holds
      rseq.x =(|.seq -cseq.|(#)|.seq -cseq.|) .x;
-A6:cseq is convergent by A3,COMSEQ_2:9; then
-   reconsider seq1 = seq -cseq as convergent Complex_Sequence
+A5:cseq is convergent by A3,COMSEQ_2:9;
+   then reconsider seq1 = seq -cseq as convergent Complex_Sequence
      by A1,COMSEQ_2:25;
-A7:|.seq1.| is convergent;
+A6:|.seq1.| is convergent;
 
-A8:|.seq1.|(#)|.seq1.| is convergent by SEQ_2:28;
-     lim (|.seq -cseq.|(#)|.seq -cseq.|)
-     = (lim |.seq -cseq.|)*(lim |.seq -cseq.|) by A7,SEQ_2:29
-    .= |.lim seq - lim cseq.|*(lim |.seq -cseq.|) by A1,A6,COMSEQ_2:27
-    .= |.lim seq - lim cseq.|*|.lim seq - lim cseq.| by A1,A6,COMSEQ_2:27
+A7:|.seq1.|(#)|.seq1.| is convergent by SEQ_2:28;
+      lim (|.seq -cseq.|(#)|.seq -cseq.|)
+     = (lim |.seq -cseq.|)*(lim |.seq -cseq.|) by A6,SEQ_2:29
+    .= |.lim seq - lim cseq.|*(lim |.seq -cseq.|) by A1,A5,COMSEQ_2:27
+    .= |.lim seq - lim cseq.|*|.lim seq - lim cseq.| by A1,A5,COMSEQ_2:27
     .= |.lim seq - c.|*|.lim seq - lim cseq.| by A3,COMSEQ_2:10
     .= |.lim seq - c.|*|.lim seq - c.| by A3,COMSEQ_2:10;
-   hence thesis by A4,A8,SEQ_1:8;
+   hence thesis by A4,A7,SEQ_1:8;
 end;
 
-Lm5:
+Lm24:
 for c be Complex, seq1 be Real_Sequence, seq be Complex_Sequence st
  seq is convergent & seq1 is convergent
   for rseq be Real_Sequence st
@@ -902,7 +907,7 @@ A3:for i be Nat holds rseq .i = |.seq.i-c.|*|.seq.i-c.|+seq1.i;
    deffunc F(set)= c;
    consider cseq be Complex_Sequence such that
 A4:for n be Nat holds cseq.n=F(n) from COMSEQ_1:sch 1;
-   now let i be Nat;
+    now let i be Nat;
      thus rseq.i=|.seq.i-c.|*|.seq.i-c.| +seq1.i by A3
             .=|.seq.i-cseq.i.|*|.seq.i-c.| +seq1.i by A4
             .=|.seq.i-cseq.i.|*|.seq.i-cseq.i.| +seq1.i by A4
@@ -916,26 +921,27 @@ A4:for n be Nat holds cseq.n=F(n) from COMSEQ_1:sch 1;
             .=(|.seq-cseq.|).i * (|.seq-cseq.|).i +seq1.i by COMSEQ_1:def 14
             .=(|.seq-cseq.|(#)|.seq-cseq.|).i +seq1.i by SEQ_1:12
             .=(|.seq -cseq.|(#)|.seq -cseq.|+seq1).i by SEQ_1:11;
-     end;  then
-   for x be set st x in NAT holds
-    rseq.x =(|.seq-cseq.|(#)|.seq-cseq.|+seq1).x; then
-A5:rseq = |.seq -cseq.|(#)|.seq-cseq.|+seq1 by SEQ_1:8;
-A7:cseq is convergent by A4,COMSEQ_2:9; then
-   reconsider s = seq-cseq as convergent Complex_Sequence by A1,COMSEQ_2:25;
-A8:|.s.| is convergent; then
-A9:|.seq-cseq.|(#)|.seq-cseq.| is convergent by SEQ_2:28;
-   lim (|.seq-cseq.|(#)|.seq-cseq.|)
-    = (lim (|.seq-cseq.|))*(lim (|.seq-cseq.|)) by A8,SEQ_2:29
-   .= (|.(lim seq)-(lim cseq).|)*(lim (|.seq-cseq.|)) by A1,A7,COMSEQ_2:27
+     end;
+   then for x be set st x in NAT holds
+    rseq.x =(|.seq-cseq.|(#)|.seq-cseq.|+seq1).x;
+then A5:rseq = |.seq -cseq.|(#)|.seq-cseq.|+seq1 by SEQ_1:8;
+A6:cseq is convergent by A4,COMSEQ_2:9;
+   then reconsider s = seq-cseq as convergent Complex_Sequence by A1,COMSEQ_2:
+25;
+A7:|.s.| is convergent;
+then A8:|.seq-cseq.|(#)|.seq-cseq.| is convergent by SEQ_2:28;
+    lim (|.seq-cseq.|(#)|.seq-cseq.|)
+    = (lim (|.seq-cseq.|))*(lim (|.seq-cseq.|)) by A7,SEQ_2:29
+   .= (|.(lim seq)-(lim cseq).|)*(lim (|.seq-cseq.|)) by A1,A6,COMSEQ_2:27
    .= (|.(lim seq)-(lim cseq).|)*(|.(lim seq)-(lim cseq).|)
-      by A1,A7,COMSEQ_2:27
+      by A1,A6,COMSEQ_2:27
    .= (|.(lim seq)-c.|)*(|.(lim seq)-(lim cseq).|) by A4,COMSEQ_2:10
    .= (|.(lim seq)-c.|)*(|.(lim seq)-c.|) by A4,COMSEQ_2:10;
-   hence thesis by A2,A5,A9,SEQ_2:19,20;
+   hence thesis by A2,A5,A8,SEQ_2:19,20;
 end;
 
 theorem
-for vseq be sequence of Complex_l2_Space st vseq is Cauchy holds
+ for vseq be sequence of Complex_l2_Space st vseq is Cauchy holds
    vseq is convergent
 proof
    let vseq be sequence of Complex_l2_Space such that
@@ -958,7 +964,7 @@ A3:  x in NAT;
 A4:  for n be Nat holds seqi.n=F(n) from COMSEQ_1:sch 1;
 A5:  seqi is convergent
      proof
-       now
+        now
          let e be Real such that
 A6:      e > 0;
          thus ex k be Nat st for m be Nat st
@@ -967,75 +973,75 @@ A6:      e > 0;
            consider k be Nat such that
 A7:         for n, m be Nat st ( n >= k & m >= k ) holds
              ||.(vseq.n) - (vseq.m).|| < e by A1,A6,CLVECT_2:58;
-           now
+            now
              let m be Nat such that
 A8:          k<=m;
 
              set vm = vseq.m;
              set vk = vseq.k;
              set seq_mk = seq_id(vm-vk);
-             ||.vm - vk.|| < e by A7,A8; then
-A9:          sqrt |.(vm-vk).|.(vm-vk).| < e by CSSPACE:def 15;
+              ||.vm - vk.|| < e by A7,A8;
+then A9:          sqrt |.(vm-vk).|.(vm-vk).| < e by CSSPACE:def 15;
              reconsider e1=e as Real;
-             |.seq_mk.|(#)|.seq_mk.| is summable by CSSPACE:def 11,def 20; then
-A10:         |.seq_mk.|(#)|.seq_mk*'.| is summable by LM;
+              |.seq_mk.|(#)|.seq_mk.| is summable by CSSPACE:def 11,def 20;
+then A10:         |.seq_mk.|(#)|.seq_mk*'.| is summable by Lm19;
 A11:         for i be Nat holds
               0 <= (|.seq_mk.|(#)|.seq_mk*'.|).i
              proof
                let i be Nat;
-               (|.seq_mk.| (#) |.seq_mk*'.|).i
+                (|.seq_mk.| (#) |.seq_mk*'.|).i
                   =(|.seq_mk.|).i * (|.seq_mk*'.|).i by SEQ_1:12
-                 .=(|.seq_mk.|).i * (|.seq_mk.|).i by LM;
+                 .=(|.seq_mk.|).i * (|.seq_mk.|).i by Lm19;
                hence thesis by REAL_1:93;
-             end; then
-A12:         0 <= Sum(|.seq_mk.|(#)|.seq_mk*'.|) by A10,SERIES_1:21; then
-A13:         0 <= sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) by SQUARE_1:def 4;
-             seq_mk(#)seq_mk*' is absolutely_summable by LM1l; then
-B13:         seq_mk(#)seq_mk*' is summable by COMSEQ_3:64;
-             (for j be Nat holds
+             end;
+then A12:         0 <= Sum(|.seq_mk.|(#)|.seq_mk*'.|) by A10,SERIES_1:21;
+then A13:         0 <= sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) by SQUARE_1:def 4;
+              seq_mk(#)seq_mk*' is absolutely_summable by Lm20;
+then A14:         seq_mk(#)seq_mk*' is summable by COMSEQ_3:64;
+              (for j be Nat holds
               (Re(seq_mk(#)seq_mk*')).j >= 0 &(Im(seq_mk(#)seq_mk*')).j = 0)
-               by Cor6; then
-             |.Sum(seq_mk(#)seq_mk*').|
-               = Sum |.seq_mk(#)seq_mk*'.| by B13,Cor5
-              .= Sum(|.seq_mk.|(#)|.seq_mk*'.|) by COMSEQ_1:49; then
-             sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) < e by A9,LM1k; then
-             (sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) )^2 < e1^2
-                by A13,SQUARE_1:78; then
-             (sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) )^2 < e*e
-                by SQUARE_1:def 3; then
-A14:         Sum(|.seq_mk.|(#)|.seq_mk*'.|) < e*e by A12,SQUARE_1:def 4;
-A15:         |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
+               by Lm9;
+             then |.Sum(seq_mk(#)seq_mk*').|
+               = Sum |.seq_mk(#)seq_mk*'.| by A14,Lm8
+              .= Sum(|.seq_mk.|(#)|.seq_mk*'.|) by COMSEQ_1:49;
+             then sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) < e by A9,Lm18;
+             then (sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) )^2 < e1^2
+                by A13,SQUARE_1:78;
+             then (sqrt Sum(|.seq_mk.|(#)|.seq_mk*'.|) )^2 < e*e
+                by SQUARE_1:def 3;
+then A15:         Sum(|.seq_mk.|(#)|.seq_mk*'.|) < e*e by A12,SQUARE_1:def 4;
+A16:         |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
                = (|.seq_mk.|(#)|.seq_mk*'.|).i
              proof
-               seq_id((vseq.m) - (vseq.k))
-                 =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by LM1i
+                seq_id((vseq.m) - (vseq.k))
+                 =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Lm16
                 .= seq_id((vseq.m))-seq_id((vseq.k)) by CSSPACE:3
-                .= seq_id(vseq.m)+-seq_id(vseq.k) by COMSEQ_1:def 10; then
-               seq_mk.i
+                .= seq_id(vseq.m)+-seq_id(vseq.k) by COMSEQ_1:def 10;
+               then seq_mk.i
                  =(seq_id(vseq.m)).i+(-seq_id(vseq.k)).i by COMSEQ_1:def 4
                 .=(seq_id(vseq.m)).i+(-(seq_id(vseq.k)).i) by COMSEQ_1:def 9
                 .=(seq_id(vseq.m)).i-(seq_id(vseq.k)).i
                 .=seqi.m -(seq_id(vseq.k)).i by A4
-                .=seqi.m-seqi.k by A4; then
-               |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
+                .=seqi.m-seqi.k by A4;
+               then |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
                  = (|.seq_mk.|).i*|.(seq_mk.i).| by COMSEQ_1:def 14
-                .= (|.seq_mk.|).i*(|.seq_mk.|).i by COMSEQ_1:def 14; then
-               (|.seq_mk.|).i*(|.seq_mk*'.|).i
-                 =|.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).| by LM;
+                .= (|.seq_mk.|).i*(|.seq_mk.|).i by COMSEQ_1:def 14;
+               then (|.seq_mk.|).i*(|.seq_mk*'.|).i
+                 =|.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).| by Lm19;
                hence thesis by SEQ_1:12;
              end;
-A16:         (|.seq_mk.|(#)|.seq_mk*'.|).i <= Sum(|.seq_mk.|(#)|.seq_mk*'.|)
+A17:         (|.seq_mk.|(#)|.seq_mk*'.|).i <= Sum(|.seq_mk.|(#)|.seq_mk*'.|)
                by A10,A11,RSSPACE2:4;
-A17:         0 <= |.(seqi.m-seqi.k).| by COMPLEX1:132; then
-A18:         0 <= |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).| by SQUARE_1:19;
-A19:         |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
-               < e*e by A14,A15,A16,AXIOMS:22;
-A20:         sqrt (|.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|)
+A18:         0 <= |.(seqi.m-seqi.k).| by COMPLEX1:132;
+then A19:         0 <= |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).| by SQUARE_1:19;
+A20:         |.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|
+               < e*e by A15,A16,A17,AXIOMS:22;
+A21:         sqrt (|.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|)
                =sqrt ((|.(seqi.m-seqi.k).|)^2) by SQUARE_1:def 3
-              .=|.(seqi.m-seqi.k).| by A17,SQUARE_1:89;
-             sqrt (e*e)=sqrt (e1^2) by SQUARE_1:def 3
+              .=|.(seqi.m-seqi.k).| by A18,SQUARE_1:89;
+              sqrt (e*e)=sqrt (e1^2) by SQUARE_1:def 3
               .=e by A6,SQUARE_1:89;
-             hence |.(seqi.m-seqi.k).| < e by A18,A19,A20,SQUARE_1:95;
+             hence |.(seqi.m-seqi.k).| < e by A19,A20,A21,SQUARE_1:95;
            end;
            hence thesis;
          end;
@@ -1047,22 +1053,22 @@ A20:         sqrt (|.(seqi.m-seqi.k).|*|.(seqi.m-seqi.k).|)
    end;
 
    consider f be Function of NAT,COMPLEX such that
-A21:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
+A22:for x be set st x in NAT holds P[x,f.x] from FUNCT_2:sch 1(A2);
    reconsider tseq=f as Complex_Sequence;
-A22:
+A23:
    now let i be Nat;
      reconsider x=i as set;
-     ex i0 be Nat st
+      ex i0 be Nat st
       x=i0 &
       ex seqi be Complex_Sequence st
        ( for n be Nat holds seqi.n=(seq_id(vseq.n)).i0 ) &
-       seqi is convergent & f.x=lim seqi by A21;
+       seqi is convergent & f.x=lim seqi by A22;
      hence ex seqi be Complex_Sequence st
        ( for n be Nat holds seqi.n=(seq_id(vseq.n)).i ) &
        seqi is convergent & tseq.i=lim seqi;
    end;
    set seq_t = seq_id(tseq);
-A23:
+A24:
    for e be Real st e >0
     ex k be Nat st
      for n be Nat st n >= k holds
@@ -1070,74 +1076,75 @@ A23:
      |.Sum((seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*').| < e*e )
    proof
      let e1 be Real such that
-A24: e1 >0;
+A25: e1 >0;
      set e=e1/2;
-A25: e > 0 by A24,SEQ_2:3;
-     e < e1 by A24,SEQ_2:4; then
-A26: e*e < e1*e1 by A25,SEQ_4:6;
+A26: e > 0 by A25,SEQ_2:3;
+      e < e1 by A25,SEQ_2:4;
+then A27: e*e < e1*e1 by A26,SEQ_4:6;
      consider k be Nat such that
-A27:  for n, m be Nat st ( n >= k & m >= k ) holds
-       ||.(vseq.n) - (vseq.m).|| < e by A1,A25,CLVECT_2:58;
-A28: for m,n be Nat st ( n >= k & m >= k ) holds
+A28:  for n, m be Nat st ( n >= k & m >= k ) holds
+       ||.(vseq.n) - (vseq.m).|| < e by A1,A26,CLVECT_2:58;
+A29: for m,n be Nat st ( n >= k & m >= k ) holds
       |.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).| is summable &
       Sum( |.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).|) < e*e &
       for i be Nat holds
        0 <= (|.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).|).i
      proof
        let m,n be Nat such that
-A29:   n >= k & m >= k;
-       ||.(vseq.n) - (vseq.m).|| < e by A27,A29; then
-A30:   sqrt |.((vseq.n-vseq.m).|.(vseq.n-vseq.m)).| < e by CSSPACE:def 15;
-A31:   |.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).| is summable
+A30:   n >= k & m >= k;
+        ||.(vseq.n) - (vseq.m).|| < e by A28,A30;
+then A31:   sqrt |.((vseq.n-vseq.m).|.(vseq.n-vseq.m)).| < e by CSSPACE:def 15;
+A32:   |.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).| is summable
           by CSSPACE:def 11,def 20;
-A32:   for i be Nat holds
+A33:   for i be Nat holds
          0 <= (|.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).|).i
        proof
          let i be Nat;
-         (|.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).|).i
+          (|.seq_id(vseq.n-vseq.m).|(#)|.seq_id(vseq.n-vseq.m).|).i
           =(|.seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m).|).i
              by COMSEQ_1:49
          .=|.(seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m)).i .|
              by COMSEQ_1:def 14;
          hence thesis by COMPLEX1:132;
-       end; then
-       0<= Sum (|.seq_id(vseq.n-vseq.m).|
-               (#)|.seq_id(vseq.n-vseq.m).|) by A31,SERIES_1:21; then
-A33:   0<= Sum |.seq_id(vseq.n-vseq.m)
-               (#)seq_id(vseq.n-vseq.m).| by COMSEQ_1:49; then
-A34:   0 <= sqrt ( Sum|.seq_id(vseq.n-vseq.m)
+       end;
+       then 0<= Sum (|.seq_id(vseq.n-vseq.m).|
+               (#)|.seq_id(vseq.n-vseq.m).|) by A32,SERIES_1:21;
+then A34:   0<= Sum |.seq_id(vseq.n-vseq.m)
+               (#)seq_id(vseq.n-vseq.m).| by COMSEQ_1:49;
+then A35:   0 <= sqrt ( Sum|.seq_id(vseq.n-vseq.m)
                (#)seq_id(vseq.n-vseq.m).| ) by SQUARE_1:def 4;
 
-       seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*'
-        is absolutely_summable by LM1l; then
-B34:    seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*'
+        seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*'
+        is absolutely_summable by Lm20;
+then A36:    seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*'
         is summable by COMSEQ_3:64;
-       (for j be Nat holds
+        (for j be Nat holds
         (Re(seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*')).j >= 0 &
         (Im(seq_id(vseq.n-vseq.m)(#)(seq_id(vseq.n-vseq.m))*')).j = 0)
-         by Cor6; then
-       |.Sum(seq_id(vseq.n-vseq.m)
+         by Lm9;
+       then |.Sum(seq_id(vseq.n-vseq.m)
           (#)(seq_id(vseq.n-vseq.m))*').|
          = Sum |.seq_id(vseq.n-vseq.m)
-               (#)(seq_id(vseq.n-vseq.m))*'.| by B34,Cor5
+               (#)(seq_id(vseq.n-vseq.m))*'.| by A36,Lm8
         .= Sum(|.seq_id(vseq.n-vseq.m).|
                (#)|.(seq_id(vseq.n-vseq.m))*'.|) by COMSEQ_1:49
         .= Sum(|.seq_id(vseq.n-vseq.m).|
-               (#)|.seq_id(vseq.n-vseq.m).|) by LM
+               (#)|.seq_id(vseq.n-vseq.m).|) by Lm19
         .= Sum(|.seq_id(vseq.n-vseq.m)
-               (#)seq_id(vseq.n-vseq.m).|) by COMSEQ_1:49; then
-       sqrt ( Sum|.seq_id(vseq.n-vseq.m)
-               (#)seq_id(vseq.n-vseq.m).| ) < e by A30,LM1k; then
-       (sqrt ( Sum|.seq_id(vseq.n-vseq.m)
+               (#)seq_id(vseq.n-vseq.m).|) by COMSEQ_1:49;
+       then sqrt ( Sum|.seq_id(vseq.n-vseq.m)
+               (#)seq_id(vseq.n-vseq.m).| ) < e by A31,Lm18;
+       then (sqrt ( Sum|.seq_id(vseq.n-vseq.m)
               (#)seq_id(vseq.n-vseq.m).| ) )^2 < e^2
-          by A34,SQUARE_1:78; then
-       (sqrt Sum|.seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m).|)^2 < e*e
-         by SQUARE_1:def 3; then
-       Sum|.seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m).| < e*e
-         by A33,SQUARE_1:def 4;
-       hence thesis by A32,CSSPACE:def 11,def 20,COMSEQ_1:49;
+          by A35,SQUARE_1:78;
+       then (sqrt Sum|.seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m).|)^2 < e*
+e
+         by SQUARE_1:def 3;
+       then Sum|.seq_id(vseq.n-vseq.m)(#)seq_id(vseq.n-vseq.m).| < e*e
+         by A34,SQUARE_1:def 4;
+       hence thesis by A33,COMSEQ_1:49,CSSPACE:def 11,def 20;
      end;
-A35: for n,i be Nat holds
+A37: for n,i be Nat holds
       for rseq be Real_Sequence st
       ( for m be Nat holds rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
           (#)|.seq_id(vseq.m-vseq.n).|).i ) holds
@@ -1146,12 +1153,12 @@ A35: for n,i be Nat holds
                    (#)|.(seq_t-seq_id(vseq.n)).|).i )
      proof
        let n be Nat;
-A36:   for m,k be Nat holds
+A38:   for m,k be Nat holds
         seq_id((vseq.m)-(vseq.k))=seq_id(vseq.m)-seq_id(vseq.k)
        proof
          let m,k be Nat;
          thus seq_id((vseq.m) - (vseq.k))
-                  =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by LM1i
+                  =seq_id(seq_id((vseq.m))-seq_id((vseq.k))) by Lm16
                 .= seq_id((vseq.m))-seq_id((vseq.k)) by CSSPACE:3;
        end;
        defpred P[Nat] means
@@ -1162,31 +1169,31 @@ A36:   for m,k be Nat holds
         & lim rseq =Partial_Sums(|.seq_t-seq_id(vseq.n).|
                    (#)|.seq_t-seq_id(vseq.n).|).$1);
 
-A37:   P[0]
+A39:   P[0]
        proof
-         now
+          now
            let rseq be Real_Sequence such that
-A38:       ( for m be Nat holds rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
+A40:       ( for m be Nat holds rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
                  (#)|.seq_id(vseq.m-vseq.n).|).0 );
            thus rseq is convergent &
             lim rseq =Partial_Sums(|.seq_t-seq_id(vseq.n).|
                (#)|.seq_t-seq_id(vseq.n).| ).0
            proof
              consider rseq0 be Complex_Sequence such that
-A39:          ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 )
-               & rseq0 is convergent & tseq.0=lim rseq0 by A22;
+A41:          ( for m be Nat holds rseq0.m=(seq_id(vseq.m)).0 )
+               & rseq0 is convergent & tseq.0=lim rseq0 by A23;
 
-A40:         now
+A42:         now
                let m be Nat;
                thus
-               rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
-                         (#)|.seq_id(vseq.m-vseq.n).|).0 by A38
+                rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
+                         (#)|.seq_id(vseq.m-vseq.n).|).0 by A40
                 .=(|.seq_id(vseq.m-vseq.n).|
                     (#)|.seq_id(vseq.m-vseq.n).|).0 by SERIES_1:def 1
                 .=(|.seq_id(vseq.m)-seq_id(vseq.n).|
-                    (#)|.seq_id(vseq.m-vseq.n).|).0 by A36
+                    (#)|.seq_id(vseq.m-vseq.n).|).0 by A38
                 .=(|.seq_id(vseq.m)-seq_id(vseq.n).|
-                    (#)|.seq_id(vseq.m)-seq_id(vseq.n).|).0 by A36
+                    (#)|.seq_id(vseq.m)-seq_id(vseq.n).|).0 by A38
                 .=(|.seq_id(vseq.m)-seq_id(vseq.n).|).0 *
                     (|.seq_id(vseq.m)-seq_id(vseq.n).| ).0 by SEQ_1:12
                 .=(|.seq_id(vseq.m)+-seq_id(vseq.n).|).0 *
@@ -1211,12 +1218,12 @@ A40:         now
                     |.(seq_id(vseq.m)).0+-(seq_id(vseq.n)).0 .|
                     by COMSEQ_1:def 9
                 .=|.rseq0.m-(seq_id(vseq.n)).0 .| *
-                    |.(seq_id(vseq.m)).0-(seq_id(vseq.n)).0 .| by A39
+                    |.(seq_id(vseq.m)).0-(seq_id(vseq.n)).0 .| by A41
                 .=|.rseq0.m-(seq_id(vseq.n)).0 .| *
-                    |.rseq0.m-(seq_id(vseq.n)).0 .| by A39;
-             end; then
-             lim rseq = |.tseq.0-(seq_id(vseq.n)).0 .| *
-                         |.tseq.0-(seq_id(vseq.n)).0 .| by A39,Lm4
+                    |.rseq0.m-(seq_id(vseq.n)).0 .| by A41;
+             end;
+             then lim rseq = |.tseq.0-(seq_id(vseq.n)).0 .| *
+                         |.tseq.0-(seq_id(vseq.n)).0 .| by A41,Lm23
               .= |.tseq.0+(-seq_id(vseq.n)).0 .| *
                    |.tseq.0+-(seq_id(vseq.n)).0 .| by COMSEQ_1:def 9
               .= |.tseq.0+(-seq_id(vseq.n)).0 .| *
@@ -1241,16 +1248,16 @@ A40:         now
                    (#)|.tseq-seq_id(vseq.n).|).0 by CSSPACE:3
               .=Partial_Sums(|.seq_t-seq_id(vseq.n).|
                           (#)|.seq_t-seq_id(vseq.n).|).0 by CSSPACE:3;
-             hence thesis by A39,A40,Lm4;
+             hence thesis by A41,A42,Lm23;
            end;
          end;
          hence thesis;
        end;
-A41:   for i be Nat st P[i] holds P[i+1]
+A43:   for i be Nat st P[i] holds P[i+1]
        proof
-         now
+          now
            let i be Nat such that
-A42:       for rseq be Real_Sequence st
+A44:       for rseq be Real_Sequence st
             ( for m be Nat holds
                rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
                        (#)|.seq_id(vseq.m-vseq.n).|).i ) holds
@@ -1266,24 +1273,24 @@ A42:       for rseq be Real_Sequence st
                    (#)|.seq_t-seq_id(vseq.n).| ).(i+1) )
            proof
              let rseq be Real_Sequence such that
-A43:         for m be Nat holds
+A45:         for m be Nat holds
               rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
                  (#)|.seq_id(vseq.m-vseq.n).|).(i+1);
              deffunc F(Nat)=Partial_Sums(|.seq_id(vseq.$1-vseq.n).|
                        (#)|.seq_id(vseq.$1-vseq.n).|).i;
              consider rseqb be Real_Sequence such that
-A44:           for m be Nat holds rseqb.m = F(m) from SEQ_1:sch 1;
-A45:         rseqb is convergent &
+A46:           for m be Nat holds rseqb.m = F(m) from SEQ_1:sch 1;
+A47:         rseqb is convergent &
                lim rseqb =Partial_Sums(|.seq_t-seq_id(vseq.n).|
-                  (#)|.seq_t-seq_id(vseq.n).| ).i by A42,A44;
+                  (#)|.seq_t-seq_id(vseq.n).| ).i by A44,A46;
              consider seq0 be Complex_Sequence such that
-A46:          ( for m be Nat holds seq0.m=(seq_id(vseq.m)).(i+1) ) &
-               seq0 is convergent & tseq.(i+1)=lim seq0 by A22;
-A47:         now let m be Nat;
+A48:          ( for m be Nat holds seq0.m=(seq_id(vseq.m)).(i+1) ) &
+               seq0 is convergent & tseq.(i+1)=lim seq0 by A23;
+A49:         now let m be Nat;
                thus
-               rseq.m
+                rseq.m
                 = Partial_Sums(|.seq_id(vseq.m-vseq.n).|
-                    (#)|.seq_id(vseq.m-vseq.n).|).(i+1) by A43
+                    (#)|.seq_id(vseq.m-vseq.n).|).(i+1) by A45
                .= (|.seq_id(vseq.m-vseq.n).|
                     (#)|.seq_id(vseq.m-vseq.n).|).(i+1)
                 + Partial_Sums(|.seq_id(vseq.m-vseq.n).|
@@ -1291,11 +1298,11 @@ A47:         now let m be Nat;
                .= ( |.seq_id(vseq.m)-seq_id(vseq.n).|
                     (#)|.seq_id(vseq.m-vseq.n).|).(i+1)
                 + Partial_Sums(|.seq_id(vseq.m-vseq.n).|
-                    (#)|.seq_id(vseq.m-vseq.n).|).i by A36
+                    (#)|.seq_id(vseq.m-vseq.n).|).i by A38
                .= ( |.seq_id(vseq.m)-seq_id(vseq.n).|
-                    (#)|.seq_id(vseq.m-vseq.n).|).(i+1) + rseqb.m by A44
+                    (#)|.seq_id(vseq.m-vseq.n).|).(i+1) + rseqb.m by A46
                .= ( |.seq_id(vseq.m)-seq_id(vseq.n).|
-                    (#)|.seq_id(vseq.m)-seq_id(vseq.n).|).(i+1)+rseqb.m by A36
+                    (#)|.seq_id(vseq.m)-seq_id(vseq.n).|).(i+1)+rseqb.m by A38
                .= ( |.seq_id(vseq.m)-seq_id(vseq.n).| ).(i+1) *
                   ( |.seq_id(vseq.m)-seq_id(vseq.n).| ).(i+1)
                   +rseqb.m by SEQ_1:12
@@ -1325,17 +1332,17 @@ A47:         now let m be Nat;
                   +rseqb.m by COMSEQ_1:def 9
                .= |.seq0.m-(seq_id(vseq.n)).(i+1).| *
                   |.(seq_id(vseq.m)).(i+1)-(seq_id(vseq.n)).(i+1).|
-                  +rseqb.m by A46
+                  +rseqb.m by A48
                .= |.seq0.m-(seq_id(vseq.n)).(i+1).| *
                   |.seq0.m-(seq_id(vseq.n)).(i+1).|
-                  +rseqb.m by A46;
-             end; then
-             lim rseq = |. lim seq0-(seq_id(vseq.n)).(i+1) .| *
+                  +rseqb.m by A48;
+             end;
+             then lim rseq = |. lim seq0-(seq_id(vseq.n)).(i+1) .| *
                         |. lim seq0-(seq_id(vseq.n)).(i+1) .| + lim rseqb
-                     by A45,A46,Lm5
+                     by A47,A48,Lm24
              .= |. tseq.(i+1)+(-seq_id(vseq.n)).(i+1) .| *
                 |. tseq.(i+1)+-(seq_id(vseq.n)).(i+1) .|
-                      + lim rseqb by COMSEQ_1:def 9,A46
+                      + lim rseqb by A48,COMSEQ_1:def 9
              .= |. tseq.(i+1)+(-seq_id(vseq.n)).(i+1) .| *
                 |. tseq.(i+1)+(-seq_id(vseq.n)).(i+1) .|
                       + lim rseqb by COMSEQ_1:def 9
@@ -1361,7 +1368,7 @@ A47:         now let m be Nat;
                 + lim rseqb by SEQ_1:12
              .= ( |.tseq-seq_id(vseq.n).|(#)|.tseq-seq_id(vseq.n).|).(i+1)
                 + Partial_Sums(|.seq_t-seq_id(vseq.n).|
-                      (#)|.seq_t-seq_id(vseq.n).| ).i by A42,A44
+                      (#)|.seq_t-seq_id(vseq.n).| ).i by A44,A46
              .= ( |.tseq-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).| ).(i+1)
                 + Partial_Sums(|.seq_t-seq_id(vseq.n).|
                       (#)|.seq_t-seq_id(vseq.n).| ).i by CSSPACE:3
@@ -1371,21 +1378,21 @@ A47:         now let m be Nat;
              .= Partial_Sums(|.seq_t-seq_id(vseq.n).|
                       (#)|.seq_t-seq_id(vseq.n).|).(i+1)
                      by SERIES_1:def 1;
-             hence thesis by A45,A46,A47,Lm5;
+             hence thesis by A47,A48,A49,Lm24;
            end;
          end;
          hence thesis;
        end;
-       for i be Nat holds P[i] from NAT_1:sch 1(A37,A41);
+        for i be Nat holds P[i] from NAT_1:sch 1(A39,A43);
        hence thesis;
      end;
-     for n be Nat st n >= k holds
+      for n be Nat st n >= k holds
         ( |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).| is summable &
           |.Sum((seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*').| < e1*e1 )
      proof
        let n be Nat such that
-A48:   n >= k;
-A49:   for i be Nat st 0 <= i holds
+A50:   n >= k;
+A51:   for i be Nat st 0 <= i holds
        Partial_Sums(|.seq_t-seq_id(vseq.n).|
                        (#)|.seq_t-seq_id(vseq.n).| ).i <=e*e
        proof
@@ -1393,290 +1400,291 @@ A49:   for i be Nat st 0 <= i holds
          deffunc F(Nat) = Partial_Sums(|.(seq_id(vseq.$1 - vseq.n)).|
                        (#)|.(seq_id(vseq.$1 - vseq.n)).|).i;
          consider rseq be Real_Sequence such that
-A50:     for m be Nat holds rseq.m=F(m) from SEQ_1:sch 1;
-A51:     rseq is convergent by A35,A50;
-A52:     lim rseq = Partial_Sums(|.seq_t-seq_id(vseq.n).|
-                   (#)|.seq_t-seq_id(vseq.n).| ).i by A35,A50;
-         for m be Nat st m >= k holds rseq.m <= e*e
+A52:     for m be Nat holds rseq.m=F(m) from SEQ_1:sch 1;
+A53:     rseq is convergent by A37,A52;
+A54:     lim rseq = Partial_Sums(|.seq_t-seq_id(vseq.n).|
+                   (#)|.seq_t-seq_id(vseq.n).| ).i by A37,A52;
+          for m be Nat st m >= k holds rseq.m <= e*e
          proof
            let m be Nat such that
-A53:       m >= k;
-A54:       rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
-                       (#)|.seq_id(vseq.m-vseq.n).|).i by A50;
-A55:       |.seq_id(vseq.m-vseq.n).|(#)|.seq_id(vseq.m-vseq.n).| is summable &
+A55:       m >= k;
+A56:       rseq.m=Partial_Sums(|.seq_id(vseq.m-vseq.n).|
+                       (#)|.seq_id(vseq.m-vseq.n).|).i by A52;
+A57:       |.seq_id(vseq.m-vseq.n).|(#)|.seq_id(vseq.m-vseq.n).| is summable &
             Sum(|.seq_id(vseq.m-vseq.n).|(#)|.seq_id(vseq.m-vseq.n).|) < e*e &
             for i be Nat holds
              0 <= (|.seq_id(vseq.m-vseq.n).|(#)|.seq_id(vseq.m-vseq.n).| ).i
-              by A28,A48,A53; then
-           Partial_Sums(|.seq_id(vseq.m-vseq.n).|
+              by A29,A50,A55;
+           then Partial_Sums(|.seq_id(vseq.m-vseq.n).|
                         (#)|.seq_id(vseq.m-vseq.n).|).i
              <=Sum(|.seq_id(vseq.m-vseq.n).|(#)|.seq_id(vseq.m-vseq.n).|)
                by RSSPACE2:4;
-           hence thesis by A54,A55,AXIOMS:22;
+           hence thesis by A56,A57,AXIOMS:22;
          end;
          hence Partial_Sums(|.seq_t-seq_id(vseq.n).|
-              (#)|.seq_t-seq_id(vseq.n).|).i <=e*e by A51,A52,RSSPACE2:6;
+              (#)|.seq_t-seq_id(vseq.n).|).i <=e*e by A53,A54,RSSPACE2:6;
        end;
-A56:   for i be Nat holds
+A58:   for i be Nat holds
         0 <= ( |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|) .i
        proof
          let i be Nat;
-         (|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|).i
+          (|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|).i
             =(|.seq_t-seq_id(vseq.n).|).i
               *(|.seq_t-seq_id(vseq.n).|).i by SEQ_1:12;
          hence thesis by REAL_1:93;
        end;
-A57:   Partial_Sums(|.seq_t-seq_id(vseq.n).|
+A59:   Partial_Sums(|.seq_t-seq_id(vseq.n).|
           (#)|.seq_t-seq_id(vseq.n).| ) is bounded_above
        proof
-         now let i be Nat;
-           0 <= i by NAT_1:18; then
-           Partial_Sums(|.seq_t-seq_id(vseq.n).|
-              (#)|.seq_t-seq_id(vseq.n).| ).i <=e*e by A49;
+          now let i be Nat;
+            0 <= i by NAT_1:18;
+           then Partial_Sums(|.seq_t-seq_id(vseq.n).|
+              (#)|.seq_t-seq_id(vseq.n).| ).i <=e*e by A51;
            hence Partial_Sums(|.seq_t-seq_id(vseq.n).|
-            (#)|.seq_t-seq_id(vseq.n).| ).i < e1*e1 by A26,AXIOMS:22;
+            (#)|.seq_t-seq_id(vseq.n).| ).i < e1*e1 by A27,AXIOMS:22;
          end;
          hence thesis by SEQ_2:def 3;
-       end; then
-Q1:    |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).| is summable
-          by A56,SERIES_1:20; then
-A58:   Partial_Sums( |.seq_t-seq_id(vseq.n).|
+       end;
+then A60:    |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).| is summable
+          by A58,SERIES_1:20;
+then A61:   Partial_Sums( |.seq_t-seq_id(vseq.n).|
                 (#)|.seq_t-seq_id(vseq.n).| ) is convergent
           by SERIES_1:def 2;
-A59:   Sum(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|)
+A62:   Sum(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|)
          = lim Partial_Sums( |.seq_t-seq_id(vseq.n).|
                        (#)|.seq_t-seq_id(vseq.n).| ) by SERIES_1:def 3;
-       lim Partial_Sums(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|)
-         <=e*e by A49,A58,RSSPACE2:6; then
-P2:    Sum(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|) < e1*e1
-         by A26,A59,AXIOMS:22;
-       |.seq_t-seq_id(vseq.n).| = |.(seq_t-seq_id(vseq.n))*'.| by LM; then
-P1:    Sum(|.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.|) < e1*e1
-         by P2,COMSEQ_1:49;
+        lim Partial_Sums(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|)
+         <=e*e by A51,A61,RSSPACE2:6;
+then A63:    Sum(|.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|) < e1*e1
+         by A27,A62,AXIOMS:22;
+        |.seq_t-seq_id(vseq.n).| = |.(seq_t-seq_id(vseq.n))*'.| by Lm19;
+then A64:    Sum(|.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.|) < e1*e1
+         by A63,COMSEQ_1:49;
 
-       |.seq_t-seq_id(vseq.n).|(#)|.(seq_t-seq_id(vseq.n))*'.| is summable
-         by Q1,LM; then
-       |.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.| is summable
-         by COMSEQ_1:49; then
-       (seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*' is absolutely_summable
-         by COMSEQ_3:def 11; then
-       |.Sum((seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*').|
-        <= Sum(|.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.|) by Cor4;
-       hence thesis by A56,A57,P1,SERIES_1:20,AXIOMS:22;
+        |.seq_t-seq_id(vseq.n).|(#)|.(seq_t-seq_id(vseq.n))*'.| is summable
+         by A60,Lm19;
+       then |.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.| is summable
+         by COMSEQ_1:49;
+       then (seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*' is
+absolutely_summable
+         by COMSEQ_3:def 11;
+       then |.Sum((seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*').|
+        <= Sum(|.(seq_t-seq_id(vseq.n))(#)(seq_t-seq_id(vseq.n))*'.|) by Lm7;
+       hence thesis by A58,A59,A64,AXIOMS:22,SERIES_1:20;
      end;
      hence thesis;
    end;
 
-A60:
+A65:
    |.seq_id(tseq).|(#)|.seq_id(tseq).| is summable
    proof
-A61: for i be Nat holds 0 <= (|.seq_id(tseq).|(#)|.seq_id(tseq).|).i
+A66: for i be Nat holds 0 <= (|.seq_id(tseq).|(#)|.seq_id(tseq).|).i
      proof
        let i be Nat;
-       (|.seq_id(tseq).|(#)|.seq_id(tseq).|).i
+        (|.seq_id(tseq).|(#)|.seq_id(tseq).|).i
          =(|.seq_id(tseq).|).i * (|.seq_id(tseq).|).i by SEQ_1:12;
        hence thesis by REAL_1:93;
      end;
      consider m be Nat such that
-A62: for n be Nat st n >= m holds
+A67: for n be Nat st n >= m holds
       ( |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).|
        is summable &
         |.Sum((seq_id(tseq)-seq_id(vseq.n))
-        (#)(seq_id(tseq)-seq_id(vseq.n))*').| < 1*1 ) by A23;
+        (#)(seq_id(tseq)-seq_id(vseq.n))*').| < 1*1 ) by A24;
 
-A63: |.seq_t-seq_id(vseq.m).|(#)|.seq_t-seq_id(vseq.m).| is summable by A62;
-A64: |.seq_id(vseq.m).|(#)|.seq_id(vseq.m).| is summable
+A68: |.seq_t-seq_id(vseq.m).|(#)|.seq_t-seq_id(vseq.m).| is summable by A67;
+A69: |.seq_id(vseq.m).|(#)|.seq_id(vseq.m).| is summable
         by CSSPACE:def 11,def 20;
      set a=|.seq_t-seq_id(vseq.m).|(#)|.seq_t-seq_id(vseq.m).|;
      set b=|.seq_id(vseq.m).|(#)|.seq_id(vseq.m).|;
      set d=|.seq_t.|(#)|.seq_t.|;
-A65: 2(#)a is summable by A63,SERIES_1:13;
-     2(#)b is summable by A64,SERIES_1:13; then
-A66: 2(#)a + 2(#)b is summable by A65,SERIES_1:10;
-     for i be Nat holds d.i <= (2(#)a + 2(#)b).i
+A70: 2(#)a is summable by A68,SERIES_1:13;
+      2(#)b is summable by A69,SERIES_1:13;
+then A71: 2(#)a + 2(#)b is summable by A70,SERIES_1:10;
+      for i be Nat holds d.i <= (2(#)a + 2(#)b).i
      proof
        let i be Nat;
-A67:   d.i=(|.seq_t.|).i * (|.seq_t.|).i by SEQ_1:12
+A72:   d.i=(|.seq_t.|).i * (|.seq_t.|).i by SEQ_1:12
          .=|.((seq_t).i).| * (|.seq_t.|).i by COMSEQ_1:def 14
          .=|.((seq_t).i).| * |.((seq_t).i).| by COMSEQ_1:def 14;
-A68:   (2(#)a + 2(#)b).i = (2(#)a).i + (2(#)b).i by SEQ_1:11
+A73:   (2(#)a + 2(#)b).i = (2(#)a).i + (2(#)b).i by SEQ_1:11
                       .=2*(a.i)+ (2(#)b).i by SEQ_1:13
                       .=2*(a.i)+ 2*(b.i) by SEQ_1:13;
-       (|.seq_t-seq_id(vseq.m).|).i
+        (|.seq_t-seq_id(vseq.m).|).i
           = (|.seq_t+-seq_id(vseq.m).|).i by COMSEQ_1:def 10
          .= |.((seq_t+-seq_id(vseq.m)).i).| by COMSEQ_1:def 14
          .= |.((seq_t).i+(-seq_id(vseq.m)).i).| by COMSEQ_1:def 4
          .= |.((seq_t).i+(-(seq_id(vseq.m)).i)).| by COMSEQ_1:def 9
-         .= |.((seq_t).i-(seq_id(vseq.m)).i).|; then
-A69:   a.i = |.((seq_t).i-(seq_id(vseq.m)).i).|
+         .= |.((seq_t).i-(seq_id(vseq.m)).i).|;
+then A74:   a.i = |.((seq_t).i-(seq_id(vseq.m)).i).|
          *|.((seq_id(tseq)).i-(seq_id(vseq.m)).i).| by SEQ_1:12;
 
        set x=(seq_t).i;
        set y=(seq_id(vseq.m)).i;
 
-A70:   2*(a.i)=2*|.(x-y).|*|.(x-y).| by A69;
-       2*(b.i)=2*( (|.seq_id(vseq.m).|).i*(|.seq_id(vseq.m).|).i ) by SEQ_1:12
+A75:   2*(a.i)=2*|.(x-y).|*|.(x-y).| by A74;
+        2*(b.i)=2*( (|.seq_id(vseq.m).|).i*(|.seq_id(vseq.m).|).i ) by SEQ_1:12
              .=2*(|.y.|*(|.seq_id(vseq.m).|).i) by COMSEQ_1:def 14
              .=2*(|.y.|*|.y.|) by COMSEQ_1:def 14
              .=2*|.y.|*|.y.|;
-       hence thesis by A67,A68,A70,Lm2;
+       hence thesis by A72,A73,A75,Lm22;
      end;
 
-     hence d is summable by A61,A66,SERIES_1:24;
+     hence d is summable by A66,A71,SERIES_1:24;
    end;
-   tseq in the_set_of_ComplexSequences by CSSPACE:def 1; then
-   reconsider tv=tseq as Point of Complex_l2_Space
-     by A60,CSSPACE:def 11,def 20;
+    tseq in the_set_of_ComplexSequences by CSSPACE:def 1;
+   then reconsider tv=tseq as Point of Complex_l2_Space
+     by A65,CSSPACE:def 11,def 20;
 
-   for e be Real st
+    for e be Real st
     e > 0 ex m be Nat st
      for n be Nat st n >= m holds ||.(vseq.n) - tv.|| < e
    proof
    let e be Real such that
-A71: e > 0;
+A76: e > 0;
 
      consider m be Nat such that
-A72: for n be Nat st n >= m holds
+A77: for n be Nat st n >= m holds
       ( |.seq_t-seq_id(vseq.n).|(#)|.seq_t-seq_id(vseq.n).| is summable &
         |.Sum((seq_t-(seq_id(vseq.n)))(#)(seq_t-(seq_id(vseq.n)))*').| < e*e )
-         by A23,A71;
-     now
+         by A24,A76;
+      now
        let n be Nat such that
-A73:   n >= m;
+A78:   n >= m;
        set seq_vn = seq_id(vseq.n);
-A74:   |.Sum((seq_t-seq_vn)(#)(seq_t-seq_vn)*').| < e*e by A72,A73;
-       tseq in the_set_of_ComplexSequences by CSSPACE:def 1; then
-       reconsider u=tseq as VECTOR of Complex_l2_Space
-         by A60,CSSPACE:def 11,def 20;
+A79:   |.Sum((seq_t-seq_vn)(#)(seq_t-seq_vn)*').| < e*e by A77,A78;
+        tseq in the_set_of_ComplexSequences by CSSPACE:def 1;
+       then reconsider u=tseq as VECTOR of Complex_l2_Space
+         by A65,CSSPACE:def 11,def 20;
        reconsider v=vseq.n as VECTOR of Complex_l2_Space;
-       seq_id(u-v) = u-v by LM1e; then
-       seq_id(u-v)=seq_t-seq_vn by LM1i; then
-A75:   |.((u-v).|.(u-v)).| < e*e by A74,LM1k;
-       0 <= Re ((u-v).|.(u-v)) by CSSPACE:def 13; then
-       0 <= |.((u-v).|.(u-v)).| by CSSPACE:36; then
-       sqrt |.((u-v).|.(u-v)).| < sqrt (e*e) by A75,SQUARE_1:95; then
-A76:   sqrt |.((u-v).|.(u-v)).| < sqrt (e^2) by SQUARE_1:def 3;
-       ||.(vseq.n) - tv.|| = ||.(vseq.n) +(-tv).|| by RLVECT_1:def 11
+        seq_id(u-v) = u-v by Lm12;
+       then seq_id(u-v)=seq_t-seq_vn by Lm16;
+then A80:   |.((u-v).|.(u-v)).| < e*e by A79,Lm18;
+        0 <= Re ((u-v).|.(u-v)) by CSSPACE:def 13;
+       then 0 <= |.((u-v).|.(u-v)).| by CSSPACE:36;
+       then sqrt |.((u-v).|.(u-v)).| < sqrt (e*e) by A80,SQUARE_1:95;
+then A81:   sqrt |.((u-v).|.(u-v)).| < sqrt (e^2) by SQUARE_1:def 3;
+        ||.(vseq.n) - tv.|| = ||.(vseq.n) +(-tv).|| by RLVECT_1:def 11
                           .=||.-(tv-(vseq.n)).|| by RLVECT_1:47
                           .=||.tv-(vseq.n).|| by CSSPACE:49
                           .=sqrt |.((u-v).|.(u-v)).| by CSSPACE:def 15;
-       hence ||.(vseq.n) - tv.|| < e by A71,A76,SQUARE_1:89;
+       hence ||.(vseq.n) - tv.|| < e by A76,A81,SQUARE_1:89;
      end;
      hence thesis;
    end;
    hence thesis by CLVECT_2:9;
-end; then
-Lm6: Complex_l2_Space is complete by CLVECT_2:def 12;
+end;
+then Lm25: Complex_l2_Space is complete by CLVECT_2:def 12;
 
 registration
   cluster Complex_l2_Space -> Hilbert; :: complete;
-  coherence by Lm6,CLVECT_2:def 13;
+  coherence by Lm25,CLVECT_2:def 13;
 end;
 
 begin  :: Some corollaries of complex sequences
 
 theorem
-for z1, z2 be Complex st
+ for z1, z2 be Complex st
  (Re z1)*(Im z2) = (Re z2)*(Im z1) & (Re z1)*(Re z2)+(Im z1)*(Im z2) >= 0 holds
-  |.z1 + z2.| = |.z1.| + |.z2.| by Cor2a;
+  |.z1 + z2.| = |.z1.| + |.z2.| by Lm4;
 
 theorem
-for x,y be Complex holds 2*|.x*y.| <= |.x.|^2 + |.y.|^2 by Lm2a;
+ for x,y be Complex holds 2*|.x*y.| <= |.x.|^2 + |.y.|^2 by Lm21;
 
 theorem
-for x,y be Complex holds
+ for x,y be Complex holds
   |.x+y.|*|.x+y.| <= 2*|.x.|*|.x.| + 2*|.y.|*|.y.| &
-  |.x.|*|.x.| <= 2*|.x-y.|*|.x-y.| + 2*|.y.|*|.y.| by Lm2;
+  |.x.|*|.x.| <= 2*|.x-y.|*|.x-y.| + 2*|.y.|*|.y.| by Lm22;
 
 theorem
-for seq be Complex_Sequence holds seq = (seq*')*' by Cor1;
+ for seq be Complex_Sequence holds seq = (seq*')*' by Lm1;
 
 theorem
-for seq be Complex_Sequence holds Partial_Sums (seq*') = (Partial_Sums seq)*'
- by Cor2;
+ for seq be Complex_Sequence holds Partial_Sums (seq*') = (Partial_Sums seq)*'
+ by Lm2;
 
 theorem
-for seq be Complex_Sequence, n be Nat st
+ for seq be Complex_Sequence, n be Nat st
  (for i be Nat holds (Re seq).i >= 0 & (Im seq).i = 0) holds
-   (|.Partial_Sums seq.|).n = (Partial_Sums |.seq.|).n by Cor2b;
+   (|.Partial_Sums seq.|).n = (Partial_Sums |.seq.|).n by Lm5;
 
 theorem
-for seq be Complex_Sequence st seq is summable holds
- Sum (seq*') = (Sum seq)*' by Cor3;
+ for seq be Complex_Sequence st seq is summable holds
+ Sum (seq*') = (Sum seq)*' by Lm6;
 
 theorem
-for seq be Complex_Sequence st seq is absolutely_summable holds
-  |. Sum seq .| <= Sum |.seq.| by Cor4;
+ for seq be Complex_Sequence st seq is absolutely_summable holds
+  |. Sum seq .| <= Sum |.seq.| by Lm7;
 
 theorem
-for seq be Complex_Sequence st seq is summable &
+ for seq be Complex_Sequence st seq is summable &
  (for n be Nat holds (Re seq).n >= 0 & (Im seq).n = 0) holds
-  |. Sum seq .| = Sum |.seq.| by Cor5;
+  |. Sum seq .| = Sum |.seq.| by Lm8;
 
 theorem
-for seq be Complex_Sequence, n be Nat holds
- (Re (seq(#)seq*')).n >= 0 & (Im (seq(#)seq*')).n = 0 by Cor6;
+ for seq be Complex_Sequence, n be Nat holds
+ (Re (seq(#)seq*')).n >= 0 & (Im (seq(#)seq*')).n = 0 by Lm9;
 
 theorem
-for seq be Complex_Sequence st
+ for seq be Complex_Sequence st
  ( seq is absolutely_summable & Sum |.seq.|=0 ) holds
     for n be Nat holds seq.n =0c
 proof
    let seq be Complex_Sequence such that
-A2:seq is absolutely_summable and
-A3:Sum |.seq.|=0;
+A1:seq is absolutely_summable and
+A2:Sum |.seq.|=0;
 
-A5:Partial_Sums |.seq.| is bounded_above by A2,COMSEQ_3:62;
-A6:for n be Nat holds (Partial_Sums |.seq.|).n <= Sum |.seq.|
+A3:Partial_Sums |.seq.| is bounded_above by A1,COMSEQ_3:62;
+A4:for n be Nat holds (Partial_Sums |.seq.|).n <= Sum |.seq.|
    proof
      let n be Nat;
-     (Partial_Sums(|.seq.|)).n <= lim Partial_Sums |.seq.| by A5,SEQ_4:54;
+      (Partial_Sums(|.seq.|)).n <= lim Partial_Sums |.seq.| by A3,SEQ_4:54;
      hence (Partial_Sums(|.seq.|)).n <=Sum |.seq.| by SERIES_1:def 3;
    end;
-B1:now assume
-     ex n be Nat st (|.seq.|).n <> 0; then
-     consider n1 be Nat such that
-A7:  (|.seq.|).n1 <> 0;
-A8:  for n be Nat holds 0 <= Partial_Sums(|.seq.|).n
+A5:now assume
+      ex n be Nat st (|.seq.|).n <> 0;
+     then consider n1 be Nat such that
+A6:  (|.seq.|).n1 <> 0;
+A7:  for n be Nat holds 0 <= Partial_Sums(|.seq.|).n
      proof
        let n be Nat;
-A9:    n=n+0;
-A10:   Partial_Sums(|.seq.|).0 = (|.seq.|).0 by SERIES_1:def 1;
-       (|.seq.|).0 = |.(seq.0).| by COMSEQ_1:def 14; then
-       0 <=(|.seq.|).0 by COMPLEX1:132;
-       hence 0 <=Partial_Sums(|.seq.|).n by A9,A10,SEQM_3:11;
+A8:    n=n+0;
+A9:   Partial_Sums(|.seq.|).0 = (|.seq.|).0 by SERIES_1:def 1;
+        (|.seq.|).0 = |.(seq.0).| by COMSEQ_1:def 14;
+       then 0 <=(|.seq.|).0 by COMPLEX1:132;
+       hence 0 <=Partial_Sums(|.seq.|).n by A8,A9,SEQM_3:11;
      end;
-     Partial_Sums(|.seq.|).n1 >0
+      Partial_Sums(|.seq.|).n1 >0
      proof
-       now per cases;
+        now per cases;
          case
-         n1=0; then
-         Partial_Sums(|.seq.|).(n1) <> 0 by A7,SERIES_1:def 1;
-         hence Partial_Sums(|.seq.|).(n1) > 0 by A8;
+          n1=0;
+         then Partial_Sums(|.seq.|).(n1) <> 0 by A6,SERIES_1:def 1;
+         hence Partial_Sums(|.seq.|).(n1) > 0 by A7;
          end;
          case
-A12:     n1<>0;
-         0 <= n1 by NAT_1:18; then
-A13:     0 + 1 <= n1 by A12,INT_1:20;
+A10:     n1<>0;
+          0 <= n1 by NAT_1:18;
+then A11:     0 + 1 <= n1 by A10,INT_1:20;
          set nn=n1-1;
-A14:     nn is Nat by A13,INT_1:18;
-A15:     nn+1 =n1;
-         (|.seq.|).n1 = |.(seq.n1).| by COMSEQ_1:def 14; then
-A16:     0 <= (|.seq.|).n1 by COMPLEX1:132;
-         0 <= Partial_Sums(|.seq.|).nn by A8,A14; then
-         (|.seq.|).(n1)+0 <= (|.seq.|).(n1)+Partial_Sums(|.seq.|).nn
+A12:     nn is Nat by A11,INT_1:18;
+A13:     nn+1 =n1;
+          (|.seq.|).n1 = |.(seq.n1).| by COMSEQ_1:def 14;
+then A14:     0 <= (|.seq.|).n1 by COMPLEX1:132;
+          0 <= Partial_Sums(|.seq.|).nn by A7,A12;
+         then (|.seq.|).(n1)+0 <= (|.seq.|).(n1)+Partial_Sums(|.seq.|).nn
            by REAL_1:55;
-         hence Partial_Sums(|.seq.|).n1 > 0 by A7,A14,A15,A16,SERIES_1:def 1;
+         hence Partial_Sums(|.seq.|).n1 > 0 by A6,A12,A13,A14,SERIES_1:def 1;
          end;
        end;
        hence Partial_Sums(|.seq.|).n1 > 0;
      end;
-     hence contradiction by A3,A6;
+     hence contradiction by A2,A4;
    end;
-   for n be Nat holds seq.n =0c
+    for n be Nat holds seq.n =0c
    proof
      let n be Nat;
-     0 = (|.seq.|).n by B1
+      0 = (|.seq.|).n by A5
       .= |.(seq.n).| by COMSEQ_1:def 14;
      hence thesis by COMPLEX1:131;
    end;
@@ -1684,34 +1692,34 @@ A16:     0 <= (|.seq.|).n1 by COMPLEX1:132;
 end;
 
 theorem
-for seq being Complex_Sequence holds
- |.seq.| = |.seq*'.| by LM;
+ for seq being Complex_Sequence holds
+ |.seq.| = |.seq*'.| by Lm19;
 
 theorem
-for c be Complex, seq be Complex_Sequence st seq is convergent
+ for c be Complex, seq be Complex_Sequence st seq is convergent
 for rseq be Real_Sequence st
   (for m be Nat holds rseq .m = |.seq.m-c.|*|.seq.m-c.|)
 holds (rseq is convergent & lim rseq = |.lim seq-c.|*|.lim seq-c.| )
- by Lm4;
+ by Lm23;
 
 theorem
-for c be Complex, seq1 be Real_Sequence, seq be Complex_Sequence st
+ for c be Complex, seq1 be Real_Sequence, seq be Complex_Sequence st
  seq is convergent & seq1 is convergent
   for rseq be Real_Sequence st
   (for i be Nat holds rseq.i = |.seq.i-c.|*|.seq.i-c.|+seq1.i) holds
    (rseq is convergent & lim rseq = |.lim seq-c.|*|.lim seq-c.|+lim seq1 )
-    by Lm5;
+    by Lm24;
 
 theorem
-for c be Complex, seq be Complex_Sequence st seq is convergent
+ for c be Complex, seq be Complex_Sequence st seq is convergent
 for rseq be Real_Sequence st
   (for m be Nat holds rseq .m = |.seq.m-c.|*|.seq.m-c.|)
-holds (rseq is convergent & lim rseq = |.lim seq-c.|*|.lim seq-c.| ) by Lm4;
+holds (rseq is convergent & lim rseq = |.lim seq-c.|*|.lim seq-c.| ) by Lm23;
 
 theorem
-for c be Complex, seq1 be Real_Sequence, seq be Complex_Sequence st
+ for c be Complex, seq1 be Real_Sequence, seq be Complex_Sequence st
  seq is convergent & seq1 is convergent
   for rseq be Real_Sequence st
   (for i be Nat holds rseq.i = |.seq.i-c.|*|.seq.i-c.|+seq1.i) holds
    (rseq is convergent & lim rseq = |.lim seq-c.|*|.lim seq-c.|+lim seq1 )
-    by Lm5;
+    by Lm24;

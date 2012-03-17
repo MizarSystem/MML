@@ -1,0 +1,139 @@
+:: The Uniform Continuity of Functions on Normed Linear Spaces
+::  by Takaya Nishiyama , Artur Korni{\l}owicz and Yasunari Shidama
+:: 
+:: Received April 6, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, FCONT_1, FCONT_2, ALI2, RLVECT_1, FUNCT_1, FINSEQ_4,
+      FUNCT_4, ARYTM_1, ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, FUNCOP_1,
+      SEQ_2, SEQM_3, SQUARE_1, COMPTS_1, BOOLE, SEQ_4, PARTFUN1, PARTFUN2,
+      NORMSP_1, POWER, LOPBAN_1, RSSPACE3;
+ notation TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, FUNCT_2, FUNCT_3, FUNCT_4, PARTFUN2, RFUNCT_1, RFUNCT_2,
+      FUNCOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_4, BINOP_1, STRUCT_0, PRE_TOPC,
+      COMPTS_1, XCMPLX_0, XREAL_0, RAT_1, INT_1, ORDINAL1, ORDINAL2, NUMBERS,
+      MEMBERED, REAL_1, NAT_1, PSCOMP_1, ALG_1, RLVECT_1, VECTSP_1, FRAENKEL,
+      ABSVALUE, SQUARE_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, SEQ_4, FUNCSDOM,
+      ABIAN, RCOMP_1, PREPOWER, POWER, BINARITH, VFUNCT_1, NORMSP_1, SIN_COS,
+      LOPBAN_1, LOPBAN_2, LOPBAN_3, RSSPACE3, NFCONT_1;
+ constructors TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ARYTM_0, REAL_1, SQUARE_1,
+      BINARITH, FUNCT_7, SEQ_2, COMPLEX1, SERIES_1, SEQM_3, NORMSP_1, SEQ_4,
+      PREPOWER, PARTFUN1, PARTFUN2, RFUNCT_1, RFUNCT_2, COMSEQ_3, RVSUM_1,
+      FINSEQ_1, FINSEQ_2, FINSEQ_4, COMPTS_1, RCOMP_1, VFUNCT_1, ABIAN,
+      SIN_COS, RSSPACE3, LOPBAN_3, NFCONT_1;
+ clusters RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, FUNCOP_1, FUNCT_1,
+      SEQ_1, SEQM_3, NORMSP_1, LOPBAN_2, LOPBAN_3;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Uniform Continuity of Functions on Normed Linear Spaces
+
+ reserve n,m,k for Nat;
+ reserve x, X,X1,Z,Z1 for set;
+ reserve s,g,r,p for Real;
+ reserve S,T for RealNormSpace;
+ reserve f,f1,f2 for PartFunc of S, T;
+ reserve s1,s2,q1 for sequence of S;
+ reserve x0,x1,x2 for Point of S;
+ reserve Y for Subset of  S;
+
+
+definition
+
+let X,S,T;
+let f;
+ pred f is_uniformly_continuous_on X means
+:: NFCONT_2:def 1
+ X c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in X & x2 in X &
+ ||.x1 - x2.|| < s holds ||. f/.x1 - f/.x2 .|| < r;
+end;
+
+definition
+let X,S;
+let f be PartFunc of the carrier of S,REAL;
+ pred f is_uniformly_continuous_on X means
+:: NFCONT_2:def 2
+ X c= dom f & for r st 0<r ex s st 0<s & for x1,x2 st x1 in X & x2 in X &
+ ||.x1 - x2.|| < s holds abs(f/.x1 - f/.x2) < r;
+end;
+
+theorem :: NFCONT_2:1
+f is_uniformly_continuous_on X & X1 c= X implies
+f is_uniformly_continuous_on X1;
+
+theorem :: NFCONT_2:2
+  f1 is_uniformly_continuous_on X & f2 is_uniformly_continuous_on X1 implies
+f1+f2 is_uniformly_continuous_on X/\X1;
+
+theorem :: NFCONT_2:3
+  f1 is_uniformly_continuous_on X & f2 is_uniformly_continuous_on X1 implies
+f1-f2 is_uniformly_continuous_on X/\X1;
+
+theorem :: NFCONT_2:4
+f is_uniformly_continuous_on X implies p(#)f is_uniformly_continuous_on X;
+
+theorem :: NFCONT_2:5
+  f is_uniformly_continuous_on X implies -f is_uniformly_continuous_on X;
+
+theorem :: NFCONT_2:6
+  f is_uniformly_continuous_on X implies ||.f .|| is_uniformly_continuous_on X;
+
+theorem :: NFCONT_2:7
+f is_uniformly_continuous_on X implies f is_continuous_on X;
+
+theorem :: NFCONT_2:8
+for f be PartFunc of the carrier of S, REAL
+st  f is_uniformly_continuous_on X holds
+ f is_continuous_on X;
+
+theorem :: NFCONT_2:9
+f is_Lipschitzian_on X implies f is_uniformly_continuous_on X;
+
+theorem :: NFCONT_2:10
+for f ,Y st Y is compact & f is_continuous_on Y holds
+f is_uniformly_continuous_on Y;
+
+theorem :: NFCONT_2:11
+  Y c= dom f & Y is compact & f is_uniformly_continuous_on Y implies
+ f.:Y is compact;
+
+theorem :: NFCONT_2:12
+  for f be PartFunc of the carrier of S, REAL
+  for Y st Y <> {} & Y c= dom f & Y is compact &
+ f is_uniformly_continuous_on Y ex x1,x2 st x1 in Y & x2 in Y &
+  f/.x1 = upper_bound (f.:Y) & f/.x2 = lower_bound (f.:Y);
+
+theorem :: NFCONT_2:13
+  X c= dom f & f is_constant_on X implies f is_uniformly_continuous_on X;
+
+begin :: Contraction Mapping Principle on Normed Linear Spaces
+
+definition let M be RealBanachSpace;
+  mode contraction of M -> Function of the carrier of M, the carrier of M
+    means
+:: NFCONT_2:def 3
+  ex L being Real st 0 < L & L < 1 &
+    for x,y being Point of M holds
+      ||.it.x - it.y.|| <=L*||.x - y.||;
+end;
+
+theorem :: NFCONT_2:14
+  for X be RealBanachSpace
+   for f be Function of  X,  X st f is contraction of X
+      ex xp be Point of X st
+         f.xp=xp
+         &
+         for x be Point of X st f.x=x
+           holds xp=x;
+
+theorem :: NFCONT_2:15
+   for  X   be RealBanachSpace
+    for f be Function of X,X  st
+      ex n0 be Nat st iter(f,n0) is contraction of X
+       holds ex xp be Point of X st
+          (f.xp=xp)
+          &
+          (for x be Point of X st f.x=x
+            holds xp=x);

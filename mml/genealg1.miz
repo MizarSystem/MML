@@ -29,34 +29,35 @@ begin :: Preliminaries
 theorem Th1:n <= len f1 implies (f1^f2)/^n = (f1/^n)^f2
 proof
   assume A1:n <= len f1;
-     len(f1^f2) = len f1 + len f2 by FINSEQ_1:35;
+      len(f1^f2) = len f1 + len f2 by FINSEQ_1:35;
    then len f1 <= len(f1^f2) by NAT_1:29;
 then A2:n <= len(f1^f2) by A1,AXIOMS:22;
 then A3:len((f1^f2)/^n) = len(f1^f2) - n by RFINSEQ:def 2;
 A4:len((f1/^n)^f2) = len(f1/^n) + len f2 by FINSEQ_1:35
     .= len f1 - n + len f2 by A1,RFINSEQ:def 2
-    .= len f1 + len f2 - n by XCMPLX_1:29;
+    .= len f1 + len f2 - n;
 then A5:len((f1^f2)/^n) = len((f1/^n)^f2) by A3,FINSEQ_1:35;
-     for i st 1 <= i & i <= len((f1^f2)/^n) holds ((f1^f2)/^n).i = ((f1/^n)^f2)
+      for i st 1 <= i & i <= len((f1^f2)/^n) holds ((f1^f2)/^n).i = ((f1/^n)^f2
+)
 .
 i
    proof
      let i; assume A6:1 <= i & i <= len((f1^f2)/^n);
      then i in Seg len((f1^f2)/^n) by FINSEQ_1:3;
 then A7:  i in dom((f1^f2)/^n) by FINSEQ_1:def 3;
-       now per cases;
+        now per cases;
        suppose A8:i <= len f1 - n;
 then A9:     i+n <= len f1 by REAL_1:84;
-          i <= i+n by NAT_1:29;
+           i <= i+n by NAT_1:29;
         then 1 <= i+n by A6,AXIOMS:22;
         then i+n in Seg len f1 by A9,FINSEQ_1:3;
 then A10:     i+n in dom f1 by FINSEQ_1:def 3;
-          i <= len(f1/^n) by A1,A8,RFINSEQ:def 2;
+           i <= len(f1/^n) by A1,A8,RFINSEQ:def 2;
         then i in Seg len(f1/^n) by A6,FINSEQ_1:3;
 then A11:     i in dom(f1/^n) by FINSEQ_1:def 3;
 A12:    ((f1^f2)/^n).i = (f1^f2).(i+n) by A2,A7,RFINSEQ:def 2
          .= f1.(i+n) by A10,FINSEQ_1:def 7;
-          ((f1/^n)^f2).i = (f1/^n).i by A11,FINSEQ_1:def 7
+           ((f1/^n)^f2).i = (f1/^n).i by A11,FINSEQ_1:def 7
          .= f1.(i+n) by A1,A11,RFINSEQ:def 2;
         hence thesis by A12;
        end;
@@ -66,10 +67,9 @@ A15:    len(f1/^n) < i & i <= len((f1/^n)^f2)
         by A1,A3,A4,A6,A13,FINSEQ_1:35,RFINSEQ:def 2;
 A16:    ((f1^f2)/^n).i = (f1^f2).(i+n) by A2,A7,RFINSEQ:def 2
          .= f2.(i+n - len f1) by A14,FINSEQ_1:37;
-          ((f1/^n)^f2).i = f2.(i - len(f1/^n)) by A15,FINSEQ_1:37
+           ((f1/^n)^f2).i = f2.(i - len(f1/^n)) by A15,FINSEQ_1:37
          .= f2.(i - (len f1 - n)) by A1,RFINSEQ:def 2
-         .= f2.(i + (n - len f1)) by XCMPLX_1:38
-         .= f2.(i+n - len f1) by XCMPLX_1:29;
+         .= f2.(i+n - len f1);
         hence thesis by A16;
      end;
      end;
@@ -81,7 +81,7 @@ end;
 theorem Th2:(f1^f2)|(len f1 + i) = f1^(f2|i)
 proof
 A1:(f1^f2)|(len f1 + i) = (f1^f2)|Seg(len f1 + i) by TOPREAL1:def 1;
-     f2|i = f2|Seg i by TOPREAL1:def 1;
+      f2|i = f2|Seg i by TOPREAL1:def 1;
    hence thesis by A1,FINSEQ_6:16;
 end;
 
@@ -101,7 +101,7 @@ registration let f be non-empty non empty Function;
   cluster Union f -> non empty;
   coherence
 proof
-    Union f = union rng f by PROB_1:def 3;
+     Union f = union rng f by PROB_1:def 3;
   hence thesis;
 end;
 end;
@@ -117,11 +117,11 @@ A1:for k st k in Seg len S ex x being Element of GA-Space S st P[k,x]
      let k; assume A2: k in Seg len S;
 then A3:  k in dom S by FINSEQ_1:def 3;
      reconsider k' = k as Element of dom S by A2,FINSEQ_1:def 3;
-       S.k' <> {};
+        S.k' <> {};
      then [#](S.k) <> {} by SUBSET_1:def 4;
      then consider x being Element of S.k such that
 A4:  x in [#](S.k) by SUBSET_1:10;
-       S.k in rng S by A3,FUNCT_1:def 5;
+        S.k in rng S by A3,FUNCT_1:def 5;
      then [#](S.k) in rng S by SUBSET_1:def 4;
      then [#](S.k) c= union rng S by ZFMISC_1:92;
      then reconsider x as Element of GA-Space S by A4,PROB_1:def 3;
@@ -198,22 +198,21 @@ A1:len crossover(p1,p2,n) = len S
    proof
 A2:  len crossover(p1,p2,n) = len ((p1|n)^(p2/^n)) by Def2
       .= len (p1|n) + len (p2/^n) by FINSEQ_1:35;
-       now per cases;
+        now per cases;
        suppose A3:n <= len p1;
-          len(p2/^n) = len p2 -'n by JORDAN3:19
+           len(p2/^n) = len p2 -'n by JORDAN3:19
          .= len S -'n by Def1
          .= len p1 -'n by Def1
          .= len p1 - n by A3,SCMFSA_7:3;
         then len crossover(p1,p2,n) = n + (len p1 - n) by A2,A3,TOPREAL1:3
-         .= len p1 - (n-n) by XCMPLX_1:37
-         .= len p1 by XCMPLX_1:17;
+         .= len p1;
         hence thesis by Def1;
        end;
        suppose A4:n > len p1;
 then A5:     len p1 - n < 0 by REAL_2:105;
-          p1|n = p1|Seg n by TOPREAL1:def 1;
+           p1|n = p1|Seg n by TOPREAL1:def 1;
 then A6:     p1|n = p1 by A4,FINSEQ_2:23;
-          len(p2/^n) = len p2 -'n by JORDAN3:19
+           len(p2/^n) = len p2 -'n by JORDAN3:19
          .= len S -'n by Def1
          .= len p1 -'n by Def1
          .= 0 by A5,BINARITH:def 3;
@@ -222,14 +221,14 @@ then A6:     p1|n = p1 by A4,FINSEQ_2:23;
      end;
      hence thesis;
    end;
-     for i st i in dom crossover(p1,p2,n) holds crossover(p1,p2,n).i in S.i
+      for i st i in dom crossover(p1,p2,n) holds crossover(p1,p2,n).i in S.i
    proof
      let i; assume A7:i in dom crossover(p1,p2,n);
 A8: crossover(p1,p2,n) = (p1|n)^(p2/^n) by Def2;
-       now per cases by A7,A8,FINSEQ_1:38;
+        now per cases by A7,A8,FINSEQ_1:38;
        suppose A9:i in dom(p1|n);
 A10:    dom(p1|n) c= dom p1 by FINSEQ_5:20;
-      (p1|n).i = (p1|n)/.i by A9,FINSEQ_4:def 4
+       (p1|n).i = (p1|n)/.i by A9,FINSEQ_4:def 4
          .= p1/.i by A9,TOPREAL1:1
          .= p1.i by A9,A10,FINSEQ_4:def 4;
         then (p1|n).i in S.i by A9,A10,Def1;
@@ -241,22 +240,22 @@ A11:    k in dom(p2/^n) & i = len(p1|n)+k;
 A12:    len(p1|n) = n
         proof
 A13:      len(p1|n) <= n by FINSEQ_5:19;
-            n <= len(p1|n)
+             n <= len(p1|n)
           proof
             assume n > len(p1|n);
 then A14:        n > len p1 by TOPREAL1:3;
-              n+k in dom p2 by A11,FINSEQ_5:29;
+               n+k in dom p2 by A11,FINSEQ_5:29;
             then n+k in Seg len p2 by FINSEQ_1:def 3;
             then n+k <= len p2 by FINSEQ_1:3;
             then n+k <= len S by Def1;
             then n+k <= len p1 by Def1;
 then A15:        k <= len p1 - n by REAL_1:84;
-              k in Seg len(p2/^n) by A11,FINSEQ_1:def 3;
+               k in Seg len(p2/^n) by A11,FINSEQ_1:def 3;
             then 1 <= k by FINSEQ_1:3;
             then 1 <= len p1 - n by A15,AXIOMS:22;
             then 1 + n <= len p1 by REAL_1:84;
 then A16:        n <= len p1 - 1 by REAL_1:84;
-              len p1 <= len p1 + 1 by NAT_1:29;
+               len p1 <= len p1 + 1 by NAT_1:29;
             then len p1 - 1 <= len p1 by REAL_1:86;
             hence contradiction by A14,A16,AXIOMS:22;
           end;
@@ -265,7 +264,7 @@ then A16:        n <= len p1 - 1 by REAL_1:84;
         then n+k in Seg len S by A1,A7,A11,FINSEQ_1:def 3;
         then n+k in Seg len p2 by Def1;
 then A17:    n+k in dom p2 by FINSEQ_1:def 3;
-          crossover(p1,p2,n).i
+           crossover(p1,p2,n).i
           = (p2/^n).k by A8,A11,FINSEQ_1:def 7
          .= (p2/^n)/.k by A11,FINSEQ_4:def 4
          .= p2/.(n+k) by A11,FINSEQ_5:30
@@ -285,7 +284,7 @@ end;
 
 theorem Th4:crossover(p1,p2,0) = p2
 proof
-     crossover(p1,p2,0) = (p1|0)^(p2/^0) by Def2
+      crossover(p1,p2,0) = (p1|0)^(p2/^0) by Def2
     .= p2/^0 by FINSEQ_1:47
     .= p2 by FINSEQ_5:31;
    hence thesis;
@@ -296,7 +295,7 @@ proof
    assume A1:n >= len p1;
    then n >= len S by Def1;
 then A2:n >= len p2 by Def1;
-     crossover(p1,p2,n) = (p1|n)^(p2/^n) by Def2
+      crossover(p1,p2,n) = (p1|n)^(p2/^n) by Def2
     .= p1^(p2/^n) by A1,TOPREAL1:2
     .= p1^{} by A2,FINSEQ_5:35
     .= p1 by FINSEQ_1:47;
@@ -312,7 +311,7 @@ theorem Th6:crossover(p1,p2,n1,n2) is Individual of S
 proof
    reconsider q1=crossover(p1,p2,n1),q2 = crossover(p2,p1,n1)
      as Individual of S;
-     crossover(q1,q2,n2) is Individual of S;
+      crossover(q1,q2,n2) is Individual of S;
    hence thesis by Def3;
 end;
 
@@ -323,7 +322,7 @@ end;
 
 theorem Th7:crossover(p1,p2,0,n) = crossover(p2,p1,n)
 proof
-     crossover(p1,p2,0,n)
+      crossover(p1,p2,0,n)
      = crossover(crossover(p1,p2,0),crossover(p2,p1,0),n) by Def3
     .= crossover(p2,crossover(p2,p1,0),n) by Th4
     .= crossover(p2,p1,n) by Th4;
@@ -334,7 +333,7 @@ theorem Th8:crossover(p1,p2,n,0) = crossover(p2,p1,n)
 proof
    reconsider q1 = crossover(p1,p2,n) as Individual of S;
    reconsider q2=crossover(p2,p1,n) as Individual of S;
-     crossover(p1,p2,n,0) = crossover(q1,q2,0) by Def3 .= q2 by Th4;
+      crossover(p1,p2,n,0) = crossover(q1,q2,0) by Def3 .= q2 by Th4;
    hence thesis;
 end;
 
@@ -343,7 +342,7 @@ proof
    assume A1:n1 >= len p1;
    then n1 >= len S by Def1;
 then A2:n1 >= len p2 by Def1;
-     crossover(p1,p2,n1,n2)
+      crossover(p1,p2,n1,n2)
      = crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n2) by Def3
     .= crossover(p1,crossover(p2,p1,n1),n2) by A1,Th5;
    hence thesis by A2,Th5;
@@ -354,12 +353,12 @@ proof
    assume n2 >= len p1;
    then n2 >= len S by Def1;
 then A1:n2 >= len crossover(p1,p2,n1) by Def1;
-     crossover(p1,p2,n1,n2)
+      crossover(p1,p2,n1,n2)
      = crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n2) by Def3;
    hence thesis by A1,Th5;
 end;
 
-theorem n1 >= len p1 & n2 >= len p1 implies crossover(p1,p2,n1,n2)=p1
+theorem  n1 >= len p1 & n2 >= len p1 implies crossover(p1,p2,n1,n2)=p1
 proof
    assume A1:n1 >= len p1 & n2 >= len p1;
    then crossover(p1,p2,n1,n2) = crossover(p1,p2,n2) by Th9;
@@ -375,7 +374,7 @@ A1:crossover(p1,p2,n1,n1)
     .= (((p1|n1)^(p2/^n1))|n1)^(((p2|n1)^(p1/^n1))/^n1) by Def2;
 A2:(((p1|n1)^(p2/^n1))|n1) = (p1|n1)
    proof
-       now per cases;
+        now per cases;
        suppose n1 <= len p1;
         then len (p1|n1) = n1 by TOPREAL1:3;
         hence thesis by FINSEQ_5:26;
@@ -383,7 +382,7 @@ A2:(((p1|n1)^(p2/^n1))|n1) = (p1|n1)
        suppose A3:n1 > len p1;
 then A4:     n1 > len S by Def1;
 then A5:     n1 > len p2 by Def1;
-          n1 > len crossover(p1,p2,n1) by A4,Def1;
+           n1 > len crossover(p1,p2,n1) by A4,Def1;
         then n1 > len ((p1|n1)^(p2/^n1)) by Def2;
         then (((p1|n1)^(p2/^n1))|n1) = (p1|n1)^(p2/^n1) by TOPREAL1:2
          .= p1^(p2/^n1) by A3,TOPREAL1:2
@@ -395,9 +394,9 @@ then A5:     n1 > len p2 by Def1;
      end;
      hence thesis;
    end;
- (((p2|n1)^(p1/^n1))/^n1) = (p1/^n1)
+  (((p2|n1)^(p1/^n1))/^n1) = (p1/^n1)
    proof
-       now per cases;
+        now per cases;
        suppose n1 <= len p2;
         then len (p2|n1) = n1 by TOPREAL1:3;
         hence thesis by FINSEQ_5:40;
@@ -405,7 +404,7 @@ then A5:     n1 > len p2 by Def1;
        suppose n1 > len p2;
 then A6:     n1 > len S by Def1;
 then A7:     n1 > len p1 by Def1;
-          n1 > len crossover(p2,p1,n1) by A6,Def1;
+           n1 > len crossover(p2,p1,n1) by A6,Def1;
         then n1 > len ((p2|n1)^(p1/^n1)) by Def2;
         then (((p2|n1)^(p1/^n1))/^n1) = {} by FINSEQ_5:35;
         hence thesis by A7,FINSEQ_5:35;
@@ -430,21 +429,21 @@ A2:crossover(p1,p2,n2,n1)
     .= (((p1|n2)^(p2/^n2))|n1)^(((p2|n2)^(p1/^n2))/^n1) by Def2;
 A3:len p1 = len S by Def1;
 A4:len p2 = len S by Def1;
-  len ((p1|n2)^(p2/^n2)) = len crossover(p1,p2,n2) by Def2;
+   len ((p1|n2)^(p2/^n2)) = len crossover(p1,p2,n2) by Def2;
 then A5:len ((p1|n2)^(p2/^n2)) = len S by Def1;
-  len ((p2|n2)^(p1/^n2)) = len crossover(p2,p1,n2) by Def2;
+   len ((p2|n2)^(p1/^n2)) = len crossover(p2,p1,n2) by Def2;
 then A6:len ((p2|n2)^(p1/^n2)) = len S by Def1;
-     now per cases by NAT_1:19;
+      now per cases by NAT_1:19;
      suppose A7:n1 >= n2 & n2 > 0;
-       now per cases;
+        now per cases;
        suppose A8:n1 >= len p1;
 then p1|n1 = p1 by TOPREAL1:2;
 then A9:    (p1|n1)^(p2/^n1) = p1^{} by A3,A4,A8,FINSEQ_5:35
          .= p1 by FINSEQ_1:47;
-       p2|n1 = p2 by A3,A4,A8,TOPREAL1:2;
+        p2|n1 = p2 by A3,A4,A8,TOPREAL1:2;
 then A10:    (p2|n1)^(p1/^n1) = p2^{} by A8,FINSEQ_5:35
         .= p2 by FINSEQ_1:47;
-      ((p1|n2)^(p2/^n2))|n1=((p1|n2)^(p2/^n2)) by A3,A5,A8,TOPREAL1:2;
+       ((p1|n2)^(p2/^n2))|n1=((p1|n2)^(p2/^n2)) by A3,A5,A8,TOPREAL1:2;
         then crossover(p1,p2,n2,n1) = ((p1|n2)^(p2/^n2))^{}
          by A2,A3,A6,A8,FINSEQ_5:35
          .= (p1|n2)^(p2/^n2) by FINSEQ_1:47;
@@ -460,9 +459,9 @@ A14:    len(p2|n2) + i = n1 by A7,NAT_1:28;
 A15:    n2 <= len p1 by A7,A11,AXIOMS:22;
 then A16:     len(p1|n2) = n2 by TOPREAL1:3;
 then A17:    len(p1|n2) + i = n1 by A13,A14,TOPREAL1:3;
-        then i=n1-n2 by A16,XCMPLX_1:26;
+        then i=n1-n2 by A16;
 then A18:    i= n1-'n2 by A7,SCMFSA_7:3;
-      len(p1|n1) = n1 by A11,TOPREAL1:3;
+       len(p1|n1) = n1 by A11,TOPREAL1:3;
 then ((p1|n1)^(p2/^n1))|n2 = (p1|n1)|n2 by A7,FINSEQ_5:25
          .= p1|n2 by A7,JORDAN4:15;
 then A19:    crossover(p1,p2,n1,n2) = (p1|n2)^(((p2|n1)/^n2)^(p1/^n1))
@@ -470,7 +469,7 @@ then A19:    crossover(p1,p2,n1,n2) = (p1|n2)^(((p2|n1)/^n2)^(p1/^n1))
          .= (p1|n2)^((p2|n1)/^n2)^(p1/^n1) by FINSEQ_1:45;
 A20:    ((p1|n2)^(p2/^n2))|n1=(p1|n2)^((p2/^n2)|i) by A17,Th2
          .= (p1|n2)^((p2|n1)/^n2) by A18,JORDAN3:21;
-          ((p2|n2)^(p1/^n2))/^n1=(p1/^n2)/^i by A14,FINSEQ_5:39
+           ((p2|n2)^(p1/^n2))/^n1=(p1/^n2)/^i by A14,FINSEQ_5:39
          .= p1/^(n2+i) by FINSEQ_6:87
          .= p1/^n1 by A3,A4,A14,A15,TOPREAL1:3;
         hence thesis by A2,A19,A20;
@@ -479,23 +478,23 @@ A20:    ((p1|n2)^(p2/^n2))|n1=(p1|n2)^((p2/^n2)|i) by A17,Th2
      hence thesis;
      end;
      suppose A21:n1 < n2 & n2 > 0;
-       now per cases;
+        now per cases;
        suppose A22:n1 >= len p1;
 then A23:    n1 >= len p2 by A4,Def1;
 A24:    n2 >= len p1 by A21,A22,AXIOMS:22;
 then A25:    n2 >= len p2 by A4,Def1;
-      (p1|n1)=p1 by A22,TOPREAL1:2;
+       (p1|n1)=p1 by A22,TOPREAL1:2;
        then A26: (p1|n1)^(p2/^n1) = p1^{} by A23,FINSEQ_5:35
        .= p1 by FINSEQ_1:47;
-      (p2|n1)=p2 by A23,TOPREAL1:2;
+       (p2|n1)=p2 by A23,TOPREAL1:2;
        then (p2|n1)^(p1/^n1) = p2^{} by A22,FINSEQ_5:35
         .= p2 by FINSEQ_1:47;
        then A27: ((p2|n1)^(p1/^n1))/^n2 = {} by A25,FINSEQ_5:35;
-      (p1|n2) = p1 by A24,TOPREAL1:2;
+       (p1|n2) = p1 by A24,TOPREAL1:2;
        then (p1|n2)^(p2/^n2) = p1^{} by A25,FINSEQ_5:35
        .= p1 by FINSEQ_1:47;
 then A28:    ((p1|n2)^(p2/^n2))|n1 = p1 by A22,TOPREAL1:2;
-      (p2|n2) = p2 by A25,TOPREAL1:2;
+       (p2|n2) = p2 by A25,TOPREAL1:2;
        then (p2|n2)^(p1/^n2) = p2^{} by A24,FINSEQ_5:35
        .= p2 by FINSEQ_1:47;
        then ((p2|n2)^(p1/^n2))/^n1 = {} by A23,FINSEQ_5:35;
@@ -509,7 +508,7 @@ A32:    len(p1|n1) + i = n2 by A21,A30,NAT_1:28;
 A33:    len(p2|n1) + i = n2 by A29,A31,A32,TOPREAL1:3;
 A34:    n1 <= len(p1|n2)
        proof
-           now per cases;
+            now per cases;
            suppose n2 >= len p1;
            hence thesis by A29,TOPREAL1:2;
            end;
@@ -521,7 +520,7 @@ A34:    n1 <= len(p1|n2)
        end;
 A35:    n1 <= len(p2|n2)
        proof
-           now per cases;
+            now per cases;
            suppose n2 >= len p2;
            hence thesis by A3,A4,A29,TOPREAL1:2;
            end;
@@ -531,15 +530,15 @@ A35:    n1 <= len(p2|n2)
          end;
          hence thesis;
        end;
-A36:    i = n2 - n1 by A30,A32,XCMPLX_1:26;
-      ((p1|n1)^(p2/^n1))|n2 = (p1|n1)^((p2/^n1)|i) by A32,Th2;
+A36:    i = n2 - n1 by A30,A32;
+       ((p1|n1)^(p2/^n1))|n2 = (p1|n1)^((p2/^n1)|i) by A32,Th2;
 then A37:    crossover(p1,p2,n1,n2)
          =((p1|n1)^((p2/^n1)|i))^((p1/^n1)/^i) by A1,A33,FINSEQ_5:39
         .=(p1|n1)^((p2/^n1)|i)^(p1/^(n1+i)) by FINSEQ_6:87
         .=(p1|n1)^((p2/^n1)|i)^(p1/^n2) by A29,A32,TOPREAL1:3;
 A38:    ((p1|n2)^(p2/^n2))|n1 = (p1|n2)|n1 by A34,FINSEQ_5:25
         .= p1|n1 by A21,JORDAN4:15;
-         ((p2|n2)^(p1/^n2))/^n1 = ((p2|n2)/^n1)^(p1/^n2) by A35,Th1
+          ((p2|n2)^(p1/^n2))/^n1 = ((p2|n2)/^n1)^(p1/^n2) by A35,Th1
         .=((p2/^n1)|(n2-'n1))^(p1/^n2) by JORDAN3:21
         .=((p2/^n1)|i)^(p1/^n2) by A21,A36,SCMFSA_7:3;
        hence thesis by A2,A37,A38,FINSEQ_1:45;
@@ -565,7 +564,7 @@ theorem Th14:crossover(p1,p2,n1,n2,n3) is Individual of S
 proof
    reconsider q1=crossover(p1,p2,n1,n2),
               q2=crossover(p2,p1,n1,n2) as Individual of S;
-     crossover(q1,q2,n3) is Individual of S;
+      crossover(q1,q2,n3) is Individual of S;
    hence thesis by Def4;
 end;
 
@@ -578,44 +577,44 @@ theorem Th15:crossover(p1,p2,0,n2,n3) = crossover(p2,p1,n2,n3) &
 crossover(p1,p2,n1,0,n3) = crossover(p2,p1,n1,n3) &
 crossover(p1,p2,n1,n2,0) = crossover(p2,p1,n1,n2)
 proof
-     crossover(p1,p2,0,n2,n3)
+      crossover(p1,p2,0,n2,n3)
     = crossover(crossover(p1,p2,0,n2),crossover(p2,p1,0,n2),n3) by Def4
    .= crossover(crossover(p2,p1,n2),crossover(p2,p1,0,n2),n3) by Th7
    .= crossover(crossover(p2,p1,n2),crossover(p1,p2,n2),n3) by Th7;
    hence crossover(p1,p2,0,n2,n3) = crossover(p2,p1,n2,n3) by Def3;
-     crossover(p1,p2,n1,0,n3)
+      crossover(p1,p2,n1,0,n3)
     = crossover(crossover(p1,p2,n1,0),crossover(p2,p1,n1,0),n3) by Def4
    .= crossover(crossover(p2,p1,n1),crossover(p2,p1,n1,0),n3) by Th8
    .= crossover(crossover(p2,p1,n1),crossover(p1,p2,n1),n3) by Th8;
    hence crossover(p1,p2,n1,0,n3) = crossover(p2,p1,n1,n3) by Def3;
-     crossover(p1,p2,n1,n2,0)
+      crossover(p1,p2,n1,n2,0)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),0) by Def4;
    hence crossover(p1,p2,n1,n2,0) = crossover(p2,p1,n1,n2) by Th4;
 end;
 
-theorem crossover(p1,p2,0,0,n3) = crossover(p1,p2,n3) &
+theorem  crossover(p1,p2,0,0,n3) = crossover(p1,p2,n3) &
 crossover(p1,p2,n1,0,0) = crossover(p1,p2,n1) &
 crossover(p1,p2,0,n2,0) = crossover(p1,p2,n2)
 proof
-     crossover(p1,p2,0,0,n3)
+      crossover(p1,p2,0,0,n3)
     = crossover(crossover(p1,p2,0,0),crossover(p2,p1,0,0),n3) by Def4
    .= crossover(p1,crossover(p2,p1,0,0),n3) by Th12;
    hence crossover(p1,p2,0,0,n3) = crossover(p1,p2,n3) by Th12;
-     crossover(p1,p2,n1,0,0)
+      crossover(p1,p2,n1,0,0)
     = crossover(crossover(p1,p2,n1,0),crossover(p2,p1,n1,0),0) by Def4
    .= crossover(crossover(p2,p1,n1),crossover(p2,p1,n1,0),0) by Th8
    .= crossover(crossover(p2,p1,n1),crossover(p1,p2,n1),0) by Th8;
    hence crossover(p1,p2,n1,0,0) = crossover(p1,p2,n1) by Th4;
-     crossover(p1,p2,0,n2,0)
+      crossover(p1,p2,0,n2,0)
     = crossover(crossover(p1,p2,0,n2),crossover(p2,p1,0,n2),0) by Def4
    .= crossover(crossover(p2,p1,n2),crossover(p2,p1,0,n2),0) by Th7
    .= crossover(crossover(p2,p1,n2),crossover(p1,p2,n2),0) by Th7;
    hence crossover(p1,p2,0,n2,0) = crossover(p1,p2,n2) by Th4;
 end;
 
-theorem crossover(p1,p2,0,0,0) = p2
+theorem  crossover(p1,p2,0,0,0) = p2
 proof
-     crossover(p1,p2,0,0,0)
+      crossover(p1,p2,0,0,0)
     = crossover(crossover(p1,p2,0,0),crossover(p2,p1,0,0),0) by Def4
    .= crossover(crossover(p1,p2,0,0),p2,0) by Th12;
    hence thesis by Th4;
@@ -627,7 +626,7 @@ proof
    assume A1:n1 >= len p1;
    then n1 >= len S by Def1;
 then A2:n1 >= len p2 by Def1;
-     crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3) by Def4
    .= crossover(crossover(p1,p2,n2),crossover(p2,p1,n1,n2),n3) by A1,Th9
    .= crossover(crossover(p1,p2,n2),crossover(p2,p1,n2),n3) by A2,Th9;
@@ -640,7 +639,7 @@ proof
    assume A1:n2 >= len p1;
    then n2 >= len S by Def1;
 then A2:n2 >= len p2 by Def1;
-     crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3) by Def4
    .= crossover(crossover(p1,p2,n1),crossover(p2,p1,n1,n2),n3) by A1,Th10
    .= crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n3) by A2,Th10;
@@ -653,7 +652,7 @@ proof
    assume n3 >= len p1;
    then n3 >= len S by Def1;
 then A1:n3 >= len crossover(p1,p2,n1,n2) by Def1;
-     crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3) by Def4;
    hence thesis by A1,Th5;
 end;
@@ -666,7 +665,7 @@ proof
    hence thesis by A1,Th9;
 end;
 
-theorem n1 >= len p1 & n3 >= len p1 implies
+theorem  n1 >= len p1 & n3 >= len p1 implies
 crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n2)
 proof
    assume A1:n1 >= len p1 & n3 >= len p1;
@@ -674,7 +673,7 @@ proof
    hence thesis by A1,Th10;
 end;
 
-theorem n2 >= len p1 & n3 >= len p1 implies
+theorem  n2 >= len p1 & n3 >= len p1 implies
 crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1)
 proof
    assume A1:n2 >= len p1 & n3 >= len p1;
@@ -682,7 +681,7 @@ proof
    hence thesis by A1,Th10;
 end;
 
-theorem n1 >= len p1 & n2 >= len p1 & n3 >= len p1 implies
+theorem  n1 >= len p1 & n2 >= len p1 & n3 >= len p1 implies
 crossover(p1,p2,n1,n2,n3) = p1
 proof
    assume A1:n1 >= len p1 & n2 >= len p1 & n3 >= len p1;
@@ -693,7 +692,7 @@ end;
 theorem Th25:crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n2,n1,n3)
 & crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n3,n2)
 proof
-     crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3) by Def4
    .= crossover(crossover(p1,p2,n2,n1),crossover(p2,p1,n1,n2),n3) by Th13
    .= crossover(crossover(p1,p2,n2,n1),crossover(p2,p1,n2,n1),n3) by Th13;
@@ -701,7 +700,7 @@ proof
 
    set q1=crossover(p1,p2,n1);
    set q2=crossover(p2,p1,n1);
-     crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3)
     = crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2),n3) by Def4
    .= (crossover(p1,p2,n1,n2)|n3)^(crossover(p2,p1,n1,n2)/^n3) by Def2
    .= (crossover(q1,q2,n2)|n3)^(crossover(p2,p1,n1,n2)/^n3) by Def3
@@ -719,7 +718,7 @@ end;
 
 theorem Th26:crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n3,n1,n2)
 proof
-    crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n3,n2) by Th25;
+     crossover(p1,p2,n1,n2,n3) = crossover(p1,p2,n1,n3,n2) by Th25;
   hence thesis by Th25;
 end;
 
@@ -729,14 +728,14 @@ crossover(p1,p2,n1,n2,n2)=crossover(p1,p2,n1)
 proof
   thus crossover(p1,p2,n1,n1,n3)=crossover(p1,p2,n3)
    proof
-       crossover(p1,p2,n1,n1,n3)
+        crossover(p1,p2,n1,n1,n3)
       =crossover(crossover(p1,p2,n1,n1),crossover(p2,p1,n1,n1),n3) by Def4
      .=crossover(p1,crossover(p2,p1,n1,n1),n3) by Th12;
      hence thesis by Th12;
    end;
  thus crossover(p1,p2,n1,n2,n1)=crossover(p1,p2,n2)
    proof
-       crossover(p1,p2,n1,n2,n1) = crossover(p1,p2,n1,n1,n2) by Th25
+        crossover(p1,p2,n1,n2,n1) = crossover(p1,p2,n1,n1,n2) by Th25
      .=crossover(crossover(p1,p2,n1,n1),crossover(p2,p1,n1,n1),n2) by Def4
      .=crossover(p1,crossover(p2,p1,n1,n1),n2) by Th12;
      hence thesis by Th12;
@@ -756,7 +755,7 @@ theorem Th28:crossover(p1,p2,n1,n2,n3,n4) is Individual of S
 proof
    reconsider q1=crossover(p1,p2,n1,n2,n3),
               q2=crossover(p2,p1,n1,n2,n3) as Individual of S;
-     crossover(q1,q2,n4) is Individual of S;
+      crossover(q1,q2,n4) is Individual of S;
    hence thesis by Def5;
 end;
 
@@ -770,22 +769,22 @@ crossover(p1,p2,n1,0,n3,n4) = crossover(p2,p1,n1,n3,n4) &
 crossover(p1,p2,n1,n2,0,n4) = crossover(p2,p1,n1,n2,n4) &
 crossover(p1,p2,n1,n2,n3,0) = crossover(p2,p1,n1,n2,n3)
 proof
-     crossover(p1,p2,0,n2,n3,n4)
+      crossover(p1,p2,0,n2,n3,n4)
   =crossover(crossover(p1,p2,0,n2,n3),crossover(p2,p1,0,n2,n3),n4) by Def5
  .=crossover(crossover(p2,p1,n2,n3),crossover(p2,p1,0,n2,n3),n4) by Th15
  .=crossover(crossover(p2,p1,n2,n3),crossover(p1,p2,n2,n3),n4) by Th15;
  hence crossover(p1,p2,0,n2,n3,n4) = crossover(p2,p1,n2,n3,n4) by Def4;
-     crossover(p1,p2,n1,0,n3,n4)
+      crossover(p1,p2,n1,0,n3,n4)
   =crossover(crossover(p1,p2,n1,0,n3),crossover(p2,p1,n1,0,n3),n4) by Def5
  .=crossover(crossover(p2,p1,n1,n3),crossover(p2,p1,n1,0,n3),n4) by Th15
  .=crossover(crossover(p2,p1,n1,n3),crossover(p1,p2,n1,n3),n4) by Th15;
  hence crossover(p1,p2,n1,0,n3,n4) = crossover(p2,p1,n1,n3,n4) by Def4;
-     crossover(p1,p2,n1,n2,0,n4)
+      crossover(p1,p2,n1,n2,0,n4)
   =crossover(crossover(p1,p2,n1,n2,0),crossover(p2,p1,n1,n2,0),n4) by Def5
  .=crossover(crossover(p2,p1,n1,n2),crossover(p2,p1,n1,n2,0),n4) by Th15
  .=crossover(crossover(p2,p1,n1,n2),crossover(p1,p2,n1,n2),n4) by Th15;
  hence crossover(p1,p2,n1,n2,0,n4) = crossover(p2,p1,n1,n2,n4) by Def4;
-     crossover(p1,p2,n1,n2,n3,0)
+      crossover(p1,p2,n1,n2,n3,0)
   =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),0) by Def5;
  hence thesis by Th4;
 end;
@@ -797,17 +796,17 @@ crossover(p1,p2,n1,0,n3,0) = crossover(p1,p2,n1,n3) &
 crossover(p1,p2,n1,0,0,n4) = crossover(p1,p2,n1,n4) &
 crossover(p1,p2,n1,n2,0,0) = crossover(p1,p2,n1,n2)
 proof
-     crossover(p1,p2,0,0,n3,n4) = crossover(p2,p1,0,n3,n4) by Th29;
+      crossover(p1,p2,0,0,n3,n4) = crossover(p2,p1,0,n3,n4) by Th29;
    hence crossover(p1,p2,0,0,n3,n4) = crossover(p1,p2,n3,n4) by Th15;
-     crossover(p1,p2,0,n2,0,n4) = crossover(p2,p1,n2,0,n4) by Th29;
+      crossover(p1,p2,0,n2,0,n4) = crossover(p2,p1,n2,0,n4) by Th29;
    hence crossover(p1,p2,0,n2,0,n4) = crossover(p1,p2,n2,n4) by Th15;
-     crossover(p1,p2,0,n2,n3,0) = crossover(p2,p1,n2,n3,0) by Th29;
+      crossover(p1,p2,0,n2,n3,0) = crossover(p2,p1,n2,n3,0) by Th29;
    hence crossover(p1,p2,0,n2,n3,0) = crossover(p1,p2,n2,n3) by Th15;
-     crossover(p1,p2,n1,0,n3,0) = crossover(p2,p1,n1,n3,0) by Th29;
+      crossover(p1,p2,n1,0,n3,0) = crossover(p2,p1,n1,n3,0) by Th29;
    hence crossover(p1,p2,n1,0,n3,0) = crossover(p1,p2,n1,n3) by Th15;
-     crossover(p1,p2,n1,0,0,n4) = crossover(p2,p1,n1,0,n4) by Th29;
+      crossover(p1,p2,n1,0,0,n4) = crossover(p2,p1,n1,0,n4) by Th29;
    hence crossover(p1,p2,n1,0,0,n4) = crossover(p1,p2,n1,n4) by Th15;
-     crossover(p1,p2,n1,n2,0,0) = crossover(p2,p1,n1,n2,0) by Th29;
+      crossover(p1,p2,n1,n2,0,0) = crossover(p2,p1,n1,n2,0) by Th29;
    hence crossover(p1,p2,n1,n2,0,0) = crossover(p1,p2,n1,n2) by Th15;
 end;
 
@@ -816,19 +815,19 @@ crossover(p1,p2,0,n2,0,0) = crossover(p2,p1,n2) &
 crossover(p1,p2,0,0,n3,0) = crossover(p2,p1,n3) &
 crossover(p1,p2,0,0,0,n4) = crossover(p2,p1,n4)
 proof
-     crossover(p1,p2,n1,0,0,0) = crossover(p1,p2,n1,0) by Th30;
+      crossover(p1,p2,n1,0,0,0) = crossover(p1,p2,n1,0) by Th30;
    hence crossover(p1,p2,n1,0,0,0) = crossover(p2,p1,n1) by Th8;
-     crossover(p1,p2,0,n2,0,0) = crossover(p1,p2,0,n2) by Th30;
+      crossover(p1,p2,0,n2,0,0) = crossover(p1,p2,0,n2) by Th30;
    hence crossover(p1,p2,0,n2,0,0) = crossover(p2,p1,n2) by Th7;
-     crossover(p1,p2,0,0,n3,0) = crossover(p1,p2,0,n3) by Th30;
+      crossover(p1,p2,0,0,n3,0) = crossover(p1,p2,0,n3) by Th30;
    hence crossover(p1,p2,0,0,n3,0) = crossover(p2,p1,n3) by Th7;
-     crossover(p1,p2,0,0,0,n4) = crossover(p1,p2,0,n4) by Th30;
+      crossover(p1,p2,0,0,0,n4) = crossover(p1,p2,0,n4) by Th30;
    hence crossover(p1,p2,0,0,0,n4) = crossover(p2,p1,n4) by Th7;
 end;
 
 theorem Th32:crossover(p1,p2,0,0,0,0) = p1
 proof
-     crossover(p1,p2,0,0,0,0) = crossover(p2,p1,0) by Th31;
+      crossover(p1,p2,0,0,0,0) = crossover(p2,p1,0) by Th31;
    hence thesis by Th4;
 end;
 
@@ -847,7 +846,7 @@ A1:(n1 >= len p1 implies
      assume A2:n1 >= len p1;
      then n1 >= len S by Def1;
 then A3:  n1 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       = crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .= crossover(crossover(p1,p2,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -862,7 +861,7 @@ A4:(n2 >= len p1 implies
      assume A5:n2 >= len p1;
      then n2 >= len S by Def1;
 then A6:  n2 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       = crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .= crossover(crossover(p1,p2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -877,7 +876,7 @@ A7:(n3 >= len p1 implies
      assume A8:n3 >= len p1;
      then n3 >= len S by Def1;
 then A9:  n3 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       = crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .= crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -886,13 +885,13 @@ then A9:  n3 >= len p2 by Def1;
      by A9,Th20;
      hence thesis by Def4;
    end;
-     (n4 >= len p1 implies
+      (n4 >= len p1 implies
    crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2,n3))
    proof
      assume n4 >= len p1;
      then n4 >= len S by Def1;
 then A10:  n4 >= len crossover(p1,p2,n1,n2,n3) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       = crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5;
      hence thesis by A10,Th5;
@@ -948,7 +947,7 @@ A9:n2 >= len p1 & n4 >= len p1 implies
      then crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n4) by Th33;
      hence thesis by A10,Th20;
    end;
-     n3 >= len p1 & n4 >= len p1 implies
+      n3 >= len p1 & n4 >= len p1 implies
    crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2)
    proof
      assume A11:n3 >= len p1 & n4 >= len p1;
@@ -990,7 +989,7 @@ A5:n1 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
      .= crossover(p1,p2,n4,n2) by Th13;
      hence thesis by A6,Th9;
    end;
-     n2 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
+      n2 >= len p1 & n3 >= len p1 & n4 >= len p1 implies
    crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1)
    proof
      assume A7:n2 >= len p1 & n3 >= len p1 & n4 >= len p1;
@@ -1036,7 +1035,7 @@ crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n3,n2,n1)
 proof
 A1:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n2,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n1,n3,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1047,7 +1046,7 @@ A1:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n2,n4)
    end;
 A2:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n1,n3,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1058,7 +1057,7 @@ A2:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n1,n3,n4)
    end;
 A3:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n3,n1,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1078,7 +1077,7 @@ A4:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n2,n4,n3)
 A5: crossover(p2,p1,n1,n2,n3)=crossover(q2,q1,n3) by Def4;
 A6: crossover(p1,p2,n1,n2,n4)=crossover(q1,q2,n4) by Def4;
 A7: crossover(p2,p1,n1,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(q1,q2,n3),crossover(q2,q1,n3),n4) by A5,Def4
@@ -1094,7 +1093,7 @@ A8:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n3,n4,n2)
 A9: crossover(p2,p1,n1,n3,n2)=crossover(q2,q1,n2) by Def4;
 A10: crossover(p1,p2,n1,n3,n4)=crossover(q1,q2,n4) by Def4;
 A11: crossover(p2,p1,n1,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n1,n3,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1114,7 +1113,7 @@ A12:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n4,n2,n3)
 A13: crossover(p1,p2,n1,n2,n3)=crossover(q1,q2,n3) by Def4;
 A14: crossover(p2,p1,n1,n2,n3)=crossover(q2,q1,n3) by Def4;
 A15: crossover(p2,p1,n1,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
      =crossover(crossover(q1,q2,n3),crossover(q2,q1,n3),n4)
      by A13,A14,Def5
      .=crossover(q1,q2,n3,n4) by Def3
@@ -1134,7 +1133,7 @@ A16:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n1,n4,n3,n2)
      set q2=crossover(p2,p1,n1,n3);
 A17: crossover(p2,p1,n1,n3,n2)=crossover(q2,q1,n2) by Def4;
 A18: crossover(p2,p1,n1,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n1,n3,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1160,7 +1159,7 @@ A19:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n2,n1,n4,n3)
 A20: crossover(p2,p1,n2,n1,n3)=crossover(q2,q1,n3) by Def4;
 A21: crossover(p1,p2,n2,n1,n4)=crossover(q1,q2,n4) by Def4;
 A22: crossover(p2,p1,n2,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1182,7 +1181,7 @@ A24: crossover(p1,p2,n2,n3,n1)=crossover(q1,q2,n1) by Def4;
 A25: crossover(p2,p1,n2,n3,n1)=crossover(q2,q1,n1) by Def4;
 A26: crossover(p1,p2,n2,n3,n4)=crossover(q1,q2,n4) by Def4;
 A27: crossover(p2,p1,n2,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1207,7 +1206,7 @@ A29:crossover(p1,p2,n2,n1,n3)=crossover(q1,q2,n3) by Def4;
 A30:crossover(p2,p1,n2,n1,n3)=crossover(q2,q1,n3) by Def4;
 A31:crossover(p1,p2,n2,n1,n4)=crossover(q1,q2,n4) by Def4;
 A32:crossover(p2,p1,n2,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1232,7 +1231,7 @@ A34:crossover(p1,p2,n2,n3,n1)=crossover(q1,q2,n1) by Def4;
 A35:crossover(p2,p1,n2,n3,n1)=crossover(q2,q1,n1) by Def4;
 A36:crossover(p1,p2,n2,n3,n4)=crossover(q1,q2,n4) by Def4;
 A37:crossover(p2,p1,n2,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1255,7 +1254,7 @@ A37:crossover(p2,p1,n2,n3,n4)=crossover(q2,q1,n4) by Def4;
    end;
 A38:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n1,n2,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1272,7 +1271,7 @@ A40:crossover(p1,p2,n3,n1,n2)=crossover(q1,q2,n2) by Def4;
 A41:crossover(p2,p1,n3,n1,n2)=crossover(q2,q1,n2) by Def4;
 A42:crossover(p1,p2,n3,n1,n4)=crossover(q1,q2,n4) by Def4;
 A43:crossover(p2,p1,n3,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1287,7 +1286,7 @@ A43:crossover(p2,p1,n3,n1,n4)=crossover(q2,q1,n4) by Def4;
    end;
 A44:crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n3,n2,n1,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1308,7 +1307,7 @@ A46:crossover(p1,p2,n3,n2,n1)=crossover(q1,q2,n1) by Def4;
 A47:crossover(p2,p1,n3,n2,n1)=crossover(q2,q1,n1) by Def4;
 A48:crossover(p1,p2,n3,n2,n4)=crossover(q1,q2,n4) by Def4;
 A49:crossover(p2,p1,n3,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1333,7 +1332,7 @@ A51:crossover(p1,p2,n3,n1,n2)=crossover(q1,q2,n2) by Def4;
 A52:crossover(p2,p1,n3,n1,n2)=crossover(q2,q1,n2) by Def4;
 A53:crossover(p1,p2,n3,n1,n4)=crossover(q1,q2,n4) by Def4;
 A54:crossover(p2,p1,n3,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1358,7 +1357,7 @@ A56:crossover(p1,p2,n3,n2,n1)=crossover(q1,q2,n1) by Def4;
 A57:crossover(p2,p1,n3,n2,n1)=crossover(q2,q1,n1) by Def4;
 A58:crossover(p1,p2,n3,n2,n4)=crossover(q1,q2,n4) by Def4;
 A59:crossover(p2,p1,n3,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1387,7 +1386,7 @@ A61:crossover(p1,p2,n1,n2,n3)=crossover(q1,q2,n3) by Def4;
 A62:crossover(p2,p1,n1,n2,n3)=crossover(q2,q1,n3) by Def4;
 A63:crossover(p1,p2,n1,n2,n4)=crossover(q1,q2,n4) by Def4;
 A64:crossover(p2,p1,n1,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(q1,q2,n3,n4) by A61,A62,Def3
@@ -1408,7 +1407,7 @@ A66:crossover(p1,p2,n1,n3,n2)=crossover(q1,q2,n2) by Def4;
 A67:crossover(p2,p1,n1,n3,n2)=crossover(q2,q1,n2) by Def4;
 A68:crossover(p1,p2,n1,n3,n4)=crossover(q1,q2,n4) by Def4;
 A69:crossover(p2,p1,n1,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n1,n3,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1433,7 +1432,7 @@ A71:crossover(p1,p2,n2,n1,n3)=crossover(q1,q2,n3) by Def4;
 A72:crossover(p2,p1,n2,n1,n3)=crossover(q2,q1,n3) by Def4;
 A73:crossover(p1,p2,n2,n1,n4)=crossover(q1,q2,n4) by Def4;
 A74:crossover(p2,p1,n2,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1458,7 +1457,7 @@ A76:crossover(p1,p2,n2,n3,n1)=crossover(q1,q2,n1) by Def4;
 A77:crossover(p2,p1,n2,n3,n1)=crossover(q2,q1,n1) by Def4;
 A78:crossover(p1,p2,n2,n3,n4)=crossover(q1,q2,n4) by Def4;
 A79:crossover(p2,p1,n2,n3,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n2,n1,n3),crossover(p2,p1,n1,n2,n3),n4)
@@ -1487,7 +1486,7 @@ A81:crossover(p1,p2,n3,n1,n2)=crossover(q1,q2,n2) by Def4;
 A82:crossover(p2,p1,n3,n1,n2)=crossover(q2,q1,n2) by Def4;
 A83:crossover(p1,p2,n3,n1,n4)=crossover(q1,q2,n4) by Def4;
 A84:crossover(p2,p1,n3,n1,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1504,7 +1503,7 @@ A84:crossover(p2,p1,n3,n1,n4)=crossover(q2,q1,n4) by Def4;
      by Th26;
      hence thesis by Def5;
    end;
-     crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n3,n2,n1)
+      crossover(p1,p2,n1,n2,n3,n4) = crossover(p1,p2,n4,n3,n2,n1)
    proof
      set q1=crossover(p1,p2,n3,n2);
      set q2=crossover(p2,p1,n3,n2);
@@ -1512,7 +1511,7 @@ A85:crossover(p1,p2,n3,n2,n1)=crossover(q1,q2,n1) by Def4;
 A86:crossover(p2,p1,n3,n2,n1)=crossover(q2,q1,n1) by Def4;
 A87:crossover(p1,p2,n3,n2,n4)=crossover(q1,q2,n4) by Def4;
 A88:crossover(p2,p1,n3,n2,n4)=crossover(q2,q1,n4) by Def4;
-       crossover(p1,p2,n1,n2,n3,n4)
+        crossover(p1,p2,n1,n2,n3,n4)
       =crossover(crossover(p1,p2,n1,n2,n3),crossover(p2,p1,n1,n2,n3),n4)
      by Def5
      .=crossover(crossover(p1,p2,n3,n1,n2),crossover(p2,p1,n1,n2,n3),n4)
@@ -1547,7 +1546,7 @@ crossover(p1,p2,n1,n2,n3,n3) = crossover(p1,p2,n1,n2)
 proof
   thus crossover(p1,p2,n1,n1,n3,n4) = crossover(p1,p2,n3,n4)
    proof
-       crossover(p1,p2,n1,n1,n3,n4)
+        crossover(p1,p2,n1,n1,n3,n4)
      =crossover(crossover(p1,p2,n1,n1,n3),crossover(p2,p1,n1,n1,n3),n4)
      by Def5
     .=crossover(crossover(p1,p2,n3),crossover(p2,p1,n1,n1,n3),n4) by Th27
@@ -1556,7 +1555,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n1,n4) = crossover(p1,p2,n2,n4)
    proof
-       crossover(p1,p2,n1,n2,n1,n4)
+        crossover(p1,p2,n1,n2,n1,n4)
      =crossover(crossover(p1,p2,n1,n2,n1),crossover(p2,p1,n1,n2,n1),n4)
      by Def5
     .=crossover(crossover(p1,p2,n2),crossover(p2,p1,n1,n2,n1),n4) by Th27
@@ -1565,7 +1564,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n3,n1) = crossover(p1,p2,n2,n3)
    proof
-       crossover(p1,p2,n1,n2,n3,n1) = crossover(p1,p2,n1,n1,n2,n3) by Th37
+        crossover(p1,p2,n1,n2,n3,n1) = crossover(p1,p2,n1,n1,n2,n3) by Th37
     .=crossover(crossover(p1,p2,n1,n1,n2),crossover(p2,p1,n1,n1,n2),n3)
      by Def5
     .=crossover(crossover(p1,p2,n2),crossover(p2,p1,n1,n1,n2),n3) by Th27
@@ -1574,7 +1573,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n2,n4) = crossover(p1,p2,n1,n4)
    proof
-       crossover(p1,p2,n1,n2,n2,n4)
+        crossover(p1,p2,n1,n2,n2,n4)
      =crossover(crossover(p1,p2,n1,n2,n2),crossover(p2,p1,n1,n2,n2),n4)
      by Def5
     .=crossover(crossover(p1,p2,n1),crossover(p2,p1,n1,n2,n2),n4) by Th27
@@ -1583,14 +1582,14 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n3,n2) = crossover(p1,p2,n1,n3)
    proof
-       crossover(p1,p2,n1,n2,n3,n2) = crossover(p1,p2,n1,n2,n2,n3) by Th37
+        crossover(p1,p2,n1,n2,n3,n2) = crossover(p1,p2,n1,n2,n2,n3) by Th37
     .=crossover(crossover(p1,p2,n1,n2,n2),crossover(p2,p1,n1,n2,n2),n3)
      by Def5
     .=crossover(crossover(p1,p2,n1),crossover(p2,p1,n1,n2,n2),n3) by Th27
     .=crossover(crossover(p1,p2,n1),crossover(p2,p1,n1),n3) by Th27;
     hence thesis by Def3;
    end;
-       crossover(p1,p2,n1,n2,n3,n3) = crossover(p1,p2,n1,n3,n3,n2) by Th37
+        crossover(p1,p2,n1,n2,n3,n3) = crossover(p1,p2,n1,n3,n3,n2) by Th37
     .=crossover(crossover(p1,p2,n1,n3,n3),crossover(p2,p1,n1,n3,n3),n2)
      by Def5
     .=crossover(crossover(p1,p2,n1),crossover(p2,p1,n1,n3,n3),n2) by Th27
@@ -1599,21 +1598,21 @@ proof
 end;
 
 theorem
-  crossover(p1,p2,n1,n1,n3,n3) = p1 &
+   crossover(p1,p2,n1,n1,n3,n3) = p1 &
 crossover(p1,p2,n1,n2,n1,n2) = p1 &
 crossover(p1,p2,n1,n2,n2,n1) = p1
 proof
   thus crossover(p1,p2,n1,n1,n3,n3) = p1
    proof
-       crossover(p1,p2,n1,n1,n3,n3)=crossover(p1,p2,n3,n3) by Th38;
+        crossover(p1,p2,n1,n1,n3,n3)=crossover(p1,p2,n3,n3) by Th38;
      hence thesis by Th12;
    end;
   thus crossover(p1,p2,n1,n2,n1,n2) = p1
    proof
-       crossover(p1,p2,n1,n2,n1,n2)=crossover(p1,p2,n2,n2) by Th38;
+        crossover(p1,p2,n1,n2,n1,n2)=crossover(p1,p2,n2,n2) by Th38;
      hence thesis by Th12;
    end;
-     crossover(p1,p2,n1,n2,n2,n1)=crossover(p1,p2,n2,n2) by Th38;
+      crossover(p1,p2,n1,n2,n2,n1)=crossover(p1,p2,n2,n2) by Th38;
    hence thesis by Th12;
 end;
 
@@ -1626,7 +1625,7 @@ theorem Th40:crossover(p1,p2,n1,n2,n3,n4,n5) is Individual of S
 proof
    reconsider q1=crossover(p1,p2,n1,n2,n3,n4),
               q2=crossover(p2,p1,n1,n2,n3,n4) as Individual of S;
-     crossover(q1,q2,n5) is Individual of S;
+      crossover(q1,q2,n5) is Individual of S;
    hence thesis by Def6;
 end;
 
@@ -1643,7 +1642,7 @@ crossover(p1,p2,n1,n2,n3,n4,0) = crossover(p2,p1,n1,n2,n3,n4)
 proof
 A1:crossover(p1,p2,0,n2,n3,n4,n5)=crossover(p2,p1,n2,n3,n4,n5)
    proof
-       crossover(p1,p2,0,n2,n3,n4,n5)
+        crossover(p1,p2,0,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,0,n2,n3,n4),crossover(p2,p1,0,n2,n3,n4),n5)
      by Def6
     .=crossover(crossover(p2,p1,n2,n3,n4),crossover(p2,p1,0,n2,n3,n4),n5)
@@ -1654,7 +1653,7 @@ A1:crossover(p1,p2,0,n2,n3,n4,n5)=crossover(p2,p1,n2,n3,n4,n5)
    end;
 A2:crossover(p1,p2,n1,0,n3,n4,n5)=crossover(p2,p1,n1,n3,n4,n5)
    proof
-       crossover(p1,p2,n1,0,n3,n4,n5)
+        crossover(p1,p2,n1,0,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,0,n3,n4),crossover(p2,p1,n1,0,n3,n4),n5)
      by Def6
     .=crossover(crossover(p2,p1,n1,n3,n4),crossover(p2,p1,n1,0,n3,n4),n5)
@@ -1665,7 +1664,7 @@ A2:crossover(p1,p2,n1,0,n3,n4,n5)=crossover(p2,p1,n1,n3,n4,n5)
    end;
 A3:crossover(p1,p2,n1,n2,0,n4,n5)=crossover(p2,p1,n1,n2,n4,n5)
    proof
-       crossover(p1,p2,n1,n2,0,n4,n5)
+        crossover(p1,p2,n1,n2,0,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,0,n4),crossover(p2,p1,n1,n2,0,n4),n5)
      by Def6
     .=crossover(crossover(p2,p1,n1,n2,n4),crossover(p2,p1,n1,n2,0,n4),n5)
@@ -1676,7 +1675,7 @@ A3:crossover(p1,p2,n1,n2,0,n4,n5)=crossover(p2,p1,n1,n2,n4,n5)
    end;
 A4:crossover(p1,p2,n1,n2,n3,0,n5)=crossover(p2,p1,n1,n2,n3,n5)
    proof
-       crossover(p1,p2,n1,n2,n3,0,n5)
+        crossover(p1,p2,n1,n2,n3,0,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,0),crossover(p2,p1,n1,n2,n3,0),n5)
      by Def6
     .=crossover(crossover(p2,p1,n1,n2,n3),crossover(p2,p1,n1,n2,n3,0),n5)
@@ -1685,9 +1684,9 @@ A4:crossover(p1,p2,n1,n2,n3,0,n5)=crossover(p2,p1,n1,n2,n3,n5)
      by Th29;
      hence thesis by Def5;
    end;
-     crossover(p1,p2,n1,n2,n3,n4,0)=crossover(p2,p1,n1,n2,n3,n4)
+      crossover(p1,p2,n1,n2,n3,n4,0)=crossover(p2,p1,n1,n2,n3,n4)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,0)
+        crossover(p1,p2,n1,n2,n3,n4,0)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),crossover(p2,p1,n1,n2,n3,n4),0)
      by Def6;
      hence thesis by Th4;
@@ -1695,7 +1694,7 @@ A4:crossover(p1,p2,n1,n2,n3,0,n5)=crossover(p2,p1,n1,n2,n3,n5)
    hence thesis by A1,A2,A3,A4;
 end;
 
-theorem crossover(p1,p2,0,0,n3,n4,n5)=crossover(p1,p2,n3,n4,n5) &
+theorem  crossover(p1,p2,0,0,n3,n4,n5)=crossover(p1,p2,n3,n4,n5) &
 crossover(p1,p2,0,n2,0,n4,n5)=crossover(p1,p2,n2,n4,n5) &
 crossover(p1,p2,0,n2,n3,0,n5)=crossover(p1,p2,n2,n3,n5) &
 crossover(p1,p2,0,n2,n3,n4,0)=crossover(p1,p2,n2,n3,n4) &
@@ -1708,7 +1707,7 @@ crossover(p1,p2,n1,n2,n3,0,0)=crossover(p1,p2,n1,n2,n3)
 proof
 A1:crossover(p1,p2,0,0,n3,n4,n5)=crossover(p1,p2,n3,n4,n5)
    proof
-       crossover(p1,p2,0,0,n3,n4,n5)
+        crossover(p1,p2,0,0,n3,n4,n5)
      =crossover(crossover(p1,p2,0,0,n3,n4),crossover(p2,p1,0,0,n3,n4),n5)
      by Def6
     .=crossover(crossover(p1,p2,n3,n4),crossover(p2,p1,0,0,n3,n4),n5)
@@ -1718,7 +1717,7 @@ A1:crossover(p1,p2,0,0,n3,n4,n5)=crossover(p1,p2,n3,n4,n5)
    end;
 A2:crossover(p1,p2,0,n2,0,n4,n5)=crossover(p1,p2,n2,n4,n5)
    proof
-       crossover(p1,p2,0,n2,0,n4,n5)
+        crossover(p1,p2,0,n2,0,n4,n5)
      =crossover(crossover(p1,p2,0,n2,0,n4),crossover(p2,p1,0,n2,0,n4),n5)
      by Def6
     .=crossover(crossover(p1,p2,n2,n4),crossover(p2,p1,0,n2,0,n4),n5)
@@ -1728,7 +1727,7 @@ A2:crossover(p1,p2,0,n2,0,n4,n5)=crossover(p1,p2,n2,n4,n5)
    end;
 A3:crossover(p1,p2,0,n2,n3,0,n5)=crossover(p1,p2,n2,n3,n5)
    proof
-       crossover(p1,p2,0,n2,n3,0,n5)
+        crossover(p1,p2,0,n2,n3,0,n5)
      =crossover(crossover(p1,p2,0,n2,n3,0),crossover(p2,p1,0,n2,n3,0),n5)
      by Def6
     .=crossover(crossover(p1,p2,n2,n3),crossover(p2,p1,0,n2,n3,0),n5)
@@ -1738,7 +1737,7 @@ A3:crossover(p1,p2,0,n2,n3,0,n5)=crossover(p1,p2,n2,n3,n5)
    end;
 A4:crossover(p1,p2,0,n2,n3,n4,0)=crossover(p1,p2,n2,n3,n4)
    proof
-       crossover(p1,p2,0,n2,n3,n4,0)
+        crossover(p1,p2,0,n2,n3,n4,0)
      =crossover(crossover(p1,p2,0,n2,n3,n4),crossover(p2,p1,0,n2,n3,n4),0)
      by Def6
     .=crossover(crossover(p1,p2,0,n2,n3,n4),crossover(p1,p2,n2,n3,n4),0)
@@ -1747,7 +1746,7 @@ A4:crossover(p1,p2,0,n2,n3,n4,0)=crossover(p1,p2,n2,n3,n4)
    end;
 A5:crossover(p1,p2,n1,0,0,n4,n5)=crossover(p1,p2,n1,n4,n5)
    proof
-       crossover(p1,p2,n1,0,0,n4,n5)
+        crossover(p1,p2,n1,0,0,n4,n5)
      =crossover(crossover(p1,p2,n1,0,0,n4),crossover(p2,p1,n1,0,0,n4),n5)
      by Def6
     .=crossover(crossover(p1,p2,n1,n4),crossover(p2,p1,n1,0,0,n4),n5)
@@ -1757,7 +1756,7 @@ A5:crossover(p1,p2,n1,0,0,n4,n5)=crossover(p1,p2,n1,n4,n5)
    end;
 A6:crossover(p1,p2,n1,0,n3,0,n5)=crossover(p1,p2,n1,n3,n5)
    proof
-       crossover(p1,p2,n1,0,n3,0,n5)
+        crossover(p1,p2,n1,0,n3,0,n5)
      =crossover(crossover(p1,p2,n1,0,n3,0),crossover(p2,p1,n1,0,n3,0),n5)
      by Def6
     .=crossover(crossover(p1,p2,n1,n3),crossover(p2,p1,n1,0,n3,0),n5)
@@ -1767,7 +1766,7 @@ A6:crossover(p1,p2,n1,0,n3,0,n5)=crossover(p1,p2,n1,n3,n5)
    end;
 A7:crossover(p1,p2,n1,0,n3,n4,0)=crossover(p1,p2,n1,n3,n4)
    proof
-       crossover(p1,p2,n1,0,n3,n4,0)
+        crossover(p1,p2,n1,0,n3,n4,0)
      =crossover(crossover(p1,p2,n1,0,n3,n4),crossover(p2,p1,n1,0,n3,n4),0)
      by Def6
     .=crossover(crossover(p1,p2,n1,0,n3,n4),crossover(p1,p2,n1,n3,n4),0)
@@ -1776,7 +1775,7 @@ A7:crossover(p1,p2,n1,0,n3,n4,0)=crossover(p1,p2,n1,n3,n4)
    end;
 A8:crossover(p1,p2,n1,n2,0,0,n5)=crossover(p1,p2,n1,n2,n5)
    proof
-       crossover(p1,p2,n1,n2,0,0,n5)
+        crossover(p1,p2,n1,n2,0,0,n5)
      =crossover(crossover(p1,p2,n1,n2,0,0),crossover(p2,p1,n1,n2,0,0),n5)
      by Def6
     .=crossover(crossover(p1,p2,n1,n2),crossover(p2,p1,n1,n2,0,0),n5)
@@ -1786,16 +1785,16 @@ A8:crossover(p1,p2,n1,n2,0,0,n5)=crossover(p1,p2,n1,n2,n5)
    end;
 A9:crossover(p1,p2,n1,n2,0,n4,0)=crossover(p1,p2,n1,n2,n4)
    proof
-       crossover(p1,p2,n1,n2,0,n4,0)
+        crossover(p1,p2,n1,n2,0,n4,0)
      =crossover(crossover(p1,p2,n1,n2,0,n4),crossover(p2,p1,n1,n2,0,n4),0)
      by Def6
     .=crossover(crossover(p1,p2,n1,n2,0,n4),crossover(p1,p2,n1,n2,n4),0)
      by Th29;
      hence thesis by Th4;
    end;
-     crossover(p1,p2,n1,n2,n3,0,0)=crossover(p1,p2,n1,n2,n3)
+      crossover(p1,p2,n1,n2,n3,0,0)=crossover(p1,p2,n1,n2,n3)
    proof
-       crossover(p1,p2,n1,n2,n3,0,0)
+        crossover(p1,p2,n1,n2,n3,0,0)
      =crossover(crossover(p1,p2,n1,n2,n3,0),crossover(p2,p1,n1,n2,n3,0),0)
      by Def6
     .=crossover(crossover(p1,p2,n1,n2,n3,0),crossover(p1,p2,n1,n2,n3),0)
@@ -1805,7 +1804,7 @@ A9:crossover(p1,p2,n1,n2,0,n4,0)=crossover(p1,p2,n1,n2,n4)
    hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9;
 end;
 
-theorem crossover(p1,p2,0,0,0,n4,n5)=crossover(p2,p1,n4,n5) &
+theorem  crossover(p1,p2,0,0,0,n4,n5)=crossover(p2,p1,n4,n5) &
 crossover(p1,p2,0,0,n3,0,n5)=crossover(p2,p1,n3,n5) &
 crossover(p1,p2,0,0,n3,n4,0)=crossover(p2,p1,n3,n4) &
 crossover(p1,p2,0,n2,0,0,n5)=crossover(p2,p1,n2,n5) &
@@ -1818,7 +1817,7 @@ crossover(p1,p2,n1,n2,0,0,0)=crossover(p2,p1,n1,n2)
 proof
 A1:crossover(p1,p2,0,0,0,n4,n5)=crossover(p2,p1,n4,n5)
    proof
-       crossover(p1,p2,0,0,0,n4,n5)
+        crossover(p1,p2,0,0,0,n4,n5)
      =crossover(crossover(p1,p2,0,0,0,n4),crossover(p2,p1,0,0,0,n4),n5)
      by Def6
      .=crossover(crossover(p2,p1,n4),crossover(p2,p1,0,0,0,n4),n5) by Th31
@@ -1827,7 +1826,7 @@ A1:crossover(p1,p2,0,0,0,n4,n5)=crossover(p2,p1,n4,n5)
    end;
 A2:crossover(p1,p2,0,0,n3,0,n5)=crossover(p2,p1,n3,n5)
    proof
-       crossover(p1,p2,0,0,n3,0,n5)
+        crossover(p1,p2,0,0,n3,0,n5)
      =crossover(crossover(p1,p2,0,0,n3,0),crossover(p2,p1,0,0,n3,0),n5)
      by Def6
      .=crossover(crossover(p2,p1,n3),crossover(p2,p1,0,0,n3,0),n5) by Th31
@@ -1836,7 +1835,7 @@ A2:crossover(p1,p2,0,0,n3,0,n5)=crossover(p2,p1,n3,n5)
    end;
 A3:crossover(p1,p2,0,0,n3,n4,0)=crossover(p2,p1,n3,n4)
    proof
-       crossover(p1,p2,0,0,n3,n4,0)
+        crossover(p1,p2,0,0,n3,n4,0)
      =crossover(crossover(p1,p2,0,0,n3,n4),crossover(p2,p1,0,0,n3,n4),0)
      by Def6
    .=crossover(crossover(p1,p2,0,0,n3,n4),crossover(p2,p1,n3,n4),0) by Th30;
@@ -1844,7 +1843,7 @@ A3:crossover(p1,p2,0,0,n3,n4,0)=crossover(p2,p1,n3,n4)
    end;
 A4:crossover(p1,p2,0,n2,0,0,n5)=crossover(p2,p1,n2,n5)
    proof
-       crossover(p1,p2,0,n2,0,0,n5)
+        crossover(p1,p2,0,n2,0,0,n5)
      =crossover(crossover(p1,p2,0,n2,0,0),crossover(p2,p1,0,n2,0,0),n5)
      by Def6
      .=crossover(crossover(p2,p1,n2),crossover(p2,p1,0,n2,0,0),n5) by Th31
@@ -1853,7 +1852,7 @@ A4:crossover(p1,p2,0,n2,0,0,n5)=crossover(p2,p1,n2,n5)
    end;
 A5:crossover(p1,p2,0,n2,0,n4,0)=crossover(p2,p1,n2,n4)
    proof
-       crossover(p1,p2,0,n2,0,n4,0)
+        crossover(p1,p2,0,n2,0,n4,0)
      =crossover(crossover(p1,p2,0,n2,0,n4),crossover(p2,p1,0,n2,0,n4),0)
      by Def6
    .=crossover(crossover(p1,p2,0,n2,0,n4),crossover(p2,p1,n2,n4),0) by Th30;
@@ -1861,7 +1860,7 @@ A5:crossover(p1,p2,0,n2,0,n4,0)=crossover(p2,p1,n2,n4)
    end;
 A6:crossover(p1,p2,0,n2,n3,0,0)=crossover(p2,p1,n2,n3)
    proof
-       crossover(p1,p2,0,n2,n3,0,0)
+        crossover(p1,p2,0,n2,n3,0,0)
      =crossover(crossover(p1,p2,0,n2,n3,0),crossover(p2,p1,0,n2,n3,0),0)
      by Def6
    .=crossover(crossover(p1,p2,0,n2,n3,0),crossover(p2,p1,n2,n3),0) by Th30;
@@ -1869,7 +1868,7 @@ A6:crossover(p1,p2,0,n2,n3,0,0)=crossover(p2,p1,n2,n3)
    end;
 A7:crossover(p1,p2,n1,0,0,0,n5)=crossover(p2,p1,n1,n5)
    proof
-       crossover(p1,p2,n1,0,0,0,n5)
+        crossover(p1,p2,n1,0,0,0,n5)
      =crossover(crossover(p1,p2,n1,0,0,0),crossover(p2,p1,n1,0,0,0),n5)
      by Def6
      .=crossover(crossover(p2,p1,n1),crossover(p2,p1,n1,0,0,0),n5) by Th31
@@ -1878,7 +1877,7 @@ A7:crossover(p1,p2,n1,0,0,0,n5)=crossover(p2,p1,n1,n5)
    end;
 A8:crossover(p1,p2,n1,0,0,n4,0)=crossover(p2,p1,n1,n4)
    proof
-       crossover(p1,p2,n1,0,0,n4,0)
+        crossover(p1,p2,n1,0,0,n4,0)
      =crossover(crossover(p1,p2,n1,0,0,n4),crossover(p2,p1,n1,0,0,n4),0)
      by Def6
    .=crossover(crossover(p1,p2,n1,0,0,n4),crossover(p2,p1,n1,n4),0) by Th30;
@@ -1886,15 +1885,15 @@ A8:crossover(p1,p2,n1,0,0,n4,0)=crossover(p2,p1,n1,n4)
    end;
 A9:crossover(p1,p2,n1,0,n3,0,0)=crossover(p2,p1,n1,n3)
    proof
-       crossover(p1,p2,n1,0,n3,0,0)
+        crossover(p1,p2,n1,0,n3,0,0)
      =crossover(crossover(p1,p2,n1,0,n3,0),crossover(p2,p1,n1,0,n3,0),0)
      by Def6
    .=crossover(crossover(p1,p2,n1,0,n3,0),crossover(p2,p1,n1,n3),0) by Th30;
      hence thesis by Th4;
    end;
-     crossover(p1,p2,n1,n2,0,0,0)=crossover(p2,p1,n1,n2)
+      crossover(p1,p2,n1,n2,0,0,0)=crossover(p2,p1,n1,n2)
    proof
-     crossover(p1,p2,n1,n2,0,0,0)
+      crossover(p1,p2,n1,n2,0,0,0)
      =crossover(crossover(p1,p2,n1,n2,0,0),crossover(p2,p1,n1,n2,0,0),0)
      by Def6
    .=crossover(crossover(p1,p2,n1,n2,0,0),crossover(p2,p1,n1,n2),0) by Th30;
@@ -1903,7 +1902,7 @@ A9:crossover(p1,p2,n1,0,n3,0,0)=crossover(p2,p1,n1,n3)
    hence thesis by A1,A2,A3,A4,A5,A6,A7,A8,A9;
 end;
 
-theorem crossover(p1,p2,0,0,0,0,n5)=crossover(p1,p2,n5) &
+theorem  crossover(p1,p2,0,0,0,0,n5)=crossover(p1,p2,n5) &
 crossover(p1,p2,0,0,0,n4,0)=crossover(p1,p2,n4) &
 crossover(p1,p2,0,0,n3,0,0)=crossover(p1,p2,n3) &
 crossover(p1,p2,0,n2,0,0,0)=crossover(p1,p2,n2) &
@@ -1911,7 +1910,7 @@ crossover(p1,p2,n1,0,0,0,0)=crossover(p1,p2,n1)
 proof
 A1:crossover(p1,p2,0,0,0,0,n5)=crossover(p1,p2,n5)
    proof
-       crossover(p1,p2,0,0,0,0,n5)
+        crossover(p1,p2,0,0,0,0,n5)
      =crossover(crossover(p1,p2,0,0,0,0),crossover(p2,p1,0,0,0,0),n5)
      by Def6
     .=crossover(p1,crossover(p2,p1,0,0,0,0),n5) by Th32;
@@ -1919,7 +1918,7 @@ A1:crossover(p1,p2,0,0,0,0,n5)=crossover(p1,p2,n5)
    end;
 A2:crossover(p1,p2,0,0,0,n4,0)=crossover(p1,p2,n4)
    proof
-       crossover(p1,p2,0,0,0,n4,0)
+        crossover(p1,p2,0,0,0,n4,0)
      =crossover(crossover(p1,p2,0,0,0,n4),crossover(p2,p1,0,0,0,n4),0)
      by Def6
     .=crossover(crossover(p1,p2,0,0,0,n4),crossover(p1,p2,n4),0) by Th31;
@@ -1927,7 +1926,7 @@ A2:crossover(p1,p2,0,0,0,n4,0)=crossover(p1,p2,n4)
    end;
 A3:crossover(p1,p2,0,0,n3,0,0)=crossover(p1,p2,n3)
    proof
-       crossover(p1,p2,0,0,n3,0,0)
+        crossover(p1,p2,0,0,n3,0,0)
      =crossover(crossover(p1,p2,0,0,n3,0),crossover(p2,p1,0,0,n3,0),0)
      by Def6
     .=crossover(crossover(p1,p2,0,0,n3,0),crossover(p1,p2,n3),0) by Th31;
@@ -1935,15 +1934,15 @@ A3:crossover(p1,p2,0,0,n3,0,0)=crossover(p1,p2,n3)
    end;
 A4:crossover(p1,p2,0,n2,0,0,0)=crossover(p1,p2,n2)
    proof
-       crossover(p1,p2,0,n2,0,0,0)
+        crossover(p1,p2,0,n2,0,0,0)
      =crossover(crossover(p1,p2,0,n2,0,0),crossover(p2,p1,0,n2,0,0),0)
      by Def6
     .=crossover(crossover(p1,p2,0,n2,0,0),crossover(p1,p2,n2),0) by Th31;
      hence thesis by Th4;
    end;
-     crossover(p1,p2,n1,0,0,0,0)=crossover(p1,p2,n1)
+      crossover(p1,p2,n1,0,0,0,0)=crossover(p1,p2,n1)
    proof
-       crossover(p1,p2,n1,0,0,0,0)
+        crossover(p1,p2,n1,0,0,0,0)
      =crossover(crossover(p1,p2,n1,0,0,0),crossover(p2,p1,n1,0,0,0),0)
      by Def6
     .=crossover(crossover(p1,p2,n1,0,0,0),crossover(p1,p2,n1),0) by Th31;
@@ -1952,9 +1951,9 @@ A4:crossover(p1,p2,0,n2,0,0,0)=crossover(p1,p2,n2)
    hence thesis by A1,A2,A3,A4;
 end;
 
-theorem crossover(p1,p2,0,0,0,0,0)=p2
+theorem  crossover(p1,p2,0,0,0,0,0)=p2
 proof
-     crossover(p1,p2,0,0,0,0,0)
+      crossover(p1,p2,0,0,0,0,0)
    =crossover(crossover(p1,p2,0,0,0,0),crossover(p2,p1,0,0,0,0),0) by Def6
   .=crossover(crossover(p1,p2,0,0,0,0),p2,0) by Th32;
   hence thesis by Th4;
@@ -1977,7 +1976,7 @@ A1:n1>=len p1 implies
      assume A2:n1 >= len p1;
      then n1 >= len S by Def1;
 then A3:  n1 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3,n4),
@@ -1992,7 +1991,7 @@ A4:n2>=len p1 implies
      assume A5:n2 >= len p1;
      then n2 >= len S by Def1;
 then A6:  n2 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n3,n4),
@@ -2007,7 +2006,7 @@ A7:n3>=len p1 implies
      assume A8:n3 >= len p1;
      then n3 >= len S by Def1;
 then A9:  n3 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2,n4),
@@ -2022,7 +2021,7 @@ A10:n4>=len p1 implies
      assume A11:n4 >= len p1;
      then n4 >= len S by Def1;
 then A12:  n4 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2,n3),
@@ -2031,13 +2030,13 @@ then A12:  n4 >= len p2 by Def1;
       crossover(p2,p1,n1,n2,n3),n5) by A12,Th33;
      hence thesis by Def5;
    end;
-     n5>=len p1 implies
+      n5>=len p1 implies
    crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n3,n4)
    proof
      assume n5 >= len p1;
      then n5 >= len S by Def1;
 then A13:  n5 >= len crossover(p1,p2,n1,n2,n3,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6;
      hence thesis by A13,Th5;
@@ -2045,7 +2044,7 @@ then A13:  n5 >= len crossover(p1,p2,n1,n2,n3,n4) by Def1;
    hence thesis by A1,A4,A7,A10;
 end;
 
-theorem (n1>=len p1 & n2>=len p1 implies
+theorem  (n1>=len p1 & n2>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n4,n5)) &
 (n1>=len p1 & n3>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n4,n5)) &
@@ -2072,7 +2071,7 @@ A1:n1>=len p1 & n2>=len p1 implies
      assume A2:n1 >= len p1 & n2 >= len p1;
      then n1 >= len S & n2 >= len S by Def1;
 then A3:  n1 >= len p2 & n2 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3,n4),
@@ -2087,7 +2086,7 @@ A4:n1>=len p1 & n3>=len p1 implies
      assume A5:n1 >= len p1 & n3 >= len p1;
      then n1 >= len S & n3 >= len S by Def1;
 then A6:  n1 >= len p2 & n3 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n4),
@@ -2102,7 +2101,7 @@ A7:n1>=len p1 & n4>=len p1 implies
      assume A8:n1 >= len p1 & n4 >= len p1;
      then n1 >= len S & n4 >= len S by Def1;
 then A9:  n1 >= len p2 & n4 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3),
@@ -2117,7 +2116,7 @@ A10:n1>=len p1 & n5>=len p1 implies
      assume A11:n1 >= len p1 & n5 >= len p1;
      then n5 >= len S by Def1;
 then A12:  n5 >= len crossover(p1,p2,n2,n3,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3,n4),
@@ -2130,7 +2129,7 @@ A13:n2>=len p1 & n3>=len p1 implies
      assume A14:n2 >= len p1 & n3 >= len p1;
      then n2 >= len S & n3 >= len S by Def1;
 then A15:  n2 >= len p2 & n3 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n4),
@@ -2145,7 +2144,7 @@ A16:n2>=len p1 & n4>=len p1 implies
      assume A17:n2 >= len p1 & n4 >= len p1;
      then n2 >= len S & n4 >= len S by Def1;
 then A18:  n2 >= len p2 & n4 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n3),
@@ -2160,7 +2159,7 @@ A19:n2>=len p1 & n5>=len p1 implies
      assume A20:n2 >= len p1 & n5 >= len p1;
      then n5 >= len S by Def1;
 then A21:  n5 >= len crossover(p1,p2,n1,n3,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n3,n4),
@@ -2173,7 +2172,7 @@ A22:n3>=len p1 & n4>=len p1 implies
      assume A23:n3 >= len p1 & n4 >= len p1;
      then n3 >= len S & n4 >= len S by Def1;
 then A24:  n3 >= len p2 & n4 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2),
@@ -2188,20 +2187,20 @@ A25:n3>=len p1 & n5>=len p1 implies
      assume A26:n3 >= len p1 & n5 >= len p1;
      then n5 >= len S by Def1;
 then A27:  n5 >= len crossover(p1,p2,n1,n2,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by A26,Th33;
      hence thesis by A27,Th5;
    end;
-     n4>=len p1 & n5>=len p1 implies
+      n4>=len p1 & n5>=len p1 implies
    crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2,n3)
    proof
      assume A28:n4 >= len p1 & n5 >= len p1;
      then n5 >= len S by Def1;
 then A29:  n5 >= len crossover(p1,p2,n1,n2,n3) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2,n3),
@@ -2211,7 +2210,7 @@ then A29:  n5 >= len crossover(p1,p2,n1,n2,n3) by Def1;
    hence thesis by A1,A4,A7,A10,A13,A16,A19,A22,A25;
 end;
 
-theorem (n1>=len p1 & n2>=len p1 & n3>=len p1 implies
+theorem  (n1>=len p1 & n2>=len p1 & n3>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4,n5)) &
 (n1>=len p1 & n2>=len p1 & n4>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n5)) &
@@ -2238,7 +2237,7 @@ A1:(n1>=len p1 & n2>=len p1 & n3>=len p1 implies
      assume A2:n1>=len p1 & n2>=len p1 & n3>=len p1;
      then n1>=len S & n2>=len S & n3>=len S by Def1;
 then A3:  n1>=len p2 & n2>=len p2 & n3>=len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n4),
@@ -2252,7 +2251,7 @@ A4:(n1>=len p1 & n2>=len p1 & n4>=len p1 implies
      assume A5:n1>=len p1 & n2>=len p1 & n4>=len p1;
      then n1>=len S & n2>=len S & n4>=len S by Def1;
 then A6:  n1>=len p2 & n2>=len p2 & n4>=len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3),
@@ -2266,7 +2265,7 @@ A7:(n1>=len p1 & n2>=len p1 & n5>=len p1 implies
      assume A8:n1>=len p1 & n2>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A9:  n5>=len crossover(p1,p2,n3,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3,n4),
@@ -2279,7 +2278,7 @@ A10:(n1>=len p1 & n3>=len p1 & n4>=len p1 implies
      assume A11:n1>=len p1 & n3>=len p1 & n4>=len p1;
      then n1>=len S & n3>=len S & n4>=len S by Def1;
 then A12:  n1>=len p2 & n3>=len p2 & n4>=len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2),
@@ -2293,7 +2292,7 @@ A13:(n1>=len p1 & n3>=len p1 & n5>=len p1 implies
      assume A14:n1>=len p1 & n3>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A15:  n5>=len crossover(p1,p2,n2,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n4),
@@ -2306,7 +2305,7 @@ A16:(n1>=len p1 & n4>=len p1 & n5>=len p1 implies
      assume A17:n1>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A18:  n5>=len crossover(p1,p2,n2,n3) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3),
@@ -2319,7 +2318,7 @@ A19:(n2>=len p1 & n3>=len p1 & n4>=len p1 implies
      assume A20:n2>=len p1 & n3>=len p1 & n4>=len p1;
      then n2>=len S & n3>=len S & n4>=len S by Def1;
 then A21:  n2>=len p2 & n3>=len p2 & n4>=len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1),
@@ -2333,7 +2332,7 @@ A22:(n2>=len p1 & n3>=len p1 & n5>=len p1 implies
      assume A23:n2>=len p1 & n3>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A24:  n5>=len crossover(p1,p2,n1,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n4),
@@ -2346,20 +2345,20 @@ A25:(n2>=len p1 & n4>=len p1 & n5>=len p1 implies
      assume A26:n2>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A27:  n5>=len crossover(p1,p2,n1,n3) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n3),
       crossover(p2,p1,n1,n2,n3,n4),n5) by A26,Th34;
      hence thesis by A27,Th5;
    end;
-     (n3>=len p1 & n4>=len p1 & n5>=len p1 implies
+      (n3>=len p1 & n4>=len p1 & n5>=len p1 implies
    crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1,n2))
    proof
      assume A28:n3>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A29: n5>=len crossover(p1,p2,n1,n2) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1,n2),
@@ -2369,7 +2368,7 @@ then A29: n5>=len crossover(p1,p2,n1,n2) by Def1;
    hence thesis by A1,A4,A7,A10,A13,A16,A19,A22,A25;
 end;
 
-theorem (n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 implies
+theorem  (n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5)) &
 (n1>=len p1 & n2>=len p1 & n3>=len p1 & n5>=len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4)) &
@@ -2386,7 +2385,7 @@ A1:(n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 implies
      assume A2:n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1;
      then n1>=len S & n2>=len S & n3>=len S & n4>=len S by Def1;
 then A3:  n1>=len p2 & n2>=len p2 & n3>=len p2 & n4>=len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(p1,crossover(p2,p1,n1,n2,n3,n4),n5) by A2,Th36;
@@ -2398,7 +2397,7 @@ A4:(n1>=len p1 & n2>=len p1 & n3>=len p1 & n5>=len p1 implies
      assume A5:n1>=len p1 & n2>=len p1 & n3>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A6:  n5>=len crossover(p1,p2,n4) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n4),
@@ -2411,7 +2410,7 @@ A7:(n1>=len p1 & n2>=len p1 & n4>=len p1 & n5>=len p1 implies
      assume A8:n1>=len p1 & n2>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A9:  n5>=len crossover(p1,p2,n3) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3),
@@ -2424,20 +2423,20 @@ A10:(n1>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1 implies
      assume A11:n1>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A12:  n5>=len crossover(p1,p2,n2) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2),
       crossover(p2,p1,n1,n2,n3,n4),n5) by A11,Th35;
      hence thesis by A12,Th5;
    end;
-     (n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1 implies
+      (n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1 implies
    crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n1))
    proof
      assume A13:n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1;
      then n5>=len S by Def1;
 then A14:  n5>=len crossover(p1,p2,n1) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n1),
@@ -2447,11 +2446,11 @@ then A14:  n5>=len crossover(p1,p2,n1) by Def1;
    hence thesis by A1,A4,A7,A10;
 end;
 
-theorem n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1
+theorem  n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1
 implies crossover(p1,p2,n1,n2,n3,n4,n5)=p1
 proof
    assume A1:n1>=len p1 & n2>=len p1 & n3>=len p1 & n4>=len p1 & n5>=len p1;
-     crossover(p1,p2,n1,n2,n3,n4,n5)
+      crossover(p1,p2,n1,n2,n3,n4,n5)
    =crossover(crossover(p1,p2,n1,n2,n3,n4),
     crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
   .=crossover(p1,crossover(p2,p1,n1,n2,n3,n4),n5) by A1,Th36;
@@ -2466,7 +2465,7 @@ crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5,n2,n3,n4,n1)
 proof
 A1:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n1,n3,n4,n5)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n1,n3,n4),
@@ -2477,7 +2476,7 @@ A1:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n2,n1,n3,n4,n5)
    end;
 A2:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n2,n1,n4,n5)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3,n2,n1,n4),
@@ -2488,7 +2487,7 @@ A2:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n3,n2,n1,n4,n5)
    end;
 A3:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4,n2,n3,n1,n5)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n4,n2,n3,n1),
@@ -2497,14 +2496,14 @@ A3:crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n4,n2,n3,n1,n5)
       crossover(p2,p1,n4,n2,n3,n1),n5) by Th37;
      hence thesis by Def6;
    end;
-     crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5,n2,n3,n4,n1)
+      crossover(p1,p2,n1,n2,n3,n4,n5)=crossover(p1,p2,n5,n2,n3,n4,n1)
    proof
      set q1=crossover(p1,p2,n2,n3,n4);
      set q2=crossover(p2,p1,n2,n3,n4);
 A4: crossover(p2,p1,n2,n3,n4,n1)=crossover(q2,q1,n1) by Def5;
 A5: crossover(p1,p2,n2,n3,n4,n5)=crossover(q1,q2,n5) by Def5;
 A6: crossover(p2,p1,n2,n3,n4,n5)=crossover(q2,q1,n5) by Def5;
-       crossover(p1,p2,n1,n2,n3,n4,n5)
+        crossover(p1,p2,n1,n2,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3,n4,n1),
@@ -2532,7 +2531,7 @@ crossover(p1,p2,n1,n2,n3,n4,n1)=crossover(p1,p2,n2,n3,n4)
 proof
   thus crossover(p1,p2,n1,n1,n3,n4,n5)=crossover(p1,p2,n3,n4,n5)
    proof
-       crossover(p1,p2,n1,n1,n3,n4,n5)
+        crossover(p1,p2,n1,n1,n3,n4,n5)
      =crossover(crossover(p1,p2,n1,n1,n3,n4),
       crossover(p2,p1,n1,n1,n3,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n3,n4),
@@ -2542,7 +2541,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n1,n4,n5)=crossover(p1,p2,n2,n4,n5)
    proof
-       crossover(p1,p2,n1,n2,n1,n4,n5)
+        crossover(p1,p2,n1,n2,n1,n4,n5)
      =crossover(crossover(p1,p2,n1,n2,n1,n4),
       crossover(p2,p1,n1,n2,n1,n4),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n4),
@@ -2552,7 +2551,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n3,n1,n5)=crossover(p1,p2,n2,n3,n5)
    proof
-       crossover(p1,p2,n1,n2,n3,n1,n5)
+        crossover(p1,p2,n1,n2,n3,n1,n5)
      =crossover(crossover(p1,p2,n1,n2,n3,n1),
       crossover(p2,p1,n1,n2,n3,n1),n5) by Def6
     .=crossover(crossover(p1,p2,n2,n3),
@@ -2563,7 +2562,7 @@ proof
      set q1=crossover(p1,p2,n2,n3,n4);
      set q2=crossover(p2,p1,n2,n3,n4);
 A1: crossover(p2,p1,n2,n3,n4,n1)=crossover(q2,q1,n1) by Def5;
-       crossover(p1,p2,n1,n2,n3,n4,n1)
+        crossover(p1,p2,n1,n2,n3,n4,n1)
      =crossover(crossover(p1,p2,n1,n2,n3,n4),
       crossover(p2,p1,n1,n2,n3,n4),n1) by Def6
     .=crossover(crossover(p1,p2,n2,n3,n4,n1),
@@ -2584,7 +2583,7 @@ theorem Th53:crossover(p1,p2,n1,n2,n3,n4,n5,n6) is Individual of S
 proof
    reconsider q1=crossover(p1,p2,n1,n2,n3,n4,n5),
               q2=crossover(p2,p1,n1,n2,n3,n4,n5) as Individual of S;
-     crossover(q1,q2,n6) is Individual of S;
+      crossover(q1,q2,n6) is Individual of S;
    hence thesis by Def7;
 end;
 
@@ -2594,7 +2593,7 @@ correctness by Th53;
 end;
 
 theorem
-  crossover(p1,p2,0,n2,n3,n4,n5,n6)=crossover(p2,p1,n2,n3,n4,n5,n6) &
+   crossover(p1,p2,0,n2,n3,n4,n5,n6)=crossover(p2,p1,n2,n3,n4,n5,n6) &
 crossover(p1,p2,n1,0,n3,n4,n5,n6)=crossover(p2,p1,n1,n3,n4,n5,n6) &
 crossover(p1,p2,n1,n2,0,n4,n5,n6)=crossover(p2,p1,n1,n2,n4,n5,n6) &
 crossover(p1,p2,n1,n2,n3,0,n5,n6)=crossover(p2,p1,n1,n2,n3,n5,n6) &
@@ -2603,7 +2602,7 @@ crossover(p1,p2,n1,n2,n3,n4,n5,0)=crossover(p2,p1,n1,n2,n3,n4,n5)
 proof
   thus crossover(p1,p2,0,n2,n3,n4,n5,n6)=crossover(p2,p1,n2,n3,n4,n5,n6)
    proof
-       crossover(p1,p2,0,n2,n3,n4,n5,n6)
+        crossover(p1,p2,0,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,0,n2,n3,n4,n5),
       crossover(p2,p1,0,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p2,p1,n2,n3,n4,n5),
@@ -2614,7 +2613,7 @@ proof
    end;
    thus crossover(p1,p2,n1,0,n3,n4,n5,n6)=crossover(p2,p1,n1,n3,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,0,n3,n4,n5,n6)
+        crossover(p1,p2,n1,0,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,0,n3,n4,n5),
       crossover(p2,p1,n1,0,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p2,p1,n1,n3,n4,n5),
@@ -2625,7 +2624,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,0,n4,n5,n6)=crossover(p2,p1,n1,n2,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,0,n4,n5,n6)
+        crossover(p1,p2,n1,n2,0,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,0,n4,n5),
       crossover(p2,p1,n1,n2,0,n4,n5),n6) by Def7
     .=crossover(crossover(p2,p1,n1,n2,n4,n5),
@@ -2636,7 +2635,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,0,n5,n6)=crossover(p2,p1,n1,n2,n3,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,0,n5,n6)
+        crossover(p1,p2,n1,n2,n3,0,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,0,n5),
       crossover(p2,p1,n1,n2,n3,0,n5),n6) by Def7
     .=crossover(crossover(p2,p1,n1,n2,n3,n5),
@@ -2647,7 +2646,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,n4,0,n6)=crossover(p2,p1,n1,n2,n3,n4,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,0,n6)
+        crossover(p1,p2,n1,n2,n3,n4,0,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,0),
       crossover(p2,p1,n1,n2,n3,n4,0),n6) by Def7
     .=crossover(crossover(p2,p1,n1,n2,n3,n4),
@@ -2662,7 +2661,7 @@ proof
     .=crossover(p2,p1,n1,n2,n3,n4,n5) by Th4;
 end;
 
-theorem (n1 >= len p1 implies
+theorem  (n1 >= len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n2,n3,n4,n5,n6)) &
 (n2 >= len p1 implies
 crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n3,n4,n5,n6)) &
@@ -2681,7 +2680,7 @@ A1:n1 >= len p1 implies
      assume A2:n1 >= len p1;
      then n1 >= len S by Def1;
 then A3:  n1 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n2,n3,n4,n5),
@@ -2696,7 +2695,7 @@ A4:n2 >= len p1 implies
      assume A5:n2 >= len p1;
      then n2 >= len S by Def1;
 then A6:  n2 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n1,n3,n4,n5),
@@ -2711,7 +2710,7 @@ A7:n3 >= len p1 implies
      assume A8:n3 >= len p1;
      then n3 >= len S by Def1;
 then A9:  n3 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n1,n2,n4,n5),
@@ -2726,7 +2725,7 @@ A10:n4 >= len p1 implies
      assume A11:n4 >= len p1;
      then n4 >= len S by Def1;
 then A12:  n4 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n1,n2,n3,n5),
@@ -2741,7 +2740,7 @@ A13:n5 >= len p1 implies
      assume A14:n5 >= len p1;
      then n5 >= len S by Def1;
 then A15:  n5 >= len p2 by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n1,n2,n3,n4),
@@ -2750,13 +2749,13 @@ then A15:  n5 >= len p2 by Def1;
       crossover(p2,p1,n1,n2,n3,n4),n6) by A15,Th46;
      hence thesis by Def6;
    end;
-     n6 >= len p1 implies
+      n6 >= len p1 implies
    crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n1,n2,n3,n4,n5)
    proof
      assume n6 >= len p1;
      then n6 >= len S by Def1;
 then A16:  n6 >= len crossover(p1,p2,n1,n2,n3,n4,n5) by Def1;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7;
      hence thesis by A16,Th5;
@@ -2773,7 +2772,7 @@ crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n6,n2,n3,n4,n5,n1)
 proof
   thus crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n2,n1,n3,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n2,n1,n3,n4,n5),
@@ -2784,7 +2783,7 @@ proof
    end;
   thus crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n3,n2,n1,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n3,n2,n1,n4,n5),
@@ -2795,7 +2794,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n4,n2,n3,n1,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n4,n2,n3,n1,n5),
@@ -2806,7 +2805,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,n4,n5,n6)=crossover(p1,p2,n5,n2,n3,n4,n1,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n5,n2,n3,n4,n1),
@@ -2820,7 +2819,7 @@ proof
 A1: crossover(p2,p1,n5,n2,n3,n4,n1)=crossover(q2,q1,n1) by Def6;
 A2: crossover(p1,p2,n5,n2,n3,n4,n6)=crossover(q1,q2,n6) by Def6;
 A3: crossover(p2,p1,n5,n2,n3,n4,n6)=crossover(q2,q1,n6) by Def6;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n5),
       crossover(p2,p1,n1,n2,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n5,n2,n3,n4,n1),
@@ -2839,7 +2838,7 @@ A3: crossover(p2,p1,n5,n2,n3,n4,n6)=crossover(q2,q1,n6) by Def6;
 end;
 
 theorem
-  crossover(p1,p2,n1,n1,n3,n4,n5,n6)=crossover(p1,p2,n3,n4,n5,n6) &
+   crossover(p1,p2,n1,n1,n3,n4,n5,n6)=crossover(p1,p2,n3,n4,n5,n6) &
 crossover(p1,p2,n1,n2,n1,n4,n5,n6)=crossover(p1,p2,n2,n4,n5,n6) &
 crossover(p1,p2,n1,n2,n3,n1,n5,n6)=crossover(p1,p2,n2,n3,n5,n6) &
 crossover(p1,p2,n1,n2,n3,n4,n1,n6)=crossover(p1,p2,n2,n3,n4,n6) &
@@ -2847,7 +2846,7 @@ crossover(p1,p2,n1,n2,n3,n4,n5,n1)=crossover(p1,p2,n2,n3,n4,n5)
 proof
    thus crossover(p1,p2,n1,n1,n3,n4,n5,n6)=crossover(p1,p2,n3,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,n1,n3,n4,n5,n6)
+        crossover(p1,p2,n1,n1,n3,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n1,n3,n4,n5),
       crossover(p2,p1,n1,n1,n3,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n3,n4,n5),
@@ -2858,7 +2857,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n1,n4,n5,n6)=crossover(p1,p2,n2,n4,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n1,n4,n5,n6)
+        crossover(p1,p2,n1,n2,n1,n4,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n1,n4,n5),
       crossover(p2,p1,n1,n2,n1,n4,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n2,n4,n5),
@@ -2869,7 +2868,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,n1,n5,n6)=crossover(p1,p2,n2,n3,n5,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n1,n5,n6)
+        crossover(p1,p2,n1,n2,n3,n1,n5,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n1,n5),
       crossover(p2,p1,n1,n2,n3,n1,n5),n6) by Def7
     .=crossover(crossover(p1,p2,n2,n3,n5),
@@ -2880,7 +2879,7 @@ proof
    end;
    thus crossover(p1,p2,n1,n2,n3,n4,n1,n6)=crossover(p1,p2,n2,n3,n4,n6)
    proof
-       crossover(p1,p2,n1,n2,n3,n4,n1,n6)
+        crossover(p1,p2,n1,n2,n3,n4,n1,n6)
      =crossover(crossover(p1,p2,n1,n2,n3,n4,n1),
       crossover(p2,p1,n1,n2,n3,n4,n1),n6) by Def7
     .=crossover(crossover(p1,p2,n2,n3,n4),
@@ -2889,7 +2888,7 @@ proof
       crossover(p2,p1,n2,n3,n4),n6) by Th52;
      hence thesis by Def5;
    end;
-       crossover(p1,p2,n1,n2,n3,n4,n5,n1)
+        crossover(p1,p2,n1,n2,n3,n4,n5,n1)
      =crossover(p1,p2,n5,n2,n3,n4,n1,n1) by Th56
     .=crossover(p1,p2,n1,n2,n3,n4,n1,n5) by Th56
     .=crossover(crossover(p1,p2,n1,n2,n3,n4,n1),

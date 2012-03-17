@@ -1,0 +1,459 @@
+:: Series on Complex {B}anach Algebra
+::  by Noboru Endou
+:: 
+:: Received April 6, 2004
+:: Copyright (c) 2004 Association of Mizar Users
+
+environ
+
+ vocabulary PRE_TOPC, NORMSP_1, RLVECT_1, FUNCT_1, ARYTM, ARYTM_1, VECTSP_1,
+      ARYTM_3, RELAT_1, ABSVALUE, ORDINAL2, SEQ_1, PROB_1, SEQ_2, SEQM_3,
+      CAT_1, PREPOWER, POWER, SERIES_1, BHSP_3, RSSPACE3, LOPBAN_3, SUPINF_2,
+      CLVECT_1, CFUNCT_1, CLOPBAN1, CLOPBAN2, COMPLEX1;
+ notation TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
+      BINOP_1, STRUCT_0, XREAL_0, ORDINAL1, NUMBERS, REAL_1, NAT_1, RLVECT_1,
+      VECTSP_1, ABSVALUE, NORMSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, PREPOWER,
+      POWER, COMPLEX1, CFUNCT_1, CLVECT_1, CSSPACE3, CLOPBAN1, CLOPBAN2,
+      LOPBAN_3, CFUNCDOM;
+ constructors REAL_1, NAT_1, FUNCT_7, DOMAIN_1, SEQ_2, SERIES_1, SEQ_4,
+      PREPOWER, RSSPACE3, COMPLEX1, CSSPACE3, LOPBAN_3, CLVECT_2, CLOPBAN2;
+ clusters SUBSET_1, RELSET_1, STRUCT_0, ORDINAL2, XREAL_0, MEMBERED, SEQ_1,
+      SEQM_3, CLVECT_1, CLOPBAN2;
+ requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
+
+
+begin :: Basic Properties of Sequences of Complex Normed Space
+
+definition
+  let X be non empty CNORMSTR;
+  let seq be sequence of X;
+func Partial_Sums seq -> sequence of X means
+:: CLOPBAN3:def 1
+  it.0 = seq.0 & for n be Nat holds it.(n+1) = it.n + seq.(n+1);
+end;
+
+theorem :: CLOPBAN3:1
+for X be add-associative right_zeroed
+         right_complementable (non empty CNORMSTR)
+ for seq be sequence of X st
+  (for n be Nat holds seq.n = 0.X) holds
+    for m be Nat holds (Partial_Sums seq).m = 0.X;
+
+definition
+  let X be ComplexNormSpace;
+  let seq be sequence of X;
+attr seq is summable means
+:: CLOPBAN3:def 2
+  Partial_Sums seq is convergent;
+end;
+
+registration
+  let X be ComplexNormSpace;
+cluster summable sequence of X;
+end;
+
+definition
+  let X be ComplexNormSpace;
+  let seq be sequence of X;
+func Sum seq -> Element of X equals
+:: CLOPBAN3:def 3
+  lim Partial_Sums seq;
+end;
+
+definition
+  let X be ComplexNormSpace;
+  let seq be sequence of X;
+attr seq is norm_summable means
+:: CLOPBAN3:def 4
+ ||.seq.|| is summable;
+end;
+
+theorem :: CLOPBAN3:2
+for X be ComplexNormSpace, seq be sequence of X, m be Nat holds
+ 0 <= ||.seq.||.m;
+
+theorem :: CLOPBAN3:3
+for X be ComplexNormSpace, x,y,z be Element of X holds
+ ||.x-y.|| = ||.(x-z)+(z-y).||;
+
+theorem :: CLOPBAN3:4
+for X be ComplexNormSpace, seq be sequence of X holds
+ seq is convergent implies
+  for s be Real st 0 < s
+  ex n be Nat st for m be Nat st n<=m holds ||.seq.m -seq.n.||<s;
+
+theorem :: CLOPBAN3:5
+for X be ComplexNormSpace, seq be sequence of X holds
+ seq is Cauchy_sequence_by_Norm
+        iff
+ for p be Real st p > 0 holds
+  ex n be Nat st for m be Nat st n <= m holds ||.seq.m-seq.n.||< p;
+
+theorem :: CLOPBAN3:6
+for X be ComplexNormSpace, seq be sequence of X st
+ (for n be Nat holds seq.n = 0.X) holds
+   for m be Nat holds (Partial_Sums ||.seq.||).m = 0;
+
+definition
+  let X be ComplexNormSpace;
+  let seq be sequence of X;
+redefine attr seq is constant means
+:: CLOPBAN3:def 5
+  ex r be Element of X st for n be Nat holds seq.n=r;
+end;
+
+definition
+  let X be ComplexNormSpace;
+  let seq be sequence of X;
+  let k be Nat;
+func seq ^\k -> sequence of X means
+:: CLOPBAN3:def 6
+  for n be Nat holds it.n=seq.(n+k);
+end;
+
+definition
+  let X be ComplexNormSpace;
+  let seq,seq1 be sequence of X;
+pred seq is_subsequence_of seq1 means
+:: CLOPBAN3:def 7
+  ex Nseq be increasing Seq_of_Nat st seq=seq1*Nseq;
+end;
+
+theorem :: CLOPBAN3:7
+for X be ComplexNormSpace, seq be sequence of X holds
+   seq ^\0 =seq;
+
+theorem :: CLOPBAN3:8
+for X be ComplexNormSpace, seq be sequence of X, k,m be Nat holds
+ (seq ^\k)^\m=(seq ^\m)^\k;
+
+theorem :: CLOPBAN3:9
+for X be ComplexNormSpace, seq be sequence of X, k,m be Nat holds
+  (seq ^\k)^\m=seq ^\(k+m);
+
+theorem :: CLOPBAN3:10
+for X be ComplexNormSpace, seq,seq1 be sequence of X holds
+  seq1 is_subsequence_of seq & seq is convergent implies
+    seq1 is convergent;
+
+theorem :: CLOPBAN3:11
+for X be ComplexNormSpace, seq,seq1 be sequence of X holds
+  seq1 is_subsequence_of seq & seq is convergent implies
+    lim seq1=lim seq;
+
+theorem :: CLOPBAN3:12
+for X be ComplexNormSpace, seq be sequence of X, k be Nat holds
+  seq ^\k is_subsequence_of seq;
+
+:::::::::: Norm Space versions of SEQ_4_33 - SEQ_4_39
+
+theorem :: CLOPBAN3:13
+for X be ComplexNormSpace, seq,seq1 be sequence of X, k be Nat holds
+  seq is convergent implies ((seq ^\k) is convergent & lim (seq ^\k)=lim seq);
+
+theorem :: CLOPBAN3:14
+for X be ComplexNormSpace, seq,seq1 be sequence of X holds
+  seq is convergent & (ex k be Nat st seq=seq1 ^\k)
+     implies seq1 is convergent;
+
+theorem :: CLOPBAN3:15
+for X be ComplexNormSpace, seq,seq1 be sequence of X holds
+  seq is convergent & (ex k be Nat st seq=seq1 ^\k)
+    implies lim seq1 =lim seq;
+
+theorem :: CLOPBAN3:16
+for X be ComplexNormSpace, seq be sequence of X holds
+  seq is constant implies seq is convergent;
+
+theorem :: CLOPBAN3:17
+for X be ComplexNormSpace, seq be sequence of X st
+  (for n be Nat holds seq.n = 0.X) holds seq is norm_summable;
+
+registration
+  let X be ComplexNormSpace;
+cluster norm_summable sequence of X;
+end;
+
+:::::::::: Norm Space versions of SERIES_1_7 - SERIES_1_16
+
+theorem :: CLOPBAN3:18
+for X be ComplexNormSpace, s be sequence of X holds
+  s is summable implies s is convergent & lim s = 0.X;
+
+theorem :: CLOPBAN3:19
+for X be ComplexNormSpace, s1,s2 be sequence of X holds
+  Partial_Sums(s1)+Partial_Sums(s2) = Partial_Sums(s1+s2);
+
+theorem :: CLOPBAN3:20
+for X be ComplexNormSpace, s1,s2 be sequence of X holds
+  Partial_Sums(s1)-Partial_Sums(s2) = Partial_Sums(s1-s2);
+
+registration
+  let X be ComplexNormSpace;
+  let seq be norm_summable sequence of X;
+cluster ||.seq.|| -> summable;
+end;
+
+registration
+  let X be ComplexNormSpace;
+cluster summable -> convergent sequence of X;
+end;
+
+theorem :: CLOPBAN3:21
+for X be ComplexNormSpace, seq1,seq2 be sequence of X st
+  seq1 is summable & seq2 is summable holds
+    seq1+seq2 is summable & Sum(seq1+seq2) = Sum(seq1)+Sum(seq2);
+
+theorem :: CLOPBAN3:22
+for X be ComplexNormSpace, seq1,seq2 be sequence of X st
+  seq1 is summable & seq2 is summable holds
+    seq1-seq2 is summable & Sum(seq1-seq2)= Sum(seq1)-Sum(seq2);
+
+registration
+  let X be ComplexNormSpace;
+  let seq1,seq2 be summable sequence of X;
+cluster seq1 + seq2 -> summable;
+cluster seq1 - seq2 -> summable;
+end;
+
+theorem :: CLOPBAN3:23
+for X be ComplexNormSpace, seq be sequence of X, z be Complex holds
+  Partial_Sums(z * seq) = z * Partial_Sums(seq);
+
+theorem :: CLOPBAN3:24
+for X be ComplexNormSpace, seq be summable sequence of X, z be Complex holds
+  z *seq is summable & Sum(z *seq)= z * Sum(seq);
+
+registration
+  let X be ComplexNormSpace;
+  let z be Complex, seq be summable sequence of X;
+cluster z *seq -> summable;
+end;
+
+theorem :: CLOPBAN3:25
+for X be ComplexNormSpace, s,s1 be sequence of X st
+  for n be Nat holds s1.n=s.0 holds
+    Partial_Sums(s^\1) = (Partial_Sums(s)^\1) - s1;
+
+theorem :: CLOPBAN3:26
+for X be ComplexNormSpace, s be sequence of X holds
+  s is summable implies for n be Nat holds s^\n is summable;
+
+registration
+   let X be ComplexNormSpace;
+   let seq be summable sequence of X, n be Nat;
+cluster seq^\n -> summable;
+end;
+
+theorem :: CLOPBAN3:27
+for X be ComplexNormSpace, seq be sequence of X holds
+  Partial_Sums ||.seq.|| is bounded_above iff seq is norm_summable;
+
+registration
+  let X be ComplexNormSpace;
+  let seq be norm_summable sequence of X;
+  cluster Partial_Sums ||.seq.|| -> bounded_above;
+end;
+
+theorem :: CLOPBAN3:28
+for X be ComplexBanachSpace, seq be sequence of X holds
+  seq is summable iff
+   (for p be Real st 0 <p holds ex n be Nat st
+     for m be Nat st n <= m holds
+      ||.Partial_Sums(seq).m-Partial_Sums(seq).n.||<p);
+
+theorem :: CLOPBAN3:29
+for X be ComplexNormSpace, s be sequence of X, n,m be Nat st n<=m holds
+  ||.Partial_Sums(s).m - Partial_Sums(s).n.||
+    <= abs(Partial_Sums(||.s.||).m - Partial_Sums(||.s.||).n);
+
+theorem :: CLOPBAN3:30
+for X be ComplexBanachSpace, seq be sequence of X holds
+  seq is norm_summable implies seq is summable;
+
+theorem :: CLOPBAN3:31
+for X be ComplexNormSpace, rseq1 be Real_Sequence, seq2 be sequence of X holds
+  rseq1 is summable &
+  (ex m be Nat st for n be Nat st m<=n holds ||.seq2.n.|| <= rseq1.n )
+    implies seq2 is norm_summable;
+
+theorem :: CLOPBAN3:32
+for X be ComplexNormSpace, seq1,seq2 be sequence of X holds
+  (for n be Nat holds 0 <= ||.seq1.||.n & ||.seq1.||.n <= ||.seq2.||.n) &
+  seq2 is norm_summable implies
+    seq1 is norm_summable & Sum ||.seq1.|| <= Sum ||.seq2.||;
+
+theorem :: CLOPBAN3:33
+for X be ComplexNormSpace, seq be sequence of X holds
+  (for n be Nat  holds ||.seq.||.n>0) &
+  (ex m be Nat st for n be Nat st n >=m holds ||.seq.||.(n+1)/||.seq.||.n >= 1)
+   implies not seq is norm_summable;
+
+theorem :: CLOPBAN3:34
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
+  rseq1 is convergent &
+  lim rseq1 < 1
+    implies seq is norm_summable;
+
+theorem :: CLOPBAN3:35
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
+  (ex m be Nat st for n be Nat st m<=n holds rseq1.n>= 1)
+    implies ||.seq.|| is not summable;
+
+theorem :: CLOPBAN3:36
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
+  (for n be Nat holds rseq1.n = n-root (||.seq.||.n)) &
+  rseq1 is convergent & lim rseq1 > 1
+    implies seq is not norm_summable;
+
+theorem :: CLOPBAN3:37
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence st
+  (||.seq.|| is non-increasing) &
+  (for n be Nat holds rseq1.n = 2 to_power n *||.seq.||.(2 to_power n)) holds
+    (seq is norm_summable iff rseq1 is summable);
+
+theorem :: CLOPBAN3:38
+for X be ComplexNormSpace, seq be sequence of X, p be Real st
+  (p>1 & (for n be Nat st n >=1 holds ||.seq.||.n = 1/ (n to_power p) )) holds
+    seq is norm_summable;
+
+theorem :: CLOPBAN3:39
+for X be ComplexNormSpace, seq be sequence of X, p be Real holds
+  p<=1 & (for n be Nat st n >=1 holds ||.seq.||.n=1/n to_power p)
+   implies not seq is norm_summable;
+
+theorem :: CLOPBAN3:40
+for X be ComplexNormSpace, seq be sequence of X, rseq1 be Real_Sequence holds
+  (for n be Nat holds seq.n<>0.X & rseq1.n=||.seq.||.(n+1)/||.seq.||.n) &
+  rseq1 is convergent & lim rseq1 < 1
+    implies seq is norm_summable;
+
+theorem :: CLOPBAN3:41
+for X be ComplexNormSpace, seq be sequence of X holds
+  (for n be Nat  holds seq.n<>0.X) &
+  (ex m be Nat st for n be Nat st n >=m holds
+    ||.seq.||.(n+1)/||.seq.||.n >= 1)
+    implies seq is not norm_summable;
+
+registration
+  let X be ComplexBanachSpace;
+cluster norm_summable -> summable sequence of X;
+end;
+
+begin :: Basic Properties of Sequence of Complex_Banach_Algebra
+
+scheme :: CLOPBAN3:sch 1
+ ExNCBCASeq{CNS()->non empty Normed_Complex_AlgebraStr,
+                  F(set) -> Point of CNS() } :
+ex S be sequence of CNS() st for n be Nat holds S.n = F(n);
+
+theorem :: CLOPBAN3:42
+for X be Complex_Banach_Algebra holds
+ for x,y,z being Element of X, a,b be Complex holds
+   x+y = y+x &
+   (x+y)+z = x+(y+z) &
+   x+(0.X) = x &
+   (ex t being Element of X st x+t= 0.X) &
+   (x*y)*z = x*(y*z) &
+   1r*x=x &
+   0c*x=0.X  &
+   a*0.X =0.X&
+   (-1r)*x=-x &
+   x*(1_ X) = x &
+   (1_ X)*x = x &
+   x*(y+z) = x*y + x*z &
+   (y+z)*x = y*x + z*x &
+   a*(x*y) = (a*x)*y &
+   a*(x+y) = a*x + a*y &
+   (a+b)*x = a*x + b*x &
+   (a*b)*x = a*(b*x)  &
+   (a*b)*(x*y)=(a*x)*(b*y) &
+   a*(x*y)=x*(a*y) &
+   0.X * x  = 0.X   &
+   x*0.X =0.X          &
+   x*(y-z) = x*y-x*z   &
+   (y-z)*x = y*x-z*x   &
+   x+y-z = x+(y-z)      &
+   x-y+z = x-(y-z)      &
+   x-y-z = x-(y+z)      &
+   x+y=(x-z)+(z+y)      &
+   x-y=(x-z)+(z-y)      &
+   x=(x-y)+y               &
+   x=y-(y-x)               &
+   ( ||.x.|| = 0 iff x = 0.X ) &
+   ||.a * x.|| = |.a.| * ||.x.|| &
+   ||.x + y.|| <= ||.x.|| + ||.y.|| &
+   ||. x*y .|| <= ||.x.|| * ||.y.|| &
+   ||. 1_ X .|| = 1  &
+   X is complete;
+
+definition
+  let X be non empty Normed_Complex_AlgebraStr;
+  let S be sequence of X;
+  let a be Element of X;
+func a * S -> sequence of X means
+:: CLOPBAN3:def 8
+  for n be Nat holds it.n = a * S.n;
+end;
+
+definition
+  let X be non empty Normed_Complex_AlgebraStr;
+  let S be sequence of X;
+  let a be Element of X;
+func S*a -> sequence of X means
+:: CLOPBAN3:def 9
+  for n be Nat holds it.n = S.n*a;
+end;
+
+definition
+  let X be non empty Normed_Complex_AlgebraStr;
+  let seq1,seq2 be sequence of X;
+func seq1 * seq2 -> sequence of X means
+:: CLOPBAN3:def 10
+  for n be Nat holds it.n = seq1.n * seq2.n;
+end;
+
+definition
+  let X be Complex_Banach_Algebra;
+  let x be Element of X such that x is invertible;
+func x" -> Element of X means
+:: CLOPBAN3:def 11
+ x*it= 1_  X & it*x= 1_  X;
+end;
+
+definition
+  let X be Complex_Banach_Algebra;
+  let z be Element of X;
+func z GeoSeq -> sequence of X means
+:: CLOPBAN3:def 12
+ it.0 = 1_ X & for n be Nat  holds it.(n+1) = it.n * z;
+end;
+
+definition
+  let X be Complex_Banach_Algebra;
+  let z be Element of X, n be Nat;
+func z #N n -> Element of X equals
+:: CLOPBAN3:def 13
+ z GeoSeq.n;
+end;
+
+theorem :: CLOPBAN3:43
+for X be Complex_Banach_Algebra, z be Element of X holds
+  z #N 0 = 1_ X;
+
+theorem :: CLOPBAN3:44
+for X be Complex_Banach_Algebra, z be Element of X holds
+  ||.z.|| < 1 implies z GeoSeq is summable norm_summable;
+
+theorem :: CLOPBAN3:45
+for X be Complex_Banach_Algebra, x be Point of X st
+  ||.1_ X - x .|| < 1 holds
+    ( (1_ X - x) GeoSeq is summable & (1_ X - x) GeoSeq is norm_summable);
+
+theorem :: CLOPBAN3:46
+for X be Complex_Banach_Algebra, x be Point of X st
+ ||.1_ X - x .|| < 1 holds
+  x is invertible & x" = Sum ((1_ X - x) GeoSeq );
+

@@ -1,6 +1,6 @@
 ;;; mizar.el --- mizar.el -- Mizar Mode for Emacs
 ;;
-;; $Revision: 1.80 $
+;; $Revision: 1.88 $
 ;;
 ;;; License:     GPL (GNU GENERAL PUBLIC LICENSE)
 ;;
@@ -181,7 +181,7 @@ Speedbar can be (de)activated later by running the command `speedbar'."
 :type 'boolean
 :group 'mizar-speedbar)
 
-(defcustom mizar-show-output 10
+(defcustom mizar-show-output 4
 "*Determines the size of the output window after processing.
 Possible values: none, 4, 10, all."
 :type '(choice (const :tag "no output" none)
@@ -489,7 +489,7 @@ Now also the environmental declarations."
 
 (defun mizar-mode-commands (map)
   (define-key map "\t" 'mizar-indent-line)
-  (define-key map "\r" 'newline-and-indent))
+  (define-key map "\r" 'mizar-newline))
 
 
 (if mizar-mode-map
@@ -595,6 +595,36 @@ Used for exact completion.")
       (setcdr  end nil))
   l2))
 
+
+;; reporting stuff stolen from delphi.el
+(defvar mizar-progress-last-reported-point nil
+  "The last point at which progress was reported.")
+
+(defun mizar-progress-start ()
+  ;; Initializes progress reporting.
+  (setq mizar-progress-last-reported-point nil))
+
+(defun mizar-progress-done (&rest msgs)
+  ;; Finalizes progress reporting.
+  (setq mizar-progress-last-reported-point nil)
+  (if (null msgs)
+      (message "")
+    (apply #'message msgs)))
+
+(defun mizar-step-progress (p desc step-size)
+  ;; If enough distance has elapsed since the last reported point, 
+  ;; then report the current progress to the user.
+  (cond ((null mizar-progress-last-reported-point)
+         ;; This is the first progress step.
+         (setq mizar-progress-last-reported-point p))
+
+        (;(and mizar-verbose
+	 (>= (abs (- p mizar-progress-last-reported-point)) step-size)
+         ;; Report the percentage complete.
+         (setq mizar-progress-last-reported-point p)
+         (message "%s %s ... %d%%"
+                  desc (buffer-name) (/ (* 100 p) (point-max))))))
+
 ;;;;;;;;;;;;  indentation (pretty poor) ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar mizar-label-regexp "\\b[a-zA-Z_'0-9]+:"
@@ -698,6 +728,18 @@ Used for exact completion.")
   "Indent the entire mizar buffer."
   (interactive )
   ( indent-region (point-min) (point-max) nil))
+
+(defun mizar-newline ()
+  "Terminate the current line with a newline and indent the next."
+  (interactive "*")
+  ;; Remove trailing spaces
+  (delete-horizontal-space)
+  (newline)
+  ;; Indent both the (now) previous and current line first.
+  (save-excursion
+    (previous-line 1)
+    (mizar-indent-line))
+  (mizar-indent-line))
 
 ;;;;;;;;;;;;;;;;  end of indentation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1070,6 +1112,11 @@ skeleton using `mizar-skeleton-items-func', and pretty prints it using
  	 (mizar-skeleton-string 
 	  (funcall mizar-skeleton-items-func
 	   (cadr (mizar-parse-region-fla beg end))))))
+;; remove possible ';' and adjust end
+    (goto-char beg)
+    (while (search-forward ";" end t)
+      (replace-match "")
+      (setq end (- end 1)))
     (goto-char end)
     (insert skel)
     (indent-region end (+ end (length skel)) nil))))
@@ -1609,13 +1656,34 @@ Goto column COL, if FORCE, then insert spaces if short."
 	  l)
   ))
 
+
+(defcustom mizar-max-errors-read 1000
+"*The maximal number of errors we take care of.
+Note that setting this too high may slow down displaying
+the errors after the verification."
+:type 'integer
+:group 'mizar-running)
+
+(defvar mizar-max-errline-length 30
+"The maximal length of one line in the error file.")
+
+(defun mizar-max-errfile-size ()
+(* mizar-max-errors-read mizar-max-errline-length))
+
 (defun mizar-get-errors (aname)
 "Return an unsorted table of errors on ANAME or nil."
 (save-excursion
   (let ((errors (concat aname ".err")))
-    (if (file-readable-p errors)
+    (when (file-readable-p errors)
 	(with-temp-buffer           ; sort columns, then lines
-	  (insert-file-contents errors)
+	  (insert-file-contents errors nil 0 (mizar-max-errfile-size))
+	  (goto-char (point-min))
+	  (when (= 0 (forward-line mizar-max-errors-read)) ; deleting
+	    (message "Too many errors, reading only first %d of them!"
+		     mizar-max-errors-read)
+	    (sleep-for 3)
+	    (beginning-of-line)
+	    (delete-region (point) (point-max)))
 	  (buff-to-numtable)
 	  )
       ))))
@@ -2159,7 +2227,7 @@ Underlines and mouse-highlites the places."
     (setq after-change-functions oldhook)
     nil))))
 	
-(defvar res-regexp "\\([A-Z0-9_]+\\):\\([a-z]+\\)[.]\\([0-9]+\\)"
+(defvar res-regexp "\\([A-Z0-9_]+\\):\\([a-z]+\\)\\([.]\\)\\([0-9]+\\)"
 "Description of the mmlquery resource format we use, see idxrepr.")
 
 (defvar mizar-cstr-map
@@ -2209,7 +2277,7 @@ replace aggr by struct."
   (if (looking-at res-regexp)
       (let ((res (match-string 0)))
 	(if (and agg2str (equal "aggr" (match-string 2)))
-	    (concat (match-string 1) ":struct." (match-string 3))
+	    (concat (match-string 1) ":struct." (match-string 4))
 	  res)))))
 
 (defun mizar-mouse-ask-query (event)
@@ -2839,7 +2907,13 @@ Commands:
 ;; The .gab files contain anchors and definitions. 
 ;; During parsing, the text properties are set for anchors,
 ;; while definitions are used to save their position as symbol
-;; property 'definition.
+;; property 'mmlquery-definition or 'mmlquery-redef .
+;; Additionaly the mmlquery kind (e.g. pred, prednot, attr, etc.) 
+;; is also kept as the value of the symbol property 'mmlquery-kind .
+;; All the text of definitions also gets the value of its name's
+;; 'mmlquery-kind as a text property, and also its 'invisible text
+;; property gets this 'mmlquery-kind as a value.
+
 
 ;; If the 'definition property is missing from a symbol, we 
 ;; open the .gab file containing the symbol first.
@@ -2860,7 +2934,6 @@ Commands:
     ;; The following are not part of the standard:
     (FUNCTION      (mmlquery-decode-anchor "a")
 		   (mmlquery-decode-definition "l")
-		   (mmlquery-decode-constructor "c")
 		   (mmlquery-decode-property     "r")
 		   (mmlquery-decode-query "q")
 		   (mmlquery-decode-hidden "h")) ; generic hidden
@@ -2895,19 +2968,80 @@ the range of text to assign text property SYMBOL with value VALUE "
 			       'help-echo param))
     (list start end 'anchor (intern param))))
 
-(defun mmlquery-decode-definition (start end &optional param)
+
+(defun get-mmlquery-resource-article (sym)
+"Extract the article name from a mmlquery resource symbol SYM, append '.gab'."
+  (let ((sname (symbol-name sym)))
+    (unless (string-match res-regexp sname)
+      (error "Error: all mmlquery resources are supposed to match %s: %s %S" 
+	     res-regexp sname sym))
+    (concat (downcase (match-string 1 sname)) ".gab")))
+
+(defvar mmlquery-item-starter-map
+  (let ((map (make-sparse-keymap))
+	(button_kword (if (eq mizar-emacs 'xemacs) [button2]
+			[mouse-2])))
+    (set-keymap-parent map mizar-mode-map)
+    (define-key map button_kword 'mmlquery-toggle-item-invis-mouse)
+    (define-key map "\C-m"  'mmlquery-toggle-item-invis)
+    map)
+"Keymap used at mmlquery item starters.")
+
+(defvar mmlquery-item-starter-help
+(substitute-command-keys "\\<mmlquery-item-starter-map>\\[mmlquery-toggle-item-invis-mouse] or \\<mmlquery-item-starter-map>\\[mmlquery-toggle-item-invis]: Hide/Show items of this kind")
+"Help displayed at mmlquery item starters.")
+
+(defun mmlquery-decode-definition (start end &optional param &rest params)
   "Decode a definition property for text between START and END.
 PARAM is a `<p>' found for the property.
 Value is a list `(START END SYMBOL VALUE)' with START and END denoting
-the range of text to assign text property SYMBOL with value VALUE "
-(let (kind (sym (intern param)))
-  (unless (string-match ".*\\:\\([a-z]+\\) .*" param)
-    (error "Error: all dli items are supposed to match \":[a-z]+[ ]\": %s" param))
-  (setq kind (intern (concat "mmlquery-" (match-string 1 param))))
-  (put sym 'mmlquery-definition start)
-  (put sym 'mmlquery-kind kind)
-  (put-text-property start end 'mmlquery-kind kind)
-  (list start end 'invisible kind)))
+the range of text to assign text property SYMBOL with value VALUE .
+The definition text now must start with :: PARAM, with the dot in
+PARAM replaced with space."
+(let ((sym (intern param)) 
+      (dstart (+ start 3 (length param))) ;; 3 = length ":: "
+      (map mmlquery-item-starter-map)
+      (allparams (cons param params))
+      kind name pname)
+  (setq name (buffer-substring-no-properties start dstart))
+  (unless (string-match res-regexp param)
+    (error "Error: all mmlquery resources are supposed to match %s: %s" 
+	   res-regexp param))
+  (setq kind (intern (concat "mmlquery-" (match-string 2 param)))
+	pname (concat ":: " (replace-match " " nil nil param 3)))
+  (unless (string-equal name pname)
+    (error "Error: the first parameter must match the item name %s: %s"
+	   pname name))
+
+  (while allparams
+    (let* ((par (car allparams))
+	   (sym1 (intern par)))
+      (cond 
+;; The first def in its article is the 'true' original for us 
+       ((and (not (get sym1 'mmlquery-definition))
+	     (equal (file-name-nondirectory (buffer-file-name 
+					     (current-buffer)))
+		    (get-mmlquery-resource-article sym1)))
+	;; we use the matching done in get-mmlquery-resource-article
+	(let ((kind1 (intern (concat "mmlquery-" (match-string 2 par)))))
+	  (put sym1 'mmlquery-definition start)
+	  (put sym1 'mmlquery-kind kind1))
+	)
+       (t
+;; otherwise it is stored among redefinitions - this is unused now
+	(put sym1 'mmlquery-redef (cons start (get sym1 'mmlquery-redef)))
+	)))
+    (setq allparams (cdr allparams)))
+  (incf dstart)  ;; this believs that end of line follows
+  (add-text-properties (+ 3 start) dstart
+		       (list 'mouse-face  'highlight ; 'speedbar-selected-face   ; 'highlight ;'face 'underline 
+;			     'fontified t 
+;			     'face '(:underline t)
+			     local-map-kword map
+			     'help-echo mmlquery-item-starter-help
+			     'mmlquery-item-starter kind))
+  (put-text-property dstart end 'mmlquery-kind kind)
+  (list dstart end 'invisible kind)))
 
 (defvar mmlquery-property-map
   (let ((map (make-sparse-keymap))
@@ -2953,31 +3087,6 @@ the range of text to assign text property SYMBOL with value VALUE "
     (list start end 'invisible 'mmlquery-property)
 ))
 
-
-(defun get-mmlquery-resource-article (sym)
-"Extract the article name from a mmlquery resource SYM, append '.gab'."
-  (let ((sname (symbol-name sym)))
-    (unless (string-match "\\([A-Z_0-9]+\\):.*" sname)
-      (error "Bad article name %s in mmlquery resource %S" sname sym))
-    (concat (downcase (match-string 1 sname)) ".gab")))
-
-
-(defun mmlquery-decode-constructor (start end &optional param)
-  "Decode a constructor property for text between START and END.
-PARAM is a `<p>' found for the property.
-Value is a list `(START END SYMBOL VALUE)' with START and END denoting
-the range of text to assign text property SYMBOL with value VALUE "
-(let ((sym (intern param)))
-;; The first def in its article is the 'true' original for us 
-  (if (and (not (get sym 'constructor))
-	   (equal (get-mmlquery-resource-article sym)
-		  (file-name-nondirectory (buffer-file-name (current-buffer)))))      	   
-      (put sym 'constructor start)
-;; otherwise it is stored among redefinitions - this is unused now
-    (put sym 'constructor-redef (cons start (get sym 'constructor-redef))))
-  (list start end 'definition sym)))
-
-
 (defun mmlquery-decode-query (start end &optional param)
   "Decode a query property for text between START and END.
 PARAM is a `<p>' found for the property.
@@ -2985,6 +3094,9 @@ Value is a list `(START END SYMBOL VALUE)' with START and END denoting
 the range of text to assign text property SYMBOL with value VALUE "
 (let ((query param))
   (list start end 'query query)))
+
+(defconst mmlquery-parsing-progress-step 2048
+"Number of chars to process before the next parsing progress report.")
 
 (defun mmlquery-next-annotation ()
   "Find and return next text/mmlquery annotation.
@@ -3006,6 +3118,8 @@ Return value is \(begin end name positive-p), or nil if none was found."
 	     (name (downcase (buffer-substring 
 			      (match-beginning 2) (match-end 2))))
 	     (pos (not (match-beginning 1))))
+	(mizar-step-progress beg "Parsing" 
+			     mmlquery-parsing-progress-step)
 	(list beg end name pos))))
 
 
@@ -3023,8 +3137,10 @@ Return value is \(begin end name positive-p), or nil if none was found."
       (goto-char from)
       (mmlquery-remove-header)
       ;; Translate annotations
+      (mizar-progress-start)
       (format-deannotate-region from (point-max) mmlquery-translations
 				'mmlquery-next-annotation)
+      (mizar-progress-done)
       (point-max))))
 
 
@@ -3097,14 +3213,13 @@ If PUSH, push positions onto the mmlquery-history."
        (oldpos (point)))
 ;; Load the article if not yet
     (unless defpos
-      (message "Loading abstract %s ..." aname)
+      (message "Parsing abstract %s ..." aname)
       (find-file-noselect afile)
-      (setq defpos (or (get anch 'constructor)
-		       (get anch 'mmlquery-definition))))
+      (setq defpos (get anch 'mmlquery-definition)))
     (unless defpos (error "No mmlquery definition for resource %S" anch))
 ;; The abstract may have been killed
     (unless (get-file-buffer afile)
-      (message "Loading abstract %s ..." aname))
+      (message "Parsing abstract %s ..." aname))
     (find-file afile)
     (goto-char defpos)
     (if push
@@ -3184,6 +3299,25 @@ mmlquery abstracts.")
      (when (and (not modified) (buffer-modified-p))
        (set-buffer-modified-p nil))))
 
+;; Not working yet, don't know why
+;; (defun mmlquery-underlined-face (face)
+;; "Return the underlined equivalent of symbol 'FACE. 
+;; If it does not exist, create it and store as a property
+;; 'mmlquery-underlined of 'FACE ."
+;; (if face   
+;;     (if (face-underline-p face) face
+;;       (let ((fc1 (get face 'mmlquery-underlined)))
+;; 	(if fc1 fc1
+;;  	  (let ((fc2 
+;; 		 (face-name 
+;; 		  (copy-face face (intern (concat (symbol-name face) 
+;; 						  "-underl"))))))
+;; ;	    (set-face-attribute fc2 nil :underline t)
+;;  	    (set-face-underline-p fc2 t)
+;;  	    (put face 'mmlquery-underlined fc2)
+;;  	    fc2)
+;; )))
+;;    'underline))
 
 (defun mmlquery-underline-highlited (start)
 "Add 'underline to 'highlite.
@@ -3199,8 +3333,13 @@ Only if `mmlquery-underlines-highlited' is non-nil."
 		(or (next-single-property-change (point) 'mouse-face 
 						 (current-buffer))
 		    (point-max))))
-	   (if (eq mfprop 'highlight)
+	   (if (and (eq mfprop 'highlight)
+		    (not (get-text-property (point) 'face)))
 	       (put-text-property (point) next-change 'face 'underline))
+;	       (let ((face (get-text-property (point) 'face)))
+;		 (setq face (mmlquery-underlined-face face))
+;		 (put-text-property (point) next-change 'face face);'(:underline "red");'underline
+;;))
 	   (goto-char next-change)))))))
 
 (defun mmlquery-underline-in-region (beg end)
@@ -3217,6 +3356,22 @@ Only if `mmlquery-underlines-highlited' is non-nil."
 (defun mmlquery-toggle-dfs () (interactive) (mmlquery-toggle-hiding 'mmlquery-dfs))
 (defun mmlquery-toggle-def () (interactive) (mmlquery-toggle-hiding 'mmlquery-def))
 
+(defun mmlquery-toggle-item-invis (&optional pos)
+"Toggle hiding of the mmlquery items that have the same kind as
+the item at POS."
+(interactive)
+(let* ((pos (or pos (point))) 
+       (prop (get-text-property pos 'mmlquery-item-starter)))
+  (or prop (error "No MMLQuery item starter at point!"))
+  (goto-char pos)
+  (mmlquery-toggle-hiding prop)))
+
+(defun mmlquery-toggle-item-invis-mouse (event)
+"Calls `mmlquery-toggle-item-invis at the point we clicked on."
+  (interactive "e")
+  (select-window (event-window event))
+  (mmlquery-toggle-item-invis (event-point event)))
+
 (defun mmlquery-toggle-property-invis (&optional pos force)
 "Toggle hiding of the property formula at POS.
 Non-nil FORCE can be either 'hide or 'unhide, and then this
@@ -3227,6 +3382,7 @@ function is used to force the hiding state."
 	 (propval (get-text-property pos 'mmlquery-property))
 	 next-change start invis)
     (or propval (error "No MMLQuery expression at point!"))
+    (goto-char pos)
     (setq next-change
 	  (or (next-single-property-change pos 'mmlquery-property (current-buffer))
 	      (point-max)))
@@ -4093,9 +4249,10 @@ If UTIL is given, call it instead of the Mizar verifier."
 	  (get-buffer "*mizar-output*"))
 	 (goto-char (point-max))
 	 (delete-blank-lines)
-	 (let ((new-height
+	 (let ((new-height 
 		(min mizar-show-output
-		     (count-lines (point-min) (point-max)))))
+		     (max window-min-height ;; prevent deleting
+			  (count-lines (point-min) (point-max))))))
 ; no sense winemacs behaves strange anyway
 ;	   (if (fboundp 'set-window-text-height)
 ;	       (set-window-text-height (get-buffer-window (current-buffer))
@@ -4288,23 +4445,24 @@ If FORCEACC, run makeenv with the -a option."
 					  mizout)
 			 (display-buffer mizout)))
 		     (message " ... done"))))
-	       (if old-dir (setq default-directory old-dir)))
-	     (unless silent
-	       (if mizar-do-expl
-		   (save-excursion
-		     (remove-text-properties (point-min) (point-max)
-					     '(mouse-face nil expl nil local-map nil))
-		     (mizar-put-bys fname)))
-	       (if compil
-		   (save-excursion
-		     (set-buffer "*compilation*")
-		     (insert (mizar-compile-errors name))
-		     (compilation-mode)
-		     (goto-char (point-min)))
-		 (mizar-do-errors name)
-		 (save-buffer)
-		 (mizar-handle-output)
-		 (mizar-show-errors))
+	       (if old-dir (setq default-directory old-dir))
+	       (unless silent
+		 (if mizar-do-expl
+		     (save-excursion
+		       (remove-text-properties 
+			(point-min) (point-max)
+			'(mouse-face nil expl nil local-map nil))
+		       (mizar-put-bys fname)))
+		 (if compil
+		     (save-excursion
+		       (set-buffer "*compilation*")
+		       (insert (mizar-compile-errors name))
+		       (compilation-mode)
+		       (goto-char (point-min)))
+		   (mizar-do-errors name)
+		   (save-buffer)
+		   (mizar-handle-output)
+		   (mizar-show-errors)))
 	       )))))))
 
 

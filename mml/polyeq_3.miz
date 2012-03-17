@@ -52,14 +52,12 @@ definition let z;
     :Def3:  [*(Re z)^2-(Im z)^2,2*(Re z*Im z)*];
   compatibility
   proof
-     z^2 = z * z by SQUARE_1:def 3
+      z^2 = z * z by SQUARE_1:def 3
        .= [* Re z * Re z - Im z * Im z, Re z * Im z + Re z * Im z *]
             by COMPLEX1:def 10
        .= [* (Re z)^2 - Im z * Im z, Re z * Im z + Re z * Im z *]
             by SQUARE_1:def 3
-       .= [* (Re z)^2 - (Im z)^2, Re z * Im z + Re z * Im z *]
-            by SQUARE_1:def 3
-       .= [*(Re z)^2-(Im z)^2,2*(Re z*Im z)*] by XCMPLX_1:11;
+       .= [*(Re z)^2-(Im z)^2,2*(Re z*Im z)*] by SQUARE_1:def 3;
     hence thesis;
   end;
   correctness by XCMPLX_0:def 2;
@@ -73,7 +71,7 @@ end;
 theorem Th1:
     [*a,c*]*[*b,d*]=[*a*b-c*d,a*d+b*c*]
  proof
-         [*a,c*]*[*b,d*]=[* Re [*a,c*]*Re [*b,d*]
+          [*a,c*]*[*b,d*]=[* Re [*a,c*]*Re [*b,d*]
                -Im [*a,c*]*Im [*b,d*],Re [*a,c*]*Im [*b,d*]
                +Re [*b,d*]*Im [*a,c*] *] by COMPLEX1:def 10
             .=[* a*Re [*b,d*]-Im [*a,c*]*Im [*b,d*],
@@ -100,13 +98,13 @@ theorem Th2:
   z=[*x,y*] implies z^2=[*x^2-y^2,2*x*y*]
 proof
   assume A1:z=[*x,y*];
-    z^2=[*(Re z)^2-(Im z)^2,2*(Re z*Im z)*] by Def3
+     z^2=[*(Re z)^2-(Im z)^2,2*(Re z*Im z)*] by Def3
      .=[*x^2-(Im [*x,y*])^2,2*(Re [*x,y*]*Im [*x,y*])*]
-                           by COMPLEX1:7,A1
+                           by A1,COMPLEX1:7
      .=[*x^2-y^2,2*(Re [*x,y*]*Im [*x,y*])*] by COMPLEX1:7
      .=[*x^2-y^2,2*(x*Im [*x,y*])*] by COMPLEX1:7
      .=[*x^2-y^2,2*(x*y)*] by COMPLEX1:7
-     .=[*x^2-y^2,2*x*y*] by XCMPLX_1:4;
+     .=[*x^2-y^2,2*x*y*];
   hence z^2=[*x^2-y^2,2*x*y*];
 end;
 
@@ -114,7 +112,7 @@ theorem Th3:
   for a,b holds [*a,0*]*[*b,0*]=[*a*b,0*]
 proof
   let a,b;
-   [*a,0*]*[*b,0*] =[*a*b-0*0,a*0+0*b*] by Th1
+    [*a,0*]*[*b,0*] =[*a*b-0*0,a*0+0*b*] by Th1
            .=[*a*b,0*];
   hence [*a,0*]*[*b,0*]=[*a*b,0*];
 end;
@@ -131,14 +129,12 @@ proof
   A2:  Poly2(a,b,c,z) = 0;
          set x=Re z;
          set y=Im z;
-          a*z^2+b*z+c = 0 by A2,POLYEQ_1:def 2;
+           a*z^2+b*z+c = 0 by A2,POLYEQ_1:def 2;
          then [*a,0*]*z^2+b*z+c = 0 by Def1;
          then [*a,0*]*z^2+[*b,0*]*z+c = 0 by Def1;
          then [*a,0*]*z^2+[*b,0*]*z+[*c,0*] = 0 by Def2;
          then [*a,0*]*([*x^2-y^2,2*(x*y)*])+[*b,0*]*z+[*c,0*] = 0
                             by Def3;
-         then [*a,0*]*[*x^2-y^2,2*x*y*]+[*b,0*]*z+[*c,0*] = 0
-                        by XCMPLX_1:4;
          then 0=[* Re [*a,0*]*Re [*x^2-y^2,2*x*y*]-Im [*a,0*]*
          Im [*x^2-y^2,2*x*y*],Re [*a,0*]*Im [*x^2-y^2,2*x*y*]
          +Re [*x^2-y^2,2*x*y*]*Im [*a,0*]  *]
@@ -168,97 +164,74 @@ proof
            +[*b*x-0*y,x*0+b*y*]+[*c,0*] = 0 by Th1;
          then [*a*(x^2-y^2)+b*x,a*(2*x*y)+b*y*]+[*c,0*] = 0
                       by COMPLFLD:2;
-         then [*a*(x^2-y^2)+b*x+c,a*(2*x*y)+b*y+0*] = 0 by COMPLFLD:2
+         then A3: [*a*(x^2-y^2)+b*x+c,a*(2*x*y)+b*y+0*] = 0 by COMPLFLD:2
                    .= [*0,0*] by ARYTM_0:def 7;
-         then A3:a*(x^2-y^2)+b*x+c = 0 & a*(2*x*y)+b*y = 0 by ARYTM_0:12;
-         then a*(x^2-y^2)+b*x+c = 0 & a*(2*x)*y+b*y = 0 by XCMPLX_1:4;
-         then a*(x^2-y^2)+b*x+c = 0 & (2*a*x)*y+b*y+0*y = 0 by XCMPLX_1:4;
-  then A4:  a*(x^2-y^2)+b*x+c = 0 & (2*a*x+b+0)*y = 0 by XCMPLX_1:9;
-         per cases by A4,XCMPLX_1:6;
+         then A4:a*(x^2-y^2)+b*x+c = 0 & a*(2*x*y)+b*y = 0 by ARYTM_0:12;
+  A5:  a*(x^2-y^2)+b*x+c = 0 & (2*a*x+b+0)*y = 0 by A3,ARYTM_0:12;
+         per cases by A5,XCMPLX_1:6;
           suppose
-  A5:      y = 0;
-  then Poly2(a,b,c,x)=0 by A3,POLYEQ_1:def 2,SQUARE_1:60;
+  A6:      y = 0;
+  then Poly2(a,b,c,x)=0 by A4,POLYEQ_1:def 2,SQUARE_1:60;
              then Re z=(-b+sqrt delta(a,b,c))/(2*a) & Im z = 0 or
              Re z= (-b-sqrt delta(a,b,c))/(2*a) & Im z = 0
-           by POLYEQ_1:5,A1,A5;
+           by A1,A6,POLYEQ_1:5;
              then z=[*(-b+sqrt delta(a,b,c))/(2*a),0*] or
              z= [*(-b-sqrt delta(a,b,c))/(2*a),0*] by COMPLEX1:8;
          hence thesis by ARYTM_0:def 7;
          end;
          suppose 2*a*x+b = 0;
-             then 2*a*x+(b -b)= 0-b by XCMPLX_1:29;
-             then (2*a)*x+0= 0-b by XCMPLX_1:14;
-  then A6:      (2*a)*x= -b by XCMPLX_1:150;
-              a"<>0 by A1,XCMPLX_1:203;
+             then A7: (2*a)*x+0= 0-b;
+               a"<>0 by A1,XCMPLX_1:203;
              then 2/a" <> 0 by XCMPLX_1:50;
              then 2/(1/a) <> 0 by XCMPLX_1:217;
              then (2*a)/1 <> 0 by XCMPLX_1:78;
-             then A7: x= (-b)/(2*a) by XCMPLX_1:90,A6;
+             then A8: x= (-b)/(2*a) by A7,XCMPLX_1:90;
   then x = -b/(2*a) by XCMPLX_1:188;
-             then a*((b/(2*a))^2-y^2)+b*(-b/(2*a))+c = 0 by
-               A3,SQUARE_1:61;
-             then a*((b/(2*a))^2-y^2)+(b*(-b/(2*a))+c)-(b*(-b/(2*a))+c)
-                           = 0-(b*(-b/(2*a))+c) by XCMPLX_1:1;
+             then a*((b/(2*a))^2-y^2)+b*(-b/(2*a))+c = 0 by A4,SQUARE_1:61;
              then a*((b/(2*a))^2-y^2)+((b*(-b/(2*a))+c)-(b*(-b/(2*a))+c))
-                          = 0-(b*(-b/(2*a))+c) by XCMPLX_1:29;
-             then a*((b/(2*a))^2-y^2)+0 = 0-(b*(-b/(2*a))+c) by XCMPLX_1:14;
-             then a*((b/(2*a))^2-y^2) = -(b*(-b/(2*a))+c) by XCMPLX_1:150;
+                          = 0-(b*(-b/(2*a))+c);
              then (b/(2*a))^2-y^2 = (-(b*(-b/(2*a))+c))/a-0
-   by XCMPLX_1:90,A1;
+   by A1,XCMPLX_1:90;
              then (b/(2*a))^2- (-(b*(-b/(2*a))+c))/a= y^2-0 by XCMPLX_1:24;
-             then y^2 = (b/(2*a))^2- (-(b*((-1)*(b/(2*a)))+c))/a
-               by XCMPLX_1:180;
-             then y^2 = (b/(2*a))^2- (-((-(-b))*(-1)*(b/(2*a))+c))/a
-                                     by XCMPLX_1:4;
-             then y^2 = (b/(2*a))^2- (-((-b)*(b/(2*a))+c))/a
-               by XCMPLX_1:180;
-             then y^2 = (b/(2*a))^2- (-(-b*(b/(2*a))+c))/a by XCMPLX_1:175;
+             then y^2 = (b/(2*a))^2- (-(-b*(b/(2*a))+c))/a;
              then y^2 = (b/(2*a))^2- (-(-(b*b)/(2*a)+c))/a by XCMPLX_1:75;
             then y^2 = (b/(2*a))^2- (-((-(b^2/(2*a)))+c))/a by SQUARE_1:def 3;
-             then y^2 = (b/(2*a))^2- (-c-(-(b^2/(2*a))))/a by XCMPLX_1:161;
-             then y^2 = (b/(2*a))^2- (-c+b^2/(2*a)+0)/a by XCMPLX_1:151;
+             then y^2 = (b/(2*a))^2- (-c+b^2/(2*a)+0)/a;
              then y^2 = (b/(2*a))^2- ((-c)/a+(b^2/(2*a))/a+0/a)
                                 by XCMPLX_1:64;
              then y^2 = (b/(2*a))^2- ((-c)*a"+(b^2/(2*a))/a) by XCMPLX_0:def 9
 ;
-             then y^2 = (b/(2*a))^2- ((-c)*a"+(b^2/(2*a))*a") by XCMPLX_0:def
-9;
-             then y^2 = (b/(2*a))^2- (-c*a"+(b^2/(2*a))*a") by XCMPLX_1:175;
-             then y^2 = (b/(2*a))^2- (-c*a")-((b^2/(2*a))*a") by XCMPLX_1:36;
-             then y^2 = (b/(2*a))^2+c*a"-((b^2/(2*a))*a") by XCMPLX_1:151;
-  then A8:      y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
+             then y^2 = (b/(2*a))^2- (-c*a"+(b^2/(2*a))*a") by XCMPLX_0:def 9;
+             then y^2 = (b/(2*a))^2+c*a"-((b^2/(2*a))*a");
+  then A9:      y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
                                 by SQUARE_1:69
               .=(b^2/(2*a)^2)*(2*a)^2+(c*a")*(2*a)^2
-                             -((b^2/(2*a))*a")*(2*a)^2 by XCMPLX_1:43
+                             -((b^2/(2*a))*a")*(2*a)^2
               .=(b^2*((2*a)^2)")*(2*a)^2+(c*a")*(2*a)^2
                           -((b^2/(2*a))*a")*(2*a)^2 by XCMPLX_0:def 9
               .=(b^2*((2*a)^2)")*(2*a)^2+(c*a")*(2*a)^2
                           -((b^2*(2*a)")*a")*(2*a)^2 by XCMPLX_0:def 9
               .=b^2/((2*a)^2)*((2*a)^2)+(c*a")*(2*a)^2
                           -(b^2*(2*a)"*a")*(2*a)^2 by XCMPLX_0:def 9;
-             a"<>0 by A1,XCMPLX_1:203;
+              a"<>0 by A1,XCMPLX_1:203;
             then 2/a" <> 0 by XCMPLX_1:50;
             then 2/(1/a) <> 0 by XCMPLX_1:217;
-  then A9:    (2*a)/1 <> 0 by XCMPLX_1:78;
-  then A10:     (2*a)^2 > 0 by SQUARE_1:74;
-  then A11:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2
-                          -(b^2*(2*a)"*a")*(2*a)^2 by A8,XCMPLX_1:88
-              .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2
-                                   by XCMPLX_1:4
+  then A10:    (2*a)/1 <> 0 by XCMPLX_1:78;
+  then A11:     (2*a)^2 > 0 by SQUARE_1:74;
+  then A12:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2 by
+A9,XCMPLX_1:88
               .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)*a)")*(2*a)^2
                           by XCMPLX_1:205
-              .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2
-                          by XCMPLX_1:4;
+              .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2;
             set t = (b^2*(2*(a*a))")*(2*a)^2;
-             t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*((2*a)^2)")
-                             by XCMPLX_1:4;
+              t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*((2*a)^2)");
             then t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*(1/(2*a)^2))
                              by XCMPLX_1:217;
-            then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A10,XCMPLX_1:107;
+            then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A11,XCMPLX_1:107;
             then t*((2*a)^2)" = b^2*(2*a^2)" by SQUARE_1:def 3;
-            then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2") by XCMPLX_1:4;
+            then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2");
             then t*((2*a)^2)"*2" = b^2*((2*(a^2*2))") by XCMPLX_1:205;
-            then t*((2*a)^2)"*2" = b^2*((2*2*a^2)") by XCMPLX_1:4;
+            then t*((2*a)^2)"*2" = b^2*((2*2*a^2)");
             then t*((2*a)^2)"*2" = b^2*((2^2*a^2)") by SQUARE_1:def 3;
             then t*((2*a)^2)"*2" = b^2*((2*a)^2)" by SQUARE_1:68;
             then (t*2")*((2*a)^2)"*(2*a)^2 = b^2*((2*a)^2)"*(2*a)^2
@@ -267,35 +240,22 @@ proof
                             by XCMPLX_0:def 9;
             then (t*2")/(2*a)^2*(2*a)^2 = b^2/(2*a)^2*(2*a)^2
                        by XCMPLX_0:def 9;
-            then t*2" = b^2/(2*a)^2*(2*a)^2 by A10,XCMPLX_1:88;
-            then t*2" = b^2 by A10,XCMPLX_1:88;
+            then t*2" = b^2/(2*a)^2*(2*a)^2 by A11,XCMPLX_1:88;
+            then t*2" = b^2 by A11,XCMPLX_1:88;
             then t/2 *2 = b^2 *2 by XCMPLX_0:def 9;
-  then A12:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-2*b^2 by XCMPLX_1:88,A11;
+  then A13:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-2*b^2 by A12,XCMPLX_1:88;
             set t=(c*a")*(2*a)^2;
-             t=(c*a")*((2*a)*(2*a)) by SQUARE_1:def 3;
-            then t=(c*a")*(a*2)*(2*a) by XCMPLX_1:4;
-            then t=c*a"*a*2*(2*a) by XCMPLX_1:4;
+              t=(c*a")*((2*a)*(2*a)) by SQUARE_1:def 3;
+            then t=c*a"*a*2*(2*a);
             then t=(c/a*a)*2*(2*a) by XCMPLX_0:def 9;
-            then t=c*2*(2*a) by XCMPLX_1:88,A1;
-            then t=c*(2*(2*a)) by XCMPLX_1:4;
-            then t=c*(2*2*a) by XCMPLX_1:4;
-            then y^2 *((2*a)^2)=-2*b^2+1*b^2+0*b^2+4*a*c
-              by A12,XCMPLX_1:155;
-            then y^2 *((2*a)^2)=(-2)*b^2+1*b^2+0*b^2+4*a *c by XCMPLX_1:175;
-            then y^2 *((2*a)^2)=((-2+1+0)*b^2)+4*a*c by XCMPLX_1:9;
-            then y^2 *((2*a)^2)=-b^2+4*a*c by XCMPLX_1:180;
-            then y^2 *((2*a)^2)=-b^2-(-4*a*c) by XCMPLX_1:151;
-            then y^2 *(2*a)^2=(-(-4*a*c))-b^2 by XCMPLX_1:144;
- then A13:  (y *(2*a))^2=4*a*c-b^2 by SQUARE_1:68;
- A14:      -delta(a,b,c) <= 0 by A1,REAL_1:66;
-             -delta(a,b,c)=-(b^2-4*a*c) by QUIN_1:def 1
-                                 .=-b^2+4*a*c by XCMPLX_1:162
-                                 .=-b^2-(-4*a*c) by XCMPLX_1:151
-                                 .=-(-4*a*c)-b^2 by XCMPLX_1:144
+            then t=c*2*(2*a) by A1,XCMPLX_1:88;
+ then A14:  (y *(2*a))^2=4*a*c-b^2 by A13,SQUARE_1:68;
+ A15:      -delta(a,b,c) <= 0 by A1,REAL_1:66;
+              -delta(a,b,c)=-(b^2-4*a*c) by QUIN_1:def 1
                                  .=4*a*c-b^2;
-            then (y *(2*a))^2 = 0 by SQUARE_1:72,A13,A14;
+            then (y *(2*a))^2 = 0 by A14,A15,SQUARE_1:72;
             then y *(2*a) = 0 by SQUARE_1:73;
-            then Re z=-b/(2*a) & Im z=0 by A7,A9,XCMPLX_1:6,188;
+            then Re z=-b/(2*a) & Im z=0 by A8,A10,XCMPLX_1:6,188;
             then z = [*-b/(2*a),0*] by COMPLEX1:8;
           hence thesis by ARYTM_0:def 7;
            end;
@@ -308,17 +268,16 @@ theorem Th5:
 proof
       assume
   A1:  a <> 0 & delta(a,b,c) < 0;
-          now let z;
+           now let z;
          assume
   A2:  Poly2(a,b,c,z) = 0c;
          set x=Re z;
          set y=Im z;
-          a*z^2+b*z+c = 0c by A2,POLYEQ_1:def 2;
+           a*z^2+b*z+c = 0c by A2,POLYEQ_1:def 2;
          then [*a,0*]*z^2+b*z+c = 0c by Def1;
          then [*a,0*]*z^2+[*b,0*]*z+c = 0c by Def1;
          then [*a,0*]*z^2+[*b,0*]*z+[*c,0*] = 0c by Def2;
          then [*a,0*]*([*x^2-y^2,2*(x*y)*])+[*b,0*]*z+[*c,0*] = 0c by Def3;
-         then [*a,0*]*[*x^2-y^2,2*x*y*]+[*b,0*]*z+[*c,0*] = 0c by XCMPLX_1:4;
          then [*Re [*a,0*]*Re [*x^2-y^2,2*x*y*]-Im [*a,0*]*Im [*x^2-y^2,2*x*y
 *]
          ,Re [*a,0*]*Im [*x^2-y^2,2*x*y*]+Re [*x^2-y^2,2*x*y*]
@@ -345,126 +304,92 @@ proof
          then [*a*(x^2-y^2)-0,0+a*(2*x*y)*]+[*b*x-0*y,x*0+b*y*]+[*c,0*] = 0c
                                   by Th1;
          then [*a*(x^2-y^2)+b*x,a*(2*x*y)+b*y*]+[*c,0*] = 0c by COMPLFLD:2;
-         then [*a*(x^2-y^2)+b*x+c,a*(2*x*y)+b*y+0*] = [*0,0*]
-              by COMPLFLD:2,Lm1;
-  then A3:  a*(x^2-y^2+0)+b*x+c = 0 & a*(2*x*y)+b*y = 0 by ARYTM_0:12;
-         then a*x^2-a*y^2+a*0+b*x+c = 0 by XCMPLX_1:44;
-         then -a*y^2+b*x+a*x^2+c = 0 by XCMPLX_1:156;
-         then -a*y^2+(b*x+a*x^2)+c = 0 by XCMPLX_1:1;
-         then -a*y^2+((b*x+a*x^2)+c )+a*y^2= 0+a*y^2 by XCMPLX_1:1;
+         then A3: [*a*(x^2-y^2)+b*x+c,a*(2*x*y)+b*y+0*] = [*0,0*]
+              by Lm1,COMPLFLD:2;
+  then A4:  a*(x^2-y^2+0)+b*x+c = 0 & a*(2*x*y)+b*y = 0 by ARYTM_0:12;
+          -a*y^2+((b*x+a*x^2)+c )+a*y^2= 0+a*y^2 by A3,ARYTM_0:12;
          then ((b*x+a*x^2)+c )+a*y^2-a*y^2= a*y^2 by XCMPLX_1:155;
          then ((b*x+a*x^2)+c )+(a*y^2-a*y^2)= a*y^2 by XCMPLX_1:29;
-         then ((b*x+a*x^2)+c)+0 = a*y^2 by XCMPLX_1:14;
+         then ((b*x+a*x^2)+c)+0 = a*y^2;
           then a*x^2*a+b*x*a+c*a = a*y^2*a by XCMPLX_1:9;
-          then x^2*(a*a)+x*b*a+c*a = y^2*a*a by XCMPLX_1:4;
-          then x^2*(a*a)+x*b*a+c*a = y^2*(a*a) by XCMPLX_1:4;
+          then x^2*(a*a)+x*b*a+c*a = y^2*a*a;
           then x^2*a^2+x*b*a+c*a = y^2*(a*a) by SQUARE_1:def 3;
           then x^2*a^2+x*b*a+c*a = y^2*a^2 by SQUARE_1:def 3;
           then ((x*a)^2+x*b*a)+0+c*a = y^2*a^2 by SQUARE_1:68;
-          then ((x*a)^2+x*b*a)+0+c*a = (y*a)^2 by SQUARE_1:68;
-          then ((x*a)^2+x*b*a)+((b/2)^2-(b/2)^2)+c*a = (y*a)^2 by XCMPLX_1:14;
-          then (x*a)^2+b*x*a+(b/2)^2-(b/2)^2+c*a = (y*a)^2 by XCMPLX_1:29;
-          then (x*a)^2+b*(x*a)+(b/2)^2-(b/2)^2+c*a = (y*a)^2 by XCMPLX_1:4;
-          then ((x*a)^2+2*(b/2)*(x*a)+(b/2)^2)-(b/2)^2+c*a = (y*a)^2
-                                  by XCMPLX_1:88;
           then ((x*a)^2+2*(x*a)*(b/2)+(b/2)^2)-(b/2)^2+c*a = (y*a)^2
-                                     by XCMPLX_1:4;
+                                     by SQUARE_1:68;
           then (x*a+b/2)^2-(b/2)^2+c*a = (y*a)^2 by SQUARE_1:63;
-          then (x*a+b/2)^2-b^2/2^2+c*a = (y*a)^2 by SQUARE_1:69;
           then (x*a+b/2)^2-b^2/2^2+c*a*4/4 = (y*a)^2
-  by XCMPLX_1:90;
-          then -(-(x*a+b/2)^2+b^2/2^2)+c*a*4/4 = (y*a)^2 by XCMPLX_1:163;
-          then (x*a+b/2)^2+(-b^2/2^2)+c*a*4/4 = (y*a)^2 by XCMPLX_1:141;
+  by SQUARE_1:69;
+          then (x*a+b/2)^2+(-b^2/2^2)+c*a*4/4 = (y*a)^2;
           then (x*a+b/2)^2+(-b^2)/2^2+c*a*4/4 = (y*a)^2 by XCMPLX_1:188;
           then (x*a+b/2)^2+(-b^2)/(2*2)+c*a*4/4 = (y*a)^2 by SQUARE_1:def 3;
-          then (x*a+b/2)^2+((-b^2)/4+c*a*4/4+0/4) = (y*a)^2 by XCMPLX_1:1;
- then A4:    (x*a+b/2)^2+(-b^2+c*a*4+0)/4 = (y*a)^2 by XCMPLX_1:64;
+          then A5: (x*a+b/2)^2+((-b^2)/4+c*a*4/4+0/4) = (y*a)^2 by XCMPLX_1:1;
           set t1= (x*a+b/2)^2;
           set t2=(-b^2+c*a*4)/4;
- A5:    t1>=0 by SQUARE_1:72;
-           t2=(-b^2+4*a*c)/4 by XCMPLX_1:4;
-          then t2=(-(b^2-4*a*c))/4 by XCMPLX_1:162;
- then A6:    t2=(-delta(a,b,c))/4 by QUIN_1:def 1;
-           0-delta(a,b,c)>0 by A1,REAL_2:173;
-          then -delta(a,b,c)>0 by XCMPLX_1:150;
-          then t2>0 by A6,REAL_2:127;
-          then 0+0<t1+t2 by A5,REAL_1:67;
-          then y^2*a^2>0 by SQUARE_1:68,A4;
+ A6:    t1>=0 by SQUARE_1:72;
+           t2=(-(b^2-4*a*c))/4;
+ then A7:    t2=(-delta(a,b,c))/4 by QUIN_1:def 1;
+            0-delta(a,b,c)>0 by A1,REAL_2:173;
+          then t2>0 by A7,REAL_2:127;
+          then 0+0<t1+t2 by A6,REAL_1:67;
+          then y^2*a^2>0 by A5,SQUARE_1:68;
           then y^2 <> 0;
           then y*y <> 0 by SQUARE_1:def 3;
- then A7:    y<>0;
-          (a*(2*x))*y+b*y = 0 by XCMPLX_1:4,A3;
-         then (a*2*x)*y+b*y-b*y = 0-b*y by XCMPLX_1:4;
-         then (a*2*x)*y+(b*y-b*y) = 0-b*y by XCMPLX_1:29;
-         then (a*2*x)*y+0 = 0-b*y by XCMPLX_1:14;
-         then (a*2*x)*y = -b*y by XCMPLX_1:150;
-         then (a*2*x)*y = (-b)*y by XCMPLX_1:175;
-         then a*2*x = -b by A7,XCMPLX_1:5;
-         then a*(2*x) = -b by XCMPLX_1:4;
+ then A8:    y<>0;
+           (a*(2*x))*y+b*y = 0 by A3,ARYTM_0:12;
+         then (a*2*x)*y+(b*y-b*y) = 0-b*y;
+         then (a*2*x)*y = (-b)*y;
+         then a*(2*x) = -b by A8,XCMPLX_1:5;
          then 2*x = (-b)/a by A1,XCMPLX_1:90;
          then x = (-b)/a/2 by XCMPLX_1:90;
          then x = 1/a*((-b)/2) by XCMPLX_1:105;
-         then A8: x = (-b)/(2*a) by XCMPLX_1:104;
+         then A9: x = (-b)/(2*a) by XCMPLX_1:104;
  then x = -b/(2*a) by XCMPLX_1:188;
-         then a*((b/(2*a))^2-y^2)+b*(-b/(2*a))+c = 0 by SQUARE_1:61,A3;
-         then a*((b/(2*a))^2-y^2)+(b*(-b/(2*a))+c)-(b*(-b/(2*a))+c)
-                  = 0-(b*(-b/(2*a))+c) by XCMPLX_1:1;
+         then a*((b/(2*a))^2-y^2)+b*(-b/(2*a))+c = 0 by A4,SQUARE_1:61;
          then a*((b/(2*a))^2-y^2)+((b*(-b/(2*a))+c)-(b*(-b/(2*a))+c))
-                  = 0-(b*(-b/(2*a))+c) by XCMPLX_1:29;
-         then a*((b/(2*a))^2-y^2)+0 = 0-(b*(-b/(2*a))+c) by XCMPLX_1:14;
-         then a*((b/(2*a))^2-y^2) = -(b*(-b/(2*a))+c) by XCMPLX_1:150;
+                  = 0-(b*(-b/(2*a))+c);
          then (b/(2*a))^2-y^2 = (-(b*(-b/(2*a))+c))/a-0
- by XCMPLX_1:90,A1;
+ by A1,XCMPLX_1:90;
          then (b/(2*a))^2- (-(b*(-b/(2*a))+c))/a= y^2-0 by XCMPLX_1:24;
-         then y^2 = (b/(2*a))^2- (-(b*((-1)*(b/(2*a)))+c))/a by XCMPLX_1:180;
-         then y^2 = (b/(2*a))^2- (-((-(-b))*(-1)*(b/(2*a))+c))/a by XCMPLX_1:4
-;
-         then y^2 = (b/(2*a))^2- (-((-b)*(b/(2*a))+c))/a by XCMPLX_1:180;
-         then y^2 = (b/(2*a))^2- (-(-b*(b/(2*a))+c))/a by XCMPLX_1:175;
+         then y^2 = (b/(2*a))^2- (-(-b*(b/(2*a))+c))/a;
          then y^2 = (b/(2*a))^2- (-(-(b*b)/(2*a)+c))/a by XCMPLX_1:75;
          then y^2 = (b/(2*a))^2- (-((-(b^2/(2*a)))+c))/a by SQUARE_1:def 3;
-         then y^2 = (b/(2*a))^2- (-c-(-(b^2/(2*a))))/a by XCMPLX_1:161;
-         then y^2 = (b/(2*a))^2- (-c+b^2/(2*a)+0)/a by XCMPLX_1:151;
+         then y^2 = (b/(2*a))^2- (-c+b^2/(2*a)+0)/a;
          then y^2 = (b/(2*a))^2- ((-c)/a+(b^2/(2*a))/a+0/a)
            by XCMPLX_1:64;
          then y^2 = (b/(2*a))^2- ((-c)*a"+(b^2/(2*a))/a) by XCMPLX_0:def 9;
-         then y^2 = (b/(2*a))^2- ((-c)*a"+(b^2/(2*a))*a") by XCMPLX_0:def 9;
-         then y^2 = (b/(2*a))^2- (-c*a"+(b^2/(2*a))*a") by XCMPLX_1:175;
-         then y^2 = (b/(2*a))^2- (-c*a")-((b^2/(2*a))*a") by XCMPLX_1:36;
-         then y^2 = (b/(2*a))^2+c*a"-((b^2/(2*a))*a") by XCMPLX_1:151;
-  then A9:   y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
+         then y^2 = (b/(2*a))^2- (-c*a"+(b^2/(2*a))*a") by XCMPLX_0:def 9;
+         then y^2 = (b/(2*a))^2+c*a"-((b^2/(2*a))*a");
+  then A10:   y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
                       by SQUARE_1:69
               .=(b^2/(2*a)^2)*(2*a)^2+(c*a")*(2*a)^2
-                           -((b^2/(2*a))*a")*(2*a)^2 by XCMPLX_1:43
+                           -((b^2/(2*a))*a")*(2*a)^2
               .=(b^2*((2*a)^2)")*(2*a)^2+(c*a")*(2*a)^2
                         -((b^2/(2*a))*a")*(2*a)^2 by XCMPLX_0:def 9
               .=(b^2*((2*a)^2)")*(2*a)^2+(c*a")*(2*a)^2
                         -((b^2*(2*a)")*a")*(2*a)^2 by XCMPLX_0:def 9
               .=b^2/((2*a)^2)*((2*a)^2)+(c*a")*(2*a)^2
                         -(b^2*(2*a)"*a")*(2*a)^2 by XCMPLX_0:def 9;
-           a"<>0 by A1,XCMPLX_1:203;
+            a"<>0 by A1,XCMPLX_1:203;
           then 2/a" <> 0 by XCMPLX_1:50;
           then 2/(1/a) <> 0 by XCMPLX_1:217;
-  then A10:  (2*a)/1 <> 0 by XCMPLX_1:78;
-  then A11:  (2*a)^2 > 0 by SQUARE_1:74;
-  then A12:   y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2
-                    -(b^2*(2*a)"*a")*(2*a)^2 by A9,XCMPLX_1:88
-            .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2
-                                by XCMPLX_1:4
+  then A11:  (2*a)/1 <> 0 by XCMPLX_1:78;
+  then A12:  (2*a)^2 > 0 by SQUARE_1:74;
+  then A13:   y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2 by
+A10,XCMPLX_1:88
             .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)*a)")*(2*a)^2
                          by XCMPLX_1:205
-            .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2
-                        by XCMPLX_1:4;
+            .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2;
            set t = (b^2*(2*(a*a))")*(2*a)^2;
-            t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*((2*a)^2)")
-                           by XCMPLX_1:4;
+             t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*((2*a)^2)");
            then t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*(1/(2*a)^2))
                            by XCMPLX_1:217;
-           then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A11,XCMPLX_1:107;
+           then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A12,XCMPLX_1:107;
            then t*((2*a)^2)" = b^2*(2*a^2)" by SQUARE_1:def 3;
-           then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2") by XCMPLX_1:4;
+           then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2");
            then t*((2*a)^2)"*2" = b^2*((2*(a^2*2))") by XCMPLX_1:205;
-           then t*((2*a)^2)"*2" = b^2*((2*2*a^2)") by XCMPLX_1:4;
+           then t*((2*a)^2)"*2" = b^2*((2*2*a^2)");
            then t*((2*a)^2)"*2" = b^2*((2^2*a^2)") by SQUARE_1:def 3;
            then t*((2*a)^2)"*2" = b^2*((2*a)^2)" by SQUARE_1:68;
            then (t*2")*((2*a)^2)"*(2*a)^2 = b^2*((2*a)^2)"*(2*a)^2
@@ -473,49 +398,34 @@ proof
                            by XCMPLX_0:def 9;
            then (t*2")/(2*a)^2*(2*a)^2 = b^2/(2*a)^2*(2*a)^2
                        by XCMPLX_0:def 9;
-            then t*2" = b^2/(2*a)^2*(2*a)^2 by A11,XCMPLX_1:88;
-            then t*2" = b^2 by A11,XCMPLX_1:88;
+            then t*2" = b^2/(2*a)^2*(2*a)^2 by A12,XCMPLX_1:88;
+            then t*2" = b^2 by A12,XCMPLX_1:88;
             then t/2 *2 = b^2 *2 by XCMPLX_0:def 9;
-  then A13:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-2*b^2 by A12,XCMPLX_1:88;
+  then A14:     y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-2*b^2 by A13,XCMPLX_1:88;
             set t=(c*a")*(2*a)^2;
-             t=(c*a")*((2*a)*(2*a)) by SQUARE_1:def 3;
-            then t=(c*a")*(a*2)*(2*a) by XCMPLX_1:4;
-            then t=c*a"*a*2*(2*a) by XCMPLX_1:4;
+              t=(c*a")*((2*a)*(2*a)) by SQUARE_1:def 3;
+            then t=c*a"*a*2*(2*a);
             then t=(c/a*a)*2*(2*a) by XCMPLX_0:def 9;
-            then t=c*2*(2*a) by XCMPLX_1:88,A1;
-            then t=c*(2*(2*a)) by XCMPLX_1:4;
-            then t=c*(2*2*a) by XCMPLX_1:4;
-            then y^2 *((2*a)^2)=-2*b^2+1*b^2+0*b^2+4*a*c
-              by A13,XCMPLX_1:155;
-            then y^2 *((2*a)^2)=(-2)*b^2+1*b^2+0*b^2+4*a *c by XCMPLX_1:175;
-            then y^2 *((2*a)^2)=((-2+1+0)*b^2)+4*a*c by XCMPLX_1:9;
-            then y^2 *((2*a)^2)=-b^2+4*a*c by XCMPLX_1:180;
-            then y^2 *((2*a)^2)=-b^2-(-4*a*c) by XCMPLX_1:151;
-            then y^2 *(2*a)^2=(-(-4*a*c))-b^2 by XCMPLX_1:144;
-  then A14:    (y *(2*a))^2=4*a*c-b^2 by SQUARE_1:68;
-  A15:     -delta(a,b,c) > 0 by REAL_1:66,A1;
-              -delta(a,b,c)=-(b^2-4*a*c) by QUIN_1:def 1
-                               .=-b^2+4*a*c by XCMPLX_1:162
-                               .=-b^2-(-4*a*c) by XCMPLX_1:151
-                               .=-(-4*a*c)-b^2 by XCMPLX_1:144
+            then t=c*2*(2*a) by A1,XCMPLX_1:88;
+  then A15:    (y *(2*a))^2=4*a*c-b^2 by A14,SQUARE_1:68;
+  A16:     -delta(a,b,c) > 0 by A1,REAL_1:66;
+               -delta(a,b,c)=-(b^2-4*a*c) by QUIN_1:def 1
                                .=4*a*c-b^2;
            then (y *(2*a))^2  =(sqrt (-delta(a,b,c)))^2
-        by A15,SQUARE_1:def 4,A14;
-           then (y *(2*a))^2  -(sqrt (-delta(a,b,c)))^2=0 by XCMPLX_1:14;
+        by A15,A16,SQUARE_1:def 4;
+           then (y *(2*a))^2  -(sqrt (-delta(a,b,c)))^2=0;
            then ((y *(2*a))+(sqrt (-delta(a,b,c))))*
            ((y *(2*a))-(sqrt (-delta(a,b,c))))=0 by SQUARE_1:67;
            then ((y *(2*a))+(sqrt (-delta(a,b,c))))=0 or
            ((y *(2*a))-(sqrt (-delta(a,b,c))))=0 by XCMPLX_1:6;
            then (y *(2*a))=0-sqrt (-delta(a,b,c)) or
-           (y *(2*a))-sqrt (-delta(a,b,c))=0 by XCMPLX_1:26;
-           then y *(2*a)/(2*a)=(-sqrt (-delta(a,b,c)))/(2*a) or
-           y *(2*a)-sqrt (-delta(a,b,c))=0 by XCMPLX_1:150;
+           (y *(2*a))-sqrt (-delta(a,b,c))=0;
            then y =(-sqrt (-delta(a,b,c)))/(2*a) or
            y *(2*a)/(2*a)=sqrt (-delta(a,b,c))/(2*a)
- by XCMPLX_1:15,XCMPLX_1:90,A10;
+ by A11,XCMPLX_1:15,90;
            then Re z=-b/(2*a) & Im z=sqrt (-delta(a,b,c))/(2*a)
            or  Re z= -b/(2*a) &  Im z= -sqrt (-delta(a,b,c))/(2*a)
- by A8,A10,XCMPLX_1:90,188;
+ by A9,A11,XCMPLX_1:90,188;
            hence z= [* -b/(2*a),sqrt (-delta(a,b,c))/(2*a)*] or
           z= [* -b/(2*a),-sqrt (-delta(a,b,c))/(2*a)*] by COMPLEX1:8;
      end;
@@ -523,17 +433,17 @@ proof
 end;
 
 theorem
-     b <> 0 & (for z holds Poly2(0,b,c,z) = 0c) implies z = -c/b
+      b <> 0 & (for z holds Poly2(0,b,c,z) = 0c) implies z = -c/b
 proof
         assume
  A1:   b <> 0;
         assume
  A2:  (for z holds Poly2(0,b,c,z) = 0c);
-         now let z1;
-         Poly2(0,b,c,z1) = 0c by A2;
+          now let z1;
+          Poly2(0,b,c,z1) = 0c by A2;
         then 0*z1^2+b*z1+c = 0c by POLYEQ_1:def 2;
          then [*0,0*]*z1^2+b*z1+c = 0c by Def1;
-         then  [*0,0*]*z1^2+[*b,0*]*z1+c = 0c by Def1;
+         then [*0,0*]*z1^2+[*b,0*]*z1+c = 0c by Def1;
            then [*b,0*]*z1+[*c,0*] = 0c by Def2,Lm1,COMPLEX1:def 6;
           then [*b,0*]*[*Re z1,Im z1*]+[*c,0*] = 0c by COMPLEX1:8;
           then [*b*Re z1-0*Im z1,b*Im z1+0*Re z1*]+[*c,0*] = 0c by Th1;
@@ -542,7 +452,7 @@ proof
            by Lm1,COMPLFLD:2;
            then b*Re z1-0+c = Re [*0,0*] & b*Im z1= Im [*0,0*] by COMPLEX1:7;
           then b*(Re z1)-0+c = 0 & b*Im z1 = 0 by COMPLEX1:7;
-          then b*(Re z1)+(c-c) =0-c & Im z1 = 0 by XCMPLX_1:29,A1,XCMPLX_1:6;
+          then b*(Re z1)+(c-c) =0-c & Im z1 = 0 by A1,XCMPLX_1:6,29;
           then b*(Re z1)+(c-c) =-c  & Im z1 = 0 by XCMPLX_1:150;
           then b*(Re z1)+0 =-c  & Im z1 = 0 by XCMPLX_1:14;
           then Re z1 =(-c)/b & Im z1 = 0 by A1,XCMPLX_1:90;
@@ -553,7 +463,7 @@ proof
 end;
 
 theorem
-     for a,b,c being Real,z,z1,z2 being Element of COMPLEX
+      for a,b,c being Real,z,z1,z2 being Element of COMPLEX
       st a <> 0 holds
       (for z being Element of COMPLEX holds
           Poly2(a,b,c,z) = Quard(a,z1,z2,z)) implies
@@ -562,28 +472,27 @@ proof
         let a,b,c be Real,z,z1,z2 be Element of COMPLEX;
          assume
   A1:  a <> 0;
-          now assume
+           now assume
   A2:  for z being Element of COMPLEX holds
                Poly2(a,b,c,z) = Quard(a,z1,z2,z);
-          now let z be Element of COMPLEX;
-          Poly2(a,b,c,0c) = Quard(a,z1,z2,0c) by A2;
+           now let z be Element of COMPLEX;
+           Poly2(a,b,c,0c) = Quard(a,z1,z2,0c) by A2;
        then a*0c^2+b*0c+c = Quard(a,z1,z2,0c) by POLYEQ_1:def 2;
        then a*0c^2+[*b,0*]*0c+c = Quard(a,z1,z2,0c) by Def1;
        then a*0c^2+[*b,0*]*0c+[*c,0*] = Quard(a,z1,z2,0c) by Def2
             .= a*((0c-z1)*(0c-z2)) by POLYEQ_1:def 3
-            .= a*((0c+(-z1))*(0c-z2)) by XCMPLX_0:def 8
-            .= a*((0c+(-z1))*(0c+(-z2))) by XCMPLX_0:def 8
+            .= a*((0c+(-z1))*(0c+(-z2)))
             .= a*((-z1)*(0c+(-z2))) by COMPLEX1:22
             .= a*((-z1)*(-z2)) by COMPLEX1:22
-            .= a*(z1*z2) by XCMPLX_1:177;
+            .= a*(z1*z2);
   then A3:  a*(z1*z2)=a*(0c*0c)+[*b,0*]*0c+[*c,0*] by SQUARE_1:def 3
             .=[*c,0*] by COMPLEX1:def 6;
-then A4:     z1*z2=[*c,0*]*a" by XCMPLX_1:204,A1
+then A4:     z1*z2=[*c,0*]*a" by A1,XCMPLX_1:204
             .= c * a" by ARYTM_0:def 7
             .= c/a by XCMPLX_0:def 9
             .= [* c/a,0*] by ARYTM_0:def 7;
      A5:   [*1,0*] = 1 by ARYTM_0:def 7;
-           Quard(a,z1,z2,[*1,0*]) = Poly2(a,b,c,[*1,0*]) by A2
+            Quard(a,z1,z2,[*1,0*]) = Poly2(a,b,c,[*1,0*]) by A2
             .=a*[*1,0*]^2+b*[*1,0*]+c by POLYEQ_1:def 2
             .=a*[*1,0*]^2+[*b,0*]*[*1,0*]+c by Def1
             .=a*[*1,0*]^2+[*b,0*]*[*1,0*]+[*c,0*] by Def2
@@ -591,19 +500,13 @@ then A4:     z1*z2=[*c,0*]*a" by XCMPLX_1:204,A1
             .=a+[*b,0*]+[*c,0*] by COMPLEX1:29;
           then a+[*b,0*]+[*c,0*]=a*(([*1,0*]-z1)*([*1,0*]-z2)) by POLYEQ_1:def
 3
-            .=a*((1-z1)*1r-(1-z1)*z2) by XCMPLX_1:40,A5,COMPLEX1:def 7
-            .=a*((1*1r-z1*1r)-(1-z1)*z2) by XCMPLX_1:40
-            .=a*((1*1r-z1*1r)-(1*z2-z1*z2)) by XCMPLX_1:40
+            .=a*((1*1r-z1*1r)-(1-z1)*z2) by A5,COMPLEX1:def 7
             .=a*((1r-z1)-(1*z2-z1*z2)) by COMPLEX1:29
-            .=a*(1r-z1-z2+z1*z2) by XCMPLX_1:37
-            .=a*(1r-(z1+z2)+z1*z2) by XCMPLX_1:36
-            .=a*((1r+(-(z1+z2)))+z1*z2) by XCMPLX_0:def 8
-            .=a*(1r+(-(z1+z2)))+a*(z1*z2) by XCMPLX_1:8
-            .=a*1r+a*(-(z1+z2))+a*(z1*z2) by XCMPLX_1:8
+            .=a*1r+a*(-(z1+z2))+a*(z1*z2)
             .=a+a*(-(z1+z2))+[*c,0*] by A3,COMPLEX1:def 7;
          then a+[*b,0*]=a+a*(-(z1+z2)) by XCMPLX_1:2;
          then [*b,0*]=a*(-(z1+z2)) by XCMPLX_1:2;
-         then [*b,0*]*a"=-(z1+z2) by XCMPLX_1:204,A1;
+         then [*b,0*]*a"=-(z1+z2) by A1,XCMPLX_1:204;
          then b*a"=-(z1+z2) by ARYTM_0:def 7;
          then -(z1+z2) = b/a by XCMPLX_0:def 9;
          hence [*b/a,0*] =-(z1+z2) & [*c/a,0*]= z1*z2 by A4,ARYTM_0:def 7;
@@ -628,7 +531,7 @@ end;
 theorem Th8:
     0c^3 = 0c
 proof
-   0c^3=0c^2*0c by Def4
+    0c^3=0c^2*0c by Def4
      .=(0c*0c)*0c by SQUARE_1:def 3
      .=0c*0c by COMPLEX1:28;
   hence 0c^3 = 0c by COMPLEX1:28;
@@ -637,7 +540,7 @@ end;
 theorem Th9:
   1r^3 = 1r
 proof
-   1r^3=1r^2*1r by Def4
+    1r^3=1r^2*1r by Def4
   .=1r*1r*1r by SQUARE_1:def 3
   .=1r*1r by COMPLEX1:29;
   hence 1r^3 = 1r by COMPLEX1:29;
@@ -646,9 +549,9 @@ end;
 theorem Th10:
     (-1r)^3=-1r
 proof
-   (-1r)^3=(-1r)^2*(-1r) by Def4
+    (-1r)^3=(-1r)^2*(-1r) by Def4
    .=((-1r)*(-1r))*(-1r) by SQUARE_1:def 3
-   .=(1r*1r)*(-1r) by XCMPLX_1:177
+   .=(1r*1r)*(-1r)
    .=1r*(-1r) by COMPLEX1:29;
    hence (-1r)^3 = -1r by COMPLEX1:29;
 end;
@@ -664,10 +567,9 @@ proof
          .=[*Re z,Im z*]*[*Re z,Im z*]*[*Re z,Im z*] by COMPLEX1:8;
          set x = Re z;
          set y = Im z;
-          z^3 = [*x*x-y*y,x*y+x*y*]*[*x,y*] by A1,Th1
+           z^3 = [*x*x-y*y,x*y+x*y*]*[*x,y*] by A1,Th1
          .= [*x^2-y*y,x*y+x*y*]*[*x,y*] by SQUARE_1:def 3
-         .= [*x^2-y^2,x*y+x*y*]*[*x,y*] by SQUARE_1:def 3
-         .= [*x^2-y^2,2*(x*y)*]*[*x,y*] by XCMPLX_1:11
+         .= [*x^2-y^2,2*(x*y)*]*[*x,y*] by SQUARE_1:def 3
          .= [*Re[*x^2-y^2,2*(x*y)*] *Re [*x,y*]-Im[*x^2-y^2,2*(x*y)*]
             *Im [*x,y*],Re[*x^2-y^2,2*(x*y)*] *Im [*x,y*]+
             Re [*x,y*]*Im [*x^2-y^2,2*(x*y)*]*] by COMPLEX1:def 10
@@ -688,12 +590,8 @@ proof
            ,(x^2-y^2) *Im [*x,y*]+Re [*x,y*]*(2*(x*y))*] by COMPLEX1:7
          .= [*(x^2-y^2) *x-(2*(x*y))*y
            ,(x^2-y^2) *y+Re [*x,y*]*(2*(x*y))*] by COMPLEX1:7
-         .= [*(x^2-y^2) *x-(2*(x*y))*y,(x^2-y^2) *y+x*(2*(x*y))*]
-                                 by COMPLEX1:7
-         .= [*(x^2*x-y^2*x+0*x)-2*(x*y)*y,(x^2-y^2+0)*y+x*(2*(x*y))*]
-                                 by XCMPLX_1:44
-         .= [*(x^2*x-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y+0*y)+x*(2*(x*y))*]
-                                  by XCMPLX_1:44
+         .= [*(x^2*x-y^2*x+0*x)-2*(x*y)*y,(x^2-y^2+0)*y+x*(2*(x*y))*] by
+COMPLEX1:7
          .= [*(x*x*x-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y+0*y)+x*(2*(x*y))*]
                                 by SQUARE_1:def 3
          .= [*(x|^1*x*x-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y)+x*(2*(x*y))*]
@@ -708,39 +606,19 @@ proof
                                 by NEWTON:10
          .= [*(x|^ 3-y^2*x)-2*(x*y)*y,(x^2*y-y|^ (1+1)*y)+x*(2*(x*y))*]
                                 by NEWTON:11
-         .= [*(x|^ 3-y^2*x)-2*(x*y)*y,(x^2*y-y|^ (2+1))+x*(2*(x*y))*]
-                                by NEWTON:11
-         .= [*(x|^ 3-y^2*x)-2*(x*y*y),(x^2*y-y|^ (2+1))+x*(2*(x*y))*]
-                                by XCMPLX_1:4
-         .= [*(x|^ 3-y^2*x)-2*(x*(y*y)),(x^2*y-y|^ (2+1))+x*(2*(x*y))*]
-                                by XCMPLX_1:4
+         .= [*(x|^ 3-y^2*x)-2*(x*(y*y)),(x^2*y-y|^ (2+1))+x*(2*(x*y))*] by
+NEWTON:11
          .= [*x|^ 3-y^2*x-2*(x*y^2),(x^2*y-y|^ 3)+x*(2*(x*y))*]
                                 by SQUARE_1:def 3
-         .= [*x|^ 3-y^2*x-2*x*y^2,(x^2*y-y|^ 3)+x*(2*(x*y))*] by XCMPLX_1:4
-         .= [*x|^ 3-x*y^2-2*x*y^2,x^2*y-y|^ 3+2*(x*(x*y))*] by XCMPLX_1:4
-         .= [*x|^ 3-x*y^2-2*x*y^2,x^2*y-y|^ 3+2*(x*x*y)*] by XCMPLX_1:4
-         .= [*x|^ 3-x*y^2-2*x*y^2,x^2*y-y|^ 3+2*(x^2*y)*] by SQUARE_1:def 3
-         .= [*x|^ 3-1*(x*y^2)-2*(x*y^2),x^2*y-y|^ 3+2*(x^2*y)*] by XCMPLX_1:4
-         .= [*x|^ 3-1*(x*y^2)-2*(x*y^2),-y|^ 3+2*(x^2*y)+x^2*y*]
-           by XCMPLX_1:156
-         .= [*x|^ 3-1*(x*y^2)-2*(x*y^2),
-                      -y|^ 3+(1*(x^2*y)+2*(x^2*y)+0*(x^2*y))*] by XCMPLX_1:1
-         .= [*x|^ 3-1*(x*y^2)-2*(x*y^2),
-                                   -y|^ 3+((1+2+0)*(x^2*y))*] by XCMPLX_1:9
-         .= [*x|^ 3+(-1*(x*y^2)-2*(x*y^2)),-y|^ 3+3*(x^2*y)*]
-           by XCMPLX_1:158
-         .= [*x|^ 3+(-(2*(x*y^2)+1*(x*y^2)+0*(x*y^2)))
-                              ,-y|^ 3+3*(x^2*y)*] by XCMPLX_1:161
-         .= [*x|^ 3+(-((2+1+0)*(x*y^2))) ,-y|^ 3+3*(x^2*y)*] by XCMPLX_1:9
-         .= [*-(-x|^ 3+3*(x*y^2)) ,-y|^ 3+3*(x^2*y)*] by XCMPLX_1:141
-         .= [*x|^ 3-3*(x*y^2) ,-y|^ 3+3*(x^2*y)*] by XCMPLX_1:163
-         .= [*x|^ 3-3*x*y^2 ,-y|^ 3+3*(x^2*y)*] by XCMPLX_1:4
-         .= [*x|^ 3-3*x*y^2 ,-y|^ 3+3*x^2*y*] by XCMPLX_1:4;
+         .= [*x|^ 3-x*y^2-2*x*y^2,x^2*y-y|^ 3+2*(x*x*y)*]
+         .= [*x|^ 3-1*(x*y^2)-2*(x*y^2),x^2*y-y|^ 3+2*(x^2*y)*] by SQUARE_1:def
+3
+         .= [*x|^ 3-3*x*y^2 ,-y|^ 3+3*x^2*y*];
       hence thesis by COMPLEX1:7;
 end;
 
 theorem
-     (for z holds Poly_3(a,b,c,d,z) = Poly_3(a',b',c',d',z)) implies
+      (for z holds Poly_3(a,b,c,d,z) = Poly_3(a',b',c',d',z)) implies
     a = a' & b = b' & c = c' & d = d'
 proof
         assume
@@ -757,7 +635,7 @@ proof
          .=[*a',0*]*0c^3+b'*0c^2+c'*0c+d' by Def1
          .=[*a',0*]*0c^3+[*b',0*]*0c^2+c'*0c+d' by Def1
          .=[*a',0*]*0c^3+[*b',0*]*0c^2+[*c',0*]*0c+d' by Def1
-         .=[*a',0*]*0c+[*b',0*]*0c^2+[*c',0*]*0c+[*d',0*] by Th8,Def2
+         .=[*a',0*]*0c+[*b',0*]*0c^2+[*c',0*]*0c+[*d',0*] by Def2,Th8
          .=0c+[*b',0*]*0c^2+[*c',0*]*0c+[*d',0*] by COMPLEX1:28
          .=[*b',0*]*0c^2+[*c',0*]*0c+[*d',0*] by COMPLEX1:22
          .=[*b',0*]*0c^2+0c+[*d',0*] by COMPLEX1:28
@@ -766,8 +644,8 @@ proof
          .=[*b',0*]*0c+[*d',0*] by COMPLEX1:28
          .=0c+[*d',0*] by COMPLEX1:28
          .=[*d',0*] by COMPLEX1:22;
-         then A2: [*d',0*]= 0c+[*b,0*]*0c^2+[*c,0*]*0c+[*d,0*] by Th8,COMPLEX1
-:28
+         then A2: [*d',0*]= 0c+[*b,0*]*0c^2+[*c,0*]*0c+[*d,0*] by Th8,COMPLEX1:
+28
          .= [*b,0*]*0c^2+[*c,0*]*0c+[*d,0*] by COMPLEX1:22
          .= [*b,0*]*0c^2+0c+ [*d,0*] by COMPLEX1:28
          .= [*b,0*]*0c^2+ [*d,0*] by COMPLEX1:22
@@ -776,7 +654,7 @@ proof
          .= 0c+ [*d,0*] by COMPLEX1:28
          .=[*d,0*] by COMPLEX1:22;
  then A3:   d = d' by ARYTM_0:12;
-          Poly_3(a,b,c,d,1r) =  Poly_3(a',b',c',d',1r) by A1;
+           Poly_3(a,b,c,d,1r) =  Poly_3(a',b',c',d',1r) by A1;
          then Poly_3(a',b',c',d',1r)=a*1r^3+b*1r^2+c*1r+d by Def5
          .=[*a,0*]*1r^3+b*1r^2+c*1r+d by Def1
          .=[*a,0*]*1r^3+[*b,0*]*1r^2+c*1r+d by Def1
@@ -787,7 +665,7 @@ proof
          .= [*a',0*]*1r^3+b'*1r^2+c'*1r+d' by Def1
          .= [*a',0*]*1r^3+[*b',0*]*1r^2+c'*1r+d' by Def1
          .= [*a',0*]*1r^3+[*b',0*]*1r^2+[*c',0*]*1r+d' by Def1
-         .=[*a',0*]*1r+[*b',0*]*1r^2+[*c',0*]*1r+[*d',0*] by Th9,Def2
+         .=[*a',0*]*1r+[*b',0*]*1r^2+[*c',0*]*1r+[*d',0*] by Def2,Th9
          .=[*a',0*]+[*b',0*]*1r^2+[*c',0*]*1r+[*d',0*] by COMPLEX1:29
          .=[*a',0*]+[*b',0*]*1r^2+[*c',0*]+[*d',0*] by COMPLEX1:29
          .=[*a',0*]+[*b',0*]*(1r*1r)+[*c',0*]+[*d',0*] by SQUARE_1:def 3
@@ -808,10 +686,10 @@ proof
  then A4:   a+b+c+d = a'+b'+c'+d' by ARYTM_0:12;
          set r1 = a+b+c;
          set r2 = a'+b'+c';
-          r1-r2 = d - d by A4,XCMPLX_1:33,A3
-              .=  0 by XCMPLX_1:14;
+           r1-r2 = d - d by A3,A4,XCMPLX_1:33
+              .=  0;
  then A5:   r1 = r2 by XCMPLX_1:15;
-          Poly_3(a,b,c,d,-1r) =  Poly_3(a',b',c',d',-1r) by A1;
+           Poly_3(a,b,c,d,-1r) =  Poly_3(a',b',c',d',-1r) by A1;
          then Poly_3(a',b',c',d',-1r)=a*(-1r)^3+b*(-1r)^2+c*(-1r)+d by Def5
          .=[*a,0*]*(-1r)^3+b*(-1r)^2+c*(-1r)+d by Def1
          .=[*a,0*]*(-1r)^3+[*b,0*]*(-1r)^2+c*(-1r)+d by Def1
@@ -825,9 +703,8 @@ proof
          .=[*a',0*]*(-1r)^3+[*b',0*]*(-1r)^2+[*c',0*]*(-1r)+[*d',0*] by Def2
          .=[*a',0*]*(-1r)+[*b',0*]*((-1r)*(-1r))+[*c',0*]*(-1r)+[*d',0*]
                                         by Th10,SQUARE_1:def 3
-         .=-[*a',0*]+[*b',0*]+[*c',0*]*(-1)+[*d',0*] by XCMPLX_1:180,
-            COMPLEX1:def 7
-         .=-[*a',0*]+[*b',0*]+-[*c',0*]+[*d',0*] by XCMPLX_1:180
+         .=-[*a',0*]+[*b',0*]+[*c',0*]*(-1)+[*d',0*] by COMPLEX1:def 7,XCMPLX_1
+:180
          .=[*-Re [*a',0*],-Im [*a',0*]*]+[*b',0*]+-[*c',0*]+[*d',0*]
                                by COMPLEX1:def 11
          .=[*-a',-Im [*a',0*]*]+[*b',0*]+-[*c',0*]+[*d',0*] by COMPLEX1:7
@@ -842,9 +719,7 @@ proof
          then [*-a'+b'+(-c')+d',0+0*]
          =[*a,0*]*(-1r)+[*b,0*]*((-1r)*(-1r))+[*c,0*]*(-1r)+[*d,0*]
                                              by Th10,SQUARE_1:def 3
-         .=-[*a,0*]+[*b,0*]+[*c,0*]*(-1)+[*d,0*] by XCMPLX_1:180,
-             COMPLEX1:def 7
-         .=-[*a,0*]+[*b,0*]+-[*c,0*]+[*d,0*] by XCMPLX_1:180
+         .=-[*a,0*]+[*b,0*]+[*c,0*]*(-1)+[*d,0*] by COMPLEX1:def 7,XCMPLX_1:180
          .=[*-Re [*a,0*],-Im [*a,0*]*]+[*b,0*]+-[*c,0*]+[*d,0*]
                                by COMPLEX1:def 11
          .=[*-a,-Im [*a,0*]*]+[*b,0*]+-[*c,0*]+[*d,0*] by COMPLEX1:7
@@ -856,50 +731,22 @@ proof
          .=[*-a+b,0+0*]+[*-c,0*]+[*d,0*] by COMPLFLD:2
          .=[*-a+b+(-c),0+0*]+[*d,0*] by COMPLFLD:2
          .=[*-a+b+(-c)+d,0+0*] by COMPLFLD:2;
-         then -a+b+(-c)+d = -a'+b'+(-c')+d' by ARYTM_0:12;
-         then -a+b-c+d = -a'+b'+(-c')+d' by XCMPLX_0:def 8;
- then A6:   -a+b-c+d = -a'+b'-c'+d' by XCMPLX_0:def 8;
+         then A6: -a+b-c+d = -a'+b'+(-c')+d' by ARYTM_0:12;
          set s1 = -a+b-c;
          set s2 = -a'+b'-c';
- A7:   s1-s2 = d - d by A6,XCMPLX_1:33,A3
-              .= 0 by XCMPLX_1:14;
-         then r1+s1 = r2+s2 by XCMPLX_1:15,A5
-          .=(a'+b'+c')+(-c'-a'+b') by XCMPLX_1:166
-          .=(b'+a'+c')+(-(c'+a')+b') by XCMPLX_1:161
-          .=(b'+a'+c')+-(c'+a')+b' by XCMPLX_1:1
-          .=b'+(a'+c')+-(c'+a')+b' by XCMPLX_1:1
-          .=b'+0+b' by XCMPLX_1:137
-          .=2*b' by XCMPLX_1:11;
-          then A8: 2*b' = (a+b+c)+(-c-a+b) by XCMPLX_1:166
-          .= ( b+a+c)+(-(c+a)+b) by XCMPLX_1:161
-          .= ( b+a+c)+-(c+a)+b by XCMPLX_1:1
-          .= b+(a+c)+-(c+a)+b by XCMPLX_1:1
-          .= b+0+b by XCMPLX_1:137
-          .=2*b by XCMPLX_1:11;
-           r1-s1 = r2-s2 by XCMPLX_1:15,A5,A7
-          .= a'+b'+c'- -( a' - b' +c') by XCMPLX_1:169
-          .= a'+b'+c'+( a'-b'+c')by XCMPLX_1:151
-          .= a'+b'+c'+(-b'+a'+c')by XCMPLX_0:def 8
-          .= a'+b'+c'+(-(b'-a'-c')) by XCMPLX_1:170
-          .= a'+b'+c'-(b'-a'-c') by XCMPLX_0:def 8
-          .= a'+b'+c'-(b'-(a'+c')) by XCMPLX_1:36
-          .= a'+b'+c'-b'+(a'+c') by XCMPLX_1:37
-          .= a'+b'-b'+c'+(a'+c') by XCMPLX_1:29
-          .= a'+c'+(a'+c') by XCMPLX_1:26;
-         then 2*(a'+c') = a+b+c-(-a+b-c) by XCMPLX_1:11
-            .= a+b+c--(a-b+c) by XCMPLX_1:169
-            .= a+b+c+(a-b+c) by XCMPLX_1:151
-            .= a+b+c+(-b+a+c) by XCMPLX_0:def 8
-            .= a+b+c+(-(b-a-c)) by XCMPLX_1:170
-            .= a+b+c-(b-a-c) by XCMPLX_0:def 8
-            .= a+b+c-(b-(a+c)) by XCMPLX_1:36
-            .= a+b+c-b+(a+c) by XCMPLX_1:37
-            .= a+b-b+c+(a+c) by XCMPLX_1:29
-            .= a +c +(a+c) by XCMPLX_1:26
-            .= 2*(a+c) by XCMPLX_1:11;
+ A7:   s1-s2 = d - d by A3,A6,XCMPLX_1:33
+              .= 0;
+         then r1+s1 =b'+0+b' by A5
+          .=2*b';
+          then A8: 2*b' = ( b+a+c)+(-(c+a)+b)
+          .=2*b;
+            r1-s1 = a'+b'+c'-(b'-a'-c') by A5,A7,XCMPLX_1:15
+          .= a'+c'+(a'+c');
+         then 2*(a'+c') = a+b+c-(b-a-c)
+            .= 2*(a+c);
            then a'+c' = a+c by XCMPLX_1:5;
  then A9:     a-a' = c'-c by XCMPLX_1:33;
-          Poly_3(a,b,c,d,[*2,0*]) =  Poly_3(a',b',c',d',[*2,0*]) by A1;
+           Poly_3(a,b,c,d,[*2,0*]) =  Poly_3(a',b',c',d',[*2,0*]) by A1;
          then Poly_3(a',b',c',d',[*2,0*])
          =a*[*2,0*]^3+b*[*2,0*]^2+c*[*2,0*]+d by Def5
          .=[*a,0*]*[*2,0*]^3+b*[*2,0*]^2+c*[*2,0*]+d by Def1
@@ -949,26 +796,20 @@ proof
   then A10:   a*8+b*4+c*2+d = a'*8+b'*4+c'*2+d' by ARYTM_0:12;
          set t1=a*8+b*4+c*2;
          set t2=a'*8+b'*4+c'*2;
-  A11:  t1 - t2 =d - d by A3,XCMPLX_1:33,A10
-                .=0 by XCMPLX_1:14;
-  A12:  (a - a')*8 = (c' -c)*2
+  A11:  t1 - t2 =d - d by A3,A10,XCMPLX_1:33
+                .=0;
+    (a - a')*8 = (c' -c)*2
          proof
-           a*8+ b*4 +c*2 = a'*8 + b'*4 +c'*2 by A11,XCMPLX_1:15;
-          then a*8+ (b*4 +c*2) = a'*8 + b'*4 +c'*2 by XCMPLX_1:1
-                        .= a'*8 + (b'*4 +c'*2) by XCMPLX_1:1;
+           a*8+ (b*4 +c*2) = a'*8 + (b'*4 +c'*2) by A11,XCMPLX_1:15;
           then a*8 - a'*8 = b'*4 +c'*2 -( b*4 +c*2) by XCMPLX_1:33
-                  .= b'*4 +c'*2 - b*4 -c*2 by XCMPLX_1:36
-                  .= b'*4 - b*4+c'*2 -c*2 by XCMPLX_1:29
+                  .= b'*4 - b*4+c'*2 -c*2
                   .= (b*4 - b*4)+c'*2 -c*2 by A8,XCMPLX_1:5
-                  .=  0 +c'*2 -c*2 by XCMPLX_1:14;
-          then (a - a')*8 =  c'*2 -c*2 by XCMPLX_1:40;hence thesis by
-XCMPLX_1:40;
+                  .=  0 +c'*2 -c*2;hence thesis by XCMPLX_1:40;
          end;
- A13:   8-2=6;
-          (c' - c)*8 - (c' -c)*2 = 0 by A9,XCMPLX_1:14,A12;
-         then (c' - c)*6 = 0 by A13,XCMPLX_1:40;
+          then (c' - c)*8 - (c' -c)*2 = 0 by A9;
+         then (c' - c)*6 = 0;
           then c' - c = 0 or 6 = 0 by XCMPLX_1:6;
-   hence thesis by A2,A8,A9,ARYTM_0:12,XCMPLX_1:15,5;
+   hence thesis by A2,A8,A9,ARYTM_0:12,XCMPLX_1:5,15;
 end;
 
 theorem  Th13:
@@ -976,85 +817,45 @@ theorem  Th13:
 proof
   A1:  (z+h)^3 = (z+h)^2*(z+h) by Def4
           .=((z+h)*(z+h))*(z+h) by SQUARE_1:def 3
-          .=((z+h)*z+(z+h)*h)*(z+h) by XCMPLX_1:8
-          .=((z*z+h*z)+(z+h)*h)*(z+h) by XCMPLX_1:8
-          .=((z*z+h*z)+(z*h+h*h))*(z+h) by XCMPLX_1:8
-          .=(z*z+h*z)*(z+h)+(z*h+h*h)*(z+h) by XCMPLX_1:8
-          .=((z*z)*(z+h)+(h*z)*(z+h))+(z*h+h*h)*(z+h) by XCMPLX_1:8
-          .=(((z*z)*z+(z*z)*h)+(h*z)*(z+h))+(z*h+h*h)*(z+h) by XCMPLX_1:8
+          .=(((z*z)*z+(z*z)*h)+(h*z)*(z+h))+(z*h+h*h)*(z+h)
           .=((z^2*z+(z*z)*h)+(h*z)*(z+h))+(z*h+h*h)*(z+h) by SQUARE_1:def 3
           .=((z^2*z+z^2*h)+(h*z)*(z+h))+(z*h+h*h)*(z+h) by SQUARE_1:def 3
-          .=((z^3+z^2*h)+(h*z)*(z+h))+(z*h+h*h)*(z+h) by Def4
-          .=((z^3+z^2*h)+(h*z*z+(h*z)*h))+(z*h+h*h)*(z+h) by XCMPLX_1:8
-          .=((z^3+z^2*h)+(h*(z*z)+z*h*h))+(z*h+h*h)*(z+h) by XCMPLX_1:4
-          .=((z^3+z^2*h)+(h*(z*z)+z*(h*h)))+(z*h+h*h)*(z+h) by XCMPLX_1:4
+          .=((z^3+z^2*h)+(h*(z*z)+z*(h*h)))+(z*h+h*h)*(z+h) by Def4
           .=((z^3+z^2*h)+(h*(z^2)+z*(h*h)))+(z*h+h*h)*(z+h) by SQUARE_1:def 3
           .=((z^3+z^2*h)+(h*(z^2)+z*(h^2)))+(z*h+h*h)*(z+h) by SQUARE_1:def 3
-          .=(z^3+z^2*h+h*(z^2)+z*(h^2))+(z*h+h*h)*(z+h) by XCMPLX_1:1;
+          .=(z^3+z^2*h+h*(z^2)+z*(h^2))+(z*h+h*h)*(z+h);
           set t = (z*h+h*h)*(z+h);
-           t = (z*h)*(z+h)+(h*h)*(z+h) by XCMPLX_1:8
-           .= ((z*h)*z+(z*h)*h)+(h*h)*(z+h) by XCMPLX_1:8
-           .= ((z*h)*z+(z*h)*h)+((h*h)*z+(h*h)*h) by XCMPLX_1:8
+            t = ((z*h)*z+(z*h)*h)+((h*h)*z+(h*h)*h)
            .= (h*z*z+z*h*h)+((h^2)*z+(h*h)*h) by SQUARE_1:def 3
-           .= (h*z*z+z*h*h)+((h^2)*z+h^2*h) by SQUARE_1:def 3
-           .= (h*(z*z)+z*h*h)+((h^2)*z+h^2*h) by XCMPLX_1:4
-           .= (h*(z*z)+z*(h*h))+((h^2)*z+h^2*h) by XCMPLX_1:4
+           .= (h*(z*z)+z*h*h)+((h^2)*z+h^2*h) by SQUARE_1:def 3
            .= (h*(z^2)+z*(h*h))+((h^2)*z+h^2*h) by SQUARE_1:def 3
            .= (h*(z^2)+z*(h^2))+((h^2)*z+h^2*h) by SQUARE_1:def 3
            .= (h*(z^2)+z*(h^2))+((h^2)*z+h^3) by Def4
-           .= (h*(z^2)+z*(h^2))+(h^2)*z+h^3 by XCMPLX_1:1;
-         then (z+h)^3 =(z^3+z^2*h+h*(z^2)+z*(h^2))+((h*(z^2)+z*(h^2))+((h^2)*z
-+h^3))
-                                        by A1,XCMPLX_1:1
-           .=(z^3+z^2*h+h*(z^2)+z*(h^2))+(h*(z^2)+z*(h^2))+((h^2)*z+h^3)
-                                        by XCMPLX_1:1
-           .=(z^3+z^2*h+h*(z^2)+z*(h^2))+(h*(z^2)+z*(h^2))+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=(z^3+z^2*h+h*(z^2))+z*(h^2)+h*(z^2)+z*(h^2)+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=(z^3+z^2*h+h*(z^2))+h*(z^2)+z*(h^2)+z*(h^2)+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=z^3+(z^2*h+h*(z^2))+h*(z^2)+z*(h^2)+z*(h^2)+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=z^3+(z^2*h+h*(z^2)+h*(z^2))+z*(h^2)+z*(h^2)+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=(z^3+(z^2*h+h*(z^2)+h*(z^2)))+(z*(h^2)+z*(h^2))+(h^2)*z+h^3
-                                        by XCMPLX_1:1
-           .=(z^3+(h*(z^2)+h*(z^2)+h*(z^2)))+(z*(h^2)+z*(h^2)+z*(h^2))+h^3
-                                        by XCMPLX_1:1
-           .=(z^3+((h+h)*(z^2)+h*(z^2)))+(z*(h^2)+z*(h^2)+z*(h^2))+h^3
-                                        by XCMPLX_1:8
-           .=(z^3+((h+h+h)*(z^2)))+(z*(h^2)+z*(h^2)+z*(h^2))+h^3
-                                        by XCMPLX_1:8
-           .=(z^3+((h+h+h)*(z^2)))+((z+z)*(h^2)+z*(h^2))+h^3 by XCMPLX_1:8
-           .=(z^3+((h+h+h)*(z^2)))+((z+z+z)*(h^2))+h^3 by XCMPLX_1:8
-           .=(z^3+(3*h)*(z^2))+((z+z+z)*(h^2))+h^3 by XCMPLX_1:12
-           .=(z^3+(3*h)*(z^2))+3*z*(h^2)+h^3 by XCMPLX_1:12
+           .= (h*(z^2)+z*(h^2))+(h^2)*z+h^3;
+         then (z+h)^3 =(z^3+(3*h)*(z^2))+3*z*(h^2)+h^3 by A1
            .=(z^3+(3*h)*(z^2))+[*3,0*]*z*(h^2)+h^3 by Def1
-           .=(z^3+(3*h)*(z^2))+[*3,0*]*(h^2)*z+h^3 by XCMPLX_1:4
+           .=(z^3+(3*h)*(z^2))+[*3,0*]*(h^2)*z+h^3
            .=(z^3+(3*h)*(z^2))+3*(h^2)*z+h^3 by Def1;
       hence thesis;
 end;
 
 theorem
-     (z*h)^3 = z^3*h^3
+      (z*h)^3 = z^3*h^3
 proof
-    (z*h)^3 = (z*h)^2*(z*h) by Def4
+     (z*h)^3 = (z*h)^2*(z*h) by Def4
            .= (z*h)*(z*h)*(z*h) by SQUARE_1:def 3
-           .= (z*h)*h*z*(z*h) by XCMPLX_1:4
-           .= z*(h*h)*z*(z*h) by XCMPLX_1:4
+           .= z*(h*h)*z*(z*h)
            .= z*h^2*z*(z*h) by SQUARE_1:def 3
-           .= (z*(z*h^2))*h*z by XCMPLX_1:4
-           .= (z*z*h^2)*h*z by XCMPLX_1:4
+           .= (z*z*h^2)*h*z
            .= (z^2*h^2)*h*z by SQUARE_1:def 3
-           .= z^2*(h^2*h)*z by XCMPLX_1:4
+           .= z^2*(h^2*h)*z
            .= z^2*h^3*z by Def4
-           .= z^2*z*h^3 by XCMPLX_1:4;
+           .= z^2*z*h^3;
    hence thesis by Def4;
 end;
 
 theorem
-     b<>0 & Poly_3(0,b,c,d,z)=0c & delta(b,c,d)>=0 implies
+      b<>0 & Poly_3(0,b,c,d,z)=0c & delta(b,c,d)>=0 implies
        z = (-c+sqrt delta(b,c,d))/(2*b) or
        z = (-c-sqrt delta(b,c,d))/(2*b) or
        z = -c/(2*b)
@@ -1074,7 +875,7 @@ proof
 end;
 
 theorem
-     b<>0 & Poly_3(0,b,c,d,z)=0c & delta(b,c,d)<0 implies
+      b<>0 & Poly_3(0,b,c,d,z)=0c & delta(b,c,d)<0 implies
       z = [*-c/(2*b),sqrt (-delta(b,c,d))/(2*b)*] or
       z = [*-c/(2*b),-sqrt (-delta(b,c,d))/(2*b)*]
 proof
@@ -1094,7 +895,7 @@ proof
 end;
 
 theorem
-     a<>0 & Poly_3(a,0,c,0,z)=0 & 4*a*c <= 0 implies
+      a<>0 & Poly_3(a,0,c,0,z)=0 & 4*a*c <= 0 implies
        z = (sqrt -4*a*c)/(2*a) or
        z = (-sqrt -4*a*c)/(2*a) or
        z = 0
@@ -1105,30 +906,29 @@ proof
          .=[*a,0*]*(z^3)+0*z^2+c*z+0 by Def1
          .=[*a,0*]*(z^3)+0*z^2+[*c,0*]*z+0 by Def1;
          then [*a,0*]*(z^2*z)+[*c,0*]*z = 0 by Def4;
-         then ([*a,0*]*z^2)*z+[*c,0*]*z = 0 by XCMPLX_1:4;
-         then ([*a,0*]*z^2+[*c,0*])*z = 0 by XCMPLX_1:8;
+         then ([*a,0*]*z^2+[*c,0*])*z = 0;
          then [*a,0*]*z^2+[*c,0*] = 0 or z = 0 by XCMPLX_1:6;
          then (a*z^2+0*z)+[*c,0*]=0 or z = 0 by Def1;
          then (a*z^2+0*z) + c = 0 or z = 0 by Def2;
  then A2:   Poly2(a,0,c,z) = 0 or z = 0 by POLYEQ_1:def 2;
-          -4*a*c >= -0 by A1,REAL_1:50;
+           -4*a*c >= -0 by A1,REAL_1:50;
          then 0^2-4*a*c >= 0 by SQUARE_1:60,XCMPLX_1:150;
          then delta(a,0,c) >= 0 by QUIN_1:def 1;
             then z = (-0+sqrt delta(a,0,c))/(2*a)
             or z = (-0-sqrt delta(a,0,c))/(2*a)
             or z= 0
-            or z = -0/(2*a) by A2,Th4,A1;
+            or z = -0/(2*a) by A1,A2,Th4;
             then z = (sqrt delta(a,0,c))/(2*a)
             or z = (-sqrt delta(a,0,c))/(2*a)
-            or z = 0 by XCMPLX_1:150;
+            or z = 0;
             then z = (sqrt (0-4*a*c))/(2*a)
             or z = (-sqrt (0-4*a*c))/(2*a)
-            or z= 0 by SQUARE_1:60,QUIN_1:def 1;
-    hence thesis by XCMPLX_1:150;
+            or z= 0 by QUIN_1:def 1,SQUARE_1:60;
+    hence thesis;
 end;
 
 theorem
-     a<>0 & Poly_3(a,b,c,0,z)=0 & delta(a,b,c)>=0 implies
+      a<>0 & Poly_3(a,b,c,0,z)=0 & delta(a,b,c)>=0 implies
        z = (-b+sqrt delta(a,b,c))/(2*a) or
        z = (-b-sqrt delta(a,b,c))/(2*a) or
        z = -b/(2*a) or
@@ -1136,19 +936,15 @@ theorem
 proof
          assume
  A1:   a<>0 & Poly_3(a,b,c,0,z) = 0 & delta(a,b,c)>=0;
-         then  0=a*(z^3)+b*z^2+c*z+0 by Def5
+         then 0=a*(z^3)+b*z^2+c*z+0 by Def5
          .=[*a,0*]*(z^3)+b*z^2+c*z+0 by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+c*z+0 by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+0 by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+[*0,0*] by Def2;
           then [*a,0*]*(z^2*z)+[*b,0*]*z^2+[*c,0*]*z = 0 by Def4,Lm1,COMPLEX1:
-def
-6;
+def 6;
          then [*a,0*]*(z^2*z)+[*b,0*]*(z*z)+[*c,0*]*z = 0 by SQUARE_1:def 3;
-         then [*a,0*]*z^2*z+[*b,0*]*(z*z)+[*c,0*]*z = 0 by XCMPLX_1:4;
-         then [*a,0*]*z^2*z+[*b,0*]*z*z+[*c,0*]*z = 0 by XCMPLX_1:4;
-         then ([*a,0*]*z^2+[*b,0*]*z)*z+[*c,0*]*z = 0 by XCMPLX_1:8;
-         then ([*a,0*]*z^2+[*b,0*]*z+[*c,0*])*z = 0 by XCMPLX_1:8;
+         then ([*a,0*]*z^2+[*b,0*]*z+[*c,0*])*z = 0;
          then [*a,0*]*z^2+[*b,0*]*z+[*c,0*] = 0 or z = 0
            by XCMPLX_1:6;
          then a*z^2+[*b,0*]*z+[*c,0*] = 0 or z = 0 by Def1;
@@ -1159,7 +955,7 @@ def
 end;
 
 theorem
-     a<>0 & Poly_3(a,b,c,0,z)=0c & delta(a,b,c)<0 implies
+      a<>0 & Poly_3(a,b,c,0,z)=0c & delta(a,b,c)<0 implies
       z= [*-b/(2*a),sqrt (-delta(a,b,c))/(2*a)*] or
       z= [*-b/(2*a),-sqrt (-delta(a,b,c))/(2*a)*] or
       z = 0c
@@ -1173,13 +969,11 @@ proof
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+[*0,0*] by Def2;
          then [*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+0 = 0c by ARYTM_0:def 7;
          then [*a,0*]*(z^2*z)+[*b,0*]*z^2+[*c,0*]*z = 0c by Def4;
-         then [*a,0*]*(z^2*z)+[*b,0*]*(z*z)+[*c,0*]*z = 0c by SQUARE_1:def 3;
-         then [*a,0*]*z^2*z+[*b,0*]*(z*z)+[*c,0*]*z = 0c by XCMPLX_1:4;
-         then [*a,0*]*z^2*z+[*b,0*]*z*z+[*c,0*]*z = 0c by XCMPLX_1:4;
-         then ([*a,0*]*z^2+[*b,0*]*z)*z+[*c,0*]*z = 0c by XCMPLX_1:8;
+         then [*a,0*]*z^2*z+[*b,0*]*(z*z)+[*c,0*]*z = 0c by SQUARE_1:def 3;
+         then ([*a,0*]*z^2+[*b,0*]*z)*z+[*c,0*]*z = 0c;
          then ([*a,0*]*z^2+[*b,0*]*z+[*c,0*])*z = 0c by XCMPLX_1:8;
          then [*a,0*]*z^2+[*b,0*]*z+[*c,0*] = 0c or z = 0c
-           by XCMPLX_1:6,COMPLEX1:def 6;
+           by COMPLEX1:def 6,XCMPLX_1:6;
          then a*z^2+[*b,0*]*z+[*c,0*] = 0c or z = 0c by Def1;
          then a*z^2+b*z+[*c,0*] = 0c or z = 0c by Def1;
          then a*z^2+b*z+c = 0c or z = 0c by Def2;
@@ -1192,27 +986,23 @@ theorem Th20:
 proof
          assume
  A1:   a>=0 & y^2 = a;
-         then 1*y^2 +0*y+(-a) = -(-a+a) by XCMPLX_1:141;
-         then 1*y^2 +0*y+(-a) = a-a by XCMPLX_1:163;
-         then 1*y^2 +0*y+(-a) = 0 by XCMPLX_1:14;
+         then 1*y^2 +0*y+(-a) = a-a;
  then A2:   Poly2(1,0,-a,y) =0 by POLYEQ_1:def 2;
-          delta(1,0,-a) = 0^2 - 4*1*(-a) by QUIN_1:def 1;
-         then delta(1,0,-a) = -4*(-a) by XCMPLX_1:150,SQUARE_1:60;
- then A3:   delta(1,0,-a) = 4*a by XCMPLX_1:179;
-         then delta(1,0,-a) >= 0 by REAL_2:121,A1;
+           delta(1,0,-a) = 0^2 - 4*1*(-a) by QUIN_1:def 1;
+         then delta(1,0,-a) = -4*(-a) by SQUARE_1:60,XCMPLX_1:150;
+ then A3:   delta(1,0,-a) = 4*a;
+         then delta(1,0,-a) >= 0 by A1,REAL_2:121;
          then y=(-0+sqrt delta(1,0,-a))/(2*1) or
-         y=(-0-sqrt delta(1,0,-a))/(2*1) by POLYEQ_1:5,A2;
+         y=(-0-sqrt delta(1,0,-a))/(2*1) by A2,POLYEQ_1:5;
          then y=(sqrt (4*a))/2 or
-         y=(-sqrt (4*a))/2 by A3,XCMPLX_1:150;
+         y=(-sqrt (4*a))/2 by A3;
          then y= sqrt a * 2 /2 or
-         y=(-(2 * sqrt a))/2 by SQUARE_1:85,A1,SQUARE_1:97;
-         then y= sqrt a * 2 /2 or
-         y=-(sqrt a * 2/2) by XCMPLX_1:188;
-    hence y= sqrt a or y=-sqrt a by XCMPLX_1:90;
+         y=(-(2 * sqrt a))/2 by A1,SQUARE_1:85,97;
+    hence y= sqrt a or y=-sqrt a;
 end;
 
 theorem
-     a<>0 & Poly_3(a,0,c,d,z)=0c & Im z = 0
+      a<>0 & Poly_3(a,0,c,d,z)=0c & Im z = 0
        implies
        (for u,v st Re z = u+v & 3*v*u+c/a=0 holds
           z = 3-root(-d/(2*a)+sqrt(d^2/(4*a^2)+(c/(3*a)) |^ 3))
@@ -1233,8 +1023,8 @@ proof
          set y=Im z;
          set p=c/a;
  A4:   z = [*Re z,Im z*] by COMPLEX1:8
-           .= x by ARYTM_0:def 7,A2;
-          0 =a*(z^3)+0*z^2+c*z+d by COMPLEX1:def 6,Def5,A2
+           .= x by A2,ARYTM_0:def 7;
+           0 =a*(z^3)+0*z^2+c*z+d by A2,Def5,COMPLEX1:def 6
          .=[*a,0*]*(z^3)+0*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*0,0*]*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*0,0*]*z^2+[*c,0*]*z+d by Def1
@@ -1244,7 +1034,7 @@ proof
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
                +[*0,0*]*z^2+[*c,0*]*z+[*d,0*] by Th11
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
-               +0c*z^2+[*c,0*]*z+[*d,0*] by COMPLEX1:def 6,ARYTM_0:def 7
+               +0c*z^2+[*c,0*]*z+[*d,0*] by ARYTM_0:def 7,COMPLEX1:def 6
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
                +0c+[*c,0*]*z+[*d,0*] by COMPLEX1:28
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
@@ -1295,32 +1085,30 @@ proof
          .= [*a*(x|^ 3 - 3*x*y^2)+c*x,a*(-y|^ 3+3*x^2*y)
             +c*y*]+[*d,0*] by COMPLFLD:2
          .= [*a*(x|^ 3 - 3*x*0)+c*x+d,a*(-0|^ 3+0)
-            +0+0*] by COMPLFLD:2,SQUARE_1:60,A2
+            +0+0*] by A2,COMPLFLD:2,SQUARE_1:60
          .= [*a*(x|^ 3 - 0)+c*x+d,a*(-0)*] by NEWTON:16
          .= [*a*x|^ 3 +c*x+d,0*];
             then a"*(a*x|^ 3+c*x+d) = a"*0 by ARYTM_0:def 7;
             then a"*(x|^ 3*a)+a"*(c*x)+a"*d = 0 by XCMPLX_1:9;
-            then x|^ 3*a"*a+a"*(c*x)+a"*d = 0 by XCMPLX_1:4;
-            then x|^ 3*a"*a+a"*c*x+a"*d = 0 by XCMPLX_1:4;
-            then x|^ 3*(a*a")+a"*c*x+a"*d = 0 by XCMPLX_1:4;
+            then x|^ 3*(a*a")+a"*c*x+a"*d = 0;
             then x|^ 3*(a/a)+a"*c*x+a"*d = 0 by XCMPLX_0:def 9;
             then x|^ 3+c*a"*x+d*a" = 0
-  by XCMPLX_1:89,A1;
+  by A1,XCMPLX_1:89;
             then x|^ 3+(c/a)*x+d*a" = 0 by XCMPLX_0:def 9;
             then 1*x|^ 3+0*x^2+(c/a)*x+d/a = 0 by XCMPLX_0:def 9;
  then A5:      Poly3(1,0,c/a,d/a,x) = 0 by POLYEQ_1:def 4;
- A6:   -(d/a)/2 = -1/2*(d/a) by XCMPLX_1:106
+ A6:   -(d/a)/2 = -1/2*(d/a)
                  .= -d/(a*2) by XCMPLX_1:104;
  A7:   (d/a)^2/4=d^2/a^2/4 by SQUARE_1:69
-                 .=1/4*(d^2/a^2) by XCMPLX_1:106
+                 .=1/4*(d^2/a^2)
                  .=d^2/(a^2*4) by XCMPLX_1:104;
-          (c/a)/3 =1/3*(c/a) by XCMPLX_1:106
+           (c/a)/3 =1/3*(c/a)
                 .=c/(a*3) by XCMPLX_1:104;
       hence thesis by A3,A4,A5,A6,A7,POLYEQ_1:19;
 end;
 
 theorem
-     a<>0 & Poly_3(a,0,c,d,z)=0c & Im z <> 0 implies
+      a<>0 & Poly_3(a,0,c,d,z)=0c & Im z <> 0 implies
     (for u,v st  Re z = u+v & 3*v*u+c/(4*a)=0 & c/a>=0 holds
           z=[*3-root(d/(16*a)+sqrt((d/(16*a))^2+(c/(12*a)) |^ 3))
              +3-root(d/(16*a)-sqrt((d/(16*a))^2+(c/(12*a)) |^ 3)),
@@ -1355,17 +1143,17 @@ proof
          set y=Im z;
          set p=c/(4*a);
  A4:   z = [*x,y*] by COMPLEX1:8;
-       0c=a*(z^3)+0*z^2+c*z+d by Def5,A2
+        0c=a*(z^3)+0*z^2+c*z+d by A2,Def5
          .=[*a,0*]*(z^3)+0*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*0,0*]*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*0,0*]*z^2+[*c,0*]*z+d by Def1
          .=[*a,0*]*(z^3)+[*0,0*]*z^2+[*c,0*]*z+[*d,0*] by Def2;
  then A5:   0 = [*a,0*]*([*Re z^3,Im z^3*])+[*0,0*]*z^2+[*c,0*]*z+[*d,0*]
-                        by COMPLEX1:def 6,COMPLEX1:8
+                        by COMPLEX1:8,def 6
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
                +[*0,0*]*z^2+[*c,0*]*z+[*d,0*] by Th11
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
-               +0c+[*c,0*]*z+[*d,0*] by COMPLEX1:28,Lm1
+               +0c+[*c,0*]*z+[*d,0*] by Lm1,COMPLEX1:28
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
             +[*c,0*]*z+[*d,0*] by COMPLEX1:22
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,-(Im z)|^ 3+3*(Re z)^2
@@ -1416,84 +1204,53 @@ proof
          .= [*a*(x|^ 3 - 3*x*y^2)+c*x+d,a*(-y|^ 3+3*x^2*y)
             +c*y+0*] by COMPLFLD:2;
 then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
-           a*(-y|^(2+1)+3*x^2*y)+c*y = 0 by A5,ARYTM_0:26;
+            a*(-y|^(2+1)+3*x^2*y)+c*y = 0 by A5,ARYTM_0:26;
           then a*(-y|^2*y+3*x^2*y)+c*y = 0 by NEWTON:11;
-          then a*((-y|^2)*y+(3*x^2)*y+0*y)+c*y = 0 by XCMPLX_1:175;
+          then a*((-y|^2)*y+(3*x^2)*y+0*y)+c*y = 0;
           then a*((-y|^2+3*x^2+0)*y)+c*y = 0 by XCMPLX_1:9;
-          then (a*(-y|^2+3*x^2+0))*y+c*y+0*y = 0 by XCMPLX_1:4;
+          then (a*(-y|^2+3*x^2+0))*y+c*y+0*y = 0;
           then (a*(-y|^2+3*x^2)+c+0)*y = 0 by XCMPLX_1:9;
-          then a*(-y|^2+3*x^2+0)+c = 0 by A2,XCMPLX_1:6;
-            then a*(-y|^2)+a*(3*x^2)+a*0+c = 0 by XCMPLX_1:9;
-            then (a*(y|^2))+(-a*(y|^2)+a*(3*x^2)+c)=(a*(y|^2))+0
-                      by XCMPLX_1:175;
             then (a*(y|^2))+(-a*(y|^2)+(a*(3*x^2)+c))=(a*(y|^2))+0
-                      by XCMPLX_1:1;
+                      by A2,XCMPLX_1:6;
             then a*(y|^2)+-a*(y|^2)+(a*(3*x^2)+c) = a*(y|^2)
                            by XCMPLX_1:1;
-            then -(-a*(y|^2)+a*(y|^2))+(a*(3*x^2)+c) = a*(y|^2)
-                           by XCMPLX_1:141;
-            then (a*(y|^2)-a*(y|^2))+(a*(3*x^2)+c) = a*(y|^2)
-                           by XCMPLX_1:163;
-            then 0+(a*(3*x^2)+c) = a*(y|^2) by XCMPLX_1:14;
             then y|^(1+1) = (a*(3*x^2)+c)/a
-  by XCMPLX_1:90,A1;
+  by A1,XCMPLX_1:90;
             then y|^1*y = (a*(3*x^2)+c)/a by NEWTON:11;
             then y*y = (a*(3*x^2)+c)/a by NEWTON:10;
             then y^2 = ((3*x^2)*a+c+0)/a by SQUARE_1:def 3;
             then y^2 = (3*x^2)*a/a+c/a+0/a by XCMPLX_1:64;
- then A7:      y^2 = 3*x^2+c/a+0*a" by XCMPLX_1:90,A1;
+ then A7:      y^2 = 3*x^2+c/a+0*a" by A1,XCMPLX_1:90;
             then a*(x|^ 3 - 3*x*(3*x^2+c/a)+0)+c*x+d = 0
- by A5,ARYTM_0:def 7,A6;
+ by A5,A6,ARYTM_0:def 7;
             then a*x|^ 3 - a*(3*x*(3*x^2+c/a+0))+a*0+c*x+d = 0 by XCMPLX_1:44;
             then 0 =a*x|^ 3 - a*((3*x)*(3*x^2)+(3*x)*(c/a)+(3*x)*0)+c*x+d
                                  by XCMPLX_1:9
-            .=a*x|^ 3 - a*(3*x*3*x^2+(3*x)*(c/a))+c*x+d by XCMPLX_1:4
-            .=a*x|^ 3 - a*(3*3*x*x^2+(3*x)*(c/a))+c*x+d by XCMPLX_1:4
-            .=a*x|^ 3 - a*(9*(x*x^2)+(3*x)*(c/a))+c*x+d by XCMPLX_1:4
+            .=a*x|^ 3 - a*(9*(x*x^2)+(3*x)*(c/a))+c*x+d
             .=a*x|^ 3 - a*(9*(x*(x*x))+(3*x)*(c/a))+c*x+d by SQUARE_1:def 3
             .=a*x|^ 3 - a*(9*(x|^1*x*x)+(3*x)*(c/a))+c*x+d by NEWTON:10
             .=a*x|^ 3 - a*(9*(x|^(1+1)*x)+(3*x)*(c/a))+c*x+d by NEWTON:11
             .=a*x|^ 3 - a*(9*(x|^(2+1))+(3*x)*(c/a)+0)+c*x+d by NEWTON:11
             .=a*x|^ 3 - (a*(9*(x|^3))+a*((3*x)*(c/a))+a*0)+c*x+d by XCMPLX_1:9
-            .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(a*(c/a)))+c*x+d by XCMPLX_1:4
+            .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(a*(c/a)))+c*x+d
             .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(a*(c*a")))+c*x+d by XCMPLX_0:def 9
-            .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(c*(a"*a)))+c*x+d by XCMPLX_1:4
+            .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(c*(a"*a)))+c*x+d
             .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*(c*(a/a)))+c*x+d by XCMPLX_0:def 9
             .=a*x|^ 3 - (a*(9*(x|^3))+(3*x)*c)+c*x+d
-  by XCMPLX_1:89,A1
-            .=a*x|^ 3 - a*(9*x|^3)-(3*x)*c+c*x+d by XCMPLX_1:36
-            .=a*x|^ 3 - (a*9)*x|^3+0*x|^3-3*x*c+c*x+d by XCMPLX_1:4
-            .=(1*a - 9*a+0*a)*x|^3-3*x*c+c*x+d by XCMPLX_1:44
-            .=(1 - 9+0)*a*x|^3-3*x*c+c*x+d by XCMPLX_1:44
-            .=(1 - 9+0)*a*x|^3-(3*x*c-1*(c*x)+0*(c*x))+d by XCMPLX_1:37
-            .=(-8)*a*x|^3-(3*(c*x)-1*(c*x)+0*(c*x))+d by XCMPLX_1:4
-            .=(-8)*a*x|^3-(3-1+0)*(c*x)+d by XCMPLX_1:44
-            .=(-8)*a*x|^3-2*c*x+d by XCMPLX_1:4
-            .=(-8*a)*x|^3-2*c*x+d by XCMPLX_1:175
-            .=-(-(-8*a)*x|^3+2*c*x)+d by XCMPLX_1:163
-            .=(-8*a)*x|^3+(-(2*c)*x)+d by XCMPLX_1:141
-            .=(-8*a)*x|^3+(-2*c)*x+d by XCMPLX_1:175;
-             then (-1)*0=(-1)*((-8*a)*x|^3)+(-1)*((-2*c)*x)+(-1)*d by XCMPLX_1
-:9
-             .=(-1)*(-8*a)*x|^3+(-1)*((-2*c)*x)+(-1)*d by XCMPLX_1:4
-             .=(-1)*(-8*a)*x|^3+(-1)*(-2*c)*x+(-1)*d by XCMPLX_1:4
-             .=1*(8*a)*x|^3+(-1)*(-2*c)*x+(-1)*d by XCMPLX_1:177
-             .=(8*a)*x|^3+1*(2*c)*x+(-1)*d by XCMPLX_1:177
-             .=(8*a)*x|^3+(2*c)*x+(-d) by XCMPLX_1:180;
+  by A1,XCMPLX_1:89
+            .=(-8*a)*x|^3+(-2*c)*x+d;
+             then (-1)*0=(8*a)*x|^3+(2*c)*x+(-d);
              then (8*a)"*0=(8*a)"*((8*a)*x|^3)+(8*a)"*((2*c)*x)+(8*a)"*(-d)
                                      by XCMPLX_1:9;
- then 0=x|^3*((8*a)*(8*a)")+(8*a)"*((2*c)*x)+(8*a)"*(-d) by XCMPLX_1:4;
+ then 0=x|^3*((8*a)*(8*a)")+(8*a)"*((2*c)*x)+(8*a)"*(-d);
  then A8:       0=x|^3*((8*a)/(8*a))+(8*a)"*((2*c)*x)+(8*a)"*(-d)
             by XCMPLX_0:def 9;
-              8*a <> 0 by A1,XCMPLX_1:6;
-             then 0=x|^3+(8*a)"*((2*c)*x)+(8*a)"*(-d)
-      by XCMPLX_1:89,A8;
-             then 0=1*x|^3+0*x^2+((8*a)"*(2*c))*x+((8*a)"*(-d)) by XCMPLX_1:4;
+               8*a <> 0 by A1,XCMPLX_1:6;
+             then 0=1*x|^3+0*x^2+((8*a)"*(2*c))*x+((8*a)"*(-d)) by A8,XCMPLX_1
+:89;
          then 0=1*x|^3+0*x^2+((2*c)/(8*a))*x+((8*a)"*(-d)) by XCMPLX_0:def 9;
          then 0=1*x|^3+0*x^2+((2*c)/(8*a))*x+((-d)/(8*a)) by XCMPLX_0:def 9;
          then 0=1*x|^3+0*x^2+((2/8*c)/a)*x+((-d)/(8*a)) by XCMPLX_1:84;
-         then 0=1*x|^3+0*x^2+((1/4*c)/a)*x+((-d)/(8*a));
-         then 0=1*x|^3+0*x^2+(c/4/a)*x+((-d)/(8*a)) by XCMPLX_1:100;
          then 0=1*x|^3+0*x^2+(1/a*(c/4))*x+((-d)/(8*a))
  by XCMPLX_1:106;
          then 0=1*x|^3+0*x^2+(c/(4*a))*x+((-d)/(8*a))
@@ -1502,17 +1259,14 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
  then A9:      Poly3(1,0,c/(4*a),-d/(8*a),x) = 0 by POLYEQ_1:def 4;
              set pp = c/(4*a);
              set q = -d/(8*a);
-              -q/2=(-q)/2 by XCMPLX_1:188;
-             then -q/2=1/2*(d/(8*a)) by XCMPLX_1:106;
-             then -q/2=d/(a*8*2) by XCMPLX_1:104;
-             then A10: -q/2=d/(a*(8*2)) by XCMPLX_1:4;
-             q^2/4=
-            (d/(8*a))^2/(1^2+2*1*1+1^2) by SQUARE_1:61,SQUARE_1:59;
+              -q/2=1/2*(d/(8*a));
+             then A10: -q/2=d/(a*8*2) by XCMPLX_1:104;
+              q^2/4=
+            (d/(8*a))^2/(1^2+2*1*1+1^2) by SQUARE_1:59,61;
               then q^2/4=(d/(8*a))^2/(1+1)^2 by SQUARE_1:63;
               then q^2/4=(d/(8*a)/2)^2 by SQUARE_1:69;
-              then q^2/4=(1/2*(d/(8*a)))^2 by XCMPLX_1:106;
-              then q^2/4=(d/(a*8*2))^2 by XCMPLX_1:104;
-              then A11:q^2/4=(d/(a*(8*2)))^2 by XCMPLX_1:4;
+              then q^2/4=(1/2*(d/(8*a)))^2;
+              then A11: q^2/4=(d/(a*8*2))^2 by XCMPLX_1:104;
  A12:      x = 3-root(-q/2+sqrt(q^2/4+(pp/3) |^ 3)) +
                 3-root(-q/2-sqrt(q^2/4+(pp/3) |^ 3)) or
             x = 3-root(-q/2+sqrt(q^2/4+(pp/3) |^ 3)) +
@@ -1522,9 +1276,9 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
          by A3,A9,POLYEQ_1:19;
             set m = 3-root(-q/2+sqrt(q^2/4+(pp/3) |^ 3));
             set n = 3-root(-q/2-sqrt(q^2/4+(pp/3) |^ 3));
-             x^2>=0 by SQUARE_1:72;
+              x^2>=0 by SQUARE_1:72;
             then 3*x^2>=0 by REAL_2:121;
- then A13:      3*x^2+c/a>=0+0 by REAL_1:55,A3;
+ then A13:      3*x^2+c/a>=0+0 by A3,REAL_1:55;
                  A14: z=[*m+n,sqrt(3*(m + n )^2+c/a)*]
              or  z=[*m+n, -sqrt(3*(m + n )^2+c/a)*]
              or  z=[*2*m,sqrt(3*(2*m)^2+c/a)*]
@@ -1532,14 +1286,14 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
              or  z=[*2*n,sqrt(3*(2*n )^2+c/a)*]
              or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*]
           proof
-          now per cases by A12,XCMPLX_1:11;
+           now per cases by A12;
          case x = m + n;
            hence z=[*m+n,sqrt(3*(m + n )^2+c/a)*]
              or  z=[*m+n, -sqrt(3*(m + n )^2+c/a)*]
              or  z=[*2*m,sqrt(3*(2*m)^2+c/a)*]
              or  z=[*2*m,-sqrt(3*(2*m)^2+c/a)*]
              or  z=[*2*n,sqrt(3*(2*n )^2+c/a)*]
-             or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*] by A13,Th20,A7,A4;
+             or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*] by A4,A7,A13,Th20;
           end;
             case x = 2*m;
              hence z=[*m+n,sqrt(3*(m + n )^2+c/a)*]
@@ -1548,7 +1302,7 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
              or  z=[*2*m,-sqrt(3*(2*m)^2+c/a)*]
              or  z=[*2*n,sqrt(3*(2*n )^2+c/a)*]
              or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*]
-       by A4,Th20,A7,A13;
+       by A4,A7,A13,Th20;
             end;
             case x = 2*n;
              hence z=[*m+n,sqrt(3*(m + n )^2+c/a)*]
@@ -1557,7 +1311,7 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
              or  z=[*2*m,-sqrt(3*(2*m)^2+c/a)*]
              or  z=[*2*n,sqrt(3*(2*n )^2+c/a)*]
              or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*]
-           by A7,Th20,A13,A4;
+           by A4,A7,A13,Th20;
             end;
              end;
              hence z=[*m+n,sqrt(3*(m + n )^2+c/a)*]
@@ -1567,14 +1321,14 @@ then A6:        a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by ARYTM_0:26;
              or  z=[*2*n,sqrt(3*(2*n )^2+c/a)*]
              or  z=[*2*n,-sqrt(3*(2*n )^2+c/a)*];
            end;
-        (c/(4*a))/3=1/3*(c/(4*a)) by XCMPLX_1:106
+         (c/(4*a))/3=1/3*(c/(4*a))
           .=c/(a*4*3) by XCMPLX_1:104
-          .=c/(a*(4*3)) by XCMPLX_1:4;
+          .=c/(a*(4*3));
     hence thesis by A10,A11,A14;
  end;
 
 theorem
-     a<>0 & Poly_3(a,b,c,d,z)=0c & Im z=0 implies
+      a<>0 & Poly_3(a,b,c,d,z)=0c & Im z=0 implies
     (for u,v,x1 st x1=Re z + b/(3*a) &
        Re z=u+v-b/(3*a) & 3*u*v+(3*a*c-b^2)/(3*a^2)=0 holds
               z =[* 3-root(-(b/(3*a)) |^ 3-(3*a*d-b*c)/(6*a^2)
@@ -1605,16 +1359,13 @@ proof
  A3:   x1=Re z +b/(3*a) & Re z=u+v-b/(3*a) & 3*u*v+(3*a*c-b^2)/(3*a^2)=0;
          set x=Re z;
          set y=Im z;
- A4:   x1 = u+v-(b/(3*a)-b/(3*a)) by A3,XCMPLX_1:37
-            .= u+v-0 by XCMPLX_1:14
-            .= u+v;
- A5:   z =[*x,y*] by COMPLEX1:8;
-          0c=a*(z^3)+b*z^2+c*z+d by Def5,A2
+ A4:   z =[*x,y*] by COMPLEX1:8;
+           0c=a*(z^3)+b*z^2+c*z+d by A2,Def5
          .=[*a,0*]*(z^3)+b*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+c*z+d by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+d by Def1
          .=[*a,0*]*(z^3)+[*b,0*]*z^2+[*c,0*]*z+[*d,0*] by Def2;
- then A6: 0c = [*a,0*]*([*Re z^3,Im z^3*])+[*b,0*]*z^2+[*c,0*]*z+[*d,0*]
+ then A5: 0c = [*a,0*]*([*Re z^3,Im z^3*])+[*b,0*]*z^2+[*c,0*]*z+[*d,0*]
                         by COMPLEX1:8
          .= [*a,0*]*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*]
                +[*b,0*]*z^2+[*c,0*]*z+[*d,0*] by Th11
@@ -1648,8 +1399,8 @@ proof
          .= [*a*(x|^ 3 - 3*x*y^2),a*(-y|^ 3+3*x^2*y)*]+[*b,0*]*z^2
             +[*c*Re z-0*Im z,c*Im z+Re z*0*]+[*d,0*] by Th1
          .= [*a*(x|^ 3 - 3*x*y^2),a*(-y|^ 3+3*x^2*y)*]
-           +[*b,0*]*[*x^2-y^2,2*x*y*]+[*c*x,c*y*]+[*d,0*] by Th2,A5;
-          [*b,0*]*[*x^2-y^2,2*x*y*]
+           +[*b,0*]*[*x^2-y^2,2*x*y*]+[*c*x,c*y*]+[*d,0*] by A4,Th2;
+           [*b,0*]*[*x^2-y^2,2*x*y*]
          =[*Re [*b,0*]*Re [*x^2-y^2,2*x*y*]-Im [*b,0*]*Im [*x^2-y^2,2*x*y*],
            Re [*b,0*]*Im [*x^2-y^2,2*x*y*]
            +Re [*x^2-y^2,2*x*y*]*Im [*b,0*] *] by COMPLEX1:def 10
@@ -1665,49 +1416,40 @@ proof
          .= [*b*(x^2-y^2)-0,b*(2*x*y)*] by COMPLEX1:7;
          then 0c= [*a*(x|^ 3 - 3*x*y^2)+b*(x^2-y^2),a*(-y|^ 3+3*x^2*y)+b*(2*x*
 y)*]
-            +[*c*x,c*y*]+[*d,0*] by A6,COMPLFLD:2
+            +[*c*x,c*y*]+[*d,0*] by A5,COMPLFLD:2
          .= [*a*(x|^ 3 - 3*x*y^2)+b*(x^2-y^2)+c*x,a*(-y|^ 3+3*x^2*y)
             +b*(2*x*y)+c*y*]+[*d,0*] by COMPLFLD:2
          .= [*a*(x|^ 3 - 3*x*0)+b*(x^2-0)+c*x+d
-                 ,a*(-0|^ 3+0)+b*0+0*] by COMPLFLD:2,A2,SQUARE_1:60
+                 ,a*(-0|^ 3+0)+b*0+0*] by A2,COMPLFLD:2,SQUARE_1:60
          .= [*a*x|^ 3+b*x^2+c*x+d,a*(-0)+0*] by NEWTON:16
          .= [*a*x|^ 3+b*x^2+c*x+d,a*0+0*];
          then a*x|^ 3+b*x^2+c*x+d = 0 by ARYTM_0:def 7,COMPLEX1:def 6;
- then A7:      Poly3(a,b,c,d,x) = 0 by POLYEQ_1:def 4;
+ then A6:      Poly3(a,b,c,d,x) = 0 by POLYEQ_1:def 4;
             set a'=b/a;
             set b'=c/a;
             set c'=d/a;
             set h=-b/(3*a);
-             a'=b/a & b'=c/a & c'=d/a & h=-b/(3*a);
- then A8:       x1 |^ 3 + 0*x1^2 + ((3*a*c-b^2)/(3*a^2))*x1
+              a'=b/a & b'=c/a & c'=d/a & h=-b/(3*a);
+ then A7:       x1 |^ 3 + 0*x1^2 + ((3*a*c-b^2)/(3*a^2))*x1
                   + (2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)) = 0
-            by POLYEQ_1:16,A1,A7,A3;
+            by A1,A3,A6,POLYEQ_1:16;
              set  p = (3*a*c-b^2)/(3*a^2);
              set  q = 2*((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2);
-              p/3=1/3*((3*a*c-b^2)/(3*a^2)) by XCMPLX_1:106;
-             then p/3=(3*a*c-b^2)/(a^2*3*3) by XCMPLX_1:104;
- then A9:       p/3=(3*a*c-b^2)/(a^2*(3*3)) by XCMPLX_1:4;
- A10:       -q/2=-(((b/(3*a)) |^ 3)*2+(3*a*d-b*c)/(3*a^2)+0)/2
-             .=-(((b/(3*a)) |^ 3)*2/2+(3*a*d-b*c)/(3*a^2)/2+0/2)
-       by XCMPLX_1:64
-            .=-(((b/(3*a)) |^ 3)+(3*a*d-b*c)/(3*a^2)/2+0/2) by XCMPLX_1:90
-            .=-((b/(3*a)) |^ 3+1/2*((3*a*d-b*c)/(3*a^2))) by XCMPLX_1:106
+               p/3=1/3*((3*a*c-b^2)/(3*a^2));
+             then A8: p/3=(3*a*c-b^2)/(a^2*3*3) by XCMPLX_1:104;
+ A9:       -q/2=-((b/(3*a)) |^ 3+1/2*((3*a*d-b*c)/(3*a^2)))
             .=-((b/(3*a)) |^ 3+(3*a*d-b*c)/(a^2*3*2)) by XCMPLX_1:104
-            .=-((b/(3*a)) |^ 3+(3*a*d-b*c)/(a^2*(3*2))) by XCMPLX_1:4
             .=0-((b/(3*a)) |^ 3+(3*a*d-b*c)/(6*a^2)) by XCMPLX_1:150
-            .=0-(b/(3*a)) |^ 3-(3*a*d-b*c)/(6*a^2) by XCMPLX_1:36
-            .=-(b/(3*a)) |^ 3-(3*a*d-b*c)/(6*a^2) by XCMPLX_1:150;
-       Poly3(1,0,p,q,x1) = 0 by A8,POLYEQ_1:17;
-  then A11:      x1 = 3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) +
+            .=-(b/(3*a)) |^ 3-(3*a*d-b*c)/(6*a^2);
+        Poly3(1,0,p,q,x1) = 0 by A7,POLYEQ_1:17;
+  then      x1 = 3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) +
                  3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)) or
             x1 = 3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) +
                  3-root(-q/2+sqrt(q^2/4+(p/3) |^ 3)) or
             x1 = 3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3)) +
                  3-root(-q/2-sqrt(q^2/4+(p/3) |^ 3))
-                    by POLYEQ_1:19,A4,A3;
-             x1+0=b/(3*a)+x by A3;
-            then x1-b/(3*a)=x-0 by XCMPLX_1:33;
-         hence thesis by A2,COMPLEX1:8,A9,A10,A11;
+                    by A3,POLYEQ_1:19;
+         hence thesis by A2,A3,A8,A9,COMPLEX1:8;
 end;
 
 theorem Th24:
@@ -1718,17 +1460,17 @@ theorem Th24:
     then z1*z+z2-z2 = -z2 by XCMPLX_1:150;
     then z1*z = -z2 by XCMPLX_1:26;
     then z = (-z2)*z1" by A1,XCMPLX_1:204;
-    then z = -(z2*z1") by XCMPLX_1:175;
+    then z = -(z2*z1");
   hence z = -(z2/z1) by XCMPLX_0:def 9;
 end;
 
 theorem
-    z2 <> 0 implies not ex z st Poly1(0,z2,z) = 0
+     z2 <> 0 implies not ex z st Poly1(0,z2,z) = 0
 proof
    assume A1: z2 <> 0;
    given s such that
    A2:Poly1(0,z2,s) = 0;
-    0*s + z2 = 0 by A2,POLYEQ_1:def 1;
+     0*s + z2 = 0 by A2,POLYEQ_1:def 1;
    hence contradiction by A1;
 end;
 
@@ -1741,7 +1483,7 @@ definition let z1,z2,z3,z;
 end;
 
 theorem
-     (for z holds CPoly2(z1,z2,z3,z) = CPoly2(s1,s2,s3,z)) implies
+      (for z holds CPoly2(z1,z2,z3,z) = CPoly2(s1,s2,s3,z)) implies
     z1 = s1 & z2 = s2 & z3 = s3
 proof
        assume
@@ -1761,7 +1503,7 @@ then A2: z3 = s1*0c^2+s2*0c+s3 by Def6
     .=0c+0c+s3 by COMPLEX1:28
     .=0c+s3 by COMPLEX1:22
     .=s3 by COMPLEX1:22;
-     CPoly2(z1,z2,z3,1r) = CPoly2(s1,s2,s3,1r) by A1;
+      CPoly2(z1,z2,z3,1r) = CPoly2(s1,s2,s3,1r) by A1;
     then z1*1r^2+z2*1r+z3 = CPoly2(s1,s2,s3,1r) by Def6;
     then z1*(1r*1r)+z2*1r+z3 = CPoly2(s1,s2,s3,1r) by SQUARE_1:def 3;
     then z1*1r+z2*1r+z3 = CPoly2(s1,s2,s3,1r) by COMPLEX1:29;
@@ -1771,73 +1513,56 @@ then A2: z3 = s1*0c^2+s2*0c+s3 by Def6
     then z1+z2+z3 = s1*(1r*1r)+s2*1r+s3 by SQUARE_1:def 3;
     then z1+z2+z3 = s1*1r+s2*1r+s3 by COMPLEX1:29;
     then z1+z2+z3 = s1+s2*1r+s3 by COMPLEX1:29;
-    then (z1+z2)+z3-z3 = (s1+s2)+s3-s3 by A2,COMPLEX1:29;
-    then z1+z2 = (s1+s2)+s3-s3 by XCMPLX_1:26;
- then A3: z1+z2 = s1+s2 by XCMPLX_1:26;
-      CPoly2(z1,z2,z3,-1r) = CPoly2(s1,s2,s3,-1r) by A1;
+    then A3: (z1+z2)+z3-z3 = (s1+s2)+s3-s3 by A2,COMPLEX1:29;
+    then A4: z1+z2 = (s1+s2)+s3-s3 by XCMPLX_1:26;
+ A5: z1+z2 = s1+s2 by A3,XCMPLX_1:26;
+       CPoly2(z1,z2,z3,-1r) = CPoly2(s1,s2,s3,-1r) by A1;
      then z1*(-1r)^2+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r) by Def6;
      then z1*((-1r)*(-1r))+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r) by SQUARE_1:def
 3;
-     then z1*(1r*1r)+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r) by XCMPLX_1:177;
+     then z1*(1r*1r)+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r);
      then z1*1r+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r) by COMPLEX1:29;
      then z1+z2*(-1r)+z3 = CPoly2(s1,s2,s3,-1r) by COMPLEX1:29;
      then z1+-z2+z3 = CPoly2(s1,s2,s3,-1r) by COMPLEX1:46;
-     then z1-z2+z3 = CPoly2(s1,s2,s3,-1r) by XCMPLX_0:def 8;
      then z1-z2+z3 = s1*(-1r)^2+s2*(-1r)+s3 by Def6;
      then z1-z2+z3 = s1*((-1r)*(-1r))+s2*(-1r)+s3 by SQUARE_1:def 3;
-     then z1-z2+z3 = s1*(1r*1r)+s2*(-1r)+s3 by XCMPLX_1:177;
+     then z1-z2+z3 = s1*(1r*1r)+s2*(-1r)+s3;
      then z1-z2+z3 = s1*1r+s2*(-1r)+s3 by COMPLEX1:29;
      then z1-z2+z3 = s1+s2*(-1r)+s3 by COMPLEX1:29;
      then z1-z2+z3 = s1+-s2+s3 by COMPLEX1:46;
-     then (z1-z2)+z3-z3 = (s1-s2)+s3-s3 by XCMPLX_0:def 8,A2;
-     then z1-z2 = (s1-s2)+s3-s3 by XCMPLX_1:26;
-     then z1-z2+(z2+z1) = s1-s2+(s2+s1) by A3,XCMPLX_1:26;
-     then z1-(z2-(z2+z1)) = s1-s2+(s2+s1) by XCMPLX_1:37;
+     then (z1-z2)+z3-z3 = (s1-s2)+s3-s3 by A2;
+     then z1-z2+(z2+z1) = s1-s2+(s2+s1) by A5,XCMPLX_1:26;
      then z1-(z2-(z2+z1)) = s1-(s2-(s2+s1)) by XCMPLX_1:37;
-     then z1-(z2-z2-z1) = s1-(s2-(s2+s1)) by XCMPLX_1:36;
-     then z1-(z2-z2-z1) = s1-(s2-s2-s1) by XCMPLX_1:36;
-     then z1-(0-z1) = s1-(s2-s2-s1) by XCMPLX_1:14;
-     then z1-(0-z1) = s1-(0-s1) by XCMPLX_1:14;
-     then z1--z1 = s1-(0-s1) by XCMPLX_1:150;
-     then z1--z1 = s1--s1 by XCMPLX_1:150;
-     then z1+z1 = s1--s1 by XCMPLX_1:151;
+     then z1--z1 = s1--s1;
      then z1+z1 = s1+s1 by XCMPLX_1:151;
-     then 2*z1 = s1+s1 by XCMPLX_1:11;
-     then A4: 2*z1 = 2*s1 by XCMPLX_1:11;
+     then A6: 2*z1 = 2*s1 by XCMPLX_1:11;
  then z1 = s1 by XCMPLX_1:5;
-     then z2+z1-z1 = s2+(z1-z1) by XCMPLX_1:29,A3;
-     then z2+z1-z1 = s2+0 by XCMPLX_1:14;
+     then z2+z1-z1 = s2+(z1-z1) by A4;
      then z2+(z1-z1) = s2+0 by XCMPLX_1:29;
-     then z2+0 = s2+0 by XCMPLX_1:14;
- hence thesis by A2,A4,XCMPLX_1:5;
+ hence thesis by A2,A6,XCMPLX_1:5;
 end;
 
 theorem
-     (-a+sqrt (a^2+b^2))/2 >=0 & (a+sqrt (a^2+b^2))/2>=0
+      (-a+sqrt (a^2+b^2))/2 >=0 & (a+sqrt (a^2+b^2))/2>=0
 proof
  A1: a^2>=0 & b^2>=0 & a^2>=a^2 by SQUARE_1:72;
  then A2: a^2+b^2>=0+0 & a^2+b^2>=0+a^2 by REAL_1:55;
- then A3: sqrt(a^2+b^2)>=sqrt(a^2) by SQUARE_1:94,A1;
-          A4:  sqrt (a^2+b^2)>=0 by SQUARE_1:def 4,A2;
+ then A3: sqrt(a^2+b^2)>=sqrt(a^2) by A1,SQUARE_1:94;
+          A4:  sqrt (a^2+b^2)>=0 by A2,SQUARE_1:def 4;
           per cases;
           suppose a>=0;
           then A5:  sqrt(a^2+b^2)>=a & a+sqrt (a^2+b^2)>=0+0
-         by REAL_1:55,SQUARE_1:89,A4,A3;
+         by A3,A4,REAL_1:55,SQUARE_1:89;
                 then sqrt(a^2+b^2)-a>=a-a by REAL_1:49;
-                then sqrt(a^2+b^2)-a>=0 by XCMPLX_1:14;
-                then -(-sqrt(a^2+b^2)+a)>=0 by XCMPLX_1:163;
-                then sqrt(a^2+b^2)+-a>=0 by XCMPLX_1:141;
                hence thesis by A5,REAL_2:125;
           end;
           suppose
           A6: a<0;
                 then -a > 0 by REAL_1:66;
           then A7:  sqrt(a^2+b^2) >= -a & -a+sqrt (a^2+b^2)>=0+0
-  by SQUARE_1:90,A6,REAL_1:67,A4,A3;
+  by A3,A4,A6,REAL_1:67,SQUARE_1:90;
                 then sqrt(a^2+b^2)-(-a) >= -a-(-a) by REAL_1:49;
-                then a+sqrt(a^2+b^2) >= -a-(-a) by XCMPLX_1:151;
-                then a+sqrt(a^2+b^2) >= 0 by XCMPLX_1:14;
-               hence thesis by REAL_2:125,A7;
+               hence thesis by A7,REAL_2:125;
               end;
 end;
 
@@ -1856,39 +1581,29 @@ proof
        set b=Im s;
        set u=Re z;
        set v=Im z;
-  z=[*u,v*] & s=[*a,b*] & b>=0 by COMPLEX1:8,A2;
-       then [*u^2-v^2,2*u*v*]=[*a,b*] by Th2,A1;
+   z=[*u,v*] & s=[*a,b*] & b>=0 by A2,COMPLEX1:8;
+       then [*u^2-v^2,2*u*v*]=[*a,b*] by A1,Th2;
  then A3: u^2-v^2=a & 2*u*v=b by ARYTM_0:12;
        then (u^2-v^2)^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:4;
        then (u^2)^2-2*u^2*v^2+(v^2)^2+(2*(u*v))^2=a^2+b^2 by SQUARE_1:64;
-       then (u^2)^2+(v^2)^2-2*u^2*v^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:29;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u*v)^2=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u^2*v^2)=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+(2*2)*(u^2*v^2)=a^2+b^2
                               by SQUARE_1:def 3;
     then 4*(u^2*v^2)-2*u^2*v^2+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:30;
-    then 4*(u^2*v^2)-2*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:4;
-    then (4-2)*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:40;
-    then (u^2)^2+2*(u^2*v^2)+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
-    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:4;
+    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
  then A4:   (u^2+v^2)^2=a^2+b^2 by SQUARE_1:63;
-        u^2>=0 & v^2>=0 by SQUARE_1:72;
+         u^2>=0 & v^2>=0 by SQUARE_1:72;
        then u^2+v^2>=0+0 by REAL_1:55;
  then A5: u^2+v^2=sqrt (a^2+b^2) by A4,SQUARE_1:89;
-       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:1,A3;
-       then u^2-(v^2-v^2)+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:37;
-       then u^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:17;
+       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by A3,XCMPLX_1:1;
        then 2*u^2=a+sqrt (a^2+b^2) by XCMPLX_1:11;
  then A6: u^2=(a+sqrt (a^2+b^2))/2 by XCMPLX_1:90;
-        v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:37,A3,A5;
-       then v^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:26;
+         v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by A3,A5,XCMPLX_1:37;
        then v^2*2=sqrt (a^2+b^2)-a by XCMPLX_1:11;
-       then v^2=(sqrt (a^2+b^2)-a)/2 by XCMPLX_1:90;
-       then v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:163;
- then A7: v^2=(-a+sqrt (a^2+b^2))/2 by XCMPLX_1:141;
-                 2*(u*v)>=0 by A2,A3,XCMPLX_1:4;
-                then -2*(u*v)<=-0 by REAL_1:50;
-                then (-2)*(u*v)<=0 by XCMPLX_1:175;
+       then A7: v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:90;
+                 -2*(u*v)<=-0 by A2,A3,REAL_1:50;
+                then (-2)*(u*v)<=0;
                 then u*v>=0 by REAL_2:129;
                 then u<=0 & v<=0 or u>=0 & v>=0 by SQUARE_1:25;
            then -u=sqrt ((a+sqrt (a^2+b^2))/2) & -v=sqrt ((-a+sqrt (a^2+b^2))/
@@ -1903,15 +1618,11 @@ proof
                 & 0+v=0-sqrt ((-a+sqrt (a^2+b^2))/2) or
            u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
                              by XCMPLX_1:35;
-           then u=-sqrt ((a+sqrt (a^2+b^2))/2) & v=-sqrt ((-a+sqrt (a^2+b^2))/
-2) or
-           u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
-                             by XCMPLX_1:150;
            hence thesis by COMPLEX1:8;
 end;
 
 theorem
-    z^2 = s & Im s = 0 & Re s > 0 implies z=sqrt(Re s) or z=-sqrt(Re s)
+     z^2 = s & Im s = 0 & Re s > 0 implies z=sqrt(Re s) or z=-sqrt(Re s)
 proof
       assume
  A1: z^2=s;
@@ -1921,30 +1632,23 @@ proof
        sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]   or
     z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
        -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]
-             by SQUARE_1:60,Th28,A1;
+             by A1,Th28,SQUARE_1:60;
     then z=[*sqrt (( Re s+Re s)/2),
        sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]   or
     z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
-       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by SQUARE_1:89,A2;
+       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by A2,SQUARE_1:89;
     then z=[*sqrt (( Re s+Re s)/2), sqrt ((-Re s+Re s)/2)*]   or
     z=[*-sqrt (( Re s+Re s)/2),
-       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by SQUARE_1:89,A2;
-    then z=[*sqrt (( Re s+Re s)/2), sqrt ((-Re s+Re s)/2)*] or
-    z=[*-sqrt (( Re s+Re s)/2),-sqrt ((-Re s+Re s)/2)*]
-                           by SQUARE_1:89,A2;
+       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by A2,SQUARE_1:89;
     then z=[*sqrt (Re s*2/2), sqrt ((-Re s+Re s)/2)*] or
-    z=[*-sqrt (Re s*2/2),-sqrt ((-Re s+Re s)/2)*] by XCMPLX_1:11;
-    then z=[*sqrt (Re s), sqrt ((0+(Re s+-Re s))/2)*] or
-    z=[*-sqrt (Re s),-sqrt ((0+(Re s+-Re s))/2)*] by XCMPLX_1:90;
+    z=[*-sqrt (Re s*2/2),-sqrt ((-Re s+Re s)/2)*] by A2,SQUARE_1:89;
     then z=[*sqrt (Re s), sqrt ((0+(Re s-Re s))/2)*] or
-    z=[*-sqrt (Re s),-sqrt ((0+(Re s-Re s))/2)*] by XCMPLX_0:def 8;
-    then z=[*sqrt (Re s), sqrt (0/2)*] or
-    z=[*-sqrt (Re s),-sqrt (0/2)*] by XCMPLX_1:25;
-    hence thesis by SQUARE_1:82,ARYTM_0:def 7;
+    z=[*-sqrt (Re s),-sqrt ((0+(Re s-Re s))/2)*];
+    hence thesis by ARYTM_0:def 7,SQUARE_1:82;
 end;
 
 theorem
-    z^2 = s & Im s = 0 & Re s < 0 implies
+     z^2 = s & Im s = 0 & Re s < 0 implies
     z=[*0, sqrt (-Re s)*] or z=[*0,-sqrt (-Re s)*]
 proof
       assume
@@ -1955,32 +1659,24 @@ proof
        sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]   or
     z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
        -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]
- by SQUARE_1:60,Th28,A1;
+ by A1,Th28,SQUARE_1:60;
     then z=[*sqrt (( Re s+-Re s)/2),
        sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]   or
     z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
-       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by SQUARE_1:90,A2;
+       -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by A2,SQUARE_1:90;
     then z=[*sqrt (( Re s+-Re s)/2), sqrt ((-Re s+-Re s)/2)*]   or
     z=[*-sqrt (( Re s+-Re s)/2),-sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*]
-                       by SQUARE_1:90,A2;
+                       by A2,SQUARE_1:90;
     then z=[*sqrt (( Re s+-Re s)/2), sqrt ((-Re s+-Re s)/2)*]   or
     z=[*-sqrt (( Re s+-Re s)/2),-sqrt ((-Re s+-Re s)/2)*]
-                           by SQUARE_1:90,A2;
-    then z=[*sqrt (( Re s+-Re s)/2), sqrt ((-Re s)*2/2)*]   or
-    z=[*-sqrt (( Re s+-Re s)/2),-sqrt ((-Re s)*2/2)*] by XCMPLX_1:11;
-    then z=[*sqrt (( 0+(Re s+-Re s))/2), sqrt (-Re s)*]   or
-    z=[*-sqrt (( 0+(Re s+-Re s))/2),-sqrt (-Re s)*]
-  by XCMPLX_1:90;
+                           by A2,SQUARE_1:90;
     then z=[*sqrt (( 0+(Re s-Re s))/2), sqrt (-Re s)*]   or
-    z=[*-sqrt (( 0+(Re s-Re s))/2),-sqrt (-Re s)*]
-  by XCMPLX_0:def 8;
-    then z=[*sqrt (0/2), sqrt (-Re s)*] or
-    z=[*-sqrt (0/2),-sqrt (-Re s)*] by XCMPLX_1:25;
+    z=[*-sqrt (( 0+(Re s-Re s))/2),-sqrt (-Re s)*];
    hence thesis by SQUARE_1:82;
 end;
 
 theorem
-    z^2 = s & Im s <0 implies
+     z^2 = s & Im s <0 implies
    z=[* sqrt (( Re s+sqrt ((Re s)^2+(Im s)^2))/2),
        -sqrt ((-Re s+sqrt ((Re s)^2+(Im s)^2))/2)*] or
    z=[*-sqrt (( Re s+sqrt ((Re s)^2+(Im s)^2))/2),
@@ -1994,37 +1690,28 @@ proof
        set b=Im s;
        set u=Re z;
        set v=Im z;
- A3: z=[*u,v*] & s=[*a,b*] & b <0 by A2,COMPLEX1:8;
-       then [*u^2-v^2,2*u*v*]=[*a,b*] by Th2,A1;
+  z=[*u,v*] & s=[*a,b*] & b <0 by A2,COMPLEX1:8;
+       then A3: [*u^2-v^2,2*u*v*]=[*a,b*] by A1,Th2;
  then A4: u^2-v^2=a & 2*u*v=b by ARYTM_0:12;
        then (u^2-v^2)^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:4;
        then (u^2)^2-2*u^2*v^2+(v^2)^2+(2*(u*v))^2=a^2+b^2 by SQUARE_1:64;
-       then (u^2)^2+(v^2)^2-2*u^2*v^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:29;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u*v)^2=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u^2*v^2)=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+(2*2)*(u^2*v^2)=a^2+b^2
                               by SQUARE_1:def 3;
     then 4*(u^2*v^2)-2*u^2*v^2+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:30;
-    then 4*(u^2*v^2)-2*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:4;
-    then (4-2)*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:40;
-    then (u^2)^2+2*(u^2*v^2)+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
-    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:4;
+    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
  then A5: sqrt (u^2+v^2)^2=sqrt (a^2+b^2) by SQUARE_1:63;
-        u^2>=0 & v^2>=0 by SQUARE_1:72;
+         u^2>=0 & v^2>=0 by SQUARE_1:72;
        then u^2+v^2>=0+0 by REAL_1:55;
  then A6: u^2+v^2=sqrt (a^2+b^2) by A5,SQUARE_1:89;
-       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:1,A4;
-       then u^2-(v^2-v^2)+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:37;
-       then u^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:17;
+       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by A4,XCMPLX_1:1;
        then 2*u^2=a+sqrt (a^2+b^2) by XCMPLX_1:11;
  then A7: u^2=(a+sqrt (a^2+b^2))/2 by XCMPLX_1:90;
-        v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:37,A4,A6;
-       then v^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:26;
+         v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by A4,A6,XCMPLX_1:37;
        then v^2*2=sqrt (a^2+b^2)-a by XCMPLX_1:11;
-       then v^2=(sqrt (a^2+b^2)-a)/2 by XCMPLX_1:90;
-       then v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:163;
- then A8: v^2=(-a+sqrt (a^2+b^2))/2 by XCMPLX_1:141;
-                 2*(u*v)<0 by A2,A4,XCMPLX_1:4;
+       then A8: v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:90;
+                  2*(u*v)<0 by A2,A3,ARYTM_0:12;
                 then u*v<0 by REAL_2:132;
                 then u<0 & v>0 or u>0 & v<0 by REAL_2:132;
           then -u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
@@ -2039,7 +1726,7 @@ or
                 & v=sqrt ((-a+sqrt (a^2+b^2))/2) or
                 u=sqrt ((a+sqrt (a^2+b^2))/2)
                 & 0+v=0-sqrt ((-a+sqrt (a^2+b^2))/2) by XCMPLX_1:35;
-          hence thesis by A3,XCMPLX_1:150;
+          hence thesis by COMPLEX1:8;
 end;
 
 theorem Th32:
@@ -2059,41 +1746,31 @@ proof
        set b=Im s;
        set u=Re z;
        set v=Im z;
- A2: z=[*u,v*] & s=[*a,b*] by COMPLEX1:8;
-       then [*u^2-v^2,2*u*v*]=[*a,b*] by A1,Th2;
+  z=[*u,v*] & s=[*a,b*] by COMPLEX1:8;
+       then A2: [*u^2-v^2,2*u*v*]=[*a,b*] by A1,Th2;
  then A3: u^2-v^2=a & 2*u*v=b by ARYTM_0:12;
        then (u^2-v^2)^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:4;
        then (u^2)^2-2*u^2*v^2+(v^2)^2+(2*(u*v))^2=a^2+b^2 by SQUARE_1:64;
-       then (u^2)^2+(v^2)^2-2*u^2*v^2+(2*(u*v))^2=a^2+b^2 by XCMPLX_1:29;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u*v)^2=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+2^2*(u^2*v^2)=a^2+b^2 by SQUARE_1:68;
     then ((u^2)^2+(v^2)^2)-2*u^2*v^2+(2*2)*(u^2*v^2)=a^2+b^2
                               by SQUARE_1:def 3;
     then 4*(u^2*v^2)-2*u^2*v^2+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:30;
-    then 4*(u^2*v^2)-2*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:4;
-    then (4-2)*(u^2*v^2)+((u^2)^2+(v^2)^2)=a^2+b^2 by XCMPLX_1:40;
-    then (u^2)^2+2*(u^2*v^2)+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
-    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:4;
+    then (u^2)^2+2*u^2*v^2+(v^2)^2=a^2+b^2 by XCMPLX_1:1;
  then A4: sqrt (u^2+v^2)^2=sqrt (a^2+b^2) by SQUARE_1:63;
-        u^2>=0 & v^2>=0 by SQUARE_1:72;
+         u^2>=0 & v^2>=0 by SQUARE_1:72;
        then u^2+v^2>=0+0 by REAL_1:55;
  then A5: u^2+v^2=sqrt (a^2+b^2) by A4,SQUARE_1:89;
-       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:1,A3;
-       then u^2-(v^2-v^2)+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:37;
-       then u^2+u^2=a+sqrt (a^2+b^2) by XCMPLX_1:17;
+       then u^2-v^2+v^2+u^2=a+sqrt (a^2+b^2) by A3,XCMPLX_1:1;
        then 2*u^2=a+sqrt (a^2+b^2) by XCMPLX_1:11;
  then A6: u^2=(a+sqrt (a^2+b^2))/2 by XCMPLX_1:90;
-        v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:37,A3,A5;
-       then v^2+v^2=sqrt (a^2+b^2)-a by XCMPLX_1:26;
+         v^2+u^2-u^2+v^2=sqrt (a^2+b^2)-a by A3,A5,XCMPLX_1:37;
        then v^2*2=sqrt (a^2+b^2)-a by XCMPLX_1:11;
-       then v^2=(sqrt (a^2+b^2)-a)/2 by XCMPLX_1:90;
-       then v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:163;
- then A7: v^2=(-a+sqrt (a^2+b^2))/2 by XCMPLX_1:141;
+       then A7: v^2=(-(-sqrt (a^2+b^2)+a))/2 by XCMPLX_1:90;
        per cases;
           suppose b>=0;
-                then 2*(u*v)>=0 by A3,XCMPLX_1:4;
-                then -2*(u*v)<=-0 by REAL_1:50;
-                then (-2)*(u*v)<=0 by XCMPLX_1:175;
+                then -2*(u*v)<=-0 by A3,REAL_1:50;
+                then (-2)*(u*v)<=0;
                 then u*v>=0 by REAL_2:129;
                 then u<=0 & v<=0 or u>=0 & v>=0 by SQUARE_1:25;
            then -u=sqrt ((a+sqrt (a^2+b^2))/2) & -v=sqrt ((-a+sqrt (a^2+b^2))/
@@ -2108,14 +1785,10 @@ proof
                 & 0+v=0-sqrt ((-a+sqrt (a^2+b^2))/2) or
            u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
                              by XCMPLX_1:35;
-           then u=-sqrt ((a+sqrt (a^2+b^2))/2) & v=-sqrt ((-a+sqrt (a^2+b^2))/
-2) or
-           u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
-                             by XCMPLX_1:150;
            hence thesis by COMPLEX1:8;
            end;
            suppose b<0;
-                then 2*(u*v)<0 by A3,XCMPLX_1:4;
+                then 2*(u*v)<0 by A2,ARYTM_0:12;
                 then u*v<0 by REAL_2:132;
                 then u<0 & v>0 or u>0 & v<0 by REAL_2:132;
           then -u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
@@ -2130,14 +1803,14 @@ or
                 & v=sqrt ((-a+sqrt (a^2+b^2))/2) or
                 u=sqrt ((a+sqrt (a^2+b^2))/2)
                 & 0+v=0-sqrt ((-a+sqrt (a^2+b^2))/2) by XCMPLX_1:35;
-          hence thesis by A2,XCMPLX_1:150;
+          hence thesis by COMPLEX1:8;
           end;
 end;
 
 theorem
-   CPoly2(0c,0c,0c,z) = 0
+    CPoly2(0c,0c,0c,z) = 0
 proof
-   CPoly2(0c,0c,0c,z) = 0c*z^2+0c*z+0c by Def6
+    CPoly2(0c,0c,0c,z) = 0c*z^2+0c*z+0c by Def6
      .=0c*z^2+0c+0c by COMPLEX1:28
      .=0c+0c+0c by COMPLEX1:28
      .=0c+0c by COMPLEX1:22;
@@ -2153,23 +1826,22 @@ proof
        .=z1*z^2+0c+0c by COMPLEX1:28
        .=z1*z^2+0c by COMPLEX1:22
        .=z1*z^2 by COMPLEX1:22;
-       then z^2=0 by XCMPLX_1:6,A1;
+       then z^2=0 by A1,XCMPLX_1:6;
        then z*z=0 by SQUARE_1:def 3;
        hence z=0 by XCMPLX_1:6;
 end;
 
 theorem
-     z1<>0 & CPoly2(z1,z2,0c,z)=0 implies z=-(z2/z1) or z=0
+      z1<>0 & CPoly2(z1,z2,0c,z)=0 implies z=-(z2/z1) or z=0
 proof
        assume
  A1: z1<>0 & CPoly2(z1,z2,0c,z)=0;
        then 0=z1*z^2+z2*z+0 by Def6,COMPLEX1:def 6
        .=z1*(z*z)+z2*z by SQUARE_1:def 3
-       .=z1*z*z+z2*z by XCMPLX_1:4
-       .=(z1*z+z2)*z by XCMPLX_1:8;
+       .=(z1*z+z2)*z;
        then z1*z+z2=0 or z=0 by XCMPLX_1:6;
        then Poly1(z1,z2,z) = 0 or z=0 by POLYEQ_1:def 1;
-    hence z=-(z2/z1) or z=0 by Th24,A1;
+    hence z=-(z2/z1) or z=0 by A1,Th24;
 end;
 
 theorem Th36:
@@ -2189,7 +1861,7 @@ proof
        let s;
        assume
  A2: s=-(z3/z1);
-        0= z1*z^2+0c*z+z3 by COMPLEX1:def 6,Def6,A1
+         0= z1*z^2+0c*z+z3 by A1,Def6,COMPLEX1:def 6
        .=z1*z^2+0c+z3 by COMPLEX1:28
        .=z1*z^2+z3 by COMPLEX1:22;
        then z1*z^2=-z3 by XCMPLX_0:def 6;
@@ -2215,25 +1887,24 @@ proof
        let h,t;
        assume
  A2: h=(z2/(2*z1))^2-z3/z1 & t=z2/(2*z1);
-       z1*z^2+z2*z+z3=0c by Def6,A1;
+        z1*z^2+z2*z+z3=0c by A1,Def6;
       then (z1*z^2+z2*z+z3)/z1=0c by COMPLEX1:87;
       then (z1*z^2+z2*z)/z1+z3/z1=0c by XCMPLX_1:63;
       then (z^2*z1)/z1+(z2*z)/z1+z3/z1=0c by XCMPLX_1:63;
-      then z^2+(z*z2)/z1+z3/z1=0c by XCMPLX_1:90,A1;
+      then z^2+(z*z2)/z1+z3/z1=0c by A1,XCMPLX_1:90;
       then z^2+(z*z2)*z1"+z3/z1=0c by XCMPLX_0:def 9;
-      then z^2+z*(z2*z1")+z3/z1=0c by XCMPLX_1:4;
+      then z^2+z*(z2*z1")+z3/z1=0c;
  then A3:z^2+(z2/z1)*z+z3/z1=0c by XCMPLX_0:def 9;
-       [*2,0*]<>0 by ARYTM_0:def 7;
- then z^2+[*2,0*]*z2/([*2,0*]*z1)*z+z3/z1=0c by XCMPLX_1:92,A3;
+        [*2,0*]<>0 by ARYTM_0:def 7;
+ then z^2+[*2,0*]*z2/([*2,0*]*z1)*z+z3/z1=0c by A3,XCMPLX_1:92;
       then z^2+[*2,0*]*(z2/([*2,0*]*z1))*z+z3/z1=0c
                   by XCMPLX_1:75;
-      then z^2+[*2,0*]*z*(z2/([*2,0*]*z1))+z3/z1=0c by XCMPLX_1:4;
+      then z^2+[*2,0*]*z*(z2/([*2,0*]*z1))+z3/z1=0c;
       then z^2+2*z*(z2/([*2,0*]*z1))+z3/z1=0c by Def1;
-      then z^2+2*z*(z2/(2*z1))+z3/z1=0c by Def1;
       then z^2+2*z*(z2/(2*z1))+(z2/(2*z1))^2-(z2/(2*z1))^2+z3/z1=0c
-                                   by XCMPLX_1:26;
+                                   by Def1;
       then (z+z2/(2*z1))^2-(z2/(2*z1))^2+z3/z1=0c by SQUARE_1:63;
-      then  (z+(z2/(2*z1)))^2-((z2/(2*z1))^2-z3/z1)=0c by XCMPLX_1:37;
+      then (z+(z2/(2*z1)))^2-((z2/(2*z1))^2-z3/z1)=0c by XCMPLX_1:37;
         then (z+t)^2=h by A2,COMPLEX1:def 6,XCMPLX_1:15;
       then z+t-t=[* sqrt (( Re h+sqrt ((Re h)^2+(Im h)^2))/2),
              sqrt ((-Re h+sqrt ((Re h)^2+(Im h)^2))/2)*]-t   or
@@ -2253,7 +1924,7 @@ definition let z1,z2,z3,z4,z;
 end;
 
 theorem
-   z^2=1 implies z=1 or z=-1
+    z^2=1 implies z=1 or z=-1
 proof
   assume z^2=1;
   then z*z = 1 by SQUARE_1:def 3;
@@ -2270,11 +1941,11 @@ proof
          .=1r*z*z*z by COMSEQ_3:def 1
          .=z*z*z by COMPLEX1:29;
          then z#N 3=z^2*z by SQUARE_1:def 3;
-  hence thesis by Def4,A1;
+  hence thesis by A1,Def4;
 end;
 
 theorem
-     z1<>0 & CPoly3(z1,z2,0c,0c,z)=0c implies z=-z2/z1 or z=0
+      z1<>0 & CPoly3(z1,z2,0c,0c,z)=0c implies z=-z2/z1 or z=0
 proof
     assume
  A1: z1<>0 & CPoly3(z1,z2,0c,0c,z)=0c;
@@ -2283,21 +1954,21 @@ proof
         .=z1*z^3 +z2*z^2+0c by COMPLEX1:22
         .=z1*z^3 +z2*z^2 by COMPLEX1:22
         .=z1*(z^2*z) +z2*z^2 by Def4
-        .=z1*z*z^2 +z2*z^2 by XCMPLX_1:4
-        .=(z1*z +z2)*z^2 by XCMPLX_1:8;
-        then z1*z +z2=0c or z^2=0c by XCMPLX_1:6,COMPLEX1:def 6;
+        .=(z1*z +z2)*z^2;
+        then z1*z +z2=0c or z^2=0c by COMPLEX1:def 6,XCMPLX_1:6;
         then z1*z +z2=0c or 1r*z^2=0c by COMPLEX1:29;
         then z1*z +z2=0c or 1r*z^2+0c=0c by COMPLEX1:22;
         then z1*z +z2=0c or 1r*z^2+0c+0c=0c by COMPLEX1:22;
-        then  Poly1(z1,z2,z)=0c or 1r*z^2+0c*z+0c=0c
-          by POLYEQ_1:def 1,COMPLEX1:28;
-         then z=-(z2/z1) or CPoly2(1r,0c,0c,z)=0 by A1,Def6,Th24,COMPLEX1:def 6
+        then Poly1(z1,z2,z)=0c or 1r*z^2+0c*z+0c=0c
+          by COMPLEX1:28,POLYEQ_1:def 1;
+         then z=-(z2/z1) or CPoly2(1r,0c,0c,z)=0 by A1,Def6,Th24,COMPLEX1:def
+6
 ;
        hence z=-(z2/z1) or z=0 by Th34,COMPLEX1:def 7;
 end;
 
 theorem
-     z1<>0c & CPoly3(z1,0c,z3,0c,z)=0c implies
+      z1<>0c & CPoly3(z1,0c,z3,0c,z)=0c implies
      (for s st s=-(z3/z1) holds
      z=0c or
      z=[*sqrt (( Re s+sqrt ((Re s)^2+(Im s)^2))/2),
@@ -2314,22 +1985,21 @@ proof
        let s;
        assume
  A2: s=-(z3/z1);
-       0c=z1*z^3 +0c*z^2+z3*z+0c by Def7,A1
+        0c=z1*z^3 +0c*z^2+z3*z+0c by A1,Def7
        .=z1*z#N 3 +0c*z^2+z3*z+0c by Th39
        .=z1*z#N 3 +0c*z^2+z3*z by COMPLEX1:22
        .=z1*z#N 3 +0c+z3*z by COMPLEX1:28
        .=z1*z#N 3+z3*z by COMPLEX1:22
        .=z1*(z^2*z)+z3*z by Th39
-       .=z1*z^2*z+z3*z by XCMPLX_1:4
-       .=(z1*z^2+z3)*z by XCMPLX_1:8;
+       .=(z1*z^2+z3)*z;
        then z1*z^2+0c*z+z3=0c or z=0c
          by COMPLEX1:def 6,XCMPLX_1:6;
        then CPoly2(z1,0c,z3,z)=0c or z=0c by Def6;
-     hence thesis by Th36,A1,A2;
+     hence thesis by A1,A2,Th36;
 end;
 
 theorem
-     z1<>0 & CPoly3(z1,z2,z3,0c,z)=0c implies
+      z1<>0 & CPoly3(z1,z2,z3,0c,z)=0c implies
      (for s,h,t st s=-(z3/z1) & h=(z2/(2*z1))^2-z3/z1 & t=z2/(2*z1) holds
            z=0 or
            z=[* sqrt (( Re h+sqrt ((Re h)^2+(Im h)^2))/2),
@@ -2346,17 +2016,14 @@ proof
        let s,h,t;
        assume
  A2: s=-(z3/z1) & h=(z2/(2*z1))^2-z3/z1 & t=z2/(2*z1);
-        0c=z1*z^3 +z2*z^2+z3*z+0c by Def7,A1
+         0c=z1*z^3 +z2*z^2+z3*z+0c by A1,Def7
        .=z1*z#N 3 +z2*z^2+z3*z+0c by Th39
        .=z1*z#N 3 +z2*z^2+z3*z by COMPLEX1:22
        .=z1*(z^2*z) +z2*z^2+z3*z by Th39
-       .=z1*z^2*z +z2*z^2+z3*z by XCMPLX_1:4
        .=z1*z^2*z +z2*(z*z)+z3*z by SQUARE_1:def 3
-       .=z1*z^2*z +z2*z*z+z3*z by XCMPLX_1:4
-       .=(z1*z^2+z2*z)*z+z3*z by XCMPLX_1:8
-       .=(z1*z^2+z2*z+z3)*z by XCMPLX_1:8
+       .=(z1*z^2+z2*z+z3)*z
        .=CPoly2(z1,z2,z3,z)*z by Def6;
-       then z=0c or CPoly2(z1,z2,z3,z)=0c by XCMPLX_1:6,COMPLEX1:def 6;
+       then z=0c or CPoly2(z1,z2,z3,z)=0c by COMPLEX1:def 6,XCMPLX_1:6;
      hence thesis by A1,A2,Th37,COMPLEX1:def 6;
 end;
 
@@ -2365,17 +2032,14 @@ theorem Th43:
     z^2 =s^2+(-[*2/3,0*])*z1*s+[*1/9,0*]*z1^2
 proof
     assume z=s-[*1/3,0*]*z1;
-       then z^2=(s+(-[*1/3,0*]*z1))^2 by XCMPLX_0:def 8
+       then z^2=(s+(-[*1/3,0*]*z1))^2
       .=s^2+2*s*(-[*1/3,0*]*z1)+(-[*1/3,0*]*z1)^2 by SQUARE_1:63
       .=s^2+2*s*(-[*1/3,0*]*z1)+([*1/3,0*]*z1)^2 by SQUARE_1:61
-      .=s^2+2*s*(-[*1/3,0*]*z1)+[*1/3,0*]^2*z1^2 by SQUARE_1:68
-      .=s^2+2*s*((-[*1/3,0*])*z1)+[*1/3,0*]^2*z1^2 by XCMPLX_1:175
-      .=s^2+2*s*(-[*1/3,0*])*z1+[*1/3,0*]^2*z1^2 by XCMPLX_1:4
+      .=s^2+2*s*(-[*1/3,0*])*z1+[*1/3,0*]^2*z1^2 by SQUARE_1:68
       .=s^2+[*2,0*]*s*(-[*1/3,0*])*z1+[*1/3,0*]^2*z1^2 by Def1
-      .=s^2+[*2,0*]*(-[*1/3,0*])*s*z1+[*1/3,0*]^2*z1^2 by XCMPLX_1:4
-      .=s^2+[*2,0*]*(-[*1/3,0*])*z1*s+[*1/3,0*]^2*z1^2 by XCMPLX_1:4
+      .=s^2+[*2,0*]*(-[*1/3,0*])*z1*s+[*1/3,0*]^2*z1^2
       .=s^2+[*2,0*]*((-1r)*[*1/3,0*])*z1*s+[*1/3,0*]^2*z1^2 by COMPLEX1:46
-      .=s^2+(-1r)*([*2,0*]*[*1/3,0*])*z1*s+[*1/3,0*]^2*z1^2 by XCMPLX_1:4
+      .=s^2+(-1r)*([*2,0*]*[*1/3,0*])*z1*s+[*1/3,0*]^2*z1^2
       .=s^2+(-1r)*([*Re [*2,0*]*Re [*1/3,0*]-Im [*2,0*]*Im [*1/3,0*]
       ,Re [*2,0*]*Im [*1/3,0*]+Re [*1/3,0*]*Im [*2,0*]*])*z1*s+[*1/3,0*]^2*z1^2
                                 by COMPLEX1:def 10
@@ -2405,16 +2069,15 @@ theorem Th44:
     z^3 =s^3-z1*s^2+[*1/3,0*]*z1^2*s-[*1/27,0*]*z1^3
 proof
     assume
-        z=s-[*1/3,0*]*z1;
- then A1: z^3=(s+(-[*1/3,0*]*z1))^3 by XCMPLX_0:def 8
+         z=s-[*1/3,0*]*z1;
+ then A1: z^3=(s+(-[*1/3,0*]*z1))^3
       .=s^3+3*(-[*1/3,0*]*z1)*s^2+3*(-[*1/3,0*]*z1)^2*s+(-[*1/3,0*]*z1)^3
                                     by Th13;
       set s1=-[*1/3,0*]*z1;
- A2:3*s1=3*((-[*1/3,0*])*z1) by XCMPLX_1:175
-         .=[*3,0*]*((-[*1/3,0*])*z1) by Def1
-         .=[*3,0*]*(-[*1/3,0*])*z1 by XCMPLX_1:4
+ A2:3*s1=[*3,0*]*((-[*1/3,0*])*z1) by Def1
+         .=[*3,0*]*(-[*1/3,0*])*z1
          .=[*3,0*]*((-1r)*[*1/3,0*])*z1 by COMPLEX1:46
-         .=(-1r)*([*3,0*]*[*1/3,0*])*z1 by XCMPLX_1:4
+         .=(-1r)*([*3,0*]*[*1/3,0*])*z1
          .=(-1r)* [* Re [*3,0*]*Re [*1/3,0*]
             -Im [*3,0*]*Im [*1/3,0*],Re [*3,0*]*Im [*1/3,0*]
             +Re [*1/3,0*]*Im [*3,0*] *]*z1 by COMPLEX1:def 10
@@ -2427,16 +2090,12 @@ proof
              0+Re [*1/3,0*]*0 *]*z1 by COMPLEX1:7
          .=(-1r)* [* 3*Re [*1/3,0*]-0,Re [*1/3,0*]*0 *]*z1 by COMPLEX1:7
          .=(-1r)* [* 3*(1/3)-0,Re [*1/3,0*]*0 *]*z1 by COMPLEX1:7
-         .=(-1r)*1r*z1 by COMPLEX1:def 7,ARYTM_0:def 7
+         .=(-1r)*1r*z1 by ARYTM_0:def 7,COMPLEX1:def 7
          .=(-1r)*z1 by COMPLEX1:29
          .=-z1 by COMPLEX1:46;
- A3: s1^2=((-[*1/3,0*])*z1)^2 by XCMPLX_1:175
-       .=((-[*1/3,0*])*z1)*((-[*1/3,0*])*z1) by SQUARE_1:def 3
-       .=(-[*1/3,0*])*z1*z1*(-[*1/3,0*]) by XCMPLX_1:4
-       .=(-[*1/3,0*])*(z1*z1)*(-[*1/3,0*]) by XCMPLX_1:4
-       .=(-[*1/3,0*])*(-[*1/3,0*])*(z1*z1) by XCMPLX_1:4
-       .=(-[*1/3,0*])*(-[*1/3,0*])*z1^2 by SQUARE_1:def 3
-       .=[*1/3,0*]*[*1/3,0*]*z1^2 by XCMPLX_1:177
+ A3: s1^2=((-[*1/3,0*])*z1)*((-[*1/3,0*])*z1) by SQUARE_1:def 3
+       .=(-[*1/3,0*])*(-[*1/3,0*])*(z1*z1)
+       .=[*1/3,0*]*[*1/3,0*]*z1^2 by SQUARE_1:def 3
        .=[*1/3,0*]^2*z1^2 by SQUARE_1:def 3
        .=[*(Re [*1/3,0*])^2-(Im [*1/3,0*])^2,2*(Re [*1/3,0*]*Im [*1/3,0*])*]
                *z1^2 by Def3
@@ -2447,7 +2106,7 @@ proof
        .=[*(1/3)*(1/3)-0,2*(1/3)*0*]*z1^2 by SQUARE_1:def 3
        .=[*1/9,0*]*z1^2;
  then A4: 3*s1^2=[*3,0*]*([*1/9,0*]*z1^2) by Def1
-            .=[*3,0*]*[*1/9,0*]*z1^2 by XCMPLX_1:4
+            .=[*3,0*]*[*1/9,0*]*z1^2
             .=[*Re [*3,0*]*Re [*1/9,0*]-Im[*3,0*] *Im [*1/9,0*]
               ,Re[*3,0*] *Im [*1/9,0*]+Re [*1/9,0*]*Im[*3,0*] *]*z1^2
                           by COMPLEX1:def 10
@@ -2461,14 +2120,11 @@ proof
             .=[*Re [*3,0*]*(1/9)-0,0 *]*z1^2 by COMPLEX1:7
             .=[*3*(1/9)-0,0 *]*z1^2 by COMPLEX1:7
             .=[*1/3,0 *]*z1^2;
-      s1^3=([*1/9,0*]*z1^2)*s1 by Def4,A3
-       .=([*1/9,0*]*z1^2)*((-[*1/3,0*])*z1) by XCMPLX_1:175
-       .=[*1/9,0*]*z1^2*z1*(-[*1/3,0*]) by XCMPLX_1:4
-       .=[*1/9,0*]*(z1^2*z1)*(-[*1/3,0*]) by XCMPLX_1:4
-       .=[*1/9,0*]*(-[*1/3,0*])*(z1^2*z1) by XCMPLX_1:4
+       s1^3=([*1/9,0*]*z1^2)*((-[*1/3,0*])*z1) by A3,Def4
+       .=[*1/9,0*]*(-[*1/3,0*])*(z1^2*z1)
        .=[*1/9,0*]*(-[*1/3,0*])*z1^3 by Def4
        .=[*1/9,0*]*((-1r)*[*1/3,0*])*z1^3 by COMPLEX1:46
-       .=[*1/9,0*]*[*1/3,0*]*(-1r)*z1^3 by XCMPLX_1:4
+       .=[*1/9,0*]*[*1/3,0*]*(-1r)*z1^3
        .=[* Re [*1/9,0*]*Re [*1/3,0*]-Im [*1/9,0*]*Im [*1/3,0*],
         Re [*1/9,0*]*Im [*1/3,0*]+Re [*1/3,0*]*Im [*1/9,0*] *]*(-1r)*z1^3
                     by COMPLEX1:def 10
@@ -2482,16 +2138,11 @@ proof
        .=[* 1/9*Re [*1/3,0*]-0*Im [*1/3,0*],0 *]*(-1r)*z1^3 by COMPLEX1:7
        .=[* 1/9*(1/3)-0,0 *]*(-1r)*z1^3 by COMPLEX1:7
        .=(-[*1/27,0*])*z1^3 by COMPLEX1:46;
-     then z^3=s^3+-z1*s^2+[*1/3,0 *]*z1^2*s+(-[*1/27,0*])*z1^3 by A1,A2,A4,
-XCMPLX_1:175
-       .=s^3+-z1*s^2+[*1/3,0 *]*z1^2*s+-[*1/27,0*]*z1^3 by XCMPLX_1:175
-       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s+-[*1/27,0*]*z1^3 by XCMPLX_0:def 8
-       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3 by XCMPLX_0:def 8;
-     hence thesis;
+     hence thesis by A1,A2,A4;
 end;
 
 theorem
-     CPoly3(1r,z1,z2,z3,z)=0c implies
+      CPoly3(1r,z1,z2,z3,z)=0c implies
     (for p,q,s st z=s-[*1/3,0*]*z1 & p=-[*1/3,0*]*z1^2+z2
                 & q=[*2/27,0*]*z1^3-[*1/3,0*]*z1*z2+z3 holds
       CPoly3(1r,0c,p,q,s)=0c )
@@ -2502,71 +2153,21 @@ proof
      assume
  A2: z=s-[*1/3,0*]*z1 & p=-[*1/3,0*]*z1^2+z2
        & q=[*2/27,0*]*z1^3-[*1/3,0*]*z1*z2+z3;
-        0c=1r*z^3+ z1*z^2+z2*z+z3 by Def7,A1
+         0c=1r*z^3+ z1*z^2+z2*z+z3 by A1,Def7
        .=1r*(s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3)+ z1*z^2+z2*z+z3
-               by Th44,A2
+               by A2,Th44
        .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+z1*z^2+z2*z+z3
                by COMPLEX1:29
        .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+z1*(s^2+(-[*2/3,0*])
         *z1*s+[*1/9,0*]*z1^2)+z2*(s-[*1/3,0*]*z1)+z3 by A2,Th43
-       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*(s^2+(-[*2/3,0*])
-        *z1*s)+z1*([*1/9,0*]*z1^2))+z2*(s-[*1/3,0*]*z1)+z3 by XCMPLX_1:8
        .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*((-[*2/3,0*])
-        *z1*s)+z1*([*1/9,0*]*z1^2))+z2*(s-[*1/3,0*]*z1)+z3 by XCMPLX_1:8
-       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*((-[*2/3,0*])
-        *z1*s)+z1*z1^2*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by XCMPLX_1:4
-       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*((-[*2/3,0*])
-        *z1*s)+z1^3*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by Def4
-      .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*((-[*2/3,0*])
-       *z1)*s+z1^3*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by XCMPLX_1:4
-      .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*z1*
-      (-[*2/3,0*])*s+z1^3*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by XCMPLX_1:4
+        *z1*s)+z1*z1^2*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3
+       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1*z1*
+      (-[*2/3,0*])*s+z1^3*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by Def4
       .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1^2*(-[*2/3,0*])
-       *s+z1^3*[*1/9,0*])+z2*(s-[*1/3,0*]*z1)+z3 by SQUARE_1:def 3
-      .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1^2*(-[*2/3,0*])
-       *s+z1^3*[*1/9,0*])+(z2*s-z2*([*1/3,0*]*z1))+z3 by XCMPLX_1:40
-      .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1^2*(-[*2/3,0*])
-        *s)+z1^3*[*1/9,0*]+(z2*s-z2*([*1/3,0*]*z1))+z3 by XCMPLX_1:1
-      .=s^3-z1*s^2+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1*s^2+z1^2*(-[*2/3,0*])
-        *s)+z1^3*[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:29
-     .=s^3-z1*s^2+([*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3)+(z1*s^2+z1^2*(-[*2/3,0*])
-        *s)+z1^3*[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:29
-     .=s^3-z1*s^2+([*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3)+z1*s^2+z1^2*(-[*2/3,0*])
-        *s+z1^3*[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3-z1*s^2+z1*s^2+([*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3)+z1^2*(-[*2/3
-      ,0*])*s+z1^3*[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+([*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3)+z1^2*(-[*2/3,0*])*s+z1^3
-       *[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:27
-     .=s^3+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+z1^2*(-[*2/3,0*])*s+z1^3
-       *[*1/9,0*]+z2*s-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:29
-     .=s^3+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+z1^2*(-[*2/3,0*])*s+z2*s+z1^3
-       *[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1^2*(-[*2/3,0*])*s+z2*s)+z1^3
-       *[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+[*1/3,0 *]*z1^2*s-[*1/27,0*]*z1^3+(z1^2*(-[*2/3,0*])+z2)*s+z1^3
-       *[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:8
-     .=s^3+[*1/3,0 *]*z1^2*s+-[*1/27,0*]*z1^3+(z1^2*(-[*2/3,0*])+z2)*s+z1^3
-       *[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_0:def 8
-     .=s^3+[*1/3,0 *]*z1^2*s+(z1^2*(-[*2/3,0*])+z2)*s+-[*1/27,0*]*z1^3
-     +z1^3*[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+([*1/3,0 *]*z1^2*s+(z1^2*(-[*2/3,0*])+z2)*s)+-[*1/27,0*]*z1^3
-     +z1^3*[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+([*1/3,0 *]*z1^2+(z1^2*(-[*2/3,0*])+z2))*s+-[*1/27,0*]*z1^3
-     +z1^3*[*1/9,0*]-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:8
-     .=s^3+([*1/3,0 *]*z1^2+(z1^2*(-[*2/3,0*])+z2))*s+(-[*1/27,0*]*z1^3
-     +z1^3*[*1/9,0*])-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+([*1/3,0 *]*z1^2+(z1^2*(-[*2/3,0*])+z2))*s+((-[*1/27,0*])*z1^3
-     +z1^3*[*1/9,0*])-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:175
-     .=s^3+([*1/3,0 *]*z1^2+(z1^2*(-[*2/3,0*])+z2))*s+(-[*1/27,0*]
-     +[*1/9,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:8
-     .=s^3+([*1/3,0 *]*z1^2+(z1^2*(-[*2/3,0*])+z2))*s+(
-     [*1/9,0*]-[*1/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_0:def 8
-     .=s^3+([*1/3,0 *]*z1^2+z1^2*(-[*2/3,0*])+z2)*s+(
-     [*1/9,0*]-[*1/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=s^3+((-[*2/3,0*]+[*1/3,0 *])*z1^2+z2)*s+(
-     [*1/9,0*]-[*1/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:8
-     .=s^3+((-([*2/3,0*]-[*1/3,0 *]))*z1^2+z2)*s+(
-     [*1/9,0*]-[*1/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:162
+       *s+z1^3*[*1/9,0*])+(z2*s-z2*([*1/3,0*]*z1))+z3 by SQUARE_1:def 3
+      .=s^3+((-[*2/3,0*]+[*1/3,0 *])*z1^2+z2)*s+(
+     [*1/9,0*]-[*1/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3
      .=s^3+((-([*2/3,0*]-[*1/3,0 *]))*z1^2+z2)*s+([*Re [*1/9,0*]-
      Re [*1/27,0*],Im [*1/9,0*]-Im [*1/27,0*]*])*z1^3-z2*([*1/3,0*]*z1)+z3
                            by COMPLEX1:def 12
@@ -2588,14 +2189,9 @@ proof
        +z2)*s+([*2/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by COMPLEX1:7
      .=s^3+((-[*2/3-1/3,0-0*])*z1^2+z2)*s+([*2/27,0*])*z1^3-z2
        *([*1/3,0*]*z1)+z3 by COMPLEX1:7
-     .=s^3+p*s+([*2/27,0*])*z1^3-z2*([*1/3,0*]*z1)+z3 by XCMPLX_1:175,A2
-     .=s^3+p*s+([*2/27,0*])*z1^3-z2*[*1/3,0*]*z1+z3 by XCMPLX_1:4
-     .=s^3+p*s+[*2/27,0*]*z1^3+-z2*[*1/3,0*]*z1+z3 by XCMPLX_0:def 8
-     .=(s^3+p*s)+([*2/27,0*]*z1^3+-z2*[*1/3,0*]*z1)+z3 by XCMPLX_1:1
-     .=(s^3+p*s)+([*2/27,0*]*z1^3+-z2*[*1/3,0*]*z1+z3) by XCMPLX_1:1
-     .=(s^3+p*s)+([*2/27,0*]*z1^3-[*1/3,0*]*z2*z1+z3) by XCMPLX_0:def 8
-     .=s^3+p*s+q by XCMPLX_1:4,A2
-     .=s^3+0c+p*s+q by COMPLEX1:22
+     .=s^3+p*s+([*2/27,0*])*z1^3-z2*[*1/3,0*]*z1+z3 by A2,XCMPLX_1:175
+     .=(s^3+p*s)+([*2/27,0*]*z1^3-[*1/3,0*]*z2*z1+z3)
+     .=s^3+0c+p*s+q by A2,COMPLEX1:22
      .=s^3+0c*s^2+p*s+q by COMPLEX1:28
      .=1r*s^3+0c*s^2+p*s+q by COMPLEX1:29;
   hence CPoly3(1r,0c,p,q,s)=0c by Def7;
@@ -2607,7 +2203,7 @@ theorem Th46:
     = [*|.z.|,0*]*[*cos Arg z,sin Arg z *]
 proof
     let z be Element of COMPLEX;
-     [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
+      [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
     =[* |.z.|*cos Arg z-0*sin Arg z, |.z.|*sin Arg z+(cos Arg z)*0 *]
     .= [*|.z.|,0*]*[*cos Arg z,sin Arg z *] by HAHNBAN1:2;
     hence thesis;
@@ -2618,7 +2214,7 @@ theorem Th47:
     z #N (n+1)=(z #N n) * z
 proof
     let z be Element of COMPLEX,n be Nat;
-     z #N (n+1) = (z GeoSeq).(n+1) by COMSEQ_3:def 2
+      z #N (n+1) = (z GeoSeq).(n+1) by COMSEQ_3:def 2
          .= (z GeoSeq).n*z by COMSEQ_3:def 1
          .= (z #N n)*z by COMSEQ_3:def 2;
    hence thesis;
@@ -2629,18 +2225,18 @@ theorem Th48:
     z#N 1= z
 proof
     let z be Element of COMPLEX;
-     z #N (0+1) = (z#N 0)*z by Th47
+      z #N (0+1) = (z#N 0)*z by Th47
               .= 1r*z by COMSEQ_3:11
               .= z by COMPLEX1:29;
    hence thesis;
 end;
 
 theorem
-   for z be Element of COMPLEX holds
+    for z be Element of COMPLEX holds
     z#N 2= z*z
 proof
     let z be Element of COMPLEX;
-     z #N (1+1) = (z#N 1)*z by Th47
+      z #N (1+1) = (z#N 1)*z by Th47
               .= z*z by Th48;
    hence thesis;
 end;
@@ -2653,8 +2249,7 @@ proof
     assume n>0;
        then n >= 0+1 by NAT_1:38;
  then A1: n-1 >= 0 by REAL_1:84;
-        n=n-(1-1)
-       .=n-1+1 by XCMPLX_1:37
+         n=n-1+1
        .= n-'1+1 by A1,BINARITH:def 3;
        hence 0c #N n = (0c #N (n-'1))*0c by Th47
               .= 0c by COMPLEX1:28;
@@ -2667,7 +2262,7 @@ theorem Th51:
 proof
     let x,y be Element of COMPLEX;
     defpred P[Nat] means (x*y) #N $1 = x #N $1 * y #N $1;
-     (x*y) #N 0 =1r by COMSEQ_3:11
+      (x*y) #N 0 =1r by COMSEQ_3:11
                 .=1r*1r by COMPLEX1:29
                 .=(x #N 0)*1r by COMSEQ_3:11
                 .=(x #N 0)*(y #N 0) by COMSEQ_3:11;
@@ -2675,10 +2270,9 @@ then A1:  P[0];
  A2: now let n be Nat;
      assume P[n];
       then (x*y)#N (n+1)= x#N n * y#N n * (y*x) by Th47
-        .= x#N n * (y#N n * (y*x)) by XCMPLX_1:4
-        .= x#N n * (y#N n * y*x) by XCMPLX_1:4
+        .= x#N n * (y#N n * y*x)
         .= x#N n * (y#N (n+1)*x) by Th47
-        .= x#N n * x *(y#N (n+1)) by XCMPLX_1:4
+        .= x#N n * x *(y#N (n+1))
         .= x#N (n+1) * y#N (n+1) by Th47;
      hence P[n+1];
    end;
@@ -2694,7 +2288,7 @@ proof
       assume
  A1: x > 0;
  defpred P[Nat] means [*x,0*]#N $1 = [*x to_power $1,0*];
-  [*x,0*]#N 0 = 1 by COMSEQ_3:11,COMPLEX1:def 7
+   [*x,0*]#N 0 = 1 by COMPLEX1:def 7,COMSEQ_3:11
        .= [*1,0*] by ARYTM_0:def 7
        .= [**1,0**] by HAHNBAN1:def 1
        .= [**x to_power 0,0**] by POWER:29
@@ -2718,7 +2312,7 @@ theorem Th53:
 proof
  let x be Real;
  defpred P[Nat] means [*cos x,sin x*]#N $1 = [*cos ($1*x),sin ($1*x)*];
-  [*cos x,sin x*] #N 0 = 1r by COMSEQ_3:11
+   [*cos x,sin x*] #N 0 = 1r by COMSEQ_3:11
        .= [*cos (0*x),sin (0*x)*] by ARYTM_0:def 7,COMPLEX1:def 7,SIN_COS:34;
  then A1: P[0];
  A2: now let n be Nat;
@@ -2732,16 +2326,14 @@ proof
         .= [*cos(n*x)*cos x - sin(n*x)*sin x,cos(n*x)*sin x+cos x*sin(n*x)*]
                                             by Th1
         .= [*cos(n*x+x),cos(n*x)*sin x+cos x*sin(n*x)*] by SIN_COS:80
-        .= [*cos(n*x+1*x+0*x),sin(n*x+1*x+0*x)*] by SIN_COS:80
-        .= [*cos((n+1+0)*x),sin(n*x+1*x+0*x)*] by XCMPLX_1:9
-        .= [*cos((n+1)*x),sin((n+1)*x)*] by XCMPLX_1:9;
+        .= [*cos((n+1)*x),sin((n+1)*x)*] by SIN_COS:80;
       hence P[n+1];
     end;
     thus for n be Nat holds P[n] from NAT_1:sch 1(A1,A2);
  end;
 
 theorem
-      for z being Element of COMPLEX
+       for z being Element of COMPLEX
      for n being Nat st z <> 0c or n > 0 holds
     z#N n = [*(|.z.| to_power n)*cos (n*Arg z)
              ,(|.z.| to_power n)*sin (n*Arg z)*]
@@ -2754,7 +2346,7 @@ proof
      suppose z <> 0c;
  then A2: |.z.| > 0 by COMPLEX1:133;
         set x=Arg z;
-       z#N n =[*|.z.|*cos Arg z-0*sin Arg z,|.z.|*sin Arg z+cos Arg z*0*]#N n
+        z#N n =[*|.z.|*cos Arg z-0*sin Arg z,|.z.|*sin Arg z+cos Arg z*0*]#N n
                                             by COMPLEX2:19
          .=([*|.z.|,0*]*[*cos Arg z,sin Arg z*])#N n by HAHNBAN1:2
          .= [*|.z.|,0*]#N n*[*cos Arg z,sin Arg z*]#N n by Th51;
@@ -2767,9 +2359,9 @@ proof
      end;
      suppose
  A3: z=0c & n > 0;
-     then 0=|.z.| to_power n by POWER:def 2,COMPLEX1:130;
+     then 0=|.z.| to_power n by COMPLEX1:130,POWER:def 2;
        hence z#N n=[*(|.z.| to_power n)*cos(n*Arg z),
-        (|.z.| to_power n)*sin(n*Arg z)*] by Th50,A3,Lm1;
+        (|.z.| to_power n)*sin(n*Arg z)*] by A3,Lm1,Th50;
       end;
 end;
 
@@ -2806,7 +2398,7 @@ theorem Th56:
  then A3: n >= 0+1 by NAT_1:38;
     per cases;
       suppose
-       z <> 0c;
+        z <> 0c;
  then A4: |.z.| > 0 by COMPLEX1:133;
        then n-root |.z.| = n -Root |.z.| by A3,POWER:def 1;
  then A5: n-root |.z.| > 0 by A3,A4,PREPOWER:def 3;
@@ -2832,9 +2424,9 @@ theorem Th56:
       hence [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
             (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]#N n
         =([*0*cos((Arg z+2*PI*k)/n),
-           (n-root 0)*sin((Arg z+2*PI*k)/n)*]#N n) by A3,POWER:6,COMPLEX1:130
+           (n-root 0)*sin((Arg z+2*PI*k)/n)*]#N n) by A3,COMPLEX1:130,POWER:6
        .= [*0,0*sin((Arg z+2*PI*k)/n)*]#N n by A3,POWER:6
-       .= z by A2,A6,Th50,Lm1;
+       .= z by A2,A6,Lm1,Th50;
      end;
    end;
 
@@ -2852,31 +2444,31 @@ definition
 end;
 
 theorem
-    for z be Element of COMPLEX
+     for z be Element of COMPLEX
    for n be non empty Nat
    for k be Nat holds
     [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
       (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*] is CRoot of n,z
 proof
    let z be Element of COMPLEX,n be non empty Nat,k be Nat;
-     [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
+      [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
       (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]#N n=z by Th56;
     hence thesis by Def8;
 end;
 
 theorem
-      for z be Element of COMPLEX
+       for z be Element of COMPLEX
      for v be CRoot of 1,z holds
        v = z
    proof
     let z be Element of COMPLEX;
     let v be CRoot of 1,z;
-     v#N 1 = z by Def8;
+      v#N 1 = z by Def8;
     hence v = z by Th48;
    end;
 
 theorem
-    for n be non empty Nat
+     for n be non empty Nat
    for v be CRoot of n,0c holds
     v = 0c
 proof
@@ -2894,22 +2486,22 @@ proof
  A4: P[k];
      consider t be Nat such that
  A5: k = t+1 by NAT_1:22;
-        k >= 1 by RLVECT_1:99;
+         k >= 1 by RLVECT_1:99;
        then t+1 > 0+1 by A3,A5,REAL_1:def 5;
  then A6: t > 0 by AXIOMS:24;
      reconsider t as non empty Nat by A3,A5,CARD_1:51;
      take t;
      thus t < k by A5,NAT_1:38;
-      v#N k = (v#N t)*v by A5,Th47;
-     then v#N t = 0c or v = 0c by A4,XCMPLX_1:6,COMPLEX1:def 6;
+       v#N k = (v#N t)*v by A5,Th47;
+     then v#N t = 0c or v = 0c by A4,COMPLEX1:def 6,XCMPLX_1:6;
      hence P[t] by A6,Th50;
     end;
-     P[1] from COMPTRIG:sch 1(A1,A2);
+      P[1] from COMPTRIG:sch 1(A1,A2);
     hence thesis by Th48;
 end;
 
 theorem
-      for n be non empty Nat
+       for n be non empty Nat
      for z be Element of COMPLEX
      for v be CRoot of n,z st v = 0c holds
        z = 0c
@@ -2924,12 +2516,12 @@ proof
 end;
 
 theorem
-    for n be non empty Nat
+     for n be non empty Nat
    for k be Nat holds
     [*cos(2*PI*k/n),sin(2*PI*k/n)*] is CRoot of n,1r
 proof
    let n be non empty Nat,k be Nat;
-       [*cos(2*PI*k/n),sin(2*PI*k/n)*]#N n
+        [*cos(2*PI*k/n),sin(2*PI*k/n)*]#N n
       =[*cos(n*((2*PI*k)/n)),sin(n*((2*PI*k)/n))*] by Th53
       .=[*cos(2*PI*k),sin(n*((2*PI*k)/n))*] by XCMPLX_1:88
       .=[*cos(2*PI*k+0),sin(2*PI*k+0)*] by XCMPLX_1:88
@@ -2944,14 +2536,12 @@ proof
 end;
 
 theorem
-    for k be Nat holds
+     for k be Nat holds
     [*cos(2*PI*k/3),sin(2*PI*k/3)*] is CRoot of 3,1r
 proof
      let k be Nat;
-      [*cos(2*PI*k/3),sin(2*PI*k/3)*]#N 3
-     =[*cos((2*PI*k/3)*3),sin((2*PI*k/3)*3)*] by Th53
-      .=[*cos(2*PI*k),sin(3*((2*PI*k)/3))*] by XCMPLX_1:88
-      .=[*cos(2*PI*k+0),sin(2*PI*k+0)*] by XCMPLX_1:88
+       [*cos(2*PI*k/3),sin(2*PI*k/3)*]#N 3
+     =[*cos(2*PI*k),sin(3*((2*PI*k)/3))*] by Th53
       .=[*cos.(2*PI*k+0),sin(2*PI*k+0)*] by SIN_COS:def 23
       .=[*cos.(2*PI*k+0),sin.(2*PI*k+0)*] by SIN_COS:def 21
       .=[*cos.(2*PI*k+0),sin.0*] by SIN_COS2:10
@@ -2963,7 +2553,7 @@ proof
 end;
 
 theorem
-      for z,s being Element of COMPLEX, n being Nat st
+       for z,s being Element of COMPLEX, n being Nat st
      s<>0 & z<>0 & n>=1 & s#N n=z#N n holds
      |.s.| = |.z.|
 proof
@@ -2971,10 +2561,10 @@ proof
      assume
  A1: s<>0 & z<>0 & n>=1 & s#N n=z#N n;
  then A2: |.s.|>0 & |.z.|>0 by COMPLEX1:133,def 6;
-        z#N n =[* |.s.|*cos Arg s, |.s.|*sin Arg s *]#N n by A1,COMPLEX2:19
+         z#N n =[* |.s.|*cos Arg s, |.s.|*sin Arg s *]#N n by A1,COMPLEX2:19
         .=([*|.s.|,0*]*[*cos Arg s,sin Arg s *])#N n by Th46
         .=([*|.s.|,0*]#N n)*([*cos Arg s,sin Arg s *]#N n) by Th51
-        .=[*|.s.| to_power n,0*]*([*cos Arg s,sin Arg s *]#N n) by Th52,A2
+        .=[*|.s.| to_power n,0*]*([*cos Arg s,sin Arg s *]#N n) by A2,Th52
         .=[*|.s.| to_power n,0*]*[*cos (n*Arg s),sin (n*Arg s)*] by Th53
        .= [*(|.s.| to_power n)*cos (n*Arg s)-0*sin (n*Arg s)
         ,(|.s.| to_power n)*sin (n*Arg s)+cos (n*Arg s)*0*] by HAHNBAN1:2
@@ -2985,7 +2575,7 @@ proof
         =[* |.z.|*cos Arg z, |.z.|*sin Arg z *]#N n by COMPLEX2:19
         .=([*|.z.|,0*]*[*cos Arg z,sin Arg z *])#N n by Th46
         .=([*|.z.|,0*]#N n)*([*cos Arg z,sin Arg z *]#N n) by Th51
-        .=[*|.z.| to_power n,0*]*([*cos Arg z,sin Arg z *]#N n) by Th52,A2
+        .=[*|.z.| to_power n,0*]*([*cos Arg z,sin Arg z *]#N n) by A2,Th52
         .=[*|.z.| to_power n,0*]*[*cos (n*Arg z),sin (n*Arg z)*] by Th53
        .= [*(|.z.| to_power n)*cos (n*Arg z)-0*sin (n*Arg z)
            ,(|.z.| to_power n)*sin (n*Arg z)+cos (n*Arg z)*0*] by HAHNBAN1:2
@@ -3011,15 +2601,12 @@ proof
        =((|.z.| to_power n))^2*(cos (n*Arg z))^2+
        ((|.z.| to_power n))^2*(sin (n*Arg z))^2 by SQUARE_1:68;
        then ((|.s.| to_power n))^2*((cos (n*Arg s))^2+(sin (n*Arg s))^2)
-       =((|.z.| to_power n))^2*(cos (n*Arg z))^2+
-       ((|.z.| to_power n))^2*(sin (n*Arg z))^2 by XCMPLX_1:8;
-       then ((|.s.| to_power n))^2*((cos (n*Arg s))^2+(sin (n*Arg s))^2)
        =((|.z.| to_power n))^2*((cos (n*Arg z))^2+(sin (n*Arg z))^2)
                           by XCMPLX_1:8;
        then ((|.s.| to_power n))^2*((cos (n*Arg s))^2+(sin (n*Arg s))^2)
        =((|.z.| to_power n))^2*1 by SIN_COS:32;
  then A3: ((|.s.| to_power n))^2*1=((|.z.| to_power n))^2 by SIN_COS:32;
- A4: |.s.| to_power n > 0 & |.z.| to_power n > 0 by POWER:39,A2;
+ A4: |.s.| to_power n > 0 & |.z.| to_power n > 0 by A2,POWER:39;
        then (|.s.| to_power n)
        =sqrt ((|.z.| to_power n))^2 by A3,SQUARE_1:89;
        then |.s.| to_power n=|.z.| to_power n by A4,SQUARE_1:89;
